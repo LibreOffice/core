@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bff0334d_a0183a75",
+        "filename": "sd/source/ui/dlg/LayerTabBar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-09-15T08:50:10Z",
+      "side": 0,
+      "message": "This line change is a noise - not related to the patch; I assume sberg would have objections? :-)",
+      "range": {
+        "startLine": 197,
+        "startChar": 41,
+        "endLine": 197,
+        "endChar": 42
+      },
+      "revId": "4ac31078b9c46231f8ecf0409a1724749ac8c5a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

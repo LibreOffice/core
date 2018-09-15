@@ -1,0 +1,170 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bff0334d_00124659",
+        "filename": "sd/source/core/drawdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-09-15T08:50:10Z",
+      "side": 1,
+      "message": "This comment isn\u0027t needed I suppose",
+      "range": {
+        "startLine": 763,
+        "startChar": 8,
+        "endLine": 763,
+        "endChar": 77
+      },
+      "revId": "405f2a3dd4b4e0daaca50348ebfd4557d42cb067",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_c01b3e71",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-09-15T08:50:10Z",
+      "side": 1,
+      "message": "I suppose this isn\u0027t needed here? At least, no sUNO_* strings were introduced here.",
+      "range": {
+        "startLine": 111,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 23
+      },
+      "revId": "405f2a3dd4b4e0daaca50348ebfd4557d42cb067",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_e00e4231",
+        "filename": "sd/source/core/drawdoc4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 996,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-09-15T08:50:10Z",
+      "side": 1,
+      "message": "This comment isn\u0027t needed - in the resulting .cxx, they will miss a context. Better put it to commit message.",
+      "range": {
+        "startLine": 994,
+        "startChar": 0,
+        "endLine": 996,
+        "endChar": 30
+      },
+      "revId": "405f2a3dd4b4e0daaca50348ebfd4557d42cb067",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_802776b7",
+        "filename": "sd/source/ui/inc/LayerTabBar.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-09-15T08:50:10Z",
+      "side": 1,
+      "message": "static?",
+      "revId": "405f2a3dd4b4e0daaca50348ebfd4557d42cb067",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_602c7299",
+        "filename": "sd/source/ui/inc/LayerTabBar.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-09-15T08:50:10Z",
+      "side": 1,
+      "message": "static?",
+      "revId": "405f2a3dd4b4e0daaca50348ebfd4557d42cb067",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_40216e9f",
+        "filename": "sd/source/ui/inc/LayerTabBar.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-09-15T08:50:10Z",
+      "side": 1,
+      "message": "static?",
+      "revId": "405f2a3dd4b4e0daaca50348ebfd4557d42cb067",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_20266ab9",
+        "filename": "sd/source/ui/unoidl/unolayer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-09-15T08:50:10Z",
+      "side": 1,
+      "message": "Comment not needed - just mention removal of the function and reason in commit message",
+      "range": {
+        "startLine": 78,
+        "startChar": 0,
+        "endLine": 79,
+        "endChar": 78
+      },
+      "revId": "405f2a3dd4b4e0daaca50348ebfd4557d42cb067",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_003b66d1",
+        "filename": "sd/source/ui/view/drviews4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-09-15T08:50:10Z",
+      "side": 1,
+      "message": "assert(false, \"Standard layer may not be deleted\");",
+      "range": {
+        "startLine": 106,
+        "startChar": 78,
+        "endLine": 106,
+        "endChar": 105
+      },
+      "revId": "405f2a3dd4b4e0daaca50348ebfd4557d42cb067",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
