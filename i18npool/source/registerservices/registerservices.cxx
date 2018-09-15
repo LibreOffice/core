@@ -64,7 +64,7 @@ using namespace ::com::sun::star::i18n;
 using namespace i18npool;
 
 #define IMPL_CREATEINSTANCE( ImplName ) \
-    uno::Reference< uno::XInterface >   \
+    static uno::Reference< uno::XInterface >   \
         ImplName##_CreateInstance(               \
             SAL_UNUSED_PARAMETER const uno::Reference<    \
                     lang::XMultiServiceFactory >& )       \
@@ -75,7 +75,7 @@ using namespace i18npool;
 }
 
 #define IMPL_CREATEINSTANCE_CTX( ImplName )               \
-    uno::Reference< uno::XInterface >                     \
+    static uno::Reference< uno::XInterface >              \
         ImplName##_CreateInstance(               \
             const uno::Reference<                         \
                     lang::XMultiServiceFactory >& rxMSF ) \

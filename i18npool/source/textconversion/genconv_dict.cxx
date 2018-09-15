@@ -29,9 +29,9 @@
 
 #include <vector>
 
-void make_hhc_char(FILE *sfp, FILE *cfp);
-void make_stc_char(FILE *sfp, FILE *cfp);
-void make_stc_word(FILE *sfp, FILE *cfp);
+static void make_hhc_char(FILE *sfp, FILE *cfp);
+static void make_stc_char(FILE *sfp, FILE *cfp);
+static void make_stc_word(FILE *sfp, FILE *cfp);
 
 /* Main Procedure */
 
@@ -328,7 +328,7 @@ typedef struct {
 } Index;
 
 extern "C" {
-int Index_comp(const void* s1, const void* s2)
+static int Index_comp(const void* s1, const void* s2)
 {
     Index const *p1 = static_cast<Index const *>(s1), *p2 = static_cast<Index const *>(s2);
     int result = p1->len - p2->len;

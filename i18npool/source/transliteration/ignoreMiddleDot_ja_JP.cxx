@@ -21,7 +21,7 @@
 
 namespace i18npool {
 
-sal_Unicode
+static sal_Unicode
 ignoreMiddleDot_ja_JP_translator (const sal_Unicode c)
 {
     switch (c) {

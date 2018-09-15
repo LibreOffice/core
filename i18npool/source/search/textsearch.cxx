@@ -287,7 +287,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions )
     setOptions2( aOptions2);
 }
 
-sal_Int32 FindPosInSeq_Impl( const Sequence <sal_Int32>& rOff, sal_Int32 nPos )
+static sal_Int32 FindPosInSeq_Impl( const Sequence <sal_Int32>& rOff, sal_Int32 nPos )
 {
     sal_Int32 nRet = 0, nEnd = rOff.getLength();
     while( nRet < nEnd && nPos > rOff[ nRet ] ) ++nRet;
@@ -1551,7 +1551,7 @@ TextSearch::getSupportedServiceNames()
     return aRet;
 }
 
-css::uno::Reference< css::uno::XInterface >
+static css::uno::Reference< css::uno::XInterface >
 TextSearch_CreateInstance(
         const css::uno::Reference<
         css::lang::XMultiServiceFactory >& rxMSF )

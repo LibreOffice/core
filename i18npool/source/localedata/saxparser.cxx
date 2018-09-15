@@ -96,7 +96,7 @@ public:
 
 // Helper : create an input stream from a file
 
-Reference< XInputStream > createStreamFromFile(
+static Reference< XInputStream > createStreamFromFile(
     const char *pcFile )
 {
     Reference<  XInputStream >  r;
