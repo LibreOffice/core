@@ -22,6 +22,8 @@
 #include <osl/thread.h>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <ftools.hxx>
+#include <ftools.hxx>
 #include <xistream.hxx>
 #include <xlstring.hxx>
 #include <xiroot.hxx>

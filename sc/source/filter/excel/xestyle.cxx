@@ -53,6 +53,7 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <xestring.hxx>
+#include <xltools.hxx>
 #include <conditio.hxx>
 
 #include <oox/export/utils.hxx>

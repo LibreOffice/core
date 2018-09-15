@@ -24,6 +24,8 @@
 #include "xeroot.hxx"
 #include <memory>
 
+struct XclAddress;
+
 // External reference log =====================================================
 
 /** Log entry for external references in a formula, used i.e. in change tracking. */

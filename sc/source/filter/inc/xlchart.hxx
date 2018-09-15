@@ -1298,8 +1298,6 @@ private:
     sal_Int32           mnIndex;                /// Index to create unique identifiers.
 };
 
-struct XclFontData;
-
 /** Helper class for usage of property sets. */
 class XclChPropSetHelper
 {

@@ -46,6 +46,7 @@
 #include <fprogressbar.hxx>
 #include <globstr.hrc>
 #include <xltracer.hxx>
+#include <xltools.hxx>
 #include <xecontent.hxx>
 #include <xelink.hxx>
 #include <xehelper.hxx>

@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XLSTREAM_HXX
 
 #include <svx/svxerr.hxx>
-#include "ftools.hxx"
 
 // Constants ==================================================================
 

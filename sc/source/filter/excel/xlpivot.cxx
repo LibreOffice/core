@@ -27,6 +27,11 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
+#include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
+#include <com/sun/star/sheet/DataPilotFieldShowItemsMode.hpp>
+#include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
+#include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
+#include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 
 using ::com::sun::star::sheet::GeneralFunction;
 using ::com::sun::star::sheet::DataPilotFieldOrientation;

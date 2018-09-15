@@ -20,9 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XICONTENT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XICONTENT_HXX
 
-#include <global.hxx>
 #include <rangelst.hxx>
-#include "xlcontent.hxx"
 #include "xistring.hxx"
 #include "xiroot.hxx"
 #include <validat.hxx>
@@ -31,6 +29,9 @@
 #include <map>
 #include <vector>
 #include <memory>
+
+class ErrCode;
+struct XclRange;
 
 /* ============================================================================
 Classes to import the big Excel document contents (related to several cells or
@@ -117,8 +118,6 @@ public:
 };
 
 // Conditional formatting =====================================================
-
-class ScConditionalFormat;
 
 /** Represents a conditional format with condition formulas, and formatting attributes. */
 class XclImpCondFormat : protected XclImpRoot

@@ -20,30 +20,26 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XESTREAM_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XESTREAM_HXX
 
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/ucb/ContentCreationException.hpp>
-
 #include <map>
 #include <stack>
-#include <string>
 #include <rtl/strbuf.hxx>
 
 #include <oox/core/xmlfilterbase.hxx>
-#include <oox/token/tokens.hxx>
 #include <sax/fshelper.hxx>
 #include <tools/stream.hxx>
-
-#include "xlstream.hxx"
-#include "xestring.hxx"
+#include "ftools.hxx"
 
 #include <filter/msfilter/mscodec.hxx>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace beans { struct NamedValue; } } } }
 
 /* ============================================================================
 Output stream class for Excel export
 - CONTINUE record handling
 ============================================================================ */
 
+class XclExpString;
 class XclExpRoot;
 class XclExpBiff8Encrypter;
 typedef std::shared_ptr< XclExpBiff8Encrypter > XclExpEncrypterRef;
@@ -235,14 +231,12 @@ private:
 
 class ScAddress;
 class ScDocShell;
-class ScDocument;
 class ScFormulaCell;
 class ScRange;
 class ScRangeList;
 class ScTokenArray;
 struct XclAddress;
 struct XclFontData;
-struct XclRange;
 class XclRangeList;
 namespace sc { class CompileFormulaContext; }
 

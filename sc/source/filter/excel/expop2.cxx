@@ -39,6 +39,7 @@
 #include <filtopt.hxx>
 #include <xltools.hxx>
 #include <xelink.hxx>
+#include <xehelper.hxx>
 
 #include <officecfg/Office/Calc.hxx>
 

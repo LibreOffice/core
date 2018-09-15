@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XISTRING_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XISTRING_HXX
 
+#include <rtl/ustring.hxx>
 #include "xlstring.hxx"
 
 // Byte/Unicode strings =======================================================

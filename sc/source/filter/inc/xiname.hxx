@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XINAME_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XINAME_HXX
 
-#include "xlname.hxx"
 #include "xiroot.hxx"
 #include "xistream.hxx"
 
@@ -29,7 +28,6 @@
 #include <memory>
 #include <vector>
 
-class ScRangeData;
 class ScTokenArray;
 
 /** Represents a defined name. It may be related to a single sheet or global. */

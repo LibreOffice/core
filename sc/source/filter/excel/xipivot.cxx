@@ -23,11 +23,13 @@
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
+#include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 
 #include <tools/datetime.hxx>
 #include <svl/zformat.hxx>
 #include <svl/intitem.hxx>
 #include <sal/log.hxx>
+#include <sot/storage.hxx>
 
 #include <document.hxx>
 #include <formulacell.hxx>

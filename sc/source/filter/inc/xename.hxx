@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XENAME_HXX
 
 #include "xerecord.hxx"
-#include "xlname.hxx"
 #include "xlformula.hxx"
 #include "xeroot.hxx"
 #include <memory>

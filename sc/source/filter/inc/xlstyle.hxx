@@ -22,9 +22,8 @@
 
 #include <map>
 #include <com/sun/star/awt/FontSlant.hpp>
-#include <com/sun/star/awt/FontStrikeout.hpp>
 #include <tools/color.hxx>
-#include <vcl/vclenum.hxx>
+#include <tools/fontenum.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/frmdir.hxx>
 #include <svl/zforlist.hxx>

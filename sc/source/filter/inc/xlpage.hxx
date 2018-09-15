@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XLPAGE_HXX
 
 #include <tools/gen.hxx>
-#include "xltools.hxx"
+#include "ftools.hxx"
 #include <memory>
 
 // Constants and Enumerations =================================================

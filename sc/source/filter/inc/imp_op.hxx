@@ -23,6 +23,7 @@
 #include <sal/types.h>
 #include "xiroot.hxx"
 #include "xistream.hxx"
+#include "ftools.hxx"
 
 #include <vector>
 #include <memory>
@@ -32,10 +33,12 @@ class SvStream;
 
 class ScFormulaCell;
 class ScDocument;
+class ScTokenArray;
 
 class ExcelToSc;
 class XclImpOutlineBuffer;
 class XclImpColRowSettings;
+struct XclAddress;
 
 class ImportTyp
 {
