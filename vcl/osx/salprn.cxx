@@ -71,8 +71,7 @@ AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
     mpGraphics = new AquaSalGraphics();
 
     const int nWidth = 100, nHeight = 100;
-    mpContextMemory.reset(static_cast<sal_uInt8*>(std::malloc(nWidth * 4 * nHeight)),
-                          &std::free);
+    mpContextMemory.reset(new (std::nothrow) sal_uInt8[nWidth * 4 * nHeight]);
 
     if (mpContextMemory)
     {
