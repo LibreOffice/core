@@ -30,6 +30,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#include <basegfx/polygon/b2dpolygontriangulator.hxx>
 
 namespace basegfx
 {
@@ -337,7 +338,8 @@ namespace basegfx
             bool bStartRound,
             bool bEndRound,
             bool bStartSquare,
-            bool bEndSquare)
+            bool bEndSquare,
+            basegfx::triangulator::B2DTriangleVector* pTriangles)
         {
             // create polygon for edge
             // Unfortunately, while it would be geometrically correct to not add
@@ -566,6 +568,14 @@ namespace basegfx
                     }
                 }
 
+                if(nullptr != pTriangles)
+                {
+                    const basegfx::triangulator::B2DTriangleVector aResult(
+                        basegfx::triangulator::triangulate(
+                            aBezierPolygon));
+                    pTriangles->insert(pTriangles->end(), aResult.begin(), aResult.end());
+                }
+
                 // return
                 return aBezierPolygon;
             }
@@ -664,6 +674,14 @@ namespace basegfx
                 // close and return
                 aEdgePolygon.setClosed(true);
 
+                if(nullptr != pTriangles)
+                {
+                    const basegfx::triangulator::B2DTriangleVector aResult(
+                        basegfx::triangulator::triangulate(
+                            aEdgePolygon));
+                    pTriangles->insert(pTriangles->end(), aResult.begin(), aResult.end());
+                }
+
                 return aEdgePolygon;
             }
         }
@@ -676,7 +694,8 @@ namespace basegfx
             const B2DPoint& rPoint,
             double fHalfLineWidth,
             B2DLineJoin eJoin,
-            double fMiterMinimumAngle)
+            double fMiterMinimumAngle,
+            basegfx::triangulator::B2DTriangleVector* pTriangles)
         {
             OSL_ENSURE(fHalfLineWidth > 0.0, "createAreaGeometryForJoin: LineWidth too small (!)");
             OSL_ENSURE(eJoin != B2DLineJoin::NONE, "createAreaGeometryForJoin: B2DLineJoin::NONE not allowed (!)");
@@ -707,6 +726,14 @@ namespace basegfx
                     aEdgePolygon.append(rPoint);
                     aEdgePolygon.append(aStartPoint);
 
+                    if(nullptr != pTriangles)
+                    {
+                        pTriangles->emplace_back(
+                            aEndPoint,
+                            rPoint,
+                            aStartPoint);
+                    }
+
                     // Look for the cut point between start point along rTangentPrev and
                     // end point along rTangentEdge. -rTangentEdge should be used, but since
                     // the cut value is used for interpolating along the first edge, the negation
@@ -719,6 +746,14 @@ namespace basegfx
                     {
                         const B2DPoint aCutPoint(aStartPoint + (rTangentPrev * fCutPos));
                         aEdgePolygon.append(aCutPoint);
+
+                        if(nullptr != pTriangles)
+                        {
+                            pTriangles->emplace_back(
+                                aStartPoint,
+                                aCutPoint,
+                                aEndPoint);
+                        }
                     }
 
                     break;
@@ -753,6 +788,17 @@ namespace basegfx
                         aEdgePolygon.setB2DPoint(aEdgePolygon.count() - 1, aEndPoint);
                         aEdgePolygon.append(rPoint);
 
+                        if(nullptr != pTriangles)
+                        {
+                            for(sal_uInt32 a(0); a < aBow.count() - 1; a++)
+                            {
+                                pTriangles->emplace_back(
+                                    0 == a ? aStartPoint : aBow.getB2DPoint(a),
+                                    rPoint,
+                                    aBow.count() - 1 == a + 1 ? aEndPoint : aBow.getB2DPoint(a + 1));
+                            }
+                        }
+
                         break;
                     }
                     else
@@ -765,6 +811,14 @@ namespace basegfx
                     aEdgePolygon.append(aEndPoint);
                     aEdgePolygon.append(rPoint);
                     aEdgePolygon.append(aStartPoint);
+
+                    if(nullptr != pTriangles)
+                    {
+                        pTriangles->emplace_back(
+                            aEndPoint,
+                            rPoint,
+                            aStartPoint);
+                    }
 
                     break;
                 }
@@ -786,7 +840,8 @@ namespace basegfx
             css::drawing::LineCap eCap,
             double fMaxAllowedAngle,
             double fMaxPartOfEdge,
-            double fMiterMinimumAngle)
+            double fMiterMinimumAngle,
+            basegfx::triangulator::B2DTriangleVector* pTriangles)
         {
             if(fMaxAllowedAngle > F_PI2)
             {
@@ -895,7 +950,8 @@ namespace basegfx
                                         aEdge.getStartPoint(),
                                         fHalfLineWidth,
                                         eJoin,
-                                        fMiterMinimumAngle));
+                                        fMiterMinimumAngle,
+                                        pTriangles));
                             }
                             else if(aOrientation == B2VectorOrientation::Negative)
                             {
@@ -911,7 +967,8 @@ namespace basegfx
                                         aEdge.getStartPoint(),
                                         fHalfLineWidth,
                                         eJoin,
-                                        fMiterMinimumAngle));
+                                        fMiterMinimumAngle,
+                                        pTriangles));
                             }
                         }
 
@@ -929,7 +986,8 @@ namespace basegfx
                                     bFirst && eCap == css::drawing::LineCap_ROUND,
                                     bLast && eCap == css::drawing::LineCap_ROUND,
                                     bFirst && eCap == css::drawing::LineCap_SQUARE,
-                                    bLast && eCap == css::drawing::LineCap_SQUARE));
+                                    bLast && eCap == css::drawing::LineCap_SQUARE,
+                                    pTriangles));
                         }
                         else
                         {
@@ -940,7 +998,8 @@ namespace basegfx
                                     false,
                                     false,
                                     false,
-                                    false));
+                                    false,
+                                    pTriangles));
                         }
 
                         // prepare next step
@@ -958,10 +1017,20 @@ namespace basegfx
                 else
                 {
                     // point count, but no edge count -> single point
-                    aRetval.append(
+                    const basegfx::B2DPolygon aCircle(
                         createPolygonFromCircle(
                             aCandidate.getB2DPoint(0),
                             fHalfLineWidth));
+
+                    aRetval.append(aCircle);
+
+                    if(nullptr != pTriangles)
+                    {
+                        const basegfx::triangulator::B2DTriangleVector aResult(
+                            basegfx::triangulator::triangulate(
+                                aCircle));
+                        pTriangles->insert(pTriangles->end(), aResult.begin(), aResult.end());
+                    }
                 }
 
                 return aRetval;

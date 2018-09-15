@@ -604,9 +604,10 @@ bool X11SalGraphics::drawPolyPolygon(
         return true;
     }
 
-    static bool bUseCairoForPolygons = false;
+    // enable by setting to something
+    static const char* pUseCairoForPolygons(getenv("SAL_ENABLE_USE_CAIRO_FOR_POLYGONS"));
 
-    if (!m_bOpenGL && bUseCairoForPolygons && SupportsCairo())
+    if (!m_bOpenGL && nullptr != pUseCairoForPolygons && SupportsCairo())
     {
         // snap to raster if requested
         const bool bSnapPoints(!getAntiAliasB2DDraw());
@@ -724,9 +725,10 @@ bool X11SalGraphics::drawPolyLine(
     }
 
 #if ENABLE_CAIRO_CANVAS
-    static bool bUseCairoForFatLines = true;
+    // disable by setting to something
+    static const char* pUseCairoForFatLines(getenv("SAL_DISABLE_USE_CAIRO_FOR_FATLINES"));
 
-    if (!m_bOpenGL && bUseCairoForFatLines && SupportsCairo())
+    if (!m_bOpenGL && nullptr == pUseCairoForFatLines && SupportsCairo())
     {
         cairo_t* cr = getCairoContext();
         clipRegion(cr);
