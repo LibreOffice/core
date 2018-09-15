@@ -51,18 +51,18 @@ Calendar_jewish::Calendar_jewish()
 const int HebrewEpoch = -1373429; // Absolute date of start of Hebrew calendar
 
 // True if year is an Hebrew leap year
-bool HebrewLeapYear(sal_Int32 year) {
+static bool HebrewLeapYear(sal_Int32 year) {
     return ((((7 * year) + 1) % 19) < 7);
 }
 
 // Last month of Hebrew year.
-sal_Int32 LastMonthOfHebrewYear(sal_Int32 year) {
+static sal_Int32 LastMonthOfHebrewYear(sal_Int32 year) {
     return  (HebrewLeapYear(year)) ? 13 : 12;
 }
 
 // Number of days elapsed from the Sunday prior to the start of the
 // Hebrew calendar to the mean conjunction of Tishri of Hebrew year.
-sal_Int32 HebrewCalendarElapsedDays(sal_Int32 year) {
+static sal_Int32 HebrewCalendarElapsedDays(sal_Int32 year) {
     sal_Int32 MonthsElapsed =
         (235 * ((year - 1) / 19))           // Months in complete cycles so far.
         + (12 * ((year - 1) % 19))          // Regular months in this cycle.
@@ -97,23 +97,23 @@ sal_Int32 HebrewCalendarElapsedDays(sal_Int32 year) {
 }
 
 // Number of days in Hebrew year.
-sal_Int32 DaysInHebrewYear(sal_Int32 year) {
+static sal_Int32 DaysInHebrewYear(sal_Int32 year) {
     return ((HebrewCalendarElapsedDays(year + 1)) -
           (HebrewCalendarElapsedDays(year)));
 }
 
 // True if Heshvan is long in Hebrew year.
-bool LongHeshvan(sal_Int32 year) {
+static bool LongHeshvan(sal_Int32 year) {
     return ((DaysInHebrewYear(year) % 10) == 5);
 }
 
 // True if Kislev is short in Hebrew year.
-bool ShortKislev(sal_Int32 year) {
+static bool ShortKislev(sal_Int32 year) {
     return ((DaysInHebrewYear(year) % 10) == 3);
 }
 
 // Last day of month in Hebrew year.
-sal_Int32 LastDayOfHebrewMonth(sal_Int32 month, sal_Int32 year) {
+static sal_Int32 LastDayOfHebrewMonth(sal_Int32 month, sal_Int32 year) {
     if ((month == 2)
         || (month == 4)
         || (month == 6)
@@ -188,7 +188,7 @@ public:
 
 //  Gregorian dates
 
-int LastDayOfGregorianMonth(int month, int year) {
+static int LastDayOfGregorianMonth(int month, int year) {
 // Compute the last date of the month for the Gregorian calendar.
 
     switch (month) {

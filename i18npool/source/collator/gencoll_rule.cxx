@@ -33,7 +33,7 @@
 
 /* Main Procedure */
 
-void data_write(char* file, char* name, sal_uInt8 *data, sal_Int32 len)
+static void data_write(char* file, char* name, sal_uInt8 *data, sal_Int32 len)
 {
     FILE *fp = fopen(file, "wb");
     if (fp == nullptr) {

@@ -123,73 +123,6 @@ LocaleNode* LocaleNode::createNode (const OUString& name, const Reference< XAttr
 
 #define OSTR(s) (OUStringToOString( (s), RTL_TEXTENCODING_UTF8).getStr())
 
-void print_OUString( const OUString& s )
-{
-    printf( "%s", OSTR(s));
-}
-
-bool is_empty_string( const OUString& s )
-{
-     return s.isEmpty() || s == "\n";
-}
-
-void print_indent( int depth )
-{
-     for( int i=0; i<depth; i++ ) printf("    ");
-}
-
-void print_color( int color )
-{
-     printf("\033[%dm", color);
-}
-
-void print_node( const LocaleNode* p, int depth )
-{
-     if( !p ) return;
-
-     print_indent( depth );
-     printf("<");
-     print_color(36);
-     print_OUString( p->getName()  );
-     print_color(0);
-     const Attr& q = p->getAttr();
-     for( sal_Int32 j = 0; j < q.getLength(); ++j )
-     {
-          printf(" ");
-          print_color(33);
-          print_OUString( q.getTypeByIndex(j) );
-          print_color(0);
-          printf("=");
-          print_color(31);
-          printf("'");
-          print_OUString( q.getValueByIndex(j) );
-          printf("'");
-          print_color(0);
-     }
-     printf(">");
-     printf("\n");
-     if( !is_empty_string( p->getValue() ) )
-     {
-          print_indent( depth+1 );
-          printf("value: ");
-          print_color(31);
-          printf("'");
-          print_OUString( p->getValue() );
-          printf("'");
-          print_color(0);
-          printf("\n");
-     }
-     for( sal_Int32 i=0; i<p->getNumberOfChildren(); i++ )
-     {
-          print_node( p->getChildAt(i), depth+1 );
-     }
-     print_indent( depth );
-     printf("</");
-     print_OUString( p->getName()  );
-     printf(">");
-     printf("\n");
-}
-
 void LocaleNode::generateCode (const OFileWriter &of) const
 {
     OUString aDTD = getAttr().getValueByName("versionDTD");
@@ -1895,7 +1828,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     of.writeFunction("getAllCalendars_", "calendarsCount", "calendars");
 }
 
-bool isIso4217( const OUString& rStr )
+static bool isIso4217( const OUString& rStr )
 {
     const sal_Unicode* p = rStr.getStr();
     return rStr.getLength() == 3

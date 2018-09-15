@@ -170,10 +170,10 @@ TransliterationImpl::getType()
     throw ERROR;
 }
 
-TransliterationModules operator&(TransliterationModules lhs, TransliterationModules rhs) {
+static TransliterationModules operator&(TransliterationModules lhs, TransliterationModules rhs) {
     return TransliterationModules(sal_Int32(lhs) & sal_Int32(rhs));
 }
-TransliterationModules operator|(TransliterationModules lhs, TransliterationModules rhs) {
+static TransliterationModules operator|(TransliterationModules lhs, TransliterationModules rhs) {
     return TransliterationModules(sal_Int32(lhs) | sal_Int32(rhs));
 }
 

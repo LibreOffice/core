@@ -64,12 +64,12 @@ namespace i18npool {
 
 struct theNatNumMutex : public rtl::Static<osl::Mutex, theNatNumMutex> {};
 
-OUString getHebrewNativeNumberString(const OUString& aNumberString, bool useGeresh);
+static OUString getHebrewNativeNumberString(const OUString& aNumberString, bool useGeresh);
 
-OUString getCyrillicNativeNumberString(const OUString& aNumberString);
+static OUString getCyrillicNativeNumberString(const OUString& aNumberString);
 
 /// @throws RuntimeException
-OUString AsciiToNativeChar( const OUString& inStr, sal_Int32 nCount,
+static OUString AsciiToNativeChar( const OUString& inStr, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset, bool useOffset, sal_Int16 number )
 {
     const sal_Unicode *src = inStr.getStr();
@@ -97,7 +97,7 @@ OUString AsciiToNativeChar( const OUString& inStr, sal_Int32 nCount,
     return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
 }
 
-bool AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int32 len,
+static bool AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int32 len,
         sal_Unicode *dst, sal_Int32& count, sal_Int16 multiChar_index, Sequence< sal_Int32 >& offset, bool useOffset, sal_Int32 startPos,
  const Number *number, const sal_Unicode* numberChar)
 {
@@ -169,7 +169,7 @@ bool AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int3
 }
 
 /// @throws RuntimeException
-OUString AsciiToNative( const OUString& inStr, sal_Int32 nCount,
+static OUString AsciiToNative( const OUString& inStr, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset, bool useOffset, const Number* number )
 {
     OUString aRet;
@@ -1015,7 +1015,7 @@ static const sal_Unicode thousands_last[] = {0x05d0, 0x05dc, 0x05e4, 0x05d9, 0x0
 static const sal_Unicode geresh = 0x05f3;
 static const sal_Unicode gershayim = 0x05f4;
 
-void makeHebrewNumber(sal_Int64 value, OUStringBuffer& output, bool isLast, bool useGeresh)
+static void makeHebrewNumber(sal_Int64 value, OUStringBuffer& output, bool isLast, bool useGeresh)
 {
     sal_Int16 num = sal::static_int_cast<sal_Int16>(value % 1000);
 
@@ -1121,7 +1121,7 @@ struct CyrillicNumberChar {
     { 0x0430, 1 }
 };
 
-void makeCyrillicNumber(sal_Int64 value, OUStringBuffer& output, bool addTitlo)
+static void makeCyrillicNumber(sal_Int64 value, OUStringBuffer& output, bool addTitlo)
 {
     sal_Int16 num = sal::static_int_cast<sal_Int16>(value % 1000);
     if (value >= 1000) {

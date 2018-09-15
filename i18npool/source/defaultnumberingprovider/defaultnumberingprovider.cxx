@@ -304,7 +304,7 @@ DefaultNumberingProvider::getDefaultContinuousNumberingLevels( const Locale& rLo
      return LocaleDataImpl::get()->getContinuousNumberingLevels( rLocale );
 }
 
-OUString toRoman( sal_Int32 n )
+static OUString toRoman( sal_Int32 n )
 {
 
 //              i, ii, iii, iv, v, vi, vii, vii, viii, ix

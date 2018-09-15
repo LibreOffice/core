@@ -79,7 +79,7 @@ TextConversion_ko::TextConversion_ko( const Reference < XComponentContext >& xCo
     }
 }
 
-sal_Int16 checkScriptType(sal_Unicode c)
+static sal_Int16 checkScriptType(sal_Unicode c)
 {
     typedef struct {
         UBlockCode from;

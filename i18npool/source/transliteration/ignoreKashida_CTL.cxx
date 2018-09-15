@@ -11,7 +11,7 @@
 
 namespace i18npool {
 
-sal_Unicode
+static sal_Unicode
 ignoreKashida_CTL_translator (const sal_Unicode c)
 {
     if( c == 0x0640 ) // Check if it's Kashida
