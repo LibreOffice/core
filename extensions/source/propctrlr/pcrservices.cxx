@@ -25,7 +25,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
-extern "C" void pcr_initializeModule()
+extern "C" {
+
+static void pcr_initializeModule()
 {
     static bool s_bInit = false;
     if (!s_bInit)
@@ -53,6 +55,7 @@ extern "C" void pcr_initializeModule()
     }
 }
 
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* pcr_component_getFactory(
                     const sal_Char* pImplementationName,

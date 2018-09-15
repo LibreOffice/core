@@ -1786,7 +1786,7 @@ OSQLParseNode* OSQLParseNode::getByRule(OSQLParseNode::Rule eRule) const
     return pRetNode;
 }
 
-OSQLParseNode* MakeANDNode(OSQLParseNode *pLeftLeaf,OSQLParseNode *pRightLeaf)
+static OSQLParseNode* MakeANDNode(OSQLParseNode *pLeftLeaf,OSQLParseNode *pRightLeaf)
 {
     OSQLParseNode* pNewNode = new OSQLParseNode(OUString(),SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::boolean_term));
     pNewNode->append(pLeftLeaf);
@@ -1795,7 +1795,7 @@ OSQLParseNode* MakeANDNode(OSQLParseNode *pLeftLeaf,OSQLParseNode *pRightLeaf)
     return pNewNode;
 }
 
-OSQLParseNode* MakeORNode(OSQLParseNode *pLeftLeaf,OSQLParseNode *pRightLeaf)
+static OSQLParseNode* MakeORNode(OSQLParseNode *pLeftLeaf,OSQLParseNode *pRightLeaf)
 {
     OSQLParseNode* pNewNode = new OSQLParseNode(OUString(),SQLNodeType::Rule,OSQLParser::RuleID(OSQLParseNode::search_condition));
     pNewNode->append(pLeftLeaf);

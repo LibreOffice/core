@@ -717,7 +717,7 @@ void FillModel::assignUsed( const FillModel& rSource )
     moRotate.assignIfUsed( rSource.moRotate );
 }
 
-void lcl_setGradientStop( std::multimap< double, Color >& rMap, const double fKey, const Color& rValue ) {
+static void lcl_setGradientStop( std::multimap< double, Color >& rMap, const double fKey, const Color& rValue ) {
     auto aElement = rMap.find( fKey );
 
     if (aElement != rMap.end())
@@ -883,7 +883,7 @@ TextpathModel::TextpathModel()
 {
 }
 
-beans::PropertyValue lcl_createTextpathProps()
+static beans::PropertyValue lcl_createTextpathProps()
 {
     uno::Sequence<beans::PropertyValue> aTextpathPropSeq( comphelper::InitPropertySequence({
             { "TextPath", uno::Any(true) },

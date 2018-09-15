@@ -47,7 +47,7 @@ using namespace ::com::sun::star::lang;
 using namespace cppu;
 
 // Forward declaration
-void Main();
+static void Main();
 
 SAL_IMPLEMENT_MAIN()
 {

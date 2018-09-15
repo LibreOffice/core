@@ -114,7 +114,7 @@ static bool g_bIsLeanException;
 
 static bool isInitVCL();
 
-oslSignalAction VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* pInfo)
+static oslSignalAction VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* pInfo)
 {
     static volatile bool bIn = false;
 

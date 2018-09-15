@@ -27,7 +27,7 @@
 
 namespace unoidl {
 
-bool operator ==(ConstantValue const & lhs, ConstantValue const & rhs) {
+static bool operator ==(ConstantValue const & lhs, ConstantValue const & rhs) {
     if (lhs.type == rhs.type) {
         switch (lhs.type) {
         case ConstantValue::TYPE_BOOLEAN:
@@ -55,11 +55,11 @@ bool operator ==(ConstantValue const & lhs, ConstantValue const & rhs) {
     return false;
 }
 
-bool operator !=(ConstantValue const & lhs, ConstantValue const & rhs) {
+static bool operator !=(ConstantValue const & lhs, ConstantValue const & rhs) {
     return !(lhs == rhs);
 }
 
-bool operator ==(
+static bool operator ==(
     SingleInterfaceBasedServiceEntity::Constructor::Parameter const & lhs,
     SingleInterfaceBasedServiceEntity::Constructor::Parameter const & rhs)
 {

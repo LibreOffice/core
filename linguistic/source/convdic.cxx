@@ -67,7 +67,7 @@ using namespace linguistic;
 
 #define SN_CONV_DICTIONARY      "com.sun.star.linguistic2.ConversionDictionary"
 
-void ReadThroughDic( const OUString &rMainURL, ConvDicXMLImport &rImport )
+static void ReadThroughDic( const OUString &rMainURL, ConvDicXMLImport &rImport )
 {
     if (rMainURL.isEmpty())
         return;

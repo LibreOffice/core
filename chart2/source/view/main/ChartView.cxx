@@ -1280,7 +1280,7 @@ css::uno::Sequence< OUString > SAL_CALL ChartView::getSupportedServiceNames()
     return { CHART_VIEW_SERVICE_NAME };
 }
 
-::basegfx::B3DHomMatrix createTransformationSceneToScreen(
+static ::basegfx::B3DHomMatrix createTransformationSceneToScreen(
     const ::basegfx::B2IRectangle& rDiagramRectangleWithoutAxes )
 {
     ::basegfx::B3DHomMatrix aM;

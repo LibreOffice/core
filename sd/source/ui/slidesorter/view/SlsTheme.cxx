@@ -33,7 +33,7 @@ namespace sd { namespace slidesorter { namespace view {
 const static Color Black = Color(0x000000);
 const static Color White = Color(0xffffff);
 
-Color ChangeLuminance (Color aColor, const int nValue)
+static Color ChangeLuminance (Color aColor, const int nValue)
 {
     if (nValue > 0)
         aColor.IncreaseLuminance(nValue);
@@ -42,7 +42,7 @@ Color ChangeLuminance (Color aColor, const int nValue)
     return aColor;
 }
 
-Color HGBAdapt (
+static Color HGBAdapt (
     const Color aColor,
     const sal_Int32 nNewSaturation,
     const sal_Int32 nNewBrightness)

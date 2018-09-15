@@ -1413,7 +1413,7 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
     return aRetSet;
 }
 
-Point ImpGetPoint(const tools::Rectangle& rRect, RectPoint eRP)
+static Point ImpGetPoint(const tools::Rectangle& rRect, RectPoint eRP)
 {
     switch(eRP) {
         case RectPoint::LT: return rRect.TopLeft();

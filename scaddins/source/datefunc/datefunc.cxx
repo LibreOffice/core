@@ -81,14 +81,14 @@ sal_uInt16 ScaFuncData::GetStrIndex( sal_uInt16 nParam ) const
     return (nParam > nParamCount) ? (nParamCount * 2) : (nParam * 2);
 }
 
-void InitScaFuncDataList(ScaFuncDataList& rList)
+static void InitScaFuncDataList(ScaFuncDataList& rList)
 {
     for (const auto & nIndex : pFuncDataArr)
         rList.push_back(ScaFuncData(nIndex));
 }
 
 //  entry points for service registration / instantiation
-uno::Reference< uno::XInterface > ScaDateAddIn_CreateInstance(
+static uno::Reference< uno::XInterface > ScaDateAddIn_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory >& )
 {
     return static_cast<cppu::OWeakObject*>(new ScaDateAddIn());

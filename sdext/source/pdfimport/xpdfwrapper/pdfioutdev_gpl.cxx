@@ -67,7 +67,7 @@ namespace pdfi
 {
 
 /// cut off very small numbers & clamp value to zero
-inline double normalize( double val )
+static inline double normalize( double val )
 {
     return fabs(val) < 0.0000001 ? 0.0 : val;
 }
@@ -118,12 +118,12 @@ std::vector<char> lcl_escapeLineFeeds(const char* const i_pStr)
 /// for the initial std::vector capacity when copying stream from xpdf
 #define WRITE_BUFFER_INITIAL_CAPACITY (1024*100)
 
-void initBuf(OutputBuffer& io_rBuffer)
+static void initBuf(OutputBuffer& io_rBuffer)
 {
     io_rBuffer.reserve(WRITE_BUFFER_INITIAL_CAPACITY);
 }
 
-void writeBinaryBuffer( const OutputBuffer& rBuffer )
+static void writeBinaryBuffer( const OutputBuffer& rBuffer )
 {
     // ---sync point--- see SYNC STREAMS above
     fflush(stdout);
@@ -138,7 +138,7 @@ void writeBinaryBuffer( const OutputBuffer& rBuffer )
     fflush(g_binary_out);
 }
 
-bool ExtractJpegData(Stream* str, OutputBuffer& outBuf)
+static bool ExtractJpegData(Stream* str, OutputBuffer& outBuf)
 {
     int bytesToMarker = 0;
     int bytesToLen = -1;
@@ -204,7 +204,7 @@ bool ExtractJpegData(Stream* str, OutputBuffer& outBuf)
     }
 }
 
-void writeJpeg_( OutputBuffer& o_rOutputBuf, Stream* str )
+static void writeJpeg_( OutputBuffer& o_rOutputBuf, Stream* str )
 {
     // dump JPEG file as-is
 #if POPPLER_CHECK_VERSION(0, 17, 3)
@@ -223,7 +223,7 @@ void writeJpeg_( OutputBuffer& o_rOutputBuf, Stream* str )
     str->close();
 }
 
-void writePbm_(OutputBuffer& o_rOutputBuf, Stream* str, int width, int height, bool bInvert )
+static void writePbm_(OutputBuffer& o_rOutputBuf, Stream* str, int width, int height, bool bInvert )
 {
     // write as PBM (char by char, to avoid stdlib lineend messing)
     o_rOutputBuf.clear();
@@ -265,7 +265,7 @@ void writePbm_(OutputBuffer& o_rOutputBuf, Stream* str, int width, int height, b
     str->close();
 }
 
-void writePpm_( OutputBuffer&     o_rOutputBuf,
+static void writePpm_( OutputBuffer&     o_rOutputBuf,
                 Stream*           str,
                 int               width,
                 int               height,
@@ -323,7 +323,7 @@ void writePpm_( OutputBuffer&     o_rOutputBuf,
 }
 
 // call this only for 1 bit image streams !
-void writePng_( OutputBuffer&     o_rOutputBuf,
+static void writePng_( OutputBuffer&     o_rOutputBuf,
                 Stream*           str,
                 int               width,
                 int               height,
@@ -340,7 +340,7 @@ void writePng_( OutputBuffer&     o_rOutputBuf,
     printf("\n");
 }
 
-void writePng_( OutputBuffer& o_rOutputBuf,
+static void writePng_( OutputBuffer& o_rOutputBuf,
                 Stream* str,
                 int width, int height, GfxImageColorMap* colorMap,
                 Stream* maskStr,
@@ -355,7 +355,7 @@ void writePng_( OutputBuffer& o_rOutputBuf,
     printf("\n");
 }
 
-void writePng_( OutputBuffer& o_rOutputBuf,
+static void writePng_( OutputBuffer& o_rOutputBuf,
                 Stream* str,
                 int width, int height, GfxImageColorMap* colorMap,
                 Stream* maskStr,
@@ -371,7 +371,7 @@ void writePng_( OutputBuffer& o_rOutputBuf,
 }
 
 // stolen from ImageOutputDev.cc
-void writeMask_( OutputBuffer& o_rOutputBuf, Stream* str, int width, int height, bool bInvert )
+static void writeMask_( OutputBuffer& o_rOutputBuf, Stream* str, int width, int height, bool bInvert )
 {
     if( str->getKind() == strDCT )
         writeJpeg_(o_rOutputBuf, str);
@@ -379,7 +379,7 @@ void writeMask_( OutputBuffer& o_rOutputBuf, Stream* str, int width, int height,
         writePbm_(o_rOutputBuf, str, width, height, bInvert );
 }
 
-void writeImage_( OutputBuffer&     o_rOutputBuf,
+static void writeImage_( OutputBuffer&     o_rOutputBuf,
                   Stream*           str,
                   int               width,
                   int               height,
@@ -415,12 +415,12 @@ void writeImage_( OutputBuffer&     o_rOutputBuf,
 // forwarders
 
 
-inline void writeImageLF( OutputBuffer&     o_rOutputBuf,
+static inline void writeImageLF( OutputBuffer&     o_rOutputBuf,
                           Stream*           str,
                           int               width,
                           int               height,
                           GfxImageColorMap* colorMap ) { writeImage_(o_rOutputBuf,str,width,height,colorMap); }
-inline void writeMaskLF( OutputBuffer&     o_rOutputBuf,
+static inline void writeMaskLF( OutputBuffer&     o_rOutputBuf,
                          Stream*           str,
                          int               width,
                          int               height,

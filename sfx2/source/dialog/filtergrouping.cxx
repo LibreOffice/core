@@ -146,7 +146,7 @@ namespace sfx2
 // = reading of configuration data
 
 
-    void lcl_ReadFilterClass( const OConfigurationNode& _rClassesNode, const OUString& _rLogicalClassName,
+    static void lcl_ReadFilterClass( const OConfigurationNode& _rClassesNode, const OUString& _rLogicalClassName,
         FilterClass& /* [out] */ _rClass )
     {
             // the description node for the current class
@@ -218,7 +218,7 @@ namespace sfx2
     };
 
 
-    void lcl_ReadGlobalFilters( const OConfigurationNode& _rFilterClassification, FilterClassList& _rGlobalClasses, std::vector<OUString>& _rGlobalClassNames )
+    static void lcl_ReadGlobalFilters( const OConfigurationNode& _rFilterClassification, FilterClassList& _rGlobalClasses, std::vector<OUString>& _rGlobalClassNames )
     {
         _rGlobalClasses.clear();
         _rGlobalClassNames.clear();
@@ -288,7 +288,7 @@ namespace sfx2
     };
 
 
-    void lcl_ReadLocalFilters( const OConfigurationNode& _rFilterClassification, FilterClassList& _rLocalClasses )
+    static void lcl_ReadLocalFilters( const OConfigurationNode& _rFilterClassification, FilterClassList& _rLocalClasses )
     {
         _rLocalClasses.clear();
 
@@ -305,7 +305,7 @@ namespace sfx2
     }
 
 
-    void lcl_ReadClassification( FilterClassList& _rGlobalClasses, std::vector<OUString>& _rGlobalClassNames, FilterClassList& _rLocalClasses )
+    static void lcl_ReadClassification( FilterClassList& _rGlobalClasses, std::vector<OUString>& _rGlobalClassNames, FilterClassList& _rLocalClasses )
     {
 
         // open our config node
@@ -495,7 +495,7 @@ namespace sfx2
     }
 
 
-    void lcl_InitGlobalClasses( GroupedFilterList& _rAllFilters, const FilterClassList& _rGlobalClasses, FilterGroupEntryReferrer& _rGlobalClassesRef )
+    static void lcl_InitGlobalClasses( GroupedFilterList& _rAllFilters, const FilterClassList& _rGlobalClasses, FilterGroupEntryReferrer& _rGlobalClassesRef )
     {
         // we need an extra group in our "all filters" container
         _rAllFilters.push_front( FilterGroup() );
@@ -555,7 +555,7 @@ namespace sfx2
     };
 
 
-    void lcl_GroupAndClassify( TSortedFilterList& _rFilterMatcher, GroupedFilterList& _rAllFilters )
+    static void lcl_GroupAndClassify( TSortedFilterList& _rFilterMatcher, GroupedFilterList& _rAllFilters )
     {
         _rAllFilters.clear();
 
@@ -745,7 +745,7 @@ namespace sfx2
 // = handling for the "all files" entry
 
 
-    bool lcl_hasAllFilesFilter( TSortedFilterList& _rFilterMatcher, OUString& /* [out] */ _rAllFilterName )
+    static bool lcl_hasAllFilesFilter( TSortedFilterList& _rFilterMatcher, OUString& /* [out] */ _rAllFilterName )
     {
         bool        bHasAll = false;
         _rAllFilterName = SfxResId( STR_SFX_FILTERNAME_ALL );
@@ -761,7 +761,7 @@ namespace sfx2
     }
 
 
-    void lcl_EnsureAllFilesEntry( TSortedFilterList& _rFilterMatcher, GroupedFilterList& _rFilters )
+    static void lcl_EnsureAllFilesEntry( TSortedFilterList& _rFilterMatcher, GroupedFilterList& _rFilters )
     {
 
         OUString sAllFilterName;

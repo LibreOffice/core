@@ -92,7 +92,7 @@ const char * dbg_out(const OUString & aStr)
     return aDbgOutResult.getStr();
 }
 
-map<sal_uInt16,OUString> & GetItemWhichMap()
+static map<sal_uInt16,OUString> & GetItemWhichMap()
 {
     static map<sal_uInt16,OUString> aItemWhichMap;
     static bool bInitialized = false;

@@ -1733,7 +1733,7 @@ void SwFootnoteBossFrame::CollectFootnotes( const SwContentFrame* _pRef,
     CollectFootnotes_( _pRef, pFootnote, _rFootnoteArr, _bCollectOnlyPreviousFootnotes, pRefBossFrame );
 }
 
-inline void FootnoteInArr( SwFootnoteFrames& rFootnoteArr, SwFootnoteFrame* pFootnote )
+static inline void FootnoteInArr( SwFootnoteFrames& rFootnoteArr, SwFootnoteFrame* pFootnote )
 {
     if ( rFootnoteArr.end() == std::find( rFootnoteArr.begin(), rFootnoteArr.end(), pFootnote ) )
         rFootnoteArr.push_back( pFootnote );

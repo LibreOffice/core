@@ -250,7 +250,7 @@ void GalleryPreview::PreviewMedia( const INetURLObject& rURL )
     }
 }
 
-void drawTransparenceBackground(vcl::RenderContext& rOut, const Point& rPos, const Size& rSize)
+static void drawTransparenceBackground(vcl::RenderContext& rOut, const Point& rPos, const Size& rSize)
 {
 
     // draw checkered background

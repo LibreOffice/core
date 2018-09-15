@@ -554,7 +554,7 @@ SimpleShape::SimpleShape( Drawing& rDrawing, const OUString& rService ) :
 {
 }
 
-void lcl_setSurround(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, const GraphicHelper& rGraphicHelper)
+static void lcl_setSurround(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, const GraphicHelper& rGraphicHelper)
 {
     OUString aWrapType = rTypeModel.moWrapType.get();
 
@@ -579,7 +579,7 @@ void lcl_setSurround(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, co
     rPropSet.setProperty(PROP_Surround, static_cast<sal_Int32>(nSurround));
 }
 
-void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, const GraphicHelper& rGraphicHelper)
+static void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, const GraphicHelper& rGraphicHelper)
 {
     if ( rTypeModel.maPosition == "absolute" )
     {

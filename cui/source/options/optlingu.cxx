@@ -118,7 +118,7 @@ static sal_Int32 lcl_SeqGetEntryPos(
     return i < nLen ? i : -1;
 }
 
-bool KillFile_Impl( const OUString& rURL )
+static bool KillFile_Impl( const OUString& rURL )
 {
     bool bRet = true;
     try

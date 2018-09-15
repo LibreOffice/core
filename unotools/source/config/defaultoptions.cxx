@@ -147,7 +147,7 @@ static PathToDefaultMapping_Impl const PathMap_Impl[] =
 
 // functions -------------------------------------------------------------
 
-Sequence< OUString > GetDefaultPropertyNames()
+static Sequence< OUString > GetDefaultPropertyNames()
 {
     static const char* aPropNames[] =
     {

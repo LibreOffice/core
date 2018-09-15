@@ -31,7 +31,7 @@ using namespace ::com::sun::star::connection;
 
 namespace stoc_connector {
     template<class T>
-    void notifyListeners(SocketConnection * pCon, bool * notified, T t)
+    static void notifyListeners(SocketConnection * pCon, bool * notified, T t)
     {
           XStreamListener_hash_set listeners;
 

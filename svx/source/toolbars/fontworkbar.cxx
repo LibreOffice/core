@@ -52,7 +52,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
-void SetAlignmentState( SdrView const * pSdrView, SfxItemSet& rSet )
+static void SetAlignmentState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -95,7 +95,7 @@ void SetAlignmentState( SdrView const * pSdrView, SfxItemSet& rSet )
     rSet.Put( SfxInt32Item( SID_FONTWORK_ALIGNMENT, nAlignment ) );
 }
 
-void SetCharacterSpacingState( SdrView const * pSdrView, SfxItemSet& rSet )
+static void SetCharacterSpacingState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -120,7 +120,7 @@ void SetCharacterSpacingState( SdrView const * pSdrView, SfxItemSet& rSet )
 }
 
 
-void SetKernCharacterPairsState( SdrView const * pSdrView, SfxItemSet& rSet )
+static void SetKernCharacterPairsState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -139,7 +139,7 @@ void SetKernCharacterPairsState( SdrView const * pSdrView, SfxItemSet& rSet )
     rSet.Put( SfxBoolItem( SID_FONTWORK_KERN_CHARACTER_PAIRS, bChecked ) );
 }
 
-void SetFontWorkShapeTypeState( SdrView const * pSdrView, SfxItemSet& rSet )
+static void SetFontWorkShapeTypeState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -319,7 +319,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
     }
 }
 
-void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const OUString& rCustomShape )
+static void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const OUString& rCustomShape )
 {
     const OUString sType( "Type" );
 

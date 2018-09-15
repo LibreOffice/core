@@ -131,7 +131,7 @@ static void lcl_MoveItWrap( R& rRef, U nMask )
 }
 
 template< typename R, typename S, typename U >
-bool IsExpand( R n1, R n2, U nStart, S nD )
+static bool IsExpand( R n1, R n2, U nStart, S nD )
 {   // before normal Move...
     return
         nD > 0          // Insert
@@ -143,7 +143,7 @@ bool IsExpand( R n1, R n2, U nStart, S nD )
 }
 
 template< typename R, typename S, typename U >
-void Expand( R& n1, R& n2, U nStart, S nD )
+static void Expand( R& n1, R& n2, U nStart, S nD )
 {   // after normal Move..., only if IsExpand was true before!
     // first the End
     if ( n2 + 1 == nStart )

@@ -61,7 +61,7 @@ using namespace comphelper;
 using namespace cppu;
 
 
-OUString makeHierarchalNameSegment( const OUString & rIn  )
+static OUString makeHierarchalNameSegment( const OUString & rIn  )
 {
     OUStringBuffer aBuffer;
     aBuffer.append( "['" );

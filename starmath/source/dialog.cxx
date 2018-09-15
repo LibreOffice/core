@@ -126,7 +126,7 @@ const OUString& SmFontStyles::GetStyleName( sal_uInt16 nIdx ) const
     }
 }
 
-const SmFontStyles & GetFontStyles()
+static const SmFontStyles & GetFontStyles()
 {
     static const SmFontStyles aImpl;
     return aImpl;

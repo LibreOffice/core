@@ -833,7 +833,7 @@ FormulaCompiler::OpCodeMapPtr FormulaCompiler::CreateOpCodeMap(
     return xMap;
 }
 
-void lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, bool bDestroy = false )
+static void lcl_fillNativeSymbols( FormulaCompiler::NonConstOpCodeMapPtr& xMap, bool bDestroy = false )
 {
     static OpCodeMapData aSymbolMap;
     osl::MutexGuard aGuard(&aSymbolMap.maMtx);

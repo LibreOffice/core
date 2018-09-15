@@ -49,12 +49,12 @@ namespace dmapper {
 
 //---------------------------------------------------  Utility functions
 template <typename T>
-beans::PropertyValue lcl_makePropVal(PropertyIds nNameID, T const & aValue)
+static beans::PropertyValue lcl_makePropVal(PropertyIds nNameID, T const & aValue)
 {
     return {getPropertyName(nNameID), 0, uno::makeAny(aValue), beans::PropertyState_DIRECT_VALUE};
 }
 
-sal_Int32 lcl_findProperty( const uno::Sequence< beans::PropertyValue >& aProps, const OUString& sName )
+static sal_Int32 lcl_findProperty( const uno::Sequence< beans::PropertyValue >& aProps, const OUString& sName )
 {
     sal_Int32 i = 0;
     sal_Int32 nLen = aProps.getLength( );
@@ -71,7 +71,7 @@ sal_Int32 lcl_findProperty( const uno::Sequence< beans::PropertyValue >& aProps,
     return nPos;
 }
 
-void lcl_mergeProperties( uno::Sequence< beans::PropertyValue >& aSrc,
+static void lcl_mergeProperties( uno::Sequence< beans::PropertyValue >& aSrc,
         uno::Sequence< beans::PropertyValue >& aDst )
 {
     for ( sal_Int32 i = 0, nSrcLen = aSrc.getLength( ); i < nSrcLen; i++ )
@@ -484,7 +484,7 @@ uno::Sequence<uno::Sequence<beans::PropertyValue>> ListDef::GetMergedPropertyVal
     return aAbstract;
 }
 
-uno::Reference< container::XNameContainer > lcl_getUnoNumberingStyles(
+static uno::Reference< container::XNameContainer > lcl_getUnoNumberingStyles(
        uno::Reference<lang::XMultiServiceFactory> const& xFactory)
 {
     uno::Reference< container::XNameContainer > xStyles;

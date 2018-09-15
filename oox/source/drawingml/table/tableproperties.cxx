@@ -49,7 +49,7 @@ TableProperties::TableProperties()
 {
 }
 
-void CreateTableRows( const uno::Reference< XTableRows >& xTableRows, const std::vector< TableRow >& rvTableRows )
+static void CreateTableRows( const uno::Reference< XTableRows >& xTableRows, const std::vector< TableRow >& rvTableRows )
 {
     if ( rvTableRows.size() > 1 )
         xTableRows->insertByIndex( 0, rvTableRows.size() - 1 );
@@ -64,7 +64,7 @@ void CreateTableRows( const uno::Reference< XTableRows >& xTableRows, const std:
     }
 }
 
-void CreateTableColumns( const Reference< XTableColumns >& xTableColumns, const std::vector< sal_Int32 >& rvTableGrid )
+static void CreateTableColumns( const Reference< XTableColumns >& xTableColumns, const std::vector< sal_Int32 >& rvTableGrid )
 {
     if ( rvTableGrid.size() > 1 )
         xTableColumns->insertByIndex( 0, rvTableGrid.size() - 1 );
@@ -78,7 +78,7 @@ void CreateTableColumns( const Reference< XTableColumns >& xTableColumns, const 
     }
 }
 
-void MergeCells( const uno::Reference< XTable >& xTable, sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_Int32 nRowSpan )
+static void MergeCells( const uno::Reference< XTable >& xTable, sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_Int32 nRowSpan )
 {
    if( xTable.is() ) try
    {
@@ -140,7 +140,7 @@ static void SetTableStyleProperties(TableStyle* &pTableStyle , sal_Int32 tblFill
     pTableStyle->getLastCol().getTextBoldStyle() = textBoldStyle;
 }
 
-TableStyle* CreateTableStyle(const OUString& styleId)
+static TableStyle* CreateTableStyle(const OUString& styleId)
 {
     TableStyle* pTableStyle = nullptr;
 

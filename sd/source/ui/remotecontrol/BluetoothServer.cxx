@@ -870,13 +870,13 @@ registerWithDefaultAdapter( DBusConnection *pConnection )
     return pService;
 }
 
-void ProfileUnregisterFunction
+static void ProfileUnregisterFunction
 (DBusConnection *, void *)
 {
     // We specifically don't need to do anything here.
 }
 
-DBusHandlerResult ProfileMessageFunction
+static DBusHandlerResult ProfileMessageFunction
 (DBusConnection *pConnection, DBusMessage *pMessage, void *user_data)
 {
     SAL_INFO("sdremote.bluetooth", "ProfileMessageFunction||" << dbus_message_get_interface(pMessage) << "||" <<  dbus_message_get_member(pMessage));

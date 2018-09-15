@@ -98,7 +98,7 @@ bool DocxExportFilter::exportDocument()
 // UNO stuff so that the filter is registered
 #define IMPL_NAME "com.sun.star.comp.Writer.DocxExport"
 
-OUString DocxExport_getImplementationName()
+static OUString DocxExport_getImplementationName()
 {
     return OUString( IMPL_NAME );
 }
@@ -108,13 +108,13 @@ OUString DocxExportFilter::getImplementationName()
     return DocxExport_getImplementationName();
 }
 
-uno::Sequence< OUString > DocxExport_getSupportedServiceNames() throw()
+static uno::Sequence< OUString > DocxExport_getSupportedServiceNames() throw()
 {
     return uno::Sequence< OUString > { "com.sun.star.document.ExportFilter" };
 }
 
 /// @throws uno::Exception
-uno::Reference< uno::XInterface > DocxExport_createInstance(const uno::Reference< uno::XComponentContext > & xCtx )
+static uno::Reference< uno::XInterface > DocxExport_createInstance(const uno::Reference< uno::XComponentContext > & xCtx )
 {
     return static_cast<cppu::OWeakObject*>(new DocxExportFilter( xCtx ));
 }

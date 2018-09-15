@@ -338,7 +338,7 @@ static OUString GetResourceURLFromToolbarId(ToolbarId eId)
     return theFilledToolBarResIdToResourceURLMap::get().findURL(eId);
 }
 
-bool IsAppWorkWinToolbox_Impl( sal_uInt16 nPos )
+static bool IsAppWorkWinToolbox_Impl( sal_uInt16 nPos )
 {
     switch ( nPos )
     {
@@ -351,7 +351,7 @@ bool IsAppWorkWinToolbox_Impl( sal_uInt16 nPos )
     }
 }
 
-sal_uInt16 TbxMatch( sal_uInt16 nPos )
+static sal_uInt16 TbxMatch( sal_uInt16 nPos )
 {
     switch ( nPos )
     {
@@ -374,7 +374,7 @@ sal_uInt16 TbxMatch( sal_uInt16 nPos )
     }
 }
 
-sal_uInt16 ChildAlignValue(SfxChildAlignment eAlign)
+static sal_uInt16 ChildAlignValue(SfxChildAlignment eAlign)
 {
     sal_uInt16 ret = 17;
 

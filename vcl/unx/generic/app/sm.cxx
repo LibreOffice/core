@@ -109,11 +109,15 @@ bool IceSalSession::cancelShutdown()
     return false;
 }
 
-extern "C" void ICEWatchProc(
+extern "C" {
+
+static void ICEWatchProc(
     IceConn ice_conn, IcePointer client_data, Bool opening,
     IcePointer * watch_data);
 
-extern "C" void ICEConnectionWorker(void * data);
+static void ICEConnectionWorker(void * data);
+
+}
 
 class ICEConnectionObserver
 {

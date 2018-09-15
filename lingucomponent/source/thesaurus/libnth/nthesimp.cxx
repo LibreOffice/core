@@ -472,7 +472,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
 }
 
 /// @throws Exception
-Reference< XInterface > Thesaurus_CreateInstance(
+static Reference< XInterface > Thesaurus_CreateInstance(
             const Reference< XMultiServiceFactory > & /*rSMgr*/ )
 {
     Reference< XInterface > xService = static_cast<cppu::OWeakObject*>(new Thesaurus);

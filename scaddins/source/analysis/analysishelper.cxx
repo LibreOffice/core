@@ -769,31 +769,31 @@ double Erfc( double x )
     return ::rtl::math::erfc(x);
 }
 
-inline bool IsNum( sal_Unicode c )
+static inline bool IsNum( sal_Unicode c )
 {
     return c >= '0' && c <= '9';
 }
 
 
-inline bool IsComma( sal_Unicode c )
+static inline bool IsComma( sal_Unicode c )
 {
     return c == '.' || c == ',';
 }
 
 
-inline bool IsExpStart( sal_Unicode c )
+static inline bool IsExpStart( sal_Unicode c )
 {
     return c == 'e' || c == 'E';
 }
 
 
-inline bool IsImagUnit( sal_Unicode c )
+static inline bool IsImagUnit( sal_Unicode c )
 {
     return c == 'i' || c == 'j';
 }
 
 
-inline sal_uInt16 GetVal( sal_Unicode c )
+static inline sal_uInt16 GetVal( sal_Unicode c )
 {
     return sal_uInt16( c - '0' );
 }

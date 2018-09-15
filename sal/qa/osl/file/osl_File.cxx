@@ -43,7 +43,7 @@ using namespace osl;
 
 /** detailed wrong message.
 */
-inline OString errorToString(const osl::FileBase::RC _nError)
+static inline OString errorToString(const osl::FileBase::RC _nError)
 {
     OString sResult;
     switch (_nError) {
@@ -84,7 +84,7 @@ inline OString errorToString(const osl::FileBase::RC _nError)
     return sResult;
 }
 
-OString errorToStr(osl::FileBase::RC const& nError)
+static OString errorToStr(osl::FileBase::RC const& nError)
 {
     OString suBuf;
     suBuf += "The returned error is: " ;
@@ -103,7 +103,7 @@ OString errorToStr(osl::FileBase::RC const& nError)
 #   define delta 1800                    // time precision, 1.8s
 #endif
 
-inline bool t_compareTime(TimeValue *m_aEndTime,  TimeValue *m_aStartTime, sal_Int32 nDelta)
+static inline bool t_compareTime(TimeValue *m_aEndTime,  TimeValue *m_aStartTime, sal_Int32 nDelta)
 {
     sal_Int32 nDeltaSeconds = m_aEndTime->Seconds - m_aStartTime->Seconds;
     sal_Int32 nDeltaNanoSec = sal_Int32(m_aEndTime->Nanosec) - sal_Int32(m_aStartTime->Nanosec);
@@ -119,7 +119,7 @@ inline bool t_compareTime(TimeValue *m_aEndTime,  TimeValue *m_aStartTime, sal_I
 
 /** compare two OUString file name.
 */
-inline bool compareFileName(const OUString & ustr1, const OUString & ustr2)
+static inline bool compareFileName(const OUString & ustr1, const OUString & ustr2)
 {
     bool bOk;
 // on Windows, the separator is '\', so here change to '/', then compare
@@ -145,14 +145,14 @@ inline bool compareFileName(const OUString & ustr1, const OUString & ustr2)
 /** simple version to judge if a file name or directory name is a URL or a system path, just to see if it
     is start with "file:///";.
 */
-inline bool isURL(const OUString& pathname)
+static inline bool isURL(const OUString& pathname)
 {
     return pathname.startsWith(aPreURL);
 }
 
 /** concat two part to form a URL or system path, add PATH_SEPARATOR between them if necessary, add "file:///" to beginning if necessary.
 */
-inline void concatURL(OUString & pathname1, const OUString & pathname2)
+static inline void concatURL(OUString & pathname1, const OUString & pathname2)
 {
     // check if pathname1 is full qualified URL;
     if (!isURL(pathname1))
@@ -170,7 +170,7 @@ inline void concatURL(OUString & pathname1, const OUString & pathname2)
 
 /** create a temp test file using OUString name of full qualified URL or system path.
 */
-inline void createTestFile(const OUString& filename)
+static inline void createTestFile(const OUString& filename)
 {
     OUString     aPathURL   = filename.copy(0);
     osl::FileBase::RC nError;
@@ -189,7 +189,7 @@ inline void createTestFile(const OUString& filename)
 
 /** create a temp test file using OUString name of full qualified URL or system path in a base directory.
 */
-inline void createTestFile(const OUString& basename, const OUString& filename)
+static inline void createTestFile(const OUString& basename, const OUString& filename)
 {
     OUString aBaseURL = basename.copy(0);
 
@@ -199,7 +199,7 @@ inline void createTestFile(const OUString& basename, const OUString& filename)
 
 /** delete a temp test file using OUString name.
 */
-inline void deleteTestFile(const OUString& filename)
+static inline void deleteTestFile(const OUString& filename)
 {
     OUString     aPathURL   = filename.copy(0);
     osl::FileBase::RC nError;
@@ -216,7 +216,7 @@ inline void deleteTestFile(const OUString& filename)
 
 /** delete a temp test file using OUString name of full qualified URL or system path in a base directory.
 */
-inline void deleteTestFile(const OUString& basename, const OUString& filename)
+static inline void deleteTestFile(const OUString& basename, const OUString& filename)
 {
     OUString aBaseURL   = basename.copy(0);
 
@@ -226,7 +226,7 @@ inline void deleteTestFile(const OUString& basename, const OUString& filename)
 
 /** create a temp test directory using OUString name of full qualified URL or system path.
 */
-inline void createTestDirectory(const OUString& dirname)
+static inline void createTestDirectory(const OUString& dirname)
 {
     OUString aPathURL   = dirname.copy(0);
     osl::FileBase::RC nError;
@@ -240,7 +240,7 @@ inline void createTestDirectory(const OUString& dirname)
 
 /** create a temp test directory using OUString name of full qualified URL or system path in a base directory.
 */
-inline void createTestDirectory(const OUString& basename, const OUString& dirname)
+static inline void createTestDirectory(const OUString& basename, const OUString& dirname)
 {
     OUString aBaseURL   = basename.copy(0);
 
@@ -250,7 +250,7 @@ inline void createTestDirectory(const OUString& basename, const OUString& dirnam
 
 /** delete a temp test directory using OUString name of full qualified URL or system path.
 */
-inline void deleteTestDirectory(const OUString& dirname)
+static inline void deleteTestDirectory(const OUString& dirname)
 {
     OUString aPathURL = dirname.copy(0);
     osl::FileBase::RC nError;
@@ -270,7 +270,7 @@ inline void deleteTestDirectory(const OUString& dirname)
 
 /** delete a temp test directory using OUString name of full qualified URL or system path in a base directory.
 */
-inline void deleteTestDirectory(const OUString& basename, const OUString& dirname)
+static inline void deleteTestDirectory(const OUString& basename, const OUString& dirname)
 {
     OUString aBaseURL   = basename.copy(0);
 
@@ -288,7 +288,7 @@ enum class oslCheckMode {
 
 /** check if the file exist
 */
-inline bool ifFileExist(const OUString & str)
+static inline bool ifFileExist(const OUString & str)
 {
     File testFile(str);
     return (testFile.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None);
@@ -296,7 +296,7 @@ inline bool ifFileExist(const OUString & str)
 
 /** check if the file can be written
 */
-inline bool ifFileCanWrite(const OUString & str)
+static inline bool ifFileCanWrite(const OUString & str)
 {
     // on Windows, the file has no write right, but can be written
 #ifdef _WIN32
@@ -317,7 +317,7 @@ inline bool ifFileCanWrite(const OUString & str)
     return bCheckResult;
 }
 
-inline bool checkDirectory(const OUString& str, oslCheckMode nCheckMode)
+static inline bool checkDirectory(const OUString& str, oslCheckMode nCheckMode)
 {
     OUString aUString;
     DirectoryItem rItem;
@@ -366,7 +366,7 @@ inline bool checkDirectory(const OUString& str, oslCheckMode nCheckMode)
 
 /** construct error message
 */
-inline OString outputError(const OString & returnVal, const OString & rightVal, const sal_Char * msg = "")
+static inline OString outputError(const OString & returnVal, const OString & rightVal, const sal_Char * msg = "")
 {
     OString aString;
     if (returnVal == rightVal)
@@ -384,7 +384,7 @@ inline OString outputError(const OString & returnVal, const OString & rightVal, 
 /** Change file mode, two version in UNIX and Windows;.
 */
 #if (defined UNX) /* chmod() method is different in Windows */
-inline void changeFileMode(OUString & filepath, sal_Int32 mode)
+static inline void changeFileMode(OUString & filepath, sal_Int32 mode)
 {
     OString aString;
     OUString aUStr = filepath.copy(0);
@@ -405,7 +405,7 @@ inline void changeFileMode(OUString & filepath, sal_Int32 mode)
 }
 #endif
 
-inline OUString getCurrentPID();
+static inline OUString getCurrentPID();
 
 // Beginning of the test cases for osl::FileBase class
 
@@ -4920,7 +4920,7 @@ namespace osl_Directory
 
 #define TEST_PATH_POSTFIX "hello/world"
 
-    OUString const & get_test_path()
+    static OUString const & get_test_path()
     {
         static OUString test_path;
         if (test_path.isEmpty())
@@ -4973,7 +4973,7 @@ namespace osl_Directory
         return test_path;
     }
 
-    void rm_test_path(const OUString& path)
+    static void rm_test_path(const OUString& path)
     {
         sal_Unicode buffer[PATH_BUFFER_SIZE];
         memcpy(buffer, path.getStr(), (path.getLength() + 1) * sizeof(sal_Unicode));

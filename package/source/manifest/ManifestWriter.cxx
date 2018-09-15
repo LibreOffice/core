@@ -73,7 +73,7 @@ void SAL_CALL ManifestWriter::writeManifestSequence( const Reference< XOutputStr
 }
 
 // Component methods
-Reference < XInterface > ManifestWriter_createInstance( Reference< XMultiServiceFactory > const & rServiceFactory )
+static Reference < XInterface > ManifestWriter_createInstance( Reference< XMultiServiceFactory > const & rServiceFactory )
 {
     return *new ManifestWriter( comphelper::getComponentContext(rServiceFactory) );
 }

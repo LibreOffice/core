@@ -305,7 +305,7 @@ static void lcl_ConvertSequenceName(OUString& rSequenceName)
 
 // FindParaStart() finds 1st Parameter that follows '\' and cToken
 // and returns start of this parameter or -1
-sal_Int32 FindParaStart( const OUString& rStr, sal_Unicode cToken, sal_Unicode cToken2 )
+static sal_Int32 FindParaStart( const OUString& rStr, sal_Unicode cToken, sal_Unicode cToken2 )
 {
     bool bStr = false; // ignore inside a string
 
@@ -334,7 +334,7 @@ sal_Int32 FindParaStart( const OUString& rStr, sal_Unicode cToken, sal_Unicode c
 // FindPara() finds the first parameter including '\' and cToken.
 // A new String will be allocated (has to be deallocated by the caller)
 // and everything that is part of the parameter will be returned.
-OUString FindPara( const OUString& rStr, sal_Unicode cToken, sal_Unicode cToken2 )
+static OUString FindPara( const OUString& rStr, sal_Unicode cToken, sal_Unicode cToken2 )
 {
     sal_Int32 n2;                                          // end
     sal_Int32 n = FindParaStart( rStr, cToken, cToken2 );  // start
@@ -408,7 +408,7 @@ bool SwWW8ImplReader::ForceFieldLanguage(SwField &rField, LanguageType nLang)
     return bRet;
 }
 
-OUString GetWordDefaultDateStringAsUS(SvNumberFormatter* pFormatter, LanguageType nLang)
+static OUString GetWordDefaultDateStringAsUS(SvNumberFormatter* pFormatter, LanguageType nLang)
 {
     //Get the system date in the correct final language layout, convert to
     //a known language and modify the 2 digit year part to be 4 digit, and
@@ -691,7 +691,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
     return nRet;
 }
 
-bool AcceptableNestedField(sal_uInt16 nFieldCode)
+static bool AcceptableNestedField(sal_uInt16 nFieldCode)
 {
     switch (nFieldCode)
     {
@@ -2203,7 +2203,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
 //helper function
 //For MS MacroButton field, the symbol in plain text is always "(" (0x28),
 //which should be mapped according to the macro type
-bool ConvertMacroSymbol( const OUString& rName, OUString& rReference )
+static bool ConvertMacroSymbol( const OUString& rName, OUString& rReference )
 {
     bool bConverted = false;
     if( rReference == "(" )

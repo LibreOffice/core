@@ -103,7 +103,7 @@ const long STD_MIN_SIZE_X = 250;
 const long STD_MIN_SIZE_Y = 250;
 
 
-OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
+static OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
 {
     const char* pClassNameResourceId = nullptr;
 

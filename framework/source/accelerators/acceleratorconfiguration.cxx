@@ -59,7 +59,7 @@ namespace framework
     const char CFG_ENTRY_SECONDARY[] = "SecondaryKeys";
     const char CFG_PROP_COMMAND[] = "Command";
 
-    OUString lcl_getKeyString(const css::awt::KeyEvent& aKeyEvent)
+    static OUString lcl_getKeyString(const css::awt::KeyEvent& aKeyEvent)
     {
         const sal_Int32 nBeginIndex = 4; // "KEY_" is the prefix of a identifier...
         OUStringBuffer sKeyBuffer((KeyMapping::get().mapCodeToIdentifier(aKeyEvent.KeyCode)).copy(nBeginIndex));
@@ -664,7 +664,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfigurati
     return comphelper::containerToSequence(lKeys);
 }
 
-AcceleratorCache::TKeyList::const_iterator lcl_getPreferredKey(const AcceleratorCache::TKeyList& lKeys)
+static AcceleratorCache::TKeyList::const_iterator lcl_getPreferredKey(const AcceleratorCache::TKeyList& lKeys)
 {
     AcceleratorCache::TKeyList::const_iterator pIt;
     for (  pIt  = lKeys.begin ();

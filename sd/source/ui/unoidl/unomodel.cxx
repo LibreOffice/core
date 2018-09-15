@@ -198,7 +198,7 @@ const sal_uInt16 WID_MODEL_DIALOGLIBS         = 12;
 const sal_uInt16 WID_MODEL_FONTS              = 13;
 const sal_uInt16 WID_MODEL_INTEROPGRABBAG     = 14;
 
-const SvxItemPropertySet* ImplGetDrawModelPropertySet()
+static const SvxItemPropertySet* ImplGetDrawModelPropertySet()
 {
     // Attention: the first parameter HAS TO BE sorted!!!
     const static SfxItemPropertyMapEntry aDrawModelPropertyMap_Impl[] =
@@ -1555,7 +1555,7 @@ ImplRenderPaintProc::ImplRenderPaintProc( const SdrLayerAdmin& rLA, SdrPageView*
 {
 }
 
-sal_Int32 ImplPDFGetBookmarkPage( const OUString& rBookmark, SdDrawDocument const & rDoc )
+static sal_Int32 ImplPDFGetBookmarkPage( const OUString& rBookmark, SdDrawDocument const & rDoc )
 {
     sal_Int32 nPage = -1;
 
@@ -1581,7 +1581,7 @@ sal_Int32 ImplPDFGetBookmarkPage( const OUString& rBookmark, SdDrawDocument cons
     return nPage;
 }
 
-void ImplPDFExportComments( const uno::Reference< drawing::XDrawPage >& xPage, vcl::PDFExtOutDevData& rPDFExtOutDevData )
+static void ImplPDFExportComments( const uno::Reference< drawing::XDrawPage >& xPage, vcl::PDFExtOutDevData& rPDFExtOutDevData )
 {
     try
     {
@@ -1618,7 +1618,7 @@ void ImplPDFExportComments( const uno::Reference< drawing::XDrawPage >& xPage, v
     }
 }
 
-void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape >& xShape, SdDrawDocument& rDoc, vcl::PDFExtOutDevData& rPDFExtOutDevData )
+static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape >& xShape, SdDrawDocument& rDoc, vcl::PDFExtOutDevData& rPDFExtOutDevData )
 {
     if ( xShape->getShapeType() == "com.sun.star.drawing.GroupShape" )
     {

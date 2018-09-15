@@ -867,7 +867,7 @@ SdrObject* isOver(const tools::Rectangle& _rRect, SdrPage const & _rPage, SdrVie
     return pOverlappedObj;
 }
 
-bool checkArrayForOccurrence(SdrObject const * _pObjToCheck, SdrUnoObj* _pIgnore[], int _nListLength)
+static bool checkArrayForOccurrence(SdrObject const * _pObjToCheck, SdrUnoObj* _pIgnore[], int _nListLength)
 {
     for(int i=0;i<_nListLength;i++)
     {

@@ -123,7 +123,7 @@ void DlgEdView::MakeVisible( const tools::Rectangle& rRect, vcl::Window& rWin )
     }
 }
 
-SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt16 nTol)
+static SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt16 nTol)
 {
     DlgEdObj* pDlgEdObj = dynamic_cast< DlgEdObj* >(pRetval);
 

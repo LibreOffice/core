@@ -131,7 +131,7 @@ generate_Opcodes(LotusContext &rContext, SvStream& aStream,
     return nErr;
 }
 
-WKTYP ScanVersion(SvStream& aStream)
+static WKTYP ScanVersion(SvStream& aStream)
 {
     // PREC:    pWKFile:   pointer to open file
     // POST:    return:     type of file

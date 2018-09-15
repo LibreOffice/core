@@ -38,7 +38,7 @@ namespace xmloff
 #define MAP_CONST_P( name, prefix, token, type, context ){ name, sizeof(name)-1, prefix, token, type|XML_TYPE_PROP_PARAGRAPH, context, SvtSaveOptions::ODFVER_010, false }
 #define MAP_END()   { nullptr, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010, false }
 
-    XMLPropertyMapEntry* getControlStylePropertyMap_Access( )
+    static XMLPropertyMapEntry* getControlStylePropertyMap_Access( )
     {
         static XMLPropertyMapEntry aControlStyleProperties[] =
         {
@@ -93,7 +93,7 @@ namespace xmloff
         }
     };
 
-    void implSortMap(XMLPropertyMapEntry* _pMap)
+    static void implSortMap(XMLPropertyMapEntry* _pMap)
     {
         XMLPropertyMapEntry* pEnd;
         // determine the last element

@@ -38,7 +38,7 @@ typedef StringHashTableImpl StringHashTable;
 static StringHashTable *rtl_str_hash_new(sal_uInt32 nSize);
 static void rtl_str_hash_free(StringHashTable *pHash);
 
-StringHashTable * getHashTable()
+static StringHashTable * getHashTable()
 {
     static StringHashTable *pInternPool = nullptr;
     if (!pInternPool)

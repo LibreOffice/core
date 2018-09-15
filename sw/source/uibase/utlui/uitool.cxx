@@ -179,7 +179,7 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet)
 
 // Fill header footer
 
-void FillHdFt(SwFrameFormat* pFormat, const  SfxItemSet& rSet)
+static void FillHdFt(SwFrameFormat* pFormat, const  SfxItemSet& rSet)
 {
     SwAttrSet aSet(pFormat->GetAttrSet());
     aSet.Put(rSet);
@@ -196,7 +196,7 @@ void FillHdFt(SwFrameFormat* pFormat, const  SfxItemSet& rSet)
 }
 
 /// Convert from UseOnPage to SvxPageUsage.
-SvxPageUsage lcl_convertUseToSvx(UseOnPage nUse)
+static SvxPageUsage lcl_convertUseToSvx(UseOnPage nUse)
 {
     SvxPageUsage nRet = SvxPageUsage::NONE;
     if (nUse & UseOnPage::Left)
@@ -211,7 +211,7 @@ SvxPageUsage lcl_convertUseToSvx(UseOnPage nUse)
 }
 
 /// Convert from SvxPageUsage to UseOnPage.
-UseOnPage lcl_convertUseFromSvx(SvxPageUsage nUse)
+static UseOnPage lcl_convertUseFromSvx(SvxPageUsage nUse)
 {
     UseOnPage nRet = UseOnPage::NONE;
     if (nUse == SvxPageUsage::Left)

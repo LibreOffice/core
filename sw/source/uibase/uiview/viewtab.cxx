@@ -183,7 +183,7 @@ static void lcl_Scale(long& nVal, long nScale)
     nVal >>= 8;
 }
 
-void ResizeFrameCols(SwFormatCol& rCol,
+static void ResizeFrameCols(SwFormatCol& rCol,
                     long nOldWidth,
                     long nNewWidth,
                     long nLeftDelta )

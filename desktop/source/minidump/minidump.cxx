@@ -19,7 +19,7 @@
 
 static const char kUserAgent[] = "Breakpad/1.0 (Linux)";
 
-std::map<std::string, std::string> readStrings(std::istream& file)
+static std::map<std::string, std::string> readStrings(std::istream& file)
 {
     std::map<std::string, std::string> parameters;
 
@@ -52,7 +52,7 @@ static size_t WriteCallback(void const *ptr, size_t size,
   return real_size;
 }
 
-void getProperty(const std::string& key, std::string& value,
+static void getProperty(const std::string& key, std::string& value,
         std::map<std::string, std::string>& parameters)
 {
     auto itr = parameters.find(key);
@@ -63,7 +63,7 @@ void getProperty(const std::string& key, std::string& value,
     }
 }
 
-std::string generate_json(const std::map<std::string, std::string>& parameters)
+static std::string generate_json(const std::map<std::string, std::string>& parameters)
 {
     std::ostringstream stream;
     stream << "{\n";
@@ -82,7 +82,7 @@ std::string generate_json(const std::map<std::string, std::string>& parameters)
     return stream.str();
 }
 
-bool uploadContent(std::map<std::string, std::string>& parameters, std::string& response)
+static bool uploadContent(std::map<std::string, std::string>& parameters, std::string& response)
 {
     CURL* curl = curl_easy_init();
     if (!curl)

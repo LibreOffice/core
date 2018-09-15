@@ -580,7 +580,7 @@ Sequence< sal_Int8 > SAL_CALL SfxBaseModel::getImplementationId()
 //  XStarBasicAccess
 
 
-Reference< script::XStarBasicAccess > implGetStarBasicAccess( SfxObjectShell const * pObjectShell )
+static Reference< script::XStarBasicAccess > implGetStarBasicAccess( SfxObjectShell const * pObjectShell )
 {
     Reference< script::XStarBasicAccess > xRet;
 
@@ -2631,7 +2631,7 @@ SfxMedium* SfxBaseModel::handleLoadError( ErrCode nError, SfxMedium* pMedium )
 //  SfxListener
 
 
-void addTitle_Impl( Sequence < beans::PropertyValue >& rSeq, const OUString& rTitle )
+static void addTitle_Impl( Sequence < beans::PropertyValue >& rSeq, const OUString& rTitle )
 {
     sal_Int32 nCount = rSeq.getLength();
     sal_Int32 nArg;

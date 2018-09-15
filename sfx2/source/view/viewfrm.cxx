@@ -2201,7 +2201,7 @@ void SfxViewFrame::ExecView_Impl
         TODO: export special helper "framework::FrameListAnalyzer" within the framework module
         and use it here.
 */
-bool impl_maxOpenDocCountReached()
+static bool impl_maxOpenDocCountReached()
 {
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     boost::optional<sal_Int32> x(officecfg::Office::Common::Misc::MaxOpenDocuments::get(xContext));
@@ -2399,7 +2399,7 @@ void SfxViewFrame::Resize( bool bForce )
 
 #define LINE_SEP 0x0A
 
-void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines )
+static void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines )
 {
     sal_Int32 nStartPos = 0;
     sal_Int32 nLine = 0;

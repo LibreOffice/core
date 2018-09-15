@@ -2538,7 +2538,7 @@ std::vector<OUString> *SwStyleNameMapper::s_pTextUINameArray = nullptr,
                 *SwStyleNameMapper::s_pTableStyleUINameArray = nullptr,
                 *SwStyleNameMapper::s_pCellStyleUINameArray = nullptr;
 
-std::vector<OUString>*
+static std::vector<OUString>*
 lcl_NewUINameArray(const char** pIds, const size_t nLen, const size_t nSvxIds = 0)
 {
     assert(nSvxIds <= nLen);

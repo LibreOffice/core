@@ -1560,7 +1560,7 @@ const SwPageDesc* SwStyleBase_Impl::GetOldPageDesc()
 
 
 
-sal_uInt8 lcl_TranslateMetric(const SfxItemPropertySimpleEntry& rEntry, SwDoc* pDoc, uno::Any& o_aValue)
+static sal_uInt8 lcl_TranslateMetric(const SfxItemPropertySimpleEntry& rEntry, SwDoc* pDoc, uno::Any& o_aValue)
 {
     // check for needed metric translation
     if(!(rEntry.nMoreFlags & PropertyMoreFlags::METRIC_ITEM))
@@ -2458,7 +2458,7 @@ beans::PropertyState SwXStyle::getPropertyState(const OUString& rPropertyName)
 
 // allow to retarget the SfxItemSet working on, default correctly. Only
 // use pSourceSet below this point (except in header/footer processing)
-const SfxItemSet* lcl_GetItemsetForProperty(const SfxItemSet& rSet, SfxStyleFamily eFamily, const OUString& rPropertyName)
+static const SfxItemSet* lcl_GetItemsetForProperty(const SfxItemSet& rSet, SfxStyleFamily eFamily, const OUString& rPropertyName)
 {
     if(eFamily != SfxStyleFamily::Page)
         return &rSet;
@@ -2572,7 +2572,7 @@ void SwXStyle::setPropertyToDefault(const OUString& rPropertyName)
     setPropertiesToDefault(aSequence);
 }
 
-SwFormat* lcl_GetFormatForStyle(SwDoc const * pDoc, const rtl::Reference<SwDocStyleSheet>& xStyle, const SfxStyleFamily eFamily)
+static SwFormat* lcl_GetFormatForStyle(SwDoc const * pDoc, const rtl::Reference<SwDocStyleSheet>& xStyle, const SfxStyleFamily eFamily)
 {
     if(!xStyle.is())
         return nullptr;

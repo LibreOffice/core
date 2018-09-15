@@ -160,14 +160,14 @@ void SetSbUnoObjectDfltPropName( SbxObject* pObj )
 }
 
 // save CoreReflection statically
-Reference< XIdlReflection > getCoreReflection_Impl()
+static Reference< XIdlReflection > getCoreReflection_Impl()
 {
     return css::reflection::theCoreReflection::get(
         comphelper::getProcessComponentContext());
 }
 
 // save CoreReflection statically
-Reference< XHierarchicalNameAccess > const & getCoreReflection_HierarchicalNameAccess_Impl()
+static Reference< XHierarchicalNameAccess > const & getCoreReflection_HierarchicalNameAccess_Impl()
 {
     static Reference< XHierarchicalNameAccess > xCoreReflection_HierarchicalNameAccess;
 
@@ -184,7 +184,7 @@ Reference< XHierarchicalNameAccess > const & getCoreReflection_HierarchicalNameA
 }
 
 // Hold TypeProvider statically
-Reference< XHierarchicalNameAccess > const & getTypeProvider_Impl()
+static Reference< XHierarchicalNameAccess > const & getTypeProvider_Impl()
 {
     static Reference< XHierarchicalNameAccess > xAccess;
 
@@ -210,7 +210,7 @@ Reference< XHierarchicalNameAccess > const & getTypeProvider_Impl()
 }
 
 // Hold TypeConverter statically
-Reference< XTypeConverter > const & getTypeConverter_Impl()
+static Reference< XTypeConverter > const & getTypeConverter_Impl()
 {
     static Reference< XTypeConverter > xTypeConverter;
 
@@ -287,7 +287,7 @@ namespace
     }
 }
 
-void implAppendExceptionMsg( OUStringBuffer& _inout_rBuffer, const Exception& _e, const OUString& _rExceptionType, sal_Int32 _nLevel )
+static void implAppendExceptionMsg( OUStringBuffer& _inout_rBuffer, const Exception& _e, const OUString& _rExceptionType, sal_Int32 _nLevel )
 {
     _inout_rBuffer.append( "\n" );
     lcl_indent( _inout_rBuffer, _nLevel );
@@ -306,14 +306,14 @@ void implAppendExceptionMsg( OUStringBuffer& _inout_rBuffer, const Exception& _e
 }
 
 // construct an error message for the exception
-OUString implGetExceptionMsg( const Exception& e, const OUString& aExceptionType_ )
+static OUString implGetExceptionMsg( const Exception& e, const OUString& aExceptionType_ )
 {
     OUStringBuffer aMessageBuf;
     implAppendExceptionMsg( aMessageBuf, e, aExceptionType_, 0 );
     return aMessageBuf.makeStringAndClear();
 }
 
-OUString implGetExceptionMsg( const Any& _rCaughtException )
+static OUString implGetExceptionMsg( const Any& _rCaughtException )
 {
     auto e = o3tl::tryAccess<Exception>(_rCaughtException);
     OSL_PRECOND( e, "implGetExceptionMsg: illegal argument!" );
@@ -324,7 +324,7 @@ OUString implGetExceptionMsg( const Any& _rCaughtException )
     return implGetExceptionMsg( *e, _rCaughtException.getValueTypeName() );
 }
 
-Any convertAny( const Any& rVal, const Type& aDestType )
+static Any convertAny( const Any& rVal, const Type& aDestType )
 {
     Any aConvertedVal;
     Reference< XTypeConverter > xConverter = getTypeConverter_Impl();
@@ -352,25 +352,25 @@ Any convertAny( const Any& rVal, const Type& aDestType )
 
 
 // TODO: source out later
-Reference<XIdlClass> TypeToIdlClass( const Type& rType )
+static Reference<XIdlClass> TypeToIdlClass( const Type& rType )
 {
     return getCoreReflection_Impl()->forName(rType.getTypeName());
 }
 
 // Exception type unknown
 template< class EXCEPTION >
-OUString implGetExceptionMsg( const EXCEPTION& e )
+static OUString implGetExceptionMsg( const EXCEPTION& e )
 {
     return implGetExceptionMsg( e, cppu::UnoType<decltype(e)>::get().getTypeName() );
 }
 
-void implHandleBasicErrorException( BasicErrorException const & e )
+static void implHandleBasicErrorException( BasicErrorException const & e )
 {
     ErrCode nError = StarBASIC::GetSfxFromVBError( static_cast<sal_uInt16>(e.ErrorCode) );
     StarBASIC::Error( nError, e.ErrorMessageArgument );
 }
 
-void implHandleWrappedTargetException( const Any& _rWrappedTargetException )
+static void implHandleWrappedTargetException( const Any& _rWrappedTargetException )
 {
     Any aExamine( _rWrappedTargetException );
 
@@ -477,7 +477,7 @@ static SbxObject* lcl_getNativeObject( sal_uInt32 nIndex )
 }
 
 // convert from Uno to Sbx
-SbxDataType unoToSbxType( TypeClass eType )
+static SbxDataType unoToSbxType( TypeClass eType )
 {
     SbxDataType eRetType = SbxVOID;
 
@@ -512,7 +512,7 @@ SbxDataType unoToSbxType( TypeClass eType )
     return eRetType;
 }
 
-SbxDataType unoToSbxType( const Reference< XIdlClass >& xIdlClass )
+static SbxDataType unoToSbxType( const Reference< XIdlClass >& xIdlClass )
 {
     SbxDataType eRetType = SbxVOID;
     if( xIdlClass.is() )
@@ -812,7 +812,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
 }
 
 // Deliver the reflection for Sbx types
-Type getUnoTypeForSbxBaseType( SbxDataType eType )
+static Type getUnoTypeForSbxBaseType( SbxDataType eType )
 {
     Type aRetType = cppu::UnoType<void>::get();
     switch( eType )
@@ -848,7 +848,7 @@ Type getUnoTypeForSbxBaseType( SbxDataType eType )
 }
 
 // Converting of Sbx to Uno without a know target class for TypeClass_ANY
-Type getUnoTypeForSbxValue( const SbxValue* pVal )
+static Type getUnoTypeForSbxValue( const SbxValue* pVal )
 {
     Type aRetType = cppu::UnoType<void>::get();
     if( !pVal )
@@ -973,7 +973,7 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
 }
 
 // converting of Sbx to Uno without known target class for TypeClass_ANY
-Any sbxToUnoValueImpl( const SbxValue* pVar, bool bBlockConversionToSmallestType = false )
+static Any sbxToUnoValueImpl( const SbxValue* pVar, bool bBlockConversionToSmallestType = false )
 {
     SbxDataType eBaseType = pVar->SbxValue::GetType();
     if( eBaseType == SbxOBJECT )
@@ -1449,7 +1449,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property const * pUn
     return aRetVal;
 }
 
-void processAutomationParams( SbxArray* pParams, Sequence< Any >& args, sal_uInt32 nParamCount )
+static void processAutomationParams( SbxArray* pParams, Sequence< Any >& args, sal_uInt32 nParamCount )
 {
     AutomationNamedArgsSbxArray* pArgNamesArray = dynamic_cast<AutomationNamedArgsSbxArray*>( pParams );
 
@@ -1498,7 +1498,7 @@ enum class INVOKETYPE
    GetProp = 0,
    Func
 };
-Any invokeAutomationMethod( const OUString& Name, Sequence< Any > const & args, SbxArray* pParams, sal_uInt32 nParamCount, Reference< XInvocation > const & rxInvocation, INVOKETYPE invokeType )
+static Any invokeAutomationMethod( const OUString& Name, Sequence< Any > const & args, SbxArray* pParams, sal_uInt32 nParamCount, Reference< XInvocation > const & rxInvocation, INVOKETYPE invokeType )
 {
     Sequence< sal_Int16 > OutParamIndex;
     Sequence< Any > OutParam;
@@ -1536,7 +1536,7 @@ Any invokeAutomationMethod( const OUString& Name, Sequence< Any > const & args, 
 }
 
 // Debugging help method to readout the imlemented interfaces of an object
-OUString Impl_GetInterfaceInfo( const Reference< XInterface >& x, const Reference< XIdlClass >& xClass, sal_uInt16 nRekLevel )
+static OUString Impl_GetInterfaceInfo( const Reference< XInterface >& x, const Reference< XIdlClass >& xClass, sal_uInt16 nRekLevel )
 {
     Type aIfaceType = cppu::UnoType<XInterface>::get();
     static Reference< XIdlClass > xIfaceClass = TypeToIdlClass( aIfaceType );
@@ -1572,7 +1572,7 @@ OUString Impl_GetInterfaceInfo( const Reference< XInterface >& x, const Referenc
     return aRetStr.makeStringAndClear();
 }
 
-OUString getDbgObjectNameImpl(SbUnoObject& rUnoObj)
+static OUString getDbgObjectNameImpl(SbUnoObject& rUnoObj)
 {
     OUString aName = rUnoObj.GetClassName();
     if( aName.isEmpty() )
@@ -1589,7 +1589,7 @@ OUString getDbgObjectNameImpl(SbUnoObject& rUnoObj)
     return aName;
 }
 
-OUString getDbgObjectName(SbUnoObject& rUnoObj)
+static OUString getDbgObjectName(SbUnoObject& rUnoObj)
 {
     OUString aName = getDbgObjectNameImpl(rUnoObj);
     if( aName.isEmpty() )
@@ -1711,7 +1711,7 @@ bool checkUnoObjectType(SbUnoObject& rUnoObj, const OUString& rClass)
 }
 
 // Debugging help method to readout the imlemented interfaces of an object
-OUString Impl_GetSupportedInterfaces(SbUnoObject& rUnoObj)
+static OUString Impl_GetSupportedInterfaces(SbUnoObject& rUnoObj)
 {
     Any aToInspectObj = rUnoObj.getUnoAny();
 
@@ -1762,7 +1762,7 @@ OUString Impl_GetSupportedInterfaces(SbUnoObject& rUnoObj)
 
 
 // Debugging help method SbxDataType -> String
-OUString Dbg_SbxDataType2String( SbxDataType eType )
+static OUString Dbg_SbxDataType2String( SbxDataType eType )
 {
     OUStringBuffer aRet;
     switch( +eType )
@@ -1806,7 +1806,7 @@ OUString Dbg_SbxDataType2String( SbxDataType eType )
 }
 
 // Debugging help method to display the properties of a SbUnoObjects
-OUString Impl_DumpProperties(SbUnoObject& rUnoObj)
+static OUString Impl_DumpProperties(SbUnoObject& rUnoObj)
 {
     OUStringBuffer aRet;
     aRet.append("Properties of object ");
@@ -1883,7 +1883,7 @@ OUString Impl_DumpProperties(SbUnoObject& rUnoObj)
 }
 
 // Debugging help method to display the methods of an SbUnoObjects
-OUString Impl_DumpMethods(SbUnoObject& rUnoObj)
+static OUString Impl_DumpMethods(SbUnoObject& rUnoObj)
 {
     OUStringBuffer aRet;
     aRet.append("Methods of object ");
@@ -2826,7 +2826,7 @@ Any SbUnoObject::getUnoAny()
 }
 
 // help method to create an Uno-Struct per CoreReflection
-SbUnoObject* Impl_CreateUnoStruct( const OUString& aClassName )
+static SbUnoObject* Impl_CreateUnoStruct( const OUString& aClassName )
 {
     // get CoreReflection
     Reference< XIdlReflection > xCoreReflection = getCoreReflection_Impl();
@@ -3181,7 +3181,7 @@ void RTL_Impl_EqualUnoObjects( SbxArray& rPar )
 // if it fails for whatever reason
 // returned Reference<> be null e.g. .is() will be false
 
-Reference< XTypeDescriptionEnumeration > getTypeDescriptorEnumeration( const OUString& sSearchRoot,
+static Reference< XTypeDescriptionEnumeration > getTypeDescriptorEnumeration( const OUString& sSearchRoot,
                                                                        const Sequence< TypeClass >& types,
                                                                        TypeDescriptionSearchDepth depth )
 {
@@ -3893,7 +3893,7 @@ private:
 
 
 // Function to replace AllListenerAdapterService::createAllListerAdapter
-Reference< XInterface > createAllListenerAdapter
+static Reference< XInterface > createAllListenerAdapter
 (
     const Reference< XInvocationAdapterFactory2 >& xInvocationAdapterFactory,
     const Reference< XIdlClass >& xListenerType,

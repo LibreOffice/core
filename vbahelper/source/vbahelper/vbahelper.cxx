@@ -83,7 +83,7 @@ namespace vba
 namespace { const double factor =  2540.0 / 72.0; }
 
 // helper method to determine if the view ( calc ) is in print-preview mode
-bool isInPrintPreview( SfxViewFrame* pView )
+static bool isInPrintPreview( SfxViewFrame* pView )
 {
     sal_uInt16 nViewNo = SID_VIEWSHELL1 - SID_VIEWSHELL0;
     if ( pView->GetObjectShell()->GetFactory().GetViewFactoryCount() >
@@ -232,7 +232,7 @@ getCurrentDoc( const OUString& sKey )
 }
 
 /// @throws uno::RuntimeException
- uno::Reference< frame::XModel >
+static uno::Reference< frame::XModel >
 getCurrentDocCtx( const OUString& ctxName, const uno::Reference< uno::XComponentContext >& xContext )
 {
     uno::Reference< frame::XModel > xModel;
@@ -556,7 +556,7 @@ ContainerUtilities::FieldInList( const uno::Sequence< OUString >& SearchList, co
 
 }
 
-bool NeedEsc(sal_Unicode cCode)
+static bool NeedEsc(sal_Unicode cCode)
 {
     return OUString(".^$+\\|{}()").indexOf(cCode) != -1;
 }

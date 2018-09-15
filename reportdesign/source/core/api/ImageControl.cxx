@@ -34,7 +34,7 @@ namespace reportdesign
 {
 
     using namespace com::sun::star;
-uno::Sequence< OUString > lcl_getImageOptionals()
+static uno::Sequence< OUString > lcl_getImageOptionals()
 {
     OUString pProps[] = {
             OUString(PROPERTY_CHARCOLOR)

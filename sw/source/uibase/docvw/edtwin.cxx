@@ -313,7 +313,7 @@ struct QuickHelpData
 #define HIT_PIX  2 /* hit tolerance in pixel  */
 #define MIN_MOVE 4
 
-inline bool IsMinMove(const Point &rStartPos, const Point &rLPt)
+static inline bool IsMinMove(const Point &rStartPos, const Point &rLPt)
 {
     return std::abs(rStartPos.X() - rLPt.X()) > MIN_MOVE ||
            std::abs(rStartPos.Y() - rLPt.Y()) > MIN_MOVE;
@@ -325,7 +325,7 @@ inline bool IsMinMove(const Point &rStartPos, const Point &rLPt)
  * in selecting, with DrawObjects; at SwgFlys to trigger
  * hyperlinks if applicable (Download/NewWindow!)
  */
-inline bool IsDrawObjSelectable( const SwWrtShell& rSh, const Point& rPt )
+static inline bool IsDrawObjSelectable( const SwWrtShell& rSh, const Point& rPt )
 {
     bool bRet = true;
     SdrObject* pObj;

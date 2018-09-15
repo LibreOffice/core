@@ -78,7 +78,7 @@ namespace
     }
 }
 
-bool
+static bool
 lcl_hasVbaEvents( const Sequence< ScriptEventDescriptor >& sEvents  )
 {
     for ( auto const& rDesc : sEvents )
@@ -89,7 +89,7 @@ lcl_hasVbaEvents( const Sequence< ScriptEventDescriptor >& sEvents  )
     return false;
 }
 
-Sequence< ScriptEventDescriptor >
+static Sequence< ScriptEventDescriptor >
 lcl_stripVbaEvents( const Sequence< ScriptEventDescriptor >& sEvents )
 {
     Sequence< ScriptEventDescriptor > sStripped( sEvents.getLength() );

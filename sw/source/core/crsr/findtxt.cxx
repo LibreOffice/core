@@ -197,7 +197,7 @@ lcl_CleanStr(const SwTextNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
 }
 
 // skip all non SwPostIts inside the array
-size_t GetPostIt(sal_Int32 aCount,const SwpHints *pHts)
+static size_t GetPostIt(sal_Int32 aCount,const SwpHints *pHts)
 {
     size_t aIndex = 0;
     while (aCount)

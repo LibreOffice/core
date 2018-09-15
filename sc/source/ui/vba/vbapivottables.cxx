@@ -24,7 +24,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-uno::Any DataPilotToPivotTable( const uno::Any& aSource, const uno::Reference< uno::XComponentContext > & xContext )
+static uno::Any DataPilotToPivotTable( const uno::Any& aSource, const uno::Reference< uno::XComponentContext > & xContext )
 {
     uno::Reference< sheet::XDataPilotTable > xTable( aSource, uno::UNO_QUERY_THROW );
     return uno::makeAny( uno::Reference< excel::XPivotTable > ( new ScVbaPivotTable( xContext, xTable ) ) );

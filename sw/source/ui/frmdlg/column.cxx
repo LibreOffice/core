@@ -75,7 +75,7 @@ using namespace ::com::sun::star;
 // static data
 static const sal_uInt16 nVisCols = 3;
 
-inline bool IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
+static inline bool IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
 {
     rWrtSh.SwapPam();
     bool bRet = pSect == rWrtSh.GetCurrSection();
@@ -347,6 +347,7 @@ SfxItemSet* SwColumnDlg::EvalCurrentSelection(void)
     return pSet;
 }
 
+static
 #if OSL_DEBUG_LEVEL < 2
 inline
 #endif

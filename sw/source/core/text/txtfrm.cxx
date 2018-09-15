@@ -697,7 +697,7 @@ SwTextFrame::~SwTextFrame()
 
 namespace sw {
 
-void UpdateMergedParaForInsert(MergedPara & rMerged,
+static void UpdateMergedParaForInsert(MergedPara & rMerged,
         SwTextNode const& rNode, sal_Int32 const nIndex, sal_Int32 const nLen)
 {
     assert(nIndex <= rNode.Len());
@@ -747,7 +747,7 @@ void UpdateMergedParaForInsert(MergedPara & rMerged,
 
 // 1. if real delete => correct nStart/nEnd for full nLen
 // 2. if rl delete => do not correct nStart/nEnd but just exclude deleted
-TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
+static TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
         bool const isRealDelete,
         SwTextNode const& rNode, sal_Int32 nIndex, sal_Int32 const nLen)
 {

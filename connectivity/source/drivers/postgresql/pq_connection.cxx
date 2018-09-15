@@ -117,11 +117,11 @@ public:
     }
 };
 
-OUString    ConnectionGetImplementationName()
+static OUString    ConnectionGetImplementationName()
 {
     return OUString( "org.openoffice.comp.connectivity.pq.Connection.noext" );
 }
-css::uno::Sequence<OUString> ConnectionGetSupportedServiceNames()
+static css::uno::Sequence<OUString> ConnectionGetSupportedServiceNames()
 {
     return Sequence< OUString > { "com.sun.star.sdbc.Connection" };
 }
@@ -640,7 +640,7 @@ Reference< XNameAccess > Connection::getUsers()
 }
 
 /// @throws Exception
-Reference< XInterface >  ConnectionCreateInstance(
+static Reference< XInterface >  ConnectionCreateInstance(
     const Reference< XComponentContext > & ctx )
 {
     ::rtl::Reference< comphelper::RefCountedMutex > ref = new comphelper::RefCountedMutex;

@@ -179,7 +179,7 @@ PropertyMapPtr StyleSheetEntry::GetMergedInheritedProperties(const StyleSheetTab
     return pRet;
 }
 
-void lcl_mergeProps( const PropertyMapPtr& pToFill, const PropertyMapPtr& pToAdd, TblStyleType nStyleId )
+static void lcl_mergeProps( const PropertyMapPtr& pToFill, const PropertyMapPtr& pToAdd, TblStyleType nStyleId )
 {
     static const PropertyIds pPropsToCheck[] =
     {

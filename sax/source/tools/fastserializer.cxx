@@ -105,7 +105,7 @@ namespace sax_fastparser {
     /** Characters not allowed in XML 1.0
         XML 1.1 would exclude only U+0000
      */
-    bool invalidChar( char c )
+    static bool invalidChar( char c )
     {
         if (static_cast<unsigned char>(c) >= 0x20)
             return false;
@@ -120,7 +120,7 @@ namespace sax_fastparser {
         return true;
     }
 
-    bool isHexDigit( char c )
+    static bool isHexDigit( char c )
     {
         return ('0' <= c && c <= '9') || ('A' <= c && c <= 'F') || ('a' <= c && c <= 'f');
     }

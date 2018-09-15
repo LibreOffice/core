@@ -44,7 +44,7 @@ namespace framework
 
 // implementation helper ( menu => ActionTrigger )
 
-bool IsSeparator( const Reference< XPropertySet >& xPropertySet )
+static bool IsSeparator( const Reference< XPropertySet >& xPropertySet )
 {
     Reference< XServiceInfo > xServiceInfo( xPropertySet, UNO_QUERY );
     try
@@ -58,7 +58,7 @@ bool IsSeparator( const Reference< XPropertySet >& xPropertySet )
     return false;
 }
 
-void GetMenuItemAttributes( const Reference< XPropertySet >& xActionTriggerPropertySet,
+static void GetMenuItemAttributes( const Reference< XPropertySet >& xActionTriggerPropertySet,
                             OUString& aMenuLabel,
                             OUString& aCommandURL,
                             OUString& aHelpURL,
@@ -94,7 +94,7 @@ void GetMenuItemAttributes( const Reference< XPropertySet >& xActionTriggerPrope
     }
 }
 
-void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, const Reference< XIndexContainer >& xActionTriggerContainer )
+static void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, const Reference< XIndexContainer >& xActionTriggerContainer )
 {
     if ( xActionTriggerContainer.is() )
     {
@@ -236,7 +236,7 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, const Reference< X
 // implementation helper ( ActionTrigger => menu )
 
 /// @throws RuntimeException
-Reference< XPropertySet > CreateActionTrigger( sal_uInt16 nItemId, const Menu* pMenu, const Reference< XIndexContainer >& rActionTriggerContainer )
+static Reference< XPropertySet > CreateActionTrigger( sal_uInt16 nItemId, const Menu* pMenu, const Reference< XIndexContainer >& rActionTriggerContainer )
 {
     Reference< XPropertySet > xPropSet;
 
@@ -283,7 +283,7 @@ Reference< XPropertySet > CreateActionTrigger( sal_uInt16 nItemId, const Menu* p
 }
 
 /// @throws RuntimeException
-Reference< XPropertySet > CreateActionTriggerSeparator( const Reference< XIndexContainer >& rActionTriggerContainer )
+static Reference< XPropertySet > CreateActionTriggerSeparator( const Reference< XIndexContainer >& rActionTriggerContainer )
 {
     Reference< XMultiServiceFactory > xMultiServiceFactory( rActionTriggerContainer, UNO_QUERY );
     if ( xMultiServiceFactory.is() )
@@ -297,7 +297,7 @@ Reference< XPropertySet > CreateActionTriggerSeparator( const Reference< XIndexC
 }
 
 /// @throws RuntimeException
-Reference< XIndexContainer > CreateActionTriggerContainer( const Reference< XIndexContainer >& rActionTriggerContainer )
+static Reference< XIndexContainer > CreateActionTriggerContainer( const Reference< XIndexContainer >& rActionTriggerContainer )
 {
     Reference< XMultiServiceFactory > xMultiServiceFactory( rActionTriggerContainer, UNO_QUERY );
     if ( xMultiServiceFactory.is() )
@@ -310,7 +310,7 @@ Reference< XIndexContainer > CreateActionTriggerContainer( const Reference< XInd
     return Reference< XIndexContainer >();
 }
 
-void FillActionTriggerContainerWithMenu( const Menu* pMenu, Reference< XIndexContainer > const & rActionTriggerContainer )
+static void FillActionTriggerContainerWithMenu( const Menu* pMenu, Reference< XIndexContainer > const & rActionTriggerContainer )
 {
     SolarMutexGuard aGuard;
 

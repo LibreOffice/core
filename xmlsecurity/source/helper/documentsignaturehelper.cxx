@@ -82,7 +82,7 @@ int compareVersions(
 }
 }
 
-void ImplFillElementList(
+static void ImplFillElementList(
     std::vector< OUString >& rList, const Reference < css::embed::XStorage >& rxStore,
     const OUString& rRootStorageName, const bool bRecursive,
     const DocumentSignatureAlgorithm mode)

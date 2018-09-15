@@ -199,7 +199,9 @@ struct NeonRequestContext
 };
 
 // A simple Neon response_block_reader for use with an XInputStream
-extern "C" int NeonSession_ResponseBlockReader(void * inUserData,
+extern "C" {
+
+static int NeonSession_ResponseBlockReader(void * inUserData,
                                                const char * inBuf,
                                                size_t inLen )
 {
@@ -213,7 +215,7 @@ extern "C" int NeonSession_ResponseBlockReader(void * inUserData,
 }
 
 // A simple Neon response_block_reader for use with an XOutputStream
-extern "C" int NeonSession_ResponseBlockWriter( void * inUserData,
+static int NeonSession_ResponseBlockWriter( void * inUserData,
                                                 const char * inBuf,
                                                 size_t inLen )
 {
@@ -226,7 +228,7 @@ extern "C" int NeonSession_ResponseBlockWriter( void * inUserData,
     return 0;
 }
 
-extern "C" int NeonSession_NeonAuth( void *       inUserData,
+static int NeonSession_NeonAuth( void *       inUserData,
 #if defined NE_FEATURE_SSPI && ! defined SYSTEM_NEON
                                      const char * inAuthProtocol,
 #endif
@@ -254,6 +256,8 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
     pAuthProtocol = nullptr;
 #endif
     return theSession->NeonAuth(pAuthProtocol, inRealm, attempt, inoutUserName, inoutPassWord);
+}
+
 }
 
 int NeonSession::NeonAuth(const char* inAuthProtocol, const char* inRealm,
@@ -376,12 +380,16 @@ namespace {
     }
 } // namespace
 
-extern "C" int NeonSession_CertificationNotify( void *userdata,
+extern "C" {
+
+static int NeonSession_CertificationNotify( void *userdata,
                                                 int,
                                                 const ne_ssl_certificate *cert )
 {
     NeonSession * pSession = static_cast< NeonSession * >( userdata );
     return pSession->CertificationNotify(cert);
+}
+
 }
 
 int NeonSession::CertificationNotify(const ne_ssl_certificate *cert)
@@ -528,7 +536,9 @@ int NeonSession::CertificationNotify(const ne_ssl_certificate *cert)
     return 1;
 }
 
-extern "C" void NeonSession_PreSendRequest( ne_request * req,
+extern "C" {
+
+static void NeonSession_PreSendRequest( ne_request * req,
                                             void * userdata,
                                             ne_buffer * headers )
 {
@@ -537,6 +547,8 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
     if (!pSession)
         return;
     pSession->PreSendRequest(req, headers);
+}
+
 }
 
 void NeonSession::PreSendRequest(ne_request* req, ne_buffer* headers)

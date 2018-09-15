@@ -57,8 +57,8 @@ using ::com::sun::star::lang::XSingleServiceFactory ;
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::security::XCertificate ;
 
-extern X509Certificate_NssImpl* NssCertToXCert( CERTCertificate* cert ) ;
-extern X509Certificate_NssImpl* NssPrivKeyToXCert( SECKEYPrivateKey* ) ;
+static X509Certificate_NssImpl* NssCertToXCert( CERTCertificate* cert ) ;
+static X509Certificate_NssImpl* NssPrivKeyToXCert( SECKEYPrivateKey* ) ;
 
 
 struct UsageDescription
@@ -78,7 +78,7 @@ struct UsageDescription
 };
 
 
-char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
+static char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
 {
     uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference < task::XInteractionHandler2 > xInteractionHandler(

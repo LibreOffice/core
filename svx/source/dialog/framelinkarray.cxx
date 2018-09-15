@@ -147,7 +147,7 @@ void Cell::MirrorSelfX()
 }
 
 
-void lclRecalcCoordVec( std::vector<long>& rCoords, const std::vector<long>& rSizes )
+static void lclRecalcCoordVec( std::vector<long>& rCoords, const std::vector<long>& rSizes )
 {
     DBG_ASSERT( rCoords.size() == rSizes.size() + 1, "lclRecalcCoordVec - inconsistent vectors" );
     auto aCIt = rCoords.begin();
@@ -158,7 +158,7 @@ void lclRecalcCoordVec( std::vector<long>& rCoords, const std::vector<long>& rSi
     }
 }
 
-void lclSetMergedRange( CellVec& rCells, size_t nWidth, size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow )
+static void lclSetMergedRange( CellVec& rCells, size_t nWidth, size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow )
 {
     for( size_t nCol = nFirstCol; nCol <= nLastCol; ++nCol )
     {
@@ -918,7 +918,7 @@ void Array::MirrorSelfX()
 }
 
 // drawing
-void HelperCreateHorizontalEntry(
+static void HelperCreateHorizontalEntry(
     const Array& rArray, const Style& rStyle, size_t col, size_t row,
     const basegfx::B2DPoint& rOrigin, const basegfx::B2DVector& rX, const basegfx::B2DVector& rY,
     drawinglayer::primitive2d::Primitive2DContainer& rSequence,
@@ -966,7 +966,7 @@ void HelperCreateHorizontalEntry(
     );
 }
 
-void HelperCreateVerticalEntry(
+static void HelperCreateVerticalEntry(
     const Array& rArray, const Style& rStyle, size_t col, size_t row,
     const basegfx::B2DPoint& rOrigin, const basegfx::B2DVector& rX, const basegfx::B2DVector& rY,
     drawinglayer::primitive2d::Primitive2DContainer& rSequence,

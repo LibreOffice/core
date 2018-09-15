@@ -37,11 +37,15 @@ using namespace css::uno;
 namespace desktop
 {
 
-extern "C" void offacc_workerfunc (void * acc)
+extern "C" {
+
+static void offacc_workerfunc (void * acc)
 {
     osl_setThreadName("URP Acceptor");
 
     static_cast<Acceptor*>(acc)->run();
+}
+
 }
 
 Acceptor::Acceptor( const Reference< XComponentContext >& rxContext )

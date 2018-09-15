@@ -131,7 +131,7 @@ SwTwips SwTextFrameInfo::GetCharPos(TextFrameIndex const nChar, bool bCenter) co
     return (( nNext + nStt ) / 2 ) - aRectFnSet.GetLeft(pFrame->getFrameArea());
 }
 
-SwPaM *AddPam( SwPaM *pPam, const SwTextFrame* pTextFrame,
+static SwPaM *AddPam( SwPaM *pPam, const SwTextFrame* pTextFrame,
             TextFrameIndex const nPos, TextFrameIndex const nLen)
 {
     if( nLen )

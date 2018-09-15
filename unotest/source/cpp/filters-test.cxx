@@ -20,7 +20,7 @@
 
 namespace test {
 
-void decode(const OUString& rIn, const OUString &rOut)
+static void decode(const OUString& rIn, const OUString &rOut)
 {
     rtlCipher cipher = rtl_cipher_create(rtl_Cipher_AlgorithmARCFOUR, rtl_Cipher_ModeStream);
     CPPUNIT_ASSERT_MESSAGE("cipher creation failed", cipher != nullptr);

@@ -83,21 +83,21 @@ typedef unsigned long Pixel;
 using namespace vcl_sal;
 
 #ifdef DBG_UTIL
-inline const char *Null( const char *p ) { return p ? p : ""; }
-inline const char *GetEnv( const char *p ) { return Null( getenv( p ) ); }
-inline const char *KeyStr( KeySym n ) { return Null( XKeysymToString( n ) ); }
+static inline const char *Null( const char *p ) { return p ? p : ""; }
+static inline const char *GetEnv( const char *p ) { return Null( getenv( p ) ); }
+static inline const char *KeyStr( KeySym n ) { return Null( XKeysymToString( n ) ); }
 
-inline const char *GetAtomName( Display *d, Atom a )
+static inline const char *GetAtomName( Display *d, Atom a )
 { return Null( XGetAtomName( d, a ) ); }
 
-inline double Hypothenuse( long w, long h )
+static inline double Hypothenuse( long w, long h )
 { return sqrt( static_cast<double>((w*w)+(h*h)) ); }
 #endif
 
-inline int ColorDiff( int r, int g, int b )
+static inline int ColorDiff( int r, int g, int b )
 { return (r*r)+(g*g)+(b*b); }
 
-inline int ColorDiff( Color c1, int r, int g, int b )
+static inline int ColorDiff( Color c1, int r, int g, int b )
 { return ColorDiff( static_cast<int>(c1.GetRed())-r,
                     static_cast<int>(c1.GetGreen())-g,
                     static_cast<int>(c1.GetBlue())-b ); }
@@ -765,7 +765,7 @@ OUString SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
     return aRet;
 }
 
-inline KeySym sal_XModifier2Keysym( Display         *pDisplay,
+static inline KeySym sal_XModifier2Keysym( Display         *pDisplay,
                                     XModifierKeymap const *pXModMap,
                                     int              n )
 {

@@ -97,7 +97,7 @@ namespace io_acceptor {
     };
 
     template<class T>
-    void notifyListeners(SocketConnection * pCon, bool * notified, T t)
+    static void notifyListeners(SocketConnection * pCon, bool * notified, T t)
     {
           XStreamListener_hash_set listeners;
 

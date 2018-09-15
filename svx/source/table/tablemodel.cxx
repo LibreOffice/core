@@ -55,7 +55,7 @@ namespace sdr { namespace table {
 
 
 // removes the given range from a vector
-template< class Vec, class Iter > void remove_range( Vec& rVector, sal_Int32 nIndex, sal_Int32 nCount )
+template< class Vec, class Iter > static void remove_range( Vec& rVector, sal_Int32 nIndex, sal_Int32 nCount )
 {
     const sal_Int32 nSize = static_cast<sal_Int32>(rVector.size());
     if( nCount && (nIndex >= 0) && (nIndex < nSize) )
@@ -74,7 +74,7 @@ template< class Vec, class Iter > void remove_range( Vec& rVector, sal_Int32 nIn
 
 
 /** inserts a range into a vector */
-template< class Vec, class Iter, class Entry > sal_Int32 insert_range( Vec& rVector, sal_Int32 nIndex, sal_Int32 nCount )
+template< class Vec, class Iter, class Entry > static sal_Int32 insert_range( Vec& rVector, sal_Int32 nIndex, sal_Int32 nCount )
 {
     if( nCount )
     {

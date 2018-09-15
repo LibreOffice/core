@@ -572,7 +572,7 @@ long BigMulDiv(long nVal, long nMul, long nDiv)
 // How many eU units fit into a mm, respectively an inch?
 // Or: How many mm, respectively inches, are there in an eU (and then give me the inverse)
 
-FrPair GetInchOrMM(MapUnit eU)
+static FrPair GetInchOrMM(MapUnit eU)
 {
     switch (eU) {
         case MapUnit::Map1000thInch: return FrPair(1000,1);
@@ -604,7 +604,7 @@ FrPair GetInchOrMM(MapUnit eU)
     return Fraction(1,1);
 }
 
-FrPair GetInchOrMM(FieldUnit eU)
+static FrPair GetInchOrMM(FieldUnit eU)
 {
     switch (eU) {
         case FUNIT_INCH       : return FrPair(   1,1);
@@ -660,7 +660,7 @@ FrPair GetMapFactor(FieldUnit eS, FieldUnit eD)
     // 1 yd      =  3 ft      =     36" =       914,4mm
     // 1 ft      = 12 "       =      1" =       304,8mm
 
-void GetMeterOrInch(MapUnit eMU, short& rnComma, long& rnMul, long& rnDiv, bool& rbMetr, bool& rbInch)
+static void GetMeterOrInch(MapUnit eMU, short& rnComma, long& rnMul, long& rnDiv, bool& rbMetr, bool& rbInch)
 {
     rnMul=1; rnDiv=1;
     short nComma=0;

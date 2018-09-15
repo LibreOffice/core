@@ -106,12 +106,12 @@ static PyRef getObjectFromLoaderModule( const char * func )
     return object;
 }
 
-OUString getImplementationName()
+static OUString getImplementationName()
 {
     return OUString( "org.openoffice.comp.pyuno.Loader" );
 }
 
-Sequence< OUString > getSupportedServiceNames()
+static Sequence< OUString > getSupportedServiceNames()
 {
     OUString serviceName( "com.sun.star.loader.Python" );
     return Sequence< OUString > ( &serviceName, 1 );
@@ -238,7 +238,7 @@ PythonInit() {
 }
 };
 
-Reference<XInterface> CreateInstance(const Reference<XComponentContext> & ctx)
+static Reference<XInterface> CreateInstance(const Reference<XComponentContext> & ctx)
 {
     // tdf#114815 thread-safe static to init python only once
     static PythonInit s_Init;

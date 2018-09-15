@@ -548,7 +548,7 @@ void Menu::RemoveItem( sal_uInt16 nPos )
         ImplCallEventListeners( VclEventId::MenuRemoveItem, nPos );
 }
 
-void ImplCopyItem( Menu* pThis, const Menu& rMenu, sal_uInt16 nPos, sal_uInt16 nNewPos )
+static void ImplCopyItem( Menu* pThis, const Menu& rMenu, sal_uInt16 nPos, sal_uInt16 nNewPos )
 {
     MenuItemType eType = rMenu.GetItemType( nPos );
 

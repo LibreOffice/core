@@ -50,7 +50,7 @@ using rtl::OUString;
 namespace cppu
 {
 
-Bootstrap const & get_unorc()
+static Bootstrap const & get_unorc()
 {
     static rtlBootstrapHandle s_bstrap = nullptr;
     if (! s_bstrap)

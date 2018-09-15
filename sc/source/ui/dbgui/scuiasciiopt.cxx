@@ -148,7 +148,7 @@ static sal_Unicode lcl_CharFromCombo( const ComboBox& rCombo, const OUString& rL
     return c;
 }
 
-void lcl_CreatePropertiesNames ( OUString& rSepPath, Sequence<OUString>& rNames, ScImportAsciiCall eCall )
+static void lcl_CreatePropertiesNames ( OUString& rSepPath, Sequence<OUString>& rNames, ScImportAsciiCall eCall )
 {
     sal_Int32 nProperties = 0;
 

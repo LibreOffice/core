@@ -89,7 +89,7 @@ using namespace i18n::ScriptType;
 #define isSeenOrSadChar(c)  (IS_JOINING_GROUP((c), SAD) || IS_JOINING_GROUP((c), SEEN))
 
 // Beh and charters that behave like Beh in medial form.
-bool isBehChar(sal_Unicode cCh)
+static bool isBehChar(sal_Unicode cCh)
 {
     bool bRet = false;
     switch (u_getIntPropertyValue(cCh, UCHAR_JOINING_GROUP))
@@ -114,7 +114,7 @@ bool isBehChar(sal_Unicode cCh)
 }
 
 // Yeh and charters that behave like Yeh in final form.
-bool isYehChar(sal_Unicode cCh)
+static bool isYehChar(sal_Unicode cCh)
 {
     bool bRet = false;
     switch (u_getIntPropertyValue(cCh, UCHAR_JOINING_GROUP))
@@ -134,7 +134,7 @@ bool isYehChar(sal_Unicode cCh)
     return bRet;
 }
 
-bool isTransparentChar ( sal_Unicode cCh )
+static bool isTransparentChar ( sal_Unicode cCh )
 {
     return u_getIntPropertyValue( cCh, UCHAR_JOINING_TYPE ) == U_JT_TRANSPARENT;
 }

@@ -112,7 +112,7 @@ css::uno::Sequence< css::beans::PropertyValue > CacheItem::getAsPackedPropertyVa
 }
 
 
-bool isSubSet(const css::uno::Any& aSubSet,
+static bool isSubSet(const css::uno::Any& aSubSet,
                   const css::uno::Any& aSet   )
 {
     const css::uno::Type& aT1 = aSubSet.getValueType();

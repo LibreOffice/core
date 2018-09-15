@@ -27,7 +27,7 @@ using namespace rtl;
 
 namespace std
 {
-template< typename charT, typename traits > std::basic_ostream<charT, traits> &
+template< typename charT, typename traits > static std::basic_ostream<charT, traits> &
 operator <<(
     std::basic_ostream<charT, traits> & stream, const std::type_info& info )
 {

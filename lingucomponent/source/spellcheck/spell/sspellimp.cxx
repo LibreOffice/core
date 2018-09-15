@@ -523,7 +523,7 @@ Reference< XSpellAlternatives > SAL_CALL SpellChecker::spell(
 }
 
 /// @throws Exception
-Reference< XInterface > SpellChecker_CreateInstance(
+static Reference< XInterface > SpellChecker_CreateInstance(
         const Reference< XMultiServiceFactory > & /*rSMgr*/ )
 {
 

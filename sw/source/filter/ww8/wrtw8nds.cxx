@@ -232,7 +232,7 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
     nCurrentSwPos = SearchNext(1);
 }
 
-sal_Int32 lcl_getMinPos( sal_Int32 pos1, sal_Int32 pos2 )
+static sal_Int32 lcl_getMinPos( sal_Int32 pos1, sal_Int32 pos2 )
 {
     if ( pos1 >= 0 && pos2 >= 0 )
     {
@@ -855,7 +855,7 @@ void WW8AttributeOutput::EndRuby(const SwTextNode& /*rNode*/, sal_Int32 /*nPos*/
 }
 
 /*#i15387# Better ideas welcome*/
-OUString &TruncateBookmark( OUString &rRet )
+static OUString &TruncateBookmark( OUString &rRet )
 {
     if ( rRet.getLength() > 40 )
         rRet = rRet.copy( 0, 40 );

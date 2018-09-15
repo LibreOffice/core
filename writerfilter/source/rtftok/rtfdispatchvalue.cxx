@@ -45,7 +45,7 @@ OUString getLODefaultLanguage()
 
 namespace writerfilter
 {
-int getNumberFormat(int nParam)
+static int getNumberFormat(int nParam)
 {
     static const int aMap[]
         = { NS_ooxml::LN_Value_ST_NumberFormat_decimal,

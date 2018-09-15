@@ -54,7 +54,9 @@ struct LinkSequenceParseContext
 #define STATE_SRC  (STATE_TOP + 2)
 
 
-extern "C" int LinkSequence_startelement_callback(
+extern "C" {
+
+static int LinkSequence_startelement_callback(
     void *,
     int parent,
     const char * /*nspace*/,
@@ -82,7 +84,7 @@ extern "C" int LinkSequence_startelement_callback(
 }
 
 
-extern "C" int LinkSequence_chardata_callback(
+static int LinkSequence_chardata_callback(
     void *userdata,
     int state,
     const char *buf,
@@ -111,7 +113,7 @@ extern "C" int LinkSequence_chardata_callback(
 }
 
 
-extern "C" int LinkSequence_endelement_callback(
+static int LinkSequence_endelement_callback(
     void *userdata,
     int state,
     const char *,
@@ -132,6 +134,7 @@ extern "C" int LinkSequence_endelement_callback(
     return 0; // zero to continue, non-zero to abort parsing
 }
 
+}
 
 // static
 bool LinkSequence::createFromXML( const OString & rInData,

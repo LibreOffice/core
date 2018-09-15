@@ -38,7 +38,7 @@
 
 using namespace ::com::sun::star;
 
-css::uno::Reference< css::awt::XWindowPeer > CreateXWindow( vcl::Window const * pWindow )
+static css::uno::Reference< css::awt::XWindowPeer > CreateXWindow( vcl::Window const * pWindow )
 {
     switch ( pWindow->GetType() )
     {

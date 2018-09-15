@@ -378,7 +378,7 @@ XmlIdRegistry::GetXmlIdForElement(const Metadatable& i_rObject) const
 
 /// generate unique xml:id
 template< typename T >
-/*static*/ OUString create_id(const
+static OUString create_id(const
     std::unordered_map< OUString, T > & i_rXmlIdMap)
 {
     static bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != nullptr);
@@ -1302,7 +1302,7 @@ void Metadatable::EnsureMetadataReference()
     m_pReg = &rReg;
 }
 
-const ::sfx2::IXmlIdRegistry& GetRegistryConst(Metadatable const& i_rObject)
+static const ::sfx2::IXmlIdRegistry& GetRegistryConst(Metadatable const& i_rObject)
 {
     return const_cast< Metadatable& >( i_rObject ).GetRegistry();
 }

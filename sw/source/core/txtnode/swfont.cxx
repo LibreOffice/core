@@ -364,7 +364,7 @@ sal_uInt16 SwFont::CalcShadowSpace(
 }
 
 // maps directions for vertical layout
-sal_uInt16 MapDirection( sal_uInt16 nDir, const bool bVertFormat )
+static sal_uInt16 MapDirection( sal_uInt16 nDir, const bool bVertFormat )
 {
     if ( bVertFormat )
     {

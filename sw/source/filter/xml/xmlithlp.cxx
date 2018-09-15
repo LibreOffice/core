@@ -132,7 +132,7 @@ bool sw_frmitems_parseXMLBorder( const OUString& rValue,
     return rHasStyle || rHasWidth || rHasColor;
 }
 
-void sw_frmitems_setXMLBorderStyle( SvxBorderLine& rLine, sal_uInt16 nStyle )
+static void sw_frmitems_setXMLBorderStyle( SvxBorderLine& rLine, sal_uInt16 nStyle )
 {
     SvxBorderLineStyle eStyle = SvxBorderLineStyle::NONE;
     if ( nStyle != table::BorderLineStyle::NONE )

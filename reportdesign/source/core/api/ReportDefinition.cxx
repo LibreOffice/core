@@ -188,7 +188,7 @@ namespace reportdesign
     using namespace com::sun::star;
     using namespace rptui;
 
-void lcl_setModelReadOnly(const uno::Reference< embed::XStorage >& _xStorage,std::shared_ptr<rptui::OReportModel> const & _rModel)
+static void lcl_setModelReadOnly(const uno::Reference< embed::XStorage >& _xStorage,std::shared_ptr<rptui::OReportModel> const & _rModel)
 {
     uno::Reference<beans::XPropertySet> xProp(_xStorage,uno::UNO_QUERY);
     sal_Int32 nOpenMode = embed::ElementModes::READ;
@@ -197,7 +197,7 @@ void lcl_setModelReadOnly(const uno::Reference< embed::XStorage >& _xStorage,std
 
     _rModel->SetReadOnly((nOpenMode & embed::ElementModes::WRITE) != embed::ElementModes::WRITE);
 }
-void lcl_stripLoadArguments( utl::MediaDescriptor& _rDescriptor, uno::Sequence< beans::PropertyValue >& _rArgs )
+static void lcl_stripLoadArguments( utl::MediaDescriptor& _rDescriptor, uno::Sequence< beans::PropertyValue >& _rArgs )
 {
     _rDescriptor.erase( OUString( "StatusIndicator" ) );
     _rDescriptor.erase( OUString( "InteractionHandler" ) );
@@ -205,7 +205,7 @@ void lcl_stripLoadArguments( utl::MediaDescriptor& _rDescriptor, uno::Sequence< 
     _rDescriptor >> _rArgs;
 }
 
-void lcl_extractAndStartStatusIndicator( const utl::MediaDescriptor& _rDescriptor, uno::Reference< task::XStatusIndicator >& _rxStatusIndicator,
+static void lcl_extractAndStartStatusIndicator( const utl::MediaDescriptor& _rDescriptor, uno::Reference< task::XStatusIndicator >& _rxStatusIndicator,
     uno::Sequence< uno::Any >& _rCallArgs )
 {
     try

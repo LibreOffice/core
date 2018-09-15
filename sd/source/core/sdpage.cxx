@@ -1272,7 +1272,7 @@ static const LayoutDescriptor& GetLayoutDescriptor( AutoLayout eLayout )
     return aLayouts[ eLayout - AUTOLAYOUT_START ];
 }
 
-rtl::OUString enumtoString(AutoLayout aut)
+static rtl::OUString enumtoString(AutoLayout aut)
 {
     rtl::OUString retstr;
     switch (aut)
@@ -1435,7 +1435,7 @@ static void CalcAutoLayoutRectangles( SdPage const & rPage,::tools::Rectangle* r
     }
 }
 
-void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescriptor, std::vector< SdrObject* >& rShapes, bool bInit, bool bSwitchLayout )
+static void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescriptor, std::vector< SdrObject* >& rShapes, bool bInit, bool bSwitchLayout )
 {
     int i;
 
@@ -2074,7 +2074,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
     }
 }
 
-SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourceObj, PresObjKind& eObjKind, bool bVertical, const ::tools::Rectangle& rRect)
+static SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourceObj, PresObjKind& eObjKind, bool bVertical, const ::tools::Rectangle& rRect)
 {
     SdDrawDocument& rModel(static_cast< SdDrawDocument& >(rPage.getSdrModelFromSdrPage()));
     if( !pSourceObj )

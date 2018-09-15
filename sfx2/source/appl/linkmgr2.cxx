@@ -556,7 +556,7 @@ bool LinkManager::GetGraphicFromAny(const OUString& rMimeType,
     return bRet;
 }
 
-OUString lcl_DDE_RelToAbs( const OUString& rTopic, const OUString& rBaseURL )
+static OUString lcl_DDE_RelToAbs( const OUString& rTopic, const OUString& rBaseURL )
 {
     OUString sRet;
     INetURLObject aURL( rTopic );

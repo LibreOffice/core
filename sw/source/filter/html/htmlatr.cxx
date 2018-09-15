@@ -416,7 +416,7 @@ SwHTMLFormatInfo::~SwHTMLFormatInfo()
 {
 }
 
-void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
+static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
                     const SfxItemSet *pNodeItemSet,
                     SwHTMLTextCollOutputInfo& rInfo )
 {
@@ -963,7 +963,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     rHWrt.m_nFirstLineIndent = 0;
 }
 
-void OutHTML_SwFormatOff( Writer& rWrt, const SwHTMLTextCollOutputInfo& rInfo )
+static void OutHTML_SwFormatOff( Writer& rWrt, const SwHTMLTextCollOutputInfo& rInfo )
 {
     SwHTMLWriter & rHWrt = static_cast<SwHTMLWriter&>(rWrt);
 

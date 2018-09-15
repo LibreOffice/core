@@ -39,7 +39,7 @@
 
 const int AllocSize = 8;
 
-inline int get_alloc_size(int len)
+static inline int get_alloc_size(int len)
 {
     return (len + AllocSize - 1) / AllocSize * AllocSize;
 }

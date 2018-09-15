@@ -1775,7 +1775,7 @@ bool SwTextNode::IsIgnoredCharFormatForNumbering(const sal_uInt16 nWhich)
 //Font underline;
 //Font Italic of Western, CJK and CTL;
 //Font Bold of Wertern, CJK and CTL;
-bool lcl_IsIgnoredCharFormatForBullets(const sal_uInt16 nWhich)
+static bool lcl_IsIgnoredCharFormatForBullets(const sal_uInt16 nWhich)
 {
     return (nWhich == RES_CHRATR_UNDERLINE || nWhich == RES_CHRATR_POSTURE || nWhich == RES_CHRATR_WEIGHT
         || nWhich == RES_CHRATR_CJK_POSTURE || nWhich == RES_CHRATR_CJK_WEIGHT

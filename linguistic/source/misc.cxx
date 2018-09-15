@@ -590,7 +590,7 @@ static CharClass & lcl_GetCharClass()
     return aCC;
 }
 
-osl::Mutex & lcl_GetCharClassMutex()
+static osl::Mutex & lcl_GetCharClassMutex()
 {
     static osl::Mutex   aMutex;
     return aMutex;

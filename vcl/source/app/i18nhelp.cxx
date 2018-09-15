@@ -75,7 +75,7 @@ LocaleDataWrapper& vcl::I18nHelper::ImplGetLocaleDataWrapper() const
     return *mpLocaleDataWrapper;
 }
 
-inline bool is_formatting_mark( sal_Unicode c )
+static inline bool is_formatting_mark( sal_Unicode c )
 {
     if( (c >= 0x200B) && (c <= 0x200F) )    // BiDi and zero-width-markers
         return true;

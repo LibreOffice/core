@@ -74,7 +74,7 @@ atk_noop_object_wrapper_get_type()
   return type;
 }
 
-AtkObject*
+static AtkObject*
 atk_noop_object_wrapper_new()
 {
   AtkObject *accessible;

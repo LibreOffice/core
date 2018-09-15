@@ -91,7 +91,7 @@ typedef std::unordered_map< OUString, FormularCommand > FormulaCommandHMap;
 
 static const FormulaCommandHMap* pCommandHashMap;
 
-OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParameter )
+static OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParameter )
 {
     OUString aRet;
     switch( rParameter.Type )

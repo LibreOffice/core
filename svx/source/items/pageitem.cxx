@@ -73,7 +73,7 @@ bool SvxPageItem::operator==( const SfxPoolItem& rAttr ) const
              eUse       == rItem.eUse );
 }
 
-inline OUString GetUsageText( const SvxPageUsage eU )
+static inline OUString GetUsageText( const SvxPageUsage eU )
 {
     switch( eU )
     {

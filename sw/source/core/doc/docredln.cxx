@@ -107,7 +107,7 @@ void SwExtraRedlineTable::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 #if OSL_DEBUG_LEVEL > 0
-bool CheckPosition( const SwPosition* pStt, const SwPosition* pEnd )
+static bool CheckPosition( const SwPosition* pStt, const SwPosition* pEnd )
 {
     int nError = 0;
     SwNode* pSttNode = &pStt->nNode.GetNode();

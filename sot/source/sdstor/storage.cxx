@@ -44,7 +44,7 @@
 
 using namespace ::com::sun::star;
 
-SvLockBytesRef MakeLockBytes_Impl( const OUString & rName, StreamMode nMode )
+static SvLockBytesRef MakeLockBytes_Impl( const OUString & rName, StreamMode nMode )
 {
     SvLockBytesRef xLB;
     if( !rName.isEmpty() )

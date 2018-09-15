@@ -399,7 +399,7 @@ public:
     sal_uInt32 getNumberFormat() const { return mnNumFmt; }
 };
 
-void IterateMatrix(
+static void IterateMatrix(
     const ScMatrixRef& pMat, ScIterFunc eFunc, bool bTextAsZero,
     sal_uLong& rCount, SvNumFormatType& rFuncFmtType, double& fRes, double& fMem )
 {

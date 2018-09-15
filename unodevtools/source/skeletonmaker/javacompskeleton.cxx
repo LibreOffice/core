@@ -32,14 +32,14 @@ using namespace ::codemaker::java;
 
 namespace skeletonmaker { namespace java {
 
-void generatePackage(std::ostream & o, const OString & implname)
+static void generatePackage(std::ostream & o, const OString & implname)
 {
     sal_Int32 index = implname.lastIndexOf('.');
     if (index != -1)
         o << "package " << implname.copy(0, index) << ";\n\n";
 }
 
-void generateImports(std::ostream & o, ProgramOptions const & options,
+static void generateImports(std::ostream & o, ProgramOptions const & options,
          const OUString & propertyhelper,
          bool serviceobject, bool supportxcomponent)
 {
@@ -73,7 +73,7 @@ void generateImports(std::ostream & o, ProgramOptions const & options,
     }
 }
 
-void generateCompFunctions(std::ostream & o, const OString & classname)
+static void generateCompFunctions(std::ostream & o, const OString & classname)
 {
     o << "    public static XSingleComponentFactory __getComponentFactory("
         " String sImplementationName ) {\n"
@@ -91,7 +91,7 @@ void generateCompFunctions(std::ostream & o, const OString & classname)
         "    }\n\n";
 }
 
-void generateXServiceInfoBodies(std::ostream& o)
+static void generateXServiceInfoBodies(std::ostream& o)
 {
     o << "    // com.sun.star.lang.XServiceInfo:\n";
     o << "    public String getImplementationName() {\n"
@@ -186,7 +186,7 @@ void generateXPropertyAccessBodies(std::ostream& o)
 }
 
 
-bool checkAttribute(
+static bool checkAttribute(
     OStringBuffer& attributeValue,
     unoidl::AccumulationBasedServiceEntity::Property::Attributes attribute)
 {
@@ -249,7 +249,7 @@ bool checkAttribute(
     return cast;
 }
 
-void registerProperties(std::ostream& o,
+static void registerProperties(std::ostream& o,
                         const AttributeInfo& properties,
                         const OString& indentation)
 {
@@ -277,7 +277,7 @@ void registerProperties(std::ostream& o,
     }
 }
 
-void generateXLocalizableBodies(std::ostream& o) {
+static void generateXLocalizableBodies(std::ostream& o) {
     // com.sun.star.lang.XLocalizable:
     // setLocale
     o << "    // com.sun.star.lang.XLocalizable:\n"
@@ -289,7 +289,7 @@ void generateXLocalizableBodies(std::ostream& o) {
         "        return m_locale;\n    }\n\n";
 }
 
-void generateXAddInBodies(std::ostream& o)
+static void generateXAddInBodies(std::ostream& o)
 {
     // com.sun.star.sheet.XAddIn:
     // getProgrammaticFuntionName
@@ -357,7 +357,7 @@ void generateXAddInBodies(std::ostream& o)
         "sCATEGORYDISPLAYNAME);\n    }\n\n";
 }
 
-void generateXCompatibilityNamesBodies(std::ostream& o)
+static void generateXCompatibilityNamesBodies(std::ostream& o)
 {
     o << "    // com.sun.star.sheet.XCompatibilityNames:\n"
         "    public com.sun.star.sheet.LocalizedName[] getCompatibilityNames("
@@ -407,7 +407,7 @@ void generateXCompatibilityNamesBodies(std::ostream& o)
         "        return seqLocalizedNames;\n    }\n\n";
 }
 
-void generateXInitializationBodies(std::ostream& o)
+static void generateXInitializationBodies(std::ostream& o)
 {
     o << "    // com.sun.star.lang.XInitialization:\n"
         "    public void initialize( Object[] object )\n"
@@ -417,7 +417,7 @@ void generateXInitializationBodies(std::ostream& o)
         "                com.sun.star.frame.XFrame.class, object[0]);\n        }\n    }\n\n";
 }
 
-void generateXDispatchBodies(std::ostream& o, ProgramOptions const & options)
+static void generateXDispatchBodies(std::ostream& o, ProgramOptions const & options)
 {
     // com.sun.star.frame.XDispatch
     // dispatch
@@ -453,7 +453,7 @@ void generateXDispatchBodies(std::ostream& o, ProgramOptions const & options)
         "        // add your own code here\n    }\n\n";
 }
 
-void generateXDispatchProviderBodies(std::ostream& o, ProgramOptions const & options)
+static void generateXDispatchProviderBodies(std::ostream& o, ProgramOptions const & options)
 {
     // com.sun.star.frame.XDispatchProvider
     // queryDispatch
@@ -492,7 +492,7 @@ void generateXDispatchProviderBodies(std::ostream& o, ProgramOptions const & opt
         "        }\n        return seqDispatcher;\n    }\n\n";
 }
 
-void generateMethodBodies(std::ostream& o,
+static void generateMethodBodies(std::ostream& o,
          ProgramOptions const & options,
          rtl::Reference< TypeManager > const & manager,
          const std::set< OUString >& interfaces,
@@ -562,7 +562,7 @@ static const char* const propcomment=
 "        // Ensure that your attributes are initialized correctly!\n";
 
 
-void generateAddinConstructorAndHelper(std::ostream& o,
+static void generateAddinConstructorAndHelper(std::ostream& o,
          ProgramOptions const & options,
          rtl::Reference< TypeManager > const & manager, const OString & classname,
          const std::set< OUString >& services,
@@ -699,7 +699,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
 }
 
 
-void generateClassDefinition(std::ostream& o,
+static void generateClassDefinition(std::ostream& o,
          ProgramOptions const & options,
          rtl::Reference< TypeManager > const & manager,
          const OString & classname,

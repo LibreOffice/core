@@ -179,7 +179,7 @@ sal_uInt32 Get10ThSec()
 
 static sal_Int32 m_nInReschedule = 0;  /// static counter for rescheduling
 
-void reschedule()
+static void reschedule()
 {
     if ( m_nInReschedule == 0 )
     {

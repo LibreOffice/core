@@ -382,7 +382,7 @@ void Window::SetZoom( const Fraction& rZoom )
     }
 }
 
-inline long WinFloatRound( double fVal )
+static inline long WinFloatRound( double fVal )
 {
     return( fVal > 0.0 ? static_cast<long>( fVal + 0.5 ) : -static_cast<long>( -fVal + 0.5 ) );
 }

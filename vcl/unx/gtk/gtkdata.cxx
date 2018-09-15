@@ -55,7 +55,7 @@ using namespace vcl_sal;
  * class GtkSalDisplay                                         *
  ***************************************************************/
 extern "C" {
-GdkFilterReturn call_filterGdkEvent( GdkXEvent* sys_event,
+static GdkFilterReturn call_filterGdkEvent( GdkXEvent* sys_event,
                                      GdkEvent* /*event*/,
                                      gpointer data )
 {
@@ -103,13 +103,13 @@ GtkSalDisplay::~GtkSalDisplay()
 
 extern "C" {
 
-void signalScreenSizeChanged( GdkScreen* pScreen, gpointer data )
+static void signalScreenSizeChanged( GdkScreen* pScreen, gpointer data )
 {
     GtkSalDisplay* pDisp = static_cast<GtkSalDisplay*>(data);
     pDisp->screenSizeChanged( pScreen );
 }
 
-void signalMonitorsChanged( GdkScreen* pScreen, gpointer data )
+static void signalMonitorsChanged( GdkScreen* pScreen, gpointer data )
 {
     GtkSalDisplay* pDisp = static_cast<GtkSalDisplay*>(data);
     pDisp->monitorsChanged( pScreen );

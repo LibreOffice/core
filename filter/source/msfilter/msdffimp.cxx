@@ -380,7 +380,7 @@ DffPropertyReader::~DffPropertyReader()
 }
 
 
-SvStream& operator>>( SvStream& rIn, SvxMSDffConnectorRule& rRule )
+static SvStream& operator>>( SvStream& rIn, SvxMSDffConnectorRule& rRule )
 {
     sal_uInt32 nRuleId;
     rIn.ReadUInt32( nRuleId )
@@ -1065,7 +1065,7 @@ struct ShadeColor
     ShadeColor( const Color& rC, double fR ) : aColor( rC ), fDist( fR ) {};
 };
 
-void GetShadeColors( const SvxMSDffManager& rManager, const DffPropertyReader& rProperties, SvStream& rIn, std::vector< ShadeColor >& rShadeColors )
+static void GetShadeColors( const SvxMSDffManager& rManager, const DffPropertyReader& rProperties, SvStream& rIn, std::vector< ShadeColor >& rShadeColors )
 {
     sal_uInt32 nPos = rIn.Tell();
     if ( rProperties.IsProperty( DFF_Prop_fillShadeColors ) )
@@ -1098,7 +1098,7 @@ void GetShadeColors( const SvxMSDffManager& rManager, const DffPropertyReader& r
     rIn.Seek( nPos );
 }
 
-void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream& rIn, SfxItemSet& rSet, const std::vector< ShadeColor >& rShadeColors, const DffObjData& rObjData, sal_Int32 nFix16Angle )
+static void ApplyRectangularGradientAsBitmap( const SvxMSDffManager& rManager, SvStream& rIn, SfxItemSet& rSet, const std::vector< ShadeColor >& rShadeColors, const DffObjData& rObjData, sal_Int32 nFix16Angle )
 {
     Size aBitmapSizePixel( static_cast< sal_Int32 >( ( rObjData.aBoundRect.GetWidth() / 2540.0 ) * 90.0 ),      // we will create a bitmap with 90 dpi
                            static_cast< sal_Int32 >( ( rObjData.aBoundRect.GetHeight() / 2540.0 ) * 90.0 ) );
@@ -6927,7 +6927,7 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
     return false;
 }
 
-const char* GetInternalServerName_Impl( const SvGlobalName& aGlobName )
+static const char* GetInternalServerName_Impl( const SvGlobalName& aGlobName )
 {
     if ( aGlobName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_60 )
       || aGlobName == SvGlobalName( SO3_SW_OLE_EMBED_CLASSID_8 ) )

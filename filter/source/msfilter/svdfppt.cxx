@@ -1766,7 +1766,7 @@ void PPTConvertOCXControls::GetDrawPage()
     }
 }
 
-bool SdrPowerPointOLEDecompress( SvStream& rOutput, SvStream& rInput, sal_uInt32 nInputSize )
+static bool SdrPowerPointOLEDecompress( SvStream& rOutput, SvStream& rInput, sal_uInt32 nInputSize )
 {
     sal_uInt32 nOldPos = rInput.Tell();
     std::unique_ptr<char[]> pBuf(new char[ nInputSize ]);
@@ -2669,7 +2669,7 @@ SdrPage* SdrPowerPointImport::MakeBlancPage( bool bMaster ) const
     return pRet;
 }
 
-void ImportComment10( SvxMSDffManager const & rMan, SvStream& rStCtrl, SdrPage* pPage, DffRecordHeader const & rComment10Hd )
+static void ImportComment10( SvxMSDffManager const & rMan, SvStream& rStCtrl, SdrPage* pPage, DffRecordHeader const & rComment10Hd )
 {
     OUString        sAuthor;
     OUString        sText;
@@ -7144,14 +7144,14 @@ PPTTextObj& PPTTextObj::operator=( PPTTextObj& rTextObj )
     return *this;
 }
 
-bool IsLine( const SdrObject* pObj )
+static bool IsLine( const SdrObject* pObj )
 {
     return dynamic_cast< const SdrPathObj* >(pObj) !=  nullptr &&
            static_cast<const SdrPathObj*>(pObj)->IsLine() &&
            static_cast<const SdrPathObj*>(pObj)->GetPointCount() == 2;
 }
 
-bool GetCellPosition( const SdrObject* pObj, const std::set< sal_Int32 >& rRows, const std::set< sal_Int32 >& rColumns,
+static bool GetCellPosition( const SdrObject* pObj, const std::set< sal_Int32 >& rRows, const std::set< sal_Int32 >& rColumns,
                             sal_Int32& nTableIndex, sal_Int32& nRow, sal_Int32& nRowCount, sal_Int32& nColumn, sal_Int32& nColumnCount )
 {
     tools::Rectangle aSnapRect( pObj->GetSnapRect() );
@@ -7194,7 +7194,7 @@ bool GetCellPosition( const SdrObject* pObj, const std::set< sal_Int32 >& rRows,
 #define LinePositionBLTR    0x20000000
 
 
-void GetRowPositions( const tools::Rectangle& rSnapRect, const std::set< sal_Int32 >& rRows,
+static void GetRowPositions( const tools::Rectangle& rSnapRect, const std::set< sal_Int32 >& rRows,
                         const std::set< sal_Int32 >& rColumns, std::vector< sal_Int32 >& rPositions, sal_Int32 nColumn, sal_Int32 nFlags )
 {
     std::set< sal_Int32 >::const_iterator aRow( rRows.find( rSnapRect.Top() ) );
@@ -7215,7 +7215,7 @@ void GetRowPositions( const tools::Rectangle& rSnapRect, const std::set< sal_Int
 }
 
 
-void GetColumnPositions( const tools::Rectangle& rSnapRect,
+static void GetColumnPositions( const tools::Rectangle& rSnapRect,
                         const std::set< sal_Int32 >& rColumns, std::vector< sal_Int32 >& rPositions, sal_Int32 nRow, sal_Int32 nFlags )
 {
     std::set< sal_Int32 >::const_iterator aColumn( rColumns.find( rSnapRect.Left() ) );
@@ -7235,7 +7235,7 @@ void GetColumnPositions( const tools::Rectangle& rSnapRect,
     }
 }
 
-void GetLinePositions( const SdrObject* pObj, const std::set< sal_Int32 >& rRows, const std::set< sal_Int32 >& rColumns,
+static void GetLinePositions( const SdrObject* pObj, const std::set< sal_Int32 >& rRows, const std::set< sal_Int32 >& rColumns,
                         std::vector< sal_Int32 >& rPositions, const tools::Rectangle& rGroupSnap )
 {
     tools::Rectangle aSnapRect( pObj->GetSnapRect() );
@@ -7301,7 +7301,7 @@ void GetLinePositions( const SdrObject* pObj, const std::set< sal_Int32 >& rRows
     }
 }
 
-void CreateTableRows( const Reference< XTableRows >& xTableRows, const std::set< sal_Int32 >& rRows, sal_Int32 nTableBottom )
+static void CreateTableRows( const Reference< XTableRows >& xTableRows, const std::set< sal_Int32 >& rRows, sal_Int32 nTableBottom )
 {
     if ( rRows.size() > 1 )
         xTableRows->insertByIndex( 0, rRows.size() - 1 );
@@ -7328,7 +7328,7 @@ void CreateTableRows( const Reference< XTableRows >& xTableRows, const std::set<
     }
 }
 
-void CreateTableColumns( const Reference< XTableColumns >& xTableColumns, const std::set< sal_Int32 >& rColumns, sal_Int32 nTableRight )
+static void CreateTableColumns( const Reference< XTableColumns >& xTableColumns, const std::set< sal_Int32 >& rColumns, sal_Int32 nTableRight )
 {
     if ( rColumns.size() > 1 )
         xTableColumns->insertByIndex( 0, rColumns.size() - 1 );
@@ -7355,7 +7355,7 @@ void CreateTableColumns( const Reference< XTableColumns >& xTableColumns, const 
     }
 }
 
-void MergeCells( const Reference< XTable >& xTable, sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_Int32 nRowSpan )
+static void MergeCells( const Reference< XTable >& xTable, sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_Int32 nRowSpan )
 {
    DBG_ASSERT( (nColSpan > 1) || (nRowSpan > 1), "nonsense parameter!!" );
    DBG_ASSERT( (nCol >= 0) && (nCol < xTable->getColumnCount()) && (nRow >= 0) && (nRow < xTable->getRowCount()), "the cell does not exists!!" );
@@ -7374,7 +7374,7 @@ void MergeCells( const Reference< XTable >& xTable, sal_Int32 nCol, sal_Int32 nR
    }
 }
 
-void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const & xCell )
+static void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const & xCell )
 {
     try
     {
@@ -7476,7 +7476,7 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const & xCel
     }
 }
 
-void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable > const & xTable, const std::vector< sal_Int32 >& vPositions, sal_Int32 nColumns )
+static void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable > const & xTable, const std::vector< sal_Int32 >& vPositions, sal_Int32 nColumns )
 {
     try
     {

@@ -70,12 +70,12 @@ using com::sun::star::sdbcx::XTablesSupplier;
 namespace pq_sdbc_driver
 {
 
-OUString DriverGetImplementationName()
+static OUString DriverGetImplementationName()
 {
     return OUString( "org.openoffice.comp.connectivity.pq.Driver.noext" );
 }
 
-Sequence< OUString > DriverGetSupportedServiceNames()
+static Sequence< OUString > DriverGetSupportedServiceNames()
 {
     return Sequence< OUString > { "com.sun.star.sdbc.Driver" };
 }
@@ -154,7 +154,7 @@ Reference< XTablesSupplier > Driver::getDataDefinitionByURL(
 }
 
 
-Reference< XInterface > DriverCreateInstance( const Reference < XComponentContext > & ctx )
+static Reference< XInterface > DriverCreateInstance( const Reference < XComponentContext > & ctx )
 {
     Reference< XInterface >  ret = * new Driver( ctx );
     return ret;

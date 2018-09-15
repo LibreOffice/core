@@ -323,7 +323,7 @@ void SheetDataBuffer::setMergedRange( const ScRange& rRange )
 
 typedef std::pair<sal_Int32, sal_Int32> FormatKeyPair;
 
-void addIfNotInMyMap( const StylesBuffer& rStyles, std::map< FormatKeyPair, ScRangeList >& rMap, sal_Int32 nXfId, sal_Int32 nFormatId, const ScRangeList& rRangeList )
+static void addIfNotInMyMap( const StylesBuffer& rStyles, std::map< FormatKeyPair, ScRangeList >& rMap, sal_Int32 nXfId, sal_Int32 nFormatId, const ScRangeList& rRangeList )
 {
     Xf* pXf1 = rStyles.getCellXf( nXfId ).get();
     if ( pXf1 )
@@ -718,7 +718,7 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel )
     }
 }
 
-void lcl_SetBorderLine( ScDocument& rDoc, const ScRange& rRange, SCTAB nScTab, SvxBoxItemLine nLine )
+static void lcl_SetBorderLine( ScDocument& rDoc, const ScRange& rRange, SCTAB nScTab, SvxBoxItemLine nLine )
 {
     SCCOL nFromScCol = (nLine == SvxBoxItemLine::RIGHT) ? rRange.aEnd.Col() : rRange.aStart.Col();
     SCROW nFromScRow = (nLine == SvxBoxItemLine::BOTTOM) ? rRange.aEnd.Row() : rRange.aStart.Row();

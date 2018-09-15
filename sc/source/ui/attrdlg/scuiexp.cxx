@@ -56,7 +56,7 @@
 namespace scui
 {
     static ScAbstractDialogFactory_Impl* pFactory=nullptr;
-    ScAbstractDialogFactory_Impl* GetFactory()
+    static ScAbstractDialogFactory_Impl* GetFactory()
     {
         if ( !pFactory )
             pFactory = new ScAbstractDialogFactory_Impl;

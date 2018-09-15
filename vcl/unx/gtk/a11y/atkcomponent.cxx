@@ -23,7 +23,7 @@
 
 using namespace ::com::sun::star;
 
-AtkObjectWrapper* getObjectWrapper(AtkComponent *pComponent)
+static AtkObjectWrapper* getObjectWrapper(AtkComponent *pComponent)
 {
     AtkObjectWrapper *pWrap = nullptr;
     if (ATK_IS_OBJECT_WRAPPER(pComponent))

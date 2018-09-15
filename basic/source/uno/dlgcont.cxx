@@ -111,7 +111,7 @@ bool SfxDialogLibraryContainer::isLibraryElementValid(const Any& rElement) const
     return SfxDialogLibrary::containsValidDialog(rElement);
 }
 
-bool writeOasis2OOoLibraryElement(
+static bool writeOasis2OOoLibraryElement(
     const Reference< XInputStream >& xInput, const Reference< XOutputStream >& xOutput )
 {
     Reference< XComponentContext > xContext(

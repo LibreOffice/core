@@ -57,7 +57,7 @@
 #include <dlfcn.h>
 #endif
 
-bool toBool(const OString &rValue)
+static bool toBool(const OString &rValue)
 {
     return (!rValue.isEmpty() && (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1'));
 }
@@ -3267,7 +3267,7 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, PopupMenu *pSubMenu, const
 
 /// Insert items to a ComboBox or a ListBox.
 /// They have no common ancestor that would have 'InsertEntry()', so use a template.
-template<typename T> bool insertItems(vcl::Window *pWindow, VclBuilder::stringmap &rMap, const std::vector<ComboBoxTextItem> &rItems)
+template<typename T> static bool insertItems(vcl::Window *pWindow, VclBuilder::stringmap &rMap, const std::vector<ComboBoxTextItem> &rItems)
 {
     T *pContainer = dynamic_cast<T*>(pWindow);
     if (!pContainer)

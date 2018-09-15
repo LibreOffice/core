@@ -367,7 +367,7 @@
 
 namespace test { namespace codemaker { namespace cppumaker {
 
-bool operator ==(
+static bool operator ==(
     test::codemaker::cppumaker::TestException1 const & e1,
     test::codemaker::cppumaker::TestException1 const & e2)
 {

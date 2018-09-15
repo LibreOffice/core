@@ -940,17 +940,17 @@ sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const OUString& _rSour
 
    return nLen;
 }
-OUString lcl_getReportEngines()
+static OUString lcl_getReportEngines()
 {
     return OUString("org.openoffice.Office.DataAccess/ReportEngines");
 }
 
-OUString lcl_getDefaultReportEngine()
+static OUString lcl_getDefaultReportEngine()
 {
     return OUString("DefaultReportEngine");
 }
 
-OUString lcl_getReportEngineNames()
+static OUString lcl_getReportEngineNames()
 {
     return OUString("ReportEngineNames");
 }

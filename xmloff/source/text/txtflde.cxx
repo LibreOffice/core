@@ -249,25 +249,25 @@ SvXMLEnumStringMapEntry<FieldIdEnum> const aFieldServiceNameMapping[] =
 
 
 // property accessor helper functions
-inline bool GetBoolProperty(const OUString&,
+static inline bool GetBoolProperty(const OUString&,
                                       const Reference<XPropertySet> &);
-inline bool GetOptionalBoolProperty(const OUString&,
+static inline bool GetOptionalBoolProperty(const OUString&,
                                               const Reference<XPropertySet> &,
                                               const Reference<XPropertySetInfo> &,
                                               bool bDefault);
-inline double GetDoubleProperty(const OUString&,
+static inline double GetDoubleProperty(const OUString&,
                                       const Reference<XPropertySet> &);
-inline OUString const GetStringProperty(const OUString&,
+static inline OUString const GetStringProperty(const OUString&,
                                         const Reference<XPropertySet> &);
-inline sal_Int32 GetIntProperty(const OUString&,
+static inline sal_Int32 GetIntProperty(const OUString&,
                                       const Reference<XPropertySet> &);
-inline sal_Int16 GetInt16Property(const OUString&,
+static inline sal_Int16 GetInt16Property(const OUString&,
                                         const Reference<XPropertySet> &);
-inline sal_Int8 GetInt8Property(const OUString&,
+static inline sal_Int8 GetInt8Property(const OUString&,
                                       const Reference<XPropertySet> &);
-inline util::DateTime const GetDateTimeProperty( const OUString& sPropName,
+static inline util::DateTime const GetDateTimeProperty( const OUString& sPropName,
                                            const Reference<XPropertySet> & xPropSet);
-inline Sequence<OUString> const GetStringSequenceProperty(
+static inline Sequence<OUString> const GetStringSequenceProperty(
                                    const OUString& sPropName,
                                    const Reference<XPropertySet> & xPropSet);
 

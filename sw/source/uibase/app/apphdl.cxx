@@ -208,7 +208,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
 }
 
 // start field dialog
-void NewXForms( SfxRequest& rReq ); // implementation: below
+static void NewXForms( SfxRequest& rReq ); // implementation: below
 
 std::shared_ptr<SwMailMergeConfigItem> SwView::EnsureMailMergeConfigItem(const SfxItemSet* pArgs)
 {

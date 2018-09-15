@@ -1075,7 +1075,7 @@ void OOle2Obj::impl_setUnoShape( const uno::Reference< uno::XInterface >& rxUnoS
 }
 
 
-uno::Reference< chart2::data::XDatabaseDataProvider > lcl_getDataProvider(const uno::Reference < embed::XEmbeddedObject >& _xObj)
+static uno::Reference< chart2::data::XDatabaseDataProvider > lcl_getDataProvider(const uno::Reference < embed::XEmbeddedObject >& _xObj)
 {
     uno::Reference< chart2::data::XDatabaseDataProvider > xSource;
     uno::Reference< embed::XComponentSupplier > xCompSupp(_xObj,uno::UNO_QUERY);

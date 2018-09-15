@@ -44,13 +44,13 @@ using namespace com::sun::star::registry;
 namespace unourl_resolver
 {
 
-Sequence< OUString > resolver_getSupportedServiceNames()
+static Sequence< OUString > resolver_getSupportedServiceNames()
 {
     Sequence< OUString > seqNames { "com.sun.star.bridge.UnoUrlResolver" };
     return seqNames;
 }
 
-OUString resolver_getImplementationName()
+static OUString resolver_getImplementationName()
 {
     return OUString(IMPLNAME);
 }

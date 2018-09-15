@@ -45,7 +45,7 @@ using namespace ::com::sun::star;
 #define THROW_WHERE ""
 #endif
 
-bool CheckPackageSignature_Impl( const uno::Reference< io::XInputStream >& xInputStream,
+static bool CheckPackageSignature_Impl( const uno::Reference< io::XInputStream >& xInputStream,
                                      const uno::Reference< io::XSeekable >& xSeekable )
 {
     if ( !xInputStream.is() || !xSeekable.is() )

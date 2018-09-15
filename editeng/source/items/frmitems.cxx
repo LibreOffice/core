@@ -1389,7 +1389,7 @@ SvxBoxItem& SvxBoxItem::operator=( const SvxBoxItem& rBox )
 }
 
 
-inline bool CmpBrdLn( const std::unique_ptr<SvxBorderLine> & pBrd1, const SvxBorderLine* pBrd2 )
+static inline bool CmpBrdLn( const std::unique_ptr<SvxBorderLine> & pBrd1, const SvxBorderLine* pBrd2 )
 {
     if( pBrd1.get() == pBrd2 )
         return true;

@@ -1346,17 +1346,17 @@ void ScOutputData::DrawClear()
 
 // Lines
 
-long lclGetSnappedX( const OutputDevice& rDev, long nPosX, bool bSnapPixel )
+static long lclGetSnappedX( const OutputDevice& rDev, long nPosX, bool bSnapPixel )
 {
     return (bSnapPixel && nPosX) ? rDev.PixelToLogic( rDev.LogicToPixel( Size( nPosX, 0 ) ) ).Width() : nPosX;
 }
 
-long lclGetSnappedY( const OutputDevice& rDev, long nPosY, bool bSnapPixel )
+static long lclGetSnappedY( const OutputDevice& rDev, long nPosY, bool bSnapPixel )
 {
     return (bSnapPixel && nPosY) ? rDev.PixelToLogic( rDev.LogicToPixel( Size( 0, nPosY ) ) ).Height() : nPosY;
 }
 
-size_t lclGetArrayColFromCellInfoX( sal_uInt16 nCellInfoX, sal_uInt16 nCellInfoFirstX, sal_uInt16 nCellInfoLastX, bool bRTL )
+static size_t lclGetArrayColFromCellInfoX( sal_uInt16 nCellInfoX, sal_uInt16 nCellInfoFirstX, sal_uInt16 nCellInfoLastX, bool bRTL )
 {
     return static_cast< size_t >( bRTL ? (nCellInfoLastX + 2 - nCellInfoX) : (nCellInfoX - nCellInfoFirstX) );
 }

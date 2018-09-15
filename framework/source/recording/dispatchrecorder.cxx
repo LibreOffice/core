@@ -51,7 +51,7 @@ DEFINE_INIT_SERVICE(
 )
 
 
-void flatten_struct_members(
+static void flatten_struct_members(
     ::std::vector< Any > * vec, void const * data,
     typelib_CompoundTypeDescription * pTD )
 {
@@ -66,7 +66,7 @@ void flatten_struct_members(
     }
 }
 
-Sequence< Any > make_seq_out_of_struct(
+static Sequence< Any > make_seq_out_of_struct(
     Any const & val )
 {
     Type const & type = val.getValueType();

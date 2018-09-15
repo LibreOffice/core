@@ -534,7 +534,7 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
 }
 
 
-void setStreamKey( const uno::Reference< io::XStream >& xStream, const OUString& aPass )
+static void setStreamKey( const uno::Reference< io::XStream >& xStream, const OUString& aPass )
 {
     uno::Reference< embed::XEncryptionProtectedSource > xEncrStream( xStream, uno::UNO_QUERY );
     if ( xEncrStream.is() )

@@ -830,7 +830,7 @@ void SbiParser::Option()
     }
 }
 
-void addStringConst( SbiSymPool& rPool, const OUString& pSym, const OUString& rStr )
+static void addStringConst( SbiSymPool& rPool, const OUString& pSym, const OUString& rStr )
 {
     SbiConstDef* pConst = new SbiConstDef( pSym );
     pConst->SetType( SbxSTRING );

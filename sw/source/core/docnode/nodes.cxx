@@ -49,7 +49,7 @@
 typedef std::vector<SwStartNode*> SwSttNdPtrs;
 
 // function to determine the highest level in the given range
-sal_uInt16 HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange );
+static sal_uInt16 HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange );
 
 /** Constructor
  *
@@ -1312,7 +1312,7 @@ SwContentNode* SwNodes::GoPrevious(SwNodeIndex *pIdx)
     return static_cast<SwContentNode*>(pNd);
 }
 
-inline bool TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, sal_uLong nStt, sal_uLong nEnd )
+static inline bool TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, sal_uLong nStt, sal_uLong nEnd )
 {
     return nStt < nSttIdx && nEnd >= nSttIdx &&
             nStt < nEndIdx && nEnd >= nEndIdx;

@@ -59,7 +59,7 @@ using namespace ::com::sun::star;
 // See swtable.cxx too
 #define COLFUZZY 20L
 
-inline bool IsSame( long nA, long nB ) { return  std::abs(nA-nB) <= COLFUZZY; }
+static inline bool IsSame( long nA, long nB ) { return  std::abs(nA-nB) <= COLFUZZY; }
 
 // SwTableLine::ChgFrameFormat may delete old format which doesn't have writer listeners anymore.
 // This may invalidate my pointers, and lead to use-after-free. For this reason, I register myself
@@ -157,7 +157,7 @@ static bool lcl_GetBoxSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
     return !rBoxes.empty();
 }
 
-inline void InsertLine( std::vector<SwTableLine*>& rLineArr, SwTableLine* pLine )
+static inline void InsertLine( std::vector<SwTableLine*>& rLineArr, SwTableLine* pLine )
 {
     if( rLineArr.end() == std::find( rLineArr.begin(), rLineArr.end(), pLine ) )
         rLineArr.push_back( pLine );
@@ -186,9 +186,9 @@ struct LinesAndTable
           m_rLines(rL), m_rTable(rTable), m_bInsertLines(true) {}
 };
 
-bool FindLine_( FndLine_ & rLine, LinesAndTable* pPara );
+static bool FindLine_( FndLine_ & rLine, LinesAndTable* pPara );
 
-bool FindBox_( FndBox_ & rBox, LinesAndTable* pPara )
+static bool FindBox_( FndBox_ & rBox, LinesAndTable* pPara )
 {
     if (!rBox.GetLines().empty())
     {
@@ -533,7 +533,7 @@ bool SwDoc::GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill )
     return bRet;
 }
 
-inline void InsertCell( std::vector<SwCellFrame*>& rCellArr, SwCellFrame* pCellFrame )
+static inline void InsertCell( std::vector<SwCellFrame*>& rCellArr, SwCellFrame* pCellFrame )
 {
     if( rCellArr.end() == std::find( rCellArr.begin(), rCellArr.end(), pCellFrame ) )
         rCellArr.push_back( pCellFrame );

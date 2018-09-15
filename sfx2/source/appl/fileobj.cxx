@@ -201,7 +201,7 @@ bool SvFileObject::LoadFile_Impl()
         If the URL doesn't denote a valid (existent and accessible) file, the
         request is silently dropped.
 */
-OUString impl_getFilter( const OUString& _rURL )
+static OUString impl_getFilter( const OUString& _rURL )
 {
     OUString sFilter;
     if ( _rURL.isEmpty() )

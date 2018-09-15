@@ -218,7 +218,7 @@ void ExtendedColorConfig_Impl::EnableBroadcast()
         ExtendedColorConfig::m_pImpl->m_bIsBroadcastEnabled = true;
 }
 
-void lcl_addString(uno::Sequence < OUString >& _rSeq,const OUString& _sAdd)
+static void lcl_addString(uno::Sequence < OUString >& _rSeq,const OUString& _sAdd)
 {
     for(OUString & i : _rSeq)
         i += _sAdd;

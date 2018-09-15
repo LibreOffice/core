@@ -115,7 +115,7 @@ makeRotateAndScaleDepthByHeight(const glm::vec3& Axis,const glm::vec3& Origin,do
     return std::make_shared<RotateAndScaleDepthByHeight>(Axis, Origin, Angle, bScale, bInter, T0, T1);
 }
 
-inline double intervalInter(double t, double T0, double T1)
+static inline double intervalInter(double t, double T0, double T1)
 {
     return ( t - T0 ) / ( T1 - T0 );
 }

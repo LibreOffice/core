@@ -289,7 +289,7 @@ void SwDocTest::testUserPerceivedCharCount()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Surrogate Pair should be counted as single character", static_cast<sal_Int32>(1), nCount);
 }
 
-SwTextNode* getModelToViewTestDocument(SwDoc *pDoc)
+static SwTextNode* getModelToViewTestDocument(SwDoc *pDoc)
 {
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     SwPaM aPaM(aIdx);
@@ -334,7 +334,7 @@ SwTextNode* getModelToViewTestDocument(SwDoc *pDoc)
     return pTextNode;
 }
 
-SwTextNode* getModelToViewTestDocument2(SwDoc *pDoc)
+static SwTextNode* getModelToViewTestDocument2(SwDoc *pDoc)
 {
     getModelToViewTestDocument(pDoc);
 

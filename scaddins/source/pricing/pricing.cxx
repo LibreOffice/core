@@ -91,7 +91,7 @@ void sca::pricing::InitScaFuncDataList(ScaFuncDataList& rList)
 }
 
 // entry points for service registration / instantiation
-uno::Reference< uno::XInterface > ScaPricingAddIn_CreateInstance(
+static uno::Reference< uno::XInterface > ScaPricingAddIn_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory >& )
 {
     return static_cast<cppu::OWeakObject*>(new ScaPricingAddIn());

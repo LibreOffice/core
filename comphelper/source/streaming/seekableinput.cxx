@@ -35,7 +35,7 @@ namespace comphelper
 const sal_Int32 nConstBufferSize = 32000;
 
 
-void copyInputToOutput_Impl( const uno::Reference< io::XInputStream >& xIn,
+static void copyInputToOutput_Impl( const uno::Reference< io::XInputStream >& xIn,
                             const uno::Reference< io::XOutputStream >& xOut )
 {
     sal_Int32 nRead;

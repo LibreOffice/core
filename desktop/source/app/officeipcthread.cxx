@@ -237,7 +237,7 @@ rtl::Reference< RequestHandler > RequestHandler::pGlobal;
 
 // Turns a string in aMsg such as file:///home/foo/.libreoffice/3
 // Into a hex string of well known length ff132a86...
-OUString CreateMD5FromString( const OUString& aMsg )
+static OUString CreateMD5FromString( const OUString& aMsg )
 {
     SAL_INFO("desktop.app", "create md5 from '" << aMsg << "'");
 
@@ -287,12 +287,12 @@ IMPL_STATIC_LINK( ProcessEventsClass_Impl, ProcessDocumentsEvent, void*, pEvent,
     delete pDocsRequest;
 }
 
-void ImplPostForeignAppEvent( ApplicationEvent* pEvent )
+static void ImplPostForeignAppEvent( ApplicationEvent* pEvent )
 {
     Application::PostUserEvent( LINK( nullptr, ProcessEventsClass_Impl, CallEvent ), pEvent );
 }
 
-void ImplPostProcessDocumentsEvent( ProcessDocumentsRequest* pEvent )
+static void ImplPostProcessDocumentsEvent( ProcessDocumentsRequest* pEvent )
 {
     Application::PostUserEvent( LINK( nullptr, ProcessEventsClass_Impl, ProcessDocumentsEvent ), pEvent );
 }

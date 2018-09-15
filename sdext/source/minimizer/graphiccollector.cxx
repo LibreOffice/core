@@ -58,7 +58,7 @@ const DeviceInfo& GraphicCollector::GetDeviceInfo( const Reference< XComponentCo
     return aDeviceInfo;
 }
 
-void ImpAddEntity( std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities, const GraphicSettings& rGraphicSettings, const GraphicCollector::GraphicUser& rUser )
+static void ImpAddEntity( std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities, const GraphicSettings& rGraphicSettings, const GraphicCollector::GraphicUser& rUser )
 {
     if ( rGraphicSettings.mbEmbedLinkedGraphics )
     {
@@ -84,7 +84,7 @@ void ImpAddEntity( std::vector< GraphicCollector::GraphicEntity >& rGraphicEntit
     }
 }
 
-void ImpAddGraphicEntity( const Reference< XComponentContext >& rxMSF, Reference< XShape > const & rxShape, const GraphicSettings& rGraphicSettings, std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities )
+static void ImpAddGraphicEntity( const Reference< XComponentContext >& rxMSF, Reference< XShape > const & rxShape, const GraphicSettings& rGraphicSettings, std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities )
 {
     Reference< XGraphic > xGraphic;
     Reference< XPropertySet > xShapePropertySet( rxShape, UNO_QUERY_THROW );
@@ -121,7 +121,7 @@ void ImpAddGraphicEntity( const Reference< XComponentContext >& rxMSF, Reference
     }
 }
 
-void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxMSF, const Reference< XPropertySet >& rxPropertySet, const awt::Size& rLogicalSize,
+static void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxMSF, const Reference< XPropertySet >& rxPropertySet, const awt::Size& rLogicalSize,
     std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities, const GraphicSettings& rGraphicSettings, const Reference< XPropertySet >& rxPagePropertySet )
 {
     try
@@ -189,7 +189,7 @@ void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxMSF, const 
     }
 }
 
-void ImpCollectBackgroundGraphic( const Reference< XComponentContext >& rxMSF, const Reference< XDrawPage >& rxDrawPage, const GraphicSettings& rGraphicSettings, std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities )
+static void ImpCollectBackgroundGraphic( const Reference< XComponentContext >& rxMSF, const Reference< XDrawPage >& rxDrawPage, const GraphicSettings& rGraphicSettings, std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities )
 {
     try
     {
@@ -207,7 +207,7 @@ void ImpCollectBackgroundGraphic( const Reference< XComponentContext >& rxMSF, c
     }
 }
 
-void ImpCollectGraphicObjects( const Reference< XComponentContext >& rxMSF, const Reference< XShapes >& rxShapes, const GraphicSettings& rGraphicSettings, std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities )
+static void ImpCollectGraphicObjects( const Reference< XComponentContext >& rxMSF, const Reference< XShapes >& rxShapes, const GraphicSettings& rGraphicSettings, std::vector< GraphicCollector::GraphicEntity >& rGraphicEntities )
 {
     for ( sal_Int32 i = 0; i < rxShapes->getCount(); i++ )
     {
@@ -327,7 +327,7 @@ void GraphicCollector::CollectGraphics( const Reference< XComponentContext >& rx
     }
 }
 
-void ImpCountGraphicObjects( const Reference< XComponentContext >& rxMSF, const Reference< XShapes >& rxShapes, const GraphicSettings& rGraphicSettings, sal_Int32& rnGraphics )
+static void ImpCountGraphicObjects( const Reference< XComponentContext >& rxMSF, const Reference< XShapes >& rxShapes, const GraphicSettings& rGraphicSettings, sal_Int32& rnGraphics )
 {
     for ( sal_Int32 i = 0; i < rxShapes->getCount(); i++ )
     {
@@ -364,7 +364,7 @@ void ImpCountGraphicObjects( const Reference< XComponentContext >& rxMSF, const 
     }
 }
 
-void ImpCountBackgroundGraphic(
+static void ImpCountBackgroundGraphic(
     const Reference< XDrawPage >& rxDrawPage, sal_Int32& rnGraphics )
 {
     try

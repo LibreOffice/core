@@ -130,7 +130,7 @@ bool SwDrawView::IsAntiAliasing() const
     return getOptionsDrawinglayer().IsAntiAliasing();
 }
 
-SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt16 nTol, const SdrMarkList &rMrkList)
+static SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt16 nTol, const SdrMarkList &rMrkList)
 {
     if(!nTol)
     {

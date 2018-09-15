@@ -25,7 +25,7 @@
 
 using namespace ::editeng;
 
-inline const SvxBorderLine* GetLineTB( const SvxBoxItem* pBox, bool bTop )
+static inline const SvxBorderLine* GetLineTB( const SvxBoxItem* pBox, bool bTop )
 {
     return bTop ? pBox->GetTop() : pBox->GetBottom();
 }

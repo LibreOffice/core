@@ -54,9 +54,9 @@ namespace comp_StringRepresentation {
 using namespace ::com::sun::star;
 
 // component and service helper functions:
-OUString _getImplementationName();
-uno::Sequence< OUString > _getSupportedServiceNames();
-uno::Reference< uno::XInterface > _create( uno::Reference< uno::XComponentContext > const & context );
+static OUString _getImplementationName();
+static uno::Sequence< OUString > _getSupportedServiceNames();
+static uno::Reference< uno::XInterface > _create( uno::Reference< uno::XComponentContext > const & context );
 
 } // closing component helper namespace
 

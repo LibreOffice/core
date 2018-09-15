@@ -132,7 +132,7 @@ struct rtl_bootstrap_NameValue
 
 typedef std::vector<rtl_bootstrap_NameValue> NameValueVector;
 
-bool find(
+static bool find(
     NameValueVector const & vector, rtl::OUString const & key,
     rtl::OUString * value)
 {
@@ -300,7 +300,7 @@ static OUString & getIniFileName_Impl()
 
 // ensure the given file url has no final slash
 
-inline void EnsureNoFinalSlash (rtl::OUString & url)
+static inline void EnsureNoFinalSlash (rtl::OUString & url)
 {
     sal_Int32 i = url.getLength();
 

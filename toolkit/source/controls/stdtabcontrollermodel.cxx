@@ -155,7 +155,7 @@ sal_uInt32 StdTabControllerModel::ImplGetControlPos( const css::uno::Reference< 
     return CONTROLPOS_NOTFOUND;
 }
 
-void ImplWriteControls( const css::uno::Reference< css::io::XObjectOutputStream > & OutStream, const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& rCtrls )
+static void ImplWriteControls( const css::uno::Reference< css::io::XObjectOutputStream > & OutStream, const css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& rCtrls )
 {
     css::uno::Reference< css::io::XMarkableStream >  xMark( OutStream, css::uno::UNO_QUERY );
     DBG_ASSERT( xMark.is(), "write: no XMarkableStream!" );
@@ -186,7 +186,7 @@ void ImplWriteControls( const css::uno::Reference< css::io::XObjectOutputStream 
     xMark->deleteMark(nDataBeginMark);
 }
 
-css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > ImplReadControls( const css::uno::Reference< css::io::XObjectInputStream > & InStream )
+static css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > > ImplReadControls( const css::uno::Reference< css::io::XObjectInputStream > & InStream )
 {
     css::uno::Reference< css::io::XMarkableStream >  xMark( InStream, css::uno::UNO_QUERY );
     DBG_ASSERT( xMark.is(), "write: no XMarkableStream!" );

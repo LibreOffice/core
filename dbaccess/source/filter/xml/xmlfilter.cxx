@@ -77,7 +77,7 @@ namespace dbaxml
 {
     using namespace ::com::sun::star::util;
     /// read a component (file + filter version)
-ErrCode ReadThroughComponent(
+static ErrCode ReadThroughComponent(
     const uno::Reference<XInputStream>& xInputStream,
     const uno::Reference<XComponent>& xModelComponent,
     const uno::Reference<XComponentContext> & rxContext,
@@ -140,7 +140,7 @@ ErrCode ReadThroughComponent(
 
 
 /// read a component (storage version)
-ErrCode ReadThroughComponent(
+static ErrCode ReadThroughComponent(
     const uno::Reference< embed::XStorage >& xStorage,
     const uno::Reference<XComponent>& xModelComponent,
     const sal_Char* pStreamName,

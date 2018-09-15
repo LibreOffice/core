@@ -40,7 +40,7 @@ static uno::Reference< XHelperInterface > lcl_createWorkbookHIParent( const uno:
     return new ScVbaWorkbook( uno::Reference< XHelperInterface >( aApplication, uno::UNO_QUERY_THROW ), xContext,  xModel );
 }
 
-uno::Any ComponentToWindow( const uno::Any& aSource, const uno::Reference< uno::XComponentContext > & xContext, const uno::Any& aApplication )
+static uno::Any ComponentToWindow( const uno::Any& aSource, const uno::Reference< uno::XComponentContext > & xContext, const uno::Any& aApplication )
 {
     uno::Reference< frame::XModel > xModel( aSource, uno::UNO_QUERY_THROW );
     // !! TODO !! iterate over all controllers

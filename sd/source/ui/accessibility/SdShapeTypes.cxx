@@ -26,7 +26,7 @@
 
 namespace accessibility {
 
-AccessibleShape*
+static AccessibleShape*
     CreateSdAccessibleShape (
         const AccessibleShapeInfo& rShapeInfo,
         const AccessibleShapeTreeInfo& rShapeTreeInfo,

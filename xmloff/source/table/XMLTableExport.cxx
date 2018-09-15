@@ -536,7 +536,7 @@ const TableStyleElement* getWriterSpecificTableStyleMap()
     return &gWriterSpecificTableStyleElements[0];
 }
 
-const TableStyleElement* getWriterSpecificTableStyleAttributes()
+static const TableStyleElement* getWriterSpecificTableStyleAttributes()
 {
     static const struct TableStyleElement gWriterSpecifitTableStyleAttributes[] =
     {

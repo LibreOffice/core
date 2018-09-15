@@ -45,7 +45,7 @@ static void do_pagein (const char * filename)
     file_image_close (&image);
 }
 
-int isRotational(char const * path)
+static int isRotational(char const * path)
 {
     int ret = 1;
 #ifdef LINUX

@@ -62,7 +62,7 @@ using namespace linguistic;
 
 #define SN_CONV_DICTIONARY_LIST  "com.sun.star.linguistic2.ConversionDictionaryList"
 
-OUString GetConvDicMainURL( const OUString &rDicName, const OUString &rDirectoryURL )
+static OUString GetConvDicMainURL( const OUString &rDicName, const OUString &rDirectoryURL )
 {
     // build URL to use for new (persistent) dictionaries
 
@@ -561,7 +561,7 @@ uno::Sequence< OUString > ConvDicList::getSupportedServiceNames_Static()
 }
 
 /// @throws css::uno::Exception
-uno::Reference< uno::XInterface > ConvDicList_CreateInstance(
+static uno::Reference< uno::XInterface > ConvDicList_CreateInstance(
         const uno::Reference< XMultiServiceFactory > & /*rSMgr*/ )
 {
     return StaticConvDicList::get();

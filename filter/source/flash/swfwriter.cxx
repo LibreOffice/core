@@ -94,7 +94,7 @@ Writer::~Writer()
 }
 
 
-void ImplCopySvStreamToXOutputStream( SvStream& rIn, Reference< XOutputStream > const &xOut )
+static void ImplCopySvStreamToXOutputStream( SvStream& rIn, Reference< XOutputStream > const &xOut )
 {
     sal_uInt32 nBufferSize = 64*1024;
 

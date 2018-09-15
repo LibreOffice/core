@@ -838,33 +838,33 @@ SprmInfo wwSprmParser::GetSprmInfo(sal_uInt16 nId) const
 
 //-end
 
-inline sal_uInt8 Get_Byte( sal_uInt8 *& p )
+static inline sal_uInt8 Get_Byte( sal_uInt8 *& p )
 {
     sal_uInt8 n = *p;
     p += 1;
     return n;
 }
 
-inline sal_uInt16 Get_UShort( sal_uInt8 *& p )
+static inline sal_uInt16 Get_UShort( sal_uInt8 *& p )
 {
     const sal_uInt16 n = SVBT16ToShort( *reinterpret_cast<SVBT16*>(p) );
     p += 2;
     return n;
 }
 
-inline sal_Int16 Get_Short( sal_uInt8 *& p )
+static inline sal_Int16 Get_Short( sal_uInt8 *& p )
 {
     return Get_UShort(p);
 }
 
-inline sal_uInt32 Get_ULong( sal_uInt8 *& p )
+static inline sal_uInt32 Get_ULong( sal_uInt8 *& p )
 {
     sal_uInt32 n = SVBT32ToUInt32( *reinterpret_cast<SVBT32*>(p) );
     p += 4;
     return n;
 }
 
-inline sal_Int32 Get_Long( sal_uInt8 *& p )
+static inline sal_Int32 Get_Long( sal_uInt8 *& p )
 {
     return Get_ULong(p);
 }
@@ -2592,12 +2592,12 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::Entry::operator<
     return (mnFC < rSecond.mnFC);
 }
 
-bool IsReplaceAllSprm(sal_uInt16 nSpId)
+static bool IsReplaceAllSprm(sal_uInt16 nSpId)
 {
     return (NS_sprm::LN_PHugePapx == nSpId || 0x6646 == nSpId);
 }
 
-bool IsExpandableSprm(sal_uInt16 nSpId)
+static bool IsExpandableSprm(sal_uInt16 nSpId)
 {
     return 0x646B == nSpId;
 }
@@ -6608,7 +6608,7 @@ MSOFactoidType::MSOFactoidType()
 
 namespace MSOPBString
 {
-OUString Read(SvStream& rStream)
+static OUString Read(SvStream& rStream)
 {
     OUString aRet;
 
@@ -6624,7 +6624,7 @@ OUString Read(SvStream& rStream)
     return aRet;
 }
 
-void Write(const OUString& rString, SvStream& rStream)
+static void Write(const OUString& rString, SvStream& rStream)
 {
     sal_uInt16 nBuf = 0;
     nBuf |= rString.getLength(); // cch, 0..14th bits.

@@ -1201,7 +1201,7 @@ StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl()
     }
 }
 
-const char *SymbolFontToString(int nResult)
+static const char *SymbolFontToString(int nResult)
 {
     const char * const *ppName = aSymbolNames;
     int nI = Symbol;

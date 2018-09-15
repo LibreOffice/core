@@ -775,7 +775,7 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrameFormat
     m_pImpl->m_pSerializer->endElementNS(XML_w, XML_pict);
 }
 
-bool lcl_isLockedCanvas(const uno::Reference<drawing::XShape>& xShape)
+static bool lcl_isLockedCanvas(const uno::Reference<drawing::XShape>& xShape)
 {
     bool bRet = false;
     uno::Sequence<beans::PropertyValue> propList = lclGetProperty(xShape, "InteropGrabBag");
@@ -984,7 +984,7 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj,
 }
 
 // Converts ARGB transparency (0..255) to drawingml alpha (opposite, and 0..100000)
-OString lcl_ConvertTransparency(const Color& rColor)
+static OString lcl_ConvertTransparency(const Color& rColor)
 {
     if (rColor.GetTransparency() > 0)
     {

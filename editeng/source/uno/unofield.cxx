@@ -67,7 +67,7 @@ public:
     OUString    msPresentation;
 };
 
-const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
+static const SfxItemPropertySet* ImplGetFieldItemPropertySet( sal_Int32 mnId )
 {
     static const SfxItemPropertyMapEntry aExDateTimeFieldPropertyMap_Impl[] =
     {
@@ -203,7 +203,7 @@ static util::DateTime getDate( sal_Int32 nDate )
     return aDate;
 }
 
-inline Date setDate( util::DateTime const & rDate )
+static inline Date setDate( util::DateTime const & rDate )
 {
     return Date( rDate.Day, rDate.Month, rDate.Year );
 }
@@ -222,7 +222,7 @@ static util::DateTime getTime(sal_Int64 const nTime)
     return aTime;
 }
 
-inline tools::Time setTime( util::DateTime const & rDate )
+static inline tools::Time setTime( util::DateTime const & rDate )
 {
     return tools::Time( rDate  );
 }

@@ -73,14 +73,14 @@ namespace svx
         return static_cast<XWeak*>(new NamespaceMap( pWhichIds, pPool ));
     }
 
-    Sequence< OUString > NamespaceMap_getSupportedServiceNames()
+    static Sequence< OUString > NamespaceMap_getSupportedServiceNames()
         throw()
     {
         Sequence<OUString> aSupportedServiceNames { "com.sun.star.xml.NamespaceMap" };
         return aSupportedServiceNames;
     }
 
-    OUString NamespaceMap_getImplementationName()
+    static OUString NamespaceMap_getImplementationName()
         throw()
     {
         return OUString( "com.sun.star.comp.Svx.NamespaceMap" );

@@ -564,7 +564,7 @@ sal_Int16 eHoriOri, sal_Int16 eHoriRel, SwTwips nPageLeft,
     return bRet;
 }
 
-bool RTLDrawingsHack(long &rLeft,
+static bool RTLDrawingsHack(long &rLeft,
     sal_Int16 eHoriOri, sal_Int16 eHoriRel, SwTwips nPageLeft,
     SwTwips nPageRight, SwTwips nPageSize)
 {
@@ -1531,7 +1531,7 @@ void SwBasicEscherEx::WriteEmptyFlyFrame(const SwFrameFormat& rFormat, sal_uInt3
     CloseContainer();   // ESCHER_SpContainer
 }
 
-ShapeFlag AddMirrorFlags(ShapeFlag nFlags, const SwMirrorGrf &rMirror)
+static ShapeFlag AddMirrorFlags(ShapeFlag nFlags, const SwMirrorGrf &rMirror)
 {
     switch (rMirror.GetValue())
     {
@@ -2838,7 +2838,7 @@ sal_Int32 SwEscherEx::WriteFlyFrame(const DrawObj &rObj, sal_uInt32 &rShapeId,
     return nBorderThick;
 }
 
-sal_uInt16 FindPos(const SwFrameFormat &rFormat, unsigned int nHdFtIndex,
+static sal_uInt16 FindPos(const SwFrameFormat &rFormat, unsigned int nHdFtIndex,
     DrawObjPointerVector &rPVec)
 {
     auto aEnd = rPVec.end();

@@ -1548,7 +1548,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
     SkipToken();
 }
 
-inline sal_uInt32 CalcShading( sal_uInt32 nColor, sal_uInt32 nFillColor, sal_uInt8 nShading )
+static inline sal_uInt32 CalcShading( sal_uInt32 nColor, sal_uInt32 nFillColor, sal_uInt8 nShading )
 {
     nColor = (nColor * nShading) / 100;
     nFillColor = (nFillColor * ( 100 - nShading )) / 100;

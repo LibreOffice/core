@@ -845,7 +845,7 @@ void SvXMLNumFmtExport::WriteMapElement_Impl( sal_Int32 nOp, double fLimit,
 
 //  for old (automatic) currency formats: parse currency symbol from text
 
-sal_Int32 lcl_FindSymbol( const OUString& sUpperStr, const OUString& sCurString )
+static sal_Int32 lcl_FindSymbol( const OUString& sUpperStr, const OUString& sCurString )
 {
     //  search for currency symbol
     //  Quoting as in ImpSvNumberformatScan::Symbol_Division

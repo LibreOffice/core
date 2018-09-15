@@ -210,7 +210,7 @@ sal_UCS4 GetLocalizedChar( sal_UCS4 nChar, LanguageType eLang )
     return nChar;
 }
 
-inline bool IsControlChar( sal_UCS4 cChar )
+static inline bool IsControlChar( sal_UCS4 cChar )
 {
     // C0 control characters
     if( (0x0001 <= cChar) && (cChar <= 0x001F) )

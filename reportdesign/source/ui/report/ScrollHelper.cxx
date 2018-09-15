@@ -34,7 +34,7 @@ namespace rptui
 using namespace ::com::sun::star;
 
 
-void lcl_setScrollBar(sal_Int32 _nNewValue,const Point& _aPos,const Size& _aSize,ScrollBar& _rScrollBar)
+static void lcl_setScrollBar(sal_Int32 _nNewValue,const Point& _aPos,const Size& _aSize,ScrollBar& _rScrollBar)
 {
     _rScrollBar.SetPosSizePixel(_aPos,_aSize);
     _rScrollBar.SetPageSize( _nNewValue );

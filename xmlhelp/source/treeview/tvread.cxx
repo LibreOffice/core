@@ -320,7 +320,9 @@ TVRead::hasByHierarchicalName( const OUString& aName )
 /*                                                                        */
 /**************************************************************************/
 
-extern "C" void start_handler(void *userData,
+extern "C" {
+
+static void start_handler(void *userData,
                    const XML_Char *name,
                    const XML_Char **atts)
 {
@@ -357,20 +359,22 @@ extern "C" void start_handler(void *userData,
     }
 }
 
-extern "C" void end_handler(void *userData,
+static void end_handler(void *userData,
                  SAL_UNUSED_PARAMETER const XML_Char * )
 {
     TVDom **tvDom = static_cast< TVDom** >( userData );
     *tvDom = (*tvDom)->getParent();
 }
 
-extern "C" void data_handler( void *userData,
+static void data_handler( void *userData,
                    const XML_Char *s,
                    int len)
 {
     TVDom **tvDom = static_cast< TVDom** >( userData );
     if( (*tvDom)->isLeaf() )
         (*tvDom)->setTitle( s,len );
+}
+
 }
 
 TVChildTarget::TVChildTarget( const ConfigData& configData,TVDom* tvDom )
@@ -1011,7 +1015,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpP
     return xHelpPackage;
 }
 
-inline bool isLetter( sal_Unicode c )
+static inline bool isLetter( sal_Unicode c )
 {
     return rtl::isAsciiAlpha(c);
 }

@@ -155,7 +155,7 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
 }
 
 /// Translate absolute <-> relative twips: LOK wants absolute coordinates as output and gives absolute coordinates as input.
-void lcl_translateTwips(vcl::Window const & rParent, vcl::Window& rChild)
+static void lcl_translateTwips(vcl::Window const & rParent, vcl::Window& rChild)
 {
     // Don't translate if we already have a non-zero origin.
     // This prevents multiple translate calls that negate

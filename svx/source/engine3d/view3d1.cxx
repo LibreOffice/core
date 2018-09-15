@@ -71,7 +71,7 @@ void E3dView::ConvertMarkedToPolyObj()
     }
 }
 
-void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& rMask)
+static void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& rMask)
 {
     if(dynamic_cast< const E3dLatheObj* >(pObj) !=  nullptr)
     {

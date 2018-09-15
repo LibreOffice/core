@@ -1866,7 +1866,7 @@ static void DelayedCloseEventLink( void* pCEvent, void* )
     delete pEv;
 }
 
-void ImplHandleClose( vcl::Window* pWindow )
+static void ImplHandleClose( vcl::Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -1961,7 +1961,7 @@ static MouseEventModifiers ImplGetMouseButtonMode( SalMouseEvent const * pEvent 
     return nMode;
 }
 
-inline bool ImplHandleSalMouseLeave( vcl::Window* pWindow, SalMouseEvent const * pEvent )
+static inline bool ImplHandleSalMouseLeave( vcl::Window* pWindow, SalMouseEvent const * pEvent )
 {
     return ImplHandleMouseEvent( pWindow, MouseNotifyEvent::MOUSEMOVE, true,
                                  pEvent->mnX, pEvent->mnY,
@@ -1969,7 +1969,7 @@ inline bool ImplHandleSalMouseLeave( vcl::Window* pWindow, SalMouseEvent const *
                                  ImplGetMouseMoveMode( pEvent ) );
 }
 
-inline bool ImplHandleSalMouseMove( vcl::Window* pWindow, SalMouseEvent const * pEvent )
+static inline bool ImplHandleSalMouseMove( vcl::Window* pWindow, SalMouseEvent const * pEvent )
 {
     return ImplHandleMouseEvent( pWindow, MouseNotifyEvent::MOUSEMOVE, false,
                                  pEvent->mnX, pEvent->mnY,
@@ -1977,7 +1977,7 @@ inline bool ImplHandleSalMouseMove( vcl::Window* pWindow, SalMouseEvent const * 
                                  ImplGetMouseMoveMode( pEvent ) );
 }
 
-inline bool ImplHandleSalMouseButtonDown( vcl::Window* pWindow, SalMouseEvent const * pEvent )
+static inline bool ImplHandleSalMouseButtonDown( vcl::Window* pWindow, SalMouseEvent const * pEvent )
 {
     return ImplHandleMouseEvent( pWindow, MouseNotifyEvent::MOUSEBUTTONDOWN, false,
                                  pEvent->mnX, pEvent->mnY,
@@ -1990,7 +1990,7 @@ inline bool ImplHandleSalMouseButtonDown( vcl::Window* pWindow, SalMouseEvent co
                                  ImplGetMouseButtonMode( pEvent ) );
 }
 
-inline bool ImplHandleSalMouseButtonUp( vcl::Window* pWindow, SalMouseEvent const * pEvent )
+static inline bool ImplHandleSalMouseButtonUp( vcl::Window* pWindow, SalMouseEvent const * pEvent )
 {
     return ImplHandleMouseEvent( pWindow, MouseNotifyEvent::MOUSEBUTTONUP, false,
                                  pEvent->mnX, pEvent->mnY,

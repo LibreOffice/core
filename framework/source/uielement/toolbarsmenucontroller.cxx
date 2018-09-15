@@ -85,14 +85,14 @@ struct ToolBarEntry
     const CollatorWrapper*  pCollatorWrapper;
 };
 
-bool CompareToolBarEntry( const ToolBarEntry& aOne, const ToolBarEntry& aTwo )
+static bool CompareToolBarEntry( const ToolBarEntry& aOne, const ToolBarEntry& aTwo )
 {
     sal_Int32 nComp = aOne.pCollatorWrapper->compareString( aOne.aUIName, aTwo.aUIName );
 
     return nComp < 0;
 }
 
-Reference< XLayoutManager > getLayoutManagerFromFrame( const Reference< XFrame >& rFrame )
+static Reference< XLayoutManager > getLayoutManagerFromFrame( const Reference< XFrame >& rFrame )
 {
     Reference< XPropertySet >   xPropSet( rFrame, UNO_QUERY );
     Reference< XLayoutManager > xLayoutManager;
