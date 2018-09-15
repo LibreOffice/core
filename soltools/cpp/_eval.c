@@ -238,10 +238,10 @@ static struct pri priority[] =
     },                                  /* ARCHITECTURE */
 };
 
-int evalop(struct pri);
-struct value tokval(Token *);
-struct value vals[NSTAK], *vp;
-enum toktype ops[NSTAK], *op;
+static int evalop(struct pri);
+static struct value tokval(Token *);
+static struct value vals[NSTAK], *vp;
+static enum toktype ops[NSTAK], *op;
 
 /*
  * Evaluate an #if #elif #ifdef #ifndef line.  trp->tp points to the keyword.
