@@ -30,6 +30,7 @@
 #include "salgdiimpl.hxx"
 
 #include <basegfx/polygon/b2dtrapezoid.hxx>
+#include <basegfx/polygon/b2dpolygontriangulator.hxx>
 
 /* From <X11/Intrinsic.h> */
 typedef unsigned long Pixel;
@@ -93,6 +94,11 @@ private:
 
     XID GetXRenderPicture();
     bool drawFilledTrapezoids( const basegfx::B2DTrapezoid*, int nTrapCount, double fTransparency );
+    bool drawFilledTriangles(
+        const basegfx::B2DHomMatrix& rObjectToDevice,
+        const basegfx::triangulator::B2DTriangleVector& rTriangles,
+        double fTransparency,
+        bool bPixelOffset);
 
     long GetGraphicsHeight() const;
 

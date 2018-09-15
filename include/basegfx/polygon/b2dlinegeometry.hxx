@@ -26,7 +26,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <basegfx/basegfxdllapi.h>
-
+#include <basegfx/polygon/b2dpolygontriangulator.hxx>
 
 namespace basegfx
 {
@@ -124,6 +124,10 @@ namespace basegfx
             the usual fallback to bevel is used. Allowed range is cropped
             to [F_PI .. 0.01 * F_PI].
 
+            @param pTriangles
+            If given, the methjod will additionally add the created geometry as
+            B2DTriangle's
+
             @return
             The tools::PolyPolygon containing the geometry of the extended line by
             it's line width. Contains bezier segments and edge roundings as
@@ -136,7 +140,8 @@ namespace basegfx
             css::drawing::LineCap eCap = css::drawing::LineCap_BUTT,
             double fMaxAllowedAngle = (12.5 * F_PI180),
             double fMaxPartOfEdge = 0.4,
-            double fMiterMinimumAngle = (15.0 * F_PI180));
+            double fMiterMinimumAngle = (15.0 * F_PI180),
+            basegfx::triangulator::B2DTriangleVector* pTriangles = nullptr);
 
     } // end of namespace tools
 } // end of namespace basegfx
