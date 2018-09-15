@@ -609,7 +609,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
     bool bDoingSymbol = false;
     sal_Unicode cReplaceSymbol = m_cSymbol;
 
-    SfxItemSet *pS = new SfxItemSet(m_pDrawEditEngine->GetEmptyItemSet());
+    std::unique_ptr<SfxItemSet> pS(new SfxItemSet(m_pDrawEditEngine->GetEmptyItemSet()));
     WW8PLCFManResult aRes;
 
     std::deque<Chunk> aChunks;
@@ -743,13 +743,12 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
             {
                 m_pDrawEditEngine->QuickSetAttribs( *pS,
                     GetESelection(*m_pDrawEditEngine, nTextStart - nStartCp, nEnd - nStartCp ) );
-                delete pS;
-                pS = new SfxItemSet(m_pDrawEditEngine->GetEmptyItemSet());
+                pS.reset( new SfxItemSet(m_pDrawEditEngine->GetEmptyItemSet()) );
             }
         }
         nStart = nNext;
     }
-    delete pS;
+    pS.reset();
 
     // pop off as far as recorded location just in case there were some left
     // unclosed
