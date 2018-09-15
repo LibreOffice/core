@@ -58,10 +58,8 @@ void ScCharDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
     }
 }
 
-ScParagraphDlg::ScParagraphDlg(vcl::Window* pParent, const SfxItemSet* pAttr)
-    : SfxTabDialog(pParent, "ParagraphDialog",
-        "modules/scalc/ui/paradialog.ui", pAttr)
-    , m_nTabPageId(0)
+ScParagraphDlg::ScParagraphDlg(weld::Window* pParent, const SfxItemSet* pAttr)
+    : SfxTabDialogController(pParent, "modules/scalc/ui/paradialog.ui", "ParagraphDialog", pAttr)
 {
     AddTabPage("labelTP_PARA_STD", RID_SVXPAGE_STD_PARAGRAPH);
     AddTabPage("labelTP_PARA_ALIGN", RID_SVXPAGE_ALIGN_PARAGRAPH);
@@ -70,12 +68,12 @@ ScParagraphDlg::ScParagraphDlg(vcl::Window* pParent, const SfxItemSet* pAttr)
         AddTabPage("labelTP_PARA_ASIAN", RID_SVXPAGE_PARA_ASIAN);
     else
         RemoveTabPage("labelTP_PARA_ASIAN");
-    m_nTabPageId = AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
+    AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
 }
 
-void ScParagraphDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void ScParagraphDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
-    if (nId == m_nTabPageId)
+    if (rId == "labelTP_TABULATOR")
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
         TabulatorDisableFlags const nFlags((TabulatorDisableFlags::TypeMask &~TabulatorDisableFlags::TypeLeft) |
