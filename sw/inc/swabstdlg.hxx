@@ -395,11 +395,11 @@ public:
 
     virtual SwLabDlgMethod GetSwLabDlgStaticMethod () =0;
 
-    virtual VclPtr<SfxAbstractTabDialog> CreateSwParaDlg ( vcl::Window *pParent,
-                                                    SwView& rVw,
-                                                    const SfxItemSet& rCoreSet,
-                                                    bool bDraw,
-                                                    const OString& sDefPage = OString() ) = 0;
+    virtual VclPtr<SfxAbstractTabDialog> CreateSwParaDlg(weld::Window *pParent,
+                                                         SwView& rVw,
+                                                         const SfxItemSet& rCoreSet,
+                                                         bool bDraw,
+                                                         const OString& sDefPage = OString() ) = 0;
 
     virtual VclPtr<VclAbstractDialog> CreateSwAutoMarkDialog(vcl::Window *pParent, SwWrtShell &rSh) = 0;
 
