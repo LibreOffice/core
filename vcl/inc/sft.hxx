@@ -49,6 +49,7 @@
 #include <vcl/fontcapabilities.hxx>
 #include <i18nlangtag/lang.h>
 
+#include <memory>
 #include <vector>
 #include <cstdint>
 
@@ -113,7 +114,7 @@ namespace vcl
         OVERLAP_COMPOUND          = 1<<10
     };
 
-/** Structure used by GetTTSimpleGlyphMetrics() and GetTTSimpleCharMetrics() functions */
+/** Structure used by GetTTSimpleCharMetrics() functions */
     typedef struct {
         sal_uInt16 adv;                         /**< advance width or height            */
         sal_Int16 sb;                           /**< left or top sidebearing            */
@@ -377,7 +378,7 @@ namespace vcl
                                int            nGlyphs);
 
 /**
- * Queries glyph metrics. Allocates an array of TTSimpleGlyphMetrics structs and returns it.
+ * Queries glyph metrics. Allocates an array of advance width/height values and returns it.
  *
  * @param ttf         pointer to the TrueTypeFont structure
  * @param glyphArray  pointer to an array of glyphs that are to be extracted from ttf
@@ -386,7 +387,7 @@ namespace vcl
  * @ingroup sft
  *
  */
-    TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont const *ttf, const sal_uInt16 *glyphArray, int nGlyphs, bool vertical);
+    std::unique_ptr<sal_uInt16[]> GetTTSimpleGlyphMetrics(TrueTypeFont const *ttf, const sal_uInt16 *glyphArray, int nGlyphs, bool vertical);
 
 #if defined(_WIN32) || defined(MACOSX) || defined(IOS)
 /**

@@ -1737,16 +1737,16 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     SAL_WARN_IF( nGlyphCount >= 257, "vcl", "too many glyphs for subsetting" );
 
     // fill pWidth array
-    TTSimpleGlyphMetrics* pMetrics =
+    std::unique_ptr<sal_uInt16[]> pMetrics =
         ::GetTTSimpleGlyphMetrics( aSftTTF.get(), aShortIDs, nGlyphCount, aIFSD.mbVertical );
     if( !pMetrics )
         return FALSE;
-    sal_uInt16 nNotDefAdv   = pMetrics[0].adv;
-    pMetrics[0].adv         = pMetrics[nNotDef].adv;
-    pMetrics[nNotDef].adv   = nNotDefAdv;
+    sal_uInt16 nNotDefAdv = pMetrics[0];
+    pMetrics[0]         = pMetrics[nNotDef];
+    pMetrics[nNotDef]   = nNotDefAdv;
     for( i = 0; i < nOrigCount; ++i )
-        pGlyphWidths[i] = pMetrics[i].adv;
-    free( pMetrics );
+        pGlyphWidths[i] = pMetrics[i];
+    pMetrics.reset();
 
     // write subset into destination file
     nRC = ::CreateTTFromTTGlyphs( aSftTTF.get(), aToFile.getStr(), aShortIDs,
@@ -1819,15 +1819,15 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
         std::vector<sal_uInt16> aGlyphIds(nGlyphs);
         for( int i = 0; i < nGlyphs; i++ )
             aGlyphIds[i] = sal_uInt16(i);
-        TTSimpleGlyphMetrics* pMetrics = ::GetTTSimpleGlyphMetrics( aSftTTF.get(),
+        std::unique_ptr<sal_uInt16[]> pMetrics = ::GetTTSimpleGlyphMetrics( aSftTTF.get(),
                                                                     &aGlyphIds[0],
                                                                     nGlyphs,
                                                                     bVertical );
         if( pMetrics )
         {
             for( int i = 0; i< nGlyphs; i++ )
-                rWidths[i] = pMetrics[i].adv;
-            free( pMetrics );
+                rWidths[i] = pMetrics[i];
+            pMetrics.reset();
             rUnicodeEnc.clear();
         }
         const WinFontFace* pWinFont = static_cast<const WinFontFace*>(pFont);

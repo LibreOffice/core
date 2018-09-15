@@ -2306,7 +2306,7 @@ bool GetSfntTable( TrueTypeFont const * ttf, int nSubtableIndex,
     return bOk;
 }
 
-TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont const *ttf, const sal_uInt16 *glyphArray, int nGlyphs, bool vertical)
+std::unique_ptr<sal_uInt16[]> GetTTSimpleGlyphMetrics(TrueTypeFont const *ttf, const sal_uInt16 *glyphArray, int nGlyphs, bool vertical)
 {
     const sal_uInt8* pTable;
     sal_uInt32 n;
@@ -2325,8 +2325,7 @@ TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont const *ttf, const sal
     if (!nGlyphs || !glyphArray) return nullptr;        /* invalid parameters */
     if (!n || !pTable) return nullptr;                  /* the font does not contain the requested metrics */
 
-    TTSimpleGlyphMetrics* res = static_cast<TTSimpleGlyphMetrics*>(calloc(nGlyphs, sizeof(TTSimpleGlyphMetrics)));
-    assert(res != nullptr);
+    std::unique_ptr<sal_uInt16[]> res(new sal_uInt16[nGlyphs]);
 
     const int UPEm = ttf->unitsPerEm;
     for( int i = 0; i < nGlyphs; ++i) {
@@ -2345,16 +2344,10 @@ TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont const *ttf, const sal
         }
 
         if( nAdvOffset >= nTableSize)
-            res[i].adv = 0; /* better than a crash for buggy fonts */
+            res[i] = 0; /* better than a crash for buggy fonts */
         else
-            res[i].adv = static_cast<sal_uInt16>(
+            res[i] = static_cast<sal_uInt16>(
                 XUnits( UPEm, GetUInt16( pTable, nAdvOffset) ) );
-
-        if( nLsbOffset >= nTableSize)
-            res[i].sb  = 0; /* better than a crash for buggy fonts */
-        else
-            res[i].sb  = static_cast<sal_Int16>(
-                XUnits( UPEm, GetInt16( pTable, nLsbOffset) ) );
     }
 
     return res;

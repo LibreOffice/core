@@ -756,15 +756,15 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
             aGlyphIds[i] = static_cast<sal_uInt16>(i);
         }
 
-        const TTSimpleGlyphMetrics* pGlyphMetrics = ::GetTTSimpleGlyphMetrics( pSftFont, &aGlyphIds[0],
+        std::unique_ptr<sal_uInt16[]> pGlyphMetrics = ::GetTTSimpleGlyphMetrics( pSftFont, &aGlyphIds[0],
                                                                                nGlyphCount, bVertical );
         if( pGlyphMetrics )
         {
             for( int i = 0; i < nGlyphCount; ++i )
             {
-                rGlyphWidths[i] = pGlyphMetrics[i].adv;
+                rGlyphWidths[i] = pGlyphMetrics[i];
             }
-            free( const_cast<TTSimpleGlyphMetrics *>(pGlyphMetrics) );
+            pGlyphMetrics.reset();
         }
 
         rtl::Reference<CoreTextFontFace> rCTFontData(new CoreTextFontFace(*pFontData, pFontData->GetFontId()));
