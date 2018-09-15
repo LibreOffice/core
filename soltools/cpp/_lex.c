@@ -64,8 +64,6 @@ enum state
     S_STNL, S_COMNL, S_EOFCOM, S_COMMENT, S_EOB, S_WS, S_NAME
 };
 
-int tottok;
-int tokkind[256];
 struct fsm
 {
     int state;                          /* if in this state */
@@ -256,7 +254,7 @@ static /*const*/ struct fsm fsm[] = {
 
 /* first index is char, second is state */
 /* increase #states to power of 2 to encourage use of shift */
-short bigfsm[256][MAXSTATE];
+static short bigfsm[256][MAXSTATE];
 
 void
     expandlex(void)

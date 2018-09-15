@@ -66,7 +66,7 @@ static unsigned char toLatin1[256] =
 
 #define MASK    "\\x%x"
 
-int
+static int
     memcpy_EBCDIC( char * pwbuf, uchar const *p, int len )
 {
     int currpos = 0;
