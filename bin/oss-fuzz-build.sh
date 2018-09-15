@@ -17,6 +17,8 @@ df -h $OUT $WORK
 cd $WORK
 $SRC/libreoffice/autogen.sh --with-distro=LibreOfficeOssFuzz --with-external-tar=$SRC
 
+make clean
+
 #build-time rsc tool leaks a titch
 export ASAN_OPTIONS="detect_leaks=0"
 
@@ -51,5 +53,3 @@ cp $SRC/*_seed_corpus.zip $OUT
 cp $SRC/*.dict $OUT
 #options files
 cp $SRC/libreoffice/vcl/workben/*.options $OUT
-
-make clean
