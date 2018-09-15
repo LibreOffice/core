@@ -491,112 +491,112 @@ AnimationNode::AnimationNode( const AnimationNode& rNode )
 {
 }
 
-Sequence<OUString> getSupportedServiceNames_PAR()
+static Sequence<OUString> getSupportedServiceNames_PAR()
 {
     return { "com.sun.star.animations.ParallelTimeContainer" };
 }
 
-OUString getImplementationName_PAR()
+static OUString getImplementationName_PAR()
 {
     return OUString( "animcore::ParallelTimeContainer" );
 }
 
-Sequence<OUString> getSupportedServiceNames_SEQ()
+static Sequence<OUString> getSupportedServiceNames_SEQ()
 {
     return { "com.sun.star.animations.SequenceTimeContainer" };
 }
 
-OUString getImplementationName_SEQ()
+static OUString getImplementationName_SEQ()
 {
     return OUString( "animcore::SequenceTimeContainer" );
 }
 
-Sequence<OUString> getSupportedServiceNames_ITERATE()
+static Sequence<OUString> getSupportedServiceNames_ITERATE()
 {
     return { "com.sun.star.animations.IterateContainer" };
 }
 
-OUString getImplementationName_ITERATE()
+static OUString getImplementationName_ITERATE()
 {
     return OUString( "animcore::IterateContainer" );
 }
 
-Sequence<OUString> getSupportedServiceNames_ANIMATE()
+static Sequence<OUString> getSupportedServiceNames_ANIMATE()
 {
     return { "com.sun.star.animations.Animate" };
 }
 
-OUString getImplementationName_ANIMATE()
+static OUString getImplementationName_ANIMATE()
 {
         return OUString( "animcore::Animate" );
 }
 
-Sequence<OUString> getSupportedServiceNames_SET()
+static Sequence<OUString> getSupportedServiceNames_SET()
 {
     return { "com.sun.star.animations.AnimateSet" };
 }
 
-OUString getImplementationName_SET()
+static OUString getImplementationName_SET()
 {
     return OUString( "animcore::AnimateSet" );
 }
 
-Sequence<OUString> getSupportedServiceNames_ANIMATECOLOR()
+static Sequence<OUString> getSupportedServiceNames_ANIMATECOLOR()
 {
     return { "com.sun.star.animations.AnimateColor" };
 }
 
-OUString getImplementationName_ANIMATECOLOR()
+static OUString getImplementationName_ANIMATECOLOR()
 {
     return OUString( "animcore::AnimateColor" );
 }
 
-Sequence<OUString> getSupportedServiceNames_ANIMATEMOTION()
+static Sequence<OUString> getSupportedServiceNames_ANIMATEMOTION()
 {
     return { "com.sun.star.animations.AnimateMotion" };
 }
 
-OUString getImplementationName_ANIMATEMOTION()
+static OUString getImplementationName_ANIMATEMOTION()
 {
     return OUString( "animcore::AnimateMotion" );
 }
 
-Sequence<OUString> getSupportedServiceNames_ANIMATETRANSFORM()
+static Sequence<OUString> getSupportedServiceNames_ANIMATETRANSFORM()
 {
     return { "com.sun.star.animations.AnimateTransform" };
 }
 
-OUString getImplementationName_ANIMATETRANSFORM()
+static OUString getImplementationName_ANIMATETRANSFORM()
 {
     return OUString( "animcore::AnimateTransform" );
 }
 
-Sequence<OUString> getSupportedServiceNames_TRANSITIONFILTER()
+static Sequence<OUString> getSupportedServiceNames_TRANSITIONFILTER()
 {
     return { "com.sun.star.animations.TransitionFilter" };
 }
 
-OUString getImplementationName_TRANSITIONFILTER()
+static OUString getImplementationName_TRANSITIONFILTER()
 {
         return OUString( "animcore::TransitionFilter" );
 }
 
-Sequence<OUString> getSupportedServiceNames_AUDIO()
+static Sequence<OUString> getSupportedServiceNames_AUDIO()
 {
     return { "com.sun.star.animations.Audio" };
 }
 
-OUString getImplementationName_AUDIO()
+static OUString getImplementationName_AUDIO()
 {
         return OUString( "animcore::Audio" );
 }
 
-Sequence<OUString> getSupportedServiceNames_COMMAND()
+static Sequence<OUString> getSupportedServiceNames_COMMAND()
 {
     return { "com.sun.star.animations.Command" };
 }
 
-OUString getImplementationName_COMMAND()
+static OUString getImplementationName_COMMAND()
 {
     return OUString( "animcore::Command" );
 }

@@ -89,7 +89,7 @@ namespace drawinglayer
         }
 
         // helper to add a centered, maybe stroked line primitive to rContainer
-        void addPolygonStrokePrimitive2D(
+        static void addPolygonStrokePrimitive2D(
             Primitive2DContainer& rContainer,
             const basegfx::B2DPoint& rStart,
             const basegfx::B2DPoint& rEnd,

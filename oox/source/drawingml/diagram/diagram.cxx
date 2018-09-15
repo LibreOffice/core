@@ -344,7 +344,7 @@ uno::Sequence<beans::PropertyValue> Diagram::getDomsAsPropertyValues() const
     return aValue;
 }
 
-uno::Reference<xml::dom::XDocument> loadFragment(
+static uno::Reference<xml::dom::XDocument> loadFragment(
     core::XmlFilterBase& rFilter,
     const OUString& rFragmentPath )
 {
@@ -353,14 +353,14 @@ uno::Reference<xml::dom::XDocument> loadFragment(
     return rFilter.importFragment( rFragmentPath );
 }
 
-uno::Reference<xml::dom::XDocument> loadFragment(
+static uno::Reference<xml::dom::XDocument> loadFragment(
     core::XmlFilterBase& rFilter,
     const rtl::Reference< core::FragmentHandler >& rxHandler )
 {
     return loadFragment( rFilter, rxHandler->getFragmentPath() );
 }
 
-void importFragment( core::XmlFilterBase& rFilter,
+static void importFragment( core::XmlFilterBase& rFilter,
                      const uno::Reference<xml::dom::XDocument>& rXDom,
                      const char* pDocName,
                      const DiagramPtr& pDiagram,

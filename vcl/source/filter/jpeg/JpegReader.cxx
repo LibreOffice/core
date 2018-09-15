@@ -32,11 +32,13 @@
 
 #define BUFFER_SIZE  4096
 
+extern "C" {
+
 /*
  * Initialize source --- called by jpeg_read_header
  * before any data is actually read.
  */
-extern "C" void init_source (j_decompress_ptr cinfo)
+static void init_source (j_decompress_ptr cinfo)
 {
     SourceManagerStruct * source = reinterpret_cast<SourceManagerStruct *>(cinfo->src);
 
@@ -48,7 +50,9 @@ extern "C" void init_source (j_decompress_ptr cinfo)
     source->no_data_available = FALSE;
 }
 
-long StreamRead( SvStream* pStream, void* pBuffer, long nBufferSize )
+}
+
+static long StreamRead( SvStream* pStream, void* pBuffer, long nBufferSize )
 {
     long nRead = 0;
 
@@ -71,7 +75,9 @@ long StreamRead( SvStream* pStream, void* pBuffer, long nBufferSize )
     return nRead;
 }
 
-extern "C" boolean fill_input_buffer (j_decompress_ptr cinfo)
+extern "C" {
+
+static boolean fill_input_buffer (j_decompress_ptr cinfo)
 {
     SourceManagerStruct * source = reinterpret_cast<SourceManagerStruct *>(cinfo->src);
     size_t nbytes;
@@ -99,7 +105,7 @@ extern "C" boolean fill_input_buffer (j_decompress_ptr cinfo)
     return TRUE;
 }
 
-extern "C" void skip_input_data (j_decompress_ptr cinfo, long numberOfBytes)
+static void skip_input_data (j_decompress_ptr cinfo, long numberOfBytes)
 {
     SourceManagerStruct * source = reinterpret_cast<SourceManagerStruct *>(cinfo->src);
 
@@ -123,9 +129,11 @@ extern "C" void skip_input_data (j_decompress_ptr cinfo, long numberOfBytes)
     }
 }
 
-extern "C" void term_source (j_decompress_ptr)
+static void term_source (j_decompress_ptr)
 {
     /* no work necessary here */
+}
+
 }
 
 void jpeg_svstream_src (j_decompress_ptr cinfo, void* input)

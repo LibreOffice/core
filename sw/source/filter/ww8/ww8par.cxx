@@ -176,7 +176,7 @@ static SwMacroInfo* GetMacroInfo( SdrObject* pObj )
     return nullptr;
 };
 
-void lclGetAbsPath(OUString& rPath, sal_uInt16 nLevel, SwDocShell const * pDocShell)
+static void lclGetAbsPath(OUString& rPath, sal_uInt16 nLevel, SwDocShell const * pDocShell)
 {
     OUStringBuffer aTmpStr;
     while( nLevel )
@@ -2855,7 +2855,7 @@ void SwWW8ImplReader::PostProcessAttrs()
  So a encoding converter that on an undefined character attempts to
  convert from 1252 on the undefined character
 */
-std::size_t Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
+static std::size_t Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
     sal_Char const *pIn, std::size_t nInLen, sal_Unicode *pOut, std::size_t nOutLen)
 {
     const sal_uInt32 nFlags =
@@ -4358,7 +4358,7 @@ void wwSectionManager::SetUseOn(wwSection &rSection)
  * Set the page descriptor on this node, handle the different cases for a text
  * node or a table
  */
-void GiveNodePageDesc(SwNodeIndex const &rIdx, const SwFormatPageDesc &rPgDesc,
+static void GiveNodePageDesc(SwNodeIndex const &rIdx, const SwFormatPageDesc &rPgDesc,
     SwDoc &rDoc)
 {
     /*

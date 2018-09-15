@@ -410,7 +410,7 @@ static const hwpeq *lookup_eqn(char const *str)
 }
 
 /* If only the first character is uppercase or all characters are uppercase, change to lowercase */
-void make_keyword( char *keyword, const char *token)
+static void make_keyword( char *keyword, const char *token)
 {
     char* ptr;
     bool result = true;
@@ -467,7 +467,7 @@ struct eq_stack {
 
 static eq_stack *stk = nullptr;
 
-void push_token(MzString const &white, MzString const &token, istream *strm)
+static void push_token(MzString const &white, MzString const &token, istream *strm)
 {
   // one time stack
   assert(stk->token.length() == 0);

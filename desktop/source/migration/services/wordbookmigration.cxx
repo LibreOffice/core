@@ -105,7 +105,7 @@ namespace migration
     }
 
 #define MAX_HEADER_LENGTH 16
-bool IsUserWordbook( const OUString& rFile )
+static bool IsUserWordbook( const OUString& rFile )
 {
     bool bRet = false;
     std::unique_ptr<SvStream> pStream = ::utl::UcbStreamHelper::CreateStream( rFile, StreamMode::STD_READ );

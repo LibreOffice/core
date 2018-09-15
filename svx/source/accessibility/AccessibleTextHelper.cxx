@@ -78,7 +78,7 @@ namespace accessibility
 // AccessibleTextHelper_Impl declaration
 
     template < typename first_type, typename second_type >
-        ::std::pair< first_type, second_type > makeSortedPair( first_type   first,
+        static ::std::pair< first_type, second_type > makeSortedPair( first_type   first,
                                                                                  second_type    second  )
     {
         if( first > second )

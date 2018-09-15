@@ -188,18 +188,18 @@ static int yy_start = 0;    /* start state number */
  */
 static int yy_did_buffer_switch_on_eof;
 
-void yyrestart YY_PROTO(( FILE *input_file ));
+static void yyrestart YY_PROTO(( FILE *input_file ));
 
-void yy_switch_to_buffer YY_PROTO(( YY_BUFFER_STATE new_buffer ));
-void yy_load_buffer_state YY_PROTO(( void ));
-YY_BUFFER_STATE yy_create_buffer YY_PROTO(( FILE *file, int size ));
-void yy_delete_buffer YY_PROTO(( YY_BUFFER_STATE b ));
-void yy_init_buffer YY_PROTO(( YY_BUFFER_STATE b, FILE *file ));
-void yy_flush_buffer YY_PROTO(( YY_BUFFER_STATE b ));
+static void yy_switch_to_buffer YY_PROTO(( YY_BUFFER_STATE new_buffer ));
+static void yy_load_buffer_state YY_PROTO(( void ));
+static YY_BUFFER_STATE yy_create_buffer YY_PROTO(( FILE *file, int size ));
+static void yy_delete_buffer YY_PROTO(( YY_BUFFER_STATE b ));
+static void yy_init_buffer YY_PROTO(( YY_BUFFER_STATE b, FILE *file ));
+static void yy_flush_buffer YY_PROTO(( YY_BUFFER_STATE b ));
 
-YY_BUFFER_STATE yy_scan_buffer YY_PROTO(( char *base, yy_size_t size ));
-YY_BUFFER_STATE yy_scan_string YY_PROTO(( yyconst char *yy_str ));
-YY_BUFFER_STATE yy_scan_bytes YY_PROTO(( yyconst char *bytes, int len ));
+static YY_BUFFER_STATE yy_scan_buffer YY_PROTO(( char *base, yy_size_t size ));
+static YY_BUFFER_STATE yy_scan_string YY_PROTO(( yyconst char *yy_str ));
+static YY_BUFFER_STATE yy_scan_bytes YY_PROTO(( yyconst char *bytes, int len ));
 
 static void *yy_flex_alloc YY_PROTO(( yy_size_t ));
 static void *yy_flex_realloc YY_PROTO(( void *, yy_size_t ));
@@ -942,13 +942,13 @@ static char *yytext;
 
 extern "C" {
 #include "grammar.h"
-int yywrap();
+static int yywrap();
 }
 
 #ifdef TOKEN_DEBUG
 #define token_debug printf
 #else
-int token_debug(const char *format, ...);
+static int token_debug(const char *format, ...);
 #endif
 
 /* Macros after this point can all be overridden by user definitions in

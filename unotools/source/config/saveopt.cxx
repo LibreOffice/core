@@ -337,7 +337,7 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
 #define SAVEWORKINGSET      13
 #define ODFDEFAULTVERSION   14
 
-Sequence< OUString > GetPropertyNames()
+static Sequence< OUString > GetPropertyNames()
 {
     static const char* aPropNames[] =
     {

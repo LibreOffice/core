@@ -44,7 +44,7 @@ void sendIpcArg(std::ostream& stream, const QString& string)
     sendIpcStringArg(stream, utf8.size(), utf8.data());
 }
 
-void sendIpcArg(std::ostream& stream, const QStringList& list)
+static void sendIpcArg(std::ostream& stream, const QStringList& list)
 {
     stream << static_cast<uint32_t>(list.size()) << ' ';
     for (const auto& entry : list)

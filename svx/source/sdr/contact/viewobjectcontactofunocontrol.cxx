@@ -199,12 +199,12 @@ namespace sdr { namespace contact {
     };
 
 
-    bool operator==( const ControlHolder& _rControl, const Reference< XInterface >& _rxCompare )
+    static bool operator==( const ControlHolder& _rControl, const Reference< XInterface >& _rxCompare )
     {
         return _rControl.getControl() == _rxCompare;
     }
 
-    bool operator==( const ControlHolder& _rControl, const Any& _rxCompare )
+    static bool operator==( const ControlHolder& _rControl, const Any& _rxCompare )
     {
         return _rControl == Reference< XInterface >( _rxCompare, UNO_QUERY );
     }
@@ -274,7 +274,7 @@ namespace sdr { namespace contact {
 
     /** positions a control, and sets its zoom mode, using a given transformation and output device
      */
-    void adjustControlGeometry_throw( const ControlHolder& _rControl, const tools::Rectangle& _rLogicBoundingRect,
+    static void adjustControlGeometry_throw( const ControlHolder& _rControl, const tools::Rectangle& _rLogicBoundingRect,
         const basegfx::B2DHomMatrix& _rViewTransformation, const ::basegfx::B2DHomMatrix& _rZoomLevelNormalization )
     {
         OSL_PRECOND( _rControl.is(), "UnoControlContactHelper::adjustControlGeometry_throw: illegal control!" );
@@ -310,7 +310,7 @@ namespace sdr { namespace contact {
 
     /** disposes the given control
      */
-    void disposeAndClearControl_nothrow( ControlHolder& _rControl )
+    static void disposeAndClearControl_nothrow( ControlHolder& _rControl )
     {
         try
         {

@@ -79,7 +79,7 @@ Reference< XPropertySet > OKeysHelper::createDescriptor()
 
 /** returns the keyrule string for the primary key
 */
-OUString getKeyRuleString(bool _bUpdate,sal_Int32 _nKeyRule)
+static OUString getKeyRuleString(bool _bUpdate,sal_Int32 _nKeyRule)
 {
     const char* pKeyRule = nullptr;
     switch ( _nKeyRule )

@@ -50,7 +50,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;
 using ::com::sun::star::drawing::TextVerticalAdjust;
 
-SfxItemPropertyMapEntry const * ImplGetSvxShapePropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvxShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const aShapePropertyMap_Impl[] =
     {
@@ -73,7 +73,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxShapePropertyMap()
     return aShapePropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvxTextShapePropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvxTextShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const aTextShapePropertyMap_Impl[] =
     {
@@ -96,7 +96,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxTextShapePropertyMap()
     return aTextShapePropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvxConnectorPropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvxConnectorPropertyMap()
 {
     static SfxItemPropertyMapEntry const aConnectorPropertyMap_Impl[] =
     {
@@ -120,7 +120,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxConnectorPropertyMap()
     return aConnectorPropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvxDimensioningPropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvxDimensioningPropertyMap()
 {
     static SfxItemPropertyMapEntry const aDimensioningPropertyMap_Impl[] =
     {
@@ -144,7 +144,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxDimensioningPropertyMap()
     return aDimensioningPropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvxCirclePropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvxCirclePropertyMap()
 {
     static SfxItemPropertyMapEntry const aCirclePropertyMap_Impl[] =
     {
@@ -168,7 +168,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxCirclePropertyMap()
     return aCirclePropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvxPolyPolygonPropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvxPolyPolygonPropertyMap()
 {
     static SfxItemPropertyMapEntry const aPolyPolygonPropertyMap_Impl[] =
     {
@@ -194,7 +194,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxPolyPolygonPropertyMap()
     return aPolyPolygonPropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvxGraphicObjectPropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvxGraphicObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const aGraphicObjectPropertyMap_Impl[] =
     {
@@ -225,7 +225,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxGraphicObjectPropertyMap()
     return aGraphicObjectPropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvx3DSceneObjectPropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvx3DSceneObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const a3DSceneObjectPropertyMap_Impl[] =
     {
@@ -243,7 +243,7 @@ SfxItemPropertyMapEntry const * ImplGetSvx3DSceneObjectPropertyMap()
     return a3DSceneObjectPropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvx3DCubeObjectPropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvx3DCubeObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const a3DCubeObjectPropertyMap_Impl[] =
     {
@@ -264,7 +264,7 @@ SfxItemPropertyMapEntry const * ImplGetSvx3DCubeObjectPropertyMap()
     return a3DCubeObjectPropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvx3DSphereObjectPropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvx3DSphereObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const a3DSphereObjectPropertyMap_Impl[] =
     {
@@ -284,7 +284,7 @@ SfxItemPropertyMapEntry const * ImplGetSvx3DSphereObjectPropertyMap()
     return a3DSphereObjectPropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvx3DLatheObjectPropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvx3DLatheObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const a3DLatheObjectPropertyMap_Impl[] =
     {
@@ -310,7 +310,7 @@ SfxItemPropertyMapEntry const * ImplGetSvx3DLatheObjectPropertyMap()
     return a3DLatheObjectPropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvx3DExtrudeObjectPropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvx3DExtrudeObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const a3DExtrudeObjectPropertyMap_Impl[] =
     {
@@ -336,7 +336,7 @@ SfxItemPropertyMapEntry const * ImplGetSvx3DExtrudeObjectPropertyMap()
     return a3DExtrudeObjectPropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvx3DPolygonObjectPropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvx3DPolygonObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const a3DPolygonObjectPropertyMap_Impl[] =
     {
@@ -357,7 +357,7 @@ SfxItemPropertyMapEntry const * ImplGetSvx3DPolygonObjectPropertyMap()
     return a3DPolygonObjectPropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvxAllPropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvxAllPropertyMap()
 {
     static SfxItemPropertyMapEntry const aAllPropertyMap_Impl[] =
     {
@@ -399,7 +399,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxAllPropertyMap()
     return aAllPropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvxGroupPropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvxGroupPropertyMap()
 {
     static SfxItemPropertyMapEntry const aGroupPropertyMap_Impl[] =
     {
@@ -412,7 +412,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxGroupPropertyMap()
     return aGroupPropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvxOle2PropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvxOle2PropertyMap()
 {
     static SfxItemPropertyMapEntry const aOle2PropertyMap_Impl[] =
     {
@@ -445,7 +445,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxOle2PropertyMap()
     return aOle2PropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvxPluginPropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvxPluginPropertyMap()
 {
     static SfxItemPropertyMapEntry const aPluginPropertyMap_Impl[] =
     {
@@ -475,7 +475,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxPluginPropertyMap()
     return aPluginPropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvxFramePropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvxFramePropertyMap()
 {
     //TODO/LATER: new properties for ScrollingMode and DefaultBorder
     static SfxItemPropertyMapEntry const aFramePropertyMap_Impl[] =
@@ -509,7 +509,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxFramePropertyMap()
     return aFramePropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvxAppletPropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvxAppletPropertyMap()
 {
     static SfxItemPropertyMapEntry const aAppletPropertyMap_Impl[] =
     {
@@ -542,7 +542,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxAppletPropertyMap()
     return aAppletPropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvxControlShapePropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvxControlShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const aControlPropertyMap_Impl[] =
     {
@@ -599,7 +599,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxControlShapePropertyMap()
     return aControlPropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvxPageShapePropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvxPageShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const aPageShapePropertyMap_Impl[] =
     {
@@ -622,7 +622,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxPageShapePropertyMap()
     return aPageShapePropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvxCaptionPropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvxCaptionPropertyMap()
 {
     static SfxItemPropertyMapEntry const aCaptionPropertyMap_Impl[] =
     {
@@ -656,7 +656,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxCaptionPropertyMap()
     return aCaptionPropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvxCustomShapePropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvxCustomShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const aCustomShapePropertyMap_Impl[] =
     {
@@ -679,7 +679,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxCustomShapePropertyMap()
     return aCustomShapePropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvxMediaShapePropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvxMediaShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const aMediaShapePropertyMap_Impl[] =
     {
@@ -711,7 +711,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxMediaShapePropertyMap()
     return aMediaShapePropertyMap_Impl;
 }
 
-SfxItemPropertyMapEntry const * ImplGetSvxTableShapePropertyMap()
+static SfxItemPropertyMapEntry const * ImplGetSvxTableShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const  aTableShapePropertyMap_Impl[] =
     {
@@ -742,7 +742,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxTableShapePropertyMap()
     return aTableShapePropertyMap_Impl;
 }
 
-comphelper::PropertyMapEntry const * ImplGetSvxDrawingDefaultsPropertyMap()
+static comphelper::PropertyMapEntry const * ImplGetSvxDrawingDefaultsPropertyMap()
 {
     static comphelper::PropertyMapEntry const aSvxDrawingDefaultsPropertyMap_Impl[] =
     {
@@ -762,7 +762,7 @@ comphelper::PropertyMapEntry const * ImplGetSvxDrawingDefaultsPropertyMap()
     return aSvxDrawingDefaultsPropertyMap_Impl;
 }
 
-comphelper::PropertyMapEntry const * ImplGetAdditionalWriterDrawingDefaultsPropertyMap()
+static comphelper::PropertyMapEntry const * ImplGetAdditionalWriterDrawingDefaultsPropertyMap()
 {
     static comphelper::PropertyMapEntry const aSvxAdditionalDefaultsPropertyMap_Impl[] =
     {
@@ -1467,7 +1467,7 @@ static const char* RID_SVXSTR_TRASNGR[] =
     RID_SVXSTR_TRASNGR0
 };
 
-bool SvxUnoGetResourceRanges( const sal_uInt16 nWhich, const char**& pApiResIds, const char**& pIntResIds, int& nCount ) throw()
+static bool SvxUnoGetResourceRanges( const sal_uInt16 nWhich, const char**& pApiResIds, const char**& pIntResIds, int& nCount ) throw()
 {
     switch( nWhich )
     {
@@ -1514,7 +1514,7 @@ bool SvxUnoGetResourceRanges( const sal_uInt16 nWhich, const char**& pApiResIds,
 }
 
 /// @throws std::exception
-bool SvxUnoConvertResourceString(const char **pSourceResIds, const char** pDestResIds, int nCount, OUString& rString, bool bToApi)
+static bool SvxUnoConvertResourceString(const char **pSourceResIds, const char** pDestResIds, int nCount, OUString& rString, bool bToApi)
 {
     // first, calculate the search string length without an optional number after the name
     sal_Int32 nLength = rString.getLength();
@@ -1749,7 +1749,7 @@ static const char* SvxUnoColorNameResId[] =
 };
 
 /// @throws std::exception
-bool SvxUnoConvertResourceStringBuiltIn(const char** pSourceResIds, const char** pDestResIds, int nCount, OUString& rString, bool bToApi)
+static bool SvxUnoConvertResourceStringBuiltIn(const char** pSourceResIds, const char** pDestResIds, int nCount, OUString& rString, bool bToApi)
 {
     //We replace e.g. "Gray 10%" with the translation of Gray, but we shouldn't
     //replace "Red Hat 1" with the translation of Red :-)

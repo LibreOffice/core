@@ -214,7 +214,7 @@ bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, bool bExtendedInfo )
 }
 
 // returns the next jpeg marker, a return value of 0 represents an error
-sal_uInt8 ImpDetectJPG_GetNextMarker( SvStream& rStm )
+static sal_uInt8 ImpDetectJPG_GetNextMarker( SvStream& rStm )
 {
     sal_uInt8 nByte;
     do

@@ -314,7 +314,7 @@ Reference< XStyleSettings > VCLXWindowImpl::getStyleSettings()
 
 // Uses an out-parameter instead of return value, due to the object reference
 
-void ImplInitWindowEvent( css::awt::WindowEvent& rEvent, vcl::Window const * pWindow )
+static void ImplInitWindowEvent( css::awt::WindowEvent& rEvent, vcl::Window const * pWindow )
 {
     Point aPos = pWindow->GetPosPixel();
     Size aSz = pWindow->GetSizePixel();

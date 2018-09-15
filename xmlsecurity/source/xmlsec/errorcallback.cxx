@@ -29,8 +29,9 @@
 #include <comphelper/windowserrorstring.hxx>
 #endif
 
-extern "C"
-void errorCallback(const char* file,
+extern "C" {
+
+static void errorCallback(const char* file,
                    int line,
                    const char* func,
                    const char* errorObject,
@@ -48,6 +49,8 @@ void errorCallback(const char* file,
 #endif
 
     SAL_WARN("xmlsecurity.xmlsec", file << ":" << line << ": " << func << "() '" << pErrorObject << "' '" << pErrorSubject << "' " << reason << " '" << pMsg << "'" << systemErrorString);
+}
+
 }
 
 XSECXMLSEC_DLLPUBLIC void setErrorRecorder()

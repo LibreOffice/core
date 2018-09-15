@@ -101,15 +101,15 @@ void RtfSdrExport::AddShape(sal_uInt32 nShapeType, ShapeFlag nShapeFlags, sal_uI
     m_nShapeFlags = nShapeFlags;
 }
 
-inline sal_uInt16 impl_GetUInt16(const sal_uInt8*& pVal)
+static inline sal_uInt16 impl_GetUInt16(const sal_uInt8*& pVal)
 {
     sal_uInt16 nRet = *pVal++;
     nRet += (*pVal++) << 8;
     return nRet;
 }
 
-inline sal_Int32 impl_GetPointComponent(const sal_uInt8*& pVal, std::size_t& rVerticesPos,
-                                        sal_uInt16 nPointSize)
+static inline sal_Int32 impl_GetPointComponent(const sal_uInt8*& pVal, std::size_t& rVerticesPos,
+                                               sal_uInt16 nPointSize)
 {
     sal_Int32 nRet = 0;
     if ((nPointSize == 0xfff0) || (nPointSize == 4))

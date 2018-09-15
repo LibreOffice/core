@@ -63,9 +63,9 @@ using namespace com::sun::star;
 
 SwRead ReadAscii = nullptr, ReadHTML = nullptr, ReadXML = nullptr;
 
-Reader* GetRTFReader();
-Reader* GetWW8Reader();
-Reader* GetDOCXReader();
+static Reader* GetRTFReader();
+static Reader* GetWW8Reader();
+static Reader* GetDOCXReader();
 
 // Note: if editing, please don't forget to modify also the enum
 // ReaderWriterEnum and aFilterDetect in iodetect.hxx & iodetect.cxx
@@ -109,7 +109,7 @@ SwRead SwGetReaderXML() // SW_DLLPUBLIC
         return ReadXML;
 }
 
-inline void SetFltPtr( sal_uInt16 rPos, SwRead pReader )
+static inline void SetFltPtr( sal_uInt16 rPos, SwRead pReader )
 {
         aReaderWriter[ rPos ].pReader = pReader;
 }

@@ -766,7 +766,7 @@ double VDataSeries::getYMeanValue() const
     return m_fYMeanValue;
 }
 
-std::unique_ptr<Symbol> getSymbolPropertiesFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
+static std::unique_ptr<Symbol> getSymbolPropertiesFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
 {
     std::unique_ptr< Symbol > apSymbolProps( new Symbol() );
     try
@@ -912,7 +912,7 @@ uno::Reference<beans::XPropertySet> VDataSeries::getPropertiesOfSeries() const
     return uno::Reference<css::beans::XPropertySet>(m_xDataSeries, css::uno::UNO_QUERY);
 }
 
-std::unique_ptr<DataPointLabel> getDataPointLabelFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
+static std::unique_ptr<DataPointLabel> getDataPointLabelFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
 {
     std::unique_ptr< DataPointLabel > apLabel( new DataPointLabel() );
     try

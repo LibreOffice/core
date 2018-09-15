@@ -100,7 +100,7 @@ static const DispatchInfo SupportedCommandsArray[] =
 
 typedef std::unordered_map< OUString, CacheDispatchInfo > CmdToInfoCache;
 
-const CmdToInfoCache& GetCommandToInfoCache()
+static const CmdToInfoCache& GetCommandToInfoCache()
 {
     static bool       bCacheInitialized = false;
     static CmdToInfoCache aCmdToInfoCache;
@@ -318,7 +318,7 @@ uno::Sequence< frame::DispatchInformation > SAL_CALL BibFrameController_Impl::ge
     return comphelper::containerToSequence( aDispatchInfoVector );
 }
 
-bool canInsertRecords(const Reference< beans::XPropertySet>& _rxCursorSet)
+static bool canInsertRecords(const Reference< beans::XPropertySet>& _rxCursorSet)
 {
     sal_Int32 nPriv = 0;
     _rxCursorSet->getPropertyValue("Privileges") >>= nPriv;

@@ -149,7 +149,7 @@ enum SdDocumentSettingsPropertyHandles
 
 #define MID_PRINTER 1
 
-    rtl::Reference<PropertySetInfo> createSettingsInfoImpl( bool bIsDraw )
+    static rtl::Reference<PropertySetInfo> createSettingsInfoImpl( bool bIsDraw )
     {
         static PropertyMapEntry const aImpressSettingsInfoMap[] =
         {

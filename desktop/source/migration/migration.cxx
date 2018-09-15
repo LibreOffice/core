@@ -78,7 +78,7 @@ static const char ITEM_DESCRIPTOR_COMMANDURL[] = "CommandURL";
 static const char ITEM_DESCRIPTOR_CONTAINER[] = "ItemDescriptorContainer";
 static const char ITEM_DESCRIPTOR_LABEL[] = "Label";
 
-OUString retrieveLabelFromCommand(const OUString& sCommand, const OUString& sModuleIdentifier)
+static OUString retrieveLabelFromCommand(const OUString& sCommand, const OUString& sModuleIdentifier)
 {
     OUString sLabel;
 
@@ -116,7 +116,7 @@ OUString retrieveLabelFromCommand(const OUString& sCommand, const OUString& sMod
     return sLabel;
 }
 
-OUString mapModuleShortNameToIdentifier(const OUString& sShortName)
+static OUString mapModuleShortNameToIdentifier(const OUString& sShortName)
 {
     OUString sIdentifier;
 

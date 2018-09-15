@@ -36,7 +36,7 @@ namespace sdr
     namespace overlay
     {
         // combine rages geometrically to a single, ORed polygon
-        basegfx::B2DPolyPolygon impCombineRangesToPolyPolygon(const std::vector< basegfx::B2DRange >& rRanges)
+        static basegfx::B2DPolyPolygon impCombineRangesToPolyPolygon(const std::vector< basegfx::B2DRange >& rRanges)
         {
             const sal_uInt32 nCount(rRanges.size());
             basegfx::B2DPolyPolygon aRetval;
@@ -60,7 +60,7 @@ namespace sdr
 
         // check if wanted type OverlayType::Transparent or OverlayType::Solid
         // is possible. If not, fallback to invert mode (classic mode)
-        OverlayType impCheckPossibleOverlayType(OverlayType aOverlayType)
+        static OverlayType impCheckPossibleOverlayType(OverlayType aOverlayType)
         {
             if(OverlayType::Invert != aOverlayType)
             {

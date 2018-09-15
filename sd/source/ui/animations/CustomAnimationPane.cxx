@@ -917,7 +917,7 @@ void CustomAnimationPane::UpdateLook()
     }
 }
 
-void addValue( std::unique_ptr<STLPropertySet>& pSet, sal_Int32 nHandle, const Any& rValue )
+static void addValue( std::unique_ptr<STLPropertySet>& pSet, sal_Int32 nHandle, const Any& rValue )
 {
     switch( pSet->getPropertyState( nHandle ) )
     {
@@ -1703,7 +1703,7 @@ void CustomAnimationPane::onChangeCurrentPage()
     }
 }
 
-bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::vector< sal_Int16 >& rParaList )
+static bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::vector< sal_Int16 >& rParaList )
 {
     Reference< XTextRange > xSelectedText;
     rSelection >>= xSelectedText;

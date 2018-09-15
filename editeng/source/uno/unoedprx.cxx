@@ -119,7 +119,7 @@ private:
     bool  mbInBullet;
 };
 
-ESelection MakeEESelection( const SvxAccessibleTextIndex& rStart, const SvxAccessibleTextIndex& rEnd )
+static ESelection MakeEESelection( const SvxAccessibleTextIndex& rStart, const SvxAccessibleTextIndex& rEnd )
 {
     // deal with field special case: to really get a field contained
     // within a selection, the start index must be before or on the
@@ -152,7 +152,7 @@ ESelection MakeEESelection( const SvxAccessibleTextIndex& rStart, const SvxAcces
                        rEnd.GetParagraph(), rEnd.GetEEIndex() );
 }
 
-ESelection MakeEESelection( const SvxAccessibleTextIndex& rIndex )
+static ESelection MakeEESelection( const SvxAccessibleTextIndex& rIndex )
 {
     return ESelection( rIndex.GetParagraph(), rIndex.GetEEIndex(),
                        rIndex.GetParagraph(), rIndex.GetEEIndex() + 1 );

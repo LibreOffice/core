@@ -2310,7 +2310,7 @@ SdrObject* SdrObject::GetConnectedNode(bool /*bTail1*/) const
 }
 
 
-void extractLineContourFromPrimitive2DSequence(
+static void extractLineContourFromPrimitive2DSequence(
     const drawinglayer::primitive2d::Primitive2DContainer& rxSequence,
     basegfx::B2DPolygonVector& rExtractedHairlines,
     basegfx::B2DPolyPolygonVector& rExtractedLineFills)

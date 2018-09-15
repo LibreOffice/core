@@ -36,7 +36,7 @@ namespace pcr
     using namespace ::com::sun::star::beans;
 
     template< typename INTERFACE, typename ARGUMENT >
-    ARGUMENT getSave( INTERFACE* pObject, ARGUMENT ( SAL_CALL INTERFACE::*pGetter )( ) )
+    static ARGUMENT getSave( INTERFACE* pObject, ARGUMENT ( SAL_CALL INTERFACE::*pGetter )( ) )
     {
         ARGUMENT aReturn = ARGUMENT();
         try

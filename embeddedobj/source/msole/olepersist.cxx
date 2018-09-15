@@ -194,7 +194,7 @@ void SetStreamMediaType_Impl( const uno::Reference< io::XStream >& xStream, cons
 }
 #endif
 
-void LetCommonStoragePassBeUsed_Impl( const uno::Reference< io::XStream >& xStream )
+static void LetCommonStoragePassBeUsed_Impl( const uno::Reference< io::XStream >& xStream )
 {
     uno::Reference< beans::XPropertySet > xPropSet( xStream, uno::UNO_QUERY_THROW );
     xPropSet->setPropertyValue("UseCommonStoragePasswordEncryption",

@@ -37,7 +37,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-int deltaColor(BitmapColor aColor1, BitmapColor aColor2)
+static int deltaColor(BitmapColor aColor1, BitmapColor aColor2)
 {
     int deltaR = std::abs(aColor1.GetRed()   - aColor2.GetRed());
     int deltaG = std::abs(aColor1.GetGreen() - aColor2.GetGreen());
@@ -46,7 +46,7 @@ int deltaColor(BitmapColor aColor1, BitmapColor aColor2)
     return std::max(std::max(deltaR, deltaG), deltaB);
 }
 
-bool checkRect(Bitmap& rBitmap, int aLayerNumber, long nAreaHeight, long nAreaWidth, Color aExpectedColor, int nMaxDelta)
+static bool checkRect(Bitmap& rBitmap, int aLayerNumber, long nAreaHeight, long nAreaWidth, Color aExpectedColor, int nMaxDelta)
 {
     BitmapScopedWriteAccess pAccess(rBitmap);
 
@@ -88,7 +88,7 @@ bool checkRect(Bitmap& rBitmap, int aLayerNumber, long nAreaHeight, long nAreaWi
     return true;
 }
 
-int getNumberOfImageComponents(const Graphic& rGraphic)
+static int getNumberOfImageComponents(const Graphic& rGraphic)
 {
     GfxLink aLink = rGraphic.GetGfxLink();
     SvMemoryStream aMemoryStream(const_cast<sal_uInt8*>(aLink.GetData()), aLink.GetDataSize(),

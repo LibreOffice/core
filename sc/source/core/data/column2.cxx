@@ -78,7 +78,7 @@
 // factor from font size to optimal cell height (text width)
 #define SC_ROT_BREAK_FACTOR     6
 
-inline bool IsAmbiguousScript( SvtScriptType nScript )
+static inline bool IsAmbiguousScript( SvtScriptType nScript )
 {
     //TODO: move to a header file
     return ( nScript != SvtScriptType::LATIN &&

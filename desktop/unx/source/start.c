@@ -567,7 +567,7 @@ static void system_checks(void)
 #endif
 }
 
-void exec_pagein (Args *args)
+static void exec_pagein (Args *args)
 {
     rtl_String * path = ustr_to_str(args->pAppPath);
     pagein_execute(rtl_string_getStr(path), "pagein-common");
@@ -714,7 +714,7 @@ static void exec_javaldx(Args *args)
 // has to be a global :(
 static oslProcess * volatile g_pProcess = NULL;
 
-void sigterm_handler(int ignored)
+static void sigterm_handler(int ignored)
 {
     (void) ignored;
 

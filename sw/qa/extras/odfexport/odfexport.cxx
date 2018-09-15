@@ -108,7 +108,7 @@ DECLARE_ODFEXPORT_TEST(testMathObjectFlatExport, "2_MathType3.docx")
     CPPUNIT_ASSERT_EQUAL(OUString(" size 12{2+2=4} {}"), formula2);
 }
 
-void testTdf43569_CheckIfFieldParse()
+static void testTdf43569_CheckIfFieldParse()
 {
     {
         const OUString fieldDefinition("IF A B C");

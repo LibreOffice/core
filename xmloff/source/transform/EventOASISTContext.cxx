@@ -122,7 +122,7 @@ OUString XMLEventOASISTransformerContext::GetEventName(
         return (*aIter).second;
 }
 
-bool ParseURL(
+static bool ParseURL(
     const OUString& rAttrValue,
     OUString* pName, OUString* pLocation )
 {

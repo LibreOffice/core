@@ -96,7 +96,7 @@ static oslMutex        ChildListMutex;
 
 } //Anonymous namespace
 
-oslProcessError osl_psz_executeProcess(sal_Char *pszImageName,
+static oslProcessError osl_psz_executeProcess(sal_Char *pszImageName,
                                                 sal_Char *pszArguments[],
                                                 oslProcessOption Options,
                                                 oslSecurity Security,
@@ -848,7 +848,7 @@ struct osl_procStat
     unsigned long vm_lib;     /* library size */
 };
 
-bool osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
+static bool osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
 {
     int fd = 0;
     bool bRet = false;
@@ -904,7 +904,7 @@ bool osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
     return bRet;
 }
 
-bool osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
+static bool osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
 {
     int fd = 0;
     char name[PATH_MAX + 1];

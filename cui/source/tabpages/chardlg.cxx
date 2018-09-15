@@ -138,7 +138,7 @@ const sal_uInt16 SvxCharTwoLinesPage::pTwoLinesRanges[] =
 
 // C-Function ------------------------------------------------------------
 
-inline bool StateToAttr( TriState aState )
+static inline bool StateToAttr( TriState aState )
 {
     return ( TRISTATE_TRUE == aState );
 }

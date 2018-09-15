@@ -111,7 +111,7 @@ namespace
 #define WID_BEGIN_NOTICE                10
 #define WID_ANCHOR_CHARACTER_STYLE      11
 
-const SfxItemPropertySet* GetFootnoteSet()
+static const SfxItemPropertySet* GetFootnoteSet()
 {
     static const SfxItemPropertyMapEntry aFootnoteMap_Impl[] =
     {
@@ -133,7 +133,7 @@ const SfxItemPropertySet* GetFootnoteSet()
     return &aFootnoteSet_Impl;
 }
 
-const SfxItemPropertySet* GetEndnoteSet()
+static const SfxItemPropertySet* GetEndnoteSet()
 {
     static const SfxItemPropertyMapEntry aEndnoteMap_Impl[] =
     {
@@ -151,7 +151,7 @@ const SfxItemPropertySet* GetEndnoteSet()
     return &aEndnoteSet_Impl;
 }
 
-const SfxItemPropertySet* GetNumberingRulesSet()
+static const SfxItemPropertySet* GetNumberingRulesSet()
 {
     static const SfxItemPropertyMapEntry aNumberingRulesMap_Impl[] =
     {
@@ -178,7 +178,7 @@ const SfxItemPropertySet* GetNumberingRulesSet()
 #define WID_COUNT_LINES_IN_FRAMES       9
 #define WID_RESTART_AT_EACH_PAGE        10
 
-const SfxItemPropertySet* GetLineNumberingSet()
+static const SfxItemPropertySet* GetLineNumberingSet()
 {
     static const SfxItemPropertyMapEntry aLineNumberingMap_Impl[] =
     {

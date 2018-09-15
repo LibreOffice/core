@@ -2049,7 +2049,7 @@ void EnhancedCustomShape2d::CreateSubPath(
     }
 }
 
-void CorrectCalloutArrows(
+static void CorrectCalloutArrows(
     MSO_SPT eSpType,
     sal_uInt32 nLineObjectCount,
     std::vector< std::pair< SdrPathObj*, double> >& vObjectList )

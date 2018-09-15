@@ -3739,7 +3739,7 @@ void XMLShapeExport::export3DLamps( const css::uno::Reference< css::beans::XProp
 // using namespace ::xmloff::EnhancedCustomShapeToken;
 
 
-void ExportParameter( OUStringBuffer& rStrBuffer, const css::drawing::EnhancedCustomShapeParameter& rParameter )
+static void ExportParameter( OUStringBuffer& rStrBuffer, const css::drawing::EnhancedCustomShapeParameter& rParameter )
 {
     if ( !rStrBuffer.isEmpty() )
         rStrBuffer.append( ' ' );
@@ -3799,7 +3799,7 @@ void ExportParameter( OUStringBuffer& rStrBuffer, const css::drawing::EnhancedCu
     }
 }
 
-void ImpExportEquations( SvXMLExport& rExport, const uno::Sequence< OUString >& rEquations )
+static void ImpExportEquations( SvXMLExport& rExport, const uno::Sequence< OUString >& rEquations )
 {
     sal_Int32 i;
     for ( i = 0; i < rEquations.getLength(); i++ )
@@ -3825,7 +3825,7 @@ void ImpExportEquations( SvXMLExport& rExport, const uno::Sequence< OUString >& 
     }
 }
 
-void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::PropertyValues >& rHandles )
+static void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::PropertyValues >& rHandles )
 {
     sal_uInt32 i, j, nElements = rHandles.getLength();
     if ( nElements )
@@ -3969,7 +3969,7 @@ void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::Propert
     }
 }
 
-void ImpExportEnhancedPath( SvXMLExport& rExport,
+static void ImpExportEnhancedPath( SvXMLExport& rExport,
                             const uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair >& rCoordinates,
                             const uno::Sequence< css::drawing::EnhancedCustomShapeSegment >& rSegments,
                             bool bExtended = false )
@@ -4129,7 +4129,7 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
         ImpExportEnhancedPath( rExport, rCoordinates, rSegments, true );
 }
 
-void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< beans::XPropertySet >& xPropSet )
+static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< beans::XPropertySet >& xPropSet )
 {
     bool bEquations = false;
     uno::Sequence< OUString > aEquations;

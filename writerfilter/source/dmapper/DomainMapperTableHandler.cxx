@@ -78,7 +78,7 @@ void DomainMapperTableHandler::startTable(const TablePropertyMapPtr& pProps)
 #endif
 }
 
-void lcl_mergeBorder( PropertyIds nId, const PropertyMapPtr& pOrig, const PropertyMapPtr& pDest )
+static void lcl_mergeBorder( PropertyIds nId, const PropertyMapPtr& pOrig, const PropertyMapPtr& pDest )
 {
     boost::optional<PropertyMap::Property> pOrigVal = pOrig->getProperty(nId);
 
@@ -88,7 +88,7 @@ void lcl_mergeBorder( PropertyIds nId, const PropertyMapPtr& pOrig, const Proper
     }
 }
 
-void lcl_computeCellBorders( const PropertyMapPtr& pTableBorders, const PropertyMapPtr& pCellProps,
+static void lcl_computeCellBorders( const PropertyMapPtr& pTableBorders, const PropertyMapPtr& pCellProps,
         sal_Int32 nCell, sal_Int32 nRow, bool bIsEndCol, bool bIsEndRow )
 {
     boost::optional<PropertyMap::Property> pVerticalVal = pCellProps->getProperty(META_PROP_VERTICAL_BORDER);
@@ -170,7 +170,7 @@ void lcl_computeCellBorders( const PropertyMapPtr& pTableBorders, const Property
 
 #ifdef DEBUG_WRITERFILTER
 
-void lcl_debug_BorderLine(table::BorderLine const & rLine)
+static void lcl_debug_BorderLine(table::BorderLine const & rLine)
 {
     TagLogger::getInstance().startElement("BorderLine");
     TagLogger::getInstance().attribute("Color", rLine.Color);
@@ -180,7 +180,7 @@ void lcl_debug_BorderLine(table::BorderLine const & rLine)
     TagLogger::getInstance().endElement();
 }
 
-void lcl_debug_TableBorder(table::TableBorder const & rBorder)
+static void lcl_debug_TableBorder(table::TableBorder const & rBorder)
 {
     TagLogger::getInstance().startElement("TableBorder");
     lcl_debug_BorderLine(rBorder.TopLine);
@@ -268,7 +268,7 @@ void lcl_extractHoriOrient(std::vector<beans::PropertyValue>& rFrameProperties, 
 
 }
 
-void lcl_DecrementHoriOrientPosition(std::vector<beans::PropertyValue>& rFrameProperties, sal_Int32 nAmount)
+static void lcl_DecrementHoriOrientPosition(std::vector<beans::PropertyValue>& rFrameProperties, sal_Int32 nAmount)
 {
     // Shifts the frame left by the given value.
     for (beans::PropertyValue & rPropertyValue : rFrameProperties)
@@ -837,7 +837,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
 }
 
 /// Do all cells in this row have a CellHideMark property?
-bool lcl_hideMarks(PropertyMapVector1& rCellProperties)
+static bool lcl_hideMarks(PropertyMapVector1& rCellProperties)
 {
     for (PropertyMapPtr & p : rCellProperties)
     {
@@ -850,7 +850,7 @@ bool lcl_hideMarks(PropertyMapVector1& rCellProperties)
 }
 
 /// Are all cells in this row empty?
-bool lcl_emptyRow(std::vector<RowSequence_t>& rTableRanges, sal_Int32 nRow)
+static bool lcl_emptyRow(std::vector<RowSequence_t>& rTableRanges, sal_Int32 nRow)
 {
     if (nRow >= static_cast<sal_Int32>(rTableRanges.size()))
     {

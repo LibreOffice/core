@@ -450,7 +450,7 @@ void NWPixmapCacheList::ThemeChanged( )
 /*********************************************************
  * Make border manipulation easier
  *********************************************************/
-inline void NW_gtk_border_set_from_border( GtkBorder& aDst, const GtkBorder * pSrc )
+static inline void NW_gtk_border_set_from_border( GtkBorder& aDst, const GtkBorder * pSrc )
 {
     aDst.left        = pSrc->left;
     aDst.top        = pSrc->top;

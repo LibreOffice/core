@@ -25,7 +25,7 @@
     Description:    Is the printer valid
  --------------------------------------------------------------------*/
 
-inline bool IsValidPrinter( const Printer* pPtr )
+static inline bool IsValidPrinter( const Printer* pPtr )
 {
     return !pPtr->GetName().isEmpty();
 }

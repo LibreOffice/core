@@ -2403,7 +2403,7 @@ namespace svxform
         }
     }
 
-    void copyPropSet( const Reference< XPropertySet >& xFrom, Reference< XPropertySet > const & xTo )
+    static void copyPropSet( const Reference< XPropertySet >& xFrom, Reference< XPropertySet > const & xTo )
     {
         DBG_ASSERT( xFrom.is(), "copyPropSet(): no source" );
         DBG_ASSERT( xTo.is(), "copyPropSet(): no target" );

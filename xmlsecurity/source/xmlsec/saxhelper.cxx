@@ -35,7 +35,7 @@ namespace cssxcsax = com::sun::star::xml::csax;
  * The return value is NULL terminated. The application has the responsibilty to
  * deallocte the return value.
  */
-xmlChar* ous_to_xmlstr( const OUString& oustr )
+static xmlChar* ous_to_xmlstr( const OUString& oustr )
 {
     OString ostr = OUStringToOString( oustr , RTL_TEXTENCODING_UTF8 ) ;
     return xmlStrndup( reinterpret_cast<xmlChar const *>(ostr.getStr()), static_cast<int>(ostr.getLength()) ) ;
@@ -45,7 +45,7 @@ xmlChar* ous_to_xmlstr( const OUString& oustr )
  * The return value is NULL terminated. The application has the responsibilty to
  * deallocte the return value.
  */
-xmlChar* ous_to_nxmlstr( const OUString& oustr, int& length )
+static xmlChar* ous_to_nxmlstr( const OUString& oustr, int& length )
 {
     OString ostr = OUStringToOString( oustr , RTL_TEXTENCODING_UTF8 ) ;
     length = ostr.getLength();
@@ -57,7 +57,7 @@ xmlChar* ous_to_nxmlstr( const OUString& oustr, int& length )
  * The return value and the referenced value must be NULL terminated.
  * The application has the responsibilty to deallocte the return value.
  */
-const xmlChar** attrlist_to_nxmlstr( const cssu::Sequence< cssxcsax::XMLAttribute >& aAttributes )
+static const xmlChar** attrlist_to_nxmlstr( const cssu::Sequence< cssxcsax::XMLAttribute >& aAttributes )
 {
     xmlChar* attname = nullptr ;
     xmlChar* attvalue = nullptr ;

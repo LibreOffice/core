@@ -1426,7 +1426,7 @@ void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const SCROW* pPosY
     }
 }
 
-inline void ShowHide( vcl::Window* pWin, bool bShow )
+static inline void ShowHide( vcl::Window* pWin, bool bShow )
 {
     OSL_ENSURE(pWin || !bShow, "window is not present");
     if (pWin)

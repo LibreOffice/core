@@ -72,13 +72,13 @@ const o3tl::enumarray<SvxAdjust, unsigned short> aSvxToUnoAdjust
     text::HoriOrientation::LEFT
 };
 
-SvxAdjust ConvertUnoAdjust( unsigned short nAdjust )
+static SvxAdjust ConvertUnoAdjust( unsigned short nAdjust )
 {
     DBG_ASSERT( nAdjust <= 7, "Enum has changed! [CL]" );
     return aUnoToSvxAdjust[nAdjust];
 }
 
-unsigned short ConvertUnoAdjust( SvxAdjust eAdjust )
+static unsigned short ConvertUnoAdjust( SvxAdjust eAdjust )
 {
     DBG_ASSERT( static_cast<int>(eAdjust) <= 6, "Enum has changed! [CL]" );
     return aSvxToUnoAdjust[eAdjust];

@@ -303,7 +303,7 @@ void FileStreamWrapper_Impl::checkError()
 #define COMMIT_RESULT_NOTHING_TO_DO     1
 #define COMMIT_RESULT_SUCCESS           2
 
-SotClipboardFormatId GetFormatId_Impl( const SvGlobalName& aName )
+static SotClipboardFormatId GetFormatId_Impl( const SvGlobalName& aName )
 {
     if ( aName == SvGlobalName( SO3_SW_CLASSID_60 ) )
         return SotClipboardFormatId::STARWRITER_60;
@@ -335,7 +335,7 @@ SotClipboardFormatId GetFormatId_Impl( const SvGlobalName& aName )
 }
 
 
-SvGlobalName GetClassId_Impl( SotClipboardFormatId nFormat )
+static SvGlobalName GetClassId_Impl( SotClipboardFormatId nFormat )
 {
     switch ( nFormat )
     {
@@ -1824,7 +1824,7 @@ sal_Int32 UCBStorage_Impl::GetObjectCount()
     return nCount;
 }
 
-OUString Find_Impl( const Sequence < Sequence < PropertyValue > >& rSequence, const OUString& rPath )
+static OUString Find_Impl( const Sequence < Sequence < PropertyValue > >& rSequence, const OUString& rPath )
 {
     bool bFound = false;
     for ( sal_Int32 nSeqs=0; nSeqs<rSequence.getLength(); nSeqs++ )

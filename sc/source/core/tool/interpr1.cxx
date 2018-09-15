@@ -8874,7 +8874,7 @@ static const UBlockScript scriptList[] = {
     {UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B, UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT},
     {UBLOCK_CJK_STROKES, UBLOCK_CJK_STROKES}
 };
-bool IsDBCS(sal_Unicode currentChar)
+static bool IsDBCS(sal_Unicode currentChar)
 {
     // for the locale of ja-JP, character U+0x005c and U+0x20ac should be ScriptType::Asian
     if( (currentChar == 0x005c || currentChar == 0x20ac) &&
@@ -8889,7 +8889,7 @@ bool IsDBCS(sal_Unicode currentChar)
     bRet = (i < SAL_N_ELEMENTS(scriptList) && block >= scriptList[i].from);
     return bRet;
 }
-sal_Int32 lcl_getLengthB( const OUString &str, sal_Int32 nPos )
+static sal_Int32 lcl_getLengthB( const OUString &str, sal_Int32 nPos )
 {
     sal_Int32 index = 0;
     sal_Int32 length = 0;
@@ -8903,7 +8903,7 @@ sal_Int32 lcl_getLengthB( const OUString &str, sal_Int32 nPos )
     }
     return length;
 }
-sal_Int32 getLengthB(const OUString &str)
+static sal_Int32 getLengthB(const OUString &str)
 {
     if(str.isEmpty())
         return 0;
@@ -8914,7 +8914,7 @@ void ScInterpreter::ScLenB()
 {
     PushDouble( getLengthB(GetString().getString()) );
 }
-OUString lcl_RightB(const OUString &rStr, sal_Int32 n)
+static OUString lcl_RightB(const OUString &rStr, sal_Int32 n)
 {
     if( n < getLengthB(rStr) )
     {
@@ -8965,7 +8965,7 @@ void ScInterpreter::ScRightB()
         PushString( aStr );
     }
 }
-OUString lcl_LeftB(const OUString &rStr, sal_Int32 n)
+static OUString lcl_LeftB(const OUString &rStr, sal_Int32 n)
 {
     if( n < getLengthB(rStr) )
     {

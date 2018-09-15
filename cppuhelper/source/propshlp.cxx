@@ -43,15 +43,15 @@ IPropertyArrayHelper::~IPropertyArrayHelper()
 {
 }
 
-inline const css::uno::Type & getPropertyTypeIdentifier( )
+static inline const css::uno::Type & getPropertyTypeIdentifier( )
 {
     return cppu::UnoType<XPropertyChangeListener>::get();
 }
-inline const css::uno::Type & getPropertiesTypeIdentifier()
+static inline const css::uno::Type & getPropertiesTypeIdentifier()
 {
     return cppu::UnoType<XPropertiesChangeListener>::get();
 }
-inline const css::uno::Type & getVetoableTypeIdentifier()
+static inline const css::uno::Type & getVetoableTypeIdentifier()
 {
     return cppu::UnoType<XVetoableChangeListener>::get();
 }

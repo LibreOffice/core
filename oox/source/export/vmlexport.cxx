@@ -335,14 +335,14 @@ static void impl_AddInt( sax_fastparser::FastAttributeList *pAttrList, sal_Int32
     pAttrList->add( nElement, OString::number( nValue ).getStr() );
 }
 
-inline sal_uInt16 impl_GetUInt16( const sal_uInt8* &pVal )
+static inline sal_uInt16 impl_GetUInt16( const sal_uInt8* &pVal )
 {
     sal_uInt16 nRet = *pVal++;
     nRet += ( *pVal++ ) << 8;
     return nRet;
 }
 
-inline sal_Int32 impl_GetPointComponent( const sal_uInt8* &pVal, sal_uInt16 nPointSize )
+static inline sal_Int32 impl_GetPointComponent( const sal_uInt8* &pVal, sal_uInt16 nPointSize )
 {
     sal_Int32 nRet = 0;
     if ( ( nPointSize == 0xfff0 ) || ( nPointSize == 4 ) )
@@ -1104,7 +1104,7 @@ void VMLExport::AddShapeAttribute( sal_Int32 nAttribute, const OString& rValue )
     m_pShapeAttrList->add( nAttribute, rValue );
 }
 
-std::vector<OString> lcl_getShapeTypes()
+static std::vector<OString> lcl_getShapeTypes()
 {
     std::vector<OString> aRet;
 
@@ -1125,7 +1125,7 @@ std::vector<OString> lcl_getShapeTypes()
     return aRet;
 }
 
-bool lcl_isTextBox(const SdrObject* pSdrObject)
+static bool lcl_isTextBox(const SdrObject* pSdrObject)
 {
     uno::Reference<beans::XPropertySet> xPropertySet(const_cast<SdrObject*>(pSdrObject)->getUnoShape(), uno::UNO_QUERY);
     if (xPropertySet.is())
@@ -1136,7 +1136,7 @@ bool lcl_isTextBox(const SdrObject* pSdrObject)
     return false;
 }
 
-OUString lcl_getAnchorIdFromGrabBag(const SdrObject* pSdrObject)
+static OUString lcl_getAnchorIdFromGrabBag(const SdrObject* pSdrObject)
 {
     OUString aResult;
 

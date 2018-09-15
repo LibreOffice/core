@@ -453,7 +453,7 @@ bool WW8ReadFieldParams::GetTokenSttFromTo(sal_Int32* pFrom, sal_Int32* pTo, sal
     return nStart && nEnd && (nMax >= nStart) && (nMax >= nEnd);
 }
 
-EquationResult Read_SubF_Combined(WW8ReadFieldParams& rReadParam)
+static EquationResult Read_SubF_Combined(WW8ReadFieldParams& rReadParam)
 {
     EquationResult aResult;
 

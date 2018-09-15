@@ -217,7 +217,7 @@ public:
                 SwNodeIndex const * pSttNd = nullptr, SwNodeIndex const * pEndNd = nullptr );
 };
 
-const sal_Unicode* StrChr( const sal_Unicode* pSrc, sal_Unicode c )
+static const sal_Unicode* StrChr( const sal_Unicode* pSrc, sal_Unicode c )
 {
     while( *pSrc && *pSrc != c )
         ++pSrc;

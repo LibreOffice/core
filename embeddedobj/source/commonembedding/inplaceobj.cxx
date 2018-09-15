@@ -27,7 +27,7 @@
 
 using namespace ::com::sun::star;
 
-bool RectanglesEqual( const awt::Rectangle& aRect1, const awt::Rectangle& aRect2 )
+static bool RectanglesEqual( const awt::Rectangle& aRect1, const awt::Rectangle& aRect2 )
 {
     return ( aRect1.X == aRect2.X
             && aRect1.Y == aRect2.Y

@@ -3008,7 +3008,7 @@ bool PPTWriter::ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 n
 }
 
 //get merged cell's width
-sal_Int32 GetCellRight( sal_Int32 nColumn,
+static sal_Int32 GetCellRight( sal_Int32 nColumn,
     ::tools::Rectangle const & rect,
     std::vector< std::pair< sal_Int32, sal_Int32 > >& aColumns,
     uno::Reference< table::XMergeableCell > const & xCell )
@@ -3025,7 +3025,7 @@ sal_Int32 GetCellRight( sal_Int32 nColumn,
     return nRight;
 }
 //get merged cell's height
-sal_Int32 GetCellBottom( sal_Int32 nRow,
+static sal_Int32 GetCellBottom( sal_Int32 nRow,
     ::tools::Rectangle const & rect,
     std::vector< std::pair< sal_Int32, sal_Int32 > >& aRows,
     uno::Reference< table::XMergeableCell > const & xCell )

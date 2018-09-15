@@ -42,7 +42,7 @@ extern "C" {
 
 std::vector<Node*> nodelist;
 
-void yyerror(const char *);
+static void yyerror(const char *);
 
 static Node *top=nullptr;
 
@@ -51,7 +51,7 @@ int Node::count = 0;
 #ifdef PARSE_DEBUG
 #define debug printf
 #else
-int debug(const char *format, ...);
+static int debug(const char *format, ...);
 #endif
 
 #include <stdio.h>
@@ -441,7 +441,7 @@ int yydebug;            /*  nonzero means print parse trace */
 #ifdef YYPARSE_PARAM
 int yyparse (void *);
 #else
-int yyparse();
+static int yyparse();
 #endif
 #endif
 

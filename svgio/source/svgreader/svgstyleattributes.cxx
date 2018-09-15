@@ -49,7 +49,7 @@ namespace svgio
 {
     namespace svgreader
     {
-        basegfx::B2DLineJoin StrokeLinejoinToB2DLineJoin(StrokeLinejoin aStrokeLinejoin)
+        static basegfx::B2DLineJoin StrokeLinejoinToB2DLineJoin(StrokeLinejoin aStrokeLinejoin)
         {
             if(StrokeLinejoin_round == aStrokeLinejoin)
             {
@@ -63,7 +63,7 @@ namespace svgio
             return basegfx::B2DLineJoin::Miter;
         }
 
-        css::drawing::LineCap StrokeLinecapToDrawingLineCap(StrokeLinecap aStrokeLinecap)
+        static css::drawing::LineCap StrokeLinecapToDrawingLineCap(StrokeLinecap aStrokeLinecap)
         {
             switch(aStrokeLinecap)
             {

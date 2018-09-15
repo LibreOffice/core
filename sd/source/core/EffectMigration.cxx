@@ -390,7 +390,7 @@ const deprecated_AnimationEffect_conversion_table[] =
     { AnimationEffect_NONE, nullptr, nullptr }
 };
 
-EffectSequence::iterator ImplFindEffect( MainSequencePtr const & pMainSequence, const Reference< XShape >& rShape, sal_Int16 nSubItem )
+static EffectSequence::iterator ImplFindEffect( MainSequencePtr const & pMainSequence, const Reference< XShape >& rShape, sal_Int16 nSubItem )
 {
     EffectSequence::iterator aIter;
 
@@ -1318,7 +1318,7 @@ void EffectMigration::SetAnimationPath( SvxShape* pShape, SdrPathObj const * pPa
 }
 
 // #i42894# helper which creates the needed XAnimate for changing visibility and all the (currently) needed embeddings
-void createVisibilityOnOffNode(Reference< XTimeContainer > const & rxParentContainer, SdrObject& rCandidate, bool bVisible, bool bOnClick, double fDuration)
+static void createVisibilityOnOffNode(Reference< XTimeContainer > const & rxParentContainer, SdrObject& rCandidate, bool bVisible, bool bOnClick, double fDuration)
 {
     Reference< XMultiServiceFactory > xMsf(::comphelper::getProcessServiceFactory());
 

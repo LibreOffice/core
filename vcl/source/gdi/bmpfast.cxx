@@ -232,7 +232,7 @@ class TrueColorPixelPtr<ScanlineFormat::N8BitPal>
 
 // converting truecolor formats
 template <ScanlineFormat SRCFMT, ScanlineFormat DSTFMT>
-inline void ImplConvertPixel( const TrueColorPixelPtr<DSTFMT>& rDst,
+static inline void ImplConvertPixel( const TrueColorPixelPtr<DSTFMT>& rDst,
     const TrueColorPixelPtr<SRCFMT>& rSrc )
 {
     rDst.SetColor( rSrc.GetRed(), rSrc.GetGreen(), rSrc.GetBlue() );
@@ -252,7 +252,7 @@ inline void ImplConvertPixel<ScanlineFormat::N16BitTcLsbMask, ScanlineFormat::N1
 }
 
 template <ScanlineFormat SRCFMT, ScanlineFormat DSTFMT>
-inline void ImplConvertLine( const TrueColorPixelPtr<DSTFMT>& rDst,
+static inline void ImplConvertLine( const TrueColorPixelPtr<DSTFMT>& rDst,
     const TrueColorPixelPtr<SRCFMT>& rSrc, int nPixelCount )
 {
     TrueColorPixelPtr<DSTFMT> aDst( rDst );
@@ -267,7 +267,7 @@ inline void ImplConvertLine( const TrueColorPixelPtr<DSTFMT>& rDst,
 
 // alpha blending truecolor pixels
 template <ScanlineFormat SRCFMT, ScanlineFormat DSTFMT>
-inline void ImplBlendPixels( const TrueColorPixelPtr<DSTFMT>& rDst,
+static inline void ImplBlendPixels( const TrueColorPixelPtr<DSTFMT>& rDst,
     const TrueColorPixelPtr<SRCFMT>& rSrc, unsigned nAlphaVal )
 {
     static const unsigned nAlphaShift = 8;
@@ -294,7 +294,7 @@ inline void ImplBlendPixels( const TrueColorPixelPtr<DSTFMT>& rDst,
 }
 
 template <ScanlineFormat MASKFMT, ScanlineFormat SRCFMT, ScanlineFormat DSTFMT>
-inline void ImplBlendLines( const TrueColorPixelPtr<DSTFMT>& rDst,
+static inline void ImplBlendLines( const TrueColorPixelPtr<DSTFMT>& rDst,
     const TrueColorPixelPtr<SRCFMT>& rSrc, const TrueColorPixelPtr<MASKFMT>& rMsk,
     int nPixelCount )
 {
@@ -345,7 +345,7 @@ static bool ImplCopyImage( BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuf
 }
 
 template <ScanlineFormat DSTFMT,ScanlineFormat SRCFMT>
-bool ImplConvertToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
+static bool ImplConvertToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer )
 {
     // help the compiler to avoid instantiations of unneeded conversions
@@ -376,7 +376,7 @@ bool ImplConvertToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
 }
 
 template <ScanlineFormat SRCFMT>
-inline bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc )
+static inline bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc )
 {
     TrueColorPixelPtr<SRCFMT> aSrcType; aSrcType.SetRawPtr( rSrc.mpBits );
 
@@ -536,7 +536,7 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
 }
 
 template <ScanlineFormat DSTFMT, ScanlineFormat SRCFMT> //,sal_uLong MSKFMT>
-bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
+static bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer,
     const BitmapBuffer& rMskBuffer )
 {
@@ -611,7 +611,7 @@ inline bool ImplBlendToBitmap<ScanlineFormat::N32BitTcBgra,ScanlineFormat::N32Bi
  }
 
 template <ScanlineFormat SRCFMT>
-bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, const BitmapBuffer& rMsk )
+static bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, const BitmapBuffer& rMsk )
 {
     TrueColorPixelPtr<SRCFMT> aSrcType; aSrcType.SetRawPtr( rSrc.mpBits );
 

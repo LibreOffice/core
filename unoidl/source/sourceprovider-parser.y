@@ -63,7 +63,7 @@
 #define YYLLOC_DEFAULT(Current, Rhs, N) \
     do { (Current) = YYRHSLOC((Rhs), (N) ? 1 : 0); } while (0)
 
-void yyerror(YYLTYPE * locp, yyscan_t yyscanner, char const * msg) {
+static void yyerror(YYLTYPE * locp, yyscan_t yyscanner, char const * msg) {
     assert(locp != nullptr);
     unoidl::detail::SourceProviderScannerData * data = yyget_extra(yyscanner);
     data->errorLine = *locp;

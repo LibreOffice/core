@@ -447,7 +447,7 @@ void ScFiltersTest::testSheetNamesXLSX()
     xDocSh->DoClose();
 }
 
-void impl_testLegacyCellAnchoredRotatedShape( ScDocument& rDoc, tools::Rectangle& aRect, const ScDrawObjData& aAnchor, long TOLERANCE = 30 /* 30 hmm */ )
+static void impl_testLegacyCellAnchoredRotatedShape( ScDocument& rDoc, tools::Rectangle& aRect, const ScDrawObjData& aAnchor, long TOLERANCE = 30 /* 30 hmm */ )
 {
     ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     CPPUNIT_ASSERT_MESSAGE("No drawing layer.", pDrawLayer);
@@ -561,7 +561,7 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
     }
 }
 
-void testEnhancedProtectionImpl( const ScDocument& rDoc )
+static void testEnhancedProtectionImpl( const ScDocument& rDoc )
 {
     const ScTableProtection* pProt = rDoc.GetTabProtection(0);
 

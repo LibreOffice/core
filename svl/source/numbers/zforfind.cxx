@@ -126,7 +126,7 @@ void ImpSvNumberInputScan::Reset()
 }
 
 // native number transliteration if necessary
-void TransformInput( SvNumberFormatter const * pFormatter, OUString& rStr )
+static void TransformInput( SvNumberFormatter const * pFormatter, OUString& rStr )
 {
     sal_Int32 nPos, nLen;
     for ( nPos = 0, nLen = rStr.getLength(); nPos < nLen; ++nPos )

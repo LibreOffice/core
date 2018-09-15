@@ -130,7 +130,7 @@ Color SwWW8ImplReader::GetCol(sal_uInt8 nIco)
     return nIco < SAL_N_ELEMENTS(eSwWW8ColA) ? eSwWW8ColA[nIco] : COL_AUTO;
 }
 
-inline sal_uInt32 MSRoundTweak(sal_uInt32 x)
+static inline sal_uInt32 MSRoundTweak(sal_uInt32 x)
 {
     return x;
 }
@@ -1378,7 +1378,7 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
     return nBorder;
 }
 
-void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace,
+static void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace,
     sal_uInt32 cv, short nIdx, SvxBoxItemLine nOOIndex, sal_uInt16 nWWIndex,
     short *pSize)
 {
@@ -1411,7 +1411,7 @@ void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace,
 
 }
 
-void Set1Border(SvxBoxItem &rBox, const WW8_BRCVer9& rBor, SvxBoxItemLine nOOIndex,
+static void Set1Border(SvxBoxItem &rBox, const WW8_BRCVer9& rBor, SvxBoxItemLine nOOIndex,
     sal_uInt16 nWWIndex, short *pSize, const bool bIgnoreSpace)
 {
     short nSpace;
@@ -1542,7 +1542,7 @@ static void FlySecur1(short& rSize, const bool bBorder)
         rSize = nMin;
 }
 
-inline bool SetValSprm( sal_Int16* pVar, WW8PLCFx_Cp_FKP* pPap, sal_uInt16 nId )
+static inline bool SetValSprm( sal_Int16* pVar, WW8PLCFx_Cp_FKP* pPap, sal_uInt16 nId )
 {
     SprmResult aS = pPap->HasSprm(nId);
     if (aS.pSprm && aS.nRemainingData >= 2)
@@ -1550,7 +1550,7 @@ inline bool SetValSprm( sal_Int16* pVar, WW8PLCFx_Cp_FKP* pPap, sal_uInt16 nId )
     return aS.pSprm != nullptr;
 }
 
-inline bool SetValSprm( sal_Int16* pVar, const WW8RStyle* pStyle, sal_uInt16 nId )
+static inline bool SetValSprm( sal_Int16* pVar, const WW8RStyle* pStyle, sal_uInt16 nId )
 {
     SprmResult aS = pStyle->HasParaSprm(nId);
     if (aS.pSprm && aS.nRemainingData >= 2)
@@ -4060,7 +4060,7 @@ void SwWW8ImplReader::Read_NoLineNumb(sal_uInt16 , const sal_uInt8* pData, short
     NewAttr( aLN );
 }
 
-bool lcl_HasExplicitLeft(const WW8PLCFMan *pPlcxMan, bool bVer67)
+static bool lcl_HasExplicitLeft(const WW8PLCFMan *pPlcxMan, bool bVer67)
 {
     WW8PLCFx_Cp_FKP *pPap = pPlcxMan ? pPlcxMan->GetPapPLCF() : nullptr;
     if (pPap)
@@ -5222,14 +5222,14 @@ struct SprmReadInfo
     FNReadRecord pReadFnc;
 };
 
-bool operator<(const SprmReadInfo &rFirst, const SprmReadInfo &rSecond)
+static bool operator<(const SprmReadInfo &rFirst, const SprmReadInfo &rSecond)
 {
     return (rFirst.nId < rSecond.nId);
 }
 
 typedef ww::SortedArray<SprmReadInfo> wwSprmDispatcher;
 
-const wwSprmDispatcher *GetWW2SprmDispatcher()
+static const wwSprmDispatcher *GetWW2SprmDispatcher()
 {
     static SprmReadInfo aSprms[] =
     {
@@ -5385,7 +5385,7 @@ const wwSprmDispatcher *GetWW2SprmDispatcher()
     return &aSprmSrch;
 }
 
-const wwSprmDispatcher *GetWW6SprmDispatcher()
+static const wwSprmDispatcher *GetWW6SprmDispatcher()
 {
     static SprmReadInfo aSprms[] =
     {
@@ -5597,7 +5597,7 @@ const wwSprmDispatcher *GetWW6SprmDispatcher()
     return &aSprmSrch;
 }
 
-const wwSprmDispatcher *GetWW8SprmDispatcher()
+static const wwSprmDispatcher *GetWW8SprmDispatcher()
 {
     static SprmReadInfo aSprms[] =
     {

@@ -159,7 +159,7 @@ namespace svgio
             }
         }
 
-        void extractFromGraphic(
+        static void extractFromGraphic(
             const Graphic& rGraphic,
             drawinglayer::primitive2d::Primitive2DContainer& rEmbedded,
             basegfx::B2DRange& rViewBox,

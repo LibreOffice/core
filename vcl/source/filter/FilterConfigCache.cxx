@@ -118,7 +118,7 @@ OUString FilterConfigCache::FilterConfigCacheEntry::GetShortName()
 
     @throws It let pass RuntimeExceptions only.
  */
-Reference< XInterface > openConfig(const char* sPackage)
+static Reference< XInterface > openConfig(const char* sPackage)
 {
     Reference< XComponentContext > xContext(
         comphelper::getProcessComponentContext() );

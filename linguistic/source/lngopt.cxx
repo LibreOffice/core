@@ -210,7 +210,7 @@ void LinguProps::launchEvent( const PropertyChangeEvent &rEvt ) const
 }
 
 /// @throws Exception
-Reference< XInterface > LinguProps_CreateInstance(
+static Reference< XInterface > LinguProps_CreateInstance(
             const Reference< XMultiServiceFactory > & /*rSMgr*/ )
 {
     Reference< XInterface > xService = static_cast<cppu::OWeakObject*>(new LinguProps);

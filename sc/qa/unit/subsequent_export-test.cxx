@@ -2457,7 +2457,7 @@ void ScExportTest::testBordersExchangeXLSX()
     xDocSh->DoClose();
 }
 
-OUString toString( const ScBigRange& rRange )
+static OUString toString( const ScBigRange& rRange )
 {
     OUStringBuffer aBuf;
     aBuf.append("(columns:");

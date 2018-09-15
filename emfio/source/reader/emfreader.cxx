@@ -457,12 +457,12 @@ namespace emfio
     }
 
     // these are referenced from inside the templates
-    SvStream& operator >> (SvStream& rStream, sal_Int16 &n)
+    static SvStream& operator >> (SvStream& rStream, sal_Int16 &n)
     {
         return rStream.ReadInt16(n);
     }
 
-    SvStream& operator >> (SvStream& rStream, sal_Int32 &n)
+    static SvStream& operator >> (SvStream& rStream, sal_Int32 &n)
     {
         return rStream.ReadInt32(n);
     }

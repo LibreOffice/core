@@ -86,16 +86,16 @@ namespace bs {
 
 // helper functions
 
-inline double sqr(double x) {
+static inline double sqr(double x) {
     return x*x;
 }
 // normal density (see also ScInterpreter::phi)
-inline double dnorm(double x) {
+static inline double dnorm(double x) {
     //return (1.0/sqrt(2.0*M_PI))*exp(-0.5*x*x); // windows may not have M_PI
     return 0.39894228040143268*exp(-0.5*x*x);
 }
 // cumulative normal distribution (see also ScInterpreter::integralPhi)
-inline double pnorm(double x) {
+static inline double pnorm(double x) {
     //return 0.5*(erf(sqrt(0.5)*x)+1.0);       // windows may not have erf
     return 0.5 * ::rtl::math::erfc(-x * 0.7071067811865475);
 }
@@ -293,7 +293,7 @@ double binasset(double S, double vol, double rd, double rf,
 // one function binary
 // using bincash()  if fd==types::Domestic
 // using binasset() if fd==types::Foreign
-double binary(double S, double vol, double rd, double rf,
+static double binary(double S, double vol, double rd, double rf,
               double tau, double K,
               types::PutCall pc, types::ForDom fd,
               types::Greeks greek) {
@@ -316,7 +316,7 @@ double binary(double S, double vol, double rd, double rf,
 // into one function
 // B1<=0 - it is assumed lower barrier not set
 // B2<=0 - it is assumed upper barrier not set
-double binary(double S, double vol, double rd, double rf,
+static double binary(double S, double vol, double rd, double rf,
               double tau, double B1, double B2,
               types::ForDom fd, types::Greeks greek) {
     assert(tau>=0.0);
@@ -503,7 +503,7 @@ namespace internal {
 // going to path-dependent barrier options,
 // K<0  - assume binary option
 // K>=0 - assume put/call option
-double vanilla(double S, double vol, double rd, double rf,
+static double vanilla(double S, double vol, double rd, double rf,
                double tau, double K, double B1, double B2,
                types::PutCall pc, types::ForDom fd,
                types::Greeks greek) {
@@ -516,7 +516,7 @@ double vanilla(double S, double vol, double rd, double rf,
     }
     return val;
 }
-double vanilla_trunc(double S, double vol, double rd, double rf,
+static double vanilla_trunc(double S, double vol, double rd, double rf,
                      double tau, double K, double B1, double B2,
                      types::PutCall pc, types::ForDom fd,
                      types::Greeks greek) {
@@ -546,7 +546,7 @@ namespace internal {
 // with sc=1 and V1() being the price of the respective truncated
 // vanilla option, V() would be the price of the respective barrier
 // option if only one barrier is present
-double barrier_term(double S, double vol, double rd, double rf,
+static double barrier_term(double S, double vol, double rd, double rf,
                     double tau, double K, double B1, double B2, double sc,
                     types::PutCall pc, types::ForDom fd,
                     types::Greeks greek) {
@@ -651,7 +651,7 @@ double barrier_term(double S, double vol, double rd, double rf,
 }
 
 // one term of the infinite sum for the valuation of double barriers
-double barrier_double_term( double S, double vol, double rd, double rf,
+static double barrier_double_term( double S, double vol, double rd, double rf,
                             double tau, double K, double B1, double B2,
                             double fac, double sc, int i,
                             types::PutCall pc, types::ForDom fd, types::Greeks greek) {
@@ -709,7 +709,7 @@ double barrier_double_term( double S, double vol, double rd, double rf,
 // general pricer for any type of options with continuously monitored barriers
 // allows two, one or zero barriers, only knock-out style
 // payoff profiles allowed based on vanilla_trunc()
-double barrier_ko(double S, double vol, double rd, double rf,
+static double barrier_ko(double S, double vol, double rd, double rf,
                   double tau, double K, double B1, double B2,
                   types::PutCall pc, types::ForDom fd,
                   types::Greeks greek) {
@@ -784,7 +784,7 @@ double barrier_ko(double S, double vol, double rd, double rf,
 }
 
 // knock-in style barrier
-double barrier_ki(double S, double vol, double rd, double rf,
+static double barrier_ki(double S, double vol, double rd, double rf,
                   double tau, double K, double B1, double B2,
                   types::PutCall pc, types::ForDom fd,
                   types::Greeks greek) {
@@ -793,7 +793,7 @@ double barrier_ki(double S, double vol, double rd, double rf,
 }
 
 // general barrier
-double barrier(double S, double vol, double rd, double rf,
+static double barrier(double S, double vol, double rd, double rf,
                double tau, double K, double B1, double B2,
                types::PutCall pc, types::ForDom fd,
                types::BarrierKIO kio, types::BarrierActive bcont,

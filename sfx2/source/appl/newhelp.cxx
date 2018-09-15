@@ -196,7 +196,7 @@ namespace sfx2
         "text*"       | "text*"              | "text"
         "text menu"   | "text* menu*"        | "text|menu"
     */
-    OUString PrepareSearchString( const OUString& rSearchString,
+    static OUString PrepareSearchString( const OUString& rSearchString,
                                 const Reference< XBreakIterator >& xBreak, bool bForSearch )
     {
         OUStringBuffer sSearchStr;
@@ -1114,7 +1114,7 @@ bool SearchTabPage_Impl::OpenKeyword( const OUString& rKeyword )
 
 // class BookmarksTabPage_Impl -------------------------------------------
 
-void GetBookmarkEntry_Impl
+static void GetBookmarkEntry_Impl
 (
     Sequence< PropertyValue >& aBookmarkEntry,
     OUString& rTitle,

@@ -49,13 +49,13 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 
-void Replace_OS_PlaceHolder(OUString& aString)
+static void Replace_OS_PlaceHolder(OUString& aString)
 {
     aString = aString.replaceAll( "*", "%" );
     aString = aString.replaceAll( "?", "_" );
 }
 
-void Replace_SQL_PlaceHolder(OUString& aString)
+static void Replace_SQL_PlaceHolder(OUString& aString)
 {
     aString = aString.replaceAll( "%", "*" );
     aString = aString.replaceAll( "_", "?" );

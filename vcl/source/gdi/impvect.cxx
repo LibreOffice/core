@@ -53,11 +53,11 @@ class ImplChain;
 
 namespace ImplVectorizer
 {
-    ImplVectMap* ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor );
-    void     ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 cReduce );
-    bool     ImplGetChain( ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain );
-    bool     ImplIsUp( ImplVectMap const * pMap, long nY, long nX );
-    void     ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly );
+    static ImplVectMap* ImplExpand( BitmapReadAccess* pRAcc, const Color& rColor );
+    static void     ImplCalculate( ImplVectMap* pMap, tools::PolyPolygon& rPolyPoly, sal_uInt8 cReduce );
+    static bool     ImplGetChain( ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain );
+    static bool     ImplIsUp( ImplVectMap const * pMap, long nY, long nX );
+    static void     ImplLimitPolyPoly( tools::PolyPolygon& rPolyPoly );
 }
 
 struct ChainMove { long nDX; long nDY; };
@@ -102,7 +102,9 @@ struct ImplColorSet
     bool        mbSet = false;
 };
 
-extern "C" int ImplColorSetCmpFnc( const void* p1, const void* p2 )
+extern "C" {
+
+static int ImplColorSetCmpFnc( const void* p1, const void* p2 )
 {
     ImplColorSet const * pSet1 = static_cast<ImplColorSet const *>(p1);
     ImplColorSet const * pSet2 = static_cast<ImplColorSet const *>(p2);
@@ -122,6 +124,8 @@ extern "C" int ImplColorSetCmpFnc( const void* p1, const void* p2 )
         nRet = 0;
 
     return nRet;
+}
+
 }
 
 class ImplPointArray

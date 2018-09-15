@@ -12,7 +12,7 @@
 #include <cassert>
 #include <unordered_map>
 
-sal_Int32 ParseMathMLUnsignedNumber(const OUString &rStr, Fraction& rUN)
+static sal_Int32 ParseMathMLUnsignedNumber(const OUString &rStr, Fraction& rUN)
 {
     auto nLen = rStr.getLength();
     sal_Int32 nDecimalPoint = -1;
@@ -38,7 +38,7 @@ sal_Int32 ParseMathMLUnsignedNumber(const OUString &rStr, Fraction& rUN)
     return nIdx;
 }
 
-sal_Int32 ParseMathMLNumber(const OUString &rStr, Fraction& rN)
+static sal_Int32 ParseMathMLNumber(const OUString &rStr, Fraction& rN)
 {
     if (rStr.isEmpty())
         return -1;

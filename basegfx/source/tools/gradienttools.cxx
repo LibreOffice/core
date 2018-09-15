@@ -45,7 +45,7 @@ namespace basegfx
     /** Most of the setup for linear & axial gradient is the same, except
         for the border treatment. Factored out here.
     */
-    ODFGradientInfo init1DGradientInfo(
+    static ODFGradientInfo init1DGradientInfo(
         const B2DRange& rTargetRange,
         sal_uInt32 nSteps,
         double fBorder,
@@ -115,7 +115,7 @@ namespace basegfx
     /** Most of the setup for radial & ellipsoidal gradient is the same,
         except for the border treatment. Factored out here.
     */
-    ODFGradientInfo initEllipticalGradientInfo(
+    static ODFGradientInfo initEllipticalGradientInfo(
         const B2DRange& rTargetRange,
         const B2DVector& rOffset,
         sal_uInt32 nSteps,
@@ -184,7 +184,7 @@ namespace basegfx
     /** Setup for rect & square gradient is exactly the same. Factored out
         here.
     */
-    ODFGradientInfo initRectGradientInfo(
+    static ODFGradientInfo initRectGradientInfo(
         const B2DRange& rTargetRange,
         const B2DVector& rOffset,
         sal_uInt32 nSteps,

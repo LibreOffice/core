@@ -90,7 +90,7 @@ bool getOutputStream(ProgramOptions const & options,
     return bStandardout;
 }
 
-bool containsAttribute(AttributeInfo& attributes, OUString const & attrname)
+static bool containsAttribute(AttributeInfo& attributes, OUString const & attrname)
 {
     for ( AttributeInfo::const_iterator i(attributes.begin());
           i != attributes.end(); ++i ) {
@@ -102,7 +102,7 @@ bool containsAttribute(AttributeInfo& attributes, OUString const & attrname)
 }
 
 // collect attributes including inherited attributes
-void checkAttributes(rtl::Reference< TypeManager > const & manager,
+static void checkAttributes(rtl::Reference< TypeManager > const & manager,
                      OUString const & name,
                      AttributeInfo& attributes,
                      std::set< OUString >& propinterfaces)
@@ -281,7 +281,7 @@ void checkDefaultInterfaces(
     }
 }
 
-bool checkServiceProperties(rtl::Reference< TypeManager > const & manager,
+static bool checkServiceProperties(rtl::Reference< TypeManager > const & manager,
                             OUString const & name)
 {
     rtl::Reference< unoidl::Entity > ent;
@@ -362,7 +362,7 @@ OUString checkPropertyHelper(
     return oldStyleWithProperties ? OUString("_") : OUString();
 }
 
-bool checkXComponentSupport(
+static bool checkXComponentSupport(
     rtl::Reference< TypeManager > const & manager, OUString const & name)
 {
     assert(manager.is());
@@ -447,7 +447,7 @@ checkAdditionalPropertyFlags(
 // This function checks if the specified types for parameters and return
 // types are allowed add-in types, for more info see the com.sun.star.sheet.AddIn
 // service description
-bool checkAddinType(rtl::Reference< TypeManager > const & manager,
+static bool checkAddinType(rtl::Reference< TypeManager > const & manager,
                     OUString const & type, bool & bLastAny,
                     bool & bHasXPropertySet, bool bIsReturn)
 {
@@ -494,7 +494,7 @@ bool checkAddinType(rtl::Reference< TypeManager > const & manager,
     return false;
 }
 
-void checkAddInTypes(
+static void checkAddInTypes(
     rtl::Reference< TypeManager > const & manager, OUString const & name,
     rtl::Reference< unoidl::InterfaceTypeEntity > const & entity)
 {
@@ -543,7 +543,7 @@ void checkAddInTypes(
     }
 }
 
-void generateFunctionParameterMap(std::ostream& o,
+static void generateFunctionParameterMap(std::ostream& o,
                                  ProgramOptions const & options,
                                  rtl::Reference< TypeManager > const & manager,
                                  OUString const & name,

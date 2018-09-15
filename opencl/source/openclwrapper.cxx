@@ -109,7 +109,7 @@ OString const & getCacheFolder()
 
 }
 
-bool initializeCommandQueue(GPUEnv& aGpuEnv)
+static bool initializeCommandQueue(GPUEnv& aGpuEnv)
 {
     OpenCLZone zone;
 

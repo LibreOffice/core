@@ -2235,7 +2235,7 @@ public:
     }
 };
 
-GType crippled_viewport_get_type();
+static GType crippled_viewport_get_type();
 
 #define CRIPPLED_TYPE_VIEWPORT            (crippled_viewport_get_type ())
 #define CRIPPLED_VIEWPORT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), CRIPPLED_TYPE_VIEWPORT, CrippledViewport))
@@ -2380,7 +2380,7 @@ GType crippled_viewport_get_type()
     return type;
 }
 
-VclPolicyType GtkToVcl(GtkPolicyType eType)
+static VclPolicyType GtkToVcl(GtkPolicyType eType)
 {
     VclPolicyType eRet(VclPolicyType::NEVER);
     switch (eType)
@@ -2399,7 +2399,7 @@ VclPolicyType GtkToVcl(GtkPolicyType eType)
     return eRet;
 }
 
-GtkPolicyType VclToGtk(VclPolicyType eType)
+static GtkPolicyType VclToGtk(VclPolicyType eType)
 {
     GtkPolicyType eRet(GTK_POLICY_ALWAYS);
     switch (eType)
@@ -2417,7 +2417,7 @@ GtkPolicyType VclToGtk(VclPolicyType eType)
     return eRet;
 }
 
-GtkMessageType VclToGtk(VclMessageType eType)
+static GtkMessageType VclToGtk(VclMessageType eType)
 {
     GtkMessageType eRet(GTK_MESSAGE_INFO);
     switch (eType)
@@ -2438,7 +2438,7 @@ GtkMessageType VclToGtk(VclMessageType eType)
     return eRet;
 }
 
-GtkButtonsType VclToGtk(VclButtonsType eType)
+static GtkButtonsType VclToGtk(VclButtonsType eType)
 {
     GtkButtonsType eRet(GTK_BUTTONS_NONE);
     switch (eType)

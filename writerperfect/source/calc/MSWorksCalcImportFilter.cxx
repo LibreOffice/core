@@ -41,7 +41,7 @@ using uno::XInterface;
 namespace MSWorksCalcImportFilterInternal
 {
 /// returns the list of stream name present in a folder
-uno::Reference<sdbc::XResultSet>
+static uno::Reference<sdbc::XResultSet>
 getResultSet(const css::uno::Reference<css::ucb::XContent>& xPackageContent) try
 {
     if (xPackageContent.is())

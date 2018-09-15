@@ -223,7 +223,7 @@ double BesselI( double x, sal_Int32 n )
 
 /// @throws IllegalArgumentException
 /// @throws NoConvergenceException
-double Besselk0( double fNum )
+static double Besselk0( double fNum )
 {
     double  fRet;
 
@@ -250,7 +250,7 @@ double Besselk0( double fNum )
 
 /// @throws IllegalArgumentException
 /// @throws NoConvergenceException
-double Besselk1( double fNum )
+static double Besselk1( double fNum )
 {
     double  fRet;
 
@@ -322,7 +322,7 @@ double BesselK( double fNum, sal_Int32 nOrder )
 
 /// @throws IllegalArgumentException
 /// @throws NoConvergenceException
-double Bessely0( double fX )
+static double Bessely0( double fX )
 {
     if (fX <= 0)
         throw IllegalArgumentException();
@@ -375,7 +375,7 @@ double Bessely0( double fX )
 // https://bz.apache.org/ooo/attachment.cgi?id=63609
 /// @throws IllegalArgumentException
 /// @throws NoConvergenceException
-double Bessely1( double fX )
+static double Bessely1( double fX )
 {
     if (fX <= 0)
         throw IllegalArgumentException();

@@ -3573,7 +3573,7 @@ void ScTable::StripHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
 //  Auto-Outline
 
 template< typename T >
-short DiffSign( T a, T b )
+static short DiffSign( T a, T b )
 {
     return (a<b) ? -1 :
             (a>b) ? 1 : 0;

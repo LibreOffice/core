@@ -246,7 +246,7 @@ LtcUtBenValueStream * LtcBenContainer::FindValueStreamWithPropertyName(const cha
     return FindNextValueStreamWithPropertyName(sPropertyName);
 }
 
-sal_uInt64 GetSvStreamSize(SvStream * pStream)
+static sal_uInt64 GetSvStreamSize(SvStream * pStream)
 {
     sal_uInt64 nCurPos = pStream->Tell();
     pStream->Seek(STREAM_SEEK_TO_END);

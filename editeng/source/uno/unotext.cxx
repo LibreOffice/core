@@ -100,7 +100,7 @@ const SvxItemPropertySet* ImplGetSvxTextPortionSvxPropertySet()
     return &aSvxTextPortionPropertySet;
 }
 
-const SfxItemPropertySet* ImplGetSvxTextPortionSfxPropertySet()
+static const SfxItemPropertySet* ImplGetSvxTextPortionSfxPropertySet()
 {
     static SfxItemPropertySet aSvxTextPortionSfxPropertySet( ImplGetSvxTextPortionPropertyMap() );
     return &aSvxTextPortionSfxPropertySet;
@@ -122,7 +122,7 @@ const SfxItemPropertyMapEntry* ImplGetSvxUnoOutlinerTextCursorPropertyMap()
 
     return aSvxUnoOutlinerTextCursorPropertyMap;
 }
-const SfxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSfxPropertySet()
+static const SfxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSfxPropertySet()
 {
     static SfxItemPropertySet aTextCursorSfxPropertySet( ImplGetSvxUnoOutlinerTextCursorPropertyMap() );
     return &aTextCursorSfxPropertySet;
@@ -194,7 +194,7 @@ void CheckSelection( struct ESelection& rSel, SvxTextForwarder const * pForwarde
     }
 }
 
-void CheckSelection( struct ESelection& rSel, SvxEditSource *pEdit ) throw()
+static void CheckSelection( struct ESelection& rSel, SvxEditSource *pEdit ) throw()
 {
     if (!pEdit)
         return;
@@ -1970,7 +1970,7 @@ void SAL_CALL SvxUnoTextBase::moveTextRange( const uno::Reference< text::XTextRa
 /// @throws lang::IllegalArgumentException
 /// @throws beans::UnknownPropertyException
 /// @throws uno::RuntimeException
-void SvxPropertyValuesToItemSet(
+static void SvxPropertyValuesToItemSet(
         SfxItemSet &rItemSet,
         const uno::Sequence< beans::PropertyValue >& rPropertyVaules,
         const SfxItemPropertySet *pPropSet,

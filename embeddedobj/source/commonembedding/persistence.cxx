@@ -89,7 +89,7 @@ uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const uno::Sequence<
 }
 
 
-uno::Sequence< beans::PropertyValue > addAsTemplate( const uno::Sequence< beans::PropertyValue >& aOrig )
+static uno::Sequence< beans::PropertyValue > addAsTemplate( const uno::Sequence< beans::PropertyValue >& aOrig )
 {
     bool bAsTemplateSet = false;
     sal_Int32 nLength = aOrig.getLength();
@@ -118,7 +118,7 @@ uno::Sequence< beans::PropertyValue > addAsTemplate( const uno::Sequence< beans:
 }
 
 
-uno::Reference< io::XInputStream > createTempInpStreamFromStor(
+static uno::Reference< io::XInputStream > createTempInpStreamFromStor(
                                                             const uno::Reference< embed::XStorage >& xStorage,
                                                             const uno::Reference< uno::XComponentContext >& xContext )
 {

@@ -1273,7 +1273,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
     }
 }
 
-sal_Int32 lcl_getOUStringMaxLineLength ( OUStringBuffer const & aString )
+static sal_Int32 lcl_getOUStringMaxLineLength ( OUStringBuffer const & aString )
 {
     const sal_Int32 nStringLength = aString.getLength();
     sal_Int32 nMaxLineLength = 0;

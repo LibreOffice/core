@@ -57,7 +57,7 @@ public:
     SwFrame* GetFrame( const Point* pDocPos ) const;
 };
 
-SwNode* GoNextWithFrame(const SwNodes& rNodes, SwNodeIndex *pIdx)
+static SwNode* GoNextWithFrame(const SwNodes& rNodes, SwNodeIndex *pIdx)
 {
     if( pIdx->GetIndex() >= rNodes.Count() - 1 )
         return nullptr;
@@ -91,7 +91,7 @@ SwNode* GoNextWithFrame(const SwNodes& rNodes, SwNodeIndex *pIdx)
     return pNd;
 }
 
-SwNode* GoPreviousWithFrame(SwNodeIndex *pIdx)
+static SwNode* GoPreviousWithFrame(SwNodeIndex *pIdx)
 {
     if( !pIdx->GetIndex() )
         return nullptr;

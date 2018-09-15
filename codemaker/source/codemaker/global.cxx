@@ -156,7 +156,7 @@ bool fileExists(const OString& fileName)
     return false;
 }
 
-bool checkFileContent(const OString& targetFileName, const OString& tmpFileName)
+static bool checkFileContent(const OString& targetFileName, const OString& tmpFileName)
 {
     FILE  *target = fopen(targetFileName.getStr(), "r");
     FILE  *tmp = fopen(tmpFileName.getStr(), "r");

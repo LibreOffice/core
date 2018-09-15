@@ -234,7 +234,7 @@ bool vcl::Region::IsEmpty() const
 }
 
 
-std::unique_ptr<RegionBand> ImplCreateRegionBandFromPolyPolygon(const tools::PolyPolygon& rPolyPolygon)
+static std::unique_ptr<RegionBand> ImplCreateRegionBandFromPolyPolygon(const tools::PolyPolygon& rPolyPolygon)
 {
     std::unique_ptr<RegionBand> pRetval;
 

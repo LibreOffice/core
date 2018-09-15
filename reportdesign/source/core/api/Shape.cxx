@@ -40,7 +40,7 @@ namespace reportdesign
 
     using namespace com::sun::star;
     using namespace comphelper;
-uno::Sequence< OUString > lcl_getShapeOptionals()
+static uno::Sequence< OUString > lcl_getShapeOptionals()
 {
     const OUString pProps[] = {
         OUString(PROPERTY_DATAFIELD)

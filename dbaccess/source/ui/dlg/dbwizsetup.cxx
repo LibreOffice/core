@@ -274,7 +274,7 @@ IMPL_LINK_NOARG(ODbTypeWizDialogSetup, OnTypeSelected, OGeneralPage&, void)
     activateDatabasePath();
 }
 
-void lcl_removeUnused(const ::comphelper::NamedValueCollection& _aOld,const ::comphelper::NamedValueCollection& _aNew,::comphelper::NamedValueCollection& _rDSInfo)
+static void lcl_removeUnused(const ::comphelper::NamedValueCollection& _aOld,const ::comphelper::NamedValueCollection& _aNew,::comphelper::NamedValueCollection& _rDSInfo)
 {
     _rDSInfo.merge(_aNew,true);
     uno::Sequence< beans::NamedValue > aOldValues = _aOld.getNamedValues();

@@ -105,7 +105,7 @@ void SwDropCapsPict::InitPrinter()
 }
 
 // Create Default-String from character-count (A, AB, ABC, ...)
-OUString GetDefaultString(sal_Int32 nChars)
+static OUString GetDefaultString(sal_Int32 nChars)
 {
     OUStringBuffer aStr(nChars);
     for (sal_Int32 i = 0; i < nChars; i++)

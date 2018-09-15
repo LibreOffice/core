@@ -93,7 +93,7 @@ SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, size_t nObjNum )
     return FmFormPage::ReplaceObject( pNewObj, nObjNum );
 }
 
-void InsertGridFrame( SdrPageGridFrameList *pLst, const SwFrame *pPg )
+static void InsertGridFrame( SdrPageGridFrameList *pLst, const SwFrame *pPg )
 {
     SwRect aPrt( pPg->getFramePrintArea() );
     aPrt += pPg->getFrameArea().Pos();

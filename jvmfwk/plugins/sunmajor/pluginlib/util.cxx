@@ -118,7 +118,7 @@ bool getSDKInfoFromRegistry(vector<OUString> & vecHome);
 bool getJREInfoFromRegistry(vector<OUString>& vecJavaHome);
 #endif
 
-bool decodeOutput(const OString& s, OUString* out);
+static bool decodeOutput(const OString& s, OUString* out);
 
 
 namespace
@@ -840,7 +840,7 @@ vector<OUString> getVectorFromCharArray(char const * const * ar, int size)
     In case of an error the returned string has the length 0.
     Otherwise the returned string is the "resolved" file URL.
  */
-OUString resolveDirPath(const OUString & path)
+static OUString resolveDirPath(const OUString & path)
 {
     OUString ret;
     salhelper::LinkResolver aResolver(osl_FileStatus_Mask_Type |
@@ -862,7 +862,7 @@ OUString resolveDirPath(const OUString & path)
 /** Checks if the path is a file. If it is a link to a file than
     it is resolved.
  */
-OUString resolveFilePath(const OUString & path)
+static OUString resolveFilePath(const OUString & path)
 {
     OUString ret;
     salhelper::LinkResolver aResolver(osl_FileStatus_Mask_Type |

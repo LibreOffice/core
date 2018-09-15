@@ -147,7 +147,7 @@ static void lcl_RemoveAttribs( EditView& rEditView )
     pEngine->SetUpdateMode(bOld);
 }
 
-void lclInsertCharacter( EditView* pTableView, EditView* pTopView, sal_Unicode cChar )
+static void lclInsertCharacter( EditView* pTableView, EditView* pTopView, sal_Unicode cChar )
 {
     OUString aString( cChar );
     if( pTableView )

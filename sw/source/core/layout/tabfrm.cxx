@@ -164,7 +164,7 @@ void SwTabFrame::RegistFlys()
     }
 }
 
-void SwInvalidateAll( SwFrame *pFrame, long nBottom );
+static void SwInvalidateAll( SwFrame *pFrame, long nBottom );
 static void lcl_RecalcRow( SwRowFrame* pRow, long nBottom );
 static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, long lYStart, bool bInva );
 // #i26945# - add parameter <_bOnlyRowsAndCells> to control
@@ -1339,7 +1339,7 @@ void SwTabFrame::Join()
     }
 }
 
-void SwInvalidatePositions( SwFrame *pFrame, long nBottom )
+static void SwInvalidatePositions( SwFrame *pFrame, long nBottom )
 {
     // LONG_MAX == nBottom means we have to calculate all
     bool bAll = LONG_MAX == nBottom;

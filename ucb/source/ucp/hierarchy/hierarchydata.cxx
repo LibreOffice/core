@@ -60,7 +60,7 @@ struct HierarchyEntry::iterator_Impl
 };
 
 
-void makeXMLName( const OUString & rIn, OUStringBuffer & rBuffer  )
+static void makeXMLName( const OUString & rIn, OUStringBuffer & rBuffer  )
 {
     sal_Int32 nCount = rIn.getLength();
     for ( sal_Int32 n = 0; n < nCount; ++n )

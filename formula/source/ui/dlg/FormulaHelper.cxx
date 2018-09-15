@@ -179,7 +179,7 @@ void FormulaHelper::GetArgStrings( ::std::vector< OUString >& _rArgs,
 }
 
 
-inline bool IsFormulaText( const CharClass* _pCharClass,const OUString& rStr, sal_Int32 nPos )
+static inline bool IsFormulaText( const CharClass* _pCharClass,const OUString& rStr, sal_Int32 nPos )
 {
     if( _pCharClass->isLetterNumeric( rStr, nPos ) )
         return true;

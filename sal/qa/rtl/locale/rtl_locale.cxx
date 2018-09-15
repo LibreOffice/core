@@ -28,7 +28,7 @@
 namespace rtl_locale
 {
     // default locale for test purpose
-    void setDefaultLocale()
+    static void setDefaultLocale()
     {
         rtl_locale_setDefault(rtl::OUString("de").getStr(), rtl::OUString("DE").getStr(), /* rtl::OUString() */ rtl::OUString("hochdeutsch").getStr() );
     }

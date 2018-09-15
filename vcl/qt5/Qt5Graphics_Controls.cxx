@@ -36,7 +36,8 @@
   @param nControlState State of the widget (default, focused, ...) in Native Widget Framework.
   @param aValue Value held by the widget (on, off, ...)
 */
-QStyle::State vclStateValue2StateFlag(ControlState nControlState, const ImplControlValue& aValue)
+static QStyle::State vclStateValue2StateFlag(ControlState nControlState,
+                                             const ImplControlValue& aValue)
 {
     QStyle::State nState
         = ((nControlState & ControlState::ENABLED) ? QStyle::State_Enabled : QStyle::State_None)

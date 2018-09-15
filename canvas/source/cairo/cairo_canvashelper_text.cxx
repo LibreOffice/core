@@ -165,7 +165,7 @@ namespace cairocanvas
         }
     };
 
-    bool setupTextOutput( OutputDevice&                                     rOutDev,
+    static bool setupTextOutput( OutputDevice&                                     rOutDev,
                           const rendering::XCanvas*                         pOwner,
                           ::Point&                                          o_rOutPos,
                           const rendering::ViewState&                       viewState,

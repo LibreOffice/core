@@ -75,7 +75,7 @@ const SvXMLEnumMapEntry<sal_uInt16> aXML_GluePointEnumMap[] =
     { XML_RECTANGLE,    3 },
     { XML_TOKEN_INVALID, 0 }
 };
-void GetBool( std::vector< css::beans::PropertyValue >& rDest,
+static void GetBool( std::vector< css::beans::PropertyValue >& rDest,
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     bool bAttrBool;
@@ -88,7 +88,7 @@ void GetBool( std::vector< css::beans::PropertyValue >& rDest,
     }
 }
 
-void GetInt32( std::vector< css::beans::PropertyValue >& rDest,
+static void GetInt32( std::vector< css::beans::PropertyValue >& rDest,
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     sal_Int32 nAttrNumber;
@@ -101,7 +101,7 @@ void GetInt32( std::vector< css::beans::PropertyValue >& rDest,
     }
 }
 
-void GetDouble( std::vector< css::beans::PropertyValue >& rDest,
+static void GetDouble( std::vector< css::beans::PropertyValue >& rDest,
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     double fAttrDouble;
@@ -114,7 +114,7 @@ void GetDouble( std::vector< css::beans::PropertyValue >& rDest,
     }
 }
 
-void GetString( std::vector< css::beans::PropertyValue >& rDest,
+static void GetString( std::vector< css::beans::PropertyValue >& rDest,
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     beans::PropertyValue aProp;
@@ -124,7 +124,7 @@ void GetString( std::vector< css::beans::PropertyValue >& rDest,
 }
 
 template<typename EnumT>
-void GetEnum( std::vector< css::beans::PropertyValue >& rDest,
+static void GetEnum( std::vector< css::beans::PropertyValue >& rDest,
                          const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp,
                         const SvXMLEnumMapEntry<EnumT>& rMap )
 {
@@ -138,7 +138,7 @@ void GetEnum( std::vector< css::beans::PropertyValue >& rDest,
     }
 }
 
-void GetDoublePercentage( std::vector< css::beans::PropertyValue >& rDest,
+static void GetDoublePercentage( std::vector< css::beans::PropertyValue >& rDest,
                          const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     sal_Int16 const eSrcUnit = ::sax::Converter::GetUnitFromString(
@@ -158,7 +158,7 @@ void GetDoublePercentage( std::vector< css::beans::PropertyValue >& rDest,
     }
 }
 
-void GetB3DVector( std::vector< css::beans::PropertyValue >& rDest,
+static void GetB3DVector( std::vector< css::beans::PropertyValue >& rDest,
                          const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     ::basegfx::B3DVector aB3DVector;
@@ -172,7 +172,7 @@ void GetB3DVector( std::vector< css::beans::PropertyValue >& rDest,
     }
 }
 
-bool GetEquationName( const OUString& rEquation, const sal_Int32 nStart, OUString& rEquationName )
+static bool GetEquationName( const OUString& rEquation, const sal_Int32 nStart, OUString& rEquationName )
 {
     sal_Int32 nIndex = nStart;
     while( nIndex < rEquation.getLength() )
@@ -195,7 +195,7 @@ bool GetEquationName( const OUString& rEquation, const sal_Int32 nStart, OUStrin
     return bValid;
 }
 
-bool GetNextParameter( css::drawing::EnhancedCustomShapeParameter& rParameter, sal_Int32& nIndex, const OUString& rParaString )
+static bool GetNextParameter( css::drawing::EnhancedCustomShapeParameter& rParameter, sal_Int32& nIndex, const OUString& rParaString )
 {
     if ( nIndex >= rParaString.getLength() )
         return false;
@@ -427,7 +427,7 @@ bool GetNextParameter( css::drawing::EnhancedCustomShapeParameter& rParameter, s
     return bValid;
 }
 
-void GetPosition3D( std::vector< css::beans::PropertyValue >& rDest,                     // e.g. draw:extrusion-viewpoint
+static void GetPosition3D( std::vector< css::beans::PropertyValue >& rDest,                     // e.g. draw:extrusion-viewpoint
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp,
                         SvXMLUnitConverter& rUnitConverter )
 {
@@ -441,7 +441,7 @@ void GetPosition3D( std::vector< css::beans::PropertyValue >& rDest,            
     }
 }
 
-void GetDoubleSequence( std::vector< css::beans::PropertyValue >& rDest,                 // e.g. draw:glue-point-leaving-directions
+static void GetDoubleSequence( std::vector< css::beans::PropertyValue >& rDest,                 // e.g. draw:glue-point-leaving-directions
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< double > vDirection;
@@ -466,7 +466,7 @@ void GetDoubleSequence( std::vector< css::beans::PropertyValue >& rDest,        
     }
 }
 
-void GetSizeSequence( std::vector< css::beans::PropertyValue >& rDest,
+static void GetSizeSequence( std::vector< css::beans::PropertyValue >& rDest,
                       const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< sal_Int32 > vNum;
@@ -503,7 +503,7 @@ void GetSizeSequence( std::vector< css::beans::PropertyValue >& rDest,
     }
 }
 
-void GetEnhancedParameter( std::vector< css::beans::PropertyValue >& rDest,              // e.g. draw:handle-position
+static void GetEnhancedParameter( std::vector< css::beans::PropertyValue >& rDest,              // e.g. draw:handle-position
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     sal_Int32 nIndex = 0;
@@ -517,7 +517,7 @@ void GetEnhancedParameter( std::vector< css::beans::PropertyValue >& rDest,     
     }
 }
 
-void GetEnhancedParameterPair( std::vector< css::beans::PropertyValue >& rDest,          // e.g. draw:handle-position
+static void GetEnhancedParameterPair( std::vector< css::beans::PropertyValue >& rDest,          // e.g. draw:handle-position
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     sal_Int32 nIndex = 0;
@@ -532,7 +532,7 @@ void GetEnhancedParameterPair( std::vector< css::beans::PropertyValue >& rDest, 
     }
 }
 
-sal_Int32 GetEnhancedParameterPairSequence( std::vector< css::beans::PropertyValue >& rDest,     // e.g. draw:glue-points
+static sal_Int32 GetEnhancedParameterPairSequence( std::vector< css::beans::PropertyValue >& rDest,     // e.g. draw:glue-points
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< css::drawing::EnhancedCustomShapeParameterPair > vParameter;
@@ -554,7 +554,7 @@ sal_Int32 GetEnhancedParameterPairSequence( std::vector< css::beans::PropertyVal
     return vParameter.size();
 }
 
-void GetEnhancedRectangleSequence( std::vector< css::beans::PropertyValue >& rDest,      // e.g. draw:text-areas
+static void GetEnhancedRectangleSequence( std::vector< css::beans::PropertyValue >& rDest,      // e.g. draw:text-areas
                         const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< css::drawing::EnhancedCustomShapeTextFrame > vTextFrame;
@@ -578,7 +578,7 @@ void GetEnhancedRectangleSequence( std::vector< css::beans::PropertyValue >& rDe
     }
 }
 
-void GetEnhancedPath( std::vector< css::beans::PropertyValue >& rDest,                   // e.g. draw:enhanced-path
+static void GetEnhancedPath( std::vector< css::beans::PropertyValue >& rDest,                   // e.g. draw:enhanced-path
                         const OUString& rValue )
 {
     std::vector< css::drawing::EnhancedCustomShapeParameterPair >    vCoordinates;
@@ -816,7 +816,7 @@ void GetEnhancedPath( std::vector< css::beans::PropertyValue >& rDest,          
     rDest.push_back( aProp );
 }
 
-void GetAdjustmentValues( std::vector< css::beans::PropertyValue >& rDest,               // draw:adjustments
+static void GetAdjustmentValues( std::vector< css::beans::PropertyValue >& rDest,               // draw:adjustments
                         const OUString& rValue )
 {
     std::vector< css::drawing::EnhancedCustomShapeAdjustmentValue > vAdjustmentValue;
@@ -1105,7 +1105,7 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
     }
 }
 
-void SdXMLCustomShapePropertyMerge( std::vector< css::beans::PropertyValue >& rPropVec,
+static void SdXMLCustomShapePropertyMerge( std::vector< css::beans::PropertyValue >& rPropVec,
                                     const std::vector< beans::PropertyValues >& rElement,
                                         const OUString& rElementName )
 {
@@ -1118,7 +1118,7 @@ void SdXMLCustomShapePropertyMerge( std::vector< css::beans::PropertyValue >& rP
     }
 }
 
-void SdXMLCustomShapePropertyMerge( std::vector< css::beans::PropertyValue >& rPropVec,
+static void SdXMLCustomShapePropertyMerge( std::vector< css::beans::PropertyValue >& rPropVec,
                                     const std::vector< OUString >& rElement,
                                         const OUString& rElementName )
 {
@@ -1131,7 +1131,7 @@ void SdXMLCustomShapePropertyMerge( std::vector< css::beans::PropertyValue >& rP
     }
 }
 
-void SdXMLCustomShapePropertyMerge( std::vector< css::beans::PropertyValue >& rPropVec,
+static void SdXMLCustomShapePropertyMerge( std::vector< css::beans::PropertyValue >& rPropVec,
                                     const std::vector< css::beans::PropertyValue >& rElement,
                                         const OUString& rElementName )
 {
@@ -1148,7 +1148,7 @@ typedef std::unordered_map< OUString, sal_Int32 > EquationHashMap;
 
 /* if rPara.Type is from type EnhancedCustomShapeParameterType::EQUATION, the name of the equation
    will be converted from OUString to index */
-void CheckAndResolveEquationParameter( css::drawing::EnhancedCustomShapeParameter& rPara, EquationHashMap* pH )
+static void CheckAndResolveEquationParameter( css::drawing::EnhancedCustomShapeParameter& rPara, EquationHashMap* pH )
 {
     if ( rPara.Type == css::drawing::EnhancedCustomShapeParameterType::EQUATION )
     {

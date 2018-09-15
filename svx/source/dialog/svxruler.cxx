@@ -1031,7 +1031,7 @@ void SvxRuler::SetDefTabDist(long inDefTabDist)  // New distance for DefaultTabs
     UpdateTabs();
 }
 
-sal_uInt16 ToSvTab_Impl(SvxTabAdjust eAdj)
+static sal_uInt16 ToSvTab_Impl(SvxTabAdjust eAdj)
 {
     /* Internal conversion routine between SV-Tab.-Enum and Svx */
     switch(eAdj) {
@@ -1045,7 +1045,7 @@ sal_uInt16 ToSvTab_Impl(SvxTabAdjust eAdj)
     return 0;
 }
 
-SvxTabAdjust ToAttrTab_Impl(sal_uInt16 eAdj)
+static SvxTabAdjust ToAttrTab_Impl(sal_uInt16 eAdj)
 {
     switch(eAdj) {
         case RULER_TAB_LEFT:    return SvxTabAdjust::Left    ;
@@ -1354,7 +1354,7 @@ ADD_DEBUG_TEXT("lDragPos: ", OUString::number(lDragPos))
     return lDragPos - lNullPix;
 }
 
-void ModifyTabs_Impl( sal_uInt16 nCount, // Number of Tabs
+static void ModifyTabs_Impl( sal_uInt16 nCount, // Number of Tabs
                       RulerTab* pTabs,   // Tab buffer
                       long lDiff)        // difference to be added
 {

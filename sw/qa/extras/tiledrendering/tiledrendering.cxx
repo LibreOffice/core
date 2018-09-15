@@ -454,7 +454,7 @@ void SwTiledRenderingTest::testResetSelection()
     CPPUNIT_ASSERT(!pWrtShell->IsSelFrameMode());
 }
 
-void lcl_search(bool bBackward)
+static void lcl_search(bool bBackward)
 {
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {

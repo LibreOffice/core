@@ -27,7 +27,7 @@
 // a 0-sign occurs; this function converts 0-signs to blanks and reads
 // a complete line until a cr/lf is found
 
-OString DXFReadLine(SvStream& rIStm)
+static OString DXFReadLine(SvStream& rIStm)
 {
     char  buf[256 + 1];
     bool  bEnd = false;
@@ -84,7 +84,7 @@ OString DXFReadLine(SvStream& rIStm)
     return aBuf.makeStringAndClear();
 }
 
-void DXFSkipLine(SvStream& rIStm)
+static void DXFSkipLine(SvStream& rIStm)
 {
     while (rIStm.good())
     {

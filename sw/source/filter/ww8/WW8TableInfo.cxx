@@ -734,7 +734,7 @@ WW8TableInfo::processTableBoxLines(const SwTableBox * pBox,
     return pNodeInfo;
 }
 
-void updateFinalEndOfLine(RowEndInners_t &rLastRowEnds, WW8TableNodeInfo const * pEndOfCellInfo)
+static void updateFinalEndOfLine(RowEndInners_t &rLastRowEnds, WW8TableNodeInfo const * pEndOfCellInfo)
 {
     sal_Int32 nDepth = pEndOfCellInfo->getDepth();
     WW8TableNodeInfoInner::Pointer_t pInner = pEndOfCellInfo->getInnerForDepth(nDepth);

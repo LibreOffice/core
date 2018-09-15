@@ -1069,7 +1069,7 @@ static bool IsShown(sal_uLong const nIndex,
     }
 }
 
-void AppendObjsOfNode(SwFrameFormats const*const pTable, sal_uLong const nIndex,
+static void AppendObjsOfNode(SwFrameFormats const*const pTable, sal_uLong const nIndex,
     SwFrame *const pFrame, SwPageFrame *const pPage, SwDoc *const pDoc,
     std::vector<sw::Extent>::const_iterator *const pIter,
     std::vector<sw::Extent>::const_iterator const*const pEnd)
@@ -1159,7 +1159,7 @@ void AppendObjs(const SwFrameFormats *const pTable, sal_uLong const nIndex,
     }
 }
 
-void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib)
+static void AppendAllObjs(const SwFrameFormats* pTable, const SwFrame* pSib)
 {
     //Connecting of all Objects, which are described in the SpzTable with the
     //layout.
@@ -2047,7 +2047,7 @@ void SwBorderAttrs::IsLine_()
  *    pre-/succeeding paragraph.
  */
 
-inline bool CmpLines( const editeng::SvxBorderLine *pL1, const editeng::SvxBorderLine *pL2 )
+static inline bool CmpLines( const editeng::SvxBorderLine *pL1, const editeng::SvxBorderLine *pL2 )
 {
     return ( ((pL1 && pL2) && (*pL1 == *pL2)) || (!pL1 && !pL2) );
 }

@@ -90,7 +90,7 @@ static long const nTabs[] =
 
 #define LB_MACROS_ITEMPOS   2
 
-OUString ConvertToUIName_Impl( SvxMacro const *pMacro )
+static OUString ConvertToUIName_Impl( SvxMacro const *pMacro )
 {
     OUString aName( pMacro->GetMacName() );
     OUString aEntry;

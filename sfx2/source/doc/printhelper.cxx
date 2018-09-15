@@ -79,7 +79,7 @@ struct IMPL_PrintListener_DataContainer : public SfxListener
                     const   SfxHint&        aHint   ) override ;
 };
 
-awt::Size impl_Size_Object2Struct( const Size& aSize )
+static awt::Size impl_Size_Object2Struct( const Size& aSize )
 {
     awt::Size aReturnValue;
     aReturnValue.Width  = aSize.Width()  ;
@@ -87,7 +87,7 @@ awt::Size impl_Size_Object2Struct( const Size& aSize )
     return aReturnValue ;
 }
 
-Size impl_Size_Struct2Object( const awt::Size& aSize )
+static Size impl_Size_Struct2Object( const awt::Size& aSize )
 {
     Size aReturnValue;
     aReturnValue.setWidth( aSize.Width )  ;

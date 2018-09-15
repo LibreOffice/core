@@ -135,7 +135,7 @@ void GridLinePoints::update( double fScaledTickValue )
     P0[m_nDimensionIndex] = P1[m_nDimensionIndex] = P2[m_nDimensionIndex] = fScaledTickValue;
 }
 
-void addLine2D( drawing::PointSequenceSequence& rPoints, sal_Int32 nIndex
+static void addLine2D( drawing::PointSequenceSequence& rPoints, sal_Int32 nIndex
              , const GridLinePoints& rScaledLogicPoints
              , const Reference< XTransformation > & xTransformation
               )
@@ -150,7 +150,7 @@ void addLine2D( drawing::PointSequenceSequence& rPoints, sal_Int32 nIndex
     rPoints[nIndex][1].Y = static_cast<sal_Int32>(aPB.PositionY);
 }
 
-void addLine3D( drawing::PolyPolygonShape3D& rPoints, sal_Int32 nIndex
+static void addLine3D( drawing::PolyPolygonShape3D& rPoints, sal_Int32 nIndex
             , const GridLinePoints& rBasePoints
             , const Reference< XTransformation > & xTransformation )
 {

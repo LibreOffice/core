@@ -39,7 +39,7 @@ using namespace css::uno;
 
 namespace vcl { namespace CommandInfoProvider {
 
-Reference<container::XNameAccess> const GetCommandDescription()
+static Reference<container::XNameAccess> const GetCommandDescription()
 {
     static WeakReference<container::XNameAccess> xWeakRef;
     css::uno::Reference<container::XNameAccess> xRef(xWeakRef);
@@ -53,7 +53,7 @@ Reference<container::XNameAccess> const GetCommandDescription()
     return xRef;
 }
 
-Reference<ui::XModuleUIConfigurationManagerSupplier> const GetModuleConfigurationSupplier()
+static Reference<ui::XModuleUIConfigurationManagerSupplier> const GetModuleConfigurationSupplier()
 {
     static WeakReference<ui::XModuleUIConfigurationManagerSupplier> xWeakRef;
     css::uno::Reference<ui::XModuleUIConfigurationManagerSupplier> xRef(xWeakRef);
@@ -67,7 +67,7 @@ Reference<ui::XModuleUIConfigurationManagerSupplier> const GetModuleConfiguratio
     return xRef;
 }
 
-Reference<ui::XAcceleratorConfiguration> const GetGlobalAcceleratorConfiguration()
+static Reference<ui::XAcceleratorConfiguration> const GetGlobalAcceleratorConfiguration()
 {
     static WeakReference<ui::XAcceleratorConfiguration> xWeakRef;
     css::uno::Reference<ui::XAcceleratorConfiguration> xRef(xWeakRef);
@@ -81,7 +81,7 @@ Reference<ui::XAcceleratorConfiguration> const GetGlobalAcceleratorConfiguration
     return xRef;
 }
 
-Reference<ui::XAcceleratorConfiguration> const GetDocumentAcceleratorConfiguration(const Reference<frame::XFrame>& rxFrame)
+static Reference<ui::XAcceleratorConfiguration> const GetDocumentAcceleratorConfiguration(const Reference<frame::XFrame>& rxFrame)
 {
     Reference<frame::XController> xController = rxFrame->getController();
     if (xController.is())
@@ -100,7 +100,7 @@ Reference<ui::XAcceleratorConfiguration> const GetDocumentAcceleratorConfigurati
     return nullptr;
 }
 
-Reference<ui::XAcceleratorConfiguration> const GetModuleAcceleratorConfiguration(const Reference<frame::XFrame>& rxFrame)
+static Reference<ui::XAcceleratorConfiguration> const GetModuleAcceleratorConfiguration(const Reference<frame::XFrame>& rxFrame)
 {
     css::uno::Reference<css::ui::XAcceleratorConfiguration> curModuleAcceleratorConfiguration;
     try
@@ -119,7 +119,7 @@ Reference<ui::XAcceleratorConfiguration> const GetModuleAcceleratorConfiguration
     return curModuleAcceleratorConfiguration;
 }
 
-vcl::KeyCode AWTKey2VCLKey(const awt::KeyEvent& aAWTKey)
+static vcl::KeyCode AWTKey2VCLKey(const awt::KeyEvent& aAWTKey)
 {
     bool bShift = ((aAWTKey.Modifiers & awt::KeyModifier::SHIFT) == awt::KeyModifier::SHIFT );
     bool bMod1  = ((aAWTKey.Modifiers & awt::KeyModifier::MOD1 ) == awt::KeyModifier::MOD1  );
@@ -130,7 +130,7 @@ vcl::KeyCode AWTKey2VCLKey(const awt::KeyEvent& aAWTKey)
     return vcl::KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
 }
 
-OUString RetrieveShortcutsFromConfiguration(
+static OUString RetrieveShortcutsFromConfiguration(
     const Reference<ui::XAcceleratorConfiguration>& rxConfiguration,
     const OUString& rsCommandName)
 {
@@ -157,7 +157,7 @@ OUString RetrieveShortcutsFromConfiguration(
     return OUString();
 }
 
-bool ResourceHasKey(const OUString& rsResourceName, const OUString& rsCommandName, const OUString& rsModuleName)
+static bool ResourceHasKey(const OUString& rsResourceName, const OUString& rsCommandName, const OUString& rsModuleName)
 {
     Sequence< OUString > aSequence;
     try
@@ -183,7 +183,7 @@ bool ResourceHasKey(const OUString& rsResourceName, const OUString& rsCommandNam
     return false;
 }
 
-Sequence<beans::PropertyValue> GetCommandProperties(const OUString& rsCommandName, const OUString& rsModuleName)
+static Sequence<beans::PropertyValue> GetCommandProperties(const OUString& rsCommandName, const OUString& rsModuleName)
 {
     Sequence<beans::PropertyValue> aProperties;
 
@@ -204,7 +204,7 @@ Sequence<beans::PropertyValue> GetCommandProperties(const OUString& rsCommandNam
     return aProperties;
 }
 
-OUString GetCommandProperty(const OUString& rsProperty, const OUString& rsCommandName, const OUString& rsModuleName)
+static OUString GetCommandProperty(const OUString& rsProperty, const OUString& rsCommandName, const OUString& rsModuleName)
 {
     const Sequence<beans::PropertyValue> aProperties (GetCommandProperties(rsCommandName, rsModuleName));
     for (sal_Int32 nIndex=0; nIndex<aProperties.getLength(); ++nIndex)
@@ -294,7 +294,7 @@ OUString GetRealCommandForCommand(const OUString& rCommandName,
     return GetCommandProperty("TargetURL", rCommandName, rsModuleName);
 }
 
-BitmapEx GetBitmapForCommand(const OUString& rsCommandName,
+static BitmapEx GetBitmapForCommand(const OUString& rsCommandName,
                              const Reference<frame::XFrame>& rxFrame,
                              vcl::ImageType eImageType)
 {

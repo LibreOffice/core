@@ -1527,7 +1527,7 @@ bool WW8Export::TransBrush(const Color& rCol, WW8_SHD& rShd)
     return !rCol.GetTransparency();
 }
 
-sal_uInt32 SuitableBGColor(Color nIn)
+static sal_uInt32 SuitableBGColor(Color nIn)
 {
     if (nIn == COL_AUTO)
         return 0xFF000000;

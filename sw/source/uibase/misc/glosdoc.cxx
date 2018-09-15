@@ -337,7 +337,7 @@ SwGlossaries::SwGlossaries()
 }
 
 // set new path and recreate internal array
-OUString lcl_makePath(const std::vector<OUString>& rPaths)
+static OUString lcl_makePath(const std::vector<OUString>& rPaths)
 {
     std::vector<OUString>::const_iterator aIt(rPaths.begin());
     const std::vector<OUString>::const_iterator aEnd(rPaths.end());

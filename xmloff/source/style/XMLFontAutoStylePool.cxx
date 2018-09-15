@@ -534,7 +534,7 @@ void XMLFontAutoStylePool::exportXML()
     }
 }
 
-OUString getFreeFontName(uno::Reference<embed::XStorage> const & rxStorage, OUString const & rFamilyName)
+static OUString getFreeFontName(uno::Reference<embed::XStorage> const & rxStorage, OUString const & rFamilyName)
 {
     OUString sName;
     int nIndex = 1;
@@ -549,7 +549,7 @@ OUString getFreeFontName(uno::Reference<embed::XStorage> const & rxStorage, OUSt
     return sName;
 }
 
-OString convertToHashString(std::vector<unsigned char> const & rHash)
+static OString convertToHashString(std::vector<unsigned char> const & rHash)
 {
     std::stringstream aStringStream;
     for (auto const & rByte : rHash)
@@ -560,7 +560,7 @@ OString convertToHashString(std::vector<unsigned char> const & rHash)
     return OString(aStringStream.str().c_str());
 }
 
-OString getFileHash(OUString const & rFileUrl)
+static OString getFileHash(OUString const & rFileUrl)
 {
     OString aHash;
     osl::File aFile(rFileUrl);

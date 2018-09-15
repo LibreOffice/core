@@ -63,7 +63,7 @@ test::BootstrapFixture::BootstrapFixture( bool bAssertOnDialog, bool bNeedUCB )
 extern "C"
 {
 
-void test_init_impl(bool bAssertOnDialog, bool bNeedUCB,
+static void test_init_impl(bool bAssertOnDialog, bool bNeedUCB,
         lang::XMultiServiceFactory * pSFactory)
 {
     if (bAssertOnDialog)

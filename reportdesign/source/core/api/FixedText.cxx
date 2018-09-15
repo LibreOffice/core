@@ -34,7 +34,7 @@ namespace reportdesign
 
     using namespace com::sun::star;
 
-uno::Sequence< OUString > lcl_getFixedTextOptionals()
+static uno::Sequence< OUString > lcl_getFixedTextOptionals()
 {
     OUString pProps[] = { OUString(PROPERTY_DATAFIELD),OUString(PROPERTY_MASTERFIELDS),OUString(PROPERTY_DETAILFIELDS) };
     return uno::Sequence< OUString >(pProps,SAL_N_ELEMENTS(pProps));

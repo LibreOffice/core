@@ -494,7 +494,7 @@ void ChartController::execute_Paint(vcl::RenderContext& rRenderContext, const to
     }
 }
 
-bool isDoubleClick( const MouseEvent& rMEvt )
+static bool isDoubleClick( const MouseEvent& rMEvt )
 {
     return rMEvt.GetClicks() == 2 && rMEvt.IsLeft() &&
         !rMEvt.IsMod1() && !rMEvt.IsMod2() && !rMEvt.IsShift();

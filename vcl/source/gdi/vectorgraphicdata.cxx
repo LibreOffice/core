@@ -90,7 +90,7 @@ BitmapEx convertPrimitive2DSequenceToBitmapEx(
     return aRetval;
 }
 
-size_t estimateSize(
+static size_t estimateSize(
     std::deque<uno::Reference<graphic::XPrimitive2D>> const& rSequence)
 {
     size_t nRet(0);

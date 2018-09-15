@@ -85,9 +85,7 @@ namespace utl
         aDataType = _rType;
     }
 
-    #ifndef UNX
     static
-    #endif
     void lcl_copyData( const NodeValueAccessor& _rAccessor, const Any& _rData, ::osl::Mutex& _rMutex )
     {
         ::osl::MutexGuard aGuard( _rMutex );
@@ -118,9 +116,7 @@ namespace utl
         }
     }
 
-    #ifndef UNX
     static
-    #endif
     void lcl_copyData( Any& _rData, const NodeValueAccessor& _rAccessor, ::osl::Mutex& _rMutex )
     {
         ::osl::MutexGuard aGuard( _rMutex );

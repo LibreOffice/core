@@ -166,14 +166,14 @@ namespace dbaui
 namespace DatabaseObject = css::sdb::application::DatabaseObject;
 namespace DatabaseObjectContainer = css::sdb::application::DatabaseObjectContainer;
 
-void SafeAddPropertyListener(const Reference< XPropertySet > & xSet, const OUString& rPropName, XPropertyChangeListener* pListener)
+static void SafeAddPropertyListener(const Reference< XPropertySet > & xSet, const OUString& rPropName, XPropertyChangeListener* pListener)
 {
     Reference< XPropertySetInfo >  xInfo = xSet->getPropertySetInfo();
     if (xInfo->hasPropertyByName(rPropName))
         xSet->addPropertyChangeListener(rPropName, pListener);
 }
 
-void SafeRemovePropertyListener(const Reference< XPropertySet > & xSet, const OUString& rPropName, XPropertyChangeListener* pListener)
+static void SafeRemovePropertyListener(const Reference< XPropertySet > & xSet, const OUString& rPropName, XPropertyChangeListener* pListener)
 {
     Reference< XPropertySetInfo >  xInfo = xSet->getPropertySetInfo();
     if (xInfo->hasPropertyByName(rPropName))
@@ -794,7 +794,7 @@ void SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
     }
 }
 
-Reference<XPropertySet> getColumnHelper(SvTreeListEntry const * _pCurrentlyDisplayed, const Reference<XPropertySet>& _rxSource)
+static Reference<XPropertySet> getColumnHelper(SvTreeListEntry const * _pCurrentlyDisplayed, const Reference<XPropertySet>& _rxSource)
 {
     Reference<XPropertySet> xRet;
     if(_pCurrentlyDisplayed)

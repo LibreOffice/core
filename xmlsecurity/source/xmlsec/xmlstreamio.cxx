@@ -33,8 +33,9 @@ static bool g_bInputCallbacksRegistered = false;
 
 static css::uno::Reference< css::xml::crypto::XUriBinding > m_xUriBinding ;
 
-extern "C"
-int xmlStreamMatch( const char* uri )
+extern "C" {
+
+static int xmlStreamMatch( const char* uri )
 {
     css::uno::Reference< css::io::XInputStream > xInputStream ;
 
@@ -65,8 +66,7 @@ int xmlStreamMatch( const char* uri )
         return 0 ;
 }
 
-extern "C"
-void* xmlStreamOpen( const char* uri )
+static void* xmlStreamOpen( const char* uri )
 {
     css::uno::Reference< css::io::XInputStream > xInputStream ;
 
@@ -99,8 +99,7 @@ void* xmlStreamOpen( const char* uri )
     return nullptr ;
 }
 
-extern "C"
-int xmlStreamRead( void* context, char* buffer, int len )
+static int xmlStreamRead( void* context, char* buffer, int len )
 {
     int numbers ;
     css::uno::Reference< css::io::XInputStream > xInputStream ;
@@ -124,8 +123,7 @@ int xmlStreamRead( void* context, char* buffer, int len )
     return numbers ;
 }
 
-extern "C"
-int xmlStreamClose( void * context )
+static int xmlStreamClose( void * context )
 {
     if (g_bInputCallbacksEnabled && g_bInputCallbacksRegistered)
     {
@@ -137,6 +135,8 @@ int xmlStreamClose( void * context )
     }
 
     return 0 ;
+}
+
 }
 
 XSECXMLSEC_DLLPUBLIC int xmlEnableStreamInputCallbacks()

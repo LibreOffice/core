@@ -665,7 +665,7 @@ void SelectionFunction::ProcessEvent (EventDescriptor& rDescriptor)
     pModeHandler->ProcessEvent(rDescriptor);
 }
 
-bool Match (
+static bool Match (
     const sal_uInt32 nEventCode,
     const sal_uInt32 nPositivePattern)
 {

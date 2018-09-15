@@ -145,7 +145,7 @@ int ToolBox::ImplGetDragWidth() const
     return ToolBox::ImplGetDragWidth( *this, mbHorz );
 }
 
-ButtonType determineButtonType( ImplToolItem const * pItem, ButtonType defaultType )
+static ButtonType determineButtonType( ImplToolItem const * pItem, ButtonType defaultType )
 {
     ButtonType tmpButtonType = defaultType;
     ToolBoxItemBits nBits = pItem->mnBits & ( ToolBoxItemBits::TEXT_ONLY | ToolBoxItemBits::ICON_ONLY );
@@ -4466,7 +4466,7 @@ bool ToolBox::ImplActivateItem( vcl::KeyCode aKeyCode )
     return bRet;
 }
 
-bool ImplCloseLastPopup( vcl::Window const *pParent )
+static bool ImplCloseLastPopup( vcl::Window const *pParent )
 {
     // close last popup toolbox (see also:
     // ImplHandleMouseFloatMode(...) in winproc.cxx )

@@ -117,7 +117,7 @@ void SwTextFrame::ValidateFrame()
 // After a RemoveFootnote the BodyFrame and all Frames contained within it, need to be
 // recalculated, so that the DeadLine is right.
 // First we search outwards, on the way back we calculate everything.
-void ValidateBodyFrame_( SwFrame *pFrame )
+static void ValidateBodyFrame_( SwFrame *pFrame )
 {
     vcl::RenderContext* pRenderContext = pFrame ? pFrame->getRootFrame()->GetCurrShell()->GetOut() : nullptr;
     if( pFrame && !pFrame->IsCellFrame() )

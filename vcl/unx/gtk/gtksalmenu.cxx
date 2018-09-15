@@ -58,7 +58,7 @@ bool GtkSalMenu::PrepUpdate()
  * Menu updating methods
  */
 
-void RemoveSpareItemsFromNativeMenu( GLOMenu* pMenu, GList** pOldCommandList, unsigned nSection, unsigned nValidItems )
+static void RemoveSpareItemsFromNativeMenu( GLOMenu* pMenu, GList** pOldCommandList, unsigned nSection, unsigned nValidItems )
 {
     sal_Int32 nSectionItems = g_lo_menu_get_n_items_from_section( pMenu, nSection );
 
@@ -97,7 +97,7 @@ namespace
     }
 }
 
-void RemoveDisabledItemsFromNativeMenu(GLOMenu* pMenu, GList** pOldCommandList,
+static void RemoveDisabledItemsFromNativeMenu(GLOMenu* pMenu, GList** pOldCommandList,
                                        sal_Int32 nSection, GActionGroup* pActionGroup)
 {
     while (nSection >= 0)
@@ -156,7 +156,7 @@ void RemoveDisabledItemsFromNativeMenu(GLOMenu* pMenu, GList** pOldCommandList,
     }
 }
 
-void RemoveSpareSectionsFromNativeMenu( GLOMenu* pMenu, GList** pOldCommandList, sal_Int32 nLastSection )
+static void RemoveSpareSectionsFromNativeMenu( GLOMenu* pMenu, GList** pOldCommandList, sal_Int32 nLastSection )
 {
     if ( pMenu == nullptr || pOldCommandList == nullptr )
         return;
@@ -170,12 +170,12 @@ void RemoveSpareSectionsFromNativeMenu( GLOMenu* pMenu, GList** pOldCommandList,
     }
 }
 
-gint CompareStr( gpointer str1, gpointer str2 )
+static gint CompareStr( gpointer str1, gpointer str2 )
 {
     return g_strcmp0( static_cast<const gchar*>(str1), static_cast<const gchar*>(str2) );
 }
 
-void RemoveUnusedCommands( GLOActionGroup* pActionGroup, GList* pOldCommandList, GList* pNewCommandList )
+static void RemoveUnusedCommands( GLOActionGroup* pActionGroup, GList* pOldCommandList, GList* pNewCommandList )
 {
     if ( pActionGroup == nullptr || pOldCommandList == nullptr )
     {

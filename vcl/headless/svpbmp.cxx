@@ -39,7 +39,7 @@ SvpSalBitmap::~SvpSalBitmap()
     Destroy();
 }
 
-std::unique_ptr<BitmapBuffer> ImplCreateDIB(
+static std::unique_ptr<BitmapBuffer> ImplCreateDIB(
     const Size& rSize,
     sal_uInt16 nBitCount,
     const BitmapPalette& rPal)

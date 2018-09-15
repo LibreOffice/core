@@ -147,7 +147,7 @@ struct XclImpXti
     explicit     XclImpXti() : mnSupbook( SAL_MAX_UINT16 ), mnSBTabFirst( SAL_MAX_UINT16 ), mnSBTabLast( SAL_MAX_UINT16 ) {}
 };
 
-inline XclImpStream& operator>>( XclImpStream& rStrm, XclImpXti& rXti )
+static inline XclImpStream& operator>>( XclImpStream& rStrm, XclImpXti& rXti )
 {
     rXti.mnSupbook = rStrm.ReaduInt16();
     rXti.mnSBTabFirst = rStrm.ReaduInt16();

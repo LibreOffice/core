@@ -71,7 +71,7 @@
 
 using namespace ::com::sun::star;
 
-bool isInVBAMode( ScDocShell& rDocSh )
+static bool isInVBAMode( ScDocShell& rDocSh )
 {
     uno::Reference<script::XLibraryContainer> xLibContainer = rDocSh.GetBasicContainer();
     uno::Reference<script::vba::XVBACompatibility> xVBACompat( xLibContainer, uno::UNO_QUERY );

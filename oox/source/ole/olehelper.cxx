@@ -315,7 +315,7 @@ bool OleHelper::importStdPic( StreamDataSequence& orGraphicData, BinaryInputStre
     return !rInStrm.isEof() && (nStdPicId == OLE_STDPIC_ID) && (nBytes > 0) && (rInStrm.readData( orGraphicData, nBytes ) == nBytes);
 }
 
-Reference< css::frame::XFrame > lcl_getFrame( const  Reference< css::frame::XModel >& rxModel )
+static Reference< css::frame::XFrame > lcl_getFrame( const  Reference< css::frame::XModel >& rxModel )
 {
     Reference< css::frame::XFrame > xFrame;
     if ( rxModel.is() )

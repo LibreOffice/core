@@ -37,7 +37,7 @@
 using namespace ::com::sun::star::i18n;
 
 template<class L, typename T>
-T getScriptType( const sal_Unicode ch, const L* typeList, T unknownType ) {
+static T getScriptType( const sal_Unicode ch, const L* typeList, T unknownType ) {
 
     sal_Int16 i = 0;
     css::i18n::UnicodeScript type = typeList[0].to;

@@ -926,7 +926,7 @@ Reference< data::XLabeledDataSequence >
     return xResult;
 }
 
-void lcl_generateAutomaticCategoriesFromChartType(
+static void lcl_generateAutomaticCategoriesFromChartType(
             Sequence< OUString >& rRet,
             const Reference< XChartType >& xChartType )
 {
@@ -1598,7 +1598,7 @@ DiagramPositioningMode DiagramHelper::getDiagramPositioningMode( const uno::Refe
     return eMode;
 }
 
-void lcl_ensureRange0to1( double& rValue )
+static void lcl_ensureRange0to1( double& rValue )
 {
     if(rValue<0.0)
         rValue=0.0;

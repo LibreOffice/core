@@ -1041,7 +1041,7 @@ void SdrPageProperties::ImpAddStyleSheet(SfxStyleSheet& rNewStyleSheet)
     }
 }
 
-void ImpPageChange(SdrPage& rSdrPage)
+static void ImpPageChange(SdrPage& rSdrPage)
 {
     rSdrPage.ActionChanged();
     rSdrPage.getSdrModelFromSdrPage().SetChanged();

@@ -93,7 +93,7 @@ using namespace ::com::sun::star;
 namespace com { namespace sun { namespace star { namespace uno {
 
 template<class T>
-std::ostream& operator<<(std::ostream& rStrm, const uno::Reference<T>& xRef)
+static std::ostream& operator<<(std::ostream& rStrm, const uno::Reference<T>& xRef)
 {
     rStrm << xRef.get();
     return rStrm;

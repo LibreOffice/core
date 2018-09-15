@@ -104,7 +104,7 @@ struct ImpRememberOrigAndClone
     SdrObject*      pClone;
 };
 
-SdrObject* ImpGetClone(std::vector<ImpRememberOrigAndClone*>& aConnectorContainer, SdrObject const * pConnObj)
+static SdrObject* ImpGetClone(std::vector<ImpRememberOrigAndClone*>& aConnectorContainer, SdrObject const * pConnObj)
 {
     for(ImpRememberOrigAndClone* p : aConnectorContainer)
     {
@@ -115,7 +115,7 @@ SdrObject* ImpGetClone(std::vector<ImpRememberOrigAndClone*>& aConnectorContaine
 }
 
 // restrict movement to WorkArea
-void ImpCheckInsertPos(Point& rPos, const Size& rSize, const ::tools::Rectangle& rWorkArea)
+static void ImpCheckInsertPos(Point& rPos, const Size& rSize, const ::tools::Rectangle& rWorkArea)
 {
     if(!rWorkArea.IsEmpty())
     {

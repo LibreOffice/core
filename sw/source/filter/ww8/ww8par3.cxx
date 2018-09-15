@@ -477,7 +477,7 @@ static void lcl_CopyGreaterEight(OUString &rDest, OUString const &rSrc,
     }
 }
 
-OUString sanitizeString(const OUString& rString)
+static OUString sanitizeString(const OUString& rString)
 {
     sal_Int32 i=0;
     while (i < rString.getLength())
@@ -1495,7 +1495,7 @@ WW8ListManager::~WW8ListManager() COVERITY_NOEXCEPT_FALSE
     }
 }
 
-bool IsEqualFormatting(const SwNumRule &rOne, const SwNumRule &rTwo)
+static bool IsEqualFormatting(const SwNumRule &rOne, const SwNumRule &rTwo)
 {
     bool bRet =
         (

@@ -435,7 +435,7 @@ static void InsertCharAttrs(SfxPoolItem const** pAttrs, SfxItemSet const& rItems
 
 // if return false: portion ends at start of redline, indexes unchanged
 // if return true: portion end not known (past end of redline), indexes point to first hint past end of redline
-bool CanSkipOverRedline(SwRangeRedline const& rRedline,
+static bool CanSkipOverRedline(SwRangeRedline const& rRedline,
         size_t & rStartIndex, size_t & rEndIndex)
 {
     size_t nStartIndex(rStartIndex);

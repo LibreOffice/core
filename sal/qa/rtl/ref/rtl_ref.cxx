@@ -45,7 +45,7 @@ public:
     void set_inc_flag() { m_bIncFlag = true; }
 };
 
-rtl::Reference< MoveTestClass > get_reference( MoveTestClass* pcTestClass )
+static rtl::Reference< MoveTestClass > get_reference( MoveTestClass* pcTestClass )
 {
     // constructor will increment the reference count
     pcTestClass->set_inc_flag();

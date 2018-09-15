@@ -221,7 +221,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo51034, "fdo51034.odt")
 
 // Remove all spaces, as LO export/import may change that.
 // Replace symbol - (i.e. U+2212) with ASCII - , LO does this change and it shouldn't matter.
-void CHECK_FORMULA(OUString const & expected, OUString const & actual) {
+static void CHECK_FORMULA(OUString const & expected, OUString const & actual) {
     CPPUNIT_ASSERT_EQUAL(
         expected.replaceAll( " ", "" ).replaceAll( OUString(u"\u2212"), "-" ),
         actual.replaceAll( " ", "" ).replaceAll( OUString(u"\u2212"), "-" ));

@@ -36,12 +36,12 @@ using namespace ftp;
 
 extern "C" {
 
-    int memory_write_dummy(void *,size_t,size_t,void *)
+    static int memory_write_dummy(void *,size_t,size_t,void *)
     {
         return 0;
     }
 
-    void delete_CURL(void *pData)
+    static void delete_CURL(void *pData)
     {
         // Otherwise response for QUIT will be sent to already destroyed
         // MemoryContainer via non-dummy memory_write function.

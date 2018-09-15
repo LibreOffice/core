@@ -99,7 +99,7 @@ enum WID_PAGE
 static sal_Char const sEmptyPageName[sizeof("page")] = "page";
 
 // this function stores the property maps for draw pages in impress and draw
-const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, PageKind ePageKind )
+static const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, PageKind ePageKind )
 {
     static const SfxItemPropertyMapEntry aDrawPagePropertyMap_Impl[] =
     {
@@ -255,7 +255,7 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, PageKind eP
 }
 
 /** this function stores the property map for master pages in impress and draw */
-const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKind )
+static const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKind )
 {
     static const SfxItemPropertyMapEntry aMasterPagePropertyMap_Impl[] =
     {

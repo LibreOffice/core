@@ -552,7 +552,7 @@ namespace basegfx
         * outside   |inside     |intersect with clip plane follwed by next
         *
         */
-        sal_uInt32 scissorLineSegment( ::basegfx::B2DPoint           *in_vertex,    // input buffer
+        static sal_uInt32 scissorLineSegment( ::basegfx::B2DPoint           *in_vertex,    // input buffer
                                        sal_uInt32                     in_count,     // number of verts in input buffer
                                        ::basegfx::B2DPoint           *out_vertex,   // output buffer
                                        scissor_plane const           *pPlane,       // scissoring plane

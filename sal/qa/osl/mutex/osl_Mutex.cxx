@@ -32,11 +32,11 @@ using namespace osl;
 */
 namespace ThreadHelper
 {
-    void thread_sleep_tenth_sec(sal_uInt32 _nTenthSec)
+    static void thread_sleep_tenth_sec(sal_uInt32 _nTenthSec)
     {
         osl::Thread::wait(std::chrono::milliseconds(_nTenthSec * 100));
     }
-    void thread_sleep( sal_uInt32 _nSec )
+    static void thread_sleep( sal_uInt32 _nSec )
     {
         /// print statement in thread process must use fflush() to force display.
         // t_print("# wait %d seconds. ", _nSec );

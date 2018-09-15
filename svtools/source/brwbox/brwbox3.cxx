@@ -39,7 +39,7 @@ namespace svt
     using namespace ::com::sun::star::lang;
     using namespace utl;
 
-    Reference< XAccessible > getHeaderCell( BrowseBoxImpl::THeaderCellMap& _raHeaderCells,
+    static Reference< XAccessible > getHeaderCell( BrowseBoxImpl::THeaderCellMap& _raHeaderCells,
                                             sal_Int32 _nPos,
                                             AccessibleBrowseBoxObjType _eType,
                                             const Reference< XAccessible >& _rParent,

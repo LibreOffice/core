@@ -469,7 +469,7 @@ static void lcl_InsCol( FndLine_* pFndLn, CpyPara& rCpyPara, sal_uInt16 nCpyCnt,
     }
 }
 
-SwRowFrame* GetRowFrame( SwTableLine& rLine )
+static SwRowFrame* GetRowFrame( SwTableLine& rLine )
 {
     SwIterator<SwRowFrame,SwFormat> aIter( *rLine.GetFrameFormat() );
     for( SwRowFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next() )
@@ -2825,7 +2825,7 @@ static bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
 //  SwComparePosition::Equal,              // Box and start/end are the same
 //  SwComparePosition::OverlapBefore,      // Box overlapps the start
 //  SwComparePosition::OverlapBehind       // Box overlapps the end
-SwComparePosition CheckBoxInRange( sal_uInt16 nStt, sal_uInt16 nEnd,
+static SwComparePosition CheckBoxInRange( sal_uInt16 nStt, sal_uInt16 nEnd,
                                     sal_uInt16 nBoxStt, sal_uInt16 nBoxEnd )
 {
     // Still treat COLFUZZY!
@@ -3898,7 +3898,7 @@ static FndBox_* lcl_SaveInsDelData( CR_SetLineHeight& rParam, SwUndo** ppUndo,
     return pFndBox;
 }
 
-void SetLineHeight( SwTableLine& rLine, SwTwips nOldHeight, SwTwips nNewHeight,
+static void SetLineHeight( SwTableLine& rLine, SwTwips nOldHeight, SwTwips nNewHeight,
                     bool bMinSize )
 {
     SwLayoutFrame* pLineFrame = GetRowFrame( rLine );

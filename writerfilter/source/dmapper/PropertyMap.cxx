@@ -447,7 +447,7 @@ SectionPropertyMap::SectionPropertyMap( bool bIsFirstSection )
     }
 }
 
-OUString lcl_FindUnusedPageStyleName( const uno::Sequence< OUString >& rPageStyleNames )
+static OUString lcl_FindUnusedPageStyleName( const uno::Sequence< OUString >& rPageStyleNames )
 {
     static const char DEFAULT_STYLE[] = "Converted";
     sal_Int32         nMaxIndex       = 0;
@@ -1015,7 +1015,7 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
     }
 }
 
-uno::Reference< beans::XPropertySet > lcl_GetRangeProperties( bool bIsFirstSection,
+static uno::Reference< beans::XPropertySet > lcl_GetRangeProperties( bool bIsFirstSection,
                                                               DomainMapper_Impl& rDM_Impl,
                                                               const uno::Reference< text::XTextRange >& xStartingRange )
 {

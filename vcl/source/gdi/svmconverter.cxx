@@ -37,7 +37,7 @@
 #include <o3tl/make_unique.hxx>
 
 // Inlines
-void ImplReadRect( SvStream& rIStm, tools::Rectangle& rRect )
+static void ImplReadRect( SvStream& rIStm, tools::Rectangle& rRect )
 {
     Point aTL;
     Point aBR;
@@ -48,7 +48,7 @@ void ImplReadRect( SvStream& rIStm, tools::Rectangle& rRect )
     rRect = tools::Rectangle( aTL, aBR );
 }
 
-bool ImplReadPoly(SvStream& rIStm, tools::Polygon& rPoly)
+static bool ImplReadPoly(SvStream& rIStm, tools::Polygon& rPoly)
 {
     sal_Int32 nSize32(0);
     rIStm.ReadInt32(nSize32);
@@ -69,7 +69,7 @@ bool ImplReadPoly(SvStream& rIStm, tools::Polygon& rPoly)
     return rIStm.good();
 }
 
-bool ImplReadPolyPoly(SvStream& rIStm, tools::PolyPolygon& rPolyPoly)
+static bool ImplReadPolyPoly(SvStream& rIStm, tools::PolyPolygon& rPolyPoly)
 {
     bool bSuccess = true;
 
@@ -91,7 +91,7 @@ bool ImplReadPolyPoly(SvStream& rIStm, tools::PolyPolygon& rPolyPoly)
     return bSuccess && rIStm.good();
 }
 
-void ImplReadColor( SvStream& rIStm, Color& rColor )
+static void ImplReadColor( SvStream& rIStm, Color& rColor )
 {
     sal_Int16 nVal(0);
 
@@ -100,7 +100,7 @@ void ImplReadColor( SvStream& rIStm, Color& rColor )
     rIStm.ReadInt16( nVal ); rColor.SetBlue( sal::static_int_cast<sal_uInt8>(static_cast<sal_uInt16>(nVal) >> 8) );
 }
 
-bool ImplReadMapMode(SvStream& rIStm, MapMode& rMapMode)
+static bool ImplReadMapMode(SvStream& rIStm, MapMode& rMapMode)
 {
     sal_Int16 nUnit(0);
     rIStm.ReadInt16(nUnit);
@@ -128,7 +128,7 @@ bool ImplReadMapMode(SvStream& rIStm, MapMode& rMapMode)
     return true;
 }
 
-void ImplReadUnicodeComment( sal_uInt32 nStrmPos, SvStream& rIStm, OUString& rString )
+static void ImplReadUnicodeComment( sal_uInt32 nStrmPos, SvStream& rIStm, OUString& rString )
 {
     sal_uInt32 nOld = rIStm.Tell();
     if ( nStrmPos )
@@ -149,7 +149,7 @@ void ImplReadUnicodeComment( sal_uInt32 nStrmPos, SvStream& rIStm, OUString& rSt
     rIStm.Seek( nOld );
 }
 
-void ImplSkipActions(SvStream& rIStm, sal_uLong nSkipCount)
+static void ImplSkipActions(SvStream& rIStm, sal_uLong nSkipCount)
 {
     sal_Int32 nActionSize;
     sal_Int16 nType;
@@ -162,7 +162,7 @@ void ImplSkipActions(SvStream& rIStm, sal_uLong nSkipCount)
     }
 }
 
-void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, tools::PolyPolygon& rPolyPoly)
+static void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, tools::PolyPolygon& rPolyPoly)
 {
     rPolyPoly.Clear();
     sal_uInt16 nPolygonCount(0);

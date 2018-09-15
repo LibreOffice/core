@@ -32,8 +32,8 @@
 #include <rtl/string.h>
 #include <sal/types.h>
 
-char* getPath(void);
-char* createCommandName( char* argv0 );
+static char* getPath(void);
+static char* createCommandName( char* argv0 );
 
 static const int SEPARATOR = '/';
 static const char* PATHSEPARATOR = ":";

@@ -24,7 +24,7 @@
 #include <osl/diagnose.h>
 
 
-bool isGlobal(const OString& scopedName)
+static bool isGlobal(const OString& scopedName)
 {
     return scopedName.isEmpty() || scopedName.startsWith(":");
 }

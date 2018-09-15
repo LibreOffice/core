@@ -297,8 +297,9 @@ getValue( EContact* pContact, sal_Int32 nColumnNum, GType nType, GValue* pStackV
     return true;
 }
 
-extern "C"
-int CompareContacts( gconstpointer _lhs, gconstpointer _rhs, gpointer _userData )
+extern "C" {
+
+static int CompareContacts( gconstpointer _lhs, gconstpointer _rhs, gpointer _userData )
 {
     EContact* lhs = const_cast< gpointer >( _lhs );
     EContact* rhs = const_cast< gpointer >( _rhs );
@@ -353,6 +354,8 @@ int CompareContacts( gconstpointer _lhs, gconstpointer _rhs, gpointer _userData 
     }
 
     return 0;
+}
+
 }
 
 OString OEvoabVersionHelper::getUserName( EBook *pBook )

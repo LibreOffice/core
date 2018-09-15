@@ -26,7 +26,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
-extern "C" void createRegistryInfo_DBU()
+extern "C" {
+
+static void createRegistryInfo_DBU()
 {
     static bool bInit = false;
     if (!bInit)
@@ -57,6 +59,8 @@ extern "C" void createRegistryInfo_DBU()
         createRegistryInfo_LimitBoxController();
         bInit = true;
     }
+}
+
 }
 
 extern "C"  SAL_DLLPUBLIC_EXPORT void* dbu_component_getFactory(

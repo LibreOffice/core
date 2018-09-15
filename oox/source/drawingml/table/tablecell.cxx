@@ -69,7 +69,7 @@ TableCell::~TableCell()
 {
 }
 
-void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
+static void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
         Reference< XPropertySet > const & rxPropSet, oox::drawingml::LineProperties& rLineProperties,
         sal_Int32 nPropId )
 {
@@ -135,7 +135,7 @@ void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
     aPropSet.setProperty( nPropId, aBorderLine );
 }
 
-void applyBorder( const ::oox::core::XmlFilterBase& rFilterBase, TableStylePart& rTableStylePart, sal_Int32 nLineType, oox::drawingml::LineProperties& rLineProperties )
+static void applyBorder( const ::oox::core::XmlFilterBase& rFilterBase, TableStylePart& rTableStylePart, sal_Int32 nLineType, oox::drawingml::LineProperties& rLineProperties )
 {
     std::map < sal_Int32, ::oox::drawingml::LinePropertiesPtr >& rPartLineBorders( rTableStylePart.getLineBorders() );
     ::oox::drawingml::ShapeStyleRef& rLineStyleRef = rTableStylePart.getStyleRefs()[ nLineType ];
@@ -153,7 +153,7 @@ void applyBorder( const ::oox::core::XmlFilterBase& rFilterBase, TableStylePart&
     }
 }
 
-void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase,
+static void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase,
                           oox::drawingml::FillProperties& rFillProperties,
                           TextCharacterProperties& aTextCharProps,
                           oox::drawingml::LineProperties& rLeftBorder,
@@ -201,7 +201,7 @@ void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase,
         aTextCharProps.moItalic = *rTableStylePart.getTextItalicStyle();
 }
 
-void applyTableCellProperties( const Reference < css::table::XCell >& rxCell, const TableCell& rTableCell )
+static void applyTableCellProperties( const Reference < css::table::XCell >& rxCell, const TableCell& rTableCell )
 {
     Reference< XPropertySet > xPropSet( rxCell, UNO_QUERY_THROW );
     xPropSet->setPropertyValue( "TextUpperDistance", Any( static_cast< sal_Int32 >( rTableCell.getTopMargin() / 360 ) ) );

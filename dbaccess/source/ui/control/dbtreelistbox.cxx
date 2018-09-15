@@ -385,7 +385,7 @@ bool DBTreeListBox::DoubleClickHdl()
     return !aDoubleClickHdl.Call( this );
 }
 
-void scrollWindow(DBTreeListBox* _pListBox, const Point& _rPos,bool _bUp)
+static void scrollWindow(DBTreeListBox* _pListBox, const Point& _rPos,bool _bUp)
 {
     SvTreeListEntry* pEntry = _pListBox->GetEntry( _rPos );
     if( pEntry && pEntry != _pListBox->Last() )

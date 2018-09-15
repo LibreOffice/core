@@ -175,7 +175,7 @@ namespace rptxml
         }
     };
 
-void lcl_adjustColumnSpanOverRows(ORptExport::TSectionsGrid& _rGrid)
+static void lcl_adjustColumnSpanOverRows(ORptExport::TSectionsGrid& _rGrid)
 {
     ORptExport::TSectionsGrid::iterator aSectionIter = _rGrid.begin();
     ORptExport::TSectionsGrid::const_iterator aSectionEnd = _rGrid.end();
@@ -477,7 +477,7 @@ void ORptExport::exportReportElement(const Reference<XReportControlModel>& _xRep
         exportComponent(_xReportElement.get());
 }
 
-void lcl_calculate(const ::std::vector<sal_Int32>& _aPosX,const ::std::vector<sal_Int32>& _aPosY,ORptExport::TGrid& _rColumns)
+static void lcl_calculate(const ::std::vector<sal_Int32>& _aPosX,const ::std::vector<sal_Int32>& _aPosY,ORptExport::TGrid& _rColumns)
 {
     sal_Int32 nCountX = _aPosX.size() - 1;
     sal_Int32 nCountY = _aPosY.size() - 1;

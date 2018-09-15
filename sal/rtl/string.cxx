@@ -185,7 +185,7 @@ static int rtl_ImplGetFastUTF8ByteLen( const sal_Unicode* pStr, sal_Int32 nLen )
 
 /* ----------------------------------------------------------------------- */
 
-bool rtl_impl_convertUStringToString(rtl_String ** pTarget,
+static bool rtl_impl_convertUStringToString(rtl_String ** pTarget,
                                                   sal_Unicode const * pSource,
                                                   sal_Int32 nLength,
                                                   rtl_TextEncoding nEncoding,

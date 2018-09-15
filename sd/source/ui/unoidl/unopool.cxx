@@ -29,7 +29,7 @@ using namespace ::com::sun::star;
 using namespace ::cppu;
 using namespace ::comphelper;
 
-LanguageType SdUnoGetLanguage( const lang::Locale& rLocale )
+static LanguageType SdUnoGetLanguage( const lang::Locale& rLocale )
 {
     //  empty language -> LANGUAGE_SYSTEM
     if ( rLocale.Language.getLength() == 0 )

@@ -3826,7 +3826,7 @@ static bool bWasError = false;
 
 extern "C"
 {
-    int local_xerror_handler(Display* , XErrorEvent*)
+    static int local_xerror_handler(Display* , XErrorEvent*)
     {
         bWasError = true;
         return 0;

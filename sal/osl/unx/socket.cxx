@@ -252,34 +252,34 @@ static oslSocketError osl_SocketErrorFromNative(int nativeType)
 
 #define ERROR_FROM_NATIVE(y)    osl_SocketErrorFromNative(y)
 
-oslSocketAddr osl_psz_createInetSocketAddr (
+static oslSocketAddr osl_psz_createInetSocketAddr (
     const sal_Char* pszDottedAddr, sal_Int32 Port);
 
-oslHostAddr osl_psz_createHostAddr (
+static oslHostAddr osl_psz_createHostAddr (
     const sal_Char *pszHostname, const oslSocketAddr Addr);
 
-oslHostAddr osl_psz_createHostAddrByName (
+static oslHostAddr osl_psz_createHostAddrByName (
     const sal_Char *pszHostname);
 
-const sal_Char* osl_psz_getHostnameOfHostAddr (
+static const sal_Char* osl_psz_getHostnameOfHostAddr (
     const oslHostAddr Addr);
 
-oslSocketResult osl_psz_getLocalHostname (
+static oslSocketResult osl_psz_getLocalHostname (
     sal_Char *pBuffer, sal_uInt32 nBufLen);
 
-oslSocketAddr osl_psz_resolveHostname (
+static oslSocketAddr osl_psz_resolveHostname (
     const sal_Char* pszHostname);
 
-sal_Int32 osl_psz_getServicePort (
+static sal_Int32 osl_psz_getServicePort (
     const sal_Char* pszServicename, const sal_Char* pszProtocol);
 
-oslSocketResult osl_psz_getHostnameOfSocketAddr (
+static oslSocketResult osl_psz_getHostnameOfSocketAddr (
     oslSocketAddr Addr, sal_Char *pBuffer, sal_uInt32 BufferSize);
 
-oslSocketResult osl_psz_getDottedInetAddrOfSocketAddr (
+static oslSocketResult osl_psz_getDottedInetAddrOfSocketAddr (
     oslSocketAddr Addr, sal_Char *pBuffer, sal_uInt32 BufferSize);
 
-void osl_psz_getLastSocketErrorDescription (
+static void osl_psz_getLastSocketErrorDescription (
     oslSocket Socket, sal_Char* pBuffer, sal_uInt32 BufferSize);
 
 static oslSocket createSocketImpl(int Socket)

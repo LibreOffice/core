@@ -53,7 +53,7 @@
 #define SMALL_DVALUE    0.0000001
 #define FSQRT2          1.4142135623730950488016887242097
 
-inline double ImplGetParameter( const Point& rCenter, const Point& rPt, double fWR, double fHR )
+static inline double ImplGetParameter( const Point& rCenter, const Point& rPt, double fWR, double fHR )
 {
     const long nDX = rPt.X() - rCenter.X();
     double fAngle = atan2( -rPt.Y() + rCenter.Y(), ( ( nDX == 0 ) ? 0.000000001 : nDX ) );
@@ -1708,7 +1708,7 @@ void Polygon::Write( SvStream& rOStream ) const
 }
 
 // #i74631#/#i115917# numerical correction method for B2DPolygon
-void impCorrectContinuity(basegfx::B2DPolygon& roPolygon, sal_uInt32 nIndex, PolyFlags nCFlag)
+static void impCorrectContinuity(basegfx::B2DPolygon& roPolygon, sal_uInt32 nIndex, PolyFlags nCFlag)
 {
     const sal_uInt32 nPointCount(roPolygon.count());
     OSL_ENSURE(nIndex < nPointCount, "impCorrectContinuity: index access out of range (!)");

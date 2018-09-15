@@ -338,7 +338,7 @@ static Mutex & getInitMutex()
 }
 
 /// @throws Exception
-css::uno::Reference<XInterface> JavaComponentLoader_CreateInstance(const css::uno::Reference<XComponentContext> & xCtx)
+static css::uno::Reference<XInterface> JavaComponentLoader_CreateInstance(const css::uno::Reference<XComponentContext> & xCtx)
 {
     css::uno::Reference<XInterface> xRet;
 

@@ -59,7 +59,7 @@ VbaWindowBase::setVisible( sal_Bool _visible )
     getWindow2()->setVisible( _visible );
 }
 
-void setPosSize( const uno::Reference< awt::XWindow >& xWindow, sal_Int32 nValue, sal_Int16 nFlag )
+static void setPosSize( const uno::Reference< awt::XWindow >& xWindow, sal_Int32 nValue, sal_Int16 nFlag )
 {
     css::awt::Rectangle aRect = xWindow->getPosSize();
     switch( nFlag )

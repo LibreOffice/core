@@ -336,7 +336,7 @@ Sequence<OUString> LangGuess_Impl::getSupportedServiceNames_Static(  )
  * Function to create a new component instance; is needed by factory helper implementation.
  * @param xMgr service manager to if the components needs other component instances
  */
-Reference< XInterface > LangGuess_Impl_create(
+static Reference< XInterface > LangGuess_Impl_create(
     Reference< XComponentContext > const & )
 {
     return static_cast< ::cppu::OWeakObject * >( new LangGuess_Impl );

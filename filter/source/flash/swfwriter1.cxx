@@ -353,7 +353,7 @@ void Writer::setClipping( const tools::PolyPolygon* pClipPolyPolygon )
 //  differences in font that actually require different glyphs to be defined,
 //  and some that don't.  This function is meant to capture all the differences
 //  that we care about.
-bool compare_fonts_for_me(const vcl::Font& rFont1, const vcl::Font& rFont2)
+static bool compare_fonts_for_me(const vcl::Font& rFont1, const vcl::Font& rFont2)
 {
     return rFont1.GetFamilyName() == rFont2.GetFamilyName() &&
             rFont1.GetWeight() == rFont2.GetWeight() &&

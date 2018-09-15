@@ -60,7 +60,7 @@ const
 //    p   q   r   s   t   u   v   w   x   y   z
 
 
-void ThreeByteToFourByte(const sal_Int8* pBuffer, const sal_Int32 nStart, const sal_Int32 nFullLen, sal_Char* aCharBuffer)
+static void ThreeByteToFourByte(const sal_Int8* pBuffer, const sal_Int32 nStart, const sal_Int32 nFullLen, sal_Char* aCharBuffer)
 {
     sal_Int32 nLen(nFullLen - nStart);
     if (nLen > 3)

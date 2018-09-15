@@ -49,7 +49,7 @@ double getRandomOrdinal( const std::size_t n )
     return comphelper::rng::uniform_size_distribution(0, n-1);
 }
 
-inline bool compare(const B2DPoint& left, const B2DPoint& right)
+static inline bool compare(const B2DPoint& left, const B2DPoint& right)
 {
     return left.getX()<right.getX()
         || (rtl::math::approxEqual(left.getX(),right.getX()) && left.getY()<right.getY());

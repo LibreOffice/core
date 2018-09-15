@@ -441,7 +441,7 @@ void JobData::disableJob()
     aConfig.close();
 }
 
-bool isEnabled( const OUString& sAdminTime ,
+static bool isEnabled( const OUString& sAdminTime ,
                     const OUString& sUserTime  )
 {
     /*Attention!

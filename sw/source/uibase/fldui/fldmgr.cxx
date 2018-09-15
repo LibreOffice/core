@@ -364,7 +364,7 @@ static SwWrtShell* lcl_GetShell()
     return nullptr;
 }
 
-inline sal_uInt16 GetPackCount() {  return SAL_N_ELEMENTS(aSwFields); }
+static inline sal_uInt16 GetPackCount() {  return SAL_N_ELEMENTS(aSwFields); }
 
 // FieldManager controls inserting and updating of fields
 SwFieldMgr::SwFieldMgr(SwWrtShell* pSh ) :

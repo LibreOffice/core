@@ -230,7 +230,7 @@ Crypto::CryptoType AgileEngine::cryptoType(const AgileEncryptionInfo& rInfo)
     return Crypto::UNKNOWN;
 }
 
-std::vector<sal_uInt8> calculateIV(comphelper::HashType eType,
+static std::vector<sal_uInt8> calculateIV(comphelper::HashType eType,
                              std::vector<sal_uInt8> const & rSalt,
                              std::vector<sal_uInt8> const & rBlock,
                              sal_Int32 nCipherBlockSize)

@@ -56,7 +56,7 @@ using namespace ::com::sun::star;
 using namespace svt;
 using namespace ::comphelper;
 
-    void lcl_addToList_throw( ComboBoxControl& _rListBox, ::std::vector<ColumnInfo>& o_aColumnList,const uno::Reference< container::XNameAccess>& i_xColumns )
+    static void lcl_addToList_throw( ComboBoxControl& _rListBox, ::std::vector<ColumnInfo>& o_aColumnList,const uno::Reference< container::XNameAccess>& i_xColumns )
     {
         uno::Sequence< OUString > aEntries = i_xColumns->getElementNames();
         const OUString* pEntries = aEntries.getConstArray();
