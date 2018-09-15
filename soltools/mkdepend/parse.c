@@ -30,13 +30,13 @@ in this Software without prior written authorization from the X Consortium.
 #include <ctype.h>
 
 #include "def.h"
-char *hash_lookup( char *symbol, struct symhash *symbols );
-void hash_undefine( char *symbol, struct symhash *symbols );
-int gobble( struct filepointer *filep, struct inclist *file,
+static char *hash_lookup( char *symbol, struct symhash *symbols );
+static void hash_undefine( char *symbol, struct symhash *symbols );
+static int gobble( struct filepointer *filep, struct inclist *file,
     struct inclist *file_red, struct symhash *symbols );
-int deftype ( char *line, struct filepointer *filep, struct inclist *file,
+static int deftype ( char *line, struct filepointer *filep, struct inclist *file,
     int parse_it, struct symhash *symbols);
-int zero_value(char const *exp, struct symhash *symbols);
+static int zero_value(char const *exp, struct symhash *symbols);
 
 extern struct symhash *maininclist;
 

@@ -85,7 +85,7 @@ typedef _W64 int   ssize_t;
 int _debugmask;
 #endif
 
-char *ProgramName;
+static char *ProgramName;
 
 #define OBJSUFFIX ".obj"
 #define INCLUDEDIR "."
@@ -115,16 +115,15 @@ char    *directives[] = {
 
 /*******   function declarations ********/
 /*******   added by -Wall project *******/
-void redirect(char * makefile);
+static void redirect(char * makefile);
 
-struct  inclist inclist[ MAXFILES ],
-                *inclistp = inclist;
+struct  inclist inclist[ MAXFILES ];
+struct  inclist *inclistp = inclist;
 
 static struct symhash *maininclist = NULL;
 
-char    *filelist[ MAXFILES ];
+static char    *filelist[ MAXFILES ];
 char    *includedirs[ MAXDIRS + 1 ];
-char    *notdotdot[ MAXDIRS ];
 char    *objprefix = "";
 char    *objsuffix = OBJSUFFIX;
 static char    *startat = "# DO NOT DELETE";
@@ -158,7 +157,7 @@ catch (int sig)
 #define sa_mask sv_mask
 #define sa_flags sv_flags
 #endif
-struct sigaction sig_act;
+static struct sigaction sig_act;
 #endif /* USGISH */
 
 static boolean native_win_slashes = FALSE;

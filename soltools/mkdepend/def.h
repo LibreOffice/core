@@ -189,7 +189,10 @@ char *append_slash(char *);
 
 extern char * directives[];
 
+extern struct inclist inclist[ MAXFILES ];
 extern struct inclist * inclistp;
+
+extern char *includedirs[ ];
 
 extern char * objprefix;
 

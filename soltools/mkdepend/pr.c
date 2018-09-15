@@ -29,9 +29,8 @@ in this Software without prior written authorization from the X Consortium.
 
 #include "def.h"
 #include <string.h>
-size_t pr( struct inclist *ip, char *file,char *base);
+static size_t pr( struct inclist *ip, char *file,char *base);
 
-extern struct   inclist inclist[ MAXFILES ];
 extern int  width;
 
 void add_include(struct filepointer *filep, struct inclist *file, struct inclist *file_red, char *include, boolean dot, boolean failOK, struct IncludesCollection* incCollection, struct symhash *symbols)
@@ -73,7 +72,7 @@ void add_include(struct filepointer *filep, struct inclist *file, struct inclist
     }
 }
 
-void pr_dummy(struct inclist const *ip)
+static void pr_dummy(struct inclist const *ip)
 {
     fwrite(ip->i_file, strlen(ip->i_file), 1, stdout);
     fwrite(" :\n\n", 4, 1, stdout);
