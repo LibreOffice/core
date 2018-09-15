@@ -31,16 +31,14 @@ in this Software without prior written authorization from the X Consortium.
 #include "def.h"
 #include <string.h>
 
-void remove_dotdot( char * );
-int isdot( char const * );
-int isdotdot( char const * );
-int issymbolic(char * dir, char * component);
-int exists_path(struct IncludesCollection*, char*);
+static void remove_dotdot( char * );
+static int isdot( char const * );
+static int isdotdot( char const * );
+static int issymbolic(char * dir, char * component);
+static int exists_path(struct IncludesCollection*, char*);
 
 
-extern struct inclist inclist[ MAXFILES ];
-extern char *includedirs[ ];
-extern char *notdotdot[ ];
+static char *notdotdot[ MAXDIRS ];
 
 struct inclist *inc_path(char *file, char *include, boolean dot, struct IncludesCollection *incCollection)
 {
