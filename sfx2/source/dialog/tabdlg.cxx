@@ -2016,6 +2016,18 @@ void SfxTabDialogController::AddTabPage
     m_pImpl->aData.push_back(new Data_Impl(m_pImpl->aData.size(), rName, pCreateFunc, pRangesFunc));
 }
 
+void SfxTabDialogController::AddTabPage
+(
+    const OString &rName,          // Page ID
+    sal_uInt16 nPageCreateId       // Identifier of the Factory Method to create the page
+)
+{
+    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+    CreateTabPage pCreateFunc = pFact->GetTabPageCreatorFunc(nPageCreateId);
+    GetTabPageRanges pRangesFunc = pFact->GetTabPageRangesFunc(nPageCreateId);
+    AddTabPage(rName, pCreateFunc, pRangesFunc);
+}
+
 void SfxTabDialogController::CreatePages()
 {
     for (auto pDataObject : m_pImpl->aData)

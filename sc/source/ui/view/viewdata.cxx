@@ -2654,13 +2654,13 @@ ScDocFunc& ScViewData::GetDocFunc() const
 
 SfxBindings& ScViewData::GetBindings()
 {
-    OSL_ENSURE( pViewShell, "GetBindings() without ViewShell" );
+    assert(pViewShell && "GetBindings() without ViewShell");
     return pViewShell->GetViewFrame()->GetBindings();
 }
 
 SfxDispatcher& ScViewData::GetDispatcher()
 {
-    OSL_ENSURE( pViewShell, "GetDispatcher() without ViewShell" );
+    assert(pViewShell && "GetDispatcher() without ViewShell");
     return *pViewShell->GetViewFrame()->GetDispatcher();
 }
 
@@ -2676,31 +2676,37 @@ const ScMarkData& ScViewData::GetMarkData() const
 
 vcl::Window* ScViewData::GetDialogParent()
 {
-    OSL_ENSURE( pViewShell, "GetDialogParent() without ViewShell" );
+    assert(pViewShell && "GetDialogParent() without ViewShell");
     return pViewShell->GetDialogParent();
+}
+
+weld::Window* ScViewData::GetFrameWeld()
+{
+    assert(pViewShell && "GetDialogParent() without ViewShell");
+    return pViewShell->GetFrameWeld();
 }
 
 ScGridWindow* ScViewData::GetActiveWin()
 {
-    OSL_ENSURE( pView, "GetActiveWin() without View" );
+    assert(pView && "GetActiveWin() without View");
     return pView->GetActiveWin();
 }
 
 const ScGridWindow* ScViewData::GetActiveWin() const
 {
-    OSL_ENSURE( pView, "GetActiveWin() without View" );
+    assert(pView && "GetActiveWin() without View");
     return pView->GetActiveWin();
 }
 
 ScDrawView* ScViewData::GetScDrawView()
 {
-    OSL_ENSURE( pView, "GetScDrawView() without View" );
+    assert(pView && "GetScDrawView() without View");
     return pView->GetScDrawView();
 }
 
 bool ScViewData::IsMinimized()
 {
-    OSL_ENSURE( pView, "IsMinimized() without View" );
+    assert(pView && "IsMinimized() without View");
     return pView->IsMinimized();
 }
 
