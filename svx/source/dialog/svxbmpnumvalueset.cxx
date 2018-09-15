@@ -818,6 +818,7 @@ void NumValueSet::SetOutlineNumberingSettings(
 SvxBmpNumValueSet::SvxBmpNumValueSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
     : NumValueSet(std::move(pScrolledWindow))
     , aFormatIdle("SvxBmpNumValueSet FormatIdle")
+    , bGrfNotFound(false)
 {
 }
 
