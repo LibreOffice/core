@@ -47,7 +47,7 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     /// graphics context for Quartz 2D
     CGContextRef                            mrContext;
     /// memory for graphics bitmap context for querying metrics
-    std::shared_ptr<sal_uInt8> mpContextMemory;
+    std::unique_ptr<sal_uInt8[]> mpContextMemory;
 
     // since changes to NSPrintInfo during a job are ignored
     // we have to care for some settings ourselves
