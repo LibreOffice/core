@@ -290,14 +290,13 @@ void SwEnvFormatPage::Edit(const OString& rIdent, bool bSender)
         ::PrepareBoxInfo( aTmpSet, *pSh );
 
         const OUString sFormatStr = pColl->GetName();
-        VclPtrInstance< SwParaDlg > pDlg(nullptr /*TODO*/, pSh->GetView(), aTmpSet, DLG_ENVELOP, &sFormatStr);
-        //VclPtrInstance< SwParaDlg > pDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, DLG_ENVELOP, &sFormatStr);
+        SwParaDlg aDlg(GetDialogFrameWeld(), pSh->GetView(), aTmpSet, DLG_ENVELOP, &sFormatStr);
 
-        if ( pDlg->Execute() == RET_OK )
+        if (aDlg.execute() == RET_OK)
         {
             // maybe relocate defaults
             const SfxPoolItem* pItem = nullptr;
-            SfxItemSet* pOutputSet = const_cast<SfxItemSet*>(pDlg->GetOutputItemSet());
+            SfxItemSet* pOutputSet = const_cast<SfxItemSet*>(aDlg.GetOutputItemSet());
             sal_uInt16 nNewDist;
 
             if( SfxItemState::SET == pOutputSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS,

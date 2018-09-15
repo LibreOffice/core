@@ -312,7 +312,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="comboPageStyle">
+                  <object class="GtkComboBoxText" id="comboPageStyle">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <accessibility>
