@@ -62,6 +62,9 @@ public:
     void        CompositeTrapezoids( int nOp, Picture aSrc, Picture aDst,
                     const XRenderPictFormat*, int nXSrc, int nYSrc,
                     const XTrapezoid*, int nCount ) const;
+    void        CompositeTriangles( int nOp, Picture aSrc, Picture aDst,
+                    const XRenderPictFormat*, int nXSrc, int nYSrc,
+                    const XTriangle*, int nCount ) const;
 };
 
 inline XRenderPictFormat* XRenderPeer::GetStandardFormatA8() const
@@ -124,6 +127,14 @@ inline void XRenderPeer::CompositeTrapezoids( int nOp,
     int nXSrc, int nYSrc, const XTrapezoid* pXT, int nCount ) const
 {
     XRenderCompositeTrapezoids( mpDisplay, nOp, aSrc, aDst, pXRPF,
+        nXSrc, nYSrc, pXT, nCount );
+}
+
+inline void XRenderPeer::CompositeTriangles( int nOp,
+    Picture aSrc, Picture aDst, const XRenderPictFormat* pXRPF,
+    int nXSrc, int nYSrc, const XTriangle* pXT, int nCount ) const
+{
+    XRenderCompositeTriangles( mpDisplay, nOp, aSrc, aDst, pXRPF,
         nXSrc, nYSrc, pXT, nCount );
 }
 
