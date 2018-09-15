@@ -191,18 +191,35 @@ namespace oglcanvas
                     const double fHeight=maSize.Height;
 
                     // TODO(P3): buffer triangulation
-                    const ::basegfx::B2DPolygon& rTriangulatedPolygon(
+                    const ::basegfx::triangulator::B2DTriangleVector rTriangulatedPolygon(
                         ::basegfx::triangulator::triangulate(
                             ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(mxClip)));
 
                     glBegin(GL_TRIANGLES);
-                    for( sal_uInt32 i=0; i<rTriangulatedPolygon.count(); i++ )
+                    for( size_t i=0; i<rTriangulatedPolygon.size(); i++ )
                     {
-                        const ::basegfx::B2DPoint& rPt( rTriangulatedPolygon.getB2DPoint(i) );
-                        const double s(rPt.getX()/fWidth);
-                        const double t(rPt.getY()/fHeight);
-                        glTexCoord2f(s,t); glVertex2d(rPt.getX(), rPt.getY());
-                    }
+                        const::basegfx::triangulator::B2DTriangle& rCandidate(rTriangulatedPolygon[i]);
+                        glTexCoord2f(
+                            rCandidate.getA().getX()/fWidth,
+                            rCandidate.getA().getY()/fHeight);
+                        glVertex2d(
+                            rCandidate.getA().getX(),
+                            rCandidate.getA().getY());
+
+                        glTexCoord2f(
+                            rCandidate.getB().getX()/fWidth,
+                            rCandidate.getB().getY()/fHeight);
+                        glVertex2d(
+                            rCandidate.getB().getX(),
+                            rCandidate.getB().getY());
+
+                        glTexCoord2f(
+                            rCandidate.getC().getX()/fWidth,
+                            rCandidate.getC().getY()/fHeight);
+                        glVertex2d(
+                            rCandidate.getC().getX(),
+                            rCandidate.getC().getY());
+                     }
                     glEnd();
                 }
                 else
