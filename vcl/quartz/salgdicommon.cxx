@@ -302,21 +302,21 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
 
     // fill the pGlyphWidths array
     // while making sure that the NotDef glyph is at index==0
-    TTSimpleGlyphMetrics* pGlyphMetrics = ::GetTTSimpleGlyphMetrics( pSftFont, aShortIDs,
+    std::unique_ptr<sal_uInt16[]> pGlyphMetrics = ::GetTTSimpleGlyphMetrics( pSftFont, aShortIDs,
                                                                      nGlyphCount, bVertical );
     if( !pGlyphMetrics )
     {
         return false;
     }
 
-    sal_uInt16 nNotDefAdv = pGlyphMetrics[0].adv;
-    pGlyphMetrics[0].adv = pGlyphMetrics[nNotDef].adv;
-    pGlyphMetrics[nNotDef].adv  = nNotDefAdv;
+    sal_uInt16 nNotDefAdv = pGlyphMetrics[0];
+    pGlyphMetrics[0] = pGlyphMetrics[nNotDef];
+    pGlyphMetrics[nNotDef]  = nNotDefAdv;
     for( int i = 0; i < nOrigCount; ++i )
     {
-        pGlyphWidths[i] = pGlyphMetrics[i].adv;
+        pGlyphWidths[i] = pGlyphMetrics[i];
     }
-    free( pGlyphMetrics );
+    pGlyphMetrics.reset();
 
     // write subset into destination file
     nRC = ::CreateTTFromTTGlyphs( pSftFont, aToFile.getStr(), aShortIDs,
