@@ -31,23 +31,19 @@
 #include <svl/intitem.hxx>
 #include <svx/flagsdef.hxx>
 
-ScCharDlg::ScCharDlg( vcl::Window* pParent, const SfxItemSet* pAttr,
-                    const SfxObjectShell* pDocShell )
-    : SfxTabDialog(pParent, "CharDialog",
-        "modules/scalc/ui/chardialog.ui", pAttr)
+ScCharDlg::ScCharDlg(weld::Window* pParent, const SfxItemSet* pAttr, const SfxObjectShell* pDocShell)
+    : SfxTabDialogController(pParent, "modules/scalc/ui/chardialog.ui", "CharDialog", pAttr)
     , rDocShell(*pDocShell)
-    , m_nNamePageId(0)
-    , m_nEffectsPageId(0)
 {
-    m_nNamePageId = AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
-    m_nEffectsPageId = AddTabPage("fonteffects", RID_SVXPAGE_CHAR_EFFECTS);
+    AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
+    AddTabPage("fonteffects", RID_SVXPAGE_CHAR_EFFECTS);
     AddTabPage("position", RID_SVXPAGE_CHAR_POSITION);
 }
 
-void ScCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void ScCharDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-    if (nId == m_nNamePageId)
+    if (rId == "font")
     {
         SvxFontListItem aItem(*static_cast<const SvxFontListItem*>(
             ( rDocShell.GetItem( SID_ATTR_CHAR_FONTLIST) ) ) );
@@ -55,7 +51,7 @@ void ScCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         aSet.Put (SvxFontListItem( aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
         rPage.PageCreated(aSet);
     }
-    else if (nId == m_nEffectsPageId)
+    else if (rId == "fonteffects")
     {
         aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP));
         rPage.PageCreated(aSet);

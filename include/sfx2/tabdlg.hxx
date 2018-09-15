@@ -288,9 +288,13 @@ public:
                            const SfxItemSet * = nullptr, bool bEditFmt = false);
     virtual ~SfxTabDialogController() override;
 
-    void                AddTabPage( const OString& rName,           // Name of the label for the page in the notebook .ui
-                                    CreateTabPage pCreateFunc,      // != 0
-                                    GetTabPageRanges pRangesFunc);  // can be 0
+    void                AddTabPage(const OString& rName,           // Name of the label for the page in the notebook .ui
+                                   CreateTabPage pCreateFunc,      // != 0
+                                   GetTabPageRanges pRangesFunc);  // can be 0
+
+    void                AddTabPage(const OString &rName,          // Name of the label for the page in the notebook .ui
+                                   sal_uInt16 nPageCreateId);     // Identifier of the Factory Method to create the page
+
     void                RemoveTabPage( const OString& rName ); // Name of the label for the page in the notebook .ui
 
     void                SetCurPageId(const OString& rName);

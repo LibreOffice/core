@@ -44,7 +44,7 @@ bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
 {
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScCharDlg(
-        pViewData->GetDialogParent(), &rArgs,
+        pViewData->GetFrameWeld(), &rArgs,
         pViewData->GetSfxDocShell()));
     if (nSlot == SID_CHAR_DLG_EFFECT)
     {
