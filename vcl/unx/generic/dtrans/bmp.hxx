@@ -36,8 +36,6 @@ sal_uInt8* X11_getBmpFromPixmap( Display* pDisplay,
                                  Colormap aColormap,
                                  sal_Int32& rOutSize );
 
-void X11_freeBmp( sal_uInt8* pBmp );
-
 class PixmapHolder
 {
     Display*        m_pDisplay;
