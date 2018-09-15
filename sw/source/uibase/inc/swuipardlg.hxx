@@ -20,31 +20,22 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SWUIPARDLG_HXX
 #include "pardlg.hxx"
 
-class SwParaDlg: public SfxTabDialog
+class SwParaDlg: public SfxTabDialogController
 {
     SwView& rView;
     sal_uInt16 nHtmlMode;
     bool bDrawParaDlg;
 
-    sal_uInt16 m_nParaStd;
-    sal_uInt16 m_nParaAlign;
-    sal_uInt16 m_nParaExt;
-    sal_uInt16 m_nParaNumPara;
-    sal_uInt16 m_nParaDrpCps;
-    sal_uInt16 m_nParaBorder;
-    sal_uInt16 m_nAreaId;
-    sal_uInt16 m_nTransparenceId;
-
-    void PageCreated(sal_uInt16 nId, SfxTabPage& rPage) override;
+    void PageCreated(const OString& rId, SfxTabPage& rPage) override;
 
 public:
-    SwParaDlg(  vcl::Window *pParent,
-                SwView& rVw,
-                const SfxItemSet&,
-                sal_uInt8 nDialogMode,
-                const OUString *pCollName,
-                bool bDraw = false,
-                const OString& sDefPage = OString());
+    SwParaDlg(weld::Window *pParent,
+              SwView& rVw,
+              const SfxItemSet&,
+              sal_uInt8 nDialogMode,
+              const OUString *pCollName,
+              bool bDraw = false,
+              const OString& sDefPage = OString());
     virtual ~SwParaDlg() override;
 };
 
