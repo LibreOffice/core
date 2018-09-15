@@ -456,7 +456,7 @@ struct MapEntry {
     Memory32 data;
 };
 
-bool operator <(const Map& map1, const Map& map2) {
+static bool operator <(const Map& map1, const Map& map2) {
     return map1.begin < map2.begin
         || (map1.begin == map2.begin && map1.size < map2.size);
 }

@@ -54,7 +54,7 @@ using namespace ::com::sun::star::util;
 typedef std::set<SwFormat*> SwpFormats;
 
 // Special case for SvxFontItem: only compare the name
-bool CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
+static bool CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
 {
     switch( rItem1.Which() )
     {

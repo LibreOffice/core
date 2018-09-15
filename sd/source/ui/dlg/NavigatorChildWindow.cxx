@@ -30,7 +30,7 @@ namespace sd {
 
 SFX_IMPL_CHILDWINDOWCONTEXT(NavigatorChildWindow, SID_NAVIGATOR)
 
-void RequestNavigatorUpdate (SfxBindings const * pBindings)
+static void RequestNavigatorUpdate (SfxBindings const * pBindings)
 {
     if (pBindings != nullptr
         && pBindings->GetDispatcher() != nullptr)

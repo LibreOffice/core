@@ -83,7 +83,7 @@ namespace accessibility
     // Static Helper
 
 
-    ESelection MakeSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
+    static ESelection MakeSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                               sal_Int32 nEndPara, sal_Int32 nEndIndex )
     {
         DBG_ASSERT(nStartPara >= 0 &&

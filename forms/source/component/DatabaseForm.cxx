@@ -2087,7 +2087,7 @@ void SAL_CALL ODatabaseForm::submit( const Reference<XControl>& Control,
     }
 }
 
-void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLTransformer>& xTransformer,const OUString& aURLStr,const OUString& aReferer,const OUString& aTargetName
+static void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLTransformer>& xTransformer,const OUString& aURLStr,const OUString& aReferer,const OUString& aTargetName
                   ,const OUString& aData,rtl_TextEncoding _eEncoding)
 {
     URL aURL;

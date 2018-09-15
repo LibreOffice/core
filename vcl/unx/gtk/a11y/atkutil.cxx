@@ -620,7 +620,7 @@ static void handle_menu_highlighted(::VclMenuEvent const * pEvent)
 
 /*****************************************************************************/
 
-void WindowEventHandler(void *, VclSimpleEvent& rEvent)
+static void WindowEventHandler(void *, VclSimpleEvent& rEvent)
 {
     try
     {

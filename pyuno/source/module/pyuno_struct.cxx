@@ -47,7 +47,7 @@ using com::sun::star::beans::XMaterialHolder;
 namespace pyuno
 {
 
-void PyUNOStruct_del( PyObject* self )
+static void PyUNOStruct_del( PyObject* self )
 {
     PyUNO *me = reinterpret_cast<PyUNO*>( self );
     {
@@ -57,7 +57,7 @@ void PyUNOStruct_del( PyObject* self )
     PyObject_Del( self );
 }
 
-PyObject *PyUNOStruct_str( PyObject *self )
+static PyObject *PyUNOStruct_str( PyObject *self )
 {
     PyUNO *me = reinterpret_cast<PyUNO*>( self );
     OStringBuffer buf;
@@ -74,7 +74,7 @@ PyObject *PyUNOStruct_str( PyObject *self )
     return PyStr_FromString( buf.getStr());
 }
 
-PyObject *PyUNOStruct_repr( PyObject *self )
+static PyObject *PyUNOStruct_repr( PyObject *self )
 {
     PyUNO *me = reinterpret_cast<PyUNO*>( self );
     PyObject *ret = nullptr;
@@ -99,7 +99,7 @@ PyObject *PyUNOStruct_repr( PyObject *self )
     return ret;
 }
 
-PyObject* PyUNOStruct_dir( PyObject *self )
+static PyObject* PyUNOStruct_dir( PyObject *self )
 {
     PyUNO *me = reinterpret_cast<PyUNO*>( self );
 
@@ -122,7 +122,7 @@ PyObject* PyUNOStruct_dir( PyObject *self )
     return member_list;
 }
 
-PyObject* PyUNOStruct_getattr( PyObject* self, char* name )
+static PyObject* PyUNOStruct_getattr( PyObject* self, char* name )
 {
     PyUNO *me = reinterpret_cast<PyUNO*>( self );
 
@@ -188,7 +188,7 @@ PyObject* PyUNOStruct_getattr( PyObject* self, char* name )
     return nullptr;
 }
 
-int PyUNOStruct_setattr (PyObject* self, char* name, PyObject* value)
+static int PyUNOStruct_setattr (PyObject* self, char* name, PyObject* value)
 {
     PyUNO* me;
 

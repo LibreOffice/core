@@ -358,7 +358,7 @@ void ScParallelismTest::testSingleRef()
 }
 
 // Common test setup steps for testSUMIFImplicitRange*()
-void lcl_setupCommon(ScDocument* pDoc, size_t nNumRows, size_t nConstCellValue)
+static void lcl_setupCommon(ScDocument* pDoc, size_t nNumRows, size_t nConstCellValue)
 {
     pDoc->SetValue(3, 0, 0, static_cast<double>(nConstCellValue));  // D1
     for (size_t i = 0; i <= (nNumRows*2); ++i)

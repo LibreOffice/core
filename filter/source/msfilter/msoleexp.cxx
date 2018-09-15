@@ -48,7 +48,7 @@
 
 using namespace ::com::sun::star;
 
-SvGlobalName GetEmbeddedVersion( const SvGlobalName& aAppName )
+static SvGlobalName GetEmbeddedVersion( const SvGlobalName& aAppName )
 {
     if ( aAppName == SvGlobalName( SO3_SM_CLASSID_60 ) )
             return SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_8 );
@@ -66,7 +66,7 @@ SvGlobalName GetEmbeddedVersion( const SvGlobalName& aAppName )
     return SvGlobalName();
 }
 
-OUString GetStorageType( const SvGlobalName& aEmbName )
+static OUString GetStorageType( const SvGlobalName& aEmbName )
 {
     if ( aEmbName == SvGlobalName( SO3_SM_OLE_EMBED_CLASSID_8 ) )
         return OUString( "LibreOffice.MathDocument.1" );
@@ -83,7 +83,7 @@ OUString GetStorageType( const SvGlobalName& aEmbName )
     return OUString();
 }
 
-bool UseOldMSExport()
+static bool UseOldMSExport()
 {
     uno::Reference< lang::XMultiServiceFactory > xProvider(
         configuration::theDefaultProvider::get(

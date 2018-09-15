@@ -26,7 +26,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-uno::Any AnnotationToComment( const uno::Any& aSource, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel )
+static uno::Any AnnotationToComment( const uno::Any& aSource, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< sheet::XSheetAnnotation > xAnno( aSource, uno::UNO_QUERY_THROW );
     uno::Reference< container::XChild > xChild( xAnno, uno::UNO_QUERY_THROW );

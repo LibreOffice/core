@@ -260,7 +260,7 @@ void DBConnector::getValue(long nCol, ScDPItemData &rData, SvNumFormatType& rNum
 
 }
 
-sheet::DataPilotFieldOrientation lcl_GetDataGetOrientation( const uno::Reference<sheet::XDimensionsSupplier>& xSource )
+static sheet::DataPilotFieldOrientation lcl_GetDataGetOrientation( const uno::Reference<sheet::XDimensionsSupplier>& xSource )
 {
     sheet::DataPilotFieldOrientation nRet = sheet::DataPilotFieldOrientation_HIDDEN;
     if ( xSource.is() )
@@ -2155,7 +2155,7 @@ public:
 
 }
 
-void lcl_FillOldFields( ScPivotFieldVector& rFields,
+static void lcl_FillOldFields( ScPivotFieldVector& rFields,
     const uno::Reference<sheet::XDimensionsSupplier>& xSource,
     sheet::DataPilotFieldOrientation nOrient, bool bAddData )
 {

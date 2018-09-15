@@ -333,7 +333,7 @@ struct Singleton:
 namespace framework {
 
 // right now we assume there's one matching listener
-uno::Reference<ui::XContextChangeEventListener> GetFirstListenerWith_ImplImpl(
+static uno::Reference<ui::XContextChangeEventListener> GetFirstListenerWith_ImplImpl(
     uno::Reference<uno::XInterface> const& xEventFocus,
     std::function<bool (uno::Reference<ui::XContextChangeEventListener> const&)> const& rPredicate)
 {

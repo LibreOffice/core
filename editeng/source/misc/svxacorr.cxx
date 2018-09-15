@@ -104,7 +104,7 @@ static const sal_Char
     /* also at these ends - Brackets and all kinds of begin characters */
     sImplEndSkipChars[] = "\"\')]}\x83\x84\x89\x91\x92\x93\x94";
 
-OUString EncryptBlockName_Imp(const OUString& rName);
+static OUString EncryptBlockName_Imp(const OUString& rName);
 
 static inline bool NonFieldWordDelim( const sal_Unicode c )
 {
@@ -130,7 +130,7 @@ static inline bool IsUpperLetter( sal_Int32 nCharType )
             ( css::i18n::KCharacterType::UPPER & nCharType);
 }
 
-bool lcl_IsUnsupportedUnicodeChar( CharClass const & rCC, const OUString& rTxt,
+static bool lcl_IsUnsupportedUnicodeChar( CharClass const & rCC, const OUString& rTxt,
                                    sal_Int32 nStt, sal_Int32 nEnd )
 {
     for( ; nStt < nEnd; ++nStt )

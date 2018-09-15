@@ -113,7 +113,7 @@ void RptMLMasterStylesContext_Impl::EndElement()
 }
 
     /// read a component (file + filter version)
-ErrCode ReadThroughComponent(
+static ErrCode ReadThroughComponent(
     const uno::Reference<XInputStream>& xInputStream,
     const uno::Reference<XComponent>& xModelComponent,
     const uno::Reference<XComponentContext> & rContext,
@@ -176,7 +176,7 @@ ErrCode ReadThroughComponent(
 }
 
 /// read a component (storage version)
-ErrCode ReadThroughComponent(
+static ErrCode ReadThroughComponent(
     const uno::Reference< embed::XStorage >& xStorage,
     const uno::Reference<XComponent>& xModelComponent,
     const sal_Char* pStreamName,

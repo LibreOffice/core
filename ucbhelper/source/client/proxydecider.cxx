@@ -226,7 +226,7 @@ bool WildCard::Matches( const OUString& rString ) const
 }
 
 
-bool getConfigStringValue(
+static bool getConfigStringValue(
     const uno::Reference< container::XNameAccess > & xNameAccess,
     const char * key,
     OUString & value )
@@ -253,7 +253,7 @@ bool getConfigStringValue(
 }
 
 
-bool getConfigInt32Value(
+static bool getConfigInt32Value(
     const uno::Reference< container::XNameAccess > & xNameAccess,
     const char * key,
     sal_Int32 & value )

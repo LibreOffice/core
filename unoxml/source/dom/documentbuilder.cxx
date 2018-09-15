@@ -333,7 +333,7 @@ namespace DOM
     }
     } // extern "C"
 
-    void throwEx(xmlParserCtxtPtr ctxt)
+    static void throwEx(xmlParserCtxtPtr ctxt)
     {
         css::xml::sax::SAXParseException saxex;
         saxex.Message = make_error_message(ctxt);

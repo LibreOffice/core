@@ -44,7 +44,7 @@ using ::rtl::OString;
 
 /** print last error of pipe system.
  */
-inline void printPipeError( ::osl::Pipe const & aPipe )
+static inline void printPipeError( ::osl::Pipe const & aPipe )
 {
     oslPipeError nError = aPipe.getError( );
     printf("#printPipeError# " );
@@ -738,7 +738,7 @@ namespace osl_StreamPipe
 
     /** wait _nSec seconds.
      */
-    void thread_sleep( sal_uInt32 _nSec )
+    static void thread_sleep( sal_uInt32 _nSec )
     {
         /// print statement in thread process must use fflush() to force display.
         fflush(stdout);

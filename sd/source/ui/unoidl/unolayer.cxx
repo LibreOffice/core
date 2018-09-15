@@ -59,7 +59,7 @@ using namespace ::com::sun::star;
 #define WID_LAYER_TITLE     5
 #define WID_LAYER_DESC      6
 
-const SvxItemPropertySet* ImplGetSdLayerPropertySet()
+static const SvxItemPropertySet* ImplGetSdLayerPropertySet()
 {
     static const SfxItemPropertyMapEntry aSdLayerPropertyMap_Impl[] =
     {

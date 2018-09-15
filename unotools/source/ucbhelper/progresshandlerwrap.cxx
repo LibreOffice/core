@@ -31,7 +31,7 @@ ProgressHandlerWrap::ProgressHandlerWrap( css::uno::Reference< css::task::XStatu
 {
 }
 
-bool getStatusFromAny_Impl( const Any& aAny, OUString& aText, sal_Int32& nNum )
+static bool getStatusFromAny_Impl( const Any& aAny, OUString& aText, sal_Int32& nNum )
 {
     bool bNumIsSet = false;
 

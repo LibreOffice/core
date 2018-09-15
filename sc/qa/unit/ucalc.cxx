@@ -1667,7 +1667,7 @@ void Test::testCSV()
 }
 
 template<typename Evaluator>
-void checkMatrixElements(const ScMatrix& rMat)
+static void checkMatrixElements(const ScMatrix& rMat)
 {
     SCSIZE nC, nR;
     rMat.GetDimensions(nC, nR);
@@ -5826,7 +5826,7 @@ void Test::testCellTextWidth()
     m_pDoc->DeleteTab(0);
 }
 
-bool checkEditTextIterator(sc::EditTextIterator& rIter, const char** pChecks)
+static bool checkEditTextIterator(sc::EditTextIterator& rIter, const char** pChecks)
 {
     const EditTextObject* pText = rIter.first();
     const char* p = *pChecks;

@@ -5064,7 +5064,7 @@ static void lcl_SvNumberformat_AddLimitStringImpl( OUString& rStr,
     rStr += "]";
 }
 
-void lcl_insertLCID( OUStringBuffer& rFormatStr, sal_uInt32 nLCID, sal_Int32 nPosInsertLCID, bool bDBNumInserted )
+static void lcl_insertLCID( OUStringBuffer& rFormatStr, sal_uInt32 nLCID, sal_Int32 nPosInsertLCID, bool bDBNumInserted )
 {
     if ( nLCID == 0 )
         return;
@@ -5090,7 +5090,7 @@ void lcl_insertLCID( OUStringBuffer& rFormatStr, sal_uInt32 nLCID, sal_Int32 nPo
  * +1 for financial numerals [NatNum2]
  * +2 for Arabic fullwidth numerals [NatNum3]
  * */
-void lcl_incrementAlphabetWithNatNum ( sal_uInt32& nAlphabetID, sal_uInt32 nNatNum )
+static void lcl_incrementAlphabetWithNatNum ( sal_uInt32& nAlphabetID, sal_uInt32 nNatNum )
 {
     if ( nNatNum == 2) // financial
         nAlphabetID += 1;

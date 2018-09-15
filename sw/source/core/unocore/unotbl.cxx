@@ -532,7 +532,7 @@ OUString sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
   @param i_bTopLeft if true, find top left box, otherwise find bottom
          right box
  */
-const SwTableBox* lcl_FindCornerTableBox(const SwTableLines& rTableLines, const bool i_bTopLeft)
+static const SwTableBox* lcl_FindCornerTableBox(const SwTableLines& rTableLines, const bool i_bTopLeft)
 {
     const SwTableLines* pLines(&rTableLines);
     while(true)

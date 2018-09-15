@@ -833,7 +833,7 @@ bool Font::needsRichTextFormat() const
     return maApiData.mnEscapement != API_ESCAPE_NONE;
 }
 
-::FontFamily lcl_getFontFamily( sal_Int32 nFamily )
+static ::FontFamily lcl_getFontFamily( sal_Int32 nFamily )
 {
     ::FontFamily eScFamily = FAMILY_DONTKNOW;
     switch( nFamily )

@@ -45,7 +45,7 @@ using namespace com::sun::star::container;
 
 namespace framework
 {
-OUString getHashKeyFromStrings( const OUString& aCommandURL, const OUString& aModuleName )
+static OUString getHashKeyFromStrings( const OUString& aCommandURL, const OUString& aModuleName )
 {
     OUStringBuffer aKey( aCommandURL );
     aKey.append( "-" );

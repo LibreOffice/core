@@ -81,7 +81,7 @@ gtv_calc_header_bar_finalize(GObject* object)
     G_OBJECT_CLASS (gtv_calc_header_bar_parent_class)->finalize (object);
 }
 
-void gtv_calc_header_bar_draw_text(cairo_t* pCairo, const GdkRectangle& rRectangle, const std::string& rText)
+static void gtv_calc_header_bar_draw_text(cairo_t* pCairo, const GdkRectangle& rRectangle, const std::string& rText)
 {
     cairo_text_extents_t extents;
     cairo_text_extents(pCairo, rText.c_str(), &extents);
@@ -90,7 +90,7 @@ void gtv_calc_header_bar_draw_text(cairo_t* pCairo, const GdkRectangle& rRectang
     cairo_show_text(pCairo, rText.c_str());
 }
 
-gboolean gtv_calc_header_bar_draw_impl(GtkWidget* pWidget, cairo_t* pCairo)
+static gboolean gtv_calc_header_bar_draw_impl(GtkWidget* pWidget, cairo_t* pCairo)
 {
     GtvCalcHeaderBar* self = GTV_CALC_HEADER_BAR(pWidget);
     GtvCalcHeaderBarPrivate& priv = getPrivate(GTV_CALC_HEADER_BAR(self));

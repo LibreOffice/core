@@ -41,7 +41,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 
 
-extern
+static
 std::vector<bool> entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpression const * _aExpr, MQueryHelperResultEntry* entry);
 
 MQueryHelperResultEntry::MQueryHelperResultEntry()

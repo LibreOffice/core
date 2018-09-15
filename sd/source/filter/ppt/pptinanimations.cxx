@@ -87,7 +87,7 @@ using namespace ::com::sun::star::presentation;
 namespace ppt
 {
 
-SvStream& operator>>(SvStream& rIn, AnimationNode& rNode )
+static SvStream& operator>>(SvStream& rIn, AnimationNode& rNode )
 {
     rIn.ReadInt32( rNode.mnU1 );
     rIn.ReadInt32( rNode.mnRestart );

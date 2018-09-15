@@ -53,7 +53,7 @@ using namespace ::com::sun::star;
 namespace std
 {
     // add operator== for weak_ptr, so we can use std::find over lists of them
-    template<typename T> bool operator==( weak_ptr<T> const& rLHS,
+    template<typename T> static bool operator==( weak_ptr<T> const& rLHS,
                                           weak_ptr<T> const& rRHS )
     {
         return rLHS.lock().get() == rRHS.lock().get();

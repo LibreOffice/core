@@ -280,7 +280,7 @@ void MailMergeCfg_Impl::Notify( const css::uno::Sequence< OUString >& )
 }
 
 //typedef SfxTabPage* (*FNCreateTabPage)(TabPageParent pParent, const SfxItemSet &rAttrSet);
-VclPtr<SfxTabPage> CreateGeneralTabPage(sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet)
+static VclPtr<SfxTabPage> CreateGeneralTabPage(sal_uInt16 nId, TabPageParent pParent, const SfxItemSet& rSet)
 {
     CreateTabPage fnCreate = nullptr;
     switch(nId)
@@ -1439,7 +1439,7 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
     }
 }
 
-OUString getCurrentFactory_Impl( const Reference< XFrame >& _xFrame )
+static OUString getCurrentFactory_Impl( const Reference< XFrame >& _xFrame )
 {
     OUString sIdentifier;
     Reference < XFrame > xCurrentFrame( _xFrame );
@@ -1739,7 +1739,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     }
 }
 
-bool isNodeActive( OptionsNode const * pNode, Module* pModule )
+static bool isNodeActive( OptionsNode const * pNode, Module* pModule )
 {
     if ( pNode )
     {

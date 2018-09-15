@@ -65,7 +65,7 @@ using namespace css::script;
 using namespace css::frame;
 using namespace css::document;
 
-void ShowErrorDialog( const Any& aException )
+static void ShowErrorDialog( const Any& aException )
 {
     ScopedVclPtrInstance<SvxScriptErrorDialog> pDlg( aException );
     pDlg->Execute();

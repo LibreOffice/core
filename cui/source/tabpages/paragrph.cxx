@@ -95,7 +95,7 @@ enum LineSpaceList
     LLINESPACE_FIX  = 7
 };
 
-void SetLineSpace_Impl( SvxLineSpacingItem&, int, long lValue = 0 );
+static void SetLineSpace_Impl( SvxLineSpacingItem&, int, long lValue = 0 );
 
 void SetLineSpace_Impl( SvxLineSpacingItem& rLineSpace,
                         int eSpace, long lValue )
@@ -145,7 +145,7 @@ void SetLineSpace_Impl( SvxLineSpacingItem& rLineSpace,
     }
 }
 
-sal_uInt16 GetHtmlMode_Impl(const SfxItemSet& rSet)
+static sal_uInt16 GetHtmlMode_Impl(const SfxItemSet& rSet)
 {
     sal_uInt16 nHtmlMode = 0;
     const SfxPoolItem* pItem = nullptr;

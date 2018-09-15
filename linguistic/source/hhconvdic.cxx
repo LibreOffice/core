@@ -56,7 +56,7 @@ using namespace i18n;
 
 // from i18npool/source/textconversion/textconversion_ko.cxx
 /// @throws RuntimeException
-sal_Int16 checkScriptType(sal_Unicode c)
+static sal_Int16 checkScriptType(sal_Unicode c)
 {
   UErrorCode status = U_ZERO_ERROR;
 
@@ -69,7 +69,7 @@ sal_Int16 checkScriptType(sal_Unicode c)
 }
 
 
-bool TextIsAllScriptType( const OUString &rTxt, sal_Int16 nScriptType )
+static bool TextIsAllScriptType( const OUString &rTxt, sal_Int16 nScriptType )
 {
     bool bIsAll = true;
     for (sal_Int32 i = 0;  i < rTxt.getLength() && bIsAll;  ++i)

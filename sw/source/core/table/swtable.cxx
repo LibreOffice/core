@@ -71,7 +71,7 @@ using namespace com::sun::star;
 
 #define COLFUZZY 20
 
-void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
+static void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
                     bool bChgAlign, sal_uLong nNdPos );
 
 inline const Color* SwTableBox::GetSaveUserColor() const
@@ -1937,7 +1937,7 @@ void SwTable::SetHTMLTableLayout(std::shared_ptr<SwHTMLTableLayout> const& r)
     m_xHTMLLayout = r;
 }
 
-void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
+static void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
                     bool bChgAlign )
 {
     sal_uLong nNdPos = rBox.IsValidNumTextNd();
@@ -2069,7 +2069,7 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
 
 }
 
-void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
+static void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
 {
     sal_uLong nNdPos = rBox.IsValidNumTextNd( false );
     if( ULONG_MAX == nNdPos )

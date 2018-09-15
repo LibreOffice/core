@@ -691,7 +691,7 @@ SwTextFormatColl& SwEditShell::GetTextFormatColl(sal_uInt16 nFormatColl) const
     return *((*(GetDoc()->GetTextFormatColls()))[nFormatColl]);
 }
 
-void insertFieldToDocument(uno::Reference<lang::XMultiServiceFactory> const & rxMultiServiceFactory,
+static void insertFieldToDocument(uno::Reference<lang::XMultiServiceFactory> const & rxMultiServiceFactory,
                            uno::Reference<text::XText> const & rxText, uno::Reference<text::XParagraphCursor> const & rxParagraphCursor,
                            OUString const & rsKey)
 {
@@ -702,7 +702,7 @@ void insertFieldToDocument(uno::Reference<lang::XMultiServiceFactory> const & rx
     rxText->insertTextContent(rxParagraphCursor, xTextContent, false);
 }
 
-void removeAllClassificationFields(OUString const & rPolicy, uno::Reference<text::XText> const & rxText)
+static void removeAllClassificationFields(OUString const & rPolicy, uno::Reference<text::XText> const & rxText)
 {
     uno::Reference<container::XEnumerationAccess> xParagraphEnumerationAccess(rxText, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphs = xParagraphEnumerationAccess->createEnumeration();
@@ -735,7 +735,7 @@ void removeAllClassificationFields(OUString const & rPolicy, uno::Reference<text
     }
 }
 
-sal_Int32 getNumberOfParagraphs(uno::Reference<text::XText> const & xText)
+static sal_Int32 getNumberOfParagraphs(uno::Reference<text::XText> const & xText)
 {
     uno::Reference<container::XEnumerationAccess> xParagraphEnumAccess(xText, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParagraphEnum = xParagraphEnumAccess->createEnumeration();
@@ -748,7 +748,7 @@ sal_Int32 getNumberOfParagraphs(uno::Reference<text::XText> const & xText)
     return nResult;
 }
 
-void equaliseNumberOfParagraph(std::vector<svx::ClassificationResult> const & rResults, uno::Reference<text::XText> const & xText)
+static void equaliseNumberOfParagraph(std::vector<svx::ClassificationResult> const & rResults, uno::Reference<text::XText> const & xText)
 {
     sal_Int32 nNumberOfParagraphs = 0;
     for (svx::ClassificationResult const & rResult : rResults)
@@ -1145,7 +1145,7 @@ void SwEditShell::SetClassification(const OUString& rName, SfxClassificationPoli
     }
 }
 
-void lcl_ApplyParagraphClassification(SwDoc* pDoc,
+static void lcl_ApplyParagraphClassification(SwDoc* pDoc,
                                       const uno::Reference<frame::XModel>& xModel,
                                       const uno::Reference<text::XTextContent>& xParent,
                                       std::vector<svx::ClassificationResult> aResults)
@@ -1273,7 +1273,7 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
     lcl_ApplyParagraphClassification(GetDoc(), xModel, xParent, std::move(aResults));
 }
 
-std::vector<svx::ClassificationResult> lcl_CollectParagraphClassification(const uno::Reference<frame::XModel>& xModel, const uno::Reference<text::XTextContent>& xParagraph)
+static std::vector<svx::ClassificationResult> lcl_CollectParagraphClassification(const uno::Reference<frame::XModel>& xModel, const uno::Reference<text::XTextContent>& xParagraph)
 {
     std::vector<svx::ClassificationResult> aResult;
 
@@ -1348,7 +1348,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectParagraphClassificati
     return lcl_CollectParagraphClassification(xModel, xParent);
 }
 
-sal_Int16 lcl_GetAngle(const drawing::HomogenMatrix3& rMatrix)
+static sal_Int16 lcl_GetAngle(const drawing::HomogenMatrix3& rMatrix)
 {
     basegfx::B2DHomMatrix aTransformation;
     basegfx::B2DTuple aScale;
@@ -1427,7 +1427,7 @@ SfxWatermarkItem SwEditShell::GetWatermark()
     return SfxWatermarkItem();
 }
 
-void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
+static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
                             const uno::Reference<frame::XModel>& xModel,
                             const uno::Reference<beans::XPropertySet>& xPageStyle,
                             const uno::Reference<text::XText>& xHeaderText)
@@ -1859,7 +1859,7 @@ void SwEditShell::ValidateAllParagraphSignatures(bool updateDontRemove)
     }
 }
 
-uno::Reference<text::XTextField> lcl_GetParagraphMetadataFieldAtIndex(const SwDocShell* pDocSh, SwTextNode const * pNode, const sal_uLong index)
+static uno::Reference<text::XTextField> lcl_GetParagraphMetadataFieldAtIndex(const SwDocShell* pDocSh, SwTextNode const * pNode, const sal_uLong index)
 {
     uno::Reference<text::XTextField> xTextField;
     if (pNode != nullptr && pDocSh != nullptr)
@@ -2050,7 +2050,7 @@ bool SwEditShell::RemoveParagraphMetadataFieldAtCursor()
     return false;
 }
 
-OUString lcl_GetParagraphClassification(SfxClassificationHelper & rHelper, sfx::ClassificationKeyCreator const & rKeyCreator,
+static OUString lcl_GetParagraphClassification(SfxClassificationHelper & rHelper, sfx::ClassificationKeyCreator const & rKeyCreator,
                                         const uno::Reference<frame::XModel>& xModel, const uno::Reference<text::XTextContent>& xParagraph)
 {
     uno::Reference<text::XTextField> xTextField;
@@ -2071,7 +2071,7 @@ OUString lcl_GetParagraphClassification(SfxClassificationHelper & rHelper, sfx::
     return OUString();
 }
 
-OUString lcl_GetHighestClassificationParagraphClass(SwPaM* pCursor)
+static OUString lcl_GetHighestClassificationParagraphClass(SwPaM* pCursor)
 {
     OUString sHighestClass;
 

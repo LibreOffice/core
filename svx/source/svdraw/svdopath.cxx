@@ -57,7 +57,7 @@
 
 using namespace sdr;
 
-inline sal_uInt16 GetPrevPnt(sal_uInt16 nPnt, sal_uInt16 nPntMax, bool bClosed)
+static inline sal_uInt16 GetPrevPnt(sal_uInt16 nPnt, sal_uInt16 nPntMax, bool bClosed)
 {
     if (nPnt>0) {
         nPnt--;
@@ -68,7 +68,7 @@ inline sal_uInt16 GetPrevPnt(sal_uInt16 nPnt, sal_uInt16 nPntMax, bool bClosed)
     return nPnt;
 }
 
-inline sal_uInt16 GetNextPnt(sal_uInt16 nPnt, sal_uInt16 nPntMax, bool bClosed)
+static inline sal_uInt16 GetNextPnt(sal_uInt16 nPnt, sal_uInt16 nPntMax, bool bClosed)
 {
     nPnt++;
     if (nPnt>nPntMax || (bClosed && nPnt>=nPntMax)) nPnt=0;

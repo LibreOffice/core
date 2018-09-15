@@ -14,7 +14,7 @@
 #include <common.hxx>
 #include <treemerge.hxx>
 
-void WriteUsage()
+static void WriteUsage()
 {
     std::cout
         << ("Syntax: Treex [-r Root] -i FileIn -o FileOut"

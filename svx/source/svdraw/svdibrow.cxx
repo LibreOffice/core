@@ -559,7 +559,7 @@ void SdrItemBrowserControl::ImpSetEntry(const ImpItemListRow& rEntry, std::size_
     }
 }
 
-bool ImpGetItem(const SfxItemSet& rSet, sal_uInt16 nWhich, const SfxPoolItem*& rpItem)
+static bool ImpGetItem(const SfxItemSet& rSet, sal_uInt16 nWhich, const SfxPoolItem*& rpItem)
 {
     SfxItemState eState=rSet.GetItemState(nWhich,true,&rpItem);
     if (eState==SfxItemState::DEFAULT) {
@@ -568,7 +568,7 @@ bool ImpGetItem(const SfxItemSet& rSet, sal_uInt16 nWhich, const SfxPoolItem*& r
     return (eState==SfxItemState::DEFAULT || eState==SfxItemState::SET) && rpItem!=nullptr;
 }
 
-bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rIndent)
+static bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rIndent)
 {
     rIndent=0;
     if (pSet==nullptr) return false;
@@ -828,7 +828,7 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
     return false;
 }
 
-sal_uInt16 ImpSortWhich(sal_uInt16 nWhich)
+static sal_uInt16 ImpSortWhich(sal_uInt16 nWhich)
 {
     switch (nWhich) {
         // Line

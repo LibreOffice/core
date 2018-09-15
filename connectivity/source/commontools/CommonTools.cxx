@@ -36,7 +36,7 @@
 #include <rtl/process.h>
 
 using namespace ::comphelper;
-inline sal_Unicode rtl_ascii_toUpperCase( sal_Unicode ch )
+static inline sal_Unicode rtl_ascii_toUpperCase( sal_Unicode ch )
 {
     return ch >= 0x0061 && ch <= 0x007a ? ch + 0x20 : ch;
 }
@@ -168,7 +168,7 @@ namespace connectivity
 namespace dbtools
 {
 
-bool isCharOk(sal_Unicode c,const OUString& _rSpecials)
+static bool isCharOk(sal_Unicode c,const OUString& _rSpecials)
 {
 
     return ( ((c >= 97) && (c <= 122)) || ((c >= 65) && (c <=  90)) || ((c >= 48) && (c <=  57)) ||

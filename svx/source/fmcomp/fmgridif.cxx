@@ -78,7 +78,7 @@ using ::com::sun::star::sdb::XRowSetSupplier;
 using ::com::sun::star::awt::XVclWindowPeer;
 
 
-css::awt::FontDescriptor ImplCreateFontDescriptor( const vcl::Font& rFont )
+static css::awt::FontDescriptor ImplCreateFontDescriptor( const vcl::Font& rFont )
 {
     css::awt::FontDescriptor aFD;
     aFD.Name = rFont.GetFamilyName();
@@ -101,7 +101,7 @@ css::awt::FontDescriptor ImplCreateFontDescriptor( const vcl::Font& rFont )
 }
 
 
-vcl::Font ImplCreateFont( const css::awt::FontDescriptor& rDescr )
+static vcl::Font ImplCreateFont( const css::awt::FontDescriptor& rDescr )
 {
     vcl::Font aFont;
     aFont.SetFamilyName( rDescr.Name );
@@ -1021,7 +1021,7 @@ void FmXGridPeer::columnChanged()
 
 namespace fmgridif
 {
-    const OUString getDataModeIdentifier()
+    static const OUString getDataModeIdentifier()
     {
         return OUString("DataMode");
     }

@@ -554,7 +554,7 @@ bool FmXBoundFormFieldIterator::ShouldHandleElement(const Reference< XInterface>
 }
 
 
-bool isControlList(const SdrMarkList& rMarkList)
+static bool isControlList(const SdrMarkList& rMarkList)
 {
     // the list contains only controls and at least one control
     const size_t nMarkCount = rMarkList.GetMarkCount();
@@ -597,7 +597,7 @@ bool isControlList(const SdrMarkList& rMarkList)
 }
 
 
-Reference< XForm > GetForm(const Reference< XInterface>& _rxElement)
+static Reference< XForm > GetForm(const Reference< XInterface>& _rxElement)
 {
     Reference< XForm > xForm( _rxElement, UNO_QUERY );
     if ( xForm.is() )
@@ -2986,7 +2986,7 @@ void FmXFormShell::startFiltering_Lock()
 }
 
 
-void saveFilter(const Reference< runtime::XFormController >& _rxController)
+static void saveFilter(const Reference< runtime::XFormController >& _rxController)
 {
     Reference< XPropertySet> xFormAsSet(_rxController->getModel(), UNO_QUERY);
     Reference< XPropertySet> xControllerAsSet(_rxController, UNO_QUERY);

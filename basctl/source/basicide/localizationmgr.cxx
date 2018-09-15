@@ -97,7 +97,7 @@ void LocalizationMgr::handleTranslationbar ()
 // TODO: -> export from toolkit
 
 
-bool isLanguageDependentProperty( const OUString& aName )
+static bool isLanguageDependentProperty( const OUString& aName )
 {
     static struct Prop
     {
@@ -160,7 +160,7 @@ void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResou
 }
 
 
-OUString implCreatePureResourceId
+static OUString implCreatePureResourceId
     ( const OUString& aDialogName, const OUString& aCtrlName,
       const OUString& aPropName,
       const Reference< XStringResourceManager >& xStringResourceManager )
@@ -770,7 +770,7 @@ void LocalizationMgr::handleBasicStopped()
 }
 
 
-DialogWindow* FindDialogWindowForEditor( DlgEditor const * pEditor )
+static DialogWindow* FindDialogWindowForEditor( DlgEditor const * pEditor )
 {
     Shell::WindowTable const& aWindowTable = GetShell()->GetWindowTable();
     for (auto const& window : aWindowTable)

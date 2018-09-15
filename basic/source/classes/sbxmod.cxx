@@ -395,7 +395,7 @@ uno::Reference< frame::XModel > getDocumentModel( StarBASIC* pb )
     return xModel;
 }
 
-uno::Reference< vba::XVBACompatibility > getVBACompatibility( const uno::Reference< frame::XModel >& rxModel )
+static uno::Reference< vba::XVBACompatibility > getVBACompatibility( const uno::Reference< frame::XModel >& rxModel )
 {
     uno::Reference< vba::XVBACompatibility > xVBACompat;
     try
@@ -409,7 +409,7 @@ uno::Reference< vba::XVBACompatibility > getVBACompatibility( const uno::Referen
     return xVBACompat;
 }
 
-bool getDefaultVBAMode( StarBASIC* pb )
+static bool getDefaultVBAMode( StarBASIC* pb )
 {
     uno::Reference< frame::XModel > xModel( getDocumentModel( pb ) );
     if (!xModel.is())
@@ -929,7 +929,7 @@ static void SendHint( SbxObject* pObj, SfxHintId nId, SbMethod* p )
 
 // #57841 Clear Uno-Objects, which were helt in RTL functions,
 // at the end of the program, so that nothing were helt.
-void ClearUnoObjectsInRTL_Impl_Rek( StarBASIC* pBasic )
+static void ClearUnoObjectsInRTL_Impl_Rek( StarBASIC* pBasic )
 {
     // delete the return value of CreateUnoService
     SbxVariable* pVar = pBasic->GetRtl()->Find( "CreateUnoService", SbxClassType::Method );
@@ -969,7 +969,7 @@ void ClearUnoObjectsInRTL_Impl_Rek( StarBASIC* pBasic )
     }
 }
 
-void ClearUnoObjectsInRTL_Impl( StarBASIC* pBasic )
+static void ClearUnoObjectsInRTL_Impl( StarBASIC* pBasic )
 {
     // #67781 Delete return values of the Uno-methods
     clearUnoMethods();

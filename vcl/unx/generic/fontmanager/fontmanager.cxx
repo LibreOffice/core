@@ -81,7 +81,7 @@ using namespace com::sun::star::lang;
  *  static helpers
  */
 
-inline sal_uInt16 getUInt16BE( const sal_uInt8*& pBuffer )
+static inline sal_uInt16 getUInt16BE( const sal_uInt8*& pBuffer )
 {
     sal_uInt16 nRet = static_cast<sal_uInt16>(pBuffer[1]) |
         (static_cast<sal_uInt16>(pBuffer[0]) << 8);

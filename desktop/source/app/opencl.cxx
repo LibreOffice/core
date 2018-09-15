@@ -45,7 +45,7 @@ namespace desktop {
 
 #if HAVE_FEATURE_OPENCL
 
-bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUString &rURL)
+static bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUString &rURL)
 {
     bool bSuccess = false;
     css::uno::Reference< css::lang::XComponent > xComponent;

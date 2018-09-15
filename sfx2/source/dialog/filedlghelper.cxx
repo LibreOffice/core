@@ -130,7 +130,7 @@ namespace
     }
 }
 
-const OUString* GetLastFilterConfigId( FileDialogHelper::Context _eContext )
+static const OUString* GetLastFilterConfigId( FileDialogHelper::Context _eContext )
 {
     static const OUString aSD_EXPORT_IDENTIFIER("SdExportLastFilter");
     static const OUString aSI_EXPORT_IDENTIFIER("SiExportLastFilter");
@@ -149,8 +149,8 @@ const OUString* GetLastFilterConfigId( FileDialogHelper::Context _eContext )
     return pRet;
 }
 
-OUString EncodeSpaces_Impl( const OUString& rSource );
-OUString DecodeSpaces_Impl( const OUString& rSource );
+static OUString EncodeSpaces_Impl( const OUString& rSource );
+static OUString DecodeSpaces_Impl( const OUString& rSource );
 
 // FileDialogHelper_Impl
 
@@ -1328,7 +1328,7 @@ void FileDialogHelper_Impl::implStartExecute()
     }
 }
 
-void lcl_saveLastURLs(std::vector<OUString>& rpURLList,
+static void lcl_saveLastURLs(std::vector<OUString>& rpURLList,
                       ::std::vector< OUString >& lLastURLs )
 {
     lLastURLs.clear();

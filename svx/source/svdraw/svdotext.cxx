@@ -1896,7 +1896,7 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
 /* Begin chaining code */
 
 // XXX: Make it a method somewhere?
-SdrObject *ImpGetObjByName(SdrObjList const *pObjList, OUString const& aObjName)
+static SdrObject *ImpGetObjByName(SdrObjList const *pObjList, OUString const& aObjName)
 {
     // scan the whole list
     size_t nObjCount = pObjList->GetObjCount();
@@ -1912,7 +1912,7 @@ SdrObject *ImpGetObjByName(SdrObjList const *pObjList, OUString const& aObjName)
 }
 
 // XXX: Make it a (private) method of SdrTextObj
-void ImpUpdateChainLinks(SdrTextObj *pTextObj, OUString const& aNextLinkName)
+static void ImpUpdateChainLinks(SdrTextObj *pTextObj, OUString const& aNextLinkName)
 {
     // XXX: Current implementation constraints text boxes to be on the same page
 

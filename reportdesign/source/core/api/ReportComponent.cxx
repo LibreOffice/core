@@ -44,7 +44,7 @@ namespace reportdesign
     using namespace com::sun::star;
     using namespace comphelper;
 
-void lcl_getDefaultFonts( vcl::Font& rLatinFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont, LanguageType  _eLatin, LanguageType _eCJK, LanguageType _eCTL )
+static void lcl_getDefaultFonts( vcl::Font& rLatinFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont, LanguageType  _eLatin, LanguageType _eCJK, LanguageType _eCTL )
 {
         LanguageType eLatin = _eLatin;
 

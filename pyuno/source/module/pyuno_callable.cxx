@@ -43,7 +43,7 @@ typedef struct
     PyUNO_callable_Internals* members;
 } PyUNO_callable;
 
-void PyUNO_callable_del (PyObject* self)
+static void PyUNO_callable_del (PyObject* self)
 {
     PyUNO_callable* me;
 
@@ -52,7 +52,7 @@ void PyUNO_callable_del (PyObject* self)
     PyObject_Del (self);
 }
 
-PyObject* PyUNO_callable_call(
+static PyObject* PyUNO_callable_call(
     PyObject* self, PyObject* args, SAL_UNUSED_PARAMETER PyObject*)
 {
     PyUNO_callable* me;

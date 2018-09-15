@@ -77,6 +77,10 @@ const char* const aPageHelpIds[NOOFPAGES] =
     HID_SD_HTMLEXPORT_PAGE6
 };
 
+static SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign);
+
+static SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDesign);
+
 // This class has all the settings for the HTML-export autopilot
 class SdPublishingDesign
 {

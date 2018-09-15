@@ -28,7 +28,7 @@
 #include <blink.hxx>
 #if OSL_DEBUG_LEVEL > 0
 
-bool ChkChain( SwLinePortion *pStart )
+static bool ChkChain( SwLinePortion *pStart )
 {
     SwLinePortion *pPor = pStart->GetPortion();
     sal_uInt16 nCount = 0;

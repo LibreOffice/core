@@ -46,7 +46,7 @@
 #include <editsh.hxx>
 
 // for the dump "MSC-" compiler
-inline sal_Int32 GetSttOrEnd( bool bCondition, const SwContentNode& rNd )
+static inline sal_Int32 GetSttOrEnd( bool bCondition, const SwContentNode& rNd )
 {
     return bCondition ? 0 : rNd.Len();
 }

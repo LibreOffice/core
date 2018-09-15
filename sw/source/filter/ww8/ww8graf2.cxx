@@ -232,7 +232,7 @@ void wwZOrderer::InsertObject(SdrObject* pObject, sal_uLong nPos)
     }
 }
 
-extern void WW8PicShadowToReal(  WW8_PIC_SHADOW const *  pPicS,  WW8_PIC*  pPic );
+static void WW8PicShadowToReal(  WW8_PIC_SHADOW const *  pPicS,  WW8_PIC*  pPic );
 
 bool SwWW8ImplReader::GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc)
 {

@@ -74,7 +74,7 @@ bool DrawCommandDispatch::isFeatureSupported( const OUString& rCommandURL )
     return parseCommandURL( rCommandURL, &nFeatureId, &aBaseCommand, &aCustomShapeType );
 }
 
-::basegfx::B2DPolyPolygon getPolygon(const char* pResId, const SdrModel& rModel)
+static ::basegfx::B2DPolyPolygon getPolygon(const char* pResId, const SdrModel& rModel)
 {
     ::basegfx::B2DPolyPolygon aReturn;
     XLineEndListRef pLineEndList = rModel.GetLineEndList();

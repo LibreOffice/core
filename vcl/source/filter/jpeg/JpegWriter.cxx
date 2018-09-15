@@ -38,7 +38,9 @@ struct DestinationManagerStruct
     JOCTET * buffer;                  /* start of buffer */
 };
 
-extern "C" void init_destination (j_compress_ptr cinfo)
+extern "C" {
+
+static void init_destination (j_compress_ptr cinfo)
 {
     DestinationManagerStruct * destination = reinterpret_cast<DestinationManagerStruct *>(cinfo->dest);
 
@@ -50,7 +52,7 @@ extern "C" void init_destination (j_compress_ptr cinfo)
     destination->pub.free_in_buffer = BUFFER_SIZE;
 }
 
-extern "C" boolean empty_output_buffer (j_compress_ptr cinfo)
+static boolean empty_output_buffer (j_compress_ptr cinfo)
 {
     DestinationManagerStruct * destination = reinterpret_cast<DestinationManagerStruct *>(cinfo->dest);
 
@@ -65,7 +67,7 @@ extern "C" boolean empty_output_buffer (j_compress_ptr cinfo)
     return TRUE;
 }
 
-extern "C" void term_destination (j_compress_ptr cinfo)
+static void term_destination (j_compress_ptr cinfo)
 {
     DestinationManagerStruct * destination = reinterpret_cast<DestinationManagerStruct *>(cinfo->dest);
     size_t datacount = BUFFER_SIZE - destination->pub.free_in_buffer;
@@ -78,6 +80,8 @@ extern "C" void term_destination (j_compress_ptr cinfo)
             ERREXIT(cinfo, JERR_FILE_WRITE);
         }
     }
+}
+
 }
 
 void jpeg_svstream_dest (j_compress_ptr cinfo, void* output)

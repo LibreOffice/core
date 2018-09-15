@@ -1941,7 +1941,7 @@ uno::Sequence< OUString > LngSvcMgr::getSupportedServiceNames_Static()
 }
 
 /// @throws uno::Exception
-uno::Reference< uno::XInterface > LngSvcMgr_CreateInstance(
+static uno::Reference< uno::XInterface > LngSvcMgr_CreateInstance(
             const uno::Reference< lang::XMultiServiceFactory > & /*rSMgr*/ )
 {
     uno::Reference< uno::XInterface > xService = static_cast<cppu::OWeakObject*>(new LngSvcMgr);

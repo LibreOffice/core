@@ -31,7 +31,7 @@
 #include "swhtml.hxx"
 #include "wrthtml.hxx"
 
-sal_Int32 lcl_html_getNextPart( OUString& rPart, const OUString& rContent,
+static sal_Int32 lcl_html_getNextPart( OUString& rPart, const OUString& rContent,
                              sal_Int32 nPos )
 {
     rPart = aEmptyOUStr;
@@ -73,7 +73,7 @@ sal_Int32 lcl_html_getNextPart( OUString& rPart, const OUString& rContent,
     return nPos;
 }
 
-sal_Int32 lcl_html_getEndNoteInfo( SwEndNoteInfo& rInfo,
+static sal_Int32 lcl_html_getEndNoteInfo( SwEndNoteInfo& rInfo,
                                     const OUString& rContent,
                                     bool bEndNote )
 {

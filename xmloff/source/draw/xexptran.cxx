@@ -39,28 +39,28 @@ using namespace ::com::sun::star;
 using o3tl::make_unique;
 
 // parsing help functions for simple chars
-void Imp_SkipSpaces(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
+static void Imp_SkipSpaces(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
     while(rPos < nLen
         && ' ' == rStr[rPos])
         rPos++;
 }
 
-void Imp_SkipSpacesAndOpeningBraces(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
+static void Imp_SkipSpacesAndOpeningBraces(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
     while(rPos < nLen
         && (' ' == rStr[rPos] || '(' == rStr[rPos]))
         rPos++;
 }
 
-void Imp_SkipSpacesAndCommas(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
+static void Imp_SkipSpacesAndCommas(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
     while(rPos < nLen
         && (' ' == rStr[rPos] || ',' == rStr[rPos]))
         rPos++;
 }
 
-void Imp_SkipSpacesAndClosingBraces(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
+static void Imp_SkipSpacesAndClosingBraces(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
     while(rPos < nLen
         && (' ' == rStr[rPos] || ')' == rStr[rPos]))
@@ -69,7 +69,7 @@ void Imp_SkipSpacesAndClosingBraces(const OUString& rStr, sal_Int32& rPos, const
 
 // parsing help functions for integer numbers
 
-bool Imp_IsOnUnitChar(const OUString& rStr, const sal_Int32 nPos)
+static bool Imp_IsOnUnitChar(const OUString& rStr, const sal_Int32 nPos)
 {
     sal_Unicode aChar(rStr[nPos]);
 
@@ -78,7 +78,7 @@ bool Imp_IsOnUnitChar(const OUString& rStr, const sal_Int32 nPos)
         || '%' == aChar;
 }
 
-double Imp_GetDoubleChar(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen,
+static double Imp_GetDoubleChar(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen,
     const SvXMLUnitConverter& rConv, double fRetval, bool bLookForUnits = false)
 {
     sal_Unicode aChar(rStr[rPos]);
@@ -141,14 +141,14 @@ double Imp_GetDoubleChar(const OUString& rStr, sal_Int32& rPos, const sal_Int32 
     return fRetval;
 }
 
-void Imp_PutDoubleChar(OUString& rStr, double fValue)
+static void Imp_PutDoubleChar(OUString& rStr, double fValue)
 {
     OUStringBuffer sStringBuffer;
     ::sax::Converter::convertDouble(sStringBuffer, fValue);
     rStr += sStringBuffer;
 }
 
-void Imp_PutDoubleChar(OUStringBuffer& rStr, const SvXMLUnitConverter& rConv, double fValue,
+static void Imp_PutDoubleChar(OUStringBuffer& rStr, const SvXMLUnitConverter& rConv, double fValue,
     bool bConvertUnits = false)
 {
     OUStringBuffer sStringBuffer;

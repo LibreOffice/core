@@ -238,7 +238,7 @@ bool OpenGLContext::ImplInit()
     return false;
 }
 
-OUString getGLString(GLenum eGlEnum)
+static OUString getGLString(GLenum eGlEnum)
 {
     OUString sString;
     const GLubyte* pString = glGetString(eGlEnum);

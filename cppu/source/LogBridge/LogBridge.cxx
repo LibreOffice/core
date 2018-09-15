@@ -189,7 +189,7 @@ bool LogBridge::v_isValid(rtl::OUString * pReason)
     }
 }
 
-void LogProbe(
+static void LogProbe(
     bool                                pre,
     SAL_UNUSED_PARAMETER void         * /*pThis*/,
     SAL_UNUSED_PARAMETER void         * /*pContext*/,

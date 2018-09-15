@@ -707,7 +707,7 @@ LibInfo::Item::Item (
 LibInfo::Item::~Item ()
 { }
 
-bool QueryDel(const OUString& rName, const OUString &rStr, weld::Widget* pParent)
+static bool QueryDel(const OUString& rName, const OUString &rStr, weld::Widget* pParent)
 {
     OUStringBuffer aNameBuf( rName );
     aNameBuf.append('\'');

@@ -3021,7 +3021,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     return true;
 }
 
-uno::Reference< uno::XInterface > GetDocModuleObject( const SfxObjectShell& rDocSh, const OUString& sCodeName )
+static uno::Reference< uno::XInterface > GetDocModuleObject( const SfxObjectShell& rDocSh, const OUString& sCodeName )
 {
     uno::Reference< lang::XMultiServiceFactory> xSF(rDocSh.GetModel(), uno::UNO_QUERY);
     uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess;
@@ -4316,7 +4316,7 @@ bool ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
     return bSuccess;
 }
 
-inline ScDirection DirFromFillDir( FillDir eDir )
+static inline ScDirection DirFromFillDir( FillDir eDir )
 {
     if (eDir==FILL_TO_BOTTOM)
         return DIR_BOTTOM;

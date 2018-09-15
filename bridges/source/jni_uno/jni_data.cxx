@@ -31,7 +31,7 @@ namespace jni_uno
 {
 
 
-inline std::unique_ptr<rtl_mem> seq_allocate(
+static inline std::unique_ptr<rtl_mem> seq_allocate(
     sal_Int32 nElements, sal_Int32 nSize )
 {
     std::unique_ptr< rtl_mem > seq(

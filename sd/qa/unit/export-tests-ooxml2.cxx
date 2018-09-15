@@ -93,7 +93,7 @@ bool checkBeginWithNumber(const OUString& rStr)
 #define CPPUNIT_ASSERT_MOTIONPATH(expect, actual) \
       assertMotionPath(expect, actual, CPPUNIT_SOURCELINE())
 
-void assertMotionPath(const OUString &rStr1, const OUString &rStr2, const CppUnit::SourceLine &rSourceLine)
+static void assertMotionPath(const OUString &rStr1, const OUString &rStr2, const CppUnit::SourceLine &rSourceLine)
 {
     sal_Int32 nIdx1 = 0;
     sal_Int32 nIdx2 = 0;
@@ -496,7 +496,7 @@ void SdOOXMLExportTest2::testTdf91378()
     xDocShRef->DoClose();
 }
 
-bool checkTransitionOnPage(uno::Reference<drawing::XDrawPagesSupplier> const & xDoc, sal_Int32 nSlideNumber,
+static bool checkTransitionOnPage(uno::Reference<drawing::XDrawPagesSupplier> const & xDoc, sal_Int32 nSlideNumber,
                            sal_Int16 nExpectedTransitionType, sal_Int16 nExpectedTransitionSubType,
                            bool bExpectedDirection = true)
 {

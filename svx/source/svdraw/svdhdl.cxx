@@ -1864,9 +1864,11 @@ struct ImplHdlAndIndex
     sal_uInt32                  mnIndex;
 };
 
+extern "C" {
+
 // Helper method for sorting handles taking care of OrdNums, keeping order in
 // single objects and re-sorting polygon handles intuitively
-extern "C" int ImplSortHdlFunc( const void* pVoid1, const void* pVoid2 )
+static int ImplSortHdlFunc( const void* pVoid1, const void* pVoid2 )
 {
     const ImplHdlAndIndex* p1 = static_cast<ImplHdlAndIndex const *>(pVoid1);
     const ImplHdlAndIndex* p2 = static_cast<ImplHdlAndIndex const *>(pVoid2);
@@ -1940,6 +1942,7 @@ extern "C" int ImplSortHdlFunc( const void* pVoid1, const void* pVoid2 )
     }
 }
 
+}
 
 void SdrHdlList::TravelFocusHdl(bool bForward)
 {

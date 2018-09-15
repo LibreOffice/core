@@ -622,11 +622,11 @@ void Test_Impl::raiseRuntimeExceptionOneway( const OUString & rMsg, const Refere
     throw aExc;
 }
 
-void dothrow2(const RuntimeException& e)
+static void dothrow2(const RuntimeException& e)
 {
     throw e;
 }
-void dothrow(const RuntimeException& e)
+static void dothrow(const RuntimeException& e)
 {
 #if defined _MSC_VER
     // currently only for MSVC:

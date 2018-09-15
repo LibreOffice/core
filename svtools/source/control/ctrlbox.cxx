@@ -275,7 +275,7 @@ SvxBorderLineStyle LineListBox::GetSelectEntryStyle() const
 }
 
 
-void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, long nWidth, SvxBorderLineStyle nDashing )
+static void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, long nWidth, SvxBorderLineStyle nDashing )
 {
     AntialiasingFlags nOldAA = rDev.GetAntialiasing();
     rDev.SetAntialiasing( nOldAA & ~AntialiasingFlags::EnableB2dDraw );
@@ -316,7 +316,7 @@ namespace svtools {
 /**
  * Dashing array must start with a line width and end with a blank width.
  */
-std::vector<double> GetDashing( SvxBorderLineStyle nDashing )
+static std::vector<double> GetDashing( SvxBorderLineStyle nDashing )
 {
     std::vector<double> aPattern;
     switch (nDashing)

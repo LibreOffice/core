@@ -1245,7 +1245,7 @@ double ScInterpreter::GetBinomDistPMF(double x, double n, double p)
     }
 }
 
-double lcl_GetBinomDistRange(double n, double xs,double xe,
+static double lcl_GetBinomDistRange(double n, double xs,double xe,
             double fFactor /* q^n */, double p, double q)
 //preconditions: 0.0 <= xs < xe <= n; xs,xe,n integral although double
 {

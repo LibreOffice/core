@@ -103,7 +103,7 @@ static void dumpTile(const int nWidth, const int nHeight, const int mode, const 
     }
 }
 
-void testTile( Document *pDocument, int max_parts,
+static void testTile( Document *pDocument, int max_parts,
                int max_tiles, bool dump )
 {
     const int mode = pDocument->getTileMode();
@@ -219,7 +219,7 @@ void testTile( Document *pDocument, int max_parts,
 static std::atomic<bool> bDialogRendered(false);
 static std::atomic<int> nDialogId(-1);
 
-void kitCallback(int nType, const char* pPayload, void* pData)
+static void kitCallback(int nType, const char* pPayload, void* pData)
 {
     Document *pDocument = static_cast<Document *>(pData);
 
@@ -261,7 +261,7 @@ void kitCallback(int nType, const char* pPayload, void* pData)
     }
 }
 
-void testDialog( Document *pDocument, const char *uno_cmd )
+static void testDialog( Document *pDocument, const char *uno_cmd )
 {
     int view = pDocument->createView();
     pDocument->setView(view);

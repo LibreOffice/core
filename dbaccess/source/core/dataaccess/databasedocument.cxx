@@ -348,7 +348,7 @@ static const char sPictures[] = "Pictures";
 // I could check anyway )
 
 /// @throws RuntimeException
-void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibraryContainer >& xDlgCont, const Reference< XStorage >& xStorage, const Reference< XModel >& rxModel, const Reference<XComponentContext >& rxContext )
+static void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibraryContainer >& xDlgCont, const Reference< XStorage >& xStorage, const Reference< XModel >& rxModel, const Reference<XComponentContext >& rxContext )
 {
     Sequence< OUString > sLibraries = xDlgCont->getElementNames();
     Reference< XStorage > xTmpPic = xStorage->openStorageElement( "tempPictures", ElementModes::READWRITE  );

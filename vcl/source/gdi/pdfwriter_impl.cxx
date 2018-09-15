@@ -1340,7 +1340,7 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
 namespace vcl
 {
 template < class GEOMETRY >
-GEOMETRY lcl_convert( const MapMode& _rSource, const MapMode& _rDest, OutputDevice* _pPixelConversion, const GEOMETRY& _rObject )
+static GEOMETRY lcl_convert( const MapMode& _rSource, const MapMode& _rDest, OutputDevice* _pPixelConversion, const GEOMETRY& _rObject )
 {
     GEOMETRY aPoint;
     if ( MapUnit::MapPixel == _rSource.GetMapUnit() )

@@ -48,7 +48,7 @@ using namespace osl;
 namespace jfw
 {
 
-OString getElement(OString const & docPath,
+static OString getElement(OString const & docPath,
                         xmlChar const * pathExpression)
 {
     //Prepare the xml document and context

@@ -37,7 +37,7 @@
 #include <drawview.hxx>
 #include <svx/sdrhittesthelper.hxx>
 
-inline long Diff( const Point& rP1, const Point& rP2 )
+static inline long Diff( const Point& rP1, const Point& rP2 )
 {
     long nX = rP1.X() - rP2.X();
     if (nX<0) nX = -nX;

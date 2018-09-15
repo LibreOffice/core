@@ -69,7 +69,7 @@ namespace rptui
 using namespace ::com::sun::star;
 
 
-Color lcl_getOverlappedControlColor(/*const uno::Reference <lang::XMultiServiceFactory> _rxFactory*/)
+static Color lcl_getOverlappedControlColor(/*const uno::Reference <lang::XMultiServiceFactory> _rxFactory*/)
 {
     svtools::ExtendedColorConfig aConfig;
     return aConfig.GetColorValue(CFG_REPORTDESIGNER, DBOVERLAPPEDCONTROL).getColor();

@@ -162,7 +162,7 @@ SwTextInfo::SwTextInfo( const SwTextInfo &rInf )
 
 #if OSL_DEBUG_LEVEL > 0
 
-void ChkOutDev( const SwTextSizeInfo &rInf )
+static void ChkOutDev( const SwTextSizeInfo &rInf )
 {
     if ( !rInf.GetVsh() )
         return;
@@ -173,7 +173,7 @@ void ChkOutDev( const SwTextSizeInfo &rInf )
 }
 #endif
 
-inline TextFrameIndex GetMinLen( const SwTextSizeInfo &rInf )
+static inline TextFrameIndex GetMinLen( const SwTextSizeInfo &rInf )
 {
     const TextFrameIndex nTextLen(rInf.GetText().getLength());
     if (rInf.GetLen() == TextFrameIndex(COMPLETE_STRING))

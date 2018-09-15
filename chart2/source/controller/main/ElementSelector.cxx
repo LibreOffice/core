@@ -56,7 +56,7 @@ SelectorListBox::SelectorListBox( vcl::Window* pParent, WinBits nStyle )
 {
 }
 
-void lcl_addObjectsToList( const ObjectHierarchy& rHierarchy, const  ObjectIdentifier & rParent, std::vector< ListBoxEntryData >& rEntries
+static void lcl_addObjectsToList( const ObjectHierarchy& rHierarchy, const  ObjectIdentifier & rParent, std::vector< ListBoxEntryData >& rEntries
                           , const sal_Int32 nHierarchyDepth, const Reference< chart2::XChartDocument >& xChartDoc )
 {
     ObjectHierarchy::tChildContainer aChildren( rHierarchy.getChildren(rParent) );

@@ -134,7 +134,7 @@ namespace dbaxml
         return aSupported;
     }
 
-    OUString lcl_implGetPropertyXMLType(const Type& _rType)
+    static OUString lcl_implGetPropertyXMLType(const Type& _rType)
     {
         // possible types we can write (either because we recognize them directly or because we convert _rValue
         // into one of these types)

@@ -166,7 +166,7 @@ SfxMediumList* DocumentInserter::CreateMediumList()
     return pMediumList;
 }
 
-void impl_FillURLList( sfx2::FileDialogHelper const * _pFileDlg, std::vector<OUString>& _rpURLList )
+static void impl_FillURLList( sfx2::FileDialogHelper const * _pFileDlg, std::vector<OUString>& _rpURLList )
 {
     DBG_ASSERT( _pFileDlg, "DocumentInserter::fillURLList(): invalid file dialog" );
 

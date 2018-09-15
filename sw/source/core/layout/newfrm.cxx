@@ -49,13 +49,13 @@ bool           SwRootFrame::s_isNoVirDev = false;
 
 SwCache *SwFrame::mpCache = nullptr;
 
-long FirstMinusSecond( long nFirst, long nSecond )
+static long FirstMinusSecond( long nFirst, long nSecond )
     { return nFirst - nSecond; }
-long SecondMinusFirst( long nFirst, long nSecond )
+static long SecondMinusFirst( long nFirst, long nSecond )
     { return nSecond - nFirst; }
-long SwIncrement( long nA, long nAdd )
+static long SwIncrement( long nA, long nAdd )
     { return nA + nAdd; }
-long SwDecrement( long nA, long nSub )
+static long SwDecrement( long nA, long nSub )
     { return nA - nSub; }
 
 static SwRectFnCollection aHorizontal = {

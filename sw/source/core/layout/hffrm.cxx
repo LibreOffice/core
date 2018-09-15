@@ -660,7 +660,7 @@ bool SwHeadFootFrame::GetEatSpacing() const
     return pFormat->GetHeaderAndFooterEatSpacing().GetValue();
 }
 
-void DelFlys( SwLayoutFrame const *pFrame, SwPageFrame *pPage )
+static void DelFlys( SwLayoutFrame const *pFrame, SwPageFrame *pPage )
 {
     size_t i = 0;
     while ( pPage->GetSortedObjs() &&

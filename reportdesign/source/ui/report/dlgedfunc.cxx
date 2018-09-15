@@ -130,7 +130,7 @@ void DlgEdFunc::setOverlappedControlColor(Color _nColor)
     m_nOverlappedControlColor = _nColor;
 }
 
-Color lcl_setColorOfObject(const uno::Reference< uno::XInterface >& _xObj, Color _nColorTRGB)
+static Color lcl_setColorOfObject(const uno::Reference< uno::XInterface >& _xObj, Color _nColorTRGB)
 {
     Color nBackColor;
     try

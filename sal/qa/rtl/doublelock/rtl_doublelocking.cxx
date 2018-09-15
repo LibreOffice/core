@@ -60,7 +60,7 @@ namespace ThreadHelper
     //     VERBOSE
     // } eSleepVerboseMode;
 
-    void thread_sleep_tenth_sec(sal_Int32 _nTenthSec/*, eSleepVerboseMode nVerbose = VERBOSE*/)
+    static void thread_sleep_tenth_sec(sal_Int32 _nTenthSec/*, eSleepVerboseMode nVerbose = VERBOSE*/)
     {
         // if (nVerbose == VERBOSE)
         // {

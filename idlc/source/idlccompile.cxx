@@ -114,7 +114,7 @@ OString convertToFileUrl(const OString& fileName)
     return fileName;
 }
 
-OString makeTempName(const OString& prefix)
+static OString makeTempName(const OString& prefix)
 {
     OUString uTmpPath;
     OString tmpPath;

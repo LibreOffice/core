@@ -99,7 +99,7 @@ struct PredicateReturn
 };
 
 extern "C" {
-Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
+static Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
 {
     PredicateReturn *pPre = reinterpret_cast<PredicateReturn *>(pData);
 

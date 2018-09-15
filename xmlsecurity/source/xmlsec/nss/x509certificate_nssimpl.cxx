@@ -350,7 +350,7 @@ const Sequence< sal_Int8>& X509Certificate_NssImpl::getUnoTunnelId() {
     return theX509Certificate_NssImplUnoTunnelId::get().getSeq();
 }
 
-OUString getAlgorithmDescription(SECAlgorithmID const *aid)
+static OUString getAlgorithmDescription(SECAlgorithmID const *aid)
 {
     SECOidTag tag;
     tag = SECOID_GetAlgorithmTag(aid);
@@ -360,7 +360,7 @@ OUString getAlgorithmDescription(SECAlgorithmID const *aid)
     return OUString::createFromAscii( pDesc ) ;
 }
 
-css::uno::Sequence< sal_Int8 > getThumbprint(CERTCertificate const *pCert, SECOidTag id)
+static css::uno::Sequence< sal_Int8 > getThumbprint(CERTCertificate const *pCert, SECOidTag id)
 {
     if( pCert != nullptr )
     {

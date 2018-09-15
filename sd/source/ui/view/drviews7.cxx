@@ -111,7 +111,7 @@ using namespace ::com::sun::star::linguistic2;
     current clipboard content and the DrawViewShell.
     The list is stored in a new instance of SvxClipboardFormatItem.
 */
-::std::unique_ptr<SvxClipboardFormatItem> GetSupportedClipboardFormats (
+static ::std::unique_ptr<SvxClipboardFormatItem> GetSupportedClipboardFormats (
     TransferableDataHelper& rDataHelper)
 {
     ::std::unique_ptr<SvxClipboardFormatItem> pResult (

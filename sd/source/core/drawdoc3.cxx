@@ -1340,7 +1340,7 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, bool bOnl
   * If rLayoutName is empty, the first master page is used.
   */
 // #i121863# factored out functionality
-bool isMasterPageLayoutNameUnique(const SdDrawDocument& rDoc, const OUString& rCandidate)
+static bool isMasterPageLayoutNameUnique(const SdDrawDocument& rDoc, const OUString& rCandidate)
 {
     if (rCandidate.isEmpty())
     {
@@ -1367,7 +1367,7 @@ bool isMasterPageLayoutNameUnique(const SdDrawDocument& rDoc, const OUString& rC
 }
 
 // #i121863# factored out functinality
-OUString createNewMasterPageLayoutName(const SdDrawDocument& rDoc)
+static OUString createNewMasterPageLayoutName(const SdDrawDocument& rDoc)
 {
     const OUString aBaseName(SdResId(STR_LAYOUT_DEFAULT_NAME));
     sal_uInt16 nCount(0);

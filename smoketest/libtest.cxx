@@ -38,14 +38,14 @@
 #else
 #include <sys/time.h>
 #include <sal/types.h>
-    long getTimeMS()
+    static long getTimeMS()
     {
         struct timeval t;
         gettimeofday(&t, nullptr);
         return t.tv_sec*1000 + t.tv_usec/1000;
     }
 
-    bool IsAbsolutePath(char const *pPath)
+    static bool IsAbsolutePath(char const *pPath)
     {
         if (pPath[0] != '/')
         {

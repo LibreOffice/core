@@ -206,7 +206,7 @@ void VDiagram::createShapes_2d()
     adjustPosAndSize_2d( m_aAvailablePosIncludingAxes, m_aAvailableSizeIncludingAxes );
 }
 
-E3dScene* lcl_getE3dScene( const uno::Reference< drawing::XShape >& xShape )
+static E3dScene* lcl_getE3dScene( const uno::Reference< drawing::XShape >& xShape )
 {
     E3dScene* pRet=nullptr;
     uno::Reference< lang::XUnoTunnel > xUnoTunnel( xShape, uno::UNO_QUERY );
@@ -223,7 +223,7 @@ E3dScene* lcl_getE3dScene( const uno::Reference< drawing::XShape >& xShape )
     return pRet;
 }
 
-void lcl_setLightSources(
+static void lcl_setLightSources(
     const uno::Reference< beans::XPropertySet > & xSource,
     const uno::Reference< beans::XPropertySet > & xDest )
 {

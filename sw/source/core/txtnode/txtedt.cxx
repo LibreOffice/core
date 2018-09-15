@@ -682,7 +682,7 @@ void SwTextNode::RstTextAttr(
     }
 }
 
-sal_Int32 clipIndexBounds(const OUString &rStr, sal_Int32 nPos)
+static sal_Int32 clipIndexBounds(const OUString &rStr, sal_Int32 nPos)
 {
     if (nPos < 0)
         return 0;

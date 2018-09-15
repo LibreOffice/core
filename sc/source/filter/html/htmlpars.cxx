@@ -1646,7 +1646,7 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
 // HTML DATA QUERY PARSER
 
 template< typename Type >
-inline Type getLimitedValue( const Type& rValue, const Type& rMin, const Type& rMax )
+static inline Type getLimitedValue( const Type& rValue, const Type& rMin, const Type& rMax )
 { return std::max( std::min( rValue, rMax ), rMin ); }
 
 ScHTMLEntry::ScHTMLEntry( const SfxItemSet& rItemSet, ScHTMLTableId nTableId ) :

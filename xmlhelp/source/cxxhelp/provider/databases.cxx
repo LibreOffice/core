@@ -1316,7 +1316,7 @@ OUString ExtensionIteratorBase::implGetFileFromPackage(
     return aFile;
 }
 
-inline bool isLetter( sal_Unicode c )
+static inline bool isLetter( sal_Unicode c )
 {
     return rtl::isAsciiAlpha(c);
 }

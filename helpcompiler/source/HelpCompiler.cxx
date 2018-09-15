@@ -287,7 +287,7 @@ std::string myparser::dump(xmlNodePtr node)
     return app;
 }
 
-void trim(std::string& str)
+static void trim(std::string& str)
 {
     std::string::size_type pos = str.find_last_not_of(' ');
     if(pos != std::string::npos)

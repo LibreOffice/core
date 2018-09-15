@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sal/log.hxx>
 
-bool openAddressBook(const std::string& path)
+static bool openAddressBook(const std::string& path)
 {
     MorkParser mork;
     // Open and parse mork file

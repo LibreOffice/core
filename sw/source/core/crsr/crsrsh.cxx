@@ -79,7 +79,7 @@ using namespace util;
  * Check if pCurrentCursor points into already existing ranges and delete those.
  * @param Pointer to SwCursor object
  */
-void CheckRange( SwCursor* pCurrentCursor )
+static void CheckRange( SwCursor* pCurrentCursor )
 {
     const SwPosition *pStt = pCurrentCursor->Start(),
         *pEnd = pCurrentCursor->GetPoint() == pStt ? pCurrentCursor->GetMark() : pCurrentCursor->GetPoint();

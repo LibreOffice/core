@@ -66,7 +66,7 @@ void ScreenSaverInhibitor::inhibit( bool bInhibit, const OUString& sReason,
 }
 
 #if ENABLE_GIO
-void dbusInhibit( bool bInhibit,
+static void dbusInhibit( bool bInhibit,
                   const gchar* service, const gchar* path, const gchar* interface,
                   const std::function<GVariant*( GDBusProxy*, GError*& )>& fInhibit,
                   const std::function<GVariant*( GDBusProxy*, const guint, GError*& )>& fUnInhibit,

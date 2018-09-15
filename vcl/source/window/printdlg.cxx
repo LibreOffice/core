@@ -883,7 +883,7 @@ bool PrintDialog::isSingleJobs()
     return maOptionsPage.mpCollateSingleJobsBox->IsChecked();
 }
 
-void setHelpId( vcl::Window* i_pWindow, const Sequence< OUString >& i_rHelpIds, sal_Int32 i_nIndex )
+static void setHelpId( vcl::Window* i_pWindow, const Sequence< OUString >& i_rHelpIds, sal_Int32 i_nIndex )
 {
     if( i_nIndex >= 0 && i_nIndex < i_rHelpIds.getLength() )
         i_pWindow->SetHelpId( OUStringToOString( i_rHelpIds.getConstArray()[i_nIndex], RTL_TEXTENCODING_UTF8 ) );

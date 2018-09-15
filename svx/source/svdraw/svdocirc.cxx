@@ -53,7 +53,7 @@
 
 using namespace com::sun::star;
 
-Point GetAnglePnt(const tools::Rectangle& rR, long nAngle)
+static Point GetAnglePnt(const tools::Rectangle& rR, long nAngle)
 {
     Point aCenter(rR.Center());
     long nWdt=rR.Right()-rR.Left();
@@ -962,7 +962,7 @@ void SdrCircObj::RestGeoData(const SdrObjGeoData& rGeo)
     ImpSetCircInfoToAttr();
 }
 
-void Union(tools::Rectangle& rR, const Point& rP)
+static void Union(tools::Rectangle& rR, const Point& rP)
 {
     if (rP.X()<rR.Left  ()) rR.SetLeft(rP.X() );
     if (rP.X()>rR.Right ()) rR.SetRight(rP.X() );

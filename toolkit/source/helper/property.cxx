@@ -88,7 +88,7 @@ struct ImplPropertyInfo
 #define DECL_DEP_PROP_3( asciiname, id, type, attrib1, attrib2, attrib3 ) \
     ImplPropertyInfo( asciiname, BASEPROPERTY_##id, cppu::UnoType<type>::get(), css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 | css::beans::PropertyAttribute::attrib3, true )
 
-ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
+static ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
 {
     static ImplPropertyInfo* pPropertyInfos = nullptr;
     static sal_uInt16 nElements = 0;
@@ -304,7 +304,7 @@ struct ImplPropertyInfoCompareFunctor
     }
 };
 
-void ImplAssertValidPropertyArray()
+static void ImplAssertValidPropertyArray()
 {
     static bool bSorted = false;
     if( !bSorted )
@@ -331,7 +331,7 @@ sal_uInt16 GetPropertyId( const OUString& rPropertyName )
     return ( pInf && pInf != (pInfo+nElements) && pInf->aName == rPropertyName) ? pInf->nPropId: 0;
 }
 
-const ImplPropertyInfo* ImplGetImplPropertyInfo( sal_uInt16 nPropertyId )
+static const ImplPropertyInfo* ImplGetImplPropertyInfo( sal_uInt16 nPropertyId )
 {
     ImplAssertValidPropertyArray();
 

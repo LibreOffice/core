@@ -98,7 +98,7 @@ using namespace ::com::sun::star;
 #include "bento.hxx"
 using namespace OpenStormBento;
 #include "explode.hxx"
-bool Decompress(SvStream *pCompressed, SvStream * & pOutDecompressed)
+static bool Decompress(SvStream *pCompressed, SvStream * & pOutDecompressed)
 {
     pCompressed->Seek(0);
     std::unique_ptr<SvMemoryStream> aDecompressed(new SvMemoryStream(4096, 4096));
@@ -148,7 +148,7 @@ bool Decompress(SvStream *pCompressed, SvStream * & pOutDecompressed)
  * @param    LwpSvStream * , created inside, deleted outside
  * @param      sal_Bool, sal_True -
  */
- bool GetLwpSvStream(SvStream *pStream, LwpSvStream * & pLwpSvStream)
+static bool GetLwpSvStream(SvStream *pStream, LwpSvStream * & pLwpSvStream)
 {
     SvStream * pDecompressed = nullptr;
 

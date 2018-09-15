@@ -178,12 +178,12 @@ public:
 
 namespace ThreadHelper
 {
-    void thread_sleep_tenth_sec(sal_Int32 _nTenthSec)
+    static void thread_sleep_tenth_sec(sal_Int32 _nTenthSec)
     {
         osl::Thread::wait(std::chrono::milliseconds(_nTenthSec * 100));
     }
 
-    void outputPriority(oslThreadPriority const& _aPriority)
+    static void outputPriority(oslThreadPriority const& _aPriority)
     {
         // LLA: output the priority
         if (_aPriority == osl_Thread_PriorityHighest)
@@ -404,7 +404,7 @@ public:
 namespace osl_Thread
 {
 
-    void resumeAndWaitThread(Thread* _pThread)
+    static void resumeAndWaitThread(Thread* _pThread)
     {
         // This function starts a thread, wait a second and suspends the thread
         // Due to the fact, that a suspend and never run thread never really exists.
@@ -422,7 +422,7 @@ namespace osl_Thread
     }
 
     // kill a running thread and join it, if it has terminated, do nothing
-    void termAndJoinThread(Thread* _pThread)
+    static void termAndJoinThread(Thread* _pThread)
     {
         _pThread->terminate();
 
@@ -568,7 +568,7 @@ namespace osl_Thread
 
     /** when the count value equal to or more than 3, suspend the thread.
     */
-    void suspendCountThread(OCountThread* _pCountThread)
+    static void suspendCountThread(OCountThread* _pCountThread)
     {
         sal_Int32 nValue = 0;
         while (true)
@@ -1689,7 +1689,7 @@ namespace osl_Thread
 } // namespace osl_Thread
 
 // destroy function when the binding thread terminate
-void destroyCallback(void * data)
+static void destroyCallback(void * data)
 {
     delete[] static_cast<char *>(data);
 }

@@ -41,13 +41,13 @@ using namespace x11;
  *  helper functions
  */
 
-inline void writeLE( sal_uInt16 nNumber, sal_uInt8* pBuffer )
+static inline void writeLE( sal_uInt16 nNumber, sal_uInt8* pBuffer )
 {
     pBuffer[ 0 ] = (nNumber & 0xff);
     pBuffer[ 1 ] = ((nNumber>>8)&0xff);
 }
 
-inline void writeLE( sal_uInt32 nNumber, sal_uInt8* pBuffer )
+static inline void writeLE( sal_uInt32 nNumber, sal_uInt8* pBuffer )
 {
     pBuffer[ 0 ] = (nNumber & 0xff);
     pBuffer[ 1 ] = ((nNumber>>8)&0xff);
@@ -55,7 +55,7 @@ inline void writeLE( sal_uInt32 nNumber, sal_uInt8* pBuffer )
     pBuffer[ 3 ] = ((nNumber>>24)&0xff);
 }
 
-inline sal_uInt16 readLE16( const sal_uInt8* pBuffer )
+static inline sal_uInt16 readLE16( const sal_uInt8* pBuffer )
 {
     //This is untainted data which comes from a controlled source
     //so, using a byte-swapping pattern which coverity doesn't
@@ -66,7 +66,7 @@ inline sal_uInt16 readLE16( const sal_uInt8* pBuffer )
     return v;
 }
 
-inline sal_uInt32 readLE32( const sal_uInt8* pBuffer )
+static inline sal_uInt32 readLE32( const sal_uInt8* pBuffer )
 {
     //This is untainted data which comes from a controlled source
     //so, using a byte-swapping pattern which coverity doesn't
@@ -83,7 +83,7 @@ inline sal_uInt32 readLE32( const sal_uInt8* pBuffer )
  * scanline helpers
  */
 
-inline void X11_writeScanlinePixel( unsigned long nColor, sal_uInt8* pScanline, int depth, int x )
+static inline void X11_writeScanlinePixel( unsigned long nColor, sal_uInt8* pScanline, int depth, int x )
 {
     switch( depth )
     {
@@ -194,12 +194,12 @@ static sal_uInt8* X11_getPaletteBmpFromImage(
     return pBuffer;
 }
 
-inline unsigned long doRightShift( unsigned long nValue, int nShift )
+static inline unsigned long doRightShift( unsigned long nValue, int nShift )
 {
     return (nShift > 0) ? (nValue >> nShift) : (nValue << (-nShift));
 }
 
-inline unsigned long doLeftShift( unsigned long nValue, int nShift )
+static inline unsigned long doLeftShift( unsigned long nValue, int nShift )
 {
     return (nShift > 0) ? (nValue << nShift) : (nValue >> (-nShift));
 }

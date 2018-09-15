@@ -374,7 +374,7 @@ void SdrTableRTFParser::NextColumn()
         mpActDefault = nullptr;
 }
 
-long TwipsToHundMM( long nIn )
+static long TwipsToHundMM( long nIn )
 {
     long nRet = OutputDevice::LogicToLogic( nIn, MapUnit::MapTwip, MapUnit::Map100thMM );
     return nRet;

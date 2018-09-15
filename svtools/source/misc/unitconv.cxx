@@ -383,7 +383,7 @@ long CalcToPoint( long nIn, MapUnit eUnit, sal_uInt16 nFactor )
 }
 
 
-long CMToTwips( long nIn )
+static long CMToTwips( long nIn )
 {
     long nRet = 0;
 
@@ -393,7 +393,7 @@ long CMToTwips( long nIn )
 }
 
 
-long MMToTwips( long nIn )
+static long MMToTwips( long nIn )
 {
     long nRet = 0;
 
@@ -403,7 +403,7 @@ long MMToTwips( long nIn )
 }
 
 
-long InchToTwips( long nIn )
+static long InchToTwips( long nIn )
 {
     long nRet = 0;
 
@@ -423,7 +423,7 @@ long PointToTwips( long nIn )
 }
 
 
-long PicaToTwips( long nIn )
+static long PicaToTwips( long nIn )
 {
     long nRet = 0;
 
@@ -433,14 +433,14 @@ long PicaToTwips( long nIn )
 }
 
 
-long TwipsToCM( long nIn )
+static long TwipsToCM( long nIn )
 {
     long nRet = nIn / 567;
     return nRet;
 }
 
 
-long InchToCM( long nIn )
+static long InchToCM( long nIn )
 {
     long nRet = 0;
 
@@ -450,14 +450,14 @@ long InchToCM( long nIn )
 }
 
 
-long MMToCM( long nIn )
+static long MMToCM( long nIn )
 {
     long nRet = nIn / 10;
     return nRet;
 }
 
 
-long PointToCM( long nIn )
+static long PointToCM( long nIn )
 {
     long nRet = 0;
 
@@ -467,7 +467,7 @@ long PointToCM( long nIn )
 }
 
 
-long PicaToCM( long nIn)
+static long PicaToCM( long nIn)
 {
     long nRet = 0;
 
@@ -477,7 +477,7 @@ long PicaToCM( long nIn)
 }
 
 
-long TwipsToMM( long nIn )
+static long TwipsToMM( long nIn )
 {
     long nRet = 0;
 
@@ -487,7 +487,7 @@ long TwipsToMM( long nIn )
 }
 
 
-long CMToMM( long nIn )
+static long CMToMM( long nIn )
 {
     long nRet = 0;
 
@@ -497,7 +497,7 @@ long CMToMM( long nIn )
 }
 
 
-long InchToMM( long nIn )
+static long InchToMM( long nIn )
 {
     long nRet = 0;
 
@@ -507,7 +507,7 @@ long InchToMM( long nIn )
 }
 
 
-long PointToMM( long nIn )
+static long PointToMM( long nIn )
 {
     long nRet = 0;
 
@@ -517,7 +517,7 @@ long PointToMM( long nIn )
 }
 
 
-long PicaToMM( long nIn )
+static long PicaToMM( long nIn )
 {
     long nRet = 0;
 
@@ -527,14 +527,14 @@ long PicaToMM( long nIn )
 }
 
 
-long TwipsToInch( long nIn )
+static long TwipsToInch( long nIn )
 {
     long nRet = nIn / 1440;
     return nRet;
 }
 
 
-long CMToInch( long nIn )
+static long CMToInch( long nIn )
 {
     long nRet = 0;
 
@@ -544,7 +544,7 @@ long CMToInch( long nIn )
 }
 
 
-long MMToInch( long nIn )
+static long MMToInch( long nIn )
 {
     long nRet = 0;
 
@@ -554,28 +554,28 @@ long MMToInch( long nIn )
 }
 
 
-long PointToInch( long nIn )
+static long PointToInch( long nIn )
 {
     long nRet = nIn / 72;
     return nRet;
 }
 
 
-long PicaToInch( long nIn )
+static long PicaToInch( long nIn )
 {
     long nRet = nIn / 6;
     return nRet;
 }
 
 
-long TwipsToPoint( long nIn )
+static long TwipsToPoint( long nIn )
 {
     long nRet = nIn / 20;
     return nRet;
 }
 
 
-long InchToPoint( long nIn )
+static long InchToPoint( long nIn )
 {
     long nRet = 0;
 
@@ -585,7 +585,7 @@ long InchToPoint( long nIn )
 }
 
 
-long CMToPoint( long nIn )
+static long CMToPoint( long nIn )
 {
     long nRet = 0;
 
@@ -595,7 +595,7 @@ long CMToPoint( long nIn )
 }
 
 
-long MMToPoint( long nIn )
+static long MMToPoint( long nIn )
 {
     long nRet = 0;
 
@@ -605,21 +605,21 @@ long MMToPoint( long nIn )
 }
 
 
-long PicaToPoint( long nIn )
+static long PicaToPoint( long nIn )
 {
     long nRet = nIn / 12;
     return nRet;
 }
 
 
-long TwipsToPica( long nIn )
+static long TwipsToPica( long nIn )
 {
     long nRet = nIn / 240;
     return nRet;
 }
 
 
-long InchToPica( long nIn )
+static long InchToPica( long nIn )
 {
     long nRet = 0;
 
@@ -629,7 +629,7 @@ long InchToPica( long nIn )
 }
 
 
-long PointToPica( long nIn )
+static long PointToPica( long nIn )
 {
     long nRet = 0;
 
@@ -639,7 +639,7 @@ long PointToPica( long nIn )
 }
 
 
-long CMToPica( long nIn )
+static long CMToPica( long nIn )
 {
     long nRet = 0;
 
@@ -649,7 +649,7 @@ long CMToPica( long nIn )
 }
 
 
-long MMToPica( long nIn )
+static long MMToPica( long nIn )
 {
     long nRet = 0;
 
@@ -659,7 +659,7 @@ long MMToPica( long nIn )
 }
 
 
-long Nothing( long nIn )
+static long Nothing( long nIn )
 {
     long nRet = nIn;
     return nRet;

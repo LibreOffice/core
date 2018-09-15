@@ -55,7 +55,7 @@ public:
 };
 
 
-void getAllHit3DObjectWithRelativePoint(
+static void getAllHit3DObjectWithRelativePoint(
     const basegfx::B3DPoint& rFront,
     const basegfx::B3DPoint& rBack,
     const E3dCompoundObject& rObject,

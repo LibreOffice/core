@@ -88,7 +88,7 @@ namespace svxform
             MapModelToShape;
 
 
-    void    collectShapeModelMapping( SdrPage const * _pPage, MapModelToShape& _rMapping )
+    static void    collectShapeModelMapping( SdrPage const * _pPage, MapModelToShape& _rMapping )
     {
         OSL_ENSURE( _pPage, "collectShapeModelMapping: invalid arg!" );
 

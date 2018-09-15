@@ -1654,7 +1654,7 @@ namespace basegfx
             return createPolygonFromEllipse( rCenter, fRadius, fRadius );
         }
 
-        B2DPolygon impCreateUnitCircle(sal_uInt32 nStartQuadrant)
+        static B2DPolygon impCreateUnitCircle(sal_uInt32 nStartQuadrant)
         {
             B2DPolygon aUnitCircle;
             const double fKappa((M_SQRT2 - 1.0) * 4.0 / 3.0);

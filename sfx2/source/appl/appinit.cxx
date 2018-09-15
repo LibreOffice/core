@@ -158,7 +158,7 @@ extern "C" bool GetSpecialCharsForEdit( vcl::Window const * i_pParent, const vcl
 
 #endif
 
-OUString SfxGetSpecialCharsForEdit(vcl::Window* pParent, const vcl::Font& rFont)
+static OUString SfxGetSpecialCharsForEdit(vcl::Window* pParent, const vcl::Font& rFont)
 {
     static bool bDetermineFunction = false;
     static PFunc_getSpecialCharsForEdit pfunc_getSpecialCharsForEdit = nullptr;

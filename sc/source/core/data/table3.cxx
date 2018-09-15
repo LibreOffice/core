@@ -104,7 +104,7 @@ using namespace ::com::sun::star::i18n;
     @return Returns TRUE if a numeral element is found in a given string, or
     FALSE if no numeral element is found.
 */
-bool SplitString( const OUString &sWhole,
+static bool SplitString( const OUString &sWhole,
     OUString &sPrefix, OUString &sSuffix, double &fNum )
 {
     // Get prefix element, search for any digit and stop.
@@ -164,7 +164,7 @@ bool SplitString( const OUString &sWhole,
     @return Returns 1 if sInput1 is greater, 0 if sInput1 == sInput2, and -1 if
     sInput2 is greater.
 */
-short Compare( const OUString &sInput1, const OUString &sInput2,
+static short Compare( const OUString &sInput1, const OUString &sInput2,
                const bool bCaseSens, const ScUserListData* pData, const CollatorWrapper *pCW )
 {
     OUString sStr1( sInput1 ), sStr2( sInput2 ), sPre1, sSuf1, sPre2, sSuf2;

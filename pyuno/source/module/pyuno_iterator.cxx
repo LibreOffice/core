@@ -40,7 +40,7 @@ using com::sun::star::uno::RuntimeException;
 namespace pyuno
 {
 
-void PyUNO_iterator_del( PyObject* self )
+static void PyUNO_iterator_del( PyObject* self )
 {
     PyUNO_iterator* me = reinterpret_cast<PyUNO_iterator*>(self);
 
@@ -51,13 +51,13 @@ void PyUNO_iterator_del( PyObject* self )
     PyObject_Del( self );
 }
 
-PyObject* PyUNO_iterator_iter( PyObject *self )
+static PyObject* PyUNO_iterator_iter( PyObject *self )
 {
     Py_INCREF( self );
     return self;
 }
 
-PyObject* PyUNO_iterator_next( PyObject *self )
+static PyObject* PyUNO_iterator_next( PyObject *self )
 {
     PyUNO_iterator* me = reinterpret_cast<PyUNO_iterator*>(self);
 
@@ -178,7 +178,7 @@ PyObject* PyUNO_iterator_new( const Reference< XEnumeration >& xEnumeration )
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void PyUNO_list_iterator_del( PyObject* self )
+static void PyUNO_list_iterator_del( PyObject* self )
 {
     PyUNO_list_iterator* me = reinterpret_cast<PyUNO_list_iterator*>(self);
 
@@ -190,7 +190,7 @@ void PyUNO_list_iterator_del( PyObject* self )
 }
 
 
-PyObject* PyUNO_list_iterator_next( PyObject *self )
+static PyObject* PyUNO_list_iterator_next( PyObject *self )
 {
     PyUNO_list_iterator* me = reinterpret_cast<PyUNO_list_iterator*>(self);
 

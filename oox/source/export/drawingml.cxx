@@ -134,7 +134,7 @@ namespace drawingml {
 #define CGETAD(propName) \
     (( bCheckDirect && GetPropertyAndState( rXPropSet, rXPropState, #propName, eState ) && eState == beans::PropertyState_DIRECT_VALUE )||GetProperty( rXPropSet, #propName ))
 
-css::uno::Any getLineDash( const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rDashName )
+static css::uno::Any getLineDash( const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rDashName )
     {
         css::uno::Reference<css::lang::XMultiServiceFactory> xFact(xModel, css::uno::UNO_QUERY);
         css::uno::Reference<css::container::XNameAccess> xNameAccess(
@@ -1908,7 +1908,7 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
     }
 }
 
-OUString GetAutoNumType(SvxNumType nNumberingType, bool bSDot, bool bPBehind, bool bPBoth)
+static OUString GetAutoNumType(SvxNumType nNumberingType, bool bSDot, bool bPBehind, bool bPBoth)
 {
     OUString sPrefixSuffix;
 
@@ -2597,7 +2597,7 @@ void DrawingML::WritePresetShape( const char* pShape )
     mpFS->endElementNS(  XML_a, XML_prstGeom );
 }
 
-std::map< OString, std::vector<OString> > lcl_getAdjNames()
+static std::map< OString, std::vector<OString> > lcl_getAdjNames()
 {
     std::map< OString, std::vector<OString> > aRet;
 
@@ -3339,12 +3339,12 @@ void DrawingML::WriteShapeEffect( const OUString& sName, const Sequence< Propert
     }
 }
 
-sal_Int32 lcl_CalculateDist(const double dX, const double dY)
+static sal_Int32 lcl_CalculateDist(const double dX, const double dY)
 {
     return static_cast< sal_Int32 >(sqrt(dX*dX + dY*dY) * 360);
 }
 
-sal_Int32 lcl_CalculateDir(const double dX, const double dY)
+static sal_Int32 lcl_CalculateDir(const double dX, const double dY)
 {
     return (static_cast< sal_Int32 >(basegfx::rad2deg(atan2(dY,dX)) * 60000) + 21600000) % 21600000;
 }

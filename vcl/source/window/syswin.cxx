@@ -112,7 +112,7 @@ void SystemWindow::dispose()
     Window::dispose();
 }
 
-void ImplHandleControlAccelerator( vcl::Window* pWindow, bool bShow )
+static void ImplHandleControlAccelerator( vcl::Window* pWindow, bool bShow )
 {
     Control *pControl = dynamic_cast<Control*>(pWindow->ImplGetWindow());
     if (pControl && pControl->GetText().indexOf('~') != -1)

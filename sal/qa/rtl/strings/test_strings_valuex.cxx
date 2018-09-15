@@ -57,7 +57,7 @@ void test::strings::valueX::testOUBoolean() {
 }
 
 template< typename T >
-void testInt() {
+static void testInt() {
     CPPUNIT_ASSERT_EQUAL( T( "30039062" ), T::number( 30039062 ));
 
     // test the overloading resolution
@@ -99,7 +99,7 @@ void test::strings::valueX::testOInt() {
 }
 
 template< typename T >
-void testFloat() {
+static void testFloat() {
     CPPUNIT_ASSERT_EQUAL( T( "39062.2" ), T::number( 39062.2f ));
     CPPUNIT_ASSERT_EQUAL( T( "30039062.2" ), T::number( 30039062.2 ));
     // long double not supported

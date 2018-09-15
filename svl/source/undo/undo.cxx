@@ -1284,7 +1284,7 @@ void SfxUndoManager::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 /// Returns a JSON representation of pAction.
-boost::property_tree::ptree lcl_ActionToJson(size_t nIndex, SfxUndoAction const * pAction)
+static boost::property_tree::ptree lcl_ActionToJson(size_t nIndex, SfxUndoAction const * pAction)
 {
     boost::property_tree::ptree aRet;
     aRet.put("index", nIndex);

@@ -73,7 +73,7 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
 
-void ImpExtractCustomShow( const Reference< XModel >& rxModel, const OUString& rCustomShowName )
+static void ImpExtractCustomShow( const Reference< XModel >& rxModel, const OUString& rCustomShowName )
 {
     vector< Reference< XDrawPage > > vNonUsedPageList;
     try
@@ -91,7 +91,7 @@ void ImpExtractCustomShow( const Reference< XModel >& rxModel, const OUString& r
     }
 }
 
-void ImpDeleteUnusedMasterPages( const Reference< XModel >& rxModel )
+static void ImpDeleteUnusedMasterPages( const Reference< XModel >& rxModel )
 {
     vector< PageCollector::MasterPageEntity > aMasterPageList;
     PageCollector::CollectMasterPages( rxModel, aMasterPageList );
@@ -108,7 +108,7 @@ void ImpDeleteUnusedMasterPages( const Reference< XModel >& rxModel )
     }
 }
 
-void ImpDeleteHiddenSlides(  const Reference< XModel >& rxModel )
+static void ImpDeleteHiddenSlides(  const Reference< XModel >& rxModel )
 {
     try
     {
@@ -135,7 +135,7 @@ void ImpDeleteHiddenSlides(  const Reference< XModel >& rxModel )
     }
 }
 
-void ImpDeleteNotesPages( const Reference< XModel >& rxModel )
+static void ImpDeleteNotesPages( const Reference< XModel >& rxModel )
 {
     try
     {
@@ -158,7 +158,7 @@ void ImpDeleteNotesPages( const Reference< XModel >& rxModel )
     }
 }
 
-void ImpConvertOLE( const Reference< XModel >& rxModel, sal_Int32 nOLEOptimizationType )
+static void ImpConvertOLE( const Reference< XModel >& rxModel, sal_Int32 nOLEOptimizationType )
 {
     try
     {
@@ -206,7 +206,7 @@ void ImpConvertOLE( const Reference< XModel >& rxModel, sal_Int32 nOLEOptimizati
     }
 }
 
-void ImpCompressGraphic( Reference< XGraphicProvider > const & rxGraphicProvider, const Reference< XGraphic >& rxGraphic, Reference< XOutputStream > const & rxOutputStream,
+static void ImpCompressGraphic( Reference< XGraphicProvider > const & rxGraphicProvider, const Reference< XGraphic >& rxGraphic, Reference< XOutputStream > const & rxOutputStream,
     const OUString& rDestMimeType, const awt::Size& rLogicalSize, sal_Int32 nJPEGQuality, sal_Int32 nImageResolution, bool bRemoveCropping, const text::GraphicCrop& rGraphicCropLogic )
 {
     try
@@ -247,7 +247,7 @@ void ImpCompressGraphic( Reference< XGraphicProvider > const & rxGraphicProvider
     }
 }
 
-Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& rxContext,
+static Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& rxContext,
     const Reference< XGraphic >& xGraphic, const awt::Size& aLogicalSize, const text::GraphicCrop& aGraphicCropLogic,
         const GraphicSettings& rGraphicSettings )
 {
@@ -371,7 +371,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
     return xNewGraphic;
 }
 
-void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentContext >& rxContext, const GraphicSettings& rGraphicSettings,
+static void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentContext >& rxContext, const GraphicSettings& rGraphicSettings,
     std::vector< GraphicCollector::GraphicEntity >& rGraphicList )
 {
     try

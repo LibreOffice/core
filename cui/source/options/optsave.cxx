@@ -348,7 +348,7 @@ bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
     return bModified;
 }
 
-bool isODFFormat( const OUString& sFilter )
+static bool isODFFormat( const OUString& sFilter )
 {
     static const char* aODFFormats[] =
     {

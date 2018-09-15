@@ -41,7 +41,7 @@ ShapeTypeHandler* ShapeTypeHandler::instance = nullptr;
 
 
 // Create an empty reference to an accessible object.
-AccessibleShape*
+static AccessibleShape*
     CreateEmptyShapeReference (
         const AccessibleShapeInfo& /*rShapeInfo*/,
         const AccessibleShapeTreeInfo& /*rShapeTreeInfo*/,

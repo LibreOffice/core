@@ -75,7 +75,7 @@ IndexerPreProcessor::~IndexerPreProcessor()
         xsltFreeStylesheet( m_xsltStylesheetPtrContent );
 }
 
-std::string getEncodedPath( const std::string& Path )
+static std::string getEncodedPath( const std::string& Path )
 {
     OString aOStr_Path( Path.c_str() );
     OUString aOUStr_Path( OStringToOUString
@@ -146,7 +146,7 @@ struct Data
     }
 };
 
-void writeKeyValue_DBHelp( FILE* pFile, const std::string& aKeyStr, const std::string& aValueStr )
+static void writeKeyValue_DBHelp( FILE* pFile, const std::string& aKeyStr, const std::string& aValueStr )
 {
     if( pFile == nullptr )
         return;
@@ -813,7 +813,9 @@ void HelpLinker::main( std::vector<std::string> &args,
 // Variable to set an exception in "C" StructuredXMLErrorFunction
 static const HelpProcessingException* GpXMLParsingException = nullptr;
 
-extern "C" void StructuredXMLErrorFunction(SAL_UNUSED_PARAMETER void *, xmlErrorPtr error)
+extern "C" {
+
+static void StructuredXMLErrorFunction(SAL_UNUSED_PARAMETER void *, xmlErrorPtr error)
 {
     std::string aErrorMsg = error->message;
     std::string aXMLParsingFile;
@@ -825,6 +827,8 @@ extern "C" void StructuredXMLErrorFunction(SAL_UNUSED_PARAMETER void *, xmlError
 
     // Reset error handler
     xmlSetStructuredErrorFunc( nullptr, nullptr );
+}
+
 }
 
 HelpProcessingErrorInfo& HelpProcessingErrorInfo::operator=( const struct HelpProcessingException& e )

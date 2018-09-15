@@ -83,7 +83,7 @@
 
 using namespace com::sun::star;
 
-inline bool GetRealURL( const SwGrfNode& rNd, OUString& rText )
+static inline bool GetRealURL( const SwGrfNode& rNd, OUString& rText )
 {
     bool bRet = rNd.GetFileFilterNms( &rText, nullptr );
     if( bRet )
@@ -880,7 +880,7 @@ static void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInAr
     }
 }
 
-bool paintUsingPrimitivesHelper(
+static bool paintUsingPrimitivesHelper(
     vcl::RenderContext& rOutputDevice,
     const drawinglayer::primitive2d::Primitive2DContainer& rSequence,
     const basegfx::B2DRange& rSourceRange,

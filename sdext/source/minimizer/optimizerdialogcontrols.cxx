@@ -44,7 +44,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::presentation;
 
 
-void SetBold( OptimizerDialog& rOptimizerDialog, const OUString& rControl )
+static void SetBold( OptimizerDialog& rOptimizerDialog, const OUString& rControl )
 {
     FontDescriptor aFontDescriptor;
     if ( rOptimizerDialog.getControlProperty( rControl, "FontDescriptor" ) >>= aFontDescriptor )
@@ -55,7 +55,7 @@ void SetBold( OptimizerDialog& rOptimizerDialog, const OUString& rControl )
 }
 
 
-OUString InsertSeparator( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, sal_Int32 nOrientation,
+static OUString InsertSeparator( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, sal_Int32 nOrientation,
                         sal_Int32 nPosX, sal_Int32 nPosY, sal_Int32 nWidth, sal_Int32 nHeight )
 {
     OUString pNames[] = {
@@ -85,7 +85,7 @@ OUString InsertSeparator( OptimizerDialog& rOptimizerDialog, const OUString& rCo
 }
 
 
-OUString InsertButton( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, Reference< XActionListener > const & xActionListener,
+static OUString InsertButton( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, Reference< XActionListener > const & xActionListener,
     sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int16 nTabIndex, bool bEnabled, PPPOptimizerTokenEnum nResID, css::awt::PushButtonType nPushButtonType )
 {
     sal_Int32 nHeight = BUTTON_HEIGHT;
@@ -122,7 +122,7 @@ OUString InsertButton( OptimizerDialog& rOptimizerDialog, const OUString& rContr
 }
 
 
-OUString InsertFixedText( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, const OUString& rLabel,
+static OUString InsertFixedText( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, const OUString& rLabel,
                                 sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, bool bMultiLine, bool bBold, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
@@ -157,7 +157,7 @@ OUString InsertFixedText( OptimizerDialog& rOptimizerDialog, const OUString& rCo
 }
 
 
-OUString InsertCheckBox( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
+static OUString InsertCheckBox( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
     const Reference< XItemListener >& xItemListener, const OUString& rLabel,
         sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int16 nTabIndex )
 {
@@ -194,7 +194,7 @@ OUString InsertCheckBox( OptimizerDialog& rOptimizerDialog, const OUString& rCon
 }
 
 
-OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
+static OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
         const Reference< XTextListener >& xTextListener, const Reference< XSpinListener >& xSpinListener, sal_Int32 nXPos, sal_Int32 nYPos,
         double fEffectiveMin, double fEffectiveMax, sal_Int16 nTabIndex )
 {
@@ -242,7 +242,7 @@ OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUString
 }
 
 
-OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
+static OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
     const Reference< XTextListener >& rTextListener, const bool bEnabled, const Sequence< OUString >& rItemList,
         sal_Int32 nXPos, sal_Int32 nYPos, sal_Int16 nTabIndex )
 {
@@ -284,7 +284,7 @@ OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUString& rCon
 }
 
 
-OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, const Reference< XItemListener >& rItemListener,
+static OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, const Reference< XItemListener >& rItemListener,
     const OUString& rLabel, sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int16 nTabIndex )
 {
     sal_Int32 nHeight = 8;
@@ -320,7 +320,7 @@ OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const OUString& r
 }
 
 
-OUString InsertListBox( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
+static OUString InsertListBox( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
     const Reference< XActionListener >& rActionListener, const bool bEnabled, const Sequence< OUString >& rItemList,
         sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int16 nTabIndex )
 {

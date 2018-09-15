@@ -744,7 +744,7 @@ void DialogWindow::SaveDialog()
     }
 }
 
-std::vector< lang::Locale > implGetLanguagesOnlyContainedInFirstSeq
+static std::vector< lang::Locale > implGetLanguagesOnlyContainedInFirstSeq
     ( const Sequence< lang::Locale >& aFirstSeq, const Sequence< lang::Locale >& aSecondSeq )
 {
     std::vector< lang::Locale > avRet;

@@ -1927,7 +1927,7 @@ static const CollatorWrapper*   pCollatorWrapper = nullptr;
 
 /* this function returns true, if aOne is less then aTwo
 */
-bool CompareSortingData_Impl( std::unique_ptr<SortingData_Impl> const & aOne, std::unique_ptr<SortingData_Impl> const & aTwo )
+static bool CompareSortingData_Impl( std::unique_ptr<SortingData_Impl> const & aOne, std::unique_ptr<SortingData_Impl> const & aTwo )
 {
     DBG_ASSERT( pCollatorWrapper, "*CompareSortingData_Impl(): Can't work this way!" );
 

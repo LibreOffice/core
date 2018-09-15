@@ -188,7 +188,7 @@ void GalApp::Init()
     }
 }
 
-std::vector<OUString> ReadResponseFile_Impl(OUString const& rInput)
+static std::vector<OUString> ReadResponseFile_Impl(OUString const& rInput)
 {
     osl::File file(rInput);
     osl::FileBase::RC rc = file.open(osl_File_OpenFlag_Read);
@@ -243,7 +243,7 @@ std::vector<OUString> ReadResponseFile_Impl(OUString const& rInput)
     return ret;
 }
 
-void
+static void
 ReadResponseFile(std::vector<INetURLObject> & rFiles, OUString const& rInput)
 {
     std::vector<OUString> files(ReadResponseFile_Impl(rInput));

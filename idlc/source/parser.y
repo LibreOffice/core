@@ -64,9 +64,9 @@ using ::rtl::OStringToOUString;
 using ::rtl::OStringBuffer;
 
 extern int yylex(void);
-void yyerror(char const *);
+static void yyerror(char const *);
 
-void checkIdentifier(::rtl::OString const * id)
+static void checkIdentifier(::rtl::OString const * id)
 {
     static short check = 0;
     if (check == 0) {
@@ -93,7 +93,7 @@ void checkIdentifier(::rtl::OString const * id)
         }
 }
 
-void reportDoubleMemberDeclarations(
+static void reportDoubleMemberDeclarations(
     AstInterface::DoubleMemberDeclarations const & doubleMembers)
 {
     for (auto const& doubleMember : doubleMembers)
@@ -102,7 +102,7 @@ void reportDoubleMemberDeclarations(
     }
 }
 
-void addInheritedInterface(
+static void addInheritedInterface(
     AstInterface * ifc, rtl::OString const & name, bool optional,
     rtl::OUString const & documentation)
 {
@@ -140,7 +140,7 @@ void addInheritedInterface(
     }
 }
 
-AstDeclaration const * createNamedType(
+static AstDeclaration const * createNamedType(
     rtl::OString const * scopedName, DeclList const * typeArgs)
 {
     AstDeclaration * decl = idlc()->scopes()->topNonNull()->lookupByName(
@@ -179,7 +179,7 @@ AstDeclaration const * createNamedType(
     return decl;
 }
 
-bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
+static bool includes(AstDeclaration const * type1, AstDeclaration const * type2) {
     OSL_ASSERT(type2 != nullptr);
     if (type1 != nullptr) {
         if (type1->getNodeType() == NT_instantiated_struct) {

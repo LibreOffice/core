@@ -50,18 +50,18 @@ namespace dbaui
     using namespace ::dbtools;
 
     // helper
-    bool operator ==(const OIndexField& _rLHS, const OIndexField& _rRHS)
+    static bool operator ==(const OIndexField& _rLHS, const OIndexField& _rRHS)
     {
         return  (_rLHS.sFieldName == _rRHS.sFieldName)
             &&  (_rLHS.bSortAscending == _rRHS.bSortAscending);
     }
 
-    bool operator !=(const OIndexField& _rLHS, const OIndexField& _rRHS)
+    static bool operator !=(const OIndexField& _rLHS, const OIndexField& _rRHS)
     {
         return !(_rLHS == _rRHS);
     }
 
-    bool operator ==(const IndexFields& _rLHS, const IndexFields& _rRHS)
+    static bool operator ==(const IndexFields& _rLHS, const IndexFields& _rRHS)
     {
         if (_rLHS.size() != _rRHS.size())
             return false;
@@ -77,7 +77,7 @@ namespace dbaui
         return true;
     }
 
-    bool operator !=(const IndexFields& _rLHS, const IndexFields& _rRHS)
+    static bool operator !=(const IndexFields& _rLHS, const IndexFields& _rRHS)
     {
         return !(_rLHS == _rRHS);
     }

@@ -66,7 +66,7 @@ void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep, sal
     terminating NULL character to be part of the string and returns bool
     instead of pointer, if character is 0 returns false.
  */
-bool ImpStrChr( const sal_Unicode* p, sal_Unicode c )
+static bool ImpStrChr( const sal_Unicode* p, sal_Unicode c )
 {
     if (!c)
         return false;

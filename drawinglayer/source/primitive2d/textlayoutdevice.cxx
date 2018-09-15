@@ -133,7 +133,7 @@ namespace drawinglayer
     namespace primitive2d
     {
         // static methods here
-        VirtualDevice& acquireGlobalVirtualDevice()
+        static VirtualDevice& acquireGlobalVirtualDevice()
         {
             scoped_timed_RefDev& rStdRefDevice = the_scoped_timed_RefDev::get();
 
@@ -143,7 +143,7 @@ namespace drawinglayer
             return rStdRefDevice->acquireVirtualDevice();
         }
 
-        void releaseGlobalVirtualDevice()
+        static void releaseGlobalVirtualDevice()
         {
             scoped_timed_RefDev& rStdRefDevice = the_scoped_timed_RefDev::get();
 

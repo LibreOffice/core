@@ -65,7 +65,7 @@
 
 using namespace ::com::sun::star;
 
-long ScaleMetricValue( long nVal, long nMul, long nDiv )
+static long ScaleMetricValue( long nVal, long nMul, long nDiv )
 {
     BigInt aVal( nVal );
 

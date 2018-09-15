@@ -37,7 +37,7 @@ namespace dmapper{
 namespace ConversionHelper{
 
 /// Convert OOXML border style to WW8 that editeng can handle.
-sal_Int32 lcl_convertBorderStyleFromToken(sal_Int32 nOOXMLType)
+static sal_Int32 lcl_convertBorderStyleFromToken(sal_Int32 nOOXMLType)
 {
     switch (nOOXMLType)
     {

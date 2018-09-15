@@ -176,27 +176,27 @@ SvxConfigPage::CanConfig( const OUString& aModuleId )
     return !(aModuleId == "com.sun.star.script.BasicIDE" || aModuleId == "com.sun.star.frame.Bibliography");
 }
 
-VclPtr<SfxTabPage> CreateSvxMenuConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
+static VclPtr<SfxTabPage> CreateSvxMenuConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
 {
     return VclPtr<SvxMenuConfigPage>::Create( pParent.pParent, *rSet );
 }
 
-VclPtr<SfxTabPage> CreateSvxContextMenuConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
+static VclPtr<SfxTabPage> CreateSvxContextMenuConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
 {
     return VclPtr<SvxMenuConfigPage>::Create( pParent.pParent, *rSet, false );
 }
 
-VclPtr<SfxTabPage> CreateKeyboardConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
+static VclPtr<SfxTabPage> CreateKeyboardConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
 {
        return VclPtr<SfxAcceleratorConfigPage>::Create( pParent.pParent, *rSet );
 }
 
-VclPtr<SfxTabPage> CreateSvxToolbarConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
+static VclPtr<SfxTabPage> CreateSvxToolbarConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
 {
     return VclPtr<SvxToolbarConfigPage>::Create( pParent.pParent, *rSet );
 }
 
-VclPtr<SfxTabPage> CreateSvxEventConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
+static VclPtr<SfxTabPage> CreateSvxEventConfigPage( TabPageParent pParent, const SfxItemSet* rSet )
 {
     return VclPtr<SvxEventConfigPage>::Create( pParent.pParent, *rSet, SvxEventConfigPage::EarlyInit() );
 }

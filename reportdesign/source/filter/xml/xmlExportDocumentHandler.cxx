@@ -38,7 +38,7 @@ namespace rptxml
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-void lcl_exportPrettyPrinting(const uno::Reference< xml::sax::XDocumentHandler >& _xDelegatee)
+static void lcl_exportPrettyPrinting(const uno::Reference< xml::sax::XDocumentHandler >& _xDelegatee)
 {
     SvtSaveOptions aSaveOpt;
     if ( aSaveOpt.IsPrettyPrinting() )
@@ -57,7 +57,7 @@ OUString lcl_createAttribute(const xmloff::token::XMLTokenEnum& _eNamespace,cons
     return sQName.makeStringAndClear();
 }
 
-void lcl_correctCellAddress(const OUString & _sName, const uno::Reference< xml::sax::XAttributeList > & xAttribs)
+static void lcl_correctCellAddress(const OUString & _sName, const uno::Reference< xml::sax::XAttributeList > & xAttribs)
 {
     SvXMLAttributeList* pList = SvXMLAttributeList::getImplementation(xAttribs);
     OUString sCellAddress = pList->getValueByName(_sName);

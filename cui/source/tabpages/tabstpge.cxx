@@ -66,7 +66,7 @@ const sal_uInt16 SvxTabulatorTabPage::pRanges[] =
     0
 };
 
-void FillUpWithDefTabs_Impl( long nDefDist, SvxTabStopItem& rTabs )
+static void FillUpWithDefTabs_Impl( long nDefDist, SvxTabStopItem& rTabs )
 {
     if( rTabs.Count() )
         return;

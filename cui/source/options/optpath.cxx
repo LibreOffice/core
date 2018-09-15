@@ -168,7 +168,7 @@ static OUString Convert_Impl( const OUString& rValue )
 
 // functions -------------------------------------------------------------
 
-bool IsMultiPath_Impl( const sal_uInt16 nIndex )
+static bool IsMultiPath_Impl( const sal_uInt16 nIndex )
 {
 #if OSL_DEBUG_LEVEL > 1
     return ( SvtPathOptions::PATH_AUTOCORRECT == nIndex ||

@@ -50,6 +50,8 @@
 #include <comphelper/lok.hxx>
 #include <vcl/weld.hxx>
 
+#include "viewfunc.hxx"
+
 // The SetVisArea of the DocShell must not be called from InnerResizePixel.
 // But our adjustments must take place.
 static bool bProtectDocShellVisArea = false;
@@ -68,7 +70,7 @@ bool SwView::IsDocumentBorder()
            SvxZoomType::PAGEWIDTH_NOBORDER == m_pWrtShell->GetViewOptions()->GetZoomType();
 }
 
-inline long GetLeftMargin( SwView const &rView )
+static inline long GetLeftMargin( SwView const &rView )
 {
     SvxZoomType eType = rView.GetWrtShell().GetViewOptions()->GetZoomType();
     long lRet = rView.GetWrtShell().GetAnyCurRect(CurRectType::PagePrt).Left();

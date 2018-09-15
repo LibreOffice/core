@@ -52,7 +52,7 @@ namespace
 namespace utl
 {
 
-OUString getParentName( const OUString& aFileName )
+static OUString getParentName( const OUString& aFileName )
 {
     sal_Int32 lastIndex = aFileName.lastIndexOf( '/' );
     OUString aParent;
@@ -71,7 +71,7 @@ OUString getParentName( const OUString& aFileName )
     return aParent;
 }
 
-bool ensuredir( const OUString& rUnqPath )
+static bool ensuredir( const OUString& rUnqPath )
 {
     OUString aPath;
     if ( rUnqPath.isEmpty() )
@@ -115,7 +115,7 @@ bool ensuredir( const OUString& rUnqPath )
     return bSuccess;
 }
 
-OUString ConstructTempDir_Impl( const OUString* pParent )
+static OUString ConstructTempDir_Impl( const OUString* pParent )
 {
     OUString aName;
     if ( pParent && !pParent->isEmpty() )
@@ -239,7 +239,7 @@ namespace
     };
 };
 
-OUString lcl_createName(
+static OUString lcl_createName(
     const OUString& rLeadingChars, Tokens & tokens, const OUString* pExtension,
     const OUString* pParent, bool bDirectory, bool bKeep, bool bLock,
     bool bCreateParentDirs )
@@ -314,7 +314,7 @@ OUString lcl_createName(
     return OUString();
 }
 
-OUString CreateTempName_Impl( const OUString* pParent, bool bKeep, bool bDir = true )
+static OUString CreateTempName_Impl( const OUString* pParent, bool bKeep, bool bDir = true )
 {
     OUString aEyeCatcher = "lu";
 #ifdef UNX

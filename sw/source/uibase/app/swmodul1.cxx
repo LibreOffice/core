@@ -439,7 +439,7 @@ static Color lcl_GetAuthorColor(std::size_t nPos)
 }
 
 /// Returns a JSON representation of a redline author.
-boost::property_tree::ptree lcl_AuthorToJson(const OUString& rAuthor, std::size_t nIndex)
+static boost::property_tree::ptree lcl_AuthorToJson(const OUString& rAuthor, std::size_t nIndex)
 {
     boost::property_tree::ptree aRet;
     aRet.put("index", nIndex);

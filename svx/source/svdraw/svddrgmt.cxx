@@ -2796,7 +2796,7 @@ void SdrDragCrook::TakeSdrDragComment(OUString& rStr) const
 #define DRAG_CROOK_RASTER_MAXIMUM   (15)
 #define DRAG_CROOK_RASTER_DISTANCE  (30)
 
-basegfx::B2DPolyPolygon impCreateDragRaster(SdrPageView const & rPageView, const tools::Rectangle& rMarkRect)
+static basegfx::B2DPolyPolygon impCreateDragRaster(SdrPageView const & rPageView, const tools::Rectangle& rMarkRect)
 {
     basegfx::B2DPolyPolygon aRetval;
 

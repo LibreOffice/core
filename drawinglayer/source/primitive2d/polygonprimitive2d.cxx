@@ -28,6 +28,8 @@
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <comphelper/random.hxx>
 
+#include <converters.hxx>
+
 using namespace com::sun::star;
 using namespace std;
 

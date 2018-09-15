@@ -98,7 +98,7 @@ void SwCompatibilityOptPage::dispose()
     SfxTabPage::dispose();
 }
 
-sal_uLong convertBools2Ulong_Impl
+static sal_uLong convertBools2Ulong_Impl
 (
     bool _bUsePrtMetrics,
     bool _bAddSpacing,

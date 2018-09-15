@@ -84,7 +84,7 @@ using namespace ::com::sun::star::i18n;
 namespace AttrSetHandleHelper
 {
 
-void GetNewAutoStyle( std::shared_ptr<const SfxItemSet>& rpAttrSet,
+static void GetNewAutoStyle( std::shared_ptr<const SfxItemSet>& rpAttrSet,
                       const SwContentNode& rNode,
                       SwAttrSet const & rNewAttrSet )
 {
@@ -99,7 +99,7 @@ void GetNewAutoStyle( std::shared_ptr<const SfxItemSet>& rpAttrSet,
     rNode.SetModifyAtAttr( bSetModifyAtAttr );
 }
 
-void SetParent( std::shared_ptr<const SfxItemSet>& rpAttrSet,
+static void SetParent( std::shared_ptr<const SfxItemSet>& rpAttrSet,
                 const SwContentNode& rNode,
                 const SwFormat* pParentFormat,
                 const SwFormat* pConditionalFormat )
@@ -135,7 +135,7 @@ void SetParent( std::shared_ptr<const SfxItemSet>& rpAttrSet,
     }
 }
 
-const SfxPoolItem* Put( std::shared_ptr<const SfxItemSet>& rpAttrSet,
+static const SfxPoolItem* Put( std::shared_ptr<const SfxItemSet>& rpAttrSet,
                         const SwContentNode& rNode,
                         const SfxPoolItem& rAttr )
 {
@@ -146,7 +146,7 @@ const SfxPoolItem* Put( std::shared_ptr<const SfxItemSet>& rpAttrSet,
     return pRet;
 }
 
-bool Put( std::shared_ptr<const SfxItemSet>& rpAttrSet, const SwContentNode& rNode,
+static bool Put( std::shared_ptr<const SfxItemSet>& rpAttrSet, const SwContentNode& rNode,
          const SfxItemSet& rSet )
 {
     SwAttrSet aNewSet( static_cast<const SwAttrSet&>(*rpAttrSet) );
@@ -173,7 +173,7 @@ bool Put( std::shared_ptr<const SfxItemSet>& rpAttrSet, const SwContentNode& rNo
     return bRet;
 }
 
-bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
+static bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
             const SwContentNode& rNode, const SfxPoolItem& rAttr,
             SwAttrSet* pOld, SwAttrSet* pNew )
 {
@@ -192,7 +192,7 @@ bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
     return bRet;
 }
 
-bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
+static bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
             const SwContentNode& rNode, const SfxItemSet& rSet,
             SwAttrSet* pOld, SwAttrSet* pNew )
 {
@@ -225,7 +225,7 @@ bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
     return bRet;
 }
 
-sal_uInt16 ClearItem_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
+static sal_uInt16 ClearItem_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
                      const SwContentNode& rNode, sal_uInt16 nWhich,
                      SwAttrSet* pOld, SwAttrSet* pNew )
 {
@@ -238,7 +238,7 @@ sal_uInt16 ClearItem_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
     return nRet;
 }
 
-sal_uInt16 ClearItem_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
+static sal_uInt16 ClearItem_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
                      const SwContentNode& rNode,
                      sal_uInt16 nWhich1, sal_uInt16 nWhich2,
                      SwAttrSet* pOld, SwAttrSet* pNew )
@@ -814,7 +814,7 @@ const SwTextNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
     return pRet;
 }
 
-inline bool IsValidNextPrevNd( const SwNode& rNd )
+static inline bool IsValidNextPrevNd( const SwNode& rNd )
 {
     return SwNodeType::Table == rNd.GetNodeType() ||
            ( SwNodeType::ContentMask & rNd.GetNodeType() ) ||

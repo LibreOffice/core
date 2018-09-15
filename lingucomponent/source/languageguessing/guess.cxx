@@ -39,7 +39,7 @@
 
 using namespace std;
 
-inline bool isSeparator(const char c){
+static inline bool isSeparator(const char c){
     return c == GUESS_SEPARATOR_OPEN || c == GUESS_SEPARATOR_SEP || c == GUESS_SEPARATOR_CLOSE || c == '\0';
 }
 

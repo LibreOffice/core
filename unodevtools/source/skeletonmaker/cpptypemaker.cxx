@@ -30,7 +30,7 @@ using namespace ::codemaker::cpp;
 
 namespace skeletonmaker { namespace cpp {
 
-void printType(
+static void printType(
     std::ostream & o, ProgramOptions const & options,
     rtl::Reference< TypeManager > const & manager,
     codemaker::UnoType::Sort sort, OUString const & nucleus, sal_Int32 rank,
@@ -134,7 +134,7 @@ void printType(
         referenceType, defaultvalue);
 }
 
-bool printConstructorParameters(
+static bool printConstructorParameters(
     std::ostream & o, ProgramOptions const & options,
     rtl::Reference< TypeManager > const & manager,
     codemaker::UnoType::Sort sort,
@@ -268,7 +268,7 @@ bool printConstructorParameters(
     return previous;
 }
 
-void printConstructor(
+static void printConstructor(
     std::ostream & o, ProgramOptions const & options,
     rtl::Reference< TypeManager > const & manager,
     codemaker::UnoType::Sort sort,
@@ -281,7 +281,7 @@ void printConstructor(
     o << ");\n";
 }
 
-void printMethodParameters(
+static void printMethodParameters(
     std::ostream & o, ProgramOptions const & options,
     rtl::Reference< TypeManager > const & manager,
     std::vector< unoidl::InterfaceTypeEntity::Method::Parameter > const &
@@ -311,7 +311,7 @@ void printMethodParameters(
     }
 }
 
-void printExceptionSpecification(
+static void printExceptionSpecification(
     std::ostream & o,
     ProgramOptions const & options,
     rtl::Reference< TypeManager > const & manager,
@@ -328,7 +328,7 @@ void printExceptionSpecification(
     o << ")";
 }
 
-void printSetPropertyMixinBody(
+static void printSetPropertyMixinBody(
     std::ostream & o, unoidl::InterfaceTypeEntity::Attribute const & attribute)
 {
     unoidl::AccumulationBasedServiceEntity::Property::Attributes propFlags
@@ -652,7 +652,7 @@ void printMethods(std::ostream & o,
         o << "\n";
 }
 
-void printConstructors(
+static void printConstructors(
     std::ostream & o, ProgramOptions const & options,
     rtl::Reference< TypeManager > const & manager, OUString const & name)
 {
@@ -700,7 +700,7 @@ void printConstructors(
     }
 }
 
-void printServiceMembers(
+static void printServiceMembers(
     std::ostream & o, ProgramOptions const & options,
     rtl::Reference< TypeManager > const & manager,
     OUString const & name,
@@ -739,7 +739,7 @@ void printServiceMembers(
     }
 }
 
-void printMapsToCppType(
+static void printMapsToCppType(
     std::ostream & o, ProgramOptions const & options,
     rtl::Reference< TypeManager > const & manager,
     codemaker::UnoType::Sort sort, OUString const & nucleus, sal_Int32 rank,

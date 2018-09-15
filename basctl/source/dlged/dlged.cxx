@@ -646,7 +646,7 @@ void DlgEditor::Cut()
 }
 
 
-void implCopyStreamToByteSequence( const Reference< XInputStream >& xStream,
+static void implCopyStreamToByteSequence( const Reference< XInputStream >& xStream,
     Sequence< sal_Int8 >& bytes )
 {
     xStream->readBytes( bytes, xStream->available() );
@@ -1102,7 +1102,7 @@ namespace Print
     long const nBorder = 300;
 }
 
-void lcl_PrintHeader( Printer* pPrinter, const OUString& rTitle ) // not working yet
+static void lcl_PrintHeader( Printer* pPrinter, const OUString& rTitle ) // not working yet
 {
 
     pPrinter->Push();

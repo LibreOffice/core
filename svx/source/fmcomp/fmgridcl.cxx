@@ -98,7 +98,7 @@ struct FmGridHeaderData
     Reference< XInterface > xDroppedResultSet;
 };
 
-void SetMenuItem(const OUString& rImgID, const OString &rID, Menu& rMenu, bool bDesignMode)
+static void SetMenuItem(const OUString& rImgID, const OString &rID, Menu& rMenu, bool bDesignMode)
 {
     BitmapEx aBitmap(rImgID);
     Image aImage(aBitmap);

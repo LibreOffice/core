@@ -32,7 +32,7 @@
 namespace chart
 {
 
-void lcl_setValue( FormattedField& rFmtField, double fValue )
+static void lcl_setValue( FormattedField& rFmtField, double fValue )
 {
     rFmtField.SetValue( fValue );
     rFmtField.SetDefaultValue( fValue );

@@ -152,7 +152,7 @@ sal_Int32 ExplicitCategoriesProvider::getCategoryLevelCount() const
     return nCount;
 }
 
-std::vector<sal_Int32> lcl_getLimitingBorders( const std::vector< ComplexCategory >& rComplexCategories )
+static std::vector<sal_Int32> lcl_getLimitingBorders( const std::vector< ComplexCategory >& rComplexCategories )
 {
     std::vector<sal_Int32> aLimitingBorders;
     sal_Int32 nBorderIndex = 0; /*border below the index*/
@@ -250,7 +250,7 @@ uno::Sequence< OUString > SplitCategoriesProvider_ForLabeledDataSequences::getSt
     return aRet;
 }
 
-std::vector< ComplexCategory > lcl_DataSequenceToComplexCategoryVector(
+static std::vector< ComplexCategory > lcl_DataSequenceToComplexCategoryVector(
     const uno::Sequence< OUString >& rStrings
     , const std::vector<sal_Int32>& rLimitingBorders, bool bCreateSingleCategories )
 {
@@ -290,7 +290,7 @@ std::vector< ComplexCategory > lcl_DataSequenceToComplexCategoryVector(
     return aResult;
 }
 
-sal_Int32 lcl_getCategoryCount( std::vector< ComplexCategory >& rComplexCategories )
+static sal_Int32 lcl_getCategoryCount( std::vector< ComplexCategory >& rComplexCategories )
 {
     sal_Int32 nCount = 0;
     for (auto const& complexCategory : rComplexCategories)
@@ -298,7 +298,7 @@ sal_Int32 lcl_getCategoryCount( std::vector< ComplexCategory >& rComplexCategori
     return nCount;
 }
 
-Sequence< OUString > lcl_getExplicitSimpleCategories(
+static Sequence< OUString > lcl_getExplicitSimpleCategories(
     const SplitCategoriesProvider& rSplitCategoriesProvider,
     std::vector< std::vector< ComplexCategory > >& rComplexCats )
 {
@@ -383,7 +383,7 @@ Sequence< OUString > ExplicitCategoriesProvider::getExplicitSimpleCategories(
     return lcl_getExplicitSimpleCategories( rSplitCategoriesProvider, aComplexCats );
 }
 
-bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataSequence, std::vector< double >& rDateCategories, bool bIsAutoDate, ChartModel& rModel )
+static bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataSequence, std::vector< double >& rDateCategories, bool bIsAutoDate, ChartModel& rModel )
 {
     bool bOnlyDatesFound = true;
     bool bAnyDataFound = false;

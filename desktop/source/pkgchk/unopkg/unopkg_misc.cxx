@@ -291,7 +291,7 @@ void printf_package(
 
 } // anon namespace
 
-void printf_unaccepted_licenses(
+static void printf_unaccepted_licenses(
     Reference<deployment::XPackage> const & ext)
 {
         OUString id(
@@ -396,7 +396,7 @@ Reference<XComponentContext> connectToOffice(
 /** returns the path to the lock file used by unopkg.
     @return the path. An empty string signifies an error.
 */
-OUString getLockFilePath()
+static OUString getLockFilePath()
 {
     OUString ret;
     OUString sBootstrap("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}");

@@ -203,7 +203,7 @@ Download::getProxyForURL(const OUString& rURL, OString& rHost, sal_Int32& rPort)
 }
 
 
-bool curl_run(const OUString& rURL, OutData& out, const OString& aProxyHost, sal_Int32 nProxyPort)
+static bool curl_run(const OUString& rURL, OutData& out, const OString& aProxyHost, sal_Int32 nProxyPort)
 {
     /* Need to investigate further whether it is necessary to call
      * curl_global_init or not - leave it for now (as the ftp UCB content

@@ -624,7 +624,7 @@ bool ScUnoAddInCollection::GetCalcName( const OUString& rExcelName, OUString& rR
     return false;
 }
 
-inline bool IsTypeName( const OUString& rName, const uno::Type& rType )
+static inline bool IsTypeName( const OUString& rName, const uno::Type& rType )
 {
     return rName == rType.getTypeName();
 }

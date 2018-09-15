@@ -43,7 +43,7 @@ namespace linguistic
 
 #define MAX_PROPOSALS   40
 
-bool SeqHasEntry(
+static bool SeqHasEntry(
         const std::vector< OUString > &rSeq,
         const OUString &rTxt)
 {

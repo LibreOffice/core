@@ -31,7 +31,7 @@ using namespace ::codemaker::cpp;
 
 namespace skeletonmaker { namespace cpp {
 
-void generateIncludes(std::ostream & o,
+static void generateIncludes(std::ostream & o,
          const std::set< OUString >& interfaces,
          const OUString & propertyhelper, const bool serviceobject,
          const bool supportxcomponent)
@@ -67,7 +67,7 @@ void generateIncludes(std::ostream & o,
     }
 }
 
-short generateNamespace(std::ostream & o,
+static short generateNamespace(std::ostream & o,
                         const OString & implname,
                         bool serviceobject,
                         OString & nm)
@@ -112,7 +112,7 @@ short generateNamespace(std::ostream & o,
     return count;
 }
 
-OString generateCompHelperDeclaration(std::ostream & o,
+static OString generateCompHelperDeclaration(std::ostream & o,
                                       const OString & implname)
 {
     OString nm;
@@ -137,7 +137,7 @@ OString generateCompHelperDeclaration(std::ostream & o,
     return nm;
 }
 
-void generateCompHelperDefinition(std::ostream & o,
+static void generateCompHelperDefinition(std::ostream & o,
          const OString & implname,
          const OString & classname,
          const std::set< OUString >& services)
@@ -176,7 +176,7 @@ void generateCompHelperDefinition(std::ostream & o,
 
 }
 
-void generateCompFunctions(std::ostream & o, const OString & nmspace)
+static void generateCompFunctions(std::ostream & o, const OString & nmspace)
 {
     o << "static ::cppu::ImplementationEntry const entries[] = {\n"
          "    { &" << nmspace << "::_create,\n      &"
@@ -500,7 +500,7 @@ void generateXDispatchProvider(std::ostream& o,
         "    }\n\n    return lDispatcher;\n}\n\n";
 }
 
-void generateAddinConstructorAndHelper(std::ostream& o,
+static void generateAddinConstructorAndHelper(std::ostream& o,
          ProgramOptions const & options,
          rtl::Reference< TypeManager > const & manager, const OString & classname,
          const std::set< OUString >& interfaces)
@@ -574,7 +574,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
     o <<"}\n\n";
 }
 
-void generateMemberInitialization(std::ostream& o,
+static void generateMemberInitialization(std::ostream& o,
                                   ProgramOptions const & options,
                                   rtl::Reference< TypeManager > const & manager,
                                   AttributeInfo const & members)
@@ -596,7 +596,7 @@ void generateMemberInitialization(std::ostream& o,
     }
 }
 
-void generateMemberDeclaration(std::ostream& o,
+static void generateMemberDeclaration(std::ostream& o,
                                ProgramOptions const & options,
                                rtl::Reference< TypeManager > const & manager,
                                AttributeInfo const & members)
@@ -610,7 +610,7 @@ void generateMemberDeclaration(std::ostream& o,
     }
 }
 
-OString generateClassDefinition(std::ostream& o,
+static OString generateClassDefinition(std::ostream& o,
          ProgramOptions const & options,
          rtl::Reference< TypeManager > const & manager,
          OString const & classname,
@@ -843,7 +843,7 @@ OString generateClassDefinition(std::ostream& o,
     return parentname.makeStringAndClear();
 }
 
-void generateXServiceInfoBodies(std::ostream& o,
+static void generateXServiceInfoBodies(std::ostream& o,
                                 OString const & classname,
                                 OString const & comphelpernamespace)
 {
@@ -868,7 +868,7 @@ void generateXServiceInfoBodies(std::ostream& o,
 }
 
 
-void generateMethodBodies(std::ostream& o,
+static void generateMethodBodies(std::ostream& o,
         ProgramOptions const & options,
         rtl::Reference< TypeManager > const & manager,
         std::set< OUString > const & interfaces,
@@ -891,7 +891,7 @@ void generateMethodBodies(std::ostream& o,
     }
 }
 
-void generateQueryInterface(std::ostream& o,
+static void generateQueryInterface(std::ostream& o,
                             ProgramOptions const & options,
                             rtl::Reference< TypeManager > const & manager,
                             const std::set< OUString >& interfaces,

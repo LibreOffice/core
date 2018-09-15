@@ -422,7 +422,7 @@ using namespace ::jni_uno;
 
 extern "C" {
 
-void java_env_dispose(uno_Environment * env) {
+static void java_env_dispose(uno_Environment * env) {
     auto * envData
         = static_cast<jni_uno::JniUnoEnvironmentData *>(env->pContext);
     if (envData != nullptr) {
@@ -456,7 +456,7 @@ void java_env_dispose(uno_Environment * env) {
     }
 }
 
-void java_env_disposing(uno_Environment * env) {
+static void java_env_disposing(uno_Environment * env) {
     java_env_dispose(env);
     delete static_cast<jni_uno::JniUnoEnvironmentData *>(env->pContext);
 }

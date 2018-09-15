@@ -78,7 +78,7 @@ ExtrusionBar::~ExtrusionBar()
     SetRepeatTarget(nullptr);
 }
 
-void getLightingDirectionDefaults( const Direction3D **pLighting1Defaults, const Direction3D **pLighting2Defaults )
+static void getLightingDirectionDefaults( const Direction3D **pLighting1Defaults, const Direction3D **pLighting2Defaults )
 {
 
     static const Direction3D aLighting1Defaults[9] =
@@ -608,7 +608,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindi
     }
 }
 
-void getExtrusionDirectionState( SdrView const * pSdrView, SfxItemSet& rSet )
+static void getExtrusionDirectionState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -755,7 +755,7 @@ void getExtrusionDirectionState( SdrView const * pSdrView, SfxItemSet& rSet )
         rSet.DisableItem( SID_EXTRUSION_DIRECTION );
 }
 
-void getExtrusionProjectionState( SdrView const * pSdrView, SfxItemSet& rSet )
+static void getExtrusionProjectionState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -810,7 +810,7 @@ void getExtrusionProjectionState( SdrView const * pSdrView, SfxItemSet& rSet )
         rSet.DisableItem( SID_EXTRUSION_PROJECTION );
 }
 
-void getExtrusionSurfaceState( SdrView const * pSdrView, SfxItemSet& rSet )
+static void getExtrusionSurfaceState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -895,7 +895,7 @@ void getExtrusionSurfaceState( SdrView const * pSdrView, SfxItemSet& rSet )
         rSet.DisableItem( SID_EXTRUSION_SURFACE );
 }
 
-void getExtrusionDepthState( SdrView const * pSdrView, SfxItemSet& rSet )
+static void getExtrusionDepthState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -974,7 +974,7 @@ static bool compare_direction( const Direction3D& d1, const Direction3D& d2 )
     return false;
 }
 
-void getExtrusionLightingDirectionState( SdrView const * pSdrView, SfxItemSet& rSet )
+static void getExtrusionLightingDirectionState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -1053,7 +1053,7 @@ void getExtrusionLightingDirectionState( SdrView const * pSdrView, SfxItemSet& r
         rSet.DisableItem( SID_EXTRUSION_LIGHTING_DIRECTION );
 }
 
-void getExtrusionLightingIntensityState( SdrView const * pSdrView, SfxItemSet& rSet )
+static void getExtrusionLightingIntensityState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
@@ -1120,7 +1120,7 @@ void getExtrusionLightingIntensityState( SdrView const * pSdrView, SfxItemSet& r
         rSet.DisableItem( SID_EXTRUSION_LIGHTING_INTENSITY );
 }
 
-void getExtrusionColorState( SdrView const * pSdrView, SfxItemSet& rSet )
+static void getExtrusionColorState( SdrView const * pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
