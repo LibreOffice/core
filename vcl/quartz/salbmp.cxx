@@ -937,8 +937,8 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth,
     if (m_pUserBuffer.get() && (nX + nWidth <= mnWidth) && (nY + nHeight <= mnHeight))
     {
         const sal_uInt32 nDestBytesPerRow = nWidth << 2;
-        sal_uInt32* pMaskBuffer = static_cast<sal_uInt32*>( std::malloc( nHeight * nDestBytesPerRow ) );
-        sal_uInt32* pDest = pMaskBuffer;
+        std::unique_ptr<sal_uInt32[]> pMaskBuffer(new (std::nothrow) sal_uInt32[ nHeight * nDestBytesPerRow / 4] );
+        sal_uInt32* pDest = pMaskBuffer.get();
 
         ImplPixelFormat* pSourcePixels = ImplPixelFormat::GetFormat( mnBits, maPalette );
 
@@ -967,14 +967,10 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth,
                 pSource += mnBytesPerRow;
             }
 
-            CGDataProviderRef xDataProvider( CGDataProviderCreateWithData(nullptr, pMaskBuffer, nHeight * nDestBytesPerRow, &CFRTLFree) );
+            CGDataProviderRef xDataProvider( CGDataProviderCreateWithData(nullptr, pMaskBuffer.release(), nHeight * nDestBytesPerRow, &CFRTLFree) );
             xMask = CGImageCreate(nWidth, nHeight, 8, 32, nDestBytesPerRow, GetSalData()->mxRGBSpace, kCGImageAlphaPremultipliedFirst, xDataProvider, nullptr, true, kCGRenderingIntentDefault);
             SAL_INFO("vcl.cg", "CGImageCreate(" << nWidth << "x" << nHeight << "x8) = " << xMask );
             CFRelease(xDataProvider);
-        }
-        else
-        {
-            free(pMaskBuffer);
         }
 
         delete pSourcePixels;
