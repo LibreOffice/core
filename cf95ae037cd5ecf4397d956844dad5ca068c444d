@@ -16,6 +16,24 @@
       "revId": "cf95ae037cd5ecf4397d956844dad5ca068c444d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_03401035",
+        "filename": "xmloff/source/text/txtflde.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1934,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2018-09-16T14:41:32Z",
+      "side": 1,
+      "message": "Thanks! I\u0027ll do this as follow-up change.",
+      "parentUuid": "bff0334d_c33468e1",
+      "revId": "cf95ae037cd5ecf4397d956844dad5ca068c444d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
