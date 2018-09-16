@@ -377,6 +377,12 @@ public:
      */
     virtual void selectPart(int /*nPart*/, int /*nSelect*/) {}
 
+    /**
+     * Move selected pages/slides to a new position.
+     * nPosition: the new position to move to.
+     * bDuplicate: to copy (true), or to move (false).
+     */
+    virtual void moveSelectedParts(int /*nPosition*/, bool /*bDuplicate*/) {}
 };
 } // namespace vcl
 

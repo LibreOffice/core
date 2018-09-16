@@ -592,6 +592,7 @@ static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis);
 static int doc_getPart(LibreOfficeKitDocument* pThis);
 static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart);
 static void doc_selectPart(LibreOfficeKitDocument* pThis, int nPart, int nSelect);
+static void doc_moveSelectedParts(LibreOfficeKitDocument* pThis, int nPosition, bool bDuplicate);
 static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart);
 static void doc_setPartMode(LibreOfficeKitDocument* pThis, int nPartMode);
 static void doc_paintTile(LibreOfficeKitDocument* pThis,
@@ -743,6 +744,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->getPart = doc_getPart;
         m_pDocumentClass->setPart = doc_setPart;
         m_pDocumentClass->selectPart = doc_selectPart;
+        m_pDocumentClass->moveSelectedParts = doc_moveSelectedParts;
         m_pDocumentClass->getPartName = doc_getPartName;
         m_pDocumentClass->setPartMode = doc_setPartMode;
         m_pDocumentClass->paintTile = doc_paintTile;
@@ -2050,6 +2052,22 @@ static void doc_selectPart(LibreOfficeKitDocument* pThis, int nPart, int nSelect
     }
 
     pDoc->selectPart( nPart, nSelect );
+}
+
+static void doc_moveSelectedParts(LibreOfficeKitDocument* pThis, int nPosition, bool bDuplicate)
+{
+    SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return;
+    }
+
+    pDoc->moveSelectedParts(nPosition, bDuplicate);
 }
 
 static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)

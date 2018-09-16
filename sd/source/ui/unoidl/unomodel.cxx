@@ -2291,6 +2291,31 @@ void SdXImpressDocument::selectPart(int nPart, int nSelect)
     pViewSh->SelectPage(nPart, nSelect);
 }
 
+void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate)
+{
+    // Duplicating is currently unsupported.
+    if (!bDuplicate)
+        mpDoc->MovePages(nPosition);
+}
+
+OUString SdXImpressDocument::getPartInfo(int nPart)
+{
+    DrawViewShell* pViewSh = GetViewShell();
+    if (!pViewSh)
+        return OUString();
+
+    OUString aPartInfo;
+    const bool bIsVisible = pViewSh->IsVisible(nPart);
+    const bool bIsSelected = pViewSh->IsSelected(nPart);
+
+    aPartInfo += "{ \"visible\": \"";
+    aPartInfo += OUString::number(static_cast<unsigned int>(bIsVisible));
+    aPartInfo += "\", \"selected\": \"";
+    aPartInfo += OUString::number(static_cast<unsigned int>(bIsSelected));
+    aPartInfo += "\" }";
+    return aPartInfo;
+}
+
 void SdXImpressDocument::setPart( int nPart )
 {
     DrawViewShell* pViewSh = GetViewShell();
