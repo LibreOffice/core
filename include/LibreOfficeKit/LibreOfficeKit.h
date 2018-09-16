@@ -381,6 +381,9 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::selectPart().
     void (*selectPart) (LibreOfficeKitDocument* pThis, int nPart, int nSelect);
 
+    /// @see lok::Document::moveSelectedParts().
+    void (*moveSelectedParts) (LibreOfficeKitDocument* pThis, int nPosition, bool bDuplicate);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
