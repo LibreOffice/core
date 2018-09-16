@@ -417,7 +417,7 @@ std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet
 #ifdef DEBUG
     {
         sal_Int32 nCheck = -1;
-        IStylePoolIteratorAccess* pIter = createIterator(false,false);
+        std::unique_ptr<IStylePoolIteratorAccess> pIter = createIterator(false,false);
         std::shared_ptr<SfxItemSet> pTemp;
         do
         {
@@ -425,7 +425,6 @@ std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet
             pTemp = pIter->getNext();
         } while( pTemp.get() );
         DBG_ASSERT( mnCount == nCheck, "Wrong counting");
-        delete pIter;
     }
 #endif
     return pCurNode->getItemSet();
