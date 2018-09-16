@@ -217,11 +217,20 @@ void PageSelector::CheckConsistency() const
     }
 }
 
-bool PageSelector::IsPageSelected (int nPageIndex)
+bool PageSelector::IsPageSelected(int nPageIndex)
 {
     SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
     if (pDescriptor.get() != nullptr)
         return pDescriptor->HasState(PageDescriptor::ST_Selected);
+    else
+        return false;
+}
+
+bool PageSelector::IsPageVisible(int nPageIndex)
+{
+    SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
+    if (pDescriptor.get() != nullptr)
+        return pDescriptor->HasState(PageDescriptor::ST_Visible);
     else
         return false;
 }
