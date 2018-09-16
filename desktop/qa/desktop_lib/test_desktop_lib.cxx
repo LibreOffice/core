@@ -2716,9 +2716,10 @@ void DesktopLOKTest::testABI()
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(47), offsetof(struct _LibreOfficeKitDocumentClass, postWindowGestureEvent));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(48), offsetof(struct _LibreOfficeKitDocumentClass, createViewWithOptions));
     CPPUNIT_ASSERT_EQUAL(documentClassOffset(49), offsetof(struct _LibreOfficeKitDocumentClass, selectPart));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(50), offsetof(struct _LibreOfficeKitDocumentClass, moveSelectedParts));
     // Extending is fine, update this, and add new assert for the offsetof the
     // new method
-    CPPUNIT_ASSERT_EQUAL(documentClassOffset(50), sizeof(struct _LibreOfficeKitDocumentClass));
+    CPPUNIT_ASSERT_EQUAL(documentClassOffset(51), sizeof(struct _LibreOfficeKitDocumentClass));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);

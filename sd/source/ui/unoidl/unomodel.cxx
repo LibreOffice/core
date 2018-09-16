@@ -2282,6 +2282,13 @@ void SdXImpressDocument::selectPart(int nPart, int nSelect)
     pViewSh->SelectPage(nPart, nSelect);
 }
 
+void SdXImpressDocument::moveSelectedParts(int nPosition, bool bDuplicate)
+{
+    // Duplicating is currently unsupported.
+    if (!bDuplicate)
+        mpDoc->MovePages(nPosition);
+}
+
 OUString SdXImpressDocument::getPartInfo(int nPart)
 {
     DrawViewShell* pViewSh = GetViewShell();

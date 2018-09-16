@@ -656,6 +656,14 @@ public:
         mpDoc->pClass->selectPart(mpDoc, nPart, nSelect);
     }
 
+    /// Moves the selected pages/slides to a new position.
+    /// nPosition is the new position where the selection
+    /// should go. bDuplicate when true will copy instead of move.
+    void moveSelectedParts(int nPosition, bool bDuplicate)
+    {
+        mpDoc->pClass->moveSelectedParts(mpDoc, nPosition, bDuplicate);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
