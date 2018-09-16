@@ -4931,7 +4931,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="DrawSection">
+                      <object class="sfxlo-OptionalBox" id="DrawTextSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -4946,10 +4946,10 @@
                             <property name="show_arrow">False</property>
                             <property name="icon_size">3</property>
                             <child>
-                              <object class="GtkToolButton" id="Insert-DrawText">
+                              <object class="GtkToolButton" id="Insert-Text">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:DrawText</property>
+                                <property name="action_name">.uno:Text</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -5044,10 +5044,10 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Insert-BasicShapes.round-rectangle">
+                                  <object class="GtkToolButton" id="Insert-BasicShapes.ellipse">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:BasicShapes.round-rectangle</property>
+                                    <property name="action_name">.uno:BasicShapes.ellipse</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -5055,10 +5055,10 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Insert-BasicShapes.ellipse">
+                                  <object class="GtkToolButton" id="Insert-DrawCaption">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:BasicShapes.ellipse</property>
+                                    <property name="action_name">.uno:DrawCaption</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -5102,7 +5102,7 @@
                             <property name="expand">False</property>
                             <property name="fill">True</property>
                             <property name="padding">5</property>
-                            <property name="position">2</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                         <style>
@@ -5116,19 +5116,19 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="DrawSection1">
+                      <object class="sfxlo-OptionalBox" id="DrawSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <child>
-                          <object class="GtkBox" id="GroupB82">
+                          <object class="GtkBox" id="GroupB75">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="shapes13">
+                              <object class="sfxlo-NotebookbarToolBox" id="shapes6">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
@@ -5172,7 +5172,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="shapes14">
+                              <object class="sfxlo-NotebookbarToolBox" id="shapes8">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
@@ -5219,7 +5219,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">3</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
@@ -11174,10 +11174,10 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Draw-BasicShapes.round-rectangle">
+                                  <object class="GtkToolButton" id="Draw-BasicShapes.ellipse">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:BasicShapes.round-rectangle</property>
+                                    <property name="action_name">.uno:BasicShapes.ellipse</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -11185,10 +11185,10 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Draw-BasicShapes.ellipse">
+                                  <object class="GtkToolButton" id="Draw-DrawCaption">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:BasicShapes.ellipse</property>
+                                    <property name="action_name">.uno:DrawCaption</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
