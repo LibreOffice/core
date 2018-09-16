@@ -52,13 +52,9 @@ XMLEventExport::XMLEventExport(SvXMLExport& rExp) :
 XMLEventExport::~XMLEventExport()
 {
     // delete all handlers
-    HandlerMap::iterator aEnd = aHandlerMap.end();
-    for( HandlerMap::iterator aIter =
-             aHandlerMap.begin();
-         aIter != aEnd;
-         ++aIter )
+    for( auto& rEntry : aHandlerMap )
     {
-        delete aIter->second;
+        delete rEntry.second;
     }
     aHandlerMap.clear();
 }

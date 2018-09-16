@@ -93,11 +93,9 @@ void XMLPersTextContentRNGTransformTContext::Characters( const OUString& rChars 
 
 void XMLMergeElemTransformerContext::ExportStartElement()
 {
-    XMLPersTextContentTContextVector::iterator aIter = m_aChildContexts.begin();
-
-    for( ; aIter != m_aChildContexts.end(); ++aIter )
+    for( const auto& rChildContext : m_aChildContexts )
     {
-        XMLPersTextContentTContext *pContext = (*aIter).get();
+        XMLPersTextContentTContext *pContext = rChildContext.get();
         static_cast< XMLMutableAttributeList * >( m_xAttrList.get() )
             ->AddAttribute( pContext->GetExportQName(),
                             pContext->GetTextContent() );

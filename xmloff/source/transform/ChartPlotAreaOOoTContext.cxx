@@ -138,13 +138,12 @@ rtl::Reference<XMLTransformerContext> XMLChartPlotAreaOOoTContext::CreateChildCo
         pContext.set(new XMLPersAttrListTContext( GetTransformer(), rQName ));
 
         // put categories at correct axis
-        XMLAxisContextVector::iterator aIter = m_aChildContexts.begin();
         bool bFound =false;
 
         // iterate over axis elements
-        for( ; ! bFound && aIter != m_aChildContexts.end(); ++aIter )
+        for( auto& rChildContext : m_aChildContexts )
         {
-            XMLAxisOOoContext * pAxisContext = (*aIter).get();
+            XMLAxisOOoContext * pAxisContext = rChildContext.get();
             if( pAxisContext != nullptr )
             {
                 // iterate over attributes to find category axis
@@ -169,6 +168,9 @@ rtl::Reference<XMLTransformerContext> XMLChartPlotAreaOOoTContext::CreateChildCo
                     }
                 }
             }
+
+            if (bFound)
+                break;
         }
         OSL_ENSURE( bFound, "No suitable axis for categories found." );
     }
@@ -198,11 +200,9 @@ void XMLChartPlotAreaOOoTContext::AddContent(rtl::Reference<XMLAxisOOoContext> c
 
 void XMLChartPlotAreaOOoTContext::ExportContent()
 {
-    XMLAxisContextVector::iterator aIter = m_aChildContexts.begin();
-
-    for( ; aIter != m_aChildContexts.end(); ++aIter )
+    for( auto& rChildContext : m_aChildContexts )
     {
-        (*aIter)->Export();
+        rChildContext->Export();
     }
 
     m_aChildContexts.clear();

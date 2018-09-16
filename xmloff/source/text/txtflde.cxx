@@ -1927,11 +1927,10 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                 // copy set to sequence
                 aFieldMasters.realloc( rOurMasters.size() );
                 sal_Int32 i = 0;
-                for( set<OUString>::iterator aSetIter = rOurMasters.begin();
-                     aSetIter != rOurMasters.end();
-                     ++aSetIter, ++i )
+                for( const auto& rMaster : rOurMasters )
                 {
-                    aFieldMasters[i] = *aSetIter;
+                    aFieldMasters[i] = rMaster;
+                    ++i;
                 }
 
                 pUsedMasters->erase(rText);
@@ -2007,12 +2006,8 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                                   XML_VARIABLE_DECLS,
                                   true, true );
 
-        for (vector<OUString>::iterator aVarIter = aVarName.begin();
-             aVarIter != aVarName.end();
-             ++aVarIter) {
-
-            OUString sName = *aVarIter;
-
+        for (const auto& sName : aVarName)
+        {
             // get field master property set
             Reference<XPropertySet> xPropSet;
             Any aAny = xFieldMasterNameAccess->getByName(sName);
@@ -2066,12 +2061,8 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                                   XML_SEQUENCE_DECLS,
                                   true, true );
 
-        for (vector<OUString>::iterator aSeqIter = aSeqName.begin();
-             aSeqIter != aSeqName.end();
-             ++aSeqIter) {
-
-            OUString sName = *aSeqIter;
-
+        for (const auto& sName : aSeqName)
+        {
             // get field master property set
             Reference<XPropertySet> xPropSet;
             Any aAny = xFieldMasterNameAccess->getByName(sName);
@@ -2108,12 +2099,8 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                                   XML_USER_FIELD_DECLS,
                                   true, true );
 
-        for (vector<OUString>::iterator aUserIter = aUserName.begin();
-             aUserIter != aUserName.end();
-             ++aUserIter) {
-
-            OUString sName = *aUserIter;
-
+        for (const auto& sName : aUserName)
+        {
             // get field master property set
             Reference<XPropertySet> xPropSet;
             Any aAny = xFieldMasterNameAccess->getByName(sName);
@@ -2159,12 +2146,8 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                                   XML_DDE_CONNECTION_DECLS,
                                   true, true );
 
-        for (vector<OUString>::iterator aDdeIter = aDdeName.begin();
-             aDdeIter != aDdeName.end();
-             ++aDdeIter)
+        for (const auto& sName : aDdeName)
         {
-            OUString sName = *aDdeIter;
-
             // get field master property set
             Reference<XPropertySet> xPropSet;
             Any aAny = xFieldMasterNameAccess->getByName(sName);

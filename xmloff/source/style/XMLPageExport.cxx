@@ -47,15 +47,15 @@ static const OUStringLiteral gsFollowStyle( "FollowStyle" );
 
 bool XMLPageExport::findPageMasterName( const OUString& rStyleName, OUString& rPMName ) const
 {
-    for( ::std::vector< XMLPageExportNameEntry >::const_iterator pEntry = aNameVector.begin();
-            pEntry != aNameVector.end(); ++pEntry )
+    auto pEntry = std::find_if(aNameVector.cbegin(), aNameVector.cend(),
+        [&rStyleName](const XMLPageExportNameEntry& rEntry) { return rEntry.sStyleName == rStyleName; });
+
+    if( pEntry != aNameVector.cend() )
     {
-        if( pEntry->sStyleName == rStyleName )
-        {
-            rPMName = pEntry->sPageMasterName;
-            return true;
-        }
+        rPMName = pEntry->sPageMasterName;
+        return true;
     }
+
     return false;
 }
 
@@ -232,10 +232,9 @@ void XMLPageExport::exportDefaultStyle()
 
             bool bExport = false;
             rtl::Reference < XMLPropertySetMapper > aPropMapper(xPageMasterExportPropMapper->getPropertySetMapper());
-            for( ::std::vector< XMLPropertyState >::iterator aIter = aPropStates.begin(); aIter != aPropStates.end(); ++aIter )
+            for( const auto& rProp : aPropStates )
             {
-                XMLPropertyState *pProp = &(*aIter);
-                sal_Int16 nContextId    = aPropMapper->GetEntryContextId( pProp->mnIndex );
+                sal_Int16 nContextId    = aPropMapper->GetEntryContextId( rProp.mnIndex );
                 if( nContextId == CTF_PM_STANDARD_MODE )
                 {
                     bExport = true;

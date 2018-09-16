@@ -130,14 +130,12 @@ void StringStatisticHelper::add( const OUString& rStyleName )
 sal_Int32 StringStatisticHelper::getModeString( OUString& rStyleName )
 {
     sal_Int32 nMax = 0;
-    const std::map< OUString, sal_Int32 >::const_iterator aEnd( mStats.end() );
-    for( std::map< OUString, sal_Int32 >::iterator iter( mStats.begin() );
-        iter != aEnd; ++iter)
+    for( const auto& rStatsEntry : mStats )
     {
-        if( (*iter).second > nMax )
+        if( rStatsEntry.second > nMax )
         {
-            rStyleName = (*iter).first;
-            nMax = (*iter).second;
+            rStyleName = rStatsEntry.first;
+            nMax = rStatsEntry.second;
         }
     }
 
@@ -206,18 +204,8 @@ XMLTableExport::~XMLTableExport ()
 
 static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
 {
-    if( !xPropStates.empty() )
-    {
-        std::vector< XMLPropertyState >::const_iterator aIter( xPropStates.begin() );
-        std::vector< XMLPropertyState >::const_iterator aEnd( xPropStates.end() );
-        while( aIter != aEnd )
-        {
-            if( aIter->mnIndex != -1 )
-                return true;
-            ++aIter;
-        }
-    }
-    return false;
+    return std::any_of(xPropStates.cbegin(), xPropStates.cend(),
+        [](const XMLPropertyState& rPropertyState) { return rPropertyState.mnIndex != -1; });
 }
 
  void XMLTableExport::collectTableAutoStyles(const Reference < XColumnRowRange >& xColumnRowRange)

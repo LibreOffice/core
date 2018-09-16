@@ -127,8 +127,8 @@ XMLPropertyHandlerFactory::XMLPropertyHandlerFactory() :
 
 XMLPropertyHandlerFactory::~XMLPropertyHandlerFactory()
 {
-    for( CacheMap::iterator pPos = mpImpl->maHandlerCache.begin(); pPos != mpImpl->maHandlerCache.end(); ++pPos )
-        delete pPos->second;
+    for( auto& rCacheEntry : mpImpl->maHandlerCache )
+        delete rCacheEntry.second;
 }
 
 // Interface

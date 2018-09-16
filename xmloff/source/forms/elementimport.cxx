@@ -219,15 +219,11 @@ namespace xmloff
         // (We do this in the non-pro version only. Doing it all the time would be much to expensive)
         if ( m_xInfo.is() )
         {
-            PropertyValueArray::const_iterator aEnd = m_aValues.end();
-            for (   PropertyValueArray::iterator aCheck = m_aValues.begin();
-                    aCheck != aEnd;
-                    ++aCheck
-                )
+            for ( const auto& rCheck : m_aValues )
             {
-                OSL_ENSURE(m_xInfo->hasPropertyByName(aCheck->Name),
+                OSL_ENSURE(m_xInfo->hasPropertyByName(rCheck.Name),
                         OStringBuffer("OElementImport::implApplySpecificProperties: read a property (").
-                    append(OUStringToOString(aCheck->Name, RTL_TEXTENCODING_ASCII_US)).
+                    append(OUStringToOString(rCheck.Name, RTL_TEXTENCODING_ASCII_US)).
                     append(") which does not exist on the element!").getStr());
             }
         }
@@ -251,14 +247,12 @@ namespace xmloff
             Any* pValues = aValues.getArray();
             // copy
 
-            PropertyValueArray::iterator aEnd = m_aValues.end();
-            for (   PropertyValueArray::iterator aPropValues = m_aValues.begin();
-                    aPropValues != aEnd;
-                    ++aPropValues, ++pNames, ++pValues
-                )
+            for ( const auto& rPropValues : m_aValues )
             {
-                *pNames = aPropValues->Name;
-                *pValues = aPropValues->Value;
+                *pNames = rPropValues.Name;
+                *pValues = rPropValues.Value;
+                ++pNames;
+                ++pValues;
             }
 
             try
@@ -275,23 +269,19 @@ namespace xmloff
 
         if (!bSuccess)
         {   // no XMultiPropertySet or setting all properties at once failed
-            PropertyValueArray::iterator aEnd = m_aValues.end();
-            for (   PropertyValueArray::iterator aPropValues = m_aValues.begin();
-                    aPropValues != aEnd;
-                    ++aPropValues
-                )
+            for ( const auto& rPropValues : m_aValues )
             {
                 // this try/catch here is expensive, but because this is just a fallback which should normally not be
                 // used it's acceptable this way ...
                 try
                 {
-                    m_xElement->setPropertyValue(aPropValues->Name, aPropValues->Value);
+                    m_xElement->setPropertyValue(rPropValues.Name, rPropValues.Value);
                 }
                 catch(const Exception&)
                 {
                     DBG_UNHANDLED_EXCEPTION("xmloff.forms");
                     OSL_FAIL(OStringBuffer("OElementImport::implApplySpecificProperties: could not set the property \"").
-                        append(OUStringToOString(aPropValues->Name, RTL_TEXTENCODING_ASCII_US)).
+                        append(OUStringToOString(rPropValues.Name, RTL_TEXTENCODING_ASCII_US)).
                         append("\"!").getStr());
                 }
             }
@@ -305,32 +295,28 @@ namespace xmloff
 
         Reference< XPropertyContainer > xDynamicProperties( m_xElement, UNO_QUERY );
 
-        PropertyValueArray::iterator aEnd = m_aGenericValues.end();
-        for (   PropertyValueArray::iterator aPropValues =
-                m_aGenericValues.begin();
-                aPropValues != aEnd;
-                ++aPropValues
-            )
+        // PropertyValueArray::iterator aEnd = m_aGenericValues.end();
+        for ( auto& rPropValues : m_aGenericValues )
         {
             // check property type for numeric types before setting
             // the property
             try
             {
                 // if such a property does not yet exist at the element, create it if necessary
-                const bool bExistentProperty = m_xInfo->hasPropertyByName( aPropValues->Name );
+                const bool bExistentProperty = m_xInfo->hasPropertyByName( rPropValues.Name );
                 if ( !bExistentProperty )
                 {
                     if ( !xDynamicProperties.is() )
                     {
                         SAL_WARN( "xmloff", "OElementImport::implApplyGenericProperties: encountered an unknown property ("
-                                    << aPropValues->Name << "), but component is no PropertyBag!");
+                                    << rPropValues.Name << "), but component is no PropertyBag!");
                         continue;
                     }
 
                     xDynamicProperties->addProperty(
-                        aPropValues->Name,
+                        rPropValues.Name,
                         PropertyAttribute::BOUND | PropertyAttribute::REMOVABLE,
-                        aPropValues->Value
+                        rPropValues.Value
                     );
 
                     // re-fetch the PropertySetInfo
@@ -338,16 +324,16 @@ namespace xmloff
                 }
 
                 // determine the type of the value (source for the following conversion)
-                TypeClass eValueTypeClass = aPropValues->Value.getValueTypeClass();
+                TypeClass eValueTypeClass = rPropValues.Value.getValueTypeClass();
                 const bool bValueIsSequence = TypeClass_SEQUENCE == eValueTypeClass;
                 if ( bValueIsSequence )
                 {
-                    uno::Type aSimpleType( getSequenceElementType( aPropValues->Value.getValueType() ) );
+                    uno::Type aSimpleType( getSequenceElementType( rPropValues.Value.getValueType() ) );
                     eValueTypeClass = aSimpleType.getTypeClass();
                 }
 
                 // determine the type of the property (target for the following conversion)
-                const Property aProperty( m_xInfo->getPropertyByName( aPropValues->Name ) );
+                const Property aProperty( m_xInfo->getPropertyByName( rPropValues.Name ) );
                 TypeClass ePropTypeClass = aProperty.Type.getTypeClass();
                 const bool bPropIsSequence = TypeClass_SEQUENCE == ePropTypeClass;
                 if( bPropIsSequence )
@@ -372,7 +358,7 @@ namespace xmloff
                         "OElementImport::implApplyGenericProperties: conversion to sequences other than 'sequence< short >' not implemented, yet!" );
 
                     Sequence< Any > aXMLValueList;
-                    aPropValues->Value >>= aXMLValueList;
+                    rPropValues.Value >>= aXMLValueList;
                     Sequence< sal_Int16 > aPropertyValueList( aXMLValueList.getLength() );
 
                     const Any*       pXMLValue = aXMLValueList.getConstArray();
@@ -386,7 +372,7 @@ namespace xmloff
                         *pPropValue = static_cast< sal_Int16 >( nVal );
                     }
 
-                    aPropValues->Value <<= aPropertyValueList;
+                    rPropValues.Value <<= aPropertyValueList;
                 }
                 else if ( ePropTypeClass != eValueTypeClass )
                 {
@@ -395,30 +381,30 @@ namespace xmloff
                     case TypeClass_DOUBLE:
                     {
                         double nVal = 0;
-                        aPropValues->Value >>= nVal;
+                        rPropValues.Value >>= nVal;
                         switch( ePropTypeClass )
                         {
                         case TypeClass_BYTE:
-                            aPropValues->Value <<= static_cast< sal_Int8 >( nVal );
+                            rPropValues.Value <<= static_cast< sal_Int8 >( nVal );
                             break;
                         case TypeClass_SHORT:
-                            aPropValues->Value <<= static_cast< sal_Int16 >( nVal );
+                            rPropValues.Value <<= static_cast< sal_Int16 >( nVal );
                             break;
                         case TypeClass_UNSIGNED_SHORT:
-                            aPropValues->Value <<= static_cast< sal_uInt16 >( nVal );
+                            rPropValues.Value <<= static_cast< sal_uInt16 >( nVal );
                             break;
                         case TypeClass_LONG:
                         case TypeClass_ENUM:
-                            aPropValues->Value <<= static_cast< sal_Int32 >( nVal );
+                            rPropValues.Value <<= static_cast< sal_Int32 >( nVal );
                             break;
                         case TypeClass_UNSIGNED_LONG:
-                            aPropValues->Value <<= static_cast< sal_uInt32 >( nVal );
+                            rPropValues.Value <<= static_cast< sal_uInt32 >( nVal );
                             break;
                         case TypeClass_UNSIGNED_HYPER:
-                            aPropValues->Value <<= static_cast< sal_uInt64 >( nVal );
+                            rPropValues.Value <<= static_cast< sal_uInt64 >( nVal );
                             break;
                         case TypeClass_HYPER:
-                            aPropValues->Value <<= static_cast< sal_Int64 >( nVal );
+                            rPropValues.Value <<= static_cast< sal_Int64 >( nVal );
                             break;
                         default:
                             OSL_FAIL( "OElementImport::implImportGenericProperties: unsupported value type!" );
@@ -432,13 +418,13 @@ namespace xmloff
                     }
                 }
 
-                m_xElement->setPropertyValue( aPropValues->Name, aPropValues->Value );
+                m_xElement->setPropertyValue( rPropValues.Name, rPropValues.Value );
             }
             catch(const Exception&)
             {
                 DBG_UNHANDLED_EXCEPTION("xmloff.forms");
                 OSL_FAIL(OStringBuffer("OElementImport::EndElement: could not set the property \"").
-                    append(OUStringToOString(aPropValues->Name, RTL_TEXTENCODING_ASCII_US)).
+                    append(OUStringToOString(rPropValues.Name, RTL_TEXTENCODING_ASCII_US)).
                     append("\"!").getStr());
             }
         }
@@ -481,32 +467,11 @@ namespace xmloff
     {
         ENSURE_OR_RETURN( m_xInfo.is(), "OElementImport::impl_matchPropertyGroup: no property set info!", i_propertyGroups.end() );
 
-        for (   PropertyGroups::const_iterator group = i_propertyGroups.begin();
-                group != i_propertyGroups.end();
-                ++group
-            )
-        {
-            bool missingProp = false;
-            for (   PropertyDescriptionList::const_iterator prop = group->begin();
-                    prop != group->end();
-                    ++prop
-                )
-            {
-                if ( !m_xInfo->hasPropertyByName( (*prop)->propertyName ) )
-                {
-                    missingProp = true;
-                    break;
-                }
-            }
-
-            if ( missingProp )
-                // try next group
-                continue;
-
-            return group;
-        }
-
-        return i_propertyGroups.end();
+        return std::find_if(i_propertyGroups.cbegin(), i_propertyGroups.cend(), [&](const PropertyDescriptionList& rGroup) {
+            return std::all_of(rGroup.cbegin(), rGroup.cend(), [&](const PropertyDescription* prop) {
+                return m_xInfo->hasPropertyByName( prop->propertyName );
+            });
+        });
     }
 
     bool OElementImport::tryGenericAttribute( sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue )
@@ -539,21 +504,15 @@ namespace xmloff
                 }
 
                 PropertyValues aValues;
-                for (   PropertyDescriptionList::const_iterator propDesc = rProperties.begin();
-                        propDesc != rProperties.end();
-                        ++propDesc
-                    )
+                for ( const auto& propDesc : rProperties )
                 {
-                    aValues[ (*propDesc)->propertyId ] = Any();
+                    aValues[ propDesc->propertyId ] = Any();
                 }
                 if ( handler->getPropertyValues( _rValue, aValues ) )
                 {
-                    for (   PropertyDescriptionList::const_iterator propDesc = rProperties.begin();
-                            propDesc != rProperties.end();
-                            ++propDesc
-                        )
+                    for ( const auto& propDesc : rProperties )
                     {
-                        implPushBackPropertyValue( (*propDesc)->propertyName, aValues[ (*propDesc)->propertyId ] );
+                        implPushBackPropertyValue( propDesc->propertyName, aValues[ propDesc->propertyId ] );
                     }
                 }
             }
@@ -829,14 +788,10 @@ namespace xmloff
         m_xElement->getPropertyValue(PROPERTY_CLASSID) >>= nClassId;
 
         // translate the value properties we collected in handleAttributes
-        PropertyValueArray::iterator aEnd = m_aValueProperties.end();
-        for (   PropertyValueArray::iterator aValueProps = m_aValueProperties.begin();
-                aValueProps != aEnd;
-                ++aValueProps
-            )
+        for ( auto& rValueProps : m_aValueProperties )
         {
             bool bSuccess = false;
-            switch (aValueProps->Handle)
+            switch (rValueProps.Handle)
             {
                 case PROPID_VALUE:
                 case PROPID_CURRENT_VALUE:
@@ -853,23 +808,23 @@ namespace xmloff
 
                         bRetrievedValues = true;
                     }
-                    if ( PROPID_VALUE == aValueProps->Handle && !pValueProperty )
+                    if ( PROPID_VALUE == rValueProps.Handle && !pValueProperty )
                     {
                         SAL_WARN( "xmloff.forms", "OControlImport::StartElement: the control does not have a value property!");
                         break;
                     }
 
-                    if ( PROPID_CURRENT_VALUE == aValueProps->Handle && !pCurrentValueProperty )
+                    if ( PROPID_CURRENT_VALUE == rValueProps.Handle && !pCurrentValueProperty )
                     {
                         SAL_WARN( "xmloff.forms", "OControlImport::StartElement: the control does not have a current-value property!");
                         break;
                     }
 
                     // transfer the name
-                    if (PROPID_VALUE == aValueProps->Handle)
-                        aValueProps->Name = OUString::createFromAscii(pValueProperty);
+                    if (PROPID_VALUE == rValueProps.Handle)
+                        rValueProps.Name = OUString::createFromAscii(pValueProperty);
                     else
-                        aValueProps->Name = OUString::createFromAscii(pCurrentValueProperty);
+                        rValueProps.Name = OUString::createFromAscii(pCurrentValueProperty);
                     bSuccess = true;
                 }
                 break;
@@ -888,16 +843,16 @@ namespace xmloff
 
                         bRetrievedValueLimits = true;
                     }
-                    OSL_ENSURE((PROPID_MIN_VALUE != aValueProps->Handle) || pMinValueProperty,
+                    OSL_ENSURE((PROPID_MIN_VALUE != rValueProps.Handle) || pMinValueProperty,
                         "OControlImport::StartElement: the control does not have a value property!");
-                    OSL_ENSURE((PROPID_MAX_VALUE != aValueProps->Handle) || pMaxValueProperty,
+                    OSL_ENSURE((PROPID_MAX_VALUE != rValueProps.Handle) || pMaxValueProperty,
                         "OControlImport::StartElement: the control does not have a current-value property!");
 
                     // transfer the name
-                    if (PROPID_MIN_VALUE == aValueProps->Handle)
-                        aValueProps->Name = OUString::createFromAscii(pMinValueProperty);
+                    if (PROPID_MIN_VALUE == rValueProps.Handle)
+                        rValueProps.Name = OUString::createFromAscii(pMinValueProperty);
                     else
-                        aValueProps->Name = OUString::createFromAscii(pMaxValueProperty);
+                        rValueProps.Name = OUString::createFromAscii(pMaxValueProperty);
                     bSuccess = true;
                 }
                 break;
@@ -907,9 +862,9 @@ namespace xmloff
                 continue;
 
             // translate the value
-            implTranslateValueProperty(m_xInfo, *aValueProps);
+            implTranslateValueProperty(m_xInfo, rValueProps);
             // add the property to the base class' array
-            implPushBackPropertyValue(*aValueProps);
+            implPushBackPropertyValue(rValueProps);
         }
 
     }
@@ -990,19 +945,15 @@ namespace xmloff
                 // is the "value property" part of the sequence?
 
             // look up this property in our sequence
-            PropertyValueArray::iterator aEnd = m_aValues.end();
-            for (   PropertyValueArray::iterator aCheck = m_aValues.begin();
-                    ( aCheck != aEnd );
-                    ++aCheck
-                )
+            for ( const auto& rCheck : m_aValues )
             {
-                if ( aCheck->Name.equalsAscii( pDefaultValueProperty ) )
+                if ( rCheck.Name.equalsAscii( pDefaultValueProperty ) )
                     bRestoreValuePropertyValue = true;
-                else if ( aCheck->Name.equalsAscii( pValueProperty ) )
+                else if ( rCheck.Name.equalsAscii( pValueProperty ) )
                 {
                     bNonDefaultValuePropertyValue = true;
                     // we need to restore the value property we found here, nothing else
-                    aValuePropertyValue = aCheck->Value;
+                    aValuePropertyValue = rCheck.Value;
                 }
             }
 
