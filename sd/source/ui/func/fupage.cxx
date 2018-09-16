@@ -330,7 +330,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent)
     {
         // create the dialog
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSdTabPageDialog(mpViewShell->GetActiveWindow(), &aMergedAttr, mpDocSh, mbDisplayBackgroundTabPage) );
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSdTabPageDialog(mpViewShell->GetFrameWeld(), &aMergedAttr, mpDocSh, mbDisplayBackgroundTabPage) );
         if( pDlg->Execute() == RET_OK )
             pTempSet.reset( new SfxItemSet(*pDlg->GetOutputItemSet()) );
     }
