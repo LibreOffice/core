@@ -145,12 +145,9 @@ void XMLEventsImportContext::SetEvents(
         xEvents = xNameRepl;
 
         // now iterate over vector and a) insert b) delete all elements
-        EventsVector::iterator aEnd = aCollectEvents.end();
-        for(EventsVector::iterator aIter = aCollectEvents.begin();
-            aIter != aEnd;
-            ++aIter)
+        for(const auto& rEvent : aCollectEvents)
         {
-            AddEventValues(aIter->first, aIter->second);
+            AddEventValues(rEvent.first, rEvent.second);
         }
         aCollectEvents.clear();
     }
@@ -164,12 +161,8 @@ void XMLEventsImportContext::GetEventSequence(
     // (This shouldn't take a lot of time, since this method should only get
     //  called if only one (or few) events are being expected)
 
-    // iterate over vector until end or rName is found;
-    EventsVector::iterator aIter = aCollectEvents.begin();
-    while( (aIter != aCollectEvents.end()) && (aIter->first != rName) )
-    {
-        ++aIter;
-    }
+    auto aIter = std::find_if(aCollectEvents.begin(), aCollectEvents.end(),
+        [&rName](EventNameValuesPair& rEvent) { return rEvent.first == rName; });
 
     // if we're not at the end, set the sequence
     if (aIter != aCollectEvents.end())

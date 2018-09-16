@@ -125,10 +125,9 @@ void PageMasterImportPropertyMapper::finished(std::vector< XMLPropertyState >& r
     XMLPropertyState* pFooterMargins[4] = { nullptr, nullptr, nullptr, nullptr };
     std::unique_ptr<XMLPropertyState> pNewFooterMargins[4];
 
-    std::vector< XMLPropertyState >::iterator aEnd = rProperties.end();
-    for (std::vector< XMLPropertyState >::iterator aIter = rProperties.begin(); aIter != aEnd; ++aIter)
+    for (auto& rProp : rProperties)
     {
-        XMLPropertyState *property = &(*aIter);
+        XMLPropertyState *property = &rProp;
         sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(property->mnIndex);
         if (property->mnIndex >= nStartIndex && property->mnIndex < nEndIndex)
         {

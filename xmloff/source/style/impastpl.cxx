@@ -480,10 +480,10 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
         XMLAutoStyleFamily &rFamily = *aJ;
 
         // iterate over names
-        for (std::set<OUString>::const_iterator aI = rFamily.maNameSet.begin(); aI != rFamily.maNameSet.end(); ++aI)
+        for (const auto& rName : rFamily.maNameSet)
         {
             aFamilies.push_back( rFamily.mnFamily );
-            aNames.push_back( *aI );
+            aNames.push_back( rName );
         }
     }
 

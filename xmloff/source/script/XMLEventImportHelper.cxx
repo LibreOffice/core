@@ -40,12 +40,9 @@ XMLEventImportHelper::XMLEventImportHelper() :
 XMLEventImportHelper::~XMLEventImportHelper()
 {
     // delete factories
-    FactoryMap::iterator aEnd = aFactoryMap.end();
-    for(FactoryMap::iterator aIter = aFactoryMap.begin();
-        aIter != aEnd;
-        ++aIter)
+    for(auto& rEntry : aFactoryMap)
     {
-        delete aIter->second;
+        delete rEntry.second;
     }
     aFactoryMap.clear();
 

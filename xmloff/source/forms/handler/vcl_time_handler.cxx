@@ -91,12 +91,9 @@ namespace xmloff
         const Any aPropertyValue( makeAny( aTime ) );
 
         OSL_ENSURE( o_propertyValues.size() == 1, "VCLTimeHandler::getPropertyValues: time strings represent exactly one property - not more, not less!" );
-        for (   PropertyValues::iterator prop = o_propertyValues.begin();
-                prop != o_propertyValues.end();
-                ++prop
-            )
+        for ( auto& prop : o_propertyValues )
         {
-            prop->second = aPropertyValue;
+            prop.second = aPropertyValue;
         }
         return true;
     }

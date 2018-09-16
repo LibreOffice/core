@@ -539,17 +539,17 @@ bool XMLPropStyleContext::doNewDrawingLayerFillStyleDefinitionsExist(
 
         if(rMapper.is())
         {
-            for(::std::vector< XMLPropertyState >::const_iterator a = maProperties.begin(); a != maProperties.end(); ++a)
+            for(const auto& a : maProperties)
             {
-                if(a->mnIndex != -1)
+                if(a.mnIndex != -1)
                 {
-                    const OUString& rPropName = rMapper->GetEntryAPIName(a->mnIndex);
+                    const OUString& rPropName = rMapper->GetEntryAPIName(a.mnIndex);
 
                     if(rPropName == rFillStyleTag)
                     {
                         FillStyle eFillStyle(FillStyle_NONE);
 
-                        if(a->maValue >>= eFillStyle)
+                        if(a.maValue >>= eFillStyle)
                         {
                             // okay, type was good, FillStyle is set
                         }
@@ -558,7 +558,7 @@ bool XMLPropStyleContext::doNewDrawingLayerFillStyleDefinitionsExist(
                             // also try an int (see XFillStyleItem::PutValue)
                             sal_Int32 nFillStyle(0);
 
-                            if(a->maValue >>= nFillStyle)
+                            if(a.maValue >>= nFillStyle)
                             {
                                 eFillStyle = static_cast< FillStyle >(nFillStyle);
                             }
@@ -584,16 +584,16 @@ void XMLPropStyleContext::deactivateOldFillStyleDefinitions(
 
         if(rMapper.is())
         {
-            for(::std::vector< XMLPropertyState >::iterator a = maProperties.begin(); a != maProperties.end(); ++a)
+            for(auto& a : maProperties)
             {
-                if(a->mnIndex != -1)
+                if(a.mnIndex != -1)
                 {
-                    const OUString& rPropName = rMapper->GetEntryAPIName(a->mnIndex);
+                    const OUString& rPropName = rMapper->GetEntryAPIName(a.mnIndex);
 
                     if(rHashSetOfTags.find(rPropName) != rHashSetOfTags.end())
                     {
                         // mark entry as inactive
-                        a->mnIndex = -1;
+                        a.mnIndex = -1;
                     }
                 }
             }
@@ -614,11 +614,11 @@ void XMLPropStyleContext::translateNameBasedDrawingLayerFillStyleDefinitionsToSt
             static OUString s_FillBitmapName("FillBitmapName");
             static OUString s_FillTransparenceGradientName("FillTransparenceGradientName");
 
-            for(::std::vector< XMLPropertyState >::iterator a = maProperties.begin(); a != maProperties.end(); ++a)
+            for(auto& a : maProperties)
             {
-                if(a->mnIndex != -1)
+                if(a.mnIndex != -1)
                 {
-                    const OUString& rPropName = rMapper->GetEntryAPIName(a->mnIndex);
+                    const OUString& rPropName = rMapper->GetEntryAPIName(a.mnIndex);
                     sal_uInt16 aStyleFamily(0);
 
                     if(rPropName == s_FillGradientName || rPropName == s_FillTransparenceGradientName)
@@ -638,9 +638,9 @@ void XMLPropStyleContext::translateNameBasedDrawingLayerFillStyleDefinitionsToSt
                     {
                         OUString sStyleName;
 
-                        a->maValue >>= sStyleName;
+                        a.maValue >>= sStyleName;
                         sStyleName = GetImport().GetStyleDisplayName( aStyleFamily, sStyleName );
-                        a->maValue <<= sStyleName;
+                        a.maValue <<= sStyleName;
                     }
                 }
             }

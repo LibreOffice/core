@@ -773,29 +773,28 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
             {
                 OUString sTmp;
                 sal_Int16 nTmp = 0;
-                ::std::vector< XMLPropertyState >::iterator i;
-                for( i = aProps.begin(); i != aProps.end(); ++i )
+                for( const auto& rProp : aProps )
                 {
-                    switch( i->mnIndex )
+                    switch( rProp.mnIndex )
                     {
                     case 0:
-                        i->maValue >>= sTmp;
+                        rProp.maValue >>= sTmp;
                         rListLevel.SetBulletFontName( sTmp);
                         break;
                     case 1:
-                        i->maValue >>= sTmp;
+                        rProp.maValue >>= sTmp;
                         rListLevel.SetBulletFontStyleName( sTmp );
                         break;
                     case 2:
-                        i->maValue >>= nTmp;
+                        rProp.maValue >>= nTmp;
                         rListLevel.SetBulletFontFamily( nTmp );
                         break;
                     case 3:
-                        i->maValue >>= nTmp;
+                        rProp.maValue >>= nTmp;
                         rListLevel.SetBulletFontPitch( nTmp );
                         break;
                     case 4:
-                        i->maValue >>= nTmp;
+                        rProp.maValue >>= nTmp;
                         rListLevel.SetBulletFontEncoding( nTmp );
                         break;
                     }

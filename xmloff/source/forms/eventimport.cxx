@@ -45,22 +45,19 @@ namespace xmloff
 
         // loop through the collected events and translate them
         sal_Int32 nSeparatorPos = -1;
-        for (   EventsVector::const_iterator aEvent = aCollectEvents.begin();
-                aEvent != aCollectEvents.end();
-                ++aEvent, ++pTranslated
-            )
+        for ( const auto& rEvent : aCollectEvents )
         {
             // the name of the event is built from ListenerType::EventMethod
-            nSeparatorPos = aEvent->first.indexOf(EVENT_NAME_SEPARATOR);
+            nSeparatorPos = rEvent.first.indexOf(EVENT_NAME_SEPARATOR);
             OSL_ENSURE(-1 != nSeparatorPos, "OFormEventsImportContext::EndElement: invalid (unrecognized) event name!");
-            pTranslated->ListenerType = aEvent->first.copy(0, nSeparatorPos);
-            pTranslated->EventMethod = aEvent->first.copy(nSeparatorPos + sizeof(EVENT_NAME_SEPARATOR) - 1);
+            pTranslated->ListenerType = rEvent.first.copy(0, nSeparatorPos);
+            pTranslated->EventMethod = rEvent.first.copy(nSeparatorPos + sizeof(EVENT_NAME_SEPARATOR) - 1);
 
             OUString sLibrary;
 
             // the local macro name and the event type are specified as properties
-            const PropertyValue* pEventDescription = aEvent->second.getConstArray();
-            const PropertyValue* pEventDescriptionEnd = pEventDescription + aEvent->second.getLength();
+            const PropertyValue* pEventDescription = rEvent.second.getConstArray();
+            const PropertyValue* pEventDescriptionEnd = pEventDescription + rEvent.second.getLength();
             for (;pEventDescription != pEventDescriptionEnd; ++pEventDescription)
             {
                 if (pEventDescription->Name == EVENT_LOCALMACRONAME ||
@@ -86,6 +83,8 @@ namespace xmloff
                 sLibrary += pTranslated->ScriptCode;
                 pTranslated->ScriptCode = sLibrary;
             }
+
+            ++pTranslated;
         }
 
         // register the events

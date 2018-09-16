@@ -67,11 +67,9 @@ void XMLPropertyBackpatcher<A>::ResolveId(
         //    (and preserve Property, if appropriate)
         Any aAny;
         aAny <<= aValue;
-        for(BackpatchListType::iterator aIter = pList->begin();
-            aIter != pList->end();
-            ++aIter)
+        for(auto& rBackpatch : *pList)
         {
-            (*aIter)->setPropertyValue(sPropertyName, aAny);
+            rBackpatch->setPropertyValue(sPropertyName, aAny);
         }
 
         // c) delete list

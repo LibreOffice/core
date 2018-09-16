@@ -113,14 +113,11 @@ namespace xmloff
         OUString sValue;
 
         // loop through all the properties which are yet to be exported
-        for (   StringSet::const_iterator aProperty = m_aRemainingProps.begin();
-                aProperty != m_aRemainingProps.end();
-                ++aProperty
-            )
+        for ( const auto& rProperty : m_aRemainingProps )
         {
-            DBG_CHECK_PROPERTY_NO_TYPE(*aProperty);
+            DBG_CHECK_PROPERTY_NO_TYPE(rProperty);
 
-            if ( !shouldExportProperty( *aProperty ) )
+            if ( !shouldExportProperty( rProperty ) )
                 continue;
 
             // now that we have the first sub-tag we need the form:properties element
@@ -128,10 +125,10 @@ namespace xmloff
                 pPropertiesTag = o3tl::make_unique<SvXMLElementExport>(m_rContext.getGlobalContext(), XML_NAMESPACE_FORM, token::XML_PROPERTIES, true, true);
 
             // add the name attribute
-            AddAttribute(XML_NAMESPACE_FORM, token::XML_PROPERTY_NAME, *aProperty);
+            AddAttribute(XML_NAMESPACE_FORM, token::XML_PROPERTY_NAME, rProperty);
 
             // get the value
-            aValue = m_xProps->getPropertyValue(*aProperty);
+            aValue = m_xProps->getPropertyValue(rProperty);
 
             // the type to export
             Type aExportType;
@@ -150,7 +147,7 @@ namespace xmloff
             if ( bIsEmptyValue )
             {
                 css::beans::Property aPropDesc;
-                aPropDesc = m_xPropertyInfo->getPropertyByName( *aProperty );
+                aPropDesc = m_xPropertyInfo->getPropertyByName( rProperty );
                 aExportType = aPropDesc.Type;
             }
             token::XMLTokenEnum eValueType = implGetPropertyXMLType( aExportType );

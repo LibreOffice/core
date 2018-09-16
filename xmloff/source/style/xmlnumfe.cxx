@@ -190,11 +190,9 @@ uno::Sequence<sal_Int32> SvXMLNumUsedList_Impl::GetWasUsed()
     sal_Int32* pWasUsed = ret.getArray();
     if (pWasUsed)
     {
-        SvXMLuInt32Set::const_iterator aItr = aWasUsed.begin();
-        while (aItr != aWasUsed.end())
+        for (const auto nWasUsed : aWasUsed)
         {
-            *pWasUsed = *aItr;
-            ++aItr;
+            *pWasUsed = nWasUsed;
             ++pWasUsed;
         }
     }
@@ -1869,18 +1867,15 @@ void SvXMLNumFmtExport::Export( bool bIsAutoStyle )
     {
         std::vector<LanguageType> aLanguages;
         pFormatter->GetUsedLanguages( aLanguages );
-        for (std::vector<LanguageType>::const_iterator it(aLanguages.begin()); it != aLanguages.end(); ++it)
+        for (const auto& nLang : aLanguages)
         {
-            LanguageType nLang = *it;
-
             sal_uInt32 nDefaultIndex = 0;
             SvNumberFormatTable& rTable = pFormatter->GetEntryTable(
                                          SvNumFormatType::DEFINED, nDefaultIndex, nLang );
-            SvNumberFormatTable::iterator it2 = rTable.begin();
-            while (it2 != rTable.end())
+            for (const auto& rTableEntry : rTable)
             {
-                nKey = it2->first;
-                pFormat = it2->second;
+                nKey = rTableEntry.first;
+                pFormat = rTableEntry.second;
                 if (!pUsedList->IsUsed(nKey))
                 {
                     DBG_ASSERT((pFormat->GetType() & SvNumFormatType::DEFINED), "a not user defined numberformat found");
@@ -1895,8 +1890,6 @@ void SvXMLNumFmtExport::Export( bool bIsAutoStyle )
                     // if it is a user-defined Format it will be added else nothing will happen
                     pUsedList->SetUsed(nKey);
                 }
-
-                ++it2;
             }
         }
     }

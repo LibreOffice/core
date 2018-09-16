@@ -417,11 +417,9 @@ void XMLTextImportPropertyMapper::finished(
     XMLPropertyState* pFillStyle(nullptr);
     XMLPropertyState* pFillColor(nullptr);
 
-    for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
-         aIter != rProperties.end();
-         ++aIter )
+    for( auto& rProperty : rProperties )
     {
-        XMLPropertyState* property = &(*aIter);
+        XMLPropertyState* property = &rProperty;
         if( -1 == property->mnIndex )
             continue;
 

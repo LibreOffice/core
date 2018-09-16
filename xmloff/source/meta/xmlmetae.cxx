@@ -394,9 +394,8 @@ SvXMLMetaExport::startElement(const OUString & i_rName,
 
     if (m_level == 1) {
         // attach preserved namespace decls from root node here
-        for (std::vector<beans::StringPair>::const_iterator iter =
-                m_preservedNSs.begin(); iter != m_preservedNSs.end(); ++iter) {
-            const OUString ns(iter->First);
+        for (const auto& rPreservedNS : m_preservedNSs) {
+            const OUString ns(rPreservedNS.First);
             bool found(false);
             // but only if it is not already there
             const sal_Int16 nCount = i_xAttribs->getLength();
@@ -408,7 +407,7 @@ SvXMLMetaExport::startElement(const OUString & i_rName,
                 }
             }
             if (!found) {
-                mrExport.AddAttribute(ns, iter->Second);
+                mrExport.AddAttribute(ns, rPreservedNS.Second);
             }
         }
     }

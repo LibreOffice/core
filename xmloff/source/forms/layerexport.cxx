@@ -478,16 +478,10 @@ namespace xmloff
             // Check if the id is already used. It shouldn't, as we currently have no mechanism for removing entries
             // from the map, so the approach used above (take the accumulated map size) should be sufficient. But if
             // somebody changes this (e.g. allows removing entries from the map), the assertion below probably will fail.
-            for (   MapPropertySet2Map::const_iterator outer = _rAllPagesControlIds.begin();
-                    outer != _rAllPagesControlIds.end();
-                    ++outer
-                )
-                for (   MapPropertySet2String::const_iterator inner = outer->second.begin();
-                        inner != outer->second.end();
-                        ++inner
-                    )
+            for ( const auto& outer : _rAllPagesControlIds )
+                for ( const auto& inner : outer.second )
                 {
-                    OSL_ENSURE( inner->second != sControlId,
+                    OSL_ENSURE( inner.second != sControlId,
                         "lcl_findFreeControlId: auto-generated control ID is already used!" );
                 }
         #endif

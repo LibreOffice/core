@@ -394,17 +394,13 @@ void OFormLayerXMLImport_Impl::endPage()
         OUString sSeparator(&s_nSeparator, 1);
         Reference< XPropertySet > xCurrentReferring;
         sal_Int32 nSeparator, nPrevSep;
-        ::std::vector< ModelStringPair >::const_iterator aEnd = m_aControlReferences.end();
-        for (   ::std::vector< ModelStringPair >::const_iterator aReferences = m_aControlReferences.begin();
-                aReferences != aEnd;
-                ++aReferences
-            )
+        for ( const auto& rReferences : m_aControlReferences )
         {
             // the list of control ids is comma separated
 
             // in a list of n ids there are only n-1 separators ... have to catch this last id
             // -> normalize the list
-            OUString sReferring = aReferences->second + sSeparator;
+            OUString sReferring = rReferences.second + sSeparator;
 
             nPrevSep = -1;
             while (-1 != (nSeparator = sReferring.indexOf(s_nSeparator, nPrevSep + 1)))
@@ -413,7 +409,7 @@ void OFormLayerXMLImport_Impl::endPage()
                 xCurrentReferring = lookupControlId(sCurrentReferring);
                 if (xCurrentReferring.is())
                     // if this condition fails, this is an error, but lookupControlId should have asserted this ...
-                    xCurrentReferring->setPropertyValue( PROPERTY_CONTROLLABEL, makeAny( aReferences->first ) );
+                    xCurrentReferring->setPropertyValue( PROPERTY_CONTROLLABEL, makeAny( rReferences.first ) );
 
                 nPrevSep = nSeparator;
             }
@@ -497,21 +493,17 @@ void OFormLayerXMLImport_Impl::documentDone( )
         &&  FormCellBindingHelper::isCellBindingAllowed( rImport.GetModel() )
         )
     {
-        ::std::vector< ModelStringPair >::const_iterator aEnd = m_aCellValueBindings.end();
-        for (   ::std::vector< ModelStringPair >::const_iterator aCellBindings = m_aCellValueBindings.begin();
-                aCellBindings != aEnd;
-                ++aCellBindings
-            )
+        for ( const auto& rCellBindings : m_aCellValueBindings )
         {
             try
             {
-                FormCellBindingHelper aHelper( aCellBindings->first, rImport.GetModel() );
+                FormCellBindingHelper aHelper( rCellBindings.first, rImport.GetModel() );
                 OSL_ENSURE( aHelper.isCellBindingAllowed(), "OFormLayerXMLImport_Impl::documentDone: can't bind this control model!" );
                 if ( aHelper.isCellBindingAllowed() )
                 {
                     // There are special bindings for listboxes. See
                     // OListAndComboImport::doRegisterCellValueBinding for a comment on this HACK.
-                    OUString sBoundCellAddress( aCellBindings->second );
+                    OUString sBoundCellAddress( rCellBindings.second );
                     sal_Int32 nIndicator = sBoundCellAddress.lastIndexOf( ":index" );
 
                     bool bUseIndexBinding = false;
@@ -537,18 +529,15 @@ void OFormLayerXMLImport_Impl::documentDone( )
         &&  FormCellBindingHelper::isListCellRangeAllowed( rImport.GetModel() )
         )
     {
-        for (   ::std::vector< ModelStringPair >::const_iterator aRangeBindings = m_aCellRangeListSources.begin();
-                aRangeBindings != m_aCellRangeListSources.end();
-                ++aRangeBindings
-            )
+        for ( const auto& rRangeBindings : m_aCellRangeListSources )
         {
             try
             {
-                FormCellBindingHelper aHelper( aRangeBindings->first, rImport.GetModel() );
+                FormCellBindingHelper aHelper( rRangeBindings.first, rImport.GetModel() );
                 OSL_ENSURE( aHelper.isListCellRangeAllowed(), "OFormLayerXMLImport_Impl::documentDone: can't bind this control model!" );
                 if ( aHelper.isListCellRangeAllowed() )
                 {
-                    aHelper.setListSource( aHelper.createCellListSourceFromStringAddress( aRangeBindings->second ) );
+                    aHelper.setListSource( aHelper.createCellListSourceFromStringAddress( rRangeBindings.second ) );
                 }
             }
             catch( const Exception& )

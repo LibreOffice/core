@@ -627,12 +627,10 @@ void SvXMLImportPropertyMapper::PrepareForMultiPropertySet_(
 
     // copy values into sequences
     i = 0;
-    for( PropertyPairs::iterator aIter = aPropertyPairs.begin();
-         aIter != aPropertyPairs.end();
-         ++aIter )
+    for( const auto& rPropertyPair : aPropertyPairs )
     {
-        pNamesArray[i] = *(aIter->first);
-        pValuesArray[i++] = *(aIter->second);
+        pNamesArray[i] = *(rPropertyPair.first);
+        pValuesArray[i++] = *(rPropertyPair.second);
     }
 }
 
