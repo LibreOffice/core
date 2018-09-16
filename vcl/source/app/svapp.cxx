@@ -505,19 +505,22 @@ void Scheduler::ProcessEventsToIdle()
     const ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->mpDefInst->IsMainThread() )
         return;
-    const ImplSchedulerData* pSchedulerData = pSVData->maSchedCtx.mpFirstSchedulerData;
-    while ( pSchedulerData )
+    for ( int nTaskPriority = 0; nTaskPriority < PRIO_COUNT; ++nTaskPriority )
     {
-        if ( pSchedulerData->mpTask && !pSchedulerData->mbInScheduler )
+        const ImplSchedulerData* pSchedulerData = pSVData->maSchedCtx.mpFirstSchedulerData[nTaskPriority];
+        while ( pSchedulerData )
         {
-            Idle *pIdle = dynamic_cast<Idle*>( pSchedulerData->mpTask );
-            if ( pIdle && pIdle->IsActive() )
+            if ( pSchedulerData->mpTask && !pSchedulerData->mbInScheduler )
             {
-                SAL_WARN( "vcl.schedule", "Unprocessed Idle: "
-                          << pIdle << " " << pIdle->GetDebugName() );
+                Idle *pIdle = dynamic_cast<Idle*>( pSchedulerData->mpTask );
+                if ( pIdle && pIdle->IsActive() )
+                {
+                    SAL_WARN( "vcl.schedule", "Unprocessed Idle: "
+                            << pIdle << " " << pIdle->GetDebugName() );
+                }
             }
+            pSchedulerData = pSchedulerData->mpNext;
         }
-        pSchedulerData = pSchedulerData->mpNext;
     }
 #endif
 }

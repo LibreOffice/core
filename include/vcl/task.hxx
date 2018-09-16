@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_TASK_HXX
 
 #include <vcl/dllapi.h>
+#include <sal/log.hxx>
 #include <memory>
 
 class Scheduler;
@@ -28,7 +29,7 @@ struct ImplSchedulerData;
 
 enum class TaskPriority
 {
-    HIGHEST,       ///< These events should run very fast!
+    HIGHEST = 0,   ///< These events should run very fast!
     DEFAULT,       ///< Default priority used, e.g. the default timer priority
     HIGH_IDLE,     ///< Important idle events to be run before processing drawing events
     RESIZE,        ///< Resize runs before repaint, so we won't paint twice
@@ -37,6 +38,8 @@ enum class TaskPriority
     DEFAULT_IDLE,  ///< Default idle priority
     LOWEST         ///< Low, very idle cleanup tasks
 };
+
+#define PRIO_COUNT (static_cast<int>(TaskPriority::LOWEST) + 1)
 
 class VCL_DLLPUBLIC Task
 {
@@ -76,7 +79,7 @@ public:
     virtual ~Task() COVERITY_NOEXCEPT_FALSE;
     Task& operator=( const Task& rTask );
 
-    void            SetPriority(TaskPriority ePriority) { mePriority = ePriority; }
+    inline void     SetPriority(TaskPriority ePriority);
     TaskPriority    GetPriority() const { return mePriority; }
 
     void            SetDebugName( const sal_Char *pDebugName ) { mpDebugName = pDebugName; }
@@ -99,6 +102,13 @@ public:
     void            SetStatic() { mbStatic = true; }
     bool            IsStatic() const { return mbStatic; }
 };
+
+inline void Task::SetPriority(TaskPriority ePriority)
+{
+    SAL_WARN_IF(mpSchedulerData, "vcl.schedule",
+                "Priority will just change after next schedule!");
+    mePriority = ePriority;
+}
 
 #endif // INCLUDED_VCL_TASK_HXX
 
