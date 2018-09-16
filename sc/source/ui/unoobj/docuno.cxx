@@ -546,10 +546,14 @@ OUString ScModelObj::getPartInfo( int nPart )
 {
     OUString aPartInfo;
     ScViewData* pViewData = ScDocShell::GetViewData();
-    bool bIsVisible = pViewData->GetDocument()->IsVisible(nPart);
+    const bool bIsVisible = pViewData->GetDocument()->IsVisible(nPart);
+    //FIXME: Implement IsSelected().
+    const bool bIsSelected = false; //pViewData->GetDocument()->IsSelected(nPart);
 
     aPartInfo += "{ \"visible\": \"";
     aPartInfo += OUString::number(static_cast<unsigned int>(bIsVisible));
+    aPartInfo += "\", \"selected\": \"";
+    aPartInfo += OUString::number(static_cast<unsigned int>(bIsSelected));
     aPartInfo += "\" }";
     return aPartInfo;
 }
