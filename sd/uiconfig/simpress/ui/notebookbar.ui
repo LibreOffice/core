@@ -5334,7 +5334,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="DrawSection">
+                      <object class="sfxlo-OptionalBox" id="DrawTextSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
@@ -5447,10 +5447,10 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Insert-BasicShapes.round-rectangle">
+                                  <object class="GtkToolButton" id="Insert-BasicShapes.ellipse">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:BasicShapes.round-rectangle</property>
+                                    <property name="action_name">.uno:BasicShapes.ellipse</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -5458,10 +5458,10 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Insert-BasicShapes.ellipse">
+                                  <object class="GtkToolButton" id="Insert-DrawCaption">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:BasicShapes.ellipse</property>
+                                    <property name="action_name">.uno:DrawCaption</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -5505,7 +5505,7 @@
                             <property name="expand">False</property>
                             <property name="fill">True</property>
                             <property name="padding">5</property>
-                            <property name="position">2</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                         <style>
@@ -5519,19 +5519,19 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="DrawSection1">
+                      <object class="sfxlo-OptionalBox" id="DrawSection">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <child>
-                          <object class="GtkBox" id="GroupB82">
+                          <object class="GtkBox" id="GroupB64">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="shapes13">
+                              <object class="sfxlo-NotebookbarToolBox" id="shapes6">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
@@ -5546,7 +5546,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Insert-SymbolShapes">
+                                  <object class="GtkToolButton" id="Inser-SymbolShapes">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:SymbolShapes</property>
@@ -5557,7 +5557,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Insert-ArrowShapes">
+                                  <object class="GtkToolButton" id="Inser-ArrowShapes">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:ArrowShapes</property>
@@ -5568,10 +5568,10 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Insert-FillShadow">
+                                  <object class="GtkToolButton" id="Insert-ConnectorToolbox">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:FillShadow</property>
+                                    <property name="action_name">.uno:ConnectorToolbox</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -5586,11 +5586,11 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="sfxlo-NotebookbarToolBox" id="shapes14">
+                              <object class="sfxlo-NotebookbarToolBox" id="shapes8">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <child>
-                                  <object class="GtkToolButton" id="Insert-StarShapes">
+                                  <object class="GtkToolButton" id="Inser-StarShapes">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:StarShapes</property>
@@ -5601,7 +5601,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Insert-CalloutShapes">
+                                  <object class="GtkToolButton" id="Inser-CalloutShapes">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:CalloutShapes</property>
@@ -5623,7 +5623,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Insert-Objects3DToolbox">
+                                  <object class="GtkToolButton" id="Inser-Objects3DToolbox">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:Objects3DToolbox</property>
@@ -5644,11 +5644,11 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">3</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSeparator" id="separator95">
+                          <object class="GtkSeparator" id="separator83">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_top">5</property>
@@ -10611,26 +10611,28 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="sfxlo-OptionalBox" id="EditGroup1">
+                      <object class="sfxlo-OptionalBox" id="DrawTextSection1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
                         <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="shapes9">
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom44">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="valign">center</property>
+                            <property name="vexpand">True</property>
                             <property name="toolbar_style">both</property>
                             <property name="show_arrow">False</property>
                             <property name="icon_size">3</property>
                             <child>
-                              <object class="GtkToolButton" id="Draw-DrawText">
+                              <object class="GtkToolButton" id="Insert-Text1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:DrawText</property>
+                                <property name="action_name">.uno:Text</property>
                               </object>
                               <packing>
-                                <property name="expand">True</property>
+                                <property name="expand">False</property>
                                 <property name="homogeneous">True</property>
                               </packing>
                             </child>
@@ -10642,9 +10644,10 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkBox" id="box72">
+                          <object class="GtkBox" id="GroupB65">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="valign">center</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="sfxlo-NotebookbarToolBox" id="shapes2">
@@ -10653,7 +10656,7 @@
                                 <property name="toolbar_style">icons</property>
                                 <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkToolButton" id="Draw-Line">
+                                  <object class="GtkToolButton" id="Insert-Line1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:Line</property>
@@ -10664,7 +10667,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Draw-Polygon_Unfilled">
+                                  <object class="GtkToolButton" id="Insert-Polygon_Unfilled1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:Polygon_Unfilled</property>
@@ -10675,7 +10678,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Draw-Bezier_Unfilled">
+                                  <object class="GtkToolButton" id="Insert-Bezier_Unfilled1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:Bezier_Unfilled</property>
@@ -10686,7 +10689,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Draw-ArrowsToolbox">
+                                  <object class="GtkToolButton" id="Insert-ArrowsToolbox1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:ArrowsToolbox</property>
@@ -10710,7 +10713,7 @@
                                 <property name="toolbar_style">icons</property>
                                 <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkToolButton" id="Draw-BasicShapes.rectangle">
+                                  <object class="GtkToolButton" id="Insert-BasicShapes.rectangle1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:BasicShapes.rectangle</property>
@@ -10721,18 +10724,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Draw-BasicShapes.round-rectangle">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:BasicShapes.round-rectangle</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">True</property>
-                                    <property name="homogeneous">True</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkToolButton" id="Draw-BasicShapes.ellipse">
+                                  <object class="GtkToolButton" id="Insert-BasicShapes.ellipse1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:BasicShapes.ellipse</property>
@@ -10743,7 +10735,18 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Draw-LineToolbox">
+                                  <object class="GtkToolButton" id="Insert-DrawCaption1">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:DrawCaption</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkToolButton" id="Insert-LineToolbox1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:LineToolbox</property>
@@ -10768,31 +10771,48 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSeparator" id="separator130">
+                          <object class="GtkSeparator" id="separator70">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin_top">5</property>
+                            <property name="margin_bottom">5</property>
                             <property name="orientation">vertical</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
                             <property name="padding">5</property>
-                            <property name="position">2</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
+                        <style>
+                          <class name="priority-6"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="sfxlo-OptionalBox" id="DrawSection1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="vexpand">True</property>
                         <child>
-                          <object class="GtkBox" id="box73">
+                          <object class="GtkBox" id="GroupB71">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="valign">center</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="sfxlo-NotebookbarToolBox" id="shapes5">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="toolbar_style">icons</property>
-                                <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkToolButton" id="Draw-BasicShapes">
+                                  <object class="GtkToolButton" id="Insert-BasicShapes1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:BasicShapes</property>
@@ -10803,7 +10823,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Draw-SymbolShapes">
+                                  <object class="GtkToolButton" id="Inser-SymbolShapes1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:SymbolShapes</property>
@@ -10814,7 +10834,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Draw-ArrowShapes">
+                                  <object class="GtkToolButton" id="Inser-ArrowShapes1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:ArrowShapes</property>
@@ -10825,10 +10845,10 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Draw-FillShadow">
+                                  <object class="GtkToolButton" id="Insert-ConnectorToolbox1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="action_name">.uno:FillShadow</property>
+                                    <property name="action_name">.uno:ConnectorToolbox</property>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
@@ -10846,10 +10866,8 @@
                               <object class="sfxlo-NotebookbarToolBox" id="shapes7">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="toolbar_style">icons</property>
-                                <property name="show_arrow">False</property>
                                 <child>
-                                  <object class="GtkToolButton" id="Draw-StarShapes">
+                                  <object class="GtkToolButton" id="Inser-StarShapes1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:StarShapes</property>
@@ -10860,7 +10878,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Draw-CalloutShapes">
+                                  <object class="GtkToolButton" id="Inser-CalloutShapes1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:CalloutShapes</property>
@@ -10871,7 +10889,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Draw-FlowChartShapes">
+                                  <object class="GtkToolButton" id="Insert-FlowChartShapes1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:FlowChartShapes</property>
@@ -10882,7 +10900,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkToolButton" id="Draw-Objects3DToolbox">
+                                  <object class="GtkToolButton" id="Inser-Objects3DToolbox1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="action_name">.uno:Objects3DToolbox</property>
@@ -10903,11 +10921,11 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">3</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSeparator" id="separator70">
+                          <object class="GtkSeparator" id="separator84">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="margin_top">5</property>
@@ -10928,7 +10946,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
@@ -11117,7 +11135,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                     <child>
@@ -11378,7 +11396,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                     <child>
@@ -11501,7 +11519,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">4</property>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                     <child>
@@ -11626,11 +11644,8 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">5</property>
+                        <property name="position">6</property>
                       </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                   </object>
                   <packing>
