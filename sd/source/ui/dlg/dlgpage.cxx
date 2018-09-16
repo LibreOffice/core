@@ -33,12 +33,9 @@
 /**
  * Constructor of tab dialog: appends pages to the dialog
  */
-SdPageDlg::SdPageDlg( SfxObjectShell const * pDocSh, vcl::Window* pParent, const SfxItemSet* pAttr, bool bAreaPage ) :
-        SfxTabDialog ( pParent
-                      ,"DrawPageDialog"
-                      ,"modules/sdraw/ui/drawpagedialog.ui"
-                      , pAttr ),
-        mpDocShell  ( pDocSh )
+SdPageDlg::SdPageDlg(SfxObjectShell const * pDocSh, weld::Window* pParent, const SfxItemSet* pAttr, bool bAreaPage)
+    : SfxTabDialogController(pParent, "modules/sdraw/ui/drawpagedialog.ui", "DrawPageDialog", pAttr)
+    , mpDocShell(pDocSh)
 {
     SvxColorListItem const * pColorListItem = mpDocShell->GetItem( SID_COLOR_TABLE );
     SvxGradientListItem const * pGradientListItem = mpDocShell->GetItem( SID_GRADIENT_LIST );
@@ -54,28 +51,28 @@ SdPageDlg::SdPageDlg( SfxObjectShell const * pDocSh, vcl::Window* pParent, const
 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
-    mnPage = AddTabPage( "RID_SVXPAGE_PAGE", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), nullptr );
-    mnArea = AddTabPage( "RID_SVXPAGE_AREA", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), nullptr );
-    mnTransparence = AddTabPage( "RID_SVXPAGE_TRANSPARENCE", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), nullptr );
+    AddTabPage("RID_SVXPAGE_PAGE", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PAGE), nullptr);
+    AddTabPage("RID_SVXPAGE_AREA", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_AREA), nullptr);
+    AddTabPage("RID_SVXPAGE_TRANSPARENCE", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TRANSPARENCE), nullptr);
 
-    if(!bAreaPage)  // I have to add the page before I remove it !
+    if (!bAreaPage)  // I have to add the page before I remove it !
     {
-        RemoveTabPage( "RID_SVXPAGE_AREA" );
-        RemoveTabPage( "RID_SVXPAGE_TRANSPARENCE" );
+        RemoveTabPage("RID_SVXPAGE_AREA");
+        RemoveTabPage("RID_SVXPAGE_TRANSPARENCE");
     }
 }
 
-void SdPageDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
+void SdPageDlg::PageCreated(const OString& rId, SfxTabPage& rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-    if (nId == mnPage)
+    if (rId == "RID_SVXPAGE_PAGE")
     {
         aSet.Put (SfxAllEnumItem(sal_uInt16(SID_ENUM_PAGE_MODE), SVX_PAGE_MODE_PRESENTATION));
         aSet.Put (SfxAllEnumItem(sal_uInt16(SID_PAPER_START), PAPER_A0));
         aSet.Put (SfxAllEnumItem(sal_uInt16(SID_PAPER_END), PAPER_E));
         rPage.PageCreated(aSet);
     }
-    else if (nId == mnArea)
+    else if (rId == "RID_SVXPAGE_AREA")
     {
         aSet.Put (SvxColorListItem(mpColorList,SID_COLOR_TABLE));
         aSet.Put (SvxGradientListItem(mpGradientList,SID_GRADIENT_LIST));
@@ -87,7 +84,7 @@ void SdPageDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
         aSet.Put (SfxUInt16Item(SID_TABPAGE_POS,0));
         rPage.PageCreated(aSet);
     }
-    else if (nId == mnTransparence)
+    else if (rId == "RID_SVXPAGE_TRANSPARENCE")
     {
         aSet.Put(SfxUInt16Item(SID_PAGE_TYPE,0));
         aSet.Put(SfxUInt16Item(SID_DLG_TYPE,1));
