@@ -265,6 +265,8 @@ public:
     virtual OUString getPostIts() override;
     /// @see vcl::ITiledRenderable::selectPart().
     virtual void selectPart(int nPart, int nSelect) override;
+    /// @see vcl::ITiledRenderable::moveSelectedParts().
+    virtual void moveSelectedParts(int nPosition, bool bDuplicate) override;
     /// @see vcl::ITiledRenderable::getPartInfo().
     virtual OUString getPartInfo(int nPart) override;
 
