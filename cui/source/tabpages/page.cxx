@@ -60,8 +60,6 @@
 // static ----------------------------------------------------------------
 
 static const long MINBODY       = 284;  // 0,5 cm rounded up in twips
-//static const long PRINT_OFFSET    = 17;   // 0,03 cm rounded down in twips
-static const long PRINT_OFFSET  = 0;    // why was this ever set to 17 ? it led to wrong right and bottom margins.
 
 const sal_uInt16 SvxPageDescPage::pRanges[] =
 {
@@ -266,11 +264,10 @@ SvxPageDescPage::SvxPageDescPage(TabPageParent pParent, const SfxItemSet& rAttr)
     Point aPrintOffset = mpDefPrinter->GetPageOffset() - mpDefPrinter->PixelToLogic( Point() );
     mpDefPrinter->SetMapMode( aOldMode );
 
-    long nOffset = !aPrintOffset.X() && !aPrintOffset.Y() ? 0 : PRINT_OFFSET;
     nFirstLeftMargin = m_xLeftMarginEdit->convert_value_from(m_xLeftMarginEdit->normalize(aPrintOffset.X()), FUNIT_TWIP);
-    nFirstRightMargin = m_xRightMarginEdit->convert_value_from(m_xRightMarginEdit->normalize(aPaperSize.Width() - aPrintSize.Width() - aPrintOffset.X() + nOffset), FUNIT_TWIP);
+    nFirstRightMargin = m_xRightMarginEdit->convert_value_from(m_xRightMarginEdit->normalize(aPaperSize.Width() - aPrintSize.Width() - aPrintOffset.X()), FUNIT_TWIP);
     nFirstTopMargin = m_xTopMarginEdit->convert_value_from(m_xTopMarginEdit->normalize(aPrintOffset.Y() ), FUNIT_TWIP);
-    nFirstBottomMargin = m_xBottomMarginEdit->convert_value_from(m_xBottomMarginEdit->normalize(aPaperSize.Height() - aPrintSize.Height() - aPrintOffset.Y() + nOffset), FUNIT_TWIP );
+    nFirstBottomMargin = m_xBottomMarginEdit->convert_value_from(m_xBottomMarginEdit->normalize(aPaperSize.Height() - aPrintSize.Height() - aPrintOffset.Y()), FUNIT_TWIP );
     nLastLeftMargin = m_xLeftMarginEdit->convert_value_from(m_xLeftMarginEdit->normalize(aPrintOffset.X() + aPrintSize.Width()), FUNIT_TWIP);
     nLastRightMargin = m_xRightMarginEdit->convert_value_from(m_xRightMarginEdit->normalize(aPrintOffset.X() + aPrintSize.Width()), FUNIT_TWIP);
     nLastTopMargin = m_xTopMarginEdit->convert_value_from(m_xTopMarginEdit->normalize(aPrintOffset.Y() + aPrintSize.Height()), FUNIT_TWIP);
@@ -965,13 +962,10 @@ void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
     sal_Int64 nSetB = m_xBottomMarginEdit->denormalize(
                     m_xBottomMarginEdit->get_value( FUNIT_TWIP ) );
 
-    long nOffset = !aPrintOffset.X() && !aPrintOffset.Y() ? 0 : PRINT_OFFSET;
     long nNewL = aPrintOffset.X();
-    long nNewR =
-        aPaperSize.Width() - aPrintSize.Width() - aPrintOffset.X() + nOffset;
+    long nNewR = aPaperSize.Width() - aPrintSize.Width() - aPrintOffset.X();
     long nNewT = aPrintOffset.Y();
-    long nNewB =
-        aPaperSize.Height() - aPrintSize.Height() - aPrintOffset.Y() + nOffset;
+    long nNewB = aPaperSize.Height() - aPrintSize.Height() - aPrintOffset.Y();
 
     nFirstLeftMargin = m_xLeftMarginEdit->convert_value_from(m_xLeftMarginEdit->normalize(nNewL), FUNIT_TWIP);
     nFirstRightMargin = m_xRightMarginEdit->convert_value_from(m_xRightMarginEdit->normalize(nNewR), FUNIT_TWIP);
