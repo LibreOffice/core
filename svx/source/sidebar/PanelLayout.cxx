@@ -18,14 +18,15 @@ using namespace sfx2::sidebar;
 
 PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
     : Control(pParent)
-    , m_aPanelLayoutIdle("svx sidebar PanelLayoutIdle")
     , m_bInClose(false)
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
-    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame));
     m_aPanelLayoutIdle.SetPriority(TaskPriority::RESIZE);
     m_aPanelLayoutIdle.SetInvokeHandler( LINK( this, PanelLayout, ImplHandlePanelLayoutTimerHdl ) );
-    m_aPanelLayoutIdle.SetDebugName( "svx::PanelLayout  m_aPanelLayoutIdle" );
+    m_aPanelLayoutIdle.SetDebugName( "svx::PanelLayout m_aPanelLayoutIdle" );
+
+    // VclBuilder will trigger resize and start Idle
+    m_pUIBuilder.reset(new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame));
     if (GetSettings().GetStyleSettings().GetAutoMnemonic())
        Accelerator::GenerateAutoMnemonicsOnHierarchy(this);
 }
