@@ -138,7 +138,6 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
 
 void SlideSorterController::Init()
 {
-    OSL_FAIL( ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> sd::SlideSorterController::SlideSorterController(), bah!" );
     mpCurrentSlideManager.reset(new CurrentSlideManager(mrSlideSorter));
     mpPageSelector.reset(new PageSelector(mrSlideSorter));
     mpFocusManager.reset(new FocusManager(mrSlideSorter));
