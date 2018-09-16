@@ -11,14 +11,10 @@ from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.debug import sleep
-#import org.libreoffice.unotest
-#import pathlib
-#def get_url_for_data_file(file_name):
-#    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
-
-from uitest.path import get_srcdir_url
+import org.libreoffice.unotest
+import pathlib
 def get_url_for_data_file(file_name):
-    return get_srcdir_url() + "/sc/qa/uitest/calc_tests/data/" + file_name
+    return pathlib.Path(org.libreoffice.unotest.makeCopyFromTDOC(file_name)).as_uri()
 
 #Bug 118206 - [GTK3] Calc hangs copying/cutting a conditional format column
 class tdf118206(UITestCase):
