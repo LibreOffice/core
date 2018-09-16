@@ -747,17 +747,8 @@ bool DrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
     return bActivated;
 }
 
-/**
- * Mark the desired page as selected (1), deselected (0), toggle (2).
- * nPage refers to the page in question.
- */
 bool DrawViewShell::SelectPage(sal_uInt16 nPage, sal_uInt16 nSelect)
 {
-    bool bOK = false;
-
-    SAL_WARN("sd", "sd::DrawViewShell::SelectPage()");
-    // Tell the slide sorter about the name change (necessary for
-    // accessibility.)
     slidesorter::SlideSorterViewShell* pSlideSorterViewShell
         = slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
     if (pSlideSorterViewShell != nullptr)
@@ -783,9 +774,31 @@ bool DrawViewShell::SelectPage(sal_uInt16 nPage, sal_uInt16 nSelect)
             else
                 aPageSelector.SelectPage(nPage);
         }
+
+        return true;
     }
 
-    return bOK;
+    return false;
+}
+
+bool DrawViewShell::IsSelected(sal_uInt16 nPage)
+{
+    slidesorter::SlideSorterViewShell* pVShell
+        = slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
+    if (pVShell != nullptr)
+        return pVShell->GetSlideSorter().GetController().GetPageSelector().IsPageSelected(nPage);
+
+    return false;
+}
+
+bool DrawViewShell::IsVisible(sal_uInt16 nPage)
+{
+    slidesorter::SlideSorterViewShell* pVShell
+        = slidesorter::SlideSorterViewShell::GetSlideSorter(GetViewShellBase());
+    if (pVShell != nullptr)
+        return pVShell->GetSlideSorter().GetController().GetPageSelector().IsPageVisible(nPage);
+
+    return false;
 }
 
 /**
