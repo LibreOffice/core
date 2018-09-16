@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bff0334d_c33468e1",
+        "filename": "xmloff/source/text/txtflde.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1934,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-09-16T14:36:16Z",
+      "side": 1,
+      "message": "this whole loop can be replaced by comphelper::containerToSequence",
+      "revId": "cf95ae037cd5ecf4397d956844dad5ca068c444d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
