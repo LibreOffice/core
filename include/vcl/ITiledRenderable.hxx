@@ -312,7 +312,8 @@ public:
     }
 
     /*
-     * Used for sheets in spreadsheet documents.
+     * Used for sheets in spreadsheet documents,
+     * and slides in presentation documents.
      */
     virtual OUString getPartInfo(int /*nPart*/)
     {
