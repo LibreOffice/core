@@ -418,7 +418,6 @@ cui/uiconfig/ui/select_persona_dialog.ui://GtkButton[@id='result7'] button-no-la
 cui/uiconfig/ui/select_persona_dialog.ui://GtkButton[@id='result8'] button-no-label
 cui/uiconfig/ui/select_persona_dialog.ui://GtkButton[@id='result9'] button-no-label
 cui/uiconfig/ui/select_persona_dialog.ui://GtkLabel[@id='progress_label'] orphan-label
-cui/uiconfig/ui/shadowtabpage.ui://svxlo-SvxRectCtl[@id='CTL_POSITION'] no-labelled-by
 cui/uiconfig/ui/signsignatureline.ui://GtkTextView[@id='edit_comment'] duplicate-mnemonic
 cui/uiconfig/ui/specialcharacters.ui://GtkLabel[@id='hexulabel'] orphan-label
 cui/uiconfig/ui/specialcharacters.ui://GtkDrawingArea[@id='viewchar2'] no-labelled-by

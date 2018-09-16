@@ -69,38 +69,9 @@ protected:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 private:
-    SvxBackgroundTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet );
+    SvxBackgroundTabPage(TabPageParent pParent, const SfxItemSet& rCoreSet);
     virtual ~SvxBackgroundTabPage() override;
     virtual void dispose() override;
-
-    VclPtr<VclContainer>           m_pAsGrid;
-    VclPtr<FixedText>              m_pSelectTxt;
-    VclPtr<ListBox>                m_pLbSelect;
-    VclPtr<FixedText>              m_pTblDesc;
-    VclPtr<ListBox>                m_pTblLBox;
-
-    VclPtr<FixedText>              m_pBackGroundColorLabelFT;
-    VclPtr<VclFrame>               m_pBackGroundColorFrame;
-    VclPtr<SvxColorValueSet>       m_pBackgroundColorSet;
-    VclPtr<BackgroundPreviewImpl>  m_pPreviewWin1;
-
-    VclPtr<CheckBox>               m_pBtnPreview;
-
-    // Background Bitmap ----------------------------------
-    VclPtr<VclContainer>           m_pBitmapContainer;
-    VclPtr<VclContainer>           m_pFileFrame;
-    VclPtr<PushButton>             m_pBtnBrowse;
-    VclPtr<CheckBox>               m_pBtnLink;
-    VclPtr<FixedText>              m_pFtUnlinked;
-    VclPtr<FixedText>              m_pFtFile;
-
-    VclPtr<VclContainer>           m_pTypeFrame;
-    VclPtr<RadioButton>            m_pBtnPosition;
-    VclPtr<RadioButton>            m_pBtnArea;
-    VclPtr<RadioButton>            m_pBtnTile;
-    VclPtr<SvxRectCtl>             m_pWndPosition;
-
-    VclPtr<BackgroundPreviewImpl>  m_pPreviewWin2;
 
     // DDListBox for Writer -------------------------------
 
@@ -121,6 +92,41 @@ private:
     std::unique_ptr<SvxBackgroundTable_Impl> pTableBck_Impl;///< Items for Sw-Table must be corrected
     std::unique_ptr<SvxBrushItem> pHighlighting;
 
+    std::unique_ptr<RectCtl> m_xWndPosition;
+    std::unique_ptr<ColorValueSet> m_xBackgroundColorSet;
+    std::unique_ptr<BackgroundPreviewImpl> m_xPreview1;
+    std::unique_ptr<BackgroundPreviewImpl> m_xPreview2;
+
+    std::unique_ptr<weld::Label> m_xFindGraphicsFt;
+    std::unique_ptr<weld::Widget> m_xAsGrid;
+    std::unique_ptr<weld::Label> m_xSelectTxt;
+    std::unique_ptr<weld::ComboBox> m_xLbSelect;
+    std::unique_ptr<weld::Label> m_xTblDesc;
+    std::unique_ptr<weld::ComboBox> m_xTblLBox;
+
+    std::unique_ptr<weld::Label> m_xBackGroundColorLabelFT;
+    std::unique_ptr<weld::Widget> m_xBackGroundColorFrame;
+
+    std::unique_ptr<weld::CheckButton> m_xBtnPreview;
+
+    // Background Bitmap ----------------------------------
+    std::unique_ptr<weld::Widget> m_xBitmapContainer;
+    std::unique_ptr<weld::Widget> m_xFileFrame;
+    std::unique_ptr<weld::Button> m_xBtnBrowse;
+    std::unique_ptr<weld::CheckButton> m_xBtnLink;
+    std::unique_ptr<weld::Label> m_xFtUnlinked;
+    std::unique_ptr<weld::Label> m_xFtFile;
+
+    std::unique_ptr<weld::Widget> m_xTypeFrame;
+    std::unique_ptr<weld::RadioButton> m_xBtnPosition;
+    std::unique_ptr<weld::RadioButton> m_xBtnArea;
+    std::unique_ptr<weld::RadioButton> m_xBtnTile;
+
+    std::unique_ptr<weld::CustomWeld> m_xWndPositionWin;
+    std::unique_ptr<weld::CustomWeld> m_xBackgroundColorSetWin;
+    std::unique_ptr<weld::CustomWeld> m_xPreviewWin1;
+    std::unique_ptr<weld::CustomWeld> m_xPreviewWin2;
+
     void                FillColorValueSets_Impl();
     void                ShowColorUI_Impl();
     void                HideColorUI_Impl();
@@ -131,15 +137,15 @@ private:
     void                SetGraphicPosition_Impl( SvxGraphicPosition ePos );
     SvxGraphicPosition  GetGraphicPosition_Impl();
     void                FillControls_Impl(const SvxBrushItem& rBgdAttr,
-                                            const OUString& rUserData);
+                                          const OUString& rUserData);
 
-    DECL_LINK( LoadIdleHdl_Impl, Timer*, void );
-    DECL_LINK(SelectHdl_Impl, ListBox&, void );
-    DECL_LINK(BrowseHdl_Impl, Button*, void);
-    DECL_LINK( RadioClickHdl_Impl, Button*, void );
-    DECL_LINK( FileClickHdl_Impl, Button*, void );
-    DECL_LINK(BackgroundColorHdl_Impl, ValueSet*, void);
-    DECL_LINK( TblDestinationHdl_Impl, ListBox&, void );
+    DECL_LINK(LoadIdleHdl_Impl, Timer*, void);
+    DECL_LINK(SelectHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(BrowseHdl_Impl, weld::Button&, void);
+    DECL_LINK(RadioClickHdl_Impl, weld::ToggleButton&, void );
+    DECL_LINK(FileClickHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(BackgroundColorHdl_Impl, SvtValueSet*, void);
+    DECL_LINK(TblDestinationHdl_Impl, weld::ComboBox&, void);
 };
 
 class SvxBkgTabPage : public SvxAreaTabPage
