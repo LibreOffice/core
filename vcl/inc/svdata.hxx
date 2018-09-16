@@ -26,6 +26,7 @@
 #include <unotools/options.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
+#include <vcl/task.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
@@ -327,9 +328,10 @@ struct BlendFrameCache
 
 struct ImplSchedulerContext
 {
-    ImplSchedulerData*      mpFirstSchedulerData = nullptr; ///< list of all active tasks
-    ImplSchedulerData*      mpLastSchedulerData = nullptr;  ///< last item of the mpFirstSchedulerData list
+    ImplSchedulerData*      mpFirstSchedulerData[PRIO_COUNT] = { nullptr, }; ///< list of all active tasks per priority
+    ImplSchedulerData*      mpLastSchedulerData[PRIO_COUNT] = { nullptr, };  ///< last item of each mpFirstSchedulerData list
     ImplSchedulerData*      mpSchedulerStack = nullptr;     ///< stack of invoked tasks
+    ImplSchedulerData*      mpSchedulerStackTop = nullptr;  ///< top most stack entry to detect needed rescheduling during pop
     SalTimer*               mpSalTimer = nullptr;           ///< interface to sal event loop / system timer
     sal_uInt64              mnTimerStart = 0;               ///< start time of the timer
     sal_uInt64              mnTimerPeriod = SAL_MAX_UINT64; ///< current timer period
