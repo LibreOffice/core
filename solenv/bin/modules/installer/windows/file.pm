@@ -562,9 +562,9 @@ sub get_fileversion
         my $ttfdata = $fnt->{'name'}->read->find_name(5);
         $fnt->release;
 
-        if ($ttfdata =~ /Version ([0-9]+(\.[0-9]+)*)/i)
+        if ($ttfdata =~ /(Version )?([0-9]+(\.[0-9]+)*)/i)
         {
-            my ($version, $subversion, $microversion, $vervariant) = split(/\./,$1);
+            my ($version, $subversion, $microversion, $vervariant) = split(/\./,$2);
             $fileversion = int($version) . "." . int($subversion) . "." . int($microversion) . "." . int($vervariant);
         }
         else
