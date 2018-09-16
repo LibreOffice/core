@@ -247,7 +247,13 @@ public:
     bool            SwitchPage(sal_uInt16 nPage);
     bool            IsSwitchPageAllowed() const;
 
+    /**
+     * Mark the desired page as selected (1), deselected (0), toggle (2).
+     * nPage refers to the page in question.
+     */
     bool            SelectPage(sal_uInt16 nPage, sal_uInt16 nSelect);
+    bool            IsSelected(sal_uInt16 nPage);
+    bool            IsVisible(sal_uInt16 nPage);
 
     void            GotoBookmark(const OUString& rBookmark);
     //Realize multi-selection of objects, If object is marked, the
