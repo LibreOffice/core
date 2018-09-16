@@ -104,18 +104,20 @@ void Scheduler::ImplDeInitScheduler()
 
     SchedulerGuard aSchedulerGuard;
 
+    int nTaskPriority = 0;
 #if OSL_DEBUG_LEVEL > 0
+    sal_uInt32 nTasks = 0;
+    for (nTaskPriority = 0; nTaskPriority < PRIO_COUNT; ++nTaskPriority)
     {
-        ImplSchedulerData* pSchedulerData = rSchedCtx.mpFirstSchedulerData;
-        sal_uInt32 nTasks = 0;
+        ImplSchedulerData* pSchedulerData = rSchedCtx.mpFirstSchedulerData[nTaskPriority];
         while ( pSchedulerData )
         {
             ++nTasks;
             pSchedulerData = pSchedulerData->mpNext;
         }
-        SAL_INFO( "vcl.schedule.deinit",
-                  "DeInit the scheduler - pending tasks: " << nTasks );
     }
+    SAL_INFO( "vcl.schedule.deinit",
+              "DeInit the scheduler - pending tasks: " << nTasks );
 
     // clean up all the sfx::SfxItemDisruptor_Impl Idles
     ProcessEventsToIdle();
@@ -131,7 +133,11 @@ void Scheduler::ImplDeInitScheduler()
 #if OSL_DEBUG_LEVEL > 0
     sal_uInt32 nActiveTasks = 0, nIgnoredTasks = 0;
 #endif
-    ImplSchedulerData* pSchedulerData = rSchedCtx.mpFirstSchedulerData;
+    nTaskPriority = 0;
+    ImplSchedulerData* pSchedulerData = nullptr;
+
+next_priority:
+    pSchedulerData = rSchedCtx.mpFirstSchedulerData[nTaskPriority];
     while ( pSchedulerData )
     {
         Task *pTask = pSchedulerData->mpTask;
@@ -176,6 +182,11 @@ void Scheduler::ImplDeInitScheduler()
         pSchedulerData = pSchedulerData->mpNext;
         delete pDeleteSchedulerData;
     }
+
+    ++nTaskPriority;
+    if (nTaskPriority < PRIO_COUNT)
+        goto next_priority;
+
 #if OSL_DEBUG_LEVEL > 0
     SAL_INFO( "vcl.schedule.deinit", "DeInit the scheduler - finished" );
     SAL_WARN_IF( 0 != nActiveTasks, "vcl.schedule.deinit", "DeInit active tasks: "
@@ -183,8 +194,11 @@ void Scheduler::ImplDeInitScheduler()
 //    assert( nIgnoredTasks == nActiveTasks );
 #endif
 
-    rSchedCtx.mpFirstSchedulerData = nullptr;
-    rSchedCtx.mpLastSchedulerData  = nullptr;
+    for (nTaskPriority = 0; nTaskPriority < PRIO_COUNT; ++nTaskPriority)
+    {
+        rSchedCtx.mpFirstSchedulerData[nTaskPriority] = nullptr;
+        rSchedCtx.mpLastSchedulerData[nTaskPriority]  = nullptr;
+    }
     rSchedCtx.mnTimerPeriod        = InfiniteTimeoutMs;
 }
 
@@ -298,38 +312,40 @@ inline void Scheduler::UpdateSystemTimer( ImplSchedulerContext &rSchedCtx,
 }
 
 static inline void AppendSchedulerData( ImplSchedulerContext &rSchedCtx,
-                                        ImplSchedulerData * const pSchedulerData )
+                                        ImplSchedulerData * const pSchedulerData)
 {
-    if ( !rSchedCtx.mpLastSchedulerData )
+    assert(pSchedulerData->mpTask);
+    const int nTaskPriority = static_cast<int>(pSchedulerData->mpTask->GetPriority());
+    if (!rSchedCtx.mpLastSchedulerData[nTaskPriority])
     {
-        rSchedCtx.mpFirstSchedulerData = pSchedulerData;
-        rSchedCtx.mpLastSchedulerData = pSchedulerData;
+        rSchedCtx.mpFirstSchedulerData[nTaskPriority] = pSchedulerData;
+        rSchedCtx.mpLastSchedulerData[nTaskPriority] = pSchedulerData;
     }
     else
     {
-        rSchedCtx.mpLastSchedulerData->mpNext = pSchedulerData;
-        rSchedCtx.mpLastSchedulerData = pSchedulerData;
+        rSchedCtx.mpLastSchedulerData[nTaskPriority]->mpNext = pSchedulerData;
+        rSchedCtx.mpLastSchedulerData[nTaskPriority] = pSchedulerData;
     }
     pSchedulerData->mpNext = nullptr;
 }
 
 static inline ImplSchedulerData* DropSchedulerData(
     ImplSchedulerContext &rSchedCtx, ImplSchedulerData * const pPrevSchedulerData,
-                                     const ImplSchedulerData * const pSchedulerData )
+    const ImplSchedulerData * const pSchedulerData, const int nTaskPriority)
 {
     assert( pSchedulerData );
     if ( pPrevSchedulerData )
         assert( pPrevSchedulerData->mpNext == pSchedulerData );
     else
-        assert( rSchedCtx.mpFirstSchedulerData == pSchedulerData );
+        assert(rSchedCtx.mpFirstSchedulerData[nTaskPriority] == pSchedulerData);
 
     ImplSchedulerData * const pSchedulerDataNext = pSchedulerData->mpNext;
     if ( pPrevSchedulerData )
         pPrevSchedulerData->mpNext = pSchedulerDataNext;
     else
-        rSchedCtx.mpFirstSchedulerData = pSchedulerDataNext;
+        rSchedCtx.mpFirstSchedulerData[nTaskPriority] = pSchedulerDataNext;
     if ( !pSchedulerDataNext )
-        rSchedCtx.mpLastSchedulerData = pPrevSchedulerData;
+        rSchedCtx.mpLastSchedulerData[nTaskPriority] = pPrevSchedulerData;
     return pSchedulerDataNext;
 }
 
@@ -348,10 +364,9 @@ bool Scheduler::ProcessTaskScheduling()
     // Allow for decimals, so subtract in the compare (needed at least on iOS)
     if ( nTime < rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod -1)
     {
-        SAL_WARN( "vcl.schedule", "we're too early - restart the timer!" );
-        UpdateSystemTimer( rSchedCtx,
-                           rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod - nTime,
-                           true, nTime );
+        int nSleep = rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod - nTime;
+        SAL_WARN("vcl.schedule", "we're too early - restart the timer (" << nSleep << "ms)!");
+        UpdateSystemTimer(rSchedCtx, nSleep, true, nTime);
         return false;
     }
 
@@ -359,69 +374,72 @@ bool Scheduler::ProcessTaskScheduling()
     ImplSchedulerData* pPrevSchedulerData = nullptr;
     ImplSchedulerData *pMostUrgent = nullptr;
     ImplSchedulerData *pPrevMostUrgent = nullptr;
+    int                nMostUrgentPriority = 0;
     sal_uInt64         nMinPeriod = InfiniteTimeoutMs;
-    sal_uInt64         nMostUrgentPeriod = InfiniteTimeoutMs;
     sal_uInt64         nReadyPeriod = InfiniteTimeoutMs;
     unsigned           nTasks = 0;
+    int                nTaskPriority = 0;
 
-    pSchedulerData = rSchedCtx.mpFirstSchedulerData;
-    while ( pSchedulerData )
+    for (; nTaskPriority < PRIO_COUNT; ++nTaskPriority)
     {
-        ++nTasks;
-        const Timer *timer = dynamic_cast<Timer*>( pSchedulerData->mpTask );
-        if ( timer )
-            SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
-                << pSchedulerData << " " << *pSchedulerData << " " << *timer );
-        else if ( pSchedulerData->mpTask )
-            SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
-                << pSchedulerData << " " << *pSchedulerData
-                << " " << *pSchedulerData->mpTask );
-        else
-            SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
-                << pSchedulerData << " " << *pSchedulerData << " (to be deleted)" );
-
-        // Should the Task be released from scheduling or stacked?
-        if ( !pSchedulerData->mpTask || !pSchedulerData->mpTask->IsActive()
-            || pSchedulerData->mbInScheduler )
+        pSchedulerData = rSchedCtx.mpFirstSchedulerData[nTaskPriority];
+        pPrevSchedulerData = nullptr;
+        while (pSchedulerData)
         {
-            ImplSchedulerData * const pSchedulerDataNext =
-                DropSchedulerData( rSchedCtx, pPrevSchedulerData, pSchedulerData );
-            if ( pSchedulerData->mbInScheduler )
-            {
-                pSchedulerData->mpNext = rSchedCtx.mpSchedulerStack;
-                rSchedCtx.mpSchedulerStack = pSchedulerData;
-            }
+            ++nTasks;
+            const Timer *timer = dynamic_cast<Timer*>( pSchedulerData->mpTask );
+            if ( timer )
+                SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
+                        << pSchedulerData << " " << *pSchedulerData << " " << *timer );
+            else if ( pSchedulerData->mpTask )
+                SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
+                        << pSchedulerData << " " << *pSchedulerData
+                        << " " << *pSchedulerData->mpTask );
             else
+                SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
+                        << pSchedulerData << " " << *pSchedulerData << " (to be deleted)" );
+
+            // Should the Task be released from scheduling?
+            assert(!pSchedulerData->mbInScheduler);
+            if (!pSchedulerData->mpTask || !pSchedulerData->mpTask->IsActive())
             {
+                ImplSchedulerData * const pSchedulerDataNext =
+                    DropSchedulerData(rSchedCtx, pPrevSchedulerData, pSchedulerData, nTaskPriority);
                 if ( pSchedulerData->mpTask )
                     pSchedulerData->mpTask->mpSchedulerData = nullptr;
                 delete pSchedulerData;
+                pSchedulerData = pSchedulerDataNext;
+                continue;
             }
-            pSchedulerData = pSchedulerDataNext;
-            continue;
+
+            assert(pSchedulerData->mpTask);
+            if (pSchedulerData->mpTask->IsActive())
+            {
+                nReadyPeriod = pSchedulerData->mpTask->UpdateMinPeriod( nMinPeriod, nTime );
+                if (ImmediateTimeoutMs == nReadyPeriod)
+                {
+                    if (!pMostUrgent)
+                    {
+                        pPrevMostUrgent = pPrevSchedulerData;
+                        pMostUrgent = pSchedulerData;
+                        nMostUrgentPriority = nTaskPriority;
+                    }
+                    else
+                    {
+                        nMinPeriod = ImmediateTimeoutMs;
+                        break;
+                    }
+                }
+                else if (nMinPeriod > nReadyPeriod)
+                    nMinPeriod = nReadyPeriod;
+            }
+
+            pPrevSchedulerData = pSchedulerData;
+            pSchedulerData = pSchedulerData->mpNext;
         }
 
-        assert( pSchedulerData->mpTask );
-        if ( !pSchedulerData->mpTask->IsActive() )
-            goto next_entry;
-
-        // skip ready tasks with lower priority than the most urgent (numerical lower is higher)
-        nReadyPeriod = pSchedulerData->mpTask->UpdateMinPeriod( nMinPeriod, nTime );
-        if ( ImmediateTimeoutMs == nReadyPeriod &&
-             (!pMostUrgent || (pSchedulerData->mpTask->GetPriority() < pMostUrgent->mpTask->GetPriority())) )
-        {
-            if ( pMostUrgent && nMinPeriod > nMostUrgentPeriod )
-                nMinPeriod = nMostUrgentPeriod;
-            pPrevMostUrgent = pPrevSchedulerData;
-            pMostUrgent = pSchedulerData;
-            nMostUrgentPeriod = nReadyPeriod;
-        }
-        else if ( nMinPeriod > nReadyPeriod )
-            nMinPeriod = nReadyPeriod;
-
-next_entry:
-        pPrevSchedulerData = pSchedulerData;
-        pSchedulerData = pSchedulerData->mpNext;
+        if (ImmediateTimeoutMs == nMinPeriod)
+            break;
     }
 
     if ( InfiniteTimeoutMs != nMinPeriod )
@@ -441,10 +459,15 @@ next_entry:
         // prepare Scheduler object for deletion after handling
         pTask->SetDeletionFlags();
 
-        // invoke the task
-        // defer pushing the scheduler stack to next run, as most tasks will
-        // not run a nested Scheduler loop and don't need a stack push!
         pMostUrgent->mbInScheduler = true;
+
+        // always push the stack, as we don't traverse the whole list to push later
+        DropSchedulerData(rSchedCtx, pPrevMostUrgent, pMostUrgent, nMostUrgentPriority);
+        pMostUrgent->mpNext = rSchedCtx.mpSchedulerStack;
+        rSchedCtx.mpSchedulerStack = pMostUrgent;
+        rSchedCtx.mpSchedulerStackTop = pMostUrgent;
+
+        // invoke the task
         sal_uInt32 nLockCount = Unlock( true );
         try
         {
@@ -472,34 +495,35 @@ next_entry:
         SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
                   << pMostUrgent << "  invoke-out" );
 
-        // eventually pop the scheduler stack
+        // pop the scheduler stack
+        pSchedulerData = rSchedCtx.mpSchedulerStack;
+        assert(pSchedulerData == pMostUrgent);
+        rSchedCtx.mpSchedulerStack = pSchedulerData->mpNext;
+
+        const bool bTaskAlive = pMostUrgent->mpTask && pMostUrgent->mpTask->IsActive();
+        if (!bTaskAlive)
+        {
+            if (pMostUrgent->mpTask)
+                pMostUrgent->mpTask->mpSchedulerData = nullptr;
+            delete pMostUrgent;
+        }
+        else
+            AppendSchedulerData(rSchedCtx, pMostUrgent);
+
         // this just happens for nested calls, which renders all accounting
         // invalid, so we just enforce a rescheduling!
-        if ( pMostUrgent == pSVData->maSchedCtx.mpSchedulerStack )
+        if (rSchedCtx.mpSchedulerStackTop != pSchedulerData)
         {
-            pSchedulerData = pSVData->maSchedCtx.mpSchedulerStack;
-            pSVData->maSchedCtx.mpSchedulerStack = pSchedulerData->mpNext;
-            AppendSchedulerData( rSchedCtx, pSchedulerData );
             UpdateSystemTimer( rSchedCtx, ImmediateTimeoutMs, true,
                                tools::Time::GetSystemTicks() );
         }
-        else
+        else if (bTaskAlive)
         {
-            // Since we can restart tasks, round-robin all non-last tasks
-            if ( pMostUrgent->mpNext )
-            {
-                DropSchedulerData( rSchedCtx, pPrevMostUrgent, pMostUrgent );
-                AppendSchedulerData( rSchedCtx, pMostUrgent );
-            }
-
-            if ( pMostUrgent->mpTask && pMostUrgent->mpTask->IsActive() )
-            {
-                pMostUrgent->mnUpdateTime = nTime;
-                nReadyPeriod = pMostUrgent->mpTask->UpdateMinPeriod( nMinPeriod, nTime );
-                if ( nMinPeriod > nReadyPeriod )
-                    nMinPeriod = nReadyPeriod;
-                UpdateSystemTimer( rSchedCtx, nMinPeriod, false, nTime );
-            }
+            pMostUrgent->mnUpdateTime = nTime;
+            nReadyPeriod = pMostUrgent->mpTask->UpdateMinPeriod( nMinPeriod, nTime );
+            if ( nMinPeriod > nReadyPeriod )
+                nMinPeriod = nReadyPeriod;
+            UpdateSystemTimer( rSchedCtx, nMinPeriod, false, nTime );
         }
     }
 
