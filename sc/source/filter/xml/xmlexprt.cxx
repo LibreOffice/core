@@ -3174,8 +3174,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
         AddAttribute(sAttrStyleName, pCellStyles->GetStyleNameByIndex(aCell.nStyleIndex, aCell.bIsAutoStyle));
     if (aCell.nValidationIndex > -1)
         AddAttribute(XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION_NAME, pValidationsContainer->GetValidationName(aCell.nValidationIndex));
-    bool bIsMatrix(aCell.bIsMatrixBase || aCell.bIsMatrixCovered);
-    bool bIsFirstMatrixCell(aCell.bIsMatrixBase);
+    const bool bIsFirstMatrixCell(aCell.bIsMatrixBase);
     if (bIsFirstMatrixCell)
     {
         SCCOL nColumns( aCell.aMatrixRange.aEnd.Col() - aCell.aMatrixRange.aStart.Col() + 1 );
@@ -3215,6 +3214,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
             {
                 if (aCell.maBaseCell.meType == CELLTYPE_FORMULA)
                 {
+                    const bool bIsMatrix(bIsFirstMatrixCell || aCell.bIsMatrixCovered);
                     ScFormulaCell* pFormulaCell = aCell.maBaseCell.mpFormula;
                     if (!bIsMatrix || bIsFirstMatrixCell)
                     {

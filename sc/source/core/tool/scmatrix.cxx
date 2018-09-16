@@ -1832,8 +1832,6 @@ public:
 
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
-        sc::Compare::Cell& rCell = mrComp.maCells[0];
-
         switch (node.type)
         {
             case mdds::mtm::element_numeric:
@@ -1865,6 +1863,7 @@ public:
                 for (; it != itEnd; ++it)
                 {
                     const svl::SharedString& rStr = *it;
+                    sc::Compare::Cell& rCell = mrComp.maCells[0];
                     rCell.mbValue = false;
                     rCell.mbEmpty = false;
                     rCell.maStr = rStr;

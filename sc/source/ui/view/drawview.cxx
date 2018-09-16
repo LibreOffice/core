@@ -673,7 +673,6 @@ void ScDrawView::SelectCurrentViewObject( const OUString& rName )
 {
     sal_uInt16 nObjectTab = 0;
     SdrObject* pFound = nullptr;
-    bool bUnMark = false;
     SfxObjectShell* pShell = pDoc->GetDocumentShell();
     if (pShell)
     {
@@ -716,7 +715,7 @@ void ScDrawView::SelectCurrentViewObject( const OUString& rName )
                 SetLayerLocked( pLayer->GetName(), false );
         }
         SdrPageView* pPV = GetSdrPageView();
-        bUnMark = IsObjMarked(pFound);
+        const bool bUnMark = IsObjMarked(pFound);
         MarkObj( pFound, pPV, bUnMark);
     }
 }

@@ -1619,11 +1619,12 @@ void ScDPResultMember::FillDataResults(
                         nMemberMeasure = SC_DPMEASURE_ALL;
 
                     OSL_ENSURE( rFilterCxt.mnRow < rSequence.getLength(), "bumm" );
-                    uno::Sequence<sheet::DataResult>& rSubSeq = rSequence.getArray()[rFilterCxt.mnRow];
                     rFilterCxt.mnCol = 0;
                     if (pRefMember->IsVisible())
+                    {
+                        uno::Sequence<sheet::DataResult>& rSubSeq = rSequence.getArray()[rFilterCxt.mnRow];
                         pDataRoot->FillDataRow(pRefMember, rFilterCxt, rSubSeq, nMemberMeasure, bHasChild, aSubState);
-
+                    }
                     rFilterCxt.mnRow += 1;
                 }
             }

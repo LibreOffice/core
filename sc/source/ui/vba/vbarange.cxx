@@ -4479,13 +4479,12 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
     // in this case we just call the core calc functionality -
     if ( Field >>= nField )
     {
-        bool bAll = false;
-        bool bAcceptCriteria2 = true;
-
         uno::Reference< sheet::XSheetFilterDescriptor2 > xDesc(
                 xDataBaseRange->getFilterDescriptor(), uno::UNO_QUERY );
         if ( xDesc.is() )
         {
+            bool bAcceptCriteria2 = true;
+            bool bAll = false;
             uno::Sequence< sheet::TableFilterField2 > sTabFilts;
             uno::Reference< beans::XPropertySet > xDescProps( xDesc, uno::UNO_QUERY_THROW );
         if ( Criteria1.hasValue() )
