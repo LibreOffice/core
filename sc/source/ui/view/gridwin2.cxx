@@ -597,8 +597,6 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
 
 bool ScGridWindow::UpdateVisibleRange()
 {
-    ScDocument& rDoc = *pViewData->GetDocument();
-
     SCCOL nPosX = 0;
     SCROW nPosY = 0;
     SCCOL nXRight = MAXCOL;
@@ -608,6 +606,7 @@ bool ScGridWindow::UpdateVisibleRange()
     {
         // entire table in the tiled rendering case
         SCTAB nTab = pViewData->GetTabNo();
+        ScDocument const& rDoc = *pViewData->GetDocument();
         SCCOL nEndCol = 0;
         SCROW nEndRow = 0;
 

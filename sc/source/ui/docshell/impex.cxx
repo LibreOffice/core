@@ -1791,14 +1791,15 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                 break;
             bool bInvalidCol = false;
             bool bInvalidRow = false;
-            bool bInvalidRefCol = false;
-            bool bInvalidRefRow = false;
             const sal_Unicode* p = aLine.getStr();
             sal_Unicode cTag = *p++;
             if( cTag == 'C' )       // Content
             {
                 if( *p++ != ';' )
                     return false;
+
+                bool bInvalidRefCol = false;
+                bool bInvalidRefRow = false;
                 while( *p )
                 {
                     sal_Unicode ch = *p++;

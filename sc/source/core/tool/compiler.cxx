@@ -5592,9 +5592,7 @@ bool ScCompiler::HandleTableRef()
         }
         bool bColumnRange = false;
         bool bCol1Rel = false;
-        bool bCol2Rel = false;
         bool bCol1RelName = false;
-        bool bCol2RelName = false;
         int nLevel = 0;
         if (bForwardToClose && GetTokenIfOpCode( ocTableRefOpen))
         {
@@ -5671,6 +5669,8 @@ bool ScCompiler::HandleTableRef()
         ScTokenArray* pNew = new ScTokenArray();
         if (nError == FormulaError::NONE || nError == FormulaError::NoValue)
         {
+            bool bCol2Rel = false;
+            bool bCol2RelName = false;
             // The FormulaError::NoValue case generates a thisrow reference that can be
             // used to save named expressions in A1 syntax notation.
             if (bColumnRange)
