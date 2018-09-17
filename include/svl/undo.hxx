@@ -26,6 +26,7 @@
 
 #include <limits>
 #include <memory>
+#include <vector>
 
 struct MarkedUndoAction;
 
@@ -80,42 +81,31 @@ private:
 typedef sal_Int32 UndoStackMark;
 #define MARK_INVALID    ::std::numeric_limits< UndoStackMark >::max()
 
-class SVL_DLLPUBLIC SfxUndoActions
+struct MarkedUndoAction
 {
-    struct Impl;
-    std::unique_ptr<Impl> mpImpl;
+    SfxUndoAction*                  pAction;
+    ::std::vector< UndoStackMark >  aMarks;
 
-public:
-    SfxUndoActions();
-    SfxUndoActions( const SfxUndoActions& r );
-    ~SfxUndoActions();
-
-    bool empty() const;
-    size_t size() const;
-
-    const MarkedUndoAction& operator[]( size_t i ) const;
-    MarkedUndoAction& operator[]( size_t i );
-
-    const SfxUndoAction* GetUndoAction( size_t i ) const;
-    SfxUndoAction* GetUndoAction( size_t i );
-
-    void Remove( size_t i_pos );
-    void Remove( size_t i_pos, size_t i_count );
-    void Insert( SfxUndoAction* i_action, size_t i_pos );
+    MarkedUndoAction(SfxUndoAction* p) : pAction(p) {}
 };
 
 /** do not make use of these implementation details, unless you
     really really have to! */
 struct SVL_DLLPUBLIC SfxUndoArray
 {
-    SfxUndoActions          aUndoActions;
+    std::vector<MarkedUndoAction> maUndoActions;
     size_t                  nMaxUndoActions;
     size_t                  nCurUndoAction;
     SfxUndoArray            *pFatherUndoArray;
-                            SfxUndoArray(size_t nMax=0):
-                                nMaxUndoActions(nMax), nCurUndoAction(0),
-                                pFatherUndoArray(nullptr) {}
+
+    SfxUndoArray(size_t nMax=0) :
+        nMaxUndoActions(nMax), nCurUndoAction(0), pFatherUndoArray(nullptr) {}
     virtual ~SfxUndoArray();
+
+    SfxUndoAction* GetUndoAction(size_t idx) { return maUndoActions[idx].pAction; }
+    void Remove(int idx);
+    void Remove( size_t i_pos, size_t i_count );
+    void Insert( SfxUndoAction* i_action, size_t i_pos );
 };
 
 
