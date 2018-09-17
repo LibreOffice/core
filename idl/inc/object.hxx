@@ -59,7 +59,7 @@ private:
 
     static void             WriteSlotStubs( const OString& rShellName,
                                         SvSlotElementList & rSlotList,
-                                        std::vector<OString*> & rList,
+                                        std::vector<OString> & rList,
                                         SvStream & rOutStm );
     static sal_uInt16       WriteSlotParamArray( SvIdlDataBase & rBase,
                                             SvSlotElementList & rSlotList,
