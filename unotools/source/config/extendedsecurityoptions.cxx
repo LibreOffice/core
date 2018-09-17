@@ -85,7 +85,7 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
 
         static Sequence< OUString > GetPropertyNames();
 
-        OUString                                        m_aSecureExtensionsSetName;
+        OUString const                                        m_aSecureExtensionsSetName;
 
         SvtExtendedSecurityOptions::OpenHyperlinkMode   m_eOpenHyperlinkMode;
 };

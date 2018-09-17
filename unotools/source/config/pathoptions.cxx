@@ -87,7 +87,7 @@ class SvtPathOptions_Impl
                                             m_aMapEnumToPropHandle;
         VarNameSet                          m_aSystemPathVarNames;
 
-        OUString                            m_aEmptyString;
+        OUString const                            m_aEmptyString;
         mutable ::osl::Mutex                m_aMutex;
 
     public:
@@ -161,7 +161,7 @@ static std::weak_ptr<SvtPathOptions_Impl> g_pOptions;
 struct PropertyStruct
 {
     const char*             pPropName;  // The ascii name of the Office path
-    SvtPathOptions::Paths   ePath;      // The enum value used by SvtPathOptions
+    SvtPathOptions::Paths const   ePath;      // The enum value used by SvtPathOptions
 };
 
 struct VarNameAttribute
