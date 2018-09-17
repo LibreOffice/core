@@ -165,23 +165,14 @@ Databases::~Databases()
 {
     // unload the databases
 
-    {
-        // DatabasesTable
-        for (auto& rDatabase : m_aDatabases)
-            delete rDatabase.second;
-    }
+    // DatabasesTable
+    m_aDatabases.clear();
 
-    {
-        //  ModInfoTable
-        for (auto& rModInfo : m_aModInfo)
-            delete rModInfo.second;
-    }
+    //  ModInfoTable
+    m_aModInfo.clear();
 
-    {
-        // KeywordInfoTable
-        for (auto& rKeywordInfo : m_aKeywordInfo)
-            delete rKeywordInfo.second;
-    }
+    // KeywordInfoTable
+    m_aKeywordInfo.clear();
 }
 
 OString Databases::getImageTheme()
@@ -390,14 +381,14 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const OUStrin
                     lineBuffer[ pos++ ] = ch;
             }
             replaceName( title );
-            it->second = new StaticModuleInformation( title,
+            it->second.reset(new StaticModuleInformation( title,
                                                       startid,
                                                       program,
-                                                      order );
+                                                      order ));
         }
     }
 
-    return it->second;
+    return it->second.get();
 }
 
 OUString Databases::processLang( const OUString& Language )
@@ -460,13 +451,13 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile( const OUString& Database,
         key = *pExtensionPath + Language + dbFileName;      // make unique, don't change language
 
     std::pair< DatabasesTable::iterator,bool > aPair =
-        m_aDatabases.emplace( key, reinterpret_cast<helpdatafileproxy::Hdf *>(0) );
+        m_aDatabases.emplace( key, nullptr);
 
     DatabasesTable::iterator it = aPair.first;
 
     if( aPair.second && ! it->second )
     {
-        helpdatafileproxy::Hdf* pHdf = nullptr;
+        std::unique_ptr<helpdatafileproxy::Hdf> pHdf;
 
         OUString fileURL;
         if( pExtensionPath )
@@ -482,13 +473,13 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile( const OUString& Database,
         //fails for example when using long path names on Windows (starting with \\?\)
         if( m_xSFA->exists( fileNameHDFHelp ) )
         {
-            pHdf = new helpdatafileproxy::Hdf( fileNameHDFHelp, m_xSFA );
+            pHdf.reset(new helpdatafileproxy::Hdf( fileNameHDFHelp, m_xSFA ));
         }
 
-        it->second = pHdf;
+        it->second = std::move(pHdf);
     }
 
-    return it->second;
+    return it->second.get();
 }
 
 Reference< XCollator >
@@ -775,10 +766,10 @@ KeywordInfo* Databases::getKeyword( const OUString& Database,
         KeywordElementComparator aComparator( xCollator );
         std::sort(aVector.begin(),aVector.end(),aComparator);
 
-        it->second = new KeywordInfo( aVector );
+        it->second.reset(new KeywordInfo( aVector ));
     }
 
-    return it->second;
+    return it->second.get();
 }
 
 Reference< XHierarchicalNameAccess > Databases::jarFile( const OUString& jar,
