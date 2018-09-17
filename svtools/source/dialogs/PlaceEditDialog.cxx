@@ -87,6 +87,24 @@ PlaceEditDialog::PlaceEditDialog(weld::Window* pParent, const std::shared_ptr<Pl
     , m_xEDPassword(m_xBuilder->weld_entry("password"))
     , m_xFTPasswordLabel(m_xBuilder->weld_label("passwordLabel"))
     , m_xTypeGrid(m_xBuilder->weld_widget("TypeGrid"))
+
+    , m_xRepositoryBox(m_xBuilder->weld_widget("RepositoryDetails"))
+    , m_xFTRepository(m_xBuilder->weld_label("repositoryLabel"))
+    , m_xLBRepository(m_xBuilder->weld_combo_box("repositories"))
+
+    , m_xEDShare(m_xBuilder->weld_entry("share"))
+    , m_xFTShare(m_xBuilder->weld_label("shareLabel"))
+
+    , m_xDetailsGrid(m_xBuilder->weld_widget("Details"))
+    , m_xHostBox(m_xBuilder->weld_widget("HostDetails"))
+    , m_xEDHost(m_xBuilder->weld_entry("host"))
+    , m_xFTHost(m_xBuilder->weld_label("hostLabel"))
+    , m_xEDPort(m_xBuilder->weld_spin_button("port"))
+    , m_xFTPort(m_xBuilder->weld_label("portLabel"))
+    , m_xEDRoot(m_xBuilder->weld_entry("path"))
+    , m_xFTRoot(m_xBuilder->weld_label("pathLabel"))
+
+    , m_xCBDavs(m_xBuilder->weld_check_button("webdavs"))
 {
     m_xEDPassword->hide();
     m_xFTPasswordLabel->hide();
