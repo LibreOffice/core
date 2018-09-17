@@ -33,6 +33,7 @@
 
 #include <unistd.h>
 #include <string.h>
+#include <comphelper/string.hxx>
 
 static bool is_gnome_desktop( Display* pDisplay )
 {
@@ -324,14 +325,24 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
         aDesktopSession = OString( pSession, strlen( pSession ) );
 
     const char *pDesktop;
-    OString aCurrentDesktop;
     if ( ( pDesktop = getenv( "XDG_CURRENT_DESKTOP" ) ) )
-        aCurrentDesktop = OString( pDesktop, strlen( pDesktop ) );
+    {
+        OString aCurrentDesktop = OString( pDesktop, strlen( pDesktop ) );
+
+        //it may be separated by colon ( e.g. unity:unity7:ubuntu )
+        std::vector<OUString> aSplitCurrentDesktop = comphelper::string::split(
+                OStringToOUString( aCurrentDesktop, RTL_TEXTENCODING_UTF8), ':');
+        for (auto& rCurrentDesktopStr : aSplitCurrentDesktop)
+        {
+            if ( rCurrentDesktopStr.equalsIgnoreAsciiCase( "unity" ) )
+                return DESKTOP_UNITY;
+            else if ( rCurrentDesktopStr.equalsIgnoreAsciiCase( "gnome") )
+                return DESKTOP_GNOME;
+        }
+    }
 
     // fast environment variable checks
-    if ( aCurrentDesktop.equalsIgnoreAsciiCase( "unity" ) )
-        ret = DESKTOP_UNITY;
-    else if ( aDesktopSession.equalsIgnoreAsciiCase( "gnome" ) )
+    if ( aDesktopSession.equalsIgnoreAsciiCase( "gnome" ) )
         ret = DESKTOP_GNOME;
     else if ( aDesktopSession.equalsIgnoreAsciiCase( "gnome-wayland" ) )
         ret = DESKTOP_GNOME;
