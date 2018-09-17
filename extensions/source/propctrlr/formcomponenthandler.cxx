@@ -2785,11 +2785,11 @@ namespace pcr
 
         {   // do this in an own block. The dialog needs to be destroyed before we call
             // destroyItemSet
-            ScopedVclPtrInstance< ControlCharacterDialog > aDlg( impl_getDefaultDialogParent_nothrow(), *pSet );
+            ControlCharacterDialog aDlg(impl_getDefaultDialogFrame_nothrow(), *pSet);
             _rClearBeforeDialog.clear();
-            if ( RET_OK == aDlg->Execute() )
+            if (RET_OK == aDlg.execute())
             {
-                const SfxItemSet* pOut = aDlg->GetOutputItemSet();
+                const SfxItemSet* pOut = aDlg.GetOutputItemSet();
                 if ( pOut )
                 {
                     std::vector< NamedValue > aFontPropertyValues;
