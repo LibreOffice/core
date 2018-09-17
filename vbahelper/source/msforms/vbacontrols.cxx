@@ -148,8 +148,8 @@ class ControlsEnumWrapper : public EnumerationHelper_BASE
     uno::Reference<container::XIndexAccess > m_xIndexAccess;
     uno::Reference<awt::XControl > m_xDlg;
     uno::Reference< frame::XModel > m_xModel;
-    double mfOffsetX;
-    double mfOffsetY;
+    double const mfOffsetX;
+    double const mfOffsetY;
     sal_Int32 nIndex;
 
 public:

@@ -64,7 +64,7 @@ protected:
     css::uno::Reference< css::drawing::XShape > m_xShape;
     css::uno::Reference< css::drawing::XShapes > m_xShapes;
     css::uno::Reference< css::beans::XPropertySet > m_xPropertySet;
-    sal_Int32 m_nType;
+    sal_Int32 const m_nType;
     css::uno::Reference< css::frame::XModel > m_xModel;
     css::uno::Any m_aRange;
     void addListeners();

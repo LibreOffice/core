@@ -34,7 +34,7 @@ class ScVbaCommandBarControl : public CommandBarControl_BASE
 {
 protected:
     VbaCommandBarHelperRef pCBarHelper;
-    OUString               m_sResourceUrl;
+    OUString const         m_sResourceUrl;
     css::uno::Reference< css::container::XIndexAccess > m_xCurrentSettings;
     css::uno::Reference< css::container::XIndexAccess > m_xBarSettings;
     css::uno::Sequence< css::beans::PropertyValue >     m_aPropertyValues;

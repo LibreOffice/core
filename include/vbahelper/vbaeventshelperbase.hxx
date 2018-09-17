@@ -122,8 +122,8 @@ protected:
 
     struct EventQueueEntry
     {
-        sal_Int32 mnEventId;
-        css::uno::Sequence< css::uno::Any > maArgs;
+        sal_Int32 const mnEventId;
+        css::uno::Sequence< css::uno::Any > const maArgs;
         /*implicit*/ EventQueueEntry( sal_Int32 nEventId ) : mnEventId( nEventId ) {}
         EventQueueEntry( sal_Int32 nEventId, const css::uno::Sequence< css::uno::Any >& rArgs ) : mnEventId( nEventId ), maArgs( rArgs ) {}
     };
