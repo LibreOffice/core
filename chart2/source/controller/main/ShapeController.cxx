@@ -512,10 +512,10 @@ void ShapeController::executeDispatch_FontDialog()
             SfxItemSet aAttr( pDrawViewWrapper->GetModel()->GetItemPool() );
             pDrawViewWrapper->GetAttributes( aAttr );
             ViewElementListProvider aViewElementListProvider( pDrawModelWrapper );
-            ScopedVclPtrInstance< ShapeFontDialog > pDlg( pChartWindow, &aAttr, &aViewElementListProvider );
-            if ( pDlg->Execute() == RET_OK )
+            ShapeFontDialog aDlg(pChartWindow->GetFrameWeld(), &aAttr, &aViewElementListProvider);
+            if (aDlg.execute() == RET_OK)
             {
-                const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
+                const SfxItemSet* pOutAttr = aDlg.GetOutputItemSet();
                 pDrawViewWrapper->SetAttributes( *pOutAttr );
             }
         }

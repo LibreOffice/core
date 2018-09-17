@@ -28,17 +28,15 @@ class ViewElementListProvider;
 
 /** dialog for font properties of shapes
  */
-class ShapeFontDialog : public SfxTabDialog
+class ShapeFontDialog : public SfxTabDialogController
 {
 public:
-    ShapeFontDialog(vcl::Window* pParent, const SfxItemSet* pAttr,
+    ShapeFontDialog(weld::Window* pParent, const SfxItemSet* pAttr,
         const ViewElementListProvider* pViewElementListProvider);
 private:
-    virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage) override;
+    virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
 
     const ViewElementListProvider* m_pViewElementListProvider;
-    sal_uInt16 m_nNamePageId;
-    sal_uInt16 m_nEffectsPageId;
 };
 
 } //  namespace chart
