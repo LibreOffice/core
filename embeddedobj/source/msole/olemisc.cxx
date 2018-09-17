@@ -107,7 +107,6 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 // this constructor let object be initialized from clipboard
 OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
 : m_pOleComponent( nullptr )
-, m_pInterfaceContainer( nullptr )
 , m_bReadOnly( false )
 , m_bDisposed( false )
 , m_nObjectState( -1 )

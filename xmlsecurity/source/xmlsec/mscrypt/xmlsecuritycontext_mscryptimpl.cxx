@@ -76,8 +76,6 @@ class XMLSecurityContext_MSCryptImpl : public ::cppu::WeakImplHelper<
 };
 
 XMLSecurityContext_MSCryptImpl::XMLSecurityContext_MSCryptImpl()
-    ://m_pKeysMngr( NULL ) ,
-     m_xSecurityEnvironment( nullptr )
 {
 }
 
