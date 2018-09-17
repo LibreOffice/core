@@ -9505,7 +9505,7 @@ SfxVoidItem FontNameList SID_ATTR_CHAR_FONTLIST
 ]
 
 
-SfxBoolItem ExtrusionToggle SID_EXTRUSION_TOOGLE
+SfxBoolItem ExtrusionToggle SID_EXTRUSION_TOGGLE
 
 [
     AutoUpdate = TRUE,

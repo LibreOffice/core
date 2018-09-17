@@ -193,7 +193,7 @@ interface TableDraw
     SID_FORMATPAINTBRUSH    [ ExecMethod = ExecFormatPaintbrush; StateMethod = StateFormatPaintbrush; ]
 
     SID_OPEN_XML_FILTERSETTINGS     [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
-    SID_EXTRUSION_TOOGLE            [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_TOGGLE            [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
     SID_EXTRUSION_TILT_DOWN         [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
     SID_EXTRUSION_TILT_UP           [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
     SID_EXTRUSION_TILT_LEFT         [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
