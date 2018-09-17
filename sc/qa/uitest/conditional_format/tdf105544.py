@@ -25,7 +25,7 @@ class tdf105544(UITestCase):
         xCalcDoc = self.xUITest.getTopFocusWindow()
         gridwin = xCalcDoc.getChild("grid_window")
         document = self.ui_test.get_component()
-        #2. select B3. Format> conditional formating> manage
+        #2. select B3. Format> conditional formatting> manage
         gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "B3"}))
         self.ui_test.execute_dialog_through_command(".uno:ConditionalFormatManagerDialog")
         xCondFormatMgr = self.xUITest.getTopFocusWindow()
