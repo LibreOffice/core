@@ -503,9 +503,9 @@ void SdTiledRenderingTest::testSetGraphicSelection()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pUndoManager->GetUndoActionCount());
     auto pListAction = dynamic_cast<SfxListUndoAction*>(pUndoManager->GetUndoAction());
     CPPUNIT_ASSERT(pListAction);
-    for (size_t i = 0; i < pListAction->aUndoActions.size(); ++i)
+    for (size_t i = 0; i < pListAction->maUndoActions.size(); ++i)
         // The second item was -1 here, view shell ID wasn't known.
-        CPPUNIT_ASSERT_EQUAL(ViewShellId(nView1), pListAction->aUndoActions.GetUndoAction(i)->GetViewShellId());
+        CPPUNIT_ASSERT_EQUAL(ViewShellId(nView1), pListAction->GetUndoAction(i)->GetViewShellId());
 
     ::tools::Rectangle aShapeAfter = pObject->GetSnapRect();
     // Check that a resize happened, but aspect ratio is not kept.
