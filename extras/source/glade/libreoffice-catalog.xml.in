@@ -230,9 +230,6 @@
     <glade-widget-class title="SvxXLinePreview" name="svxlo-SvxXLinePreview"
                         generic-name="Line Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="SvxXMeasurePreview" name="svxlo-SvxXMeasurePreview"
-                        generic-name="Dimension Line Preview Window" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="SvxXConnectionPreview" name="svxlo-SvxXConnectionPreview"
                         generic-name="Connector Line Preview Window" parent="GtkDrawingArea"
                             icon-name="widget-gtk-drawingarea"/>
@@ -344,11 +341,8 @@
     <glade-widget-class title="Assign Fields Control" name="swuilo-SwAssignFieldsControl"
                         generic-name="Assign Fields Control" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Rectangle Control" name="svxlo-SvxRectCtl"
-                        generic-name="Rectangle Control" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Emboss Control" name="cuilo-EmbossControl"
-                        generic-name="Emboss Control" parent="svxlo-SvxRectCtl"
+                        generic-name="Emboss Control" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Frame Direction ListBox" name="svxlo-FrameDirectionListBox"
                         generic-name="FrameDirectionListBox" parent="GtkComboBox"
