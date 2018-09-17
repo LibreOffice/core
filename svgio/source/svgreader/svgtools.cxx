@@ -636,7 +636,6 @@ namespace svgio
             typedef std::pair< OUString, Color > ColorTokenValueType;
             static const ColorTokenMapper aColorTokenMapperList {
                 { ColorTokenValueType(OUString("aliceblue"), Color(240, 248, 255)) },
-                { ColorTokenValueType(OUString("aliceblue"), Color(240, 248, 255) ) },
                 { ColorTokenValueType(OUString("antiquewhite"), Color(250, 235, 215) ) },
                 { ColorTokenValueType(OUString("aqua"), Color( 0, 255, 255) ) },
                 { ColorTokenValueType(OUString("aquamarine"), Color(127, 255, 212) ) },
