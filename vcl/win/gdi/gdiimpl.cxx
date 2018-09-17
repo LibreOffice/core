@@ -2139,7 +2139,6 @@ bool WinSalGraphicsImpl::drawPolyLine(
     const Gdiplus::Color aTestColor(aTrans, maLineColor.GetRed(), maLineColor.GetGreen(), maLineColor.GetBlue());
     Gdiplus::Pen aPen(aTestColor.GetValue(), Gdiplus::REAL(rLineWidths.getX()));
     bool bNoLineJoin(false);
-    Gdiplus::Matrix aMatrix;
 
     // Set full (Object-to-Device) transformation - if used
     if(rObjectToDevice.isIdentity())
