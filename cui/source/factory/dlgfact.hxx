@@ -652,8 +652,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog> CreateTextTabDialog( weld::Window* pParent,
                                             const SfxItemSet* pAttrSet,
                                             SdrView* pView ) override;
-    virtual VclPtr<SfxAbstractTabDialog> CreateTabItemDialog(vcl::Window* pParent,
-                                            const SfxItemSet& rSet) override;
+    virtual VclPtr<SfxAbstractTabDialog> CreateTabItemDialog(weld::Window* pParent, const SfxItemSet& rSet) override;
     virtual VclPtr<AbstractSvxCaptionDialog>
                                           CreateCaptionDialog(weld::Window* pParent,
                                             const SdrView* pView,

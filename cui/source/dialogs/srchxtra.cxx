@@ -33,22 +33,18 @@
 #include <rtl/strbuf.hxx>
 #include <svtools/treelistentry.hxx>
 
-SvxSearchFormatDialog::SvxSearchFormatDialog(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabDialog(pParent, "SearchFormatDialog", "cui/ui/searchformatdialog.ui", &rSet)
-    , m_nNamePageId(0)
-    , m_nParaStdPageId(0)
-    , m_nParaAlignPageId(0)
-    , m_nBackPageId(0)
+SvxSearchFormatDialog::SvxSearchFormatDialog(weld::Window* pParent, const SfxItemSet& rSet)
+    : SfxTabDialogController(pParent, "cui/ui/searchformatdialog.ui", "SearchFormatDialog", &rSet)
 {
-    m_nNamePageId = AddTabPage("font", SvxCharNamePage::Create, nullptr);
+    AddTabPage("font", SvxCharNamePage::Create, nullptr);
     AddTabPage("fonteffects", SvxCharEffectsPage::Create, nullptr);
     AddTabPage("position", SvxCharPositionPage::Create, nullptr);
     AddTabPage("asianlayout", SvxCharTwoLinesPage::Create, nullptr);
-    m_nParaStdPageId = AddTabPage("labelTP_PARA_STD", SvxStdParagraphTabPage::Create, nullptr);
-    m_nParaAlignPageId = AddTabPage("labelTP_PARA_ALIGN", SvxParaAlignTabPage::Create, nullptr);
+    AddTabPage("labelTP_PARA_STD", SvxStdParagraphTabPage::Create, nullptr);
+    AddTabPage("labelTP_PARA_ALIGN", SvxParaAlignTabPage::Create, nullptr);
     AddTabPage("labelTP_PARA_EXT", SvxExtParagraphTabPage::Create, nullptr);
     AddTabPage("labelTP_PARA_ASIAN", SvxAsianTabPage::Create, nullptr );
-    m_nBackPageId = AddTabPage("background", SvxBackgroundTabPage::Create, nullptr);
+    AddTabPage("background", SvxBackgroundTabPage::Create, nullptr);
 
     // remove asian tabpages if necessary
     SvtCJKOptions aCJKOptions;
@@ -60,18 +56,11 @@ SvxSearchFormatDialog::SvxSearchFormatDialog(vcl::Window* pParent, const SfxItem
 
 SvxSearchFormatDialog::~SvxSearchFormatDialog()
 {
-    disposeOnce();
 }
 
-void SvxSearchFormatDialog::dispose()
+void SvxSearchFormatDialog::PageCreated(const OString& rId, SfxTabPage& rPage)
 {
-    m_pFontList.reset();
-    SfxTabDialog::dispose();
-}
-
-void SvxSearchFormatDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
-{
-    if (nId == m_nNamePageId)
+    if (rId == "font")
     {
         const FontList* pApm_pFontList = nullptr;
         SfxObjectShell* pSh = SfxObjectShell::Current();
@@ -89,7 +78,7 @@ void SvxSearchFormatDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
         if ( !pList )
         {
             if ( !m_pFontList )
-                m_pFontList.reset( new FontList( this ) );
+                m_pFontList.reset(new FontList(Application::GetDefaultDevice()));
             pList = m_pFontList.get();
         }
 
@@ -98,15 +87,15 @@ void SvxSearchFormatDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
                 SetFontList( SvxFontListItem( pList, SID_ATTR_CHAR_FONTLIST ) );
         static_cast<SvxCharNamePage&>(rPage).EnableSearchMode();
     }
-    else if (nId == m_nParaStdPageId)
+    else if (rId == "labelTP_PARA_STD")
     {
         static_cast<SvxStdParagraphTabPage&>(rPage).EnableAutoFirstLine();
     }
-    else if (nId == m_nParaAlignPageId)
+    else if (rId == "labelTP_PARA_ALIGN")
     {
         static_cast<SvxParaAlignTabPage&>(rPage).EnableJustifyExt();
     }
-    else if (nId == m_nBackPageId)
+    else if (rId == "background")
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
         aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_HIGHLIGHTING)));

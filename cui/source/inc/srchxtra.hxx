@@ -27,22 +27,17 @@
 #include <svx/checklbx.hxx>
 #include <svx/srchdlg.hxx>
 
-class SvxSearchFormatDialog : public SfxTabDialog
+class SvxSearchFormatDialog : public SfxTabDialogController
 {
 public:
-    SvxSearchFormatDialog( vcl::Window* pParent, const SfxItemSet& rSet );
+    SvxSearchFormatDialog(weld::Window* pParent, const SfxItemSet& rSet);
     virtual ~SvxSearchFormatDialog() override;
-    virtual void dispose() override;
 
 protected:
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
+    virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
 
 private:
     std::unique_ptr<FontList> m_pFontList;
-    sal_uInt16 m_nNamePageId;
-    sal_uInt16 m_nParaStdPageId;
-    sal_uInt16 m_nParaAlignPageId;
-    sal_uInt16 m_nBackPageId;
 };
 
 // class SvxSearchFormatDialog -------------------------------------------
