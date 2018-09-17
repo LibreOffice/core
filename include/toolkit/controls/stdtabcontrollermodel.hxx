@@ -69,14 +69,6 @@ struct UnoControlModelEntry
     };
 };
 
-struct ComponentEntry
-{
-    css::awt::XWindow*     pComponent;
-    Point                               aPos;
-};
-
-typedef ::std::vector< ComponentEntry* > ComponentEntryList;
-
 #define CONTROLPOS_NOTFOUND 0xFFFFFFFF
 
 class StdTabControllerModel final : public css::awt::XTabControllerModel,
