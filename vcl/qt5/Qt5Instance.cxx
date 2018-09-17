@@ -225,17 +225,27 @@ void Qt5Instance::ProcessEvent(SalUserEvent aEvent)
 }
 
 css::uno::Reference<css::ui::dialogs::XFilePicker2>
-Qt5Instance::createFilePicker(const css::uno::Reference<css::uno::XComponentContext>&)
+Qt5Instance::createFilePicker(const css::uno::Reference<css::uno::XComponentContext>& cntxt)
 {
+#if (defined _WIN32 || defined MACOSX)
+    return SalInstance::createFilePicker(cntxt);
+#else
+    (void)cntxt;
     return css::uno::Reference<css::ui::dialogs::XFilePicker2>(
         new Qt5FilePicker(QFileDialog::ExistingFile));
+#endif
 }
 
 css::uno::Reference<css::ui::dialogs::XFolderPicker2>
-Qt5Instance::createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>&)
+Qt5Instance::createFolderPicker(const css::uno::Reference<css::uno::XComponentContext>& cntxt)
 {
+#if (defined _WIN32 || defined MACOSX)
+    return SalInstance::createFolderPicker(cntxt);
+#else
+    (void)cntxt;
     return css::uno::Reference<css::ui::dialogs::XFolderPicker2>(
         new Qt5FilePicker(QFileDialog::Directory));
+#endif
 }
 
 css::uno::Reference<css::uno::XInterface>
