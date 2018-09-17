@@ -2376,7 +2376,7 @@ interface DrawView
         ExecMethod = Execute ;
         StateMethod = GetMenuState ;
     ]
-    SID_EXTRUSION_TOOGLE
+    SID_EXTRUSION_TOGGLE
     [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;

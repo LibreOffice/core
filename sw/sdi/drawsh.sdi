@@ -266,7 +266,7 @@ interface TextDraw : TextDrawBase
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
-    SID_EXTRUSION_TOOGLE
+    SID_EXTRUSION_TOGGLE
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;

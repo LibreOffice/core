@@ -576,7 +576,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                 break;
             }
 
-        case SID_EXTRUSION_TOOGLE:
+        case SID_EXTRUSION_TOGGLE:
         case SID_EXTRUSION_TILT_DOWN:
         case SID_EXTRUSION_TILT_UP:
         case SID_EXTRUSION_TILT_LEFT:

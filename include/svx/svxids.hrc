@@ -739,7 +739,7 @@ class SfxStringItem;
 #define SID_VERTICALTEXT_STATE                          ( SID_SVX_START + 957 )
 #define SID_OPEN_XML_FILTERSETTINGS                     ( SID_SVX_START + 958 )
 #define SID_HANGUL_HANJA_CONVERSION                     ( SID_SVX_START + 959 )
-#define SID_EXTRUSION_TOOGLE                            ( SID_SVX_START + 960 )
+#define SID_EXTRUSION_TOGGLE                            ( SID_SVX_START + 960 )
 #define SID_EXTRUSION_TILT_DOWN                         ( SID_SVX_START + 961 )
 #define SID_EXTRUSION_TILT_UP                           ( SID_SVX_START + 962 )
 #define SID_EXTRUSION_TILT_LEFT                         ( SID_SVX_START + 963 )

@@ -119,7 +119,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
     sal_uInt16 nSID = rReq.GetSlot();
     switch( nSID )
     {
-    case SID_EXTRUSION_TOOGLE:
+    case SID_EXTRUSION_TOGGLE:
     {
         css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
 
@@ -458,7 +458,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindi
 
     switch( nSID )
     {
-        case SID_EXTRUSION_TOOGLE:
+        case SID_EXTRUSION_TOGGLE:
         {
             if ( !pStrResId )
                 pStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_ON_OFF;
@@ -584,7 +584,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindi
             break;
     }
 
-    if( nSID == SID_EXTRUSION_TOOGLE )
+    if( nSID == SID_EXTRUSION_TOGGLE )
     {
             static const sal_uInt16 SidArray[] = {
                 SID_EXTRUSION_TILT_DOWN,
@@ -1285,10 +1285,10 @@ void ExtrusionBar::getState( SdrView const * pSdrView, SfxItemSet& rSet )
         if(! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_SURFACE_FLOATER );
     }
-    if (rSet.GetItemState(SID_EXTRUSION_TOOGLE) != SfxItemState::UNKNOWN)
+    if (rSet.GetItemState(SID_EXTRUSION_TOGGLE) != SfxItemState::UNKNOWN)
     {
         if( !checkForSelectedCustomShapes( pSdrView, false ) )
-            rSet.DisableItem( SID_EXTRUSION_TOOGLE );
+            rSet.DisableItem( SID_EXTRUSION_TOGGLE );
     }
     if (rSet.GetItemState(SID_EXTRUSION_DEPTH) != SfxItemState::UNKNOWN)
     {
