@@ -40,6 +40,11 @@ public:
     OWeakTypeObject();
     virtual ~OWeakTypeObject() override;
 
+    OWeakTypeObject(OWeakTypeObject const &) = default;
+    OWeakTypeObject(OWeakTypeObject &&) = default;
+    OWeakTypeObject & operator =(OWeakTypeObject const &) = default;
+    OWeakTypeObject & operator =(OWeakTypeObject &&) = default;
+
     virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() throw () override;
     virtual void SAL_CALL release() throw () override;
