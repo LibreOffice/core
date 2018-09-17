@@ -2331,7 +2331,7 @@ void SvtValueSet::ImplDeleteItems()
 
     for ( size_t i = 0; i < n; ++i )
     {
-        SvtValueSetItem* pItem = mItemList[i];
+        SvtValueSetItem* pItem = mItemList[i].get();
         if ( pItem->mbVisible && ImplHasAccessibleListeners() )
         {
             Any aOldAny;
@@ -2341,7 +2341,7 @@ void SvtValueSet::ImplDeleteItems()
             ImplFireAccessibleEvent(AccessibleEventId::CHILD, aOldAny, aNewAny);
         }
 
-        delete pItem;
+        mItemList[i].reset();
     }
 
     mItemList.clear();
@@ -2398,12 +2398,12 @@ SvtValueSetItem* SvtValueSet::ImplGetItem( size_t nPos )
     if (nPos == VALUESET_ITEM_NONEITEM)
         return mpNoneItem.get();
     else
-        return (nPos < mItemList.size()) ? mItemList[nPos] : nullptr;
+        return (nPos < mItemList.size()) ? mItemList[nPos].get() : nullptr;
 }
 
 SvtValueSetItem* SvtValueSet::ImplGetFirstItem()
 {
-    return mItemList.size() ? mItemList[0] : nullptr;
+    return mItemList.size() ? mItemList[0].get() : nullptr;
 }
 
 sal_uInt16 SvtValueSet::ImplGetVisibleItemCount() const
@@ -2701,10 +2701,7 @@ void SvtValueSet::RemoveItem( sal_uInt16 nItemId )
         return;
 
     if ( nPos < mItemList.size() ) {
-        SvtValueItemList::iterator it = mItemList.begin();
-        ::std::advance( it, nPos );
-        delete *it;
-        mItemList.erase( it );
+        mItemList.erase( mItemList.begin() + nPos );
     }
 
     // reset variables
@@ -2923,7 +2920,7 @@ void SvtValueSet::SelectItem( sal_uInt16 nItemId )
 
         SvtValueSetItem* pItem;
         if( nPos != VALUESET_ITEM_NOTFOUND )
-            pItem = mItemList[nPos];
+            pItem = mItemList[nPos].get();
         else
             pItem = mpNoneItem.get();
 
@@ -3231,7 +3228,7 @@ void SvtValueSet::Format(vcl::RenderContext const & rRenderContext)
         }
         for (size_t i = 0; i < nItemCount; i++)
         {
-            SvtValueSetItem* pItem = mItemList[i];
+            SvtValueSetItem* pItem = mItemList[i].get();
 
             if (i >= nFirstItem && i < nLastItem)
             {
@@ -3316,7 +3313,7 @@ void SvtValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 
     if (nItemId)
     {
         const size_t nPos = GetItemPos( nItemId );
-        pItem = mItemList[ nPos ];
+        pItem = mItemList[ nPos ].get();
         aRect = ImplGetItemRect( nPos );
     }
     else if (mpNoneItem.get())
@@ -3617,7 +3614,7 @@ void SvtValueSet::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
     if ( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
-    SvtValueSetItem* pItem = mItemList[nPos];
+    SvtValueSetItem* pItem = mItemList[nPos].get();
     pItem->meType  = VALUESETITEM_IMAGE;
     pItem->maImage = rImage;
 
@@ -3714,45 +3711,43 @@ Size SvtValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesire
 void SvtValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
                            const OUString& rText, size_t nPos )
 {
-    SvtValueSetItem* pItem = new SvtValueSetItem( *this );
+    std::unique_ptr<SvtValueSetItem> pItem(new SvtValueSetItem( *this ));
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_IMAGE;
     pItem->maImage  = rImage;
     pItem->maText   = rText;
-    ImplInsertItem( pItem, nPos );
+    ImplInsertItem( std::move(pItem), nPos );
 }
 
 void SvtValueSet::InsertItem( sal_uInt16 nItemId, size_t nPos )
 {
-    SvtValueSetItem* pItem = new SvtValueSetItem( *this );
+    std::unique_ptr<SvtValueSetItem> pItem(new SvtValueSetItem( *this ));
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_USERDRAW;
-    ImplInsertItem( pItem, nPos );
+    ImplInsertItem( std::move(pItem), nPos );
 }
 
 void SvtValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor,
                            const OUString& rText )
 {
-    SvtValueSetItem* pItem = new SvtValueSetItem( *this );
+    std::unique_ptr<SvtValueSetItem> pItem(new SvtValueSetItem( *this ));
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_COLOR;
     pItem->maColor  = rColor;
     pItem->maText   = rText;
-    ImplInsertItem( pItem, VALUESET_APPEND );
+    ImplInsertItem( std::move(pItem), VALUESET_APPEND );
 }
 
-void SvtValueSet::ImplInsertItem( SvtValueSetItem *const pItem, const size_t nPos )
+void SvtValueSet::ImplInsertItem( std::unique_ptr<SvtValueSetItem> pItem, const size_t nPos )
 {
     DBG_ASSERT( pItem->mnId, "ValueSet::InsertItem(): ItemId == 0" );
     DBG_ASSERT( GetItemPos( pItem->mnId ) == VALUESET_ITEM_NOTFOUND,
                 "ValueSet::InsertItem(): ItemId already exists" );
 
     if ( nPos < mItemList.size() ) {
-        SvtValueItemList::iterator it = mItemList.begin();
-        ::std::advance( it, nPos );
-        mItemList.insert( it, pItem );
+        mItemList.insert( mItemList.begin() + nPos, std::move(pItem) );
     } else {
-        mItemList.push_back( pItem );
+        mItemList.push_back( std::move(pItem) );
     }
 
     queue_resize();
@@ -3834,11 +3829,11 @@ void SvtValueSet::InsertItem( sal_uInt16 nItemId, const OUString& rText, size_t 
     DBG_ASSERT( nItemId, "ValueSet::InsertItem(): ItemId == 0" );
     DBG_ASSERT( GetItemPos( nItemId ) == VALUESET_ITEM_NOTFOUND,
                 "ValueSet::InsertItem(): ItemId already exists" );
-    SvtValueSetItem* pItem = new SvtValueSetItem( *this );
+    std::unique_ptr<SvtValueSetItem> pItem(new SvtValueSetItem( *this ));
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_USERDRAW;
     pItem->maText   = rText;
-    ImplInsertItem( pItem, nPos );
+    ImplInsertItem( std::move(pItem), nPos );
 }
 
 void SvtValueSet::SetItemHeight( long nNewItemHeight )
@@ -3901,7 +3896,7 @@ void SvtValueSet::SetItemText(sal_uInt16 nItemId, const OUString& rText)
     if ( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
-    SvtValueSetItem* pItem = mItemList[nPos];
+    SvtValueSetItem* pItem = mItemList[nPos].get();
 
     // Remember old and new name for accessibility event.
     Any aOldName;
@@ -3936,7 +3931,7 @@ Size SvtValueSet::GetLargestItemSize()
 {
     Size aLargestItem;
 
-    for (SvtValueSetItem* pItem : mItemList)
+    for (std::unique_ptr<SvtValueSetItem>& pItem : mItemList)
     {
         if (!pItem->mbVisible)
             continue;
