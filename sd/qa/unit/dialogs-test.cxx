@@ -419,7 +419,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
         {
             // CreateSdParagraphTabDlg(const SfxItemSet* pAttr) override;
             pRetval = getSdAbstractDialogFactory()->CreateSdParagraphTabDlg(
-                getViewShell()->GetActiveWindow(),
+                getViewShell()->GetFrameWeld(),
                 &getEmptySfxItemSet());
             break;
         }
