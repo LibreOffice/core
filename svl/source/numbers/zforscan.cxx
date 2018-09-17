@@ -698,7 +698,7 @@ short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos
     {
         // skip the gap of colors et al between new and old keywords and search on
         i = NF_KEY_LASTKEYWORD;
-        while ( i > 0 && sString.indexOf(rKeyword[i]) != 0 )
+        while ( i > 0 && !sString.startsWith( rKeyword[i]) )
         {
             i--;
         }
@@ -707,7 +707,7 @@ short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos
             // found something, but maybe it's something else?
             // e.g. new NNN is found in NNNN, for NNNN we must search on
             short j = i - 1;
-            while ( j > 0 && sString.indexOf(rKeyword[j]) != 0 )
+            while ( j > 0 && !sString.startsWith( rKeyword[j]) )
             {
                 j--;
             }
@@ -722,7 +722,7 @@ short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos
             // are localized. That was already checked in
             // SetDependentKeywords().
             i = NF_KEY_LASTKEYWORD;
-            while ( i > 0 && sString.indexOf(sEnglishKeyword[i]) != 0 )
+            while ( i > 0 && !sString.startsWith( sEnglishKeyword[i]) )
             {
                 i--;
             }
@@ -731,7 +731,7 @@ short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos
                 // found something, but maybe it's something else?
                 // e.g. new NNN is found in NNNN, for NNNN we must search on
                 short j = i - 1;
-                while ( j > 0 && sString.indexOf(sEnglishKeyword[j]) != 0 )
+                while ( j > 0 && !sString.startsWith( sEnglishKeyword[j]) )
                 {
                     j--;
                 }
