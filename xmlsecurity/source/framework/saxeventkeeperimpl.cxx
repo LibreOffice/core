@@ -56,11 +56,7 @@ SAXEventKeeperImpl::~SAXEventKeeperImpl()
     /*
      * delete the BufferNode tree
      */
-    if (m_pRootBufferNode != nullptr)
-    {
-        m_pRootBufferNode->freeAllChildren();
-        m_pRootBufferNode.reset();
-    }
+    m_pRootBufferNode.reset();
 
     m_pCurrentBufferNode = m_pCurrentBlockingBufferNode = nullptr;
 
@@ -103,7 +99,7 @@ void SAXEventKeeperImpl::setCurrentBufferNode(BufferNode* pBufferNode)
 
         if (pBufferNode->getParent() == nullptr)
         {
-            m_pCurrentBufferNode->addChild(pBufferNode);
+            m_pCurrentBufferNode->addChild(std::unique_ptr<BufferNode>(pBufferNode));
             pBufferNode->setParent(m_pCurrentBufferNode);
         }
 
@@ -329,13 +325,11 @@ OUString SAXEventKeeperImpl::printBufferNode(
     }
     rc.append("\n");
 
-    std::vector< const BufferNode* >* vChildren = pBufferNode->getChildren();
-    for( const auto& jj : *vChildren )
+    std::vector< std::unique_ptr<BufferNode> > const & vChildren = pBufferNode->getChildren();
+    for( const auto& jj : vChildren )
     {
-        rc.append(printBufferNode(jj, nIndent+4));
+        rc.append(printBufferNode(jj.get(), nIndent+4));
     }
-
-    delete vChildren;
 
     return rc.makeStringAndClear();
 }
@@ -358,19 +352,17 @@ cssu::Sequence< cssu::Reference< cssxw::XXMLElementWrapper > >
  *  list - the child Elements list.
  ******************************************************************************/
 {
-    std::vector< const BufferNode* >* vChildren = pBufferNode->getChildren();
+    std::vector< std::unique_ptr<BufferNode> > const & vChildren = pBufferNode->getChildren();
 
     cssu::Sequence < cssu::Reference<
-        cssxw::XXMLElementWrapper > > aChildrenCollection ( vChildren->size());
+        cssxw::XXMLElementWrapper > > aChildrenCollection ( vChildren.size());
 
     sal_Int32 nIndex = 0;
-    for( const auto& i : *vChildren )
+    for( const auto& i : vChildren )
     {
         aChildrenCollection[nIndex] = i->getXMLElement();
         nIndex++;
     }
-
-    delete vChildren;
 
     return aChildrenCollection;
 }
@@ -501,23 +493,16 @@ void SAXEventKeeperImpl::smashBufferNode(
 
         sal_Int32 nIndex = pParent->indexOfChild(pBufferNode);
 
-        std::vector< const BufferNode* >* vChildren = pBufferNode->getChildren();
-        pParent->removeChild(pBufferNode);
-        pBufferNode->setParent(nullptr);
+        std::vector< std::unique_ptr<BufferNode> > vChildren = pBufferNode->releaseChildren();
+        pParent->removeChild(pBufferNode); // delete buffernode
 
-        for( const auto& i : *vChildren )
+        for( auto& i : vChildren )
         {
-            const_cast<BufferNode *>(i)->setParent(pParent);
-            pParent->addChild(i, nIndex);
+            i->setParent(pParent);
+            pParent->addChild(std::move(i), nIndex);
             nIndex++;
         }
 
-        delete vChildren;
-
-        /*
-         * delete the BufferNode
-         */
-        delete pBufferNode;
     }
 }
 
