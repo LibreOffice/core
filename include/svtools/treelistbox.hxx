@@ -251,7 +251,7 @@ protected:
     Link<SvTreeListBox*,bool> aDoubleClickHdl;
     SvTreeListEntry*        pTargetEntry;
     SvLBoxButtonData*       pCheckButtonData;
-    std::vector<SvLBoxTab*> aTabs;
+    std::vector<std::unique_ptr<SvLBoxTab>> aTabs;
     SvTreeFlags             nTreeFlags;
     SvTreeListBoxFlags      nImpFlags;
     // Move/CopySelection: Position of the current Entry in SelectionList

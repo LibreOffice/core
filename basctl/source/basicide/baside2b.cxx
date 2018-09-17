@@ -2096,7 +2096,7 @@ void WatchTreeListBox::SetTabs()
     sal_uInt16 nTabCount_ = aTabs.size();
     for( sal_uInt16 i = 0 ; i < nTabCount_ ; i++ )
     {
-        SvLBoxTab* pTab = aTabs[i];
+        SvLBoxTab* pTab = aTabs[i].get();
         if( i == 2 )
             pTab->nFlags |= SvLBoxTabFlags::EDITABLE;
         else

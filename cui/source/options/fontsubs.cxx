@@ -435,11 +435,11 @@ void SvxFontSubstCheckListBox::SetTabs()
     SvSimpleTable::SetTabs();
     SvLBoxTabFlags nAdjust = SvLBoxTabFlags::ADJUST_RIGHT|SvLBoxTabFlags::ADJUST_LEFT|SvLBoxTabFlags::ADJUST_CENTER|SvLBoxTabFlags::ADJUST_NUMERIC|SvLBoxTabFlags::FORCE;
 
-    SvLBoxTab* pTab = aTabs[1];
+    SvLBoxTab* pTab = aTabs[1].get();
     pTab->nFlags &= ~nAdjust;
     pTab->nFlags |= SvLBoxTabFlags::PUSHABLE|SvLBoxTabFlags::ADJUST_CENTER|SvLBoxTabFlags::FORCE;
 
-    pTab = aTabs[2];
+    pTab = aTabs[2].get();
     pTab->nFlags &= ~nAdjust;
     pTab->nFlags |= SvLBoxTabFlags::PUSHABLE|SvLBoxTabFlags::ADJUST_CENTER|SvLBoxTabFlags::FORCE;
 }

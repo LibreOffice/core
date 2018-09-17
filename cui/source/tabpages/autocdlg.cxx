@@ -761,13 +761,13 @@ void OfaACorrCheckListBox::SetTabs()
 
     if( aTabs.size() > 1 )
     {
-        SvLBoxTab* pTab = aTabs[1];
+        SvLBoxTab* pTab = aTabs[1].get();
         pTab->nFlags &= ~nAdjust;
         pTab->nFlags |= SvLBoxTabFlags::PUSHABLE|SvLBoxTabFlags::ADJUST_CENTER|SvLBoxTabFlags::FORCE;
     }
     if( aTabs.size() > 2 )
     {
-        SvLBoxTab* pTab = aTabs[2];
+        SvLBoxTab* pTab = aTabs[2].get();
         pTab->nFlags &= ~nAdjust;
         pTab->nFlags |= SvLBoxTabFlags::PUSHABLE|SvLBoxTabFlags::ADJUST_CENTER|SvLBoxTabFlags::FORCE;
     }
