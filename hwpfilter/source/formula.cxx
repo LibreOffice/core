@@ -233,7 +233,7 @@ void Formula::makeIdentifier(Node *res)
 #endif
           break;
      case ID_OPERATOR :
-     case ID_DELIMETER :
+     case ID_DELIMITER :
         {
 #ifdef DEBUG
           inds; fprintf(stderr,"<math:mo>%s</math:mo>\n",tmp->value); indo;

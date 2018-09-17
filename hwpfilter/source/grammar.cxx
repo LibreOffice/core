@@ -771,10 +771,10 @@ case 11:
 { yyval.ptr = new Node(ID_IDENTIFIER); yyval.ptr->value = strdup(yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr);
     break;}
 case 12:
-{ yyval.ptr = new Node(ID_DELIMETER); yyval.ptr->value = strdup(yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr);
+{ yyval.ptr = new Node(ID_DELIMITER); yyval.ptr->value = strdup(yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr);
     break;}
 case 13:
-{ yyval.ptr = new Node(ID_DELIMETER); yyval.ptr->value = strdup(yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr);
+{ yyval.ptr = new Node(ID_DELIMITER); yyval.ptr->value = strdup(yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr);
     break;}
 case 14:
 { yyval.ptr = new Node(ID_IDENTIFIER); yyval.ptr->value = strdup(yyvsp[0].str); debug("Identifier : %s\n",yyvsp[0].str); nodelist.push_back(yyval.ptr);

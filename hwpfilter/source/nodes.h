@@ -60,7 +60,7 @@ enum IDLIST {
      ID_NUMBER,
      ID_OPERATOR,
      ID_SPACE,
-     ID_DELIMETER
+     ID_DELIMITER
 };
 
 class Node{
