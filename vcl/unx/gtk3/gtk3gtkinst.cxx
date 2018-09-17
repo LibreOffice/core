@@ -4673,7 +4673,8 @@ public:
         , m_nChangedSignalId(g_signal_connect(m_pComboBox, "changed", G_CALLBACK(signalChanged), this))
         , m_nPopupShownSignalId(g_signal_connect(m_pComboBox, "notify::popup-shown", G_CALLBACK(signalPopupShown), this))
     {
-        if (!has_entry())
+        GList* cells = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(m_pComboBox));
+        if (!g_list_length(cells))
         {
             //Always use the same text column renderer layout
             GtkCellRenderer* text_renderer = gtk_cell_renderer_text_new();
@@ -4685,7 +4686,6 @@ public:
         {
             // this bit isn't great, I really want to be able to ellipse the text in the comboboxtext itself and let
             // the popup menu render them in full, in the interim allow the text to wrap in both cases
-            GList* cells = gtk_cell_layout_get_cells(GTK_CELL_LAYOUT(m_pComboBox));
             GtkCellRenderer* cell = static_cast<GtkCellRenderer*>(cells->data);
             g_object_set(G_OBJECT(cell), "ellipsize", PANGO_ELLIPSIZE_MIDDLE, nullptr);
             if (g_list_length(cells) == 2)
@@ -4695,8 +4695,8 @@ public:
                 //column will be after it, but we want it before
                 gtk_cell_layout_reorder(GTK_CELL_LAYOUT(m_pComboBox), cell, 1);
             }
-            g_list_free(cells);
         }
+        g_list_free(cells);
 
         if (GtkEntry* pEntry = get_entry())
         {
