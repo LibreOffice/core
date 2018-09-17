@@ -190,6 +190,11 @@ IMPL_ABSTDLG_BASE(AbstractSvxHpLinkDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractFmSearchDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractGraphicFilterDialog_Impl);
 
+short AbstractGraphicFilterDialogController_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 short AbstractSvxAreaTabDialog_Impl::Execute()
 {
     return m_xDlg->execute();
@@ -814,6 +819,11 @@ Graphic AbstractGraphicFilterDialog_Impl::GetFilteredGraphic( const Graphic& rGr
     return pDlg->GetFilteredGraphic( rGraphic, fScaleX, fScaleY );
 }
 
+Graphic AbstractGraphicFilterDialogController_Impl::GetFilteredGraphic(const Graphic& rGraphic, double fScaleX, double fScaleY)
+{
+    return m_xDlg->GetFilteredGraphic(rGraphic, fScaleX, fScaleY);
+}
+
 // AbstractSvxAreaTabDialog implementations just forwards everything to the dialog
 void AbstractSvxAreaTabDialog_Impl::SetCurPageId( const OString& rName )
 {
@@ -1269,11 +1279,10 @@ VclPtr<AbstractFmSearchDialog> AbstractDialogFactory_Impl::CreateFmSearchDialog(
     return VclPtr<AbstractFmSearchDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterEmboss (vcl::Window* pParent,
+VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterEmboss(weld::Window* pParent,
                                             const Graphic& rGraphic)
 {
-    VclPtrInstance<GraphicFilterEmboss> pDlg( pParent, rGraphic, RectPoint::MM );
-    return VclPtr<AbstractGraphicFilterDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractGraphicFilterDialogController_Impl>::Create(o3tl::make_unique<GraphicFilterEmboss>(pParent, rGraphic, RectPoint::MM));
 }
 
 VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterPoster(vcl::Window* pParent,
