@@ -151,13 +151,8 @@ protected:
     ) override;
 
 private:
-    void impl_activateTabControllers();
-
     // list of pointer of "struct IMPL_ControlInfo" to hold child-controls
     ::std::vector< std::unique_ptr<IMPL_ControlInfo> > maControlInfoList;
-
-    // list of references of XTabController to hold tab-order in this container
-    css::uno::Sequence< css::uno::Reference< css::awt::XTabController > >  m_xTabControllerList;
 
     ::cppu::OMultiTypeInterfaceContainerHelper                          m_aListeners;
 
