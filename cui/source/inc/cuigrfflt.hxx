@@ -64,6 +64,41 @@ public:
     double          GetScaleY() const { return mfScaleY; }
 };
 
+class CuiGraphicPreviewWindow : public weld::CustomWidgetController
+{
+private:
+    const Graphic* mpOrigGraphic;
+    Size maOrigGraphicSizePixel;
+    Size maOutputSizePixel;
+    Link<LinkParamNone*,void>    maModifyHdl;
+    Graphic   maScaledOrig;
+    Graphic   maPreview;
+    double    mfScaleX;
+    double    mfScaleY;
+
+    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
+    virtual void Resize() override;
+
+    void ScaleImageToFit();
+
+public:
+    CuiGraphicPreviewWindow();
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    void init(const Graphic* pOrigGraphic, const Link<LinkParamNone*,void>& rLink)
+    {
+        mpOrigGraphic = pOrigGraphic;
+        maModifyHdl = rLink;
+        maOrigGraphicSizePixel = GetDrawingArea()->get_ref_device().LogicToPixel(mpOrigGraphic->GetPrefSize(),
+                                                                                 mpOrigGraphic->GetPrefMapMode());
+        ScaleImageToFit();
+    }
+
+    void            SetPreview(const Graphic& rGraphic);
+    const Graphic&  GetScaledOriginal() const { return maScaledOrig; }
+    double          GetScaleX() const { return mfScaleX; }
+    double          GetScaleY() const { return mfScaleY; }
+};
+
 class GraphicFilterDialog : public ModalDialog
 {
 private:
@@ -89,6 +124,30 @@ public:
     virtual void dispose() override;
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) = 0;
+};
+
+class GraphicFilterDialogController : public weld::GenericDialogController
+{
+private:
+
+    Timer           maTimer;
+    Link<LinkParamNone*,void> maModifyHdl;
+    bool            bIsBitmap;
+
+    DECL_LINK( ImplPreviewTimeoutHdl, Timer *, void );
+    DECL_LINK( ImplModifyHdl, LinkParamNone*, void);
+
+protected:
+    CuiGraphicPreviewWindow  maPreview;
+    std::unique_ptr<weld::CustomWeld> mxPreview;
+
+    const Link<LinkParamNone*,void>&   GetModifyHdl() const { return maModifyHdl; }
+    const Size&     GetGraphicSizePixel() const;
+
+public:
+
+    GraphicFilterDialogController(weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID, const Graphic& rGraphic);
+    virtual Graphic GetFilteredGraphic(const Graphic& rGraphic, double fScaleX, double fScaleY) = 0;
 };
 
 class GraphicFilterSmooth : public GraphicFilterDialog
@@ -171,30 +230,32 @@ public:
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
 };
 
-class EmbossControl : public SvxRectCtl
+class EmbossControl : public RectCtl
 {
 private:
     Link<LinkParamNone*, void> maModifyHdl;
-    virtual void    MouseButtonDown( const MouseEvent& rEvt ) override;
-    virtual Size    GetOptimalSize() const override;
+    virtual void MouseButtonDown( const MouseEvent& rEvt ) override;
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 public:
-    EmbossControl(vcl::Window* pParent)
-        : SvxRectCtl(pParent) {}
+    EmbossControl()
+        : RectCtl(nullptr)
+    {
+    }
 
     void            SetModifyHdl( const Link<LinkParamNone*,void>& rHdl ) { maModifyHdl = rHdl; }
 };
 
-class GraphicFilterEmboss : public GraphicFilterDialog
+class GraphicFilterEmboss : public GraphicFilterDialogController
 {
 private:
-    VclPtr<EmbossControl>  mpCtlLight;
+    EmbossControl  maCtlLight;
+    std::unique_ptr<weld::CustomWeld> mxCtlLight;
 public:
-    GraphicFilterEmboss( vcl::Window* pParent, const Graphic& rGraphic,
-                         RectPoint eLightSource );
+    GraphicFilterEmboss(weld::Window* pParent, const Graphic& rGraphic,
+                        RectPoint eLightSource);
     virtual ~GraphicFilterEmboss() override;
-    virtual void dispose() override;
 
-    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
+    virtual Graphic GetFilteredGraphic(const Graphic& rGraphic, double fScaleX, double fScaleY) override;
 };
 
 #endif

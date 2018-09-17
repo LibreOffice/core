@@ -341,9 +341,6 @@
     <glade-widget-class title="Assign Fields Control" name="swuilo-SwAssignFieldsControl"
                         generic-name="Assign Fields Control" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Emboss Control" name="cuilo-EmbossControl"
-                        generic-name="Emboss Control" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Frame Direction ListBox" name="svxlo-FrameDirectionListBox"
                         generic-name="FrameDirectionListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>

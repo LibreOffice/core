@@ -79,7 +79,6 @@ void GraphicPreviewWindow::SetPreview(const Graphic& rGraphic)
     Invalidate();
 }
 
-
 void GraphicPreviewWindow::ScaleImageToFit()
 {
     if (!mpOrigGraphic)
@@ -125,10 +124,99 @@ void GraphicPreviewWindow::ScaleImageToFit()
     maModifyHdl.Call(nullptr);
 }
 
-
 void GraphicPreviewWindow::Resize()
 {
     Control::Resize();
+    ScaleImageToFit();
+}
+
+CuiGraphicPreviewWindow::CuiGraphicPreviewWindow()
+    : mpOrigGraphic(nullptr)
+    , mfScaleX(0.0)
+    , mfScaleY(0.0)
+{
+}
+
+void CuiGraphicPreviewWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
+    OutputDevice &rDevice = pDrawingArea->get_ref_device();
+    maOutputSizePixel = rDevice.LogicToPixel(Size(81, 73), MapMode(MapUnit::MapAppFont));
+    pDrawingArea->set_size_request(maOutputSizePixel.Width(), maOutputSizePixel.Height());
+}
+
+void CuiGraphicPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
+{
+    const Size aOutputSize(GetOutputSizePixel());
+
+    if (maPreview.IsAnimated())
+    {
+        const Size aGraphicSize(rRenderContext.LogicToPixel(maPreview.GetPrefSize(), maPreview.GetPrefMapMode()));
+        const Point aGraphicPosition((aOutputSize.Width()  - aGraphicSize.Width()  ) >> 1,
+                                     (aOutputSize.Height() - aGraphicSize.Height() ) >> 1);
+        maPreview.StartAnimation(&rRenderContext, aGraphicPosition, aGraphicSize);
+    }
+    else
+    {
+        const Size  aGraphicSize(maPreview.GetSizePixel());
+        const Point aGraphicPosition((aOutputSize.Width()  - aGraphicSize.Width())  >> 1,
+                                     (aOutputSize.Height() - aGraphicSize.Height()) >> 1);
+        maPreview.Draw(&rRenderContext, aGraphicPosition, aGraphicSize);
+    }
+}
+
+void CuiGraphicPreviewWindow::SetPreview(const Graphic& rGraphic)
+{
+    maPreview = rGraphic;
+    Invalidate();
+}
+
+void CuiGraphicPreviewWindow::ScaleImageToFit()
+{
+    if (!mpOrigGraphic)
+        return;
+
+    maScaledOrig = *mpOrigGraphic;
+
+    const Size aPreviewSize(GetOutputSizePixel());
+    Size aGrfSize(maOrigGraphicSizePixel);
+
+    if( mpOrigGraphic->GetType() == GraphicType::Bitmap &&
+        aPreviewSize.Width() && aPreviewSize.Height() &&
+        aGrfSize.Width() && aGrfSize.Height() )
+    {
+        const double fGrfWH = static_cast<double>(aGrfSize.Width()) / aGrfSize.Height();
+        const double fPreWH = static_cast<double>(aPreviewSize.Width()) / aPreviewSize.Height();
+
+        if( fGrfWH < fPreWH )
+        {
+            aGrfSize.setWidth( static_cast<long>( aPreviewSize.Height() * fGrfWH ) );
+            aGrfSize.setHeight( aPreviewSize.Height() );
+        }
+        else
+        {
+            aGrfSize.setWidth( aPreviewSize.Width() );
+            aGrfSize.setHeight( static_cast<long>( aPreviewSize.Width() / fGrfWH ) );
+        }
+
+        mfScaleX = static_cast<double>(aGrfSize.Width()) / maOrigGraphicSizePixel.Width();
+        mfScaleY = static_cast<double>(aGrfSize.Height()) / maOrigGraphicSizePixel.Height();
+
+        if( !mpOrigGraphic->IsAnimated() )
+        {
+            BitmapEx aBmpEx( mpOrigGraphic->GetBitmapEx() );
+
+            if( aBmpEx.Scale( aGrfSize ) )
+                maScaledOrig = aBmpEx;
+        }
+    }
+
+    maModifyHdl.Call(nullptr);
+}
+
+void CuiGraphicPreviewWindow::Resize()
+{
+    maOutputSizePixel = GetOutputSizePixel();
     ScaleImageToFit();
 }
 
@@ -180,6 +268,36 @@ IMPL_LINK_NOARG(GraphicFilterDialog, ImplModifyHdl, LinkParamNone*, void)
     }
 }
 
+GraphicFilterDialogController::GraphicFilterDialogController(weld::Window* pParent,
+    const OUString& rUIXMLDescription, const OString& rID,
+    const Graphic& rGraphic)
+    : GenericDialogController(pParent, rUIXMLDescription, rID)
+    , maModifyHdl(LINK(this, GraphicFilterDialogController, ImplModifyHdl))
+    , mxPreview(new weld::CustomWeld(*m_xBuilder, "preview", maPreview))
+{
+    bIsBitmap = rGraphic.GetType() == GraphicType::Bitmap;
+
+    maTimer.SetInvokeHandler(LINK(this, GraphicFilterDialogController, ImplPreviewTimeoutHdl));
+    maTimer.SetTimeout(5);
+
+    maPreview.init(&rGraphic, maModifyHdl);
+}
+
+IMPL_LINK_NOARG(GraphicFilterDialogController, ImplPreviewTimeoutHdl, Timer *, void)
+{
+    maTimer.Stop();
+    maPreview.SetPreview(GetFilteredGraphic(maPreview.GetScaledOriginal(),
+        maPreview.GetScaleX(), maPreview.GetScaleY()));
+}
+
+IMPL_LINK_NOARG(GraphicFilterDialogController, ImplModifyHdl, LinkParamNone*, void)
+{
+    if (bIsBitmap)
+    {
+        maTimer.Stop();
+        maTimer.Start();
+    }
+}
 
 GraphicFilterMosaic::GraphicFilterMosaic( vcl::Window* pParent, const Graphic& rGraphic,
                                           sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, bool bEnhanceEdges )
@@ -517,53 +635,39 @@ void EmbossControl::MouseButtonDown( const MouseEvent& rEvt )
 {
     const RectPoint eOldRP = GetActualRP();
 
-    SvxRectCtl::MouseButtonDown( rEvt );
+    RectCtl::MouseButtonDown( rEvt );
 
     if( GetActualRP() != eOldRP )
         maModifyHdl.Call( nullptr );
 }
 
-
-Size EmbossControl::GetOptimalSize() const
+void EmbossControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    return LogicToPixel(Size(77, 60), MapMode(MapUnit::MapAppFont));
+    RectCtl::SetDrawingArea(pDrawingArea);
+    Size aSize(pDrawingArea->get_ref_device().LogicToPixel(Size(77, 60), MapMode(MapUnit::MapAppFont)));
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
 }
 
-
-VCL_BUILDER_FACTORY(EmbossControl)
-
-
-GraphicFilterEmboss::GraphicFilterEmboss(vcl::Window* pParent,
+GraphicFilterEmboss::GraphicFilterEmboss(weld::Window* pParent,
     const Graphic& rGraphic, RectPoint eLightSource)
-    : GraphicFilterDialog (pParent, "EmbossDialog",
-        "cui/ui/embossdialog.ui", rGraphic)
+    : GraphicFilterDialogController(pParent, "cui/ui/embossdialog.ui", "EmbossDialog", rGraphic)
+    , mxCtlLight(new weld::CustomWeld(*m_xBuilder, "lightsource", maCtlLight))
 {
-    get(mpCtlLight, "lightsource");
-    mpCtlLight->SetActualRP(eLightSource);
-    mpCtlLight->SetModifyHdl( GetModifyHdl() );
-    mpCtlLight->GrabFocus();
+    maCtlLight.SetActualRP(eLightSource);
+    maCtlLight.SetModifyHdl( GetModifyHdl() );
+    maCtlLight.GrabFocus();
 }
-
 
 GraphicFilterEmboss::~GraphicFilterEmboss()
 {
-    disposeOnce();
 }
-
-
-void GraphicFilterEmboss::dispose()
-{
-    mpCtlLight.clear();
-    GraphicFilterDialog::dispose();
-}
-
 
 Graphic GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
     Graphic aRet;
     sal_uInt16  nAzim, nElev;
 
-    switch( mpCtlLight->GetActualRP() )
+    switch (maCtlLight.GetActualRP())
     {
         default:       OSL_FAIL("svx::GraphicFilterEmboss::GetFilteredGraphic(), unknown Reference Point!" );
                        SAL_FALLTHROUGH;
