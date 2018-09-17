@@ -857,7 +857,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     // is it allowed to delete the current layer?
-    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_DELETE_LAYER ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_DELETE_LAYER )
+        || SfxItemState::DEFAULT == rSet.GetItemState( SID_RENAMELAYER ) )
     {
         if(GetLayerTabControl()) // #i87182#
         {
