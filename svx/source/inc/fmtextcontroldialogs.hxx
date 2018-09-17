@@ -24,33 +24,27 @@
 #include <sfx2/tabdlg.hxx>
 #include <editeng/flstitem.hxx>
 
-
 namespace svx
 {
 
-    class TextControlCharAttribDialog : public SfxTabDialog
+    class TextControlCharAttribDialog : public SfxTabDialogController
     {
     private:
         SvxFontListItem m_aFontList;
-        sal_uInt16 m_nCharNamePageId;
-        sal_uInt16 m_nCharEffectsPageId;
-        sal_uInt16 m_nCharPositionPageId;
 
     public:
-        TextControlCharAttribDialog( vcl::Window* pParent, const SfxItemSet& _rCoreSet, const SvxFontListItem& _rFontList );
+        TextControlCharAttribDialog(weld::Window* pParent, const SfxItemSet& rCoreSet, const SvxFontListItem& rFontList);
 
     protected:
-        virtual void PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage ) override;
+        virtual void PageCreated(const OString& rId, SfxTabPage& _rPage) override;
     };
 
-    class TextControlParaAttribDialog : public SfxTabDialog
+    class TextControlParaAttribDialog : public SfxTabDialogController
     {
     public:
-        TextControlParaAttribDialog(vcl::Window* _pParent, const SfxItemSet& _rCoreSet);
+        TextControlParaAttribDialog(weld::Window* pParent, const SfxItemSet& rCoreSet);
     };
-
 }
-
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMTEXTCONTROLDIALOGS_HXX
 

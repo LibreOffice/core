@@ -31,44 +31,38 @@
 namespace svx
 {
 
-    TextControlCharAttribDialog::TextControlCharAttribDialog( vcl::Window* pParent, const SfxItemSet& _rCoreSet, const SvxFontListItem& _rFontList )
-        : SfxTabDialog( pParent, "TextControlCharacterPropertiesDialog",
-            "svx/ui/textcontrolchardialog.ui", &_rCoreSet )
-        , m_aFontList(_rFontList)
-        , m_nCharNamePageId(0)
-        , m_nCharEffectsPageId(0)
-        , m_nCharPositionPageId(0)
+    TextControlCharAttribDialog::TextControlCharAttribDialog(weld::Window* pParent, const SfxItemSet& rCoreSet, const SvxFontListItem& rFontList)
+        : SfxTabDialogController(pParent, "svx/ui/textcontrolchardialog.ui", "TextControlCharacterPropertiesDialog", &rCoreSet)
+        , m_aFontList(rFontList)
     {
-        m_nCharNamePageId = AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
-        m_nCharEffectsPageId = AddTabPage("fonteffects", RID_SVXPAGE_CHAR_EFFECTS);
-        m_nCharPositionPageId = AddTabPage("position", RID_SVXPAGE_CHAR_POSITION);
+        AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
+        AddTabPage("fonteffects", RID_SVXPAGE_CHAR_EFFECTS);
+        AddTabPage("position", RID_SVXPAGE_CHAR_POSITION);
     }
 
-    void TextControlCharAttribDialog::PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage )
+    void TextControlCharAttribDialog::PageCreated(const OString& rId, SfxTabPage& rPage)
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
 
-        if (_nId == m_nCharNamePageId)
+        if (rId == "font")
         {
             aSet.Put (m_aFontList);
-            _rPage.PageCreated(aSet);
+            rPage.PageCreated(aSet);
         }
-        else if (_nId == m_nCharEffectsPageId)
+        else if (rId == "fonteffects")
         {
             aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP));
-            _rPage.PageCreated(aSet);
+            rPage.PageCreated(aSet);
         }
-        else if (_nId == m_nCharPositionPageId)
+        else if (rId == "position")
         {
             aSet.Put( SfxUInt32Item(SID_FLAG_TYPE, SVX_PREVIEW_CHARACTER) );
-            _rPage.PageCreated(aSet);
+            rPage.PageCreated(aSet);
         }
     }
 
-    TextControlParaAttribDialog::TextControlParaAttribDialog(vcl::Window* _pParent,
-        const SfxItemSet& _rCoreSet)
-        : SfxTabDialog( _pParent, "TextControlParagraphPropertiesDialog",
-            "svx/ui/textcontrolparadialog.ui", &_rCoreSet )
+    TextControlParaAttribDialog::TextControlParaAttribDialog(weld::Window* pParent, const SfxItemSet& rCoreSet)
+        : SfxTabDialogController(pParent, "svx/ui/textcontrolparadialog.ui", "TextControlParagraphPropertiesDialog", &rCoreSet)
     {
         AddTabPage("labelTP_PARA_STD", RID_SVXPAGE_STD_PARAGRAPH);
         AddTabPage("labelTP_PARA_ALIGN", RID_SVXPAGE_ALIGN_PARAGRAPH);
@@ -81,8 +75,6 @@ namespace svx
 
         AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
     }
-
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

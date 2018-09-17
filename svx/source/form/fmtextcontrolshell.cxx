@@ -619,7 +619,7 @@ namespace svx
     }
 
 
-    void FmTextControlShell::executeAttributeDialog( AttributeSet _eSet, SfxRequest& _rReq )
+    void FmTextControlShell::executeAttributeDialog( AttributeSet _eSet, SfxRequest& rReq )
     {
         const SvxFontListItem* pFontList = dynamic_cast<const SvxFontListItem*>( m_pViewFrame->GetObjectShell()->GetItem( SID_ATTR_CHAR_FONTLIST )  );
         DBG_ASSERT( pFontList, "FmTextControlShell::executeAttributeDialog: no font list item!" );
@@ -640,12 +640,12 @@ namespace svx
         fillFeatureDispatchers( m_xActiveControl, pDialogSlots, aAdditionalFestures );
         transferFeatureStatesToItemSet( aAdditionalFestures, *xCurrentItems, true );
 
-        VclPtr<SfxTabDialog> xDialog;
-        if ( _eSet == eCharAttribs)
-            xDialog = VclPtr<TextControlCharAttribDialog>::Create( nullptr, *xCurrentItems, *pFontList );
+        std::unique_ptr<SfxTabDialogController> xDialog;
+        if (_eSet == eCharAttribs)
+            xDialog = o3tl::make_unique<TextControlCharAttribDialog>(rReq.GetFrameWeld(), *xCurrentItems, *pFontList);
         else
-            xDialog = VclPtr<TextControlParaAttribDialog>::Create( nullptr, *xCurrentItems );
-        if ( RET_OK == xDialog->Execute() )
+            xDialog = o3tl::make_unique<TextControlParaAttribDialog>(rReq.GetFrameWeld(), *xCurrentItems);
+        if ( RET_OK == xDialog->execute() )
         {
             const SfxItemSet& rModifiedItems = *xDialog->GetOutputItemSet();
             for ( WhichId nWhich = pPool->GetFirstWhich(); nWhich <= pPool->GetLastWhich(); ++nWhich )
@@ -721,7 +721,7 @@ namespace svx
                 #endif
                 }
             }
-            _rReq.Done( rModifiedItems );
+            rReq.Done( rModifiedItems );
         }
 
         xDialog.reset();
