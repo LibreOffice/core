@@ -419,41 +419,57 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
             if ( bAlignPossible )
             {
                 const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-                if( rMarkList.GetMarkCount() == 1 && bAlignPossible )
-                {   // Do not align objects to each other
-                    RndStdIds nAnchor = pSh->GetAnchorId();
-                    if (nAnchor == RndStdIds::FLY_AS_CHAR)
-                    {
-                        sal_Int16 nVertOrient = -1;
+                if ( rMarkList.GetMarkCount() == 1 )
+                {
+                    sal_Int16 nHorizOrient = -1, nVertOrient = -1;
 
-                        switch (nSlotId)
-                        {
-                            case SID_OBJECT_ALIGN_UP:
-                                nVertOrient = text::VertOrientation::TOP;
-                                break;
-                            case SID_OBJECT_ALIGN_MIDDLE:
-                                nVertOrient = text::VertOrientation::CENTER;
-                                break;
-                            case SID_OBJECT_ALIGN_DOWN:
-                                nVertOrient = text::VertOrientation::BOTTOM;
-                                break;
-                            default:
-                                break;
-                        }
-                        if (nVertOrient != -1)
-                        {
-                            pSh->StartAction();
-                            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                            SwFrameFormat* pFrameFormat = FindFrameFormat( pObj );
-                            SwFormatVertOrient aVOrient(pFrameFormat->GetFormatAttr(RES_VERT_ORIENT));
-                            aVOrient.SetVertOrient( nVertOrient );
-                            pFrameFormat->SetFormatAttr(aVOrient);
-                            pSh->EndAction();
-                        }
-                        break;
+                    switch (nSlotId)
+                    {
+                        case SID_OBJECT_ALIGN_LEFT:
+                            nHorizOrient = text::HoriOrientation::LEFT;
+                            break;
+                        case SID_OBJECT_ALIGN_CENTER:
+                            nHorizOrient = text::HoriOrientation::CENTER;
+                            break;
+                        case SID_OBJECT_ALIGN_RIGHT:
+                            nHorizOrient = text::HoriOrientation::RIGHT;
+                            break;
+                        case SID_OBJECT_ALIGN_UP:
+                            nVertOrient = text::VertOrientation::TOP;
+                            break;
+                        case SID_OBJECT_ALIGN_MIDDLE:
+                            nVertOrient = text::VertOrientation::CENTER;
+                            break;
+                        case SID_OBJECT_ALIGN_DOWN:
+                            nVertOrient = text::VertOrientation::BOTTOM;
+                            break;
+                        default:
+                            break;
                     }
-                    if (nAnchor == RndStdIds::FLY_AT_PARA)
-                        break;  // Do not align frames of an anchored paragraph
+
+                    if (nHorizOrient != -1)
+                    {
+                        pSh->StartAction();
+                        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                        SwFrameFormat* pFrameFormat = FindFrameFormat( pObj );
+                        SwFormatHoriOrient aHOrient(pFrameFormat->GetFormatAttr(RES_HORI_ORIENT));
+                        aHOrient.SetHoriOrient( nHorizOrient );
+                        pFrameFormat->SetFormatAttr(aHOrient);
+                        pSh->EndAction();
+                    }
+
+                    if (nVertOrient != -1)
+                    {
+                        pSh->StartAction();
+                        SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                        SwFrameFormat* pFrameFormat = FindFrameFormat( pObj );
+                        SwFormatVertOrient aVOrient(pFrameFormat->GetFormatAttr(RES_VERT_ORIENT));
+                        aVOrient.SetVertOrient( nVertOrient );
+                        pFrameFormat->SetFormatAttr(aVOrient);
+                        pSh->EndAction();
+                    }
+
+                    break;
                 }
 
                 pSh->StartAction();
@@ -654,7 +670,7 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
             case SID_OBJECT_ALIGN:
                 if ( !rSh.IsAlignPossible() || bProtected )
                     rSet.DisableItem( nWhich );
-                else
+                else if ( rSh.GetAnchorId() == RndStdIds::FLY_AS_CHAR )
                 {
                     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                     //if only one object is selected it can only be vertically
