@@ -354,7 +354,7 @@ static OString MakeSlotName( SvStringHashEntry const * pEntry )
 };
 
 void SvMetaSlot::WriteSlotStubs( const OString& rShellName,
-                                std::vector<OString*> & rList,
+                                std::vector<OString> & rList,
                                 SvStream & rOutStm ) const
 {
     if ( !GetExport() && !GetHidden() )
@@ -367,7 +367,7 @@ void SvMetaSlot::WriteSlotStubs( const OString& rShellName,
         bool bIn = false;
         for( size_t n = 0; n < rList.size(); n++ )
         {
-            if (*rList[n] == aMethodName)
+            if (rList[n] == aMethodName)
             {
                 bIn = true;
                 break;
@@ -376,7 +376,7 @@ void SvMetaSlot::WriteSlotStubs( const OString& rShellName,
 
         if ( !bIn )
         {
-            rList.push_back( new OString(aMethodName) );
+            rList.push_back( aMethodName );
             rOutStm.WriteCharPtr( "SFX_EXEC_STUB(" )
                    .WriteOString( rShellName )
                    .WriteChar( ',' )
@@ -392,7 +392,7 @@ void SvMetaSlot::WriteSlotStubs( const OString& rShellName,
         bool bIn = false;
         for ( size_t n=0; n < rList.size(); n++ )
         {
-            if (*rList[n] == aMethodName)
+            if (rList[n] == aMethodName)
             {
                 bIn = true;
                 break;
@@ -401,7 +401,7 @@ void SvMetaSlot::WriteSlotStubs( const OString& rShellName,
 
         if ( !bIn )
         {
-            rList.push_back( new OString(aMethodName) );
+            rList.push_back( aMethodName );
             rOutStm.WriteCharPtr( "SFX_STATE_STUB(" )
                    .WriteOString( rShellName )
                    .WriteChar( ',' )

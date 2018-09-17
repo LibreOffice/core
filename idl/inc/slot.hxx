@@ -119,7 +119,7 @@ public:
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) override;
     virtual void        Insert( SvSlotElementList& ) override;
     void                WriteSlotStubs( const OString& rShellName,
-                                    std::vector<OString*> & rList,
+                                    std::vector<OString> & rList,
                                     SvStream & rOutStm ) const;
     sal_uInt16          WriteSlotMap( const OString& rShellName,
                                     sal_uInt16 nCount,
