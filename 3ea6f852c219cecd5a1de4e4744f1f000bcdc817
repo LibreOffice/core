@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bff0334d_86054e7d",
+        "filename": "vcl/headless/svpinst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-09-17T13:32:13Z",
+      "side": 1,
+      "message": "given the casting going on, this should probably be taking\n   std::unique_ptr\u003cSvpSalYieldMutex\u003e\nas a parameter",
+      "revId": "3ea6f852c219cecd5a1de4e4744f1f000bcdc817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
