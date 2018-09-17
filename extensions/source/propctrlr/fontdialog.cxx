@@ -167,25 +167,18 @@ namespace pcr
             _rSet.InvalidateItem(_nItemId);
     }
 
-
     //= ControlCharacterDialog
-
-
-    ControlCharacterDialog::ControlCharacterDialog(vcl::Window* _pParent, const SfxItemSet& _rCoreSet)
-        : SfxTabDialog(_pParent, "ControlFontDialog",
-            "modules/spropctrlr/ui/controlfontdialog.ui", &_rCoreSet)
-        , m_nCharsId(0)
+    ControlCharacterDialog::ControlCharacterDialog(weld::Window* pParent, const SfxItemSet& _rCoreSet)
+        : SfxTabDialogController(pParent, "modules/spropctrlr/ui/controlfontdialog.ui", "ControlFontDialog", &_rCoreSet)
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        m_nCharsId = AddTabPage("font", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr );
+        AddTabPage("font", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr );
         AddTabPage("fonteffects", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), nullptr );
     }
-
 
     ControlCharacterDialog::~ControlCharacterDialog()
     {
     }
-
 
     void ControlCharacterDialog::translatePropertiesToItems(const Reference< XPropertySet >& _rxModel, SfxItemSet* _pSet)
     {
@@ -284,9 +277,7 @@ namespace pcr
         _pSet->DisableItem(SID_ATTR_CHAR_CASEMAP);
         _pSet->DisableItem(SID_ATTR_CHAR_CONTOUR);
         _pSet->DisableItem(SID_ATTR_CHAR_SHADOWED);
-
     }
-
 
     namespace
     {
@@ -295,7 +286,6 @@ namespace pcr
             _out_properties.push_back( NamedValue( _name, _value ) );
         }
     }
-
 
     void ControlCharacterDialog::translateItemsToProperties( const SfxItemSet& _rSet, std::vector< NamedValue >& _out_properties )
     {
@@ -453,7 +443,6 @@ namespace pcr
         }
     }
 
-
     void ControlCharacterDialog::translateItemsToProperties( const SfxItemSet& _rSet, const Reference< XPropertySet >& _rxModel)
     {
         OSL_ENSURE( _rxModel.is(), "ControlCharacterDialog::translateItemsToProperties: invalid arguments!" );
@@ -472,7 +461,6 @@ namespace pcr
             DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
         }
     }
-
 
     void ControlCharacterDialog::createItemSet(std::unique_ptr<SfxItemSet>& _rpSet, SfxItemPool*& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults)
     {
@@ -544,7 +532,6 @@ namespace pcr
         _rpSet.reset(new SfxItemSet(*_rpPool));
     }
 
-
     void ControlCharacterDialog::destroyItemSet(std::unique_ptr<SfxItemSet>& _rpSet, SfxItemPool*& _rpPool, std::vector<SfxPoolItem*>*& _rpDefaults)
     {
         // from the pool, get and remember the font list (needs to be deleted)
@@ -567,18 +554,16 @@ namespace pcr
         delete pFontList;
     }
 
-
-    void ControlCharacterDialog::PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage )
+    void ControlCharacterDialog::PageCreated(const OString& rId, SfxTabPage& rPage)
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-        if ( _nId == m_nCharsId ) {
+        if (rId == "font")
+        {
             aSet.Put (SvxFontListItem(static_cast<const SvxFontListItem&>(GetInputSetImpl()->Get(CFID_FONTLIST))));
             aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_HIDE_LANGUAGE));
-            _rPage.PageCreated(aSet);
+            rPage.PageCreated(aSet);
         }
     }
-
-
 }   // namespace pcr
 
 
