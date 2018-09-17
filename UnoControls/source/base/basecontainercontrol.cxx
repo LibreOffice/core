@@ -123,10 +123,6 @@ void SAL_CALL BaseContainerControl::createPeer( const   Reference< XToolkit >&  
         {
             seqControlList.getArray()[n]->createPeer( xToolkit, getPeer() );
         }
-
-        // activate new tab order
-        impl_activateTabControllers();
-
     }
 }
 
@@ -217,7 +213,6 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
     {
         // .. then create a peer on child
         pNewControl->xControl->createPeer ( getPeer()->getToolkit(), getPeer() );
-        impl_activateTabControllers ();
     }
 
     // Send message to all listener
@@ -391,23 +386,6 @@ WindowDescriptor* BaseContainerControl::impl_getWindowDescriptor ( const Referen
 
 void BaseContainerControl::impl_paint ( sal_Int32 /*nX*/, sal_Int32 /*nY*/, const Reference< XGraphics > & /*rGraphics*/ )
 {
-}
-
-//  private method
-
-void BaseContainerControl::impl_activateTabControllers ()
-{
-    // Ready for multithreading
-    MutexGuard aGuard (m_aMutex);
-
-    sal_uInt32  nMaxCount   =   m_xTabControllerList.getLength ();
-    sal_uInt32  nCount      =   0;
-
-    for ( nCount = 0; nCount < nMaxCount; ++nCount )
-    {
-         m_xTabControllerList.getArray () [nCount]->setContainer        ( this  );
-         m_xTabControllerList.getArray () [nCount]->activateTabOrder    (       );
-    }
 }
 
 } // namespace unocontrols
