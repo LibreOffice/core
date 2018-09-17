@@ -63,6 +63,7 @@
 #include <com/sun/star/text/BibliographyDataType.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/rdf/XMetadatable.hpp>
+#include <comphelper/sequence.hxx>
 #include <o3tl/any.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
@@ -1922,17 +1923,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
             if (aMapIter != pUsedMasters->end())
             {
                 // found the set of used field masters
-                set<OUString> & rOurMasters = aMapIter->second;
-
-                // copy set to sequence
-                aFieldMasters.realloc( rOurMasters.size() );
-                sal_Int32 i = 0;
-                for( const auto& rMaster : rOurMasters )
-                {
-                    aFieldMasters[i] = rMaster;
-                    ++i;
-                }
-
+                aFieldMasters = comphelper::containerToSequence(aMapIter->second);
                 pUsedMasters->erase(rText);
             }
             // else: XText not found -> ignore
