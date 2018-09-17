@@ -2819,7 +2819,7 @@ void DbGridControl::Command(const CommandEvent& rEvt)
                 }
             }
 
-            sal_uInt16 nColId = GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X());
+            sal_uInt16 nColId = GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X())+(GetModelColCount()-GetViewColCount());
             long   nRow = GetRowAtYPosPixel(rEvt.GetMousePosPixel().Y());
 
             if (nColId == HandleColumnId)
