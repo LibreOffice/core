@@ -35,7 +35,7 @@ class XMLEventContextFactory;
 class XMLEventsImportContext;
 struct XMLEventNameTranslation;
 
-typedef ::std::map< OUString, XMLEventContextFactory* > FactoryMap;
+typedef ::std::map< OUString, std::unique_ptr<XMLEventContextFactory> > FactoryMap;
 typedef ::std::map< XMLEventName, OUString > NameMap;
 
 
@@ -70,7 +70,7 @@ public:
 
     /// register a handler for a particular language type
     void RegisterFactory( const OUString& rLanguage,
-                          XMLEventContextFactory* aFactory );
+                          std::unique_ptr<XMLEventContextFactory> aFactory );
 
     /// add event name translation to the internal table
     void AddTranslationTable( const XMLEventNameTranslation* pTransTable );
