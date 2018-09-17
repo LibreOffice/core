@@ -89,7 +89,8 @@ namespace vcl
     class VCL_DLLPUBLIC LazyDeletorBase
     {
         friend void LazyDelete::flush();
-        protected:
+        friend struct std::default_delete<LazyDeletorBase>;
+    protected:
         LazyDeletorBase();
         virtual ~LazyDeletorBase();
     };
