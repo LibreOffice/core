@@ -851,7 +851,9 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
            aFilterArgs, rName, true );
 
     if( !(IsOrganizerMode() || IsBlockMode() || m_bInsertMode ||
-          m_aOption.IsFormatsOnly() ) )
+          m_aOption.IsFormatsOnly() ||
+            // sw_redlinehide: disable layout cache for now
+          (getenv("SW_REDLINEHIDE") && !*o3tl::doAccess<bool>(xInfoSet->getPropertyValue(sShowChanges)))))
     {
         try
         {

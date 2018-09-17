@@ -376,7 +376,9 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     }
 
     if( m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() && m_pDoc->getIDocumentStatistics().GetDocStat().nPage > 1 &&
-        !(m_bOrganizerMode || m_bBlock || bErr) )
+        !(m_bOrganizerMode || m_bBlock || bErr ||
+            // sw_redlinehide: disable layout cache for now
+            m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->IsHideRedlines()))
     {
         try
         {
