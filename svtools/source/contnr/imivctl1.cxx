@@ -2456,7 +2456,7 @@ static tools::Rectangle GetHotSpot( const tools::Rectangle& rRect )
 }
 
 void SvxIconChoiceCtrl_Impl::SelectRect( SvxIconChoiceCtrlEntry* pEntry1, SvxIconChoiceCtrlEntry* pEntry2,
-    bool bAdd, std::vector<tools::Rectangle*>* pOtherRects )
+    bool bAdd, std::vector<tools::Rectangle>* pOtherRects )
 {
     DBG_ASSERT(pEntry1 && pEntry2,"SelectEntry: Invalid Entry-Ptr");
     tools::Rectangle aRect( GetEntryBoundRect( pEntry1 ) );
@@ -2465,7 +2465,7 @@ void SvxIconChoiceCtrl_Impl::SelectRect( SvxIconChoiceCtrlEntry* pEntry1, SvxIco
 }
 
 void SvxIconChoiceCtrl_Impl::SelectRect( const tools::Rectangle& rRect, bool bAdd,
-    std::vector<tools::Rectangle*>* pOtherRects )
+    std::vector<tools::Rectangle>* pOtherRects )
 {
     aCurSelectionRect = rRect;
     if( !pZOrderList || !pZOrderList->size() )
@@ -2607,13 +2607,13 @@ void SvxIconChoiceCtrl_Impl::SelectRange(
     }
 }
 
-bool SvxIconChoiceCtrl_Impl::IsOver( std::vector<tools::Rectangle*>* pRectList, const tools::Rectangle& rBoundRect )
+bool SvxIconChoiceCtrl_Impl::IsOver( std::vector<tools::Rectangle>* pRectList, const tools::Rectangle& rBoundRect )
 {
     const sal_uInt16 nCount = pRectList->size();
     for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
     {
-        tools::Rectangle* pRect = (*pRectList)[ nCur ];
-        if( rBoundRect.IsOver( *pRect ))
+        tools::Rectangle& rRect = (*pRectList)[ nCur ];
+        if( rBoundRect.IsOver( rRect ))
             return true;
     }
     return false;
@@ -2630,19 +2630,13 @@ void SvxIconChoiceCtrl_Impl::AddSelectedRect( SvxIconChoiceCtrlEntry* pEntry1,
 
 void SvxIconChoiceCtrl_Impl::AddSelectedRect( const tools::Rectangle& rRect )
 {
-    tools::Rectangle* pRect = new tools::Rectangle( rRect );
-    pRect->Justify();
-    aSelectedRectList.push_back( pRect );
+    tools::Rectangle newRect = rRect;
+    newRect.Justify();
+    aSelectedRectList.push_back( newRect );
 }
 
 void SvxIconChoiceCtrl_Impl::ClearSelectedRectList()
 {
-    const sal_uInt16 nCount = aSelectedRectList.size();
-    for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
-    {
-        tools::Rectangle* pRect = aSelectedRectList[ nCur ];
-        delete pRect;
-    }
     aSelectedRectList.clear();
 }
 
