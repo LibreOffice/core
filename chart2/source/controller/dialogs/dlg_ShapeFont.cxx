@@ -32,28 +32,25 @@ using namespace ::com::sun::star;
 namespace chart
 {
 
-ShapeFontDialog::ShapeFontDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
-    const ViewElementListProvider* pViewElementListProvider )
-    : SfxTabDialog(pParent, "CharDialog",
-        "modules/schart/ui/chardialog.ui", pAttr)
+ShapeFontDialog::ShapeFontDialog(weld::Window* pParent, const SfxItemSet* pAttr,
+    const ViewElementListProvider* pViewElementListProvider)
+    : SfxTabDialogController(pParent, "modules/schart/ui/chardialog.ui", "CharDialog", pAttr)
     , m_pViewElementListProvider(pViewElementListProvider)
-    , m_nNamePageId(0)
-    , m_nEffectsPageId(0)
 {
-    m_nNamePageId = AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
-    m_nEffectsPageId = AddTabPage("fonteffects", RID_SVXPAGE_CHAR_EFFECTS);
+    AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
+    AddTabPage("fonteffects", RID_SVXPAGE_CHAR_EFFECTS);
     AddTabPage("position", RID_SVXPAGE_CHAR_POSITION );
 }
 
-void ShapeFontDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
+void ShapeFontDialog::PageCreated(const OString& rId, SfxTabPage& rPage)
 {
     SfxAllItemSet aSet( *( GetInputSetImpl()->GetPool() ) );
-    if (nId == m_nNamePageId)
+    if (rId == "font")
     {
         aSet.Put( SvxFontListItem( m_pViewElementListProvider->getFontList(), SID_ATTR_CHAR_FONTLIST ) );
         rPage.PageCreated( aSet );
     }
-    else if (nId == m_nEffectsPageId)
+    else if (rId == "fonteffects")
     {
         aSet.Put( SfxUInt16Item( SID_DISABLE_CTL, DISABLE_CASEMAP ) );
         rPage.PageCreated( aSet );
