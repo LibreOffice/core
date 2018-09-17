@@ -28,21 +28,15 @@ class SfxObjectShell;
 /**
  * Character-Tab-Dialog
  */
-class SdCharDlg : public SfxTabDialog
+class SdCharDlg : public SfxTabDialogController
 {
 private:
-    sal_uInt16 mnCharName;
-    sal_uInt16 mnCharEffects;
-    sal_uInt16 mnCharBackground;
-
     const SfxObjectShell&   rDocShell;
 
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
+    virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
 
 public:
-
-            SdCharDlg( vcl::Window* pParent, const SfxItemSet* pAttr,
-                        const SfxObjectShell* pDocShell );
+    SdCharDlg(weld::Window* pParent, const SfxItemSet* pAttr, const SfxObjectShell* pDocShell);
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_DLG_CHAR_HXX

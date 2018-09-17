@@ -30,38 +30,35 @@
 /**
  * Constructor of tab dialog: append pages to dialog
  */
-SdCharDlg::SdCharDlg( vcl::Window* pParent, const SfxItemSet* pAttr,
-                    const SfxObjectShell* pDocShell ) :
-        SfxTabDialog        ( pParent
-                             ,"DrawCharDialog"
-                             ,"modules/sdraw/ui/drawchardialog.ui"
-                             , pAttr ),
-        rDocShell           ( *pDocShell )
+SdCharDlg::SdCharDlg(weld::Window* pParent, const SfxItemSet* pAttr,
+                    const SfxObjectShell* pDocShell)
+    : SfxTabDialogController(pParent, "modules/sdraw/ui/drawchardialog.ui",
+                             "DrawCharDialog", pAttr)
+    , rDocShell(*pDocShell)
 {
-
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
-    mnCharName = AddTabPage( "RID_SVXPAGE_CHAR_NAME", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), nullptr );
-    mnCharEffects =  AddTabPage( "RID_SVXPAGE_CHAR_EFFECTS", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), nullptr );
-    AddTabPage( "RID_SVXPAGE_CHAR_POSITION", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), nullptr );
-    mnCharBackground = AddTabPage( "RID_SVXPAGE_BACKGROUND", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr );
+    AddTabPage("RID_SVXPAGE_CHAR_NAME", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), nullptr);
+    AddTabPage("RID_SVXPAGE_CHAR_EFFECTS", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), nullptr);
+    AddTabPage("RID_SVXPAGE_CHAR_POSITION", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_POSITION), nullptr);
+    AddTabPage("RID_SVXPAGE_BACKGROUND", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_BACKGROUND), nullptr);
 }
 
-void SdCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SdCharDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-    if (nId == mnCharName)
+    if (rId == "RID_SVXPAGE_CHAR_NAME")
     {
         SvxFontListItem aItem(* static_cast<const SvxFontListItem*>( rDocShell.GetItem( SID_ATTR_CHAR_FONTLIST) ) );
 
         aSet.Put (SvxFontListItem( aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
         rPage.PageCreated(aSet);
     }
-    else if (nId == mnCharEffects)
+    else if (rId == "RID_SVXPAGE_CHAR_EFFECTS")
     {
         rPage.PageCreated(aSet);
     }
-    else if (nId == mnCharBackground)
+    else if (rId == "RID_SVXPAGE_BACKGROUND")
     {
         aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR)));
         rPage.PageCreated(aSet);

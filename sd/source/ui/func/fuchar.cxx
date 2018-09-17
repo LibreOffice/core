@@ -72,7 +72,7 @@ void FuChar::DoExecute( SfxRequest& rReq )
         aNewAttr.Put( aEditAttr, false );
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSdTabCharDialog(mpViewShell->GetActiveWindow(), &aNewAttr, mpDoc->GetDocSh() ) );
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSdTabCharDialog(mpViewShell->GetFrameWeld(), &aNewAttr, mpDoc->GetDocSh() ) );
         if (rReq.GetSlot() == SID_CHAR_DLG_EFFECT)
         {
             pDlg->SetCurPageId("RID_SVXPAGE_CHAR_EFFECTS");
