@@ -88,6 +88,24 @@
     },
     {
       "key": {
+        "uuid": "bff0334d_86366eb4",
+        "filename": "sd/source/ui/inc/LayerTabBar.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2018-09-17T11:07:38Z",
+      "side": 1,
+      "message": "That is a good tip. I have already wondered, how to use these methods outside LayerTabBar.",
+      "parentUuid": "bff0334d_802776b7",
+      "revId": "405f2a3dd4b4e0daaca50348ebfd4557d42cb067",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bff0334d_602c7299",
         "filename": "sd/source/ui/inc/LayerTabBar.hxx",
         "patchSetId": 1
