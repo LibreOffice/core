@@ -176,9 +176,13 @@ namespace
         // tdf#81835 prefer RTF/HTML over GDI Metafile
         CPPUNIT_ASSERT(FindFormatIndex(pFormats, SotClipboardFormatId::RTF) < FindFormatIndex(pFormats, SotClipboardFormatId::GDIMETAFILE));
         CPPUNIT_ASSERT(FindFormatIndex(pFormats, SotClipboardFormatId::HTML) < FindFormatIndex(pFormats, SotClipboardFormatId::GDIMETAFILE));
+#ifndef MACOSX
         // tdf#115574 prefer RTF over BITMAP (Excel provides a BITMAP we can't
         // read, also Excel paste result used to be an editable table)
         CPPUNIT_ASSERT(FindFormatIndex(pFormats, SotClipboardFormatId::RTF) < FindFormatIndex(pFormats, SotClipboardFormatId::BITMAP));
+#else
+        CPPUNIT_ASSERT(FindFormatIndex(pFormats, SotClipboardFormatId::BITMAP) < FindFormatIndex(pFormats, SotClipboardFormatId::RTF));
+#endif
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(SotTest);
