@@ -2702,22 +2702,7 @@ void SwFEShell::SetObjAttr( const SfxItemSet& rSet )
 
 bool SwFEShell::IsAlignPossible() const
 {
-    const size_t nCnt = IsObjSelected();
-    if ( 0 < nCnt )
-    {
-        bool bRet = true;
-        if ( nCnt == 1 )
-        {
-            SdrObject *pO = Imp()->GetDrawView()->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
-            SwDrawContact *pC = static_cast<SwDrawContact*>(GetUserCall(pO));
-            OSL_ENSURE( pC, "No SwDrawContact!");
-            //only as character bound drawings can be aligned
-            bRet = pC && pC->GetFormat()->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR;
-        }
-        if ( bRet )
-            return Imp()->GetDrawView()->IsAlignPossible();
-    }
-    return false;
+    return Imp()->GetDrawView()->IsAlignPossible();
 }
 
 // temporary fix till  SS of JOE is available
