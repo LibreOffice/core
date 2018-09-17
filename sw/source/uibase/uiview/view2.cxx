@@ -28,6 +28,7 @@
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
+#include <officecfg/Office/Common.hxx>
 #include <svl/aeitem.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <docary.hxx>
@@ -640,7 +641,9 @@ void SwView::Execute(SfxRequest &rReq)
                 if( static_cast<const SfxBoolItem*>(pItem)->GetValue() )
                     nMode |= RedlineFlags::ShowDelete;
 
-                if (getenv("SW_REDLINEHIDE")) // TODO...
+                uno::Reference<uno::XComponentContext> const xContext(
+                        comphelper::getProcessComponentContext());
+                if (officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
                 {
                     m_pWrtShell->GetLayout()->SetHideRedlines(
                         !static_cast<const SfxBoolItem*>(pItem)->GetValue());

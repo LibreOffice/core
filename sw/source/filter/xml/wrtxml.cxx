@@ -26,6 +26,8 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/frame/XModule.hpp>
 
+#include <officecfg/Office/Common.hxx>
+
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/genericpropertyset.hxx>
@@ -183,7 +185,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     const OUString sShowChanges("ShowChanges");
     RedlineFlags nRedlineFlags = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
     bool isShowChanges;
-    if (getenv("SW_REDLINEHIDE"))
+    if (officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
     {   // TODO: ideally this would be stored per-view...
         isShowChanges = !m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->IsHideRedlines();
     }
@@ -415,7 +417,7 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     nRedlineFlags = m_pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
     nRedlineFlags &= ~RedlineFlags::ShowMask;
     nRedlineFlags |= RedlineFlags::ShowInsert;
-    if (getenv("SW_REDLINEHIDE"))
+    if (officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
     {
         nRedlineFlags |= RedlineFlags::ShowDelete;
     }
