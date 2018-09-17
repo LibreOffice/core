@@ -32,7 +32,7 @@ class ScVbaCommandBarControls : public CommandBarControls_BASE
 private:
     VbaCommandBarHelperRef                              pCBarHelper;
     css::uno::Reference< css::container::XIndexAccess > m_xBarSettings;
-    OUString                                            m_sResourceUrl;
+    OUString const                                      m_sResourceUrl;
     bool                                                m_bIsMenu;
 
     static css::uno::Sequence< css::beans::PropertyValue > CreateMenuItemData( const OUString& sCommandURL,

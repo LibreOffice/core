@@ -432,8 +432,8 @@ void SAL_CALL ScVbaControl::setTag( const OUString& aTag )
 
 struct PointerStyles
 {
-   long msoPointerStyle;
-   PointerStyle loPointStyle;
+   long const msoPointerStyle;
+   PointerStyle const loPointStyle;
 };
 
 // 1 -> 1 map of styles ( some dubious choices in there though )

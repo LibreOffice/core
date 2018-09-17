@@ -29,7 +29,7 @@ const OUString SVALUE( "MultiPageValue" );
 
 class PagesImpl : public cppu::WeakImplHelper< container::XIndexAccess >
 {
-    sal_Int32 mnPages;
+    sal_Int32 const mnPages;
 public:
     explicit PagesImpl( sal_Int32 nPages ) : mnPages( nPages ) {}
     virtual ::sal_Int32 SAL_CALL getCount() override { return mnPages; }

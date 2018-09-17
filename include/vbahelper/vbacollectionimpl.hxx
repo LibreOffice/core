@@ -238,7 +238,7 @@ typedef InheritedHelperInterfaceImpl< Ifc... > BaseColBase;
 protected:
     css::uno::Reference< css::container::XIndexAccess > m_xIndexAccess;
     css::uno::Reference< css::container::XNameAccess > m_xNameAccess;
-    bool mbIgnoreCase;
+    bool const mbIgnoreCase;
 
     /// @throws css::uno::RuntimeException
     virtual css::uno::Any getItemByStringIndex( const OUString& sIndex )

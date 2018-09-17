@@ -47,7 +47,7 @@ class VBAHELPER_DLLPUBLIC VbaFontBase : public VbaFontBase_BASE
 protected:
     css::uno::Reference< css::beans::XPropertySet > mxFont;
     css::uno::Reference< css::container::XIndexAccess > mxPalette;
-    bool mbFormControl;
+    bool const mbFormControl;
 
 public:
     // use local constants there is no need to expose these constants

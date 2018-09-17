@@ -56,7 +56,7 @@ public:
     };
 
 private:
-    DOCUMENT_TYPE meDocType;
+    DOCUMENT_TYPE const meDocType;
 
 public:
     /// @throws css::uno::RuntimeException

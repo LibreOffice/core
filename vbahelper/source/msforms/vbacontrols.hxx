@@ -54,8 +54,8 @@ public:
 private:
     css::uno::Reference< css::awt::XControl > mxDialog;
     css::uno::Reference< css::frame::XModel > mxModel;
-    double mfOffsetX;
-    double mfOffsetY;
+    double const mfOffsetX;
+    double const mfOffsetY;
 };
 
 #endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACONTROLS_HXX
