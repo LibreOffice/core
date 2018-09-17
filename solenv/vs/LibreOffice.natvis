@@ -450,4 +450,12 @@
       <ExpandedItem>(SwLayoutFrame&amp;)(*this)</ExpandedItem>
     </Expand>
   </Type>
+  <Type Name="boost::optional&lt;*&gt;">
+    <DisplayString Condition="!m_initialized">Optional not set</DisplayString>
+    <DisplayString>{*reinterpret_cast&lt;$T1 *&gt;(m_storage.dummy_.data)}</DisplayString>
+    <Expand>
+      <Item Name="initialized">m_initialized</Item>
+      <Item Name="data">*reinterpret_cast&lt;$T1 *&gt;(m_storage.dummy_.data)</Item>
+    </Expand>
+  </Type>
 </AutoVisualizer>
