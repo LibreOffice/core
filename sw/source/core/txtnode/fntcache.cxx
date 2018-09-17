@@ -135,10 +135,6 @@ bool operator<(const SwTextGlyphsKey& l, const SwTextGlyphsKey& r)
         return true;
     if (l.m_pOutputDevice.get() > r.m_pOutputDevice.get())
         return false;
-    if (l.m_aText < r.m_aText)
-        return true;
-    if (l.m_aText > r.m_aText)
-        return false;
     if (l.m_nIndex < r.m_nIndex)
         return true;
     if (l.m_nIndex > r.m_nIndex)
@@ -147,6 +143,15 @@ bool operator<(const SwTextGlyphsKey& l, const SwTextGlyphsKey& r)
         return true;
     if (l.m_nLength > r.m_nLength)
         return false;
+
+    // Comparing strings is expensive, so compare them only at the end, and
+    // only once.
+    sal_Int32 nRet = l.m_aText.compareTo(r.m_aText);
+    if (nRet < 0)
+        return true;
+    if (nRet > 0)
+        return false;
+
     return false;
 };
 
