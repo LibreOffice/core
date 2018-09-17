@@ -3161,8 +3161,8 @@ SvLBoxTab* SvImpLBox::NextTab( SvLBoxTab const * pTab )
         return nullptr;
     for( int nTab=0; nTab < (nTabCount-1); nTab++)
     {
-        if( pView->aTabs[nTab]==pTab )
-            return pView->aTabs[nTab+1];
+        if( pView->aTabs[nTab].get() == pTab )
+            return pView->aTabs[nTab+1].get();
     }
     return nullptr;
 }
@@ -3199,7 +3199,7 @@ bool SvImpLBox::SetMostRight( SvTreeListEntry* pEntry )
         if( nLastItem < nLastTab )
             nLastTab = nLastItem;
 
-        SvLBoxTab* pTab = pView->aTabs[ nLastTab ];
+        SvLBoxTab* pTab = pView->aTabs[ nLastTab ].get();
         SvLBoxItem& rItem = pEntry->GetItem( nLastTab );
 
         long nTabPos = pView->GetTabPos( pEntry, pTab );
