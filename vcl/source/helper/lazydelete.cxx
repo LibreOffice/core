@@ -37,20 +37,17 @@ LazyDeletorBase::~LazyDeletorBase()
 LazyDeletor* LazyDeletor::s_pOneInstance = nullptr;
 
 // a list for all LazyeDeletor<T> singletons
-static std::vector< LazyDeletorBase* > lcl_aDeletors;
+static std::vector< std::unique_ptr<LazyDeletorBase> > lcl_aDeletors;
 
 void LazyDelete::addDeletor( LazyDeletorBase* i_pDel )
 {
-    lcl_aDeletors.push_back( i_pDel );
+    lcl_aDeletors.emplace_back( i_pDel );
 }
 
 void LazyDelete::flush()
 {
     DBG_TESTSOLARMUTEX(); // must be locked
 
-    unsigned int nCount = lcl_aDeletors.size();
-    for( unsigned int i = 0; i < nCount; i++ )
-        delete lcl_aDeletors[i];
     lcl_aDeletors.clear();
 }
 
