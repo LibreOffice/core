@@ -85,16 +85,16 @@ namespace sdr
 
         void MeasureProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
-            // get access to dimension line object
-            SdrMeasureObj& rObj = static_cast<SdrMeasureObj&>(GetSdrObject());
-
-            // call parent
+            // call parent (always first thing to do, may create the SfxItemSet)
             TextProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
 
             // local changes
+            // get access to dimension line object
+            SdrMeasureObj& rObj = static_cast<SdrMeasureObj&>(GetSdrObject());
 
             // mark dimension line text as changed (dirty) in the dimension line object
             rObj.SetTextDirty();
+
             // tdf#98525 ask the dimension line object to redraw the changed text
             rObj.UndirtyText();
         }
