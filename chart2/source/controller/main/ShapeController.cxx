@@ -547,10 +547,10 @@ void ShapeController::executeDispatch_ParagraphDialog()
             aNewAttr.Put( SvxWidowsItem( 0, SID_ATTR_PARA_WIDOWS) );
             aNewAttr.Put( SvxOrphansItem( 0, SID_ATTR_PARA_ORPHANS) );
 
-            ScopedVclPtrInstance< ShapeParagraphDialog > pDlg( pChartWindow, &aNewAttr );
-            if ( pDlg->Execute() == RET_OK )
+            ShapeParagraphDialog aDlg(pChartWindow->GetFrameWeld(), &aNewAttr);
+            if (aDlg.execute() == RET_OK)
             {
-                const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
+                const SfxItemSet* pOutAttr = aDlg.GetOutputItemSet();
                 pDrawViewWrapper->SetAttributes( *pOutAttr );
             }
         }
