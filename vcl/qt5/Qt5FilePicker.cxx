@@ -78,14 +78,14 @@ uno::Sequence<OUString> FilePicker_getSupportedServiceNames()
 
 Qt5FilePicker::Qt5FilePicker(QFileDialog::FileMode eMode)
     : Qt5FilePicker_Base(m_aHelperMutex)
+    , m_pFileDialog(new QFileDialog())
 {
-    m_pFileDialog = new QFileDialog();
-    m_pOptionsDialog = new QDialog();
-
+    m_pFileDialog->setOption(QFileDialog::DontUseNativeDialog);
     m_pFileDialog->setFileMode(eMode);
-    //    m_pFileDialog->setWindowModality( Qt::WindowModal );
     m_pFileDialog->setWindowModality(Qt::ApplicationModal);
-    m_pOptionsDialog->setWindowModality(Qt::WindowModal);
+
+    m_pExtraControls = new QWidget();
+    m_pLayout = dynamic_cast<QGridLayout*>(m_pFileDialog->layout());
 
     setMultiSelectionMode(false);
 
@@ -145,27 +145,14 @@ Qt5FilePicker::Qt5FilePicker(QFileDialog::FileMode eMode)
             SLOT(initializeSlot(const css::uno::Sequence<css::uno::Any>&)),
             Qt::BlockingQueuedConnection);
 
-    // Destructor proxy
-    connect(this, SIGNAL(cleanupProxySignal()), this, SLOT(cleanupProxy()),
-            Qt::BlockingQueuedConnection);
-
     // XFilePickerListener notifications
-    connect(m_pFileDialog, SIGNAL(filterSelected(const QString&)), this,
+    connect(m_pFileDialog.get(), SIGNAL(filterSelected(const QString&)), this,
             SLOT(filterSelected(const QString&)));
-    connect(m_pFileDialog, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+    connect(m_pFileDialog.get(), SIGNAL(currentChanged(const QString&)), this,
+            SLOT(currentChanged(const QString&)));
 }
 
-Qt5FilePicker::~Qt5FilePicker() { cleanupProxy(); }
-
-void Qt5FilePicker::cleanupProxy()
-{
-    if (qApp->thread() != QThread::currentThread())
-    {
-        SolarMutexReleaser aReleaser;
-        return Q_EMIT cleanupProxySignal();
-    }
-    delete m_pOptionsDialog;
-}
+Qt5FilePicker::~Qt5FilePicker() {}
 
 void SAL_CALL
 Qt5FilePicker::addFilePickerListener(const uno::Reference<XFilePickerListener>& xListener)
@@ -188,7 +175,7 @@ void SAL_CALL Qt5FilePicker::setTitle(const OUString& title)
         return Q_EMIT setTitleSignal(title);
     }
 
-    m_pOptionsDialog->setWindowTitle(toQString(title));
+    m_pFileDialog->setWindowTitle(toQString(title));
 }
 
 sal_Int16 SAL_CALL Qt5FilePicker::execute()
@@ -214,52 +201,21 @@ sal_Int16 SAL_CALL Qt5FilePicker::execute()
         }
     }
 
-    m_pFileDialog->setNameFilters(m_aNamedFilterList);
-    if (!m_aCurrentFilterTitle.isNull())
-    {
-        int i = 0;
-        for (; i < m_aFilterTitleList.size(); ++i)
-            if (m_aCurrentFilterTitle == m_aFilterTitleList[i])
-            {
-                m_pFileDialog->selectNameFilter(m_aNamedFilterList[i]);
-                break;
-            }
-        assert(i < m_aFilterTitleList.size());
-    }
+    if (!m_aNamedFilterList.isEmpty())
+        m_pFileDialog->setNameFilters(m_aNamedFilterList);
+    if (!m_aCurrentFilter.isEmpty())
+        m_pFileDialog->selectNameFilter(m_aCurrentFilter);
 
     if (pTransientParent)
     {
         m_pFileDialog->show();
         m_pFileDialog->window()->windowHandle()->setTransientParent(pTransientWindow);
         m_pFileDialog->setFocusProxy(pTransientParent);
-        //        pTransientParent->setMouseTracking( false );
     }
+
     int result = m_pFileDialog->exec();
-    if (pTransientParent)
-        //        pTransientParent->setMouseTracking( true );
-        if (QFileDialog::Rejected == result)
-            return ExecutableDialogResults::CANCEL;
-
-    if (!m_aCustomWidgetsMap.empty())
-    {
-        m_pFilenameLabel->setText(m_pFileDialog->selectedUrls()[0].url());
-        QString filter = m_pFileDialog->selectedNameFilter();
-        int pos = filter.indexOf(" (");
-        if (pos >= 0)
-            filter.truncate(pos);
-        m_pFilterLabel->setText(filter);
-
-        if (pTransientParent)
-        {
-            m_pOptionsDialog->show();
-            m_pOptionsDialog->window()->windowHandle()->setTransientParent(pTransientWindow);
-            m_pOptionsDialog->setFocusProxy(pTransientParent);
-        }
-        result = m_pOptionsDialog->exec();
-        if (QFileDialog::Rejected == result)
-            return ExecutableDialogResults::CANCEL;
-    }
-
+    if (QFileDialog::Rejected == result)
+        return ExecutableDialogResults::CANCEL;
     return ExecutableDialogResults::OK;
 }
 
@@ -343,16 +299,16 @@ void SAL_CALL Qt5FilePicker::appendFilter(const OUString& title, const OUString&
         return Q_EMIT appendFilterSignal(title, filter);
     }
 
-    QString t = toQString(title);
-    QString f = toQString(filter);
+    // '/' need to be escaped else they are assumed to be mime types
+    QString t = toQString(title).replace("/", "\\/");
 
-    // '/' need to be escaped else they are assumed to be mime types by kfiledialog
-    //see the docs
-    t.replace("/", "\\/");
-
-    int pos = t.indexOf(" (");
+    QString n = t;
+    // strip duplicated type
+    int pos = n.indexOf(" (");
     if (pos >= 0)
-        t.truncate(pos);
+        n.truncate(pos);
+
+    QString f = toQString(filter);
 
     // openoffice gives us filters separated by ';' qt dialogs just want space separated
     f.replace(";", " ");
@@ -360,8 +316,8 @@ void SAL_CALL Qt5FilePicker::appendFilter(const OUString& title, const OUString&
     // make sure "*.*" is not used as "all files"
     f.replace("*.*", "*");
 
-    m_aFilterTitleList.append(toQString(title));
-    m_aNamedFilterList.append(QString("%1 (%2)").arg(t).arg(f));
+    m_aNamedFilterList << QStringLiteral("%1 (%2)").arg(n, f);
+    m_aTitleToFilterMap[t] = m_aNamedFilterList.constLast();
 }
 
 void SAL_CALL Qt5FilePicker::setCurrentFilter(const OUString& title)
@@ -372,7 +328,7 @@ void SAL_CALL Qt5FilePicker::setCurrentFilter(const OUString& title)
         return Q_EMIT setCurrentFilterSignal(title);
     }
 
-    m_aCurrentFilterTitle = toQString(title);
+    m_aCurrentFilter = m_aTitleToFilterMap.value(toQString(title).replace("/", "\\/"));
 }
 
 OUString SAL_CALL Qt5FilePicker::getCurrentFilter()
@@ -383,13 +339,10 @@ OUString SAL_CALL Qt5FilePicker::getCurrentFilter()
         return Q_EMIT getCurrentFilterSignal();
     }
 
-    QString filter = m_pFileDialog->selectedNameFilter();
-    for (int i = 0; i < m_aNamedFilterList.size(); ++i)
-        if (filter == m_aNamedFilterList[i])
-            return toOUString(m_aFilterTitleList[i]);
-    SAL_WARN("vcl.qt5", m_aNamedFilterList.size() << " Unknown filter: " << toOUString(filter));
-    assert(!"Selected filter not in filter list?! ");
-    return OUString("");
+    QString filter = m_aTitleToFilterMap.key(m_pFileDialog->selectedNameFilter());
+    if (filter.isEmpty())
+        filter = "ODF Text Document (.odt)";
+    return toOUString(filter);
 }
 
 void SAL_CALL Qt5FilePicker::appendFilterGroup(const OUString& rGroupTitle,
@@ -409,6 +362,81 @@ void SAL_CALL Qt5FilePicker::appendFilterGroup(const OUString& rGroupTitle,
     }
 }
 
+static uno::Any HandleGetListValue(QComboBox* pWidget, sal_Int16 nControlAction)
+{
+    uno::Any aAny;
+    switch (nControlAction)
+    {
+        case ControlActions::GET_ITEMS:
+        {
+            Sequence<OUString> aItemList(pWidget->count());
+            for (sal_Int32 i = 0; i < pWidget->count(); ++i)
+                aItemList[i] = toOUString(pWidget->itemText(i));
+            aAny <<= aItemList;
+            break;
+        }
+        case ControlActions::GET_SELECTED_ITEM:
+        {
+            if (!pWidget->currentText().isEmpty())
+                aAny <<= toOUString(pWidget->currentText());
+            break;
+        }
+        case ControlActions::GET_SELECTED_ITEM_INDEX:
+        {
+            if (pWidget->currentIndex() >= 0)
+                aAny <<= static_cast<sal_Int32>(pWidget->currentIndex());
+            break;
+        }
+        default:
+            SAL_WARN("vcl.qt5",
+                     "undocumented/unimplemented ControlAction for a list " << nControlAction);
+            break;
+    }
+    return aAny;
+}
+
+static void HandleSetListValue(QComboBox* pWidget, sal_Int16 nControlAction, const uno::Any& rValue)
+{
+    switch (nControlAction)
+    {
+        case ControlActions::ADD_ITEM:
+        {
+            OUString sItem;
+            rValue >>= sItem;
+            pWidget->addItem(toQString(sItem));
+            break;
+        }
+        case ControlActions::ADD_ITEMS:
+        {
+            Sequence<OUString> aStringList;
+            rValue >>= aStringList;
+            for (auto const& sItem : aStringList)
+                pWidget->addItem(toQString(sItem));
+            break;
+        }
+        case ControlActions::DELETE_ITEM:
+        {
+            sal_Int32 nPos = 0;
+            rValue >>= nPos;
+            pWidget->removeItem(nPos);
+            break;
+        }
+        case ControlActions::SET_SELECT_ITEM:
+        {
+            sal_Int32 nPos = 0;
+            rValue >>= nPos;
+            pWidget->setCurrentIndex(nPos);
+            break;
+        }
+        default:
+            SAL_WARN("vcl.qt5",
+                     "undocumented/unimplemented ControlAction for a list " << nControlAction);
+            break;
+    }
+
+    pWidget->setEnabled(pWidget->count() > 0);
+}
+
 void SAL_CALL Qt5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAction,
                                       const uno::Any& value)
 {
@@ -420,24 +448,23 @@ void SAL_CALL Qt5FilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlAct
 
     if (m_aCustomWidgetsMap.contains(controlId))
     {
-        QCheckBox* cb = dynamic_cast<QCheckBox*>(m_aCustomWidgetsMap.value(controlId));
+        QWidget* widget = m_aCustomWidgetsMap.value(controlId);
+        QCheckBox* cb = dynamic_cast<QCheckBox*>(widget);
         if (cb)
             cb->setChecked(value.get<bool>());
+        else
+        {
+            QComboBox* combo = dynamic_cast<QComboBox*>(widget);
+            if (combo)
+                HandleSetListValue(combo, nControlAction, value);
+        }
     }
     else
-        SAL_WARN("vcl", "set label on unknown control " << controlId);
+        SAL_WARN("vcl.qt5", "set value on unknown control " << controlId);
 }
 
 uno::Any SAL_CALL Qt5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
 {
-    if (CHECKBOX_AUTOEXTENSION == controlId)
-        // We ignore this one and rely on QFileDialog to provide the function.
-        // Always return false, to pretend we do not support this, otherwise
-        // LO core would try to be smart and cut the extension in some places,
-        // interfering with QFileDialog's handling of it. QFileDialog also
-        // saves the value of the setting, so LO core is not needed for that either.
-        return uno::Any(false);
-
     if (qApp->thread() != QThread::currentThread())
     {
         SolarMutexReleaser aReleaser;
@@ -447,12 +474,19 @@ uno::Any SAL_CALL Qt5FilePicker::getValue(sal_Int16 controlId, sal_Int16 nContro
     uno::Any res(false);
     if (m_aCustomWidgetsMap.contains(controlId))
     {
-        QCheckBox* cb = dynamic_cast<QCheckBox*>(m_aCustomWidgetsMap.value(controlId));
+        QWidget* widget = m_aCustomWidgetsMap.value(controlId);
+        QCheckBox* cb = dynamic_cast<QCheckBox*>(widget);
         if (cb)
             res <<= cb->isChecked();
+        else
+        {
+            QComboBox* combo = dynamic_cast<QComboBox*>(widget);
+            if (combo)
+                res = HandleGetListValue(combo, nControlAction);
+        }
     }
     else
-        SAL_WARN("vcl", "get value on unknown control " << controlId);
+        SAL_WARN("vcl.qt5", "get value on unknown control " << controlId);
 
     return res;
 }
@@ -468,7 +502,7 @@ void SAL_CALL Qt5FilePicker::enableControl(sal_Int16 controlId, sal_Bool enable)
     if (m_aCustomWidgetsMap.contains(controlId))
         m_aCustomWidgetsMap.value(controlId)->setEnabled(enable);
     else
-        SAL_WARN("vcl", "enable unknown control " << controlId);
+        SAL_WARN("vcl.qt5", "enable unknown control " << controlId);
 }
 
 void SAL_CALL Qt5FilePicker::setLabel(sal_Int16 controlId, const OUString& label)
@@ -486,7 +520,7 @@ void SAL_CALL Qt5FilePicker::setLabel(sal_Int16 controlId, const OUString& label
             cb->setText(toQString(label));
     }
     else
-        SAL_WARN("vcl", "set label on unknown control " << controlId);
+        SAL_WARN("vcl.qt5", "set label on unknown control " << controlId);
 }
 
 OUString SAL_CALL Qt5FilePicker::getLabel(sal_Int16 controlId)
@@ -505,7 +539,7 @@ OUString SAL_CALL Qt5FilePicker::getLabel(sal_Int16 controlId)
             label = cb->text();
     }
     else
-        SAL_WARN("vcl", "get label on unknown control " << controlId);
+        SAL_WARN("vcl.qt5", "get label on unknown control " << controlId);
 
     return toOUString(label);
 }
@@ -522,10 +556,10 @@ QString Qt5FilePicker::getResString(const char* pResId)
     return aResString.replace('~', '&');
 }
 
-void Qt5FilePicker::addCustomControl(QGridLayout* pLayout, sal_Int16 controlId)
+void Qt5FilePicker::addCustomControl(sal_Int16 controlId)
 {
     QWidget* widget = nullptr;
-    QWidget* label = nullptr;
+    QLabel* label = nullptr;
     const char* resId = nullptr;
 
     switch (controlId)
@@ -550,6 +584,9 @@ void Qt5FilePicker::addCustomControl(QGridLayout* pLayout, sal_Int16 controlId)
             break;
         case CHECKBOX_SELECTION:
             resId = STR_FPICKER_SELECTION;
+            break;
+        case CHECKBOX_GPGENCRYPTION:
+            resId = STR_FPICKER_GPGENCRYPT;
             break;
         case PUSHBUTTON_PLAY:
             resId = STR_FPICKER_PLAY;
@@ -579,7 +616,8 @@ void Qt5FilePicker::addCustomControl(QGridLayout* pLayout, sal_Int16 controlId)
         case CHECKBOX_LINK:
         case CHECKBOX_PREVIEW:
         case CHECKBOX_SELECTION:
-            widget = new QCheckBox(getResString(resId), m_pOptionsDialog);
+        case CHECKBOX_GPGENCRYPTION:
+            widget = new QCheckBox(getResString(resId), m_pExtraControls);
             break;
         case PUSHBUTTON_PLAY:
             break;
@@ -587,8 +625,9 @@ void Qt5FilePicker::addCustomControl(QGridLayout* pLayout, sal_Int16 controlId)
         case LISTBOX_TEMPLATE:
         case LISTBOX_IMAGE_TEMPLATE:
         case LISTBOX_FILTER_SELECTOR:
-            label = new QLabel(getResString(resId), m_pOptionsDialog);
-            widget = new QComboBox(m_pOptionsDialog);
+            label = new QLabel(getResString(resId), m_pExtraControls);
+            widget = new QComboBox(m_pExtraControls);
+            label->setBuddy(widget);
             break;
         case LISTBOX_VERSION_LABEL:
         case LISTBOX_TEMPLATE_LABEL:
@@ -598,10 +637,10 @@ void Qt5FilePicker::addCustomControl(QGridLayout* pLayout, sal_Int16 controlId)
 
     if (widget)
     {
-        const int row = pLayout->rowCount();
+        const int row = m_pLayout->rowCount();
         if (label)
-            pLayout->addWidget(label, row, 0);
-        pLayout->addWidget(widget, row, 1);
+            m_pLayout->addWidget(label, row, 0);
+        m_pLayout->addWidget(widget, row, 1);
         m_aCustomWidgetsMap.insert(controlId, widget);
     }
 }
@@ -615,8 +654,8 @@ void SAL_CALL Qt5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
     }
 
     m_aNamedFilterList.clear();
-    m_aFilterTitleList.clear();
-    m_aCurrentFilterTitle.clear();
+    m_aTitleToFilterMap.clear();
+    m_aCurrentFilter.clear();
 
     // parameter checking
     uno::Any arg;
@@ -634,15 +673,6 @@ void SAL_CALL Qt5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
                                              static_cast<XFilePicker2*>(this), 1);
     }
 
-    QGridLayout* pLayout = new QGridLayout();
-    m_pOptionsDialog->setLayout(pLayout);
-    pLayout->addWidget(new QLabel("Filename:"), 0, 0);
-    m_pFilenameLabel = new QLabel();
-    pLayout->addWidget(m_pFilenameLabel, 0, 1);
-    pLayout->addWidget(new QLabel("Type:"), 1, 0);
-    m_pFilterLabel = new QLabel();
-    pLayout->addWidget(m_pFilterLabel, 1, 1);
-
     sal_Int16 templateId = -1;
     arg >>= templateId;
 
@@ -658,79 +688,68 @@ void SAL_CALL Qt5FilePicker::initialize(const uno::Sequence<uno::Any>& args)
 
         case FILESAVE_AUTOEXTENSION:
             acceptMode = QFileDialog::AcceptSave;
-            addCustomControl(pLayout, CHECKBOX_AUTOEXTENSION);
+            addCustomControl(CHECKBOX_AUTOEXTENSION);
             break;
 
         case FILESAVE_AUTOEXTENSION_PASSWORD:
             acceptMode = QFileDialog::AcceptSave;
-            addCustomControl(pLayout, CHECKBOX_AUTOEXTENSION);
-            addCustomControl(pLayout, CHECKBOX_PASSWORD);
+            addCustomControl(CHECKBOX_AUTOEXTENSION);
+            addCustomControl(CHECKBOX_PASSWORD);
+            addCustomControl(CHECKBOX_GPGENCRYPTION);
             break;
 
         case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
             acceptMode = QFileDialog::AcceptSave;
-            addCustomControl(pLayout, CHECKBOX_AUTOEXTENSION);
-            addCustomControl(pLayout, CHECKBOX_PASSWORD);
-            addCustomControl(pLayout, CHECKBOX_FILTEROPTIONS);
+            addCustomControl(CHECKBOX_AUTOEXTENSION);
+            addCustomControl(CHECKBOX_PASSWORD);
+            addCustomControl(CHECKBOX_GPGENCRYPTION);
+            addCustomControl(CHECKBOX_FILTEROPTIONS);
             break;
 
         case FILESAVE_AUTOEXTENSION_SELECTION:
             acceptMode = QFileDialog::AcceptSave;
-            addCustomControl(pLayout, CHECKBOX_AUTOEXTENSION);
-            addCustomControl(pLayout, CHECKBOX_SELECTION);
+            addCustomControl(CHECKBOX_AUTOEXTENSION);
+            addCustomControl(CHECKBOX_SELECTION);
             break;
 
         case FILESAVE_AUTOEXTENSION_TEMPLATE:
             acceptMode = QFileDialog::AcceptSave;
-            addCustomControl(pLayout, CHECKBOX_AUTOEXTENSION);
-            addCustomControl(pLayout, LISTBOX_TEMPLATE);
+            addCustomControl(CHECKBOX_AUTOEXTENSION);
+            addCustomControl(LISTBOX_TEMPLATE);
             break;
 
         case FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE:
-            addCustomControl(pLayout, CHECKBOX_LINK);
-            addCustomControl(pLayout, CHECKBOX_PREVIEW);
-            addCustomControl(pLayout, LISTBOX_IMAGE_TEMPLATE);
+            addCustomControl(CHECKBOX_LINK);
+            addCustomControl(CHECKBOX_PREVIEW);
+            addCustomControl(LISTBOX_IMAGE_TEMPLATE);
             break;
 
         case FILEOPEN_PLAY:
-            addCustomControl(pLayout, PUSHBUTTON_PLAY);
+            addCustomControl(PUSHBUTTON_PLAY);
             break;
 
         case FILEOPEN_LINK_PLAY:
-            addCustomControl(pLayout, CHECKBOX_LINK);
-            addCustomControl(pLayout, PUSHBUTTON_PLAY);
+            addCustomControl(CHECKBOX_LINK);
+            addCustomControl(PUSHBUTTON_PLAY);
             break;
 
         case FILEOPEN_READONLY_VERSION:
-            addCustomControl(pLayout, CHECKBOX_READONLY);
-            addCustomControl(pLayout, LISTBOX_VERSION);
+            addCustomControl(CHECKBOX_READONLY);
+            addCustomControl(LISTBOX_VERSION);
             break;
 
         case FILEOPEN_LINK_PREVIEW:
-            addCustomControl(pLayout, CHECKBOX_LINK);
-            addCustomControl(pLayout, CHECKBOX_PREVIEW);
+            addCustomControl(CHECKBOX_LINK);
+            addCustomControl(CHECKBOX_PREVIEW);
             break;
 
         case FILEOPEN_PREVIEW:
-            addCustomControl(pLayout, CHECKBOX_PREVIEW);
+            addCustomControl(CHECKBOX_PREVIEW);
             break;
 
         default:
             throw lang::IllegalArgumentException("Unknown template",
                                                  static_cast<XFilePicker2*>(this), 1);
-    }
-
-    if (!m_aCustomWidgetsMap.empty())
-    {
-        QHBoxLayout* pHBoxLayout = new QHBoxLayout();
-        pLayout->addLayout(pHBoxLayout, pLayout->rowCount(), 0, 1, 2);
-        pHBoxLayout->addStretch();
-        QPushButton* pButton = new QPushButton("Ok");
-        connect(pButton, SIGNAL(clicked()), m_pOptionsDialog, SLOT(accept()));
-        pHBoxLayout->addWidget(pButton);
-        pButton = new QPushButton("Cancel");
-        connect(pButton, SIGNAL(clicked()), m_pOptionsDialog, SLOT(reject()));
-        pHBoxLayout->addWidget(pButton);
     }
 
     const char* resId = nullptr;
@@ -780,15 +799,15 @@ void Qt5FilePicker::filterSelected(const QString&)
 {
     FilePickerEvent aEvent;
     aEvent.ElementId = LISTBOX_FILTER;
-    SAL_INFO("vcl", "filter changed");
+    SAL_INFO("vcl.qt5", "filter changed");
     if (m_xListener.is())
         m_xListener->controlStateChanged(aEvent);
 }
 
-void Qt5FilePicker::selectionChanged()
+void Qt5FilePicker::currentChanged(const QString&)
 {
     FilePickerEvent aEvent;
-    SAL_INFO("vcl", "file selection changed");
+    SAL_INFO("vcl.qt5", "file selection changed");
     if (m_xListener.is())
         m_xListener->fileSelectionChanged(aEvent);
 }

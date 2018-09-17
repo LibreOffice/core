@@ -55,15 +55,16 @@ class Qt5FilePicker : public QObject, public Qt5FilePicker_Base
 protected:
     css::uno::Reference<css::ui::dialogs::XFilePickerListener> m_xListener;
 
-    QFileDialog* m_pFileDialog; ///< the non-extendable file picker dialog
+    std::unique_ptr<QFileDialog> m_pFileDialog; ///< the non-native file picker dialog
 
     osl::Mutex m_aHelperMutex; ///< mutex used by the WeakComponentImplHelper
 
-    QStringList m_aNamedFilterList; ///< named filter list for the QFileDialog
-    QStringList m_aFilterTitleList; ///< the original filter titles
-    QString m_aCurrentFilterTitle; ///< the current filter title
+    QStringList m_aNamedFilterList; ///< to keep the original sequence
+    QHash<QString, QString> m_aTitleToFilterMap;
+    QString m_aCurrentFilter;
 
-    QDialog* m_pOptionsDialog; ///< an extra options dialog window
+    QWidget* m_pExtraControls; ///< widget to contain extra custom controls
+    QGridLayout* m_pLayout; ///< layout for extra custom controls
     QLabel* m_pFilenameLabel; ///< label to display the filename
     QLabel* m_pFilterLabel; ///< label to display the filter
     QHash<sal_Int16, QWidget*> m_aCustomWidgetsMap; ///< map of SAL control ID's to widget
@@ -246,27 +247,19 @@ Q_SIGNALS:
     // XInitialization
     void initializeSignal(const css::uno::Sequence<css::uno::Any>& rArguments);
 
-    // Destructor proxy
-    void cleanupProxySignal();
-
 private:
     Qt5FilePicker(const Qt5FilePicker&) = delete;
     Qt5FilePicker& operator=(const Qt5FilePicker&) = delete;
 
-    // add a custom control widget to the options dialog
-    void addCustomControl(QGridLayout* pLayout, sal_Int16 controlId);
+    void addCustomControl(sal_Int16 controlId);
 
     static QString getResString(const char* pRedId);
 
 private Q_SLOTS:
-    void cleanupProxy();
-
     // emit XFilePickerListener controlStateChanged event
     void filterSelected(const QString&);
     // emit XFilePickerListener fileSelectionChanged event
-    //    void urlSelected(const QUrl &);
-
-    void selectionChanged();
+    void currentChanged(const QString&);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
