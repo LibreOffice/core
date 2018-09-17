@@ -278,9 +278,14 @@ bool BufferNode::hasChildren() const
     return (!m_vChildren.empty());
 }
 
-std::vector< const BufferNode* >* BufferNode::getChildren() const
+std::vector< std::unique_ptr<BufferNode> > const & BufferNode::getChildren() const
 {
-    return new std::vector< const BufferNode* >( m_vChildren );
+    return m_vChildren;
+}
+
+std::vector< std::unique_ptr<BufferNode> > BufferNode::releaseChildren()
+{
+    return std::move(m_vChildren);
 }
 
 const BufferNode* BufferNode::getFirstChild() const
@@ -307,13 +312,13 @@ const BufferNode* BufferNode::getFirstChild() const
 
     if (!m_vChildren.empty())
     {
-        rc = const_cast<BufferNode*>(m_vChildren.front());
+        rc = m_vChildren.front().get();
     }
 
     return rc;
 }
 
-void BufferNode::addChild(const BufferNode* pChild, sal_Int32 nPosition)
+void BufferNode::addChild(std::unique_ptr<BufferNode> pChild, sal_Int32 nPosition)
 /****** BufferNode/addChild(pChild,nPosition) ********************************
  *
  *   NAME
@@ -339,17 +344,15 @@ void BufferNode::addChild(const BufferNode* pChild, sal_Int32 nPosition)
 {
     if (nPosition == -1)
     {
-        m_vChildren.push_back( pChild );
+        m_vChildren.push_back( std::move(pChild) );
     }
     else
     {
-        std::vector< const BufferNode* >::iterator ii = m_vChildren.begin();
-        ii += nPosition;
-        m_vChildren.insert(ii, pChild);
+        m_vChildren.insert(m_vChildren.begin() + nPosition, std::move(pChild));
     }
 }
 
-void BufferNode::addChild(const BufferNode* pChild)
+void BufferNode::addChild(std::unique_ptr<BufferNode> pChild)
 /****** BufferNode/addChild() ************************************************
  *
  *   NAME
@@ -371,14 +374,14 @@ void BufferNode::addChild(const BufferNode* pChild)
  *  The new child BufferNode is appended at the end.
  ******************************************************************************/
 {
-    addChild(pChild, -1);
+    addChild(std::move(pChild), -1);
 }
 
 void BufferNode::removeChild(const BufferNode* pChild)
 /****** BufferNode/removeChild ***********************************************
  *
  *   NAME
- *  removeChild -- removes a child BufferNode from the children list.
+ *  removeChild -- removes and deletes a child BufferNode from the children list.
  *
  *   SYNOPSIS
  *  removeChild(pChild);
@@ -393,7 +396,9 @@ void BufferNode::removeChild(const BufferNode* pChild)
  *  empty
  ******************************************************************************/
 {
-    auto ii = std::find(m_vChildren.begin(), m_vChildren.end(), pChild);
+    auto ii = std::find_if(m_vChildren.begin(), m_vChildren.end(),
+                [pChild] (const std::unique_ptr<BufferNode>& i)
+                { return i.get() == pChild; });
     if (ii != m_vChildren.end())
         m_vChildren.erase( ii );
 }
@@ -418,7 +423,9 @@ sal_Int32 BufferNode::indexOfChild(const BufferNode* pChild) const
  *          is not found, -1 is returned.
  ******************************************************************************/
 {
-    auto ii = std::find(m_vChildren.begin(), m_vChildren.end(), pChild);
+    auto ii = std::find_if(m_vChildren.begin(), m_vChildren.end(),
+            [pChild] (const std::unique_ptr<BufferNode>& i)
+            { return i.get() == pChild; });
     if (ii == m_vChildren.end())
         return -1;
 
@@ -486,12 +493,12 @@ const BufferNode* BufferNode::isAncestor(const BufferNode* pDescendant) const
     if (pDescendant != nullptr)
     {
         auto ii = std::find_if(m_vChildren.cbegin(), m_vChildren.cend(),
-            [&pDescendant](const BufferNode* pChild) {
-                return (pChild == pDescendant) || (pChild->isAncestor(pDescendant) != nullptr);
+            [&pDescendant](const std::unique_ptr<BufferNode>& pChild) {
+                return (pChild.get() == pDescendant) || (pChild->isAncestor(pDescendant) != nullptr);
             });
 
         if (ii != m_vChildren.end())
-            rc = const_cast<BufferNode*>(*ii);
+            rc = ii->get();
     }
 
     return rc;
@@ -636,9 +643,8 @@ void BufferNode::notifyBranch()
  *  empty
  ******************************************************************************/
 {
-    for( const BufferNode* ii : m_vChildren )
+    for( std::unique_ptr<BufferNode>& pBufferNode : m_vChildren )
     {
-        BufferNode* pBufferNode = const_cast<BufferNode*>(ii);
         pBufferNode->elementCollectorNotify();
         pBufferNode->notifyBranch();
     }
@@ -756,7 +762,7 @@ bool BufferNode::isECInSubTreeIncluded(sal_Int32 nIgnoredSecurityId) const
     if ( !rc )
     {
         rc = std::any_of(m_vChildren.begin(), m_vChildren.end(),
-            [nIgnoredSecurityId](const BufferNode* pBufferNode) {
+            [nIgnoredSecurityId](const std::unique_ptr<BufferNode>& pBufferNode) {
                 return pBufferNode->isECInSubTreeIncluded(nIgnoredSecurityId);
         });
     }
@@ -832,7 +838,7 @@ bool BufferNode::isBlockerInSubTreeIncluded(sal_Int32 nIgnoredSecurityId) const
  ******************************************************************************/
 {
     return std::any_of(m_vChildren.begin(), m_vChildren.end(),
-        [nIgnoredSecurityId](const BufferNode* pBufferNode) {
+        [nIgnoredSecurityId](const std::unique_ptr<BufferNode>& pBufferNode) {
             ElementMark* pBlocker = pBufferNode->getBlocker();
             return (pBlocker != nullptr &&
                 (nIgnoredSecurityId == cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID ||
@@ -864,51 +870,21 @@ const BufferNode* BufferNode::getNextChild(const BufferNode* pChild) const
     BufferNode* rc = nullptr;
     bool bChildFound = false;
 
-    for( const BufferNode* i : m_vChildren )
+    for( std::unique_ptr<BufferNode> const & i : m_vChildren )
     {
         if (bChildFound)
         {
-            rc = const_cast<BufferNode*>(i);
+            rc = i.get();
             break;
         }
 
-        if( i == pChild )
+        if( i.get() == pChild )
         {
             bChildFound = true;
         }
     }
 
     return rc;
-}
-
-
-void BufferNode::freeAllChildren()
-/****** BufferNode/freeAllChildren *******************************************
- *
- *   NAME
- *  freeAllChildren -- free all his child BufferNode.
- *
- *   SYNOPSIS
- *  freeAllChildren();
- *
- *   FUNCTION
- *  see NAME
- *
- *   INPUTS
- *  empty
- *
- *   RESULT
- *  empty
- ******************************************************************************/
-{
-    for( const BufferNode* i : m_vChildren )
-    {
-        BufferNode *pChild = const_cast<BufferNode *>(i);
-        pChild->freeAllChildren();
-        delete pChild;
-    }
-
-    m_vChildren.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
