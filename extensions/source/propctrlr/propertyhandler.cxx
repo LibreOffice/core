@@ -310,6 +310,11 @@ namespace pcr
         return PropertyHandlerHelper::getDialogParentWindow( m_xContext );
     }
 
+    weld::Window* PropertyHandler::impl_getDefaultDialogFrame_nothrow() const
+    {
+        return PropertyHandlerHelper::getDialogParentFrame(m_xContext);
+    }
+
     PropertyId PropertyHandler::impl_getPropertyId_throwUnknownProperty( const OUString& _rPropertyName ) const
     {
         PropertyId nPropId = m_pInfoService->getPropertyId( _rPropertyName );
