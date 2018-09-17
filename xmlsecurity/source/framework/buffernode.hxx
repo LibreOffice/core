@@ -49,7 +49,7 @@ private:
     BufferNode* m_pParent;
 
     /* all child BufferNodes */
-    std::vector< const BufferNode* > m_vChildren;
+    std::vector< std::unique_ptr<BufferNode> > m_vChildren;
 
     /* all ElementCollector holding this BufferNode */
     std::vector< const ElementCollector* > m_vElementCollectors;
@@ -89,10 +89,11 @@ public:
     OUString printChildren() const;
     bool hasAnything() const;
     bool hasChildren() const;
-    std::vector< const BufferNode* >* getChildren() const;
+    std::vector< std::unique_ptr< BufferNode> > const & getChildren() const;
+    std::vector< std::unique_ptr< BufferNode> > releaseChildren();
     const BufferNode* getFirstChild() const;
-    void addChild(const BufferNode* pChild, sal_Int32 nPosition);
-    void addChild(const BufferNode* pChild);
+    void addChild(std::unique_ptr<BufferNode> pChild, sal_Int32 nPosition);
+    void addChild(std::unique_ptr<BufferNode> pChild);
     void removeChild(const BufferNode* pChild);
     sal_Int32 indexOfChild(const BufferNode* pChild) const;
     const BufferNode* getParent() const { return m_pParent;}
@@ -106,7 +107,6 @@ public:
         css::xml::wrapper::XXMLElementWrapper >& xXMLElement);
     void notifyBranch();
     void elementCollectorNotify();
-    void freeAllChildren();
 };
 
 #endif
