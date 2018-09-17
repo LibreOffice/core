@@ -73,8 +73,6 @@ const NfKeywordTable ImpSvNumberformatScan::sEnglishKeyword =
     "NNN",     // NF_KEY_NNN Day of week long
     "WW",      // NF_KEY_WW Week of year
     "MMMMM",   // NF_KEY_MMMMM first letter of month name
-    "",        // NF_KEY_UNUSED4,
-    "",        // NF_KEY_UNUSED5,     // was quarter word, not used anymore from SRC631 on (26.04.01)
     "TRUE",    // NF_KEY_TRUE boolean true
     "FALSE",   // NF_KEY_FALSE boolean false
     "BOOLEAN", // NF_KEY_BOOLEAN boolean
