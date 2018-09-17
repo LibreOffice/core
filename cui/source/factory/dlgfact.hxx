@@ -46,6 +46,7 @@ class SvxHpLinkDlg;
 class FmSearchDialog;
 class Graphic;
 class GraphicFilterDialog;
+class GraphicFilterDialogController;
 class SvxAreaTabDialog;
 class InsertObjectDialog_Impl;
 class SvPasteObjectDialog;
@@ -475,6 +476,19 @@ class AbstractGraphicFilterDialog_Impl :public AbstractGraphicFilterDialog
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
 };
 
+class AbstractGraphicFilterDialogController_Impl : public AbstractGraphicFilterDialog
+{
+protected:
+    std::unique_ptr<GraphicFilterDialogController> m_xDlg;
+public:
+    explicit AbstractGraphicFilterDialogController_Impl(std::unique_ptr<GraphicFilterDialogController> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
+};
+
 class SvxAreaTabDialog;
 class AbstractSvxAreaTabDialog_Impl : public AbstractSvxAreaTabDialog
 {
@@ -739,7 +753,7 @@ public:
                                                         const std::vector< OUString >& _rContexts,
                                                         sal_Int16 nInitialContext,
                                                         const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier) override;
-    virtual VclPtr<AbstractGraphicFilterDialog>   CreateGraphicFilterEmboss(vcl::Window* pParent,
+    virtual VclPtr<AbstractGraphicFilterDialog>   CreateGraphicFilterEmboss(weld::Window* pParent,
                                                 const Graphic& rGraphic) override;
     virtual VclPtr<AbstractGraphicFilterDialog>   CreateGraphicFilterPoster(vcl::Window* pParent,
                                                 const Graphic& rGraphic) override;
