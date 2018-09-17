@@ -61,14 +61,14 @@ class SwRevisionConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 
-    AuthorCharAttr  aInsertAttr;        //Revision/TextDisplay/Insert/Attribute  // Redlining: author character attributes
+    AuthorCharAttr  m_aInsertAttr;        //Revision/TextDisplay/Insert/Attribute  // Redlining: author character attributes
                                         //Revision/TextDisplay/Insert/Color
-    AuthorCharAttr  aDeletedAttr;       //Revision/TextDisplay/Delete/Attribute
+    AuthorCharAttr  m_aDeletedAttr;       //Revision/TextDisplay/Delete/Attribute
                                         //Revision/TextDisplay/Delete/Color
-    AuthorCharAttr  aFormatAttr;        //Revision/TextDisplay/ChangeAttribute/Attribute
+    AuthorCharAttr  m_aFormatAttr;        //Revision/TextDisplay/ChangeAttribute/Attribute
                                         //Revision/TextDisplay/ChangeAttribute/Color
-    sal_uInt16      nMarkAlign;         //Revision/LinesChanged/Mark
-    Color           aMarkColor;         //Revision/LinesChanged/Color
+    sal_uInt16      m_nMarkAlign;         //Revision/LinesChanged/Mark
+    Color           m_aMarkColor;         //Revision/LinesChanged/Color
 
     static const css::uno::Sequence<OUString>& GetPropertyNames();
 
@@ -238,24 +238,24 @@ public:
     void        SetTableVInsert( sal_uInt16 nSet ) {  m_aTableConfig.nTableVInsert = nSet;
                                                 m_aTableConfig.SetModified();}
 
-    const AuthorCharAttr    &GetInsertAuthorAttr() const { return m_aRevisionConfig.aInsertAttr; }
-    void        SetInsertAuthorAttr( AuthorCharAttr const &rAttr ) {  m_aRevisionConfig.aInsertAttr = rAttr;
+    const AuthorCharAttr    &GetInsertAuthorAttr() const { return m_aRevisionConfig.m_aInsertAttr; }
+    void        SetInsertAuthorAttr( AuthorCharAttr const &rAttr ) {  m_aRevisionConfig.m_aInsertAttr = rAttr;
                                                                      m_aRevisionConfig.SetModified();}
 
-    const AuthorCharAttr    &GetDeletedAuthorAttr() const { return m_aRevisionConfig.aDeletedAttr; }
-    void        SetDeletedAuthorAttr( AuthorCharAttr const &rAttr ) { m_aRevisionConfig.aDeletedAttr = rAttr;
+    const AuthorCharAttr    &GetDeletedAuthorAttr() const { return m_aRevisionConfig.m_aDeletedAttr; }
+    void        SetDeletedAuthorAttr( AuthorCharAttr const &rAttr ) { m_aRevisionConfig.m_aDeletedAttr = rAttr;
                                                                       m_aRevisionConfig.SetModified();}
 
-    const AuthorCharAttr    &GetFormatAuthorAttr() const { return m_aRevisionConfig.aFormatAttr; }
-    void        SetFormatAuthorAttr( AuthorCharAttr const &rAttr ) {  m_aRevisionConfig.aFormatAttr = rAttr;
+    const AuthorCharAttr    &GetFormatAuthorAttr() const { return m_aRevisionConfig.m_aFormatAttr; }
+    void        SetFormatAuthorAttr( AuthorCharAttr const &rAttr ) {  m_aRevisionConfig.m_aFormatAttr = rAttr;
                                                                       m_aRevisionConfig.SetModified();}
 
-    sal_uInt16          GetMarkAlignMode()  const               { return m_aRevisionConfig.nMarkAlign; }
-    void            SetMarkAlignMode(sal_uInt16 nMode)          { m_aRevisionConfig.nMarkAlign = nMode;
+    sal_uInt16          GetMarkAlignMode()  const               { return m_aRevisionConfig.m_nMarkAlign; }
+    void            SetMarkAlignMode(sal_uInt16 nMode)          { m_aRevisionConfig.m_nMarkAlign = nMode;
                                                               m_aRevisionConfig.SetModified();}
 
-    const Color&    GetMarkAlignColor() const               { return m_aRevisionConfig.aMarkColor; }
-    void            SetMarkAlignColor(const Color &rColor)  { m_aRevisionConfig.aMarkColor = rColor;
+    const Color&    GetMarkAlignColor() const               { return m_aRevisionConfig.m_aMarkColor; }
+    void            SetMarkAlignColor(const Color &rColor)  { m_aRevisionConfig.m_aMarkColor = rColor;
                                                               m_aRevisionConfig.SetModified();}
 
     bool        IsInsWithCaption(bool bHTML) const

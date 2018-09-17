@@ -245,15 +245,15 @@ SwRevisionConfig::SwRevisionConfig() :
     ConfigItem("Office.Writer/Revision",
         ConfigItemMode::DelayedUpdate|ConfigItemMode::ReleaseTree)
 {
-    aInsertAttr.m_nItemId = SID_ATTR_CHAR_UNDERLINE;
-    aInsertAttr.m_nAttr = LINESTYLE_SINGLE;
-    aInsertAttr.m_nColor = COL_TRANSPARENT;
-    aDeletedAttr.m_nItemId = SID_ATTR_CHAR_STRIKEOUT;
-    aDeletedAttr.m_nAttr = STRIKEOUT_SINGLE;
-    aDeletedAttr.m_nColor = COL_TRANSPARENT;
-    aFormatAttr.m_nItemId = SID_ATTR_CHAR_WEIGHT;
-    aFormatAttr.m_nAttr = WEIGHT_BOLD;
-    aFormatAttr.m_nColor = COL_BLACK;
+    m_aInsertAttr.m_nItemId = SID_ATTR_CHAR_UNDERLINE;
+    m_aInsertAttr.m_nAttr = LINESTYLE_SINGLE;
+    m_aInsertAttr.m_nColor = COL_TRANSPARENT;
+    m_aDeletedAttr.m_nItemId = SID_ATTR_CHAR_STRIKEOUT;
+    m_aDeletedAttr.m_nAttr = STRIKEOUT_SINGLE;
+    m_aDeletedAttr.m_nColor = COL_TRANSPARENT;
+    m_aFormatAttr.m_nItemId = SID_ATTR_CHAR_WEIGHT;
+    m_aFormatAttr.m_nAttr = WEIGHT_BOLD;
+    m_aFormatAttr.m_nColor = COL_BLACK;
     Load();
 }
 
@@ -299,14 +299,14 @@ void SwRevisionConfig::ImplCommit()
     {
         switch(nProp)
         {
-            case 0 : pValues[nProp] <<= lcl_ConvertAttrToCfg(aInsertAttr); break;
-            case 1 : pValues[nProp] <<= aInsertAttr.m_nColor;   break;
-            case 2 : pValues[nProp] <<= lcl_ConvertAttrToCfg(aDeletedAttr); break;
-            case 3 : pValues[nProp] <<= aDeletedAttr.m_nColor;  break;
-            case 4 : pValues[nProp] <<= lcl_ConvertAttrToCfg(aFormatAttr); break;
-            case 5 : pValues[nProp] <<= aFormatAttr.m_nColor;   break;
-            case 6 : pValues[nProp] <<= nMarkAlign;             break;
-            case 7 : pValues[nProp] <<= aMarkColor;             break;
+            case 0 : pValues[nProp] <<= lcl_ConvertAttrToCfg(m_aInsertAttr); break;
+            case 1 : pValues[nProp] <<= m_aInsertAttr.m_nColor;   break;
+            case 2 : pValues[nProp] <<= lcl_ConvertAttrToCfg(m_aDeletedAttr); break;
+            case 3 : pValues[nProp] <<= m_aDeletedAttr.m_nColor;  break;
+            case 4 : pValues[nProp] <<= lcl_ConvertAttrToCfg(m_aFormatAttr); break;
+            case 5 : pValues[nProp] <<= m_aFormatAttr.m_nColor;   break;
+            case 6 : pValues[nProp] <<= m_nMarkAlign;             break;
+            case 7 : pValues[nProp] <<= m_aMarkColor;             break;
         }
     }
     PutProperties(aNames, aValues);
@@ -352,14 +352,14 @@ void SwRevisionConfig::Load()
             pValues[nProp] >>= nVal;
             switch (nProp)
             {
-                case 0 : lcl_ConvertCfgToAttr(nVal, aInsertAttr); break;
-                case 1 : aInsertAttr.m_nColor     = Color(nVal); break;
-                case 2 : lcl_ConvertCfgToAttr(nVal, aDeletedAttr, true); break;
-                case 3 : aDeletedAttr.m_nColor    = Color(nVal); break;
-                case 4 : lcl_ConvertCfgToAttr(nVal, aFormatAttr); break;
-                case 5 : aFormatAttr.m_nColor     = Color(nVal); break;
-                case 6 : nMarkAlign = sal::static_int_cast< sal_uInt16, sal_Int32>(nVal); break;
-                case 7 : aMarkColor = Color(nVal); break;
+                case 0 : lcl_ConvertCfgToAttr(nVal, m_aInsertAttr); break;
+                case 1 : m_aInsertAttr.m_nColor     = Color(nVal); break;
+                case 2 : lcl_ConvertCfgToAttr(nVal, m_aDeletedAttr, true); break;
+                case 3 : m_aDeletedAttr.m_nColor    = Color(nVal); break;
+                case 4 : lcl_ConvertCfgToAttr(nVal, m_aFormatAttr); break;
+                case 5 : m_aFormatAttr.m_nColor     = Color(nVal); break;
+                case 6 : m_nMarkAlign = sal::static_int_cast< sal_uInt16, sal_Int32>(nVal); break;
+                case 7 : m_aMarkColor = Color(nVal); break;
             }
         }
     }
