@@ -25,15 +25,10 @@
 
 //! For ImpSvNumberformatScan: first the short symbols, then the long symbols!
 //! e.g. first TT then TTTT
-//! The internal order is essentially for the format code string scanner!
-//! New keywords MUST NOT be inserted, only the NF_KEY_UNUSEDn may be used,
-//! NF_KEY_LASTKEYWORD must be adjusted accordingly. Otherwise old versions
-//! will fail upon reading these entries. Nevertheless, old versions are NOT
-//! able to display those new keywords => blank display.
+//! The internal order is essential for the format code string scanner.
+//! New keywords MUST NOT be inserted.
 //
-// Note: 2005-09-02: the above applies to the binary file format.
-//
-// ER 15.12.99: This table is externally only to be used with method
+// This table is externally only to be used with method
 // OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable&, const LocaleDataWrapper& );
 // and method
 // void SvNumberFormatter::FillKeywordTable( NfKeywordTable&, LanguageType );
@@ -70,8 +65,6 @@ enum NfKeywordIndex
     NF_KEY_WW,          // week of year, as of version 8, 19.06.98
     NF_KEY_MMMMM,       // first letter of month name
     NF_KEY_LASTKEYWORD = NF_KEY_MMMMM,
-    NF_KEY_UNUSED4,
-    NF_KEY_UNUSED5,     // was quarter word, not used anymore from SRC631 on (26.04.01)
     NF_KEY_TRUE,        // boolean true
     NF_KEY_FALSE,       // boolean false
     NF_KEY_BOOLEAN,     // boolean
