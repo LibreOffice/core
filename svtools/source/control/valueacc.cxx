@@ -1726,7 +1726,7 @@ uno::Reference< accessibility::XAccessible > SAL_CALL SvtValueSetAcc::getAccessi
 
         if( VALUESET_ITEM_NONEITEM != nItemPos )
         {
-            SvtValueSetItem *const pItem = mpParent->mItemList[nItemPos];
+            SvtValueSetItem *const pItem = mpParent->mItemList[nItemPos].get();
             xRet = pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ );
         }
     }

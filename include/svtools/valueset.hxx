@@ -180,7 +180,7 @@ to be set (before Show) with SetStyle().
 *************************************************************************/
 
 typedef std::vector<std::unique_ptr<ValueSetItem>> ValueItemList;
-typedef std::vector<SvtValueSetItem*> SvtValueItemList;
+typedef std::vector<std::unique_ptr<SvtValueSetItem>> SvtValueItemList;
 
 #define WB_ITEMBORDER           (WinBits(0x00010000))
 #define WB_DOUBLEBORDER         (WinBits(0x00020000))
@@ -460,7 +460,7 @@ private:
     SVT_DLLPRIVATE SvtValueSetItem*    ImplGetItem( size_t nPos );
     SVT_DLLPRIVATE SvtValueSetItem*    ImplGetFirstItem();
     SVT_DLLPRIVATE sal_uInt16          ImplGetVisibleItemCount() const;
-    SVT_DLLPRIVATE void         ImplInsertItem( SvtValueSetItem *const pItem, const size_t nPos );
+    SVT_DLLPRIVATE void         ImplInsertItem( std::unique_ptr<SvtValueSetItem> pItem, const size_t nPos );
     SVT_DLLPRIVATE tools::Rectangle    ImplGetItemRect( size_t nPos ) const;
     SVT_DLLPRIVATE void         ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     SVT_DLLPRIVATE bool         ImplHasAccessibleListeners();
