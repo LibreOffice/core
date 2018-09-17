@@ -123,7 +123,7 @@ void ValueSet::ImplDeleteItems()
 
     for ( size_t i = 0; i < n; ++i )
     {
-        ValueSetItem* pItem = mItemList[i];
+        ValueSetItem* pItem = mItemList[i].get();
         if ( pItem->mbVisible && ImplHasAccessibleListeners() )
         {
             Any aOldAny;
@@ -133,7 +133,7 @@ void ValueSet::ImplDeleteItems()
             ImplFireAccessibleEvent(AccessibleEventId::CHILD, aOldAny, aNewAny);
         }
 
-        delete pItem;
+        mItemList[i].reset();
     }
 
     mItemList.clear();
@@ -614,7 +614,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
         }
         for (size_t i = 0; i < nItemCount; i++)
         {
-            ValueSetItem* pItem = mItemList[i];
+            ValueSetItem* pItem = mItemList[i].get();
 
             if (i >= nFirstItem && i < nLastItem)
             {
@@ -736,7 +736,7 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nIt
     if (nItemId)
     {
         const size_t nPos = GetItemPos( nItemId );
-        pItem = mItemList[ nPos ];
+        pItem = mItemList[ nPos ].get();
         aRect = ImplGetItemRect( nPos );
     }
     else if (mpNoneItem.get())
@@ -1028,12 +1028,12 @@ ValueSetItem* ValueSet::ImplGetItem( size_t nPos )
     if (nPos == VALUESET_ITEM_NONEITEM)
         return mpNoneItem.get();
     else
-        return (nPos < mItemList.size()) ? mItemList[nPos] : nullptr;
+        return (nPos < mItemList.size()) ? mItemList[nPos].get() : nullptr;
 }
 
 ValueSetItem* ValueSet::ImplGetFirstItem()
 {
-    return mItemList.size() ? mItemList[0] : nullptr;
+    return mItemList.size() ? mItemList[0].get() : nullptr;
 }
 
 sal_uInt16 ValueSet::ImplGetVisibleItemCount() const
@@ -1520,56 +1520,54 @@ void ValueSet::UserDraw( const UserDrawEvent& )
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage )
 {
-    ValueSetItem* pItem = new ValueSetItem( *this );
+    std::unique_ptr<ValueSetItem> pItem(new ValueSetItem( *this ));
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_IMAGE;
     pItem->maImage  = rImage;
-    ImplInsertItem( pItem, VALUESET_APPEND );
+    ImplInsertItem( std::move(pItem), VALUESET_APPEND );
 }
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
                            const OUString& rText, size_t nPos,
                            bool bShowLegend )
 {
-    ValueSetItem* pItem = new ValueSetItem( *this );
+    std::unique_ptr<ValueSetItem> pItem(new ValueSetItem( *this ));
     pItem->mnId     = nItemId;
     pItem->meType   = bShowLegend ? VALUESETITEM_IMAGE_AND_TEXT : VALUESETITEM_IMAGE;
     pItem->maImage  = rImage;
     pItem->maText   = rText;
-    ImplInsertItem( pItem, nPos );
+    ImplInsertItem( std::move(pItem), nPos );
 }
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor,
                            const OUString& rText )
 {
-    ValueSetItem* pItem = new ValueSetItem( *this );
+    std::unique_ptr<ValueSetItem> pItem(new ValueSetItem( *this ));
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_COLOR;
     pItem->maColor  = rColor;
     pItem->maText   = rText;
-    ImplInsertItem( pItem, VALUESET_APPEND );
+    ImplInsertItem( std::move(pItem), VALUESET_APPEND );
 }
 
 void ValueSet::InsertItem( sal_uInt16 nItemId, size_t nPos )
 {
-    ValueSetItem* pItem = new ValueSetItem( *this );
+    std::unique_ptr<ValueSetItem> pItem(new ValueSetItem( *this ));
     pItem->mnId     = nItemId;
     pItem->meType   = VALUESETITEM_USERDRAW;
-    ImplInsertItem( pItem, nPos );
+    ImplInsertItem( std::move(pItem), nPos );
 }
 
-void ValueSet::ImplInsertItem( ValueSetItem *const pItem, const size_t nPos )
+void ValueSet::ImplInsertItem( std::unique_ptr<ValueSetItem> pItem, const size_t nPos )
 {
     DBG_ASSERT( pItem->mnId, "ValueSet::InsertItem(): ItemId == 0" );
     DBG_ASSERT( GetItemPos( pItem->mnId ) == VALUESET_ITEM_NOTFOUND,
                 "ValueSet::InsertItem(): ItemId already exists" );
 
     if ( nPos < mItemList.size() ) {
-        ValueItemList::iterator it = mItemList.begin();
-        ::std::advance( it, nPos );
-        mItemList.insert( it, pItem );
+        mItemList.insert( mItemList.begin() + nPos, std::move(pItem) );
     } else {
-        mItemList.push_back( pItem );
+        mItemList.push_back( std::move(pItem) );
     }
 
     queue_resize();
@@ -1607,10 +1605,7 @@ void ValueSet::RemoveItem( sal_uInt16 nItemId )
         return;
 
     if ( nPos < mItemList.size() ) {
-        ValueItemList::iterator it = mItemList.begin();
-        ::std::advance( it, nPos );
-        delete *it;
-        mItemList.erase( it );
+        mItemList.erase( mItemList.begin() + nPos );
     }
 
     // reset variables
@@ -1838,7 +1833,7 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
 
         ValueSetItem* pItem;
         if( nPos != VALUESET_ITEM_NOTFOUND )
-            pItem = mItemList[nPos];
+            pItem = mItemList[nPos].get();
         else
             pItem = mpNoneItem.get();
 
@@ -1879,7 +1874,7 @@ void ValueSet::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
     if ( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
-    ValueSetItem* pItem = mItemList[nPos];
+    ValueSetItem* pItem = mItemList[nPos].get();
     pItem->meType  = VALUESETITEM_IMAGE;
     pItem->maImage = rImage;
 
@@ -1909,7 +1904,7 @@ void ValueSet::SetItemColor( sal_uInt16 nItemId, const Color& rColor )
     if ( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
-    ValueSetItem* pItem = mItemList[nPos];
+    ValueSetItem* pItem = mItemList[nPos].get();
     pItem->meType  = VALUESETITEM_COLOR;
     pItem->maColor = rColor;
 
@@ -1939,7 +1934,7 @@ void ValueSet::SetItemData( sal_uInt16 nItemId, void* pData )
     if ( nPos == VALUESET_ITEM_NOTFOUND )
         return;
 
-    ValueSetItem* pItem = mItemList[nPos];
+    ValueSetItem* pItem = mItemList[nPos].get();
     pItem->mpData = pData;
 
     if ( pItem->meType == VALUESETITEM_USERDRAW )
@@ -1972,7 +1967,7 @@ void ValueSet::SetItemText(sal_uInt16 nItemId, const OUString& rText)
         return;
 
 
-    ValueSetItem* pItem = mItemList[nPos];
+    ValueSetItem* pItem = mItemList[nPos].get();
 
     // Remember old and new name for accessibility event.
     Any aOldName;
@@ -2215,7 +2210,7 @@ Size ValueSet::GetLargestItemSize()
 {
     Size aLargestItem;
 
-    for (ValueSetItem* pItem : mItemList)
+    for (std::unique_ptr<ValueSetItem>& pItem : mItemList)
     {
         if (!pItem->mbVisible)
             continue;
