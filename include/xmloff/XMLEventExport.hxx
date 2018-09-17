@@ -29,6 +29,7 @@
 #include <xmloff/xmlevent.hxx>
 
 #include <map>
+#include <memory>
 
 class SvXMLExport;
 namespace com { namespace sun { namespace star {
@@ -38,7 +39,7 @@ namespace com { namespace sun { namespace star {
     namespace beans { struct PropertyValue; }
 } } }
 
-typedef ::std::map< OUString, XMLEventExportHandler* > HandlerMap;
+typedef ::std::map< OUString, std::unique_ptr<XMLEventExportHandler> > HandlerMap;
 typedef ::std::map< OUString, XMLEventName > NameMap;
 
 /**
@@ -75,7 +76,7 @@ public:
     /// no pointers to a handler registered with AddHandler() should be
     /// held by anyone.
     void AddHandler( const OUString& rName,
-                     XMLEventExportHandler* rHandler );
+                     std::unique_ptr<XMLEventExportHandler> pHandler );
 
     /// register additional event names
     void AddTranslationTable( const XMLEventNameTranslation* pTransTable );
