@@ -231,6 +231,12 @@ Sequence< Reference< XControl > > StdTabController::getControls(  )
     return aSeq;
 }
 
+struct ComponentEntry
+{
+    css::awt::XWindow*  pComponent;
+    ::Point             aPos;
+};
+
 void StdTabController::autoTabOrder(  )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -255,43 +261,39 @@ void StdTabController::autoTabOrder(  )
     Reference< XWindow > * pComponents = aCompSeq.getArray();
 
     // insert sort algorithm
-    ComponentEntryList aCtrls;
-    size_t n;
-    for ( n = 0; n < nCtrls; n++ )
+    std::vector< ComponentEntry > aCtrls;
+    aCtrls.reserve(nCtrls);
+    for ( size_t n = 0; n < nCtrls; n++ )
     {
         XWindow* pC = pComponents[n].get();
-        ComponentEntry* pE = new ComponentEntry;
-        pE->pComponent = pC;
+        ComponentEntry newEntry;
+        newEntry.pComponent = pC;
         awt::Rectangle aPosSize = pC->getPosSize();
-        pE->aPos.setX( aPosSize.X );
-        pE->aPos.setY( aPosSize.Y );
+        newEntry.aPos.setX( aPosSize.X );
+        newEntry.aPos.setY( aPosSize.Y );
 
-        ComponentEntryList::size_type nPos;
+        decltype(aCtrls)::size_type nPos;
         for ( nPos = 0; nPos < aCtrls.size(); nPos++ )
         {
-            ComponentEntry* pEntry = aCtrls[ nPos ];
-            if ( ( pEntry->aPos.Y() > pE->aPos.Y() ) ||
-                 ( ( pEntry->aPos.Y() == pE->aPos.Y() ) && ( pEntry->aPos.X() > pE->aPos.X() ) ) )
+            ComponentEntry& rEntry = aCtrls[ nPos ];
+            if ( ( rEntry.aPos.Y() > newEntry.aPos.Y() ) ||
+                 ( ( rEntry.aPos.Y() == newEntry.aPos.Y() ) && ( rEntry.aPos.X() > newEntry.aPos.X() ) ) )
                     break;
         }
         if ( nPos < aCtrls.size() ) {
-            ComponentEntryList::iterator it = aCtrls.begin();
-            ::std::advance( it, nPos );
-            aCtrls.insert( it, pE );
+            aCtrls.insert( aCtrls.begin() + nPos, newEntry );
         } else {
-            aCtrls.push_back( pE );
+            aCtrls.push_back( newEntry );
         }
     }
 
     Sequence< Reference< XControlModel > > aNewSeq( nCtrls );
-    for ( n = 0; n < nCtrls; n++ )
+    for ( size_t n = 0; n < nCtrls; n++ )
     {
-        ComponentEntry* pE = aCtrls[ n ];
-        Reference< XControl >  xUC( pE->pComponent, UNO_QUERY );
+        ComponentEntry& rEntry = aCtrls[ n ];
+        Reference< XControl >  xUC( rEntry.pComponent, UNO_QUERY );
         aNewSeq.getArray()[n] = xUC->getModel();
-        delete pE;
     }
-    aCtrls.clear();
 
     mxModel->setControlModels( aNewSeq );
 }
