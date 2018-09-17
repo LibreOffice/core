@@ -172,7 +172,7 @@ namespace rptui
         */
         void            toggleGrid(bool _bGridVisible);
 
-        void            togglePropertyBrowser(bool _bToogleOn);
+        void            togglePropertyBrowser(bool _bToggleOn);
 
         bool            isAddFieldVisible() const;
         void            toggleAddField();

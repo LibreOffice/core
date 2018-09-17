@@ -418,21 +418,21 @@ void ODesignView::unmarkAllObjects()
     m_aScrollWindow->unmarkAllObjects();
 }
 
-void ODesignView::togglePropertyBrowser(bool _bToogleOn)
+void ODesignView::togglePropertyBrowser(bool _bToggleOn)
 {
-    if ( !m_pPropWin && _bToogleOn )
+    if ( !m_pPropWin && _bToggleOn )
     {
         m_pPropWin = VclPtr<PropBrw>::Create(getController().getORB(), m_pTaskPane,this);
         m_pPropWin->Invalidate();
         static_cast<OTaskWindow*>(m_pTaskPane.get())->setPropertyBrowser(m_pPropWin);
         notifySystemWindow(this,m_pPropWin,::comphelper::mem_fun(&TaskPaneList::AddWindow));
     }
-    if ( m_pPropWin && _bToogleOn != m_pPropWin->IsVisible() )
+    if ( m_pPropWin && _bToggleOn != m_pPropWin->IsVisible() )
     {
         if ( !m_pCurrentView && !m_xReportComponent.is() )
             m_xReportComponent = getController().getReportDefinition();
 
-        const bool bWillBeVisible = _bToogleOn;
+        const bool bWillBeVisible = _bToggleOn;
         m_pPropWin->Show(bWillBeVisible);
         m_pTaskPane->Show(bWillBeVisible);
         m_pTaskPane->Invalidate();
