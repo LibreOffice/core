@@ -168,7 +168,7 @@ SvxGraphicFilterResult SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const 
             case SID_GRFFILTER_EMBOSS:
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterEmboss(pWindow, rGraphic));
+                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterEmboss(pWindow ? pWindow->GetFrameWeld() : nullptr, rGraphic));
                 if( aDlg->Execute() == RET_OK )
                     aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );
             }
