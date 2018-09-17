@@ -1415,15 +1415,7 @@ bool SfxObjectShell::PrepareForSigning(weld::Window* pDialogParent)
         ImplGetSignatureState( true ); // script signature
     bool bHasSign = ( pImpl->nScriptingSignatureState != SignatureState::NOSIGNATURES || pImpl->nDocumentSignatureState != SignatureState::NOSIGNATURES );
 
-    // the target ODF version on saving
-
-    // Please fix this comment if you can: Note that the talk about "ODF version" around here is a
-    // bit silly, as there should be nothing ODF-specific in this code, right? What we mean, I
-    // think, is "ODF version iff it is ODF that is the format the document is being stored as", and
-    // otherwise the "ODF version" is ignored. Not sure why such format-specific things needs to be
-    // handled here. Digital signatures then complicate matters further, as it's only ODF 1.2 and
-    // OOXML that have digital signatures.
-
+    // the target ODF version on saving (only valid when signing ODF of course)
     SvtSaveOptions aSaveOpt;
     SvtSaveOptions::ODFDefaultVersion nVersion = aSaveOpt.GetODFDefaultVersion();
 
@@ -1431,7 +1423,7 @@ bool SfxObjectShell::PrepareForSigning(weld::Window* pDialogParent)
     OUString aODFVersion(comphelper::OStorageHelper::GetODFVersionFromStorage(GetStorage()));
 
     if ( IsModified() || !GetMedium() || GetMedium()->GetName().isEmpty()
-      || (aODFVersion != ODFVER_012_TEXT && !bHasSign) )
+      || (GetMedium()->GetFilter()->IsOwnFormat() && aODFVersion != ODFVER_012_TEXT && !bHasSign) )
     {
         // the document might need saving ( new, modified or in ODF1.1 format without signature )
 
