@@ -157,7 +157,7 @@ class SvxIconChoiceCtrl_Impl
     VclPtr<ScrollBar>       aHorSBar;
     VclPtr<ScrollBarBox>    aScrBarBox;
     tools::Rectangle               aCurSelectionRect;
-    std::vector<tools::Rectangle*> aSelectedRectList;
+    std::vector<tools::Rectangle> aSelectedRectList;
     Idle                    aEditIdle;                 // for editing in place
     Idle                    aAutoArrangeIdle;
     Idle                    aDocRectChangedIdle;
@@ -245,7 +245,7 @@ class SvxIconChoiceCtrl_Impl
                             SvxIconChoiceCtrlEntry* pEntry1,
                             SvxIconChoiceCtrlEntry* pEntry2,
                             bool bAdd,
-                            std::vector<tools::Rectangle*>* pOtherRects
+                            std::vector<tools::Rectangle>* pOtherRects
                         );
 
     void                SelectRange(
@@ -411,14 +411,14 @@ public:
     void                HideDDIcon();
 
     static bool         IsOver(
-                            std::vector<tools::Rectangle*>* pSelectedRectList,
+                            std::vector<tools::Rectangle>* pSelectedRectList,
                             const tools::Rectangle& rEntryBoundRect
                         );
 
     void                SelectRect(
                             const tools::Rectangle&,
                             bool bAdd,
-                            std::vector<tools::Rectangle*>* pOtherRects
+                            std::vector<tools::Rectangle>* pOtherRects
                         );
 
     bool               IsTextHit( SvxIconChoiceCtrlEntry* pEntry, const Point& rDocPos );
