@@ -243,18 +243,17 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
 
         strDirectory += "/.execoooXXXXXX";
         OString aTmpName = OUStringToOString(strDirectory, osl_getThreadTextEncoding());
-        char *tmpfname = new char[aTmpName.getLength()+1];
-        strncpy(tmpfname, aTmpName.getStr(), aTmpName.getLength()+1);
+        std::unique_ptr<char[]> tmpfname(new char[aTmpName.getLength()+1]);
+        strncpy(tmpfname.get(), aTmpName.getStr(), aTmpName.getLength()+1);
         // coverity[secure_temp] - https://communities.coverity.com/thread/3179
-        if ((block.fd = mkstemp(tmpfname)) == -1)
-            fprintf(stderr, "mkstemp(\"%s\") failed: %s\n", tmpfname, strerror(errno));
+        if ((block.fd = mkstemp(tmpfname.get())) == -1)
+            fprintf(stderr, "mkstemp(\"%s\") failed: %s\n", tmpfname.get(), strerror(errno));
         if (block.fd == -1)
         {
-            delete[] tmpfname;
             break;
         }
-        unlink(tmpfname);
-        delete[] tmpfname;
+        unlink(tmpfname.get());
+        tmpfname.reset();
 #if defined(HAVE_POSIX_FALLOCATE)
         int err = posix_fallocate(block.fd, 0, block.size);
 #else
