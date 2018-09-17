@@ -399,7 +399,7 @@ int AccObjectWinManager::UpdateAccSelection(XAccessible* pXAcc)
     if(pAccObj==nullptr)
         return 0;
 
-    Reference<XAccessible> pRChild = nullptr;
+    Reference<XAccessible> pRChild;
     AccObject* pAccChildObj = nullptr;
     int selectNum= pRSelection->getSelectedAccessibleChildCount();
 

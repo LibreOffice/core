@@ -53,7 +53,6 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(ADORecordset* _pRecordSet
     ,OPropertySetHelper(ODatabaseMetaDataResultSet_BASE::rBHelper)
     ,m_pRecordSet(_pRecordSet)
     ,m_aStatement(nullptr)
-    ,m_xMetaData(nullptr)
     ,m_nRowPos(0)
     ,m_bWasNull(false)
     ,m_bEOF(false)

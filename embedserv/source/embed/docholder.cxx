@@ -1205,7 +1205,7 @@ css::uno::Reference< css::awt::XWindow> SAL_CALL DocumentHolder::getContainerWin
     if(m_xContainerWindow.is())
         return m_xContainerWindow;
 
-    uno::Reference<awt::XWindow> xWin(nullptr);
+    uno::Reference<awt::XWindow> xWin;
 
     uno::Reference<awt::XToolkit2> xToolkit = awt::Toolkit::create( comphelper::getComponentContext(m_xFactory) );
 

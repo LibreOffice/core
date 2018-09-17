@@ -215,7 +215,7 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
 
     }
 
-    Reference< XTablesSupplier > xTab = nullptr;
+    Reference< XTablesSupplier > xTab;
     if(pConnection)
     {
         WpADOCatalog aCatalog;
