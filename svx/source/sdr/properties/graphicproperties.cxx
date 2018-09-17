@@ -106,13 +106,12 @@ namespace sdr
 
         void GraphicProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
-            SdrGrafObj& rObj = static_cast<SdrGrafObj&>(GetSdrObject());
+            // call parent (always first thing to do, may create the SfxItemSet)
+            RectangleProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
 
             // local changes
+            SdrGrafObj& rObj = static_cast<SdrGrafObj&>(GetSdrObject());
             rObj.SetXPolyDirty();
-
-            // call parent
-            RectangleProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
 
             // local changes
             rObj.ImpSetAttrToGrafInfo();

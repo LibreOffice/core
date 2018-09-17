@@ -78,12 +78,11 @@ namespace sdr
 
         void ConnectorProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
-            SdrEdgeObj& rObj = static_cast<SdrEdgeObj&>(GetSdrObject());
-
-            // call parent
+            // call parent (always first thing to do, may create the SfxItemSet)
             TextProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
 
             // local changes
+            SdrEdgeObj& rObj = static_cast<SdrEdgeObj&>(GetSdrObject());
             rObj.ImpSetAttrToEdgeInfo();
         }
     } // end of namespace properties

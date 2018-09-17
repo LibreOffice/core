@@ -165,7 +165,7 @@ namespace sdr
 
         void CustomShapeProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
-            // call parent
+            // call parent (always first thing to do, may create the SfxItemSet)
             TextProperties::SetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr );
 
             // update bTextFrame and RenderGeometry

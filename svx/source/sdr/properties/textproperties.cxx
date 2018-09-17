@@ -232,12 +232,11 @@ namespace sdr
 
         void TextProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr)
         {
-            SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
-
-            // call parent
+            // call parent (always first thing to do, may create the SfxItemSet)
             AttributeProperties::SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
 
             // #i101556# StyleSheet has changed -> new version
+            SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
             maVersion++;
 
             if(!rObj.IsLinkedText() )
