@@ -340,7 +340,7 @@ namespace DOM
     // IO context functions for libxml2 interaction
     typedef struct {
         Reference< XOutputStream > stream;
-        bool allowClose;
+        bool const allowClose;
     } IOContext;
 
     extern "C" {

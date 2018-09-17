@@ -114,7 +114,7 @@ class SvtViewOptionsBase_Impl final
                                                                            bool         bCreateIfMissing);
 
     private:
-        OUString                                    m_sListName;
+        OUString const                                    m_sListName;
         css::uno::Reference< css::container::XNameAccess > m_xRoot;
         css::uno::Reference< css::container::XNameAccess > m_xSet;
 

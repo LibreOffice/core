@@ -53,8 +53,8 @@ class LoginDialog : public weld::GenericDialogController
     std::unique_ptr<weld::CheckButton> m_xSavePasswdBtn;
     std::unique_ptr<weld::CheckButton> m_xUseSysCredsCB;
     std::unique_ptr<weld::Button> m_xOKBtn;
-    OUString m_server;
-    OUString m_realm;
+    OUString const m_server;
+    OUString const m_realm;
 
     void            HideControls_Impl( LoginFlags nFlags );
     void            EnableUseSysCredsControls_Impl( bool bUseSysCredsEnabled );

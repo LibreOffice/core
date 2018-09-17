@@ -466,7 +466,7 @@ static const char* const aImplKillTrailingWithExceptionsList[] =
 struct ImplFontAttrWeightSearchData
 {
     const char*             mpStr;
-    FontWeight              meWeight;
+    FontWeight const              meWeight;
 };
 
 static ImplFontAttrWeightSearchData const aImplWeightAttrSearchList[] =
@@ -492,7 +492,7 @@ static ImplFontAttrWeightSearchData const aImplWeightAttrSearchList[] =
 struct ImplFontAttrWidthSearchData
 {
     const char*             mpStr;
-    FontWidth               meWidth;
+    FontWidth const               meWidth;
 };
 
 static ImplFontAttrWidthSearchData const aImplWidthAttrSearchList[] =
@@ -513,7 +513,7 @@ static ImplFontAttrWidthSearchData const aImplWidthAttrSearchList[] =
 struct ImplFontAttrTypeSearchData
 {
     const char*             mpStr;
-    ImplFontAttrs           mnType;
+    ImplFontAttrs const           mnType;
 };
 
 static ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
@@ -796,7 +796,7 @@ static const char* const pAttribNames[] =
 struct enum_convert
 {
     const char* pName;
-    int          nEnum;
+    int const          nEnum;
 };
 
 static const enum_convert pWeightNames[] =

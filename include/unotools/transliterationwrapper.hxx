@@ -39,7 +39,7 @@ class UNOTOOLS_DLLPUBLIC TransliterationWrapper
 {
     css::uno::Reference< css::i18n::XExtendedTransliteration > xTrans;
     LanguageTag aLanguageTag;
-    TransliterationFlags nType;
+    TransliterationFlags const nType;
     mutable bool bFirstCall;
 
     TransliterationWrapper( const TransliterationWrapper& ) = delete;

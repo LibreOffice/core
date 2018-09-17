@@ -38,7 +38,7 @@ class UNOTOOLS_DLLPUBLIC OInputStreamHelper : public cppu::WeakImplHelper<css::i
     ::osl::Mutex    m_aMutex;
     SvLockBytesRef  m_xLockBytes;
     sal_uInt64      m_nActPos;
-    sal_Int32       m_nAvailable;   // this is typically the chunk(buffer) size
+    sal_Int32 const       m_nAvailable;   // this is typically the chunk(buffer) size
 
 public:
     OInputStreamHelper(const SvLockBytesRef& _xLockBytes,

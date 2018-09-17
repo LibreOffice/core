@@ -48,7 +48,7 @@ class UNOTOOLS_DLLPUBLIC TempFile
     OUString    aName;
     std::unique_ptr<SvStream>
                 pStream;
-    bool        bIsDirectory;
+    bool const        bIsDirectory;
     bool        bKillingFileEnabled;
 
 public:

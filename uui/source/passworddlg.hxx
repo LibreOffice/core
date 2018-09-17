@@ -31,7 +31,7 @@ class PasswordDialog : public weld::GenericDialogController
     std::unique_ptr<weld::Entry> m_xEDConfirmPassword;
     std::unique_ptr<weld::Button> m_xOKBtn;
     sal_uInt16      nMinLen;
-    OUString        aPasswdMismatch;
+    OUString const  aPasswdMismatch;
 
 
     DECL_LINK(OKHdl_Impl, weld::Button&, void);

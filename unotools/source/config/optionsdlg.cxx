@@ -45,7 +45,7 @@ class SvtOptionsDlgOptions_Impl : public utl::ConfigItem
 private:
     typedef std::unordered_map< OUString, bool > OptionNodeList;
 
-    OUString        m_sPathDelimiter;
+    static constexpr OUStringLiteral g_sPathDelimiter = "/";
     OptionNodeList  m_aOptionNodeList;
 
     enum NodeType{ NT_Group, NT_Page, NT_Option };
@@ -81,14 +81,11 @@ namespace
 
 SvtOptionsDlgOptions_Impl::SvtOptionsDlgOptions_Impl()
     : ConfigItem( CFG_FILENAME ),
-
-    m_sPathDelimiter( "/" ),
     m_aOptionNodeList( OptionNodeList() )
-
 {
     OUString sRootNode( ROOT_NODE );
     Sequence< OUString > aNodeSeq = GetNodeNames( sRootNode );
-    OUString sNode( sRootNode + m_sPathDelimiter );
+    OUString sNode( sRootNode + g_sPathDelimiter );
     sal_uInt32 nCount = aNodeSeq.getLength();
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
@@ -109,7 +106,7 @@ void SvtOptionsDlgOptions_Impl::Notify( const Sequence< OUString >& )
 
 void SvtOptionsDlgOptions_Impl::ReadNode( const OUString& _rNode, NodeType _eType )
 {
-    OUString sNode( _rNode + m_sPathDelimiter );
+    OUString sNode( _rNode + g_sPathDelimiter );
     OUString sSet;
     sal_Int32 nLen = 0;
     switch ( _eType )
@@ -154,7 +151,7 @@ void SvtOptionsDlgOptions_Impl::ReadNode( const OUString& _rNode, NodeType _eTyp
         {
             for ( sal_uInt32 n = 0; n < static_cast<sal_uInt32>(aNodes.getLength()); ++n )
             {
-                OUString sSubNodeName( sNodes + m_sPathDelimiter + aNodes[n] );
+                OUString sSubNodeName( sNodes + g_sPathDelimiter + aNodes[n] );
                 ReadNode( sSubNodeName, _eType == NT_Group ? NT_Page : NT_Option );
             }
         }
