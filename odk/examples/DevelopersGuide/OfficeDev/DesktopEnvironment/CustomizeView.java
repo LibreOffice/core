@@ -57,9 +57,9 @@ public class CustomizeView extends    JPanel
     private static final String FEATUREPROP_TOOLBAR     = "ToolBarVisible"    ;
     private static final String FEATUREPROP_OBJECTBAR   = "ObjectBarVisible"  ;
 
-    private static final String ACTION_MENUBAR          = "toogle_menu"       ;
-    private static final String ACTION_TOOLBAR          = "toogle_toolbar"    ;
-    private static final String ACTION_OBJECTBAR        = "toogle_objectbar"  ;
+    private static final String ACTION_MENUBAR          = "toggle_menu"       ;
+    private static final String ACTION_TOOLBAR          = "toggle_toolbar"    ;
+    private static final String ACTION_OBJECTBAR        = "toggle_objectbar"  ;
 
     private static final String MENUBAR_ON              = "menubar on"        ;
     private static final String TOOLBAR_ON              = "toolbar on"        ;
