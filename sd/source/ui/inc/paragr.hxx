@@ -25,15 +25,13 @@
 /**
  * Paragraph-Tab-Dialog
  */
-class SdParagraphDlg : public SfxTabDialog
+class SdParagraphDlg : public SfxTabDialogController
 {
-    sal_uInt16      m_nParaStd;
-
 private:
-    virtual void    PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
+    virtual void    PageCreated(const OString& rId, SfxTabPage &rPage) override;
 
 public:
-                    SdParagraphDlg( vcl::Window* pParent, const SfxItemSet* pAttr );
+    SdParagraphDlg(weld::Window* pParent, const SfxItemSet* pAttr);
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_PARAGR_HXX
