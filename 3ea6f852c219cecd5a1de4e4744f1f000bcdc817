@@ -16,6 +16,58 @@
       "revId": "3ea6f852c219cecd5a1de4e4744f1f000bcdc817",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_2687a2da",
+        "filename": "vcl/headless/svpinst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-09-17T14:02:54Z",
+      "side": 1,
+      "message": "Would be nice, but there is this code in \n\nvcl/inc/headless/svpinst.hxx:#define SvpSalInstance AquaSalInstance\n\nNo idea how this works on IOS?!\n\nAnd from reading the commit message from commit 0efd06de8fca4036c4132b2745a11273b1755df2, I\u0027m not sure I want to touch this.",
+      "parentUuid": "bff0334d_86054e7d",
+      "revId": "3ea6f852c219cecd5a1de4e4744f1f000bcdc817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_4682a6ca",
+        "filename": "vcl/headless/svpinst.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-09-17T14:02:54Z",
+      "side": 1,
+      "message": "This code just runs, if the YieldMutex is really a SvpSalYieldMutex.",
+      "revId": "3ea6f852c219cecd5a1de4e4744f1f000bcdc817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_066c9e34",
+        "filename": "vcl/inc/salinst.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-09-17T14:02:54Z",
+      "side": 1,
+      "message": "Probably this should be const. It doesn\u0027t make sense to change it and there is no API.",
+      "revId": "3ea6f852c219cecd5a1de4e4744f1f000bcdc817",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
