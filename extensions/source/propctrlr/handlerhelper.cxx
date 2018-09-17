@@ -35,6 +35,7 @@
 #include <com/sun/star/inspection/XNumericControl.hpp>
 #include <tools/diagnose_ex.h>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/svapp.hxx>
 
 #include <algorithm>
 
@@ -290,7 +291,20 @@ namespace pcr
         return pInspectorWindow;
     }
 
-
+    weld::Window* PropertyHandlerHelper::getDialogParentFrame(const Reference<XComponentContext>& _rContext)
+    {
+        weld::Window* pInspectorWindow = nullptr;
+        try
+        {
+            Reference< XWindow > xInspectorWindow( _rContext->getValueByName( "DialogParentWindow" ), UNO_QUERY_THROW );
+            pInspectorWindow = Application::GetFrameWeld(xInspectorWindow);
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("extensions.propctrlr");
+        }
+        return pInspectorWindow;
+    }
 } // namespace pcr
 
 

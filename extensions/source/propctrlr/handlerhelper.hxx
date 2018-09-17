@@ -31,6 +31,7 @@
 #include <vector>
 
 namespace vcl { class Window; }
+namespace weld { class Window; }
 namespace com { namespace sun { namespace star {
     namespace inspection {
         struct LineDescriptor;
@@ -199,6 +200,7 @@ namespace pcr
                 the component context which was used to create the component calling this method
         */
         static vcl::Window* getDialogParentWindow( const css::uno::Reference< css::uno::XComponentContext > & _rContext );
+        static weld::Window* getDialogParentFrame( const css::uno::Reference< css::uno::XComponentContext > & _rContext );
 
 
         /** determines whether given PropertyAttributes require a to-be-created

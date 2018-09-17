@@ -30,11 +30,10 @@ namespace pcr
 
 
     //= ControlCharacterDialog
-
-    class ControlCharacterDialog : public SfxTabDialog
+    class ControlCharacterDialog : public SfxTabDialogController
     {
     public:
-        ControlCharacterDialog(vcl::Window* _pParent, const SfxItemSet& _rCoreSet);
+        ControlCharacterDialog(weld::Window* pParent, const SfxItemSet& rCoreSet);
         virtual ~ControlCharacterDialog() override;
 
         /// creates an item set to be used with this dialog
@@ -61,9 +60,7 @@ namespace pcr
             std::vector< css::beans::NamedValue >& _out_properties );
 
     protected:
-        virtual void PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage) override;
-    private:
-        sal_uInt16 m_nCharsId;
+        virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
     };
 
 }   // namespace pcr
