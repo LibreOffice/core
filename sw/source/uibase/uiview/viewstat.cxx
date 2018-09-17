@@ -22,6 +22,7 @@
 
 #include <hintids.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
+#include <officecfg/Office/Common.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/cjkoptions.hxx>
@@ -281,7 +282,9 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case FN_REDLINE_SHOW:
             {
-                if (getenv("SW_REDLINEHIDE")) // TODO...
+                uno::Reference<uno::XComponentContext> const xContext(
+                        comphelper::getProcessComponentContext());
+                if (officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
                 {
                     rSet.Put(SfxBoolItem(nWhich, !m_pWrtShell->GetLayout()->IsHideRedlines()));
                 }
