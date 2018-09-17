@@ -94,7 +94,7 @@ inline bool isMIMECharsetEncoding(rtl_TextEncoding eEncoding)
     return rtl_isOctetTextEncoding(eEncoding);
 }
 
-sal_Unicode * convertToUnicode(const sal_Char * pBegin,
+std::unique_ptr<sal_Unicode[]> convertToUnicode(const sal_Char * pBegin,
                                          const sal_Char * pEnd,
                                          rtl_TextEncoding eEncoding,
                                          sal_Size & rSize)
@@ -105,15 +105,15 @@ sal_Unicode * convertToUnicode(const sal_Char * pBegin,
         = rtl_createTextToUnicodeConverter(eEncoding);
     rtl_TextToUnicodeContext hContext
         = rtl_createTextToUnicodeContext(hConverter);
-    sal_Unicode * pBuffer;
+    std::unique_ptr<sal_Unicode[]> pBuffer;
     sal_uInt32 nInfo;
     for (sal_Size nBufferSize = pEnd - pBegin;;
          nBufferSize += nBufferSize / 3 + 1)
     {
-        pBuffer = new sal_Unicode[nBufferSize];
+        pBuffer.reset(new sal_Unicode[nBufferSize]);
         sal_Size nSrcCvtBytes;
         rSize = rtl_convertTextToUnicode(
-                    hConverter, hContext, pBegin, pEnd - pBegin, pBuffer,
+                    hConverter, hContext, pBegin, pEnd - pBegin, pBuffer.get(),
                     nBufferSize,
                     RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR
                         | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
@@ -121,20 +121,19 @@ sal_Unicode * convertToUnicode(const sal_Char * pBegin,
                     &nInfo, &nSrcCvtBytes);
         if (nInfo != RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL)
             break;
-        delete[] pBuffer;
+        pBuffer.reset();
         rtl_resetTextToUnicodeContext(hConverter, hContext);
     }
     rtl_destroyTextToUnicodeContext(hConverter, hContext);
     rtl_destroyTextToUnicodeConverter(hConverter);
     if (nInfo != 0)
     {
-        delete[] pBuffer;
-        pBuffer = nullptr;
+        pBuffer.reset();
     }
     return pBuffer;
 }
 
-sal_Char * convertFromUnicode(const sal_Unicode * pBegin,
+std::unique_ptr<sal_Char[]> convertFromUnicode(const sal_Unicode * pBegin,
                                         const sal_Unicode * pEnd,
                                         rtl_TextEncoding eEncoding,
                                         sal_Size & rSize)
@@ -145,15 +144,15 @@ sal_Char * convertFromUnicode(const sal_Unicode * pBegin,
         = rtl_createUnicodeToTextConverter(eEncoding);
     rtl_UnicodeToTextContext hContext
         = rtl_createUnicodeToTextContext(hConverter);
-    sal_Char * pBuffer;
+    std::unique_ptr<sal_Char[]> pBuffer;
     sal_uInt32 nInfo;
     for (sal_Size nBufferSize = pEnd - pBegin;;
          nBufferSize += nBufferSize / 3 + 1)
     {
-        pBuffer = new sal_Char[nBufferSize];
+        pBuffer.reset(new sal_Char[nBufferSize]);
         sal_Size nSrcCvtBytes;
         rSize = rtl_convertUnicodeToText(
-                    hConverter, hContext, pBegin, pEnd - pBegin, pBuffer,
+                    hConverter, hContext, pBegin, pEnd - pBegin, pBuffer.get(),
                     nBufferSize,
                     RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
                         | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR
@@ -162,15 +161,14 @@ sal_Char * convertFromUnicode(const sal_Unicode * pBegin,
                     &nInfo, &nSrcCvtBytes);
         if (nInfo != RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL)
             break;
-        delete[] pBuffer;
+        pBuffer.reset();
         rtl_resetUnicodeToTextContext(hConverter, hContext);
     }
     rtl_destroyUnicodeToTextContext(hConverter, hContext);
     rtl_destroyUnicodeToTextConverter(hConverter);
     if (nInfo != 0)
     {
-        delete[] pBuffer;
-        pBuffer = nullptr;
+        pBuffer.reset();
     }
     return pBuffer;
 }
@@ -294,14 +292,13 @@ bool translateUTF8Char(const sal_Char *& rBegin,
         sal_Unicode aUTF16[2];
         const sal_Unicode * pUTF16End = putUTF32Character(aUTF16, nUCS4);
         sal_Size nSize;
-        sal_Char * pBuffer = convertFromUnicode(aUTF16, pUTF16End, eEncoding,
+        std::unique_ptr<sal_Char[]> pBuffer = convertFromUnicode(aUTF16, pUTF16End, eEncoding,
                                                 nSize);
         if (!pBuffer)
             return false;
         DBG_ASSERT(nSize == 1,
                    "translateUTF8Char(): Bad conversion");
-        rCharacter = *pBuffer;
-        delete[] pBuffer;
+        rCharacter = *pBuffer.get();
     }
     rBegin = p;
     return true;
@@ -384,7 +381,7 @@ bool parseParameters(ParameterList const & rInput,
             do
             {
                 sal_Size nSize;
-                sal_Unicode * pUnicode
+                std::unique_ptr<sal_Unicode[]> pUnicode
                     = convertToUnicode(itNext->m_aValue.getStr(),
                                                  itNext->m_aValue.getStr()
                                                      + itNext->m_aValue.getLength(),
@@ -403,8 +400,7 @@ bool parseParameters(ParameterList const & rInput,
                     bBadEncoding = true;
                     break;
                 }
-                aValue.append(pUnicode, static_cast<sal_Int32>(nSize));
-                delete[] pUnicode;
+                aValue.append(pUnicode.get(), static_cast<sal_Int32>(nSize));
                 ++itNext;
             }
             while (itNext != rInput.end() && itNext->m_nSection != 0);
@@ -1395,7 +1391,7 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
 
             bEncodedWord = bEncodedWord && q != pEnd && *q++ == '=';
 
-            sal_Unicode * pUnicodeBuffer = nullptr;
+            std::unique_ptr<sal_Unicode[]> pUnicodeBuffer;
             sal_Size nUnicodeSize = 0;
             if (bEncodedWord)
             {
@@ -1403,7 +1399,7 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
                     = convertToUnicode(sText.getStr(),
                                        sText.getStr() + sText.getLength(),
                                        eCharsetEncoding, nUnicodeSize);
-                if (pUnicodeBuffer == nullptr)
+                if (!pUnicodeBuffer)
                     bEncodedWord = false;
             }
 
@@ -1411,9 +1407,9 @@ OUString INetMIME::decodeHeaderFieldBody(const OString& rBody)
             {
                 appendISO88591(sDecoded, pCopyBegin, pWSPBegin);
                 sDecoded.append(
-                    pUnicodeBuffer,
+                    pUnicodeBuffer.get(),
                     static_cast< sal_Int32 >(nUnicodeSize));
-                delete[] pUnicodeBuffer;
+                pUnicodeBuffer.reset();
                 p = q;
                 pCopyBegin = p;
 
