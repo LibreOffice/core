@@ -1143,11 +1143,11 @@ VclPtr<AbstractURLDlg> AbstractDialogFactory_Impl::CreateURLDialog( vcl::Window*
     return VclPtr<AbstractURLDlg_Impl>::Create( pDlg );
 }
 
-VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateTabItemDialog(vcl::Window* pParent,
+VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateTabItemDialog(weld::Window* pParent,
     const SfxItemSet& rSet)
 {
-    VclPtrInstance<SvxSearchFormatDialog> pDlg(pParent, rSet);
-    return VclPtr<CuiAbstractTabDialog_Impl>::Create(pDlg);
+    return VclPtr<CuiAbstractTabController_Impl>::Create(o3tl::make_unique<SvxSearchFormatDialog>(
+                                                         pParent, rSet));
 }
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxSearchAttributeDialog( vcl::Window* pParent,
