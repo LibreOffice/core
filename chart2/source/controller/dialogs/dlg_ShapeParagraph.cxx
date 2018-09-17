@@ -30,11 +30,9 @@ using namespace ::com::sun::star;
 namespace chart
 {
 
-ShapeParagraphDialog::ShapeParagraphDialog(vcl::Window* pParent,
+ShapeParagraphDialog::ShapeParagraphDialog(weld::Window* pParent,
     const SfxItemSet* pAttr)
-    : SfxTabDialog(pParent, "ParagraphDialog",
-        "modules/schart/ui/paradialog.ui", pAttr)
-    , m_nTabPageId(0)
+    : SfxTabDialogController(pParent, "modules/schart/ui/paradialog.ui", "ParagraphDialog", pAttr)
 {
     SvtCJKOptions aCJKOptions;
 
@@ -48,12 +46,12 @@ ShapeParagraphDialog::ShapeParagraphDialog(vcl::Window* pParent,
     {
         RemoveTabPage("labelTP_PARA_ASIAN");
     }
-    m_nTabPageId = AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
+    AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
 }
 
-void ShapeParagraphDialog::PageCreated( sal_uInt16 nId, SfxTabPage& rPage )
+void ShapeParagraphDialog::PageCreated(const OString& rId, SfxTabPage& rPage)
 {
-    if (nId == m_nTabPageId)
+    if (rId == "labelTP_TABULATOR")
     {
         SfxAllItemSet aSet( *( GetInputSetImpl()->GetPool() ) );
         TabulatorDisableFlags const nFlags(( TabulatorDisableFlags::TypeMask &~TabulatorDisableFlags::TypeLeft ) |
