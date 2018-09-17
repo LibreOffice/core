@@ -257,16 +257,16 @@ namespace chelp {
 
         std::vector< OUString >    m_avModules;
 
-        typedef std::unordered_map< OUString,helpdatafileproxy::Hdf* >   DatabasesTable;
+        typedef std::unordered_map< OUString, std::unique_ptr<helpdatafileproxy::Hdf> >   DatabasesTable;
         DatabasesTable m_aDatabases;         // Language and module dependent databases
 
         typedef std::unordered_map< OUString,OUString > LangSetTable;
         LangSetTable m_aLangSet;   // Mapping to of lang-country to lang
 
-        typedef std::unordered_map< OUString,StaticModuleInformation* > ModInfoTable;
+        typedef std::unordered_map< OUString, std::unique_ptr<StaticModuleInformation> > ModInfoTable;
         ModInfoTable m_aModInfo;   // Module information
 
-        typedef std::unordered_map< OUString,KeywordInfo* > KeywordInfoTable;
+        typedef std::unordered_map< OUString, std::unique_ptr<KeywordInfo> > KeywordInfoTable;
         KeywordInfoTable m_aKeywordInfo;   // Module information
 
         typedef
