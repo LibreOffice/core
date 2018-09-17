@@ -160,13 +160,11 @@ IMPL_LINK_NOARG(SdParagraphNumTabPage, ImplNewStartHdl, Button*, void)
     m_pNewStartNF->Enable(bEnable && m_pNewStartNumberCB->IsChecked());
 }
 
-SdParagraphDlg::SdParagraphDlg( vcl::Window* pParent, const SfxItemSet* pAttr )
-               : SfxTabDialog( pParent,
-                               "DrawParagraphPropertiesDialog",
-                               "modules/sdraw/ui/drawparadialog.ui",
-                               pAttr )
+SdParagraphDlg::SdParagraphDlg(weld::Window* pParent, const SfxItemSet* pAttr)
+    : SfxTabDialogController(pParent, "modules/sdraw/ui/drawparadialog.ui",
+                             "DrawParagraphPropertiesDialog", pAttr)
 {
-    m_nParaStd = AddTabPage( "labelTP_PARA_STD", RID_SVXPAGE_STD_PARAGRAPH);
+    AddTabPage( "labelTP_PARA_STD", RID_SVXPAGE_STD_PARAGRAPH);
 
     SvtCJKOptions aCJKOptions;
     if( aCJKOptions.IsAsianTypographyEnabled() )
@@ -185,10 +183,10 @@ SdParagraphDlg::SdParagraphDlg( vcl::Window* pParent, const SfxItemSet* pAttr )
       AddTabPage("labelTP_TABULATOR", RID_SVXPAGE_TABULATOR);
 }
 
-void SdParagraphDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SdParagraphDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-    if (m_nParaStd == nId)
+    if (rId == "labelTP_PARA_STD")
     {
         aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST, MM50/2));
         rPage.PageCreated(aSet);
