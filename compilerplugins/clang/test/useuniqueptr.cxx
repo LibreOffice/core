@@ -61,7 +61,7 @@ class Class5 {
     ~Class5()
     {
         for (auto p : m_pbar)
-            delete p; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+            delete p; // expected-error {{rather manage this with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
     }
 };
 class Class5a {
@@ -72,7 +72,7 @@ class Class5a {
         {
             int x = 1;
             x = x + 2;
-            delete p; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+            delete p; // expected-error {{rather manage this with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
         }
     }
 };
@@ -81,7 +81,7 @@ class Class6 {
     ~Class6()
     {
         for (auto p : m_pbar)
-            delete p; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+            delete p; // expected-error {{rather manage this with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
     }
 };
 class Class7 {
@@ -97,7 +97,7 @@ class Class8 {
     ~Class8()
     {
         for (auto i : m_pbar)
-            delete i.second; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+            delete i.second; // expected-error {{rather manage this with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
     }
 };
 class Foo8 {
@@ -152,7 +152,7 @@ class Foo11 {
     {
         for (const auto & p : m_pbar1)
         {
-            delete p; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+            delete p; // expected-error {{rather manage this with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
         }
     }
 };
@@ -214,7 +214,7 @@ class Foo17 {
     int * m_pbar1[6]; // expected-note {{member is here [loplugin:useuniqueptr]}}
     ~Foo17()
     {
-        delete m_pbar1[0]; // expected-error {{unconditional call to delete on a member, should be using std::unique_ptr [loplugin:useuniqueptr]}}
+        delete m_pbar1[0]; // expected-error {{unconditional call to delete on an array member, should be using std::unique_ptr [loplugin:useuniqueptr]}}
     }
 };
 
@@ -229,6 +229,26 @@ class Foo18 {
     }
 };
 #endif
+
+void foo19()
+{
+    std::vector<char*> vec; // expected-note {{var is here [loplugin:useuniqueptr]}}
+    for(char * p : vec)
+        delete p; // expected-error {{rather manage this var with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+}
+
+// no warning expected
+namespace foo20
+{
+    struct struct20_1 {};
+    struct struct20_2 : public struct20_1 {
+        char * p;
+    };
+    void foo20(struct20_1 * pMapping)
+    {
+        delete static_cast< struct20_2 * >( pMapping )->p;
+    }
+};
 
 //  ------------------------------------------------------------------------------------------------
 // tests for passing owning pointers to constructors
