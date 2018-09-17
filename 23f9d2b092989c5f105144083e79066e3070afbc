@@ -16,6 +16,24 @@
       "revId": "23f9d2b092989c5f105144083e79066e3070afbc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bff0334d_a37cc4b5",
+        "filename": "svgio/source/svgreader/svgtools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-09-17T08:11:48Z",
+      "side": 1,
+      "message": "thanks, fixed with commit 694a433d5fbc9ab77dd37e7be9e79f3d3776eb24",
+      "parentUuid": "dfeb2761_2da626c3",
+      "revId": "23f9d2b092989c5f105144083e79066e3070afbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
