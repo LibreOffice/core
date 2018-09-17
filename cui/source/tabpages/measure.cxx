@@ -77,73 +77,63 @@ SvxMeasureDialog::SvxMeasureDialog( vcl::Window* pParent, const SfxItemSet& rInA
 |*
 \************************************************************************/
 
-SvxMeasurePage::SvxMeasurePage( vcl::Window* pWindow, const SfxItemSet& rInAttrs ) :
-                SvxTabPage      ( pWindow
-                                 ,"DimensionLinesTabPage"
-                                 ,"cui/ui/dimensionlinestabpage.ui"
-                                 ,rInAttrs ),
-        rOutAttrs               ( rInAttrs ),
-        aAttrSet                ( *rInAttrs.GetPool() ),
-        pView( nullptr ),
-        eUnit( MapUnit::Map100thMM ),
-        bPositionModified       ( false )
+SvxMeasurePage::SvxMeasurePage(TabPageParent pWindow, const SfxItemSet& rInAttrs)
+    : SvxTabPage(pWindow, "cui/ui/dimensionlinestabpage.ui", "DimensionLinesTabPage", rInAttrs)
+    , rOutAttrs(rInAttrs)
+    , aAttrSet(*rInAttrs.GetPool())
+    , pView(nullptr)
+    , eUnit(MapUnit::Map100thMM)
+    , bPositionModified(false)
+    , m_aCtlPosition(this)
+    , m_xMtrFldLineDist(m_xBuilder->weld_metric_spin_button("MTR_LINE_DIST", FUNIT_MM))
+    , m_xMtrFldHelplineOverhang(m_xBuilder->weld_metric_spin_button("MTR_FLD_HELPLINE_OVERHANG", FUNIT_MM))
+    , m_xMtrFldHelplineDist(m_xBuilder->weld_metric_spin_button("MTR_FLD_HELPLINE_DIST", FUNIT_MM))
+    , m_xMtrFldHelpline1Len(m_xBuilder->weld_metric_spin_button("MTR_FLD_HELPLINE1_LEN", FUNIT_MM))
+    , m_xMtrFldHelpline2Len(m_xBuilder->weld_metric_spin_button("MTR_FLD_HELPLINE2_LEN", FUNIT_MM))
+    , m_xTsbBelowRefEdge(m_xBuilder->weld_check_button("TSB_BELOW_REF_EDGE"))
+    , m_xMtrFldDecimalPlaces(m_xBuilder->weld_spin_button("MTR_FLD_DECIMALPLACES"))
+    , m_xTsbAutoPosV(m_xBuilder->weld_check_button("TSB_AUTOPOSV"))
+    , m_xTsbAutoPosH(m_xBuilder->weld_check_button("TSB_AUTOPOSH"))
+    , m_xTsbShowUnit(m_xBuilder->weld_check_button("TSB_SHOW_UNIT"))
+    , m_xLbUnit(m_xBuilder->weld_combo_box("LB_UNIT"))
+    , m_xTsbParallel(m_xBuilder->weld_check_button("TSB_PARALLEL"))
+    , m_xFtAutomatic(m_xBuilder->weld_label("STR_MEASURE_AUTOMATIC"))
+    , m_xCtlPosition(new weld::CustomWeld(*m_xBuilder, "CTL_POSITION", m_aCtlPosition))
+    , m_xCtlPreview(new weld::CustomWeld(*m_xBuilder, "CTL_PREVIEW", m_aCtlPreview))
 {
-    get(m_pMtrFldLineDist, "MTR_LINE_DIST");
-    get(m_pMtrFldHelplineOverhang, "MTR_FLD_HELPLINE_OVERHANG");
-    get(m_pMtrFldHelplineDist, "MTR_FLD_HELPLINE_DIST");
-    get(m_pMtrFldHelpline1Len, "MTR_FLD_HELPLINE1_LEN");
-    get(m_pMtrFldHelpline2Len, "MTR_FLD_HELPLINE2_LEN");
-    get(m_pTsbBelowRefEdge, "TSB_BELOW_REF_EDGE");
-    get(m_pMtrFldDecimalPlaces, "MTR_FLD_DECIMALPLACES");
-
-    get(m_pCtlPosition, "CTL_POSITION");
-    get(m_pTsbAutoPosV, "TSB_AUTOPOSV");
-    get(m_pTsbAutoPosH, "TSB_AUTOPOSH");
-    get(m_pTsbShowUnit, "TSB_SHOW_UNIT");
-    get(m_pLbUnit, "LB_UNIT");
-    get(m_pTsbParallel, "TSB_PARALLEL");
-
-    get(m_pCtlPreview, "CTL_PREVIEW");
-    m_pCtlPreview->SetAttributes(rInAttrs);
-
-    get(m_pFtAutomatic,"STR_MEASURE_AUTOMATIC");
+    m_aCtlPreview.SetAttributes(rInAttrs);
 
     FillUnitLB();
 
     const FieldUnit eFUnit = GetModuleFieldUnit( rInAttrs );
-    SetFieldUnit( *m_pMtrFldLineDist, eFUnit );
-    SetFieldUnit( *m_pMtrFldHelplineOverhang, eFUnit );
-    SetFieldUnit( *m_pMtrFldHelplineDist, eFUnit );
-    SetFieldUnit( *m_pMtrFldHelpline1Len, eFUnit );
-    SetFieldUnit( *m_pMtrFldHelpline2Len, eFUnit );
+    SetFieldUnit( *m_xMtrFldLineDist, eFUnit );
+    SetFieldUnit( *m_xMtrFldHelplineOverhang, eFUnit );
+    SetFieldUnit( *m_xMtrFldHelplineDist, eFUnit );
+    SetFieldUnit( *m_xMtrFldHelpline1Len, eFUnit );
+    SetFieldUnit( *m_xMtrFldHelpline2Len, eFUnit );
     if( eFUnit == FUNIT_MM )
     {
-        m_pMtrFldLineDist->SetSpinSize( 50 );
-        m_pMtrFldHelplineOverhang->SetSpinSize( 50 );
-        m_pMtrFldHelplineDist->SetSpinSize( 50 );
-        m_pMtrFldHelpline1Len->SetSpinSize( 50 );
-        m_pMtrFldHelpline2Len->SetSpinSize( 50 );
+        m_xMtrFldLineDist->set_increments(50, 500, FUNIT_NONE);
+        m_xMtrFldHelplineOverhang->set_increments(50, 500, FUNIT_NONE);
+        m_xMtrFldHelplineDist->set_increments(50, 500, FUNIT_NONE);
+        m_xMtrFldHelpline1Len->set_increments(50, 500, FUNIT_NONE);
+        m_xMtrFldHelpline2Len->set_increments(50, 500, FUNIT_NONE);
     }
 
-    m_pTsbAutoPosV->SetClickHdl( LINK( this, SvxMeasurePage, ClickAutoPosHdl_Impl ) );
-    m_pTsbAutoPosH->SetClickHdl( LINK( this, SvxMeasurePage, ClickAutoPosHdl_Impl ) );
+    m_xTsbAutoPosV->connect_toggled(LINK( this, SvxMeasurePage, ClickAutoPosHdl_Impl));
+    m_xTsbAutoPosH->connect_toggled(LINK(this, SvxMeasurePage, ClickAutoPosHdl_Impl));
 
-    // set background and border of iconchoicectrl
-    const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    m_pCtlPreview->SetBackground ( rStyles.GetWindowColor() );
-    m_pCtlPreview->SetBorderStyle(WindowBorderStyle::MONO);
-
-    Link<Edit&,void> aLink( LINK( this, SvxMeasurePage, ChangeAttrEditHdl_Impl ) );
-    m_pMtrFldLineDist->SetModifyHdl( aLink );
-    m_pMtrFldHelplineOverhang->SetModifyHdl( aLink );
-    m_pMtrFldHelplineDist->SetModifyHdl( aLink );
-    m_pMtrFldHelpline1Len->SetModifyHdl( aLink );
-    m_pMtrFldHelpline2Len->SetModifyHdl( aLink );
-    m_pMtrFldDecimalPlaces->SetModifyHdl( aLink );
-    m_pTsbBelowRefEdge->SetClickHdl( LINK( this, SvxMeasurePage, ChangeAttrClickHdl_Impl ) );
-    m_pTsbParallel->SetClickHdl( LINK( this, SvxMeasurePage, ChangeAttrClickHdl_Impl ) );
-    m_pTsbShowUnit->SetClickHdl( LINK( this, SvxMeasurePage, ChangeAttrClickHdl_Impl ) );
-    m_pLbUnit->SetSelectHdl( LINK( this, SvxMeasurePage, ChangeAttrListBoxHdl_Impl ) );
+    Link<weld::MetricSpinButton&,void> aLink(LINK(this, SvxMeasurePage, ChangeAttrEditHdl_Impl));
+    m_xMtrFldLineDist->connect_value_changed(aLink);
+    m_xMtrFldHelplineOverhang->connect_value_changed(aLink);
+    m_xMtrFldHelplineDist->connect_value_changed(aLink);
+    m_xMtrFldHelpline1Len->connect_value_changed(aLink);
+    m_xMtrFldHelpline2Len->connect_value_changed(aLink);
+    m_xMtrFldDecimalPlaces->connect_value_changed(LINK(this, SvxMeasurePage, ChangeAttrSpinHdl_Impl));
+    m_xTsbBelowRefEdge->connect_toggled(LINK(this, SvxMeasurePage, ChangeAttrClickHdl_Impl));
+    m_xTsbParallel->connect_toggled( LINK( this, SvxMeasurePage, ChangeAttrClickHdl_Impl));
+    m_xTsbShowUnit->connect_toggled(LINK(this, SvxMeasurePage, ChangeAttrClickHdl_Impl));
+    m_xLbUnit->connect_changed(LINK(this, SvxMeasurePage, ChangeAttrListBoxHdl_Impl));
 }
 
 SvxMeasurePage::~SvxMeasurePage()
@@ -153,21 +143,8 @@ SvxMeasurePage::~SvxMeasurePage()
 
 void SvxMeasurePage::dispose()
 {
-    m_pMtrFldLineDist.clear();
-    m_pMtrFldHelplineOverhang.clear();
-    m_pMtrFldHelplineDist.clear();
-    m_pMtrFldHelpline1Len.clear();
-    m_pMtrFldHelpline2Len.clear();
-    m_pTsbBelowRefEdge.clear();
-    m_pMtrFldDecimalPlaces.clear();
-    m_pCtlPosition.clear();
-    m_pTsbAutoPosV.clear();
-    m_pTsbAutoPosH.clear();
-    m_pTsbShowUnit.clear();
-    m_pLbUnit.clear();
-    m_pTsbParallel.clear();
-    m_pFtAutomatic.clear();
-    m_pCtlPreview.clear();
+    m_xCtlPreview.reset();
+    m_xCtlPosition.reset();
     SvxTabPage::dispose();
 }
 
@@ -191,13 +168,13 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     if( pItem )
     {
         long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
-        SetMetricValue( *m_pMtrFldLineDist, nValue, eUnit );
+        SetMetricValue( *m_xMtrFldLineDist, nValue, eUnit );
     }
     else
     {
-        m_pMtrFldLineDist->SetText( OUString() );
+        m_xMtrFldLineDist->set_text(OUString());
     }
-    m_pMtrFldLineDist->SaveValue();
+    m_xMtrFldLineDist->save_value();
 
     // SdrMeasureHelplineOverhangItem
     pItem = GetItem( *rAttrs, SDRATTR_MEASUREHELPLINEOVERHANG );
@@ -206,13 +183,13 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     if( pItem )
     {
         long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
-        SetMetricValue( *m_pMtrFldHelplineOverhang, nValue, eUnit );
+        SetMetricValue( *m_xMtrFldHelplineOverhang, nValue, eUnit );
     }
     else
     {
-        m_pMtrFldHelplineOverhang->SetText( OUString() );
+        m_xMtrFldHelplineOverhang->set_text(OUString());
     }
-    m_pMtrFldHelplineOverhang->SaveValue();
+    m_xMtrFldHelplineOverhang->save_value();
 
     // SdrMeasureHelplineDistItem
     pItem = GetItem( *rAttrs, SDRATTR_MEASUREHELPLINEDIST );
@@ -221,13 +198,13 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     if( pItem )
     {
         long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
-        SetMetricValue( *m_pMtrFldHelplineDist, nValue, eUnit );
+        SetMetricValue( *m_xMtrFldHelplineDist, nValue, eUnit );
     }
     else
     {
-        m_pMtrFldHelplineDist->SetText( OUString() );
+        m_xMtrFldHelplineDist->set_text(OUString());
     }
-    m_pMtrFldHelplineDist->SaveValue();
+    m_xMtrFldHelplineDist->save_value();
 
     // SdrMeasureHelpline1LenItem
     pItem = GetItem( *rAttrs, SDRATTR_MEASUREHELPLINE1LEN );
@@ -236,13 +213,13 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     if( pItem )
     {
         long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
-        SetMetricValue( *m_pMtrFldHelpline1Len, nValue, eUnit );
+        SetMetricValue( *m_xMtrFldHelpline1Len, nValue, eUnit );
     }
     else
     {
-        m_pMtrFldHelpline1Len->SetText( OUString() );
+        m_xMtrFldHelpline1Len->set_text(OUString());
     }
-    m_pMtrFldHelpline1Len->SaveValue();
+    m_xMtrFldHelpline1Len->save_value();
 
     // SdrMeasureHelpline2LenItem
     pItem = GetItem( *rAttrs, SDRATTR_MEASUREHELPLINE2LEN );
@@ -251,26 +228,25 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     if( pItem )
     {
         long nValue = static_cast<const SdrMetricItem*>( pItem )->GetValue();
-        SetMetricValue( *m_pMtrFldHelpline2Len, nValue, eUnit );
+        SetMetricValue( *m_xMtrFldHelpline2Len, nValue, eUnit );
     }
     else
     {
-        m_pMtrFldHelpline2Len->SetText( OUString() );
+        m_xMtrFldHelpline2Len->set_text(OUString());
     }
-    m_pMtrFldHelpline2Len->SaveValue();
+    m_xMtrFldHelpline2Len->save_value();
 
     // SdrMeasureBelowRefEdgeItem
     if( rAttrs->GetItemState( SDRATTR_MEASUREBELOWREFEDGE ) != SfxItemState::DONTCARE )
     {
-        m_pTsbBelowRefEdge->SetState( rAttrs->Get( SDRATTR_MEASUREBELOWREFEDGE ).
+        m_xTsbBelowRefEdge->set_state( rAttrs->Get( SDRATTR_MEASUREBELOWREFEDGE ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
-        m_pTsbBelowRefEdge->EnableTriState( false );
     }
     else
     {
-        m_pTsbBelowRefEdge->SetState( TRISTATE_INDET );
+        m_xTsbBelowRefEdge->set_state( TRISTATE_INDET );
     }
-    m_pTsbBelowRefEdge->SaveValue();
+    m_xTsbBelowRefEdge->save_state();
 
     // SdrMeasureDecimalPlacesItem
     pItem = GetItem( *rAttrs, SDRATTR_MEASUREDECIMALPLACES );
@@ -279,60 +255,58 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     if( pItem )
     {
         sal_Int16 nValue = static_cast<const SdrMeasureDecimalPlacesItem*>( pItem )->GetValue();
-        m_pMtrFldDecimalPlaces->SetValue( nValue );
+        m_xMtrFldDecimalPlaces->set_value(nValue);
     }
     else
     {
-        m_pMtrFldDecimalPlaces->SetText( OUString() );
+        m_xMtrFldDecimalPlaces->set_text(OUString());
     }
-    m_pMtrFldDecimalPlaces->SaveValue();
+    m_xMtrFldDecimalPlaces->save_value();
 
     // SdrMeasureTextRota90Item
     // Attention: negate !
     if( rAttrs->GetItemState( SDRATTR_MEASURETEXTROTA90 ) != SfxItemState::DONTCARE )
     {
-        m_pTsbParallel->SetState( rAttrs->Get( SDRATTR_MEASURETEXTROTA90 ).
+        m_xTsbParallel->set_state( rAttrs->Get( SDRATTR_MEASURETEXTROTA90 ).
                         GetValue() ? TRISTATE_FALSE : TRISTATE_TRUE );
-        m_pTsbParallel->EnableTriState( false );
     }
     else
     {
-        m_pTsbParallel->SetState( TRISTATE_INDET );
+        m_xTsbParallel->set_state( TRISTATE_INDET );
     }
-    m_pTsbParallel->SaveValue();
+    m_xTsbParallel->save_state();
 
     // SdrMeasureShowUnitItem
     if( rAttrs->GetItemState( SDRATTR_MEASURESHOWUNIT ) != SfxItemState::DONTCARE )
     {
-        m_pTsbShowUnit->SetState( rAttrs->Get( SDRATTR_MEASURESHOWUNIT ).
+        m_xTsbShowUnit->set_state( rAttrs->Get( SDRATTR_MEASURESHOWUNIT ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
-        m_pTsbShowUnit->EnableTriState( false );
     }
     else
     {
-        m_pTsbShowUnit->SetState( TRISTATE_INDET );
+        m_xTsbShowUnit->set_state( TRISTATE_INDET );
     }
-    m_pTsbShowUnit->SaveValue();
+    m_xTsbShowUnit->save_state();
 
     // SdrMeasureUnitItem
     if( rAttrs->GetItemState( SDRATTR_MEASUREUNIT ) != SfxItemState::DONTCARE )
     {
         long nFieldUnit = static_cast<long>(rAttrs->Get( SDRATTR_MEASUREUNIT ).GetValue());
 
-        for( sal_Int32 i = 0; i < m_pLbUnit->GetEntryCount(); ++i )
+        for (sal_Int32 i = 0; i < m_xLbUnit->get_count(); ++i)
         {
-            if ( reinterpret_cast<sal_IntPtr>(m_pLbUnit->GetEntryData( i )) == nFieldUnit )
+            if (m_xLbUnit->get_id(i).toInt32() == nFieldUnit)
             {
-                m_pLbUnit->SelectEntryPos( i );
+                m_xLbUnit->set_active(i);
                 break;
             }
         }
     }
     else
     {
-        m_pLbUnit->SetNoSelection();
+        m_xLbUnit->set_active(-1);
     }
-    m_pLbUnit->SaveValue();
+    m_xLbUnit->save_value();
 
     // Position
     if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTVPOS ) != SfxItemState::DONTCARE )
@@ -342,9 +316,6 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
         {
             if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTHPOS ) != SfxItemState::DONTCARE )
             {
-                m_pTsbAutoPosV->EnableTriState( false );
-                m_pTsbAutoPosH->EnableTriState( false );
-
                 css::drawing::MeasureTextHorzPos eHPos =
                             rAttrs->Get( SDRATTR_MEASURETEXTHPOS ).GetValue();
                 RectPoint eRP = RectPoint::MM;
@@ -397,33 +368,33 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
 
                 if (eHPos == css::drawing::MeasureTextHorzPos_AUTO)
                 {
-                    m_pTsbAutoPosH->SetState( TRISTATE_TRUE );
+                    m_xTsbAutoPosH->set_state( TRISTATE_TRUE );
                     nState = CTL_STATE::NOHORZ;
                 }
 
                 if (eVPos == css::drawing::MeasureTextVertPos_AUTO)
                 {
-                    m_pTsbAutoPosV->SetState( TRISTATE_TRUE );
+                    m_xTsbAutoPosV->set_state( TRISTATE_TRUE );
                     nState |= CTL_STATE::NOVERT;
                 }
 
-                m_pCtlPosition->SetState( nState );
-                m_pCtlPosition->SetActualRP( eRP );
+                m_aCtlPosition.SetState(nState);
+                m_aCtlPosition.SetActualRP(eRP);
             }
         }
     }
     else
     {
-        m_pCtlPosition->Reset();
-        m_pTsbAutoPosV->SetState( TRISTATE_INDET );
-        m_pTsbAutoPosH->SetState( TRISTATE_INDET );
+        m_aCtlPosition.Reset();
+        m_xTsbAutoPosV->set_state( TRISTATE_INDET );
+        m_xTsbAutoPosH->set_state( TRISTATE_INDET );
     }
 
     // put the attributes to the preview-control,
     // otherwise the control don't know about
     // the settings of the dialog (#67930)
-    ChangeAttrHdl_Impl( m_pTsbShowUnit );
-    m_pCtlPreview->SetAttributes( *rAttrs );
+    ChangeAttrHdl_Impl(m_xTsbShowUnit.get());
+    m_aCtlPreview.SetAttributes(*rAttrs);
 
     bPositionModified = false;
 }
@@ -440,77 +411,77 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
     sal_Int32    nValue;
     TriState eState;
 
-    if( m_pMtrFldLineDist->IsValueChangedFromSaved() )
+    if( m_xMtrFldLineDist->get_value_changed_from_saved() )
     {
-        nValue = GetCoreValue( *m_pMtrFldLineDist, eUnit );
+        nValue = GetCoreValue( *m_xMtrFldLineDist, eUnit );
         rAttrs->Put( makeSdrMeasureLineDistItem( nValue ) );
         bModified = true;
     }
 
-    if( m_pMtrFldHelplineOverhang->IsValueChangedFromSaved() )
+    if( m_xMtrFldHelplineOverhang->get_value_changed_from_saved() )
     {
-        nValue = GetCoreValue( *m_pMtrFldHelplineOverhang, eUnit );
+        nValue = GetCoreValue( *m_xMtrFldHelplineOverhang, eUnit );
         rAttrs->Put( makeSdrMeasureHelplineOverhangItem( nValue ) );
         bModified = true;
     }
 
-    if( m_pMtrFldHelplineDist->IsValueChangedFromSaved() )
+    if( m_xMtrFldHelplineDist->get_value_changed_from_saved() )
     {
-        nValue = GetCoreValue( *m_pMtrFldHelplineDist, eUnit );
+        nValue = GetCoreValue( *m_xMtrFldHelplineDist, eUnit );
         rAttrs->Put( makeSdrMeasureHelplineDistItem( nValue ) );
         bModified = true;
     }
 
-    if( m_pMtrFldHelpline1Len->IsValueChangedFromSaved() )
+    if( m_xMtrFldHelpline1Len->get_value_changed_from_saved() )
     {
-        nValue = GetCoreValue( *m_pMtrFldHelpline1Len, eUnit );
+        nValue = GetCoreValue( *m_xMtrFldHelpline1Len, eUnit );
         rAttrs->Put( makeSdrMeasureHelpline1LenItem( nValue ) );
         bModified = true;
     }
 
-    if( m_pMtrFldHelpline2Len->IsValueChangedFromSaved() )
+    if( m_xMtrFldHelpline2Len->get_value_changed_from_saved() )
     {
-        nValue = GetCoreValue( *m_pMtrFldHelpline2Len, eUnit );
+        nValue = GetCoreValue( *m_xMtrFldHelpline2Len, eUnit );
         rAttrs->Put( makeSdrMeasureHelpline2LenItem( nValue ) );
         bModified = true;
     }
 
-    eState = m_pTsbBelowRefEdge->GetState();
-    if( m_pTsbBelowRefEdge->IsValueChangedFromSaved() )
+    eState = m_xTsbBelowRefEdge->get_state();
+    if( m_xTsbBelowRefEdge->get_state_changed_from_saved() )
     {
         rAttrs->Put( SdrMeasureBelowRefEdgeItem( TRISTATE_TRUE == eState ) );
         bModified = true;
     }
 
-    if( m_pMtrFldDecimalPlaces->IsValueChangedFromSaved() )
+    if( m_xMtrFldDecimalPlaces->get_value_changed_from_saved() )
     {
-        nValue = static_cast<sal_Int32>(m_pMtrFldDecimalPlaces->GetValue());
+        nValue = m_xMtrFldDecimalPlaces->get_value();
         rAttrs->Put(
             SdrMeasureDecimalPlacesItem(
                 sal::static_int_cast< sal_Int16 >( nValue ) ) );
         bModified = true;
     }
 
-    eState = m_pTsbParallel->GetState();
-    if( m_pTsbParallel->IsValueChangedFromSaved() )
+    eState = m_xTsbParallel->get_state();
+    if( m_xTsbParallel->get_state_changed_from_saved() )
     {
         rAttrs->Put( SdrMeasureTextRota90Item( TRISTATE_FALSE == eState ) );
         bModified = true;
     }
 
-    eState = m_pTsbShowUnit->GetState();
-    if( m_pTsbShowUnit->IsValueChangedFromSaved() )
+    eState = m_xTsbShowUnit->get_state();
+    if( m_xTsbShowUnit->get_state_changed_from_saved() )
     {
         rAttrs->Put( SdrYesNoItem(SDRATTR_MEASURESHOWUNIT, TRISTATE_TRUE == eState ) );
         bModified = true;
     }
 
-    sal_Int32 nPos = m_pLbUnit->GetSelectedEntryPos();
-    if( m_pLbUnit->IsValueChangedFromSaved() )
+    int nPos = m_xLbUnit->get_active();
+    if( m_xLbUnit->get_value_changed_from_saved() )
     {
-        if( nPos != LISTBOX_ENTRY_NOTFOUND )
+        if (nPos != -1)
         {
-            sal_uInt16 nFieldUnit = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(m_pLbUnit->GetEntryData( nPos )));
+            sal_uInt16 nFieldUnit = m_xLbUnit->get_id(nPos).toUInt32();
             FieldUnit _eUnit = static_cast<FieldUnit>(nFieldUnit);
             rAttrs->Put( SdrMeasureUnitItem( _eUnit ) );
             bModified = true;
@@ -523,7 +494,7 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
         css::drawing::MeasureTextVertPos eVPos, eOldVPos;
         css::drawing::MeasureTextHorzPos eHPos, eOldHPos;
 
-        RectPoint eRP = m_pCtlPosition->GetActualRP();
+        RectPoint eRP = m_aCtlPosition.GetActualRP();
         switch( eRP )
         {
             default:
@@ -546,10 +517,10 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
             case RectPoint::RB: eVPos = css::drawing::MeasureTextVertPos_WEST;
                         eHPos = css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE; break;
         }
-        if (m_pTsbAutoPosH->GetState() == TRISTATE_TRUE)
+        if (m_xTsbAutoPosH->get_state() == TRISTATE_TRUE)
             eHPos = css::drawing::MeasureTextHorzPos_AUTO;
 
-        if (m_pTsbAutoPosV->GetState() == TRISTATE_TRUE)
+        if (m_xTsbAutoPosV->get_state() == TRISTATE_TRUE)
             eVPos = css::drawing::MeasureTextVertPos_AUTO;
 
         if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTVPOS ) != SfxItemState::DONTCARE )
@@ -604,162 +575,169 @@ void SvxMeasurePage::Construct()
     // floatingpoint-values' is not clear, but has to be done another way - if needed.
     // Checked on original aw080, is just commented out there, too.
 
-    // m_pCtlPreview->pMeasureObj->SetModel( pView->GetModel() );
-    m_pCtlPreview->Invalidate();
+    m_aCtlPreview.Invalidate();
 }
 
-VclPtr<SfxTabPage> SvxMeasurePage::Create( TabPageParent pWindow,
-                                           const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SvxMeasurePage::Create(TabPageParent pParent,
+                                          const SfxItemSet* rAttrs)
 {
-    return VclPtr<SvxMeasurePage>::Create( pWindow.pParent, *rAttrs );
+    return VclPtr<SvxMeasurePage>::Create(pParent, *rAttrs);
 }
 
 void SvxMeasurePage::PointChanged( vcl::Window* pWindow, RectPoint /*eRP*/ )
 {
-    ChangeAttrHdl_Impl( pWindow );
+    ChangeAttrHdl_Impl(pWindow);
 }
 
-void SvxMeasurePage::PointChanged( weld::DrawingArea*, RectPoint /*eRP*/ )
+void SvxMeasurePage::PointChanged(weld::DrawingArea* pDrawingArea, RectPoint /*eRP*/)
 {
-    ChangeAttrHdl_Impl( m_pCtlPosition );
+    ChangeAttrHdl_Impl(pDrawingArea);
 }
 
-IMPL_LINK( SvxMeasurePage, ClickAutoPosHdl_Impl, Button*, p, void )
+IMPL_LINK( SvxMeasurePage, ClickAutoPosHdl_Impl, weld::ToggleButton&, rBox, void )
 {
-    if( m_pTsbAutoPosH->GetState() == TRISTATE_TRUE )
+    if (m_xTsbAutoPosH->get_state() == TRISTATE_TRUE)
     {
-        switch( m_pCtlPosition->GetActualRP() )
+        switch( m_aCtlPosition.GetActualRP() )
         {
             case RectPoint::LT:
             case RectPoint::RT:
-                m_pCtlPosition->SetActualRP( RectPoint::MT );
+                m_aCtlPosition.SetActualRP( RectPoint::MT );
             break;
 
             case RectPoint::LM:
             case RectPoint::RM:
-                m_pCtlPosition->SetActualRP( RectPoint::MM );
+                m_aCtlPosition.SetActualRP( RectPoint::MM );
             break;
 
             case RectPoint::LB:
             case RectPoint::RB:
-                m_pCtlPosition->SetActualRP( RectPoint::MB );
+                m_aCtlPosition.SetActualRP( RectPoint::MB );
             break;
             default: ;//prevent warning
         }
     }
-    if( m_pTsbAutoPosV->GetState() == TRISTATE_TRUE )
+    if (m_xTsbAutoPosV->get_state() == TRISTATE_TRUE)
     {
-        switch( m_pCtlPosition->GetActualRP() )
+        switch( m_aCtlPosition.GetActualRP() )
         {
             case RectPoint::LT:
             case RectPoint::LB:
-                m_pCtlPosition->SetActualRP( RectPoint::LM );
+                m_aCtlPosition.SetActualRP( RectPoint::LM );
             break;
 
             case RectPoint::MT:
             case RectPoint::MB:
-                m_pCtlPosition->SetActualRP( RectPoint::MM );
+                m_aCtlPosition.SetActualRP( RectPoint::MM );
             break;
 
             case RectPoint::RT:
             case RectPoint::RB:
-                m_pCtlPosition->SetActualRP( RectPoint::RM );
+                m_aCtlPosition.SetActualRP( RectPoint::RM );
             break;
             default: ;//prevent warning
         }
     }
-    ChangeAttrHdl_Impl( p );
+    ChangeAttrHdl_Impl(&rBox);
 }
 
-IMPL_LINK( SvxMeasurePage, ChangeAttrClickHdl_Impl, Button*, p, void )
+IMPL_LINK(SvxMeasurePage, ChangeAttrClickHdl_Impl, weld::ToggleButton&, r, void)
 {
-    ChangeAttrHdl_Impl(p);
+    ChangeAttrHdl_Impl(&r);
 }
-IMPL_LINK( SvxMeasurePage, ChangeAttrListBoxHdl_Impl, ListBox&, rBox, void )
-{
-    ChangeAttrHdl_Impl(&rBox);
-}
-IMPL_LINK( SvxMeasurePage, ChangeAttrEditHdl_Impl, Edit&, rBox, void )
+
+IMPL_LINK(SvxMeasurePage, ChangeAttrListBoxHdl_Impl, weld::ComboBox&, rBox, void)
 {
     ChangeAttrHdl_Impl(&rBox);
 }
+
+IMPL_LINK(SvxMeasurePage, ChangeAttrEditHdl_Impl, weld::MetricSpinButton&, rBox, void)
+{
+    ChangeAttrHdl_Impl(&rBox);
+}
+
+IMPL_LINK( SvxMeasurePage, ChangeAttrSpinHdl_Impl, weld::SpinButton&, rBox, void )
+{
+    ChangeAttrHdl_Impl(&rBox);
+}
+
 void SvxMeasurePage::ChangeAttrHdl_Impl( void const * p )
 {
-    if( p == m_pMtrFldLineDist )
+    if (p == m_xMtrFldLineDist.get())
     {
-        sal_Int32 nValue = GetCoreValue( *m_pMtrFldLineDist, eUnit );
+        sal_Int32 nValue = GetCoreValue( *m_xMtrFldLineDist, eUnit );
         aAttrSet.Put( makeSdrMeasureLineDistItem( nValue ) );
     }
 
-    if( p == m_pMtrFldHelplineOverhang )
+    if (p == m_xMtrFldHelplineOverhang.get())
     {
-        sal_Int32 nValue = GetCoreValue( *m_pMtrFldHelplineOverhang, eUnit );
+        sal_Int32 nValue = GetCoreValue( *m_xMtrFldHelplineOverhang, eUnit );
         aAttrSet.Put( makeSdrMeasureHelplineOverhangItem( nValue) );
     }
 
-    if( p == m_pMtrFldHelplineDist )
+    if (p == m_xMtrFldHelplineDist.get())
     {
-        sal_Int32 nValue = GetCoreValue( *m_pMtrFldHelplineDist, eUnit );
+        sal_Int32 nValue = GetCoreValue( *m_xMtrFldHelplineDist, eUnit );
         aAttrSet.Put( makeSdrMeasureHelplineDistItem( nValue) );
     }
 
-    if( p == m_pMtrFldHelpline1Len )
+    if (p == m_xMtrFldHelpline1Len.get())
     {
-        sal_Int32 nValue = GetCoreValue( *m_pMtrFldHelpline1Len, eUnit );
+        sal_Int32 nValue = GetCoreValue( *m_xMtrFldHelpline1Len, eUnit );
         aAttrSet.Put( makeSdrMeasureHelpline1LenItem( nValue ) );
     }
 
-    if( p == m_pMtrFldHelpline2Len )
+    if (p == m_xMtrFldHelpline2Len.get())
     {
-        sal_Int32 nValue = GetCoreValue( *m_pMtrFldHelpline2Len, eUnit );
+        sal_Int32 nValue = GetCoreValue( *m_xMtrFldHelpline2Len, eUnit );
         aAttrSet.Put( makeSdrMeasureHelpline2LenItem( nValue ) );
     }
 
-    if( p == m_pTsbBelowRefEdge )
+    if (p == m_xTsbBelowRefEdge.get())
     {
-        TriState eState = m_pTsbBelowRefEdge->GetState();
+        TriState eState = m_xTsbBelowRefEdge->get_state();
         if( eState != TRISTATE_INDET )
             aAttrSet.Put( SdrMeasureBelowRefEdgeItem( TRISTATE_TRUE == eState ) );
     }
 
-    if( p == m_pMtrFldDecimalPlaces )
+    if (p == m_xMtrFldDecimalPlaces.get())
     {
         sal_Int16 nValue = sal::static_int_cast< sal_Int16 >(
-            m_pMtrFldDecimalPlaces->GetValue() );
+            m_xMtrFldDecimalPlaces->get_value() );
         aAttrSet.Put( SdrMeasureDecimalPlacesItem( nValue ) );
     }
 
-    if( p == m_pTsbParallel )
+    if (p == m_xTsbParallel.get())
     {
-        TriState eState = m_pTsbParallel->GetState();
+        TriState eState = m_xTsbParallel->get_state();
         if( eState != TRISTATE_INDET )
             aAttrSet.Put( SdrMeasureTextRota90Item( TRISTATE_FALSE == eState ) );
     }
 
-    if( p == m_pTsbShowUnit )
+    if (p == m_xTsbShowUnit.get())
     {
-        TriState eState = m_pTsbShowUnit->GetState();
+        TriState eState = m_xTsbShowUnit->get_state();
         if( eState != TRISTATE_INDET )
             aAttrSet.Put( SdrYesNoItem( SDRATTR_MEASURESHOWUNIT, TRISTATE_TRUE == eState ) );
     }
 
-    if( p == m_pLbUnit )
+    if (p == m_xLbUnit.get())
     {
-        sal_Int32 nPos = m_pLbUnit->GetSelectedEntryPos();
-        if( nPos != LISTBOX_ENTRY_NOTFOUND )
+        int nPos = m_xLbUnit->get_active();
+        if (nPos != -1)
         {
-            sal_uInt16 nFieldUnit = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(m_pLbUnit->GetEntryData( nPos )));
+            sal_uInt16 nFieldUnit = m_xLbUnit->get_id(nPos).toUInt32();
             FieldUnit _eUnit = static_cast<FieldUnit>(nFieldUnit);
             aAttrSet.Put( SdrMeasureUnitItem( _eUnit ) );
         }
     }
 
-    if( p == m_pTsbAutoPosV || p == m_pTsbAutoPosH || p == m_pCtlPosition )
+    if (p == m_xTsbAutoPosV.get() || p == m_xTsbAutoPosH.get() || p == m_aCtlPosition.GetDrawingArea())
     {
         bPositionModified = true;
 
         // Position
-        RectPoint eRP = m_pCtlPosition->GetActualRP();
+        RectPoint eRP = m_aCtlPosition.GetActualRP();
         css::drawing::MeasureTextVertPos eVPos;
         css::drawing::MeasureTextHorzPos eHPos;
 
@@ -788,27 +766,27 @@ void SvxMeasurePage::ChangeAttrHdl_Impl( void const * p )
 
         CTL_STATE nState = CTL_STATE::NONE;
 
-        if (m_pTsbAutoPosH->GetState() == TRISTATE_TRUE)
+        if (m_xTsbAutoPosH->get_state() == TRISTATE_TRUE)
         {
             eHPos = css::drawing::MeasureTextHorzPos_AUTO;
             nState = CTL_STATE::NOHORZ;
         }
 
-        if (m_pTsbAutoPosV->GetState() == TRISTATE_TRUE)
+        if (m_xTsbAutoPosV->get_state() == TRISTATE_TRUE)
         {
             eVPos = css::drawing::MeasureTextVertPos_AUTO;
             nState |= CTL_STATE::NOVERT;
         }
 
-        if( p == m_pTsbAutoPosV || p == m_pTsbAutoPosH )
-            m_pCtlPosition->SetState( nState );
+        if (p == m_xTsbAutoPosV.get() || p == m_xTsbAutoPosH.get())
+            m_aCtlPosition.SetState( nState );
 
         aAttrSet.Put( SdrMeasureTextVPosItem( eVPos ) );
         aAttrSet.Put( SdrMeasureTextHPosItem( eHPos ) );
     }
 
-    m_pCtlPreview->SetAttributes( aAttrSet );
-    m_pCtlPreview->Invalidate();
+    m_aCtlPreview.SetAttributes(aAttrSet);
+    m_aCtlPreview.Invalidate();
 }
 
 void SvxMeasurePage::FillUnitLB()
@@ -816,18 +794,17 @@ void SvxMeasurePage::FillUnitLB()
     // fill ListBox with metrics
 
     FieldUnit nUnit = FUNIT_NONE;
-    OUString aStrMetric( m_pFtAutomatic->GetText());
-    sal_Int32 nPos = m_pLbUnit->InsertEntry( aStrMetric );
-    m_pLbUnit->SetEntryData( nPos, reinterpret_cast<void*>(nUnit) );
+    OUString aStrMetric(m_xFtAutomatic->get_label());
+    m_xLbUnit->append(OUString::number(nUnit), aStrMetric);
 
     for( sal_uInt32 i = 0; i < SvxFieldUnitTable::Count(); ++i )
     {
         aStrMetric = SvxFieldUnitTable::GetString(i);
         nUnit = SvxFieldUnitTable::GetValue(i);
-        nPos = m_pLbUnit->InsertEntry( aStrMetric );
-        m_pLbUnit->SetEntryData( nPos, reinterpret_cast<void*>(nUnit) );
+        m_xLbUnit->append(OUString::number(nUnit), aStrMetric);
     }
 }
+
 void SvxMeasurePage::PageCreated(const SfxAllItemSet& aSet)
 {
     const OfaPtrItem* pOfaPtrItem = aSet.GetItem<OfaPtrItem>(SID_OBJECT_LIST, false);

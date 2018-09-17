@@ -195,7 +195,6 @@ cui/uiconfig/ui/connpooloptions.ui://GtkLabel[@id='driverlabel'] orphan-label
 cui/uiconfig/ui/connpooloptions.ui://GtkLabel[@id='driver'] orphan-label
 cui/uiconfig/ui/databaselinkdialog.ui://GtkLabel[@id='alttitle'] orphan-label
 cui/uiconfig/ui/dimensionlinestabpage.ui://GtkLabel[@id='FT_POSITION'] orphan-label
-cui/uiconfig/ui/dimensionlinestabpage.ui://svxlo-SvxRectCtl[@id='CTL_POSITION'] no-labelled-by
 cui/uiconfig/ui/dimensionlinestabpage.ui://GtkComboBox[@id='LB_UNIT'] no-labelled-by
 cui/uiconfig/ui/dimensionlinestabpage.ui://GtkLabel[@id='STR_MEASURE_AUTOMATIC'] orphan-label
 cui/uiconfig/ui/eventassignpage.ui://cuilo-MacroEventListBox[@id='assignments:border'] no-labelled-by

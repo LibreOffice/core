@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_MEASCTRL_HXX
 #define INCLUDED_SVX_MEASCTRL_HXX
 
-#include <vcl/ctrl.hxx>
+#include <vcl/customweld.hxx>
 #include <svx/svxdllapi.h>
 #include <memory>
 
@@ -27,27 +27,26 @@ class SfxItemSet;
 class SdrMeasureObj;
 class SdrModel;
 
-class SVX_DLLPUBLIC SvxXMeasurePreview : public Control
+class SVX_DLLPUBLIC SvxXMeasurePreview : public weld::CustomWidgetController
 {
  friend class SvxMeasurePage;
 
 private:
+    MapMode m_aMapMode;
     SdrMeasureObj* pMeasureObj;
     std::unique_ptr<SdrModel> pModel;
 
+    void ResizeImpl(const Size& rSize);
 public:
-    SvxXMeasurePreview(vcl::Window* pParent, WinBits nStyle);
+    SvxXMeasurePreview();
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual ~SvxXMeasurePreview() override;
-    virtual void dispose() override;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
     virtual void Resize() override;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) override;
-    virtual Size GetOptimalSize() const override;
 
     void SetAttributes(const SfxItemSet& rInAttrs);
-
-    virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
 };
 
 #endif

@@ -87,8 +87,6 @@ Size SvxRectCtl::GetOptimalSize() const
     return LogicToPixel(Size(78, 39), MapMode(MapUnit::MapAppFont));
 }
 
-VCL_BUILDER_FACTORY(SvxRectCtl)
-
 SvxRectCtl::~SvxRectCtl()
 {
     disposeOnce();
