@@ -40,10 +40,6 @@ XMLEventImportHelper::XMLEventImportHelper() :
 XMLEventImportHelper::~XMLEventImportHelper()
 {
     // delete factories
-    for(auto& rEntry : aFactoryMap)
-    {
-        delete rEntry.second;
-    }
     aFactoryMap.clear();
 
     // delete name map
@@ -52,13 +48,10 @@ XMLEventImportHelper::~XMLEventImportHelper()
 
 void XMLEventImportHelper::RegisterFactory(
     const OUString& rLanguage,
-    XMLEventContextFactory* pFactory )
+    std::unique_ptr<XMLEventContextFactory> pFactory )
 {
-    DBG_ASSERT(pFactory != nullptr, "I need a factory.");
-    if (nullptr != pFactory)
-    {
-        aFactoryMap[rLanguage] = pFactory;
-    }
+    assert(pFactory);
+    aFactoryMap[rLanguage] = std::move(pFactory);
 }
 
 void XMLEventImportHelper::AddTranslationTable(

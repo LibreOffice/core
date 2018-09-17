@@ -1594,15 +1594,15 @@ XMLEventImportHelper& SvXMLImport::GetEventImport()
         mpEventImportHelper = o3tl::make_unique<XMLEventImportHelper>();
         const OUString& sStarBasic(GetXMLToken(XML_STARBASIC));
         mpEventImportHelper->RegisterFactory(sStarBasic,
-                                            new XMLStarBasicContextFactory());
+                                            o3tl::make_unique<XMLStarBasicContextFactory>());
         const OUString& sScript(GetXMLToken(XML_SCRIPT));
         mpEventImportHelper->RegisterFactory(sScript,
-                                            new XMLScriptContextFactory());
+                                            o3tl::make_unique<XMLScriptContextFactory>());
         mpEventImportHelper->AddTranslationTable(aStandardEventTable);
 
         // register StarBasic event handler with capitalized spelling
         mpEventImportHelper->RegisterFactory("StarBasic",
-                                            new XMLStarBasicContextFactory());
+                                            o3tl::make_unique<XMLStarBasicContextFactory>());
     }
 
     return *mpEventImportHelper;
