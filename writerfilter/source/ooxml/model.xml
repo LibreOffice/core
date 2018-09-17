@@ -17927,8 +17927,8 @@
     <resource name="CT_PgNum" resource="Stream">
       <action name="end" action="pgNum"/>
     </resource>
-    <resource name="CT_Cr" resource="Stream">
-      <action name="end" action="endOfParagraph"/>
+    <resource name="CT_Cr" resource="Properties">
+      <action name="end" action="handleBreak"/>
     </resource>
     <resource name="CT_Tab" resource="Stream">
       <action name="end" action="tab"/>
