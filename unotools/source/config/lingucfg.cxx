@@ -212,7 +212,7 @@ static struct NamesToHdl
 {
     const char   *pFullPropName;      // full qualified name as used in configuration
     const char   *pPropName;          // property name only (atom) of above
-    sal_Int32   nHdl;               // numeric handle representing the property
+    sal_Int32 const   nHdl;               // numeric handle representing the property
 }aNamesToHdl[] =
 {
 {/*  0 */    "General/DefaultLocale",                         UPN_DEFAULT_LOCALE,                    UPH_DEFAULT_LOCALE},
