@@ -400,7 +400,7 @@ void OOXMLSecExporter::Impl::writeSignatureInfo()
     m_xDocumentHandler->characters("9"); // This is what MSO 2016 writes, though [MS-OFFCRYPTO] doesn't document what the value means.
     m_xDocumentHandler->endElement("SignatureProviderDetails");
     m_xDocumentHandler->startElement("SignatureType", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
-    m_xDocumentHandler->characters("1");
+    m_xDocumentHandler->characters("2");
     m_xDocumentHandler->endElement("SignatureType");
 
     m_xDocumentHandler->endElement("SignatureInfoV1");
