@@ -193,7 +193,7 @@ do { \
         break;          /* switch */ \
     }
 
-ConvErr QProToSc::Convert( const ScTokenArray*& pArray )
+ConvErr QProToSc::Convert( std::unique_ptr<ScTokenArray>& pArray )
 {
     sal_uInt8 nFmla[ nBufSize ], nArg;
     sal_uInt8 nArgArray[ nBufSize ] = {0};
@@ -392,7 +392,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray )
         }
         i++;
     }
-    pArray = aPool[ aStack.Get() ];
+    pArray = aPool.GetTokenArray( aStack.Get());
     return eRet;
 }
 

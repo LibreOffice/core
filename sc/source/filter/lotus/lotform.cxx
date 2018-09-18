@@ -384,7 +384,7 @@ LotusToSc::LotusToSc(LotusContext &rContext, SvStream &rStream, svl::SharedStrin
 typedef FUNC_TYPE ( FuncType1 ) ( sal_uInt8 );
 typedef DefTokenId ( FuncType2 ) ( sal_uInt8 );
 
-void LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest )
+void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest )
 {
     sal_uInt8               nOc;
     sal_uInt8               nCnt;
@@ -438,7 +438,7 @@ void LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest )
 
         if( nBytesLeft < 0 )
         {
-            rpErg = aPool[ aStack.Get() ];
+            rpErg = aPool.GetTokenArray( aStack.Get());
             return;
         }
 
@@ -659,7 +659,7 @@ void LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest )
         }
     }
 
-    rpErg = aPool[ aStack.Get() ];
+    rpErg = aPool.GetTokenArray( aStack.Get());
 
     SAL_WARN_IF( nBytesLeft < 0, "sc.filter", "*LotusToSc::Convert(): processed too much!");
     SAL_WARN_IF( nBytesLeft > 0, "sc.filter", "*LotusToSc::Convert(): what happens with the rest?" );
