@@ -20,6 +20,13 @@
             android:title="File explorer layout"
             android:key="EXPLORER_VIEW_TYPE"
             android:summary="View files as a grid or in a list." />
+        <ListPreference
+            android:title="Display Language"
+            android:summary="Set the default display language"
+            android:entries="@array/SupportedLanguages"
+            android:entryValues="@array/SupportedLanguagesValues"
+            android:key="DISPLAY_LANGUAGE"
+            />
         <CheckBoxPreference
             android:title="@string/pref_show_hidden_files"
             android:key="ENABLE_SHOW_HIDDEN_FILES"
