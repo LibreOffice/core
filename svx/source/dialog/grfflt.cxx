@@ -159,7 +159,7 @@ SvxGraphicFilterResult SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const 
             case SID_GRFFILTER_MOSAIC:
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterMosaic(pWindow, rGraphic));
+                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterMosaic(pWindow ? pWindow->GetFrameWeld() : nullptr, rGraphic));
                 if( aDlg->Execute() == RET_OK )
                     aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );
             }
@@ -211,7 +211,7 @@ SvxGraphicFilterResult SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const 
             case SID_GRFFILTER_SEPIA:
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterSepia(pWindow, rGraphic));
+                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterSepia(pWindow ? pWindow->GetFrameWeld() : nullptr, rGraphic));
                 if( aDlg->Execute() == RET_OK )
                     aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );
             }

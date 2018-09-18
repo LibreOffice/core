@@ -1311,11 +1311,10 @@ VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFil
     return VclPtr<AbstractGraphicFilterDialogController_Impl>::Create(o3tl::make_unique<GraphicFilterSolarize>(pParent, rGraphic, 128, false /*bInvert*/));
 }
 
-VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterMosaic (vcl::Window* pParent,
+VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterMosaic(weld::Window* pParent,
                                             const Graphic& rGraphic)
 {
-    VclPtrInstance<GraphicFilterMosaic> pDlg(pParent, rGraphic, 4, 4, false/*bEnhanceEdges*/);
-    return VclPtr<AbstractGraphicFilterDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractGraphicFilterDialogController_Impl>::Create(o3tl::make_unique<GraphicFilterMosaic>(pParent, rGraphic, 4, 4, false /*bEnhanceEdges*/));
 }
 
 VclPtr<AbstractSvxAreaTabDialog> AbstractDialogFactory_Impl::CreateSvxAreaTabDialog(weld::Window* pParent,
