@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f013ff3_5bcba31d",
+        "filename": "sw/qa/python/xscriptprovider.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-09-18T08:13:12Z",
+      "side": 1,
+      "message": "What exactly does this check? xScript is of Type \"XScript\", not boolean.\nCan you check xScript.is() as we do in cpp? Or does the bool check already do that?",
+      "revId": "49e54f804b2293247839453a9526cd5debbc4f17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
