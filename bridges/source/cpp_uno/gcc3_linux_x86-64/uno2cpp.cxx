@@ -317,7 +317,7 @@ void unoInterfaceProxyDispatch(
     {
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
     {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
         // determine vtable call index
         sal_Int32 nMemberPos = reinterpret_cast<typelib_InterfaceMemberTypeDescription const *>(pMemberDescr)->nPosition;
         assert(nMemberPos < pTypeDescr->nAllMembers);
@@ -366,7 +366,7 @@ void unoInterfaceProxyDispatch(
     }
     case typelib_TypeClass_INTERFACE_METHOD:
     {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
         // determine vtable call index
         sal_Int32 nMemberPos = reinterpret_cast<typelib_InterfaceMemberTypeDescription const *>(pMemberDescr)->nPosition;
         assert(nMemberPos < pTypeDescr->nAllMembers);
