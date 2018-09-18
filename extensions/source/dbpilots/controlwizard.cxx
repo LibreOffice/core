@@ -159,7 +159,7 @@ namespace dbp
         for (;pItems < pEnd; ++pItems)
         {
             nPos = _rList.InsertEntry(*pItems);
-            _rList.SetEntryData(nPos, reinterpret_cast<void*>(0));
+            _rList.SetEntryData(nPos, nullptr);
         }
     }
 
