@@ -91,6 +91,8 @@
 
 #include <boost/optional.hpp>
 
+#include <unotools/configmgr.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
@@ -1371,7 +1373,8 @@ IMPL_LINK_NOARG(SfxViewFrame, GetInvolvedHandler, Button*, void)
 {
     try
     {
-        sfx2::openUriExternally("https://hub.libreoffice.org/joinus", false);
+        OUString sURL("https://hub.libreoffice.org/joinus/?LOlocale=" + utl::ConfigManager::getLocale());
+        sfx2::openUriExternally(sURL, false);
     }
     catch (const Exception&)
     {
