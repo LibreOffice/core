@@ -184,23 +184,19 @@ public:
     bool            IsEnhanceEdges() const { return mpCbxEdges->IsChecked(); }
 };
 
-class GraphicFilterSolarize : public GraphicFilterDialog
+class GraphicFilterSolarize : public GraphicFilterDialogController
 {
 private:
-    VclPtr<MetricField>    mpMtrThreshold;
-    VclPtr<CheckBox>       mpCbxInvert;
-    DECL_LINK(CheckBoxModifyHdl, CheckBox&, void);
-    DECL_LINK(EditModifyHdl, Edit&, void);
+    std::unique_ptr<weld::MetricSpinButton> mxMtrThreshold;
+    std::unique_ptr<weld::CheckButton> mxCbxInvert;
+    DECL_LINK(CheckBoxModifyHdl, weld::ToggleButton&, void);
+    DECL_LINK(EditModifyHdl, weld::MetricSpinButton&, void);
 
 public:
-
-    GraphicFilterSolarize( vcl::Window* pParent, const Graphic& rGraphic,
-                                           sal_uInt8 nGreyThreshold, bool bInvert );
-    virtual ~GraphicFilterSolarize() override;
-    virtual void dispose() override;
-
-    virtual Graphic     GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
-    bool            IsInvert() const { return mpCbxInvert->IsChecked(); }
+    GraphicFilterSolarize(weld::Window* pParent, const Graphic& rGraphic,
+                          sal_uInt8 nGreyThreshold, bool bInvert);
+    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
+    bool            IsInvert() const { return mxCbxInvert->get_active(); }
 };
 
 class GraphicFilterSepia : public GraphicFilterDialog
