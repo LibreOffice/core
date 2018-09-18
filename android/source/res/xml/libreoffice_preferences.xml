@@ -4,22 +4,24 @@
         android:title="@string/pref_category_explorer"
         android:key="PREF_CATEGORY_EXPLORER">
         <ListPreference
-            android:title="Default File Filter"
-            android:summary="Set which file filter should be used by default."
+            android:title="@string/pref_filter_title"
+            android:summary="@string/pref_filter_summary"
             android:entries="@array/FilterTypeNames"
             android:entryValues="@array/FilterTypeStringValues"
             android:key="FILTER_MODE"/>
         <ListPreference
-            android:summary="Select how to order files: A-Z, by size or by date."
+            android:summary="@string/pref_sort_summary"
             android:key="SORT_MODE"
-            android:title="File Order" android:entries="@array/SortModeNames" android:entryValues="@array/SortModeStringValues"/>
+            android:title="@string/pref_sort_title"
+            android:entries="@array/SortModeNames"
+            android:entryValues="@array/SortModeStringValues"/>
         <ListPreference
             android:entries="@array/ViewModeNames"
             android:entryValues="@array/ViewModeStringValues"
             android:defaultValue="@integer/grid_view_integer"
-            android:title="File explorer layout"
+            android:title="@string/pref_file_explorer_title"
             android:key="EXPLORER_VIEW_TYPE"
-            android:summary="View files as a grid or in a list." />
+            android:summary="@string/pref_viewmode_summary" />
         <CheckBoxPreference
             android:title="@string/pref_show_hidden_files"
             android:key="ENABLE_SHOW_HIDDEN_FILES"

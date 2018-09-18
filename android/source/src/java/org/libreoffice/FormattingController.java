@@ -279,8 +279,8 @@ class FormattingController implements View.OnClickListener {
         npColNegative.setOnClickListener(negativeButtonClickListener);
 
         insertTableBuilder.setView(numberPicker);
-        insertTableBuilder.setNeutralButton("Cancel", null);
-        insertTableBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        insertTableBuilder.setNeutralButton(R.string.alert_cancel, null);
+        insertTableBuilder.setPositiveButton(R.string.alert_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -346,7 +346,7 @@ class FormattingController implements View.OnClickListener {
     private void deleteTable() {
         AlertDialog.Builder deleteBuilder = new AlertDialog.Builder(mContext);
         deleteBuilder.setTitle(R.string.select_delete_options);
-        deleteBuilder.setNeutralButton("Cancel",null);
+        deleteBuilder.setNeutralButton(R.string.alert_cancel,null);
         final int[] selectedItem = new int[1];
         deleteBuilder.setSingleChoiceItems(mContext.getResources().getStringArray(R.array.deleterowcolumns), -1, new DialogInterface.OnClickListener() {
             @Override
@@ -354,7 +354,7 @@ class FormattingController implements View.OnClickListener {
                 selectedItem[0] = which;
             }
         });
-        deleteBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        deleteBuilder.setPositiveButton(R.string.alert_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (selectedItem[0]){

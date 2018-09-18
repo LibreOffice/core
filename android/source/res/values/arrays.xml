@@ -30,19 +30,19 @@
         <item >1</item>
     </string-array>
     <string-array name="FilterTypeNames">
-        <item>Everything</item>
-        <item>Documents</item>
-        <item>Spreadsheets</item>
-        <item>Presentations</item>
-        <item>Drawings</item>
+        <item>@string/filter_everything</item>
+        <item>@string/filter_documents</item>
+        <item>@string/filter_spreadsheets</item>
+        <item>@string/filter_presentations</item>
+        <item>@string/filter_drawings</item>
     </string-array>
     <string-array name="SortModeNames">
-        <item >A-Z</item>
-        <item >Z-A</item>
-        <item >Oldest First</item>
-        <item >Newest First</item>
-        <item >Largest First</item>
-        <item >Smallest First</item>
+        <item >@string/sort_az</item>
+        <item >@string/sort_za</item>
+        <item >@string/sort_oldest</item>
+        <item >@string/sort_newest</item>
+        <item >@string/sort_largest</item>
+        <item >@string/sort_smallest</item>
     </string-array>
 
 

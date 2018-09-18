@@ -211,4 +211,18 @@
     <string name="UNO_commands_string_parent_value_hint">Parent Value</string>
     <string name="action_exportToPDF">Export To PDF</string>
     <string name="action_print">Print</string>
+    <string name="tabhost_character">Character</string>
+    <string name="tabhost_paragraph">Paragraph</string>
+    <string name="tabhost_insert">Insert</string>
+    <string name="tabhost_style">Style</string>
+    <string name="alert_ok">OK</string>
+    <string name="alert_cancel">Cancel</string>
+    <string name="unable_to_go_further">Unable to go further.</string>
+    <string name="current_uno_command">Current UNO command</string>
+    <string name="pref_sort_summary">Select how to order files: A-Z, by size or by date.</string>
+    <string name="pref_viewmode_summary">View files as a grid or in a list.</string>
+    <string name="pref_file_explorer_title">File explorer layout</string>
+    <string name="pref_sort_title">File Order</string>
+    <string name="pref_filter_title">Default File Filter</string>
+    <string name="pref_filter_summary">Set which file filter should be used by default.</string>
 </resources>
