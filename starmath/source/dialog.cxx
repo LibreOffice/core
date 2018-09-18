@@ -226,10 +226,8 @@ VclPtr<SfxTabPage> SmPrintOptionsTabPage::Create(TabPageParent pParent, const Sf
     return VclPtr<SmPrintOptionsTabPage>::Create(pParent, rSet).get();
 }
 
-void SmShowFont::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
+void SmShowFont::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
-    Window::Paint(rRenderContext, rRect);
-
     Color aBackColor;
     Color aTextColor;
     lclGetSettingColors(aBackColor, aTextColor);
@@ -249,11 +247,11 @@ void SmShowFont::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangl
                                   (rRenderContext.GetOutputSize().Height() - aTextSize.Height()) / 2), sText);
 }
 
-VCL_BUILDER_FACTORY_CONSTRUCTOR(SmShowFont, 0)
-
-Size SmShowFont::GetOptimalSize() const
+void SmShowFont::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    return LogicToPixel(Size(111 , 31), MapMode(MapUnit::MapAppFont));
+    CustomWidgetController::SetDrawingArea(pDrawingArea);
+    Size aSize(pDrawingArea->get_ref_device().LogicToPixel(Size(111 , 31), MapMode(MapUnit::MapAppFont)));
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
 }
 
 void SmShowFont::SetFont(const vcl::Font& rFont)
@@ -262,67 +260,56 @@ void SmShowFont::SetFont(const vcl::Font& rFont)
     Invalidate();
 }
 
-IMPL_LINK( SmFontDialog, FontSelectHdl, ComboBox&, rComboBox, void )
+IMPL_LINK( SmFontDialog, FontSelectHdl, weld::ComboBox&, rComboBox, void )
 {
-    maFont.SetFamilyName(rComboBox.GetText());
-    m_pShowFont->SetFont(maFont);
+    maFont.SetFamilyName(rComboBox.get_active_text());
+    m_aShowFont.SetFont(maFont);
 }
 
-IMPL_LINK( SmFontDialog, FontModifyHdl, Edit&, rEdit, void )
+IMPL_LINK_NOARG(SmFontDialog, AttrChangeHdl, weld::ToggleButton&, void)
 {
-    ComboBox& rComboBox = static_cast<ComboBox&>(rEdit);
-    // if font is available in list then use it
-    sal_Int32 nPos = rComboBox.GetEntryPos( rComboBox.GetText() );
-    if (COMBOBOX_ENTRY_NOTFOUND != nPos)
-    {
-        FontSelectHdl( rComboBox );
-    }
-}
-
-IMPL_LINK_NOARG( SmFontDialog, AttrChangeHdl, Button*, void )
-{
-    if (m_pBoldCheckBox->IsChecked())
+    if (m_xBoldCheckBox->get_active())
         maFont.SetWeight(WEIGHT_BOLD);
     else
         maFont.SetWeight(WEIGHT_NORMAL);
 
-    if (m_pItalicCheckBox->IsChecked())
+    if (m_xItalicCheckBox->get_active())
         maFont.SetItalic(ITALIC_NORMAL);
     else
         maFont.SetItalic(ITALIC_NONE);
 
-    m_pShowFont->SetFont(maFont);
+    m_aShowFont.SetFont(maFont);
 }
 
 void SmFontDialog::SetFont(const vcl::Font &rFont)
 {
     maFont = rFont;
 
-    m_pFontBox->SetText(maFont.GetFamilyName());
-    m_pBoldCheckBox->Check(IsBold(maFont));
-    m_pItalicCheckBox->Check(IsItalic(maFont));
-    m_pShowFont->SetFont(maFont);
+    m_xFontBox->set_active_text(maFont.GetFamilyName());
+    m_xBoldCheckBox->set_active(IsBold(maFont));
+    m_xItalicCheckBox->set_active(IsItalic(maFont));
+    m_aShowFont.SetFont(maFont);
 }
 
-SmFontDialog::SmFontDialog(vcl::Window * pParent, OutputDevice *pFntListDevice, bool bHideCheckboxes)
-    : ModalDialog(pParent, "FontDialog", "modules/smath/ui/fontdialog.ui")
+SmFontDialog::SmFontDialog(weld::Window * pParent, OutputDevice *pFntListDevice, bool bHideCheckboxes)
+    : GenericDialogController(pParent, "modules/smath/ui/fontdialog.ui", "FontDialog")
+    , m_xFontBox(m_xBuilder->weld_entry_tree_view("fontgrid", "font", "fonts"))
+    , m_xAttrFrame(m_xBuilder->weld_widget("attrframe"))
+    , m_xBoldCheckBox(m_xBuilder->weld_check_button("bold"))
+    , m_xItalicCheckBox(m_xBuilder->weld_check_button("italic"))
+    , m_xShowFont(new weld::CustomWeld(*m_xBuilder, "preview", m_aShowFont))
 {
-    get(m_pFontBox, "font");
-    m_pFontBox->set_height_request(8 * m_pFontBox->GetTextHeight());
-    get(m_pAttrFrame, "attrframe");
-    get(m_pBoldCheckBox, "bold");
-    get(m_pItalicCheckBox, "italic");
-    get(m_pShowFont, "preview");
+    m_xFontBox->set_height_request_by_rows(8);
 
     {
-        WaitObject aWait( this );
+        weld::WaitObject aWait(pParent);
 
         FontList aFontList( pFntListDevice );
 
         sal_uInt16  nCount = aFontList.GetFontNameCount();
         for (sal_uInt16 i = 0;  i < nCount; ++i)
         {
-            m_pFontBox->InsertEntry( aFontList.GetFontName(i).GetFamilyName() );
+            m_xFontBox->append_text(aFontList.GetFontName(i).GetFamilyName());
         }
         maFont.SetFontSize(Size(0, 24));
         maFont.SetWeight(WEIGHT_NORMAL);
@@ -331,47 +318,24 @@ SmFontDialog::SmFontDialog(vcl::Window * pParent, OutputDevice *pFntListDevice, 
         maFont.SetPitch(PITCH_DONTKNOW);
         maFont.SetCharSet(RTL_TEXTENCODING_DONTKNOW);
         maFont.SetTransparent(true);
-
-        // preview like controls should have a 2D look
-        m_pShowFont->SetBorderStyle( WindowBorderStyle::MONO );
     }
 
-    m_pFontBox->SetSelectHdl(LINK(this, SmFontDialog, FontSelectHdl));
-    m_pFontBox->SetModifyHdl(LINK(this, SmFontDialog, FontModifyHdl));
-    m_pBoldCheckBox->SetClickHdl(LINK(this, SmFontDialog, AttrChangeHdl));
-    m_pItalicCheckBox->SetClickHdl(LINK(this, SmFontDialog, AttrChangeHdl));
+    m_xFontBox->connect_changed(LINK(this, SmFontDialog, FontSelectHdl));
+    m_xBoldCheckBox->connect_toggled(LINK(this, SmFontDialog, AttrChangeHdl));
+    m_xItalicCheckBox->connect_toggled(LINK(this, SmFontDialog, AttrChangeHdl));
 
     if (bHideCheckboxes)
     {
-        m_pBoldCheckBox->Check( false );
-        m_pBoldCheckBox->Enable( false );
-        m_pItalicCheckBox->Check( false );
-        m_pItalicCheckBox->Enable( false );
-        m_pAttrFrame->Show(false);
+        m_xBoldCheckBox->set_active(false);
+        m_xBoldCheckBox->set_sensitive(false);
+        m_xItalicCheckBox->set_active(false);
+        m_xItalicCheckBox->set_sensitive(false);
+        m_xAttrFrame->show(false);
     }
 }
 
 SmFontDialog::~SmFontDialog()
 {
-    disposeOnce();
-}
-
-void SmFontDialog::dispose()
-{
-    m_pFontBox.clear();
-    m_pAttrFrame.clear();
-    m_pBoldCheckBox.clear();
-    m_pItalicCheckBox.clear();
-    m_pShowFont.clear();
-    ModalDialog::dispose();
-}
-
-void SmFontDialog::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    if (rDCEvt.GetType() == DataChangedEventType::SETTINGS  && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE))
-        m_pShowFont->Invalidate();
-
-    ModalDialog::DataChanged( rDCEvt );
 }
 
 class SaveDefaultsQuery : public weld::MessageDialogController
@@ -476,11 +440,11 @@ IMPL_LINK(SmFontTypeDialog, MenuSelectHdl, const OString&, rIdent, void)
 
     if (pActiveListBox)
     {
-        ScopedVclPtrInstance<SmFontDialog> pFontDialog(nullptr /*TODO*/, pFontListDev, bHideCheckboxes);
+        SmFontDialog aFontDialog(m_xDialog.get(), pFontListDev, bHideCheckboxes);
 
-        pActiveListBox->WriteTo(*pFontDialog);
-        if (pFontDialog->Execute() == RET_OK)
-            pActiveListBox->ReadFrom(*pFontDialog);
+        pActiveListBox->WriteTo(aFontDialog);
+        if (aFontDialog.run() == RET_OK)
+            pActiveListBox->ReadFrom(aFontDialog);
     }
 }
 
