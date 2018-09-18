@@ -326,7 +326,7 @@ private:
 // "InstMSUBinary" property and unpacks the binary with that name to a temporary file; sets
 // "cleanup_msu" and "inst_msu" properties to the full name of the extracted temporary file. These
 // properties will become "CustomActionData" property inside relevant deferred actions.
-extern "C" UINT __stdcall UnpackMSUForInstall(MSIHANDLE hInstall)
+extern "C" __declspec(dllexport) UINT __stdcall UnpackMSUForInstall(MSIHANDLE hInstall)
 {
     try
     {
@@ -411,7 +411,7 @@ extern "C" UINT __stdcall UnpackMSUForInstall(MSIHANDLE hInstall)
 
 // Deferred action "inst_msu" that must be run from system account. Receives the tempfile name from
 // "CustomActionData" property, and runs wusa.exe to install it. Waits for it and checks exit code.
-extern "C" UINT __stdcall InstallMSU(MSIHANDLE hInstall)
+extern "C" __declspec(dllexport) UINT __stdcall InstallMSU(MSIHANDLE hInstall)
 {
     try
     {
@@ -486,7 +486,7 @@ extern "C" UINT __stdcall InstallMSU(MSIHANDLE hInstall)
 // Rollback deferred action "cleanup_msu" that is executed on error or cancel.
 // It removes the temporary file created by UnpackMSUForInstall action.
 // MUST be placed IMMEDIATELY AFTER "unpack_msu" in execute sequence.
-extern "C" UINT __stdcall CleanupMSU(MSIHANDLE hInstall)
+extern "C" __declspec(dllexport) UINT __stdcall CleanupMSU(MSIHANDLE hInstall)
 {
     try
     {

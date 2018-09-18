@@ -21,7 +21,7 @@
 
 #include <shlobj.h>
 
-extern "C" UINT __stdcall RemoveQuickstarterLink( MSIHANDLE hMSI )
+extern "C" __declspec(dllexport) UINT __stdcall RemoveQuickstarterLink( MSIHANDLE hMSI )
 {
     WCHAR    szStartupPath[MAX_PATH];
 

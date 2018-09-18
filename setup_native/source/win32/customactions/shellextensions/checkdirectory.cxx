@@ -28,7 +28,7 @@
 #include <systools/win32/uwinapi.h>
 #include "../tools/seterror.hxx"
 
-extern "C" UINT __stdcall CheckInstallDirectory(MSIHANDLE handle)
+extern "C" __declspec(dllexport) UINT __stdcall CheckInstallDirectory(MSIHANDLE handle)
 {
     std::wstring sInstallPath = GetMsiPropertyW(handle, L"INSTALLLOCATION");
     std::wstring sOfficeHostnamePath = GetMsiPropertyW(handle, L"OFFICEDIRHOSTNAME");

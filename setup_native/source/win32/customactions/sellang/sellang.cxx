@@ -231,7 +231,7 @@ void addMatchingDictionaries(
 
 }
 
-extern "C" UINT __stdcall SelectLanguage( MSIHANDLE handle )
+extern "C" __declspec(dllexport) UINT __stdcall SelectLanguage( MSIHANDLE handle )
 {
     char feature[100];
     MSIHANDLE database, view, record;

@@ -124,7 +124,7 @@ void StartIndexingService(SC_HANDLE hService)
     }
 }
 
-extern "C" UINT __stdcall RestartIndexingService(MSIHANDLE)
+extern "C" __declspec(dllexport) UINT __stdcall RestartIndexingService(MSIHANDLE)
 {
     SC_HANDLE hSCManager = OpenSCManagerW(
         nullptr, // local machine

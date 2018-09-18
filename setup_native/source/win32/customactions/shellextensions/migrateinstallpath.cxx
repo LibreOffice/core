@@ -21,7 +21,7 @@
 #include <algorithm>
 #include <systools/win32/uwinapi.h>
 
-extern "C" UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
+extern "C" __declspec(dllexport) UINT __stdcall MigrateInstallPath( MSIHANDLE handle )
 {
     WCHAR   szValue[8192];
     DWORD   nValueSize = sizeof(szValue); // yes, it is the number of bytes

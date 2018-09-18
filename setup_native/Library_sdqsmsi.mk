@@ -18,7 +18,6 @@ $(eval $(call gb_Library_add_cxxflags,sdqsmsi,\
 ))
 
 $(eval $(call gb_Library_add_ldflags,sdqsmsi,\
-	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/quickstarter/sdqsmsi.def \
 	/NODEFAULTLIB \
 ))
 
