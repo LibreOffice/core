@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f013ff3_fe549d56",
+        "filename": "basic/source/classes/sbunoobj.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1887,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-09-18T14:10:33Z",
+      "side": 1,
+      "message": "i don\u0027t see the value in changing this.\n\nhere aRet is added to multiple times, even in a loop, and the OUStringBuffer is more performant in this case than OUString::operator+, which needs to copy the entire string every time.",
+      "revId": "6a6333b1939c81ce2cfcc6ebc9b9f3254793c313",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f013ff3_de51e164",
+        "filename": "basic/source/classes/sbunoobj.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4757,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-09-18T14:10:33Z",
+      "side": 1,
+      "message": "This one is also better as OUStringBuffer;",
+      "revId": "6a6333b1939c81ce2cfcc6ebc9b9f3254793c313",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f013ff3_be4e15bf",
+        "filename": "basic/source/classes/sbunoobj.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4832,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-09-18T14:10:33Z",
+      "side": 1,
+      "message": "this is good",
+      "revId": "6a6333b1939c81ce2cfcc6ebc9b9f3254793c313",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f013ff3_9e4b59af",
+        "filename": "basic/source/classes/sbunoobj.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4850,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-09-18T14:10:33Z",
+      "side": 1,
+      "message": "this is good",
+      "revId": "6a6333b1939c81ce2cfcc6ebc9b9f3254793c313",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f013ff3_7ee88d15",
+        "filename": "connectivity/source/drivers/hsqldb/HView.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-09-18T14:10:33Z",
+      "side": 1,
+      "message": "okay!",
+      "revId": "6a6333b1939c81ce2cfcc6ebc9b9f3254793c313",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f013ff3_fe96dd94",
+        "filename": "connectivity/source/drivers/hsqldb/HView.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-09-18T14:10:33Z",
+      "side": 1,
+      "message": "this is wrong: the \"makeStringAndClear\" will leave the OUStringBuffer *empty\" while +\u003d will *append* to the exisitng OUString.\n\nJust use \"\u003d\" instead.",
+      "revId": "6a6333b1939c81ce2cfcc6ebc9b9f3254793c313",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
