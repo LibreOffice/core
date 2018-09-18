@@ -23,6 +23,7 @@ $(eval $(call gb_PythonTest_add_modules,sw_python,$(SRCDIR)/sw/qa/python,\
 	check_named_property_values \
 	check_indexed_property_values \
 	check_styles \
+	check_xtexttable.py \
 	check_table \
 	get_expression \
 	set_expression \
