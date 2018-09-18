@@ -370,42 +370,24 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
     return aRet;
 }
 
-
-GraphicFilterSmooth::GraphicFilterSmooth( vcl::Window* pParent, const Graphic& rGraphic, double nRadius)
-    : GraphicFilterDialog(pParent, "SmoothDialog",
-        "cui/ui/smoothdialog.ui", rGraphic)
+GraphicFilterSmooth::GraphicFilterSmooth(weld::Window* pParent, const Graphic& rGraphic, double nRadius)
+    : GraphicFilterDialogController(pParent, "cui/ui/smoothdialog.ui", "SmoothDialog", rGraphic)
+    , mxMtrRadius(m_xBuilder->weld_spin_button("radius"))
 {
-    get(mpMtrRadius, "radius");
-
-    mpMtrRadius->SetValue( nRadius* 10  );
-    mpMtrRadius->SetModifyHdl( LINK(this, GraphicFilterSmooth, EditModifyHdl) );
-    mpMtrRadius->GrabFocus();
+    mxMtrRadius->set_value(nRadius * 10);
+    mxMtrRadius->connect_value_changed(LINK(this, GraphicFilterSmooth, EditModifyHdl));
+    mxMtrRadius->grab_focus();
 }
 
-
-IMPL_LINK_NOARG(GraphicFilterSmooth, EditModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(GraphicFilterSmooth, EditModifyHdl, weld::SpinButton&, void)
 {
     GetModifyHdl().Call(nullptr);
 }
 
-
-GraphicFilterSmooth::~GraphicFilterSmooth()
-{
-    disposeOnce();
-}
-
-
-void GraphicFilterSmooth::dispose()
-{
-    mpMtrRadius.clear();
-    GraphicFilterDialog::dispose();
-}
-
-
 Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
     Graphic         aRet;
-    double          nRadius = mpMtrRadius->GetValue() / 10.0;
+    double          nRadius = mxMtrRadius->get_value() / 10.0;
 
     if( rGraphic.IsAnimated() )
     {
