@@ -76,74 +76,8 @@ namespace o3tl
     template<> struct typed_flags<CTL_STATE> : is_typed_flags<CTL_STATE, 0x03> {};
 }
 
-class SvxRectCtlAccessibleContext;
 class RectCtlAccessibleContext;
 class SvxPixelCtlAccessible;
-
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRectCtl : public Control
-{
-private:
-    SVX_DLLPRIVATE void             InitSettings(vcl::RenderContext& rRenderContext);
-    SVX_DLLPRIVATE void             InitRectBitmap();
-    SVX_DLLPRIVATE BitmapEx&        GetRectBitmap();
-    SVX_DLLPRIVATE void             Resize_Impl();
-
-protected:
-    rtl::Reference<SvxRectCtlAccessibleContext> pAccContext;
-    sal_uInt16 nBorderWidth;
-    sal_uInt16 nRadius;
-    Size aSize;
-    Point aPtLT, aPtMT, aPtRT;
-    Point aPtLM, aPtMM, aPtRM;
-    Point aPtLB, aPtMB, aPtRB;
-    Point aPtNew;
-    RectPoint eRP, eDefRP;
-    std::unique_ptr<BitmapEx> pBitmap;
-    CTL_STATE m_nState;
-
-    bool mbUpdateForeground : 1;
-    bool mbUpdateBackground : 1;
-
-    void MarkToResetSettings(bool bUpdateForeground, bool bUpdateBackground);
-
-    RectPoint          GetRPFromPoint( Point, bool bRTL = false ) const;
-    const Point&        GetPointFromRP( RectPoint ) const;
-    void                SetFocusRect();
-    Point               SetActualRPWithoutInvalidate( RectPoint eNewRP );  // returns the last point
-
-    virtual void        GetFocus() override;
-    virtual void        LoseFocus() override;
-
-    Point               GetApproxLogPtFromPixPt( const Point& rRoughPixelPoint ) const;
-public:
-    SvxRectCtl( vcl::Window* pParent, RectPoint eRpt = RectPoint::MM,
-                sal_uInt16 nBorder = 200, sal_uInt16 nCircle = 80 );
-    virtual ~SvxRectCtl() override;
-    virtual void dispose() override;
-
-    virtual void        Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual void        MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void        KeyInput( const KeyEvent& rKeyEvt ) override;
-    virtual void        StateChanged( StateChangedType nStateChange ) override;
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) override;
-    virtual void        Resize() override;
-    virtual Size        GetOptimalSize() const override;
-
-    void                Reset();
-    RectPoint           GetActualRP() const { return eRP;}
-    void                SetActualRP( RectPoint eNewRP );
-
-    void                SetState( CTL_STATE nState );
-
-    static const sal_uInt8 NO_CHILDREN = 9;   // returns number of usable radio buttons
-
-    tools::Rectangle           CalculateFocusRectangle() const;
-    tools::Rectangle           CalculateFocusRectangle( RectPoint eRectPoint ) const;
-
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
-
-    RectPoint          GetApproxRPFromPixPt( const css::awt::Point& rPixelPoint ) const;
-};
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC RectCtl : public weld::CustomWidgetController
 {
