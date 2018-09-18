@@ -124,7 +124,7 @@ public class DirectoryBrowserFragment extends Fragment {
 
     private void changeDirectory(File destination) {
         if(destination == null) {
-            Toast.makeText(getActivity(), "Unable to go further.", Toast.LENGTH_SHORT)
+            Toast.makeText(getActivity(), R.string.unable_to_go_further, Toast.LENGTH_SHORT)
                     .show();
         } else {
             Fragment fragment = DirectoryBrowserFragment.newInstance(destination.toURI().toString());

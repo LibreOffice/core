@@ -232,24 +232,24 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         TabHost host = findViewById(R.id.toolbarTabHost);
         host.setup();
 
-        TabHost.TabSpec spec = host.newTabSpec("Character");
+        TabHost.TabSpec spec = host.newTabSpec(getString(R.string.tabhost_character));
         spec.setContent(R.id.tab_character);
-        spec.setIndicator("Character");
+        spec.setIndicator(getString(R.string.tabhost_character));
         host.addTab(spec);
 
-        spec = host.newTabSpec("Paragraph");
+        spec = host.newTabSpec(getString(R.string.tabhost_paragraph));
         spec.setContent(R.id.tab_paragraph);
-        spec.setIndicator("Paragraph");
+        spec.setIndicator(getString(R.string.tabhost_paragraph));
         host.addTab(spec);
 
-        spec = host.newTabSpec("Insert");
+        spec = host.newTabSpec(getString(R.string.tabhost_insert));
         spec.setContent(R.id.tab_insert);
-        spec.setIndicator("Insert");
+        spec.setIndicator(getString(R.string.tabhost_insert));
         host.addTab(spec);
 
-        spec = host.newTabSpec("Style");
+        spec = host.newTabSpec(getString(R.string.tabhost_style));
         spec.setContent(R.id.tab_style);
-        spec.setIndicator("Style");
+        spec.setIndicator(getString(R.string.tabhost_style));
         host.addTab(spec);
 
         LinearLayout bottomToolbarLayout = findViewById(R.id.toolbar_bottom);
@@ -753,13 +753,13 @@ public class LibreOfficeMainActivity extends AppCompatActivity implements Settin
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.alert_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mTileProvider.renamePart( input.getText().toString());
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.alert_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();

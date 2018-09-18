@@ -63,7 +63,7 @@ class UNOCommandsController implements View.OnClickListener {
     private void showCommandDialog() {
         try {
             AlertDialog dialog = new AlertDialog.Builder(mActivity)
-                    .setTitle("Current UNO command")
+                    .setTitle(R.string.current_uno_command)
                     .setMessage(mRootJSON.toString(2))
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
