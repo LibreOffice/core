@@ -13,20 +13,6 @@ pdfium_patches += ubsan.patch
 # Fixes build on our baseline.
 pdfium_patches += build.patch.1
 # Adds missing editing API
-# Backport of <https://pdfium-review.googlesource.com/35931>.
-pdfium_patches += 0001-Add-FPDFTextObj_GetFontSize-API.patch.patch.1
-# Backport of <https://pdfium-review.googlesource.com/36750>.
-pdfium_patches += 0001-Add-FPDFText_GetTextRenderMode-API.patch.1
-# Backport of <https://pdfium-review.googlesource.com/37316>.
-pdfium_patches += 0001-Add-FPDFFormObj_CountObjects-API.patch.1
-# Backport of <https://pdfium-review.googlesource.com/37890>.
-pdfium_patches += 0001-Add-FPDFFormObj_GetObject-API.patch.1
-# Backport of <https://pdfium-review.googlesource.com/38870>.
-pdfium_patches += 0001-Add-FPDFText_GetFontName-API.patch.1
-# Backport of <https://pdfium-review.googlesource.com/39530>.
-pdfium_patches += 0001-Add-FPDFTextObj_GetText-API.patch.1
-# Backport of <https://pdfium-review.googlesource.com/39930>.
-pdfium_patches += 0001-Add-FPDFFormObj_GetMatrix-API.patch.1
 pdfium_patches += 0003-svx-import-PDF-images-as-BGRA.patch.2
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
@@ -51,7 +37,8 @@ $(eval $(call gb_UnpackedTarball_set_post_action,pdfium,\
     mv third_party/base/allocator/partition_allocator/address_space_randomization.cc third_party/base/allocator/partition_allocator/address_space_randomization.cpp && \
     mv third_party/base/allocator/partition_allocator/page_allocator.cc third_party/base/allocator/partition_allocator/page_allocator.cpp && \
     mv third_party/base/allocator/partition_allocator/partition_alloc.cc third_party/base/allocator/partition_allocator/partition_alloc.cpp && \
-    mv third_party/base/allocator/partition_allocator/spin_lock.cc third_party/base/allocator/partition_allocator/spin_lock.cpp \
+    mv third_party/base/allocator/partition_allocator/spin_lock.cc third_party/base/allocator/partition_allocator/spin_lock.cpp && \
+	mv third_party/base/debug/alias.cc third_party/base/debug/alias.cpp \
 ))
 
 # vim: set noet sw=4 ts=4:

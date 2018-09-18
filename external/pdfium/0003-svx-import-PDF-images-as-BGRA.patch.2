@@ -26,7 +26,7 @@ index fed1581..3f400c7 100644
 +  if (!pImg)
 +    return nullptr;
 +
-+  RetainPtr<CFX_DIBSource> pSource = pImg->LoadDIBSource();
++  RetainPtr<CFX_DIBBase> pSource = pImg->LoadDIBBase();
 +  if (!pSource)
 +    return nullptr;
 +
