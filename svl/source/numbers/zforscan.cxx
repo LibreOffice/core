@@ -54,6 +54,7 @@ const NfKeywordTable ImpSvNumberformatScan::sEnglishKeyword =
     "MM",      // NF_KEY_MM month 02     (!)
     "MMM",     // NF_KEY_MMM month short name
     "MMMM",    // NF_KEY_MMMM month long name
+    "MMMMM",   // NF_KEY_MMMMM first letter of month name
     "H",       // NF_KEY_H hour
     "HH",      // NF_KEY_HH hour 02
     "S",       // NF_KEY_S Second
@@ -67,12 +68,25 @@ const NfKeywordTable ImpSvNumberformatScan::sEnglishKeyword =
     "YY",      // NF_KEY_YY year two digits
     "YYYY",    // NF_KEY_YYYY year four digits
     "NN",      // NF_KEY_NN Day of week short
+    "NNN",     // NF_KEY_NNN Day of week long
     "NNNN",    // NF_KEY_NNNN Day of week long incl. separator
+    "AAA",     // NF_KEY_AAA
+    "AAAA",    // NF_KEY_AAAA
+    "E",       // NF_KEY_EC
+    "EE",      // NF_KEY_EEC
+    "G",       // NF_KEY_G
+    "GG",      // NF_KEY_GG
+    "GGG",     // NF_KEY_GGG
+    "R",       // NF_KEY_R
+    "RR",      // NF_KEY_RR
+    "WW",      // NF_KEY_WW Week of year
+    "t",       // NF_KEY_THAI_T Thai T modifier, speciality of Thai Excel, only
+                // used with Thai locale and converted to [NatNum1], only
+                // exception as lowercase
     "CCC",     // NF_KEY_CCC Currency abbreviation
     "GENERAL", // NF_KEY_GENERAL General / Standard
-    "NNN",     // NF_KEY_NNN Day of week long
-    "WW",      // NF_KEY_WW Week of year
-    "MMMMM",   // NF_KEY_MMMMM first letter of month name
+
+    // Reserved words translated and color names follow:
     "TRUE",    // NF_KEY_TRUE boolean true
     "FALSE",   // NF_KEY_FALSE boolean false
     "BOOLEAN", // NF_KEY_BOOLEAN boolean
@@ -87,19 +101,8 @@ const NfKeywordTable ImpSvNumberformatScan::sEnglishKeyword =
     "BROWN",   // NF_KEY_BROWN
     "GREY",    // NF_KEY_GREY
     "YELLOW",  // NF_KEY_YELLOW
-    "WHITE",   // NF_KEY_WHITE
-    // preset new calendar keywords
-    "AAA",     // NF_KEY_AAA
-    "AAAA",    // NF_KEY_AAAA
-    "E",       // NF_KEY_EC
-    "EE",      // NF_KEY_EEC
-    "G",       // NF_KEY_G
-    "GG",      // NF_KEY_GG
-    "GGG",     // NF_KEY_GGG
-    "R",       // NF_KEY_R
-    "RR",      // NF_KEY_RR
-    "t"        // NF_KEY_THAI_T Thai T modifier, speciality of Thai Excel, only used with Thai locale and converted to [NatNum1]
-};             // only exception as lowercase
+    "WHITE"    // NF_KEY_WHITE
+};
 
 ::std::vector<Color> ImpSvNumberformatScan::StandardColor;
 bool ImpSvNumberformatScan::bStandardColorNeedInitialization = true;
@@ -680,67 +683,26 @@ short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos
         rbFoundEnglish = true;
         return NF_KEY_GENERAL;
     }
-    //! MUST be a reverse search to find longer strings first
-    short i = NF_KEYWORD_ENTRIES_COUNT-1;
-    bool bFound = false;
-    for ( ; i > NF_KEY_LASTKEYWORD_SO5; --i )
+
+    // MUST be a reverse search to find longer strings first,
+    // new keywords take precedence over old keywords,
+    // skip colors et al after keywords.
+    short i = NF_KEY_LASTKEYWORD;
+    while (i > 0 && !sString.startsWith( rKeyword[i]))
     {
-        bFound = sString.startsWith(rKeyword[i]);
-        if ( bFound )
-        {
-            break;
-        }
+        i--;
     }
-    // new keywords take precedence over old keywords
-    if ( !bFound )
+    if (i == 0 && meKeywordLocalization == KeywordLocalization::AllowEnglish)
     {
-        // skip the gap of colors et al between new and old keywords and search on
+        // No localized (if so) keyword, try English keywords if keywords
+        // are localized. That was already checked in SetDependentKeywords().
         i = NF_KEY_LASTKEYWORD;
-        while ( i > 0 && !sString.startsWith( rKeyword[i]) )
+        while (i > 0 && !sString.startsWith( sEnglishKeyword[i]))
         {
             i--;
         }
-        if ( i > NF_KEY_LASTOLDKEYWORD && sString != rKeyword[i] )
-        {
-            // found something, but maybe it's something else?
-            // e.g. new NNN is found in NNNN, for NNNN we must search on
-            short j = i - 1;
-            while ( j > 0 && !sString.startsWith( rKeyword[j]) )
-            {
-                j--;
-            }
-            if ( j && rKeyword[j].getLength() > rKeyword[i].getLength() )
-            {
-                return j;
-            }
-        }
-        if (i == 0 && meKeywordLocalization == KeywordLocalization::AllowEnglish)
-        {
-            // No localized (if so) keyword, try English keywords if keywords
-            // are localized. That was already checked in
-            // SetDependentKeywords().
-            i = NF_KEY_LASTKEYWORD;
-            while ( i > 0 && !sString.startsWith( sEnglishKeyword[i]) )
-            {
-                i--;
-            }
-            if ( i > NF_KEY_LASTOLDKEYWORD && sString != sEnglishKeyword[i] )
-            {
-                // found something, but maybe it's something else?
-                // e.g. new NNN is found in NNNN, for NNNN we must search on
-                short j = i - 1;
-                while ( j > 0 && !sString.startsWith( sEnglishKeyword[j]) )
-                {
-                    j--;
-                }
-                if ( j && sEnglishKeyword[j].getLength() > sEnglishKeyword[i].getLength() )
-                {
-                    rbFoundEnglish = true;
-                    return j;
-                }
-            }
-        }
     }
+
     // The Thai T NatNum modifier during Xcl import.
     if (i == 0 && bConvertMode &&
         sString[0] == 'T' &&
