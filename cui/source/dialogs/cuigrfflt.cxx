@@ -505,38 +505,24 @@ Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic, doub
     return aRet;
 }
 
-GraphicFilterSepia::GraphicFilterSepia( vcl::Window* pParent, const Graphic& rGraphic,
-                                        sal_uInt16 nSepiaPercent )
-    : GraphicFilterDialog(pParent, "AgingDialog",
-        "cui/ui/agingdialog.ui", rGraphic)
+GraphicFilterSepia::GraphicFilterSepia(weld::Window* pParent, const Graphic& rGraphic,
+                                       sal_uInt16 nSepiaPercent)
+    : GraphicFilterDialogController(pParent, "cui/ui/agingdialog.ui", "AgingDialog", rGraphic)
+    , mxMtrSepia(m_xBuilder->weld_metric_spin_button("value", FUNIT_PERCENT))
 {
-    get(mpMtrSepia, "value");
-
-    mpMtrSepia->SetValue( nSepiaPercent );
-    mpMtrSepia->SetModifyHdl( LINK(this, GraphicFilterSepia, EditModifyHdl) );
+    mxMtrSepia->set_value(nSepiaPercent, FUNIT_PERCENT);
+    mxMtrSepia->connect_value_changed(LINK(this, GraphicFilterSepia, EditModifyHdl));
 }
 
-IMPL_LINK_NOARG(GraphicFilterSepia, EditModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(GraphicFilterSepia, EditModifyHdl, weld::MetricSpinButton&, void)
 {
     GetModifyHdl().Call(nullptr);
 }
 
-GraphicFilterSepia::~GraphicFilterSepia()
-{
-    disposeOnce();
-}
-
-void GraphicFilterSepia::dispose()
-{
-    mpMtrSepia.clear();
-    GraphicFilterDialog::dispose();
-}
-
-
 Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
     Graphic         aRet;
-    sal_uInt16      nSepiaPct = sal::static_int_cast< sal_uInt16 >(mpMtrSepia->GetValue());
+    sal_uInt16      nSepiaPct = sal::static_int_cast< sal_uInt16 >(mxMtrSepia->get_value(FUNIT_PERCENT));
 
     if( rGraphic.IsAnimated() )
     {

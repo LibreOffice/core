@@ -199,16 +199,14 @@ public:
     bool            IsInvert() const { return mxCbxInvert->get_active(); }
 };
 
-class GraphicFilterSepia : public GraphicFilterDialog
+class GraphicFilterSepia : public GraphicFilterDialogController
 {
 private:
-    VclPtr<MetricField>    mpMtrSepia;
-    DECL_LINK(EditModifyHdl, Edit&, void);
+    std::unique_ptr<weld::MetricSpinButton> mxMtrSepia;
+    DECL_LINK(EditModifyHdl, weld::MetricSpinButton&, void);
 public:
-    GraphicFilterSepia( vcl::Window* pParent, const Graphic& rGraphic,
-                        sal_uInt16 nSepiaPercent );
-    virtual ~GraphicFilterSepia() override;
-    virtual void dispose() override;
+    GraphicFilterSepia(weld::Window* pParent, const Graphic& rGraphic,
+                       sal_uInt16 nSepiaPercent);
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
 };
 
