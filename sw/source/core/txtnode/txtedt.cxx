@@ -1658,9 +1658,16 @@ bool SwTextNode::Hyphenate( SwInterHyphInfo &rHyphInf )
 
     SwTextFrame *pFrame = ::sw::SwHyphIterCacheLastTextFrame(this,
         [&rHyphInf, this]() {
+            std::pair<Point, bool> tmp;
+            Point const*const pPoint = rHyphInf.GetCursorPos();
+            if (pPoint)
+            {
+                tmp.first = *pPoint;
+                tmp.second = true;
+            }
             return static_cast<SwTextFrame*>(this->getLayoutFrame(
                 this->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
-                rHyphInf.GetCursorPos()));
+                nullptr, pPoint ? &tmp : nullptr));
         });
     if (!pFrame)
     {

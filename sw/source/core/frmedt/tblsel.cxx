@@ -227,11 +227,13 @@ void GetTableSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
             aMkPos = pShCursor->GetMkPos();
         }
         const SwContentNode *pCntNd = rCursor.GetContentNode();
+        std::pair<Point, bool> tmp(aPtPos, true);
         const SwLayoutFrame *pStart = pCntNd ?
-            pCntNd->getLayoutFrame( pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPtPos )->GetUpper() : nullptr;
+            pCntNd->getLayoutFrame(pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp)->GetUpper() : nullptr;
         pCntNd = rCursor.GetContentNode(false);
+        tmp.first = aMkPos;
         const SwLayoutFrame *pEnd = pCntNd ?
-            pCntNd->getLayoutFrame( pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aMkPos )->GetUpper() : nullptr;
+            pCntNd->getLayoutFrame(pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp)->GetUpper() : nullptr;
         if( pStart && pEnd )
             GetTableSel( pStart, pEnd, rBoxes, nullptr, eSearchType );
     }
@@ -438,7 +440,10 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
     if ( !pCNd || pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) == nullptr )
             return false;
 
-    const SwLayoutFrame *pStart = pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aNullPos )->GetUpper();
+    std::pair<Point, bool> tmp(aNullPos, true);
+    const SwLayoutFrame *const pStart = pCNd->getLayoutFrame(
+            pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            nullptr, &tmp)->GetUpper();
     OSL_ENSURE( pStart, "without frame nothing works" );
 
     aIdx = rEndNd;
@@ -452,7 +457,9 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
         return false;
     }
 
-    const SwLayoutFrame *pEnd = pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aNullPos )->GetUpper();
+    const SwLayoutFrame *const pEnd = pCNd->getLayoutFrame(
+            pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            nullptr, &tmp)->GetUpper();
     OSL_ENSURE( pEnd, "without frame nothing works" );
 
     bool bValidChartSel;
@@ -682,10 +689,12 @@ bool GetAutoSumSel( const SwCursorShell& rShell, SwCellFrames& rBoxes )
     if ( rShell.IsTableMode() )
         pCursor = rShell.m_pTableCursor;
 
-    const SwLayoutFrame *pStart = pCursor->GetContentNode()->getLayoutFrame( rShell.GetLayout(),
-                      &pCursor->GetPtPos() )->GetUpper(),
-                      *pEnd   = pCursor->GetContentNode(false)->getLayoutFrame( rShell.GetLayout(),
-                      &pCursor->GetMkPos() )->GetUpper();
+    std::pair<Point, bool> tmp(pCursor->GetPtPos(), true);
+    const SwLayoutFrame *const pStart = pCursor->GetContentNode()->getLayoutFrame(
+            rShell.GetLayout(), nullptr, &tmp)->GetUpper();
+    tmp.first = pCursor->GetMkPos();
+    const SwLayoutFrame *const pEnd = pCursor->GetContentNode(false)->getLayoutFrame(
+            rShell.GetLayout(), nullptr, &tmp)->GetUpper();
 
     const SwLayoutFrame* pSttCell = pStart;
     while( pSttCell && !pSttCell->IsCellFrame() )
@@ -919,11 +928,14 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     Point aPt( 0, 0 );
 
     const SwContentNode* pCntNd = rPam.GetContentNode();
-    const SwLayoutFrame *pStart = pCntNd->getLayoutFrame( pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
-                                                        &aPt )->GetUpper();
+    std::pair<Point, bool> const tmp(aPt, true);
+    const SwLayoutFrame *const pStart = pCntNd->getLayoutFrame(
+            pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            nullptr, &tmp)->GetUpper();
     pCntNd = rPam.GetContentNode(false);
-    const SwLayoutFrame *pEnd = pCntNd->getLayoutFrame( pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
-                                                        &aPt )->GetUpper();
+    const SwLayoutFrame *const pEnd = pCntNd->getLayoutFrame(
+            pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            nullptr, &tmp)->GetUpper();
 
     // First, compute tables and rectangles
     SwSelUnions aUnions;
@@ -1434,11 +1446,14 @@ TableMergeErr CheckMergeSel( const SwPaM& rPam )
 
     Point aPt;
     const SwContentNode* pCntNd = rPam.GetContentNode();
-    const SwLayoutFrame *pStart = pCntNd->getLayoutFrame( pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
-                                                        &aPt )->GetUpper();
+    std::pair<Point, bool> tmp(aPt, true);
+    const SwLayoutFrame *const pStart = pCntNd->getLayoutFrame(
+            pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            nullptr, &tmp)->GetUpper();
     pCntNd = rPam.GetContentNode(false);
-    const SwLayoutFrame *pEnd = pCntNd->getLayoutFrame( pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
-                                                    &aPt )->GetUpper();
+    const SwLayoutFrame *const pEnd = pCntNd->getLayoutFrame(
+            pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            nullptr, &tmp)->GetUpper();
     GetTableSel( pStart, pEnd, aBoxes, nullptr );
     return CheckMergeSel( aBoxes );
 }
@@ -1962,11 +1977,15 @@ bool CheckSplitCells( const SwCursor& rCursor, sal_uInt16 nDiv,
     }
 
     const SwContentNode* pCntNd = rCursor.GetContentNode();
-    const SwLayoutFrame *pStart = pCntNd->getLayoutFrame( pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
-                                                        &aPtPos )->GetUpper();
+    std::pair<Point, bool> tmp(aPtPos, true);
+    const SwLayoutFrame *const pStart = pCntNd->getLayoutFrame(
+            pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            nullptr, &tmp)->GetUpper();
     pCntNd = rCursor.GetContentNode(false);
-    const SwLayoutFrame *pEnd = pCntNd->getLayoutFrame( pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
-                                &aMkPos )->GetUpper();
+    tmp.first = aMkPos;
+    const SwLayoutFrame *const pEnd = pCntNd->getLayoutFrame(
+            pCntNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            nullptr, &tmp)->GetUpper();
 
     SwRectFnSet aRectFnSet(pStart->GetUpper());
 

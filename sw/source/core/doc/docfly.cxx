@@ -234,7 +234,8 @@ static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFormatAnchor& rAnch,
             {
                 const SwPosition *pPos = rAnch.GetContentAnchor();
                 const SwContentNode* pNd = pPos->nNode.GetNode().GetContentNode();
-                const SwFrame* pOld = pNd ? pNd->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), &aRet, nullptr, false ) : nullptr;
+                std::pair<Point, bool> const tmp(aRet, false);
+                const SwFrame* pOld = pNd ? pNd->getLayoutFrame(rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp) : nullptr;
                 if( pOld )
                     aRet = pOld->getFrameArea().Pos();
             }
@@ -824,8 +825,11 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                         getIDocumentLayoutAccess().GetCurrentLayout()->GetCursorOfst( &aPos, aPoint, &aState );
                         // consider that drawing objects can be in
                         // header/footer. Thus, <GetFrame()> by left-top-corner
+                        std::pair<Point, bool> const tmp(aPt, false);
                         pTextFrame = aPos.nNode.GetNode().
-                                        GetContentNode()->getLayoutFrame( getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
+                            GetContentNode()->getLayoutFrame(
+                                getIDocumentLayoutAccess().GetCurrentLayout(),
+                                nullptr, &tmp);
                     }
                     const SwFrame *pTmp = ::FindAnchor( pTextFrame, aPt );
                     pNewAnchorFrame = pTmp->FindFlyFrame();

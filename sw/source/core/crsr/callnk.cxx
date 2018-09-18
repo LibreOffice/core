@@ -203,7 +203,7 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
 
     const SwFrame* pFrame;
     const SwFlyFrame *pFlyFrame;
-    if( !rShell.ActionPend() && nullptr != ( pFrame = pCNd->getLayoutFrame(rShell.GetLayout(), nullptr, nullptr, false) ) &&
+    if (!rShell.ActionPend() && nullptr != (pFrame = pCNd->getLayoutFrame(rShell.GetLayout(), nullptr, nullptr)) &&
         nullptr != ( pFlyFrame = pFrame->FindFlyFrame() ) && !rShell.IsTableMode() )
     {
         const SwNodeIndex* pIndex = pFlyFrame->GetFormat()->GetContent().GetContentIdx();
@@ -220,9 +220,10 @@ SwCallLink::~SwCallLink() COVERITY_NOEXCEPT_FALSE
     }
 }
 
-long SwCallLink::getLayoutFrame( const SwRootFrame* pRoot, SwTextNode const & rNd, sal_Int32 nCntPos, bool bCalcFrame )
+long SwCallLink::getLayoutFrame(const SwRootFrame* pRoot,
+        SwTextNode const & rNd, sal_Int32 nCntPos, bool /*bCalcFrame*/)
 {
-    SwTextFrame* pFrame = static_cast<SwTextFrame*>(rNd.getLayoutFrame(pRoot,nullptr,nullptr,bCalcFrame));
+    SwTextFrame* pFrame = static_cast<SwTextFrame*>(rNd.getLayoutFrame(pRoot, nullptr, nullptr));
     SwTextFrame* pNext;
     if ( pFrame && !pFrame->IsHiddenNow() )
     {
