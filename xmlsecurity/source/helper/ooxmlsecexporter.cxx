@@ -359,9 +359,9 @@ void OOXMLSecExporter::Impl::writeSignatureInfo()
     pAttributeList->AddAttribute("xmlns", "http://schemas.microsoft.com/office/2006/digsig");
     m_xDocumentHandler->startElement("SignatureInfoV1", uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
 
-    m_xDocumentHandler->startElement("SetupId", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
+    m_xDocumentHandler->startElement("SetupID", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
     m_xDocumentHandler->characters(m_rInformation.ouSignatureLineId);
-    m_xDocumentHandler->endElement("SetupId");
+    m_xDocumentHandler->endElement("SetupID");
     m_xDocumentHandler->startElement("SignatureText", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
     m_xDocumentHandler->endElement("SignatureText");
     m_xDocumentHandler->startElement("SignatureImage", uno::Reference<xml::sax::XAttributeList>(new SvXMLAttributeList()));
@@ -416,7 +416,7 @@ void OOXMLSecExporter::Impl::writePackageSignature()
         m_xDocumentHandler->startElement("xd:QualifyingProperties", uno::Reference<xml::sax::XAttributeList>(pAttributeList.get()));
     }
 
-    DocumentSignatureHelper::writeSignedProperties(m_xDocumentHandler, m_rInformation, m_aSignatureTimeValue);
+    DocumentSignatureHelper::writeSignedProperties(m_xDocumentHandler, m_rInformation, m_aSignatureTimeValue, false);
 
     m_xDocumentHandler->endElement("xd:QualifyingProperties");
     m_xDocumentHandler->endElement("Object");
