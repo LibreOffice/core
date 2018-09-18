@@ -548,6 +548,7 @@ void ScFormulaCellGroup::setCode( ScTokenArray* pCode )
 {
     delete mpCode;
     mpCode = pCode; // takes ownership of the token array.
+    mpCode->Finalize(); // Reduce memory usage if needed.
     mbInvariant = mpCode->IsInvariant();
     mpCode->GenHash();
 }
@@ -699,6 +700,8 @@ ScFormulaCell::ScFormulaCell(
 {
     assert(pArray); // Never pass a NULL pointer here.
 
+    pCode->Finalize(); // Reduce memory usage if needed.
+
     // Generate RPN token array.
     if (pCode->GetLen() && pCode->GetCodeError() == FormulaError::NONE && !pCode->GetCodeLen())
     {
@@ -722,7 +725,7 @@ ScFormulaCell::ScFormulaCell(
     ScDocument* pDoc, const ScAddress& rPos, const ScTokenArray& rArray,
     const FormulaGrammar::Grammar eGrammar, ScMatrixMode cMatInd ) :
     eTempGrammar( eGrammar),
-    pCode(new ScTokenArray(rArray)),
+    pCode(new ScTokenArray(rArray)), // also implicitly does Finalize() on the array
     pDocument( pDoc ),
     pPrevious(nullptr),
     pNext(nullptr),

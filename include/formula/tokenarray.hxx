@@ -291,6 +291,11 @@ public:
 
     virtual void Clear();
 
+    /**
+     * The array has its final used size and no more token can be added.
+     */
+    void Finalize();
+
     void SetFromRangeName( bool b ) { mbFromRangeName = b; }
     bool IsFromRangeName() const { return mbFromRangeName; }
 
