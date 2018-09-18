@@ -386,6 +386,23 @@ DECLARE_OOXMLEXPORT_TEST(testOpenDocumentAsReadOnly, "open-as-read-only.docx")
     CPPUNIT_ASSERT(pTextDoc->GetDocShell()->IsSecurityOptOpenReadOnly());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf58944RepeatingTableHeader, "tdf58944-repeating-table-header.docx")
+{
+    // DOCX tables with more than 10 repeating header lines imported without repeating header lines
+    // as a workaround for MSO's limitation of header line repetition
+    xmlDocPtr pDump = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    // table starts on page 1 and finished on page 2
+    // instead of showing only a part of it on page 2
+    assertXPath(pDump, "/root/page[1]/body/tab", 1);
+    assertXPath(pDump, "/root/page[1]/body/tab/row", 11);
+    CPPUNIT_ASSERT_EQUAL(OUString("Test1"),
+                         parseDump("/root/page[2]/body/tab/row[1]/cell[1]/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Test2"),
+                         parseDump("/root/page[2]/body/tab/row[2]/cell[1]/txt/text()"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

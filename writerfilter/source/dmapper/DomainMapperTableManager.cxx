@@ -200,9 +200,27 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 // to prevent later rows from increasing the repeating m_nHeaderRepeat is set to NULL when repeating stops
                 if( nIntValue > 0 && m_nHeaderRepeat >= 0 )
                 {
-                    ++m_nHeaderRepeat;
                     TablePropertyMapPtr pPropMap( new TablePropertyMap );
-                    pPropMap->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny( m_nHeaderRepeat ));
+
+                    // Repeating header lines are not visible in MSO, if there is no space for them.
+                    // OOXML (and ODF) standards don't specify this exception, and unfortunately,
+                    // it's easy to create tables with invisible repeating headers in MSO, resulting
+                    // OOXML files with non-standardized layout. To show the same or a similar layout
+                    // in LibreOffice (instead of a broken table with invisible content), we use a
+                    // reasonable 10-row limit to apply header repetition, as a workaround.
+                    // Later it's still possible to switch on header repetition or create a better
+                    // compatible repeating table header in Writer for (pretty unlikely) tables with
+                    // really repeating headers consisted of more than 10 table rows.
+                    if ( m_nHeaderRepeat == 10 )
+                    {
+                        m_nHeaderRepeat = -1;
+                        pPropMap->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny(sal_Int32(0)));
+                    }
+                    else
+                    {
+                        ++m_nHeaderRepeat;
+                        pPropMap->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny( m_nHeaderRepeat ));
+                    }
                     insertTableProps(pPropMap);
                 }
                 else
