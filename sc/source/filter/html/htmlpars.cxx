@@ -3039,15 +3039,11 @@ class CSSHandler
         }
     };
 
-    typedef std::pair<MemStr, MemStr> SelectorName; // element : class
-    typedef std::vector<SelectorName> SelectorNames;
-    SelectorNames maSelectorNames; /// current selector names.
     MemStr maPropName;  /// current property name.
     MemStr maPropValue; /// current property value.
 
-    ScHTMLStyles& mrStyles;
 public:
-    explicit CSSHandler(ScHTMLStyles& rStyles) : mrStyles(rStyles) {}
+    explicit CSSHandler() {}
 
     static void at_rule_name(const char* /*p*/, size_t /*n*/)
     {
@@ -3070,26 +3066,12 @@ public:
 
     static void begin_block() {}
 
-    void end_block()
-    {
-        maSelectorNames.clear();
-    }
+    static void end_block() {}
 
     static void begin_property() {}
 
     void end_property()
     {
-        SelectorNames::const_iterator itr = maSelectorNames.begin(), itrEnd = maSelectorNames.end();
-        for (; itr != itrEnd; ++itr)
-        {
-            // Add this property to the collection for each selector.
-            const SelectorName& rSelName = *itr;
-            const MemStr& rElem = rSelName.first;
-            const MemStr& rClass = rSelName.second;
-            OUString aName(maPropName.mp, maPropName.mn, RTL_TEXTENCODING_UTF8);
-            OUString aValue(maPropValue.mp, maPropValue.mn, RTL_TEXTENCODING_UTF8);
-            mrStyles.add(rElem.mp, rElem.mn, rClass.mp, rClass.mn, aName, aValue);
-        }
         maPropName = MemStr();
         maPropValue = MemStr();
     }
@@ -3128,7 +3110,7 @@ public:
 void ScHTMLQueryParser::ParseStyle(const OUString& rStrm)
 {
     OString aStr = OUStringToOString(rStrm, RTL_TEXTENCODING_UTF8);
-    CSSHandler aHdl(GetStyles());
+    CSSHandler aHdl;
     orcus::css_parser<CSSHandler> aParser(aStr.getStr(), aStr.getLength(), aHdl);
     try
     {

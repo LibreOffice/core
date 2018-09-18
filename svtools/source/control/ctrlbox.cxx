@@ -1701,8 +1701,6 @@ sal_Int64 FontSizeBox::GetValueFromStringUnit(const OUString& rStr, FieldUnit eO
 SvtFontSizeBox::SvtFontSizeBox(std::unique_ptr<weld::ComboBox> p)
     : pFontList(nullptr)
     , nSavedValue(0)
-    , nMin(20)
-    , nMax(9999)
     , eUnit(FUNIT_POINT)
     , nDecimalDigits(1)
     , nRelMin(0)
@@ -1918,7 +1916,6 @@ void SvtFontSizeBox::SetRelative( bool bNewRelative )
         if (bPtRelative)
         {
             SetDecimalDigits( 1 );
-            SetRange(nPtRelMin, nPtRelMax);
             SetUnit(FUNIT_POINT);
 
             short i = nPtRelMin, n = 0;
@@ -1932,7 +1929,6 @@ void SvtFontSizeBox::SetRelative( bool bNewRelative )
         else
         {
             SetDecimalDigits(0);
-            SetRange(nRelMin, nRelMax);
             SetUnit(FUNIT_PERCENT);
 
             sal_uInt16 i = nRelMin;
@@ -1949,7 +1945,6 @@ void SvtFontSizeBox::SetRelative( bool bNewRelative )
             m_xComboBox->clear();
         bRelative = bPtRelative = false;
         SetDecimalDigits(1);
-        SetRange(20, 9999);
         SetUnit(FUNIT_POINT);
         if ( pFontList)
             Fill( &aFontMetric, pFontList );

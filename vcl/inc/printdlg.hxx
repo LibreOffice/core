@@ -195,7 +195,6 @@ namespace vcl
         std::map< OUString, std::vector< VclPtr<vcl::Window> > >
                                                 maPropertyToWindowMap;
         std::map< VclPtr<vcl::Window>, sal_Int32 >          maControlToNumValMap;
-        std::set< OUString >                    maReverseDependencySet;
 
         Size                                    maNupPortraitSize;
         Size                                    maNupLandscapeSize;

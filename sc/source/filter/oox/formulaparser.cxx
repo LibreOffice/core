@@ -465,7 +465,6 @@ protected:
     ApiToken&           getOperandToken( size_t nOpIndex, size_t nTokenIndex );
 
     bool                pushOperandToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = nullptr );
-    bool                pushAnyOperandToken( const Any& rAny, sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = nullptr );
     template< typename Type >
     bool                pushValueOperandToken( const Type& rValue, sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces = nullptr );
     template< typename Type >
@@ -480,7 +479,6 @@ protected:
     bool                pushFunctionOperatorToken( const FunctionInfo& rFuncInfo, size_t nParamCount, const WhiteSpaceVec* pLeadingSpaces = nullptr, const WhiteSpaceVec* pClosingSpaces = nullptr );
 
     bool                pushOperand( sal_Int32 nOpCode );
-    bool                pushAnyOperand( const Any& rAny, sal_Int32 nOpCode );
     template< typename Type >
     bool                pushValueOperand( const Type& rValue, sal_Int32 nOpCode );
     template< typename Type >
@@ -734,14 +732,6 @@ bool FormulaParserImpl::pushOperandToken( sal_Int32 nOpCode, const WhiteSpaceVec
     return true;
 }
 
-bool FormulaParserImpl::pushAnyOperandToken( const Any& rAny, sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces )
-{
-    size_t nSpacesSize = appendWhiteSpaceTokens( pSpaces );
-    appendRawToken( nOpCode ) = rAny;
-    pushOperandSize( nSpacesSize + 1 );
-    return true;
-}
-
 template< typename Type >
 bool FormulaParserImpl::pushValueOperandToken( const Type& rValue, sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces )
 {
@@ -853,11 +843,6 @@ bool FormulaParserImpl::pushOperand( sal_Int32 nOpCode )
     return pushOperandToken( nOpCode, &maLeadingSpaces ) && resetSpaces();
 }
 
-bool FormulaParserImpl::pushAnyOperand( const Any& rAny, sal_Int32 nOpCode )
-{
-    return pushAnyOperandToken( rAny, nOpCode, &maLeadingSpaces ) && resetSpaces();
-}
-
 template< typename Type >
 bool FormulaParserImpl::pushValueOperand( const Type& rValue, sal_Int32 nOpCode )
 {
@@ -946,9 +931,6 @@ bool FormulaParserImpl::pushReferenceOperand( const LinkSheetRange& rSheetRange,
 
 bool FormulaParserImpl::pushEmbeddedRefOperand( const DefinedNameBase& rName, bool bPushBadToken )
 {
-    Any aRefAny = rName.getReference( maBaseAddr );
-    if( aRefAny.hasValue() )
-        return pushAnyOperand( aRefAny, OPCODE_PUSH );
     if( bPushBadToken && !rName.getModelName().isEmpty() && (rName.getModelName()[ 0 ] >= ' ') )
         return pushValueOperand( rName.getModelName(), OPCODE_BAD );
     return pushBiffErrorOperand( BIFF_ERR_NAME );

@@ -102,15 +102,10 @@ class ViewShellObjectBarFactory
 {
 public:
     explicit ViewShellObjectBarFactory (::sd::ViewShell& rViewShell);
-    virtual ~ViewShellObjectBarFactory() override;
     virtual SfxShell* CreateShell( ::sd::ShellId nId ) override;
     virtual void ReleaseShell (SfxShell* pShell) override;
 private:
     ::sd::ViewShell& mrViewShell;
-    /** This cache holds the already created object bars.
-    */
-    typedef ::std::map< ::sd::ShellId,SfxShell*> ShellCache;
-    ShellCache maShellCache;
 };
 
 } // end of anonymous namespace
@@ -1637,64 +1632,48 @@ ViewShellObjectBarFactory::ViewShellObjectBarFactory (
 {
 }
 
-ViewShellObjectBarFactory::~ViewShellObjectBarFactory()
-{
-    for (ShellCache::iterator aI(maShellCache.begin());
-         aI!=maShellCache.end();
-         ++aI)
-    {
-        delete aI->second;
-    }
-}
-
 SfxShell* ViewShellObjectBarFactory::CreateShell( ::sd::ShellId nId )
 {
     SfxShell* pShell = nullptr;
 
-    ShellCache::iterator aI (maShellCache.find(nId));
-    if (aI == maShellCache.end() || aI->second==nullptr)
+    ::sd::View* pView = mrViewShell.GetView();
+    switch (nId)
     {
-        ::sd::View* pView = mrViewShell.GetView();
-        switch (nId)
-        {
-            case ToolbarId::Bezier_Toolbox_Sd:
-                pShell = new ::sd::BezierObjectBar(&mrViewShell, pView);
-                break;
+        case ToolbarId::Bezier_Toolbox_Sd:
+            pShell = new ::sd::BezierObjectBar(&mrViewShell, pView);
+            break;
 
-            case ToolbarId::Draw_Text_Toolbox_Sd:
-                pShell = new ::sd::TextObjectBar(
-                    &mrViewShell, mrViewShell.GetDoc()->GetPool(), pView);
-                break;
+        case ToolbarId::Draw_Text_Toolbox_Sd:
+            pShell = new ::sd::TextObjectBar(
+                &mrViewShell, mrViewShell.GetDoc()->GetPool(), pView);
+            break;
 
-            case ToolbarId::Draw_Graf_Toolbox:
-                pShell = new ::sd::GraphicObjectBar(&mrViewShell, pView);
-                break;
+        case ToolbarId::Draw_Graf_Toolbox:
+            pShell = new ::sd::GraphicObjectBar(&mrViewShell, pView);
+            break;
 
-            case ToolbarId::Draw_Media_Toolbox:
-                pShell = new ::sd::MediaObjectBar(&mrViewShell, pView);
-                break;
+        case ToolbarId::Draw_Media_Toolbox:
+            pShell = new ::sd::MediaObjectBar(&mrViewShell, pView);
+            break;
 
-            case ToolbarId::Draw_Table_Toolbox:
-                pShell = ::sd::ui::table::CreateTableObjectBar( mrViewShell, pView );
-                break;
+        case ToolbarId::Draw_Table_Toolbox:
+            pShell = ::sd::ui::table::CreateTableObjectBar( mrViewShell, pView );
+            break;
 
-            case ToolbarId::Svx_Extrusion_Bar:
-                pShell = new svx::ExtrusionBar(
-                    &mrViewShell.GetViewShellBase());
-                break;
+        case ToolbarId::Svx_Extrusion_Bar:
+            pShell = new svx::ExtrusionBar(
+                &mrViewShell.GetViewShellBase());
+            break;
 
-            case ToolbarId::Svx_Fontwork_Bar:
-                pShell = new svx::FontworkBar(
-                    &mrViewShell.GetViewShellBase());
-                break;
+         case ToolbarId::Svx_Fontwork_Bar:
+            pShell = new svx::FontworkBar(
+                &mrViewShell.GetViewShellBase());
+            break;
 
-            default:
-                pShell = nullptr;
-                break;
-        }
+        default:
+            pShell = nullptr;
+            break;
     }
-    else
-        pShell = aI->second;
 
     return pShell;
 }

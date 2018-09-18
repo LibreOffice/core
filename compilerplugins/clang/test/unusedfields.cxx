@@ -10,6 +10,7 @@
 #include <vector>
 #include <ostream>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
 struct Foo
 // expected-error@-1 {{read m_foo1 [loplugin:unusedfields]}}
@@ -169,6 +170,30 @@ struct ReadOnlyAnalysis3
     {
         if (m_f1)
             m_f1 = 1;
+    }
+};
+
+// Verify the special logic for container fields that only contains mutations that
+// add elements.
+struct ReadOnlyAnalysis4
+// expected-error@-1 {{read m_readonly [loplugin:unusedfields]}}
+// expected-error@-2 {{read m_readwrite [loplugin:unusedfields]}}
+// expected-error@-3 {{write m_readwrite [loplugin:unusedfields]}}
+// expected-error@-4 {{read m_readonlyCss [loplugin:unusedfields]}}
+{
+    std::vector<int> m_readonly;
+    std::vector<int> m_readwrite;
+    css::uno::Sequence<sal_Int32> m_readonlyCss;
+
+    void func1()
+    {
+        int x = m_readonly[0];
+        (void)x;
+        *m_readonly.begin() = 1;
+
+        m_readwrite.push_back(0);
+
+        x = m_readonlyCss.getArray()[0];
     }
 };
 

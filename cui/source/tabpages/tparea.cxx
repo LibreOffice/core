@@ -127,20 +127,20 @@ SvxAreaTabPage::SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs
     m_pFillTabPage.disposeAndReset(SvxColorTabPage::Create(aFillTab, &m_rXFSet));
     m_aColorSize = m_pFillTabPage->get_container_size();
     m_pFillTabPage.disposeAndReset(SvxGradientTabPage::Create(aFillTab, &m_rXFSet));
-    m_aGradientSize = m_pFillTabPage->get_container_size();
+    Size aGradientSize = m_pFillTabPage->get_container_size();
     m_pFillTabPage.disposeAndReset(SvxBitmapTabPage::Create(aFillTab, &m_rXFSet));
-    m_aBitmapSize = m_pFillTabPage->get_container_size();
+    Size aBitmapSize = m_pFillTabPage->get_container_size();
     m_pFillTabPage.disposeAndReset(SvxHatchTabPage::Create(aFillTab, &m_rXFSet));
-    m_aHatchSize = m_pFillTabPage->get_container_size();
+    Size aHatchSize = m_pFillTabPage->get_container_size();
     m_pFillTabPage.disposeAndReset(SvxPatternTabPage::Create(aFillTab, &m_rXFSet));
-    m_aPatternSize = m_pFillTabPage->get_container_size();
+    Size aPatternSize = m_pFillTabPage->get_container_size();
     m_pFillTabPage.disposeAndClear();
 
     Size aSize(m_aColorSize);
-    lclExtendSize(aSize, m_aGradientSize);
-    lclExtendSize(aSize, m_aBitmapSize);
-    lclExtendSize(aSize, m_aHatchSize);
-    lclExtendSize(aSize, m_aPatternSize);
+    lclExtendSize(aSize, aGradientSize);
+    lclExtendSize(aSize, aBitmapSize);
+    lclExtendSize(aSize, aHatchSize);
+    lclExtendSize(aSize, aPatternSize);
     m_xFillTab->set_size_request(aSize.Width(), aSize.Height());
 }
 
