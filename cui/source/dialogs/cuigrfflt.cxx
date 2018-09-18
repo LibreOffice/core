@@ -302,63 +302,43 @@ IMPL_LINK_NOARG(GraphicFilterDialogController, ImplModifyHdl, LinkParamNone*, vo
     }
 }
 
-GraphicFilterMosaic::GraphicFilterMosaic( vcl::Window* pParent, const Graphic& rGraphic,
-                                          sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, bool bEnhanceEdges )
-    : GraphicFilterDialog(pParent, "MosaicDialog",
-        "cui/ui/mosaicdialog.ui", rGraphic)
+GraphicFilterMosaic::GraphicFilterMosaic(weld::Window* pParent, const Graphic& rGraphic,
+                                         sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, bool bEnhanceEdges)
+    : GraphicFilterDialogController(pParent, "cui/ui/mosaicdialog.ui", "MosaicDialog", rGraphic)
+    , mxMtrWidth(m_xBuilder->weld_metric_spin_button("width", FUNIT_PIXEL))
+    , mxMtrHeight(m_xBuilder->weld_metric_spin_button("height", FUNIT_PIXEL))
+    , mxCbxEdges(m_xBuilder->weld_check_button("edges"))
 {
-    get(mpMtrWidth, "width");
-    get(mpMtrHeight, "height");
-    get(mpCbxEdges, "edges");
+    mxMtrWidth->set_value(nTileWidth, FUNIT_PIXEL);
+    mxMtrWidth->set_max(GetGraphicSizePixel().Width(), FUNIT_PIXEL);
+    mxMtrWidth->connect_value_changed(LINK(this, GraphicFilterMosaic, EditModifyHdl));
 
-    mpMtrWidth->SetValue( nTileWidth );
-    mpMtrWidth->SetLast( GetGraphicSizePixel().Width() );
-    mpMtrWidth->SetModifyHdl( LINK(this, GraphicFilterMosaic, EditModifyHdl) );
+    mxMtrHeight->set_value(nTileHeight, FUNIT_PIXEL);
+    mxMtrHeight->set_max(GetGraphicSizePixel().Height(), FUNIT_PIXEL);
+    mxMtrHeight->connect_value_changed(LINK(this, GraphicFilterMosaic, EditModifyHdl));
 
-    mpMtrHeight->SetValue( nTileHeight );
-    mpMtrHeight->SetLast( GetGraphicSizePixel().Height() );
-    mpMtrHeight->SetModifyHdl( LINK(this, GraphicFilterMosaic, EditModifyHdl) );
+    mxCbxEdges->set_active(bEnhanceEdges);
+    mxCbxEdges->connect_toggled(LINK(this, GraphicFilterMosaic, CheckBoxModifyHdl));
 
-    mpCbxEdges->Check( bEnhanceEdges );
-    mpCbxEdges->SetToggleHdl( LINK(this, GraphicFilterMosaic, CheckBoxModifyHdl) );
-
-    mpMtrWidth->GrabFocus();
+    mxMtrWidth->grab_focus();
 }
 
-
-IMPL_LINK_NOARG(GraphicFilterMosaic, CheckBoxModifyHdl, CheckBox&, void)
+IMPL_LINK_NOARG(GraphicFilterMosaic, CheckBoxModifyHdl, weld::ToggleButton&, void)
 {
     GetModifyHdl().Call(nullptr);
 }
 
-
-IMPL_LINK_NOARG(GraphicFilterMosaic, EditModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(GraphicFilterMosaic, EditModifyHdl, weld::MetricSpinButton&, void)
 {
     GetModifyHdl().Call(nullptr);
 }
-
-
-GraphicFilterMosaic::~GraphicFilterMosaic()
-{
-    disposeOnce();
-}
-
-
-void GraphicFilterMosaic::dispose()
-{
-    mpMtrWidth.clear();
-    mpMtrHeight.clear();
-    mpCbxEdges.clear();
-    GraphicFilterDialog::dispose();
-}
-
 
 Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
                                                  double fScaleX, double fScaleY )
 {
     Graphic         aRet;
-    long            nTileWidth = static_cast<long>(mpMtrWidth->GetValue());
-    long            nTileHeight = static_cast<long>(mpMtrHeight->GetValue());
+    long            nTileWidth = static_cast<long>(mxMtrWidth->get_value(FUNIT_PIXEL));
+    long            nTileHeight = static_cast<long>(mxMtrHeight->get_value(FUNIT_PIXEL));
     const Size      aSize( std::max( FRound( nTileWidth * fScaleX ), 1L ),
                            std::max( FRound( nTileHeight * fScaleY ), 1L ) );
 
