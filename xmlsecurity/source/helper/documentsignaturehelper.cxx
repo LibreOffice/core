@@ -515,7 +515,7 @@ void DocumentSignatureHelper::writeDigestMethod(
 void DocumentSignatureHelper::writeSignedProperties(
     const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler,
     const SignatureInformation& signatureInfo,
-    const OUString& sDate)
+    const OUString& sDate, const bool bWriteSignatureLineData)
 {
     {
         rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
@@ -554,8 +554,8 @@ void DocumentSignatureHelper::writeSignedProperties(
     xDocumentHandler->endElement("xd:SignaturePolicyImplied");
     xDocumentHandler->endElement("xd:SignaturePolicyIdentifier");
 
-    if (!signatureInfo.ouSignatureLineId.isEmpty() && signatureInfo.aValidSignatureImage.is()
-        && signatureInfo.aInvalidSignatureImage.is())
+    if (bWriteSignatureLineData && !signatureInfo.ouSignatureLineId.isEmpty()
+        && signatureInfo.aValidSignatureImage.is() && signatureInfo.aInvalidSignatureImage.is())
     {
         rtl::Reference<SvXMLAttributeList> pAttributeList(new SvXMLAttributeList());
         pAttributeList->AddAttribute(
@@ -574,7 +574,7 @@ void DocumentSignatureHelper::writeSignedProperties(
         }
 
         {
-            // Write SignatureLineId element
+            // Write SignatureLineValidImage element
             xDocumentHandler->startElement(
                 "loext:SignatureLineValidImage",
                 Reference<XAttributeList>(new SvXMLAttributeList()));
@@ -589,7 +589,7 @@ void DocumentSignatureHelper::writeSignedProperties(
         }
 
         {
-            // Write SignatureLineId element
+            // Write SignatureLineInvalidImage element
             xDocumentHandler->startElement(
                 "loext:SignatureLineInvalidImage",
                 Reference<XAttributeList>(new SvXMLAttributeList()));
