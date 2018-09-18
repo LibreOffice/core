@@ -24,14 +24,14 @@
 #include <QtCore/QThread>
 
 #include <vcl/svapp.hxx>
+#include <sal/log.hxx>
 
 Qt5Timer::Qt5Timer()
 {
     m_aTimer.setSingleShot(true);
-    // run the timer itself in the main / creator thread
-    connect(&m_aTimer, SIGNAL(timeout()), this, SLOT(timeoutActivated()), Qt::QueuedConnection);
-    // QTimer::start() can be called only in its creator thread
-    connect(this, SIGNAL(startTimerSignal()), this, SLOT(startTimer()), Qt::QueuedConnection);
+    connect(&m_aTimer, SIGNAL(timeout()), this, SLOT(timeoutActivated()));
+    connect(this, SIGNAL(startTimerSignal(int)), this, SLOT(startTimer(int)));
+    connect(this, SIGNAL(stopTimerSignal()), this, SLOT(stopTimer()));
 }
 
 void Qt5Timer::timeoutActivated()
@@ -40,17 +40,12 @@ void Qt5Timer::timeoutActivated()
     CallCallback();
 }
 
-void Qt5Timer::startTimer() { m_aTimer.start(); }
+void Qt5Timer::startTimer(int nMS) { m_aTimer.start(nMS); }
 
-void Qt5Timer::Start(sal_uIntPtr nMS)
-{
-    m_aTimer.setInterval(nMS);
-    if (qApp->thread() == QThread::currentThread())
-        startTimer();
-    else
-        Q_EMIT startTimerSignal();
-}
+void Qt5Timer::Start(sal_uIntPtr nMS) { Q_EMIT startTimerSignal(nMS); }
 
-void Qt5Timer::Stop() { m_aTimer.stop(); }
+void Qt5Timer::stopTimer() { m_aTimer.stop(); }
+
+void Qt5Timer::Stop() { Q_EMIT stopTimerSignal(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
