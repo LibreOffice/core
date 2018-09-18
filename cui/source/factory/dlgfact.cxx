@@ -1297,11 +1297,10 @@ VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFil
     return VclPtr<AbstractGraphicFilterDialogController_Impl>::Create(o3tl::make_unique<GraphicFilterSepia>(pParent, rGraphic, 10));
 }
 
-VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterSmooth(vcl::Window* pParent,
+VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterSmooth(weld::Window* pParent,
                                             const Graphic& rGraphic, double nRadius)
 {
-    VclPtrInstance<GraphicFilterSmooth> pDlg( pParent, rGraphic, nRadius );
-    return VclPtr<AbstractGraphicFilterDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractGraphicFilterDialogController_Impl>::Create(o3tl::make_unique<GraphicFilterSmooth>(pParent, rGraphic, nRadius));
 }
 
 VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterSolarize(weld::Window* pParent,

@@ -42,7 +42,7 @@ SvxGraphicFilterResult SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const 
     {
         SfxViewFrame*   pViewFrame = SfxViewFrame::Current();
         SfxObjectShell* pShell = pViewFrame ? pViewFrame->GetObjectShell() : nullptr;
-        vcl::Window*         pWindow = ( pViewFrame && pViewFrame->GetViewShell() ) ? pViewFrame->GetViewShell()->GetWindow() : nullptr;
+        weld::Window*   pFrameWeld = (pViewFrame && pViewFrame->GetViewShell()) ? pViewFrame->GetViewShell()->GetFrameWeld() : nullptr;
         Graphic         aGraphic;
 
         switch( rReq.GetSlot() )
@@ -75,7 +75,7 @@ SvxGraphicFilterResult SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const 
             case SID_GRFFILTER_SMOOTH:
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterSmooth(pWindow, rGraphic, 0.7));
+                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterSmooth(pFrameWeld, rGraphic, 0.7));
                 if( aDlg->Execute() == RET_OK )
                     aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );
             }
@@ -159,7 +159,7 @@ SvxGraphicFilterResult SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const 
             case SID_GRFFILTER_MOSAIC:
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterMosaic(pWindow ? pWindow->GetFrameWeld() : nullptr, rGraphic));
+                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterMosaic(pFrameWeld, rGraphic));
                 if( aDlg->Execute() == RET_OK )
                     aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );
             }
@@ -168,7 +168,7 @@ SvxGraphicFilterResult SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const 
             case SID_GRFFILTER_EMBOSS:
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterEmboss(pWindow ? pWindow->GetFrameWeld() : nullptr, rGraphic));
+                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterEmboss(pFrameWeld, rGraphic));
                 if( aDlg->Execute() == RET_OK )
                     aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );
             }
@@ -177,7 +177,7 @@ SvxGraphicFilterResult SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const 
             case SID_GRFFILTER_POSTER:
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterPoster(pWindow ? pWindow->GetFrameWeld() : nullptr, rGraphic));
+                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterPoster(pFrameWeld, rGraphic));
                 if( aDlg->Execute() == RET_OK )
                     aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );
             }
@@ -211,7 +211,7 @@ SvxGraphicFilterResult SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const 
             case SID_GRFFILTER_SEPIA:
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterSepia(pWindow ? pWindow->GetFrameWeld() : nullptr, rGraphic));
+                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterSepia(pFrameWeld, rGraphic));
                 if( aDlg->Execute() == RET_OK )
                     aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );
             }
@@ -220,7 +220,7 @@ SvxGraphicFilterResult SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest const 
             case SID_GRFFILTER_SOLARIZE:
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterSolarize(pWindow ? pWindow->GetFrameWeld() : nullptr, rGraphic));
+                ScopedVclPtr<AbstractGraphicFilterDialog> aDlg(pFact->CreateGraphicFilterSolarize(pFrameWeld, rGraphic));
                 if( aDlg->Execute() == RET_OK )
                     aGraphic = aDlg->GetFilteredGraphic( rGraphic, 1.0, 1.0 );
             }
