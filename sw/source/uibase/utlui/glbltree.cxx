@@ -270,7 +270,7 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
                     {
                         nEntryCount++;
                         nAbsContPos++;
-                        pCnt = (*pTempContents)[ nAbsContPos ];
+                        pCnt = (*pTempContents)[ nAbsContPos ].get();
                     }
                 }
             }
@@ -659,7 +659,7 @@ void SwGlobalTree::Display(bool bOnlyUpdateUserData)
         SvTreeListEntry* pEntry = First();
         for (size_t i = 0; i < nCount && pEntry; i++)
         {
-            SwGlblDocContent* pCont = (*m_pSwGlblDocContents)[i];
+            SwGlblDocContent* pCont = (*m_pSwGlblDocContents)[i].get();
             pEntry->SetUserData(pCont);
             pEntry = Next(pEntry);
             assert(pEntry || i == nCount - 1);
@@ -683,7 +683,7 @@ void SwGlobalTree::Display(bool bOnlyUpdateUserData)
         SvTreeListEntry* pSelEntry = nullptr;
         for( size_t i = 0; i < nCount; i++)
         {
-            SwGlblDocContent* pCont = (*m_pSwGlblDocContents)[i];
+            SwGlblDocContent* pCont = (*m_pSwGlblDocContents)[i].get();
             OUString sEntry;
             Image aImage;
             switch( pCont->GetType()  )
@@ -1130,8 +1130,8 @@ bool    SwGlobalTree::Update(bool bHard)
             {
                 for(size_t i = 0; i < pTempContents->size() && !bCopy; i++)
                 {
-                    SwGlblDocContent* pLeft = (*pTempContents)[i];
-                    SwGlblDocContent* pRight = (*m_pSwGlblDocContents)[i];
+                    SwGlblDocContent* pLeft = (*pTempContents)[i].get();
+                    SwGlblDocContent* pRight = (*m_pSwGlblDocContents)[i].get();
                     GlobalDocContentType eType = pLeft->GetType();
                     SvTreeListEntry* pEntry = GetEntry(i);
                     OUString sTemp = GetEntryText(pEntry);
@@ -1153,10 +1153,7 @@ bool    SwGlobalTree::Update(bool bHard)
             }
             if(bCopy || bHard)
             {
-                m_pSwGlblDocContents->DeleteAndDestroyAll();
-                m_pSwGlblDocContents->insert( *pTempContents );
-                pTempContents->clear();
-
+                *m_pSwGlblDocContents = std::move( *pTempContents );
             }
         }
 
@@ -1165,7 +1162,7 @@ bool    SwGlobalTree::Update(bool bHard)
     {
         Clear();
         if(m_pSwGlblDocContents)
-            m_pSwGlblDocContents->DeleteAndDestroyAll();
+            m_pSwGlblDocContents->clear();
     }
     // FIXME: Implement a test for changes!
     return bRet;
@@ -1308,9 +1305,9 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
         SwGlblDocContent* pAnchorContent = nullptr;
         OSL_ENSURE(aTempContents.size() > (nAnchorContent + nFile), "invalid anchor content -> last insertion failed");
         if ( aTempContents.size() > (nAnchorContent + nFile) )
-            pAnchorContent = aTempContents[nAnchorContent + nFile];
+            pAnchorContent = aTempContents[nAnchorContent + nFile].get();
         else
-            pAnchorContent = aTempContents.back();
+            pAnchorContent = aTempContents.back().get();
         OUString sFileName(pFileNames[nFile]);
         INetURLObject aFileUrl;
         aFileUrl.SetSmartURL( sFileName );
