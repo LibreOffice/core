@@ -106,11 +106,9 @@ using namespace ::com::sun::star::container;
 #define NAVI_BOOKMARK_DELIM     u'\x0001'
 
 class SwContentArr
-    : public o3tl::sorted_vector<SwContent*, o3tl::less_ptr_to<SwContent>,
+    : public o3tl::sorted_vector<std::unique_ptr<SwContent>, o3tl::less_uniqueptr_to<SwContent>,
                 o3tl::find_partialorder_ptrequals>
 {
-public:
-    ~SwContentArr() { DeleteAndDestroyAll(); }
 };
 
 bool SwContentTree::bIsInDrag = false;
@@ -159,15 +157,15 @@ namespace
         for( SwGetINetAttrs::size_type n = 0; n < nCount; ++n )
         {
             SwGetINetAttr* p = &aArr[ n ];
-            SwURLFieldContent* pCnt = new SwURLFieldContent(
+            std::unique_ptr<SwURLFieldContent> pCnt(new SwURLFieldContent(
                                 pCntType,
                                 p->sText,
                                 INetURLObject::decode(
                                     p->rINetAttr.GetINetFormat().GetValue(),
                                     INetURLObject::DecodeMechanism::Unambiguous ),
                                 &p->rINetAttr,
-                                n );
-            pMember->insert( pCnt );
+                                n ));
+            pMember->insert( std::move(pCnt) );
         }
         return nCount;
     }
@@ -373,15 +371,15 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                         pParentFormat = pParentFormat->GetParent();
                     }
 
-                    SwContent* pCnt = new SwRegionContent(this, rSectionName,
+                    std::unique_ptr<SwContent> pCnt(new SwRegionContent(this, rSectionName,
                             nLevel,
-                            pFormat->FindLayoutRect( false, &aNullPt ).Top());
+                            pFormat->FindLayoutRect( false, &aNullPt ).Top()));
 
                     SwPtrMsgPoolItem aAskItem( RES_CONTENT_VISIBLE, nullptr );
                     if( !pFormat->GetInfo( aAskItem ) &&
                         !aAskItem.pObject )     // not visible
                         pCnt->SetInvisible();
-                    pMember->insert(pCnt);
+                    pMember->insert(std::move(pCnt));
                 }
             }
             nMemberCount = pMember->size();
@@ -401,7 +399,6 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                         *pMember);
                 }
 
-                pOldMember->DeleteAndDestroyAll();
                 delete pOldMember;
             }
         }
@@ -424,8 +421,8 @@ void SwContentType::Init(bool* pbInvalidateWindow)
             nMemberCount = 0;
             if(!pMember)
                 pMember.reset( new SwContentArr );
-            else if(!pMember->empty())
-                pMember->DeleteAndDestroyAll();
+            else
+                pMember->clear();
 
             nMemberCount = lcl_InsertURLFieldContent(pMember.get(), pWrtShell, this);
 
@@ -439,8 +436,8 @@ void SwContentType::Init(bool* pbInvalidateWindow)
             nMemberCount = 0;
             if(!pMember)
                 pMember.reset( new SwContentArr );
-            else if(!pMember->empty())
-                pMember->DeleteAndDestroyAll();
+            else
+                pMember->clear();
 
             SwPostItMgr* aMgr = pWrtShell->GetView().GetPostItMgr();
             if (aMgr)
@@ -454,12 +451,12 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                         {
                             OUString sEntry = pFormatField->GetField()->GetPar2();
                             sEntry = RemoveNewline(sEntry);
-                            SwPostItContent* pCnt = new SwPostItContent(
+                            std::unique_ptr<SwPostItContent> pCnt(new SwPostItContent(
                                                 this,
                                                 sEntry,
                                                 pFormatField,
-                                                nMemberCount);
-                            pMember->insert(pCnt);
+                                                nMemberCount));
+                            pMember->insert(std::move(pCnt));
                             nMemberCount++;
                         }
                     }
@@ -509,7 +506,7 @@ const SwContent* SwContentType::GetMember(size_t nIndex)
         FillMemberList();
     }
     if(nIndex < pMember->size())
-        return (*pMember)[nIndex];
+        return (*pMember)[nIndex].get();
 
     return nullptr;
 }
@@ -521,20 +518,20 @@ void SwContentType::Invalidate()
 
 void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
 {
-    SwContentArr*   pOldMember = nullptr;
+    std::unique_ptr<SwContentArr> pOldMember;
     size_t nOldMemberCount = 0;
     SwPtrMsgPoolItem aAskItem( RES_CONTENT_VISIBLE, nullptr );
     if(pMember && pbLevelOrVisibilityChanged)
     {
-        pOldMember = pMember.release();
+        pOldMember = std::move(pMember);
         nOldMemberCount = pOldMember->size();
         pMember.reset( new SwContentArr );
         *pbLevelOrVisibilityChanged = false;
     }
     else if(!pMember)
         pMember.reset( new SwContentArr );
-    else if(!pMember->empty())
-        pMember->DeleteAndDestroyAll();
+    else
+        pMember->clear();
     switch(nContentType)
     {
         case ContentTypeId::OUTLINE   :
@@ -553,13 +550,13 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     OUString aEntry(comphelper::string::stripStart(
                         pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(i), ' '));
                     aEntry = SwNavigationPI::CleanEntry(aEntry);
-                    SwOutlineContent* pCnt = new SwOutlineContent(this, aEntry, i, nLevel,
-                                                        pWrtShell->IsOutlineMovable( i ), nPos );
-                    pMember->insert(pCnt);//, nPos);
+                    std::unique_ptr<SwOutlineContent> pCnt(new SwOutlineContent(this, aEntry, i, nLevel,
+                                                        pWrtShell->IsOutlineMovable( i ), nPos ));
+                    pMember->insert(std::move(pCnt));
                     // with the same number and existing "pOldMember" the
                     // old one is compared with the new OutlinePos.
                     // cast for Win16
-                    if (nOldMemberCount > nPos && static_cast<SwOutlineContent*>((*pOldMember)[nPos])->GetOutlineLevel() != nLevel)
+                    if (nOldMemberCount > nPos && static_cast<SwOutlineContent*>((*pOldMember)[nPos].get())->GetOutlineLevel() != nLevel)
                         *pbLevelOrVisibilityChanged = true;
 
                     nPos++;
@@ -586,7 +583,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     !aAskItem.pObject )     // not visible
                     pCnt->SetInvisible();
 
-                pMember->insert(pCnt);
+                pMember->insert(std::unique_ptr<SwContent>(pCnt));
 
                 if(nOldMemberCount > i &&
                     (*pOldMember)[i]->IsInvisible() != pCnt->IsInvisible())
@@ -631,7 +628,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 if( !pFrameFormat->GetInfo( aAskItem ) &&
                     !aAskItem.pObject )     // not visible
                     pCnt->SetInvisible();
-                pMember->insert(pCnt);
+                pMember->insert(std::unique_ptr<SwContent>(pCnt));
                 if (nOldMemberCount > i &&
                     (*pOldMember)[i]->IsInvisible() != pCnt->IsInvisible())
                         *pbLevelOrVisibilityChanged = true;
@@ -649,8 +646,8 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 {
                     const OUString& rBkmName = ppBookmark->get()->GetName();
                     //nYPos from 0 -> text::Bookmarks will be sorted alphabetically
-                    SwContent* pCnt = new SwContent(this, rBkmName, 0);
-                    pMember->insert(pCnt);
+                    std::unique_ptr<SwContent> pCnt(new SwContent(this, rBkmName, 0));
+                    pMember->insert(std::move(pCnt));
                 }
             }
         }
@@ -677,13 +674,13 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                         pParentFormat = pParentFormat->GetParent();
                     }
 
-                    SwContent* pCnt = new SwRegionContent(this, sSectionName,
+                    std::unique_ptr<SwContent> pCnt(new SwRegionContent(this, sSectionName,
                             nLevel,
-                            pFormat->FindLayoutRect( false, &aNullPt ).Top());
+                            pFormat->FindLayoutRect( false, &aNullPt ).Top()));
                     if( !pFormat->GetInfo( aAskItem ) &&
                         !aAskItem.pObject )     // not visible
                         pCnt->SetInvisible();
-                    pMember->insert(pCnt);
+                    pMember->insert(std::move(pCnt));
                 }
 
                 if(nullptr != pbLevelOrVisibilityChanged)
@@ -709,8 +706,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             for(std::vector<OUString>::const_iterator i = aRefMarks.begin(); i != aRefMarks.end(); ++i)
             {
                 // References sorted alphabetically
-                SwContent* pCnt = new SwContent(this, *i, 0);
-                pMember->insert(pCnt);
+                pMember->insert(o3tl::make_unique<SwContent>(this, *i, 0));
             }
         }
         break;
@@ -734,7 +730,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     !aAskItem.pObject )     // not visible
                     pCnt->SetInvisible();
 
-                pMember->insert( pCnt );
+                pMember->insert( std::unique_ptr<SwContent>(pCnt) );
                 const size_t nPos = pMember->size() - 1;
                 if(nOldMemberCount > nPos &&
                     (*pOldMember)[nPos]->IsInvisible()
@@ -748,8 +744,8 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             nMemberCount = 0;
             if(!pMember)
                 pMember.reset( new SwContentArr );
-            else if(!pMember->empty())
-                pMember->DeleteAndDestroyAll();
+            else
+                pMember->clear();
             SwPostItMgr* aMgr = pWrtShell->GetView().GetPostItMgr();
             if (aMgr)
             {
@@ -762,12 +758,12 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                         {
                             OUString sEntry = pFormatField->GetField()->GetPar2();
                             sEntry = RemoveNewline(sEntry);
-                            SwPostItContent* pCnt = new SwPostItContent(
+                            std::unique_ptr<SwPostItContent> pCnt(new SwPostItContent(
                                                 this,
                                                 sEntry,
                                                 pFormatField,
-                                                nMemberCount);
-                            pMember->insert(pCnt);
+                                                nMemberCount));
+                            pMember->insert(std::move(pCnt));
                             nMemberCount++;
                         }
                     }
@@ -780,8 +776,8 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             nMemberCount = 0;
             if(!pMember)
                 pMember.reset( new SwContentArr );
-            else if(!pMember->empty())
-                pMember->DeleteAndDestroyAll();
+            else
+                pMember->clear();
 
             IDocumentDrawModelAccess& rIDDMA = pWrtShell->getIDocumentDrawModelAccess();
             SwDrawModel* pModel = rIDDMA.GetDrawModel();
@@ -806,7 +802,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                                             nYPos);
                         if(!rIDDMA.IsVisibleLayerId(pTemp->GetLayer()))
                             pCnt->SetInvisible();
-                        pMember->insert(pCnt);
+                        pMember->insert(std::unique_ptr<SwContent>(pCnt));
                         nMemberCount++;
                         if (nOldMemberCount > i &&
                             (*pOldMember)[i]->IsInvisible() != pCnt->IsInvisible() )
@@ -819,9 +815,6 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         default: break;
     }
     bDataValid = true;
-    if(pOldMember)
-        pOldMember->DeleteAndDestroyAll();
-
 }
 
 enum STR_CONTEXT_IDX
