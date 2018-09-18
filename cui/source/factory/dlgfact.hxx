@@ -755,7 +755,7 @@ public:
                                                         const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier) override;
     virtual VclPtr<AbstractGraphicFilterDialog>   CreateGraphicFilterEmboss(weld::Window* pParent,
                                                 const Graphic& rGraphic) override;
-    virtual VclPtr<AbstractGraphicFilterDialog>   CreateGraphicFilterPoster(vcl::Window* pParent,
+    virtual VclPtr<AbstractGraphicFilterDialog>   CreateGraphicFilterPoster(weld::Window* pParent,
                                                 const Graphic& rGraphic) override;
     virtual VclPtr<AbstractGraphicFilterDialog>   CreateGraphicFilterSepia(weld::Window* pParent,
                                                 const Graphic& rGraphic) override;

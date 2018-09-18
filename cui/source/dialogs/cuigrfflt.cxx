@@ -522,44 +522,25 @@ Graphic GraphicFilterSepia::GetFilteredGraphic( const Graphic& rGraphic, double,
     return aRet;
 }
 
-
-GraphicFilterPoster::GraphicFilterPoster(vcl::Window* pParent, const Graphic& rGraphic,
+GraphicFilterPoster::GraphicFilterPoster(weld::Window* pParent, const Graphic& rGraphic,
                                           sal_uInt16 nPosterCount)
-    : GraphicFilterDialog(pParent, "PosterDialog",
-        "cui/ui/posterdialog.ui", rGraphic)
+    : GraphicFilterDialogController(pParent, "cui/ui/posterdialog.ui", "PosterDialog", rGraphic)
+    , mxNumPoster(m_xBuilder->weld_spin_button("value"))
 {
-    get(mpNumPoster, "value");
-
-    mpNumPoster->SetFirst( 2 );
-    mpNumPoster->SetLast( rGraphic.GetBitmapEx().GetBitCount() );
-    mpNumPoster->SetValue( nPosterCount );
-    mpNumPoster->SetModifyHdl( LINK(this, GraphicFilterPoster, EditModifyHdl) );
+    mxNumPoster->set_range(2, rGraphic.GetBitmapEx().GetBitCount());
+    mxNumPoster->set_value(nPosterCount);
+    mxNumPoster->connect_value_changed(LINK(this, GraphicFilterPoster, EditModifyHdl));
 }
 
-
-IMPL_LINK_NOARG(GraphicFilterPoster, EditModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(GraphicFilterPoster, EditModifyHdl, weld::SpinButton&, void)
 {
     GetModifyHdl().Call(nullptr);
 }
 
-
-GraphicFilterPoster::~GraphicFilterPoster()
-{
-    disposeOnce();
-}
-
-
-void GraphicFilterPoster::dispose()
-{
-    mpNumPoster.clear();
-    GraphicFilterDialog::dispose();
-}
-
-
 Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
     Graphic          aRet;
-    const sal_uInt16 nPosterCount = static_cast<sal_uInt16>(mpNumPoster->GetValue());
+    const sal_uInt16 nPosterCount = static_cast<sal_uInt16>(mxNumPoster->get_value());
 
     if( rGraphic.IsAnimated() )
     {
