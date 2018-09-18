@@ -37,6 +37,7 @@
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/prgsbar.hxx>
@@ -1393,6 +1394,24 @@ public:
     }
 };
 
+class SalInstanceImage : public SalInstanceWidget, public virtual weld::Image
+{
+private:
+    VclPtr<FixedImage> m_xImage;
+
+public:
+    SalInstanceImage(FixedImage* pImage, bool bTakeOwnership)
+        : SalInstanceWidget(pImage, bTakeOwnership)
+        , m_xImage(pImage)
+    {
+    }
+
+    virtual void set_from_icon_name(const OUString& rIconName) override
+    {
+        m_xImage->SetImage(::Image(BitmapEx(rIconName)));
+    }
+};
+
 class SalInstanceEntry : public SalInstanceWidget, public virtual weld::Entry
 {
 private:
@@ -2626,6 +2645,12 @@ public:
     {
         ::ProgressBar* pProgress = m_xBuilder->get<::ProgressBar>(id);
         return pProgress ? o3tl::make_unique<SalInstanceProgressBar>(pProgress, bTakeOwnership) : nullptr;
+    }
+
+    virtual std::unique_ptr<weld::Image> weld_image(const OString &id, bool bTakeOwnership) override
+    {
+        FixedImage* pImage = m_xBuilder->get<FixedImage>(id);
+        return pImage ? o3tl::make_unique<SalInstanceImage>(pImage, bTakeOwnership) : nullptr;
     }
 
     virtual std::unique_ptr<weld::Entry> weld_entry(const OString &id, bool bTakeOwnership) override

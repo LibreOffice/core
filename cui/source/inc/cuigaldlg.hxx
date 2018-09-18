@@ -206,27 +206,21 @@ public:
 class TPGalleryThemeGeneral : public SfxTabPage
 {
 private:
-
-    VclPtr<FixedImage>         m_pFiMSImage;
-    VclPtr<Edit>               m_pEdtMSName;
-    VclPtr<FixedText>          m_pFtMSShowType;
-    VclPtr<FixedText>          m_pFtMSShowPath;
-    VclPtr<FixedText>          m_pFtMSShowContent;
-    VclPtr<FixedText>          m_pFtMSShowChangeDate;
     ExchangeData*       pData;
+
+    std::unique_ptr<weld::Image> m_xFiMSImage;
+    std::unique_ptr<weld::Entry> m_xEdtMSName;
+    std::unique_ptr<weld::Label> m_xFtMSShowType;
+    std::unique_ptr<weld::Label> m_xFtMSShowPath;
+    std::unique_ptr<weld::Label> m_xFtMSShowContent;
+    std::unique_ptr<weld::Label> m_xFtMSShowChangeDate;
 
     virtual void        Reset( const SfxItemSet* ) override {}
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
 
-
 public:
-
-                        TPGalleryThemeGeneral( vcl::Window* pParent, const SfxItemSet& rSet );
-    virtual             ~TPGalleryThemeGeneral() override;
-    virtual void        dispose() override;
-
+    TPGalleryThemeGeneral(TabPageParent pParent, const SfxItemSet& rSet);
     void                SetXChgData( ExchangeData* pData );
-
     static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
 };
 
