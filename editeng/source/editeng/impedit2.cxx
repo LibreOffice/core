@@ -65,7 +65,6 @@
 #include <o3tl/make_unique.hxx>
 #include <comphelper/lok.hxx>
 #include <unotools/configmgr.hxx>
-
 #include <unicode/ubidi.h>
 #include <algorithm>
 #include <memory>
@@ -2993,7 +2992,15 @@ bool ImpEditEngine::UpdateFields()
                 std::unique_ptr<EditCharAttribField> pCurrent(new EditCharAttribField(rField));
                 rField.Reset();
 
-                if ( aStatus.MarkFields() )
+                //tdf#66545 No field shadings for URLs
+                bool bIsURL = false;
+                if ( const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(rField.GetItem()) )
+                {
+                    if ( const SvxFieldData* pFieldData = pFieldItem->GetField() )
+                      bIsURL = (dynamic_cast<const SvxURLField* >(pFieldData) != nullptr);
+                 }
+
+                if ( aStatus.MarkFields() && !bIsURL )
                     rField.GetFieldColor() = GetColorConfig().GetColorValue( svtools::WRITERFIELDSHADINGS ).nColor;
 
                 const OUString aFldValue =
