@@ -16,6 +16,24 @@
       "revId": "49e54f804b2293247839453a9526cd5debbc4f17",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f013ff3_bbe3c7a4",
+        "filename": "sw/qa/python/xscriptprovider.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2018-09-18T08:30:55Z",
+      "side": 1,
+      "message": "As far as I found, if getScript is returning empty object (it is strange, because it should either return valid object or throw an exception, but this is what we testing), in Python we receive None. \nWhile assertTrue() works, I think I will replace it by assertIsNotNone() - it is more logical",
+      "parentUuid": "1f013ff3_5bcba31d",
+      "revId": "49e54f804b2293247839453a9526cd5debbc4f17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
