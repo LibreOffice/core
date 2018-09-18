@@ -65,6 +65,7 @@
 #include <o3tl/make_unique.hxx>
 #include <comphelper/lok.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #include <unicode/ubidi.h>
 #include <algorithm>
@@ -2993,7 +2994,11 @@ bool ImpEditEngine::UpdateFields()
                 std::unique_ptr<EditCharAttribField> pCurrent(new EditCharAttribField(rField));
                 rField.Reset();
 
-                if ( aStatus.MarkFields() )
+                const SvxFieldItem* pField = static_cast<const SvxFieldItem*>(rField.GetItem());
+                const SvxFieldData* pFld = pField->GetField();
+                const bool IsCalcURL = dynamic_cast<const SvxURLField* >(pFld) && SvtModuleOptions().IsCalc();
+
+                if ( aStatus.MarkFields() && !IsCalcURL) //tdf#66545 No field shadings for Calc
                     rField.GetFieldColor() = GetColorConfig().GetColorValue( svtools::WRITERFIELDSHADINGS ).nColor;
 
                 const OUString aFldValue =
