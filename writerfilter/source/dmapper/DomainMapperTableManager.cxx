@@ -200,9 +200,27 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 // to prevent later rows from increasing the repeating m_nHeaderRepeat is set to NULL when repeating stops
                 if( nIntValue > 0 && m_nHeaderRepeat == static_cast<int>(m_nRow) )
                 {
-                    ++m_nHeaderRepeat;
                     TablePropertyMapPtr pPropMap( new TablePropertyMap );
-                    pPropMap->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny( m_nHeaderRepeat ));
+
+                    // FIXME: DOCX tables with more than 10 repeating header lines imported
+                    // without repeating header lines to mimic an MSO workaround for its usability bug.
+                    // Explanation: it's very hard to set and modify repeating header rows in Word,
+                    // often resulting tables with a special workaround: setting all table rows as
+                    // repeating header, because exceeding the pages by "unlimited" header rows turns off the
+                    // table headers automatically in MSO. 10-row limit is a reasonable temporary limit
+                    // to handle DOCX tables with "unlimited" repeating header, till the same "turn off
+                    // exceeding header" feature is ready (see tdf#88496).
+#define HEADER_ROW_LIMIT_FOR_MSO_WORKAROUND 10
+                    if ( m_nHeaderRepeat == HEADER_ROW_LIMIT_FOR_MSO_WORKAROUND )
+                    {
+                        m_nHeaderRepeat = -1;
+                        pPropMap->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny(sal_Int32(0)));
+                    }
+                    else
+                    {
+                        ++m_nHeaderRepeat;
+                        pPropMap->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny( m_nHeaderRepeat ));
+                    }
                     insertTableProps(pPropMap);
                 }
                 else
