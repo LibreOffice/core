@@ -4945,6 +4945,7 @@ private:
     GtkBuilder* m_pBuilder;
     GSList* m_pObjectList;
     GtkWidget* m_pParentWidget;
+    gulong m_nNotifySignalId;
     std::vector<GtkButton*> m_aMnemonicButtons;
     std::vector<GtkLabel*> m_aMnemonicLabels;
 
@@ -5030,6 +5031,28 @@ private:
         }
     }
 
+    //GtkBuilder sets translation domain during parse, and unsets it again afterwards.
+    //In order for GtkBuilder to find the translations bindtextdomain has to be called
+    //for the domain. So here on the first setting of "domain" we call Translate::Create
+    //to make sure that happens. Without this, if some other part of LibreOffice has
+    //used the translation machinery for this domain it will still work, but if it
+    //hasn't, e.g. tdf#119929, then the translation fails
+    void translation_domain_set()
+    {
+        Translate::Create(gtk_builder_get_translation_domain(m_pBuilder), LanguageTag(m_aUILang));
+        g_signal_handler_disconnect(m_pBuilder, m_nNotifySignalId);
+    }
+
+    static void signalNotify(GObject*, GParamSpec *pSpec, gpointer pData)
+    {
+        g_return_if_fail(pSpec != nullptr);
+        if (strcmp(pSpec->name, "translation-domain") == 0)
+        {
+            GtkInstanceBuilder* pBuilder = static_cast<GtkInstanceBuilder*>(pData);
+            pBuilder->translation_domain_set();
+        }
+    }
+
     static void postprocess(gpointer data, gpointer user_data)
     {
         GObject* pObject = static_cast<GObject*>(data);
@@ -5044,13 +5067,9 @@ public:
         , m_pStringReplace(Translate::GetReadStringHook())
         , m_sHelpRoot(rUIFile)
         , m_pParentWidget(pParent)
+        , m_nNotifySignalId(0)
     {
         ensure_intercept_drawing_area_accessibility();
-
-        OUString aUri(rUIRoot + rUIFile);
-        OUString aPath;
-        osl::FileBase::getSystemPathFromFileURL(aUri, aPath);
-        m_pBuilder = gtk_builder_new_from_file(OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).getStr());
 
         sal_Int32 nIdx = m_sHelpRoot.lastIndexOf('.');
         if (nIdx != -1)
@@ -5059,6 +5078,13 @@ public:
         m_aUtf8HelpRoot = OUStringToOString(m_sHelpRoot, RTL_TEXTENCODING_UTF8);
         m_aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
         m_aUILang = Application::GetSettings().GetUILanguageTag().getBcp47();
+
+        OUString aUri(rUIRoot + rUIFile);
+        OUString aPath;
+        osl::FileBase::getSystemPathFromFileURL(aUri, aPath);
+        m_pBuilder = gtk_builder_new();
+        m_nNotifySignalId = g_signal_connect_data(G_OBJECT(m_pBuilder), "notify", G_CALLBACK(signalNotify), this, nullptr, G_CONNECT_AFTER);
+        gtk_builder_add_from_file(m_pBuilder, OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).getStr(), nullptr);
 
         m_pObjectList = gtk_builder_get_objects(m_pBuilder);
         g_slist_foreach(m_pObjectList, postprocess, this);
