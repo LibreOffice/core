@@ -22,6 +22,15 @@
             android:title="@string/pref_file_explorer_title"
             android:key="EXPLORER_VIEW_TYPE"
             android:summary="@string/pref_viewmode_summary" />
+
+        <ListPreference
+            android:title="Display Language"
+            android:summary="Set the default display language"
+            android:entries="@array/SupportedLanguages"
+            android:entryValues="@array/SupportedLanguagesValues"
+            android:key="DISPLAY_LANGUAGE"
+            />
+
         <CheckBoxPreference
             android:title="@string/pref_show_hidden_files"
             android:key="ENABLE_SHOW_HIDDEN_FILES"

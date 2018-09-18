@@ -11,6 +11,7 @@
 package org.libreoffice;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.Handler;
 
 public class LibreOfficeApplication extends Application {
@@ -23,5 +24,10 @@ public class LibreOfficeApplication extends Application {
 
     public static Handler getMainHandler() {
         return mainHandler;
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base, "en"));
     }
 }
