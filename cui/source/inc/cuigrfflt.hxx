@@ -209,17 +209,14 @@ public:
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
 };
 
-class GraphicFilterPoster : public GraphicFilterDialog
+class GraphicFilterPoster : public GraphicFilterDialogController
 {
 private:
-    VclPtr<NumericField>   mpNumPoster;
-    DECL_LINK(EditModifyHdl, Edit&, void);
+    std::unique_ptr<weld::SpinButton> mxNumPoster;
+    DECL_LINK(EditModifyHdl, weld::SpinButton&, void);
 public:
-    GraphicFilterPoster( vcl::Window* pParent, const Graphic& rGraphic,
-                         sal_uInt16 nPosterColorCount );
-    virtual ~GraphicFilterPoster() override;
-    virtual void dispose() override;
-
+    GraphicFilterPoster(weld::Window* pParent, const Graphic& rGraphic,
+                        sal_uInt16 nPosterColorCount);
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
 };
 

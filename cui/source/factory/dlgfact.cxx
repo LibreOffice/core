@@ -1285,11 +1285,10 @@ VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFil
     return VclPtr<AbstractGraphicFilterDialogController_Impl>::Create(o3tl::make_unique<GraphicFilterEmboss>(pParent, rGraphic, RectPoint::MM));
 }
 
-VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterPoster(vcl::Window* pParent,
+VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterPoster(weld::Window* pParent,
                                             const Graphic& rGraphic)
 {
-    VclPtrInstance<GraphicFilterPoster> pDlg( pParent, rGraphic, 16 );
-    return VclPtr<AbstractGraphicFilterDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractGraphicFilterDialogController_Impl>::Create(o3tl::make_unique<GraphicFilterPoster>(pParent, rGraphic, 16));
 }
 
 VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterSepia(weld::Window* pParent,
