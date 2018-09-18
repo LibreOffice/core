@@ -36,7 +36,7 @@ public:
                             ScRangeList& rScRanges, XclFormulaType eType,
                             const XclTokenArray& rXclTokArr, XclImpStream& rStrm );
 
-    const ScTokenArray* CreateFormula( XclFormulaType eType, const XclTokenArray& rXclTokArr );
+    std::unique_ptr<ScTokenArray> CreateFormula( XclFormulaType eType, const XclTokenArray& rXclTokArr );
 
 };
 
@@ -63,7 +63,7 @@ void XclImpFmlaCompImpl::CreateRangeList(
     }
 }
 
-const ScTokenArray* XclImpFmlaCompImpl::CreateFormula(
+std::unique_ptr<ScTokenArray> XclImpFmlaCompImpl::CreateFormula(
         XclFormulaType /*eType*/, const XclTokenArray& rXclTokArr )
 {
     if (rXclTokArr.Empty())
@@ -75,7 +75,7 @@ const ScTokenArray* XclImpFmlaCompImpl::CreateFormula(
     aMemStrm.WriteBytes(rXclTokArr.GetData(), rXclTokArr.GetSize());
     XclImpStream aFmlaStrm( aMemStrm, GetRoot() );
     aFmlaStrm.StartNextRecord();
-    const ScTokenArray* pArray = nullptr;
+    std::unique_ptr<ScTokenArray> pArray( nullptr );
     GetOldFmlaConverter().Reset();
     GetOldFmlaConverter().Convert(pArray, aFmlaStrm, aFmlaStrm.GetRecSize(), true);
     return pArray;
@@ -98,7 +98,7 @@ void XclImpFormulaCompiler::CreateRangeList(
     mxImpl->CreateRangeList( rScRanges, eType, rXclTokArr, rStrm );
 }
 
-const ScTokenArray* XclImpFormulaCompiler::CreateFormula(
+std::unique_ptr<ScTokenArray> XclImpFormulaCompiler::CreateFormula(
         XclFormulaType eType, const XclTokenArray& rXclTokArr )
 {
     return mxImpl->CreateFormula(eType, rXclTokArr);

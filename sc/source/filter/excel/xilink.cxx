@@ -382,7 +382,7 @@ XclImpExtName::XclImpExtName( XclImpSupbook& rSupbook, XclImpStream& rStrm, XclS
             {
                 if (pFormulaConv)
                 {
-                    const ScTokenArray* pArray = nullptr;
+                    std::unique_ptr<ScTokenArray> pArray( nullptr );
                     sal_uInt16 nFmlaLen;
                     nFmlaLen = rStrm.ReaduInt16();
                     std::vector<OUString> aTabNames;
@@ -393,7 +393,7 @@ XclImpExtName::XclImpExtName( XclImpSupbook& rSupbook, XclImpStream& rStrm, XclS
 
                     pFormulaConv->ConvertExternName(pArray, rStrm, nFmlaLen, rSupbook.GetXclUrl(), aTabNames);
                     if (pArray)
-                        mxArray.reset(pArray->Clone());
+                        mxArray = std::move( pArray );
                 }
             }
         break;

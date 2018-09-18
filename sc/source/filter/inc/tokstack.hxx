@@ -209,7 +209,6 @@ private:
 #ifdef DBG_UTIL
         sal_uInt16                      m_nRek; // recursion counter
 #endif
-        std::unique_ptr<ScTokenArray>   pScToken;   // Token array
 
         bool                        GrowTripel( sal_uInt16 nByMin );
         bool                        GrowId();
@@ -222,8 +221,8 @@ private:
                                         nElementCurrent+1.
                                      */
         bool                        CheckElementOrGrow();
-        bool                        GetElement( const sal_uInt16 nId );
-        bool                        GetElementRek( const sal_uInt16 nId );
+        bool                        GetElement( const sal_uInt16 nId, ScTokenArray* pScToken );
+        bool                        GetElementRek( const sal_uInt16 nId, ScTokenArray* pScToken );
         void                        ClearMatrix();
 public:
     TokenPool( svl::SharedStringPool& rSPool );
@@ -252,7 +251,7 @@ public:
         const TokenId               StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef );
         const TokenId               StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef );
 
-        inline const ScTokenArray*  operator []( const TokenId& rId );
+        std::unique_ptr<ScTokenArray> GetTokenArray( const TokenId& rId );
         void                        Reset();
         bool                        IsSingleOp( const TokenId& rId, const DefTokenId eId ) const;
         const OUString*             GetExternal( const TokenId& rId ) const;
@@ -412,16 +411,16 @@ inline const TokenId TokenPool::Store()
     return nId;
 }
 
-const inline ScTokenArray* TokenPool::operator []( const TokenId& rId )
+inline std::unique_ptr<ScTokenArray> TokenPool::GetTokenArray( const TokenId& rId )
 {
-    pScToken->Clear();
+    std::unique_ptr<ScTokenArray> pScToken( new ScTokenArray );
 
     if( rId )
     {//...only if rId > 0!
 #ifdef DBG_UTIL
         m_nRek = 0;
 #endif
-        GetElement( static_cast<sal_uInt16>(rId) - 1 );
+        GetElement( static_cast<sal_uInt16>(rId) - 1, pScToken.get());
     }
 
     return pScToken.get();

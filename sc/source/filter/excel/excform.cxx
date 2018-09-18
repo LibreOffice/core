@@ -107,7 +107,7 @@ void ImportExcel::Formula(
         return;
 
     // Formula will be read next, length in nFormLen
-    const ScTokenArray* pResult = nullptr;
+    std::unique_ptr<ScTokenArray> pResult( nullptr );
 
     pFormConv->Reset( aScPos );
     ScDocumentImport& rDoc = GetDocImport();
@@ -157,7 +157,7 @@ void ImportExcel::Formula(
 
     if (pResult)
     {
-        pCell = new ScFormulaCell(&rDoc.getDoc(), aScPos, *pResult);
+        pCell = new ScFormulaCell(&rDoc.getDoc(), aScPos, pResult.release());
         pCell->GetCode()->WrapReference(aScPos, EXC_MAXCOL8, EXC_MAXROW8);
         rDoc.getDoc().CheckLinkFormulaNeedingCheck( *pCell->GetCode());
         rDoc.getDoc().EnsureTable(aScPos.Tab());
@@ -196,17 +196,17 @@ ExcelToSc::~ExcelToSc()
 {
 }
 
-void ExcelToSc::GetDummy( const ScTokenArray*& pResult )
+std::unique_ptr<ScTokenArray> ExcelToSc::GetDummy()
 {
     aPool.Store( OUString("Dummy()") );
     aPool >> aStack;
-    pResult = aPool[ aStack.Get() ];
+    return aPool.GetTokenArray( aStack.Get());
 }
 
 // if bAllowArrays is false stream seeks to first byte after <nFormulaLen>
 // otherwise it will seek to the first byte after the additional content (eg
 // inline arrays) following <nFormulaLen>
-ConvErr ExcelToSc::Convert( const ScTokenArray*& pResult, XclImpStream& aIn, std::size_t nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT )
+ConvErr ExcelToSc::Convert( std::unique_ptr<ScTokenArray>& pResult, XclImpStream& aIn, std::size_t nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT )
 {
     RootData&       rR = GetOldRoot();
     sal_uInt8           nOp, nLen;
@@ -232,7 +232,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pResult, XclImpStream& aIn, std
     {
         aPool.Store( OUString("-/-") );
         aPool >> aStack;
-        pResult = aPool[ aStack.Get() ];
+        pResult = aPool.GetTokenArray( aStack.Get());
         return ConvErr::OK;
     }
 
@@ -870,14 +870,14 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pResult, XclImpStream& aIn, std
     {
         aPool << ocBad;
         aPool >> aStack;
-        pResult = aPool[ aStack.Get() ];
+        pResult = aPool.GetTokenArray( aStack.Get());
         eRet = ConvErr::Ni;
     }
     else if( aIn.GetRecPos() != nEndPos )
     {
         aPool << ocBad;
         aPool >> aStack;
-        pResult = aPool[ aStack.Get() ];
+        pResult = aPool.GetTokenArray( aStack.Get());
         eRet = ConvErr::Count;
     }
     else if( bArrayFormula )
@@ -887,7 +887,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pResult, XclImpStream& aIn, std
     }
     else
     {
-        pResult = aPool[ aStack.Get() ];
+        pResult = aPool.GetTokenArray( aStack.Get());
         eRet = ConvErr::OK;
     }
 
@@ -1326,7 +1326,7 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
     return eRet;
 }
 
-void ExcelToSc::ConvertExternName( const ScTokenArray*& /*rpArray*/, XclImpStream& /*rStrm*/, std::size_t /*nFormulaLen*/,
+void ExcelToSc::ConvertExternName( std::unique_ptr<ScTokenArray>& /*rpArray*/, XclImpStream& /*rStrm*/, std::size_t /*nFormulaLen*/,
                                       const OUString& /*rUrl*/, const vector<OUString>& /*rTabNames*/ )
 {
 }
@@ -1676,7 +1676,7 @@ void ExcelToSc::ExcRelToScRel( sal_uInt16 nRow, sal_uInt8 nCol, ScSingleRefData 
     }
 }
 
-const ScTokenArray* ExcelToSc::GetBoolErr( XclBoolError eType )
+std::unique_ptr<ScTokenArray> ExcelToSc::GetBoolErr( XclBoolError eType )
 {
     FormulaError nError;
     aPool.Reset();
@@ -1708,11 +1708,11 @@ const ScTokenArray* ExcelToSc::GetBoolErr( XclBoolError eType )
 
     aPool >> aStack;
 
-    const ScTokenArray*     pResult = aPool[ aStack.Get() ];
+    std::unique_ptr<ScTokenArray> pResult = aPool.GetTokenArray( aStack.Get());
     if( nError != FormulaError::NONE )
-        const_cast<ScTokenArray*>(pResult)->SetCodeError( nError );
+        pResult->SetCodeError( nError );
 
-    const_cast<ScTokenArray*>(pResult)->SetExclusiveRecalcModeNormal();
+    pResult->SetExclusiveRecalcModeNormal();
 
     return pResult;
 }

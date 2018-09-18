@@ -58,7 +58,7 @@ private:
 public:
     static const size_t nBufSize = 256;
     QProToSc( SvStream &aStr, svl::SharedStringPool& rSPool, const ScAddress& rRefPos );
-    ConvErr Convert( const ScTokenArray*& pArray );
+    ConvErr Convert( std::unique_ptr<ScTokenArray>& pArray );
     void DoFunc( DefTokenId eOc, sal_uInt16 nArgs, const sal_Char* pExtString );
     void ReadSRD( ScSingleRefData& rR, sal_Int8 nPage, sal_Int8 nCol, sal_uInt16 rRel );
     void IncToken( TokenId &aParam );

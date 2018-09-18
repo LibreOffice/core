@@ -144,7 +144,7 @@ void OP_Formula(LotusContext &rContext, SvStream& r, sal_uInt16 /*n*/)
     SCCOL nCol(static_cast<SCCOL>(nTmpCol));
     SCROW nRow(static_cast<SCROW>(nTmpRow));
 
-    const ScTokenArray* pResult;
+    std::unique_ptr<ScTokenArray> pResult;
     sal_Int32 nBytesLeft = nFormulaSize;
     ScAddress aAddress(nCol, nRow, 0);
 
@@ -157,7 +157,7 @@ void OP_Formula(LotusContext &rContext, SvStream& r, sal_uInt16 /*n*/)
 
     if (ValidColRow(nCol, nRow))
     {
-        ScFormulaCell* pCell = new ScFormulaCell(rContext.pLotusRoot->pDoc, aAddress, *pResult);
+        ScFormulaCell* pCell = new ScFormulaCell(rContext.pLotusRoot->pDoc, aAddress, pResult.release());
         pCell->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
         rContext.pDoc->EnsureTable(0);
         rContext.pDoc->SetFormulaCell(ScAddress(nCol, nRow, 0), pCell);
@@ -402,7 +402,7 @@ void OP_Formula123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     SCROW nRow(static_cast<SCROW>(nTmpRow));
     r.SeekRel( 8 );    // skip Result
 
-    const ScTokenArray* pResult;
+    std::unique_ptr<ScTokenArray> pResult;
     sal_Int32 nBytesLeft = (n > 12) ? n - 12 : 0;
     ScAddress aAddress( nCol, nRow, nTab );
 
@@ -415,7 +415,7 @@ void OP_Formula123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 
     if (ValidColRow(nCol, nRow) && nTab <= rContext.pDoc->GetMaxTableNumber())
     {
-        ScFormulaCell* pCell = new ScFormulaCell(rContext.pLotusRoot->pDoc, aAddress, *pResult);
+        ScFormulaCell* pCell = new ScFormulaCell(rContext.pLotusRoot->pDoc, aAddress, pResult.release());
         pCell->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
         rContext.pDoc->EnsureTable(nTab);
         rContext.pDoc->SetFormulaCell(ScAddress(nCol,nRow,nTab), pCell);
