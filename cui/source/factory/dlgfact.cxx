@@ -189,7 +189,7 @@ short AbstractSvxPathSelectDialog_Impl::Execute()
 IMPL_ABSTDLG_BASE(AbstractSvxHpLinkDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractFmSearchDialog_Impl);
 
-short AbstractGraphicFilterDialogController_Impl::Execute()
+short AbstractGraphicFilterDialog_Impl::Execute()
 {
     return m_xDlg->run();
 }
@@ -813,7 +813,7 @@ void AbstractFmSearchDialog_Impl::SetActiveField(const OUString& strField)
     pDlg->SetActiveField(strField);
 }
 
-Graphic AbstractGraphicFilterDialogController_Impl::GetFilteredGraphic(const Graphic& rGraphic, double fScaleX, double fScaleY)
+Graphic AbstractGraphicFilterDialog_Impl::GetFilteredGraphic(const Graphic& rGraphic, double fScaleX, double fScaleY)
 {
     return m_xDlg->GetFilteredGraphic(rGraphic, fScaleX, fScaleY);
 }
@@ -1276,37 +1276,37 @@ VclPtr<AbstractFmSearchDialog> AbstractDialogFactory_Impl::CreateFmSearchDialog(
 VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterEmboss(weld::Window* pParent,
                                             const Graphic& rGraphic)
 {
-    return VclPtr<AbstractGraphicFilterDialogController_Impl>::Create(o3tl::make_unique<GraphicFilterEmboss>(pParent, rGraphic, RectPoint::MM));
+    return VclPtr<AbstractGraphicFilterDialog_Impl>::Create(o3tl::make_unique<GraphicFilterEmboss>(pParent, rGraphic, RectPoint::MM));
 }
 
 VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterPoster(weld::Window* pParent,
                                             const Graphic& rGraphic)
 {
-    return VclPtr<AbstractGraphicFilterDialogController_Impl>::Create(o3tl::make_unique<GraphicFilterPoster>(pParent, rGraphic, 16));
+    return VclPtr<AbstractGraphicFilterDialog_Impl>::Create(o3tl::make_unique<GraphicFilterPoster>(pParent, rGraphic, 16));
 }
 
 VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterSepia(weld::Window* pParent,
                                             const Graphic& rGraphic)
 {
-    return VclPtr<AbstractGraphicFilterDialogController_Impl>::Create(o3tl::make_unique<GraphicFilterSepia>(pParent, rGraphic, 10));
+    return VclPtr<AbstractGraphicFilterDialog_Impl>::Create(o3tl::make_unique<GraphicFilterSepia>(pParent, rGraphic, 10));
 }
 
 VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterSmooth(weld::Window* pParent,
                                             const Graphic& rGraphic, double nRadius)
 {
-    return VclPtr<AbstractGraphicFilterDialogController_Impl>::Create(o3tl::make_unique<GraphicFilterSmooth>(pParent, rGraphic, nRadius));
+    return VclPtr<AbstractGraphicFilterDialog_Impl>::Create(o3tl::make_unique<GraphicFilterSmooth>(pParent, rGraphic, nRadius));
 }
 
 VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterSolarize(weld::Window* pParent,
                                             const Graphic& rGraphic)
 {
-    return VclPtr<AbstractGraphicFilterDialogController_Impl>::Create(o3tl::make_unique<GraphicFilterSolarize>(pParent, rGraphic, 128, false /*bInvert*/));
+    return VclPtr<AbstractGraphicFilterDialog_Impl>::Create(o3tl::make_unique<GraphicFilterSolarize>(pParent, rGraphic, 128, false /*bInvert*/));
 }
 
 VclPtr<AbstractGraphicFilterDialog> AbstractDialogFactory_Impl::CreateGraphicFilterMosaic(weld::Window* pParent,
                                             const Graphic& rGraphic)
 {
-    return VclPtr<AbstractGraphicFilterDialogController_Impl>::Create(o3tl::make_unique<GraphicFilterMosaic>(pParent, rGraphic, 4, 4, false /*bEnhanceEdges*/));
+    return VclPtr<AbstractGraphicFilterDialog_Impl>::Create(o3tl::make_unique<GraphicFilterMosaic>(pParent, rGraphic, 4, 4, false /*bEnhanceEdges*/));
 }
 
 VclPtr<AbstractSvxAreaTabDialog> AbstractDialogFactory_Impl::CreateSvxAreaTabDialog(weld::Window* pParent,
