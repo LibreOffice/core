@@ -521,7 +521,7 @@ sal_uInt8 GetColorValue( double nVal, double nVal1, sal_uInt8 nColVal1, double n
     if (nVal >= nVal2)
         return nColVal2;
 
-    sal_uInt8 nColVal = static_cast<sal_uInt8>((nVal - nVal1)/(nVal2-nVal1)*(nColVal2-nColVal1))+nColVal1;
+    sal_uInt8 nColVal = static_cast<int>((nVal - nVal1)/(nVal2-nVal1)*(nColVal2-nColVal1))+nColVal1;
     return nColVal;
 }
 
