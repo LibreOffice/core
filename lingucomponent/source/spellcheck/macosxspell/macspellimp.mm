@@ -485,7 +485,7 @@ Reference< XSpellAlternatives > SAL_CALL
 }
 
 /// @throws Exception
-Reference< XInterface > MacSpellChecker_CreateInstance(
+static Reference< XInterface > MacSpellChecker_CreateInstance(
             const Reference< XMultiServiceFactory > & /*rSMgr*/ )
 {
 

@@ -696,7 +696,7 @@ const aImplSalSysPalEntryAry[ 16 ] =
 { 0xFF, 0xFF, 0xFF }
 };
 
-const BitmapPalette& GetDefaultPalette( int mnBits, bool bMonochrome )
+static const BitmapPalette& GetDefaultPalette( int mnBits, bool bMonochrome )
 {
     if( bMonochrome )
         return Bitmap::GetGreyPalette( 1U << mnBits );

@@ -44,12 +44,12 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star;
 using namespace comphelper;
 
-OUString dropTarget_getImplementationName()
+static OUString dropTarget_getImplementationName()
 {
     return OUString("com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1");
 }
 
-Sequence<OUString> dropTarget_getSupportedServiceNames()
+static Sequence<OUString> dropTarget_getSupportedServiceNames()
 {
     return { OUString("com.sun.star.datatransfer.dnd.OleDropTarget") };
 }

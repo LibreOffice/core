@@ -35,7 +35,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-NSString * getTableNotification( const AccessibleEventObject& aEvent )
+static NSString * getTableNotification( const AccessibleEventObject& aEvent )
 {
     AccessibleTableModelChange aChange;
     NSString * notification = nil;

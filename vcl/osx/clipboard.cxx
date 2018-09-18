@@ -66,12 +66,12 @@ using namespace comphelper;
 
 @end
 
-OUString clipboard_getImplementationName()
+static OUString clipboard_getImplementationName()
 {
   return OUString("com.sun.star.datatransfer.clipboard.AquaClipboard");
 }
 
-Sequence<OUString> clipboard_getSupportedServiceNames()
+static Sequence<OUString> clipboard_getSupportedServiceNames()
 {
   return { OUString("com.sun.star.datatransfer.clipboard.SystemClipboard") };
 }
