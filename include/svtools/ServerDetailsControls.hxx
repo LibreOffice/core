@@ -93,6 +93,9 @@ class DavDetailsContainer : public HostDetailsContainer
 
 class SmbDetailsContainer : public DetailsContainer
 {
+    private:
+        OUString m_sHost;
+
     public:
         SmbDetailsContainer(PlaceEditDialog* pDialog);
 
