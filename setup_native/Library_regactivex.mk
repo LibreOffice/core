@@ -18,7 +18,6 @@ $(eval $(call gb_Library_add_cxxflags,regactivex,\
 ))
 
 $(eval $(call gb_Library_add_ldflags,regactivex,\
-	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/regactivex/regactivex.def \
 	/NODEFAULTLIB \
 ))
 

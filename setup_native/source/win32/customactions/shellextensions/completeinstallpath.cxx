@@ -21,7 +21,7 @@
 
 #include <malloc.h>
 
-extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
+extern "C" __declspec(dllexport) UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
 {
     // This CustomAction is necessary for updates from OOo 3.0, OOo 3.1 and OOo 3.2 to versions
     // OOo 3.3 or later. This is caused by a change of INSTALLLOCATION, that starting with OOo 3.3

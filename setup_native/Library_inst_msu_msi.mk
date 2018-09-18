@@ -18,7 +18,6 @@ $(eval $(call gb_Library_add_cxxflags,inst_msu_msi,\
 ))
 
 $(eval $(call gb_Library_add_ldflags,inst_msu_msi,\
-	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/inst_msu/inst_msu_msi.def \
 	/NODEFAULTLIB \
 ))
 

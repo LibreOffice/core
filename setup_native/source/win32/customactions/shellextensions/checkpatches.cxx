@@ -38,7 +38,7 @@ static inline void OutputDebugStringFormatW( PCWSTR, ... )
 }
 #endif
 
-extern "C" UINT __stdcall CheckPatchList( MSIHANDLE handle )
+extern "C" __declspec(dllexport) UINT __stdcall CheckPatchList( MSIHANDLE handle )
 {
     std::wstring sPatchList = GetMsiPropertyW( handle, L"PATCH" );
     std::wstring sRequiredPatch = GetMsiPropertyW( handle, L"PREREQUIREDPATCH" );

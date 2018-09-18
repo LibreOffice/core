@@ -66,7 +66,7 @@ static inline void OutputDebugStringFormatW( PCWSTR, ... )
 #endif
 
 
-extern "C" UINT __stdcall CheckVersions( MSIHANDLE hMSI )
+extern "C" __declspec(dllexport) UINT __stdcall CheckVersions( MSIHANDLE hMSI )
 {
     // MessageBoxW(NULL, L"CheckVersions", L"Information", MB_OK | MB_ICONINFORMATION);
 

@@ -12,7 +12,7 @@
 #include <msi.h>
 #include <commctrl.h>
 
-extern "C" UINT __stdcall SortTree(MSIHANDLE)
+extern "C" __declspec(dllexport) UINT __stdcall SortTree(MSIHANDLE)
 {
     // Sort items (languages) in SelectionTree control, fdo#46355
 

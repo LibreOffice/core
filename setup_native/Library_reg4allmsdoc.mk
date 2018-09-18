@@ -20,7 +20,6 @@ $(eval $(call gb_Library_add_cxxflags,reg4allmsdoc,\
 ))
 
 $(eval $(call gb_Library_add_ldflags,reg4allmsdoc,\
-	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/reg4allmsdoc/reg4allmsdoc.def \
 	/NODEFAULTLIB \
 ))
 

@@ -22,7 +22,6 @@ $(eval $(call gb_Library_add_cxxflags,sellangmsi,\
 ))
 
 $(eval $(call gb_Library_add_ldflags,sellangmsi,\
-	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/sellang/sellang.def \
 	/NODEFAULTLIB \
 ))
 
