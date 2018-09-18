@@ -77,41 +77,36 @@ public:
 
 /**************************************************************************/
 
-class SmShowFont : public vcl::Window
+class SmShowFont : public weld::CustomWidgetController
 {
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
 
     vcl::Font maFont;
 
 public:
-    SmShowFont(vcl::Window *pParent, WinBits nStyle)
-        : Window(pParent, nStyle)
+    SmShowFont()
     {
     }
-    virtual Size GetOptimalSize() const override;
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     void SetFont(const vcl::Font& rFont);
 };
 
-class SmFontDialog : public ModalDialog
+class SmFontDialog : public weld::GenericDialogController
 {
-    VclPtr<ComboBox>       m_pFontBox;
-    VclPtr<VclContainer>   m_pAttrFrame;
-    VclPtr<CheckBox>       m_pBoldCheckBox;
-    VclPtr<CheckBox>       m_pItalicCheckBox;
-    VclPtr<SmShowFont>     m_pShowFont;
-
     vcl::Font maFont;
+    SmShowFont m_aShowFont;
+    std::unique_ptr<weld::EntryTreeView> m_xFontBox;
+    std::unique_ptr<weld::Widget> m_xAttrFrame;
+    std::unique_ptr<weld::CheckButton> m_xBoldCheckBox;
+    std::unique_ptr<weld::CheckButton> m_xItalicCheckBox;
+    std::unique_ptr<weld::CustomWeld> m_xShowFont;
 
-    DECL_LINK(FontSelectHdl, ComboBox&, void);
-    DECL_LINK(FontModifyHdl, Edit&, void);
-    DECL_LINK(AttrChangeHdl, Button *, void);
-
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
+    DECL_LINK(FontSelectHdl, weld::ComboBox&, void);
+    DECL_LINK(AttrChangeHdl, weld::ToggleButton&, void);
 
 public:
-    SmFontDialog(vcl::Window * pParent, OutputDevice *pFntListDevice, bool bHideCheckboxes);
+    SmFontDialog(weld::Window* pParent, OutputDevice *pFntListDevice, bool bHideCheckboxes);
     virtual ~SmFontDialog() override;
-    virtual void dispose() override;
 
     const vcl::Font& GetFont() const
     {
