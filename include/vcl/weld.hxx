@@ -593,6 +593,12 @@ public:
     static unsigned int Power10(unsigned int n);
 };
 
+class VCL_DLLPUBLIC Image : virtual public Widget
+{
+public:
+    virtual void set_from_icon_name(const OUString& rIconName) = 0;
+};
+
 // an entry + treeview pair, where the entry autocompletes from the
 // treeview list, and selecting something in the list sets the
 // entry to that text, i.e. a visually exploded ComboBox
@@ -1078,6 +1084,7 @@ public:
     virtual std::unique_ptr<ProgressBar> weld_progress_bar(const OString& id,
                                                            bool bTakeOwnership = false)
         = 0;
+    virtual std::unique_ptr<Image> weld_image(const OString& id, bool bTakeOwnership = false) = 0;
     virtual std::unique_ptr<DrawingArea>
     weld_drawing_area(const OString& id, const a11yref& rA11yImpl = nullptr,
                       FactoryFunction pUITestFactoryFunction = nullptr, void* pUserData = nullptr,

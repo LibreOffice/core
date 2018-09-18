@@ -3306,6 +3306,51 @@ public:
     }
 };
 
+namespace
+{
+    GdkPixbuf* load_icon_by_name(const OUString& rIconName, const OUString& rIconTheme, const OUString& rUILang)
+    {
+        GdkPixbuf* pixbuf = nullptr;
+        auto xMemStm = ImageTree::get().getImageStream(rIconName, rIconTheme, rUILang);
+        if (xMemStm)
+        {
+            GdkPixbufLoader *pixbuf_loader = gdk_pixbuf_loader_new();
+            gdk_pixbuf_loader_write(pixbuf_loader, static_cast<const guchar*>(xMemStm->GetData()),
+                                    xMemStm->Seek(STREAM_SEEK_TO_END), nullptr);
+            gdk_pixbuf_loader_close(pixbuf_loader, nullptr);
+            pixbuf = gdk_pixbuf_loader_get_pixbuf(pixbuf_loader);
+            if (pixbuf)
+                g_object_ref(pixbuf);
+            g_object_unref(pixbuf_loader);
+        }
+        return pixbuf;
+    }
+}
+
+class GtkInstanceImage : public GtkInstanceWidget, public virtual weld::Image
+{
+private:
+    GtkImage* m_pImage;
+
+public:
+    GtkInstanceImage(GtkImage* pImage, bool bTakeOwnership)
+        : GtkInstanceWidget(GTK_WIDGET(pImage), bTakeOwnership)
+        , m_pImage(pImage)
+    {
+    }
+
+    virtual void set_from_icon_name(const OUString& rIconName) override
+    {
+        OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+        OUString sUILang = Application::GetSettings().GetUILanguageTag().getBcp47();
+        GdkPixbuf* pixbuf = load_icon_by_name(rIconName, sIconTheme, sUILang);
+        if (!pixbuf)
+            return;
+        gtk_image_set_from_pixbuf(m_pImage, pixbuf);
+        g_object_unref(pixbuf);
+    }
+};
+
 class GtkInstanceEntry : public GtkInstanceWidget, public virtual weld::Entry
 {
 private:
@@ -3560,27 +3605,6 @@ namespace
         return found;
     }
 
-    GdkPixbuf* load_icon_by_name(const OUString& rIconName, const OUString& rIconTheme, const OUString& rUILang)
-    {
-        GdkPixbuf* pixbuf = nullptr;
-        auto xMemStm = ImageTree::get().getImageStream(rIconName, rIconTheme, rUILang);
-        if (xMemStm)
-        {
-            GdkPixbufLoader *pixbuf_loader = gdk_pixbuf_loader_new();
-            gdk_pixbuf_loader_write(pixbuf_loader, static_cast<const guchar*>(xMemStm->GetData()),
-                                    xMemStm->Seek(STREAM_SEEK_TO_END), nullptr);
-            gdk_pixbuf_loader_close(pixbuf_loader, nullptr);
-            pixbuf = gdk_pixbuf_loader_get_pixbuf(pixbuf_loader);
-            if (pixbuf)
-                g_object_ref(pixbuf);
-            g_object_unref(pixbuf_loader);
-        }
-        return pixbuf;
-    }
-}
-
-namespace
-{
     void insert_row(GtkListStore* pListStore, int pos, const OUString& rId, const OUString& rText, const OUString* pImage)
     {
         GtkTreeIter iter;
@@ -5191,8 +5215,6 @@ private:
             GtkImage* pImage = GTK_IMAGE(pWidget);
             const gchar* icon_name;
             gtk_image_get_icon_name(pImage, &icon_name, nullptr);
-            GtkIconSize size;
-            g_object_get(pImage, "icon-size", &size, nullptr);
             if (icon_name)
             {
                 OUString aIconName(icon_name, strlen(icon_name), RTL_TEXTENCODING_UTF8);
@@ -5495,6 +5517,15 @@ public:
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pProgressBar));
         return o3tl::make_unique<GtkInstanceProgressBar>(pProgressBar, bTakeOwnership);
+    }
+
+    virtual std::unique_ptr<weld::Image> weld_image(const OString &id, bool bTakeOwnership) override
+    {
+        GtkImage* pImage = GTK_IMAGE(gtk_builder_get_object(m_pBuilder, id.getStr()));
+        if (!pImage)
+            return nullptr;
+        auto_add_parentless_widgets_to_container(GTK_WIDGET(pImage));
+        return o3tl::make_unique<GtkInstanceImage>(pImage, bTakeOwnership);
     }
 
     virtual std::unique_ptr<weld::Entry> weld_entry(const OString &id, bool bTakeOwnership) override

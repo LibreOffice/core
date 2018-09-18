@@ -574,7 +574,6 @@ GalleryThemeProperties::GalleryThemeProperties(vcl::Window* pParent,
     SetText( aText );
 }
 
-
 void GalleryThemeProperties::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     if (nId == m_nGeneralPageId)
@@ -583,38 +582,17 @@ void GalleryThemeProperties::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         static_cast<TPGalleryThemeProperties&>( rPage ).SetXChgData( pData );
 }
 
-
-TPGalleryThemeGeneral::TPGalleryThemeGeneral(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "GalleryGeneralPage",
-        "cui/ui/gallerygeneralpage.ui", &rSet)
+TPGalleryThemeGeneral::TPGalleryThemeGeneral(TabPageParent pParent, const SfxItemSet& rSet)
+    : SfxTabPage(pParent, "cui/ui/gallerygeneralpage.ui", "GalleryGeneralPage", &rSet)
     , pData(nullptr)
+    , m_xFiMSImage(m_xBuilder->weld_image("image"))
+    , m_xEdtMSName(m_xBuilder->weld_entry("name"))
+    , m_xFtMSShowType(m_xBuilder->weld_label("type"))
+    , m_xFtMSShowPath(m_xBuilder->weld_label("location"))
+    , m_xFtMSShowContent(m_xBuilder->weld_label("contents"))
+    , m_xFtMSShowChangeDate(m_xBuilder->weld_label("modified"))
 {
-    get(m_pFiMSImage, "image");
-    get(m_pEdtMSName, "name");
-    get(m_pFtMSShowType, "type");
-    get(m_pFtMSShowPath, "location");
-    get(m_pFtMSShowContent, "contents");
-    get(m_pFtMSShowChangeDate, "modified");
 }
-
-
-TPGalleryThemeGeneral::~TPGalleryThemeGeneral()
-{
-    disposeOnce();
-}
-
-
-void TPGalleryThemeGeneral::dispose()
-{
-    m_pFiMSImage.clear();
-    m_pEdtMSName.clear();
-    m_pFtMSShowType.clear();
-    m_pFtMSShowPath.clear();
-    m_pFtMSShowContent.clear();
-    m_pFtMSShowChangeDate.clear();
-    SfxTabPage::dispose();
-}
-
 
 void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
 {
@@ -627,19 +605,15 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     OUString            aType( SvxResId( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
     bool            bReadOnly = pThm->IsReadOnly();
 
-    m_pEdtMSName->SetText( pThm->GetName() );
-    m_pEdtMSName->SetReadOnly( bReadOnly );
-
-    if( bReadOnly )
-        m_pEdtMSName->Disable();
-    else
-        m_pEdtMSName->Enable();
+    m_xEdtMSName->set_text(pThm->GetName());
+    m_xEdtMSName->set_editable(!bReadOnly);
+    m_xEdtMSName->set_sensitive(!bReadOnly);
 
     if( pThm->IsReadOnly() )
         aType += CuiResId( RID_SVXSTR_GALLERY_READONLY );
 
-    m_pFtMSShowType->SetText( aType );
-    m_pFtMSShowPath->SetText( pThm->GetSdgURL().GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ) );
+    m_xFtMSShowType->set_label(aType);
+    m_xFtMSShowPath->set_label(pThm->GetSdgURL().GetMainURL(INetURLObject::DecodeMechanism::Unambiguous));
 
     // singular or plural?
     if ( 1 == pThm->GetObjectCount() )
@@ -649,7 +623,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
 
     aOutStr += " " + aObjStr;
 
-    m_pFtMSShowContent->SetText( aOutStr );
+    m_xFtMSShowContent->set_label(aOutStr);
 
     // get locale wrapper (singleton)
     const SvtSysLocale aSysLocale;
@@ -657,7 +631,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
 
     // ChangeDate/Time
     aAccess = aLocaleData.getDate( pData->aThemeChangeDate ) + ", " + aLocaleData.getTime( pData->aThemeChangeTime );
-    m_pFtMSShowChangeDate->SetText( aAccess );
+    m_xFtMSShowChangeDate->set_label(aAccess);
 
     // set image
     OUString sId;
@@ -669,20 +643,19 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     else
         sId = RID_SVXBMP_THEME_NORMAL_BIG;
 
-    m_pFiMSImage->SetImage(Image(BitmapEx(sId)));
+    m_xFiMSImage->set_from_icon_name(sId);
 }
 
 bool TPGalleryThemeGeneral::FillItemSet( SfxItemSet* /*rSet*/ )
 {
-    pData->aEditedTitle = m_pEdtMSName->GetText();
+    pData->aEditedTitle = m_xEdtMSName->get_text();
     return true;
 }
 
-VclPtr<SfxTabPage> TPGalleryThemeGeneral::Create( TabPageParent pParent, const SfxItemSet* rSet )
+VclPtr<SfxTabPage> TPGalleryThemeGeneral::Create(TabPageParent pParent, const SfxItemSet* rSet)
 {
-    return VclPtr<TPGalleryThemeGeneral>::Create( pParent.pParent, *rSet );
+    return VclPtr<TPGalleryThemeGeneral>::Create(pParent, *rSet);
 }
-
 
 TPGalleryThemeProperties::TPGalleryThemeProperties( vcl::Window* pWindow, const SfxItemSet& rSet )
     : SfxTabPage(pWindow, "GalleryFilesPage", "cui/ui/galleryfilespage.ui", &rSet)
