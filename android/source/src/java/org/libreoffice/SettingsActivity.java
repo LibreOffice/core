@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 
 public class SettingsActivity extends Activity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,11 +25,17 @@ public class SettingsActivity extends Activity {
             .commit();
     }
 
+    public void restartSettingsActivity(){
+        finish();
+        startActivity(getIntent());
+    }
+
     public static class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.libreoffice_preferences);
+
         }
 
         @Override
@@ -48,6 +55,9 @@ public class SettingsActivity extends Activity {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             SettingsListenerModel.getInstance().changePreferenceState(sharedPreferences, key);
+            if(key.equals("DISPLAY_LANGUAGE")){
+                getActivity().recreate();
+            }
         }
     }
 }

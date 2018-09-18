@@ -12,6 +12,9 @@
         <item >1</item>
         <item >2</item>
     </string-array>
+    <string-array name="SupportedLanguagesValues">
+        <item >en</item>
+    </string-array>
     <string-array name="SortModeStringValues">
         <item >0</item>
         <item >1</item>
@@ -35,6 +38,9 @@
         <item>@string/filter_spreadsheets</item>
         <item>@string/filter_presentations</item>
         <item>@string/filter_drawings</item>
+    </string-array>
+    <string-array name="SupportedLanguages">
+        <item>English</item>
     </string-array>
     <string-array name="SortModeNames">
         <item >@string/sort_az</item>
