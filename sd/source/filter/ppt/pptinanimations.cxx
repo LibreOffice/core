@@ -735,7 +735,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
             aUserData.realloc(nSize+1);
             aUserData[nSize].Name = "preset-id";
 
-            const oox::ppt::preset_maping* p = oox::ppt::preset_maping::getList();
+            const oox::ppt::preset_mapping* p = oox::ppt::preset_mapping::getList();
             while( p->mpStrPresetId && ((p->mnPresetClass != nEffectPresetClass) || (p->mnPresetId != nPresetId )) )
                 p++;
 
