@@ -247,7 +247,8 @@ bool SmbDetailsContainer::setUrl( const INetURLObject& rUrl )
             sPath = sFullPath.copy( nPos );
         }
 
-        m_pDialog->m_xEDHost->set_text( rUrl.GetHost( ) );
+        m_sHost = rUrl.GetHost( );
+        m_pDialog->m_xEDHost->set_text( m_sHost );
         m_pDialog->m_xEDShare->set_text( sShare );
         m_pDialog->m_xEDRoot->set_text( sPath );
     }
@@ -266,6 +267,9 @@ void SmbDetailsContainer::show( bool bShow )
     m_pDialog->m_xHostBox->show( bShow );
     m_pDialog->m_xEDPort->set_sensitive( !bShow );
     m_pDialog->m_xFTPort->set_sensitive( !bShow );
+
+    if ( bShow )
+        m_pDialog->m_xEDHost->set_text( m_sHost );
 }
 
 CmisDetailsContainer::CmisDetailsContainer(PlaceEditDialog* pParentDialog, OUString const & sBinding) :
