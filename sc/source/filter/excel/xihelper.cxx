@@ -794,10 +794,10 @@ XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm ) :
             mnBoolErr = rStrm.ReaduInt8();
             rStrm.Ignore( 7 );
 
-            const ScTokenArray* pScTokArr = rStrm.GetRoot().GetOldFmlaConverter().GetBoolErr(
+            std::unique_ptr<ScTokenArray> pScTokArr = rStrm.GetRoot().GetOldFmlaConverter().GetBoolErr(
                 XclTools::ErrorToEnum( fVal, mnType == EXC_CACHEDVAL_ERROR, mnBoolErr ) );
             if( pScTokArr )
-                mxTokArr.reset( pScTokArr->Clone() );
+                mxTokArr = std::move( pScTokArr );
         }
         break;
         default:

@@ -111,14 +111,14 @@ ErrCode ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSty
                     break;
                 }
                 ScAddress aAddr( nCol, nRow, nTab );
-                const ScTokenArray *pArray;
+                std::unique_ptr<ScTokenArray> pArray;
 
                 QProToSc aConv(*mpStream, pDoc->GetSharedStringPool(), aAddr);
                 if (ConvErr::OK != aConv.Convert( pArray ))
                     eRet = SCERR_IMPORT_FORMAT;
                 else
                 {
-                    ScFormulaCell* pFormula = new ScFormulaCell(pDoc, aAddr, *pArray);
+                    ScFormulaCell* pFormula = new ScFormulaCell(pDoc, aAddr, pArray.release());
                     nStyle = nStyle >> 3;
                     pFormula->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
                     pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );

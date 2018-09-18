@@ -63,8 +63,6 @@ TokenPool::TokenPool( svl::SharedStringPool& rSPool ) :
     ppP_Matrix.reset( new ScMatrix*[ nP_Matrix ] );
     memset( ppP_Matrix.get(), 0, sizeof( ScMatrix* ) * nP_Matrix );
 
-    pScToken.reset(new ScTokenArray);
-
     Reset();
 }
 
@@ -174,7 +172,7 @@ bool TokenPool::GrowMatrix()
     return true;
 }
 
-bool TokenPool::GetElement( const sal_uInt16 nId )
+bool TokenPool::GetElement( const sal_uInt16 nId, ScTokenArray* pScToken )
 {
     if (nId >= nElementCurrent)
     {
@@ -184,7 +182,7 @@ bool TokenPool::GetElement( const sal_uInt16 nId )
 
     bool bRet = true;
     if( pType[ nId ] == T_Id )
-        bRet = GetElementRek( nId );
+        bRet = GetElementRek( nId, pScToken );
     else
     {
         switch( pType[ nId ] )
@@ -336,7 +334,7 @@ bool TokenPool::GetElement( const sal_uInt16 nId )
     return bRet;
 }
 
-bool TokenPool::GetElementRek( const sal_uInt16 nId )
+bool TokenPool::GetElementRek( const sal_uInt16 nId, ScTokenArray* pScToken )
 {
 #ifdef DBG_UTIL
     m_nRek++;
@@ -392,9 +390,9 @@ bool TokenPool::GetElementRek( const sal_uInt16 nId )
             else
             {
                 if (pType[ *pCurrent ] == T_Id)
-                    bRet = GetElementRek( *pCurrent );
+                    bRet = GetElementRek( *pCurrent, pScToken );
                 else
-                    bRet = GetElement( *pCurrent );
+                    bRet = GetElement( *pCurrent, pScToken );
             }
         }
         else    // elementary SC_Token

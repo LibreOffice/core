@@ -135,7 +135,7 @@ bool ExcelToSc8::HandleOleLink(sal_uInt16 nXtiIndex, const XclImpExtName& rExtNa
 
 // if bAllowArrays is false stream seeks to first byte after <nFormulaLen>
 // otherwise it will seek to the first byte past additional content after <nFormulaLen>
-ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn, std::size_t nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT )
+ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpStream& aIn, std::size_t nFormulaLen, bool bAllowArrays, const FORMULA_TYPE eFT )
 {
     bool                    bError = false;
     bool                    bArrayFormula = false;
@@ -160,7 +160,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
     {
         aPool.Store( OUString( "-/-" ) );
         aPool >> aStack;
-        rpTokArray = aPool[ aStack.Get() ];
+        rpTokArray = aPool.GetTokenArray( aStack.Get());
         return ConvErr::OK;
     }
 
@@ -924,14 +924,14 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
     {
         aPool << ocBad;
         aPool >> aStack;
-        rpTokArray = aPool[ aStack.Get() ];
+        rpTokArray = aPool.GetTokenArray( aStack.Get());
         eRet = ConvErr::Ni;
     }
     else if( aIn.GetRecPos() != nEndPos )
     {
         aPool << ocBad;
         aPool >> aStack;
-        rpTokArray = aPool[ aStack.Get() ];
+        rpTokArray = aPool.GetTokenArray( aStack.Get());
         eRet = ConvErr::Count;
     }
     else if( bArrayFormula )
@@ -941,7 +941,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
     }
     else
     {
-        rpTokArray = aPool[ aStack.Get() ];
+        rpTokArray = aPool.GetTokenArray( aStack.Get());
         eRet = ConvErr::OK;
     }
 
@@ -1297,7 +1297,7 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std
     return eRet;
 }
 
-void ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& rStrm, std::size_t nFormulaLen,
+void ExcelToSc8::ConvertExternName( std::unique_ptr<ScTokenArray>& rpArray, XclImpStream& rStrm, std::size_t nFormulaLen,
                                        const OUString& rUrl, const vector<OUString>& rTabNames )
 {
     if( !GetDocShell() )
@@ -1321,7 +1321,7 @@ void ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& 
     {
         aPool.Store(OUString("-/-"));
         aPool >> aStack;
-        rpArray = aPool[aStack.Get()];
+        rpArray = aPool.GetTokenArray( aStack.Get());
         return;
     }
 
@@ -1430,17 +1430,17 @@ void ExcelToSc8::ConvertExternName( const ScTokenArray*& rpArray, XclImpStream& 
     {
         aPool << ocBad;
         aPool >> aStack;
-        rpArray = aPool[ aStack.Get() ];
+        rpArray = aPool.GetTokenArray( aStack.Get());
     }
     else if( rStrm.GetRecPos() != nEndPos )
     {
         aPool << ocBad;
         aPool >> aStack;
-        rpArray = aPool[ aStack.Get() ];
+        rpArray = aPool.GetTokenArray( aStack.Get());
     }
     else
     {
-        rpArray = aPool[ aStack.Get() ];
+        rpArray = aPool.GetTokenArray( aStack.Get());
     }
 
     rStrm.Seek(nEndPos);

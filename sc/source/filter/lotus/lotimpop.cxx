@@ -270,7 +270,7 @@ void ImportLotus::Formulacell( sal_uInt16 n )
 
     n -= std::min<sal_uInt16>(n, 14);
 
-    const ScTokenArray* pErg;
+    std::unique_ptr<ScTokenArray> pErg;
     sal_Int32 nRest = n;
 
     aConv.Reset( aAddr );
@@ -279,7 +279,7 @@ void ImportLotus::Formulacell( sal_uInt16 n )
     if (!aConv.good())
         return;
 
-    ScFormulaCell* pCell = pErg ? new ScFormulaCell(pD, aAddr, *pErg) : new ScFormulaCell(pD, aAddr);
+    ScFormulaCell* pCell = pErg ? new ScFormulaCell(pD, aAddr, pErg.release()) : new ScFormulaCell(pD, aAddr);
     pCell->AddRecalcMode( ScRecalcMode::ONLOAD_ONCE );
     pD->EnsureTable(aAddr.Tab());
     pD->SetFormulaCell(aAddr, pCell);

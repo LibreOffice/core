@@ -78,7 +78,7 @@ private:
     bool                        CheckRecord( sal_uInt16 nOpCode );
 
     void                        ReadFormula(
-                                    ScTokenArray*& rpTokenArray,
+                                    std::unique_ptr<ScTokenArray>& rpTokenArray,
                                     const ScAddress& rPosition );
     void ReadCell( ScCellValue& rCell, sal_uInt32& rFormat, sal_uInt16 nFlags, const ScAddress& rPosition );
 

@@ -118,9 +118,11 @@ void XclImpPCItem::WriteToSource( XclImpRoot& rRoot, const ScAddress& rScPos ) c
     {
         double fValue;
         sal_uInt8 nErrCode = static_cast< sal_uInt8 >( *pnError );
-        const ScTokenArray* pScTokArr = rRoot.GetOldFmlaConverter().GetBoolErr(
+        std::unique_ptr<ScTokenArray> pScTokArr = rRoot.GetOldFmlaConverter().GetBoolErr(
             XclTools::ErrorToEnum( fValue, true, nErrCode ) );
-        ScFormulaCell* pCell = pScTokArr ? new ScFormulaCell(&rDoc.getDoc(), rScPos, *pScTokArr) : new ScFormulaCell(&rDoc.getDoc(), rScPos);
+        ScFormulaCell* pCell = pScTokArr
+            ? new ScFormulaCell(&rDoc.getDoc(), rScPos, pScTokArr.release())
+            : new ScFormulaCell(&rDoc.getDoc(), rScPos);
         pCell->SetHybridDouble( fValue );
         rDoc.setFormulaCell(rScPos, pCell);
     }

@@ -99,7 +99,7 @@ public:
     void                Reset();
     void                Reset( const ScAddress& rEingPos );
 
-    virtual ConvErr     Convert( const ScTokenArray*& rpErg, XclImpStream& rStrm, std::size_t nFormulaLen,
+    virtual ConvErr     Convert( std::unique_ptr<ScTokenArray>& rpErg, XclImpStream& rStrm, std::size_t nFormulaLen,
                                  bool bAllowArrays, const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
     virtual ConvErr     Convert( ScRangeListTabs&, XclImpStream& rStrm, std::size_t nFormulaLen, SCTAB nTab,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
@@ -124,7 +124,7 @@ protected:
 public:
     void                Reset( const ScAddress& rEingPos );
 
-    virtual void        Convert( const ScTokenArray*& rpErg, sal_Int32& nRest ) = 0;
+    virtual void        Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& nRest ) = 0;
 
     bool good() const { return aIn.good(); }
 
