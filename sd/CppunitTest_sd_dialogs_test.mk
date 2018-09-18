@@ -67,6 +67,7 @@ $(eval $(call gb_CppunitTest_use_rdb,sd_dialogs_test,services))
 $(eval $(call gb_CppunitTest_use_configuration,sd_dialogs_test))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,sd_dialogs_test,\
+	cui \
 	modules/sdraw \
 	modules/simpress \
 ))
