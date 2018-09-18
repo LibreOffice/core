@@ -2199,7 +2199,10 @@ bool SwRefPageGetFieldType::MakeSetList( SetGetExpFields& rTmpLst )
 
                 // Always the first! (in Tab-Headline, header/footer )
                 Point aPt;
-                const SwContentFrame* pFrame = rTextNd.getLayoutFrame( rTextNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
+                std::pair<Point, bool> const tmp(aPt, false);
+                const SwContentFrame *const pFrame = rTextNd.getLayoutFrame(
+                    rTextNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+                    nullptr, &tmp);
 
                 SetGetExpField* pNew;
 
@@ -2257,8 +2260,12 @@ void SwRefPageGetFieldType::UpdateField( SwTextField const * pTextField,
             {
                 // determine the correct offset
                 Point aPt;
-                const SwContentFrame* pFrame = pTextNode->getLayoutFrame( pTextNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
-                const SwContentFrame* pRefFrame = pRefTextField->GetTextNode().getLayoutFrame( pRefTextField->GetTextNode().GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
+                std::pair<Point, bool> const tmp(aPt, false);
+                const SwContentFrame *const pFrame = pTextNode->getLayoutFrame(
+                    pTextNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp);
+                const SwContentFrame *const pRefFrame = pRefTextField->GetTextNode().getLayoutFrame(
+                    pRefTextField->GetTextNode().GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+                    nullptr, &tmp);
                 const SwPageFrame* pPgFrame = nullptr;
                 const short nDiff = ( pFrame && pRefFrame )
                         ?   (pPgFrame = pFrame->FindPageFrame())->GetPhyPageNum() -
@@ -2340,7 +2347,9 @@ void SwRefPageGetField::ChangeExpansion( const SwFrame* pFrame,
     const SwRefPageSetField* pSetField =
                         static_cast<const SwRefPageSetField*>(pRefTextField->GetFormatField().GetField());
     Point aPt;
-    const SwContentFrame* pRefFrame = pRefTextField->GetTextNode().getLayoutFrame( pFrame->getRootFrame(), &aPt, nullptr, false );
+    std::pair<Point, bool> const tmp(aPt, false);
+    const SwContentFrame *const pRefFrame = pRefTextField->GetTextNode().getLayoutFrame(
+            pFrame->getRootFrame(), nullptr, &tmp);
     if( pSetField->IsOn() && pRefFrame )
     {
         // determine the correct offset

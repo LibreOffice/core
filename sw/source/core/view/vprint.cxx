@@ -359,7 +359,7 @@ void SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
         SwShellTableCursor* pShellTableCursor = pFESh->GetTableCursor();
 
         const SwContentNode* pContentNode = pShellTableCursor->GetNode().GetContentNode();
-        const SwContentFrame *pContentFrame = pContentNode ? pContentNode->getLayoutFrame( GetLayout(), nullptr, pShellTableCursor->Start() ) : nullptr;
+        const SwContentFrame *const pContentFrame = pContentNode ? pContentNode->getLayoutFrame(GetLayout(), pShellTableCursor->Start()) : nullptr;
         if( pContentFrame )
         {
             SwRect aCharRect;

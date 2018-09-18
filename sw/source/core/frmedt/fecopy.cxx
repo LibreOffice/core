@@ -253,7 +253,9 @@ static bool lcl_SetAnchor( const SwPosition& rPos, const SwNode& rNd, SwFlyFrame
 {
     bool bRet = true;
     rAnchor.SetAnchor( &rPos );
-    SwContentFrame* pTmpFrame = rNd.GetContentNode()->getLayoutFrame( rDestShell.GetLayout(), &rInsPt, nullptr, false );
+    std::pair<Point, bool> const tmp(rInsPt, false);
+    SwContentFrame *const pTmpFrame = rNd.GetContentNode()->getLayoutFrame(
+            rDestShell.GetLayout(), nullptr, &tmp);
     SwFlyFrame *pTmpFly = pTmpFrame->FindFlyFrame();
     if( pTmpFly && bCheckFlyRecur && pFly->IsUpperOf( *pTmpFly ) )
     {

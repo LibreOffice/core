@@ -384,7 +384,7 @@ bool SwNode::IsInVisibleArea( SwViewShell const * pSh ) const
     if( pSh )
     {
         const SwFrame* pFrame;
-        if( pNd && nullptr != ( pFrame = pNd->getLayoutFrame( pSh->GetLayout(), nullptr, nullptr, false ) ) )
+        if (pNd && nullptr != (pFrame = pNd->getLayoutFrame(pSh->GetLayout(), nullptr, nullptr)))
         {
 
             if ( pFrame->IsInTab() )
@@ -495,7 +495,7 @@ const SwPageDesc* SwNode::FindPageDesc( size_t* pPgDescNdIdx ) const
     {
         const SwFrame* pFrame;
         const SwPageFrame* pPage;
-        if( pNode && nullptr != ( pFrame = pNode->getLayoutFrame( pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr, false/*bCalcLay*/ ) ) &&
+        if (pNode && nullptr != (pFrame = pNode->getLayoutFrame(pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, nullptr)) &&
             nullptr != ( pPage = pFrame->FindPageFrame() ) )
         {
             pPgDesc = pPage->GetPageDesc();
@@ -789,8 +789,9 @@ const SwTextNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
             const SwContentNode* pCNd = GetContentNode();
 
             Point aPt( 0, 0 );
-            const SwFrame* pFrame = pRet->getLayoutFrame( pRet->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false ),
-                       * pMyFrame = pCNd ? pCNd->getLayoutFrame( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false ) : nullptr;
+            std::pair<Point, bool> const tmp(aPt, false);
+            const SwFrame* pFrame = pRet->getLayoutFrame(pRet->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp),
+                       * pMyFrame = pCNd ? pCNd->getLayoutFrame(pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp) : nullptr;
             const SwPageFrame* pPgFrame = pFrame ? pFrame->FindPageFrame() : nullptr;
             if( pPgFrame && pMyFrame &&
                 pPgFrame->getFrameArea().Top() > pMyFrame->getFrameArea().Top() )
@@ -1121,17 +1122,24 @@ bool SwContentNode::InvalidateNumRule()
 }
 
 SwContentFrame *SwContentNode::getLayoutFrame( const SwRootFrame* _pRoot,
-    const Point* pPoint, const SwPosition *pPos, const bool bCalcFrame ) const
+    const SwPosition *const pPos,
+    std::pair<Point, bool> const*const pViewPosAndCalcFrame) const
 {
     return static_cast<SwContentFrame*>( ::GetFrameOfModify( _pRoot, *this, FRM_CNTNT,
-                                            pPoint, pPos, bCalcFrame ));
+                                            pPos, pViewPosAndCalcFrame));
 }
 
 SwRect SwContentNode::FindLayoutRect( const bool bPrtArea, const Point* pPoint ) const
 {
     SwRect aRet;
+    std::pair<Point, bool> tmp;
+    if (pPoint)
+    {
+        tmp.first = *pPoint;
+        tmp.second = false;
+    }
     SwContentFrame* pFrame = static_cast<SwContentFrame*>( ::GetFrameOfModify( nullptr, *this,
-                                            FRM_CNTNT, pPoint ) );
+                                FRM_CNTNT, nullptr, pPoint ? &tmp : nullptr) );
     if( pFrame )
         aRet = bPrtArea ? pFrame->getFramePrintArea() : pFrame->getFrameArea();
     return aRet;
@@ -1962,7 +1970,8 @@ SvxFrameDirection SwContentNode::GetTextDirection( const SwPosition& rPos,
         aPt = *pPt;
 
     // #i72024# - No format of the frame, because this can cause recursive layout actions
-    SwFrame* pFrame = getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, &rPos, false );
+    std::pair<Point, bool> const tmp(aPt, false);
+    SwFrame* pFrame = getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &rPos, &tmp);
 
     if ( pFrame )
     {

@@ -137,10 +137,11 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
             if ( ! pSI )
             {
                 // seems to be an empty paragraph.
-                Point aPt; // why ???
+                Point aPt;
+                std::pair<Point, bool> const tmp(aPt, false);
                 pFrame = static_cast<SwTextFrame*>(
                         static_cast<SwTextNode&>(rNode).getLayoutFrame(
-                            GetLayout(), &aPt, pTmpCursor->GetPoint(), false));
+                            GetLayout(), pTmpCursor->GetPoint(), &tmp));
 
                 SwScriptInfo aScriptInfo;
                 aScriptInfo.InitScriptInfo(static_cast<SwTextNode&>(rNode),

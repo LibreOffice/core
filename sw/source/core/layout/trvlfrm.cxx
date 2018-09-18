@@ -983,9 +983,8 @@ sal_uInt16 SwRootFrame::GetCurrPage( const SwPaM *pActualCursor ) const
 {
     OSL_ENSURE( pActualCursor, "got no page cursor" );
     SwFrame const*const pActFrame = pActualCursor->GetPoint()->nNode.GetNode().
-                                    GetContentNode()->getLayoutFrame( this, nullptr,
-                                                    pActualCursor->GetPoint(),
-                                                    false );
+                                    GetContentNode()->getLayoutFrame(this,
+                                                    pActualCursor->GetPoint());
     return pActFrame->FindPageFrame()->GetPhyPageNum();
 }
 
@@ -1893,8 +1892,10 @@ bool SwRootFrame::MakeTableCursors( SwTableCursor& rTableCursor )
     const SwContentNode* pTmpStartNode = rTableCursor.GetContentNode();
     const SwContentNode* pTmpEndNode   = rTableCursor.GetContentNode(false);
 
-    const SwFrame* pTmpStartFrame = pTmpStartNode ? pTmpStartNode->getLayoutFrame( this, &aPtPt, nullptr, false ) : nullptr;
-    const SwFrame* pTmpEndFrame   = pTmpEndNode   ?   pTmpEndNode->getLayoutFrame( this, &aMkPt, nullptr, false ) : nullptr;
+    std::pair<Point, bool> tmp(aPtPt, false);
+    const SwFrame *const pTmpStartFrame = pTmpStartNode ? pTmpStartNode->getLayoutFrame(this, nullptr, &tmp) : nullptr;
+    tmp.first = aMkPt;
+    const SwFrame *const pTmpEndFrame = pTmpEndNode ? pTmpEndNode->getLayoutFrame(this, nullptr, &tmp) : nullptr;
 
     const SwLayoutFrame* pStart = pTmpStartFrame ? pTmpStartFrame->GetUpper() : nullptr;
     const SwLayoutFrame* pEnd   = pTmpEndFrame   ? pTmpEndFrame->GetUpper() : nullptr;
@@ -2040,11 +2041,13 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
 
     //First obtain the ContentFrames for the start and the end - those are needed
     //anyway.
+    std::pair<Point, bool> tmp(rCursor.GetSttPos(), true);
     SwContentFrame* pStartFrame = pStartPos->nNode.GetNode().
-        GetContentNode()->getLayoutFrame( this, &rCursor.GetSttPos(), pStartPos );
+        GetContentNode()->getLayoutFrame(this, pStartPos, &tmp);
 
+    tmp.first = rCursor.GetEndPos();
     SwContentFrame* pEndFrame   = pEndPos->nNode.GetNode().
-        GetContentNode()->getLayoutFrame( this, &rCursor.GetEndPos(), pEndPos );
+        GetContentNode()->getLayoutFrame(this, pEndPos, &tmp);
 
     assert(pStartFrame && pEndFrame && "No ContentFrames found.");
     //tdf#119224 start and end are expected to exist for the scope of this function

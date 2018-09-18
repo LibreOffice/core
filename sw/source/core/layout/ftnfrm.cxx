@@ -2837,7 +2837,7 @@ SwContentFrame* SwFootnoteFrame::GetRefFromAttr()
     assert(mpAttribute && "invalid Attribute");
     SwTextNode& rTNd = const_cast<SwTextNode&>(mpAttribute->GetTextNode());
     SwPosition aPos( rTNd, SwIndex( &rTNd, mpAttribute->GetStart() ));
-    SwContentFrame* pCFrame = rTNd.getLayoutFrame( getRootFrame(), nullptr, &aPos, false );
+    SwContentFrame* pCFrame = rTNd.getLayoutFrame(getRootFrame(), &aPos);
     return pCFrame;
 }
 

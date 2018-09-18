@@ -104,7 +104,7 @@ typedef std::vector<SwTextAttr*> SwpHts;
                                   pNd->GetpSwpHints()->Check(true); }
 #define CHECK_SWPHINTS_IF_FRM(pNd)  { if( pNd->GetpSwpHints() && \
                                    !pNd->GetDoc()->IsInReading() ) \
-    pNd->GetpSwpHints()->Check(getLayoutFrame(nullptr, nullptr, nullptr, false) != nullptr); }
+    pNd->GetpSwpHints()->Check(getLayoutFrame(nullptr, nullptr, nullptr) != nullptr); }
 #else
 #define CHECK_SWPHINTS(pNd)
 #define CHECK_SWPHINTS_IF_FRM(pNd)

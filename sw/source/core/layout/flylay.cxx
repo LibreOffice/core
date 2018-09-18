@@ -781,7 +781,7 @@ void SwFlyLayFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         {
             SwNodeIndex aIdx( pAnch->GetContentAnchor()->nNode );
             SwContentFrame *pContent = GetFormat()->GetDoc()->GetNodes().GoNext( &aIdx )->
-                         GetContentNode()->getLayoutFrame( getRootFrame(), nullptr, nullptr, false );
+                GetContentNode()->getLayoutFrame(getRootFrame(), nullptr, nullptr);
             if( pContent )
             {
                 SwFlyFrame *pTmp = pContent->FindFlyFrame();

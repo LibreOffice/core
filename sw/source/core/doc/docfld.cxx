@@ -997,7 +997,9 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFiel
 
     // always the first! (in tab headline, header-/footer)
     Point aPt;
-    const SwContentFrame* pFrame = rTextNd.getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
+    std::pair<Point, bool> const tmp(aPt, false);
+    const SwContentFrame* pFrame = rTextNd.getLayoutFrame(
+        rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp);
 
     SetGetExpField* pNew = nullptr;
     bool bIsInBody = false;
@@ -1061,7 +1063,10 @@ void SwDocUpdateField::GetBodyNode( const SwSectionNode& rSectNd )
 
             // always the first! (in tab headline, header-/footer)
             Point aPt;
-            const SwContentFrame* pFrame = pCNd->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
+            std::pair<Point, bool> const tmp(aPt, false);
+            const SwContentFrame* pFrame = pCNd->getLayoutFrame(
+                    rDoc.getIDocumentLayoutAccess().GetCurrentLayout(),
+                    nullptr, &tmp);
             if( !pFrame )
                 break;
 

@@ -112,8 +112,10 @@ static void lcl_GetStartEndCell( const SwCursor& rCursor,
     SwContentNode* pPointNd = rCursor.GetContentNode();
     SwContentNode* pMarkNd  = rCursor.GetContentNode(false);
 
-    SwFrame* pPointFrame = pPointNd ? pPointNd->getLayoutFrame( pPointNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPtPos ) : nullptr;
-    SwFrame* pMarkFrame  = pMarkNd  ? pMarkNd->getLayoutFrame( pMarkNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aMkPos )  : nullptr;
+    std::pair<Point, bool> tmp(aPtPos, true);
+    SwFrame *const pPointFrame = pPointNd ? pPointNd->getLayoutFrame(pPointNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp) : nullptr;
+    tmp.first = aMkPos;
+    SwFrame *const pMarkFrame = pMarkNd ? pMarkNd->getLayoutFrame(pMarkNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp) : nullptr;
 
     prStart = pPointFrame ? pPointFrame->GetUpper() : nullptr;
     prEnd   = pMarkFrame  ? pMarkFrame->GetUpper() : nullptr;

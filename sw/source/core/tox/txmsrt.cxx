@@ -158,7 +158,10 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwContentNode* pNd,
             {
                 // Then get the 'anchor' (body) position
                 Point aPt;
-                const SwContentFrame* pFrame = pNd->getLayoutFrame( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
+                std::pair<Point, bool> tmp(aPt, false);
+                const SwContentFrame *const pFrame = pNd->getLayoutFrame(
+                    pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+                    nullptr, &tmp);
                 if( pFrame )
                 {
                     SwPosition aPos( *pNd );

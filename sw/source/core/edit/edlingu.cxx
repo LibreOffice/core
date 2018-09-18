@@ -859,7 +859,13 @@ void SwEditShell::HandleCorrectionError(
     SwCursorMoveState aState;
     aState.m_bRealWidth = true;
     SwContentNode* pContentNode = pCursor->GetContentNode();
-    SwContentFrame *pContentFrame = pContentNode->getLayoutFrame( GetLayout(), pPt, pCursor->GetPoint(), false);
+    std::pair<Point, bool> tmp;
+    if (pPt)
+    {
+        tmp.first = *pPt;
+        tmp.second = false;
+    }
+    SwContentFrame *const pContentFrame = pContentNode->getLayoutFrame(GetLayout(), pCursor->GetPoint(), pPt ? &tmp : nullptr);
 
     pContentFrame->GetCharRect( aStartRect, *pCursor->GetPoint(), &aState );
     rContent = nWordEnd - 1;

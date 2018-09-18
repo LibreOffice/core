@@ -180,7 +180,10 @@ bool SwCursorShell::SelTableRowOrCol( bool bRow, bool bRowSimple )
         const SwShellCursor *pCursor = GetCursor_();
         const SwFrame* pStartFrame = pFrame;
         const SwContentNode *pCNd = pCursor->GetContentNode( false );
-        const SwFrame* pEndFrame   = pCNd ? pCNd->getLayoutFrame( GetLayout(), &pCursor->GetMkPos() ) : nullptr;
+        std::pair<Point, bool> const tmp(pCursor->GetMkPos(), true);
+        const SwFrame* pEndFrame = pCNd
+            ? pCNd->getLayoutFrame(GetLayout(), nullptr, &tmp)
+            : nullptr;
 
         if ( bRow )
         {

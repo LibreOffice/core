@@ -651,9 +651,10 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                 !pCursorShell->IsTableMode() &&
                 !pCursor->HasMark() && !pCursor->IsMultiSelection())
             {
-                SwContentFrame *pContentFrame = pCursor->GetContentNode()->getLayoutFrame(
+                std::pair<Point, bool> const tmp(rPt, false);
+                SwContentFrame *const pContentFrame = pCursor->GetContentNode()->getLayoutFrame(
                                         pCursorShell->GetLayout(),
-                                        &rPt, &aPoint, false);
+                                        &aPoint, &tmp);
                 if (pContentFrame)
                 {
                     SwRect aRepaint(static_cast<SwTextFrame*>(pContentFrame)->AutoSpell_(

@@ -403,11 +403,10 @@ public:
     bool GoNext(SwIndex *, sal_uInt16 nMode ) const;
     bool GoPrevious(SwIndex *, sal_uInt16 nMode ) const;
 
-    /// Replacement for good old GetFrame(..):
+    /// @see GetFrameOfModify
     SwContentFrame *getLayoutFrame( const SwRootFrame*,
-                        const Point* pDocPos = nullptr,
-                        const SwPosition *pPos = nullptr,
-                        const bool bCalcFrame = true ) const;
+            const SwPosition *pPos = nullptr,
+            std::pair<Point, bool> const* pViewPosAndCalcFrame = nullptr) const;
     /** @return the real size of the frame or an empty rectangle if
        no layout exists. Needed for export filters. */
     SwRect FindLayoutRect( const bool bPrtArea = false,

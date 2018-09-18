@@ -297,7 +297,8 @@ static const SwFrame* lcl_GetFrameOfNode( const SwNode& rNd )
         pMod = nullptr;
 
     Point aNullPt;
-    return pMod ? ::GetFrameOfModify( nullptr, *pMod, nFrameType, &aNullPt )
+    std::pair<Point, bool> const tmp(aNullPt, false);
+    return pMod ? ::GetFrameOfModify(nullptr, *pMod, nFrameType, nullptr, &tmp)
                 : nullptr;
 }
 

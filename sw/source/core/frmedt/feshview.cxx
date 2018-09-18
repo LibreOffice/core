@@ -1806,7 +1806,8 @@ bool SwFEShell::ImpEndCreate()
         // characterbinding not allowed in readonly-content
         if( !aPos.nNode.GetNode().IsProtect() )
         {
-            pAnch = aPos.nNode.GetNode().GetContentNode()->getLayoutFrame( GetLayout(), &aPoint, &aPos );
+            std::pair<Point, bool> const tmp(aPoint, true);
+            pAnch = aPos.nNode.GetNode().GetContentNode()->getLayoutFrame(GetLayout(), &aPos, &tmp);
             SwRect aTmp;
             pAnch->GetCharRect( aTmp, aPos );
 
@@ -1857,7 +1858,8 @@ bool SwFEShell::ImpEndCreate()
         }
 
         SwContentNode* pCNode = aPos.nNode.GetNode().GetContentNode();
-        pAnch = pCNode ? pCNode->getLayoutFrame( GetLayout(), &aPoint, nullptr, false ) : nullptr;
+        std::pair<Point, bool> const tmp(aPoint, false);
+        pAnch = pCNode ? pCNode->getLayoutFrame(GetLayout(), nullptr, &tmp) : nullptr;
         if (!pAnch)
         {
             // Hidden content. Anchor to the page instead

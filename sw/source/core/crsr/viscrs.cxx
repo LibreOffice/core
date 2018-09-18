@@ -142,7 +142,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
         if( rNode.IsTextNode() )
         {
             const SwTextNode& rTNd = *rNode.GetTextNode();
-            const SwFrame* pFrame = rTNd.getLayoutFrame( m_pCursorShell->GetLayout(), nullptr, nullptr, false );
+            const SwFrame* pFrame = rTNd.getLayoutFrame(m_pCursorShell->GetLayout(), nullptr, nullptr);
             if ( pFrame )
             {
                 const SwScriptInfo* pSI = static_cast<const SwTextFrame*>(pFrame)->GetScriptInfo();
@@ -309,7 +309,10 @@ void SwSelPaintRects::Hide()
 static SwRect lcl_getLayoutRect(const Point& rPoint, const SwPosition& rPosition)
 {
     const SwContentNode* pNode = rPosition.nNode.GetNode().GetContentNode();
-    const SwContentFrame* pFrame = pNode->getLayoutFrame(pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &rPoint, &rPosition);
+    std::pair<Point, bool> const tmp(rPoint, true);
+    const SwContentFrame* pFrame = pNode->getLayoutFrame(
+            pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            &rPosition, &tmp);
     SwRect aRect;
     pFrame->GetCharRect(aRect, rPosition);
     return aRect;
@@ -807,7 +810,8 @@ void SwShellTableCursor::FillRects()
         if( !pCNd )
             continue;
 
-        SwFrame* pFrame = pCNd->getLayoutFrame( GetShell()->GetLayout(), &GetSttPos() );
+        std::pair<Point, bool> const tmp(GetSttPos(), true);
+        SwFrame* pFrame = pCNd->getLayoutFrame(GetShell()->GetLayout(), nullptr, &tmp);
         while( pFrame && !pFrame->IsCellFrame() )
             pFrame = pFrame->GetUpper();
 
@@ -856,7 +860,8 @@ bool SwShellTableCursor::IsInside( const Point& rPt ) const
         if( !pCNd )
             continue;
 
-        SwFrame* pFrame = pCNd->getLayoutFrame( GetShell()->GetLayout(), &GetPtPos() );
+        std::pair<Point, bool> const tmp(GetPtPos(), true);
+        SwFrame* pFrame = pCNd->getLayoutFrame(GetShell()->GetLayout(), nullptr, &tmp);
         while( pFrame && !pFrame->IsCellFrame() )
             pFrame = pFrame->GetUpper();
         OSL_ENSURE( pFrame, "Node not in a table" );

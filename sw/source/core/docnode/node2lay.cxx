@@ -416,7 +416,13 @@ void SwNode2LayImpl::RestoreUpperFrames( SwNodes& rNds, sal_uLong nStt, sal_uLon
 SwFrame* SwNode2LayImpl::GetFrame( const Point* pDocPos ) const
 {
     // test if change of member pIter -> pMod broke anything
-    return pMod ? ::GetFrameOfModify( nullptr, *pMod, FRM_ALL, pDocPos, nullptr ) : nullptr;
+    std::pair<Point, bool> tmp;
+    if (pDocPos)
+    {
+        tmp.first = *pDocPos;
+        tmp.second = false;
+    }
+    return pMod ? ::GetFrameOfModify(nullptr, *pMod, FRM_ALL, nullptr, pDocPos ? &tmp : nullptr) : nullptr;
 }
 
 SwNode2Layout::SwNode2Layout( const SwNode& rNd, sal_uLong nIdx )

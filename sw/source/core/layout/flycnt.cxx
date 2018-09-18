@@ -168,7 +168,8 @@ void SwFlyAtContentFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pN
         if ( !pContent )
         {
             SwContentNode *pNode = aNewIdx.GetNode().GetContentNode();
-            pContent = pNode->getLayoutFrame( getRootFrame(), &pOldAnchor->getFrameArea().Pos(), nullptr, false );
+            std::pair<Point, bool> const tmp(pOldAnchor->getFrameArea().Pos(), false);
+            pContent = pNode->getLayoutFrame(getRootFrame(), nullptr, &tmp);
             OSL_ENSURE( pContent, "New anchor not found" );
         }
         //Flys are never attached to a follow, but always on the master which
