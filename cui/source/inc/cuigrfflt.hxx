@@ -97,6 +97,7 @@ public:
     const Graphic&  GetScaledOriginal() const { return maScaledOrig; }
     double          GetScaleX() const { return mfScaleX; }
     double          GetScaleY() const { return mfScaleY; }
+    const Size&     GetGraphicSizePixel() const { return maOrigGraphicSizePixel; }
 };
 
 class GraphicFilterDialog : public ModalDialog
@@ -142,7 +143,7 @@ protected:
     std::unique_ptr<weld::CustomWeld> mxPreview;
 
     const Link<LinkParamNone*,void>&   GetModifyHdl() const { return maModifyHdl; }
-    const Size&     GetGraphicSizePixel() const;
+    const Size& GetGraphicSizePixel() const { return maPreview.GetGraphicSizePixel(); }
 
 public:
 
@@ -165,23 +166,21 @@ public:
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
 };
 
-class GraphicFilterMosaic : public GraphicFilterDialog
+class GraphicFilterMosaic : public GraphicFilterDialogController
 {
 private:
-    VclPtr<MetricField>    mpMtrWidth;
-    VclPtr<MetricField>    mpMtrHeight;
-    VclPtr<CheckBox>       mpCbxEdges;
-    DECL_LINK(CheckBoxModifyHdl, CheckBox&, void);
-    DECL_LINK(EditModifyHdl, Edit&, void);
+    std::unique_ptr<weld::MetricSpinButton> mxMtrWidth;
+    std::unique_ptr<weld::MetricSpinButton> mxMtrHeight;
+    std::unique_ptr<weld::CheckButton> mxCbxEdges;
+    DECL_LINK(CheckBoxModifyHdl, weld::ToggleButton&, void);
+    DECL_LINK(EditModifyHdl, weld::MetricSpinButton&, void);
 public:
 
-    GraphicFilterMosaic(vcl::Window* pParent, const Graphic& rGraphic,
+    GraphicFilterMosaic(weld::Window* pParent, const Graphic& rGraphic,
         sal_uInt16 nTileWidth, sal_uInt16 nTileHeight, bool bEnhanceEdges);
-    virtual ~GraphicFilterMosaic() override;
-    virtual void dispose() override;
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
-    bool            IsEnhanceEdges() const { return mpCbxEdges->IsChecked(); }
+    bool            IsEnhanceEdges() const { return mxCbxEdges->get_active(); }
 };
 
 class GraphicFilterSolarize : public GraphicFilterDialogController
