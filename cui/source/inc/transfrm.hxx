@@ -92,10 +92,10 @@ private:
     // #i75273#
     double              mfOldWidth;
     double              mfOldHeight;
-    RectPoint          meRP;
+    RectPoint           meRP;
 
-    RectCtl          m_aCtlPos;
-    RectCtl          m_aCtlSize;
+    SvxRectCtl          m_aCtlPos;
+    SvxRectCtl          m_aCtlSize;
 
     // position
     std::unique_ptr<weld::Widget> m_xFlPosition;
@@ -183,7 +183,7 @@ private:
     FieldUnit           eDlgUnit;
 
     svx::SvxDialControl m_aCtlAngle;
-    RectCtl m_aCtlRect;
+    SvxRectCtl m_aCtlRect;
 
     std::unique_ptr<weld::Widget> m_xFlPosition;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrPosX;

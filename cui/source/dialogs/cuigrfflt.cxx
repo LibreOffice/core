@@ -396,12 +396,11 @@ Graphic GraphicFilterPoster::GetFilteredGraphic( const Graphic& rGraphic, double
     return aRet;
 }
 
-
 void EmbossControl::MouseButtonDown( const MouseEvent& rEvt )
 {
     const RectPoint eOldRP = GetActualRP();
 
-    RectCtl::MouseButtonDown( rEvt );
+    SvxRectCtl::MouseButtonDown( rEvt );
 
     if( GetActualRP() != eOldRP )
         maModifyHdl.Call( nullptr );
@@ -409,7 +408,7 @@ void EmbossControl::MouseButtonDown( const MouseEvent& rEvt )
 
 void EmbossControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    RectCtl::SetDrawingArea(pDrawingArea);
+    SvxRectCtl::SetDrawingArea(pDrawingArea);
     Size aSize(pDrawingArea->get_ref_device().LogicToPixel(Size(77, 60), MapMode(MapUnit::MapAppFont)));
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
 }

@@ -57,18 +57,18 @@ namespace com { namespace sun { namespace star { namespace awt {
 } } } }
 
 namespace tools { class Rectangle; }
-class RectCtl;
-class RectCtlChildAccessibleContext;
+class SvxRectCtl;
+class SvxRectCtlChildAccessibleContext;
 namespace vcl { class Window; }
 
 typedef ::cppu::ImplHelper1<css::accessibility::XAccessible> OAccessibleHelper_Base;
 
-class RectCtlAccessibleContext final : public ::comphelper::OAccessibleSelectionHelper,
+class SvxRectCtlAccessibleContext final : public ::comphelper::OAccessibleSelectionHelper,
                                        public OAccessibleHelper_Base
 {
 public:
     // internal
-    RectCtlAccessibleContext(RectCtl* pRepresentation);
+    SvxRectCtlAccessibleContext(SvxRectCtl* pRepresentation);
 
     DECLARE_XINTERFACE( )
     DECLARE_XTYPEPROVIDER( )
@@ -104,7 +104,7 @@ public:
     void FireChildFocus( RectPoint eButton );
 
 private:
-    virtual ~RectCtlAccessibleContext() override;
+    virtual ~SvxRectCtlAccessibleContext() override;
 
     // OCommonAccessibleSelection
     // return if the specified child is visible => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
@@ -140,10 +140,10 @@ private:
     OUString                     msName;
 
     /// pointer to internal representation
-    RectCtl*                  mpRepr;
+    SvxRectCtl*                  mpRepr;
 
     /// array for all possible children
-    std::vector<rtl::Reference<RectCtlChildAccessibleContext>>  mvChildren;
+    std::vector<rtl::Reference<SvxRectCtlChildAccessibleContext>>  mvChildren;
 
     /// actual selected child
     long                                mnSelectedChild;
@@ -154,11 +154,11 @@ typedef ::cppu::ImplHelper3 <   css::accessibility::XAccessible,
                                 css::accessibility::XAccessibleAction
                             >   OAccessibleHelper_Base_3;
 
-class RectCtlChildAccessibleContext final : public ::comphelper::OAccessibleComponentHelper,
+class SvxRectCtlChildAccessibleContext final : public ::comphelper::OAccessibleComponentHelper,
                                             public OAccessibleHelper_Base_3
 {
 public:
-    RectCtlChildAccessibleContext(
+    SvxRectCtlChildAccessibleContext(
         const css::uno::Reference< css::accessibility::XAccessible>& rxParent,
         const OUString& rName, const OUString& rDescription,
         const tools::Rectangle& rBoundingBox,
@@ -211,7 +211,7 @@ public:
     void FireFocusEvent();
 
 private:
-    virtual ~RectCtlChildAccessibleContext() override;
+    virtual ~SvxRectCtlChildAccessibleContext() override;
 
     virtual void SAL_CALL disposing() override;
 
