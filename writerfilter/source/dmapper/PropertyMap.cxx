@@ -922,6 +922,9 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
             m_aFollowPageStyle->setPropertyValue("FooterIsOn", uno::makeAny(true));
     }
 
+    const bool bDynamicHeightTop = m_nTopMargin >= 0;
+    if (!bDynamicHeightTop)
+        m_nTopMargin = std::abs(m_nTopMargin);
     sal_Int32 nTopMargin = m_nTopMargin;
     sal_Int32 nHeaderTop = m_nHeaderTop;
     if ( HasHeader( bFirstPage ) )
@@ -938,13 +941,13 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
     }
 
 
-    if ( m_nTopMargin >= 0 ) //fixed height header -> see WW8Par6.hxx
+    Insert(PROP_HEADER_IS_DYNAMIC_HEIGHT, uno::makeAny(bDynamicHeightTop));
+    Insert(PROP_HEADER_DYNAMIC_SPACING, uno::makeAny(true));
+    Insert(PROP_HEADER_BODY_DISTANCE,
+           uno::makeAny(nHeaderTop - MIN_HEAD_FOOT_HEIGHT)); // ULSpace.Top()
+    Insert(PROP_HEADER_HEIGHT, uno::makeAny(nHeaderTop));
+    if (bDynamicHeightTop) // dynamic height header -> see WW8Par6.hxx
     {
-        Insert( PROP_HEADER_IS_DYNAMIC_HEIGHT, uno::makeAny( true ) );
-        Insert( PROP_HEADER_DYNAMIC_SPACING, uno::makeAny( true ) );
-        Insert( PROP_HEADER_BODY_DISTANCE, uno::makeAny( nHeaderTop - MIN_HEAD_FOOT_HEIGHT ) );// ULSpace.Top()
-        Insert( PROP_HEADER_HEIGHT, uno::makeAny( nHeaderTop ) );
-
         if (bCopyFirstToFollow && HasHeader(/*bFirstPage=*/true))
         {
             m_aFollowPageStyle->setPropertyValue("HeaderDynamicSpacing",
@@ -953,16 +956,10 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
                                                  getProperty(PROP_HEADER_HEIGHT)->second);
         }
     }
-    else
-    {
-        //todo: old filter fakes a frame into the header/footer to support overlapping
-        //current setting is completely wrong!
-        Insert( PROP_HEADER_HEIGHT, uno::makeAny( nHeaderTop ) );
-        Insert( PROP_HEADER_BODY_DISTANCE, uno::makeAny( m_nTopMargin - nHeaderTop ) );
-        Insert( PROP_HEADER_IS_DYNAMIC_HEIGHT, uno::makeAny( false ) );
-        Insert( PROP_HEADER_DYNAMIC_SPACING, uno::makeAny( false ) );
-    }
 
+    const bool bDynamicHeightBottom = m_nBottomMargin >= 0;
+    if (!bDynamicHeightBottom)
+        m_nBottomMargin = std::abs(m_nBottomMargin);
     sal_Int32 nBottomMargin = m_nBottomMargin;
     sal_Int32 nHeaderBottom = m_nHeaderBottom;
     if ( HasFooter( bFirstPage ) )
@@ -976,13 +973,12 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
             nHeaderBottom = MIN_HEAD_FOOT_HEIGHT;
     }
 
-    if ( m_nBottomMargin >= 0 ) //fixed height footer -> see WW8Par6.hxx
+    Insert(PROP_FOOTER_IS_DYNAMIC_HEIGHT, uno::makeAny(bDynamicHeightBottom));
+    Insert(PROP_FOOTER_DYNAMIC_SPACING, uno::makeAny(true));
+    Insert(PROP_FOOTER_BODY_DISTANCE, uno::makeAny(nHeaderBottom - MIN_HEAD_FOOT_HEIGHT));
+    Insert(PROP_FOOTER_HEIGHT, uno::makeAny(nHeaderBottom));
+    if (bDynamicHeightBottom) // dynamic height footer -> see WW8Par6.hxx
     {
-        Insert( PROP_FOOTER_IS_DYNAMIC_HEIGHT, uno::makeAny( true ) );
-        Insert( PROP_FOOTER_DYNAMIC_SPACING, uno::makeAny( true ) );
-        Insert( PROP_FOOTER_BODY_DISTANCE, uno::makeAny( nHeaderBottom - MIN_HEAD_FOOT_HEIGHT ) );
-        Insert( PROP_FOOTER_HEIGHT, uno::makeAny( nHeaderBottom ) );
-
         if (bCopyFirstToFollow && HasFooter(/*bFirstPage=*/true))
         {
             m_aFollowPageStyle->setPropertyValue("FooterDynamicSpacing",
@@ -990,15 +986,6 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
             m_aFollowPageStyle->setPropertyValue("FooterHeight",
                                                  getProperty(PROP_FOOTER_HEIGHT)->second);
         }
-    }
-    else
-    {
-        //todo: old filter fakes a frame into the header/footer to support overlapping
-        //current setting is completely wrong!
-        Insert( PROP_FOOTER_IS_DYNAMIC_HEIGHT, uno::makeAny( false ) );
-        Insert( PROP_FOOTER_DYNAMIC_SPACING, uno::makeAny( false ) );
-        Insert( PROP_FOOTER_HEIGHT, uno::makeAny( m_nBottomMargin - nHeaderBottom ) );
-        Insert( PROP_FOOTER_BODY_DISTANCE, uno::makeAny( nHeaderBottom ) );
     }
 
     //now set the top/bottom margin for the follow page style
