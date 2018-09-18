@@ -863,10 +863,10 @@ void ImpSdrPdfImport::ImportForm(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     FPDFFormObj_GetMatrix(pPageObject, &a, &b, &c, &d, &e, &f);
     mCurMatrix = Matrix(a, b, c, d, e, f);
 
-    const int nCount = FPDFFormObj_CountSubObjects(pPageObject);
+    const int nCount = FPDFFormObj_CountObjects(pPageObject);
     for (int nIndex = 0; nIndex < nCount; ++nIndex)
     {
-        FPDF_PAGEOBJECT pFormObject = FPDFFormObj_GetSubObject(pPageObject, nIndex);
+        FPDF_PAGEOBJECT pFormObject = FPDFFormObj_GetObject(pPageObject, nIndex);
         ImportPdfObject(pFormObject, pTextPage, -1);
     }
 
@@ -896,12 +896,10 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     aTextMatrix.Transform(left, right, top, bottom);
     const tools::Rectangle aRect = PointsToLogic(left, right, top, bottom);
 
-    const int nChars = FPDFTextObj_CountChars(pPageObject) * 2;
-    std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nChars + 1]); // + terminating null
+    const int nChars = FPDFTextObj_GetText(pPageObject, pTextPage, nullptr, 0);
+    std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nChars]);
 
-    unsigned short* pShortText = reinterpret_cast<unsigned short*>(pText.get());
-    const int nActualChars
-        = FPDFTextObj_GetTextProcessed(pPageObject, pTextPage, 0, nChars, pShortText);
+    const int nActualChars = FPDFTextObj_GetText(pPageObject, pTextPage, pText.get(), nChars);
     if (nActualChars <= 0)
     {
         return;
@@ -926,10 +924,11 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
         mbFntDirty = true;
     }
 
-    std::unique_ptr<char[]> pFontName(new char[80 + 1]); // + terminating null
+    const int nFontName = 80 + 1;
+    std::unique_ptr<char[]> pFontName(new char[nFontName]); // + terminating null
     char* pCharFontName = reinterpret_cast<char*>(pFontName.get());
-    int nFontNameChars = FPDFTextObj_GetFontName(pPageObject, pCharFontName);
-    if (nFontNameChars > 0)
+    int nFontNameChars = FPDFTextObj_GetFontName(pPageObject, pCharFontName, nFontName);
+    if (nFontName >= nFontNameChars)
     {
         OUString sFontName = OUString::createFromAscii(pFontName.get());
         if (sFontName != aFnt.GetFamilyName())
@@ -941,9 +940,32 @@ void ImpSdrPdfImport::ImportText(FPDF_PAGEOBJECT pPageObject, FPDF_TEXTPAGE pTex
     }
 
     Color aTextColor(COL_TRANSPARENT);
-    unsigned int nR, nG, nB, nA;
-    if (FPDFTextObj_GetColor(pPageObject, &nR, &nG, &nB, &nA))
-        aTextColor = Color(nR, nG, nB);
+    bool bFill = false;
+    bool bUse = true;
+    switch (FPDFText_GetTextRenderMode(pPageObject))
+    {
+        case FPDF_TEXTRENDERMODE_FILL:
+        case FPDF_TEXTRENDERMODE_FILL_CLIP:
+        case FPDF_TEXTRENDERMODE_FILL_STROKE:
+        case FPDF_TEXTRENDERMODE_FILL_STROKE_CLIP:
+            bFill = true;
+            break;
+        case FPDF_TEXTRENDERMODE_STROKE:
+        case FPDF_TEXTRENDERMODE_STROKE_CLIP:
+            break;
+        case FPDF_TEXTRENDERMODE_INVISIBLE:
+        case FPDF_TEXTRENDERMODE_CLIP:
+            bUse = false;
+            break;
+    }
+    if (bUse)
+    {
+        unsigned int nR, nG, nB, nA;
+        bool bRet = bFill ? FPDFPageObj_GetFillColor(pPageObject, &nR, &nG, &nB, &nA)
+                          : FPDFPageObj_GetStrokeColor(pPageObject, &nR, &nG, &nB, &nA);
+        if (bRet)
+            aTextColor = Color(nR, nG, nB);
+    }
 
     if (aTextColor != mpVD->GetTextColor())
     {
