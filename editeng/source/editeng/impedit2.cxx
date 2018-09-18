@@ -53,7 +53,7 @@
 #include <com/sun/star/text/CharacterCompressionType.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
 
-
+#include <tools/gen.hxx>
 #include <sal/log.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
@@ -61,7 +61,6 @@
 #include <o3tl/make_unique.hxx>
 #include <comphelper/lok.hxx>
 #include <unotools/configmgr.hxx>
-
 #include <unicode/ubidi.h>
 #include <algorithm>
 #include <memory>
@@ -2962,6 +2961,8 @@ bool ImpEditEngine::UpdateFields()
 {
     bool bChanges = false;
     sal_Int32 nParas = GetEditDoc().Count();
+    TriState eIsURL = TRISTATE_INDET;
+
     for ( sal_Int32 nPara = 0; nPara < nParas; nPara++ )
     {
         bool bChangesInPara = false;
@@ -2977,7 +2978,16 @@ bool ImpEditEngine::UpdateFields()
                 std::unique_ptr<EditCharAttribField> pCurrent(new EditCharAttribField(rField));
                 rField.Reset();
 
-                if ( aStatus.MarkFields() )
+                //tdf#66545 No field shadings for URLs
+                if (eIsURL == TRISTATE_INDET) {
+                    if ( const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(rField.GetItem()) )
+                    {
+                        if ( const SvxFieldData* pFieldData = pFieldItem->GetField() )
+                            eIsURL = (dynamic_cast<const SvxURLField* >(pFieldData) != nullptr) ? TRISTATE_TRUE : TRISTATE_FALSE;
+                     }
+                }
+
+                if ( aStatus.MarkFields() && (eIsURL==TRISTATE_FALSE) )
                     rField.GetFieldColor() = GetColorConfig().GetColorValue( svtools::WRITERFIELDSHADINGS ).nColor;
 
                 const OUString aFldValue =
