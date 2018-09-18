@@ -211,4 +211,12 @@
     <string name="UNO_commands_string_parent_value_hint">Parent Value</string>
     <string name="action_exportToPDF">Export To PDF</string>
     <string name="action_print">Print</string>
+    <string name="tabhost_character">Character</string>
+    <string name="tabhost_paragraph">Paragraph</string>
+    <string name="tabhost_insert">Insert</string>
+    <string name="tabhost_style">Style</string>
+    <string name="alert_ok">OK</string>
+    <string name="alert_cancel">Cancel</string>
+    <string name="unable_to_go_further">Unable to go further.</string>
+    <string name="current_uno_command">Current UNO command</string>
 </resources>
