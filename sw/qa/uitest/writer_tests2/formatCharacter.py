@@ -34,13 +34,10 @@ class formatCharacter(UITestCase):
         xLangFontCTL = xDialog.getChild("ctllanglb")
 
         xSizeFont.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xSizeFont.executeAction("BACKSPACE", tuple())
         xSizeFont.executeAction("TYPE", mkPropertyValues({"TEXT":"18"}))    #set font size 18
         xSizeFontEast.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xSizeFontEast.executeAction("BACKSPACE", tuple())
         xSizeFontEast.executeAction("TYPE", mkPropertyValues({"TEXT":"18"}))    #set font size 18
         xSizeFontCTL.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xSizeFontCTL.executeAction("BACKSPACE", tuple())
         xSizeFontCTL.executeAction("TYPE", mkPropertyValues({"TEXT":"18"}))    #set font size 18
         select_pos(xLangFont, "0")
         select_pos(xLangFontEast, "0")

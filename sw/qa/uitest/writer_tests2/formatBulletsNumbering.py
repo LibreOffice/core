@@ -129,7 +129,6 @@ class formatBulletsNumbering(UITestCase):
         xcharstyle.executeAction("SELECT", actionProps2)
         xprefix.executeAction("TYPE", mkPropertyValues({"TEXT":"o"}))
         xsuffix.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xsuffix.executeAction("BACKSPACE", tuple())
         xsuffix.executeAction("TYPE", mkPropertyValues({"TEXT":"a"}))
         xallsame.executeAction("CLICK", tuple())
 
