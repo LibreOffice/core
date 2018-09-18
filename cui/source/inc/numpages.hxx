@@ -48,7 +48,6 @@ class SvxNumberingPreview : public vcl::Window
 {
     const SvxNumRule*   pActNum;
     vcl::Font           aStdFont;
-    bool                bPosition;
     sal_uInt16          nActLevel;
 
     protected:

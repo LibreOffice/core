@@ -97,8 +97,7 @@ CalcSettingsModel::CalcSettingsModel() :
     mbCalcCompleted( true ),
     mbFullPrecision( true ),
     mbIterate( false ),
-    mbConcurrent( true ),
-    mbUseNlr( false )
+    mbConcurrent( true )
 {
 }
 
@@ -233,7 +232,7 @@ void WorkbookSettings::finalizeImport()
     aPropSet.setProperty( PROP_IterationCount,     maCalcSettings.mnIterateCount );
     aPropSet.setProperty( PROP_IterationEpsilon,   maCalcSettings.mfIterateDelta );
     aPropSet.setProperty( PROP_CalcAsShown,        !maCalcSettings.mbFullPrecision );
-    aPropSet.setProperty( PROP_LookUpLabels,       maCalcSettings.mbUseNlr );
+    aPropSet.setProperty( PROP_LookUpLabels,       false );
 
     Reference< XNumberFormatsSupplier > xNumFmtsSupp( getDocument(), UNO_QUERY );
     if( xNumFmtsSupp.is() )

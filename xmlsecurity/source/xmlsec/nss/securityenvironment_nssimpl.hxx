@@ -60,8 +60,6 @@ private:
 
         CERTCertDBHandle*                   m_pHandler ;
         std::list< PK11SymKey* >            m_tSymKeyList ;
-        std::list< SECKEYPublicKey* >       m_tPubKeyList ;
-        std::list< SECKEYPrivateKey* >      m_tPriKeyList ;
 
     public:
         SecurityEnvironment_NssImpl();

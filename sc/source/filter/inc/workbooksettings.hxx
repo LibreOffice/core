@@ -75,7 +75,6 @@ struct CalcSettingsModel
     bool                mbFullPrecision;        /// True = use full precision on calculation.
     bool                mbIterate;              /// True = allow circular references.
     bool                mbConcurrent;           /// True = concurrent calculation enabled.
-    bool                mbUseNlr;               /// True = use natural language references in formulas.
 
     explicit            CalcSettingsModel();
 };

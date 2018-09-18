@@ -65,7 +65,6 @@ ClientBox::ClientBox( vcl::Window* pParent, WinBits nStyle ) :
     m_bHasActive( false ),
     m_bNeedsRecalc( true ),
     m_bAdjustActive( false ),
-    m_bInDelete( false ),
     m_nActive( 0 ),
     m_nTopIndex( 0 ),
     m_nActiveHeight( 0 ),
@@ -118,11 +117,6 @@ ClientBox::~ClientBox()
 
 void ClientBox::dispose()
 {
-    if ( ! m_bInDelete )
-        DeleteRemoved();
-
-    m_bInDelete = true;
-
     m_vEntries.clear();
 
     m_xRemoveListener.clear();
@@ -183,20 +177,6 @@ void ClientBox::CalcActiveHeight()
         aPos.AdjustY(m_nActiveHeight - m_nStdHeight );
 
     return ::tools::Rectangle( aPos, aSize );
-}
-
-void ClientBox::DeleteRemoved()
-{
-    const ::osl::MutexGuard aGuard( m_entriesMutex );
-
-    m_bInDelete = true;
-
-    if ( ! m_vRemovedEntries.empty() )
-    {
-        m_vRemovedEntries.clear();
-    }
-
-    m_bInDelete = false;
 }
 
 long ClientBox::GetActiveEntryIndex()
@@ -469,9 +449,6 @@ bool ClientBox::HandleCursorKey( sal_uInt16 nKeyCode )
 
 void ClientBox::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle &/*rPaintRect*/)
 {
-    if (!m_bInDelete)
-        DeleteRemoved();
-
     if (m_bNeedsRecalc)
         RecalcAll();
 
@@ -576,9 +553,6 @@ void ClientBox::MouseButtonDown( const MouseEvent& rMEvt )
 
 bool ClientBox::EventNotify( NotifyEvent& rNEvt )
 {
-    if ( !m_bInDelete )
-        DeleteRemoved();
-
     bool bHandled = false;
 
     if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )

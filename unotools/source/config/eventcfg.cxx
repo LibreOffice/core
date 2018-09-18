@@ -85,7 +85,6 @@ class GlobalEventConfig_Impl : public utl::ConfigItem
 {
 private:
     EventBindingHash m_eventBindingHash;
-    FrameVector m_lFrames;
     SupportedEventsVector m_supportedEvents;
 
     void initBindingInfo();
@@ -154,20 +153,6 @@ void GlobalEventConfig_Impl::Notify( const Sequence< OUString >& )
     MutexGuard aGuard( GlobalEventConfig::GetOwnStaticMutex() );
 
     initBindingInfo();
-
-    // don't forget to update all existing frames and her might cached dispatch objects!
-    // But look for already killed frames. We hold weak references instead of hard ones ...
-    for (FrameVector::iterator pIt  = m_lFrames.begin(); pIt != m_lFrames.end(); )
-    {
-        css::uno::Reference< css::frame::XFrame > xFrame(pIt->get(), css::uno::UNO_QUERY);
-        if (xFrame.is())
-        {
-            xFrame->contextChanged();
-            ++pIt;
-        }
-        else
-            pIt = m_lFrames.erase(pIt);
-    }
 }
 
 //  public method
