@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">-99.989999999999995</property>
     <property name="upper">99.989999999999995</property>
@@ -19,6 +18,36 @@
   <object class="GtkAdjustment" id="adjustment3">
     <property name="lower">0.050000000000000003</property>
     <property name="upper">200</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment4">
+    <property name="lower">0.050000000000000003</property>
+    <property name="upper">200</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment5">
+    <property name="lower">1</property>
+    <property name="upper">9999</property>
+    <property name="step_increment">10</property>
+    <property name="page_increment">100</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment6">
+    <property name="lower">-99.989999999999995</property>
+    <property name="upper">99.989999999999995</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment7">
+    <property name="lower">-99.989999999999995</property>
+    <property name="upper">99.989999999999995</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment8">
+    <property name="lower">-99.989999999999995</property>
+    <property name="upper">99.989999999999995</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
@@ -93,10 +122,10 @@
                       <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="croppage|label2">_Left:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">left:0.00cm</property>
+                        <property name="mnemonic_widget">left</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -104,9 +133,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="left:0.00cm">
+                      <object class="GtkSpinButton" id="left">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
                       </object>
@@ -119,10 +149,10 @@
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="croppage|label3">_Right:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">right:0.00cm</property>
+                        <property name="mnemonic_widget">right</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -130,10 +160,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="right:0.00cm">
+                      <object class="GtkSpinButton" id="right">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="adjustment">adjustment1</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustment7</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -157,10 +188,10 @@
                       <object class="GtkLabel" id="label4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="croppage|label4">_Top:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">top:0.00cm</property>
+                        <property name="mnemonic_widget">top</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -171,10 +202,10 @@
                       <object class="GtkLabel" id="label5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="croppage|label5">_Bottom:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">bottom:0.00cm</property>
+                        <property name="mnemonic_widget">bottom</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -182,10 +213,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="top:0.00cm">
+                      <object class="GtkSpinButton" id="top">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="adjustment">adjustment1</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustment6</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -194,10 +226,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="bottom:0.00cm">
+                      <object class="GtkSpinButton" id="bottom">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="adjustment">adjustment1</property>
+                        <property name="activates_default">True</property>
+                        <property name="adjustment">adjustment8</property>
                         <property name="digits">2</property>
                       </object>
                       <packing>
@@ -253,10 +286,10 @@
                   <object class="GtkLabel" id="label6">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="croppage|label6">_Width:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">widthzoom:0%</property>
+                    <property name="mnemonic_widget">widthzoom</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -264,9 +297,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="widthzoom:0%">
+                  <object class="GtkSpinButton" id="widthzoom">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
                     <property name="adjustment">adjustment2</property>
                   </object>
                   <packing>
@@ -278,10 +312,10 @@
                   <object class="GtkLabel" id="label7">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="croppage|label7">_Height:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">heightzoom:0%</property>
+                    <property name="mnemonic_widget">heightzoom</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -289,10 +323,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="heightzoom:0%">
+                  <object class="GtkSpinButton" id="heightzoom">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">adjustment2</property>
+                    <property name="activates_default">True</property>
+                    <property name="adjustment">adjustment5</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -341,10 +376,10 @@
                   <object class="GtkLabel" id="label8">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="croppage|label8">_Width:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">width:0.00cm</property>
+                    <property name="mnemonic_widget">width</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -352,9 +387,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="width:0.00cm">
+                  <object class="GtkSpinButton" id="width">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
                     <property name="adjustment">adjustment3</property>
                     <property name="digits">2</property>
                   </object>
@@ -367,10 +403,10 @@
                   <object class="GtkLabel" id="label9">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="croppage|label9">_Height:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">height:0.00cm</property>
+                    <property name="mnemonic_widget">height</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -378,10 +414,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="height:0.00cm">
+                  <object class="GtkSpinButton" id="height">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">adjustment3</property>
+                    <property name="activates_default">True</property>
+                    <property name="adjustment">adjustment4</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
@@ -415,11 +452,28 @@
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
         <child>
-          <object class="cuilo-SvxCropExample" id="preview:border">
+          <object class="GtkScrolledWindow">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="hexpand">True</property>
+            <property name="hscrollbar_policy">never</property>
+            <property name="vscrollbar_policy">never</property>
+            <property name="shadow_type">in</property>
+            <child>
+              <object class="GtkViewport">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkDrawingArea" id="preview">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="hexpand">True</property>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -488,14 +542,14 @@
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">
     <widgets>
-      <widget name="left:0.00cm"/>
-      <widget name="right:0.00cm"/>
-      <widget name="top:0.00cm"/>
-      <widget name="bottom:0.00cm"/>
-      <widget name="widthzoom:0%"/>
-      <widget name="heightzoom:0%"/>
-      <widget name="width:0.00cm"/>
-      <widget name="height:0.00cm"/>
+      <widget name="left"/>
+      <widget name="right"/>
+      <widget name="top"/>
+      <widget name="bottom"/>
+      <widget name="widthzoom"/>
+      <widget name="heightzoom"/>
+      <widget name="width"/>
+      <widget name="height"/>
     </widgets>
   </object>
 </interface>
