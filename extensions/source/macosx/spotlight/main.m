@@ -64,11 +64,11 @@ typedef struct
 //    Forward declaration for the IUnknown implementation.
 //
 
-MetadataImporterPluginType  *AllocMetadataImporterPluginType(CFUUIDRef inFactoryID);
-void                      DeallocMetadataImporterPluginType(MetadataImporterPluginType *thisInstance);
-HRESULT                   MetadataImporterQueryInterface(void *thisInstance,REFIID iid,LPVOID *ppv);
-ULONG                     MetadataImporterPluginAddRef(void *thisInstance);
-ULONG                     MetadataImporterPluginRelease(void *thisInstance);
+static MetadataImporterPluginType  *AllocMetadataImporterPluginType(CFUUIDRef inFactoryID);
+static void                      DeallocMetadataImporterPluginType(MetadataImporterPluginType *thisInstance);
+static HRESULT                   MetadataImporterQueryInterface(void *thisInstance,REFIID iid,LPVOID *ppv);
+static ULONG                     MetadataImporterPluginAddRef(void *thisInstance);
+static ULONG                     MetadataImporterPluginRelease(void *thisInstance);
 //    testInterfaceFtbl    definition
 //    The TestInterface function table.
 //

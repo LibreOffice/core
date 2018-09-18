@@ -75,7 +75,7 @@ Entry const CtrlIdToResIdTable[] = {
 
 const sal_Int32 SIZE_TABLE = SAL_N_ELEMENTS( CtrlIdToResIdTable );
 
-const char* CtrlIdToResId(sal_Int32 aControlId)
+static const char* CtrlIdToResId(sal_Int32 aControlId)
 {
     const char *pResId = nullptr;
 
@@ -93,7 +93,7 @@ const char* CtrlIdToResId(sal_Int32 aControlId)
 
 namespace CResourceProvider_Impl
 {
-    NSString* getResString(sal_Int16 aId)
+    static NSString* getResString(sal_Int16 aId)
     {
         OUString aResString;
 

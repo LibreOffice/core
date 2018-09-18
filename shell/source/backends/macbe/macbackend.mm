@@ -156,7 +156,7 @@ MacOSXBackend* MacOSXBackend::createInstance()
     return new MacOSXBackend;
 }
 
-rtl::OUString CFStringToOUString(const CFStringRef sOrig) {
+static rtl::OUString CFStringToOUString(const CFStringRef sOrig) {
     CFRetain(sOrig);
 
     CFIndex nStringLen = CFStringGetLength(sOrig)+1;
@@ -171,7 +171,7 @@ rtl::OUString CFStringToOUString(const CFStringRef sOrig) {
     return rtl::OUString::createFromAscii(sBuffer);
 }
 
-rtl::OUString GetOUString( NSString* pStr )
+static rtl::OUString GetOUString( NSString* pStr )
 {
     if( ! pStr )
         return rtl::OUString();

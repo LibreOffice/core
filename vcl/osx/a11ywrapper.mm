@@ -972,7 +972,7 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     return hit;
 }
 
-Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
+static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
                                                  Reference < XAccessibleContext > const & rxAccessibleContext ) {
     Reference < XAccessibleContext > hitChild;
     Reference < XAccessibleContext > emptyReference;

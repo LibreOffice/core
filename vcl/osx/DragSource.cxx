@@ -54,12 +54,12 @@ NSView* DragSource::g_DragSourceView = nil;
 bool DragSource::g_DropSuccessSet = false;
 bool DragSource::g_DropSuccess = false;
 
-OUString dragSource_getImplementationName()
+static OUString dragSource_getImplementationName()
 {
   return OUString("com.sun.star.comp.datatransfer.dnd.OleDragSource_V1");
 }
 
-Sequence<OUString> dragSource_getSupportedServiceNames()
+static Sequence<OUString> dragSource_getSupportedServiceNames()
 {
   return { OUString("com.sun.star.datatransfer.dnd.OleDragSource") };
 }

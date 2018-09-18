@@ -284,7 +284,7 @@ static bool findDataStream(NSFileHandle *file, CentralDirectoryEntry *entry, NSS
     return true;
 }
 
-NSData *getUncompressedData(NSFileHandle *file, NSString *name)
+static NSData *getUncompressedData(NSFileHandle *file, NSString *name)
 {
     CentralDirectoryEntry entry;
     if (!findDataStream(file, &entry, name))
