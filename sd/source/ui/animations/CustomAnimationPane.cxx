@@ -2385,7 +2385,12 @@ void CustomAnimationPane::moveSelection( bool bUp )
                 if( aInsertPos != rEffectSequence.end() )
                 {
                     ++aInsertPos;
-                    while( (aInsertPos != rEffectSequence.end()) && !mpCustomAnimationList->isExpanded(*aInsertPos))
+                    // Advance over rolled-up (un-expanded) items, unless we just moved it there.
+                    while( (aInsertPos != rEffectSequence.end())
+                        && !mpCustomAnimationList->isExpanded(*aInsertPos)
+                        && (std::find(maListSelection.begin(), maListSelection.end(), *aInsertPos)
+                                == maListSelection.end())
+                    )
                         ++aInsertPos;
 
                     rEffectSequence.insert( aInsertPos, pEffect );
