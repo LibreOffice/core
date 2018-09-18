@@ -158,7 +158,7 @@ public:
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
 };
 
-class EmbossControl : public RectCtl
+class EmbossControl : public SvxRectCtl
 {
 private:
     Link<LinkParamNone*, void> maModifyHdl;
@@ -166,7 +166,7 @@ private:
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 public:
     EmbossControl()
-        : RectCtl(nullptr)
+        : SvxRectCtl(nullptr)
     {
     }
 

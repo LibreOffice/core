@@ -40,7 +40,7 @@ private:
 
     bool            bPositionModified;
 
-    RectCtl m_aCtlPosition;
+    SvxRectCtl m_aCtlPosition;
     SvxXMeasurePreview  m_aCtlPreview;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldLineDist;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldHelplineOverhang;

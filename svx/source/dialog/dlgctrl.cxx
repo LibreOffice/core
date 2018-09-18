@@ -60,7 +60,7 @@ using namespace ::com::sun::star::accessibility;
 // Control for display and selection of the corner points and
 // mid point of an object
 
-BitmapEx& RectCtl::GetRectBitmap()
+BitmapEx& SvxRectCtl::GetRectBitmap()
 {
     if( !pBitmap )
         InitRectBitmap();
@@ -68,7 +68,7 @@ BitmapEx& RectCtl::GetRectBitmap()
     return *pBitmap;
 }
 
-RectCtl::RectCtl(SvxTabPage* pPage, RectPoint eRpt, sal_uInt16 nBorder)
+SvxRectCtl::SvxRectCtl(SvxTabPage* pPage, RectPoint eRpt, sal_uInt16 nBorder)
     : m_pPage(pPage)
     , nBorderWidth(Application::GetDefaultDevice()->LogicToPixel(Size(nBorder, 0), MapMode(MapUnit::Map100thMM)).Width())
     , eRP(eRpt)
@@ -78,7 +78,7 @@ RectCtl::RectCtl(SvxTabPage* pPage, RectPoint eRpt, sal_uInt16 nBorder)
 {
 }
 
-void RectCtl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+void SvxRectCtl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     CustomWidgetController::SetDrawingArea(pDrawingArea);
     Size aSize(pDrawingArea->get_approximate_digit_width() * 25,
@@ -87,25 +87,25 @@ void RectCtl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     Resize_Impl(aSize);
 }
 
-void RectCtl::SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder)
+void SvxRectCtl::SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder)
 {
     nBorderWidth = Application::GetDefaultDevice()->LogicToPixel(Size(nBorder, 0), MapMode(MapUnit::Map100thMM)).Width();
     eDefRP = eRpt;
     Resize();
 }
 
-RectCtl::~RectCtl()
+SvxRectCtl::~SvxRectCtl()
 {
     pBitmap.reset();
     pAccContext.clear();
 }
 
-void RectCtl::Resize()
+void SvxRectCtl::Resize()
 {
     Resize_Impl(GetOutputSizePixel());
 }
 
-void RectCtl::Resize_Impl(const Size &rSize)
+void SvxRectCtl::Resize_Impl(const Size &rSize)
 {
     aPtLT = Point( 0 + nBorderWidth,  0 + nBorderWidth );
     aPtMT = Point( rSize.Width() / 2, 0 + nBorderWidth );
@@ -123,7 +123,7 @@ void RectCtl::Resize_Impl(const Size &rSize)
     StyleUpdated();
 }
 
-void RectCtl::InitRectBitmap()
+void SvxRectCtl::InitRectBitmap()
 {
     pBitmap.reset();
 
@@ -170,13 +170,13 @@ void RectCtl::InitRectBitmap()
     pBitmap->Replace( aColorAry1, aColorAry2, 7 );
 }
 
-void RectCtl::StyleUpdated()
+void SvxRectCtl::StyleUpdated()
 {
     pBitmap.reset(); // forces new creating of bitmap
     CustomWidgetController::StyleUpdated();
 }
 
-void RectCtl::InitSettings(vcl::RenderContext& rRenderContext)
+void SvxRectCtl::InitSettings(vcl::RenderContext& rRenderContext)
 {
     svtools::ColorConfig aColorConfig;
     Color aTextColor(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor);
@@ -187,9 +187,9 @@ void RectCtl::InitSettings(vcl::RenderContext& rRenderContext)
 
 // The clicked rectangle (3 x 3) is determined and the parent (dialog)
 // is notified that the item was changed
-void RectCtl::MouseButtonDown(const MouseEvent& rMEvt)
+void SvxRectCtl::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // CompletelyDisabled() added to have a disabled state for RectCtl
+    // CompletelyDisabled() added to have a disabled state for SvxRectCtl
     if(!IsCompletelyDisabled())
     {
         aPtNew = GetApproxLogPtFromPixPt( rMEvt.GetPosPixel() );
@@ -201,9 +201,9 @@ void RectCtl::MouseButtonDown(const MouseEvent& rMEvt)
     }
 }
 
-bool RectCtl::KeyInput(const KeyEvent& rKeyEvt)
+bool SvxRectCtl::KeyInput(const KeyEvent& rKeyEvt)
 {
-    // CompletelyDisabled() added to have a disabled state for RectCtl
+    // CompletelyDisabled() added to have a disabled state for SvxRectCtl
     if (IsCompletelyDisabled())
         return false;
 
@@ -285,7 +285,7 @@ bool RectCtl::KeyInput(const KeyEvent& rKeyEvt)
 }
 
 // the control (rectangle with 9 circles)
-void RectCtl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     InitSettings(rRenderContext);
 
@@ -327,7 +327,7 @@ void RectCtl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 
     BitmapEx& rBitmap = GetRectBitmap();
 
-    // CompletelyDisabled() added to have a disabled state for RectCtl
+    // CompletelyDisabled() added to have a disabled state for SvxRectCtl
     if (IsCompletelyDisabled())
     {
         rRenderContext.DrawBitmap(aPtLT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap.GetBitmap());
@@ -357,7 +357,7 @@ void RectCtl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
     }
 
     // draw active button, avoid center pos for angle
-    // CompletelyDisabled() added to have a disabled state for RectCtl
+    // CompletelyDisabled() added to have a disabled state for SvxRectCtl
     if (!IsCompletelyDisabled())
     {
         if (IsEnabled())
@@ -370,7 +370,7 @@ void RectCtl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
     }
 }
 
-tools::Rectangle RectCtl::GetFocusRect()
+tools::Rectangle SvxRectCtl::GetFocusRect()
 {
     tools::Rectangle aRet;
     if (HasFocus())
@@ -380,7 +380,7 @@ tools::Rectangle RectCtl::GetFocusRect()
 
 // Convert RectPoint Point
 
-const Point& RectCtl::GetPointFromRP( RectPoint _eRP) const
+const Point& SvxRectCtl::GetPointFromRP( RectPoint _eRP) const
 {
     switch( _eRP )
     {
@@ -397,7 +397,7 @@ const Point& RectCtl::GetPointFromRP( RectPoint _eRP) const
     return aPtMM; // default
 }
 
-Point RectCtl::SetActualRPWithoutInvalidate( RectPoint eNewRP )
+Point SvxRectCtl::SetActualRPWithoutInvalidate( RectPoint eNewRP )
 {
     Point aPtLast = aPtNew;
     aPtNew = GetPointFromRP( eNewRP );
@@ -418,7 +418,7 @@ Point RectCtl::SetActualRPWithoutInvalidate( RectPoint eNewRP )
     return aPtLast;
 }
 
-void RectCtl::GetFocus()
+void SvxRectCtl::GetFocus()
 {
     Invalidate();
 
@@ -429,12 +429,12 @@ void RectCtl::GetFocus()
     }
 }
 
-void RectCtl::LoseFocus()
+void SvxRectCtl::LoseFocus()
 {
     Invalidate();
 }
 
-Point RectCtl::GetApproxLogPtFromPixPt( const Point& rPt ) const
+Point SvxRectCtl::GetApproxLogPtFromPixPt( const Point& rPt ) const
 {
     Point   aPt = rPt;
     long    x;
@@ -472,7 +472,7 @@ Point RectCtl::GetApproxLogPtFromPixPt( const Point& rPt ) const
 
 // Converts Point in RectPoint
 
-RectPoint RectCtl::GetRPFromPoint( Point aPt, bool bRTL ) const
+RectPoint SvxRectCtl::GetRPFromPoint( Point aPt, bool bRTL ) const
 {
     RectPoint rPoint = RectPoint::MM;  // default
 
@@ -490,7 +490,7 @@ RectPoint RectCtl::GetRPFromPoint( Point aPt, bool bRTL ) const
 
 // Resets to the original state of the control
 
-void RectCtl::Reset()
+void SvxRectCtl::Reset()
 {
     aPtNew = GetPointFromRP( eDefRP );
     eRP = eDefRP;
@@ -500,7 +500,7 @@ void RectCtl::Reset()
 // Returns the currently selected RectPoint
 
 
-void RectCtl::SetActualRP( RectPoint eNewRP )
+void SvxRectCtl::SetActualRP( RectPoint eNewRP )
 {
     SetActualRPWithoutInvalidate(eNewRP);
 
@@ -511,7 +511,7 @@ void RectCtl::SetActualRP( RectPoint eNewRP )
         pAccContext->selectChild( eNewRP /* MT, bFireFocus */ );
 }
 
-void RectCtl::SetState( CTL_STATE nState )
+void SvxRectCtl::SetState( CTL_STATE nState )
 {
     m_nState = nState;
 
@@ -531,13 +531,13 @@ void RectCtl::SetState( CTL_STATE nState )
         m_pPage->PointChanged(GetDrawingArea(), eRP);
 }
 
-tools::Rectangle RectCtl::CalculateFocusRectangle() const
+tools::Rectangle SvxRectCtl::CalculateFocusRectangle() const
 {
     Size        aDstBtnSize(15, 15);
     return tools::Rectangle( aPtNew - Point( aDstBtnSize.Width() >> 1, aDstBtnSize.Height() >> 1 ), aDstBtnSize );
 }
 
-tools::Rectangle RectCtl::CalculateFocusRectangle( RectPoint eRectPoint ) const
+tools::Rectangle SvxRectCtl::CalculateFocusRectangle( RectPoint eRectPoint ) const
 {
     tools::Rectangle   aRet;
     RectPoint  eOldRectPoint = GetActualRP();
@@ -546,7 +546,7 @@ tools::Rectangle RectCtl::CalculateFocusRectangle( RectPoint eRectPoint ) const
         aRet = CalculateFocusRectangle();
     else
     {
-        RectCtl* pThis = const_cast<RectCtl*>(this);
+        SvxRectCtl* pThis = const_cast<SvxRectCtl*>(this);
 
         pThis->SetActualRPWithoutInvalidate( eRectPoint );      // no invalidation because it's only temporary!
         aRet = CalculateFocusRectangle();
@@ -557,19 +557,19 @@ tools::Rectangle RectCtl::CalculateFocusRectangle( RectPoint eRectPoint ) const
     return aRet;
 }
 
-Reference< XAccessible > RectCtl::CreateAccessible()
+Reference< XAccessible > SvxRectCtl::CreateAccessible()
 {
-    pAccContext = new RectCtlAccessibleContext(this);
+    pAccContext = new SvxRectCtlAccessibleContext(this);
     return pAccContext.get();
 }
 
-RectPoint RectCtl::GetApproxRPFromPixPt( const css::awt::Point& r ) const
+RectPoint SvxRectCtl::GetApproxRPFromPixPt( const css::awt::Point& r ) const
 {
     return GetRPFromPoint( GetApproxLogPtFromPixPt( Point( r.X, r.Y ) ) );
 }
 
-// CompletelyDisabled() added to have a disabled state for RectCtl
-void RectCtl::DoCompletelyDisable(bool bNew)
+// CompletelyDisabled() added to have a disabled state for SvxRectCtl
+void SvxRectCtl::DoCompletelyDisable(bool bNew)
 {
     mbCompleteDisable = bNew;
     Invalidate();
