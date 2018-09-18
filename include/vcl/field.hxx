@@ -154,7 +154,6 @@ public:
     void                    SetUserValue( sal_Int64 nNewValue );
     virtual void            SetValue( sal_Int64 nNewValue );
     sal_Int64               GetValue() const;
-    sal_Int64               GetSavedIntValue() const;
     virtual OUString        CreateFieldText( sal_Int64 nValue ) const;
     bool                    IsValueModified() const;
 

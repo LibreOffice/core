@@ -75,8 +75,6 @@ class Attr {
 public:
     explicit Attr (const Reference< XAttributeList > & attr);
     OUString getValueByName (const sal_Char *str) const;
-    sal_Int32 getLength() const;
-    const OUString& getTypeByIndex (sal_Int32 idx) const;
     const OUString& getValueByIndex (sal_Int32 idx) const ;
 };
 

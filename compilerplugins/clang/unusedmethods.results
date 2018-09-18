@@ -46,8 +46,6 @@ connectivity/source/inc/OTypeInfo.hxx:46
     _Bool connectivity::OTypeInfo::operator==(const struct connectivity::OTypeInfo &) const
 connectivity/source/inc/OTypeInfo.hxx:47
     _Bool connectivity::OTypeInfo::operator!=(const struct connectivity::OTypeInfo &) const
-cui/source/inc/numpages.hxx:62
-    void SvxNumberingPreview::SetPositionMode()
 dbaccess/source/filter/hsqldb/fbalterparser.hxx:20
     void dbahsql::FbAlterStmtParser::ensureProperTableLengths() const
 dbaccess/source/filter/hsqldb/parseschema.hxx:82
@@ -112,6 +110,10 @@ hwpfilter/source/mzstring.h:101
     class MzString & MzString::operator<<(long)
 hwpfilter/source/mzstring.h:102
     class MzString & MzString::operator<<(short)
+i18npool/source/localedata/LocaleNode.hxx:78
+    int Attr::getLength() const
+i18npool/source/localedata/LocaleNode.hxx:79
+    const class rtl::OUString & Attr::getTypeByIndex(int) const
 include/basegfx/color/bcolormodifier.hxx:76
     _Bool basegfx::BColorModifier::operator!=(const class basegfx::BColorModifier &) const
 include/basegfx/curve/b2dcubicbezier.hxx:52
@@ -560,8 +562,20 @@ include/svl/itempool.hxx:196
     void SfxItemPool::dumpAsXml(struct _xmlTextWriter *) const
 include/svtools/ctrlbox.hxx:208
     long LineListBox::GetWidth() const
-include/svtools/ctrlbox.hxx:220
-    int LineListBox::GetEntryPos(enum SvxBorderLineStyle) const
+include/svtools/ctrlbox.hxx:418
+    void FontStyleBox::Fill(const class rtl::OUString &,const class FontList *)
+include/svtools/ctrlbox.hxx:477
+    void FontSizeBox::EnableRelativeMode(unsigned short,unsigned short,unsigned short)
+include/svtools/ctrlbox.hxx:479
+    void FontSizeBox::EnablePtRelativeMode(short,short,short)
+include/svtools/ctrlbox.hxx:481
+    _Bool FontSizeBox::IsRelativeMode() const
+include/svtools/ctrlbox.hxx:483
+    _Bool FontSizeBox::IsRelative() const
+include/svtools/ctrlbox.hxx:484
+    void FontSizeBox::SetPtRelative(_Bool)
+include/svtools/ctrlbox.hxx:486
+    _Bool FontSizeBox::IsPtRelative() const
 include/svtools/dialogcontrolling.hxx:167
     void svt::ControlDependencyManager::enableOnCheckMark(class CheckBox &,class vcl::Window &,class vcl::Window &)
 include/svx/ClassificationEditView.hxx:42
@@ -572,18 +586,38 @@ include/svx/ClassificationField.hxx:48
     const class rtl::OUString & svx::ClassificationResult::getDisplayText() const
 include/svx/ClassificationField.hxx:53
     _Bool svx::ClassificationResult::operator==(const class svx::ClassificationResult &) const
+include/svx/fntctrl.hxx:83
+    void SvxFontPrevWindow::SetFromItemSet(const class SfxItemSet &,_Bool)
 include/svx/framelink.hxx:201
     _Bool operator>(const class svx::frame::Style &,const class svx::frame::Style &)
 include/svx/framelink.hxx:238
     _Bool svx::frame::StyleVectorCombination::operator<(const class svx::frame::StyleVectorCombination &) const
+include/svx/langbox.hxx:85
+    void SvxLanguageBoxBase::SetNoSelectionLBB()
+include/svx/langbox.hxx:86
+    void SvxLanguageBoxBase::HideLBB()
+include/svx/langbox.hxx:87
+    void SvxLanguageBoxBase::DisableLBB()
+include/svx/langbox.hxx:88
+    void SvxLanguageBoxBase::SaveValueLBB()
+include/svx/langbox.hxx:89
+    int SvxLanguageBoxBase::GetSelectedEntryPosLBB() const
+include/svx/langbox.hxx:90
+    void * SvxLanguageBoxBase::GetEntryDataLBB(int) const
+include/svx/langbox.hxx:91
+    int SvxLanguageBoxBase::GetSavedValueLBB() const
+include/svx/langbox.hxx:209
+    enum SvxLanguageComboBox::EditedAndValid SvxLanguageComboBox::GetEditedAndValid() const
+include/svx/langbox.hxx:210
+    int SvxLanguageComboBox::SaveEditedAsEntry()
 include/svx/svdlayer.hxx:75
     _Bool SdrLayer::operator==(const class SdrLayer &) const
 include/svx/svdpage.hxx:105
     class SdrModel & SdrObjList::getSdrModelFromSdrObjList() const
 include/svx/svdpntv.hxx:462
     _Bool SdrPaintView::IsSwapAsynchron() const
-include/svx/SvxPresetListBox.hxx:41
-    void SvxPresetListBox::FillPresetListBoxImpl(type-parameter-?-? &,unsigned int)
+include/svx/SvxPresetListBox.hxx:44
+    const class Size & SvxPresetListBox::GetIconSize() const
 include/svx/xpoly.hxx:82
     _Bool XPolygon::operator==(const class XPolygon &) const
 include/tools/bigint.hxx:86
@@ -674,6 +708,8 @@ include/vcl/errcode.hxx:89
     _Bool ErrCode::operator>(const class ErrCode &) const
 include/vcl/errcode.hxx:90
     _Bool ErrCode::operator>=(const class ErrCode &) const
+include/vcl/field.hxx:157
+    long NumericFormatter::GetSavedIntValue() const
 include/vcl/gdimtf.hxx:111
     _Bool GDIMetaFile::operator!=(const class GDIMetaFile &) const
 include/vcl/gradient.hxx:104
@@ -754,43 +790,43 @@ include/vcl/weld.hxx:171
     class rtl::OUString weld::Notebook::get_tab_label_text(const class rtl::OString &) const
 include/vcl/weld.hxx:197
     struct SystemEnvData weld::Window::get_system_data() const
-include/vcl/weld.hxx:333
+include/vcl/weld.hxx:347
     void weld::TreeView::set_top_entry(int)
-include/vcl/weld.hxx:359
+include/vcl/weld.hxx:373
     void weld::TreeView::select_all()
-include/vcl/weld.hxx:486
+include/vcl/weld.hxx:500
     void weld::Entry::signal_insert_text(class rtl::OUString &)
-include/vcl/weld.hxx:555
+include/vcl/weld.hxx:570
     int weld::SpinButton::get_min() const
-include/vcl/weld.hxx:737
+include/vcl/weld.hxx:832
     void weld::MetricSpinButton::set_position(int)
-include/vcl/weld.hxx:784
+include/vcl/weld.hxx:879
     _Bool weld::TimeSpinButton::get_sensitive() const
-include/vcl/weld.hxx:785
+include/vcl/weld.hxx:880
     _Bool weld::TimeSpinButton::get_visible() const
-include/vcl/weld.hxx:786
+include/vcl/weld.hxx:881
     void weld::TimeSpinButton::grab_focus()
-include/vcl/weld.hxx:787
-    _Bool weld::TimeSpinButton::has_focus() const
-include/vcl/weld.hxx:788
-    void weld::TimeSpinButton::show(_Bool)
-include/vcl/weld.hxx:789
-    void weld::TimeSpinButton::hide()
-include/vcl/weld.hxx:790
-    void weld::TimeSpinButton::save_value()
-include/vcl/weld.hxx:791
-    _Bool weld::TimeSpinButton::get_value_changed_from_saved() const
 include/vcl/weld.hxx:882
+    _Bool weld::TimeSpinButton::has_focus() const
+include/vcl/weld.hxx:883
+    void weld::TimeSpinButton::show(_Bool)
+include/vcl/weld.hxx:884
+    void weld::TimeSpinButton::hide()
+include/vcl/weld.hxx:885
+    void weld::TimeSpinButton::save_value()
+include/vcl/weld.hxx:886
+    _Bool weld::TimeSpinButton::get_value_changed_from_saved() const
+include/vcl/weld.hxx:977
     void weld::DrawingArea::connect_key_release(const class Link<const class KeyEvent &, _Bool> &)
-include/vcl/weld.hxx:935
+include/vcl/weld.hxx:1003
     void weld::Menu::set_sensitive(const class rtl::OString &,_Bool)
-include/vcl/weld.hxx:936
+include/vcl/weld.hxx:1004
     void weld::Menu::set_active(const class rtl::OString &,_Bool)
-include/vcl/weld.hxx:945
+include/vcl/weld.hxx:1013
     void weld::SizeGroup::set_mode(enum VclSizeGroupMode)
-include/vcl/weld.hxx:967
+include/vcl/weld.hxx:1035
     class std::unique_ptr<class weld::Window, struct std::default_delete<class weld::Window> > weld::Builder::weld_window(const class rtl::OString &,_Bool)
-include/vcl/weld.hxx:1078
+include/vcl/weld.hxx:1146
     class rtl::OUString weld::MessageDialogController::get_primary_text() const
 include/vcl/window.hxx:430
     const char * ImplDbgCheckWindow(const void *)
@@ -876,13 +912,13 @@ sc/source/core/opencl/formulagroupcl.cxx:1260
     _Bool sc::opencl::ParallelReductionVectorRef::GetEndFixed() const
 sc/source/core/opencl/op_statistical.hxx:204
      sc::opencl::OpGeoMean::OpGeoMean()
-sc/source/core/tool/scmatrix.cxx:2355
+sc/source/core/tool/scmatrix.cxx:2354
     type-parameter-?-? * wrapped_iterator::operator->() const
-sc/source/core/tool/scmatrix.cxx:3361
+sc/source/core/tool/scmatrix.cxx:3360
     const class svl::SharedString & matop::COp::operator()(char,type-parameter-?-?,double,double,const class svl::SharedString &) const
-sc/source/filter/inc/orcusinterface.hxx:79
+sc/source/filter/inc/orcusinterface.hxx:77
      ScOrcusRefResolver::ScOrcusRefResolver(const class ScOrcusGlobalSettings &)
-sc/source/filter/inc/tokstack.hxx:217
+sc/source/filter/inc/tokstack.hxx:214
     _Bool TokenPool::GrowTripel(unsigned short)
 sc/source/filter/inc/xestream.hxx:107
     class XclExpStream & XclExpStream::operator<<(float)
@@ -1172,6 +1208,8 @@ vcl/inc/fontinstance.hxx:81
     void LogicalFontInstance::ReleaseHbFont()
 vcl/inc/fontselect.hxx:49
     _Bool FontSelectPattern::operator!=(const class FontSelectPattern &) const
+vcl/inc/headless/svpgdi.hxx:245
+    void SvpSalGraphics::drawBitmap(const struct SalTwoRect &,struct BitmapBuffer *,enum _cairo_operator)
 vcl/inc/impgraph.hxx:57
     _Bool GraphicID::operator==(const class GraphicID &) const
 vcl/inc/opengl/BufferObject.hxx:50
@@ -1204,19 +1242,9 @@ vcl/inc/PhysicalFontFace.hxx:69
     void PhysicalFontFace::SetBitmapSize(int,int)
 vcl/inc/PhysicalFontFamily.hxx:58
     const class rtl::OUString & PhysicalFontFamily::GetAliasNames() const
-vcl/inc/qt5/Qt5FilePicker.hxx:122
-    void Qt5FilePicker::disposing(const struct com::sun::star::lang::EventObject &)
-vcl/inc/qt5/Qt5FontFace.hxx:42
-    int Qt5FontFace::GetFontTable(const char *,unsigned char *) const
-vcl/inc/qt5/Qt5FontFace.hxx:46
-    _Bool Qt5FontFace::HasChar(unsigned int) const
-vcl/inc/qt5/Qt5Frame.hxx:91
-    void Qt5Frame::TriggerPaintEvent(class QRect)
-vcl/inc/qt5/Qt5Painter.hxx:56
-    void Qt5Painter::update()
 vcl/inc/regionband.hxx:27
     const char * ImplDbgTestRegionBand(const void *)
-vcl/inc/salgdi.hxx:222
+vcl/inc/salgdi.hxx:217
     class basegfx::B2DHomMatrix SalGraphics::mirror(const class basegfx::B2DHomMatrix &,const class OutputDevice *) const
 vcl/inc/salmenu.hxx:46
      SalMenuButtonItem::SalMenuButtonItem()
@@ -1240,6 +1268,12 @@ vcl/inc/unx/gtk/gtkdata.hxx:191
     void GtkSalDisplay::RefreshMenusUnity()
 vcl/inc/unx/gtk/gtkinst.hxx:122
     void GtkDropTarget::fire_dragExit(const struct com::sun::star::datatransfer::dnd::DropTargetEvent &)
+vcl/inc/unx/saldata.hxx:68
+    void X11SalData::initNWF()
+vcl/inc/unx/saldisp.hxx:386
+    class SalXLib * SalDisplay::GetXLib() const
+vcl/inc/unx/salframe.h:187
+    enum SalFrameStyleFlags X11SalFrame::GetStyle() const
 vcl/source/edit/textdat2.hxx:85
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class std::unique_ptr<class TETextPortion, struct std::default_delete<class TETextPortion> > *, class std::__cxx1998::vector<class std::unique_ptr<class TETextPortion, struct std::default_delete<class TETextPortion> >, class std::allocator<class std::unique_ptr<class TETextPortion, struct std::default_delete<class TETextPortion> > > > >, class std::__debug::vector<class std::unique_ptr<class TETextPortion, struct std::default_delete<class TETextPortion> >, class std::allocator<class std::unique_ptr<class TETextPortion, struct std::default_delete<class TETextPortion> > > > > TETextPortionList::begin() const
 vcl/source/edit/textdat2.hxx:87
@@ -1256,10 +1290,6 @@ vcl/source/fontsubset/xlat.hxx:34
     unsigned short TranslateChar15(unsigned short)
 vcl/source/fontsubset/xlat.hxx:35
     unsigned short TranslateChar16(unsigned short)
-vcl/unx/kde4/KDE4FilePicker.hxx:137
-    void KDE4FilePicker::disposing(const struct com::sun::star::lang::EventObject &)
-vcl/unx/kde5/KDE5FilePicker.hxx:149
-    void KDE5FilePicker::disposing(const struct com::sun::star::lang::EventObject &)
 workdir/LexTarget/l10ntools/source/cfglex.cxx:3721
     void YYWarning(const char *)
 workdir/LexTarget/l10ntools/source/xrmlex.cxx:715

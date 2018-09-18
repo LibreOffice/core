@@ -82,14 +82,6 @@ public:
     LanguageType    GetSelectedLanguage() const;
     bool            IsLanguageSelected( const LanguageType eLangType ) const;
 
-    void                SetNoSelectionLBB();
-    void                HideLBB();
-    void                DisableLBB();
-    void                SaveValueLBB();
-    sal_Int32           GetSelectedEntryPosLBB() const;
-    void*               GetEntryDataLBB( sal_Int32  nPos ) const;
-    sal_Int32           GetSavedValueLBB() const;
-
 protected:
     Image                   m_aNotCheckedImage;
     Image                   m_aCheckedImage;
@@ -205,10 +197,6 @@ public:
         Valid,
         Invalid
     };
-
-    EditedAndValid      GetEditedAndValid() const { return meEditedAndValid;}
-    sal_Int32           SaveEditedAsEntry();
-
 
 private:
     sal_Int32       mnSavedValuePos;
