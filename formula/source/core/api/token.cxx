@@ -579,6 +579,18 @@ FormulaTokenArray::~FormulaTokenArray()
     Clear();
 }
 
+void FormulaTokenArray::Finalize()
+{
+    if( nLen && !mbFinalized )
+    {
+        // Add() overallocates, so reallocate to the minimum needed size.
+        std::unique_ptr<FormulaToken*[]> newCode(new FormulaToken*[ nLen ]);
+        std::copy(&pCode[0], &pCode[nLen], newCode.get());
+        pCode = std::move( newCode );
+        mbFinalized = true;
+    }
+}
+
 void FormulaTokenArray::Assign( const FormulaTokenArray& r )
 {
     nLen   = r.nLen;
@@ -779,7 +791,8 @@ FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
 // Allocating an array of size FORMULA_MAXTOKENS is simple, but that results in relatively large
 // allocations that malloc() implementations usually do not handle as efficiently as smaller
 // sizes (not only in terms of memory usage but also speed). Since most token arrays are going
-// to be small, start with a small array and resize only if needed.
+// to be small, start with a small array and resize only if needed. Eventually Finalize() will
+// reallocate the memory to size exactly matching the requirements.
     const size_t MAX_FAST_TOKENS = 32;
     if( !pCode )
         pCode.reset(new FormulaToken*[ MAX_FAST_TOKENS ]);
