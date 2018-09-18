@@ -102,7 +102,8 @@ namespace DocumentSignatureHelper
     void writeSignedProperties(
         const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler,
         const SignatureInformation& signatureInfo,
-        const OUString& sDate);
+        const OUString& sDate,
+        const bool bWriteSignatureLineData);
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREHELPER_HXX
