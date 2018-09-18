@@ -94,8 +94,9 @@ bool SwCursorShell::GotoFootnoteText()
                    GetCursor_()->GetPoint()->nNode.GetNode().GetTextNode() : nullptr;
         if( pTextNd )
         {
-            const SwFrame *pFrame = pTextNd->getLayoutFrame( GetLayout(), &GetCursor_()->GetSttPos(),
-                                                 GetCursor_()->Start() );
+            std::pair<Point, bool> const tmp(GetCursor_()->GetSttPos(), true);
+            const SwFrame *pFrame = pTextNd->getLayoutFrame( GetLayout(),
+                                                 GetCursor_()->Start(), &tmp);
             const SwFootnoteBossFrame* pFootnoteBoss;
             bool bSkip = pFrame && pFrame->IsInFootnote();
             while( pFrame && nullptr != ( pFootnoteBoss = pFrame->FindFootnoteBossFrame() ) )

@@ -252,7 +252,9 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
             continue;
 
         Point aPt;
-        const SwContentFrame* pCFrame = pTOXSrc->getLayoutFrame( getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, nullptr, false );
+        std::pair<Point, bool> const tmp(aPt, false);
+        const SwContentFrame* pCFrame = pTOXSrc->getLayoutFrame(
+                getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp);
         if (!pCFrame)
             continue;
 

@@ -533,8 +533,14 @@ sal_uInt16 SwPaM::GetPageNum( bool bAtPoint, const Point* pLayPos )
     const SwContentNode *pNd ;
     const SwPosition* pPos = bAtPoint ? m_pPoint : m_pMark;
 
+    std::pair<Point, bool> tmp;
+    if (pLayPos)
+    {
+        tmp.first = *pLayPos;
+        tmp.second = false;
+    }
     if( nullptr != ( pNd = pPos->nNode.GetNode().GetContentNode() ) &&
-        nullptr != ( pCFrame = pNd->getLayoutFrame( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), pLayPos, pPos, false )) &&
+        nullptr != (pCFrame = pNd->getLayoutFrame(pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), pPos, pLayPos ? &tmp : nullptr)) &&
         nullptr != ( pPg = pCFrame->FindPageFrame() ))
         return pPg->GetPhyPageNum();
     return 0;
@@ -575,7 +581,10 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
     if ( pNd != nullptr )
     {
         Point aTmpPt;
-        pFrame = pNd->getLayoutFrame( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aTmpPt, GetPoint(), false );
+        std::pair<Point, bool> const tmp(aTmpPt, false);
+        pFrame = pNd->getLayoutFrame(
+            pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+            GetPoint(), &tmp);
     }
 
     // Will be set if point are inside edit-in-readonly environment
@@ -608,7 +617,10 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
         if ( pNd != nullptr )
         {
             Point aTmpPt;
-            pFrame = pNd->getLayoutFrame( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aTmpPt, GetMark(), false );
+            std::pair<Point, bool> const tmp(aTmpPt, false);
+            pFrame = pNd->getLayoutFrame(
+                pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+                GetMark(), &tmp);
         }
 
         const SwFrame* pMarkEditInReadonlyFrame = nullptr;

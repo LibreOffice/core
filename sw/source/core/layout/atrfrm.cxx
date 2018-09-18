@@ -2697,7 +2697,13 @@ SwRect SwFrameFormat::FindLayoutRect( const bool bPrtArea, const Point* pPoint )
     else
     {
         const SwFrameType nFrameType = RES_FLYFRMFMT == Which() ? SwFrameType::Fly : FRM_ALL;
-        pFrame = ::GetFrameOfModify( nullptr, *this, nFrameType, pPoint);
+        std::pair<Point, bool> tmp;
+        if (pPoint)
+        {
+            tmp.first = *pPoint;
+            tmp.second = false;
+        }
+        pFrame = ::GetFrameOfModify(nullptr, *this, nFrameType, nullptr, pPoint ? &tmp : nullptr);
     }
 
     if( pFrame )
@@ -2715,8 +2721,9 @@ SdrObject* SwFrameFormat::FindRealSdrObject()
     if( RES_FLYFRMFMT == Which() )
     {
         Point aNullPt;
+        std::pair<Point, bool> const tmp(aNullPt, false);
         SwFlyFrame* pFly = static_cast<SwFlyFrame*>(::GetFrameOfModify( nullptr, *this, SwFrameType::Fly,
-                                                    &aNullPt ));
+                                                    nullptr, &tmp));
         return pFly ? pFly->GetVirtDrawObj() : nullptr;
     }
     return FindSdrObject();
@@ -3058,8 +3065,14 @@ void SwFlyFrameFormat::MakeFrames()
 
 SwFlyFrame* SwFlyFrameFormat::GetFrame( const Point* pPoint ) const
 {
+    std::pair<Point, bool> tmp;
+    if (pPoint)
+    {
+        tmp.first = *pPoint;
+        tmp.second = false;
+    }
     return static_cast<SwFlyFrame*>(::GetFrameOfModify( nullptr, *this, SwFrameType::Fly,
-                                            pPoint ));
+                                            nullptr, &tmp));
 }
 
 SwAnchoredObject* SwFlyFrameFormat::GetAnchoredObj() const
