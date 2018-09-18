@@ -418,7 +418,7 @@ public:
                                                 const Graphic& rGraphic)=0;
     virtual VclPtr<AbstractGraphicFilterDialog>   CreateGraphicFilterSepia(weld::Window* pParent,
                                                 const Graphic& rGraphic)=0;
-    virtual VclPtr<AbstractGraphicFilterDialog>   CreateGraphicFilterSmooth (vcl::Window* pParent,
+    virtual VclPtr<AbstractGraphicFilterDialog>   CreateGraphicFilterSmooth(weld::Window* pParent,
                                                 const Graphic& rGraphic,
                                                 double nRadius)=0;
     virtual VclPtr<AbstractGraphicFilterDialog>   CreateGraphicFilterSolarize(weld::Window* pParent,

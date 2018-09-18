@@ -151,18 +151,15 @@ public:
     virtual Graphic GetFilteredGraphic(const Graphic& rGraphic, double fScaleX, double fScaleY) = 0;
 };
 
-class GraphicFilterSmooth : public GraphicFilterDialog
+class GraphicFilterSmooth : public GraphicFilterDialogController
 {
 private:
-    VclPtr<NumericField>   mpMtrRadius;
-    DECL_LINK(EditModifyHdl, Edit&, void);
+    std::unique_ptr<weld::SpinButton> mxMtrRadius;
+    DECL_LINK(EditModifyHdl, weld::SpinButton&, void);
 
 public:
 
-    GraphicFilterSmooth( vcl::Window* pParent, const Graphic& rGraphic, double nRadius);
-    virtual ~GraphicFilterSmooth() override;
-    virtual void dispose() override;
-
+    GraphicFilterSmooth(weld::Window* pParent, const Graphic& rGraphic, double nRadius);
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
 };
 
