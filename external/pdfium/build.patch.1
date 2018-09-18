@@ -125,12 +125,12 @@ diff --git a/core/fpdfdoc/cpdf_dest.h b/core/fpdfdoc/cpdf_dest.h
 index 7f4eb86c0..5e227f86e 100644
 --- a/core/fpdfdoc/cpdf_dest.h
 +++ b/core/fpdfdoc/cpdf_dest.h
-@@ -46,7 +46,7 @@ class CPDF_Dest {
+@@ -41,7 +41,7 @@
                float* pZoom) const;
  
   private:
--  UnownedPtr<const CPDF_Array> const m_pObj;
-+  UnownedPtr<const CPDF_Array> m_pObj;
+-  UnownedPtr<const CPDF_Array> const m_pArray;
++  UnownedPtr<const CPDF_Array> m_pArray;
  };
  
  #endif  // CORE_FPDFDOC_CPDF_DEST_H_
