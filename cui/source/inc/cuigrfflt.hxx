@@ -32,38 +32,6 @@
 #include <svx/dlgctrl.hxx>
 #include <svx/rectenum.hxx>
 
-class GraphicPreviewWindow : public Control
-{
-private:
-    const Graphic* mpOrigGraphic;
-    Link<LinkParamNone*,void>    maModifyHdl;
-    Graphic   maScaledOrig;
-    Graphic   maPreview;
-    double    mfScaleX;
-    double    mfScaleY;
-
-    virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
-    virtual void Resize() override;
-    virtual Size GetOptimalSize() const override;
-
-    void ScaleImageToFit();
-
-public:
-
-    GraphicPreviewWindow(vcl::Window* pParent, WinBits nStyle);
-    void init(const Graphic* pOrigGraphic, const Link<LinkParamNone*,void>& rLink)
-    {
-        mpOrigGraphic = pOrigGraphic;
-        maModifyHdl = rLink;
-        ScaleImageToFit();
-    }
-
-    void            SetPreview(const Graphic& rGraphic);
-    const Graphic&  GetScaledOriginal() const { return maScaledOrig; }
-    double          GetScaleX() const { return mfScaleX; }
-    double          GetScaleY() const { return mfScaleY; }
-};
-
 class CuiGraphicPreviewWindow : public weld::CustomWidgetController
 {
 private:
@@ -98,33 +66,6 @@ public:
     double          GetScaleX() const { return mfScaleX; }
     double          GetScaleY() const { return mfScaleY; }
     const Size&     GetGraphicSizePixel() const { return maOrigGraphicSizePixel; }
-};
-
-class GraphicFilterDialog : public ModalDialog
-{
-private:
-
-    Timer           maTimer;
-    Link<LinkParamNone*,void> maModifyHdl;
-    Size            maSizePixel;
-    bool            bIsBitmap;
-
-    DECL_LINK( ImplPreviewTimeoutHdl, Timer *, void );
-    DECL_LINK( ImplModifyHdl, LinkParamNone*, void);
-
-protected:
-    VclPtr<GraphicPreviewWindow>  mpPreview;
-
-    const Link<LinkParamNone*,void>&   GetModifyHdl() const { return maModifyHdl; }
-    const Size&     GetGraphicSizePixel() const { return maSizePixel; }
-
-public:
-
-    GraphicFilterDialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, const Graphic& rGraphic);
-    virtual ~GraphicFilterDialog() override;
-    virtual void dispose() override;
-
-    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) = 0;
 };
 
 class GraphicFilterDialogController : public weld::GenericDialogController

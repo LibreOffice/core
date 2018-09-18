@@ -188,7 +188,6 @@ short AbstractSvxPathSelectDialog_Impl::Execute()
 
 IMPL_ABSTDLG_BASE(AbstractSvxHpLinkDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractFmSearchDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractGraphicFilterDialog_Impl);
 
 short AbstractGraphicFilterDialogController_Impl::Execute()
 {
@@ -812,11 +811,6 @@ void AbstractFmSearchDialog_Impl::SetCanceledNotFoundHdl(const Link<FmFoundRecor
 void AbstractFmSearchDialog_Impl::SetActiveField(const OUString& strField)
 {
     pDlg->SetActiveField(strField);
-}
-
-Graphic AbstractGraphicFilterDialog_Impl::GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY )
-{
-    return pDlg->GetFilteredGraphic( rGraphic, fScaleX, fScaleY );
 }
 
 Graphic AbstractGraphicFilterDialogController_Impl::GetFilteredGraphic(const Graphic& rGraphic, double fScaleX, double fScaleY)
