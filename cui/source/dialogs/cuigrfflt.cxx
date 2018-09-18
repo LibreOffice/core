@@ -449,53 +449,33 @@ Graphic GraphicFilterSmooth::GetFilteredGraphic( const Graphic& rGraphic, double
     return aRet;
 }
 
-
-GraphicFilterSolarize::GraphicFilterSolarize( vcl::Window* pParent, const Graphic& rGraphic,
-                                              sal_uInt8 cGreyThreshold, bool bInvert )
-    : GraphicFilterDialog(pParent, "SolarizeDialog",
-        "cui/ui/solarizedialog.ui", rGraphic)
+GraphicFilterSolarize::GraphicFilterSolarize(weld::Window* pParent, const Graphic& rGraphic,
+                                             sal_uInt8 cGreyThreshold, bool bInvert)
+    : GraphicFilterDialogController(pParent, "cui/ui/solarizedialog.ui", "SolarizeDialog", rGraphic)
+    , mxMtrThreshold(m_xBuilder->weld_metric_spin_button("value", FUNIT_PERCENT))
+    , mxCbxInvert(m_xBuilder->weld_check_button("invert"))
 {
-    get(mpMtrThreshold, "value");
-    get(mpCbxInvert, "invert");
+    mxMtrThreshold->set_value(FRound(cGreyThreshold / 2.55), FUNIT_PERCENT);
+    mxMtrThreshold->connect_value_changed(LINK(this, GraphicFilterSolarize, EditModifyHdl));
 
-    mpMtrThreshold->SetValue( FRound( cGreyThreshold / 2.55 ) );
-    mpMtrThreshold->SetModifyHdl( LINK(this, GraphicFilterSolarize, EditModifyHdl) );
-
-    mpCbxInvert->Check( bInvert );
-    mpCbxInvert->SetToggleHdl( LINK(this, GraphicFilterSolarize, CheckBoxModifyHdl) );
+    mxCbxInvert->set_active(bInvert);
+    mxCbxInvert->connect_toggled(LINK(this, GraphicFilterSolarize, CheckBoxModifyHdl));
 }
 
-
-IMPL_LINK_NOARG(GraphicFilterSolarize, CheckBoxModifyHdl, CheckBox&, void)
+IMPL_LINK_NOARG(GraphicFilterSolarize, CheckBoxModifyHdl, weld::ToggleButton&, void)
 {
     GetModifyHdl().Call(nullptr);
 }
 
-
-IMPL_LINK_NOARG(GraphicFilterSolarize, EditModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(GraphicFilterSolarize, EditModifyHdl, weld::MetricSpinButton&, void)
 {
     GetModifyHdl().Call(nullptr);
 }
-
-
-GraphicFilterSolarize::~GraphicFilterSolarize()
-{
-    disposeOnce();
-}
-
-
-void GraphicFilterSolarize::dispose()
-{
-    mpMtrThreshold.clear();
-    mpCbxInvert.clear();
-    GraphicFilterDialog::dispose();
-}
-
 
 Graphic GraphicFilterSolarize::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
     Graphic         aRet;
-    sal_uInt8       nGreyThreshold = static_cast<sal_uInt8>(FRound( mpMtrThreshold->GetValue() * 2.55 ));
+    sal_uInt8       nGreyThreshold = static_cast<sal_uInt8>(FRound(mxMtrThreshold->get_value(FUNIT_PERCENT) * 2.55));
 
     if( rGraphic.IsAnimated() )
     {
