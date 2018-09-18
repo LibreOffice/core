@@ -69,13 +69,13 @@ namespace oox { namespace ppt {
         static const convert_subtype* getList();
     };
 
-    struct OOX_DLLPUBLIC preset_maping
+    struct OOX_DLLPUBLIC preset_mapping
     {
         sal_Int32   mnPresetClass;
         sal_Int32   mnPresetId;
         const sal_Char* mpStrPresetId;
 
-        static const preset_maping* getList();
+        static const preset_mapping* getList();
     };
 
     OOX_DLLPUBLIC OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_Int32 nPresetSubType );
