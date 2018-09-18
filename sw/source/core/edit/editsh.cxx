@@ -605,7 +605,8 @@ Graphic SwEditShell::GetIMapGraphic() const
         }
         else if ( rNd.IsOLENode() )
         {
-            aRet = *static_cast<SwOLENode&>(rNd).GetGraphic();
+            if (const Graphic* pGraphic = static_cast<SwOLENode&>(rNd).GetGraphic())
+                aRet = *pGraphic;
         }
         else
         {
