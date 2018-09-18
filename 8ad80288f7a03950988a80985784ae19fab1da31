@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f013ff3_5b9f23b4",
+        "filename": "sw/qa/python/xscriptprovider.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-09-18T01:39:44Z",
+      "side": 1,
+      "message": "I think that needs the document model (xDoc), c.f. scripting/source/basprov/basprov.cxx:240 ff",
+      "revId": "8ad80288f7a03950988a80985784ae19fab1da31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
