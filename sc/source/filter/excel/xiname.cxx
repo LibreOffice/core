@@ -144,12 +144,12 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     // 3) *** convert the name definition formula *** -------------------------
 
     rFmlaConv.Reset();
-    const ScTokenArray* pTokArr = nullptr; // pointer to token array, owned by rFmlaConv
+    std::unique_ptr<ScTokenArray> pTokArr( nullptr );
 
     if( ::get_flag( nFlags, EXC_NAME_BIG ) )
     {
         // special, unsupported name
-        rFmlaConv.GetDummy( pTokArr );
+        pTokArr = rFmlaConv.GetDummy();
     }
     else if( bBuiltIn )
     {
@@ -209,7 +209,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     }
 
     if (pTokArr && !bFunction && !mbVBName)
-        InsertName(pTokArr);
+        InsertName(pTokArr.get());
 }
 
 void XclImpName::ConvertTokens()
@@ -219,7 +219,7 @@ void XclImpName::ConvertTokens()
 
     ExcelToSc& rFmlaConv = GetOldFmlaConverter();
     rFmlaConv.Reset();
-    const ScTokenArray* pArray = nullptr;
+    std::unique_ptr<ScTokenArray> pArray( nullptr );
 
     XclImpStreamPos aOldPos;
     XclImpStream& rStrm = mpTokensData->mrStrm;
@@ -229,7 +229,7 @@ void XclImpName::ConvertTokens()
     rStrm.RestorePosition(aOldPos);
 
     if (pArray)
-        InsertName(pArray);
+        InsertName(pArray.get());
 
     mpTokensData.reset();
 }

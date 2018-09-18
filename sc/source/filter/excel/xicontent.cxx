@@ -658,13 +658,13 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     ::std::unique_ptr< ScTokenArray > xTokArr1;
     if( nFmlaSize1 > 0 )
     {
-        const ScTokenArray* pTokArr = nullptr;
+        std::unique_ptr<ScTokenArray> pTokArr( nullptr );
         rFmlaConv.Reset( rPos );
         rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize1, false, FT_CondFormat );
         // formula converter owns pTokArr -> create a copy of the token array
         if( pTokArr )
         {
-            xTokArr1.reset( pTokArr->Clone() );
+            xTokArr1 = std::move( pTokArr );
             GetDocRef().CheckLinkFormulaNeedingCheck( *xTokArr1);
         }
     }
@@ -672,13 +672,13 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     ::std::unique_ptr< ScTokenArray > xTokArr2;
     if( nFmlaSize2 > 0 )
     {
-        const ScTokenArray* pTokArr = nullptr;
+        std::unique_ptr<ScTokenArray> pTokArr( nullptr );
         rFmlaConv.Reset( rPos );
         rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize2, false, FT_CondFormat );
         // formula converter owns pTokArr -> create a copy of the token array
         if( pTokArr )
         {
-            xTokArr2.reset( pTokArr->Clone() );
+            xTokArr2 = std::move( pTokArr );
             GetDocRef().CheckLinkFormulaNeedingCheck( *xTokArr2);
         }
     }
@@ -832,23 +832,23 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     rStrm.RestorePosition(aPosFormula1);
     if( nLenFormula1 > 0 )
     {
-        const ScTokenArray* pTokArr = nullptr;
+        std::unique_ptr<ScTokenArray> pTokArr( nullptr );
         rFmlaConv.Reset(aCombinedRange.aStart);
         rFmlaConv.Convert( pTokArr, rStrm, nLenFormula1, false, FT_CondFormat );
         // formula converter owns pTokArr -> create a copy of the token array
         if( pTokArr )
-            xTokArr1.reset( pTokArr->Clone() );
+            xTokArr1 = std::move( pTokArr );
     }
     rStrm.SetNulSubstChar();    // back to default
     if (nLenFormula2 > 0)
     {
         rStrm.RestorePosition(aPosFormula2);
-        const ScTokenArray* pTokArr = nullptr;
+        std::unique_ptr<ScTokenArray> pTokArr( nullptr );
         rFmlaConv.Reset(aCombinedRange.aStart);
         rFmlaConv.Convert( pTokArr, rStrm, nLenFormula2, false, FT_CondFormat );
         // formula converter owns pTokArr -> create a copy of the token array
         if( pTokArr )
-            xTokArr2.reset( pTokArr->Clone() );
+            xTokArr2 = std::move( pTokArr );
     }
 
     rStrm.RestorePosition(aCurrentPos);

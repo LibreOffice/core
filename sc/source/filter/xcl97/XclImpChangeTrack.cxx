@@ -179,7 +179,7 @@ void XclImpChangeTrack::Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab, Exc
     }
 }
 
-void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddress& rPosition )
+void XclImpChangeTrack::ReadFormula( std::unique_ptr<ScTokenArray>& rpTokenArray, const ScAddress& rPosition )
 {
     sal_uInt16 nFmlSize = pStrm->ReaduInt16();
 
@@ -208,10 +208,10 @@ void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddres
     XclImpChTrFmlConverter aFmlConv( GetRoot(), *this );
 
     // read the formula, 3D tab refs from extended data
-    const ScTokenArray* pArray = nullptr;
+    std::unique_ptr<ScTokenArray> pArray( nullptr );
     aFmlConv.Reset( rPosition );
     bool bOK = (aFmlConv.Convert( pArray, aFmlaStrm, nFmlSize, false ) == ConvErr::OK);   // JEG : Check This
-    rpTokenArray = (bOK && pArray) ? new ScTokenArray( *pArray ) : nullptr;
+    rpTokenArray = (bOK && pArray) ? std::move( pArray ) : nullptr;
     pStrm->Ignore( 1 );
 }
 
@@ -267,14 +267,13 @@ void XclImpChangeTrack::ReadCell(
         break;
         case EXC_CHTR_TYPE_FORMULA:
         {
-            ScTokenArray* pTokenArray = nullptr;
+            std::unique_ptr<ScTokenArray> pTokenArray( nullptr );
             ReadFormula( pTokenArray, rPosition );
             if( pStrm->IsValid() && pTokenArray )
             {
                 rCell.meType = CELLTYPE_FORMULA;
-                rCell.mpFormula = new ScFormulaCell(&GetDocRef(), rPosition, *pTokenArray);
+                rCell.mpFormula = new ScFormulaCell(&GetDocRef(), rPosition, pTokenArray.release());
             }
-            delete pTokenArray;
         }
         break;
         default:

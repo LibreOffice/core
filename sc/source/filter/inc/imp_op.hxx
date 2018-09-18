@@ -186,7 +186,7 @@ protected:
 
     virtual void            EndSheet();
     void                    NewTable();
-    const ScTokenArray*     ErrorToFormula( bool bErrOrVal, sal_uInt8 nError,
+    std::unique_ptr<ScTokenArray> ErrorToFormula( bool bErrOrVal, sal_uInt8 nError,
                                 double& rVal );
 
     void            AdjustRowHeight();

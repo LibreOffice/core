@@ -386,8 +386,10 @@ void ImportExcel::ReadBoolErr()
             GetXFRangeBuffer().SetXF( aScPos, nXFIdx );
 
         double fValue;
-        const ScTokenArray* pScTokArr = ErrorToFormula( nType != EXC_BOOLERR_BOOL, nValue, fValue );
-        ScFormulaCell* pCell = pScTokArr ? new ScFormulaCell(pD, aScPos, *pScTokArr) : new ScFormulaCell(pD, aScPos);
+        std::unique_ptr<ScTokenArray> pScTokArr = ErrorToFormula( nType != EXC_BOOLERR_BOOL, nValue, fValue );
+        ScFormulaCell* pCell = pScTokArr
+            ? new ScFormulaCell(pD, aScPos, pScTokArr.release())
+            : new ScFormulaCell(pD, aScPos);
         pCell->SetHybridDouble( fValue );
         GetDocImport().setFormulaCell(aScPos, pCell);
     }
@@ -537,7 +539,7 @@ void ImportExcel::Array25()
         nFormLen = aIn.ReaduInt16();
     }
 
-    const ScTokenArray* pResult = nullptr;
+    std::unique_ptr<ScTokenArray> pResult( nullptr );
 
     if (ValidColRow(nLastCol, nLastRow))
     {
@@ -844,7 +846,7 @@ void ImportExcel::Shrfmla()
 
     // read mark is now on the formula
 
-    const ScTokenArray* pResult;
+    std::unique_ptr<ScTokenArray> pResult;
 
     // The shared range in this record is erroneous more than half the time.
     // Don't ever rely on it. Use the one from the formula cell above.
@@ -867,7 +869,7 @@ void ImportExcel::Shrfmla()
 
     ScDocumentImport& rDoc = GetDocImport();
 
-    ScFormulaCell* pCell = new ScFormulaCell(pD, aPos, *pResult);
+    ScFormulaCell* pCell = new ScFormulaCell(pD, aPos, pResult.release());
     pCell->GetCode()->WrapReference(aPos, EXC_MAXCOL8, EXC_MAXROW8);
     rDoc.getDoc().CheckLinkFormulaNeedingCheck( *pCell->GetCode());
     rDoc.getDoc().EnsureTable(aPos.Tab());
@@ -1035,7 +1037,7 @@ void ImportExcel::Array34()
     aIn.Ignore( (GetBiff() >= EXC_BIFF5) ? 6 : 2 );
     nFormLen = aIn.ReaduInt16();
 
-    const ScTokenArray* pResult = nullptr;
+    std::unique_ptr<ScTokenArray> pResult( nullptr );
 
     if( ValidColRow( nLastCol, nLastRow ) )
     {
@@ -1244,7 +1246,7 @@ void ImportExcel::NewTable()
     pRowOutlineBuff = pNewItem->GetRowOutline();
 }
 
-const ScTokenArray* ImportExcel::ErrorToFormula( bool bErrOrVal, sal_uInt8 nError, double& rVal )
+std::unique_ptr<ScTokenArray> ImportExcel::ErrorToFormula( bool bErrOrVal, sal_uInt8 nError, double& rVal )
 {
     return pFormConv->GetBoolErr( XclTools::ErrorToEnum( rVal, bErrOrVal, nError ) );
 }
