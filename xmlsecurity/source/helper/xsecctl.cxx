@@ -898,7 +898,7 @@ void XSecController::exportSignature(
                 xDocumentHandler->startElement(
                     "xd:QualifyingProperties",
                     cssu::Reference< cssxs::XAttributeList > (pAttributeList));
-                DocumentSignatureHelper::writeSignedProperties(xDocumentHandler, signatureInfo, sDate);
+                DocumentSignatureHelper::writeSignedProperties(xDocumentHandler, signatureInfo, sDate, true);
                 writeUnsignedProperties(xDocumentHandler, signatureInfo);
                 xDocumentHandler->endElement( "xd:QualifyingProperties" );
             }
