@@ -776,8 +776,20 @@ FormulaToken* FormulaTokenArray::Add( FormulaToken* t )
         return nullptr;
     }
 
+// Allocating an array of size FORMULA_TOKENS is simple, but that results in relatively large
+// allocations that malloc() implementations usually do not handle as efficiently as smaller
+// sizes (not only in terms of memory usage but also speed). Since most token arrays are going
+// to be small, start with a small array and resize only if needed.
+#define MAX_FAST_TOKENS 32
     if( !pCode )
-        pCode.reset(new FormulaToken*[ FORMULA_MAXTOKENS ]);
+        pCode.reset(new FormulaToken*[ MAX_FAST_TOKENS ]);
+    if( nLen == MAX_FAST_TOKENS )
+    {
+        FormulaToken** tmp = new FormulaToken*[ FORMULA_MAXTOKENS ];
+        std::copy(&pCode[0], &pCode[MAX_FAST_TOKENS], tmp);
+        pCode.reset(tmp);
+    }
+#undef MAX_FAST_TOKENS
     if( nLen < FORMULA_MAXTOKENS - 1 )
     {
         CheckToken(*t);
