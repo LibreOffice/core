@@ -53,7 +53,7 @@ bool SwEditShell::IsGlblDocSaveLinks() const
 
 void SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
 {
-    rArr.DeleteAndDestroyAll();
+    rArr.clear();
 
     if( !getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT) )
         return;
@@ -67,22 +67,21 @@ void SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
         const SwSection* pSect = rSectFormats[ --n ]->GetGlobalDocSection();
         if( pSect )
         {
-            SwGlblDocContent* pNew = nullptr;
+            std::unique_ptr<SwGlblDocContent> pNew;
             switch( pSect->GetType() )
             {
             case TOX_HEADER_SECTION:
                 break;      // ignore
             case TOX_CONTENT_SECTION:
                 OSL_ENSURE( dynamic_cast<const SwTOXBaseSection*>( pSect) !=  nullptr, "no TOXBaseSection!" );
-                pNew = new SwGlblDocContent( static_cast<const SwTOXBaseSection*>(pSect) );
+                pNew.reset(new SwGlblDocContent( static_cast<const SwTOXBaseSection*>(pSect) ));
                 break;
 
             default:
-                pNew = new SwGlblDocContent( pSect );
+                pNew.reset(new SwGlblDocContent( pSect ));
                 break;
             }
-            if( pNew && !rArr.insert( pNew ).second )
-                delete pNew;
+            rArr.insert( std::move(pNew) );
         }
     }
 
@@ -98,10 +97,8 @@ void SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
             if( ( pNd = pMyDoc->GetNodes()[ nSttIdx ])->IsContentNode()
                 || pNd->IsSectionNode() || pNd->IsTableNode() )
             {
-                SwGlblDocContent* pNew = new SwGlblDocContent( nSttIdx );
-                if( !rArr.insert( pNew ).second )
-                    delete pNew;
-                else
+                std::unique_ptr<SwGlblDocContent> pNew(new SwGlblDocContent( nSttIdx ));
+                if( rArr.insert( std::move(pNew) ).second )
                     ++n; // to the next position
                 break;
             }
@@ -119,17 +116,15 @@ void SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
             if( ( pNd = pMyDoc->GetNodes()[ nSttIdx ])->IsContentNode()
                 || pNd->IsSectionNode() || pNd->IsTableNode() )
             {
-                SwGlblDocContent* pNew = new SwGlblDocContent( nSttIdx );
-                if( !rArr.insert( pNew ).second )
-                    delete pNew;
+                rArr.insert( o3tl::make_unique<SwGlblDocContent>( nSttIdx ) );
                 break;
             }
     }
     else
     {
-        SwGlblDocContent* pNew = new SwGlblDocContent(
-                    pMyDoc->GetNodes().GetEndOfExtras().GetIndex() + 2 );
-        rArr.insert( pNew );
+        std::unique_ptr<SwGlblDocContent> pNew(new SwGlblDocContent(
+                    pMyDoc->GetNodes().GetEndOfExtras().GetIndex() + 2 ));
+        rArr.insert( std::move(pNew) );
     }
 }
 
