@@ -1680,7 +1680,10 @@ SwCursor::DoSetBidiLevelLeftRight(
             // for visual cursor travelling (used in bidi layout)
             // we first have to convert the logic to a visual position
             Point aPt;
-            pSttFrame = rTNd.getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, GetPoint() );
+            std::pair<Point, bool> const tmp(aPt, true);
+            pSttFrame = rTNd.getLayoutFrame(
+                    GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+                    GetPoint(), &tmp);
             if( pSttFrame )
             {
                 sal_uInt8 nCursorLevel = GetCursorBidiLevel();
@@ -1864,7 +1867,10 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
         if ( &rTmpNode != &rNode && rTmpNode.IsTextNode() )
         {
             Point aPt;
-            const SwContentFrame* pEndFrame = rTmpNode.GetTextNode()->getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, GetPoint() );
+            std::pair<Point, bool> const tmp(aPt, true);
+            const SwContentFrame* pEndFrame = rTmpNode.GetTextNode()->getLayoutFrame(
+                GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
+                GetPoint(), &tmp);
             if ( pEndFrame )
             {
                 if ( ! pEndFrame->IsRightToLeft() != ! pSttFrame->IsRightToLeft() )
@@ -1936,7 +1942,8 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
     Point aPt;
     if( pPt )
         aPt = *pPt;
-    SwContentFrame* pFrame = GetContentNode()->getLayoutFrame(&rLayout, &aPt, GetPoint());
+    std::pair<Point, bool> const temp(aPt, true);
+    SwContentFrame* pFrame = GetContentNode()->getLayoutFrame(&rLayout, GetPoint(), &temp);
 
     if( pFrame )
     {
@@ -1972,7 +1979,8 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
                 const SwNode* pEndNd = pTableNd->EndOfSectionNode();
                 GetPoint()->nNode = *pEndNd;
                 pTableCursor->Move( fnMoveBackward, GoInNode );
-               pFrame = GetContentNode()->getLayoutFrame(&rLayout, &aPt, GetPoint());
+                std::pair<Point, bool> const tmp(aPt, true);
+                pFrame = GetContentNode()->getLayoutFrame(&rLayout, GetPoint(), &tmp);
             }
         }
 
@@ -1981,7 +1989,8 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
                     : pFrame->UnitDown( this, nUpDownX, bInReadOnly ) ) &&
                 CheckNodesRange( aOldPos.nNode, GetPoint()->nNode, bChkRange ))
         {
-               pFrame = GetContentNode()->getLayoutFrame(&rLayout, &aPt, GetPoint());
+            std::pair<Point, bool> const tmp(aPt, true);
+            pFrame = GetContentNode()->getLayoutFrame(&rLayout, GetPoint(), &tmp);
             --nCnt;
         }
 
@@ -1993,7 +2002,8 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
             {
                 // try to position the cursor at half of the char-rect's height
                 DisableCallbackAction a(rLayout);
-                pFrame = GetContentNode()->getLayoutFrame(&rLayout, &aPt, GetPoint());
+                std::pair<Point, bool> const tmp(aPt, true);
+                pFrame = GetContentNode()->getLayoutFrame(&rLayout, GetPoint(), &tmp);
                 SwCursorMoveState eTmpState( MV_UPDOWN );
                 eTmpState.m_bSetInReadOnly = bInReadOnly;
                 SwRect aTmpRect;
@@ -2025,7 +2035,9 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
 bool SwCursor::LeftRightMargin( bool bLeft, bool bAPI )
 {
     Point aPt;
-    SwContentFrame * pFrame = GetContentNode()->getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, GetPoint() );
+    std::pair<Point, bool> const tmp(aPt, true);
+    SwContentFrame *const pFrame = GetContentNode()->getLayoutFrame(
+        GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), GetPoint(), &tmp);
 
     // calculate cursor bidi level
     if ( pFrame )
@@ -2041,7 +2053,9 @@ bool SwCursor::IsAtLeftRightMargin( bool bLeft, bool bAPI ) const
 {
     bool bRet = false;
     Point aPt;
-    SwContentFrame * pFrame = GetContentNode()->getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, GetPoint() );
+    std::pair<Point, bool> const tmp(aPt, true);
+    SwContentFrame *const pFrame = GetContentNode()->getLayoutFrame(
+        GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), GetPoint(), &tmp);
     if( pFrame )
     {
         SwPaM aPam( *GetPoint() );

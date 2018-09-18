@@ -3421,8 +3421,9 @@ void SwFrameHolder::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
 }
 
-SwFrame* GetFrameOfModify( const SwRootFrame* pLayout, SwModify const& rMod, SwFrameType const nFrameType,
-        const Point* pPoint, const SwPosition *pPos, const bool bCalcFrame )
+SwFrame* GetFrameOfModify(SwRootFrame const*const pLayout, SwModify const& rMod,
+        SwFrameType const nFrameType, SwPosition const*const pPos,
+        std::pair<Point, bool> const*const pViewPosAndCalcFrame)
 {
     SwFrame *pMinFrame = nullptr, *pTmpFrame;
     SwFrameHolder aHolder;
@@ -3443,7 +3444,7 @@ SwFrame* GetFrameOfModify( const SwRootFrame* pLayout, SwModify const& rMod, SwF
                 (!pTmpFrame->IsFlowFrame() ||
                  !SwFlowFrame::CastFlowFrame( pTmpFrame )->IsFollow() ))
             {
-                if( pPoint )
+                if (pViewPosAndCalcFrame)
                 {
                     // watch for Frame being deleted
                     if ( pMinFrame )
@@ -3451,7 +3452,7 @@ SwFrame* GetFrameOfModify( const SwRootFrame* pLayout, SwModify const& rMod, SwF
                     else
                         aHolder.Reset();
 
-                    if( bCalcFrame )
+                    if (pViewPosAndCalcFrame->second)
                     {
                         // tdf#108118 prevent recursion
                         DisableCallbackAction a(*pTmpFrame->getRootFrame());
@@ -3479,7 +3480,8 @@ SwFrame* GetFrameOfModify( const SwRootFrame* pLayout, SwModify const& rMod, SwF
                     }
 
                     // for Flys go via the parent if the Fly is not yet "formatted"
-                    if( !bCalcFrame && pTmpFrame->GetType() & SwFrameType::Fly &&
+                    if (!pViewPosAndCalcFrame->second &&
+                        pTmpFrame->GetType() & SwFrameType::Fly &&
                         static_cast<SwFlyFrame*>(pTmpFrame)->GetAnchorFrame() &&
                         FAR_AWAY == pTmpFrame->getFrameArea().Pos().getX() &&
                         FAR_AWAY == pTmpFrame->getFrameArea().Pos().getY() )
@@ -3487,7 +3489,7 @@ SwFrame* GetFrameOfModify( const SwRootFrame* pLayout, SwModify const& rMod, SwF
                     else
                         aCalcRect = pTmpFrame->getFrameArea();
 
-                    if ( aCalcRect.IsInside( *pPoint ) )
+                    if (aCalcRect.IsInside(pViewPosAndCalcFrame->first))
                     {
                         pMinFrame = pTmpFrame;
                         break;
@@ -3495,7 +3497,7 @@ SwFrame* GetFrameOfModify( const SwRootFrame* pLayout, SwModify const& rMod, SwF
 
                     // Point not in rectangle. Compare distances:
                     const Point aCalcRectCenter = aCalcRect.Center();
-                    const Point aDiff = aCalcRectCenter - *pPoint;
+                    const Point aDiff = aCalcRectCenter - pViewPosAndCalcFrame->first;
                     const sal_uInt64 nCurrentDist = sal_Int64(aDiff.getX()) * sal_Int64(aDiff.getX()) + sal_Int64(aDiff.getY()) * sal_Int64(aDiff.getY()); // opt: no sqrt
                     if ( !pMinFrame || nCurrentDist < nMinDist )
                     {
@@ -3505,7 +3507,7 @@ SwFrame* GetFrameOfModify( const SwRootFrame* pLayout, SwModify const& rMod, SwF
                 }
                 else
                 {
-                    // if no pPoint is provided, take the first one
+                    // if no pViewPosAndCalcFrame is provided, take the first one
                     pMinFrame = pTmpFrame;
                     break;
                 }

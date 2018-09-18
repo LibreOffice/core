@@ -171,13 +171,23 @@ bool IsFrameInSameContext( const SwFrame *pInnerFrame, const SwFrame *pFrame );
 
 const SwFrame * FindPage( const SwRect &rRect, const SwFrame *pPage );
 
-// used by SwContentNode::GetFrame and SwFlyFrame::GetFrame
+/** @see SwContentNode::getLayoutFrame()
+    @param pPos
+      Document model position; for a text frame, the returned frame will be
+      one containing this position.
+    @param pViewPosAndCalcFrame
+      First is a point in the document view; the returned frame will be the one
+      with the minimal distance to this point.  To get the first frame in the
+      document, pass in a default-initialized Point with coordinates 0,0.
+      Second indicates whether the frames should be formatted before retrieving
+      their position for the test; this cannot be done by every caller so use
+      with care!
+ */
 SwFrame* GetFrameOfModify( const SwRootFrame* pLayout,
                        SwModify const&,
                        SwFrameType const nFrameType,
-                       const Point* = nullptr,
                        const SwPosition *pPos = nullptr,
-                       const bool bCalcFrame = false );
+                       std::pair<Point, bool> const* pViewPosAndCalcFrame = nullptr);
 
 // Should extra data (redline stroke, line numbers) be painted?
 bool IsExtraData( const SwDoc *pDoc );

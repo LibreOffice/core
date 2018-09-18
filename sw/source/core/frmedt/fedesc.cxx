@@ -187,19 +187,20 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
     const SwFrame* pMkFrame, *pPtFrame;
     const SwPageDesc* pFnd, *pRetDesc = reinterpret_cast<SwPageDesc*>(sal_IntPtr(-1));
     const Point aNulPt;
+    std::pair<Point, bool> const tmp(aNulPt, false);
 
     for(SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
 
         if( nullptr != (pCNd = rPaM.GetContentNode() ) &&
-            nullptr != ( pPtFrame = pCNd->getLayoutFrame( GetLayout(), &aNulPt, nullptr, false )) )
+            nullptr != (pPtFrame = pCNd->getLayoutFrame(GetLayout(), nullptr, &tmp)))
             pPtFrame = pPtFrame->FindPageFrame();
         else
             pPtFrame = nullptr;
 
         if( rPaM.HasMark() &&
             nullptr != (pCNd = rPaM.GetContentNode( false ) ) &&
-            nullptr != ( pMkFrame = pCNd->getLayoutFrame( GetLayout(), &aNulPt, nullptr, false )) )
+            nullptr != (pMkFrame = pCNd->getLayoutFrame(GetLayout(), nullptr, &tmp)))
             pMkFrame = pMkFrame->FindPageFrame();
         else
             pMkFrame = pPtFrame;

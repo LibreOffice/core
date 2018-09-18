@@ -713,7 +713,10 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                     {
                         // is in the special section, that's expensive!
                         Point aPt;      // return the first frame of the layout - Tab.Headline!!
-                        pFrame = rTextNd.getLayoutFrame( m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), &aPt );
+                        std::pair<Point, bool> const tmp(aPt, true);
+                        pFrame = rTextNd.getLayoutFrame(
+                            m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout(),
+                            nullptr, &tmp);
                         if( pFrame )
                         {
                             SwPosition aPos( *pTableNd );
@@ -783,7 +786,10 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                         if( !pCNd )
                             pCNd = m_rDoc.GetNodes().GoNext( &aCNdIdx );
 
-                        if( pCNd && nullptr != (pFrame = pCNd->getLayoutFrame( m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), &aPt )) )
+                        std::pair<Point, bool> const tmp(aPt, true);
+                        if (pCNd && nullptr != (pFrame = pCNd->getLayoutFrame(
+                                m_rDoc.getIDocumentLayoutAccess().GetCurrentLayout(),
+                                nullptr, &tmp)))
                         {
                             SwPosition aPos( *pCNd );
                             if( GetBodyTextNode( m_rDoc, aPos, *pFrame ) )
