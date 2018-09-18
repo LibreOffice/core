@@ -50,7 +50,7 @@ private:
     bool                bWordWrapTextEnabled;
     bool                bFitToSizeEnabled;
 
-    RectCtl m_aCtlPosition;
+    SvxRectCtl m_aCtlPosition;
 
     std::unique_ptr<weld::Widget> m_xDrawingText;
     std::unique_ptr<weld::Widget> m_xCustomShapeText;

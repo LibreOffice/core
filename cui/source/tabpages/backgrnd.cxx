@@ -297,7 +297,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(TabPageParent pParent, const SfxItemS
     , bCharBackColor(false)
     , m_bColorSelected(false)
     , pPageImpl(new SvxBackgroundPage_Impl)
-    , m_xWndPosition(new RectCtl(this))
+    , m_xWndPosition(new SvxRectCtl(this))
     , m_xBackgroundColorSet(new ColorValueSet(m_xBuilder->weld_scrolled_window("backgroundcolorsetwin")))
     , m_xPreview1(new BackgroundPreviewImpl)
     , m_xPreview2(new BackgroundPreviewImpl)

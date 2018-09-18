@@ -76,10 +76,10 @@ namespace o3tl
     template<> struct typed_flags<CTL_STATE> : is_typed_flags<CTL_STATE, 0x03> {};
 }
 
-class RectCtlAccessibleContext;
+class SvxRectCtlAccessibleContext;
 class SvxPixelCtlAccessible;
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC RectCtl : public weld::CustomWidgetController
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxRectCtl : public weld::CustomWidgetController
 {
 private:
     VclPtr<SvxTabPage> m_pPage;
@@ -89,11 +89,11 @@ private:
     SVX_DLLPRIVATE BitmapEx&        GetRectBitmap();
     SVX_DLLPRIVATE void             Resize_Impl(const Size& rSize);
 
-    RectCtl(const RectCtl&) = delete;
-    RectCtl& operator=(const RectCtl&) = delete;
+    SvxRectCtl(const SvxRectCtl&) = delete;
+    SvxRectCtl& operator=(const SvxRectCtl&) = delete;
 
 protected:
-    rtl::Reference<RectCtlAccessibleContext> pAccContext;
+    rtl::Reference<SvxRectCtlAccessibleContext> pAccContext;
     sal_uInt16 nBorderWidth;
     Point aPtLT, aPtMT, aPtRT;
     Point aPtLM, aPtMM, aPtRM;
@@ -111,9 +111,9 @@ protected:
 
     Point               GetApproxLogPtFromPixPt( const Point& rRoughPixelPoint ) const;
 public:
-    RectCtl(SvxTabPage* pPage, RectPoint eRpt = RectPoint::MM, sal_uInt16 nBorder = 200);
+    SvxRectCtl(SvxTabPage* pPage, RectPoint eRpt = RectPoint::MM, sal_uInt16 nBorder = 200);
     void SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder);
-    virtual ~RectCtl() override;
+    virtual ~SvxRectCtl() override;
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
     virtual void Resize() override;

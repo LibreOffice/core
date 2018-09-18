@@ -92,7 +92,7 @@ private:
     std::unique_ptr<SvxBackgroundTable_Impl> pTableBck_Impl;///< Items for Sw-Table must be corrected
     std::unique_ptr<SvxBrushItem> pHighlighting;
 
-    std::unique_ptr<RectCtl> m_xWndPosition;
+    std::unique_ptr<SvxRectCtl> m_xWndPosition;
     std::unique_ptr<ColorValueSet> m_xBackgroundColorSet;
     std::unique_ptr<BackgroundPreviewImpl> m_xPreview1;
     std::unique_ptr<BackgroundPreviewImpl> m_xPreview2;
