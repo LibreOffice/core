@@ -68,7 +68,7 @@ public:
     const Size&     GetGraphicSizePixel() const { return maOrigGraphicSizePixel; }
 };
 
-class GraphicFilterDialogController : public weld::GenericDialogController
+class GraphicFilterDialog : public weld::GenericDialogController
 {
 private:
 
@@ -88,11 +88,11 @@ protected:
 
 public:
 
-    GraphicFilterDialogController(weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID, const Graphic& rGraphic);
+    GraphicFilterDialog(weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID, const Graphic& rGraphic);
     virtual Graphic GetFilteredGraphic(const Graphic& rGraphic, double fScaleX, double fScaleY) = 0;
 };
 
-class GraphicFilterSmooth : public GraphicFilterDialogController
+class GraphicFilterSmooth : public GraphicFilterDialog
 {
 private:
     std::unique_ptr<weld::SpinButton> mxMtrRadius;
@@ -104,7 +104,7 @@ public:
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
 };
 
-class GraphicFilterMosaic : public GraphicFilterDialogController
+class GraphicFilterMosaic : public GraphicFilterDialog
 {
 private:
     std::unique_ptr<weld::MetricSpinButton> mxMtrWidth;
@@ -121,7 +121,7 @@ public:
     bool            IsEnhanceEdges() const { return mxCbxEdges->get_active(); }
 };
 
-class GraphicFilterSolarize : public GraphicFilterDialogController
+class GraphicFilterSolarize : public GraphicFilterDialog
 {
 private:
     std::unique_ptr<weld::MetricSpinButton> mxMtrThreshold;
@@ -136,7 +136,7 @@ public:
     bool            IsInvert() const { return mxCbxInvert->get_active(); }
 };
 
-class GraphicFilterSepia : public GraphicFilterDialogController
+class GraphicFilterSepia : public GraphicFilterDialog
 {
 private:
     std::unique_ptr<weld::MetricSpinButton> mxMtrSepia;
@@ -147,7 +147,7 @@ public:
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
 };
 
-class GraphicFilterPoster : public GraphicFilterDialogController
+class GraphicFilterPoster : public GraphicFilterDialog
 {
 private:
     std::unique_ptr<weld::SpinButton> mxNumPoster;
@@ -173,7 +173,7 @@ public:
     void            SetModifyHdl( const Link<LinkParamNone*,void>& rHdl ) { maModifyHdl = rHdl; }
 };
 
-class GraphicFilterEmboss : public GraphicFilterDialogController
+class GraphicFilterEmboss : public GraphicFilterDialog
 {
 private:
     EmbossControl  maCtlLight;

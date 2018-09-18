@@ -46,7 +46,6 @@ class SvxHpLinkDlg;
 class FmSearchDialog;
 class Graphic;
 class GraphicFilterDialog;
-class GraphicFilterDialogController;
 class SvxAreaTabDialog;
 class InsertObjectDialog_Impl;
 class SvPasteObjectDialog;
@@ -470,12 +469,12 @@ class AbstractFmSearchDialog_Impl :public AbstractFmSearchDialog
     virtual void SetActiveField(const OUString& strField) override;
 };
 
-class AbstractGraphicFilterDialogController_Impl : public AbstractGraphicFilterDialog
+class AbstractGraphicFilterDialog_Impl : public AbstractGraphicFilterDialog
 {
 protected:
-    std::unique_ptr<GraphicFilterDialogController> m_xDlg;
+    std::unique_ptr<GraphicFilterDialog> m_xDlg;
 public:
-    explicit AbstractGraphicFilterDialogController_Impl(std::unique_ptr<GraphicFilterDialogController> p)
+    explicit AbstractGraphicFilterDialog_Impl(std::unique_ptr<GraphicFilterDialog> p)
         : m_xDlg(std::move(p))
     {
     }
