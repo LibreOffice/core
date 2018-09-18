@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#GERRITHOST=gerrit.libreoffice.org
+#GERRITHOST=gerrit.libreoffice.org  last
 GERRITHOST=logerrit
 GERRITURL=ssh://$GERRITHOST/core
 
