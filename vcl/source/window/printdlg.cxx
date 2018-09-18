@@ -1303,23 +1303,6 @@ void PrintDialog::checkOptionalControlDependencies()
          it != maControlToPropertyMap.end(); ++it )
     {
         bool bShouldbeEnabled = maPController->isUIOptionEnabled( it->second );
-        if( ! bShouldbeEnabled )
-        {
-            // enable controls that are directly attached to a dependency anyway
-            // if the normally disabled controls get modified, change the dependency
-            // so the control would be enabled
-            // example: in print range "Print All" is selected, "Page Range" is then of course
-            // not selected and the Edit for the Page Range would be disabled
-            // as a convenience we should enable the Edit anyway and automatically select
-            // "Page Range" instead of "Print All" if the Edit gets modified
-            if( maReverseDependencySet.find( it->second ) != maReverseDependencySet.end() )
-            {
-                OUString aDep( maPController->getDependency( it->second ) );
-                // if the dependency is at least enabled, then enable this control anyway
-                if( !aDep.isEmpty() && maPController->isUIOptionEnabled( aDep ) )
-                    bShouldbeEnabled = true;
-            }
-        }
 
         if( bShouldbeEnabled && dynamic_cast<RadioButton*>(it->first.get()) )
         {

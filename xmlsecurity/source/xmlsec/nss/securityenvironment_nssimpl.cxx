@@ -106,7 +106,7 @@ static char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*ar
 }
 
 SecurityEnvironment_NssImpl::SecurityEnvironment_NssImpl() :
-m_pHandler( nullptr ) , m_tSymKeyList() , m_tPubKeyList() , m_tPriKeyList() {
+m_pHandler( nullptr ) , m_tSymKeyList() {
     PK11_SetPasswordFunc( GetPasswordFunction ) ;
 }
 
@@ -122,16 +122,6 @@ SecurityEnvironment_NssImpl::~SecurityEnvironment_NssImpl() {
     if( !m_tSymKeyList.empty()  ) {
         for( auto& symKey : m_tSymKeyList )
             PK11_FreeSymKey( symKey ) ;
-    }
-
-    if( !m_tPubKeyList.empty()  ) {
-        for( auto& pubKeyIt : m_tPubKeyList )
-            SECKEY_DestroyPublicKey( pubKeyIt ) ;
-    }
-
-    if( !m_tPriKeyList.empty()  ) {
-        for( auto& priKey : m_tPriKeyList )
-            SECKEY_DestroyPrivateKey( priKey ) ;
     }
 }
 
@@ -311,15 +301,6 @@ SecurityEnvironment_NssImpl::getPersonalCertificates()
         }
 
 
-    }
-
-    //secondly, we try to find certificate from registered private keys.
-    if( !m_tPriKeyList.empty()  ) {
-        for( const auto& priKey : m_tPriKeyList ) {
-            xcert = NssPrivKeyToXCert( priKey ) ;
-            if( xcert != nullptr )
-                certsList.push_back( xcert ) ;
-        }
     }
 
     length = certsList.size() ;

@@ -87,7 +87,6 @@ class ClientBox : public Control
     bool m_bHasActive : 1;
     bool m_bNeedsRecalc : 1;
     bool m_bAdjustActive : 1;
-    bool m_bInDelete : 1;
     //Must be guarded together with m_vEntries to ensure a valid index at all times.
     //Use m_entriesMutex as guard.
     long m_nActive;
@@ -112,14 +111,12 @@ class ClientBox : public Control
     //while new entries are added / removed in a separate thread.
     mutable ::osl::Mutex    m_entriesMutex;
     std::vector< TClientBoxEntry > m_vEntries;
-    std::vector< TClientBoxEntry > m_vRemovedEntries;
 
     void CalcActiveHeight();
     long GetTotalHeight() const;
     void SetupScrollBar();
     void DrawRow(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect, const TClientBoxEntry& rEntry);
     bool HandleCursorKey( sal_uInt16 nKeyCode );
-    void DeleteRemoved();
 
     DECL_LINK( ScrollHdl, ScrollBar*, void );
     DECL_LINK( DeauthoriseHdl, Button*, void );

@@ -78,14 +78,11 @@ public:
 
     /** Returns the original name as imported from or exported to the file. */
     const OUString& getUpcaseModelName() const;
-    /** Returns an Any with a SingleReference or ComplexReference, or an empty Any. */
-    css::uno::Any getReference( const ScAddress& rBaseAddr ) const;
 
 protected:
     DefinedNameModel    maModel;        /// Model data for this defined name.
     mutable OUString    maUpModelName;  /// Model name converted to uppercase ASCII.
     OUString            maCalcName;     /// Final name used in the Calc document.
-    css::uno::Any       maRefAny;       /// Single cell/range reference.
 };
 
 class DefinedName : public DefinedNameBase
