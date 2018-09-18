@@ -27,7 +27,7 @@
 
 static int opterr = 1;
 int optind = 1;
-int optopt;
+static int optopt;
 char *optarg;
 
 int
