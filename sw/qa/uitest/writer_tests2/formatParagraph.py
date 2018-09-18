@@ -344,14 +344,11 @@ class formatParagraph(UITestCase):
 
         xDecimal.executeAction("CLICK", tuple())
         xDecimalTxt.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xDecimalTxt.executeAction("BACKSPACE", tuple())
         xDecimalTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"i"}))
         xFill.executeAction("CLICK", tuple())
         xFillTxt.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xFillTxt.executeAction("BACKSPACE", tuple())
         xFillTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"p"}))
         xED_TABPOS.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xED_TABPOS.executeAction("BACKSPACE", tuple())
         xED_TABPOS.executeAction("TYPE", mkPropertyValues({"TEXT":"1"}))
         xNewButtn.executeAction("CLICK", tuple())
 

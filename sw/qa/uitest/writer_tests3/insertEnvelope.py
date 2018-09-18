@@ -27,15 +27,11 @@ class WriterInsertEnvelope(UITestCase):
         xSenderCheckBox = xDialog.getChild("sender")
 
         xAddrTxt.executeAction("SELECT", mkPropertyValues({"FROM": "1", "TO": "200"}))
-        xAddrTxt.executeAction("BACKSPACE", tuple())
         xAddrTxt.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xAddrTxt.executeAction("BACKSPACE", tuple())
         xAddrTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"Address"}))
 
         xSenderTxt.executeAction("SELECT", mkPropertyValues({"FROM": "1", "TO": "200"}))
-        xSenderTxt.executeAction("BACKSPACE", tuple())
         xSenderTxt.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-        xSenderTxt.executeAction("BACKSPACE", tuple())
         xSenderTxt.executeAction("TYPE", mkPropertyValues({"TEXT":"Sender"}))
 
         xInsBtn = xDialog.getChild("user")
