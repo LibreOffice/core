@@ -196,11 +196,9 @@ include/vcl/texteng.hxx:279
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/toolbox.hxx:514
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:286
+include/vcl/weld.hxx:299
     _Bool weld::ComboBoxText::get_entry_selection_bounds(int &,int &)
-include/vcl/weld.hxx:495
-    _Bool weld::Entry::get_selection_bounds(int &,int &)
-include/vcl/weld.hxx:816
+include/vcl/weld.hxx:911
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
@@ -308,12 +306,14 @@ vcl/inc/opengl/texture.hxx:112
     _Bool OpenGLTexture::CopyData(int,int,int,int,const unsigned char *)
 vcl/inc/salframe.hxx:222
     _Bool SalFrame::SetPluginParent(struct SystemParentData *)
-vcl/inc/salgdi.hxx:219
+vcl/inc/salgdi.hxx:214
     class basegfx::B2DPoint SalGraphics::mirror(const class basegfx::B2DPoint &,const class OutputDevice *) const
-vcl/inc/salgdi.hxx:401
+vcl/inc/salgdi.hxx:397
     _Bool SalGraphics::BlendBitmap(const struct SalTwoRect &,const class SalBitmap &,const class OutputDevice *)
 vcl/inc/unx/gtk/gtkdata.hxx:164
     int GtkSalDisplay::CaptureMouse(class SalFrame *)
+vcl/inc/unx/saldisp.hxx:316
+    _Bool SalDisplay::Dispatch(union _XEvent *)
 vcl/source/gdi/pdfwriter_impl.hxx:1259
     _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
 vcl/source/gdi/pdfwriter_impl.hxx:1260

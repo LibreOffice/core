@@ -415,8 +415,6 @@ public:
         ComboBox::SetText( rText );
     }
 
-    void            Fill( const OUString& rName, const FontList* pList );
-
 private:
                     FontStyleBox( const FontStyleBox& ) = delete;
     FontStyleBox&   operator =( const FontStyleBox& ) = delete;
@@ -474,16 +472,7 @@ public:
 
     void            Fill( const FontMetric* pFontMetric, const FontList* pList );
 
-    void            EnableRelativeMode( sal_uInt16 nMin, sal_uInt16 nMax,
-                                        sal_uInt16 nStep = 5 );
-    void            EnablePtRelativeMode( short nMin, short nMax,
-                                          short nStep = 10 );
-    bool            IsRelativeMode() const { return bRelativeMode; }
     void            SetRelative( bool bRelative );
-    bool            IsRelative() const { return bRelative; }
-    void            SetPtRelative( bool bPtRel )
-                        { bPtRelative = bPtRel; SetRelative( true ); }
-    bool            IsPtRelative() const { return bPtRelative; }
 
     virtual void    SetValue( sal_Int64 nNewValue, FieldUnit eInUnit ) override;
     virtual void    SetValue( sal_Int64 nNewValue  ) override;
