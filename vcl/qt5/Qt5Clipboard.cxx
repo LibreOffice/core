@@ -13,7 +13,11 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 
+#include <QtWidgets/QApplication>
+#include <QtGui/QClipboard>
+
 #include <Qt5Clipboard.hxx>
+#include <Qt5Tools.hxx>
 
 std::vector<css::datatransfer::DataFlavor> Qt5Transferable::getTransferDataFlavorsAsVector()
 {
@@ -46,11 +50,19 @@ Qt5Transferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& /*rF
  */
 
 css::uno::Any SAL_CALL
-Qt5Transferable::getTransferData(const css::datatransfer::DataFlavor& /*rFlavor*/)
+Qt5Transferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
 {
     css::uno::Any aRet;
-    Sequence<sal_Int8> aSeq(0, 4); //FIXME
-    aRet <<= aSeq;
+
+    if (rFlavor.MimeType == "text/plain;charset=utf-16")
+    {
+        const QClipboard* clipboard = QApplication::clipboard();
+        QString clipboardContent = clipboard->text();
+        OUString sContent = toOUString(clipboardContent);
+
+        aRet <<= sContent.replaceAll("\r\n", "\n");
+    }
+
     return aRet;
 }
 
