@@ -18,6 +18,7 @@
  */
 
 #include <Qt5Frame.hxx>
+#include <Qt5Frame.moc>
 
 #include <Qt5Tools.hxx>
 #include <Qt5Instance.hxx>
@@ -108,6 +109,7 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     }
     else
         m_pQWidget = new Qt5Widget(*this, aWinFlags);
+    connect(this, SIGNAL(setVisibleSignal(bool)), SLOT(setVisible(bool)));
 
     if (pParent && !(pParent->m_nStyle & SalFrameStyleFlags::PLUG))
     {
@@ -301,6 +303,14 @@ void Qt5Frame::DrawMenuBar() { /* not needed */}
 
 void Qt5Frame::SetExtendedFrameStyle(SalExtStyle /*nExtStyle*/) { /* not needed */}
 
+void Qt5Frame::setVisible(bool bVisible)
+{
+    if (m_pTopLevel)
+        m_pTopLevel->setVisible(bVisible);
+    else
+        m_pQWidget->setVisible(bVisible);
+}
+
 void Qt5Frame::Show(bool bVisible, bool /*bNoActivate*/)
 {
     assert(m_pQWidget);
@@ -308,10 +318,7 @@ void Qt5Frame::Show(bool bVisible, bool /*bNoActivate*/)
     if (m_bDefaultSize)
         SetDefaultSize();
 
-    if (m_pTopLevel)
-        m_pTopLevel->setVisible(bVisible);
-    else
-        m_pQWidget->setVisible(bVisible);
+    Q_EMIT setVisibleSignal(bVisible);
 }
 
 void Qt5Frame::SetMinClientSize(long nWidth, long nHeight)

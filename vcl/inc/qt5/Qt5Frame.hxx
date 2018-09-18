@@ -27,6 +27,8 @@
 #include <headless/svpgdi.hxx>
 #include <vcl/svapp.hxx>
 
+#include <QtCore/QObject>
+
 class Qt5Graphics;
 class Qt5Instance;
 class Qt5Menu;
@@ -37,8 +39,10 @@ class QScreen;
 class QImage;
 class SvpSalGraphics;
 
-class VCLPLUG_QT5_PUBLIC Qt5Frame : public SalFrame
+class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
 {
+    Q_OBJECT
+
     friend class Qt5Widget;
 
     QWidget* m_pQWidget;
@@ -89,6 +93,12 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public SalFrame
 
     void TriggerPaintEvent();
     void TriggerPaintEvent(QRect aRect);
+
+private Q_SLOTS:
+    void setVisible(bool);
+
+Q_SIGNALS:
+    void setVisibleSignal(bool);
 
 public:
     Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nSalFrameStyle, bool bUseCairo);
