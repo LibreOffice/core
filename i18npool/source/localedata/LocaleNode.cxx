@@ -2311,14 +2311,6 @@ OUString Attr::getValueByName (const sal_Char *str) const {
     return OUString();
 }
 
-sal_Int32 Attr::getLength() const{
-    return name.getLength();
-}
-
-const OUString& Attr::getTypeByIndex (sal_Int32 idx) const {
-    return name[idx];
-}
-
 const OUString& Attr::getValueByIndex (sal_Int32 idx) const
 {
     return value[idx];

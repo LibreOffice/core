@@ -493,41 +493,6 @@ sal_Int32 SvxLanguageBoxBase::ImplTypeToPos( LanguageType eType ) const
 }
 
 
-void SvxLanguageBoxBase::SetNoSelectionLBB()
-{
-    ImplSetNoSelection();
-}
-
-void SvxLanguageBoxBase::HideLBB()
-{
-    ImplHide();
-}
-
-void SvxLanguageBoxBase::DisableLBB()
-{
-    ImplDisable();
-}
-
-void SvxLanguageBoxBase::SaveValueLBB()
-{
-    ImplSaveValue();
-}
-
-sal_Int32 SvxLanguageBoxBase::GetSelectedEntryPosLBB() const
-{
-    return ImplGetSelectedEntryPos();
-}
-
-void* SvxLanguageBoxBase::GetEntryDataLBB( sal_Int32  nPos ) const
-{
-    return ImplGetEntryData( nPos);
-}
-
-sal_Int32 SvxLanguageBoxBase::GetSavedValueLBB() const
-{
-    return ImplGetSavedValue();
-}
-
 LanguageType LanguageBox::get_active_id() const
 {
     OUString sLang = m_xControl->get_active_id();
@@ -1128,43 +1093,6 @@ IMPL_LINK_NOARG( SvxLanguageComboBox, EditModifyHdl, Edit&, void )
     }
 }
 
-
-sal_Int32 SvxLanguageComboBox::SaveEditedAsEntry()
-{
-    if (meEditedAndValid != EditedAndValid::Valid)
-        return COMBOBOX_ENTRY_NOTFOUND;
-
-    LanguageTag aLanguageTag( vcl::I18nHelper::filterFormattingChars( GetText()));
-    LanguageType nLang = aLanguageTag.getLanguageType();
-    if (nLang == LANGUAGE_DONTKNOW)
-    {
-        SAL_WARN( "svx.dialog", "SvxLanguageComboBox::SaveEditedAsEntry: unknown tag");
-        return COMBOBOX_ENTRY_NOTFOUND;
-    }
-
-    sal_Int32 nPos = ImplTypeToPos( nLang);
-    if (nPos != COMBOBOX_ENTRY_NOTFOUND)
-        return nPos;    // Already present but with a different string.
-
-    if (SvtLanguageTable::HasLanguageType( nLang))
-    {
-        // In SvtLanguageTable but not in SvxLanguageComboBox. On purpose? This
-        // may be an entry with different settings or CTL instead of Western or
-        // ... all things we don't handle yet.
-        SAL_WARN( "svx.dialog", "SvxLanguageComboBox::SaveEditedAsEntry: already in SvtLanguageTable: " <<
-                SvtLanguageTable::GetLanguageString( nLang) << ", " << nLang);
-    }
-    else
-    {
-        // Add to both, SvtLanguageTable and SvxLanguageComboBox.
-        /* TODO: a descriptive user comment would be a nice to have here. */
-        SvtLanguageTable::AddLanguageTag( aLanguageTag );
-    }
-
-    nPos = InsertLanguage( nLang);
-
-    return nPos;
-}
 
 sal_Int32 LanguageBox::SaveEditedAsEntry()
 {

@@ -80,9 +80,6 @@ public:
     void                SetFontWidthScale( const SfxItemSet& rSet );
     void                SetFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
 
-    void                SetFromItemSet( const SfxItemSet &rSet,
-                                        bool bPreviewBackgroundToCharacter );
-
     virtual Size GetOptimalSize() const override;
 };
 

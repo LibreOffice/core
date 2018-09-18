@@ -611,11 +611,6 @@ sal_Int64 NumericFormatter::GetValue() const
     return GetField() ? GetValueFromString(GetField()->GetText()) : 0;
 }
 
-sal_Int64 NumericFormatter::GetSavedIntValue() const
-{
-    return GetField() ? GetValueFromString(GetField()->GetSavedValue()) : 0;
-}
-
 bool NumericFormatter::IsValueModified() const
 {
     if ( ImplGetEmptyFieldValue() )
