@@ -20,31 +20,30 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_GRFPAGE_HXX
 #define INCLUDED_CUI_SOURCE_INC_GRFPAGE_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/graph.hxx>
 #include <sfx2/tabdlg.hxx>
 
-class SvxCropExample : public vcl::Window
+class SvxCropExample : public weld::CustomWidgetController
 {
-    Size        aFrameSize;
-    Point       aTopLeft, aBottomRight;
-    Graphic     aGrf;
+    MapMode     m_aMapMode;
+    Size        m_aFrameSize;
+    Point       m_aTopLeft, m_aBottomRight;
+    Graphic     m_aGrf;
 
 public:
-    SvxCropExample( vcl::Window* pPar, WinBits nStyle );
+    SvxCropExample();
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& rRect) override;
     virtual void Resize() override;
-    virtual Size GetOptimalSize() const override;
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
-    void SetTop( long nVal )                { aTopLeft.setX(nVal); }
-    void SetBottom( long nVal )             { aBottomRight.setX(nVal); }
-    void SetLeft( long nVal )               { aTopLeft.setY(nVal); }
-    void SetRight( long nVal)               { aBottomRight.setY(nVal); }
+    void SetTop( long nVal )                { m_aTopLeft.setX(nVal); }
+    void SetBottom( long nVal )             { m_aBottomRight.setX(nVal); }
+    void SetLeft( long nVal )               { m_aTopLeft.setY(nVal); }
+    void SetRight( long nVal)               { m_aBottomRight.setY(nVal); }
     void SetFrameSize( const Size& rSz );
-    void SetGraphic( const Graphic& rGrf )  { aGrf = rGrf; }
+    void SetGraphic( const Graphic& rGrf )  { m_aGrf = rGrf; }
 };
 
 class SvxGrfCropPage : public SfxTabPage
@@ -54,53 +53,48 @@ class SvxGrfCropPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-    VclPtr<VclContainer>   m_pCropFrame;
-    VclPtr<RadioButton>    m_pZoomConstRB;
-    VclPtr<RadioButton>    m_pSizeConstRB;
-    VclPtr<MetricField>    m_pLeftMF;
-    VclPtr<MetricField>    m_pRightMF;
-    VclPtr<MetricField>    m_pTopMF;
-    VclPtr<MetricField>    m_pBottomMF;
-
-    VclPtr<VclContainer>   m_pScaleFrame;
-    VclPtr<MetricField>    m_pWidthZoomMF;
-    VclPtr<MetricField>    m_pHeightZoomMF;
-
-    VclPtr<VclContainer>   m_pSizeFrame;
-    VclPtr<MetricField>    m_pWidthMF;
-    VclPtr<MetricField>    m_pHeightMF;
-
-    VclPtr<VclContainer>   m_pOrigSizeGrid;
-    VclPtr<FixedText>      m_pOrigSizeFT;
-    VclPtr<PushButton>     m_pOrigSizePB;
-
-    // Example
-    VclPtr<SvxCropExample> m_pExampleWN;
-
-
-    Timer           aTimer;
     OUString        aGraphicName;
     Size            aOrigSize;
     Size            aOrigPixelSize;
     Size            aPageSize;
-    VclPtr<MetricField>  pLastCropField;
     long            nOldWidth;
     long            nOldHeight;
     bool            bReset;
     bool            bSetOrigSize;
 
+    SvxCropExample m_aExampleWN;
 
-    SvxGrfCropPage( vcl::Window *pParent, const SfxItemSet &rSet );
+    std::unique_ptr<weld::Widget> m_xCropFrame;
+    std::unique_ptr<weld::RadioButton> m_xZoomConstRB;
+    std::unique_ptr<weld::RadioButton> m_xSizeConstRB;
+    std::unique_ptr<weld::MetricSpinButton> m_xLeftMF;
+    std::unique_ptr<weld::MetricSpinButton> m_xRightMF;
+    std::unique_ptr<weld::MetricSpinButton> m_xTopMF;
+    std::unique_ptr<weld::MetricSpinButton> m_xBottomMF;
+
+    std::unique_ptr<weld::Widget> m_xScaleFrame;
+    std::unique_ptr<weld::MetricSpinButton> m_xWidthZoomMF;
+    std::unique_ptr<weld::MetricSpinButton> m_xHeightZoomMF;
+
+    std::unique_ptr<weld::Widget> m_xSizeFrame;
+    std::unique_ptr<weld::MetricSpinButton> m_xWidthMF;
+    std::unique_ptr<weld::MetricSpinButton> m_xHeightMF;
+
+    std::unique_ptr<weld::Widget> m_xOrigSizeGrid;
+    std::unique_ptr<weld::Label> m_xOrigSizeFT;
+    std::unique_ptr<weld::Button> m_xOrigSizePB;
+
+    // Example
+    std::unique_ptr<weld::CustomWeld> m_xExampleWN;
+
+    SvxGrfCropPage(TabPageParent pParent, const SfxItemSet &rSet);
     virtual ~SvxGrfCropPage() override;
     virtual void dispose() override;
 
-    DECL_LINK( ZoomHdl, Edit&, void );
-    DECL_LINK( SizeHdl, Edit&, void );
-    DECL_LINK( CropHdl, SpinField&, void );
-    DECL_LINK( CropLoseFocusHdl, Control&, void );
-    DECL_LINK( CropModifyHdl, Edit&, void );
-    DECL_LINK( OrigSizeHdl, Button*, void );
-    DECL_LINK( Timeout, Timer *, void );
+    DECL_LINK(ZoomHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(SizeHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(CropModifyHdl, weld::MetricSpinButton&, void);
+    DECL_LINK(OrigSizeHdl, weld::Button&, void);
 
     void            CalcZoom();
     void            CalcMinMaxBorder();
@@ -115,7 +109,6 @@ public:
     virtual void Reset( const SfxItemSet *rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet *pSet ) override;
 };
-
 
 #endif
 
