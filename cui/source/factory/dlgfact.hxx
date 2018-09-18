@@ -470,12 +470,6 @@ class AbstractFmSearchDialog_Impl :public AbstractFmSearchDialog
     virtual void SetActiveField(const OUString& strField) override;
 };
 
-class AbstractGraphicFilterDialog_Impl :public AbstractGraphicFilterDialog
-{
-    DECL_ABSTDLG_BASE(AbstractGraphicFilterDialog_Impl,GraphicFilterDialog)
-    virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) override;
-};
-
 class AbstractGraphicFilterDialogController_Impl : public AbstractGraphicFilterDialog
 {
 protected:
