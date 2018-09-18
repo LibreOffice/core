@@ -135,10 +135,14 @@ void SwXMLBrushItemImportContext::EndElement()
         m_xGraphic = GetImport().loadGraphicFromBase64(m_xBase64Stream);
         m_xBase64Stream = nullptr;
     }
+
     if (m_xGraphic.is())
     {
         Graphic aGraphic(m_xGraphic);
+        SvxGraphicPosition eOldGraphicPos = pItem->GetGraphicPos();
         pItem->SetGraphic(aGraphic);
+        if (GPOS_NONE == eOldGraphicPos && GPOS_NONE != pItem->GetGraphicPos())
+            pItem->SetGraphicPos(GPOS_TILED);
     }
 
     if (!(pItem->GetGraphic()))
