@@ -789,8 +789,6 @@ void SvxCropExample::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
                           aFrameSize);
     aGrf.Draw(&rRenderContext, aRect.TopLeft(), aRect.GetSize());
 
-    Size aSz(2, 0);
-    aSz = rRenderContext.PixelToLogic(aSz);
     rRenderContext.SetFillColor(COL_TRANSPARENT);
     rRenderContext.SetRasterOp(RasterOp::Invert);
     aRect.AdjustLeft(aTopLeft.Y() );
