@@ -185,7 +185,7 @@ public:
 
     virtual void MouseMove(const MouseEvent& rMEvt) override;
 
-    void AppendItem(ThumbnailViewItem *pItem);
+    void AppendItem(std::unique_ptr<ThumbnailViewItem> pItem);
 
     void RemoveItem(sal_uInt16 nItemId);
 
@@ -195,7 +195,7 @@ public:
     virtual void Reload() {}
 
     // Change current thumbnail item list with new one (invalidates all pointers to a thumbnail item)
-    void updateItems(const std::vector<ThumbnailViewItem *> &items);
+    void updateItems(std::vector<std::unique_ptr<ThumbnailViewItem>> items);
 
     size_t GetItemPos( sal_uInt16 nItemId ) const;
 
@@ -288,7 +288,7 @@ protected:
 
 protected:
 
-    ThumbnailValueItemList mItemList;
+    std::vector< std::unique_ptr<ThumbnailViewItem> > mItemList;
     ThumbnailValueItemList mFilteredItemList; ///< Cache to store the filtered items
     ThumbnailValueItemList::iterator mpStartSelRange;
     VclPtr<ScrollBar> mpScrBar;
