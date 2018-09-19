@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f013ff3_641800d3",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3002,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-09-19T11:48:13Z",
+      "side": 1,
+      "message": "A dynamic_cast returns nullptr if the object is not of the queried type (which is the purpose of dynamic_cast to check whether a pointer points to an object of the given type), so pField needs to be checked before accessed.",
+      "range": {
+        "startLine": 3002,
+        "startChar": 47,
+        "endLine": 3002,
+        "endChar": 53
+      },
+      "revId": "0ac3445fa8c0fefbe3eb3fe52123ffb56419bfac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f013ff3_440d048f",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3003,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-09-19T11:48:13Z",
+      "side": 1,
+      "message": "This is an implicit conversion of pointer to boolean and instead should be\n\n bIsCalcURL \u003d (dynamic_cast\u003cconst SvxURLField* \u003e(pFld) !\u003d nullptr);\n\nfor better readability (else an explicit bool(...) would do as well).",
+      "range": {
+        "startLine": 3003,
+        "startChar": 20,
+        "endLine": 3003,
+        "endChar": 73
+      },
+      "revId": "0ac3445fa8c0fefbe3eb3fe52123ffb56419bfac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
