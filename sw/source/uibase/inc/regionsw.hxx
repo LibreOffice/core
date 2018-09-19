@@ -227,7 +227,7 @@ public:
 
 class SwSectionIndentTabPage : public SfxTabPage
 {
-    ParaPrevWindow m_aPreviewWin;
+    SvxParaPrevWindow m_aPreviewWin;
     std::unique_ptr<weld::MetricSpinButton> m_xBeforeMF;
     std::unique_ptr<weld::MetricSpinButton> m_xAfterMF;
     std::unique_ptr<weld::CustomWeld> m_xPreviewWin;

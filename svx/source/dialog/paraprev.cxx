@@ -22,7 +22,7 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
 
-ParaPrevWindow::ParaPrevWindow() :
+SvxParaPrevWindow::SvxParaPrevWindow() :
     nLeftMargin     ( 0 ),
     nRightMargin    ( 0 ),
     nFirstLineOfst  ( 0 ),
@@ -35,21 +35,21 @@ ParaPrevWindow::ParaPrevWindow() :
     aSize = Size(11905, 16837);
 }
 
-void ParaPrevWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+void SvxParaPrevWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     CustomWidgetController::SetDrawingArea(pDrawingArea);
     Size aOptimalSize(getParagraphPreviewOptimalSize(pDrawingArea->get_ref_device()));
     pDrawingArea->set_size_request(aOptimalSize.Width(), aOptimalSize.Height());
 }
 
-void ParaPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SvxParaPrevWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     DrawParagraph(rRenderContext);
 }
 
 #define DEF_MARGIN  120
 
-void ParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
+void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
 {
     // Count in Twips by default
     rRenderContext.Push(PushFlags::MAPMODE);
