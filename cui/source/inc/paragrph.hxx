@@ -59,7 +59,7 @@ private:
     bool                    bRelativeMode;
     OUString                sAbsDist;
 
-    ParaPrevWindow m_aExampleWin;
+    SvxParaPrevWindow m_aExampleWin;
 
     // indention
     std::unique_ptr<RelativeField> m_xLeftIndent;
@@ -134,7 +134,7 @@ class SvxParaAlignTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
     static const sal_uInt16 pAlignRanges[];
 
-    ParaPrevWindow m_aExampleWin;
+    SvxParaPrevWindow m_aExampleWin;
 
     // alignment
     std::unique_ptr<weld::RadioButton> m_xLeft;

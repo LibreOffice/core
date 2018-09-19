@@ -35,7 +35,7 @@ enum class SvxPrevLineSpace
     Leading
 };
 
-class SVX_DLLPUBLIC ParaPrevWindow final : public weld::CustomWidgetController
+class SVX_DLLPUBLIC SvxParaPrevWindow final : public weld::CustomWidgetController
 {
     Size                aSize;
 
@@ -60,7 +60,7 @@ class SVX_DLLPUBLIC ParaPrevWindow final : public weld::CustomWidgetController
     void DrawParagraph(vcl::RenderContext& rRenderContext);
 
 public:
-    ParaPrevWindow();
+    SvxParaPrevWindow();
 
     void SetFirstLineOfst( short nNew )
     {
