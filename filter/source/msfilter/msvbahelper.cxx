@@ -78,6 +78,8 @@ static OUString trimMacroName( const OUString& rMacroName )
     return aMacroName;
 }
 
+#if HAVE_FEATURE_SCRIPTING
+
 static SfxObjectShell* findShellForUrl( const OUString& sMacroURLOrPath )
 {
     SfxObjectShell* pFoundShell=nullptr;
@@ -224,6 +226,8 @@ static bool hasMacro( SfxObjectShell const * pShell, const OUString& sLibrary, O
     return bFound;
 }
 
+#endif
+
 OUString getDefaultProjectName( SfxObjectShell const * pShell )
 {
     OUString aPrjName;
@@ -235,6 +239,8 @@ OUString getDefaultProjectName( SfxObjectShell const * pShell )
     }
     return aPrjName;
 }
+
+#if HAVE_FEATURE_SCRIPTING
 
 static void parseMacro( const OUString& sMacro, OUString& sContainer, OUString& sModule, OUString& sProcedure )
 {
@@ -256,6 +262,8 @@ static void parseMacro( const OUString& sMacro, OUString& sContainer, OUString& 
     else
        sProcedure = sMacro;
 }
+
+#endif
 
 OUString resolveVBAMacro( SfxObjectShell const * pShell, const OUString& rLibName, const OUString& rModuleName, const OUString& rMacroName )
 {
