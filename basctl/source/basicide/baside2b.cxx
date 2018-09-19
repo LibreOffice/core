@@ -1469,9 +1469,9 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
             }
             else if (sCommand == "properties")
             {
-                ScopedVclPtrInstance<BreakPointDialog> aBrkDlg(this, GetBreakPoints());
-                aBrkDlg->SetCurrentBreakPoint( *pBrk );
-                aBrkDlg->Execute();
+                BreakPointDialog aBrkDlg(GetFrameWeld(), GetBreakPoints());
+                aBrkDlg.SetCurrentBreakPoint( *pBrk );
+                aBrkDlg.run();
                 Invalidate();
             }
         }
@@ -1481,8 +1481,8 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
             OString sCommand = xBrkListMenu->GetItemIdent(xBrkListMenu->Execute(this, aPos));
             if (sCommand == "manage")
             {
-                ScopedVclPtrInstance< BreakPointDialog > aBrkDlg( this, GetBreakPoints() );
-                aBrkDlg->Execute();
+                BreakPointDialog aBrkDlg(GetFrameWeld(), GetBreakPoints());
+                aBrkDlg.run();
                 Invalidate();
             }
         }
