@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f013ff3_61f4725c",
+        "filename": "sw/PythonTest_sw_python.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-09-19T06:59:46Z",
+      "side": 1,
+      "message": "Please use only lowercase and underscores for filenames (see https://softwareengineering.stackexchange.com/questions/308972/python-file-naming-convention)",
+      "revId": "728da586206c0b93f7599aafc3c2c00d428b000e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f013ff3_a1f95a4e",
+        "filename": "sw/qa/python/check_XTextTable.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-09-19T06:59:46Z",
+      "side": 1,
+      "message": "does it work if you write\n\nfor xName in xNames:\n    ...\n\n?",
+      "range": {
+        "startLine": 56,
+        "startChar": 8,
+        "endLine": 56,
+        "endChar": 36
+      },
+      "revId": "728da586206c0b93f7599aafc3c2c00d428b000e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f013ff3_21ee6a88",
+        "filename": "sw/qa/python/check_XTextTable.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-09-19T06:59:46Z",
+      "side": 1,
+      "message": "maybe rather use assertIsNotNone (sounds more like what it\u0027s testing).",
+      "range": {
+        "startLine": 59,
+        "startChar": 17,
+        "endLine": 59,
+        "endChar": 27
+      },
+      "revId": "728da586206c0b93f7599aafc3c2c00d428b000e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f013ff3_01036e44",
+        "filename": "sw/qa/python/check_XTextTable.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-09-19T06:59:46Z",
+      "side": 1,
+      "message": "same here",
+      "range": {
+        "startLine": 66,
+        "startChar": 17,
+        "endLine": 66,
+        "endChar": 27
+      },
+      "revId": "728da586206c0b93f7599aafc3c2c00d428b000e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f013ff3_c1fc6640",
+        "filename": "sw/qa/python/check_XTextTable.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-09-19T06:59:46Z",
+      "side": 1,
+      "message": "same here (assertIsNone)",
+      "range": {
+        "startLine": 70,
+        "startChar": 13,
+        "endLine": 70,
+        "endChar": 24
+      },
+      "revId": "728da586206c0b93f7599aafc3c2c00d428b000e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
