@@ -97,7 +97,7 @@ namespace comphelper
             sal_uInt8 aSeq[16];
             rtl_createUuid(aSeq, nullptr, true);
 
-            char str[39];
+            char str[38];
             sprintf(str, "{%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
                     aSeq[0], aSeq[1], aSeq[2], aSeq[3], aSeq[4], aSeq[5], aSeq[6], aSeq[7], aSeq[8],
                     aSeq[9], aSeq[10], aSeq[11], aSeq[12], aSeq[13], aSeq[14], aSeq[15]);
