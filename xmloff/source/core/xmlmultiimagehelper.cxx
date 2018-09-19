@@ -75,6 +75,10 @@ namespace
         {
             return 1020;
         }
+        if(sMimeType == "image/x-eps")
+        {
+            return 1025;
+        }
         if(sMimeType == "application/pdf")
         {
             return 1030;
