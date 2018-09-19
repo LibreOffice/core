@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f013ff3_a17cbab5",
+        "filename": "comphelper/source/xml/xmltools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-09-19T07:21:50Z",
+      "side": 1,
+      "message": "this looks wrong - surely this should be \n   OString(str, SAL_N_ELEMENTS(str) - 1)\nor just\n   OString(str)\n?\nOtherwise the OString\u0027s length is going to include the trailing null, which will confuse some code, (but not all code).",
+      "revId": "f95b625faa1f82f2ffa80cc3a18c179b76dcfecb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
