@@ -2066,6 +2066,16 @@ DECLARE_ODFEXPORT_TEST(tdf101856, "tdf101856.odt")
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xBookmark5, UNO_NAME_BOOKMARK_HIDDEN));
 }
 
+DECLARE_ODFEXPORT_TEST(tdf118502, "tdf118502.odt")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    // Make sure the replacement graphic is still there
+    // (was gone because the original graphic was not recognized during load)
+    auto xReplacementGraphic
+        = getProperty<uno::Reference<graphic::XGraphic>>(xShape, "ReplacementGraphic");
+    CPPUNIT_ASSERT(xReplacementGraphic.is());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

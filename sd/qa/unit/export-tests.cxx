@@ -103,6 +103,7 @@ public:
     void testBulletsAsImage();
     void testTdf113818();
     void testTdf119629();
+    void testTdf118502();
     void testTdf113822();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
@@ -132,6 +133,7 @@ public:
     CPPUNIT_TEST(testBulletsAsImage);
     CPPUNIT_TEST(testTdf113818);
     CPPUNIT_TEST(testTdf119629);
+    CPPUNIT_TEST(testTdf118502);
     CPPUNIT_TEST(testTdf113822);
 
     CPPUNIT_TEST_SUITE_END();
