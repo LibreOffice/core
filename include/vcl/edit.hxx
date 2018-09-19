@@ -212,6 +212,7 @@ public:
     virtual sal_Int32   GetMaxTextLen() const { return mnMaxTextLen; }
 
     void                SetWidthInChars(sal_Int32 nWidthInChars);
+    sal_Int32           GetWidthInChars() const { return mnWidthInChars; }
 
     void                setMaxWidthChars(sal_Int32 nWidth);
 

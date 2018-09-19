@@ -104,7 +104,12 @@ IMPL_ABSTDLG_BASE(CuiAbstractTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxDistributeDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractHangulHanjaConversionDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractFmShowColsDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractHyphenWordDialog_Impl)
+
+short AbstractHyphenWordDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractThesaurusDialog_Impl)
 
 short AbstractSvxZoomDialog_Impl::Execute()
@@ -477,11 +482,6 @@ OUString AbstractThesaurusDialog_Impl::GetWord()
 {
     return pDlg->GetWord();
 };
-
-vcl::Window* AbstractHyphenWordDialog_Impl::GetWindow()
-{
-    return pDlg;
-}
 
 Reference < css::embed::XEmbeddedObject > AbstractInsertObjectDialog_Impl::GetObject()
 {
@@ -1050,13 +1050,12 @@ VclPtr<AbstractThesaurusDialog> AbstractDialogFactory_Impl::CreateThesaurusDialo
     return VclPtr<AbstractThesaurusDialog_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractHyphenWordDialog> AbstractDialogFactory_Impl::CreateHyphenWordDialog( vcl::Window* pParent,
+VclPtr<AbstractHyphenWordDialog> AbstractDialogFactory_Impl::CreateHyphenWordDialog(weld::Window* pParent,
                                                 const OUString &rWord, LanguageType nLang,
                                                 css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
-                                                SvxSpellWrapper* pWrapper )
+                                                SvxSpellWrapper* pWrapper)
 {
-    VclPtrInstance<SvxHyphenWordDialog> pDlg( rWord, nLang, pParent, xHyphen, pWrapper );
-    return VclPtr<AbstractHyphenWordDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractHyphenWordDialog_Impl>::Create(o3tl::make_unique<SvxHyphenWordDialog>(rWord, nLang, pParent, xHyphen, pWrapper));
 }
 
 VclPtr<AbstractFmShowColsDialog> AbstractDialogFactory_Impl::CreateFmShowColsDialog()

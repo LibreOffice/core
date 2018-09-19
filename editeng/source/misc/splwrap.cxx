@@ -273,18 +273,16 @@ void SvxSpellWrapper::SpellDocument( )
     {
         Reference< XHyphenatedWord >        xHyphWord( GetLast(), UNO_QUERY );
 
-        vcl::Window *pOld = pWin;
         if (xHyphWord.is())
         {
             EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractHyphenWordDialog> pDlg(pFact->CreateHyphenWordDialog( pWin,
+            ScopedVclPtr<AbstractHyphenWordDialog> pDlg(pFact->CreateHyphenWordDialog(
+                            pWin ? pWin->GetFrameWeld() : nullptr,
                             xHyphWord->getWord(),
                             LanguageTag( xHyphWord->getLocale() ).getLanguageType(),
                             xHyph, this ));
-            pWin = pDlg->GetWindow();
             pDlg->Execute();
         }
-        pWin = pOld;
     }
 }
 

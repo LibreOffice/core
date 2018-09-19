@@ -42,9 +42,6 @@
     <glade-widget-class title="Condition Edit" name="rptuilo-ConditionField"
                         generic-name="ConditionEdit" parent="GtkEntry"
                         icon-name="widget-gtk-comboboxtext"/>
-    <glade-widget-class title="Hyphen Edit" name="cuilo-HyphenEdit"
-                        generic-name="HyphenEdit" parent="GtkEntry"
-                        icon-name="widget-gtk-textentry"/>
     <glade-widget-class title="OSQL NameEdit" name="dbulo-OSQLNameEdit"
                         generic-name="OSQLNameEdit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>

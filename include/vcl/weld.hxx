@@ -505,11 +505,13 @@ public:
     virtual void set_text(const OUString& rText) = 0;
     virtual OUString get_text() const = 0;
     virtual void set_width_chars(int nChars) = 0;
+    virtual int get_width_chars() const = 0;
     virtual void set_max_length(int nChars) = 0;
     // nEndPos can be -1 in order to select all text
     virtual void select_region(int nStartPos, int nEndPos) = 0;
     virtual bool get_selection_bounds(int& rStartPos, int& rEndPos) = 0;
     virtual void set_position(int nCursorPos) = 0;
+    virtual int get_position() const = 0;
     virtual void set_editable(bool bEditable) = 0;
     virtual bool get_editable() const = 0;
     virtual void set_error(bool bShowError) = 0;
@@ -670,6 +672,8 @@ public:
     {
         m_xEntry->select_region(nStartPos, nEndPos);
     }
+    //if not text was selected, both rStartPos and rEndPos will be identical
+    //and false will be returned
     virtual bool get_entry_selection_bounds(int& rStartPos, int& rEndPos) override
     {
         return m_xEntry->get_selection_bounds(rStartPos, rEndPos);
