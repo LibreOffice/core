@@ -2946,13 +2946,13 @@ dnl ===================================================================
 
 if test $_os = iOS; then
     AC_MSG_CHECKING([what iOS SDK to use])
-    current_sdk_ver=11.4
+    current_sdk_ver=12.0
     if test "$enable_ios_simulator" = "yes"; then
         platform=iPhoneSimulator
         versionmin=-mios-simulator-version-min=$current_sdk_ver
     else
         platform=iPhoneOS
-        versionmin=-miphoneos-version-min=$current_sdk_ver
+        versionmin=-miphoneos-version-min=11.0
     fi
     xcode_developer=`xcode-select -print-path`
 
