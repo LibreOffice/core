@@ -3365,6 +3365,7 @@ private:
     gulong m_nChangedSignalId;
     gulong m_nInsertTextSignalId;
     gulong m_nCursorPosSignalId;
+    gulong m_nSelectionPosSignalId;
 
     static void signalChanged(GtkEntry*, gpointer widget)
     {
@@ -3410,6 +3411,7 @@ public:
         , m_nChangedSignalId(g_signal_connect(pEntry, "changed", G_CALLBACK(signalChanged), this))
         , m_nInsertTextSignalId(g_signal_connect(pEntry, "insert-text", G_CALLBACK(signalInsertText), this))
         , m_nCursorPosSignalId(g_signal_connect(pEntry, "notify::cursor-position", G_CALLBACK(signalCursorPosition), this))
+        , m_nSelectionPosSignalId(g_signal_connect(pEntry, "notify::selection-bound", G_CALLBACK(signalCursorPosition), this))
     {
     }
 
@@ -3434,6 +3436,11 @@ public:
         enable_notify_events();
     }
 
+    virtual int get_width_chars() const override
+    {
+        return gtk_entry_get_width_chars(m_pEntry);
+    }
+
     virtual void set_max_length(int nChars) override
     {
         disable_notify_events();
@@ -3455,7 +3462,14 @@ public:
 
     virtual void set_position(int nCursorPos) override
     {
+        disable_notify_events();
         gtk_editable_set_position(GTK_EDITABLE(m_pEntry), nCursorPos);
+        enable_notify_events();
+    }
+
+    virtual int get_position() const override
+    {
+        return gtk_editable_get_position(GTK_EDITABLE(m_pEntry));
     }
 
     virtual void set_editable(bool bEditable) override
@@ -3478,6 +3492,8 @@ public:
 
     virtual void disable_notify_events() override
     {
+        g_signal_handler_block(m_pEntry, m_nSelectionPosSignalId);
+        g_signal_handler_block(m_pEntry, m_nCursorPosSignalId);
         g_signal_handler_block(m_pEntry, m_nInsertTextSignalId);
         g_signal_handler_block(m_pEntry, m_nChangedSignalId);
         GtkInstanceWidget::disable_notify_events();
@@ -3488,6 +3504,8 @@ public:
         GtkInstanceWidget::enable_notify_events();
         g_signal_handler_unblock(m_pEntry, m_nChangedSignalId);
         g_signal_handler_unblock(m_pEntry, m_nInsertTextSignalId);
+        g_signal_handler_unblock(m_pEntry, m_nCursorPosSignalId);
+        g_signal_handler_unblock(m_pEntry, m_nSelectionPosSignalId);
     }
 
     virtual vcl::Font get_font() override
@@ -3579,6 +3597,7 @@ public:
 
     virtual ~GtkInstanceEntry() override
     {
+        g_signal_handler_disconnect(m_pEntry, m_nSelectionPosSignalId);
         g_signal_handler_disconnect(m_pEntry, m_nCursorPosSignalId);
         g_signal_handler_disconnect(m_pEntry, m_nInsertTextSignalId);
         g_signal_handler_disconnect(m_pEntry, m_nChangedSignalId);

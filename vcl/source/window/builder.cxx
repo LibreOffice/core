@@ -1846,7 +1846,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     }
     else if (name == "GtkEntry")
     {
-        xWindow = VclPtr<Edit>::Create(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
+        xWindow = VclPtr<Edit>::Create(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK|WB_NOHIDESELECTION);
         BuilderUtils::ensureDefaultWidthChars(rMap);
     }
     else if (name == "GtkNotebook")
@@ -1862,7 +1862,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     {
         extractBuffer(id, rMap);
 
-        WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT;
+        WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_NOHIDESELECTION;
         OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
         if (!sBorder.isEmpty())
             nWinStyle |= WB_BORDER;

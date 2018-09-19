@@ -1462,7 +1462,9 @@ public:
 
     virtual void set_text(const OUString& rText) override
     {
+        disable_notify_events();
         m_xEntry->SetText(rText);
+        enable_notify_events();
     }
 
     virtual OUString get_text() const override
@@ -1475,6 +1477,11 @@ public:
         m_xEntry->SetWidthInChars(nChars);
     }
 
+    virtual int get_width_chars() const override
+    {
+        return m_xEntry->GetWidthInChars();
+    }
+
     virtual void set_max_length(int nChars) override
     {
         m_xEntry->SetMaxTextLen(nChars);
@@ -1482,7 +1489,9 @@ public:
 
     virtual void select_region(int nStartPos, int nEndPos) override
     {
+        disable_notify_events();
         m_xEntry->SetSelection(Selection(nStartPos, nEndPos < 0 ? SELECTION_MAX : nEndPos));
+        enable_notify_events();
     }
 
     bool get_selection_bounds(int& rStartPos, int &rEndPos) override
@@ -1495,10 +1504,17 @@ public:
 
     virtual void set_position(int nCursorPos) override
     {
+        disable_notify_events();
         if (nCursorPos < 0)
             m_xEntry->SetCursorAtLast();
         else
             m_xEntry->SetSelection(Selection(nCursorPos, nCursorPos));
+        enable_notify_events();
+    }
+
+    virtual int get_position() const override
+    {
+        return m_xEntry->GetSelection().Max();
     }
 
     virtual void set_editable(bool bEditable) override
@@ -1562,6 +1578,8 @@ IMPL_LINK_NOARG(SalInstanceEntry, ChangeHdl, Edit&, void)
 
 IMPL_LINK(SalInstanceEntry, CursorListener, VclWindowEvent&, rEvent, void)
 {
+    if (notify_events_disabled())
+        return;
     if (rEvent.GetId() == VclEventId::EditSelectionChanged || rEvent.GetId() == VclEventId::EditCaretChanged)
         signal_cursor_position();
 }
@@ -1930,7 +1948,9 @@ public:
 
     virtual void select_region(int nStartPos, int nEndPos) override
     {
+        disable_notify_events();
         m_xTextView->SetSelection(Selection(nStartPos, nEndPos < 0 ? SELECTION_MAX : nEndPos));
+        enable_notify_events();
     }
 
     virtual void set_editable(bool bEditable) override
