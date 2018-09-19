@@ -532,16 +532,14 @@ uno::Any getPropertyFromContext( const OUString& rPropertyName, const XMLPropSty
         return aRet;
     const ::std::vector< XMLPropertyState >& rProperties = pPropStyleContext->GetProperties();
     const rtl::Reference< XMLPropertySetMapper >& rMapper = pStylesCtxt->GetImportPropertyMapper( pPropStyleContext->GetFamily()/*XML_STYLE_FAMILY_SCH_CHART_ID*/ )->getPropertySetMapper();
-    ::std::vector< XMLPropertyState >::const_iterator aEnd( rProperties.end() );
-    ::std::vector< XMLPropertyState >::const_iterator aPropIter( rProperties.begin() );
-    for( aPropIter = rProperties.begin(); aPropIter != aEnd; ++aPropIter )
+    for( const auto& rProp : rProperties )
     {
-        sal_Int32 nIdx = aPropIter->mnIndex;
+        sal_Int32 nIdx = rProp.mnIndex;
         if( nIdx == -1 )
             continue;
         OUString aPropName = rMapper->GetEntryAPIName( nIdx );
         if(rPropertyName == aPropName)
-            return aPropIter->maValue;
+            return rProp.maValue;
     }
     return aRet;
 }
@@ -719,10 +717,9 @@ bool switchBackToDataProviderFromParent( const Reference< chart2::XChartDocument
 
     xDataReceiver->attachDataProvider( xDataProviderFromParent );
 
-    for( tSchXMLLSequencesPerIndex::const_iterator aLSeqIt( rLSequencesPerIndex.begin() );
-         aLSeqIt != rLSequencesPerIndex.end(); ++aLSeqIt )
+    for( const auto& rLSeq : rLSequencesPerIndex )
     {
-        Reference< chart2::data::XLabeledDataSequence > xLabeledSeq( aLSeqIt->second );
+        Reference< chart2::data::XLabeledDataSequence > xLabeledSeq( rLSeq.second );
         if( !xLabeledSeq.is() )
             continue;
         Reference< chart2::data::XDataSequence > xNewSeq;

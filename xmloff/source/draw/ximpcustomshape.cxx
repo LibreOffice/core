@@ -1180,50 +1180,45 @@ void XMLEnhancedCustomShapeContext::EndElement()
         }
 
         // resolve equation
-        std::vector< OUString >::iterator aEquationIter = maEquations.begin();
-        std::vector< OUString >::iterator aEquationEnd  = maEquations.end();
-        while( aEquationIter != aEquationEnd )
+        for( auto& rEquation : maEquations )
         {
             sal_Int32 nIndexOf = 0;
             do
             {
-                nIndexOf = aEquationIter->indexOf( '?', nIndexOf );
+                nIndexOf = rEquation.indexOf( '?', nIndexOf );
                 if ( nIndexOf != -1 )
                 {
                     OUString aEquationName;
-                    if ( GetEquationName( *aEquationIter, nIndexOf + 1, aEquationName ) )
+                    if ( GetEquationName( rEquation, nIndexOf + 1, aEquationName ) )
                     {
                         // copying first characters inclusive '?'
-                        OUString aNew( aEquationIter->copy( 0, nIndexOf + 1 ) );
+                        OUString aNew( rEquation.copy( 0, nIndexOf + 1 ) );
                         sal_Int32 nIndex = 0;
                         EquationHashMap::iterator aHashIter( pH->find( aEquationName ) );
                         if ( aHashIter != pH->end() )
                             nIndex = (*aHashIter).second;
                         aNew += OUString::number( nIndex );
-                        aNew += aEquationIter->copy( nIndexOf + aEquationName.getLength() + 1 );
-                        *aEquationIter = aNew;
+                        aNew += rEquation.copy( nIndexOf + aEquationName.getLength() + 1 );
+                        rEquation = aNew;
                     }
                     nIndexOf++;
                 }
             }
             while( nIndexOf != -1 );
-            ++aEquationIter;
         }
 
         // Path
         sal_Int32 i;
-        std::vector< beans::PropertyValue >::iterator aPathIter = maPath.begin();
-        std::vector< beans::PropertyValue >::iterator aPathEnd  = maPath.end();
-        while ( aPathIter != aPathEnd )
+        for ( beans::PropertyValue& rPathItem : maPath )
         {
-            switch( EASGet( aPathIter->Name ) )
+            switch( EASGet( rPathItem.Name ) )
             {
                 case EAS_Coordinates :
                 case EAS_GluePoints :
                 {
                     uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > const & rSeq =
                         *o3tl::doAccess<uno::Sequence< css::drawing::EnhancedCustomShapeParameterPair > >(
-                            aPathIter->Value);
+                            rPathItem.Value);
                     for ( i = 0; i < rSeq.getLength(); i++ )
                     {
                         CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].First), pH.get() );
@@ -1235,7 +1230,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
                 {
                     uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > const & rSeq =
                         *o3tl::doAccess<uno::Sequence< css::drawing::EnhancedCustomShapeTextFrame > >(
-                            aPathIter->Value);
+                            rPathItem.Value);
                     for ( i = 0; i < rSeq.getLength(); i++ )
                     {
                         CheckAndResolveEquationParameter( const_cast<css::drawing::EnhancedCustomShapeParameter &>(rSeq[ i ].TopLeft.First), pH.get() );
@@ -1248,7 +1243,6 @@ void XMLEnhancedCustomShapeContext::EndElement()
                 default:
                     break;
             }
-            ++aPathIter;
         }
         for ( css::beans::PropertyValues const & aHandle : maHandles )
         {

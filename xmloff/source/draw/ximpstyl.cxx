@@ -192,19 +192,18 @@ void SdXMLDrawingPageStyleContext::Finish( bool bOverwrite )
 
     const rtl::Reference< XMLPropertySetMapper >& rImpPrMap = GetStyles()->GetImportPropertyMapper( GetFamily() )->getPropertySetMapper();
 
-    ::std::vector< XMLPropertyState >::iterator property = rProperties.begin();
-    for(; property != rProperties.end(); ++property)
+    for(auto& property : rProperties)
     {
-        if( property->mnIndex == -1 )
+        if( property.mnIndex == -1 )
             continue;
 
-        sal_Int16 nContextID = rImpPrMap->GetEntryContextId(property->mnIndex);
+        sal_Int16 nContextID = rImpPrMap->GetEntryContextId(property.mnIndex);
         switch( nContextID )
         {
             case CTF_DATE_TIME_FORMAT:
             {
                 OUString sStyleName;
-                (*property).maValue >>= sStyleName;
+                property.maValue >>= sStyleName;
 
                 sal_Int32 nStyle = 0;
 
@@ -215,7 +214,7 @@ void SdXMLDrawingPageStyleContext::Finish( bool bOverwrite )
                 if( pSdNumStyle )
                     nStyle = pSdNumStyle->GetDrawKey();
 
-                (*property).maValue <<= nStyle;
+                property.maValue <<= nStyle;
             }
             break;
         }
@@ -1187,18 +1186,13 @@ static bool canSkipReset(const OUString &rName, const XMLPropStyleContext* pProp
         if (nIndexStyle != -1)
         {
             const ::std::vector< XMLPropertyState > &rProperties = pPropStyle->GetProperties();
-            ::std::vector< XMLPropertyState >::const_iterator property = rProperties.begin();
-            for(; property != rProperties.end(); ++property)
+            auto property = std::find_if(rProperties.cbegin(), rProperties.cend(),
+                [nIndexStyle](const XMLPropertyState& rProp) { return rProp.mnIndex == nIndexStyle; });
+            if (property != rProperties.cend())
             {
-                sal_Int32 nIdx = property->mnIndex;
-                if (nIdx == nIndexStyle)
-                {
-                    bool bNewStyleTextAutoGrowHeight(false);
-                    property->maValue >>= bNewStyleTextAutoGrowHeight;
-                    if (bNewStyleTextAutoGrowHeight == bOldStyleTextAutoGrowHeight)
-                        bCanSkipReset = true;
-                    break;
-                }
+                bool bNewStyleTextAutoGrowHeight(false);
+                property->maValue >>= bNewStyleTextAutoGrowHeight;
+                bCanSkipReset = (bNewStyleTextAutoGrowHeight == bOldStyleTextAutoGrowHeight);
             }
         }
     }
