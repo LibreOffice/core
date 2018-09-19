@@ -1553,9 +1553,11 @@ bool Window::set_property(const OString &rKey, const OUString &rValue)
     else if (rKey == "can-focus")
     {
         WinBits nBits = GetStyle();
-        nBits &= ~WB_TABSTOP;
+        nBits &= ~(WB_TABSTOP|WB_NOTABSTOP);
         if (toBool(rValue))
             nBits |= WB_TABSTOP;
+        else
+            nBits |= WB_NOTABSTOP;
         SetStyle(nBits);
     }
     else

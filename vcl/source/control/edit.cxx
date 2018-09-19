@@ -191,16 +191,7 @@ bool Edit::set_property(const OString &rKey, const OUString &rValue)
     }
     else if (rKey == "editable")
     {
-        bool bReadOnly = !toBool(rValue);
-        SetReadOnly(bReadOnly);
-        //disable tab to traverse into readonly editables
-        WinBits nBits = GetStyle();
-        nBits &= ~(WB_TABSTOP|WB_NOTABSTOP);
-        if (!bReadOnly)
-            nBits |= WB_TABSTOP;
-        else
-            nBits |= WB_NOTABSTOP;
-        SetStyle(nBits);
+        SetReadOnly(!toBool(rValue));
     }
     else if (rKey == "visibility")
     {
