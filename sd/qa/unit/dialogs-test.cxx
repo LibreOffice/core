@@ -294,7 +294,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
         {
             // needs an SfxItemSet, use the one from the 1st object
             pRetval = getSdAbstractDialogFactory()->CreateCopyDlg(
-                getViewShell()->GetActiveWindow(),
+                getViewShell()->GetFrameWeld(),
                 getSfxItemSetFromSdrObject(),
                 getDrawView());
             break;

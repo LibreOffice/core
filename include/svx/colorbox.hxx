@@ -136,6 +136,7 @@ public:
     bool IsValueChangedFromSaved() const { return m_aSaveColor != GetSelectEntryColor(); }
 
     void set_sensitive(bool sensitive) { m_xButton->set_sensitive(sensitive); }
+    bool get_sensitive() const { return m_xButton->get_sensitive(); }
     void hide() { m_xButton->hide(); }
 };
 
