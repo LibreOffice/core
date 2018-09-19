@@ -115,22 +115,16 @@ bool UnoInterfaceToUniqueIdentifierMapper::findReference( const Reference< XInte
 {
     uno::Reference< uno::XInterface > xRef( rInterface, uno::UNO_QUERY );
 
-    rIter = maEntries.begin();
-
     const IdMap_t::const_iterator aEnd( maEntries.end() );
-    while( rIter != aEnd )
-    {
+    rIter = std::find_if(maEntries.begin(), aEnd, [&xRef](const IdMap_t::value_type& rItem) {
         // The Reference == operator, does a repeated queryInterface on
         // this to ensure we got the right XInterface base-class. However,
         // we can be sure that this has been done already by the time we
         // get to here.
-        if( (*rIter).second.get() == xRef.get() )
-            return true;
+        return rItem.second.get() == xRef.get();
+    });
 
-        ++rIter;
-    }
-
-    return false;
+    return rIter != aEnd;
 }
 
 bool UnoInterfaceToUniqueIdentifierMapper::findIdentifier( const OUString& rIdentifier, IdMap_t::const_iterator& rIter ) const

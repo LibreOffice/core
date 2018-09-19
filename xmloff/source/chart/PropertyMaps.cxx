@@ -207,13 +207,11 @@ void XMLChartExportPropertyMapper::ContextFilter(
     bool bCheckAuto = false;
 
     // filter properties
-    for( std::vector< XMLPropertyState >::iterator property = rProperties.begin();
-         property != rProperties.end();
-         ++property )
+    for( auto& rProperty : rProperties )
     {
         // find properties with context
         // to prevent writing this property set mnIndex member to -1
-        switch( getPropertySetMapper()->GetEntryContextId( property->mnIndex ))
+        switch( getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex ))
         {
             // if Auto... is set the corresponding properties mustn't be exported
             case XML_SCH_CONTEXT_MIN:
@@ -241,7 +239,7 @@ void XMLChartExportPropertyMapper::ContextFilter(
             // the following property is deprecated
             // element-item symbol-image is used now
             case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME:
-                property->mnIndex = -1;
+                rProperty.mnIndex = -1;
                 break;
 
             case XML_SCH_CONTEXT_STOCK_WITH_VOLUME:
@@ -251,7 +249,7 @@ void XMLChartExportPropertyMapper::ContextFilter(
                 // because there, the transformation to OOo is done after the
                 // complete export of the chart in OASIS format.
                 if( mrExport.getExportFlags() & SvXMLExportFlags::OASIS )
-                    property->mnIndex = -1;
+                    rProperty.mnIndex = -1;
                 break;
         }
 
@@ -265,7 +263,7 @@ void XMLChartExportPropertyMapper::ContextFilter(
                     uno::Any aAny = rPropSet->getPropertyValue( aAutoPropName );
                     aAny >>= bAuto;
                     if( bAuto )
-                        property->mnIndex = -1;
+                        rProperty.mnIndex = -1;
                 }
                 catch(const beans::UnknownPropertyException&)
                 {

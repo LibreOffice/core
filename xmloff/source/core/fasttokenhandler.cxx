@@ -44,12 +44,12 @@ TokenMap::TokenMap() :
     };
 
     const sal_Char* const* ppcTokenName = sppcTokenNames;
-    for( std::vector< uno::Sequence< sal_Int8 > >::iterator aIt = maTokenNames.begin(), aEnd = maTokenNames.end();
-            aIt != aEnd; ++aIt, ++ppcTokenName )
+    for( auto& rTokenName : maTokenNames )
     {
         OString aUtf8Token( *ppcTokenName );
-        *aIt = uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >(
+        rTokenName = uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >(
                     aUtf8Token.getStr() ), aUtf8Token.getLength() );
+        ++ppcTokenName;
     }
 }
 

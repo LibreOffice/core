@@ -982,13 +982,10 @@ void XMLShapeImportHelper::moveGluePointMapping( const css::uno::Reference< css:
         ShapeGluePointsMap::iterator aShapeIter( mpPageContext->maShapeGluePointsMap.find( xShape ) );
         if( aShapeIter != mpPageContext->maShapeGluePointsMap.end() )
         {
-            GluePointIdMap::iterator aShapeIdIter = (*aShapeIter).second.begin();
-            GluePointIdMap::iterator aShapeIdEnd  = (*aShapeIter).second.end();
-            while ( aShapeIdIter != aShapeIdEnd )
+            for ( auto& rShapeId : (*aShapeIter).second )
             {
-                if ( (*aShapeIdIter).second != -1 )
-                    (*aShapeIdIter).second += n;
-                ++aShapeIdIter;
+                if ( rShapeId.second != -1 )
+                    rShapeId.second += n;
             }
         }
     }

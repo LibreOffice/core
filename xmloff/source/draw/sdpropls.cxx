@@ -1338,11 +1338,9 @@ void XMLShapeExportPropertyMapper::ContextFilter(
     XMLPropertyState* pControlWritingMode = nullptr;
 
     // filter properties
-    for( std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
-         aIter != rProperties.end();
-         ++aIter )
+    for( auto& rProp : rProperties )
     {
-            XMLPropertyState *property = &(*aIter);
+        XMLPropertyState *property = &rProp;
         if( property->mnIndex == -1 )
             continue;
 
@@ -1700,11 +1698,9 @@ void XMLPageExportPropertyMapper::ContextFilter(
     sal_Int16 nTransitionType = 0;
 
     // filter properties
-    for( std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
-         aIter != rProperties.end();
-         ++aIter )
+    for( auto& rProp : rProperties )
     {
-        XMLPropertyState *property = &(*aIter);
+        XMLPropertyState *property = &rProp;
         if( property->mnIndex == -1 )
             continue;
 

@@ -3762,15 +3762,9 @@ void SdXMLCustomShapeContext::EndElement()
 
             //fdo#84043 overwrite the property if it already exists, otherwise append it
             beans::PropertyValue* pItem;
-            std::vector< beans::PropertyValue >::iterator aI(maCustomShapeGeometry.begin());
-            std::vector< beans::PropertyValue >::iterator aE(maCustomShapeGeometry.end());
-            while (aI != aE)
-            {
-                if (aI->Name == sName)
-                    break;
-                ++aI;
-            }
-            if (aI != aE)
+            auto aI = std::find_if(maCustomShapeGeometry.begin(), maCustomShapeGeometry.end(),
+                [&sName](beans::PropertyValue& rValue) { return rValue.Name == sName; });
+            if (aI != maCustomShapeGeometry.end())
             {
                 beans::PropertyValue& rItem = *aI;
                 pItem = &rItem;

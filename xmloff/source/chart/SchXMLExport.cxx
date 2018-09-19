@@ -378,10 +378,9 @@ Sequence< Reference< chart2::data::XLabeledDataSequence > > lcl_getAllSeriesSequ
     {
         Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram());
         ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector( SchXMLSeriesHelper::getDataSeriesFromDiagram( xDiagram ));
-        for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aSeriesIt( aSeriesVector.begin() )
-            ; aSeriesIt != aSeriesVector.end(); ++aSeriesIt )
+        for( const auto& rSeries : aSeriesVector )
         {
-            Reference< chart2::data::XDataSource > xDataSource( *aSeriesIt, uno::UNO_QUERY );
+            Reference< chart2::data::XDataSource > xDataSource( rSeries, uno::UNO_QUERY );
             if( !xDataSource.is() )
                 continue;
             uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
@@ -555,12 +554,11 @@ sal_Int32 lcl_getMaxSequenceLength(
     const SchXMLExportHelper_Impl::tDataSequenceCont & rContainer )
 {
     sal_Int32 nResult = 0;
-    for( SchXMLExportHelper_Impl::tDataSequenceCont::const_iterator aIt( rContainer.begin());
-         aIt != rContainer.end(); ++aIt )
+    for( const auto& rDataSequence : rContainer )
     {
-        if( aIt->second.is())
+        if( rDataSequence.second.is())
         {
-            sal_Int32 nSeqLength = aIt->second->getData().getLength();
+            sal_Int32 nSeqLength = rDataSequence.second->getData().getLength();
             if( nSeqLength > nResult )
                 nResult = nSeqLength;
         }
@@ -733,20 +731,22 @@ void lcl_ReorderInternalSequencesAccordingToTheirRangeName(
 
     rInOutSequences.clear();
     sal_Int32 nIndex = 0;
-    for( lcl_DataSequenceMap::const_iterator aIt = aIndexSequenceMap.begin();
-         aIt != aIndexSequenceMap.end(); ++aIt, ++nIndex )
+    for( const auto& rEntry : aIndexSequenceMap )
     {
-        if( aIt->first < 0 )
-            continue;
-        // fill empty columns
-        rInOutSequences.insert(
-                rInOutSequences.end(),
-                aIt->first - nIndex,
-                SchXMLExportHelper_Impl::tDataSequenceCont::value_type(
-                    uno::Reference< chart2::data::XDataSequence >(),
-                    uno::Reference< chart2::data::XDataSequence >() ));
-        nIndex = aIt->first;
-        rInOutSequences.push_back( aIt->second );
+        if( rEntry.first >= 0 )
+        {
+            // fill empty columns
+            rInOutSequences.insert(
+                    rInOutSequences.end(),
+                    rEntry.first - nIndex,
+                    SchXMLExportHelper_Impl::tDataSequenceCont::value_type(
+                        uno::Reference< chart2::data::XDataSequence >(),
+                        uno::Reference< chart2::data::XDataSequence >() ));
+            nIndex = rEntry.first;
+            rInOutSequences.push_back( rEntry.second );
+        }
+
+        ++nIndex;
     }
 }
 
@@ -779,9 +779,6 @@ lcl_TableData lcl_getDataForLocalTable(
 
         //series values and series labels
         SchXMLExportHelper_Impl::tDataSequenceCont::size_type nNumSequences = aSequencesToExport.size();
-        SchXMLExportHelper_Impl::tDataSequenceCont::const_iterator aBegin( aSequencesToExport.begin());
-        SchXMLExportHelper_Impl::tDataSequenceCont::const_iterator aEnd( aSequencesToExport.end());
-        SchXMLExportHelper_Impl::tDataSequenceCont::const_iterator aIt( aBegin );
 
         auto nMaxSequenceLength( lcl_getMaxSequenceLength( aSequencesToExport ));
         if( aSimpleCategories.getLength() > nMaxSequenceLength )
@@ -822,30 +819,30 @@ lcl_TableData lcl_getDataForLocalTable(
         // iterate over all sequences
         size_t nSeqIdx = 0;
         Sequence< Sequence< OUString > > aComplexLabels(nNumSequences);
-        for( ; aIt != aEnd; ++aIt, ++nSeqIdx )
+        for( const auto& rDataSequence : aSequencesToExport )
         {
             OUString aRange;
             Sequence< OUString >& rCurrentComplexLabel = aComplexLabels[nSeqIdx];
-            if( aIt->first.is())
+            if( rDataSequence.first.is())
             {
-                lcl_getLabelStringSequence( rCurrentComplexLabel, aIt->first );
+                lcl_getLabelStringSequence( rCurrentComplexLabel, rDataSequence.first );
                 rLabels[nSeqIdx] = lcl_flattenStringSequence( rCurrentComplexLabel );
-                aRange = aIt->first->getSourceRangeRepresentation();
+                aRange = rDataSequence.first->getSourceRangeRepresentation();
                 if( xRangeConversion.is())
                     aRange = xRangeConversion->convertRangeToXML( aRange );
             }
-            else if( aIt->second.is())
+            else if( rDataSequence.second.is())
             {
                 rCurrentComplexLabel.realloc(1);
                 rLabels[nSeqIdx] = rCurrentComplexLabel[0] = lcl_flattenStringSequence(
-                    aIt->second->generateLabel( chart2::data::LabelOrigin_SHORT_SIDE ));
+                    rDataSequence.second->generateLabel( chart2::data::LabelOrigin_SHORT_SIDE ));
             }
             if( bSeriesFromColumns )
                 aResult.aColumnDescriptions_Ranges.push_back( aRange );
             else
                 aResult.aRowDescriptions_Ranges.push_back( aRange );
 
-            ::std::vector< double > aNumbers( lcl_getAllValuesFromSequence( aIt->second ));
+            ::std::vector< double > aNumbers( lcl_getAllValuesFromSequence( rDataSequence.second ));
             if( bSeriesFromColumns )
             {
                 const sal_Int32 nSize( static_cast< sal_Int32 >( aNumbers.size()));
@@ -855,17 +852,19 @@ lcl_TableData lcl_getDataForLocalTable(
             else
                 aResult.aDataInRows[nSeqIdx] = aNumbers;
 
-            if( aIt->second.is())
+            if( rDataSequence.second.is())
             {
-                aRange =  aIt->second->getSourceRangeRepresentation();
+                aRange =  rDataSequence.second->getSourceRangeRepresentation();
                 if( xRangeConversion.is())
                     aRange = xRangeConversion->convertRangeToXML( aRange );
             }
             aResult.aDataRangeRepresentations.push_back( aRange );
 
             //is column hidden?
-            if( !lcl_SequenceHasUnhiddenData(aIt->first) && !lcl_SequenceHasUnhiddenData(aIt->second) )
+            if( !lcl_SequenceHasUnhiddenData(rDataSequence.first) && !lcl_SequenceHasUnhiddenData(rDataSequence.second) )
                 aResult.aHiddenColumns.push_back(nSeqIdx);
+
+            ++nSeqIdx;
         }
         Sequence< Sequence< Any > >& rComplexAnyLabels = bSeriesFromColumns ? aResult.aComplexColumnDescriptions : aResult.aComplexRowDescriptions;//#i116544#
         rComplexAnyLabels.realloc(aComplexLabels.getLength());
@@ -1633,9 +1632,7 @@ void SchXMLExportHelper_Impl::exportTable()
         const Sequence< Sequence< uno::Any > >& rComplexColumnDescriptions = aData.aComplexColumnDescriptions;
         sal_Int32 nComplexCount = rComplexColumnDescriptions.getLength();
         sal_Int32 nC = 0;
-        for( tStringVector::const_iterator aIt( aData.aColumnDescriptions.begin())
-             ; (aIt != aData.aColumnDescriptions.end())
-             ; ++aIt, nC++ )
+        for( const auto& rDesc : aData.aColumnDescriptions )
         {
             bool bExportString = true;
             if( nC < nComplexCount )
@@ -1662,7 +1659,7 @@ void SchXMLExportHelper_Impl::exportTable()
             }
 
             SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, true, true );
-            exportText( *aIt );
+            exportText( rDesc );
             if( nC < nComplexCount )
                 lcl_exportComplexLabel( rComplexColumnDescriptions[nC], mrExport );
             if( !bHasOwnData && aColumnDescriptions_RangeIter != aColumnDescriptions_RangeEnd )
@@ -1672,6 +1669,8 @@ void SchXMLExportHelper_Impl::exportTable()
                     SchXMLTools::exportRangeToSomewhere( mrExport, *aColumnDescriptions_RangeIter );
                 ++aColumnDescriptions_RangeIter;
             }
+
+            nC++;
         }
         SAL_WARN_IF( !bHasOwnData && (aColumnDescriptions_RangeIter != aColumnDescriptions_RangeEnd), "xmloff.chart", "bHasOwnData == false && aColumnDescriptions_RangeIter != aColumnDescriptions_RangeEnd" );
     } // closing row and header-rows elements
@@ -1684,9 +1683,7 @@ void SchXMLExportHelper_Impl::exportTable()
         sal_Int32 nComplexCount = rComplexRowDescriptions.getLength();
         sal_Int32 nC = 0;
 
-        for( t2DNumberContainer::const_iterator aRowIt( aData.aDataInRows.begin())
-            ; aRowIt != aData.aDataInRows.end()
-            ; ++aRowIt, ++nC )
+        for( const auto& rRow : aData.aDataInRows )
         {
             SvXMLElementExport aRow( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, true, true );
 
@@ -1732,8 +1729,8 @@ void SchXMLExportHelper_Impl::exportTable()
             }
 
             //export row values
-            for( t2DNumberContainer::value_type::const_iterator aColIt( aRowIt->begin());
-                 aColIt != aRowIt->end(); ++aColIt )
+            for( t2DNumberContainer::value_type::const_iterator aColIt( rRow.begin());
+                 aColIt != rRow.end(); ++aColIt )
             {
                 ::sax::Converter::convertDouble( msStringBuffer, *aColIt );
                 msString = msStringBuffer.makeStringAndClear();
@@ -1742,7 +1739,7 @@ void SchXMLExportHelper_Impl::exportTable()
                 SvXMLElementExport aCell( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, true, true );
                 exportText( msString ); // do not convert tabs and lfs
                 if( ( !bHasOwnData && aDataRangeIter != aDataRangeEndIter ) &&
-                    ( mbRowSourceColumns || (aColIt == aRowIt->begin()) ) )
+                    ( mbRowSourceColumns || (aColIt == rRow.begin()) ) )
                 {
                     // remind the original range to allow a correct re-association when copying via clipboard
                     if (!(*aDataRangeIter).isEmpty())
@@ -1750,6 +1747,8 @@ void SchXMLExportHelper_Impl::exportTable()
                     ++aDataRangeIter;
                 }
             }
+
+            ++nC;
         }
     }
 
@@ -3050,11 +3049,10 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
                 // register data ranges for error bars for export in local table
                 ::std::vector< Reference< chart2::data::XDataSequence > > aErrorBarSequences(
                     lcl_getErrorBarSequences( xErrorBarProp ));
-                for( ::std::vector< Reference< chart2::data::XDataSequence > >::const_iterator aIt(
-                         aErrorBarSequences.begin()); aIt != aErrorBarSequences.end(); ++aIt )
+                for( const auto& rErrorBarSequence : aErrorBarSequences )
                 {
                     m_aDataSequencesToExport.emplace_back(
-                        uno::Reference< chart2::data::XDataSequence >(), *aIt );
+                        uno::Reference< chart2::data::XDataSequence >(), rErrorBarSequence );
                 }
             }
 
@@ -3384,7 +3382,6 @@ void SchXMLExportHelper_Impl::exportDataPoints(
         return;
 
     // write elements (merge equal ones)
-    ::std::vector< SchXMLDataPointStruct >::iterator aIter = aDataPointVector.begin();
     SchXMLDataPointStruct aPoint;
     SchXMLDataPointStruct aLastPoint;
 
@@ -3392,9 +3389,9 @@ void SchXMLExportHelper_Impl::exportDataPoints(
     // the element is counted in the first iteration
     aLastPoint.mnRepeat = 0;
 
-    for( ; aIter != aDataPointVector.end(); ++aIter )
+    for( const auto& rPoint : aDataPointVector )
     {
-        aPoint = (*aIter);
+        aPoint = rPoint;
 
         if( aPoint.maStyleName == aLastPoint.maStyleName )
             aPoint.mnRepeat += aLastPoint.mnRepeat;

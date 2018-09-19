@@ -304,14 +304,13 @@ void SchXMLTableContext::EndElement()
             return;
 
         // permute the values of all rows according to aPermutation
-        for( ::std::vector< ::std::vector< SchXMLCell > >::iterator aRowIt( mrTable.aData.begin());
-             aRowIt != mrTable.aData.end(); ++aRowIt )
+        for( auto& rRow : mrTable.aData )
         {
             bool bModified = false;
             ::std::vector< SchXMLCell > aModifiedRow;
             const size_t nPermSize = aPermutation.size();
             SAL_WARN_IF( static_cast< sal_Int32 >( nPermSize ) - 1 != *(::std::max_element( aPermutation.begin(), aPermutation.end())), "xmloff.chart", "nPermSize - 1 != *(::std::max_element( aPermutation.begin(), aPermutation.end())");
-            const size_t nRowSize = aRowIt->size();
+            const size_t nRowSize = rRow.size();
             const size_t nDestSize = ::std::min( nPermSize, nRowSize );
             for( size_t nDestinationIndex = 0; nDestinationIndex < nDestSize; ++nDestinationIndex )
             {
@@ -323,18 +322,18 @@ void SchXMLTableContext::EndElement()
                     if( !bModified )
                     {
                         SAL_WARN_IF( !aModifiedRow.empty(), "xmloff.chart", "aModifiedRow is NOT NULL");
-                        aModifiedRow.reserve( aRowIt->size());
-                        ::std::copy( aRowIt->begin(), aRowIt->end(), ::std::back_inserter( aModifiedRow ));
+                        aModifiedRow.reserve( rRow.size());
+                        ::std::copy( rRow.begin(), rRow.end(), ::std::back_inserter( aModifiedRow ));
                         SAL_WARN_IF( aModifiedRow.empty(), "xmloff.chart", "aModifiedRow is NULL");
                     }
                     SAL_WARN_IF( nDestinationIndex >= aModifiedRow.size(), "xmloff.chart", "nDestinationIndex >= aModifiedRow.size()");
-                    aModifiedRow[ nDestinationIndex ] = (*aRowIt)[ nSourceIndex ];
+                    aModifiedRow[ nDestinationIndex ] = rRow[ nSourceIndex ];
                     bModified = true;
                 }
             }
             // copy back
             if( bModified )
-                ::std::copy( aModifiedRow.begin(), aModifiedRow.end(), aRowIt->begin());
+                ::std::copy( aModifiedRow.begin(), aModifiedRow.end(), rRow.begin());
         }
     }
     else if( mbHasRowPermutation )
@@ -851,16 +850,15 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
 
     bool bCategoriesApplied = false;
     // translate ranges (using the map created before)
-    for( tSchXMLLSequencesPerIndex::const_iterator aLSeqIt( rLSequencesPerIndex.begin());
-         aLSeqIt != rLSequencesPerIndex.end(); ++aLSeqIt )
+    for( const auto& rLSeq : rLSequencesPerIndex )
     {
-        if( aLSeqIt->second.is())
+        if( rLSeq.second.is())
         {
             // values/error bars/categories
-            if( aLSeqIt->first.second == SCH_XML_PART_VALUES ||
-                aLSeqIt->first.second == SCH_XML_PART_ERROR_BARS )
+            if( rLSeq.first.second == SCH_XML_PART_VALUES ||
+                rLSeq.first.second == SCH_XML_PART_ERROR_BARS )
             {
-                Reference< chart2::data::XDataSequence > xSeq( aLSeqIt->second->getValues());
+                Reference< chart2::data::XDataSequence > xSeq( rLSeq.second->getValues());
 
                 OUString aRange;
                 if( xSeq.is() &&
@@ -873,46 +871,46 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                     {
                         SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
                                             Reference< beans::XPropertySet >( xNewSeq, uno::UNO_QUERY ));
-                        aLSeqIt->second->setValues( xNewSeq );
+                        rLSeq.second->setValues( xNewSeq );
                     }
                 }
                 else
                 {
                     if( lcl_tableOfRangeMatches( aRange, rTable.aTableNameOfFile ))
                     {
-                        if( aLSeqIt->first.first == SCH_XML_CATEGORIES_INDEX )
+                        if( rLSeq.first.first == SCH_XML_CATEGORIES_INDEX )
                             bCategoriesApplied = true;
                     }
                     else
                     {
-                        if( aLSeqIt->first.first == SCH_XML_CATEGORIES_INDEX )
+                        if( rLSeq.first.first == SCH_XML_CATEGORIES_INDEX )
                         {
-                            Reference< beans::XPropertySet > xOldSequenceProp( aLSeqIt->second->getValues(), uno::UNO_QUERY );
+                            Reference< beans::XPropertySet > xOldSequenceProp( rLSeq.second->getValues(), uno::UNO_QUERY );
                             Reference< chart2::data::XDataSequence > xNewSequence(
                                 xDataProv->createDataSequenceByRangeRepresentation("categories"));
                             SchXMLTools::copyProperties(
                                 xOldSequenceProp, Reference< beans::XPropertySet >( xNewSequence, uno::UNO_QUERY ));
-                            aLSeqIt->second->setValues( xNewSequence );
+                            rLSeq.second->setValues( xNewSequence );
                             bCategoriesApplied = true;
                         }
                         else
                         {
-                            Reference< beans::XPropertySet > xOldSequenceProp( aLSeqIt->second->getValues(), uno::UNO_QUERY );
-                            OUString aRep( OUString::number( aLSeqIt->first.first ));
+                            Reference< beans::XPropertySet > xOldSequenceProp( rLSeq.second->getValues(), uno::UNO_QUERY );
+                            OUString aRep( OUString::number( rLSeq.first.first ));
                             Reference< chart2::data::XDataSequence > xNewSequence(
                                 xDataProv->createDataSequenceByRangeRepresentation( aRep ));
                             SchXMLTools::copyProperties(
                                 xOldSequenceProp, Reference< beans::XPropertySet >( xNewSequence, uno::UNO_QUERY ));
-                            aLSeqIt->second->setValues( xNewSequence );
+                            rLSeq.second->setValues( xNewSequence );
                         }
                     }
                 }
             }
             else // labels
             {
-                SAL_WARN_IF( aLSeqIt->first.second != SCH_XML_PART_LABEL, "xmloff.chart", "aLSeqIt->first.second != SCH_XML_PART_LABEL" );
+                SAL_WARN_IF( rLSeq.first.second != SCH_XML_PART_LABEL, "xmloff.chart", "rLSeq.first.second != SCH_XML_PART_LABEL" );
                 // labels
-                Reference< chart2::data::XDataSequence > xSeq( aLSeqIt->second->getLabel());
+                Reference< chart2::data::XDataSequence > xSeq( rLSeq.second->getLabel());
                 OUString aRange;
                 if( xSeq.is() &&
                     SchXMLTools::getXMLRangePropertyFromDataSequence( xSeq, aRange, /* bClearProp = */ true ) &&
@@ -924,19 +922,19 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                     {
                         SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
                                             Reference< beans::XPropertySet >( xNewSeq, uno::UNO_QUERY ));
-                        aLSeqIt->second->setLabel( xNewSeq );
+                        rLSeq.second->setLabel( xNewSeq );
                     }
                 }
                 else if( ! lcl_tableOfRangeMatches( aRange, rTable.aTableNameOfFile ))
                 {
                     OUString aRep("label ");
-                    aRep += OUString::number( aLSeqIt->first.first );
+                    aRep += OUString::number( rLSeq.first.first );
 
                     Reference< chart2::data::XDataSequence > xNewSeq(
                         xDataProv->createDataSequenceByRangeRepresentation( aRep ));
                     SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
                                         Reference< beans::XPropertySet >( xNewSeq, uno::UNO_QUERY ));
-                    aLSeqIt->second->setLabel( xNewSeq );
+                    rLSeq.second->setLabel( xNewSeq );
                 }
             }
         }
@@ -1049,14 +1047,9 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                             }
 
                             ::std::vector< sal_Int32 > aSequenceIndexesToDelete;
-                            for( ::std::vector< sal_Int32 >::const_iterator aIt(
-                                     rTable.aHiddenColumns.begin()); aIt != rTable.aHiddenColumns.end(); ++aIt )
-                            {
-                                sal_Int32 nSequenceIndex = *aIt;
-                                if( aUsageMap.find(nSequenceIndex) != aUsageMap.end() )
-                                    continue;
-                                aSequenceIndexesToDelete.push_back(nSequenceIndex);
-                            }
+                            std::copy_if(rTable.aHiddenColumns.begin(), rTable.aHiddenColumns.end(),
+                                std::back_inserter(aSequenceIndexesToDelete),
+                                [&aUsageMap](sal_Int32 nSequenceIndex) { return aUsageMap.find(nSequenceIndex) == aUsageMap.end(); });
 
                             // delete unnecessary sequences of the internal data
                             // iterate using greatest index first, so that deletion does not

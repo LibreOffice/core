@@ -426,19 +426,14 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
 {
     mpImpl->maEffects.sort();
 
-    list<XMLEffectHint>::iterator aIter = mpImpl->maEffects.begin();
-    const list<XMLEffectHint>::iterator aEnd = mpImpl->maEffects.end();
-
     OUStringBuffer sTmp;
 
-    if( aIter != aEnd )
+    if( !mpImpl->maEffects.empty() )
     {
         SvXMLElementExport aElement( rExport, XML_NAMESPACE_PRESENTATION, XML_ANIMATIONS, true, true );
 
-        do
+        for (const auto& rEffect : mpImpl->maEffects)
         {
-            XMLEffectHint& rEffect = *aIter;
-
             SAL_WARN_IF( !rEffect.mxShape.is(), "xmloff", "shape id creation failed for animation effect?" );
 
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_SHAPE_ID, rExport.getInterfaceToIdentifierMapper().getIdentifier( rEffect.mxShape ) );
@@ -523,10 +518,7 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
                     SvXMLElementExport aElem( rExport, XML_NAMESPACE_PRESENTATION, XML_SOUND, true, true );
                 }
             }
-
-            ++aIter;
         }
-        while( aIter != aEnd );
     }
 
     mpImpl->maEffects.clear();
