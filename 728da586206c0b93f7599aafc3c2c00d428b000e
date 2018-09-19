@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1f013ff3_010dae3d",
+        "filename": "sw/PythonTest_sw_python.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2018-09-19T08:09:06Z",
+      "side": 1,
+      "message": "$ ls pyuno/qa/pytests/ -l\ninsertremovecells.py\ntestcollections_base.py\ntestcollections_misc.py\ntestcollections_mixednameindex.py\ntestcollections_XCellRange.py\ntestcollections_XEnumeration.py\ntestcollections_XEnumerationAccess.py\ntestcollections_XIndexAccess.py\ntestcollections_XIndexContainer.py\ntestcollections_XIndexReplace.py\ntestcollections_XNameAccess.py\ntestcollections_XNameContainer.py\ntestcollections_XNameReplace.py\ntestdocuments\ntestssl.py",
+      "parentUuid": "1f013ff3_61f4725c",
+      "revId": "728da586206c0b93f7599aafc3c2c00d428b000e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f013ff3_a1f95a4e",
         "filename": "sw/qa/python/check_XTextTable.py",
         "patchSetId": 1
