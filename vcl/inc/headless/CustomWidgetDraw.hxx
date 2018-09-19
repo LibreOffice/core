@@ -16,6 +16,7 @@
 #include <WidgetDrawInterface.hxx>
 #include <WidgetThemeLibrary.hxx>
 #include <headless/svpgdi.hxx>
+#include <vcl/settings.hxx>
 #include <memory>
 
 namespace vcl
@@ -45,6 +46,8 @@ public:
                                 const ImplControlValue& aValue, const OUString& aCaption,
                                 tools::Rectangle& rNativeBoundingRegion,
                                 tools::Rectangle& rNativeContentRegion) override;
+
+    bool updateSettings(AllSettings& rSettings) override;
 };
 
 } // end vcl namespace

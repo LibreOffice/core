@@ -14,9 +14,27 @@
 #include <cairo.h>
 #include <vcl/dllapi.h>
 #include <vcl/salnativewidgets.hxx>
+#include <tools/color.hxx>
 
 namespace vcl
 {
+struct WidgetDrawStyle
+{
+    Color maFaceColor;
+    Color maLightColor;
+    Color maLightBorderColor;
+    Color maShadowColor;
+    Color maDarkShadowColor;
+    Color maHighlightColor;
+    Color maHighlightTextColor;
+    Color maActiveTabColor;
+    Color maInactiveTabColor;
+    Color maWindowColor;
+    Color maWindowTextColor;
+    Color maDialogColor;
+    Color maDialogTextColor;
+};
+
 struct ControlDrawParameters
 {
     ControlDrawParameters(cairo_t* i_pCairo, ControlPart i_ePart, ControlState i_eState)
@@ -76,6 +94,8 @@ public:
     virtual bool drawListNet(ControlDrawParameters const& rParameters, long nWidth, long nHeight);
     virtual bool drawListHeader(ControlDrawParameters const& rParameters, long nWidth,
                                 long nHeight);
+
+    virtual bool updateSettings(WidgetDrawStyle& rSettings);
 };
 
 extern "C" vcl::WidgetThemeLibrary* CreateWidgetThemeLibrary();

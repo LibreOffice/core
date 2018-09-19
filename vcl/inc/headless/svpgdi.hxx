@@ -280,6 +280,8 @@ public:
                                  tools::Rectangle& rNativeBoundingRegion,
                                  tools::Rectangle& rNativeContentRegion) override;
 
+    virtual void updateSettings(AllSettings& rSettings);
+
 #if ENABLE_CAIRO_CANVAS
     virtual bool            SupportsCairo() const override;
     virtual cairo::SurfaceSharedPtr CreateSurface(const cairo::CairoSurfaceSharedPtr& rSurface) const override;

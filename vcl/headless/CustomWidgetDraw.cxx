@@ -309,6 +309,76 @@ bool CustomWidgetDraw::getNativeControlRegion(
                                               rNativeBoundingRegion, rNativeContentRegion);
 }
 
+bool CustomWidgetDraw::updateSettings(AllSettings& rSettings)
+{
+    if (!s_pWidgetImplementation)
+        return false;
+
+    WidgetDrawStyle aStyle;
+
+    if (s_pWidgetImplementation->updateSettings(aStyle))
+    {
+        StyleSettings aStyleSet = rSettings.GetStyleSettings();
+
+        aStyleSet.SetFaceColor(aStyle.maFaceColor);
+        aStyleSet.SetCheckedColor(Color(0xCC, 0xCC, 0xCC));
+        aStyleSet.SetLightColor(aStyle.maLightColor);
+        aStyleSet.SetLightBorderColor(aStyle.maLightBorderColor);
+        aStyleSet.SetShadowColor(aStyle.maShadowColor);
+        aStyleSet.SetDarkShadowColor(aStyle.maDarkShadowColor);
+        aStyleSet.SetButtonTextColor(Color(COL_BLACK));
+        aStyleSet.SetButtonRolloverTextColor(Color(COL_BLACK));
+        aStyleSet.SetRadioCheckTextColor(Color(COL_BLACK));
+        aStyleSet.SetGroupTextColor(Color(COL_BLACK));
+        aStyleSet.SetLabelTextColor(Color(COL_BLACK));
+        aStyleSet.SetWindowColor(aStyle.maWindowColor);
+        aStyleSet.SetWindowTextColor(aStyle.maWindowTextColor);
+        aStyleSet.SetDialogColor(aStyle.maDialogColor);
+        aStyleSet.SetDialogTextColor(aStyle.maDialogTextColor);
+        aStyleSet.SetWorkspaceColor(Color(0xDF, 0xDF, 0xDE));
+        aStyleSet.SetMonoColor(Color(COL_BLACK));
+        aStyleSet.SetFieldColor(Color(COL_WHITE));
+        aStyleSet.SetFieldTextColor(Color(COL_BLACK));
+        aStyleSet.SetFieldRolloverTextColor(Color(COL_BLACK));
+        aStyleSet.SetActiveColor(Color(COL_BLUE));
+        aStyleSet.SetActiveTextColor(Color(COL_WHITE));
+        aStyleSet.SetActiveBorderColor(Color(COL_LIGHTGRAY));
+        aStyleSet.SetDeactiveColor(Color(COL_GRAY));
+        aStyleSet.SetDeactiveTextColor(Color(COL_LIGHTGRAY));
+        aStyleSet.SetDeactiveBorderColor(Color(COL_LIGHTGRAY));
+        aStyleSet.SetMenuColor(Color(COL_LIGHTGRAY));
+        aStyleSet.SetMenuBarColor(Color(COL_LIGHTGRAY));
+        aStyleSet.SetMenuBarRolloverColor(Color(COL_BLUE));
+        aStyleSet.SetMenuBorderColor(Color(COL_LIGHTGRAY));
+        aStyleSet.SetMenuTextColor(Color(COL_BLACK));
+        aStyleSet.SetMenuBarTextColor(Color(COL_BLACK));
+        aStyleSet.SetMenuBarRolloverTextColor(Color(COL_WHITE));
+        aStyleSet.SetMenuBarHighlightTextColor(Color(COL_WHITE));
+        aStyleSet.SetMenuHighlightColor(Color(COL_BLUE));
+        aStyleSet.SetMenuHighlightTextColor(Color(COL_WHITE));
+        aStyleSet.SetHighlightColor(aStyle.maHighlightColor);
+        aStyleSet.SetHighlightTextColor(aStyle.maHighlightTextColor);
+        aStyleSet.SetActiveTabColor(aStyle.maActiveTabColor);
+        aStyleSet.SetInactiveTabColor(aStyle.maInactiveTabColor);
+        aStyleSet.SetTabTextColor(Color(COL_BLACK));
+        aStyleSet.SetTabRolloverTextColor(Color(COL_BLACK));
+        aStyleSet.SetTabHighlightTextColor(Color(COL_BLACK));
+        aStyleSet.SetDisableColor(Color(COL_GRAY));
+        aStyleSet.SetHelpColor(Color(0xFF, 0xFF, 0xE0));
+        aStyleSet.SetHelpTextColor(Color(COL_BLACK));
+        aStyleSet.SetLinkColor(Color(COL_BLUE));
+        aStyleSet.SetVisitedLinkColor(Color(0x00, 0x00, 0xCC));
+        aStyleSet.SetToolTextColor(Color(COL_BLACK));
+        aStyleSet.SetFontColor(Color(COL_BLACK));
+
+        rSettings.SetStyleSettings(aStyleSet);
+
+        return true;
+    }
+
+    return false;
+}
+
 } // end vcl namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

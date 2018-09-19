@@ -426,6 +426,23 @@ void SvpSalFrame::UpdateSettings( AllSettings& rSettings )
 
         aStdFont.SetFontSize(Size(0, 12));
         aStyleSettings.SetMenuFont(aStdFont);
+
+        SvpSalGraphics* pGraphics = m_aGraphics.back();
+        bool bFreeGraphics = false;
+        if (!pGraphics)
+        {
+            pGraphics = dynamic_cast<SvpSalGraphics*>(AcquireGraphics());
+            if (!pGraphics)
+            {
+                SAL_WARN("vcl.gtk3", "Could not get graphics - unable to update settings");
+                return;
+            }
+            bFreeGraphics = true;
+        }
+        pGraphics->updateSettings(rSettings);
+
+        if (bFreeGraphics)
+            ReleaseGraphics(pGraphics);
     }
 
     rSettings.SetStyleSettings( aStyleSettings );
