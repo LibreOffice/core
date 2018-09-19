@@ -54,7 +54,10 @@ short SdAbstractGenericDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractCopyDlg_Impl);
+short AbstractCopyDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractSdCustomShowDlg_Impl::Execute()
 {
@@ -125,7 +128,7 @@ short AbstractMasterLayoutDialog_Impl::Execute()
 
 void AbstractCopyDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
 {
-    pDlg->GetAttr( rOutAttrs );
+    m_xDlg->GetAttr( rOutAttrs );
 }
 
 bool AbstractSdCustomShowDlg_Impl::IsModified() const
@@ -372,11 +375,11 @@ VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateBreakDlg(
     return VclPtr<AbstractBreakDlg_Impl>::Create(o3tl::make_unique<::sd::BreakDlg>(pParent, pDrView, pShell, nSumActionCount, nObjCount));
 }
 
-VclPtr<AbstractCopyDlg> SdAbstractDialogFactory_Impl::CreateCopyDlg(vcl::Window* pParent,
+VclPtr<AbstractCopyDlg> SdAbstractDialogFactory_Impl::CreateCopyDlg(weld::Window* pParent,
                                             const SfxItemSet& rInAttrs,
                                             ::sd::View* pView )
 {
-    return VclPtr<AbstractCopyDlg_Impl>::Create( VclPtr<::sd::CopyDlg>::Create( pParent, rInAttrs, pView ) );
+    return VclPtr<AbstractCopyDlg_Impl>::Create(o3tl::make_unique<::sd::CopyDlg>(pParent, rInAttrs, pView));
 }
 
 VclPtr<AbstractSdCustomShowDlg> SdAbstractDialogFactory_Impl::CreateSdCustomShowDlg(weld::Window* pParent, SdDrawDocument& rDrawDoc )

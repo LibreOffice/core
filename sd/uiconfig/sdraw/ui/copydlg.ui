@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">1</property>
     <property name="upper">999</property>
@@ -19,28 +18,66 @@
   <object class="GtkAdjustment" id="adjustment3">
     <property name="lower">-1000000</property>
     <property name="upper">1000000</property>
-    <property name="step_increment">0.1</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment4">
+    <property name="lower">-1000000</property>
+    <property name="upper">1000000</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment5">
+    <property name="lower">-1000000</property>
+    <property name="upper">1000000</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment6">
+    <property name="lower">-1000000</property>
+    <property name="upper">1000000</property>
+    <property name="step_increment">0.10000000000000001</property>
     <property name="page_increment">1</property>
   </object>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">sd/res/pipette.png</property>
+    <property name="icon_name">sd/res/pipette.png</property>
   </object>
   <object class="GtkDialog" id="DuplicateDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="copydlg|DuplicateDialog">Duplicate</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
-            <property name="layout_style">start</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="default">
+                <property name="label" translatable="yes" context="copydlg|default">_Default</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
@@ -54,7 +91,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -64,20 +101,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="default">
-                <property name="label" translatable="yes" context="copydlg|default">_Default</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -141,6 +164,7 @@
                     <property name="can_focus">True</property>
                     <property name="margin_left">12</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                     <property name="adjustment">adjustment1</property>
                   </object>
                   <packing>
@@ -156,6 +180,7 @@
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes" context="copydlg|viewdata|tooltip_text">Values from Selection</property>
                     <property name="image">image1</property>
+                    <property name="always_show_image">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="viewdata-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="copydlg|viewdata-atkobject">Values from Selection</property>
@@ -202,7 +227,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="copydlg|label5">_X axis:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">x:0.00cm</property>
+                            <property name="mnemonic_widget">x</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -216,7 +241,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="copydlg|label6">_Y axis:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">y:0.00cm</property>
+                            <property name="mnemonic_widget">y</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -230,7 +255,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="copydlg|label7">_Angle:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">angle:0degrees</property>
+                            <property name="mnemonic_widget">angle</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -239,10 +264,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="x:0.00cm">
+                          <object class="GtkSpinButton" id="x">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                             <property name="adjustment">adjustment3</property>
                             <property name="digits">2</property>
                           </object>
@@ -252,11 +278,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="y:0.00cm">
+                          <object class="GtkSpinButton" id="y">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
-                            <property name="adjustment">adjustment3</property>
+                            <property name="activates_default">True</property>
+                            <property name="adjustment">adjustment4</property>
                             <property name="digits">2</property>
                           </object>
                           <packing>
@@ -265,10 +292,11 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="angle:0degrees">
+                          <object class="GtkSpinButton" id="angle">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
+                            <property name="activates_default">True</property>
                             <property name="adjustment">adjustment2</property>
                             <property name="digits">2</property>
                           </object>
@@ -325,7 +353,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="copydlg|label8">_Width:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">width:0.00cm</property>
+                            <property name="mnemonic_widget">width</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -339,7 +367,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="copydlg|label9">_Height:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">height:0.00cm</property>
+                            <property name="mnemonic_widget">height</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -348,11 +376,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="width:0.00cm">
+                          <object class="GtkSpinButton" id="width">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
-                            <property name="adjustment">adjustment3</property>
+                            <property name="activates_default">True</property>
+                            <property name="adjustment">adjustment5</property>
                             <property name="digits">2</property>
                           </object>
                           <packing>
@@ -361,11 +390,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="height:0.00cm">
+                          <object class="GtkSpinButton" id="height">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>
-                            <property name="adjustment">adjustment3</property>
+                            <property name="activates_default">True</property>
+                            <property name="adjustment">adjustment6</property>
                             <property name="digits">2</property>
                           </object>
                           <packing>
@@ -444,10 +474,15 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svxcorelo-SvxColorListBox" id="start">
+                          <object class="GtkMenuButton" id="start">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
                             <property name="hexpand">True</property>
+                            <property name="xalign">0</property>
+                            <child>
+                              <placeholder/>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -455,10 +490,15 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svxcorelo-SvxColorListBox" id="end">
+                          <object class="GtkMenuButton" id="end">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
                             <property name="hexpand">True</property>
+                            <property name="xalign">0</property>
+                            <child>
+                              <placeholder/>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -496,9 +536,9 @@
       </object>
     </child>
     <action-widgets>
+      <action-widget response="0">default</action-widget>
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
-      <action-widget response="0">default</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
   </object>

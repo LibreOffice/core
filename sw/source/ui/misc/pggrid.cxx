@@ -70,7 +70,7 @@ SwTextGridPage::SwTextGridPage(TabPageParent pParent, const SfxItemSet &rSet)
     , m_xDisplayFL(m_xBuilder->weld_widget("frameFL_DISPLAY"))
     , m_xDisplayCB(m_xBuilder->weld_check_button("checkCB_DISPLAY"))
     , m_xPrintCB(m_xBuilder->weld_check_button("checkCB_PRINT"))
-    , m_xColorLB(new ColorListBox(m_xBuilder->weld_menu_button("listLB_COLOR"), GetFrameWeld()))
+    , m_xColorLB(new ColorListBox(m_xBuilder->weld_menu_button("listLB_COLOR"), pParent.GetFrameWeld()))
 {
     Link<weld::SpinButton&,void> aLink = LINK(this, SwTextGridPage, CharorLineChangedHdl);
     m_xCharsPerLineNF->connect_value_changed(aLink);

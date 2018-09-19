@@ -97,7 +97,14 @@ public:
 
 class AbstractCopyDlg_Impl : public AbstractCopyDlg
 {
-    DECL_ABSTDLG_BASE(AbstractCopyDlg_Impl,::sd::CopyDlg)
+private:
+    std::unique_ptr<sd::CopyDlg> m_xDlg;
+public:
+    AbstractCopyDlg_Impl(std::unique_ptr<::sd::CopyDlg> pDlg)
+        : m_xDlg(std::move(pDlg))
+    {
+    }
+    virtual short Execute() override;
     virtual void    GetAttr( SfxItemSet& rOutAttrs ) override;
 };
 
@@ -308,7 +315,7 @@ public:
     virtual ~SdAbstractDialogFactory_Impl() {}
 
     virtual VclPtr<VclAbstractDialog>          CreateBreakDlg(weld::Window* pWindow, ::sd::DrawView* pDrView, ::sd::DrawDocShell* pShell, sal_uLong nSumActionCount, sal_uLong nObjCount) override;
-    virtual VclPtr<AbstractCopyDlg>            CreateCopyDlg(vcl::Window* pParent, const SfxItemSet& rInAttrs, ::sd::View* pView) override;
+    virtual VclPtr<AbstractCopyDlg>            CreateCopyDlg(weld::Window* pParent, const SfxItemSet& rInAttrs, ::sd::View* pView) override;
     virtual VclPtr<AbstractSdCustomShowDlg>    CreateSdCustomShowDlg(weld::Window* pParent, SdDrawDocument& rDrawDoc) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdTabCharDialog(weld::Window* pWindow, const SfxItemSet* pAttr, SfxObjectShell* pDocShell) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdTabPageDialog(weld::Window* pWindow, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, bool bAreaPage) override;

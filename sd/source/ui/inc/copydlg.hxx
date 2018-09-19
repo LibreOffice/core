@@ -20,13 +20,12 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_COPYDLG_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_COPYDLG_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/customweld.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <tools/fract.hxx>
 
-class SvxColorListBox;
+class ColorListBox;
 
 namespace sd {
 
@@ -35,41 +34,35 @@ class View;
 /**
  * dialog to adjust screen
  */
-class CopyDlg
-    : public SfxModalDialog
+class CopyDlg : public weld::GenericDialogController
 {
 public:
-    CopyDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView);
+    CopyDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView);
     virtual ~CopyDlg() override;
-    virtual void dispose() override;
 
-    void    GetAttr( SfxItemSet& rOutAttrs );
+    void GetAttr( SfxItemSet& rOutAttrs );
     void Reset();
 
 private:
-    VclPtr<NumericField>       m_pNumFldCopies;
-    VclPtr<Button>             m_pBtnSetViewData;
-
-    VclPtr<MetricField>        m_pMtrFldMoveX;
-    VclPtr<MetricField>        m_pMtrFldMoveY;
-    VclPtr<MetricField>        m_pMtrFldAngle;
-
-    VclPtr<MetricField>        m_pMtrFldWidth;
-    VclPtr<MetricField>        m_pMtrFldHeight;
-
-    VclPtr<SvxColorListBox>    m_pLbStartColor;
-    VclPtr<FixedText>          m_pFtEndColor;
-    VclPtr<SvxColorListBox>    m_pLbEndColor;
-
-    VclPtr<PushButton>         m_pBtnSetDefault;
-
     const SfxItemSet&   mrOutAttrs;
     Fraction            maUIScale;
     ::sd::View*         mpView;
 
-    DECL_LINK( SelectColorHdl, SvxColorListBox&, void );
-    DECL_LINK( SetViewData, Button*, void );
-    DECL_LINK( SetDefault, Button*, void );
+    std::unique_ptr<weld::SpinButton> m_xNumFldCopies;
+    std::unique_ptr<weld::Button> m_xBtnSetViewData;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldMoveX;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldMoveY;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldAngle;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldWidth;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldHeight;
+    std::unique_ptr<weld::Label> m_xFtEndColor;
+    std::unique_ptr<weld::Button> m_xBtnSetDefault;
+    std::unique_ptr<ColorListBox> m_xLbStartColor;
+    std::unique_ptr<ColorListBox> m_xLbEndColor;
+
+    DECL_LINK(SelectColorHdl, ColorListBox&, void);
+    DECL_LINK(SetViewData, weld::Button&, void);
+    DECL_LINK(SetDefault, weld::Button&, void);
 };
 
 } // end of namespace sd

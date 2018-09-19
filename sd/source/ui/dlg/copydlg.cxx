@@ -28,6 +28,7 @@
 #include <svx/xenum.hxx>
 
 #include <sfx2/app.hxx>
+#include <unotools/viewoptions.hxx>
 
 #include <sdattr.hxx>
 
@@ -39,67 +40,50 @@ namespace sd {
 
 #define TOKEN ';'
 
-CopyDlg::CopyDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pInView)
-    : SfxModalDialog(pWindow, "DuplicateDialog", "modules/sdraw/ui/copydlg.ui")
+CopyDlg::CopyDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pInView)
+    : GenericDialogController(pWindow, "modules/sdraw/ui/copydlg.ui", "DuplicateDialog")
     , mrOutAttrs(rInAttrs)
     , maUIScale(pInView->GetDoc().GetUIScale())
     , mpView(pInView)
+    , m_xNumFldCopies(m_xBuilder->weld_spin_button("copies"))
+    , m_xBtnSetViewData(m_xBuilder->weld_button("viewdata"))
+    , m_xMtrFldMoveX(m_xBuilder->weld_metric_spin_button("x", FUNIT_CM))
+    , m_xMtrFldMoveY(m_xBuilder->weld_metric_spin_button("y", FUNIT_CM))
+    , m_xMtrFldAngle(m_xBuilder->weld_metric_spin_button("angle", FUNIT_DEGREE))
+    , m_xMtrFldWidth(m_xBuilder->weld_metric_spin_button("width", FUNIT_CM))
+    , m_xMtrFldHeight(m_xBuilder->weld_metric_spin_button("height", FUNIT_CM))
+    , m_xFtEndColor(m_xBuilder->weld_label("endlabel"))
+    , m_xBtnSetDefault(m_xBuilder->weld_button("default"))
+    , m_xLbStartColor(new ColorListBox(m_xBuilder->weld_menu_button("start"), pWindow))
+    , m_xLbEndColor(new ColorListBox(m_xBuilder->weld_menu_button("end"), pWindow))
 {
-    get(m_pNumFldCopies, "copies");
-    get(m_pBtnSetViewData, "viewdata");
-    get(m_pMtrFldMoveX, "x");
-    get(m_pMtrFldMoveY, "y");
-    get(m_pMtrFldAngle, "angle");
-    get(m_pMtrFldWidth, "width");
-    get(m_pMtrFldHeight, "height");
-    get(m_pLbStartColor, "start");
-    get(m_pFtEndColor, "endlabel");
-    get(m_pLbEndColor, "end");
-    get(m_pBtnSetDefault, "default");
-
-    m_pLbStartColor->SetSelectHdl( LINK( this, CopyDlg, SelectColorHdl ) );
-    m_pBtnSetViewData->SetClickHdl( LINK( this, CopyDlg, SetViewData ) );
-    m_pBtnSetDefault->SetClickHdl( LINK( this, CopyDlg, SetDefault ) );
+    m_xLbStartColor->SetSelectHdl( LINK( this, CopyDlg, SelectColorHdl ) );
+    m_xBtnSetViewData->connect_clicked( LINK( this, CopyDlg, SetViewData ) );
+    m_xBtnSetDefault->connect_clicked( LINK( this, CopyDlg, SetDefault ) );
 
     FieldUnit eFUnit( SfxModule::GetCurrentFieldUnit() );
 
-    SetFieldUnit( *m_pMtrFldMoveX, eFUnit, true );
-    SetFieldUnit( *m_pMtrFldMoveY, eFUnit, true );
-    SetFieldUnit( *m_pMtrFldWidth, eFUnit, true );
-    SetFieldUnit( *m_pMtrFldHeight, eFUnit, true );
+    SetFieldUnit( *m_xMtrFldMoveX, eFUnit, true );
+    SetFieldUnit( *m_xMtrFldMoveY, eFUnit, true );
+    SetFieldUnit( *m_xMtrFldWidth, eFUnit, true );
+    SetFieldUnit( *m_xMtrFldHeight, eFUnit, true );
 
     Reset();
 }
 
 CopyDlg::~CopyDlg()
 {
-    disposeOnce();
-}
-
-void CopyDlg::dispose()
-{
-    GetExtraData() =
-        OUString::number(m_pNumFldCopies->GetValue()) + OUString(TOKEN) +
-        OUString::number(m_pMtrFldMoveX->GetValue()) + OUString(TOKEN) +
-        OUString::number(m_pMtrFldMoveY->GetValue()) + OUString(TOKEN) +
-        OUString::number(m_pMtrFldAngle->GetValue()) + OUString(TOKEN) +
-        OUString::number(m_pMtrFldWidth->GetValue()) + OUString(TOKEN) +
-        OUString::number(m_pMtrFldHeight->GetValue()) + OUString(TOKEN) +
-        OUString::number(static_cast<sal_uInt32>(m_pLbStartColor->GetSelectEntryColor())) + OUString(TOKEN) +
-        OUString::number(static_cast<sal_uInt32>(m_pLbEndColor->GetSelectEntryColor()));
-
-    m_pNumFldCopies.clear();
-    m_pBtnSetViewData.clear();
-    m_pMtrFldMoveX.clear();
-    m_pMtrFldMoveY.clear();
-    m_pMtrFldAngle.clear();
-    m_pMtrFldWidth.clear();
-    m_pMtrFldHeight.clear();
-    m_pLbStartColor.clear();
-    m_pFtEndColor.clear();
-    m_pLbEndColor.clear();
-    m_pBtnSetDefault.clear();
-    SfxModalDialog::dispose();
+    SvtViewOptions aDlgOpt(EViewType::Dialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+    OUString sStr =
+        OUString::number(m_xNumFldCopies->get_value()) + OUString(TOKEN) +
+        OUString::number(m_xMtrFldMoveX->get_value(FUNIT_NONE)) + OUString(TOKEN) +
+        OUString::number(m_xMtrFldMoveY->get_value(FUNIT_NONE)) + OUString(TOKEN) +
+        OUString::number(m_xMtrFldAngle->get_value(FUNIT_NONE)) + OUString(TOKEN) +
+        OUString::number(m_xMtrFldWidth->get_value(FUNIT_NONE)) + OUString(TOKEN) +
+        OUString::number(m_xMtrFldHeight->get_value(FUNIT_NONE)) + OUString(TOKEN) +
+        OUString::number(static_cast<sal_uInt32>(m_xLbStartColor->GetSelectEntryColor())) + OUString(TOKEN) +
+        OUString::number(static_cast<sal_uInt32>(m_xLbEndColor->GetSelectEntryColor()));
+    aDlgOpt.SetUserItem("UserItem", css::uno::makeAny(sStr));
 }
 
 /**
@@ -110,82 +94,84 @@ void CopyDlg::Reset()
     // Set Min/Max values
     ::tools::Rectangle aRect = mpView->GetAllMarkedRect();
     Size aPageSize = mpView->GetSdrPageView()->GetPage()->GetSize();
-    SetMetricValue( *m_pMtrFldMoveX, long(1000000 / maUIScale), MapUnit::Map100thMM);
-    double fScaleFactor = m_pMtrFldMoveX->GetValue()/1000000.0;
+    SetMetricValue( *m_xMtrFldMoveX, long(1000000 / maUIScale), MapUnit::Map100thMM);
+    double fScaleFactor = m_xMtrFldMoveX->get_value(FUNIT_NONE)/1000000.0;
 
     long nPageWidth  = aPageSize.Width()  * fScaleFactor;
     long nPageHeight = aPageSize.Height() * fScaleFactor;
     long nRectWidth  = aRect.GetWidth()   * fScaleFactor;
     long nRectHeight = aRect.GetHeight()  * fScaleFactor;
-    m_pMtrFldMoveX->SetMin( -nPageWidth );
-    m_pMtrFldMoveX->SetMax(  nPageWidth );
-    m_pMtrFldMoveY->SetMin( -nPageHeight );
-    m_pMtrFldMoveY->SetMax(  nPageHeight );
-    m_pMtrFldWidth->SetMin( -nRectWidth );
-    m_pMtrFldWidth->SetMax(  nPageWidth );
-    m_pMtrFldHeight->SetMin( -nRectHeight );
-    m_pMtrFldHeight->SetMax(  nPageHeight );
+    m_xMtrFldMoveX->set_range(-nPageWidth, nPageWidth, FUNIT_NONE);
+    m_xMtrFldMoveY->set_range(-nPageHeight, nPageHeight, FUNIT_NONE);
+    m_xMtrFldWidth->set_range(-nRectWidth, nPageWidth, FUNIT_NONE);
+    m_xMtrFldHeight->set_range(-nRectHeight, nPageHeight, FUNIT_NONE);
 
     const SfxPoolItem* pPoolItem = nullptr;
-    const OUString aStr( GetExtraData() );
+    OUString aStr;
+    SvtViewOptions aDlgOpt(EViewType::Dialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
+    if (aDlgOpt.Exists())
+    {
+        css::uno::Any aUserItem = aDlgOpt.GetUserItem("UserItem");
+        aUserItem >>= aStr;
+    }
 
     if (aStr.isEmpty())
     {
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_NUMBER, true, &pPoolItem ) )
-            m_pNumFldCopies->SetValue( static_cast<const SfxUInt16Item*>( pPoolItem )->GetValue() );
+            m_xNumFldCopies->set_value(static_cast<const SfxUInt16Item*>(pPoolItem)->GetValue());
         else
-            m_pNumFldCopies->SetValue( 1 );
+            m_xNumFldCopies->set_value(1);
 
         long nMoveX = 500;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_X, true, &pPoolItem ) )
             nMoveX = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
-        SetMetricValue( *m_pMtrFldMoveX, long(nMoveX / maUIScale), MapUnit::Map100thMM);
+        SetMetricValue( *m_xMtrFldMoveX, long(nMoveX / maUIScale), MapUnit::Map100thMM);
 
         long nMoveY = 500;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_Y, true, &pPoolItem ) )
             nMoveY = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
-        SetMetricValue( *m_pMtrFldMoveY, long(nMoveY / maUIScale), MapUnit::Map100thMM);
+        SetMetricValue( *m_xMtrFldMoveY, long(nMoveY / maUIScale), MapUnit::Map100thMM);
 
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_ANGLE, true, &pPoolItem ) )
-            m_pMtrFldAngle->SetValue( static_cast<const SfxInt32Item*>( pPoolItem )->GetValue() );
+            m_xMtrFldAngle->set_value(static_cast<const SfxInt32Item*>( pPoolItem )->GetValue(), FUNIT_NONE);
         else
-            m_pMtrFldAngle->SetValue( 0 );
+            m_xMtrFldAngle->set_value(0, FUNIT_NONE);
 
         long nWidth = 0;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_WIDTH, true, &pPoolItem ) )
             nWidth = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
-        SetMetricValue( *m_pMtrFldWidth, long(nWidth / maUIScale), MapUnit::Map100thMM);
+        SetMetricValue( *m_xMtrFldWidth, long(nWidth / maUIScale), MapUnit::Map100thMM);
 
         long nHeight = 0;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_HEIGHT, true, &pPoolItem ) )
             nHeight = static_cast<const SfxInt32Item*>( pPoolItem )->GetValue();
-        SetMetricValue( *m_pMtrFldHeight, long(nHeight / maUIScale), MapUnit::Map100thMM);
+        SetMetricValue( *m_xMtrFldHeight, long(nHeight / maUIScale), MapUnit::Map100thMM);
 
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, true, &pPoolItem ) )
         {
             Color aColor = static_cast<const XColorItem*>( pPoolItem )->GetColorValue();
-            m_pLbStartColor->SelectEntry( aColor );
-            m_pLbEndColor->SelectEntry( aColor );
+            m_xLbStartColor->SelectEntry( aColor );
+            m_xLbEndColor->SelectEntry( aColor );
         }
         else
         {
-            m_pLbStartColor->SetNoSelection();
-            m_pLbEndColor->SetNoSelection();
-            m_pLbEndColor->Disable();
-            m_pFtEndColor->Disable();
+            m_xLbStartColor->SetNoSelection();
+            m_xLbEndColor->SetNoSelection();
+            m_xLbEndColor->set_sensitive(false);
+            m_xFtEndColor->set_sensitive(false);
         }
     }
     else
     {
         sal_Int32 nIdx {0};
-        m_pNumFldCopies->SetValue( aStr.getToken(0, TOKEN, nIdx).toInt64() );
-        m_pMtrFldMoveX->SetValue( aStr.getToken(0, TOKEN, nIdx).toInt64() );
-        m_pMtrFldMoveY->SetValue( aStr.getToken(0, TOKEN, nIdx).toInt64() );
-        m_pMtrFldAngle->SetValue( aStr.getToken(0, TOKEN, nIdx).toInt64() );
-        m_pMtrFldWidth->SetValue( aStr.getToken(0, TOKEN, nIdx).toInt64() );
-        m_pMtrFldHeight->SetValue( aStr.getToken(0, TOKEN, nIdx).toInt64() );
-        m_pLbStartColor->SelectEntry( Color( aStr.getToken(0, TOKEN, nIdx).toUInt32() ) );
-        m_pLbEndColor->SelectEntry( Color( aStr.getToken(0, TOKEN, nIdx).toUInt32() ) );
+        m_xNumFldCopies->set_value(aStr.getToken(0, TOKEN, nIdx).toInt64());
+        m_xMtrFldMoveX->set_value(aStr.getToken(0, TOKEN, nIdx).toInt64(), FUNIT_NONE);
+        m_xMtrFldMoveY->set_value(aStr.getToken(0, TOKEN, nIdx).toInt64(), FUNIT_NONE);
+        m_xMtrFldAngle->set_value(aStr.getToken(0, TOKEN, nIdx).toInt64(), FUNIT_NONE);
+        m_xMtrFldWidth->set_value(aStr.getToken(0, TOKEN, nIdx).toInt64(), FUNIT_NONE);
+        m_xMtrFldHeight->set_value(aStr.getToken(0, TOKEN, nIdx).toInt64(), FUNIT_NONE);
+        m_xLbStartColor->SelectEntry( Color( aStr.getToken(0, TOKEN, nIdx).toUInt32() ) );
+        m_xLbEndColor->SelectEntry( Color( aStr.getToken(0, TOKEN, nIdx).toUInt32() ) );
     }
 
 }
@@ -195,49 +181,49 @@ void CopyDlg::Reset()
  */
 void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
 {
-    long nMoveX = long( GetCoreValue( *m_pMtrFldMoveX, MapUnit::Map100thMM) * maUIScale);
-    long nMoveY = long( GetCoreValue( *m_pMtrFldMoveY, MapUnit::Map100thMM) * maUIScale);
-    long nHeight = long( GetCoreValue( *m_pMtrFldHeight, MapUnit::Map100thMM) * maUIScale);
-    long nWidth  = long( GetCoreValue( *m_pMtrFldWidth, MapUnit::Map100thMM) * maUIScale);
+    long nMoveX = long( GetCoreValue( *m_xMtrFldMoveX, MapUnit::Map100thMM) * maUIScale);
+    long nMoveY = long( GetCoreValue( *m_xMtrFldMoveY, MapUnit::Map100thMM) * maUIScale);
+    long nHeight = long( GetCoreValue( *m_xMtrFldHeight, MapUnit::Map100thMM) * maUIScale);
+    long nWidth  = long( GetCoreValue( *m_xMtrFldWidth, MapUnit::Map100thMM) * maUIScale);
 
-    rOutAttrs.Put( SfxUInt16Item( ATTR_COPY_NUMBER, static_cast<sal_uInt16>(m_pNumFldCopies->GetValue()) ) );
+    rOutAttrs.Put( SfxUInt16Item( ATTR_COPY_NUMBER, static_cast<sal_uInt16>(m_xNumFldCopies->get_value()) ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_MOVE_X, nMoveX ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_MOVE_Y, nMoveY ) );
-    rOutAttrs.Put( SfxInt32Item( ATTR_COPY_ANGLE, static_cast<sal_Int32>(m_pMtrFldAngle->GetValue()) ) );
+    rOutAttrs.Put( SfxInt32Item( ATTR_COPY_ANGLE, static_cast<sal_Int32>(m_xMtrFldAngle->get_value(FUNIT_DEGREE)) ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_WIDTH, nWidth ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_HEIGHT, nHeight ) );
 
-    NamedColor aColor = m_pLbStartColor->GetSelectedEntry();
+    NamedColor aColor = m_xLbStartColor->GetSelectedEntry();
     rOutAttrs.Put(XColorItem(ATTR_COPY_START_COLOR, aColor.second, aColor.first));
-    aColor = m_pLbEndColor->GetSelectedEntry();
+    aColor = m_xLbEndColor->GetSelectedEntry();
     rOutAttrs.Put(XColorItem(ATTR_COPY_END_COLOR, aColor.second, aColor.first));
 }
 
 /**
  * enables and selects end color LB
  */
-IMPL_LINK_NOARG(CopyDlg, SelectColorHdl, SvxColorListBox&, void)
+IMPL_LINK_NOARG(CopyDlg, SelectColorHdl, ColorListBox&, void)
 {
-    const Color aColor = m_pLbStartColor->GetSelectEntryColor();
+    const Color aColor = m_xLbStartColor->GetSelectEntryColor();
 
-    if (!m_pLbEndColor->IsEnabled())
+    if (!m_xLbEndColor->get_sensitive())
     {
-        m_pLbEndColor->SelectEntry(aColor);
-        m_pLbEndColor->Enable();
-        m_pFtEndColor->Enable();
+        m_xLbEndColor->SelectEntry(aColor);
+        m_xLbEndColor->set_sensitive(true);
+        m_xFtEndColor->set_sensitive(true);
     }
 }
 
 /**
  * sets values of selection
  */
-IMPL_LINK_NOARG(CopyDlg, SetViewData, Button*, void)
+IMPL_LINK_NOARG(CopyDlg, SetViewData, weld::Button&, void)
 {
     ::tools::Rectangle aRect = mpView->GetAllMarkedRect();
 
-    SetMetricValue( *m_pMtrFldMoveX, long( aRect.GetWidth() /
+    SetMetricValue( *m_xMtrFldMoveX, long( aRect.GetWidth() /
                                     maUIScale ), MapUnit::Map100thMM);
-    SetMetricValue( *m_pMtrFldMoveY, long( aRect.GetHeight() /
+    SetMetricValue( *m_xMtrFldMoveY, long( aRect.GetHeight() /
                                     maUIScale ), MapUnit::Map100thMM);
 
     // sets color attribute
@@ -245,33 +231,33 @@ IMPL_LINK_NOARG(CopyDlg, SetViewData, Button*, void)
     if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, true, &pPoolItem ) )
     {
         Color aColor = static_cast<const XColorItem*>( pPoolItem )->GetColorValue();
-        m_pLbStartColor->SelectEntry( aColor );
+        m_xLbStartColor->SelectEntry( aColor );
     }
 }
 
 /**
  * resets values to default
  */
-IMPL_LINK_NOARG(CopyDlg, SetDefault, Button*, void)
+IMPL_LINK_NOARG(CopyDlg, SetDefault, weld::Button&, void)
 {
-    m_pNumFldCopies->SetValue( 1 );
+    m_xNumFldCopies->set_value(1);
 
     long nValue = 500;
-    SetMetricValue( *m_pMtrFldMoveX, long(nValue / maUIScale), MapUnit::Map100thMM);
-    SetMetricValue( *m_pMtrFldMoveY, long(nValue / maUIScale), MapUnit::Map100thMM);
+    SetMetricValue( *m_xMtrFldMoveX, long(nValue / maUIScale), MapUnit::Map100thMM);
+    SetMetricValue( *m_xMtrFldMoveY, long(nValue / maUIScale), MapUnit::Map100thMM);
 
     nValue = 0;
-    m_pMtrFldAngle->SetValue( nValue );
-    SetMetricValue( *m_pMtrFldWidth, long(nValue / maUIScale), MapUnit::Map100thMM);
-    SetMetricValue( *m_pMtrFldHeight, long(nValue / maUIScale), MapUnit::Map100thMM);
+    m_xMtrFldAngle->set_value(nValue, FUNIT_DEGREE);
+    SetMetricValue( *m_xMtrFldWidth, long(nValue / maUIScale), MapUnit::Map100thMM);
+    SetMetricValue( *m_xMtrFldHeight, long(nValue / maUIScale), MapUnit::Map100thMM);
 
     // set color attribute
     const SfxPoolItem*  pPoolItem = nullptr;
     if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, true, &pPoolItem ) )
     {
         Color aColor = static_cast<const XColorItem*>( pPoolItem )->GetColorValue();
-        m_pLbStartColor->SelectEntry( aColor );
-        m_pLbEndColor->SelectEntry( aColor );
+        m_xLbStartColor->SelectEntry( aColor );
+        m_xLbEndColor->SelectEntry( aColor );
     }
 }
 
