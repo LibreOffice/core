@@ -38,6 +38,8 @@ class PdfExportTest : public test::BootstrapFixture, public unotest::MacrosTest
     uno::Reference<lang::XComponent> mxComponent;
     FPDF_PAGE mpPdfPage = nullptr;
     FPDF_DOCUMENT mpPdfDocument = nullptr;
+    /// Underlying memory of mpPdfDocument.
+    SvMemoryStream maPdfMemory;
     utl::TempFile maTempFile;
     SvMemoryStream maMemory;
     // Export the document as PDF, then parse it with PDFium.
@@ -287,9 +289,8 @@ void PdfExportTest::testTdf105461()
 
     // Parse the export result with pdfium.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    mpPdfDocument = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
+    maPdfMemory.WriteStream(aFile);
+    mpPdfDocument = FPDF_LoadMemDocument(maPdfMemory.GetData(), maPdfMemory.GetSize(), /*password=*/nullptr);
     CPPUNIT_ASSERT(mpPdfDocument);
 
     // The document has one page.
@@ -339,9 +340,8 @@ void PdfExportTest::testTdf107868()
 
     // Parse the export result with pdfium.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    mpPdfDocument = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
+    maPdfMemory.WriteStream(aFile);
+    mpPdfDocument = FPDF_LoadMemDocument(maPdfMemory.GetData(), maPdfMemory.GetSize(), /*password=*/nullptr);
     if (!mpPdfDocument)
         // Printing to PDF failed in a non-interesting way, e.g. CUPS is not
         // running, there is no printer defined, etc.
@@ -769,9 +769,8 @@ void PdfExportTest::testTdf108963()
 
     // Parse the export result with pdfium.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    mpPdfDocument = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
+    maPdfMemory.WriteStream(aFile);
+    mpPdfDocument = FPDF_LoadMemDocument(maPdfMemory.GetData(), maPdfMemory.GetSize(), /*password=*/nullptr);
     CPPUNIT_ASSERT(mpPdfDocument);
 
     // The document has one page.
@@ -973,9 +972,8 @@ void PdfExportTest::testTdf115117_1a()
 
     // Parse the export result with pdfium.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    mpPdfDocument = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
+    maPdfMemory.WriteStream(aFile);
+    mpPdfDocument = FPDF_LoadMemDocument(maPdfMemory.GetData(), maPdfMemory.GetSize(), /*password=*/nullptr);
     CPPUNIT_ASSERT(mpPdfDocument);
 
     // The document has one page.
@@ -1016,9 +1014,8 @@ void PdfExportTest::testTdf115117_2a()
 
     // Parse the export result with pdfium.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
-    mpPdfDocument = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
+    maPdfMemory.WriteStream(aFile);
+    mpPdfDocument = FPDF_LoadMemDocument(maPdfMemory.GetData(), maPdfMemory.GetSize(), /*password=*/nullptr);
     CPPUNIT_ASSERT(mpPdfDocument);
 
     // The document has one page.
@@ -1327,10 +1324,9 @@ void PdfExportTest::testTdf105954()
 
     // Parse the export result with pdfium.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    SvMemoryStream aMemory;
-    aMemory.WriteStream(aFile);
+    maPdfMemory.WriteStream(aFile);
     mpPdfDocument
-        = FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr);
+        = FPDF_LoadMemDocument(maPdfMemory.GetData(), maPdfMemory.GetSize(), /*password=*/nullptr);
     CPPUNIT_ASSERT(mpPdfDocument);
 
     // The document has one page.
