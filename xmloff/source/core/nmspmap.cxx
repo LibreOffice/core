@@ -148,16 +148,12 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByPrefix( const OUString& rPrefix ) const
 sal_uInt16 SvXMLNamespaceMap::GetKeyByName( const OUString& rName ) const
 {
     sal_uInt16 nKey = XML_NAMESPACE_UNKNOWN;
-    NameSpaceHash::const_iterator aIter = aNameHash.begin(), aEnd = aNameHash.end();
-    while (aIter != aEnd )
-    {
-        if ((*aIter).second->sName == rName)
-        {
-            nKey = (*aIter).second->nKey;
-            break;
-        }
-        ++aIter;
-    }
+    auto aIter = std::find_if(aNameHash.cbegin(), aNameHash.cend(),
+        [&rName](const NameSpaceHash::value_type& rEntry) { return rEntry.second->sName == rName; });
+
+    if (aIter != aNameHash.cend())
+        nKey = (*aIter).second->nKey;
+
     return nKey;
 }
 

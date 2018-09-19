@@ -193,11 +193,9 @@ void XMLErrors::AddRecord(
 void XMLErrors::ThrowErrorAsSAXException(sal_Int32 nIdMask)
 {
     // search first error/warning that matches the nIdMask
-    for( ErrorList::iterator aIter = aErrors.begin();
-         aIter != aErrors.end();
-         ++aIter )
+    for( const auto& rError : aErrors )
     {
-        if ( (aIter->nId & nIdMask) != 0 )
+        if ( (rError.nId & nIdMask) != 0 )
         {
             // we throw the error
             ErrorRecord& rErr = aErrors[0];

@@ -135,16 +135,12 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
 
         ::std::vector< XMLPropertyState > &rProperties = GetProperties();
         ::std::vector< XMLPropertyState >::iterator end( rProperties.end() );
-        ::std::vector< XMLPropertyState >::iterator property;
 
         // first, look for the old format, where we had a text:list-style-name
         // attribute in the style:properties element
-        for( property = rProperties.begin(); property != end; ++property )
-        {
+        auto property = std::find_if(rProperties.begin(), end, [&rMapper](XMLPropertyState& rProp) {
             // find properties with context
-            if( (property->mnIndex != -1) && (rMapper->GetEntryContextId( property->mnIndex ) == CTF_SD_NUMBERINGRULES_NAME) )
-                break;
-        }
+            return (rProp.mnIndex != -1) && (rMapper->GetEntryContextId( rProp.mnIndex ) == CTF_SD_NUMBERINGRULES_NAME); });
 
         // if we did not find an old list-style-name in the properties, and we need one
         // because we got a style:list-style attribute in the style-style element
