@@ -138,18 +138,6 @@
       </properties>
     </glade-widget-class>
 
-    <glade-widget-class title="Font ListBox" name="svtlo-FontStyleBox"
-                        generic-name="FontStyleBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox">
-      <properties>
-        <property save="True" query="False" id="dropdown" default="True" name="Use DropDown">
-          <parameter-spec>
-            <type>GParamBoolean</type>
-          </parameter-spec>
-        </property>
-      </properties>
-    </glade-widget-class>
-
     <glade-widget-class title="Text Encoding ListBox" name="svxlo-SvxTextEncodingBox"
                         generic-name="TextEncodingBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox">
@@ -211,9 +199,6 @@
                         icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Document Preview Window" name="sdlo-SdDocPreviewWin"
                         generic-name="Document Preview Window" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Rectangle Preview" name="svxlo-SvxXRectPreview"
-                        generic-name="Rectangle Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="SvxXLinePreview" name="svxlo-SvxXLinePreview"
                         generic-name="Line Preview Window" parent="GtkDrawingArea"
@@ -287,9 +272,6 @@
     <glade-widget-class title="ConfigGroupFunction ListBox" name="cuilo-SfxConfigFunctionListBox"
                         generic-name="ConfigGroupFunction ListBox" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="Paragraph Preview" name="svxlo-SvxParaPrevWindow"
-                        generic-name="Paragraph Preview Window" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Table Preview" name="swuilo-AutoFmtPreview"
                         generic-name="Table Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
@@ -338,9 +320,6 @@
     <glade-widget-class title="Chart Light Button" name="chartcontrollerlo-LightButton"
                         generic-name="ChartLightButton" parent="GtkButton"
                         icon-name="widget-gtk-button"/>
-    <glade-widget-class title="Bookmark Combo" name="swuilo-BookmarkCombo"
-                        generic-name="BookmarkComboBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Category Edit" name="swuilo-FEdit"
                         generic-name="CategoryEdit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
