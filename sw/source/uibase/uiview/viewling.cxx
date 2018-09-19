@@ -405,8 +405,8 @@ void SwView::HyphenateDocument()
     // do not hyphenate if interactive hyphenation is active elsewhere
     if (SwEditShell::HasHyphIter())
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr, VclMessageType::Warning,
-            VclButtonsType::Ok, SwResId(STR_MULT_INTERACT_HYPH_WARN)));
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetEditWin().GetFrameWeld(),
+            VclMessageType::Warning, VclButtonsType::Ok, SwResId(STR_MULT_INTERACT_HYPH_WARN)));
         xBox->set_title(SwResId(STR_HYPH_TITLE));
         xBox->run();
         return;
