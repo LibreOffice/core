@@ -1380,6 +1380,7 @@ void SvtFontStyleBox::Fill( const OUString& rName, const FontList* pList )
 FontSizeBox::FontSizeBox( vcl::Window* pParent, WinBits nWinSize ) :
     MetricBox( pParent, nWinSize )
 {
+    EnableSelectAll();
     ImplInit();
 }
 
