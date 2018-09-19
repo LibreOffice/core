@@ -2400,6 +2400,8 @@ void SfxViewFrame::Resize( bool bForce )
     }
 }
 
+#if HAVE_FEATURE_SCRIPTING
+
 #define LINE_SEP 0x0A
 
 static void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines )
@@ -2442,6 +2444,8 @@ static void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines )
             rStr = rStr.copy( 0, nStartPos ) + rStr.copy( n );
     }
 }
+
+#endif
 
 /*
     add new recorded dispatch macro script into the application global basic

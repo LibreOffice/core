@@ -579,6 +579,7 @@ Sequence< sal_Int8 > SAL_CALL SfxBaseModel::getImplementationId()
 
 //  XStarBasicAccess
 
+#if HAVE_FEATURE_SCRIPTING
 
 static Reference< script::XStarBasicAccess > implGetStarBasicAccess( SfxObjectShell const * pObjectShell )
 {
@@ -595,6 +596,8 @@ static Reference< script::XStarBasicAccess > implGetStarBasicAccess( SfxObjectSh
 #endif
     return xRet;
 }
+
+#endif
 
 Reference< container::XNameContainer > SAL_CALL SfxBaseModel::getLibraryContainer()
 {
