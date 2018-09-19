@@ -1319,7 +1319,7 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
     if ( rMEvt.GetClicks() < 4 )
     {
         mbClickedInSelection = false;
-        if ( rMEvt.GetClicks() == 3 || mbSelectAllSingleClick )
+        if ( rMEvt.GetClicks() == 3 || mbSelectAllSingleClick && !HasFocus() )
         {
             ImplSetSelection( Selection( 0, EDIT_NOLIMIT) );
             ImplCopyToSelectionClipboard();
