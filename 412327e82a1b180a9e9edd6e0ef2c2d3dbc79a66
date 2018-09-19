@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f013ff3_84e8ac16",
+        "filename": "comphelper/source/xml/xmltools.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-09-19T09:21:27Z",
+      "side": 1,
+      "message": "if the output string is really 38 characters long, you need 39 chars to make sprintf happy, otherwise you are going to overrun the end of the array and make valgrind unhappy, because sprintf will null-terminate it for you",
+      "revId": "412327e82a1b180a9e9edd6e0ef2c2d3dbc79a66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
