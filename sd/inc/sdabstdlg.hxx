@@ -168,7 +168,7 @@ public:
     SD_DLLPUBLIC static SdAbstractDialogFactory*     Create();
 
     virtual VclPtr<VclAbstractDialog>          CreateBreakDlg(weld::Window* pWindow, ::sd::DrawView* pDrView, ::sd::DrawDocShell* pShell, sal_uLong nSumActionCount, sal_uLong nObjCount ) = 0;
-    virtual VclPtr<AbstractCopyDlg>            CreateCopyDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView ) = 0;
+    virtual VclPtr<AbstractCopyDlg>            CreateCopyDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView ) = 0;
     virtual VclPtr<AbstractSdCustomShowDlg>    CreateSdCustomShowDlg(weld::Window* pWindow, SdDrawDocument& rDrawDoc) = 0;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdTabCharDialog(weld::Window* pWindow, const SfxItemSet* pAttr, SfxObjectShell* pDocShell) = 0;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdTabPageDialog(weld::Window* pWindow, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, bool bAreaPage) = 0;
