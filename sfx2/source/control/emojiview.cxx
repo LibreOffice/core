@@ -209,13 +209,13 @@ void EmojiView::setInsertEmojiHdl(const Link<ThumbnailViewItem*, void> &rLink)
 
 void EmojiView::AppendItem(const OUString &rTitle, const OUString &rCategory, const OUString &rName)
 {
-    EmojiViewItem *pItem = new EmojiViewItem(*this, getNextItemId());
+    std::unique_ptr<EmojiViewItem> pItem(new EmojiViewItem(*this, getNextItemId()));
 
     pItem->maTitle = rTitle;
     pItem->setCategory(rCategory);
     pItem->setHelpText(rName);
 
-    ThumbnailView::AppendItem(pItem);
+    ThumbnailView::AppendItem(std::move(pItem));
 
     CalculateItemPositions();
 }

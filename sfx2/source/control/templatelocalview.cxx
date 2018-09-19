@@ -548,8 +548,9 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
             // Keep view document id synchronized with SfxDocumentTemplates
             for (auto const& item : mItemList)
             {
-                if (static_cast<TemplateViewItem*>(item)->mnDocId > pViewItem->mnDocId)
-                    --static_cast<TemplateViewItem*>(item)->mnDocId;
+                auto pTemplateViewItem = static_cast<TemplateViewItem*>(item.get());
+                if (pTemplateViewItem->mnDocId > pViewItem->mnDocId)
+                    --pTemplateViewItem->mnDocId;
             }
         }
 
@@ -658,8 +659,9 @@ void TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
                     // Keep view document id synchronized with SfxDocumentTemplates
                     for (auto const& item : mItemList)
                     {
-                        if (static_cast<TemplateViewItem*>(item)->mnDocId > pViewItem->mnDocId)
-                            --static_cast<TemplateViewItem*>(item)->mnDocId;
+                        auto pTemplateViewItem = static_cast<TemplateViewItem*>(item.get());
+                        if (pTemplateViewItem->mnDocId > pViewItem->mnDocId)
+                            --pTemplateViewItem->mnDocId;
                     }
                 }
             }
@@ -753,16 +755,16 @@ bool TemplateLocalView::renameItem(ThumbnailViewItem* pItem, const OUString& sNe
 
 void TemplateLocalView::insertItems(const std::vector<TemplateItemProperties> &rTemplates, bool isRegionSelected, bool bShowCategoryInTooltip)
 {
-    std::vector<ThumbnailViewItem*> aItems(rTemplates.size());
+    std::vector<std::unique_ptr<ThumbnailViewItem>> aItems(rTemplates.size());
     for (size_t i = 0, n = rTemplates.size(); i < n; ++i )
     {
         const TemplateItemProperties *pCur = &rTemplates[i];
 
-        TemplateViewItem *pChild;
+        std::unique_ptr<TemplateViewItem> pChild;
         if(isRegionSelected)
-            pChild = new TemplateViewItem(*this, pCur->nId);
+            pChild.reset(new TemplateViewItem(*this, pCur->nId));
         else
-            pChild = new TemplateViewItem(*this, i+1);
+            pChild.reset(new TemplateViewItem(*this, i+1));
 
         pChild->mnDocId = pCur->nDocId;
         pChild->mnRegionId = pCur->nRegionId;
@@ -789,10 +791,10 @@ void TemplateLocalView::insertItems(const std::vector<TemplateItemProperties> &r
             pChild->maPreview1 = TemplateLocalView::getDefaultThumbnail(pCur->aPath);
         }
 
-        aItems[i] = pChild;
+        aItems[i] = std::move(pChild);
     }
 
-    updateItems(aItems);
+    updateItems(std::move(aItems));
 }
 
 void TemplateLocalView::updateThumbnailDimensions(long itemMaxSize)
@@ -976,9 +978,9 @@ bool TemplateLocalView::IsDefaultTemplate(const OUString& rPath)
 
 void TemplateLocalView::RemoveDefaultTemplateIcon(const OUString& rPath)
 {
-    for (ThumbnailViewItem* pItem : mItemList)
+    for (std::unique_ptr<ThumbnailViewItem>& pItem : mItemList)
     {
-        TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem);
+        TemplateViewItem* pViewItem = dynamic_cast<TemplateViewItem*>(pItem.get());
         if (pViewItem && pViewItem->getPath().match(rPath))
         {
             pViewItem->showDefaultIcon(false);
