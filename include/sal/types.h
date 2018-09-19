@@ -697,6 +697,20 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 #endif
 /// @endcond
 
+/// @cond INTERNAL
+/** Inline variables, where supported.
+
+    @since LibreOffice 6.2
+*/
+#if defined LIBO_INTERNAL_ONLY
+#if HAVE_CPP_INLINE_VARIABLES
+#define SAL_INLINE_VARIABLE inline
+#else
+#define SAL_INLINE_VARIABLE
+#endif
+#endif
+/// @endcond
+
 #endif // INCLUDED_SAL_TYPES_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
