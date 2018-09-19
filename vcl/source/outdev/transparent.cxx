@@ -292,14 +292,27 @@ void OutputDevice::DrawTransparent(
         if( bDrawnOk )
         {
             if( mpMetaFile )
-                mpMetaFile->AddAction( new MetaTransparentAction( tools::PolyPolygon( rB2DPolyPoly ), static_cast< sal_uInt16 >(fTransparency * 100.0)));
+            {
+                // tdf#119843 need transformed Polygon here
+                basegfx::B2DPolyPolygon aB2DPolyPoly(rB2DPolyPoly);
+                aB2DPolyPoly.transform(rObjectTransform);
+                mpMetaFile->AddAction(
+                    new MetaTransparentAction(
+                        tools::PolyPolygon(aB2DPolyPoly),
+                        static_cast< sal_uInt16 >(fTransparency * 100.0)));
+            }
 
             return;
         }
     }
 
     // fallback to old polygon drawing if needed
-    DrawTransparent(toPolyPolygon(rB2DPolyPoly), static_cast<sal_uInt16>(fTransparency * 100.0));
+    // tdf#119843 need transformed Polygon here
+    basegfx::B2DPolyPolygon aB2DPolyPoly(rB2DPolyPoly);
+    aB2DPolyPoly.transform(rObjectTransform);
+    DrawTransparent(
+        toPolyPolygon(aB2DPolyPoly),
+        static_cast<sal_uInt16>(fTransparency * 100.0));
 }
 
 void OutputDevice::DrawInvisiblePolygon( const tools::PolyPolygon& rPolyPoly )
