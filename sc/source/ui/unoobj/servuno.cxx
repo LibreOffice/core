@@ -71,6 +71,8 @@
 
 using namespace ::com::sun::star;
 
+#if HAVE_FEATURE_SCRIPTING
+
 static bool isInVBAMode( ScDocShell& rDocSh )
 {
     uno::Reference<script::XLibraryContainer> xLibContainer = rDocSh.GetBasicContainer();
@@ -79,6 +81,8 @@ static bool isInVBAMode( ScDocShell& rDocSh )
         return xVBACompat->getVBACompatibilityMode();
     return false;
 }
+
+#endif
 
 class ScVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper< container::XNameAccess >
 {
