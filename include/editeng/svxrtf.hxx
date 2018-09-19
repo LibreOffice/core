@@ -90,10 +90,6 @@ public:
 typedef std::map<short, std::unique_ptr<vcl::Font>> SvxRTFFontTbl;
 typedef std::map<sal_uInt16, std::unique_ptr<SvxRTFStyleType>> SvxRTFStyleTbl;
 
-// SvxRTFItemStack can't be "std::stack< SvxRTFItemStackType* >" type, because
-// the methods are using operator[] in sw/source/filter/rtf/rtftbl.cxx file
-typedef std::deque< SvxRTFItemStackType* > SvxRTFItemStack;
-
 // own helper classes for the RTF Parser
 struct SvxRTFStyleType
 {
@@ -180,7 +176,7 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     std::deque< Color* >  aColorTbl;
     SvxRTFFontTbl         m_FontTable;
     SvxRTFStyleTbl        m_StyleTable;
-    SvxRTFItemStack       aAttrStack;
+    std::deque< std::unique_ptr<SvxRTFItemStackType> >  aAttrStack;
     SvxRTFItemStackList   m_AttrSetList;
 
     RTFPlainAttrMapIds aPlainMap;
@@ -364,7 +360,7 @@ inline const Color& SvxRTFParser::GetColor( size_t nId ) const
 inline SfxItemSet& SvxRTFParser::GetAttrSet()
 {
     SvxRTFItemStackType* pTmp;
-    if( bNewGroup || nullptr == ( pTmp = aAttrStack.empty() ? nullptr : aAttrStack.back()) )
+    if( bNewGroup || nullptr == ( pTmp = aAttrStack.empty() ? nullptr : aAttrStack.back().get()) )
         pTmp = GetAttrSet_();
     return pTmp->aAttrSet;
 }
