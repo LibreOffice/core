@@ -214,7 +214,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 if( !bChkStkPos )
                     break;
 
-                SvxRTFItemStackType* pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back();
+                SvxRTFItemStackType* pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();
                 if( !pCurrent || (pCurrent->pSttNd->GetIdx() == pInsPos->GetNodeIdx() &&
                     pCurrent->nSttCnt == pInsPos->GetCntIdx() ))
                     break;
@@ -227,17 +227,17 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     pCurrent->nStyleNo )
                 {
                     // Open a new Group
-                    SvxRTFItemStackType* pNew = new SvxRTFItemStackType(
-                                                *pCurrent, *pInsPos, true );
+                    std::unique_ptr<SvxRTFItemStackType> pNew(new SvxRTFItemStackType(
+                                                *pCurrent, *pInsPos, true ));
                     pNew->SetRTFDefaults( GetRTFDefaults() );
 
                     // "Set" all valid attributes up until this point
                     AttrGroupEnd();
-                    pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back();  // can be changed after AttrGroupEnd!
+                    pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();  // can be changed after AttrGroupEnd!
                     pNew->aAttrSet.SetParent( pCurrent ? &pCurrent->aAttrSet : nullptr );
 
-                    aAttrStack.push_back( pNew );
-                    pCurrent = pNew;
+                    aAttrStack.push_back( std::move(pNew) );
+                    pCurrent = aAttrStack.back().get();
                 }
                 else
                     // continue to use this entry as a new one
@@ -268,7 +268,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 {
                     sal_uInt16 nStyleNo = -1 == nTokenValue ? 0 : sal_uInt16(nTokenValue);
                     // set StyleNo to the current style on the AttrStack
-                    SvxRTFItemStackType* pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back();
+                    SvxRTFItemStackType* pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();
                     if( !pCurrent )
                         break;
 
@@ -1686,7 +1686,7 @@ void SvxRTFParser::RTFPardPlain( bool const bPard, SfxItemSet** ppSet )
 {
     if( !bNewGroup && !aAttrStack.empty() ) // not at the beginning of a new group
     {
-        SvxRTFItemStackType* pCurrent = aAttrStack.back();
+        SvxRTFItemStackType* pCurrent = aAttrStack.back().get();
 
         int nLastToken = GetStackPtr(-1)->nTokenId;
         bool bNewStkEntry = true;
@@ -1697,15 +1697,15 @@ void SvxRTFParser::RTFPardPlain( bool const bPard, SfxItemSet** ppSet )
             if (pCurrent->aAttrSet.Count() || pCurrent->m_pChildList || pCurrent->nStyleNo)
             {
                 // open a new group
-                SvxRTFItemStackType* pNew = new SvxRTFItemStackType( *pCurrent, *pInsPos, true );
+                std::unique_ptr<SvxRTFItemStackType> pNew(new SvxRTFItemStackType( *pCurrent, *pInsPos, true ));
                 pNew->SetRTFDefaults( GetRTFDefaults() );
 
                 // Set all until here valid attributes
                 AttrGroupEnd();
-                pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back();  // can be changed after AttrGroupEnd!
+                pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();  // can be changed after AttrGroupEnd!
                 pNew->aAttrSet.SetParent( pCurrent ? &pCurrent->aAttrSet : nullptr );
-                aAttrStack.push_back( pNew );
-                pCurrent = pNew;
+                aAttrStack.push_back( std::move(pNew) );
+                pCurrent = aAttrStack.back().get();
             }
             else
             {

@@ -585,12 +585,7 @@ void SvxRTFParser::ClearColorTbl()
 
 void SvxRTFParser::ClearAttrStack()
 {
-    for( size_t nCnt = aAttrStack.size(); nCnt; --nCnt )
-    {
-        SvxRTFItemStackType* pTmp = aAttrStack.back();
-        aAttrStack.pop_back();
-        delete pTmp;
-    }
+    aAttrStack.clear();
 }
 
 OUString& SvxRTFParser::DelCharAtEnd( OUString& rStr, const sal_Unicode cDel )
@@ -621,18 +616,18 @@ const vcl::Font& SvxRTFParser::GetFont( sal_uInt16 nId )
 
 SvxRTFItemStackType* SvxRTFParser::GetAttrSet_()
 {
-    SvxRTFItemStackType* pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back();
-    SvxRTFItemStackType* pNew;
+    SvxRTFItemStackType* pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();
+    std::unique_ptr<SvxRTFItemStackType> pNew;
     if( pCurrent )
-        pNew = new SvxRTFItemStackType( *pCurrent, *pInsPos, false/*bCopyAttr*/ );
+        pNew.reset(new SvxRTFItemStackType( *pCurrent, *pInsPos, false/*bCopyAttr*/ ));
     else
-        pNew = new SvxRTFItemStackType( *pAttrPool, &aWhichMap[0],
-                                        *pInsPos );
+        pNew.reset(new SvxRTFItemStackType( *pAttrPool, &aWhichMap[0],
+                                        *pInsPos ));
     pNew->SetRTFDefaults( GetRTFDefaults() );
 
-    aAttrStack.push_back( pNew );
+    aAttrStack.push_back( std::move(pNew) );
     bNewGroup = false;
-    return pNew;
+    return aAttrStack.back().get();
 }
 
 
@@ -684,9 +679,8 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
 {
     if( !aAttrStack.empty() )
     {
-        SvxRTFItemStackType *pOld = aAttrStack.empty() ? nullptr : aAttrStack.back();
-        aAttrStack.pop_back();
-        SvxRTFItemStackType *pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back();
+        std::unique_ptr<SvxRTFItemStackType> pOld = std::move(aAttrStack.back());
+        SvxRTFItemStackType *pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();
 
         do {        // middle check loop
             sal_Int32 nOldSttNdIdx = pOld->pSttNd->GetIdx();
@@ -778,7 +772,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
 
                             if( pCurrent )
                             {
-                                pCurrent->Add(std::unique_ptr<SvxRTFItemStackType>(pOld));
+                                pCurrent->Add(std::move(pOld));
                                 pCurrent->Add(std::move(pNew));
                             }
                             else
@@ -786,10 +780,9 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                                 // Last off the stack, thus cache it until the next text was
                                 // read. (Span no attributes!)
 
-                                m_AttrSetList.push_back(std::unique_ptr<SvxRTFItemStackType>(pOld));
+                                m_AttrSetList.push_back(std::move(pOld));
                                 m_AttrSetList.push_back(std::move(pNew));
                             }
-                            pOld = nullptr;   // Do not delete pOld
                             break;
                         }
                     }
@@ -813,7 +806,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
 
                 if( pCurrent )
                 {
-                    pCurrent->Add(std::unique_ptr<SvxRTFItemStackType>(pOld));
+                    pCurrent->Add(std::move(pOld));
                     // split up and create new entry, because it make no sense
                     // to create a "so long" depend list. Bug 95010
                     if (bCrsrBack && 50 < pCurrent->m_pChildList->size())
@@ -823,23 +816,21 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                         bCrsrBack = false;
 
                         // Open a new Group.
-                        SvxRTFItemStackType* pNew = new SvxRTFItemStackType(
-                                                *pCurrent, *pInsPos, true );
+                        std::unique_ptr<SvxRTFItemStackType> pNew(new SvxRTFItemStackType(
+                                                *pCurrent, *pInsPos, true ));
                         pNew->SetRTFDefaults( GetRTFDefaults() );
 
                         // Set all until here valid Attributes
                         AttrGroupEnd();
-                        pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back();  // can be changed after AttrGroupEnd!
+                        pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();  // can be changed after AttrGroupEnd!
                         pNew->aAttrSet.SetParent( pCurrent ? &pCurrent->aAttrSet : nullptr );
-                        aAttrStack.push_back( pNew );
+                        aAttrStack.push_back( std::move(pNew) );
                     }
                 }
                 else
                     // Last off the stack, thus cache it until the next text was
                     // read. (Span no attributes!)
-                    m_AttrSetList.push_back(std::unique_ptr<SvxRTFItemStackType>(pOld));
-
-                pOld = nullptr;
+                    m_AttrSetList.push_back(std::move(pOld));
             }
 
             if( bCrsrBack )
@@ -847,8 +838,6 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                 MovePos();
 
         } while( false );
-
-        delete pOld;
 
         bNewGroup = false;
     }
@@ -889,7 +878,7 @@ void SvxRTFParser::SetAttrSet( SvxRTFItemStackType &rSet )
 // Has no text been inserted yet? (SttPos from the top Stack entry!)
 bool SvxRTFParser::IsAttrSttPos()
 {
-    SvxRTFItemStackType* pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back();
+    SvxRTFItemStackType* pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();
     return !pCurrent || (pCurrent->pSttNd->GetIdx() == pInsPos->GetNodeIdx() &&
         pCurrent->nSttCnt == pInsPos->GetCntIdx());
 }
