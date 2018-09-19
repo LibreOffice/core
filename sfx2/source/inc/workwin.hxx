@@ -190,7 +190,7 @@ class SfxWorkWindow final
     VclPtr<SfxSplitWindow>  pSplit[SFX_SPLITWINDOWS_MAX];
     std::vector<SfxChild_Impl*>
                             aChildren;
-    std::vector<SfxChildWin_Impl*>
+    std::vector<std::unique_ptr<SfxChildWin_Impl>>
                             aChildWins;
     SfxBindings*            pBindings;
     VclPtr<vcl::Window>     pWorkWin;
