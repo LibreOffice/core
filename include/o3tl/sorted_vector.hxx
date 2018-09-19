@@ -224,6 +224,7 @@ class sorted_vector<Value,Compare,Find,false> : public sorted_vector<Value, Comp
 {
 public:
     using sorted_vector<Value, Compare, Find, true>::sorted_vector;
+    typedef sorted_vector<Value, Compare, Find, true> super_sorted_vector;
 
     sorted_vector(sorted_vector const&) = delete;
     sorted_vector& operator=(sorted_vector const&) = delete;
@@ -231,6 +232,17 @@ public:
     sorted_vector() = default;
     sorted_vector(sorted_vector&&) = default;
     sorted_vector& operator=(sorted_vector&&) = default;
+
+    /**
+     * implement find for sorted_vectors containing std::unique_ptr
+     */
+    typename super_sorted_vector::const_iterator find( typename Value::element_type const * x ) const
+    {
+        Value tmp(const_cast<typename Value::element_type*>(x));
+        auto ret = super_sorted_vector::find(tmp);
+        tmp.release();
+        return ret;
+    }
 };
 
 
