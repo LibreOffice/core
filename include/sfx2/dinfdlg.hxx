@@ -570,7 +570,7 @@ private:
     VclPtr<VclBox>                      m_pBox;
     sal_Int32                           m_nItemHeight;
     SvNumberFormatter                   m_aNumberFormatter;
-    std::vector< CmisPropertyLine* >    m_aCmisPropertiesLines;
+    std::vector< std::unique_ptr<CmisPropertyLine> > m_aCmisPropertiesLines;
 public:
     CmisPropertiesWindow(SfxTabPage* pParent);
     ~CmisPropertiesWindow();

@@ -2278,13 +2278,6 @@ CmisPropertiesWindow::~CmisPropertiesWindow()
 
 void CmisPropertiesWindow::ClearAllLines()
 {
-    std::vector< CmisPropertyLine* >::iterator pIter;
-    for ( pIter = m_aCmisPropertiesLines.begin();
-          pIter != m_aCmisPropertiesLines.end(); ++pIter )
-    {
-        CmisPropertyLine* pLine = *pIter;
-        delete pLine;
-    }
     m_aCmisPropertiesLines.clear();
 }
 
@@ -2293,7 +2286,7 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
                                     const bool bRequired, const bool bMultiValued,
                                     const bool bOpenChoice, Any& /*aChoices*/, Any const & rAny )
 {
-    CmisPropertyLine* pNewLine = new CmisPropertyLine( m_pBox );
+    std::unique_ptr<CmisPropertyLine> pNewLine(new CmisPropertyLine( m_pBox ));
 
     pNewLine->m_sId = sId;
     pNewLine->m_sType = sType;
@@ -2376,7 +2369,7 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
     pNewLine->m_aType->SetText( sType );
     pNewLine->m_aType->Show();
 
-    m_aCmisPropertiesLines.push_back( pNewLine );
+    m_aCmisPropertiesLines.push_back( std::move(pNewLine) );
 }
 
 void CmisPropertiesWindow::DoScroll( sal_Int32 nNewPos )
@@ -2388,11 +2381,10 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
 {
     Sequence< document::CmisProperty > aPropertiesSeq( m_aCmisPropertiesLines.size() );
     sal_Int32 i = 0;
-    std::vector< CmisPropertyLine* >::const_iterator pIter;
-    for ( pIter = m_aCmisPropertiesLines.begin();
+    for ( auto pIter = m_aCmisPropertiesLines.begin();
             pIter != m_aCmisPropertiesLines.end(); ++pIter, ++i )
     {
-        CmisPropertyLine* pLine = *pIter;
+        CmisPropertyLine* pLine = pIter->get();
 
         aPropertiesSeq[i].Id = pLine->m_sId;
         aPropertiesSeq[i].Type = pLine->m_sType;
