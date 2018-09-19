@@ -100,12 +100,10 @@ struct LocalFocus
 
 // Entry-List
 
-typedef ::std::vector< SvxIconChoiceCtrlEntry* > SvxIconChoiceCtrlEntryList_impl;
-
 class EntryList_Impl
 {
 private:
-    SvxIconChoiceCtrlEntryList_impl maIconChoiceCtrlEntryList;
+    std::vector< SvxIconChoiceCtrlEntry* > maIconChoiceCtrlEntryList;
     SvxIconChoiceCtrl_Impl*         _pOwner;
 
 public:
@@ -172,7 +170,7 @@ class SvxIconChoiceCtrl_Impl
     std::unique_ptr<IcnGridMap_Impl> pGridMap;
     long                    nMaxVirtWidth;  // max. width aVirtOutputSize for ALIGN_TOP
     long                    nMaxVirtHeight; // max. height aVirtOutputSize for ALIGN_LEFT
-    std::unique_ptr<SvxIconChoiceCtrlEntryList_impl> pZOrderList;
+    std::vector< SvxIconChoiceCtrlEntry* > maZOrderList;
     std::unique_ptr<SvxIconChoiceCtrlColumnInfoMap> m_pColumns;
     VclPtr<IcnViewEdit_Impl>   pEdit;
     WinBits                 nWinBits;
