@@ -403,7 +403,7 @@ private:
     sal_Int32                           m_nLineHeight;
     sal_Int32                           m_nScrollPos;
     std::vector<std::unique_ptr<CustomProperty>> m_aCustomProperties;
-    std::vector<CustomPropertyLine*>    m_aCustomPropertiesLines;
+    std::vector<std::unique_ptr<CustomPropertyLine>> m_aCustomPropertiesLines;
     CustomPropertyLine*                 m_pCurrentLine;
     SvNumberFormatter                   m_aNumberFormatter;
     Idle                                m_aEditLoseFocusIdle;

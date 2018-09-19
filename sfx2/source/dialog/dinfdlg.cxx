@@ -1536,8 +1536,8 @@ IMPL_LINK( CustomPropertiesWindow, RemoveHdl, Button*, pBtn, void )
 
     CustomPropertiesRemoveButton* pButton = static_cast<CustomPropertiesRemoveButton*>(pBtn);
     CustomPropertyLine* pLine = pButton->GetLine();
-    std::vector< CustomPropertyLine* >::iterator pFound =
-        std::find( m_aCustomPropertiesLines.begin(), m_aCustomPropertiesLines.end(), pLine );
+    auto pFound = std::find_if( m_aCustomPropertiesLines.begin(), m_aCustomPropertiesLines.end(),
+                    [&] (const std::unique_ptr<CustomPropertyLine>& p) { return p.get() == pLine; });
     if ( pFound != m_aCustomPropertiesLines.end() )
     {
         sal_uInt32 nLineNumber = pFound - m_aCustomPropertiesLines.begin();
@@ -1664,8 +1664,8 @@ void CustomPropertiesWindow::Resize()
     m_pHeaderBar->SetItemSize( HI_VALUE, nItemWidth );
     m_pHeaderBar->SetItemSize( HI_ACTION, nButtonWidth );
 
-    for (CustomPropertyLine* pLine : m_aCustomPropertiesLines)
-        SetWidgetWidths(pLine);
+    for (std::unique_ptr<CustomPropertyLine>& pLine : m_aCustomPropertiesLines)
+        SetWidgetWidths(pLine.get());
 
     SetVisibleLineCount(GetVisibleLineCount());
     ReloadLinesContent();
@@ -1711,7 +1711,7 @@ void CustomPropertiesWindow::CreateNewLine()
 
     sal_Int32 nPos = GetExistingLineCount() * GetLineHeight();
     nPos += LogicToPixel(Size(0, 2), MapMode(MapUnit::MapAppFont)).Height();
-    m_aCustomPropertiesLines.push_back( pNewLine );
+    m_aCustomPropertiesLines.emplace_back( pNewLine );
 
     SetWidgetWidths(pNewLine);
     pNewLine->m_aLine->SetPosSizePixel(Point(0, nPos + m_nScrollPos), Size(GetSizePixel().Width(), m_nWidgetHeight));
@@ -1724,12 +1724,9 @@ void CustomPropertiesWindow::CreateNewLine()
 bool CustomPropertiesWindow::AreAllLinesValid() const
 {
     bool bRet = true;
-    std::vector< CustomPropertyLine* >::const_iterator pIter;
-    for ( pIter = m_aCustomPropertiesLines.begin();
-            pIter != m_aCustomPropertiesLines.end(); ++pIter )
+    for ( std::unique_ptr<CustomPropertyLine> const & pLine : m_aCustomPropertiesLines )
     {
-        CustomPropertyLine* pLine = *pIter;
-        if ( !IsLineValid( pLine ) )
+        if ( !IsLineValid( pLine.get() ) )
         {
             bRet = false;
             break;
@@ -1741,15 +1738,8 @@ bool CustomPropertiesWindow::AreAllLinesValid() const
 
 void CustomPropertiesWindow::ClearAllLines()
 {
-    std::vector< CustomPropertyLine* >::iterator pIter;
-    for ( pIter = m_aCustomPropertiesLines.begin();
-          pIter != m_aCustomPropertiesLines.end(); ++pIter )
-    {
-        CustomPropertyLine* pLine = *pIter;
-        delete pLine;
-    }
-    m_aCustomProperties.clear();
     m_aCustomPropertiesLines.clear();
+    m_aCustomProperties.clear();
     m_nScrollPos = 0;
 }
 
@@ -1782,7 +1772,7 @@ void CustomPropertiesWindow::StoreCustomProperties()
 
     for (sal_uInt32 i = 0; nDataModelPos + i < GetTotalLineCount() && i < GetExistingLineCount(); i++)
     {
-        CustomPropertyLine* pLine = m_aCustomPropertiesLines[i];
+        CustomPropertyLine* pLine = m_aCustomPropertiesLines[i].get();
 
         OUString sPropertyName = pLine->m_aNameBox->GetText();
         if (!sPropertyName.isEmpty())
@@ -1879,7 +1869,7 @@ void CustomPropertiesWindow::ReloadLinesContent()
         const OUString& rName = m_aCustomProperties[nDataModelPos + i]->m_sName;
         const css::uno::Any& rAny = m_aCustomProperties[nDataModelPos + i]->m_aValue;
 
-        CustomPropertyLine* pLine = m_aCustomPropertiesLines[i];
+        CustomPropertyLine* pLine = m_aCustomPropertiesLines[i].get();
         pLine->Clear();
 
         pLine->m_aNameBox->SetText(rName);
@@ -1956,7 +1946,7 @@ void CustomPropertiesWindow::ReloadLinesContent()
     }
     while (nDataModelPos + i >= GetTotalLineCount() && i < GetExistingLineCount())
     {
-        CustomPropertyLine* pLine = m_aCustomPropertiesLines[i];
+        CustomPropertyLine* pLine = m_aCustomPropertiesLines[i].get();
         pLine->Hide();
         i++;
     }
