@@ -112,8 +112,8 @@ inline XMLFontAutoStylePoolEntry_Impl::XMLFontAutoStylePoolEntry_Impl(
 
 struct XMLFontAutoStylePoolEntryCmp_Impl {
     bool operator()(
-        XMLFontAutoStylePoolEntry_Impl* const& r1,
-        XMLFontAutoStylePoolEntry_Impl* const& r2 ) const
+        std::unique_ptr<XMLFontAutoStylePoolEntry_Impl> const& r1,
+        std::unique_ptr<XMLFontAutoStylePoolEntry_Impl> const& r2 ) const
     {
         bool bEnc1(r1->GetEncoding() != RTL_TEXTENCODING_SYMBOL);
         bool bEnc2(r2->GetEncoding() != RTL_TEXTENCODING_SYMBOL);
@@ -134,13 +134,8 @@ struct XMLFontAutoStylePoolEntryCmp_Impl {
     }
 };
 
-class XMLFontAutoStylePool_Impl : public o3tl::sorted_vector<XMLFontAutoStylePoolEntry_Impl*, XMLFontAutoStylePoolEntryCmp_Impl>
+class XMLFontAutoStylePool_Impl : public o3tl::sorted_vector<std::unique_ptr<XMLFontAutoStylePoolEntry_Impl>, XMLFontAutoStylePoolEntryCmp_Impl>
 {
-public:
-    ~XMLFontAutoStylePool_Impl()
-    {
-        DeleteAndDestroyAll();
-    }
 };
 
 XMLFontAutoStylePool::XMLFontAutoStylePool(SvXMLExport& rExp, bool bTryToEmbedFonts) :
@@ -201,10 +196,10 @@ OUString XMLFontAutoStylePool::Add(
             }
         }
 
-        XMLFontAutoStylePoolEntry_Impl *pEntry =
+        std::unique_ptr<XMLFontAutoStylePoolEntry_Impl> pEntry(
             new XMLFontAutoStylePoolEntry_Impl( sName, rFamilyName, rStyleName,
-                                                nFamily, nPitch, eEnc );
-        m_pFontAutoStylePool->insert( pEntry );
+                                                nFamily, nPitch, eEnc ));
+        m_pFontAutoStylePool->insert( std::move(pEntry) );
         m_aNames.insert(sName);
     }
 
@@ -403,7 +398,7 @@ void XMLFontAutoStylePool::exportXML()
 
     for (sal_uInt32 i = 0; i < nCount; i++)
     {
-        const XMLFontAutoStylePoolEntry_Impl* pEntry = (*m_pFontAutoStylePool)[i];
+        const XMLFontAutoStylePoolEntry_Impl* pEntry = (*m_pFontAutoStylePool)[i].get();
 
         GetExport().AddAttribute(XML_NAMESPACE_STYLE, XML_NAME, pEntry->GetName());
 
