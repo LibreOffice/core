@@ -19,33 +19,33 @@
 
 #include <salgdi.hxx>
 
-bool SalGraphics::IsNativeControlSupported(ControlType eType, ControlPart ePart)
+bool SalGraphics::IsNativeControlSupported(ControlType /*eType*/, ControlPart /*ePart*/)
 {
     return false;
 }
 
-bool SalGraphics::hitTestNativeControl(ControlType eType, ControlPart ePart,
-                                       const tools::Rectangle& rBoundingControlRegion,
-                                       const Point& rPosition, bool& rIsInside)
+bool SalGraphics::hitTestNativeControl(ControlType /*eType*/, ControlPart /*ePart*/,
+                                       const tools::Rectangle& /*rBoundingControlRegion*/,
+                                       const Point& /*rPosition*/, bool& /*rIsInside*/)
 {
     return false;
 }
 
-bool SalGraphics::drawNativeControl(ControlType eType, ControlPart ePart,
-                                   const tools::Rectangle& rBoundingControlRegion,
-                                   ControlState eState, const ImplControlValue& aValue,
-                                   const OUString& aCaptions)
+bool SalGraphics::drawNativeControl(ControlType /*eType*/, ControlPart /*ePart*/,
+                                   const tools::Rectangle& /*rBoundingControlRegion*/,
+                                   ControlState /*eState*/, const ImplControlValue& /*aValue*/,
+                                   const OUString& /*aCaptions*/)
 {
     return false;
 }
 
-bool SalGraphics::getNativeControlRegion(ControlType eType, ControlPart ePart,
-                                         const tools::Rectangle& rBoundingControlRegion,
-                                         ControlState eState,
-                                         const ImplControlValue& aValue,
-                                         const OUString& aCaption,
-                                         tools::Rectangle& rNativeBoundingRegion,
-                                         tools::Rectangle& rNativeContentRegion)
+bool SalGraphics::getNativeControlRegion(ControlType /*eType*/, ControlPart /*ePart*/,
+                                         const tools::Rectangle& /*rBoundingControlRegion*/,
+                                         ControlState /*eState*/,
+                                         const ImplControlValue& /*aValue*/,
+                                         const OUString& /*aCaption*/,
+                                         tools::Rectangle& /*rNativeBoundingRegion*/,
+                                         tools::Rectangle& /*rNativeContentRegion*/)
 {
     return false;
 }
