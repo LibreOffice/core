@@ -23,13 +23,9 @@
 
 #include <sal/log.hxx>
 #include <vcl/font.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
 #include <tools/fract.hxx>
 #include <deque>
-
 
 inline long SmPtsTo100th_mm(long nNumPts)
     // returns the length (in 100th of mm) that corresponds to the length
