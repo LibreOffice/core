@@ -289,6 +289,12 @@ public:
         m_xWidget->set_height_request(nHeight);
     }
 
+    virtual Size get_size_request() const override
+    {
+        return Size(m_xWidget->get_width_request(),
+                    m_xWidget->get_height_request());
+    }
+
     virtual Size get_preferred_size() const override
     {
         return m_xWidget->get_preferred_size();

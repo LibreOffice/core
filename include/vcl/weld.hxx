@@ -59,6 +59,7 @@ public:
             hide();
     }
     virtual void set_size_request(int nWidth, int nHeight) = 0;
+    virtual Size get_size_request() const = 0;
     virtual Size get_preferred_size() const = 0;
     virtual float get_approximate_digit_width() const = 0;
     virtual int get_text_height() const = 0;
@@ -347,7 +348,11 @@ public:
     //by text
     virtual OUString get_text(int pos) const = 0;
     virtual int find_text(const OUString& rText) const = 0;
-    OUString get_selected_text() const { return get_text(get_selected_index()); }
+    OUString get_selected_text() const
+    {
+        int index = get_selected_index();
+        return index != -1 ? get_text(index) : OUString();
+    }
     void select_text(const OUString& rText) { select(find_text(rText)); }
     void remove_text(const OUString& rText) { remove(find_text(rText)); }
     std::vector<OUString> get_selected_rows_text() const
@@ -822,6 +827,7 @@ public:
     {
         m_xSpinButton->set_size_request(nWidth, nHeight);
     }
+    Size get_size_request() const { return m_xSpinButton->get_size_request(); }
     Size get_preferred_size() const { return m_xSpinButton->get_preferred_size(); }
     void connect_focus_in(const Link<Widget&, void>& rLink)
     {

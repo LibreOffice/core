@@ -378,7 +378,7 @@ namespace weld
     void EntryTreeView::set_height_request_by_rows(int nRows)
     {
         int nHeight = nRows == -1 ? -1 : m_xTreeView->get_height_rows(nRows);
-        m_xTreeView->set_size_request(-1, nHeight);
+        m_xTreeView->set_size_request(m_xTreeView->get_size_request().Width(), nHeight);
     }
 }
 
