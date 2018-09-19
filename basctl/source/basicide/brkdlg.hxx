@@ -20,39 +20,36 @@
 #ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_BRKDLG_HXX
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_BRKDLG_HXX
 
-#include <vcl/dialog.hxx>
-
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
+#include <vcl/weld.hxx>
 
 namespace basctl
 {
 
-class BreakPointDialog final : public ModalDialog
+class BreakPointDialog final : public weld::GenericDialogController
 {
-    VclPtr<ComboBox>       m_pComboBox;
-    VclPtr<OKButton>       m_pOKButton;
-    VclPtr<PushButton>     m_pNewButton;
-    VclPtr<PushButton>     m_pDelButton;
-    VclPtr<CheckBox>       m_pCheckBox;
-    VclPtr<NumericField>   m_pNumericField;
-
     BreakPointList & m_rOriginalBreakPointList;
     BreakPointList m_aModifiedBreakPointList;
 
+    std::unique_ptr<weld::EntryTreeView> m_xComboBox;
+    std::unique_ptr<weld::Button> m_xOKButton;
+    std::unique_ptr<weld::Button> m_xNewButton;
+    std::unique_ptr<weld::Button> m_xDelButton;
+    std::unique_ptr<weld::CheckButton> m_xCheckBox;
+    std::unique_ptr<weld::SpinButton> m_xNumericField;
+
     void            CheckButtons();
-    DECL_LINK( CheckBoxHdl, Button*, void );
-    DECL_LINK( ComboBoxHighlightHdl, ComboBox&, void );
-    DECL_LINK( EditModifyHdl, Edit&, void );
-    DECL_LINK( ButtonHdl, Button*, void );
+    DECL_LINK(CheckBoxHdl, weld::ToggleButton&, void);
+    DECL_LINK(EditModifyHdl, weld::ComboBox&, void);
+    DECL_LINK(FieldModifyHdl, weld::SpinButton&, void);
+    DECL_LINK(ButtonHdl, weld::Button&, void);
+    DECL_LINK(TreeModifyHdl, weld::TreeView&, void);
     void            UpdateFields( BreakPoint const & rBrk );
     BreakPoint*     GetSelectedBreakPoint();
 
 
 public:
-            BreakPointDialog( vcl::Window* pParent, BreakPointList& rBrkList );
+    BreakPointDialog(weld::Window* pParent, BreakPointList& rBrkList);
     virtual ~BreakPointDialog() override;
-    virtual void dispose() override;
 
     void    SetCurrentBreakPoint( BreakPoint const & rBrk );
 };

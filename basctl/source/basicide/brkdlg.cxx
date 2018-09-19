@@ -61,46 +61,45 @@ bool lcl_ParseText(OUString const &rText, size_t& rLineNr )
 
 } // namespace
 
-BreakPointDialog::BreakPointDialog( vcl::Window* pParent, BreakPointList& rBrkPntList )
-    : ModalDialog(pParent, "ManageBreakpointsDialog",
-        "modules/BasicIDE/ui/managebreakpoints.ui")
+BreakPointDialog::BreakPointDialog(weld::Window* pParent, BreakPointList& rBrkPntList)
+    : GenericDialogController(pParent, "modules/BasicIDE/ui/managebreakpoints.ui", "ManageBreakpointsDialog")
     , m_rOriginalBreakPointList(rBrkPntList)
     , m_aModifiedBreakPointList(rBrkPntList)
+    , m_xComboBox(m_xBuilder->weld_entry_tree_view("entriesgrid", "entries", "entrieslist"))
+    , m_xOKButton(m_xBuilder->weld_button("ok"))
+    , m_xNewButton(m_xBuilder->weld_button("new"))
+    , m_xDelButton(m_xBuilder->weld_button("delete"))
+    , m_xCheckBox(m_xBuilder->weld_check_button("active"))
+    , m_xNumericField(m_xBuilder->weld_spin_button("pass-nospin"))
 {
-    get(m_pComboBox, "entries");
-    m_pComboBox->set_height_request(m_pComboBox->GetTextHeight() * 12);
-    m_pComboBox->set_width_request(m_pComboBox->approximate_char_width() * 32);
-    get(m_pOKButton, "ok");
-    get(m_pNewButton, "new");
-    get(m_pDelButton, "delete");
-    get(m_pCheckBox, "active");
-    get(m_pNumericField, "pass-nospin");
+    m_xComboBox->set_size_request(m_xComboBox->get_approximate_digit_width() * 20, -1);
+    m_xComboBox->set_height_request_by_rows(12);
 
-    m_pComboBox->SetUpdateMode(false);
+    m_xComboBox->freeze();
     for ( size_t i = 0, n = m_aModifiedBreakPointList.size(); i < n; ++i )
     {
         BreakPoint& rBrk = m_aModifiedBreakPointList.at( i );
         OUString aEntryStr( "# " + OUString::number(rBrk.nLine) );
-        m_pComboBox->InsertEntry( aEntryStr );
+        m_xComboBox->append_text(aEntryStr);
     }
-    m_pComboBox->SetUpdateMode(true);
+    m_xComboBox->thaw();
 
-    m_pOKButton->SetClickHdl( LINK( this, BreakPointDialog, ButtonHdl ) );
-    m_pNewButton->SetClickHdl( LINK( this, BreakPointDialog, ButtonHdl ) );
-    m_pDelButton->SetClickHdl( LINK( this, BreakPointDialog, ButtonHdl ) );
+    m_xOKButton->connect_clicked(LINK(this, BreakPointDialog, ButtonHdl));
+    m_xNewButton->connect_clicked(LINK(this, BreakPointDialog, ButtonHdl));
+    m_xDelButton->connect_clicked(LINK(this, BreakPointDialog, ButtonHdl));
 
-    m_pCheckBox->SetClickHdl( LINK( this, BreakPointDialog, CheckBoxHdl ) );
-    m_pComboBox->SetSelectHdl( LINK( this, BreakPointDialog, ComboBoxHighlightHdl ) );
-    m_pComboBox->SetModifyHdl( LINK( this, BreakPointDialog, EditModifyHdl ) );
-    m_pComboBox->GrabFocus();
+    m_xCheckBox->connect_toggled(LINK(this, BreakPointDialog, CheckBoxHdl));
+    m_xComboBox->connect_changed(LINK(this, BreakPointDialog, EditModifyHdl));
+    m_xComboBox->connect_row_activated(LINK(this, BreakPointDialog, TreeModifyHdl));
+    m_xComboBox->grab_focus();
 
-    m_pNumericField->SetMin( 0 );
-    m_pNumericField->SetMax( 0x7FFFFFFF );
-    m_pNumericField->SetSpinSize( 1 );
-    m_pNumericField->SetStrictFormat(true);
-    m_pNumericField->SetModifyHdl( LINK( this, BreakPointDialog, EditModifyHdl ) );
+    m_xNumericField->set_range(0, 0x7FFFFFFF);
+    m_xNumericField->set_increments(1, 10);
+    m_xNumericField->connect_value_changed(LINK(this, BreakPointDialog, FieldModifyHdl));
 
-    m_pComboBox->SetText( m_pComboBox->GetEntry( 0 ) );
+    if (m_xComboBox->get_count())
+        m_xComboBox->set_active(0);
+
     if (m_aModifiedBreakPointList.size())
         UpdateFields( m_aModifiedBreakPointList.at( 0 ) );
 
@@ -109,24 +108,12 @@ BreakPointDialog::BreakPointDialog( vcl::Window* pParent, BreakPointList& rBrkPn
 
 BreakPointDialog::~BreakPointDialog()
 {
-    disposeOnce();
-}
-
-void BreakPointDialog::dispose()
-{
-    m_pComboBox.clear();
-    m_pOKButton.clear();
-    m_pNewButton.clear();
-    m_pDelButton.clear();
-    m_pNumericField.clear();
-    m_pCheckBox.clear();
-    ModalDialog::dispose();
 }
 
 void BreakPointDialog::SetCurrentBreakPoint( BreakPoint const & rBrk )
 {
     OUString aStr( "# " + OUString::number(rBrk.nLine) );
-    m_pComboBox->SetText( aStr );
+    m_xComboBox->set_entry_text(aStr);
     UpdateFields( rBrk );
 }
 
@@ -136,111 +123,115 @@ void BreakPointDialog::CheckButtons()
     // number that is not already present in the combo box list; otherwise
     // "OK" and "Delete" buttons are enabled:
     size_t nLine;
-    if (lcl_ParseText(m_pComboBox->GetText(), nLine)
+    if (lcl_ParseText(m_xComboBox->get_active_text(), nLine)
         && m_aModifiedBreakPointList.FindBreakPoint(nLine) == nullptr)
     {
-        m_pNewButton->Enable();
-        m_pOKButton->Disable();
-        m_pDelButton->Disable();
+        m_xNewButton->set_sensitive(true);
+        m_xOKButton->set_sensitive(false);
+        m_xDelButton->set_sensitive(false);
+        m_xDelButton->set_has_default(false);
+        m_xNewButton->set_has_default(true);
     }
     else
     {
-        m_pNewButton->Disable();
-        m_pOKButton->Enable();
-        m_pDelButton->Enable();
+        m_xNewButton->set_sensitive(false);
+        m_xOKButton->set_sensitive(true);
+        m_xDelButton->set_sensitive(true);
+        m_xNewButton->set_has_default(false);
+        m_xDelButton->set_has_default(true);
     }
 }
 
-IMPL_LINK( BreakPointDialog, CheckBoxHdl, Button *, pButton, void )
+IMPL_LINK(BreakPointDialog, CheckBoxHdl, weld::ToggleButton&, rButton, void)
 {
-    ::CheckBox * pChkBx = static_cast<::CheckBox*>(pButton);
     BreakPoint* pBrk = GetSelectedBreakPoint();
     if (pBrk)
-        pBrk->bEnabled = pChkBx->IsChecked();
+        pBrk->bEnabled = rButton.get_active();
 }
 
-IMPL_LINK( BreakPointDialog, ComboBoxHighlightHdl, ComboBox&, rBox, void )
+IMPL_LINK(BreakPointDialog, EditModifyHdl, weld::ComboBox&, rBox, void)
 {
-    m_pNewButton->Disable();
-    m_pOKButton->Enable();
-    m_pDelButton->Enable();
+    CheckButtons();
 
-    sal_Int32 nEntry = rBox.GetEntryPos( rBox.GetText() );
+    int nEntry = rBox.find_text(rBox.get_active_text());
+    if (nEntry == -1)
+        return;
     BreakPoint& rBrk = m_aModifiedBreakPointList.at( nEntry );
     UpdateFields( rBrk );
 }
 
-
-IMPL_LINK( BreakPointDialog, EditModifyHdl, Edit&, rEdit, void )
+IMPL_LINK(BreakPointDialog, FieldModifyHdl, weld::SpinButton&, rEdit, void)
 {
-    if (&rEdit == m_pComboBox)
-        CheckButtons();
-    else if (&rEdit == m_pNumericField)
-    {
-        BreakPoint* pBrk = GetSelectedBreakPoint();
-        if (pBrk)
-            pBrk->nStopAfter = rEdit.GetText().toInt32();
-    }
+    BreakPoint* pBrk = GetSelectedBreakPoint();
+    if (pBrk)
+        pBrk->nStopAfter = rEdit.get_value();
 }
 
-
-IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton, void )
+IMPL_LINK_NOARG(BreakPointDialog, TreeModifyHdl, weld::TreeView&, void)
 {
-    if (pButton == m_pOKButton)
+    if (!m_xDelButton->get_sensitive())
+        return;
+    ButtonHdl(*m_xDelButton);
+}
+
+IMPL_LINK(BreakPointDialog, ButtonHdl, weld::Button&, rButton, void)
+{
+    if (&rButton == m_xOKButton.get())
     {
         m_rOriginalBreakPointList.transfer(m_aModifiedBreakPointList);
-        EndDialog( 1 );
+        m_xDialog->response(RET_OK);
     }
-    else if (pButton == m_pNewButton)
+    else if (&rButton == m_xNewButton.get())
     {
         // keep checkbox in mind!
-        OUString aText( m_pComboBox->GetText() );
+        OUString aText(m_xComboBox->get_active_text());
         size_t nLine;
         bool bValid = lcl_ParseText( aText, nLine );
         if ( bValid )
         {
             BreakPoint aBrk( nLine );
-            aBrk.bEnabled = m_pCheckBox->IsChecked();
-            aBrk.nStopAfter = static_cast<size_t>(m_pNumericField->GetValue());
+            aBrk.bEnabled = m_xCheckBox->get_active();
+            aBrk.nStopAfter = static_cast<size_t>(m_xNumericField->get_value());
             m_aModifiedBreakPointList.InsertSorted( aBrk );
             OUString aEntryStr( "# " + OUString::number(aBrk.nLine) );
-            m_pComboBox->InsertEntry( aEntryStr );
+            m_xComboBox->append_text(aEntryStr);
             if (SfxDispatcher* pDispatcher = GetDispatcher())
                 pDispatcher->Execute( SID_BASICIDE_BRKPNTSCHANGED );
         }
         else
         {
-            m_pComboBox->SetText( aText );
-            m_pComboBox->GrabFocus();
+            m_xComboBox->set_active_text(aText);
+            m_xComboBox->grab_focus();
         }
         CheckButtons();
     }
-    else if (pButton == m_pDelButton)
+    else if (&rButton == m_xDelButton.get())
     {
-        sal_Int32 nEntry = m_pComboBox->GetEntryPos( m_pComboBox->GetText() );
-        m_aModifiedBreakPointList.remove( nEntry );
-        m_pComboBox->RemoveEntryAt(nEntry);
-        if ( nEntry && nEntry >= m_pComboBox->GetEntryCount() )
-            nEntry--;
-        m_pComboBox->SetText( m_pComboBox->GetEntry( nEntry ) );
-        if (SfxDispatcher* pDispatcher = GetDispatcher())
-            pDispatcher->Execute( SID_BASICIDE_BRKPNTSCHANGED );
-        CheckButtons();
+        int nEntry = m_xComboBox->find_text(m_xComboBox->get_active_text());
+        if (nEntry != -1)
+        {
+            m_aModifiedBreakPointList.remove(nEntry);
+            m_xComboBox->remove(nEntry);
+            if (nEntry && nEntry >= m_xComboBox->get_count())
+                nEntry--;
+            m_xComboBox->set_active_text(m_xComboBox->get_text(nEntry));
+            if (SfxDispatcher* pDispatcher = GetDispatcher())
+                pDispatcher->Execute( SID_BASICIDE_BRKPNTSCHANGED );
+            CheckButtons();
+        }
     }
 }
 
-
 void BreakPointDialog::UpdateFields( BreakPoint const & rBrk )
 {
-    m_pCheckBox->Check( rBrk.bEnabled );
-    m_pNumericField->SetValue( rBrk.nStopAfter );
+    m_xCheckBox->set_active(rBrk.bEnabled);
+    m_xNumericField->set_value(rBrk.nStopAfter);
 }
-
 
 BreakPoint* BreakPointDialog::GetSelectedBreakPoint()
 {
-    sal_Int32 nEntry = m_pComboBox->GetEntryPos( m_pComboBox->GetText() );
-    if (nEntry == LISTBOX_ENTRY_NOTFOUND)
+    int nEntry = m_xComboBox->find_text(m_xComboBox->get_active_text());
+    if (nEntry == -1)
         return nullptr;
     return &m_aModifiedBreakPointList.at( nEntry );
 }

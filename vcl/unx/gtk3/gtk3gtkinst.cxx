@@ -1282,6 +1282,13 @@ public:
         gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
 
+    virtual Size get_size_request() const override
+    {
+        int nWidth, nHeight;
+        gtk_widget_get_size_request(m_pWidget, &nWidth, &nHeight);
+        return Size(nWidth, nHeight);
+    }
+
     virtual Size get_preferred_size() const override
     {
         GtkRequisition size;

@@ -588,15 +588,13 @@ void ModulWindow::BasicToggleBreakPointEnabled()
     }
 }
 
-
 void ModulWindow::ManageBreakPoints()
 {
     BreakPointWindow& rBrkWin = GetBreakPointWindow();
-    ScopedVclPtrInstance< BreakPointDialog > aBrkDlg( &rBrkWin, GetBreakPoints() );
-    aBrkDlg->Execute();
+    BreakPointDialog aBrkDlg(rBrkWin.GetFrameWeld(), GetBreakPoints());
+    aBrkDlg.run();
     rBrkWin.Invalidate();
 }
-
 
 bool ModulWindow::BasicErrorHdl( StarBASIC const * pBasic )
 {
