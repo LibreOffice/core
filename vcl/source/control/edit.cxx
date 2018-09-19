@@ -1319,7 +1319,7 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
     if ( rMEvt.GetClicks() < 4 )
     {
         mbClickedInSelection = false;
-        if ( rMEvt.GetClicks() == 3 || mbSelectAllSingleClick )
+        if ( rMEvt.GetClicks() == 3 )
         {
             ImplSetSelection( Selection( 0, EDIT_NOLIMIT) );
             ImplCopyToSelectionClipboard();
@@ -1844,7 +1844,11 @@ void Edit::GetFocus()
     else if ( !mbActivePopup )
     {
         maUndoText = maText.toString();
-
+        if(mbSelectAllSingleClick)
+        {
+            maSelection.Min() = 0;
+            maSelection.Max() = maText.getLength();
+        }
         SelectionOptions nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
         if ( !( GetStyle() & (WB_NOHIDESELECTION|WB_READONLY) )
                 && ( GetGetFocusFlags() & (GetFocusFlags::Init|GetFocusFlags::Tab|GetFocusFlags::CURSOR|GetFocusFlags::Mnemonic) ) )
