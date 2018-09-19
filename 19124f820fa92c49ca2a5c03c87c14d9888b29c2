@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f013ff3_e49e5053",
+        "filename": "sd/source/ui/view/drviews4.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-09-19T11:11:36Z",
+      "side": 1,
+      "message": "Since we have a loplugin insisting on using class names with static members instead of instance names, it needs to be\n\n    if (LayerTabBar::IsRealNameOfStandardLayer(rName))",
+      "range": {
+        "startLine": 104,
+        "startChar": 8,
+        "endLine": 104,
+        "endChar": 62
+      },
+      "revId": "19124f820fa92c49ca2a5c03c87c14d9888b29c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
