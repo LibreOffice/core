@@ -77,17 +77,15 @@ using ::com::sun::star::uno::Sequence;
     sal_Int32 nIndex=0;
 
     ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector( SchXMLSeriesHelper::getDataSeriesFromDiagram( xDiagram ));
-    const ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aSeriesEnd( aSeriesVector.end() );
-    for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aSeriesIt( aSeriesVector.begin() )
-        ; aSeriesIt != aSeriesEnd
-        ; ++aSeriesIt, nIndex++ )
+    for( const auto& rSeries : aSeriesVector )
     {
-        Reference< chart2::XDataSeries > xSeries( *aSeriesIt );
+        Reference< chart2::XDataSeries > xSeries( rSeries );
         if( xSeries.is() )
         {
             if( aRet.end() == aRet.find(xSeries) )
                 aRet[xSeries]=nIndex;
         }
+        nIndex++;
     }
     return aRet;
 }

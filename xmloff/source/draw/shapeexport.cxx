@@ -437,14 +437,8 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                 }
             }
 
-            std::vector< XMLPropertyState >::iterator aIter = aPropStates.begin();
-            std::vector< XMLPropertyState >::iterator aEnd = aPropStates.end();
-            while( aIter != aEnd )
-            {
-                if( aIter->mnIndex != -1 )
-                    nCount++;
-                ++aIter;
-            }
+            nCount = std::count_if(aPropStates.cbegin(), aPropStates.cend(),
+                [](const XMLPropertyState& rProp) { return rProp.mnIndex != -1; });
         }
 
         if(nCount == 0)
@@ -501,15 +495,8 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                 }
             }
 
-            nCount = 0;
-            std::vector< XMLPropertyState >::iterator aIter = aPropStates.begin();
-            std::vector< XMLPropertyState >::iterator aEnd = aPropStates.end();
-            while( aIter != aEnd )
-            {
-                if( aIter->mnIndex != -1 )
-                    nCount++;
-                ++aIter;
-            }
+            nCount = std::count_if(aPropStates.cbegin(), aPropStates.cend(),
+                [](const XMLPropertyState& rProp) { return rProp.mnIndex != -1; });
 
             if( nCount )
             {

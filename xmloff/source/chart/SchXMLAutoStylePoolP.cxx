@@ -48,27 +48,26 @@ void SchXMLAutoStylePoolP::exportStyleAttributes(
 
     if( nFamily == XML_STYLE_FAMILY_SCH_CHART_ID )
     {
-        for( ::std::vector< XMLPropertyState >::const_iterator iter = rProperties.begin();
-             (iter != rProperties.end()); ++iter )
+        for( const auto& rProp : rProperties )
         {
-            if( iter->mnIndex == -1 )
+            if( rProp.mnIndex == -1 )
                 continue;
 
             rtl::Reference< XMLPropertySetMapper > aPropMapper =
                 mrSchXMLExport.GetPropertySetMapper();
-            sal_Int16 nContextID = aPropMapper->GetEntryContextId( iter->mnIndex );
+            sal_Int16 nContextID = aPropMapper->GetEntryContextId( rProp.mnIndex );
             if( nContextID == XML_SCH_CONTEXT_SPECIAL_NUMBER_FORMAT )
             {
                 sal_Int32 nNumberFormat = -1;
-                if( ( iter->maValue >>= nNumberFormat ) &&
+                if( ( rProp.maValue >>= nNumberFormat ) &&
                     ( nNumberFormat != -1 ))
                 {
                     OUString sAttrValue = mrSchXMLExport.getDataStyleName( nNumberFormat );
                     if( !sAttrValue.isEmpty() )
                     {
                         mrSchXMLExport.AddAttribute(
-                            aPropMapper->GetEntryNameSpace( iter->mnIndex ),
-                            aPropMapper->GetEntryXMLName( iter->mnIndex ),
+                            aPropMapper->GetEntryNameSpace( rProp.mnIndex ),
+                            aPropMapper->GetEntryXMLName( rProp.mnIndex ),
                             sAttrValue );
                     }
                 }

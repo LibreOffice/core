@@ -1362,13 +1362,8 @@ void SdXMLExport::ImpPrepDrawPageInfos()
 static OUString findOrAppendImpl( std::vector< OUString >& rVector, const OUString& rText, const sal_Char* pPrefix )
 {
     // search rVector if there is already a string that equals rText
-    std::vector< OUString >::iterator aIter;
-    sal_Int32 nIndex;
-    for( nIndex = 1, aIter = rVector.begin(); aIter != rVector.end(); ++aIter, ++nIndex )
-    {
-        if( (*aIter) == rText )
-            break;
-    }
+    auto aIter = std::find(rVector.begin(), rVector.end(), rText);
+    sal_Int32 nIndex = std::distance(rVector.begin(), aIter) + 1;
 
     // if nothing is found, append the string at the end of rVector
     if( aIter == rVector.end() )
@@ -1384,16 +1379,13 @@ static OUString findOrAppendImpl( std::vector< OUString >& rVector, const OUStri
 static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, const OUString& rText, bool bFixed, sal_Int32 nFormat, const sal_Char* pPrefix )
 {
     // search rVector if there is already a DateTimeDeclImpl with rText,bFixed and nFormat
-    std::vector< DateTimeDeclImpl >::iterator aIter;
-    sal_Int32 nIndex;
-    for( nIndex = 1, aIter = rVector.begin(); aIter != rVector.end(); ++aIter, ++nIndex )
-    {
-        const DateTimeDeclImpl& rDecl = (*aIter);
-        if( (rDecl.mbFixed == bFixed ) &&
-            (!bFixed || rDecl.maStrText == rText) &&
-            (bFixed || (rDecl.mnFormat == nFormat) ) )
-            break;
-    }
+    auto aIter = std::find_if(rVector.begin(), rVector.end(),
+        [bFixed, &rText, nFormat](const DateTimeDeclImpl& rDecl) {
+            return (rDecl.mbFixed == bFixed) &&
+                (!bFixed || (rDecl.maStrText == rText)) &&
+                (bFixed || (rDecl.mnFormat == nFormat));
+        });
+    sal_Int32 nIndex = std::distance(rVector.begin(), aIter) + 1;
 
     // if nothing is found, append a new DateTimeDeclImpl
     if( aIter == rVector.end() )
@@ -1410,7 +1402,6 @@ static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, cons
     OUString aStr( OUString::createFromAscii( pPrefix ) );
     aStr += OUString::number( nIndex );
     return aStr;
-
 }
 
 static const sal_Char gpStrHeaderTextPrefix[] = "hdr";
@@ -1477,16 +1468,16 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
     {
         // export header decls
         const OUString aPrefix( gpStrHeaderTextPrefix );
-        std::vector< OUString >::iterator aIter;
-        sal_Int32 nIndex;
-        for( nIndex = 1, aIter = maHeaderDeclsVector.begin(); aIter != maHeaderDeclsVector.end(); ++aIter, ++nIndex )
+        sal_Int32 nIndex = 1;
+        for( const auto& rDecl : maHeaderDeclsVector )
         {
             sBuffer.append( aPrefix );
             sBuffer.append( nIndex );
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_NAME, sBuffer.makeStringAndClear());
 
             SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_HEADER_DECL, true, true);
-            Characters(*aIter);
+            Characters(rDecl);
+            ++nIndex;
         }
     }
 
@@ -1494,16 +1485,16 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
     {
         // export footer decls
         const OUString aPrefix( gpStrFooterTextPrefix );
-        std::vector< OUString >::iterator aIter;
-        sal_Int32 nIndex;
-        for( nIndex = 1, aIter = maFooterDeclsVector.begin(); aIter != maFooterDeclsVector.end(); ++aIter, ++nIndex )
+        sal_Int32 nIndex = 1;
+        for( const auto& rDecl : maFooterDeclsVector )
         {
             sBuffer.append( aPrefix );
             sBuffer.append( nIndex );
             AddAttribute(XML_NAMESPACE_PRESENTATION, XML_NAME, sBuffer.makeStringAndClear());
 
             SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_FOOTER_DECL, false, false);
-            Characters(*aIter);
+            Characters(rDecl);
+            ++nIndex;
         }
     }
 
@@ -1511,12 +1502,9 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
     {
         // export footer decls
         const OUString aPrefix( gpStrDateTimeTextPrefix );
-        std::vector< DateTimeDeclImpl >::iterator aIter;
-        sal_Int32 nIndex;
-        for( nIndex = 1, aIter = maDateTimeDeclsVector.begin(); aIter != maDateTimeDeclsVector.end(); ++aIter, ++nIndex )
+        sal_Int32 nIndex = 1;
+        for( const auto& rDecl : maDateTimeDeclsVector )
         {
-            const DateTimeDeclImpl& rDecl = (*aIter);
-
             sBuffer.append( aPrefix );
             sBuffer.append( nIndex );
             AddAttribute( XML_NAMESPACE_PRESENTATION, XML_NAME, sBuffer.makeStringAndClear());
@@ -1529,6 +1517,8 @@ void SdXMLExport::ImpWriteHeaderFooterDecls()
             SvXMLElementExport aElem(*this, XML_NAMESPACE_PRESENTATION, XML_DATE_TIME_DECL, false, false);
             if( rDecl.mbFixed )
                 Characters(rDecl.maStrText);
+
+            ++nIndex;
         }
     }
 }
@@ -2502,16 +2492,11 @@ void SdXMLExport::exportDataStyles()
 
 void SdXMLExport::exportAutoDataStyles()
 {
-    SdXMLFormatMap::iterator aIter( maUsedDateStyles.begin() );
-    SdXMLFormatMap::iterator aEnd( maUsedDateStyles.end() );
+    for( const auto& rUsedDateStyle : maUsedDateStyles )
+        SdXMLNumberStylesExporter::exportDateStyle( *this, rUsedDateStyle );
 
-    while( aIter != aEnd )
-        SdXMLNumberStylesExporter::exportDateStyle( *this, (*aIter++) );
-
-    aIter = maUsedTimeStyles.begin();
-    aEnd = maUsedTimeStyles.end();
-    while( aIter != aEnd )
-        SdXMLNumberStylesExporter::exportTimeStyle( *this, (*aIter++) );
+    for( const auto& rUsedTimeStyle : maUsedTimeStyles )
+        SdXMLNumberStylesExporter::exportTimeStyle( *this, rUsedTimeStyle );
 
     if(HasFormExport())
         GetFormExport()->exportAutoControlNumberStyles();
