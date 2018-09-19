@@ -200,7 +200,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             case NS_ooxml::LN_CT_TrPrBase_tblHeader:
                 // if nIntValue == 1 then the row is a repeated header line
                 // to prevent later rows from increasing the repeating m_nHeaderRepeat is set to NULL when repeating stops
-                if( nIntValue > 0 && m_nHeaderRepeat >= 0 )
+                if( nIntValue > 0 && m_nHeaderRepeat == static_cast<int>(m_nRow) )
                 {
                     ++m_nHeaderRepeat;
                     TablePropertyMapPtr pPropMap( new TablePropertyMap );
