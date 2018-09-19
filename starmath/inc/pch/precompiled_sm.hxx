@@ -58,7 +58,6 @@
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <salhelper/singletonref.hxx>
-#include <vcl/button.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/devicecoordinate.hxx>
@@ -96,7 +95,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <dialog.hxx>
 #include <document.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>

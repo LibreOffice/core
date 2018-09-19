@@ -17,14 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/builderfactory.hxx>
-
 #include <strings.hrc>
-
 #include <utility.hxx>
 #include <dialog.hxx>
 #include <view.hxx>
-
 
 // return pointer to active SmViewShell, if this is not possible
 // return 0 instead.

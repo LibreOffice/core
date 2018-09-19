@@ -26,10 +26,8 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/ctrltool.hxx>
-#include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/fontcharmap.hxx>

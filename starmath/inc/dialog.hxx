@@ -19,20 +19,9 @@
 #ifndef INCLUDED_STARMATH_INC_DIALOG_HXX
 #define INCLUDED_STARMATH_INC_DIALOG_HXX
 
-#include <vcl/image.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/layout.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <vcl/combobox.hxx>
 #include <svx/charmap.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <vcl/field.hxx>
-#include <vcl/menubtn.hxx>
-#include <vcl/scrbar.hxx>
-#include <vcl/ctrl.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/outdev.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svtools/ctrltool.hxx>
