@@ -35,31 +35,6 @@ enum class SvxPrevLineSpace
     Leading
 };
 
-class SVX_DLLPUBLIC SvxParaPrevWindow final : public vcl::Window
-{
-    OUString            aText;
-    tools::Rectangle    Lines[9];
-
-    using Window::Draw;
-
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
-    virtual Size GetOptimalSize() const override;
-
-    void DrawParagraph(vcl::RenderContext& rRenderContext);
-
-public:
-    SvxParaPrevWindow( vcl::Window* pParent, WinBits nBits);
-
-    void SetText( const OUString& rStr ) override
-    {
-        aText = rStr;
-    }
-    OUString GetText() const override
-    {
-        return aText;
-    }
-};
-
 class SVX_DLLPUBLIC ParaPrevWindow final : public weld::CustomWidgetController
 {
     Size                aSize;
