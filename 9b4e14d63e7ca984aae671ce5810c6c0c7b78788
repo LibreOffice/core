@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f013ff3_043b7cd1",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2997,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-09-19T08:44:11Z",
+      "side": 1,
+      "message": "So then it may be better to use dynamic_cast here instead?",
+      "range": {
+        "startLine": 2997,
+        "startChar": 45,
+        "endLine": 2997,
+        "endChar": 56
+      },
+      "revId": "9b4e14d63e7ca984aae671ce5810c6c0c7b78788",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f013ff3_44562409",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2999,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-09-19T08:44:11Z",
+      "side": 1,
+      "message": "The entire block evaluating the field type is only necessary for Calc and dynamic_cast can be quite expensive, so place it in an\n\n if (SvtModuleOptions().IsCalc())\n\nHowever, as this loops over all paragraphs and their fields it would be even better to use a TriState (include/tools/gen.hxx) and determine only once (i.e. call SvtModuleOptions().IsCalc() only once) whether we are in Calc or not.",
+      "revId": "9b4e14d63e7ca984aae671ce5810c6c0c7b78788",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f013ff3_e43c10c1",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2999,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-09-19T08:44:11Z",
+      "side": 1,
+      "message": "Nitpick: name bCalcURL instead of IsCalcURL",
+      "range": {
+        "startLine": 2999,
+        "startChar": 27,
+        "endLine": 2999,
+        "endChar": 36
+      },
+      "revId": "9b4e14d63e7ca984aae671ce5810c6c0c7b78788",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
