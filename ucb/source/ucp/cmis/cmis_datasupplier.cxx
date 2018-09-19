@@ -47,7 +47,7 @@ namespace cmis
                  ( mnOpenMode == ucb::OpenMode::DOCUMENTS && !bIsFolder ) ||
                  ( mnOpenMode == ucb::OpenMode::ALL ) )
             {
-                maResults.push_back( new ResultListEntry( *it ) );
+                maResults.emplace_back( *it );
             }
         }
         mbCountFinal = true;
@@ -55,12 +55,6 @@ namespace cmis
 
     DataSupplier::~DataSupplier()
     {
-        while ( maResults.size( ) > 0 )
-        {
-            ResultListEntry* back = maResults.back( );
-            maResults.pop_back( );
-            delete back;
-        }
     }
 
     OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
@@ -80,7 +74,7 @@ namespace cmis
         if (!getResult(nIndex))
             return uno::Reference<ucb::XContent>();
 
-        return maResults[ nIndex ]->xContent;
+        return maResults[ nIndex ].xContent;
     }
 
     bool DataSupplier::getResult( sal_uInt32 nIndex )
@@ -115,7 +109,7 @@ namespace cmis
     {
         if ( nIndex < maResults.size() )
         {
-            uno::Reference< sdbc::XRow > xRow = maResults[ nIndex ]->xRow;
+            uno::Reference< sdbc::XRow > xRow = maResults[ nIndex ].xRow;
             if ( xRow.is() )
             {
                 // Already cached.
@@ -142,7 +136,7 @@ namespace cmis
                     uno::Reference< sdbc::XRow > xRow;
                     if ( aResult >>= xRow )
                     {
-                        maResults[ nIndex ]->xRow = xRow;
+                        maResults[ nIndex ].xRow = xRow;
                         return xRow;
                     }
                 }
@@ -157,7 +151,7 @@ namespace cmis
     void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )
     {
         if ( nIndex < maResults.size() )
-            maResults[ nIndex ]->xRow.clear();
+            maResults[ nIndex ].xRow.clear();
     }
 
     void DataSupplier::close()
