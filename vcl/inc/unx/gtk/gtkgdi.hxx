@@ -115,6 +115,9 @@ public:
                                                     const OUString& rCaption,
                                                     tools::Rectangle &rNativeBoundingRegion,
                                                     tools::Rectangle &rNativeContentRegion ) override;
+
+    virtual void updateSettings(AllSettings& rSettings) override;
+
 #if ENABLE_CAIRO_CANVAS
 
     virtual bool        SupportsCairo() const override;
@@ -125,7 +128,6 @@ public:
 
     void WidgetQueueDraw() const;
 
-    void updateSettings( AllSettings& rSettings );
     static void refreshFontconfig( GtkSettings *pSettings );
     static void signalSettingsNotify( GObject*, GParamSpec *pSpec, gpointer );
 

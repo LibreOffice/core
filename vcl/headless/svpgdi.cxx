@@ -1541,6 +1541,13 @@ bool SvpSalGraphics::getNativeControlRegion(ControlType eType, ControlPart ePart
     return false;
 }
 
+void SvpSalGraphics::updateSettings(AllSettings& rSettings)
+{
+    if (hasWidgetDraw())
+    {
+        m_pWidgetDraw->updateSettings(rSettings);
+    }
+}
 
 namespace
 {

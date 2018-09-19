@@ -2873,8 +2873,14 @@ static vcl::Font getFont(GtkStyleContext* pStyle, const css::lang::Locale& rLoca
     return aFont;
 }
 
-void GtkSalGraphics::updateSettings( AllSettings& rSettings )
+void GtkSalGraphics::updateSettings(AllSettings& rSettings)
 {
+    if (m_pWidgetDraw)
+    {
+        m_pWidgetDraw->updateSettings(rSettings);
+        return;
+    }
+
     GtkStyleContext* pStyle = gtk_widget_get_style_context( mpWindow );
     GtkSettings* pSettings = gtk_widget_get_settings( mpWindow );
     StyleSettings aStyleSet = rSettings.GetStyleSettings();

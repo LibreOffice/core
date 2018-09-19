@@ -12,6 +12,8 @@
 #define INCLUDED_VCL_INC_WIDGETDRAWINTERFACE_HXX
 
 #include <vcl/dllapi.h>
+#include <vcl/salnativewidgets.hxx>
+#include <vcl/settings.hxx>
 
 namespace vcl
 {
@@ -91,6 +93,8 @@ public:
                                         tools::Rectangle& rNativeBoundingRegion,
                                         tools::Rectangle& rNativeContentRegion)
         = 0;
+
+    virtual bool updateSettings(AllSettings& rSettings) = 0;
 };
 }
 
