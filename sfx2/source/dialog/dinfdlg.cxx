@@ -2250,33 +2250,9 @@ CmisPropertyLine::CmisPropertyLine(vcl::Window* pParent)
 
 CmisPropertyLine::~CmisPropertyLine( )
 {
-    std::vector< CmisValue* >::iterator pIter;
-    for ( pIter = m_aValues.begin();
-          pIter != m_aValues.end(); ++pIter )
-    {
-        CmisValue* pValue = *pIter;
-        delete pValue;
-    }
     m_aValues.clear();
-
-    std::vector< CmisYesNo* >::iterator pIterYesNo;
-    for ( pIterYesNo = m_aYesNos.begin();
-          pIterYesNo != m_aYesNos.end(); ++pIterYesNo )
-    {
-        CmisYesNo* pYesNo = *pIterYesNo;
-        delete pYesNo;
-    }
     m_aYesNos.clear();
-
-    std::vector< CmisDateTime* >::iterator pIterDateTime;
-    for ( pIterDateTime = m_aDateTimes.begin();
-          pIterDateTime != m_aDateTimes.end(); ++pIterDateTime )
-    {
-        CmisDateTime* pDateTime = *pIterDateTime;
-        delete pDateTime;
-    }
     m_aDateTimes.clear();
-
 }
 
 long CmisPropertyLine::getItemHeight() const
@@ -2336,9 +2312,9 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
         {
             OUString sValue;
             m_aNumberFormatter.GetInputLineString( seqValue[i], nIndex, sValue );
-            CmisValue* pValue = new CmisValue( m_pBox, sValue );
+            std::unique_ptr<CmisValue> pValue(new CmisValue( m_pBox, sValue ));
             pValue->m_aValueEdit->SetReadOnly( !bUpdatable );
-            pNewLine->m_aValues.push_back( pValue );
+            pNewLine->m_aValues.push_back( std::move(pValue) );
         }
     }
     else if ( sType == CMIS_TYPE_DECIMAL )
@@ -2351,9 +2327,9 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
         {
             OUString sValue;
             m_aNumberFormatter.GetInputLineString( seqValue[i], nIndex, sValue );
-            CmisValue* pValue = new CmisValue( m_pBox, sValue );
+            std::unique_ptr<CmisValue> pValue(new CmisValue( m_pBox, sValue ));
             pValue->m_aValueEdit->SetReadOnly( !bUpdatable );
-            pNewLine->m_aValues.push_back( pValue );
+            pNewLine->m_aValues.push_back( std::move(pValue) );
         }
 
     }
@@ -2364,10 +2340,10 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
         sal_Int32 nNumValue = seqValue.getLength( );
         for ( sal_Int32 i = 0; i < nNumValue; ++i )
         {
-            CmisYesNo* pYesNo = new CmisYesNo( m_pBox, seqValue[i] );
+            std::unique_ptr<CmisYesNo> pYesNo(new CmisYesNo( m_pBox, seqValue[i] ));
             pYesNo->m_aYesButton->Enable( bUpdatable );
             pYesNo->m_aNoButton->Enable( bUpdatable );
-            pNewLine->m_aYesNos.push_back( pYesNo );
+            pNewLine->m_aYesNos.push_back( std::move(pYesNo) );
         }
     }
     else if ( sType == CMIS_TYPE_STRING )
@@ -2377,9 +2353,9 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
         sal_Int32 nNumValue = seqValue.getLength( );
         for ( sal_Int32 i = 0; i < nNumValue; ++i )
         {
-            CmisValue* pValue = new CmisValue( m_pBox, seqValue[i] );
+            std::unique_ptr<CmisValue> pValue(new CmisValue( m_pBox, seqValue[i] ));
             pValue->m_aValueEdit->SetReadOnly( !bUpdatable );
-            pNewLine->m_aValues.push_back( pValue );
+            pNewLine->m_aValues.push_back( std::move(pValue) );
         }
     }
     else if ( sType == CMIS_TYPE_DATETIME )
@@ -2389,10 +2365,10 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
         sal_Int32 nNumValue = seqValue.getLength( );
         for ( sal_Int32 i = 0; i < nNumValue; ++i )
         {
-            CmisDateTime* pDateTime = new CmisDateTime( m_pBox, seqValue[i]);
+            std::unique_ptr<CmisDateTime> pDateTime(new CmisDateTime( m_pBox, seqValue[i]));
             pDateTime->m_aDateField->SetReadOnly( !bUpdatable );
             pDateTime->m_aTimeField->SetReadOnly( !bUpdatable );
-            pNewLine->m_aDateTimes.push_back( pDateTime );
+            pNewLine->m_aDateTimes.push_back( std::move(pDateTime) );
         }
     }
     pNewLine->m_aName->SetText( sName );
@@ -2436,7 +2412,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                     m_aNumberFormatter ).GetFormatIndex( NF_NUMBER_SYSTEM );
                 Sequence< double > seqValue( pLine->m_aValues.size( ) );
                 sal_Int32 k = 0;
-                for ( std::vector< CmisValue*>::const_iterator it = pLine->m_aValues.begin();
+                for ( auto it = pLine->m_aValues.begin();
                     it != pLine->m_aValues.end(); ++it, ++k)
                 {
                     double dValue = 0.0;
@@ -2454,7 +2430,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                     m_aNumberFormatter ).GetFormatIndex( NF_NUMBER_SYSTEM );
                 Sequence< sal_Int64 > seqValue( pLine->m_aValues.size( ) );
                 sal_Int32 k = 0;
-                for ( std::vector< CmisValue*>::const_iterator it = pLine->m_aValues.begin();
+                for ( auto it = pLine->m_aValues.begin();
                     it != pLine->m_aValues.end(); ++it, ++k)
                 {
                     double dValue = 0;
@@ -2470,7 +2446,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
             {
                 Sequence<sal_Bool> seqValue( pLine->m_aYesNos.size( ) );
                 sal_Int32 k = 0;
-                for ( std::vector< CmisYesNo*>::const_iterator it = pLine->m_aYesNos.begin();
+                for ( auto it = pLine->m_aYesNos.begin();
                     it != pLine->m_aYesNos.end(); ++it, ++k)
                 {
                     bool bValue = (*it)->m_aYesButton->IsChecked();
@@ -2483,7 +2459,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
             {
                 Sequence< util::DateTime > seqValue( pLine->m_aDateTimes.size( ) );
                 sal_Int32 k = 0;
-                for ( std::vector< CmisDateTime*>::const_iterator it = pLine->m_aDateTimes.begin();
+                for ( auto it = pLine->m_aDateTimes.begin();
                     it != pLine->m_aDateTimes.end(); ++it, ++k)
                 {
                     Date aTmpDate = (*it)->m_aDateField->GetDate();
@@ -2500,7 +2476,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
             {
                 Sequence< OUString > seqValue( pLine->m_aValues.size( ) );
                 sal_Int32 k = 0;
-                for ( std::vector< CmisValue*>::const_iterator it = pLine->m_aValues.begin();
+                for ( auto it = pLine->m_aValues.begin();
                     it != pLine->m_aValues.end(); ++it, ++k)
                 {
                     OUString sValue( (*it)->m_aValueEdit->GetText() );

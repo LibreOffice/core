@@ -554,9 +554,9 @@ struct CmisPropertyLine : public VclBuilderContainer
     bool                          m_bOpenChoice;
     VclPtr<FixedText>             m_aName;
     VclPtr<FixedText>             m_aType;
-    std::vector< CmisValue* >     m_aValues;
-    std::vector< CmisDateTime* >  m_aDateTimes;
-    std::vector< CmisYesNo* >     m_aYesNos;
+    std::vector< std::unique_ptr<CmisValue> >     m_aValues;
+    std::vector< std::unique_ptr<CmisDateTime> >  m_aDateTimes;
+    std::vector< std::unique_ptr<CmisYesNo> >     m_aYesNos;
     long getItemHeight() const;
     CmisPropertyLine( vcl::Window* pParent );
     virtual ~CmisPropertyLine() override;
