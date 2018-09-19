@@ -118,8 +118,8 @@ XMLTextListAutoStylePoolEntry_Impl::XMLTextListAutoStylePoolEntry_Impl(
 struct XMLTextListAutoStylePoolEntryCmp_Impl
 {
     bool operator()(
-            XMLTextListAutoStylePoolEntry_Impl* const& r1,
-            XMLTextListAutoStylePoolEntry_Impl* const& r2 ) const
+            std::unique_ptr<XMLTextListAutoStylePoolEntry_Impl> const& r1,
+            std::unique_ptr<XMLTextListAutoStylePoolEntry_Impl> const& r2 ) const
     {
         if( r1->IsNamed() )
         {
@@ -137,7 +137,7 @@ struct XMLTextListAutoStylePoolEntryCmp_Impl
         }
     }
 };
-class XMLTextListAutoStylePool_Impl : public o3tl::sorted_vector<XMLTextListAutoStylePoolEntry_Impl*, XMLTextListAutoStylePoolEntryCmp_Impl> {};
+class XMLTextListAutoStylePool_Impl : public o3tl::sorted_vector<std::unique_ptr<XMLTextListAutoStylePoolEntry_Impl>, XMLTextListAutoStylePoolEntryCmp_Impl> {};
 
 XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
     rExport( rExp ),
@@ -157,8 +157,6 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
 
 XMLTextListAutoStylePool::~XMLTextListAutoStylePool()
 {
-    // The XMLTextListAutoStylePoolEntry_Impl object in the pool need delete explicitly in dtor.
-    pPool->DeleteAndDestroyAll();
 }
 
 void XMLTextListAutoStylePool::RegisterName( const OUString& rName )
@@ -206,12 +204,12 @@ OUString XMLTextListAutoStylePool::Add(
     }
     else
     {
-        XMLTextListAutoStylePoolEntry_Impl *pEntry =
+        std::unique_ptr<XMLTextListAutoStylePoolEntry_Impl> pEntry(
             new XMLTextListAutoStylePoolEntry_Impl( pPool->size(),
                                                rNumRules, m_aNames, sPrefix,
-                                               nName );
-        pPool->insert( pEntry );
+                                               nName ));
         sName = pEntry->GetName();
+        pPool->insert( std::move(pEntry) );
     }
 
     return sName;
@@ -253,7 +251,7 @@ void XMLTextListAutoStylePool::exportXML() const
     sal_uInt32 i;
     for( i=0; i < nCount; i++ )
     {
-        XMLTextListAutoStylePoolEntry_Impl *pEntry = (*pPool)[i];
+        XMLTextListAutoStylePoolEntry_Impl *pEntry = (*pPool)[i].get();
         SAL_WARN_IF( pEntry->GetPos() >= nCount, "xmloff", "Illegal pos" );
         aExpEntries[pEntry->GetPos()] = pEntry;
     }
