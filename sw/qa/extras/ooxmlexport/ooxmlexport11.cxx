@@ -743,6 +743,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf118691, "tdf118691.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Before\nAfter"), xCell->getString());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf64264, "tdf64264.docx")
+{
+    // DOCX table rows with tblHeader setting mustn't modify the count of the
+    // repeated table header rows, when there is rows before them without tblHeader settings.
+    xmlDocPtr pDump = parseLayoutDump();
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+
+    // table starts on page 1 and finished on page 2
+    // and it has got only a single repeating header line
+    assertXPath(pDump, "/root/page[2]/body/tab", 1);
+    assertXPath(pDump, "/root/page[2]/body/tab/row", 47);
+    CPPUNIT_ASSERT_EQUAL(OUString("Repeating Table Header"),
+                         parseDump("/root/page[2]/body/tab/row[1]/cell[1]/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Text"),
+                         parseDump("/root/page[2]/body/tab/row[2]/cell[1]/txt/text()"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
