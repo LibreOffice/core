@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f013ff3_a1c5da5d",
+        "filename": "sd/source/ui/view/drviews4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-09-19T04:12:17Z",
+      "side": 1,
+      "message": "Oh sorry - my fault; I should have written\n\n    assert(false \u0026\u0026 \"Standard layer may not be deleted.\");\n\nbecause assert naturally takes only a single arg. Sorry for that.",
+      "range": {
+        "startLine": 106,
+        "startChar": 8,
+        "endLine": 106,
+        "endChar": 60
+      },
+      "revId": "afc2a8a7e8b24c29ad3c6fac8854cf6554c078e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
