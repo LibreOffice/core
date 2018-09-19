@@ -31,7 +31,6 @@ class SVX_DLLPUBLIC SvxPresetListBox : public ValueSet
 {
 private:
     sal_uInt32 nColCount;
-    Size       aIconSize;
 
     DECL_LINK( OnMenuItemSelected, Menu*, bool );
 
