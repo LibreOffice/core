@@ -43,7 +43,7 @@ enum class SwFieldIds : sal_uInt16 {
     Author,
     Chapter,
     DocStat,
-    GetExp,
+    GetExp, // 10
     SetExp,
     GetRef,
     HiddenText,
@@ -53,7 +53,7 @@ enum class SwFieldIds : sal_uInt16 {
     Reg,
     VarReg,
     SetRef,
-    Input,
+    Input, // 20
     Macro,
     Dde,
     Table,
@@ -63,7 +63,7 @@ enum class SwFieldIds : sal_uInt16 {
     DbNextSet,
     DbNumSet,
     DbSetNumber,
-    ExtUser,
+    ExtUser, // 30
     RefPageSet,
     RefPageGet,
     Internet,
@@ -73,7 +73,7 @@ enum class SwFieldIds : sal_uInt16 {
     TableOfAuthorities,
     CombinedChars,
     Dropdown,
-    ParagraphSignature,
+    ParagraphSignature, // 40
     LAST = ParagraphSignature,
 
     Unknown = USHRT_MAX, // used as default value in some method calls
