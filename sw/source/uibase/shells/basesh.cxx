@@ -2467,7 +2467,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 ::PrepareBoxInfo( aSet, rSh );
                 rSh.GetTabBorders( aSet );
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                pDlg.disposeAndReset(pFact->CreateSwBorderDlg( &rMDI, aSet, SwBorderModes::TABLE ));
+                pDlg.disposeAndReset(pFact->CreateSwBorderDlg(rMDI.GetFrameWeld(), aSet, SwBorderModes::TABLE));
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetTabBorders( *pDlg->GetOutputItemSet() );
@@ -2481,7 +2481,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 aSet.Put( aMgr.GetAttrSet() );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                pDlg.disposeAndReset(pFact->CreateSwBorderDlg( &rMDI, aSet, SwBorderModes::FRAME ));
+                pDlg.disposeAndReset(pFact->CreateSwBorderDlg(rMDI.GetFrameWeld(), aSet, SwBorderModes::FRAME));
                 if ( pDlg->Execute() == RET_OK )
                 {
                     aMgr.SetAttrSet( *pDlg->GetOutputItemSet() );
@@ -2496,7 +2496,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 ::PrepareBoxInfo( aSet, rSh );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                pDlg.disposeAndReset(pFact->CreateSwBorderDlg( &rMDI, aSet, SwBorderModes::PARA ));
+                pDlg.disposeAndReset(pFact->CreateSwBorderDlg(rMDI.GetFrameWeld(), aSet, SwBorderModes::PARA));
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetAttrSet( *pDlg->GetOutputItemSet() );
