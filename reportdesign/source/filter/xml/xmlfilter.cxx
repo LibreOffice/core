@@ -46,6 +46,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <comphelper/genericpropertyset.hxx>
+#include <comphelper/propertysetinfo.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <sfx2/docfile.hxx>

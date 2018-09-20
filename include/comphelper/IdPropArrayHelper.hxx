@@ -23,9 +23,7 @@
 
 #include <map>
 
-#include <cppuhelper/component.hxx>
 #include <osl/mutex.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 #include <cppuhelper/propshlp.hxx>

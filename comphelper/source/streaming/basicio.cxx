@@ -18,7 +18,7 @@
  */
 
 #include <comphelper/basicio.hxx>
-
+#include <com/sun/star/awt/FontDescriptor.hpp>
 
 namespace comphelper
 {

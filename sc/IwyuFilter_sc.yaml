@@ -391,6 +391,9 @@ blacklist:
     sc/source/filter/inc/xerecord.hxx:
     # Needed for member access
     - xestream.hxx
+    sc/source/filter/inc/xistream.hxx:
+    # Needed for implicit dtor
+    - com/sun/star/beans/NamedValue.hpp
     sc/source/filter/inc/xlstring.hxx:
     # Needed for template
     - o3tl/typed_flags_set.hxx

@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/accessibleeventnotifier.hxx>
+#include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <rtl/instance.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 
