@@ -680,7 +680,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         }
 
         // #i97726# always get text for "repeat" of undo action
-        aString = ScEditUtil::GetSpaceDelimitedString(aEngine);
+        aString = ScEditUtil::GetMultilineString(aEngine);
 
         //      undo
 

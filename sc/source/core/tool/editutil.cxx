@@ -96,10 +96,6 @@ static OUString lcl_GetDelimitedString( const EditTextObject& rEdit, const sal_C
     return aRet.makeStringAndClear();
 }
 
-OUString ScEditUtil::GetSpaceDelimitedString( const EditEngine& rEngine )
-{
-    return lcl_GetDelimitedString(rEngine, ' ');
-}
 OUString ScEditUtil::GetMultilineString( const EditEngine& rEngine )
 {
     return lcl_GetDelimitedString(rEngine, '\n');

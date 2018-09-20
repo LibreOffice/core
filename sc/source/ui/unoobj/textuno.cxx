@@ -359,7 +359,7 @@ OUString SAL_CALL ScHeaderFooterTextObj::getString()
         aEditEngine.SetData( aData );
 
         aEditEngine.SetText(*pData);
-        aRet = ScEditUtil::GetSpaceDelimitedString( aEditEngine );
+        aRet = ScEditUtil::GetMultilineString(aEditEngine);
     }
     return aRet;
 }

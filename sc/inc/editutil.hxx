@@ -50,9 +50,6 @@ class ScEditUtil
 public:
     static OUString ModifyDelimiters( const OUString& rOld );
 
-    /// Retrieves string with paragraphs delimited by spaces
-    static OUString GetSpaceDelimitedString( const EditEngine& rEngine );
-
     /// Retrieves string with paragraphs delimited by new lines ('\n').
     static OUString GetMultilineString( const EditEngine& rEngine );
     static OUString GetMultilineString( const EditTextObject& rEdit );

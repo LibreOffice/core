@@ -480,12 +480,7 @@ void ScInputHandler::DeleteRangeFinder()
 
 static inline OUString GetEditText(const EditEngine* pEng)
 {
-    return ScEditUtil::GetSpaceDelimitedString(*pEng);
-}
-
-static void lcl_RemoveTabs(OUString& rStr)
-{
-    rStr = rStr.replace('\t', ' ');
+    return ScEditUtil::GetMultilineString(*pEng);
 }
 
 static void lcl_RemoveLineEnd(OUString& rStr)
@@ -2241,7 +2236,6 @@ IMPL_LINK_NOARG(ScInputHandler, ModifyHdl, LinkParamNone*, void)
         // Update input line from ModifyHdl for changes that are not
         // wrapped by DataChanging/DataChanged calls (like Drag&Drop)
         OUString aText(ScEditUtil::GetMultilineString(*mpEditEngine));
-        lcl_RemoveTabs(aText);
         pInputWin->SetTextString(aText);
     }
 }
@@ -2296,7 +2290,6 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
             aText = ScEditUtil::GetMultilineString(*mpEditEngine);
         else
             aText = GetEditText(mpEditEngine.get());
-        lcl_RemoveTabs(aText);
 
         if ( pInputWin )
             pInputWin->SetTextString( aText );
@@ -2635,8 +2628,6 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
             pTableView->CompleteAutoCorrect(pFrameWin);
         aString = GetEditText(mpEditEngine.get());
     }
-    lcl_RemoveTabs(aString);
-    lcl_RemoveTabs(aPreAutoCorrectString);
 
     // Test if valid (always with simple string)
     if ( bModified && nValidation && pActiveViewSh )
@@ -3681,7 +3672,6 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                                 aString = ScEditUtil::GetMultilineString(*mpEditEngine);
                             else
                                 aString = GetEditText(mpEditEngine.get());
-                            lcl_RemoveTabs(aString);
                             bTextValid = false;
                             aCurrentText.clear();
                         }

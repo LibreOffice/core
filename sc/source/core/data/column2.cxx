@@ -1113,7 +1113,7 @@ public:
         else                                            // create String
         {
             // Store the string replacement for later commits.
-            OUString aText = ScEditUtil::GetSpaceDelimitedString(*mpEngine);
+            OUString aText = ScEditUtil::GetMultilineString(*mpEngine);
             maStrEntries.emplace_back(nRow, aText);
         }
     }
