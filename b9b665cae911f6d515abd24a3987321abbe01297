@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f013ff3_6a0a078b",
+        "filename": "sw/qa/python/check_xnamedgraph.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2018-09-20T12:51:47Z",
+      "side": 1,
+      "message": "can be this more general? without wollmux specifics?",
+      "revId": "b9b665cae911f6d515abd24a3987321abbe01297",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
