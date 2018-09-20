@@ -52,13 +52,14 @@ const sal_uInt16 SwWrapTabPage::m_aWrapPageRg[] = {
     0
 };
 
-SwWrapDlg::SwWrapDlg(vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pWrtShell, bool bDrawMode)
-    : SfxSingleTabDialog(pParent, rSet, "WrapDialog", "modules/swriter/ui/wrapdialog.ui")
+SwWrapDlg::SwWrapDlg(TabPageParent pParent, SfxItemSet& rSet, SwWrtShell* pWrtShell, bool bDrawMode)
+    : SfxSingleTabDialogController(pParent, rSet, "modules/swriter/ui/wrapdialog.ui", "WrapDialog")
 {
     // create TabPage
-    VclPtr<SwWrapTabPage> pNewPage = static_cast<SwWrapTabPage*>( SwWrapTabPage::Create(get_content_area(), &rSet).get() );
-    pNewPage->SetFormatUsed(false, bDrawMode);
-    pNewPage->SetShell(pWrtShell);
+    TabPageParent pPageParent(get_content_area(), this);
+    VclPtr<SwWrapTabPage> xNewPage = static_cast<SwWrapTabPage*>(SwWrapTabPage::Create(pPageParent, &rSet).get());
+    xNewPage->SetFormatUsed(false, bDrawMode);
+    xNewPage->SetShell(pWrtShell);
     SetTabPage(pNewPage);
 }
 
