@@ -206,7 +206,7 @@ public:
 //  private methods
 
 private:
-    virtual void ImplCommit() SAL_FINAL override;
+    virtual void ImplCommit() final override;
 
     static Sequence< OUString > impl_GetPropertyNames();
 

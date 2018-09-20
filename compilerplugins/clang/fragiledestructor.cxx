@@ -95,7 +95,7 @@ bool FragileDestructor::VisitCXXMemberCallExpr(const CXXMemberCallExpr* callExpr
         return true;
     report(
         DiagnosticsEngine::Warning,
-        "calling virtual method from destructor, either make the virtual method SAL_FINAL, or make this class SAL_FINAL",
+        "calling virtual method from destructor, either make the virtual method final, or make this class final",
         compat::getBeginLoc(callExpr))
       << callExpr->getSourceRange();
     report(
