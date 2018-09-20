@@ -409,18 +409,6 @@ namespace css = ::com::sun::star;
 #define SAL_OVERRIDE
 #endif
 
-/** C++11 "final" feature.
-
-    For LIBO_INTERNAL_ONLY, mark a class as non-derivable or a method as non-overridable.
-
-    @since LibreOffice 4.1
-*/
-#if defined LIBO_INTERNAL_ONLY
-#define SAL_FINAL final
-#else
-#define SAL_FINAL
-#endif
-
 #if defined LIBO_INTERNAL_ONLY
 #if HAVE_CPP_ATTRIBUTE_FALLTHROUGH
 #define SAL_FALLTHROUGH [[fallthrough]]
