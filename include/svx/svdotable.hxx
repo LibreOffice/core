@@ -211,7 +211,6 @@ public:
     virtual void AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrinkOnly = false ) override;
 
     virtual sal_uInt32 GetHdlCount() const override;
-    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const override;
     virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
 
     // Special drag methods

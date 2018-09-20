@@ -263,7 +263,7 @@ class SwDrawVirtObj : public SdrVirtObj
         virtual void RecalcBoundRect() override;
         virtual ::basegfx::B2DPolyPolygon TakeXorPoly() const override;
         virtual ::basegfx::B2DPolyPolygon TakeContour() const override;
-        virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const override;
+        virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
         virtual void NbcMove(const Size& rSiz) override;
         virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
         virtual void NbcRotate(const Point& rRef, long nAngle, double sn, double cs) override;

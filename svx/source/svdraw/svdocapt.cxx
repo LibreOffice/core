@@ -294,33 +294,20 @@ sal_uInt32 SdrCaptionObj::GetHdlCount() const
     return nCount1 + 1;
 }
 
-SdrHdl* SdrCaptionObj::GetHdl(sal_uInt32 nHdlNum) const
+void SdrCaptionObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
-    const sal_uInt32 nRectHdlCnt(SdrRectObj::GetHdlCount());
+    SdrRectObj::AddToHdlList(rHdlList);
+    const sal_uInt32 nRectHdlCnt(rHdlList.GetHdlCount());
 
-    if(nHdlNum < nRectHdlCnt)
+    sal_uInt32 nCnt = aTailPoly.GetSize();
+    for(sal_uInt32 i = 0; i<nCnt; ++i)
     {
-        return SdrRectObj::GetHdl(nHdlNum);
-    }
-    else
-    {
-        sal_uInt32 nPntNum(nHdlNum);
-        nPntNum -= nRectHdlCnt;
-
-        if(nPntNum < aTailPoly.GetSize())
-        {
-            SdrHdl* pHdl = new SdrHdl(aTailPoly.GetPoint(static_cast<sal_uInt16>(nPntNum)), SdrHdlKind::Poly);
-            pHdl->SetPolyNum(1);
-            pHdl->SetPointNum(nPntNum);
-            return pHdl;
-        }
-        else
-        {
-            return nullptr;
-        }
+        SdrHdl* pHdl = new SdrHdl(aTailPoly.GetPoint(i), SdrHdlKind::Poly);
+        pHdl->SetPolyNum(1);
+        pHdl->SetPointNum(nRectHdlCnt + i);
+        rHdlList.AddHdl(pHdl);
     }
 }
-
 
 bool SdrCaptionObj::hasSpecialDrag() const
 {

@@ -521,7 +521,6 @@ public:
     /// An object that returns true from HasSpacialDrag() must provide these
     /// methods (incl. FillHdlList()).
     virtual sal_uInt32 GetHdlCount() const;
-    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
     virtual sal_uInt32 GetPlusHdlCount(const SdrHdl& rHdl) const;
     virtual SdrHdl* GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlNum) const;
     virtual void AddToHdlList(SdrHdlList& rHdlList) const;

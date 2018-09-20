@@ -310,70 +310,67 @@ sal_uInt32 SdrRectObj::GetHdlCount() const
     return IsTextFrame() ? 10 : 9;
 }
 
-SdrHdl* SdrRectObj::GetHdl(sal_uInt32 nHdlNum) const
+void SdrRectObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
-    SdrHdl* pH = nullptr;
-    Point aPnt;
-    SdrHdlKind eKind = SdrHdlKind::Move;
-
-    if(!IsTextFrame())
+    sal_Int32 nCount = IsTextFrame() ? 10 : 9;
+    for(sal_Int32 nHdlNum = 0; nHdlNum < nCount; ++nHdlNum)
     {
-        nHdlNum++;
-    }
+        SdrHdl* pH = nullptr;
+        Point aPnt;
+        SdrHdlKind eKind = SdrHdlKind::Move;
 
-    switch(nHdlNum)
-    {
-        case 0:
+        switch(nHdlNum)
         {
-            OSL_ENSURE(!IsTextEditActive(), "Do not use a ImpTextframeHdl for highlighting text in active text edit, this will collide with EditEngine paints (!)");
-            // hack for calc grid sync to ensure the hatched area
-            // for a textbox is displayed at correct position
-            pH = new ImpTextframeHdl(maRect + GetGridOffset() );
+            case 0:
+            {
+                OSL_ENSURE(!IsTextEditActive(), "Do not use a ImpTextframeHdl for highlighting text in active text edit, this will collide with EditEngine paints (!)");
+                // hack for calc grid sync to ensure the hatched area
+                // for a textbox is displayed at correct position
+                pH = new ImpTextframeHdl(maRect + GetGridOffset() );
+                pH->SetObj(const_cast<SdrRectObj*>(this));
+                pH->SetRotationAngle(aGeo.nRotationAngle);
+                break;
+            }
+            case 1:
+            {
+                long a = GetEckenradius();
+                long b = std::max(maRect.GetWidth(),maRect.GetHeight())/2; // rounded up, because GetWidth() adds 1
+                if (a>b) a=b;
+                if (a<0) a=0;
+                aPnt=maRect.TopLeft();
+                aPnt.AdjustX(a );
+                eKind = SdrHdlKind::Circle;
+                break;
+            }
+            case 2: aPnt=maRect.TopLeft();      eKind = SdrHdlKind::UpperLeft; break;
+            case 3: aPnt=maRect.TopCenter();    eKind = SdrHdlKind::Upper; break;
+            case 4: aPnt=maRect.TopRight();     eKind = SdrHdlKind::UpperRight; break;
+            case 5: aPnt=maRect.LeftCenter();   eKind = SdrHdlKind::Left ; break;
+            case 6: aPnt=maRect.RightCenter();  eKind = SdrHdlKind::Right; break;
+            case 7: aPnt=maRect.BottomLeft();   eKind = SdrHdlKind::LowerLeft; break;
+            case 8: aPnt=maRect.BottomCenter(); eKind = SdrHdlKind::Lower; break;
+            case 9: aPnt=maRect.BottomRight();  eKind = SdrHdlKind::LowerRight; break;
+        }
+
+        if(!pH)
+        {
+            if(aGeo.nShearAngle)
+            {
+                ShearPoint(aPnt,maRect.TopLeft(),aGeo.nTan);
+            }
+
+            if(aGeo.nRotationAngle)
+            {
+                RotatePoint(aPnt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+            }
+
+            pH = new SdrHdl(aPnt,eKind);
             pH->SetObj(const_cast<SdrRectObj*>(this));
             pH->SetRotationAngle(aGeo.nRotationAngle);
-            break;
         }
-        case 1:
-        {
-            long a = GetEckenradius();
-            long b = std::max(maRect.GetWidth(),maRect.GetHeight())/2; // rounded up, because GetWidth() adds 1
-            if (a>b) a=b;
-            if (a<0) a=0;
-            aPnt=maRect.TopLeft();
-            aPnt.AdjustX(a );
-            eKind = SdrHdlKind::Circle;
-            break;
-        }
-        case 2: aPnt=maRect.TopLeft();      eKind = SdrHdlKind::UpperLeft; break;
-        case 3: aPnt=maRect.TopCenter();    eKind = SdrHdlKind::Upper; break;
-        case 4: aPnt=maRect.TopRight();     eKind = SdrHdlKind::UpperRight; break;
-        case 5: aPnt=maRect.LeftCenter();   eKind = SdrHdlKind::Left ; break;
-        case 6: aPnt=maRect.RightCenter();  eKind = SdrHdlKind::Right; break;
-        case 7: aPnt=maRect.BottomLeft();   eKind = SdrHdlKind::LowerLeft; break;
-        case 8: aPnt=maRect.BottomCenter(); eKind = SdrHdlKind::Lower; break;
-        case 9: aPnt=maRect.BottomRight();  eKind = SdrHdlKind::LowerRight; break;
+        rHdlList.AddHdl(pH);
     }
-
-    if(!pH)
-    {
-        if(aGeo.nShearAngle)
-        {
-            ShearPoint(aPnt,maRect.TopLeft(),aGeo.nTan);
-        }
-
-        if(aGeo.nRotationAngle)
-        {
-            RotatePoint(aPnt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-        }
-
-        pH = new SdrHdl(aPnt,eKind);
-        pH->SetObj(const_cast<SdrRectObj*>(this));
-        pH->SetRotationAngle(aGeo.nRotationAngle);
-    }
-
-    return pH;
 }
-
 
 bool SdrRectObj::hasSpecialDrag() const
 {

@@ -486,10 +486,12 @@ void SdTiledRenderingTest::testSetGraphicSelection()
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     SdPage* pPage = pViewShell->GetActualPage();
     SdrObject* pObject = pPage->GetObj(0);
+    SdrHdlList handleList(nullptr);
+    pObject->AddToHdlList(handleList);
     // Make sure the rectangle has 8 handles: at each corner and at the center of each edge.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(8), pObject->GetHdlCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(8), handleList.GetHdlCount());
     // Take the bottom center one.
-    SdrHdl* pHdl = pObject->GetHdl(6);
+    SdrHdl* pHdl = handleList.GetHdl(6);
     CPPUNIT_ASSERT_EQUAL(int(SdrHdlKind::Lower), static_cast<int>(pHdl->GetKind()));
     ::tools::Rectangle aShapeBefore = pObject->GetSnapRect();
     // Resize.
