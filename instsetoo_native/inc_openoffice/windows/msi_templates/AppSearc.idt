@@ -6,5 +6,3 @@ INSTALLLOCATION	installuser_
 INSTALLLOCATION	installmachine
 INSTALLLOCATION	installmachine_
 WIN81S14	win81s14
-UCRT_DETECTED	ucrt_detected
-UCRT_DETECTED	ucrt_on_win10

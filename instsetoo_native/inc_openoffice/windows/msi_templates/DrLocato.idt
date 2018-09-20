@@ -2,5 +2,3 @@ Signature_	Parent	Path	Depth
 s72	S72	S255	I2
 DrLocator	Signature_	Parent	Path
 win81s14		[SystemFolder]	
-ucrt_detected		[SystemFolder]	
-ucrt_on_win10		[SystemFolder]	
