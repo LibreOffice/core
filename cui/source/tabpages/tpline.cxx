@@ -81,10 +81,10 @@ SvxLineTabPage::SvxLineTabPage
     vcl::Window* pParent,
     const SfxItemSet& rInAttrs
 ) :
-    SvxTabPage ( pParent
+    SfxTabPage ( pParent
                  ,"LineTabPage"
                  ,"cui/ui/linetabpage.ui"
-                 , rInAttrs ),
+                 , &rInAttrs ),
 
     m_pSymbolList(nullptr),
     m_bNewSize(false),
@@ -258,7 +258,7 @@ void SvxLineTabPage::dispose()
     m_pSymbolWidthMF.clear();
     m_pSymbolHeightMF.clear();
     m_pSymbolRatioCB.clear();
-    SvxTabPage::dispose();
+    SfxTabPage::dispose();
 }
 
 void SvxLineTabPage::Construct()
@@ -1669,14 +1669,6 @@ IMPL_LINK_NOARG(SvxLineTabPage, ChangeTransparentHdl_Impl, Edit&, void)
     m_pCtlPreview->Invalidate();
 }
 
-void SvxLineTabPage::PointChanged( vcl::Window*, RectPoint )
-{
-}
-
-void SvxLineTabPage::PointChanged( weld::DrawingArea*, RectPoint )
-{
-}
-
 void SvxLineTabPage::FillUserData()
 {
     // Write the synched value to the INI file
@@ -1761,7 +1753,7 @@ IMPL_LINK( SvxLineTabPage, RatioHdl_Impl, Button*, pBox, void )
 
 void SvxLineTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    SvxTabPage::DataChanged( rDCEvt );
+    SfxTabPage::DataChanged( rDCEvt );
 
     if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {

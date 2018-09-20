@@ -50,7 +50,7 @@
 using namespace com::sun::star;
 
 SvxHatchTabPage::SvxHatchTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SvxTabPage(pParent, "cui/ui/hatchpage.ui", "HatchPage", rInAttrs)
+    : SfxTabPage(pParent, "cui/ui/hatchpage.ui", "HatchPage", &rInAttrs)
     , m_rOutAttrs(rInAttrs)
     , m_pnHatchingListState(nullptr)
     , m_pnColorListState(nullptr)
@@ -131,7 +131,7 @@ void SvxHatchTabPage::dispose()
     m_xHatchLB.reset();
     m_xLbBackgroundColor.reset();
     m_xLbLineColor.reset();
-    SvxTabPage::dispose();
+    SfxTabPage::dispose();
 }
 
 void SvxHatchTabPage::Construct()
@@ -568,20 +568,12 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, PresetListBox*, void )
 
 }
 
-void SvxHatchTabPage::PointChanged( vcl::Window*, RectPoint )
-{
-}
-
-void SvxHatchTabPage::PointChanged( weld::DrawingArea*, RectPoint )
-{
-}
-
 void SvxHatchTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
         m_aCtlPreview.SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 
-    SvxTabPage::DataChanged( rDCEvt );
+    SfxTabPage::DataChanged( rDCEvt );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

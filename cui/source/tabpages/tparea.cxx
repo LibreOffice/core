@@ -83,7 +83,7 @@ void lclExtendSize(Size& rSize, const Size& rInputSize)
 \************************************************************************/
 
 SvxAreaTabPage::SvxAreaTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SvxTabPage(pParent, "cui/ui/areatabpage.ui", "AreaTabPage", rInAttrs)
+    : SfxTabPage(pParent, "cui/ui/areatabpage.ui", "AreaTabPage", &rInAttrs)
     // local fixed not o be changed values for local pointers
     , maFixed_ChangeType(ChangeType::NONE)
     // init with pointers to fixed ChangeType
@@ -152,7 +152,7 @@ SvxAreaTabPage::~SvxAreaTabPage()
 void SvxAreaTabPage::dispose()
 {
     m_pFillTabPage.disposeAndClear();
-    SvxTabPage::dispose();
+    SfxTabPage::dispose();
 }
 
 void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
@@ -386,14 +386,6 @@ void SvxAreaTabPage::PageCreated(const SfxAllItemSet& aSet)
         SetBitmapList(pBitmapListItem->GetBitmapList());
     if (pPatternListItem)
         SetPatternList(pPatternListItem->GetPatternList());
-}
-
-void SvxAreaTabPage::PointChanged( vcl::Window* , RectPoint )
-{
-}
-
-void SvxAreaTabPage::PointChanged( weld::DrawingArea*, RectPoint )
-{
 }
 
 void SvxAreaTabPage::CreatePage( sal_Int32 nId, SfxTabPage* pTab )
