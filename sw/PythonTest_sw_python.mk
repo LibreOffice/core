@@ -29,6 +29,7 @@ $(eval $(call gb_PythonTest_add_modules,sw_python,$(SRCDIR)/sw/qa/python,\
 	text_portion_enumeration_test \
 	var_fields \
 	xscriptprovider \
+	xtextfieldssupplier \
 ))
 
 # vim: set noet sw=4 ts=4:
