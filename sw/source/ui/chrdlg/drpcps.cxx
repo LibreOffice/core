@@ -448,12 +448,13 @@ void SwDropCapsPict::InitPrinter_()
     }
 }
 
-SwDropCapsDlg::SwDropCapsDlg(vcl::Window *pParent, const SfxItemSet &rSet )
-    : SfxSingleTabDialog(pParent, rSet)
+SwDropCapsDlg::SwDropCapsDlg(weld::Window *pParent, const SfxItemSet &rSet)
+    : SfxSingleTabDialogController(pParent, rSet)
 {
-    VclPtr<SwDropCapsPage> pNewPage( static_cast<SwDropCapsPage*>( SwDropCapsPage::Create(get_content_area(), &rSet).get() ) );
-    pNewPage->SetFormat(false);
-    SetTabPage(pNewPage);
+    TabPageParent pPageParent(get_content_area(), this);
+    VclPtr<SwDropCapsPage> xNewPage(static_cast<SwDropCapsPage*>(SwDropCapsPage::Create(pPageParent, &rSet).get()));
+    xNewPage->SetFormat(false);
+    SetTabPage(xNewPage);
 }
 
 SwDropCapsPage::SwDropCapsPage(TabPageParent pParent, const SfxItemSet &rSet)

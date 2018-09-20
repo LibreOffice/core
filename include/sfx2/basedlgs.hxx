@@ -27,6 +27,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/weld.hxx>
 
 class TabPage;
 class SfxTabPage;
@@ -187,6 +188,38 @@ protected:
 
 private:
     std::unique_ptr<SingleTabDlgImpl>   pImpl;
+};
+
+class SFX2_DLLPUBLIC SfxSingleTabDialogController : public weld::GenericDialogController
+{
+private:
+    VclPtr<SfxTabPage>          m_xSfxPage;
+    std::unique_ptr<SfxItemSet> m_xOutputSet;
+    const SfxItemSet* m_pInputSet;
+
+public:
+    SfxSingleTabDialogController(weld::Window *pParent, const SfxItemSet& rOptionsSet,
+        const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"),
+        const OString& rID = OString("SingleTabDialog"));
+
+    virtual weld::Container* get_content_area() { return m_xContainer.get(); }
+
+    virtual             ~SfxSingleTabDialogController() override;
+
+    void                SetTabPage(SfxTabPage* pTabPage);
+    SfxTabPage*         GetTabPage() const { return m_xSfxPage; }
+    weld::Button&       GetOKButton() const { return *m_xOKBtn; }
+
+    const SfxItemSet*   GetOutputItemSet() const { return m_xOutputSet.get(); }
+    const SfxItemSet*   GetInputItemSet() const { return m_pInputSet; }
+
+protected:
+    std::unique_ptr<weld::Container> m_xContainer;
+    std::unique_ptr<weld::Button> m_xOKBtn;
+    std::unique_ptr<weld::Button> m_xHelpBtn;
+
+    void                CreateOutputItemSet(const SfxItemSet& rInput);
+    DECL_DLLPRIVATE_LINK(OKHdl_Impl, weld::Button&, void);
 };
 
 #endif

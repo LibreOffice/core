@@ -361,7 +361,7 @@ public:
 
     virtual VclPtr<SfxAbstractDialog> CreateNumFormatDialog( vcl::Window* pParent,
                                                  const SfxItemSet& rAttr) = 0;
-    virtual VclPtr<SfxAbstractDialog> CreateSwDropCapsDialog(vcl::Window* pParent, const SfxItemSet& rSet) = 0;
+    virtual VclPtr<SfxAbstractDialog> CreateSwDropCapsDialog(weld::Window* pParent, const SfxItemSet& rSet) = 0;
     virtual VclPtr<SfxAbstractDialog> CreateSwBackgroundDialog(vcl::Window* pParent, const SfxItemSet& rSet) = 0;
 
     virtual VclPtr<AbstractSwWordCountFloatDlg> CreateSwWordCountDialog(SfxBindings* pBindings,

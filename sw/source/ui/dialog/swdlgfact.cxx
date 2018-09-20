@@ -90,56 +90,76 @@ using namespace css::uno;
 IMPL_ABSTDLG_BASE(AbstractSwWordCountFloatDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwInsertAbstractDlg_Impl);
 IMPL_ABSTDLG_BASE(SwAbstractSfxDialog_Impl);
+
+short SwAbstractSfxController_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 short AbstractSwAsciiFilterDlg_Impl::Execute()
 {
     return m_xDlg->run();
 }
+
 IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl);
+
 short AbstractSplitTableDialog_Impl::Execute()
 {
     return m_xDlg->execute();
 }
+
 short AbstractSwBreakDlg_Impl::Execute()
 {
     return m_xDlg->execute();
 }
+
 short AbstractSwTableWidthDlg_Impl::Execute()
 {
     return m_xDlg->execute();
 }
+
 short AbstractSwTableHeightDlg_Impl::Execute()
 {
     return m_xDlg->execute();
 }
+
 short AbstractSwMergeTableDlg_Impl::Execute()
 {
     return m_xDlg->execute();
 }
+
 short AbstractGenericDialog_Impl::Execute()
 {
     return m_xDlg->run();
 }
+
 bool AbstractGenericDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
 {
     return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
+
 short AbstractSwSortDlg_Impl::Execute()
 {
     return m_xDlg->execute();
 }
+
 short AbstractMultiTOXMarkDlg_Impl::Execute()
 {
     return m_xDlg->execute();
 }
+
 short AbstractTabController_Impl::Execute()
 {
     return m_xDlg->execute();
 }
+
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
+
 short AbstractSwConvertTableDlg_Impl::Execute()
 {
     return m_xDlg->run();
 }
+
 IMPL_ABSTDLG_BASE(AbstractSwInsertDBColAutoPilot_Impl);
 
 short AbstractDropDownFieldDialog_Impl::Execute()
@@ -153,15 +173,19 @@ short AbstractSwLabDlg_Impl::Execute()
 }
 
 IMPL_ABSTDLG_BASE(AbstractSwSelGlossaryDlg_Impl);
+
 short AbstractSwAutoFormatDlg_Impl::Execute()
 {
     return m_xDlg->execute();
 }
+
 IMPL_ABSTDLG_BASE(AbstractSwFieldDlg_Impl);
+
 short AbstractSwRenameXNamedDlg_Impl::Execute()
 {
     return m_xDlg->run();
 }
+
 IMPL_ABSTDLG_BASE(AbstractSwModalRedlineAcceptDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractGlossaryDlg_Impl);
 
@@ -293,6 +317,16 @@ const SfxItemSet* SwAbstractSfxDialog_Impl::GetOutputItemSet() const
 void SwAbstractSfxDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
+}
+
+const SfxItemSet* SwAbstractSfxController_Impl::GetOutputItemSet() const
+{
+    return m_xDlg->GetOutputItemSet();
+}
+
+void SwAbstractSfxController_Impl::SetText(const OUString& rStr)
+{
+    m_xDlg->set_title(rStr);
 }
 
 void AbstractSwAsciiFilterDlg_Impl::FillOptions( SwAsciiOptions& rOptions )
@@ -724,11 +758,10 @@ VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwAddressAbstractD
     return VclPtr<SwAbstractSfxDialog_Impl>::Create(pDlg);
 }
 
-VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwDropCapsDialog( vcl::Window* pParent,
+VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwDropCapsDialog(weld::Window* pParent,
                                                                   const SfxItemSet& rSet)
 {
-    VclPtr<SfxModalDialog> pDlg = VclPtr<SwDropCapsDlg>::Create(pParent, rSet);
-    return VclPtr<SwAbstractSfxDialog_Impl>::Create( pDlg );
+    return VclPtr<SwAbstractSfxController_Impl>::Create(o3tl::make_unique<SwDropCapsDlg>(pParent, rSet));
 }
 
 VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwBackgroundDialog( vcl::Window* pParent,

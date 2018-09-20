@@ -479,7 +479,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                                            HINT_END, HINT_END>{});
                 rSh.GetCurAttr(aSet);
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSwDropCapsDialog(GetView().GetWindow(), aSet));
+                ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSwDropCapsDialog(GetView().GetFrameWeld(), aSet));
                 if (pDlg->Execute() == RET_OK)
                 {
                     rSh.StartAction();
