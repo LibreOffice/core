@@ -101,7 +101,12 @@ IMPL_ABSTDLG_BASE(CuiAbstractSfxDialog_Impl)
 IMPL_ABSTDLG_BASE(CuiVclAbstractDialog_Impl)
 IMPL_ABSTDLG_BASE(VclAbstractRefreshableDialog_Impl);
 IMPL_ABSTDLG_BASE(CuiAbstractTabDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractSvxDistributeDialog_Impl);
+
+short AbstractSvxDistributeDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(AbstractHangulHanjaConversionDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractFmShowColsDialog_Impl);
 
@@ -370,11 +375,11 @@ void CuiAbstractSfxDialog_Impl::SetText( const OUString& rStr )
 
 SvxDistributeHorizontal AbstractSvxDistributeDialog_Impl::GetDistributeHor()const
 {
-    return pDlg->GetDistributeHor();
+    return m_xDlg->GetDistributeHor();
 }
 SvxDistributeVertical AbstractSvxDistributeDialog_Impl::GetDistributeVer()const
 {
-    return pDlg->GetDistributeVer();
+    return m_xDlg->GetDistributeVer();
 }
 
 void AbstractHangulHanjaConversionDialog_Impl::EndDialog(sal_Int32 nResult)
@@ -1029,10 +1034,10 @@ VclPtr<AbstractSvxCaptionDialog> AbstractDialogFactory_Impl::CreateCaptionDialog
     return VclPtr<AbstractSvxCaptionDialog_Impl>::Create(o3tl::make_unique<SvxCaptionTabDialog>(pParent, pView, nAnchorTypes));
 }
 
-VclPtr<AbstractSvxDistributeDialog>    AbstractDialogFactory_Impl::CreateSvxDistributeDialog(const SfxItemSet& rAttr)
+VclPtr<AbstractSvxDistributeDialog> AbstractDialogFactory_Impl::CreateSvxDistributeDialog(weld::Window* pParent,
+                                                                                          const SfxItemSet& rAttr)
 {
-    VclPtrInstance<SvxDistributeDialog> pDlg( nullptr, rAttr, SvxDistributeHorizontal::NONE, SvxDistributeVertical::NONE);
-    return VclPtr<AbstractSvxDistributeDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractSvxDistributeDialog_Impl>::Create(o3tl::make_unique<SvxDistributeDialog>(pParent, rAttr, SvxDistributeHorizontal::NONE, SvxDistributeVertical::NONE));
 }
 
 VclPtr<AbstractHangulHanjaConversionDialog> AbstractDialogFactory_Impl::CreateHangulHanjaConversionDialog(vcl::Window* pParent,

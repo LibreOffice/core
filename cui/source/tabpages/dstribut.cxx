@@ -28,26 +28,19 @@
 |*
 \************************************************************************/
 
-SvxDistributeDialog::SvxDistributeDialog(vcl::Window* pParent,
+SvxDistributeDialog::SvxDistributeDialog(weld::Window* pParent,
     const SfxItemSet& rInAttrs, SvxDistributeHorizontal eHor,
     SvxDistributeVertical eVer)
-    : SfxSingleTabDialog(pParent, rInAttrs, "DistributionDialog",
-        "cui/ui/distributiondialog.ui")
-    , mpPage(nullptr)
+    : SfxSingleTabDialogController(pParent, rInAttrs, "cui/ui/distributiondialog.ui",
+                                   "DistributionDialog")
 {
-    mpPage = VclPtr<SvxDistributePage>::Create(get_content_area(), rInAttrs, eHor, eVer);
+    TabPageParent pPageParent(get_content_area(), this);
+    mpPage = VclPtr<SvxDistributePage>::Create(pPageParent, rInAttrs, eHor, eVer);
     SetTabPage(mpPage);
 }
 
 SvxDistributeDialog::~SvxDistributeDialog()
 {
-    disposeOnce();
-}
-
-void SvxDistributeDialog::dispose()
-{
-    mpPage.clear();
-    SfxSingleTabDialog::dispose();
 }
 
 /*************************************************************************

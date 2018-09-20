@@ -342,7 +342,7 @@ public:
                                                                  const SdrView* pView,
                                                                  SvxAnchorIds nAnchorTypes = SvxAnchorIds::NONE) = 0;
 
-    virtual VclPtr<AbstractSvxDistributeDialog>    CreateSvxDistributeDialog(
+    virtual VclPtr<AbstractSvxDistributeDialog>    CreateSvxDistributeDialog(weld::Window* pParent,
                                             const SfxItemSet& rAttr)= 0;
 
     virtual VclPtr<AbstractFmShowColsDialog> CreateFmShowColsDialog() = 0;

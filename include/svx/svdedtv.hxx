@@ -255,7 +255,7 @@ public:
     void MergeMarkedObjects(SdrMergeMode eMode);
 
     // for distribution dialog function
-    void DistributeMarkedObjects();
+    void DistributeMarkedObjects(weld::Window* pParent);
 
     // for setting either the width or height of all selected
     // objects to the width/height of the last selected object
