@@ -240,7 +240,7 @@ public:
     virtual SdrGluePointList* ForceGluePointList() override;
 
     virtual sal_uInt32 GetHdlCount() const override;
-    virtual SdrHdl* GetHdl( sal_uInt32 nHdlNum ) const override;
+    virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
 
     // #i33136#
     static bool doConstructOrthogonal(const OUString& rName);

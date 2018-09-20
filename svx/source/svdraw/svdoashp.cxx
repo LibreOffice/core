@@ -1801,42 +1801,33 @@ SdrGluePointList* SdrObjCustomShape::ForceGluePointList()
 sal_uInt32 SdrObjCustomShape::GetHdlCount() const
 {
     const sal_uInt32 nBasicHdlCount(SdrTextObj::GetHdlCount());
-    std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
-    return ( aInteractionHandles.size() + nBasicHdlCount );
+    return ( GetInteractionHandles().size() + nBasicHdlCount );
 }
 
-SdrHdl* SdrObjCustomShape::GetHdl( sal_uInt32 nHdlNum ) const
+void SdrObjCustomShape::AddToHdlList(SdrHdlList& rHdlList) const
 {
-    SdrHdl* pH = nullptr;
-    const sal_uInt32 nBasicHdlCount(SdrTextObj::GetHdlCount());
+    SdrTextObj::AddToHdlList(rHdlList);
 
-    if ( nHdlNum < nBasicHdlCount )
-        pH = SdrTextObj::GetHdl( nHdlNum );
-    else
+    int nCustomShapeHdlNum = 0;
+    for (SdrCustomShapeInteraction const & rInteraction : GetInteractionHandles())
     {
-        std::vector< SdrCustomShapeInteraction > aInteractionHandles( GetInteractionHandles() );
-        const sal_uInt32 nCustomShapeHdlNum(nHdlNum - nBasicHdlCount);
-
-        if ( nCustomShapeHdlNum < aInteractionHandles.size() )
+        if ( rInteraction.xInteraction.is() )
         {
-            if ( aInteractionHandles[ nCustomShapeHdlNum ].xInteraction.is() )
+            try
             {
-                try
-                {
-                    css::awt::Point aPosition( aInteractionHandles[ nCustomShapeHdlNum ].xInteraction->getPosition() );
-                    pH = new SdrHdl( Point( aPosition.X, aPosition.Y ), SdrHdlKind::CustomShape1 );
-                    pH->SetPointNum( nCustomShapeHdlNum );
-                    pH->SetObj( const_cast<SdrObjCustomShape*>(this) );
-                }
-                catch ( const uno::RuntimeException& )
-                {
-                }
+                css::awt::Point aPosition( rInteraction.xInteraction->getPosition() );
+                SdrHdl* pH = new SdrHdl( Point( aPosition.X, aPosition.Y ), SdrHdlKind::CustomShape1 );
+                pH->SetPointNum( nCustomShapeHdlNum );
+                pH->SetObj( const_cast<SdrObjCustomShape*>(this) );
+                rHdlList.AddHdl(pH);
+            }
+            catch ( const uno::RuntimeException& )
+            {
             }
         }
+        ++nCustomShapeHdlNum;
     }
-    return pH;
 }
-
 
 bool SdrObjCustomShape::hasSpecialDrag() const
 {

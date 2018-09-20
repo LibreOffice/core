@@ -751,9 +751,12 @@ sal_uInt32 SdrGrafObj::GetHdlCount() const
     return 8L;
 }
 
-SdrHdl* SdrGrafObj::GetHdl(sal_uInt32 nHdlNum) const
+void SdrGrafObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
-    return SdrRectObj::GetHdl( nHdlNum + 1 );
+    SdrHdlList tempList(nullptr);
+    SdrRectObj::AddToHdlList( tempList );
+    tempList.RemoveHdl(0);
+    tempList.MoveTo(rHdlList);
 }
 
 void SdrGrafObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)

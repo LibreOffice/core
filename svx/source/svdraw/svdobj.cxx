@@ -1174,21 +1174,24 @@ sal_uInt32 SdrObject::GetHdlCount() const
     return 8L;
 }
 
-SdrHdl* SdrObject::GetHdl(sal_uInt32 nHdlNum) const
+void SdrObject::AddToHdlList(SdrHdlList& rHdlList) const
 {
-    SdrHdl* pH=nullptr;
     const tools::Rectangle& rR=GetSnapRect();
-    switch (nHdlNum) {
-        case 0: pH=new SdrHdl(rR.TopLeft(),     SdrHdlKind::UpperLeft); break;
-        case 1: pH=new SdrHdl(rR.TopCenter(),   SdrHdlKind::Upper); break;
-        case 2: pH=new SdrHdl(rR.TopRight(),    SdrHdlKind::UpperRight); break;
-        case 3: pH=new SdrHdl(rR.LeftCenter(),  SdrHdlKind::Left ); break;
-        case 4: pH=new SdrHdl(rR.RightCenter(), SdrHdlKind::Right); break;
-        case 5: pH=new SdrHdl(rR.BottomLeft(),  SdrHdlKind::LowerLeft); break;
-        case 6: pH=new SdrHdl(rR.BottomCenter(),SdrHdlKind::Lower); break;
-        case 7: pH=new SdrHdl(rR.BottomRight(), SdrHdlKind::LowerRight); break;
+    for (sal_uInt32 nHdlNum=0; nHdlNum<8; ++nHdlNum)
+    {
+        SdrHdl* pH=nullptr;
+        switch (nHdlNum) {
+            case 0: pH=new SdrHdl(rR.TopLeft(),     SdrHdlKind::UpperLeft); break;
+            case 1: pH=new SdrHdl(rR.TopCenter(),   SdrHdlKind::Upper); break;
+            case 2: pH=new SdrHdl(rR.TopRight(),    SdrHdlKind::UpperRight); break;
+            case 3: pH=new SdrHdl(rR.LeftCenter(),  SdrHdlKind::Left ); break;
+            case 4: pH=new SdrHdl(rR.RightCenter(), SdrHdlKind::Right); break;
+            case 5: pH=new SdrHdl(rR.BottomLeft(),  SdrHdlKind::LowerLeft); break;
+            case 6: pH=new SdrHdl(rR.BottomCenter(),SdrHdlKind::Lower); break;
+            case 7: pH=new SdrHdl(rR.BottomRight(), SdrHdlKind::LowerRight); break;
+        }
+        rHdlList.AddHdl(pH);
     }
-    return pH;
 }
 
 sal_uInt32 SdrObject::GetPlusHdlCount(const SdrHdl& /*rHdl*/) const
@@ -1199,17 +1202,6 @@ sal_uInt32 SdrObject::GetPlusHdlCount(const SdrHdl& /*rHdl*/) const
 SdrHdl* SdrObject::GetPlusHdl(const SdrHdl& /*rHdl*/, sal_uInt32 /*nPlNum*/) const
 {
     return nullptr;
-}
-
-void SdrObject::AddToHdlList(SdrHdlList& rHdlList) const
-{
-    sal_uInt32 nCount=GetHdlCount();
-    for (sal_uInt32 i=0; i<nCount; i++) {
-        SdrHdl* pHdl=GetHdl(i);
-        if (pHdl!=nullptr) {
-            rHdlList.AddHdl(pHdl);
-        }
-    }
 }
 
 void SdrObject::addCropHandles(SdrHdlList& /*rTarget*/) const
