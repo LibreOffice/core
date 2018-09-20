@@ -11,8 +11,9 @@
 #define INCLUDED_COMPHELPER_LOK_HXX
 
 #include <comphelper/comphelperdllapi.h>
+#include <rtl/ustring.hxx>
 
-#include <i18nlangtag/languagetag.hxx>
+class LanguageTag;
 
 // Interface between the LibreOfficeKit implementation called by LibreOfficeKit clients and other
 // LibreOffice code.

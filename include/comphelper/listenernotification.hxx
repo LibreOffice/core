@@ -22,11 +22,12 @@
 
 #include <comphelper/interfacecontainer2.hxx>
 
-#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
 #include <comphelper/comphelperdllapi.h>
 
 #include <memory>
 
+namespace com { namespace sun { namespace star { namespace lang { class XEventListener; } } } }
 
 namespace comphelper
 {

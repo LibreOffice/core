@@ -31,6 +31,7 @@
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
 using namespace com::sun::star;

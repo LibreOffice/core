@@ -25,9 +25,8 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/TypeClass.hpp>
-#include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Any.hxx>
-#include <cppu/unotype.hxx>
 
 namespace cppu
 {

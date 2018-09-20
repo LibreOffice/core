@@ -20,16 +20,18 @@
 #define INCLUDED_COMPHELPER_EMBEDDEDOBJECTCONTAINER_HXX
 
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/Sequence.h>
 #include <comphelper/comphelperdllapi.h>
 
 #include <rtl/ustring.hxx>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
+namespace com { namespace sun { namespace star { namespace embed { class XEmbeddedObject; } } } }
+namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
+namespace com { namespace sun { namespace star { namespace io { class XInputStream; } } } }
+namespace com { namespace sun { namespace star { namespace task { class XInteractionHandler; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
 
 namespace comphelper
 {

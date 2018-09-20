@@ -12,9 +12,11 @@
 
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/XDispatchResultListener.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XDispatchResultListener; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
 
 namespace comphelper
 {

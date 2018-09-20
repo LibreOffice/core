@@ -68,6 +68,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/numberedcollection.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/propertysetinfo.hxx>
 
 #include <connectivity/dbtools.hxx>
 

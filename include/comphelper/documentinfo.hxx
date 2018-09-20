@@ -21,8 +21,10 @@
 #define INCLUDED_COMPHELPER_DOCUMENTINFO_HXX
 
 #include <comphelper/comphelperdllapi.h>
+#include <rtl/ustring.hxx>
 
-#include <com/sun/star/frame/XModel.hpp>
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
 
 
 namespace comphelper {

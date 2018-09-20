@@ -26,6 +26,7 @@
 #include <comphelper/hash.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/sequence.hxx>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>

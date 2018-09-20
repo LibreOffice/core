@@ -54,6 +54,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/XLinkageSupport.hpp>
 #include <com/sun/star/embed/EntryInitModes.hpp>

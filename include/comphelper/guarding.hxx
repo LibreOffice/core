@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_GUARDING_HXX
 #define INCLUDED_COMPHELPER_GUARDING_HXX
 
-#include <osl/mutex.hxx>
+namespace osl { class Mutex; }
 
 
 namespace comphelper
