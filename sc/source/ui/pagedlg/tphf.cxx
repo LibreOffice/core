@@ -192,37 +192,37 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl, void*, void)
     else
     {
         OUString  aText;
-        VclPtrInstance< SfxSingleTabDialog > pDlg(this, aDataSet);
         bool bRightPage = m_xCntSharedBox->get_active() || (SvxPageUsage::Left != nPageUsage);
 
-        if ( nId == SID_ATTR_PAGE_HEADERSET )
+        SfxSingleTabDialogController aDlg(GetDialogFrameWeld(), aDataSet);
+        TabPageParent pPageParent(aDlg.get_content_area(), &aDlg);
+        if (nId == SID_ATTR_PAGE_HEADERSET)
         {
-            aText = ScResId( STR_PAGEHEADER );
-            if ( bRightPage )
-                pDlg->SetTabPage( ScRightHeaderEditPage::Create( pDlg->get_content_area(), &aDataSet ) );
+            aText = ScResId(STR_PAGEHEADER);
+            if (bRightPage)
+                aDlg.SetTabPage(ScRightHeaderEditPage::Create(pPageParent, &aDataSet));
             else
-                pDlg->SetTabPage( ScLeftHeaderEditPage::Create( pDlg->get_content_area(), &aDataSet ) );
+                aDlg.SetTabPage(ScLeftHeaderEditPage::Create(pPageParent, &aDataSet));
         }
         else
         {
-            aText = ScResId( STR_PAGEFOOTER );
-            if ( bRightPage )
-                pDlg->SetTabPage( ScRightFooterEditPage::Create( pDlg->get_content_area(), &aDataSet ) );
+            aText = ScResId(STR_PAGEFOOTER);
+            if (bRightPage)
+                aDlg.SetTabPage(ScRightFooterEditPage::Create(pPageParent, &aDataSet));
             else
-                pDlg->SetTabPage( ScLeftFooterEditPage::Create( pDlg->get_content_area(), &aDataSet ) );
+                aDlg.SetTabPage(ScLeftFooterEditPage::Create(pPageParent, &aDataSet));
         }
 
         SvxNumType eNumType = aDataSet.Get(ATTR_PAGE).GetNumType();
-        static_cast<ScHFEditPage*>(pDlg->GetTabPage())->SetNumType(eNumType);
+        static_cast<ScHFEditPage*>(aDlg.GetTabPage())->SetNumType(eNumType);
 
-        aText += " (" + ScResId( STR_PAGESTYLE );
-        aText += ": " + aStrPageStyle + ")";
+        aText += " (" + ScResId(STR_PAGESTYLE) + ": " + aStrPageStyle + ")";
 
-        pDlg->SetText( aText );
+        aDlg.set_title(aText);
 
-        if ( pDlg->Execute() == RET_OK )
+        if (aDlg.run() == RET_OK)
         {
-            aDataSet.Put( *pDlg->GetOutputItemSet() );
+            aDataSet.Put(*aDlg.GetOutputItemSet());
         }
     }
 }
