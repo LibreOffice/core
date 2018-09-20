@@ -32,7 +32,7 @@ class VCL_DLLPUBLIC Scheduler final
 {
     friend class SchedulerGuard;
     friend class Task;
-    Scheduler() SAL_DELETED_FUNCTION;
+    Scheduler() = delete;
 
     static inline void UpdateSystemTimer( ImplSchedulerContext &rSchedCtx,
                                           sal_uInt64 nMinPeriod,
