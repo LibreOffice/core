@@ -697,21 +697,22 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                     aCropDlgAttr.Put( SdrGrafCropItem( aLTSize.Width(), aLTSize.Height(),
                                                     aRBSize.Width(), aRBSize.Height() ) );
 
-                    ScopedVclPtrInstance<SfxSingleTabDialog> aCropDialog(
-                        SfxViewShell::Current() ? SfxViewShell::Current()->GetWindow() : nullptr,
+                    vcl::Window* pParent(SfxViewShell::Current() ? SfxViewShell::Current()->GetWindow() : nullptr);
+                    SfxSingleTabDialogController aCropDialog(pParent ? pParent->GetFrameWeld() : nullptr,
                         aCropDlgAttr);
                     const OUString aCropStr(SvxResId(RID_SVXSTR_GRAFCROP));
 
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_GRFCROP );
-                    VclPtr<SfxTabPage> pTabPage = (*fnCreatePage)( aCropDialog->get_content_area(), &aCropDlgAttr );
+                    TabPageParent pPageParent(aCropDialog.get_content_area(), &aCropDialog);
+                    VclPtr<SfxTabPage> xTabPage = (*fnCreatePage)(pPageParent, &aCropDlgAttr);
 
-                    pTabPage->SetText( aCropStr );
-                    aCropDialog->SetTabPage( pTabPage );
+                    xTabPage->SetText(aCropStr);
+                    aCropDialog.SetTabPage(xTabPage);
 
-                    if( aCropDialog->Execute() == RET_OK )
+                    if (aCropDialog.run() == RET_OK)
                     {
-                        const SfxItemSet* pOutAttr = aCropDialog->GetOutputItemSet();
+                        const SfxItemSet* pOutAttr = aCropDialog.GetOutputItemSet();
 
                         if( pOutAttr )
                         {
