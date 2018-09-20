@@ -29,10 +29,10 @@ namespace vcl { class Window; }
 class SfxItemSet;
 class SwWrtShell;
 
-class SwWrapDlg : public SfxSingleTabDialog
+class SwWrapDlg : public SfxSingleTabDialogController
 {
 public:
-    SwWrapDlg(vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode);
+    SwWrapDlg(TabPageParent pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode);
 };
 
 // circulation TabPage
