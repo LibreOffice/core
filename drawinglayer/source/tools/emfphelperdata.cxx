@@ -1316,7 +1316,7 @@ namespace emfplushelper
                             const OUString text = read_uInt16s_ToOUString(rMS, stringLength);
                             SAL_INFO("drawinglayer", "EMF+ DrawString string: " << text);
                             // get the stringFormat from the Object table ( this is OPTIONAL and may be nullptr )
-                            const EMFPStringFormat *stringFormat = static_cast< EMFPStringFormat* >(maEMFPObjects[formatId & 0xff].get());
+                            const EMFPStringFormat *stringFormat = dynamic_cast<EMFPStringFormat*>(maEMFPObjects[formatId & 0xff].get());
                             // get the font from the flags
                             const EMFPFont *font = static_cast< EMFPFont* >( maEMFPObjects[flags & 0xff].get() );
                             if (!font)
@@ -1347,7 +1347,7 @@ namespace emfplushelper
                             double stringAlignmentHorizontalOffset = 0.0;
                             if (stringFormat)
                             {
-                                SAL_WARN_IF(stringFormat && stringFormat->DirectionRightToLeft(), "drawinglayer", "EMF+ DrawString Alignment TODO For a right-to-left layout rectangle, the origin should be at the upper right.");
+                                SAL_WARN_IF(stringFormat->DirectionRightToLeft(), "drawinglayer", "EMF+ DrawString Alignment TODO For a right-to-left layout rectangle, the origin should be at the upper right.");
                                 if (stringFormat->stringAlignment == StringAlignmentNear)
                                 // Alignment is to the left side of the layout rectangle (lx, ly, lw, lh)
                                 {
