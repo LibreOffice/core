@@ -575,15 +575,13 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                 if( rSh.GetContentAtPos( rLPt, aSwContentAtPos) )
                 {
                     // Is edit inline input field
-                    if (IsAttrAtPos::Field == aSwContentAtPos.eContentAtPos)
+                    if (IsAttrAtPos::Field == aSwContentAtPos.eContentAtPos
+                        && aSwContentAtPos.pFndTextAttr != nullptr
+                        && aSwContentAtPos.pFndTextAttr->Which() == RES_TXTATR_INPUTFIELD)
                     {
-                        if ( aSwContentAtPos.pFndTextAttr != nullptr
-                            && aSwContentAtPos.pFndTextAttr->Which() == RES_TXTATR_INPUTFIELD)
-                        {
-                            const SwField *pCursorField = rSh.CursorInsideInputField() ? rSh.GetCurField( true ) : nullptr;
-                            if (!(pCursorField && pCursorField == aSwContentAtPos.pFndTextAttr->GetFormatField().GetField()))
-                                eStyle = PointerStyle::RefHand;
-                        }
+                        const SwField *pCursorField = rSh.CursorInsideInputField() ? rSh.GetCurField( true ) : nullptr;
+                        if (!(pCursorField && pCursorField == aSwContentAtPos.pFndTextAttr->GetFormatField().GetField()))
+                            eStyle = PointerStyle::RefHand;
                     }
                     else
                     {
