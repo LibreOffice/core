@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f013ff3_2aa3df51",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3008,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-09-20T14:50:46Z",
+      "side": 1,
+      "message": "This all is a weird flow. It could be better written as (untested)\n\n bool bIsCalcURL \u003d false;\n if (SvtModuleOptions().IsCalc())\n {\n     if (const SvxFieldItem* pFieldItem \u003d dynamic_cast\u003cconst SvxFieldItem*\u003e(rField.GetItem()))\n     {\n         if (const SvxFieldData* pFieldData \u003d pFieldItem-\u003eGetField())\n             bIsCalcURL \u003d (dynamic_cast\u003cconst SvxURLField* \u003e(pFieldData) !\u003d nullptr);\n     }\n }",
+      "revId": "ed43a8cef25d7dd1653a76e6feeb158cfea08e44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
