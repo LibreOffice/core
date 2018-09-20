@@ -32,13 +32,13 @@
  <toolbar:toolbaritem xlink:href=".uno:WrapRight" toolbar:style="radio" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapThrough" toolbar:style="radio"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AlignLeft" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignRight" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlignLeft" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignCenter" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlignRight" toolbar:style="radio"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AlignTop" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignVerticalCenter" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignBottom" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignUp" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignMiddle" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignDown" toolbar:style="radio"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>
