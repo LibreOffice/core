@@ -20,7 +20,6 @@ $(eval $(call gb_Library_add_libs,unowinreg,\
 ))
 else
 $(eval $(call gb_Library_add_ldflags,unowinreg,\
-	/DEF:$(SRCDIR)/odk/source/unowinreg/win/unowinreg.def \
 	/MANIFEST:NO \
 ))
 endif
