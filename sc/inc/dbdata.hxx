@@ -241,7 +241,8 @@ public:
         DBsType m_DBs;
         ScDBCollection& mrParent;
         NamedDBs(ScDBCollection& rParent, ScDocument& rDoc);
-        NamedDBs(const NamedDBs& r);
+        NamedDBs(const NamedDBs& r, ScDBCollection& rParent);
+        NamedDBs(const NamedDBs&) = delete;
         virtual ~NamedDBs() override;
         NamedDBs & operator=(NamedDBs const&) = delete;
         void initInserted( ScDBData* p );
