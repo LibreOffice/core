@@ -46,10 +46,12 @@
   <menu:menu menu:id=".uno:TableAutoFitMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:SetColumnWidth"/>
+      <menu:menuitem menu:id=".uno:SetMinimalColumnWidth"/>
       <menu:menuitem menu:id=".uno:SetOptimalColumnWidth"/>
       <menu:menuitem menu:id=".uno:DistributeColumns"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:SetRowHeight"/>
+      <menu:menuitem menu:id=".uno:SetMinimalRowHeight"/>
       <menu:menuitem menu:id=".uno:SetOptimalRowHeight"/>
       <menu:menuitem menu:id=".uno:DistributeRows"/>
     </menu:menupopup>

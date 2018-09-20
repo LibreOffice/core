@@ -970,7 +970,8 @@ class SfxStringItem;
 #define SID_SIGN_SIGNATURELINE                          ( SID_SVX_START + 1175 )
 #define SID_MEASURE_DLG                                 ( SID_SVX_START + 1176 )
 
-
+#define SID_TABLE_MINIMAL_COLUMN_WIDTH                  ( SID_SVX_START + 1185 )
+#define SID_TABLE_MINIMAL_ROW_HEIGHT                    ( SID_SVX_START + 1186 )
 #define SID_TABLE_OPTIMAL_COLUMN_WIDTH                  ( SID_SVX_START + 1187 )
 #define SID_TABLE_OPTIMAL_ROW_HEIGHT                    ( SID_SVX_START + 1188 )
 
