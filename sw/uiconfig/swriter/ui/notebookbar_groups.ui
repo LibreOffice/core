@@ -521,6 +521,15 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="rowmenuminimalrow">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SetMinimalRowHeight</property>
+        <property name="label" translatable="yes" context="notebookbar_groups|rowmenuminimalrow">Minimal Row Height</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="rowmenuoptimalrow">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
