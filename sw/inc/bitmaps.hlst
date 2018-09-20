@@ -88,6 +88,18 @@
 #define RID_BMP_DROP_LINK                       "sw/res/sc20238.png"
 #define RID_BMP_DROP_COPY                       "sw/res/sc20239.png"
 
+#define RID_BMP_WRAP_RIGHT                      "sw/res/wr03.png"
+#define RID_BMP_WRAP_CONTOUR_RIGHT              "sw/res/wr09.png"
+#define RID_BMP_WRAP_LEFT                       "sw/res/wr02.png"
+#define RID_BMP_WRAP_CONTOUR_LEFT               "sw/res/wr08.png"
+#define RID_BMP_WRAP_NONE                       "sw/res/wr01.png"
+#define RID_BMP_WRAP_CONTOUR_NONE               "sw/res/wr07.png"
+#define RID_BMP_WRAP_IDEAL                      "sw/res/wr06.png"
+#define RID_BMP_WRAP_CONTOUR_IDEAL              "sw/res/wr011.png"
+#define RID_BMP_WRAP_THROUGH                    "sw/res/wr05.png"
+#define RID_BMP_WRAP_PARALLEL                   "sw/res/wr04.png"
+#define RID_BMP_WRAP_CONTOUR_PARALLEL           "sw/res/wr010.png"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -1070,6 +1070,11 @@ public:
             m_xButton->SetModeImage(Image());
     }
 
+    virtual void set_from_icon_name(const OUString& rIconName) override
+    {
+        m_xButton->SetModeImage(::Image(BitmapEx(rIconName)));
+    }
+
     virtual OUString get_label() const override
     {
         return m_xButton->GetText();
@@ -1208,6 +1213,11 @@ public:
     virtual bool get_active() const override
     {
         return m_xRadioButton->IsChecked();
+    }
+
+    virtual void set_from_icon_name(const OUString& rIconName) override
+    {
+        m_xRadioButton->SetModeRadioImage(::Image(BitmapEx(rIconName)));
     }
 
     virtual void set_inconsistent(bool /*inconsistent*/) override

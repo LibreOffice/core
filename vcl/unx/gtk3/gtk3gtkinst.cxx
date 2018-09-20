@@ -2751,6 +2751,34 @@ public:
     }
 };
 
+namespace
+{
+    GdkPixbuf* load_icon_by_name(const OUString& rIconName, const OUString& rIconTheme, const OUString& rUILang)
+    {
+        GdkPixbuf* pixbuf = nullptr;
+        auto xMemStm = ImageTree::get().getImageStream(rIconName, rIconTheme, rUILang);
+        if (xMemStm)
+        {
+            GdkPixbufLoader *pixbuf_loader = gdk_pixbuf_loader_new();
+            gdk_pixbuf_loader_write(pixbuf_loader, static_cast<const guchar*>(xMemStm->GetData()),
+                                    xMemStm->Seek(STREAM_SEEK_TO_END), nullptr);
+            gdk_pixbuf_loader_close(pixbuf_loader, nullptr);
+            pixbuf = gdk_pixbuf_loader_get_pixbuf(pixbuf_loader);
+            if (pixbuf)
+                g_object_ref(pixbuf);
+            g_object_unref(pixbuf_loader);
+        }
+        return pixbuf;
+    }
+
+    GdkPixbuf* load_icon_by_name(const OUString& rIconName)
+    {
+        OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+        OUString sUILang = Application::GetSettings().GetUILanguageTag().getBcp47();
+        return load_icon_by_name(rIconName, sIconTheme, sUILang);
+    }
+}
+
 class GtkInstanceButton : public GtkInstanceContainer, public virtual weld::Button
 {
 private:
@@ -2786,6 +2814,15 @@ public:
             gtk_button_set_image(m_pButton, gtk_image_new_from_surface(get_underlying_cairo_surface(*pDevice)));
         else
             gtk_button_set_image(m_pButton, nullptr);
+    }
+
+    virtual void set_from_icon_name(const OUString& rIconName) override
+    {
+        GdkPixbuf* pixbuf = load_icon_by_name(rIconName);
+        if (!pixbuf)
+            return;
+        gtk_button_set_image(m_pButton, gtk_image_new_from_pixbuf(pixbuf));
+        g_object_unref(pixbuf);
     }
 
     virtual OUString get_label() const override
@@ -3313,27 +3350,6 @@ public:
     }
 };
 
-namespace
-{
-    GdkPixbuf* load_icon_by_name(const OUString& rIconName, const OUString& rIconTheme, const OUString& rUILang)
-    {
-        GdkPixbuf* pixbuf = nullptr;
-        auto xMemStm = ImageTree::get().getImageStream(rIconName, rIconTheme, rUILang);
-        if (xMemStm)
-        {
-            GdkPixbufLoader *pixbuf_loader = gdk_pixbuf_loader_new();
-            gdk_pixbuf_loader_write(pixbuf_loader, static_cast<const guchar*>(xMemStm->GetData()),
-                                    xMemStm->Seek(STREAM_SEEK_TO_END), nullptr);
-            gdk_pixbuf_loader_close(pixbuf_loader, nullptr);
-            pixbuf = gdk_pixbuf_loader_get_pixbuf(pixbuf_loader);
-            if (pixbuf)
-                g_object_ref(pixbuf);
-            g_object_unref(pixbuf_loader);
-        }
-        return pixbuf;
-    }
-}
-
 class GtkInstanceImage : public GtkInstanceWidget, public virtual weld::Image
 {
 private:
@@ -3348,9 +3364,7 @@ public:
 
     virtual void set_from_icon_name(const OUString& rIconName) override
     {
-        OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
-        OUString sUILang = Application::GetSettings().GetUILanguageTag().getBcp47();
-        GdkPixbuf* pixbuf = load_icon_by_name(rIconName, sIconTheme, sUILang);
+        GdkPixbuf* pixbuf = load_icon_by_name(rIconName);
         if (!pixbuf)
             return;
         gtk_image_set_from_pixbuf(m_pImage, pixbuf);
