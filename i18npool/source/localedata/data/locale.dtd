@@ -342,7 +342,9 @@
  -->
 
 <!ELEMENT MonthsOfYear (Month*)>
-<!-- All Month elements of a Calendar must be given if the RefLocale mechanism is not used! -->
+<!-- Nominative month names.
+     All Month elements of a Calendar must be given if the RefLocale mechanism is not used!
+ -->
 <!ATTLIST MonthsOfYear %RefLocale;>
 <!-- Sequence of months is important, MUST start with the first month of a
      year, e.g. January in a Gregorian calendar.
@@ -351,8 +353,9 @@
 <!ELEMENT GenitiveMonths (Month*)>
 <!-- Possessive genitive case month names, for example in Slavic locales. The
      element is optional, but if present all Month elements of a Calendar must
-     be given if the RefLocale mechanism is not used! If not present,
-     MonthsOfYear names will be used. -->
+     be given if the RefLocale mechanism is not used! If not specified,
+     the MonthsOfYear names will be used in the context of the number
+     formatter's genitive case. -->
 <!ATTLIST GenitiveMonths %RefLocale;>
 <!-- Sequence of months is important, MUST start with the first month of a
      year, e.g. January in a Gregorian calendar.
@@ -361,11 +364,39 @@
 <!ELEMENT PartitiveMonths (Month*)>
 <!-- Partitive case month names, for example in Finnish locales. The
      element is optional, but if present all Month elements of a Calendar must
-     be given if the RefLocale mechanism is not used! If not present,
-     GenitiveMonths names will be used. -->
+     be given if the RefLocale mechanism is not used! If not specified,
+     GenitiveMonths names will be used, or if those are not specified then
+     MonthsOfYear, in the context of the number formatter's partitive case. -->
 <!ATTLIST PartitiveMonths %RefLocale;>
 <!-- Sequence of months is important, MUST start with the first month of a
      year, e.g. January in a Gregorian calendar.
+ -->
+
+<!-- Rules for use of nominative / genitive / partitive case month names in
+     number formatter when encountering MMM or MMMM:
+
+     * MMM or MMMM immediately preceded or followed by a literal character
+       other than space ⇒ nominative month name (noun), for Excel and backwards
+       compatibility such as Finnish MMMM"ta"
+     * no day of month (D or DD) present in format code => nominative name
+     * day of month (D or DD) after MMM or MMMM => genitive name
+       * no genitive names defined => nominative name
+     * day of month (D or DD) before MMM or MMMM => partitive name
+       * no partitive names defined => genitive name
+         * no genitive names defined => nominative name
+
+     NOTE:
+
+     If only <MonthsOfYear> and <PartitiveMonths> are specified but not
+     <GenitiveMonths>, then for MMM(M) D(D) formats the <MonthsOfYear>
+     nominative name is displayed. Only for D(D) MMM(M) formats the
+     <PartitiveMonths> name is displayed.
+
+     If only for MMM(M) D(D) formats the <GenitiveMonths> are to be displayed
+     but nominative names for D(D) MMM(M), then specify <PartitiveMonths>
+     identical to <MonthsOfYear>, do not omit it as otherwise it would inherit
+     from <GenitiveMonths> again.
+
  -->
 
 <!ELEMENT Month (MonthID, DefaultAbbrvName, DefaultFullName, DefaultNarrowName*)>
