@@ -283,8 +283,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
     {
         if ( bErase )
             Erase();
-        // Yeah, so trying to re-use a VirtualDevice but this time using a
-        // pre-allocated buffer won't work. Big deal.
+        SAL_WARN( "vcl.virdev", "Trying to re-use a VirtualDevice but this time using a pre-allocated buffer");
         return true;
     }
 
