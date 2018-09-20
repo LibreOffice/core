@@ -2521,6 +2521,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="SetMinimalRowHeightD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SetMinimalRowHeight</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="SetOptimalRowHeightD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -2545,6 +2552,13 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SetColumnWidth</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="SetMinimalColumnWidthD">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:SetMinimalColumnWidth</property>
       </object>
     </child>
     <child>

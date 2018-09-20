@@ -2298,6 +2298,14 @@
           <value xml:lang="en-US">~First Paragraph</value>
         </prop>
       </node>
+      <node oor:name=".uno:SetMinimalColumnWidth" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Minimize Column Width</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:DistributeColumns" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Distribute Columns Evenly</value>
@@ -2309,6 +2317,14 @@
       <node oor:name=".uno:IncrementIndentValue" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Increment Indent Value</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:SetMinimalRowHeight" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Minimize Row Height</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:DistributeRows" oor:op="replace">

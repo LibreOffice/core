@@ -772,6 +772,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                         break;
                 }
             break;
+        case SID_TABLE_MINIMAL_COLUMN_WIDTH:
         case FN_TABLE_ADJUST_CELLS:
         case FN_TABLE_BALANCE_CELLS:
         {
@@ -784,6 +785,13 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 }
                 rSh.AdjustCellWidth(bBalance);
             }
+            bCallDone = true;
+            break;
+        }
+        case SID_TABLE_MINIMAL_ROW_HEIGHT:
+        {
+            const SwFormatFrameSize aSz;
+            rSh.SetRowHeight( aSz );
             bCallDone = true;
             break;
         }
@@ -1221,9 +1229,10 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 if ( !rSh.IsTableMode() )
                     rSet.DisableItem(FN_TABLE_MERGE_CELLS);
                 break;
+            case SID_TABLE_MINIMAL_COLUMN_WIDTH:
             case FN_TABLE_ADJUST_CELLS:
                 if ( !rSh.IsAdjustCellWidthAllowed() )
-                    rSet.DisableItem(FN_TABLE_ADJUST_CELLS);
+                    rSet.DisableItem(nSlot);
                 break;
 
             case FN_TABLE_BALANCE_CELLS:
@@ -1257,6 +1266,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 }
                 break;
 
+            case SID_TABLE_MINIMAL_ROW_HEIGHT:
             case FN_TABLE_OPTIMAL_HEIGHT:
             {
                 // Disable if auto height already is enabled.
