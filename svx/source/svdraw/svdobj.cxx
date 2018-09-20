@@ -1194,14 +1194,8 @@ void SdrObject::AddToHdlList(SdrHdlList& rHdlList) const
     }
 }
 
-sal_uInt32 SdrObject::GetPlusHdlCount(const SdrHdl& /*rHdl*/) const
+void SdrObject::AddToPlusHdlList(SdrHdlList&, SdrHdl&) const
 {
-    return 0L;
-}
-
-SdrHdl* SdrObject::GetPlusHdl(const SdrHdl& /*rHdl*/, sal_uInt32 /*nPlNum*/) const
-{
-    return nullptr;
 }
 
 void SdrObject::addCropHandles(SdrHdlList& /*rTarget*/) const
