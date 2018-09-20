@@ -2400,7 +2400,7 @@ void SwBaseShell::GetBorderState(SfxItemSet &rSet)
 void SwBaseShell::ExecDlg(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
-    vcl::Window& rMDI = GetView().GetViewFrame()->GetWindow();
+    weld::Window* pMDI = GetView().GetViewFrame()->GetWindow().GetFrameWeld();
     // So that from the basic no dialogues for the background views are called:
     bool bBackground = (&GetView() != GetActiveView());
     const SfxPoolItem* pItem = nullptr;
@@ -2417,7 +2417,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
         case FN_FORMAT_TITLEPAGE_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateTitlePageDlg(rMDI.GetFrameWeld()));
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateTitlePageDlg(pMDI));
             pDlg->Execute();
         }
         break;
@@ -2467,7 +2467,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 ::PrepareBoxInfo( aSet, rSh );
                 rSh.GetTabBorders( aSet );
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                pDlg.disposeAndReset(pFact->CreateSwBorderDlg(rMDI.GetFrameWeld(), aSet, SwBorderModes::TABLE));
+                pDlg.disposeAndReset(pFact->CreateSwBorderDlg(pMDI, aSet, SwBorderModes::TABLE));
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetTabBorders( *pDlg->GetOutputItemSet() );
@@ -2481,7 +2481,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 aSet.Put( aMgr.GetAttrSet() );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                pDlg.disposeAndReset(pFact->CreateSwBorderDlg(rMDI.GetFrameWeld(), aSet, SwBorderModes::FRAME));
+                pDlg.disposeAndReset(pFact->CreateSwBorderDlg(pMDI, aSet, SwBorderModes::FRAME));
                 if ( pDlg->Execute() == RET_OK )
                 {
                     aMgr.SetAttrSet( *pDlg->GetOutputItemSet() );
@@ -2496,7 +2496,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 ::PrepareBoxInfo( aSet, rSh );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                pDlg.disposeAndReset(pFact->CreateSwBorderDlg(rMDI.GetFrameWeld(), aSet, SwBorderModes::PARA));
+                pDlg.disposeAndReset(pFact->CreateSwBorderDlg(pMDI, aSet, SwBorderModes::PARA));
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetAttrSet( *pDlg->GetOutputItemSet() );
@@ -2524,7 +2524,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 // Get background attributes of the table and put it in the set
                 SvxBrushItem aBrush(RES_BACKGROUND);
                 rSh.GetBoxBackground( aBrush );
-                pDlg.disposeAndReset(pFact->CreateSwBackgroundDialog(&rMDI, aSet));
+                pDlg.disposeAndReset(pFact->CreateSwBackgroundDialog(pMDI, aSet));
                 aSet.Put( aBrush );
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2538,7 +2538,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
                 rSh.GetFlyFrameAttr( aSet );
 
-                pDlg.disposeAndReset(pFact->CreateSwBackgroundDialog(&rMDI, aSet));
+                pDlg.disposeAndReset(pFact->CreateSwBackgroundDialog(pMDI, aSet));
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetFlyFrameAttr(const_cast<SfxItemSet &>(*pDlg->GetOutputItemSet()) );
@@ -2550,7 +2550,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 // Set border attributes Umrandungsattribute with the shell quite normal.
                 rSh.GetCurAttr( aSet );
 
-                pDlg.disposeAndReset(pFact->CreateSwBackgroundDialog(&rMDI, aSet));
+                pDlg.disposeAndReset(pFact->CreateSwBackgroundDialog(pMDI, aSet));
                 if ( pDlg->Execute() == RET_OK )
                 {
                     rSh.SetAttrSet( *pDlg->GetOutputItemSet() );

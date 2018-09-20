@@ -22,13 +22,10 @@
 
 #include <sfx2/basedlgs.hxx>
 
-namespace vcl { class Window; }
-class SfxItemSet;
-
-class SwBackgroundDlg : public SfxSingleTabDialog
+class SwBackgroundDlg : public SfxSingleTabDialogController
 {
 public:
-    SwBackgroundDlg(vcl::Window* pParent, const SfxItemSet& rSet);
+    SwBackgroundDlg(weld::Window* pParent, const SfxItemSet& rSet);
 };
 
 #endif

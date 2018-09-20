@@ -176,7 +176,9 @@ BackgroundPreviewImpl::BackgroundPreviewImpl()
 void BackgroundPreviewImpl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     CustomWidgetController::SetDrawingArea(pDrawingArea);
-    aDrawRect = tools::Rectangle(Point(0,0), GetOutputSizePixel());
+    Size aSize(pDrawingArea->get_ref_device().LogicToPixel(Size(300, 77)));
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+    aDrawRect = tools::Rectangle(Point(0,0), aSize);
     Invalidate(aDrawRect);
 }
 
