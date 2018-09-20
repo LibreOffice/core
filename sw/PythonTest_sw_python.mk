@@ -24,6 +24,7 @@ $(eval $(call gb_PythonTest_add_modules,sw_python,$(SRCDIR)/sw/qa/python,\
 	check_indexed_property_values \
 	check_styles \
 	check_table \
+	check_xnamedgraph \
 	get_expression \
 	set_expression \
 	text_portion_enumeration_test \
