@@ -733,4 +733,112 @@ void SfxSingleTabDialog::SetTabPage(SfxTabPage* pTabPage)
     }
 }
 
+SfxSingleTabDialogController::SfxSingleTabDialogController(weld::Window *pParent, const SfxItemSet& rSet,
+    const OUString& rUIXMLDescription, const OString& rID)
+    : GenericDialogController(pParent, rUIXMLDescription, rID)
+    , m_pInputSet(&rSet)
+    , m_xContainer(m_xDialog->weld_content_area())
+    , m_xOKBtn(m_xBuilder->weld_button("ok"))
+    , m_xHelpBtn(m_xBuilder->weld_button("help"))
+{
+    m_xOKBtn->connect_clicked(LINK(this, SfxSingleTabDialogController, OKHdl_Impl));
+}
+
+SfxSingleTabDialogController::~SfxSingleTabDialogController()
+{
+    m_xSfxPage.disposeAndClear();
+}
+
+/*  [Description]
+
+    Insert a (new) TabPage; an existing page is deleted.
+    The passed on page is initialized with the initially given Itemset
+    through calling Reset().
+*/
+void SfxSingleTabDialogController::SetTabPage(SfxTabPage* pTabPage)
+{
+    m_xSfxPage.disposeAndClear();
+    m_xSfxPage = pTabPage;
+
+    if (m_xSfxPage)
+    {
+        // First obtain the user data, only then Reset()
+        OUString sConfigId = OStringToOUString(m_xSfxPage->GetConfigId(), RTL_TEXTENCODING_UTF8);
+        SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
+        Any aUserItem = aPageOpt.GetUserItem( USERITEM_NAME );
+        OUString sUserData;
+        aUserItem >>= sUserData;
+        m_xSfxPage->SetUserData(sUserData);
+        m_xSfxPage->Reset(GetInputItemSet());
+//TODO        m_xSfxPage->Show();
+
+        m_xHelpBtn->show(Help::IsContextHelpEnabled());
+
+        // Set TabPage text in the Dialog if there is any
+        OUString sTitle(m_xSfxPage->GetText());
+        if (!sTitle.isEmpty())
+            m_xDialog->set_title(sTitle);
+
+        // Dialog receives the HelpId of TabPage if there is any
+        OString sHelpId(m_xSfxPage->GetHelpId());
+        if (!sHelpId.isEmpty())
+            m_xDialog->set_help_id(sHelpId);
+    }
+}
+
+/*  [Description]
+
+    Ok_Handler; FillItemSet() is called for setting of Page.
+*/
+IMPL_LINK_NOARG(SfxSingleTabDialogController, OKHdl_Impl, weld::Button&, void)
+{
+    const SfxItemSet* pInputSet = GetInputItemSet();
+    if (!pInputSet)
+    {
+        // TabPage without ItemSet
+        m_xDialog->response(RET_OK);
+        return;
+    }
+
+    if (!GetOutputItemSet())
+    {
+        CreateOutputItemSet(*pInputSet);
+    }
+
+    bool bModified = false;
+
+    if (m_xSfxPage->HasExchangeSupport())
+    {
+        DeactivateRC nRet = m_xSfxPage->DeactivatePage(m_xOutputSet.get());
+        if (nRet != DeactivateRC::LeavePage)
+            return;
+        else
+            bModified = m_xOutputSet->Count() > 0;
+    }
+    else
+        bModified = m_xSfxPage->FillItemSet(m_xOutputSet.get());
+
+    if (bModified)
+    {
+        // Save user data in IniManager.
+        m_xSfxPage->FillUserData();
+        OUString sData(m_xSfxPage->GetUserData());
+
+        OUString sConfigId = OStringToOUString(m_xSfxPage->GetConfigId(),
+            RTL_TEXTENCODING_UTF8);
+        SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
+        aPageOpt.SetUserItem( USERITEM_NAME, makeAny( sData ) );
+        m_xDialog->response(RET_OK);
+    }
+    else
+        m_xDialog->response(RET_CANCEL);
+}
+
+void SfxSingleTabDialogController::CreateOutputItemSet(const SfxItemSet& rSet)
+{
+    assert(!m_xOutputSet && "Double creation of OutputSet!");
+    m_xOutputSet.reset(new SfxItemSet(rSet));
+    m_xOutputSet->ClearItem();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

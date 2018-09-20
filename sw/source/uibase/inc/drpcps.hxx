@@ -36,10 +36,10 @@
 
 class SwWrtShell;
 
-class SwDropCapsDlg : public SfxSingleTabDialog
+class SwDropCapsDlg : public SfxSingleTabDialogController
 {
 public:
-    SwDropCapsDlg(vcl::Window *pParent, const SfxItemSet &rSet );
+    SwDropCapsDlg(weld::Window *pParent, const SfxItemSet &rSet);
 };
 
 class SwDropCapsPage;
