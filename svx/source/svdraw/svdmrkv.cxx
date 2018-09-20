@@ -918,18 +918,17 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                         pHdl->SetSelected(bSelected);
                         if (mbPlusHdlAlways || bSelected)
                         {
-                            sal_uInt32 nPlusHdlCnt=pObj->GetPlusHdlCount(*pHdl);
+                            SdrHdlList plusList(nullptr);
+                            pObj->AddToPlusHdlList(plusList, *pHdl);
+                            sal_uInt32 nPlusHdlCnt=plusList.GetHdlCount();
                             for (sal_uInt32 nPlusNum=0; nPlusNum<nPlusHdlCnt; nPlusNum++)
                             {
-                                SdrHdl* pPlusHdl=pObj->GetPlusHdl(*pHdl,nPlusNum);
-                                if (pPlusHdl!=nullptr)
-                                {
-                                    pPlusHdl->SetObj(pObj);
-                                    pPlusHdl->SetPageView(pPV);
-                                    pPlusHdl->SetPlusHdl(true);
-                                    maHdlList.AddHdl(pPlusHdl);
-                                }
+                                SdrHdl* pPlusHdl=plusList.GetHdl(nPlusNum);
+                                pPlusHdl->SetObj(pObj);
+                                pPlusHdl->SetPageView(pPV);
+                                pPlusHdl->SetPlusHdl(true);
                             }
+                            plusList.MoveTo(maHdlList);
                         }
                     }
                 }

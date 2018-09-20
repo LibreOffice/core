@@ -77,8 +77,7 @@ public:
 
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
     virtual sal_uInt32 GetHdlCount() const override;
-    virtual sal_uInt32 GetPlusHdlCount(const SdrHdl& rHdl) const override;
-    virtual SdrHdl* GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlNum) const override;
+    virtual void AddToPlusHdlList(SdrHdlList& rHdlList, SdrHdl& rHdl) const override;
     virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
 
     // special drag methods

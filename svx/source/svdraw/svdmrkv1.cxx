@@ -152,18 +152,17 @@ bool SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark)
     {
         if (!bUnmark)
         {
-            sal_uInt32 nCount(pObj->GetPlusHdlCount(*pHdl));
+            SdrHdlList plusList(nullptr);
+            pObj->AddToPlusHdlList(plusList, *pHdl);
+            sal_uInt32 nCount(plusList.GetHdlCount());
             for (sal_uInt32 i=0; i<nCount; i++)
             {
-                SdrHdl* pPlusHdl=pObj->GetPlusHdl(*pHdl,i);
-                if (pPlusHdl!=nullptr)
-                {
-                    pPlusHdl->SetObj(pObj);
-                    pPlusHdl->SetPageView(pMark->GetPageView());
-                    pPlusHdl->SetPlusHdl(true);
-                    maHdlList.AddHdl(pPlusHdl);
-                }
+                SdrHdl* pPlusHdl=plusList.GetHdl(i);
+                pPlusHdl->SetObj(pObj);
+                pPlusHdl->SetPageView(pMark->GetPageView());
+                pPlusHdl->SetPlusHdl(true);
             }
+            plusList.MoveTo(maHdlList);
         }
         else
         {
