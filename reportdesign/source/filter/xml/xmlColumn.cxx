@@ -28,6 +28,7 @@
 #include "xmlStyleImport.hxx"
 #include "xmlTable.hxx"
 #include <comphelper/genericpropertyset.hxx>
+#include <comphelper/propertysetinfo.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <strings.hxx>
 

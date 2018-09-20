@@ -18,6 +18,7 @@
  */
 
 #include <listenercontainers.hxx>
+#include <osl/diagnose.h>
 
 
 namespace frm

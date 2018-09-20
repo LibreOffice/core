@@ -106,3 +106,52 @@ blacklist:
     include/ucbhelper/simpleinteractionrequest.hxx:
     # Needed for template
     - o3tl/typed_flags_set.hxx
+    include/comphelper/accessiblekeybindinghelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleKeyBinding.hpp
+    include/comphelper/accessiblecomponenthelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleExtendedComponent.hpp
+    include/comphelper/accessiblecontexthelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleContext.hpp
+    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
+    include/comphelper/accessibleselectionhelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleSelection.hpp
+    include/comphelper/accessibletexthelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleText.hpp
+    include/comphelper/accessiblewrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleContext.hpp
+    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
+    - com/sun/star/accessibility/XAccessibleEventListener.hpp
+    include/comphelper/accimplaccess.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XUnoTunnel.hpp
+    include/comphelper/attributelist.hxx:
+    # base class has to be a complete type
+    - com/sun/star/util/XCloneable.hpp
+    - com/sun/star/xml/sax/XAttributeList.hpp
+    include/comphelper/componentmodule.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XSingleServiceFactory.hpp
+    include/comphelper/configurationhelper.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx
+    # Needed for implicit destructor
+    - com/sun/star/uno/Any.hxx
+    include/comphelper/documentconstants.hxx:
+   # Needed for template
+    - o3tl/typed_flags_set.hxx
+    include/comphelper/docpasswordrequest.hxx:
+    # base class has to be a complete type
+    - com/sun/star/task/XInteractionRequest.hpp
+    include/comphelper/interaction.hxx:
+    # base class has to be a complete type
+    - com/sun/star/task/XInteractionAbort.hpp
+    - com/sun/star/task/XInteractionApprove.hpp
+    - com/sun/star/task/XInteractionDisapprove.hpp
+    - com/sun/star/task/XInteractionRequest.hpp
+    - com/sun/star/task/XInteractionRetry.hpp

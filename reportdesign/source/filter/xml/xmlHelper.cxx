@@ -23,6 +23,7 @@
 #include <xmloff/controlpropertyhdl.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/genericpropertyset.hxx>
+#include <comphelper/propertysetinfo.hxx>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

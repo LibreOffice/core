@@ -30,17 +30,17 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <cppuhelper/compbase.hxx>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/interfacecontainer.h>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ref.hxx>
 
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace comphelper
 {

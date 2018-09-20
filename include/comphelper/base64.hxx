@@ -25,7 +25,8 @@
 #include <sal/types.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
-#include <com/sun/star/uno/Sequence.h>
+
+namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
 
 namespace comphelper {
 

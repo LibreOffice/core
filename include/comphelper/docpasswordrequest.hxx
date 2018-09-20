@@ -22,10 +22,11 @@
 
 #include <comphelper/comphelperdllapi.h>
 #include <com/sun/star/task/PasswordRequestMode.hpp>
-#include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
+
+namespace com { namespace sun { namespace star { namespace task { class XInteractionAbort; } } } }
 
 namespace comphelper {
 

@@ -63,6 +63,7 @@
 #include <unotools/syslocale.hxx>
 #include <svx/swframetypes.hxx>
 #include <svx/svxids.hrc>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 using namespace com::sun::star;
 

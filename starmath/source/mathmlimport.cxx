@@ -38,6 +38,7 @@ one go*/
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/propertysetinfo.hxx>
 #include <o3tl/make_unique.hxx>
 #include <rtl/character.hxx>
 #include <sal/log.hxx>

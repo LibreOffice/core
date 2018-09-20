@@ -23,12 +23,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/comphelperdllapi.h>
-#include <memory>
-
-namespace com { namespace sun { namespace star { namespace accessibility {
-    class XAccessible;
-    class XAccessibleContext;
-}}}}
 
 namespace comphelper
 {

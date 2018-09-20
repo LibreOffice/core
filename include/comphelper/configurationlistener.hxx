@@ -10,18 +10,17 @@
 #ifndef INCLUDED_COMPHELPER_CONFIGURATIONLISTENER_HXX
 #define INCLUDED_COMPHELPER_CONFIGURATIONLISTENER_HXX
 
-#include <algorithm>
 #include <vector>
-#include <iterator>
 #include <comphelper/comphelperdllapi.h>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
+
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyChangeEvent; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace comphelper {
 

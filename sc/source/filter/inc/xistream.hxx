@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XISTREAM_HXX
 
 #include <comphelper/docpasswordhelper.hxx>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <filter/msfilter/mscodec.hxx>
 #include <tools/stream.hxx>
 #include <memory>

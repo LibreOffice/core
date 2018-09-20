@@ -20,17 +20,14 @@
 #ifndef INCLUDED_COMPHELPER_CONFIGURATIONHELPER_HXX
 #define INCLUDED_COMPHELPER_CONFIGURATIONHELPER_HXX
 
-#include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/util/XChangesBatch.hpp>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Any.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
 
 namespace comphelper
 {

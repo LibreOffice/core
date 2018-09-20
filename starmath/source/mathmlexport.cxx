@@ -48,6 +48,7 @@
 #include <xmloff/attrlist.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/propertysetinfo.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 

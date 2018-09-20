@@ -21,7 +21,7 @@
 #define INCLUDED_COMPHELPER_COMPONENTBASE_HXX
 
 #include <comphelper/comphelperdllapi.h>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/interfacecontainer.h>
 
 
 namespace comphelper

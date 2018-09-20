@@ -19,7 +19,6 @@
 #ifndef INCLUDED_COMPHELPER_DOCUMENTCONSTANTS_HXX
 #define INCLUDED_COMPHELPER_DOCUMENTCONSTANTS_HXX
 
-#include <rtl/ustring.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 // formats of SO6/7

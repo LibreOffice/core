@@ -22,6 +22,7 @@
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/i18n/Boundary.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <extended/textwindowaccessibility.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>

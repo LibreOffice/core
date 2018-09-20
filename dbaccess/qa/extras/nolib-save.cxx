@@ -19,6 +19,7 @@
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>

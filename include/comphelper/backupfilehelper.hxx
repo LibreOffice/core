@@ -14,9 +14,6 @@
 
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
-#include <osl/file.hxx>
-#include <memory>
 #include <set>
 #include <vector>
 

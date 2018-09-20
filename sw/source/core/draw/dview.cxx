@@ -26,6 +26,7 @@
 #include <tools/globname.hxx>
 #include <editeng/outliner.hxx>
 #include <com/sun/star/embed/EmbedMisc.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 #include <swtypes.hxx>
 #include <pagefrm.hxx>

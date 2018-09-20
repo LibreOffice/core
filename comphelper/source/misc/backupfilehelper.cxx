@@ -11,6 +11,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
+#include <osl/file.hxx>
 #include <comphelper/backupfilehelper.hxx>
 #include <rtl/crc.h>
 #include <algorithm>

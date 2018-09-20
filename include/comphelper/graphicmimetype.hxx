@@ -14,9 +14,34 @@
 #include <rtl/ustring.hxx>
 #include <vcl/salctype.hxx>
 
-#include <com/sun/star/graphic/XGraphic.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Reference.h>
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace graphic
+{
+class XGraphic;
+}
+}
+}
+}
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace io
+{
+class XInputStream;
+}
+}
+}
+}
 
 namespace comphelper
 {

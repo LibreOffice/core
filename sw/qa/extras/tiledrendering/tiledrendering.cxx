@@ -11,6 +11,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/frame/DispatchResultState.hpp>
+#include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <swmodeltestbase.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/dispatchcommand.hxx>

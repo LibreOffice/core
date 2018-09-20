@@ -22,6 +22,7 @@
 #include <editeng/editview.hxx>
 #include <svx/svxids.hrc>
 #include <editeng/scriptspaceitem.hxx>
+#include <osl/diagnose.h>
 
 
 namespace frm

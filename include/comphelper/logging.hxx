@@ -21,13 +21,13 @@
 #define INCLUDED_COMPHELPER_LOGGING_HXX
 
 #include <comphelper/comphelperdllapi.h>
-
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/logging/XLogHandler.hpp>
-#include <com/sun/star/logging/LogLevel.hpp>
+#include <rtl/ustring.hxx>
 
 #include <boost/optional.hpp>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace comphelper
 {

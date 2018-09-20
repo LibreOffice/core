@@ -13,6 +13,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <comphelper/genericpropertyset.hxx>
+#include <comphelper/propertysetinfo.hxx>
 
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlmetai.hxx>

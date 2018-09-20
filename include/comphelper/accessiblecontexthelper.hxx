@@ -24,7 +24,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/solarmutex.hxx>
 #include <memory>

@@ -28,8 +28,6 @@
 
 #include <osl/mutex.hxx>
 
-#include <rtl/string.hxx>
-#include <rtl/instance.hxx>
 #include <memory>
 
 

@@ -18,6 +18,7 @@
  */
 
 #include "featuredispatcher.hxx"
+#include <osl/diagnose.h>
 
 
 namespace frm

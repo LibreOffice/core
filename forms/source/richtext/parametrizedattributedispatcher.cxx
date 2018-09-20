@@ -21,6 +21,7 @@
 #include <editeng/editview.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
+#include <osl/diagnose.h>
 
 #include <svx/svxids.hrc>
 #include <sfx2/sfxuno.hxx>

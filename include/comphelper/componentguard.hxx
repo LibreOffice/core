@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/interfacecontainer.h>
 
 
 namespace comphelper
