@@ -1070,6 +1070,11 @@ public:
             m_xButton->SetModeImage(Image());
     }
 
+    virtual void set_from_icon_name(const OUString& rIconName) override
+    {
+        m_xButton->SetModeImage(::Image(BitmapEx(rIconName)));
+    }
+
     virtual OUString get_label() const override
     {
         return m_xButton->GetText();
