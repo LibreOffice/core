@@ -23,18 +23,18 @@
 #include <pattern.hxx>
 #include <strings.hrc>
 
-SwBackgroundDlg::SwBackgroundDlg(vcl::Window* pParent, const SfxItemSet& rSet)
-    : SfxSingleTabDialog(pParent, rSet)
+SwBackgroundDlg::SwBackgroundDlg(weld::Window* pParent, const SfxItemSet& rSet)
+    : SfxSingleTabDialogController(pParent, rSet)
 
 {
-    SetText(SwResId(STR_FRMUI_PATTERN));
+    m_xDialog->set_title(SwResId(STR_FRMUI_PATTERN));
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND );
     if ( fnCreatePage )
     {
-        SetTabPage((*fnCreatePage)(get_content_area(), &rSet));
+        TabPageParent pPageParent(get_content_area(), this);
+        SetTabPage((*fnCreatePage)(pPageParent, &rSet));
     }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
