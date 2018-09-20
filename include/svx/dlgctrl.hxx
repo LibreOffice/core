@@ -56,7 +56,6 @@ public:
         : SfxTabPage(pParent, rUIXMLDescription, rID, &rAttrSet)
     {
     }
-    virtual void PointChanged(vcl::Window* pWindow, RectPoint eRP) = 0;
     virtual void PointChanged(weld::DrawingArea* pArea, RectPoint eRP) = 0;
 };
 

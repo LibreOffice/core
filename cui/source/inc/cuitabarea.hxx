@@ -339,7 +339,6 @@ public:
     virtual void Reset( const SfxItemSet * ) override;
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
-    virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
     virtual void PointChanged( weld::DrawingArea* pWindow, RectPoint eRP ) override;
 
     void    SetColorList( XColorListRef const & pColorList ) { m_pColorList = pColorList; }
@@ -635,7 +634,6 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
-    virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
     virtual void PointChanged( weld::DrawingArea*, RectPoint eRP ) override;
 
     void    SetColorList( XColorListRef const & pColorList ) { m_pColorList = pColorList; }

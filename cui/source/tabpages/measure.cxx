@@ -584,11 +584,6 @@ VclPtr<SfxTabPage> SvxMeasurePage::Create(TabPageParent pParent,
     return VclPtr<SvxMeasurePage>::Create(pParent, *rAttrs);
 }
 
-void SvxMeasurePage::PointChanged( vcl::Window* pWindow, RectPoint /*eRP*/ )
-{
-    ChangeAttrHdl_Impl(pWindow);
-}
-
 void SvxMeasurePage::PointChanged(weld::DrawingArea* pDrawingArea, RectPoint /*eRP*/)
 {
     ChangeAttrHdl_Impl(pDrawingArea);
