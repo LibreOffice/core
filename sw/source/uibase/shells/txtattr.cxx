@@ -492,7 +492,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                             rSh.ReplaceDropText(static_cast<const SfxStringItem*>(pItem)->GetValue());
                     }
                     rSh.SetAttrSet(*pDlg->GetOutputItemSet());
-                    rSh.StartUndo( SwUndoId::END );
+                    rSh.EndUndo( SwUndoId::END );
                     rSh.EndAction();
                     rReq.Done(*pDlg->GetOutputItemSet());
                 }
