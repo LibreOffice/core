@@ -45,87 +45,17 @@ static SwGlossaryList* pGlossaryList = nullptr;
 
 namespace
 {
-
-enum CachedStringID
-{
-    OldGrfCat,
-    OldTabCat,
-    OldFrameCat,
-    OldDrwCat,
-    CurrGlosGroup,
-    CachedStrings
-};
-
-OUString StringCache[CachedStrings];
-
-const OUString& GetCachedString(CachedStringID id)
-{
-    return StringCache[id];
-}
-
-void SetCachedString(CachedStringID id, const OUString& sStr)
-{
-    StringCache[id] = sStr;
-}
-
-void ClearStringCache()
-{
-    for (auto & s : StringCache)
-    {
-        s.clear();
-    }
-}
-
-}
-
-const OUString& GetOldGrfCat()
-{
-    return GetCachedString(OldGrfCat);
-}
-
-void SetOldGrfCat(const OUString& sStr)
-{
-    SetCachedString(OldGrfCat, sStr);
-}
-
-const OUString& GetOldTabCat()
-{
-    return GetCachedString(OldTabCat);
-}
-
-void SetOldTabCat(const OUString& sStr)
-{
-    SetCachedString(OldTabCat, sStr);
-}
-
-const OUString& GetOldFrameCat()
-{
-    return GetCachedString(OldFrameCat);
-}
-
-void SetOldFrameCat(const OUString& sStr)
-{
-    SetCachedString(OldFrameCat, sStr);
-}
-
-const OUString& GetOldDrwCat()
-{
-    return GetCachedString(OldDrwCat);
-}
-
-void SetOldDrwCat(const OUString& sStr)
-{
-    SetCachedString(OldDrwCat, sStr);
+OUString CurrGlosGroup;
 }
 
 const OUString& GetCurrGlosGroup()
 {
-    return GetCachedString(CurrGlosGroup);
+    return CurrGlosGroup;
 }
 
 void SetCurrGlosGroup(const OUString& sStr)
 {
-    SetCachedString(CurrGlosGroup, sStr);
+    CurrGlosGroup = sStr;
 }
 
 namespace
@@ -149,7 +79,6 @@ void FinitUI()
 
     delete SwFieldType::s_pFieldNames;
 
-    ClearStringCache();
     delete pGlossaryList;
     delete pAuthFieldNameList;
     delete pAuthFieldTypeList;

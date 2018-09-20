@@ -2463,4 +2463,45 @@ void SwView::ExecuteScan( SfxRequest& rReq )
         m_pViewImpl->ExecuteScan(rReq) ;
 }
 
+const OUString& SwView::GetOldGrfCat()
+{
+    return GetCachedString(OldGrfCat);
+}
+
+void SwView::SetOldGrfCat(const OUString& sStr)
+{
+    SetCachedString(OldGrfCat, sStr);
+}
+
+const OUString& SwView::GetOldTabCat()
+{
+    return GetCachedString(OldTabCat);
+}
+
+void SwView::SetOldTabCat(const OUString& sStr)
+{
+    SetCachedString(OldTabCat, sStr);
+}
+
+const OUString& SwView::GetOldFrameCat()
+{
+    return GetCachedString(OldFrameCat);
+}
+
+void SwView::SetOldFrameCat(const OUString& sStr)
+{
+    SetCachedString(OldFrameCat, sStr);
+}
+
+const OUString& SwView::GetOldDrwCat()
+{
+    return GetCachedString(OldDrwCat);
+}
+
+void SwView::SetOldDrwCat(const OUString& sStr)
+{
+    SwView::SetCachedString(OldDrwCat, sStr);
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
