@@ -1070,9 +1070,9 @@ ScRangeList& ScDBDataContainerBase::GetDirtyTableColumnNames()
 ScDBCollection::NamedDBs::NamedDBs(ScDBCollection& rParent, ScDocument& rDoc) :
     ScDBDataContainerBase(rDoc), mrParent(rParent) {}
 
-ScDBCollection::NamedDBs::NamedDBs(const NamedDBs& r)
+ScDBCollection::NamedDBs::NamedDBs(const NamedDBs& r, ScDBCollection& rParent)
     : ScDBDataContainerBase(r.mrDoc)
-    , mrParent(r.mrParent)
+    , mrParent(rParent)
 {
     for (auto const& it : r.m_DBs)
     {
@@ -1286,7 +1286,7 @@ ScDBCollection::ScDBCollection(ScDocument* pDocument) :
     pDoc(pDocument), nEntryIndex(1), maNamedDBs(*this, *pDocument) {}
 
 ScDBCollection::ScDBCollection(const ScDBCollection& r) :
-    pDoc(r.pDoc), nEntryIndex(r.nEntryIndex), maNamedDBs(r.maNamedDBs), maAnonDBs(r.maAnonDBs) {}
+    pDoc(r.pDoc), nEntryIndex(r.nEntryIndex), maNamedDBs(r.maNamedDBs, *this), maAnonDBs(r.maAnonDBs) {}
 
 const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion ePortion) const
 {
