@@ -2609,7 +2609,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else
             {
-                mpDrawView->DistributeMarkedObjects();
+                mpDrawView->DistributeMarkedObjects(GetFrameWeld());
             }
             Cancel();
             rReq.Done ();

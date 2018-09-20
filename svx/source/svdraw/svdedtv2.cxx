@@ -762,7 +762,7 @@ struct ImpDistributeEntry
 
 typedef vector< ImpDistributeEntry*> ImpDistributeEntryList;
 
-void SdrEditView::DistributeMarkedObjects()
+void SdrEditView::DistributeMarkedObjects(weld::Window* pParent)
 {
     const size_t nMark(GetMarkedObjectCount());
 
@@ -771,7 +771,7 @@ void SdrEditView::DistributeMarkedObjects()
         SfxItemSet aNewAttr(mpModel->GetItemPool());
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxDistributeDialog> pDlg(pFact->CreateSvxDistributeDialog(aNewAttr));
+        ScopedVclPtr<AbstractSvxDistributeDialog> pDlg(pFact->CreateSvxDistributeDialog(pParent, aNewAttr));
 
         sal_uInt16 nResult = pDlg->Execute();
 

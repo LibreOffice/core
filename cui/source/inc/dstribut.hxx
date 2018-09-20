@@ -55,16 +55,15 @@ public:
     SvxDistributeVertical GetDistributeVer() const { return m_eDistributeVer; }
 };
 
-class SvxDistributeDialog : public SfxSingleTabDialog
+class SvxDistributeDialog : public SfxSingleTabDialogController
 {
     VclPtr<SvxDistributePage> mpPage;
 
 public:
-    SvxDistributeDialog(vcl::Window* pParent, const SfxItemSet& rAttr,
+    SvxDistributeDialog(weld::Window* pParent, const SfxItemSet& rAttr,
         SvxDistributeHorizontal eHor,
         SvxDistributeVertical eVer);
     virtual ~SvxDistributeDialog() override;
-    virtual void dispose() override;
 
     SvxDistributeHorizontal GetDistributeHor() const { return mpPage->GetDistributeHor(); }
     SvxDistributeVertical GetDistributeVer() const { return mpPage->GetDistributeVer(); }

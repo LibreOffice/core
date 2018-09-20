@@ -145,7 +145,14 @@ public:
 class SvxDistributeDialog;
 class AbstractSvxDistributeDialog_Impl: public AbstractSvxDistributeDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSvxDistributeDialog_Impl,SvxDistributeDialog)
+protected:
+    std::unique_ptr<SvxDistributeDialog> m_xDlg;
+public:
+    explicit AbstractSvxDistributeDialog_Impl(std::unique_ptr<SvxDistributeDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
 public:
     virtual SvxDistributeHorizontal GetDistributeHor() const override;
     virtual SvxDistributeVertical GetDistributeVer() const override;
@@ -671,7 +678,7 @@ public:
                                             const SdrView* pView,
                                             SvxAnchorIds nAnchorTypes = SvxAnchorIds::NONE) override;
     virtual VclPtr<AbstractSvxDistributeDialog>
-                                          CreateSvxDistributeDialog(const SfxItemSet& rAttr) override;
+                                          CreateSvxDistributeDialog(weld::Window* pParent, const SfxItemSet& rAttr) override;
     virtual VclPtr<SfxAbstractInsertObjectDialog>
                                            CreateInsertObjectDialog(weld::Window* pParent, const OUString& rCommmand,
                                             const css::uno::Reference < css::embed::XStorage >& xStor,
