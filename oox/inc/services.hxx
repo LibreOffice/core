@@ -23,13 +23,6 @@
 #include <sal/config.h>
 
 namespace oox {
-    namespace ppt {
-        extern OUString QuickDiagrammingLayout_getImplementationName();
-        extern css::uno::Sequence< OUString > QuickDiagrammingLayout_getSupportedServiceNames();
-        /// @throws css::uno::Exception
-        extern css::uno::Reference< css::uno::XInterface > QuickDiagrammingLayout_createInstance(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
-    }
     namespace shape {
         extern OUString ShapeContextHandler_getImplementationName();
         extern css::uno::Sequence< OUString > ShapeContextHandler_getSupportedServiceNames();

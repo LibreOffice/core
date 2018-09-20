@@ -43,23 +43,6 @@ using namespace ::oox::drawingml;
 
 namespace oox { namespace ppt {
 
-OUString QuickDiagrammingLayout_getImplementationName()
-{
-    return OUString( "com.sun.star.comp.Impress.oox.QuickDiagrammingLayout" );
-}
-
-uno::Sequence< OUString > QuickDiagrammingLayout_getSupportedServiceNames()
-{
-    const OUString aServiceName = "com.sun.star.comp.ooxpptx.dgm.layout";
-    const Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-uno::Reference< uno::XInterface > QuickDiagrammingLayout_createInstance( const Reference< XComponentContext >& rxContext )
-{
-    return static_cast<cppu::OWeakObject*>(new QuickDiagrammingLayout( rxContext ));
-}
-
 QuickDiagrammingLayout::QuickDiagrammingLayout( const Reference< XComponentContext >& rxContext )
     : XmlFilterBase( rxContext ),
     mpThemePtr(new drawingml::Theme())
@@ -159,7 +142,7 @@ const oox::drawingml::table::TableStyleListPtr QuickDiagrammingLayout::getTableS
 
 OUString QuickDiagrammingLayout::getImplementationName()
 {
-    return QuickDiagrammingLayout_getImplementationName();
+    return OUString( "com.sun.star.comp.Impress.oox.QuickDiagrammingLayout" );
 }
 
 ::oox::ole::VbaProject* QuickDiagrammingLayout::implCreateVbaProject() const
@@ -168,5 +151,12 @@ OUString QuickDiagrammingLayout::getImplementationName()
 }
 
 }}
+
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_oox_ppt_QuickDiagrammingLayout_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(new oox::ppt::QuickDiagrammingLayout(pCtx));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
