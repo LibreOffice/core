@@ -21,20 +21,15 @@
 
 #include <sal/config.h>
 
-#include <cstddef>
-#include <functional>
 #include <vector>
-#include <utility>
 
-#include <osl/diagnose.h>
-#include <osl/mutex.hxx>
-#include <rtl/alloc.h>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/comphelperdllapi.h>
+
+namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
+namespace osl { class Mutex; }
 
 /** */ //for docpp
 namespace comphelper

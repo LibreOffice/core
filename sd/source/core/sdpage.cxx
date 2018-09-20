@@ -52,6 +52,7 @@
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XTimeContainer.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNamedNodeMap.hpp>

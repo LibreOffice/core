@@ -21,6 +21,7 @@
 #include <connectivity/CommonTools.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/logging/LogLevel.hpp>
 #include <java/tools.hxx>
 #include <java/sql/SQLException.hxx>
 #include <osl/thread.h>

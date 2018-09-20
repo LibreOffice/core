@@ -20,10 +20,11 @@
 #ifndef INCLUDED_COMPHELPER_BASICIO_HXX
 #define INCLUDED_COMPHELPER_BASICIO_HXX
 
-#include <com/sun/star/io/XPersistObject.hpp>
-#include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/io/XObjectOutputStream.hpp>
+#include <com/sun/star/io/XObjectInputStream.hpp>
 #include <comphelper/comphelperdllapi.h>
 
+namespace com { namespace sun { namespace star { namespace awt { struct FontDescriptor; } } } }
 
 namespace comphelper
 {

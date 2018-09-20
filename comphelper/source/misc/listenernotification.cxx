@@ -19,7 +19,9 @@
 
 #include <comphelper/listenernotification.hxx>
 
+#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <osl/diagnose.h>
 
 
 namespace comphelper

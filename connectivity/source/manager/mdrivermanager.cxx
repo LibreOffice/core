@@ -24,6 +24,7 @@
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/logging/LogLevel.hpp>
 
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>

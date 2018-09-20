@@ -79,6 +79,7 @@
 #include <o3tl/make_unique.hxx>
 #include <com/sun/star/i18n/Boundary.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <memory>
 
 

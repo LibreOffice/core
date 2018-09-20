@@ -29,6 +29,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/genericpropertyset.hxx>
+#include <comphelper/propertysetinfo.hxx>
 #include <vcl/errinf.hxx>
 #include <o3tl/any.hxx>
 #include <sal/log.hxx>

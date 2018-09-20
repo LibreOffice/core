@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include <com/sun/star/document/EventObject.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <osl/mutex.hxx>

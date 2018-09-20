@@ -22,12 +22,13 @@
 
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
-#include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/comphelperdllapi.h>
 
+namespace com { namespace sun { namespace star { namespace i18n { class XBreakIterator; } } } }
+namespace com { namespace sun { namespace star { namespace i18n { class XCharacterClassification; } } } }
+namespace com { namespace sun { namespace star { namespace i18n { struct Boundary; } } } }
 
 namespace comphelper
 {
