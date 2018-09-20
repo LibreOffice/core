@@ -2251,11 +2251,9 @@ size_t SdrHdlList::GetHdlNum(const SdrHdl* pHdl) const
 
 void SdrHdlList::AddHdl(SdrHdl* pHdl)
 {
-    if (pHdl!=nullptr)
-    {
-        aList.push_back(pHdl);
-        pHdl->SetHdlList(this);
-    }
+    assert(pHdl);
+    aList.push_back(pHdl);
+    pHdl->SetHdlList(this);
 }
 
 SdrHdl* SdrHdlList::IsHdlListHit(const Point& rPnt) const
@@ -2283,6 +2281,12 @@ SdrHdl* SdrHdlList::GetHdl(SdrHdlKind eKind1) const
             pRet=pHdl;
     }
     return pRet;
+}
+
+void SdrHdlList::MoveTo(SdrHdlList& rOther)
+{
+    rOther.aList.insert(rOther.aList.end(), aList.begin(), aList.end());
+    aList.clear();
 }
 
 SdrCropHdl::SdrCropHdl(

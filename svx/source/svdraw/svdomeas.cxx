@@ -751,27 +751,30 @@ sal_uInt32 SdrMeasureObj::GetHdlCount() const
     return 6L;
 }
 
-SdrHdl* SdrMeasureObj::GetHdl(sal_uInt32 nHdlNum) const
+void SdrMeasureObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
     ImpMeasureRec aRec;
     ImpMeasurePoly aMPol;
     ImpTakeAttr(aRec);
     aRec.nHelplineDist=0;
     ImpCalcGeometrics(aRec,aMPol);
-    Point aPt;
 
-    switch (nHdlNum) {
-        case 0: aPt=aMPol.aHelpline1.aP1; break;
-        case 1: aPt=aMPol.aHelpline2.aP1; break;
-        case 2: aPt=aPt1;       break;
-        case 3: aPt=aPt2;       break;
-        case 4: aPt=aMPol.aHelpline1.aP2; break;
-        case 5: aPt=aMPol.aHelpline2.aP2; break;
-    } // switch
-    SdrHdl* pHdl=new ImpMeasureHdl(aPt,SdrHdlKind::User);
-    pHdl->SetObjHdlNum(nHdlNum);
-    pHdl->SetRotationAngle(aMPol.nLineAngle);
-    return pHdl;
+    for (sal_uInt32 nHdlNum=0; nHdlNum<6; ++nHdlNum)
+    {
+        Point aPt;
+        switch (nHdlNum) {
+            case 0: aPt=aMPol.aHelpline1.aP1; break;
+            case 1: aPt=aMPol.aHelpline2.aP1; break;
+            case 2: aPt=aPt1;       break;
+            case 3: aPt=aPt2;       break;
+            case 4: aPt=aMPol.aHelpline1.aP2; break;
+            case 5: aPt=aMPol.aHelpline2.aP2; break;
+        } // switch
+        SdrHdl* pHdl=new ImpMeasureHdl(aPt,SdrHdlKind::User);
+        pHdl->SetObjHdlNum(nHdlNum);
+        pHdl->SetRotationAngle(aMPol.nLineAngle);
+        rHdlList.AddHdl(pHdl);
+    }
 }
 
 

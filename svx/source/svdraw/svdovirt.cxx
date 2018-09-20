@@ -199,19 +199,17 @@ sal_uInt32 SdrVirtObj::GetHdlCount() const
     return rRefObj.GetHdlCount();
 }
 
-SdrHdl* SdrVirtObj::GetHdl(sal_uInt32 nHdlNum) const
+void SdrVirtObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
-    SdrHdl* pHdl=rRefObj.GetHdl(nHdlNum);
-
-    // #i73248#
-    // GetHdl() at SdrObject is not guaranteed to return an object
-    if(pHdl)
+    SdrHdlList tempList(nullptr);
+    rRefObj.AddToHdlList(tempList);
+    for (size_t i=0; i<tempList.GetHdlCount(); ++i)
     {
+        SdrHdl* pHdl = tempList.GetHdl(i);
         Point aP(pHdl->GetPos()+aAnchor);
         pHdl->SetPos(aP);
     }
-
-    return pHdl;
+    tempList.MoveTo(rHdlList);
 }
 
 sal_uInt32 SdrVirtObj::GetPlusHdlCount(const SdrHdl& rHdl) const
@@ -225,43 +223,6 @@ SdrHdl* SdrVirtObj::GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlNum) const
     pHdl->SetPos(pHdl->GetPos() + aAnchor);
     return pHdl;
 }
-
-void SdrVirtObj::AddToHdlList(SdrHdlList& rHdlList) const
-{
-    // #i73248#
-    // SdrObject::AddToHdlList(rHdlList) is not a good thing to call
-    // since at SdrPathObj, only AddToHdlList may be used and the call
-    // will instead use the standard implementation which uses GetHdlCount()
-    // and GetHdl instead. This is not wrong, but may be much less effective
-    // and may not be prepared to GetHdl returning NULL
-
-    // get handles using AddToHdlList from ref object
-    SdrHdlList aLocalList(nullptr);
-    rRefObj.AddToHdlList(aLocalList);
-    const size_t nHdlCount(aLocalList.GetHdlCount());
-
-    if(nHdlCount)
-    {
-        // translate handles and add them to dest list. They are temporarily part of
-        // two lists then
-        const Point aOffset(GetOffset());
-
-        for(size_t a = 0; a < nHdlCount; ++a)
-        {
-            SdrHdl* pCandidate = aLocalList.GetHdl(a);
-            pCandidate->SetPos(pCandidate->GetPos() + aOffset);
-            rHdlList.AddHdl(pCandidate);
-        }
-
-        // remove them from source list, else they will be deleted when
-        // source list is deleted
-        while(aLocalList.GetHdlCount())
-        {
-            aLocalList.RemoveHdl(aLocalList.GetHdlCount() - 1);
-        }
-    }
-}
-
 
 bool SdrVirtObj::hasSpecialDrag() const
 {

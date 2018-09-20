@@ -461,6 +461,9 @@ public:
     SdrHdl* RemoveHdl(size_t nNum);
     void RemoveAllByKind(SdrHdlKind eKind);
 
+    // move the ownership of all the SdrHdl to rOther
+    void MoveTo(SdrHdlList& rOther);
+
     // Last inserted handles are likely hit (if the handles are above each other)
     SdrHdl* IsHdlListHit(const Point& rPnt) const;
     SdrHdl* GetHdl(SdrHdlKind eKind1) const;

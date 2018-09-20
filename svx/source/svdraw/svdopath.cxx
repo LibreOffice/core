@@ -1984,28 +1984,6 @@ sal_uInt32 SdrPathObj::GetHdlCount() const
     return nRetval;
 }
 
-SdrHdl* SdrPathObj::GetHdl(sal_uInt32 nHdlNum) const
-{
-    // #i73248#
-    // Warn the user that this is ineffective and show alternatives. Should not be used at all.
-    OSL_FAIL("SdrPathObj::GetHdl(): ineffective, use AddToHdlList instead (!)");
-
-    // to have an alternative, get single handle using the ineffective way
-    SdrHdl* pRetval = nullptr;
-    SdrHdlList aLocalList(nullptr);
-    AddToHdlList(aLocalList);
-    const sal_uInt32 nHdlCount(aLocalList.GetHdlCount());
-
-    if(nHdlCount && nHdlNum < nHdlCount)
-    {
-        // remove and remember. The other created handles will be deleted again with the
-        // destruction of the local list
-        pRetval = aLocalList.RemoveHdl(nHdlNum);
-    }
-
-    return pRetval;
-}
-
 void SdrPathObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
     // keep old stuff to be able to keep old SdrHdl stuff, too

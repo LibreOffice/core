@@ -36,29 +36,30 @@ sal_uInt32 SdrTextObj::GetHdlCount() const
     return 8L;
 }
 
-SdrHdl* SdrTextObj::GetHdl(sal_uInt32 nHdlNum) const
+void SdrTextObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
-    SdrHdl* pH=nullptr;
-    Point aPnt;
-    SdrHdlKind eKind=SdrHdlKind::Move;
-    switch (nHdlNum) {
-        case 0: aPnt=maRect.TopLeft();      eKind=SdrHdlKind::UpperLeft; break;
-        case 1: aPnt=maRect.TopCenter();    eKind=SdrHdlKind::Upper; break;
-        case 2: aPnt=maRect.TopRight();     eKind=SdrHdlKind::UpperRight; break;
-        case 3: aPnt=maRect.LeftCenter();   eKind=SdrHdlKind::Left ; break;
-        case 4: aPnt=maRect.RightCenter();  eKind=SdrHdlKind::Right; break;
-        case 5: aPnt=maRect.BottomLeft();   eKind=SdrHdlKind::LowerLeft; break;
-        case 6: aPnt=maRect.BottomCenter(); eKind=SdrHdlKind::Lower; break;
-        case 7: aPnt=maRect.BottomRight();  eKind=SdrHdlKind::LowerRight; break;
-    }
-    if (aGeo.nShearAngle!=0) ShearPoint(aPnt,maRect.TopLeft(),aGeo.nTan);
-    if (aGeo.nRotationAngle!=0) RotatePoint(aPnt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-    if (eKind!=SdrHdlKind::Move) {
+    for(sal_uInt32 nHdlNum=0; nHdlNum<8; ++nHdlNum)
+    {
+        SdrHdl* pH=nullptr;
+        Point aPnt;
+        SdrHdlKind eKind;
+        switch (nHdlNum) {
+            case 0: aPnt=maRect.TopLeft();      eKind=SdrHdlKind::UpperLeft; break;
+            case 1: aPnt=maRect.TopCenter();    eKind=SdrHdlKind::Upper; break;
+            case 2: aPnt=maRect.TopRight();     eKind=SdrHdlKind::UpperRight; break;
+            case 3: aPnt=maRect.LeftCenter();   eKind=SdrHdlKind::Left ; break;
+            case 4: aPnt=maRect.RightCenter();  eKind=SdrHdlKind::Right; break;
+            case 5: aPnt=maRect.BottomLeft();   eKind=SdrHdlKind::LowerLeft; break;
+            case 6: aPnt=maRect.BottomCenter(); eKind=SdrHdlKind::Lower; break;
+            case 7: aPnt=maRect.BottomRight();  eKind=SdrHdlKind::LowerRight; break;
+        }
+        if (aGeo.nShearAngle!=0) ShearPoint(aPnt,maRect.TopLeft(),aGeo.nTan);
+        if (aGeo.nRotationAngle!=0) RotatePoint(aPnt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
         pH=new SdrHdl(aPnt,eKind);
         pH->SetObj(const_cast<SdrTextObj*>(this));
         pH->SetRotationAngle(aGeo.nRotationAngle);
+        rHdlList.AddHdl(pH);
     }
-    return pH;
 }
 
 

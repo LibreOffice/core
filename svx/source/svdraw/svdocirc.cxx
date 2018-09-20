@@ -406,83 +406,81 @@ sal_uInt32 SdrCircObj::GetHdlCount() const
     }
 }
 
-SdrHdl* SdrCircObj::GetHdl(sal_uInt32 nHdlNum) const
+void SdrCircObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
+    sal_uInt32 nHdlCnt = 8;
     if (meCircleKind==OBJ_CIRC)
-    {
-        nHdlNum += 2;
-    }
+        nHdlCnt += 2;
 
-    SdrHdl* pH = nullptr;
-    Point aPnt;
-    SdrHdlKind eLocalKind(SdrHdlKind::Move);
-    sal_uInt32 nPNum(0);
-
-    switch (nHdlNum)
+    for (sal_uInt32 nHdlNum=0; nHdlNum<nHdlCnt; ++nHdlNum)
     {
-        case 0:
-            aPnt = GetAnglePnt(maRect,nStartAngle);
-            eLocalKind = SdrHdlKind::Circle;
-            nPNum = 1;
-            break;
-        case 1:
-            aPnt = GetAnglePnt(maRect,nEndAngle);
-            eLocalKind = SdrHdlKind::Circle;
-            nPNum = 2;
-            break;
-        case 2:
-            aPnt = maRect.TopLeft();
-            eLocalKind = SdrHdlKind::UpperLeft;
-            break;
-        case 3:
-            aPnt = maRect.TopCenter();
-            eLocalKind = SdrHdlKind::Upper;
-            break;
-        case 4:
-            aPnt = maRect.TopRight();
-            eLocalKind = SdrHdlKind::UpperRight;
-            break;
-        case 5:
-            aPnt = maRect.LeftCenter();
-            eLocalKind = SdrHdlKind::Left;
-            break;
-        case 6:
-            aPnt = maRect.RightCenter();
-            eLocalKind = SdrHdlKind::Right;
-            break;
-        case 7:
-            aPnt = maRect.BottomLeft();
-            eLocalKind = SdrHdlKind::LowerLeft;
-            break;
-        case 8:
-            aPnt = maRect.BottomCenter();
-            eLocalKind = SdrHdlKind::Lower;
-            break;
-        case 9:
-            aPnt = maRect.BottomRight();
-            eLocalKind = SdrHdlKind::LowerRight;
-            break;
-    }
+        SdrHdl* pH = nullptr;
+        Point aPnt;
+        SdrHdlKind eLocalKind(SdrHdlKind::Move);
+        sal_uInt32 nPNum(0);
 
-    if (aGeo.nShearAngle)
-    {
-        ShearPoint(aPnt,maRect.TopLeft(),aGeo.nTan);
-    }
+        switch (nHdlNum)
+        {
+            case 0:
+                aPnt = GetAnglePnt(maRect,nStartAngle);
+                eLocalKind = SdrHdlKind::Circle;
+                nPNum = 1;
+                break;
+            case 1:
+                aPnt = GetAnglePnt(maRect,nEndAngle);
+                eLocalKind = SdrHdlKind::Circle;
+                nPNum = 2;
+                break;
+            case 2:
+                aPnt = maRect.TopLeft();
+                eLocalKind = SdrHdlKind::UpperLeft;
+                break;
+            case 3:
+                aPnt = maRect.TopCenter();
+                eLocalKind = SdrHdlKind::Upper;
+                break;
+            case 4:
+                aPnt = maRect.TopRight();
+                eLocalKind = SdrHdlKind::UpperRight;
+                break;
+            case 5:
+                aPnt = maRect.LeftCenter();
+                eLocalKind = SdrHdlKind::Left;
+                break;
+            case 6:
+                aPnt = maRect.RightCenter();
+                eLocalKind = SdrHdlKind::Right;
+                break;
+            case 7:
+                aPnt = maRect.BottomLeft();
+                eLocalKind = SdrHdlKind::LowerLeft;
+                break;
+            case 8:
+                aPnt = maRect.BottomCenter();
+                eLocalKind = SdrHdlKind::Lower;
+                break;
+            case 9:
+                aPnt = maRect.BottomRight();
+                eLocalKind = SdrHdlKind::LowerRight;
+                break;
+        }
 
-    if (aGeo.nRotationAngle)
-    {
-        RotatePoint(aPnt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-    }
+        if (aGeo.nShearAngle)
+        {
+            ShearPoint(aPnt,maRect.TopLeft(),aGeo.nTan);
+        }
 
-    if (eLocalKind != SdrHdlKind::Move)
-    {
+        if (aGeo.nRotationAngle)
+        {
+            RotatePoint(aPnt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+        }
+
         pH = new SdrHdl(aPnt,eLocalKind);
         pH->SetPointNum(nPNum);
         pH->SetObj(const_cast<SdrCircObj*>(this));
         pH->SetRotationAngle(aGeo.nRotationAngle);
+        rHdlList.AddHdl(pH);
     }
-
-    return pH;
 }
 
 

@@ -2187,29 +2187,6 @@ void SdrTableObj::AddToHdlList(SdrHdlList& rHdlList) const
         rHdlList.GetHdl(nHdl)->SetObj(const_cast<SdrTableObj*>(this));
 }
 
-SdrHdl* SdrTableObj::GetHdl(sal_uInt32 nHdlNum) const
-{
-    // #i73248#
-    // Warn the user that this is ineffective and show alternatives. Should not be used at all.
-    OSL_FAIL("SdrTableObj::GetHdl(): ineffective, use AddToHdlList instead (!)");
-
-    // to have an alternative, get single handle using the ineffective way
-    SdrHdl* pRetval = nullptr;
-    SdrHdlList aLocalList(nullptr);
-    AddToHdlList(aLocalList);
-    const size_t nHdlCount(aLocalList.GetHdlCount());
-
-    if(nHdlCount && static_cast<size_t>(nHdlNum) < nHdlCount)
-    {
-        // remove and remember. The other created handles will be deleted again with the
-        // destruction of the local list
-        pRetval = aLocalList.RemoveHdl(nHdlNum);
-    }
-
-    return pRetval;
-}
-
-
 // Dragging
 
 bool SdrTableObj::hasSpecialDrag() const

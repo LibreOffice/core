@@ -2339,21 +2339,19 @@ basegfx::B2DPolyPolygon SwDrawVirtObj::TakeContour() const
     return aRetval;
 }
 
-SdrHdl* SwDrawVirtObj::GetHdl(sal_uInt32 nHdlNum) const
+void SwDrawVirtObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
-    SdrHdl* pHdl = rRefObj.GetHdl(nHdlNum);
+    SdrHdlList tmpList(nullptr);
+    rRefObj.AddToHdlList(tmpList);
 
-    if(pHdl)
+    size_t cnt = tmpList.GetHdlCount();
+    for(size_t i=0; i < cnt; ++i)
     {
+        SdrHdl* pHdl = tmpList.GetHdl(i);
         Point aP(pHdl->GetPos() + GetOffset());
         pHdl->SetPos(aP);
     }
-    else
-    {
-        OSL_ENSURE(false, "Got no SdrHdl(!)");
-    }
-
-    return pHdl;
+    tmpList.MoveTo(rHdlList);
 }
 
 void SwDrawVirtObj::NbcMove(const Size& rSiz)
