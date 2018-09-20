@@ -231,11 +231,11 @@ namespace xforms
 
     protected:
         // OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const SAL_OVERRIDE;
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
         // XPropertySet
-        virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() SAL_OVERRIDE;
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
+        virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
     };
 
     class OBooleanType;

@@ -133,9 +133,9 @@ public:
     explicit     ValueItemWrapper( sal_uInt16 nSlot ) :
                             SingleItemWrapper< ItemT, ValueT >( nSlot ) {}
 
-    virtual ValueT      GetItemValue( const ItemT& rItem ) const SAL_OVERRIDE
+    virtual ValueT      GetItemValue( const ItemT& rItem ) const override
                             { return static_cast< ValueT >( rItem.GetValue() ); }
-    virtual void        SetItemValue( ItemT& rItem, ValueT aValue ) const SAL_OVERRIDE
+    virtual void        SetItemValue( ItemT& rItem, ValueT aValue ) const override
                             { rItem.SetValue( static_cast< InternalValueT >( aValue ) ); }
 };
 

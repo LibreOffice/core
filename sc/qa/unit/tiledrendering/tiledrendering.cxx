@@ -63,8 +63,8 @@ class ScTiledRenderingTest : public test::BootstrapFixture, public unotest::Macr
 {
 public:
     ScTiledRenderingTest();
-    virtual void setUp() SAL_OVERRIDE;
-    virtual void tearDown() SAL_OVERRIDE;
+    virtual void setUp() override;
+    virtual void tearDown() override;
 
     void testRowColumnSelections();
     void testSortAscendingDescending();

@@ -76,163 +76,160 @@ class OResultSet final : public OBase_Mutex,
     sal_Int32 m_nRowCount = 0;
 
     // OPropertyArrayUsageHelper
-    ::cppu::IPropertyArrayHelper* createArrayHelper() const SAL_OVERRIDE;
+    ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
     // OPropertySetHelper
-    ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
+    ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     sal_Bool SAL_CALL convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue,
-                                               sal_Int32 nHandle, const Any& rValue) SAL_OVERRIDE;
+                                               sal_Int32 nHandle, const Any& rValue) override;
 
-    void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
-                                                   const Any& rValue) SAL_OVERRIDE;
+    void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) override;
 
-    void SAL_CALL getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;
+    void SAL_CALL getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const override;
 
     // you can't delete objects of this type
     virtual ~OResultSet() override = default;
 
 public:
-    virtual rtl::OUString SAL_CALL getImplementationName() SAL_OVERRIDE;
+    virtual rtl::OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const& ServiceName) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const& ServiceName) override;
 
-    virtual css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames() SAL_OVERRIDE;
+    virtual css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames() override;
 
     OResultSet(OConnection& rConn, OCommonStatement* pStmt, MYSQL_RES* pResult,
                rtl_TextEncoding _encoding);
 
     // ::cppu::OComponentHelper
-    void SAL_CALL disposing() SAL_OVERRIDE;
+    void SAL_CALL disposing() override;
 
     // XInterface
-    Any SAL_CALL queryInterface(const css::uno::Type& rType) SAL_OVERRIDE;
+    Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
 
-    void SAL_CALL acquire() throw() SAL_OVERRIDE;
-    void SAL_CALL release() throw() SAL_OVERRIDE;
+    void SAL_CALL acquire() throw() override;
+    void SAL_CALL release() throw() override;
 
     //XTypeProvider
-    css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() SAL_OVERRIDE;
+    css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
 
     // XPropertySet
-    css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() SAL_OVERRIDE;
+    css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
 
     // XResultSet
-    sal_Bool SAL_CALL next() SAL_OVERRIDE;
-    sal_Bool SAL_CALL isBeforeFirst() SAL_OVERRIDE;
-    sal_Bool SAL_CALL isAfterLast() SAL_OVERRIDE;
-    sal_Bool SAL_CALL isFirst() SAL_OVERRIDE;
-    sal_Bool SAL_CALL isLast() SAL_OVERRIDE;
+    sal_Bool SAL_CALL next() override;
+    sal_Bool SAL_CALL isBeforeFirst() override;
+    sal_Bool SAL_CALL isAfterLast() override;
+    sal_Bool SAL_CALL isFirst() override;
+    sal_Bool SAL_CALL isLast() override;
 
-    void SAL_CALL beforeFirst() SAL_OVERRIDE;
-    void SAL_CALL afterLast() SAL_OVERRIDE;
+    void SAL_CALL beforeFirst() override;
+    void SAL_CALL afterLast() override;
 
-    sal_Bool SAL_CALL first() SAL_OVERRIDE;
-    sal_Bool SAL_CALL last() SAL_OVERRIDE;
+    sal_Bool SAL_CALL first() override;
+    sal_Bool SAL_CALL last() override;
 
-    sal_Int32 SAL_CALL getRow() SAL_OVERRIDE;
+    sal_Int32 SAL_CALL getRow() override;
 
-    sal_Bool SAL_CALL absolute(sal_Int32 row) SAL_OVERRIDE;
-    sal_Bool SAL_CALL relative(sal_Int32 rows) SAL_OVERRIDE;
-    sal_Bool SAL_CALL previous() SAL_OVERRIDE;
+    sal_Bool SAL_CALL absolute(sal_Int32 row) override;
+    sal_Bool SAL_CALL relative(sal_Int32 rows) override;
+    sal_Bool SAL_CALL previous() override;
 
-    void SAL_CALL refreshRow() SAL_OVERRIDE;
+    void SAL_CALL refreshRow() override;
 
-    sal_Bool SAL_CALL rowUpdated() SAL_OVERRIDE;
-    sal_Bool SAL_CALL rowInserted() SAL_OVERRIDE;
-    sal_Bool SAL_CALL rowDeleted() SAL_OVERRIDE;
+    sal_Bool SAL_CALL rowUpdated() override;
+    sal_Bool SAL_CALL rowInserted() override;
+    sal_Bool SAL_CALL rowDeleted() override;
 
-    css::uno::Reference<css::uno::XInterface> SAL_CALL getStatement() SAL_OVERRIDE;
+    css::uno::Reference<css::uno::XInterface> SAL_CALL getStatement() override;
     // XRow
-    sal_Bool SAL_CALL wasNull() SAL_OVERRIDE;
+    sal_Bool SAL_CALL wasNull() override;
 
-    rtl::OUString SAL_CALL getString(sal_Int32 column) SAL_OVERRIDE;
+    rtl::OUString SAL_CALL getString(sal_Int32 column) override;
 
-    sal_Bool SAL_CALL getBoolean(sal_Int32 column) SAL_OVERRIDE;
-    sal_Int8 SAL_CALL getByte(sal_Int32 column) SAL_OVERRIDE;
-    sal_Int16 SAL_CALL getShort(sal_Int32 column) SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getInt(sal_Int32 column) SAL_OVERRIDE;
-    sal_Int64 SAL_CALL getLong(sal_Int32 column) SAL_OVERRIDE;
+    sal_Bool SAL_CALL getBoolean(sal_Int32 column) override;
+    sal_Int8 SAL_CALL getByte(sal_Int32 column) override;
+    sal_Int16 SAL_CALL getShort(sal_Int32 column) override;
+    sal_Int32 SAL_CALL getInt(sal_Int32 column) override;
+    sal_Int64 SAL_CALL getLong(sal_Int32 column) override;
 
-    float SAL_CALL getFloat(sal_Int32 column) SAL_OVERRIDE;
-    double SAL_CALL getDouble(sal_Int32 column) SAL_OVERRIDE;
+    float SAL_CALL getFloat(sal_Int32 column) override;
+    double SAL_CALL getDouble(sal_Int32 column) override;
 
-    css::uno::Sequence<sal_Int8> SAL_CALL getBytes(sal_Int32 column) SAL_OVERRIDE;
-    css::util::Date SAL_CALL getDate(sal_Int32 column) SAL_OVERRIDE;
-    css::util::Time SAL_CALL getTime(sal_Int32 column) SAL_OVERRIDE;
-    css::util::DateTime SAL_CALL getTimestamp(sal_Int32 column) SAL_OVERRIDE;
+    css::uno::Sequence<sal_Int8> SAL_CALL getBytes(sal_Int32 column) override;
+    css::util::Date SAL_CALL getDate(sal_Int32 column) override;
+    css::util::Time SAL_CALL getTime(sal_Int32 column) override;
+    css::util::DateTime SAL_CALL getTimestamp(sal_Int32 column) override;
 
+    css::uno::Reference<css::io::XInputStream> SAL_CALL getBinaryStream(sal_Int32 column) override;
     css::uno::Reference<css::io::XInputStream>
-        SAL_CALL getBinaryStream(sal_Int32 column) SAL_OVERRIDE;
-    css::uno::Reference<css::io::XInputStream>
-        SAL_CALL getCharacterStream(sal_Int32 column) SAL_OVERRIDE;
+        SAL_CALL getCharacterStream(sal_Int32 column) override;
 
-    Any SAL_CALL getObject(sal_Int32 column, const my_XNameAccessRef& typeMap) SAL_OVERRIDE;
+    Any SAL_CALL getObject(sal_Int32 column, const my_XNameAccessRef& typeMap) override;
 
-    css::uno::Reference<css::sdbc::XRef> SAL_CALL getRef(sal_Int32 column) SAL_OVERRIDE;
-    css::uno::Reference<css::sdbc::XBlob> SAL_CALL getBlob(sal_Int32 column) SAL_OVERRIDE;
-    css::uno::Reference<css::sdbc::XClob> SAL_CALL getClob(sal_Int32 column) SAL_OVERRIDE;
-    css::uno::Reference<css::sdbc::XArray> SAL_CALL getArray(sal_Int32 column) SAL_OVERRIDE;
+    css::uno::Reference<css::sdbc::XRef> SAL_CALL getRef(sal_Int32 column) override;
+    css::uno::Reference<css::sdbc::XBlob> SAL_CALL getBlob(sal_Int32 column) override;
+    css::uno::Reference<css::sdbc::XClob> SAL_CALL getClob(sal_Int32 column) override;
+    css::uno::Reference<css::sdbc::XArray> SAL_CALL getArray(sal_Int32 column) override;
 
     // XResultSetMetaDataSupplier
-    css::uno::Reference<css::sdbc::XResultSetMetaData> SAL_CALL getMetaData() SAL_OVERRIDE;
+    css::uno::Reference<css::sdbc::XResultSetMetaData> SAL_CALL getMetaData() override;
 
     // XCancellable
-    void SAL_CALL cancel() SAL_OVERRIDE;
+    void SAL_CALL cancel() override;
 
     // XCloseable
-    void SAL_CALL close() SAL_OVERRIDE;
+    void SAL_CALL close() override;
 
     // XWarningsSupplier
-    Any SAL_CALL getWarnings() SAL_OVERRIDE;
+    Any SAL_CALL getWarnings() override;
 
-    void SAL_CALL clearWarnings() SAL_OVERRIDE;
+    void SAL_CALL clearWarnings() override;
 
     // XResultSetUpdate
-    void SAL_CALL insertRow() SAL_OVERRIDE;
-    void SAL_CALL updateRow() SAL_OVERRIDE;
-    void SAL_CALL deleteRow() SAL_OVERRIDE;
-    void SAL_CALL cancelRowUpdates() SAL_OVERRIDE;
-    void SAL_CALL moveToInsertRow() SAL_OVERRIDE;
-    void SAL_CALL moveToCurrentRow() SAL_OVERRIDE;
+    void SAL_CALL insertRow() override;
+    void SAL_CALL updateRow() override;
+    void SAL_CALL deleteRow() override;
+    void SAL_CALL cancelRowUpdates() override;
+    void SAL_CALL moveToInsertRow() override;
+    void SAL_CALL moveToCurrentRow() override;
 
     // XRowUpdate
-    void SAL_CALL updateNull(sal_Int32 column) SAL_OVERRIDE;
-    void SAL_CALL updateBoolean(sal_Int32 column, sal_Bool x) SAL_OVERRIDE;
-    void SAL_CALL updateByte(sal_Int32 column, sal_Int8 x) SAL_OVERRIDE;
-    void SAL_CALL updateShort(sal_Int32 column, sal_Int16 x) SAL_OVERRIDE;
-    void SAL_CALL updateInt(sal_Int32 column, sal_Int32 x) SAL_OVERRIDE;
-    void SAL_CALL updateLong(sal_Int32 column, sal_Int64 x) SAL_OVERRIDE;
-    void SAL_CALL updateFloat(sal_Int32 column, float x) SAL_OVERRIDE;
-    void SAL_CALL updateDouble(sal_Int32 column, double x) SAL_OVERRIDE;
-    void SAL_CALL updateString(sal_Int32 column, const rtl::OUString& x) SAL_OVERRIDE;
-    void SAL_CALL updateBytes(sal_Int32 column, const css::uno::Sequence<sal_Int8>& x) SAL_OVERRIDE;
-    void SAL_CALL updateDate(sal_Int32 column, const css::util::Date& x) SAL_OVERRIDE;
-    void SAL_CALL updateTime(sal_Int32 column, const css::util::Time& x) SAL_OVERRIDE;
-    void SAL_CALL updateTimestamp(sal_Int32 column, const css::util::DateTime& x) SAL_OVERRIDE;
+    void SAL_CALL updateNull(sal_Int32 column) override;
+    void SAL_CALL updateBoolean(sal_Int32 column, sal_Bool x) override;
+    void SAL_CALL updateByte(sal_Int32 column, sal_Int8 x) override;
+    void SAL_CALL updateShort(sal_Int32 column, sal_Int16 x) override;
+    void SAL_CALL updateInt(sal_Int32 column, sal_Int32 x) override;
+    void SAL_CALL updateLong(sal_Int32 column, sal_Int64 x) override;
+    void SAL_CALL updateFloat(sal_Int32 column, float x) override;
+    void SAL_CALL updateDouble(sal_Int32 column, double x) override;
+    void SAL_CALL updateString(sal_Int32 column, const rtl::OUString& x) override;
+    void SAL_CALL updateBytes(sal_Int32 column, const css::uno::Sequence<sal_Int8>& x) override;
+    void SAL_CALL updateDate(sal_Int32 column, const css::util::Date& x) override;
+    void SAL_CALL updateTime(sal_Int32 column, const css::util::Time& x) override;
+    void SAL_CALL updateTimestamp(sal_Int32 column, const css::util::DateTime& x) override;
     void SAL_CALL updateBinaryStream(sal_Int32 column,
                                      const css::uno::Reference<css::io::XInputStream>& x,
-                                     sal_Int32 length) SAL_OVERRIDE;
+                                     sal_Int32 length) override;
     void SAL_CALL updateCharacterStream(sal_Int32 column,
                                         const css::uno::Reference<css::io::XInputStream>& x,
-                                        sal_Int32 length) SAL_OVERRIDE;
-    void SAL_CALL updateObject(sal_Int32 column, const Any& x) SAL_OVERRIDE;
-    void SAL_CALL updateNumericObject(sal_Int32 column, const Any& x, sal_Int32 scale) SAL_OVERRIDE;
+                                        sal_Int32 length) override;
+    void SAL_CALL updateObject(sal_Int32 column, const Any& x) override;
+    void SAL_CALL updateNumericObject(sal_Int32 column, const Any& x, sal_Int32 scale) override;
 
     // XColumnLocate
-    sal_Int32 SAL_CALL findColumn(const rtl::OUString& columnName) SAL_OVERRIDE;
+    sal_Int32 SAL_CALL findColumn(const rtl::OUString& columnName) override;
 
     // XRowLocate
-    Any SAL_CALL getBookmark() SAL_OVERRIDE;
+    Any SAL_CALL getBookmark() override;
 
-    sal_Bool SAL_CALL moveToBookmark(const Any& bookmark) SAL_OVERRIDE;
-    sal_Bool SAL_CALL moveRelativeToBookmark(const Any& bookmark, sal_Int32 rows) SAL_OVERRIDE;
-    sal_Int32 SAL_CALL compareBookmarks(const Any& first, const Any& second) SAL_OVERRIDE;
-    sal_Bool SAL_CALL hasOrderedBookmarks() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL hashBookmark(const Any& bookmark) SAL_OVERRIDE;
+    sal_Bool SAL_CALL moveToBookmark(const Any& bookmark) override;
+    sal_Bool SAL_CALL moveRelativeToBookmark(const Any& bookmark, sal_Int32 rows) override;
+    sal_Int32 SAL_CALL compareBookmarks(const Any& first, const Any& second) override;
+    sal_Bool SAL_CALL hasOrderedBookmarks() override;
+    sal_Int32 SAL_CALL hashBookmark(const Any& bookmark) override;
 
     // XDeleteRows
-    css::uno::Sequence<sal_Int32>
-        SAL_CALL deleteRows(const css::uno::Sequence<Any>& rows) SAL_OVERRIDE;
+    css::uno::Sequence<sal_Int32> SAL_CALL deleteRows(const css::uno::Sequence<Any>& rows) override;
 
     void checkColumnIndex(sal_Int32 index);
     void checkRowIndex();

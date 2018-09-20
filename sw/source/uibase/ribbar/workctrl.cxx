@@ -604,7 +604,7 @@ public:
 
 protected:
     void            Select();
-    virtual bool    EventNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual bool    EventNotify( NotifyEvent& rNEvt ) override;
 };
 
 SwJumpToSpecificBox_Impl::SwJumpToSpecificBox_Impl(vcl::Window* pParent, sal_uInt16 nSlot)

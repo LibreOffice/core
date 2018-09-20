@@ -62,27 +62,26 @@ public:
     explicit MysqlCDriver(const Reference<css::lang::XMultiServiceFactory>& _rxFactory);
 
     // OComponentHelper
-    void SAL_CALL disposing() SAL_OVERRIDE;
+    void SAL_CALL disposing() override;
     // XInterface
     static OUString getImplementationName_Static();
     static Sequence<OUString> getSupportedServiceNames_Static();
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) SAL_OVERRIDE;
-    Sequence<OUString> SAL_CALL getSupportedServiceNames() SAL_OVERRIDE;
+    OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XDriver
     Reference<css::sdbc::XConnection> SAL_CALL
-    connect(const OUString& url, const Sequence<css::beans::PropertyValue>& info) SAL_OVERRIDE;
+    connect(const OUString& url, const Sequence<css::beans::PropertyValue>& info) override;
 
-    sal_Bool SAL_CALL acceptsURL(const OUString& url) SAL_OVERRIDE;
-    Sequence<css::sdbc::DriverPropertyInfo>
-        SAL_CALL getPropertyInfo(const OUString& url,
-                                 const Sequence<css::beans::PropertyValue>& info) SAL_OVERRIDE;
+    sal_Bool SAL_CALL acceptsURL(const OUString& url) override;
+    Sequence<css::sdbc::DriverPropertyInfo> SAL_CALL
+    getPropertyInfo(const OUString& url, const Sequence<css::beans::PropertyValue>& info) override;
 
-    sal_Int32 SAL_CALL getMajorVersion() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMinorVersion() SAL_OVERRIDE;
+    sal_Int32 SAL_CALL getMajorVersion() override;
+    sal_Int32 SAL_CALL getMinorVersion() override;
 
     const Reference<css::lang::XMultiServiceFactory>& getFactory() const { return m_xFactory; }
 

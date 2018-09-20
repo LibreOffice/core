@@ -30,8 +30,8 @@ public:
 
     virtual ~SvxFmMSFactory() {}
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance(const OUString& ServiceSpecifier) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance(const OUString& ServiceSpecifier) override;
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
 };
 
 #endif // INCLUDED_SVX_FMDMOD_HXX

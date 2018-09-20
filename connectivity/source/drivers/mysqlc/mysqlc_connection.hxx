@@ -113,58 +113,58 @@ public:
     rtl_TextEncoding getConnectionEncoding() const { return m_settings.encoding; }
 
     // OComponentHelper
-    virtual void SAL_CALL disposing() SAL_OVERRIDE;
+    virtual void SAL_CALL disposing() override;
 
     // XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName() SAL_OVERRIDE;
+    virtual rtl::OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const& ServiceName) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const& ServiceName) override;
 
-    virtual css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames() SAL_OVERRIDE;
+    virtual css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XConnection
-    css::uno::Reference<css::sdbc::XStatement> SAL_CALL createStatement() SAL_OVERRIDE;
+    css::uno::Reference<css::sdbc::XStatement> SAL_CALL createStatement() override;
 
     css::uno::Reference<css::sdbc::XPreparedStatement>
-        SAL_CALL prepareStatement(const rtl::OUString& sql) SAL_OVERRIDE;
+        SAL_CALL prepareStatement(const rtl::OUString& sql) override;
 
     css::uno::Reference<css::sdbc::XPreparedStatement>
-        SAL_CALL prepareCall(const rtl::OUString& sql) SAL_OVERRIDE;
+        SAL_CALL prepareCall(const rtl::OUString& sql) override;
 
-    rtl::OUString SAL_CALL nativeSQL(const rtl::OUString& sql) SAL_OVERRIDE;
+    rtl::OUString SAL_CALL nativeSQL(const rtl::OUString& sql) override;
 
-    void SAL_CALL setAutoCommit(sal_Bool autoCommit) SAL_OVERRIDE;
+    void SAL_CALL setAutoCommit(sal_Bool autoCommit) override;
 
-    sal_Bool SAL_CALL getAutoCommit() SAL_OVERRIDE;
+    sal_Bool SAL_CALL getAutoCommit() override;
 
-    void SAL_CALL commit() SAL_OVERRIDE;
+    void SAL_CALL commit() override;
 
-    void SAL_CALL rollback() SAL_OVERRIDE;
+    void SAL_CALL rollback() override;
 
-    sal_Bool SAL_CALL isClosed() SAL_OVERRIDE;
+    sal_Bool SAL_CALL isClosed() override;
 
-    css::uno::Reference<css::sdbc::XDatabaseMetaData> SAL_CALL getMetaData() SAL_OVERRIDE;
+    css::uno::Reference<css::sdbc::XDatabaseMetaData> SAL_CALL getMetaData() override;
 
-    void SAL_CALL setReadOnly(sal_Bool readOnly) SAL_OVERRIDE;
+    void SAL_CALL setReadOnly(sal_Bool readOnly) override;
 
-    sal_Bool SAL_CALL isReadOnly() SAL_OVERRIDE;
+    sal_Bool SAL_CALL isReadOnly() override;
 
-    void SAL_CALL setCatalog(const rtl::OUString& catalog) SAL_OVERRIDE;
+    void SAL_CALL setCatalog(const rtl::OUString& catalog) override;
 
-    rtl::OUString SAL_CALL getCatalog() SAL_OVERRIDE;
+    rtl::OUString SAL_CALL getCatalog() override;
 
-    void SAL_CALL setTransactionIsolation(sal_Int32 level) SAL_OVERRIDE;
+    void SAL_CALL setTransactionIsolation(sal_Int32 level) override;
 
-    sal_Int32 SAL_CALL getTransactionIsolation() SAL_OVERRIDE;
+    sal_Int32 SAL_CALL getTransactionIsolation() override;
 
-    my_XNameAccessRef SAL_CALL getTypeMap() SAL_OVERRIDE;
+    my_XNameAccessRef SAL_CALL getTypeMap() override;
 
-    void SAL_CALL setTypeMap(const my_XNameAccessRef& typeMap) SAL_OVERRIDE;
+    void SAL_CALL setTypeMap(const my_XNameAccessRef& typeMap) override;
     // XCloseable
-    void SAL_CALL close() SAL_OVERRIDE;
+    void SAL_CALL close() override;
     // XWarningsSupplier
-    css::uno::Any SAL_CALL getWarnings() SAL_OVERRIDE;
-    void SAL_CALL clearWarnings() SAL_OVERRIDE;
+    css::uno::Any SAL_CALL getWarnings() override;
+    void SAL_CALL clearWarnings() override;
 
     // TODO: Not used
     //sal_Int32 sdbcColumnType(rtl::OUString typeName);

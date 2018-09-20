@@ -26,11 +26,11 @@ friend class NotebookBarContextChangeEventListener;
 public:
     NotebookBar(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame);
     virtual ~NotebookBar() override;
-    virtual void dispose() SAL_OVERRIDE;
+    virtual void dispose() override;
 
     virtual bool PreNotify( NotifyEvent& rNEvt ) override;
-    virtual Size GetOptimalSize() const SAL_OVERRIDE;
-    virtual void setPosSizePixel(long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const override;
+    virtual void setPosSizePixel(long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) override;
     virtual void Resize() override;
 
     void SetSystemWindow(SystemWindow* pSystemWindow);

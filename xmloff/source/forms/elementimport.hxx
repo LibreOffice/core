@@ -574,13 +574,13 @@ namespace xmloff
         // SvXMLImportContext overridables
         virtual SvXMLImportContextRef CreateChildContext(
             sal_uInt16 _nPrefix, const OUString& _rLocalName,
-            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) SAL_OVERRIDE;
-        virtual void EndElement() SAL_OVERRIDE;
+            const css::uno::Reference< css::xml::sax::XAttributeList >& _rxAttrList) override;
+        virtual void EndElement() override;
 
     protected:
         // OElementImport overridables
         virtual css::uno::Reference< css::beans::XPropertySet >
-                        createElement() SAL_OVERRIDE;
+                        createElement() override;
 
         // create the child context for the given control type
         virtual SvXMLImportContext* implCreateControlWrapper(
@@ -608,7 +608,7 @@ namespace xmloff
     protected:
         // OElementImport overridables
         virtual css::uno::Reference< css::beans::XPropertySet >
-                        createElement() SAL_OVERRIDE;
+                        createElement() override;
     };
 
     //= OColumnWrapperImport
