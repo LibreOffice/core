@@ -179,7 +179,7 @@ public:
     SdrGrafObj&             operator=(const SdrGrafObj& rObj);
 
     virtual sal_uInt32 GetHdlCount() const override;
-    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const override;
+    virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
 
     virtual void            NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
     virtual void            NbcMirror(const Point& rRef1, const Point& rRef2) override;
