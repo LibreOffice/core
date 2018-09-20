@@ -316,6 +316,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         case SwFieldIds::Input:  // BubbleHelp, because the suggestion could be quite long
                             bBalloon = true;
                             SAL_FALLTHROUGH;
+                        case SwFieldIds::Dropdown:
                         case SwFieldIds::JumpEdit:
                             sText = pField->GetPar2();
                             break;
