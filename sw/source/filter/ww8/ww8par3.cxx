@@ -102,7 +102,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
 {
     WW8FormulaEditBox aFormula(*this);
 
-    if (rStr[pF->nLCode-1]==0x01) {
+    if (pF->nLCode && rStr[pF->nLCode-1]==0x01) {
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_EDIT);
     }
 
