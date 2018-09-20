@@ -643,6 +643,51 @@ public:
     /// See SfxViewShell::NotifyCursor().
     void NotifyCursor(SfxViewShell* pViewShell) const override;
     void ShowUIElement(const OUString& sElementURL) const;
+
+
+enum CachedStringID
+{
+    OldGrfCat,
+    OldTabCat,
+    OldFrameCat,
+    OldDrwCat,
+    CachedStrings
+};
+
+OUString *StringCache[CachedStrings] = {nullptr};
+
+inline OUString GetCachedString(CachedStringID id)
+{
+    return StringCache[id] ? *StringCache[id] : OUString();
+}
+
+inline void SetCachedString(CachedStringID id, const OUString& sStr)
+{
+    if (StringCache[id])
+    {
+        *StringCache[id] = sStr;
+    }
+    else
+    {
+        StringCache[id] = new OUString(sStr);
+    }
+}
+
+void ClearStringCache()
+{
+    for (OUString* p : StringCache)
+    {
+        delete p;
+    }
+}
+SW_DLLPUBLIC OUString GetOldGrfCat();
+SW_DLLPUBLIC void SetOldGrfCat(const OUString& sStr);
+SW_DLLPUBLIC OUString GetOldTabCat();
+SW_DLLPUBLIC void SetOldTabCat(const OUString& sStr);
+SW_DLLPUBLIC OUString GetOldFrameCat();
+SW_DLLPUBLIC void SetOldFrameCat(const OUString& sStr);
+SW_DLLPUBLIC OUString GetOldDrwCat();
+SW_DLLPUBLIC void SetOldDrwCat(const OUString& sStr);
 };
 
 inline long SwView::GetXScroll() const
