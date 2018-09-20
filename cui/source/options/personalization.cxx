@@ -38,9 +38,6 @@
 #include <ucbhelper/content.hxx>
 #include <comphelper/simplefileaccessinteraction.hxx>
 
-#define MAX_RESULTS 9
-#define MAX_DEFAULT_PERSONAS 3
-
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
@@ -205,7 +202,7 @@ IMPL_LINK( SelectPersonaDialog, SelectPersona, Button*, pButton, void )
     if( m_pSearchThread.is() )
         m_pSearchThread->StopExecution();
 
-    for( sal_Int32 index = 0; index < 9; index++ )
+    for( sal_Int32 index = 0; index < MAX_RESULTS; index++ )
     {
         if( pButton == m_vResultList[index] )
         {
@@ -533,7 +530,7 @@ IMPL_LINK( SvxPersonalizationTabPage, ForceSelect, Button*, pButton, void )
 IMPL_LINK( SvxPersonalizationTabPage, DefaultPersona, Button*, pButton, void )
 {
     m_pDefaultPersona->Check();
-    for( sal_Int32 nIndex = 0; nIndex < 3; nIndex++ )
+    for( sal_Int32 nIndex = 0; nIndex < MAX_DEFAULT_PERSONAS; nIndex++ )
     {
         if( pButton == m_vDefaultPersonaImages[nIndex] )
             m_aPersonaSettings = m_vDefaultPersonaSettings[nIndex];
