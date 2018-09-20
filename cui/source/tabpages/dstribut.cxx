@@ -56,47 +56,29 @@ void SvxDistributeDialog::dispose()
 |*
 \************************************************************************/
 
-SvxDistributePage::SvxDistributePage(vcl::Window* pWindow,
+SvxDistributePage::SvxDistributePage(TabPageParent pWindow,
     const SfxItemSet& rInAttrs, SvxDistributeHorizontal eHor,
     SvxDistributeVertical eVer)
-    : SvxTabPage(pWindow, "DistributionPage", "cui/ui/distributionpage.ui",
+    : SvxTabPage(pWindow, "cui/ui/distributionpage.ui", "DistributionPage",
         rInAttrs)
     , m_eDistributeHor(eHor)
     , m_eDistributeVer(eVer)
+    , m_xBtnHorNone(m_xBuilder->weld_radio_button("hornone"))
+    , m_xBtnHorLeft(m_xBuilder->weld_radio_button("horleft"))
+    , m_xBtnHorCenter(m_xBuilder->weld_radio_button("horcenter"))
+    , m_xBtnHorDistance(m_xBuilder->weld_radio_button("hordistance"))
+    , m_xBtnHorRight(m_xBuilder->weld_radio_button("horright"))
+    , m_xBtnVerNone(m_xBuilder->weld_radio_button("vernone"))
+    , m_xBtnVerTop(m_xBuilder->weld_radio_button("vertop"))
+    , m_xBtnVerCenter(m_xBuilder->weld_radio_button("vercenter"))
+    , m_xBtnVerDistance(m_xBuilder->weld_radio_button("verdistance"))
+    , m_xBtnVerBottom(m_xBuilder->weld_radio_button("verbottom"))
 {
-    get(m_pBtnHorNone, "hornone");
-    get(m_pBtnHorLeft, "horleft");
-    get(m_pBtnHorCenter, "horcenter");
-    get(m_pBtnHorDistance, "hordistance");
-    get(m_pBtnHorRight, "horright");
-
-    get(m_pBtnVerNone, "vernone");
-    get(m_pBtnVerTop, "vertop");
-    get(m_pBtnVerCenter, "vercenter");
-    get(m_pBtnVerDistance, "verdistance");
-    get(m_pBtnVerBottom, "verbottom");
 }
 
 SvxDistributePage::~SvxDistributePage()
 {
-    disposeOnce();
 }
-
-void SvxDistributePage::dispose()
-{
-    m_pBtnHorNone.clear();
-    m_pBtnHorLeft.clear();
-    m_pBtnHorCenter.clear();
-    m_pBtnHorDistance.clear();
-    m_pBtnHorRight.clear();
-    m_pBtnVerNone.clear();
-    m_pBtnVerTop.clear();
-    m_pBtnVerCenter.clear();
-    m_pBtnVerDistance.clear();
-    m_pBtnVerBottom.clear();
-    SvxTabPage::dispose();
-}
-
 
 void SvxDistributePage::PointChanged(vcl::Window* /*pWindow*/, RectPoint /*eRP*/)
 {
@@ -114,34 +96,34 @@ void SvxDistributePage::PointChanged(weld::DrawingArea*, RectPoint /*eRP*/)
 
 void SvxDistributePage::Reset(const SfxItemSet* )
 {
-    m_pBtnHorNone->SetState(false);
-    m_pBtnHorLeft->SetState(false);
-    m_pBtnHorCenter->SetState(false);
-    m_pBtnHorDistance->SetState(false);
-    m_pBtnHorRight->SetState(false);
+    m_xBtnHorNone->set_active(false);
+    m_xBtnHorLeft->set_active(false);
+    m_xBtnHorCenter->set_active(false);
+    m_xBtnHorDistance->set_active(false);
+    m_xBtnHorRight->set_active(false);
 
     switch(m_eDistributeHor)
     {
-        case SvxDistributeHorizontal::NONE : m_pBtnHorNone->SetState(true); break;
-        case SvxDistributeHorizontal::Left : m_pBtnHorLeft->SetState(true); break;
-        case SvxDistributeHorizontal::Center : m_pBtnHorCenter->SetState(true); break;
-        case SvxDistributeHorizontal::Distance : m_pBtnHorDistance->SetState(true); break;
-        case SvxDistributeHorizontal::Right    : m_pBtnHorRight->SetState(true);    break;
+        case SvxDistributeHorizontal::NONE : m_xBtnHorNone->set_active(true); break;
+        case SvxDistributeHorizontal::Left : m_xBtnHorLeft->set_active(true); break;
+        case SvxDistributeHorizontal::Center : m_xBtnHorCenter->set_active(true); break;
+        case SvxDistributeHorizontal::Distance : m_xBtnHorDistance->set_active(true); break;
+        case SvxDistributeHorizontal::Right    : m_xBtnHorRight->set_active(true);    break;
     }
 
-    m_pBtnVerNone->SetState(false);
-    m_pBtnVerTop->SetState(false);
-    m_pBtnVerCenter->SetState(false);
-    m_pBtnVerDistance->SetState(false);
-    m_pBtnVerBottom->SetState(false);
+    m_xBtnVerNone->set_active(false);
+    m_xBtnVerTop->set_active(false);
+    m_xBtnVerCenter->set_active(false);
+    m_xBtnVerDistance->set_active(false);
+    m_xBtnVerBottom->set_active(false);
 
     switch(m_eDistributeVer)
     {
-        case SvxDistributeVertical::NONE : m_pBtnVerNone->SetState(true); break;
-        case SvxDistributeVertical::Top : m_pBtnVerTop->SetState(true); break;
-        case SvxDistributeVertical::Center : m_pBtnVerCenter->SetState(true); break;
-        case SvxDistributeVertical::Distance : m_pBtnVerDistance->SetState(true); break;
-        case SvxDistributeVertical::Bottom : m_pBtnVerBottom->SetState(true); break;
+        case SvxDistributeVertical::NONE : m_xBtnVerNone->set_active(true); break;
+        case SvxDistributeVertical::Top : m_xBtnVerTop->set_active(true); break;
+        case SvxDistributeVertical::Center : m_xBtnVerCenter->set_active(true); break;
+        case SvxDistributeVertical::Distance : m_xBtnVerDistance->set_active(true); break;
+        case SvxDistributeVertical::Bottom : m_xBtnVerBottom->set_active(true); break;
     }
 }
 
@@ -156,22 +138,22 @@ bool SvxDistributePage::FillItemSet( SfxItemSet* )
     SvxDistributeHorizontal eDistributeHor(SvxDistributeHorizontal::NONE);
     SvxDistributeVertical eDistributeVer(SvxDistributeVertical::NONE);
 
-    if(m_pBtnHorLeft->IsChecked())
+    if(m_xBtnHorLeft->get_active())
         eDistributeHor = SvxDistributeHorizontal::Left;
-    else if(m_pBtnHorCenter->IsChecked())
+    else if(m_xBtnHorCenter->get_active())
         eDistributeHor = SvxDistributeHorizontal::Center;
-    else if(m_pBtnHorDistance->IsChecked())
+    else if(m_xBtnHorDistance->get_active())
         eDistributeHor = SvxDistributeHorizontal::Distance;
-    else if(m_pBtnHorRight->IsChecked())
+    else if(m_xBtnHorRight->get_active())
         eDistributeHor = SvxDistributeHorizontal::Right;
 
-    if(m_pBtnVerTop->IsChecked())
+    if(m_xBtnVerTop->get_active())
         eDistributeVer = SvxDistributeVertical::Top;
-    else if(m_pBtnVerCenter->IsChecked())
+    else if(m_xBtnVerCenter->get_active())
         eDistributeVer = SvxDistributeVertical::Center;
-    else if(m_pBtnVerDistance->IsChecked())
+    else if(m_xBtnVerDistance->get_active())
         eDistributeVer = SvxDistributeVertical::Distance;
-    else if(m_pBtnVerBottom->IsChecked())
+    else if(m_xBtnVerBottom->get_active())
         eDistributeVer = SvxDistributeVertical::Bottom;
 
     if(eDistributeHor != m_eDistributeHor || eDistributeVer != m_eDistributeVer)

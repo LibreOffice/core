@@ -29,23 +29,22 @@ class SvxDistributePage : public SvxTabPage
     SvxDistributeHorizontal     m_eDistributeHor;
     SvxDistributeVertical       m_eDistributeVer;
 
-    VclPtr<RadioButton>                m_pBtnHorNone;
-    VclPtr<RadioButton>                m_pBtnHorLeft;
-    VclPtr<RadioButton>                m_pBtnHorCenter;
-    VclPtr<RadioButton>                m_pBtnHorDistance;
-    VclPtr<RadioButton>                m_pBtnHorRight;
-    VclPtr<RadioButton>                m_pBtnVerNone;
-    VclPtr<RadioButton>                m_pBtnVerTop;
-    VclPtr<RadioButton>                m_pBtnVerCenter;
-    VclPtr<RadioButton>                m_pBtnVerDistance;
-    VclPtr<RadioButton>                m_pBtnVerBottom;
+    std::unique_ptr<weld::RadioButton> m_xBtnHorNone;
+    std::unique_ptr<weld::RadioButton> m_xBtnHorLeft;
+    std::unique_ptr<weld::RadioButton> m_xBtnHorCenter;
+    std::unique_ptr<weld::RadioButton> m_xBtnHorDistance;
+    std::unique_ptr<weld::RadioButton> m_xBtnHorRight;
+    std::unique_ptr<weld::RadioButton> m_xBtnVerNone;
+    std::unique_ptr<weld::RadioButton> m_xBtnVerTop;
+    std::unique_ptr<weld::RadioButton> m_xBtnVerCenter;
+    std::unique_ptr<weld::RadioButton> m_xBtnVerDistance;
+    std::unique_ptr<weld::RadioButton> m_xBtnVerBottom;
 
 public:
-    SvxDistributePage(vcl::Window* pWindow, const SfxItemSet& rInAttrs,
+    SvxDistributePage(TabPageParent pWindow, const SfxItemSet& rInAttrs,
         SvxDistributeHorizontal eHor,
         SvxDistributeVertical eVer);
     virtual ~SvxDistributePage() override;
-    virtual void dispose() override;
 
     virtual bool FillItemSet(SfxItemSet*) override;
     virtual void Reset(const SfxItemSet*) override;
