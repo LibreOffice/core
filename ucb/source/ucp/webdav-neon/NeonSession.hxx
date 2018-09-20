@@ -89,7 +89,7 @@ public:
     virtual void
     OPTIONS( const OUString & inPath,
              DAVOptions& rOptions, // contains the name+values
-             const DAVRequestEnvironment & rEnv ) SAL_OVERRIDE;
+             const DAVRequestEnvironment & rEnv ) override;
 
     // allprop & named
     virtual void

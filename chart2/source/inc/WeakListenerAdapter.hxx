@@ -55,7 +55,7 @@ public:
 protected:
     // ____ XEventListener (base of all listeners) ____
     virtual void SAL_CALL disposing(
-        const css::lang::EventObject& Source ) SAL_OVERRIDE
+        const css::lang::EventObject& Source ) override
     {
         css::uno::Reference< css::lang::XEventListener > xEventListener(
                   css::uno::Reference< Listener >( m_xListener), css::uno::UNO_QUERY );

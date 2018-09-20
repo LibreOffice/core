@@ -74,17 +74,16 @@ protected:
     void disposeResultSet();
 
     // OPropertyArrayUsageHelper
-    ::cppu::IPropertyArrayHelper* createArrayHelper() const SAL_OVERRIDE;
+    ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
     // OPropertySetHelper
-    ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
+    ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
     sal_Bool SAL_CALL convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue,
-                                               sal_Int32 nHandle, const Any& rValue) SAL_OVERRIDE;
+                                               sal_Int32 nHandle, const Any& rValue) override;
 
-    void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
-                                                   const Any& rValue) SAL_OVERRIDE;
+    void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) override;
 
-    void SAL_CALL getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;
+    void SAL_CALL getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const override;
     virtual ~OCommonStatement() override;
 
 protected:
@@ -95,49 +94,49 @@ public:
     using OCommonStatement_IBase::operator css::uno::Reference<css::uno::XInterface>;
 
     // OComponentHelper
-    void SAL_CALL disposing() SAL_OVERRIDE;
+    void SAL_CALL disposing() override;
 
     // XInterface
-    void SAL_CALL release() throw() SAL_OVERRIDE;
+    void SAL_CALL release() throw() override;
 
-    void SAL_CALL acquire() throw() SAL_OVERRIDE;
+    void SAL_CALL acquire() throw() override;
 
     // XInterface
-    Any SAL_CALL queryInterface(const css::uno::Type& rType) SAL_OVERRIDE;
+    Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
 
     //XTypeProvider
-    css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() SAL_OVERRIDE;
+    css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
 
     // XPropertySet
-    css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() SAL_OVERRIDE;
+    css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
 
     // XStatement
     css::uno::Reference<css::sdbc::XResultSet>
-        SAL_CALL executeQuery(const rtl::OUString& sql) SAL_OVERRIDE;
+        SAL_CALL executeQuery(const rtl::OUString& sql) override;
 
-    sal_Int32 SAL_CALL executeUpdate(const rtl::OUString& sql) SAL_OVERRIDE;
+    sal_Int32 SAL_CALL executeUpdate(const rtl::OUString& sql) override;
 
-    sal_Bool SAL_CALL execute(const rtl::OUString& sql) SAL_OVERRIDE;
+    sal_Bool SAL_CALL execute(const rtl::OUString& sql) override;
 
-    css::uno::Reference<css::sdbc::XConnection> SAL_CALL getConnection() SAL_OVERRIDE;
+    css::uno::Reference<css::sdbc::XConnection> SAL_CALL getConnection() override;
 
     // XWarningsSupplier
-    Any SAL_CALL getWarnings() SAL_OVERRIDE;
+    Any SAL_CALL getWarnings() override;
 
-    void SAL_CALL clearWarnings() SAL_OVERRIDE;
+    void SAL_CALL clearWarnings() override;
 
     // XCancellable
-    void SAL_CALL cancel() SAL_OVERRIDE;
+    void SAL_CALL cancel() override;
 
     // XCloseable
-    void SAL_CALL close() SAL_OVERRIDE;
+    void SAL_CALL close() override;
 
     // XMultipleResults
-    css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getResultSet() SAL_OVERRIDE;
+    css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getResultSet() override;
 
-    sal_Int32 SAL_CALL getUpdateCount() SAL_OVERRIDE;
+    sal_Int32 SAL_CALL getUpdateCount() override;
 
-    sal_Bool SAL_CALL getMoreResults() SAL_OVERRIDE;
+    sal_Bool SAL_CALL getMoreResults() override;
 
     // other methods
     OConnection* getOwnConnection() const { return m_xConnection.get(); }
@@ -160,23 +159,23 @@ public:
     {
     }
 
-    virtual rtl::OUString SAL_CALL getImplementationName() SAL_OVERRIDE;
+    virtual rtl::OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const& ServiceName) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const& ServiceName) override;
 
-    virtual css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames() SAL_OVERRIDE;
+    virtual css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames() override;
 
-    Any SAL_CALL queryInterface(const css::uno::Type& rType) SAL_OVERRIDE;
+    Any SAL_CALL queryInterface(const css::uno::Type& rType) override;
 
-    void SAL_CALL acquire() throw() SAL_OVERRIDE;
-    void SAL_CALL release() throw() SAL_OVERRIDE;
+    void SAL_CALL acquire() throw() override;
+    void SAL_CALL release() throw() override;
 
     // XBatchExecution
-    void SAL_CALL addBatch(const rtl::OUString& sql) SAL_OVERRIDE;
+    void SAL_CALL addBatch(const rtl::OUString& sql) override;
 
-    void SAL_CALL clearBatch() SAL_OVERRIDE;
+    void SAL_CALL clearBatch() override;
 
-    css::uno::Sequence<sal_Int32> SAL_CALL executeBatch() SAL_OVERRIDE;
+    css::uno::Sequence<sal_Int32> SAL_CALL executeBatch() override;
 };
 }
 }

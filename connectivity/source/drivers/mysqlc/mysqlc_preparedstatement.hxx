@@ -61,32 +61,31 @@ class OPreparedStatement final : public OCommonStatement, public OPreparedStatem
 
     void checkParameterIndex(sal_Int32 parameter);
 
-    void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
-                                                   const Any& rValue) SAL_OVERRIDE;
+    void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) override;
     virtual ~OPreparedStatement() override;
 
 public:
-    virtual rtl::OUString SAL_CALL getImplementationName() SAL_OVERRIDE;
+    virtual rtl::OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const& ServiceName) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const& ServiceName) override;
 
-    virtual css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames() SAL_OVERRIDE;
+    virtual css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames() override;
 
     OPreparedStatement(OConnection* _pConnection, MYSQL_STMT* pStmt);
 
     //XInterface
-    Any SAL_CALL queryInterface(const Type& rType) SAL_OVERRIDE;
-    void SAL_CALL acquire() throw() SAL_OVERRIDE;
-    void SAL_CALL release() throw() SAL_OVERRIDE;
+    Any SAL_CALL queryInterface(const Type& rType) override;
+    void SAL_CALL acquire() throw() override;
+    void SAL_CALL release() throw() override;
 
     //XTypeProvider
-    css::uno::Sequence<Type> SAL_CALL getTypes() SAL_OVERRIDE;
+    css::uno::Sequence<Type> SAL_CALL getTypes() override;
 
     // XPreparedStatement
-    Reference<css::sdbc::XResultSet> SAL_CALL executeQuery() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL executeUpdate() SAL_OVERRIDE;
-    sal_Bool SAL_CALL execute() SAL_OVERRIDE;
-    Reference<css::sdbc::XConnection> SAL_CALL getConnection() SAL_OVERRIDE;
+    Reference<css::sdbc::XResultSet> SAL_CALL executeQuery() override;
+    sal_Int32 SAL_CALL executeUpdate() override;
+    sal_Bool SAL_CALL execute() override;
+    Reference<css::sdbc::XConnection> SAL_CALL getConnection() override;
 
     // XStatement
     using OCommonStatement::execute;
@@ -94,65 +93,65 @@ public:
     using OCommonStatement::executeUpdate;
 
     // XParameters
-    void SAL_CALL setNull(sal_Int32 parameter, sal_Int32 sqlType) SAL_OVERRIDE;
+    void SAL_CALL setNull(sal_Int32 parameter, sal_Int32 sqlType) override;
 
     void SAL_CALL setObjectNull(sal_Int32 parameter, sal_Int32 sqlType,
-                                const rtl::OUString& typeName) SAL_OVERRIDE;
+                                const rtl::OUString& typeName) override;
 
-    void SAL_CALL setBoolean(sal_Int32 parameter, sal_Bool x) SAL_OVERRIDE;
+    void SAL_CALL setBoolean(sal_Int32 parameter, sal_Bool x) override;
 
-    void SAL_CALL setByte(sal_Int32 parameter, sal_Int8 x) SAL_OVERRIDE;
+    void SAL_CALL setByte(sal_Int32 parameter, sal_Int8 x) override;
 
-    void SAL_CALL setShort(sal_Int32 parameter, sal_Int16 x) SAL_OVERRIDE;
+    void SAL_CALL setShort(sal_Int32 parameter, sal_Int16 x) override;
 
-    void SAL_CALL setInt(sal_Int32 parameter, sal_Int32 x) SAL_OVERRIDE;
+    void SAL_CALL setInt(sal_Int32 parameter, sal_Int32 x) override;
 
-    void SAL_CALL setLong(sal_Int32 parameter, sal_Int64 x) SAL_OVERRIDE;
+    void SAL_CALL setLong(sal_Int32 parameter, sal_Int64 x) override;
 
-    void SAL_CALL setFloat(sal_Int32 parameter, float x) SAL_OVERRIDE;
+    void SAL_CALL setFloat(sal_Int32 parameter, float x) override;
 
-    void SAL_CALL setDouble(sal_Int32 parameter, double x) SAL_OVERRIDE;
+    void SAL_CALL setDouble(sal_Int32 parameter, double x) override;
 
-    void SAL_CALL setString(sal_Int32 parameter, const rtl::OUString& x) SAL_OVERRIDE;
+    void SAL_CALL setString(sal_Int32 parameter, const rtl::OUString& x) override;
 
-    void SAL_CALL setBytes(sal_Int32 parameter, const css::uno::Sequence<sal_Int8>& x) SAL_OVERRIDE;
+    void SAL_CALL setBytes(sal_Int32 parameter, const css::uno::Sequence<sal_Int8>& x) override;
 
-    void SAL_CALL setDate(sal_Int32 parameter, const css::util::Date& x) SAL_OVERRIDE;
+    void SAL_CALL setDate(sal_Int32 parameter, const css::util::Date& x) override;
 
-    void SAL_CALL setTime(sal_Int32 parameter, const css::util::Time& x) SAL_OVERRIDE;
-    void SAL_CALL setTimestamp(sal_Int32 parameter, const css::util::DateTime& x) SAL_OVERRIDE;
+    void SAL_CALL setTime(sal_Int32 parameter, const css::util::Time& x) override;
+    void SAL_CALL setTimestamp(sal_Int32 parameter, const css::util::DateTime& x) override;
 
     void SAL_CALL setBinaryStream(sal_Int32 parameter, const Reference<css::io::XInputStream>& x,
-                                  sal_Int32 length) SAL_OVERRIDE;
+                                  sal_Int32 length) override;
 
     void SAL_CALL setCharacterStream(sal_Int32 parameter, const Reference<css::io::XInputStream>& x,
-                                     sal_Int32 length) SAL_OVERRIDE;
+                                     sal_Int32 length) override;
 
-    void SAL_CALL setObject(sal_Int32 parameter, const Any& x) SAL_OVERRIDE;
+    void SAL_CALL setObject(sal_Int32 parameter, const Any& x) override;
 
     void SAL_CALL setObjectWithInfo(sal_Int32 parameter, const Any& x, sal_Int32 targetSqlType,
-                                    sal_Int32 scale) SAL_OVERRIDE;
+                                    sal_Int32 scale) override;
 
-    void SAL_CALL setRef(sal_Int32 parameter, const Reference<css::sdbc::XRef>& x) SAL_OVERRIDE;
+    void SAL_CALL setRef(sal_Int32 parameter, const Reference<css::sdbc::XRef>& x) override;
 
-    void SAL_CALL setBlob(sal_Int32 parameter, const Reference<css::sdbc::XBlob>& x) SAL_OVERRIDE;
+    void SAL_CALL setBlob(sal_Int32 parameter, const Reference<css::sdbc::XBlob>& x) override;
 
-    void SAL_CALL setClob(sal_Int32 parameter, const Reference<css::sdbc::XClob>& x) SAL_OVERRIDE;
+    void SAL_CALL setClob(sal_Int32 parameter, const Reference<css::sdbc::XClob>& x) override;
 
-    void SAL_CALL setArray(sal_Int32 parameter, const Reference<css::sdbc::XArray>& x) SAL_OVERRIDE;
+    void SAL_CALL setArray(sal_Int32 parameter, const Reference<css::sdbc::XArray>& x) override;
 
-    void SAL_CALL clearParameters() SAL_OVERRIDE;
+    void SAL_CALL clearParameters() override;
 
     // XPreparedBatchExecution
-    void SAL_CALL addBatch() SAL_OVERRIDE;
-    void SAL_CALL clearBatch() SAL_OVERRIDE;
-    css::uno::Sequence<sal_Int32> SAL_CALL executeBatch() SAL_OVERRIDE;
+    void SAL_CALL addBatch() override;
+    void SAL_CALL clearBatch() override;
+    css::uno::Sequence<sal_Int32> SAL_CALL executeBatch() override;
 
     // XCloseable
-    void SAL_CALL close() SAL_OVERRIDE;
+    void SAL_CALL close() override;
 
     // XResultSetMetaDataSupplier
-    Reference<css::sdbc::XResultSetMetaData> SAL_CALL getMetaData() SAL_OVERRIDE;
+    Reference<css::sdbc::XResultSetMetaData> SAL_CALL getMetaData() override;
 };
 } /* mysqlc */
 } /* connectivity */

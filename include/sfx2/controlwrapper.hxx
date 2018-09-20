@@ -254,11 +254,11 @@ public:
     explicit     MetricFieldWrapper( MetricField& rField, FieldUnit eUnit ) :
                             SingleControlWrapper< MetricField, ValueT >( rField ), meUnit( eUnit ) {}
 
-    virtual bool        IsControlDontKnow() const SAL_OVERRIDE;
-    virtual void        SetControlDontKnow( bool bSet ) SAL_OVERRIDE;
+    virtual bool        IsControlDontKnow() const override;
+    virtual void        SetControlDontKnow( bool bSet ) override;
 
-    virtual ValueT      GetControlValue() const SAL_OVERRIDE;
-    virtual void        SetControlValue( ValueT nValue ) SAL_OVERRIDE;
+    virtual ValueT      GetControlValue() const override;
+    virtual void        SetControlValue( ValueT nValue ) override;
 
 private:
     FieldUnit           meUnit;
@@ -288,13 +288,13 @@ public:
     explicit     ListBoxWrapper( ListBox& rListBox, const MapEntryType* pMap ) :
                             SingleControlWrapper< ListBox, ValueT >( rListBox ), MapperType( WRAPPER_LISTBOX_ENTRY_NOTFOUND, pMap ) {}
 
-    virtual bool        IsControlDontKnow() const SAL_OVERRIDE
+    virtual bool        IsControlDontKnow() const override
                             { return this->GetControl().GetSelectedEntryCount() == 0; }
-    virtual void        SetControlDontKnow( bool bSet ) SAL_OVERRIDE
+    virtual void        SetControlDontKnow( bool bSet ) override
                             { if( bSet ) this->GetControl().SetNoSelection(); }
 
-    virtual ValueT      GetControlValue() const SAL_OVERRIDE;
-    virtual void        SetControlValue( ValueT nValue ) SAL_OVERRIDE;
+    virtual ValueT      GetControlValue() const override;
+    virtual void        SetControlValue( ValueT nValue ) override;
 };
 
 
@@ -321,13 +321,13 @@ public:
     explicit     ValueSetWrapper( ValueSet& rValueSet, const MapEntryType* pMap ) :
                             SingleControlWrapper< ValueSet, ValueT >( rValueSet ), MapperType( WRAPPER_VALUESET_ITEM_NOTFOUND, pMap ) {}
 
-    virtual bool        IsControlDontKnow() const SAL_OVERRIDE
+    virtual bool        IsControlDontKnow() const override
                             { return this->GetControl().IsNoSelection(); }
-    virtual void        SetControlDontKnow( bool bSet ) SAL_OVERRIDE
+    virtual void        SetControlDontKnow( bool bSet ) override
                             { if( bSet ) this->GetControl().SetNoSelection(); }
 
-    virtual ValueT      GetControlValue() const SAL_OVERRIDE;
-    virtual void        SetControlValue( ValueT nValue ) SAL_OVERRIDE;
+    virtual ValueT      GetControlValue() const override;
+    virtual void        SetControlValue( ValueT nValue ) override;
 };
 
 

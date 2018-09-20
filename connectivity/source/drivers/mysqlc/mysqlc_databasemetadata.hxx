@@ -48,193 +48,194 @@ public:
 
     // as I mentioned before this interface is really BIG
     // XDatabaseMetaData
-    sal_Bool SAL_CALL allProceduresAreCallable() SAL_OVERRIDE;
-    sal_Bool SAL_CALL allTablesAreSelectable() SAL_OVERRIDE;
-    rtl::OUString SAL_CALL getURL() SAL_OVERRIDE;
-    rtl::OUString SAL_CALL getUserName() SAL_OVERRIDE;
-    sal_Bool SAL_CALL isReadOnly() SAL_OVERRIDE;
-    sal_Bool SAL_CALL nullsAreSortedHigh() SAL_OVERRIDE;
-    sal_Bool SAL_CALL nullsAreSortedLow() SAL_OVERRIDE;
-    sal_Bool SAL_CALL nullsAreSortedAtStart() SAL_OVERRIDE;
-    sal_Bool SAL_CALL nullsAreSortedAtEnd() SAL_OVERRIDE;
-    rtl::OUString SAL_CALL getDatabaseProductName() SAL_OVERRIDE;
-    rtl::OUString SAL_CALL getDatabaseProductVersion() SAL_OVERRIDE;
-    rtl::OUString SAL_CALL getDriverName() SAL_OVERRIDE;
-    rtl::OUString SAL_CALL getDriverVersion() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getDriverMajorVersion() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getDriverMinorVersion() SAL_OVERRIDE;
-    sal_Bool SAL_CALL usesLocalFiles() SAL_OVERRIDE;
-    sal_Bool SAL_CALL usesLocalFilePerTable() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsMixedCaseIdentifiers() SAL_OVERRIDE;
-    sal_Bool SAL_CALL storesUpperCaseIdentifiers() SAL_OVERRIDE;
-    sal_Bool SAL_CALL storesLowerCaseIdentifiers() SAL_OVERRIDE;
-    sal_Bool SAL_CALL storesMixedCaseIdentifiers() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsMixedCaseQuotedIdentifiers() SAL_OVERRIDE;
-    sal_Bool SAL_CALL storesUpperCaseQuotedIdentifiers() SAL_OVERRIDE;
-    sal_Bool SAL_CALL storesLowerCaseQuotedIdentifiers() SAL_OVERRIDE;
-    sal_Bool SAL_CALL storesMixedCaseQuotedIdentifiers() SAL_OVERRIDE;
-    rtl::OUString SAL_CALL getIdentifierQuoteString() SAL_OVERRIDE;
-    rtl::OUString SAL_CALL getSQLKeywords() SAL_OVERRIDE;
-    rtl::OUString SAL_CALL getNumericFunctions() SAL_OVERRIDE;
-    rtl::OUString SAL_CALL getStringFunctions() SAL_OVERRIDE;
-    rtl::OUString SAL_CALL getSystemFunctions() SAL_OVERRIDE;
-    rtl::OUString SAL_CALL getTimeDateFunctions() SAL_OVERRIDE;
-    rtl::OUString SAL_CALL getSearchStringEscape() SAL_OVERRIDE;
-    rtl::OUString SAL_CALL getExtraNameCharacters() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsAlterTableWithAddColumn() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsAlterTableWithDropColumn() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsColumnAliasing() SAL_OVERRIDE;
-    sal_Bool SAL_CALL nullPlusNonNullIsNull() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsTypeConversion() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsConvert(sal_Int32 fromType, sal_Int32 toType) SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsTableCorrelationNames() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsDifferentTableCorrelationNames() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsExpressionsInOrderBy() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsOrderByUnrelated() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsGroupBy() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsGroupByUnrelated() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsGroupByBeyondSelect() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsLikeEscapeClause() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsMultipleResultSets() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsMultipleTransactions() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsNonNullableColumns() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsMinimumSQLGrammar() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsCoreSQLGrammar() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsExtendedSQLGrammar() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsANSI92EntryLevelSQL() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsANSI92IntermediateSQL() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsANSI92FullSQL() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsIntegrityEnhancementFacility() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsOuterJoins() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsFullOuterJoins() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsLimitedOuterJoins() SAL_OVERRIDE;
-    rtl::OUString SAL_CALL getSchemaTerm() SAL_OVERRIDE;
-    rtl::OUString SAL_CALL getProcedureTerm() SAL_OVERRIDE;
-    rtl::OUString SAL_CALL getCatalogTerm() SAL_OVERRIDE;
-    sal_Bool SAL_CALL isCatalogAtStart() SAL_OVERRIDE;
-    rtl::OUString SAL_CALL getCatalogSeparator() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsSchemasInDataManipulation() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsSchemasInProcedureCalls() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsSchemasInTableDefinitions() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsSchemasInIndexDefinitions() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsSchemasInPrivilegeDefinitions() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsCatalogsInDataManipulation() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsCatalogsInProcedureCalls() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsCatalogsInTableDefinitions() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsCatalogsInIndexDefinitions() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsCatalogsInPrivilegeDefinitions() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsPositionedDelete() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsPositionedUpdate() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsSelectForUpdate() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsStoredProcedures() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsSubqueriesInComparisons() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsSubqueriesInExists() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsSubqueriesInIns() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsSubqueriesInQuantifieds() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsCorrelatedSubqueries() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsUnion() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsUnionAll() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsOpenCursorsAcrossCommit() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsOpenCursorsAcrossRollback() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsOpenStatementsAcrossCommit() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsOpenStatementsAcrossRollback() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMaxBinaryLiteralLength() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMaxCharLiteralLength() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMaxColumnNameLength() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMaxColumnsInGroupBy() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMaxColumnsInIndex() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMaxColumnsInOrderBy() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMaxColumnsInSelect() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMaxColumnsInTable() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMaxConnections() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMaxCursorNameLength() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMaxIndexLength() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMaxSchemaNameLength() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMaxProcedureNameLength() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMaxCatalogNameLength() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMaxRowSize() SAL_OVERRIDE;
-    sal_Bool SAL_CALL doesMaxRowSizeIncludeBlobs() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMaxStatementLength() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMaxStatements() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMaxTableNameLength() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMaxTablesInSelect() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getMaxUserNameLength() SAL_OVERRIDE;
-    sal_Int32 SAL_CALL getDefaultTransactionIsolation() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsTransactions() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsTransactionIsolationLevel(sal_Int32 level) SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsDataDefinitionAndDataManipulationTransactions() SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsDataManipulationTransactionsOnly() SAL_OVERRIDE;
-    sal_Bool SAL_CALL dataDefinitionCausesTransactionCommit() SAL_OVERRIDE;
-    sal_Bool SAL_CALL dataDefinitionIgnoredInTransactions() SAL_OVERRIDE;
+    sal_Bool SAL_CALL allProceduresAreCallable() override;
+    sal_Bool SAL_CALL allTablesAreSelectable() override;
+    rtl::OUString SAL_CALL getURL() override;
+    rtl::OUString SAL_CALL getUserName() override;
+    sal_Bool SAL_CALL isReadOnly() override;
+    sal_Bool SAL_CALL nullsAreSortedHigh() override;
+    sal_Bool SAL_CALL nullsAreSortedLow() override;
+    sal_Bool SAL_CALL nullsAreSortedAtStart() override;
+    sal_Bool SAL_CALL nullsAreSortedAtEnd() override;
+    rtl::OUString SAL_CALL getDatabaseProductName() override;
+    rtl::OUString SAL_CALL getDatabaseProductVersion() override;
+    rtl::OUString SAL_CALL getDriverName() override;
+    rtl::OUString SAL_CALL getDriverVersion() override;
+    sal_Int32 SAL_CALL getDriverMajorVersion() override;
+    sal_Int32 SAL_CALL getDriverMinorVersion() override;
+    sal_Bool SAL_CALL usesLocalFiles() override;
+    sal_Bool SAL_CALL usesLocalFilePerTable() override;
+    sal_Bool SAL_CALL supportsMixedCaseIdentifiers() override;
+    sal_Bool SAL_CALL storesUpperCaseIdentifiers() override;
+    sal_Bool SAL_CALL storesLowerCaseIdentifiers() override;
+    sal_Bool SAL_CALL storesMixedCaseIdentifiers() override;
+    sal_Bool SAL_CALL supportsMixedCaseQuotedIdentifiers() override;
+    sal_Bool SAL_CALL storesUpperCaseQuotedIdentifiers() override;
+    sal_Bool SAL_CALL storesLowerCaseQuotedIdentifiers() override;
+    sal_Bool SAL_CALL storesMixedCaseQuotedIdentifiers() override;
+    rtl::OUString SAL_CALL getIdentifierQuoteString() override;
+    rtl::OUString SAL_CALL getSQLKeywords() override;
+    rtl::OUString SAL_CALL getNumericFunctions() override;
+    rtl::OUString SAL_CALL getStringFunctions() override;
+    rtl::OUString SAL_CALL getSystemFunctions() override;
+    rtl::OUString SAL_CALL getTimeDateFunctions() override;
+    rtl::OUString SAL_CALL getSearchStringEscape() override;
+    rtl::OUString SAL_CALL getExtraNameCharacters() override;
+    sal_Bool SAL_CALL supportsAlterTableWithAddColumn() override;
+    sal_Bool SAL_CALL supportsAlterTableWithDropColumn() override;
+    sal_Bool SAL_CALL supportsColumnAliasing() override;
+    sal_Bool SAL_CALL nullPlusNonNullIsNull() override;
+    sal_Bool SAL_CALL supportsTypeConversion() override;
+    sal_Bool SAL_CALL supportsConvert(sal_Int32 fromType, sal_Int32 toType) override;
+    sal_Bool SAL_CALL supportsTableCorrelationNames() override;
+    sal_Bool SAL_CALL supportsDifferentTableCorrelationNames() override;
+    sal_Bool SAL_CALL supportsExpressionsInOrderBy() override;
+    sal_Bool SAL_CALL supportsOrderByUnrelated() override;
+    sal_Bool SAL_CALL supportsGroupBy() override;
+    sal_Bool SAL_CALL supportsGroupByUnrelated() override;
+    sal_Bool SAL_CALL supportsGroupByBeyondSelect() override;
+    sal_Bool SAL_CALL supportsLikeEscapeClause() override;
+    sal_Bool SAL_CALL supportsMultipleResultSets() override;
+    sal_Bool SAL_CALL supportsMultipleTransactions() override;
+    sal_Bool SAL_CALL supportsNonNullableColumns() override;
+    sal_Bool SAL_CALL supportsMinimumSQLGrammar() override;
+    sal_Bool SAL_CALL supportsCoreSQLGrammar() override;
+    sal_Bool SAL_CALL supportsExtendedSQLGrammar() override;
+    sal_Bool SAL_CALL supportsANSI92EntryLevelSQL() override;
+    sal_Bool SAL_CALL supportsANSI92IntermediateSQL() override;
+    sal_Bool SAL_CALL supportsANSI92FullSQL() override;
+    sal_Bool SAL_CALL supportsIntegrityEnhancementFacility() override;
+    sal_Bool SAL_CALL supportsOuterJoins() override;
+    sal_Bool SAL_CALL supportsFullOuterJoins() override;
+    sal_Bool SAL_CALL supportsLimitedOuterJoins() override;
+    rtl::OUString SAL_CALL getSchemaTerm() override;
+    rtl::OUString SAL_CALL getProcedureTerm() override;
+    rtl::OUString SAL_CALL getCatalogTerm() override;
+    sal_Bool SAL_CALL isCatalogAtStart() override;
+    rtl::OUString SAL_CALL getCatalogSeparator() override;
+    sal_Bool SAL_CALL supportsSchemasInDataManipulation() override;
+    sal_Bool SAL_CALL supportsSchemasInProcedureCalls() override;
+    sal_Bool SAL_CALL supportsSchemasInTableDefinitions() override;
+    sal_Bool SAL_CALL supportsSchemasInIndexDefinitions() override;
+    sal_Bool SAL_CALL supportsSchemasInPrivilegeDefinitions() override;
+    sal_Bool SAL_CALL supportsCatalogsInDataManipulation() override;
+    sal_Bool SAL_CALL supportsCatalogsInProcedureCalls() override;
+    sal_Bool SAL_CALL supportsCatalogsInTableDefinitions() override;
+    sal_Bool SAL_CALL supportsCatalogsInIndexDefinitions() override;
+    sal_Bool SAL_CALL supportsCatalogsInPrivilegeDefinitions() override;
+    sal_Bool SAL_CALL supportsPositionedDelete() override;
+    sal_Bool SAL_CALL supportsPositionedUpdate() override;
+    sal_Bool SAL_CALL supportsSelectForUpdate() override;
+    sal_Bool SAL_CALL supportsStoredProcedures() override;
+    sal_Bool SAL_CALL supportsSubqueriesInComparisons() override;
+    sal_Bool SAL_CALL supportsSubqueriesInExists() override;
+    sal_Bool SAL_CALL supportsSubqueriesInIns() override;
+    sal_Bool SAL_CALL supportsSubqueriesInQuantifieds() override;
+    sal_Bool SAL_CALL supportsCorrelatedSubqueries() override;
+    sal_Bool SAL_CALL supportsUnion() override;
+    sal_Bool SAL_CALL supportsUnionAll() override;
+    sal_Bool SAL_CALL supportsOpenCursorsAcrossCommit() override;
+    sal_Bool SAL_CALL supportsOpenCursorsAcrossRollback() override;
+    sal_Bool SAL_CALL supportsOpenStatementsAcrossCommit() override;
+    sal_Bool SAL_CALL supportsOpenStatementsAcrossRollback() override;
+    sal_Int32 SAL_CALL getMaxBinaryLiteralLength() override;
+    sal_Int32 SAL_CALL getMaxCharLiteralLength() override;
+    sal_Int32 SAL_CALL getMaxColumnNameLength() override;
+    sal_Int32 SAL_CALL getMaxColumnsInGroupBy() override;
+    sal_Int32 SAL_CALL getMaxColumnsInIndex() override;
+    sal_Int32 SAL_CALL getMaxColumnsInOrderBy() override;
+    sal_Int32 SAL_CALL getMaxColumnsInSelect() override;
+    sal_Int32 SAL_CALL getMaxColumnsInTable() override;
+    sal_Int32 SAL_CALL getMaxConnections() override;
+    sal_Int32 SAL_CALL getMaxCursorNameLength() override;
+    sal_Int32 SAL_CALL getMaxIndexLength() override;
+    sal_Int32 SAL_CALL getMaxSchemaNameLength() override;
+    sal_Int32 SAL_CALL getMaxProcedureNameLength() override;
+    sal_Int32 SAL_CALL getMaxCatalogNameLength() override;
+    sal_Int32 SAL_CALL getMaxRowSize() override;
+    sal_Bool SAL_CALL doesMaxRowSizeIncludeBlobs() override;
+    sal_Int32 SAL_CALL getMaxStatementLength() override;
+    sal_Int32 SAL_CALL getMaxStatements() override;
+    sal_Int32 SAL_CALL getMaxTableNameLength() override;
+    sal_Int32 SAL_CALL getMaxTablesInSelect() override;
+    sal_Int32 SAL_CALL getMaxUserNameLength() override;
+    sal_Int32 SAL_CALL getDefaultTransactionIsolation() override;
+    sal_Bool SAL_CALL supportsTransactions() override;
+    sal_Bool SAL_CALL supportsTransactionIsolationLevel(sal_Int32 level) override;
+    sal_Bool SAL_CALL supportsDataDefinitionAndDataManipulationTransactions() override;
+    sal_Bool SAL_CALL supportsDataManipulationTransactionsOnly() override;
+    sal_Bool SAL_CALL dataDefinitionCausesTransactionCommit() override;
+    sal_Bool SAL_CALL dataDefinitionIgnoredInTransactions() override;
     css::uno::Reference<css::sdbc::XResultSet>
         SAL_CALL getProcedures(const Any& catalog, const rtl::OUString& schemaPattern,
-                               const rtl::OUString& procedureNamePattern) SAL_OVERRIDE;
+                               const rtl::OUString& procedureNamePattern) override;
     css::uno::Reference<css::sdbc::XResultSet>
         SAL_CALL getProcedureColumns(const Any& catalog, const rtl::OUString& schemaPattern,
                                      const rtl::OUString& procedureNamePattern,
-                                     const rtl::OUString& columnNamePattern) SAL_OVERRIDE;
+                                     const rtl::OUString& columnNamePattern) override;
     css::uno::Reference<css::sdbc::XResultSet>
         SAL_CALL getTables(const Any& catalog, const rtl::OUString& schemaPattern,
                            const rtl::OUString& tableNamePattern,
-                           const css::uno::Sequence<rtl::OUString>& types) SAL_OVERRIDE;
-    css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getSchemas() SAL_OVERRIDE;
-    css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getCatalogs() SAL_OVERRIDE;
-    css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getTableTypes() SAL_OVERRIDE;
+                           const css::uno::Sequence<rtl::OUString>& types) override;
+    css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getSchemas() override;
+    css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getCatalogs() override;
+    css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getTableTypes() override;
     css::uno::Reference<css::sdbc::XResultSet>
         SAL_CALL getColumns(const Any& catalog, const rtl::OUString& schemaPattern,
                             const rtl::OUString& tableNamePattern,
-                            const rtl::OUString& columnNamePattern) SAL_OVERRIDE;
+                            const rtl::OUString& columnNamePattern) override;
     css::uno::Reference<css::sdbc::XResultSet>
         SAL_CALL getColumnPrivileges(const Any& catalog, const rtl::OUString& schema,
                                      const rtl::OUString& table,
-                                     const rtl::OUString& columnNamePattern) SAL_OVERRIDE;
+                                     const rtl::OUString& columnNamePattern) override;
     css::uno::Reference<css::sdbc::XResultSet>
         SAL_CALL getTablePrivileges(const Any& catalog, const rtl::OUString& schemaPattern,
-                                    const rtl::OUString& tableNamePattern) SAL_OVERRIDE;
+                                    const rtl::OUString& tableNamePattern) override;
     css::uno::Reference<css::sdbc::XResultSet>
         SAL_CALL getBestRowIdentifier(const Any& catalog, const rtl::OUString& schema,
                                       const rtl::OUString& table, sal_Int32 scope,
-                                      sal_Bool nullable) SAL_OVERRIDE;
+                                      sal_Bool nullable) override;
     css::uno::Reference<css::sdbc::XResultSet>
         SAL_CALL getVersionColumns(const Any& catalog, const rtl::OUString& schema,
-                                   const rtl::OUString& table) SAL_OVERRIDE;
+                                   const rtl::OUString& table) override;
     css::uno::Reference<css::sdbc::XResultSet>
         SAL_CALL getPrimaryKeys(const Any& catalog, const rtl::OUString& schema,
-                                const rtl::OUString& table) SAL_OVERRIDE;
+                                const rtl::OUString& table) override;
     css::uno::Reference<css::sdbc::XResultSet>
         SAL_CALL getImportedKeys(const Any& catalog, const rtl::OUString& schema,
-                                 const rtl::OUString& table) SAL_OVERRIDE;
+                                 const rtl::OUString& table) override;
     css::uno::Reference<css::sdbc::XResultSet>
         SAL_CALL getExportedKeys(const Any& catalog, const rtl::OUString& schema,
-                                 const rtl::OUString& table) SAL_OVERRIDE;
+                                 const rtl::OUString& table) override;
     css::uno::Reference<css::sdbc::XResultSet>
         SAL_CALL getCrossReference(const Any& primaryCatalog, const rtl::OUString& primarySchema,
                                    const rtl::OUString& primaryTable, const Any& foreignCatalog,
                                    const rtl::OUString& foreignSchema,
-                                   const rtl::OUString& foreignTable) SAL_OVERRIDE;
-    css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getTypeInfo() SAL_OVERRIDE;
-    css::uno::Reference<css::sdbc::XResultSet>
-        SAL_CALL getIndexInfo(const Any& catalog, const rtl::OUString& schema,
-                              const rtl::OUString& table, sal_Bool unique,
-                              sal_Bool approximate) SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsResultSetType(sal_Int32 setType) SAL_OVERRIDE;
+                                   const rtl::OUString& foreignTable) override;
+    css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getTypeInfo() override;
+    css::uno::Reference<css::sdbc::XResultSet> SAL_CALL getIndexInfo(const Any& catalog,
+                                                                     const rtl::OUString& schema,
+                                                                     const rtl::OUString& table,
+                                                                     sal_Bool unique,
+                                                                     sal_Bool approximate) override;
+    sal_Bool SAL_CALL supportsResultSetType(sal_Int32 setType) override;
     sal_Bool SAL_CALL supportsResultSetConcurrency(sal_Int32 setType,
-                                                   sal_Int32 concurrency) SAL_OVERRIDE;
-    sal_Bool SAL_CALL ownUpdatesAreVisible(sal_Int32 setType) SAL_OVERRIDE;
-    sal_Bool SAL_CALL ownDeletesAreVisible(sal_Int32 setType) SAL_OVERRIDE;
-    sal_Bool SAL_CALL ownInsertsAreVisible(sal_Int32 setType) SAL_OVERRIDE;
-    sal_Bool SAL_CALL othersUpdatesAreVisible(sal_Int32 setType) SAL_OVERRIDE;
-    sal_Bool SAL_CALL othersDeletesAreVisible(sal_Int32 setType) SAL_OVERRIDE;
-    sal_Bool SAL_CALL othersInsertsAreVisible(sal_Int32 setType) SAL_OVERRIDE;
-    sal_Bool SAL_CALL updatesAreDetected(sal_Int32 setType) SAL_OVERRIDE;
-    sal_Bool SAL_CALL deletesAreDetected(sal_Int32 setType) SAL_OVERRIDE;
-    sal_Bool SAL_CALL insertsAreDetected(sal_Int32 setType) SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsBatchUpdates() SAL_OVERRIDE;
+                                                   sal_Int32 concurrency) override;
+    sal_Bool SAL_CALL ownUpdatesAreVisible(sal_Int32 setType) override;
+    sal_Bool SAL_CALL ownDeletesAreVisible(sal_Int32 setType) override;
+    sal_Bool SAL_CALL ownInsertsAreVisible(sal_Int32 setType) override;
+    sal_Bool SAL_CALL othersUpdatesAreVisible(sal_Int32 setType) override;
+    sal_Bool SAL_CALL othersDeletesAreVisible(sal_Int32 setType) override;
+    sal_Bool SAL_CALL othersInsertsAreVisible(sal_Int32 setType) override;
+    sal_Bool SAL_CALL updatesAreDetected(sal_Int32 setType) override;
+    sal_Bool SAL_CALL deletesAreDetected(sal_Int32 setType) override;
+    sal_Bool SAL_CALL insertsAreDetected(sal_Int32 setType) override;
+    sal_Bool SAL_CALL supportsBatchUpdates() override;
     css::uno::Reference<css::sdbc::XResultSet>
         SAL_CALL getUDTs(const Any& catalog, const rtl::OUString& schemaPattern,
                          const rtl::OUString& typeNamePattern,
-                         const css::uno::Sequence<sal_Int32>& types) SAL_OVERRIDE;
-    css::uno::Reference<css::sdbc::XConnection> SAL_CALL getConnection() SAL_OVERRIDE;
+                         const css::uno::Sequence<sal_Int32>& types) override;
+    css::uno::Reference<css::sdbc::XConnection> SAL_CALL getConnection() override;
 };
 }
 }

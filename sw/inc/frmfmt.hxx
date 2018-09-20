@@ -177,7 +177,7 @@ public:
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
-    virtual void SetName( const OUString& rNewName, bool bBroadcast=false ) SAL_OVERRIDE;
+    virtual void SetName( const OUString& rNewName, bool bBroadcast=false ) override;
 };
 
 // The FlyFrame-Format

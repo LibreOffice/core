@@ -42,11 +42,11 @@ public:
                     css::uno::Reference< css::beans::XPropertySet >& xProps,
                     css::sheet::TablePageBreakData aTablePageBreakData);
 
-    virtual sal_Int32 SAL_CALL getType( ) SAL_OVERRIDE;
-    virtual void SAL_CALL setType(sal_Int32 type) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getType( ) override;
+    virtual void SAL_CALL setType(sal_Int32 type) override;
 
-    virtual void SAL_CALL Delete() SAL_OVERRIDE;
-    virtual css::uno::Reference< ov::excel::XRange> SAL_CALL Location() SAL_OVERRIDE;
+    virtual void SAL_CALL Delete() override;
+    virtual css::uno::Reference< ov::excel::XRange> SAL_CALL Location() override;
 };
 
 typedef ScVbaPageBreak < ov::excel::XHPageBreak > ScVbaHPageBreak_BASE;

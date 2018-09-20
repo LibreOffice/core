@@ -37,9 +37,9 @@ namespace ooo
             T1 mnValue;
             public:
             DefaultReturnHelper( const T1& nValue ) : mnValue( nValue ) {}
-            virtual void  SAL_CALL setValue( T1 nValue ) SAL_OVERRIDE { mnValue = nValue; }
-            virtual T1  SAL_CALL getValue() SAL_OVERRIDE { return mnValue; }
-            OUString SAL_CALL getDefaultPropertyName(  ) SAL_OVERRIDE { return OUString("Value"); }
+            virtual void  SAL_CALL setValue( T1 nValue ) override { mnValue = nValue; }
+            virtual T1  SAL_CALL getValue() override { return mnValue; }
+            OUString SAL_CALL getDefaultPropertyName(  ) override { return OUString("Value"); }
         };
 
         typedef DefaultReturnHelper< sal_Int32, ov::msforms::XReturnInteger > ReturnInteger_BASE;
