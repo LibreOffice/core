@@ -910,10 +910,9 @@ VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwBorderDlg(weld::
     return VclPtr<SwAbstractSfxController_Impl>::Create(o3tl::make_unique<SwBorderDlg>(pParent, rSet, nType));
 }
 
-VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh )
+VclPtr<SfxAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwWrapDlg(weld::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh)
 {
-    VclPtr<SfxModalDialog> pDlg = VclPtr<SwWrapDlg>::Create( pParent, rSet, pSh, true/*bDrawMode*/ );
-    return VclPtr<SwAbstractSfxDialog_Impl>::Create( pDlg );
+    return VclPtr<SwAbstractSfxController_Impl>::Create(o3tl::make_unique<SwWrapDlg>(pParent, rSet, pSh, true/*bDrawMode*/));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateSwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rFnc)

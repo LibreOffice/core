@@ -620,7 +620,7 @@ public:
                                                                   const SwTableAutoFormat* pSelFormat = nullptr) override;
     virtual VclPtr<SfxAbstractDialog> CreateSwBorderDlg(weld::Window* pParent, SfxItemSet& rSet, SwBorderModes nType) override;
 
-    virtual VclPtr<SfxAbstractDialog> CreateSwWrapDlg ( vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh ) override;
+    virtual VclPtr<SfxAbstractDialog> CreateSwWrapDlg(weld::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh) override;
     virtual VclPtr<VclAbstractDialog> CreateSwTableWidthDlg(weld::Window *pParent, SwTableFUNC &rFnc) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateSwTableTabDlg(weld::Window* pParent,
         const SfxItemSet* pItemSet, SwWrtShell* pSh) override;
