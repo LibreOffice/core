@@ -213,9 +213,14 @@ IMPL_LINK( SelectPersonaDialog, SelectPersona, Button*, pButton, void )
             {
                 m_aSelectedPersona = m_vPersonaSettings[index];
                 // get the persona name from the setting variable to show in the progress.
-                sal_Int32 nNameIndex = m_aSelectedPersona.indexOf( ';' );
-                OUString aName = m_aSelectedPersona.copy( 0, nNameIndex );
-                OUString aProgress = CuiResId(RID_SVXSTR_SELECTEDPERSONA) + aName;
+                sal_Int32 nSlugIndex, nNameIndex;
+                OUString aName, aProgress;
+
+                // Skip the slug
+                nSlugIndex = m_aSelectedPersona.indexOf( ';' );
+                nNameIndex = m_aSelectedPersona.indexOf( ';', nSlugIndex );
+                aName = m_aSelectedPersona.copy( nSlugIndex + 1, nNameIndex );
+                aProgress = CuiResId(RID_SVXSTR_SELECTEDPERSONA) + aName;
                 SetProgress( aProgress );
             }
             break;
@@ -409,8 +414,12 @@ void SvxPersonalizationTabPage::CheckAppliedTheme()
 
 void SvxPersonalizationTabPage::ShowAppliedThemeLabel(const OUString& aPersonaSetting)
 {
-    sal_Int32 nNameIndex = aPersonaSetting.indexOf( '/' );
-    OUString aName = "(" + aPersonaSetting.copy( 0, nNameIndex ) +")";
+    sal_Int32 nSlugIndex, nNameIndex;
+    OUString aName;
+
+    nSlugIndex = aPersonaSetting.indexOf( ';' ) + 1;
+    nNameIndex = aPersonaSetting.indexOf( ';', nSlugIndex );
+    aName = "(" + aPersonaSetting.copy( nSlugIndex, nNameIndex ) +")";
     m_pAppliedThemeLabel->Show();
     m_pAppliedThemeLabel->SetText( aName );
 }
@@ -469,8 +478,12 @@ void SvxPersonalizationTabPage::LoadExtensionThemes()
     for( sal_Int32 nIndex = 0; nIndex < nLength; nIndex++ )
     {
         Reference< XPropertySet > xPropertySet( officecfg::Office::Common::Misc::PersonasList::get()->getByName( installedPersonas[nIndex] ), UNO_QUERY_THROW );
-        OUString aPersonaName, aPreviewFile, aHeaderFile, aFooterFile, aTextColor, aAccentColor, aPersonaSettings;
-        Any aValue = xPropertySet->getPropertyValue( "Name" );
+        OUString aPersonaSlug, aPersonaName, aPreviewFile, aHeaderFile, aFooterFile, aTextColor, aAccentColor, aPersonaSettings;
+
+        Any aValue = xPropertySet->getPropertyValue( "Slug" );
+        aValue >>= aPersonaSlug;
+
+        aValue = xPropertySet->getPropertyValue( "Name" );
         aValue >>= aPersonaName;
         m_pPersonaList->InsertEntry( aPersonaName );
 
@@ -489,7 +502,8 @@ void SvxPersonalizationTabPage::LoadExtensionThemes()
         aValue = xPropertySet->getPropertyValue( "AccentColor" );
         aValue >>= aAccentColor;
 
-        aPersonaSettings = aPreviewFile + ";" + aHeaderFile + ";" + aFooterFile + ";" + aTextColor + ";" + aAccentColor;
+        aPersonaSettings = aPersonaSlug + ";" + aPersonaName + ";" + aPreviewFile
+                + ";" + aHeaderFile + ";" + aFooterFile + ";" + aTextColor + ";" + aAccentColor;
         rtl::Bootstrap::expandMacros( aPersonaSettings );
         m_vExtensionPersonaSettings.push_back( aPersonaSettings );
     }
@@ -569,7 +583,7 @@ static OUString searchValue( const OString &rBuffer, sal_Int32 from, const OStri
 /// Parse the Persona web page, and find where to get the bitmaps + the color values.
 static bool parsePersonaInfo( const OString &rBufferArg, OUString *pHeaderURL, OUString *pFooterURL,
                               OUString *pTextColor, OUString *pAccentColor, OUString *pPreviewURL,
-                              OUString *pName )
+                              OUString *pName, OUString *pSlug )
 {
     // tdf#115417: buffer retrieved from html response can contain &quot; or &#34;
     // let's replace the whole buffer with last one so we can treat it easily
@@ -601,7 +615,12 @@ static bool parsePersonaInfo( const OString &rBufferArg, OUString *pHeaderURL, O
         return false;
 
     *pName = searchValue( rBuffer, persona, "\"name\":\"" );
-    return !pName->isEmpty();
+    if ( pName->isEmpty() )
+        return false;
+
+    *pSlug = searchValue( rBuffer, persona, "\"bySlug\":{\"" );
+
+    return !pSlug->isEmpty();
 }
 
 SearchAndParseThread::SearchAndParseThread( SelectPersonaDialog* pDialog,
@@ -660,15 +679,15 @@ bool getPreviewFile( const OUString& rURL, OUString *pPreviewFile, OUString *pPe
     xStream->closeInput();
 
     // get the important bits of info
-    OUString aHeaderURL, aFooterURL, aTextColor, aAccentColor, aPreviewURL, aName;
+    OUString aHeaderURL, aFooterURL, aTextColor, aAccentColor, aPreviewURL, aName, aSlug;
 
-    if ( !parsePersonaInfo( aBuffer.makeStringAndClear(), &aHeaderURL, &aFooterURL, &aTextColor, &aAccentColor, &aPreviewURL, &aName ) )
+    if ( !parsePersonaInfo( aBuffer.makeStringAndClear(), &aHeaderURL, &aFooterURL, &aTextColor, &aAccentColor, &aPreviewURL, &aName, &aSlug ) )
         return false;
 
     // copy the images to the user's gallery
     OUString gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
     rtl::Bootstrap::expandMacros( gallery );
-    gallery += "/user/gallery/personas/" + aName + "/";
+    gallery += "/user/gallery/personas/" + aSlug + "/";
     osl::Directory::createPath( gallery );
 
     OUString aPreviewFile( INetURLObject( aPreviewURL ).getName() );
@@ -681,7 +700,7 @@ bool getPreviewFile( const OUString& rURL, OUString *pPreviewFile, OUString *pPe
         return false;
     }
     *pPreviewFile = gallery + aPreviewFile;
-    *pPersonaSetting = aName + ";" + aHeaderURL + ";" + aFooterURL + ";" + aTextColor + ";" + aAccentColor;
+    *pPersonaSetting = aSlug + ";" + aName + ";" + aHeaderURL + ";" + aFooterURL + ";" + aTextColor + ";" + aAccentColor;
     return true;
 }
 
@@ -825,13 +844,17 @@ void SearchAndParseThread::execute()
         if ( !xFileAccess.is() )
             return;
 
-        OUString aName, aHeaderURL, aFooterURL, aTextColor, aAccentColor;
+        OUString aSlug, aName, aHeaderURL, aFooterURL, aTextColor, aAccentColor;
         OUString aPersonaSetting;
 
         // get the required fields from m_aURL
         sal_Int32 nOldIndex = 0;
         sal_Int32 nNewIndex = m_aURL.indexOf( ';', nOldIndex );
-        aName = m_aURL.copy( nOldIndex, ( nNewIndex - nOldIndex ) );
+        aSlug = m_aURL.copy( nOldIndex, ( nNewIndex - nOldIndex ) );
+
+        nOldIndex = nNewIndex + 1;
+        nNewIndex = m_aURL.indexOf( ';', nOldIndex );
+        aName = m_aURL.copy(nOldIndex , ( nNewIndex - nOldIndex ) );
 
         nOldIndex = nNewIndex + 1;
         nNewIndex = m_aURL.indexOf( ';', nOldIndex );
@@ -858,8 +881,8 @@ void SearchAndParseThread::execute()
         OUString aHeaderFile( INetURLObject( aHeaderURL ).getName() );
         OUString aFooterFile( INetURLObject( aFooterURL ).getName() );
 
-        aHeaderFile = aName + "/" + aHeaderFile;
-        aFooterFile = aName + "/" + aFooterFile;
+        aHeaderFile = aSlug + "/" + aHeaderFile;
+        aFooterFile = aSlug + "/" + aFooterFile;
 
         try {
             xFileAccess->copy( aHeaderURL, gallery + aHeaderFile );
@@ -883,7 +906,8 @@ void SearchAndParseThread::execute()
 
         SolarMutexGuard aGuard;
 
-        aPersonaSetting = aHeaderFile + ";" + aFooterFile + ";" + aTextColor + ";" + aAccentColor;
+        aPersonaSetting = aSlug + ";" + aName + ";" + aHeaderFile + ";" + aFooterFile
+                + ";" + aTextColor + ";" + aAccentColor;
         m_pPersonaDialog->SetAppliedPersonaSetting( aPersonaSetting );
         m_pPersonaDialog->EndDialog( RET_OK );
     }

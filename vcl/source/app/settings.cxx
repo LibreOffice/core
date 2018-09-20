@@ -2122,6 +2122,11 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
     if ( aPersona == "own" || aPersona == "default" )
     {
         sal_Int32 nIndex = 0;
+
+        // Skip the persona slug and name
+        OUString tmp = aPersonaSettings.getToken( 0, ';', nIndex );
+        tmp = aPersonaSettings.getToken( 0, ';', nIndex );
+
         aHeader = aPersonaSettings.getToken( 0, ';', nIndex );
         if ( nIndex > 0 )
             aFooter = aPersonaSettings.getToken( 0, ';', nIndex );
