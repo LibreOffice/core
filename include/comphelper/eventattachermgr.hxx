@@ -20,19 +20,15 @@
 #ifndef INCLUDED_COMPHELPER_EVENTATTACHERMGR_HXX
 #define INCLUDED_COMPHELPER_EVENTATTACHERMGR_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
 
 namespace com { namespace sun { namespace star {
 namespace uno {
-    class Exception;
     class XComponentContext;
 }
 namespace script {
     class XEventAttacherManager;
-}
-namespace beans {
-    class XIntrospection;
 }
 } } }
 

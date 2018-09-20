@@ -20,9 +20,11 @@
 #ifndef INCLUDED_COMPHELPER_GENERICPROPERTYSET_HXX
 #define INCLUDED_COMPHELPER_GENERICPROPERTYSET_HXX
 
-#include <comphelper/propertysetinfo.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace comphelper { class PropertySetInfo; }
 
 namespace comphelper
 {

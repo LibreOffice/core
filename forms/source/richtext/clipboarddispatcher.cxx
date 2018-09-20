@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <svtools/cliplistener.hxx>
 #include <svtools/transfer.hxx>
+#include <osl/diagnose.h>
 
 
 namespace frm

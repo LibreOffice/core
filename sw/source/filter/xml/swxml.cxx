@@ -48,6 +48,7 @@
 #include <svx/xmleohlp.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/genericpropertyset.hxx>
+#include <comphelper/propertysetinfo.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <sfx2/frame.hxx>

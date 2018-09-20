@@ -8,6 +8,7 @@
  */
 
 #include <comphelper/lok.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <iostream>
 #include <sstream>

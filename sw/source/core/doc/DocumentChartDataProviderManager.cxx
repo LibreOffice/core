@@ -27,6 +27,7 @@
 #include <frmfmt.hxx>
 #include <ndole.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 
 using namespace com::sun::star;
