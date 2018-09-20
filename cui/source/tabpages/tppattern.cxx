@@ -532,11 +532,6 @@ void SvxPatternTabPage::ChangeColor_Impl()
     m_aCtlPreview.Invalidate();
 }
 
-void SvxPatternTabPage::PointChanged( vcl::Window*, RectPoint )
-{
-    assert(false);
-}
-
 void SvxPatternTabPage::PointChanged(weld::DrawingArea* pDrawingArea, RectPoint)
 {
     if (pDrawingArea == m_xCtlPixel->GetDrawingArea())

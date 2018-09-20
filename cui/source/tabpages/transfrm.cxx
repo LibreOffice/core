@@ -328,11 +328,6 @@ DeactivateRC SvxAngleTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-void SvxAngleTabPage::PointChanged(vcl::Window*, RectPoint)
-{
-    assert(false);
-}
-
 void SvxAngleTabPage::PointChanged(weld::DrawingArea* pDrawingArea, RectPoint eRP)
 {
     if (pDrawingArea == m_aCtlRect.GetDrawingArea())
@@ -1445,11 +1440,6 @@ void SvxPositionSizeTabPage::GetTopLeftPosition(double& rfX, double& rfY, const 
             break;
         }
     }
-}
-
-void SvxPositionSizeTabPage::PointChanged(vcl::Window* /*pWindow*/, RectPoint /*eRP*/)
-{
-    assert(false);
 }
 
 void SvxPositionSizeTabPage::PointChanged(weld::DrawingArea* pDrawingArea, RectPoint eRP)

@@ -476,12 +476,6 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl, weld::MetricSpinButton&,
     m_aCtlXRectPreview.Invalidate();
 }
 
-void SvxShadowTabPage::PointChanged( vcl::Window*, RectPoint )
-{
-    // repaint shadow
-    ModifyShadowHdl_Impl( *m_xMtrTransparent );
-}
-
 void SvxShadowTabPage::PointChanged( weld::DrawingArea*, RectPoint )
 {
     // repaint shadow

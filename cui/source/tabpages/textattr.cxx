@@ -507,41 +507,6 @@ VclPtr<SfxTabPage> SvxTextAttrPage::Create(TabPageParent pWindow, const SfxItemS
 
 /** Check whether we have to uncheck the "Full width" check box.
 */
-void SvxTextAttrPage::PointChanged( vcl::Window*, RectPoint eRP )
-{
-    if (m_xTsbFullWidth->get_state() == TRISTATE_TRUE)
-    {
-        // Depending on write direction and currently checked anchor we have
-        // to uncheck the "full width" button.
-        if (IsTextDirectionLeftToRight())
-            switch( eRP )
-            {
-                case RectPoint::LT:
-                case RectPoint::LM:
-                case RectPoint::LB:
-                case RectPoint::RT:
-                case RectPoint::RM:
-                case RectPoint::RB:
-                    m_xTsbFullWidth->set_state( TRISTATE_FALSE );
-                break;
-                default: ;//prevent warning
-            }
-        else
-            switch (eRP)
-            {
-                case RectPoint::LT:
-                case RectPoint::MT:
-                case RectPoint::RT:
-                case RectPoint::LB:
-                case RectPoint::MB:
-                case RectPoint::RB:
-                    m_xTsbFullWidth->set_state( TRISTATE_FALSE );
-                break;
-                default: ;//prevent warning
-            }
-    }
-}
-
 void SvxTextAttrPage::PointChanged(weld::DrawingArea*,  RectPoint eRP)
 {
     if (m_xTsbFullWidth->get_state() == TRISTATE_TRUE)
