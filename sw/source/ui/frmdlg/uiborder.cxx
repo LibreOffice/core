@@ -29,24 +29,24 @@
 #include <uiborder.hxx>
 #include <strings.hrc>
 
-SwBorderDlg::SwBorderDlg(vcl::Window* pParent, SfxItemSet& rSet, SwBorderModes nType) :
-    SfxSingleTabDialog(pParent, rSet)
-
+SwBorderDlg::SwBorderDlg(weld::Window* pParent, SfxItemSet& rSet, SwBorderModes nType)
+    : SfxSingleTabDialogController(pParent, rSet)
 {
-    SetText(SwResId(STR_FRMUI_BORDER));
+    m_xDialog->set_title(SwResId(STR_FRMUI_BORDER));
 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER );
 
-    if ( fnCreatePage )
+    if (fnCreatePage)
     {
-        VclPtr<SfxTabPage> pNewPage = (*fnCreatePage)( get_content_area(), &rSet );
+        TabPageParent pPageParent(get_content_area(), this);
+        VclPtr<SfxTabPage> xNewPage = (*fnCreatePage)(pPageParent, &rSet);
         SfxAllItemSet aSet(*(rSet.GetPool()));
         aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE, static_cast<sal_uInt16>(nType)));
         if(SwBorderModes::TABLE == nType)
             aSet.Put (SfxUInt32Item(SID_FLAG_TYPE,SVX_HIDESHADOWCTL));
-        pNewPage->PageCreated(aSet);
-        SetTabPage(pNewPage);
+        xNewPage->PageCreated(aSet);
+        SetTabPage(xNewPage);
     }
 }
 
