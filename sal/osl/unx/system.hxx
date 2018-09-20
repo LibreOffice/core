@@ -107,8 +107,6 @@
 #       define ETIME ETIMEDOUT
 #   endif
 #   define SIGIOT SIGABRT
-#   define ESOCKTNOSUPPORT ENOTSUP
-#   define ETOOMANYREFS EOPNOTSUPP
 #   define SOCK_RDM 0
 //  hack: Haiku defines SOL_SOCKET as -1, but this makes GCC complain about
 //  narrowing conversion

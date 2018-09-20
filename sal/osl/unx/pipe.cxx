@@ -51,7 +51,9 @@ static struct
     { EPROTOTYPE,      osl_Pipe_E_NoProtocol        },  /* Protocol wrong type for socket */
     { ENOPROTOOPT,     osl_Pipe_E_NoProtocol        },  /* Protocol not available */
     { EPROTONOSUPPORT, osl_Pipe_E_NoProtocol        },  /* Protocol not supported */
+#ifdef ESOCKTNOSUPPORT
     { ESOCKTNOSUPPORT, osl_Pipe_E_NoProtocol        },  /* Socket type not supported */
+#endif
     { EPFNOSUPPORT,    osl_Pipe_E_NoProtocol        },  /* Protocol family not supported */
     { EAFNOSUPPORT,    osl_Pipe_E_NoProtocol        },  /* Address family not supported by */
                                                         /* protocol family */
