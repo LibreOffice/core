@@ -2012,80 +2012,48 @@ void SdrPathObj::AddToHdlList(SdrHdlList& rHdlList) const
     }
 }
 
-sal_uInt32 SdrPathObj::GetPlusHdlCount(const SdrHdl& rHdl) const
+void SdrPathObj::AddToPlusHdlList(SdrHdlList& rHdlList, SdrHdl& rHdl) const
 {
     // keep old stuff to be able to keep old SdrHdl stuff, too
     const XPolyPolygon aOldPathPolygon(GetPathPoly());
-    sal_uInt16 nCnt = 0;
     sal_uInt16 nPnt = static_cast<sal_uInt16>(rHdl.GetPointNum());
     sal_uInt16 nPolyNum = static_cast<sal_uInt16>(rHdl.GetPolyNum());
 
-    if(nPolyNum < aOldPathPolygon.Count())
+    if (nPolyNum>=aOldPathPolygon.Count())
+        return;
+
+    const XPolygon& rXPoly = aOldPathPolygon[nPolyNum];
+    sal_uInt16 nPntMax = rXPoly.GetPointCount();
+
+    if (nPntMax<=0)
+        return;
+
+    nPntMax--;
+    for (sal_uInt32 nPlusNum = 0; nPlusNum <= nPntMax; ++nPlusNum)
     {
-        const XPolygon& rXPoly = aOldPathPolygon[nPolyNum];
-        sal_uInt16 nPntMax = rXPoly.GetPointCount();
-        if (nPntMax>0)
+        SdrHdl* pHdl=new SdrHdlBezWgt(&rHdl);
+        pHdl->SetPolyNum(rHdl.GetPolyNum());
+
+        if (nPnt==0 && IsClosed()) nPnt=nPntMax;
+        if (nPnt>0 && rXPoly.GetFlags(nPnt-1)==PolyFlags::Control && nPlusNum==0)
         {
-            nPntMax--;
-            if (nPnt<=nPntMax)
+            pHdl->SetPos(rXPoly[nPnt-1]);
+            pHdl->SetPointNum(nPnt-1);
+        }
+        else
+        {
+            if (nPnt==nPntMax && IsClosed()) nPnt=0;
+            if (nPnt<rXPoly.GetPointCount()-1 && rXPoly.GetFlags(nPnt+1)==PolyFlags::Control)
             {
-                if (rXPoly.GetFlags(nPnt)!=PolyFlags::Control)
-                {
-                    if (nPnt==0 && IsClosed()) nPnt=nPntMax;
-                    if (nPnt>0 && rXPoly.GetFlags(nPnt-1)==PolyFlags::Control) nCnt++;
-                    if (nPnt==nPntMax && IsClosed()) nPnt=0;
-                    if (nPnt<nPntMax && rXPoly.GetFlags(nPnt+1)==PolyFlags::Control) nCnt++;
-                }
+                pHdl->SetPos(rXPoly[nPnt+1]);
+                pHdl->SetPointNum(nPnt+1);
             }
         }
+
+        pHdl->SetSourceHdlNum(rHdl.GetSourceHdlNum());
+        pHdl->SetPlusHdl(true);
+        rHdlList.AddHdl(pHdl);
     }
-
-    return nCnt;
-}
-
-SdrHdl* SdrPathObj::GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlusNum) const
-{
-    // keep old stuff to be able to keep old SdrHdl stuff, too
-    const XPolyPolygon aOldPathPolygon(GetPathPoly());
-    SdrHdl* pHdl = nullptr;
-    sal_uInt16 nPnt = static_cast<sal_uInt16>(rHdl.GetPointNum());
-    sal_uInt16 nPolyNum = static_cast<sal_uInt16>(rHdl.GetPolyNum());
-
-    if (nPolyNum<aOldPathPolygon.Count())
-    {
-        const XPolygon& rXPoly = aOldPathPolygon[nPolyNum];
-        sal_uInt16 nPntMax = rXPoly.GetPointCount();
-
-        if (nPntMax>0)
-        {
-            nPntMax--;
-            if (nPnt<=nPntMax)
-            {
-                pHdl=new SdrHdlBezWgt(&rHdl);
-                pHdl->SetPolyNum(rHdl.GetPolyNum());
-
-                if (nPnt==0 && IsClosed()) nPnt=nPntMax;
-                if (nPnt>0 && rXPoly.GetFlags(nPnt-1)==PolyFlags::Control && nPlusNum==0)
-                {
-                    pHdl->SetPos(rXPoly[nPnt-1]);
-                    pHdl->SetPointNum(nPnt-1);
-                }
-                else
-                {
-                    if (nPnt==nPntMax && IsClosed()) nPnt=0;
-                    if (nPnt<rXPoly.GetPointCount()-1 && rXPoly.GetFlags(nPnt+1)==PolyFlags::Control)
-                    {
-                        pHdl->SetPos(rXPoly[nPnt+1]);
-                        pHdl->SetPointNum(nPnt+1);
-                    }
-                }
-
-                pHdl->SetSourceHdlNum(rHdl.GetSourceHdlNum());
-                pHdl->SetPlusHdl(true);
-            }
-        }
-    }
-    return pHdl;
 }
 
 // dragging

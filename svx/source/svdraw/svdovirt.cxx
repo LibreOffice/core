@@ -212,16 +212,17 @@ void SdrVirtObj::AddToHdlList(SdrHdlList& rHdlList) const
     tempList.MoveTo(rHdlList);
 }
 
-sal_uInt32 SdrVirtObj::GetPlusHdlCount(const SdrHdl& rHdl) const
+void SdrVirtObj::AddToPlusHdlList(SdrHdlList& rHdlList, SdrHdl& rHdl) const
 {
-    return rRefObj.GetPlusHdlCount(rHdl);
-}
-
-SdrHdl* SdrVirtObj::GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlNum) const
-{
-    SdrHdl* pHdl=rRefObj.GetPlusHdl(rHdl,nPlNum);
-    pHdl->SetPos(pHdl->GetPos() + aAnchor);
-    return pHdl;
+    SdrHdlList tempList(nullptr);
+    rRefObj.AddToPlusHdlList(tempList, rHdl);
+    for (size_t i=0; i<tempList.GetHdlCount(); ++i)
+    {
+        SdrHdl* pHdl = tempList.GetHdl(i);
+        Point aP(pHdl->GetPos()+aAnchor);
+        pHdl->SetPos(aP);
+    }
+    tempList.MoveTo(rHdlList);
 }
 
 bool SdrVirtObj::hasSpecialDrag() const
