@@ -376,8 +376,8 @@
      number formatter when encountering MMM or MMMM:
 
      * MMM or MMMM immediately preceded or followed by a literal character
-       other than space ⇒ nominative month name (noun), for Excel and backwards
-       compatibility such as Finnish MMMM"ta"
+       other than space => nominative month name (noun), for Excel and
+       backwards compatibility such as Finnish MMMM"ta"
      * no day of month (D or DD) present in format code => nominative name
      * day of month (D or DD) after MMM or MMMM => genitive name
        * no genitive names defined => nominative name
