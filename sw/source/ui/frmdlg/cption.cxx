@@ -161,6 +161,14 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     if (eType & SelectionType::Graphic)
     {
         nPoolId = RES_POOLCOLL_LABEL_FIGURE;
+
+        SwSetExpFieldType* pTypeIll= static_cast<SwSetExpFieldType*>(rSh.GetFieldType(SwFieldIds::SetExp, SwResId(STR_POOLCOLL_LABEL_ABB)));
+        if(rSh.IsUsed(*pTypeIll)) //default to illustration for legacy docs
+        {
+            nPoolId = RES_POOLCOLL_LABEL_ABB;
+
+        }
+
         sString = ::GetOldGrfCat();
         bCopyAttributes = true;
         //if not OLE
