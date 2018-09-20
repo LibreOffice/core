@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f013ff3_4f3abde7",
+        "filename": "translations",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-09-20T07:52:14Z",
+      "side": 0,
+      "message": "That looks unintended?",
+      "revId": "c6bf755eff1f74d024a8687b52a9cadf88a27576",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
