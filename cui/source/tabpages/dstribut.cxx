@@ -52,8 +52,8 @@ SvxDistributeDialog::~SvxDistributeDialog()
 SvxDistributePage::SvxDistributePage(TabPageParent pWindow,
     const SfxItemSet& rInAttrs, SvxDistributeHorizontal eHor,
     SvxDistributeVertical eVer)
-    : SvxTabPage(pWindow, "cui/ui/distributionpage.ui", "DistributionPage",
-        rInAttrs)
+    : SfxTabPage(pWindow, "cui/ui/distributionpage.ui", "DistributionPage",
+        &rInAttrs)
     , m_eDistributeHor(eHor)
     , m_eDistributeVer(eVer)
     , m_xBtnHorNone(m_xBuilder->weld_radio_button("hornone"))
@@ -70,14 +70,6 @@ SvxDistributePage::SvxDistributePage(TabPageParent pWindow,
 }
 
 SvxDistributePage::~SvxDistributePage()
-{
-}
-
-void SvxDistributePage::PointChanged(vcl::Window* /*pWindow*/, RectPoint /*eRP*/)
-{
-}
-
-void SvxDistributePage::PointChanged(weld::DrawingArea*, RectPoint /*eRP*/)
 {
 }
 

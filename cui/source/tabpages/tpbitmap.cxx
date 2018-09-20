@@ -68,7 +68,7 @@ const sal_uInt16 SvxBitmapTabPage::pBitmapRanges[] =
 };
 
 SvxBitmapTabPage::SvxBitmapTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SvxTabPage(pParent, "cui/ui/bitmaptabpage.ui", "BitmapTabPage", rInAttrs)
+    : SfxTabPage(pParent, "cui/ui/bitmaptabpage.ui", "BitmapTabPage", &rInAttrs)
     , m_rOutAttrs(rInAttrs)
     , m_pnBitmapListState(nullptr)
     , m_fObjectWidth(0.0)
@@ -142,7 +142,7 @@ void SvxBitmapTabPage::dispose()
     m_xBitmapLBWin.reset();
     m_xBitmapLB.reset();
     m_xCtlBitmapPreview.reset();
-    SvxTabPage::dispose();
+    SfxTabPage::dispose();
 }
 
 void SvxBitmapTabPage::Construct()
@@ -793,14 +793,6 @@ sal_Int32 SvxBitmapTabPage::SearchBitmapList(const OUString& rBitmapName)
         }
     }
     return nPos;
-}
-
-void SvxBitmapTabPage::PointChanged( vcl::Window* , RectPoint )
-{
-}
-
-void SvxBitmapTabPage::PointChanged( weld::DrawingArea*, RectPoint )
-{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

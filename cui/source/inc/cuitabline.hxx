@@ -84,7 +84,7 @@ struct SvxBmpItemInfo
     sal_uInt16          nItemId;
 };
 
-class SvxLineTabPage : public SvxTabPage
+class SvxLineTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
@@ -214,9 +214,6 @@ public:
 
     virtual void ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
-
-    virtual void PointChanged( vcl::Window* pWindow, RectPoint eRP ) override;
-    virtual void PointChanged( weld::DrawingArea* pWindow, RectPoint eRP ) override;
 
     virtual void FillUserData() override;
 

@@ -403,7 +403,7 @@ void SvxAngleTabPage::PointChanged(weld::DrawingArea* pDrawingArea, RectPoint eR
 |*
 \************************************************************************/
 SvxSlantTabPage::SvxSlantTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SvxTabPage(pParent, "cui/ui/slantcornertabpage.ui", "SlantAndCornerRadius", rInAttrs)
+    : SfxTabPage(pParent, "cui/ui/slantcornertabpage.ui", "SlantAndCornerRadius", &rInAttrs)
     , rOutAttrs(rInAttrs)
     , pView(nullptr)
     , eDlgUnit(FUNIT_NONE)
@@ -747,14 +747,6 @@ DeactivateRC SvxSlantTabPage::DeactivatePage( SfxItemSet* _pSet )
     return DeactivateRC::LeavePage;
 }
 
-
-void SvxSlantTabPage::PointChanged( vcl::Window*, RectPoint )
-{
-}
-
-void SvxSlantTabPage::PointChanged( weld::DrawingArea*, RectPoint )
-{
-}
 
 /*************************************************************************
 |*

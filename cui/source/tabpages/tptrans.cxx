@@ -201,7 +201,7 @@ void SvxTransparenceTabPage::SetControlState_Impl(css::awt::GradientStyle eXGS)
 }
 
 SvxTransparenceTabPage::SvxTransparenceTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
-    : SvxTabPage(pParent, "cui/ui/transparencytabpage.ui", "TransparencyTabPage", rInAttrs)
+    : SfxTabPage(pParent, "cui/ui/transparencytabpage.ui", "TransparencyTabPage", &rInAttrs)
     , rOutAttrs(rInAttrs)
     , nPageType(PageType::Area)
     , nDlgType(0)
@@ -445,14 +445,6 @@ DeactivateRC SvxTransparenceTabPage::DeactivatePage(SfxItemSet* _pSet)
     if( _pSet )
         FillItemSet( _pSet );
     return DeactivateRC::LeavePage;
-}
-
-void SvxTransparenceTabPage::PointChanged(vcl::Window* , RectPoint )
-{
-}
-
-void SvxTransparenceTabPage::PointChanged(weld::DrawingArea*, RectPoint)
-{
 }
 
 // Preview-Methods
