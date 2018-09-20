@@ -7,6 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <memory>
+#include <type_traits>
+
 #include <config_features.h>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -31,19 +36,37 @@ using namespace ::com::sun::star;
 namespace
 {
 
+struct CloseDocument {
+    void operator ()(FPDF_DOCUMENT doc) {
+        if (doc != nullptr) {
+            FPDF_CloseDocument(doc);
+        }
+    }
+};
+
+using DocumentHolder =
+    std::unique_ptr<typename std::remove_pointer<FPDF_DOCUMENT>::type, CloseDocument>;
+
+struct ClosePage {
+    void operator ()(FPDF_PAGE page) {
+        if (page != nullptr) {
+            FPDF_ClosePage(page);
+        }
+    }
+};
+
+using PageHolder =
+    std::unique_ptr<typename std::remove_pointer<FPDF_PAGE>::type, ClosePage>;
+
 /// Tests the PDF export filter.
 class PdfExportTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
     uno::Reference<uno::XComponentContext> mxComponentContext;
     uno::Reference<lang::XComponent> mxComponent;
-    FPDF_PAGE mpPdfPage = nullptr;
-    FPDF_DOCUMENT mpPdfDocument = nullptr;
-    /// Underlying memory of mpPdfDocument.
-    SvMemoryStream maPdfMemory;
     utl::TempFile maTempFile;
     SvMemoryStream maMemory;
     // Export the document as PDF, then parse it with PDFium.
-    void exportAndParse(const OUString& rURL, const utl::MediaDescriptor& rDescriptor);
+    DocumentHolder exportAndParse(const OUString& rURL, const utl::MediaDescriptor& rDescriptor);
 
 public:
     PdfExportTest();
@@ -129,7 +152,7 @@ PdfExportTest::PdfExportTest()
     maTempFile.EnableKillingFile();
 }
 
-void PdfExportTest::exportAndParse(const OUString& rURL, const utl::MediaDescriptor& rDescriptor)
+DocumentHolder PdfExportTest::exportAndParse(const OUString& rURL, const utl::MediaDescriptor& rDescriptor)
 {
     // Import the bugdoc and export as PDF.
     mxComponent = loadFromDesktop(rURL);
@@ -141,9 +164,10 @@ void PdfExportTest::exportAndParse(const OUString& rURL, const utl::MediaDescrip
     // Parse the export result with pdfium.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
     maMemory.WriteStream(aFile);
-    mpPdfDocument
-        = FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr);
-    CPPUNIT_ASSERT(mpPdfDocument);
+    DocumentHolder pPdfDocument(
+        FPDF_LoadMemDocument(maMemory.GetData(), maMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument.get());
+    return pPdfDocument;
 }
 
 void PdfExportTest::setUp()
@@ -163,8 +187,6 @@ void PdfExportTest::setUp()
 
 void PdfExportTest::tearDown()
 {
-    FPDF_ClosePage(mpPdfPage);
-    FPDF_CloseDocument(mpPdfDocument);
     FPDF_DestroyLibrary();
 
     if (mxComponent.is())
@@ -289,21 +311,22 @@ void PdfExportTest::testTdf105461()
 
     // Parse the export result with pdfium.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    maPdfMemory.WriteStream(aFile);
-    mpPdfDocument = FPDF_LoadMemDocument(maPdfMemory.GetData(), maPdfMemory.GetSize(), /*password=*/nullptr);
-    CPPUNIT_ASSERT(mpPdfDocument);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    DocumentHolder pPdfDocument(FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument.get());
 
     // The document has one page.
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(mpPdfDocument));
-    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/0);
-    CPPUNIT_ASSERT(mpPdfPage);
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+    PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage.get());
 
     // Make sure there is a filled rectangle inside.
-    int nPageObjectCount = FPDFPage_CountObjects(mpPdfPage);
+    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
     int nYellowPathCount = 0;
     for (int i = 0; i < nPageObjectCount; ++i)
     {
-        FPDF_PAGEOBJECT pPdfPageObject = FPDFPage_GetObject(mpPdfPage, i);
+        FPDF_PAGEOBJECT pPdfPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
         if (FPDFPageObj_GetType(pPdfPageObject) != FPDF_PAGEOBJ_PATH)
             continue;
 
@@ -340,24 +363,25 @@ void PdfExportTest::testTdf107868()
 
     // Parse the export result with pdfium.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    maPdfMemory.WriteStream(aFile);
-    mpPdfDocument = FPDF_LoadMemDocument(maPdfMemory.GetData(), maPdfMemory.GetSize(), /*password=*/nullptr);
-    if (!mpPdfDocument)
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    DocumentHolder pPdfDocument(FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    if (!pPdfDocument.get())
         // Printing to PDF failed in a non-interesting way, e.g. CUPS is not
         // running, there is no printer defined, etc.
         return;
 
     // The document has one page.
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(mpPdfDocument));
-    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/0);
-    CPPUNIT_ASSERT(mpPdfPage);
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+    PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage.get());
 
     // Make sure there is no filled rectangle inside.
-    int nPageObjectCount = FPDFPage_CountObjects(mpPdfPage);
+    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
     int nWhitePathCount = 0;
     for (int i = 0; i < nPageObjectCount; ++i)
     {
-        FPDF_PAGEOBJECT pPdfPageObject = FPDFPage_GetObject(mpPdfPage, i);
+        FPDF_PAGEOBJECT pPdfPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
         if (FPDFPageObj_GetType(pPdfPageObject) != FPDF_PAGEOBJ_PATH)
             continue;
 
@@ -769,29 +793,30 @@ void PdfExportTest::testTdf108963()
 
     // Parse the export result with pdfium.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    maPdfMemory.WriteStream(aFile);
-    mpPdfDocument = FPDF_LoadMemDocument(maPdfMemory.GetData(), maPdfMemory.GetSize(), /*password=*/nullptr);
-    CPPUNIT_ASSERT(mpPdfDocument);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    DocumentHolder pPdfDocument(FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument.get());
 
     // The document has one page.
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(mpPdfDocument));
-    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/0);
-    CPPUNIT_ASSERT(mpPdfPage);
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+    PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage.get());
 
     // Test page size (28x15.75 cm, was 1/100th mm off, tdf#112690)
     // bad: MediaBox[0 0 793.672440944882 446.428346456693]
     // good: MediaBox[0 0 793.700787401575 446.456692913386]
-    const double aWidth = FPDF_GetPageWidth(mpPdfPage);
+    const double aWidth = FPDF_GetPageWidth(pPdfPage.get());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(793.7, aWidth, 0.01);
-    const double aHeight = FPDF_GetPageHeight(mpPdfPage);
+    const double aHeight = FPDF_GetPageHeight(pPdfPage.get());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(446.46, aHeight, 0.01);
 
     // Make sure there is a filled rectangle inside.
-    int nPageObjectCount = FPDFPage_CountObjects(mpPdfPage);
+    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
     int nYellowPathCount = 0;
     for (int i = 0; i < nPageObjectCount; ++i)
     {
-        FPDF_PAGEOBJECT pPdfPageObject = FPDFPage_GetObject(mpPdfPage, i);
+        FPDF_PAGEOBJECT pPdfPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
         if (FPDFPageObj_GetType(pPdfPageObject) != FPDF_PAGEOBJ_PATH)
             continue;
 
@@ -972,16 +997,17 @@ void PdfExportTest::testTdf115117_1a()
 
     // Parse the export result with pdfium.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    maPdfMemory.WriteStream(aFile);
-    mpPdfDocument = FPDF_LoadMemDocument(maPdfMemory.GetData(), maPdfMemory.GetSize(), /*password=*/nullptr);
-    CPPUNIT_ASSERT(mpPdfDocument);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    DocumentHolder pPdfDocument(FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument.get());
 
     // The document has one page.
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(mpPdfDocument));
-    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/0);
-    CPPUNIT_ASSERT(mpPdfPage);
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+    PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage.get());
 
-    auto pPdfTextPage = FPDFText_LoadPage(mpPdfPage);
+    auto pPdfTextPage = FPDFText_LoadPage(pPdfPage.get());
     CPPUNIT_ASSERT(pPdfTextPage);
 
     // Extract the text from the page. This pdfium API is a bit higher level
@@ -1014,16 +1040,17 @@ void PdfExportTest::testTdf115117_2a()
 
     // Parse the export result with pdfium.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    maPdfMemory.WriteStream(aFile);
-    mpPdfDocument = FPDF_LoadMemDocument(maPdfMemory.GetData(), maPdfMemory.GetSize(), /*password=*/nullptr);
-    CPPUNIT_ASSERT(mpPdfDocument);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    DocumentHolder pPdfDocument(FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument.get());
 
     // The document has one page.
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(mpPdfDocument));
-    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/0);
-    CPPUNIT_ASSERT(mpPdfPage);
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+    PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage.get());
 
-    auto pPdfTextPage = FPDFText_LoadPage(mpPdfPage);
+    auto pPdfTextPage = FPDFText_LoadPage(pPdfPage.get());
     CPPUNIT_ASSERT(pPdfTextPage);
 
     int nChars = FPDFText_CountChars(pPdfTextPage);
@@ -1324,24 +1351,25 @@ void PdfExportTest::testTdf105954()
 
     // Parse the export result with pdfium.
     SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
-    maPdfMemory.WriteStream(aFile);
-    mpPdfDocument
-        = FPDF_LoadMemDocument(maPdfMemory.GetData(), maPdfMemory.GetSize(), /*password=*/nullptr);
-    CPPUNIT_ASSERT(mpPdfDocument);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    DocumentHolder pPdfDocument(
+        FPDF_LoadMemDocument(aMemory.GetData(), aMemory.GetSize(), /*password=*/nullptr));
+    CPPUNIT_ASSERT(pPdfDocument.get());
 
     // The document has one page.
-    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(mpPdfDocument));
-    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/0);
-    CPPUNIT_ASSERT(mpPdfPage);
+    CPPUNIT_ASSERT_EQUAL(1, FPDF_GetPageCount(pPdfDocument.get()));
+    PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage.get());
 
     // There is a single image on the page.
-    int nPageObjectCount = FPDFPage_CountObjects(mpPdfPage);
+    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
     CPPUNIT_ASSERT_EQUAL(1, nPageObjectCount);
 
     // Check width of the image.
-    FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(mpPdfPage, /*index=*/0);
+    FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), /*index=*/0);
     FPDF_IMAGEOBJ_METADATA aMeta;
-    CPPUNIT_ASSERT(FPDFImageObj_GetImageMetadata(pPageObject, mpPdfPage, &aMeta));
+    CPPUNIT_ASSERT(FPDFImageObj_GetImageMetadata(pPageObject, pPdfPage.get(), &aMeta));
     // This was 2000, i.e. the 'reduce to 300 DPI' request was ignored.
     // This is now around 238 (228 on macOS).
     CPPUNIT_ASSERT_LESS(static_cast<unsigned int>(250), aMeta.width);
@@ -1353,19 +1381,19 @@ void PdfExportTest::testTdf106702()
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106702.odt";
     utl::MediaDescriptor aMediaDescriptor;
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-    exportAndParse(aURL, aMediaDescriptor);
+    auto pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
 
     // The document has two pages.
-    CPPUNIT_ASSERT_EQUAL(2, FPDF_GetPageCount(mpPdfDocument));
+    CPPUNIT_ASSERT_EQUAL(2, FPDF_GetPageCount(pPdfDocument.get()));
 
     // First page already has the correct image position.
-    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/0);
-    CPPUNIT_ASSERT(mpPdfPage);
+    PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage.get());
     int nExpected = 0;
-    int nPageObjectCount = FPDFPage_CountObjects(mpPdfPage);
+    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
     for (int i = 0; i < nPageObjectCount; ++i)
     {
-        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(mpPdfPage, i);
+        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
         if (FPDFPageObj_GetType(pPageObject) != FPDF_PAGEOBJ_IMAGE)
             continue;
 
@@ -1376,14 +1404,13 @@ void PdfExportTest::testTdf106702()
     }
 
     // Second page had an incorrect image position.
-    FPDF_ClosePage(mpPdfPage);
-    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/1);
-    CPPUNIT_ASSERT(mpPdfPage);
+    pPdfPage.reset(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/1));
+    CPPUNIT_ASSERT(pPdfPage.get());
     int nActual = 0;
-    nPageObjectCount = FPDFPage_CountObjects(mpPdfPage);
+    nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
     for (int i = 0; i < nPageObjectCount; ++i)
     {
-        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(mpPdfPage, i);
+        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
         if (FPDFPageObj_GetType(pPageObject) != FPDF_PAGEOBJ_IMAGE)
             continue;
 
@@ -1412,19 +1439,19 @@ void PdfExportTest::testTdf113143()
         { "SelectPdfVersion", uno::makeAny(static_cast<sal_Int32>(16)) },
     }));
     aMediaDescriptor["FilterData"] <<= aFilterData;
-    exportAndParse(aURL, aMediaDescriptor);
+    auto pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
 
     // The document has two pages.
-    CPPUNIT_ASSERT_EQUAL(2, FPDF_GetPageCount(mpPdfDocument));
+    CPPUNIT_ASSERT_EQUAL(2, FPDF_GetPageCount(pPdfDocument.get()));
 
     // First has the original (larger) image.
-    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/0);
-    CPPUNIT_ASSERT(mpPdfPage);
+    PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/0));
+    CPPUNIT_ASSERT(pPdfPage.get());
     int nLarger = 0;
-    int nPageObjectCount = FPDFPage_CountObjects(mpPdfPage);
+    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
     for (int i = 0; i < nPageObjectCount; ++i)
     {
-        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(mpPdfPage, i);
+        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
         if (FPDFPageObj_GetType(pPageObject) != FPDF_PAGEOBJ_IMAGE)
             continue;
 
@@ -1435,14 +1462,13 @@ void PdfExportTest::testTdf113143()
     }
 
     // Second page has the scaled (smaller) image.
-    FPDF_ClosePage(mpPdfPage);
-    mpPdfPage = FPDF_LoadPage(mpPdfDocument, /*page_index=*/1);
-    CPPUNIT_ASSERT(mpPdfPage);
+    pPdfPage.reset(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/1));
+    CPPUNIT_ASSERT(pPdfPage.get());
     int nSmaller = 0;
-    nPageObjectCount = FPDFPage_CountObjects(mpPdfPage);
+    nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
     for (int i = 0; i < nPageObjectCount; ++i)
     {
-        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(mpPdfPage, i);
+        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
         if (FPDFPageObj_GetType(pPageObject) != FPDF_PAGEOBJ_IMAGE)
             continue;
 
