@@ -445,8 +445,10 @@ std::string UnixErrnoString(int nErrno)
             return "EACCES";
         case EFAULT:
             return "EFAULT";
+#ifdef ENOTBLK
         case ENOTBLK:
             return "ENOTBLK";
+#endif
         case EBUSY:
             return "EBUSY";
         case EEXIST:
