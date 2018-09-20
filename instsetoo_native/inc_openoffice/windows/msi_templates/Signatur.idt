@@ -5,12 +5,3 @@ Signature	Signature
 # language, and we need language-independent comparison, we use a value that is at
 # least 1 less (see note at https://msdn.microsoft.com/en-us/library/aa371853).
 win81s14	kernel32.dll	6.3.9600.17030						
-ucrt_detected	ucrtbase.dll	10.0.10240.0						
-# The great feature of all recent Windows is that they make it incredibly hard to find their
-# actual versions. Win 10 makes the next step in that direction: not only it tells you that
-# its version is 6.3 (VersionNT is 603), but also it disallows you to get real version of a
-# file during installation, if the version is greater than 6.3. So, for ucrt DLLs versioned
-# by MS as 10.0.x.y, it returns 6.3.x.y, pretending to have a lower version than on Win8.1.
-# Here we check for this, knowing that we get a version below 7.0 for UCRT that never had a
-# version below 10.0, then it's Win10+ that is lying to us.
-ucrt_on_win10	ucrtbase.dll		7.0.0.0					
