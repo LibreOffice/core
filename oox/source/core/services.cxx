@@ -35,7 +35,6 @@ namespace {
 // Impress" would actually want to make use of them:
 static ::cppu::ImplementationEntry const spServices[] =
 {
-    IMPLEMENTATION_ENTRY( ::oox::ppt::QuickDiagrammingLayout ),
     IMPLEMENTATION_ENTRY( ::oox::shape::ShapeContextHandler ),
     { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
