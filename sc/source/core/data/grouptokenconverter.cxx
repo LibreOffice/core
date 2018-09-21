@@ -20,7 +20,7 @@ using namespace formula;
 
 bool ScGroupTokenConverter::isSelfReferenceRelative(const ScAddress& rRefPos, SCROW nRelRow)
 {
-    if (rRefPos.Col() != mrPos.Col())
+    if (rRefPos.Col() != mrPos.Col() || rRefPos.Tab() != mrPos.Tab())
         return false;
 
     SCROW nLen = mrCell.GetCellGroup()->mnLength;
@@ -46,7 +46,7 @@ bool ScGroupTokenConverter::isSelfReferenceRelative(const ScAddress& rRefPos, SC
 
 bool ScGroupTokenConverter::isSelfReferenceAbsolute(const ScAddress& rRefPos)
 {
-    if (rRefPos.Col() != mrPos.Col())
+    if (rRefPos.Col() != mrPos.Col() || rRefPos.Tab() != mrPos.Tab())
         return false;
 
     SCROW nLen = mrCell.GetCellGroup()->mnLength;
