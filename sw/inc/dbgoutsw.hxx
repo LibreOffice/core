@@ -64,7 +64,6 @@ SW_DLLPUBLIC const char * dbg_out(const SwpHints &rHints);
 SW_DLLPUBLIC const char * dbg_out(const SfxPoolItem & rItem);
 SW_DLLPUBLIC const char * dbg_out(const SfxPoolItem * pItem);
 SW_DLLPUBLIC const char * dbg_out(const SfxItemSet & rSet);
-SW_DLLPUBLIC const char * dbg_out(SwNodes & rNodes);
 SW_DLLPUBLIC const char * dbg_out(const SwPosition & rPos);
 SW_DLLPUBLIC const char * dbg_out(const SwPaM & rPam);
 SW_DLLPUBLIC const char * dbg_out(const SwNodeNum & rNum);

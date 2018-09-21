@@ -135,7 +135,6 @@ public:
     void                 Merge( SbxArray* );
     OUString             GetAlias( sal_uInt16 );
     void                 PutAlias( const OUString&, sal_uInt16 );
-    SbxVariable*         FindUserData( sal_uInt32 nUserData );
     SbxVariable* Find( const OUString&, SbxClassType );
 
     // Additional methods for 32-bit indices
@@ -212,7 +211,6 @@ public:
     SbxCollection();
     SbxCollection( const SbxCollection& );
     SbxCollection& operator=( const SbxCollection& );
-    virtual SbxVariable* FindUserData( sal_uInt32 nUserData ) override;
     virtual SbxVariable* Find( const OUString&, SbxClassType ) override;
     virtual void Clear() override;
 };

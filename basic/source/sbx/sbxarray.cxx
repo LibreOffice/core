@@ -341,56 +341,6 @@ void SbxArray::Merge( SbxArray* p )
     }
 }
 
-// Search of an element via the user data. If the element is
-// object, it will also be scanned.
-
-SbxVariable* SbxArray::FindUserData( sal_uInt32 nData )
-{
-    SbxVariable* p = nullptr;
-    for (auto& rEntry : mVarEntries)
-    {
-        if (!rEntry.mpVar.is())
-            continue;
-
-        if (rEntry.mpVar->IsVisible() && rEntry.mpVar->GetUserData() == nData)
-        {
-            p = rEntry.mpVar.get();
-            p->ResetFlag( SbxFlagBits::ExtFound );
-            break;  // JSM 1995-10-06
-        }
-
-        // Did we have an array/object with extended search?
-        if (rEntry.mpVar->IsSet(SbxFlagBits::ExtSearch))
-        {
-            switch (rEntry.mpVar->GetClass())
-            {
-                case SbxClassType::Object:
-                {
-                    // Objects are not allowed to scan their parent.
-                    SbxFlagBits nOld = rEntry.mpVar->GetFlags();
-                    rEntry.mpVar->ResetFlag(SbxFlagBits::GlobalSearch);
-                    p = static_cast<SbxObject&>(*rEntry.mpVar).FindUserData(nData);
-                    rEntry.mpVar->SetFlags(nOld);
-                }
-                break;
-                case SbxClassType::Array:
-                    // Casting SbxVariable to SbxArray?  Really?
-                    p = reinterpret_cast<SbxArray&>(*rEntry.mpVar).FindUserData(nData);
-                break;
-                default:
-                    ;
-            }
-
-            if (p)
-            {
-                p->SetFlag(SbxFlagBits::ExtFound);
-                break;
-            }
-        }
-    }
-    return p;
-}
-
 // Search of an element by his name and type. If an element is an object,
 // it will also be scanned..
 

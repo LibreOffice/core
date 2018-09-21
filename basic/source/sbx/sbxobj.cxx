@@ -175,38 +175,6 @@ bool SbxObject::IsClass( const OUString& rName ) const
     return aClassName.equalsIgnoreAsciiCase( rName );
 }
 
-SbxVariable* SbxObject::FindUserData( sal_uInt32 nData )
-{
-    SbxVariable* pRes = pMethods->FindUserData( nData );
-    if( !pRes )
-    {
-        pRes = pProps->FindUserData( nData );
-    }
-    if( !pRes )
-    {
-        pRes = pObjs->FindUserData( nData );
-    }
-    // Search in the parents?
-    if( !pRes && IsSet( SbxFlagBits::GlobalSearch ) )
-    {
-        SbxObject* pCur = this;
-        while( !pRes && pCur->pParent )
-        {
-            // I myself was already searched!
-            SbxFlagBits nOwn = pCur->GetFlags();
-            pCur->ResetFlag( SbxFlagBits::ExtSearch );
-            // I search already global!
-            SbxFlagBits nPar = pCur->pParent->GetFlags();
-            pCur->pParent->ResetFlag( SbxFlagBits::GlobalSearch );
-            pRes = pCur->pParent->FindUserData( nData );
-            pCur->SetFlags( nOwn );
-            pCur->pParent->SetFlags( nPar );
-            pCur = pCur->pParent;
-        }
-    }
-    return pRes;
-}
-
 SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
 {
 #ifdef DBG_UTIL

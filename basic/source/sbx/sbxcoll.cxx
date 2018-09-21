@@ -87,19 +87,6 @@ void SbxCollection::Initialize()
     p->SetFlag( SbxFlagBits::DontStore );
 }
 
-SbxVariable* SbxCollection::FindUserData( sal_uInt32 nData )
-{
-    if( GetParameters() )
-    {
-        SbxObject* pObj = static_cast<SbxObject*>(GetObject());
-        return pObj ? pObj->FindUserData( nData ) : nullptr;
-    }
-    else
-    {
-        return SbxObject::FindUserData( nData );
-    }
-}
-
 SbxVariable* SbxCollection::Find( const OUString& rName, SbxClassType t )
 {
     if( GetParameters() )

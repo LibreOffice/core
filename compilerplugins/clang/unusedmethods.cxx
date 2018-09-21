@@ -153,14 +153,19 @@ MyFuncInfo UnusedMethods::niceName(const FunctionDecl* functionDecl)
         aInfo.returnType = "";
     }
 
-    if (const CXXMethodDecl* methodDecl = dyn_cast<CXXMethodDecl>(functionDecl)) {
+    if (auto methodDecl = dyn_cast<CXXMethodDecl>(functionDecl)) {
         const CXXRecordDecl* recordDecl = methodDecl->getParent();
-        aInfo.nameAndParams += recordDecl->getQualifiedNameAsString();
-        aInfo.nameAndParams += "::";
+        aInfo.nameAndParams = recordDecl->getQualifiedNameAsString()
+                + "::"
+                + functionDecl->getNameAsString()
+                + "(";
         if (methodDecl->isVirtual())
             aInfo.virtualness = "virtual";
     }
-    aInfo.nameAndParams += functionDecl->getNameAsString() + "(";
+    else
+    {
+        aInfo.nameAndParams = functionDecl->getQualifiedNameAsString() + "(";
+    }
     bool bFirst = true;
     for (const ParmVarDecl *pParmVarDecl : compat::parameters(*functionDecl)) {
         if (bFirst)

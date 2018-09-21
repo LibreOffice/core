@@ -706,8 +706,6 @@ public:
 
     void                        DrawPixel( const Point& rPt );
     void                        DrawPixel( const Point& rPt, const Color& rColor );
-    void                        DrawPixel( const tools::Polygon& rPts, const Color* pColors );
-    void                        DrawPixel( const tools::Polygon& rPts, const Color& rColor );
 
     Color                       GetPixel( const Point& rPt ) const;
     ///@}
