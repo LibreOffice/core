@@ -10,13 +10,16 @@
 
 #include <Qt5MainWindow.hxx>
 #include <Qt5MainWindow.moc>
+#include <Qt5AccessibleWidget.hxx>
 
+#include <QtGui/QAccessible>
 #include <QtGui/QCloseEvent>
 
 Qt5MainWindow::Qt5MainWindow(Qt5Frame& rFrame, QWidget* parent, Qt::WindowFlags f)
     : QMainWindow(parent, f)
     , m_pFrame(&rFrame)
 {
+    QAccessible::installFactory(Qt5AccessibleWidget::customFactory);
 }
 
 void Qt5MainWindow::closeEvent(QCloseEvent* pEvent)
