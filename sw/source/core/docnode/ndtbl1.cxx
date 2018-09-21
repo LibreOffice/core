@@ -1512,30 +1512,27 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, bool bBalance )
         pEnd = pEnd->GetUpper();
     ::lcl_CalcColValues( aMins, aTabCols, pStart, pEnd, false );
 
+    sal_uInt16 nSelectedWidth = 0, nCols = 0;
     if( bBalance )
     {
-        // All Columns, which are now selected, have a desired value.
-        // We add up the current values, divide the result by their
-        // count and get a desired value for balancing.
-        sal_uInt16 nWish = 0, nCnt = 0;
+        // Find the combined size of the selected columns, and distribute evenly
         for ( size_t i = 0; i <= aTabCols.Count(); ++i )
         {
-            int nDiff = aWish[i];
-            if ( nDiff )
+            if ( aWish[i] )
             {
                 if ( i == 0 )
-                    nWish += aTabCols[i] - aTabCols.GetLeft();
+                    nSelectedWidth += aTabCols[i] - aTabCols.GetLeft();
                 else if ( i == aTabCols.Count() )
-                    nWish += aTabCols.GetRight() - aTabCols[i-1];
+                    nSelectedWidth += aTabCols.GetRight() - aTabCols[i-1];
                 else
-                    nWish += aTabCols[i] - aTabCols[i-1];
-                ++nCnt;
+                    nSelectedWidth += aTabCols[i] - aTabCols[i-1];
+                ++nCols;
             }
         }
-        nWish /= nCnt;
+        const sal_uInt16 nEqualWidth = nSelectedWidth / nCols;
         for (sal_uInt16 & rn : aWish)
             if ( rn )
-                rn = nWish;
+                rn = nEqualWidth;
     }
 
     const long nOldRight = aTabCols.GetRight();
