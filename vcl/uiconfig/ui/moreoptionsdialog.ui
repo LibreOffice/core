@@ -59,7 +59,7 @@
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkCheckButton" id="singlejobs">
-                <property name="label" translatable="yes" context="moreoptionsdialog|singlejobs">Create single print jobs for collated output</property>
+                <property name="label" translatable="yes" context="moreoptionsdialog|singlejobs">Create separate print jobs for collated output</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
