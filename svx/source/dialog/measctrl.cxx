@@ -41,7 +41,7 @@ void SvxXMeasurePreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
 
     pModel.reset(new SdrModel(nullptr, nullptr, true));
-    pMeasureObj = new SdrMeasureObj(*pModel, Point(), Point());
+    pMeasureObj.reset(new SdrMeasureObj(*pModel, Point(), Point()));
 
     ResizeImpl(aSize);
     Invalidate();
@@ -72,17 +72,6 @@ void SvxXMeasurePreview::Resize()
 
 SvxXMeasurePreview::~SvxXMeasurePreview()
 {
-    // No one is deleting the MeasureObj? This is not only an error but also
-    // a memory leak (!). Main problem is that this object is still listening to
-    // a StyleSheet of the model which was set. Thus, if You want to keep the object,
-    // set the model to 0L, if object is not needed (seems to be the case here),
-    // delete it.
-
-    // always use SdrObject::Free(...) for SdrObjects (!)
-    SdrObject* pTemp(pMeasureObj);
-    SdrObject::Free(pTemp);
-
-    pModel.reset();
 }
 
 void SvxXMeasurePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
