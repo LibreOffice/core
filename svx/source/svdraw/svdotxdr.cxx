@@ -40,7 +40,6 @@ void SdrTextObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
     for(sal_uInt32 nHdlNum=0; nHdlNum<8; ++nHdlNum)
     {
-        SdrHdl* pH=nullptr;
         Point aPnt;
         SdrHdlKind eKind = SdrHdlKind::UpperLeft;
         switch (nHdlNum) {
@@ -55,10 +54,10 @@ void SdrTextObj::AddToHdlList(SdrHdlList& rHdlList) const
         }
         if (aGeo.nShearAngle!=0) ShearPoint(aPnt,maRect.TopLeft(),aGeo.nTan);
         if (aGeo.nRotationAngle!=0) RotatePoint(aPnt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-        pH=new SdrHdl(aPnt,eKind);
+        std::unique_ptr<SdrHdl> pH(new SdrHdl(aPnt,eKind));
         pH->SetObj(const_cast<SdrTextObj*>(this));
         pH->SetRotationAngle(aGeo.nRotationAngle);
-        rHdlList.AddHdl(pH);
+        rHdlList.AddHdl(std::move(pH));
     }
 }
 

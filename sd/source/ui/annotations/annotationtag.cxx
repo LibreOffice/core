@@ -451,7 +451,7 @@ void AnnotationTag::addCustomHandles( SdrHdlList& rHandlerList )
     if( mxAnnotation.is() )
     {
         SmartTagReference xThis( this );
-        AnnotationHdl* pHdl = new AnnotationHdl( xThis, mxAnnotation, Point() );
+        std::unique_ptr<AnnotationHdl> pHdl(new AnnotationHdl( xThis, mxAnnotation, Point() ));
         pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
         pHdl->SetPageView( mrView.GetSdrPageView() );
 
@@ -459,7 +459,7 @@ void AnnotationTag::addCustomHandles( SdrHdlList& rHandlerList )
         Point aBasePos( static_cast<long>(aPosition.X * 100.0), static_cast<long>(aPosition.Y * 100.0) );
         pHdl->SetPos( aBasePos );
 
-        rHandlerList.AddHdl( pHdl );
+        rHandlerList.AddHdl( std::move(pHdl) );
     }
 }
 

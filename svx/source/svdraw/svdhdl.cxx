@@ -1797,7 +1797,7 @@ void ImpTextframeHdl::CreateB2dIAObject()
 }
 
 
-static bool ImpSdrHdlListSorter(SdrHdl* const& lhs, SdrHdl* const& rhs)
+static bool ImpSdrHdlListSorter(std::unique_ptr<SdrHdl> const& lhs, std::unique_ptr<SdrHdl> const& rhs)
 {
     SdrHdlKind eKind1=lhs->GetKind();
     SdrHdlKind eKind2=rhs->GetKind();
@@ -1950,7 +1950,7 @@ void SdrHdlList::TravelFocusHdl(bool bForward)
     if (mnFocusIndex >= GetHdlCount())
         mnFocusIndex = SAL_MAX_SIZE;
 
-    if(aList.empty())
+    if(maList.empty())
         return;
 
     // take care of old handle
@@ -1965,23 +1965,23 @@ void SdrHdlList::TravelFocusHdl(bool bForward)
     }
 
     // allocate pointer array for sorted handle list
-    std::unique_ptr<ImplHdlAndIndex[]> pHdlAndIndex(new ImplHdlAndIndex[aList.size()]);
+    std::unique_ptr<ImplHdlAndIndex[]> pHdlAndIndex(new ImplHdlAndIndex[maList.size()]);
 
     // build sorted handle list
-    for( size_t a = 0; a < aList.size(); ++a)
+    for( size_t a = 0; a < maList.size(); ++a)
     {
-        pHdlAndIndex[a].mpHdl = aList[a];
+        pHdlAndIndex[a].mpHdl = maList[a].get();
         pHdlAndIndex[a].mnIndex = a;
     }
 
-    qsort(pHdlAndIndex.get(), aList.size(), sizeof(ImplHdlAndIndex), ImplSortHdlFunc);
+    qsort(pHdlAndIndex.get(), maList.size(), sizeof(ImplHdlAndIndex), ImplSortHdlFunc);
 
     // look for old num in sorted array
     size_t nOldHdl(nOldHdlNum);
 
     if(nOldHdlNum != SAL_MAX_SIZE)
     {
-        for(size_t a = 0; a < aList.size(); ++a)
+        for(size_t a = 0; a < maList.size(); ++a)
         {
             if(pHdlAndIndex[a].mpHdl == pOld)
             {
@@ -1999,7 +1999,7 @@ void SdrHdlList::TravelFocusHdl(bool bForward)
     {
         if(nOldHdl != SAL_MAX_SIZE)
         {
-            if(nOldHdl == aList.size() - 1)
+            if(nOldHdl == maList.size() - 1)
             {
                 // end forward run
                 nNewHdl = SAL_MAX_SIZE;
@@ -2021,7 +2021,7 @@ void SdrHdlList::TravelFocusHdl(bool bForward)
         if(nOldHdl == SAL_MAX_SIZE)
         {
             // start backward run at last entry
-            nNewHdl = aList.size() - 1;
+            nNewHdl = maList.size() - 1;
 
         }
         else
@@ -2047,9 +2047,9 @@ void SdrHdlList::TravelFocusHdl(bool bForward)
     {
         SdrHdl* pNew = pHdlAndIndex[nNewHdl].mpHdl;
 
-        for(size_t a = 0; a < aList.size(); ++a)
+        for(size_t a = 0; a < maList.size(); ++a)
         {
-            if(aList[a] == pNew)
+            if(maList[a].get() == pNew)
             {
                 nNewHdlNum = a;
                 break;
@@ -2122,8 +2122,7 @@ void SdrHdlList::ResetFocusHdl()
 
 SdrHdlList::SdrHdlList(SdrMarkView* pV)
 :   mnFocusIndex(SAL_MAX_SIZE),
-    pView(pV),
-    aList()
+    pView(pV)
 {
     nHdlSize = 3;
     bRotateShear = false;
@@ -2178,24 +2177,20 @@ void SdrHdlList::SetDistortShear(bool bOn)
     bDistortShear = bOn;
 }
 
-SdrHdl* SdrHdlList::RemoveHdl(size_t nNum)
+std::unique_ptr<SdrHdl> SdrHdlList::RemoveHdl(size_t nNum)
 {
-    SdrHdl* pRetval = aList[nNum];
-    aList.erase(aList.begin() + nNum);
+    std::unique_ptr<SdrHdl> pRetval = std::move(maList[nNum]);
+    maList.erase(maList.begin() + nNum);
 
     return pRetval;
 }
 
 void SdrHdlList::RemoveAllByKind(SdrHdlKind eKind)
 {
-    for(std::deque<SdrHdl*>::iterator it = aList.begin(); it != aList.end(); )
+    for(auto it = maList.begin(); it != maList.end(); )
     {
-        SdrHdl* p = *it;
-        if (p->GetKind() == eKind)
-        {
-            it = aList.erase( it );
-            delete p;
-        }
+        if ((*it)->GetKind() == eKind)
+            it = maList.erase( it );
         else
             ++it;
     }
@@ -2203,12 +2198,7 @@ void SdrHdlList::RemoveAllByKind(SdrHdlKind eKind)
 
 void SdrHdlList::Clear()
 {
-    for (size_t i=0; i<GetHdlCount(); ++i)
-    {
-        SdrHdl* pHdl=GetHdl(i);
-        delete pHdl;
-    }
-    aList.clear();
+    maList.clear();
 
     bRotateShear=false;
     bDistortShear=false;
@@ -2219,7 +2209,7 @@ void SdrHdlList::Sort()
     // remember currently focused handle
     SdrHdl* pPrev = GetFocusHdl();
 
-    std::sort( aList.begin(), aList.end(), ImpSdrHdlListSorter );
+    std::sort( maList.begin(), maList.end(), ImpSdrHdlListSorter );
 
     // get now and compare
     SdrHdl* pNow = GetFocusHdl();
@@ -2243,16 +2233,18 @@ size_t SdrHdlList::GetHdlNum(const SdrHdl* pHdl) const
 {
     if (pHdl==nullptr)
         return SAL_MAX_SIZE;
-    std::deque<SdrHdl*>::const_iterator it = std::find( aList.begin(), aList.end(), pHdl);
-    if( it == aList.end() )
+    auto it = std::find_if( maList.begin(), maList.end(),
+        [&](const std::unique_ptr<SdrHdl> & p) { return p.get() == pHdl; });
+    assert(it != maList.end());
+    if( it == maList.end() )
         return SAL_MAX_SIZE;
-    return it - aList.begin();
+    return it - maList.begin();
 }
 
-void SdrHdlList::AddHdl(SdrHdl* pHdl)
+void SdrHdlList::AddHdl(std::unique_ptr<SdrHdl> pHdl)
 {
     assert(pHdl);
-    aList.push_back(pHdl);
+    maList.push_back(std::move(pHdl));
     pHdl->SetHdlList(this);
 }
 
@@ -2285,8 +2277,9 @@ SdrHdl* SdrHdlList::GetHdl(SdrHdlKind eKind1) const
 
 void SdrHdlList::MoveTo(SdrHdlList& rOther)
 {
-    rOther.aList.insert(rOther.aList.end(), aList.begin(), aList.end());
-    aList.clear();
+    rOther.maList.insert(rOther.maList.end(),
+        std::make_move_iterator(maList.begin()), std::make_move_iterator(maList.end()));
+    maList.clear();
 }
 
 SdrCropHdl::SdrCropHdl(

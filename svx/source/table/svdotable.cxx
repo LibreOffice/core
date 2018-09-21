@@ -2110,10 +2110,10 @@ void SdrTableObj::AddToHdlList(SdrHdlList& rHdlList) const
         Point aPoint( maRect.TopLeft() );
         aPoint.AdjustY(nEdge );
 
-        TableEdgeHdl* pHdl= new TableEdgeHdl(aPoint,true,nEdgeMin,nEdgeMax,nColCount+1);
+        std::unique_ptr<TableEdgeHdl> pHdl(new TableEdgeHdl(aPoint,true,nEdgeMin,nEdgeMax,nColCount+1));
         pHdl->SetPointNum( nRow );
-        rHdlList.AddHdl( pHdl );
-        aRowEdges[nRow] = pHdl;
+        aRowEdges[nRow] = pHdl.get();
+        rHdlList.AddHdl( std::move(pHdl) );
     }
 
     // second add column handles
@@ -2129,10 +2129,10 @@ void SdrTableObj::AddToHdlList(SdrHdlList& rHdlList) const
         Point aPoint( maRect.TopLeft() );
         aPoint.AdjustX(nEdge );
 
-        TableEdgeHdl* pHdl = new TableEdgeHdl(aPoint,false,nEdgeMin,nEdgeMax, nRowCount+1);
+        std::unique_ptr<TableEdgeHdl> pHdl(new TableEdgeHdl(aPoint,false,nEdgeMin,nEdgeMax, nRowCount+1));
         pHdl->SetPointNum( nCol );
-        rHdlList.AddHdl( pHdl );
-        aColEdges[nCol] = pHdl;
+        aColEdges[nCol] = pHdl.get();
+        rHdlList.AddHdl( std::move(pHdl) );
     }
 
     // now add visible edges to row and column handles
@@ -2171,16 +2171,19 @@ void SdrTableObj::AddToHdlList(SdrHdlList& rHdlList) const
     }
 
     // add remaining handles
-    SdrHdl* pH=nullptr;
-    rHdlList.AddHdl( pH = new TableBorderHdl( maRect, !IsTextEditActive() ) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(maRect.TopLeft(),SdrHdlKind::UpperLeft) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(maRect.TopCenter(),SdrHdlKind::Upper) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(maRect.TopRight(),SdrHdlKind::UpperRight) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(maRect.LeftCenter(),SdrHdlKind::Left) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(maRect.RightCenter(),SdrHdlKind::Right) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(maRect.BottomLeft(),SdrHdlKind::LowerLeft) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(maRect.BottomCenter(),SdrHdlKind::Lower) ); pH->SetMoveOutside( true );
-    rHdlList.AddHdl( pH = new SdrHdl(maRect.BottomRight(),SdrHdlKind::LowerRight) ); pH->SetMoveOutside( true );
+    SdrHdlList tempList(nullptr);
+    tempList.AddHdl( o3tl::make_unique<TableBorderHdl>( maRect, !IsTextEditActive() ) );
+    tempList.AddHdl( o3tl::make_unique<SdrHdl>(maRect.TopLeft(),SdrHdlKind::UpperLeft) );
+    tempList.AddHdl( o3tl::make_unique<SdrHdl>(maRect.TopCenter(),SdrHdlKind::Upper) );
+    tempList.AddHdl( o3tl::make_unique<SdrHdl>(maRect.TopRight(),SdrHdlKind::UpperRight) );
+    tempList.AddHdl( o3tl::make_unique<SdrHdl>(maRect.LeftCenter(),SdrHdlKind::Left) );
+    tempList.AddHdl( o3tl::make_unique<SdrHdl>(maRect.RightCenter(),SdrHdlKind::Right) );
+    tempList.AddHdl( o3tl::make_unique<SdrHdl>(maRect.BottomLeft(),SdrHdlKind::LowerLeft) );
+    tempList.AddHdl( o3tl::make_unique<SdrHdl>(maRect.BottomCenter(),SdrHdlKind::Lower) );
+    tempList.AddHdl( o3tl::make_unique<SdrHdl>(maRect.BottomRight(),SdrHdlKind::LowerRight) );
+    for( size_t nHdl = 0; nHdl < tempList.GetHdlCount(); ++nHdl )
+        tempList.GetHdl(nHdl)->SetMoveOutside(true);
+    tempList.MoveTo(rHdlList);
 
     const size_t nHdlCount = rHdlList.GetHdlCount();
     for( size_t nHdl = 0; nHdl < nHdlCount; ++nHdl )

@@ -2000,13 +2000,13 @@ void SdrPathObj::AddToHdlList(SdrHdlList& rHdlList) const
         for (sal_uInt16 j=0; j<nPntCnt; j++) {
             if (rXPoly.GetFlags(j)!=PolyFlags::Control) {
                 const Point& rPnt=rXPoly[j];
-                SdrHdl* pHdl=new SdrHdl(rPnt,SdrHdlKind::Poly);
+                std::unique_ptr<SdrHdl> pHdl(new SdrHdl(rPnt,SdrHdlKind::Poly));
                 pHdl->SetPolyNum(i);
                 pHdl->SetPointNum(j);
                 pHdl->Set1PixMore(j==0);
                 pHdl->SetSourceHdlNum(nIdx);
                 nIdx++;
-                rHdlList.AddHdl(pHdl);
+                rHdlList.AddHdl(std::move(pHdl));
             }
         }
     }
@@ -2031,7 +2031,7 @@ void SdrPathObj::AddToPlusHdlList(SdrHdlList& rHdlList, SdrHdl& rHdl) const
     nPntMax--;
     for (sal_uInt32 nPlusNum = 0; nPlusNum <= nPntMax; ++nPlusNum)
     {
-        SdrHdl* pHdl=new SdrHdlBezWgt(&rHdl);
+        std::unique_ptr<SdrHdl> pHdl(new SdrHdlBezWgt(&rHdl));
         pHdl->SetPolyNum(rHdl.GetPolyNum());
 
         if (nPnt==0 && IsClosed()) nPnt=nPntMax;
@@ -2052,7 +2052,7 @@ void SdrPathObj::AddToPlusHdlList(SdrHdlList& rHdlList, SdrHdl& rHdl) const
 
         pHdl->SetSourceHdlNum(rHdl.GetSourceHdlNum());
         pHdl->SetPlusHdl(true);
-        rHdlList.AddHdl(pHdl);
+        rHdlList.AddHdl(std::move(pHdl));
     }
 }
 
