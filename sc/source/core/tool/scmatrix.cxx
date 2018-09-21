@@ -2193,7 +2193,7 @@ void ScMatrixImpl::MergeDoubleArray( std::vector<double>& rArray, ScFullMatrix::
         case ScFullMatrix::Mul:
         {
             MergeDoubleArrayFunc<ArrayMul> aFunc(rArray);
-            aFunc = maMat.walk(std::move(aFunc));
+            maMat.walk(std::move(aFunc));
         }
         break;
         default:
@@ -2493,7 +2493,7 @@ template<typename T>
 void ScMatrixImpl::ApplyOperation(T aOp, ScMatrixImpl& rMat)
 {
     MatrixOpWrapper<T> aFunc(rMat.maMat, aOp);
-    aFunc = maMat.walk(aFunc);
+    maMat.walk(aFunc);
 }
 
 template<typename T>
@@ -2640,7 +2640,7 @@ void ScMatrixImpl::ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
 {
     WalkElementBlockOperation aFunc(maMat.size().row,
             aDoubleFunc, aBoolFunc, aStringFunc, aEmptyFunc);
-    aFunc = maMat.walk(
+    maMat.walk(
         aFunc,
         MatrixImplType::size_pair_type(rStartPos.first, rStartPos.second),
         MatrixImplType::size_pair_type(rEndPos.first, rEndPos.second));
