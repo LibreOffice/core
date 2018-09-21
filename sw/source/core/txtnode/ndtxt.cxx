@@ -2441,7 +2441,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
     }
     pDest->m_Text = pDest->m_Text.replaceAt(nDestStart, 0,
                         m_Text.copy(nTextStartIdx, nLen));
-    m_Text = m_Text.replaceAt(nTextStartIdx, nLen, "");
+    OUString const newText = m_Text.replaceAt(nTextStartIdx, nLen, "");
     nLen = pDest->m_Text.getLength() - nInitSize; // update w/ current size!
     if (!nLen)                 // String didn't grow?
         return;
@@ -2657,6 +2657,9 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
     {
         Update( rStart, nLen, true, true );
     }
+
+    // set after moving hints
+    m_Text = newText;
 
     if (bMergePortionsNeeded)
     {
