@@ -162,7 +162,7 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
     , m_bInhibitActivate(false)
     , m_aInserted(BitmapEx(BMP_REDLINE_INSERTED))
     , m_aDeleted(BitmapEx(BMP_REDLINE_DELETED))
-    , m_aFormated(BitmapEx(BMP_REDLINE_FORMATED))
+    , m_aFormated(BitmapEx(BMP_REDLINE_FORMATTED))
     , m_aTableChgd(BitmapEx(BMP_REDLINE_TABLECHG))
     , m_aFormatCollSet(BitmapEx(BMP_REDLINE_FMTCOLLSET))
 {

@@ -23,7 +23,7 @@
 
 #define BMP_REDLINE_INSERTED                    "sw/res/redline_inserted.png"
 #define BMP_REDLINE_DELETED                     "sw/res/redline_deleted.png"
-#define BMP_REDLINE_FORMATED                    "sw/res/redline_inserted.png"
+#define BMP_REDLINE_FORMATTED                   "sw/res/redline_inserted.png"
 #define BMP_REDLINE_TABLECHG                    "sw/res/redline_inserted.png"
 #define BMP_REDLINE_FMTCOLLSET                  "sw/res/redline_inserted.png"
 
