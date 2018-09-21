@@ -387,13 +387,13 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
         aPos.AdjustX( -(all_width >> 1) );
         aPos.AdjustY( -(all_height >> 1) );
 
-        ImageButtonHdl* pHdl = new ImageButtonHdl( xThis, aPoint );
+        std::unique_ptr<ImageButtonHdl> pHdl(new ImageButtonHdl( xThis, aPoint ));
         pHdl->SetObjHdlNum( SMART_TAG_HDL_NUM );
         pHdl->SetPageView( mrView.GetSdrPageView() );
 
         pHdl->SetPos( aPos );
 
-        rHandlerList.AddHdl( pHdl );
+        rHandlerList.AddHdl( std::move(pHdl) );
     }
 }
 

@@ -1816,10 +1816,10 @@ void SdrObjCustomShape::AddToHdlList(SdrHdlList& rHdlList) const
             try
             {
                 css::awt::Point aPosition( rInteraction.xInteraction->getPosition() );
-                SdrHdl* pH = new SdrHdl( Point( aPosition.X, aPosition.Y ), SdrHdlKind::CustomShape1 );
+                std::unique_ptr<SdrHdl> pH(new SdrHdl( Point( aPosition.X, aPosition.Y ), SdrHdlKind::CustomShape1 ));
                 pH->SetPointNum( nCustomShapeHdlNum );
                 pH->SetObj( const_cast<SdrObjCustomShape*>(this) );
-                rHdlList.AddHdl(pH);
+                rHdlList.AddHdl(std::move(pH));
             }
             catch ( const uno::RuntimeException& )
             {

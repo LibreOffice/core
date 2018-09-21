@@ -414,7 +414,6 @@ void SdrCircObj::AddToHdlList(SdrHdlList& rHdlList) const
 
     for (sal_uInt32 nHdlNum=0; nHdlNum<nHdlCnt; ++nHdlNum)
     {
-        SdrHdl* pH = nullptr;
         Point aPnt;
         SdrHdlKind eLocalKind(SdrHdlKind::Move);
         sal_uInt32 nPNum(0);
@@ -475,11 +474,11 @@ void SdrCircObj::AddToHdlList(SdrHdlList& rHdlList) const
             RotatePoint(aPnt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
         }
 
-        pH = new SdrHdl(aPnt,eLocalKind);
+        std::unique_ptr<SdrHdl> pH(new SdrHdl(aPnt,eLocalKind));
         pH->SetPointNum(nPNum);
         pH->SetObj(const_cast<SdrCircObj*>(this));
         pH->SetRotationAngle(aGeo.nRotationAngle);
-        rHdlList.AddHdl(pH);
+        rHdlList.AddHdl(std::move(pH));
     }
 }
 

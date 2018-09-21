@@ -302,10 +302,10 @@ void SdrCaptionObj::AddToHdlList(SdrHdlList& rHdlList) const
     sal_uInt32 nCnt = aTailPoly.GetSize();
     for(sal_uInt32 i = 0; i<nCnt; ++i)
     {
-        SdrHdl* pHdl = new SdrHdl(aTailPoly.GetPoint(i), SdrHdlKind::Poly);
+        std::unique_ptr<SdrHdl> pHdl(new SdrHdl(aTailPoly.GetPoint(i), SdrHdlKind::Poly));
         pHdl->SetPolyNum(1);
         pHdl->SetPointNum(nRectHdlCnt + i);
-        rHdlList.AddHdl(pHdl);
+        rHdlList.AddHdl(std::move(pHdl));
     }
 }
 

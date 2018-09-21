@@ -1179,18 +1179,18 @@ void SdrObject::AddToHdlList(SdrHdlList& rHdlList) const
     const tools::Rectangle& rR=GetSnapRect();
     for (sal_uInt32 nHdlNum=0; nHdlNum<8; ++nHdlNum)
     {
-        SdrHdl* pH=nullptr;
+        std::unique_ptr<SdrHdl> pH;
         switch (nHdlNum) {
-            case 0: pH=new SdrHdl(rR.TopLeft(),     SdrHdlKind::UpperLeft); break;
-            case 1: pH=new SdrHdl(rR.TopCenter(),   SdrHdlKind::Upper); break;
-            case 2: pH=new SdrHdl(rR.TopRight(),    SdrHdlKind::UpperRight); break;
-            case 3: pH=new SdrHdl(rR.LeftCenter(),  SdrHdlKind::Left ); break;
-            case 4: pH=new SdrHdl(rR.RightCenter(), SdrHdlKind::Right); break;
-            case 5: pH=new SdrHdl(rR.BottomLeft(),  SdrHdlKind::LowerLeft); break;
-            case 6: pH=new SdrHdl(rR.BottomCenter(),SdrHdlKind::Lower); break;
-            case 7: pH=new SdrHdl(rR.BottomRight(), SdrHdlKind::LowerRight); break;
+            case 0: pH.reset(new SdrHdl(rR.TopLeft(),     SdrHdlKind::UpperLeft)); break;
+            case 1: pH.reset(new SdrHdl(rR.TopCenter(),   SdrHdlKind::Upper)); break;
+            case 2: pH.reset(new SdrHdl(rR.TopRight(),    SdrHdlKind::UpperRight)); break;
+            case 3: pH.reset(new SdrHdl(rR.LeftCenter(),  SdrHdlKind::Left )); break;
+            case 4: pH.reset(new SdrHdl(rR.RightCenter(), SdrHdlKind::Right)); break;
+            case 5: pH.reset(new SdrHdl(rR.BottomLeft(),  SdrHdlKind::LowerLeft)); break;
+            case 6: pH.reset(new SdrHdl(rR.BottomCenter(),SdrHdlKind::Lower)); break;
+            case 7: pH.reset(new SdrHdl(rR.BottomRight(), SdrHdlKind::LowerRight)); break;
         }
-        rHdlList.AddHdl(pH);
+        rHdlList.AddHdl(std::move(pH));
     }
 }
 
