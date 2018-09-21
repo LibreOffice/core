@@ -1487,6 +1487,20 @@ SwXText::appendTextContent(
     return insertTextContentWithProperties(xTextContent, rCharacterAndParagraphProperties, xInsertPosition);
 }
 
+// determine wether SwFrameFormat is a graphic node
+static bool isGraphicNode(const SwFrameFormat* pFrameFormat)
+{
+    // safety
+    if( !pFrameFormat->GetContent().GetContentIdx() )
+    {
+        return false;
+    }
+    auto index = *pFrameFormat->GetContent().GetContentIdx();
+    // consider the next node -> there is the graphic stored
+    index++;
+    return index.GetNode().IsGrfNode();
+}
+
 // move previously appended paragraphs into a text frames
 // to support import filters
 uno::Reference< text::XTextContent > SAL_CALL
@@ -1632,13 +1646,15 @@ SwXText::convertToTextFrame(
 
     // see if there are frames already anchored to this node
     // we have to work with the SdrObjects, as unique name is not guaranteed in their frame format
+    // tdf#115094: do nothing if we have a graphic node
     std::set<const SdrObject*> aAnchoredObjectsByPtr;
     std::set<OUString> aAnchoredObjectsByName;
     for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrameFormats()->size(); ++i)
     {
         const SwFrameFormat* pFrameFormat = (*m_pImpl->m_pDoc->GetSpzFrameFormats())[i];
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
-        if ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId() || RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) &&
+        if ( !isGraphicNode(pFrameFormat) &&
+                (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId() || RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) &&
                 aStartPam.Start()->nNode.GetIndex() <= rAnchor.GetContentAnchor()->nNode.GetIndex() &&
                 aStartPam.End()->nNode.GetIndex() >= rAnchor.GetContentAnchor()->nNode.GetIndex())
         {

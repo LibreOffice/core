@@ -20,6 +20,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
+
 
 class Test : public SwModelTestBase
 {
@@ -221,6 +223,24 @@ DECLARE_OOXMLIMPORT_TEST(testTdf119200, "tdf119200.docx")
     CPPUNIT_ASSERT_EQUAL(OUString(u" size 12{ func \u2284 } {}"), getFormula(getRun(xPara, 5)));
     CPPUNIT_ASSERT_EQUAL(OUString(u" size 12{ func \u2286 } {}"), getFormula(getRun(xPara, 6)));
     CPPUNIT_ASSERT_EQUAL(OUString(u" size 12{ func \u2287 } {}"), getFormula(getRun(xPara, 7)));
+}
+
+DECLARE_OOXMLIMPORT_TEST(testTdf115094, "tdf115094.docx")
+{
+    // anchor of graphic has to be the text in the text frame
+    // xray ThisComponent.DrawPage(1).Anchor.Text
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText1(xShape->getAnchor()->getText(), uno::UNO_QUERY);
+
+    // xray ThisComponent.TextFrames(0).Text
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<text::XTextFrame> xTextFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText2(xTextFrame->getText(), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL( xText1.get(), xText2.get() );
 }
 
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
