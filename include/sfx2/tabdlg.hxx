@@ -374,8 +374,6 @@ protected:
 public:
     void                SetTabDialog(SfxTabDialog* pDialog);
     void                SetDialogController(SfxTabDialogController* pDialog);
-protected:
-    void                AddItemConnection( sfx::ItemConnectionBase* pConnection );
 public:
     virtual             ~SfxTabPage() override;
     virtual void        dispose() override;

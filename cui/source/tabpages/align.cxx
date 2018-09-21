@@ -32,7 +32,6 @@
 #include <svx/dlgutil.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
-#include <sfx2/itemconnect.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/languageoptions.hxx>
 #include <svx/flagsdef.hxx>
