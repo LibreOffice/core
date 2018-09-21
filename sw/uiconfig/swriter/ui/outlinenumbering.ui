@@ -112,7 +112,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkMenuButton" id="format">
-                <property name="label" translatable="yes" context="outlinenumbering|user">_Format</property>
+                <property name="label" translatable="yes" context="outlinenumbering|user">L_oad/Save</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
