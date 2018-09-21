@@ -52,6 +52,7 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     maHighlightColor.assignIfUsed( rSourceProps.maHighlightColor );
     maUnderlineColor.assignIfUsed( rSourceProps.maUnderlineColor );
     moHeight.assignIfUsed( rSourceProps.moHeight );
+    moFontScale.assignIfUsed(rSourceProps.moFontScale);
     moSpacing.assignIfUsed( rSourceProps.moSpacing );
     moUnderline.assignIfUsed( rSourceProps.moUnderline );
     moBaseline.assignIfUsed( rSourceProps.moBaseline );
@@ -117,6 +118,8 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     if( moHeight.has() )
     {
         float fHeight = GetFontHeight( moHeight.get() );
+        if (moFontScale.has())
+            fHeight *= (moFontScale.get() / 100000);
         rPropMap.setProperty( PROP_CharHeight, fHeight);
         rPropMap.setProperty( PROP_CharHeightAsian, fHeight);
         rPropMap.setProperty( PROP_CharHeightComplex, fHeight);
