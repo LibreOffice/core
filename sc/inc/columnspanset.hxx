@@ -154,6 +154,22 @@ private:
     ColumnSpansType maSpans;
 };
 
+/**
+ * Optimized ColumnSpanSet version that operates on a single ScRange.
+ */
+class RangeColumnSpanSet
+{
+public:
+    RangeColumnSpanSet( const ScRange& range )
+         : range( range ) {}
+    void executeAction(ScDocument& rDoc, sc::ColumnSpanSet::Action& ac) const;
+    void executeColumnAction(ScDocument& rDoc, sc::ColumnSpanSet::ColumnAction& ac) const;
+    void executeColumnAction(ScDocument& rDoc, sc::ColumnSpanSet::ColumnAction& ac, double& fMem) const;
+private:
+    ScRange range;
+};
+
+
 }
 
 #endif

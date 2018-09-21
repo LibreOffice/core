@@ -177,7 +177,6 @@
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
 #include <tokenarray.hxx>
 #include <tokenuno.hxx>
-#include <columnspanset.hxx>
 
 #include <memory>
 

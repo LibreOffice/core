@@ -819,8 +819,7 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 }
                 else if ( ( eFunc == ifSUM || eFunc == ifCOUNT ) && mnSubTotalFlags == SubtotalFlags::NONE )
                 {
-                    sc::ColumnSpanSet aSet( false );
-                    aSet.set( aRange, true );
+                    sc::RangeColumnSpanSet aSet( aRange );
 
                     if ( eFunc == ifSUM )
                     {
