@@ -2084,8 +2084,17 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
 
         case RES_TXTATR_FTN :
         {
-            nPos = MapModelToView(&rNode,
-                static_cast<const SwFormatFootnote*>(pNew)->GetTextFootnote()->GetStart());
+            if (!IsInFootnote())
+            {   // the hint may be sent from the anchor node, or from a
+                // node in the footnote; the anchor index is only valid in the
+                // anchor node!
+                assert(&rNode == &static_cast<const SwFormatFootnote*>(pNew)->GetTextFootnote()->GetTextNode());
+                nPos = MapModelToView(&rNode,
+                    static_cast<const SwFormatFootnote*>(pNew)->GetTextFootnote()->GetStart());
+            }
+#ifdef _MSC_VER
+            else nPos = TextFrameIndex(42); // shut up MSVC 2017 spurious warning C4701
+#endif
             if (IsInFootnote() || IsIdxInside(nPos, TextFrameIndex(1)))
                 Prepare( PREP_FTN, static_cast<const SwFormatFootnote*>(pNew)->GetTextFootnote() );
             break;
