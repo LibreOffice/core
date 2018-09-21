@@ -249,9 +249,11 @@ SwRevisionConfig::SwRevisionConfig() :
     m_aInsertAttr.m_nAttr = LINESTYLE_SINGLE;
     m_aInsertAttr.m_nColor = COL_TRANSPARENT;
     m_aDeletedAttr.m_nItemId = SID_ATTR_CHAR_STRIKEOUT;
+    // coverity[mixed_enums : FALSE] - unhelpfully warns different enum than LINESTYLE_SINGLE above
     m_aDeletedAttr.m_nAttr = STRIKEOUT_SINGLE;
     m_aDeletedAttr.m_nColor = COL_TRANSPARENT;
     m_aFormatAttr.m_nItemId = SID_ATTR_CHAR_WEIGHT;
+    // coverity[mixed_enums : FALSE] - unhelpfully warns different enum than STRIKEOUT_SINGLE above
     m_aFormatAttr.m_nAttr = WEIGHT_BOLD;
     m_aFormatAttr.m_nColor = COL_BLACK;
     Load();
