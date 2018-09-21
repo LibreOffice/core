@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_EDTWIN_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_EDTWIN_HXX
 
+#include <o3tl/deleter.hxx>
 #include <sot/exchange.hxx>
 #include <svx/svdobj.hxx>
 #include <tools/link.hxx>
@@ -90,7 +91,7 @@ class SwEditWin final : public vcl::Window,
 
     std::unique_ptr<SdrDropMarkerOverlay> m_pUserMarker;
     SdrObject               *m_pUserMarkerObj;
-    std::unique_ptr<SwShadowCursor>       m_pShadCursor;
+    std::unique_ptr<SwShadowCursor, o3tl::default_delete<SwShadowCursor>> m_pShadCursor;
     boost::optional<Point>                m_xRowColumnSelectionStart; // save position where table row/column selection has been started
 
     SwView         &m_rView;

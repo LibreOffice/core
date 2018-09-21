@@ -1179,7 +1179,7 @@ void SwContentFrame::MakeAll(vcl::RenderContext* /*pRenderContext*/)
     PROTOCOL_ENTER( this, PROT::MakeAll, DbgAction::NONE, nullptr )
 
     // takes care of the notification in the dtor
-    std::unique_ptr<SwContentNotify> pNotify(new SwContentNotify( this ));
+    std::unique_ptr<SwContentNotify, o3tl::default_delete<SwContentNotify>> pNotify(new SwContentNotify( this ));
 
     // as long as bMakePage is true, a new page can be created (exactly once)
     bool bMakePage = true;

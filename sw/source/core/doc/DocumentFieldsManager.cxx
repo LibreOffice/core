@@ -50,6 +50,7 @@
 #include <usrfld.hxx>
 #include <ndindex.hxx>
 #include <pam.hxx>
+#include <o3tl/deleter.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
@@ -670,7 +671,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                 TBL_CALC != static_cast<SwTableFormulaUpdate*>(pHt)->m_eFlags ))
         return ;
 
-    std::unique_ptr<SwCalc> pCalc;
+    std::unique_ptr<SwCalc, o3tl::default_delete<SwCalc>> pCalc;
 
     if( pFieldType )
     {

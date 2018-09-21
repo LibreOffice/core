@@ -21,6 +21,7 @@
 #define INCLUDED_SVTOOLS_POPUPWINDOWCONTROLLER_HXX
 
 #include <memory>
+#include <o3tl/deleter.hxx>
 #include <svtools/svtdllapi.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -61,7 +62,7 @@ public:
     virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
 
 private:
-    std::unique_ptr< PopupWindowControllerImpl >  mxImpl;
+    std::unique_ptr<PopupWindowControllerImpl, o3tl::default_delete<PopupWindowControllerImpl>>  mxImpl;
 };
 
 } // namespace svt

@@ -55,6 +55,7 @@
 #include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <o3tl/deleter.hxx>
 #include <rtl/ref.hxx>
 #include <svx/fmdmod.hxx>
 #include <editeng/UnoForbiddenCharsTable.hxx>
@@ -133,7 +134,7 @@ private:
     class Impl;
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
-    std::deque<std::unique_ptr<UnoActionContext>> maActionArr;
+    std::deque<std::unique_ptr<UnoActionContext, o3tl::default_delete<UnoActionContext>>> maActionArr;
 
     const SfxItemPropertySet* pPropSet;
 
