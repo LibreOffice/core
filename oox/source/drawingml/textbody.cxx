@@ -54,6 +54,11 @@ TextParagraph& TextBody::addParagraph()
     return *xPara;
 }
 
+void TextBody::appendParagraph(std::shared_ptr<TextParagraph> pTextParagraph)
+{
+    maParagraphs.push_back(pTextParagraph);
+}
+
 void TextBody::insertAt(
         const ::oox::core::XmlFilterBase& rFilterBase,
         const Reference < XText > & xText,

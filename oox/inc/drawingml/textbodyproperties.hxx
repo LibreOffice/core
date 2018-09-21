@@ -41,6 +41,10 @@ struct TextBodyProperties
     boost::optional< sal_Int32 >                    moTextOffLower;
     boost::optional< sal_Int32 >                    moTextOffRight;
     css::drawing::TextVerticalAdjust                meVA;
+    /// Number of requested columns.
+    sal_Int32 mnNumCol = 1;
+    /// Normal autofit: font scale (default: 100%).
+    sal_Int32 mnFontScale = 100000;
 
     explicit            TextBodyProperties();
 

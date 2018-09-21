@@ -60,6 +60,9 @@ public:
         const css::uno::Reference < css::beans::XPropertySet > & xPropSet,
         const ::oox::drawingml::TextListStylePtr& pMasterTextListStyle );
 
+    /// Distributes text body with multiple columns in table cells.
+    void pullFromTextBody(oox::drawingml::TextBodyPtr pTextBody, sal_Int32 nShapeWidth);
+
 private:
 
     const TableStyle&                   getUsedTableStyle(const ::oox::core::XmlFilterBase& rFilterBase, TableStyle*& rTableStyleToDelete);
