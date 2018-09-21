@@ -517,7 +517,8 @@ SvxDialControl::DialControl_Impl::DialControl_Impl(OutputDevice& rReference) :
     mnInitialAngle( 0 ),
     mnOldAngle( 0 ),
     mnCenterX( 0 ),
-    mnCenterY( 0 )
+    mnCenterY( 0 ),
+    mbNoRot( false )
 {
 }
 
@@ -620,6 +621,17 @@ void SvxDialControl::LoseFocus()
     HandleEscapeEvent();
 }
 
+void SvxDialControl::SetNoRotation()
+{
+    if( !mpImpl->mbNoRot )
+    {
+        mpImpl->mbNoRot = true;
+        InvalidateControl();
+        if (mpImpl->mpLinkField)
+            mpImpl->mpLinkField->set_text("");
+    }
+}
+
 sal_Int32 SvxDialControl::GetRotation() const
 {
     return mpImpl->mnAngle;
@@ -633,7 +645,7 @@ void SvxDialControl::SetLinkedField(weld::SpinButton* pField, sal_Int32 nDecimal
     if( mpImpl->mpLinkField )
     {
         weld::SpinButton& rField = *mpImpl->mpLinkField;
-        rField.connect_value_changed(Link<weld::SpinButton&,void>());
+        rField.connect_changed(Link<weld::Entry&,void>());
     }
     // remember the new linked field
     mpImpl->mpLinkField = pField;
@@ -641,11 +653,11 @@ void SvxDialControl::SetLinkedField(weld::SpinButton* pField, sal_Int32 nDecimal
     if( mpImpl->mpLinkField )
     {
         weld::SpinButton& rField = *mpImpl->mpLinkField;
-        rField.connect_value_changed(LINK(this, SvxDialControl, LinkedFieldModifyHdl));
+        rField.connect_changed(LINK(this, SvxDialControl, LinkedFieldModifyHdl));
     }
 }
 
-IMPL_LINK_NOARG(SvxDialControl, LinkedFieldModifyHdl, weld::SpinButton&, void)
+IMPL_LINK_NOARG(SvxDialControl, LinkedFieldModifyHdl, weld::Entry&, void)
 {
     LinkedFieldModifyHdl();
 }
@@ -689,19 +701,26 @@ void SvxDialControl::Init( const Size& rWinSize )
 void SvxDialControl::InvalidateControl()
 {
     mpImpl->mxBmpBuffered->CopyBackground( IsEnabled() ? *mpImpl->mxBmpEnabled : *mpImpl->mxBmpDisabled );
-    mpImpl->mxBmpBuffered->DrawElements( OUString(), mpImpl->mnAngle );
+    if( !mpImpl->mbNoRot )
+        mpImpl->mxBmpBuffered->DrawElements(GetText(), mpImpl->mnAngle);
     Invalidate();
 }
 
-void SvxDialControl::SetRotation( sal_Int32 nAngle )
+void SvxDialControl::SetRotation(sal_Int32 nAngle)
 {
-    while( nAngle < 0 )
+    bool bOldSel = mpImpl->mbNoRot;
+    mpImpl->mbNoRot = false;
+
+    while (nAngle < 0)
         nAngle += 36000;
 
-    mpImpl->mnAngle = nAngle;
-    InvalidateControl();
-    if( mpImpl->mpLinkField )
-        mpImpl->mpLinkField->set_value(GetRotation() / mpImpl->mnLinkedFieldValueMultiplyer);
+    if (!bOldSel || (mpImpl->mnAngle != nAngle))
+    {
+        mpImpl->mnAngle = nAngle;
+        InvalidateControl();
+        if( mpImpl->mpLinkField )
+            mpImpl->mpLinkField->set_value(GetRotation() / mpImpl->mnLinkedFieldValueMultiplyer);
+    }
 }
 
 void SvxDialControl::HandleMouseEvent( const Point& rPos, bool bInitial )
@@ -732,32 +751,6 @@ void SvxDialControl::HandleEscapeEvent()
         if( mpImpl->mpLinkField )
             mpImpl->mpLinkField->grab_focus();
     }
-}
-
-DialControlWrapper::DialControlWrapper( DialControl& rDial ) :
-    SingleControlWrapperType( rDial )
-{
-}
-
-bool DialControlWrapper::IsControlDontKnow() const
-{
-    return !GetControl().HasRotation();
-}
-
-void DialControlWrapper::SetControlDontKnow( bool bSet )
-{
-    if( bSet )
-        GetControl().SetNoRotation();
-}
-
-sal_Int32 DialControlWrapper::GetControlValue() const
-{
-    return GetControl().GetRotation();
-}
-
-void DialControlWrapper::SetControlValue( sal_Int32 nValue )
-{
-    GetControl().SetRotation( nValue );
 }
 
 }
