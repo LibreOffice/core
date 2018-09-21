@@ -1200,7 +1200,7 @@
 #define STR_REDLINE_INSERTED                    NC_("STR_REDLINE_INSERTED", "Insertion")
 #define STR_REDLINE_DELETED                     NC_("STR_REDLINE_DELETED", "Deletion")
 #define STR_REDLINE_AUTOFMT                     NC_("STR_REDLINE_AUTOFMT", "AutoCorrect")
-#define STR_REDLINE_FORMATED                    NC_("STR_REDLINE_FORMATED", "Formats")
+#define STR_REDLINE_FORMATTED                   NC_("STR_REDLINE_FORMATTED", "Formats")
 #define STR_REDLINE_TABLECHG                    NC_("STR_REDLINE_TABLECHG", "Table Changes")
 #define STR_REDLINE_FMTCOLLSET                  NC_("STR_REDLINE_FMTCOLLSET", "Applied Paragraph Styles")
 #define STR_PAGE                                NC_("STR_PAGE", "Page ")
