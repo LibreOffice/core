@@ -79,8 +79,6 @@ $(eval $(call gb_Library_use_externals,vclplug_gtk3_kde5,\
 	boost_filesystem \
 	epoxy \
 	dbus \
-	graphite \
-	harfbuzz \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3_kde5,\
