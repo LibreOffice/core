@@ -1954,24 +1954,31 @@ void impAddB2DPolygonToGDIPlusGraphicsPathReal(
 class SystemDependentData_GraphicsPath : public basegfx::SystemDependentData
 {
 private:
+    // the path data itself
     Gdiplus::GraphicsPath           maGraphicsPath;
-    bool                            mbPixelSnapHairline;
+
+    // all other values the triangulation is based on and
+    // need to be compared with to check for data validity
+    bool                            mbNoLineJoin;
 
 public:
     SystemDependentData_GraphicsPath(
-        basegfx::SystemDependentDataManager& rSystemDependentDataManager);
-
+        basegfx::SystemDependentDataManager& rSystemDependentDataManager,
+        bool bNoLineJoin);
+    // non-const getter to allow manipulation. That way, we do not need
+    // to copy it (with unknown costs)
     Gdiplus::GraphicsPath& getGraphicsPath() { return maGraphicsPath; }
 
-    bool getPixelSnapHairline() const { return mbPixelSnapHairline; }
-    void setPixelSnapHairline(bool bNew) { mbPixelSnapHairline = bNew; }
+    // other data-validity access
+    bool getNoLineJoin() const { return mbNoLineJoin; }
 };
 
 SystemDependentData_GraphicsPath::SystemDependentData_GraphicsPath(
-    basegfx::SystemDependentDataManager& rSystemDependentDataManager)
+    basegfx::SystemDependentDataManager& rSystemDependentDataManager,
+    bool bNoLineJoin)
 :   basegfx::SystemDependentData(rSystemDependentDataManager),
     maGraphicsPath(),
-    mbPixelSnapHairline(false)
+    mbNoLineJoin(bNoLineJoin)
 {
 }
 
@@ -2019,7 +2026,8 @@ bool WinSalGraphicsImpl::drawPolyPolygon(
     {
         // add to buffering mechanism
         pSystemDependentData_GraphicsPath = rPolyPolygon.addOrReplaceSystemDependentData<SystemDependentData_GraphicsPath>(
-            ImplGetSystemDependentDataManager());
+            ImplGetSystemDependentDataManager(),
+            false);
 
         // Note: In principle we could use the same buffered geometry at line
         // and fill polygons. Checked that in a first try, used
@@ -2221,7 +2229,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
     if(pSystemDependentData_GraphicsPath)
     {
         // check data validity
-        if(pSystemDependentData_GraphicsPath->getPixelSnapHairline() != bPixelSnapHairline)
+        if(pSystemDependentData_GraphicsPath->getNoLineJoin() != bNoLineJoin)
         {
             // data invalid, forget
             pSystemDependentData_GraphicsPath.reset();
@@ -2232,11 +2240,10 @@ bool WinSalGraphicsImpl::drawPolyLine(
     {
         // add to buffering mechanism
         pSystemDependentData_GraphicsPath = rPolygon.addOrReplaceSystemDependentData<SystemDependentData_GraphicsPath>(
-            ImplGetSystemDependentDataManager());
+            ImplGetSystemDependentDataManager(),
+            bNoLineJoin);
 
         // fill data of buffered data
-        pSystemDependentData_GraphicsPath->setPixelSnapHairline(bPixelSnapHairline);
-
         impAddB2DPolygonToGDIPlusGraphicsPathReal(
             pSystemDependentData_GraphicsPath->getGraphicsPath(),
             rPolygon,
