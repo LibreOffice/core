@@ -1630,15 +1630,27 @@ SwXText::convertToTextFrame(
     *aStartPam.End() = *pEndPam->End();
     pEndPam.reset(nullptr);
 
+    // lambda to determine wether pFrameFormat is a graphic node
+    auto isGraphicNode = [](const SwFrameFormat* pFrameFormat)
+    {
+        //create a movable PaM
+        SwPaM aMovePam(pFrameFormat->GetContent().GetContentIdx()->GetNode());
+        //move forward
+        aMovePam.Move( fnMoveForward, GoInContent );
+        return aMovePam.GetNode().IsGrfNode();
+    };
+
     // see if there are frames already anchored to this node
     // we have to work with the SdrObjects, as unique name is not guaranteed in their frame format
+    // tdf#115094: do nothing if we have a graphic node
     std::set<const SdrObject*> aAnchoredObjectsByPtr;
     std::set<OUString> aAnchoredObjectsByName;
     for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrameFormats()->size(); ++i)
     {
         const SwFrameFormat* pFrameFormat = (*m_pImpl->m_pDoc->GetSpzFrameFormats())[i];
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
-        if ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId() || RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) &&
+        if ( !isGraphicNode(pFrameFormat) &&
+                (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId() || RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) &&
                 aStartPam.Start()->nNode.GetIndex() <= rAnchor.GetContentAnchor()->nNode.GetIndex() &&
                 aStartPam.End()->nNode.GetIndex() >= rAnchor.GetContentAnchor()->nNode.GetIndex())
         {
