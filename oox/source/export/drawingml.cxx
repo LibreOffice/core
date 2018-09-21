@@ -731,9 +731,35 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
     if( bDashSet && aStyleLineStyle != drawing::LineStyle_DASH )
     {
         // convert absolute dash/dot length to relative length
-        int relDotLen = nLineWidth ? aLineDash.DotLen / nLineWidth : -1;
-        int relDashLen = nLineWidth ? aLineDash.DashLen / nLineWidth : -1;
-        int relDistance = nLineWidth ? aLineDash.Distance / nLineWidth : -1;
+        int relDotLen = nLineWidth ? aLineDash.DotLen / nLineWidth : 0;
+        int relDashLen = nLineWidth ? aLineDash.DashLen / nLineWidth : 0;
+        int relDistance = nLineWidth ? aLineDash.Distance / nLineWidth : 0;
+        // fixing relative values in the case of mso preset linewidths
+        //todo: fix relDotLen, relDashLen and relDistance in every case of 0-1 linewidth
+        switch (nLineWidth)
+        {
+        case 9: // 1/4 pt
+            {
+            relDotLen = relDotLen ? (relDotLen + 1) / 4 : 0;
+            relDashLen = relDashLen ? (relDashLen + 1) / 4 : 0;
+            relDistance = relDistance ? (relDistance + 1) / 4 : 0;
+            break;
+            }
+        case 18: // 1/2 pt
+            {
+            relDotLen = relDotLen ? (relDotLen + 1) / 2 : 0;
+            relDashLen = relDashLen ? (relDashLen + 1) / 2 : 0;
+            relDistance = relDistance ? (relDistance + 1) / 2 : 0;
+            break;
+            }
+        case 26: // 3/4 pt
+            {
+            relDotLen = relDotLen ? (relDotLen + 1) * 3 / 4 : 0;
+            relDashLen = relDashLen ? (relDashLen + 1) * 3 / 4 : 0;
+            relDistance = relDistance ? (relDistance + 1) *3 / 4 : 0;
+            break;
+            }
+        }
         // keep default mso preset linestyles (instead of custdash)
         if (aLineDash.Dots == 1 && relDotLen == 1 && aLineDash.Dashes == 0 && relDashLen == 0 && relDistance == 3)
         {
