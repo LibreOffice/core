@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.4 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -28,6 +28,7 @@
             <property name="halign">end</property>
             <property name="label" translatable="yes" context="customanimationtimingtab|start_label">_Start:</property>
             <property name="use_underline">True</property>
+            <property name="mnemonic_widget">start_list</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -41,6 +42,7 @@
             <property name="halign">end</property>
             <property name="label" translatable="yes" context="customanimationtimingtab|delay_label">_Delay:</property>
             <property name="use_underline">True</property>
+            <property name="mnemonic_widget">delay_value:0.0sec</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -54,6 +56,7 @@
             <property name="halign">end</property>
             <property name="label" translatable="yes" context="customanimationtimingtab|duration_label">D_uration:</property>
             <property name="use_underline">True</property>
+            <property name="mnemonic_widget">anim_duration:0.00sec</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -67,6 +70,7 @@
             <property name="halign">end</property>
             <property name="label" translatable="yes" context="customanimationtimingtab|repeat_label">_Repeat:</property>
             <property name="use_underline">True</property>
+            <property name="mnemonic_widget">repeat_list</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
