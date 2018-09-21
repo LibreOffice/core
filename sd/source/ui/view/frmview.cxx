@@ -35,7 +35,6 @@
 #include <DrawViewShell.hxx>
 #include <OutlineViewShell.hxx>
 #include <sdmod.hxx>
-#include <unokywds.hxx>
 #include <pres.hxx>
 #include <strings.hrc>
 #include <sdiocmpt.hxx>
