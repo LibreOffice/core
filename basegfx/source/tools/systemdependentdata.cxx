@@ -61,15 +61,25 @@ namespace basegfx
 namespace basegfx
 {
     SystemDependentData::SystemDependentData(
-        SystemDependentDataManager& rSystemDependentDataManager,
-        sal_uInt32 nHoldCycles)
-    :   mrSystemDependentDataManager(rSystemDependentDataManager),
-        mnHoldCycles(nHoldCycles)
+        SystemDependentDataManager& rSystemDependentDataManager)
+    :   mrSystemDependentDataManager(rSystemDependentDataManager)
     {
     }
 
     SystemDependentData::~SystemDependentData()
     {
+    }
+
+    sal_uInt32 SystemDependentData::getHoldCyclesInSeconds() const
+    {
+        // default implementation returns 60(s)
+        return 60;
+    }
+
+    sal_Int64 SystemDependentData::estimateUsageInBytes() const
+    {
+        // default implementation has no idea
+        return 0;
     }
 } // namespace basegfx
 
