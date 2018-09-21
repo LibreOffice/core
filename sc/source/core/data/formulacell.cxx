@@ -4248,7 +4248,7 @@ struct ScDependantsCalculator
 
     bool isSelfReferenceRelative(const ScAddress& rRefPos, SCROW nRelRow)
     {
-        if (rRefPos.Col() != mrPos.Col())
+        if (rRefPos.Col() != mrPos.Col() || rRefPos.Tab() != mrPos.Tab())
             return false;
 
         SCROW nEndRow = mrPos.Row() + mnLen - 1;
@@ -4278,7 +4278,7 @@ struct ScDependantsCalculator
 
     bool isSelfReferenceAbsolute(const ScAddress& rRefPos)
     {
-        if (rRefPos.Col() != mrPos.Col())
+        if (rRefPos.Col() != mrPos.Col() || rRefPos.Tab() != mrPos.Tab())
             return false;
 
         SCROW nEndRow = mrPos.Row() + mnLen - 1;
@@ -4297,8 +4297,11 @@ struct ScDependantsCalculator
     //        isSelfReference[Absolute|Relative]() on both the start and end of the double ref
     bool isDoubleRefSpanGroupRange(const ScRange& rAbs, bool bIsRef1RowRel, bool bIsRef2RowRel)
     {
-        if (rAbs.aStart.Col() > mrPos.Col() || rAbs.aEnd.Col() < mrPos.Col())
+        if (rAbs.aStart.Col() > mrPos.Col() || rAbs.aEnd.Col() < mrPos.Col()
+            || rAbs.aStart.Tab() > mrPos.Tab() || rAbs.aEnd.Tab() < mrPos.Tab())
+        {
             return false;
+        }
 
         SCROW nStartRow    = mrPos.Row();
         SCROW nEndRow      = nStartRow + mnLen - 1;
