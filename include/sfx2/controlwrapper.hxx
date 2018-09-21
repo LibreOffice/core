@@ -122,12 +122,8 @@ private:
      |   |   +- [ValueType]MetricFieldWrapper   [1] [2]
      |   |
      |   +- ListBoxWrapper< ValueT >   [1]
-     |   |   |
-     |   |   +- [ValueType]ListBoxWrapper   [1] [2]
-     |   |
-     |   +- ValueSetWrapper< ValueT >   [1]
      |       |
-     |       +- [ValueType]ValueSetWrapper   [1] [2]
+     |       +- [ValueType]ListBoxWrapper   [1] [2]
      |
      +- MultiControlWrapperHelper
          |
@@ -226,21 +222,6 @@ public:
 };
 
 
-/** A wrapper for the VCL CheckBox. */
-class SFX2_DLLPUBLIC CheckBoxWrapper:
-    public SingleControlWrapper< CheckBox, bool >
-{
-public:
-    explicit            CheckBoxWrapper( CheckBox& rCheckBox );
-
-    virtual bool        IsControlDontKnow() const override;
-    virtual void        SetControlDontKnow( bool bSet ) override;
-
-    virtual bool        GetControlValue() const override;
-    virtual void        SetControlValue( bool bValue ) override;
-};
-
-
 /** A wrapper for the VCL MetricField.
 
     Adds support for field units during accessing the control value. The
@@ -290,39 +271,6 @@ public:
 
     virtual bool        IsControlDontKnow() const override
                             { return this->GetControl().GetSelectedEntryCount() == 0; }
-    virtual void        SetControlDontKnow( bool bSet ) override
-                            { if( bSet ) this->GetControl().SetNoSelection(); }
-
-    virtual ValueT      GetControlValue() const override;
-    virtual void        SetControlValue( ValueT nValue ) override;
-};
-
-
-#define WRAPPER_VALUESET_ITEM_NOTFOUND  0xFFFF  /* XXX was value of VALUESET_ITEM_NOTFOUND */
-
-/** A wrapper for the SVTOOLS ValueSet.
-
-    If a position<->value map is passed to the constructor, it MUST be
-    terminated with an entry containing WRAPPER_VALUESET_ITEM_NOTFOUND as list
-    position. See documentation of the PosValueMapper template for details.
- */
-template< typename ValueT >
-class ValueSetWrapper :
-        public SingleControlWrapper< ValueSet, ValueT >,
-        public PosValueMapper< ValueSetPosType, ValueT >
-{
-    typedef PosValueMapper< ValueSetPosType, ValueT > MapperType;
-
-public:
-    typedef typename MapperType::MapEntryType MapEntryType;
-
-    /** @param pMap  Optional position <-> value map.
-        See PosValueMapper documentation for details. */
-    explicit     ValueSetWrapper( ValueSet& rValueSet, const MapEntryType* pMap ) :
-                            SingleControlWrapper< ValueSet, ValueT >( rValueSet ), MapperType( WRAPPER_VALUESET_ITEM_NOTFOUND, pMap ) {}
-
-    virtual bool        IsControlDontKnow() const override
-                            { return this->GetControl().IsNoSelection(); }
     virtual void        SetControlDontKnow( bool bSet ) override
                             { if( bSet ) this->GetControl().SetNoSelection(); }
 
@@ -423,22 +371,6 @@ void ListBoxWrapper< ValueT >::SetControlValue( ValueT nValue )
     if( nPos != this->GetNotFoundPos() )
         this->GetControl().SelectEntryPos( nPos );
 }
-
-
-template< typename ValueT >
-ValueT ValueSetWrapper< ValueT >::GetControlValue() const
-{
-    return this->GetValueFromPos( this->GetControl().GetSelectedItemId() );
-}
-
-template< typename ValueT >
-void ValueSetWrapper< ValueT >::SetControlValue( ValueT nValue )
-{
-    sal_uInt16 nPos = this->GetPosFromValue( nValue );
-    if( nPos != this->GetNotFoundPos() )
-        this->GetControl().SelectItem( nPos );
-}
-
 
 } // namespace sfx
 
