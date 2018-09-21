@@ -89,7 +89,7 @@ static OUString lcl_BuildTitleWithRedline( const SwRangeRedline *pRedline )
             break;
         case nsRedlineType_t::REDLINE_FORMAT:
         case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT:
-            pResId = STR_REDLINE_FORMATED;
+            pResId = STR_REDLINE_FORMATTED;
             break;
         case nsRedlineType_t::REDLINE_TABLE:
             pResId = STR_REDLINE_TABLECHG;
