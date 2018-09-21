@@ -89,25 +89,6 @@ private:
     std::unique_ptr< OrientationHelper_Impl > mpImpl;
 };
 
-
-/** Wrapper for usage of the stacked attribute of an OrientationHelper in item connections. */
-class SVX_DLLPUBLIC OrientStackedWrapper : public sfx::SingleControlWrapper< OrientationHelper, bool >
-{
-public:
-    explicit            OrientStackedWrapper( OrientationHelper& rOrientHlp );
-
-    virtual bool        IsControlDontKnow() const override;
-    virtual void        SetControlDontKnow( bool bSet ) override;
-
-    virtual bool        GetControlValue() const override;
-    virtual void        SetControlValue( bool bValue ) override;
-};
-
-
-/** An item<->control connection for the stacked attribute of an OrientationHelper. */
-typedef sfx::ItemControlConnection< sfx::BoolItemWrapper, OrientStackedWrapper > OrientStackedConnection;
-
-
 } // namespace
 
 #endif

@@ -101,34 +101,6 @@ void DummyWindowWrapper::SetControlValue( void* )
 {
 }
 
-
-CheckBoxWrapper::CheckBoxWrapper( CheckBox& rCheckBox ) :
-        SingleControlWrapperType( rCheckBox )
-{
-}
-
-bool CheckBoxWrapper::IsControlDontKnow() const
-{
-    return GetControl().GetState() == TRISTATE_INDET;
-}
-
-void CheckBoxWrapper::SetControlDontKnow( bool bSet )
-{
-    GetControl().EnableTriState( bSet );
-    GetControl().SetState( bSet ? TRISTATE_INDET : TRISTATE_FALSE );
-}
-
-bool CheckBoxWrapper::GetControlValue() const
-{
-    return GetControl().IsChecked();
-}
-
-void CheckBoxWrapper::SetControlValue( bool bValue )
-{
-    GetControl().Check( bValue );
-}
-
-
 // Base connection classes
 
 

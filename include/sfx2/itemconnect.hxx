@@ -143,23 +143,13 @@ namespace sfx {
      |
      +- ItemControlConnection< ItemWrpT, ControlWrpT >
      |   |
-     |   +- CheckBoxConnection   [1]
-     |   |
      |   +- NumericConnection< ItemWrpT >   [1]
      |   |   |
      |   |   +- [ValueType]NumericConnection   [1] [2]
      |   |
-     |   +- MetricConnection< ItemWrpT >   [1]
-     |   |   |
-     |   |   +- [ValueType]MetricConnection   [1] [2]
-     |   |
      |   +- ListBoxConnection< ItemWrpT >   [1]
-     |   |   |
-     |   |   +- [ValueType]ListBoxConnection   [1] [2]
-     |   |
-     |   +- ValueSetConnection< ItemWrpT >   [1]
      |       |
-     |       +- [ValueType]ValueSetConnection   [1] [2]
+     |       +- [ValueType]ListBoxConnection   [1] [2]
      |
      +- ItemConnectionArray   [1]
 
@@ -273,34 +263,6 @@ private:
     sal_uInt16              mnSlot;
 };
 
-
-/** Connection between an SfxBoolItem and a VCL CheckBox. */
-typedef ItemControlConnection< BoolItemWrapper, CheckBoxWrapper > CheckBoxConnection;
-
-
-/** Connection between an item and the VCL MetricField.
-
-    Adds support of different field units during control value <-> item value
-    conversion. The field unit passed to the constructor applies for the item
-    values, while the field unit used in the control has to be set at the
-    control itself.
- */
-template< typename ItemWrpT >
-class MetricConnection : public ItemControlConnection< ItemWrpT,
-        MetricFieldWrapper< typename ItemWrpT::ItemValueType > >
-{
-    typedef ItemControlConnection< ItemWrpT,
-        MetricFieldWrapper< typename ItemWrpT::ItemValueType > >
-    ItemControlConnectionType;
-
-public:
-    typedef typename ItemControlConnectionType::ControlWrapperType MetricFieldWrapperType;
-
-    explicit            MetricConnection( sal_uInt16 nSlot, MetricField& rField,
-                            FieldUnit eItemUnit, ItemConnFlags nFlags = ItemConnFlags::NONE );
-};
-
-
 /** Connection between an item and a VCL ListBox.
 
     Optionally a map can be passed that maps list box positions to item values.
@@ -322,31 +284,6 @@ public:
     typedef typename ListBoxWrapperType::MapEntryType               MapEntryType;
 
     explicit            ListBoxConnection( sal_uInt16 nSlot, ListBox& rListBox,
-                            const MapEntryType* pMap, ItemConnFlags nFlags = ItemConnFlags::NONE );
-};
-
-
-/** Connection between an item and an SVTOOLS ValueSet.
-
-    Optionally a map can be passed that maps value set identifiers to item
-    values. This map MUST be terminated with an entry containing
-    WRAPPER_VALUESET_ITEM_NOTFOUND as value set identifier. The item value
-    contained in this last entry is used as default item value in case of an
-    error.
- */
-template< typename ItemWrpT >
-class ValueSetConnection : public ItemControlConnection< ItemWrpT,
-        ValueSetWrapper< typename ItemWrpT::ItemValueType > >
-{
-    typedef ItemControlConnection< ItemWrpT,
-        ValueSetWrapper< typename ItemWrpT::ItemValueType > >
-    ItemControlConnectionType;
-
-public:
-    typedef typename ItemControlConnectionType::ControlWrapperType  ValueSetWrapperType;
-    typedef typename ValueSetWrapperType::MapEntryType              MapEntryType;
-
-    explicit            ValueSetConnection( sal_uInt16 nSlot, ValueSet& rValueSet,
                             const MapEntryType* pMap, ItemConnFlags nFlags = ItemConnFlags::NONE );
 };
 
@@ -462,30 +399,12 @@ bool ItemControlConnection< ItemWrpT, ControlWrpT >::FillItemSet(
 
 // Standard connections
 
-
-template< typename ItemWrpT >
-MetricConnection< ItemWrpT >::MetricConnection(
-        sal_uInt16 nSlot, MetricField& rField, FieldUnit eItemUnit, ItemConnFlags nFlags ) :
-    ItemControlConnectionType( nSlot, new MetricFieldWrapperType( rField, eItemUnit ), nFlags )
-{
-}
-
-
 template< typename ItemWrpT >
 ListBoxConnection< ItemWrpT >::ListBoxConnection(
         sal_uInt16 nSlot, ListBox& rListBox, const MapEntryType* pMap, ItemConnFlags nFlags ) :
     ItemControlConnectionType( nSlot, new ListBoxWrapperType( rListBox, pMap ), nFlags )
 {
 }
-
-
-template< typename ItemWrpT >
-ValueSetConnection< ItemWrpT >::ValueSetConnection(
-        sal_uInt16 nSlot, ValueSet& rValueSet, const MapEntryType* pMap, ItemConnFlags nFlags ) :
-    ItemControlConnectionType( nSlot, new ValueSetWrapperType( rValueSet, pMap ), nFlags )
-{
-}
-
 
 } // namespace sfx
 
