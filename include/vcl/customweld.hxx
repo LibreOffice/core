@@ -123,6 +123,7 @@ public:
     void set_margin_bottom(int nMargin) { m_xDrawingArea->set_margin_bottom(nMargin); }
     void set_sensitive(bool bSensitive) { m_xDrawingArea->set_sensitive(bSensitive); }
     bool get_sensitive() const { return m_xDrawingArea->get_sensitive(); }
+    bool get_visible() const { return m_xDrawingArea->get_visible(); }
 };
 }
 #endif

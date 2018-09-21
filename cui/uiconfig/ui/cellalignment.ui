@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustmentIndent">
     <property name="upper">990</property>
     <property name="step_increment">10</property>
@@ -11,78 +10,6 @@
   <object class="GtkAdjustment" id="adjustmentSpinDegrees">
     <property name="upper">359</property>
     <property name="step_increment">5</property>
-  </object>
-  <object class="GtkListStore" id="liststoreHorzAlign">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name gint1 -->
-      <column type="gint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="cellalignment|liststoreHorzAlign">Default</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="cellalignment|liststoreHorzAlign">Left</col>
-        <col id="1">1</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="cellalignment|liststoreHorzAlign">Center</col>
-        <col id="1">2</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="cellalignment|liststoreHorzAlign">Right</col>
-        <col id="1">3</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="cellalignment|liststoreHorzAlign">Justified</col>
-        <col id="1">4</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="cellalignment|liststoreHorzAlign">Filled</col>
-        <col id="1">5</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="cellalignment|liststoreHorzAlign">Distributed</col>
-        <col id="1">6</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="liststoreVertAlign">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name gint1 -->
-      <column type="gint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="cellalignment|liststoreVertAlign">Default</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="cellalignment|liststoreVertAlign">Top</col>
-        <col id="1">1</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="cellalignment|liststoreVertAlign">Middle</col>
-        <col id="1">2</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="cellalignment|liststoreVertAlign">Bottom</col>
-        <col id="1">3</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="cellalignment|liststoreVertAlign">Justified</col>
-        <col id="1">4</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="cellalignment|liststoreVertAlign">Distributed</col>
-        <col id="1">5</col>
-      </row>
-    </data>
   </object>
   <object class="GtkGrid" id="CellAlignPage">
     <property name="visible">True</property>
@@ -119,10 +46,10 @@
                       <object class="GtkLabel" id="labelDegrees">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="cellalignment|labelDegrees">_Degrees:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">spinDegrees</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -133,10 +60,10 @@
                       <object class="GtkLabel" id="labelRefEdge">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="cellalignment|labelRefEdge">_Reference edge:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">references</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -144,10 +71,27 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo-ValueSet" id="references">
+                      <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="halign">start</property>
+                        <property name="hscrollbar_policy">never</property>
+                        <property name="vscrollbar_policy">never</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkViewport">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkDrawingArea" id="references">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                                <property name="halign">start</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -158,6 +102,7 @@
                       <object class="GtkSpinButton" id="spinDegrees">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
                         <property name="progress_pulse_step">1</property>
                         <property name="adjustment">adjustmentSpinDegrees</property>
                         <property name="wrap">True</property>
@@ -174,12 +119,29 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="svxlo-DialControl" id="dialcontrol">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="active">True</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="vscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <object class="GtkViewport">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkDrawingArea" id="dialcontrol">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                            <property name="halign">center</property>
+                            <property name="valign">center</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -322,7 +284,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkHBox" id="boxDirection">
+                  <object class="GtkBox" id="boxDirection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="spacing">12</property>
@@ -330,10 +292,10 @@
                       <object class="GtkLabel" id="LabelTxtDir">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="cellalignment|LabelTxtDir">Te_xt direction:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">comboTextDirBox</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -342,7 +304,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-FrameDirectionListBox" id="comboTextDirBox">
+                      <object class="GtkComboBoxText" id="comboTextDirBox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -398,9 +360,10 @@
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">12</property>
                 <child>
-                  <object class="GtkSpinButton" id="spinIndentFrom:0.00pt">
+                  <object class="GtkSpinButton" id="spinIndentFrom">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
                     <property name="adjustment">adjustmentIndent</property>
                     <property name="climb_rate">1</property>
                   </object>
@@ -413,10 +376,10 @@
                   <object class="GtkLabel" id="labelHorzAlign">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="cellalignment|labelHorzAlign">Hori_zontal</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">comboboxHorzAlign</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -427,10 +390,10 @@
                   <object class="GtkLabel" id="labelVertAlign">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="cellalignment|labelVertAlign">_Vertical</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">comboboxVertAlign</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -441,10 +404,10 @@
                   <object class="GtkLabel" id="labelIndent">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="cellalignment|labelIndent">I_ndent</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">spinIndentFrom:0.00pt</property>
+                    <property name="mnemonic_widget">spinIndentFrom</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -452,11 +415,19 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="comboboxHorzAlign">
+                  <object class="GtkComboBoxText" id="comboboxHorzAlign">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="model">liststoreHorzAlign</property>
+                    <items>
+                      <item id="0" translatable="yes" context="cellalignment|liststoreHorzAlign">Default</item>
+                      <item id="1" translatable="yes" context="cellalignment|liststoreHorzAlign">Left</item>
+                      <item id="2" translatable="yes" context="cellalignment|liststoreHorzAlign">Center</item>
+                      <item id="3" translatable="yes" context="cellalignment|liststoreHorzAlign">Right</item>
+                      <item id="4" translatable="yes" context="cellalignment|liststoreHorzAlign">Justified</item>
+                      <item id="5" translatable="yes" context="cellalignment|liststoreHorzAlign">Filled</item>
+                      <item id="6" translatable="yes" context="cellalignment|liststoreHorzAlign">Distributed</item>
+                    </items>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -464,11 +435,18 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="comboboxVertAlign">
+                  <object class="GtkComboBoxText" id="comboboxVertAlign">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="model">liststoreVertAlign</property>
+                    <items>
+                      <item id="0" translatable="yes" context="cellalignment|liststoreVertAlign">Default</item>
+                      <item id="1" translatable="yes" context="cellalignment|liststoreVertAlign">Top</item>
+                      <item id="2" translatable="yes" context="cellalignment|liststoreVertAlign">Middle</item>
+                      <item id="3" translatable="yes" context="cellalignment|liststoreVertAlign">Bottom</item>
+                      <item id="4" translatable="yes" context="cellalignment|liststoreVertAlign">Justified</item>
+                      <item id="5" translatable="yes" context="cellalignment|liststoreVertAlign">Distributed</item>
+                    </items>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>

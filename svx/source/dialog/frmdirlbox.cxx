@@ -71,34 +71,6 @@ SvxFrameDirection FrameDirectionListBox::GetSelectEntryValue() const
     return lclVoidToEnum( GetEntryData( nPos ) );
 }
 
-
-FrameDirectionListBoxWrapper::FrameDirectionListBoxWrapper( FrameDirectionListBox& rListBox ) :
-    SingleControlWrapperType( rListBox )
-{
-}
-
-bool FrameDirectionListBoxWrapper::IsControlDontKnow() const
-{
-    return GetControl().GetSelectedEntryCount() == 0;
-}
-
-void FrameDirectionListBoxWrapper::SetControlDontKnow( bool bSet )
-{
-    if( bSet )
-        GetControl().SetNoSelection();
-}
-
-SvxFrameDirection FrameDirectionListBoxWrapper::GetControlValue() const
-{
-    return GetControl().GetSelectEntryValue();
-}
-
-void FrameDirectionListBoxWrapper::SetControlValue( SvxFrameDirection eValue )
-{
-    GetControl().SelectEntryValue( eValue );
-}
-
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

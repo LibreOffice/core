@@ -149,34 +149,6 @@ void OrientationHelper::EnableStackedTriState( bool bEnable )
     mpImpl->mrCbStacked.EnableTriState( bEnable );
 }
 
-
-OrientStackedWrapper::OrientStackedWrapper( OrientationHelper& rOrientHlp ) :
-    SingleControlWrapperType( rOrientHlp )
-{
-}
-
-bool OrientStackedWrapper::IsControlDontKnow() const
-{
-    return GetControl().GetStackedState() == TRISTATE_INDET;
-}
-
-void OrientStackedWrapper::SetControlDontKnow( bool bSet )
-{
-    GetControl().EnableStackedTriState( bSet );
-    GetControl().SetStackedState( bSet ? TRISTATE_INDET : TRISTATE_FALSE );
-}
-
-bool OrientStackedWrapper::GetControlValue() const
-{
-    return GetControl().GetStackedState() == TRISTATE_TRUE;
-}
-
-void OrientStackedWrapper::SetControlValue( bool bValue )
-{
-    GetControl().SetStackedState( bValue ? TRISTATE_TRUE : TRISTATE_FALSE );
-}
-
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
