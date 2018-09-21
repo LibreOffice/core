@@ -1651,26 +1651,45 @@ bool X11SalGraphicsImpl::drawFilledTriangles(
 class SystemDependentData_Triangulation : public basegfx::SystemDependentData
 {
 private:
+    // the triangulation itself
     basegfx::triangulator::B2DTriangleVector    maTriangles;
+
+    // all other values the triangulation is based on and
+    // need to be compared with to check for data validity
     basegfx::B2DVector                          maLineWidth;
+    basegfx::B2DLineJoin                        meJoin;
+    css::drawing::LineCap                       meCap;
+    double                                      mfMiterMinimumAngle;
 
 public:
     SystemDependentData_Triangulation(
         basegfx::SystemDependentDataManager& rSystemDependentDataManager,
         const basegfx::triangulator::B2DTriangleVector& rTriangles,
-        const basegfx::B2DVector& rLineWidth);
+        const basegfx::B2DVector& rLineWidth,
+        basegfx::B2DLineJoin eJoin,
+        css::drawing::LineCap eCap,
+        double fMiterMinimumAngle);
 
     const basegfx::triangulator::B2DTriangleVector& getTriangles() const { return maTriangles; }
     const basegfx::B2DVector& getLineWidth() const { return maLineWidth; }
+    const basegfx::B2DLineJoin& getJoin() const { return meJoin; }
+    const css::drawing::LineCap& getCap() const { return meCap; }
+    double getMiterMinimumAngle() const { return mfMiterMinimumAngle; }
 };
 
 SystemDependentData_Triangulation::SystemDependentData_Triangulation(
     basegfx::SystemDependentDataManager& rSystemDependentDataManager,
     const basegfx::triangulator::B2DTriangleVector& rTriangles,
-    const basegfx::B2DVector& rLineWidth)
+    const basegfx::B2DVector& rLineWidth,
+    basegfx::B2DLineJoin eJoin,
+    css::drawing::LineCap eCap,
+    double fMiterMinimumAngle)
 :   basegfx::SystemDependentData(rSystemDependentDataManager),
     maTriangles(rTriangles),
-    maLineWidth(rLineWidth)
+    maLineWidth(rLineWidth),
+    meJoin(eJoin),
+    meCap(eCap),
+    mfMiterMinimumAngle(fMiterMinimumAngle)
 {
 }
 
@@ -1716,7 +1735,19 @@ bool X11SalGraphicsImpl::drawPolyLine(
 
     if(pSystemDependentData_Triangulation)
     {
-        // check data validity
+        // check data validity (I)
+        if(pSystemDependentData_Triangulation->getJoin() != eLineJoin
+        || pSystemDependentData_Triangulation->getCap() != eLineCap
+        || pSystemDependentData_Triangulation->getMiterMinimumAngle() != fMiterMinimumAngle)
+        {
+            // data invalid, forget
+            pSystemDependentData_Triangulation.reset();
+        }
+    }
+
+    if(pSystemDependentData_Triangulation)
+    {
+        // check data validity (II)
         if(pSystemDependentData_Triangulation->getLineWidth() != aLineWidth)
         {
             // sometimes small inconsistencies, use a percentage tolerance
@@ -1774,11 +1805,16 @@ bool X11SalGraphicsImpl::drawPolyLine(
 
         if(!aTriangles.empty())
         {
-            // add to buffering mechanism
+            // Add to buffering mechanism
+            // Add all values the triangulation is based off, too, to check for
+            // validity (see above)
             pSystemDependentData_Triangulation = rPolygon.addOrReplaceSystemDependentData<SystemDependentData_Triangulation>(
                 ImplGetSystemDependentDataManager(),
                 aTriangles,
-                aLineWidth);
+                aLineWidth,
+                eLineJoin,
+                eLineCap,
+                fMiterMinimumAngle);
         }
     }
 

@@ -89,14 +89,9 @@ namespace basegfx
         // a single, globally used one, but not necessarily
         SystemDependentDataManager&     mrSystemDependentDataManager;
 
-        // number of cycles a SystemDependentDataManager should/might
-        // hold this instance - does not have to be used, but should be
-        sal_uInt32                      mnHoldCycles;
-
     public:
         SystemDependentData(
-            SystemDependentDataManager& rSystemDependentDataManager,
-            sal_uInt32 nHoldCycles = 60);
+            SystemDependentDataManager& rSystemDependentDataManager);
 
         // CAUTION! It is VERY important to keep this base class
         // virtual, else typeid(class).hash_code() from derived classes
@@ -108,8 +103,17 @@ namespace basegfx
         // using getSystemDependentDataManager()
         SystemDependentDataManager& getSystemDependentDataManager() { return mrSystemDependentDataManager; }
 
-        // number of cycles to hold data
-        sal_uInt32 getHoldCycles() const { return mnHoldCycles; }
+        // Number of cycles a SystemDependentDataManager should/might
+        // hold this instance in seconds - does not have to be used,
+        // but should be. Default implementation returns 60(s). Override to
+        // offer useful data if you want to have better caching.
+        virtual sal_uInt32 getHoldCyclesInSeconds() const;
+
+        // Size estimation of the entry in bytes - does not have to
+        // be used, but should be. Default returns zero what
+        // means there is no size estimation available. Override to
+        // offer useful data if you want to have better caching.
+        virtual sal_Int64 estimateUsageInBytes() const;
     };
 } // end of namespace basegfx
 
