@@ -23,6 +23,7 @@
 #define MAX_DEFAULT_PERSONAS 3  // Maximum number of default personas
 
 class FixedText;
+class FixedHyperlink;
 class SearchAndParseThread;
 
 class SvxPersonalizationTabPage : public SfxTabPage
@@ -39,7 +40,7 @@ private:
     VclPtr<ListBox> m_pPersonaList;                    ///< The ListBox to show the list of installed personas
     OUString m_aPersonaSettings;                       ///< Header and footer images + color to be set in the settings.
     VclPtr<FixedText> m_pExtensionLabel;               ///< The "select persona installed via extensions" label
-    VclPtr<FixedText> m_pAppliedThemeLabel;            ///< The label for showing applied custom theme
+    VclPtr<FixedHyperlink> m_pAppliedThemeLabel;            ///< The label for showing applied custom theme
 
     std::vector<OUString> m_vDefaultPersonaSettings;
     std::vector<OUString> m_vExtensionPersonaSettings;

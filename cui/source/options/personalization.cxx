@@ -21,6 +21,8 @@
 #include <rtl/strbuf.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/fixedhyper.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
@@ -278,7 +280,7 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( vcl::Window *pParent, cons
     // persona
     get( m_pNoPersona, "no_persona" );
     get( m_pDefaultPersona, "default_persona" );
-    get( m_pAppliedThemeLabel, "applied_theme" );
+    get( m_pAppliedThemeLabel, "applied_theme_link" );
 
     get( m_pOwnPersona, "own_persona" );
     m_pOwnPersona->SetClickHdl( LINK( this, SvxPersonalizationTabPage, ForceSelect ) );
@@ -411,14 +413,24 @@ void SvxPersonalizationTabPage::CheckAppliedTheme()
 
 void SvxPersonalizationTabPage::ShowAppliedThemeLabel(const OUString& aPersonaSetting)
 {
-    sal_Int32 nSlugIndex, nNameIndex;
-    OUString aName;
+    OUString aSlug, aName;
+    sal_Int32 nIndex = 0;
 
-    nSlugIndex = aPersonaSetting.indexOf( ';' ) + 1;
-    nNameIndex = aPersonaSetting.indexOf( ';', nSlugIndex );
-    aName = "(" + aPersonaSetting.copy( nSlugIndex, nNameIndex ) +")";
-    m_pAppliedThemeLabel->Show();
-    m_pAppliedThemeLabel->SetText( aName );
+    aSlug = aPersonaSetting.getToken( 0, ';', nIndex );
+
+    if ( nIndex > 0 )
+        aName = "(" + aPersonaSetting.getToken( 0, ';', nIndex ) + ")";
+
+    if ( !aName.isEmpty() )
+    {
+        m_pAppliedThemeLabel->SetText( aName );
+        m_pAppliedThemeLabel->SetURL( "https://addons.mozilla.org/en-US/firefox/addon/" + aSlug + "/" );
+        m_pAppliedThemeLabel->Show();
+    }
+    else
+    {
+        SAL_WARN("cui.options", "Applied persona doesn't have a name!");
+    }
 }
 
 void SvxPersonalizationTabPage::LoadDefaultImages()
