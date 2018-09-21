@@ -202,26 +202,6 @@ private:
 };
 
 
-/** A dummy wrapper for a VCL Window that does nothing special.
-
-    This wrapper is used to implement the DummyItemConnection. It does not
-    connect an item to a control, but handles the special flags to disable or
-    hide a control, if an item is unknown.
- */
-class SFX2_DLLPUBLIC DummyWindowWrapper:
-    public SingleControlWrapper< vcl::Window, void* >
-{
-public:
-    explicit            DummyWindowWrapper( vcl::Window& rWindow );
-
-    virtual bool        IsControlDontKnow() const override;
-    virtual void        SetControlDontKnow( bool ) override;
-
-    virtual void*       GetControlValue() const override;
-    virtual void        SetControlValue( void* ) override;
-};
-
-
 /** A wrapper for the VCL MetricField.
 
     Adds support for field units during accessing the control value. The

@@ -22,7 +22,6 @@
 
 #include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
-#include <sfx2/itemconnect.hxx>
 #include <editeng/frmdir.hxx>
 #include <svx/svxdllapi.h>
 

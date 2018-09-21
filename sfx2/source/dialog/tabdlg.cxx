@@ -32,7 +32,6 @@
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/sfxdlg.hxx>
-#include <sfx2/itemconnect.hxx>
 #include <sfx2/viewsh.hxx>
 #include <uitest/sfx_uiobject.hxx>
 #include <unotools/viewoptions.hxx>
@@ -51,7 +50,6 @@ using namespace ::com::sun::star::uno;
 struct TabPageImpl
 {
     bool                        mbStandard;
-    sfx::ItemConnectionArray    maItemConn;
     VclPtr<SfxTabDialog>        mxDialog;
     SfxTabDialogController*     mpDialogController;
     css::uno::Reference< css::frame::XFrame > mxFrame;
@@ -213,15 +211,13 @@ void SfxTabPage::dispose()
     TabPage::dispose();
 }
 
-bool SfxTabPage::FillItemSet( SfxItemSet* rSet )
+bool SfxTabPage::FillItemSet( SfxItemSet* )
 {
-    return pImpl->maItemConn.DoFillItemSet( *rSet, GetItemSet() );
+    return false;
 }
 
-void SfxTabPage::Reset( const SfxItemSet* rSet )
+void SfxTabPage::Reset( const SfxItemSet* )
 {
-    pImpl->maItemConn.DoApplyFlags( rSet );
-    pImpl->maItemConn.DoReset( rSet );
 }
 
 void SfxTabPage::ActivatePage( const SfxItemSet& )
@@ -325,11 +321,6 @@ void SfxTabPage::PageCreated( const SfxAllItemSet& /*aSet*/ )
 
 void SfxTabPage::ChangesApplied()
 {
-}
-
-void SfxTabPage::AddItemConnection( sfx::ItemConnectionBase* pConnection )
-{
-    pImpl->maItemConn.AddConnection( pConnection );
 }
 
 void SfxTabPage::SetTabDialog(SfxTabDialog* pDialog)

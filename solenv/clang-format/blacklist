@@ -6805,8 +6805,6 @@ include/sfx2/htmlmode.hxx
 include/sfx2/infobar.hxx
 include/sfx2/inputdlg.hxx
 include/sfx2/ipclient.hxx
-include/sfx2/itemconnect.hxx
-include/sfx2/itemwrapper.hxx
 include/sfx2/linkmgr.hxx
 include/sfx2/linksrc.hxx
 include/sfx2/lnkbase.hxx
@@ -12891,7 +12889,6 @@ sfx2/source/dialog/filtergrouping.cxx
 sfx2/source/dialog/filtergrouping.hxx
 sfx2/source/dialog/infobar.cxx
 sfx2/source/dialog/inputdlg.cxx
-sfx2/source/dialog/itemconnect.cxx
 sfx2/source/dialog/mailmodel.cxx
 sfx2/source/dialog/mgetempl.cxx
 sfx2/source/dialog/navigat.cxx
