@@ -2641,7 +2641,7 @@ void ScMatrixImpl::ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
     WalkElementBlockOperation aFunc(maMat.size().row,
             aDoubleFunc, aBoolFunc, aStringFunc, aEmptyFunc);
     maMat.walk(
-        aFunc,
+        std::move(aFunc),
         MatrixImplType::size_pair_type(rStartPos.first, rStartPos.second),
         MatrixImplType::size_pair_type(rEndPos.first, rEndPos.second));
 }
