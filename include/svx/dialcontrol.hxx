@@ -179,6 +179,8 @@ public:
     sal_Int32           GetRotation() const;
     /** Sets the rotation to the passed value (in 1/100 degrees). */
     void                SetRotation( sal_Int32 nAngle );
+    /** Sets the control to "don't care" state. */
+    void                SetNoRotation();
 
     /** Links the passed numeric edit field to the control (bi-directional).
      *  nDecimalPlaces:
@@ -194,12 +196,16 @@ public:
     /** Compare value with the saved value */
     bool                IsValueModified();
 
+    const OUString&     GetText() const { return mpImpl->maText; }
+    void                SetText(const OUString& rText) { mpImpl->maText = rText; }
+
 protected:
     struct DialControl_Impl
     {
         ScopedVclPtr<DialControlBmp> mxBmpEnabled;
         ScopedVclPtr<DialControlBmp> mxBmpDisabled;
         ScopedVclPtr<DialControlBmp> mxBmpBuffered;
+        OUString            maText;
         weld::SpinButton*   mpLinkField;
         sal_Int32           mnLinkedFieldValueMultiplyer;
         Size                maWinSize;
@@ -209,6 +215,7 @@ protected:
         sal_Int32           mnOldAngle;
         long                mnCenterX;
         long                mnCenterY;
+        bool                mbNoRot;
 
         explicit            DialControl_Impl(OutputDevice& rReference);
         void                Init( const Size& rWinSize, const vcl::Font& rWinFont );
@@ -228,22 +235,6 @@ private:
     DECL_LINK( LinkedFieldModifyHdl, weld::SpinButton&, void );
     void LinkedFieldModifyHdl();
 };
-
-/** Wrapper for usage of a DialControl in item connections. */
-class SAL_WARN_UNUSED SVX_DLLPUBLIC DialControlWrapper : public sfx::SingleControlWrapper< DialControl, sal_Int32 >
-{
-public:
-    explicit            DialControlWrapper( DialControl& rDial );
-
-    virtual bool        IsControlDontKnow() const override;
-    virtual void        SetControlDontKnow( bool bSet ) override;
-
-    virtual sal_Int32   GetControlValue() const override;
-    virtual void        SetControlValue( sal_Int32 nValue ) override;
-};
-
-/** An item<->control connection for a DialControl. */
-typedef sfx::ItemControlConnection< sfx::Int32ItemWrapper, DialControlWrapper > DialControlConnection;
 
 }
 
