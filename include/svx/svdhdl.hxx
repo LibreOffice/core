@@ -415,7 +415,7 @@ class SVX_DLLPUBLIC SdrHdlList
 protected:
     size_t                      mnFocusIndex;
     SdrMarkView*                pView;
-    std::deque<SdrHdl*>         aList;
+    std::deque<std::unique_ptr<SdrHdl>> maList;
     sal_uInt16                  nHdlSize;
 
     bool                        bRotateShear : 1;
@@ -443,8 +443,8 @@ public:
     //          2.Level PageView (Pointer)
     //          3.Level Position (x+y)
     void     Sort();
-    size_t   GetHdlCount() const { return aList.size(); }
-    SdrHdl*  GetHdl(size_t nNum) const { return nNum<aList.size() ? aList[nNum] : nullptr; }
+    size_t   GetHdlCount() const { return maList.size(); }
+    SdrHdl*  GetHdl(size_t nNum) const { return maList[nNum].get(); }
     size_t   GetHdlNum(const SdrHdl* pHdl) const;
     void     SetHdlSize(sal_uInt16 nSiz);
     sal_uInt16   GetHdlSize() const                        { return nHdlSize; }
@@ -457,8 +457,8 @@ public:
 
     // AddHdl takes ownership of the handle. It should be on the Heap
     // as Clear() deletes it.
-    void    AddHdl(SdrHdl* pHdl);
-    SdrHdl* RemoveHdl(size_t nNum);
+    void    AddHdl(std::unique_ptr<SdrHdl> pHdl);
+    std::unique_ptr<SdrHdl> RemoveHdl(size_t nNum);
     void RemoveAllByKind(SdrHdlKind eKind);
 
     // move the ownership of all the SdrHdl to rOther

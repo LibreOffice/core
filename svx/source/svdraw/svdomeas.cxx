@@ -770,10 +770,10 @@ void SdrMeasureObj::AddToHdlList(SdrHdlList& rHdlList) const
             case 4: aPt=aMPol.aHelpline1.aP2; break;
             case 5: aPt=aMPol.aHelpline2.aP2; break;
         } // switch
-        SdrHdl* pHdl=new ImpMeasureHdl(aPt,SdrHdlKind::User);
+        std::unique_ptr<SdrHdl> pHdl(new ImpMeasureHdl(aPt,SdrHdlKind::User));
         pHdl->SetObjHdlNum(nHdlNum);
         pHdl->SetRotationAngle(aMPol.nLineAngle);
-        rHdlList.AddHdl(pHdl);
+        rHdlList.AddHdl(std::move(pHdl));
     }
 }
 
