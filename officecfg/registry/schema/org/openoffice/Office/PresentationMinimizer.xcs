@@ -363,7 +363,7 @@ The current presentation contains no OLE objects.</value>
 			</prop>
 			<prop oor:name="STR_ERROR_IO" oor:type="xs:string" oor:localized="true">
 		<info><desc>String STR_ERROR_IO.</desc></info>
-				<value>Writing output file failed!</value>
+				<value>Writing output file failed.</value>
 			</prop>
 		</group>
 		<node-ref oor:name="LastUsedSettings" oor:node-type="OptimizerSettings">
