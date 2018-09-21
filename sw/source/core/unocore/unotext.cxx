@@ -1630,15 +1630,42 @@ SwXText::convertToTextFrame(
     *aStartPam.End() = *pEndPam->End();
     pEndPam.reset(nullptr);
 
+    // lambda to determine wether pFrameFormat is in a tableBox node
+    auto isInTableBox = [](const SwFrameFormat* pFrameFormat)
+    {
+//         return false;
+//         // safety
+//         if( !pFrameFormat->GetContent().GetContentIdx() )
+//             return false;
+//         auto index = *pFrameFormat->GetContent().GetContentIdx();
+//         index++;
+//         return index.GetNode().IsGrfNode();
+
+        SwPaM aMovePam(pFrameFormat->GetAnchor().GetContentAnchor()->nNode);
+        aMovePam.Move(fnMoveBackward);
+        const auto& aNode = aMovePam.GetNode();
+
+        if ( aNode.IsStartNode() )
+        {
+            const auto& aStartNode = static_cast<const SwStartNode&>( aNode );
+            return aStartNode.GetStartNodeType() == SwTableBoxStartNode;
+        }
+        else
+        {
+            return false;
+        }
+    };
     // see if there are frames already anchored to this node
     // we have to work with the SdrObjects, as unique name is not guaranteed in their frame format
+    // tdf#115094: do nothing if we have a graphic node
     std::set<const SdrObject*> aAnchoredObjectsByPtr;
     std::set<OUString> aAnchoredObjectsByName;
     for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrameFormats()->size(); ++i)
     {
         const SwFrameFormat* pFrameFormat = (*m_pImpl->m_pDoc->GetSpzFrameFormats())[i];
         const SwFormatAnchor& rAnchor = pFrameFormat->GetAnchor();
-        if ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId() || RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) &&
+        if ( !isInTable(pFrameFormat) &&
+                (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId() || RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) &&
                 aStartPam.Start()->nNode.GetIndex() <= rAnchor.GetContentAnchor()->nNode.GetIndex() &&
                 aStartPam.End()->nNode.GetIndex() >= rAnchor.GetContentAnchor()->nNode.GetIndex())
         {
