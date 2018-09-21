@@ -42,7 +42,6 @@
 #include <svl/intitem.hxx>
 #include <svl/ilstitem.hxx>
 #include <svl/int64item.hxx>
-#include <sfx2/itemconnect.hxx>
 #include <sal/macros.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -374,8 +373,8 @@ SvxBorderTabPage::SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCor
 
         mbHorEnabled = pBoxInfo->IsHorEnabled();
         mbVerEnabled = pBoxInfo->IsVerEnabled();
-        mbTLBREnabled = sfx::ItemWrapperHelper::IsKnownItem( rCoreAttrs, SID_ATTR_BORDER_DIAG_TLBR );
-        mbBLTREnabled = sfx::ItemWrapperHelper::IsKnownItem( rCoreAttrs, SID_ATTR_BORDER_DIAG_BLTR );
+        mbTLBREnabled = rCoreAttrs.GetItemState(GetWhich(SID_ATTR_BORDER_DIAG_TLBR)) != SfxItemState::UNKNOWN;
+        mbBLTREnabled = rCoreAttrs.GetItemState(GetWhich(SID_ATTR_BORDER_DIAG_BLTR)) != SfxItemState::UNKNOWN;
 
         if(pBoxInfo->IsDist())
         {
