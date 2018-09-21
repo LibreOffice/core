@@ -315,7 +315,7 @@ void SdrRectObj::AddToHdlList(SdrHdlList& rHdlList) const
     sal_Int32 nCount = IsTextFrame() ? 10 : 9;
     for(sal_Int32 nHdlNum = 0; nHdlNum < nCount; ++nHdlNum)
     {
-        SdrHdl* pH = nullptr;
+        std::unique_ptr<SdrHdl> pH;
         Point aPnt;
         SdrHdlKind eKind = SdrHdlKind::Move;
 
@@ -326,7 +326,7 @@ void SdrRectObj::AddToHdlList(SdrHdlList& rHdlList) const
                 OSL_ENSURE(!IsTextEditActive(), "Do not use a ImpTextframeHdl for highlighting text in active text edit, this will collide with EditEngine paints (!)");
                 // hack for calc grid sync to ensure the hatched area
                 // for a textbox is displayed at correct position
-                pH = new ImpTextframeHdl(maRect + GetGridOffset() );
+                pH.reset(new ImpTextframeHdl(maRect + GetGridOffset() ));
                 pH->SetObj(const_cast<SdrRectObj*>(this));
                 pH->SetRotationAngle(aGeo.nRotationAngle);
                 break;
@@ -364,11 +364,11 @@ void SdrRectObj::AddToHdlList(SdrHdlList& rHdlList) const
                 RotatePoint(aPnt,maRect.TopLeft(),aGeo.nSin,aGeo.nCos);
             }
 
-            pH = new SdrHdl(aPnt,eKind);
+            pH.reset(new SdrHdl(aPnt,eKind));
             pH->SetObj(const_cast<SdrRectObj*>(this));
             pH->SetRotationAngle(aGeo.nRotationAngle);
         }
-        rHdlList.AddHdl(pH);
+        rHdlList.AddHdl(std::move(pH));
     }
 }
 

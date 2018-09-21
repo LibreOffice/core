@@ -29,6 +29,7 @@
 #include <vcl/svapp.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <o3tl/make_unique.hxx>
 
 namespace chart
 {
@@ -595,8 +596,7 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
                 for( sal_uInt32 nM = 0; nM < aPolygon.count(); nM++)
                 {
                     const ::basegfx::B2DPoint aPoint(aPolygon.getB2DPoint(nM));
-                    SdrHdl* pHdl = new SdrHdl(Point(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY())), SdrHdlKind::Poly);
-                    rHdlList.AddHdl(pHdl);
+                    rHdlList.AddHdl(o3tl::make_unique<SdrHdl>(Point(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY())), SdrHdlKind::Poly));
                 }
             }
             return true;
@@ -641,8 +641,7 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
         }
 
         Point aPos = pSubObj->GetCurrentBoundRect().Center();
-        SdrHdl* pHdl = new SdrHdl(aPos,SdrHdlKind::Poly);
-        rHdlList.AddHdl(pHdl);
+        rHdlList.AddHdl(o3tl::make_unique<SdrHdl>(aPos,SdrHdlKind::Poly));
     }
     return true;
 }

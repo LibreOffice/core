@@ -244,7 +244,7 @@ void SwDrawView::AddCustomHdl()
     }
 
     // add anchor handle:
-    maHdlList.AddHdl( new SwSdrHdl( aPos, ( pAnch->IsVertical() && !pAnch->IsVertLR() ) ||
+    maHdlList.AddHdl( o3tl::make_unique<SwSdrHdl>( aPos, ( pAnch->IsVertical() && !pAnch->IsVertLR() ) ||
                                      pAnch->IsRightToLeft() ) );
 }
 

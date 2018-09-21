@@ -574,7 +574,7 @@ void E3dCompoundObject::AddToHdlList(SdrHdlList& rHdlList) const
                 // to 2d world coor
                 aPos2D *= rVCScene.getObjectTransformation();
 
-                rHdlList.AddHdl(new SdrHdl(Point(basegfx::fround(aPos2D.getX()), basegfx::fround(aPos2D.getY())), SdrHdlKind::BezierWeight));
+                rHdlList.AddHdl(o3tl::make_unique<SdrHdl>(Point(basegfx::fround(aPos2D.getX()), basegfx::fround(aPos2D.getY())), SdrHdlKind::BezierWeight));
             }
         }
     }
@@ -583,8 +583,7 @@ void E3dCompoundObject::AddToHdlList(SdrHdlList& rHdlList) const
 
     if(aPolyPolygon.count())
     {
-        E3dVolumeMarker* pVolMarker = new E3dVolumeMarker(aPolyPolygon);
-        rHdlList.AddHdl(pVolMarker);
+        rHdlList.AddHdl(o3tl::make_unique<E3dVolumeMarker>(aPolyPolygon));
     }
 }
 

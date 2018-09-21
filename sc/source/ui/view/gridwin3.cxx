@@ -303,7 +303,7 @@ void ScGridWindow::CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddres
             bool bNegativePage = pViewData->GetDocument()->IsNegativePage( pViewData->GetTabNo() );
             Point aPos = pViewData->GetScrPos( rAddress.Col(), rAddress.Row(), eWhich, true );
             aPos = PixelToLogic(aPos);
-            rHdl.AddHdl(new SdrHdl(aPos, bNegativePage ? SdrHdlKind::Anchor_TR : SdrHdlKind::Anchor));
+            rHdl.AddHdl(o3tl::make_unique<SdrHdl>(aPos, bNegativePage ? SdrHdlKind::Anchor_TR : SdrHdlKind::Anchor));
         }
     }
 }
