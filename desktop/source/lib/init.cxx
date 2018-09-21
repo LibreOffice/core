@@ -20,6 +20,7 @@
 #include <unicode/ucnv.h>
 #include <premac.h>
 #import <Foundation/Foundation.h>
+#import <CoreGraphics/CoreGraphics.h>
 #include <postmac.h>
 #endif
 
@@ -2098,6 +2099,14 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 
     pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+
+#if 0
+    // Draw something at least, to see that the context as such is correctly set up
+    CGContextSetRGBFillColor(aData.rCGContext, 1, 0, 0, 1);
+    CGContextFillRect(aData.rCGContext, CGRectMake (0, 0, 200, 100));
+    CGContextSetRGBFillColor(aData.rCGContext, 0, 0, 1, .5);
+    CGContextFillRect(aData.rCGContext, CGRectMake (0, 0, 100, 200));
+#endif
 #else
     ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT) ;
 
