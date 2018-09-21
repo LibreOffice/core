@@ -421,6 +421,7 @@ private:
     long            mnUserItemWidth;
     long            mnUserItemHeight;
     sal_uInt16      mnSelItemId;
+    int             mnSavedItemId;
     sal_uInt16      mnHighItemId;
     sal_uInt16      mnCols;
     sal_uInt16      mnCurCol;
@@ -581,6 +582,17 @@ public:
         return mbEdgeBlending;
     }
     void SetEdgeBlending(bool bNew);
+
+    void SaveValue()
+    {
+        mnSavedItemId = IsNoSelection() ? -1 : GetSelectedItemId();
+    }
+
+    bool IsValueChangedFromSaved() const
+    {
+        int nItemId = IsNoSelection() ? -1 : GetSelectedItemId();
+        return mnSavedItemId != nItemId;
+    }
 };
 
 
