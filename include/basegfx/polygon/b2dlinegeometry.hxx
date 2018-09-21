@@ -125,7 +125,7 @@ namespace basegfx
             to [F_PI .. 0.01 * F_PI].
 
             @param pTriangles
-            If given, the methjod will additionally add the created geometry as
+            If given, the method will additionally add the created geometry as
             B2DTriangle's
 
             @return
