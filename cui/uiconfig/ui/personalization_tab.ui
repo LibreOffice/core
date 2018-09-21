@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkVBox" id="PersonalizationTabPage">
@@ -134,9 +134,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="applied_theme">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                      <object class="GtkLinkButton" id="applied_theme_link">
+                        <property name="label" translatable="no">Applied persona's name and URL</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="relief">none</property>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -167,8 +169,8 @@
                 <child>
                   <object class="GtkLabel" id="extensions_label">
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="personalization_tab|extensions_label">Or, select from the Themes installed via extensions:</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
