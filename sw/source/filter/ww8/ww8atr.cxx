@@ -5507,8 +5507,11 @@ const SwRedlineData* AttributeOutputBase::GetParagraphMarkerRedline( const SwTex
         if ( pRedl->GetRedlineData().GetType() != aRedlineType )
             continue;
 
-        const SwPosition* pCheckedStt = pRedl->Start();
         const SwPosition* pCheckedEnd = pRedl->End();
+        if (!pCheckedEnd)
+            continue;
+
+        const SwPosition* pCheckedStt = pRedl->Start();
         sal_uLong uStartNodeIndex = pCheckedStt->nNode.GetIndex();
         sal_uLong uStartCharIndex = pCheckedStt->nContent.GetIndex();
         sal_uLong uEndNodeIndex   = pCheckedEnd->nNode.GetIndex();
@@ -5517,9 +5520,6 @@ const SwRedlineData* AttributeOutputBase::GetParagraphMarkerRedline( const SwTex
 
         if( uStartNodeIndex <= uNodeIndex && uNodeIndex < uEndNodeIndex )
         {
-            if ( !pCheckedEnd )
-                continue;
-
             // Maybe add here a check that also the start & end of the redline is the entire paragraph
             if ( ( uStartNodeIndex < uEndNodeIndex ) &&
                  // check start:
