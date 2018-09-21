@@ -21,6 +21,7 @@
 
 #include <vcl/customweld.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/svdobj.hxx>
 #include <memory>
 
 class SfxItemSet;
@@ -33,7 +34,7 @@ class SVX_DLLPUBLIC SvxXMeasurePreview : public weld::CustomWidgetController
 
 private:
     MapMode m_aMapMode;
-    SdrMeasureObj* pMeasureObj;
+    std::unique_ptr<SdrMeasureObj, SdrObjectFreeOp> pMeasureObj;
     std::unique_ptr<SdrModel> pModel;
 
     void ResizeImpl(const Size& rSize);
