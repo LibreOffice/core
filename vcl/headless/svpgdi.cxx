@@ -1036,27 +1036,36 @@ void SvpSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 class SystemDependentData_CairoPath : public basegfx::SystemDependentData
 {
 private:
+    // the path data itself
     cairo_path_t*       mpCairoPath;
-    bool                mbPixelSnapHairline;
+
+    // all other values the path data  is based on and
+    // need to be compared with to check for data validity
+    bool                mbNoJoin;
+    bool                mbAntiAliasB2DDraw;
 
 public:
     SystemDependentData_CairoPath(
         basegfx::SystemDependentDataManager& rSystemDependentDataManager,
-        cairo_path_t* pCairoPath);
+        cairo_path_t* pCairoPath,
+        bool bNoJoin,
+        bool bAntiAliasB2DDraw);
     virtual ~SystemDependentData_CairoPath() override;
 
     cairo_path_t* getCairoPath() { return mpCairoPath; }
-
-    bool getPixelSnapHairline() const { return mbPixelSnapHairline; }
-    void setPixelSnapHairline(bool bNew) { mbPixelSnapHairline = bNew; }
+    bool getNoJoin() const { return mbNoJoin; }
+    bool getAntiAliasB2DDraw() const { return mbAntiAliasB2DDraw; }
 };
 
 SystemDependentData_CairoPath::SystemDependentData_CairoPath(
     basegfx::SystemDependentDataManager& rSystemDependentDataManager,
-    cairo_path_t* pCairoPath)
+    cairo_path_t* pCairoPath,
+    bool bNoJoin,
+    bool bAntiAliasB2DDraw)
 :   basegfx::SystemDependentData(rSystemDependentDataManager),
     mpCairoPath(pCairoPath),
-    mbPixelSnapHairline(false)
+    mbNoJoin(bNoJoin),
+    mbAntiAliasB2DDraw(bAntiAliasB2DDraw)
 {
 }
 
@@ -1246,7 +1255,8 @@ bool SvpSalGraphics::drawPolyLine(
     {
         // check data validity
         if(nullptr == pSystemDependentData_CairoPath->getCairoPath()
-            || pSystemDependentData_CairoPath->getPixelSnapHairline() != bPixelSnapHairline)
+            || pSystemDependentData_CairoPath->getNoJoin() != bNoJoin
+            || pSystemDependentData_CairoPath->getAntiAliasB2DDraw() != bAntiAliasB2DDraw)
         {
             // data invalid, forget
             pSystemDependentData_CairoPath.reset();
@@ -1303,10 +1313,9 @@ bool SvpSalGraphics::drawPolyLine(
         // copy and add to buffering mechanism
         pSystemDependentData_CairoPath = rPolyLine.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
             ImplGetSystemDependentDataManager(),
-            cairo_copy_path(cr));
-
-        // fill data of buffered data
-        pSystemDependentData_CairoPath->setPixelSnapHairline(bPixelSnapHairline);
+            cairo_copy_path(cr),
+            bNoJoin,
+            bAntiAliasB2DDraw);
     }
 
     // extract extents
@@ -1416,7 +1425,9 @@ bool SvpSalGraphics::drawPolyPolygon(
         // for decisions how/what to buffer, see Note in WinSalGraphicsImpl::drawPolyPolygon
         pSystemDependentData_CairoPath = rPolyPolygon.addOrReplaceSystemDependentData<SystemDependentData_CairoPath>(
             ImplGetSystemDependentDataManager(),
-            cairo_copy_path(cr));
+            cairo_copy_path(cr),
+            false,
+            false);
     }
 
     // To make releaseCairoContext work, use empty extents
