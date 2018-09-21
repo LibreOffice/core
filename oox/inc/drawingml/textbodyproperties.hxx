@@ -42,6 +42,8 @@ struct TextBodyProperties
     boost::optional< sal_Int32 >                    moTextOffRight;
     css::drawing::TextVerticalAdjust                meVA;
     OUString                                        msPrst;
+    /// Number of requested columns.
+    sal_Int32 mnNumCol = 1;
 
     explicit            TextBodyProperties();
 

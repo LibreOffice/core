@@ -90,7 +90,7 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper cons
 //   sal_Int32 nVertOverflow =  rAttribs.getToken( XML_vertOverflow, XML_overflow );
 
     // ST_TextColumnCount
-//   sal_Int32 nNumCol = rAttribs.getInteger( XML_numCol, 1 );
+    mrTextBodyProp.mnNumCol = rAttribs.getInteger( XML_numCol, 1 );
 
     // ST_Angle
     mrTextBodyProp.moRotation = rAttribs.getInteger( XML_rot );

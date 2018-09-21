@@ -45,6 +45,8 @@ public:
 
     const TextParagraphVector&          getParagraphs() const { return maParagraphs; }
     TextParagraph&                      addParagraph();
+    /// Appends an existing paragraph to this text body.
+    void appendParagraph(std::shared_ptr<TextParagraph> pTextParagraph);
 
     const TextListStyle&                getTextListStyle() const { return maTextListStyle; }
     TextListStyle&                      getTextListStyle() { return maTextListStyle; }
