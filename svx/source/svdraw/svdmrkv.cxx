@@ -826,53 +826,53 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
 
                 if (bWdt0 && bHgt0)
                 {
-                    maHdlList.AddHdl(new SdrHdl(aRect.TopLeft(), SdrHdlKind::UpperLeft));
+                    maHdlList.AddHdl(o3tl::make_unique<SdrHdl>(aRect.TopLeft(), SdrHdlKind::UpperLeft));
                 }
                 else if (!bStdDrag && (bWdt0 || bHgt0))
                 {
-                    maHdlList.AddHdl(new SdrHdl(aRect.TopLeft(), SdrHdlKind::UpperLeft));
-                    maHdlList.AddHdl(new SdrHdl(aRect.BottomRight(), SdrHdlKind::LowerRight));
+                    maHdlList.AddHdl(o3tl::make_unique<SdrHdl>(aRect.TopLeft(), SdrHdlKind::UpperLeft));
+                    maHdlList.AddHdl(o3tl::make_unique<SdrHdl>(aRect.BottomRight(), SdrHdlKind::LowerRight));
                 }
                 else
                 {
                     if (!bWdt0 && !bHgt0)
                     {
-                        maHdlList.AddHdl(new SdrHdl(aRect.TopLeft(), SdrHdlKind::UpperLeft));
+                        maHdlList.AddHdl(o3tl::make_unique<SdrHdl>(aRect.TopLeft(), SdrHdlKind::UpperLeft));
                     }
 
                     if (!bLimitedRotation && !bHgt0)
                     {
-                        maHdlList.AddHdl(new SdrHdl(aRect.TopCenter(), SdrHdlKind::Upper));
+                        maHdlList.AddHdl(o3tl::make_unique<SdrHdl>(aRect.TopCenter(), SdrHdlKind::Upper));
                     }
 
                     if (!bWdt0 && !bHgt0)
                     {
-                        maHdlList.AddHdl(new SdrHdl(aRect.TopRight(), SdrHdlKind::UpperRight));
+                        maHdlList.AddHdl(o3tl::make_unique<SdrHdl>(aRect.TopRight(), SdrHdlKind::UpperRight));
                     }
 
                     if (!bLimitedRotation && !bWdt0)
                     {
-                        maHdlList.AddHdl(new SdrHdl(aRect.LeftCenter(), SdrHdlKind::Left ));
+                        maHdlList.AddHdl(o3tl::make_unique<SdrHdl>(aRect.LeftCenter(), SdrHdlKind::Left ));
                     }
 
                     if (!bLimitedRotation && !bWdt0)
                     {
-                        maHdlList.AddHdl(new SdrHdl(aRect.RightCenter(), SdrHdlKind::Right));
+                        maHdlList.AddHdl(o3tl::make_unique<SdrHdl>(aRect.RightCenter(), SdrHdlKind::Right));
                     }
 
                     if (!bWdt0 && !bHgt0)
                     {
-                        maHdlList.AddHdl(new SdrHdl(aRect.BottomLeft(), SdrHdlKind::LowerLeft));
+                        maHdlList.AddHdl(o3tl::make_unique<SdrHdl>(aRect.BottomLeft(), SdrHdlKind::LowerLeft));
                     }
 
                     if (!bLimitedRotation && !bHgt0)
                     {
-                        maHdlList.AddHdl(new SdrHdl(aRect.BottomCenter(), SdrHdlKind::Lower));
+                        maHdlList.AddHdl(o3tl::make_unique<SdrHdl>(aRect.BottomCenter(), SdrHdlKind::Lower));
                     }
 
                     if (!bWdt0 && !bHgt0)
                     {
-                        maHdlList.AddHdl(new SdrHdl(aRect.BottomRight(), SdrHdlKind::LowerRight));
+                        maHdlList.AddHdl(o3tl::make_unique<SdrHdl>(aRect.BottomRight(), SdrHdlKind::LowerRight));
                     }
                 }
             }
@@ -956,11 +956,11 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
             {
                 const SdrGluePoint& rGP=(*pGPL)[nNumGP];
                 Point aPos(rGP.GetAbsolutePos(*pObj));
-                SdrHdl* pGlueHdl=new SdrHdl(aPos,SdrHdlKind::Glue);
+                std::unique_ptr<SdrHdl> pGlueHdl(new SdrHdl(aPos,SdrHdlKind::Glue));
                 pGlueHdl->SetObj(pObj);
                 pGlueHdl->SetPageView(pPV);
                 pGlueHdl->SetObjHdlNum(nId);
-                maHdlList.AddHdl(pGlueHdl);
+                maHdlList.AddHdl(std::move(pGlueHdl));
             }
         }
     }
@@ -1023,26 +1023,23 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
         case SdrDragMode::Rotate:
         {
             // add rotation center
-            SdrHdl* pHdl = new SdrHdl(maRef1, SdrHdlKind::Ref1);
-
-            maHdlList.AddHdl(pHdl);
-
+            maHdlList.AddHdl(o3tl::make_unique<SdrHdl>(maRef1, SdrHdlKind::Ref1));
             break;
         }
         case SdrDragMode::Mirror:
         {
             // add axis of reflection
-            SdrHdl* pHdl3 = new SdrHdl(maRef2, SdrHdlKind::Ref2);
-            SdrHdl* pHdl2 = new SdrHdl(maRef1, SdrHdlKind::Ref1);
-            SdrHdl* pHdl1 = new SdrHdlLine(*pHdl2, *pHdl3, SdrHdlKind::MirrorAxis);
+            std::unique_ptr<SdrHdl> pHdl3(new SdrHdl(maRef2, SdrHdlKind::Ref2));
+            std::unique_ptr<SdrHdl> pHdl2(new SdrHdl(maRef1, SdrHdlKind::Ref1));
+            std::unique_ptr<SdrHdl> pHdl1(new SdrHdlLine(*pHdl2, *pHdl3, SdrHdlKind::MirrorAxis));
 
             pHdl1->SetObjHdlNum(1); // for sorting
             pHdl2->SetObjHdlNum(2); // for sorting
             pHdl3->SetObjHdlNum(3); // for sorting
 
-            maHdlList.AddHdl(pHdl1); // line comes first, so it is the last in HitTest
-            maHdlList.AddHdl(pHdl2);
-            maHdlList.AddHdl(pHdl3);
+            maHdlList.AddHdl(std::move(pHdl1)); // line comes first, so it is the last in HitTest
+            maHdlList.AddHdl(std::move(pHdl2));
+            maHdlList.AddHdl(std::move(pHdl3));
 
             break;
         }
@@ -1091,21 +1088,21 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                 // build handles
                 const Point aTmpPos1(basegfx::fround(aGradTransVector.maPositionA.getX()), basegfx::fround(aGradTransVector.maPositionA.getY()));
                 const Point aTmpPos2(basegfx::fround(aGradTransVector.maPositionB.getX()), basegfx::fround(aGradTransVector.maPositionB.getY()));
-                SdrHdlColor* pColHdl1 = new SdrHdlColor(aTmpPos1, aGradTransVector.aCol1, SDR_HANDLE_COLOR_SIZE_NORMAL, true);
-                SdrHdlColor* pColHdl2 = new SdrHdlColor(aTmpPos2, aGradTransVector.aCol2, SDR_HANDLE_COLOR_SIZE_NORMAL, true);
-                SdrHdlGradient* pGradHdl = new SdrHdlGradient(aTmpPos1, aTmpPos2, false);
+                std::unique_ptr<SdrHdlColor> pColHdl1(new SdrHdlColor(aTmpPos1, aGradTransVector.aCol1, SDR_HANDLE_COLOR_SIZE_NORMAL, true));
+                std::unique_ptr<SdrHdlColor> pColHdl2(new SdrHdlColor(aTmpPos2, aGradTransVector.aCol2, SDR_HANDLE_COLOR_SIZE_NORMAL, true));
+                std::unique_ptr<SdrHdlGradient> pGradHdl(new SdrHdlGradient(aTmpPos1, aTmpPos2, false));
                 DBG_ASSERT(pColHdl1 && pColHdl2 && pGradHdl, "Could not get all necessary handles!");
 
                 // link them
-                pGradHdl->SetColorHandles(pColHdl1, pColHdl2);
+                pGradHdl->SetColorHandles(pColHdl1.get(), pColHdl2.get());
                 pGradHdl->SetObj(pObj);
-                pColHdl1->SetColorChangeHdl(LINK(pGradHdl, SdrHdlGradient, ColorChangeHdl));
-                pColHdl2->SetColorChangeHdl(LINK(pGradHdl, SdrHdlGradient, ColorChangeHdl));
+                pColHdl1->SetColorChangeHdl(LINK(pGradHdl.get(), SdrHdlGradient, ColorChangeHdl));
+                pColHdl2->SetColorChangeHdl(LINK(pGradHdl.get(), SdrHdlGradient, ColorChangeHdl));
 
                 // insert them
-                maHdlList.AddHdl(pColHdl1);
-                maHdlList.AddHdl(pColHdl2);
-                maHdlList.AddHdl(pGradHdl);
+                maHdlList.AddHdl(std::move(pColHdl1));
+                maHdlList.AddHdl(std::move(pColHdl2));
+                maHdlList.AddHdl(std::move(pGradHdl));
             }
             break;
         }
@@ -1133,21 +1130,21 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
                     // build handles
                     const Point aTmpPos1(basegfx::fround(aGradTransVector.maPositionA.getX()), basegfx::fround(aGradTransVector.maPositionA.getY()));
                     const Point aTmpPos2(basegfx::fround(aGradTransVector.maPositionB.getX()), basegfx::fround(aGradTransVector.maPositionB.getY()));
-                    SdrHdlColor* pColHdl1 = new SdrHdlColor(aTmpPos1, aGradTransVector.aCol1, aHdlSize, false);
-                    SdrHdlColor* pColHdl2 = new SdrHdlColor(aTmpPos2, aGradTransVector.aCol2, aHdlSize, false);
-                    SdrHdlGradient* pGradHdl = new SdrHdlGradient(aTmpPos1, aTmpPos2, true);
+                    std::unique_ptr<SdrHdlColor> pColHdl1(new SdrHdlColor(aTmpPos1, aGradTransVector.aCol1, aHdlSize, false));
+                    std::unique_ptr<SdrHdlColor> pColHdl2(new SdrHdlColor(aTmpPos2, aGradTransVector.aCol2, aHdlSize, false));
+                    std::unique_ptr<SdrHdlGradient> pGradHdl(new SdrHdlGradient(aTmpPos1, aTmpPos2, true));
                     DBG_ASSERT(pColHdl1 && pColHdl2 && pGradHdl, "Could not get all necessary handles!");
 
                     // link them
-                    pGradHdl->SetColorHandles(pColHdl1, pColHdl2);
+                    pGradHdl->SetColorHandles(pColHdl1.get(), pColHdl2.get());
                     pGradHdl->SetObj(pObj);
-                    pColHdl1->SetColorChangeHdl(LINK(pGradHdl, SdrHdlGradient, ColorChangeHdl));
-                    pColHdl2->SetColorChangeHdl(LINK(pGradHdl, SdrHdlGradient, ColorChangeHdl));
+                    pColHdl1->SetColorChangeHdl(LINK(pGradHdl.get(), SdrHdlGradient, ColorChangeHdl));
+                    pColHdl2->SetColorChangeHdl(LINK(pGradHdl.get(), SdrHdlGradient, ColorChangeHdl));
 
                     // insert them
-                    maHdlList.AddHdl(pColHdl1);
-                    maHdlList.AddHdl(pColHdl2);
-                    maHdlList.AddHdl(pGradHdl);
+                    maHdlList.AddHdl(std::move(pColHdl1));
+                    maHdlList.AddHdl(std::move(pColHdl2));
+                    maHdlList.AddHdl(std::move(pGradHdl));
                 }
             }
             break;
