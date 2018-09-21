@@ -27,6 +27,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <editeng/svxenum.hxx>
+#include <o3tl/deleter.hxx>
 
 namespace sc {
     struct SpellCheckContext;
@@ -58,6 +59,7 @@ enum ScOutputType { OUTTYPE_WINDOW, OUTTYPE_PRINTER };
 
 class ScFieldEditEngine;
 class ClearableClipRegion;
+typedef std::unique_ptr<ClearableClipRegion, o3tl::default_delete<ClearableClipRegion>> ClearableClipRegionPtr;
 
 class ScOutputData
 {
@@ -247,8 +249,8 @@ private:
     void ShowClipMarks( DrawEditParam& rParam, long nEngineHeight, const Size& aCellSize,
                         bool bMerged, OutputAreaParam& aAreaParam );
 
-    std::unique_ptr<ClearableClipRegion> Clip( DrawEditParam& rParam, const Size& aCellSize, OutputAreaParam& aAreaParam,
-                                               long nEngineHeight, bool bWrapFields );
+    ClearableClipRegionPtr Clip(DrawEditParam& rParam, const Size& aCellSize, OutputAreaParam& aAreaParam,
+                                long nEngineHeight, bool bWrapFields);
 
     bool AdjustAreaParamClipRect(OutputAreaParam& rAreaParam);
     long SetEngineTextAndGetWidth( DrawEditParam& rParam, const OUString& rSetString,

@@ -30,7 +30,7 @@ SwDocFac::SwDocFac( SwDoc *pDc )
 }
 
 
-SwDocFac::~SwDocFac()
+SwDocFac::~SwDocFac() COVERITY_NOEXCEPT_FALSE
 {
 }
 

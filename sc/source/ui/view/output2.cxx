@@ -2773,7 +2773,7 @@ public:
         }
     }
 
-    ~ClearableClipRegion()
+    ~ClearableClipRegion() COVERITY_NOEXCEPT_FALSE
     {
         // Pop() or SetClipRegion() must only be called in case bClip was true
         // in the ctor, and only then mpDev is set.
@@ -3185,7 +3185,7 @@ void ScOutputData::ShowClipMarks( DrawEditParam& rParam, long nEngineHeight, con
     }
 }
 
-std::unique_ptr<ClearableClipRegion> ScOutputData::Clip( DrawEditParam& rParam, const Size& aCellSize,
+ClearableClipRegionPtr ScOutputData::Clip( DrawEditParam& rParam, const Size& aCellSize,
                                                         OutputAreaParam& aAreaParam, long nEngineHeight,
                                                         bool bWrapFields)
 {
@@ -3214,9 +3214,9 @@ std::unique_ptr<ClearableClipRegion> ScOutputData::Clip( DrawEditParam& rParam, 
     }
 
         // Clip marks are already handled in GetOutputArea
-    return  std::unique_ptr<ClearableClipRegion>( new ClearableClipRegion( rParam.mbPixelToLogic ?
-                                                mpRefDevice->PixelToLogic( aAreaParam.maClipRect )
-                                              : aAreaParam.maClipRect, bClip, bSimClip, mpDev, bMetaFile ));
+    return ClearableClipRegionPtr(new ClearableClipRegion(rParam.mbPixelToLogic ?
+                                                mpRefDevice->PixelToLogic(aAreaParam.maClipRect)
+                                              : aAreaParam.maClipRect, bClip, bSimClip, mpDev, bMetaFile));
 }
 
 void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
