@@ -436,7 +436,7 @@ void DomainMapper_Impl::RemoveLastParagraph( )
             xCursor->goLeft( 1, true );
             // If this is a text on a shape, possibly the text has the trailing
             // newline removed already.
-            if (xCursor->getString() == SAL_NEWLINE_STRING)
+            if (xCursor->getString() == "\n")
             {
                 uno::Reference<beans::XPropertySet> xDocProps(GetTextDocument(), uno::UNO_QUERY);
                 const OUString aRecordChanges("RecordChanges");
