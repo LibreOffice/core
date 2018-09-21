@@ -438,7 +438,7 @@ void SwDoc::GetRowHeight( const SwCursor& rCursor, SwFormatFrameSize *& rpSz )
     }
 }
 
-bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly )
+bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly, const bool bOptimize )
 {
     bool bRet = false;
     SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
@@ -452,7 +452,7 @@ bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly )
             if( !bTstOnly )
             {
                 long nHeight = 0;
-
+                sal_Int32 nTotalHeight = 0;
                 for ( auto pLn : aRowArr )
                 {
                     SwIterator<SwFrame,SwFormat> aIter( *pLn->GetFrameFormat() );
@@ -462,7 +462,12 @@ bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly )
                         nHeight = std::max( nHeight, pFrame->getFrameArea().Height() );
                         pFrame = aIter.Next();
                     }
+                    nTotalHeight += nHeight;
                 }
+
+                if ( bOptimize )
+                    nHeight = nTotalHeight / aRowArr.size();
+
                 SwFormatFrameSize aNew( ATT_MIN_SIZE, 0, nHeight );
 
                 if (GetIDocumentUndoRedo().DoesUndo())

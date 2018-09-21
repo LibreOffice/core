@@ -1434,7 +1434,11 @@ public:
     static void GetRowHeight( const SwCursor& rCursor, SwFormatFrameSize *& rpSz );
     void SetRowSplit( const SwCursor& rCursor, const SwFormatRowSplit &rNew );
     static void GetRowSplit( const SwCursor& rCursor, SwFormatRowSplit *& rpSz );
-    bool BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly );
+
+    /// Adjustment of Rowheights. Determine via bTstOnly if more than one row is selected.
+    /// bOptimize: distribute current table height, instead of using the largest row.
+    ///   Call again without bOptimize to ensure equal height in case some row's content didn't fit.
+    bool BalanceRowHeight( const SwCursor& rCursor, bool bTstOnly, const bool bOptimize );
     void SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew );
     static bool GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill );
     void SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet );

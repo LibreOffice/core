@@ -656,8 +656,7 @@ public:
     void   SetBoxAlign( sal_uInt16 nOrient );
     sal_uInt16 GetBoxAlign() const;         ///< USHRT_MAX if ambiguous.
 
-    /// Adjustment of Rowheights. Determine via bTstOnly if more than one row is selected.
-    bool BalanceRowHeight( bool bTstOnly );
+    bool BalanceRowHeight( bool bTstOnly, const bool bOptimize = false );
 
     void SetTabBorders( const SfxItemSet& rSet );
     void GetTabBorders(       SfxItemSet& rSet) const;

@@ -736,12 +736,12 @@ void SwFEShell::GetRowHeight( SwFormatFrameSize *& rpSz ) const
     SwDoc::GetRowHeight( *getShellCursor( false ), rpSz );
 }
 
-bool SwFEShell::BalanceRowHeight( bool bTstOnly )
+bool SwFEShell::BalanceRowHeight( bool bTstOnly, const bool bOptimize )
 {
     SET_CURR_SHELL( this );
     if( !bTstOnly )
         StartAllAction();
-    bool bRet = GetDoc()->BalanceRowHeight( *getShellCursor( false ), bTstOnly );
+    bool bRet = GetDoc()->BalanceRowHeight( *getShellCursor( false ), bTstOnly, bOptimize );
     if( !bTstOnly )
         EndAllActionAndCall();
     return bRet;
