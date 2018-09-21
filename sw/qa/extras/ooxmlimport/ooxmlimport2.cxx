@@ -223,6 +223,26 @@ DECLARE_OOXMLIMPORT_TEST(testTdf119200, "tdf119200.docx")
     CPPUNIT_ASSERT_EQUAL(OUString(u" size 12{ func \u2287 } {}"), getFormula(getRun(xPara, 7)));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf115094, "tdf115094.docx")
+{
+    // anchor of graphic has to be the text in the text frame
+    // xray ThisComponent.DrawPage(1).Anchor.Text
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(),
+                                                      uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText1(xShape->getAnchor()->getText(), uno::UNO_QUERY);
+
+    // xray ThisComponent.TextTables(0).getCellByName("A1")
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xText2(xTable->getCellByName("A1"), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(xText1.get(), xText2.get());
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
