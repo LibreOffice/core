@@ -20,6 +20,7 @@
 #include <oox/ppt/pptshape.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <drawingml/textbody.hxx>
+#include <drawingml/table/tableproperties.hxx>
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -221,6 +222,23 @@ void PPTShape::addShape(
                     if (mnSubType && meShapeLocation == Layout)
                         sServiceName = sOutlinerShapeService;
                 break;
+            }
+        }
+
+        if (sServiceName != "com.sun.star.drawing.TableShape")
+        {
+            if (TextBodyPtr pTextBody = getTextBody())
+            {
+                sal_Int32 nNumCol = pTextBody->getTextProperties().mnNumCol;
+                if (nNumCol > 1)
+                {
+                    // This shape is not a table, but has multiple columns,
+                    // represent that as a table.
+                    sServiceName = "com.sun.star.drawing.TableShape";
+                    oox::drawingml::table::TablePropertiesPtr pTableProperties = getTableProperties();
+                    pTableProperties->pullFromTextBody(pTextBody, maSize.Width);
+                    setTextBody(nullptr);
+                }
             }
         }
 

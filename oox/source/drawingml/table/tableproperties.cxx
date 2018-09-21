@@ -19,6 +19,7 @@
 
 #include <drawingml/table/tableproperties.hxx>
 #include <drawingml/table/tablestylelist.hxx>
+#include <drawingml/textbody.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -304,6 +305,37 @@ void TableProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBa
     xTableStyleToDelete.reset();
 }
 
+void TableProperties::pullFromTextBody(oox::drawingml::TextBodyPtr pTextBody, sal_Int32 nShapeWidth)
+{
+    // Create table grid and a single row.
+    sal_Int32 nNumCol = pTextBody->getTextProperties().mnNumCol;
+    std::vector<sal_Int32>& rTableGrid(getTableGrid());
+    sal_Int32 nColWidth = nShapeWidth / nNumCol;
+    for (sal_Int32 nCol = 0; nCol < nNumCol; ++nCol)
+        rTableGrid.push_back(nColWidth);
+    std::vector<drawingml::table::TableRow>& rTableRows(getTableRows());
+    rTableRows.emplace_back();
+    oox::drawingml::table::TableRow& rTableRow = rTableRows.back();
+    std::vector<oox::drawingml::table::TableCell>& rTableCells = rTableRow.getTableCells();
+
+    // Create the cells and distribute the paragraphs from pTextBody.
+    sal_Int32 nNumPara = pTextBody->getParagraphs().size();
+    sal_Int32 nParaPerCol = std::ceil(double(nNumPara) / nNumCol);
+    size_t nPara = 0;
+    for (sal_Int32 nCol = 0; nCol < nNumCol; ++nCol)
+    {
+        rTableCells.emplace_back();
+        oox::drawingml::table::TableCell& rTableCell = rTableCells.back();
+        TextBodyPtr pCellTextBody(new TextBody);
+        rTableCell.setTextBody(pCellTextBody);
+        for (sal_Int32 nParaInCol = 0; nParaInCol < nParaPerCol; ++nParaInCol)
+        {
+            if (nPara < pTextBody->getParagraphs().size())
+                pCellTextBody->appendParagraph(pTextBody->getParagraphs()[nPara]);
+            ++nPara;
+        }
+    }
+}
 } } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

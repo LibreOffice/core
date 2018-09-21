@@ -189,6 +189,7 @@ public:
     void testPatternImport();
     void testPptCrop();
     void testTdf119015();
+    void testTdf120028();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -271,6 +272,7 @@ public:
     CPPUNIT_TEST(testTdf116266);
     CPPUNIT_TEST(testPptCrop);
     CPPUNIT_TEST(testTdf119015);
+    CPPUNIT_TEST(testTdf120028);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2553,6 +2555,30 @@ void SdImportTest::testTdf119015()
     uno::Reference<text::XTextRange> xTextRange(xTable->getCellByPosition(2, 0),
                                                 uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("A3"), xTextRange->getString());
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf120028()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf120028.pptx"), PPTX);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
+                                                     uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDoc.is());
+
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPage.is());
+
+    // This failed, shape was not a table, all text was rendered in a single
+    // column.
+    uno::Reference<beans::XPropertySet> xShape(getShape(0, xPage));
+    uno::Reference<table::XColumnRowRange> xModel(xShape->getPropertyValue("Model"),
+                                                  uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModel.is());
+
+    uno::Reference<table::XTableColumns> xColumns = xModel->getColumns();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xColumns->getCount());
 
     xDocShRef->DoClose();
 }
