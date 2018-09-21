@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f013ff3_905fc2e4",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3001,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-09-21T13:02:30Z",
+      "side": 1,
+      "message": "Nitpick: at least use the correct indentation please.. 4 spaces per level.",
+      "range": {
+        "startLine": 3000,
+        "startChar": 0,
+        "endLine": 3001,
+        "endChar": 18
+      },
+      "revId": "7e690c92b14b0d437d8edfc00e8980a239a566e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f013ff3_706436ba",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 3003,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-09-21T13:02:30Z",
+      "side": 1,
+      "message": "Btw, fields are marked only if aStatus.MarkFields() yields true, so all the new code should go into this if to be executed only if necessary.",
+      "revId": "7e690c92b14b0d437d8edfc00e8980a239a566e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
