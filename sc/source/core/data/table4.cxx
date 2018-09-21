@@ -59,7 +59,6 @@
 #include <segmenttree.hxx>
 #include <conditio.hxx>
 #include <editutil.hxx>
-#include <columnspanset.hxx>
 #include <listenercontext.hxx>
 
 #include <math.h>

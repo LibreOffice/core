@@ -58,7 +58,6 @@
 #include <cellform.hxx>
 #include <asciiopt.hxx>
 #include <impex.hxx>
-#include <columnspanset.hxx>
 #include <docoptio.hxx>
 #include <patattr.hxx>
 #include <docpool.hxx>

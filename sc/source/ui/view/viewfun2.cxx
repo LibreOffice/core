@@ -83,7 +83,6 @@
 #include <prnsave.hxx>
 #include <searchresults.hxx>
 #include <tokenarray.hxx>
-#include <columnspanset.hxx>
 #include <rowheightcontext.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
