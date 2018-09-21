@@ -762,6 +762,15 @@ DECLARE_OOXMLEXPORT_TEST(testWatermarkTrim, "tdf114308.docx")
     CPPUNIT_ASSERT_MESSAGE(ss.str(), nDifference >= -4);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf105444, "tdf105444.docx")
+{
+    xmlDocPtr pXmlComm = parseExport("word/comments.xml");
+    if (!pXmlComm)
+        return;
+    // there is no extra paragraph on Win32, only a single one.
+    assertXPath(pXmlComm, "/w:comments/w:comment/w:p", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
