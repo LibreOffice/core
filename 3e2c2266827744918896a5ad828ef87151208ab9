@@ -16,6 +16,24 @@
       "revId": "3e2c2266827744918896a5ad828ef87151208ab9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f013ff3_30746e99",
+        "filename": "vcl/win/gdi/salfont.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-09-21T11:51:33Z",
+      "side": 1,
+      "message": "Yup - thanks for that.",
+      "parentUuid": "1f013ff3_b0319eef",
+      "revId": "3e2c2266827744918896a5ad828ef87151208ab9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
