@@ -153,7 +153,7 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
     , m_xPopup(pBuilder->get_menu("writermenu"))
     , m_sInserted(SwResId(STR_REDLINE_INSERTED))
     , m_sDeleted(SwResId(STR_REDLINE_DELETED))
-    , m_sFormated(SwResId(STR_REDLINE_FORMATED))
+    , m_sFormated(SwResId(STR_REDLINE_FORMATTED))
     , m_sTableChgd(SwResId(STR_REDLINE_TABLECHG))
     , m_sFormatCollSet(SwResId(STR_REDLINE_FMTCOLLSET))
     , m_sAutoFormat(SwResId(STR_REDLINE_AUTOFMT))
@@ -1101,7 +1101,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
                     break;
                 case nsRedlineType_t::REDLINE_FORMAT:
                 case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT:
-                    pResId = STR_REDLINE_FORMATED;
+                    pResId = STR_REDLINE_FORMATTED;
                     break;
                 case nsRedlineType_t::REDLINE_TABLE:
                     pResId = STR_REDLINE_TABLECHG;
