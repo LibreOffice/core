@@ -378,6 +378,66 @@ bool SingleColumnSpanSet::empty() const
     return (it->first == 0) && !(it->second) && (++it != maSpans.end()) && (it->first == MAXROWCOUNT);
 }
 
+
+void RangeColumnSpanSet::executeAction(ScDocument& rDoc, sc::ColumnSpanSet::Action& ac) const
+{
+    for (SCTAB nTab = range.aStart.Tab(); nTab <= range.aEnd.Tab(); ++nTab)
+    {
+        for (SCCOL nCol = range.aStart.Col(); nCol <= range.aEnd.Col(); ++nCol)
+        {
+            ScTable* pTab = rDoc.FetchTable(nTab);
+            if (!pTab)
+                continue;
+
+            if (!ValidCol(nCol))
+                break;
+
+            ac.startColumn(nTab, nCol);
+            ac.execute(ScAddress(nCol, range.aStart.Row(), nTab), range.aEnd.Row() - range.aStart.Row() + 1, true);
+        }
+    }
 }
+
+void RangeColumnSpanSet::executeColumnAction(ScDocument& rDoc, sc::ColumnSpanSet::ColumnAction& ac) const
+{
+    for (SCTAB nTab = range.aStart.Tab(); nTab <= range.aEnd.Tab(); ++nTab)
+    {
+        for (SCCOL nCol = range.aStart.Col(); nCol <= range.aEnd.Col(); ++nCol)
+        {
+            ScTable* pTab = rDoc.FetchTable(nTab);
+            if (!pTab)
+                continue;
+
+            if (!ValidCol(nCol))
+                break;
+
+            ScColumn& rColumn = pTab->aCol[nCol];
+            ac.startColumn(&rColumn);
+            ac.execute( range.aStart.Row(), range.aEnd.Row(), true );
+        }
+    }
+}
+
+void RangeColumnSpanSet::executeColumnAction(ScDocument& rDoc, sc::ColumnSpanSet::ColumnAction& ac, double& fMem) const
+{
+    for (SCTAB nTab = range.aStart.Tab(); nTab <= range.aEnd.Tab(); ++nTab)
+    {
+        for (SCCOL nCol = range.aStart.Col(); nCol <= range.aEnd.Col(); ++nCol)
+        {
+            ScTable* pTab = rDoc.FetchTable(nTab);
+            if (!pTab)
+                continue;
+
+            if (!ValidCol(nCol))
+                break;
+
+            ScColumn& rColumn = pTab->aCol[nCol];
+            ac.startColumn(&rColumn);
+            ac.executeSum( range.aStart.Row(), range.aEnd.Row(), true, fMem );
+        }
+    }
+}
+
+} // namespace sc
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

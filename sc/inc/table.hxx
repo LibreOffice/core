@@ -60,6 +60,7 @@ class CopyToClipContext;
 class CopyToDocContext;
 class MixDocContext;
 class ColumnSpanSet;
+class RangeColumnSpanSet;
 class ColumnSet;
 struct ColumnBlockPosition;
 struct RefUpdateContext;
@@ -255,6 +256,7 @@ friend class ScColumnTextWidthIterator;
 friend class ScDocumentImport;
 friend class sc::DocumentStreamAccess;
 friend class sc::ColumnSpanSet;
+friend class sc::RangeColumnSpanSet;
 friend class sc::EditTextIterator;
 friend class sc::FormulaGroupAreaListener;
 
