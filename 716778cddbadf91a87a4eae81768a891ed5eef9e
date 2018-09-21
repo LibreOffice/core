@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f013ff3_b0e2be2e",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-09-21T12:37:46Z",
+      "side": 1,
+      "message": "I doubt all consumers of the GetEditText() string can handle embedded newlines.",
+      "revId": "716778cddbadf91a87a4eae81768a891ed5eef9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

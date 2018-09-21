@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f013ff3_d090aa98",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-09-21T12:37:46Z",
+      "side": 0,
+      "message": "Not replacing tabs at all isn\u0027t a good idea. There are quite some places where tabs are used as field/column separators in data exchange, such as DDE link results, the internal unformatted text Tab Separated Values (SotClipboardFormatId::STRING_TSVC), also used in Text to Columns, which all assume there are no embedded tabs in cell data.\n\nFor readability of formula expressions tabs are not necessarily needed, if we really wanted to support such thing then rather replace a tab with 4 spaces instead of 1 only in formula expressions, and maybe even only if at start of a line as indentation.",
+      "revId": "62cd86977ca41677c56fb2d1f97bb1c5cbdbd416",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
