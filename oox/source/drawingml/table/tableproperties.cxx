@@ -20,6 +20,7 @@
 #include <drawingml/table/tableproperties.hxx>
 #include <drawingml/table/tablestylelist.hxx>
 #include <drawingml/textbody.hxx>
+#include <drawingml/textparagraph.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -321,6 +322,8 @@ void TableProperties::pullFromTextBody(oox::drawingml::TextBodyPtr pTextBody, sa
     // Create the cells and distribute the paragraphs from pTextBody.
     sal_Int32 nNumPara = pTextBody->getParagraphs().size();
     sal_Int32 nParaPerCol = std::ceil(double(nNumPara) / nNumCol);
+    // Font scale of text body will be applied at a text run level.
+    sal_Int32 nFontScale = pTextBody->getTextProperties().mnFontScale;
     size_t nPara = 0;
     for (sal_Int32 nCol = 0; nCol < nNumCol; ++nCol)
     {
@@ -331,7 +334,16 @@ void TableProperties::pullFromTextBody(oox::drawingml::TextBodyPtr pTextBody, sa
         for (sal_Int32 nParaInCol = 0; nParaInCol < nParaPerCol; ++nParaInCol)
         {
             if (nPara < pTextBody->getParagraphs().size())
-                pCellTextBody->appendParagraph(pTextBody->getParagraphs()[nPara]);
+            {
+                std::shared_ptr<oox::drawingml::TextParagraph> pParagraph
+                    = pTextBody->getParagraphs()[nPara];
+                if (nFontScale != 100000)
+                {
+                    for (auto& pRun : pParagraph->getRuns())
+                        pRun->getTextCharacterProperties().moFontScale = nFontScale;
+                }
+                pCellTextBody->appendParagraph(pParagraph);
+            }
             ++nPara;
         }
     }

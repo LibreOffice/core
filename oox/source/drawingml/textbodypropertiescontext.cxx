@@ -155,9 +155,12 @@ ContextHandlerRef TextBodyPropertiesContext::onCreateContext( sal_Int32 aElement
                 mrTextBodyProp.maPropertyMap.setProperty( PROP_TextAutoGrowHeight, false);   // CT_TextNoAutofit
                 break;
             case A_TOKEN( normAutofit ):    // CT_TextNormalAutofit
+            {
                 mrTextBodyProp.maPropertyMap.setProperty( PROP_TextFitToSize, TextFitToSizeType_AUTOFIT);
                 mrTextBodyProp.maPropertyMap.setProperty( PROP_TextAutoGrowHeight, false);
+                mrTextBodyProp.mnFontScale = rAttribs.getInteger(XML_fontScale, 100000);
                 break;
+            }
             case A_TOKEN( spAutoFit ):
                 {
                     const sal_Int32 tVert = mrTextBodyProp.moVert.get( XML_horz );

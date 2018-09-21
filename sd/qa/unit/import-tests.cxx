@@ -2561,6 +2561,7 @@ void SdImportTest::testTdf119015()
 
 void SdImportTest::testTdf120028()
 {
+    // Check that the table shape has 4 columns.
     ::sd::DrawDocShellRef xDocShRef
         = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf120028.pptx"), PPTX);
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
@@ -2579,6 +2580,17 @@ void SdImportTest::testTdf120028()
 
     uno::Reference<table::XTableColumns> xColumns = xModel->getColumns();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xColumns->getCount());
+
+    // Check font size in the A1 cell.
+    uno::Reference<table::XCellRange> xCells(xModel, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xCell(xCells->getCellByPosition(0, 0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xCell));
+    uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
+    uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY);
+    double fCharHeight = 0;
+    xPropSet->getPropertyValue("CharHeight") >>= fCharHeight;
+    // This failed, non-scaled height was 13.5.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(11.5, fCharHeight, 1E-12);
 
     xDocShRef->DoClose();
 }
