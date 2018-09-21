@@ -57,7 +57,6 @@ public:
     SbxProperty* GetDfltProperty();
     void SetDfltProperty( const OUString& r );
     // Search for an element
-    virtual SbxVariable* FindUserData( sal_uInt32 nUserData );
     virtual SbxVariable* Find( const OUString&, SbxClassType );
     SbxVariable* FindQualified( const OUString&, SbxClassType );
     // Quick-Call-Interface for Methods

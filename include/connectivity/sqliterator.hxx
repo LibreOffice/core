@@ -255,9 +255,6 @@ namespace connectivity
                                     OUString &_rColumnName,
                                     OUString& _rTableRange);
 
-        // empty if ambiguous
-        bool getColumnTableRange(const OSQLParseNode* pNode, OUString &rTableRange) const;
-
         // return true when the tableNode is a rule like catalog_name, schema_name or table_name
         static bool isTableNode(const OSQLParseNode* _pTableNode);
 
@@ -268,8 +265,6 @@ namespace connectivity
         ::std::vector< TNodePair >& getJoinConditions() const;
 
     private:
-        // helper to implement getColumnTableRange
-        bool impl_getColumnTableRange(const OSQLParseNode* pNode, OUString &rTableRange) const;
 
         /** traverses the list of table names, and fills _rTables
         */

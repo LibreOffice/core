@@ -1,0 +1,65 @@
+found cycle
+    bool connectivity::OSQLParseTreeIterator::impl_getColumnTableRange(const connectivity::OSQLParseNode *,rtl::OUString &) const
+    include/connectivity/sqliterator.hxx:272
+
+    bool connectivity::OSQLParseTreeIterator::getColumnTableRange(const connectivity::OSQLParseNode *,rtl::OUString &) const
+    include/connectivity/sqliterator.hxx:259
+
+found cycle
+    void (anonymous namespace)::traceValue(_typelib_TypeDescriptionReference *,void *)
+    cppu/source/LogBridge/LogBridge.cxx:132
+
+    void uno_ext_getMapping(_uno_Mapping **,_uno_Environment *,_uno_Environment *)
+    cppu/source/UnsafeBridge/UnsafeBridge.cxx:133
+
+    void LogProbe(bool,void *,void *,_typelib_TypeDescriptionReference *,_typelib_MethodParameter *,int,const _typelib_TypeDescription *,void *,void **,_uno_Any **)
+    cppu/source/LogBridge/LogBridge.cxx:192
+
+found cycle
+    rtl::OUString lcl_dbg_out(SwNodes &)
+    sw/source/core/doc/dbgoutsw.cxx:743
+
+    void lcl_dbg_nodes_inner(rtl::OUString &,SwNodes &,unsigned long &)
+    sw/source/core/doc/dbgoutsw.cxx:694
+
+    const char * dbg_out(SwNodes &)
+    sw/inc/dbgoutsw.hxx:67
+
+found cycle
+    void OutputDevice::DrawPixel(const tools::Polygon &,const Color &)
+    include/vcl/outdev.hxx:710
+
+    void OutputDevice::DrawPixel(const tools::Polygon &,const Color *)
+    include/vcl/outdev.hxx:709
+
+found cycle
+    void SbxVariable::Dump(SvStream &,bool)
+    include/basic/sbxvar.hxx:260
+
+    void SbxObject::Dump(SvStream &,bool)
+    include/basic/sbxobj.hxx:81
+
+    void SbRtl_DumpAllObjects(StarBASIC *,SbxArray &,bool)
+    basic/source/inc/rtlproto.hxx:293
+
+found cycle
+    SbxVariable * SbxArray::FindUserData(unsigned int)
+    include/basic/sbx.hxx:138
+
+    SbxVariable * SbxObject::FindUserData(unsigned int)
+    include/basic/sbxobj.hxx:60
+
+found cycle
+    unsigned long slideshow::internal::hash::operator()(const type-parameter-?-? &) const
+    slideshow/source/inc/tools.hxx:83
+
+    unsigned long com::sun::star::uno::hash_value(const Reference<type-parameter-?-?> &)
+    slideshow/source/inc/tools.hxx:93
+
+found cycle
+    void ScDPResultDimension::DumpState(const ScDPResultMember *,ScDocument *,ScAddress &) const
+    sc/inc/dptabres.hxx:583
+
+    void ScDPResultMember::DumpState(const ScDPResultMember *,ScDocument *,ScAddress &) const
+    sc/inc/dptabres.hxx:413
+
