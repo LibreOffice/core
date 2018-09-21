@@ -1810,6 +1810,8 @@ void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
 
     // WordLineMode
     nWhich = GetWhich( SID_ATTR_CHAR_WORDLINEMODE );
+    eState = rSet->GetItemState( nWhich );
+
     switch ( eState )
     {
         case SfxItemState::UNKNOWN:
