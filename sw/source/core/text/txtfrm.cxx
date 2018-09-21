@@ -855,7 +855,7 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
         if (it->pNode == &rNode)
         {
             ++nFoundNode;
-            if (nIndex + nToDelete <= it->nStart)
+            if (nIndex + nToDelete < it->nStart)
             {
                 nToDelete = 0;
                 if (!isRealDelete)
@@ -891,6 +891,15 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
                     {   // adjust for deleted text
                         it->nStart -= (nLen - nToDelete);
                         it->nEnd -= (nLen - nToDelete + nDeleteHere);
+                        if (it != rMerged.extents.begin()
+                            && (it-1)->pNode == &rNode
+                            && (it-1)->nEnd == it->nStart)
+                        {   // merge adjacent extents
+                            nTFIndex += it->nEnd - it->nStart;
+                            (it-1)->nEnd = it->nEnd;
+                            it = rMerged.extents.erase(it);
+                            bErase = true; // skip increment
+                        }
                     }
                     else
                     {   // exclude text marked as deleted
