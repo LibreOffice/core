@@ -3758,7 +3758,7 @@ void SwWW8ImplReader::ProcessCurrentCollChange(WW8PLCFManResult& rRes,
     }
 }
 
-long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStartLine)
+long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStartLine, int nDepthGuard)
 {
     long nSkipChars = 0;
     WW8PLCFManResult aRes;
@@ -3850,7 +3850,13 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTextPos, long nTextEnd, bool& rbStar
 
         if( (0 <= nNext) && (nSkipPos >= nNext) )
         {
-            nNext = ReadTextAttr(rTextPos, nTextEnd, rbStartLine);
+            if (nDepthGuard >= 1024)
+            {
+                SAL_WARN("sw.ww8", "ReadTextAttr hit recursion limit");
+                nNext = nTextEnd;
+            }
+            else
+                nNext = ReadTextAttr(rTextPos, nTextEnd, rbStartLine, nDepthGuard + 1);
             bDoPlcxManPlusPLus = false;
             m_bIgnoreText = true;
         }
