@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f013ff3_b0319eef",
+        "filename": "vcl/win/gdi/salfont.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 990,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2018-09-21T11:41:28Z",
+      "side": 1,
+      "message": "isn\u0027t it possible that this deletes the font that was just set in line 973, which was set later in line 1001 in the old code?",
+      "revId": "3e2c2266827744918896a5ad828ef87151208ab9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
