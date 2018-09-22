@@ -2482,7 +2482,7 @@ void EditEngine::ParagraphInserted( sal_Int32 nPara )
     {
         EENotify aNotify( EE_NOTIFY_PARAGRAPHINSERTED );
         aNotify.nParagraph = nPara;
-        pImpEditEngine->QueueNotify( aNotify );
+        pImpEditEngine->GetNotifyHdl().Call( aNotify );
     }
 }
 
@@ -2493,7 +2493,7 @@ void EditEngine::ParagraphDeleted( sal_Int32 nPara )
     {
         EENotify aNotify( EE_NOTIFY_PARAGRAPHREMOVED );
         aNotify.nParagraph = nPara;
-        pImpEditEngine->QueueNotify( aNotify );
+        pImpEditEngine->GetNotifyHdl().Call( aNotify );
     }
 }
 void EditEngine::ParagraphConnected( sal_Int32 /*nLeftParagraph*/, sal_Int32 /*nRightParagraph*/ )
@@ -2515,7 +2515,7 @@ void EditEngine::ParagraphHeightChanged( sal_Int32 nPara )
     {
         EENotify aNotify( EE_NOTIFY_TextHeightChanged );
         aNotify.nParagraph = nPara;
-        pImpEditEngine->QueueNotify( aNotify );
+        pImpEditEngine->GetNotifyHdl().Call( aNotify );
     }
 }
 
