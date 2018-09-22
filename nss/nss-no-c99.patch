@@ -1475,34 +1475,9 @@
          64,
      }
  };
---- a/nss/nss/lib/freebl/ecl/curve25519_64.c	2017-04-06 16:14:46.000000000 +0200
-+++ b/nss/nss/lib/freebl/ecl/curve25519_64.c	2018-05-22 19:18:07.482457400 +0200
-@@ -38,17 +38,17 @@
-     const int64_t *in = (const int64_t *)iin;
-     int64_t *out = (int64_t *)ioutput;
- 
-+    // An arithmetic shift right of 63 places turns a positive number to 0 and a
-+    // negative number to all 1's. This gives us a bitmask that lets us avoid
-+    // side-channel prone branches.
-+    int64_t t;
-+
-     out[0] = in[0] - out[0];
-     out[1] = in[1] - out[1];
-     out[2] = in[2] - out[2];
-     out[3] = in[3] - out[3];
-     out[4] = in[4] - out[4];
- 
--    // An arithmetic shift right of 63 places turns a positive number to 0 and a
--    // negative number to all 1's. This gives us a bitmask that lets us avoid
--    // side-channel prone branches.
--    int64_t t;
--
- #define NEGCHAIN(a, b)        \
-     t = out[a] >> 63;         \
-     out[a] += twotothe51 & t; \
 --- a/nss/nss/lib/softoken/pkcs11c.c	2017-04-06 16:14:46.000000000 +0200
 +++ b/nss/nss/lib/softoken/pkcs11c.c	2018-05-22 19:43:15.154079800 +0200
-@@ -5105,10 +5105,11 @@
+@@ -5125,10 +5125,11 @@
                  crv = sftk_AddAttributeType(publicKey, CKA_EC_POINT,
                                              sftk_item_expand(&ecPriv->publicValue));
              } else {
@@ -1517,22 +1492,2493 @@
                  if (!pubValue) {
                      crv = CKR_ARGUMENTS_BAD;
                      goto ecgn_done;
---- a/nss/nss/lib/ssl/ssl3con.c	2017-04-06 16:14:46.000000000 +0200
-+++ b/nss/nss/lib/ssl/ssl3con.c	2018-05-22 20:19:16.542798900 +0200
-@@ -2261,6 +2261,7 @@
- {
-     const ssl3MACDef *mac_def;
-     SECStatus rv;
-+    PK11Context *mac_context;
+diff -ur nss/nss/cmd/lib/secutil.c nss_new/nss/cmd/lib/secutil.c
+--- a/nss/nss/cmd/lib/secutil.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/cmd/lib/secutil.c	2018-09-19 13:53:21.922607000 +0200
+@@ -217,6 +217,7 @@
+     secuPWData *pwdata = (secuPWData *)arg;
+     secuPWData pwnull = { PW_NONE, 0 };
+     secuPWData pwxtrn = { PW_EXTERNAL, "external" };
++    char *pw;
  
-     PRINT_BUF(95, (NULL, "frag hash1: header", header, headerLen));
-     PRINT_BUF(95, (NULL, "frag hash1: input", input, inputLength));
-@@ -2271,7 +2272,7 @@
-         return SECSuccess;
+     if (pwdata == NULL)
+         pwdata = &pwnull;
+@@ -240,7 +241,7 @@
+             sprintf(prompt,
+                     "Press Enter, then enter PIN for \"%s\" on external device.\n",
+                     PK11_GetTokenName(slot));
+-            char *pw = SECU_GetPasswordString(NULL, prompt);
++            pw = SECU_GetPasswordString(NULL, prompt);
+             PORT_Free(pw);
+         /* Fall Through */
+         case PW_PLAINTEXT:
+diff -ur nss/nss/cmd/signtool/javascript.c nss_new/nss/cmd/signtool/javascript.c
+--- a/nss/nss/cmd/signtool/javascript.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/cmd/signtool/javascript.c	2018-09-21 18:09:42.429614100 +0200
+@@ -6,6 +6,7 @@
+ #include <prmem.h>
+ #include <prio.h>
+ #include <prenv.h>
++#include "prprf.h"
+ 
+ static int javascript_fn(char *relpath, char *basedir, char *reldir,
+                          char *filename, void *arg);
+@@ -1672,7 +1673,7 @@
+ {
+     char fn[FNSIZE];
+     PRDir *dir;
+-    int c = snprintf(fn, sizeof(fn), "%s/%s", basepath, path);
++    int c = PR_snprintf(fn, sizeof(fn), "%s/%s", basepath, path);
+     if (c >= sizeof(fn)) {
+         return PR_FAILURE;
+     }
+diff -ur nss/nss/cmd/signtool/sign.c nss_new/nss/cmd/signtool/sign.c
+--- a/nss/nss/cmd/signtool/sign.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/cmd/signtool/sign.c	2018-09-21 18:12:32.664160400 +0200
+@@ -5,6 +5,7 @@
+ #include "signtool.h"
+ #include "zip.h"
+ #include "prmem.h"
++#include "prprf.h"
+ #include "blapi.h"
+ #include "sechash.h" /* for HASH_GetHashObject() */
+ 
+@@ -82,13 +83,13 @@
+         }
+ 
+         /* rsa/dsa to zip */
+-        count = snprintf(tempfn, sizeof(tempfn), "META-INF/%s.%s", base, (keyType == dsaKey ? "dsa" : "rsa"));
++        count = PR_snprintf(tempfn, sizeof(tempfn), "META-INF/%s.%s", base, (keyType == dsaKey ? "dsa" : "rsa"));
+         if (count >= sizeof(tempfn)) {
+             PR_fprintf(errorFD, "unable to write key metadata\n");
+             errorCount++;
+             exit(ERRX);
+         }
+-        count = snprintf(fullfn, sizeof(fullfn), "%s/%s", tree, tempfn);
++        count = PR_snprintf(fullfn, sizeof(fullfn), "%s/%s", tree, tempfn);
+         if (count >= sizeof(fullfn)) {
+             PR_fprintf(errorFD, "unable to write key metadata\n");
+             errorCount++;
+@@ -103,7 +104,7 @@
+     }
+     /* mf to zip */
+     strcpy(tempfn, "META-INF/manifest.mf");
+-    count = snprintf(fullfn, sizeof(fullfn), "%s/%s", tree, tempfn);
++    count = PR_snprintf(fullfn, sizeof(fullfn), "%s/%s", tree, tempfn);
+     if (count >= sizeof(fullfn)) {
+         PR_fprintf(errorFD, "unable to write manifest\n");
+         errorCount++;
+@@ -112,13 +113,13 @@
+     JzipAdd(fullfn, tempfn, zipfile, compression_level);
+ 
+     /* sf to zip */
+-    count = snprintf(tempfn, sizeof(tempfn), "META-INF/%s.sf", base);
++    count = PR_snprintf(tempfn, sizeof(tempfn), "META-INF/%s.sf", base);
+     if (count >= sizeof(tempfn)) {
+         PR_fprintf(errorFD, "unable to write sf metadata\n");
+         errorCount++;
+         exit(ERRX);
+     }
+-    count = snprintf(fullfn, sizeof(fullfn), "%s/%s", tree, tempfn);
++    count = PR_snprintf(fullfn, sizeof(fullfn), "%s/%s", tree, tempfn);
+     if (count >= sizeof(fullfn)) {
+         PR_fprintf(errorFD, "unable to write sf metadata\n");
+         errorCount++;
+@@ -129,13 +130,13 @@
+     /* Add the rsa/dsa file to the zip archive normally */
+     if (!xpi_arc) {
+         /* rsa/dsa to zip */
+-        count = snprintf(tempfn, sizeof(tempfn), "META-INF/%s.%s", base, (keyType == dsaKey ? "dsa" : "rsa"));
++        count = PR_snprintf(tempfn, sizeof(tempfn), "META-INF/%s.%s", base, (keyType == dsaKey ? "dsa" : "rsa"));
+         if (count >= sizeof(tempfn)) {
+             PR_fprintf(errorFD, "unable to write key metadata\n");
+             errorCount++;
+             exit(ERRX);
+         }
+-        count = snprintf(fullfn, sizeof(fullfn), "%s/%s", tree, tempfn);
++        count = PR_snprintf(fullfn, sizeof(fullfn), "%s/%s", tree, tempfn);
+         if (count >= sizeof(fullfn)) {
+             PR_fprintf(errorFD, "unable to write key metadata\n");
+             errorCount++;
+@@ -456,7 +457,7 @@
+         if (!PL_HashTableLookup(extensions, ext))
+             return 0;
+     }
+-    count = snprintf(fullname, sizeof(fullname), "%s/%s", basedir, relpath);
++    count = PR_snprintf(fullname, sizeof(fullname), "%s/%s", basedir, relpath);
+     if (count >= sizeof(fullname)) {
+         return 1;
+     }
+diff -ur nss/nss/lib/freebl/blake2b.c nss_new/nss/lib/freebl/blake2b.c
+--- a/nss/nss/lib/freebl/blake2b.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/freebl/blake2b.c	2018-09-06 16:22:55.312309800 +0200
+@@ -147,6 +147,7 @@
+ blake2b_Begin(BLAKE2BContext* ctx, uint8_t outlen, const uint8_t* key,
+               size_t keylen)
+ {
++    uint64_t param;
+     PORT_Assert(ctx != NULL);
+     if (!ctx) {
+         goto failure;
+@@ -164,7 +165,7 @@
      }
  
--    PK11Context *mac_context =
-+    mac_context =
-         (useServerMacKey ? spec->server.write_mac_context
-                          : spec->client.write_mac_context);
-     rv = PK11_DigestBegin(mac_context);
+     /* Mix key size(keylen) and desired hash length(outlen) into h0 */
+-    uint64_t param = outlen ^ (keylen << 8) ^ (1 << 16) ^ (1 << 24);
++    param = outlen ^ (keylen << 8) ^ (1 << 16) ^ (1 << 24);
+     PORT_Memcpy(ctx->h, iv, 8 * 8);
+     ctx->h[0] ^= param;
+     ctx->outlen = outlen;
+@@ -402,12 +403,13 @@
+ BLAKE2BContext*
+ BLAKE2B_Resurrect(unsigned char* space, void* arg)
+ {
++    BLAKE2BContext* ctx;
+     PORT_Assert(space != NULL);
+     if (!space) {
+         PORT_SetError(SEC_ERROR_INVALID_ARGS);
+         return NULL;
+     }
+-    BLAKE2BContext* ctx = BLAKE2B_NewContext();
++    ctx = BLAKE2B_NewContext();
+     if (ctx == NULL) {
+         PORT_SetError(SEC_ERROR_INVALID_ARGS);
+         return NULL;
+diff -ur nss/nss/lib/freebl/chacha20poly1305.c nss_new/nss/lib/freebl/chacha20poly1305.c
+--- a/nss/nss/lib/freebl/chacha20poly1305.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/freebl/chacha20poly1305.c	2018-09-07 03:48:50.608015600 +0200
+@@ -75,6 +75,8 @@
+ #endif
+     Hacl_Impl_Poly1305_State_poly1305_state state =
+         Hacl_Poly1305_mk_state(stateStack, stateStack + offset);
++    unsigned int i;
++    unsigned int j;
+ 
+     unsigned char block[16] = { 0 };
+     Hacl_Poly1305_init(state, (uint8_t *)key);
+@@ -83,8 +85,6 @@
+     memset(block, 0, 16);
+     Poly1305PadUpdate(state, block, ciphertext, ciphertextLen);
+ 
+-    unsigned int i;
+-    unsigned int j;
+     for (i = 0, j = adLen; i < 8; i++, j >>= 8) {
+         block[i] = j;
+     }
+diff -ur nss/nss/lib/freebl/ecl/ecp_25519.c nss_new/nss/lib/freebl/ecl/ecp_25519.c
+--- a/nss/nss/lib/freebl/ecl/ecp_25519.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/freebl/ecl/ecp_25519.c	2018-09-07 04:22:09.320906200 +0200
+@@ -104,6 +104,7 @@
+ {
+     PRUint8 *px;
+     PRUint8 basePoint[32] = { 9 };
++    SECStatus rv;
+ 
+     if (!P) {
+         px = basePoint;
+@@ -115,7 +116,7 @@
+         px = P->data;
+     }
+ 
+-    SECStatus rv = ec_Curve25519_mul(X->data, k->data, px);
++    rv = ec_Curve25519_mul(X->data, k->data, px);
+     if (NSS_SecureMemcmpZero(X->data, X->len) == 0) {
+         return SECFailure;
+     }
+diff -ur nss/nss/lib/freebl/verified/FStar.c nss_new/nss/lib/freebl/verified/FStar.c
+--- a/nss/nss/lib/freebl/verified/FStar.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/freebl/verified/FStar.c	2018-09-10 01:27:51.192382800 +0200
+@@ -32,37 +32,45 @@
+ FStar_UInt128_uint128
+ FStar_UInt128_add(FStar_UInt128_uint128 a, FStar_UInt128_uint128 b)
+ {
+-    return (
+-        (FStar_UInt128_uint128){
+-            .low = a.low + b.low,
+-            .high = a.high + b.high + FStar_UInt128_carry(a.low + b.low, b.low) });
++    FStar_UInt128_uint128 ret =
++      {
++            a.low + b.low,
++            a.high + b.high + FStar_UInt128_carry(a.low + b.low, b.low)
++      };
++    return ret;
+ }
+ 
+ FStar_UInt128_uint128
+ FStar_UInt128_add_mod(FStar_UInt128_uint128 a, FStar_UInt128_uint128 b)
+ {
+-    return (
+-        (FStar_UInt128_uint128){
+-            .low = a.low + b.low,
+-            .high = a.high + b.high + FStar_UInt128_carry(a.low + b.low, b.low) });
++  FStar_UInt128_uint128 ret =
++    {
++            a.low + b.low,
++            a.high + b.high + FStar_UInt128_carry(a.low + b.low, b.low)
++    };
++  return ret;
+ }
+ 
+ FStar_UInt128_uint128
+ FStar_UInt128_sub(FStar_UInt128_uint128 a, FStar_UInt128_uint128 b)
+ {
+-    return (
+-        (FStar_UInt128_uint128){
+-            .low = a.low - b.low,
+-            .high = a.high - b.high - FStar_UInt128_carry(a.low, a.low - b.low) });
++    FStar_UInt128_uint128 ret =
++      {
++            a.low - b.low,
++            a.high - b.high - FStar_UInt128_carry(a.low, a.low - b.low)
++      };
++    return ret;
+ }
+ 
+ static FStar_UInt128_uint128
+ FStar_UInt128_sub_mod_impl(FStar_UInt128_uint128 a, FStar_UInt128_uint128 b)
+ {
+-    return (
+-        (FStar_UInt128_uint128){
+-            .low = a.low - b.low,
+-            .high = a.high - b.high - FStar_UInt128_carry(a.low, a.low - b.low) });
++    FStar_UInt128_uint128 ret =
++      {
++            a.low - b.low,
++            a.high - b.high - FStar_UInt128_carry(a.low, a.low - b.low)
++      };
++    return ret;
+ }
+ 
+ FStar_UInt128_uint128
+@@ -74,25 +82,29 @@
+ FStar_UInt128_uint128
+ FStar_UInt128_logand(FStar_UInt128_uint128 a, FStar_UInt128_uint128 b)
+ {
+-    return ((FStar_UInt128_uint128){.low = a.low & b.low, .high = a.high & b.high });
++    FStar_UInt128_uint128 ret = { a.low & b.low, a.high & b.high };
++    return ret;
+ }
+ 
+ FStar_UInt128_uint128
+ FStar_UInt128_logxor(FStar_UInt128_uint128 a, FStar_UInt128_uint128 b)
+ {
+-    return ((FStar_UInt128_uint128){.low = a.low ^ b.low, .high = a.high ^ b.high });
++    FStar_UInt128_uint128 ret = { a.low ^ b.low, a.high ^ b.high };
++    return ret;
+ }
+ 
+ FStar_UInt128_uint128
+ FStar_UInt128_logor(FStar_UInt128_uint128 a, FStar_UInt128_uint128 b)
+ {
+-    return ((FStar_UInt128_uint128){.low = a.low | b.low, .high = a.high | b.high });
++    FStar_UInt128_uint128 ret = { a.low | b.low, a.high | b.high };
++    return ret;
+ }
+ 
+ FStar_UInt128_uint128
+ FStar_UInt128_lognot(FStar_UInt128_uint128 a)
+ {
+-    return ((FStar_UInt128_uint128){.low = ~a.low, .high = ~a.high });
++    FStar_UInt128_uint128 ret = { ~a.low, ~a.high };
++    return ret;
+ }
+ 
+ static uint32_t FStar_UInt128_u32_64 = (uint32_t)64U;
+@@ -115,16 +127,25 @@
+     if (s == (uint32_t)0U)
+         return a;
+     else
+-        return (
+-            (FStar_UInt128_uint128){
+-                .low = a.low << s,
+-                .high = FStar_UInt128_add_u64_shift_left_respec(a.high, a.low, s) });
++    {
++        FStar_UInt128_uint128 ret =
++	  {
++                a.low << s,
++                FStar_UInt128_add_u64_shift_left_respec(a.high, a.low, s)
++	  };
++	return ret;
++    }
+ }
+ 
+ static FStar_UInt128_uint128
+ FStar_UInt128_shift_left_large(FStar_UInt128_uint128 a, uint32_t s)
+ {
+-    return ((FStar_UInt128_uint128){.low = (uint64_t)0U, .high = a.low << (s - FStar_UInt128_u32_64) });
++    FStar_UInt128_uint128 ret =
++      {
++	(uint64_t)0U,
++	a.low << (s - FStar_UInt128_u32_64)
++      };
++    return ret;
+ }
+ 
+ FStar_UInt128_uint128
+@@ -154,16 +175,25 @@
+     if (s == (uint32_t)0U)
+         return a;
+     else
+-        return (
+-            (FStar_UInt128_uint128){
+-                .low = FStar_UInt128_add_u64_shift_right_respec(a.high, a.low, s),
+-                .high = a.high >> s });
++    {
++        FStar_UInt128_uint128 ret =
++	  {
++                FStar_UInt128_add_u64_shift_right_respec(a.high, a.low, s),
++                a.high >> s
++	  };
++	return ret;
++    }
+ }
+ 
+ static FStar_UInt128_uint128
+ FStar_UInt128_shift_right_large(FStar_UInt128_uint128 a, uint32_t s)
+ {
+-    return ((FStar_UInt128_uint128){.low = a.high >> (s - FStar_UInt128_u32_64), .high = (uint64_t)0U });
++    FStar_UInt128_uint128 ret =
++      {
++	a.high >> (s - FStar_UInt128_u32_64),
++	(uint64_t)0U
++      };
++    return ret;
+ }
+ 
+ FStar_UInt128_uint128
+@@ -178,25 +208,34 @@
+ FStar_UInt128_uint128
+ FStar_UInt128_eq_mask(FStar_UInt128_uint128 a, FStar_UInt128_uint128 b)
+ {
+-    return (
+-        (FStar_UInt128_uint128){
+-            .low = FStar_UInt64_eq_mask(a.low, b.low) & FStar_UInt64_eq_mask(a.high, b.high),
+-            .high = FStar_UInt64_eq_mask(a.low, b.low) & FStar_UInt64_eq_mask(a.high, b.high) });
++    FStar_UInt128_uint128 ret =
++      {
++            FStar_UInt64_eq_mask(a.low, b.low) & FStar_UInt64_eq_mask(a.high, b.high),
++            FStar_UInt64_eq_mask(a.low, b.low) & FStar_UInt64_eq_mask(a.high, b.high)
++      };
++    return ret;
+ }
+ 
+ FStar_UInt128_uint128
+ FStar_UInt128_gte_mask(FStar_UInt128_uint128 a, FStar_UInt128_uint128 b)
+ {
+-    return (
+-        (FStar_UInt128_uint128){
+-            .low = (FStar_UInt64_gte_mask(a.high, b.high) & ~FStar_UInt64_eq_mask(a.high, b.high)) | (FStar_UInt64_eq_mask(a.high, b.high) & FStar_UInt64_gte_mask(a.low, b.low)),
+-            .high = (FStar_UInt64_gte_mask(a.high, b.high) & ~FStar_UInt64_eq_mask(a.high, b.high)) | (FStar_UInt64_eq_mask(a.high, b.high) & FStar_UInt64_gte_mask(a.low, b.low)) });
++    FStar_UInt128_uint128 ret =
++      {
++            (FStar_UInt64_gte_mask(a.high, b.high) & ~FStar_UInt64_eq_mask(a.high, b.high)) | (FStar_UInt64_eq_mask(a.high, b.high) & FStar_UInt64_gte_mask(a.low, b.low)),
++            (FStar_UInt64_gte_mask(a.high, b.high) & ~FStar_UInt64_eq_mask(a.high, b.high)) | (FStar_UInt64_eq_mask(a.high, b.high) & FStar_UInt64_gte_mask(a.low, b.low))
++      };
++    return ret;
+ }
+ 
+ FStar_UInt128_uint128
+ FStar_UInt128_uint64_to_uint128(uint64_t a)
+ {
+-    return ((FStar_UInt128_uint128){.low = a, .high = (uint64_t)0U });
++    FStar_UInt128_uint128 ret =
++      {
++	a,
++	(uint64_t)0U
++      };
++    return ret;
+ }
+ 
+ uint64_t
+@@ -218,12 +257,14 @@
+ static K___uint64_t_uint64_t_uint64_t_uint64_t
+ FStar_UInt128_mul_wide_impl_t_(uint64_t x, uint64_t y)
+ {
+-    return (
+-        (K___uint64_t_uint64_t_uint64_t_uint64_t){
+-            .fst = FStar_UInt128_u64_mod_32(x),
+-            .snd = FStar_UInt128_u64_mod_32(FStar_UInt128_u64_mod_32(x) * FStar_UInt128_u64_mod_32(y)),
+-            .thd = x >> FStar_UInt128_u32_32,
+-            .f3 = (x >> FStar_UInt128_u32_32) * FStar_UInt128_u64_mod_32(y) + (FStar_UInt128_u64_mod_32(x) * FStar_UInt128_u64_mod_32(y) >> FStar_UInt128_u32_32) });
++    K___uint64_t_uint64_t_uint64_t_uint64_t ret =
++      {
++            FStar_UInt128_u64_mod_32(x),
++            FStar_UInt128_u64_mod_32(FStar_UInt128_u64_mod_32(x) * FStar_UInt128_u64_mod_32(y)),
++            x >> FStar_UInt128_u32_32,
++            (x >> FStar_UInt128_u32_32) * FStar_UInt128_u64_mod_32(y) + (FStar_UInt128_u64_mod_32(x) * FStar_UInt128_u64_mod_32(y) >> FStar_UInt128_u32_32)
++      };
++    return ret;
+ }
+ 
+ static uint64_t
+@@ -240,12 +281,14 @@
+     uint64_t w3 = scrut.snd;
+     uint64_t x_ = scrut.thd;
+     uint64_t t_ = scrut.f3;
+-    return (
+-        (FStar_UInt128_uint128){
+-            .low = FStar_UInt128_u32_combine_(u1 * (y >> FStar_UInt128_u32_32) + FStar_UInt128_u64_mod_32(t_),
++    FStar_UInt128_uint128 ret =
++      {
++            FStar_UInt128_u32_combine_(u1 * (y >> FStar_UInt128_u32_32) + FStar_UInt128_u64_mod_32(t_),
+                                               w3),
+-            .high = x_ * (y >> FStar_UInt128_u32_32) + (t_ >> FStar_UInt128_u32_32) +
+-                    ((u1 * (y >> FStar_UInt128_u32_32) + FStar_UInt128_u64_mod_32(t_)) >> FStar_UInt128_u32_32) });
++            x_ * (y >> FStar_UInt128_u32_32) + (t_ >> FStar_UInt128_u32_32) +
++                    ((u1 * (y >> FStar_UInt128_u32_32) + FStar_UInt128_u64_mod_32(t_)) >> FStar_UInt128_u32_32)
++      };
++    return ret;
+ }
+ 
+ FStar_UInt128_uint128
+diff -ur nss/nss/lib/freebl/verified/Hacl_Chacha20.c nss_new/nss/lib/freebl/verified/Hacl_Chacha20.c
+--- a/nss/nss/lib/freebl/verified/Hacl_Chacha20.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/freebl/verified/Hacl_Chacha20.c	2018-09-07 05:07:09.660750000 +0200
+@@ -18,7 +18,8 @@
+ static void
+ Hacl_Lib_LoadStore32_uint32s_from_le_bytes(uint32_t *output, uint8_t *input, uint32_t len)
+ {
+-    for (uint32_t i = (uint32_t)0U; i < len; i = i + (uint32_t)1U) {
++    uint32_t i;
++    for (i = (uint32_t)0U; i < len; i = i + (uint32_t)1U) {
+         uint8_t *x0 = input + (uint32_t)4U * i;
+         uint32_t inputi = load32_le(x0);
+         output[i] = inputi;
+@@ -28,7 +29,8 @@
+ static void
+ Hacl_Lib_LoadStore32_uint32s_to_le_bytes(uint8_t *output, uint32_t *input, uint32_t len)
+ {
+-    for (uint32_t i = (uint32_t)0U; i < len; i = i + (uint32_t)1U) {
++    uint32_t i;
++    for (i = (uint32_t)0U; i < len; i = i + (uint32_t)1U) {
+         uint32_t hd1 = input[i];
+         uint8_t *x0 = output + (uint32_t)4U * i;
+         store32_le(x0, hd1);
+@@ -44,33 +46,54 @@
+ inline static void
+ Hacl_Impl_Chacha20_quarter_round(uint32_t *st, uint32_t a, uint32_t b, uint32_t c, uint32_t d)
+ {
+-    uint32_t sa = st[a];
+-    uint32_t sb0 = st[b];
++    uint32_t sa;
++    uint32_t sb0;
++    uint32_t sd;
++    uint32_t sa10;
++    uint32_t sda;
++    uint32_t sa0;
++    uint32_t sb1;
++    uint32_t sd0;
++    uint32_t sa11;
++    uint32_t sda0;
++    uint32_t sa2;
++    uint32_t sb2;
++    uint32_t sd1;
++    uint32_t sa12;
++    uint32_t sda1;
++    uint32_t sa3;
++    uint32_t sb;
++    uint32_t sd2;
++    uint32_t sa1;
++    uint32_t sda2;
++
++    sa = st[a];
++    sb0 = st[b];
+     st[a] = sa + sb0;
+-    uint32_t sd = st[d];
+-    uint32_t sa10 = st[a];
+-    uint32_t sda = sd ^ sa10;
++    sd = st[d];
++    sa10 = st[a];
++    sda = sd ^ sa10;
+     st[d] = Hacl_Impl_Chacha20_rotate_left(sda, (uint32_t)16U);
+-    uint32_t sa0 = st[c];
+-    uint32_t sb1 = st[d];
++    sa0 = st[c];
++    sb1 = st[d];
+     st[c] = sa0 + sb1;
+-    uint32_t sd0 = st[b];
+-    uint32_t sa11 = st[c];
+-    uint32_t sda0 = sd0 ^ sa11;
++    sd0 = st[b];
++    sa11 = st[c];
++    sda0 = sd0 ^ sa11;
+     st[b] = Hacl_Impl_Chacha20_rotate_left(sda0, (uint32_t)12U);
+-    uint32_t sa2 = st[a];
+-    uint32_t sb2 = st[b];
++    sa2 = st[a];
++    sb2 = st[b];
+     st[a] = sa2 + sb2;
+-    uint32_t sd1 = st[d];
+-    uint32_t sa12 = st[a];
+-    uint32_t sda1 = sd1 ^ sa12;
++    sd1 = st[d];
++    sa12 = st[a];
++    sda1 = sd1 ^ sa12;
+     st[d] = Hacl_Impl_Chacha20_rotate_left(sda1, (uint32_t)8U);
+-    uint32_t sa3 = st[c];
+-    uint32_t sb = st[d];
++    sa3 = st[c];
++    sb = st[d];
+     st[c] = sa3 + sb;
+-    uint32_t sd2 = st[b];
+-    uint32_t sa1 = st[c];
+-    uint32_t sda2 = sd2 ^ sa1;
++    sd2 = st[b];
++    sa1 = st[c];
++    sda2 = sd2 ^ sa1;
+     st[b] = Hacl_Impl_Chacha20_rotate_left(sda2, (uint32_t)7U);
+ }
+ 
+@@ -90,14 +113,16 @@
+ inline static void
+ Hacl_Impl_Chacha20_rounds(uint32_t *st)
+ {
+-    for (uint32_t i = (uint32_t)0U; i < (uint32_t)10U; i = i + (uint32_t)1U)
++    uint32_t i;
++    for (i = (uint32_t)0U; i < (uint32_t)10U; i = i + (uint32_t)1U)
+         Hacl_Impl_Chacha20_double_round(st);
+ }
+ 
+ inline static void
+ Hacl_Impl_Chacha20_sum_states(uint32_t *st, uint32_t *st_)
+ {
+-    for (uint32_t i = (uint32_t)0U; i < (uint32_t)16U; i = i + (uint32_t)1U) {
++    uint32_t i;
++    for (i = (uint32_t)0U; i < (uint32_t)16U; i = i + (uint32_t)1U) {
+         uint32_t xi = st[i];
+         uint32_t yi = st_[i];
+         st[i] = xi + yi;
+@@ -150,9 +175,10 @@
+     uint32_t *k = b;
+     uint32_t *ib = b + (uint32_t)16U;
+     uint32_t *ob = b + (uint32_t)32U;
++    uint32_t i;
+     Hacl_Impl_Chacha20_chacha20_core(k, st, ctr);
+     Hacl_Lib_LoadStore32_uint32s_from_le_bytes(ib, plain, (uint32_t)16U);
+-    for (uint32_t i = (uint32_t)0U; i < (uint32_t)16U; i = i + (uint32_t)1U) {
++    for (i = (uint32_t)0U; i < (uint32_t)16U; i = i + (uint32_t)1U) {
+         uint32_t xi = ib[i];
+         uint32_t yi = k[i];
+         ob[i] = xi ^ yi;
+@@ -169,9 +195,11 @@
+     uint32_t ctr)
+ {
+     uint8_t block[64U] = { 0U };
++    uint8_t *mask;
++    uint32_t i;
+     Hacl_Impl_Chacha20_chacha20_block(block, st, ctr);
+-    uint8_t *mask = block;
+-    for (uint32_t i = (uint32_t)0U; i < len; i = i + (uint32_t)1U) {
++    mask = block;
++    for (i = (uint32_t)0U; i < len; i = i + (uint32_t)1U) {
+         uint8_t xi = plain[i];
+         uint8_t yi = mask[i];
+         output[i] = xi ^ yi;
+@@ -186,7 +214,8 @@
+     uint32_t *st,
+     uint32_t ctr)
+ {
+-    for (uint32_t i = (uint32_t)0U; i < num_blocks; i = i + (uint32_t)1U) {
++    uint32_t i;
++    for (i = (uint32_t)0U; i < num_blocks; i = i + (uint32_t)1U) {
+         uint8_t *b = plain + (uint32_t)64U * i;
+         uint8_t *o = output + (uint32_t)64U * i;
+         Hacl_Impl_Chacha20_update(o, b, st, ctr + i);
+diff -ur nss/nss/lib/freebl/verified/Hacl_Chacha20_Vec128.c nss_new/nss/lib/freebl/verified/Hacl_Chacha20_Vec128.c
+--- a/nss/nss/lib/freebl/verified/Hacl_Chacha20_Vec128.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/freebl/verified/Hacl_Chacha20_Vec128.c	2018-09-07 05:31:17.778914000 +0200
+@@ -42,53 +42,83 @@
+ inline static void
+ Hacl_Impl_Chacha20_Vec128_State_state_setup(vec *st, uint8_t *k, uint8_t *n1, uint32_t c)
+ {
++    vec k0;
++    vec k1;
++    uint32_t n0;
++    uint8_t *x00;
++    uint32_t n10;
++    uint8_t *x0;
++    uint32_t n2;
++    vec v1;
++
+     st[0U] =
+         vec_load_32x4((uint32_t)0x61707865U,
+                       (uint32_t)0x3320646eU,
+                       (uint32_t)0x79622d32U,
+                       (uint32_t)0x6b206574U);
+-    vec k0 = vec_load128_le(k);
+-    vec k1 = vec_load128_le(k + (uint32_t)16U);
++    k0 = vec_load128_le(k);
++    k1 = vec_load128_le(k + (uint32_t)16U);
+     st[1U] = k0;
+     st[2U] = k1;
+-    uint32_t n0 = load32_le(n1);
+-    uint8_t *x00 = n1 + (uint32_t)4U;
+-    uint32_t n10 = load32_le(x00);
+-    uint8_t *x0 = n1 + (uint32_t)8U;
+-    uint32_t n2 = load32_le(x0);
+-    vec v1 = vec_load_32x4(c, n0, n10, n2);
++    n0 = load32_le(n1);
++    x00 = n1 + (uint32_t)4U;
++    n10 = load32_le(x00);
++    x0 = n1 + (uint32_t)8U;
++    n2 = load32_le(x0);
++    v1 = vec_load_32x4(c, n0, n10, n2);
+     st[3U] = v1;
+ }
+ 
+ inline static void
+ Hacl_Impl_Chacha20_Vec128_round(vec *st)
+ {
+-    vec sa = st[0U];
+-    vec sb0 = st[1U];
+-    vec sd0 = st[3U];
+-    vec sa10 = vec_add(sa, sb0);
+-    vec sd10 = vec_rotate_left(vec_xor(sd0, sa10), (uint32_t)16U);
++    vec sa;
++    vec sb0;
++    vec sd0;
++    vec sa10;
++    vec sd10;
++    vec sa0;
++    vec sb1;
++    vec sd2;
++    vec sa11;
++    vec sd11;
++    vec sa2;
++    vec sb2;
++    vec sd3;
++    vec sa12;
++    vec sd12;
++    vec sa3;
++    vec sb;
++    vec sd;
++    vec sa1;
++    vec sd1;
++
++    sa = st[0U];
++    sb0 = st[1U];
++    sd0 = st[3U];
++    sa10 = vec_add(sa, sb0);
++    sd10 = vec_rotate_left(vec_xor(sd0, sa10), (uint32_t)16U);
+     st[0U] = sa10;
+     st[3U] = sd10;
+-    vec sa0 = st[2U];
+-    vec sb1 = st[3U];
+-    vec sd2 = st[1U];
+-    vec sa11 = vec_add(sa0, sb1);
+-    vec sd11 = vec_rotate_left(vec_xor(sd2, sa11), (uint32_t)12U);
++    sa0 = st[2U];
++    sb1 = st[3U];
++    sd2 = st[1U];
++    sa11 = vec_add(sa0, sb1);
++    sd11 = vec_rotate_left(vec_xor(sd2, sa11), (uint32_t)12U);
+     st[2U] = sa11;
+     st[1U] = sd11;
+-    vec sa2 = st[0U];
+-    vec sb2 = st[1U];
+-    vec sd3 = st[3U];
+-    vec sa12 = vec_add(sa2, sb2);
+-    vec sd12 = vec_rotate_left(vec_xor(sd3, sa12), (uint32_t)8U);
++    sa2 = st[0U];
++    sb2 = st[1U];
++    sd3 = st[3U];
++    sa12 = vec_add(sa2, sb2);
++    sd12 = vec_rotate_left(vec_xor(sd3, sa12), (uint32_t)8U);
+     st[0U] = sa12;
+     st[3U] = sd12;
+-    vec sa3 = st[2U];
+-    vec sb = st[3U];
+-    vec sd = st[1U];
+-    vec sa1 = vec_add(sa3, sb);
+-    vec sd1 = vec_rotate_left(vec_xor(sd, sa1), (uint32_t)7U);
++    sa3 = st[2U];
++    sb = st[3U];
++    sd = st[1U];
++    sa1 = vec_add(sa3, sb);
++    sd1 = vec_rotate_left(vec_xor(sd, sa1), (uint32_t)7U);
+     st[2U] = sa1;
+     st[1U] = sd1;
+ }
+@@ -96,17 +126,24 @@
+ inline static void
+ Hacl_Impl_Chacha20_Vec128_double_round(vec *st)
+ {
++    vec r1;
++    vec r20;
++    vec r30;
++    vec r10;
++    vec r2;
++    vec r3;
++
+     Hacl_Impl_Chacha20_Vec128_round(st);
+-    vec r1 = st[1U];
+-    vec r20 = st[2U];
+-    vec r30 = st[3U];
++    r1 = st[1U];
++    r20 = st[2U];
++    r30 = st[3U];
+     st[1U] = vec_shuffle_right(r1, (uint32_t)1U);
+     st[2U] = vec_shuffle_right(r20, (uint32_t)2U);
+     st[3U] = vec_shuffle_right(r30, (uint32_t)3U);
+     Hacl_Impl_Chacha20_Vec128_round(st);
+-    vec r10 = st[1U];
+-    vec r2 = st[2U];
+-    vec r3 = st[3U];
++    r10 = st[1U];
++    r2 = st[2U];
++    r3 = st[3U];
+     st[1U] = vec_shuffle_right(r10, (uint32_t)3U);
+     st[2U] = vec_shuffle_right(r2, (uint32_t)2U);
+     st[3U] = vec_shuffle_right(r3, (uint32_t)1U);
+@@ -153,8 +190,9 @@
+ inline static void
+ Hacl_Impl_Chacha20_Vec128_chacha20_core(vec *k, vec *st)
+ {
++    uint32_t i;
+     Hacl_Impl_Chacha20_Vec128_copy_state(k, st);
+-    for (uint32_t i = (uint32_t)0U; i < (uint32_t)10U; i = i + (uint32_t)1U)
++    for (i = (uint32_t)0U; i < (uint32_t)10U; i = i + (uint32_t)1U)
+         Hacl_Impl_Chacha20_Vec128_double_round(k);
+     Hacl_Impl_Chacha20_Vec128_sum_states(k, st);
+ }
+@@ -188,8 +226,9 @@
+ inline static void
+ Hacl_Impl_Chacha20_Vec128_chacha20_core3(vec *k0, vec *k1, vec *k2, vec *st)
+ {
++    uint32_t i;
+     Hacl_Impl_Chacha20_Vec128_chacha20_incr3(k0, k1, k2, st);
+-    for (uint32_t i = (uint32_t)0U; i < (uint32_t)10U; i = i + (uint32_t)1U)
++    for (i = (uint32_t)0U; i < (uint32_t)10U; i = i + (uint32_t)1U)
+         Hacl_Impl_Chacha20_Vec128_double_round3(k0, k1, k2);
+     Hacl_Impl_Chacha20_Vec128_chacha20_sum3(k0, k1, k2, st);
+ }
+@@ -197,9 +236,10 @@
+ inline static void
+ Hacl_Impl_Chacha20_Vec128_chacha20_block(uint8_t *stream_block, vec *st)
+ {
+-    KRML_CHECK_SIZE(vec_zero(), (uint32_t)4U);
+     vec k[4U];
+-    for (uint32_t _i = 0U; _i < (uint32_t)4U; ++_i)
++    uint32_t _i;
++    KRML_CHECK_SIZE(vec_zero(), (uint32_t)4U);
++    for (_i = 0U; _i < (uint32_t)4U; ++_i)
+         k[_i] = vec_zero();
+     Hacl_Impl_Chacha20_Vec128_chacha20_core(k, st);
+     Hacl_Impl_Chacha20_Vec128_State_state_to_key_block(stream_block, k);
+@@ -215,9 +255,11 @@
+ Hacl_Impl_Chacha20_Vec128_update_last(uint8_t *output, uint8_t *plain, uint32_t len, vec *st)
+ {
+     uint8_t block[64U] = { 0U };
++    uint8_t *mask;
++    uint32_t i;
+     Hacl_Impl_Chacha20_Vec128_chacha20_block(block, st);
+-    uint8_t *mask = block;
+-    for (uint32_t i = (uint32_t)0U; i < len; i = i + (uint32_t)1U) {
++    mask = block;
++    for (i = (uint32_t)0U; i < len; i = i + (uint32_t)1U) {
+         uint8_t xi = plain[i];
+         uint8_t yi = mask[i];
+         output[i] = xi ^ yi;
+@@ -252,9 +294,10 @@
+ static void
+ Hacl_Impl_Chacha20_Vec128_update(uint8_t *output, uint8_t *plain, vec *st)
+ {
+-    KRML_CHECK_SIZE(vec_zero(), (uint32_t)4U);
+     vec k[4U];
+-    for (uint32_t _i = 0U; _i < (uint32_t)4U; ++_i)
++    uint32_t _i;
++    KRML_CHECK_SIZE(vec_zero(), (uint32_t)4U);
++    for (_i = 0U; _i < (uint32_t)4U; ++_i)
+         k[_i] = vec_zero();
+     Hacl_Impl_Chacha20_Vec128_chacha20_core(k, st);
+     Hacl_Impl_Chacha20_Vec128_xor_block(output, plain, k);
+@@ -263,25 +306,32 @@
+ static void
+ Hacl_Impl_Chacha20_Vec128_update3(uint8_t *output, uint8_t *plain, vec *st)
+ {
+-    KRML_CHECK_SIZE(vec_zero(), (uint32_t)4U);
+     vec k0[4U];
+-    for (uint32_t _i = 0U; _i < (uint32_t)4U; ++_i)
++    uint32_t _i;
++    vec k1[4U];
++    vec k2[4U];
++    uint8_t *p0;
++    uint8_t *p1;
++    uint8_t *p2;
++    uint8_t *o0;
++    uint8_t *o1;
++    uint8_t *o2;
++    KRML_CHECK_SIZE(vec_zero(), (uint32_t)4U);
++    for (_i = 0U; _i < (uint32_t)4U; ++_i)
+         k0[_i] = vec_zero();
+     KRML_CHECK_SIZE(vec_zero(), (uint32_t)4U);
+-    vec k1[4U];
+-    for (uint32_t _i = 0U; _i < (uint32_t)4U; ++_i)
++    for (_i = 0U; _i < (uint32_t)4U; ++_i)
+         k1[_i] = vec_zero();
+     KRML_CHECK_SIZE(vec_zero(), (uint32_t)4U);
+-    vec k2[4U];
+-    for (uint32_t _i = 0U; _i < (uint32_t)4U; ++_i)
++    for (_i = 0U; _i < (uint32_t)4U; ++_i)
+         k2[_i] = vec_zero();
+     Hacl_Impl_Chacha20_Vec128_chacha20_core3(k0, k1, k2, st);
+-    uint8_t *p0 = plain;
+-    uint8_t *p1 = plain + (uint32_t)64U;
+-    uint8_t *p2 = plain + (uint32_t)128U;
+-    uint8_t *o0 = output;
+-    uint8_t *o1 = output + (uint32_t)64U;
+-    uint8_t *o2 = output + (uint32_t)128U;
++    p0 = plain;
++    p1 = plain + (uint32_t)64U;
++    p2 = plain + (uint32_t)128U;
++    o0 = output;
++    o1 = output + (uint32_t)64U;
++    o2 = output + (uint32_t)128U;
+     Hacl_Impl_Chacha20_Vec128_xor_block(o0, p0, k0);
+     Hacl_Impl_Chacha20_Vec128_xor_block(o1, p1, k1);
+     Hacl_Impl_Chacha20_Vec128_xor_block(o2, p2, k2);
+@@ -308,7 +358,8 @@
+     uint32_t len,
+     vec *st)
+ {
+-    for (uint32_t i = (uint32_t)0U; i < len; i = i + (uint32_t)1U)
++    uint32_t i;
++    for (i = (uint32_t)0U; i < len; i = i + (uint32_t)1U)
+         Hacl_Impl_Chacha20_Vec128_update3_(output, plain, len, st, i);
+ }
+ 
+@@ -368,11 +419,13 @@
+     uint8_t *n1,
+     uint32_t ctr)
+ {
+-    KRML_CHECK_SIZE(vec_zero(), (uint32_t)4U);
+     vec buf[4U];
+-    for (uint32_t _i = 0U; _i < (uint32_t)4U; ++_i)
++    uint32_t _i;
++    vec *st;
++    KRML_CHECK_SIZE(vec_zero(), (uint32_t)4U);
++    for (_i = 0U; _i < (uint32_t)4U; ++_i)
+         buf[_i] = vec_zero();
+-    vec *st = buf;
++    st = buf;
+     Hacl_Impl_Chacha20_Vec128_init(st, k, n1, ctr);
+     Hacl_Impl_Chacha20_Vec128_chacha20_counter_mode(output, plain, len, st);
+ }
+diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/verified/Hacl_Curve25519.c
+--- a/nss/nss/lib/freebl/verified/Hacl_Curve25519.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/freebl/verified/Hacl_Curve25519.c	2018-09-07 06:13:30.375593700 +0200
+@@ -129,6 +129,7 @@
+ Hacl_Bignum_Fmul_shift_reduce(uint64_t *output)
+ {
+     uint64_t tmp = output[4U];
++    uint64_t b0;
+     {
+         uint32_t ctr = (uint32_t)5U - (uint32_t)0U - (uint32_t)1U;
+         uint64_t z = output[ctr - (uint32_t)1U];
+@@ -150,7 +151,7 @@
+         output[ctr] = z;
+     }
+     output[0U] = tmp;
+-    uint64_t b0 = output[0U];
++    b0 = output[0U];
+     output[0U] = (uint64_t)19U * b0;
+ }
+ 
+@@ -177,38 +178,43 @@
+         Hacl_Bignum_Fproduct_sum_scalar_multiplication_(output, input, input2i);
+         Hacl_Bignum_Fmul_shift_reduce(input);
+     }
+-    uint32_t i = (uint32_t)4U;
+-    uint64_t input2i = input21[i];
+-    Hacl_Bignum_Fproduct_sum_scalar_multiplication_(output, input, input2i);
++    {
++      uint32_t i = (uint32_t)4U;
++      uint64_t input2i = input21[i];
++      Hacl_Bignum_Fproduct_sum_scalar_multiplication_(output, input, input2i);
++    }
+ }
+ 
+ inline static void
+ Hacl_Bignum_Fmul_fmul(uint64_t *output, uint64_t *input, uint64_t *input21)
+ {
+     uint64_t tmp[5U] = { 0U };
+-    memcpy(tmp, input, (uint32_t)5U * sizeof input[0U]);
+-    KRML_CHECK_SIZE(FStar_UInt128_uint64_to_uint128((uint64_t)0U), (uint32_t)5U);
+     FStar_UInt128_t t[5U];
+-    for (uint32_t _i = 0U; _i < (uint32_t)5U; ++_i)
++    uint32_t _i;
++    FStar_UInt128_t b4 = t[4U];
++    FStar_UInt128_t b0 = t[0U];
++    FStar_UInt128_t b4_;
++    FStar_UInt128_t b0_;
++    uint64_t i0;
++    uint64_t i1;
++    uint64_t i0_;
++    uint64_t i1_;
++    KRML_CHECK_SIZE(FStar_UInt128_uint64_to_uint128((uint64_t)0U), (uint32_t)5U);
++    for (_i = 0U; _i < (uint32_t)5U; ++_i)
+         t[_i] = FStar_UInt128_uint64_to_uint128((uint64_t)0U);
+     Hacl_Bignum_Fmul_mul_shift_reduce_(t, tmp, input21);
+     Hacl_Bignum_Fproduct_carry_wide_(t);
+-    FStar_UInt128_t b4 = t[4U];
+-    FStar_UInt128_t b0 = t[0U];
+-    FStar_UInt128_t
+-        b4_ = FStar_UInt128_logand(b4, FStar_UInt128_uint64_to_uint128((uint64_t)0x7ffffffffffffU));
+-    FStar_UInt128_t
+-        b0_ =
+-            FStar_UInt128_add(b0,
++    b4_ = FStar_UInt128_logand(b4, FStar_UInt128_uint64_to_uint128((uint64_t)0x7ffffffffffffU));
++    b0_ = FStar_UInt128_add(b0,
+                               FStar_UInt128_mul_wide((uint64_t)19U,
+                                                      FStar_UInt128_uint128_to_uint64(FStar_UInt128_shift_right(b4, (uint32_t)51U))));
+     t[4U] = b4_;
+     t[0U] = b0_;
+     Hacl_Bignum_Fproduct_copy_from_wide_(output, t);
+-    uint64_t i0 = output[0U];
+-    uint64_t i1 = output[1U];
+-    uint64_t i0_ = i0 & (uint64_t)0x7ffffffffffffU;
+-    uint64_t i1_ = i1 + (i0 >> (uint32_t)51U);
++    i0 = output[0U];
++    i1 = output[1U];
++    i0_ = i0 & (uint64_t)0x7ffffffffffffU;
++    i1_ = i1 + (i0 >> (uint32_t)51U);
+     output[0U] = i0_;
+     output[1U] = i1_;
+ }
+@@ -261,24 +267,27 @@
+ inline static void
+ Hacl_Bignum_Fsquare_fsquare_(FStar_UInt128_t *tmp, uint64_t *output)
+ {
+-    Hacl_Bignum_Fsquare_fsquare__(tmp, output);
+-    Hacl_Bignum_Fproduct_carry_wide_(tmp);
+     FStar_UInt128_t b4 = tmp[4U];
+     FStar_UInt128_t b0 = tmp[0U];
+-    FStar_UInt128_t
+-        b4_ = FStar_UInt128_logand(b4, FStar_UInt128_uint64_to_uint128((uint64_t)0x7ffffffffffffU));
+-    FStar_UInt128_t
+-        b0_ =
+-            FStar_UInt128_add(b0,
++    FStar_UInt128_t b4_;
++    FStar_UInt128_t b0_;
++    uint64_t i0;
++    uint64_t i1;
++    uint64_t i0_;
++    uint64_t i1_;
++    Hacl_Bignum_Fsquare_fsquare__(tmp, output);
++    Hacl_Bignum_Fproduct_carry_wide_(tmp);
++    b4_ = FStar_UInt128_logand(b4, FStar_UInt128_uint64_to_uint128((uint64_t)0x7ffffffffffffU));
++    b0_ = FStar_UInt128_add(b0,
+                               FStar_UInt128_mul_wide((uint64_t)19U,
+                                                      FStar_UInt128_uint128_to_uint64(FStar_UInt128_shift_right(b4, (uint32_t)51U))));
+     tmp[4U] = b4_;
+     tmp[0U] = b0_;
+     Hacl_Bignum_Fproduct_copy_from_wide_(output, tmp);
+-    uint64_t i0 = output[0U];
+-    uint64_t i1 = output[1U];
+-    uint64_t i0_ = i0 & (uint64_t)0x7ffffffffffffU;
+-    uint64_t i1_ = i1 + (i0 >> (uint32_t)51U);
++    i0 = output[0U];
++    i1 = output[1U];
++    i0_ = i0 & (uint64_t)0x7ffffffffffffU;
++    i1_ = i1 + (i0 >> (uint32_t)51U);
+     output[0U] = i0_;
+     output[1U] = i1_;
+ }
+@@ -286,17 +295,19 @@
+ static void
+ Hacl_Bignum_Fsquare_fsquare_times_(uint64_t *input, FStar_UInt128_t *tmp, uint32_t count1)
+ {
++    uint32_t i;
+     Hacl_Bignum_Fsquare_fsquare_(tmp, input);
+-    for (uint32_t i = (uint32_t)1U; i < count1; i = i + (uint32_t)1U)
++    for (i = (uint32_t)1U; i < count1; i = i + (uint32_t)1U)
+         Hacl_Bignum_Fsquare_fsquare_(tmp, input);
+ }
+ 
+ inline static void
+ Hacl_Bignum_Fsquare_fsquare_times(uint64_t *output, uint64_t *input, uint32_t count1)
+ {
+-    KRML_CHECK_SIZE(FStar_UInt128_uint64_to_uint128((uint64_t)0U), (uint32_t)5U);
+     FStar_UInt128_t t[5U];
+-    for (uint32_t _i = 0U; _i < (uint32_t)5U; ++_i)
++    uint32_t _i;
++    KRML_CHECK_SIZE(FStar_UInt128_uint64_to_uint128((uint64_t)0U), (uint32_t)5U);
++    for (_i = 0U; _i < (uint32_t)5U; ++_i)
+         t[_i] = FStar_UInt128_uint64_to_uint128((uint64_t)0U);
+     memcpy(output, input, (uint32_t)5U * sizeof input[0U]);
+     Hacl_Bignum_Fsquare_fsquare_times_(output, t, count1);
+@@ -305,9 +316,10 @@
+ inline static void
+ Hacl_Bignum_Fsquare_fsquare_times_inplace(uint64_t *output, uint32_t count1)
+ {
+-    KRML_CHECK_SIZE(FStar_UInt128_uint64_to_uint128((uint64_t)0U), (uint32_t)5U);
+     FStar_UInt128_t t[5U];
+-    for (uint32_t _i = 0U; _i < (uint32_t)5U; ++_i)
++    uint32_t _i;
++    KRML_CHECK_SIZE(FStar_UInt128_uint64_to_uint128((uint64_t)0U), (uint32_t)5U);
++    for (_i = 0U; _i < (uint32_t)5U; ++_i)
+         t[_i] = FStar_UInt128_uint64_to_uint128((uint64_t)0U);
+     Hacl_Bignum_Fsquare_fsquare_times_(output, t, count1);
+ }
+@@ -319,6 +331,14 @@
+     uint64_t *a = buf;
+     uint64_t *t00 = buf + (uint32_t)5U;
+     uint64_t *b0 = buf + (uint32_t)10U;
++    uint64_t *t01;
++    uint64_t *b1;
++    uint64_t *c0;
++    uint64_t *a0;
++    uint64_t *t0;
++    uint64_t *b;
++    uint64_t *c;
++
+     Hacl_Bignum_Fsquare_fsquare_times(a, z, (uint32_t)1U);
+     Hacl_Bignum_Fsquare_fsquare_times(t00, a, (uint32_t)2U);
+     Hacl_Bignum_Fmul_fmul(b0, t00, z);
+@@ -326,9 +346,9 @@
+     Hacl_Bignum_Fsquare_fsquare_times(t00, a, (uint32_t)1U);
+     Hacl_Bignum_Fmul_fmul(b0, t00, b0);
+     Hacl_Bignum_Fsquare_fsquare_times(t00, b0, (uint32_t)5U);
+-    uint64_t *t01 = buf + (uint32_t)5U;
+-    uint64_t *b1 = buf + (uint32_t)10U;
+-    uint64_t *c0 = buf + (uint32_t)15U;
++    t01 = buf + (uint32_t)5U;
++    b1 = buf + (uint32_t)10U;
++    c0 = buf + (uint32_t)15U;
+     Hacl_Bignum_Fmul_fmul(b1, t01, b1);
+     Hacl_Bignum_Fsquare_fsquare_times(t01, b1, (uint32_t)10U);
+     Hacl_Bignum_Fmul_fmul(c0, t01, b1);
+@@ -337,10 +357,10 @@
+     Hacl_Bignum_Fsquare_fsquare_times_inplace(t01, (uint32_t)10U);
+     Hacl_Bignum_Fmul_fmul(b1, t01, b1);
+     Hacl_Bignum_Fsquare_fsquare_times(t01, b1, (uint32_t)50U);
+-    uint64_t *a0 = buf;
+-    uint64_t *t0 = buf + (uint32_t)5U;
+-    uint64_t *b = buf + (uint32_t)10U;
+-    uint64_t *c = buf + (uint32_t)15U;
++    a0 = buf;
++    t0 = buf + (uint32_t)5U;
++    b = buf + (uint32_t)10U;
++    c = buf + (uint32_t)15U;
+     Hacl_Bignum_Fmul_fmul(c, t0, b);
+     Hacl_Bignum_Fsquare_fsquare_times(t0, c, (uint32_t)100U);
+     Hacl_Bignum_Fmul_fmul(t0, t0, c);
+@@ -384,12 +404,17 @@
+ Hacl_Bignum_fdifference(uint64_t *a, uint64_t *b)
+ {
+     uint64_t tmp[5U] = { 0U };
++    uint64_t b0;
++    uint64_t b1;
++    uint64_t b2;
++    uint64_t b3;
++    uint64_t b4;
+     memcpy(tmp, b, (uint32_t)5U * sizeof b[0U]);
+-    uint64_t b0 = tmp[0U];
+-    uint64_t b1 = tmp[1U];
+-    uint64_t b2 = tmp[2U];
+-    uint64_t b3 = tmp[3U];
+-    uint64_t b4 = tmp[4U];
++    b0 = tmp[0U];
++    b1 = tmp[1U];
++    b2 = tmp[2U];
++    b3 = tmp[3U];
++    b4 = tmp[4U];
+     tmp[0U] = b0 + (uint64_t)0x3fffffffffff68U;
+     tmp[1U] = b1 + (uint64_t)0x3ffffffffffff8U;
+     tmp[2U] = b2 + (uint64_t)0x3ffffffffffff8U;
+@@ -425,9 +450,10 @@
+ inline static void
+ Hacl_Bignum_fscalar(uint64_t *output, uint64_t *b, uint64_t s)
+ {
+-    KRML_CHECK_SIZE(FStar_UInt128_uint64_to_uint128((uint64_t)0U), (uint32_t)5U);
+     FStar_UInt128_t tmp[5U];
+-    for (uint32_t _i = 0U; _i < (uint32_t)5U; ++_i)
++    uint32_t _i;
++    KRML_CHECK_SIZE(FStar_UInt128_uint64_to_uint128((uint64_t)0U), (uint32_t)5U);
++    for (_i = 0U; _i < (uint32_t)5U; ++_i)
+         tmp[_i] = FStar_UInt128_uint64_to_uint128((uint64_t)0U);
+     {
+         uint64_t xi = b[0U];
+@@ -450,6 +476,7 @@
+         tmp[4U] = FStar_UInt128_mul_wide(xi, s);
+     }
+     Hacl_Bignum_Fproduct_carry_wide_(tmp);
++    {
+     FStar_UInt128_t b4 = tmp[4U];
+     FStar_UInt128_t b0 = tmp[0U];
+     FStar_UInt128_t
+@@ -462,6 +489,7 @@
+     tmp[4U] = b4_;
+     tmp[0U] = b0_;
+     Hacl_Bignum_Fproduct_copy_from_wide_(output, tmp);
++    }
+ }
+ 
+ inline static void
+@@ -493,8 +521,9 @@
+ Hacl_EC_Point_swap_conditional_(uint64_t *a, uint64_t *b, uint64_t swap1, uint32_t ctr)
+ {
+     if (!(ctr == (uint32_t)0U)) {
++        uint32_t i;
+         Hacl_EC_Point_swap_conditional_step(a, b, swap1, ctr);
+-        uint32_t i = ctr - (uint32_t)1U;
++        i = ctr - (uint32_t)1U;
+         Hacl_EC_Point_swap_conditional_(a, b, swap1, i);
+     }
+ }
+@@ -538,6 +567,16 @@
+     uint64_t *origxprime = buf + (uint32_t)5U;
+     uint64_t *xxprime0 = buf + (uint32_t)25U;
+     uint64_t *zzprime0 = buf + (uint32_t)30U;
++    uint64_t *origxprime0;
++    uint64_t *xx0;
++    uint64_t *zz0;
++    uint64_t *xxprime;
++    uint64_t *zzprime;
++    uint64_t *zzzprime;
++    uint64_t *zzz;
++    uint64_t *xx;
++    uint64_t *zz;
++    uint64_t scalar;
+     memcpy(origx, x, (uint32_t)5U * sizeof x[0U]);
+     Hacl_Bignum_fsum(x, z);
+     Hacl_Bignum_fdifference(z, origx);
+@@ -546,12 +585,12 @@
+     Hacl_Bignum_fdifference(zprime, origxprime);
+     Hacl_Bignum_fmul(xxprime0, xprime, z);
+     Hacl_Bignum_fmul(zzprime0, x, zprime);
+-    uint64_t *origxprime0 = buf + (uint32_t)5U;
+-    uint64_t *xx0 = buf + (uint32_t)15U;
+-    uint64_t *zz0 = buf + (uint32_t)20U;
+-    uint64_t *xxprime = buf + (uint32_t)25U;
+-    uint64_t *zzprime = buf + (uint32_t)30U;
+-    uint64_t *zzzprime = buf + (uint32_t)35U;
++    origxprime0 = buf + (uint32_t)5U;
++    xx0 = buf + (uint32_t)15U;
++    zz0 = buf + (uint32_t)20U;
++    xxprime = buf + (uint32_t)25U;
++    zzprime = buf + (uint32_t)30U;
++    zzzprime = buf + (uint32_t)35U;
+     memcpy(origxprime0, xxprime, (uint32_t)5U * sizeof xxprime[0U]);
+     Hacl_Bignum_fsum(xxprime, zzprime);
+     Hacl_Bignum_fdifference(zzprime, origxprime0);
+@@ -560,12 +599,12 @@
+     Hacl_Bignum_fmul(z3, zzzprime, qx);
+     Hacl_Bignum_Fsquare_fsquare_times(xx0, x, (uint32_t)1U);
+     Hacl_Bignum_Fsquare_fsquare_times(zz0, z, (uint32_t)1U);
+-    uint64_t *zzz = buf + (uint32_t)10U;
+-    uint64_t *xx = buf + (uint32_t)15U;
+-    uint64_t *zz = buf + (uint32_t)20U;
++    zzz = buf + (uint32_t)10U;
++    xx = buf + (uint32_t)15U;
++    zz = buf + (uint32_t)20U;
+     Hacl_Bignum_fmul(x2, xx, zz);
+     Hacl_Bignum_fdifference(zz, xx);
+-    uint64_t scalar = (uint64_t)121665U;
++    scalar = (uint64_t)121665U;
+     Hacl_Bignum_fscalar(zzz, zz, scalar);
+     Hacl_Bignum_fsum(zzz, xx);
+     Hacl_Bignum_fmul(z2, zzz, zz);
+@@ -581,9 +620,10 @@
+     uint8_t byt)
+ {
+     uint64_t bit = (uint64_t)(byt >> (uint32_t)7U);
++    uint64_t bit0;
+     Hacl_EC_Point_swap_conditional(nq, nqpq, bit);
+     Hacl_EC_AddAndDouble_fmonty(nq2, nqpq2, nq, nqpq, q);
+-    uint64_t bit0 = (uint64_t)(byt >> (uint32_t)7U);
++    bit0 = (uint64_t)(byt >> (uint32_t)7U);
+     Hacl_EC_Point_swap_conditional(nq2, nqpq2, bit0);
+ }
+ 
+@@ -596,8 +636,9 @@
+     uint64_t *q,
+     uint8_t byt)
+ {
++    uint8_t byt1;
+     Hacl_EC_Ladder_SmallLoop_cmult_small_loop_step(nq, nqpq, nq2, nqpq2, q, byt);
+-    uint8_t byt1 = byt << (uint32_t)1U;
++    byt1 = byt << (uint32_t)1U;
+     Hacl_EC_Ladder_SmallLoop_cmult_small_loop_step(nq2, nqpq2, nq, nqpq, q, byt1);
+ }
+ 
+@@ -613,8 +654,9 @@
+ {
+     if (!(i == (uint32_t)0U)) {
+         uint32_t i_ = i - (uint32_t)1U;
++        uint8_t byt_;
+         Hacl_EC_Ladder_SmallLoop_cmult_small_loop_double_step(nq, nqpq, nq2, nqpq2, q, byt);
+-        uint8_t byt_ = byt << (uint32_t)2U;
++        byt_ = byt << (uint32_t)2U;
+         Hacl_EC_Ladder_SmallLoop_cmult_small_loop(nq, nqpq, nq2, nqpq2, q, byt_, i_);
+     }
+ }
+@@ -731,12 +773,16 @@
+ static void
+ Hacl_EC_Format_fcontract_second_carry_full(uint64_t *input)
+ {
++    uint64_t i0;
++    uint64_t i1;
++    uint64_t i0_;
++    uint64_t i1_;
+     Hacl_EC_Format_fcontract_second_carry_pass(input);
+     Hacl_Bignum_Modulo_carry_top(input);
+-    uint64_t i0 = input[0U];
+-    uint64_t i1 = input[1U];
+-    uint64_t i0_ = i0 & (uint64_t)0x7ffffffffffffU;
+-    uint64_t i1_ = i1 + (i0 >> (uint32_t)51U);
++    i0 = input[0U];
++    i1 = input[1U];
++    i0_ = i0 & (uint64_t)0x7ffffffffffffU;
++    i1_ = i1 + (i0 >> (uint32_t)51U);
+     input[0U] = i0_;
+     input[1U] = i1_;
+ }
+@@ -817,22 +863,32 @@
+     uint64_t buf0[10U] = { 0U };
+     uint64_t *x0 = buf0;
+     uint64_t *z = buf0 + (uint32_t)5U;
++    uint64_t *q;
++    uint8_t e[32U] = { 0U };
++    uint8_t e0;
++    uint8_t e31;
++    uint8_t e01;
++    uint8_t e311;
++    uint8_t e312;
++    uint8_t *scalar;
++    uint64_t buf[15U] = { 0U };
++    uint64_t *nq;
++    uint64_t *x;
++
+     Hacl_EC_Format_fexpand(x0, basepoint);
+     z[0U] = (uint64_t)1U;
+-    uint64_t *q = buf0;
+-    uint8_t e[32U] = { 0U };
++    q = buf0;
+     memcpy(e, secret, (uint32_t)32U * sizeof secret[0U]);
+-    uint8_t e0 = e[0U];
+-    uint8_t e31 = e[31U];
+-    uint8_t e01 = e0 & (uint8_t)248U;
+-    uint8_t e311 = e31 & (uint8_t)127U;
+-    uint8_t e312 = e311 | (uint8_t)64U;
++    e0 = e[0U];
++    e31 = e[31U];
++    e01 = e0 & (uint8_t)248U;
++    e311 = e31 & (uint8_t)127U;
++    e312 = e311 | (uint8_t)64U;
+     e[0U] = e01;
+     e[31U] = e312;
+-    uint8_t *scalar = e;
+-    uint64_t buf[15U] = { 0U };
+-    uint64_t *nq = buf;
+-    uint64_t *x = nq;
++    scalar = e;
++    nq = buf;
++    x = nq;
+     x[0U] = (uint64_t)1U;
+     Hacl_EC_Ladder_cmult(nq, scalar, q);
+     Hacl_EC_Format_scalar_of_point(mypublic, nq);
+diff -ur nss/nss/lib/freebl/verified/Hacl_Poly1305_32.c nss_new/nss/lib/freebl/verified/Hacl_Poly1305_32.c
+--- a/nss/nss/lib/freebl/verified/Hacl_Poly1305_32.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/freebl/verified/Hacl_Poly1305_32.c	2018-09-14 18:37:50.838682200 +0200
+@@ -47,7 +47,8 @@
+ inline static void
+ Hacl_Bignum_Fproduct_copy_from_wide_(uint32_t *output, uint64_t *input)
+ {
+-    for (uint32_t i = (uint32_t)0U; i < (uint32_t)5U; i = i + (uint32_t)1U) {
++    uint32_t i;
++    for (i = (uint32_t)0U; i < (uint32_t)5U; i = i + (uint32_t)1U) {
+         uint64_t xi = input[i];
+         output[i] = (uint32_t)xi;
+     }
+@@ -56,7 +57,8 @@
+ inline static void
+ Hacl_Bignum_Fproduct_sum_scalar_multiplication_(uint64_t *output, uint32_t *input, uint32_t s)
+ {
+-    for (uint32_t i = (uint32_t)0U; i < (uint32_t)5U; i = i + (uint32_t)1U) {
++    uint32_t i;
++    for (i = (uint32_t)0U; i < (uint32_t)5U; i = i + (uint32_t)1U) {
+         uint64_t xi = output[i];
+         uint32_t yi = input[i];
+         uint64_t x_wide = (uint64_t)yi;
+@@ -68,7 +70,8 @@
+ inline static void
+ Hacl_Bignum_Fproduct_carry_wide_(uint64_t *tmp)
+ {
+-    for (uint32_t i = (uint32_t)0U; i < (uint32_t)4U; i = i + (uint32_t)1U) {
++    uint32_t i;
++    for (i = (uint32_t)0U; i < (uint32_t)4U; i = i + (uint32_t)1U) {
+         uint32_t ctr = i;
+         uint64_t tctr = tmp[ctr];
+         uint64_t tctrp1 = tmp[ctr + (uint32_t)1U];
+@@ -82,7 +85,8 @@
+ inline static void
+ Hacl_Bignum_Fproduct_carry_limb_(uint32_t *tmp)
+ {
+-    for (uint32_t i = (uint32_t)0U; i < (uint32_t)4U; i = i + (uint32_t)1U) {
++    uint32_t i;
++    for (i = (uint32_t)0U; i < (uint32_t)4U; i = i + (uint32_t)1U) {
+         uint32_t ctr = i;
+         uint32_t tctr = tmp[ctr];
+         uint32_t tctrp1 = tmp[ctr + (uint32_t)1U];
+@@ -97,7 +101,8 @@
+ Hacl_Bignum_Fmul_shift_reduce(uint32_t *output)
+ {
+     uint32_t tmp = output[4U];
+-    for (uint32_t i = (uint32_t)0U; i < (uint32_t)4U; i = i + (uint32_t)1U) {
++    uint32_t i;
++    for (i = (uint32_t)0U; i < (uint32_t)4U; i = i + (uint32_t)1U) {
+         uint32_t ctr = (uint32_t)5U - i - (uint32_t)1U;
+         uint32_t z = output[ctr - (uint32_t)1U];
+         output[ctr] = z;
+@@ -109,13 +114,15 @@
+ static void
+ Hacl_Bignum_Fmul_mul_shift_reduce_(uint64_t *output, uint32_t *input, uint32_t *input2)
+ {
+-    for (uint32_t i = (uint32_t)0U; i < (uint32_t)4U; i = i + (uint32_t)1U) {
++    uint32_t i;
++    uint32_t input2i;
++    for (i = (uint32_t)0U; i < (uint32_t)4U; i = i + (uint32_t)1U) {
+         uint32_t input2i = input2[i];
+         Hacl_Bignum_Fproduct_sum_scalar_multiplication_(output, input, input2i);
+         Hacl_Bignum_Fmul_shift_reduce(input);
+     }
+-    uint32_t i = (uint32_t)4U;
+-    uint32_t input2i = input2[i];
++    i = (uint32_t)4U;
++    input2i = input2[i];
+     Hacl_Bignum_Fproduct_sum_scalar_multiplication_(output, input, input2i);
+ }
+ 
+@@ -123,16 +130,20 @@
+ Hacl_Bignum_Fmul_fmul(uint32_t *output, uint32_t *input, uint32_t *input2)
+ {
+     uint32_t tmp[5U] = { 0U };
+-    memcpy(tmp, input, (uint32_t)5U * sizeof input[0U]);
+     uint64_t t[5U] = { 0U };
++    uint32_t i0;
++    uint32_t i1;
++    uint32_t i0_;
++    uint32_t i1_;
++    memcpy(tmp, input, (uint32_t)5U * sizeof input[0U]);
+     Hacl_Bignum_Fmul_mul_shift_reduce_(t, tmp, input2);
+     Hacl_Bignum_Fproduct_carry_wide_(t);
+     Hacl_Bignum_Modulo_carry_top_wide(t);
+     Hacl_Bignum_Fproduct_copy_from_wide_(output, t);
+-    uint32_t i0 = output[0U];
+-    uint32_t i1 = output[1U];
+-    uint32_t i0_ = i0 & (uint32_t)0x3ffffffU;
+-    uint32_t i1_ = i1 + (i0 >> (uint32_t)26U);
++    i0 = output[0U];
++    i1 = output[1U];
++    i0_ = i0 & (uint32_t)0x3ffffffU;
++    i1_ = i1 + (i0 >> (uint32_t)26U);
+     output[0U] = i0_;
+     output[1U] = i1_;
+ }
+@@ -140,7 +151,8 @@
+ inline static void
+ Hacl_Bignum_AddAndMultiply_add_and_multiply(uint32_t *acc, uint32_t *block, uint32_t *r)
+ {
+-    for (uint32_t i = (uint32_t)0U; i < (uint32_t)5U; i = i + (uint32_t)1U) {
++    uint32_t i;
++    for (i = (uint32_t)0U; i < (uint32_t)5U; i = i + (uint32_t)1U) {
+         uint32_t xi = acc[i];
+         uint32_t yi = block[i];
+         acc[i] = xi + yi;
+@@ -175,13 +187,15 @@
+     uint32_t r2 = i2 >> (uint32_t)4U & (uint32_t)0x3ffffffU;
+     uint32_t r3 = i3 >> (uint32_t)6U & (uint32_t)0x3ffffffU;
+     uint32_t r4 = i4 >> (uint32_t)8U;
++    uint32_t b4;
++    uint32_t b4_;
+     tmp[0U] = r0;
+     tmp[1U] = r1;
+     tmp[2U] = r2;
+     tmp[3U] = r3;
+     tmp[4U] = r4;
+-    uint32_t b4 = tmp[4U];
+-    uint32_t b4_ = (uint32_t)0x1000000U | b4;
++    b4 = tmp[4U];
++    b4_ = (uint32_t)0x1000000U | b4;
+     tmp[4U] = b4_;
+     Hacl_Bignum_AddAndMultiply_add_and_multiply(acc, tmp, r5);
+ }
+@@ -209,15 +223,19 @@
+     uint32_t r2 = i2 >> (uint32_t)4U & (uint32_t)0x3ffffffU;
+     uint32_t r3 = i3 >> (uint32_t)6U & (uint32_t)0x3ffffffU;
+     uint32_t r4 = i4 >> (uint32_t)8U;
++    Hacl_Impl_Poly1305_32_State_poly1305_state scrut0;
++    uint32_t *h;
++    Hacl_Impl_Poly1305_32_State_poly1305_state scrut;
++    uint32_t *r = scrut.r;
+     tmp[0U] = r0;
+     tmp[1U] = r1;
+     tmp[2U] = r2;
+     tmp[3U] = r3;
+     tmp[4U] = r4;
+-    Hacl_Impl_Poly1305_32_State_poly1305_state scrut0 = st;
+-    uint32_t *h = scrut0.h;
+-    Hacl_Impl_Poly1305_32_State_poly1305_state scrut = st;
+-    uint32_t *r = scrut.r;
++    scrut0 = st;
++    h = scrut0.h;
++    scrut = st;
++    r = scrut.r;
+     Hacl_Bignum_AddAndMultiply_add_and_multiply(h, tmp, r);
+ }
+ 
+@@ -228,12 +246,15 @@
+     uint64_t rem_)
+ {
+     uint8_t zero1 = (uint8_t)0U;
+-    KRML_CHECK_SIZE(zero1, (uint32_t)16U);
+     uint8_t block[16U];
+-    for (uint32_t _i = 0U; _i < (uint32_t)16U; ++_i)
++    uint32_t _i;
++    uint32_t i0;
++    uint32_t i;
++    KRML_CHECK_SIZE(zero1, (uint32_t)16U);
++    for (_i = 0U; _i < (uint32_t)16U; ++_i)
+         block[_i] = zero1;
+-    uint32_t i0 = (uint32_t)rem_;
+-    uint32_t i = (uint32_t)rem_;
++    i0 = (uint32_t)rem_;
++    i = (uint32_t)rem_;
+     memcpy(block, m, i * sizeof m[0U]);
+     block[i0] = (uint8_t)1U;
+     Hacl_Impl_Poly1305_32_poly1305_process_last_block_(block, st, m, rem_);
+@@ -242,69 +263,116 @@
+ static void
+ Hacl_Impl_Poly1305_32_poly1305_last_pass(uint32_t *acc)
+ {
++    uint32_t t0;
++    uint32_t t10;
++    uint32_t t20;
++    uint32_t t30;
++    uint32_t t40;
++    uint32_t t1_;
++    uint32_t mask_261;
++    uint32_t t0_;
++    uint32_t t2_;
++    uint32_t t1__;
++    uint32_t t3_;
++    uint32_t t2__;
++    uint32_t t4_;
++    uint32_t t3__;
++    uint32_t t00;
++    uint32_t t1;
++    uint32_t t2;
++    uint32_t t3;
++    uint32_t t4;
++    uint32_t t1_0;
++    uint32_t t0_0;
++    uint32_t t2_0;
++    uint32_t t1__0;
++    uint32_t t3_0;
++    uint32_t t2__0;
++    uint32_t t4_0;
++    uint32_t t3__0;
++    uint32_t i0;
++    uint32_t i1;
++    uint32_t i0_;
++    uint32_t i1_;
++    uint32_t a0;
++    uint32_t a1;
++    uint32_t a2;
++    uint32_t a3;
++    uint32_t a4;
++    uint32_t mask0;
++    uint32_t mask1;
++    uint32_t mask2;
++    uint32_t mask3;
++    uint32_t mask4;
++    uint32_t mask ;
++    uint32_t a0_;
++    uint32_t a1_;
++    uint32_t a2_;
++    uint32_t a3_;
++    uint32_t a4_;
+     Hacl_Bignum_Fproduct_carry_limb_(acc);
+     Hacl_Bignum_Modulo_carry_top(acc);
+-    uint32_t t0 = acc[0U];
+-    uint32_t t10 = acc[1U];
+-    uint32_t t20 = acc[2U];
+-    uint32_t t30 = acc[3U];
+-    uint32_t t40 = acc[4U];
+-    uint32_t t1_ = t10 + (t0 >> (uint32_t)26U);
+-    uint32_t mask_261 = (uint32_t)0x3ffffffU;
+-    uint32_t t0_ = t0 & mask_261;
+-    uint32_t t2_ = t20 + (t1_ >> (uint32_t)26U);
+-    uint32_t t1__ = t1_ & mask_261;
+-    uint32_t t3_ = t30 + (t2_ >> (uint32_t)26U);
+-    uint32_t t2__ = t2_ & mask_261;
+-    uint32_t t4_ = t40 + (t3_ >> (uint32_t)26U);
+-    uint32_t t3__ = t3_ & mask_261;
++    t0 = acc[0U];
++    t10 = acc[1U];
++    t20 = acc[2U];
++    t30 = acc[3U];
++    t40 = acc[4U];
++    t1_ = t10 + (t0 >> (uint32_t)26U);
++    mask_261 = (uint32_t)0x3ffffffU;
++    t0_ = t0 & mask_261;
++    t2_ = t20 + (t1_ >> (uint32_t)26U);
++    t1__ = t1_ & mask_261;
++    t3_ = t30 + (t2_ >> (uint32_t)26U);
++    t2__ = t2_ & mask_261;
++    t4_ = t40 + (t3_ >> (uint32_t)26U);
++    t3__ = t3_ & mask_261;
+     acc[0U] = t0_;
+     acc[1U] = t1__;
+     acc[2U] = t2__;
+     acc[3U] = t3__;
+     acc[4U] = t4_;
+     Hacl_Bignum_Modulo_carry_top(acc);
+-    uint32_t t00 = acc[0U];
+-    uint32_t t1 = acc[1U];
+-    uint32_t t2 = acc[2U];
+-    uint32_t t3 = acc[3U];
+-    uint32_t t4 = acc[4U];
+-    uint32_t t1_0 = t1 + (t00 >> (uint32_t)26U);
+-    uint32_t t0_0 = t00 & (uint32_t)0x3ffffffU;
+-    uint32_t t2_0 = t2 + (t1_0 >> (uint32_t)26U);
+-    uint32_t t1__0 = t1_0 & (uint32_t)0x3ffffffU;
+-    uint32_t t3_0 = t3 + (t2_0 >> (uint32_t)26U);
+-    uint32_t t2__0 = t2_0 & (uint32_t)0x3ffffffU;
+-    uint32_t t4_0 = t4 + (t3_0 >> (uint32_t)26U);
+-    uint32_t t3__0 = t3_0 & (uint32_t)0x3ffffffU;
++    t00 = acc[0U];
++    t1 = acc[1U];
++    t2 = acc[2U];
++    t3 = acc[3U];
++    t4 = acc[4U];
++    t1_0 = t1 + (t00 >> (uint32_t)26U);
++    t0_0 = t00 & (uint32_t)0x3ffffffU;
++    t2_0 = t2 + (t1_0 >> (uint32_t)26U);
++    t1__0 = t1_0 & (uint32_t)0x3ffffffU;
++    t3_0 = t3 + (t2_0 >> (uint32_t)26U);
++    t2__0 = t2_0 & (uint32_t)0x3ffffffU;
++    t4_0 = t4 + (t3_0 >> (uint32_t)26U);
++    t3__0 = t3_0 & (uint32_t)0x3ffffffU;
+     acc[0U] = t0_0;
+     acc[1U] = t1__0;
+     acc[2U] = t2__0;
+     acc[3U] = t3__0;
+     acc[4U] = t4_0;
+     Hacl_Bignum_Modulo_carry_top(acc);
+-    uint32_t i0 = acc[0U];
+-    uint32_t i1 = acc[1U];
+-    uint32_t i0_ = i0 & (uint32_t)0x3ffffffU;
+-    uint32_t i1_ = i1 + (i0 >> (uint32_t)26U);
++    i0 = acc[0U];
++    i1 = acc[1U];
++    i0_ = i0 & (uint32_t)0x3ffffffU;
++    i1_ = i1 + (i0 >> (uint32_t)26U);
+     acc[0U] = i0_;
+     acc[1U] = i1_;
+-    uint32_t a0 = acc[0U];
+-    uint32_t a1 = acc[1U];
+-    uint32_t a2 = acc[2U];
+-    uint32_t a3 = acc[3U];
+-    uint32_t a4 = acc[4U];
+-    uint32_t mask0 = FStar_UInt32_gte_mask(a0, (uint32_t)0x3fffffbU);
+-    uint32_t mask1 = FStar_UInt32_eq_mask(a1, (uint32_t)0x3ffffffU);
+-    uint32_t mask2 = FStar_UInt32_eq_mask(a2, (uint32_t)0x3ffffffU);
+-    uint32_t mask3 = FStar_UInt32_eq_mask(a3, (uint32_t)0x3ffffffU);
+-    uint32_t mask4 = FStar_UInt32_eq_mask(a4, (uint32_t)0x3ffffffU);
+-    uint32_t mask = (((mask0 & mask1) & mask2) & mask3) & mask4;
+-    uint32_t a0_ = a0 - ((uint32_t)0x3fffffbU & mask);
+-    uint32_t a1_ = a1 - ((uint32_t)0x3ffffffU & mask);
+-    uint32_t a2_ = a2 - ((uint32_t)0x3ffffffU & mask);
+-    uint32_t a3_ = a3 - ((uint32_t)0x3ffffffU & mask);
+-    uint32_t a4_ = a4 - ((uint32_t)0x3ffffffU & mask);
++    a0 = acc[0U];
++    a1 = acc[1U];
++    a2 = acc[2U];
++    a3 = acc[3U];
++    a4 = acc[4U];
++    mask0 = FStar_UInt32_gte_mask(a0, (uint32_t)0x3fffffbU);
++    mask1 = FStar_UInt32_eq_mask(a1, (uint32_t)0x3ffffffU);
++    mask2 = FStar_UInt32_eq_mask(a2, (uint32_t)0x3ffffffU);
++    mask3 = FStar_UInt32_eq_mask(a3, (uint32_t)0x3ffffffU);
++    mask4 = FStar_UInt32_eq_mask(a4, (uint32_t)0x3ffffffU);
++    mask = (((mask0 & mask1) & mask2) & mask3) & mask4;
++    a0_ = a0 - ((uint32_t)0x3fffffbU & mask);
++    a1_ = a1 - ((uint32_t)0x3ffffffU & mask);
++    a2_ = a2 - ((uint32_t)0x3ffffffU & mask);
++    a3_ = a3 - ((uint32_t)0x3ffffffU & mask);
++    a4_ = a4 - ((uint32_t)0x3ffffffU & mask);
+     acc[0U] = a0_;
+     acc[1U] = a1_;
+     acc[2U] = a2_;
+@@ -315,7 +383,8 @@
+ static Hacl_Impl_Poly1305_32_State_poly1305_state
+ Hacl_Impl_Poly1305_32_mk_state(uint32_t *r, uint32_t *h)
+ {
+-    return ((Hacl_Impl_Poly1305_32_State_poly1305_state){.r = r, .h = h });
++    Hacl_Impl_Poly1305_32_State_poly1305_state aState = {r, h };
++    return aState;
+ }
+ 
+ static void
+@@ -327,8 +396,9 @@
+     if (!(len1 == (uint64_t)0U)) {
+         uint8_t *block = m;
+         uint8_t *tail1 = m + (uint32_t)16U;
++        uint64_t len2;
+         Hacl_Impl_Poly1305_32_poly1305_update(st, block);
+-        uint64_t len2 = len1 - (uint64_t)1U;
++        len2 = len1 - (uint64_t)1U;
+         Hacl_Standalone_Poly1305_32_poly1305_blocks(st, tail1, len2);
+     }
+ }
+@@ -363,14 +433,17 @@
+     uint32_t
+         r4 =
+             (uint32_t)FStar_UInt128_uint128_to_uint64(FStar_UInt128_shift_right(k_clamped, (uint32_t)104U)) & (uint32_t)0x3ffffffU;
++    Hacl_Impl_Poly1305_32_State_poly1305_state scrut0;
++    uint32_t *h;
++    uint32_t *x00;
+     x0[0U] = r0;
+     x0[1U] = r1;
+     x0[2U] = r2;
+     x0[3U] = r3;
+     x0[4U] = r4;
+-    Hacl_Impl_Poly1305_32_State_poly1305_state scrut0 = st;
+-    uint32_t *h = scrut0.h;
+-    uint32_t *x00 = h;
++    scrut0 = st;
++    h = scrut0.h;
++    x00 = h;
+     x00[0U] = (uint32_t)0U;
+     x00[1U] = (uint32_t)0U;
+     x00[2U] = (uint32_t)0U;
+@@ -391,12 +464,15 @@
+     uint64_t rem16 = len1 & (uint64_t)0xfU;
+     uint8_t *part_input = m;
+     uint8_t *last_block = m + (uint32_t)((uint64_t)16U * len16);
++    Hacl_Impl_Poly1305_32_State_poly1305_state scrut;
++    uint32_t *h;
++    uint32_t *acc;
+     Hacl_Standalone_Poly1305_32_poly1305_partial(st, part_input, len16, kr);
+     if (!(rem16 == (uint64_t)0U))
+         Hacl_Impl_Poly1305_32_poly1305_process_last_block(st, last_block, rem16);
+-    Hacl_Impl_Poly1305_32_State_poly1305_state scrut = st;
+-    uint32_t *h = scrut.h;
+-    uint32_t *acc = h;
++    scrut = st;
++    h = scrut.h;
++    acc = h;
+     Hacl_Impl_Poly1305_32_poly1305_last_pass(acc);
+ }
+ 
+@@ -413,6 +489,7 @@
+     Hacl_Impl_Poly1305_32_State_poly1305_state st = Hacl_Impl_Poly1305_32_mk_state(r, h);
+     uint8_t *key_s = k1 + (uint32_t)16U;
+     Hacl_Standalone_Poly1305_32_poly1305_complete(st, input, len1, k1);
++    {
+     Hacl_Impl_Poly1305_32_State_poly1305_state scrut = st;
+     uint32_t *h5 = scrut.h;
+     uint32_t *acc = h5;
+@@ -435,6 +512,7 @@
+                                                                                             FStar_UInt128_uint64_to_uint128((uint64_t)h0)))));
+     FStar_UInt128_t mac_ = FStar_UInt128_add_mod(acc_, k_);
+     store128_le(output, mac_);
++    }
+ }
+ 
+ static void
+@@ -485,14 +563,17 @@
+     uint32_t
+         r4 =
+             (uint32_t)FStar_UInt128_uint128_to_uint64(FStar_UInt128_shift_right(k_clamped, (uint32_t)104U)) & (uint32_t)0x3ffffffU;
++    Hacl_Impl_Poly1305_32_State_poly1305_state scrut0;
++    uint32_t *h;
++    uint32_t *x00;
+     x0[0U] = r0;
+     x0[1U] = r1;
+     x0[2U] = r2;
+     x0[3U] = r3;
+     x0[4U] = r4;
+-    Hacl_Impl_Poly1305_32_State_poly1305_state scrut0 = st;
+-    uint32_t *h = scrut0.h;
+-    uint32_t *x00 = h;
++    scrut0 = st;
++    h = scrut0.h;
++    x00 = h;
+     x00[0U] = (uint32_t)0U;
+     x00[1U] = (uint32_t)0U;
+     x00[2U] = (uint32_t)0U;
+@@ -529,11 +610,14 @@
+     uint8_t *m,
+     uint32_t len1)
+ {
++    Hacl_Impl_Poly1305_32_State_poly1305_state scrut;
++    uint32_t *h;
++    uint32_t *acc;
+     if (!((uint64_t)len1 == (uint64_t)0U))
+         Hacl_Impl_Poly1305_32_poly1305_process_last_block(st, m, (uint64_t)len1);
+-    Hacl_Impl_Poly1305_32_State_poly1305_state scrut = st;
+-    uint32_t *h = scrut.h;
+-    uint32_t *acc = h;
++    scrut = st;
++    h = scrut.h;
++    acc = h;
+     Hacl_Impl_Poly1305_32_poly1305_last_pass(acc);
+ }
+ 
+diff -ur nss/nss/lib/freebl/verified/kremlib.h nss_new/nss/lib/freebl/verified/kremlib.h
+--- a/nss/nss/lib/freebl/verified/kremlib.h	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/freebl/verified/kremlib.h	2018-09-07 03:48:09.669539000 +0200
+@@ -592,7 +592,7 @@
+ static inline void
+ print128_(const char *where, uint128_t *n)
+ {
+-    KRML_HOST_PRINTF("%s: [0x%08" PRIx64 ",0x%08" PRIx64 "]\n", where, n->high, n->low);
++  // KRML_HOST_PRINTF("%s: [0x%08" PRIx64 ",0x%08" PRIx64 "]\n", where, n->high, n->low);
+ }
+ 
+ static inline void
+diff -ur nss/nss/lib/freebl/verified/kremlib_base.h nss_new/nss/lib/freebl/verified/kremlib_base.h
+--- a/nss/nss/lib/freebl/verified/kremlib_base.h	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/freebl/verified/kremlib_base.h	2018-09-07 03:11:39.712507800 +0200
+@@ -16,9 +16,17 @@
+ #ifndef __KREMLIB_BASE_H
+ #define __KREMLIB_BASE_H
+ 
+-#include <inttypes.h>
++//#include <inttypes.h>
++#include <stdint.h>
+ #include <limits.h>
+-#include <stdbool.h>
++
++//#include <stdbool.h>
++typedef int bool;
++#define true 1
++#define false 0
++
++#define inline
++
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+diff -ur nss/nss/lib/pk11wrap/pk11skey.c nss_new/nss/lib/pk11wrap/pk11skey.c
+--- a/nss/nss/lib/pk11wrap/pk11skey.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/pk11wrap/pk11skey.c	2018-09-18 11:33:52.253969200 +0200
+@@ -2217,12 +2217,13 @@
+     /* old PKCS #11 spec was ambiguous on what needed to be passed,
+      * try this again with an encoded public key */
+     if (crv != CKR_OK) {
++        SECItem *pubValue;
+         /* For curves that only use X as public value and no encoding we don't
+          * have to try again. (Currently only Curve25519) */
+         if (pk11_ECGetPubkeyEncoding(pubKey) == ECPoint_XOnly) {
+             goto loser;
+         }
+-        SECItem *pubValue = SEC_ASN1EncodeItem(NULL, NULL,
++        pubValue = SEC_ASN1EncodeItem(NULL, NULL,
+                                                &pubKey->u.ec.publicValue,
+                                                SEC_ASN1_GET(SEC_OctetStringTemplate));
+         if (pubValue == NULL) {
+diff -ur nss/nss/lib/pkcs7/p7create.c nss_new/nss/lib/pkcs7/p7create.c
+--- a/nss/nss/lib/pkcs7/p7create.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/pkcs7/p7create.c	2018-09-19 13:40:41.437890500 +0200
+@@ -1263,6 +1263,7 @@
+     SECAlgorithmID *algid;
+     SEC_PKCS7EncryptedData *enc_data;
+     SECStatus rv;
++    SECAlgorithmID *pbe_algid;
+ 
+     PORT_Assert(SEC_PKCS5IsAlgorithmPBEAlgTag(pbe_algorithm));
+ 
+@@ -1274,7 +1275,6 @@
+     enc_data = cinfo->content.encryptedData;
+     algid = &(enc_data->encContentInfo.contentEncAlg);
+ 
+-    SECAlgorithmID *pbe_algid;
+     pbe_algid = PK11_CreatePBEV2AlgorithmID(pbe_algorithm,
+                                             cipher_algorithm,
+                                             prf_algorithm,
+diff -ur nss/nss/lib/softoken/sdb.c nss_new/nss/lib/softoken/sdb.c
+--- a/nss/nss/lib/softoken/sdb.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/softoken/sdb.c	2018-09-14 18:47:11.826781200 +0200
+@@ -206,12 +206,13 @@
+ sdb_chmod(const char *filename, int pmode)
+ {
+     int result;
++    wchar_t *filenameWide;
+ 
+     if (!filename) {
+         return -1;
+     }
+ 
+-    wchar_t *filenameWide = _NSSUTIL_UTF8ToWide(filename);
++    filenameWide = _NSSUTIL_UTF8ToWide(filename);
+     if (!filenameWide) {
+         return -1;
+     }
+diff -ur nss/nss/lib/ssl/dtls13con.c nss_new/nss/lib/ssl/dtls13con.c
+--- a/nss/nss/lib/ssl/dtls13con.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/ssl/dtls13con.c	2018-09-18 12:37:53.795110600 +0200
+@@ -64,7 +64,7 @@
+ } DTLSHandshakeRecordEntry;
+ 
+ /* Combine the epoch and sequence number into a single value. */
+-static inline sslSequenceNumber
++static sslSequenceNumber
+ dtls_CombineSequenceNumber(DTLSEpoch epoch, sslSequenceNumber seqNum)
+ {
+     PORT_Assert(seqNum <= RECORD_SEQ_MAX);
+diff -ur nss/nss/lib/ssl/selfencrypt.c nss_new/nss/lib/ssl/selfencrypt.c
+--- a/nss/nss/lib/ssl/selfencrypt.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/ssl/selfencrypt.c	2018-09-19 01:42:46.230591100 +0200
+@@ -197,30 +197,35 @@
+     sslReadBuffer encodedKeyNameBuffer = { 0 };
+     SECStatus rv = sslRead_Read(&reader, SELF_ENCRYPT_KEY_NAME_LEN,
+                                 &encodedKeyNameBuffer);
++    sslReadBuffer ivBuffer = { 0 };
++    PRUint64 cipherTextLen;
++    sslReadBuffer cipherTextBuffer = { 0 };
++    unsigned int bytesToMac;
++    sslReadBuffer encodedMacBuffer = { 0 };
++    unsigned char computedMac[SHA256_LENGTH];
++    unsigned int computedMacLen;
++
+     if (rv != SECSuccess) {
+         return SECFailure;
+     }
+ 
+-    sslReadBuffer ivBuffer = { 0 };
+     rv = sslRead_Read(&reader, AES_BLOCK_SIZE, &ivBuffer);
+     if (rv != SECSuccess) {
+         return SECFailure;
+     }
+ 
+-    PRUint64 cipherTextLen = 0;
++    cipherTextLen = 0;
+     rv = sslRead_ReadNumber(&reader, 2, &cipherTextLen);
+     if (rv != SECSuccess) {
+         return SECFailure;
+     }
+ 
+-    sslReadBuffer cipherTextBuffer = { 0 };
+     rv = sslRead_Read(&reader, (unsigned int)cipherTextLen, &cipherTextBuffer);
+     if (rv != SECSuccess) {
+         return SECFailure;
+     }
+-    unsigned int bytesToMac = reader.offset;
++    bytesToMac = reader.offset;
+ 
+-    sslReadBuffer encodedMacBuffer = { 0 };
+     rv = sslRead_Read(&reader, SHA256_LENGTH, &encodedMacBuffer);
+     if (rv != SECSuccess) {
+         return SECFailure;
+@@ -240,8 +245,7 @@
+     }
+ 
+     /* 2. Check the MAC */
+-    unsigned char computedMac[SHA256_LENGTH];
+-    unsigned int computedMacLen = 0;
++    computedMacLen = 0;
+     rv = ssl_MacBuffer(macKey, CKM_SHA256_HMAC, in, bytesToMac,
+                        computedMac, &computedMacLen, sizeof(computedMac));
+     if (rv != SECSuccess) {
+@@ -254,12 +258,14 @@
+     }
+ 
+     /* 3. OK, it verifies, now decrypt. */
++    {
+     SECItem ivItem = { siBuffer, (unsigned char *)ivBuffer.buf, AES_BLOCK_SIZE };
+     rv = PK11_Decrypt(encKey, CKM_AES_CBC_PAD, &ivItem,
+                       out, outLen, maxOutLen, cipherTextBuffer.buf, cipherTextLen);
+     if (rv != SECSuccess) {
+         return SECFailure;
+     }
++    }
+ 
+     return SECSuccess;
+ }
+diff -ur nss/nss/lib/ssl/ssl3con.c nss_new/nss/lib/ssl/ssl3con.c
+--- a/nss/nss/lib/ssl/ssl3con.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/ssl/ssl3con.c	2018-09-18 12:54:26.104920200 +0200
+@@ -5563,6 +5563,7 @@
+     SECStatus rv = SECFailure;
+     SECItem enc_pms = { siBuffer, NULL, 0 };
+     PRBool isTLS;
++    unsigned int svrPubKeyBits;
+ 
+     PORT_Assert(ss->opt.noLocks || ssl_HaveSSL3HandshakeLock(ss));
+     PORT_Assert(ss->opt.noLocks || ssl_HaveXmitBufLock(ss));
+@@ -5579,7 +5580,7 @@
+     }
+ 
+     /* Get the wrapped (encrypted) pre-master secret, enc_pms */
+-    unsigned int svrPubKeyBits = SECKEY_PublicKeyStrengthInBits(svrPubKey);
++    svrPubKeyBits = SECKEY_PublicKeyStrengthInBits(svrPubKey);
+     enc_pms.len = (svrPubKeyBits + 7) / 8;
+     /* Check that the RSA key isn't larger than 8k bit. */
+     if (svrPubKeyBits > SSL_MAX_RSA_KEY_BITS) {
+@@ -11746,11 +11747,13 @@
+     }
+ 
+     for (i = 0; i < toCheck; i++) {
++        unsigned char mask;
++        unsigned char b;
+         t = paddingLength - i;
+         /* If i <= paddingLength then the MSB of t is zero and mask is
+          * 0xff.  Otherwise, mask is 0. */
+-        unsigned char mask = DUPLICATE_MSB_TO_ALL(~t);
+-        unsigned char b = plaintext->buf[plaintext->len - 1 - i];
++        mask = DUPLICATE_MSB_TO_ALL(~t);
++        b = plaintext->buf[plaintext->len - 1 - i];
+         /* The final |paddingLength+1| bytes should all have the value
+          * |paddingLength|. Therefore the XOR should be zero. */
+         good &= ~(mask & (paddingLength ^ b));
+@@ -12292,6 +12295,7 @@
+     }
+ 
+     if (rv != SECSuccess) {
++        int errCode;
+         ssl_ReleaseSpecReadLock(ss); /***************************/
+ 
+         SSL_DBG(("%d: SSL3[%d]: decryption failed", SSL_GETPID(), ss->fd));
+@@ -12322,7 +12326,7 @@
+             return SECSuccess;
+         }
+ 
+-        int errCode = PORT_GetError();
++        errCode = PORT_GetError();
+         SSL3_SendAlert(ss, alert_fatal, alert);
+         /* Reset the error code in case SSL3_SendAlert called
+          * PORT_SetError(). */
+diff -ur nss/nss/lib/ssl/ssl3exthandle.c nss_new/nss/lib/ssl/ssl3exthandle.c
+--- a/nss/nss/lib/ssl/ssl3exthandle.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/ssl/ssl3exthandle.c	2018-09-18 14:20:01.612911900 +0200
+@@ -1914,6 +1914,8 @@
+                            sslBuffer *buf, PRBool *added)
+ {
+     PRUint32 maxLimit;
++    PRUint32 limit;
++    SECStatus rv;
+     if (ss->sec.isServer) {
+         maxLimit = (ss->version >= SSL_LIBRARY_VERSION_TLS_1_3)
+                        ? (MAX_FRAGMENT_LENGTH + 1)
+@@ -1923,8 +1925,8 @@
+                        ? (MAX_FRAGMENT_LENGTH + 1)
+                        : MAX_FRAGMENT_LENGTH;
+     }
+-    PRUint32 limit = PR_MIN(ss->opt.recordSizeLimit, maxLimit);
+-    SECStatus rv = sslBuffer_AppendNumber(buf, limit, 2);
++    limit = PR_MIN(ss->opt.recordSizeLimit, maxLimit);
++    rv = sslBuffer_AppendNumber(buf, limit, 2);
+     if (rv != SECSuccess) {
+         return SECFailure;
+     }
+diff -ur nss/nss/lib/ssl/sslbloom.c nss_new/nss/lib/ssl/sslbloom.c
+--- a/nss/nss/lib/ssl/sslbloom.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/ssl/sslbloom.c	2018-09-18 13:09:01.900866100 +0200
+@@ -10,7 +10,7 @@
+ #include "prnetdb.h"
+ #include "secport.h"
+ 
+-static inline unsigned int
++static unsigned int
+ sslBloom_Size(unsigned int bits)
+ {
+     return (bits >= 3) ? (1 << (bits - 3)) : 1;
+diff -ur nss/nss/lib/ssl/sslencode.c nss_new/nss/lib/ssl/sslencode.c
+--- a/nss/nss/lib/ssl/sslencode.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/ssl/sslencode.c	2018-09-18 13:43:20.673756400 +0200
+@@ -214,6 +214,8 @@
+ SECStatus
+ sslRead_ReadNumber(sslReader *reader, unsigned int bytes, PRUint64 *num)
+ {
++    unsigned int i;
++    PRUint64 number;
+     if (!reader || !num) {
+         PORT_SetError(SEC_ERROR_INVALID_ARGS);
+         return SECFailure;
+@@ -224,8 +226,7 @@
+         PORT_SetError(SEC_ERROR_BAD_DATA);
+         return SECFailure;
+     }
+-    unsigned int i;
+-    PRUint64 number = 0;
++    number = 0;
+     for (i = 0; i < bytes; i++) {
+         number = (number << 8) + reader->buf.buf[i + reader->offset];
+     }
+diff -ur nss/nss/lib/ssl/sslnonce.c nss_new/nss/lib/ssl/sslnonce.c
+--- a/nss/nss/lib/ssl/sslnonce.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/ssl/sslnonce.c	2018-09-18 23:16:11.660366800 +0200
+@@ -439,6 +439,10 @@
+ ssl_DecodeResumptionToken(sslSessionID *sid, const PRUint8 *encodedToken,
+                           PRUint32 encodedTokenLen)
+ {
++    sslReader reader = SSL_READER(encodedToken, encodedTokenLen);
++    sslReadBuffer readerBuffer = { 0 };
++    PRUint64 tmpInt;
++
+     PORT_Assert(encodedTokenLen);
+     PORT_Assert(encodedToken);
+     PORT_Assert(sid);
+@@ -454,10 +458,8 @@
+     }
+ 
+     /* These variables are used across macros. Don't use them outside. */
+-    sslReader reader = SSL_READER(encodedToken, encodedTokenLen);
+     reader.offset += 1; // We read the version already. Skip the first byte.
+-    sslReadBuffer readerBuffer = { 0 };
+-    PRUint64 tmpInt = 0;
++    tmpInt = 0;
+ 
+     if (sslRead_ReadNumber(&reader, 8, &tmpInt) != SECSuccess) {
+         return SECFailure;
+@@ -494,9 +496,9 @@
+         return SECFailure;
+     }
+     if (readerBuffer.len) {
+-        PORT_Assert(!sid->peerCert);
+         SECItem tempItem = { siBuffer, (unsigned char *)readerBuffer.buf,
+                              readerBuffer.len };
++        PORT_Assert(!sid->peerCert);
+         sid->peerCert = CERT_NewTempCertificate(NULL, /* dbHandle */
+                                                 &tempItem,
+                                                 NULL, PR_FALSE, PR_TRUE);
+@@ -514,9 +516,11 @@
+         if (!sid->peerCertStatus.items) {
+             return SECFailure;
+         }
++        {
+         SECItem tempItem = { siBuffer, (unsigned char *)readerBuffer.buf,
+                              readerBuffer.len };
+         SECITEM_CopyItem(NULL, &sid->peerCertStatus.items[0], &tempItem);
++        }
+     }
+ 
+     if (sslRead_ReadVariable(&reader, 1, &readerBuffer) != SECSuccess) {
+@@ -546,11 +550,13 @@
+     }
+     if (readerBuffer.len) {
+         PORT_Assert(!sid->localCert);
++        {
+         SECItem tempItem = { siBuffer, (unsigned char *)readerBuffer.buf,
+                              readerBuffer.len };
+         sid->localCert = CERT_NewTempCertificate(NULL, /* dbHandle */
+                                                  &tempItem,
+                                                  NULL, PR_FALSE, PR_TRUE);
++        }
+     }
+ 
+     if (sslRead_ReadNumber(&reader, 8, &sid->addr.pr_s6_addr64[0]) != SECSuccess) {
+@@ -706,13 +712,16 @@
+ PRBool
+ ssl_IsResumptionTokenValid(sslSocket *ss)
+ {
++    sslSessionID *sid;
++    PRTime endTime;
++    NewSessionTicket *ticket;
+     PORT_Assert(ss);
+-    sslSessionID *sid = ss->sec.ci.sid;
++    sid = ss->sec.ci.sid;
+     PORT_Assert(sid);
+ 
+     // Check that the ticket didn't expire.
+-    PRTime endTime = 0;
+-    NewSessionTicket *ticket = &sid->u.ssl3.locked.sessionTicket;
++    endTime = 0;
++    ticket = &sid->u.ssl3.locked.sessionTicket;
+     if (ticket->ticket_lifetime_hint != 0) {
+         endTime = ticket->received_timestamp +
+                   (PRTime)(ticket->ticket_lifetime_hint * PR_USEC_PER_SEC);
+@@ -746,6 +755,8 @@
+ static SECStatus
+ ssl_EncodeResumptionToken(sslSessionID *sid, sslBuffer *encodedTokenBuf)
+ {
++    SECStatus rv;
++    PRUint64 len;
+     PORT_Assert(encodedTokenBuf);
+     PORT_Assert(sid);
+     if (!sid || !sid->u.ssl3.locked.sessionTicket.ticket.len ||
+@@ -760,7 +771,7 @@
+      * SECItems are prepended with a 64-bit length field followed by the bytes.
+      * Optional bytes are encoded as a 0-length item if not present.
+      */
+-    SECStatus rv = sslBuffer_AppendNumber(encodedTokenBuf,
++    rv = sslBuffer_AppendNumber(encodedTokenBuf,
+                                           SSLResumptionTokenVersion, 1);
+     if (rv != SECSuccess) {
+         return SECFailure;
+@@ -843,7 +854,7 @@
+         }
+     }
+ 
+-    PRUint64 len = sid->peerID ? strlen(sid->peerID) : 0;
++    len = sid->peerID ? strlen(sid->peerID) : 0;
+     if (len > PR_UINT8_MAX) {
+         // This string really shouldn't be that long.
+         PORT_SetError(SEC_ERROR_LIBRARY_FAILURE);
+@@ -1052,8 +1063,10 @@
+ void
+ ssl_CacheExternalToken(sslSocket *ss)
+ {
++    sslSessionID *sid;
++    sslBuffer encodedToken = SSL_BUFFER_EMPTY;
+     PORT_Assert(ss);
+-    sslSessionID *sid = ss->sec.ci.sid;
++    sid = ss->sec.ci.sid;
+     PORT_Assert(sid);
+     PORT_Assert(sid->cached == never_cached);
+     PORT_Assert(ss->resumptionTokenCallback);
+@@ -1083,8 +1096,6 @@
+         sid->expirationTime = sid->creationTime + ssl3_sid_timeout;
+     }
+ 
+-    sslBuffer encodedToken = SSL_BUFFER_EMPTY;
+-
+     if (ssl_EncodeResumptionToken(sid, &encodedToken) != SECSuccess) {
+         SSL_TRC(3, ("SSL [%d]: encoding resumption token failed", ss->fd));
+         return;
+@@ -1127,11 +1138,12 @@
+ void
+ ssl_UncacheSessionID(sslSocket *ss)
+ {
++    sslSecurityInfo *sec;
+     if (ss->opt.noCache) {
+         return;
+     }
+ 
+-    sslSecurityInfo *sec = &ss->sec;
++    sec = &ss->sec;
+     PORT_Assert(sec);
+ 
+     if (sec->ci.sid) {
+diff -ur nss/nss/lib/ssl/sslsnce.c nss_new/nss/lib/ssl/sslsnce.c
+--- a/nss/nss/lib/ssl/sslsnce.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/ssl/sslsnce.c	2018-09-18 23:29:00.521322700 +0200
+@@ -732,12 +732,12 @@
+ void
+ ssl_ServerCacheSessionID(sslSessionID *sid)
+ {
+-    PORT_Assert(sid);
+-
+     sidCacheEntry sce;
+     PRUint32 now = 0;
+     cacheDesc *cache = &globalCache;
+ 
++    PORT_Assert(sid);
++
+     if (sid->u.ssl3.sessionIDLength == 0) {
+         return;
+     }
+diff -ur nss/nss/lib/ssl/sslsock.c nss_new/nss/lib/ssl/sslsock.c
+--- a/nss/nss/lib/ssl/sslsock.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/ssl/sslsock.c	2018-09-19 00:07:12.192937500 +0200
+@@ -53,36 +53,36 @@
+ ** default settings for socket enables
+ */
+ static sslOptions ssl_defaults = {
+-    .nextProtoNego = { siBuffer, NULL, 0 },
+-    .maxEarlyDataSize = 1 << 16,
+-    .recordSizeLimit = MAX_FRAGMENT_LENGTH + 1,
+-    .useSecurity = PR_TRUE,
+-    .useSocks = PR_FALSE,
+-    .requestCertificate = PR_FALSE,
+-    .requireCertificate = SSL_REQUIRE_FIRST_HANDSHAKE,
+-    .handshakeAsClient = PR_FALSE,
+-    .handshakeAsServer = PR_FALSE,
+-    .noCache = PR_FALSE,
+-    .fdx = PR_FALSE,
+-    .detectRollBack = PR_TRUE,
+-    .noLocks = PR_FALSE,
+-    .enableSessionTickets = PR_FALSE,
+-    .enableDeflate = PR_FALSE,
+-    .enableRenegotiation = SSL_RENEGOTIATE_REQUIRES_XTN,
+-    .requireSafeNegotiation = PR_FALSE,
+-    .enableFalseStart = PR_FALSE,
+-    .cbcRandomIV = PR_TRUE,
+-    .enableOCSPStapling = PR_FALSE,
+-    .enableALPN = PR_TRUE,
+-    .reuseServerECDHEKey = PR_TRUE,
+-    .enableFallbackSCSV = PR_FALSE,
+-    .enableServerDhe = PR_TRUE,
+-    .enableExtendedMS = PR_FALSE,
+-    .enableSignedCertTimestamps = PR_FALSE,
+-    .requireDHENamedGroups = PR_FALSE,
+-    .enable0RttData = PR_FALSE,
+-    .enableTls13CompatMode = PR_FALSE,
+-    .enableDtlsShortHeader = PR_FALSE
++    { siBuffer, NULL, 0 },
++    MAX_FRAGMENT_LENGTH + 1,
++    1 << 16,
++    PR_TRUE,
++    PR_FALSE,
++    PR_FALSE,
++    SSL_REQUIRE_FIRST_HANDSHAKE,
++    PR_FALSE,
++    PR_FALSE,
++    PR_FALSE,
++    PR_FALSE,
++    PR_TRUE,
++    PR_FALSE,
++    PR_FALSE,
++    PR_FALSE,
++    SSL_RENEGOTIATE_REQUIRES_XTN,
++    PR_FALSE,
++    PR_FALSE,
++    PR_TRUE,
++    PR_FALSE,
++    PR_TRUE,
++    PR_TRUE,
++    PR_FALSE,
++    PR_TRUE,
++    PR_FALSE,
++    PR_FALSE,
++    PR_FALSE,
++    PR_FALSE,
++    PR_FALSE,
++    PR_FALSE
+ };
+ 
+ /*
+@@ -2002,6 +2002,7 @@
+                      unsigned int length)
+ {
+     sslSocket *ss;
++    size_t firstLen;
+ 
+     ss = ssl_FindSocket(fd);
+     if (!ss) {
+@@ -2020,7 +2021,7 @@
+     ssl_GetSSL3HandshakeLock(ss);
+     SECITEM_FreeItem(&ss->opt.nextProtoNego, PR_FALSE);
+     SECITEM_AllocItem(NULL, &ss->opt.nextProtoNego, length);
+-    size_t firstLen = data[0] + 1;
++    firstLen = data[0] + 1;
+     /* firstLen <= length is ensured by ssl3_ValidateAppProtocol. */
+     PORT_Memcpy(ss->opt.nextProtoNego.data + (length - firstLen), data, firstLen);
+     PORT_Memcpy(ss->opt.nextProtoNego.data, data + firstLen, length - firstLen);
+@@ -4049,6 +4050,7 @@
+                           unsigned int len)
+ {
+     sslSocket *ss = ssl_FindSocket(fd);
++    SECStatus rv;
+ 
+     if (!ss) {
+         SSL_DBG(("%d: SSL[%d]: bad socket in SSL_SetResumptionToken",
+@@ -4079,7 +4081,7 @@
+     }
+ 
+     /* Populate NewSessionTicket values */
+-    SECStatus rv = ssl_DecodeResumptionToken(ss->sec.ci.sid, token, len);
++    rv = ssl_DecodeResumptionToken(ss->sec.ci.sid, token, len);
+     if (rv != SECSuccess) {
+         // If decoding fails, we assume the token is bad.
+         PORT_SetError(SSL_ERROR_BAD_RESUMPTION_TOKEN_ERROR);
+@@ -4133,13 +4135,13 @@
+ SSLExp_GetResumptionTokenInfo(const PRUint8 *tokenData, unsigned int tokenLen,
+                               SSLResumptionTokenInfo *tokenOut, PRUintn len)
+ {
++    sslSessionID sid = { 0 };
++    SSLResumptionTokenInfo token;
+     if (!tokenData || !tokenOut || !tokenLen ||
+         len > sizeof(SSLResumptionTokenInfo)) {
+         PORT_SetError(SEC_ERROR_INVALID_ARGS);
+         return SECFailure;
+     }
+-    sslSessionID sid = { 0 };
+-    SSLResumptionTokenInfo token;
+ 
+     /* Populate sid values */
+     if (ssl_DecodeResumptionToken(&sid, tokenData, tokenLen) != SECSuccess) {
+diff -ur nss/nss/lib/ssl/tls13hashstate.c nss_new/nss/lib/ssl/tls13hashstate.c
+--- a/nss/nss/lib/ssl/tls13hashstate.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/ssl/tls13hashstate.c	2018-09-19 13:22:23.746451600 +0200
+@@ -102,7 +102,10 @@
+         return SECFailure;
+     }
+ 
++    {
+     sslReader reader = SSL_READER(plaintext, plaintextLen);
++    sslReadBuffer appTokenReader = { 0 };
++    unsigned int hashLen;
+ 
+     /* Should start with 0xff. */
+     rv = sslRead_ReadNumber(&reader, 1, &sentinel);
+@@ -138,7 +141,6 @@
+         return SECFailure;
+     }
+     ss->xtnData.applicationToken.len = appTokenLen;
+-    sslReadBuffer appTokenReader = { 0 };
+     rv = sslRead_Read(&reader, appTokenLen, &appTokenReader);
+     if (rv != SECSuccess) {
+         FATAL_ERROR(ss, SSL_ERROR_RX_MALFORMED_CLIENT_HELLO, illegal_parameter);
+@@ -148,7 +150,7 @@
+     PORT_Memcpy(ss->xtnData.applicationToken.data, appTokenReader.buf, appTokenLen);
+ 
+     /* The remainder is the hash. */
+-    unsigned int hashLen = SSL_READER_REMAINING(&reader);
++    hashLen = SSL_READER_REMAINING(&reader);
+     if (hashLen != tls13_GetHashSize(ss)) {
+         FATAL_ERROR(ss, SSL_ERROR_RX_MALFORMED_CLIENT_HELLO, illegal_parameter);
+         return SECFailure;
+@@ -182,4 +184,5 @@
+     *previousCipherSuite = cipherSuite;
+     *previousGroup = selectedGroup;
+     return SECSuccess;
++    }
+ }
+diff -ur nss/nss/lib/util/quickder.c nss_new/nss/lib/util/quickder.c
+--- a/nss/nss/lib/util/quickder.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/util/quickder.c	2018-09-06 15:30:17.340172300 +0200
+@@ -406,13 +406,14 @@
+               const SEC_ASN1Template* templateEntry,
+               SECItem* src, PLArenaPool* arena, PRBool checkTag)
+ {
++    void* subdata;
+     const SEC_ASN1Template* ptrTemplate =
+         SEC_ASN1GetSubtemplate(templateEntry, dest, PR_FALSE);
+     if (!ptrTemplate) {
+         PORT_SetError(SEC_ERROR_INVALID_ARGS);
+         return SECFailure;
+     }
+-    void* subdata = PORT_ArenaZAlloc(arena, ptrTemplate->size);
++    subdata = PORT_ArenaZAlloc(arena, ptrTemplate->size);
+     *(void**)((char*)dest + templateEntry->offset) = subdata;
+     if (subdata) {
+         return DecodeItem(subdata, ptrTemplate, src, arena, checkTag);
+diff -ur nss/nss/lib/util/secport.c nss_new/nss/lib/util/secport.c
+--- a/nss/nss/lib/util/secport.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/util/secport.c	2018-09-06 15:59:21.837141800 +0200
+@@ -150,13 +150,14 @@
+ void *
+ PORT_ZAllocAlignedOffset(size_t size, size_t alignment, size_t offset)
+ {
++    void *mem = NULL;
++    void *v;
+     PORT_Assert(offset < size);
+     if (offset > size) {
+         return NULL;
+     }
+ 
+-    void *mem = NULL;
+-    void *v = PORT_ZAllocAligned(size, alignment, &mem);
++    v = PORT_ZAllocAligned(size, alignment, &mem);
+     if (!v) {
+         return NULL;
+     }
+diff -ur nss/nss/lib/util/utilmod.c nss_new/nss/lib/util/utilmod.c
+--- a/nss/nss/lib/util/utilmod.c	2018-06-21 11:24:45.000000000 +0200
++++ b/nss/nss/lib/util/utilmod.c	2018-09-06 16:12:23.959424800 +0200
+@@ -75,12 +75,13 @@
+ os_open(const char *filename, int oflag, int pmode)
+ {
+     int fd;
++    wchar_t *filenameWide;
+ 
+     if (!filename) {
+         return -1;
+     }
+ 
+-    wchar_t *filenameWide = _NSSUTIL_UTF8ToWide(filename);
++    filenameWide = _NSSUTIL_UTF8ToWide(filename);
+     if (!filenameWide) {
+         return -1;
+     }
+@@ -94,12 +95,13 @@
+ os_stat(const char *path, os_stat_type *buffer)
+ {
+     int result;
++    wchar_t *pathWide;
+ 
+     if (!path) {
+         return -1;
+     }
+ 
+-    wchar_t *pathWide = _NSSUTIL_UTF8ToWide(path);
++    pathWide = _NSSUTIL_UTF8ToWide(path);
+     if (!pathWide) {
+         return -1;
+     }
+@@ -113,16 +115,18 @@
+ os_fopen(const char *filename, const char *mode)
+ {
+     FILE *fp;
++    wchar_t *filenameWide;
++    wchar_t *modeWide;
+ 
+     if (!filename || !mode) {
+         return NULL;
+     }
+ 
+-    wchar_t *filenameWide = _NSSUTIL_UTF8ToWide(filename);
++    filenameWide = _NSSUTIL_UTF8ToWide(filename);
+     if (!filenameWide) {
+         return NULL;
+     }
+-    wchar_t *modeWide = _NSSUTIL_UTF8ToWide(mode);
++    modeWide = _NSSUTIL_UTF8ToWide(mode);
+     if (!modeWide) {
+         PORT_Free(filenameWide);
+         return NULL;
+@@ -138,12 +142,13 @@
+ _NSSUTIL_Access(const char *path, PRAccessHow how)
+ {
+     int result;
++    int mode;
++    wchar_t *pathWide;
+ 
+     if (!path) {
+         return PR_FAILURE;
+     }
+ 
+-    int mode;
+     switch (how) {
+         case PR_ACCESS_WRITE_OK:
+             mode = 2;
+@@ -158,7 +163,7 @@
+             return PR_FAILURE;
+     }
+ 
+-    wchar_t *pathWide = _NSSUTIL_UTF8ToWide(path);
++    pathWide = _NSSUTIL_UTF8ToWide(path);
+     if (!pathWide) {
+         return PR_FAILURE;
+     }
+@@ -172,12 +177,13 @@
+ nssutil_Delete(const char *name)
+ {
+     BOOL result;
++    wchar_t *nameWide;
+ 
+     if (!name) {
+         return PR_FAILURE;
+     }
+ 
+-    wchar_t *nameWide = _NSSUTIL_UTF8ToWide(name);
++    nameWide = _NSSUTIL_UTF8ToWide(name);
+     if (!nameWide) {
+         return PR_FAILURE;
+     }
+@@ -191,16 +197,18 @@
+ nssutil_Rename(const char *from, const char *to)
+ {
+     BOOL result;
++    wchar_t *fromWide;
++    wchar_t *toWide;
+ 
+     if (!from || !to) {
+         return PR_FAILURE;
+     }
+ 
+-    wchar_t *fromWide = _NSSUTIL_UTF8ToWide(from);
++    fromWide = _NSSUTIL_UTF8ToWide(from);
+     if (!fromWide) {
+         return PR_FAILURE;
+     }
+-    wchar_t *toWide = _NSSUTIL_UTF8ToWide(to);
++    toWide = _NSSUTIL_UTF8ToWide(to);
+     if (!toWide) {
+         PORT_Free(fromWide);
+         return PR_FAILURE;

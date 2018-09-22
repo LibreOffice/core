@@ -15,12 +15,11 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 	nss/nss.patch \
 	nss/nss-3.13.5-zlib-werror.patch \
 	$(if $(filter WNTMSC,$(OS)$(COM)),nss/nss.windows.patch) \
-    nss/nss.windowbuild.patch.0 \
 	$(if $(filter MSC-INTEL,$(COM)-$(CPUNAME)), \
 		nss/nss.cygwin64.in32bit.patch) \
     $(if $(findstring 120_70,$(VCVER)_$(WINDOWS_SDK_VERSION)), \
         nss/nss-winXP-sdk.patch.1) \
-	nss/nss-no-c99.patch \
+	$(if $(filter WNTMSC,$(OS)$(COM)),nss/nss-no-c99.patch) \
 ))
 
 # vim: set noet sw=4 ts=4:
