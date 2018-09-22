@@ -30,8 +30,8 @@
 #include "shellid.hxx"
 
 #include <svl/lstner.hxx>
-
 #include <sfx2/StyleManager.hxx>
+#include <o3tl/deleter.hxx>
 
 class SwDoc;
 class SfxDocumentInfoDialog;
@@ -43,6 +43,7 @@ class SwWrtShell;
 class SwFEShell;
 class Reader;
 class SwReader;
+typedef std::unique_ptr<SwReader, o3tl::default_delete<SwReader>> SwReaderPtr;
 class SwCursorShell;
 class SwSrcView;
 class SwPaM;
@@ -231,7 +232,7 @@ public:
                 { return const_cast<SwDocShell*>(this)->GetFEShell(); }
 
     /// For inserting document.
-    Reader* StartConvertFrom(SfxMedium& rMedium, std::unique_ptr<SwReader>& rpRdr,
+    Reader* StartConvertFrom(SfxMedium& rMedium, SwReaderPtr& rpRdr,
                             SwCursorShell const * pCursorSh = nullptr, SwPaM* pPaM = nullptr);
 
 #if defined(_WIN32)
