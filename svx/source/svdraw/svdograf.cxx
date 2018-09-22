@@ -755,7 +755,7 @@ void SdrGrafObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
     SdrHdlList tempList(nullptr);
     SdrRectObj::AddToHdlList( tempList );
-    tempList.RemoveHdl(0);
+    delete tempList.RemoveHdl(0);
     tempList.MoveTo(rHdlList);
 }
 
