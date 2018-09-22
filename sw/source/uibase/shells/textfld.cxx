@@ -696,7 +696,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 goto FIELD_INSERT;
             case FN_INSERT_FLD_TITLE   :
                 nInsertType = TYP_DOCINFOFLD;
-                nInsertSubType = DI_TITEL;
+                nInsertSubType = DI_TITLE;
                 goto FIELD_INSERT;
             case FN_INSERT_FLD_AUTHOR  :
                 nInsertType = TYP_DOCINFOFLD;
