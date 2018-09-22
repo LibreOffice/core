@@ -1598,18 +1598,6 @@ bool PrinterController::isUIChoiceEnabled( const OUString& i_rProperty, sal_Int3
     return bEnabled;
 }
 
-OUString PrinterController::getDependency( const OUString& i_rProperty ) const
-{
-    OUString aDependency;
-
-    vcl::ImplPrinterControllerData::ControlDependencyMap::const_iterator it =
-        mpImplData->maControlDependencies.find( i_rProperty );
-    if( it != mpImplData->maControlDependencies.end() )
-        aDependency = it->second.maDependsOnName;
-
-    return aDependency;
-}
-
 OUString PrinterController::makeEnabled( const OUString& i_rProperty )
 {
     OUString aDependency;

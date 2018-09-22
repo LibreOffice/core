@@ -1774,27 +1774,6 @@ void MetricBox::InsertValue( sal_Int64 nValue, FieldUnit eInUnit, sal_Int32 nPos
     ComboBox::InsertEntry( CreateFieldText( nValue ), nPos );
 }
 
-sal_Int64 MetricBox::GetValue( sal_Int32 nPos ) const
-{
-    double nValue = 0;
-    TextToValue( ComboBox::GetEntry( nPos ), nValue, mnBaseValue,
-                        GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit );
-
-    // convert to previously configured units
-    sal_Int64 nRetValue = MetricField::ConvertValue( static_cast<sal_Int64>(nValue), mnBaseValue, GetDecimalDigits(),
-                                                     meUnit, FUNIT_NONE );
-
-    return nRetValue;
-}
-
-sal_Int32 MetricBox::GetValuePos( sal_Int64 nValue, FieldUnit eInUnit ) const
-{
-    // convert to previously configured units
-    nValue = MetricField::ConvertValue( nValue, mnBaseValue, GetDecimalDigits(),
-                                        eInUnit, meUnit );
-    return ComboBox::GetEntryPos( CreateFieldText( nValue ) );
-}
-
 static bool ImplCurrencyProcessKeyInput( const KeyEvent& rKEvt,
                                          bool bUseThousandSep, const LocaleDataWrapper& rWrapper )
 {

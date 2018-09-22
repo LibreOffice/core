@@ -1189,11 +1189,6 @@ SdrPage::~SdrPage()
     mpSdrPageProperties.reset();
 }
 
-SdrModel& SdrPage::getSdrModelFromSdrObjList() const
-{
-    return getSdrModelFromSdrPage();
-}
-
 void SdrPage::lateInit(const SdrPage& rSrcPage)
 {
     assert(!mpViewContact);

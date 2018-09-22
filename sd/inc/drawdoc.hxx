@@ -483,8 +483,6 @@ public:
 
     SAL_DLLPRIVATE CharClass*          GetCharClass() const { return mpCharClass.get(); }
 
-    SAL_DLLPRIVATE void                RestoreLayerNames();
-
     SAL_DLLPRIVATE void                UpdateAllLinks();
 
     SAL_DLLPRIVATE void                CheckMasterPages();

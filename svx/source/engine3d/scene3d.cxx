@@ -225,11 +225,6 @@ SdrObject* E3dScene::getSdrObjectFromSdrObjList() const
     return const_cast< E3dScene* >(this);
 }
 
-SdrModel& E3dScene::getSdrModelFromSdrObjList() const
-{
-    return getSdrModelFromSdrObject();
-}
-
 SdrObjList* E3dScene::getChildrenOfSdrObject() const
 {
     return const_cast< E3dScene* >(this);

@@ -107,11 +107,6 @@ protected:
     SVX_DLLPRIVATE virtual void         ImplSelectEntryPos( sal_Int32 nPos, bool bSelect ) = 0;
     SVX_DLLPRIVATE virtual bool         ImplIsEntryPosSelected( sal_Int32 nPos ) const = 0;
     SVX_DLLPRIVATE virtual sal_Int32    ImplGetEntryPos( const void* pData ) const = 0;
-    SVX_DLLPRIVATE virtual void         ImplSetNoSelection() = 0;
-    SVX_DLLPRIVATE virtual void         ImplHide() = 0;
-    SVX_DLLPRIVATE virtual void         ImplDisable() = 0;
-    SVX_DLLPRIVATE virtual void         ImplSaveValue() = 0;
-    SVX_DLLPRIVATE virtual sal_Int32    ImplGetSavedValue() const = 0;
 };
 
 
@@ -132,11 +127,6 @@ private:
     SVX_DLLPRIVATE virtual void         ImplSelectEntryPos( sal_Int32 nPos, bool bSelect ) override;
     SVX_DLLPRIVATE virtual bool         ImplIsEntryPosSelected( sal_Int32 nPos ) const override;
     SVX_DLLPRIVATE virtual sal_Int32    ImplGetEntryPos( const void* pData ) const override;
-    SVX_DLLPRIVATE virtual void         ImplSetNoSelection() override;
-    SVX_DLLPRIVATE virtual void         ImplHide() override;
-    SVX_DLLPRIVATE virtual void         ImplDisable() override;
-    SVX_DLLPRIVATE virtual void         ImplSaveValue() override;
-    SVX_DLLPRIVATE virtual sal_Int32    ImplGetSavedValue() const override;
 };
 
 class SVX_DLLPUBLIC LanguageBox
@@ -199,7 +189,6 @@ public:
     };
 
 private:
-    sal_Int32       mnSavedValuePos;
     EditedAndValid  meEditedAndValid;
 
     SVX_DLLPRIVATE virtual sal_Int32    ImplInsertImgEntry( const OUString& rEntry, sal_Int32  nPos, bool bChecked ) override;
@@ -213,11 +202,6 @@ private:
     SVX_DLLPRIVATE virtual void         ImplSelectEntryPos( sal_Int32 nPos, bool bSelect ) override;
     SVX_DLLPRIVATE virtual bool         ImplIsEntryPosSelected( sal_Int32 nPos ) const override;
     SVX_DLLPRIVATE virtual sal_Int32    ImplGetEntryPos( const void* pData ) const override;
-    SVX_DLLPRIVATE virtual void         ImplSetNoSelection() override;
-    SVX_DLLPRIVATE virtual void         ImplHide() override;
-    SVX_DLLPRIVATE virtual void         ImplDisable() override;
-    SVX_DLLPRIVATE virtual void         ImplSaveValue() override;
-    SVX_DLLPRIVATE virtual sal_Int32    ImplGetSavedValue() const override;
 
     DECL_LINK( EditModifyHdl, Edit&, void );
 };

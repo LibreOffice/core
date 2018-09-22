@@ -836,7 +836,6 @@ SvxLanguageBox::SvxLanguageBox( vcl::Window* pParent, WinBits nBits )
 SvxLanguageComboBox::SvxLanguageComboBox( vcl::Window* pParent, WinBits nBits )
     : ComboBox( pParent, nBits )
     , SvxLanguageBoxBase()
-    , mnSavedValuePos( COMBOBOX_ENTRY_NOTFOUND )
     , meEditedAndValid( EditedAndValid::No )
 {
     // display entries sorted
@@ -956,62 +955,6 @@ sal_Int32 SvxLanguageBox::ImplGetEntryPos( const void* pData ) const
 sal_Int32 SvxLanguageComboBox::ImplGetEntryPos( const void* pData ) const
 {
     return GetEntryPos( pData);
-}
-
-
-void SvxLanguageBox::ImplSetNoSelection()
-{
-    SetNoSelection();
-}
-
-void SvxLanguageComboBox::ImplSetNoSelection()
-{
-    SetNoSelection();
-}
-
-
-void SvxLanguageBox::ImplHide()
-{
-    Hide();
-}
-
-void SvxLanguageComboBox::ImplHide()
-{
-    Hide();
-}
-
-
-void SvxLanguageBox::ImplDisable()
-{
-    Disable();
-}
-
-void SvxLanguageComboBox::ImplDisable()
-{
-    Disable();
-}
-
-
-void SvxLanguageBox::ImplSaveValue()
-{
-    SaveValue();
-}
-
-void SvxLanguageComboBox::ImplSaveValue()
-{
-    // Emulate the ListBox behavior.
-    mnSavedValuePos = GetSelectedEntryPos();
-}
-
-
-sal_Int32 SvxLanguageBox::ImplGetSavedValue() const
-{
-    return GetSavedValue();
-}
-
-sal_Int32 SvxLanguageComboBox::ImplGetSavedValue() const
-{
-    return mnSavedValuePos;
 }
 
 
