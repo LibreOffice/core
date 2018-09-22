@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f013ff3_30eeae88",
+        "filename": "xmloff/source/draw/sdxmlexp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1374,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-09-22T08:57:46Z",
+      "side": 1,
+      "message": "this may be problematic, using an iterator after the vector has been modified",
+      "revId": "7abe200e9fe5756bbf4003975c34019adeb60e25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f013ff3_1003b244",
+        "filename": "xmloff/source/draw/sdxmlexp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1402,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-09-22T08:57:46Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "7abe200e9fe5756bbf4003975c34019adeb60e25",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
