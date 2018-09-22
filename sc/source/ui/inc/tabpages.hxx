@@ -35,20 +35,14 @@ public:
     virtual void        Reset           ( const SfxItemSet* ) override;
 
     virtual ~ScTabPageProtection() override;
-    virtual void dispose() override;
 
 protected:
     using SfxTabPage::DeactivatePage;
     virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet ) override;
 
 private:
-                ScTabPageProtection( vcl::Window*            pParent,
-                                     const SfxItemSet&  rCoreAttrs );
+    ScTabPageProtection(TabPageParent pParent, const SfxItemSet& rCoreAttrs);
 private:
-    VclPtr<TriStateBox>    m_pBtnHideCell;
-    VclPtr<TriStateBox>    m_pBtnProtect;
-    VclPtr<TriStateBox>    m_pBtnHideFormula;
-    VclPtr<TriStateBox>    m_pBtnHidePrint;
                                         // current status:
     bool            bTriEnabled;        //  if before - DontCare
     bool            bDontCare;          //  all in  TriState
@@ -57,8 +51,13 @@ private:
     bool            bHideCell;
     bool            bHidePrint;
 
+    std::unique_ptr<weld::CheckButton> m_xBtnHideCell;
+    std::unique_ptr<weld::CheckButton> m_xBtnProtect;
+    std::unique_ptr<weld::CheckButton> m_xBtnHideFormula;
+    std::unique_ptr<weld::CheckButton> m_xBtnHidePrint;
+
     // Handler:
-    DECL_LINK( ButtonClickHdl, Button*, void );
+    DECL_LINK(ButtonClickHdl, weld::ToggleButton&, void);
     void        UpdateButtons();
 };
 
