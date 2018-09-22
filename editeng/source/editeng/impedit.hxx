@@ -455,8 +455,6 @@ private:
 
     std::unique_ptr<ImplIMEInfos> mpIMEInfos;
 
-    std::vector<EENotify> aNotifyCache;
-
     OUString            aWordDelimiters;
 
     EditSelFunctionSet  aSelFuncSet;
