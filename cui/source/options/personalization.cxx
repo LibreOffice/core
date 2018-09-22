@@ -450,14 +450,18 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
     while( aStream.IsOpen() && !aStream.eof() && nIndex < MAX_DEFAULT_PERSONAS )
     {
         OString aLine;
+        OUString aPersonaSetting, aPreviewFile;
+        sal_Int32 nPreviewIndex = 0;
+
         aStream.ReadLine( aLine );
-        OUString aPersonaSetting( OStringToOUString( aLine, RTL_TEXTENCODING_UTF8 ) );
-        OUString aPreviewFile;
-        sal_Int32 nNewIndex = aPersonaSetting.indexOf( ';' );
-        if( nNewIndex < 0 )
+        aPersonaSetting = OStringToOUString( aLine, RTL_TEXTENCODING_UTF8 );
+        aPreviewFile = aPersonaSetting.getToken( 2, ';', nPreviewIndex );
+
+        if (aPreviewFile.isEmpty())
             break;
-        aPreviewFile = aPersonaSetting.copy( 0, nNewIndex );
-        aPersonaSetting = aPersonaSetting.copy( nNewIndex + 1 );
+
+        // There is no room for the preview file in the PersonaSettings currently
+        aPersonaSetting = aPersonaSetting.replaceFirst( aPreviewFile + ";", "" );
         m_vDefaultPersonaSettings.push_back( aPersonaSetting );
 
         INetURLObject aURLObj( gallery + aPreviewFile );
