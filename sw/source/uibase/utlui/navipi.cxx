@@ -1241,6 +1241,13 @@ SwNavigationChild::SwNavigationChild( vcl::Window* pParent,
     {
         pNavi->m_aContentTree->SetRootType(nRootType);
         pNavi->m_aContentToolBox->CheckItem(pNavi->m_aContentToolBox->GetItemId("root"));
+        if (nRootType == ContentTypeId::OUTLINE)
+        {
+            pNavi->m_aContentTree->SetSelectionMode(SelectionMode::Multiple);
+            pNavi->m_aContentTree->SetDragDropMode(DragDropMode::CTRL_MOVE |
+            DragDropMode::CTRL_COPY |
+            DragDropMode::ENABLE_TOP);
+        }
     }
     pNavi->m_aContentTree->SetOutlineLevel( static_cast< sal_uInt8 >( pNaviConfig->GetOutlineLevel() ) );
     pNavi->SetRegionDropMode( pNaviConfig->GetRegionMode() );
