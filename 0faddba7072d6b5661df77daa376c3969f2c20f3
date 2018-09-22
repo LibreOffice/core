@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f013ff3_e4908b98",
+        "filename": "svx/source/svdraw/svdograf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-09-22T16:52:50Z",
+      "side": 1,
+      "message": "darn, sorry, in a follow-on change I convert SdrHdlList::RemoveHd l to return std::unique_ptr so this becomes unnecessary, but lets put this in anyway, since that won\u0027t land for a couple of days",
+      "revId": "0faddba7072d6b5661df77daa376c3969f2c20f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
