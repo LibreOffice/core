@@ -151,7 +151,7 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
         pEditEngine->pImpEditEngine->QueueNotify( aNotify );
     }
     if(pEditEngine->pImpEditEngine->IsFormatted())
-        pEditEngine->pImpEditEngine->SendNotifications();
+        pEditEngine->pImpEditEngine->ProcessNotifications();
 }
 
 /// Translate absolute <-> relative twips: LOK wants absolute coordinates as output and gives absolute coordinates as input.
