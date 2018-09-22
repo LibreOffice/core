@@ -67,6 +67,7 @@ public:
     void testTdf101242_ODF();
     void testTdf101242_settings();
     void testTdf119392();
+    void testTdf67248();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf96206);
@@ -79,6 +80,7 @@ public:
     CPPUNIT_TEST(testTdf101242_ODF);
     CPPUNIT_TEST(testTdf101242_settings);
     CPPUNIT_TEST(testTdf119392);
+    CPPUNIT_TEST(testTdf67248);
     CPPUNIT_TEST_SUITE_END();
 
 virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -531,6 +533,19 @@ void SdMiscTest::testTdf119392()
     CPPUNIT_ASSERT_MESSAGE( "Item LockedLayers does not exists.", !sBase64.isEmpty());
     comphelper::Base64::decode(aDecodedSeq, sBase64);
     CPPUNIT_ASSERT_EQUAL( 0x80, static_cast<sal_uInt8>(aDecodedSeq[0]) & 0xff);
+
+    xDocShRef->DoClose();
+}
+
+void SdMiscTest::testTdf67248()
+{
+    // The document tdf67248.odg has been created with a German UI. It has a user layer named "Background".
+    // On opening the user layer must still exists. The error was, that it was merged into the standard
+    // layer "background".
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf67248.odg"), ODG);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
+    SdrLayerAdmin& rLayerAdmin = xDocShRef->GetDoc()->GetLayerAdmin();
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16(6), rLayerAdmin.GetLayerCount());
 
     xDocShRef->DoClose();
 }
