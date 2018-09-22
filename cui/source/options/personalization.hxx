@@ -62,6 +62,19 @@ public:
     void CheckAppliedTheme();
     void ShowAppliedThemeLabel( const OUString& );
 
+    /*
+     * Loads the default personas from the shared personas directory
+     * which resides in the shared gallery.
+     * There needs to be a separate subdirectory for each default persona,
+     * which includes the preview, header, and footer images.
+     * And there needs to be a personas_list.txt file in the personas directory
+     * which keeps the index/info of the default personas, one persona per line.
+     * A line should look like this:
+     * persona_slug;Persona Name;subdir/preview.jpg;subdir/header.jpg;subdir/footer.jpg;#textcolor;#accentcolor
+     * (It is recommended to keep the subdir name the same as the slug)
+     * Example line:
+     *  abstract;Abstract;abstract/preview.jpg;abstract/Header2.jpg;abstract/Footer2.jpg;#ffffff;#000000
+     */
     void LoadDefaultImages();
     void LoadExtensionThemes();
 
