@@ -150,12 +150,7 @@ bool ExpressionAlwaysZero::TraverseStaticAssertDecl( StaticAssertDecl * )
     return true;
 }
 
-// on clang-3.8, this plugin can generate OOM
-#if CLANG_VERSION >= 30900
-loplugin::Plugin::Registration< ExpressionAlwaysZero > X("expressionalwayszero");
-#else
 loplugin::Plugin::Registration< ExpressionAlwaysZero > X("expressionalwayszero", false);
-#endif
 
 }
 
