@@ -606,13 +606,9 @@ namespace dbaui
         switch ( eType )
         {
         case ::dbaccess::DST_MYSQL_JDBC:
-            _inout_rDisplayName = "MySQL";
-            break;
         case ::dbaccess::DST_MYSQL_ODBC:
         case ::dbaccess::DST_MYSQL_NATIVE:
-            // don't display those, the decision whether the user connects via JDBC/ODBC/C-OOo is made on another
-            // page
-            _inout_rDisplayName.clear();
+            _inout_rDisplayName = "MySQL";
             break;
         default:
             break;
