@@ -153,7 +153,7 @@ bool SwDocShell::InsertGeneratedStream(SfxMedium & rMedium,
     if (!::sw::XTextRangeToSwPaM(aPam, xInsertPosition))
         return false;
     // similar to SwView::InsertMedium
-    std::unique_ptr<SwReader> pReader;
+    SwReaderPtr pReader;
     Reader *const pRead = StartConvertFrom(rMedium, pReader, nullptr, &aPam);
     if (!pRead)
         return false;
@@ -162,7 +162,7 @@ bool SwDocShell::InsertGeneratedStream(SfxMedium & rMedium,
 }
 
 // Prepare loading
-Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, std::unique_ptr<SwReader>& rpRdr,
+Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReaderPtr& rpRdr,
                                     SwCursorShell const *pCursorShell,
                                     SwPaM* pPaM )
 {
@@ -231,7 +231,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, std::unique_ptr<SwReade
 // Loading
 bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
 {
-    std::unique_ptr<SwReader> pRdr;
+    SwReaderPtr pRdr;
     SwRead pRead = StartConvertFrom(rMedium, pRdr);
     if (!pRead)
       return false; // #129881# return if no reader is found

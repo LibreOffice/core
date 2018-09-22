@@ -2158,7 +2158,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, std::unique_ptr<SfxMedium> pMediu
         pMedium->Download();    // start download if needed
         if( aRef.is() && 1 < aRef->GetRefCount() )  // still a valid ref?
         {
-            std::unique_ptr<SwReader> pRdr;
+            SwReaderPtr pRdr;
             Reader *pRead = pDocSh->StartConvertFrom(*pMedium, pRdr, m_pWrtShell.get());
             if( pRead ||
                 (pMedium->GetFilter()->GetFilterFlags() & SfxFilterFlags::STARONEFILTER) )

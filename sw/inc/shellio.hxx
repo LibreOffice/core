@@ -29,6 +29,7 @@
 #include <tools/ref.hxx>
 #include <rtl/ref.hxx>
 #include <osl/thread.h>
+#include <o3tl/deleter.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include "swdllapi.h"
 #include "docfac.hxx"
@@ -171,6 +172,8 @@ protected:
     void                SetBaseURL( const OUString& rURL ) { sBaseURL = rURL; }
     void                SetSkipImages( bool bSkipImages ) { mbSkipImages = bSkipImages; }
 };
+
+typedef std::unique_ptr<SwReader, o3tl::default_delete<SwReader>> SwReaderPtr;
 
 // Special Readers can be both!! (Excel, W4W, .. ).
 enum class SwReaderType {
