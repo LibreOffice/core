@@ -1061,7 +1061,7 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
     pMed->Download();   // if necessary: start the download
     if( aRef.is() && 1 < aRef->GetRefCount() )  // Ref still valid?
     {
-        std::unique_ptr<SwReader> pRdr;
+        std::unique_ptr<SwReader, o3tl::default_delete<SwReader>> pRdr;
         SfxItemSet* pSet =  pMed->GetItemSet();
         pSet->Put(SfxBoolItem(FN_API_CALL, true));
         if(!sPassword.isEmpty())
