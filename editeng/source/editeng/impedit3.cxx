@@ -4238,7 +4238,7 @@ void ImpEditEngine::FormatAndUpdate( EditView* pCurView, bool bCalledFromUndo )
         UpdateViews( pCurView );
     }
 
-    SendNotifications();
+    ProcessNotifications();
 }
 
 void ImpEditEngine::SetFlatMode( bool bFlat )

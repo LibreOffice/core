@@ -174,14 +174,8 @@ void ImpEditEngine::Dispose()
     pSharedVCL.reset();
 }
 
-void ImpEditEngine::SendNotifications()
+void ImpEditEngine::ProcessNotifications()
 {
-    while(!aNotifyCache.empty())
-    {
-        GetNotifyHdl().Call( aNotifyCache[0] );
-        aNotifyCache.erase(aNotifyCache.begin());
-    }
-
     EENotify aNotify(EE_NOTIFY_PROCESSNOTIFICATIONS);
     GetNotifyHdl().Call(aNotify);
 }
@@ -4402,7 +4396,7 @@ bool ImpEditEngine::DoVisualCursorTraveling()
 
 void ImpEditEngine::QueueNotify( EENotify& rNotify )
 {
-    aNotifyCache.push_back(rNotify);
+    GetNotifyHdl().Call( rNotify );
 }
 
 IMPL_LINK_NOARG(ImpEditEngine, DocModified, LinkParamNone*, void)
