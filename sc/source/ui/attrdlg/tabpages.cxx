@@ -35,25 +35,23 @@ const sal_uInt16 ScTabPageProtection::pProtectionRanges[] =
 
 // Zellschutz-Tabpage:
 
-ScTabPageProtection::ScTabPageProtection(vcl::Window* pParent, const SfxItemSet& rCoreAttrs)
-    : SfxTabPage(pParent, "CellProtectionPage",
-        "modules/scalc/ui/cellprotectionpage.ui", &rCoreAttrs)
+ScTabPageProtection::ScTabPageProtection(TabPageParent pParent, const SfxItemSet& rCoreAttrs)
+    : SfxTabPage(pParent, "modules/scalc/ui/cellprotectionpage.ui", "CellProtectionPage", &rCoreAttrs)
+    , m_xBtnHideCell(m_xBuilder->weld_check_button("checkHideAll"))
+    , m_xBtnProtect(m_xBuilder->weld_check_button("checkProtected"))
+    , m_xBtnHideFormula(m_xBuilder->weld_check_button("checkHideFormula"))
+    , m_xBtnHidePrint(m_xBuilder->weld_check_button("checkHidePrinting"))
 {
-    get(m_pBtnHideCell,"checkHideAll");
-    get(m_pBtnProtect,"checkProtected");
-    get(m_pBtnHideFormula,"checkHideFormula");
-    get(m_pBtnHidePrint,"checkHidePrinting");
-
     // This Page need ExchangeSupport
     SetExchangeSupport();
 
     //  States will be set in Reset
     bTriEnabled = bDontCare = bProtect = bHideForm = bHideCell = bHidePrint = false;
 
-    m_pBtnProtect->SetClickHdl(     LINK( this, ScTabPageProtection, ButtonClickHdl ) );
-    m_pBtnHideCell->SetClickHdl(    LINK( this, ScTabPageProtection, ButtonClickHdl ) );
-    m_pBtnHideFormula->SetClickHdl( LINK( this, ScTabPageProtection, ButtonClickHdl ) );
-    m_pBtnHidePrint->SetClickHdl(   LINK( this, ScTabPageProtection, ButtonClickHdl ) );
+    m_xBtnProtect->connect_toggled(LINK(this, ScTabPageProtection, ButtonClickHdl));
+    m_xBtnHideCell->connect_toggled(LINK(this, ScTabPageProtection, ButtonClickHdl));
+    m_xBtnHideFormula->connect_toggled(LINK(this, ScTabPageProtection, ButtonClickHdl));
+    m_xBtnHidePrint->connect_toggled(LINK(this, ScTabPageProtection, ButtonClickHdl));
 }
 
 ScTabPageProtection::~ScTabPageProtection()
@@ -61,18 +59,9 @@ ScTabPageProtection::~ScTabPageProtection()
     disposeOnce();
 }
 
-void ScTabPageProtection::dispose()
+VclPtr<SfxTabPage> ScTabPageProtection::Create(TabPageParent pParent, const SfxItemSet* rAttrSet)
 {
-    m_pBtnHideCell.clear();
-    m_pBtnProtect.clear();
-    m_pBtnHideFormula.clear();
-    m_pBtnHidePrint.clear();
-    SfxTabPage::dispose();
-}
-
-VclPtr<SfxTabPage> ScTabPageProtection::Create( TabPageParent pParent, const SfxItemSet* rAttrSet )
-{
-    return VclPtr<ScTabPageProtection>::Create( pParent.pParent, *rAttrSet );
+    return VclPtr<ScTabPageProtection>::Create(pParent, *rAttrSet);
 }
 
 void ScTabPageProtection::Reset( const SfxItemSet* rCoreAttrs )
@@ -109,11 +98,13 @@ void ScTabPageProtection::Reset( const SfxItemSet* rCoreAttrs )
     }
 
     //  Start Controls
-
-    m_pBtnProtect->EnableTriState( bTriEnabled );
-    m_pBtnHideCell->EnableTriState( bTriEnabled );
-    m_pBtnHideFormula->EnableTriState( bTriEnabled );
-    m_pBtnHidePrint->EnableTriState( bTriEnabled );
+    if (bTriEnabled)
+    {
+        m_xBtnProtect->set_state(TRISTATE_INDET);
+        m_xBtnHideCell->set_state(TRISTATE_INDET);
+        m_xBtnHideFormula->set_state(TRISTATE_INDET);
+        m_xBtnHidePrint->set_state(TRISTATE_INDET);
+    }
 
     UpdateButtons();
 }
@@ -156,23 +147,23 @@ DeactivateRC ScTabPageProtection::DeactivatePage( SfxItemSet* pSetP )
     return DeactivateRC::LeavePage;
 }
 
-IMPL_LINK( ScTabPageProtection, ButtonClickHdl, Button*, pBox, void )
+IMPL_LINK(ScTabPageProtection, ButtonClickHdl, weld::ToggleButton&, rBox, void)
 {
-    TriState eState = static_cast<TriStateBox*>(pBox)->GetState();
-    if ( eState == TRISTATE_INDET )
+    TriState eState = rBox.get_state();
+    if (eState == TRISTATE_INDET)
         bDontCare = true;                           // everything combined at DontCare
     else
     {
         bDontCare = false;                          // DontCare from everywhere
-        bool bOn = ( eState == TRISTATE_TRUE );       // from a selected value
+        bool bOn = eState == TRISTATE_TRUE;         // from a selected value
 
-        if ( pBox == m_pBtnProtect )
+        if (&rBox == m_xBtnProtect.get())
             bProtect = bOn;
-        else if ( pBox == m_pBtnHideCell )
+        else if (&rBox == m_xBtnHideCell.get())
             bHideCell = bOn;
-        else if ( pBox == m_pBtnHideFormula )
+        else if (&rBox == m_xBtnHideFormula.get())
             bHideForm = bOn;
-        else if ( pBox == m_pBtnHidePrint )
+        else if (&rBox == m_xBtnHidePrint.get())
             bHidePrint = bOn;
         else
         {
@@ -185,25 +176,25 @@ IMPL_LINK( ScTabPageProtection, ButtonClickHdl, Button*, pBox, void )
 
 void ScTabPageProtection::UpdateButtons()
 {
-    if ( bDontCare )
+    if (bDontCare)
     {
-        m_pBtnProtect->SetState( TRISTATE_INDET );
-        m_pBtnHideCell->SetState( TRISTATE_INDET );
-        m_pBtnHideFormula->SetState( TRISTATE_INDET );
-        m_pBtnHidePrint->SetState( TRISTATE_INDET );
+        m_xBtnProtect->set_state(TRISTATE_INDET);
+        m_xBtnHideCell->set_state(TRISTATE_INDET);
+        m_xBtnHideFormula->set_state(TRISTATE_INDET);
+        m_xBtnHidePrint->set_state(TRISTATE_INDET);
     }
     else
     {
-        m_pBtnProtect->SetState( bProtect ? TRISTATE_TRUE : TRISTATE_FALSE );
-        m_pBtnHideCell->SetState( bHideCell ? TRISTATE_TRUE : TRISTATE_FALSE );
-        m_pBtnHideFormula->SetState( bHideForm ? TRISTATE_TRUE : TRISTATE_FALSE );
-        m_pBtnHidePrint->SetState( bHidePrint ? TRISTATE_TRUE : TRISTATE_FALSE );
+        m_xBtnProtect->set_state(bProtect ? TRISTATE_TRUE : TRISTATE_FALSE);
+        m_xBtnHideCell->set_state(bHideCell ? TRISTATE_TRUE : TRISTATE_FALSE);
+        m_xBtnHideFormula->set_state(bHideForm ? TRISTATE_TRUE : TRISTATE_FALSE);
+        m_xBtnHidePrint->set_state(bHidePrint ? TRISTATE_TRUE : TRISTATE_FALSE);
     }
 
-    bool bEnable = ( m_pBtnHideCell->GetState() != TRISTATE_TRUE );
+    bool bEnable = (m_xBtnHideCell->get_state() != TRISTATE_TRUE);
     {
-        m_pBtnProtect->Enable( bEnable );
-        m_pBtnHideFormula->Enable( bEnable );
+        m_xBtnProtect->set_sensitive(bEnable);
+        m_xBtnHideFormula->set_sensitive(bEnable);
     }
 }
 
