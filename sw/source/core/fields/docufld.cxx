@@ -876,7 +876,7 @@ OUString SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
     OUString aStr;
     switch(nSub)
     {
-    case DI_TITEL:  aStr = xDocProps->getTitle();       break;
+    case DI_TITLE:  aStr = xDocProps->getTitle();       break;
     case DI_THEMA:  aStr = xDocProps->getSubject();     break;
     case DI_KEYS:   aStr = ::comphelper::string::convertCommaSeparated(
                                 xDocProps->getKeywords());

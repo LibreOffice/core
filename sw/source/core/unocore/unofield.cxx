@@ -125,7 +125,7 @@ static const sal_uInt16 aDocInfoSubTypeFromService[] =
     DI_PRINT | DI_SUB_DATE,     //PROPERTY_MAP_FLDTYP_DOCINFO_PRINT_DATE_TIME
     DI_KEYS,                    //PROPERTY_MAP_FLDTYP_DOCINFO_KEY_WORDS
     DI_THEMA,                   //PROPERTY_MAP_FLDTYP_DOCINFO_SUBJECT
-    DI_TITEL,                   //PROPERTY_MAP_FLDTYP_DOCINFO_TITLE
+    DI_TITLE,                   //PROPERTY_MAP_FLDTYP_DOCINFO_TITLE
     DI_DOCNO                    //PROPERTY_MAP_FLDTYP_DOCINFO_REVISION
 };
 
@@ -238,7 +238,7 @@ static SwServiceType lcl_GetServiceForField( const SwField& rField )
             case DI_COMMENT:nSrvId = SwServiceType::FieldTypeDocInfoDescription;break;
             case DI_KEYS:   nSrvId = SwServiceType::FieldTypeDocInfoKeywords;break;
             case DI_THEMA:  nSrvId = SwServiceType::FieldTypeDocInfoSubject;  break;
-            case DI_TITEL:  nSrvId = SwServiceType::FieldTypeDocInfoTitle;    break;
+            case DI_TITLE:  nSrvId = SwServiceType::FieldTypeDocInfoTitle;    break;
             case DI_DOCNO:  nSrvId = SwServiceType::FieldTypeDocInfoRevision; break;
             case DI_CUSTOM: nSrvId = SwServiceType::FieldTypeDocInfoCustom;   break;
             }
