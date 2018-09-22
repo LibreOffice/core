@@ -34,7 +34,6 @@ typedef long (*FUNC_CONVERT)(long);
 
 SVT_DLLPUBLIC void      SetFieldUnit(weld::MetricSpinButton& rCtrl, FieldUnit eUnit, bool bAll = false);
 SVT_DLLPUBLIC void      SetFieldUnit( MetricField& rCtrl, FieldUnit eUnit, bool bAll = false );
-SVT_DLLPUBLIC void      SetFieldUnit( MetricBox& rCtrl, FieldUnit eUnit );
 
 SVT_DLLPUBLIC long      CalcToUnit( float nIn, MapUnit eUnit );
 SVT_DLLPUBLIC long      CalcToPoint( long nIn, MapUnit eUnit, sal_uInt16 nFactor );

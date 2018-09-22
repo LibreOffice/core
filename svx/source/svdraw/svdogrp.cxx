@@ -85,11 +85,6 @@ SdrObject* SdrObjGroup::getSdrObjectFromSdrObjList() const
     return const_cast< SdrObjGroup* >(this);
 }
 
-SdrModel& SdrObjGroup::getSdrModelFromSdrObjList() const
-{
-    return getSdrModelFromSdrObject();
-}
-
 SdrObjList* SdrObjGroup::getChildrenOfSdrObject() const
 {
     return const_cast< SdrObjGroup* >(this);

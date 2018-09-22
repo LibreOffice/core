@@ -29,15 +29,6 @@
 
 class SvxSpellWrapper;
 
-class HyphenEdit : public Edit
-{
-public:
-    HyphenEdit(vcl::Window* pParent);
-
-protected:
-    virtual void KeyInput(const KeyEvent &rKEvt) override;
-};
-
 class SvxHyphenWordDialog : public weld::GenericDialogController
 {
     OUString            m_aLabel;

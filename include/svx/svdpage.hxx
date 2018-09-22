@@ -102,7 +102,6 @@ public:
     // SdrModel/SdrPage access on SdrObjList level
     virtual SdrPage* getSdrPageFromSdrObjList() const;
     virtual SdrObject* getSdrObjectFromSdrObjList() const;
-    virtual SdrModel& getSdrModelFromSdrObjList() const = 0;
 
     void CopyObjects(const SdrObjList& rSrcList);
 
@@ -394,7 +393,6 @@ public:
 
     // SdrModel access on SdrPage level
     SdrModel& getSdrModelFromSdrPage() const { return mrSdrModelFromSdrPage; }
-    virtual SdrModel& getSdrModelFromSdrObjList() const override;
 
 protected:
     sdr::contact::ViewContact* CreateObjectSpecificViewContact();

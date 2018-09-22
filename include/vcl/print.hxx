@@ -484,12 +484,6 @@ public:
     bool                                isUIOptionEnabled( const OUString& rPropName ) const;
     bool                                isUIChoiceEnabled( const OUString& rPropName, sal_Int32 nChoice ) const;
 
-    /** @return The property name rPropName depends on or an empty string
-
-        if no dependency exists.
-    */
-    OUString                            getDependency( const OUString& rPropName ) const;
-
     /** MakeEnabled will change the property rPropName depends on to the value
 
         that makes rPropName enabled. If the dependency itself is also disabled,

@@ -92,7 +92,6 @@ public:
     // derived from SdrObjList
     virtual SdrPage* getSdrPageFromSdrObjList() const override;
     virtual SdrObject* getSdrObjectFromSdrObjList() const override;
-    virtual SdrModel& getSdrModelFromSdrObjList() const override;
 
     // derived from SdrObject
     virtual SdrObjList* getChildrenOfSdrObject() const override;

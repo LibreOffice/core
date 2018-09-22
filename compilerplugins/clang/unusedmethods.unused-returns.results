@@ -148,10 +148,12 @@ include/svl/macitem.hxx:92
     class SvStream & SvxMacroTableDtor::Write(class SvStream &) const
 include/svl/poolitem.hxx:173
     class SvStream & SfxPoolItem::Store(class SvStream &,unsigned short) const
-include/svx/dlgctrl.hxx:176
-    class Point RectCtl::SetActualRPWithoutInvalidate(enum RectPoint)
+include/svx/dlgctrl.hxx:105
+    class Point SvxRectCtl::SetActualRPWithoutInvalidate(enum RectPoint)
 include/svx/framelink.hxx:195
     class svx::frame::Style & svx::frame::Style::MirrorSelf()
+include/svx/svdhdl.hxx:461
+    class SdrHdl * SdrHdlList::RemoveHdl(unsigned long)
 include/svx/SvxColorValueSet.hxx:55
     class Size ColorValueSet::layoutToGivenHeight(unsigned int,unsigned int)
 include/test/sheet/xcellrangedata.hxx:21
@@ -196,9 +198,9 @@ include/vcl/texteng.hxx:279
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/toolbox.hxx:514
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:299
-    _Bool weld::ComboBoxText::get_entry_selection_bounds(int &,int &)
-include/vcl/weld.hxx:911
+include/vcl/weld.hxx:300
+    _Bool weld::ComboBox::get_entry_selection_bounds(int &,int &)
+include/vcl/weld.hxx:925
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
@@ -274,8 +276,8 @@ sw/inc/editsh.hxx:635
     const class GraphicAttr * SwEditShell::GetGraphicAttr(class GraphicAttr &) const
 sw/inc/IDocumentUndoRedo.hxx:180
     _Bool IDocumentUndoRedo::Repeat(class sw::RepeatContext &,const unsigned short)
-sw/inc/swcrsr.hxx:166
-    _Bool SwCursor::ExpandToSentenceBorders()
+sw/inc/swcrsr.hxx:156
+    _Bool SwCursor::ExpandToSentenceBorders(const class SwRootFrame *)
 sw/inc/tblafmt.hxx:349
     _Bool SwTableAutoFormatTable::Load(class SvStream &)
 sw/source/core/inc/laycache.hxx:64
@@ -314,9 +316,9 @@ vcl/inc/unx/gtk/gtkdata.hxx:164
     int GtkSalDisplay::CaptureMouse(class SalFrame *)
 vcl/inc/unx/saldisp.hxx:316
     _Bool SalDisplay::Dispatch(union _XEvent *)
-vcl/source/gdi/pdfwriter_impl.hxx:1259
+vcl/source/gdi/pdfwriter_impl.hxx:1255
     _Bool vcl::PDFWriterImpl::setCurrentStructureElement(int)
-vcl/source/gdi/pdfwriter_impl.hxx:1260
+vcl/source/gdi/pdfwriter_impl.hxx:1256
     _Bool vcl::PDFWriterImpl::setStructureAttribute(enum vcl::PDFWriter::StructAttribute,enum vcl::PDFWriter::StructAttributeValue)
-vcl/source/gdi/pdfwriter_impl.hxx:1261
+vcl/source/gdi/pdfwriter_impl.hxx:1257
     _Bool vcl::PDFWriterImpl::setStructureAttributeNumerical(enum vcl::PDFWriter::StructAttribute,int)
