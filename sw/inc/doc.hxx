@@ -1460,7 +1460,11 @@ public:
     static bool GetBoxAttr( const SwCursor& rCursor, SfxPoolItem &rToFill );
     void SetBoxAlign( const SwCursor& rCursor, sal_uInt16 nAlign );
     static sal_uInt16 GetBoxAlign( const SwCursor& rCursor );
-    void AdjustCellWidth( const SwCursor& rCursor, bool bBalance );
+    /// Adjusts selected cell widths in such a way, that their content does not need to be wrapped (if possible).
+    /// bBalance evenly re-distributes the available space regardless of content or wrapping.
+    /// bNoShrink keeps table size the same by distributing excesss space proportionately.
+    /// bColumnWidth tests the entire column for content width, not just selected cells.
+    void AdjustCellWidth( const SwCursor& rCursor, const bool bBalance, const bool bNoShrink, const bool bColumnWidth );
 
     SwChainRet Chainable( const SwFrameFormat &rSource, const SwFrameFormat &rDest );
     SwChainRet Chain( SwFrameFormat &rSource, const SwFrameFormat &rDest );
