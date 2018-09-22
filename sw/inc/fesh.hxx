@@ -708,10 +708,7 @@ public:
     bool IsInRepeatedHeadline() const { return CheckHeadline( true ); }
     bool IsInHeadline() const { return CheckHeadline( false ); }
 
-    /** Adjusts cell widths in such a way, that their content
-     does not need to be wrapped (if possible).
-     bBalance provides for adjustment of selected columns. */
-    void AdjustCellWidth( bool bBalance );
+    void AdjustCellWidth( bool bBalance, const bool bNoShrink, const bool bColumnWidth );
 
     /// Not allowed if only empty cells are selected.
     bool IsAdjustCellWidthAllowed( bool bBalance = false ) const;

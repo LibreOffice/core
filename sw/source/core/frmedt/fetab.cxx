@@ -1107,7 +1107,7 @@ bool SwFEShell::CheckHeadline( bool bRepeat ) const
     return bRet;
 }
 
-void SwFEShell::AdjustCellWidth( bool bBalance )
+void SwFEShell::AdjustCellWidth( bool bBalance, const bool bNoShrink, const bool bColumnWidth )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -1117,7 +1117,7 @@ void SwFEShell::AdjustCellWidth( bool bBalance )
     TableWait aWait(std::numeric_limits<size_t>::max(), nullptr,
                   *GetDoc()->GetDocShell());
 
-    GetDoc()->AdjustCellWidth( *getShellCursor( false ), bBalance );
+    GetDoc()->AdjustCellWidth( *getShellCursor( false ), bBalance, bNoShrink, bColumnWidth );
     EndAllActionAndCall();
 }
 
