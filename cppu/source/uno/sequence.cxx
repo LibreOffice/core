@@ -269,7 +269,7 @@ static inline bool idefaultConstructElements(
     {
         if (nAlloc >= 0)
         {
-            // coverity[suspicious_sizeof] - sizeof(uno_Sequence*) is correct here
+            // coverity[suspicious_sizeof : FALSE] - sizeof(uno_Sequence*) is correct here
             pSeq = reallocSeq(pSeq, sizeof(uno_Sequence*), nAlloc);
         }
         if (pSeq != nullptr)
@@ -518,7 +518,7 @@ static inline bool icopyConstructFromElements(
     }
     case typelib_TypeClass_SEQUENCE: // sequence of sequence
     {
-        // coverity[suspicious_sizeof] - sizeof(uno_Sequence*) is correct here
+        // coverity[suspicious_sizeof : FALSE] - sizeof(uno_Sequence*) is correct here
         pSeq = reallocSeq(pSeq, sizeof(uno_Sequence*), nAlloc);
         if (pSeq != nullptr)
         {
