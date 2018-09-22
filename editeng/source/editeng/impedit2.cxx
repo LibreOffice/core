@@ -174,18 +174,6 @@ void ImpEditEngine::Dispose()
     pSharedVCL.reset();
 }
 
-void ImpEditEngine::SendNotifications()
-{
-    while(!aNotifyCache.empty())
-    {
-        GetNotifyHdl().Call( aNotifyCache[0] );
-        aNotifyCache.erase(aNotifyCache.begin());
-    }
-
-    EENotify aNotify(EE_NOTIFY_PROCESSNOTIFICATIONS);
-    GetNotifyHdl().Call(aNotify);
-}
-
 ImpEditEngine::~ImpEditEngine()
 {
     aStatusTimer.Stop();
@@ -741,7 +729,7 @@ void ImpEditEngine::TextModified()
     if ( GetNotifyHdl().IsSet() )
     {
         EENotify aNotify( EE_NOTIFY_TEXTMODIFIED );
-        QueueNotify( aNotify );
+        GetNotifyHdl().Call( aNotify );
     }
 }
 
@@ -2209,7 +2197,7 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
         aNotify.nParagraph = nNewPos;
         aNotify.nParam1 = aOldPositions.Min();
         aNotify.nParam2 = aOldPositions.Max();
-        QueueNotify( aNotify );
+        GetNotifyHdl().Call( aNotify );
     }
 
     aEditDoc.SetModified( true );
@@ -4397,12 +4385,6 @@ bool ImpEditEngine::DoVisualCursorTraveling()
 {
     // Don't check if it's necessary, because we also need it when leaving the paragraph
     return IsVisualCursorTravelingEnabled();
-}
-
-
-void ImpEditEngine::QueueNotify( EENotify& rNotify )
-{
-    aNotifyCache.push_back(rNotify);
 }
 
 IMPL_LINK_NOARG(ImpEditEngine, DocModified, LinkParamNone*, void)

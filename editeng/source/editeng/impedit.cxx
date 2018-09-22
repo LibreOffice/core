@@ -148,10 +148,13 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
             eNotifyType = EE_NOTIFY_TEXTVIEWSELECTIONCHANGED;
         }
         EENotify aNotify( eNotifyType );
-        pEditEngine->pImpEditEngine->QueueNotify( aNotify );
+        pEditEngine->pImpEditEngine->GetNotifyHdl().Call( aNotify );
     }
     if(pEditEngine->pImpEditEngine->IsFormatted())
-        pEditEngine->pImpEditEngine->SendNotifications();
+    {
+        EENotify aNotify(EE_NOTIFY_PROCESSNOTIFICATIONS);
+        pEditEngine->pImpEditEngine->GetNotifyHdl().Call(aNotify);
+    }
 }
 
 /// Translate absolute <-> relative twips: LOK wants absolute coordinates as output and gives absolute coordinates as input.
@@ -1274,7 +1277,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
         if ( pEditEngine->pImpEditEngine->GetNotifyHdl().IsSet() )
         {
             EENotify aNotify( EE_NOTIFY_TEXTVIEWSCROLLED );
-            pEditEngine->pImpEditEngine->QueueNotify( aNotify );
+            pEditEngine->pImpEditEngine->GetNotifyHdl().Call( aNotify );
         }
     }
 

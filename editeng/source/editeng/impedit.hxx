@@ -455,8 +455,6 @@ private:
 
     std::unique_ptr<ImplIMEInfos> mpIMEInfos;
 
-    std::vector<EENotify> aNotifyCache;
-
     OUString            aWordDelimiters;
 
     EditSelFunctionSet  aSelFuncSet;
@@ -914,9 +912,6 @@ public:
     InternalEditStatus& GetStatus() { return aStatus; }
     void                CallStatusHdl();
     void                DelayedCallStatusHdl()  { aStatusTimer.Start(); }
-
-    void                QueueNotify( EENotify& rNotify );
-    void                SendNotifications();
 
     void                UndoActionStart( sal_uInt16 nId );
     void                UndoActionStart( sal_uInt16 nId, const ESelection& rSel );
