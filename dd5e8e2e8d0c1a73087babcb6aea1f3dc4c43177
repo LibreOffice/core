@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f013ff3_44af3f94",
+        "filename": "sw/qa/python/check_xnamedgraph.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-09-22T20:46:44Z",
+      "side": 1,
+      "message": "This is no longer idiomatic in Python\n\nSee e.g. f-Strings, as described here: https://realpython.com/python-f-strings/",
+      "revId": "dd5e8e2e8d0c1a73087babcb6aea1f3dc4c43177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f013ff3_848e672c",
+        "filename": "sw/qa/python/check_xnamedgraph.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-09-22T20:46:44Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "dd5e8e2e8d0c1a73087babcb6aea1f3dc4c43177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f013ff3_24943344",
+        "filename": "sw/qa/python/check_xnamedgraph.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-09-22T20:46:44Z",
+      "side": 1,
+      "message": "Tiny nit: count +\u003d 1 looks nicer",
+      "revId": "dd5e8e2e8d0c1a73087babcb6aea1f3dc4c43177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f013ff3_c49a2f6d",
+        "filename": "sw/qa/python/check_xnamedgraph.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-09-22T20:46:44Z",
+      "side": 1,
+      "message": "More idiomatic:\n\nxPredicate \u003d self.nameToUri... if xPredicate is not None else None",
+      "revId": "dd5e8e2e8d0c1a73087babcb6aea1f3dc4c43177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f013ff3_a4896327",
+        "filename": "sw/qa/python/check_xnamedgraph.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-09-22T20:46:44Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "dd5e8e2e8d0c1a73087babcb6aea1f3dc4c43177",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
