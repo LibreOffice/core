@@ -39,6 +39,8 @@
 #include <QtCore/QHash>
 #include <QtWidgets/QFileDialog>
 
+#include <memory>
+
 class QGridLayout;
 class QLabel;
 class QWidget;
