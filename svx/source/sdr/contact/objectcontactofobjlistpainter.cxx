@@ -128,12 +128,6 @@ void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
     }
 }
 
-// VirtualDevice?
-bool ObjectContactOfObjListPainter::isOutputToVirtualDevice() const
-{
-    return (OUTDEV_VIRDEV == mrTargetOutputDevice.GetOutDevType());
-}
-
 // recording MetaFile?
 bool ObjectContactOfObjListPainter::isOutputToRecordingMetaFile() const
 {

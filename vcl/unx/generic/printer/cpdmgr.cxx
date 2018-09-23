@@ -754,44 +754,5 @@ bool CPDManager::checkPrintersChanged( bool )
 #endif
 }
 
-bool CPDManager::addPrinter( const OUString& rName, const OUString& rDriver )
-{
-#if ENABLE_DBUS && ENABLE_GIO
-    // don't touch the CPD printers
-    if (m_aCPDDestMap.find( rName ) != m_aCPDDestMap.end() || rDriver.startsWith("CPD:"))
-        return false;
-#endif
-    return PrinterInfoManager::addPrinter( rName, rDriver );
-}
-
-bool CPDManager::removePrinter( const OUString& rName, bool bCheck )
-{
-#if ENABLE_DBUS && ENABLE_GIO
-    // don't touch the CPD printers
-    if( m_aCPDDestMap.find( rName ) != m_aCPDDestMap.end() )
-        return false;
-#endif
-    return PrinterInfoManager::removePrinter( rName, bCheck );
-}
-
-bool CPDManager::setDefaultPrinter( const OUString& rName )
-{
-    bool bSuccess = false;
-#if ENABLE_DBUS && ENABLE_GIO
-    std::unordered_map< OUString, CPDPrinter * >::iterator nit =
-        m_aCPDDestMap.find( rName );
-    if( nit != m_aCPDDestMap.end())
-    {
-        m_aDefaultPrinter = rName;
-        bSuccess = true;
-    }
-    else
-        bSuccess = PrinterInfoManager::setDefaultPrinter( rName );
-#else
-    (void)rName;
-#endif
-    return bSuccess;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

@@ -123,17 +123,6 @@ bool LwpVirtualLayout::MarginsSameAsParent()
 }
 
 /**
-* @descr:   Get column width
-*
-*/
-double LwpVirtualLayout::GetColWidth(sal_uInt16 /*nIndex*/)
-{
-    //return GetContentWidth(); //not support now
-    //return LwpTools::ConvertToMetric(5); //test
-    return 0; //test
-}
-
-/**
 * @descr:   Get the gap between columns
 *
 */
@@ -1557,31 +1546,6 @@ sal_uInt16 LwpLayout::GetNumCols()
     return nRet;
 }
 
-/**
-* @descr:   Get column width
-* @param:   the order of column
-*/
-double LwpLayout::GetColWidth(sal_uInt16 nIndex)
-{
-    if((m_nOverrideFlag & OVER_COLUMNS)||(m_nAttributes2 & STYLE2_LOCALCOLUMNINFO))
-    {
-        LwpLayoutColumns* pLayColumns = dynamic_cast<LwpLayoutColumns*>(m_LayColumns.obj().get());
-        if(pLayColumns)
-        {
-            return pLayColumns->GetColWidth(nIndex);
-        }
-    }
-
-    rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
-    LwpVirtualLayout* pStyle = dynamic_cast<LwpVirtualLayout*>(xBase.get());
-    if (pStyle)
-    {
-        return pStyle->GetColWidth(nIndex);
-    }
-
-    return LwpVirtualLayout::GetColWidth(nIndex);
-
-}
 
 /**
 * @descr:   Get gap between columns

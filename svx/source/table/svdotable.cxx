@@ -2006,18 +2006,6 @@ void SdrTableObj::NbcReformatText()
 }
 
 
-void SdrTableObj::ReformatText()
-{
-    tools::Rectangle aBoundRect0;
-    if (pUserCall!=nullptr)
-        aBoundRect0=GetLastBoundRect();
-    NbcReformatText();
-    SetChanged();
-    BroadcastObjectChange();
-    SendUserCall(SdrUserCallType::Resize,aBoundRect0);
-}
-
-
 bool SdrTableObj::IsVerticalWriting() const
 {
     const SvxWritingModeItem* pModeItem = &GetObjectItem( SDRATTR_TEXTDIRECTION );

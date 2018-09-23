@@ -73,7 +73,6 @@ public:
 
     // the SvxViewForwarder interface
     virtual bool        IsValid() const override;
-    virtual tools::Rectangle   GetVisArea() const override;
     virtual Point       LogicToPixel( const Point&, const MapMode& ) const override;
     virtual Point       PixelToLogic( const Point&, const MapMode& ) const override;
 

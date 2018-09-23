@@ -119,7 +119,6 @@ public:
     sal_Int32 getXNoteId() const;
     void setForwardEvents(bool bForwardEvents);
     bool isForwardEvents() const;
-    virtual void setParent(OOXMLFastContextHandler * pParent);
     virtual void setId(Id nId);
     virtual Id getId() const;
 
@@ -298,7 +297,6 @@ protected:
     OOXMLPropertySet::Pointer_t mpPropertySet;
 
     virtual void lcl_endFastElement(Token_t Element) override;
-    virtual void setParent(OOXMLFastContextHandler * pParent) override;
 
 private:
 

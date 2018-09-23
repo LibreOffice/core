@@ -81,7 +81,7 @@ def sort_set_by_natural_key(s):
 # --------------------------------------------------------------------------------------------
 
 # follow caller-callee chains, removing all methods reachable from a root method
-def remove_reachable(startCaller):
+def remove_reachable(callDict, startCaller):
     worklist = list()
     worklist.append(startCaller)
     while len(worklist) > 0:
@@ -151,12 +151,18 @@ for caller in callDict:
                 to_be_removed.add(caller)
 # remove everything reachable from the found entry points
 for caller in to_be_removed:
-    remove_reachable(caller)
+    remove_reachable(callDict, caller)
 for caller in callDict:
     callDict[caller] -= to_be_removed
 
+# create a reverse call graph
+inverseCallDict = defaultdict(set) # map of from_method_name -> set(method_name)
+for caller in callDict:
+    for callee in callDict[caller]:
+        inverseCallDict[callee].add(caller)
+
 print_tree_recurse_set = set() # protect against cycles
-def print_tree(f, caller, depth):
+def print_tree(f, callDict, caller, depth):
     if depth == 0:
         f.write("\n") # add an empty line before each tree
         print_tree_recurse_set.clear()
@@ -172,13 +178,7 @@ def print_tree(f, caller, depth):
     f.write("  " * depth + definitionToSourceLocationMap[caller] + "\n")
     calleeSet = callDict[caller]
     for c in calleeSet:
-        print_tree(f, c, depth+1)
-
-# create a reverse call graph
-inverseCallDict = defaultdict(set) # map of from_method_name -> set(method_name)
-for caller in callDict:
-    for callee in callDict[caller]:
-        inverseCallDict[callee].add(caller)
+        print_tree(f, callDict, c, depth+1)
 
 # find possible roots (ie. entrypoints) by looking for methods that are not called
 def dump_possible_roots():
@@ -201,42 +201,75 @@ def dump_possible_roots():
             count = count + 1
             #if count>1000: break
 
-
 # Look for cycles in a directed graph
 # Adapted from:
 # https://codereview.stackexchange.com/questions/86021/check-if-a-directed-graph-contains-a-cycle
-with open("compilerplugins/clang/methodcycles.results", "wt") as f:
-    path = set()
-    visited = set()
+def print_cycles():
+    with open("compilerplugins/clang/methodcycles.results", "wt") as f:
+        path = set()
+        visited = set()
 
-    def printPath(path):
-        if len(path) < 2:
-            return
-        # we may have found a cycle, but if the cycle is called from outside the cycle
-        # the code is still in use.
-        for p in path:
-            for caller in inverseCallDict[p]:
-                if not caller in path:
-                    return
-        f.write("found cycle\n")
-        for p in path:
-            f.write("    " + p + "\n")
-            f.write("    " + definitionToSourceLocationMap[p] + "\n")
-            f.write("\n")
+        def printPath(path):
+            if len(path) < 2:
+                return
+            # we may have found a cycle, but if the cycle is called from outside the cycle
+            # the code is still in use.
+            for p in path:
+                for caller in inverseCallDict[p]:
+                    if not caller in path:
+                        return
+            f.write("found cycle\n")
+            for p in path:
+                f.write("    " + p + "\n")
+                f.write("    " + definitionToSourceLocationMap[p] + "\n")
+                f.write("\n")
 
-    def checkCyclic(vertex):
-        if vertex in visited:
-            return
-        visited.add(vertex)
-        path.add(vertex)
-        if vertex in callDict:
-            for neighbour in callDict[vertex]:
-                if neighbour in path:
-                    printPath(path)
-                    break
-                else:
-                    checkCyclic(neighbour)
-        path.remove(vertex)
+        def checkCyclic(vertex):
+            if vertex in visited:
+                return
+            visited.add(vertex)
+            path.add(vertex)
+            if vertex in callDict:
+                for neighbour in callDict[vertex]:
+                    if neighbour in path:
+                        printPath(path)
+                        break
+                    else:
+                        checkCyclic(neighbour)
+            path.remove(vertex)
 
-    for caller in callDict:
-        checkCyclic(caller)
+        for caller in callDict:
+            checkCyclic(caller)
+
+print_cycles()
+
+# print partioned sub-graphs
+def print_partitions():
+    callDict2 = callDict
+    # Remove anything with no callees, and that is itself not called.
+    # After this stage, we should only be left with closed sub-graphs ie. partitions
+    while True:
+        to_be_removed.clear()
+        for caller in callDict2:
+            if len(callDict2[caller]) == 0 \
+                or not caller in inverseCallDict[caller]:
+                to_be_removed.add(caller)
+        if len(to_be_removed) == 0:
+            break
+        for caller in to_be_removed:
+            remove_reachable(callDict2, caller)
+        for caller in callDict2:
+            callDict2[caller] -= to_be_removed
+
+    count = 0
+    with open("compilerplugins/clang/methodcycles.partition.results", "wt") as f:
+        f.write("callDict size " + str(len(callDict2)) + "\n")
+        f.write("\n")
+        while len(callDict2) > 0:
+            print_tree(f, callDict2, next(iter(callDict2)), 0)
+            for c in print_tree_recurse_set:
+                callDict2.pop(c, None)
+            count = count + 1
+            if count>1000: break
+
+print_partitions()

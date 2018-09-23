@@ -76,9 +76,6 @@ namespace sdr
             // this ObjectContact.
             virtual void InvalidatePartOfView(const basegfx::B2DRange& rRange) const override;
 
-            // Get info if given Rectangle is visible in this view
-            virtual bool IsAreaVisible(const basegfx::B2DRange& rRange) const override;
-
             // Get info about the need to visualize GluePoints. The default
             // is that it is not necessary.
             virtual bool AreGluePointsVisible() const override;
@@ -92,12 +89,6 @@ namespace sdr
             // print? Default is false
             virtual bool isOutputToPrinter() const override;
 
-            // window? Default is true
-            virtual bool isOutputToWindow() const override;
-
-            // VirtualDevice? Default is false
-            virtual bool isOutputToVirtualDevice() const override;
-
             // recording MetaFile? Default is false
             virtual bool isOutputToRecordingMetaFile() const override;
 
@@ -106,9 +97,6 @@ namespace sdr
 
             // gray display mode
             virtual bool isDrawModeGray() const override;
-
-            // gray display mode
-            virtual bool isDrawModeBlackWhite() const override;
 
             // high contrast display mode
             virtual bool isDrawModeHighContrast() const override;

@@ -807,32 +807,6 @@ bool SmViewForwarder::IsValid() const
     return rEditAcc.GetEditView() != nullptr;
 }
 
-tools::Rectangle SmViewForwarder::GetVisArea() const
-{
-    EditView *pEditView = rEditAcc.GetEditView();
-    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
-
-    if( pOutDev && pEditView)
-    {
-        tools::Rectangle aVisArea = pEditView->GetVisArea();
-
-        // figure out map mode from edit engine
-        EditEngine* pEditEngine = pEditView->GetEditEngine();
-
-        if( pEditEngine )
-        {
-            MapMode aMapMode(pOutDev->GetMapMode());
-            aVisArea = OutputDevice::LogicToLogic( aVisArea,
-                                                   pEditEngine->GetRefMapMode(),
-                                                   MapMode(aMapMode.GetMapUnit()));
-            aMapMode.SetOrigin(Point());
-            return pOutDev->LogicToPixel( aVisArea, aMapMode );
-        }
-    }
-
-    return tools::Rectangle();
-}
-
 Point SmViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
 {
     EditView *pEditView = rEditAcc.GetEditView();
@@ -1412,33 +1386,6 @@ bool SmEditViewForwarder::IsValid() const
     return rEditAcc.GetEditView() != nullptr;
 }
 
-tools::Rectangle SmEditViewForwarder::GetVisArea() const
-{
-    tools::Rectangle aRect(0,0,0,0);
-
-    EditView *pEditView = rEditAcc.GetEditView();
-    OutputDevice* pOutDev = pEditView ? pEditView->GetWindow() : nullptr;
-
-    if( pOutDev && pEditView)
-    {
-        tools::Rectangle aVisArea = pEditView->GetVisArea();
-
-        // figure out map mode from edit engine
-        EditEngine* pEditEngine = pEditView->GetEditEngine();
-
-        if( pEditEngine )
-        {
-            MapMode aMapMode(pOutDev->GetMapMode());
-            aVisArea = OutputDevice::LogicToLogic( aVisArea,
-                                                   pEditEngine->GetRefMapMode(),
-                                                   MapMode(aMapMode.GetMapUnit()));
-            aMapMode.SetOrigin(Point());
-            aRect = pOutDev->LogicToPixel( aVisArea, aMapMode );
-        }
-    }
-
-    return aRect;
-}
 
 Point SmEditViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
 {

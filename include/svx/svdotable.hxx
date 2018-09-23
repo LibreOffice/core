@@ -241,7 +241,6 @@ public:
     virtual OutlinerParaObject* GetOutlinerParaObject() const override;
 
     virtual void NbcReformatText() override;
-    virtual void ReformatText() override;
 
     virtual bool IsVerticalWriting() const override;
     virtual void SetVerticalWriting(bool bVertical) override;

@@ -72,8 +72,6 @@ public:
     virtual bool            GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nPara, sal_Int32 nIndex, bool bInCell = false ) const override;
     virtual sal_Int32       GetLineCount( sal_Int32 nPara ) const override;
     virtual sal_Int32       GetLineLen( sal_Int32 nPara, sal_Int32 nLine ) const override;
-    virtual void            SetUpdateModeForAcc( bool bUp) override;
-    virtual bool            GetUpdateModeForAcc() const override;
     virtual void            GetLineBoundaries( /*out*/sal_Int32 &rStart, /*out*/sal_Int32 &rEnd, sal_Int32 nParagraph, sal_Int32 nLine ) const override;
     virtual sal_Int32       GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex ) const override;
 
@@ -118,7 +116,6 @@ public:
 
     // SvxViewForwarder interface
     virtual bool        IsValid() const override;
-    virtual tools::Rectangle   GetVisArea() const override;
     virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const override;
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const override;
 

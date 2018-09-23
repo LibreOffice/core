@@ -121,13 +121,6 @@ void ObjectContact::InvalidatePartOfView(const basegfx::B2DRange& /*rRange*/) co
     // nothing to do here in the default version
 }
 
-// Get info if given Rectangle is visible in this view
-bool ObjectContact::IsAreaVisible(const basegfx::B2DRange& /*rRange*/) const
-{
-    // always visible in default version
-    return true;
-}
-
 // Get info about the need to visualize GluePoints
 bool ObjectContact::AreGluePointsVisible() const
 {
@@ -160,18 +153,6 @@ bool ObjectContact::isOutputToPrinter() const
     return false;
 }
 
-// window? Default is true
-bool ObjectContact::isOutputToWindow() const
-{
-    return true;
-}
-
-// VirtualDevice? Default is false
-bool ObjectContact::isOutputToVirtualDevice() const
-{
-    return false;
-}
-
 // recording MetaFile? Default is false
 bool ObjectContact::isOutputToRecordingMetaFile() const
 {
@@ -186,12 +167,6 @@ bool ObjectContact::isOutputToPDFFile() const
 
 // gray display mode
 bool ObjectContact::isDrawModeGray() const
-{
-    return false;
-}
-
-// gray display mode
-bool ObjectContact::isDrawModeBlackWhite() const
 {
     return false;
 }

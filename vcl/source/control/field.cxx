@@ -408,13 +408,6 @@ void FormatterBase::SetStrictFormat( bool bStrict )
     }
 }
 
-void FormatterBase::SetLocale( const lang::Locale& rLocale )
-{
-    ImplGetLocaleDataWrapper().setLanguageTag( LanguageTag( rLocale) );
-    mbDefaultLocale = false;
-    ReformatAll();
-}
-
 const lang::Locale& FormatterBase::GetLocale() const
 {
     if ( !mpLocaleDataWrapper || mbDefaultLocale )

@@ -109,14 +109,6 @@ ScVbaFormatCondition::retrieveAPIType(sal_Int32 _nVBAType, const uno::Reference<
     return aAPIType;
 }
 
-void
-ScVbaFormatCondition::setFormula1( const uno::Any& _aFormula1)
-{
-    // getA1Formula *SHOULD* detect whether the formula is r1c1 or A1 syntax
-    // and if R1C1 convert to A1
-    ScVbaFormatCondition_BASE::setFormula1( uno::makeAny( ScVbaFormatConditions::getA1Formula(_aFormula1) ) );
-}
-
 ::sal_Int32 SAL_CALL
 ScVbaFormatCondition::Type(  )
 {

@@ -153,28 +153,6 @@ public:
     // printer discovery to finish
     virtual bool checkPrintersChanged( bool bWait );
 
-    // members for administration
-
-    // add a named printer
-    // addPrinter fails if a printer with the same name already exists
-    // or the driver does not exist
-    virtual bool addPrinter( const OUString& rPrinterName, const OUString& rDriverName );
-
-    // remove a named printer
-    // this fails if the config file belonging to this printer
-    // is not writeable
-    // if bCheckOnly is true, the printer is not really removed;
-    // this is for checking if the removal would fail
-    virtual bool removePrinter( const OUString& rPrinterName, bool bCheckOnly );
-
-    // save the changes to all printers. this fails if there
-    // is no writable config file at all
-    virtual bool writePrinterConfig();
-
-    // set a new default printer
-    // fails if the specified printer does not exist
-    virtual bool setDefaultPrinter( const OUString& rPrinterName );
-
     // abstract print command
     // returns a stdio FILE* that a postscript file may be written to
     // this may either be a regular file or the result of popen()

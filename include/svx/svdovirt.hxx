@@ -134,14 +134,12 @@ public:
     virtual void SetGeoData(const SdrObjGeoData& rGeo) override;
 
     virtual void NbcReformatText() override;
-    virtual void ReformatText() override;
 
     virtual bool HasMacro() const override;
     virtual SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec) const override;
     virtual Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec) const override;
     virtual void PaintMacro (OutputDevice& rOut, const tools::Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const override;
     virtual bool DoMacro (const SdrObjMacroHitRec& rRec) override;
-    virtual OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const override;
 
     // #i73248# for default SdrVirtObj, offset is aAnchor, not (0,0)
     virtual const Point GetOffset() const;

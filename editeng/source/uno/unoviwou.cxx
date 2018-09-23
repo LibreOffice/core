@@ -51,34 +51,6 @@ bool SvxDrawOutlinerViewForwarder::IsValid() const
     return true;
 }
 
-tools::Rectangle SvxDrawOutlinerViewForwarder::GetVisArea() const
-{
-    OutputDevice* pOutDev = mrOutlinerView.GetWindow();
-
-    if( pOutDev )
-    {
-        tools::Rectangle aVisArea = mrOutlinerView.GetVisArea();
-
-        Point aTextOffset( GetTextOffset() );
-        aVisArea.Move( aTextOffset.X(), aTextOffset.Y() );
-
-        // figure out map mode from edit engine
-        Outliner* pOutliner = mrOutlinerView.GetOutliner();
-
-        if( pOutliner )
-        {
-            MapMode aMapMode(pOutDev->GetMapMode());
-            aVisArea = OutputDevice::LogicToLogic( aVisArea,
-                                                   pOutliner->GetRefMapMode(),
-                                                   MapMode(aMapMode.GetMapUnit()));
-            aMapMode.SetOrigin(Point());
-            return pOutDev->LogicToPixel( aVisArea, aMapMode );
-        }
-    }
-
-    return tools::Rectangle();
-}
-
 Point SvxDrawOutlinerViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
 {
     OutputDevice* pOutDev = mrOutlinerView.GetWindow();

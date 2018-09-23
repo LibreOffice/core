@@ -1144,13 +1144,6 @@ bool View::HasMarkedPoints() const
         return FmFormView::HasMarkedPoints();
 }
 
-sal_Int32 View::GetMarkedPointCount() const
-{
-    sal_Int32 nCount = FmFormView::GetMarkedPointCount();
-    nCount += maSmartTags.GetMarkedPointCount();
-    return nCount;
-}
-
 bool View::IsPointMarkable(const SdrHdl& rHdl) const
 {
     if( SmartTagSet::IsPointMarkable( rHdl ) )

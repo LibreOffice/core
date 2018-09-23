@@ -160,17 +160,6 @@ OUString const & SdStyleSheet::GetApiName() const
         return GetName();
 }
 
-void SdStyleSheet::Load (SvStream& rIn, sal_uInt16 nVersion)
-{
-    SfxStyleSheetBase::Load(rIn, nVersion);
-
-    /* previously, the default mask was 0xAFFE. The needed flags were masked
-       from this mask. Now the flag SfxStyleSearchBits::ReadOnly was introduced and with
-       this, all style sheets are read only. Since no style sheet should be read
-       only in Draw, we reset the flag here.  */
-    nMask &= ~SfxStyleSearchBits::ReadOnly;
-}
-
 bool SdStyleSheet::SetParent(const OUString& rParentName)
 {
     bool bResult = false;

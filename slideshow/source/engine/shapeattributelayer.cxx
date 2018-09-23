@@ -650,14 +650,6 @@ namespace slideshow
             return mbCharRotationAngleValid || ( haveChild() && mpChild->isCharRotationAngleValid() );
         }
 
-        double ShapeAttributeLayer::getCharRotationAngle() const
-        {
-            return calcValue( mnCharRotationAngle,
-                              mbCharRotationAngleValid,
-                              &ShapeAttributeLayer::isCharRotationAngleValid,
-                              &ShapeAttributeLayer::getCharRotationAngle );
-        }
-
         void ShapeAttributeLayer::setCharRotationAngle( const double& rNewAngle )
         {
             ENSURE_OR_THROW( ::rtl::math::isFinite(rNewAngle),

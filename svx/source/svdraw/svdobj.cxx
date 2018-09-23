@@ -1754,17 +1754,6 @@ void SdrObject::NbcReformatText()
 {
 }
 
-void SdrObject::ReformatText()
-{
-    tools::Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
-    NbcReformatText();
-    SetChanged();
-    BroadcastObjectChange();
-    if (GetCurrentBoundRect()!=aBoundRect0) {
-        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
-    }
-}
-
 void SdrObject::BurnInStyleSheetAttributes()
 {
     GetProperties().ForceStyleToHardAttributes();
@@ -1811,11 +1800,6 @@ void SdrObject::PaintMacro(OutputDevice& rOut, const tools::Rectangle& , const S
 bool SdrObject::DoMacro(const SdrObjMacroHitRec&)
 {
     return false;
-}
-
-OUString SdrObject::GetMacroPopupComment(const SdrObjMacroHitRec&) const
-{
-    return OUString();
 }
 
 bool SdrObject::IsMacroHit(const SdrObjMacroHitRec& rRec) const

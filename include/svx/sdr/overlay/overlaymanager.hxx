@@ -103,9 +103,6 @@ namespace sdr
             // flush. Do buffered updates.
             virtual void flush();
 
-            // restore part of background. Implemented form buffered versions only.
-            virtual void restoreBackground(const vcl::Region& rRegion) const;
-
             // get the OutputDevice
             OutputDevice& getOutputDevice() const { return mrOutputDevice; }
 

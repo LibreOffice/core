@@ -730,7 +730,6 @@ class SVX_DLLPUBLIC SdrUndoFactory
 public:
     // Shapes
     virtual ~SdrUndoFactory();
-    virtual SdrUndoAction* CreateUndoMoveObject( SdrObject& rObject );
     virtual SdrUndoAction* CreateUndoMoveObject( SdrObject& rObject, const Size& rDist );
     virtual SdrUndoAction* CreateUndoGeoObject( SdrObject& rObject );
     virtual SdrUndoAction* CreateUndoAttrObject( SdrObject& rObject, bool bStyleSheet1 = false, bool bSaveText = false );
@@ -755,7 +754,6 @@ public:
     // Layer
     virtual SdrUndoAction* CreateUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
     virtual SdrUndoAction* CreateUndoDeleteLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);
-    virtual SdrUndoAction* CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNewPos1);
 
     // Page
     virtual SdrUndoAction* CreateUndoDeletePage(SdrPage& rPage);

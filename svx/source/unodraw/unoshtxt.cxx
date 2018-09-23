@@ -139,7 +139,6 @@ public:
 
     bool                    IsValid() const;
 
-    tools::Rectangle               GetVisArea();
     Point                   LogicToPixel( const Point&, const MapMode& rMapMode );
     Point                   PixelToLogic( const Point&, const MapMode& rMapMode );
 
@@ -822,35 +821,6 @@ bool SvxTextEditSourceImpl::IsValid() const
     return mpView && mpWindow;
 }
 
-tools::Rectangle SvxTextEditSourceImpl::GetVisArea()
-{
-    if( IsValid() )
-    {
-        SdrPaintWindow* pPaintWindow = mpView->FindPaintWindow(*mpWindow);
-        tools::Rectangle aVisArea;
-
-        if(pPaintWindow)
-        {
-            aVisArea = pPaintWindow->GetVisibleArea();
-        }
-
-        // offset vis area by edit engine left-top position
-        SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
-        if( pTextObj )
-        {
-            tools::Rectangle aAnchorRect;
-            pTextObj->TakeTextAnchorRect( aAnchorRect );
-            aVisArea.Move( -aAnchorRect.Left(), -aAnchorRect.Top() );
-
-            MapMode aMapMode(mpWindow->GetMapMode());
-            aMapMode.SetOrigin(Point());
-            return mpWindow->LogicToPixel( aVisArea, aMapMode );
-        }
-    }
-
-    return tools::Rectangle();
-}
-
 Point SvxTextEditSourceImpl::LogicToPixel( const Point& rPoint, const MapMode& rMapMode )
 {
     // The responsibilities of ViewForwarder happen to be
@@ -997,11 +967,6 @@ void SvxTextEditSource::unlock()
 bool SvxTextEditSource::IsValid() const
 {
     return mpImpl->IsValid();
-}
-
-tools::Rectangle SvxTextEditSource::GetVisArea() const
-{
-    return mpImpl->GetVisArea();
 }
 
 Point SvxTextEditSource::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const

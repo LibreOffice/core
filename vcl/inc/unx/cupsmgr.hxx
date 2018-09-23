@@ -82,13 +82,6 @@ public:
 
     /// check if the printer configuration has changed
     virtual bool checkPrintersChanged( bool bWait ) override;
-
-    // members for administration
-    // disable for CUPS
-    virtual bool addPrinter( const OUString& rPrinterName, const OUString& rDriverName ) override;
-    virtual bool removePrinter( const OUString& rPrinterName, bool bCheckOnly ) override;
-    virtual bool writePrinterConfig() override;
-    virtual bool setDefaultPrinter( const OUString& rPrinterName ) override;
 };
 
 } // namespace psp

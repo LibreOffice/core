@@ -437,7 +437,6 @@ public:
 
     Size                        GetFirstPageSize();
     bool                        DoClose();
-    virtual void                PrepareReload();
     std::shared_ptr<GDIMetaFile> GetPreviewMetaFile( bool bFullContent = false ) const;
     virtual void                CancelTransfers();
 
@@ -580,7 +579,6 @@ public:
     static OUString             GetServiceNameFromFactory( const OUString& rFact );
     bool                        IsInPlaceActive();
     bool                        IsUIActive();
-    virtual void                InPlaceActivate( bool );
 
     static bool                 CopyStoragesOfUnknownMediaType(
                                     const css::uno::Reference< css::embed::XStorage >& xSource,

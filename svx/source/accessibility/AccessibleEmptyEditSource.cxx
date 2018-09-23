@@ -158,7 +158,6 @@ namespace accessibility
         sal_Int16       GetDepth( sal_Int32 ) const override { return -1; }
         bool            SetDepth( sal_Int32, sal_Int16 ) override { return true; }
 
-        tools::Rectangle       GetVisArea() const override { return tools::Rectangle(); }
         Point           LogicToPixel( const Point& rPoint, const MapMode& /*rMapMode*/ ) const override { return rPoint; }
         Point           PixelToLogic( const Point& rPoint, const MapMode& /*rMapMode*/ ) const override { return rPoint; }
 

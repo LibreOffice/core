@@ -682,7 +682,6 @@ public:
     virtual void NbcSetOutlinerParaObject(std::unique_ptr<OutlinerParaObject> pTextObject);
     virtual OutlinerParaObject* GetOutlinerParaObject() const;
     virtual void NbcReformatText();
-    virtual void ReformatText();
 
     void BurnInStyleSheetAttributes();
 
@@ -692,7 +691,6 @@ public:
     virtual Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec) const;
     virtual void PaintMacro (OutputDevice& rOut, const tools::Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec) const;
     virtual bool DoMacro (const SdrObjMacroHitRec& rRec);
-    virtual OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const;
     bool IsMacroHit(const SdrObjMacroHitRec& rRec) const;
 
     // Connectors
