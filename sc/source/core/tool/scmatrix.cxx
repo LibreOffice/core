@@ -2506,11 +2506,9 @@ std::vector<ScMatrix::IterateResult> ScMatrixImpl::ApplyCollectOperation(const s
 
 namespace {
 
-class WalkElementBlockOperation
+struct ElementBlock
 {
-public:
-
-    WalkElementBlockOperation(size_t nRowSize,
+    ElementBlock(size_t nRowSize,
             ScFullMatrix::DoubleOpFunction const & aDoubleFunc,
             ScFullMatrix::BoolOpFunction const & aBoolFunc,
             ScFullMatrix::StringOpFunction const & aStringFunc,
@@ -2522,6 +2520,25 @@ public:
         maBoolFunc(aBoolFunc),
         maStringFunc(aStringFunc),
         maEmptyFunc(aEmptyFunc)
+    {
+    }
+
+    size_t mnRowSize;
+    size_t mnRowPos;
+    size_t mnColPos;
+
+    ScFullMatrix::DoubleOpFunction maDoubleFunc;
+    ScFullMatrix::BoolOpFunction maBoolFunc;
+    ScFullMatrix::StringOpFunction maStringFunc;
+    ScFullMatrix::EmptyOpFunction maEmptyFunc;
+};
+
+class WalkElementBlockOperation
+{
+public:
+
+    WalkElementBlockOperation(ElementBlock& rElementBlock)
+        : mrElementBlock(rElementBlock)
     {
     }
 
@@ -2539,12 +2556,12 @@ public:
                 std::advance(itEnd, node.size);
                 for (auto itr = it; itr != itEnd; ++itr)
                 {
-                    maDoubleFunc(mnRowPos, mnColPos, *itr);
-                    ++mnRowPos;
-                    if (mnRowPos >= mnRowSize)
+                    mrElementBlock.maDoubleFunc(mrElementBlock.mnRowPos, mrElementBlock.mnColPos, *itr);
+                    ++mrElementBlock.mnRowPos;
+                    if (mrElementBlock.mnRowPos >= mrElementBlock.mnRowSize)
                     {
-                        mnRowPos = 0;
-                        ++mnColPos;
+                        mrElementBlock.mnRowPos = 0;
+                        ++mrElementBlock.mnColPos;
                     }
                 }
             }
@@ -2559,12 +2576,12 @@ public:
                 std::advance(itEnd, node.size);
                 for (auto itr = it; itr != itEnd; ++itr)
                 {
-                    maStringFunc(mnRowPos, mnColPos, *itr);
-                    ++mnRowPos;
-                    if (mnRowPos >= mnRowSize)
+                    mrElementBlock.maStringFunc(mrElementBlock.mnRowPos, mrElementBlock.mnColPos, *itr);
+                    ++mrElementBlock.mnRowPos;
+                    if (mrElementBlock.mnRowPos >= mrElementBlock.mnRowSize)
                     {
-                        mnRowPos = 0;
-                        ++mnColPos;
+                        mrElementBlock.mnRowPos = 0;
+                        ++mrElementBlock.mnColPos;
                     }
                 }
             }
@@ -2579,12 +2596,12 @@ public:
                 std::advance(itEnd, node.size);
                 for (auto itr = it; itr != itEnd; ++itr)
                 {
-                    maBoolFunc(mnRowPos, mnColPos, *itr);
-                    ++mnRowPos;
-                    if (mnRowPos >= mnRowSize)
+                    mrElementBlock.maBoolFunc(mrElementBlock.mnRowPos, mrElementBlock.mnColPos, *itr);
+                    ++mrElementBlock.mnRowPos;
+                    if (mrElementBlock.mnRowPos >= mrElementBlock.mnRowSize)
                     {
-                        mnRowPos = 0;
-                        ++mnColPos;
+                        mrElementBlock.mnRowPos = 0;
+                        ++mrElementBlock.mnColPos;
                     }
                 }
             }
@@ -2593,12 +2610,12 @@ public:
             {
                 for (size_t i=0; i < node.size; ++i)
                 {
-                    maEmptyFunc(mnRowPos, mnColPos);
-                    ++mnRowPos;
-                    if (mnRowPos >= mnRowSize)
+                    mrElementBlock.maEmptyFunc(mrElementBlock.mnRowPos, mrElementBlock.mnColPos);
+                    ++mrElementBlock.mnRowPos;
+                    if (mrElementBlock.mnRowPos >= mrElementBlock.mnRowSize)
                     {
-                        mnRowPos = 0;
-                        ++mnColPos;
+                        mrElementBlock.mnRowPos = 0;
+                        ++mrElementBlock.mnColPos;
                     }
                 }
             }
@@ -2607,12 +2624,12 @@ public:
             {
                 SAL_WARN("sc.core","WalkElementBlockOperation - unhandled element_integer");
                 // No function (yet?), but advance row and column count.
-                mnColPos += node.size / mnRowSize;
-                mnRowPos += node.size % mnRowSize;
-                if (mnRowPos >= mnRowSize)
+                mrElementBlock.mnColPos += node.size / mrElementBlock.mnRowSize;
+                mrElementBlock.mnRowPos += node.size % mrElementBlock.mnRowSize;
+                if (mrElementBlock.mnRowPos >= mrElementBlock.mnRowSize)
                 {
-                    mnRowPos = 0;
-                    ++mnColPos;
+                    mrElementBlock.mnRowPos = 0;
+                    ++mrElementBlock.mnColPos;
                 }
             }
             break;
@@ -2621,14 +2638,7 @@ public:
 
 private:
 
-    size_t mnRowSize;
-    size_t mnRowPos;
-    size_t mnColPos;
-
-    ScFullMatrix::DoubleOpFunction maDoubleFunc;
-    ScFullMatrix::BoolOpFunction maBoolFunc;
-    ScFullMatrix::StringOpFunction maStringFunc;
-    ScFullMatrix::EmptyOpFunction maEmptyFunc;
+    ElementBlock& mrElementBlock;
 };
 
 }
@@ -2638,10 +2648,10 @@ void ScMatrixImpl::ExecuteOperation(const std::pair<size_t, size_t>& rStartPos,
         const ScMatrix::BoolOpFunction& aBoolFunc, const ScMatrix::StringOpFunction& aStringFunc,
         const ScMatrix::EmptyOpFunction& aEmptyFunc) const
 {
-    WalkElementBlockOperation aFunc(maMat.size().row,
-            aDoubleFunc, aBoolFunc, aStringFunc, aEmptyFunc);
+    ElementBlock aPayload(maMat.size().row, aDoubleFunc, aBoolFunc, aStringFunc, aEmptyFunc);
+    WalkElementBlockOperation aFunc(aPayload);
     maMat.walk(
-        std::move(aFunc),
+        aFunc,
         MatrixImplType::size_pair_type(rStartPos.first, rStartPos.second),
         MatrixImplType::size_pair_type(rEndPos.first, rEndPos.second));
 }
