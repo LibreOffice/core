@@ -812,6 +812,9 @@ haiku*)
     ;;
 esac
 
+AC_C_BIGENDIAN([ENDIANNESS=big], [ENDIANNESS=little])
+AC_SUBST(ENDIANNESS)
+
 if test "$_os" = "Android" ; then
     # Verify that the NDK and SDK options are proper
     if test -z "$with_android_ndk"; then
