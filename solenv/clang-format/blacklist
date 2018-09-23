@@ -3010,6 +3010,7 @@ dbaccess/qa/unit/dbaccess-dialogs-test.cxx
 dbaccess/qa/unit/dbtest_base.cxx
 dbaccess/qa/unit/embeddeddb_performancetest.cxx
 dbaccess/qa/unit/firebird.cxx
+dbaccess/qa/unit/firebird-regression.cxx
 dbaccess/qa/unit/hsqldb.cxx
 dbaccess/source/core/api/BookmarkSet.cxx
 dbaccess/source/core/api/BookmarkSet.hxx
