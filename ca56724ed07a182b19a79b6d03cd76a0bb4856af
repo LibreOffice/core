@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_1a82bd50",
+        "filename": "include/osl/file.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1642,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-23T15:33:00Z",
+      "side": 1,
+      "message": "* Is the relevant functionality, as needed by SfxMedium::TransactedTransferForFS_Impl (sfx2/source/doc/docfile.cxx), mainly about file creation time, or about metadata in general?  Why concentrate here on file creation time only?\n* On non-Windows OS, we could implement such \"preserve metadata of replaced file (if any)\" semantics too.  It\u0027s not clear to me why this should \"only [be] relevant to Windows\".",
+      "revId": "ca56724ed07a182b19a79b6d03cd76a0bb4856af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_ba907197",
+        "filename": "include/osl/file.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1661,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-23T15:33:00Z",
+      "side": 1,
+      "message": "rather see osl_moveFile?",
+      "revId": "ca56724ed07a182b19a79b6d03cd76a0bb4856af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_da9325a3",
+        "filename": "include/osl/file.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1327,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-23T15:33:00Z",
+      "side": 1,
+      "message": "the closing */ should be indented",
+      "revId": "ca56724ed07a182b19a79b6d03cd76a0bb4856af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_fa96e994",
+        "filename": "sal/util/sal.map",
+        "patchSetId": 5
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-09-23T15:33:00Z",
+      "side": 1,
+      "message": "the PRIVATE sections are meant for symbols that are never intended to be used directly by 3rd party code (not for symbols that might need some iterations before they\u0027re ready for exposure to 3rd party code; we don\u0027t have such a \"not-yet published playground\" in these map files, unfortunately); IMO this should be in a proper LIBO_UDK_6.2 section",
+      "revId": "ca56724ed07a182b19a79b6d03cd76a0bb4856af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
