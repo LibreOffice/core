@@ -278,6 +278,17 @@ void SlideBackground::HandleContextChange(
     else if ( IsDraw() )
     {
         mpMasterLabel->SetText(SdResId(STR_MASTERPAGE_LABEL));
+
+        if (maContext == maDrawOtherContext)
+        {
+            mpFillStyle->Show();
+            mpBackgroundLabel->Show();
+        }
+        else if (maContext == maDrawMasterContext)
+        {
+            mpFillStyle->Hide();
+            mpBackgroundLabel->Hide();
+        }
     }
 }
 
@@ -285,7 +296,7 @@ void SlideBackground::Update()
 {
     eFillStyle nPos = static_cast<eFillStyle>(mpFillStyle->GetSelectedEntryPos());
 
-    if(maContext != maImpressOtherContext)
+    if(maContext != maImpressOtherContext && maContext != maDrawOtherContext)
         nPos = NONE;
 
     SfxObjectShell* pSh = SfxObjectShell::Current();
