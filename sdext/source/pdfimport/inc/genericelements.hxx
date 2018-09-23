@@ -254,7 +254,6 @@ namespace pdfi
 
         virtual void visitedBy( ElementTreeVisitor&, const std::list< std::unique_ptr<Element> >::const_iterator& rParentIt ) override;
 
-        static void updateParagraphGeometry( Element* pEle );
         void resolveHyperlinks();
         void resolveFontStyles( PDFIProcessor const & rProc );
         void resolveUnderlines( PDFIProcessor const & rProc );

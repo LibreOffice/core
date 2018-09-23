@@ -67,9 +67,6 @@ namespace sdr
             // flush. Do buffered updates.
             virtual void flush() override;
 
-            // restore part of background. Implemented form buffered versions only.
-            virtual void restoreBackground(const vcl::Region& rRegion) const override;
-
             // invalidate the given range at local OutputDevice
             virtual void invalidateRange(const basegfx::B2DRange& rRange) override;
         };

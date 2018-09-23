@@ -92,20 +92,6 @@ ScVbaCondition< Ifc... >::Formula2( )
 }
 
 template< typename... Ifc >
-void
-ScVbaCondition< Ifc... >::setFormula1( const uno::Any& _aFormula1)
-{
-    OUString sFormula;
-    if ( _aFormula1 >>= sFormula )
-    {
-        mxSheetCondition->setFormula1( sFormula );
-        table::CellRangeAddress aCellRangeAddress = mxAddressable->getRangeAddress();
-        table::CellAddress aCellAddress( aCellRangeAddress.Sheet, aCellRangeAddress.StartColumn,  aCellRangeAddress.StartRow );
-        mxSheetCondition->setSourcePosition(aCellAddress);
-    }
-}
-
-template< typename... Ifc >
 sal_Int32
 ScVbaCondition< Ifc... >::Operator(bool _bIncludeFormulaValue)
 {

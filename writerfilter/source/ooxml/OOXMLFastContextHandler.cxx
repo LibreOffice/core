@@ -295,12 +295,6 @@ Token_t OOXMLFastContextHandler::getToken() const
     return mnToken;
 }
 
-void OOXMLFastContextHandler::setParent
-(OOXMLFastContextHandler * pParent)
-{
-    mpParent = pParent;
-}
-
 void OOXMLFastContextHandler::sendTableDepth() const
 {
     if (mnTableDepth > 0)
@@ -1111,15 +1105,6 @@ void OOXMLFastContextHandlerProperties::handleFontRel()
 void OOXMLFastContextHandlerProperties::handleHyperlinkURL() {
     OOXMLHyperlinkURLHandler aHyperlinkURLHandler(this);
     getPropertySet()->resolve(aHyperlinkURLHandler);
-}
-
-void OOXMLFastContextHandlerProperties::setParent
-(OOXMLFastContextHandler * pParent)
-{
-    OOXMLFastContextHandler::setParent(pParent);
-
-    if (mpParent->getResource() == STREAM)
-        mbResolve = true;
 }
 
 void OOXMLFastContextHandlerProperties::setPropertySet

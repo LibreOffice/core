@@ -1718,11 +1718,8 @@ OUString SdrUndoPageChangeMasterPage::GetComment() const
 
 
 SdrUndoFactory::~SdrUndoFactory(){}
+
 // shapes
-SdrUndoAction* SdrUndoFactory::CreateUndoMoveObject( SdrObject& rObject )
-{
-    return new SdrUndoMoveObj( rObject );
-}
 
 SdrUndoAction* SdrUndoFactory::CreateUndoMoveObject( SdrObject& rObject, const Size& rDist )
 {
@@ -1802,11 +1799,6 @@ SdrUndoAction* SdrUndoFactory::CreateUndoNewLayer(sal_uInt16 nLayerNum, SdrLayer
 SdrUndoAction* SdrUndoFactory::CreateUndoDeleteLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
 {
     return new SdrUndoDelLayer( nLayerNum, rNewLayerAdmin, rNewModel );
-}
-
-SdrUndoAction* SdrUndoFactory::CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNewPos1)
-{
-    return new SdrUndoMoveLayer( nLayerNum, rNewLayerAdmin, rNewModel, nNewPos1 );
 }
 
 // page

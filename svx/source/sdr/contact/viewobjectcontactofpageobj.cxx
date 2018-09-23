@@ -64,12 +64,9 @@ public:
 
     // forward access to SdrPageView of ViewObjectContactOfPageObj
     virtual bool isOutputToPrinter() const override;
-    virtual bool isOutputToWindow() const override;
-    virtual bool isOutputToVirtualDevice() const override;
     virtual bool isOutputToRecordingMetaFile() const override;
     virtual bool isOutputToPDFFile() const override;
     virtual bool isDrawModeGray() const override;
-    virtual bool isDrawModeBlackWhite() const override;
     virtual bool isDrawModeHighContrast() const override;
     virtual SdrPageView* TryToGetSdrPageView() const override;
     virtual OutputDevice* TryToGetOutputDevice() const override;
@@ -177,12 +174,9 @@ void PagePrimitiveExtractor::InvalidatePartOfView(const basegfx::B2DRange& rRang
 
 // forward access to SdrPageView to VOCOfPageObj
 bool PagePrimitiveExtractor::isOutputToPrinter() const { return mrViewObjectContactOfPageObj.GetObjectContact().isOutputToPrinter(); }
-bool PagePrimitiveExtractor::isOutputToWindow() const { return mrViewObjectContactOfPageObj.GetObjectContact().isOutputToWindow(); }
-bool PagePrimitiveExtractor::isOutputToVirtualDevice() const { return mrViewObjectContactOfPageObj.GetObjectContact().isOutputToVirtualDevice(); }
 bool PagePrimitiveExtractor::isOutputToRecordingMetaFile() const { return mrViewObjectContactOfPageObj.GetObjectContact().isOutputToRecordingMetaFile(); }
 bool PagePrimitiveExtractor::isOutputToPDFFile() const { return mrViewObjectContactOfPageObj.GetObjectContact().isOutputToPDFFile(); }
 bool PagePrimitiveExtractor::isDrawModeGray() const { return mrViewObjectContactOfPageObj.GetObjectContact().isDrawModeGray(); }
-bool PagePrimitiveExtractor::isDrawModeBlackWhite() const { return mrViewObjectContactOfPageObj.GetObjectContact().isDrawModeBlackWhite(); }
 bool PagePrimitiveExtractor::isDrawModeHighContrast() const { return mrViewObjectContactOfPageObj.GetObjectContact().isDrawModeHighContrast(); }
 SdrPageView* PagePrimitiveExtractor::TryToGetSdrPageView() const { return mrViewObjectContactOfPageObj.GetObjectContact().TryToGetSdrPageView(); }
 OutputDevice* PagePrimitiveExtractor::TryToGetOutputDevice() const { return mrViewObjectContactOfPageObj.GetObjectContact().TryToGetOutputDevice(); }

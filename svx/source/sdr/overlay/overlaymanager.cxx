@@ -261,11 +261,6 @@ namespace sdr
             // default has nothing to do
         }
 
-        void OverlayManager::restoreBackground(const vcl::Region& /*rRegion*/) const
-        {
-            // unbuffered versions do nothing here
-        }
-
         void OverlayManager::add(OverlayObject& rOverlayObject)
         {
             OSL_ENSURE(nullptr == rOverlayObject.mpOverlayManager, "OverlayObject is added twice to an OverlayManager (!)");

@@ -679,16 +679,6 @@ EBulletInfo SvxAccessibleTextAdapter::GetBulletInfo( sal_Int32 nPara ) const
     return mpTextForwarder->GetBulletInfo( nPara );
 }
 
-void SvxAccessibleTextAdapter::SetUpdateModeForAcc(bool bUp)
-{
-    return mpTextForwarder->SetUpdateModeForAcc(bUp);
-}
-
-bool SvxAccessibleTextAdapter::GetUpdateModeForAcc( ) const
-{
-    return mpTextForwarder->GetUpdateModeForAcc();
-}
-
 tools::Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex ) const
 {
     assert(mpTextForwarder && "SvxAccessibleTextAdapter: no forwarder");
@@ -1123,13 +1113,6 @@ bool SvxAccessibleTextEditViewAdapter::IsValid() const
         return mpViewForwarder->IsValid();
     else
         return false;
-}
-
-tools::Rectangle SvxAccessibleTextEditViewAdapter::GetVisArea() const
-{
-    DBG_ASSERT(mpViewForwarder, "SvxAccessibleTextEditViewAdapter: no forwarder");
-
-    return mpViewForwarder->GetVisArea();
 }
 
 Point SvxAccessibleTextEditViewAdapter::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const

@@ -413,16 +413,6 @@ namespace sdr
             ImpBufferTimerHandler(nullptr);
         }
 
-        void OverlayManagerBuffered::restoreBackground(const vcl::Region& rRegion) const
-        {
-            // restore
-            const vcl::Region aRegionPixel(getOutputDevice().LogicToPixel(rRegion));
-            ImpRestoreBackground(aRegionPixel);
-
-            // call parent
-            OverlayManager::restoreBackground(rRegion);
-        }
-
         void OverlayManagerBuffered::invalidateRange(const basegfx::B2DRange& rRange)
         {
             if(!rRange.isEmpty())

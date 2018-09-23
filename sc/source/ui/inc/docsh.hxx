@@ -202,7 +202,6 @@ public:
     virtual bool    SaveAs( SfxMedium& rMedium ) override;
     virtual bool    ConvertTo( SfxMedium &rMedium ) override;
     virtual bool    PrepareClose( bool bUI = true ) override;
-    virtual void    PrepareReload() override;
     virtual void    LoadStyles( SfxObjectShell &rSource ) override;
 
     virtual bool    DoSaveCompleted( SfxMedium * pNewStor=nullptr, bool bRegisterRecent=true ) override;     // SfxObjectShell

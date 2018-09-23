@@ -835,10 +835,6 @@ void SfxStyleSheetBasePool::ChangeParent(const OUString& rOld,
     SetSearchMask(GetSearchFamily(), nTmpMask);
 }
 
-void SfxStyleSheetBase::Load( SvStream&, sal_uInt16 )
-{
-}
-
 SfxStyleSheet::SfxStyleSheet(const OUString &rName,
                              const SfxStyleSheetBasePool& r_Pool,
                              SfxStyleFamily eFam,

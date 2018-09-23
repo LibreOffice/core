@@ -39,8 +39,6 @@ public:
     virtual OUString SAL_CALL Formula1( ) override;
     virtual OUString SAL_CALL Formula2( ) override;
     /// @throws css::script::BasicErrorException
-    virtual void setFormula1( const css::uno::Any& _aFormula1);
-    /// @throws css::script::BasicErrorException
     virtual sal_Int32 Operator(bool _bIncludeFormulaValue);
     virtual sal_Int32 SAL_CALL Operator() override = 0;
 

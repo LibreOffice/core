@@ -99,7 +99,6 @@ class LwpVirtualLayout : public LwpDLNFPVList
 public:
     LwpVirtualLayout(LwpObjectHeader const &objHdr, LwpSvStream* pStrm);
     virtual sal_uInt16 GetNumCols(){return 1;}
-    virtual double GetColWidth(sal_uInt16 nIndex);
     virtual double GetColGap(sal_uInt16 nIndex);
     virtual bool IsAutoGrow(){ return false;}
     virtual bool IsAutoGrowUp(){ return false;}
@@ -445,7 +444,6 @@ protected:
 public:
     LwpUseWhen* VirtualGetUseWhen() override;
     virtual sal_uInt16 GetNumCols() override;
-    virtual double GetColWidth(sal_uInt16 nIndex) override;
     virtual double GetColGap(sal_uInt16 nIndex) override;
     sal_uInt16 GetUsePage();
 public:

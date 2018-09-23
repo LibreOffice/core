@@ -341,51 +341,6 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
     }
 }
 
-void DrawDocShell::InPlaceActivate( bool bActive )
-{
-    SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, false);
-    std::vector<std::unique_ptr<FrameView>> &rViews = mpDoc->GetFrameViewList();
-
-    if( !bActive )
-    {
-        rViews.clear();
-
-        while (pSfxViewFrame)
-        {
-            // determine the number of FrameViews
-            SfxViewShell* pSfxViewSh = pSfxViewFrame->GetViewShell();
-            ViewShell* pViewSh = dynamic_cast<ViewShell*>(pSfxViewSh);
-
-            if ( pViewSh && pViewSh->GetFrameView() )
-            {
-                pViewSh->WriteFrameViewData();
-                rViews.push_back( o3tl::make_unique<FrameView>( mpDoc, pViewSh->GetFrameView() ) );
-            }
-
-            pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, false);
-        }
-    }
-
-    SfxObjectShell::InPlaceActivate( bActive );
-
-    if( bActive )
-    {
-        for( std::vector<FrameView*>::size_type i = 0; pSfxViewFrame && (i < rViews.size()); i++ )
-        {
-            // determine the number of FrameViews
-            SfxViewShell* pSfxViewSh = pSfxViewFrame->GetViewShell();
-            ViewShell* pViewSh = dynamic_cast<ViewShell*>(pSfxViewSh);
-
-            if ( pViewSh )
-            {
-                pViewSh->ReadFrameViewData( rViews[ i ].get() );
-            }
-
-            pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, false);
-        }
-    }
-}
-
 void DrawDocShell::Activate( bool bMDI)
 {
     if (bMDI)

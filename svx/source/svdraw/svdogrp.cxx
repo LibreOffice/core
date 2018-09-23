@@ -766,11 +766,6 @@ void SdrObjGroup::NbcReformatText()
     NbcReformatAllTextObjects();
 }
 
-void SdrObjGroup::ReformatText()
-{
-    ReformatAllTextObjects();
-}
-
 SdrObject* SdrObjGroup::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     SdrObject* pGroup = new SdrObjGroup(getSdrModelFromSdrObject());

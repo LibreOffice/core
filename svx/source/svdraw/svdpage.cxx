@@ -450,39 +450,6 @@ SdrObject* SdrObjList::RemoveObject(size_t nObjNum)
     return pObj;
 }
 
-SdrObject* SdrObjList::NbcReplaceObject(SdrObject* pNewObj, size_t nObjNum)
-{
-    if (nObjNum >= maList.size() || pNewObj == nullptr)
-    {
-        OSL_ASSERT(nObjNum<maList.size());
-        OSL_ASSERT(pNewObj!=nullptr);
-        return nullptr;
-    }
-
-    SdrObject* pObj=maList[nObjNum];
-    DBG_ASSERT(pObj!=nullptr,"SdrObjList::ReplaceObject: Could not find object to remove.");
-    if (pObj!=nullptr) {
-        DBG_ASSERT(pObj->IsInserted(),"SdrObjList::ReplaceObject: the object does not have status Inserted.");
-        pObj->InsertedStateChange();
-        SetParentAtSdrObjectFromSdrObjList(*pObj, nullptr);
-        ReplaceObjectInContainer(*pNewObj,nObjNum);
-
-        // flushViewObjectContacts() clears the VOC's and those invalidate
-        pObj->GetViewContact().flushViewObjectContacts();
-
-        pNewObj->SetOrdNum(nObjNum);
-        SetParentAtSdrObjectFromSdrObjList(*pNewObj, this);
-
-        // Inform the parent about change to allow invalidations at
-        // evtl. existing parent visualisations
-        impChildInserted(*pNewObj);
-
-        pNewObj->InsertedStateChange();
-        SetSdrObjListRectsDirty();
-    }
-    return pObj;
-}
-
 SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
 {
     if (nObjNum >= maList.size())

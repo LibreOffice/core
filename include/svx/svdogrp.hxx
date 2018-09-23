@@ -103,7 +103,6 @@ public:
     virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
 
     virtual void NbcReformatText() override;
-    virtual void ReformatText() override;
 
     virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 

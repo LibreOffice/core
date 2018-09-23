@@ -1430,21 +1430,6 @@ void SdrTextObj::NbcReformatText()
     }
 }
 
-void SdrTextObj::ReformatText()
-{
-    if(GetOutlinerParaObject())
-    {
-        tools::Rectangle aBoundRect0;
-        if (pUserCall!=nullptr)
-            aBoundRect0=GetLastBoundRect();
-
-        NbcReformatText();
-        SetChanged();
-        BroadcastObjectChange();
-        SendUserCall(SdrUserCallType::Resize,aBoundRect0);
-    }
-}
-
 SdrObjGeoData* SdrTextObj::NewGeoData() const
 {
     return new SdrTextObjGeoData;

@@ -444,14 +444,6 @@ public:
     virtual void cellProps(const TablePropertyMapPtr& pProps);
 
     /**
-       Handle properties of a certain cell in the current row.
-
-       @paran i        index of the cell in the current row
-       @param pProps   the properties
-     */
-    virtual void cellPropsByCell(unsigned int i, const TablePropertyMapPtr& pProps);
-
-    /**
        Handle properties of the current row.
 
        @param pProps   the properties

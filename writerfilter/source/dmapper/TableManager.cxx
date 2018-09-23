@@ -94,19 +94,6 @@ void TableManager::insertRowProps(const TablePropertyMapPtr& pProps)
 #endif
 }
 
-void TableManager::cellPropsByCell(unsigned int i, const TablePropertyMapPtr& pProps)
-{
-#ifdef DEBUG_WRITERFILTER
-    TagLogger::getInstance().startElement("tablemanager.cellPropsByCell");
-#endif
-
-    mTableDataStack.top()->insertCellProperties(i, pProps);
-
-#ifdef DEBUG_WRITERFILTER
-    TagLogger::getInstance().endElement();
-#endif
-}
-
 void TableManager::cellProps(const TablePropertyMapPtr& pProps)
 {
 #ifdef DEBUG_WRITERFILTER

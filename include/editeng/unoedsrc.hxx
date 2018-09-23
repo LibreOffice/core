@@ -215,9 +215,6 @@ public:
      */
     virtual EBulletInfo     GetBulletInfo( sal_Int32 nPara ) const = 0;
 
-    virtual void            SetUpdateModeForAcc(bool) {}
-    virtual bool            GetUpdateModeForAcc() const { return true; }
-
     /** Query the bounding rectangle of the given character
 
         @param nPara[0 .. n]
@@ -459,15 +456,6 @@ public:
         @return sal_False, if no longer valid
      */
     virtual bool        IsValid() const = 0;
-
-    /** Query visible area of the view containing the text
-
-        @return the visible rectangle of the text, i.e. the part of
-        the EditEngine or Outliner that is currently on screen. The
-        values are already in screen coordinates (pixel), and have to
-        be relative to the EditEngine/Outliner's upper left corner.
-     */
-    virtual tools::Rectangle   GetVisArea() const = 0;
 
     /** Convert from logical, EditEngine-relative coordinates to screen coordinates
 

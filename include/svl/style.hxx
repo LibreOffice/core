@@ -132,7 +132,6 @@ protected:
     SfxStyleSheetBase( const OUString&, SfxStyleSheetBasePool*, SfxStyleFamily eFam, SfxStyleSearchBits mask );
     SfxStyleSheetBase( const SfxStyleSheetBase& );
     virtual ~SfxStyleSheetBase() override;
-    virtual void Load( SvStream&, sal_uInt16 );
 
 public:
 

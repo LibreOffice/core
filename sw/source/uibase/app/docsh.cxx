@@ -1187,10 +1187,6 @@ void SwDocShell::SetView(SwView* pVw)
         m_pWrtShell = nullptr;
 }
 
-void SwDocShell::PrepareReload()
-{
-}
-
 // #i59688#
 // linked graphics are now loaded on demand.
 // Thus, loading of linked graphics no longer needed and necessary for

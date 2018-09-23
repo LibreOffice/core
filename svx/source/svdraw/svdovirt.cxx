@@ -520,12 +520,6 @@ void SdrVirtObj::NbcReformatText()
     rRefObj.NbcReformatText();
 }
 
-void SdrVirtObj::ReformatText()
-{
-    rRefObj.ReformatText();
-}
-
-
 bool SdrVirtObj::HasMacro() const
 {
     return rRefObj.HasMacro();
@@ -549,11 +543,6 @@ void SdrVirtObj::PaintMacro(OutputDevice& rOut, const tools::Rectangle& rDirtyRe
 bool SdrVirtObj::DoMacro(const SdrObjMacroHitRec& rRec)
 {
     return rRefObj.DoMacro(rRec); // TODO: positioning offset
-}
-
-OUString SdrVirtObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
-{
-    return rRefObj.GetMacroPopupComment(rRec); // TODO: positioning offset
 }
 
 const Point SdrVirtObj::GetOffset() const

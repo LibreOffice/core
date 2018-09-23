@@ -378,11 +378,7 @@ namespace slideshow
             /** Query whether the char rotation angle attribute is valid
              */
             bool isCharRotationAngleValid() const;
-            /** Query the current text rotation angle of the shape
 
-                @return the text rotation angle in degrees.
-             */
-            double getCharRotationAngle() const;
             /** Set the new text rotation angle of the shape
 
                 @param rNewAngle

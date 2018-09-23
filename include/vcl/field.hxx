@@ -75,7 +75,6 @@ public:
     virtual void            Reformat();
     virtual void            ReformatAll();
 
-    virtual void            SetLocale( const css::lang::Locale& rLocale );
     const css::lang::Locale& GetLocale() const;
     const LanguageTag&      GetLanguageTag() const;
 
@@ -312,9 +311,6 @@ public:
 
     virtual void            Reformat() override;
     virtual void            ReformatAll() override;
-
-    virtual void            SetLocale( const css::lang::Locale& rLocale ) override;
-
 
     void                    SetExtDateFormat( ExtDateFieldFormat eFormat );
     ExtDateFieldFormat      GetExtDateFormat( bool bResolveSystemFormat = false ) const;

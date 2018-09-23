@@ -111,14 +111,6 @@ public:
            TableManager::cellProps( pProps );
     };
 
-    virtual void cellPropsByCell(unsigned int i, const TablePropertyMapPtr& pProps) override
-    {
-        if ( m_pStyleProps.get( ) )
-            m_pStyleProps->InsertProps(pProps.get());
-        else
-           TableManager::cellPropsByCell( i, pProps );
-    };
-
     virtual void insertRowProps(const TablePropertyMapPtr& pProps) override
     {
         if ( m_pStyleProps.get( ) )

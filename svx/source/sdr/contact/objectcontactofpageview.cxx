@@ -354,33 +354,6 @@ namespace sdr
             GetPageWindow().InvalidatePageWindow(rRange);
         }
 
-        // Get info if given Rectangle is visible in this view
-        bool ObjectContactOfPageView::IsAreaVisible(const basegfx::B2DRange& rRange) const
-        {
-            // compare with the visible rectangle
-            if(rRange.isEmpty())
-            {
-                // no range -> not visible
-                return false;
-            }
-            else
-            {
-                const OutputDevice& rTargetOutDev = GetPageWindow().GetPaintWindow().GetTargetOutputDevice();
-                const Size aOutputSizePixel(rTargetOutDev.GetOutputSizePixel());
-                basegfx::B2DRange aLogicViewRange(0.0, 0.0, aOutputSizePixel.getWidth(), aOutputSizePixel.getHeight());
-
-                aLogicViewRange.transform(rTargetOutDev.GetInverseViewTransformation());
-
-                if(!aLogicViewRange.isEmpty() && !aLogicViewRange.overlaps(rRange))
-                {
-                    return false;
-                }
-            }
-
-            // call parent
-            return ObjectContact::IsAreaVisible(rRange);
-        }
-
         // Get info about the need to visualize GluePoints
         bool ObjectContactOfPageView::AreGluePointsVisible() const
         {
@@ -413,18 +386,6 @@ namespace sdr
             return (OUTDEV_PRINTER == mrPageWindow.GetPaintWindow().GetOutputDevice().GetOutDevType());
         }
 
-        // window?
-        bool ObjectContactOfPageView::isOutputToWindow() const
-        {
-            return (OUTDEV_WINDOW == mrPageWindow.GetPaintWindow().GetOutputDevice().GetOutDevType());
-        }
-
-        // VirtualDevice?
-        bool ObjectContactOfPageView::isOutputToVirtualDevice() const
-        {
-            return (OUTDEV_VIRDEV == mrPageWindow.GetPaintWindow().GetOutputDevice().GetOutDevType());
-        }
-
         // recording MetaFile?
         bool ObjectContactOfPageView::isOutputToRecordingMetaFile() const
         {
@@ -443,13 +404,6 @@ namespace sdr
         {
             const DrawModeFlags nDrawMode(mrPageWindow.GetPaintWindow().GetOutputDevice().GetDrawMode());
             return (nDrawMode == (DrawModeFlags::GrayLine|DrawModeFlags::GrayFill|DrawModeFlags::BlackText|DrawModeFlags::GrayBitmap|DrawModeFlags::GrayGradient));
-        }
-
-        // gray display mode
-        bool ObjectContactOfPageView::isDrawModeBlackWhite() const
-        {
-            const DrawModeFlags nDrawMode(mrPageWindow.GetPaintWindow().GetOutputDevice().GetDrawMode());
-            return (nDrawMode == (DrawModeFlags::BlackLine|DrawModeFlags::BlackText|DrawModeFlags::WhiteFill|DrawModeFlags::GrayBitmap|DrawModeFlags::WhiteGradient));
         }
 
         // high contrast display mode

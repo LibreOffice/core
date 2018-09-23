@@ -187,7 +187,6 @@ public:
     virtual OutputDevice* GetDocumentRefDev() override;
     virtual void      OnDocumentPrinterChanged( Printer * pNewPrinter ) override;
 
-    virtual void            PrepareReload() override;
     virtual void            SetModified( bool = true ) override;
 
     /// Dispatcher

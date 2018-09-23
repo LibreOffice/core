@@ -1,0 +1,98 @@
+callDict size 32
+
+
+void writerfilter::ooxml::OOXMLFastContextHandler::setParent(writerfilter::ooxml::OOXMLFastContextHandler *)
+writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:122
+
+int SdrMarkView::GetMarkedPointCount() const
+include/svx/svdmrkv.hxx:314
+
+void SvxTextForwarder::SetUpdateModeForAcc(bool)
+include/editeng/unoedsrc.hxx:218
+
+bool psp::PrinterInfoManager::writePrinterConfig()
+vcl/inc/printerinfomanager.hxx:172
+
+void sdr::overlay::OverlayManager::restoreBackground(const vcl::Region &) const
+include/svx/sdr/overlay/overlaymanager.hxx:107
+
+bool psp::PrinterInfoManager::setDefaultPrinter(const rtl::OUString &)
+vcl/inc/printerinfomanager.hxx:176
+
+SdrUndoAction * SdrUndoFactory::CreateUndoMoveLayer(unsigned short,SdrLayerAdmin &,SdrModel &,unsigned short)
+include/svx/svdundo.hxx:758
+
+void writerfilter::dmapper::TableManager::cellPropsByCell(unsigned int,const tools::SvRef<writerfilter::dmapper::TablePropertyMap> &)
+writerfilter/source/dmapper/TableManager.hxx:452
+
+double LwpVirtualLayout::GetColWidth(unsigned short)
+lotuswordpro/source/filter/lwplayout.hxx:102
+
+double slideshow::internal::ShapeAttributeLayer::getCharRotationAngle() const
+slideshow/source/inc/shapeattributelayer.hxx:385
+
+bool SwDrawBase::KeyInput(const KeyEvent &)
+sw/source/uibase/inc/drawbase.hxx:53
+
+void SdrObject::ReformatText()
+include/svx/svdobj.hxx:685
+
+void FormatterBase::SetLocale(const com::sun::star::lang::Locale &)
+include/vcl/field.hxx:78
+
+std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > writerfilter::ooxml::OOXMLFastContextHandler::getType() const
+writerfilter/source/ooxml/OOXMLFastContextHandler.hxx:88
+
+bool sdr::contact::ObjectContact::isDrawModeBlackWhite() const
+include/svx/sdr/contact/objectcontact.hxx:154
+
+void ScVbaCondition::setFormula1(const com::sun::star::uno::Any &)
+sc/source/ui/vba/vbacondition.hxx:42
+
+void sax_fastparser::FastSaxSerializer::ForMerge::print()
+sax/source/tools/fastserializer.hxx:184
+
+bool SvxTextForwarder::GetUpdateModeForAcc() const
+include/editeng/unoedsrc.hxx:219
+
+rtl::OUString SdrObject::GetMacroPopupComment(const SdrObjMacroHitRec &) const
+include/svx/svdobj.hxx:695
+
+bool psp::PrinterInfoManager::removePrinter(const rtl::OUString &,bool)
+vcl/inc/printerinfomanager.hxx:168
+
+bool sdr::contact::ObjectContact::isOutputToWindow() const
+include/svx/sdr/contact/objectcontact.hxx:139
+
+void SfxStyleSheetBase::Load(SvStream &,unsigned short)
+include/svl/style.hxx:135
+
+void SfxObjectShell::PrepareReload()
+include/sfx2/objsh.hxx:440
+
+void SfxObjectShell::InPlaceActivate(bool)
+include/sfx2/objsh.hxx:583
+
+bool sdr::contact::ObjectContact::IsAreaVisible(const basegfx::B2DRange &) const
+include/svx/sdr/contact/objectcontact.hxx:116
+
+void sfx2::sidebar::Deck::PrintWindowSubTree(vcl::Window *,int)
+include/sfx2/sidebar/Deck.hxx:70
+
+void pdfi::PageElement::updateParagraphGeometry(pdfi::Element *)
+sdext/source/pdfimport/inc/genericelements.hxx:257
+
+bool sdr::contact::ObjectContact::isOutputToVirtualDevice() const
+include/svx/sdr/contact/objectcontact.hxx:142
+
+tools::Rectangle SvxViewForwarder::GetVisArea() const
+include/editeng/unoedsrc.hxx:470
+
+bool psp::PrinterInfoManager::addPrinter(const rtl::OUString &,const rtl::OUString &)
+vcl/inc/printerinfomanager.hxx:161
+
+SdrUndoAction * SdrUndoFactory::CreateUndoMoveObject(SdrObject &)
+include/svx/svdundo.hxx:733
+
+SdrObject * SdrObjList::NbcReplaceObject(SdrObject *,unsigned long)
+include/svx/svdpage.hxx:126

@@ -1423,12 +1423,6 @@ DateFormatter::~DateFormatter()
 {
 }
 
-void DateFormatter::SetLocale( const css::lang::Locale& rLocale )
-{
-    mpCalendarWrapper.reset();
-    FormatterBase::SetLocale( rLocale );
-}
-
 CalendarWrapper& DateFormatter::GetCalendarWrapper() const
 {
     if ( !mpCalendarWrapper )

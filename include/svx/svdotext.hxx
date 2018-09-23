@@ -493,7 +493,6 @@ public:
     std::unique_ptr<OutlinerParaObject> GetEditOutlinerParaObject() const;
 
     virtual void NbcReformatText() override;
-    virtual void ReformatText() override;
 
     virtual bool CalcFieldValue(const SvxFieldItem& rField, sal_Int32 nPara, sal_uInt16 nPos,
         bool bEdit, boost::optional<Color>& rpTxtColor, boost::optional<Color>& rpFldColor, OUString& rRet) const;

@@ -31,35 +31,6 @@ DrawSelection::DrawSelection(SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView*
     m_bCreateObj = false;
 }
 
-// Process keyboard events
-
-// If a KeyEvent is processed then the return value is true, otherwise
-// false.
-
-bool DrawSelection::KeyInput(const KeyEvent& rKEvt)
-{
-    bool bReturn = false;
-
-    switch (rKEvt.GetKeyCode().GetCode())
-    {
-        case KEY_ESCAPE:
-        {
-            if (m_pWin->IsDrawAction())
-            {
-                m_pSh->BreakMark();
-                m_pWin->ReleaseMouse();
-            }
-            bReturn = true;
-        }
-        break;
-    }
-
-    if (!bReturn)
-        bReturn = SwDrawBase::KeyInput(rKEvt);
-
-    return bReturn;
-}
-
 void DrawSelection::Activate(const sal_uInt16 nSlotId)
 {
     m_pWin->SetSdrDrawMode(OBJ_NONE);

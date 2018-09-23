@@ -35,7 +35,6 @@ namespace rptui
         virtual ~OReportUndoFactory() override;
 
            // shapes
-        virtual SdrUndoAction* CreateUndoMoveObject( SdrObject& rObject ) override;
         virtual SdrUndoAction* CreateUndoMoveObject( SdrObject& rObject, const Size& rDist ) override;
         virtual SdrUndoAction* CreateUndoGeoObject( SdrObject& rObject ) override;
         virtual SdrUndoAction* CreateUndoAttrObject( SdrObject& rObject, bool bStyleSheet1 = false, bool bSaveText = false ) override;
@@ -54,7 +53,6 @@ namespace rptui
         // layer
         virtual SdrUndoAction* CreateUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel) override;
         virtual SdrUndoAction* CreateUndoDeleteLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel) override;
-        virtual SdrUndoAction* CreateUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNewPos1) override;
 
         // page
         virtual SdrUndoAction* CreateUndoDeletePage(SdrPage& rPage) override;

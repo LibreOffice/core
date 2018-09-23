@@ -71,9 +71,6 @@ public:
     // Process the whole displaying
     virtual void ProcessDisplay(DisplayInfo& rDisplayInfo) override;
 
-    // VirtualDevice? Default is false
-    virtual bool isOutputToVirtualDevice() const override;
-
     // recording MetaFile? Default is false
     virtual bool isOutputToRecordingMetaFile() const override;
 

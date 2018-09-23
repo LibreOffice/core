@@ -897,13 +897,6 @@ void SfxObjectShell::SetActivateEvent_Impl(SfxEventHintId nId )
     pImpl->nEventId = nId;
 }
 
-void SfxObjectShell::PrepareReload( )
-/*
-  Is called before the Reload and gives the opportunity to clear any caches.
-*/
-{
-}
-
 bool SfxObjectShell::IsAutoLoadLocked() const
 
 /* Returns whether an Autoload is allowed to be executed. Before the
@@ -1645,10 +1638,6 @@ bool SfxObjectShell::IsUIActive()
 
     SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
     return pFrame && pFrame->GetFrame().IsInPlace() && pFrame->GetFrame().GetWorkWindow_Impl()->IsVisible_Impl();
-}
-
-void SfxObjectShell::InPlaceActivate( bool )
-{
 }
 
 bool SfxObjectShell::UseInteractionToHandleError(
