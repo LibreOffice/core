@@ -761,10 +761,10 @@ bool SwRedlineExtraData::operator == ( const SwRedlineExtraData& ) const
 SwRedlineExtraData_FormatColl::SwRedlineExtraData_FormatColl( const OUString& rColl,
                                                 sal_uInt16 nPoolFormatId,
                                                 const SfxItemSet* pItemSet )
-    : sFormatNm(rColl), nPoolId(nPoolFormatId)
+    : m_sFormatNm(rColl), m_nPoolId(nPoolFormatId)
 {
     if( pItemSet && pItemSet->Count() )
-        pSet.reset( new SfxItemSet( *pItemSet ) );
+        m_pSet.reset( new SfxItemSet( *pItemSet ) );
 }
 
 SwRedlineExtraData_FormatColl::~SwRedlineExtraData_FormatColl()
@@ -773,7 +773,7 @@ SwRedlineExtraData_FormatColl::~SwRedlineExtraData_FormatColl()
 
 SwRedlineExtraData* SwRedlineExtraData_FormatColl::CreateNew() const
 {
-    return new SwRedlineExtraData_FormatColl( sFormatNm, nPoolId, pSet.get() );
+    return new SwRedlineExtraData_FormatColl( m_sFormatNm, m_nPoolId, m_pSet.get() );
 }
 
 void SwRedlineExtraData_FormatColl::Reject( SwPaM& rPam ) const
@@ -781,13 +781,13 @@ void SwRedlineExtraData_FormatColl::Reject( SwPaM& rPam ) const
     SwDoc* pDoc = rPam.GetDoc();
 
     // What about Undo? Is it turned off?
-    SwTextFormatColl* pColl = USHRT_MAX == nPoolId
-                            ? pDoc->FindTextFormatCollByName( sFormatNm )
-                            : pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( nPoolId );
+    SwTextFormatColl* pColl = USHRT_MAX == m_nPoolId
+                            ? pDoc->FindTextFormatCollByName( m_sFormatNm )
+                            : pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool( m_nPoolId );
     if( pColl )
         pDoc->SetTextFormatColl( rPam, pColl, false );
 
-    if( pSet )
+    if( m_pSet )
     {
         rPam.SetMark();
         SwPosition& rMark = *rPam.GetMark();
@@ -800,13 +800,13 @@ void SwRedlineExtraData_FormatColl::Reject( SwPaM& rPam ) const
             {
                 // Only set those that are not there anymore. Others
                 // could have changed, but we don't touch these.
-                SfxItemSet aTmp( *pSet );
+                SfxItemSet aTmp( *m_pSet );
                 aTmp.Differentiate( *pTNd->GetpSwAttrSet() );
                 pDoc->getIDocumentContentOperations().InsertItemSet( rPam, aTmp );
             }
             else
             {
-                pDoc->getIDocumentContentOperations().InsertItemSet( rPam, *pSet );
+                pDoc->getIDocumentContentOperations().InsertItemSet( rPam, *m_pSet );
             }
         }
         rPam.DeleteMark();
@@ -816,17 +816,17 @@ void SwRedlineExtraData_FormatColl::Reject( SwPaM& rPam ) const
 bool SwRedlineExtraData_FormatColl::operator == ( const SwRedlineExtraData& r) const
 {
     const SwRedlineExtraData_FormatColl& rCmp = static_cast<const SwRedlineExtraData_FormatColl&>(r);
-    return sFormatNm == rCmp.sFormatNm && nPoolId == rCmp.nPoolId &&
-            ( ( !pSet && !rCmp.pSet ) ||
-               ( pSet && rCmp.pSet && *pSet == *rCmp.pSet ) );
+    return m_sFormatNm == rCmp.m_sFormatNm && m_nPoolId == rCmp.m_nPoolId &&
+            ( ( !m_pSet && !rCmp.m_pSet ) ||
+               ( m_pSet && rCmp.m_pSet && *m_pSet == *rCmp.m_pSet ) );
 }
 
 void SwRedlineExtraData_FormatColl::SetItemSet( const SfxItemSet& rSet )
 {
     if( rSet.Count() )
-        pSet.reset( new SfxItemSet( rSet ) );
+        m_pSet.reset( new SfxItemSet( rSet ) );
     else
-        pSet.reset();
+        m_pSet.reset();
 }
 
 SwRedlineExtraData_Format::SwRedlineExtraData_Format( const SfxItemSet& rSet )
@@ -835,7 +835,7 @@ SwRedlineExtraData_Format::SwRedlineExtraData_Format( const SfxItemSet& rSet )
     const SfxPoolItem* pItem = aIter.FirstItem();
     while(pItem)
     {
-        aWhichIds.push_back( pItem->Which() );
+        m_aWhichIds.push_back( pItem->Which() );
         if( aIter.IsAtEnd() )
             break;
         pItem = aIter.NextItem();
@@ -846,7 +846,7 @@ SwRedlineExtraData_Format::SwRedlineExtraData_Format(
         const SwRedlineExtraData_Format& rCpy )
     : SwRedlineExtraData()
 {
-    aWhichIds.insert( aWhichIds.begin(), rCpy.aWhichIds.begin(), rCpy.aWhichIds.end() );
+    m_aWhichIds.insert( m_aWhichIds.begin(), rCpy.m_aWhichIds.begin(), rCpy.m_aWhichIds.end() );
 }
 
 SwRedlineExtraData_Format::~SwRedlineExtraData_Format()
@@ -867,7 +867,7 @@ void SwRedlineExtraData_Format::Reject( SwPaM& rPam ) const
 
     // Actually we need to reset the Attribute here!
     std::vector<sal_uInt16>::const_iterator it;
-    for( it = aWhichIds.begin(); it != aWhichIds.end(); ++it )
+    for( it = m_aWhichIds.begin(); it != m_aWhichIds.end(); ++it )
     {
         pDoc->getIDocumentContentOperations().InsertPoolItem( rPam, *GetDfltAttr( *it ),
             SetAttrMode::DONTEXPAND );
@@ -878,13 +878,13 @@ void SwRedlineExtraData_Format::Reject( SwPaM& rPam ) const
 
 bool SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) const
 {
-    const size_t nEnd = aWhichIds.size();
-    if( nEnd != static_cast<const SwRedlineExtraData_Format&>(rCmp).aWhichIds.size() )
+    const size_t nEnd = m_aWhichIds.size();
+    if( nEnd != static_cast<const SwRedlineExtraData_Format&>(rCmp).m_aWhichIds.size() )
         return false;
 
     for( size_t n = 0; n < nEnd; ++n )
     {
-        if( static_cast<const SwRedlineExtraData_Format&>(rCmp).aWhichIds[n] != aWhichIds[n])
+        if( static_cast<const SwRedlineExtraData_Format&>(rCmp).m_aWhichIds[n] != m_aWhichIds[n])
         {
             return false;
         }
@@ -895,20 +895,20 @@ bool SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) c
 SwRedlineExtraData_FormattingChanges::SwRedlineExtraData_FormattingChanges( const SfxItemSet* pItemSet )
 {
     if( pItemSet && pItemSet->Count() )
-        pSet.reset( new SfxItemSet( *pItemSet ) );
+        m_pSet.reset( new SfxItemSet( *pItemSet ) );
 }
 
 SwRedlineExtraData_FormattingChanges::SwRedlineExtraData_FormattingChanges( const SwRedlineExtraData_FormattingChanges& rCpy )
     : SwRedlineExtraData()
 {
     // Checking pointer pSet before accessing it for Count
-    if( rCpy.pSet && rCpy.pSet->Count() )
+    if( rCpy.m_pSet && rCpy.m_pSet->Count() )
     {
-        pSet.reset( new SfxItemSet( *(rCpy.pSet) ) );
+        m_pSet.reset( new SfxItemSet( *(rCpy.m_pSet) ) );
     }
     else
     {
-        pSet.reset();
+        m_pSet.reset();
     }
 }
 
@@ -930,12 +930,12 @@ bool SwRedlineExtraData_FormattingChanges::operator == ( const SwRedlineExtraDat
 {
     const SwRedlineExtraData_FormattingChanges& rCmp = static_cast<const SwRedlineExtraData_FormattingChanges&>(rExtraData);
 
-    if ( !pSet && !rCmp.pSet )
+    if ( !m_pSet && !rCmp.m_pSet )
     {
         // Both SfxItemSet are null
         return true;
     }
-    else if ( pSet && rCmp.pSet && *pSet == *rCmp.pSet )
+    else if ( m_pSet && rCmp.m_pSet && *m_pSet == *rCmp.m_pSet )
     {
         // Both SfxItemSet exist and are equal
         return true;
