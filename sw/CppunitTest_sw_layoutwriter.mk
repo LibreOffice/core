@@ -55,6 +55,10 @@ $(eval $(call gb_CppunitTest_use_vcl,sw_layoutwriter))
 
 $(eval $(call gb_CppunitTest_use_rdb,sw_layoutwriter,services))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,sw_layoutwriter,\
+    officecfg/registry \
+))
+
 $(eval $(call gb_CppunitTest_use_configuration,sw_layoutwriter))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,sw_layoutwriter, \

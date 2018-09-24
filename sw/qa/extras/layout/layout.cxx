@@ -10,13 +10,18 @@
 #include <swmodeltestbase.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <test/mtfxmldump.hxx>
+#include <com/sun/star/frame/DispatchHelper.hpp>
+#include <officecfg/Office/Common.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/extras/layout/data/";
 
 /// Test to assert layout / rendering result of Writer.
 class SwLayoutWriter : public SwModelTestBase
 {
+    void CheckRedlineFootnotesHidden();
+
 public:
+    void testRedlineFootnotes();
     void testTdf116830();
     void testTdf116925();
     void testTdf117028();
@@ -33,6 +38,7 @@ public:
     void testTdf116989();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
+    CPPUNIT_TEST(testRedlineFootnotes);
     CPPUNIT_TEST(testTdf116830);
     CPPUNIT_TEST(testTdf116925);
     CPPUNIT_TEST(testTdf117028);
@@ -60,6 +66,141 @@ SwDoc* SwLayoutWriter::createDoc(const char* pName)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     return pTextDoc->GetDocShell()->GetDoc();
+}
+
+static void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent,
+                                const OUString& rCommand,
+                                const uno::Sequence<beans::PropertyValue>& rPropertyValues)
+{
+    uno::Reference<frame::XController> xController
+        = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY)->getCurrentController();
+    CPPUNIT_ASSERT(xController.is());
+    uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFrame.is());
+
+    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
+    CPPUNIT_ASSERT(xDispatchHelper.is());
+
+    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
+}
+
+// this is a member because our test classes have protected members :(
+void SwLayoutWriter::CheckRedlineFootnotesHidden()
+{
+    discardDumpedLayout();
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged", "paraPropsNodeIndex", "24");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Special[1]", "nType", "POR_FTN");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Special[1]", "rText", "1");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "foaz");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Special[2]", "nType", "POR_FTN");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Special[2]", "rText", "5"); // TODO 2
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[1]/txt[1]/merged", "paraPropsNodeIndex", "13");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[1]/txt[1]/Special[1]", "nType", "POR_FTNNUM");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[1]/txt[1]/Special[1]", "rText", "1");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[1]/txt[1]/Text[1]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[1]/txt[1]/Text[1]", "Portion", "ac");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[2]/txt[1]/merged", "paraPropsNodeIndex", "16");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[2]/txt[1]/Special[1]", "nType", "POR_FTNNUM");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[2]/txt[1]/Special[1]", "rText", "5"); // TODO 2
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[2]/txt[1]/Text[1]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[2]/txt[1]/Text[1]", "Portion", "mo");
+}
+
+void SwLayoutWriter::testRedlineFootnotes()
+{
+    // currently need experimental mode
+    Resetter _([]() {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Misc::ExperimentalMode::set(false, pBatch);
+        return pBatch->commit();
+    });
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Misc::ExperimentalMode::set(true, pBatch);
+    pBatch->commit();
+
+    createDoc("redline_footnotes.odt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwRootFrame* pLayout(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+    CPPUNIT_ASSERT(pLayout->IsHideRedlines());
+
+    // verify after load
+    CheckRedlineFootnotesHidden();
+
+    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
+    discardDumpedLayout();
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+
+    // show: nothing is merged
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//merged");
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
+    xmlXPathFreeObject(pXmlObj);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Special[1]", "nType", "POR_FTN");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Special[1]", "rText", "1");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "fo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[2]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[2]", "Portion", "o");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Special[2]", "nType", "POR_FTN");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Special[2]", "rText", "2");
+
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[1]/txt[1]/Special[1]", "nType", "POR_FTNNUM");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[1]/txt[1]/Special[1]", "rText", "1");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[1]/txt[1]/Text[1]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[1]/txt[1]/Text[1]", "Portion", "a");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[1]/txt[1]/Text[2]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[1]/txt[1]/Text[2]", "Portion", "b");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[1]/txt[1]/Text[3]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[1]/txt[1]/Text[3]", "Portion", "c");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[2]/txt[1]/Special[1]", "nType", "POR_FTNNUM");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[2]/txt[1]/Special[1]", "rText", "2");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[2]/txt[1]/Text[1]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[2]/txt[1]/Text[1]", "Portion", "def");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text[1]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text[1]", "Portion", "b");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Special[1]", "nType", "POR_FTN");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Special[1]", "rText", "3");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text[2]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text[2]", "Portion", "ar");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[3]/txt[1]/Special[1]", "nType", "POR_FTNNUM");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[3]/txt[1]/Special[1]", "rText", "3");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[3]/txt[1]/Text[1]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[3]/txt[1]/Text[1]", "Portion", "ghi");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Special[1]", "nType", "POR_FTN");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Special[1]", "rText", "4");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text[1]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text[1]", "Portion", "b");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text[2]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text[2]", "Portion", "az");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Special[2]", "nType", "POR_FTN");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Special[2]", "rText", "5");
+
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[4]/txt[1]/Special[1]", "nType", "POR_FTNNUM");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[4]/txt[1]/Special[1]", "rText", "4");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[4]/txt[1]/Text[1]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[4]/txt[1]/Text[1]", "Portion", "jkl");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[5]/txt[1]/Special[1]", "nType", "POR_FTNNUM");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[5]/txt[1]/Special[1]", "rText", "5");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[5]/txt[1]/Text[1]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[5]/txt[1]/Text[1]", "Portion", "m");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[5]/txt[1]/Text[2]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[5]/txt[1]/Text[2]", "Portion", "n");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[5]/txt[1]/Text[3]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[5]/txt[1]/Text[3]", "Portion", "o");
+
+    // verify after hide
+    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    CPPUNIT_ASSERT(pLayout->IsHideRedlines());
+    discardDumpedLayout();
+    CheckRedlineFootnotesHidden();
 }
 
 void SwLayoutWriter::testTdf116830()
