@@ -309,19 +309,15 @@ void unoInterfaceProxyDispatch(
     // is my surrogate
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
         = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy * >(pUnoI);
-#if OSL_DEBUG_LEVEL > 0
-    typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
-#endif
 
     switch (pMemberDescr->eTypeClass)
     {
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
     {
-#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
-        // determine vtable call index
-        sal_Int32 nMemberPos = reinterpret_cast<typelib_InterfaceMemberTypeDescription const *>(pMemberDescr)->nPosition;
-        assert(nMemberPos < pTypeDescr->nAllMembers);
-#endif
+        assert(
+            (reinterpret_cast<typelib_InterfaceMemberTypeDescription const *>(pMemberDescr)
+             ->nPosition)
+            < pThis->pTypeDescr->nAllMembers);
         VtableSlot aVtableSlot(
                 getVtableSlot(
                     reinterpret_cast<
@@ -366,11 +362,10 @@ void unoInterfaceProxyDispatch(
     }
     case typelib_TypeClass_INTERFACE_METHOD:
     {
-#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
-        // determine vtable call index
-        sal_Int32 nMemberPos = reinterpret_cast<typelib_InterfaceMemberTypeDescription const *>(pMemberDescr)->nPosition;
-        assert(nMemberPos < pTypeDescr->nAllMembers);
-#endif
+        assert(
+            (reinterpret_cast<typelib_InterfaceMemberTypeDescription const *>(pMemberDescr)
+             ->nPosition)
+            < pThis->pTypeDescr->nAllMembers);
         VtableSlot aVtableSlot(
                 getVtableSlot(
                     reinterpret_cast<
