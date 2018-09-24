@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_fa8709b6",
+        "filename": "sw/source/core/docnode/ndtbl1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1521,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-24T13:55:58Z",
+      "side": 1,
+      "message": "I don\u0027t know what situation would have a column with no wish value (although there is a hint in lcl_CalcColValues that sets some wishes to zero). Just left to prevent regressions.\n\nMaybe remove that in a separate commit. I checked the function history and a read-through of the code doesn\u0027t indicate any intentional setting of zero to any tabcol or wish value...",
+      "range": {
+        "startLine": 1521,
+        "startChar": 16,
+        "endLine": 1521,
+        "endChar": 25
+      },
+      "revId": "412fc8362e091d4218fb2684f522c9709ebe6e5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
