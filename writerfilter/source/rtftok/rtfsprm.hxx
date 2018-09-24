@@ -61,7 +61,7 @@ public:
     /// Removes elements which are already in the reference set.
     /// Also insert default values to override attributes of style
     /// (yes, really; that's what Word does).
-    RTFSprms cloneAndDeduplicate(RTFSprms& rReference) const;
+    RTFSprms cloneAndDeduplicate(RTFSprms& rReference, Id nStyleType) const;
     /// Inserts default values to override attributes of pAbstract.
     void duplicateList(const RTFValue::Pointer_t& pAbstract);
     /// Removes duplicated values based on in-list properties.
