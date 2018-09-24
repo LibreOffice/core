@@ -20,7 +20,7 @@
 
 #define CATEGORYCOUNT 6         // Number of persona categories
 #define MAX_RESULTS 9           // Maximum number of search results
-#define MAX_DEFAULT_PERSONAS 3  // Maximum number of default personas
+#define MAX_DEFAULT_PERSONAS 6  // Maximum number of default personas
 
 class FixedText;
 class FixedHyperlink;
