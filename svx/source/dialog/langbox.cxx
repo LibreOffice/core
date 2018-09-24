@@ -502,6 +502,16 @@ LanguageType LanguageBox::get_active_id() const
         return LANGUAGE_DONTKNOW;
 }
 
+void LanguageBox::remove_id(const LanguageType eLangType)
+{
+    m_xControl->remove_id(OUString::number(static_cast<sal_uInt16>(eLangType)));
+}
+
+void LanguageBox::append(const LanguageType eLangType, const OUString& rStr)
+{
+    m_xControl->append(OUString::number(static_cast<sal_uInt16>(eLangType)), rStr);
+}
+
 void LanguageBox::set_active_id(const LanguageType eLangType)
 {
     // If the core uses a LangID of an imported MS document and wants to select
