@@ -1140,6 +1140,14 @@ DECLARE_RTFIMPORT_TEST(testTdf90260Par, "hello.rtf")
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf119599, "tdf119599.rtf")
+{
+    uno::Reference<beans::XPropertyState> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+    // This was beans::PropertyState_DIRECT_VALUE, changing the font size in
+    // the style had no effect on the rendering result.
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE, xRun->getPropertyState("CharHeight"));
+}
+
 DECLARE_RTFIMPORT_TEST(testTdf90315, "tdf90315.rtf")
 {
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);

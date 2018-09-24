@@ -489,8 +489,9 @@ RTFDocumentImpl::getProperties(RTFSprms& rAttributes, RTFSprms const& rSprms, Id
         RTFSprms aStyleSprms;
         RTFSprms aStyleAttributes;
         // Ensure the paragraph style is a flat list.
-        if (!nStyleType || nStyleType == NS_ooxml::LN_Value_ST_StyleType_paragraph)
-            lcl_copyFlatten(rProps, aStyleAttributes, aStyleSprms);
+        // Take paragraph style into account for character properties as well,
+        // as paragraph style may contain character properties.
+        lcl_copyFlatten(rProps, aStyleAttributes, aStyleSprms);
 
         if (itChar != m_aStyleTableEntries.end())
         {
@@ -502,8 +503,8 @@ RTFDocumentImpl::getProperties(RTFSprms& rAttributes, RTFSprms const& rSprms, Id
         }
 
         // Get rid of direct formatting what is already in the style.
-        RTFSprms const sprms(aSprms.cloneAndDeduplicate(aStyleSprms));
-        RTFSprms const attributes(rAttributes.cloneAndDeduplicate(aStyleAttributes));
+        RTFSprms const sprms(aSprms.cloneAndDeduplicate(aStyleSprms, nStyleType));
+        RTFSprms const attributes(rAttributes.cloneAndDeduplicate(aStyleAttributes, nStyleType));
         return std::make_shared<RTFReferenceProperties>(attributes, sprms);
     }
 
