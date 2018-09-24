@@ -247,7 +247,7 @@ BOOL createKey( HKEY hkey,
 }
 
 STDAPI DllUnregisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit );
-HRESULT DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess, const wchar_t* pProgramPath, const wchar_t* pLibName )
+static HRESULT DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess, const wchar_t* pProgramPath, const wchar_t* pLibName )
 {
     BOOL aResult = FALSE;
 
@@ -427,7 +427,7 @@ HRESULT DeleteKeyTree( HKEY hkey, const char* pPath, REGSAM nKeyAccess )
     return REG_DELETE_KEY_A( hkey, pPath, nKeyAccess & ( KEY_WOW64_64KEY | KEY_WOW64_32KEY ) );
 }
 
-STDAPI DllUnregisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess )
+static HRESULT DllUnregisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess )
 {
     HKEY        hkey = nullptr;
     BOOL        fErr = FALSE;
@@ -543,7 +543,7 @@ const char* const aMSMimeType[] = { "application/msword",
 const int nForMSModes[] = { 1, 1, 2, 2, 4, 4, 4 };
 
 STDAPI DllUnregisterServerDoc( int nMode, BOOL bForAllUsers, BOOL bFor64Bit );
-STDAPI DllRegisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess )
+static HRESULT DllRegisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess )
 {
     BOOL aResult = TRUE;
 
@@ -645,7 +645,7 @@ STDAPI DllRegisterServerDoc( int nMode, BOOL bForAllUsers, BOOL bFor64Bit )
 
 // DllUnregisterServerDoc - Removes entries from the system registry
 
-STDAPI DllUnregisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess )
+static HRESULT DllUnregisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess )
 {
     HKEY        hkey = nullptr;
     BOOL        fErr = FALSE;
