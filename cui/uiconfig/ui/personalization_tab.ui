@@ -45,7 +45,7 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="default_persona">
-                    <property name="label" translatable="yes" context="personalization_tab|default_persona">Pre-installed Theme (if available)</property>
+                    <property name="label" translatable="yes" context="personalization_tab|default_persona">Preinstalled Theme</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
