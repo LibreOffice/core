@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_1a719de1",
+        "filename": "sw/source/uibase/shells/tabsh.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 774,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-24T14:15:21Z",
+      "side": 1,
+      "message": "perhaps this should be bOnlySelectedCells? (base minimize on the selected cell width for historical purposes - because that is how optimize did it before. Generally it is a bad idea to optimize on certain cells, but in the case of choosing to minimize the table, I can see the value in being able to minimize on specific data, rather than the entire column\u0027s contents. An existing safeguard is that the selection must contain content in order for the minimize function to enable.",
+      "range": {
+        "startLine": 774,
+        "startChar": 24,
+        "endLine": 774,
+        "endChar": 37
+      },
+      "revId": "f00412de957d06538118bcf8beb9c10eaa086f56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

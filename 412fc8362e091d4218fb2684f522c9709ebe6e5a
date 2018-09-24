@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_7a62d918",
+        "filename": "sw/source/core/docnode/ndtbl1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1398,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-24T14:15:21Z",
+      "side": 0,
+      "message": "bWishValues had two meanings.  One was if it is asking for the content width (wish), or if it is calculating minimum width.\n\nThe other meaning was whether the entire column should be checked, or only the selected cells. Maybe a better replacement name would be bEntireColumn.",
+      "range": {
+        "startLine": 1398,
+        "startChar": 20,
+        "endLine": 1398,
+        "endChar": 31
+      },
+      "revId": "412fc8362e091d4218fb2684f522c9709ebe6e5a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
