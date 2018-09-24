@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_1a12bdb2",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1438,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-24T13:16:06Z",
+      "side": 1,
+      "message": "Moved the documentation away from a \"wrapper\" function to the implementation location.",
+      "range": {
+        "startLine": 1438,
+        "startChar": 8,
+        "endLine": 1438,
+        "endChar": 32
+      },
+      "revId": "31616961a213dfacec473bbb4ba07c64538f4fea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
