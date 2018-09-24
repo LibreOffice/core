@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_7a7899f7",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-09-24T11:08:53Z",
+      "side": 1,
+      "message": "this should probably just be inlined into the call site(s), or use CallNotify/SendNotify",
+      "revId": "f7925e3b69d30b0fbd4d0b3c7c30a0d1e30153bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_9a1dadbf",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 4397,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-09-24T11:08:53Z",
+      "side": 1,
+      "message": "this should be called SendNotify or CallNotify now, or just inlined into the call-sites",
+      "revId": "f7925e3b69d30b0fbd4d0b3c7c30a0d1e30153bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
