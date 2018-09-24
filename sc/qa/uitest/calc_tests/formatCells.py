@@ -75,7 +75,7 @@ class formatCell(UITestCase):
         xformatted = xDialog.getChild("formatted")
 
         self.assertEqual(get_state_as_dict(xliststore1)["SelectEntryText"], "Number")
-        self.assertEqual(get_state_as_dict(xlanguagelb)["SelectEntryText"], "\u202aEnglish (USA)\u202c")
+        self.assertEqual(get_state_as_dict(xlanguagelb)["SelectEntryText"], "English (USA)")
         self.assertEqual(get_state_as_dict(xdecimalsed)["Text"], "1")
         self.assertEqual(get_state_as_dict(xleadzerosed)["Text"], "2")
         self.assertEqual(get_state_as_dict(xnegnumred)["Selected"], "true")
