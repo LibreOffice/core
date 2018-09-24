@@ -18,9 +18,12 @@
  */
 
 #include <ucbhelper/contentidentifier.hxx>
+#include <ucbhelper/getcomponentcontext.hxx>
+#include <ucbhelper/macros.hxx>
 #include "webdavprovider.hxx"
 #include "webdavcontent.hxx"
 
+#include <cppuhelper/queryinterface.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
