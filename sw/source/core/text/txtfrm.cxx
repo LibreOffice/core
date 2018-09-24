@@ -680,7 +680,6 @@ void SwTextFrame::DestroyImpl()
     // Remove associated SwParaPortion from s_pTextCache
     ClearPara();
 
-    assert(!GetDoc().IsInDtor()); // this shouldn't be happening with ViewShell owning layout
     if (!GetDoc().IsInDtor() && HasFootnote())
     {
         if (m_pMergedPara)

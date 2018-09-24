@@ -421,8 +421,7 @@ void SwContentFrame::DestroyImpl()
     {
         pCNd = static_cast<SwTextFrame*>(this)->GetTextNodeFirst();
     }
-    // IsInDtor shouldn't be happening with ViewShell owning layout
-    assert(nullptr == pCNd || !pCNd->GetDoc()->IsInDtor());
+
     if (nullptr != pCNd && !pCNd->GetDoc()->IsInDtor())
     {
         //Unregister from root if I'm still in turbo there.
