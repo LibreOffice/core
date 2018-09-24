@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">20</property>
     <property name="step_increment">1</property>
@@ -16,17 +15,17 @@
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/nu02.png</property>
+    <property name="icon_name">svx/res/nu02.png</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/nu01.png</property>
+    <property name="icon_name">svx/res/nu01.png</property>
   </object>
   <object class="GtkImage" id="image3">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">svx/res/nu03.png</property>
+    <property name="icon_name">svx/res/nu03.png</property>
   </object>
   <object class="GtkListStore" id="liststore1">
     <columns>
@@ -233,10 +232,10 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkSpinButton" id="decimalsed">
+                      <object class="GtkSpinButton" id="denominatored">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="adjustment">adjustment1</property>
+                        <property name="adjustment">adjustment2</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -245,10 +244,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="denominatored">
+                      <object class="GtkSpinButton" id="decimalsed">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="adjustment">adjustment2</property>
+                        <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -282,13 +281,12 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkLabel" id="decimalsft">
-                        <property name="visible">True</property>
+                      <object class="GtkLabel" id="denominatorft">
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
-                        <property name="label" translatable="yes" context="numberingformatpage|decimalsft">_Decimal places:</property>
+                        <property name="label" translatable="yes" context="numberingformatpage|denominatorft">Den_ominator places:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">decimalsed</property>
+                        <property name="mnemonic_widget">denominatored</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -297,13 +295,13 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="denominatorft">
-                        <property name="visible">False</property>
+                      <object class="GtkLabel" id="decimalsft">
+                        <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">1</property>
-                        <property name="label" translatable="yes" context="numberingformatpage|denominatorft">Den_ominator places:</property>
+                        <property name="label" translatable="yes" context="numberingformatpage|decimalsft">_Decimal places:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">denominatored</property>
+                        <property name="mnemonic_widget">decimalsed</property>
+                        <property name="xalign">1</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -321,10 +319,10 @@
                   <object class="GtkLabel" id="leadzerosft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">1</property>
                     <property name="label" translatable="yes" context="numberingformatpage|leadzerosft">Leading _zeroes:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">leadzerosed</property>
+                    <property name="xalign">1</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -354,9 +352,8 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkCheckButton" id="thousands">
-                        <property name="label" translatable="yes" context="numberingformatpage|thousands">_Thousands separator</property>
-                        <property name="visible">True</property>
+                      <object class="GtkCheckButton" id="engineering">
+                        <property name="label" translatable="yes" context="numberingformatpage|engineering">_Engineering notation</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
@@ -370,9 +367,9 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="engineering">
-                        <property name="label" translatable="yes" context="numberingformatpage|engineering">_Engineering notation</property>
-                        <property name="visible">False</property>
+                      <object class="GtkCheckButton" id="thousands">
+                        <property name="label" translatable="yes" context="numberingformatpage|thousands">_Thousands separator</property>
+                        <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
@@ -437,7 +434,7 @@
                     <property name="can_focus">True</property>
                     <property name="shadow_type">in</property>
                     <child>
-                      <object class="GtkTreeView" id="categorylb:border">
+                      <object class="GtkTreeView" id="categorylb">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="has_focus">True</property>
@@ -458,7 +455,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="numberingformatpage|categoryft">C_ategory</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">categorylb:border</property>
+                <property name="mnemonic_widget">categorylb</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -494,21 +491,6 @@
                     <property name="vexpand">True</property>
                     <property name="row_spacing">6</property>
                     <child>
-                      <object class="svxlo-SvxFontListBox" id="formatlb:border">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="Font List-selection1"/>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkComboBox" id="currencylb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -521,6 +503,28 @@
                         <property name="top_attach">0</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkScrolledWindow">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkTreeView" id="formatlb">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection" id="Font List-selection1"/>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -531,7 +535,6 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="numberingformatpage|formatft">Fo_rmat</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">formatlb:border</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -564,7 +567,7 @@
                     <property name="vexpand">True</property>
                     <property name="row_spacing">6</property>
                     <child>
-                      <object class="svxcorelo-SvxLanguageBox" id="languagelb">
+                      <object class="GtkComboBoxText" id="languagelb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">start</property>
@@ -572,19 +575,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="cuilo-SvxNumberPreview" id="preview">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="valign">end</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
                       </packing>
                     </child>
                     <child>
@@ -600,6 +590,35 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="valign">end</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkViewport">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkDrawingArea" id="preview">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="valign">end</property>
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
                       </packing>
                     </child>
                   </object>

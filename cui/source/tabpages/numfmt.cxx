@@ -77,20 +77,11 @@ const sal_uInt16 SvxNumberFormatTabPage::pRanges[] =
 #*
 #************************************************************************/
 
-SvxNumberPreview::SvxNumberPreview(vcl::Window* pParent)
-    : Window(pParent, WB_BORDER)
-    , mnPos(-1)
+SvxNumberPreview::SvxNumberPreview()
+    : mnPos(-1)
     , mnChar(0x0)
 {
-    vcl::Font aFont( GetFont() );
-    aFont.SetTransparent( true );
-    aFont.SetColor( Application::GetSettings().GetStyleSettings().GetFieldColor() );
-    SetFont( aFont );
-    InitSettings( true, true );
-    SetBorderStyle( WindowBorderStyle::MONO );
 }
-
-VCL_BUILDER_FACTORY(SvxNumberPreview)
 
 /*************************************************************************
 #*  Method:        NotifyChange
@@ -131,7 +122,6 @@ void SvxNumberPreview::NotifyChange( const OUString& rPrevStr,
     Color aWindowTextColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
     aPrevCol = pColor ? *pColor : aWindowTextColor;
     Invalidate();
-    Update();
 }
 
 /*************************************************************************
@@ -147,11 +137,19 @@ void SvxNumberPreview::NotifyChange( const OUString& rPrevStr,
 
 void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle&)
 {
+    rRenderContext.Push(PushFlags::ALL);
+
+    svtools::ColorConfig aColorConfig;
+    rRenderContext.SetTextColor(aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor);
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    rRenderContext.SetBackground(rStyleSettings.GetWindowColor());
+
     vcl::Font aDrawFont = rRenderContext.GetFont();
     Size aSzWnd(GetOutputSizePixel());
     OUString aTmpStr( aPrevStr );
     long nLeadSpace = (aSzWnd.Width() - rRenderContext.GetTextWidth(aTmpStr)) / 2;
 
+    aDrawFont.SetTransparent(true);
     aDrawFont.SetColor(aPrevCol);
     rRenderContext.SetFont(aDrawFont);
 
@@ -172,104 +170,59 @@ void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::
     Point aPosText = Point((mnPos != -1) ? 0 : nLeadSpace,
                            (aSzWnd.Height() - GetTextHeight()) / 2);
     rRenderContext.DrawText(aPosText, aTmpStr);
-}
-
-void SvxNumberPreview::InitSettings( bool bForeground, bool bBackground )
-{
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-
-    if ( bForeground )
-    {
-        svtools::ColorConfig aColorConfig;
-        Color aTextColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
-
-        if ( IsControlForeground() )
-            aTextColor = GetControlForeground();
-        SetTextColor( aTextColor );
-    }
-
-    if ( bBackground )
-    {
-        if ( IsControlBackground() )
-            SetBackground( GetControlBackground() );
-        else
-            SetBackground( rStyleSettings.GetWindowColor() );
-    }
-    Invalidate();
-}
-
-
-void SvxNumberPreview::StateChanged( StateChangedType nType )
-{
-    if ( nType == StateChangedType::ControlForeground )
-        InitSettings( true, false );
-    else if ( nType == StateChangedType::ControlBackground )
-        InitSettings( false, true );
-
-    Window::StateChanged( nType );
-}
-
-
-void SvxNumberPreview::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    Window::DataChanged( rDCEvt );
-
-    if ( ( rDCEvt.GetType() == DataChangedEventType::SETTINGS ) && ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE ) )
-        InitSettings( true, true );
+    rRenderContext.Pop();
 }
 
 // class SvxNumberFormatTabPage ------------------------------------------
 
 #define REMOVE_DONTKNOW() \
-    if ( !m_pFtLanguage->IsEnabled() )                                     \
-    {                                                                   \
-        m_pFtLanguage->Enable();                                          \
-        m_pLbLanguage->Enable();                                          \
-        m_pLbLanguage->SelectLanguage( pNumFmtShell->GetCurLanguage() );  \
+    if (!m_xFtLanguage->get_sensitive())                                 \
+    {                                                                    \
+        m_xFtLanguage->set_sensitive(true);                              \
+        m_xLbLanguage->set_sensitive(true);                              \
+        m_xLbLanguage->SelectLanguage( pNumFmtShell->GetCurLanguage() ); \
     }
 
 #define HDL(hdl) LINK( this, SvxNumberFormatTabPage, hdl )
 
-SvxNumberFormatTabPage::SvxNumberFormatTabPage(vcl::Window* pParent,
+SvxNumberFormatTabPage::SvxNumberFormatTabPage(TabPageParent pParent,
     const SfxItemSet& rCoreAttrs)
-    : SfxTabPage(pParent, "NumberingFormatPage",
-        "cui/ui/numberingformatpage.ui", &rCoreAttrs)
+    : SfxTabPage(pParent, "cui/ui/numberingformatpage.ui", "NumberingFormatPage", &rCoreAttrs)
     , nInitFormat(ULONG_MAX)
     , sAutomaticEntry(CuiResId(RID_SVXSTR_AUTO_ENTRY))
     , pLastActivWindow(nullptr)
+    , m_xFtCategory(m_xBuilder->weld_label("categoryft"))
+    , m_xLbCategory(m_xBuilder->weld_tree_view("categorylb"))
+    , m_xFtFormat(m_xBuilder->weld_label("formatft"))
+    , m_xLbCurrency(m_xBuilder->weld_combo_box("currencylb"))
+    , m_xLbFormat(m_xBuilder->weld_tree_view("formatlb"))
+    , m_xFtLanguage(m_xBuilder->weld_label("languageft"))
+    , m_xCbSourceFormat(m_xBuilder->weld_check_button("sourceformat"))
+    , m_xFtOptions(m_xBuilder->weld_label("optionsft"))
+    , m_xFtDecimals(m_xBuilder->weld_label("decimalsft"))
+    , m_xEdDecimals(m_xBuilder->weld_spin_button("decimalsed"))
+    , m_xFtDenominator(m_xBuilder->weld_label("denominatorft"))
+    , m_xEdDenominator(m_xBuilder->weld_spin_button("denominatored"))
+    , m_xBtnNegRed(m_xBuilder->weld_check_button("negnumred"))
+    , m_xFtLeadZeroes(m_xBuilder->weld_label("leadzerosft"))
+    , m_xEdLeadZeroes(m_xBuilder->weld_spin_button("leadzerosed"))
+    , m_xBtnThousand(m_xBuilder->weld_check_button("thousands"))
+    , m_xBtnEngineering(m_xBuilder->weld_check_button("engineering"))
+    , m_xFormatCodeFrame(m_xBuilder->weld_widget("formatcode"))
+    , m_xEdFormat(m_xBuilder->weld_entry("formatted"))
+    , m_xIbAdd(m_xBuilder->weld_button("add"))
+    , m_xIbInfo(m_xBuilder->weld_button("edit"))
+    , m_xIbRemove(m_xBuilder->weld_button("delete"))
+    , m_xFtComment(m_xBuilder->weld_label("commentft"))
+    , m_xEdComment(m_xBuilder->weld_entry("commented"))
+    , m_xLbLanguage(new LanguageBox(m_xBuilder->weld_combo_box("languagelb")))
+    , m_xWndPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aWndPreview))
 {
-    get(m_pFtCategory, "categoryft");
-    get(m_pLbCategory, "categorylb");
-    get(m_pFtFormat, "formatft");
-    get(m_pLbCurrency, "currencylb");
-    get(m_pLbFormat, "formatlb");
     long nWidth = approximate_char_width() * 26;
-    m_pLbFormat->set_width_request(nWidth);
-    m_pLbCurrency->set_width_request(nWidth);
-    get(m_pFtLanguage, "languageft");
-    get(m_pLbLanguage, "languagelb");
-    get(m_pCbSourceFormat, "sourceformat");
-    get(m_pWndPreview, "preview");
-    get(m_pFtOptions, "optionsft");
-    get(m_pFtDecimals, "decimalsft");
-    get(m_pEdDecimals, "decimalsed");
-    get(m_pFtDenominator, "denominatorft");
-    get(m_pEdDenominator, "denominatored");
-    get(m_pBtnNegRed, "negnumred");
-    get(m_pFtLeadZeroes, "leadzerosft");
-    get(m_pEdLeadZeroes, "leadzerosed");
-    get(m_pBtnThousand, "thousands");
-    get(m_pBtnEngineering, "engineering");
-    get(m_pFormatCodeFrame, "formatcode");
-    get(m_pEdFormat, "formatted");
-    get(m_pIbAdd, "add");
-    get(m_pIbInfo, "edit");
-    get(m_pIbRemove, "delete");
-    get(m_pFtComment, "commentft");
-    get(m_pEdComment, "commented");
-
-    m_pLbCategory->SetDropDownLineCount(8);
-    m_pWndPreview->set_height_request(GetTextHeight()*3);
+    m_xLbFormat->set_size_request(nWidth, -1);
+    m_xLbCurrency->set_size_request(nWidth, -1);
+    m_xLbCategory->set_size_request(-1, m_xLbCategory->get_height_rows(8));
+    m_xWndPreview->set_size_request(GetTextHeight()*3, -1);
 
     Init_Impl();
     SetExchangeSupport(); // this page needs ExchangeSupport
@@ -281,37 +234,12 @@ SvxNumberFormatTabPage::~SvxNumberFormatTabPage()
     disposeOnce();
 }
 
-
 void SvxNumberFormatTabPage::dispose()
 {
     pNumFmtShell.reset();
     pNumItem.reset();
-    m_pFtCategory.clear();
-    m_pLbCategory.clear();
-    m_pFtFormat.clear();
-    m_pLbCurrency.clear();
-    m_pLbFormat.clear();
-    m_pFtLanguage.clear();
-    m_pLbLanguage.clear();
-    m_pCbSourceFormat.clear();
-    m_pWndPreview.clear();
-    m_pFtOptions.clear();
-    m_pFtDecimals.clear();
-    m_pEdDecimals.clear();
-    m_pFtDenominator.clear();
-    m_pEdDenominator.clear();
-    m_pBtnNegRed.clear();
-    m_pFtLeadZeroes.clear();
-    m_pEdLeadZeroes.clear();
-    m_pBtnThousand.clear();
-    m_pBtnEngineering.clear();
-    m_pFormatCodeFrame.clear();
-    m_pEdFormat.clear();
-    m_pIbAdd.clear();
-    m_pIbInfo.clear();
-    m_pIbRemove.clear();
-    m_pFtComment.clear();
-    m_pEdComment.clear();
+    m_xWndPreview.reset();
+    m_xLbLanguage.reset();
     pLastActivWindow.clear();
     SfxTabPage::dispose();
 }
@@ -321,57 +249,57 @@ void SvxNumberFormatTabPage::Init_Impl()
     bNumItemFlag=true;
     bOneAreaFlag=false;
 
-    m_pIbAdd->Enable(false );
-    m_pIbRemove->Enable(false );
-    m_pIbInfo->Enable(false );
+    m_xIbAdd->set_sensitive(false );
+    m_xIbRemove->set_sensitive(false );
+    m_xIbInfo->set_sensitive(false );
 
-    m_pEdComment->SetText(m_pLbCategory->GetEntry(1));    // string for user defined
+    m_xEdComment->set_text(m_xLbCategory->get_text(1));    // string for user defined
 
-    m_pEdComment->Hide();
+    m_xEdComment->hide();
 
-    m_pCbSourceFormat->Check( false );
-    m_pCbSourceFormat->Disable();
-    m_pCbSourceFormat->Hide();
+    m_xCbSourceFormat->set_active( false );
+    m_xCbSourceFormat->set_sensitive(false);
+    m_xCbSourceFormat->hide();
 
-    Link<ListBox&,void> aLink2 = LINK( this, SvxNumberFormatTabPage, SelFormatListBoxHdl_Impl );
+    Link<weld::TreeView&,void> aLink2 = LINK(this, SvxNumberFormatTabPage, SelFormatTreeListBoxHdl_Impl);
+    Link<weld::ComboBox&,void> aLink3 = LINK(this, SvxNumberFormatTabPage, SelFormatListBoxHdl_Impl);
+    m_xLbCategory->connect_changed(aLink2);
+    m_xLbFormat->connect_changed(aLink2);
+    m_xLbLanguage->connect_changed(aLink3);
+    m_xLbCurrency->connect_changed(aLink3);
+    m_xCbSourceFormat->connect_toggled(LINK(this, SvxNumberFormatTabPage, SelFormatClickHdl_Impl));
 
-    m_pLbCategory->SetSelectHdl( aLink2 );
-    m_pLbFormat->SetSelectHdl( LINK( this, SvxNumberFormatTabPage, SelFormatTreeListBoxHdl_Impl ) );
-    m_pLbLanguage->SetSelectHdl( aLink2 );
-    m_pLbCurrency->SetSelectHdl( aLink2 );
-    m_pCbSourceFormat->SetClickHdl( LINK( this, SvxNumberFormatTabPage, SelFormatClickHdl_Impl ) );
+    Link<weld::SpinButton&,void> aLink = LINK( this, SvxNumberFormatTabPage, OptEditHdl_Impl );
 
-    Link<Edit&,void> aLink = LINK( this, SvxNumberFormatTabPage, OptEditHdl_Impl );
+    m_xEdDecimals->connect_value_changed(aLink);
+    m_xEdDenominator->connect_value_changed(aLink);
+    m_xEdLeadZeroes->connect_value_changed(aLink);
 
-    m_pEdDecimals->SetModifyHdl( aLink );
-    m_pEdDenominator->SetModifyHdl( aLink );
-    m_pEdLeadZeroes->SetModifyHdl( aLink );
-
-    m_pBtnNegRed->SetClickHdl( LINK( this, SvxNumberFormatTabPage, OptClickHdl_Impl ) );
-    m_pBtnThousand->SetClickHdl( LINK( this, SvxNumberFormatTabPage, OptClickHdl_Impl ) );
-    m_pBtnEngineering->SetClickHdl( LINK( this, SvxNumberFormatTabPage, OptClickHdl_Impl ) );
-    m_pLbFormat->SetDoubleClickHdl( HDL( DoubleClickHdl_Impl ) );
-    m_pEdFormat->SetModifyHdl( HDL( EditModifyHdl_Impl ) );
-    m_pIbAdd->SetClickHdl( HDL( ClickHdl_Impl ) );
-    m_pIbRemove->SetClickHdl( HDL( ClickHdl_Impl ) );
-    m_pIbInfo->SetClickHdl( HDL( ClickHdl_Impl ) );
+    m_xBtnNegRed->connect_toggled(LINK(this, SvxNumberFormatTabPage, OptClickHdl_Impl));
+    m_xBtnThousand->connect_toggled(LINK(this, SvxNumberFormatTabPage, OptClickHdl_Impl));
+    m_xBtnEngineering->connect_toggled(LINK(this, SvxNumberFormatTabPage, OptClickHdl_Impl));
+    m_xLbFormat->connect_row_activated(HDL(DoubleClickHdl_Impl));
+    m_xEdFormat->connect_changed(HDL(EditModifyHdl_Impl));
+    m_xIbAdd->connect_clicked(HDL(ClickHdl_Impl));
+    m_xIbRemove->connect_clicked(HDL(ClickHdl_Impl));
+    m_xIbInfo->connect_clicked(HDL(ClickHdl_Impl));
     UpdateThousandEngineeringCheckBox();
     UpdateDecimalsDenominatorEditBox();
 
-    m_pEdComment->SetLoseFocusHdl( LINK( this, SvxNumberFormatTabPage, LostFocusHdl_Impl) );
+    m_xEdComment->connect_focus_out(LINK(this, SvxNumberFormatTabPage, LostFocusHdl_Impl));
     aResetWinTimer.SetInvokeHandler(LINK( this, SvxNumberFormatTabPage, TimeHdl_Impl));
-    aResetWinTimer.SetTimeout( 10);
+    aResetWinTimer.SetTimeout(10);
 
     // initialize language ListBox
 
-    m_pLbLanguage->SetLanguageList( SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, false);
-    m_pLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
+    m_xLbLanguage->SetLanguageList( SvxLanguageListFlags::ALL | SvxLanguageListFlags::ONLY_KNOWN, false);
+    m_xLbLanguage->InsertLanguage( LANGUAGE_SYSTEM );
 }
 
 VclPtr<SfxTabPage> SvxNumberFormatTabPage::Create( TabPageParent pParent,
                                                    const SfxItemSet* rAttrSet )
 {
-    return VclPtr<SvxNumberFormatTabPage>::Create( pParent.pParent, *rAttrSet );
+    return VclPtr<SvxNumberFormatTabPage>::Create(pParent, *rAttrSet);
 }
 
 
@@ -459,18 +387,18 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
         const SfxBoolItem* pBoolItem = static_cast<const SfxBoolItem*>(
                       GetItem( *rSet, SID_ATTR_NUMBERFORMAT_SOURCE ));
         if ( pBoolItem )
-            m_pCbSourceFormat->Check( pBoolItem->GetValue() );
+            m_xCbSourceFormat->set_active(pBoolItem->GetValue());
         else
-            m_pCbSourceFormat->Check( false );
-        m_pCbSourceFormat->Enable();
-        m_pCbSourceFormat->Show();
+            m_xCbSourceFormat->set_active( false );
+        m_xCbSourceFormat->set_sensitive(true);
+        m_xCbSourceFormat->show();
     }
     else
     {
         bool bInit = false;     // set to sal_True for debug test
-        m_pCbSourceFormat->Check( bInit );
-        m_pCbSourceFormat->Enable( bInit );
-        m_pCbSourceFormat->Show( bInit );
+        m_xCbSourceFormat->set_active( bInit );
+        m_xCbSourceFormat->set_sensitive( bInit );
+        m_xCbSourceFormat->show( bInit );
     }
 
     // pNumItem must have been set from outside!
@@ -542,18 +470,19 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     {
         sal_Int32 nPos = pNumFmtShell->GetCurrencySymbol();
         if (nPos == 0)
+        {
             // Enable "Automatically" if currently used so it is selectable.
-            m_pLbCurrency->SetEntryFlags( nPos, ListBoxEntryFlags::NONE );
-
-        m_pLbCurrency->SelectEntryPos(nPos);
+//TODO            m_xLbCurrency->SetEntryFlags( nPos, ListBoxEntryFlags::NONE );
+        }
+        m_xLbCurrency->set_active(nPos);
     }
 
     nFixedCategory=nCatLbSelPos;
     if(bOneAreaFlag)
     {
-        OUString sFixedCategory = m_pLbCategory->GetEntry(nFixedCategory);
-        m_pLbCategory->Clear();
-        m_pLbCategory->InsertEntry(sFixedCategory);
+        OUString sFixedCategory = m_xLbCategory->get_text(nFixedCategory);
+        m_xLbCategory->clear();
+        m_xLbCategory->append_text(sFixedCategory);
         SetCategory(0);
     }
     else
@@ -569,22 +498,22 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     // LanguageType no_NO.
     if ( eLangType == LANGUAGE_NORWEGIAN )
     {
-        m_pLbLanguage->RemoveLanguage( eLangType );    // in case we're already called
-        m_pLbLanguage->InsertLanguage( eLangType );
+        m_xLbLanguage->RemoveLanguage( eLangType );    // in case we're already called
+        m_xLbLanguage->InsertLanguage( eLangType );
     }
-    m_pLbLanguage->SelectLanguage( eLangType );
+    m_xLbLanguage->SelectLanguage( eLangType );
     if(pAutoEntryAttr)
         AddAutomaticLanguage_Impl(eLangType, pAutoEntryAttr->GetValue());
     UpdateFormatListBox_Impl(false,true);
 
 //! This spoils everything because it rematches currency formats based on
-//! the selected m_pLbCurrency entry instead of the current format.
+//! the selected m_xLbCurrency entry instead of the current format.
 //! Besides that everything seems to be initialized by now, so why call it?
-//  SelFormatHdl_Impl( m_pLbCategory );
+//  SelFormatHdl_Impl( m_xLbCategory );
 
     if ( pValFmtAttr )
     {
-        EditHdl_Impl(m_pEdFormat); // UpdateOptions_Impl() as a side effect
+        EditHdl_Impl(m_xEdFormat.get()); // UpdateOptions_Impl() as a side effect
     }
     else    // DONT_KNOW
     {
@@ -592,7 +521,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
         Obstructing();
     }
 
-    if ( m_pCbSourceFormat->IsChecked() )
+    if ( m_xCbSourceFormat->get_active() )
     {
         // everything disabled except SourceFormat checkbox
         EnableBySourceFormat_Impl();
@@ -612,38 +541,38 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 #************************************************************************/
 void SvxNumberFormatTabPage::Obstructing()
 {
-    m_pLbFormat->SetNoSelection();
-    m_pLbLanguage->SetNoSelection();
-    m_pFtLanguage->Disable();
-    m_pLbLanguage->Disable();
+    m_xLbFormat->select(-1);
+    m_xLbLanguage->set_active(-1);
+    m_xFtLanguage->set_sensitive(false);
+    m_xLbLanguage->set_sensitive(false);
 
-    m_pIbAdd->Enable(false );
-    m_pIbRemove->Enable(false );
-    m_pIbInfo->Enable(false );
+    m_xIbAdd->set_sensitive(false );
+    m_xIbRemove->set_sensitive(false );
+    m_xIbInfo->set_sensitive(false );
 
-    m_pBtnNegRed->Disable();
-    m_pBtnThousand->Disable();
-    m_pBtnEngineering->Disable();
-    m_pFtLeadZeroes->Disable();
-    m_pFtDecimals->Disable();
-    m_pFtDenominator->Disable();
-    m_pEdLeadZeroes->Disable();
-    m_pEdDecimals->Disable();
-    m_pEdDenominator->Disable();
-    m_pFtOptions->Disable();
-    m_pEdDecimals->SetText( OUString() );
-    m_pEdLeadZeroes->SetText( OUString() );
-    m_pBtnNegRed->Check( false );
-    m_pBtnThousand->Check( false );
-    m_pBtnEngineering->Check( false );
-    m_pWndPreview->NotifyChange( OUString() );
+    m_xBtnNegRed->set_sensitive(false);
+    m_xBtnThousand->set_sensitive(false);
+    m_xBtnEngineering->set_sensitive(false);
+    m_xFtLeadZeroes->set_sensitive(false);
+    m_xFtDecimals->set_sensitive(false);
+    m_xFtDenominator->set_sensitive(false);
+    m_xEdLeadZeroes->set_sensitive(false);
+    m_xEdDecimals->set_sensitive(false);
+    m_xEdDenominator->set_sensitive(false);
+    m_xFtOptions->set_sensitive(false);
+    m_xEdDecimals->set_text( OUString() );
+    m_xEdLeadZeroes->set_text( OUString() );
+    m_xBtnNegRed->set_active( false );
+    m_xBtnThousand->set_active( false );
+    m_xBtnEngineering->set_active( false );
+    m_aWndPreview.NotifyChange( OUString() );
 
-    m_pLbCategory->SelectEntryPos( 0 );
-    m_pEdFormat->SetText( OUString() );
-    m_pFtComment->SetText( OUString() );
-    m_pEdComment->SetText(m_pLbCategory->GetEntry(1));  // string for user defined
+    m_xLbCategory->select(0);
+    m_xEdFormat->set_text( OUString() );
+    m_xFtComment->set_label( OUString() );
+    m_xEdComment->set_text(m_xLbCategory->get_text(1));  // string for user defined
 
-    m_pEdFormat->GrabFocus();
+    m_xEdFormat->grab_focus();
 }
 
 
@@ -653,28 +582,28 @@ void SvxNumberFormatTabPage::Obstructing()
 #************************************************************************/
 void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
 {
-    bool bEnable = !m_pCbSourceFormat->IsChecked();
+    bool bEnable = !m_xCbSourceFormat->get_active();
     if ( !bEnable )
-        m_pCbSourceFormat->GrabFocus();
-    m_pFtCategory->Enable( bEnable );
-    m_pLbCategory->Enable( bEnable );
-    m_pFtFormat->Enable( bEnable );
-    m_pLbCurrency->Enable( bEnable );
-    m_pLbFormat->Enable( bEnable );
-    m_pFtLanguage->Enable( bEnable );
-    m_pLbLanguage->Enable( bEnable );
-    m_pFtDecimals->Enable( bEnable );
-    m_pEdDecimals->Enable( bEnable );
-    m_pFtDenominator->Enable( bEnable );
-    m_pEdDenominator->Enable( bEnable );
-    m_pFtLeadZeroes->Enable( bEnable );
-    m_pEdLeadZeroes->Enable( bEnable );
-    m_pBtnNegRed->Enable( bEnable );
-    m_pBtnThousand->Enable( bEnable );
-    m_pBtnEngineering->Enable( bEnable );
-    m_pFtOptions->Enable( bEnable );
-    m_pFormatCodeFrame->Enable( bEnable );
-    m_pLbFormat->Invalidate(); // #i43322#
+        m_xCbSourceFormat->grab_focus();
+    m_xFtCategory->set_sensitive( bEnable );
+    m_xLbCategory->set_sensitive( bEnable );
+    m_xFtFormat->set_sensitive( bEnable );
+    m_xLbCurrency->set_sensitive( bEnable );
+    m_xLbFormat->set_sensitive( bEnable );
+    m_xFtLanguage->set_sensitive( bEnable );
+    m_xLbLanguage->set_sensitive( bEnable );
+    m_xFtDecimals->set_sensitive( bEnable );
+    m_xEdDecimals->set_sensitive( bEnable );
+    m_xFtDenominator->set_sensitive( bEnable );
+    m_xEdDenominator->set_sensitive( bEnable );
+    m_xFtLeadZeroes->set_sensitive( bEnable );
+    m_xEdLeadZeroes->set_sensitive( bEnable );
+    m_xBtnNegRed->set_sensitive( bEnable );
+    m_xBtnThousand->set_sensitive( bEnable );
+    m_xBtnEngineering->set_sensitive( bEnable );
+    m_xFtOptions->set_sensitive( bEnable );
+    m_xFormatCodeFrame->set_sensitive( bEnable );
+    m_xLbFormat->Invalidate(); // #i43322#
 }
 
 
@@ -691,8 +620,8 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
 
 void SvxNumberFormatTabPage::HideLanguage(bool bFlag)
 {
-    m_pFtLanguage->Show(!bFlag);
-    m_pLbLanguage->Show(!bFlag);
+    m_xFtLanguage->show(!bFlag);
+    m_xLbLanguage->show(!bFlag);
 }
 
 /*************************************************************************
@@ -710,7 +639,7 @@ void SvxNumberFormatTabPage::HideLanguage(bool bFlag)
 
 bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 {
-    bool bDataChanged   = m_pFtLanguage->IsEnabled() || m_pCbSourceFormat->IsEnabled();
+    bool bDataChanged   = m_xFtLanguage->get_sensitive() || m_xCbSourceFormat->get_sensitive();
     if ( bDataChanged )
     {
         const SfxItemSet& rMyItemSet = GetItemSet();
@@ -719,15 +648,15 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 
         // OK chosen - Is format code input entered already taken over?
         // If not, simulate Add. Upon syntax error ignore input and prevent Put.
-        OUString    aFormat = m_pEdFormat->GetText();
+        OUString    aFormat = m_xEdFormat->get_text();
         sal_uInt32 nCurKey = pNumFmtShell->GetCurNumFmtKey();
 
-        if ( m_pIbAdd->IsEnabled() || pNumFmtShell->IsTmpCurrencyFormat(aFormat) )
+        if ( m_xIbAdd->get_sensitive() || pNumFmtShell->IsTmpCurrencyFormat(aFormat) )
         {   // #79599# It is not sufficient to just add the format code (or
             // delete it in case of bOneAreaFlag and resulting category change).
             // Upon switching tab pages we need all settings to be consistent
             // in case this page will be redisplayed later.
-            bDataChanged = Click_Impl(m_pIbAdd);
+            bDataChanged = Click_Impl(*m_xIbAdd);
             nCurKey = pNumFmtShell->GetCurNumFmtKey();
         }
         else if(nCurKey == NUMKEY_UNDEFINED)
@@ -781,26 +710,26 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 
         // Whether source format is to be taken or not:
 
-        if ( m_pCbSourceFormat->IsEnabled() )
+        if ( m_xCbSourceFormat->get_sensitive() )
         {
             sal_uInt16 _nWhich = GetWhich( SID_ATTR_NUMBERFORMAT_SOURCE );
             SfxItemState _eItemState = rMyItemSet.GetItemState( _nWhich, false );
             const SfxBoolItem* pBoolItem = static_cast<const SfxBoolItem*>(
                         GetItem( rMyItemSet, SID_ATTR_NUMBERFORMAT_SOURCE ));
             bool bOld = pBoolItem && pBoolItem->GetValue();
-            rCoreAttrs->Put( SfxBoolItem( _nWhich, m_pCbSourceFormat->IsChecked() ) );
+            rCoreAttrs->Put( SfxBoolItem( _nWhich, m_xCbSourceFormat->get_active() ) );
             if ( !bDataChanged )
-                bDataChanged = (bOld != m_pCbSourceFormat->IsChecked() ||
+                bDataChanged = (bOld != m_xCbSourceFormat->get_active() ||
                     _eItemState != SfxItemState::SET);
         }
 
         // FillItemSet is only called on OK, here we can notify the
         // NumberFormatShell that all new user defined formats are valid.
         pNumFmtShell->ValidateNewEntries();
-        if(m_pLbLanguage->IsVisible() &&
-                LISTBOX_ENTRY_NOTFOUND != m_pLbLanguage->GetEntryPos(sAutomaticEntry))
+        if(m_xLbLanguage->get_visible() &&
+                m_xLbLanguage->find_text(sAutomaticEntry) != -1)
                 rCoreAttrs->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ADD_AUTO,
-                    m_pLbLanguage->GetSelectedEntry() == sAutomaticEntry));
+                    m_xLbLanguage->GetSelectedEntry() == sAutomaticEntry));
     }
 
     return bDataChanged;
@@ -818,12 +747,12 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
 {
     OUString    aEntry;
     OUString    aTmpString;
-    vcl::Font   aFont=m_pLbCategory->GetFont();
+    vcl::Font   aFont=m_xLbCategory->GetFont();
     size_t      i = 0;
     short       nTmpCatPos;
 
-    m_pLbFormat->Clear();
-    m_pLbFormat->SetUpdateMode( false );
+    m_xLbFormat->Clear();
+    m_xLbFormat->SetUpdateMode( false );
 
     if( rEntries.empty() )
         return;
@@ -834,7 +763,7 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
     }
     else
     {
-        nTmpCatPos=m_pLbCategory->GetSelectedEntryPos();
+        nTmpCatPos=m_xLbCategory->GetSelectedEntryPos();
     }
 
     switch (nTmpCatPos)
@@ -847,7 +776,7 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
                                     aTmpString=aEntry;
                                 else
                                     aTmpString = pNumFmtShell->GetStandardName();
-                                m_pLbFormat->InsertFontEntry( aTmpString, aFont );
+                                m_xLbFormat->InsertFontEntry( aTmpString, aFont );
                                 break;
 
         default:                break;
@@ -863,16 +792,16 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
             {
                 Color* pPreviewColor = nullptr;
                 OUString aPreviewString( GetExpColorString( pPreviewColor, aEntry, aPrivCat ) );
-                vcl::Font aEntryFont( m_pLbFormat->GetFont() );
-                m_pLbFormat->InsertFontEntry( aPreviewString, aEntryFont, pPreviewColor );
+                vcl::Font aEntryFont( m_xLbFormat->GetFont() );
+                m_xLbFormat->InsertFontEntry( aPreviewString, aEntryFont, pPreviewColor );
             }
             else
             {
-                m_pLbFormat->InsertFontEntry(aEntry,aFont);
+                m_xLbFormat->InsertFontEntry(aEntry,aFont);
             }
         }
     }
-    m_pLbFormat->SetUpdateMode( true );
+    m_xLbFormat->SetUpdateMode( true );
     rEntries.clear();
 }
 
@@ -890,14 +819,14 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
 
 void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_False*/ )
 {
-    OUString    theFormat           = m_pEdFormat->GetText();
-    sal_Int32   nCurCategory        = m_pLbCategory->GetSelectedEntryPos();
+    OUString    theFormat           = m_xEdFormat->get_text();
+    sal_Int32   nCurCategory        = m_xLbCategory->GetSelectedEntryPos();
     sal_uInt16  nCategory           = static_cast<sal_uInt16>(nCurCategory);
     sal_uInt16  nDecimals           = 0;
     sal_uInt16  nZeroes             = 0;
     bool        bNegRed             = false;
     bool        bThousand           = false;
-    sal_Int32   nCurrencyPos        =m_pLbCurrency->GetSelectedEntryPos();
+    sal_Int32   nCurrencyPos        =m_xLbCurrency->GetSelectedEntryPos();
 
     if(bOneAreaFlag)
         nCurCategory=nFixedCategory;
@@ -913,7 +842,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
         sal_uInt16 nTstPos=pNumFmtShell->FindCurrencyFormat(theFormat);
         if(nCurrencyPos!=static_cast<sal_Int32>(nTstPos) && nTstPos!=sal_uInt16(-1))
         {
-            m_pLbCurrency->SelectEntryPos(nTstPos);
+            m_xLbCurrency->set_active(nTstPos);
             pNumFmtShell->SetCurrencySymbol(nTstPos);
             bDoIt=true;
         }
@@ -932,12 +861,12 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
             UpdateFormatListBox_Impl( true, false );
         }
     }
-    else if ( m_pLbFormat->GetEntryCount() > 0 )
+    else if ( m_xLbFormat->n_children() > 0 )
     {
         sal_uInt32 nCurEntryKey=NUMKEY_UNDEFINED;
-        if(!pNumFmtShell->FindEntry( m_pEdFormat->GetText(),&nCurEntryKey))
+        if(!pNumFmtShell->FindEntry( m_xEdFormat->get_text(),&nCurEntryKey))
         {
-            m_pLbFormat->SetNoSelection();
+            m_xLbFormat->SetNoSelection();
         }
     }
     if(bOneAreaFlag)
@@ -953,41 +882,41 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
             {
                 sal_uInt16 nIntDigits = pNumFmtShell->GetFormatIntegerDigits(theFormat);
                 bThousand = (nIntDigits > 0) && (nIntDigits % 3 == 0);
-                m_pBtnEngineering->Enable();
-                m_pBtnEngineering->Check( bThousand );
+                m_xBtnEngineering->set_sensitive(true);
+                m_xBtnEngineering->set_active( bThousand );
             }
             SAL_FALLTHROUGH;
         case CAT_NUMBER:
         case CAT_PERCENT:
         case CAT_CURRENCY:
         case CAT_FRACTION:
-            m_pFtOptions->Enable();
+            m_xFtOptions->set_sensitive(true);
             if ( nCategory == CAT_FRACTION )
             {
-                m_pFtDenominator->Enable();
-                m_pEdDenominator->Enable();
+                m_xFtDenominator->set_sensitive(true);
+                m_xEdDenominator->set_sensitive(true);
             }
             else
             {
-                m_pFtDecimals->Enable();
-                m_pEdDecimals->Enable();
+                m_xFtDecimals->set_sensitive(true);
+                m_xEdDecimals->set_sensitive(true);
             }
-            m_pFtLeadZeroes->Enable();
-            m_pEdLeadZeroes->Enable();
-            m_pBtnNegRed->Enable();
-            if ( nCategory == CAT_NUMBER && m_pLbFormat->GetSelectedEntryPos() == 0 )
-                m_pEdDecimals->SetText( "" ); //General format tdf#44399
+            m_xFtLeadZeroes->set_sensitive(true);
+            m_xEdLeadZeroes->set_sensitive(true);
+            m_xBtnNegRed->set_sensitive(true);
+            if ( nCategory == CAT_NUMBER && m_xLbFormat->GetSelectedEntryPos() == 0 )
+                m_xEdDecimals->set_text( "" ); //General format tdf#44399
             else
                 if ( nCategory == CAT_FRACTION )
-                    m_pEdDenominator->SetText( OUString::number( nDecimals ) );
+                    m_xEdDenominator->set_text( OUString::number( nDecimals ) );
                 else
-                    m_pEdDecimals->SetText( OUString::number( nDecimals ) );
-            m_pEdLeadZeroes->SetText( OUString::number( nZeroes ) );
-            m_pBtnNegRed->Check( bNegRed );
+                    m_xEdDecimals->set_text( OUString::number( nDecimals ) );
+            m_xEdLeadZeroes->set_text( OUString::number( nZeroes ) );
+            m_xBtnNegRed->set_active( bNegRed );
             if ( nCategory != CAT_SCIENTIFIC )
             {
-                m_pBtnThousand->Enable();
-                m_pBtnThousand->Check( bThousand );
+                m_xBtnThousand->set_sensitive(true);
+                m_xBtnThousand->set_active( bThousand );
             }
             break;
 
@@ -998,21 +927,21 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
         case CAT_TIME:
         case CAT_BOOLEAN:
         default:
-            m_pFtOptions->Disable();
-            m_pFtDecimals->Disable();
-            m_pEdDecimals->Disable();
-            m_pFtDenominator->Disable();
-            m_pEdDenominator->Disable();
-            m_pFtLeadZeroes->Disable();
-            m_pEdLeadZeroes->Disable();
-            m_pBtnNegRed->Disable();
-            m_pBtnThousand->Disable();
-            m_pBtnEngineering->Disable();
-            m_pEdDecimals->SetText( OUString::number( 0 ) );
-            m_pEdLeadZeroes->SetText( OUString::number( 0 ) );
-            m_pBtnNegRed->Check( false );
-            m_pBtnThousand->Check( false );
-            m_pBtnEngineering->Check( false );
+            m_xFtOptions->set_sensitive(false);
+            m_xFtDecimals->set_sensitive(false);
+            m_xEdDecimals->set_sensitive(false);
+            m_xFtDenominator->set_sensitive(false);
+            m_xEdDenominator->set_sensitive(false);
+            m_xFtLeadZeroes->set_sensitive(false);
+            m_xEdLeadZeroes->set_sensitive(false);
+            m_xBtnNegRed->set_sensitive(false);
+            m_xBtnThousand->set_sensitive(false);
+            m_xBtnEngineering->set_sensitive(false);
+            m_xEdDecimals->set_text( OUString::number( 0 ) );
+            m_xEdLeadZeroes->set_text( OUString::number( 0 ) );
+            m_xBtnNegRed->set_active( false );
+            m_xBtnThousand->set_active( false );
+            m_xBtnEngineering->set_active( false );
     }
 }
 
@@ -1046,21 +975,21 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
     }
     else
     {
-        nTmpCatPos=m_pLbCategory->GetSelectedEntryPos();
+        nTmpCatPos=m_xLbCategory->GetSelectedEntryPos();
     }
 
 
     if ( bCat )
     {
         if(nTmpCatPos!=CAT_CURRENCY)
-            m_pLbCurrency->Hide();
+            m_xLbCurrency->hide();
         else
-            m_pLbCurrency->Show();
+            m_xLbCurrency->show();
 
         pNumFmtShell->CategoryChanged( nTmpCatPos,nFmtLbSelPos, aEntryList );
     }
     else
-        pNumFmtShell->LanguageChanged( m_pLbLanguage->GetSelectedLanguage(),
+        pNumFmtShell->LanguageChanged( m_xLbLanguage->GetSelectedLanguage(),
                                        nFmtLbSelPos,aEntryList );
 
     REMOVE_DONTKNOW() // possibly UI-Enable
@@ -1071,21 +1000,21 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
         if(bUpdateEdit)
         {
             OUString aFormat=aEntryList[nFmtLbSelPos];
-            m_pEdFormat->SetText(aFormat);
-            m_pFtComment->SetText(pNumFmtShell->GetComment4Entry(nFmtLbSelPos));
+            m_xEdFormat->set_text(aFormat);
+            m_xFtComment->set_label(pNumFmtShell->GetComment4Entry(nFmtLbSelPos));
         }
 
         if(!bOneAreaFlag || !bCat)
         {
             FillFormatListBox_Impl( aEntryList );
-            m_pLbFormat->SelectEntryPos( nFmtLbSelPos );
+            m_xLbFormat->SelectEntryPos( nFmtLbSelPos );
 
-            m_pFtComment->SetText(pNumFmtShell->GetComment4Entry(nFmtLbSelPos));
+            m_xFtComment->set_label(pNumFmtShell->GetComment4Entry(nFmtLbSelPos));
             if(pNumFmtShell->GetUserDefined4Entry(nFmtLbSelPos))
             {
                 if(pNumFmtShell->GetComment4Entry(nFmtLbSelPos).isEmpty())
                 {
-                    m_pFtComment->SetText(m_pLbCategory->GetEntry(1));
+                    m_xFtComment->set_label(m_xLbCategory->get_text(1));
                 }
             }
             ChangePreviewText( static_cast<sal_uInt16>(nFmtLbSelPos) );
@@ -1097,26 +1026,26 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
         FillFormatListBox_Impl( aEntryList );
         if(nFmtLbSelPos != SELPOS_NONE)
         {
-            m_pLbFormat->SelectEntryPos( static_cast<sal_uInt16>(nFmtLbSelPos) );
+            m_xLbFormat->SelectEntryPos( static_cast<sal_uInt16>(nFmtLbSelPos) );
 
-            m_pFtComment->SetText(pNumFmtShell->GetComment4Entry(nFmtLbSelPos));
+            m_xFtComment->set_label(pNumFmtShell->GetComment4Entry(nFmtLbSelPos));
             if(pNumFmtShell->GetUserDefined4Entry(nFmtLbSelPos))
             {
                 if(pNumFmtShell->GetComment4Entry(nFmtLbSelPos).isEmpty())
                 {
-                    m_pFtComment->SetText(m_pLbCategory->GetEntry(1));
+                    m_xFtComment->set_label(m_xLbCategory->get_text(1));
                 }
             }
         }
         else
         {
-            m_pLbFormat->SetNoSelection();
+            m_xLbFormat->SetNoSelection();
         }
 
         if ( bUpdateEdit )
         {
-            m_pEdFormat->SetText( OUString() );
-            m_pWndPreview->NotifyChange( OUString() );
+            m_xEdFormat->set_text( OUString() );
+            m_aWndPreview.NotifyChange( OUString() );
         }
     }
 
@@ -1132,9 +1061,9 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
 
 void SvxNumberFormatTabPage::UpdateThousandEngineeringCheckBox()
 {
-    bool bIsScientific = m_pLbCategory->GetSelectedEntryPos() == CAT_SCIENTIFIC;
-    m_pBtnThousand->Show( !bIsScientific );
-    m_pBtnEngineering->Show( bIsScientific );
+    bool bIsScientific = m_xLbCategory->GetSelectedEntryPos() == CAT_SCIENTIFIC;
+    m_xBtnThousand->show( !bIsScientific );
+    m_xBtnEngineering->show( bIsScientific );
 }
 
 
@@ -1146,11 +1075,11 @@ void SvxNumberFormatTabPage::UpdateThousandEngineeringCheckBox()
 
 void SvxNumberFormatTabPage::UpdateDecimalsDenominatorEditBox()
 {
-    bool bIsFraction = m_pLbCategory->GetSelectedEntryPos() == CAT_FRACTION;
-    m_pFtDecimals->Show( !bIsFraction );
-    m_pEdDecimals->Show( !bIsFraction );
-    m_pFtDenominator->Show( bIsFraction );
-    m_pEdDenominator->Show( bIsFraction );
+    bool bIsFraction = m_xLbCategory->GetSelectedEntryPos() == CAT_FRACTION;
+    m_xFtDecimals->show( !bIsFraction );
+    m_xEdDecimals->show( !bIsFraction );
+    m_xFtDenominator->show( bIsFraction );
+    m_xEdDenominator->show( bIsFraction );
 }
 
 
@@ -1166,25 +1095,21 @@ void SvxNumberFormatTabPage::UpdateDecimalsDenominatorEditBox()
 #*
 #************************************************************************/
 
-IMPL_LINK( SvxNumberFormatTabPage, DoubleClickHdl_Impl, SvTreeListBox*, pLb, bool )
+IMPL_LINK(SvxNumberFormatTabPage, DoubleClickHdl_Impl, weld::TreeView&, rLb, void)
 {
-    if (pLb == m_pLbFormat)
-    {
-        SelFormatHdl_Impl( pLb );
+    SelFormatHdl_Impl(&rLb);
 
-        if ( fnOkHdl.IsSet() )
-        {   // temporary solution, should be offered by SfxTabPage
-            fnOkHdl.Call( nullptr );
-        }
-        else
-        {
-            SfxSingleTabDialog* pParent = dynamic_cast< SfxSingleTabDialog* >( GetParentDialog() );
-            OKButton* pOKButton = pParent ? pParent->GetOKButton() : nullptr;
-            if ( pOKButton )
-                pOKButton->Click();
-        }
+    if ( fnOkHdl.IsSet() )
+    {   // temporary solution, should be offered by SfxTabPage
+        fnOkHdl.Call( nullptr );
     }
-    return false;
+    else
+    {
+        SfxSingleTabDialog* pParent = dynamic_cast<SfxSingleTabDialog*>(GetParentDialog());
+        OKButton* pOKButton = pParent ? pParent->GetOKButton() : nullptr;
+        if ( pOKButton )
+            pOKButton->Click();
+    }
 }
 
 
@@ -1200,36 +1125,39 @@ IMPL_LINK( SvxNumberFormatTabPage, DoubleClickHdl_Impl, SvTreeListBox*, pLb, boo
 #*
 #************************************************************************/
 
-IMPL_LINK( SvxNumberFormatTabPage, SelFormatClickHdl_Impl, Button*, pLb, void )
-{
-    SelFormatHdl_Impl(pLb);
-}
-IMPL_LINK( SvxNumberFormatTabPage, SelFormatTreeListBoxHdl_Impl, SvTreeListBox*, pLb, void )
-{
-    SelFormatHdl_Impl(pLb);
-}
-IMPL_LINK( SvxNumberFormatTabPage, SelFormatListBoxHdl_Impl, ListBox&, rLb, void )
+IMPL_LINK(SvxNumberFormatTabPage, SelFormatClickHdl_Impl, weld::ToggleButton&, rLb, void)
 {
     SelFormatHdl_Impl(&rLb);
 }
+
+IMPL_LINK(SvxNumberFormatTabPage, SelFormatTreeListBoxHdl_Impl, weld::TreeView&, rLb, void)
+{
+    SelFormatHdl_Impl(&rLb);
+}
+
+IMPL_LINK(SvxNumberFormatTabPage, SelFormatListBoxHdl_Impl, weld::ComboBox&, rLb, void)
+{
+    SelFormatHdl_Impl(&rLb);
+}
+
 void SvxNumberFormatTabPage::SelFormatHdl_Impl(void * pLb )
 {
-    if (pLb == m_pCbSourceFormat)
+    if (pLb == m_xCbSourceFormat.get())
     {
         EnableBySourceFormat_Impl();    // enable/disable everything else
-        if ( m_pCbSourceFormat->IsChecked() )
+        if ( m_xCbSourceFormat->get_active() )
             return;   // just disabled everything else
 
         // Reinit options enable/disable for current selection.
 
         // Current category may be UserDefined with no format entries defined.
-        // And yes, m_pLbFormat is a SvxFontListBox with sal_uLong list positions,
+        // And yes, m_xLbFormat is a SvxFontListBox with sal_uLong list positions,
         // implementation returns a TREELIST_ENTRY_NOTFOUND if empty,
         // comparison with sal_Int32 LISTBOX_ENTRY_NOTFOUND wouldn't match.
-        if ( m_pLbFormat->GetSelectedEntryPos() == TREELIST_ENTRY_NOTFOUND )
-            pLb = m_pLbCategory; // continue with the current category selected
+        if ( m_xLbFormat->GetSelectedEntryPos() == TREELIST_ENTRY_NOTFOUND )
+            pLb = m_xLbCategory; // continue with the current category selected
         else
-            pLb = m_pLbFormat;   // continue with the current format selected
+            pLb = m_xLbFormat;   // continue with the current format selected
     }
 
     sal_Int32 nTmpCatPos;
@@ -1240,20 +1168,20 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(void * pLb )
     }
     else
     {
-        nTmpCatPos=m_pLbCategory->GetSelectedEntryPos();
+        nTmpCatPos=m_xLbCategory->GetSelectedEntryPos();
     }
 
-    if (nTmpCatPos==CAT_CURRENCY && pLb == m_pLbCurrency )
+    if (nTmpCatPos==CAT_CURRENCY && pLb == m_xLbCurrency )
     {
-        sal_Int32 nCurrencyPos = m_pLbCurrency->GetSelectedEntryPos();
+        sal_Int32 nCurrencyPos = m_xLbCurrency->GetSelectedEntryPos();
         pNumFmtShell->SetCurrencySymbol(static_cast<sal_uInt32>(nCurrencyPos));
     }
 
 
     // Format-ListBox ----------------------------------------------------
-    if (pLb == m_pLbFormat)
+    if (pLb == m_xLbFormat)
     {
-        sal_uLong nSelPos = m_pLbFormat->GetSelectedEntryPos();
+        sal_uLong nSelPos = m_xLbFormat->GetSelectedEntryPos();
         short nFmtLbSelPos = static_cast<short>(nSelPos);
 
         OUString aFormat = pNumFmtShell->GetFormat4Entry(nFmtLbSelPos);
@@ -1263,14 +1191,14 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(void * pLb )
         {
             if(aComment.isEmpty())
             {
-                aComment = m_pLbCategory->GetEntry(1);
+                aComment = m_xLbCategory->get_text(1);
             }
         }
 
         if ( !aFormat.isEmpty() )
         {
-            if(!m_pEdFormat->HasFocus()) m_pEdFormat->SetText( aFormat );
-            m_pFtComment->SetText(aComment);
+            if(!m_xEdFormat->HasFocus()) m_xEdFormat->set_text( aFormat );
+            m_xFtComment->set_label(aComment);
             ChangePreviewText( static_cast<sal_uInt16>(nSelPos) );
         }
 
@@ -1278,18 +1206,18 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(void * pLb )
 
         if ( pNumFmtShell->FindEntry( aFormat) )
         {
-            m_pIbAdd->Enable(false );
+            m_xIbAdd->set_sensitive(false );
             bool bIsUserDef=pNumFmtShell->IsUserDefined( aFormat );
-            m_pIbRemove->Enable(bIsUserDef);
-            m_pIbInfo->Enable(bIsUserDef);
+            m_xIbRemove->set_sensitive(bIsUserDef);
+            m_xIbInfo->set_sensitive(bIsUserDef);
 
         }
         else
         {
-            m_pIbAdd->Enable();
-            m_pIbInfo->Enable();
-            m_pIbRemove->Enable(false );
-            m_pFtComment->SetText(m_pEdComment->GetText());
+            m_xIbAdd->set_sensitive(true);
+            m_xIbInfo->set_sensitive(true);
+            m_xIbRemove->set_sensitive(false );
+            m_xFtComment->set_label(m_xEdComment->get_text());
 
         }
         UpdateOptions_Impl( false );
@@ -1299,7 +1227,7 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(void * pLb )
 
 
     // category-ListBox -------------------------------------------------
-    if (pLb == m_pLbCategory || pLb == m_pLbCurrency)
+    if (pLb == m_xLbCategory || pLb == m_xLbCurrency)
     {
         UpdateFormatListBox_Impl( true, true );
         EditHdl_Impl( nullptr );
@@ -1310,10 +1238,10 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(void * pLb )
 
 
     // language/country-ListBox ----------------------------------------------
-    if (pLb == m_pLbLanguage)
+    if (pLb == m_xLbLanguage)
     {
         UpdateFormatListBox_Impl( false, true );
-        EditHdl_Impl(m_pEdFormat);
+        EditHdl_Impl(m_xEdFormat.get());
 
         return;
     }
@@ -1321,7 +1249,7 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(void * pLb )
 
 
 /*************************************************************************
-#*  Method:    ClickHdl_Impl, PushButton* pIB
+#*  Method:    ClickHdl_Impl, weld::Button& rIB
 #*------------------------------------------------------------------------
 #*
 #*  Class:      SvxNumberFormatTabPage
@@ -1332,21 +1260,22 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(void * pLb )
 #*
 #************************************************************************/
 
-IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, Button*, pIB, void)
+IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, weld::Button&, rIB, void)
 {
-    Click_Impl(static_cast<PushButton*>(pIB));
+    Click_Impl(rIB);
 }
-bool SvxNumberFormatTabPage::Click_Impl(PushButton* pIB)
+
+bool SvxNumberFormatTabPage::Click_Impl(weld::Button& rIB)
 {
     sal_uLong       nReturn = 0;
     const sal_uLong nReturnChanged  = 0x1;  // THE boolean return value
     const sal_uLong nReturnAdded    = 0x2;  // temp: format added
     const sal_uLong nReturnOneArea  = 0x4;  // temp: one area but category changed => ignored
 
-    if (pIB == m_pIbAdd)
+    if (&rIB == m_xIbAdd.get())
     {   // Also called from FillItemSet() if a temporary currency format has
         // to be added, not only if the Add button is enabled.
-        OUString               aFormat = m_pEdFormat->GetText();
+        OUString               aFormat = m_xEdFormat->get_text();
         std::vector<OUString> aEntryList;
         std::vector<OUString> a2EntryList;
         sal_uInt16           nCatLbSelPos = 0;
@@ -1360,23 +1289,23 @@ bool SvxNumberFormatTabPage::Click_Impl(PushButton* pIB)
         if ( bAdded )
             nReturn |= nReturnChanged | nReturnAdded;
 
-        if (pLastActivWindow == m_pEdComment)
+        if (pLastActivWindow == m_xEdComment)
         {
-            m_pEdFormat->GrabFocus();
-            m_pEdComment->Hide();
-            m_pFtComment->Show();
-            m_pFtComment->SetText(m_pEdComment->GetText());
+            m_xEdFormat->grab_focus();
+            m_xEdComment->hide();
+            m_xFtComment->show();
+            m_xFtComment->set_label(m_xEdComment->get_text());
         }
 
         if ( !nErrPos ) // Syntax ok?
         {
             // May be sorted under a different locale if LCID was parsed.
             if (bAdded)
-                m_pLbLanguage->SelectLanguage( pNumFmtShell->GetCurLanguage() );
+                m_xLbLanguage->SelectLanguage( pNumFmtShell->GetCurLanguage() );
 
             if(nCatLbSelPos==CAT_CURRENCY)
             {
-                m_pLbCurrency->SelectEntryPos(static_cast<sal_uInt16>(pNumFmtShell->GetCurrencySymbol()));
+                m_xLbCurrency->SelectEntryPos(static_cast<sal_uInt16>(pNumFmtShell->GetCurrencySymbol()));
             }
 
             if(bOneAreaFlag && (nFixedCategory!=nCatLbSelPos))
@@ -1387,8 +1316,8 @@ bool SvxNumberFormatTabPage::Click_Impl(PushButton* pIB)
                                             nFmtLbSelPos,
                                             a2EntryList);
                 a2EntryList.clear();
-                m_pEdFormat->GrabFocus();
-                m_pEdFormat->SetSelection( Selection( 0, SELECTION_MAX ) );
+                m_xEdFormat->grab_focus();
+                m_xEdFormat->SetSelection( Selection( 0, SELECTION_MAX ) );
                 nReturn |= nReturnOneArea;
             }
             else
@@ -1402,20 +1331,20 @@ bool SvxNumberFormatTabPage::Click_Impl(PushButton* pIB)
                         SetCategory(nCatLbSelPos );
 
                     FillFormatListBox_Impl( aEntryList );
-                    if(m_pEdComment->GetText()!=m_pLbCategory->GetEntry(1))
+                    if (m_xEdComment->get_text()!=m_xLbCategory->get_text(1))
                     {
                         pNumFmtShell->SetComment4Entry(nFmtLbSelPos,
-                                                    m_pEdComment->GetText());
+                                                    m_xEdComment->get_text());
                     }
                     else
                     {
                         pNumFmtShell->SetComment4Entry(nFmtLbSelPos,
                                                         OUString());
                     }
-                    m_pLbFormat->SelectEntryPos( static_cast<sal_uInt16>(nFmtLbSelPos) );
-                    m_pEdFormat->SetText( aFormat );
+                    m_xLbFormat->SelectEntryPos( static_cast<sal_uInt16>(nFmtLbSelPos) );
+                    m_xEdFormat->set_text( aFormat );
 
-                    m_pEdComment->SetText(m_pLbCategory->GetEntry(1));    // String for user defined
+                    m_xEdComment->set_text(m_xLbCategory->get_text(1));    // String for user defined
 
                     ChangePreviewText( static_cast<sal_uInt16>(nFmtLbSelPos) );
                 }
@@ -1423,18 +1352,18 @@ bool SvxNumberFormatTabPage::Click_Impl(PushButton* pIB)
         }
         else // syntax error
         {
-            m_pEdFormat->GrabFocus();
-            m_pEdFormat->SetSelection( Selection( nErrPos == -1 ? SELECTION_MAX : nErrPos, SELECTION_MAX ) );
+            m_xEdFormat->grab_focus();
+            m_xEdFormat->SetSelection( Selection( nErrPos == -1 ? SELECTION_MAX : nErrPos, SELECTION_MAX ) );
         }
-        EditHdl_Impl(m_pEdFormat);
+        EditHdl_Impl(m_xEdFormat.get());
         nReturn = ((nReturn & nReturnOneArea) ? 0 : (nReturn & nReturnChanged));
 
         aEntryList.clear();
         a2EntryList.clear();
     }
-    else if (pIB == m_pIbRemove)
+    else if (&rIB == m_xIbRemove.get())
     {
-        OUString              aFormat = m_pEdFormat->GetText();
+        OUString              aFormat = m_xEdFormat->get_text();
         std::vector<OUString> aEntryList;
         sal_uInt16           nCatLbSelPos = 0;
         short                nFmtLbSelPos = SELPOS_NONE;
@@ -1444,7 +1373,7 @@ bool SvxNumberFormatTabPage::Click_Impl(PushButton* pIB)
                                     nFmtLbSelPos,
                                     aEntryList );
 
-        m_pEdComment->SetText(m_pLbCategory->GetEntry(1));
+        m_xEdComment->set_text(m_xLbCategory->get_text(1));
 
         if( nFmtLbSelPos>=0 && static_cast<size_t>(nFmtLbSelPos)<aEntryList.size() )
         {
@@ -1460,35 +1389,35 @@ bool SvxNumberFormatTabPage::Click_Impl(PushButton* pIB)
                 else
                     SetCategory(nCatLbSelPos );
 
-            m_pLbFormat->SelectEntryPos( static_cast<sal_uInt16>(nFmtLbSelPos) );
-            m_pEdFormat->SetText( aFormat );
+            m_xLbFormat->SelectEntryPos( static_cast<sal_uInt16>(nFmtLbSelPos) );
+            m_xEdFormat->set_text( aFormat );
             ChangePreviewText( static_cast<sal_uInt16>(nFmtLbSelPos) );
         }
         else
         {
             // set to "all/standard"
             SetCategory(0);
-            SelFormatHdl_Impl(m_pLbCategory);
+            SelFormatHdl_Impl(m_xLbCategory);
         }
 
-        EditHdl_Impl(m_pEdFormat);
+        EditHdl_Impl(m_xEdFormat.get());
 
         aEntryList.clear();
     }
-    else if (pIB == m_pIbInfo)
+    else if (&rIB == m_xIbInfo.get())
     {
-        if(!(pLastActivWindow == m_pEdComment))
+        if(!(pLastActivWindow == m_xEdComment))
         {
-            m_pEdComment->SetText(m_pFtComment->GetText());
-            m_pEdComment->Show();
-            m_pFtComment->Hide();
-            m_pEdComment->GrabFocus();
+            m_xEdComment->set_text(m_xFtComment->get_text());
+            m_xEdComment->show();
+            m_xFtComment->hide();
+            m_xEdComment->grab_focus();
         }
         else
         {
-            m_pEdFormat->GrabFocus();
-            m_pEdComment->Hide();
-            m_pFtComment->Show();
+            m_xEdFormat->grab_focus();
+            m_xEdComment->hide();
+            m_xFtComment->show();
         }
     }
 
@@ -1508,59 +1437,60 @@ bool SvxNumberFormatTabPage::Click_Impl(PushButton* pIB)
 #*
 #************************************************************************/
 
-IMPL_LINK( SvxNumberFormatTabPage, EditModifyHdl_Impl, Edit&, rEdit, void )
+IMPL_LINK(SvxNumberFormatTabPage, EditModifyHdl_Impl, weld::Entry&, rEdit, void)
 {
     EditHdl_Impl(&rEdit);
 }
-void SvxNumberFormatTabPage::EditHdl_Impl( Edit const * pEdFormat )
+
+void SvxNumberFormatTabPage::EditHdl_Impl(const weld::Entry* pEdFormat)
 {
     sal_uInt32 nCurKey = NUMKEY_UNDEFINED;
 
-    if ( m_pEdFormat->GetText().isEmpty() )
+    if ( m_xEdFormat->get_text().isEmpty() )
     {
-        m_pIbAdd->Enable(false );
-        m_pIbRemove->Enable(false );
-        m_pIbInfo->Enable(false );
-        m_pFtComment->SetText(OUString());
+        m_xIbAdd->set_sensitive(false );
+        m_xIbRemove->set_sensitive(false );
+        m_xIbInfo->set_sensitive(false );
+        m_xFtComment->set_label(OUString());
     }
     else
     {
-        OUString aFormat = m_pEdFormat->GetText();
+        OUString aFormat = m_xEdFormat->get_text();
         MakePreviewText( aFormat );
 
         if ( pNumFmtShell->FindEntry( aFormat, &nCurKey ) )
         {
-            m_pIbAdd->Enable(false );
+            m_xIbAdd->set_sensitive(false );
             bool bUserDef=pNumFmtShell->IsUserDefined( aFormat );
 
-            m_pIbRemove->Enable(bUserDef);
-            m_pIbInfo->Enable(bUserDef);
+            m_xIbRemove->set_sensitive(bUserDef);
+            m_xIbInfo->set_sensitive(bUserDef);
 
             if(bUserDef)
             {
                 sal_uInt16 nTmpCurPos=pNumFmtShell->FindCurrencyFormat(aFormat );
 
                 if(nTmpCurPos!=sal_uInt16(-1))
-                    m_pLbCurrency->SelectEntryPos(nTmpCurPos);
+                    m_xLbCurrency->SelectEntryPos(nTmpCurPos);
             }
             short nPosi=pNumFmtShell->GetListPos4Entry(aFormat);
             if(nPosi>=0)
-                m_pLbFormat->SelectEntryPos( static_cast<sal_uInt16>(nPosi));
+                m_xLbFormat->SelectEntryPos( static_cast<sal_uInt16>(nPosi));
 
         }
         else
         {
 
-            m_pIbAdd->Enable();
-            m_pIbInfo->Enable();
-            m_pIbRemove->Enable(false );
+            m_xIbAdd->set_sensitive(true);
+            m_xIbInfo->set_sensitive(true);
+            m_xIbRemove->set_sensitive(false );
 
-            m_pFtComment->SetText(m_pEdComment->GetText());
+            m_xFtComment->set_label(m_xEdComment->get_text());
 
         }
     }
 
-    if ( pEdFormat )
+    if (pEdFormat)
     {
         pNumFmtShell->SetCurNumFmtKey( nCurKey );
         UpdateOptions_Impl( true );
@@ -1579,61 +1509,63 @@ void SvxNumberFormatTabPage::EditHdl_Impl( Edit const * pEdFormat )
 #*
 #************************************************************************/
 
-IMPL_LINK( SvxNumberFormatTabPage, OptClickHdl_Impl, Button*, pOptCtrl, void )
+IMPL_LINK(SvxNumberFormatTabPage, OptClickHdl_Impl, weld::ToggleButton&, rOptCtrl, void)
 {
-    OptHdl_Impl(pOptCtrl);
+    OptHdl_Impl(&rOptCtrl);
 }
+
 IMPL_LINK( SvxNumberFormatTabPage, OptEditHdl_Impl, Edit&, rEdit, void )
 {
     OptHdl_Impl(&rEdit);
 }
+
 void SvxNumberFormatTabPage::OptHdl_Impl( void const * pOptCtrl )
 {
-    if (   (pOptCtrl == m_pEdLeadZeroes)
-        || (pOptCtrl == m_pEdDecimals)
-        || (pOptCtrl == m_pEdDenominator)
-        || (pOptCtrl == m_pBtnNegRed)
-        || (pOptCtrl == m_pBtnThousand)
-        || (pOptCtrl == m_pBtnEngineering) )
+    if (   (pOptCtrl == m_xEdLeadZeroes.get())
+        || (pOptCtrl == m_xEdDecimals.get())
+        || (pOptCtrl == m_xEdDenominator.get())
+        || (pOptCtrl == m_xBtnNegRed.get())
+        || (pOptCtrl == m_xBtnThousand.get())
+        || (pOptCtrl == m_xBtnEngineering.get()) )
     {
         OUString          aFormat;
-        bool          bThousand  = ( m_pBtnThousand->IsVisible() && m_pBtnThousand->IsEnabled() && m_pBtnThousand->IsChecked() )
-                                || ( m_pBtnEngineering->IsVisible() && m_pBtnEngineering->IsEnabled() && m_pBtnEngineering->IsChecked() );
-        bool          bNegRed    =   m_pBtnNegRed->IsEnabled() && m_pBtnNegRed->IsChecked();
-        sal_uInt16    nPrecision = (m_pEdDecimals->IsEnabled() && m_pEdDecimals->IsVisible())
-                                 ? static_cast<sal_uInt16>(m_pEdDecimals->GetValue())
-                                 : ( (m_pEdDenominator->IsEnabled() && m_pEdDenominator->IsVisible())
-                                   ? static_cast<sal_uInt16>(m_pEdDenominator->GetValue())
+        bool          bThousand  = ( m_xBtnThousand->get_visible() && m_xBtnThousand->get_sensitive() && m_xBtnThousand->get_active() )
+                                || ( m_xBtnEngineering->get_visible() && m_xBtnEngineering->get_sensitive() && m_xBtnEngineering->get_active() );
+        bool          bNegRed    =   m_xBtnNegRed->get_sensitive() && m_xBtnNegRed->get_active();
+        sal_uInt16    nPrecision = (m_xEdDecimals->get_sensitive() && m_xEdDecimals->get_visible())
+                                 ? static_cast<sal_uInt16>(m_xEdDecimals->get_value())
+                                 : ( (m_xEdDenominator->get_sensitive() && m_xEdDenominator->get_visible())
+                                   ? static_cast<sal_uInt16>(m_xEdDenominator->get_value())
                                    : sal_uInt16(0) );
-        sal_uInt16    nLeadZeroes = (m_pEdLeadZeroes->IsEnabled())
-                                 ? static_cast<sal_uInt16>(m_pEdLeadZeroes->GetValue())
+        sal_uInt16    nLeadZeroes = (m_xEdLeadZeroes->get_sensitive())
+                                 ? static_cast<sal_uInt16>(m_xEdLeadZeroes->get_value())
                                  : sal_uInt16(0);
-        if ( pNumFmtShell->GetStandardName() == m_pEdFormat->GetText() )
+        if ( pNumFmtShell->GetStandardName() == m_xEdFormat->get_text() )
         {
-            m_pEdDecimals->SetValue( nPrecision );
+            m_xEdDecimals->set_value(nPrecision);
         }
 
         pNumFmtShell->MakeFormat( aFormat,
                                   bThousand, bNegRed,
                                   nPrecision, nLeadZeroes,
-                                  static_cast<sal_uInt16>(m_pLbFormat->GetSelectedEntryPos()) );
+                                  static_cast<sal_uInt16>(m_xLbFormat->get_selected_index()) );
 
-        m_pEdFormat->SetText( aFormat );
+        m_xEdFormat->set_text( aFormat );
         MakePreviewText( aFormat );
 
         if ( pNumFmtShell->FindEntry( aFormat ) )
         {
-            m_pIbAdd->Enable(false );
+            m_xIbAdd->set_sensitive(false );
             bool bUserDef=pNumFmtShell->IsUserDefined( aFormat );
-            m_pIbRemove->Enable(bUserDef);
-            m_pIbInfo->Enable(bUserDef);
-            EditHdl_Impl(m_pEdFormat);
+            m_xIbRemove->set_sensitive(bUserDef);
+            m_xIbInfo->set_sensitive(bUserDef);
+            EditHdl_Impl(m_xEdFormat.get());
 
         }
         else
         {
             EditHdl_Impl( nullptr );
-            m_pLbFormat->SetNoSelection();
+            m_xLbFormat->select(-1);
         }
     }
 }
@@ -1655,22 +1587,17 @@ IMPL_LINK_NOARG(SvxNumberFormatTabPage, TimeHdl_Impl, Timer *, void)
 #*
 #************************************************************************/
 
-IMPL_LINK( SvxNumberFormatTabPage, LostFocusHdl_Impl, Control&, rControl, void)
+IMPL_LINK_NOARG( SvxNumberFormatTabPage, LostFocusHdl_Impl, weld::Widget&, void)
 {
-    Edit* pEd = static_cast<Edit*>(&rControl);
-    if (pEd == m_pEdComment)
+    aResetWinTimer.Start();
+    m_xFtComment->set_label(m_xEdComment->get_text());
+    m_xEdComment->hide();
+    m_xFtComment->show();
+    if(!m_xIbAdd->get_sensitive())
     {
-        aResetWinTimer.Start();
-        m_pFtComment->SetText(m_pEdComment->GetText());
-        m_pEdComment->Hide();
-        m_pFtComment->Show();
-        if(!m_pIbAdd->IsEnabled())
-        {
-            sal_uInt16  nSelPos = static_cast<sal_uInt16>(m_pLbFormat->GetSelectedEntryPos());
-            pNumFmtShell->SetComment4Entry(nSelPos,
-                                        m_pEdComment->GetText());
-            m_pEdComment->SetText(m_pLbCategory->GetEntry(1));    // String for user defined
-        }
+        sal_uInt16 nSelPos = m_xLbFormat->get_selected_index();
+        pNumFmtShell->SetComment4Entry(nSelPos, m_xEdComment->get_text());
+        m_xEdComment->set_text(m_xLbCategory->get_text(1));    // String for user defined
     }
 }
 
@@ -1726,7 +1653,7 @@ void SvxNumberFormatTabPage::MakePreviewText( const OUString& rFormat )
     OUString aPreviewString;
     Color* pPreviewColor = nullptr;
     pNumFmtShell->MakePreviewString( rFormat, aPreviewString, pPreviewColor );
-    m_pWndPreview->NotifyChange( aPreviewString, pPreviewColor );
+    m_aWndPreview.NotifyChange( aPreviewString, pPreviewColor );
 }
 
 void SvxNumberFormatTabPage::ChangePreviewText( sal_uInt16 nPos )
@@ -1734,14 +1661,14 @@ void SvxNumberFormatTabPage::ChangePreviewText( sal_uInt16 nPos )
     OUString aPreviewString;
     Color* pPreviewColor = nullptr;
     pNumFmtShell->FormatChanged( nPos, aPreviewString, pPreviewColor );
-    m_pWndPreview->NotifyChange( aPreviewString, pPreviewColor );
+    m_aWndPreview.NotifyChange( aPreviewString, pPreviewColor );
 }
 
 bool SvxNumberFormatTabPage::PreNotify( NotifyEvent& rNEvt )
 {
     if(rNEvt.GetType()==MouseNotifyEvent::LOSEFOCUS)
     {
-        if ( rNEvt.GetWindow() == dynamic_cast<const  vcl::Window* >( m_pEdComment.get() ) && !m_pEdComment->IsVisible() )
+        if ( rNEvt.GetWindow() == dynamic_cast<const  vcl::Window* >( m_xEdComment.get() ) && !m_xEdComment->get_visible() )
         {
             pLastActivWindow = nullptr;
         }
@@ -1761,23 +1688,23 @@ void SvxNumberFormatTabPage::FillCurrencyBox()
     sal_uInt16  nSelPos=0;
     pNumFmtShell->GetCurrencySymbols(aList, &nSelPos);
 
-    for(std::vector<OUString>::iterator i = aList.begin() + 1;i != aList.end(); ++i)
-        m_pLbCurrency->InsertEntry(*i);
+    for (std::vector<OUString>::iterator i = aList.begin() + 1;i != aList.end(); ++i)
+        m_xLbCurrency->append_text(*i);
 
     // Initially disable the "Automatically" entry. First ensure that nothing
     // is selected, else if the to be disabled (first) entry was selected it
     // would be sticky when disabled and could not be deselected!
-    m_pLbCurrency->SetNoSelection();
-    m_pLbCurrency->SetEntryFlags( 0, ListBoxEntryFlags::DisableSelection | ListBoxEntryFlags::DrawDisabled);
-    m_pLbCurrency->SelectEntryPos(nSelPos);
+    m_xLbCurrency->set_active(-1);
+//TODO    m_xLbCurrency->SetEntryFlags( 0, ListBoxEntryFlags::DisableSelection | ListBoxEntryFlags::DrawDisabled);
+    m_xLbCurrency->set_active(nSelPos);
 }
 
 void SvxNumberFormatTabPage::SetCategory(sal_uInt16 nPos)
 {
-    sal_uInt16  nCurCategory = m_pLbCategory->GetSelectedEntryPos();
+    sal_uInt16 nCurCategory = m_xLbCategory->get_selected_index();
     sal_uInt16 nTmpCatPos;
 
-    if(bOneAreaFlag)
+    if (bOneAreaFlag)
     {
         nTmpCatPos=nFixedCategory;
     }
@@ -1786,15 +1713,16 @@ void SvxNumberFormatTabPage::SetCategory(sal_uInt16 nPos)
         nTmpCatPos=nPos;
     }
 
-    if(m_pLbCategory->GetEntryCount()==1 || nCurCategory!=nPos)
+    if(m_xLbCategory->n_children()==1 || nCurCategory!=nPos)
     {
         if(nTmpCatPos!=CAT_CURRENCY)
-            m_pLbCurrency->Hide();
+            m_xLbCurrency->hide();
         else
-            m_pLbCurrency->Show();
+            m_xLbCurrency->show();
     }
-    m_pLbCategory->SelectEntryPos(nPos);
+    m_xLbCategory->select(nPos);
 }
+
 /* to support Writer text field language handling an
    additional entry needs to be inserted into the ListBox
    which marks a certain language as automatically detected
@@ -1802,11 +1730,11 @@ void SvxNumberFormatTabPage::SetCategory(sal_uInt16 nPos)
 */
 void SvxNumberFormatTabPage::AddAutomaticLanguage_Impl(LanguageType eAutoLang, bool bSelect)
 {
-    m_pLbLanguage->RemoveLanguage(LANGUAGE_SYSTEM);
-    const sal_Int32 nPos = m_pLbLanguage->InsertEntry(sAutomaticEntry);
-    m_pLbLanguage->SetEntryData(nPos, reinterpret_cast<void*>(static_cast<sal_uInt16>(eAutoLang)));
+    m_xLbLanguage->RemoveLanguage(LANGUAGE_SYSTEM);
+    const sal_Int32 nPos = m_xLbLanguage->InsertEntry(sAutomaticEntry);
+    m_xLbLanguage->SetEntryData(nPos, reinterpret_cast<void*>(static_cast<sal_uInt16>(eAutoLang)));
     if(bSelect)
-        m_pLbLanguage->SelectEntryPos(nPos);
+        m_xLbLanguage->SelectEntryPos(nPos);
 }
 
 void SvxNumberFormatTabPage::PageCreated(const SfxAllItemSet& aSet)

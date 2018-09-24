@@ -173,6 +173,7 @@ public:
     void set_active(int nPos) { m_xControl->set_active(nPos); }
     int get_active() const { return m_xControl->get_active(); }
     void set_active_id(const LanguageType eLangType);
+    bool get_visible() const { return m_xControl->get_visible(); }
     LanguageType get_active_id() const;
 };
 
