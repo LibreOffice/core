@@ -529,7 +529,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xWarningOnBox;
 public:
     MessageWithCheck(weld::Window *pParent, const OUString& rUIFile, const OString& rDialogId)
-        : weld::MessageDialogController(pParent, rUIFile, rDialogId, "ask")
+        : MessageDialogController(pParent, rUIFile, rDialogId, "ask")
         , m_xWarningOnBox(m_xBuilder->weld_check_button("ask"))
     {
     }

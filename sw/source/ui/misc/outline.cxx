@@ -113,7 +113,7 @@ IMPL_LINK_NOARG(SwNumNamesDlg, DoubleClickHdl, weld::TreeView&, void)
 }
 
 SwNumNamesDlg::SwNumNamesDlg(weld::Window *pParent)
-    : weld::GenericDialogController(pParent,
+    : GenericDialogController(pParent,
             "modules/swriter/ui/numberingnamedialog.ui",
             "NumberingNameDialog")
     , m_xFormEdit(m_xBuilder->weld_entry("entry"))
