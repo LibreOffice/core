@@ -53,7 +53,7 @@ class DAVResourceAccess
     std::vector< SerfUri > m_aRedirectURIs;
 
 public:
-    DAVResourceAccess() : m_xSessionFactory( nullptr ) {}
+    DAVResourceAccess() = default;
     DAVResourceAccess( const css::uno::Reference< css::uno::XComponentContext > & rContext,
                        rtl::Reference< DAVSessionFactory > const & rSessionFactory,
                        const OUString & rURL );
