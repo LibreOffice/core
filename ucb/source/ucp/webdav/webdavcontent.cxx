@@ -18,11 +18,14 @@
  */
 
 #include <memory>
+
+#include <cppuhelper/queryinterface.hxx>
 #include <osl/diagnose.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <ucbhelper/contentidentifier.hxx>
+#include <ucbhelper/macros.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/simpleinteractionrequest.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
@@ -38,6 +41,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/task/PasswordContainerInteractionHandler.hpp>
 #include <com/sun/star/ucb/CommandEnvironment.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
