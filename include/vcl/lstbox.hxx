@@ -180,6 +180,8 @@ public:
     void*               GetEntryData( sal_Int32  nPos ) const;
     void*               GetSelectedEntryData() const { return GetEntryData(GetSelectedEntryPos()); }
 
+    void                SetEntryTextColor(sal_Int32 nPos, const Color* pTextColor);
+
     /** this methods stores a combination of flags from the
         ListBoxEntryFlags::* defines at the given entry.
         See description of the possible ListBoxEntryFlags::* flags
