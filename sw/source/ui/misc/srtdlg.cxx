@@ -98,7 +98,7 @@ static bool lcl_GetSelTable( SwWrtShell const &rSh, sal_uInt16& rX, sal_uInt16& 
 
 // init list
 SwSortDlg::SwSortDlg(weld::Window* pParent, SwWrtShell &rShell)
-    : weld::GenericDialogController(pParent, "modules/swriter/ui/sortdialog.ui", "SortDialog")
+    : GenericDialogController(pParent, "modules/swriter/ui/sortdialog.ui", "SortDialog")
     , m_pParent(pParent)
     , m_xColLbl(m_xBuilder->weld_label("column"))
     , m_xKeyCB1(m_xBuilder->weld_check_button("key1"))

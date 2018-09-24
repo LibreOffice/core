@@ -84,7 +84,7 @@ static inline bool IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSe
 }
 
 SwColumnDlg::SwColumnDlg(weld::Window* pParent, SwWrtShell& rSh)
-    : weld::GenericDialogController(pParent, "modules/swriter/ui/columndialog.ui", "ColumnDialog")
+    : GenericDialogController(pParent, "modules/swriter/ui/columndialog.ui", "ColumnDialog")
     , m_rWrtShell(rSh)
     , m_pFrameSet(nullptr)
     , m_nOldSelection(0)

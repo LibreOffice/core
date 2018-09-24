@@ -60,7 +60,7 @@ IMPL_LINK(SwInsTableDlg, TextFilterHdl, OUString&, rTest, bool)
 }
 
 SwInsTableDlg::SwInsTableDlg(SwView& rView)
-    : weld::GenericDialogController(rView.GetFrameWeld(), "modules/swriter/ui/inserttable.ui", "InsertTableDialog")
+    : GenericDialogController(rView.GetFrameWeld(), "modules/swriter/ui/inserttable.ui", "InsertTableDialog")
     , m_aTextFilter(" .<>")
     , pShell(&rView.GetWrtShell())
     , pTAutoFormat(nullptr)

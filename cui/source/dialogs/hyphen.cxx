@@ -405,7 +405,7 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
     weld::Window* pParent,
     uno::Reference< linguistic2::XHyphenator > const &xHyphen,
     SvxSpellWrapper* pWrapper)
-    : weld::GenericDialogController(pParent, "cui/ui/hyphenate.ui", "HyphenateDialog")
+    : GenericDialogController(pParent, "cui/ui/hyphenate.ui", "HyphenateDialog")
     , m_pHyphWrapper(pWrapper)
     , m_aActWord(rWord)
     , m_nActLanguage(nLang)
