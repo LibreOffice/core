@@ -168,12 +168,19 @@ public:
     void save_active_id() { m_eSavedLanguage = get_active_id(); }
     LanguageType get_saved_active_id() const { return m_eSavedLanguage; }
     bool get_active_id_changed_from_saved() const { return m_eSavedLanguage != get_active_id(); }
+    void show() { m_xControl->show(); }
     void hide() { m_xControl->hide(); }
+    void show(bool bShow) { if (bShow) show(); else hide(); }
     void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
     void set_active(int nPos) { m_xControl->set_active(nPos); }
     int get_active() const { return m_xControl->get_active(); }
     void set_active_id(const LanguageType eLangType);
+    OUString get_active_text() const { return m_xControl->get_active_text(); }
+    bool get_visible() const { return m_xControl->get_visible(); }
     LanguageType get_active_id() const;
+    void remove_id(const LanguageType eLangType);
+    void append(const LanguageType eLangType, const OUString& rStr);
+    int find_text(const OUString& rStr) const { return m_xControl->find_text(rStr); }
 };
 
 class SVX_DLLPUBLIC SvxLanguageComboBox : public ComboBox, public SvxLanguageBoxBase
