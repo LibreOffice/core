@@ -1179,6 +1179,8 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
             fMinX -= aExtrapolateBackward;
 
             fPointScale = (fMaxX - fMinX) / (fChartMaxX - fChartMinX);
+            // sanitize the value, tdf#119922
+            fPointScale = std::min(fPointScale, 1000.0);
         }
 
         xCalculator->setRegressionProperties(aDegree, bForceIntercept, aInterceptValue, aPeriod);
