@@ -37,8 +37,9 @@ static int isdotdot( char const * );
 static int issymbolic(char * dir, char * component);
 static int exists_path(struct IncludesCollection*, char*);
 
-
+#ifdef S_IFLNK
 static char *notdotdot[ MAXDIRS ];
+#endif
 
 struct inclist *inc_path(char *file, char *include, boolean dot, struct IncludesCollection *incCollection)
 {
