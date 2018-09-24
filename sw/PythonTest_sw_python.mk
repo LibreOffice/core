@@ -25,6 +25,7 @@ $(eval $(call gb_PythonTest_add_modules,sw_python,$(SRCDIR)/sw/qa/python,\
 	check_styles \
 	check_xtexttable \
 	check_table \
+	check_xautotextcontainer \
 	check_xnamedgraph \
 	get_expression \
 	set_expression \
