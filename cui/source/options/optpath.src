@@ -29,65 +29,62 @@
 #include "helpid.hrc"
 
  // RID_SFXPAGE_PATH -----------------------------------------------------
-#define STD_MASKCOLOR Color { Red=0xffff; Green=0x0000; Blue=0xffff; }
 TabPage RID_SFXPAGE_PATH
 {
     HelpId = HID_OPTIONS_PATH ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( 260, 185 ) ;
     Text [ en-US ] = "Paths" ;
     FixedText FT_TYPE
     {
         Hide = TRUE;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 14 ) ;
+        Size = MAP_APPFONT ( 40, 10 ) ;
         Text [ en-US ] = "Type" ;
     };
     FixedText FT_PATH
     {
         Hide = TRUE;
-        Pos = MAP_APPFONT ( 110 , 14 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 110, 14 ) ;
+        Size = MAP_APPFONT ( 40, 10 ) ;
         Text [ en-US ] = "Path" ;
     };
     Control LB_PATH
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 236 , 147 ) ;
+        Pos = MAP_APPFONT ( 12, 14 ) ;
+        Size = MAP_APPFONT ( 236, 147 ) ;
         Border = TRUE ;
-        TabStop = TRUE;
+        TabStop = TRUE ;
     };
     PushButton BTN_PATH
     {
         HelpID = "cui:PushButton:RID_SFXPAGE_PATH:BTN_PATH";
-        Pos = MAP_APPFONT ( 183 , 165 ) ;
-        Size = MAP_APPFONT ( 65 , 14 ) ;
+        Pos = MAP_APPFONT ( 183, 165 ) ;
+        Size = MAP_APPFONT ( 65, 14 ) ;
         Text [ en-US ] = "~Edit..." ;
     };
     PushButton BTN_STANDARD
     {
         HelpID = "cui:PushButton:RID_SFXPAGE_PATH:BTN_STANDARD";
-        Pos = MAP_APPFONT ( 115 , 165 ) ;
-        Size = MAP_APPFONT ( 65 , 14 ) ;
+        Pos = MAP_APPFONT ( 115, 165 ) ;
+        Size = MAP_APPFONT ( 65, 14 ) ;
         Text [ en-US ] = "~Default" ;
     };
     FixedLine GB_STD
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
         Text [ en-US ] = "Paths used by %PRODUCTNAME" ;
     };
     Image IMG_LOCK
     {
-        ImageBitmap = Bitmap { File = "lock.bmp"; };
-        MaskColor = STD_MASKCOLOR;
+        ImageBitmap = Bitmap { File = "lock.png"; } ;
     };
     Image IMG_LOCK_HC
     {
-        ImageBitmap = Bitmap { File = "lock_hc.bmp"; };
-        MaskColor = STD_MASKCOLOR;
+        ImageBitmap = Bitmap { File = "lock_hc.png"; } ;
     };
     String STR_MULTIPATHDLG
     {
@@ -140,7 +137,7 @@ String RID_SVXSTR_KEY_TEMPLATE_PATH
 };
 String RID_SVXSTR_KEY_GLOSSARY_PATH
 {
-    Text [ en-US ] = "AutoText";
+    Text [ en-US ] = "AutoText" ;
 };
 String RID_SVXSTR_KEY_DICTIONARY_PATH
 {
@@ -161,38 +158,38 @@ String RID_SVXSTR_KEY_STORAGE_DIR
 };
 String RID_SVXSTR_KEY_TEMP_PATH
 {
-    Text [ en-US ] = "Temporary files";
+    Text [ en-US ] = "Temporary files" ;
 };
 String RID_SVXSTR_KEY_PLUGINS_PATH
 {
-    Text [ en-US ] = "Plug-ins";
+    Text [ en-US ] = "Plug-ins" ;
 };
 String RID_SVXSTR_KEY_FAVORITES_DIR
 {
-    Text [ en-US ] = "Folder Bookmarks";
+    Text [ en-US ] = "Folder Bookmarks" ;
 };
 String RID_SVXSTR_KEY_FILTER_PATH
 {
-    Text [ en-US ] = "Filters";
+    Text [ en-US ] = "Filters" ;
 };
 String RID_SVXSTR_KEY_ADDINS_PATH
 {
-    Text [ en-US ] = "Add-ins";
+    Text [ en-US ] = "Add-ins" ;
 };
 String RID_SVXSTR_KEY_USERCONFIG_PATH
 {
-    Text [ en-US ] = "User Configuration";
+    Text [ en-US ] = "User Configuration" ;
 };
 String RID_SVXSTR_KEY_USERDICTIONARY_DIR
 {
-    Text [ en-US ] = "User-defined dictionaries";
+    Text [ en-US ] = "User-defined dictionaries" ;
 };
 String RID_SVXSTR_KEY_AUTOCORRECT_DIR
 {
-    Text [ en-US ] = "AutoCorrect";
+    Text [ en-US ] = "AutoCorrect" ;
 };
 String RID_SVXSTR_KEY_LINGUISTIC_DIR
 {
-    Text [ en-US ] = "Writing aids";
+    Text [ en-US ] = "Writing aids" ;
 };
 
