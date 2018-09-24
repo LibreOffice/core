@@ -33,6 +33,7 @@
 #include "DAVSession.hxx"
 #include "SerfUri.hxx"
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
+#include <com/sun/star/ucb/ResultSetException.hpp>
 
 using namespace com::sun::star;
 using namespace http_dav_ucp;
