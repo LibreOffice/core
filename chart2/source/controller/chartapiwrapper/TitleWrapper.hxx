@@ -21,18 +21,17 @@
 
 #include <WrappedPropertySet.hxx>
 #include "ReferenceSizePropertyProvider.hxx"
-#include "Chart2ModelContact.hxx"
 #include <TitleHelper.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/chart2/XTitle.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <memory>
+
+namespace chart { namespace wrapper { class Chart2ModelContact; } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XTitle; } } } }
 
 namespace chart
 {

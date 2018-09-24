@@ -440,3 +440,109 @@ blacklist:
     chart2/source/controller/sidebar/ChartSidebarSelectionListener.hxx:
     # base class has to be a complete type
     - com/sun/star/view/XSelectionChangeListener.hpp
+    chart2/source/controller/chartapiwrapper/ChartDataWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XAnyDescriptionAccess.hpp
+    - com/sun/star/chart/XDateCategories.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/uno/XComponent.hpp
+    chart2/source/controller/chartapiwrapper/AxisWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart/XAxis.hpp
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/util/XNumberFormatsSupplier.hpp
+    - WrappedPropertySet.hxx
+    chart2/source/controller/chartapiwrapper/AreaWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - WrappedPropertySet.hxx
+    chart2/source/controller/chartapiwrapper/DataSeriesPointWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XEventListener.hpp
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - WrappedPropertySet.hxx
+    chart2/source/controller/chartapiwrapper/DiagramWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/chart2/XDiagramProvider.hpp
+    - com/sun/star/chart/X3DDefaultSetter.hpp
+    - com/sun/star/chart/X3DDisplay.hpp
+    - com/sun/star/chart/XAxisSupplier.hpp
+    - com/sun/star/chart/XAxisZSupplier.hpp
+    - com/sun/star/chart/XDiagram.hpp
+    - com/sun/star/chart/XDiagramPositioning.hpp
+    - com/sun/star/chart/XSecondAxisTitleSupplier.hpp
+    - com/sun/star/chart/XStatisticDisplay.hpp
+    - com/sun/star/chart/XTwoAxisXSupplier.hpp
+    - com/sun/star/chart/XTwoAxisYSupplier.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - WrappedPropertySet.hxx
+    chart2/source/controller/chartapiwrapper/GridWrapper.hxx:
+    # base class has to be a complete type
+    - WrappedPropertySet.hxx
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/controller/chartapiwrapper/LegendWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - WrappedPropertySet.hxx
+    chart2/source/controller/chartapiwrapper/MinMaxLineWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XMultiPropertySet.hpp
+    - com/sun/star/beans/XMultiPropertyStates.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/controller/chartapiwrapper/UpDownBarWrapper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XMultiPropertySet.hpp
+    - com/sun/star/beans/XMultiPropertyStates.hpp
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/beans/XPropertyState.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/controller/chartapiwrapper/TitleWrapper.hxx:
+    # base class has to be a complete type
+    - WrappedPropertySet.hxx
+    - com/sun/star/drawing/XShape.hpp
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/controller/chartapiwrapper/WallFloorWrapper.hxx:
+    # base class has to be a complete type
+    - WrappedPropertySet.hxx
+    - com/sun/star/lang/XComponent.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    chart2/source/controller/chartapiwrapper/WrappedAutomaticPositionProperties.hxx:
+    # Needed for css namespace shortcut
+    - sal/types.h
+    chart2/source/controller/chartapiwrapper/WrappedDataCaptionProperties.hxx:
+    # Needed for css namespace shortcut
+    - sal/types.h
+    chart2/source/controller/chartapiwrapper/WrappedScaleTextProperties.hxx:
+    # Needed for css namespace shortcut
+    - sal/types.h
+    chart2/source/controller/chartapiwrapper/WrappedSplineProperties.hxx:
+    # Needed for css namespace shortcut
+    - sal/types.h
+    chart2/source/controller/chartapiwrapper/WrappedSplineProperties.hxx:
+    # Needed for css namespace shortcut
+    - sal/types.h
+    chart2/source/controller/chartapiwrapper/WrappedSymbolProperties.hxx:
+    # Needed for css namespace shortcut
+    - sal/types.h
+    chart2/source/controller/chartapiwrapper/WrappedStatisticProperties.hxx:
+    # Needed for css namespace shortcut
+    - sal/types.h
+    chart2/source/controller/chartapiwrapper/WrappedStockProperties.hxx:
+    # Needed for css namespace shortcut
+    - sal/types.h

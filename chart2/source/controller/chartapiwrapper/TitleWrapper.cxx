@@ -18,12 +18,15 @@
  */
 
 #include "TitleWrapper.hxx"
+#include "Chart2ModelContact.hxx"
 #include <ControllerLockGuard.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/XTitle.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 #include <CharacterProperties.hxx>
 #include <LinePropertiesHelper.hxx>

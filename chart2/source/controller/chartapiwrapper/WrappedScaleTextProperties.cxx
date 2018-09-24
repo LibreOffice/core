@@ -18,10 +18,13 @@
  */
 
 #include "WrappedScaleTextProperties.hxx"
+#include "Chart2ModelContact.hxx"
 #include <FastPropertyIdRanges.hxx>
+#include <WrappedProperty.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
