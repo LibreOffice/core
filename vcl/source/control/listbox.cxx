@@ -1091,6 +1091,11 @@ void* ListBox::GetEntryData( sal_Int32 nPos ) const
     return mpImplLB->GetEntryList()->GetEntryData( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
 }
 
+void ListBox::SetEntryTextColor(sal_Int32 nPos, const Color* pTextColor)
+{
+    mpImplLB->SetEntryTextColor(nPos + mpImplLB->GetEntryList()->GetMRUCount(), pTextColor);
+}
+
 void ListBox::SetEntryFlags( sal_Int32 nPos, ListBoxEntryFlags nFlags )
 {
     mpImplLB->SetEntryFlags( nPos + mpImplLB->GetEntryList()->GetMRUCount(), nFlags );
