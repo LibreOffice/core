@@ -1645,6 +1645,11 @@ public:
         m_xTreeView->SetEntryData(nInsertedAt, new OUString(rId));
     }
 
+    virtual void set_font_color(int pos, const Color& rColor) const override
+    {
+        m_xTreeView->SetEntryTextColor(pos, &rColor);
+    }
+
     virtual void remove(int pos) override
     {
         m_xTreeView->RemoveEntry(pos);

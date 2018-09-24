@@ -367,6 +367,19 @@ void* ImplEntryList::GetEntryData( sal_Int32 nPos ) const
     return pImplEntry ? pImplEntry->mpUserData : nullptr;
 }
 
+void ImplEntryList::SetEntryTextColor(sal_Int32 nPos, const Color* pColor)
+{
+    ImplEntryType* pImplEntry = GetEntry(nPos);
+    if (pImplEntry)
+        pImplEntry->mxTextColor.reset(pColor ? new Color(*pColor) : nullptr);
+}
+
+const Color* ImplEntryList::GetEntryTextColor(sal_Int32 nPos) const
+{
+    ImplEntryType* pImplEntry = GetEntry(nPos);
+    return pImplEntry ? pImplEntry->mxTextColor.get() : nullptr;
+}
+
 void ImplEntryList::SetEntryFlags( sal_Int32 nPos, ListBoxEntryFlags nFlags )
 {
     ImplEntryType* pImplEntry = GetEntry( nPos );
@@ -1728,6 +1741,8 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
         ApplySettings(rRenderContext);
         if (!IsEnabled())
             rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
+        else if (const Color* pTextColor = mpEntryList->GetEntryTextColor(nPos))
+            rRenderContext.SetTextColor(*pTextColor);
     }
     rRenderContext.SetTextFillColor();
 
