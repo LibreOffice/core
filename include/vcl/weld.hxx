@@ -327,13 +327,6 @@ public:
         insert(-1, rId, rStr, &rImage);
     }
 
-    virtual int n_children() const = 0;
-    virtual void clear() = 0;
-    virtual int get_height_rows(int nRows) const = 0;
-
-    virtual void set_selection_mode(bool bMultiple) = 0;
-    virtual int count_selected_rows() const = 0;
-
     void connect_changed(const Link<TreeView&, void>& rLink) { m_aChangeHdl = rLink; }
     void connect_row_activated(const Link<TreeView&, void>& rLink) { m_aRowActivatedHdl = rLink; }
 
@@ -344,6 +337,7 @@ public:
     virtual void remove(int pos) = 0;
     virtual void set_top_entry(int pos) = 0;
     virtual std::vector<int> get_selected_rows() const = 0;
+    virtual void set_font_color(int pos, const Color& rColor) const = 0;
 
     //by text
     virtual OUString get_text(int pos) const = 0;
@@ -374,6 +368,13 @@ public:
     //all of them
     void select_all() { unselect(-1); }
     void unselect_all() { select(-1); }
+
+    virtual int n_children() const = 0;
+    virtual void clear() = 0;
+    virtual int get_height_rows(int nRows) const = 0;
+
+    virtual void set_selection_mode(bool bMultiple) = 0;
+    virtual int count_selected_rows() const = 0;
 };
 
 class VCL_DLLPUBLIC Button : virtual public Container
