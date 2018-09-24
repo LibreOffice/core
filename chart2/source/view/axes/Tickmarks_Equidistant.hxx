@@ -57,7 +57,11 @@ private: //methods
                     if(m_pSimpleTicks)
                         return (*m_pSimpleTicks)[nDepth][nIndex];
                     else
+                    {
+                        if ((*m_pInfoTicks)[nDepth].size() <= size_t(nIndex))
+                            return std::numeric_limits<double>::max();
                         return (((*m_pInfoTicks)[nDepth])[nIndex]).fScaledTickValue;
+                    }
                 }
     sal_Int32   getTickCount( sal_Int32 nDepth ) const
                 {
