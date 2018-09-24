@@ -1,4 +1,5 @@
-<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><linearGradient id="a" gradientUnits="userSpaceOnUse" x1="7.644068" x2="9.237289" y1="2.169492" y2="13.694915"><stop offset="0" stop-color="#fff"/><stop offset=".06779661" stop-color="#fff" stop-opacity=".235294"/><stop offset="1" stop-color="#fff" stop-opacity=".156863"/><stop offset="1" stop-color="#fff" stop-opacity=".392157"/></linearGradient><linearGradient id="b" gradientUnits="userSpaceOnUse" x1="8.135593" x2="7.389831" y1="15.728813" y2=".610169"><stop offset="0" stop-opacity=".339506"/><stop offset="1" stop-opacity=".246914"/></linearGradient><linearGradient id="c" gradientUnits="userSpaceOnUse" x1="13.084745" x2="13.898305" y1="1.152542" y2="15.389831"><stop offset="0" stop-color="#f4f4f4"/><stop offset="1" stop-color="#dbdbdb"/></linearGradient>
 
-     /&gt;
- <path d="m4.875.5-4.375 4.375v6.25l4.375 4.375h6.25l4.375-4.375v-6.25l-4.375-4.375z" fill="#e9e9e9" stroke="#8c8c8c" stroke-linejoin="round"/><path d="m5.265625 1.4375-3.828125 3.828125v5.46875l3.828125 3.828125h5.46875l3.828125-3.828125v-5.46875l-3.828125-3.828125z" fill="none" stroke="#fff" stroke-linejoin="round" stroke-width=".875"/></svg>
+
+     /&amp;gt;
+ <g stroke-linejoin="round"><path d="m4.875.5-4.375 4.375v6.25l4.375 4.375h6.25l4.375-4.375v-6.25l-4.375-4.375z" fill="url(#c)" stroke="url(#b)"/><path d="m5.265625 1.4375-3.828125 3.828125v5.46875l3.828125 3.828125h5.46875l3.828125-3.828125v-5.46875l-3.828125-3.828125z" fill="none" stroke="url(#a)" stroke-width=".875"/></g></svg>
