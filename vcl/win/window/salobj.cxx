@@ -66,7 +66,7 @@ WinSalObject* ImplFindSalObject( HWND hWndChild )
     return nullptr;
 }
 
-WinSalFrame* ImplFindSalObjectFrame( HWND hWnd )
+static WinSalFrame* ImplFindSalObjectFrame( HWND hWnd )
 {
     WinSalFrame* pFrame = nullptr;
     WinSalObject* pObject = ImplFindSalObject( hWnd );
@@ -87,7 +87,7 @@ WinSalFrame* ImplFindSalObjectFrame( HWND hWnd )
     return pFrame;
 }
 
-LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
+static LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
 {
     // Used for Unicode and none Unicode
     SalData* pSalData = GetSalData();
@@ -258,7 +258,7 @@ void ImplSalPostDispatchMsg( const MSG* pMsg )
     pSalData->mnSalObjWantKeyEvt = 0;
 }
 
-LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
+static LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
 {
     WinSalObject*   pSysObj;
     LRESULT         nRet = 0;
@@ -375,7 +375,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
     return nRet;
 }
 
-LRESULT CALLBACK SalSysObjWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+static LRESULT CALLBACK SalSysObjWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     int bDef = TRUE;
     LRESULT nRet = SalSysObjWndProc( hWnd, nMsg, wParam, lParam, bDef );
@@ -384,7 +384,7 @@ LRESULT CALLBACK SalSysObjWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM 
     return nRet;
 }
 
-LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
+static LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
 {
     LRESULT nRet = 0;
 
@@ -446,7 +446,7 @@ LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPA
     return nRet;
 }
 
-LRESULT CALLBACK SalSysObjChildWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
+static LRESULT CALLBACK SalSysObjChildWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     int bDef = TRUE;
     LRESULT nRet = SalSysObjChildWndProc( hWnd, nMsg, wParam, lParam, bDef );

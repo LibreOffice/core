@@ -168,7 +168,7 @@ std::wstring CMetaInfoReader::getTagAttribute(const std::wstring& TagName,  cons
 */
 const LocaleSet_t EN_US_LOCALE( ::std::make_pair( ::std::wstring( L"en" ),  ::std::wstring( L"US" )));
 
-bool isValidLocale(const ::std::wstring& Locale)
+static bool isValidLocale(const ::std::wstring& Locale)
 {
     return ( Locale.length() == 5 );
 }

@@ -335,7 +335,7 @@ void WinSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcG
     }
 }
 
-void ImplCalcOutSideRgn( const RECT& rSrcRect,
+static void ImplCalcOutSideRgn( const RECT& rSrcRect,
                          int nLeft, int nTop, int nRight, int nBottom,
                          HRGN& rhInvalidateRgn )
 {
@@ -1824,7 +1824,7 @@ bool WinSalGraphicsImpl::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt
     return bRet;
 }
 
-basegfx::B2DPoint impPixelSnap(
+static basegfx::B2DPoint impPixelSnap(
     const basegfx::B2DPolygon& rPolygon,
     const basegfx::B2DHomMatrix& rObjectToDevice,
     basegfx::B2DHomMatrix& rObjectToDeviceInv,
@@ -1866,7 +1866,7 @@ basegfx::B2DPoint impPixelSnap(
     return rPolygon.getB2DPoint(nIndex);
 }
 
-void impAddB2DPolygonToGDIPlusGraphicsPathReal(
+static void impAddB2DPolygonToGDIPlusGraphicsPathReal(
     Gdiplus::GraphicsPath& rGraphicsPath,
     const basegfx::B2DPolygon& rPolygon,
     const basegfx::B2DHomMatrix& rObjectToDevice,
@@ -2274,7 +2274,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
     return true;
 }
 
-void paintToGdiPlus(
+static void paintToGdiPlus(
     Gdiplus::Graphics& rGraphics,
     const SalTwoRect& rTR,
     Gdiplus::Bitmap& rBitmap)
@@ -2305,7 +2305,7 @@ void paintToGdiPlus(
         &aAttributes);
 }
 
-void setInterpolationMode(
+static void setInterpolationMode(
     Gdiplus::Graphics& rGraphics,
     long rSrcWidth,
     long rDestWidth,

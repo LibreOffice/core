@@ -26,6 +26,8 @@
 #include <COMOpenDocuments.hpp>
 #include <registrar.hpp>
 
+#include <shlwapi.h> // declaration of DllInstall
+
 namespace {
 
 HANDLE g_hModule;

@@ -224,7 +224,7 @@ struct OleComponentNative_Impl {
 };
 
 
-DWORD GetAspectFromFlavor( const datatransfer::DataFlavor& aFlavor )
+static DWORD GetAspectFromFlavor( const datatransfer::DataFlavor& aFlavor )
 {
     if ( aFlavor.MimeType.indexOf( ";Aspect=THUMBNAIL" ) != -1 )
         return DVASPECT_THUMBNAIL;
@@ -237,7 +237,7 @@ DWORD GetAspectFromFlavor( const datatransfer::DataFlavor& aFlavor )
 }
 
 
-OUString GetFlavorSuffixFromAspect( DWORD nAsp )
+static OUString GetFlavorSuffixFromAspect( DWORD nAsp )
 {
     OUString aResult;
 
@@ -254,7 +254,7 @@ OUString GetFlavorSuffixFromAspect( DWORD nAsp )
 }
 
 
-HRESULT OpenIStorageFromURL_Impl( const OUString& aURL, IStorage** ppIStorage )
+static HRESULT OpenIStorageFromURL_Impl( const OUString& aURL, IStorage** ppIStorage )
 {
     OSL_ENSURE( ppIStorage, "The pointer must not be empty!" );
 
@@ -375,7 +375,7 @@ bool OleComponentNative_Impl::GraphicalFlavor( const datatransfer::DataFlavor& a
 }
 
 
-bool GetClassIDFromSequence_Impl( uno::Sequence< sal_Int8 > const & aSeq, CLSID& aResult )
+static bool GetClassIDFromSequence_Impl( uno::Sequence< sal_Int8 > const & aSeq, CLSID& aResult )
 {
     if ( aSeq.getLength() == 16 )
     {
@@ -392,7 +392,7 @@ bool GetClassIDFromSequence_Impl( uno::Sequence< sal_Int8 > const & aSeq, CLSID&
 }
 
 
-OUString WinAccToVcl_Impl( const sal_Unicode* pStr )
+static OUString WinAccToVcl_Impl( const sal_Unicode* pStr )
 {
     OUString aResult;
 

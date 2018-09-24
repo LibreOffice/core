@@ -367,7 +367,7 @@ static HANDLE WINAPI OpenDirectory( rtl_uString* pPath)
     return static_cast<HANDLE>(pDirectory);
 }
 
-BOOL WINAPI EnumDirectory(HANDLE hDirectory, LPWIN32_FIND_DATAW pFindData)
+static BOOL WINAPI EnumDirectory(HANDLE hDirectory, LPWIN32_FIND_DATAW pFindData)
 {
     BOOL        fSuccess = FALSE;
     LPDIRECTORY pDirectory = static_cast<LPDIRECTORY>(hDirectory);
@@ -1149,7 +1149,7 @@ static inline bool is_floppy_A_present()
 static inline bool is_floppy_B_present()
 { return (GetLogicalDrives() & 2); }
 
-bool is_floppy_volume_mount_point(const rtl::OUString& path)
+static bool is_floppy_volume_mount_point(const rtl::OUString& path)
 {
     // determines if a volume mount point shows to a floppy
     // disk by comparing the unique volume names

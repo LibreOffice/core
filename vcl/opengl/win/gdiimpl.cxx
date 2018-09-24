@@ -77,7 +77,7 @@ void WinOpenGLContext::resetCurrent()
     g_bAnyCurrent = false;
 }
 
-void ensureDispatchTable()
+static void ensureDispatchTable()
 {
     thread_local bool bEpoxyDispatchMakeCurrentCalled = false;
     if (!bEpoxyDispatchMakeCurrentCalled)
@@ -189,7 +189,7 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM l
     }
 }
 
-bool InitTempWindow(HWND& hwnd, int width, int height, const PIXELFORMATDESCRIPTOR& inPfd, GLWinWindow& glWin)
+static bool InitTempWindow(HWND& hwnd, int width, int height, const PIXELFORMATDESCRIPTOR& inPfd, GLWinWindow& glWin)
 {
     OpenGLZone aZone;
 
@@ -245,7 +245,7 @@ bool InitTempWindow(HWND& hwnd, int width, int height, const PIXELFORMATDESCRIPT
     return true;
 }
 
-bool WGLisExtensionSupported(const char *extension)
+static bool WGLisExtensionSupported(const char *extension)
 {
     OpenGLZone aZone;
 
@@ -284,7 +284,7 @@ bool WGLisExtensionSupported(const char *extension)
     }
 }
 
-bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
+static bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
         bool bUseDoubleBufferedRendering, bool bRequestVirtualDevice)
 {
     OpenGLZone aZone;

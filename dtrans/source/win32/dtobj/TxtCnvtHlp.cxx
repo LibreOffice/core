@@ -27,7 +27,7 @@ using namespace ::com::sun::star::uno;
 
 // assuming a '\0' terminated string if no length specified
 
-int CalcBuffSizeForTextConversion( UINT code_page, LPCSTR lpMultiByteString, int nLen = -1 )
+static int CalcBuffSizeForTextConversion( UINT code_page, LPCSTR lpMultiByteString, int nLen = -1 )
 {
     return ( MultiByteToWideChar( code_page,
                                 0,
@@ -39,7 +39,7 @@ int CalcBuffSizeForTextConversion( UINT code_page, LPCSTR lpMultiByteString, int
 
 // assuming a '\0' terminated string if no length specified
 
-int CalcBuffSizeForTextConversion( UINT code_page, LPCWSTR lpWideCharString, int nLen = -1 )
+static int CalcBuffSizeForTextConversion( UINT code_page, LPCWSTR lpWideCharString, int nLen = -1 )
 {
     return WideCharToMultiByte( code_page,
                                 0,

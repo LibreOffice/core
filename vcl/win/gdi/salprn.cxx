@@ -1283,7 +1283,7 @@ std::unique_ptr<SalPrinter> WinSalInstance::CreatePrinter( SalInfoPrinter* pInfo
     return std::unique_ptr<SalPrinter>(pPrinter);
 }
 
-BOOL CALLBACK SalPrintAbortProc( HDC hPrnDC, int /* nError */ )
+static BOOL CALLBACK SalPrintAbortProc( HDC hPrnDC, int /* nError */ )
 {
     SalData*    pSalData = GetSalData();
     WinSalPrinter* pPrinter;

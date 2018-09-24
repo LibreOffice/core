@@ -68,7 +68,7 @@ Entry const CtrlIdToResIdTable[] = {
 
 const sal_Int32 SIZE_TABLE = SAL_N_ELEMENTS( CtrlIdToResIdTable );
 
-const char* CtrlIdToResId( sal_Int32 aControlId )
+static const char* CtrlIdToResId( sal_Int32 aControlId )
 {
     const char* pResId = nullptr;
 

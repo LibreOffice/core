@@ -85,7 +85,7 @@ void SalAbort( const OUString& rErrorText, bool )
     }
 }
 
-LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
+static LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 
 class SalYieldMutex : public comphelper::SolarMutex
 {

@@ -24,7 +24,7 @@
 typedef HRESULT (__stdcall *lpfnDllRegisterServer)();
 typedef HRESULT (__stdcall *lpfnDllUnregisterServer)();
 
-bool IsUnregisterParameter(const wchar_t* Param)
+static bool IsUnregisterParameter(const wchar_t* Param)
 {
     return ((0 == _wcsicmp(Param, L"/u")) ||
             (0 == _wcsicmp(Param, L"-u")));

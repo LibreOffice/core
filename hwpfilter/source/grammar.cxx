@@ -445,7 +445,7 @@ static int yyparse();
 #endif
 #endif
 
-int
+static int
 yyparse(YYPARSE_PARAM_ARG)
      YYPARSE_PARAM_DECL
 {

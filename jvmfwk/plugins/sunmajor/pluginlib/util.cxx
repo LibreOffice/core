@@ -114,8 +114,8 @@ char const *g_arSearchPaths[] = {
 namespace jfw_plugin
 {
 #if defined(_WIN32)
-bool getSDKInfoFromRegistry(vector<OUString> & vecHome);
-bool getJREInfoFromRegistry(vector<OUString>& vecJavaHome);
+static bool getSDKInfoFromRegistry(vector<OUString> & vecHome);
+static bool getJREInfoFromRegistry(vector<OUString>& vecJavaHome);
 #endif
 
 static bool decodeOutput(const OString& s, OUString* out);
@@ -568,7 +568,7 @@ bool decodeOutput(const OString& s, OUString* out)
 
 #if defined(_WIN32)
 
-bool getJavaInfoFromRegistry(const wchar_t* szRegKey,
+static bool getJavaInfoFromRegistry(const wchar_t* szRegKey,
                              vector<OUString>& vecJavaHome)
 {
     HKEY    hRoot;
@@ -650,7 +650,7 @@ bool getJREInfoFromRegistry(vector<OUString>& vecJavaHome)
     return getJavaInfoFromRegistry(HKEY_SUN_JRE, vecJavaHome);
 }
 
-void addJavaInfoFromWinReg(
+static void addJavaInfoFromWinReg(
     std::vector<rtl::Reference<VendorBase> > & allInfos,
     std::vector<rtl::Reference<VendorBase> > & addedInfos)
 {

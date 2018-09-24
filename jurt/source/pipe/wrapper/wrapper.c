@@ -33,7 +33,7 @@ static HMODULE   module   = NULL;
 static HINSTANCE hInstDLL = NULL;
 static CRITICAL_SECTION CriticalSection;
 
-void InitWrapper(void) {
+static void InitWrapper(void) {
     #define MAXPATH 512
     wchar_t path[MAXPATH];
     DWORD size;

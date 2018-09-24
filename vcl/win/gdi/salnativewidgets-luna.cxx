@@ -343,7 +343,7 @@ bool WinSalGraphics::hitTestNativeControl( ControlType,
     return FALSE;
 }
 
-bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, const OUString& aStr)
+static bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, const OUString& aStr)
 {
     HRESULT hr = vsAPI.DrawThemeBackground( hTheme, hDC, iPart, iState, &rc, nullptr);
 
@@ -359,7 +359,7 @@ bool ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, cons
     return (hr == S_OK);
 }
 
-tools::Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const tools::Rectangle& /* aRect */, THEMESIZE eTS = TS_TRUE )
+static tools::Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState, const tools::Rectangle& /* aRect */, THEMESIZE eTS = TS_TRUE )
 {
     SIZE aSz;
     HRESULT hr = vsAPI.GetThemePartSize( hTheme, hDC, iPart, iState, nullptr, eTS, &aSz ); // TS_TRUE returns optimal size
@@ -371,7 +371,7 @@ tools::Rectangle ImplGetThemeRect( HTHEME hTheme, HDC hDC, int iPart, int iState
 
 // Helper functions
 
-void ImplConvertSpinbuttonValues( ControlPart nControlPart, const ControlState& rState, const tools::Rectangle& rRect,
+static void ImplConvertSpinbuttonValues( ControlPart nControlPart, const ControlState& rState, const tools::Rectangle& rRect,
                                  int* pLunaPart, int *pLunaState, RECT *pRect )
 {
     if( nControlPart == ControlPart::ButtonDown )
@@ -523,7 +523,7 @@ static tools::Rectangle GetMenuPopupMarkRegion(const ImplControlValue& rValue)
     return aRet;
 }
 
-bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
+static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                             ControlType nType,
                             ControlPart nPart,
                             ControlState nState,

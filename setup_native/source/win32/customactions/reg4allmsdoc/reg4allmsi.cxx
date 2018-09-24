@@ -132,7 +132,7 @@ static BOOL CheckExtensionInRegistry( LPCWSTR lpSubKey )
     return bRet;
 }
 
-bool GetMsiPropW( MSIHANDLE handle, LPCWSTR name, /*out*/std::wstring& value )
+static bool GetMsiPropW( MSIHANDLE handle, LPCWSTR name, /*out*/std::wstring& value )
 {
     DWORD sz = 0;
     LPWSTR dummy = const_cast<LPWSTR>(L"");
@@ -149,7 +149,7 @@ bool GetMsiPropW( MSIHANDLE handle, LPCWSTR name, /*out*/std::wstring& value )
     return false;
 }
 
-bool IsSetMsiPropW( MSIHANDLE handle, LPCWSTR name )
+static bool IsSetMsiPropW( MSIHANDLE handle, LPCWSTR name )
 {
     std::wstring val;
     GetMsiPropW( handle, name, val );

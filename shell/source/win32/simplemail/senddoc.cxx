@@ -39,7 +39,7 @@
 #include <stdexcept>
 
 #if OSL_DEBUG_LEVEL > 0
-    void dumpParameter();
+    static void dumpParameter();
 #endif
 
 typedef std::vector<MapiRecipDescW> MapiRecipientList_t;
@@ -75,7 +75,7 @@ namespace /* private */
     @returns
     the email address prefixed with the specified prefix.
 */
-inline std::wstring prefixEmailAddress(
+static inline std::wstring prefixEmailAddress(
     const std::wstring& aEmailAddress,
     const std::wstring& aPrefix = L"SMTP:")
 {
@@ -83,7 +83,7 @@ inline std::wstring prefixEmailAddress(
 }
 
 /** @internal */
-void addRecipient(
+static void addRecipient(
     ULONG recipClass,
     const std::wstring& recipAddress,
     MapiRecipientList_t* pMapiRecipientList)
@@ -98,7 +98,7 @@ void addRecipient(
 }
 
 /** @internal */
-void initRecipientList(MapiRecipientList_t* pMapiRecipientList)
+static void initRecipientList(MapiRecipientList_t* pMapiRecipientList)
 {
     OSL_ASSERT(pMapiRecipientList->empty());
 
@@ -116,7 +116,7 @@ void initRecipientList(MapiRecipientList_t* pMapiRecipientList)
 }
 
 /** @internal */
-void initAttachmentList(MapiAttachmentList_t* pMapiAttachmentList)
+static void initAttachmentList(MapiAttachmentList_t* pMapiAttachmentList)
 {
     OSL_ASSERT(pMapiAttachmentList->empty());
 
@@ -140,7 +140,7 @@ void initAttachmentList(MapiAttachmentList_t* pMapiAttachmentList)
 }
 
 /** @internal */
-void initMapiOriginator(MapiRecipDescW* pMapiOriginator)
+static void initMapiOriginator(MapiRecipDescW* pMapiOriginator)
 {
     ZeroMemory(pMapiOriginator, sizeof(*pMapiOriginator));
 
@@ -150,7 +150,7 @@ void initMapiOriginator(MapiRecipDescW* pMapiOriginator)
 }
 
 /** @internal */
-void initMapiMessage(
+static void initMapiMessage(
     MapiRecipDescW* aMapiOriginator,
     MapiRecipientList_t& aMapiRecipientList,
     MapiAttachmentList_t& aMapiAttachmentList,
@@ -184,7 +184,7 @@ const wchar_t* const KnownParameters[] =
 };
 
 /** @internal */
-bool isKnownParameter(const wchar_t* aParameterName)
+static bool isKnownParameter(const wchar_t* aParameterName)
 {
     for (const wchar_t* KnownParameter : KnownParameters)
         if (_wcsicmp(aParameterName, KnownParameter) == 0)
@@ -194,7 +194,7 @@ bool isKnownParameter(const wchar_t* aParameterName)
 }
 
 /** @internal */
-void initParameter(int argc, wchar_t* argv[])
+static void initParameter(int argc, wchar_t* argv[])
 {
     for (int i = 1; i < argc; i++)
     {
@@ -249,7 +249,7 @@ void initParameter(int argc, wchar_t* argv[])
     }
 }
 
-void ShowError(ULONG nMAPIResult)
+static void ShowError(ULONG nMAPIResult)
 {
     if (!gBootstrap.isEmpty())
         rtl::Bootstrap::setIniFilename(gBootstrap);

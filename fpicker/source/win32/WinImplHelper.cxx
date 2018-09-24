@@ -48,7 +48,7 @@ const sal_Unicode   AMPERSAND_SIGN = L'&';
 // Windows ME       VER_PLATFORM_WIN32_WINDOWS  4       90
 
 
-void Replace( const OUString& aLabel, sal_Unicode OldChar, sal_Unicode NewChar, OUStringBuffer& aBuffer )
+static void Replace( const OUString& aLabel, sal_Unicode OldChar, sal_Unicode NewChar, OUStringBuffer& aBuffer )
 {
     OSL_ASSERT( aLabel.getLength( ) );
     OSL_ASSERT( aBuffer.getCapacity( ) >= (aLabel.getLength( )) );

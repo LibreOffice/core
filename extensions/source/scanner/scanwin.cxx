@@ -69,6 +69,8 @@ enum TwainState
     TWAIN_STATE_CANCELED = 3
 };
 
+static LRESULT CALLBACK TwainMsgProc( int nCode, WPARAM wParam, LPARAM lParam );
+
 class ImpTwain : public ::cppu::WeakImplHelper< util::XCloseListener >
 {
     friend LRESULT CALLBACK TwainMsgProc( int nCode, WPARAM wParam, LPARAM lParam );
@@ -118,7 +120,7 @@ public:
 
 static ImpTwain* pImpTwainInstance = nullptr;
 
-LRESULT CALLBACK TwainWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
+static LRESULT CALLBACK TwainWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
 {
     return DefWindowProcW( hWnd, nMsg, nPar1, nPar2 );
 }

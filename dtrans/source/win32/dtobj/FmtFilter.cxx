@@ -214,7 +214,7 @@ Sequence< sal_Int8 > OOBmpToWinDIB( Sequence< sal_Int8 >& aOOBmp )
     return winDIBStream;
 }
 
-std::string GetHtmlFormatHeader(size_t startHtml, size_t endHtml, size_t startFragment, size_t endFragment)
+static std::string GetHtmlFormatHeader(size_t startHtml, size_t endHtml, size_t startFragment, size_t endFragment)
 {
     std::ostringstream htmlHeader;
     htmlHeader << "Version:1.0" << '\r' << '\n';
@@ -272,7 +272,7 @@ Sequence<sal_Int8> TextHtmlToHTMLFormat(Sequence<sal_Int8> const & aTextHtml)
     return byteSequence;
 }
 
-std::wstring getFileExtension(const std::wstring& aFilename)
+static std::wstring getFileExtension(const std::wstring& aFilename)
 {
     std::wstring::size_type idx = aFilename.rfind(L".");
     if (idx != std::wstring::npos)
@@ -284,7 +284,7 @@ std::wstring getFileExtension(const std::wstring& aFilename)
 
 const std::wstring SHELL_LINK_FILE_EXTENSION = L".lnk";
 
-bool isShellLink(const std::wstring& aFilename)
+static bool isShellLink(const std::wstring& aFilename)
 {
     std::wstring ext = getFileExtension(aFilename);
     return (_wcsicmp(ext.c_str(), SHELL_LINK_FILE_EXTENSION.c_str()) == 0);
@@ -293,7 +293,7 @@ bool isShellLink(const std::wstring& aFilename)
 /** Resolve a Windows Shell Link (lnk) file. If a resolution
     is not possible simply return the provided name of the
     lnk file. */
-std::wstring getShellLinkTarget(const std::wstring& aLnkFile)
+static std::wstring getShellLinkTarget(const std::wstring& aLnkFile)
 {
     OSL_ASSERT(isShellLink(aLnkFile));
 
@@ -339,7 +339,7 @@ typedef Sequence<sal_Int8> ByteSequence_t;
 
 /* Calculate the size required for turning a string list into
    a double '\0' terminated string buffer */
-size_t CalcSizeForStringListBuffer(const std::vector<std::wstring>& fileList)
+static size_t CalcSizeForStringListBuffer(const std::vector<std::wstring>& fileList)
 {
     if ( fileList.empty() )
         return 0;
@@ -352,7 +352,7 @@ size_t CalcSizeForStringListBuffer(const std::vector<std::wstring>& fileList)
     return (size * sizeof(std::vector<std::wstring>::value_type::value_type));
 }
 
-ByteSequence_t FileListToByteSequence(const std::vector<std::wstring>& fileList)
+static ByteSequence_t FileListToByteSequence(const std::vector<std::wstring>& fileList)
 {
     ByteSequence_t bseq;
     size_t size = CalcSizeForStringListBuffer(fileList);

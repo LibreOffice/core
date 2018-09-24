@@ -32,7 +32,7 @@
 typedef SQLRETURN (SQL_API* TSQLManageDataSource) (SQLHWND hwndParent);
 
 // displays the error text for the last error (GetLastError), and returns this error value
-int displayLastError()
+static int displayLastError()
 {
     DWORD   dwError = GetLastError();
 
@@ -58,7 +58,7 @@ int displayLastError()
 
 /** registers the window class for our application's main window
 */
-BOOL registerWindowClass( HINSTANCE _hAppInstance )
+static BOOL registerWindowClass( HINSTANCE _hAppInstance )
 {
     WNDCLASSEXW wcx;
 
@@ -79,7 +79,7 @@ BOOL registerWindowClass( HINSTANCE _hAppInstance )
 }
 
 /// initializes the application instances
-HWND initInstance( HINSTANCE _hAppInstance )
+static HWND initInstance( HINSTANCE _hAppInstance )
 {
     HWND hWindow = CreateWindowW(
         L"ODBCConfigMainClass", // name of window class

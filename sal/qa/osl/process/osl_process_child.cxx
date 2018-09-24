@@ -52,12 +52,12 @@ static void wait_for_seconds(char* time)
 
 #ifdef _WIN32
 
-void w_to_a(LPCWSTR strW, LPSTR strA, DWORD size)
+static void w_to_a(LPCWSTR strW, LPSTR strA, DWORD size)
 {
     WideCharToMultiByte(CP_ACP, 0, strW, -1, strA, size, nullptr, nullptr);
 }
 
-    void dump_env(char* file_path)
+    static void dump_env(char* file_path)
     {
         LPWSTR env = GetEnvironmentStringsW();
         LPWSTR p   = env;

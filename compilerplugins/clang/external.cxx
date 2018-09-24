@@ -126,19 +126,28 @@ public:
         {
             return true;
         }
-        if (decl->isMain())
+        if (decl->isMain() || decl->isMSVCRTEntryPoint())
         {
             return true;
         }
+        if (hasCLanguageLinkageType(decl)
+            && loplugin::DeclCheck(decl).Function("_DllMainCRTStartup").GlobalNamespace())
+        {
+            return true;
+        }
+        // If the function definition is explicit marked SAL_DLLPUBLIC_EXPORT or similar, then
+        // assume that it needs to be present (e.g., only called via dlopen, or a backwards-
+        // compatibility stub like in sal/osl/all/compat.cxx):
         if (auto const attr = decl->getAttr<VisibilityAttr>())
         {
             if (attr->getVisibility() == VisibilityAttr::Default)
             {
-                // If the function definition has explicit default visibility, then assume that it
-                // needs to be present (e.g., only called via dlopen, or a backwards-compatibility
-                // stub like in sal/osl/all/compat.cxx):
                 return true;
             }
+        }
+        else if (decl->hasAttr<DLLExportAttr>())
+        {
+            return true;
         }
         auto const canon = decl->getCanonicalDecl();
         if (hasCLanguageLinkageType(canon)
@@ -174,6 +183,10 @@ public:
             return true;
         }
         if (!decl->isThisDeclarationADefinition())
+        {
+            return true;
+        }
+        if (loplugin::DeclCheck(decl).Var("_pRawDllMain").GlobalNamespace())
         {
             return true;
         }
@@ -261,14 +274,27 @@ private:
                 return true;
             }
         }
-        if (compiler.getSourceManager().isMacroBodyExpansion(decl->getLocation())
-            && (Lexer::getImmediateMacroName(decl->getLocation(), compiler.getSourceManager(),
-                                             compiler.getLangOpts())
-                == "MDDS_MTV_DEFINE_ELEMENT_CALLBACKS"))
+        if (compiler.getSourceManager().isMacroBodyExpansion(decl->getLocation()))
         {
-            // Even wrapping in an unnamed namespace or sneaking "static" into the macro wouldn't
-            // help, as then some of the functions it defines would be flagged as unused:
-            return true;
+            if (Lexer::getImmediateMacroName(decl->getLocation(), compiler.getSourceManager(),
+                                             compiler.getLangOpts())
+                == "MDDS_MTV_DEFINE_ELEMENT_CALLBACKS")
+            {
+                // Even wrapping in an unnamed namespace or sneaking "static" into the macro
+                // wouldn't help, as then some of the functions it defines would be flagged as
+                // unused:
+                return true;
+            }
+        }
+        else if (compiler.getSourceManager().isMacroArgExpansion(decl->getLocation()))
+        {
+            if (Lexer::getImmediateMacroName(decl->getLocation(), compiler.getSourceManager(),
+                                             compiler.getLangOpts())
+                == "DEFINE_GUID")
+            {
+                // Windows, guiddef.h:
+                return true;
+            }
         }
         TypedefNameDecl const* typedefed = nullptr;
         if (auto const d = dyn_cast<TagDecl>(decl))

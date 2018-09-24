@@ -29,20 +29,20 @@
 using namespace ::com::sun::star;
 
 /// @throws uno::Exception
-uno::Reference<uno::XInterface> EmbedServer_createInstance(
+static uno::Reference<uno::XInterface> EmbedServer_createInstance(
     const uno::Reference<lang::XMultiServiceFactory> & xSMgr)
 {
     uno::Reference<uno::XInterface > xService = *new EmbedServer_Impl( xSMgr );
     return xService;
 }
 
-OUString EmbedServer_getImplementationName() throw()
+static OUString EmbedServer_getImplementationName() throw()
 {
     return OUString("com.sun.star.comp.ole.EmbedServer");
 
 }
 
-uno::Sequence< OUString > EmbedServer_getSupportedServiceNames() throw()
+static uno::Sequence< OUString > EmbedServer_getSupportedServiceNames() throw()
 {
     uno::Sequence<OUString> aServiceNames { "com.sun.star.document.OleEmbeddedServerRegistration" };
     return aServiceNames;

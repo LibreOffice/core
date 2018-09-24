@@ -33,11 +33,11 @@
 #define MY_SIZE(s) (sizeof (s) / sizeof *(s))
 #define MY_LENGTH(s) (MY_SIZE(s) - 1)
 
-wchar_t* getPath(void);
-wchar_t* createCommandLine( wchar_t const * lpCmdLine );
-FILE* getErrorFile( int create );
-void writeError( const char* errstr );
-void closeErrorFile(void);
+static wchar_t* getPath(void);
+static wchar_t* createCommandLine( wchar_t const * lpCmdLine );
+static FILE* getErrorFile( int create );
+static void writeError( const char* errstr );
+static void closeErrorFile(void);
 
 /*
  * The main function implements a loader for applications which use UNO.

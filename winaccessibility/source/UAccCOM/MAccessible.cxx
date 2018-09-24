@@ -2541,7 +2541,7 @@ BOOL CMAccessible::GetXInterfaceFromXAccessible(XAccessible* pXAcc, XInterface**
     return FALSE;
 }
 
-template<typename T> HRESULT
+template<typename T> static HRESULT
 createAggInstance(CMAccessible &rOuter, void ** ppvObject)
 {
     // Note: CComAggObject has special handling for IUnknown - must

@@ -17,7 +17,7 @@
 #include <stdio.h>
 
 // Display confirmation dialog, return false on negative answer
-bool SecurityWarning(const wchar_t* sProgram, const wchar_t* sDocument)
+static bool SecurityWarning(const wchar_t* sProgram, const wchar_t* sDocument)
 {
     // TODO: change wording (currently taken from MS Office), use LO localization
     wchar_t sBuf[65536];
@@ -30,7 +30,7 @@ bool SecurityWarning(const wchar_t* sProgram, const wchar_t* sDocument)
 }
 
 // Returns S_OK if successful
-HRESULT LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath, bool bDoSecurityWarning)
+static HRESULT LOStart(const wchar_t* sModeArg, const wchar_t* sFilePath, bool bDoSecurityWarning)
 {
     const wchar_t* sProgram = GetLOPath();
     if (bDoSecurityWarning && !SecurityWarning(sProgram, sFilePath))

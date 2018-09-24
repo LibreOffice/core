@@ -46,7 +46,7 @@ using namespace com::sun::star::awt::MouseButton;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::lang;
 
-unsigned __stdcall DndOleSTAFunc(LPVOID pParams);
+static unsigned __stdcall DndOleSTAFunc(LPVOID pParams);
 
 DragSource::DragSource( const Reference<XComponentContext>& rxContext):
     WeakComponentImplHelper< XDragSource, XInitialization, XServiceInfo >(m_mutex),

@@ -36,7 +36,7 @@
 typedef int ( __stdcall * DllNativeRegProc ) ( int, BOOL, BOOL, const wchar_t* );
 typedef int ( __stdcall * DllNativeUnregProc ) ( int, BOOL, BOOL );
 
-BOOL UnicodeEquals( wchar_t const * pStr1, wchar_t const * pStr2 )
+static BOOL UnicodeEquals( wchar_t const * pStr1, wchar_t const * pStr2 )
 {
     if ( pStr1 == nullptr && pStr2 == nullptr )
         return TRUE;
@@ -53,7 +53,7 @@ BOOL UnicodeEquals( wchar_t const * pStr1, wchar_t const * pStr2 )
 }
 
 
-void RegisterActiveXNative( const wchar_t* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
+static void RegisterActiveXNative( const wchar_t* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
 {
     HINSTANCE hModule = LoadLibraryExW( pActiveXPath, nullptr, LOAD_WITH_ALTERED_SEARCH_PATH );
     if( hModule )
@@ -80,7 +80,7 @@ void RegisterActiveXNative( const wchar_t* pActiveXPath, int nMode, BOOL Install
 }
 
 
-void UnregisterActiveXNative( const wchar_t* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
+static void UnregisterActiveXNative( const wchar_t* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
 {
     HINSTANCE hModule = LoadLibraryExW( pActiveXPath, nullptr, LOAD_WITH_ALTERED_SEARCH_PATH );
     if( hModule )
@@ -94,7 +94,7 @@ void UnregisterActiveXNative( const wchar_t* pActiveXPath, int nMode, BOOL Insta
 }
 
 
-BOOL GetMsiPropW( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
+static BOOL GetMsiPropW( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 {
     DWORD sz = 0;
     if ( MsiGetPropertyW( hMSI, pPropName, const_cast<wchar_t *>(L""), &sz ) == ERROR_MORE_DATA )
@@ -113,7 +113,7 @@ BOOL GetMsiPropW( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 }
 
 
-BOOL GetActiveXControlPath( MSIHANDLE hMSI, wchar_t** ppActiveXPath )
+static BOOL GetActiveXControlPath( MSIHANDLE hMSI, wchar_t** ppActiveXPath )
 {
     wchar_t* pProgPath = nullptr;
     if ( GetMsiPropW( hMSI, L"INSTALLLOCATION", &pProgPath ) && pProgPath )
@@ -133,7 +133,7 @@ BOOL GetActiveXControlPath( MSIHANDLE hMSI, wchar_t** ppActiveXPath )
 }
 
 
-BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDeinstallMode )
+static BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDeinstallMode )
 {
     // for now the chart is always installed
     nOldInstallMode = CHART_COMPONENT;
@@ -232,7 +232,7 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
 }
 
 
-BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
+static BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
 {
     BOOL bResult = FALSE;
     wchar_t* pVal = nullptr;
@@ -246,7 +246,7 @@ BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
 }
 
 
-BOOL MakeInstallFor64Bit( MSIHANDLE hMSI )
+static BOOL MakeInstallFor64Bit( MSIHANDLE hMSI )
 {
     BOOL bResult = FALSE;
     wchar_t* pVal = nullptr;

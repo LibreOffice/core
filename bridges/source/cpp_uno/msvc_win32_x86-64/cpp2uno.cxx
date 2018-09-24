@@ -30,6 +30,7 @@
 #include <types.hxx>
 #include <vtablefactory.hxx>
 
+#include "call.hxx"
 #include "mscx.hxx"
 
 using namespace ::com::sun::star::uno;
@@ -382,7 +383,7 @@ extern "C" char privateSnippetExecutor;
 // - Loads functionIndex and vtableOffset into scratch registers
 // - Jumps to privateSnippetExecutor
 
-unsigned char * codeSnippet(
+static unsigned char * codeSnippet(
     unsigned char * code,
     CPPU_CURRENT_NAMESPACE::RegParamKind param_kind[4],
     sal_Int32 nFunctionIndex,
