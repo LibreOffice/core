@@ -50,7 +50,7 @@
 
 #if defined(_WIN32)
 
-OUString SfxDdeServiceName_Impl( const OUString& sIn )
+static OUString SfxDdeServiceName_Impl( const OUString& sIn )
 {
     OUStringBuffer sReturn(sIn.getLength());
 

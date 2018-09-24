@@ -25,6 +25,7 @@
 #include <sal/log.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
+#include "file-impl.hxx"
 #include "file_url.hxx"
 #include "file_error.hxx"
 

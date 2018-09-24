@@ -40,7 +40,7 @@
 #endif
 #include <windows.h>
 
-css::beans::Optional<css::uno::Any> ImplGetLocale(LCID lcid)
+static css::beans::Optional<css::uno::Any> ImplGetLocale(LCID lcid)
 {
     WCHAR buffer[8];
     PWSTR cp = buffer;

@@ -199,7 +199,7 @@ void WinSalMenu::RemoveItem( unsigned nPos )
     }
 }
 
-void ImplRemoveItemById( WinSalMenu *pSalMenu, unsigned nItemId )
+static void ImplRemoveItemById( WinSalMenu *pSalMenu, unsigned nItemId )
 {
     if( !pSalMenu )
         return;

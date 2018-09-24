@@ -23,6 +23,8 @@
 #include "inprocembobj.h"
 #include <embservconst.h>
 
+#include <olectl.h> // declarations of DllRegisterServer/DllUnregisterServer
+
 static const GUID* guidList[ SUPPORTED_FACTORIES_NUM ] = {
     &OID_WriterTextServer,
     &OID_WriterOASISTextServer,

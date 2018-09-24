@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
 
 namespace avmedia { namespace win {
 
-LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
+static LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM nPar2 )
 {
     Window* pWindow = reinterpret_cast<Window*>(GetWindowLongPtrW( hWnd, 0 ));
     bool    bProcessed = true;
@@ -133,7 +133,7 @@ LRESULT CALLBACK MediaPlayerWndProc( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM n
     return( bProcessed ? 0 : DefWindowProcW( hWnd, nMsg, nPar1, nPar2 ) );
 }
 
-WNDCLASSW* lcl_getWndClass()
+static WNDCLASSW* lcl_getWndClass()
 {
     WNDCLASSW* s_pWndClass = new WNDCLASSW;
 

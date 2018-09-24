@@ -30,13 +30,13 @@ using namespace ::com::sun::star::registry  ;
 using namespace ::cppu                      ;
 using namespace ::com::sun::star::lang;
 
-Reference< XInterface > createDragSource( const Reference< XMultiServiceFactory >& rServiceManager )
+static Reference< XInterface > createDragSource( const Reference< XMultiServiceFactory >& rServiceManager )
 {
     DragSource* pSource= new DragSource( comphelper::getComponentContext(rServiceManager) );
     return Reference<XInterface>( static_cast<XInitialization*>(pSource), UNO_QUERY);
 }
 
-Reference< XInterface > createDropTarget( const Reference< XMultiServiceFactory >& rServiceManager )
+static Reference< XInterface > createDropTarget( const Reference< XMultiServiceFactory >& rServiceManager )
 {
     DropTarget* pTarget= new DropTarget( comphelper::getComponentContext(rServiceManager) );
     return Reference<XInterface>( static_cast<XInitialization*>(pTarget), UNO_QUERY);

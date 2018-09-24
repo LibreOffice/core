@@ -101,7 +101,7 @@ ULONG STDMETHODCALLTYPE CInfoTip::Release()
 
 /** get file type information from registry.
 */
-std::wstring getFileTypeInfo(const std::wstring& file_extension)
+static std::wstring getFileTypeInfo(const std::wstring& file_extension)
 {
     wchar_t extKeyValue[MAX_STRING];
     wchar_t typeKeyValue[MAX_STRING];
@@ -115,7 +115,7 @@ std::wstring getFileTypeInfo(const std::wstring& file_extension)
 
 /** get file size.
 */
-DWORD getSizeOfFile( wchar_t const * FileName )
+static DWORD getSizeOfFile( wchar_t const * FileName )
 {
     HANDLE hFile = CreateFileW(FileName,                                    // open file
                         GENERIC_READ,                                       // open for reading
@@ -137,7 +137,7 @@ DWORD getSizeOfFile( wchar_t const * FileName )
 
 /** format file size in to be more readable.
 */
-std::wstring formatSizeOfFile( DWORD dwSize )
+static std::wstring formatSizeOfFile( DWORD dwSize )
 {
     if ( dwSize < 1000 )
     {
@@ -178,7 +178,7 @@ std::wstring formatSizeOfFile( DWORD dwSize )
 
 /** get file size information.
 */
-std::wstring getFileSizeInfo(wchar_t const * FileName)
+static std::wstring getFileSizeInfo(wchar_t const * FileName)
 {
     DWORD dwSize=getSizeOfFile(FileName);
     if (dwSize != INVALID_FILE_SIZE)

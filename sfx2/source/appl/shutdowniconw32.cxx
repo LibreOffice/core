@@ -263,7 +263,7 @@ static void addTaskbarIcon( HWND hWnd )
 }
 
 
-LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+static LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     static UINT s_uTaskbarRestart = 0;
     static UINT s_uMsgKillTray = 0;
@@ -387,7 +387,7 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 }
 
 
-LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+static LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
     {
@@ -447,7 +447,7 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 }
 
 
-DWORD WINAPI SystrayThread( LPVOID /*lpParam*/ )
+static DWORD WINAPI SystrayThread( LPVOID /*lpParam*/ )
 {
     osl_setThreadName("SystrayThread");
 
@@ -673,7 +673,7 @@ void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
 // code from setup2 project
 
 
-void SHFree_( void *pv )
+static void SHFree_( void *pv )
 {
     IMalloc *pMalloc;
     if( NOERROR == SHGetMalloc(&pMalloc) )
@@ -729,7 +729,7 @@ static HRESULT WINAPI SHCoCreateInstance( LPVOID lpszReserved, REFCLSID clsid, L
     return hResult;
 }
 
-BOOL CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObjectPath,
+static BOOL CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObjectPath,
     const OUString& rAbsShortcut, const OUString& rDescription, const OUString& rParameter )
 {
     HRESULT hres;

@@ -55,7 +55,7 @@ using ::com::sun::star::util::DateTime ;
     "S" or "CN" (without ""). Do not use spaces at the beginning of the type name.
     If the type name is not found then pair.first and pair.second are -1.
 */
-std::pair< sal_Int32, sal_Int32 >
+static std::pair< sal_Int32, sal_Int32 >
 findTypeInDN(const OUString& rRawString, const OUString& sTypeName)
 {
     std::pair< sal_Int32, sal_Int32 > retVal;
@@ -158,7 +158,7 @@ findTypeInDN(const OUString& rRawString, const OUString& sTypeName)
   strings for type names. Instead it uses OIDs.
  */
 
-OUString replaceTagSWithTagST(OUString const & oldDN)
+static OUString replaceTagSWithTagST(OUString const & oldDN)
 {
     std::pair<sal_Int32, sal_Int32 > pairIndex = findTypeInDN(oldDN, "S");
 
@@ -480,7 +480,7 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl::getImplementation( con
         return nullptr ;
 }
 
-OUString findOIDDescription(char const *oid)
+static OUString findOIDDescription(char const *oid)
 {
     OUString ouOID = OUString::createFromAscii( oid );
     for (int i=0; i<nOID; i++)
@@ -495,7 +495,7 @@ OUString findOIDDescription(char const *oid)
     return OUString() ;
 }
 
-css::uno::Sequence< sal_Int8 > getThumbprint(const CERT_CONTEXT* pCertContext, DWORD dwPropId)
+static css::uno::Sequence< sal_Int8 > getThumbprint(const CERT_CONTEXT* pCertContext, DWORD dwPropId)
 {
     if( pCertContext != nullptr )
     {

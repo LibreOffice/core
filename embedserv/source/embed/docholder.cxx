@@ -499,7 +499,7 @@ void DocumentHolder::UIDeactivate()
     return;
 }
 
-void CopyToOLEMenu(HMENU hOrig,WORD origPos,HMENU hDest,WORD destPos)
+static void CopyToOLEMenu(HMENU hOrig,WORD origPos,HMENU hDest,WORD destPos)
 {
     HMENU subMenu(nullptr);
     wchar_t buffer[256];

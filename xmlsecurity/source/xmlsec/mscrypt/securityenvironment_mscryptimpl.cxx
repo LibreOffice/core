@@ -93,7 +93,7 @@ CertErrorToString const arErrStrings[] =
     { 0x00080000, "CERT_TRUST_CTL_IS_NOT_VALID_FOR_USAGE"}
 };
 
-void traceTrustStatus(DWORD err)
+static void traceTrustStatus(DWORD err)
 {
     if (err == 0)
         SAL_INFO("xmlsecurity.xmlsec", "  " << arErrStrings[0].name);
@@ -281,7 +281,9 @@ static OUString get_system_name(const void *pvSystemStore,
     return o3tl::toU(ppwszSystemName);
 }
 
-extern "C" BOOL WINAPI cert_enum_physical_store_callback(const void *,
+extern "C" {
+
+static BOOL WINAPI cert_enum_physical_store_callback(const void *,
                                                          DWORD dwFlags,
                                                          LPCWSTR pwszStoreName,
                                                          PCERT_PHYSICAL_STORE_INFO,
@@ -296,7 +298,7 @@ extern "C" BOOL WINAPI cert_enum_physical_store_callback(const void *,
     return TRUE;
 }
 
-extern "C" BOOL WINAPI cert_enum_system_store_callback(const void *pvSystemStore,
+static BOOL WINAPI cert_enum_system_store_callback(const void *pvSystemStore,
                                                        DWORD dwFlags,
                                                        PCERT_SYSTEM_STORE_INFO,
                                                        void *,
@@ -317,6 +319,8 @@ extern "C" BOOL WINAPI cert_enum_system_store_callback(const void *pvSystemStore
         }
     }
     return TRUE;
+}
+
 }
 
 #endif
@@ -750,7 +754,7 @@ uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificat
 }
 
 
-HCERTSTORE getCertStoreForIntermediatCerts(
+static HCERTSTORE getCertStoreForIntermediatCerts(
     const uno::Sequence< uno::Reference< css::security::XCertificate > >& seqCerts)
 {
     HCERTSTORE store = nullptr;

@@ -78,7 +78,7 @@ void *CurThreadData::getData()
     return osl_getThreadKeyData(m_hKey);
 }
 
-void o2u_attachCurrentThread()
+static void o2u_attachCurrentThread()
 {
     static CurThreadData oleThreadData;
 

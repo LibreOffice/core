@@ -28,6 +28,7 @@
 #include <string>
 #include <shlobj.h>
 
+#include <olectl.h> // declarations of DllRegisterServer/DllUnregisterServer
 
 // Module global
 

@@ -57,7 +57,7 @@ static DWORD g_dwTLSLocaleEncId = DWORD(-1);
  * callback function test
  *****************************************************************************/
 
-BOOL CALLBACK EnumLocalesProcW( LPWSTR lpLocaleStringW )
+static BOOL CALLBACK EnumLocalesProcW( LPWSTR lpLocaleStringW )
 {
     /* check params received via TLS */
     EnumLocalesParams * params = static_cast<EnumLocalesParams *>(TlsGetValue( g_dwTLSLocaleEncId ));
@@ -111,7 +111,7 @@ BOOL CALLBACK EnumLocalesProcW( LPWSTR lpLocaleStringW )
     return TRUE;
 }
 
-rtl_TextEncoding GetTextEncodingFromLCID( LCID localeId )
+static rtl_TextEncoding GetTextEncodingFromLCID( LCID localeId )
 {
     rtl_TextEncoding Encoding = RTL_TEXTENCODING_DONTKNOW;
     WCHAR ansiCP[6];

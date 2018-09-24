@@ -59,7 +59,7 @@ struct oslPipeImpl
     bool                 m_bClosed;
 };
 
-oslPipe osl_createPipeImpl(void)
+static oslPipe osl_createPipeImpl(void)
 {
     oslPipe pPipe;
 
@@ -78,7 +78,7 @@ oslPipe osl_createPipeImpl(void)
     return pPipe;
 }
 
-void osl_destroyPipeImpl(oslPipe pPipe)
+static void osl_destroyPipeImpl(oslPipe pPipe)
 {
     if (pPipe)
     {

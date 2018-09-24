@@ -262,7 +262,7 @@ using namespace ::osl;
 
 namespace CPPU_CURRENT_NAMESPACE
 {
-    int mscx_getRTTI_len(OUString const & rUNOname);
+    static int mscx_getRTTI_len(OUString const & rUNOname);
 
 
 static inline OUString toUNOname(
@@ -425,7 +425,7 @@ RTTInfos::RTTInfos() throw ()
 {
 }
 
-void * __cdecl copyConstruct(
+static void * __cdecl copyConstruct(
     void * pExcThis,
     void * pSource,
     typelib_TypeDescription * pTD ) throw ()
@@ -434,7 +434,7 @@ void * __cdecl copyConstruct(
     return pExcThis;
 }
 
-void * __cdecl destruct(
+static void * __cdecl destruct(
     void * pExcThis,
     typelib_TypeDescription * pTD ) throw ()
 {
@@ -444,7 +444,7 @@ void * __cdecl destruct(
 
 const int codeSnippetSize = 40;
 
-void GenerateConstructorTrampoline(
+static void GenerateConstructorTrampoline(
     unsigned char * code,
     typelib_TypeDescription * pTD ) throw ()
 {
@@ -464,7 +464,7 @@ void GenerateConstructorTrampoline(
     assert( p < code + codeSnippetSize );
 }
 
-void GenerateDestructorTrampoline(
+static void GenerateDestructorTrampoline(
     unsigned char * code,
     typelib_TypeDescription * pTD ) throw ()
 {

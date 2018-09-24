@@ -240,7 +240,7 @@ static void AccessBridgeUpdateOldTopWindows( const Reference< XMSAAService > &xA
  * @param xContext No use here.
  * @return The object interface.
  */
-Reference< XInterface > create_MSAAServiceImpl( Reference< XComponentContext > const & /*xContext*/ )
+static Reference< XInterface > create_MSAAServiceImpl( Reference< XComponentContext > const & /*xContext*/ )
 {
     Reference< XMSAAService > xAccMgr( new MSAAServiceImpl() );
 

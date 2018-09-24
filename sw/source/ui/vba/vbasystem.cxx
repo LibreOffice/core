@@ -49,7 +49,7 @@ void PrivateProfileStringListener::Initialize( const OUString& rFileName, const 
     maKey = rKey;
 }
 #ifdef _WIN32
-void lcl_getRegKeyInfo( const OString& sKeyInfo, HKEY& hBaseKey, OString& sSubKey )
+static void lcl_getRegKeyInfo( const OString& sKeyInfo, HKEY& hBaseKey, OString& sSubKey )
 {
     sal_Int32 nBaseKeyIndex = sKeyInfo.indexOf('\\');
     if( nBaseKeyIndex > 0 )

@@ -56,7 +56,7 @@ using namespace ::com::sun::star;
 const OUString aOfficeEmbedStreamName( "package_stream" );
 const OUString aExtentStreamName( "properties_stream" );
 
-uno::Reference< io::XInputStream > createTempXInStreamFromIStream(
+static uno::Reference< io::XInputStream > createTempXInStreamFromIStream(
                                         uno::Reference< lang::XMultiServiceFactory > const & xFactory,
                                         IStream *pStream )
 {
@@ -110,7 +110,7 @@ uno::Reference< io::XInputStream > createTempXInStreamFromIStream(
     return xResult;
 }
 
-HRESULT copyXTempOutToIStream( uno::Reference< io::XOutputStream > const & xTempOut, IStream* pStream )
+static HRESULT copyXTempOutToIStream( uno::Reference< io::XOutputStream > const & xTempOut, IStream* pStream )
 {
     if ( !xTempOut.is() || !pStream )
         return E_FAIL;

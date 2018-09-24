@@ -62,6 +62,8 @@
 
 #include <stream_helper.hxx>
 
+#include <olectl.h> // declarations of DllRegisterServer/DllUnregisterServer
+
 //C-------------------------------------------------------------------------
 //  Class:      COooFilter
 //  Summary:    Implements LibreOffice filter class
@@ -436,7 +438,7 @@ SCODE STDMETHODCALLTYPE COooFilter::GetText(ULONG * pcwcBuffer, WCHAR * awcBuffe
 //  Returns:    corresponding metainfo names.
 
 
-::std::wstring GetMetaInfoNameFromPropertyId( ULONG ulPropID )
+static ::std::wstring GetMetaInfoNameFromPropertyId( ULONG ulPropID )
 {
     switch ( ulPropID )
     {

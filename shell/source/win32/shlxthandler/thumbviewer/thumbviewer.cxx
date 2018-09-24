@@ -45,7 +45,7 @@ namespace internal
     /* The signet.png used for thumbnails of signed documents
        is contained as resource in this module, the resource
        id is 2000 */
-    void LoadSignetImageFromResource(ZipFile::ZipContentBuffer_t& buffer)
+    static void LoadSignetImageFromResource(ZipFile::ZipContentBuffer_t& buffer)
     {
         HRSRC hrc = FindResourceW(g_hModule, L"#2000", RT_RCDATA);
         DWORD size = SizeofResource(g_hModule, hrc);
@@ -54,12 +54,12 @@ namespace internal
         buffer = ZipFile::ZipContentBuffer_t(data, data + size);
     }
 
-    bool IsSignedDocument(const ZipFile* zipfile)
+    static bool IsSignedDocument(const ZipFile* zipfile)
     {
         return zipfile->HasContent("META-INF/documentsignatures.xml");
     }
 
-    Gdiplus::Point CalcSignetPosition(
+    static Gdiplus::Point CalcSignetPosition(
         const Gdiplus::Rect& canvas, const Gdiplus::Rect& thumbnail_border, const Gdiplus::Rect& signet)
     {
         int x = 0;

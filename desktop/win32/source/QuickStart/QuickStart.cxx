@@ -34,13 +34,13 @@
 #include <malloc.h>
 #include <memory.h>
 
-bool SofficeRuns()
+static bool SofficeRuns()
 {
     // check for soffice by searching the communication window
     return FindWindowExW( nullptr, nullptr, QUICKSTART_CLASSNAME, nullptr ) != nullptr;
 }
 
-bool launchSoffice( )
+static bool launchSoffice( )
 {
     if ( !SofficeRuns() )
     {

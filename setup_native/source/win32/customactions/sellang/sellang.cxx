@@ -37,7 +37,7 @@
 
 #include <spellchecker_selection.hxx>
 
-BOOL GetMsiPropA( MSIHANDLE hMSI, const char* pPropName, char** ppValue )
+static BOOL GetMsiPropA( MSIHANDLE hMSI, const char* pPropName, char** ppValue )
 {
     DWORD sz = 0;
     if ( MsiGetPropertyA( hMSI, pPropName, const_cast<char *>(""), &sz ) == ERROR_MORE_DATA ) {
@@ -162,14 +162,14 @@ langid_to_string( LANGID langid )
 static const char *ui_langs[MAX_LANGUAGES];
 static int num_ui_langs = 0;
 
-void add_ui_lang(char const * lang)
+static void add_ui_lang(char const * lang)
 {
     if (lang != nullptr && num_ui_langs != SAL_N_ELEMENTS(ui_langs)) {
         ui_langs[num_ui_langs++] = lang;
     }
 }
 
-BOOL CALLBACK
+static BOOL CALLBACK
 enum_ui_lang_proc (LPTSTR language, LONG_PTR /* unused_lParam */)
 {
     long langid = strtol(language, nullptr, 16);

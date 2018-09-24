@@ -79,7 +79,7 @@ const AFX_RECTINFO afxRectInfo[] =
 };
 
 
-HBRUSH HalftoneBrush()
+static HBRUSH HalftoneBrush()
 {
     if (afxHalftoneBrush == nullptr)
     {
@@ -97,7 +97,7 @@ HBRUSH HalftoneBrush()
 }
 
 
-void DrawDragRect(
+static void DrawDragRect(
     HDC hDC,LPRECT lpRect,SIZE size,
     LPRECT lpRectLast,SIZE sizeLast,
     HBRUSH hBrush = nullptr,HBRUSH hBrushLast = nullptr)
@@ -185,7 +185,7 @@ void winwrap::TransformRect(LPRECT rect,HWND pWnd,HWND pWndClipTo)
 }
 
 
-void NormalizeRect(LPRECT rp)
+static void NormalizeRect(LPRECT rp)
 {
     if(rp->left > rp->right) {
         UINT tmp = rp->left;

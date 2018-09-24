@@ -219,7 +219,7 @@ static sal_uInt32 getTotalFilterLength( CFilterContainer& aFilterContainer )
     return ( totalLength > 0 ) ? totalLength + 1 : totalLength;
 }
 
-inline
+static inline
 void wcsmemcpy( sal_Unicode* pDest, const sal_Unicode* pSrc, sal_uInt32 nLength )
 {
     memcpy( pDest, pSrc, nLength * sizeof( sal_Unicode ) );

@@ -465,7 +465,7 @@ Reference<XInterface> resolveUnoURL(
 }
 
 #ifdef _WIN32
-void writeConsoleWithStream(OUString const & sText, HANDLE stream)
+static void writeConsoleWithStream(OUString const & sText, HANDLE stream)
 {
     DWORD nWrittenChars = 0;
     WriteFile(stream, sText.getStr(),

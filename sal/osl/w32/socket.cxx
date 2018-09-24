@@ -224,7 +224,7 @@ struct LeakWarning
 static LeakWarning socketWarning;
 #endif
 
-oslSocket createSocketImpl(SOCKET Socket)
+static oslSocket createSocketImpl(SOCKET Socket)
 {
     oslSocket pSockImpl = static_cast<oslSocket>(rtl_allocateZeroMemory( sizeof(struct oslSocketImpl)));
     pSockImpl->m_Socket = Socket;
@@ -232,7 +232,7 @@ oslSocket createSocketImpl(SOCKET Socket)
     return pSockImpl;
 }
 
-void destroySocketImpl(oslSocketImpl *pImpl)
+static void destroySocketImpl(oslSocketImpl *pImpl)
 {
     if (pImpl)
     {

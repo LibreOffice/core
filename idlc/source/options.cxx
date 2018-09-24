@@ -187,7 +187,7 @@ bool Options::setOption(char const * option, std::string const & rArg)
    a windows short Url. The ucpp preprocessor has problems with such paths and returns
    with error.
 */
-OString convertIncPathtoShortWindowsPath(const OString& incPath) {
+static OString convertIncPathtoShortWindowsPath(const OString& incPath) {
     OUString path = OStringToOUString(incPath, RTL_TEXTENCODING_UTF8);
 
     std::vector<sal_Unicode> vec(path.getLength() + 1);

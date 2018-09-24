@@ -38,14 +38,14 @@
 #include <shlguid.h>
 #include <shlobj.h>
 
- inline bool is_current_process_window(HWND hwnd)
+static inline bool is_current_process_window(HWND hwnd)
 {
     DWORD pid;
     GetWindowThreadProcessId(hwnd, &pid);
     return (pid == GetCurrentProcessId());
 }
 
-HWND choose_parent_window()
+static HWND choose_parent_window()
 {
     HWND hwnd_parent = GetForegroundWindow();
     if (!is_current_process_window(hwnd_parent))
@@ -93,7 +93,7 @@ static const GUID CLIENTID_FILEOPEN_PLAY            = {0x32CFB147, 0xF5AE, 0x4F9
 static const GUID CLIENTID_FILEOPEN_LINK            = {0x39AC4BAE, 0x7D2D, 0x46BC, 0xBE, 0x2E, 0xF8, 0x8C, 0xB5, 0x65, 0x5E, 0x6A};
 
 
-OUString lcl_getURLFromShellItem (IShellItem* pItem)
+static OUString lcl_getURLFromShellItem (IShellItem* pItem)
 {
     LPWSTR pStr = nullptr;
     OUString sURL;
@@ -148,7 +148,7 @@ bailout:
 }
 
 
-::std::vector< COMDLG_FILTERSPEC > lcl_buildFilterList(CFilterContainer& rContainer)
+static ::std::vector< COMDLG_FILTERSPEC > lcl_buildFilterList(CFilterContainer& rContainer)
 {
           ::std::vector< COMDLG_FILTERSPEC > lList  ;
           CFilterContainer::FILTER_ENTRY_T   aFilter;
@@ -1088,7 +1088,7 @@ TFileDialogCustomize VistaFilePickerImpl::impl_getCustomizeInterface()
 }
 
 
-void lcl_removeControlItemsWorkaround(const TFileDialogCustomize& iCustom   ,
+static void lcl_removeControlItemsWorkaround(const TFileDialogCustomize& iCustom   ,
                                             ::sal_Int16           nControlId)
 {
     ::sal_Int32 i       = 0;

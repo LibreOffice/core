@@ -19,12 +19,12 @@
 
 #ifdef _WIN32
 //#include <Windows.h>   // come from LibreOfficeKitInit.h
-    long getTimeMS()
+    static long getTimeMS()
     {
         return GetTickCount();
     }
 
-    bool IsAbsolutePath(char const *pPath)
+    static bool IsAbsolutePath(char const *pPath)
     {
         if (pPath[1] != ':')
         {

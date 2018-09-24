@@ -194,7 +194,7 @@ const char* const aProxyStubActApprove = "{00020424-0000-0000-C000-000000000046}
 // The following prefix is required for HKEY_LOCAL_MACHINE and HKEY_CURRENT_USER ( not for HKEY_CLASSES_ROOT )
 const char* const aLocalPrefix = "Software\\Classes\\";
 
-BOOL createKey( HKEY hkey,
+static BOOL createKey( HKEY hkey,
                 const char* aKeyToCreate,
                 REGSAM nKeyAccess,
                 const char* aValue = nullptr,
@@ -220,7 +220,7 @@ BOOL createKey( HKEY hkey,
 
 }
 
-BOOL createKey( HKEY hkey,
+static BOOL createKey( HKEY hkey,
                 const wchar_t* aKeyToCreate,
                 REGSAM nKeyAccess,
                 const wchar_t* aValue = nullptr,
@@ -246,7 +246,7 @@ BOOL createKey( HKEY hkey,
 
 }
 
-STDAPI DllUnregisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit );
+EXTERN_C __declspec(dllexport) HRESULT STDAPICALLTYPE DllUnregisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit );
 static HRESULT DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess, const wchar_t* pProgramPath, const wchar_t* pLibName )
 {
     BOOL aResult = FALSE;
@@ -389,7 +389,7 @@ static HRESULT DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSA
     return HRESULT(aResult);
 }
 
-STDAPI DllRegisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit, const wchar_t* pProgramPath )
+EXTERN_C __declspec(dllexport) HRESULT STDAPICALLTYPE DllRegisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit, const wchar_t* pProgramPath )
 {
     HRESULT hr = S_OK;
     if ( bFor64Bit )
@@ -403,7 +403,7 @@ STDAPI DllRegisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit, co
 
 
 // DllUnregisterServer - Removes entries from the system registry
-HRESULT DeleteKeyTree( HKEY hkey, const char* pPath, REGSAM nKeyAccess )
+static HRESULT DeleteKeyTree( HKEY hkey, const char* pPath, REGSAM nKeyAccess )
 {
     HKEY hkey1 = nullptr;
 
@@ -542,7 +542,7 @@ const char* const aMSMimeType[] = { "application/msword",
                           "application/mspowerpoint" };
 const int nForMSModes[] = { 1, 1, 2, 2, 4, 4, 4 };
 
-STDAPI DllUnregisterServerDoc( int nMode, BOOL bForAllUsers, BOOL bFor64Bit );
+EXTERN_C __declspec(dllexport) HRESULT STDAPICALLTYPE DllUnregisterServerDoc( int nMode, BOOL bForAllUsers, BOOL bFor64Bit );
 static HRESULT DllRegisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess )
 {
     BOOL aResult = TRUE;
@@ -630,7 +630,7 @@ static HRESULT DllRegisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM n
     return HRESULT(aResult);
 }
 
-STDAPI DllRegisterServerDoc( int nMode, BOOL bForAllUsers, BOOL bFor64Bit )
+EXTERN_C __declspec(dllexport) HRESULT STDAPICALLTYPE DllRegisterServerDoc( int nMode, BOOL bForAllUsers, BOOL bFor64Bit )
 {
     HRESULT hr = S_OK;
     if ( bFor64Bit )

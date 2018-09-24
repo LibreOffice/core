@@ -24,6 +24,7 @@
 #include "SOComWindowPeer.h"
 #include "SODispatchInterceptor.h"
 #include "SOActionsApproval.h"
+#include "com_uno_helper.h"
 
 #if defined __clang__
 #pragma clang diagnostic push
@@ -37,7 +38,7 @@
 #define STAROFFICE_WINDOWCLASS L"SOParentWindow"
 
 
-void OutputError_Impl( HWND hw, HRESULT ErrorCode )
+static void OutputError_Impl( HWND hw, HRESULT ErrorCode )
 {
     LPWSTR sMessage = nullptr;
     FormatMessageW(
@@ -81,7 +82,7 @@ HRESULT ExecuteFunc( IDispatch* idispUnoObject,
     return hr;
 }
 
-HRESULT GetIDispByFunc( IDispatch* idispUnoObject,
+static HRESULT GetIDispByFunc( IDispatch* idispUnoObject,
                           OLECHAR const * sFuncName,
                           CComVariant* params,
                           unsigned int count,
@@ -102,7 +103,7 @@ HRESULT GetIDispByFunc( IDispatch* idispUnoObject,
     return S_OK;
 }
 
-HRESULT PutPropertiesToIDisp( IDispatch* pdispObject,
+static HRESULT PutPropertiesToIDisp( IDispatch* pdispObject,
                               OLECHAR const ** sMemberNames,
                               CComVariant* pVariant,
                               unsigned int count )
