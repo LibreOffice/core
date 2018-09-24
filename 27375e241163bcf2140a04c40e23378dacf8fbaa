@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_fa3dc92c",
+        "filename": "sw/uiconfig/sglobal/toolbar/optimizetablebar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-24T10:49:10Z",
+      "side": 1,
+      "message": "Why were these added this way? I would have expected column,row, column, row.  Instead we have column, row, row, column.  (I matched it for consistency in Draw, but I don\u0027t like it - especially now with 6 items.)",
+      "range": {
+        "startLine": 23,
+        "startChar": 1,
+        "endLine": 26,
+        "endChar": 63
+      },
+      "revId": "27375e241163bcf2140a04c40e23378dacf8fbaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_7a13f9b9",
+        "filename": "sw/uiconfig/sweb/popupmenu/table.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-24T10:49:10Z",
+      "side": 1,
+      "message": "In table.xml the column comes first, in all the others, the row is first. Inconsistent, but I just followed along...",
+      "range": {
+        "startLine": 48,
+        "startChar": 2,
+        "endLine": 51,
+        "endChar": 55
+      },
+      "revId": "27375e241163bcf2140a04c40e23378dacf8fbaa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
