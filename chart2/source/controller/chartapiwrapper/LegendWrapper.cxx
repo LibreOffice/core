@@ -28,6 +28,7 @@
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 
 #include <CharacterProperties.hxx>

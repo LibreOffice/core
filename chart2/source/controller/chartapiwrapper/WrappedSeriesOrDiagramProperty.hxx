@@ -22,10 +22,11 @@
 #include <WrappedProperty.hxx>
 #include "Chart2ModelContact.hxx"
 #include <DiagramHelper.hxx>
-#include <com/sun/star/chart2/XDataSeries.hpp>
 
 #include <memory>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
 
 namespace chart
 {

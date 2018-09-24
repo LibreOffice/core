@@ -20,7 +20,8 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDADDINPROPERTY_HXX
 
 #include <WrappedProperty.hxx>
-#include <ChartDocumentWrapper.hxx>
+
+namespace chart { namespace wrapper { class ChartDocumentWrapper; } }
 
 namespace chart
 {

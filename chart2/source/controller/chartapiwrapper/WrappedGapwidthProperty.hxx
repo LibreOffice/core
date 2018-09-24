@@ -20,9 +20,10 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDGAPWIDTHPROPERTY_HXX
 
 #include <WrappedDefaultProperty.hxx>
-#include "Chart2ModelContact.hxx"
 
 #include <memory>
+
+namespace chart { namespace wrapper { class Chart2ModelContact; } }
 
 namespace chart
 {

@@ -23,14 +23,14 @@
 #include "ReferenceSizePropertyProvider.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
-#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
 
 namespace chart
 {

@@ -23,6 +23,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/chart2/XDataSeries.hpp>
+#include <com/sun/star/chart2/XDiagram.hpp>
 
 #include <FillProperties.hxx>
 #include <LinePropertiesHelper.hxx>

@@ -18,6 +18,7 @@
  */
 
 #include "WrappedScaleProperty.hxx"
+#include "Chart2ModelContact.hxx"
 #include <CommonConverters.hxx>
 #include <AxisHelper.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>

@@ -18,6 +18,7 @@
  */
 
 #include "WrappedGapwidthProperty.hxx"
+#include "Chart2ModelContact.hxx"
 #include <DiagramHelper.hxx>
 
 using namespace ::com::sun::star;
