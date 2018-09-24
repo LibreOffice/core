@@ -28,7 +28,6 @@
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="image_position">bottom</property>
               </object>
               <packing>
                 <property name="expand">False</property>
