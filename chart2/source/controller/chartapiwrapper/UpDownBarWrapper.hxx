@@ -22,16 +22,13 @@
 #include <MutexContainer.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 
-#include <com/sun/star/chart2/XDiagram.hpp>
-
-#include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <memory>
 

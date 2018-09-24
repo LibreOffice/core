@@ -24,14 +24,14 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/chart/XAxis.hpp>
-#include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace chart2 { class XAxis; } } } }
 
 namespace chart
 {

@@ -26,8 +26,7 @@
 #include <com/sun/star/chart/XDateCategories.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
 
 #include <memory>
 

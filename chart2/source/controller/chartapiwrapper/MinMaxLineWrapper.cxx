@@ -21,6 +21,7 @@
 #include "Chart2ModelContact.hxx"
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
+#include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>

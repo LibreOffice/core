@@ -19,11 +19,13 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDDATACAPTIONPROPERTIES_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDDATACAPTIONPROPERTIES_HXX
 
-#include <WrappedProperty.hxx>
-#include "Chart2ModelContact.hxx"
-
+#include <sal/types.h>
 #include <memory>
 #include <vector>
+
+namespace chart { class WrappedProperty; }
+namespace chart { namespace wrapper { class Chart2ModelContact; } }
+namespace com { namespace sun { namespace star { namespace beans { struct Property; } } } }
 
 namespace chart
 {

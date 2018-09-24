@@ -18,14 +18,17 @@
  */
 
 #include "WrappedSplineProperties.hxx"
+#include "Chart2ModelContact.hxx"
 #include <FastPropertyIdRanges.hxx>
 #include <DiagramHelper.hxx>
+#include <WrappedProperty.hxx>
 #include <unonames.hxx>
 
 #include <sal/log.hxx>
 
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;

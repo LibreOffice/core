@@ -20,9 +20,12 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDAUTOMATICPOSITIONPROPERTIES_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_WRAPPEDAUTOMATICPOSITIONPROPERTIES_HXX
 
-#include <WrappedProperty.hxx>
-#include <com/sun/star/beans/Property.hpp>
+#include <sal/types.h>
+#include <memory>
 #include <vector>
+
+namespace chart { class WrappedProperty; }
+namespace com { namespace sun { namespace star { namespace beans { struct Property; } } } }
 
 namespace chart
 {

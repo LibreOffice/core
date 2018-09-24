@@ -18,6 +18,7 @@
  */
 
 #include "WrappedAddInProperty.hxx"
+#include <ChartDocumentWrapper.hxx>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;

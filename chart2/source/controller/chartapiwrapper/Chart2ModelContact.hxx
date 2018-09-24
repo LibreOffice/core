@@ -19,21 +19,26 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_CHART2MODELCONTACT_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_CHART2MODELCONTACT_HXX
 
-#include <chartview/ExplicitScaleValues.hxx>
-#include <com/sun/star/chart2/XAxis.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
-#include <com/sun/star/chart2/XTitle.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
 
 #include <map>
+
+namespace chart { struct ExplicitIncrementData; }
+namespace chart { struct ExplicitScaleData; }
+namespace com { namespace sun { namespace star { namespace chart2 { class XAxis; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDiagram; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XTitle; } } } }
+namespace com { namespace sun { namespace star { namespace container { class XNameContainer; } } } }
+namespace com { namespace sun { namespace star { namespace drawing { class XDrawPage; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XUnoTunnel; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+
 
 namespace chart
 {

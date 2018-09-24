@@ -53,6 +53,7 @@
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/ChartSolidType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
