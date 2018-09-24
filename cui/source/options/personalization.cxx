@@ -297,6 +297,15 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( vcl::Window *pParent, cons
     get( m_vDefaultPersonaImages[2], "default3" );
     m_vDefaultPersonaImages[2]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
 
+    get( m_vDefaultPersonaImages[3], "default4" );
+    m_vDefaultPersonaImages[3]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
+
+    get( m_vDefaultPersonaImages[4], "default5" );
+    m_vDefaultPersonaImages[4]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
+
+    get( m_vDefaultPersonaImages[5], "default6" );
+    m_vDefaultPersonaImages[5]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
+
     get( m_pPersonaList, "installed_personas" );
     m_pPersonaList->SetSelectHdl( LINK( this, SvxPersonalizationTabPage, SelectInstalledPersona ) );
 
