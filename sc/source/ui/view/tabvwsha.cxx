@@ -542,7 +542,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     bInFormatDialog = true;
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-    VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScAttrDlg(GetDialogParent(), pOldSet.get()));
+    VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScAttrDlg(GetFrameWeld(), pOldSet.get()));
 
     if (!rName.isEmpty())
         pDlg->SetCurPageId(rName);
@@ -551,23 +551,25 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
     rReq.Ignore(); // the 'old' request is not relevant any more
 
     pDlg->StartExecuteAsync([=](sal_Int32 nResult){
-            bInFormatDialog = false;
+        bInFormatDialog = false;
 
-            if ( nResult == RET_OK )
+        if ( nResult == RET_OK )
+        {
+            const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+
+            const SfxPoolItem* pItem=nullptr;
+            if(pOutSet->GetItemState(SID_ATTR_NUMBERFORMAT_INFO,true,&pItem)==SfxItemState::SET)
             {
-                const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-
-                const SfxPoolItem* pItem=nullptr;
-                if(pOutSet->GetItemState(SID_ATTR_NUMBERFORMAT_INFO,true,&pItem)==SfxItemState::SET)
-                {
-                    UpdateNumberFormatter(static_cast<const SvxNumberInfoItem&>(*pItem));
-                }
-
-                ApplyAttributes(pOutSet, pOldSet.get());
-
-                pRequest->Done(*pOutSet);
+                UpdateNumberFormatter(static_cast<const SvxNumberInfoItem&>(*pItem));
             }
-        });
+
+            ApplyAttributes(pOutSet, pOldSet.get());
+
+            pRequest->Done(*pOutSet);
+        }
+
+        pDlg->disposeOnce();
+    });
 }
 
 bool ScTabViewShell::IsRefInputMode() const
