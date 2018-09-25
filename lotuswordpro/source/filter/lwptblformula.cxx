@@ -67,6 +67,7 @@
 #include <osl/thread.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <o3tl/make_unique.hxx>
 #include <memory>
 
 LwpFormulaArg::~LwpFormulaArg()
@@ -81,19 +82,13 @@ LwpFormulaArg::~LwpFormulaArg()
 
 LwpFormulaInfo::~LwpFormulaInfo()
 {
-    while(m_aStack.size()>0)
-    {
-        LwpFormulaArg* pArg=m_aStack.back();
-        m_aStack.pop_back();
-        delete pArg; pArg=nullptr;
-    }
 }
 
 void LwpFormulaInfo::ReadConst()
 {
     double Constant = m_pObjStrm->QuickReadDouble();
 
-    m_aStack.push_back( new LwpFormulaConst(Constant) );
+    m_aStack.push_back( o3tl::make_unique<LwpFormulaConst>(Constant) );
 }
 
 /**
@@ -112,7 +107,7 @@ void LwpFormulaInfo::ReadText()
     aText += OUString(pBuf.get(), nStrLen, osl_getThreadTextEncoding());
     aText += "\"";
 
-    m_aStack.push_back(new LwpFormulaText(aText));
+    m_aStack.push_back(o3tl::make_unique<LwpFormulaText>(aText));
 }
 
 void LwpFormulaInfo::ReadCellID()
@@ -123,26 +118,24 @@ void LwpFormulaInfo::ReadCellID()
     RowSpecifier.QuickRead(m_pObjStrm.get());
     ColumnSpecifier.QuickRead(m_pObjStrm.get());
 
-    m_aStack.push_back( new LwpFormulaCellAddr(ColumnSpecifier.ColumnID(cColumn),
+    m_aStack.push_back( o3tl::make_unique<LwpFormulaCellAddr>(ColumnSpecifier.ColumnID(cColumn),
                                                 RowSpecifier.RowID(m_nFormulaRow)) );
 }
 
 void LwpFormulaInfo::ReadCellRange()
 {
     ReadCellID( ); // start
-    LwpFormulaCellAddr* pStartCellAddr = static_cast<LwpFormulaCellAddr*>(m_aStack.back());
+    std::unique_ptr<LwpFormulaCellAddr> pStartCellAddr( static_cast<LwpFormulaCellAddr*>(m_aStack.back().release()));
     m_aStack.pop_back();
 
     ReadCellID(); // end
-    LwpFormulaCellAddr* pEndCellAddr = static_cast<LwpFormulaCellAddr*>(m_aStack.back());
+    std::unique_ptr<LwpFormulaCellAddr> pEndCellAddr(static_cast<LwpFormulaCellAddr*>(m_aStack.back().release()));
     m_aStack.pop_back();
 
-    m_aStack.push_back( new LwpFormulaCellRangeAddr(pStartCellAddr->GetCol(),
+    m_aStack.push_back( o3tl::make_unique<LwpFormulaCellRangeAddr>(pStartCellAddr->GetCol(),
                                                     pStartCellAddr->GetRow(),
                                                     pEndCellAddr->GetCol(),
                                                     pEndCellAddr->GetRow()) );
-    delete pStartCellAddr;
-    delete pEndCellAddr;
 }
 
 /**
@@ -190,7 +183,7 @@ void LwpFormulaInfo::ReadExpression()
                 {
                     std::unique_ptr<LwpFormulaFunc> xFunc(new LwpFormulaFunc(TokenType));
                     ReadArguments(*xFunc);
-                    m_aStack.push_back(xFunc.release());
+                    m_aStack.push_back(std::move(xFunc));
                 }
                 break;
 
@@ -211,18 +204,18 @@ void LwpFormulaInfo::ReadExpression()
 
                 if (m_aStack.size() >= 2)
                 {//binary operator
-                    LwpFormulaOp* pOp = new LwpFormulaOp(TokenType);
-                    pOp->AddArg(std::unique_ptr<LwpFormulaArg>(m_aStack.back())); m_aStack.pop_back();
-                    pOp->AddArg(std::unique_ptr<LwpFormulaArg>(m_aStack.back())); m_aStack.pop_back();
-                    m_aStack.push_back(pOp);
+                    std::unique_ptr<LwpFormulaOp> pOp(new LwpFormulaOp(TokenType));
+                    pOp->AddArg(std::move(m_aStack.back())); m_aStack.pop_back();
+                    pOp->AddArg(std::move(m_aStack.back())); m_aStack.pop_back();
+                    m_aStack.push_back(std::move(pOp));
                 }
                 break;
             case TK_UNARY_MINUS:
                 if (!m_aStack.empty())
                 {
-                    LwpFormulaUnaryOp* pOp = new LwpFormulaUnaryOp(TokenType);
-                    pOp->AddArg(std::unique_ptr<LwpFormulaArg>(m_aStack.back())); m_aStack.pop_back();
-                    m_aStack.push_back(pOp);
+                    std::unique_ptr<LwpFormulaUnaryOp> pOp(new LwpFormulaUnaryOp(TokenType));
+                    pOp->AddArg(std::move(m_aStack.back())); m_aStack.pop_back();
+                    m_aStack.push_back(std::move(pOp));
                 }
                 break;
             default:
@@ -293,7 +286,7 @@ void LwpFormulaInfo::ReadArguments(LwpFormulaFunc& aFunc)
 
         if (bArgument && !m_aStack.empty())
         {
-            aFunc.AddArg(std::unique_ptr<LwpFormulaArg>(m_aStack.back()));
+            aFunc.AddArg(std::move(m_aStack.back()));
             m_aStack.pop_back();
         }
     }
@@ -333,8 +326,7 @@ OUString  LwpFormulaInfo::Convert(LwpTableLayout* pCellsMap)
     {
         if(1==m_aStack.size())
         {
-            LwpFormulaArg* pFormula = m_aStack.back();
-            aFormula = pFormula->ToString(pCellsMap);
+            aFormula = m_aStack[0]->ToString(pCellsMap);
         }
         else
         {
