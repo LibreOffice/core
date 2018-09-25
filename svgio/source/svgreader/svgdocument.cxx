@@ -33,18 +33,12 @@ namespace svgio
 
         SvgDocument::~SvgDocument()
         {
-            while(!maNodes.empty())
-            {
-                SvgNode* pCandidate = maNodes[maNodes.size() - 1];
-                delete pCandidate;
-                maNodes.pop_back();
-            }
         }
 
-        void SvgDocument::appendNode(SvgNode* pNode)
+        void SvgDocument::appendNode(std::unique_ptr<SvgNode> pNode)
         {
-            OSL_ENSURE(pNode, "OOps, empty node added (!)");
-            maNodes.push_back(pNode);
+            assert(pNode);
+            maNodes.push_back(std::move(pNode));
         }
 
         void SvgDocument::addSvgNodeToMapper(const OUString& rStr, const SvgNode& rNode)

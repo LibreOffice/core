@@ -153,7 +153,8 @@ namespace svgio
                     mpTarget = const_cast< SvgNode* >(mpTarget->getParent());
 
                 const SvgNodeVector& rOwnedTopLevels = maDocument.getSvgNodeVector();
-                if (std::find(rOwnedTopLevels.begin(), rOwnedTopLevels.end(), mpTarget) == rOwnedTopLevels.end())
+                if (std::none_of(rOwnedTopLevels.begin(), rOwnedTopLevels.end(),
+                                [&](std::unique_ptr<SvgNode> const & p) { return p.get() == mpTarget; }))
                     delete mpTarget;
             }
             OSL_ENSURE(!maCssContents.size(), "SvgDocHdl destructed with active css style stack entry (!)");
@@ -487,7 +488,7 @@ namespace svgio
                             if(!mpTarget->getParent())
                             {
                                 // last element closing, save this tree
-                                maDocument.appendNode(mpTarget);
+                                maDocument.appendNode(std::unique_ptr<SvgNode>(mpTarget));
                             }
 
                             mpTarget = const_cast< SvgNode* >(mpTarget->getParent());
