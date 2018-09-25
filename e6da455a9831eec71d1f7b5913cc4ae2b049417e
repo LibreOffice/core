@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_fda14397",
+        "filename": "sw/qa/python/check_xautotextcontainer.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-09-25T03:32:33Z",
+      "side": 1,
+      "message": "Is there any reported / asserted failure case?",
+      "revId": "e6da455a9831eec71d1f7b5913cc4ae2b049417e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_1d9d1759",
+        "filename": "sw/qa/python/check_xautotextcontainer.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-09-25T03:32:33Z",
+      "side": 1,
+      "message": "but then lets test that all of that works? _ is tested above, but not all of a-z A-Z, and neither \u0027 \u0027\n\nTesting that the API excludes some chars is less interesting - if future LibreOffice versions widen that, what\u0027s the harm?",
+      "revId": "e6da455a9831eec71d1f7b5913cc4ae2b049417e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
