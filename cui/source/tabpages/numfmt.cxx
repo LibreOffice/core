@@ -221,7 +221,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(TabPageParent pParent,
     long nWidth = approximate_char_width() * 26;
     m_xLbFormat->set_size_request(nWidth, -1);
     m_xLbCurrency->set_size_request(nWidth, -1);
-    m_xLbCategory->set_size_request(-1, m_xLbCategory->get_height_rows(8));
+    m_xLbCategory->set_size_request(-1, m_xLbCategory->get_height_rows(7);
     m_xWndPreview->set_size_request(GetTextHeight()*3, -1);
 
     Init_Impl();
