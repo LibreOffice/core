@@ -45,8 +45,6 @@ namespace svgio
 {
     namespace svgreader
     {
-        typedef ::std::vector< SvgNode* > SvgNodeVector;
-
         enum XmlSpace
         {
             XmlSpace_notset,
