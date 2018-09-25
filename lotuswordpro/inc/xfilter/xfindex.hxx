@@ -65,6 +65,7 @@
 #include <xfilter/xfcontent.hxx>
 #include <xfilter/xfcontentcontainer.hxx>
 #include <xfilter/xftabstop.hxx>
+#include <rtl/ref.hxx>
 
 class XFIndex;
 class XFIndexTemplate;
@@ -168,7 +169,7 @@ private:
     bool            m_bProtect;
     bool            m_bSeparator;
 
-    std::vector<XFIndexTemplate *>  m_aTemplates; // template entry + style
+    std::vector<rtl::Reference<XFIndexTemplate>>  m_aTemplates; // template entry + style
 
     #define MAX_TOC_LEVEL 10
     std::vector<OUString> m_aTOCSource[MAX_TOC_LEVEL+1];
