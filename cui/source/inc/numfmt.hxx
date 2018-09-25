@@ -84,7 +84,6 @@ private:
     std::unique_ptr<SvxNumberInfoItem>    pNumItem;
     std::unique_ptr<SvxNumberFormatShell> pNumFmtShell;
     sal_uLong               nInitFormat;
-    Link<SfxPoolItem const *,void> fnOkHdl;
 
     bool                bNumItemFlag; ///< for handling with DocShell
     bool                bOneAreaFlag;
