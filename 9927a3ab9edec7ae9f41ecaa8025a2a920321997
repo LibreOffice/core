@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_dd79df2f",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-09-25T02:55:31Z",
+      "side": 1,
+      "message": "Just the right addition. Good work here.\n\nBut this won\u0027t work because you haven\u0027t updated the MAX_DEFAULT_PERSONAS defined in personalization.hxx\n\nIn fact, this would result in a crash if the related loop wasn\u0027t guarded with an out-of-bounds check. -I added that check last week. :)-",
+      "range": {
+        "startLine": 300,
+        "startChar": 4,
+        "endLine": 307,
+        "endChar": 103
+      },
+      "revId": "9927a3ab9edec7ae9f41ecaa8025a2a920321997",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_3d833b07",
+        "filename": "cui/uiconfig/ui/personalization_tab.ui",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-09-25T02:55:31Z",
+      "side": 1,
+      "message": "Now we have threre boxes, two inside in the third. Seems like unnecessary complexity.\n\nYou could avoid this with a single Grid.\n\n(Applies for box1, box3, box4.)",
+      "range": {
+        "startLine": 69,
+        "startChar": 21,
+        "endLine": 69,
+        "endChar": 55
+      },
+      "revId": "9927a3ab9edec7ae9f41ecaa8025a2a920321997",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
