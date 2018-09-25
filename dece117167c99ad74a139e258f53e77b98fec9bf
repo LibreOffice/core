@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_00948a43",
+        "filename": "sw/qa/python/check_xautotextcontainer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2018-09-25T16:13:21Z",
+      "side": 1,
+      "message": "It is designed to ensure that exception is thrown?\nI think it is better to use self.assertRaises() with explicit exception name for this situation.\nUsage example you will find in sw\\qa\\python\\xscriptprovider.py\n\n(same for such constructions below)\n\nRight now it is not clear what we are testing: exceptions are suppressed and no asserts.",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 16
+      },
+      "revId": "dece117167c99ad74a139e258f53e77b98fec9bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
