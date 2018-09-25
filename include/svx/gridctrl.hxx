@@ -592,6 +592,7 @@ protected:
 
 private:
     using BrowseBox::InsertHandleColumn;
+    sal_uInt16 computeViewId(sal_uInt16 _nColViewId);//computes the new ViewId if hidden columns are detected
 };
 
 #endif // INCLUDED_SVX_GRIDCTRL_HXX
