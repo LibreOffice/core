@@ -693,6 +693,11 @@ short ScAbstractTabController_Impl::Execute()
     return m_xDlg->execute();
 }
 
+bool ScAbstractTabController_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return SfxTabDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 void ScAbstractTabController_Impl::SetCurPageId( const OString &rName )
 {
     m_xDlg->SetCurPageId( rName );
@@ -957,10 +962,9 @@ VclPtr<AbstractScImportOptionsDlg> ScAbstractDialogFactory_Impl::CreateScImportO
     return VclPtr<AbstractScImportOptionsDlg_Impl>::Create( pDlg );
 }
 
-VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScAttrDlg(vcl::Window* pParent, const SfxItemSet* pCellAttrs)
+VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScAttrDlg(weld::Window* pParent, const SfxItemSet* pCellAttrs)
 {
-    VclPtr<SfxTabDialog> pDlg = VclPtr<ScAttrDlg>::Create(pParent, pCellAttrs);
-    return VclPtr<ScAbstractTabDialog_Impl>::Create(pDlg);
+    return VclPtr<ScAbstractTabController_Impl>::Create(o3tl::make_unique<ScAttrDlg>(pParent, pCellAttrs));
 }
 
 VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScHFEditDlg( vcl::Window*         pParent,
