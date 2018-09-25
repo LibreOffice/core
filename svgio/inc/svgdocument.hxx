@@ -21,12 +21,16 @@
 #define INCLUDED_SVGIO_INC_SVGDOCUMENT_HXX
 
 #include "svgnode.hxx"
+#include <memory>
 #include <unordered_map>
+#include <vector>
 
 namespace svgio
 {
     namespace svgreader
     {
+        typedef std::vector< std::unique_ptr<SvgNode> > SvgNodeVector;
+
         class SvgDocument
         {
         private:
@@ -52,7 +56,7 @@ namespace svgio
             SvgDocument& operator=(const SvgDocument&) = delete;
 
             /// append another root node, ownership changes
-            void appendNode(SvgNode* pNode);
+            void appendNode(std::unique_ptr<SvgNode> pNode);
 
             /// add/remove nodes with Id to mapper
             void addSvgNodeToMapper(const OUString& rStr, const SvgNode& rNode);

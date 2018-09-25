@@ -143,13 +143,8 @@ namespace svgio
                 }
 
                 // decompose to primitives
-                const SvgNodeVector& rResults = pSvgDocHdl->getSvgDocument().getSvgNodeVector();
-                const sal_uInt32 nCount(rResults.size());
-
-                for(sal_uInt32 a(0); a < nCount; a++)
+                for(std::unique_ptr<SvgNode> const & pCandidate : pSvgDocHdl->getSvgDocument().getSvgNodeVector())
                 {
-                    SvgNode* pCandidate = rResults[a];
-
                     if(Display_none != pCandidate->getDisplay())
                     {
                         pCandidate->decomposeSvgNode(aRetval, false);
