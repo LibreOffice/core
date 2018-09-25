@@ -87,8 +87,6 @@ SvxFontListBox::SvxFontListBox(vcl::Window* pParent, WinBits nStyle)
     maEntryFont = aStdFont;
 }
 
-VCL_BUILDER_FACTORY_CONSTRUCTOR(SvxFontListBox, WB_TABSTOP)
-
 void SvxFontListBox::InsertFontEntry( const OUString& rString, const vcl::Font& rFont, const Color* pColor )
 {
     mbUseFont = true;           // InitEntry() will use maEntryFont
