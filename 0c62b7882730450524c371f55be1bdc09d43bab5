@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_400e02e6",
+        "filename": "sw/qa/unit/unoapi.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-09-25T13:47:43Z",
+      "side": 1,
+      "message": "So could you adjust the code so that the NoSuchElementException is thrown when the element does not exist?",
+      "revId": "0c62b7882730450524c371f55be1bdc09d43bab5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
