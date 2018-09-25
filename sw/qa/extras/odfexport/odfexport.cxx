@@ -1083,5 +1083,16 @@ DECLARE_ODFEXPORT_TEST(tdf101856, "tdf101856.odt")
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xBookmark5, UNO_NAME_BOOKMARK_HIDDEN));
 }
 
+DECLARE_ODFEXPORT_TEST(tdf118502, "tdf118502.odt")
+{
+    utl::TempFile aTempFile;
+    save("writer8", aTempFile);
+
+    uno::Sequence<uno::Any> aArgs(1);
+    aArgs[0] <<= OUString(aTempFile.GetURL());
+    uno::Reference<container::XNameAccess> xNameAccess(m_xSFactory->createInstanceWithArguments("com.sun.star.packages.zip.ZipFileAccess", aArgs), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("Pictures/2000000200000169000000D99F3EA97BFD720EBF.eps")));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
