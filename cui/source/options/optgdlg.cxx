@@ -1313,7 +1313,7 @@ VclPtr<SfxTabPage> OfaLanguagesTabPage::Create( TabPageParent pParent, const Sfx
     return VclPtr<OfaLanguagesTabPage>::Create(pParent.pParent, *rAttrSet);
 }
 
-static void lcl_UpdateAndDelete(SfxVoidItem* pInvalidItems[], SfxBoolItem* pBoolItems[], sal_uInt16 nCount)
+static void lcl_Update(std::unique_ptr<SfxVoidItem> pInvalidItems[], std::unique_ptr<SfxBoolItem> pBoolItems[], sal_uInt16 nCount)
 {
     SfxViewFrame* pCurrentFrm = SfxViewFrame::Current();
     SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst();
@@ -1328,11 +1328,6 @@ static void lcl_UpdateAndDelete(SfxVoidItem* pInvalidItems[], SfxBoolItem* pBool
             rBind.SetState( *pBoolItems[i] );
         }
         pViewFrm = SfxViewFrame::GetNext(*pViewFrm);
-    }
-    for(sal_Int16 i = 0; i < nCount; i++)
-    {
-        delete pInvalidItems[i];
-        delete pBoolItems[i] ;
     }
 }
 
@@ -1533,15 +1528,15 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
         //iterate over all bindings to invalidate vertical text direction
         const sal_uInt16 STATE_COUNT = 2;
 
-        SfxBoolItem* pBoolItems[STATE_COUNT];
-        pBoolItems[0] = new SfxBoolItem(SID_VERTICALTEXT_STATE, false);
-        pBoolItems[1] = new SfxBoolItem(SID_TEXT_FITTOSIZE_VERTICAL, false);
+        std::unique_ptr<SfxBoolItem> pBoolItems[STATE_COUNT];
+        pBoolItems[0].reset(new SfxBoolItem(SID_VERTICALTEXT_STATE, false));
+        pBoolItems[1].reset(new SfxBoolItem(SID_TEXT_FITTOSIZE_VERTICAL, false));
 
-        SfxVoidItem* pInvalidItems[STATE_COUNT];
-        pInvalidItems[0] = new SfxVoidItem(SID_VERTICALTEXT_STATE);
-        pInvalidItems[1] = new SfxVoidItem(SID_TEXT_FITTOSIZE_VERTICAL);
+        std::unique_ptr<SfxVoidItem> pInvalidItems[STATE_COUNT];
+        pInvalidItems[0].reset(new SfxVoidItem(SID_VERTICALTEXT_STATE));
+        pInvalidItems[1].reset(new SfxVoidItem(SID_TEXT_FITTOSIZE_VERTICAL));
 
-        lcl_UpdateAndDelete(pInvalidItems, pBoolItems, STATE_COUNT);
+        lcl_Update(pInvalidItems, pBoolItems, STATE_COUNT);
     }
 
     if ( m_pCTLSupportCB->IsValueChangedFromSaved() )
@@ -1553,11 +1548,11 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
         pLangConfig->aLanguageOptions.SetCTLFontEnabled( m_pCTLSupportCB->IsChecked() );
 
         const sal_uInt16 STATE_COUNT = 1;
-        SfxBoolItem* pBoolItems[STATE_COUNT];
-        pBoolItems[0] = new SfxBoolItem(SID_CTLFONT_STATE, false);
-        SfxVoidItem* pInvalidItems[STATE_COUNT];
-        pInvalidItems[0] = new SfxVoidItem(SID_CTLFONT_STATE);
-        lcl_UpdateAndDelete(pInvalidItems, pBoolItems, STATE_COUNT);
+        std::unique_ptr<SfxBoolItem> pBoolItems[STATE_COUNT];
+        pBoolItems[0].reset(new SfxBoolItem(SID_CTLFONT_STATE, false));
+        std::unique_ptr<SfxVoidItem> pInvalidItems[STATE_COUNT];
+        pInvalidItems[0].reset(new SfxVoidItem(SID_CTLFONT_STATE));
+        lcl_Update(pInvalidItems, pBoolItems, STATE_COUNT);
     }
 
     if ( pLangConfig->aSysLocaleOptions.IsModified() )
