@@ -212,8 +212,8 @@ void LwpFormulaInfo::ReadExpression()
                 if (m_aStack.size() >= 2)
                 {//binary operator
                     LwpFormulaOp* pOp = new LwpFormulaOp(TokenType);
-                    pOp->AddArg(m_aStack.back()); m_aStack.pop_back();
-                    pOp->AddArg(m_aStack.back()); m_aStack.pop_back();
+                    pOp->AddArg(std::unique_ptr<LwpFormulaArg>(m_aStack.back())); m_aStack.pop_back();
+                    pOp->AddArg(std::unique_ptr<LwpFormulaArg>(m_aStack.back())); m_aStack.pop_back();
                     m_aStack.push_back(pOp);
                 }
                 break;
@@ -221,7 +221,7 @@ void LwpFormulaInfo::ReadExpression()
                 if (!m_aStack.empty())
                 {
                     LwpFormulaUnaryOp* pOp = new LwpFormulaUnaryOp(TokenType);
-                    pOp->AddArg(m_aStack.back()); m_aStack.pop_back();
+                    pOp->AddArg(std::unique_ptr<LwpFormulaArg>(m_aStack.back())); m_aStack.pop_back();
                     m_aStack.push_back(pOp);
                 }
                 break;
@@ -293,7 +293,7 @@ void LwpFormulaInfo::ReadArguments(LwpFormulaFunc& aFunc)
 
         if (bArgument && !m_aStack.empty())
         {
-            aFunc.AddArg(m_aStack.back());
+            aFunc.AddArg(std::unique_ptr<LwpFormulaArg>(m_aStack.back()));
             m_aStack.pop_back();
         }
     }
@@ -415,16 +415,10 @@ LwpFormulaFunc::LwpFormulaFunc(sal_uInt16 nTokenType)
 
 LwpFormulaFunc::~LwpFormulaFunc()
 {
-    while(m_aArgs.size()>0)
-    {
-        LwpFormulaArg* pArg = m_aArgs.back();
-        m_aArgs.pop_back();
-        delete pArg;pArg=nullptr;
-    }
 }
-void LwpFormulaFunc::AddArg(LwpFormulaArg* pArg)
+void LwpFormulaFunc::AddArg(std::unique_ptr<LwpFormulaArg> pArg)
 {
-    m_aArgs.push_back(pArg);
+    m_aArgs.push_back(std::move(pArg));
 }
 /**
 *   Convert the functions to a string, which is a argument of other formula
@@ -475,16 +469,12 @@ OUString LwpFormulaOp::ToString(LwpTableLayout* pCellsMap)
     OUString aFormula;
     if (2==m_aArgs.size())
     {
-        std::vector<LwpFormulaArg*>::iterator aItr = m_aArgs.end();
-        --aItr;
-
-        aFormula += (*aItr)->ToArgString(pCellsMap) + " ";
+        aFormula += m_aArgs[1]->ToArgString(pCellsMap) + " ";
         OUString aFuncName = LwpFormulaTools::GetName(m_nTokenType);
 
         aFormula += aFuncName + " ";
 
-        --aItr;
-        aFormula += (*aItr)->ToArgString(pCellsMap);
+        aFormula += m_aArgs[0]->ToArgString(pCellsMap);
     }
     else
     {
@@ -503,9 +493,7 @@ OUString LwpFormulaUnaryOp::ToString(LwpTableLayout* pCellsMap)
     {
         OUString aFuncName = LwpFormulaTools::GetName(m_nTokenType);
         aFormula += aFuncName;
-
-        std::vector<LwpFormulaArg*>::iterator aItr = m_aArgs.begin();
-        aFormula += (*aItr)->ToArgString(pCellsMap);
+        aFormula += m_aArgs[0]->ToArgString(pCellsMap);
     }
     else
     {

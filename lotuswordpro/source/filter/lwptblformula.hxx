@@ -167,13 +167,13 @@ public:
     explicit LwpFormulaFunc(sal_uInt16 nTokenType);
     virtual ~LwpFormulaFunc() override;
 
-    void AddArg(LwpFormulaArg* pArg);
+    void AddArg(std::unique_ptr<LwpFormulaArg> pArg);
 
     virtual OUString ToString(LwpTableLayout* pCellsMap) override;
     OUString ToArgString(LwpTableLayout* pCellsMap) override;
 
 protected:
-    std::vector<LwpFormulaArg*> m_aArgs;
+    std::vector<std::unique_ptr<LwpFormulaArg>> m_aArgs;
     sal_uInt16 m_nTokenType;
 };
 
