@@ -1911,7 +1911,8 @@ public:
 
     virtual void set_busy_cursor(bool bBusy) override
     {
-        gtk_widget_realize(m_pWidget);
+        if (!gtk_widget_get_realized(m_pWidget))
+            gtk_widget_realize(m_pWidget);
         GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
         GdkCursor *pCursor = bBusy ? gdk_cursor_new_from_name(pDisplay, "progress") : nullptr;
         gdk_window_set_cursor(gtk_widget_get_window(m_pWidget), pCursor);
@@ -4582,6 +4583,9 @@ public:
         g_object_steal_data(G_OBJECT(m_pDrawingArea), "g-lo-GtkInstanceDrawingArea");
         if (m_pAccessible)
             g_object_unref(m_pAccessible);
+        css::uno::Reference<css::lang::XComponent> xComp(m_xAccessible, css::uno::UNO_QUERY);
+        if (xComp.is())
+            xComp->dispose();
         g_signal_handler_disconnect(m_pDrawingArea, m_nPopupMenu);
         g_signal_handler_disconnect(m_pDrawingArea, m_nQueryTooltip);
         g_signal_handler_disconnect(m_pDrawingArea, m_nStyleUpdatedSignalId);
