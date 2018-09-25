@@ -2793,6 +2793,25 @@ void DbGridControl::executeRowContextMenu( long _nRow, const Point& _rPreferredP
     PostExecuteRowContextMenu( static_cast<sal_uInt16>(_nRow), *aContextMenu.get(), aContextMenu->Execute( this, _rPreferredPos ) );
 }
 
+sal_uInt16 DbGridControl::computeRealColumnId(sal_uInt16 _nColViewId)
+{
+    sal_uInt16 lNewColViewId = 1;
+    sal_uInt16 lRealColumnId = 0;
+    for(sal_uInt16 iId = 1 ; iId < m_aColumns.size() + 1 ; ++iId)
+    {
+        if(!m_aColumns[GetModelColumnPos(iId)].get()->IsHidden())
+        {
+            if(lNewColViewId == _nColViewId)
+            {
+                lRealColumnId=iId;
+                break;
+            }
+            ++lNewColViewId;
+        }
+    }
+    return lRealColumnId;
+}
+
 void DbGridControl::Command(const CommandEvent& rEvt)
 {
     switch (rEvt.GetCommand())
@@ -2820,18 +2839,34 @@ void DbGridControl::Command(const CommandEvent& rEvt)
             }
 
             sal_uInt16 nColId = GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X());
-            long   nRow = GetRowAtYPosPixel(rEvt.GetMousePosPixel().Y());
+            long nRow = GetRowAtYPosPixel(rEvt.GetMousePosPixel().Y());
+            /*
+             * lColViewId represents the Id of the column selected in the View considering the occurence of hidden columns.
+             * lColModelId represents the Id of the column in the Model considering the occurence of hidden columns.
+             *
+             * if there isn't any hidden column in the View : the Column Model Id is identical to the Column View Id.
+            */
+
+            sal_uInt16 lColViewId=0;
+            sal_uInt16 lColModelId=0;
+            if(GetModelColCount()-GetViewColCount()!=0 && nColId<m_aColumns.size()+1)
+            {
+                lColViewId=nColId;
+                lColModelId=computeRealColumnId(nColId);
+            }
+            else
+                lColViewId=lColModelId=nColId;
 
             if (nColId == HandleColumnId)
             {
                 executeRowContextMenu( nRow, rEvt.GetMousePosPixel() );
             }
-            else if (canCopyCellText(nRow, nColId))
+            else if (canCopyCellText(nRow, lColViewId))
             {
                 VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/cellmenu.ui", "");
                 VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
                 if (aContextMenu->Execute(this, rEvt.GetMousePosPixel()))
-                    copyCellText(nRow, nColId);
+                    copyCellText(nRow, lColModelId);
             }
             else
             {
