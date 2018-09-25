@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_7d8e5328",
+        "filename": "cui/source/options/personalization.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-09-25T03:07:14Z",
+      "side": 1,
+      "message": "This change actually belongs to the first patch, but great that you got it corrected here.",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 69
+      },
+      "revId": "030181b37d2b7edd7cab20ceb7736e575186f99b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_5d938f50",
+        "filename": "extras/source/gallery/personas/personas_list.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-09-25T03:07:14Z",
+      "side": 1,
+      "message": "I guess this shouldn\u0027t work. Have you tested on the current master?\n\nIt doesn\u0027t have the slug and the name of the personas, as specified in the personalization.hxx file: https://opengrok.libreoffice.org/xref/core/cui/source/options/personalization.hxx#73",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 68
+      },
+      "revId": "030181b37d2b7edd7cab20ceb7736e575186f99b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
