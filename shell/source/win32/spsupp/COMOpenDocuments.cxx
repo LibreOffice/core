@@ -313,7 +313,7 @@ STDMETHODIMP COMOpenDocuments::CreateNewDocument2(
     return hr;
 }
 
-// Used with the OpenDocuments.CreateNewDocument2 Method method to determine
+// Used with the OpenDocuments.CreateNewDocument2 method to determine
 // whether the security dialog box that appears when a document is opened has already appeared
 //
 // If the PromptedOnLastOpen method returns true, the window containing the document library view
