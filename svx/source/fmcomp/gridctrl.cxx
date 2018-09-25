@@ -61,6 +61,7 @@
 #include <cstdlib>
 #include <map>
 #include <memory>
+#include <vector>
 
 using namespace ::dbtools;
 using namespace ::dbtools::DBTypeConversion;
@@ -2793,6 +2794,17 @@ void DbGridControl::executeRowContextMenu( long _nRow, const Point& _rPreferredP
     PostExecuteRowContextMenu( static_cast<sal_uInt16>(_nRow), *aContextMenu.get(), aContextMenu->Execute( this, _rPreferredPos ) );
 }
 
+sal_uInt16 DbGridControl::computeViewId(sal_uInt16 _nColViewId)
+{
+    std::vector< sal_uInt16 > lModifiedViewId;
+    for(sal_uInt16 iId = 1;iId < m_aColumns.size() +1;++iId)
+    {
+        if(! m_aColumns[GetModelColumnPos(iId)].get()->IsHidden())
+            lModifiedViewId.emplace_back(iId);
+    }
+    return lModifiedViewId[ _nColViewId - 1];
+}
+
 void DbGridControl::Command(const CommandEvent& rEvt)
 {
     switch (rEvt.GetCommand())
@@ -2820,18 +2832,28 @@ void DbGridControl::Command(const CommandEvent& rEvt)
             }
 
             sal_uInt16 nColId = GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X());
-            long   nRow = GetRowAtYPosPixel(rEvt.GetMousePosPixel().Y());
+            long nRow = GetRowAtYPosPixel(rEvt.GetMousePosPixel().Y());
+            sal_uInt16 nColViewId = 0;
+            sal_uInt16 nColModelId = 0;
+
+            if(GetModelColCount()-GetViewColCount() != 0 && nColId < m_aColumns.size() +1)
+            {
+                nColViewId = nColId;
+                nColModelId = computeViewId(nColId);
+            }
+            else
+                nColViewId = nColModelId = nColId;
 
             if (nColId == HandleColumnId)
             {
                 executeRowContextMenu( nRow, rEvt.GetMousePosPixel() );
             }
-            else if (canCopyCellText(nRow, nColId))
+            else if (canCopyCellText(nRow, nColViewId))
             {
                 VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "svx/ui/cellmenu.ui", "");
                 VclPtr<PopupMenu> aContextMenu(aBuilder.get_menu("menu"));
                 if (aContextMenu->Execute(this, rEvt.GetMousePosPixel()))
-                    copyCellText(nRow, nColId);
+                    copyCellText(nRow, nColModelId);
             }
             else
             {
