@@ -731,12 +731,12 @@ void RtfAttributeOutput::TableBackgrounds(
     const SwTableLine* pTableLine = pTableBox->GetUpper();
 
     Color aColor = COL_AUTO;
-    const SvxBrushItem* pTableColorProp
+    auto pTableColorProp
         = pTable->GetFrameFormat()->GetAttrSet().GetItem<SvxBrushItem>(RES_BACKGROUND);
     if (pTableColorProp)
         aColor = pTableColorProp->GetColor();
 
-    const SvxBrushItem* pRowColorProp
+    auto pRowColorProp
         = pTableLine->GetFrameFormat()->GetAttrSet().GetItem<SvxBrushItem>(RES_BACKGROUND);
     if (pRowColorProp && pRowColorProp->GetColor() != COL_AUTO)
         aColor = pRowColorProp->GetColor();
