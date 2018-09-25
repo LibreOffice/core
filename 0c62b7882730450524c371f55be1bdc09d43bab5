@@ -16,6 +16,24 @@
       "revId": "0c62b7882730450524c371f55be1bdc09d43bab5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_209d4e59",
+        "filename": "sw/qa/unit/unoapi.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2018-09-25T18:05:57Z",
+      "side": 1,
+      "message": "Done in https://gerrit.libreoffice.org/60978\nCurrent patch will be updated once that change will be merged: otherwise it will not pass Jenkins",
+      "parentUuid": "ff0f0b1f_400e02e6",
+      "revId": "0c62b7882730450524c371f55be1bdc09d43bab5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
