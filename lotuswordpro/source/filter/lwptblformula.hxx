@@ -209,7 +209,7 @@ private:
     void ReadConst();
     void MarkUnsupported(sal_uInt16 TokenType);
 
-    std::vector<LwpFormulaArg*> m_aStack;
+    std::vector<std::unique_ptr<LwpFormulaArg>> m_aStack;
     sal_uInt16 m_nFormulaRow;
 };
 
