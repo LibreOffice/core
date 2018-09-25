@@ -95,6 +95,8 @@
   <object class="GtkGrid" id="NumberingFormatPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <property name="row_spacing">6</property>
     <property name="column_spacing">12</property>
@@ -245,10 +247,10 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkSpinButton" id="denominatored">
+                      <object class="GtkSpinButton" id="decimalsed">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="adjustment">adjustment2</property>
+                        <property name="adjustment">adjustment1</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -257,10 +259,10 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="decimalsed">
+                      <object class="GtkSpinButton" id="denominatored">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="adjustment">adjustment1</property>
+                        <property name="adjustment">adjustment2</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -294,11 +296,12 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkLabel" id="denominatorft">
+                      <object class="GtkLabel" id="decimalsft">
+                        <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="numberingformatpage|denominatorft">Den_ominator places:</property>
+                        <property name="label" translatable="yes" context="numberingformatpage|decimalsft">_Decimal places:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">denominatored</property>
+                        <property name="mnemonic_widget">decimalsed</property>
                         <property name="xalign">1</property>
                       </object>
                       <packing>
@@ -308,12 +311,11 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="decimalsft">
-                        <property name="visible">True</property>
+                      <object class="GtkLabel" id="denominatorft">
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes" context="numberingformatpage|decimalsft">_Decimal places:</property>
+                        <property name="label" translatable="yes" context="numberingformatpage|denominatorft">Den_ominator places:</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">decimalsed</property>
+                        <property name="mnemonic_widget">denominatored</property>
                         <property name="xalign">1</property>
                       </object>
                       <packing>
@@ -365,8 +367,9 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkCheckButton" id="engineering">
-                        <property name="label" translatable="yes" context="numberingformatpage|engineering">_Engineering notation</property>
+                      <object class="GtkCheckButton" id="thousands">
+                        <property name="label" translatable="yes" context="numberingformatpage|thousands">_Thousands separator</property>
+                        <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
@@ -380,9 +383,8 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="thousands">
-                        <property name="label" translatable="yes" context="numberingformatpage|thousands">_Thousands separator</property>
-                        <property name="visible">True</property>
+                      <object class="GtkCheckButton" id="engineering">
+                        <property name="label" translatable="yes" context="numberingformatpage|engineering">_Engineering notation</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
@@ -440,17 +442,20 @@
               <object class="GtkAlignment" id="alignment3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="vexpand">True</property>
                 <property name="top_padding">6</property>
                 <child>
                   <object class="GtkScrolledWindow" id="scrolledwindow1">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="vexpand">True</property>
                     <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkTreeView" id="categorylb">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="has_focus">True</property>
+                        <property name="vexpand">True</property>
                         <property name="model">liststore1</property>
                         <property name="headers_visible">False</property>
                         <property name="headers_clickable">False</property>
