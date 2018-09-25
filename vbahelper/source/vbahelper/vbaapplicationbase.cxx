@@ -145,7 +145,7 @@ struct VbaTimerInfoHash
     }
 };
 
-typedef std::unordered_map< VbaTimerInfo, VbaTimer*, VbaTimerInfoHash > VbaTimerHashMap;
+typedef std::unordered_map< VbaTimerInfo, std::unique_ptr<VbaTimer>, VbaTimerInfoHash > VbaTimerHashMap;
 
 struct VbaApplicationBase_Impl final
 {
@@ -154,18 +154,6 @@ struct VbaApplicationBase_Impl final
     OUString msCaption;
 
     VbaApplicationBase_Impl() : mbVisible( true ) {}
-
-    ~VbaApplicationBase_Impl()
-    {
-        // remove the remaining timers
-        for ( VbaTimerHashMap::iterator aIter = m_aTimerHash.begin();
-              aIter != m_aTimerHash.end();
-              ++aIter )
-        {
-            delete aIter->second;
-            aIter->second = nullptr;
-        }
-    }
 };
 
 VbaApplicationBase::VbaApplicationBase( const uno::Reference< uno::XComponentContext >& xContext )
@@ -395,15 +383,13 @@ void SAL_CALL VbaApplicationBase::OnTime( const uno::Any& aEarliestTime, const O
     VbaTimerHashMap::iterator aIter = m_pImpl->m_aTimerHash.find( aTimerIndex );
     if ( aIter != m_pImpl->m_aTimerHash.end() )
     {
-        delete aIter->second;
-        aIter->second = nullptr;
         m_pImpl->m_aTimerHash.erase( aIter );
     }
 
     if ( bSetTimer )
     {
         VbaTimer* pTimer = new VbaTimer;
-        m_pImpl->m_aTimerHash[ aTimerIndex ] = pTimer;
+        m_pImpl->m_aTimerHash[ aTimerIndex ].reset(pTimer);
         pTimer->Start( this, aFunction, nEarliestTime, nLatestTime );
     }
 }
