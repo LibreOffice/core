@@ -22,6 +22,7 @@ $(eval $(call gb_PythonTest_add_modules,sw_python,$(SRCDIR)/sw/qa/python,\
 	check_cross_references \
 	check_named_property_values \
 	check_indexed_property_values \
+	check_xautotextgroup \
 	check_styles \
 	check_xtexttable \
 	check_table \
