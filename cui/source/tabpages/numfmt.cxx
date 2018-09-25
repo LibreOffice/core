@@ -1126,10 +1126,8 @@ IMPL_LINK(SvxNumberFormatTabPage, DoubleClickHdl_Impl, weld::TreeView&, rLb, voi
 {
     SelFormatHdl_Impl(&rLb);
 
-    if ( fnOkHdl.IsSet() )
-    {   // temporary solution, should be offered by SfxTabPage
-        fnOkHdl.Call( nullptr );
-    }
+    if (SfxTabDialogController* pController = GetDialogController())
+        pController->getDialog()->response(RET_OK);
     else
     {
         SfxSingleTabDialog* pParent = dynamic_cast<SfxSingleTabDialog*>(GetParentDialog());
@@ -1732,11 +1730,8 @@ void SvxNumberFormatTabPage::AddAutomaticLanguage_Impl(LanguageType eAutoLang, b
 void SvxNumberFormatTabPage::PageCreated(const SfxAllItemSet& aSet)
 {
     const SvxNumberInfoItem* pNumberInfoItem = aSet.GetItem<SvxNumberInfoItem>(SID_ATTR_NUMBERFORMAT_INFO, false);
-    const SfxLinkItem* pLinkItem = aSet.GetItem<SfxLinkItem>(SID_LINK_TYPE, false);
     if (pNumberInfoItem && !pNumItem)
         pNumItem.reset( static_cast<SvxNumberInfoItem*>(pNumberInfoItem->Clone()) );
-    if (pLinkItem)
-        fnOkHdl = pLinkItem->GetValue();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
