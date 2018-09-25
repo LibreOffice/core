@@ -189,7 +189,8 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(TabPageParent pParent,
     const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pParent, "cui/ui/numberingformatpage.ui", "NumberingFormatPage", &rCoreAttrs)
     , nInitFormat(ULONG_MAX)
-    , sAutomaticEntry(CuiResId(RID_SVXSTR_AUTO_ENTRY))
+    , bLegacyAutomaticCurrency(false)
+    , sAutomaticLangEntry(CuiResId(RID_SVXSTR_AUTO_ENTRY))
     , m_pLastActivWindow(nullptr)
     , m_xFtCategory(m_xBuilder->weld_label("categoryft"))
     , m_xLbCategory(m_xBuilder->weld_tree_view("categorylb"))
@@ -223,6 +224,11 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(TabPageParent pParent,
     m_xLbFormat->set_size_request(nWidth, m_xLbFormat->get_height_rows(5));
     m_xLbCurrency->set_size_request(1, -1);  // width of 1, so real width will be that of its LbFormat sibling
     m_xWndPreview->set_size_request(GetTextHeight()*3, -1);
+
+    // Initially remove the "Automatically" entry.
+    m_xLbCurrency->set_active(-1); // First ensure that nothing is selected.
+    sAutomaticCurrencyEntry = m_xLbCurrency->get_text(0);
+    m_xLbCurrency->remove(0);
 
     Init_Impl();
     SetExchangeSupport(); // this page needs ExchangeSupport
@@ -314,6 +320,29 @@ VclPtr<SfxTabPage> SvxNumberFormatTabPage::Create( TabPageParent pParent,
 #*  Output:     ---
 #*
 #************************************************************************/
+
+void SvxNumberFormatTabPage::set_active_currency(sal_Int32 nPos)
+{
+    static_assert(SELPOS_NONE == -1, "SELPOS_NONE was -1 at time of writing");
+    if (nPos == 0 && !bLegacyAutomaticCurrency)
+    {
+        // Insert "Automatically" if currently used so it is selectable.
+        m_xLbCurrency->insert_text(0, sAutomaticCurrencyEntry);
+        bLegacyAutomaticCurrency = true;
+    }
+    if (nPos != -1 && !bLegacyAutomaticCurrency)
+        --nPos;
+    m_xLbCurrency->set_active(nPos);
+}
+
+sal_uInt32 SvxNumberFormatTabPage::get_active_currency() const
+{
+    static_assert(SELPOS_NONE == -1, "SELPOS_NONE was -1 at time of writing");
+    sal_Int32 nCurrencyPos = m_xLbCurrency->get_active();
+    if (nCurrencyPos != -1 && !bLegacyAutomaticCurrency)
+        ++nCurrencyPos;
+    return nCurrencyPos;
+}
 
 void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 {
@@ -467,15 +496,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
                                    aFmtEntryList, aPrevString, pDummy );
 
     if (nCatLbSelPos==CAT_CURRENCY)
-    {
-        sal_Int32 nPos = pNumFmtShell->GetCurrencySymbol();
-        if (nPos == 0)
-        {
-            // Enable "Automatically" if currently used so it is selectable.
-//TODO            m_xLbCurrency->SetEntryFlags( nPos, ListBoxEntryFlags::NONE );
-        }
-        m_xLbCurrency->set_active(nPos);
-    }
+        set_active_currency(pNumFmtShell->GetCurrencySymbol());
 
     nFixedCategory=nCatLbSelPos;
     if(bOneAreaFlag)
@@ -726,9 +747,9 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
         // NumberFormatShell that all new user defined formats are valid.
         pNumFmtShell->ValidateNewEntries();
         if(m_xLbLanguage->get_visible() &&
-                m_xLbLanguage->find_text(sAutomaticEntry) != -1)
+                m_xLbLanguage->find_text(sAutomaticLangEntry) != -1)
                 rCoreAttrs->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ADD_AUTO,
-                    m_xLbLanguage->get_active_text() == sAutomaticEntry));
+                    m_xLbLanguage->get_active_text() == sAutomaticLangEntry));
     }
 
     return bDataChanged;
@@ -746,16 +767,14 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
 {
     OUString    aEntry;
     OUString    aTmpString;
-//TODO    vcl::Font   aFont=m_xLbCategory->GetFont();
-    vcl::Font   aFont;
     size_t      i = 0;
     short       nTmpCatPos;
 
     m_xLbFormat->clear();
-    m_xLbFormat->freeze();
-
-    if( rEntries.empty() )
+    if (rEntries.empty())
         return;
+
+    m_xLbFormat->freeze();
 
     if(bOneAreaFlag)
     {
@@ -776,7 +795,6 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
                                     aTmpString=aEntry;
                                 else
                                     aTmpString = pNumFmtShell->GetStandardName();
-//TODO                                m_xLbFormat->InsertFontEntry( aTmpString, aFont );
                                 m_xLbFormat->append_text(aTmpString);
                                 break;
 
@@ -793,13 +811,12 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
             {
                 Color* pPreviewColor = nullptr;
                 OUString aPreviewString( GetExpColorString( pPreviewColor, aEntry, aPrivCat ) );
-//TODO                vcl::Font aEntryFont( m_xLbFormat->GetFont() );
-//TODO                m_xLbFormat->InsertFontEntry( aPreviewString, aEntryFont, pPreviewColor );
                 m_xLbFormat->append_text(aPreviewString);
+                if (pPreviewColor)
+                    m_xLbFormat->set_font_color(m_xLbFormat->n_children() -1, *pPreviewColor);
             }
             else
             {
-//TODO                m_xLbFormat->InsertFontEntry(aEntry,aFont);
                 m_xLbFormat->append_text(aEntry);
             }
         }
@@ -829,7 +846,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
     sal_uInt16  nZeroes             = 0;
     bool        bNegRed             = false;
     bool        bThousand           = false;
-    sal_Int32   nCurrencyPos        = m_xLbCurrency->get_active();
+    sal_Int32   nCurrencyPos        = get_active_currency();
 
     if(bOneAreaFlag)
         nCurCategory=nFixedCategory;
@@ -845,12 +862,11 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
         sal_uInt16 nTstPos=pNumFmtShell->FindCurrencyFormat(theFormat);
         if(nCurrencyPos!=static_cast<sal_Int32>(nTstPos) && nTstPos!=sal_uInt16(-1))
         {
-            m_xLbCurrency->set_active(nTstPos);
+            set_active_currency(nTstPos);
             pNumFmtShell->SetCurrencySymbol(nTstPos);
             bDoIt=true;
         }
     }
-
 
     if ( nCategory != nCurCategory || bDoIt)
     {
@@ -1170,11 +1186,7 @@ void SvxNumberFormatTabPage::SelFormatHdl_Impl(void * pLb)
     }
 
     if (nTmpCatPos==CAT_CURRENCY && pLb == m_xLbCurrency.get())
-    {
-        sal_Int32 nCurrencyPos = m_xLbCurrency->get_active();
-        pNumFmtShell->SetCurrencySymbol(static_cast<sal_uInt32>(nCurrencyPos));
-    }
-
+        pNumFmtShell->SetCurrencySymbol(get_active_currency());
 
     // Format-ListBox ----------------------------------------------------
     if (pLb == m_xLbFormat.get())
@@ -1302,10 +1314,8 @@ bool SvxNumberFormatTabPage::Click_Impl(weld::Button& rIB)
             if (bAdded)
                 m_xLbLanguage->set_active_id(pNumFmtShell->GetCurLanguage());
 
-            if(nCatLbSelPos==CAT_CURRENCY)
-            {
-                m_xLbCurrency->set_active(static_cast<sal_uInt16>(pNumFmtShell->GetCurrencySymbol()));
-            }
+            if (nCatLbSelPos==CAT_CURRENCY)
+                set_active_currency(pNumFmtShell->GetCurrencySymbol());
 
             if(bOneAreaFlag && (nFixedCategory!=nCatLbSelPos))
             {
@@ -1468,9 +1478,8 @@ void SvxNumberFormatTabPage::EditHdl_Impl(const weld::Entry* pEdFormat)
             if(bUserDef)
             {
                 sal_uInt16 nTmpCurPos=pNumFmtShell->FindCurrencyFormat(aFormat );
-
-                if(nTmpCurPos!=sal_uInt16(-1))
-                    m_xLbCurrency->set_active(nTmpCurPos);
+                if (nTmpCurPos != sal_uInt16(-1))
+                    set_active_currency(nTmpCurPos);
             }
             short nPosi=pNumFmtShell->GetListPos4Entry(aFormat);
             if(nPosi>=0)
@@ -1689,15 +1698,14 @@ void SvxNumberFormatTabPage::FillCurrencyBox()
     sal_uInt16  nSelPos=0;
     pNumFmtShell->GetCurrencySymbols(aList, &nSelPos);
 
+    m_xLbCurrency->freeze();
+    m_xLbCurrency->clear();
+    bLegacyAutomaticCurrency = false;
     for (std::vector<OUString>::iterator i = aList.begin() + 1;i != aList.end(); ++i)
         m_xLbCurrency->append_text(*i);
+    m_xLbCurrency->thaw();
 
-    // Initially disable the "Automatically" entry. First ensure that nothing
-    // is selected, else if the to be disabled (first) entry was selected it
-    // would be sticky when disabled and could not be deselected!
-    m_xLbCurrency->set_active(-1);
-//TODO    m_xLbCurrency->SetEntryFlags( 0, ListBoxEntryFlags::DisableSelection | ListBoxEntryFlags::DrawDisabled);
-    m_xLbCurrency->set_active(nSelPos);
+    set_active_currency(nSelPos);
 }
 
 void SvxNumberFormatTabPage::SetCategory(sal_uInt16 nPos)
@@ -1732,7 +1740,7 @@ void SvxNumberFormatTabPage::SetCategory(sal_uInt16 nPos)
 void SvxNumberFormatTabPage::AddAutomaticLanguage_Impl(LanguageType eAutoLang, bool bSelect)
 {
     m_xLbLanguage->remove_id(LANGUAGE_SYSTEM);
-    m_xLbLanguage->append(eAutoLang, sAutomaticEntry);
+    m_xLbLanguage->append(eAutoLang, sAutomaticLangEntry);
     if (bSelect)
         m_xLbLanguage->set_active_id(eAutoLang);
 }

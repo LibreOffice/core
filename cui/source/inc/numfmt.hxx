@@ -90,9 +90,11 @@ private:
 
     bool                bNumItemFlag; ///< for handling with DocShell
     bool                bOneAreaFlag;
+    bool                bLegacyAutomaticCurrency;
     short                   nFixedCategory;
 
-    OUString sAutomaticEntry;
+    OUString sAutomaticLangEntry;
+    OUString sAutomaticCurrencyEntry;
 
     weld::Widget* m_pLastActivWindow;
 
@@ -153,6 +155,12 @@ private:
     DECL_LINK( TimeHdl_Impl, Timer *, void);
     void EditHdl_Impl(const weld::Entry*);
     void OptHdl_Impl(void const *);
+
+    // set and get currency, taking into account if the legacy
+    // automatic currency entry exists
+    void set_active_currency(sal_Int32 nCurCurrencyEntryPos);
+    sal_uInt32 get_active_currency() const;
+
 };
 
 #endif

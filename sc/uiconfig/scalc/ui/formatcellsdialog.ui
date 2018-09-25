@@ -96,6 +96,7 @@
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
+            <property name="tab_pos">left</property>
             <property name="scrollable">True</property>
             <child>
               <object class="GtkGrid">

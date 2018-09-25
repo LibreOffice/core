@@ -73,23 +73,16 @@
       </row>
     </data>
   </object>
-  <object class="GtkListStore" id="liststore2">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="numberingformatpage|liststore2">Automatically</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkListStore" id="liststore3">
     <columns>
       <!-- column-name text -->
       <column type="gchararray"/>
       <!-- column-name id -->
       <column type="gchararray"/>
+      <!-- column-name image -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name textcolor -->
+      <column type="GdkRGBA"/>
     </columns>
   </object>
   <object class="GtkGrid" id="NumberingFormatPage">
@@ -522,12 +515,14 @@
                     <property name="vexpand">True</property>
                     <property name="row_spacing">6</property>
                     <child>
-                      <object class="GtkComboBox" id="currencylb">
+                      <object class="GtkComboBoxText" id="currencylb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">start</property>
                         <property name="hexpand">True</property>
-                        <property name="model">liststore2</property>
+                        <items>
+                          <item translatable="yes" context="numberingformatpage|liststore2">Automatically</item>
+                        </items>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -559,6 +554,7 @@
                                   <object class="GtkCellRendererText" id="cellrenderertext2"/>
                                   <attributes>
                                     <attribute name="text">0</attribute>
+                                    <attribute name="foreground-rgba">3</attribute>
                                   </attributes>
                                 </child>
                               </object>
