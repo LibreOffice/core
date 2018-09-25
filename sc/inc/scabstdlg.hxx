@@ -515,8 +515,8 @@ public:
                                                                     bool                    bOnlyDbtoolsEncodings,
                                                                     bool                    bImport = true ) = 0;
 
-    virtual VclPtr<SfxAbstractTabDialog> CreateScAttrDlg( vcl::Window*          pParent,
-                                                    const SfxItemSet* pCellAttrs ) = 0;
+    virtual VclPtr<SfxAbstractTabDialog> CreateScAttrDlg(weld::Window* pParent,
+                                                    const SfxItemSet* pCellAttrs) = 0;
 
     virtual VclPtr<SfxAbstractTabDialog> CreateScHFEditDlg(vcl::Window*       pParent,
                                                     const SfxItemSet&   rCoreSet,
