@@ -12,9 +12,9 @@
    width="32"
    version="1.1"
    id="svg1191"
-   sodipodi:docname="wr08.svg"
+   sodipodi:docname="wrapcontour.svg"
    inkscape:version="0.92.3 (unknown)"
-   inkscape:export-filename="/home/rizmut/Dokumen/Rizmut/Github/libreoffice-style-elementary/images_elementary/cmd/32/wrapcontour.png"
+   inkscape:export-filename="/home/rizmut/Documents/Rizmut/Github/libreoffice-style-elementary/images_elementary/cmd/32/wrapthrough.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <metadata
@@ -63,8 +63,8 @@
      id="namedview1193"
      showgrid="true"
      inkscape:zoom="8"
-     inkscape:cx="3.898886"
-     inkscape:cy="26.613226"
+     inkscape:cx="21.188176"
+     inkscape:cy="20.768141"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -100,7 +100,7 @@
   </linearGradient>
   <g
      id="g3308"
-     transform="matrix(0.71523068,0.71523068,-0.71523068,0.71523068,4.0402369,-2.0110627)">
+     transform="matrix(0.71523068,0.71523068,-0.71523068,0.71523068,5.8935468,-2.0110627)">
     <path
        sodipodi:nodetypes="ccccc"
        id="path2071"
@@ -118,13 +118,13 @@
      transform="matrix(1.8666667,0,0,1,-6.879167,-285.88748)"
      id="g1165">
     <path
-       d="m 4.5357144,290.12081 -0.5669643,0 -10e-8,0.52917 0.5669644,0 z"
+       d="m 5.3861608,290.12081 -1.4174107,0 -10e-8,0.52917 1.4174108,0 z"
        id="path1161"
        inkscape:connector-curvature="0"
        style="opacity:0.35;fill:#ffffff;stroke-width:0.30818799"
        sodipodi:nodetypes="ccccc" />
     <path
-       d="m 3.96875,289.85623 0.5669644,0 v 0.52917 l -0.5669644,0 z"
+       d="m 3.96875,289.85623 1.4174108,0 v 0.52917 l -1.4174108,0 z"
        id="path1163"
        inkscape:connector-curvature="0"
        style="fill:url(#a)"
@@ -134,13 +134,13 @@
      transform="matrix(1.8666667,0,0,1,-6.879167,-284.56456)"
      id="g1171">
     <path
-       d="m 4.9609376,290.1213 -0.9921875,0 v 0.52868 l 0.9921875,0 z"
+       d="m 5.811384,290.1213 -1.8426339,0 v 0.52868 l 1.8426339,0 z"
        id="path1167"
        inkscape:connector-curvature="0"
        style="opacity:0.35;fill:#ffffff;stroke-width:0.30818799"
        sodipodi:nodetypes="ccccc" />
     <path
-       d="m 3.96875,289.85623 0.9921875,0 v 0.52917 l -0.9921875,0 z"
+       d="m 3.96875,289.85623 1.8426339,0 v 0.52917 l -1.8426339,0 z"
        id="path1169"
        inkscape:connector-curvature="0"
        style="fill:url(#a)"
@@ -164,13 +164,13 @@
      transform="matrix(1.8666667,0,0,1,-6.879167,-287.2104)"
      id="g1183">
     <path
-       d="m 4.9609376,290.25329 -0.9921876,0 v 0.39669 l 0.9921876,0 z"
+       d="m 5.811384,290.25329 -1.842634,0 v 0.39669 l 1.842634,0 z"
        id="path1179"
        inkscape:connector-curvature="0"
        style="opacity:0.35;fill:#ffffff;stroke-width:0.30818799"
        sodipodi:nodetypes="ccccc" />
     <path
-       d="m 3.96875,289.85623 0.9921876,0 v 0.52917 l -0.9921876,0 z"
+       d="m 3.96875,289.85623 1.842634,0 v 0.52917 l -1.842634,0 z"
        id="path1181"
        inkscape:connector-curvature="0"
        style="fill:url(#a)"

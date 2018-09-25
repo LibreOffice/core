@@ -12,9 +12,9 @@
    width="32"
    version="1.1"
    id="svg1191"
-   sodipodi:docname="wr08.svg"
-   inkscape:version="0.92.3 (unknown)"
-   inkscape:export-filename="/home/rizmut/Dokumen/Rizmut/Github/libreoffice-style-elementary/images_elementary/cmd/32/wrapcontour.png"
+   sodipodi:docname="wrapthrough.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:export-filename="/home/rizmut/Documents/Rizmut/Github/libreoffice-style-elementary/images_elementary/cmd/32/wrapoff.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <metadata
@@ -33,12 +33,12 @@
      id="defs1195">
     <linearGradient
        id="d"
-       gradientTransform="matrix(0.39850607,0,0,0.4269723,0.99195645,2.844603)"
+       gradientTransform="matrix(0.49388712,0,0,0.52916666,0.14869584,2.512748)"
        gradientUnits="userSpaceOnUse"
-       x1="6.7329144"
-       x2="11.780465"
-       y1="0.96986985"
-       y2="6.0204782">
+       x1="8.2703867"
+       x2="8.2703867"
+       y1="-0.24850014"
+       y2="6.7515001">
       <stop
          offset="0"
          stop-color="#cd9ef7"
@@ -59,12 +59,12 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1366"
-     inkscape:window-height="706"
+     inkscape:window-height="696"
      id="namedview1193"
      showgrid="true"
-     inkscape:zoom="8"
-     inkscape:cx="3.898886"
-     inkscape:cy="26.613226"
+     inkscape:zoom="11.313709"
+     inkscape:cx="8.4433967"
+     inkscape:cy="18.770971"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -99,78 +99,77 @@
        id="stop1158" />
   </linearGradient>
   <g
-     id="g3308"
-     transform="matrix(0.71523068,0.71523068,-0.71523068,0.71523068,4.0402369,-2.0110627)">
+     id="g3308">
     <path
        sodipodi:nodetypes="ccccc"
        id="path2071"
-       d="m 3.1132279,2.8436384 2.7734714,-9.762e-4 0.00224,2.7759096 -2.7734725,9.763e-4 z"
-       style="fill:url(#d);stroke:#7239b3;stroke-width:0.26164195;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.75"
+       d="m 2.2485195,2.5146529 3.9664588,-0.00121 0.00277,3.4403141 -3.96646,0.00121 z"
+       style="fill:url(#d);stroke:#7239b3;stroke-width:0.26458335;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:0.75"
        inkscape:connector-curvature="0" />
     <path
-       sodipodi:nodetypes="ccc"
+       sodipodi:nodetypes="cc"
        id="path2073"
-       d="M 3.3800009,5.4880377 3.3729547,3.0971645 5.735158,3.1260279"
+       d="m 2.3808112,2.7813529 3.7018755,-0.00121"
        style="opacity:0.3;fill:none;stroke:#ffffff;stroke-width:0.26617086"
        inkscape:connector-curvature="0" />
   </g>
   <g
-     transform="matrix(1.8666667,0,0,1,-6.879167,-285.88748)"
+     transform="matrix(1.8666667 0 0 1 -6.879167 -285.88748)"
      id="g1165">
     <path
-       d="m 4.5357144,290.12081 -0.5669643,0 -10e-8,0.52917 0.5669644,0 z"
+       d="m 7.9375001,290.12081 -3.96875,0 -10e-8,0.52917 3.9687501,0 z"
        id="path1161"
        inkscape:connector-curvature="0"
        style="opacity:0.35;fill:#ffffff;stroke-width:0.30818799"
        sodipodi:nodetypes="ccccc" />
     <path
-       d="m 3.96875,289.85623 0.5669644,0 v 0.52917 l -0.5669644,0 z"
+       d="m 3.96875,289.85623 3.9687501,0 v 0.52917 l -3.9687501,0 z"
        id="path1163"
        inkscape:connector-curvature="0"
        style="fill:url(#a)"
        sodipodi:nodetypes="ccccc" />
   </g>
   <g
-     transform="matrix(1.8666667,0,0,1,-6.879167,-284.56456)"
+     transform="matrix(1.8666667 0 0 1 -6.879167 -284.564563)"
      id="g1171">
     <path
-       d="m 4.9609376,290.1213 -0.9921875,0 v 0.52868 l 0.9921875,0 z"
+       d="m 7.9375002,290.1213 -3.9687501,0 v 0.52868 l 3.9687501,0 z"
        id="path1167"
        inkscape:connector-curvature="0"
        style="opacity:0.35;fill:#ffffff;stroke-width:0.30818799"
        sodipodi:nodetypes="ccccc" />
     <path
-       d="m 3.96875,289.85623 0.9921875,0 v 0.52917 l -0.9921875,0 z"
+       d="m 3.96875,289.85623 3.9687501,0 v 0.52917 l -3.9687501,0 z"
        id="path1169"
        inkscape:connector-curvature="0"
        style="fill:url(#a)"
        sodipodi:nodetypes="ccccc" />
   </g>
   <g
-     transform="matrix(1.8666667,0,0,1,-6.879167,-288.53332)"
+     transform="matrix(1.8666667 0 0 1 -6.879167 -288.53332)"
      id="g1177">
     <path
-       d="m 7.9375,290.25329 c 0,-0.0712 -0.2070112,-0.13217 -0.4487234,-0.13217 H 4.4979167 c -0.2417118,0 -0.5291667,0.061 -0.5291667,0.13217 v 0.26434 c 0,0.0712 0.2874549,0.13217 0.5291667,0.13217 0.00101,10e-4 2.9908599,0 2.9908599,0 0.2417122,0 0.4487234,-0.061 0.4487234,-0.13217 z"
+       d="m7.9375 290.25329c0-.0712-.2070112-.13217-.4487234-.13217h-2.9908599c-.2417118 0-.5291667.061-.5291667.13217v.26434c0 .0712.2874549.13217.5291667.13217.00101.001 2.9908599 0 2.9908599 0 .2417122 0 .4487234-.061.4487234-.13217z"
        id="path1173"
-       inkscape:connector-curvature="0"
-       style="opacity:0.35;fill:#ffffff;stroke-width:0.30818799" />
+       stroke-width=".308188"
+       fill="#fff"
+       opacity=".35" />
     <path
-       d="M 3.96875,289.85623 H 7.9375 v 0.52917 H 3.96875 Z"
+       d="m3.96875 289.85623h3.96875v.52917h-3.96875z"
        id="path1175"
-       inkscape:connector-curvature="0"
-       style="fill:url(#a)" />
+       fill="url(#a)" />
   </g>
   <g
-     transform="matrix(1.8666667,0,0,1,-6.879167,-287.2104)"
+     transform="matrix(1.8666667 0 0 1 -6.879167 -287.2104)"
      id="g1183">
     <path
-       d="m 4.9609376,290.25329 -0.9921876,0 v 0.39669 l 0.9921876,0 z"
+       d="m 7.9375001,290.25329 -3.9687501,0 v 0.39669 l 3.9687501,0 z"
        id="path1179"
        inkscape:connector-curvature="0"
        style="opacity:0.35;fill:#ffffff;stroke-width:0.30818799"
        sodipodi:nodetypes="ccccc" />
     <path
-       d="m 3.96875,289.85623 0.9921876,0 v 0.52917 l -0.9921876,0 z"
+       d="m 3.96875,289.85623 3.9687501,0 v 0.52917 l -3.9687501,0 z"
        id="path1181"
        inkscape:connector-curvature="0"
        style="fill:url(#a)"
