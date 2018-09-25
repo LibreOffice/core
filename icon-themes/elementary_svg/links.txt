@@ -1126,11 +1126,6 @@ cmd/sc_sortdown.svg cmd/sc_sortdescending.svg
 cmd/sc_sortup.svg cmd/sc_sortascending.svg
 cmd/sc_tablesort.svg cmd/sc_sortascending.svg
 
-# Contour
-cmd/32/contourdialog.svg cmd/32/imagemapdialog.svg
-cmd/lc_contourdialog.svg cmd/lc_imagemapdialog.svg
-cmd/sc_contourdialog.svg cmd/sc_imagemapdialog.svg
-
 # Config
 cmd/32/formatselection.svg cmd/32/configuredialog.svg
 cmd/lc_formatselection.svg cmd/lc_configuredialog.svg
@@ -1950,6 +1945,15 @@ sw/res/sr20017.svg cmd/sc_insertindexesentry.svg
 
 sw/res/sx03.svg cmd/sc_dbqueryedit.svg
 
+sw/res/wr01.svg cmd/32/wrapoff.svg
+sw/res/wr02.svg cmd/32/wrapleft.svg
+sw/res/wr03.svg cmd/32/wrapright.svg
+sw/res/wr04.svg cmd/32/wrapon.svg
+sw/res/wr05.svg cmd/32/wrapthrough.svg
+sw/res/wr06.svg cmd/32/wrapideal.svg
+sw/res/wr07.svg cmd/32/wrapoff.svg
+sw/res/wr011.svg cmd/32/wrapideal.svg
+
 # res
 sw/res/all_left.svg cmd/sc_firstrecord.svg
 sw/res/all_right.svg cmd/sc_lastrecord.svg
@@ -1965,6 +1969,12 @@ sw/res/zetlver2.svg svx/res/zetlver2.svg
 # vcl
 # ==============================================
 vcl/res/index.svg cmd/sc_insertmultiindex.svg
+
+# wrap
+# ==============================================
+cmd/32/wrapmenu.svg cmd/32/wrapon.svg
+cmd/lc_wrapmenu.svg cmd/lc_wrapon.svg
+cmd/sc_wrapmenu.svg cmd/sc_wrapon.svg
 
 # xmlsecurity
 # ==============================================
