@@ -496,7 +496,7 @@ SdrObject* SelectionHelper::getMarkHandlesObject( SdrObject* pObj )
 SdrObject* SelectionHelper::getObjectToMark()
 {
     //return the selected object itself
-    //or a specific other object if that exsists
+    //or a specific other object if that exists
     SdrObject* pObj = m_pSelectedObj;
     m_pMarkObj = pObj;
 
@@ -571,7 +571,7 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
     //.. or 3. feature from drawinglayer to create handles for each shape ... (bad performance ... ?) ?
 
     //scenario 1 is now used:
-    //if a child with name MarkHandles exsists
+    //if a child with name MarkHandles exists
     //this child is marked instead of the logical selected object
 
 /*

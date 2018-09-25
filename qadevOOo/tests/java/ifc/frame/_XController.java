@@ -47,7 +47,7 @@ import com.sun.star.util.XModifiable;
 *  <li> <code>'SecondModel'</code> (of type <code>XModel</code>):
 *   other model, used for tests </li>
 *  <li> <code>'HasViewData'</code> (of type <code>Boolean</code>):
-*   (optional relation) if it exsists, so controller has no view data</li>
+*   (optional relation) if it exists, so controller has no view data</li>
 *  <li> <code>'SecondController'</code> (of type <code>XController</code>):
 *   other controller, used for tests </li>
 * </ul> <p>

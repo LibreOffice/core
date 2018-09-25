@@ -60,7 +60,7 @@ import lib.TestEnvironment;
 *  to find other frame than itself.</li>
 *
 *  <li> <code>'Desktop'</code> (of type <code>Object</code>):
-*  if exsists, then desktop component is tested</li>
+*  if exists, then desktop component is tested</li>
 * </ul> <p>
 * Test is <b> NOT </b> multithread compliant. <p>
 * @see com.sun.star.frame.XFrame

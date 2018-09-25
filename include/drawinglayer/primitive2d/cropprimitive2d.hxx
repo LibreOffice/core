@@ -41,7 +41,7 @@ namespace drawinglayer
             to get to the uncropped original content.
 
             Thus a transformation has to be calculated which will be applied
-            to the already exsisting content to get it to the uncropped state
+            to the already existing content to get it to the uncropped state
             and then this is masked with the current state (mask polygon
             created from unit polygon and maTransformation).
 

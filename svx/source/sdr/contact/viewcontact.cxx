@@ -177,7 +177,7 @@ ViewContact* ViewContact::GetParentContact() const
 
 void ViewContact::ActionChildInserted(ViewContact& rChild)
 {
-    // propagate change to all exsisting visualisations which
+    // propagate change to all existing visualisations which
     // will force a VOC for the new child and invalidate its range
     const sal_uInt32 nCount(maViewObjectContactVector.size());
 
