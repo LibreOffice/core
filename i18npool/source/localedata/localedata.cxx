@@ -481,11 +481,11 @@ public:
 
     oslGenericFunction getFunctionSymbolByName(
             const OUString& localeName, const sal_Char* pFunction,
-            LocaleDataLookupTableItem** pOutCachedItem );
+            std::unique_ptr<LocaleDataLookupTableItem>* pOutCachedItem );
 
 private:
     ::osl::Mutex maMutex;
-    ::std::vector< LocaleDataLookupTableItem* >  maLookupTable;
+    ::std::vector< LocaleDataLookupTableItem >  maLookupTable;
 };
 
 // from instance.hxx: Helper base class for a late-initialized
@@ -502,20 +502,14 @@ lcl_LookupTableHelper::lcl_LookupTableHelper()
 
 lcl_LookupTableHelper::~lcl_LookupTableHelper()
 {
-    std::vector<LocaleDataLookupTableItem*>::const_iterator aEnd(maLookupTable.end());
-    std::vector<LocaleDataLookupTableItem*>::iterator aIter(maLookupTable.begin());
-
-    for ( ; aIter != aEnd; ++aIter ) {
-        LocaleDataLookupTableItem* pItem = *aIter;
-        delete pItem->module;
-        delete pItem;
+    for ( LocaleDataLookupTableItem& item : maLookupTable ) {
+        delete item.module;
     }
-    maLookupTable.clear();
 }
 
 oslGenericFunction lcl_LookupTableHelper::getFunctionSymbolByName(
         const OUString& localeName, const sal_Char* pFunction,
-        LocaleDataLookupTableItem** pOutCachedItem )
+        std::unique_ptr<LocaleDataLookupTableItem>* pOutCachedItem )
 {
     OUString aFallback;
     bool bFallback = (localeName.indexOf( cUnder) < 0);
@@ -540,14 +534,14 @@ oslGenericFunction lcl_LookupTableHelper::getFunctionSymbolByName(
                         strlen(i.pLocale) + 1 + strlen(pFunction)));
             {
                 ::osl::MutexGuard aGuard( maMutex );
-                for (LocaleDataLookupTableItem* pCurrent : maLookupTable)
+                for (LocaleDataLookupTableItem & rCurrent : maLookupTable)
                 {
-                    if (pCurrent->dllName == i.pLib)
+                    if (rCurrent.dllName == i.pLib)
                     {
                         OSL_ASSERT( pOutCachedItem );
                         if( pOutCachedItem )
                         {
-                            (*pOutCachedItem) = new LocaleDataLookupTableItem( *pCurrent );
+                            (*pOutCachedItem).reset(new LocaleDataLookupTableItem( rCurrent ));
                             (*pOutCachedItem)->localeName = i.pLocale;
                             return (*pOutCachedItem)->module->getFunctionSymbol(
                                     aBuf.appendAscii( pFunction).append( cUnder).
@@ -570,12 +564,11 @@ oslGenericFunction lcl_LookupTableHelper::getFunctionSymbolByName(
             if ( module->loadRelative(&thisModule, aBuf.makeStringAndClear()) )
             {
                 ::osl::MutexGuard aGuard( maMutex );
-                LocaleDataLookupTableItem* pNewItem = new LocaleDataLookupTableItem(i.pLib, module, i.pLocale);
-                maLookupTable.push_back(pNewItem);
+                maLookupTable.emplace_back(i.pLib, module, i.pLocale);
                 OSL_ASSERT( pOutCachedItem );
                 if( pOutCachedItem )
                 {
-                    (*pOutCachedItem) = new LocaleDataLookupTableItem( *pNewItem );
+                    pOutCachedItem->reset(new LocaleDataLookupTableItem( maLookupTable.back() ));
                     return module->getFunctionSymbol(
                             aBuf.appendAscii(pFunction).append(cUnder).
                             appendAscii((*pOutCachedItem)->localeName).makeStringAndClear());
@@ -1455,7 +1448,7 @@ oslGenericFunction LocaleDataImpl::getFunctionSymbol( const Locale& rLocale, con
     }
 
     oslGenericFunction pSymbol = nullptr;
-    LocaleDataLookupTableItem *pCachedItem = nullptr;
+    std::unique_ptr<LocaleDataLookupTableItem> pCachedItem;
 
     // Load function with name <func>_<lang>_<country> or <func>_<bcp47> and
     // fallbacks.
@@ -1482,7 +1475,7 @@ oslGenericFunction LocaleDataImpl::getFunctionSymbol( const Locale& rLocale, con
         throw RuntimeException();
 
     if (pCachedItem)
-        cachedItem.reset(pCachedItem);
+        cachedItem = std::move(pCachedItem);
     if (cachedItem.get())
         cachedItem->aLocale = rLocale;
 
@@ -1500,15 +1493,11 @@ LocaleDataImpl::getAllInstalledLocaleNames()
 
         // Check if the locale is really available and not just in the table,
         // don't allow fall backs.
-        LocaleDataLookupTableItem *pCachedItem = nullptr;
+        std::unique_ptr<LocaleDataLookupTableItem> pCachedItem;
         if (lcl_LookupTableStatic::get().getFunctionSymbolByName( name, "getLocaleItem", &pCachedItem )) {
             if( pCachedItem )
-                cachedItem.reset( pCachedItem );
+                cachedItem = std::move( pCachedItem );
             seq[nInstalled++] = LanguageTag::convertToLocale( name.replace( cUnder, cHyphen), false);
-        }
-        else
-        {
-            delete pCachedItem;
         }
     }
     if ( nInstalled < nbOfLocales )
