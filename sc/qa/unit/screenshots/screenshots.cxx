@@ -268,11 +268,9 @@ VclPtr<VclAbstractDialog> ScScreenshotTest::createDialogByID(sal_uInt32 nID)
             mpItemSet->MergeRange(SID_ATTR_NUMBERFORMAT_INFO, SID_ATTR_NUMBERFORMAT_INFO);
             mpItemSet->Put(*pNumberInfoItem);
 
-            pReturnDialog = mpFact->CreateScAttrDlg(mpViewShell->GetDialogParent(), mpItemSet.get());
+            pReturnDialog = mpFact->CreateScAttrDlg(mpViewShell->GetFrameWeld(), mpItemSet.get());
             break;
         }
-           //ScopedVclPtrInstance<ScShareDocumentDlg> pDlg14( mpViewShell->GetDialogParent(), &rViewData );
-            //ScopedVclPtrInstance<ScTableProtectionDlg> pDlg16(mpViewShell->GetDialogParent());
         default:
             break;
     }
