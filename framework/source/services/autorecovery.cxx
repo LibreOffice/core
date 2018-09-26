@@ -208,7 +208,7 @@ public:
         /// the Auto/Emergency saved document is not really up-to-date (some changes can be missing)
         E_INCOMPLETE = 128,
         /// the Auto/Emergency saved document was processed successfully
-        E_SUCCEDED = 512
+        E_SUCCEEDED = 512
     };
 
     /** @short  indicates the results of a FAILURE_SAFE operation
@@ -3103,7 +3103,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
         // ... you know the reason: to know it on recovery time if next line crash .-)
         rInfo.DocumentState &= ~AutoRecovery::E_TRY_SAVE;
         rInfo.DocumentState |=  AutoRecovery::E_HANDLED;
-        rInfo.DocumentState |=  AutoRecovery::E_SUCCEDED;
+        rInfo.DocumentState |=  AutoRecovery::E_SUCCEEDED;
     }
     else
     {
@@ -3145,7 +3145,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
     for (auto & info : m_lDocCache)
     {
         // Such documents are already loaded by the last loop.
-        // Don't check E_SUCCEDED here! It may be the final state of an AutoSave
+        // Don't check E_SUCCEEDED here! It may be the final state of an AutoSave
         // operation before!!!
         if ((info.DocumentState & AutoRecovery::E_HANDLED) == AutoRecovery::E_HANDLED)
             continue;
@@ -3296,7 +3296,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         info.DocumentState &= ~AutoRecovery::E_TRY_LOAD_BACKUP;
         info.DocumentState &= ~AutoRecovery::E_TRY_LOAD_ORIGINAL;
         info.DocumentState |=  AutoRecovery::E_HANDLED;
-        info.DocumentState |=  AutoRecovery::E_SUCCEDED;
+        info.DocumentState |=  AutoRecovery::E_SUCCEEDED;
 
         implts_flushConfigItem(info);
         implts_informListener(eJob,
