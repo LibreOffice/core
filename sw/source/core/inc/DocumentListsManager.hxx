@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTLISTSMANAGER_HXX
 
 #include <IDocumentListsAccess.hxx>
+#include <memory>
 #include <unordered_map>
 
 class SwList;
@@ -38,7 +39,6 @@ class DocumentListsManager : public IDocumentListsAccess
 
         SwList* createList( const OUString& rListId,
                                     const OUString& rDefaultListStyleName ) override;
-        void deleteList( const OUString& rListId ) override;
         SwList* getListByName( const OUString& rListId ) const override;
 
         void createListForListStyle( const OUString& rListStyleName ) override;
@@ -57,11 +57,10 @@ class DocumentListsManager : public IDocumentListsAccess
 
         SwDoc& m_rDoc;
 
-        typedef std::unordered_map<OUString, SwList*> tHashMapForLists;
         // container to hold the lists of the text document
-        tHashMapForLists maLists;
+        std::unordered_map<OUString, std::unique_ptr<SwList>> maLists;
         // relation between list style and its default list
-        tHashMapForLists maListStyleLists;
+        std::unordered_map<OUString, SwList*> maListStyleLists;
 
         const OUString CreateUniqueListId();
         const OUString MakeListIdUnique( const OUString& aSuggestedUniqueListId );
