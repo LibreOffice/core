@@ -360,9 +360,9 @@ namespace
     {
         static struct _unit_table
         {
-            FieldUnit eFieldUnit;
-            sal_Int16 nMeasurementUnit;
-            sal_Int16 nFieldToMeasureFactor;
+            FieldUnit const eFieldUnit;
+            sal_Int16 const nMeasurementUnit;
+            sal_Int16 const nFieldToMeasureFactor;
         } aUnits[] = {
             { FUNIT_NONE,       -1 , -1},
             { FUNIT_MM,         MeasureUnit::MM,            1 },    // must precede MM_10TH

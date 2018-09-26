@@ -57,7 +57,7 @@ private:
             xCallback( rCallback ), aData( rAny ) {}
 
         css::uno::Reference< css::awt::XCallback > xCallback;
-        css::uno::Any                              aData;
+        css::uno::Any const                        aData;
     };
 
     DECL_STATIC_LINK( AsyncCallback, Notify_Impl, void*, void );

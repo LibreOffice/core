@@ -415,7 +415,7 @@ public:
         delete this;
     }
 
-    sal_Int32 m_nPauseMilliseconds;
+    sal_Int32 const m_nPauseMilliseconds;
 };
 
 class VCLXToolkitMutexHelper
@@ -439,8 +439,8 @@ class VCLXToolkit : public VCLXToolkitMutexHelper,
     ::comphelper::OInterfaceContainerHelper2 m_aTopWindowListeners;
     ::comphelper::OInterfaceContainerHelper2 m_aKeyHandlers;
     ::comphelper::OInterfaceContainerHelper2 m_aFocusListeners;
-    ::Link<VclSimpleEvent&,void> m_aEventListenerLink;
-    ::Link<VclWindowEvent&,bool> m_aKeyListenerLink;
+    ::Link<VclSimpleEvent&,void> const m_aEventListenerLink;
+    ::Link<VclWindowEvent&,bool> const m_aKeyListenerLink;
     bool m_bEventListener;
     bool m_bKeyListener;
 
@@ -801,9 +801,9 @@ WindowType ImplGetComponentType( const OUString& rServiceName )
 
 struct MessageBoxTypeInfo
 {
-    css::awt::MessageBoxType eType;
+    css::awt::MessageBoxType const eType;
     const sal_Char          *pName;
-    sal_Int32                nLen;
+    sal_Int32 const          nLen;
 };
 
 static const MessageBoxTypeInfo aMessageBoxTypeInfo[] =
