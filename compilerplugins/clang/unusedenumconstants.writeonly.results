@@ -1401,7 +1401,7 @@ framework/source/services/autorecovery.cxx:188
 framework/source/services/autorecovery.cxx:196
     enum (anonymous namespace)::AutoRecovery::EDocStates E_TRY_SAVE
 framework/source/services/autorecovery.cxx:207
-    enum (anonymous namespace)::AutoRecovery::EDocStates E_SUCCEDED
+    enum (anonymous namespace)::AutoRecovery::EDocStates E_SUCCEEDED
 framework/source/services/autorecovery.cxx:218
     enum (anonymous namespace)::AutoRecovery::EFailureSafeResult E_COPIED
 framework/source/services/autorecovery.cxx:219
