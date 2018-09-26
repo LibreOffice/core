@@ -52,9 +52,6 @@ struct ResultSetColumnData
     /** @see ResultSetMetaData::isCaseSensitive */
     bool        isCaseSensitive;
 
-    /** @see ResultSetMetaData::getColumnDisplaySize */
-    sal_Int32       columnDisplaySize;
-
     inline ResultSetColumnData();
 };
 
@@ -62,8 +59,7 @@ struct ResultSetColumnData
 //       may heavily depend on the behaviour of the default constructor.
 
 ResultSetColumnData::ResultSetColumnData()
-: isCaseSensitive( true ),
-  columnDisplaySize( 16 )
+: isCaseSensitive( true )
 {
 }
 
