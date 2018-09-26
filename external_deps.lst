@@ -1,22 +1,22 @@
 # Format of this file:
 #
-# Comments start with '#' and are ignored.  Empty lines (only whitespace) are ignored.
+# Comments start with '#' and are ignored. Empty lines (only whitespace) are ignored.
 #
 # All other lines have one of two different formats:
-# 
-# if (<logical-expression>)  
-#     starts a block that specifies the download site(s) of an external library.
-# 
+#
+# if (<logical-expression>)
+#    starts a block that specifies the download site(s) of an external library.
+#
 # <name>=<value>
-#    defines a variable.  A definition after an "if" statement is only valid up to the next
-#    "if" statement.  Previous definitions are replaced.
+#    defines a variable. A definition after an "if" statement is only valid up to the next
+#    "if" statement. Previous definitions are replaced.
 #    <value> can contain references to other variables in the form $(<other-variable>)
 #
 # Some variables have special names:
 #    MD5 defines the MD5 check-sum of a library
-#    URL1 to URL9 define alternative download sites.  The first one that provides the library
+#    URL1 to URL9 define alternative download sites. The first one that provides the library
 #    with matching MD5 wins.
-#    name is the name under which the library tar-ball is stored.  It overrides the name of the
+#    name is the name under which the library tar-ball is stored. It overrides the name of the
 #    downloaded file.
 
 # Wherever possible the external tar-balls are loaded from their original distribution sites.
@@ -35,7 +35,7 @@ OOO_EXTRAS=https://sourceforge.net/projects/oooextras.mirror/files/
 if ( true )
     MD5 = 0168229624cfac409e766913506961a8
     name = ucpp-1.3.2.tar.gz
-    URL1 =  https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/ucpp/ucpp-1.3.2.tar.gz
+    URL1 = https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/ucpp/ucpp-1.3.2.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (ENABLE_UNIT_TESTS == YES)
@@ -55,7 +55,7 @@ if (SYSTEM_MDDS != YES)
     name = mdds_0.3.1.tar.bz2
     URL1 = https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/multidimalgorithm/mdds_0.3.1.tar.bz2
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
- 
+
 if (SYSTEM_LIBTEXTCAT != YES)
     MD5 = 128cfc86ed5953e57fe0f5ae98b62c2e
     name = libtextcat-2.2.tar.gz
@@ -76,7 +76,7 @@ if ( true )
 if (SOLAR_JAVA==TRUE && SYSTEM_LUCENE!=YES)
     MD5 = 17960f35b2239654ba608cf1f3e256b3
     name = lucene-2.9.4-src.tar.gz
-    URL1 = http://archive.apache.org/dist/lucene/java/2.9.4/lucene-2.9.4-src.tar.gz
+    URL1 = https://archive.apache.org/dist/lucene/java/2.9.4/lucene-2.9.4-src.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (ENABLE_NSS_MODULE!=NO && SYSTEM_NSS!=YES)
@@ -112,13 +112,13 @@ if (GUI!=UNX || SYSTEM_ZLIB!=YES)
 if (SOLAR_JAVA==TRUE && ENABLE_MEDIAWIKI==YES)
     MD5 = 2c9b0f83ed5890af02c0df1c1776f39b
     name = commons-httpclient-3.1-src.tar.gz
-    URL1 = http://archive.apache.org/dist/httpcomponents/commons-httpclient/source/$(name)
+    URL1 = https://archive.apache.org/dist/httpcomponents/commons-httpclient/source/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SOLAR_JAVA==TRUE && ENABLE_MEDIAWIKI==YES)
     MD5 = db87f7004cefc9d17f7ac841f86122bd
     name = commons-codec-1.9-src.tar.gz
-    URL1 = http://archive.apache.org/dist/commons/codec/source/$(name)
+    URL1 = https://archive.apache.org/dist/commons/codec/source/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if ( true )
@@ -136,7 +136,7 @@ if ( true )
 if (SOLAR_JAVA==TRUE && (ENABLE_MEDIAWIKI==YES || ENABLE_REPORTBUILDER==YES))
     MD5 = e8e197d628436490886d17cffa108fe3
     name = commons-logging-1.1.3-src.tar.gz
-    URL1 = http://archive.apache.org/dist/commons/logging/source/$(name)
+    URL1 = https://archive.apache.org/dist/commons/logging/source/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_JPEG != YES)
@@ -148,7 +148,7 @@ if (SYSTEM_JPEG != YES)
 if (SOLAR_JAVA==TRUE)
     MD5 = 4c8c505cc3cba4c467c479e3e0f09ba4
     name = commons-lang3-3.3-src.tar.gz
-    URL1 = http://archive.apache.org/dist/commons/lang/source/$(name)
+    URL1 = https://archive.apache.org/dist/commons/lang/source/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_OPENSSL!=YES && DISABLE_OPENSSL!=TRUE)
@@ -160,13 +160,13 @@ if (SYSTEM_OPENSSL!=YES && DISABLE_OPENSSL!=TRUE)
 if ( true )
     MD5 = 98492e965963f852ab29f9e61b2ad700
     name = apr-1.5.2.tar.gz
-    URL1 = http://archive.apache.org/dist/apr/$(name)
+    URL1 = https://archive.apache.org/dist/apr/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if ( true )
     MD5 = 866825c04da827c6e5f53daff5569f42
     name = apr-util-1.5.4.tar.gz
-    URL1 = http://archive.apache.org/dist/apr/$(name)
+    URL1 = https://archive.apache.org/dist/apr/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_LIBXML != YES)
@@ -184,7 +184,7 @@ if (SYSTEM_LIBXSLT != YES)
 if (SOLAR_JAVA == TRUE)
     MD5 = 63574e3ada44f473892a61a2da433a59
     name = apache-tomcat-5.5.36-src.tar.gz
-    URL1 = http://archive.apache.org/dist/tomcat/tomcat-5/v5.5.36/src/apache-tomcat-5.5.36-src.tar.gz
+    URL1 = https://archive.apache.org/dist/tomcat/tomcat-5/v5.5.36/src/apache-tomcat-5.5.36-src.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SOLAR_JAVA == TRUE)
@@ -196,7 +196,7 @@ if (SOLAR_JAVA == TRUE)
 if (ENABLE_MEDIAWIKI == YES)
     MD5 = a7983f859eafb2677d7ff386a023bc40
     name = xsltml_2.1.2.zip
-    URL1 = http://sourceforge.net/projects/xsltml/files/xsltml/v.2.1.2/xsltml_2.1.2.zip/download
+    URL1 = https://sourceforge.net/projects/xsltml/files/xsltml/v.2.1.2/xsltml_2.1.2.zip/download
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SYSTEM_PYTHON != YES)
@@ -256,8 +256,8 @@ if ( true )
 
 if (RAT_JAR_HOME==BUILD)
     MD5 = 0f926196d42577addec7e1aa5b510605
-    name = apache-rat-0.10-bin.tar.bz2 
-    URL1 = http://archive.apache.org/dist/creadur/apache-rat-0.10/$(name)
+    name = apache-rat-0.10-bin.tar.bz2
+    URL1 = https://archive.apache.org/dist/creadur/apache-rat-0.10/$(name)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SOLAR_JAVA==TRUE && SYSTEM_BSH!=YES)
