@@ -155,7 +155,7 @@ struct EqualsAnnotation {
     { return ref.name == name_; }
 
 private:
-    OUString name_;
+    OUString const name_;
 };
 
 void checkMap(

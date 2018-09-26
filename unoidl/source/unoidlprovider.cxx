@@ -83,7 +83,7 @@ namespace {
 
 // sizeof (Memory16) == 2
 struct Memory16 {
-    unsigned char byte[2];
+    unsigned char const byte[2];
 
     sal_uInt16 getUnsigned16() const {
         return static_cast< sal_uInt16 >(byte[0])
@@ -93,7 +93,7 @@ struct Memory16 {
 
 // sizeof (Memory32) == 4
 struct Memory32 {
-    unsigned char byte[4];
+    unsigned char const byte[4];
 
     sal_uInt32 getUnsigned32() const {
         return static_cast< sal_uInt32 >(byte[0])
@@ -124,7 +124,7 @@ struct Memory32 {
 
 // sizeof (Memory64) == 8
 struct Memory64 {
-    unsigned char byte[8];
+    unsigned char const byte[8];
 
     sal_uInt64 getUnsigned64() const {
         return static_cast< sal_uInt64 >(byte[0])
@@ -452,8 +452,8 @@ OUString MappedFile::readIdxString(
 
 // sizeof (MapEntry) == 8
 struct MapEntry {
-    Memory32 name;
-    Memory32 data;
+    Memory32 const name;
+    Memory32 const data;
 };
 
 static bool operator <(const Map& map1, const Map& map2) {

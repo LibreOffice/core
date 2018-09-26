@@ -316,8 +316,8 @@ struct ConstItem {
         dataOffset(0)
     {}
 
-    unoidl::ConstantValue constant;
-    std::vector< OUString > annotations;
+    unoidl::ConstantValue const constant;
+    std::vector< OUString > const annotations;
     sal_uInt64 nameOffset;
     sal_uInt64 dataOffset;
 };

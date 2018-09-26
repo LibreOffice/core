@@ -45,7 +45,7 @@ private:
     virtual rtl::Reference< MapCursor > createCursor() const override;
 
     std::vector< rtl::Reference< Provider > > providers_;
-    OUString name_;
+    OUString const name_;
 };
 
 std::vector< OUString > AggregatingModule::getMemberNames() const {
@@ -77,7 +77,7 @@ private:
     void findCursor();
 
     std::vector< rtl::Reference< Provider > > providers_;
-    OUString name_;
+    OUString const name_;
     std::vector< rtl::Reference< Provider > >::iterator iterator_;
     rtl::Reference< MapCursor > cursor_;
     std::set< OUString > seen_;
