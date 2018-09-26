@@ -250,6 +250,9 @@ ConvertBorderWidthFromWord(SvxBorderLineStyle const eStyle, double const i_fWidt
 double
 ConvertBorderWidthToWord(SvxBorderLineStyle const eStyle, double const fWidth)
 {
+    if ( !fWidth )
+        return 0;
+
     switch (eStyle)
     {
         // Single lines
@@ -264,31 +267,31 @@ ConvertBorderWidthToWord(SvxBorderLineStyle const eStyle, double const fWidth)
         // Double lines
         case SvxBorderLineStyle::DOUBLE:
         case SvxBorderLineStyle::DOUBLE_THIN:
-            return fWidth / 3.0;
+            return std::max(1.0, fWidth / 3.0);
 
         case SvxBorderLineStyle::THINTHICK_MEDIUMGAP:
         case SvxBorderLineStyle::THICKTHIN_MEDIUMGAP:
         case SvxBorderLineStyle::EMBOSSED:
         case SvxBorderLineStyle::ENGRAVED:
-            return fWidth / 2.0;
+            return std::max(1.0, fWidth / 2.0);
 
         case SvxBorderLineStyle::THINTHICK_SMALLGAP:
-            return fWidth - THINTHICK_SMALLGAP_line2 - THINTHICK_SMALLGAP_gap;
+            return std::max(1.0, fWidth - THINTHICK_SMALLGAP_line2 - THINTHICK_SMALLGAP_gap);
 
         case SvxBorderLineStyle::THINTHICK_LARGEGAP:
-            return fWidth - THINTHICK_LARGEGAP_line1 - THINTHICK_LARGEGAP_line2;
+            return std::max(1.0, fWidth - THINTHICK_LARGEGAP_line1 - THINTHICK_LARGEGAP_line2);
 
         case SvxBorderLineStyle::THICKTHIN_SMALLGAP:
-            return fWidth - THICKTHIN_SMALLGAP_line1 - THICKTHIN_SMALLGAP_gap;
+            return std::max(1.0, fWidth - THICKTHIN_SMALLGAP_line1 - THICKTHIN_SMALLGAP_gap);
 
         case SvxBorderLineStyle::THICKTHIN_LARGEGAP:
-            return fWidth - THICKTHIN_LARGEGAP_line1 - THICKTHIN_LARGEGAP_line2;
+            return std::max(1.0, fWidth - THICKTHIN_LARGEGAP_line1 - THICKTHIN_LARGEGAP_line2);
 
         case SvxBorderLineStyle::OUTSET:
-            return (fWidth - OUTSET_line1) / 2.0;
+            return std::max(1.0, (fWidth - OUTSET_line1) / 2.0);
 
         case SvxBorderLineStyle::INSET:
-            return (fWidth - INSET_line2) / 2.0;
+            return std::max(1.0, (fWidth - INSET_line2) / 2.0);
 
         case SvxBorderLineStyle::NONE:
             return 0;
