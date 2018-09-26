@@ -39,31 +39,30 @@ namespace dbaui
     // implements the "Special Settings" page of the advanced database settings
     class SpecialSettingsPage final : public OGenericAdministrationPage
     {
-        VclPtr<CheckBox>           m_pIsSQL92Check;
-        VclPtr<CheckBox>           m_pAppendTableAlias;
-        VclPtr<CheckBox>           m_pAsBeforeCorrelationName;
-        VclPtr<CheckBox>           m_pEnableOuterJoin;
-        VclPtr<CheckBox>           m_pIgnoreDriverPrivileges;
-        VclPtr<CheckBox>           m_pParameterSubstitution;
-        VclPtr<CheckBox>           m_pSuppressVersionColumn;
-        VclPtr<CheckBox>           m_pCatalog;
-        VclPtr<CheckBox>           m_pSchema;
-        VclPtr<CheckBox>           m_pIndexAppendix;
-        VclPtr<CheckBox>           m_pDosLineEnds;
-        VclPtr<CheckBox>           m_pCheckRequiredFields;
-        VclPtr<CheckBox>           m_pIgnoreCurrency;
-        VclPtr<CheckBox>           m_pEscapeDateTime;
-        VclPtr<CheckBox>           m_pPrimaryKeySupport;
-        VclPtr<CheckBox>           m_pRespectDriverResultSetType;
+        std::unique_ptr<weld::CheckButton> m_xIsSQL92Check;
+        std::unique_ptr<weld::CheckButton> m_xAppendTableAlias;
+        std::unique_ptr<weld::CheckButton> m_xAsBeforeCorrelationName;
+        std::unique_ptr<weld::CheckButton> m_xEnableOuterJoin;
+        std::unique_ptr<weld::CheckButton> m_xIgnoreDriverPrivileges;
+        std::unique_ptr<weld::CheckButton> m_xParameterSubstitution;
+        std::unique_ptr<weld::CheckButton> m_xSuppressVersionColumn;
+        std::unique_ptr<weld::CheckButton> m_xCatalog;
+        std::unique_ptr<weld::CheckButton> m_xSchema;
+        std::unique_ptr<weld::CheckButton> m_xIndexAppendix;
+        std::unique_ptr<weld::CheckButton> m_xDosLineEnds;
+        std::unique_ptr<weld::CheckButton> m_xCheckRequiredFields;
+        std::unique_ptr<weld::CheckButton> m_xIgnoreCurrency;
+        std::unique_ptr<weld::CheckButton> m_xEscapeDateTime;
+        std::unique_ptr<weld::CheckButton> m_xPrimaryKeySupport;
+        std::unique_ptr<weld::CheckButton> m_xRespectDriverResultSetType;
 
-        VclPtr<FixedText>          m_pBooleanComparisonModeLabel;
-        VclPtr<ListBox>            m_pBooleanComparisonMode;
+        std::unique_ptr<weld::Label> m_xBooleanComparisonModeLabel;
+        std::unique_ptr<weld::ComboBox> m_xBooleanComparisonMode;
 
-        VclPtr<FixedText>          m_pMaxRowScanLabel;
-        VclPtr<NumericField>       m_pMaxRowScan;
+        std::unique_ptr<weld::Label> m_xMaxRowScanLabel;
+        std::unique_ptr<weld::SpinButton> m_xMaxRowScan;
 
-        ::svt::ControlDependencyManager
-                            m_aControlDependencies;
+        ::svt::ControlDependencyManager m_aControlDependencies;
 
         BooleanSettingDescs m_aBooleanSettings;
 
@@ -73,7 +72,7 @@ namespace dbaui
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
 
-        SpecialSettingsPage(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta );
+        SpecialSettingsPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta);
 
     private:
         virtual ~SpecialSettingsPage() override;
@@ -95,21 +94,20 @@ namespace dbaui
     // GeneratedValuesPage
     class GeneratedValuesPage final : public OGenericAdministrationPage
     {
-        VclPtr<VclFrame>   m_pAutoFrame;
-        VclPtr<CheckBox>   m_pAutoRetrievingEnabled;
-        VclPtr<FixedText>  m_pAutoIncrementLabel;
-        VclPtr<Edit>       m_pAutoIncrement;
-        VclPtr<FixedText>  m_pAutoRetrievingLabel;
-        VclPtr<Edit>       m_pAutoRetrieving;
+        std::unique_ptr<weld::CheckButton> m_xAutoRetrievingEnabled;
+        std::unique_ptr<weld::Label> m_xAutoIncrementLabel;
+        std::unique_ptr<weld::Entry> m_xAutoIncrement;
+        std::unique_ptr<weld::Label> m_xAutoRetrievingLabel;
+        std::unique_ptr<weld::Entry> m_xAutoRetrieving;
 
-        ::svt::ControlDependencyManager
-                    m_aControlDependencies;
+        ::svt::ControlDependencyManager m_aControlDependencies;
 
     public:
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
 
-        GeneratedValuesPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
+        GeneratedValuesPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
     private:
+        DECL_LINK(OnAutoToggleHdl, weld::ToggleButton&, void);
 
         // nControlFlags is a combination of the CBTP_xxx-constants
         virtual ~GeneratedValuesPage() override;
@@ -124,7 +122,6 @@ namespace dbaui
         // <method>OGenericAdministrationPage::fillWindows</method>
         virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
     };
-
 }
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_ADVANCEDSETTINGS_HXX
