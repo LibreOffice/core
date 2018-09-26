@@ -158,8 +158,6 @@ RTFSymbol aRTFControlWords[] = {
     { "brdrdash", CONTROL_FLAG, RTF_BRDRDASH, 0 },
     { "brdrdashd", CONTROL_FLAG, RTF_BRDRDASHD, 0 },
     { "brdrdashdd", CONTROL_FLAG, RTF_BRDRDASHDD, 0 },
-    { "brdrdashdot", CONTROL_FLAG, RTF_BRDRDASHDOT, 0 },
-    { "brdrdashdotdot", CONTROL_FLAG, RTF_BRDRDASHDOTDOT, 0 },
     { "brdrdashdotstr", CONTROL_FLAG, RTF_BRDRDASHDOTSTR, 0 },
     { "brdrdashsm", CONTROL_FLAG, RTF_BRDRDASHSM, 0 },
     { "brdrdb", CONTROL_FLAG, RTF_BRDRDB, 0 },
