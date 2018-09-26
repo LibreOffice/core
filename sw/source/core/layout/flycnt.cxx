@@ -210,7 +210,7 @@ class SwOszControl
     static const SwFlyFrame *pStack5;
 
     const SwFlyFrame *pFly;
-    std::vector<Point*> maObjPositions;
+    std::vector<Point> maObjPositions;
 
 public:
     explicit SwOszControl( const SwFlyFrame *pFrame );
@@ -253,13 +253,7 @@ SwOszControl::~SwOszControl()
     else if ( SwOszControl::pStack5 == pFly )
         SwOszControl::pStack5 = nullptr;
     // #i3317#
-    while ( !maObjPositions.empty() )
-    {
-        Point* pPos = maObjPositions.back();
-        delete pPos;
-
-        maObjPositions.pop_back();
-    }
+    maObjPositions.clear();
 }
 
 bool SwOszControl::IsInProgress( const SwFlyFrame *pFly )
@@ -288,22 +282,19 @@ bool SwOszControl::ChkOsz()
     }
     else
     {
-        Point* pNewObjPos = new Point( pFly->GetObjRect().Pos() );
-        for ( std::vector<Point*>::iterator aObjPosIter = maObjPositions.begin();
-              aObjPosIter != maObjPositions.end();
-              ++aObjPosIter )
+        Point aNewObjPos = pFly->GetObjRect().Pos();
+        for ( auto const & pt : maObjPositions )
         {
-            if ( *pNewObjPos == *(*aObjPosIter) )
+            if ( aNewObjPos == pt )
             {
                 // position already occurred -> oscillation
                 bOscillationDetected = true;
-                delete pNewObjPos;
                 break;
             }
         }
         if ( !bOscillationDetected )
         {
-            maObjPositions.push_back( pNewObjPos );
+            maObjPositions.push_back( aNewObjPos );
         }
     }
 
