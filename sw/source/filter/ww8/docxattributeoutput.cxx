@@ -2932,6 +2932,7 @@ static void impl_borderLine( FSHelperPtr const & pSerializer, sal_Int32 elementT
                 pVal = "dashed";
                 break;
             case SvxBorderLineStyle::DOUBLE:
+            case SvxBorderLineStyle::DOUBLE_THIN:
                 pVal = "double";
                 break;
             case SvxBorderLineStyle::THINTHICK_SMALLGAP:
@@ -2966,6 +2967,12 @@ static void impl_borderLine( FSHelperPtr const & pSerializer, sal_Int32 elementT
                 break;
             case SvxBorderLineStyle::FINE_DASHED:
                 pVal = "dashSmallGap";
+                break;
+            case SvxBorderLineStyle::DASH_DOT:
+                pVal = "dotDash";
+                break;
+            case SvxBorderLineStyle::DASH_DOT_DOT:
+                pVal = "dotDotDash";
                 break;
             case SvxBorderLineStyle::NONE:
             default:
