@@ -44,6 +44,14 @@ using ::com::sun::star::xml::crypto::XXMLSignatureTemplate ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 using ::com::sun::star::xml::crypto::XUriBinding ;
 
+namespace std
+{
+template <> struct default_delete<xmlSecKeysMngr>
+{
+    void operator()(xmlSecKeysMngrPtr ptr) { SecurityEnvironment_NssImpl::destroyKeysManager(ptr); }
+};
+}
+
 class XMLSignature_NssImpl
     : public ::cppu::WeakImplHelper<xml::crypto::XXMLSignature, lang::XServiceInfo>
 {
@@ -77,7 +85,6 @@ SAL_CALL XMLSignature_NssImpl::generate(
     const Reference< XSecurityEnvironment >& aEnvironment
 )
 {
-    xmlSecKeysMngrPtr pMngr = nullptr ;
     xmlSecDSigCtxPtr pDsigCtx = nullptr ;
     xmlNodePtr pNode = nullptr ;
 
@@ -126,16 +133,15 @@ SAL_CALL XMLSignature_NssImpl::generate(
 
      setErrorRecorder();
 
-    pMngr = pSecEnv->createKeysManager();
+    std::unique_ptr<xmlSecKeysMngr> pMngr(pSecEnv->createKeysManager());
     if( !pMngr ) {
         throw RuntimeException() ;
     }
 
     //Create Signature context
-    pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
+    pDsigCtx = xmlSecDSigCtxCreate(pMngr.get());
     if( pDsigCtx == nullptr )
     {
-        SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );
         //throw XMLSignatureException() ;
         clearErrorRecorder();
         return aTemplate;
@@ -156,7 +162,6 @@ SAL_CALL XMLSignature_NssImpl::generate(
 
 
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
-    SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );
 
     //Unregistered the stream/URI binding
     if( xUriBinding.is() )
@@ -172,7 +177,6 @@ SAL_CALL XMLSignature_NssImpl::validate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XXMLSecurityContext >& aSecurityCtx
 ) {
-    xmlSecKeysMngrPtr pMngr = nullptr ;
     xmlSecDSigCtxPtr pDsigCtx = nullptr ;
     xmlNodePtr pNode = nullptr ;
     //sal_Bool valid ;
@@ -224,17 +228,15 @@ SAL_CALL XMLSignature_NssImpl::validate(
         if( pSecEnv == nullptr )
             throw RuntimeException() ;
 
-        pMngr = pSecEnv->createKeysManager();
+        std::unique_ptr<xmlSecKeysMngr> pMngr(pSecEnv->createKeysManager());
         if( !pMngr ) {
             throw RuntimeException() ;
         }
 
         //Create Signature context
-        pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
+        pDsigCtx = xmlSecDSigCtxCreate(pMngr.get());
         if( pDsigCtx == nullptr )
         {
-            SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );
-            //throw XMLSignatureException() ;
             clearErrorRecorder();
             return aTemplate;
         }
@@ -263,7 +265,6 @@ SAL_CALL XMLSignature_NssImpl::validate(
         {
             aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
             xmlSecDSigCtxDestroy( pDsigCtx ) ;
-            SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );
             break;
         }
         else
@@ -271,7 +272,6 @@ SAL_CALL XMLSignature_NssImpl::validate(
             aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_UNKNOWN);
         }
         xmlSecDSigCtxDestroy( pDsigCtx ) ;
-        SecurityEnvironment_NssImpl::destroyKeysManager( pMngr );
     }
 
 
