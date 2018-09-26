@@ -38,7 +38,7 @@ class TOOLS_DLLPUBLIC VersionCompat
     SvStream*       mpRWStm;
     sal_uInt32      mnCompatPos;
     sal_uInt32      mnTotalSize;
-    StreamMode   mnStmMode;
+    StreamMode const mnStmMode;
     sal_uInt16      mnVersion;
 
                     VersionCompat( const VersionCompat& ) = delete;

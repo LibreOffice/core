@@ -40,11 +40,11 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC ZCodec
     bool            mbStatus;
     bool            mbFinish;
     sal_uInt8*      mpInBuf;
-    size_t          mnInBufSize;
+    size_t const    mnInBufSize;
     size_t          mnInToRead;
     SvStream*       mpOStm;
     sal_uInt8*      mpOutBuf;
-    size_t          mnOutBufSize;
+    size_t const    mnOutBufSize;
 
     sal_uInt32      mnCRC;
     int             mnCompressLevel;
