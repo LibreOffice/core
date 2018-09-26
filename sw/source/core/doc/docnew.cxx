@@ -936,19 +936,45 @@ static void lcl_CopyFollowPageDesc(
                             const sal_uLong nDocNo )
 {
     //now copy the follow page desc, too
-    const SwPageDesc* pFollowPageDesc = rSourcePageDesc.GetFollow();
-    OUString sFollowPageDesc = pFollowPageDesc->GetName();
-    if( sFollowPageDesc != rSourcePageDesc.GetName() )
+    // note: these may at any point form a cycle, so a loop is needed and it
+    // must be detected that the last iteration closes the cycle and doesn't
+    // copy the first page desc of the cycle again.
+    std::map<OUString, OUString> followMap{ { rSourcePageDesc.GetName(), rTargetPageDesc.GetName() } };
+    SwPageDesc const* pCurSourcePageDesc(&rSourcePageDesc);
+    SwPageDesc const* pCurTargetPageDesc(&rTargetPageDesc);
+    do
     {
+        const SwPageDesc* pFollowPageDesc = pCurSourcePageDesc->GetFollow();
+        OUString sFollowPageDesc = pFollowPageDesc->GetName();
+        if (sFollowPageDesc == pCurSourcePageDesc->GetName())
+        {
+            break;
+        }
         SwDoc* pTargetDoc = rTargetShell.GetDoc();
-        OUString sNewFollowPageDesc = lcl_FindUniqueName(&rTargetShell, sFollowPageDesc, nDocNo );
-        SwPageDesc* pTargetFollowPageDesc = pTargetDoc->MakePageDesc(sNewFollowPageDesc);
-
-        pTargetDoc->CopyPageDesc(*pFollowPageDesc, *pTargetFollowPageDesc, false);
-        SwPageDesc aDesc(rTargetPageDesc);
+        SwPageDesc* pTargetFollowPageDesc(nullptr);
+        auto const itMapped(followMap.find(sFollowPageDesc));
+        if (itMapped == followMap.end())
+        {
+            OUString sNewFollowPageDesc = lcl_FindUniqueName(&rTargetShell, sFollowPageDesc, nDocNo);
+            pTargetFollowPageDesc = pTargetDoc->MakePageDesc(sNewFollowPageDesc);
+            pTargetDoc->CopyPageDesc(*pFollowPageDesc, *pTargetFollowPageDesc, false);
+        }
+        else
+        {
+            pTargetFollowPageDesc = pTargetDoc->FindPageDesc(itMapped->second);
+        }
+        SwPageDesc aDesc(*pCurTargetPageDesc);
         aDesc.SetFollow(pTargetFollowPageDesc);
-        pTargetDoc->ChgPageDesc(rTargetPageDesc.GetName(), aDesc);
+        pTargetDoc->ChgPageDesc(pCurTargetPageDesc->GetName(), aDesc);
+        if (itMapped != followMap.end())
+        {
+            break; // was already copied
+        }
+        pCurSourcePageDesc = pCurSourcePageDesc->GetFollow();
+        pCurTargetPageDesc = pTargetFollowPageDesc;
+        followMap[pCurSourcePageDesc->GetName()] = pCurTargetPageDesc->GetName();
     }
+    while (true);
 }
 
 // appends all pages of source SwDoc - based on SwFEShell::Paste( SwDoc* )
