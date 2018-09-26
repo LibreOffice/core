@@ -103,7 +103,7 @@ protected:
                                         maAccessibleContext;    /// our most recent XAccessibleContext instance
 
     bool                            mbDisposePeer;
-    bool                            mbRefeshingPeer;
+    bool                            mbRefreshingPeer;
     bool                            mbCreatingPeer;
     bool                            mbCreatingCompatiblePeer;
     bool                            mbDesignMode;
