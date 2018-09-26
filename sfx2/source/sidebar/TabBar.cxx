@@ -229,7 +229,11 @@ void TabBar::DataChanged (const DataChangedEvent& rDataChangedEvent)
 
 bool TabBar::EventNotify(NotifyEvent& rEvent)
 {
-    if(rEvent.GetType() == MouseNotifyEvent::COMMAND)
+    MouseNotifyEvent nType = rEvent.GetType();
+    if (MouseNotifyEvent::KEYINPUT == nType)
+        return true;
+
+    if(MouseNotifyEvent::COMMAND == nType)
     {
         const CommandEvent& rCommandEvent = *rEvent.GetCommandEvent();
         if(rCommandEvent.GetCommand() == CommandEventId::Wheel)
