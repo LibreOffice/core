@@ -48,7 +48,7 @@ using namespace ::com::sun::star;
 struct UnoControlHolder
 {
     uno::Reference< awt::XControl > mxControl;
-    OUString                 msName;
+    OUString const                  msName;
 
 public:
     UnoControlHolder( const OUString& rName, const uno::Reference< awt::XControl > & rControl )

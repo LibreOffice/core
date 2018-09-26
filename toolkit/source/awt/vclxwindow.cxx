@@ -118,7 +118,7 @@ public:
     bool                                mbDisposing             : 1;
     bool                                mbDesignMode            : 1;
     bool                                mbSynthesizingVCLEvent  : 1;
-    bool                                mbWithDefaultProps      : 1;
+    bool const                          mbWithDefaultProps      : 1;
 
     sal_uLong                           mnListenerLockLevel;
     sal_Int16                           mnWritingMode;
