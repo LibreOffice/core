@@ -187,7 +187,7 @@ void MiscTest::testHardLinks()
     // This failed: hard link count was 1, the hard link broke on store.
     CPPUNIT_ASSERT(buf.st_nlink > 1);
 
-    // Test that symlinks are presreved as well.
+    // Test that symlinks are preserved as well.
     nRet = remove(aNew.getStr());
     CPPUNIT_ASSERT_EQUAL(0, nRet);
     symlink(aOld.getStr(), aNew.getStr());
