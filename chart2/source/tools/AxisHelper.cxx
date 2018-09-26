@@ -154,8 +154,6 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
     xProp->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkToSource;
     xProp->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormatKey;
 
-    sal_Int32 nOldNumberFormat = nNumberFormatKey;
-
     if (bLinkToSource)
     {
         bool bFormatSet = false;
@@ -329,9 +327,6 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                 }
             }
         }
-
-        if (nOldNumberFormat != nNumberFormatKey)
-            xProp->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any(nNumberFormatKey));
     }
 
     return nNumberFormatKey;
