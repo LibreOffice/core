@@ -92,6 +92,148 @@ static vcl::Window* ImplGetCurTabWindow(const vcl::Window* pWindow)
     return nullptr;
 }
 
+namespace {
+
+class WindowIterator
+    : public std::iterator<std::forward_iterator_tag, vcl::Window*>
+{
+    const value_type m_pParent, m_pRealParent, m_pWindow;
+    const bool m_bTestEnabled;
+    value_type m_pCurrentWindow;
+    std::vector<value_type> m_aWindowStack;
+    bool m_bCurrentWindowMayHaveChildren;
+    bool m_bIsTabControl;
+
+    inline bool IsEnabled(value_type pWindow)
+    {
+        return (!m_bTestEnabled || (isEnabledInLayout(pWindow) && pWindow->IsInputEnabled()));
+    }
+
+public:
+    explicit WindowIterator(value_type pParent, value_type pWindow, bool bEnabled)
+        : m_pParent(pParent)
+        , m_pRealParent(ImplGetTopParentOfTabHierarchy(pParent)->ImplGetWindow())
+        , m_pWindow(pWindow)
+        , m_bTestEnabled(bEnabled)
+        , m_pCurrentWindow(m_pRealParent)
+        , m_aWindowStack({nullptr})
+        , m_bCurrentWindowMayHaveChildren(true)
+        , m_bIsTabControl(false)
+    {
+        if (m_pRealParent->GetType() == WindowType::TABCONTROL)
+            m_bIsTabControl = true;
+        ++(*this);
+    }
+
+    WindowIterator& operator++()
+    {
+        vcl::Window* pWindow = nullptr;
+        vcl::Window* pNextWindow = m_pCurrentWindow;
+        vcl::Window* pNextImplWindow = pNextWindow ? pNextWindow->ImplGetWindow() : nullptr;
+
+        while (true)
+        {
+            if (m_bIsTabControl)
+            {
+                // check if pNextWindow has children => not in dispose
+                pWindow = firstLogicalChildOfParent(pNextWindow);
+                if (pWindow)
+                    pWindow = ImplGetCurTabWindow(pNextImplWindow);
+            }
+            else if (m_bCurrentWindowMayHaveChildren)
+                pWindow = firstLogicalChildOfParent(pNextImplWindow);
+
+            if (!pWindow)
+            {
+                vcl::Window* pParent = nullptr;
+                while (true)
+                {
+                    assert(!pWindow);
+
+                    if (nullptr != pParent)
+                        m_aWindowStack.pop_back();
+                    pParent = m_aWindowStack.back();
+                    if (nullptr == pParent)
+                        break;
+                    vcl::Window* pImplParent = pParent->ImplGetWindow();
+
+                    if (pImplParent->GetType() == WindowType::TABCONTROL)
+                    {
+                        pNextWindow = pParent;
+                        continue;
+                    }
+
+                    pWindow = nextLogicalChildOfParent(pImplParent, pNextWindow);
+                    if (!pWindow)
+                        pNextWindow = pParent;
+                    else
+                    {
+                        pNextImplWindow = pWindow->ImplGetWindow();
+                        if (!ImplHasIndirectTabParent(pWindow) && pNextImplWindow->IsDialogControlStart())
+                            pWindow = nullptr;
+                        else
+                        {
+                            pNextWindow = pWindow;
+                            break;
+                        }
+                    }
+                }
+                if (!pWindow)
+                    break;
+            }
+            else if (m_bCurrentWindowMayHaveChildren || m_bIsTabControl)
+            {
+                m_aWindowStack.push_back(pNextWindow);
+                pNextWindow = pWindow;
+                pNextImplWindow = pNextWindow->ImplGetWindow();
+            }
+
+            vcl::Window* pImplWindow = pWindow->ImplGetWindow();
+            if (isVisibleInLayout(pImplWindow) && IsEnabled(pImplWindow))
+            {
+                m_bIsTabControl = (pImplWindow->GetType() == WindowType::TABCONTROL);
+                m_bCurrentWindowMayHaveChildren = pImplWindow->GetStyle() & (WB_DIALOGCONTROL | WB_CHILDDLGCTRL);
+                if (m_bCurrentWindowMayHaveChildren && !m_bIsTabControl)
+                    continue;
+                else
+                    break;
+            }
+            else
+            {
+                m_bCurrentWindowMayHaveChildren = false;
+                m_bIsTabControl = false;
+            }
+
+            pWindow = nextLogicalChildOfParent(m_aWindowStack.back(), pNextWindow);
+            if (pWindow)
+            {
+                pNextWindow = pWindow;
+                pNextImplWindow = pNextWindow->ImplGetWindow();
+            }
+        }
+
+        m_pCurrentWindow = pWindow;
+        return *this;
+    }
+    WindowIterator operator++(int)
+    { WindowIterator retval = *this; ++(*this); return retval; }
+
+    bool operator==(WindowIterator other) const { return m_pCurrentWindow == other.m_pCurrentWindow; }
+    bool operator!=(WindowIterator other) const { return m_pCurrentWindow != other.m_pCurrentWindow; }
+    value_type operator*() const { return m_pCurrentWindow ? m_pCurrentWindow->ImplGetWindow() : nullptr; }
+    value_type operator->() const { return this->operator*(); }
+    WindowIterator begin()
+    { return WindowIterator(m_pParent, m_pWindow, m_bTestEnabled); }
+    WindowIterator end()
+    {
+        WindowIterator aEnd(m_pParent, m_pWindow, m_bTestEnabled);
+        aEnd.m_pCurrentWindow = nullptr;
+        return aEnd;
+    }
+};
+
+};
+
 static vcl::Window* ImplGetSubChildWindow( vcl::Window* pParent, sal_uInt16 n, sal_uInt16& nIndex )
 {
     // ignore border window
@@ -590,8 +732,6 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
     vcl::Window* pTempWindow;
     vcl::Window* pButtonWindow;
     sal_uInt16  i;
-    sal_uInt16  iButton;
-    sal_uInt16  iButtonStart;
     sal_uInt16  iTemp;
     sal_uInt16  nIndex;
     sal_uInt16  nFormStart;
@@ -625,19 +765,13 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
 
     if ( nKeyCode == KEY_RETURN )
     {
-        // search first for a DefPushButton/CancelButton
-        pButtonWindow = ImplGetChildWindow( this, nFormStart, iButton, true );
-        iButtonStart = iButton;
-        while ( pButtonWindow )
-        {
-            if ( (pButtonWindow->GetStyle() & WB_DEFBUTTON) &&
-                 pButtonWindow->mpWindowImpl->mbPushButton )
+        // search first for a DefPushButton
+        WindowIterator aIter(this, pFocusWindow, true);
+        for (; *aIter; ++aIter)
+            if ( (aIter->GetStyle() & WB_DEFBUTTON) &&
+                 aIter->mpWindowImpl->mbPushButton )
                 break;
-
-            pButtonWindow = ImplGetNextWindow( this, iButton, iButton, true );
-            if ( (iButton <= iButtonStart) || (iButton > nFormEnd) )
-                pButtonWindow = nullptr;
-        }
+        pButtonWindow = *aIter;
 
         if ( bKeyInput && !pButtonWindow && (nDlgCtrlFlags & DialogControlFlags::Return) )
         {
@@ -701,18 +835,12 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
     }
     else if ( nKeyCode == KEY_ESCAPE )
     {
-        // search first for a DefPushButton/CancelButton
-        pButtonWindow = ImplGetChildWindow( this, nFormStart, iButton, true );
-        iButtonStart = iButton;
-        while ( pButtonWindow )
-        {
-            if ( pButtonWindow->GetType() == WindowType::CANCELBUTTON )
+        // search first for a CancelButton
+        WindowIterator aIter(this, pFocusWindow, true);
+        for (; *aIter; ++aIter)
+            if (aIter->GetType() == WindowType::CANCELBUTTON)
                 break;
-
-            pButtonWindow = ImplGetNextWindow( this, iButton, iButton, true );
-            if ( (iButton <= iButtonStart) || (iButton > nFormEnd) )
-                pButtonWindow = nullptr;
-        }
+        pButtonWindow = *aIter;
 
         if ( bKeyInput && mpWindowImpl->mpDlgCtrlDownWindow )
         {
