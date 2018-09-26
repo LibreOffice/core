@@ -60,7 +60,6 @@ private:
     struct MemberNode;
     struct DimensionNode;
     typedef std::map<OUString, std::shared_ptr<MemberNode> > MembersType;
-    typedef std::map<OUString, DimensionNode*> DimensionsType;
 
     struct DimensionNode
     {
@@ -80,7 +79,7 @@ private:
     struct MemberNode
     {
         ValuesType maValues;
-        DimensionsType maChildDimensions;
+        std::map<OUString, std::unique_ptr<DimensionNode>> maChildDimensions;
 
         MemberNode();
         MemberNode(const MemberNode&) = delete;
