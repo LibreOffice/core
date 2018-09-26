@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_a39a886b",
+        "filename": "test/source/table/xtablechart.cxx",
+        "patchSetId": 19
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-09-26T16:05:43Z",
+      "side": 1,
+      "message": "There is no CppUnit assert helper to compare a sequence of table::CellRangeAddress. To make the checks work:\n1. compare the length of both sequences.\n2. Loop over the sequences and compare the elements (then the existing CppUnit assert helper can be used).",
+      "revId": "462205a99f348777b3f1b3ab916857910e3ed4e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
