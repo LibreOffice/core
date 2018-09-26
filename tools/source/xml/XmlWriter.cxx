@@ -39,7 +39,7 @@ struct XmlWriterImpl
     {
     }
 
-    SvStream* mpStream;
+    SvStream* const mpStream;
     xmlTextWriterPtr mpWriter;
 };
 

@@ -33,12 +33,12 @@ struct INetContentTypeParameter
     /** The optional character set specification (see RFC 2231), in US-ASCII
         encoding and converted to lower case.
      */
-    OString m_sCharset;
+    OString const m_sCharset;
 
     /** The optional language specification (see RFC 2231), in US-ASCII
         encoding and converted to lower case.
      */
-    OString m_sLanguage;
+    OString const m_sLanguage;
 
     /** The attribute value.  If the value is a quoted-string, it is
         'unpacked.'  If a character set is specified, and the value can be
@@ -57,13 +57,13 @@ struct INetContentTypeParameter
         within Unicode's Private Use Area (effectively adding 0xF800 to the
         character's numeric value).
      */
-    OUString m_sValue;
+    OUString const m_sValue;
 
     /** This is true if the value is successfully converted to Unicode, and
         false if the value is a special mixture of ISO-LATIN-1 characters and
         characters from Unicode's Private Use Area.
      */
-    bool m_bConverted;
+    bool const m_bConverted;
 };
 
 /** The key is the name of the attribute, in US-ASCII encoding and converted

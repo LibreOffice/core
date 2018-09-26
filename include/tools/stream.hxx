@@ -100,7 +100,7 @@ enum SvLockBytesStatFlag { SVSTATFLAG_DEFAULT };
 class TOOLS_DLLPUBLIC SvLockBytes: public virtual SvRefBase
 {
     SvStream * m_pStream;
-    bool m_bOwner;
+    bool const m_bOwner;
     bool m_bSync;
 
 protected:

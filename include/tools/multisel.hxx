@@ -77,16 +77,16 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC StringRangeEnumerator
 {
     struct Range
     {
-        sal_Int32   nFirst;
-        sal_Int32   nLast;
+        sal_Int32 const   nFirst;
+        sal_Int32 const   nLast;
 
         Range( sal_Int32 i_nFirst, sal_Int32 i_nLast ) : nFirst( i_nFirst ), nLast( i_nLast ) {}
     };
     std::vector< StringRangeEnumerator::Range >            maSequence;
     sal_Int32                                              mnCount;
-    sal_Int32                                              mnMin;
-    sal_Int32                                              mnMax;
-    sal_Int32                                              mnOffset;
+    sal_Int32 const                                        mnMin;
+    sal_Int32 const                                        mnMax;
+    sal_Int32 const                                        mnOffset;
     bool                                                   mbValidInput;
 
     bool setRange( const OUString& i_rNewRange );
