@@ -63,7 +63,7 @@ typedef std::map< NeonLock *, LockInfo > LockInfoMap;
 class NeonLockStore
 {
     osl::Mutex         m_aMutex;
-    ne_lock_store    * m_pNeonLockStore;
+    ne_lock_store * const m_pNeonLockStore;
     rtl::Reference< TickerThread > m_pTickerThread;
     LockInfoMap        m_aLockInfoMap;
 

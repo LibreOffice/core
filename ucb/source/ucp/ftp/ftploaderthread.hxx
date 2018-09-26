@@ -50,7 +50,7 @@ namespace ftp {
         FTPLoaderThread(const FTPLoaderThread&) = delete;
         FTPLoaderThread& operator=(const FTPLoaderThread&) = delete;
 
-        oslThreadKey m_threadKey;
+        oslThreadKey const m_threadKey;
 
     };  // end class FTPLoaderThread
 

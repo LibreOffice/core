@@ -173,7 +173,7 @@ private:
     css::uno::Reference< css::embed::XTransactedObject >  m_xWrappedTransObj;
     css::uno::Reference< css::lang::XComponent >          m_xWrappedComponent;
     css::uno::Reference< css::lang::XTypeProvider >       m_xWrappedTypeProv;
-    bool                                            m_bIsDocumentStorage;
+    bool const                                            m_bIsDocumentStorage;
 
     StorageElementFactory::StorageMap::iterator m_aContainerIt;
 

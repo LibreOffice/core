@@ -69,11 +69,11 @@ private:
     OUString          m_sObjectPath;
     OUString          m_sObjectId;
     OUString          m_sURL;
-    cmis::URL              m_aURL;
+    cmis::URL const   m_aURL;
 
     // Members to be set for non-persistent content
     bool                   m_bTransient;
-    bool                   m_bIsFolder;
+    bool const             m_bIsFolder;
     libcmis::ObjectTypePtr m_pObjectType;
     std::map< std::string, libcmis::PropertyPtr > m_pObjectProps;
 

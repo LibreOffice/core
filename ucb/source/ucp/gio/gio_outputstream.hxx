@@ -38,7 +38,7 @@ class OutputStream :
     public Seekable
 {
 private:
-    GFileOutputStream *mpStream;
+    GFileOutputStream * const mpStream;
 
 public:
     explicit OutputStream ( GFileOutputStream *pStream );
