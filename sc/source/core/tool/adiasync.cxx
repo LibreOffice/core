@@ -50,7 +50,7 @@ ScAddInAsync::ScAddInAsync(sal_uLong nHandleP, LegacyFuncData* pFuncData, ScDocu
 {
     pDocs.reset(new ScAddInDocs);
     pDocs->insert( pDoc );
-    theAddInAsyncTbl.insert( this );
+    theAddInAsyncTbl.emplace( this );
 }
 
 ScAddInAsync::~ScAddInAsync()
@@ -65,26 +65,29 @@ ScAddInAsync::~ScAddInAsync()
 ScAddInAsync* ScAddInAsync::Get( sal_uLong nHandleP )
 {
     ScAddInAsync* pRet = nullptr;
-    ScAddInAsyncs::iterator it = std::find_if(
+    auto it = std::find_if(
         theAddInAsyncTbl.begin(), theAddInAsyncTbl.end(),
-        [nHandleP](ScAddInAsync const * el)
+        [nHandleP](std::unique_ptr<ScAddInAsync> const & el)
             { return el->nHandle == nHandleP; });
     if ( it != theAddInAsyncTbl.end() )
-        pRet = *it;
+        pRet = it->get();
     return pRet;
 }
 
 void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
 {
-    ScAddInAsync* p;
-    if ( (p = Get( nHandleP )) == nullptr )
+    auto asyncIt = std::find_if(
+        theAddInAsyncTbl.begin(), theAddInAsyncTbl.end(),
+        [nHandleP](std::unique_ptr<ScAddInAsync> const & el)
+            { return el->nHandle == nHandleP; });
+    if ( asyncIt == theAddInAsyncTbl.end() )
         return;
+    ScAddInAsync* p = asyncIt->get();
 
     if ( !p->HasListeners() )
     {
         // not in dTor because of theAddInAsyncTbl.DeleteAndDestroy in ScGlobal::Clear
-        theAddInAsyncTbl.erase( p );
-        delete p;
+        theAddInAsyncTbl.erase( asyncIt );
         return ;
     }
     switch ( p->meType )
@@ -122,7 +125,7 @@ void ScAddInAsync::RemoveDocument( ScDocument* pDocumentP )
     {
         for( ScAddInAsyncs::reverse_iterator iter1 = theAddInAsyncTbl.rbegin(); iter1 != theAddInAsyncTbl.rend(); ++iter1 )
         {   // backwards because of pointer-movement in array
-            ScAddInAsync* pAsync = *iter1;
+            ScAddInAsync* pAsync = iter1->get();
             ScAddInDocs* p = pAsync->pDocs.get();
             ScAddInDocs::iterator iter2 = p->find( pDocumentP );
             if( iter2 != p->end() )
@@ -131,7 +134,6 @@ void ScAddInAsync::RemoveDocument( ScDocument* pDocumentP )
                 if ( p->empty() )
                 {   // this AddIn is not used anymore
                     theAddInAsyncTbl.erase( --(iter1.base()) );
-                    delete pAsync;
                 }
             }
         }
