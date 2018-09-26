@@ -59,12 +59,7 @@ void ScDPResultTree::DimensionNode::dump(int nLevel) const
 
 ScDPResultTree::MemberNode::MemberNode() {}
 
-ScDPResultTree::MemberNode::~MemberNode()
-{
-    DimensionsType::iterator it = maChildDimensions.begin(), itEnd = maChildDimensions.end();
-    for (; it != itEnd; ++it)
-        delete it->second;
-}
+ScDPResultTree::MemberNode::~MemberNode() {}
 
 #if DEBUG_PIVOT_TABLE
 void ScDPResultTree::MemberNode::dump(int nLevel) const
@@ -108,26 +103,21 @@ void ScDPResultTree::add(
             maPrimaryDimName = filter.maDimName;
 
         // See if this dimension exists.
-        DimensionsType& rDims = pMemNode->maChildDimensions;
+        auto& rDims = pMemNode->maChildDimensions;
         OUString aUpperName = ScGlobal::pCharClass->uppercase(filter.maDimName);
-        DimensionsType::iterator itDim = rDims.find(aUpperName);
+        auto itDim = rDims.find(aUpperName);
         if (itDim == rDims.end())
         {
             // New dimension.  Insert it.
-            std::pair<DimensionsType::iterator, bool> r =
-                rDims.emplace(aUpperName, new DimensionNode);
-
-            if (!r.second)
-                // Insertion failed!
-                return;
-
+            auto r = rDims.emplace(aUpperName, new DimensionNode);
+            assert(r.second);
             itDim = r.first;
         }
 
         pDimName = &itDim->first;
 
         // Now, see if this dimension member exists.
-        DimensionNode* pDim = itDim->second;
+        DimensionNode* pDim = itDim->second.get();
         MembersType& rMembersValueNames = pDim->maChildMembersValueNames;
         aUpperName = ScGlobal::pCharClass->uppercase(filter.maValueName);
         MembersType::iterator itMem = rMembersValueNames.find(aUpperName);
@@ -214,14 +204,14 @@ const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
     const MemberNode* pMember = mpRoot.get();
     for (; p != pEnd; ++p)
     {
-        DimensionsType::const_iterator itDim = pMember->maChildDimensions.find(
+        auto itDim = pMember->maChildDimensions.find(
             ScGlobal::pCharClass->uppercase(p->FieldName));
 
         if (itDim == pMember->maChildDimensions.end())
             // Specified dimension not found.
             return nullptr;
 
-        const DimensionNode* pDim = itDim->second;
+        const DimensionNode* pDim = itDim->second.get();
         MembersType::const_iterator itMem( pDim->maChildMembersValueNames.find(
                     ScGlobal::pCharClass->uppercase( p->MatchValueName)));
 
@@ -246,8 +236,8 @@ const ScDPResultTree::ValuesType* ScDPResultTree::getResults(
         const MemberNode* pFieldMember = pMember;
         while (pFieldMember->maChildDimensions.size() == 1)
         {
-            DimensionsType::const_iterator itDim( pFieldMember->maChildDimensions.begin());
-            const DimensionNode* pDim = itDim->second;
+            auto itDim( pFieldMember->maChildDimensions.begin());
+            const DimensionNode* pDim = itDim->second.get();
             if (pDim->maChildMembersValueNames.size() != 1)
                 break;  // while
             pFieldMember = pDim->maChildMembersValueNames.begin()->second.get();
