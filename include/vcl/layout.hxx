@@ -769,6 +769,13 @@ public:
 //of children
 VCL_DLLPUBLIC vcl::Window* firstLogicalChildOfParent(const vcl::Window *pTopLevel);
 
+//Get last window of a pTopLevel window as
+//if any intermediate layout widgets didn't exist
+//i.e. acts like pChild = pChild->GetWindow(GetWindowType::LastChild);
+//in a flat hierarchy where dialogs only have one layer
+//of children
+VCL_DLLPUBLIC vcl::Window* lastLogicalChildOfParent(const vcl::Window *pTopLevel);
+
 //Get next window after pChild of a pTopLevel window as
 //if any intermediate layout widgets didn't exist
 //i.e. acts like pChild = pChild->GetWindow(GetWindowType::Next);
