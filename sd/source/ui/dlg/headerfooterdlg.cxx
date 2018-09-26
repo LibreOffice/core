@@ -385,6 +385,27 @@ void HeaderFooterDialog::change( SdUndoGroup* pUndoGroup, SdPage* pPage, const H
     pPage->setHeaderFooterSettings( rNewSettings );
 }
 
+namespace {
+
+void recursive_rename_ui_element(vcl::Window& rWindow, const OUString& rPrefix)
+{
+    OUString aID = rWindow.get_id();
+    if (aID.isEmpty())
+    {
+        rWindow.set_id(rPrefix +  aID);
+    }
+
+    size_t nChildCount = rWindow.GetChildCount();
+    for (size_t i = 0; i < nChildCount; ++i)
+    {
+        vcl::Window* pChild = rWindow.GetChild(i);
+        if (pChild)
+            recursive_rename_ui_element(*pChild, rPrefix);
+    }
+}
+
+}
+
 HeaderFooterTabPage::HeaderFooterTabPage( vcl::Window* pWindow, SdDrawDocument* pDoc, SdPage* pActualPage, bool bHandoutMode ) :
         TabPage( pWindow, "HeaderFooterTab", "modules/simpress/ui/headerfootertab.ui" ),
         mpDoc(pDoc),
@@ -443,6 +464,11 @@ HeaderFooterTabPage::HeaderFooterTabPage( vcl::Window* pWindow, SdDrawDocument* 
     mpCBDateTimeLanguage->SelectLanguage( meOldLanguage );
 
     FillFormatList(0);
+
+    if (mbHandoutMode)
+        recursive_rename_ui_element(*this, "handout");
+    else
+        recursive_rename_ui_element(*this, "slide");
 }
 
 HeaderFooterTabPage::~HeaderFooterTabPage()
