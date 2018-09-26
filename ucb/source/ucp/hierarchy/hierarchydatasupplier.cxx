@@ -48,7 +48,7 @@ struct ResultListEntry
     uno::Reference< ucb::XContentIdentifier > xId;
     uno::Reference< ucb::XContent >           xContent;
     uno::Reference< sdbc::XRow >              xRow;
-    HierarchyEntryData                        aData;
+    HierarchyEntryData const                  aData;
 
     explicit ResultListEntry( const HierarchyEntryData& rEntry ) : aData( rEntry ) {}
 };
@@ -70,8 +70,8 @@ struct DataSupplier_Impl
     rtl::Reference< HierarchyContent >              m_xContent;
     uno::Reference< uno::XComponentContext >        m_xContext;
     HierarchyEntry                                  m_aFolder;
-    HierarchyEntry::iterator                        m_aIterator;
-    sal_Int32                                       m_nOpenMode;
+    HierarchyEntry::iterator const                  m_aIterator;
+    sal_Int32 const                                 m_nOpenMode;
     bool                                        m_bCountFinal;
 
     DataSupplier_Impl(

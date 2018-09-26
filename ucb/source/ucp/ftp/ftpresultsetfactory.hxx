@@ -46,8 +46,8 @@ public:
 private:
     css::uno::Reference< css::uno::XComponentContext >        m_xContext;
     css::uno::Reference< css::ucb::XContentProvider >         m_xProvider;
-    css::uno::Sequence< css::beans::Property >                m_seq;
-    std::vector<FTPDirentry>                                  m_dirvec;
+    css::uno::Sequence< css::beans::Property > const          m_seq;
+    std::vector<FTPDirentry> const                            m_dirvec;
 };
 
 }

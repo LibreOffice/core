@@ -64,7 +64,7 @@ class ContentProvider;
 class Content : public ::ucbhelper::ContentImplHelper, public css::ucb::XContentCreator
 {
 private:
-    ContentProvider  *m_pProvider;
+    ContentProvider * const m_pProvider;
     GFile* mpFile;
     GFileInfo *mpInfo;
     bool mbTransient;

@@ -113,7 +113,7 @@ private:
     FTPURL              m_aFTPURL;
     bool                m_bInserted;
     bool                m_bTitleSet;
-    css::ucb::ContentInfo m_aInfo;
+    css::ucb::ContentInfo const m_aInfo;
 
     virtual css::uno::Sequence< css::beans::Property >
         getProperties( const css::uno::Reference<

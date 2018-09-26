@@ -174,13 +174,13 @@ namespace fileaccess
         class MyProperty
         {
         private:
-            OUString                    PropertyName;
-            sal_Int32                   Handle;
-            bool                        isNative;
-            css::uno::Type              Typ;        // Duplicates information in Value
+            OUString const              PropertyName;
+            sal_Int32 const             Handle;
+            bool const                  isNative;
+            css::uno::Type const        Typ;        // Duplicates information in Value
             css::uno::Any               Value;
             css::beans::PropertyState   State;
-            sal_Int16                   Attributes;
+            sal_Int16 const             Attributes;
         public:
             explicit MyProperty( const OUString&  thePropertyName );
             MyProperty( bool                              theIsNative,

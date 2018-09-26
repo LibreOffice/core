@@ -39,7 +39,7 @@ class UcbPropertiesManager : public cppu::WeakImplHelper <
     css::lang::XServiceInfo,
     css::beans::XPropertySetInfo >
 {
-    css::uno::Sequence< css::beans::Property > m_pProps;
+    css::uno::Sequence< css::beans::Property > const m_pProps;
 
 private:
     bool queryProperty( const OUString& rName,

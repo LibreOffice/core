@@ -35,7 +35,7 @@ struct ResultListEntry
     css::uno::Reference< css::ucb::XContentIdentifier > xId;
     css::uno::Reference< css::ucb::XContent > xContent;
     css::uno::Reference< css::sdbc::XRow > xRow;
-    GFileInfo *pInfo;
+    GFileInfo * const pInfo;
 
     explicit ResultListEntry( GFileInfo *pInInfo ) : pInfo(pInInfo)
     {
@@ -54,7 +54,7 @@ class DataSupplier : public ucbhelper::ResultSetDataSupplier
 {
 private:
     rtl::Reference< ::gio::Content > mxContent;
-    sal_Int32 mnOpenMode;
+    sal_Int32 const mnOpenMode;
     bool mbCountFinal;
     bool getData();
     ResultList maResults;

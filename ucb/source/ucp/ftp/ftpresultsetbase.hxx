@@ -396,7 +396,7 @@ namespace ftp {
         ItemSet                             m_aItems;
         std::vector<OUString>               m_aPath;
 
-        css::uno::Sequence< css::beans::Property >
+        css::uno::Sequence< css::beans::Property > const
                                             m_sProperty;
 
         osl::Mutex                          m_aMutex;

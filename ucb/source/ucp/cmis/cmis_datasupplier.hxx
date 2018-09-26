@@ -35,7 +35,7 @@ namespace cmis
     {
         private:
             ChildrenProvider* m_pChildrenProvider;
-            sal_Int32 mnOpenMode;
+            sal_Int32 const mnOpenMode;
             bool mbCountFinal;
             void getData();
             std::vector< ResultListEntry > maResults;

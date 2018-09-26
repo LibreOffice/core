@@ -102,7 +102,7 @@ namespace fileaccess {
         osl::Mutex                                         m_aMutex;
         css::uno::Sequence< css::uno::Any >                m_aValueMap;
         bool                                               m_nWasNull;
-        TaskManager*                                             m_pMyShell;
+        TaskManager* const                                 m_pMyShell;
         css::uno::Reference< css::script::XTypeConverter > m_xTypeConverter;
     };
 

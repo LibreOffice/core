@@ -53,7 +53,7 @@ class Package : public cppu::OWeakObject,
 {
     friend class ContentProvider;
 
-    OUString                                        m_aName;
+    OUString const                                       m_aName;
     uno::Reference< container::XHierarchicalNameAccess > m_xNA;
     ContentProvider*                                     m_pOwner;
 
