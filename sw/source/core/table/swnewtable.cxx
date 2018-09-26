@@ -734,10 +734,10 @@ bool SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                 nLastRowSpan = nRowSpan;
         }
         const SvxBoxItem& aSelBoxItem = pBoxFrameFormat->GetBox();
-        SvxBoxItem* pNoRightBorder = nullptr;
+        std::unique_ptr<SvxBoxItem> pNoRightBorder;
         if( aSelBoxItem.GetRight() )
         {
-            pNoRightBorder = new SvxBoxItem( aSelBoxItem );
+            pNoRightBorder.reset( new SvxBoxItem( aSelBoxItem ));
             pNoRightBorder->SetLine( nullptr, SvxBoxItemLine::RIGHT );
         }
         for( sal_uInt16 j = 0; j < nCnt; ++j )
@@ -762,7 +762,6 @@ bool SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
             SwFrameFormat* pFrameFormat = pBox->ClaimFrameFormat();
             pFrameFormat->SetFormatAttr( *pNoRightBorder );
         }
-        delete pNoRightBorder;
     }
 
     aFndBox.MakeFrames( *this );
