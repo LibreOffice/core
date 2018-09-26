@@ -198,16 +198,12 @@ sal_Bool SAL_CALL ResultSetMetaData::isSigned( sal_Int32 /*column*/ )
 
 
 // virtual
-sal_Int32 SAL_CALL ResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
+sal_Int32 SAL_CALL ResultSetMetaData::getColumnDisplaySize( sal_Int32 /*column*/ )
 {
     /*
         Gets the normal maximum width in characters for column.
      */
-
-    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
-        return 16;
-
-    return m_pImpl->m_aColumnData[ column - 1 ].columnDisplaySize;
+    return 16;
 }
 
 

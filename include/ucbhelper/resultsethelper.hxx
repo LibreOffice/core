@@ -62,7 +62,7 @@ class UCBHELPER_DLLPUBLIC ResultSetImplHelper :
 
 protected:
     osl::Mutex                                                 m_aMutex;
-    css::ucb::OpenCommandArgument2                             m_aCommand;
+    css::ucb::OpenCommandArgument2 const                       m_aCommand;
     css::uno::Reference< css::uno::XComponentContext >         m_xContext;
     // Resultset #1
     css::uno::Reference< css::sdbc::XResultSet >               m_xResultSet1;

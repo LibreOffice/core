@@ -66,7 +66,7 @@ namespace proxydecider_impl
 class WildCard
 {
 private:
-    OString m_aWildString;
+    OString const m_aWildString;
 
 public:
     explicit WildCard( const OUString& rWildCard )
@@ -80,18 +80,13 @@ public:
 
 typedef std::pair< WildCard, WildCard > NoProxyListEntry;
 
-
 class HostnameCache
 {
     typedef std::pair< OUString, OUString > HostListEntry;
 
     std::deque< HostListEntry >    m_aHostList;
-    sal_uInt32                     m_nCapacity;
 
 public:
-    explicit HostnameCache()
-        : m_nCapacity( 256 ) {}
-
     bool get( const OUString & rKey, OUString & rValue ) const
     {
         for (auto const& host : m_aHostList)
@@ -107,8 +102,10 @@ public:
 
     void put( const OUString & rKey, const OUString & rValue )
     {
-        if ( m_aHostList.size() == m_nCapacity )
-            m_aHostList.resize( m_nCapacity / 2 );
+        static constexpr sal_uInt32 nCapacity = 256;
+
+        if ( m_aHostList.size() == nCapacity )
+            m_aHostList.resize( nCapacity / 2 );
 
         m_aHostList.push_front( HostListEntry( rKey, rValue ) );
     }

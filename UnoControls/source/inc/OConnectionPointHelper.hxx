@@ -100,7 +100,7 @@ private:
     css::uno::WeakReference< css::lang::XConnectionPointContainer >   m_oContainerWeakReference;   // Reference to container-class!. Don't use Reference<...>
                                                                                             // It is a ring-reference => and must be a wekreference!
     OConnectionPointContainerHelper*                                  m_pContainerImplementation;
-    css::uno::Type                                                    m_aInterfaceType;
+    css::uno::Type const                                                    m_aInterfaceType;
     css::uno::Reference< css::uno::XInterface >                       m_xLock;
 };
 
