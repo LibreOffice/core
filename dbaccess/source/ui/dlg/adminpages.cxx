@@ -68,6 +68,16 @@ namespace dbaui
         SetExchangeSupport();
     }
 
+    OGenericAdministrationPage::OGenericAdministrationPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rId, const SfxItemSet& rAttrSet)
+        : SfxTabPage(pParent, rUIXMLDescription, rId, &rAttrSet)
+        , m_abEnableRoadmap(false)
+        , m_pAdminDialog(nullptr)
+        , m_pItemSetHelper(nullptr)
+    {
+
+        SetExchangeSupport();
+    }
+
     DeactivateRC OGenericAdministrationPage::DeactivatePage(SfxItemSet* _pSet)
     {
         if (_pSet)
@@ -108,18 +118,37 @@ namespace dbaui
     {
         callModifiedHdl(pCtrl);
     }
-    IMPL_LINK(OGenericAdministrationPage, OnControlModifiedClick, Button*, pCtrl, void)
+
+    IMPL_LINK(OGenericAdministrationPage, OnControlModifiedButtonClick, weld::ToggleButton&, rCtrl, void)
     {
-        callModifiedHdl(pCtrl);
+        callModifiedHdl(&rCtrl);
     }
+
+    IMPL_LINK(OGenericAdministrationPage, OnControlModifiedClick, Button*, rCtrl, void)
+    {
+        callModifiedHdl(&rCtrl);
+    }
+
     IMPL_LINK(OGenericAdministrationPage, ControlModifiedCheckBoxHdl, CheckBox&, rCtrl, void)
     {
         callModifiedHdl(&rCtrl);
     }
+
     IMPL_LINK(OGenericAdministrationPage, OnControlEditModifyHdl, Edit&, rCtrl, void)
     {
         callModifiedHdl(&rCtrl);
     }
+
+    IMPL_LINK(OGenericAdministrationPage, OnControlEntryModifyHdl, weld::Entry&, rCtrl, void)
+    {
+        callModifiedHdl(&rCtrl);
+    }
+
+    IMPL_LINK(OGenericAdministrationPage, OnControlSpinButtonModifyHdl, weld::SpinButton&, rCtrl, void)
+    {
+        callModifiedHdl(&rCtrl);
+    }
+
     bool OGenericAdministrationPage::getSelectedDataSource(OUString& _sReturn, OUString const & _sCurr)
     {
         // collect all ODBC data source names
@@ -210,6 +239,27 @@ namespace dbaui
             _bChangedSomething = true;
         }
     }
+    void OGenericAdministrationPage::fillBool( SfxItemSet& _rSet, const weld::CheckButton* pCheckBox, sal_uInt16 _nID, bool bOptionalBool, bool& _bChangedSomething, bool _bRevertValue )
+    {
+        if (pCheckBox && pCheckBox->get_state_changed_from_saved())
+        {
+            bool bValue = pCheckBox->get_active();
+            if ( _bRevertValue )
+                bValue = !bValue;
+
+            if (bOptionalBool)
+            {
+                OptionalBoolItem aValue( _nID );
+                if ( pCheckBox->get_state() != TRISTATE_INDET )
+                    aValue.SetValue( bValue );
+                _rSet.Put( aValue );
+            }
+            else
+                _rSet.Put( SfxBoolItem( _nID, bValue ) );
+
+            _bChangedSomething = true;
+        }
+    }
     void OGenericAdministrationPage::fillInt32(SfxItemSet& _rSet, NumericField const * _pEdit, sal_uInt16 _nID, bool& _bChangedSomething)
     {
         if( _pEdit && _pEdit->IsValueChangedFromSaved() )
@@ -218,11 +268,27 @@ namespace dbaui
             _bChangedSomething = true;
         }
     }
+    void OGenericAdministrationPage::fillInt32(SfxItemSet& _rSet, const weld::SpinButton* pEdit, sal_uInt16 _nID, bool& _bChangedSomething)
+    {
+        if (pEdit && pEdit->get_value_changed_from_saved())
+        {
+            _rSet.Put(SfxInt32Item(_nID, pEdit->get_value()));
+            _bChangedSomething = true;
+        }
+    }
     void OGenericAdministrationPage::fillString(SfxItemSet& _rSet, Edit const * _pEdit, sal_uInt16 _nID, bool& _bChangedSomething)
     {
         if( _pEdit && _pEdit->IsValueChangedFromSaved() )
         {
             _rSet.Put(SfxStringItem(_nID, _pEdit->GetText()));
+            _bChangedSomething = true;
+        }
+    }
+    void OGenericAdministrationPage::fillString(SfxItemSet& _rSet, const weld::Entry* pEdit, sal_uInt16 _nID, bool& _bChangedSomething)
+    {
+        if (pEdit && pEdit->get_value_changed_from_saved())
+        {
+            _rSet.Put(SfxStringItem(_nID, pEdit->get_text()));
             _bChangedSomething = true;
         }
     }

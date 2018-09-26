@@ -6073,6 +6073,12 @@ public:
         return o3tl::make_unique<GtkInstanceSpinButton>(pSpinButton, bTakeOwnership);
     }
 
+    virtual std::unique_ptr<weld::MetricSpinButton> weld_metric_spin_button(const OString& id, FieldUnit eUnit,
+                                                                      bool bTakeOwnership) override
+    {
+        return o3tl::make_unique<weld::MetricSpinButton>(weld_spin_button(id, bTakeOwnership), eUnit);
+    }
+
     virtual std::unique_ptr<weld::TimeSpinButton> weld_time_spin_button(const OString& id, TimeFieldFormat eFormat,
                                                         bool bTakeOwnership) override
     {
