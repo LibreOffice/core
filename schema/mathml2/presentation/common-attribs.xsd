@@ -66,31 +66,31 @@
         </xs:restriction>
       </xs:simpleType>
    </xs:attribute>
-   <!-- set by dictionnary, else it is "thickmathspace" -->
+   <!-- set by dictionary, else it is "thickmathspace" -->
    <xs:attribute name="lspace">
       <xs:simpleType>
          <xs:union memberTypes="length-with-unit named-space"/>
       </xs:simpleType>
-   </xs:attribute>    
-   <!-- set by dictionnary, else it is "thickmathspace" -->
+   </xs:attribute>
+   <!-- set by dictionary, else it is "thickmathspace" -->
    <xs:attribute name="rspace">
       <xs:simpleType>
          <xs:union memberTypes="length-with-unit named-space"/>
       </xs:simpleType>
    </xs:attribute>
-   <!-- set by dictionnary, else it is "false" -->
+   <!-- set by dictionary, else it is "false" -->
    <xs:attribute name="fence" type="xs:boolean"/>
-   <!-- set by dictionnary, else it is "false" -->
+   <!-- set by dictionary, else it is "false" -->
    <xs:attribute name="separator" type="xs:boolean"/>
-   <!-- set by dictionnary, else it is "false" -->
+   <!-- set by dictionary, else it is "false" -->
    <xs:attribute name="stretchy" type="xs:boolean"/>
-   <!-- set by dictionnary, else it is "true" -->
+   <!-- set by dictionary, else it is "true" -->
    <xs:attribute name="symmetric" type="xs:boolean"/>
-   <!-- set by dictionnary, else it is "false" -->
+   <!-- set by dictionary, else it is "false" -->
    <xs:attribute name="movablelimits" type="xs:boolean"/>
-   <!-- set by dictionnary, else it is "false" -->
+   <!-- set by dictionary, else it is "false" -->
    <xs:attribute name="accent" type="xs:boolean"/>
-   <!-- set by dictionnary, else it is "false" -->
+   <!-- set by dictionary, else it is "false" -->
    <xs:attribute name="largeop" type="xs:boolean"/>
    <xs:attribute name="minsize">
       <xs:simpleType>
