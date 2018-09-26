@@ -80,7 +80,7 @@ namespace ftp {
 
     private:
 
-        OUString m_ident;
+        OUString const m_ident;
     };
 
 }

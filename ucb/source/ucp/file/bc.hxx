@@ -226,7 +226,7 @@ namespace fileaccess {
                      JustInserted = 2,
                      Deleted = 4,
                      FullFeatured = 8 };
-        bool                                                                    m_bFolder;
+        bool const                                                                  m_bFolder;
         sal_uInt16                                                                  m_nState;
 
         osl::Mutex                         m_aMutex;

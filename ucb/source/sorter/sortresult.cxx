@@ -71,7 +71,7 @@ struct SortListData
 {
     bool        mbModified;
     sal_IntPtr  mnCurPos;
-    sal_IntPtr  mnOldPos;
+    sal_IntPtr const  mnOldPos;
 
     explicit SortListData( sal_IntPtr nPos );
 };

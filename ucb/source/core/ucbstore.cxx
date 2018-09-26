@@ -1059,7 +1059,7 @@ struct PersistentPropertySet_Impl
 {
     rtl::Reference<PropertySetRegistry>  m_pCreator;
     rtl::Reference<PropertySetInfo_Impl> m_pInfo;
-    OUString                    m_aKey;
+    OUString const              m_aKey;
     OUString                    m_aFullKey;
     osl::Mutex                  m_aMutex;
     std::unique_ptr<OInterfaceContainerHelper2>  m_pDisposeEventListeners;

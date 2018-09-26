@@ -37,7 +37,7 @@ class Seekable : public css::io::XTruncate,
     public ::cppu::OWeakObject
 {
 private:
-    GSeekable *mpStream;
+    GSeekable * const mpStream;
 public:
     explicit Seekable( GSeekable *pStream );
     virtual ~Seekable() override;

@@ -49,8 +49,8 @@ class RepoContent : public ::ucbhelper::ContentImplHelper,
                     public ChildrenProvider
 {
 private:
-    ContentProvider*       m_pProvider;
-    URL                    m_aURL;
+    ContentProvider* const       m_pProvider;
+    URL const                    m_aURL;
     OUString          m_sRepositoryId;
 
     std::vector< libcmis::RepositoryPtr > m_aRepositories;
