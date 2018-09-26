@@ -120,6 +120,7 @@ static OString OutTBLBorderLine(RtfExport const& rExport, const editeng::SvxBord
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDASH);
                 break;
             case SvxBorderLineStyle::DOUBLE:
+            case SvxBorderLineStyle::DOUBLE_THIN:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDB);
                 break;
             case SvxBorderLineStyle::THINTHICK_SMALLGAP:
@@ -151,6 +152,15 @@ static OString OutTBLBorderLine(RtfExport const& rExport, const editeng::SvxBord
                 break;
             case SvxBorderLineStyle::INSET:
                 aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRINSET);
+                break;
+            case SvxBorderLineStyle::FINE_DASHED:
+                aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDASHSM);
+                break;
+            case SvxBorderLineStyle::DASH_DOT:
+                aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDASHD);
+                break;
+            case SvxBorderLineStyle::DASH_DOT_DOT:
+                aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDASHDD);
                 break;
             case SvxBorderLineStyle::NONE:
             default:

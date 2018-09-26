@@ -217,6 +217,15 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             case RTF_BRDRINSET:
                 nParam = NS_ooxml::LN_Value_ST_Border_inset;
                 break;
+            case RTF_BRDRDASHSM:
+                nParam = NS_ooxml::LN_Value_ST_Border_dashSmallGap;
+                break;
+            case RTF_BRDRDASHD:
+                nParam = NS_ooxml::LN_Value_ST_Border_dotDash;
+                break;
+            case RTF_BRDRDASHDD:
+                nParam = NS_ooxml::LN_Value_ST_Border_dotDotDash;
+                break;
             case RTF_BRDRNONE:
                 nParam = NS_ooxml::LN_Value_ST_Border_none;
                 break;
