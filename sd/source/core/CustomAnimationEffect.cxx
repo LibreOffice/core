@@ -2969,7 +2969,7 @@ void MainSequence::init()
     mnSequenceType = EffectNodeType::MAIN_SEQUENCE;
 
     maTimer.SetInvokeHandler( LINK(this, MainSequence, onTimerHdl) );
-    maTimer.SetTimeout(500);
+    maTimer.SetTimeout(50);
 
     mxChangesListener.set( new AnimationChangeListener( this ) );
 
@@ -3356,7 +3356,7 @@ IMPL_LINK_NOARG(MainSequence, onTimerHdl, Timer *, void)
     }
 }
 
-/** starts a timer that recreates the internal structure from the API core after 1 second */
+/** starts a timer that recreates the internal structure from the API core */
 void MainSequence::startRecreateTimer()
 {
     if( !mbRebuilding && (mbIgnoreChanges == 0) )
@@ -3366,7 +3366,10 @@ void MainSequence::startRecreateTimer()
     }
 }
 
-/** starts a timer that rebuilds the API core from the internal structure after 1 second */
+/**
+ * starts a timer that rebuilds the API core from the internal structure
+ * This is used to reduce the number of screen redraws due to animation changes.
+*/
 void MainSequence::startRebuildTimer()
 {
     mbTimerMode = true;
