@@ -150,12 +150,12 @@ ErrCode SwReader::Read( const Reader& rOptions )
 
         mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
 
-        SwPaM* pUndoPam = nullptr;
+        std::unique_ptr<SwPaM> pUndoPam;
         if( bDocUndo || pCursor )
         {
             // set Pam to the previous node, so that it is not also moved
             const SwNodeIndex& rTmp = pPam->GetPoint()->nNode;
-            pUndoPam = new SwPaM( rTmp, rTmp, 0, -1 );
+            pUndoPam.reset(new SwPaM( rTmp, rTmp, 0, -1 ));
         }
 
         // store for now all Fly's
@@ -316,7 +316,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
             mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
         }
 
-        delete pUndoPam;
+        pUndoPam.reset();
 
         pPam = pPam->GetNext();
         if( pPam == pEnd )
