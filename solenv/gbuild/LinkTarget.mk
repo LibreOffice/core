@@ -62,6 +62,23 @@ gb_Object__command_dep = \
 endif
 
 
+# AsmObject class
+
+gb_AsmObject_REPOS := $(gb_REPOS)
+
+gb_AsmObject_get_source = $(1)/$(2)$(gb_AsmObject_EXT)
+
+define gb_AsmObject__rules
+$$(call gb_AsmObject_get_target,%) : $$(call gb_AsmObject_get_source,$(1),%)
+	$$(call gb_AsmObject__command,$$@,$$*,$$<))
+
+endef
+
+$(foreach repo,$(gb_AsmObject_REPOS),$(eval $(call gb_AsmObject__rules,$(repo))))
+
+gb_AsmObject_AsmObject =
+
+
 # CObject class
 
 gb_CObject_REPOS := $(gb_REPOS)
@@ -213,6 +230,7 @@ gb_LinkTarget_DEFAULTDEFS := $(gb_GLOBALDEFS)
 $(call gb_LinkTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),LNK,4)
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
+		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_dep_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
@@ -324,6 +342,8 @@ define gb_LinkTarget_LinkTarget
 $(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_LinkTarget_get_external_headers_target,$(1)) : SELF := $(1)
 $(call gb_LinkTarget_get_target,$(1)) : DLLTARGET := 
+$(call gb_LinkTarget_get_clean_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : ASMOBJECTS :=
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : COBJECTS := 
 $(call gb_LinkTarget_get_clean_target,$(1)) \
@@ -693,6 +713,14 @@ $$(foreach lib,$(2),$$(call gb_Library_get_headers_target,$$(lib)))
 endef
 
 
+define gb_LinkTarget_add_asmobject
+$(call gb_LinkTarget_get_target,$(1)) : ASMOBJECTS += $(2)
+$(call gb_LinkTarget_get_clean_target,$(1)) : ASMOBJECTS += $(2)
+
+$(call gb_LinkTarget_get_target,$(1)) : $(call gb_AsmObject_get_target,$(2))
+
+endef
+
 define gb_LinkTarget_add_cobject
 $(call gb_LinkTarget_get_target,$(1)) : COBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : COBJECTS += $(2)
@@ -759,6 +787,10 @@ endef
 
 define gb_LinkTarget_add_exception_object
 $(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS))
+endef
+
+define gb_LinkTarget_add_asmbojects
+$(foreach obj,$(2),$(call gb_LinkTarget_add_asmobject,$(1),$(obj),$(3)))
 endef
 
 define gb_LinkTarget_add_cobjects

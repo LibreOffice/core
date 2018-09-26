@@ -263,6 +263,26 @@ $(1)))))
 endef
 
 
+# AsmObject class
+
+gb_AsmObject_EXT := .asm
+
+define gb_AsmObject__command
+$(call gb_Output_announce,$(2),$(true),ASM,3)
+$(call gb_Helper_abbreviate_dirs_native,\
+	mkdir -p $(dir $(1)) && \
+	unset INCLUDE && \
+	$(gb_CC) \
+		$(DEFS) \
+		$(T_CFLAGS) \
+		-FD$(PDBFILE) \
+		$(CFLAGS) \
+		-I$(dir $(3)) \
+		$(INCLUDE) \
+		-c $(3) \
+		-Fo$(1))
+endef
+
 # CObject class
 
 ifeq ($(gb_FULLDEPS),$(true))

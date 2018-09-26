@@ -46,6 +46,7 @@ endef
 
 gb_AllLangResTarget_get_target = $(WORKDIR)/AllLangRes/$(1)
 gb_Ant_get_target = $(WORKDIR)/Ant/$(1).jar
+gb_AsmObject_get_target = $(WORKDIR)/AsmObject/$(1).o
 gb_BisonTarget_get_target = $(WORKDIR)/Bison/$(1)/$(2).cxx
 gb_CObject_get_target = $(WORKDIR)/CObject/$(1).o
 gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component

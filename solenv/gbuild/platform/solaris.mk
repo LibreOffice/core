@@ -145,6 +145,24 @@ $(1)
 endef
 
 
+# AsmObject class
+
+gb_AsmObject_EXT := .s
+
+define gb_AsmObject__command
+$(call gb_Output_announce,$(2),$(true),ASM,3)
+$(call gb_Helper_abbreviate_dirs,\
+	mkdir -p $(dir $(1)) && \
+	$(gb_CC) \
+		$(DEFS) \
+		$(T_CFLAGS) \
+		$(CFLAGS) \
+		-c $(3) \
+		-o $(1) \
+		-I$(dir $(3)) \
+		$(INCLUDE))
+endef
+
 # CObject class
 
 define gb_CObject__command
