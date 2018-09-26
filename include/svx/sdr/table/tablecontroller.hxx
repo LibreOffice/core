@@ -72,9 +72,9 @@ public:
     SVX_DLLPRIVATE void onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs = nullptr );
     SVX_DLLPRIVATE void onDelete( sal_uInt16 nSId );
     SVX_DLLPRIVATE void onSelect( sal_uInt16 nSId );
-    SVX_DLLPRIVATE void onFormatTable( SfxRequest const & rReq );
+    SVX_DLLPRIVATE void onFormatTable(const SfxRequest& rReq);
     SVX_DLLPRIVATE void MergeMarkedCells();
-    SVX_DLLPRIVATE void SplitMarkedCells();
+    SVX_DLLPRIVATE void SplitMarkedCells(const SfxRequest& rReq);
     SVX_DLLPRIVATE void DistributeColumns( const bool bOptimize );
     SVX_DLLPRIVATE void DistributeRows( const bool bOptimize );
     SVX_DLLPRIVATE void SetVertical( sal_uInt16 nSId );

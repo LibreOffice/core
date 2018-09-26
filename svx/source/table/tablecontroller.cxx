@@ -887,7 +887,7 @@ namespace
     }
 }
 
-void SvxTableController::onFormatTable( SfxRequest const & rReq )
+void SvxTableController::onFormatTable(const SfxRequest& rReq)
 {
     if(!mxTableObj.is())
         return;
@@ -912,6 +912,7 @@ void SvxTableController::onFormatTable( SfxRequest const & rReq )
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         ScopedVclPtr<SfxAbstractTabDialog> xDlg( pFact->CreateSvxFormatCellsDialog(
+            rReq.GetFrameWeld(),
             &aNewAttr,
             rModel,
             &rTableObj) );
@@ -999,7 +1000,7 @@ void SvxTableController::Execute( SfxRequest& rReq )
         break;
 
     case SID_TABLE_SPLIT_CELLS:
-        SplitMarkedCells();
+        SplitMarkedCells(rReq);
         break;
 
     case SID_TABLE_OPTIMAL_COLUMN_WIDTH:
@@ -1246,13 +1247,13 @@ void SvxTableController::MergeMarkedCells()
     }
 }
 
-void SvxTableController::SplitMarkedCells()
+void SvxTableController::SplitMarkedCells(const SfxRequest& rReq)
 {
     if(!checkTableObject() || !mxTable.is())
         return;
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr< SvxAbstractSplitTableDialog > xDlg( pFact->CreateSvxSplitTableDialog( nullptr, false, 99 ) );
+    ScopedVclPtr<SvxAbstractSplitTableDialog> xDlg(pFact->CreateSvxSplitTableDialog(rReq.GetFrameWeld(), false, 99));
 
     if( xDlg->Execute() )
     {
@@ -1650,7 +1651,7 @@ SvxTableController::TblAction SvxTableController::getKeyboardAction(const KeyEve
     return nAction;
 }
 
-bool SvxTableController::executeAction(TblAction nAction, bool bSelect, vcl::Window* pWindow)
+bool SvxTableController::executeAction(TblAction nAction, bool bSelect, vcl::/indow* pWindow)
 {
     sdr::table::SdrTableObj* pTableObj = mxTableObj.get();
     if( !pTableObj )
