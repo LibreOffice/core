@@ -54,29 +54,8 @@ namespace dbaui
     };
 
     // SpecialSettingsPage
-    SpecialSettingsPage::SpecialSettingsPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta )
-        : OGenericAdministrationPage(pParent, "SpecialSettingsPage",
-            "dbaccess/ui/specialsettingspage.ui", _rCoreAttrs)
-        , m_pIsSQL92Check( nullptr )
-        , m_pAppendTableAlias( nullptr )
-        , m_pAsBeforeCorrelationName( nullptr )
-        , m_pEnableOuterJoin( nullptr )
-        , m_pIgnoreDriverPrivileges( nullptr )
-        , m_pParameterSubstitution( nullptr )
-        , m_pSuppressVersionColumn( nullptr )
-        , m_pCatalog( nullptr )
-        , m_pSchema( nullptr )
-        , m_pIndexAppendix( nullptr )
-        , m_pDosLineEnds( nullptr )
-        , m_pCheckRequiredFields( nullptr )
-        , m_pIgnoreCurrency(nullptr)
-        , m_pEscapeDateTime(nullptr)
-        , m_pPrimaryKeySupport(nullptr)
-        , m_pRespectDriverResultSetType(nullptr)
-        , m_pBooleanComparisonModeLabel( nullptr )
-        , m_pBooleanComparisonMode( nullptr )
-        , m_pMaxRowScanLabel( nullptr )
-        , m_pMaxRowScan( nullptr )
+    SpecialSettingsPage::SpecialSettingsPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta)
+        : OGenericAdministrationPage(pParent, "dbaccess/ui/specialsettingspage.ui", "SpecialSettingsPage", _rCoreAttrs)
         , m_aControlDependencies()
         , m_aBooleanSettings()
         , m_bHasBooleanComparisonMode( _rDSMeta.getFeatureSet().has( DSID_BOOLEANCOMPARISON ) )
@@ -91,7 +70,7 @@ namespace dbaui
             sal_uInt16 nItemId = booleanSetting.nItemId;
             if ( rFeatures.has( nItemId ) )
             {
-                get(*booleanSetting.ppControl, booleanSetting.sControlId);
+                *booleanSetting.ppControl = m_xBuilder->weld_check_button(booleanSetting.sControlId);
                 (*booleanSetting.ppControl)->SetClickHdl( LINK(this, OGenericAdministrationPage, OnControlModifiedClick) );
                 (*booleanSetting.ppControl)->Show();
 
@@ -102,29 +81,29 @@ namespace dbaui
             }
         }
 
-        if ( m_pAsBeforeCorrelationName && m_pAppendTableAlias )
-            // make m_pAsBeforeCorrelationName depend on m_pAppendTableAlias
-            m_aControlDependencies.enableOnCheckMark( *m_pAppendTableAlias, *m_pAsBeforeCorrelationName );
+        if (m_xAsBeforeCorrelationName && m_xAppendTableAlias)
+            // make m_xAsBeforeCorrelationName depend on m_xAppendTableAlias
+            m_aControlDependencies.enableOnCheckMark( *m_xAppendTableAlias, *m_xAsBeforeCorrelationName );
 
         // create the controls for the boolean comparison mode
         if ( m_bHasBooleanComparisonMode )
         {
-            get(m_pBooleanComparisonModeLabel, "comparisonft");
-            get(m_pBooleanComparisonMode, "comparison");
-            m_pBooleanComparisonMode->SetDropDownLineCount( 4 );
-            m_pBooleanComparisonMode->SetSelectHdl( LINK(this, SpecialSettingsPage, BooleanComparisonSelectHdl) );
-            m_pBooleanComparisonModeLabel->Show();
-            m_pBooleanComparisonMode->Show();
+            m_xBooleanComparisonModeLabel = m_xBuilder->weld_label("comparisonft");
+            m_xBooleanComparisonMode = m_xBuilder->weld_combo("comparison");
+            m_xBooleanComparisonMode->SetDropDownLineCount( 4 );
+            m_xBooleanComparisonMode->SetSelectHdl( LINK(this, SpecialSettingsPage, BooleanComparisonSelectHdl) );
+            m_xBooleanComparisonModeLabel->show();
+            m_xBooleanComparisonMode->show();
         }
         // create the controls for the max row scan
         if ( m_bHasMaxRowScan )
         {
-            get(m_pMaxRowScanLabel, "rowsft");
-            get(m_pMaxRowScan, "rows");
-            m_pMaxRowScan->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
-            m_pMaxRowScan->SetUseThousandSep(false);
-            m_pMaxRowScanLabel->Show();
-            m_pMaxRowScan->Show();
+            m_xMaxRowScanLabel  = m_xBuilder->weld_label("rowsft");
+            m_xMaxRowScan = m_xBuilder->weld_spin_button("rows");
+            m_xMaxRowScan->SetModifyHdl(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
+            m_xMaxRowScan->SetUseThousandSep(false);
+            m_xMaxRowScanLabel->show();
+            m_xMaxRowScan->show();
         }
     }
 
@@ -138,54 +117,28 @@ namespace dbaui
         disposeOnce();
     }
 
-    void SpecialSettingsPage::dispose()
-    {
-        m_aControlDependencies.clear();
-        m_pIsSQL92Check.clear();
-        m_pAppendTableAlias.clear();
-        m_pAsBeforeCorrelationName.clear();
-        m_pEnableOuterJoin.clear();
-        m_pIgnoreDriverPrivileges.clear();
-        m_pParameterSubstitution.clear();
-        m_pSuppressVersionColumn.clear();
-        m_pCatalog.clear();
-        m_pSchema.clear();
-        m_pIndexAppendix.clear();
-        m_pDosLineEnds.clear();
-        m_pCheckRequiredFields.clear();
-        m_pIgnoreCurrency.clear();
-        m_pEscapeDateTime.clear();
-        m_pPrimaryKeySupport.clear();
-        m_pRespectDriverResultSetType.clear();
-        m_pBooleanComparisonModeLabel.clear();
-        m_pBooleanComparisonMode.clear();
-        m_pMaxRowScanLabel.clear();
-        m_pMaxRowScan.clear();
-        OGenericAdministrationPage::dispose();
-    }
-
     void SpecialSettingsPage::impl_initBooleanSettings()
     {
         OSL_PRECOND( m_aBooleanSettings.empty(), "SpecialSettingsPage::impl_initBooleanSettings: called twice!" );
 
         // for easier maintenance, write the table in this form, then copy it to m_aBooleanSettings
         BooleanSettingDesc aSettings[] = {
-            { std::addressof(m_pIsSQL92Check),                 "usesql92",        DSID_SQL92CHECK,            false },
-            { std::addressof(m_pAppendTableAlias),             "append",          DSID_APPEND_TABLE_ALIAS,    false },
-            { std::addressof(m_pAsBeforeCorrelationName),      "useas",           DSID_AS_BEFORE_CORRNAME,    false },
-            { std::addressof(m_pEnableOuterJoin),              "useoj",           DSID_ENABLEOUTERJOIN,       false },
-            { std::addressof(m_pIgnoreDriverPrivileges),       "ignoreprivs",     DSID_IGNOREDRIVER_PRIV,     false },
-            { std::addressof(m_pParameterSubstitution),        "replaceparams",   DSID_PARAMETERNAMESUBST,    false },
-            { std::addressof(m_pSuppressVersionColumn),        "displayver",      DSID_SUPPRESSVERSIONCL,     true  },
-            { std::addressof(m_pCatalog),                      "usecatalogname",  DSID_CATALOG,               false },
-            { std::addressof(m_pSchema),                       "useschemaname",   DSID_SCHEMA,                false },
-            { std::addressof(m_pIndexAppendix),                "createindex",     DSID_INDEXAPPENDIX,         false },
-            { std::addressof(m_pDosLineEnds),                  "eol",             DSID_DOSLINEENDS,           false },
-            { std::addressof(m_pCheckRequiredFields),          "ignorecurrency",  DSID_CHECK_REQUIRED_FIELDS, false },
-            { std::addressof(m_pIgnoreCurrency),               "inputchecks",     DSID_IGNORECURRENCY,        false },
-            { std::addressof(m_pEscapeDateTime),               "useodbcliterals", DSID_ESCAPE_DATETIME,       false },
-            { std::addressof(m_pPrimaryKeySupport),            "primarykeys",     DSID_PRIMARY_KEY_SUPPORT,   false },
-            { std::addressof(m_pRespectDriverResultSetType),   "resulttype",      DSID_RESPECTRESULTSETTYPE,  false }
+            { std::addressof(m_xIsSQL92Check),                 "usesql92",        DSID_SQL92CHECK,            false },
+            { std::addressof(m_xAppendTableAlias),             "append",          DSID_APPEND_TABLE_ALIAS,    false },
+            { std::addressof(m_xAsBeforeCorrelationName),      "useas",           DSID_AS_BEFORE_CORRNAME,    false },
+            { std::addressof(m_xEnableOuterJoin),              "useoj",           DSID_ENABLEOUTERJOIN,       false },
+            { std::addressof(m_xIgnoreDriverPrivileges),       "ignoreprivs",     DSID_IGNOREDRIVER_PRIV,     false },
+            { std::addressof(m_xParameterSubstitution),        "replaceparams",   DSID_PARAMETERNAMESUBST,    false },
+            { std::addressof(m_xSuppressVersionColumn),        "displayver",      DSID_SUPPRESSVERSIONCL,     true  },
+            { std::addressof(m_xCatalog),                      "usecatalogname",  DSID_CATALOG,               false },
+            { std::addressof(m_xSchema),                       "useschemaname",   DSID_SCHEMA,                false },
+            { std::addressof(m_xIndexAppendix),                "createindex",     DSID_INDEXAPPENDIX,         false },
+            { std::addressof(m_xDosLineEnds),                  "eol",             DSID_DOSLINEENDS,           false },
+            { std::addressof(m_xCheckRequiredFields),          "ignorecurrency",  DSID_CHECK_REQUIRED_FIELDS, false },
+            { std::addressof(m_xIgnoreCurrency),               "inputchecks",     DSID_IGNORECURRENCY,        false },
+            { std::addressof(m_xEscapeDateTime),               "useodbcliterals", DSID_ESCAPE_DATETIME,       false },
+            { std::addressof(m_xPrimaryKeySupport),            "primarykeys",     DSID_PRIMARY_KEY_SUPPORT,   false },
+            { std::addressof(m_xRespectDriverResultSetType),   "resulttype",      DSID_RESPECTRESULTSETTYPE,  false }
         };
 
         for ( const BooleanSettingDesc& rDesc : aSettings )
@@ -198,11 +151,11 @@ namespace dbaui
     {
         if ( m_bHasBooleanComparisonMode )
         {
-            _rControlList.emplace_back( new ODisableWrapper< FixedText >( m_pBooleanComparisonModeLabel ) );
+            _rControlList.emplace_back(new ODisableWrapper<weld::Label>(m_xBooleanComparisonModeLabel));
         }
         if ( m_bHasMaxRowScan )
         {
-            _rControlList.emplace_back( new ODisableWrapper< FixedText >( m_pMaxRowScanLabel ) );
+            _rControlList.emplace_back(new ODisableWrapper<weld::Label>(m_xMaxRowScanLabel));
         }
     }
 
@@ -217,9 +170,9 @@ namespace dbaui
         }
 
         if ( m_bHasBooleanComparisonMode )
-            _rControlList.emplace_back( new OSaveValueWrapper< ListBox >( m_pBooleanComparisonMode ) );
+            _rControlList.emplace_back(new OSaveValueWrapper<weld::ComboBox>(m_xBooleanComparisonMode));
         if ( m_bHasMaxRowScan )
-            _rControlList.emplace_back(new OSaveValueWrapper<NumericField>(m_pMaxRowScan));
+            _rControlList.emplace_back(new OSaveValueWrapper<weld::SpinButton>(m_xMaxRowScan));
     }
 
     void SpecialSettingsPage::implInitControls(const SfxItemSet& _rSet, bool _bSaveValue)
@@ -272,13 +225,13 @@ namespace dbaui
         if ( m_bHasBooleanComparisonMode )
         {
             const SfxInt32Item* pBooleanComparison = _rSet.GetItem<SfxInt32Item>(DSID_BOOLEANCOMPARISON);
-            m_pBooleanComparisonMode->SelectEntryPos( static_cast< sal_uInt16 >( pBooleanComparison->GetValue() ) );
+            m_xBooleanComparisonMode->set_active(static_cast<sal_uInt16>(pBooleanComparison->GetValue()));
         }
 
         if ( m_bHasMaxRowScan )
         {
             const SfxInt32Item* pMaxRowScan = _rSet.GetItem<SfxInt32Item>(DSID_MAX_ROW_SCAN);
-            m_pMaxRowScan->SetValue(pMaxRowScan->GetValue());
+            m_xMaxRowScan->set_value(pMaxRowScan->GetValue());
         }
 
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
@@ -299,37 +252,34 @@ namespace dbaui
         // the non-boolean items
         if ( m_bHasBooleanComparisonMode )
         {
-            if ( m_pBooleanComparisonMode->IsValueChangedFromSaved() )
+            if (m_xBooleanComparisonMode->IsValueChangedFromSaved())
             {
-                _rSet->Put( SfxInt32Item( DSID_BOOLEANCOMPARISON, m_pBooleanComparisonMode->GetSelectedEntryPos() ) );
+                _rSet->Put(SfxInt32Item(DSID_BOOLEANCOMPARISON, m_xBooleanComparisonMode->get_active()));
                 bChangedSomething = true;
             }
         }
         if ( m_bHasMaxRowScan )
         {
-            fillInt32(*_rSet,m_pMaxRowScan,DSID_MAX_ROW_SCAN,bChangedSomething);
+            fillInt32(*_rSet,m_xMaxRowScan,DSID_MAX_ROW_SCAN,bChangedSomething);
         }
         return bChangedSomething;
     }
 
     // GeneratedValuesPage
-    GeneratedValuesPage::GeneratedValuesPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs )
-        : OGenericAdministrationPage(pParent, "GeneratedValuesPage",
-            "dbaccess/ui/generatedvaluespage.ui", _rCoreAttrs)
+    GeneratedValuesPage::GeneratedValuesPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs)
+        : OGenericAdministrationPage(pParent, "dbaccess/ui/generatedvaluespage.ui", "GeneratedValuesPage", _rCoreAttrs)
+        , m_xAutoRetrievingEnabled(m_xBuilder->weld_check_button("autoretrieve"))
+        , m_xAutoIncrementLabel(m_xBuilder->weld_label("statementft"))
+        , m_xAutoIncrement(m_xBuilder->weld_entry("statement"))
+        , m_xAutoRetrievingLabel(m_xBuilder->weld_label("queryft"))
+        , m_xAutoRetrieving(m_xBuilder->weld_entry("query"))
     {
-        get(m_pAutoFrame, "GeneratedValuesPage");
-        get(m_pAutoRetrievingEnabled, "autoretrieve");
-        get(m_pAutoIncrementLabel, "statementft");
-        get(m_pAutoIncrement, "statement");
-        get(m_pAutoRetrievingLabel, "queryft");
-        get(m_pAutoRetrieving, "query");
+        m_xAutoRetrievingEnabled->connect_toggled(LINK(this, OGenericAdministrationPage, OnControlModifiedClick));
+        m_xAutoIncrement->connect_changed(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
+        m_xAutoRetrieving->connect_changed(LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl));
 
-        m_pAutoRetrievingEnabled->SetClickHdl( LINK(this, OGenericAdministrationPage, OnControlModifiedClick) );
-        m_pAutoIncrement->SetModifyHdl( LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl) );
-        m_pAutoRetrieving->SetModifyHdl( LINK(this, OGenericAdministrationPage, OnControlEditModifyHdl) );
-
-        m_aControlDependencies.enableOnCheckMark( *m_pAutoRetrievingEnabled,
-            *m_pAutoIncrementLabel, *m_pAutoIncrement, *m_pAutoRetrievingLabel, *m_pAutoRetrieving );
+        m_aControlDependencies.enableOnCheckMark( *m_xAutoRetrievingEnabled,
+            *m_xAutoIncrementLabel, *m_xAutoIncrement, *m_xAutoRetrievingLabel, *m_xAutoRetrieving );
     }
 
     GeneratedValuesPage::~GeneratedValuesPage()
@@ -337,28 +287,16 @@ namespace dbaui
         disposeOnce();
     }
 
-    void GeneratedValuesPage::dispose()
-    {
-        m_aControlDependencies.clear();
-        m_pAutoFrame.clear();
-        m_pAutoRetrievingEnabled.clear();
-        m_pAutoIncrementLabel.clear();
-        m_pAutoIncrement.clear();
-        m_pAutoRetrievingLabel.clear();
-        m_pAutoRetrieving.clear();
-        OGenericAdministrationPage::dispose();
-    }
-
     void GeneratedValuesPage::fillWindows( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList )
     {
-        _rControlList.emplace_back( new ODisableWrapper< VclFrame >( m_pAutoFrame ) );
+        _rControlList.emplace_back(new ODisableWrapper<VclFrame>(m_xContainer));
     }
 
     void GeneratedValuesPage::fillControls( std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList )
     {
-        _rControlList.emplace_back( new OSaveValueWrapper< CheckBox >( m_pAutoRetrievingEnabled ) );
-        _rControlList.emplace_back( new OSaveValueWrapper< Edit >( m_pAutoIncrement ) );
-        _rControlList.emplace_back( new OSaveValueWrapper< Edit >( m_pAutoRetrieving ) );
+        _rControlList.emplace_back( new OSaveValueWrapper<weld::CheckButton>( m_xAutoRetrievingEnabled ) );
+        _rControlList.emplace_back( new OSaveValueWrapper<weld::Entry>( m_xAutoIncrement ) );
+        _rControlList.emplace_back( new OSaveValueWrapper<weld::Entry>( m_xAutoRetrieving ) );
     }
 
     void GeneratedValuesPage::implInitControls( const SfxItemSet& _rSet, bool _bSaveValue )
@@ -376,12 +314,12 @@ namespace dbaui
         if (bValid)
         {
             bool bEnabled = pAutoRetrieveEnabledItem->GetValue();
-            m_pAutoRetrievingEnabled->Check( bEnabled );
+            m_xAutoRetrievingEnabled->set_active(bEnabled);
 
-            m_pAutoIncrement->SetText( pAutoIncrementItem->GetValue() );
-            m_pAutoIncrement->ClearModifyFlag();
-            m_pAutoRetrieving->SetText( pAutoRetrieveValueItem->GetValue() );
-            m_pAutoRetrieving->ClearModifyFlag();
+            m_xAutoIncrement->set_text(pAutoIncrementItem->GetValue());
+            m_xAutoIncrement->save_value();
+            m_xAutoRetrieving->set_text(pAutoRetrieveValueItem->GetValue());
+            m_xAutoRetrieving->save_value();
         }
         OGenericAdministrationPage::implInitControls( _rSet, _bSaveValue );
     }
@@ -390,9 +328,9 @@ namespace dbaui
     {
         bool bChangedSomething = false;
 
-        fillString( *_rSet, m_pAutoIncrement, DSID_AUTOINCREMENTVALUE, bChangedSomething );
-        fillBool( *_rSet, m_pAutoRetrievingEnabled, DSID_AUTORETRIEVEENABLED, bChangedSomething );
-        fillString( *_rSet, m_pAutoRetrieving, DSID_AUTORETRIEVEVALUE, bChangedSomething );
+        fillString( *_rSet, m_xAutoIncrement, DSID_AUTOINCREMENTVALUE, bChangedSomething );
+        fillBool( *_rSet, m_xAutoRetrievingEnabled, DSID_AUTORETRIEVEENABLED, bChangedSomething );
+        fillString( *_rSet, m_xAutoRetrieving, DSID_AUTORETRIEVEVALUE, bChangedSomething );
 
         return bChangedSomething;
     }

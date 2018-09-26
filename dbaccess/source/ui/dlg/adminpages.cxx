@@ -68,6 +68,16 @@ namespace dbaui
         SetExchangeSupport();
     }
 
+    OGenericAdministrationPage::OGenericAdministrationPage(TabPageParent _pParent, const OUString& _rUIXMLDescription, const OString& _rId, const SfxItemSet& _rAttrSet)
+        :SfxTabPage(_pParent, _rUIXMLDescription, _rId, &_rAttrSet)
+        ,m_abEnableRoadmap(false)
+        ,m_pAdminDialog(nullptr)
+        ,m_pItemSetHelper(nullptr)
+    {
+
+        SetExchangeSupport();
+    }
+
     DeactivateRC OGenericAdministrationPage::DeactivatePage(SfxItemSet* _pSet)
     {
         if (_pSet)

@@ -73,7 +73,7 @@ namespace dbaui
     public:
         virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) override;
 
-        SpecialSettingsPage(vcl::Window* pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta );
+        SpecialSettingsPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta);
 
     private:
         virtual ~SpecialSettingsPage() override;
@@ -95,20 +95,18 @@ namespace dbaui
     // GeneratedValuesPage
     class GeneratedValuesPage final : public OGenericAdministrationPage
     {
-        VclPtr<VclFrame>   m_pAutoFrame;
-        VclPtr<CheckBox>   m_pAutoRetrievingEnabled;
-        VclPtr<FixedText>  m_pAutoIncrementLabel;
-        VclPtr<Edit>       m_pAutoIncrement;
-        VclPtr<FixedText>  m_pAutoRetrievingLabel;
-        VclPtr<Edit>       m_pAutoRetrieving;
+        std::unique_ptr<weld::CheckButton> m_xAutoRetrievingEnabled;
+        std::unique_ptr<weld::Label> m_xAutoIncrementLabel;
+        std::unique_ptr<weld::Entry> m_xAutoIncrement;
+        std::unique_ptr<weld::Label> m_xAutoRetrievingLabel;
+        std::unique_ptr<weld::Entry> m_xAutoRetrieving;
 
-        ::svt::ControlDependencyManager
-                    m_aControlDependencies;
+        ::svt::ControlDependencyManager m_aControlDependencies;
 
     public:
         virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) override;
 
-        GeneratedValuesPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs );
+        GeneratedValuesPage(TabPageParent pParent, const SfxItemSet& _rCoreAttrs);
     private:
 
         // nControlFlags is a combination of the CBTP_xxx-constants
@@ -124,7 +122,6 @@ namespace dbaui
         // <method>OGenericAdministrationPage::fillWindows</method>
         virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
     };
-
 }
 
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_ADVANCEDSETTINGS_HXX
