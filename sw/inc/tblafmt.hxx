@@ -376,16 +376,16 @@ public:
 
 class SwCellStyleDescriptor
 {
-    const std::pair<OUString, SwBoxAutoFormat*>& m_rCellStyleDesc;
+    const std::pair<OUString, std::unique_ptr<SwBoxAutoFormat>>& m_rCellStyleDesc;
 public:
-    SwCellStyleDescriptor(const std::pair<OUString, SwBoxAutoFormat*>& rCellStyleDesc) : m_rCellStyleDesc(rCellStyleDesc) { }
+    SwCellStyleDescriptor(const std::pair<OUString, std::unique_ptr<SwBoxAutoFormat>>& rCellStyleDesc) : m_rCellStyleDesc(rCellStyleDesc) { }
 
     const OUString&  GetName()   { return m_rCellStyleDesc.first; }
 };
 
 class SwCellStyleTable
 {
-    std::vector<std::pair<OUString, SwBoxAutoFormat*>> m_aCellStyles;
+    std::vector<std::pair<OUString, std::unique_ptr<SwBoxAutoFormat>>> m_aCellStyles;
 public:
     SwCellStyleTable();
     ~SwCellStyleTable();

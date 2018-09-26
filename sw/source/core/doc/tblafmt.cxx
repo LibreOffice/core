@@ -1405,8 +1405,6 @@ SwCellStyleTable::SwCellStyleTable()
 
 SwCellStyleTable::~SwCellStyleTable()
 {
-    for (size_t i=0; i < m_aCellStyles.size(); ++i)
-        delete m_aCellStyles[i].second;
 }
 
 size_t SwCellStyleTable::size() const
@@ -1416,9 +1414,6 @@ size_t SwCellStyleTable::size() const
 
 void SwCellStyleTable::clear()
 {
-    for (size_t i=0; i < m_aCellStyles.size(); ++i)
-        delete m_aCellStyles[i].second;
-
     m_aCellStyles.clear();
 }
 
@@ -1438,7 +1433,6 @@ void SwCellStyleTable::RemoveBoxFormat(const OUString& sName)
     {
         if (iter->first == sName)
         {
-            delete iter->second;
             m_aCellStyles.erase(iter);
             return;
         }
@@ -1450,7 +1444,7 @@ OUString SwCellStyleTable::GetBoxFormatName(const SwBoxAutoFormat& rBoxFormat) c
 {
     for (size_t i=0; i < m_aCellStyles.size(); ++i)
     {
-        if (m_aCellStyles[i].second == &rBoxFormat)
+        if (m_aCellStyles[i].second.get() == &rBoxFormat)
             return m_aCellStyles[i].first;
     }
 
@@ -1463,7 +1457,7 @@ SwBoxAutoFormat* SwCellStyleTable::GetBoxFormat(const OUString& sName) const
     for (size_t i=0; i < m_aCellStyles.size(); ++i)
     {
         if (m_aCellStyles[i].first == sName)
-            return m_aCellStyles[i].second;
+            return m_aCellStyles[i].second.get();
     }
 
     return nullptr;
