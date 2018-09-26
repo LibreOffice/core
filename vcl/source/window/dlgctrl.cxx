@@ -35,6 +35,17 @@
 
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 
+// #define ITER_ONLY
+// #define DUMP_ITER
+// #define DUMP_SUBCHILD
+// #define DUMP_IMPL_FIND_DLGCTRL
+// #define DUMP_IMPL_DLGCTL
+// #define DUMP_UPDATE_DEF_BUTTON
+
+#if (defined(DUMP_ITER) || defined(DUMP_SUBCHILD) || defined(DUMP_IMPL_FIND_DLGCTRL))
+#define WT(a) " " << a << " (" << (a ? a->ImplGetWindow() : nullptr) << " " << (a ? (int) a->GetType() - 0x130 : 0) << ")"
+#endif
+
 using namespace ::com::sun::star;
 
 static bool ImplHasIndirectTabParent( vcl::Window* pWindow )
@@ -120,13 +131,22 @@ public:
         , m_bCurrentWindowMayHaveChildren(true)
         , m_bIsTabControl(false)
     {
+#ifdef DUMP_ITER
+        SAL_DEBUG("Iter construct start " << m_pRealParent << " " << pWindow << " " << m_bTestEnabled);
+#endif
         if (m_pRealParent->GetType() == WindowType::TABCONTROL)
             m_bIsTabControl = true;
         ++(*this);
+#ifdef DUMP_ITER
+        SAL_DEBUG("Iter construct end " << m_bIsTabControl);
+#endif
     }
 
     WindowIterator& operator++()
     {
+#ifdef DUMP_ITER
+        SAL_DEBUG("++ In");
+#endif
         vcl::Window* pWindow = nullptr;
         vcl::Window* pNextWindow = m_pCurrentWindow;
         vcl::Window* pNextImplWindow = pNextWindow ? pNextWindow->ImplGetWindow() : nullptr;
@@ -138,13 +158,26 @@ public:
                 // check if pNextWindow has children => not in dispose
                 pWindow = firstLogicalChildOfParent(pNextWindow);
                 if (pWindow)
+                {
                     pWindow = ImplGetCurTabWindow(pNextImplWindow);
+#ifdef DUMP_ITER
+                    SAL_DEBUG("ImplGetTabWindow " << pNextImplWindow << " => " << WT(pWindow));
+#endif
+                }
             }
             else if (m_bCurrentWindowMayHaveChildren)
+            {
                 pWindow = firstLogicalChildOfParent(pNextImplWindow);
+#ifdef DUMP_ITER
+                SAL_DEBUG("firstLogicalChildOfParent " << pNextImplWindow << " => " << WT(pWindow));
+#endif
+            }
 
             if (!pWindow)
             {
+#ifdef DUMP_ITER
+                SAL_DEBUG("!window " << WT(pNextImplWindow));
+#endif
                 vcl::Window* pParent = nullptr;
                 while (true)
                 {
@@ -159,11 +192,17 @@ public:
 
                     if (pImplParent->GetType() == WindowType::TABCONTROL)
                     {
+#ifdef DUMP_ITER
+                        SAL_DEBUG("IsTabcontrol " << WT(pImplParent));
+#endif
                         pNextWindow = pParent;
                         continue;
                     }
 
                     pWindow = nextLogicalChildOfParent(pImplParent, pNextWindow);
+#ifdef DUMP_ITER
+                    SAL_DEBUG("nextLogicalChildOfParent " << pImplParent << " " << pNextWindow << " >> " << WT(pWindow));
+#endif
                     if (!pWindow)
                         pNextWindow = pParent;
                     else
@@ -178,6 +217,9 @@ public:
                         }
                     }
                 }
+#ifdef DUMP_ITER
+                SAL_DEBUG("!window end " << pWindow);
+#endif
                 if (!pWindow)
                     break;
             }
@@ -193,6 +235,9 @@ public:
             {
                 m_bIsTabControl = (pImplWindow->GetType() == WindowType::TABCONTROL);
                 m_bCurrentWindowMayHaveChildren = pImplWindow->GetStyle() & (WB_DIALOGCONTROL | WB_CHILDDLGCTRL);
+#ifdef DUMP_ITER
+                SAL_DEBUG("isVisibleInLayout " << pImplWindow << " " << m_bCurrentWindowMayHaveChildren << " " << m_bIsTabControl);
+#endif
                 if (m_bCurrentWindowMayHaveChildren && !m_bIsTabControl)
                     continue;
                 else
@@ -205,6 +250,9 @@ public:
             }
 
             pWindow = nextLogicalChildOfParent(m_aWindowStack.back(), pNextWindow);
+#ifdef DUMP_ITER
+            SAL_DEBUG("nextLogicalChildOfParent " << m_aWindowStack.back() << " " << pNextWindow << " => " << WT(pWindow));
+#endif
             if (pWindow)
             {
                 pNextWindow = pWindow;
@@ -212,6 +260,9 @@ public:
             }
         }
 
+#ifdef DUMP_ITER
+        SAL_DEBUG("++ >> " << WT(pWindow));
+#endif
         m_pCurrentWindow = pWindow;
         return *this;
     }
@@ -242,6 +293,10 @@ static vcl::Window* ImplGetSubChildWindow( vcl::Window* pParent, sal_uInt16 n, s
 
     vcl::Window* pFoundWindow = nullptr;
     vcl::Window* pWindow = firstLogicalChildOfParent(pParent);
+
+#ifdef DUMP_SUBCHILD
+    SAL_DEBUG(nIndex << " firstLogicalChildOfParent " << pParent << " => " << WT(pWindow));
+#endif
     vcl::Window* pNextWindow = pWindow;
 
     // process just the current page of a tab control
@@ -262,7 +317,12 @@ static vcl::Window* ImplGetSubChildWindow( vcl::Window* pParent, sal_uInt16 n, s
             if (pWindow->GetType() == WindowType::TABCONTROL)
             {
                 if (n == nIndex)
+                {
+#ifdef DUMP_SUBCHILD
+                    SAL_DEBUG(nIndex << " << 1. " << WT(pWindow));
+#endif
                     return pWindow;
+                }
                 ++nIndex;
             }
             if (pWindow->GetStyle() & (WB_DIALOGCONTROL | WB_CHILDDLGCTRL))
@@ -271,15 +331,26 @@ static vcl::Window* ImplGetSubChildWindow( vcl::Window* pParent, sal_uInt16 n, s
                 pFoundWindow = pWindow;
 
             if (n == nIndex)
+            {
+#ifdef DUMP_SUBCHILD
+                SAL_DEBUG(nIndex << " << 2. " << WT(pFoundWindow));
+#endif
                 return pFoundWindow;
+            }
             ++nIndex;
         }
 
         pWindow = nextLogicalChildOfParent(pParent, pNextWindow);
+#ifdef DUMP_SUBCHILD
+        SAL_DEBUG(nIndex << " nextLogicalChildOfParent " << pParent << " " << pNextWindow << " => " << WT(pWindow));
+#endif
         pNextWindow = pWindow;
     }
 
     --nIndex;
+#ifdef DUMP_SUBCHILD
+    SAL_DEBUG(nIndex << " << 3. " << WT(pFoundWindow));
+#endif
     assert(!pFoundWindow || (pFoundWindow == pFoundWindow->ImplGetWindow()));
     return pFoundWindow;
 }
@@ -447,6 +518,14 @@ vcl::Window* ImplFindDlgCtrlWindow( vcl::Window* pParent, vcl::Window* pWindow, 
     sal_uInt16  nSecondFormStart = 0;
     sal_uInt16  nFormEnd;
 
+#ifdef DUMP_IMPL_FIND_DLGCTRL
+    SAL_DEBUG("ImplFindDlgCtrlWindow " << pParent << " " << pWindow);
+#define DUMP_WINDOW(prefix, window) \
+    do { if (window) SAL_DEBUG(prefix << " " << i << WT(window)); } while (false)
+#else
+#define DUMP_WINDOW(a, b)
+#endif
+
     // find focus window in the child list
     vcl::Window* pFirstChildWindow = pSWindow = ImplGetChildWindow( pParent, 0, i, false );
 
@@ -463,6 +542,9 @@ vcl::Window* ImplFindDlgCtrlWindow( vcl::Window* pParent, vcl::Window* pWindow, 
         // SecondWindow for composite controls like ComboBoxes and arrays
         if ( pSWindow->ImplIsWindowOrChild( pWindow ) )
         {
+#ifdef DUMP_IMPL_FIND_DLGCTRL
+            SAL_DEBUG("SecondWindow");
+#endif
             pSecondWindow = pSWindow;
             nSecond_i = i;
             nSecondFormStart = nFormStart;
@@ -473,7 +555,10 @@ vcl::Window* ImplFindDlgCtrlWindow( vcl::Window* pParent, vcl::Window* pWindow, 
         pSWindow = ImplGetNextWindow( pParent, i, i, false );
         if ( !i )
             pSWindow = nullptr;
+        DUMP_WINDOW("1", pSWindow);
     }
+
+    DUMP_WINDOW("2", pSWindow);
 
     if ( !pSWindow )
     {
@@ -504,6 +589,8 @@ vcl::Window* ImplFindDlgCtrlWindow( vcl::Window* pParent, vcl::Window* pWindow, 
           || ( pTempWindow && !ImplHasIndirectTabParent( pTempWindow )
                && pTempWindow->ImplGetWindow()->IsDialogControlStart() ) )
             break;
+
+        DUMP_WINDOW("3", pTempWindow);
 
         if ( pTempWindow && pTempWindow == pFirstChildWindow )
         {
@@ -732,6 +819,10 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
     vcl::Window* pTempWindow;
     vcl::Window* pButtonWindow;
     sal_uInt16  i;
+#ifndef ITER_ONLY
+    sal_uInt16  iButton;
+    sal_uInt16  iButtonStart;
+#endif
     sal_uInt16  iTemp;
     sal_uInt16  nIndex;
     sal_uInt16  nFormStart;
@@ -763,15 +854,43 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
 
     pButtonWindow = nullptr;
 
+#ifdef DUMP_IMPL_DLGCTL
+    SAL_DEBUG("Window::ImplDlgCtrl");
+#endif
     if ( nKeyCode == KEY_RETURN )
     {
         // search first for a DefPushButton
         WindowIterator aIter(this, pFocusWindow, true);
+#ifdef ITER_ONLY
         for (; *aIter; ++aIter)
             if ( (aIter->GetStyle() & WB_DEFBUTTON) &&
                  aIter->mpWindowImpl->mbPushButton )
                 break;
         pButtonWindow = *aIter;
+#else
+        pButtonWindow = ImplGetChildWindow(this, nFormStart, iButton, true);
+        iButtonStart = iButton;
+#ifdef DUMP_IMPL_DLGCTL
+        SAL_DEBUG("iter start: " << nFormStart << " " << iButton << " " << this << " " << pFocusWindow);
+        SAL_DEBUG("old: " << pButtonWindow << " new: " << *aIter);
+#endif
+        assert(pButtonWindow == *aIter);
+        while ( pButtonWindow )
+        {
+            if ( (pButtonWindow->GetStyle() & WB_DEFBUTTON) &&
+                 pButtonWindow->mpWindowImpl->mbPushButton )
+                break;
+
+            pButtonWindow = ImplGetNextWindow( this, iButton, iButton, true );
+            if ( (iButton <= iButtonStart) || (iButton > nFormEnd) )
+                pButtonWindow = nullptr;
+            ++aIter;
+#ifdef DUMP_IMPL_DLGCTL
+            SAL_DEBUG("old: " << pButtonWindow << " new: " << *aIter);
+#endif
+            assert(pButtonWindow == *aIter);
+        }
+#endif // !ITER_ONLY
 
         if ( bKeyInput && !pButtonWindow && (nDlgCtrlFlags & DialogControlFlags::Return) )
         {
@@ -837,10 +956,34 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
     {
         // search first for a CancelButton
         WindowIterator aIter(this, pFocusWindow, true);
+#ifdef ITER_ONLY
         for (; *aIter; ++aIter)
             if (aIter->GetType() == WindowType::CANCELBUTTON)
                 break;
         pButtonWindow = *aIter;
+#else
+        pButtonWindow = ImplGetChildWindow(this, nFormStart, iButton, true);
+        iButtonStart = iButton;
+#ifdef DUMP_IMPL_DLGCTL
+        SAL_DEBUG("iter start: " << nFormStart << " " << iButton << " " << this << " " << pFocusWindow);
+        SAL_DEBUG("old: " << pButtonWindow << " new: " << *aIter);
+#endif
+        assert(pButtonWindow == *aIter);
+        while ( pButtonWindow )
+        {
+            if ( pButtonWindow->GetType() == WindowType::CANCELBUTTON )
+                break;
+
+            pButtonWindow = ImplGetNextWindow( this, iButton, iButton, true );
+            if ( (iButton <= iButtonStart) || (iButton > nFormEnd) )
+                pButtonWindow = nullptr;
+            ++aIter;
+#ifdef DUMP_IMPL_DLGCTL
+            SAL_DEBUG("old: " << pButtonWindow << " new: " << *aIter);
+#endif
+            assert(pButtonWindow == *aIter);
+        }
+#endif // !ITER_ONLY
 
         if ( bKeyInput && mpWindowImpl->mpDlgCtrlDownWindow )
         {
@@ -870,7 +1013,13 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                     // search group
                     vcl::Window* pFormularFirstWindow = nullptr;
                     vcl::Window* pLastFormularFirstWindow = nullptr;
+                    WindowIterator aIter(this, nullptr, false);
                     pTempWindow = ImplGetChildWindow( this, 0, iTemp, false );
+#ifdef DUMP_IMPL_DLGCTL
+                    SAL_DEBUG("iter start: " << iTemp << " " << i << " " << this);
+                    SAL_DEBUG("old: " << pTempWindow << " new: " << *aIter);
+#endif
+                    assert(pTempWindow == *aIter);
                     vcl::Window* pPrevFirstFormularFirstWindow = nullptr;
                     vcl::Window* pFirstFormularFirstWindow = pTempWindow;
                     while ( pTempWindow )
@@ -893,9 +1042,14 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                             pLastFormularFirstWindow = pTempWindow;
                         }
 
+                        ++aIter;
                         pTempWindow = ImplGetNextWindow( this, iTemp, iTemp, false );
                         if ( !iTemp )
                             pTempWindow = nullptr;
+#ifdef DUMP_IMPL_DLGCTL
+                        SAL_DEBUG("old: " << pTempWindow << " new: " << *aIter);
+#endif
+                        assert(pTempWindow == *aIter);
                     }
 
                     if ( bFormular )
@@ -1141,7 +1295,18 @@ static void ImplDlgCtrlUpdateDefButton( vcl::Window* pParent, vcl::Window* pFocu
         nFormEnd = 0xFFFF;
     }
 
+    WindowIterator aIter(pParent, pFocusWindow, false);
+#ifdef ITER_ONLY
+    pSWindow = *aIter;
+#else
     pSWindow = ImplGetChildWindow( pParent, nFormStart, i, false );
+#endif
+#ifdef DUMP_UPDATE_DEF_BUTTON
+    SAL_DEBUG("ImplDlgCtrlUpdateDefButton");
+    SAL_DEBUG("iter start: " << nFormStart << " " << i << " " << pParent << " " << pFocusWindow << " " << pSWindow);
+    SAL_DEBUG("old: " << pSWindow << " new: " << *aIter);
+#endif
+    assert(pSWindow == *aIter);
     while ( pSWindow )
     {
         if ( pSWindow->ImplIsPushButton() )
@@ -1155,9 +1320,18 @@ static void ImplDlgCtrlUpdateDefButton( vcl::Window* pParent, vcl::Window* pFocu
                 pNewDefButton = pPushButton;
         }
 
+        ++aIter;
+#ifdef ITER_ONLY
+        pSWindow = *aIter;
+#else
         pSWindow = ImplGetNextWindow( pParent, i, i, false );
         if ( !i || (i > nFormEnd) )
             pSWindow = nullptr;
+#endif
+#ifdef DUMP_UPDATE_DEF_BUTTON
+        SAL_DEBUG("old: " << pSWindow << " new: " << *aIter << " " << i);
+#endif
+        assert(pSWindow == *aIter);
     }
 
     if ( !bGetFocus )
