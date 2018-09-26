@@ -354,7 +354,7 @@ void ScChartPositioner::CreatePositionMap()
     GlueState();
 
     const bool bNoGlue = (eGlue == ScChartGlue::NONE);
-    std::unique_ptr<ColumnMap> pCols( new ColumnMap );
+    ColumnMap aColMap;
     SCROW nNoGlueRow = 0;
     for ( size_t i = 0, nRanges = aRangeListRef->size(); i < nRanges; ++i )
     {
@@ -367,15 +367,7 @@ void ScChartPositioner::CreatePositionMap()
                     static_cast<sal_uLong>(nCol1));
             for ( nCol = nCol1; nCol <= nCol2; ++nCol, ++nInsCol )
             {
-                RowMap* pCol = nullptr;
-                ColumnMap::const_iterator it = pCols->find( nInsCol );
-                if ( it == pCols->end() )
-                {
-                    pCol = new RowMap;
-                    pCols->emplace(nInsCol, pCol);
-                }
-                else
-                    pCol = it->second;
+                RowMap* pCol = &aColMap[nInsCol];
 
                 // in other table a new ColKey already was created,
                 // the rows must be equal to be filled with Dummy
@@ -394,13 +386,13 @@ void ScChartPositioner::CreatePositionMap()
     }
 
     // count of data
-    nColCount = static_cast< SCSIZE >( pCols->size());
-    if ( !pCols->empty() )
+    nColCount = static_cast< SCSIZE >( aColMap.size());
+    if ( !aColMap.empty() )
     {
-        RowMap* pCol = pCols->begin()->second;
+        RowMap& rCol = aColMap.begin()->second;
         if ( bDummyUpperLeft )
-            (*pCol)[ 0 ] = nullptr; // Dummy for labeling
-        nRowCount = static_cast< SCSIZE >( pCol->size());
+            rCol[ 0 ] = nullptr; // Dummy for labeling
+        nRowCount = static_cast< SCSIZE >( rCol.size());
     }
     else
         nRowCount = 0;
@@ -411,27 +403,10 @@ void ScChartPositioner::CreatePositionMap()
 
     if ( nColCount==0 || nRowCount==0 )
     {   // create an entry without data
-        RowMap* pCol;
-        if ( !pCols->empty() )
-            pCol = pCols->begin()->second;
-        else
-        {
-            pCol = new RowMap;
-            (*pCols)[ 0 ] = pCol;
-        }
+        RowMap& rCol = aColMap[0];
         nColCount = 1;
-        if ( !pCol->empty() )
-        {   // cannot be if nColCount==0 || nRowCount==0
-            ScAddress* pPos = pCol->begin()->second;
-            if ( pPos )
-            {
-                sal_uLong nCurrentKey = pCol->begin()->first;
-                delete pPos;
-                (*pCol)[ nCurrentKey ] = nullptr;
-            }
-        }
-        else
-            (*pCol)[ 0 ] = nullptr;
+        assert ( rCol.empty() );
+        rCol[ 0 ] = nullptr;
         nRowCount = 1;
         nColAdd = 0;
         nRowAdd = 0;
@@ -440,26 +415,20 @@ void ScChartPositioner::CreatePositionMap()
     {
         if ( bNoGlue )
         {   // fill gaps with Dummies, first column is master
-            RowMap* pFirstCol = pCols->begin()->second;
-            sal_uLong nCount = pFirstCol->size();
-            RowMap::const_iterator it1 = pFirstCol->begin();
+            RowMap& rFirstCol = aColMap.begin()->second;
+            sal_uLong nCount = rFirstCol.size();
+            RowMap::const_iterator it1 = rFirstCol.begin();
             for ( sal_uLong n = 0; n < nCount; n++, ++it1 )
             {
                 sal_uLong nKey = it1->first;
-                for (ColumnMap::const_iterator it2 = ++pCols->begin(); it2 != pCols->end(); ++it2 )
-                    it2->second->emplace( nKey, nullptr ); // no data
+                for (ColumnMap::iterator it2 = ++aColMap.begin(); it2 != aColMap.end(); ++it2 )
+                    it2->second.emplace( nKey, nullptr ); // no data
             }
         }
     }
 
     pPositionMap.reset( new ScChartPositionMap( static_cast<SCCOL>(nColCount), static_cast<SCROW>(nRowCount),
-        static_cast<SCCOL>(nColAdd), static_cast<SCROW>(nRowAdd), *pCols ) );
-
-    //  cleanup
-    for (ColumnMap::const_iterator it = pCols->begin(); it != pCols->end(); ++it )
-    {   // Only delete tables, not the ScAddress*!
-        delete it->second;
-    }
+        static_cast<SCCOL>(nColAdd), static_cast<SCROW>(nRowAdd), aColMap ) );
 }
 
 void ScChartPositioner::InvalidateGlue()
@@ -470,45 +439,41 @@ void ScChartPositioner::InvalidateGlue()
 
 ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
             SCCOL nColAdd, SCROW nRowAdd, ColumnMap& rCols ) :
-        ppData( new ScAddress* [ nChartCols * nChartRows ] ),
-        ppColHeader( new ScAddress* [ nChartCols ] ),
-        ppRowHeader( new ScAddress* [ nChartRows ] ),
+        ppData( new std::unique_ptr<ScAddress> [ nChartCols * nChartRows ] ),
+        ppColHeader( new std::unique_ptr<ScAddress> [ nChartCols ] ),
+        ppRowHeader( new std::unique_ptr<ScAddress> [ nChartRows ] ),
         nCount( static_cast<sal_uLong>(nChartCols) * nChartRows ),
         nColCount( nChartCols ),
         nRowCount( nChartRows )
 {
     OSL_ENSURE( nColCount && nRowCount, "ScChartPositionMap without dimension" );
 
-    ColumnMap::const_iterator pColIter = rCols.begin();
-    RowMap* pCol1 = pColIter->second;
-    RowMap::const_iterator pPos1Iter;
+    ColumnMap::iterator pColIter = rCols.begin();
+    RowMap& rCol1 = pColIter->second;
+    RowMap::iterator pPos1Iter;
 
     // row header
-    pPos1Iter = pCol1->begin();
+    pPos1Iter = rCol1.begin();
     if ( nRowAdd )
         ++pPos1Iter;
     if ( nColAdd )
     {   // independent
         SCROW nRow = 0;
-        for ( ; nRow < nRowCount && pPos1Iter != pCol1->end(); nRow++ )
+        for ( ; nRow < nRowCount && pPos1Iter != rCol1.end(); nRow++ )
         {
-            ppRowHeader[ nRow ] = pPos1Iter->second;
+            ppRowHeader[ nRow ] = std::move(pPos1Iter->second);
             ++pPos1Iter;
         }
-        for ( ; nRow < nRowCount; nRow++ )
-            ppRowHeader[ nRow ] = nullptr;
     }
     else
     {   // copy
         SCROW nRow = 0;
-        for ( ; nRow < nRowCount && pPos1Iter != pCol1->end(); nRow++ )
+        for ( ; nRow < nRowCount && pPos1Iter != rCol1.end(); nRow++ )
         {
-            ppRowHeader[ nRow ] = pPos1Iter->second ?
-                new ScAddress( *pPos1Iter->second ) : nullptr;
+            if (pPos1Iter->second)
+                ppRowHeader[ nRow ].reset(new ScAddress( *pPos1Iter->second ));
             ++pPos1Iter;
         }
-        for ( ; nRow < nRowCount; nRow++ )
-            ppRowHeader[ nRow ] = nullptr;
     }
     if ( nColAdd )
     {
@@ -521,56 +486,33 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
     {
         if ( pColIter != rCols.end() )
         {
-            RowMap* pCol2 = pColIter->second;
-            RowMap::const_iterator pPosIter = pCol2->begin();
-            if ( pPosIter != pCol2->end() )
+            RowMap& rCol2 = pColIter->second;
+            RowMap::iterator pPosIter = rCol2.begin();
+            if ( pPosIter != rCol2.end() )
             {
                 if ( nRowAdd )
                 {
-                    ppColHeader[ nCol ] = pPosIter->second; // independent
+                    ppColHeader[ nCol ] = std::move(pPosIter->second); // independent
                     ++pPosIter;
                 }
-                else
-                    ppColHeader[ nCol ] = pPosIter->second ?
-                        new ScAddress( *pPosIter->second ) : nullptr;
+                else if ( pPosIter->second )
+                    ppColHeader[ nCol ].reset( new ScAddress( *pPosIter->second ) );
             }
 
             SCROW nRow = 0;
-            for ( ; nRow < nRowCount && pPosIter != pCol2->end(); nRow++, nIndex++ )
+            for ( ; nRow < nRowCount && pPosIter != rCol2.end(); nRow++, nIndex++ )
             {
-                ppData[ nIndex ] = pPosIter->second;
+                ppData[ nIndex ] = std::move(pPosIter->second);
                 ++pPosIter;
             }
-            for ( ; nRow < nRowCount; nRow++, nIndex++ )
-                ppData[ nIndex ] = nullptr;
 
             ++pColIter;
-        }
-        else
-        {
-            ppColHeader[ nCol ] = nullptr;
-            for ( SCROW nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
-            {
-                ppData[ nIndex ] = nullptr;
-            }
         }
     }
 }
 
 ScChartPositionMap::~ScChartPositionMap()
 {
-    for ( sal_uLong nIndex=0; nIndex < nCount; nIndex++ )
-    {
-        delete ppData[nIndex];
-    }
-    for ( SCCOL j=0; j < nColCount; j++ )
-    {
-        delete ppColHeader[j];
-    }
-    for ( SCROW i=0; i < nRowCount; i++ )
-    {
-        delete ppRowHeader[i];
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
