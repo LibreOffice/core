@@ -94,49 +94,39 @@ static vcl::Window* ImplGetCurTabWindow(const vcl::Window* pWindow)
 
 static vcl::Window* ImplGetSubChildWindow( vcl::Window* pParent, sal_uInt16 n, sal_uInt16& nIndex )
 {
-    vcl::Window*     pTabPage = nullptr;
     vcl::Window*     pFoundWindow = nullptr;
-
     vcl::Window*     pWindow = firstLogicalChildOfParent(pParent);
     vcl::Window*     pNextWindow = pWindow;
-    while ( pWindow )
+
+    // process just the current page of a tab control
+    if (pWindow && pParent->ImplGetWindow()->GetType() == WindowType::TABCONTROL)
+    {
+        pWindow = ImplGetCurTabWindow(pParent->ImplGetWindow());
+        pNextWindow = lastLogicalChildOfParent(pParent);
+    }
+
+    while (pWindow)
     {
         pWindow = pWindow->ImplGetWindow();
 
         // skip invisible and disabled windows
-        if ( pTabPage || isVisibleInLayout(pWindow) )
+        if (isVisibleInLayout(pWindow))
         {
-            // if the last control was a TabControl, take its TabPage
-            if ( pTabPage )
-            {
-                pFoundWindow = ImplGetSubChildWindow( pTabPage, n, nIndex );
-                pTabPage = nullptr;
-            }
+            if (pWindow->GetStyle() & (WB_DIALOGCONTROL | WB_CHILDDLGCTRL))
+                pFoundWindow = ImplGetSubChildWindow(pWindow, n, nIndex);
             else
-            {
                 pFoundWindow = pWindow;
-                // for a TabControl, remember the current TabPage for later use
-                if ( pWindow->GetType() == WindowType::TABCONTROL )
-                    pTabPage = ImplGetCurTabWindow(pWindow);
-                else if (pWindow->GetStyle() & (WB_DIALOGCONTROL | WB_CHILDDLGCTRL))
-                    pFoundWindow = ImplGetSubChildWindow( pWindow, n, nIndex );
-            }
 
-            if ( n == nIndex )
+            if (n == nIndex)
                 return pFoundWindow;
-            nIndex++;
+            ++nIndex;
         }
 
-        if ( pTabPage )
-            pWindow = pTabPage;
-        else
-        {
-            pWindow = nextLogicalChildOfParent(pParent, pNextWindow);
-            pNextWindow = pWindow;
-        }
+        pWindow = nextLogicalChildOfParent(pParent, pNextWindow);
+        pNextWindow = pWindow;
     }
 
-    nIndex--;
+    --nIndex;
     return pFoundWindow;
 }
 
