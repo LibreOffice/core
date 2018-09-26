@@ -3032,18 +3032,6 @@ static void impl_borderLine( FSHelperPtr const & pSerializer, sal_Int32 elementT
     pSerializer->singleElementNS( XML_w, elementToken, xAttrs );
 }
 
-static OutputBorderOptions lcl_getTableDefaultBorderOptions(bool bEcma)
-{
-    OutputBorderOptions rOptions;
-
-    rOptions.tag = XML_tblBorders;
-    rOptions.bUseStartEnd = !bEcma;
-    rOptions.bWriteTag = true;
-    rOptions.bWriteDistance = false;
-
-    return rOptions;
-}
-
 static OutputBorderOptions lcl_getTableCellBorderOptions(bool bEcma)
 {
     OutputBorderOptions rOptions;
@@ -3780,19 +3768,10 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     m_pSerializer->endElementNS( XML_w, XML_tblGrid );
 }
 
-void DocxAttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
+void DocxAttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/ )
 {
-    const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
-    const SwFrameFormat * pFrameFormat = pTabBox->GetFrameFormat();
-
-    bool bEcma = GetExport().GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
-
-    // Don't write table defaults based on the top-left cell if we have a table style available.
-    if (m_aTableStyleConf.empty())
-    {
-        // the defaults of the table are taken from the top-left cell
-        impl_borders(m_pSerializer, pFrameFormat->GetBox(), lcl_getTableDefaultBorderOptions(bEcma), m_aTableStyleConf);
-    }
+    // Table defaults should only be created IF m_aTableStyleConf contents haven't come from a table style.
+    // Previously this function wrote out Cell A1 as the table default, causing problems with no benefit.
 }
 
 void DocxAttributeOutput::TableDefaultCellMargins( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner )
