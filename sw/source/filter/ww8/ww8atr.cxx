@@ -4221,6 +4221,7 @@ WW8_BRCVer9 WW8Export::TranslateBorderLine(const SvxBorderLine& rLine,
                 brcType = 7;
                 break;
             case SvxBorderLineStyle::DOUBLE:
+            case SvxBorderLineStyle::DOUBLE_THIN:
                 brcType = 3;
                 break;
             case SvxBorderLineStyle::THINTHICK_SMALLGAP:
