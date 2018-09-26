@@ -56,7 +56,7 @@ SwList* DocumentListsManager::createList( const OUString& rListId,
     }
 
     SwList* pNewList = new SwList( sListId, *pDefaultNumRuleForNewList, m_rDoc.GetNodes() );
-    maLists[sListId] = pNewList;
+    maLists[sListId].reset(pNewList);
 
     return pNewList;
 }
@@ -75,11 +75,10 @@ SwList* DocumentListsManager::getListByName( const OUString& sListId ) const
 {
     SwList* pList = nullptr;
 
-    std::unordered_map< OUString, SwList* >::const_iterator
-                                            aListIter = maLists.find( sListId );
+    auto aListIter = maLists.find( sListId );
     if ( aListIter != maLists.end() )
     {
-        pList = (*aListIter).second;
+        pList = (*aListIter).second.get();
     }
 
     return pList;
@@ -152,10 +151,10 @@ void DocumentListsManager::deleteListForListStyle( const OUString& sListStyleNam
 void DocumentListsManager::deleteListsByDefaultListStyle( const OUString& rListStyleName )
 {
     std::vector< SwList* > aListsForDeletion;
-    tHashMapForLists::iterator aListIter = maLists.begin();
+    auto aListIter = maLists.begin();
     while ( aListIter != maLists.end() )
     {
-        SwList* pList = (*aListIter).second;
+        SwList* pList = (*aListIter).second.get();
         if ( pList->GetDefaultListStyleName() == rListStyleName )
         {
             aListsForDeletion.push_back( pList );
@@ -194,15 +193,7 @@ void DocumentListsManager::trackChangeOfListStyleName( const OUString& sListStyl
 
 DocumentListsManager::~DocumentListsManager()
 {
-    for ( std::unordered_map< OUString, SwList* >::iterator
-                                           aListIter = maLists.begin();
-        aListIter != maLists.end();
-        ++aListIter )
-    {
-         delete (*aListIter).second;
-    }
     maLists.clear();
-
     maListStyleLists.clear();
 }
 

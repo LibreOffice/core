@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTLISTSMANAGER_HXX
 
 #include <IDocumentListsAccess.hxx>
+#include <memory>
 #include <unordered_map>
 
 class SwList;
@@ -59,7 +60,7 @@ class DocumentListsManager : public IDocumentListsAccess
 
         typedef std::unordered_map<OUString, SwList*> tHashMapForLists;
         // container to hold the lists of the text document
-        tHashMapForLists maLists;
+        std::unordered_map<OUString, std::unique_ptr<SwList>> maLists;
         // relation between list style and its default list
         tHashMapForLists maListStyleLists;
 
