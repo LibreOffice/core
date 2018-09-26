@@ -543,10 +543,6 @@ void ScGlobal::InitTextHeight(const SfxItemPool* pPool)
 void ScGlobal::Clear()
 {
     // Destroy asyncs _before_ ExitExternalFunc!
-    for( ScAddInAsyncs::iterator it = theAddInAsyncTbl.begin(); it != theAddInAsyncTbl.end(); ++it )
-    {
-        delete *it;
-    }
     theAddInAsyncTbl.clear();
     ExitExternalFunc();
     ClearAutoFormat();
