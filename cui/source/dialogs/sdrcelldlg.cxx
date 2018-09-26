@@ -25,25 +25,24 @@
 #include <border.hxx>
 #include <svx/dialogs.hrc>
 
-SvxFormatCellsDialog::SvxFormatCellsDialog( vcl::Window* pParent, const SfxItemSet* pAttr, const SdrModel& rModel )
-    : SfxTabDialog(pParent, "FormatCellsDialog", "cui/ui/formatcellsdialog.ui", pAttr)
+SvxFormatCellsDialog::SvxFormatCellsDialog(weld::Window* pParent, const SfxItemSet* pAttr, const SdrModel& rModel)
+    : SfxTabDialogController(pParent, "cui/ui/formatcellsdialog.ui", "FormatCellsDialog", pAttr)
     , mrOutAttrs(*pAttr)
     , mpColorTab(rModel.GetColorList())
     , mpGradientList(rModel.GetGradientList())
     , mpHatchingList(rModel.GetHatchList())
     , mpBitmapList(rModel.GetBitmapList())
     , mpPatternList(rModel.GetPatternList())
-    , m_nAreaPageId(0)
 {
     AddTabPage("name", RID_SVXPAGE_CHAR_NAME);
     AddTabPage("effects", RID_SVXPAGE_CHAR_EFFECTS);
-    m_nBorderPageId = AddTabPage("border", RID_SVXPAGE_BORDER );
-    m_nAreaPageId = AddTabPage("area", RID_SVXPAGE_AREA);
+    AddTabPage("border", RID_SVXPAGE_BORDER );
+    AddTabPage("area", RID_SVXPAGE_AREA);
 }
 
-void SvxFormatCellsDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SvxFormatCellsDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
-    if (nId == m_nAreaPageId)
+    if (rId == "area")
     {
         SvxAreaTabPage& rAreaPage = static_cast<SvxAreaTabPage&>(rPage);
         rAreaPage.SetColorList( mpColorTab );
@@ -53,13 +52,13 @@ void SvxFormatCellsDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         rAreaPage.SetPatternList( mpPatternList );;
         rAreaPage.ActivatePage( mrOutAttrs );
     }
-    else if (nId == m_nBorderPageId)
+    else if (rId == "border")
     {
         SvxBorderTabPage& rBorderPage = static_cast<SvxBorderTabPage&>(rPage);
         rBorderPage.SetTableMode();
     }
     else
-        SfxTabDialog::PageCreated( nId, rPage );
+        SfxTabDialogController::PageCreated(rId, rPage);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
