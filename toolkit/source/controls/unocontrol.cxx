@@ -140,7 +140,7 @@ UnoControl::UnoControl() :
     , mpData( new UnoControl_Data )
 {
     mbDisposePeer = true;
-    mbRefeshingPeer = false;
+    mbRefreshingPeer = false;
     mbCreatingPeer = false;
     mbCreatingCompatiblePeer = false;
     mbDesignMode = false;
@@ -499,7 +499,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         }
 
         sal_uInt16 nPType = GetPropertyId( pEvents->PropertyName );
-        if ( mbDesignMode && mbDisposePeer && !mbRefeshingPeer && !mbCreatingPeer )
+        if ( mbDesignMode && mbDisposePeer && !mbRefreshingPeer && !mbCreatingPeer )
         {
             // if we're in design mode, then some properties can change which
             // require creating a *new* peer (since these properties cannot
@@ -620,10 +620,10 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         getPeer()->dispose();
         mxPeer.clear();
         mxVclWindowPeer = nullptr;
-        mbRefeshingPeer = true;
+        mbRefreshingPeer = true;
         Reference< XWindowPeer >    xP( xParent, UNO_QUERY );
         xThis->createPeer( Reference< XToolkit > (), xP );
-        mbRefeshingPeer = false;
+        mbRefreshingPeer = false;
         aPeerPropertiesToSet.clear();
     }
 
