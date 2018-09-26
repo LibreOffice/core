@@ -341,7 +341,6 @@ void CUPSManager::initialize()
         }
         aPrinter.m_aInfo.setDefaultBackend(bUsePDF);
         aPrinter.m_aInfo.m_aDriverName = aBuf.makeStringAndClear();
-        aPrinter.m_bModified = false;
 
         m_aPrinters[ aPrinter.m_aInfo.m_aPrinterName ] = aPrinter;
         m_aCUPSDestMap[ aPrinter.m_aInfo.m_aPrinterName ] = nPrinter;

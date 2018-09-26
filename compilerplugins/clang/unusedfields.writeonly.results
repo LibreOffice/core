@@ -146,6 +146,8 @@ cui/source/inc/cuihyperdlg.hxx:57
     SvxHlinkCtrl aRdOnlyForwarder class SfxStatusForwarder
 cui/source/inc/cuihyperdlg.hxx:77
     SvxHpLinkDlg maCtrl class SvxHlinkCtrl
+cui/source/inc/grfpage.hxx:62
+    SvxGrfCropPage bReset _Bool
 dbaccess/source/core/dataaccess/documentdefinition.cxx:287
     dbaccess::LifetimeCoupler m_xClient Reference<class com::sun::star::uno::XInterface>
 desktop/qa/desktop_lib/test_desktop_lib.cxx:178
@@ -340,17 +342,17 @@ sc/source/filter/excel/xltools.cxx:104
      smD union sal_math_Double
 sc/source/filter/inc/exp_op.hxx:47
     ExportBiff5 pExcRoot struct RootData *
-sc/source/filter/inc/imp_op.hxx:81
+sc/source/filter/inc/imp_op.hxx:84
     ImportExcel::LastFormula mpCell class ScFormulaCell *
-sc/source/filter/inc/orcusinterface.hxx:450
+sc/source/filter/inc/orcusinterface.hxx:446
     ScOrcusStyles::xf mnStyleXf size_t
-sc/source/filter/inc/orcusinterface.hxx:470
+sc/source/filter/inc/orcusinterface.hxx:466
     ScOrcusStyles::cell_style mnBuiltInId size_t
-sc/source/filter/inc/root.hxx:95
+sc/source/filter/inc/root.hxx:92
     LOTUS_ROOT eActType enum Lotus123Typ
-sc/source/filter/inc/root.hxx:96
+sc/source/filter/inc/root.hxx:93
     LOTUS_ROOT aActRange class ScRange
-sc/source/filter/inc/tokstack.hxx:145
+sc/source/filter/inc/tokstack.hxx:142
     TokenPool pP_Err TokenPoolPool<sal_uInt16, 8>
 sc/source/filter/oox/biffhelper.cxx:41
     oox::xls::(anonymous namespace)::DecodedDouble maStruct union sal_math_Double
@@ -362,6 +364,8 @@ sc/source/filter/xml/xmlexternaltabi.hxx:112
     ScXMLExternalRefCellContext mnCellType sal_Int16
 sc/source/ui/inc/AccessibleText.hxx:194
     ScAccessiblePreviewHeaderCellTextData mbRowHeader _Bool
+sc/source/ui/inc/AccessibleText.hxx:223
+    ScAccessibleHeaderTextData mbHeader _Bool
 sc/source/ui/inc/datastream.hxx:108
     sc::DataStream mnSettings sal_uInt32
 sc/source/ui/inc/preview.hxx:47
@@ -390,6 +394,8 @@ slideshow/source/engine/opengl/TransitionImpl.hxx:297
     Vertex texcoord glm::vec2
 slideshow/source/engine/slideshowimpl.cxx:1043
     (anonymous namespace)::SlideShowImpl::PrefetchPropertiesFunc mpSlideShowImpl class (anonymous namespace)::SlideShowImpl *const
+slideshow/source/inc/shapeattributelayer.hxx:501
+    slideshow::internal::ShapeAttributeLayer mnCharRotationAngle double
 soltools/cpp/cpp.h:143
     macroValidator pMacro Nlist *
 starmath/inc/view.hxx:158
@@ -436,7 +442,7 @@ svx/source/svdraw/svdpdf.hxx:197
     ImpSdrPdfImport mdPageWidthPts double
 svx/source/table/tablertfimporter.cxx:54
     sdr::table::RTFCellDefault maItemSet class SfxItemSet
-sw/inc/shellio.hxx:146
+sw/inc/shellio.hxx:147
     SwReader aFileName class rtl::OUString
 sw/source/core/doc/tblafmt.cxx:186
     SwAfVersions m_nVerticalAlignmentVersion sal_uInt16
@@ -484,10 +490,8 @@ vcl/inc/opengl/RenderList.hxx:29
     Vertex color glm::vec4
 vcl/inc/opengl/RenderList.hxx:30
     Vertex lineData glm::vec4
-vcl/inc/qt5/Qt5Frame.hxx:65
-    Qt5Frame m_pSalMenu class Qt5Menu *
-vcl/inc/qt5/Qt5Graphics.hxx:56
-    Qt5Graphics m_pFontCollection class PhysicalFontCollection *
+vcl/inc/printerinfomanager.hxx:100
+    psp::PrinterInfoManager::Printer m_bModified _Bool
 vcl/inc/salmenu.hxx:34
     SalItemParams nBits enum MenuItemBits
 vcl/inc/salmenu.hxx:42
@@ -514,13 +518,13 @@ vcl/inc/salwtype.hxx:213
     SalQueryCharPositionEvent mnCursorBoundHeight long
 vcl/inc/salwtype.hxx:248
     SalSwipeEvent mnVelocityY double
-vcl/inc/sft.hxx:461
+vcl/inc/sft.hxx:462
     vcl::TrueTypeFont mapper sal_uInt32 (*)(const sal_uInt8 *, sal_uInt32, sal_uInt32)
 vcl/inc/unx/gtk/gtkframe.hxx:215
     GtkSalFrame m_nFloatFlags enum FloatWinPopupFlags
 vcl/opengl/salbmp.cxx:440
     (anonymous namespace)::ScanlineWriter mpCurrentScanline sal_uInt8 *
-vcl/source/filter/graphicfilter.cxx:1009
+vcl/source/filter/graphicfilter.cxx:1010
     ImpFilterLibCache mpLast struct ImpFilterLibCacheEntry *
 vcl/source/filter/jpeg/Exif.hxx:56
     Exif::ExifIFD type sal_uInt16
@@ -531,20 +535,16 @@ vcl/unx/generic/app/wmadaptor.cxx:1269
 vcl/unx/generic/app/wmadaptor.cxx:1270
     _mwmhints status unsigned long
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
-    AtkObjectWrapper aParent AtkObject
-vcl/unx/gtk/a11y/atkwrapper.hxx:80
-    AtkObjectWrapperClass aParentClass AtkObjectClass
+    AtkObjectWrapper aParent const AtkObject
+vcl/unx/gtk/a11y/atkwrapper.hxx:78
+    AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk/gloactiongroup.cxx:30
     GLOAction parent_instance GObject
 vcl/unx/gtk/glomenu.cxx:20
-    GLOMenu parent_instance GMenuModel
+    GLOMenu parent_instance const GMenuModel
 vcl/unx/gtk/hudawareness.cxx:20
     (anonymous) connection GDBusConnection *
 vcl/unx/gtk/hudawareness.cxx:23
     (anonymous) notify GDestroyNotify
-vcl/unx/kde4/KDEXLib.hxx:49
-    KDEXLib::SocketData pending YieldFunc
-vcl/unx/kde4/KDEXLib.hxx:50
-    KDEXLib::SocketData queued YieldFunc
 writerfilter/source/dmapper/PropertyMap.hxx:197
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32

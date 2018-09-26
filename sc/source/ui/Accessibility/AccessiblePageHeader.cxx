@@ -362,12 +362,12 @@ void ScAccessiblePageHeader::AddChild(const EditTextObject* pArea, sal_uInt32 nI
         {
             if (!ScGlobal::EETextObjEqual(maAreas[nIndex]->GetEditTextObject(), pArea))
             {
-                maAreas[nIndex] = new ScAccessiblePageHeaderArea(this, mpViewShell, pArea, mbHeader, eAdjust);
+                maAreas[nIndex] = new ScAccessiblePageHeaderArea(this, mpViewShell, pArea, eAdjust);
             }
         }
         else
         {
-            maAreas[nIndex] = new ScAccessiblePageHeaderArea(this, mpViewShell, pArea, mbHeader, eAdjust);
+            maAreas[nIndex] = new ScAccessiblePageHeaderArea(this, mpViewShell, pArea, eAdjust);
         }
         ++mnChildCount;
     }

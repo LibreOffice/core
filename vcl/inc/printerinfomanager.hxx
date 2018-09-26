@@ -96,8 +96,6 @@ protected:
         // this must be unique over all configuration files
         // it usually should be the printer name
         OString          m_aGroup;
-        // whether changes need to be saved
-        bool                    m_bModified;
         // the corresponding info and job data
         PrinterInfo             m_aInfo;
     };

@@ -120,14 +120,22 @@ cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
 cui/source/dialogs/colorpicker.cxx:719
     cui::ColorPickerDialog m_aColorPrevious class cui::ColorPreviewControl
-cui/source/factory/dlgfact.cxx:1396
+cui/source/factory/dlgfact.cxx:1398
     SvxMacroAssignDialog m_aItems class SfxItemSet
 cui/source/inc/cfgutil.hxx:190
     SvxScriptSelectorDialog m_aStylesInfo struct SfxStylesInfo_Impl
-cui/source/inc/cuitabarea.hxx:236
+cui/source/inc/cuitabarea.hxx:234
     SvxAreaTabPage maFixed_ChangeType enum ChangeType
-cui/source/inc/cuitabarea.hxx:244
+cui/source/inc/cuitabarea.hxx:242
     SvxAreaTabPage m_aXFillAttr class XFillAttrSetItem
+cui/source/inc/tabstpge.hxx:93
+    SvxTabulatorTabPage m_aLeftWin class TabWin_Impl
+cui/source/inc/tabstpge.hxx:94
+    SvxTabulatorTabPage m_aRightWin class TabWin_Impl
+cui/source/inc/tabstpge.hxx:95
+    SvxTabulatorTabPage m_aCenterWin class TabWin_Impl
+cui/source/inc/tabstpge.hxx:96
+    SvxTabulatorTabPage m_aDezWin class TabWin_Impl
 dbaccess/source/core/api/RowSet.hxx:111
     dbaccess::ORowSet m_aURL class rtl::OUString
 dbaccess/source/core/api/RowSet.hxx:125
@@ -205,7 +213,7 @@ include/svx/ClassificationDialog.hxx:63
 include/svx/itemwin.hxx:34
     SvxLineBox aDelayTimer class Timer
 include/vcl/font/Feature.hxx:102
-    vcl::font::Feature m_eType enum vcl::font::FeatureType
+    vcl::font::Feature m_eType const enum vcl::font::FeatureType
 include/xmloff/shapeimport.hxx:140
     SdXML3DLightContext mbSpecular _Bool
 jvmfwk/plugins/sunmajor/pluginlib/sunversion.hxx:102
@@ -314,21 +322,25 @@ sc/source/core/data/document.cxx:1244
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch sc::AutoCalcSwitch
 sc/source/core/data/document.cxx:1245
     (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aBulk class ScBulkBroadcast
+sc/source/filter/html/htmlpars.cxx:3029
+    (anonymous namespace)::CSSHandler::MemStr mp const char *
+sc/source/filter/html/htmlpars.cxx:3030
+    (anonymous namespace)::CSSHandler::MemStr mn size_t
 sc/source/filter/inc/htmlpars.hxx:614
     ScHTMLQueryParser mnUnusedId ScHTMLTableId
-sc/source/filter/inc/sheetdatacontext.hxx:61
+sc/source/filter/inc/sheetdatacontext.hxx:62
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
-sc/source/filter/inc/xetable.hxx:1004
+sc/source/filter/inc/xetable.hxx:1002
     XclExpCellTable maArrayBfr class XclExpArrayBuffer
-sc/source/filter/inc/xetable.hxx:1005
+sc/source/filter/inc/xetable.hxx:1003
     XclExpCellTable maShrfmlaBfr class XclExpShrfmlaBuffer
-sc/source/filter/inc/xiescher.hxx:1201
+sc/source/filter/inc/xiescher.hxx:1202
     XclImpDffPropSet maDummyStrm class SvMemoryStream
-sc/source/filter/inc/xihelper.hxx:329
+sc/source/filter/inc/xihelper.hxx:328
     XclImpCachedValue mxTokArr XclImpCachedValue::ScTokenArrayPtr
-sc/source/filter/inc/xistream.hxx:171
+sc/source/filter/inc/xistream.hxx:172
     XclImpBiff8StdDecrypter maCodec ::msfilter::MSCodec_Std97
-sc/source/filter/inc/xistream.hxx:193
+sc/source/filter/inc/xistream.hxx:194
     XclImpBiff8CryptoAPIDecrypter maCodec ::msfilter::MSCodec_CryptoAPI
 sc/source/filter/oox/worksheethelper.cxx:387
     oox::xls::WorksheetGlobals mxProgressBar oox::ISegmentProgressBarRef
@@ -340,6 +352,16 @@ sc/source/filter/xml/xmltransformationi.hxx:121
     ScXMLColumnNumberContext aType class rtl::OUString
 sc/source/filter/xml/xmltransformationi.hxx:155
     ScXMLDateTimeContext aType class rtl::OUString
+sc/source/ui/Accessibility/AccessibleText.cxx:52
+    ScViewForwarder maCellPos class ScAddress
+sc/source/ui/Accessibility/AccessibleText.cxx:273
+    ScPreviewCellViewForwarder maCellPos class ScAddress
+sc/source/ui/Accessibility/AccessibleText.cxx:289
+    ScPreviewHeaderCellViewForwarder maCellPos class ScAddress
+sc/source/ui/Accessibility/AccessibleText.cxx:305
+    ScPreviewNoteViewForwarder maCellPos class ScAddress
+sc/source/ui/Accessibility/AccessibleText.cxx:1309
+    ScCsvViewForwarder maBoundBox tools::Rectangle
 sc/source/ui/inc/acredlin.hxx:58
     ScAcceptChgDlg aReOpenIdle class Idle
 sc/source/ui/inc/anyrefdg.hxx:119
@@ -370,7 +392,7 @@ sccomp/source/solver/DifferentialEvolution.hxx:35
     DifferentialEvolutionAlgorithm maRandomDevice std::random_device
 sccomp/source/solver/ParticelSwarmOptimization.hxx:56
     ParticleSwarmOptimizationAlgorithm maRandomDevice std::random_device
-scripting/source/stringresource/stringresource.cxx:1317
+scripting/source/stringresource/stringresource.cxx:1318
     stringresource::BinaryInput m_aData Sequence<sal_Int8>
 sd/inc/anminfo.hxx:52
     SdAnimationInfo maSecondSoundFile class rtl::OUString
@@ -388,17 +410,15 @@ sd/source/ui/table/TableDesignPane.hxx:106
     sd::TableDesignPane aImpl class sd::TableDesignWidget
 sd/source/ui/view/DocumentRenderer.cxx:1319
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
-sd/source/ui/view/viewshel.cxx:1216
+sd/source/ui/view/viewshel.cxx:1211
     sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
-sd/source/ui/view/viewshel.cxx:1217
+sd/source/ui/view/viewshel.cxx:1212
     sd::KeepSlideSorterInSyncWithPageChanges m_aModelLock sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
-sd/source/ui/view/viewshel.cxx:1218
+sd/source/ui/view/viewshel.cxx:1213
     sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::class PageSelector::UpdateLock
-sd/source/ui/view/viewshel.cxx:1219
+sd/source/ui/view/viewshel.cxx:1214
     sd::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
-sfx2/source/dialog/itemconnect.cxx:139
-    sfx::MultiControlWrapperHelper_Impl maVec sfx::ControlWrpVec
-sfx2/source/doc/doctempl.cxx:115
+sfx2/source/doc/doctempl.cxx:116
     DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
 slideshow/source/engine/animationnodes/animationbasenode.hxx:89
     slideshow::internal::AnimationBaseNode mpSubsetManager slideshow::internal::SubsettableShapeManagerSharedPtr
@@ -420,7 +440,7 @@ slideshow/source/engine/smilfunctionparser.cxx:504
     slideshow::internal::(anonymous namespace)::ExpressionGrammar::definition identifier ::boost::spirit::rule<ScannerT>
 starmath/inc/view.hxx:218
     SmViewShell maGraphicController class SmGraphicController
-starmath/source/accessibility.hxx:273
+starmath/source/accessibility.hxx:271
     SmEditSource rEditAcc class SmEditAccessible &
 svgio/inc/svgcharacternode.hxx:89
     svgio::svgreader::SvgTextPosition maY ::std::vector<double>
@@ -508,10 +528,6 @@ sw/source/ui/dbui/mmaddressblockpage.hxx:212
     SwCustomizeAddressBlockDialog m_aTextFilter class TextFilter
 sw/source/uibase/docvw/romenu.hxx:35
     SwReadOnlyPopup m_aBuilder class VclBuilder
-sw/source/uibase/inc/chrdlg.hxx:43
-    SwCharDlg m_nCharUrlId sal_uInt16
-sw/source/uibase/inc/chrdlg.hxx:45
-    SwCharDlg m_nCharBrdId sal_uInt16
 sw/source/uibase/inc/cption.hxx:44
     SwCaptionDialog m_aTextFilter class TextFilterAutoConvert
 sw/source/uibase/inc/glossary.hxx:95
@@ -555,13 +571,7 @@ vcl/inc/opengl/RenderList.hxx:29
 vcl/inc/opengl/RenderList.hxx:30
     Vertex lineData glm::vec4
 vcl/inc/opengl/zone.hxx:46
-    OpenGLVCLContextZone aZone class OpenGLZone
-vcl/inc/qt5/Qt5Graphics.hxx:61
-    Qt5Graphics m_lastPopupRect class QRect
-vcl/inc/qt5/Qt5Object.hxx:34
-    Qt5Object m_aSystemData struct SystemEnvData
-vcl/inc/qt5/Qt5Object.hxx:36
-    Qt5Object m_pParent class Qt5Frame *
+    OpenGLVCLContextZone aZone const class OpenGLZone
 vcl/inc/salmenu.hxx:42
     SalMenuButtonItem mnId sal_uInt16
 vcl/inc/salmenu.hxx:43
@@ -582,26 +592,24 @@ vcl/inc/unx/i18n_ic.hxx:46
     SalI18N_InputContext maSwitchIMCallback XIMCallback
 vcl/inc/unx/i18n_ic.hxx:47
     SalI18N_InputContext maDestroyCallback XIMCallback
-vcl/source/app/salvtables.cxx:1396
+vcl/source/app/salvtables.cxx:1462
     SalInstanceEntry m_aTextFilter class SalInstanceEntry::WeldTextFilter
 vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:36
     ImplOldJobSetupData cPortName char [32]
-vcl/unx/gtk3/gtk3gtkinst.cxx:2248
+vcl/unx/gtk3/gtk3gtkinst.cxx:2255
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
-    (anonymous) atk_hyper_link AtkHyperlink
+    (anonymous) atk_hyper_link const AtkHyperlink
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
-    AtkObjectWrapper aParent AtkObject
-vcl/unx/gtk/a11y/atkwrapper.hxx:80
-    AtkObjectWrapperClass aParentClass AtkObjectClass
+    AtkObjectWrapper aParent const AtkObject
+vcl/unx/gtk/a11y/atkwrapper.hxx:78
+    AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
 vcl/unx/gtk/gloactiongroup.cxx:30
     GLOAction parent_instance GObject
 vcl/unx/gtk/glomenu.cxx:20
-    GLOMenu parent_instance GMenuModel
-vcl/unx/kde5/KDE5FilePicker.hxx:81
-    KDE5FilePicker allowRemoteUrls _Bool
+    GLOMenu parent_instance const GMenuModel
 writerfilter/source/dmapper/PropertyMap.hxx:197
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
 xmloff/source/text/XMLTextListBlockContext.hxx:35

@@ -53,7 +53,6 @@ SvxGrfCropPage::SvxGrfCropPage(TabPageParent pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "cui/ui/croppage.ui", "CropPage", &rSet)
     , nOldWidth(0)
     , nOldHeight(0)
-    , bReset(false)
     , bSetOrigSize(false)
     , m_xCropFrame(m_xBuilder->weld_widget("cropframe"))
     , m_xZoomConstRB(m_xBuilder->weld_radio_button("keepscale"))
@@ -217,9 +216,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
     }
 
     GraphicHasChanged( bFound );
-    bReset = true;
     ActivatePage( *rSet );
-    bReset = false;
 }
 
 bool SvxGrfCropPage::FillItemSet(SfxItemSet *rSet)

@@ -39,7 +39,6 @@ public:
         const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
         ScPreviewShell* pViewShell,
         const EditTextObject* pEditObj,
-        bool bHeader,
         SvxAdjust eAdjust);
 protected:
     virtual ~ScAccessiblePageHeaderArea() override;
@@ -107,7 +106,6 @@ private:
     std::unique_ptr<EditTextObject> mpEditObj;
     std::unique_ptr<accessibility::AccessibleTextHelper> mpTextHelper;
     ScPreviewShell* mpViewShell;
-    bool            mbHeader;
     SvxAdjust       meAdjust;
 
     void CreateTextHelper();
