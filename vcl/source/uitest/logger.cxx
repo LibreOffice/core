@@ -88,15 +88,18 @@ void UITestLogger::logCommand(const OUString& rAction, const css::uno::Sequence<
 namespace {
 
 // most likely this should be recursive
-bool child_windows_have_focus(VclPtr<Control> const & xUIElement)
+bool child_windows_have_focus(VclPtr<vcl::Window> const & xUIElement)
 {
     sal_Int32 nCount = xUIElement->GetChildCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        if (xUIElement->GetChild(i)->HasFocus())
+        vcl::Window* pChild = xUIElement->GetChild(i);
+        if (pChild->HasFocus())
         {
             return true;
         }
+        if (child_windows_have_focus(VclPtr<vcl::Window>(pChild)))
+            return true;
     }
     return false;
 }
