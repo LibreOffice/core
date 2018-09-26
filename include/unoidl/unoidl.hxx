@@ -38,7 +38,7 @@ public:
 private:
     void operator =(NoSuchFileException) = delete;
 
-    rtl::OUString uri_;
+    rtl::OUString const uri_;
 };
 
 class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL FileFormatException final {
@@ -61,8 +61,8 @@ public:
 private:
     void operator =(FileFormatException) = delete;
 
-    rtl::OUString uri_;
-    rtl::OUString detail_;
+    rtl::OUString const uri_;
+    rtl::OUString const detail_;
 };
 
 struct AnnotatedReference {
@@ -74,7 +74,7 @@ struct AnnotatedReference {
 
     rtl::OUString name;
 
-    std::vector< rtl::OUString > annotations;
+    std::vector< rtl::OUString > const annotations;
 };
 
 class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL Entity: public salhelper::SimpleReferenceObject {
@@ -95,7 +95,7 @@ protected:
     virtual SAL_DLLPRIVATE ~Entity() throw () override;
 
 private:
-    Sort sort_;
+    Sort const sort_;
 };
 
 class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL MapCursor: public salhelper::SimpleReferenceObject {
@@ -140,9 +140,9 @@ protected:
     virtual SAL_DLLPRIVATE ~PublishableEntity() throw () override;
 
 private:
-    bool published_;
+    bool const published_;
 
-    std::vector< rtl::OUString > annotations_;
+    std::vector< rtl::OUString > const annotations_;
 };
 
 class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL EnumTypeEntity: public PublishableEntity {
@@ -158,7 +158,7 @@ public:
 
         sal_Int32 value;
 
-        std::vector< rtl::OUString > annotations;
+        std::vector< rtl::OUString > const annotations;
     };
 
     SAL_DLLPRIVATE EnumTypeEntity(
@@ -173,7 +173,7 @@ public:
 private:
     virtual SAL_DLLPRIVATE ~EnumTypeEntity() throw () override;
 
-    std::vector< Member > members_;
+    std::vector< Member > const members_;
 };
 
 class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL PlainStructTypeEntity: public PublishableEntity {
@@ -188,7 +188,7 @@ public:
 
         rtl::OUString type;
 
-        std::vector< rtl::OUString > annotations;
+        std::vector< rtl::OUString > const annotations;
     };
 
     SAL_DLLPRIVATE PlainStructTypeEntity(
@@ -207,8 +207,8 @@ public:
 private:
     virtual SAL_DLLPRIVATE ~PlainStructTypeEntity() throw () override;
 
-    rtl::OUString directBase_;
-    std::vector< Member > directMembers_;
+    rtl::OUString const directBase_;
+    std::vector< Member > const directMembers_;
 };
 
 class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL PolymorphicStructTypeTemplateEntity:
@@ -230,7 +230,7 @@ public:
 
         bool parameterized;
 
-        std::vector< rtl::OUString > annotations;
+        std::vector< rtl::OUString > const annotations;
     };
 
     SAL_DLLPRIVATE PolymorphicStructTypeTemplateEntity(
@@ -250,8 +250,8 @@ public:
 private:
     virtual SAL_DLLPRIVATE ~PolymorphicStructTypeTemplateEntity() throw () override;
 
-    std::vector< rtl::OUString > typeParameters_;
-    std::vector< Member > members_;
+    std::vector< rtl::OUString > const typeParameters_;
+    std::vector< Member > const members_;
 };
 
 class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL ExceptionTypeEntity: public PublishableEntity {
@@ -267,7 +267,7 @@ public:
 
         rtl::OUString type;
 
-        std::vector< rtl::OUString > annotations;
+        std::vector< rtl::OUString > const annotations;
     };
 
     SAL_DLLPRIVATE ExceptionTypeEntity(
@@ -286,8 +286,8 @@ public:
 private:
     virtual SAL_DLLPRIVATE ~ExceptionTypeEntity() throw () override;
 
-    rtl::OUString directBase_;
-    std::vector< Member > directMembers_;
+    rtl::OUString const directBase_;
+    std::vector< Member > const directMembers_;
 };
 
 class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL InterfaceTypeEntity: public PublishableEntity {
@@ -316,7 +316,7 @@ public:
 
         std::vector< rtl::OUString > setExceptions;
 
-        std::vector< rtl::OUString > annotations;
+        std::vector< rtl::OUString > const annotations;
     };
 
     struct Method {
@@ -353,7 +353,7 @@ public:
 
         std::vector< rtl::OUString > exceptions;
 
-        std::vector< rtl::OUString > annotations;
+        std::vector< rtl::OUString > const annotations;
     };
 
     SAL_DLLPRIVATE InterfaceTypeEntity(
@@ -384,10 +384,10 @@ public:
 private:
     virtual SAL_DLLPRIVATE ~InterfaceTypeEntity() throw () override;
 
-    std::vector< AnnotatedReference > directMandatoryBases_;
-    std::vector< AnnotatedReference > directOptionalBases_;
-    std::vector< Attribute > directAttributes_;
-    std::vector< Method > directMethods_;
+    std::vector< AnnotatedReference > const directMandatoryBases_;
+    std::vector< AnnotatedReference > const directOptionalBases_;
+    std::vector< Attribute > const directAttributes_;
+    std::vector< Method > const directMethods_;
 };
 
 class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL TypedefEntity: public PublishableEntity {
@@ -403,7 +403,7 @@ public:
 private:
     virtual SAL_DLLPRIVATE ~TypedefEntity() throw () override;
 
-    rtl::OUString type_;
+    rtl::OUString const type_;
 };
 
 struct SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL ConstantValue {
@@ -467,7 +467,7 @@ public:
 
         ConstantValue value;
 
-        std::vector< rtl::OUString > annotations;
+        std::vector< rtl::OUString > const annotations;
     };
 
     SAL_DLLPRIVATE ConstantGroupEntity(
@@ -482,7 +482,7 @@ public:
 private:
     virtual SAL_DLLPRIVATE ~ConstantGroupEntity() throw () override;
 
-    std::vector< Member > members_;
+    std::vector< Member > const members_;
 };
 
 class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL SingleInterfaceBasedServiceEntity:
@@ -499,9 +499,9 @@ public:
 
             rtl::OUString name;
 
-            rtl::OUString type;
+            rtl::OUString const type;
 
-            bool rest;
+            bool const rest;
         };
 
         Constructor(): defaultConstructor(true) {}
@@ -521,7 +521,7 @@ public:
 
         std::vector< rtl::OUString > exceptions;
 
-        std::vector< rtl::OUString > annotations;
+        std::vector< rtl::OUString > const annotations;
 
         bool defaultConstructor;
     };
@@ -543,8 +543,8 @@ public:
 private:
     virtual SAL_DLLPRIVATE ~SingleInterfaceBasedServiceEntity() throw () override;
 
-    rtl::OUString base_;
-    std::vector< Constructor > constructors_;
+    rtl::OUString const base_;
+    std::vector< Constructor > const constructors_;
 };
 
 class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL AccumulationBasedServiceEntity:
@@ -576,9 +576,9 @@ public:
 
         rtl::OUString type;
 
-        Attributes attributes;
+        Attributes const attributes;
 
-        std::vector< rtl::OUString > annotations;
+        std::vector< rtl::OUString > const annotations;
     };
 
     SAL_DLLPRIVATE AccumulationBasedServiceEntity(
@@ -620,11 +620,11 @@ public:
 private:
     virtual SAL_DLLPRIVATE ~AccumulationBasedServiceEntity() throw () override;
 
-    std::vector< AnnotatedReference > directMandatoryBaseServices_;
-    std::vector< AnnotatedReference > directOptionalBaseServices_;
-    std::vector< AnnotatedReference > directMandatoryBaseInterfaces_;
-    std::vector< AnnotatedReference > directOptionalBaseInterfaces_;
-    std::vector< Property > directProperties_;
+    std::vector< AnnotatedReference > const directMandatoryBaseServices_;
+    std::vector< AnnotatedReference > const directOptionalBaseServices_;
+    std::vector< AnnotatedReference > const directMandatoryBaseInterfaces_;
+    std::vector< AnnotatedReference > const directOptionalBaseInterfaces_;
+    std::vector< Property > const directProperties_;
 };
 
 class LO_DLLPUBLIC_UNOIDL InterfaceBasedSingletonEntity:
@@ -644,7 +644,7 @@ public:
 private:
     virtual SAL_DLLPRIVATE ~InterfaceBasedSingletonEntity() throw () override;
 
-    rtl::OUString base_;
+    rtl::OUString const base_;
 };
 
 class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL ServiceBasedSingletonEntity: public PublishableEntity
@@ -662,7 +662,7 @@ public:
 private:
     virtual SAL_DLLPRIVATE ~ServiceBasedSingletonEntity() throw () override;
 
-    rtl::OUString base_;
+    rtl::OUString const base_;
 };
 
 class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL Provider: public salhelper::SimpleReferenceObject {

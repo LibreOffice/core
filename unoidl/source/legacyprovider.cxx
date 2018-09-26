@@ -143,7 +143,7 @@ private:
     { return new Cursor(manager_, ucr_, key_); }
 
     rtl::Reference< Manager > manager_;
-    RegistryKey ucr_;
+    RegistryKey const ucr_;
     mutable RegistryKey key_;
 };
 
