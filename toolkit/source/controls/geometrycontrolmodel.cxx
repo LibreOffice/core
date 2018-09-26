@@ -585,7 +585,7 @@
 
     struct Int32Equal
     {
-        sal_Int32   m_nCompare;
+        sal_Int32 const   m_nCompare;
         explicit Int32Equal( sal_Int32 _nCompare ) : m_nCompare( _nCompare ) { }
 
         bool operator()( sal_Int32 _nLHS )

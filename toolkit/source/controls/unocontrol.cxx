@@ -60,7 +60,7 @@ using ::com::sun::star::accessibility::XAccessible;
 struct LanguageDependentProp
 {
     const char* pPropName;
-    sal_Int32   nPropNameLength;
+    sal_Int32 const nPropNameLength;
 };
 
 static const LanguageDependentProp aLanguageDependentProp[] =
