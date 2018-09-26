@@ -137,11 +137,10 @@ class SwObjPosOscillationControl
     private:
         const SwAnchoredDrawObject* mpAnchoredDrawObj;
 
-        std::vector<Point*> maObjPositions;
+        std::vector<Point> maObjPositions;
 
     public:
         explicit SwObjPosOscillationControl( const SwAnchoredDrawObject& _rAnchoredDrawObj );
-        ~SwObjPosOscillationControl();
 
         bool OscillationDetected();
 };
@@ -150,17 +149,6 @@ SwObjPosOscillationControl::SwObjPosOscillationControl(
                                 const SwAnchoredDrawObject& _rAnchoredDrawObj )
     : mpAnchoredDrawObj( &_rAnchoredDrawObj )
 {
-}
-
-SwObjPosOscillationControl::~SwObjPosOscillationControl()
-{
-    while ( !maObjPositions.empty() )
-    {
-        Point* pPos = maObjPositions.back();
-        delete pPos;
-
-        maObjPositions.pop_back();
-    }
 }
 
 bool SwObjPosOscillationControl::OscillationDetected()
@@ -174,22 +162,19 @@ bool SwObjPosOscillationControl::OscillationDetected()
     }
     else
     {
-        Point* pNewObjPos = new Point( mpAnchoredDrawObj->GetObjRect().Pos() );
-        for ( std::vector<Point*>::iterator aObjPosIter = maObjPositions.begin();
-              aObjPosIter != maObjPositions.end();
-              ++aObjPosIter )
+        Point aNewObjPos = mpAnchoredDrawObj->GetObjRect().Pos();
+        for ( auto const & pt : maObjPositions )
         {
-            if ( *pNewObjPos == *(*aObjPosIter) )
+            if ( aNewObjPos == pt )
             {
                 // position already occurred -> oscillation
                 bOscillationDetected = true;
-                delete pNewObjPos;
                 break;
             }
         }
         if ( !bOscillationDetected )
         {
-            maObjPositions.push_back( pNewObjPos );
+            maObjPositions.push_back( aNewObjPos );
         }
     }
 
