@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_006c8a34",
+        "filename": "svx/source/fmcomp/gridctrl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2799,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-09-26T08:14:57Z",
+      "side": 1,
+      "message": "You construct a whole vector to throw it away as soon as the method returns, after using only one value... Please compute only the value you need, and return it.\n\nSomething like:\n\nsal_uInt16 i \u003d 0;\nsal_uInt16 iId \u003d 1;\nfor(; iId \u003c\u003d m_aColumns.size() \u0026\u0026 i \u003c _nColViewId; ++iId)\n{\n    if(! m_aColumns[GetModelColumnPos(iId)].get()-\u003eIsHidden())\n    {\n        ++i;\n    }\n}\n\nif (i \u003d\u003d 0)\n   return iId;\nelse\n   // some error condition?",
+      "revId": "c0c8518c217fd274912b3ebf0ecc0e1be7fe6e39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_8061ba3c",
+        "filename": "svx/source/fmcomp/gridctrl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2836,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-09-26T08:14:57Z",
+      "side": 1,
+      "message": "It looks like in all code paths, nColViewId is always set to nColId. SO why a new variable? If you want to rename nColId to nColViewId for better clarity, then do so.",
+      "revId": "c0c8518c217fd274912b3ebf0ecc0e1be7fe6e39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_e0687622",
+        "filename": "svx/source/fmcomp/gridctrl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2839,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-09-26T08:14:57Z",
+      "side": 1,
+      "message": "use \" \u003c\u003d x\" instead of \"\u003c x +1\";\nmore readable",
+      "range": {
+        "startLine": 2839,
+        "startChar": 67,
+        "endLine": 2839,
+        "endChar": 68
+      },
+      "revId": "c0c8518c217fd274912b3ebf0ecc0e1be7fe6e39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_c07572fc",
+        "filename": "svx/source/fmcomp/gridctrl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2842,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-09-26T08:14:57Z",
+      "side": 1,
+      "message": "computeViewId is named like it takes a \"something\" and returns a view id. But you put the result in a variable called nColModelId, which makes it sound like the return value is a model id. Which is it? Either the variable or the method needs to be renamed.",
+      "range": {
+        "startLine": 2842,
+        "startChar": 0,
+        "endLine": 2842,
+        "endChar": 52
+      },
+      "revId": "c0c8518c217fd274912b3ebf0ecc0e1be7fe6e39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
