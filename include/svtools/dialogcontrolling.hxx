@@ -164,8 +164,6 @@ namespace svt
                 disabled when it's unmarked
         */
         void    enableOnCheckMark( CheckBox& _rBox, vcl::Window& _rDependentWindow );
-        void    enableOnCheckMark( CheckBox& _rBox, vcl::Window& _rDependentWindow1, vcl::Window& _rDependentWindow2 );
-        void    enableOnCheckMark( CheckBox& _rBox, vcl::Window& _rDependentWindow1, vcl::Window& _rDependentWindow2, vcl::Window& _rDependentWindow3, vcl::Window& _rDependentWindow4 );
 
         /** adds a non-standard controller whose functionality is not covered by the other methods
 
