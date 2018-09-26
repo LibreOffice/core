@@ -201,7 +201,7 @@ class ScAccessibleHeaderTextData : public ScAccessibleTextData
 {
 public:
                         ScAccessibleHeaderTextData(ScPreviewShell* pViewShell,
-                            const EditTextObject* pEditObj, bool bHeader, SvxAdjust eAdjust);
+                            const EditTextObject* pEditObj, SvxAdjust eAdjust);
     virtual             ~ScAccessibleHeaderTextData() override;
 
     virtual ScAccessibleTextData* Clone() const override;
@@ -220,7 +220,6 @@ private:
     std::unique_ptr<SvxEditEngineForwarder> mpForwarder;
     ScDocShell*             mpDocSh;
     const EditTextObject*   mpEditObj;
-    bool                    mbHeader;
     bool                    mbDataValid;
     SvxAdjust               meAdjust;
 };

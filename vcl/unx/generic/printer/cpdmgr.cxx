@@ -235,7 +235,6 @@ void CPDManager::addNewPrinter(const OUString& aPrinterName, const OUString& aUn
     }
     aPrinter.m_aInfo.setDefaultBackend(true);
     aPrinter.m_aInfo.m_aDriverName = aBuf.makeStringAndClear();
-    aPrinter.m_bModified = false;
     m_aPrinters[ aUniqueName ] = aPrinter;
 }
 #endif

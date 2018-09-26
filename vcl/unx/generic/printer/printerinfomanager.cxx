@@ -462,7 +462,6 @@ void PrinterInfoManager::initialize()
 
                 // finally insert printer
                 FileBase::getFileURLFromSystemPath( aFile.PathToFileName(), aPrinter.m_aFile );
-                aPrinter.m_bModified    = false;
                 aPrinter.m_aGroup       = aConfig.GetGroupName( nGroup );
                 std::unordered_map< OUString, Printer >::const_iterator find_it =
                 m_aPrinters.find( aPrinterName );
@@ -534,7 +533,6 @@ void PrinterInfoManager::initialize()
         aPrinter.m_aInfo.m_aCommand         = aCmd;
         aPrinter.m_aInfo.m_aComment         = printQueue.m_aComment;
         aPrinter.m_aInfo.m_aLocation        = printQueue.m_aLocation;
-        aPrinter.m_bModified                = false;
         aPrinter.m_aGroup                   = OUStringToOString(aPrinterName, aEncoding); //provide group name in case user makes this one permanent
 
         m_aPrinters[ aPrinterName ] = aPrinter;
