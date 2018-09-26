@@ -68,6 +68,16 @@ namespace dbaui
         SetExchangeSupport();
     }
 
+    OGenericAdministrationPage::OGenericAdministrationPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rId, const SfxItemSet& rAttrSet)
+        : SfxTabPage(pParent, rUIXMLDescription, rId, &rAttrSet)
+        , m_abEnableRoadmap(false)
+        , m_pAdminDialog(nullptr)
+        , m_pItemSetHelper(nullptr)
+    {
+
+        SetExchangeSupport();
+    }
+
     DeactivateRC OGenericAdministrationPage::DeactivatePage(SfxItemSet* _pSet)
     {
         if (_pSet)
@@ -108,18 +118,22 @@ namespace dbaui
     {
         callModifiedHdl(pCtrl);
     }
-    IMPL_LINK(OGenericAdministrationPage, OnControlModifiedClick, Button*, pCtrl, void)
+
+    IMPL_LINK(OGenericAdministrationPage, OnControlModifiedClick, weld::ToggleButton&, rCtrl, void)
     {
-        callModifiedHdl(pCtrl);
+        callModifiedHdl(&rCtrl);
     }
+
     IMPL_LINK(OGenericAdministrationPage, ControlModifiedCheckBoxHdl, CheckBox&, rCtrl, void)
     {
         callModifiedHdl(&rCtrl);
     }
+
     IMPL_LINK(OGenericAdministrationPage, OnControlEditModifyHdl, Edit&, rCtrl, void)
     {
         callModifiedHdl(&rCtrl);
     }
+
     bool OGenericAdministrationPage::getSelectedDataSource(OUString& _sReturn, OUString const & _sCurr)
     {
         // collect all ODBC data source names
