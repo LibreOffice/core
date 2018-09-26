@@ -136,28 +136,29 @@ private:
 
     const CustomAnimationPresets* mpCustomAnimationPresets;
 
-    VclPtr<PushButton> mpPBAddEffect;
-    VclPtr<PushButton> mpPBRemoveEffect;
-    VclPtr<FixedText>  mpFTEffect;
-    VclPtr<FixedText>  mpFTStart;
-    VclPtr<ListBox>    mpLBStart;
-    VclPtr<FixedText>  mpFTProperty;
-    VclPtr<VclHBox>    mpPlaceholderBox;
-    VclPtr<PropertyControl>    mpLBProperty;
-    VclPtr<PushButton> mpPBPropertyMore;
-    VclPtr<FixedText>  mpFTDuration;
+    // UI Elements
+    VclPtr<FixedText>   mpFTAnimation;
+    VclPtr<CustomAnimationList> mpCustomAnimationList;
+    VclPtr<PushButton>  mpPBAddEffect;
+    VclPtr<PushButton>  mpPBRemoveEffect;
+    VclPtr<PushButton>  mpPBMoveUp;
+    VclPtr<PushButton>  mpPBMoveDown;
+    VclPtr<FixedText>   mpFTCategory;
+    VclPtr<ListBox>     mpLBCategory;
+    VclPtr<FixedText>   mpFTEffect;
+    VclPtr<CategoryListBox> mpLBAnimation;
+    VclPtr<FixedText>   mpFTStart;
+    VclPtr<ListBox>     mpLBStart;
+    VclPtr<FixedText>   mpFTProperty;
+    VclPtr<PropertyControl> mpLBProperty;
+    VclPtr<VclHBox>     mpPlaceholderBox;
+    VclPtr<PushButton>  mpPBPropertyMore;
+    VclPtr<FixedText>   mpFTDuration;
     VclPtr<MetricBox>   mpCBXDuration;
     VclPtr<FixedText>   mpFTStartDelay;
     VclPtr<MetricField> mpMFStartDelay;
-    VclPtr<CustomAnimationList>    mpCustomAnimationList;
-    VclPtr<PushButton> mpPBMoveUp;
-    VclPtr<PushButton> mpPBMoveDown;
-    VclPtr<PushButton> mpPBPlay;
-    VclPtr<CheckBox>   mpCBAutoPreview;
-    VclPtr<FixedText> mpFTCategory;
-    VclPtr<ListBox>    mpLBCategory;
-    VclPtr<FixedText> mpFTAnimation;
-    VclPtr<CategoryListBox> mpLBAnimation;
+    VclPtr<CheckBox>    mpCBAutoPreview;
+    VclPtr<PushButton>  mpPBPlay;
 
     OUString    maStrModify;
     OUString    maStrProperty;
