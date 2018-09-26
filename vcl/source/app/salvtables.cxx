@@ -1901,6 +1901,7 @@ public:
         : SalInstanceEntry(pButton, bTakeOwnership)
         , m_xButton(pButton)
     {
+        m_xButton->SetUseThousandSep(false);  //off by default, MetricSpinButton enables it
         m_xButton->SetUpHdl(LINK(this, SalInstanceSpinButton, UpDownHdl));
         m_xButton->SetDownHdl(LINK(this, SalInstanceSpinButton, UpDownHdl));
         m_xButton->SetLoseFocusHdl(LINK(this, SalInstanceSpinButton, LoseFocusHdl));
@@ -1948,9 +1949,16 @@ public:
         m_xButton->SetDecimalDigits(digits);
     }
 
+    //so with hh::mm::ss, incrementing mm will not reset ss
     void DisableRemainderFactor()
     {
         m_xButton->DisableRemainderFactor();
+    }
+
+    //off by default for direct SpinButtons, MetricSpinButton enables it
+    void SetUseThousandSep()
+    {
+        m_xButton->SetUseThousandSep(true);
     }
 
     virtual unsigned int get_digits() const override
@@ -2829,6 +2837,18 @@ public:
     {
         NumericField* pSpinButton = m_xBuilder->get<NumericField>(id);
         return pSpinButton ? o3tl::make_unique<SalInstanceSpinButton>(pSpinButton, bTakeOwnership) : nullptr;
+    }
+
+    virtual std::unique_ptr<weld::MetricSpinButton> weld_metric_spin_button(const OString& id, FieldUnit eUnit,
+                                                                            bool bTakeOwnership) override
+    {
+        std::unique_ptr<weld::SpinButton> xButton(weld_spin_button(id, bTakeOwnership));
+        if (xButton)
+        {
+            SalInstanceSpinButton& rButton = dynamic_cast<SalInstanceSpinButton&>(*xButton);
+            rButton.SetUseThousandSep();
+        }
+        return o3tl::make_unique<weld::MetricSpinButton>(std::move(xButton), eUnit);
     }
 
     virtual std::unique_ptr<weld::TimeSpinButton> weld_time_spin_button(const OString& id, TimeFieldFormat eFormat,

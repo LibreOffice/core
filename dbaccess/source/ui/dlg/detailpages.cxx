@@ -803,16 +803,16 @@ namespace dbaui
         return m_pTextConnectionHelper->prepareLeave();
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateGeneratedValuesPage( TabPageParent _pParent, const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> ODriversSettings::CreateGeneratedValuesPage(TabPageParent pParent, const SfxItemSet* _rAttrSet)
     {
-        return VclPtr<GeneratedValuesPage>::Create( _pParent.pParent, *_rAttrSet );
+        return VclPtr<GeneratedValuesPage>::Create(pParent, *_rAttrSet);
     }
 
-    VclPtr<SfxTabPage> ODriversSettings::CreateSpecialSettingsPage( TabPageParent _pParent, const SfxItemSet* _rAttrSet )
+    VclPtr<SfxTabPage> ODriversSettings::CreateSpecialSettingsPage(TabPageParent pParent, const SfxItemSet* _rAttrSet)
     {
         OUString eType = ODbDataSourceAdministrationHelper::getDatasourceType( *_rAttrSet );
         DataSourceMetaData aMetaData( eType );
-        return VclPtr<SpecialSettingsPage>::Create( _pParent.pParent, *_rAttrSet, aMetaData );
+        return VclPtr<SpecialSettingsPage>::Create(pParent, *_rAttrSet, aMetaData);
     }
 }   // namespace dbaui
 
