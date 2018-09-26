@@ -55,7 +55,7 @@
  ************************************************************************/
 /*************************************************************************
  * @file
- * Represente index source,index body and index index entry.
+ * Represents index source, index body and index entry.
  ************************************************************************/
 #ifndef INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFINDEX_HXX
 #define INCLUDED_LOTUSWORDPRO_INC_XFILTER_XFINDEX_HXX
