@@ -1190,11 +1190,8 @@ public:
     virtual std::unique_ptr<SpinButton> weld_spin_button(const OString& id,
                                                          bool bTakeOwnership = false)
         = 0;
-    std::unique_ptr<MetricSpinButton> weld_metric_spin_button(const OString& id, FieldUnit eUnit,
-                                                              bool bTakeOwnership = false)
-    {
-        return o3tl::make_unique<MetricSpinButton>(weld_spin_button(id, bTakeOwnership), eUnit);
-    }
+    virtual std::unique_ptr<MetricSpinButton>
+    weld_metric_spin_button(const OString& id, FieldUnit eUnit, bool bTakeOwnership = false) = 0;
     virtual std::unique_ptr<TimeSpinButton>
     weld_time_spin_button(const OString& id, TimeFieldFormat eFormat, bool bTakeOwnership = false)
         = 0;

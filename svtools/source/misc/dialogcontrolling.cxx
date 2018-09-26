@@ -203,35 +203,6 @@ namespace svt
         m_pImpl->aControllers.push_back( pController );
     }
 
-
-    void ControlDependencyManager::enableOnCheckMark( CheckBox& _rBox, vcl::Window& _rDependentWindow )
-    {
-        std::shared_ptr<DialogController> pController( new RadioDependentEnabler( _rBox ) );
-        pController->addDependentWindow( _rDependentWindow );
-        m_pImpl->aControllers.push_back( pController );
-    }
-
-
-    void ControlDependencyManager::enableOnCheckMark( CheckBox& _rBox, vcl::Window& _rDependentWindow1, vcl::Window& _rDependentWindow2 )
-    {
-        std::shared_ptr<DialogController> pController( new RadioDependentEnabler( _rBox ) );
-        pController->addDependentWindow( _rDependentWindow1 );
-        pController->addDependentWindow( _rDependentWindow2 );
-        m_pImpl->aControllers.push_back( pController );
-    }
-
-
-    void ControlDependencyManager::enableOnCheckMark( CheckBox& _rBox, vcl::Window& _rDependentWindow1, vcl::Window& _rDependentWindow2, vcl::Window& _rDependentWindow3, vcl::Window& _rDependentWindow4 )
-    {
-        std::shared_ptr<DialogController> pController( new RadioDependentEnabler( _rBox ) );
-        pController->addDependentWindow( _rDependentWindow1 );
-        pController->addDependentWindow( _rDependentWindow2 );
-        pController->addDependentWindow( _rDependentWindow3 );
-        pController->addDependentWindow( _rDependentWindow4 );
-        m_pImpl->aControllers.push_back( pController );
-    }
-
-
 } // namespace svt
 
 
