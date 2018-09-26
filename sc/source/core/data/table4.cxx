@@ -611,7 +611,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         const ScPatternAttr* pSrcPattern = nullptr;
         const ScStyleSheet* pStyleSheet = nullptr;
         SCCOLROW nAtSrc = nISrcStart;
-        ScPatternAttr* pNewPattern = nullptr;
+        std::unique_ptr<ScPatternAttr> pNewPattern;
         bool bGetPattern = true;
         rInner = nIStart;
         while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
@@ -620,7 +620,6 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             {
                 if ( bGetPattern )
                 {
-                    delete pNewPattern;
                     if (bVertical)      // rInner&:=nRow, rOuter&:=nCol
                         pSrcPattern = aCol[nCol].GetPattern(static_cast<SCROW>(nAtSrc));
                     else                // rInner&:=nCol, rOuter&:=nRow
@@ -632,13 +631,13 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     if ( rSet.GetItemState(ATTR_MERGE, false) == SfxItemState::SET
                             || rSet.GetItemState(ATTR_MERGE_FLAG, false) == SfxItemState::SET )
                     {
-                        pNewPattern = new ScPatternAttr( *pSrcPattern );
+                        pNewPattern.reset( new ScPatternAttr( *pSrcPattern ));
                         SfxItemSet& rNewSet = pNewPattern->GetItemSet();
                         rNewSet.ClearItem(ATTR_MERGE);
                         rNewSet.ClearItem(ATTR_MERGE_FLAG);
                     }
                     else
-                        pNewPattern = nullptr;
+                        pNewPattern.reset();
                 }
 
                 const ScCondFormatItem& rCondFormatItem = pSrcPattern->GetItem(ATTR_CONDITIONAL);
@@ -728,7 +727,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             if (rInner == nIEnd) break;
             if (bPositive) ++rInner; else --rInner;
         }
-        delete pNewPattern;
+        pNewPattern.reset();
 
         //  Analyse
 
