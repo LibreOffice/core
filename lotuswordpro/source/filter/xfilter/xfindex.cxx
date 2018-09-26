@@ -55,7 +55,7 @@
  ************************************************************************/
 /*************************************************************************
  * @file
- * Represente index source,index body and index index entry.
+ * Represente index source, index body and index entry.
  ************************************************************************/
 #include <xfilter/xfindex.hxx>
 #include <xfilter/xfparagraph.hxx>
