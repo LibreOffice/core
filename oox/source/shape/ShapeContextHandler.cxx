@@ -26,7 +26,6 @@
 #include "LockedCanvasContext.hxx"
 #include "WpsContext.hxx"
 #include "WpgContext.hxx"
-#include <services.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <oox/vml/vmldrawingfragment.hxx>
 #include <oox/vml/vmlshape.hxx>
@@ -37,29 +36,11 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <memory>
 
-namespace oox { namespace shape {
-
 using namespace ::com::sun::star;
+
+namespace oox { namespace shape {
 using namespace core;
 using namespace drawingml;
-
-OUString ShapeContextHandler_getImplementationName()
-{
-    return OUString( "com.sun.star.comp.oox.ShapeContextHandler" );
-}
-
-uno::Sequence< OUString >
-ShapeContextHandler_getSupportedServiceNames()
-{
-    uno::Sequence< OUString > s { "com.sun.star.xml.sax.FastShapeContextHandler" };
-    return s;
-}
-
-uno::Reference< uno::XInterface >
-ShapeContextHandler_createInstance( const uno::Reference< uno::XComponentContext > & context)
-{
-    return static_cast< ::cppu::OWeakObject* >( new ShapeContextHandler(context) );
-}
 
 ShapeContextHandler::ShapeContextHandler(uno::Reference< uno::XComponentContext > const & context) :
   mnStartToken(0)
@@ -616,12 +597,13 @@ void SAL_CALL ShapeContextHandler::setMediaDescriptor(const uno::Sequence<beans:
 
 OUString ShapeContextHandler::getImplementationName()
 {
-    return ShapeContextHandler_getImplementationName();
+    return OUString( "com.sun.star.comp.oox.ShapeContextHandler" );
 }
 
 uno::Sequence< OUString > ShapeContextHandler::getSupportedServiceNames()
 {
-    return ShapeContextHandler_getSupportedServiceNames();
+    uno::Sequence< OUString > s { "com.sun.star.xml.sax.FastShapeContextHandler" };
+    return s;
 }
 
 sal_Bool SAL_CALL ShapeContextHandler::supportsService(const OUString & ServiceName)
@@ -630,5 +612,12 @@ sal_Bool SAL_CALL ShapeContextHandler::supportsService(const OUString & ServiceN
 }
 
 }}
+
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_oox_ShapeContextHandler_get_implementation(
+    uno::XComponentContext* pCtx, uno::Sequence<uno::Any> const& /*rSeq*/)
+{
+    return cppu::acquire(new oox::shape::ShapeContextHandler(pCtx));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

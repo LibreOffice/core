@@ -27,8 +27,6 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <services.hxx>
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;

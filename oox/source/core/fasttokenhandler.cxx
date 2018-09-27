@@ -24,8 +24,6 @@
 #include <oox/token/tokenmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <services.hxx>
-
 using namespace ::com::sun::star;
 
 namespace oox {

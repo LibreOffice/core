@@ -18,7 +18,6 @@
  */
 
 #include "ooxmldocpropimport.hxx"
-#include <services.hxx>
 
 #include <vector>
 #include <com/sun/star/embed/ElementModes.hpp>
