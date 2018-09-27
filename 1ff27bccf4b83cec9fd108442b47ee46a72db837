@@ -16,6 +16,23 @@
       "revId": "1ff27bccf4b83cec9fd108442b47ee46a72db837",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_2e5e5fe6",
+        "filename": "formula/source/core/api/token.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 783,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-09-27T10:58:39Z",
+      "side": 1,
+      "message": "I\u0027d rather use\n\n constexpr size_t MAX_FAST_TOKENS \u003d 32;\n\nhere, which also spares the #undef below.",
+      "revId": "1ff27bccf4b83cec9fd108442b47ee46a72db837",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
