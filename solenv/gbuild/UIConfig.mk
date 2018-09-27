@@ -147,7 +147,7 @@ gb_UIConfig_gla11y_PARAMETERS += --widgets-suffixignored +ValueSet,HBox,VBox,Too
 gb_UIConfig_gla11y_PARAMETERS += --widgets-button +svtlo-ManagedMenuButton
 
 # All new warnings should be fatal except a few kinds which could be only doubtful
-gb_UIConfig_gla11y_PARAMETERS += --fatal-all --not-fatal-type duplicate-mnemonic --not-fatal-type labelled-by-and-mnemonic --not-fatal-type orphan-label
+gb_UIConfig_gla11y_PARAMETERS += --fatal-all --not-fatal-type multiple-mnemonic --not-fatal-type labelled-by-and-mnemonic --not-fatal-type orphan-label
 
 define gb_UIConfig_a11yerrors__command
 $(call gb_UIConfig__gla11y_command)

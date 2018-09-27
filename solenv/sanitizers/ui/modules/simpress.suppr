@@ -32,3 +32,4 @@ sd/uiconfig/simpress/ui/prntopts.ui://GtkCheckButton[@id='backcb'] missing-label
 sd/uiconfig/simpress/ui/sidebarslidebackground.ui://GtkComboBoxText[@id='masterslide'] no-labelled-by
 sd/uiconfig/simpress/ui/sidebarslidebackground.ui://GtkLabel[@id='masterlabel'] orphan-label
 sd/uiconfig/simpress/ui/sidebarslidebackground.ui://GtkLabel[@id='customlabel'] orphan-label
+sd/uiconfig/simpress/ui/prntopts.ui://GtkRadioButton[@id='brouchrb'] multiple-labelled-by
