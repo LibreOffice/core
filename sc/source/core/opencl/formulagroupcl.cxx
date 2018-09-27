@@ -2149,6 +2149,7 @@ static DynamicKernelArgument* VectorRefFactory( const ScCalcConfig& config, cons
     // SUMIFS does not perform parallel reduction at DoubleVectorRef level
     if (dynamic_cast<OpSumIfs*>(pCodeGen.get()))
     {
+        // coverity[identical_branches] - only identical if Base happens to be VectorRef
         if (index == 0) // the first argument of OpSumIfs cannot be strings anyway
             return new DynamicKernelSlidingArgument<VectorRef>(config, s, ft, pCodeGen, index);
         return new DynamicKernelSlidingArgument<Base>(config, s, ft, pCodeGen, index);
