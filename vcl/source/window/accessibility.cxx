@@ -170,7 +170,7 @@ bool Window::ImplIsAccessibleNativeFrame() const
 
 vcl::Window* Window::GetAccessibleParentWindow() const
 {
-    if ( ImplIsAccessibleNativeFrame() )
+    if (!mpWindowImpl || ImplIsAccessibleNativeFrame())
         return nullptr;
 
     vcl::Window* pParent = mpWindowImpl->mpParent;
@@ -203,6 +203,9 @@ vcl::Window* Window::GetAccessibleParentWindow() const
 
 sal_uInt16 Window::GetAccessibleChildWindowCount()
 {
+    if (!mpWindowImpl)
+        return 0;
+
     sal_uInt16 nChildren = 0;
     vcl::Window* pChild = mpWindowImpl->mpFirstChild;
     while( pChild )
@@ -407,6 +410,9 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
 
 sal_uInt16 Window::GetAccessibleRole() const
 {
+    if (!mpWindowImpl)
+        return 0;
+
     sal_uInt16 nRole = mpWindowImpl->mpAccessibleInfos ? mpWindowImpl->mpAccessibleInfos->nAccessibleRole : 0xFFFF;
     if ( nRole == 0xFFFF )
         nRole = getDefaultAccessibleRole();
@@ -427,6 +433,9 @@ void Window::SetAccessibleName( const OUString& rName )
 
 OUString Window::GetAccessibleName() const
 {
+    if (!mpWindowImpl)
+        return "";
+
     if (mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pAccessibleName)
         return *mpWindowImpl->mpAccessibleInfos->pAccessibleName;
     return getDefaultAccessibleName();
@@ -506,6 +515,9 @@ void Window::SetAccessibleDescription( const OUString& rDescription )
 
 OUString Window::GetAccessibleDescription() const
 {
+    if (!mpWindowImpl)
+        return "";
+
     OUString aAccessibleDescription;
     if ( mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pAccessibleDescription )
     {
