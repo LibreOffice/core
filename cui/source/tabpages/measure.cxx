@@ -58,17 +58,18 @@ const sal_uInt16 SvxMeasurePage::pRanges[] =
 |*
 \************************************************************************/
 
-SvxMeasureDialog::SvxMeasureDialog( vcl::Window* pParent, const SfxItemSet& rInAttrs,
-                                const SdrView* pSdrView )
-    : SfxSingleTabDialog(pParent, rInAttrs)
+SvxMeasureDialog::SvxMeasureDialog(weld::Window* pParent, const SfxItemSet& rInAttrs,
+                                const SdrView* pSdrView)
+    : SfxSingleTabDialogController(pParent, rInAttrs)
 {
-    VclPtrInstance<SvxMeasurePage> _pPage( get_content_area(), rInAttrs );
+    TabPageParent pPageParent(get_content_area(), this);
+    VclPtrInstance<SvxMeasurePage> pPage(pPageParent, rInAttrs);
 
-    _pPage->SetView( pSdrView );
-    _pPage->Construct();
+    pPage->SetView(pSdrView);
+    pPage->Construct();
 
-    SetTabPage(_pPage );
-    SetText(CuiResId(RID_SVXSTR_DIMENSION_LINE));
+    SetTabPage(pPage);
+    m_xDialog->set_title(CuiResId(RID_SVXSTR_DIMENSION_LINE));
 }
 
 /*************************************************************************
