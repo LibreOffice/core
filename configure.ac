@@ -8028,7 +8028,7 @@ fi
 dnl ===================================================================
 dnl Check for system cppunit
 dnl ===================================================================
-if test "$cross_compiling" != "yes"; then
+if test "$_os" != "Android" ; then
     libo_CHECK_SYSTEM_MODULE([cppunit],[CPPUNIT],[cppunit >= 1.14.0])
 fi
 

@@ -181,85 +181,6 @@ static oslSignalAction VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* 
 
 }
 
-#ifdef IOS
-
-#include <cppuhelper/exc_hlp.hxx>
-#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
-
-// Swiped from cppuhelper/qa/misc/test_misc.cxx. Ideally we should
-// have a unit test app for iOS that would somehow include relevant
-// unit tests from source files all over the place.
-
-static void testExceptions()
-{
-    css::uno::Any aSavedExceptionAny;
-    std::exception_ptr
-        aSavedException; /// exception caught during unzipping is saved to be thrown during reading
-    try
-    {
-        throw css::uno::RuntimeException("RuntimeException");
-    }
-    catch (...)
-    {
-        aSavedException = std::current_exception();
-    }
-    assert(bool(aSavedException));
-    try
-    {
-        std::rethrow_exception(aSavedException);
-    }
-    catch (const css::uno::RuntimeException&)
-    {
-        // the expected case
-        aSavedExceptionAny = cppu::getCaughtException();
-    }
-    catch (...)
-    {
-        assert(false);
-    }
-    assert(aSavedExceptionAny.hasValue());
-
-    try
-    {
-        throw css::ucb::InteractiveAugmentedIOException();
-    }
-    catch (const css::ucb::InteractiveAugmentedIOException&)
-    {
-        aSavedExceptionAny = cppu::getCaughtException();
-    }
-    catch (const css::uno::Exception&)
-    {
-        assert(false);
-    }
-    catch (...)
-    {
-        assert(false);
-    }
-    assert(aSavedExceptionAny.hasValue());
-
-    try
-    {
-        css::ucb::InteractiveAugmentedIOException iaie;
-        css::uno::Any aEx = css::uno::makeAny(iaie);
-        // css::uno::Exception e;
-        // css::uno::Any aEx = css::uno::makeAny(e);
-        cppu::throwException(aEx);
-    }
-    catch (const css::ucb::InteractiveAugmentedIOException&)
-    {
-    }
-    catch (const css::uno::Exception& e)
-    {
-        assert(false);
-    }
-    catch (...)
-    {
-        assert(false);
-    }
-}
-
-#endif
-
 int ImplSVMain()
 {
     // The 'real' SVMain()
@@ -270,10 +191,6 @@ int ImplSVMain()
     int nReturn = EXIT_FAILURE;
 
     bool bInit = isInitVCL() || InitVCL();
-
-#ifdef IOS
-    testExceptions();
-#endif
 
     if( bInit )
     {
