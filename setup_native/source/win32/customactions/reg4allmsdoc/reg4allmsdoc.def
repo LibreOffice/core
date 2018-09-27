@@ -1,0 +1,6 @@
+LIBRARY		"reg4allmsdoc.dll"
+EXPORTS
+			FindRegisteredExtensions
+			LookForRegisteredExtensions
+			RegisterSomeExtensions
+			RestoreRegAllMSDoc 

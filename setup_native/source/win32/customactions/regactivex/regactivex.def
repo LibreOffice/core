@@ -1,0 +1,4 @@
+LIBRARY		"regactivex.dll"
+EXPORTS
+			InstallActiveXControl
+			DeinstallActiveXControl 
