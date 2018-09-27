@@ -43,7 +43,8 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
                                                                                               sal_Int32        nSearchFlags    )
     throw(css::uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aLock;
+    // SAFE {
+    SolarMutexClearableGuard aReadLock;
 
     // a) first search an interceptor, which match to this URL by its URL pattern registration
     //    Note: if it return NULL - it does not mean an empty interceptor list automatically!
@@ -75,6 +76,9 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL InterceptionHelper::queryD
     //    But to be more feature proof - we should check that .-)
     if (!xInterceptor.is() && m_xSlave.is())
         xInterceptor = m_xSlave;
+
+    aReadLock.clear();
+    // } SAFE
 
     css::uno::Reference< css::frame::XDispatch > xReturn;
     if (xInterceptor.is())
