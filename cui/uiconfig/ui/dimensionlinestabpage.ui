@@ -156,7 +156,7 @@
                       <object class="GtkCheckButton" id="TSB_BELOW_REF_EDGE">
                         <property name="label" translatable="yes" context="dimensionlinestabpage|TSB_BELOW_REF_EDGE">Measure _below object</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="margin_left">12</property>
                         <property name="use_underline">True</property>
@@ -173,7 +173,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_LINE_DIST">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="digits">2</property>
@@ -186,7 +186,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_FLD_HELPLINE_OVERHANG">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment3</property>
                         <property name="digits">2</property>
@@ -199,7 +199,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_FLD_HELPLINE_DIST">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment4</property>
                         <property name="digits">2</property>
@@ -212,7 +212,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_FLD_HELPLINE1_LEN">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment5</property>
                         <property name="digits">2</property>
@@ -225,7 +225,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_FLD_HELPLINE2_LEN">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment6</property>
                         <property name="digits">2</property>
@@ -238,7 +238,7 @@
                     <child>
                       <object class="GtkSpinButton" id="MTR_FLD_DECIMALPLACES">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="activates_default">True</property>
                         <property name="adjustment">adjustment2</property>
                       </object>
@@ -347,7 +347,7 @@
                               <object class="GtkCheckButton" id="TSB_AUTOPOSV">
                                 <property name="label" translatable="yes" context="dimensionlinestabpage|TSB_AUTOPOSV">_AutoVertical</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
@@ -364,7 +364,7 @@
                               <object class="GtkCheckButton" id="TSB_AUTOPOSH">
                                 <property name="label" translatable="yes" context="dimensionlinestabpage|TSB_AUTOPOSH">A_utoHorizontal</property>
                                 <property name="visible">True</property>
-                                <property name="can_focus">False</property>
+                                <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="xalign">0</property>
@@ -390,7 +390,7 @@
                       <object class="GtkCheckButton" id="TSB_PARALLEL">
                         <property name="label" translatable="yes" context="dimensionlinestabpage|TSB_PARALLEL">_Parallel to line</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
@@ -407,7 +407,7 @@
                       <object class="GtkCheckButton" id="TSB_SHOW_UNIT">
                         <property name="label" translatable="yes" context="dimensionlinestabpage|TSB_SHOW_UNIT">Show _measurement units</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>

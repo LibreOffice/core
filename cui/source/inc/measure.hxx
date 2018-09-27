@@ -89,10 +89,10 @@ public:
 
 /* Derived from SfxSingleTabDialog, in order to be able to be
    informed about virtual methods by the control. */
-class SvxMeasureDialog : public SfxSingleTabDialog
+class SvxMeasureDialog : public SfxSingleTabDialogController
 {
 public:
-    SvxMeasureDialog(vcl::Window* pParent, const SfxItemSet& rAttr,
+    SvxMeasureDialog(weld::Window* pParent, const SfxItemSet& rAttr,
         const SdrView* pView);
 };
 
