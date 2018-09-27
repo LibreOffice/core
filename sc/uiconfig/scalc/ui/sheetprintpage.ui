@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustmentFirstPage">
@@ -12,6 +12,18 @@
     <property name="lower">1</property>
     <property name="upper">1000</property>
     <property name="value">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentPage1">
+    <property name="lower">1</property>
+    <property name="upper">1000</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustmentPage2">
+    <property name="lower">1</property>
+    <property name="upper">1000</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
@@ -117,6 +129,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="max_length">5</property>
+                        <property name="activates_default">True</property>
                         <property name="adjustment">adjustmentFirstPage</property>
                         <accessibility>
                           <relation type="labelled-by" target="checkBTN_PAGENO"/>
@@ -387,7 +400,7 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkHBox" id="boxSCALEALL">
+                      <object class="GtkBox" id="boxSCALEALL">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="spacing">12</property>
@@ -397,7 +410,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="sheetprintpage|labelSF">_Scaling factor:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">spinED_SCALEALL:0%</property>
+                            <property name="mnemonic_widget">spinED_SCALEALL</property>
                             <property name="xalign">0</property>
                           </object>
                           <packing>
@@ -407,9 +420,10 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="spinED_SCALEALL:0%">
+                          <object class="GtkSpinButton" id="spinED_SCALEALL">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                             <property name="adjustment">adjustmentScalingFactor</property>
                           </object>
                           <packing>
@@ -434,13 +448,13 @@
                         <property name="row_homogeneous">True</property>
                         <child>
                           <object class="GtkCheckButton" id="labelWP">
+                            <property name="label" translatable="yes" context="sheetprintpage|labelWP">_Width in pages:</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="label" translatable="yes" context="sheetprintpage|labelWP">_Width in pages:</property>
-                            <property name="use_underline">True</property>
                             <property name="receives_default">False</property>
-                            <property name="draw_indicator">True</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
                             <accessibility>
                               <relation type="label-for" target="spinED_SCALEPAGEWIDTH"/>
                             </accessibility>
@@ -452,13 +466,13 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="labelHP">
+                            <property name="label" translatable="yes" context="sheetprintpage|labelHP">_Height in pages:</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="label" translatable="yes" context="sheetprintpage|labelHP">_Height in pages:</property>
-                            <property name="use_underline">True</property>
                             <property name="receives_default">False</property>
-                            <property name="draw_indicator">True</property>
+                            <property name="use_underline">True</property>
                             <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
                             <accessibility>
                               <relation type="label-for" target="spinED_SCALEPAGEHEIGHT"/>
                             </accessibility>
@@ -472,6 +486,7 @@
                           <object class="GtkSpinButton" id="spinED_SCALEPAGEWIDTH">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                             <property name="shadow_type">none</property>
                             <property name="adjustment">adjustmentPage</property>
                             <accessibility>
@@ -487,8 +502,9 @@
                           <object class="GtkSpinButton" id="spinED_SCALEPAGEHEIGHT">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                             <property name="shadow_type">none</property>
-                            <property name="adjustment">adjustmentPage</property>
+                            <property name="adjustment">adjustmentPage1</property>
                             <accessibility>
                               <relation type="labelled-by" target="labelHP"/>
                             </accessibility>
@@ -506,7 +522,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkHBox" id="boxNP">
+                      <object class="GtkBox" id="boxNP">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="spacing">12</property>
@@ -529,7 +545,8 @@
                           <object class="GtkSpinButton" id="spinED_SCALEPAGENUM">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="adjustment">adjustmentPage</property>
+                            <property name="activates_default">True</property>
+                            <property name="adjustment">adjustmentPage2</property>
                             <property name="update_policy">if-valid</property>
                           </object>
                           <packing>
