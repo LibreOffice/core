@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_2e0d3f37",
+        "filename": "sw/qa/unit/unoapi.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-09-27T08:57:03Z",
+      "side": 1,
+      "message": "Those macros should probably go to sw/qa/extras/inc/swmodeltestbase.hxx",
+      "revId": "09d3adc4d7c4a95bc74957a7d990b5414999b28e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
