@@ -130,7 +130,8 @@ private:
             content (false) will be focused instead.
     */
     void FocusPanel(const sal_Int32 nPanelIndex,
-                    const bool bFallbackToDeckTitle);
+                    const bool bFallbackToDeckTitle,
+                    const bool bFromEscape = false);
 
     void FocusPanelContent(const sal_Int32 nPanelIndex);
     void FocusButton(const sal_Int32 nButtonIndex);

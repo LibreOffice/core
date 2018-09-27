@@ -228,7 +228,8 @@ bool FocusManager::IsPanelTitleVisible (const sal_Int32 nPanelIndex) const
 
 void FocusManager::FocusPanel (
     const sal_Int32 nPanelIndex,
-    const bool bFallbackToDeckTitle)
+    const bool bFallbackToDeckTitle,
+    const bool bFromEscape)
 {
     if (nPanelIndex<0 || nPanelIndex>=static_cast<sal_Int32>(maPanels.size()))
     {
@@ -254,7 +255,12 @@ void FocusManager::FocusPanel (
         if (IsDeckTitleVisible())
             FocusDeckTitle();
         else
-            FocusPanelContent(nPanelIndex);
+        {
+            if (bFromEscape && maPanels.size() == 1)
+                FocusButton(0);
+            else
+                FocusPanelContent(nPanelIndex);
+        }
     }
     else
         FocusPanelContent(nPanelIndex);
@@ -583,7 +589,7 @@ IMPL_LINK(FocusManager, ChildEventListener, VclWindowEvent&, rEvent, void)
                 {
                     case KEY_ESCAPE:
                         // Return focus back to the panel title.
-                        FocusPanel(aLocation.mnIndex, true);
+                        FocusPanel(aLocation.mnIndex, true, true);
                         break;
 
                     case KEY_TAB:
