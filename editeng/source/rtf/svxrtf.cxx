@@ -680,6 +680,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
     if( !aAttrStack.empty() )
     {
         std::unique_ptr<SvxRTFItemStackType> pOld = std::move(aAttrStack.back());
+        aAttrStack.pop_back();
         SvxRTFItemStackType *pCurrent = aAttrStack.empty() ? nullptr : aAttrStack.back().get();
 
         do {        // middle check loop
