@@ -243,7 +243,7 @@ def print_cycles():
 
 print_cycles()
 
-# print partioned sub-graphs
+# print partitioned sub-graphs
 def print_partitions():
     callDict2 = callDict
     # Remove anything with no callees, and that is itself not called.
