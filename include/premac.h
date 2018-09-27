@@ -20,5 +20,6 @@
 #define Point MacOSPoint
 #define Size MacOSSize
 #define TimeValue MacOSTimeValue
+#define TimeRecord MacOSTimeRecord
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

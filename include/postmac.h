@@ -20,5 +20,6 @@
 #undef Point
 #undef Size
 #undef TimeValue
+#undef TimeRecord
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
