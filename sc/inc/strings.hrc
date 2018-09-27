@@ -52,9 +52,9 @@
 #define SCSTR_TOTAL                                 NC_("SCSTR_TOTAL", "%1 results found")
 #define SCSTR_SKIPPED                               NC_("SCSTR_SKIPPED", "(only %1 are listed)")
 // Attribute
-#define SCSTR_PROTECTDOC                            NC_("SCSTR_PROTECTDOC", "Protect Document")
-#define SCSTR_UNPROTECTDOC                          NC_("SCSTR_UNPROTECTDOC", "Unprotect document")
-#define SCSTR_UNPROTECTTAB                          NC_("SCSTR_UNPROTECTTAB", "Unprotect sheet")
+#define SCSTR_PROTECTDOC                            NC_("SCSTR_PROTECTDOC", "Protect Sheet Tabs")
+#define SCSTR_UNPROTECTDOC                          NC_("SCSTR_UNPROTECTDOC", "Unprotect Sheet Tabs")
+#define SCSTR_UNPROTECTTAB                          NC_("SCSTR_UNPROTECTTAB", "Unprotect Sheet")
 #define SCSTR_CHG_PROTECT                           NC_("SCSTR_CHG_PROTECT", "Protect Records")
 #define SCSTR_CHG_UNPROTECT                         NC_("SCSTR_CHG_UNPROTECT", "Unprotect Records")
 #define SCSTR_PASSWORD                              NC_("SCSTR_PASSWORD", "Password:")

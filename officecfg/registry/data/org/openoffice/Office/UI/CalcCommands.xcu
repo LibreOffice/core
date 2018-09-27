@@ -1652,7 +1652,7 @@
       </node>
       <node oor:name=".uno:ToolProtectionDocument" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Protect ~Spreadsheet...</value>
+          <value xml:lang="en-US">Protect ~Sheet Tabs...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
