@@ -2744,7 +2744,7 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
     return pBrushItem;
 }
 
-class SectionSaveStruct : public SwPendingStackData
+class SectionSaveStruct : public SwPendingData
 {
     sal_uInt16 m_nBaseFontStMinSave, m_nFontStMinSave, m_nFontStHeadStartSave;
     sal_uInt16 m_nDefListDeepSave;
@@ -3188,7 +3188,7 @@ void SwHTMLParser::RegisterDrawObjectToTable( HTMLTable *pCurTable,
 void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                                    bool bHead )
 {
-    if( !IsParserWorking() && !m_pPendStack )
+    if( !IsParserWorking() && m_vPendingStack.empty() )
         return;
 
     ::comphelper::FlagRestorationGuard g(m_isInTableStructure, false);
@@ -3196,15 +3196,13 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
     HtmlTokenId nToken = HtmlTokenId::NONE;
     bool bPending = false;
-    if( m_pPendStack )
+    if( !m_vPendingStack.empty() )
     {
-        xSaveStruct.reset(static_cast<CellSaveStruct*>(m_pPendStack->pData));
+        xSaveStruct.reset(static_cast<CellSaveStruct*>(m_vPendingStack.back().pData.release()));
 
-        SwPendingStack* pTmp = m_pPendStack->pNext;
-        delete m_pPendStack;
-        m_pPendStack = pTmp;
-        nToken = m_pPendStack ? m_pPendStack->nToken : GetSaveToken();
-        bPending = SvParserState::Error == eState && m_pPendStack != nullptr;
+        m_vPendingStack.pop_back();
+        nToken = !m_vPendingStack.empty() ? m_vPendingStack.back().nToken : GetSaveToken();
+        bPending = SvParserState::Error == eState && !m_vPendingStack.empty();
 
         SaveState( nToken );
     }
@@ -3587,9 +3585,9 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
         nToken = FilterToken( nToken );
 
-        OSL_ENSURE( m_pPendStack || !m_bCallNextToken || xSaveStruct->IsInSection(),
+        OSL_ENSURE( !m_vPendingStack.empty() || !m_bCallNextToken || xSaveStruct->IsInSection(),
                 "Where is the section??" );
-        if( !m_pPendStack && m_bCallNextToken && xSaveStruct->IsInSection() )
+        if( m_vPendingStack.empty() && m_bCallNextToken && xSaveStruct->IsInSection() )
         {
             // Call NextToken directly (e.g. ignore the content of floating frames or applets)
             NextToken( nToken );
@@ -3617,7 +3615,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             {
                 bool bHasToFly = false;
                 SvxAdjust eTabAdjust = SvxAdjust::End;
-                if( !m_pPendStack )
+                if( m_vPendingStack.empty() )
                 {
                     // only if we create a new table, but not if we're still
                     // reading in the table after a Pending
@@ -3771,7 +3769,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             break;
         }
 
-        OSL_ENSURE( !bPending || !m_pPendStack,
+        OSL_ENSURE( !bPending || m_vPendingStack.empty(),
                 "SwHTMLParser::BuildTableCell: There is a PendStack again" );
         bPending = false;
         if( IsParserWorking() )
@@ -3783,9 +3781,9 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
     if( SvParserState::Pending == GetStatus() )
     {
-        m_pPendStack = new SwPendingStack( bHead ? HtmlTokenId::TABLEHEADER_ON
-                                               : HtmlTokenId::TABLEDATA_ON, m_pPendStack );
-        m_pPendStack->pData = xSaveStruct.release();
+        m_vPendingStack.emplace_back( bHead ? HtmlTokenId::TABLEHEADER_ON
+                                            : HtmlTokenId::TABLEDATA_ON );
+        m_vPendingStack.back().pData = std::move(xSaveStruct);
 
         return;
     }
@@ -3879,7 +3877,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
     xSaveStruct.reset();
 }
 
-class RowSaveStruct : public SwPendingStackData
+class RowSaveStruct : public SwPendingData
 {
 public:
     SvxAdjust eAdjust;
@@ -3897,22 +3895,20 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
 {
     // <TR> was already read
 
-    if( !IsParserWorking() && !m_pPendStack )
+    if( !IsParserWorking() && m_vPendingStack.empty() )
         return;
 
     HtmlTokenId nToken = HtmlTokenId::NONE;
     std::unique_ptr<RowSaveStruct> xSaveStruct;
 
     bool bPending = false;
-    if( m_pPendStack )
+    if( !m_vPendingStack.empty() )
     {
-        xSaveStruct.reset(static_cast<RowSaveStruct*>(m_pPendStack->pData));
+        xSaveStruct.reset(static_cast<RowSaveStruct*>(m_vPendingStack.back().pData.release()));
 
-        SwPendingStack* pTmp = m_pPendStack->pNext;
-        delete m_pPendStack;
-        m_pPendStack = pTmp;
-        nToken = m_pPendStack ? m_pPendStack->nToken : GetSaveToken();
-        bPending = SvParserState::Error == eState && m_pPendStack != nullptr;
+        m_vPendingStack.pop_back();
+        nToken = !m_vPendingStack.empty() ? m_vPendingStack.back().nToken : GetSaveToken();
+        bPending = SvParserState::Error == eState && !m_vPendingStack.empty();
 
         SaveState( nToken );
     }
@@ -3986,10 +3982,10 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
 
         nToken = FilterToken( nToken );
 
-        OSL_ENSURE( m_pPendStack || !m_bCallNextToken ||
+        OSL_ENSURE( !m_vPendingStack.empty() || !m_bCallNextToken ||
                 pCurTable->GetContext() || pCurTable->HasParentSection(),
                 "Where is the section??" );
-        if( !m_pPendStack && m_bCallNextToken &&
+        if( m_vPendingStack.empty() && m_bCallNextToken &&
             (pCurTable->GetContext() || pCurTable->HasParentSection()) )
         {
             /// Call NextToken directly (e.g. ignore the content of floating frames or applets)
@@ -4069,7 +4065,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
             break;
         }
 
-        OSL_ENSURE( !bPending || !m_pPendStack,
+        OSL_ENSURE( !bPending || m_vPendingStack.empty(),
                 "SwHTMLParser::BuildTableRow: There is a PendStack again" );
         bPending = false;
         if( IsParserWorking() )
@@ -4081,8 +4077,8 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
 
     if( SvParserState::Pending == GetStatus() )
     {
-        m_pPendStack = new SwPendingStack( HtmlTokenId::TABLEROW_ON, m_pPendStack );
-        m_pPendStack->pData = xSaveStruct.release();
+        m_vPendingStack.emplace_back( HtmlTokenId::TABLEROW_ON );
+        m_vPendingStack.back().pData = std::move(xSaveStruct);
     }
     else
     {
@@ -4098,22 +4094,20 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
                                       bool bHead )
 {
     // <THEAD>, <TBODY> resp. <TFOOT> were read already
-    if( !IsParserWorking() && !m_pPendStack )
+    if( !IsParserWorking() && m_vPendingStack.empty() )
         return;
 
     HtmlTokenId nToken = HtmlTokenId::NONE;
     bool bPending = false;
     std::unique_ptr<RowSaveStruct> xSaveStruct;
 
-    if( m_pPendStack )
+    if( !m_vPendingStack.empty() )
     {
-        xSaveStruct.reset(static_cast<RowSaveStruct*>(m_pPendStack->pData));
+        xSaveStruct.reset(static_cast<RowSaveStruct*>(m_vPendingStack.back().pData.release()));
 
-        SwPendingStack* pTmp = m_pPendStack->pNext;
-        delete m_pPendStack;
-        m_pPendStack = pTmp;
-        nToken = m_pPendStack ? m_pPendStack->nToken : GetSaveToken();
-        bPending = SvParserState::Error == eState && m_pPendStack != nullptr;
+        m_vPendingStack.pop_back();
+        nToken = !m_vPendingStack.empty() ? m_vPendingStack.back().nToken : GetSaveToken();
+        bPending = SvParserState::Error == eState && !m_vPendingStack.empty();
 
         SaveState( nToken );
     }
@@ -4160,10 +4154,10 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
 
         nToken = FilterToken( nToken );
 
-        OSL_ENSURE( m_pPendStack || !m_bCallNextToken ||
+        OSL_ENSURE( !m_vPendingStack.empty() || !m_bCallNextToken ||
                 pCurTable->GetContext() || pCurTable->HasParentSection(),
                 "Where is the section?" );
-        if( !m_pPendStack && m_bCallNextToken &&
+        if( m_vPendingStack.empty() && m_bCallNextToken &&
             (pCurTable->GetContext() || pCurTable->HasParentSection()) )
         {
             // Call NextToken directly (e.g. ignore the content of floating frames or applets)
@@ -4229,7 +4223,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
             NextToken( nToken );
         }
 
-        OSL_ENSURE( !bPending || !m_pPendStack,
+        OSL_ENSURE( !bPending || m_vPendingStack.empty(),
                 "SwHTMLParser::BuildTableSection: There is a PendStack again" );
         bPending = false;
         if( IsParserWorking() )
@@ -4241,9 +4235,9 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
 
     if( SvParserState::Pending == GetStatus() )
     {
-        m_pPendStack = new SwPendingStack( bHead ? HtmlTokenId::THEAD_ON
-                                               : HtmlTokenId::TBODY_ON, m_pPendStack );
-        m_pPendStack->pData = xSaveStruct.release();
+        m_vPendingStack.emplace_back( bHead ? HtmlTokenId::THEAD_ON
+                                            : HtmlTokenId::TBODY_ON );
+        m_vPendingStack.back().pData = std::move(xSaveStruct);
     }
     else
     {
@@ -4254,7 +4248,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
     // now we stand (perhaps) in front of <TBODY>,... or </TABLE>
 }
 
-struct TableColGrpSaveStruct : public SwPendingStackData
+struct TableColGrpSaveStruct : public SwPendingData
 {
     sal_uInt16 nColGrpSpan;
     sal_uInt16 nColGrpWidth;
@@ -4284,29 +4278,28 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
 {
     // <COLGROUP> was read already if bReadOptions is set
 
-    if( !IsParserWorking() && !m_pPendStack )
+    if( !IsParserWorking() && m_vPendingStack.empty() )
         return;
 
     HtmlTokenId nToken = HtmlTokenId::NONE;
     bool bPending = false;
-    TableColGrpSaveStruct* pSaveStruct;
+    std::unique_ptr<TableColGrpSaveStruct> pSaveStruct;
 
-    if( m_pPendStack )
+    if( !m_vPendingStack.empty() )
     {
-        pSaveStruct = static_cast<TableColGrpSaveStruct*>(m_pPendStack->pData);
+        pSaveStruct.reset(static_cast<TableColGrpSaveStruct*>(m_vPendingStack.back().pData.release()));
 
-        SwPendingStack* pTmp = m_pPendStack->pNext;
-        delete m_pPendStack;
-        m_pPendStack = pTmp;
-        nToken = m_pPendStack ? m_pPendStack->nToken : GetSaveToken();
-        bPending = SvParserState::Error == eState && m_pPendStack != nullptr;
+
+        m_vPendingStack.pop_back();
+        nToken = !m_vPendingStack.empty() ? m_vPendingStack.back().nToken : GetSaveToken();
+        bPending = SvParserState::Error == eState && !m_vPendingStack.empty();
 
         SaveState( nToken );
     }
     else
     {
 
-        pSaveStruct = new TableColGrpSaveStruct;
+        pSaveStruct.reset(new TableColGrpSaveStruct);
         if( bReadOptions )
         {
             const HTMLOptions& rColGrpOptions = GetOptions();
@@ -4358,10 +4351,10 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
 
         nToken = FilterToken( nToken );
 
-        OSL_ENSURE( m_pPendStack || !m_bCallNextToken ||
+        OSL_ENSURE( !m_vPendingStack.empty() || !m_bCallNextToken ||
                 pCurTable->GetContext() || pCurTable->HasParentSection(),
                 "Where is the section?" );
-        if( !m_pPendStack && m_bCallNextToken &&
+        if( m_vPendingStack.empty() && m_bCallNextToken &&
             (pCurTable->GetContext() || pCurTable->HasParentSection()) )
         {
             // Call NextToken directly (e.g. ignore the content of floating frames or applets)
@@ -4451,7 +4444,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
             NextToken( nToken );
         }
 
-        OSL_ENSURE( !bPending || !m_pPendStack,
+        OSL_ENSURE( !bPending || m_vPendingStack.empty(),
                 "SwHTMLParser::BuildTableColGrp: There is a PendStack again" );
         bPending = false;
         if( IsParserWorking() )
@@ -4463,13 +4456,12 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
 
     if( SvParserState::Pending == GetStatus() )
     {
-        m_pPendStack = new SwPendingStack( HtmlTokenId::COL_ON, m_pPendStack );
-        m_pPendStack->pData = pSaveStruct;
+        m_vPendingStack.emplace_back( HtmlTokenId::COL_ON );
+        m_vPendingStack.back().pData = std::move(pSaveStruct);
     }
     else
     {
         pSaveStruct->CloseColGroup( pCurTable );
-        delete pSaveStruct;
     }
 }
 
@@ -4512,21 +4504,19 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
 {
     // <CAPTION> was read already
 
-    if( !IsParserWorking() && !m_pPendStack )
+    if( !IsParserWorking() && m_vPendingStack.empty() )
         return;
 
     HtmlTokenId nToken = HtmlTokenId::NONE;
     std::unique_ptr<CaptionSaveStruct> xSaveStruct;
 
-    if( m_pPendStack )
+    if( !m_vPendingStack.empty() )
     {
-        xSaveStruct.reset(static_cast<CaptionSaveStruct*>(m_pPendStack->pData));
+        xSaveStruct.reset(static_cast<CaptionSaveStruct*>(m_vPendingStack.back().pData.release()));
 
-        SwPendingStack* pTmp = m_pPendStack->pNext;
-        delete m_pPendStack;
-        m_pPendStack = pTmp;
-        nToken = m_pPendStack ? m_pPendStack->nToken : GetSaveToken();
-        OSL_ENSURE( !m_pPendStack, "Where does a PendStack coming from?" );
+        m_vPendingStack.pop_back();
+        nToken = !m_vPendingStack.empty() ? m_vPendingStack.back().nToken : GetSaveToken();
+        OSL_ENSURE( m_vPendingStack.empty(), "Where does a PendStack coming from?" );
 
         SaveState( nToken );
     }
@@ -4595,7 +4585,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         switch( nToken )
         {
         case HtmlTokenId::TABLE_ON:
-            if( !m_pPendStack )
+            if( m_vPendingStack.empty() )
             {
                 xSaveStruct->m_xTable = m_xTable;
                 bool bHasToFly = xSaveStruct->m_xTable.get() != pCurTable;
@@ -4625,13 +4615,10 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
             bDone = true;
             break;
         default:
-            if( m_pPendStack )
+            if( !m_vPendingStack.empty() )
             {
-                SwPendingStack* pTmp = m_pPendStack->pNext;
-                delete m_pPendStack;
-                m_pPendStack = pTmp;
-
-                OSL_ENSURE( !pTmp, "Further it can't go!" );
+                m_vPendingStack.pop_back();
+                OSL_ENSURE( m_vPendingStack.empty(), "Further it can't go!" );
             }
 
             if( IsParserWorking() )
@@ -4648,8 +4635,8 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
 
     if( SvParserState::Pending==GetStatus() )
     {
-        m_pPendStack = new SwPendingStack( HtmlTokenId::CAPTION_ON, m_pPendStack );
-        m_pPendStack->pData = xSaveStruct.release();
+        m_vPendingStack.emplace_back( HtmlTokenId::CAPTION_ON );
+        m_vPendingStack.back().pData = std::move(xSaveStruct);
         return;
     }
 
@@ -4693,7 +4680,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
     *m_pPam->GetPoint() = xSaveStruct->GetPos();
 }
 
-class TableSaveStruct : public SwPendingStackData
+class TableSaveStruct : public SwPendingData
 {
 public:
     std::shared_ptr<HTMLTable> m_xCurrentTable;
@@ -5006,7 +4993,7 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
     if (aGuard.TooDeep())
         eState = SvParserState::Error;
 
-    if (!IsParserWorking() && !m_pPendStack)
+    if (!IsParserWorking() && m_vPendingStack.empty())
         return std::shared_ptr<HTMLTable>();
 
     ::comphelper::FlagRestorationGuard g(m_isInTableStructure, true);
@@ -5014,15 +5001,13 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
     bool bPending = false;
     std::unique_ptr<TableSaveStruct> xSaveStruct;
 
-    if( m_pPendStack )
+    if( !m_vPendingStack.empty() )
     {
-        xSaveStruct.reset(static_cast<TableSaveStruct*>(m_pPendStack->pData));
+        xSaveStruct.reset(static_cast<TableSaveStruct*>(m_vPendingStack.back().pData.release()));
 
-        SwPendingStack* pTmp = m_pPendStack->pNext;
-        delete m_pPendStack;
-        m_pPendStack = pTmp;
-        nToken = m_pPendStack ? m_pPendStack->nToken : GetSaveToken();
-        bPending = SvParserState::Error == eState && m_pPendStack != nullptr;
+        m_vPendingStack.pop_back();
+        nToken = !m_vPendingStack.empty() ? m_vPendingStack.back().nToken : GetSaveToken();
+        bPending = SvParserState::Error == eState && !m_vPendingStack.empty();
 
         SaveState( nToken );
     }
@@ -5060,10 +5045,10 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
 
         nToken = FilterToken( nToken );
 
-        OSL_ENSURE( m_pPendStack || !m_bCallNextToken ||
+        OSL_ENSURE( !m_vPendingStack.empty() || !m_bCallNextToken ||
                 xCurTable->GetContext() || xCurTable->HasParentSection(),
                 "Where is the section?" );
-        if( !m_pPendStack && m_bCallNextToken &&
+        if( m_vPendingStack.empty() && m_bCallNextToken &&
             (xCurTable->GetContext() || xCurTable->HasParentSection()) )
         {
             /// Call NextToken directly (e.g. ignore the content of floating frames or applets)
@@ -5129,7 +5114,7 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
             break;
         }
 
-        OSL_ENSURE( !bPending || !m_pPendStack,
+        OSL_ENSURE( !bPending || m_vPendingStack.empty(),
                 "SwHTMLParser::BuildTable: There is a PendStack again" );
         bPending = false;
         if( IsParserWorking() )
@@ -5141,8 +5126,8 @@ std::shared_ptr<HTMLTable> SwHTMLParser::BuildTable(SvxAdjust eParentAdjust,
 
     if( SvParserState::Pending == GetStatus() )
     {
-        m_pPendStack = new SwPendingStack( HtmlTokenId::TABLE_ON, m_pPendStack );
-        m_pPendStack->pData = xSaveStruct.release();
+        m_vPendingStack.emplace_back( HtmlTokenId::TABLE_ON );
+        m_vPendingStack.back().pData = std::move(xSaveStruct);
         return std::shared_ptr<HTMLTable>();
     }
 

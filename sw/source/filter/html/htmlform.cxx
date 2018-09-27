@@ -1379,7 +1379,7 @@ void SwHTMLParser::EndForm( bool bAppend )
 
 void SwHTMLParser::InsertInput()
 {
-    assert(m_pPendStack == nullptr);
+    assert(m_vPendingStack.empty());
 
     if( !m_pFormImpl || !m_pFormImpl->GetFormComps().is() )
         return;
@@ -1851,7 +1851,7 @@ void SwHTMLParser::InsertInput()
 
 void SwHTMLParser::NewTextArea()
 {
-    assert(m_pPendStack == nullptr);
+    assert(m_vPendingStack.empty());
 
     OSL_ENSURE( !m_bTextArea, "TextArea in TextArea?" );
     OSL_ENSURE( !m_pFormImpl || !m_pFormImpl->GetFCompPropSet().is(),
@@ -2133,7 +2133,7 @@ void SwHTMLParser::InsertTextAreaText( HtmlTokenId nToken )
 
 void SwHTMLParser::NewSelect()
 {
-    assert(m_pPendStack == nullptr);
+    assert(m_vPendingStack.empty());
 
     OSL_ENSURE( !m_bSelect, "Select in Select?" );
     OSL_ENSURE( !m_pFormImpl || !m_pFormImpl->GetFCompPropSet().is(),
@@ -2347,7 +2347,7 @@ void SwHTMLParser::NewSelect()
 
 void SwHTMLParser::EndSelect()
 {
-    assert(m_pPendStack == nullptr);
+    assert(m_vPendingStack.empty());
 
     OSL_ENSURE( m_bSelect, "no Select" );
     OSL_ENSURE( m_pFormImpl && m_pFormImpl->GetFCompPropSet().is(),
