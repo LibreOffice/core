@@ -286,12 +286,13 @@ static void testDialog( Document *pDocument, const char *uno_cmd )
 
 int main( int argc, char* argv[] )
 {
-    int arg;
+    int arg = 2;
+    origin = getTimeNow();
 
+#ifndef IOS
     // avoid X oddness etc.
     unsetenv("DISPLAY");
 
-    origin = getTimeNow();
     if( argc < 4 ||
         ( argc > 1 && ( !strcmp( argv[1], "--help" ) || !strcmp( argv[1], "-h" ) ) ) )
         return help();
@@ -302,7 +303,6 @@ int main( int argc, char* argv[] )
         return 1;
     }
 
-    arg = 2;
     const char *doc_url = argv[arg++];
     const char *mode = argv[arg++];
 
@@ -325,10 +325,18 @@ int main( int argc, char* argv[] )
         lok_preinit(argv[1], user_url.c_str());
         aTimes.emplace_back();
     }
+    const char *install_path = argv[1];
+    const char *user_profile = user_url.c_str();
+#else
+    const char *install_path = nullptr;
+    const char *user_profile = nullptr;
+    const char *doc_url = strdup([[[[[NSBundle mainBundle] bundleURL] absoluteString] stringByAppendingString:@"/test.odt"] UTF8String]);
+    const char *mode = "--tile";
+#endif
 
     aTimes.emplace_back("initialization");
     // coverity[tainted_string] - build time test tool
-    Office *pOffice = lok_cpp_init(argv[1], user_url.c_str());
+    Office *pOffice = lok_cpp_init(install_path, user_profile);
     if (pOffice == nullptr)
     {
         fprintf(stderr, "Failed to initialize Office from %s\n", argv[1]);
