@@ -306,7 +306,7 @@ void ThreadTaskTag::waitUntilDone()
     std::unique_lock< std::mutex > aGuard( maMutex );
     while( mnTasksWorking > 0 )
     {
-#ifdef DBG_UTIL
+#if defined DBG_UTIL && !defined NDEBUG
         // 3 minute timeout in debug mode so our tests fail sooner rather than later
         std::cv_status result = maTasksComplete.wait_for(
             aGuard, std::chrono::seconds( 3 * 60 ));
