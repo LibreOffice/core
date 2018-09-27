@@ -199,7 +199,7 @@ class Substitutor
 {
 private:
     typedef std::map<std::string, std::string> replacement_table_t;
-    typedef std::map<std::string, replacement_table_t*> iso_lang_replacement_table_t;
+    typedef std::map<std::string, replacement_table_t> iso_lang_replacement_table_t;
 
 public:
     typedef iso_lang_replacement_table_t::iterator iterator;
@@ -215,17 +215,6 @@ public:
 
     Substitutor() {};
 
-    ~Substitutor()
-    {
-        iso_lang_replacement_table_t::iterator iter_end = iso_lang_replacement_table_.end();
-        iso_lang_replacement_table_t::iterator iter = iso_lang_replacement_table_.begin();
-
-        for( /* no init */; iter != iter_end; ++iter)
-            delete iter->second;
-
-        iso_lang_replacement_table_.clear();
-    }
-
     void set_language(const iso_lang_identifier& iso_lang)
     {
         active_iso_lang_ = iso_lang;
@@ -235,42 +224,26 @@ public:
     //its substitute else leave it unchanged
     void substitute(std::string& Text)
     {
-        replacement_table_t* prt = get_replacement_table(active_iso_lang_.make_std_string());
-        OSL_ASSERT(prt);
-        replacement_table_t::iterator iter = prt->find(Text);
-        if (iter != prt->end())
+        replacement_table_t& prt = get_replacement_table(active_iso_lang_.make_std_string());
+        replacement_table_t::iterator iter = prt.find(Text);
+        if (iter != prt.end())
             Text = iter->second;
     }
 
     void add_substitution(
         const std::string& Placeholder, const std::string& Substitute)
     {
-        replacement_table_t* prt = get_replacement_table(active_iso_lang_.make_std_string());
-        OSL_ASSERT(prt);
-        prt->insert(std::make_pair(Placeholder, Substitute));
+        replacement_table_t& prt = get_replacement_table(active_iso_lang_.make_std_string());
+        prt.insert(std::make_pair(Placeholder, Substitute));
     }
 
 
 private:
     // Return the replacement table for the iso lang id
     // create a new one if not already present
-    replacement_table_t* get_replacement_table(const std::string& iso_lang)
+    replacement_table_t& get_replacement_table(const std::string& iso_lang)
     {
-        iso_lang_replacement_table_t::iterator iter =
-            iso_lang_replacement_table_.find(iso_lang);
-
-        replacement_table_t* prt = nullptr;
-
-        if (iso_lang_replacement_table_.end() == iter)
-        {
-            prt = new replacement_table_t;
-            iso_lang_replacement_table_.insert(std::make_pair(iso_lang, prt));
-        }
-        else
-        {
-            prt = iter->second;
-        }
-        return prt;
+        return iso_lang_replacement_table_[iso_lang];
     }
 
 private:
