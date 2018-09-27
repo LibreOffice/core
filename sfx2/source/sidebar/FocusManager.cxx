@@ -577,8 +577,11 @@ IMPL_LINK(FocusManager, ChildEventListener, VclWindowEvent&, rEvent, void)
                 switch (pKeyEvent->GetKeyCode().GetCode())
                 {
                     case KEY_ESCAPE:
-                        // Return focus back to the panel title.
-                        FocusPanel(aLocation.mnIndex, true);
+                        // Return focus to tab bar sidebar settings button or panel title.
+                        if (!IsDeckTitleVisible() && maPanels.size() == 1)
+                            FocusButton(0);
+                        else
+                            FocusPanel(aLocation.mnIndex, true);
                         break;
 
                     case KEY_TAB:
