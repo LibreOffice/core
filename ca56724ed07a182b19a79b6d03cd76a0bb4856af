@@ -121,6 +121,24 @@
       "revId": "ca56724ed07a182b19a79b6d03cd76a0bb4856af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_0ecb9b53",
+        "filename": "sal/util/sal.map",
+        "patchSetId": 5
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-09-27T13:19:30Z",
+      "side": 1,
+      "message": "Agree. I suppose that later we could simply add something like \"osl_replaceFileWithBackup\".",
+      "parentUuid": "ff0f0b1f_ee9e2753",
+      "revId": "ca56724ed07a182b19a79b6d03cd76a0bb4856af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
