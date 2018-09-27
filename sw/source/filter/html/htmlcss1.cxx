@@ -1725,15 +1725,13 @@ bool SwHTMLParser::FileDownload( const OUString& rURL,
 void SwHTMLParser::InsertLink()
 {
     bool bFinishDownload = false;
-    if( m_pPendStack )
+    if( !m_vPendingStack.empty() )
     {
         OSL_ENSURE( ShouldFinishFileDownload(),
                 "Pending-Stack without File-Download?" );
 
-        SwPendingStack* pTmp = m_pPendStack->pNext;
-        delete m_pPendStack;
-        m_pPendStack = pTmp;
-        OSL_ENSURE( !m_pPendStack, "Where does the Pending-Stack come from?" );
+        m_vPendingStack.pop_back();
+        assert( m_vPendingStack.empty() && "Where does the Pending-Stack come from?" );
 
         bFinishDownload = true;
     }
@@ -1778,7 +1776,7 @@ void SwHTMLParser::InsertLink()
                     // The style was load asynchronously and is only available
                     // on the next continue call. Therefore we must create a
                     // Pending stack, so that we will return to here.
-                    m_pPendStack = new SwPendingStack( HtmlTokenId::LINK, m_pPendStack );
+                    m_vPendingStack.emplace_back( HtmlTokenId::LINK );
                 }
             }
             else

@@ -259,7 +259,6 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_sBaseURL( rBaseURL ),
     m_xAttrTab(new HTMLAttrTable),
     m_pNumRuleInfo( new SwHTMLNumRuleInfo ),
-    m_pPendStack( nullptr ),
     m_xDoc( pD ),
     m_pActionViewShell( nullptr ),
     m_pSttNdIdx( nullptr ),
@@ -477,15 +476,9 @@ SwHTMLParser::~SwHTMLParser()
     OSL_ENSURE(!m_xTable.get(), "It exists still a open table");
     m_pImageMaps.reset();
 
-    OSL_ENSURE( !m_pPendStack,
+    OSL_ENSURE( m_vPendingStack.empty(),
             "SwHTMLParser::~SwHTMLParser: Here should not be Pending-Stack anymore" );
-    while( m_pPendStack )
-    {
-        SwPendingStack* pTmp = m_pPendStack;
-        m_pPendStack = m_pPendStack->pNext;
-        delete pTmp->pData;
-        delete pTmp;
-    }
+    m_vPendingStack.clear();
 
     m_xDoc.clear();
 
@@ -634,16 +627,16 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
     // of NextToken.
     if( SvParserState::Error == eState )
     {
-        OSL_ENSURE( !m_pPendStack || m_pPendStack->nToken != HtmlTokenId::NONE,
+        OSL_ENSURE( m_vPendingStack.empty() || m_vPendingStack.back().nToken != HtmlTokenId::NONE,
                 "SwHTMLParser::Continue: Pending-Stack without Token" );
-        if( m_pPendStack && m_pPendStack->nToken != HtmlTokenId::NONE )
-            NextToken( m_pPendStack->nToken );
-        OSL_ENSURE( !m_pPendStack,
+        if( !m_vPendingStack.empty() && m_vPendingStack.back().nToken != HtmlTokenId::NONE )
+            NextToken( m_vPendingStack.back().nToken );
+        OSL_ENSURE( m_vPendingStack.empty(),
                 "SwHTMLParser::Continue: There is again a Pending-Stack" );
     }
     else
     {
-        HTMLParser::Continue( m_pPendStack ? m_pPendStack->nToken : nToken );
+        HTMLParser::Continue( !m_vPendingStack.empty() ? m_vPendingStack.back().nToken : nToken );
     }
 
     // disable progress bar again
@@ -962,14 +955,14 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         // Was the import cancelled by SFX? If a pending stack
         // exists, clean it.
         eState = SvParserState::Error;
-        OSL_ENSURE( !m_pPendStack || m_pPendStack->nToken != HtmlTokenId::NONE,
+        OSL_ENSURE( m_vPendingStack.empty() || m_vPendingStack.back().nToken != HtmlTokenId::NONE,
                 "SwHTMLParser::NextToken: Pending-Stack without token" );
-        if( 1 == m_xDoc->getReferenceCount() || !m_pPendStack )
+        if( 1 == m_xDoc->getReferenceCount() || m_vPendingStack.empty() )
             return ;
     }
 
 #if OSL_DEBUG_LEVEL > 0
-    if( m_pPendStack )
+    if( !m_vPendingStack.empty() )
     {
         switch( nToken )
         {
@@ -985,7 +978,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         case HtmlTokenId::SELECT_OFF:
             break;
         default:
-            OSL_ENSURE( !m_pPendStack, "Unknown token for Pending-Stack" );
+            OSL_ENSURE( m_vPendingStack.empty(), "Unknown token for Pending-Stack" );
             break;
         }
     }
@@ -994,7 +987,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
     // The following special cases have to be treated before the
     // filter detection, because Netscape doesn't reference the content
     // of the title for filter detection either.
-    if( !m_pPendStack )
+    if( m_vPendingStack.empty() )
     {
         if( m_bInTitle )
         {
@@ -1063,7 +1056,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
 
     // The following special cases may or have to be treated after the
     // filter detection
-    if( !m_pPendStack )
+    if( m_vPendingStack.empty() )
     {
         if( m_bInFloatingFrame )
         {
@@ -1729,7 +1722,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
         break;
 
     case HtmlTokenId::TABLE_ON:
-        if( m_pPendStack )
+        if( !m_vPendingStack.empty() )
             BuildTable( SvxAdjust::End );
         else
         {

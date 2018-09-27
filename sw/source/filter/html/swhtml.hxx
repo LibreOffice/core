@@ -52,7 +52,7 @@ class SwHTMLForm_Impl;
 class SwApplet_Impl;
 struct SwHTMLFootEndNote_Impl;
 class HTMLTableCnts;
-struct SwPendingStack;
+struct SwPending;
 class SvxCSS1PropertyInfo;
 struct ImplSVEvent;
 
@@ -372,7 +372,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     std::unique_ptr<SwCSS1Parser> m_pCSS1Parser;   // Style-Sheet-Parser
     std::unique_ptr<SwHTMLNumRuleInfo> m_pNumRuleInfo;
-    SwPendingStack  *m_pPendStack;
+    std::vector<SwPending>  m_vPendingStack;
 
     rtl::Reference<SwDoc> m_xDoc;
     SwPaM           *m_pPam;      // SwPosition should be enough, or ??
@@ -930,19 +930,18 @@ public:
     static OUString StripQueryFromPath(const OUString& rBase, const OUString& rPath);
 };
 
-struct SwPendingStackData
+struct SwPendingData
 {
-    virtual ~SwPendingStackData() {}
+    virtual ~SwPendingData() {}
 };
 
-struct SwPendingStack
+struct SwPending
 {
     HtmlTokenId nToken;
-    SwPendingStackData* pData;
-    SwPendingStack* pNext;
+    std::unique_ptr<SwPendingData> pData;
 
-    SwPendingStack( HtmlTokenId nTkn, SwPendingStack* pNxt )
-        : nToken( nTkn ), pData( nullptr ), pNext( pNxt )
+    SwPending( HtmlTokenId nTkn )
+        : nToken( nTkn )
         {}
 };
 
