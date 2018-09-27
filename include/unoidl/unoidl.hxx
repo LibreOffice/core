@@ -505,11 +505,11 @@ public:
             bool const rest;
         };
 
-        Constructor(): defaultConstructor(true)
+        Constructor():
 #if defined __clang__ && CLANG_VERSION == 30800
-                       , annotations()
+            annotations(),
 #endif
-        {}
+            defaultConstructor(true) {}
 
         Constructor(
             rtl::OUString const & theName,
