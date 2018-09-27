@@ -81,7 +81,7 @@ ScHFPage::~ScHFPage()
 
 void ScHFPage::dispose()
 {
-    pStyleDlg.clear();
+    pStyleDlg = nullptr;
     SvxHFPage::dispose();
 }
 
