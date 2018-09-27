@@ -206,13 +206,14 @@ void PCXReader::ImplReadHeader()
 
 void PCXReader::ImplReadBody()
 {
-    sal_uInt8   *pPlane[ 4 ], * pDest;
+    std::unique_ptr<sal_uInt8[]> pPlane[ 4 ];
+    sal_uInt8   * pDest;
     sal_uLong   i, nx, ny, np, nCount, nPercent;
     sal_uLong   nLastPercent = 0;
     sal_uInt8   nDat = 0, nCol = 0;
 
     for( np = 0; np < nPlanes; np++ )
-        pPlane[ np ] = new sal_uInt8[ nBytesPerPlaneLin ];
+        pPlane[ np ].reset(new sal_uInt8[ nBytesPerPlaneLin ]);
 
     nCount = 0;
     for ( ny = 0; ny < nHeight; ny++ )
@@ -230,10 +231,10 @@ void PCXReader::ImplReadBody()
         for ( np = 0; np < nPlanes; np++)
         {
             if ( nEncoding == 0)
-                m_rPCX.ReadBytes( static_cast<void *>(pPlane[ np ]), nBytesPerPlaneLin );
+                m_rPCX.ReadBytes( static_cast<void *>(pPlane[ np ].get()), nBytesPerPlaneLin );
             else
             {
-                pDest = pPlane[ np ];
+                pDest = pPlane[ np ].get();
                 nx = nBytesPerPlaneLin;
                 while ( nCount > 0 && nx > 0)
                 {
@@ -277,10 +278,10 @@ void PCXReader::ImplReadBody()
                 }
             }
         }
-        sal_uInt8 *pSource1 = pPlane[ 0 ];
-        sal_uInt8 *pSource2 = pPlane[ 1 ];
-        sal_uInt8 *pSource3 = pPlane[ 2 ];
-        sal_uInt8 *pSource4 = pPlane[ 3 ];
+        sal_uInt8 *pSource1 = pPlane[ 0 ].get();
+        sal_uInt8 *pSource2 = pPlane[ 1 ].get();
+        sal_uInt8 *pSource3 = pPlane[ 2 ].get();
+        sal_uInt8 *pSource4 = pPlane[ 3 ].get();
         switch ( nBitsPerPlanePix + ( nPlanes << 8 ) )
         {
             // 2 colors
@@ -375,8 +376,6 @@ void PCXReader::ImplReadBody()
                 break;
         }
     }
-    for ( np = 0; np < nPlanes; np++ )
-        delete[] pPlane[ np ];
 }
 
 void PCXReader::ImplReadPalette( sal_uLong nCol )
