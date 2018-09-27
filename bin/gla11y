@@ -837,7 +837,6 @@ def is_orphan_widget(filename, tree, root, obj, orphan, orphan_root, doprint = F
         if len(children) >= 1:
             return False
 
-
     # Really no label, perhaps emit a warning
     if not is_enabled(obj, "no-labelled-by", enables, True):
         # Warnings disabled for this class of widgets
@@ -980,15 +979,22 @@ def check_a11y_relation(filename, tree):
         # Check labelled-by and its dual label-for
         labelled_by = check_rels(filename, tree, root, obj, "labelled-by", "label-for")
 
+        # Check member-of
+        member_of = check_rels(filename, tree, root, obj, "member-of")
+
         visible = is_visible(obj)
 
         # Should have only one label
-        if len(labelled_by) >= 1:
+        if oid in labelled_by_elm:
             if oid in mnemonic_for_elm:
                 warn(filename, tree, obj, "labelled-by-and-mnemonic",
                      "has both a mnemonic " + elm_name_line(mnemonic_for_elm[oid][0]) + "and labelled-by relation")
-            if len(labelled_by) > 1:
+            if len(labelled_by_elm[oid]) > 1:
                 warn(filename, tree, obj, "multiple-labelled-by", "has multiple labelled-by relations")
+            elif len(labelled_by_elm[oid]) == 1:
+                paired = labelled_by_elm[oid][0]
+                if paired != None and visible != is_visible(paired):
+                    warn(filename, tree, obj, "visibility-conflict", "visibility conflicts with paired " + paired.attrib.get('id'))
         if oid in label_for_elm:
             if len(label_for_elm[oid]) > 1:
                 warn(filename, tree, obj, "duplicate-label-for", "is referenced by multiple label-for " + elms_names_lines(label_for_elm[oid]))
@@ -999,9 +1005,6 @@ def check_a11y_relation(filename, tree):
         if oid in mnemonic_for_elm:
             if len(mnemonic_for_elm[oid]) > 1:
                 warn(filename, tree, obj, "duplicate-mnemonic", "is referenced by multiple mnemonic_widget " + elms_names_lines(mnemonic_for_elm[oid]))
-
-        # Check member-of
-        member_of = check_rels(filename, tree, root, obj, "member-of")
 
         # Labels special case
         if klass in widgets_labels:
