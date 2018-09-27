@@ -483,9 +483,9 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     DECL_LINK( AsyncCallback, void*, void );
 
     // set attribute on document
-    void SetAttr_( bool bChkEnd, bool bBeforeTable, HTMLAttrs *pPostIts );
+    void SetAttr_( bool bChkEnd, bool bBeforeTable, std::deque<std::unique_ptr<HTMLAttr>> *pPostIts );
     void SetAttr( bool bChkEnd = true, bool bBeforeTable = false,
-                         HTMLAttrs *pPostIts = nullptr )
+                         std::deque<std::unique_ptr<HTMLAttr>> *pPostIts = nullptr )
     {
         if( !m_aSetAttrTab.empty() || !m_aMoveFlyFrames.empty() )
             SetAttr_( bChkEnd, bBeforeTable, pPostIts );
@@ -510,7 +510,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void SplitAttrTab(std::shared_ptr<HTMLAttrTable> const & rNewAttrTab, bool bMoveEndBack);
     void RestoreAttrTab(std::shared_ptr<HTMLAttrTable> const & rNewAttrTab);
     void InsertAttr( const SfxPoolItem& rItem, bool bInsAtStart );
-    void InsertAttrs( HTMLAttrs& rAttrs );
+    void InsertAttrs( std::deque<std::unique_ptr<HTMLAttr>> rAttrs );
 
     bool DoPositioning( SfxItemSet &rItemSet,
                         SvxCSS1PropertyInfo &rPropInfo,

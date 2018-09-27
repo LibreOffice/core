@@ -2681,7 +2681,7 @@ SwViewShell *SwHTMLParser::CheckActionViewShell()
 }
 
 void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
-                             HTMLAttrs *pPostIts )
+                             std::deque<std::unique_ptr<HTMLAttr>> *pPostIts )
 {
     std::unique_ptr<SwPaM> pAttrPam( new SwPaM( *m_pPam->GetPoint() ) );
     const SwNodeIndex& rEndIdx = m_pPam->GetPoint()->nNode;
@@ -2880,7 +2880,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                         if( pPostIts && (SwFieldIds::Postit == nFieldWhich ||
                                          SwFieldIds::Script == nFieldWhich) )
                         {
-                            pPostIts->push_front( pAttr );
+                            pPostIts->emplace_front( pAttr );
                         }
                         else
                         {
@@ -3420,14 +3420,13 @@ void SwHTMLParser::InsertAttr( const SfxPoolItem& rItem, bool bInsAtStart )
         m_aSetAttrTab.push_back( pTmp );
 }
 
-void SwHTMLParser::InsertAttrs( HTMLAttrs& rAttrs )
+void SwHTMLParser::InsertAttrs( std::deque<std::unique_ptr<HTMLAttr>> rAttrs )
 {
     while( !rAttrs.empty() )
     {
-        HTMLAttr *pAttr = rAttrs.front();
+        std::unique_ptr<HTMLAttr> pAttr = std::move(rAttrs.front());
         InsertAttr( pAttr->GetItem(), false );
         rAttrs.pop_front();
-        delete pAttr;
     }
 }
 

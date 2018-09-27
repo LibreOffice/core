@@ -261,8 +261,8 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
                 bAppended = true;
             }
         }
-        HTMLAttrs *pPostIts = bAppended ? nullptr : new HTMLAttrs;
-        SetAttr( true, true, pPostIts );
+        std::unique_ptr<std::deque<std::unique_ptr<HTMLAttr>>> pPostIts(bAppended ? nullptr : new std::deque<std::unique_ptr<HTMLAttr>>);
+        SetAttr( true, true, pPostIts.get() );
 
         // make name of section unique
         const OUString aName( m_xDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : nullptr ) );
@@ -357,9 +357,8 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
         if( pPostIts )
         {
             // move still existing PostIts in the first paragraph of the table
-            InsertAttrs( *pPostIts );
-            delete pPostIts;
-            pPostIts = nullptr;
+            InsertAttrs( std::move(*pPostIts) );
+            pPostIts.reset();
         }
 
         xCntxt->SetSpansSection( true );
@@ -684,8 +683,8 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
                 bAppended = true;
             }
         }
-        HTMLAttrs *pPostIts = bAppended ? nullptr : new HTMLAttrs;
-        SetAttr( true, true, pPostIts );
+        std::unique_ptr<std::deque<std::unique_ptr<HTMLAttr>>> pPostIts(bAppended ? nullptr : new std::deque<std::unique_ptr<HTMLAttr>>);
+        SetAttr( true, true, pPostIts.get() );
 
         // Make section name unique.
         OUString aName( m_xDoc->GetUniqueSectionName( !aId.isEmpty() ? &aId : nullptr ) );
@@ -744,9 +743,8 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         if( pPostIts )
         {
             // Move pending PostIts into the section.
-            InsertAttrs( *pPostIts );
-            delete pPostIts;
-            pPostIts = nullptr;
+            InsertAttrs( std::move(*pPostIts) );
+            pPostIts.reset();
         }
 
         xCntxt->SetSpansSection( true );
