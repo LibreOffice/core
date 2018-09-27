@@ -21,8 +21,7 @@ IOSDIRS = $(IOSGEN) \
                $(IOSRES)/program \
 	       $(IOSRES)/share \
 	       $(IOSRES)/config \
-               $(IOSRES)/filter \
-	  $(WORKDIR)/ios
+               $(IOSRES)/filter
 
 
 #- Top level  -----------------------------------------------------------------
@@ -41,12 +40,9 @@ $(IOSDIRS):
 $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
                          $(SRCDIR)/ios/CustomTarget_iOS_setup.mk \
 	                 $(SRCDIR)/solenv/bin/native-code.py \
-	                 $(IOSGEN) $(WORKDIR)/ios \
+	                 $(IOSGEN) \
 	                 $(IOSDIRS)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),EN2,2)
-
-	# Secure LibreOffice.c get build if there are changes
-	rm -rf $(WORKDIR)/ios/*
 
 	# generate native-code.h (used by LibreOffice.c)
 	$(SRCDIR)/solenv/bin/native-code.py \
@@ -111,7 +107,6 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
 #- clean ios  -----------------------------------------------------------------
 $(call gb_CustomTarget_get_clean_target,ios/iOS_setup):
 	$(call gb_Output_announce,$(subst $(WORKDIR)/Clean/,,$@),$(false),ENV,2)
-	rm -rf $(IOSRES)/* $(IOSGEN)/native-code.h $(IOSGEN)/build
-	rm -rf $(WORKDIR)/ios
+	rm -rf $(IOSRES)/* $(IOSGEN)/native-code.h $(IOSGEN)
 
 # vim: set noet sw=4 ts=4:
