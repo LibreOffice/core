@@ -247,11 +247,10 @@ bool RecoveryUI::impl_doEmergencySave()
     rtl::Reference<svxdr::RecoveryCore> pCore = new svxdr::RecoveryCore(m_xContext, true);
 
     // create dialog for this operation and bind it to the used core service
-    ScopedVclPtrInstance<svxdr::SaveDialog> xDialog(m_pParentWindow, pCore.get());
-    DialogReleaseGuard dialogReleaseGuard(m_pDialog, xDialog);
+    svxdr::SaveDialog aDialog(m_pParentWindow ? m_pParentWindow->GetFrameWeld() : nullptr, pCore.get());
 
     // start the dialog
-    short nRet = xDialog->Execute();
+    short nRet = aDialog.run();
     return (nRet==DLG_RET_OK_AUTOLUNCH);
 }
 
