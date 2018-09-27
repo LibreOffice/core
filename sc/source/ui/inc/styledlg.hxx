@@ -24,26 +24,19 @@
 
 class SfxStyleSheetBase;
 
-class ScStyleDlg : public SfxStyleDialog
+class ScStyleDlg : public SfxStyleDialogController
 {
 public:
-    ScStyleDlg( vcl::Window*             pParent,
-                SfxStyleSheetBase&  rStyleBase,
-                sal_uInt16          nRscId );
+    ScStyleDlg(weld::Window* pParent,
+               SfxStyleSheetBase& rStyleBase,
+               bool bPage);
 
 protected:
-    virtual void                PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage ) override;
-    virtual void                RefreshInputSet() override;
+    virtual void PageCreated(const OString& rPageId, SfxTabPage& rTabPage) override;
+    virtual void RefreshInputSet() override;
 
 private:
-    sal_uInt16 nDlgRsc;
-
-    sal_uInt16 m_nNumberId;
-    sal_uInt16 m_nFontId;
-    sal_uInt16 m_nBackgroundId;
-    sal_uInt16 m_nPageId;
-    sal_uInt16 m_nHeaderId;
-    sal_uInt16 m_nFooterId;
+    bool m_bPage;
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_STYLEDLG_HXX
