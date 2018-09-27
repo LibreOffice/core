@@ -44,6 +44,9 @@ class EventListener(XDocumentEventListener,unohelper.Base):
         if event.EventName in self.eventNames:
             self.executed = True
             self.eventExecuted.append(event.EventName)
+        else:
+            print(self.eventNames)
+            print(event.EventName)
 
     def hasExecuted(self, eventName):
         return eventName in self.eventExecuted
