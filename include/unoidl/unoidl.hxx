@@ -15,6 +15,7 @@
 #include <cassert>
 #include <vector>
 
+#include <config_clang.h>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
@@ -504,7 +505,11 @@ public:
             bool const rest;
         };
 
-        Constructor(): defaultConstructor(true) {}
+        Constructor(): defaultConstructor(true)
+#if defined __clang__ && CLANG_VERSION == 30800
+                       , annotations()
+#endif
+        {}
 
         Constructor(
             rtl::OUString const & theName,
