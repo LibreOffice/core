@@ -1,4 +1,4 @@
-sc/uiconfig/scalc/ui/headerfootercontent.ui://GtkComboBox[@id='comboLB_DEFINED'] duplicate-mnemonic
+sc/uiconfig/scalc/ui/headerfootercontent.ui://GtkComboBox[@id='comboLB_DEFINED'] multiple-mnemonic
 sc/uiconfig/scalc/ui/advancedfilterdialog.ui://GtkButton[@id='rbfilterarea'] button-no-label
 sc/uiconfig/scalc/ui/advancedfilterdialog.ui://GtkButton[@id='rbcopyarea'] button-no-label
 sc/uiconfig/scalc/ui/analysisofvariancedialog.ui://GtkButton[@id='input-range-button'] button-no-label

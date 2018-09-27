@@ -313,3 +313,5 @@ cui/uiconfig/ui/wordcompletionpage.ui://GtkSpinButton[@id='minwordlen'] no-label
 cui/uiconfig/ui/bulletandposition.ui://GtkToggleButton[@id='left'] button-no-label
 cui/uiconfig/ui/bulletandposition.ui://GtkToggleButton[@id='center'] button-no-label
 cui/uiconfig/ui/bulletandposition.ui://GtkToggleButton[@id='right'] button-no-label
+cui/uiconfig/ui/additionsfragment.ui://GtkLabel[@id='labelDescription'] multiple-labelled-by
+cui/uiconfig/ui/zoomdialog.ui://GtkRadioButton[@id='columns'] multiple-labelled-by
