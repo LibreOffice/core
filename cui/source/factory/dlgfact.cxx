@@ -98,6 +98,12 @@ using ::com::sun::star::uno::Reference;
 using namespace svx;
 // AbstractTabDialog implementations just forwards everything to the dialog
 IMPL_ABSTDLG_BASE(CuiAbstractSfxDialog_Impl)
+
+short CuiAbstractController_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(CuiVclAbstractDialog_Impl)
 IMPL_ABSTDLG_BASE(VclAbstractRefreshableDialog_Impl);
 IMPL_ABSTDLG_BASE(CuiAbstractTabDialog_Impl);
@@ -361,7 +367,15 @@ void CuiAbstractTabController_Impl::SetText( const OUString& rStr )
     m_xDlg->set_title(rStr);
 }
 
+const SfxItemSet* CuiAbstractController_Impl::GetOutputItemSet() const
+{
+    return m_xDlg->GetOutputItemSet();
+}
 
+void CuiAbstractController_Impl::SetText(const OUString& rStr)
+{
+    m_xDlg->set_title(rStr);
+}
 
 const SfxItemSet* CuiAbstractSfxDialog_Impl::GetOutputItemSet() const
 {
@@ -1343,19 +1357,18 @@ VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateEventConfigDialog( v
     return VclPtr<CuiAbstractSfxDialog_Impl>::Create(pDlg);
 }
 
-VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog( vcl::Window* pParent,
-                                                                        const SfxItemSet& rAttr,
-                                                                        const SdrView* pView,
-                                                                        sal_uInt32 nResId
-                                                                        )
+VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog(vcl::Window* pParent,
+                                                                      const SfxItemSet& rAttr,
+                                                                      const SdrView* pView,
+                                                                      sal_uInt32 nResId)
 {
-
     SfxSingleTabDialog* pDlg=nullptr;
     switch ( nResId )
     {
         case RID_SVXPAGE_MEASURE :
-            pDlg = VclPtr<SvxMeasureDialog>::Create( pParent, rAttr, pView );
-            break;
+        {
+            return VclPtr<CuiAbstractController_Impl>::Create(o3tl::make_unique<SvxMeasureDialog>(pParent ? pParent->GetFrameWeld() : nullptr, rAttr, pView));
+        }
         case RID_SVXPAGE_CONNECTION :
             pDlg = VclPtr<SvxConnectionDialog>::Create( pParent, rAttr, pView );
             break;
@@ -1371,6 +1384,7 @@ VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog( vcl::Wind
 
     return nullptr;
 }
+
 
 VclPtr<AbstractSvxPostItDialog> AbstractDialogFactory_Impl::CreateSvxPostItDialog( weld::Window* pParent,
                                                                         const SfxItemSet& rCoreSet,

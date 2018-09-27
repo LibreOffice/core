@@ -28,6 +28,7 @@
 
 class SfxTabDialog;
 class SfxModalDialog;
+class SfxSingleTabDialogController;
 class Dialog;
 class SfxItemPool;
 class FmShowColsDialog;
@@ -112,6 +113,23 @@ class CuiAbstractSfxDialog_Impl : public SfxAbstractDialog
         //From class Window.
     virtual void          SetText( const OUString& rStr ) override;
 };
+
+class CuiAbstractController_Impl : public SfxAbstractDialog
+{
+protected:
+    std::unique_ptr<SfxSingleTabDialogController> m_xDlg;
+public:
+    explicit CuiAbstractController_Impl(std::unique_ptr<SfxSingleTabDialogController> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual const SfxItemSet*   GetOutputItemSet() const override;
+
+    //From class Window.
+    virtual void          SetText( const OUString& rStr ) override;
+};
+
 
 class CuiAbstractTabDialog_Impl : public SfxAbstractTabDialog
 {
