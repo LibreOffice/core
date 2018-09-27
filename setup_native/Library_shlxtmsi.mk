@@ -22,6 +22,7 @@ $(eval $(call gb_Library_add_cxxflags,shlxtmsi,\
 ))
 
 $(eval $(call gb_Library_add_ldflags,shlxtmsi,\
+	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/shellextensions/shlxtmsi.def \
 	/NODEFAULTLIB \
 ))
 

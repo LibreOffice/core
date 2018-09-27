@@ -18,6 +18,7 @@ $(eval $(call gb_Library_add_cxxflags,sn_tools,\
 ))
 
 $(eval $(call gb_Library_add_ldflags,sn_tools,\
+	/DEF:$(SRCDIR)/setup_native/source/win32/customactions/tools/sn_tools.def \
 	/NODEFAULTLIB \
 ))
 
