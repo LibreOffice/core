@@ -461,7 +461,7 @@ QStringList Qt5AccessibleWidget::keyBindingsForAction(const QString& actionName)
     return QStringList();
 } */
 
-bool Qt5AccessibleWidget::isValid() const { return true; }
+bool Qt5AccessibleWidget::isValid() const { return m_pWindow.get() != nullptr; }
 
 QObject* Qt5AccessibleWidget::object() const { return nullptr; }
 
