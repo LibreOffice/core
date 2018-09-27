@@ -1252,6 +1252,10 @@ void PrintDialog::setupOptionalUI()
         maNUpPage.mpPagesBoxTitleTxt->SetText( maNUpPage.mpPagesBtn->GetText() );
         maNUpPage.mpPagesBoxTitleTxt->Show();
         maNUpPage.mpPagesBtn->Show( false );
+
+        maNUpPage.mpPagesBoxTitleTxt->SetAccessibleRelationLabelFor(maNUpPage.mpNupPagesBox);
+        maNUpPage.mpNupPagesBox->SetAccessibleRelationLabeledBy(maNUpPage.mpPagesBoxTitleTxt);
+        maNUpPage.mpPagesBtn->SetAccessibleRelationLabelFor(nullptr);
     }
 
     // update enable states

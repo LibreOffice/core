@@ -341,6 +341,10 @@ void SwFieldDBPage::TypeHdl( ListBox const * pBox )
             m_pNumFormatLB->Show();
             m_pFormatLB->Hide();
 
+            m_pNewFormatRB->SetAccessibleRelationLabelFor(m_pNumFormatLB);
+            m_pNumFormatLB->SetAccessibleRelationLabeledBy(m_pNewFormatRB);
+            m_pFormatLB->SetAccessibleRelationLabelFor(nullptr);
+
             if (pBox)   // type was changed by user
                 m_pDBFormatRB->Check();
 
@@ -376,6 +380,11 @@ void SwFieldDBPage::TypeHdl( ListBox const * pBox )
             m_pNewFormatRB->Check();
             m_pNumFormatLB->Hide();
             m_pFormatLB->Show();
+
+            m_pNewFormatRB->SetAccessibleRelationLabelFor(m_pFormatLB);
+            m_pFormatLB->SetAccessibleRelationLabeledBy(m_pNewFormatRB);
+            m_pNumFormatLB->SetAccessibleRelationLabelFor(nullptr);
+
             if( IsFieldEdit() )
             {
                 for( sal_Int32 nI = m_pFormatLB->GetEntryCount(); nI; )

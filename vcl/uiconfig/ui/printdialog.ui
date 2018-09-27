@@ -1075,7 +1075,7 @@
                                     <property name="can_focus">False</property>
                                     <property name="model">liststore1</property>
                                     <accessibility>
-                                      <relation type="labelled-by" target="pagespersheettxt"/>
+                                      <relation type="labelled-by" target="pagespersheetbtn"/>
                                     </accessibility>
                                   </object>
                                   <packing>
@@ -1099,6 +1099,9 @@
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">brochure</property>
+                                        <accessibility>
+                                          <relation type="label-for" target="paperspersheetlb"/>
+                                        </accessibility>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -1109,9 +1112,6 @@
                                     <child>
                                       <object class="GtkLabel" id="pagespersheettxt">
                                         <property name="can_focus">False</property>
-                                        <accessibility>
-                                          <relation type="label-for" target="paperspersheetlb"/>
-                                        </accessibility>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
