@@ -908,6 +908,18 @@ def check_props(filename, tree, root, elm, forward):
             err(filename, tree, elm, "undeclared-target", forward + " uses undeclared target '%s'" % prop.text)
     return props
 
+def is_visible(obj):
+    visible = False
+    visible_prop = obj.findall("property[@name='visible']")
+    visible_len = len(visible_prop)
+    if visible_len:
+        visible_txt = visible_prop[visible_len - 1].text
+        if visible_txt.lower() == "true":
+            visible = True
+        elif visible_txt.lower() == "false":
+            visible = False
+    return visible
+
 def check_rels(filename, tree, root, elm, forward, backward = None):
     """
     Check the relations given by forward
@@ -968,6 +980,8 @@ def check_a11y_relation(filename, tree):
         # Check labelled-by and its dual label-for
         labelled_by = check_rels(filename, tree, root, obj, "labelled-by", "label-for")
 
+        visible = is_visible(obj)
+
         # Should have only one label
         if len(labelled_by) >= 1:
             if oid in mnemonic_for_elm:
@@ -978,6 +992,10 @@ def check_a11y_relation(filename, tree):
         if oid in label_for_elm:
             if len(label_for_elm[oid]) > 1:
                 warn(filename, tree, obj, "duplicate-label-for", "is referenced by multiple label-for " + elms_names_lines(label_for_elm[oid]))
+            elif len(label_for_elm[oid]) == 1:
+                paired = label_for_elm[oid][0]
+                if visible != is_visible(paired):
+                    warn(filename, tree, obj, "visibility-conflict", "visibility conflicts with paired " + paired.attrib.get('id'))
         if oid in mnemonic_for_elm:
             if len(mnemonic_for_elm[oid]) > 1:
                 warn(filename, tree, obj, "duplicate-mnemonic", "is referenced by multiple mnemonic_widget " + elms_names_lines(mnemonic_for_elm[oid]))
