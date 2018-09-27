@@ -68,8 +68,8 @@ class UITest(object):
                 time_ += DEFAULT_SLEEP
                 time.sleep(DEFAULT_SLEEP)
 
-    def execute_dialog_through_command(self, command):
-        with EventListener(self._xContext, "DialogExecute") as event:
+    def execute_dialog_through_command(self, command, printNames=False):
+        with EventListener(self._xContext, "DialogExecute", printNames=printNames) as event:
             if not self._xUITest.executeDialog(command):
                 raise DialogNotExecutedException(command)
             time_ = 0
@@ -82,8 +82,8 @@ class UITest(object):
 
         raise DialogNotExecutedException(command)
 
-    def execute_modeless_dialog_through_command(self, command):
-        with EventListener(self._xContext, "ModelessDialogVisible") as event:
+    def execute_modeless_dialog_through_command(self, command, printNames=False):
+        with EventListener(self._xContext, "ModelessDialogVisible", printNames = printNames) as event:
             if not self._xUITest.executeCommand(command):
                 raise DialogNotExecutedException(command)
             time_ = 0
@@ -178,7 +178,7 @@ class UITest(object):
                 time.sleep(DEFAULT_SLEEP)
 
     def execute_blocking_action(self, action, dialog_element=None,
-            args=(), dialog_handler=None):
+            args=(), dialog_handler=None, printNames=False):
         """Executes an action which blocks while a dialog is shown.
 
         Click a button or perform some other action on the dialog when it
@@ -192,10 +192,11 @@ class UITest(object):
             args(tuple, optional): The arguments to be passed to `action`
             dialog_handler(callable, optional): Will be called when the dialog
                 is shown, with the dialog object passed as a parameter.
+            printNames: print all received event names
         """
 
         thread = threading.Thread(target=action, args=args)
-        with EventListener(self._xContext, ["DialogExecute", "ModelessDialogExecute"]) as event:
+        with EventListener(self._xContext, ["DialogExecute", "ModelessDialogExecute"], printNames=printNames) as event:
             thread.start()
             time_ = 0
             # we are not necessarily opening a dialog, so wait much longer
