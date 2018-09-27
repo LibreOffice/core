@@ -159,11 +159,11 @@
 #define STR_QRY_JOIN_COLUMN_COMPARE                 NC_("STR_QRY_JOIN_COLUMN_COMPARE", "Columns can only be compared using '='.")
 #define STR_QRY_LIKE_LEFT_NO_COLUMN                 NC_("STR_QRY_LIKE_LEFT_NO_COLUMN", "You must use a column name before 'LIKE'.")
 #define STR_QRY_CHECK_CASESENSITIVE                 NC_("STR_QRY_CHECK_CASESENSITIVE", "The column could not be found. Please note that the database is case-sensitive.")
-// To translators: For $object$, one of the valu    es of the RSC_QUERY_OBJECT_TYPE resource will be inserted.
+// To translators: for $object$, one of the values of the RSC_QUERY_OBJECT_TYPE resource will be inserted.
 #define STR_QUERY_SAVEMODIFIED                      NC_("STR_QUERY_SAVEMODIFIED", "$object$ has been changed.\nDo you want to save the changes?" )
-// To translators: For $object$, one of the valu    es of the RSC_QUERY_OBJECT_TYPE resource (except \"SQL command\", which doesn't make sense here) will be inserted.
+// To translators: for $object$, one of the values of the RSC_QUERY_OBJECT_TYPE resource (except \"SQL command\", which doesn't make sense here) will be inserted.
 #define STR_ERROR_PARSING_STATEMENT                 NC_("STR_ERROR_PARSING_STATEMENT", "$object$ is based on an SQL command which could not be parsed.")
-// To translators: For $object$, one of the valu    es of the RSC_QUERY_OBJECT_TYPE resource (except \"SQL command\", which doesn't make sense here) will be inserted.
+// To translators: for $object$, one of the values of the RSC_QUERY_OBJECT_TYPE resource (except \"SQL command\", which doesn't make sense here) will be inserted.
 #define STR_INFO_OPENING_IN_SQL_VIEW                NC_("STR_INFO_OPENING_IN_SQL_VIEW", "$object$ will be opened in SQL view.")
 #define STR_STATEMENT_WITHOUT_RESULT_SET            NC_("STR_STATEMENT_WITHOUT_RESULT_SET", "The query does not create a result set, and thus cannot be part of another query.")
 
