@@ -434,8 +434,14 @@ QAccessible::State Qt5AccessibleWidget::state() const
     return state;
 }
 
-QColor Qt5AccessibleWidget::foregroundColor() const { return QColor(); }
-QColor Qt5AccessibleWidget::backgroundColor() const { return QColor(); }
+QColor Qt5AccessibleWidget::foregroundColor() const
+{
+    return toQColor(m_pWindow->GetControlForeground());
+}
+QColor Qt5AccessibleWidget::backgroundColor() const
+{
+    return toQColor(m_pWindow->GetControlBackground());
+}
 
 void* Qt5AccessibleWidget::interface_cast(QAccessible::InterfaceType /* t */)
 {
