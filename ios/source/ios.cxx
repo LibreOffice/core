@@ -28,6 +28,7 @@ void lo_ios_throwException(css::uno::Any const& aException)
     assert(aException.getValueTypeClass() == css::uno::TypeClass_EXCEPTION);
 
     tryThrow<css::ucb::InteractiveAugmentedIOException>(aException);
+    tryThrow<css::uno::RuntimeException>(aException);
 
     assert(false);
 }
