@@ -3372,7 +3372,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                                                m_nContextStAttrMin ) );
 
             // end all open attributes and open them again behind the table
-            HTMLAttrs *pPostIts = nullptr;
+            std::unique_ptr<std::deque<std::unique_ptr<HTMLAttr>>> pPostIts;
             if( !bForceFrame && (bTopTable || pCurTable->HasParentSection()) )
             {
                 SplitAttrTab(pTCntxt->xAttrTab, bTopTable);
@@ -3384,16 +3384,16 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 if( (bTopTable && !bAppended) ||
                     (!bTopTable && !bParentLFStripped &&
                      !m_pPam->GetPoint()->nContent.GetIndex()) )
-                    pPostIts = new HTMLAttrs;
-                SetAttr( bTopTable, bTopTable, pPostIts );
+                    pPostIts.reset(new std::deque<std::unique_ptr<HTMLAttr>>);
+                SetAttr( bTopTable, bTopTable, pPostIts.get() );
             }
             else
             {
                 SaveAttrTab(pTCntxt->xAttrTab);
                 if( bTopTable && !bAppended )
                 {
-                    pPostIts = new HTMLAttrs;
-                    SetAttr( true, true, pPostIts );
+                    pPostIts.reset(new std::deque<std::unique_ptr<HTMLAttr>>);
+                    SetAttr( true, true, pPostIts.get() );
                 }
             }
             m_bNoParSpace = false;
@@ -3523,9 +3523,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 if( !bAppended && pPostIts )
                 {
                     // set still-existing PostIts to the first paragraph of the table
-                    InsertAttrs( *pPostIts );
-                    delete pPostIts;
-                    pPostIts = nullptr;
+                    InsertAttrs( std::move(*pPostIts) );
+                    pPostIts.reset();
                 }
 
                 pTCntxt->SetTableNode( const_cast<SwTableNode *>(pNd->FindTableNode()) );
@@ -3553,9 +3552,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     if( pPostIts )
                     {
                         // move still existing PostIts to the end of the current paragraph
-                        InsertAttrs( *pPostIts );
-                        delete pPostIts;
-                        pPostIts = nullptr;
+                        InsertAttrs( std::move(*pPostIts) );
+                        pPostIts.reset();
                     }
                 }
 
