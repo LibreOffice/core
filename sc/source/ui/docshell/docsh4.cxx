@@ -1693,7 +1693,8 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
-                        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScStyleDlg( GetActiveDialogParent(), *pStyleSheet, RID_SCDLG_STYLES_PAGE, RID_SCDLG_STYLES_PAGE ));
+                        vcl::Window* pParent = GetActiveDialogParent();
+                        ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateScStyleDlg(pParent ? pParent->GetFrameWeld() : nullptr, *pStyleSheet, true));
 
                         if ( pDlg->Execute() == RET_OK )
                         {
