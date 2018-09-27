@@ -48,7 +48,7 @@ private:
     SfxItemSet           aDataSet;
     OUString             aStrPageStyle;
     SvxPageUsage         nPageUsage;
-    VclPtr<ScStyleDlg>   pStyleDlg;
+    ScStyleDlg*          pStyleDlg;
     std::unique_ptr<weld::Button> m_xBtnEdit;
 
     DECL_LINK(BtnHdl, weld::Button&, void);

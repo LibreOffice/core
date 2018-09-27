@@ -671,10 +671,9 @@ public:
                                                     const OUString&     rPageStyle,
                                                     sal_uInt16          nResId ) override;
 
-    virtual VclPtr<SfxAbstractTabDialog> CreateScStyleDlg( vcl::Window*                pParent,
-                                                    SfxStyleSheetBase&  rStyleBase,
-                                                    sal_uInt16              nRscId,
-                                                    int nId) override;
+    virtual VclPtr<SfxAbstractTabDialog> CreateScStyleDlg(weld::Window* pParent,
+                                                          SfxStyleSheetBase& rStyleBase,
+                                                          bool bPage) override;
 
     virtual VclPtr<SfxAbstractTabDialog> CreateScSubTotalDlg( vcl::Window*             pParent,
                                                         const SfxItemSet*   pArgSet ) override;
