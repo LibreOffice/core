@@ -177,6 +177,7 @@ public:
 
     //test shape import
     void testControlImport();
+    void testActiveXOptionButtonGroup();
     void testChartImportODS();
 #if HAVE_MORE_FONTS
     void testChartImportXLS();
@@ -290,6 +291,7 @@ public:
     CPPUNIT_TEST(testCellValueXLSX);
     CPPUNIT_TEST(testRowIndex1BasedXLSX);
     CPPUNIT_TEST(testControlImport);
+    CPPUNIT_TEST(testActiveXOptionButtonGroup);
     CPPUNIT_TEST(testChartImportODS);
 #if HAVE_MORE_FONTS
     CPPUNIT_TEST(testChartImportXLS);
@@ -1674,6 +1676,36 @@ void ScFiltersTest::testControlImport()
     uno::Reference< drawing::XControlShape > xControlShape(xIA_DrawPage->getByIndex(0), UNO_QUERY_THROW);
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testActiveXOptionButtonGroup()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf111980_radioButtons.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load singlecontrol.xlsx", xDocSh.is());
+    uno::Reference< frame::XModel > xModel = xDocSh->GetModel();
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(xModel, UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIA(xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( xIA->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIA_DrawPage(xDrawPageSupplier->getDrawPage(), UNO_QUERY_THROW);
+
+    OUString sGroupName;
+    uno::Reference< drawing::XControlShape > xControlShape(xIA_DrawPage->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("GroupName") >>= sGroupName;
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet1"), sGroupName);
+
+    // Form optionbuttons (without Group names) were not grouped.
+    // The two optionbuttons should have the same auto-generated group name.
+    xControlShape.set(xIA_DrawPage->getByIndex(4), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("GroupName") >>= sGroupName;
+    CPPUNIT_ASSERT_EQUAL(false, sGroupName.isEmpty());
+
+    OUString sGroupName5;
+    xControlShape.set(xIA_DrawPage->getByIndex(5), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("GroupName") >>= sGroupName5;
+    CPPUNIT_ASSERT_EQUAL(sGroupName, sGroupName5);
 }
 
 void ScFiltersTest::testChartImportODS()
