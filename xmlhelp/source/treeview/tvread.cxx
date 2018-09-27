@@ -400,10 +400,10 @@ TVChildTarget::TVChildTarget( const Reference< XComponentContext >& xContext )
     while( j )
     {
         len = configData.vFileLen[--j];
-        char* s = new char[ int(len) ];  // the buffer to hold the installed files
+        std::unique_ptr<char[]> s(new char[ int(len) ]);  // the buffer to hold the installed files
         osl::File aFile( configData.vFileURL[j] );
         aFile.open( osl_File_OpenFlag_Read );
-        aFile.read( s,len,ret );
+        aFile.read( s.get(),len,ret );
         aFile.close();
 
         XML_Parser parser = XML_ParserCreate( nullptr );
@@ -414,12 +414,11 @@ TVChildTarget::TVChildTarget( const Reference< XComponentContext >& xContext )
                                      data_handler);
         XML_SetUserData( parser,&pTVDom ); // does not return this
 
-        XML_Status const parsed = XML_Parse(parser, s, int(len), j==0);
+        XML_Status const parsed = XML_Parse(parser, s.get(), int(len), j==0);
         SAL_WARN_IF(XML_STATUS_ERROR == parsed, "xmlhelp",
                 "TVChildTarget::TVChildTarget(): Tree file parsing failed");
 
         XML_ParserFree( parser );
-        delete[] s;
 
         Check(pTVDom);
     }
