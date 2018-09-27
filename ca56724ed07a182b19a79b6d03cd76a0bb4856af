@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ff0f0b1f_0ef83bc2",
+        "filename": "include/osl/file.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1642,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-09-27T11:25:37Z",
+      "side": 1,
+      "message": "\u003e On non-Windows OS, we could implement such \"preserve metadata of replaced file (if any)\" semantics too. It\u0027s not clear to me why this should \"only [be] relevant to Windows\"\n\nMy comment was meant to mean that \"currently, this is only implemented for Windows\" (hence \"currently\"). Sorry for bad language. Will re-phrase this.",
+      "parentUuid": "ff0f0b1f_1a82bd50",
+      "revId": "ca56724ed07a182b19a79b6d03cd76a0bb4856af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff0f0b1f_ba907197",
         "filename": "include/osl/file.h",
         "patchSetId": 5
@@ -64,6 +82,24 @@
       "writtenOn": "2018-09-23T15:33:00Z",
       "side": 1,
       "message": "the PRIVATE sections are meant for symbols that are never intended to be used directly by 3rd party code (not for symbols that might need some iterations before they\u0027re ready for exposure to 3rd party code; we don\u0027t have such a \"not-yet published playground\" in these map files, unfortunately); IMO this should be in a proper LIBO_UDK_6.2 section",
+      "revId": "ca56724ed07a182b19a79b6d03cd76a0bb4856af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_eef4e7d1",
+        "filename": "sal/util/sal.map",
+        "patchSetId": 5
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-09-27T11:25:37Z",
+      "side": 1,
+      "message": "... but moving it to a \"proper section\" means it\u0027s OK to use it for 3rd party code \u003d published API \u003d no way to change it later?",
+      "parentUuid": "ff0f0b1f_fa96e994",
       "revId": "ca56724ed07a182b19a79b6d03cd76a0bb4856af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
