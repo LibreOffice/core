@@ -2288,7 +2288,7 @@
             <desc>Specifies whether only entries with the defined format are accepted. This option is only available if the number format recognition is active (Number_recognition = True).</desc>
             <label>Number format recognition</label>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="Alignment" oor:type="xs:boolean" oor:nillable="false">
           <!-- OldPath: Writer/Insert/IntoTables -->
@@ -2298,7 +2298,7 @@
             <desc>Specifies whether all numbers are aligned below right of the cell and not above left (as in the case of text). This option is only available if number format recognition is active (Number_recognition = True).</desc>
             <label>Alignment</label>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
       </group>
     </group>
