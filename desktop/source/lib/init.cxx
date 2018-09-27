@@ -2103,10 +2103,14 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 
 #if 0
     // Draw something at least, to see that the context as such is correctly set up
-    CGContextSetRGBFillColor(aData.rCGContext, 1, 0, 0, 1);
-    CGContextFillRect(aData.rCGContext, CGRectMake (0, 0, 200, 100));
     CGContextSetRGBFillColor(aData.rCGContext, 0, 0, 1, .5);
-    CGContextFillRect(aData.rCGContext, CGRectMake (0, 0, 100, 200));
+    CGContextFillRect(aData.rCGContext, CGRectMake(20, 0, nCanvasWidth-20, 20));
+    CGContextSetRGBFillColor(aData.rCGContext, 0, 1, 1, .5);
+    CGContextFillRect(aData.rCGContext, CGRectMake(nCanvasWidth-20, 20, 20, nCanvasHeight-20));
+    CGContextSetRGBFillColor(aData.rCGContext, 0, 1, 0, .5);
+    CGContextFillRect(aData.rCGContext, CGRectMake(0, nCanvasHeight-20, nCanvasWidth-20, 20));
+    CGContextSetRGBFillColor(aData.rCGContext, 0, 1, 1, .5);
+    CGContextFillRect(aData.rCGContext, CGRectMake(0, 0, 20, nCanvasHeight-20));
 #endif
 #else
     ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT) ;
