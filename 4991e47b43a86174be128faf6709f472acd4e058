@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_493aade7",
+        "filename": "sw/qa/python/check_xautotextgroup.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2018-09-28T06:35:34Z",
+      "side": 1,
+      "message": "try to put \"cls.xDoc \u003d None\" after closing. this potentially could help with crash\n\nMore info see in for example in sw\\qa\\python\\check_bookmarks.py in same tearDownClass() method: threre is the same trick used and there is an explanation",
+      "range": {
+        "startLine": 35,
+        "startChar": 8,
+        "endLine": 35,
+        "endChar": 28
+      },
+      "revId": "4991e47b43a86174be128faf6709f472acd4e058",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
