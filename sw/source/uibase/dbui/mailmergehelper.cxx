@@ -87,7 +87,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
         uno::Reference< mail::XMailService >&  rxInMailService,
         const OUString& rInMailServerPassword,
         const OUString& rOutMailServerPassword,
-        vcl::Window* pDialogParentWindow )
+        weld::Window* pDialogParentWindow )
 {
     uno::Reference< mail::XSmtpService > xSmtpServer;
     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -611,7 +611,7 @@ OUString SwAuthenticator::getPassword(  )
 {
     if(!m_aUserName.isEmpty() && m_aPassword.isEmpty() && m_pParentWindow)
     {
-       SfxPasswordDialog aPasswdDlg(m_pParentWindow->GetFrameWeld());
+       SfxPasswordDialog aPasswdDlg(m_pParentWindow);
        aPasswdDlg.SetMinLen(0);
        if (RET_OK == aPasswdDlg.execute())
             m_aPassword = aPasswdDlg.GetPassword();

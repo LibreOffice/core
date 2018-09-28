@@ -41,36 +41,33 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::mail;
 using namespace ::com::sun::star::beans;
 
-class SwTestAccountSettingsDialog : public SfxModalDialog
+class SwTestAccountSettingsDialog : public weld::GenericDialogController
 {
-    VclPtr<VclMultiLineEdit>   m_pErrorsED;
-
-    VclPtr<PushButton>         m_pStopPB;
-
-    VclPtr<FixedText>          m_pEstablish;
-    VclPtr<FixedText>          m_pFind;
-    VclPtr<FixedText>          m_pResult1;
-    VclPtr<FixedText>          m_pResult2;
-    VclPtr<FixedImage>         m_pImage1;
-    VclPtr<FixedImage>         m_pImage2;
-
-    Image               m_aCompletedImg;
-    Image               m_aFailedImg;
+    ImplSVEvent*        m_pPostedEvent;
     OUString            m_sCompleted;
     OUString            m_sFailed;
     OUString            m_sErrorServer;
+    bool                m_bStop;
 
     VclPtr<SwMailConfigPage>   m_pParent;
 
-    bool                m_bStop;
+    std::unique_ptr<weld::Button> m_xStopPB;
+    std::unique_ptr<weld::TextView> m_xErrorsED;
+    std::unique_ptr<weld::Label> m_xEstablish;
+    std::unique_ptr<weld::Label> m_xFind;
+    std::unique_ptr<weld::Label> m_xResult1;
+    std::unique_ptr<weld::Label> m_xResult2;
+    std::unique_ptr<weld::Image> m_xImage1;
+    std::unique_ptr<weld::Image> m_xImage2;
+    std::unique_ptr<weld::Image> m_xImage3;
+    std::unique_ptr<weld::Image> m_xImage4;
 
     void                Test();
-    DECL_LINK(StopHdl, Button*, void);
+    DECL_LINK(StopHdl, weld::Button&, void);
     DECL_LINK(TestHdl, void*, void);
 public:
     explicit SwTestAccountSettingsDialog(SwMailConfigPage* pParent);
     virtual ~SwTestAccountSettingsDialog() override;
-    virtual void dispose() override;
 };
 
 class SwAuthenticationSettingsDialog : public weld::GenericDialogController
@@ -216,7 +213,8 @@ IMPL_LINK_NOARG(SwMailConfigPage, AuthenticationHdl, Button*, void)
 
 IMPL_LINK_NOARG(SwMailConfigPage, TestHdl, Button*, void)
 {
-    ScopedVclPtrInstance<SwTestAccountSettingsDialog>(this)->Execute();
+    SwTestAccountSettingsDialog aDlg(this);
+    aDlg.run();
 }
 
 IMPL_LINK(SwMailConfigPage, SecureHdl, Button*, pBox, void)
@@ -228,61 +226,50 @@ IMPL_LINK(SwMailConfigPage, SecureHdl, Button*, pBox, void)
 }
 
 SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pParent)
-    : SfxModalDialog(pParent, "TestMailSettings", "modules/swriter/ui/testmailsettings.ui")
-    , m_aCompletedImg(BitmapEx(RID_BMP_FORMULA_APPLY))
-    , m_aFailedImg(BitmapEx(RID_BMP_FORMULA_CANCEL))
-    , m_pParent(pParent)
+    : GenericDialogController(pParent->GetFrameWeld(), "modules/swriter/ui/testmailsettings.ui", "TestMailSettings")
     , m_bStop(false)
+    , m_pParent(pParent)
+    , m_xStopPB(m_xBuilder->weld_button("stop"))
+    , m_xErrorsED(m_xBuilder->weld_text_view("errors"))
+    , m_xEstablish(m_xBuilder->weld_label("establish"))
+    , m_xFind(m_xBuilder->weld_label("find"))
+    , m_xResult1(m_xBuilder->weld_label("result1"))
+    , m_xResult2(m_xBuilder->weld_label("result2"))
+    , m_xImage1(m_xBuilder->weld_image("image1"))
+    , m_xImage2(m_xBuilder->weld_image("image2"))
+    , m_xImage3(m_xBuilder->weld_image("image3"))
+    , m_xImage4(m_xBuilder->weld_image("image4"))
 {
-    get(m_pStopPB, "stop");
-    get(m_pErrorsED, "errors");
-    m_pErrorsED->SetMaxTextWidth(80 * m_pErrorsED->approximate_char_width());
-    m_pErrorsED->set_height_request(8 * m_pErrorsED->GetTextHeight());
-    m_sErrorServer = m_pErrorsED->GetText();
-    m_pErrorsED->SetText("");
-    get(m_pEstablish, "establish");
-    get(m_pFind, "find");
-    get(m_pImage1, "image1");
-    get(m_pResult1, "result1");
-    get(m_pImage2, "image2");
-    get(m_pResult2, "result2");
-    m_sCompleted = m_pResult1->GetText();
-    m_sFailed = m_pResult2->GetText();
+    m_xErrorsED->set_size_request(m_xErrorsED->get_approximate_digit_width() * 72,
+                                  m_xErrorsED->get_height_rows(8));
+    m_sErrorServer = m_xErrorsED->get_text();
+    m_xErrorsED->set_text("");
+    m_sCompleted = m_xResult1->get_label();
+    m_sFailed = m_xResult2->get_label();
 
-    m_pStopPB->SetClickHdl(LINK(this, SwTestAccountSettingsDialog, StopHdl));
+    m_xStopPB->connect_clicked(LINK(this, SwTestAccountSettingsDialog, StopHdl));
 
-    Application::PostUserEvent( LINK( this, SwTestAccountSettingsDialog, TestHdl ), this, true );
+    m_pPostedEvent = Application::PostUserEvent(LINK(this, SwTestAccountSettingsDialog, TestHdl));
 }
 
 SwTestAccountSettingsDialog::~SwTestAccountSettingsDialog()
 {
-    disposeOnce();
+    if (m_pPostedEvent)
+    {
+        Application::RemoveUserEvent(m_pPostedEvent);
+    }
 }
 
-void SwTestAccountSettingsDialog::dispose()
-{
-    m_pErrorsED.clear();
-    m_pStopPB.clear();
-    m_pEstablish.clear();
-    m_pFind.clear();
-    m_pResult1.clear();
-    m_pResult2.clear();
-    m_pImage1.clear();
-    m_pImage2.clear();
-    m_pParent.clear();
-    SfxModalDialog::dispose();
-}
-
-IMPL_LINK_NOARG(SwTestAccountSettingsDialog, StopHdl, Button*, void)
+IMPL_LINK_NOARG(SwTestAccountSettingsDialog, StopHdl, weld::Button&, void)
 {
     m_bStop = true;
 }
 
 IMPL_LINK_NOARG(SwTestAccountSettingsDialog, TestHdl, void*, void)
 {
-    EnterWait();
+    m_pPostedEvent = nullptr;
+    weld::WaitObject aWait(m_xDialog.get());
     Test();
-    LeaveWait();
 }
 
 void SwTestAccountSettingsDialog::Test()
@@ -318,7 +305,7 @@ void SwTestAccountSettingsDialog::Test()
                 new SwAuthenticator(
                     m_pParent->m_pConfigItem->GetInServerUserName(),
                     m_pParent->m_pConfigItem->GetInServerPassword(),
-                    this);
+                    m_xDialog.get());
 
             xInMailService->addConnectionListener(xConnectionListener);
             //check connection
@@ -339,7 +326,7 @@ void SwTestAccountSettingsDialog::Test()
                 new SwAuthenticator(
                     m_pParent->m_pConfigItem->GetMailUserName(),
                     m_pParent->m_pConfigItem->GetMailPassword(),
-                    this);
+                    m_xDialog.get());
         else
             xAuthenticator =  new SwAuthenticator();
 
@@ -369,18 +356,20 @@ void SwTestAccountSettingsDialog::Test()
         sException = e.Message;
     }
 
-    m_pResult1->SetText(bIsServer ? m_sCompleted : m_sFailed);
-    m_pImage1->SetImage(bIsServer ? m_aCompletedImg : m_aFailedImg);
+    m_xResult1->set_label(bIsServer ? m_sCompleted : m_sFailed);
+    m_xImage1->show(!bIsServer);
+    m_xImage3->show(bIsServer);
 
-    m_pResult2->SetText(bIsLoggedIn ? m_sCompleted : m_sFailed);
-    m_pImage2->SetImage(bIsLoggedIn ? m_aCompletedImg : m_aFailedImg);
+    m_xResult2->set_label(bIsLoggedIn ? m_sCompleted : m_sFailed);
+    m_xImage2->show(!bIsLoggedIn);
+    m_xImage4->show(bIsLoggedIn);
 
     if (!bIsServer || !bIsLoggedIn)
     {
         OUString aErrorMessage(m_sErrorServer);
         if (!sException.isEmpty())
             aErrorMessage += "\n--\n" + sException;
-        m_pErrorsED->SetText(aErrorMessage);
+        m_xErrorsED->set_text(aErrorMessage);
     }
 }
 

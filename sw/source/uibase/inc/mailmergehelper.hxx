@@ -49,7 +49,7 @@ namespace SwMailMergeHelper
                             css::uno::Reference<css::mail::XMailService>& xInMailService,
                             const OUString& rInMailServerPassword,
                             const OUString& rOutMailServerPassword,
-                            vcl::Window* pDialogParentWindow = nullptr);
+                            weld::Window* pDialogParentWindow = nullptr);
 }
 
 struct SwAddressPreview_Impl;
@@ -142,12 +142,12 @@ class SW_DLLPUBLIC SwAuthenticator :
 {
     OUString m_aUserName;
     OUString m_aPassword;
-    VclPtr<vcl::Window> m_pParentWindow;
+    weld::Window* m_pParentWindow;
 public:
     SwAuthenticator()
         : m_pParentWindow(nullptr)
     {}
-    SwAuthenticator(const OUString& username, const OUString& password, vcl::Window* pParent)
+    SwAuthenticator(const OUString& username, const OUString& password, weld::Window* pParent)
         : m_aUserName(username)
         , m_aPassword(password)
         , m_pParentWindow(pParent)

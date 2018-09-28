@@ -73,7 +73,7 @@ public:
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
 };
 
-/* Derived from SfxSingleTabDialog, in order to be informed about
+/* Derived from SfxSingleTabDialogController, in order to be informed about
    virtual methods by the control. */
 class SvxConnectionDialog : public SfxSingleTabDialogController
 {
