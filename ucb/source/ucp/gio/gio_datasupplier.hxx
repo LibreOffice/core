@@ -22,6 +22,7 @@
 
 #include <ucbhelper/resultset.hxx>
 #include "gio_content.hxx"
+#include <memory>
 #include <vector>
 
 namespace gio
@@ -48,7 +49,7 @@ struct ResultListEntry
     }
 };
 
-typedef std::vector< ResultListEntry* > ResultList;
+typedef std::vector< std::unique_ptr<ResultListEntry> > ResultList;
 
 class DataSupplier : public ucbhelper::ResultSetDataSupplier
 {
