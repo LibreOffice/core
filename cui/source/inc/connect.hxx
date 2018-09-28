@@ -75,11 +75,11 @@ public:
 
 /* Derived from SfxSingleTabDialog, in order to be informed about
    virtual methods by the control. */
-class SvxConnectionDialog : public SfxSingleTabDialog
+class SvxConnectionDialog : public SfxSingleTabDialogController
 {
 public:
-    SvxConnectionDialog( vcl::Window* pParent, const SfxItemSet& rAttr,
-                       const SdrView* pView );
+    SvxConnectionDialog(weld::Window* pParent, const SfxItemSet& rAttr,
+                        const SdrView* pView);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CONNECT_HXX
