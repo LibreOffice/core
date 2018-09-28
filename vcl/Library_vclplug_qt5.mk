@@ -102,8 +102,8 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/Qt5Timer \
     vcl/qt5/Qt5Tools \
     vcl/qt5/Qt5VirtualDevice \
-    vcl/qt5/Qt5VclWindow \
     vcl/qt5/Qt5Widget \
+    vcl/qt5/Qt5XAccessible \
 ))
 
 ifeq ($(OS),LINUX)

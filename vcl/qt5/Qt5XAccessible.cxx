@@ -7,19 +7,22 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <Qt5VclWindow.hxx>
-#include <Qt5VclWindow.moc>
+#include <Qt5XAccessible.hxx>
+#include <Qt5XAccessible.moc>
 
 #include <Qt5Frame.hxx>
 #include <Qt5Tools.hxx>
 #include <Qt5Widget.hxx>
 
+#include <com/sun/star/accessibility/XAccessible.hpp>
+
 #include <sal/log.hxx>
 
 using namespace css::accessibility;
+using namespace css::uno;
 
-Qt5VclWindow::Qt5VclWindow(vcl::Window* pWindow)
-    : m_pWindow(pWindow)
+Qt5XAccessible::Qt5XAccessible(Reference<XAccessible> xAccessible)
+    : m_xAccessible(xAccessible)
 {
 }
 
