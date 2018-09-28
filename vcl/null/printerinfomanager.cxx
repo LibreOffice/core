@@ -90,26 +90,6 @@ const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& /* rPrint
     return aEmptyInfo;
 }
 
-bool PrinterInfoManager::writePrinterConfig()
-{
-    return false;
-}
-
-bool PrinterInfoManager::addPrinter( const OUString& /* rPrinterName */, const OUString& /* rDriverName */ )
-{
-    return false;
-}
-
-bool PrinterInfoManager::removePrinter( const OUString& /* rPrinterName */, bool /* bCheckOnly */ )
-{
-    return false;
-}
-
-bool PrinterInfoManager::setDefaultPrinter( const OUString& /* rPrinterName */ )
-{
-    return false;
-}
-
 bool PrinterInfoManager::checkFeatureToken( const OUString& /* rPrinterName */, const char* /* pToken */ ) const
 {
     (void) this;
