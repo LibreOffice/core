@@ -24,28 +24,24 @@
 
 #include <Qt5Frame.hxx>
 #include <Qt5Tools.hxx>
-#include <Qt5VclWindow.hxx>
+#include <Qt5XAccessible.hxx>
 #include <Qt5Widget.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 
 #include <sal/log.hxx>
 #include <vcl/popupmenuwindow.hxx>
 
+using namespace css;
 using namespace css::accessibility;
 using namespace css::uno;
 
-Qt5AccessibleWidget::Qt5AccessibleWidget(Qt5Widget* pFrame, vcl::Window* pWindow)
-    : m_pFrame(pFrame)
-    , m_pWindow(pWindow)
-{
-}
-
-Qt5AccessibleWidget::Qt5AccessibleWidget(vcl::Window* pWindow)
-    : m_pWindow(pWindow)
+Qt5AccessibleWidget::Qt5AccessibleWidget(const Reference<XAccessible> xAccessible)
+    : m_xAccessible(xAccessible)
 {
 }
 
@@ -53,10 +49,7 @@ QWindow* Qt5AccessibleWidget::window() const { return nullptr; }
 
 int Qt5AccessibleWidget::childCount() const
 {
-    if (!m_pWindow.get())
-        return 0;
-
-    return m_pWindow->GetAccessibleChildWindowCount();
+    return m_xAccessible->getAccessibleContext()->getAccessibleChildCount();
 }
 
 int Qt5AccessibleWidget::indexOfChild(const QAccessibleInterface* /* child */) const { return 0; }
@@ -68,58 +61,42 @@ QVector<QPair<QAccessibleInterface*, QAccessible::Relation>>
 
 QAccessibleInterface* Qt5AccessibleWidget::focusChild() const
 {
-    if (m_pWindow->HasChildPathFocus())
+    /* if (m_pWindow->HasChildPathFocus())
         return QAccessible::queryAccessibleInterface(
-            new Qt5VclWindow(Application::GetFocusWindow()));
+            new Qt5XAccessible(m_xAccessible->getAccessibleContext()->getAccessibleChild(index))); */
     return QAccessible::queryAccessibleInterface(object());
 }
 
 QRect Qt5AccessibleWidget::rect() const
 {
-    if (!m_pWindow.get())
-        return QRect();
+    Reference<XAccessibleComponent> xAccessibleComponent(m_xAccessible->getAccessibleContext(),
+                                                         UNO_QUERY);
+    awt::Point aPoint = xAccessibleComponent->getLocation();
+    awt::Size aSize = xAccessibleComponent->getSize();
 
-    SolarMutexGuard aSolarGuard;
-
-    // TODO: This seems to return a relative position (to the parent window).
-    // Needs to be absolute instead.
-    Point aPoint(m_pWindow->GetPosPixel());
-    Size aSize(m_pWindow->GetSizePixel());
-
-    return QRect(aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height());
+    return QRect(aPoint.X, aPoint.Y, aSize.Width, aSize.Height);
 }
 
 QAccessibleInterface* Qt5AccessibleWidget::parent() const
 {
-    if (!m_pWindow)
-        return QAccessible::queryAccessibleInterface(nullptr);
-
     return QAccessible::queryAccessibleInterface(
-        new Qt5VclWindow(m_pWindow->GetAccessibleParentWindow()));
+        new Qt5XAccessible(m_xAccessible->getAccessibleContext()->getAccessibleParent()));
 }
 QAccessibleInterface* Qt5AccessibleWidget::child(int index) const
 {
-    if (!m_pWindow)
-        return QAccessible::queryAccessibleInterface(nullptr);
-
     return QAccessible::queryAccessibleInterface(
-        new Qt5VclWindow(m_pWindow->GetAccessibleChildWindow(index)));
+        new Qt5XAccessible(m_xAccessible->getAccessibleContext()->getAccessibleChild(index)));
 }
 
 QString Qt5AccessibleWidget::text(QAccessible::Text text) const
 {
-    if (!m_pWindow.get())
-        return QString();
-
-    SolarMutexGuard aSolarGuard;
-
     switch (text)
     {
         case QAccessible::Name:
-            return toQString(m_pWindow->GetAccessibleName());
+            return toQString(m_xAccessible->getAccessibleContext()->getAccessibleName());
         case QAccessible::Description:
         case QAccessible::DebugDescription:
-            return toQString(m_pWindow->GetAccessibleDescription());
+            return toQString(m_xAccessible->getAccessibleContext()->getAccessibleDescription());
         case QAccessible::Value:
         case QAccessible::Help:
         case QAccessible::Accelerator:
@@ -130,10 +107,10 @@ QString Qt5AccessibleWidget::text(QAccessible::Text text) const
 }
 QAccessible::Role Qt5AccessibleWidget::role() const
 {
-    if (!m_pWindow.get())
+    if (!m_xAccessible.is())
         return QAccessible::NoRole;
 
-    switch (m_pWindow->GetAccessibleRole())
+    switch (m_xAccessible->getAccessibleContext()->getAccessibleRole())
     {
         case AccessibleRole::UNKNOWN:
             return QAccessible::NoRole;
@@ -388,48 +365,12 @@ QAccessible::Role Qt5AccessibleWidget::role() const
          */
         case AccessibleRole::WINDOW: // top-level window without title bar
         {
-            SolarMutexGuard aSolarGuard;
-            WindowType type = WindowType::WINDOW;
-            bool parentIsMenuFloatingWindow = false;
-
-            vcl::Window* pParent = m_pWindow->GetParent();
-            if (pParent)
-            {
-                type = pParent->GetType();
-                parentIsMenuFloatingWindow = pParent->IsMenuFloatingWindow();
-            }
-
-            if ((WindowType::LISTBOX != type) && (WindowType::COMBOBOX != type)
-                && (WindowType::MENUBARWINDOW != type) && !parentIsMenuFloatingWindow)
-            {
-                return QAccessible::Window;
-            }
-        }
-            SAL_FALLTHROUGH;
-
-        default:
-        {
-            SolarMutexGuard aSolarGuard;
-            vcl::Window* pChild = m_pWindow->GetWindow(GetWindowType::FirstChild);
-            if (pChild)
-            {
-                if (WindowType::HELPTEXTWINDOW == pChild->GetType())
-                {
-                    return QAccessible::HelpBalloon;
-                }
-                else if (m_pWindow->GetType() == WindowType::BORDERWINDOW
-                         && pChild->GetType() == WindowType::FLOATINGWINDOW)
-                {
-                    PopupMenuFloatingWindow* p = dynamic_cast<PopupMenuFloatingWindow*>(pChild);
-                    if (p && p->IsPopupMenu() && p->GetMenuStackLevel() == 0)
-                    {
-                        return QAccessible::PopupMenu;
-                    }
-                }
-            }
-            break;
+            return QAccessible::Window;
         }
     }
+
+    SAL_WARN("vcl.qt5",
+             "Unmapped role: " << m_xAccessible->getAccessibleContext()->getAccessibleRole());
     return QAccessible::NoRole;
 }
 
@@ -470,10 +411,10 @@ void lcl_addState(QAccessible::State* state, sal_Int16 nState)
             state->focused = true;
             break;
         case AccessibleStateType::HORIZONTAL:
-            //state->horizontal = true;
+            // No match
             break;
         case AccessibleStateType::ICONIFIED:
-            //state->iconified = true;
+            // No match
             break;
         case AccessibleStateType::INDETERMINATE:
             // No match
@@ -540,11 +481,10 @@ QAccessible::State Qt5AccessibleWidget::state() const
 {
     QAccessible::State state;
 
-    Reference<XAccessible> xAccessible(m_pWindow->GetAccessible());
-    if (!xAccessible.is())
+    if (!m_xAccessible.is())
         return state;
     Reference<XAccessibleStateSet> xStateSet(
-        xAccessible->getAccessibleContext()->getAccessibleStateSet());
+        m_xAccessible->getAccessibleContext()->getAccessibleStateSet());
 
     if (!xStateSet.is())
         return state;
@@ -561,11 +501,15 @@ QAccessible::State Qt5AccessibleWidget::state() const
 
 QColor Qt5AccessibleWidget::foregroundColor() const
 {
-    return toQColor(m_pWindow->GetControlForeground());
+    Reference<XAccessibleComponent> xAccessibleComponent(m_xAccessible->getAccessibleContext(),
+                                                         UNO_QUERY);
+    return toQColor(xAccessibleComponent->getForeground());
 }
 QColor Qt5AccessibleWidget::backgroundColor() const
 {
-    return toQColor(m_pWindow->GetControlBackground());
+    Reference<XAccessibleComponent> xAccessibleComponent(m_xAccessible->getAccessibleContext(),
+                                                         UNO_QUERY);
+    return toQColor(xAccessibleComponent->getBackground());
 }
 
 void* Qt5AccessibleWidget::interface_cast(QAccessible::InterfaceType /* t */)
@@ -592,31 +536,14 @@ QStringList Qt5AccessibleWidget::keyBindingsForAction(const QString& actionName)
     return QStringList();
 } */
 
-bool Qt5AccessibleWidget::isValid() const { return m_pWindow.get() != nullptr; }
+bool Qt5AccessibleWidget::isValid() const
+{
+    return m_xAccessible.is() && m_xAccessible->getAccessibleContext().is();
+}
 
 QObject* Qt5AccessibleWidget::object() const { return nullptr; }
 
-void Qt5AccessibleWidget::setText(QAccessible::Text t, const QString& text)
-{
-    if (!m_pWindow)
-        return;
-
-    switch (t)
-    {
-        case QAccessible::Name:
-            m_pWindow->SetAccessibleName(toOUString(text));
-            break;
-        case QAccessible::Description:
-        case QAccessible::DebugDescription:
-            m_pWindow->SetAccessibleDescription(toOUString(text));
-            break;
-        case QAccessible::Value:
-        case QAccessible::Help:
-        case QAccessible::Accelerator:
-        case QAccessible::UserText:
-            break;
-    }
-}
+void Qt5AccessibleWidget::setText(QAccessible::Text /* t */, const QString& /* text */) {}
 
 QAccessibleInterface* Qt5AccessibleWidget::childAt(int /* x */, int /* y */) const
 {
@@ -627,13 +554,16 @@ QAccessibleInterface* Qt5AccessibleWidget::customFactory(const QString& classnam
 {
     if (classname == QLatin1String("Qt5Widget") && object && object->isWidgetType())
     {
-        return new Qt5AccessibleWidget(static_cast<Qt5Widget*>(object),
-                                       (static_cast<Qt5Widget*>(object))->m_pFrame->GetWindow());
+        Qt5Widget* pWidget = static_cast<Qt5Widget*>(object);
+        return new Qt5AccessibleWidget(pWidget->m_pFrame->GetWindow()->GetAccessible());
     }
-    if (classname == QLatin1String("Qt5VclWindow") && object)
+    if (classname == QLatin1String("Qt5XAccessible") && object)
     {
-        if (dynamic_cast<Qt5VclWindow*>(object) != nullptr)
-            return new Qt5AccessibleWidget((static_cast<Qt5VclWindow*>(object))->m_pWindow);
+        if (dynamic_cast<Qt5XAccessible*>(object) != nullptr)
+        {
+            Qt5XAccessible* pVclWindow = static_cast<Qt5XAccessible*>(object);
+            return new Qt5AccessibleWidget(pVclWindow->m_xAccessible);
+        }
     }
 
     return nullptr;
