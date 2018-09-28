@@ -83,15 +83,6 @@ DummyWindowWrapper::DummyWindowWrapper( vcl::Window& rWindow ) :
 {
 }
 
-bool DummyWindowWrapper::IsControlDontKnow() const
-{
-    return false;
-}
-
-void DummyWindowWrapper::SetControlDontKnow( bool )
-{
-}
-
 void* DummyWindowWrapper::GetControlValue() const
 {
     return nullptr;
@@ -131,109 +122,6 @@ bool ItemConnectionBase::DoFillItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
 TriState ItemConnectionBase::GetShowState( bool bKnown ) const
 {
     return lclConvertToTriState( bKnown, bool(mnFlags & ItemConnFlags::HideUnknown) );
-}
-
-
-// Standard connections
-
-
-DummyItemConnection::DummyItemConnection( sal_uInt16 nSlot, vcl::Window& rWindow, ItemConnFlags nFlags ) :
-    ItemConnectionBase( nFlags ),
-    DummyWindowWrapper( rWindow ),
-    mnSlot( nSlot )
-{
-}
-
-void DummyItemConnection::ApplyFlags( const SfxItemSet* pItemSet )
-{
-    bool bKnown = ItemWrapperHelper::IsKnownItem( *pItemSet, mnSlot );
-    ModifyControl( GetShowState( bKnown ) );
-}
-
-void DummyItemConnection::Reset( const SfxItemSet* )
-{
-}
-
-bool DummyItemConnection::FillItemSet( SfxItemSet& /*rDestSet*/, const SfxItemSet& /*rOldSet*/ )
-{
-    return false;   // item set not changed
-}
-
-
-// Array of connections
-
-
-class ItemConnectionArrayImpl
-{
-public:
-    void                        Append( ItemConnectionBase* pConnection );
-
-    void                        ApplyFlags( const SfxItemSet* pItemSet );
-    void                        Reset( const SfxItemSet* pItemSet );
-    bool                        FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet );
-
-private:
-    typedef std::shared_ptr< ItemConnectionBase > ItemConnectionRef;
-    typedef std::vector< ItemConnectionRef > ItemConnectionVector;
-
-    ItemConnectionVector maVector;
-};
-
-void ItemConnectionArrayImpl::Append( ItemConnectionBase* pConnection )
-{
-    if( pConnection )
-        maVector.push_back( ItemConnectionRef( pConnection ) );
-}
-
-void ItemConnectionArrayImpl::ApplyFlags( const SfxItemSet* pItemSet )
-{
-    for (auto const& itemConnection : maVector)
-        itemConnection->DoApplyFlags( pItemSet );
-}
-
-void ItemConnectionArrayImpl::Reset( const SfxItemSet* pItemSet )
-{
-    for (auto const& itemConnection : maVector)
-        itemConnection->DoReset( pItemSet );
-}
-
-bool ItemConnectionArrayImpl::FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet )
-{
-    bool bChanged = false;
-    for (auto const& itemConnection : maVector)
-        bChanged |= itemConnection->DoFillItemSet( rDestSet, rOldSet );
-    return bChanged;
-}
-
-
-ItemConnectionArray::ItemConnectionArray() :
-    ItemConnectionBase(ItemConnFlags::NONE),
-    mxImpl( new ItemConnectionArrayImpl )
-{
-}
-
-ItemConnectionArray::~ItemConnectionArray()
-{
-}
-
-void ItemConnectionArray::AddConnection( ItemConnectionBase* pConnection )
-{
-    mxImpl->Append( pConnection );
-}
-
-void ItemConnectionArray::ApplyFlags( const SfxItemSet* pItemSet )
-{
-    mxImpl->ApplyFlags( pItemSet );
-}
-
-void ItemConnectionArray::Reset( const SfxItemSet* pItemSet )
-{
-    mxImpl->Reset( pItemSet );
-}
-
-bool ItemConnectionArray::FillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet )
-{
-    return mxImpl->FillItemSet( rDestSet, rOldSet );
 }
 
 

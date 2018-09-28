@@ -1313,26 +1313,6 @@ OUString SdrUndoDelLayer::GetComment() const
 }
 
 
-void SdrUndoMoveLayer::Undo()
-{
-    SdrLayer* pCmpLayer= pLayerAdmin->RemoveLayer(nNewPos);
-    DBG_ASSERT(pCmpLayer==pLayer,"SdrUndoMoveLayer::Undo(): Removed layer is != pLayer.");
-    pLayerAdmin->InsertLayer(pLayer,nNum);
-}
-
-void SdrUndoMoveLayer::Redo()
-{
-    SdrLayer* pCmpLayer= pLayerAdmin->RemoveLayer(nNum);
-    DBG_ASSERT(pCmpLayer==pLayer,"SdrUndoMoveLayer::Redo(): Removed layer is != pLayer.");
-    pLayerAdmin->InsertLayer(pLayer,nNewPos);
-}
-
-OUString SdrUndoMoveLayer::GetComment() const
-{
-    return SvxResId(STR_UndoMovLayer);
-}
-
-
 SdrUndoPage::SdrUndoPage(SdrPage& rNewPg)
 :   SdrUndoAction(rNewPg.getSdrModelFromSdrPage())
     ,mrPage(rNewPg)

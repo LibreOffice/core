@@ -46,8 +46,6 @@ connectivity/source/inc/OTypeInfo.hxx:46
     _Bool connectivity::OTypeInfo::operator==(const struct connectivity::OTypeInfo &) const
 connectivity/source/inc/OTypeInfo.hxx:47
     _Bool connectivity::OTypeInfo::operator!=(const struct connectivity::OTypeInfo &) const
-cui/source/inc/hyphen.hxx:35
-     HyphenEdit::HyphenEdit(class vcl::Window *)
 dbaccess/source/filter/hsqldb/fbalterparser.hxx:20
     void dbahsql::FbAlterStmtParser::ensureProperTableLengths() const
 dbaccess/source/filter/hsqldb/parseschema.hxx:82
@@ -282,6 +280,8 @@ include/basegfx/utils/b2dclipstate.hxx:75
     _Bool basegfx::utils::B2DClipState::operator!=(const class basegfx::utils::B2DClipState &) const
 include/basegfx/utils/systemdependentdata.hxx:69
      basegfx::MinimalSystemDependentDataManager::MinimalSystemDependentDataManager()
+include/basegfx/utils/systemdependentdata.hxx:116
+    long basegfx::SystemDependentData::estimateUsageInBytes() const
 include/basegfx/utils/unopolypolygon.hxx:91
     const class basegfx::B2DPolyPolygon & basegfx::unotools::UnoPolyPolygon::getPolyPolygonUnsafe() const
 include/basegfx/vector/b2ivector.hxx:75
@@ -330,9 +330,9 @@ include/codemaker/global.hxx:61
     class FileStream & operator<<(class FileStream &,const class rtl::OStringBuffer &)
 include/comphelper/automationinvokedzone.hxx:28
      comphelper::Automation::AutomationInvokedZone::AutomationInvokedZone()
-include/comphelper/basicio.hxx:51
-    const class com::sun::star::uno::Reference<class com::sun::star::io::XObjectInputStream> & comphelper::operator>>(const class com::sun::star::uno::Reference<class com::sun::star::io::XObjectInputStream> &,unsigned int &)
 include/comphelper/basicio.hxx:52
+    const class com::sun::star::uno::Reference<class com::sun::star::io::XObjectInputStream> & comphelper::operator>>(const class com::sun::star::uno::Reference<class com::sun::star::io::XObjectInputStream> &,unsigned int &)
+include/comphelper/basicio.hxx:53
     const class com::sun::star::uno::Reference<class com::sun::star::io::XObjectOutputStream> & comphelper::operator<<(const class com::sun::star::uno::Reference<class com::sun::star::io::XObjectOutputStream> &,unsigned int)
 include/comphelper/configuration.hxx:248
     type-parameter-?-? comphelper::ConfigurationLocalizedProperty::get(const class com::sun::star::uno::Reference<class com::sun::star::uno::XComponentContext> &)
@@ -374,7 +374,7 @@ include/comphelper/logging.hxx:413
     void comphelper::EventLogger::logp(const int,const char *,const char *,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
 include/comphelper/logging.hxx:426
     void comphelper::EventLogger::logp(const int,const char *,const char *,const char *,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?,type-parameter-?-?) const
-include/comphelper/lok.hxx:46
+include/comphelper/lok.hxx:47
     _Bool comphelper::LibreOfficeKit::isLocalRendering()
 include/comphelper/propagg.hxx:55
     _Bool comphelper::internal::OPropertyAccessor::operator==(const struct comphelper::internal::OPropertyAccessor &) const
@@ -554,8 +554,40 @@ include/sfx2/charwin.hxx:63
     void SvxCharView::connect_focus_in(const class Link<class weld::Widget &, void> &)
 include/sfx2/charwin.hxx:64
     void SvxCharView::connect_focus_out(const class Link<class weld::Widget &, void> &)
+include/sfx2/controlwrapper.hxx:150
+    _Bool sfx::ControlWrapperBase::IsControlDontKnow() const
+include/sfx2/controlwrapper.hxx:152
+    void sfx::ControlWrapperBase::SetControlDontKnow(_Bool)
+include/sfx2/controlwrapper.hxx:235
+     sfx::MetricFieldWrapper::MetricFieldWrapper<ValueT>(class MetricField &,enum FieldUnit)
 include/sfx2/docfilt.hxx:83
     _Bool SfxFilter::GetGpgEncryption() const
+include/sfx2/itemconnect.hxx:215
+     sfx::ItemControlConnection::ItemControlConnection<ItemWrpT, ControlWrpT>(unsigned short,type-parameter-?-? *,enum ItemConnFlags)
+include/sfx2/itemconnect.hxx:221
+     sfx::ItemControlConnection::ItemControlConnection<ItemWrpT, ControlWrpT>(unsigned short,typename type-parameter-?-?::ControlType &,enum ItemConnFlags)
+include/sfx2/itemconnect.hxx:254
+     sfx::DummyItemConnection::DummyItemConnection(unsigned short,class vcl::Window &,enum ItemConnFlags)
+include/sfx2/itemconnect.hxx:286
+     sfx::ListBoxConnection::ListBoxConnection<ItemWrpT>(unsigned short,class ListBox &,const typename ItemControlConnection<type-parameter-?-?, ListBoxWrapper<typename type-parameter-?-?::ItemValueType> >::ControlWrapperType::MapEntryType *,enum ItemConnFlags)
+include/sfx2/itemconnect.hxx:306
+     sfx::ItemConnectionArray::ItemConnectionArray()
+include/sfx2/itemconnect.hxx:311
+    void sfx::ItemConnectionArray::AddConnection(class sfx::ItemConnectionBase *)
+include/sfx2/itemwrapper.hxx:92
+     sfx::SingleItemWrapper::SingleItemWrapper<ItemT, ValueT>(unsigned short)
+include/sfx2/itemwrapper.hxx:97
+    unsigned short sfx::SingleItemWrapper::GetSlotId() const
+include/sfx2/itemwrapper.hxx:103
+    const type-parameter-?-? * sfx::SingleItemWrapper::GetUniqueItem(const class SfxItemSet &) const
+include/sfx2/itemwrapper.hxx:107
+    const type-parameter-?-? & sfx::SingleItemWrapper::GetDefaultItem(const class SfxItemSet &) const
+include/sfx2/itemwrapper.hxx:110
+    type-parameter-?-? sfx::SingleItemWrapper::GetItemValue(const type-parameter-?-? &) const
+include/sfx2/itemwrapper.hxx:112
+    void sfx::SingleItemWrapper::SetItemValue(type-parameter-?-? &,type-parameter-?-?) const
+include/sfx2/itemwrapper.hxx:133
+     sfx::ValueItemWrapper::ValueItemWrapper<ItemT, ValueT, InternalValueT>(unsigned short)
 include/sfx2/lokcharthelper.hxx:41
     void LokChartHelper::Invalidate()
 include/sfx2/msg.hxx:120
@@ -570,8 +602,6 @@ include/svtools/ctrlbox.hxx:208
     long LineListBox::GetWidth() const
 include/svtools/dialogcontrolling.hxx:167
     void svt::ControlDependencyManager::enableOnCheckMark(class CheckBox &,class vcl::Window &,class vcl::Window &)
-include/svtools/unitconv.hxx:37
-    void SetFieldUnit(class MetricBox &,enum FieldUnit)
 include/svx/ClassificationEditView.hxx:42
     void svx::ClassificationEditView::SetCharAttributes()
 include/svx/ClassificationEditView.hxx:48
@@ -584,22 +614,16 @@ include/svx/framelink.hxx:201
     _Bool svx::frame::operator>(const class svx::frame::Style &,const class svx::frame::Style &)
 include/svx/framelink.hxx:238
     _Bool svx::frame::StyleVectorCombination::operator<(const class svx::frame::StyleVectorCombination &) const
-include/svx/langbox.hxx:110
-    void SvxLanguageBoxBase::ImplSetNoSelection()
-include/svx/langbox.hxx:111
-    void SvxLanguageBoxBase::ImplHide()
-include/svx/langbox.hxx:112
-    void SvxLanguageBoxBase::ImplDisable()
-include/svx/langbox.hxx:113
-    void SvxLanguageBoxBase::ImplSaveValue()
-include/svx/langbox.hxx:114
-    int SvxLanguageBoxBase::ImplGetSavedValue() const
+include/svx/orienthelper.hxx:86
+    void svx::OrientationHelper::EnableStackedTriState(_Bool)
 include/svx/svdlayer.hxx:75
     _Bool SdrLayer::operator==(const class SdrLayer &) const
-include/svx/svdpage.hxx:105
-    class SdrModel & SdrObjList::getSdrModelFromSdrObjList() const
 include/svx/svdpntv.hxx:462
     _Bool SdrPaintView::IsSwapAsynchron() const
+include/svx/svdundo.hxx:190
+     SdrUndoMoveObj::SdrUndoMoveObj(class SdrObject &)
+include/svx/svdundo.hxx:525
+     SdrUndoMoveLayer::SdrUndoMoveLayer(unsigned short,class SdrLayerAdmin &,class SdrModel &,unsigned short)
 include/svx/xpoly.hxx:82
     _Bool XPolygon::operator==(const class XPolygon &) const
 include/tools/bigint.hxx:86
@@ -692,10 +716,6 @@ include/vcl/errcode.hxx:89
     _Bool ErrCode::operator>(const class ErrCode &) const
 include/vcl/errcode.hxx:90
     _Bool ErrCode::operator>=(const class ErrCode &) const
-include/vcl/field.hxx:671
-    long MetricBox::GetValue(int) const
-include/vcl/field.hxx:672
-    int MetricBox::GetValuePos(long,enum FieldUnit) const
 include/vcl/gdimtf.hxx:111
     _Bool GDIMetaFile::operator!=(const class GDIMetaFile &) const
 include/vcl/gradient.hxx:104
@@ -710,8 +730,6 @@ include/vcl/opengl/OpenGLHelper.hxx:61
     void OpenGLHelper::renderToFile(long,long,const class rtl::OUString &)
 include/vcl/opengl/OpenGLHelper.hxx:91
     void OpenGLHelper::debugMsgStreamWarn(const class std::__cxx11::basic_ostringstream<char> &)
-include/vcl/print.hxx:491
-    class rtl::OUString vcl::PrinterController::getDependency(const class rtl::OUString &) const
 include/vcl/salnativewidgets.hxx:387
     _Bool TabitemValue::isBothAligned() const
 include/vcl/salnativewidgets.hxx:388
@@ -828,6 +846,8 @@ include/vcl/window.hxx:1239
     class Size vcl::Window::PaintActiveFloatingWindow(class VirtualDevice &) const
 libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.hxx:35
     void openLokDialog(struct _GtkWidget *,void *)
+lotuswordpro/source/filter/lwplaypiece.hxx:219
+    double LwpLayoutColumns::GetColWidth(unsigned short)
 o3tl/qa/cow_wrapper_clients.hxx:140
     _Bool o3tltests::cow_wrapper_client4::operator==(const class o3tltests::cow_wrapper_client4 &) const
 o3tl/qa/cow_wrapper_clients.hxx:141
@@ -852,6 +872,8 @@ sc/inc/datamapper.hxx:85
     void sc::ExternalDataSource::setURL(const class rtl::OUString &)
 sc/inc/datamapper.hxx:86
     void sc::ExternalDataSource::setProvider(const class rtl::OUString &)
+sc/inc/documentlinkmgr.hxx:65
+    void sc::DocumentLinkManager::disconnectDdeLinks()
 sc/inc/dpfilteredcache.hxx:143
     void ScDPFilteredCache::dump() const
 sc/inc/formulacell.hxx:460
@@ -910,7 +932,7 @@ sc/source/core/opencl/op_statistical.hxx:204
      sc::opencl::OpGeoMean::OpGeoMean()
 sc/source/core/tool/scmatrix.cxx:2354
     type-parameter-?-? * wrapped_iterator::operator->() const
-sc/source/core/tool/scmatrix.cxx:3360
+sc/source/core/tool/scmatrix.cxx:3370
     const class svl::SharedString & matop::COp::operator()(char,type-parameter-?-?,double,double,const class svl::SharedString &) const
 sc/source/filter/inc/htmlpars.hxx:60
     void ScHTMLStyles::add(const char *,unsigned long,const char *,unsigned long,const class rtl::OUString &,const class rtl::OUString &)
@@ -954,8 +976,6 @@ sccomp/source/solver/DifferentialEvolution.hxx:67
     int DifferentialEvolutionAlgorithm::getLastChange()
 sccomp/source/solver/ParticelSwarmOptimization.hxx:85
     int ParticleSwarmOptimizationAlgorithm::getLastChange()
-sd/inc/drawdoc.hxx:486
-    void SdDrawDocument::RestoreLayerNames()
 sd/inc/sddll.hxx:48
      SdDLL::SdDLL()
 sd/source/filter/ppt/pptinanimations.hxx:105
@@ -1014,7 +1034,9 @@ slideshow/source/engine/animationfactory.cxx:548
     typename type-parameter-?-?::ValueType slideshow::internal::(anonymous namespace)::GenericAnimation::getUnderlyingValue() const
 slideshow/source/engine/opengl/TransitionImpl.hxx:180
     void OGLTransitionImpl::finish(double,double,double,double,double)
-slideshow/source/inc/shapeattributelayer.hxx:391
+slideshow/source/inc/shapeattributelayer.hxx:380
+    _Bool slideshow::internal::ShapeAttributeLayer::isCharRotationAngleValid() const
+slideshow/source/inc/shapeattributelayer.hxx:387
     void slideshow::internal::ShapeAttributeLayer::setCharRotationAngle(const double &)
 svgio/inc/svgstyleattributes.hxx:346
     class svgio::svgreader::SvgNumber svgio::svgreader::SvgStyleAttributes::getStrokeDashOffset() const
@@ -1098,6 +1120,8 @@ sw/inc/extinput.hxx:48
     class SwExtTextInput * SwExtTextInput::GetPrev()
 sw/inc/extinput.hxx:49
     const class SwExtTextInput * SwExtTextInput::GetPrev() const
+sw/inc/fesh.hxx:538
+    void SwFEShell::BreakMark()
 sw/inc/IDocumentLinksAdministration.hxx:53
     _Bool IDocumentLinksAdministration::GetData(const class rtl::OUString &,const class rtl::OUString &,class com::sun::star::uno::Any &) const
 sw/inc/IDocumentLinksAdministration.hxx:55
@@ -1158,7 +1182,7 @@ sw/inc/viscrs.hxx:204
     const class SwShellTableCursor * SwShellTableCursor::GetPrev() const
 sw/qa/extras/inc/swmodeltestbase.hxx:621
     class com::sun::star::uno::Reference<class com::sun::star::beans::XPropertySet> SwModelTestBase::getParagraphAnchoredObject(const int,const class com::sun::star::uno::Reference<class com::sun::star::text::XTextRange> &) const
-sw/qa/extras/uiwriter/uiwriter.cxx:6538
+sw/qa/extras/uiwriter/uiwriter.cxx:6530
     int main()
 sw/source/core/inc/frame.hxx:907
     void SwFrame::dumpTopMostAsXml(struct _xmlTextWriter *) const
@@ -1176,8 +1200,6 @@ sw/source/core/text/porlin.hxx:120
     _Bool SwLinePortion::IsTabRightPortion() const
 sw/source/core/text/txtpaint.hxx:73
      DbgRect::DbgRect(class OutputDevice *,const class tools::Rectangle &,const _Bool,class Color)
-sw/source/filter/ww8/ww8scan.hxx:1861
-    void SwapQuotesInField(class rtl::OUString &)
 sw/source/filter/ww8/ww8struc.hxx:243
      WW8_BRCVer6::WW8_BRCVer6()
 sw/source/uibase/inc/swcont.hxx:86
@@ -1290,10 +1312,12 @@ vcl/source/fontsubset/xlat.hxx:34
     unsigned short vcl::TranslateChar15(unsigned short)
 vcl/source/fontsubset/xlat.hxx:35
     unsigned short vcl::TranslateChar16(unsigned short)
-workdir/LexTarget/l10ntools/source/cfglex.cxx:3721
-    void YYWarning(const char *)
 workdir/LexTarget/l10ntools/source/xrmlex.cxx:715
     void YYWarning()
+workdir/LexTarget/l10ntools/source/xrmlex.cxx:2211
+    void YYWarning(const char *)
+writerfilter/source/dmapper/TableData.hxx:329
+    void writerfilter::dmapper::TableData::insertCellProperties(unsigned int,class tools::SvRef<class writerfilter::dmapper::TablePropertyMap>)
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:176
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> *, class std::__cxx1998::vector<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> > > >, class std::__debug::vector<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> > > > writerfilter::ooxml::OOXMLPropertySet::begin() const
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:177

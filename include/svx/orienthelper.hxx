@@ -82,9 +82,6 @@ public:
     /** Returns the state of the "stacked" check box. */
     TriState            GetStackedState() const;
 
-    /** Enables/disables the "don't know" state of the "Stacked text" check box. */
-    void                EnableStackedTriState( bool bEnable );
-
 private:
     std::unique_ptr< OrientationHelper_Impl > mpImpl;
 };

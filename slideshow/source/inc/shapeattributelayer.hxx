@@ -375,17 +375,6 @@ namespace slideshow
              */
             void setCharColor( const RGBColor& nNewColor );
 
-            /** Query whether the char rotation angle attribute is valid
-             */
-            bool isCharRotationAngleValid() const;
-
-            /** Set the new text rotation angle of the shape
-
-                @param rNewAngle
-                New text rotation angle in degrees.
-             */
-            void setCharRotationAngle( const double& rNewAngle );
-
             /** Query whether the char weight attribute is valid
              */
             bool isCharWeightValid() const;
@@ -498,7 +487,6 @@ namespace slideshow
             double                                      mnShearXAngle;
             double                                      mnShearYAngle;
             double                                      mnAlpha;
-            double                                      mnCharRotationAngle;
             double                                      mnCharScale;
             double                                      mnCharWeight;
 
@@ -537,7 +525,6 @@ namespace slideshow
 
             bool                                        mbAlphaValid            : 1;
 
-            bool                                        mbCharRotationAngleValid: 1;
             bool                                        mbCharScaleValid        : 1;
 
             bool                                        mbDimColorValid         : 1;

@@ -321,17 +321,6 @@ public:
     }
 
     /**
-       Add properties to a cell of the current row.
-
-       @param i       index of the cell
-       @param pProps  properties to add
-     */
-    void insertCellProperties(unsigned int i, TablePropertyMapPtr pProps)
-    {
-        mpRow->insertCellProperties(i, pProps);
-    }
-
-    /**
        Return number of rows in the table.
      */
     unsigned int getRowCount()

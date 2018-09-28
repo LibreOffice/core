@@ -139,7 +139,6 @@ namespace slideshow
             mnShearXAngle(),
             mnShearYAngle(),
             mnAlpha(),
-            mnCharRotationAngle(),
             mnCharScale(),
             mnCharWeight(),
 
@@ -178,7 +177,6 @@ namespace slideshow
 
             mbAlphaValid( false ),
 
-            mbCharRotationAngleValid( false ),
             mbCharScaleValid( false ),
 
             mbDimColorValid( false ),
@@ -642,21 +640,6 @@ namespace slideshow
         {
             maCharColor = nNewColor;
             mbCharColorValid = true;
-            ++mnContentState;
-        }
-
-        bool ShapeAttributeLayer::isCharRotationAngleValid() const
-        {
-            return mbCharRotationAngleValid || ( haveChild() && mpChild->isCharRotationAngleValid() );
-        }
-
-        void ShapeAttributeLayer::setCharRotationAngle( const double& rNewAngle )
-        {
-            ENSURE_OR_THROW( ::rtl::math::isFinite(rNewAngle),
-                              "ShapeAttributeLayer::setCharRotationAngle(): Invalid angle" );
-
-            mnCharRotationAngle = rNewAngle;
-            mbCharRotationAngleValid = true;
             ++mnContentState;
         }
 

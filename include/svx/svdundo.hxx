@@ -187,7 +187,6 @@ class SVX_DLLPUBLIC SdrUndoMoveObj final : public SdrUndoObj
     Size                        aDistance;     // Distance by which we move
 
 public:
-    SdrUndoMoveObj(SdrObject& rNewObj): SdrUndoObj(rNewObj) {}
     SdrUndoMoveObj(SdrObject& rNewObj, const Size& rDist): SdrUndoObj(rNewObj),aDistance(rDist) {}
     virtual ~SdrUndoMoveObj() override;
 
@@ -511,26 +510,6 @@ public:
 
     virtual OUString GetComment() const override;
 };
-
-/**
- * Moving a Layer.
- * Create Action before the Move.
- */
-
-class SdrUndoMoveLayer : public SdrUndoLayer
-{
-    sal_uInt16                      nNewPos;
-
-public:
-    SdrUndoMoveLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel, sal_uInt16 nNewPos1)
-    :   SdrUndoLayer(nLayerNum,rNewLayerAdmin,rNewModel), nNewPos(nNewPos1) {}
-
-    virtual void Undo() override;
-    virtual void Redo() override;
-
-    virtual OUString GetComment() const override;
-};
-
 
 /*
  * Pages
