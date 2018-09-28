@@ -79,7 +79,7 @@ public:
 class FmParentData : public FmFilterData
 {
 protected:
-    ::std::vector< FmFilterData* >  m_aChildren;
+    ::std::vector< std::unique_ptr<FmFilterData> >  m_aChildren;
 
 public:
     FmParentData(FmParentData* pParent, const OUString& rText)
@@ -87,7 +87,7 @@ public:
     {}
     virtual ~FmParentData() override;
 
-    ::std::vector< FmFilterData* >& GetChildren() { return m_aChildren; }
+    ::std::vector< std::unique_ptr<FmFilterData> >& GetChildren() { return m_aChildren; }
 };
 
 
@@ -166,7 +166,7 @@ public:
     void Update(const css::uno::Reference< css::container::XIndexAccess > & xControllers, const css::uno::Reference< css::form::runtime::XFormController > & xCurrent);
     void Clear();
     bool ValidateText(FmFilterItem const * pItem, OUString& rText, OUString& rErrorMsg) const;
-    void Append(FmFilterItems* pItems, FmFilterItem* pFilterItem);
+    void Append(FmFilterItems* pItems, std::unique_ptr<FmFilterItem> pFilterItem);
     void SetTextForItem(FmFilterItem* pItem, const OUString& rText);
 
     FmFormItem* GetCurrentForm() const {return m_pCurrentItems ? static_cast<FmFormItem*>(m_pCurrentItems->GetParent()) : nullptr;}
@@ -181,10 +181,10 @@ public:
     void EnsureEmptyFilterRows( FmParentData& _rItem );
 
 private:
-    void Insert(const ::std::vector<FmFilterData*>::iterator& rPos, FmFilterData* pFilterItem);
-    void Remove( const ::std::vector<FmFilterData*>::iterator& rPos );
-    FmFormItem* Find(const ::std::vector<FmFilterData*>& rItems, const css::uno::Reference< css::form::runtime::XFormController > & xController) const;
-    FmFormItem* Find(const ::std::vector<FmFilterData*>& rItems, const css::uno::Reference< css::form::XForm >& xForm) const;
+    void Insert(const ::std::vector<std::unique_ptr<FmFilterData>>::iterator& rPos, std::unique_ptr<FmFilterData> pFilterItem);
+    void Remove( const ::std::vector<std::unique_ptr<FmFilterData>>::iterator& rPos );
+    FmFormItem* Find(const ::std::vector<std::unique_ptr<FmFilterData>>& rItems, const css::uno::Reference< css::form::runtime::XFormController > & xController) const;
+    FmFormItem* Find(const ::std::vector<std::unique_ptr<FmFilterData>>& rItems, const css::uno::Reference< css::form::XForm >& xForm) const;
     void Update(const css::uno::Reference< css::container::XIndexAccess > & xControllers, FmParentData* pParent);
 };
 
