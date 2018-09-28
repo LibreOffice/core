@@ -28,11 +28,15 @@
 #include <Qt5Widget.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 
 #include <sal/log.hxx>
 #include <vcl/popupmenuwindow.hxx>
 
 using namespace css::accessibility;
+using namespace css::uno;
 
 Qt5AccessibleWidget::Qt5AccessibleWidget(Qt5Widget* pFrame, vcl::Window* pWindow)
     : m_pFrame(pFrame)
@@ -428,9 +432,130 @@ QAccessible::Role Qt5AccessibleWidget::role() const
     }
     return QAccessible::NoRole;
 }
+
+namespace
+{
+void lcl_addState(QAccessible::State* state, sal_Int16 nState)
+{
+    switch (nState)
+    {
+        case AccessibleStateType::INVALID:
+            state->invalid = true;
+            break;
+        case AccessibleStateType::ACTIVE:
+            state->active = true;
+            break;
+        case AccessibleStateType::ARMED:
+            // No match
+            break;
+        case AccessibleStateType::BUSY:
+            state->busy = true;
+            break;
+        case AccessibleStateType::CHECKED:
+            state->checked = true;
+            break;
+        case AccessibleStateType::EDITABLE:
+            state->editable = true;
+            break;
+        case AccessibleStateType::ENABLED:
+            state->disabled = false;
+            break;
+        case AccessibleStateType::EXPANDABLE:
+            state->expandable = true;
+            break;
+        case AccessibleStateType::FOCUSABLE:
+            state->focusable = true;
+            break;
+        case AccessibleStateType::FOCUSED:
+            state->focused = true;
+            break;
+        case AccessibleStateType::HORIZONTAL:
+            //state->horizontal = true;
+            break;
+        case AccessibleStateType::ICONIFIED:
+            //state->iconified = true;
+            break;
+        case AccessibleStateType::INDETERMINATE:
+            // No match
+            break;
+        case AccessibleStateType::MANAGES_DESCENDANTS:
+            // No match
+            break;
+        case AccessibleStateType::MODAL:
+            state->modal = true;
+            break;
+        case AccessibleStateType::OPAQUE:
+            // No match
+            break;
+        case AccessibleStateType::PRESSED:
+            state->pressed = true;
+            break;
+        case AccessibleStateType::RESIZABLE:
+            state->sizeable = true;
+            break;
+        case AccessibleStateType::SELECTABLE:
+            state->selectable = true;
+            break;
+        case AccessibleStateType::SELECTED:
+            state->selected = true;
+            break;
+        case AccessibleStateType::SENSITIVE:
+            // No match
+            break;
+        case AccessibleStateType::SHOWING:
+            // No match
+            break;
+        case AccessibleStateType::SINGLE_LINE:
+            // No match
+            break;
+        case AccessibleStateType::STALE:
+            // No match
+            break;
+        case AccessibleStateType::TRANSIENT:
+            // No match
+            break;
+        case AccessibleStateType::VERTICAL:
+            // No match
+            break;
+        case AccessibleStateType::VISIBLE:
+            state->invisible = false;
+            break;
+        case AccessibleStateType::DEFAULT:
+            // No match
+            break;
+        case AccessibleStateType::DEFUNC:
+            state->invalid = true;
+            break;
+        case AccessibleStateType::MULTI_SELECTABLE:
+            state->multiSelectable = true;
+            break;
+        default:
+            SAL_WARN("vcl.qt5", "Unmapped state: " << nState);
+            break;
+    }
+}
+}
+
 QAccessible::State Qt5AccessibleWidget::state() const
 {
     QAccessible::State state;
+
+    Reference<XAccessible> xAccessible(m_pWindow->GetAccessible());
+    if (!xAccessible.is())
+        return state;
+    Reference<XAccessibleStateSet> xStateSet(
+        xAccessible->getAccessibleContext()->getAccessibleStateSet());
+
+    if (!xStateSet.is())
+        return state;
+
+    Sequence<sal_Int16> aStates = xStateSet->getStates();
+
+    for (sal_Int32 n = 0; n < aStates.getLength(); n++)
+    {
+        lcl_addState(&state, n);
+    }
+
     return state;
 }
 
