@@ -111,7 +111,7 @@ class WindowIterator
     const value_type m_pParent, m_pRealParent, m_pWindow;
     const bool m_bTestEnabled;
     value_type m_pCurrentWindow;
-    std::vector<value_type> m_aWindowStack;
+    value_type m_pCurrentParent;
     bool m_bCurrentWindowMayHaveChildren;
     bool m_bIsTabControl;
 
@@ -127,7 +127,7 @@ public:
         , m_pWindow(pWindow)
         , m_bTestEnabled(bEnabled)
         , m_pCurrentWindow(m_pRealParent)
-        , m_aWindowStack({nullptr})
+        , m_pCurrentParent(nullptr)
         , m_bCurrentWindowMayHaveChildren(true)
         , m_bIsTabControl(false)
     {
@@ -178,16 +178,15 @@ public:
 #ifdef DUMP_ITER
                 SAL_DEBUG("!window " << WT(pNextImplWindow));
 #endif
+                if (pNextWindow == m_pRealParent)
+                    break;
+
                 vcl::Window* pParent = nullptr;
                 while (true)
                 {
                     assert(!pWindow);
 
-                    if (nullptr != pParent)
-                        m_aWindowStack.pop_back();
-                    pParent = m_aWindowStack.back();
-                    if (nullptr == pParent)
-                        break;
+                    pParent = getNonLayoutParent(pNextWindow)->GetWindow(GetWindowType::Border);
                     vcl::Window* pImplParent = pParent->ImplGetWindow();
 
                     if (pImplParent->GetType() == WindowType::TABCONTROL)
@@ -204,7 +203,11 @@ public:
                     SAL_DEBUG("nextLogicalChildOfParent " << pImplParent << " " << pNextWindow << " >> " << WT(pWindow));
 #endif
                     if (!pWindow)
+                    {
+                        if (pImplParent == m_pRealParent)
+                            break;
                         pNextWindow = pParent;
+                    }
                     else
                     {
                         pNextImplWindow = pWindow->ImplGetWindow();
@@ -213,6 +216,7 @@ public:
                         else
                         {
                             pNextWindow = pWindow;
+                            m_pCurrentParent = pImplParent;
                             break;
                         }
                     }
@@ -225,7 +229,7 @@ public:
             }
             else if (m_bCurrentWindowMayHaveChildren || m_bIsTabControl)
             {
-                m_aWindowStack.push_back(pNextWindow);
+                m_pCurrentParent = pNextWindow;
                 pNextWindow = pWindow;
                 pNextImplWindow = pNextWindow->ImplGetWindow();
             }
@@ -249,9 +253,9 @@ public:
                 m_bIsTabControl = false;
             }
 
-            pWindow = nextLogicalChildOfParent(m_aWindowStack.back(), pNextWindow);
+            pWindow = nextLogicalChildOfParent(m_pCurrentParent, pNextWindow);
 #ifdef DUMP_ITER
-            SAL_DEBUG("nextLogicalChildOfParent " << m_aWindowStack.back() << " " << pNextWindow << " => " << WT(pWindow));
+            SAL_DEBUG("nextLogicalChildOfParent " << m_pCurrentParent << " " << pNextWindow << " => " << WT(pWindow));
 #endif
             if (pWindow)
             {
