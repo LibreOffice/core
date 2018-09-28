@@ -42,7 +42,11 @@ public:
  */
 void FirebirdTest::testEmptyDBConnection()
 {
-    auto const tmp = createTempCopy("firebird_empty.odb");
+#ifdef OSL_BIGENDIAN
+// FIXME
+#else
+    auto const tmp = createTempCopy("firebird_empty_le.odb");
+#endif
     uno::Reference< XOfficeDatabaseDocument > xDocument =
         getDocumentForUrl(tmp.GetURL());
 
@@ -57,8 +61,12 @@ void FirebirdTest::testEmptyDBConnection()
  */
 void FirebirdTest::testIntegerDatabase()
 {
+#ifdef OSL_BIGENDIAN
+// FIXME
+#else
     uno::Reference< XOfficeDatabaseDocument > xDocument =
-        getDocumentForFileName("firebird_integer_x64le_ods12.odb");
+        getDocumentForFileName("firebird_integer_le_ods12.odb");
+#endif
 
     uno::Reference< XConnection > xConnection =
         getConnectionForDocument(xDocument);
