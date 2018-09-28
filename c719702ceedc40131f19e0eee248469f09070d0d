@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_0fe6f517",
+        "filename": "test/source/table/xtablechart.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-09-28T17:39:27Z",
+      "side": 1,
+      "message": "That assert isn\u0027t very meaningful, better replace it with something else.",
+      "revId": "c719702ceedc40131f19e0eee248469f09070d0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_2fe1b9ff",
+        "filename": "test/source/table/xtablechart.cxx",
+        "patchSetId": 25
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-09-28T17:39:27Z",
+      "side": 1,
+      "message": "That will not detect when the length of the ranges are different.\nReplace it with an assert and then test will fail.\nCPPUINT_ASSERT(aRanges.getLength(), aRanges2.getLength());",
+      "revId": "c719702ceedc40131f19e0eee248469f09070d0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
