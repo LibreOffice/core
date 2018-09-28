@@ -21,13 +21,13 @@
 
 #include <sfx2/basedlgs.hxx>
 
-namespace vcl { class Window; }
+namespace weld { class Window; }
 class SfxItemSet;
 
-class SwNumFormatDlg : public SfxSingleTabDialog
+class SwNumFormatDlg : public SfxSingleTabDialogController
 {
 public:
-     SwNumFormatDlg(vcl::Window* pParent, const SfxItemSet& rSet);
+     SwNumFormatDlg(weld::Window* pParent, const SfxItemSet& rSet);
 };
 
 #endif
