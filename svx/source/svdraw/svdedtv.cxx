@@ -266,7 +266,7 @@ void SdrEditView::DeleteLayer(const OUString& rName)
         }
         else
         {
-            delete rLA.RemoveLayer(nLayerNum);
+            rLA.RemoveLayer(nLayerNum);
         }
 
         mpModel->SetChanged();
