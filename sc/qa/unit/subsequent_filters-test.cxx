@@ -1694,18 +1694,34 @@ void ScFiltersTest::testActiveXOptionButtonGroup()
     xPropertySet->getPropertyValue("GroupName") >>= sGroupName;
     CPPUNIT_ASSERT_EQUAL(OUString("Sheet1"), sGroupName);
 
-    // Form optionbuttons (without Group names) were not grouped.
+    // Optionbuttons (without Group names) were not grouped.
     // The two optionbuttons should have the same auto-generated group name.
+    OUString sGroupName2; //ActiveX controls
+    xControlShape.set(xIA_DrawPage->getByIndex(2), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("GroupName") >>= sGroupName2;
+    CPPUNIT_ASSERT_EQUAL( false, sGroupName2.isEmpty() );
+
+    OUString sGroupName3;
+    xControlShape.set(xIA_DrawPage->getByIndex(3), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("GroupName") >>= sGroupName3;
+    CPPUNIT_ASSERT_EQUAL( sGroupName2, sGroupName3 );
+    CPPUNIT_ASSERT( sGroupName != sGroupName3 );
+
+    OUString sGroupName4; //Form controls
     xControlShape.set(xIA_DrawPage->getByIndex(4), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY_THROW);
-    xPropertySet->getPropertyValue("GroupName") >>= sGroupName;
-    CPPUNIT_ASSERT_EQUAL(false, sGroupName.isEmpty());
+    xPropertySet->getPropertyValue("GroupName") >>= sGroupName4;
+    CPPUNIT_ASSERT_EQUAL( false, sGroupName4.isEmpty() );
 
     OUString sGroupName5;
     xControlShape.set(xIA_DrawPage->getByIndex(5), uno::UNO_QUERY_THROW);
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY_THROW);
     xPropertySet->getPropertyValue("GroupName") >>= sGroupName5;
-    CPPUNIT_ASSERT_EQUAL(sGroupName, sGroupName5);
+    CPPUNIT_ASSERT_EQUAL( sGroupName4, sGroupName5 );
+    CPPUNIT_ASSERT( sGroupName2 != sGroupName5 );
+    CPPUNIT_ASSERT( sGroupName != sGroupName5 );
 }
 
 void ScFiltersTest::testChartImportODS()
