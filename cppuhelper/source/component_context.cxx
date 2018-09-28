@@ -137,7 +137,7 @@ protected:
             , lateInit( lateInit_ )
             {}
     };
-    typedef std::unordered_map< OUString, ContextEntry *  > t_map;
+    typedef std::unordered_map< OUString, ContextEntry  > t_map;
     t_map m_map;
 
     Reference< lang::XMultiComponentFactory > m_xSMgr;
@@ -150,7 +150,6 @@ public:
     ComponentContext(
         ContextEntry_Init const * pEntries, sal_Int32 nEntries,
         Reference< XComponentContext > const & xDelegate );
-    virtual ~ComponentContext() override;
 
     // XComponentContext
     virtual Any SAL_CALL getValueByName( OUString const & rName ) override;
@@ -177,12 +176,11 @@ public:
 void ComponentContext::insertByName(
     OUString const & name, Any const & element )
 {
-    t_map::mapped_type entry(
-        new ContextEntry(
+    ContextEntry entry(
             element,
             /* lateInit_: */
             name.startsWith( "/singletons/" ) &&
-            !element.hasValue() ) );
+            !element.hasValue() );
     MutexGuard guard( m_mutex );
     std::pair<t_map::iterator, bool> insertion( m_map.emplace(
         name, entry ) );
@@ -202,7 +200,6 @@ void ComponentContext::removeByName( OUString const & name )
             "no such element: " + name,
             static_cast<OWeakObject *>(this) );
 
-    delete iFind->second;
     m_map.erase(iFind);
 }
 
@@ -212,7 +209,7 @@ void ComponentContext::replaceByName(
     OUString const & name, Any const & element )
 {
     MutexGuard guard( m_mutex );
-    t_map::const_iterator const iFind( m_map.find( name ) );
+    t_map::iterator iFind( m_map.find( name ) );
     if (iFind == m_map.end())
         throw container::NoSuchElementException(
             "no such element: " + name,
@@ -220,13 +217,13 @@ void ComponentContext::replaceByName(
     if (name.startsWith( "/singletons/" ) &&
         !element.hasValue())
     {
-        iFind->second->value.clear();
-        iFind->second->lateInit = true;
+        iFind->second.value.clear();
+        iFind->second.lateInit = true;
     }
     else
     {
-        iFind->second->value = element;
-        iFind->second->lateInit = false;
+        iFind->second.value = element;
+        iFind->second.lateInit = false;
     }
 }
 
@@ -276,13 +273,13 @@ sal_Bool ComponentContext::hasElements()
 Any ComponentContext::lookupMap( OUString const & rName )
 {
     ResettableMutexGuard guard( m_mutex );
-    t_map::const_iterator iFind( m_map.find( rName ) );
+    t_map::iterator iFind( m_map.find( rName ) );
     if (iFind == m_map.end())
         return Any();
 
-    t_map::mapped_type pEntry = iFind->second;
-    if (! pEntry->lateInit)
-        return pEntry->value;
+    ContextEntry& rFindEntry = iFind->second;
+    if (! rFindEntry.lateInit)
+        return rFindEntry.value;
 
     // late init singleton entry
     Reference< XInterface > xInstance;
@@ -351,14 +348,14 @@ Any ComponentContext::lookupMap( OUString const & rName )
     iFind = m_map.find( rName );
     if (iFind != m_map.end())
     {
-        pEntry = iFind->second;
-        if (pEntry->lateInit)
+        ContextEntry & rEntry = iFind->second;
+        if (rEntry.lateInit)
         {
-            pEntry->value <<= xInstance;
-            pEntry->lateInit = false;
-            return pEntry->value;
+            rEntry.value <<= xInstance;
+            rEntry.lateInit = false;
+            return rEntry.value;
         }
-        ret = pEntry->value;
+        ret = rEntry.value;
     }
     guard.clear();
     if (ret != xInstance) {
@@ -397,44 +394,35 @@ Reference< lang::XMultiComponentFactory > ComponentContext::getServiceManager()
     return m_xSMgr;
 }
 
-ComponentContext::~ComponentContext()
-{
-    t_map::const_iterator iPos( m_map.begin() );
-    t_map::const_iterator const iEnd( m_map.end() );
-    for ( ; iPos != iEnd; ++iPos )
-        delete iPos->second;
-    m_map.clear();
-}
-
 void ComponentContext::disposing()
 {
     Reference< lang::XComponent > xTDMgr, xAC; // to be disposed separately
 
     // dispose all context objects
-    t_map::const_iterator iPos( m_map.begin() );
-    t_map::const_iterator const iEnd( m_map.end() );
+    t_map::iterator iPos( m_map.begin() );
+    t_map::iterator const iEnd( m_map.end() );
     for ( ; iPos != iEnd; ++iPos )
     {
-        t_map::mapped_type pEntry = iPos->second;
+        ContextEntry& rEntry = iPos->second;
 
         // service manager disposed separately
         if (!m_xSMgr.is() ||
             !iPos->first.startsWith( SMGR_SINGLETON ))
         {
-            if (pEntry->lateInit)
+            if (rEntry.lateInit)
             {
                 // late init
                 MutexGuard guard( m_mutex );
-                if (pEntry->lateInit)
+                if (rEntry.lateInit)
                 {
-                    pEntry->value.clear(); // release factory
-                    pEntry->lateInit = false;
+                    rEntry.value.clear(); // release factory
+                    rEntry.lateInit = false;
                     continue;
                 }
             }
 
             Reference< lang::XComponent > xComp;
-            pEntry->value >>= xComp;
+            rEntry.value >>= xComp;
             if (xComp.is())
             {
                 if ( iPos->first == TDMGR_SINGLETON )
@@ -461,9 +449,6 @@ void ComponentContext::disposing()
     // dispose tdmgr; revokes callback from cppu runtime
     try_dispose( xTDMgr );
 
-    iPos = m_map.begin();
-    for ( ; iPos != iEnd; ++iPos )
-        delete iPos->second;
     m_map.clear();
 
     // Hack to terminate any JNI bridge's AsynchronousFinalizer thread (as JNI
@@ -503,15 +488,15 @@ ComponentContext::ComponentContext(
         if (rEntry.bLateInitService)
         {
             // singleton entry
-            m_map[ rEntry.name ] = new ContextEntry( Any(), true );
+            m_map.emplace( rEntry.name, ContextEntry( Any(), true ) );
             // service
-            m_map[ rEntry.name + "/service" ] = new ContextEntry( rEntry.value, false );
+            m_map.emplace( rEntry.name + "/service", ContextEntry( rEntry.value, false ) );
             // initial-arguments are provided as optional context entry
         }
         else
         {
             // only value, no late init factory nor string
-            m_map[ rEntry.name ] = new ContextEntry( rEntry.value, false );
+            m_map.emplace( rEntry.name, ContextEntry( rEntry.value, false ) );
         }
     }
 
