@@ -644,7 +644,7 @@ sal_Int32 gatherName(const sal_Char* text)
 }
 /**
  Read SQL Name literal for predicate check
- Valid Names or internatioanl keywords:
+ Valid Names or international keywords:
  As we have international keywords, we test first on them
 */
 sal_Int32 gatherNamePre(const sal_Char* text)
