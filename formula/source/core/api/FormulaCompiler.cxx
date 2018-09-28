@@ -988,11 +988,10 @@ bool FormulaCompiler::IsOpCodeVolatile( OpCode eOp )
         case ocFormula:
         case ocInfo:
         // more than one parameters:
-            // ocIndirect/ocIndirectXL otherwise would have to do
+            // ocIndirect otherwise would have to do
             // StopListening and StartListening on a reference for every
             // interpreted value.
         case ocIndirect:
-        case ocIndirectXL:
             // ocOffset results in indirect references.
         case ocOffset:
             // ocDebugVar shows internal value that may change as the internal state changes.

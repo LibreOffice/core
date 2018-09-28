@@ -303,9 +303,7 @@ enum OpCode : sal_uInt16
         ocDBVarP            = SC_OPCODE_DB_VAR_P,
     // Management functions
         ocIndirect          = SC_OPCODE_INDIRECT,
-        ocIndirectXL        = SC_OPCODE_INDIRECT_XL,
         ocAddress           = SC_OPCODE_ADDRESS,
-        ocAddressXL         = SC_OPCODE_ADDRESS_XL,
         ocMatch             = SC_OPCODE_MATCH,
         ocCountEmptyCells   = SC_OPCODE_COUNT_EMPTY_CELLS,
         ocCountIf           = SC_OPCODE_COUNT_IF,
@@ -782,9 +780,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocDBVar: return "DBVar";
     case ocDBVarP: return "DBVarP";
     case ocIndirect: return "Indirect";
-    case ocIndirectXL: return "IndirectXL";
     case ocAddress: return "Address";
-    case ocAddressXL: return "AddressXL";
     case ocMatch: return "Match";
     case ocCountEmptyCells: return "CountEmptyCells";
     case ocCountIf: return "CountIf";
