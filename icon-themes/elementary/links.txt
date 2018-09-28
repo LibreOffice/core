@@ -50,7 +50,6 @@ cmd/32/insertauthorfield.png cmd/32/dbviewaliases.png
 cmd/32/insertcell.png cmd/32/insertcellsright.png
 cmd/32/insertcolumnsbefore.png cmd/32/insertcolumns.png
 cmd/32/insertctrl.png cmd/32/inserttable.png
-cmd/32/insertcurrencyfield.png cmd/32/formattedfield.png
 cmd/32/insertcurrentdate.png cmd/32/datefield.png
 cmd/32/insertcurrenttime.png cmd/32/timefield.png
 cmd/32/insertdatefield.png cmd/32/datefield.png
@@ -106,7 +105,6 @@ cmd/lc_insertauthorfield.png cmd/lc_dbviewaliases.png
 cmd/lc_insertcell.png cmd/lc_insertcellsright.png
 cmd/lc_insertcolumnsbefore.png cmd/lc_insertcolumns.png
 cmd/lc_insertctrl.png cmd/lc_inserttable.png
-cmd/lc_insertcurrencyfield.png cmd/lc_formattedfield.png
 cmd/lc_insertcurrentdate.png cmd/lc_datefield.png
 cmd/lc_insertcurrenttime.png cmd/lc_timefield.png
 cmd/lc_insertdatefield.png cmd/lc_datefield.png
@@ -164,7 +162,6 @@ cmd/sc_insertauthorfield.png cmd/sc_dbviewaliases.png
 cmd/sc_insertcell.png cmd/sc_insertcellsright.png
 cmd/sc_insertcolumnsbefore.png cmd/sc_insertcolumns.png
 cmd/sc_insertctrl.png cmd/sc_inserttable.png
-cmd/sc_insertcurrencyfield.png cmd/sc_formattedfield.png
 cmd/sc_insertcurrentdate.png cmd/sc_datefield.png
 cmd/sc_insertcurrenttime.png cmd/sc_timefield.png
 cmd/sc_insertdatefield.png cmd/sc_datefield.png
@@ -397,15 +394,12 @@ cmd/sc_sectionaligntop.png cmd/sc_alignup.png
 # Graphic
 cmd/32/colorview.png cmd/32/graphicfilterinvert.png
 cmd/32/formatimagemenu.png cmd/32/graphic.png
-cmd/32/grafgamma.png cmd/32/graphicfilterinvert.png
 cmd/32/grafinvert.png cmd/32/graphicfilterinvert.png
 cmd/32/grafmode.png cmd/32/graphicdialog.png
 cmd/32/graphicfilterposter.png cmd/32/graphicdialog.png
 cmd/32/imagebutton.png cmd/32/gallery.png
 
 cmd/lc_colorview.png cmd/lc_graphicfilterinvert.png
-cmd/lc_formatimagemenu.png cmd/lc_graphic.png
-cmd/lc_grafgamma.png cmd/lc_graphicfilterinvert.png
 cmd/lc_grafinvert.png cmd/lc_graphicfilterinvert.png
 cmd/lc_grafmode.png cmd/lc_graphicdialog.png
 cmd/lc_graphicfilterposter.png cmd/lc_graphicdialog.png
@@ -414,7 +408,6 @@ cmd/lc_imagebutton.png cmd/lc_gallery.png
 cmd/sc_colorview.png cmd/sc_graphicfilterinvert.png
 cmd/sc_formatimagemenu.png cmd/sc_graphic.png
 cmd/sc_graphicfilterposter.png cmd/sc_graphicdialog.png
-cmd/sc_grafgamma.png cmd/sc_graphicfilterinvert.png
 cmd/sc_grafinvert.png cmd/sc_graphicfilterinvert.png
 cmd/sc_grafmode.png cmd/sc_graphicdialog.png
 cmd/sc_imagebutton.png cmd/sc_gallery.png
@@ -437,7 +430,6 @@ cmd/32/flowchartshapes.flowchart-extract.png cmd/32/basicshapes.isosceles-triang
 cmd/32/flowchartshapes.flowchart-magnetic-disk.png cmd/32/basicshapes.can.png
 cmd/32/flowchartshapes.flowchart-manual-operation.png cmd/32/basicshapes.trapezoid.png
 cmd/32/flowchartshapes.flowchart-merge.png cmd/32/fontworkshapetype.fontwork-triangle-down.png
-cmd/32/flowchartshapes.flowchart-punched-tape.png cmd/32/fontworkshapetype.fontwork-wave.png
 cmd/32/fontworkshapetype.fontwork-circle-pour.png cmd/32/basicshapes.ring.png
 cmd/32/fontworkshapetype.fontwork-fade-down.png cmd/32/basicshapes.trapezoid.png
 cmd/32/fontworkshapetype.fontwork-triangle-up.png cmd/32/basicshapes.isosceles-triangle.png
@@ -469,7 +461,6 @@ cmd/lc_flowchartshapes.flowchart-extract.png cmd/lc_basicshapes.isosceles-triang
 cmd/lc_flowchartshapes.flowchart-magnetic-disk.png cmd/lc_basicshapes.can.png
 cmd/lc_flowchartshapes.flowchart-manual-operation.png cmd/lc_basicshapes.trapezoid.png
 cmd/lc_flowchartshapes.flowchart-merge.png cmd/lc_fontworkshapetype.fontwork-triangle-down.png
-cmd/lc_flowchartshapes.flowchart-punched-tape.png cmd/lc_fontworkshapetype.fontwork-wave.png
 cmd/lc_fontworkshapetype.fontwork-circle-pour.png cmd/lc_basicshapes.ring.png
 cmd/lc_fontworkshapetype.fontwork-fade-down.png cmd/lc_basicshapes.trapezoid.png
 cmd/lc_fontworkshapetype.fontwork-triangle-up.png cmd/lc_basicshapes.isosceles-triangle.png
@@ -501,7 +492,6 @@ cmd/sc_flowchartshapes.flowchart-extract.png cmd/sc_basicshapes.isosceles-triang
 cmd/sc_flowchartshapes.flowchart-magnetic-disk.png cmd/sc_basicshapes.can.png
 cmd/sc_flowchartshapes.flowchart-manual-operation.png cmd/sc_basicshapes.trapezoid.png
 cmd/sc_flowchartshapes.flowchart-merge.png cmd/sc_fontworkshapetype.fontwork-triangle-down.png
-cmd/sc_flowchartshapes.flowchart-punched-tape.png cmd/sc_fontworkshapetype.fontwork-wave.png
 cmd/sc_fontworkshapetype.fontwork-circle-pour.png cmd/sc_basicshapes.ring.png
 cmd/sc_fontworkshapetype.fontwork-fade-down.png cmd/sc_basicshapes.trapezoid.png
 cmd/sc_fontworkshapetype.fontwork-triangle-up.png cmd/sc_basicshapes.isosceles-triangle.png
@@ -763,11 +753,6 @@ cmd/sc_closedocs.png cmd/sc_closedoc.png
 cmd/sc_closepreview.png cmd/sc_closedoc.png
 cmd/sc_exitsearch.png cmd/sc_closedoc.png
 
-# arc
-cmd/32/basicshapes.block-arc.png cmd/32/arc.png
-cmd/lc_basicshapes.block-arc.png cmd/lc_arc.png
-cmd/sc_basicshapes.block-arc.png cmd/sc_arc.png
-
 # Cancel
 cmd/32/no.png cmd/32/cancel.png
 cmd/32/removetableof.png cmd/32/cancel.png
@@ -843,35 +828,29 @@ cmd/32/browsebackward.png cmd/32/prevrecord.png
 cmd/32/navigateback.png cmd/32/prevrecord.png
 cmd/32/pageup.png cmd/32/prevrecord.png
 cmd/32/previouspage.png cmd/32/prevrecord.png
-cmd/32/previoustrackedchange.png cmd/32/prevrecord.png
 
 cmd/lc_browsebackward.png cmd/lc_prevrecord.png
 cmd/lc_navigateback.png cmd/lc_prevrecord.png
 cmd/lc_pageup.png cmd/lc_prevrecord.png
 cmd/lc_previouspage.png cmd/lc_prevrecord.png
-cmd/lc_previoustrackedchange.png cmd/lc_prevrecord.png
 
 cmd/sc_browsebackward.png cmd/sc_prevrecord.png
 cmd/sc_navigateback.png cmd/sc_prevrecord.png
 cmd/sc_pageup.png cmd/sc_prevrecord.png
 cmd/sc_previouspage.png cmd/sc_prevrecord.png
-cmd/sc_previoustrackedchange.png cmd/sc_prevrecord.png
 
 # >
 cmd/32/pagedown.png cmd/32/nextrecord.png
 cmd/32/navigateforward.png cmd/32/nextrecord.png
 cmd/32/nextpage.png cmd/32/nextrecord.png
-cmd/32/nexttrackedchange.png cmd/32/nextrecord.png
 
 cmd/lc_pagedown.png cmd/lc_nextrecord.png
 cmd/lc_navigateforward.png cmd/lc_nextrecord.png
 cmd/lc_nextpage.png cmd/lc_nextrecord.png
-cmd/lc_nexttrackedchange.png cmd/lc_nextrecord.png
 
 cmd/sc_pagedown.png cmd/sc_nextrecord.png
 cmd/sc_navigateforward.png cmd/sc_nextrecord.png
 cmd/sc_nextpage.png cmd/sc_nextrecord.png
-cmd/sc_nexttrackedchange.png cmd/sc_nextrecord.png
 
 # >|
 cmd/32/gotoend.png cmd/32/lastrecord.png
@@ -1137,17 +1116,17 @@ cmd/lc_hyphenation.png cmd/lc_hyphenate.png
 cmd/sc_hyphenation.png cmd/sc_hyphenate.png
 
 # Currency
-cmd/32/currencyfield.png cmd/32/formattedfield.png
-cmd/32/numberformatcurrency.png cmd/32/formattedfield.png
-cmd/32/numberformatcurrencysimple.png cmd/32/formattedfield.png
+cmd/32/insertcurrencyfield.png cmd/32/currencyfield.png
+cmd/32/numberformatcurrency.png cmd/32/currencyfield.png
+cmd/32/numberformatcurrencysimple.png cmd/32/currencyfield.png
 
-cmd/lc_currencyfield.png cmd/lc_formattedfield.png
-cmd/lc_numberformatcurrency.png cmd/lc_formattedfield.png
-cmd/lc_numberformatcurrencysimple.png cmd/lc_formattedfield.png
+cmd/lc_insertcurrencyfield.png cmd/lc_currencyfield.png
+cmd/lc_numberformatcurrency.png cmd/lc_currencyfield.png
+cmd/lc_numberformatcurrencysimple.png cmd/lc_currencyfield.png
 
-cmd/sc_numberformatcurrency.png cmd/sc_formattedfield.png
-cmd/sc_currencyfield.png cmd/sc_formattedfield.png
-cmd/sc_numberformatcurrencysimple.png cmd/sc_formattedfield.png
+cmd/sc_insertcurrencyfield.png cmd/sc_currencyfield.png
+cmd/sc_numberformatcurrency.png cmd/sc_currencyfield.png
+cmd/sc_numberformatcurrencysimple.png cmd/sc_currencyfield.png
 
 # Fontwork
 cmd/32/fontworkshapetype.png cmd/32/fontwork.png
@@ -1446,10 +1425,6 @@ cmd/lc_showgraphics.png cmd/lc_graphic.png
 cmd/sc_showgraphics.png cmd/sc_graphic.png
 
 # navigator
-cmd/32/dsbrowserexplorer.png cmd/32/showfmexplorer.png
-cmd/lc_dsbrowserexplorer.png cmd/lc_showfmexplorer.png
-cmd/sc_dsbrowserexplorer.png cmd/sc_showfmexplorer.png
-
 cmd/32/savesimple.png cmd/32/save.png
 cmd/lc_savesimple.png cmd/lc_save.png
 cmd/sc_savesimple.png cmd/sc_save.png
@@ -1868,7 +1843,7 @@ svx/res/zoom_page_statusbar.png cmd/sc_zoompanning.png
 svx/res/reloads.png cmd/sc_reload.png
 
 svx/res/symphony/AdjustColorBlue_16x16.png cmd/sc_grafblue.png
-svx/res/symphony/AdjustColorGamma_16x16.png cmd/sc_graphicfilterinvert.png
+svx/res/symphony/AdjustColorGamma_16x16.png cmd/sc_grafgamma.png
 svx/res/symphony/AdjustColorGreen_16x16.png cmd/sc_grafgreen.png
 svx/res/symphony/AdjustColorRed_16x16.png cmd/sc_grafred.png
 svx/res/symphony/fill_color.png cmd/sc_backgroundcolor.png
@@ -2000,18 +1975,24 @@ cmd/sc_showruler.png cmd/sc_ruler.png
 cmd/sc_sidebarmenu.png cmd/sc_sidebar.png
 cmd/sc_toolbarsmenu.png cmd/sc_showtoolbar.png
 
-# Comment 
+# Comment
 cmd/32/deleteallnotes.png cmd/32/deleteallannotation.png
+cmd/32/deletecomment.png cmd/32/deleteannotation.png
 cmd/32/deletenote.png cmd/32/deleteannotation.png
 cmd/32/formatallnotes.png cmd/32/editannotation.png
+cmd/32/showinlinetooltips.png cmd/32/editannotation.png
 
 cmd/lc_deleteallnotes.png cmd/lc_deleteallannotation.png
+cmd/lc_deletecomment.png cmd/lc_deleteannotation.png
 cmd/lc_deletenote.png cmd/lc_deleteannotation.png
 cmd/lc_formatallnotes.png cmd/lc_editannotation.png
+cmd/lc_showinlinetooltips.png cmd/lc_editannotation.png
 
 cmd/sc_deleteallnotes.png cmd/sc_deleteallannotation.png
+cmd/sc_deletecomment.png cmd/sc_deleteannotation.png
 cmd/sc_deletenote.png cmd/sc_deleteannotation.png
 cmd/sc_formatallnotes.png cmd/sc_editannotation.png
+cmd/sc_showinlinetooltips.png cmd/sc_editannotation.png
 
 # Other
 

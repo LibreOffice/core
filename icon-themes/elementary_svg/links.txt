@@ -50,7 +50,6 @@ cmd/32/insertauthorfield.svg cmd/32/dbviewaliases.svg
 cmd/32/insertcell.svg cmd/32/insertcellsright.svg
 cmd/32/insertcolumnsbefore.svg cmd/32/insertcolumns.svg
 cmd/32/insertctrl.svg cmd/32/inserttable.svg
-cmd/32/insertcurrencyfield.svg cmd/32/formattedfield.svg
 cmd/32/insertcurrentdate.svg cmd/32/datefield.svg
 cmd/32/insertcurrenttime.svg cmd/32/timefield.svg
 cmd/32/insertdatefield.svg cmd/32/datefield.svg
@@ -106,7 +105,6 @@ cmd/lc_insertauthorfield.svg cmd/lc_dbviewaliases.svg
 cmd/lc_insertcell.svg cmd/lc_insertcellsright.svg
 cmd/lc_insertcolumnsbefore.svg cmd/lc_insertcolumns.svg
 cmd/lc_insertctrl.svg cmd/lc_inserttable.svg
-cmd/lc_insertcurrencyfield.svg cmd/lc_formattedfield.svg
 cmd/lc_insertcurrentdate.svg cmd/lc_datefield.svg
 cmd/lc_insertcurrenttime.svg cmd/lc_timefield.svg
 cmd/lc_insertdatefield.svg cmd/lc_datefield.svg
@@ -164,7 +162,6 @@ cmd/sc_insertauthorfield.svg cmd/sc_dbviewaliases.svg
 cmd/sc_insertcell.svg cmd/sc_insertcellsright.svg
 cmd/sc_insertcolumnsbefore.svg cmd/sc_insertcolumns.svg
 cmd/sc_insertctrl.svg cmd/sc_inserttable.svg
-cmd/sc_insertcurrencyfield.svg cmd/sc_formattedfield.svg
 cmd/sc_insertcurrentdate.svg cmd/sc_datefield.svg
 cmd/sc_insertcurrenttime.svg cmd/sc_timefield.svg
 cmd/sc_insertdatefield.svg cmd/sc_datefield.svg
@@ -397,15 +394,12 @@ cmd/sc_sectionaligntop.svg cmd/sc_alignup.svg
 # Graphic
 cmd/32/colorview.svg cmd/32/graphicfilterinvert.svg
 cmd/32/formatimagemenu.svg cmd/32/graphic.svg
-cmd/32/grafgamma.svg cmd/32/graphicfilterinvert.svg
 cmd/32/grafinvert.svg cmd/32/graphicfilterinvert.svg
 cmd/32/grafmode.svg cmd/32/graphicdialog.svg
 cmd/32/graphicfilterposter.svg cmd/32/graphicdialog.svg
 cmd/32/imagebutton.svg cmd/32/gallery.svg
 
 cmd/lc_colorview.svg cmd/lc_graphicfilterinvert.svg
-cmd/lc_formatimagemenu.svg cmd/lc_graphic.svg
-cmd/lc_grafgamma.svg cmd/lc_graphicfilterinvert.svg
 cmd/lc_grafinvert.svg cmd/lc_graphicfilterinvert.svg
 cmd/lc_grafmode.svg cmd/lc_graphicdialog.svg
 cmd/lc_graphicfilterposter.svg cmd/lc_graphicdialog.svg
@@ -414,7 +408,6 @@ cmd/lc_imagebutton.svg cmd/lc_gallery.svg
 cmd/sc_colorview.svg cmd/sc_graphicfilterinvert.svg
 cmd/sc_formatimagemenu.svg cmd/sc_graphic.svg
 cmd/sc_graphicfilterposter.svg cmd/sc_graphicdialog.svg
-cmd/sc_grafgamma.svg cmd/sc_graphicfilterinvert.svg
 cmd/sc_grafinvert.svg cmd/sc_graphicfilterinvert.svg
 cmd/sc_grafmode.svg cmd/sc_graphicdialog.svg
 cmd/sc_imagebutton.svg cmd/sc_gallery.svg
@@ -437,7 +430,6 @@ cmd/32/flowchartshapes.flowchart-extract.svg cmd/32/basicshapes.isosceles-triang
 cmd/32/flowchartshapes.flowchart-magnetic-disk.svg cmd/32/basicshapes.can.svg
 cmd/32/flowchartshapes.flowchart-manual-operation.svg cmd/32/basicshapes.trapezoid.svg
 cmd/32/flowchartshapes.flowchart-merge.svg cmd/32/fontworkshapetype.fontwork-triangle-down.svg
-cmd/32/flowchartshapes.flowchart-punched-tape.svg cmd/32/fontworkshapetype.fontwork-wave.svg
 cmd/32/fontworkshapetype.fontwork-circle-pour.svg cmd/32/basicshapes.ring.svg
 cmd/32/fontworkshapetype.fontwork-fade-down.svg cmd/32/basicshapes.trapezoid.svg
 cmd/32/fontworkshapetype.fontwork-triangle-up.svg cmd/32/basicshapes.isosceles-triangle.svg
@@ -469,7 +461,6 @@ cmd/lc_flowchartshapes.flowchart-extract.svg cmd/lc_basicshapes.isosceles-triang
 cmd/lc_flowchartshapes.flowchart-magnetic-disk.svg cmd/lc_basicshapes.can.svg
 cmd/lc_flowchartshapes.flowchart-manual-operation.svg cmd/lc_basicshapes.trapezoid.svg
 cmd/lc_flowchartshapes.flowchart-merge.svg cmd/lc_fontworkshapetype.fontwork-triangle-down.svg
-cmd/lc_flowchartshapes.flowchart-punched-tape.svg cmd/lc_fontworkshapetype.fontwork-wave.svg
 cmd/lc_fontworkshapetype.fontwork-circle-pour.svg cmd/lc_basicshapes.ring.svg
 cmd/lc_fontworkshapetype.fontwork-fade-down.svg cmd/lc_basicshapes.trapezoid.svg
 cmd/lc_fontworkshapetype.fontwork-triangle-up.svg cmd/lc_basicshapes.isosceles-triangle.svg
@@ -501,7 +492,6 @@ cmd/sc_flowchartshapes.flowchart-extract.svg cmd/sc_basicshapes.isosceles-triang
 cmd/sc_flowchartshapes.flowchart-magnetic-disk.svg cmd/sc_basicshapes.can.svg
 cmd/sc_flowchartshapes.flowchart-manual-operation.svg cmd/sc_basicshapes.trapezoid.svg
 cmd/sc_flowchartshapes.flowchart-merge.svg cmd/sc_fontworkshapetype.fontwork-triangle-down.svg
-cmd/sc_flowchartshapes.flowchart-punched-tape.svg cmd/sc_fontworkshapetype.fontwork-wave.svg
 cmd/sc_fontworkshapetype.fontwork-circle-pour.svg cmd/sc_basicshapes.ring.svg
 cmd/sc_fontworkshapetype.fontwork-fade-down.svg cmd/sc_basicshapes.trapezoid.svg
 cmd/sc_fontworkshapetype.fontwork-triangle-up.svg cmd/sc_basicshapes.isosceles-triangle.svg
@@ -763,11 +753,6 @@ cmd/sc_closedocs.svg cmd/sc_closedoc.svg
 cmd/sc_closepreview.svg cmd/sc_closedoc.svg
 cmd/sc_exitsearch.svg cmd/sc_closedoc.svg
 
-# arc
-cmd/32/basicshapes.block-arc.svg cmd/32/arc.svg
-cmd/lc_basicshapes.block-arc.svg cmd/lc_arc.svg
-cmd/sc_basicshapes.block-arc.svg cmd/sc_arc.svg
-
 # Cancel
 cmd/32/no.svg cmd/32/cancel.svg
 cmd/32/removetableof.svg cmd/32/cancel.svg
@@ -843,35 +828,29 @@ cmd/32/browsebackward.svg cmd/32/prevrecord.svg
 cmd/32/navigateback.svg cmd/32/prevrecord.svg
 cmd/32/pageup.svg cmd/32/prevrecord.svg
 cmd/32/previouspage.svg cmd/32/prevrecord.svg
-cmd/32/previoustrackedchange.svg cmd/32/prevrecord.svg
 
 cmd/lc_browsebackward.svg cmd/lc_prevrecord.svg
 cmd/lc_navigateback.svg cmd/lc_prevrecord.svg
 cmd/lc_pageup.svg cmd/lc_prevrecord.svg
 cmd/lc_previouspage.svg cmd/lc_prevrecord.svg
-cmd/lc_previoustrackedchange.svg cmd/lc_prevrecord.svg
 
 cmd/sc_browsebackward.svg cmd/sc_prevrecord.svg
 cmd/sc_navigateback.svg cmd/sc_prevrecord.svg
 cmd/sc_pageup.svg cmd/sc_prevrecord.svg
 cmd/sc_previouspage.svg cmd/sc_prevrecord.svg
-cmd/sc_previoustrackedchange.svg cmd/sc_prevrecord.svg
 
 # >
 cmd/32/pagedown.svg cmd/32/nextrecord.svg
 cmd/32/navigateforward.svg cmd/32/nextrecord.svg
 cmd/32/nextpage.svg cmd/32/nextrecord.svg
-cmd/32/nexttrackedchange.svg cmd/32/nextrecord.svg
 
 cmd/lc_pagedown.svg cmd/lc_nextrecord.svg
 cmd/lc_navigateforward.svg cmd/lc_nextrecord.svg
 cmd/lc_nextpage.svg cmd/lc_nextrecord.svg
-cmd/lc_nexttrackedchange.svg cmd/lc_nextrecord.svg
 
 cmd/sc_pagedown.svg cmd/sc_nextrecord.svg
 cmd/sc_navigateforward.svg cmd/sc_nextrecord.svg
 cmd/sc_nextpage.svg cmd/sc_nextrecord.svg
-cmd/sc_nexttrackedchange.svg cmd/sc_nextrecord.svg
 
 # >|
 cmd/32/gotoend.svg cmd/32/lastrecord.svg
@@ -1137,17 +1116,17 @@ cmd/lc_hyphenation.svg cmd/lc_hyphenate.svg
 cmd/sc_hyphenation.svg cmd/sc_hyphenate.svg
 
 # Currency
-cmd/32/currencyfield.svg cmd/32/formattedfield.svg
-cmd/32/numberformatcurrency.svg cmd/32/formattedfield.svg
-cmd/32/numberformatcurrencysimple.svg cmd/32/formattedfield.svg
+cmd/32/insertcurrencyfield.svg cmd/32/currencyfield.svg
+cmd/32/numberformatcurrency.svg cmd/32/currencyfield.svg
+cmd/32/numberformatcurrencysimple.svg cmd/32/currencyfield.svg
 
-cmd/lc_currencyfield.svg cmd/lc_formattedfield.svg
-cmd/lc_numberformatcurrency.svg cmd/lc_formattedfield.svg
-cmd/lc_numberformatcurrencysimple.svg cmd/lc_formattedfield.svg
+cmd/lc_insertcurrencyfield.svg cmd/lc_currencyfield.svg
+cmd/lc_numberformatcurrency.svg cmd/lc_currencyfield.svg
+cmd/lc_numberformatcurrencysimple.svg cmd/lc_currencyfield.svg
 
-cmd/sc_numberformatcurrency.svg cmd/sc_formattedfield.svg
-cmd/sc_currencyfield.svg cmd/sc_formattedfield.svg
-cmd/sc_numberformatcurrencysimple.svg cmd/sc_formattedfield.svg
+cmd/sc_insertcurrencyfield.svg cmd/sc_currencyfield.svg
+cmd/sc_numberformatcurrency.svg cmd/sc_currencyfield.svg
+cmd/sc_numberformatcurrencysimple.svg cmd/sc_currencyfield.svg
 
 # Fontwork
 cmd/32/fontworkshapetype.svg cmd/32/fontwork.svg
@@ -1446,10 +1425,6 @@ cmd/lc_showgraphics.svg cmd/lc_graphic.svg
 cmd/sc_showgraphics.svg cmd/sc_graphic.svg
 
 # navigator
-cmd/32/dsbrowserexplorer.svg cmd/32/showfmexplorer.svg
-cmd/lc_dsbrowserexplorer.svg cmd/lc_showfmexplorer.svg
-cmd/sc_dsbrowserexplorer.svg cmd/sc_showfmexplorer.svg
-
 cmd/32/savesimple.svg cmd/32/save.svg
 cmd/lc_savesimple.svg cmd/lc_save.svg
 cmd/sc_savesimple.svg cmd/sc_save.svg
@@ -1868,7 +1843,7 @@ svx/res/zoom_page_statusbar.svg cmd/sc_zoompanning.svg
 svx/res/reloads.svg cmd/sc_reload.svg
 
 svx/res/symphony/AdjustColorBlue_16x16.svg cmd/sc_grafblue.svg
-svx/res/symphony/AdjustColorGamma_16x16.svg cmd/sc_graphicfilterinvert.svg
+svx/res/symphony/AdjustColorGamma_16x16.svg cmd/sc_grafgamma.svg
 svx/res/symphony/AdjustColorGreen_16x16.svg cmd/sc_grafgreen.svg
 svx/res/symphony/AdjustColorRed_16x16.svg cmd/sc_grafred.svg
 svx/res/symphony/fill_color.svg cmd/sc_backgroundcolor.svg
@@ -2000,18 +1975,24 @@ cmd/sc_showruler.svg cmd/sc_ruler.svg
 cmd/sc_sidebarmenu.svg cmd/sc_sidebar.svg
 cmd/sc_toolbarsmenu.svg cmd/sc_showtoolbar.svg
 
-# Comment 
+# Comment
 cmd/32/deleteallnotes.svg cmd/32/deleteallannotation.svg
+cmd/32/deletecomment.svg cmd/32/deleteannotation.svg
 cmd/32/deletenote.svg cmd/32/deleteannotation.svg
 cmd/32/formatallnotes.svg cmd/32/editannotation.svg
+cmd/32/showinlinetooltips.svg cmd/32/editannotation.svg
 
 cmd/lc_deleteallnotes.svg cmd/lc_deleteallannotation.svg
+cmd/lc_deletecomment.svg cmd/lc_deleteannotation.svg
 cmd/lc_deletenote.svg cmd/lc_deleteannotation.svg
 cmd/lc_formatallnotes.svg cmd/lc_editannotation.svg
+cmd/lc_showinlinetooltips.svg cmd/lc_editannotation.svg
 
 cmd/sc_deleteallnotes.svg cmd/sc_deleteallannotation.svg
+cmd/sc_deletecomment.svg cmd/sc_deleteannotation.svg
 cmd/sc_deletenote.svg cmd/sc_deleteannotation.svg
 cmd/sc_formatallnotes.svg cmd/sc_editannotation.svg
+cmd/sc_showinlinetooltips.svg cmd/sc_editannotation.svg
 
 # Other
 
