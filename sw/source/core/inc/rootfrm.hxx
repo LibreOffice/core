@@ -403,6 +403,10 @@ public:
 
     void RemovePage( SwPageFrame **pDel, SwRemoveResult eResult );
 
+    /**
+     * Replacement for sw::DocumentRedlineManager::GetRedlineFlags()
+     * (this is layout-level redline hiding).
+     */
     bool IsHideRedlines() const { return mbHideRedlines; }
     void SetHideRedlines(bool);
 };

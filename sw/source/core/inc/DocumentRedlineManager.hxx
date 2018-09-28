@@ -33,6 +33,10 @@ class DocumentRedlineManager : public IDocumentRedlineAccess
 public:
     DocumentRedlineManager( SwDoc& i_rSwdoc );
 
+    /**
+     * Replaced by SwRootFrame::IsHideRedlines() (this is model-level redline
+     * hiding).
+     */
     virtual RedlineFlags GetRedlineFlags() const override;
 
     virtual void SetRedlineFlags_intern(/*[in]*/RedlineFlags eMode) override;
