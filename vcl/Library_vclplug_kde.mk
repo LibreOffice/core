@@ -91,4 +91,5 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_kde,\
     pthread \
 ))
 endif
+
 # vim: set noet sw=4 ts=4:

@@ -211,3 +211,5 @@ $(eval $(call gb_WinResTarget_set_include,vcl/src,\
 ))
 
 endif
+
+# vim: set noet sw=4 ts=4:

@@ -57,7 +57,7 @@ endif
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
-     $$(FREETYPE_CFLAGS) \
+    $$(FREETYPE_CFLAGS) \
 ))
 endif
 
@@ -538,4 +538,5 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     $(gb_STDLIBS) \
 ))
 endif
+
 # vim: set noet sw=4 ts=4:

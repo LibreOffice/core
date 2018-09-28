@@ -25,8 +25,9 @@
 $(eval $(call gb_Package_Package,vcl_zip,))
 $(eval $(call gb_Package_add_file,vcl_zip,bin/osxres.zip,$(WORKDIR)/Misc/osxres.zip))
 
-/$(WORKDIR)/Misc/osxres.zip: $(SRCDIR)/vcl/aqua/source/res/MainMenu.nib/*.nib $(SRCDIR)/vcl/aqua/source/res/cursors/*.png 
+/$(WORKDIR)/Misc/osxres.zip: $(SRCDIR)/vcl/aqua/source/res/MainMenu.nib/*.nib $(SRCDIR)/vcl/aqua/source/res/cursors/*.png
     cd $(SRCDIR)/vcl/aqua/source/res ; \
     mkdir -p $(dir $@) ; \
     zip $@ MainMenu.nib/*.nib cursors/*.png
 
+# vim: set noet sw=4 ts=4:

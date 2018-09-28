@@ -47,5 +47,4 @@ $(eval $(call gb_SrsTarget_add_files,vcl/source/src,\
     vcl/source/src/units.src \
 ))
 
-
 # vim: set noet sw=4 ts=4:

@@ -21,7 +21,6 @@
 
 
 
-
 $(eval $(call gb_Module_Module,vcl))
 
 $(eval $(call gb_Module_add_targets,vcl,\

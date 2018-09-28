@@ -162,3 +162,4 @@ $(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/window.hxx,vcl/window.hxx))
 $(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/wpropset.hxx,vcl/wpropset.hxx))
 $(eval $(call gb_Package_add_file,vcl_inc,inc/vcl/wrkwin.hxx,vcl/wrkwin.hxx))
 
+# vim: set noet sw=4 ts=4:

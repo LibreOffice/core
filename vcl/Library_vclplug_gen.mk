@@ -121,7 +121,7 @@ $(eval $(call gb_Library_add_defs,vclplug_gen,\
 ))
 
 
-## handle RandR 
+## handle RandR
 ifeq ($(ENABLE_RANDR),TRUE)
 $(eval $(call gb_Library_add_defs,vclplug_gen,\
     -DUSE_RANDR \
@@ -203,4 +203,5 @@ $(eval $(call gb_Library_add_libs,vclplug_gen, \
     -lXinerama -lXrandr \
 ))
 endif
+
 # vim: set noet sw=4 ts=4:
