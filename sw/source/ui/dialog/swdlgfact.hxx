@@ -573,7 +573,7 @@ class SwAbstractDialogFactory_Impl : public SwAbstractDialogFactory
 public:
     virtual ~SwAbstractDialogFactory_Impl() {}
 
-    virtual VclPtr<SfxAbstractDialog> CreateNumFormatDialog(vcl::Window* pParent, const SfxItemSet& rAttr) override;
+    virtual VclPtr<SfxAbstractDialog> CreateNumFormatDialog(weld::Window* pParent, const SfxItemSet& rAttr) override;
     virtual VclPtr<SfxAbstractDialog> CreateSwDropCapsDialog(weld::Window* pParent, const SfxItemSet& rSet) override;
     virtual VclPtr<SfxAbstractDialog> CreateSwBackgroundDialog(weld::Window* pParent, const SfxItemSet& rSet) override;
     virtual VclPtr<AbstractSwWordCountFloatDlg> CreateSwWordCountDialog(SfxBindings* pBindings,

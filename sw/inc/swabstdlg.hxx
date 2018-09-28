@@ -359,8 +359,7 @@ class SwAbstractDialogFactory
 public:
     static SwAbstractDialogFactory*     Create();
 
-    virtual VclPtr<SfxAbstractDialog> CreateNumFormatDialog( vcl::Window* pParent,
-                                                 const SfxItemSet& rAttr) = 0;
+    virtual VclPtr<SfxAbstractDialog> CreateNumFormatDialog(weld::Window* pParent, const SfxItemSet& rAttr) = 0;
     virtual VclPtr<SfxAbstractDialog> CreateSwDropCapsDialog(weld::Window* pParent, const SfxItemSet& rSet) = 0;
     virtual VclPtr<SfxAbstractDialog> CreateSwBackgroundDialog(weld::Window* pParent, const SfxItemSet& rSet) = 0;
 
