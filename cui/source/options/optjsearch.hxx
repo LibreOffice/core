@@ -20,58 +20,51 @@
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_OPTJSEARCH_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTJSEARCH_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <vcl/weld.hxx>
 
-namespace vcl { class Window; }
 class SfxItemSet;
-
 
 class SvxJSearchOptionsPage : public SfxTabPage
 {
 private:
-    VclPtr<CheckBox>   m_pMatchCase;
-    VclPtr<CheckBox>   m_pMatchFullHalfWidth;
-    VclPtr<CheckBox>   m_pMatchHiraganaKatakana;
-    VclPtr<CheckBox>   m_pMatchContractions;
-    VclPtr<CheckBox>   m_pMatchMinusDashChoon;
-    VclPtr<CheckBox>   m_pMatchRepeatCharMarks;
-    VclPtr<CheckBox>   m_pMatchVariantFormKanji;
-    VclPtr<CheckBox>   m_pMatchOldKanaForms;
-    VclPtr<CheckBox>   m_pMatchDiziDuzu;
-    VclPtr<CheckBox>   m_pMatchBavaHafa;
-    VclPtr<CheckBox>   m_pMatchTsithichiDhizi;
-    VclPtr<CheckBox>   m_pMatchHyuiyuByuvyu;
-    VclPtr<CheckBox>   m_pMatchSesheZeje;
-    VclPtr<CheckBox>   m_pMatchIaiya;
-    VclPtr<CheckBox>   m_pMatchKiku;
-    VclPtr<CheckBox>   m_pMatchProlongedSoundMark;
+    std::unique_ptr<weld::CheckButton> m_xMatchCase;
+    std::unique_ptr<weld::CheckButton> m_xMatchFullHalfWidth;
+    std::unique_ptr<weld::CheckButton> m_xMatchHiraganaKatakana;
+    std::unique_ptr<weld::CheckButton> m_xMatchContractions;
+    std::unique_ptr<weld::CheckButton> m_xMatchMinusDashChoon;
+    std::unique_ptr<weld::CheckButton> m_xMatchRepeatCharMarks;
+    std::unique_ptr<weld::CheckButton> m_xMatchVariantFormKanji;
+    std::unique_ptr<weld::CheckButton> m_xMatchOldKanaForms;
+    std::unique_ptr<weld::CheckButton> m_xMatchDiziDuzu;
+    std::unique_ptr<weld::CheckButton> m_xMatchBavaHafa;
+    std::unique_ptr<weld::CheckButton> m_xMatchTsithichiDhizi;
+    std::unique_ptr<weld::CheckButton> m_xMatchHyuiyuByuvyu;
+    std::unique_ptr<weld::CheckButton> m_xMatchSesheZeje;
+    std::unique_ptr<weld::CheckButton> m_xMatchIaiya;
+    std::unique_ptr<weld::CheckButton> m_xMatchKiku;
+    std::unique_ptr<weld::CheckButton> m_xMatchProlongedSoundMark;
 
-    VclPtr<CheckBox>   m_pIgnorePunctuation;
-    VclPtr<CheckBox>   m_pIgnoreWhitespace;
-    VclPtr<CheckBox>   m_pIgnoreMiddleDot;
+    std::unique_ptr<weld::CheckButton> m_xIgnorePunctuation;
+    std::unique_ptr<weld::CheckButton> m_xIgnoreWhitespace;
+    std::unique_ptr<weld::CheckButton> m_xIgnoreMiddleDot;
 
-    TransliterationFlags
-                       nTransliterationFlags;
-    bool               bSaveOptions;
+    TransliterationFlags nTransliterationFlags;
+    bool bSaveOptions;
 
-    TransliterationFlags
-                        GetTransliterationFlags_Impl();
+    TransliterationFlags GetTransliterationFlags_Impl();
 
 public:
-                        SvxJSearchOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
+    SvxJSearchOptionsPage(TabPageParent pParent, const SfxItemSet& rSet);
     virtual ~SvxJSearchOptionsPage() override;
-    virtual void dispose() override;
-    static VclPtr<SfxTabPage>  Create( TabPageParent pParent, const SfxItemSet* rSet );
+    static VclPtr<SfxTabPage>  Create(TabPageParent pParent, const SfxItemSet* rSet);
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
 
     void                EnableSaveOptions( bool bVal )  { bSaveOptions = bVal; }
 
-    TransliterationFlags
-                        GetTransliterationFlags() const { return nTransliterationFlags; }
+    TransliterationFlags GetTransliterationFlags() const { return nTransliterationFlags; }
     void                SetTransliterationFlags( TransliterationFlags nSettings );
 };
 
