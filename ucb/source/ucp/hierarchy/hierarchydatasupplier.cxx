@@ -57,7 +57,7 @@ struct ResultListEntry
 // ResultList.
 
 
-typedef std::vector< ResultListEntry* > ResultList;
+typedef std::vector< std::unique_ptr<ResultListEntry> > ResultList;
 
 
 // struct DataSupplier_Impl.
@@ -84,21 +84,8 @@ struct DataSupplier_Impl
                      rContent->getProvider().get() ),
                  rContent->getIdentifier()->getContentIdentifier() ),
       m_nOpenMode( nOpenMode ), m_bCountFinal( false ) {}
-    ~DataSupplier_Impl();
 };
 
-
-DataSupplier_Impl::~DataSupplier_Impl()
-{
-    ResultList::const_iterator it  = m_aResults.begin();
-    ResultList::const_iterator end = m_aResults.end();
-
-    while ( it != end )
-    {
-        delete *it;
-        ++it;
-    }
-}
 
 }
 
@@ -247,7 +234,7 @@ bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
         const HierarchyEntryData& rResult = *m_pImpl->m_aIterator;
         if ( checkResult( rResult ) )
         {
-            m_pImpl->m_aResults.push_back( new ResultListEntry( rResult ) );
+            m_pImpl->m_aResults.emplace_back( new ResultListEntry( rResult ) );
 
             if ( nPos == nIndex )
             {
@@ -294,7 +281,7 @@ sal_uInt32 HierarchyResultSetDataSupplier::totalCount()
     {
         const HierarchyEntryData& rResult = *m_pImpl->m_aIterator;
         if ( checkResult( rResult ) )
-            m_pImpl->m_aResults.push_back( new ResultListEntry( rResult ) );
+            m_pImpl->m_aResults.emplace_back( new ResultListEntry( rResult ) );
     }
 
     m_pImpl->m_bCountFinal = true;
