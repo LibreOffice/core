@@ -85,7 +85,7 @@ void lcl_setBoolItemToCheckBox( const SfxItemSet& rInAttrs, sal_uInt16 nWhichId,
 
 }//end anonymous namespace
 
-DataLabelResources::DataLabelResources(VclBuilderContainer* pWindow, vcl::Window* pParent, const SfxItemSet& rInAttrs )
+DataLabelResources::DataLabelResources(VclBuilderContainer* pWindow, weld::Window* pParent, const SfxItemSet& rInAttrs )
     :
     m_pNumberFormatter(nullptr),
     m_bNumberFormatMixedState(true),
@@ -204,12 +204,12 @@ IMPL_LINK( DataLabelResources, NumberFormatDialogHdl, Button *, pButton, void )
         aNumberSet.Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE, rnFormatKey ));
     aNumberSet.Put( SfxBoolItem( SID_ATTR_NUMBERFORMAT_SOURCE, rUseSourceFormat ));
 
-    ScopedVclPtrInstance< NumberFormatDialog > aDlg(m_pWindow, aNumberSet);
+    NumberFormatDialog aDlg(m_pWindow, aNumberSet);
     if( bPercent )
-        aDlg->SetText( m_pFT_NumberFormatForPercent->GetText());
-    if( aDlg->Execute() == RET_OK )
+        aDlg.set_title(m_pFT_NumberFormatForPercent->GetText());
+    if (aDlg.run() == RET_OK)
     {
-        const SfxItemSet* pResult = aDlg->GetOutputItemSet();
+        const SfxItemSet* pResult = aDlg.GetOutputItemSet();
         if( pResult )
         {
             bool bOldSource = rUseSourceFormat;

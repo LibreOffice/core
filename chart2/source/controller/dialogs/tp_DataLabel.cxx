@@ -29,7 +29,7 @@ DataLabelsTabPage::DataLabelsTabPage(vcl::Window* pWindow, const SfxItemSet& rIn
         , "tp_DataLabel"
         , "modules/schart/ui/tp_DataLabel.ui"
         , &rInAttrs)
-        , m_aDataLabelResources(this, this, rInAttrs)
+        , m_aDataLabelResources(this, GetFrameWeld(), rInAttrs)
 {
 }
 

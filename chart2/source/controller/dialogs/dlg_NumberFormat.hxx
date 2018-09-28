@@ -21,16 +21,16 @@
 
 #include <sfx2/basedlgs.hxx>
 
-namespace vcl { class Window; }
+namespace weld { class Window; }
 class SfxItemSet;
 
 namespace chart
 {
 
-class NumberFormatDialog : public SfxSingleTabDialog
+class NumberFormatDialog : public SfxSingleTabDialogController
 {
 public:
-    NumberFormatDialog(vcl::Window* pParent, SfxItemSet& rSet);
+    NumberFormatDialog(weld::Window* pParent, SfxItemSet& rSet);
 
     static SfxItemSet CreateEmptyItemSetForNumberFormatDialog( SfxItemPool& rItemPool );
 };
