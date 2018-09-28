@@ -28,6 +28,7 @@
 #include "colorscale.hxx"
 #include "cellvalue.hxx"
 #include <o3tl/typed_flags_set.hxx>
+#include <boost/optional.hpp>
 
 class SfxItemSet;
 class SvxBrushItem;
@@ -133,7 +134,7 @@ struct CellInfo
 
     const ScPatternAttr*        pPatternAttr;
     const SfxItemSet*           pConditionSet;
-    std::unique_ptr<const Color> pColorScale;
+    boost::optional<Color>      mxColorScale;
     std::unique_ptr<const ScDataBarInfo> pDataBar;
     std::unique_ptr<const ScIconSetInfo> pIconSet;
 

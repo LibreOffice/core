@@ -574,9 +574,8 @@ void Test::testIconSet()
     for(size_t i = 0; i < SAL_N_ELEMENTS(aTests); ++i)
     {
         m_pDoc->SetValue(0,0,0,aTests[i].nVal);
-        ScIconSetInfo* pInfo = pEntry->GetIconSetInfo(ScAddress(0,0,0));
+        std::unique_ptr<ScIconSetInfo> pInfo = pEntry->GetIconSetInfo(ScAddress(0,0,0));
         CPPUNIT_ASSERT_EQUAL(aTests[i].nIndex, pInfo->nIconIndex);
-        delete pInfo;
     }
 
     delete pEntry;

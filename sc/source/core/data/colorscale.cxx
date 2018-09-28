@@ -585,17 +585,17 @@ double ScColorScaleFormat::CalcValue(double nMin, double nMax, const ScColorScal
     return (*itr)->GetValue();
 }
 
-Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
+boost::optional<Color> ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
 {
     ScRefCellValue rCell(*mpDoc, rAddr);
     if(!rCell.hasNumeric())
-        return nullptr;
+        return boost::optional<Color>();
 
     // now we have for sure a value
     double nVal = rCell.getValue();
 
     if (maColorScales.size() < 2)
-        return nullptr;
+        return boost::optional<Color>();
 
     double nMin = std::numeric_limits<double>::max();
     double nMax = std::numeric_limits<double>::min();
@@ -603,7 +603,7 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
 
     // this check is for safety
     if(nMin >= nMax)
-        return nullptr;
+        return boost::optional<Color>();
 
     ScColorScaleEntries::const_iterator itr = begin();
     double nValMin = CalcValue(nMin, nMax, itr);
@@ -624,7 +624,7 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
 
     Color aColor = CalcColor(nVal, nValMin, rColMin, nValMax, rColMax);
 
-    return new Color(aColor);
+    return aColor;
 }
 
 void ScColorScaleFormat::UpdateReference( sc::RefUpdateContext& rCxt )
@@ -832,7 +832,7 @@ double ScDataBarFormat::getMax(double nMin, double nMax) const
     return mpFormatData->mpUpperLimit->GetValue();
 }
 
-ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
+std::unique_ptr<ScDataBarInfo> ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
 {
     ScRefCellValue rCell(*mpDoc, rAddr);
     if(!rCell.hasNumeric())
@@ -849,7 +849,7 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
 
     double nValue = rCell.getValue();
 
-    ScDataBarInfo* pInfo = new ScDataBarInfo;
+    std::unique_ptr<ScDataBarInfo> pInfo(new ScDataBarInfo);
     if(mpFormatData->meAxisPosition == databar::NONE)
     {
         if(nValue <= nMin)
@@ -1023,7 +1023,7 @@ const ScIconSetFormatData* ScIconSetFormat::GetIconSetData() const
     return mpFormatData.get();
 }
 
-ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
+std::unique_ptr<ScIconSetInfo> ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
 {
     ScRefCellValue rCell(*mpDoc, rAddr);
     if(!rCell.hasNumeric())
@@ -1054,7 +1054,7 @@ ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
     if(nVal >= nValMax)
         ++nIndex;
 
-    ScIconSetInfo* pInfo = new ScIconSetInfo;
+    std::unique_ptr<ScIconSetInfo> pInfo(new ScIconSetInfo);
 
     if(mpFormatData->mbReverse)
     {
@@ -1068,7 +1068,6 @@ ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
         sal_Int32 nCustomIndex = mpFormatData->maCustomVector[nIndex].second;
         if (nCustomIndex == -1)
         {
-            delete pInfo;
             return nullptr;
         }
 

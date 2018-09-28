@@ -22,6 +22,7 @@
 
 #include "global.hxx"
 #include <tools/solar.h>
+#include <tools/color.hxx>
 #include "address.hxx"
 #include <formula/grammar.hxx>
 #include "scdllapi.h"
@@ -36,6 +37,7 @@
 #include <tools/date.hxx>
 #include <tools/link.hxx>
 
+#include <boost/optional.hpp>
 #include <map>
 #include <memory>
 #include <set>
@@ -43,7 +45,6 @@
 class ScFormulaCell;
 class ScTokenArray;
 struct ScRefCellValue;
-class Color;
 
 namespace sc {
 
@@ -211,14 +212,13 @@ struct ScIconSetInfo;
 
 struct ScCondFormatData
 {
-    ScCondFormatData():
-        pColorScale(nullptr),
-        pDataBar(nullptr),
-        pIconSet(nullptr) {}
+    ScCondFormatData();
+    ScCondFormatData(ScCondFormatData&&);
+    ~ScCondFormatData();
 
-    Color* pColorScale;
-    ScDataBarInfo* pDataBar;
-    ScIconSetInfo* pIconSet;
+    boost::optional<Color> mxColorScale;
+    std::unique_ptr<ScDataBarInfo> pDataBar;
+    std::unique_ptr<ScIconSetInfo> pIconSet;
     OUString aStyleName;
 };
 
