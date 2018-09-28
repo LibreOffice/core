@@ -21,10 +21,8 @@
 
 #include <svx/connctrl.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/group.hxx>
+#include <vcl/customweld.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/basedlgs.hxx>
 
 class SdrView;
@@ -34,36 +32,33 @@ class SvxConnectionPage : public SfxTabPage
 {
 private:
     static const sal_uInt16 pRanges[];
-    VclPtr<ListBox>             m_pLbType;
-
-    VclPtr<FixedText>           m_pFtLine1;
-    VclPtr<MetricField>         m_pMtrFldLine1;
-    VclPtr<FixedText>           m_pFtLine2;
-    VclPtr<MetricField>         m_pMtrFldLine2;
-    VclPtr<FixedText>           m_pFtLine3;
-    VclPtr<MetricField>         m_pMtrFldLine3;
-
-    VclPtr<MetricField>         m_pMtrFldHorz1;
-    VclPtr<MetricField>         m_pMtrFldVert1;
-    VclPtr<MetricField>         m_pMtrFldHorz2;
-    VclPtr<MetricField>         m_pMtrFldVert2;
-
-    VclPtr<SvxXConnectionPreview>   m_pCtlPreview;
-
     const SfxItemSet&   rOutAttrs;
     SfxItemSet          aAttrSet;
     const SdrView*      pView;
     MapUnit             eUnit;
 
+    SvxXConnectionPreview m_aCtlPreview;
+    std::unique_ptr<weld::ComboBox> m_xLbType;
+    std::unique_ptr<weld::Label> m_xFtLine1;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldLine1;
+    std::unique_ptr<weld::Label> m_xFtLine2;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldLine2;
+    std::unique_ptr<weld::Label> m_xFtLine3;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldLine3;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldHorz1;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldVert1;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldHorz2;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrFldVert2;
+    std::unique_ptr<weld::CustomWeld> m_xCtlPreview;
+
     void                FillTypeLB();
 
-    DECL_LINK( ChangeAttrEditHdl_Impl, Edit&, void );
-    DECL_LINK( ChangeAttrListBoxHdl_Impl, ListBox&, void );
-    void ChangeAttrHdl_Impl(void const *);
+    DECL_LINK(ChangeAttrEditHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(ChangeAttrListBoxHdl_Impl, weld::ComboBox&, void);
 
 public:
 
-    SvxConnectionPage( vcl::Window* pWindow, const SfxItemSet& rInAttrs );
+    SvxConnectionPage(TabPageParent pWindow, const SfxItemSet& rInAttrs);
     virtual ~SvxConnectionPage() override;
     virtual void dispose() override;
 

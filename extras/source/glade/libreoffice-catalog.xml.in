@@ -200,9 +200,6 @@
     <glade-widget-class title="SvxXLinePreview" name="svxlo-SvxXLinePreview"
                         generic-name="Line Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="SvxXConnectionPreview" name="svxlo-SvxXConnectionPreview"
-                        generic-name="Connector Line Preview Window" parent="GtkDrawingArea"
-                            icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Svx 3D Light Control" name="svxlo-SvxLightCtl3D"
                         generic-name="3D Light Control" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
