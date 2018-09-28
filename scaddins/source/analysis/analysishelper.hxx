@@ -34,6 +34,7 @@
 
 #include "analysisdefs.hxx"
 
+#include <memory>
 #include <vector>
 
 
@@ -576,7 +577,7 @@ public:
 class ConvertDataList
 {
 private:
-    std::vector<ConvertData*> maVector;
+    std::vector<std::unique_ptr<ConvertData>> maVector;
 public:
                             ConvertDataList();
                             ~ConvertDataList();
