@@ -16,6 +16,12 @@
 #if 0
 typedef o3tl::strong_int<sal_Int32, struct Tag_TextFrameIndex> TextFrameIndex;
 #else
+/**
+ * Denotes a character index in a text frame at a layout level, after extent
+ * mapping from a text node at a document model level.
+ *
+ * @see SwTextFrame::MapViewToModelPos().
+ */
 typedef sal_Int32 TextFrameIndex;
 #endif
 
