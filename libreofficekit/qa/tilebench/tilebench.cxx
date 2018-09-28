@@ -64,7 +64,15 @@ static std::vector< TimeRecord > aTimes;
 static void dumpTile(const int nWidth, const int nHeight, const int mode, const unsigned char* pBufferU)
 {
     auto pBuffer = reinterpret_cast<const char *>(pBufferU);
+#ifndef IOS
     std::ofstream ofs("/tmp/dump_tile.ppm");
+#else
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    static int counter = 0;
+    NSString *path = [NSString stringWithFormat:@"%@/dump_tile_%d.ppm", documentsDirectory, counter++];
+    std::ofstream ofs([path UTF8String]);
+#endif
     ofs << "P6\n"
         << nWidth << " "
         << nHeight << "\n"
@@ -101,6 +109,7 @@ static void dumpTile(const int nWidth, const int nHeight, const int mode, const 
             }
         }
     }
+    ofs.close();
 }
 
 static void testTile( Document *pDocument, int max_parts,
@@ -156,8 +165,15 @@ static void testTile( Document *pDocument, int max_parts,
         {
             // whole part; meaningful only for non-writer documents.
             aTimes.emplace_back("render whole part");
+#ifndef IOS
             pDocument->paintTile(pPixels, nTilePixelWidth, nTilePixelHeight,
                                  nWidth/2, 2000, 1000, 1000); // not square
+#else
+            pDocument->paintTile(lo_ios_app_get_cgcontext_for_buffer(pPixels, nTilePixelWidth, nTilePixelHeight),
+                                 nTilePixelWidth, nTilePixelHeight,
+                                 nWidth/2, 2000, 1000, 1000); // not square
+            lo_ios_app_release_cgcontext_for_buffer();
+#endif
             aTimes.emplace_back();
             if (dump)
                 dumpTile(nTilePixelWidth, nTilePixelHeight, mode, pPixels);
@@ -177,9 +193,15 @@ static void testTile( Document *pDocument, int max_parts,
                         nY = nHeight;
                         break;
                     }
-
+#ifndef IOS
                     pDocument->paintTile(pPixels, nTilePixelWidth, nTilePixelHeight,
                                          nX, nY, nTilePixelWidth, nTilePixelHeight);
+#else
+                    pDocument->paintTile(lo_ios_app_get_cgcontext_for_buffer(pPixels, nTilePixelWidth, nTilePixelHeight),
+                                         nTilePixelWidth, nTilePixelHeight,
+                                         nX, nY, nTilePixelWidth, nTilePixelHeight);
+                    lo_ios_app_release_cgcontext_for_buffer();
+#endif
                     nTiles++;
                     fprintf (stderr, "   rendered 1:1 tile %d at %d, %d\n",
                              nTiles, nX, nY);
@@ -203,9 +225,15 @@ static void testTile( Document *pDocument, int max_parts,
                         nY = nHeight;
                         break;
                     }
-
+#ifndef IOS
                     pDocument->paintTile(pPixels, nTilePixelWidth, nTilePixelHeight,
                                          nX, nY, nTileTwipWidth, nTileTwipHeight);
+#else
+                    pDocument->paintTile(lo_ios_app_get_cgcontext_for_buffer(pPixels, nTilePixelWidth, nTilePixelHeight),
+                                         nTilePixelWidth, nTilePixelHeight,
+                                         nX, nY, nTileTwipWidth, nTileTwipHeight);
+                    lo_ios_app_release_cgcontext_for_buffer();
+#endif
                     nTiles++;
                     fprintf (stderr, "   rendered scaled tile %d at %d, %d\n",
                              nTiles, nX, nY);
