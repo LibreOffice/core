@@ -32,7 +32,7 @@ include/basegfx/vector/b3dvector.hxx:146
     class basegfx::B3DVector & basegfx::B3DVector::setLength(double)
 include/basegfx/vector/b3dvector.hxx:171
     class basegfx::B3DVector & basegfx::B3DVector::normalize()
-include/comphelper/backupfilehelper.hxx:207
+include/comphelper/backupfilehelper.hxx:204
     _Bool comphelper::BackupFileHelper::tryPush_extensionInfo(const class rtl::OUString &)
 include/editeng/editview.hxx:220
     class ErrCode EditView::Read(class SvStream &,enum EETextFormat,class SvKeyValueIterator *)
@@ -152,8 +152,6 @@ include/svx/dlgctrl.hxx:105
     class Point SvxRectCtl::SetActualRPWithoutInvalidate(enum RectPoint)
 include/svx/framelink.hxx:195
     class svx::frame::Style & svx::frame::Style::MirrorSelf()
-include/svx/svdhdl.hxx:461
-    class SdrHdl * SdrHdlList::RemoveHdl(unsigned long)
 include/svx/SvxColorValueSet.hxx:55
     class Size ColorValueSet::layoutToGivenHeight(unsigned int,unsigned int)
 include/test/sheet/xcellrangedata.hxx:21

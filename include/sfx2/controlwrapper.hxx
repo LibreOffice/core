@@ -146,11 +146,6 @@ public:
         @descr  Will do nothing, if the corresponding parameter is TRISTATE_INDET. */
     virtual void        ModifyControl( TriState eShow ) = 0;
 
-    /** Derived classes return true if the control is in "don't know" state. */
-    virtual bool        IsControlDontKnow() const = 0;
-    /** Derived classes set the control to "don't know" state. */
-    virtual void        SetControlDontKnow( bool bSet ) = 0;
-
 private:
                         ControlWrapperBase( const ControlWrapperBase& ) = delete;
     ControlWrapperBase& operator=( const ControlWrapperBase& ) = delete;
@@ -214,35 +209,8 @@ class SFX2_DLLPUBLIC DummyWindowWrapper:
 public:
     explicit            DummyWindowWrapper( vcl::Window& rWindow );
 
-    virtual bool        IsControlDontKnow() const override;
-    virtual void        SetControlDontKnow( bool ) override;
-
     virtual void*       GetControlValue() const override;
     virtual void        SetControlValue( void* ) override;
-};
-
-
-/** A wrapper for the VCL MetricField.
-
-    Adds support for field units during accessing the control value. The
-    wrapper respects the field unit set at the control itself and converts it
-    from/to the field unit passed to the constructor.
- */
-template< typename ValueT >
-class MetricFieldWrapper : public SingleControlWrapper< MetricField, ValueT >
-{
-public:
-    explicit     MetricFieldWrapper( MetricField& rField, FieldUnit eUnit ) :
-                            SingleControlWrapper< MetricField, ValueT >( rField ), meUnit( eUnit ) {}
-
-    virtual bool        IsControlDontKnow() const override;
-    virtual void        SetControlDontKnow( bool bSet ) override;
-
-    virtual ValueT      GetControlValue() const override;
-    virtual void        SetControlValue( ValueT nValue ) override;
-
-private:
-    FieldUnit           meUnit;
 };
 
 
@@ -332,31 +300,6 @@ inline void SingleControlWrapper< ControlT, ValueT >::ModifyControl( TriState eS
         mrControl.Show( eShow == TRISTATE_TRUE );
 }
 
-
-template< typename ValueT >
-bool MetricFieldWrapper< ValueT >::IsControlDontKnow() const
-{
-    return this->GetControl().GetText().isEmpty();
-}
-
-template< typename ValueT >
-void MetricFieldWrapper< ValueT >::SetControlDontKnow( bool bSet )
-{
-    if( bSet )
-        this->GetControl().SetText( OUString() );
-}
-
-template< typename ValueT >
-ValueT MetricFieldWrapper< ValueT >::GetControlValue() const
-{
-    return static_cast< ValueT >( this->GetControl().Denormalize( this->GetControl().GetValue( meUnit ) ) );
-}
-
-template< typename ValueT >
-void MetricFieldWrapper< ValueT >::SetControlValue( ValueT nValue )
-{
-    this->GetControl().SetValue( this->GetControl().Normalize( static_cast< sal_Int64 >( nValue ) ), meUnit );
-}
 
 template< typename ValueT >
 ValueT ListBoxWrapper< ValueT >::GetControlValue() const

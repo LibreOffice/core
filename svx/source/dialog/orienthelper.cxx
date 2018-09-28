@@ -144,11 +144,6 @@ TriState OrientationHelper::GetStackedState() const
     return mpImpl->mrCbStacked.GetState();
 }
 
-void OrientationHelper::EnableStackedTriState( bool bEnable )
-{
-    mpImpl->mrCbStacked.EnableTriState( bEnable );
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

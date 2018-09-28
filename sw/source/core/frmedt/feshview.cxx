@@ -2221,12 +2221,6 @@ bool SwFEShell::EndMark()
     return bRet;
 }
 
-void SwFEShell::BreakMark()
-{
-    OSL_ENSURE( Imp()->HasDrawView(), "BreakMark without DrawView?" );
-    Imp()->GetDrawView()->BrkMarkObj();
-}
-
 RndStdIds SwFEShell::GetAnchorId() const
 {
     RndStdIds nRet = RndStdIds(SHRT_MAX);

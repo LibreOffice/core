@@ -260,22 +260,6 @@ size_t DocumentLinkManager::getDdeLinkCount() const
     return nDdeCount;
 }
 
-void DocumentLinkManager::disconnectDdeLinks()
-{
-    sfx2::LinkManager* pMgr = mpImpl->mpLinkManager;
-    if (!pMgr)
-        return;
-
-    const sfx2::SvBaseLinks& rLinks = pMgr->GetLinks();
-    for (const auto & rLink : rLinks)
-    {
-        ::sfx2::SvBaseLink* pBase = rLink.get();
-        ScDdeLink* pDdeLink = dynamic_cast<ScDdeLink*>(pBase);
-        if (pDdeLink)
-            pDdeLink->Disconnect();
-    }
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
