@@ -34,6 +34,12 @@ $(eval $(call gb_Module_add_l10n_targets,dbaccess,\
 
 ifneq ($(OS),IOS)
 ifeq ($(ENABLE_FIREBIRD_SDBC),TRUE)
+# remove if we have a be file for this
+ifeq ($(ENDIANNESS),little)
+$(eval $(call gb_Module_add_check_targets,dbaccess,\
+    CppunitTest_dbaccess_firebird_regression_test \
+))
+endif
 $(eval $(call gb_Module_add_check_targets,dbaccess,\
     CppunitTest_dbaccess_firebird_test \
 ))
