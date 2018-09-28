@@ -1426,7 +1426,7 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
         SfxItemSet aSet( SfxGetpApp()->GetPool() );
         pSearchItem->SetTransliterationFlags( GetTransliterationFlags() );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxJSearchOptionsDialog> aDlg(pFact->CreateSvxJSearchOptionsDialog( this, aSet,
+        ScopedVclPtr<AbstractSvxJSearchOptionsDialog> aDlg(pFact->CreateSvxJSearchOptionsDialog(GetFrameWeld(), aSet,
                 pSearchItem->GetTransliterationFlags() ));
         int nRet = aDlg->Execute();
         if (RET_OK == nRet) //! true only if FillItemSet of SvxJSearchOptionsPage returns true

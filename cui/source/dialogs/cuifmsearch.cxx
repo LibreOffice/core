@@ -370,7 +370,7 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton, void )
     {
         SfxItemSet aSet( SfxGetpApp()->GetPool() );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSvxJSearchOptionsDialog> aDlg(pFact->CreateSvxJSearchOptionsDialog( this, aSet, m_pSearchEngine->GetTransliterationFlags() ));
+        ScopedVclPtr<AbstractSvxJSearchOptionsDialog> aDlg(pFact->CreateSvxJSearchOptionsDialog(GetFrameWeld(), aSet, m_pSearchEngine->GetTransliterationFlags() ));
         aDlg->Execute();
 
         TransliterationFlags nFlags = aDlg->GetTransliterationFlags();

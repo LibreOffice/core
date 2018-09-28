@@ -167,7 +167,10 @@ bool AbstractSvxCaptionDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
     return SfxTabDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
-IMPL_ABSTDLG_BASE(AbstractSvxJSearchOptionsDialog_Impl);
+short AbstractSvxJSearchOptionsDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractFmInputRecordNoDialog_Impl::Execute()
 {
@@ -692,7 +695,7 @@ void AbstractSvxCaptionDialog_Impl::SetValidateFramePosLink( const Link<SvxSwFra
 
 TransliterationFlags AbstractSvxJSearchOptionsDialog_Impl::GetTransliterationFlags() const
 {
-    return pDlg->GetTransliterationFlags();
+    return m_xDlg->GetTransliterationFlags();
 }
 
 void AbstractFmInputRecordNoDialog_Impl::SetValue(long nNew)
@@ -1221,12 +1224,11 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSchTransformTabDi
     return VclPtr<CuiAbstractTabController_Impl>::Create(std::move(pDlg));
 }
 
-VclPtr<AbstractSvxJSearchOptionsDialog> AbstractDialogFactory_Impl::CreateSvxJSearchOptionsDialog( vcl::Window* pParent,
+VclPtr<AbstractSvxJSearchOptionsDialog> AbstractDialogFactory_Impl::CreateSvxJSearchOptionsDialog(weld::Window* pParent,
                                                             const SfxItemSet& rOptionsSet,
                                                             TransliterationFlags nInitialFlags)
 {
-    VclPtrInstance<SvxJSearchOptionsDialog> pDlg( pParent, rOptionsSet, nInitialFlags );
-    return VclPtr<AbstractSvxJSearchOptionsDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractSvxJSearchOptionsDialog_Impl>::Create(o3tl::make_unique<SvxJSearchOptionsDialog>(pParent, rOptionsSet, nInitialFlags));
 }
 
 VclPtr<AbstractFmInputRecordNoDialog> AbstractDialogFactory_Impl::CreateFmInputRecordNoDialog(weld::Window* pParent)

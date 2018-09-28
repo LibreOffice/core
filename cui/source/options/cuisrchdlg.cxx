@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/wrkwin.hxx>
-#include <vcl/morebtn.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/style.hxx>
@@ -42,40 +40,29 @@
 
 // class SvxJSearchOptionsDialog -----------------------------------------
 
-SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(vcl::Window *pParent,
+SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(weld::Window *pParent,
     const SfxItemSet& rOptionsSet, TransliterationFlags nInitialFlags)
-    : SfxSingleTabDialog(pParent, rOptionsSet)
-    , nInitialTlFlags( nInitialFlags )
+    : SfxSingleTabDialogController(pParent, rOptionsSet)
 {
-    // pPage will be implicitly destroyed by the
+    // m_xPage will be implicitly destroyed by the
     // SfxSingleTabDialog destructor
-    pPage.reset( static_cast<SvxJSearchOptionsPage *>(
+    TabPageParent pPageParent(get_content_area(), this);
+    m_xPage.reset(static_cast<SvxJSearchOptionsPage*>(
                         SvxJSearchOptionsPage::Create(
-                                get_content_area(), &rOptionsSet ).get() ) );
-    SetTabPage( pPage );    //! implicitly calls pPage->Reset(...)!
-    pPage->EnableSaveOptions(false);
+                                pPageParent, &rOptionsSet).get()));
+    SetTabPage(m_xPage); //! implicitly calls m_xPage->Reset(...)!
+    m_xPage->EnableSaveOptions(false);
+    m_xPage->SetTransliterationFlags(nInitialFlags);
 }
 
 SvxJSearchOptionsDialog::~SvxJSearchOptionsDialog()
 {
-    disposeOnce();
-}
-
-void SvxJSearchOptionsDialog::dispose()
-{
-    pPage.clear();
-    SfxSingleTabDialog::dispose();
-}
-
-void SvxJSearchOptionsDialog::Activate()
-{
-    pPage->SetTransliterationFlags( nInitialTlFlags );
+    m_xPage.clear();
 }
 
 TransliterationFlags SvxJSearchOptionsDialog::GetTransliterationFlags() const
 {
-    return pPage->GetTransliterationFlags();
+    return m_xPage->GetTransliterationFlags();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
