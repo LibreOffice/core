@@ -670,10 +670,10 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
         if (!pImage)
             continue;
 
+        const stockinfo &rImageInfo = elem.second;
         if (rImageInfo.m_sStock == "gtk-missing-image")
             continue;
 
-        const stockinfo &rImageInfo = elem.second;
         SymbolType eType = mapStockToSymbol(rImageInfo.m_sStock);
         SAL_WARN_IF(eType != SymbolType::IMAGE, "vcl", "unimplemented symbol type for images");
         if (eType != SymbolType::IMAGE)
