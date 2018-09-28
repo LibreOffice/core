@@ -42,6 +42,7 @@
 #include <cellvalue.hxx>
 #include <editutil.hxx>
 #include <tokenarray.hxx>
+#include <fillinfo.hxx>
 #include <refupdatecontext.hxx>
 #include <formula/errorcodes.hxx>
 #include <svl/sharedstring.hxx>
@@ -1824,10 +1825,10 @@ ScCondFormatData ScConditionalFormat::GetData( ScRefCellValue& rCell, const ScAd
             if (rEntry.IsCellValid(rCell, rPos))
                 aData.aStyleName = rEntry.GetStyle();
         }
-        else if((*itr)->GetType() == ScFormatEntry::Type::Colorscale && !aData.pColorScale)
+        else if((*itr)->GetType() == ScFormatEntry::Type::Colorscale && !aData.mxColorScale)
         {
             const ScColorScaleFormat& rEntry = static_cast<const ScColorScaleFormat&>(**itr);
-            aData.pColorScale = rEntry.GetColor(rPos);
+            aData.mxColorScale = rEntry.GetColor(rPos);
         }
         else if((*itr)->GetType() == ScFormatEntry::Type::Databar && !aData.pDataBar)
         {
@@ -2298,5 +2299,12 @@ void ScConditionalFormatList::CalcAll()
     }
 
 }
+
+ScCondFormatData::ScCondFormatData() {}
+
+ScCondFormatData::ScCondFormatData(ScCondFormatData&&) = default;
+
+ScCondFormatData::~ScCondFormatData() {}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

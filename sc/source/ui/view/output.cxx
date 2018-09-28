@@ -784,8 +784,8 @@ static bool lcl_EqualBack( const RowInfo& rFirst, const RowInfo& rOther,
 
     for ( nX=nX1; nX<=nX2; nX++ )
     {
-        const Color* pCol1 = rFirst.pCellInfo[nX+1].pColorScale.get();
-        const Color* pCol2 = rOther.pCellInfo[nX+1].pColorScale.get();
+        boost::optional<Color> const & pCol1 = rFirst.pCellInfo[nX+1].mxColorScale;
+        boost::optional<Color> const & pCol2 = rOther.pCellInfo[nX+1].mxColorScale;
         if( (pCol1 && !pCol2) || (!pCol1 && pCol2) )
             return false;
 
@@ -919,7 +919,7 @@ void drawIconSets(vcl::RenderContext& rRenderContext, const ScIconSetInfo* pOldI
     rRenderContext.DrawBitmapEx( Point( rRect.Left() + 2 * nOneX, rRect.Top() + 2 * nOneY), Size(aOrigSize, aOrigSize), rIcon );
 }
 
-void drawCells(vcl::RenderContext& rRenderContext, const Color* pColor, const SvxBrushItem* pBackground, const Color*& pOldColor, const SvxBrushItem*& pOldBackground,
+void drawCells(vcl::RenderContext& rRenderContext, boost::optional<Color> const & pColor, const SvxBrushItem* pBackground, boost::optional<Color>& pOldColor, const SvxBrushItem*& pOldBackground,
         tools::Rectangle& rRect, long nPosX, long nLayoutSign, long nOneX, long nOneY, const ScDataBarInfo* pDataBarInfo, const ScDataBarInfo*& pOldDataBarInfo,
         const ScIconSetInfo* pIconSetInfo, const ScIconSetInfo*& pOldIconSetInfo,
         sc::IconSetBitmapMap & rIconSetBitmapMap)
@@ -981,7 +981,7 @@ void drawCells(vcl::RenderContext& rRenderContext, const Color* pColor, const Sv
     else if(pBackground)
     {
         pOldBackground = pBackground;
-        pOldColor = nullptr;
+        pOldColor.reset();
     }
 
     if(pDataBarInfo)
@@ -1069,7 +1069,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
 
                 const SvxBrushItem* pOldBackground = nullptr;
                 const SvxBrushItem* pBackground = nullptr;
-                const Color* pOldColor = nullptr;
+                boost::optional<Color> pOldColor;
                 const ScDataBarInfo* pOldDataBarInfo = nullptr;
                 const ScIconSetInfo* pOldIconSetInfo = nullptr;
                 SCCOL nMergedCols = 1;
@@ -1114,7 +1114,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                         pBackground = lcl_FindBackground( mpDoc, nX, nY, nTab );
                     }
 
-                    const Color* pColor = pInfo->pColorScale.get();
+                    boost::optional<Color> const & pColor = pInfo->mxColorScale;
                     const ScDataBarInfo* pDataBarInfo = pInfo->pDataBar.get();
                     const ScIconSetInfo* pIconSetInfo = pInfo->pIconSet.get();
 
@@ -1146,7 +1146,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                 if (bWorksInPixels)
                     nPosXLogic = rRenderContext.PixelToLogic(Point(nPosX, 0)).X();
 
-                drawCells(rRenderContext, nullptr, nullptr, pOldColor, pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneXLogic, nOneYLogic, nullptr, pOldDataBarInfo, nullptr, pOldIconSetInfo, mpDoc->GetIconSetBitmapMap());
+                drawCells(rRenderContext, boost::optional<Color>(), nullptr, pOldColor, pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneXLogic, nOneYLogic, nullptr, pOldDataBarInfo, nullptr, pOldIconSetInfo, mpDoc->GetIconSetBitmapMap());
 
                 nArrY += nSkip;
             }
@@ -1632,7 +1632,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
                             //  high contrast for cell borders and backgrounds -> empty background
                             pBackground = ScGlobal::GetEmptyBrushItem();
                         }
-                        if (!pInfo->pColorScale)
+                        if (!pInfo->mxColorScale)
                         {
                             const Color& rColor = pBackground->GetColor();
                             if (rColor.GetTransparency() != 255)
@@ -1660,7 +1660,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
                         else
                         {
                             tools::Polygon aPoly(4, aPoints);
-                            const Color* pColor = pInfo->pColorScale.get();
+                            boost::optional<Color> const & pColor = pInfo->mxColorScale;
 
                             // for DrawPolygon, whitout Pen one pixel is left out
                             // to the right and below...
