@@ -13,19 +13,22 @@
 
 #include <QtCore/QObject>
 
+#include <com/sun/star/accessibility/XAccessible.hpp>
+
 #include <vcl/window.hxx>
 
 class Qt5Frame;
 class Qt5Widget;
 
-// Wrapper class to hold a vcl::Window while being able to pass it as a QObject
-class VCLPLUG_QT5_PUBLIC Qt5VclWindow : public QObject
+// Wrapper class to hold a css::accessibility::XAccessible object
+// while being able to pass it as a QObject
+class VCLPLUG_QT5_PUBLIC Qt5XAccessible : public QObject
 {
     Q_OBJECT
 
 public:
-    Qt5VclWindow(vcl::Window* pWindow);
-    VclPtr<vcl::Window> m_pWindow;
+    Qt5XAccessible(css::uno::Reference<css::accessibility::XAccessible> xAccessible);
+    css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
