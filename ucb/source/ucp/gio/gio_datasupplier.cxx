@@ -35,8 +35,6 @@ using namespace gio;
 namespace gio
 {
 
-typedef std::vector< ResultListEntry* > ResultList;
-
 DataSupplier::DataSupplier( const rtl::Reference< ::gio::Content >& rContent, sal_Int32 nOpenMode )
     : mxContent(rContent), mnOpenMode(nOpenMode), mbCountFinal(false)
 {
@@ -73,7 +71,7 @@ bool DataSupplier::getData()
                 break;
         }
 
-        maResults.push_back( new ResultListEntry( pInfo ) );
+        maResults.emplace_back( new ResultListEntry( pInfo ) );
         g_object_unref(pInfo);
     }
 
@@ -85,14 +83,6 @@ bool DataSupplier::getData()
 
 DataSupplier::~DataSupplier()
 {
-    ResultList::const_iterator it  = maResults.begin();
-    ResultList::const_iterator end = maResults.end();
-
-    while ( it != end )
-    {
-        delete *it;
-        ++it;
-    }
 }
 
 OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
