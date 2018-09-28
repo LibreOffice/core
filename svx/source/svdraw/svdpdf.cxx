@@ -986,7 +986,7 @@ void ImpSdrPdfImport::MapScaling()
 void ImpSdrPdfImport::ImportImage(FPDF_PAGEOBJECT pPageObject, int /*nPageObjectIndex*/)
 {
     std::unique_ptr<std::remove_pointer<FPDF_BITMAP>::type, FPDFBitmapDeleter> bitmap(
-        FPDFImageObj_GetBitmapBgra(pPageObject));
+        FPDFImageObj_GetBitmap(pPageObject));
     if (!bitmap)
     {
         SAL_WARN("sd.filter", "Failed to get IMAGE");
