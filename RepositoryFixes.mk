@@ -107,8 +107,8 @@ gb_Library_FILENAMES := $(patsubst z:iz%,z:zlib%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst stl:istl%,stl:msvcprt%,$(gb_Library_FILENAMES))
 
 # handle libraries in msvc format that don't use an "i" prefix for their import library
-# these are libraries built by OOo, but only a few of them
-# all other libraries built by OOo and all platform libraries (exceptions see below) are used without an import library
+# these are libraries built by AOO, but only a few of them
+# all other libraries built by AOO and all platform libraries (exceptions see below) are used without an import library
 # we link against their dlls in gcc format directly
 gb_Library_NOILIBFILENAMES:=\
     icudt \
@@ -193,7 +193,7 @@ gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 
 endif # ifneq ($(USE_MINGW),)
 
-else  # ifeq ($(OS),WNT)
+else # ifeq ($(OS),WNT)
 
 gb_Library_FILENAMES := $(patsubst vbaobj:vbaobj.uno%,vbaobj:libvbaobj.uno%,$(gb_Library_FILENAMES))
 

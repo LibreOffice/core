@@ -371,7 +371,7 @@ $(call gb_LinkTarget_add_defs,$(1),\
 $(call gb_LinkTarget_set_include,$(1),\
     $$(INCLUDE) \
     $(APR_CFLAGS) \
-)       
+)
 $(call gb_LinkTarget_add_libs,$(1),$(APR_LIBS))
 endef
 
@@ -667,6 +667,5 @@ endif
 endef
 
 endif # SYSTEM_HUNSPELL
-
 
 # vim: set noet sw=4 ts=4:
