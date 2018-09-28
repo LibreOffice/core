@@ -35,40 +35,30 @@
 #include <vcl/settings.hxx>
 #include <memory>
 
-SvxXConnectionPreview::SvxXConnectionPreview( vcl::Window* pParent, WinBits nStyle)
-    : Control(pParent, nStyle)
-    , pEdgeObj(nullptr)
+SvxXConnectionPreview::SvxXConnectionPreview()
+    : pEdgeObj(nullptr)
     , pView(nullptr)
 {
     SetMapMode(MapMode(MapUnit::Map100thMM));
-    SetStyles();
 }
 
-VCL_BUILDER_FACTORY_CONSTRUCTOR(SvxXConnectionPreview, 0)
+void SvxXConnectionPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    weld::CustomWidgetController::SetDrawingArea(pDrawingArea);
+    Size aSize(pDrawingArea->get_ref_device().LogicToPixel(Size(118 , 121), MapMode(MapUnit::MapAppFont)));
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+    SetOutputSizePixel(aSize);
+}
 
 SvxXConnectionPreview::~SvxXConnectionPreview()
 {
-    disposeOnce();
-}
-
-void SvxXConnectionPreview::dispose()
-{
-    pSdrPage.reset();
-    Control::dispose();
 }
 
 void SvxXConnectionPreview::Resize()
 {
-    Control::Resize();
-
     AdaptSize();
 
     Invalidate();
-}
-
-Size SvxXConnectionPreview::GetOptimalSize() const
-{
-    return LogicToPixel(Size(118 , 121), MapMode(MapUnit::MapAppFont));
 }
 
 void SvxXConnectionPreview::AdaptSize()
@@ -89,7 +79,7 @@ void SvxXConnectionPreview::AdaptSize()
     MapMode         aDisplayMap( aMapMode );
     Point           aNewPos;
     Size            aNewSize;
-    const Size      aWinSize = PixelToLogic( GetOutputSizePixel(), aDisplayMap );
+    const Size      aWinSize = GetDrawingArea()->get_ref_device().PixelToLogic(GetOutputSizePixel(), aDisplayMap);
     const long      nWidth = aWinSize.Width();
     const long      nHeight = aWinSize.Height();
     if (aRect.GetHeight() == 0)
@@ -123,7 +113,7 @@ void SvxXConnectionPreview::AdaptSize()
     aNewPos.setX( ( nWidth - aNewSize.Width() )  >> 1 );
     aNewPos.setY( ( nHeight - aNewSize.Height() ) >> 1 );
 
-    aDisplayMap.SetOrigin( LogicToLogic( aNewPos, aMapMode, aDisplayMap ) );
+    aDisplayMap.SetOrigin(OutputDevice::LogicToLogic(aNewPos, aMapMode, aDisplayMap));
     SetMapMode( aDisplayMap );
 
     // Origin
@@ -206,6 +196,14 @@ void SvxXConnectionPreview::Construct()
 
 void SvxXConnectionPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
+    rRenderContext.Push(PushFlags::ALL);
+
+    rRenderContext.SetMapMode(GetMapMode());
+
+    const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
+    rRenderContext.SetDrawMode(rStyles.GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR);
+    rRenderContext.SetBackground(Wallpaper(rStyles.GetFieldColor()));
+
     if (pSdrPage)
     {
         // This will not work anymore. To not start at Adam and Eve, i will
@@ -231,6 +229,8 @@ void SvxXConnectionPreview::Paint(vcl::RenderContext& rRenderContext, const tool
         // do processing
         aPainter.ProcessDisplay(aDisplayInfo);
     }
+
+    rRenderContext.Pop();
 }
 
 void SvxXConnectionPreview::SetAttributes( const SfxItemSet& rInAttrs )
@@ -239,7 +239,6 @@ void SvxXConnectionPreview::SetAttributes( const SfxItemSet& rInAttrs )
 
     Invalidate();
 }
-
 
 // Get number of lines which are offset based on the preview object
 
@@ -291,7 +290,8 @@ void SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
             aMapMode.SetScaleY( aYFrac );
             SetMapMode( aMapMode );
 
-            Size aOutSize( GetOutputSize() );
+            Size aOutSize(GetOutputSizePixel());
+            aOutSize = GetDrawingArea()->get_ref_device().PixelToLogic(aOutSize);
 
             Point aPt( aMapMode.GetOrigin() );
             long nX = static_cast<long>( ( static_cast<double>(aOutSize.Width()) - ( static_cast<double>(aOutSize.Width()) * static_cast<double>(*pMultFrac)  ) ) / 2.0 + 0.5 );
@@ -304,23 +304,6 @@ void SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
 
             Invalidate();
         }
-    }
-}
-
-void SvxXConnectionPreview::SetStyles()
-{
-    const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
-    SetBackground( Wallpaper( rStyles.GetFieldColor() ) );
-}
-
-void SvxXConnectionPreview::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    Control::DataChanged( rDCEvt );
-
-    if ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-    {
-        SetStyles();
     }
 }
 
