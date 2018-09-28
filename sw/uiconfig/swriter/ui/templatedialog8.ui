@@ -68,7 +68,7 @@
             </child>
             <child>
               <object class="GtkButton" id="standard">
-                <property name="label">Standard</property>
+                <property name="label" translatable="yes" context="templatedialog8|standard">Standard</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
