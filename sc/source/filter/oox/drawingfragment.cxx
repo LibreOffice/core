@@ -536,6 +536,8 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
             case XML_Radio:
             {
                 AxOptionButtonModel& rAxModel = aControl.createModel< AxOptionButtonModel >();
+                // unique name to prevent autoGroping with ActiveX controls.
+                rAxModel.maGroupName = "autoGroup_formControl";
                 convertControlText( rAxModel.maFontData, rAxModel.mnTextColor, rAxModel.maCaption, pTextBox, pClientData->mnTextHAlign );
                 convertControlBackground( rAxModel, rShape );
                 rAxModel.maValue = OUString::number( pClientData->mnChecked );
