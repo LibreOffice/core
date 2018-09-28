@@ -22,7 +22,7 @@
 #include <QtGui/QColor>
 #include <QtGui/QWindow>
 
-#include <vcl/window.hxx>
+#include <com/sun/star/accessibility/XAccessible.hpp>
 
 class Qt5Frame;
 class Qt5Widget;
@@ -33,8 +33,7 @@ class VCLPLUG_QT5_PUBLIC Qt5AccessibleWidget : public QObject, public QAccessibl
     Q_OBJECT
 
 public:
-    Qt5AccessibleWidget(Qt5Widget* pFrame, vcl::Window* pWindow);
-    Qt5AccessibleWidget(vcl::Window* pWindow);
+    Qt5AccessibleWidget(const css::uno::Reference<css::accessibility::XAccessible> xAccessible);
     QWindow* window() const override;
     int childCount() const override;
     int indexOfChild(const QAccessibleInterface* child) const override;
@@ -70,8 +69,7 @@ public:
     static QAccessibleInterface* customFactory(const QString& classname, QObject* object);
 
 private:
-    Qt5Widget* m_pFrame;
-    VclPtr<vcl::Window> m_pWindow;
+    css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
