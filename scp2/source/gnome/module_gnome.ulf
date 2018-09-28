@@ -20,5 +20,5 @@
 en-US = "GNOME Integration"
 
 [STR_DESC_MODULE_OPTIONAL_GNOME]
-en-US = "System integration of %PRODUCTNAME %PRODUCTVERSION into Gnome Desktop Environment."
+en-US = "System integration of %PRODUCTNAME %PRODUCTVERSION into GNOME Desktop Environment."
 
