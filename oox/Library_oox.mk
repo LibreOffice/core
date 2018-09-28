@@ -96,7 +96,6 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/core/recordparser \
     oox/source/core/relations \
     oox/source/core/relationshandler \
-    oox/source/core/services \
     oox/source/core/xmlfilterbase \
     oox/source/crypto/AgileEngine \
     oox/source/crypto/CryptTools \

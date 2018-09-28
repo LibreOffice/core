@@ -18,7 +18,7 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="oox" xmlns="http://openoffice.org/2010/uno-components">
+    xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.oox.core.FastTokenHandler"
     constructor="com_sun_star_comp_oox_core_FastTokenHandler_get_implementation">
     <service name="com.sun.star.xml.sax.FastTokenHandler"/>
@@ -36,7 +36,8 @@
     <service name="com.sun.star.document.ImportFilter"/>
     <service name="com.sun.star.document.ExportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.oox.ShapeContextHandler">
+  <implementation name="com.sun.star.comp.oox.ShapeContextHandler"
+    constructor="com_sun_star_comp_oox_ShapeContextHandler_get_implementation">
     <service name="com.sun.star.xml.sax.FastShapeContextHandler"/>
   </implementation>
 </component>

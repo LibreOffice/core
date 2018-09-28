@@ -187,7 +187,6 @@
 #include <sax/fastattribs.hxx>
 #include <sax/fshelper.hxx>
 #include <sax/saxdllapi.h>
-#include <services.hxx>
 #include <svtools/svtdllapi.h>
 #include <svx/msdffdef.hxx>
 #include <svx/svxdllapi.h>
