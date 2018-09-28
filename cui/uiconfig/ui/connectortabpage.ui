@@ -73,7 +73,7 @@
             <child>
               <object class="GtkComboBoxText" id="LB_TYPE">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
               </object>
               <packing>
                 <property name="expand">False</property>

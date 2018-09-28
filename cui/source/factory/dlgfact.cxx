@@ -1370,8 +1370,8 @@ VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateSfxDialog(vcl::Windo
             return VclPtr<CuiAbstractController_Impl>::Create(o3tl::make_unique<SvxMeasureDialog>(pParent ? pParent->GetFrameWeld() : nullptr, rAttr, pView));
         }
         case RID_SVXPAGE_CONNECTION :
-            pDlg = VclPtr<SvxConnectionDialog>::Create( pParent, rAttr, pView );
-            break;
+            return VclPtr<CuiAbstractController_Impl>::Create(o3tl::make_unique<SvxConnectionDialog>(pParent ? pParent->GetFrameWeld() : nullptr, rAttr, pView));
+
         case RID_SFXPAGE_DBREGISTER :
             pDlg = VclPtr<DatabaseRegistrationDialog>::Create( pParent, rAttr );
             break;
