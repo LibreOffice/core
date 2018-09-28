@@ -45,7 +45,7 @@ findrequires = ""
 copyright = "2018 The Document Foundation"
 solariscopyright = "solariscopyrightfile"
 vendor = "The Document Foundation"
-description = "Gnome integration module for %PRODUCTNAME %PRODUCTVERSION"
+description = "GNOME integration module for %PRODUCTNAME %PRODUCTVERSION"
 destpath = "/opt"
 packageversion = "%PACKAGEVERSION"
 End
