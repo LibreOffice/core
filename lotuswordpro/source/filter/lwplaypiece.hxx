@@ -216,7 +216,6 @@ public:
     LwpLayoutColumns(LwpObjectHeader const & objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) override;
     sal_uInt16 GetNumCols(){return m_nNumCols;}
-    double GetColWidth(sal_uInt16 nIndex);
     double GetColGap(sal_uInt16 nIndex);
 private:
     virtual void Read() override;

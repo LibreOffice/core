@@ -62,7 +62,6 @@ public:
 
     size_t getDdeLinkCount() const;
 
-    void disconnectDdeLinks();
 private:
     bool hasDdeOrOleOrWebServiceLinks(bool bDde, bool bOle, bool bWebService) const;
 };

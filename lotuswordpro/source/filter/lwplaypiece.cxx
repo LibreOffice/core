@@ -286,15 +286,6 @@ void LwpLayoutColumns::Read()
     }
 }
 
-double LwpLayoutColumns::GetColWidth(sal_uInt16 nIndex)
-{
-    if(nIndex >= m_nNumCols)
-    {
-        return 0;
-    }
-    return m_pColumns[nIndex].GetWidth();
-}
-
 double LwpLayoutColumns::GetColGap(sal_uInt16 nIndex)
 {
     if(nIndex >= m_nNumCols)

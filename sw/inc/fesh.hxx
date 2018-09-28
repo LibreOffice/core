@@ -535,7 +535,6 @@ public:
     bool BeginMark( const Point &rPos );
     void MoveMark ( const Point &rPos );
     bool EndMark  ();
-    void BreakMark();
 
     /// Create and destroy group, don't when frame is selected.
     bool IsGroupSelected();     ///< Can be a mixed selection!
