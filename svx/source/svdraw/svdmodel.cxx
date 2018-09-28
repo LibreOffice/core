@@ -645,7 +645,7 @@ void SdrModel::ClearModel(bool bCalledFromDestructor)
     maMaPag.clear();
     MasterPageListChanged();
 
-    pLayerAdmin->ClearLayer();
+    pLayerAdmin->ClearLayers();
 }
 
 SdrModel* SdrModel::AllocModel() const

@@ -24,6 +24,7 @@
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
 #include <algorithm>
+#include <memory>
 #include <vector>
 
 /**
@@ -110,7 +111,7 @@ friend class SdrModel;
 friend class SdrPage;
 
 protected:
-    std::vector<SdrLayer*> aLayer;
+    std::vector<std::unique_ptr<SdrLayer>> maLayers;
     SdrLayerAdmin* pParent; // The page's admin knows the doc's admin
     SdrModel* pModel; // For broadcasting
     OUString maControlLayerName;
@@ -129,11 +130,11 @@ public:
 
     void               SetModel(SdrModel* pNewModel);
 
-    void               InsertLayer(SdrLayer* pLayer, sal_uInt16 nPos);
-    SdrLayer*          RemoveLayer(sal_uInt16 nPos);
+    void               InsertLayer(std::unique_ptr<SdrLayer> pLayer, sal_uInt16 nPos);
+    std::unique_ptr<SdrLayer> RemoveLayer(sal_uInt16 nPos);
 
-    // Delete the entire layer
-    void               ClearLayer();
+    // Delete all layers
+    void               ClearLayers();
 
     // New layer is created and inserted
     SdrLayer*          NewLayer(const OUString& rName, sal_uInt16 nPos=0xFFFF);
@@ -142,10 +143,10 @@ public:
     void               NewStandardLayer(sal_uInt16 nPos);
 
     // Iterate over all layers
-    sal_uInt16         GetLayerCount() const                                         { return sal_uInt16(aLayer.size()); }
+    sal_uInt16         GetLayerCount() const                                         { return sal_uInt16(maLayers.size()); }
 
-    SdrLayer*          GetLayer(sal_uInt16 i)                                        { return aLayer[i]; }
-    const SdrLayer*    GetLayer(sal_uInt16 i) const                                  { return aLayer[i]; }
+    SdrLayer*          GetLayer(sal_uInt16 i)                                        { return maLayers[i].get(); }
+    const SdrLayer*    GetLayer(sal_uInt16 i) const                                  { return maLayers[i].get(); }
 
     sal_uInt16         GetLayerPos(SdrLayer* pLayer) const;
 

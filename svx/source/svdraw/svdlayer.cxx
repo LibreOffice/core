@@ -111,7 +111,6 @@ bool SdrLayer::operator==(const SdrLayer& rCmpLayer) const
 }
 
 SdrLayerAdmin::SdrLayerAdmin(SdrLayerAdmin* pNewParent):
-    aLayer(),
     pParent(pNewParent),
     pModel(nullptr),
     maControlLayerName("controls")
@@ -119,7 +118,6 @@ SdrLayerAdmin::SdrLayerAdmin(SdrLayerAdmin* pNewParent):
 }
 
 SdrLayerAdmin::SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin):
-    aLayer(),
     pParent(nullptr),
     pModel(nullptr),
     maControlLayerName("controls")
@@ -129,24 +127,21 @@ SdrLayerAdmin::SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin):
 
 SdrLayerAdmin::~SdrLayerAdmin()
 {
-    ClearLayer();
 }
 
-void SdrLayerAdmin::ClearLayer()
+void SdrLayerAdmin::ClearLayers()
 {
-    for( std::vector<SdrLayer*>::const_iterator it = aLayer.begin(); it != aLayer.end(); ++it )
-        delete *it;
-    aLayer.clear();
+    maLayers.clear();
 }
 
 SdrLayerAdmin& SdrLayerAdmin::operator=(const SdrLayerAdmin& rSrcLayerAdmin)
 {
-    ClearLayer();
+    maLayers.clear();
     pParent=rSrcLayerAdmin.pParent;
     sal_uInt16 i;
     sal_uInt16 nCount=rSrcLayerAdmin.GetLayerCount();
     for (i=0; i<nCount; i++) {
-        aLayer.push_back(new SdrLayer(*rSrcLayerAdmin.GetLayer(i)));
+        maLayers.emplace_back(new SdrLayer(*rSrcLayerAdmin.GetLayer(i)));
     }
     return *this;
 }
@@ -172,20 +167,20 @@ void SdrLayerAdmin::Broadcast() const
     }
 }
 
-void SdrLayerAdmin::InsertLayer(SdrLayer* pLayer, sal_uInt16 nPos)
+void SdrLayerAdmin::InsertLayer(std::unique_ptr<SdrLayer> pLayer, sal_uInt16 nPos)
 {
-        if(nPos==0xFFFF)
-            aLayer.push_back(pLayer);
-        else
-            aLayer.insert(aLayer.begin() + nPos, pLayer);
         pLayer->SetModel(pModel);
+        if(nPos==0xFFFF)
+            maLayers.push_back(std::move(pLayer));
+        else
+            maLayers.insert(maLayers.begin() + nPos, std::move(pLayer));
         Broadcast();
 }
 
-SdrLayer* SdrLayerAdmin::RemoveLayer(sal_uInt16 nPos)
+std::unique_ptr<SdrLayer> SdrLayerAdmin::RemoveLayer(sal_uInt16 nPos)
 {
-    SdrLayer* pRetLayer=aLayer[nPos];
-    aLayer.erase(aLayer.begin()+nPos);
+    std::unique_ptr<SdrLayer> pRetLayer = std::move(maLayers[nPos]);
+    maLayers.erase(maLayers.begin()+nPos);
     Broadcast();
     return pRetLayer;
 }
@@ -196,9 +191,9 @@ SdrLayer* SdrLayerAdmin::NewLayer(const OUString& rName, sal_uInt16 nPos)
     SdrLayer* pLay=new SdrLayer(nID,rName);
     pLay->SetModel(pModel);
     if(nPos==0xFFFF)
-        aLayer.push_back(pLay);
+        maLayers.push_back(std::unique_ptr<SdrLayer>(pLay));
     else
-        aLayer.insert(aLayer.begin() + nPos, pLay);
+        maLayers.insert(maLayers.begin() + nPos, std::unique_ptr<SdrLayer>(pLay));
     Broadcast();
     return pLay;
 }
@@ -210,9 +205,9 @@ void SdrLayerAdmin::NewStandardLayer(sal_uInt16 nPos)
     pLay->SetStandardLayer();
     pLay->SetModel(pModel);
     if(nPos==0xFFFF)
-        aLayer.push_back(pLay);
+        maLayers.push_back(std::unique_ptr<SdrLayer>(pLay));
     else
-        aLayer.insert(aLayer.begin() + nPos, pLay);
+        maLayers.insert(maLayers.begin() + nPos, std::unique_ptr<SdrLayer>(pLay));
     Broadcast();
 }
 
@@ -220,11 +215,10 @@ sal_uInt16 SdrLayerAdmin::GetLayerPos(SdrLayer* pLayer) const
 {
     sal_uInt16 nRet=SDRLAYERPOS_NOTFOUND;
     if (pLayer!=nullptr) {
-        std::vector<SdrLayer*>::const_iterator it = std::find(aLayer.begin(), aLayer.end(), pLayer);
-        if (it==aLayer.end()) {
-            nRet=SDRLAYERPOS_NOTFOUND;
-        } else {
-            nRet=it - aLayer.begin();
+        auto it = std::find_if(maLayers.begin(), maLayers.end(),
+                    [&](const std::unique_ptr<SdrLayer> & p) { return p.get() == pLayer; });
+        if (it!=maLayers.end()) {
+            nRet=it - maLayers.begin();
         }
     }
     return nRet;
@@ -266,9 +260,9 @@ SdrLayerID SdrLayerAdmin::GetLayerID(const OUString& rName) const
 
 const SdrLayer* SdrLayerAdmin::GetLayerPerID(SdrLayerID nID) const
 {
-    for (SdrLayer* pLayer : aLayer)
+    for (auto const & pLayer : maLayers)
         if (pLayer->GetID() == nID)
-            return pLayer;
+            return pLayer.get();
     return nullptr;
 }
 
@@ -313,7 +307,7 @@ void SdrLayerAdmin::SetControlLayerName(const OUString& rNewName)
 void  SdrLayerAdmin::getVisibleLayersODF( SdrLayerIDSet& rOutSet) const
 {
     rOutSet.ClearAll();
-    for( SdrLayer* pCurrentLayer : aLayer )
+    for( auto & pCurrentLayer : maLayers )
     {
         if ( pCurrentLayer->IsVisibleODF() )
             rOutSet.Set( pCurrentLayer->GetID() );
@@ -323,7 +317,7 @@ void  SdrLayerAdmin::getVisibleLayersODF( SdrLayerIDSet& rOutSet) const
 void SdrLayerAdmin::getPrintableLayersODF( SdrLayerIDSet& rOutSet) const
 {
     rOutSet.ClearAll();
-    for( SdrLayer* pCurrentLayer : aLayer )
+    for( auto & pCurrentLayer : maLayers )
     {
         if ( pCurrentLayer->IsPrintableODF() )
             rOutSet.Set( pCurrentLayer->GetID() );
@@ -333,7 +327,7 @@ void SdrLayerAdmin::getPrintableLayersODF( SdrLayerIDSet& rOutSet) const
 void SdrLayerAdmin::getLockedLayersODF( SdrLayerIDSet& rOutSet) const
 {
     rOutSet.ClearAll();
-    for( SdrLayer* pCurrentLayer : aLayer )
+    for( auto& pCurrentLayer : maLayers )
     {
         if ( pCurrentLayer->IsLockedODF() )
             rOutSet.Set( pCurrentLayer->GetID() );
@@ -355,18 +349,20 @@ void SdrLayerAdmin::QueryValue(const SdrLayerIDSet& rViewLayerSet, css::uno::Any
     sal_uInt8 nByteIndex = 0;
     sal_uInt8 nBitpos = 0;
     sal_uInt16 nLayerPos = 0; // Position of the layer in member aLayer and in <draw:layer-set> in file
-    for( SdrLayer* pCurrentLayer : aLayer )
+    sal_uInt16 nLayerIndex = 0;
+    for( auto& pCurrentLayer : maLayers )
     {
         SdrLayerID nCurrentID = pCurrentLayer->GetID();
         if ( rViewLayerSet.IsSet(nCurrentID) )
         {
-            nLayerPos = GetLayerPos(pCurrentLayer);
+            nLayerPos = nLayerIndex;
             nByteIndex = nLayerPos / 8;
             if (nByteIndex > 31)
                 continue; // skip position, if too large for bitfield
             nBitpos = nLayerPos % 8;
             aTmp[nByteIndex] |= (1 << nBitpos);
         }
+        ++nLayerIndex;
     }
 
     // Second transform the bitfield to byte sequence, same as in previous version of QueryValue

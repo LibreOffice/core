@@ -261,12 +261,12 @@ void SdrEditView::DeleteLayer(const OUString& rName)
         if( bUndo )
         {
             AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteLayer(nLayerNum, rLA, *mpModel));
-            rLA.RemoveLayer(nLayerNum);
+            rLA.RemoveLayer(nLayerNum).release();
             EndUndo();
         }
         else
         {
-            delete rLA.RemoveLayer(nLayerNum);
+            rLA.RemoveLayer(nLayerNum);
         }
 
         mpModel->SetChanged();
