@@ -29,6 +29,7 @@
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>
 
+#include <memory>
 #include <vector>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
@@ -55,7 +56,6 @@ namespace sdr
 
 // typedefs for a list of SdrPageWindow
 class SdrPageWindow;
-typedef ::std::vector< SdrPageWindow* > SdrPageWindowVector;
 
 
 class SVX_DLLPUBLIC SdrPageView
@@ -85,7 +85,7 @@ private:
     // #103834# Use one reserved slot (bReserveBool1) for the background color
     Color         maBackgroundColor;
 
-    SdrPageWindowVector maPageWindows;
+    std::vector< std::unique_ptr<SdrPageWindow> > maPageWindows;
 
     // #i72752# member to remember with which SdrPageWindow the BeginDrawLayer
     // was done
@@ -93,7 +93,7 @@ private:
 
     // interface to SdrPageWindow
     void ClearPageWindows();
-    SdrPageWindow* RemovePageWindow(SdrPageWindow& rOld);
+    std::unique_ptr<SdrPageWindow> RemovePageWindow(SdrPageWindow& rOld);
 public:
     sal_uInt32 PageWindowCount() const { return maPageWindows.size(); }
     SdrPageWindow* FindPageWindow( SdrPaintWindow& rPaintWindow ) const;
