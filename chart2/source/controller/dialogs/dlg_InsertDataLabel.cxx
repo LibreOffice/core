@@ -27,7 +27,7 @@ DataLabelsDialog::DataLabelsDialog(vcl::Window* pWindow, const SfxItemSet& rInAt
     ModalDialog(pWindow
                 ,"dlg_DataLabels"
                 ,"modules/schart/ui/dlg_DataLabel.ui"),
-    m_apDataLabelResources( new DataLabelResources(this, this, rInAttrs) )
+    m_apDataLabelResources( new DataLabelResources(this, GetFrameWeld(), rInAttrs) )
 {
     m_apDataLabelResources->SetNumberFormatter( pFormatter );
     m_apDataLabelResources->Reset(rInAttrs);
