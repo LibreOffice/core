@@ -418,7 +418,7 @@ void  SwSendMailDialog::SendMails()
     uno::Reference< mail::XSmtpService > xSmtpServer =
                 SwMailMergeHelper::ConnectToSmtpServer( *m_pConfigItem,
                                             m_pImpl->xConnectedInMailService,
-                                            aEmptyOUStr, aEmptyOUStr, this );
+                                            aEmptyOUStr, aEmptyOUStr, GetFrameWeld() );
     bool bIsLoggedIn = xSmtpServer.is() && xSmtpServer->isConnected();
     LeaveWait();
     if(!bIsLoggedIn)
