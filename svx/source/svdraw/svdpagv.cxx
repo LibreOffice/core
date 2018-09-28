@@ -52,11 +52,11 @@ using namespace ::com::sun::star;
 
 SdrPageWindow* SdrPageView::FindPageWindow(SdrPaintWindow& rPaintWindow) const
 {
-    for(SdrPageWindowVector::const_iterator a = maPageWindows.begin(); a != maPageWindows.end(); ++a)
+    for(auto & a : maPageWindows)
     {
-        if(&((*a)->GetPaintWindow()) == &rPaintWindow)
+        if(&(a->GetPaintWindow()) == &rPaintWindow)
         {
-            return *a;
+            return a.get();
         }
     }
 
@@ -65,16 +65,12 @@ SdrPageWindow* SdrPageView::FindPageWindow(SdrPaintWindow& rPaintWindow) const
 
 const SdrPageWindow* SdrPageView::FindPatchedPageWindow( const OutputDevice& _rOutDev ) const
 {
-    for (   SdrPageWindowVector::const_iterator loop = maPageWindows.begin();
-            loop != maPageWindows.end();
-            ++loop
-        )
+    for ( auto const & pPageWindow : maPageWindows )
     {
-        const SdrPageWindow& rPageWindow( *(*loop) );
-        const SdrPaintWindow& rPaintWindow( rPageWindow.GetOriginalPaintWindow() ? *rPageWindow.GetOriginalPaintWindow() : rPageWindow.GetPaintWindow() );
+        const SdrPaintWindow& rPaintWindow( pPageWindow->GetOriginalPaintWindow() ? *pPageWindow->GetOriginalPaintWindow() : pPageWindow->GetPaintWindow() );
         if ( &rPaintWindow.GetOutputDevice() == &_rOutDev )
         {
-            return &rPageWindow;
+            return pPageWindow.get();
         }
     }
 
@@ -83,11 +79,11 @@ const SdrPageWindow* SdrPageView::FindPatchedPageWindow( const OutputDevice& _rO
 
 SdrPageWindow* SdrPageView::FindPageWindow(const OutputDevice& rOutDev) const
 {
-    for(SdrPageWindowVector::const_iterator a = maPageWindows.begin(); a != maPageWindows.end(); ++a)
+    for ( auto const & pPageWindow : maPageWindows )
     {
-        if(&((*a)->GetPaintWindow().GetOutputDevice()) == &rOutDev)
+        if(&(pPageWindow->GetPaintWindow().GetOutputDevice()) == &rOutDev)
         {
-            return *a;
+            return pPageWindow.get();
         }
     }
 
@@ -96,32 +92,23 @@ SdrPageWindow* SdrPageView::FindPageWindow(const OutputDevice& rOutDev) const
 
 SdrPageWindow* SdrPageView::GetPageWindow(sal_uInt32 nIndex) const
 {
-    if(nIndex < maPageWindows.size())
-    {
-        return maPageWindows[nIndex];
-    }
-
-    return nullptr;
+    return maPageWindows[nIndex].get();
 }
 
 void SdrPageView::ClearPageWindows()
 {
-    for(SdrPageWindowVector::const_iterator a = maPageWindows.begin(); a != maPageWindows.end(); ++a)
-    {
-        delete *a;
-    }
-
     maPageWindows.clear();
 }
 
-SdrPageWindow* SdrPageView::RemovePageWindow(SdrPageWindow& rOld)
+std::unique_ptr<SdrPageWindow> SdrPageView::RemovePageWindow(SdrPageWindow& rOld)
 {
-    const SdrPageWindowVector::iterator aFindResult = ::std::find(maPageWindows.begin(), maPageWindows.end(), &rOld);
+    auto aFindResult = ::std::find_if(maPageWindows.begin(), maPageWindows.end(),
+                        [&](const std::unique_ptr<SdrPageWindow> & p) { return p.get() == &rOld; } );
 
     if(aFindResult != maPageWindows.end())
     {
         // remember return value
-        SdrPageWindow* pSdrPageWindow = *aFindResult;
+        std::unique_ptr<SdrPageWindow> pSdrPageWindow = std::move(*aFindResult);
         maPageWindows.erase(aFindResult);
         return pSdrPageWindow;
     }
@@ -164,27 +151,25 @@ SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
 
 SdrPageView::~SdrPageView()
 {
-
-    // cleanup window vector
-    ClearPageWindows();
 }
 
 void SdrPageView::AddPaintWindowToPageView(SdrPaintWindow& rPaintWindow)
 {
     if(!FindPageWindow(rPaintWindow))
     {
-        maPageWindows.push_back(new SdrPageWindow(*this, rPaintWindow));
+        maPageWindows.emplace_back(new SdrPageWindow(*this, rPaintWindow));
     }
 }
 
 void SdrPageView::RemovePaintWindowFromPageView(SdrPaintWindow& rPaintWindow)
 {
-    SdrPageWindow* pCandidate = FindPageWindow(rPaintWindow);
-
-    if(pCandidate)
+    for(auto it = maPageWindows.begin(); it != maPageWindows.end(); ++it)
     {
-        pCandidate = RemovePageWindow(*pCandidate);
-        delete pCandidate;
+        if(&((*it)->GetPaintWindow()) == &rPaintWindow)
+        {
+            maPageWindows.erase(it);
+            break;
+        }
     }
 }
 
