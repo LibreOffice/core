@@ -1275,7 +1275,7 @@ void SdrUndoNewLayer::Undo()
 {
     DBG_ASSERT(!bItsMine,"SdrUndoNewLayer::Undo(): Layer already belongs to UndoAction.");
     bItsMine=true;
-    SdrLayer* pCmpLayer= pLayerAdmin->RemoveLayer(nNum);
+    SdrLayer* pCmpLayer= pLayerAdmin->RemoveLayer(nNum).release();
     DBG_ASSERT(pCmpLayer==pLayer,"SdrUndoNewLayer::Undo(): Removed layer is != pLayer.");
 }
 
@@ -1283,7 +1283,7 @@ void SdrUndoNewLayer::Redo()
 {
     DBG_ASSERT(bItsMine,"SdrUndoNewLayer::Undo(): Layer does not belong to UndoAction.");
     bItsMine=false;
-    pLayerAdmin->InsertLayer(pLayer,nNum);
+    pLayerAdmin->InsertLayer(std::unique_ptr<SdrLayer>(pLayer),nNum);
 }
 
 OUString SdrUndoNewLayer::GetComment() const
@@ -1296,14 +1296,14 @@ void SdrUndoDelLayer::Undo()
 {
     DBG_ASSERT(bItsMine,"SdrUndoDelLayer::Undo(): Layer does not belong to UndoAction.");
     bItsMine=false;
-    pLayerAdmin->InsertLayer(pLayer,nNum);
+    pLayerAdmin->InsertLayer(std::unique_ptr<SdrLayer>(pLayer),nNum);
 }
 
 void SdrUndoDelLayer::Redo()
 {
     DBG_ASSERT(!bItsMine,"SdrUndoDelLayer::Undo(): Layer already belongs to UndoAction.");
     bItsMine=true;
-    SdrLayer* pCmpLayer= pLayerAdmin->RemoveLayer(nNum);
+    SdrLayer* pCmpLayer= pLayerAdmin->RemoveLayer(nNum).release();
     DBG_ASSERT(pCmpLayer==pLayer,"SdrUndoDelLayer::Redo(): Removed layer is != pLayer.");
 }
 
