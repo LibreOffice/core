@@ -47,7 +47,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
-                <property name="label">1f603</property>
+                <property name="label" translatable="no">1f603</property>
               </object>
               <packing>
                 <property name="tab_fill">False</property>
@@ -70,7 +70,7 @@
                 <property name="width_request">40</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">1f43c</property>
+                <property name="label" translatable="no">1f43c</property>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -94,7 +94,7 @@
                 <property name="width_request">40</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">1f34f</property>
+                <property name="label" translatable="no">1f34f</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -117,7 +117,7 @@
               <object class="GtkLabel" id="activity">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">1f3c8</property>
+                <property name="label" translatable="no">1f3c8</property>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -140,7 +140,7 @@
               <object class="GtkLabel" id="travel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">1f697</property>
+                <property name="label" translatable="no">1f697</property>
               </object>
               <packing>
                 <property name="position">4</property>
@@ -163,7 +163,7 @@
               <object class="GtkLabel" id="objects">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">1f4f1</property>
+                <property name="label" translatable="no">1f4f1</property>
               </object>
               <packing>
                 <property name="position">5</property>
@@ -186,7 +186,7 @@
               <object class="GtkLabel" id="symbols">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">1f499</property>
+                <property name="label" translatable="no">1f499</property>
               </object>
               <packing>
                 <property name="position">6</property>
@@ -209,7 +209,7 @@
               <object class="GtkLabel" id="flags">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">1f1ee-1f1f3</property>
+                <property name="label" translatable="no">1f1ee-1f1f3</property>
               </object>
               <packing>
                 <property name="position">7</property>
@@ -232,7 +232,7 @@
               <object class="GtkLabel" id="unicode9">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">1f939</property>
+                <property name="label" translatable="no">1f939</property>
               </object>
               <packing>
                 <property name="position">8</property>
