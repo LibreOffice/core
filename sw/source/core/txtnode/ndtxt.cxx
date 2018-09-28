@@ -2012,7 +2012,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
 {
     CHECK_SWPHINTS_IF_FRM(this);
     CHECK_SWPHINTS(pDest);
-    sal_Int32 nTextStartIdx = rStart.GetIndex();
+    const sal_Int32 nTextStartIdx = rStart.GetIndex();
     sal_Int32 nDestStart = rDestStart.GetIndex();      // remember old Pos
 
     if (pDest->GetDoc()->IsClipBoard() && GetNum())
@@ -2103,7 +2103,6 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
 
     // Fetch end only now, because copying into self updates the start index
     // and all attributes
-    nTextStartIdx = rStart.GetIndex();
     const sal_Int32 nEnd = nTextStartIdx + nLen;
 
     // 2. copy attributes
@@ -2251,8 +2250,10 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
         std::reverse(metaFieldRanges.begin(), metaFieldRanges.end());
         for (const auto& pair : metaFieldRanges)
         {
-            const SwIndex aIdx(pDest, pair.first);
-            pDest->EraseText(aIdx, pair.second - pair.first);
+            const SwIndex aIdx(pDest, std::max(pair.first - nTextStartIdx, 0));
+            const sal_Int32 nCount = pair.second - pair.first;
+            if (nCount > 0)
+                pDest->EraseText(aIdx, nCount);
         }
     }
 
