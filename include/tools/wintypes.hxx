@@ -26,8 +26,8 @@
 enum class WindowType : sal_uInt16
 {
     NONE                 = 0,
-    FIRST                = 0x0130,
-    MESSBOX              = FIRST,
+    FIRST                = 0x0130, // 304
+    MESSBOX              = FIRST, // 0
     INFOBOX              ,
     WARNINGBOX           ,
     ERRORBOX             ,
@@ -37,7 +37,7 @@ enum class WindowType : sal_uInt16
     CONTAINER            ,
     FLOATINGWINDOW       ,
     DIALOG               ,
-    MODELESSDIALOG       ,
+    MODELESSDIALOG       , // 10 (314)
     MODALDIALOG          ,
     CONTROL              ,
     PUSHBUTTON           ,
@@ -47,7 +47,7 @@ enum class WindowType : sal_uInt16
     IMAGEBUTTON          ,
     MENUBUTTON           ,
     MOREBUTTON           ,
-    SPINBUTTON           ,
+    SPINBUTTON           , // 20 (324)
     RADIOBUTTON          ,
     CHECKBOX             ,
     TRISTATEBOX          ,
@@ -57,7 +57,7 @@ enum class WindowType : sal_uInt16
     LISTBOX              ,
     MULTILISTBOX         ,
     FIXEDTEXT            ,
-    FIXEDLINE            ,
+    FIXEDLINE            , // 30 (334)
     FIXEDBITMAP          ,
     FIXEDIMAGE           ,
     GROUPBOX             ,
@@ -67,7 +67,7 @@ enum class WindowType : sal_uInt16
     SPLITWINDOW          ,
     SPINFIELD            ,
     PATTERNFIELD         ,
-    NUMERICFIELD         ,
+    NUMERICFIELD         , // 40 (344)
     METRICFIELD          ,
     CURRENCYFIELD        ,
     DATEFIELD            ,
@@ -77,7 +77,7 @@ enum class WindowType : sal_uInt16
     METRICBOX            ,
     CURRENCYBOX          ,
     DATEBOX              ,
-    TIMEBOX              ,
+    TIMEBOX              , // 50 (354)
     LONGCURRENCYFIELD    ,
     LONGCURRENCYBOX      ,
     SCROLLWINDOW         ,
@@ -87,7 +87,7 @@ enum class WindowType : sal_uInt16
     TABPAGE              ,
     TABCONTROL           ,
     TABDIALOG            ,
-    BORDERWINDOW         ,
+    BORDERWINDOW         , // 60 (364)
     BUTTONDIALOG         ,
     SYSTEMCHILDWINDOW    ,
     SLIDER               ,
@@ -97,7 +97,7 @@ enum class WindowType : sal_uInt16
     INTROWINDOW          ,
     LISTBOXWINDOW        ,
     DOCKINGAREA          ,
-    RULER                ,
+    RULER                , // 70 (374)
     CALCINPUTLINE        ,
     LAST                 = CALCINPUTLINE,
     // only used in vclxtoolkit.cxx
@@ -163,6 +163,7 @@ WinBits const WB_AUTOHSCROLL =          SAL_CONST_INT64(0x10000000);
 WinBits const WB_DOCKABLE =             SAL_CONST_INT64(0x20000000);
 WinBits const WB_AUTOVSCROLL =          SAL_CONST_INT64(0x40000000);
 WinBits const WB_HYPHENATION =          SAL_CONST_INT64(0x800000000) | WB_WORDBREAK;
+// #i93011# style bit for some child windows, that want their children checked for accelerators
 WinBits const WB_CHILDDLGCTRL =         SAL_CONST_INT64(0x100000000000);
 
 // system floating window
