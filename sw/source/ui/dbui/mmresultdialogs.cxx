@@ -884,8 +884,8 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
         {
             SwView* pConfigView = pTargetView ? pTargetView : pView;
             SfxAllItemSet aSet(pConfigView->GetPool());
-            ScopedVclPtrInstance< SwMailConfigDlg > pDlg(pButton, aSet);
-            nRet = pDlg->Execute();
+            SwMailConfigDlg aDlg(pButton->GetFrameWeld(), aSet);
+            nRet = aDlg.run();
         }
 
         if(nRet != RET_OK && nRet != RET_YES)
