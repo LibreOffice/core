@@ -138,6 +138,7 @@
 #define SPINNER_64_12                                "vcl/res/spinner-64-12.png"
 //end, Throbber::getDefaultImageURLs
 
+#define IMG_APPLY   "sw/res/sc20558.png"
 #define IMG_WARN    "dbaccess/res/exwarning.png"
 #define IMG_ERROR   "dbaccess/res/exerror.png"
 #define IMG_INFO    "dbaccess/res/exinfo.png"
