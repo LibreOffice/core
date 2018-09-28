@@ -25,7 +25,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="check">
-        <property name="label">placeholder</property>
+        <property name="label" translatable="no">placeholder</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="no_show_all">True</property>

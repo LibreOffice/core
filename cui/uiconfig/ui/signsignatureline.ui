@@ -53,7 +53,7 @@
             </child>
             <child>
               <object class="GtkButton" id="ok">
-                <property name="label">Sign</property>
+                <property name="label" translatable="yes" context="signsignatureline|ok">Sign</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
