@@ -371,7 +371,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox&, rBox, void )
     aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ADD_AUTO, bUseAutomaticLanguage));
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateNumFormatDialog(this, aCoreSet));
+    ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateNumFormatDialog(GetFrameWeld(), aCoreSet));
 
     if (RET_OK == pDlg->Execute())
     {
