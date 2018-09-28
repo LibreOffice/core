@@ -87,7 +87,7 @@ public:
 
 };
 
-/* Derived from SfxSingleTabDialog, in order to be able to be
+/* Derived from SfxSingleTabDialogController, in order to be able to be
    informed about virtual methods by the control. */
 class SvxMeasureDialog : public SfxSingleTabDialogController
 {
