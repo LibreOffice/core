@@ -398,28 +398,6 @@ public:
     virtual Size GetOptimalSize() const override;
 };
 
-/*************************************************************************
-|*
-|* SvxXRectPreview
-|*
-\************************************************************************/
-
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXRectPreview : public SvxPreviewBase
-{
-private:
-    SdrObject*                                      mpRectangleObject;
-
-public:
-    SvxXRectPreview(vcl::Window* pParent);
-    virtual ~SvxXRectPreview() override;
-    virtual void dispose() override;
-
-    void SetAttributes(const SfxItemSet& rItemSet);
-
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual void Resize() override;
-};
-
 class SAL_WARN_UNUSED SVX_DLLPUBLIC XRectPreview : public PreviewBase
 {
 private:
