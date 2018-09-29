@@ -258,12 +258,20 @@ protected:
 public:
     virtual void insert_text(int pos, const OUString& rStr) = 0;
     void append_text(const OUString& rStr) { insert_text(-1, rStr); }
-    virtual void insert(int pos, const OUString& rId, const OUString& rStr, const OUString* pImage)
+    virtual void insert(int pos, const OUString& rId, const OUString& rStr,
+                        const OUString* pIconName, VirtualDevice* pImageSufface)
         = 0;
-    void append(const OUString& rId, const OUString& rStr) { insert(-1, rId, rStr, nullptr); }
+    void append(const OUString& rId, const OUString& rStr)
+    {
+        insert(-1, rId, rStr, nullptr, nullptr);
+    }
     void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
     {
-        insert(-1, rId, rStr, &rImage);
+        insert(-1, rId, rStr, &rImage, nullptr);
+    }
+    void append(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
+    {
+        insert(-1, rId, rStr, nullptr, &rImage);
     }
 
     virtual int get_count() const = 0;
@@ -318,13 +326,21 @@ protected:
 
 public:
     virtual void insert_text(const OUString& rText, int pos) = 0;
-    virtual void insert(int pos, const OUString& rId, const OUString& rStr, const OUString* pImage)
+    virtual void insert(int pos, const OUString& rId, const OUString& rStr,
+                        const OUString* pIconName, VirtualDevice* pImageSurface)
         = 0;
     void append_text(const OUString& rText) { insert_text(rText, -1); }
-    void append(const OUString& rId, const OUString& rStr) { insert(-1, rId, rStr, nullptr); }
+    void append(const OUString& rId, const OUString& rStr)
+    {
+        insert(-1, rId, rStr, nullptr, nullptr);
+    }
     void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
     {
-        insert(-1, rId, rStr, &rImage);
+        insert(-1, rId, rStr, &rImage, nullptr);
+    }
+    void append(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
+    {
+        insert(-1, rId, rStr, nullptr, &rImage);
     }
 
     void connect_changed(const Link<TreeView&, void>& rLink) { m_aChangeHdl = rLink; }
@@ -630,9 +646,9 @@ public:
         m_xTreeView->insert_text(rStr, pos);
     }
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
-                        const OUString* pImage) override
+                        const OUString* pIconName, VirtualDevice* pImageSurface) override
     {
-        m_xTreeView->insert(pos, rId, rStr, pImage);
+        m_xTreeView->insert(pos, rId, rStr, pIconName, pImageSurface);
     }
 
     virtual int get_count() const override { return m_xTreeView->n_children(); }
