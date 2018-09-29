@@ -3146,6 +3146,8 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
             _nObjectId,
             SdrInventor::ReportDesign,
             OBJ_DLG_FIXEDTEXT,
+            nullptr,
+            pSectionWindow->getReportSection().getPage(),
 
             // tdf#118963 Need a SdrModel for SdrObject creation. Dereferencing
             // m_aReportModel seems pretty safe, it's done in other places, initialized
@@ -3453,6 +3455,8 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                 nOBJID,
                 SdrInventor::ReportDesign,
                 OBJ_DLG_FIXEDTEXT,
+                pSectionWindow[1]->getReportSection().getPage(),
+                pSectionWindow[0]->getReportSection().getPage(),
 
                 // tdf#118963 Need a SdrModel for SdrObject creation. Dereferencing
                 // m_aReportModel seems pretty safe, it's done in other places, initialized
