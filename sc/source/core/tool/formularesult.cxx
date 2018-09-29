@@ -107,6 +107,7 @@ void ScFormulaResult::ResolveToken( const formula::FormulaToken * p )
                 p->DecRef();
                 mbToken = false;
                 meMultiline = MULTILINE_FALSE;
+                mfValue = 0.0;
                 break;
             case formula::svDouble:
                 mfValue = p->GetDouble();
@@ -140,6 +141,7 @@ void ScFormulaResult::Assign( const ScFormulaResult & r )
         mbEmpty = true;
         mbEmptyDisplayedAsString = r.mbEmptyDisplayedAsString;
         meMultiline = r.meMultiline;
+        mfValue = 0.0;
     }
     else if (r.mbToken)
     {
