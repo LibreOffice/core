@@ -947,7 +947,12 @@ void SdrObject::SetChanged()
     // of the next changes. It should not mean to have a SdrModel
     // set (this is guaranteed now), but should be connected to
     // being added to a SdrPage (?)
-    if(IsInserted())
+    // TTTT tdf#120066 Indeed - This triggers e.g. by CustomShape
+    // geometry-presenting SdrObjects that are in a SdrObjGroup,
+    // but the SdrObjGroup is *by purpose* not inserted.
+    // Need to check deeper and maybe identify all ::IsInserted()
+    // calls by rename and let the compiler work...
+    if(nullptr != getSdrPageFromSdrObject())
     {
         getSdrModelFromSdrObject().SetChanged();
     }
