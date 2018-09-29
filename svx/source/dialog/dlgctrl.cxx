@@ -1626,7 +1626,7 @@ void PreviewBase::StyleUpdated()
     CustomWidgetController::StyleUpdated();
 }
 
-XRectPreview::XRectPreview()
+SvxXRectPreview::SvxXRectPreview()
     : mpRectangleObject(nullptr)
 {
 }
@@ -1637,7 +1637,7 @@ tools::Rectangle PreviewBase::GetPreviewSize() const
     return aObjectSize;
 }
 
-void XRectPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+void SvxXRectPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     PreviewBase::SetDrawingArea(pDrawingArea);
     InitSettings();
@@ -1646,7 +1646,7 @@ void XRectPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     mpRectangleObject = new SdrRectObj(getModel(), GetPreviewSize());
 }
 
-void XRectPreview::Resize()
+void SvxXRectPreview::Resize()
 {
     SdrObject *pOrigObject = mpRectangleObject;
     if (pOrigObject)
@@ -1658,18 +1658,18 @@ void XRectPreview::Resize()
     PreviewBase::Resize();
 }
 
-XRectPreview::~XRectPreview()
+SvxXRectPreview::~SvxXRectPreview()
 {
     SdrObject::Free(mpRectangleObject);
 }
 
-void XRectPreview::SetAttributes(const SfxItemSet& rItemSet)
+void SvxXRectPreview::SetAttributes(const SfxItemSet& rItemSet)
 {
     mpRectangleObject->SetMergedItemSet(rItemSet, true);
     mpRectangleObject->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
 }
 
-void XRectPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SvxXRectPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     rRenderContext.Push(PushFlags::MAPMODE);
     rRenderContext.SetMapMode(MapMode(MapUnit::Map100thMM));
