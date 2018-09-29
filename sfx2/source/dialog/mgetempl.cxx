@@ -200,7 +200,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(TabPageParent pParent, const Sf
                  rTupel.nFlags != SfxStyleSearchBits::AllVisible &&
                  rTupel.nFlags != SfxStyleSearchBits::All )
             {
-                m_xFilterLb->insert(nIdx, OUString::number(i), rTupel.aName, nullptr);
+                m_xFilterLb->insert(nIdx, OUString::number(i), rTupel.aName, nullptr, nullptr);
                 if ( ( rTupel.nFlags & nMask ) == nMask )
                     nStyleFilterIdx = nIdx;
                 ++nIdx;

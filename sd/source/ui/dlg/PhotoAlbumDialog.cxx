@@ -550,8 +550,8 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, UpHdl, weld::Button&, void)
         m_xImagesLst->remove_text(sActEntry);
         m_xImagesLst->remove_text(sUpperEntry);
 
-        m_xImagesLst->insert(nActPos - 1, sAct, sActEntry, nullptr);
-        m_xImagesLst->insert(nActPos, sUpper, sUpperEntry, nullptr);
+        m_xImagesLst->insert(nActPos - 1, sAct, sActEntry, nullptr, nullptr);
+        m_xImagesLst->insert(nActPos, sUpper, sUpperEntry, nullptr, nullptr);
 
         m_xImagesLst->select(nActPos - 1);
     }
@@ -573,8 +573,8 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, DownHdl, weld::Button&, void)
         m_xImagesLst->remove_text(sActEntry);
         m_xImagesLst->remove_text(sDownEntry);
 
-        m_xImagesLst->insert(nActPos, sDown, sDownEntry, nullptr);
-        m_xImagesLst->insert(nActPos + 1, sAct, sActEntry, nullptr);
+        m_xImagesLst->insert(nActPos, sDown, sDownEntry, nullptr, nullptr);
+        m_xImagesLst->insert(nActPos + 1, sAct, sActEntry, nullptr, nullptr);
 
         m_xImagesLst->select(nActPos + 1);
     }

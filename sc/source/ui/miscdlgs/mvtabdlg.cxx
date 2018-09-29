@@ -220,7 +220,7 @@ void ScMoveTableDlg::InitDocListBox()
                 aEntryName += msCurrentDoc;
             }
 
-            m_xLbDoc->insert(i, OUString::number(reinterpret_cast<sal_uInt64>(&pScSh->GetDocument())), aEntryName, nullptr);
+            m_xLbDoc->insert(i, OUString::number(reinterpret_cast<sal_uInt64>(&pScSh->GetDocument())), aEntryName, nullptr, nullptr);
 
             i++;
         }

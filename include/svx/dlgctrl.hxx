@@ -268,7 +268,6 @@ public:
     void Modify(const XDashEntry& rEntry, sal_Int32 nPos, const BitmapEx& rBitmap );
 };
 
-
 /************************************************************************/
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC LineEndLB : public ListBox
@@ -283,6 +282,27 @@ public:
     void    Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const BitmapEx& rBitmap );
 };
 
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxLineEndLB
+{
+private:
+    std::unique_ptr<weld::ComboBox> m_xControl;
+
+public:
+    SvxLineEndLB(std::unique_ptr<weld::ComboBox> pControl);
+
+    void Fill( const XLineEndListRef &pList, bool bStart = true );
+
+    void    Append( const XLineEndEntry& rEntry, const BitmapEx& rBitmap );
+    void    Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const BitmapEx& rBitmap );
+
+    void clear() { m_xControl->clear(); }
+    void remove(int nPos) { m_xControl->remove(nPos); }
+    int get_active() const { return m_xControl->get_active(); }
+    void set_active(int nPos) { m_xControl->set_active(nPos); }
+    OUString get_active_text() const { return m_xControl->get_active_text(); }
+    void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xControl->connect_changed(rLink); }
+    int get_count() const { return m_xControl->get_count(); }
+};
 
 class SdrObject;
 class SdrPathObj;
@@ -353,6 +373,11 @@ public:
         mpBufferDevice->SetDrawMode(nDrawMode);
     }
 
+    Size GetOutputSize() const
+    {
+        return mpBufferDevice->PixelToLogic(GetOutputSizePixel());
+    }
+
     // dada read access
     SdrModel& getModel() const
     {
@@ -396,6 +421,32 @@ public:
     virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void Resize() override;
     virtual Size GetOptimalSize() const override;
+};
+
+class SAL_WARN_UNUSED SVX_DLLPUBLIC XLinePreview : public PreviewBase
+{
+private:
+    SdrPathObj*                                     mpLineObjA;
+    SdrPathObj*                                     mpLineObjB;
+    SdrPathObj*                                     mpLineObjC;
+
+    Graphic*                                        mpGraphic;
+    bool                                            mbWithSymbol;
+    Size                                            maSymbolSize;
+
+public:
+    XLinePreview();
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    virtual ~XLinePreview() override;
+
+    void SetLineAttributes(const SfxItemSet& rItemSet);
+
+    void ShowSymbol( bool b ) { mbWithSymbol = b; };
+    void SetSymbol( Graphic* p, const Size& s );
+    void ResizeSymbol( const Size& s );
+
+    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
+    virtual void Resize() override;
 };
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXRectPreview : public PreviewBase
