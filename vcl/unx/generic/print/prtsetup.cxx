@@ -329,7 +329,7 @@ RTSDevicePage::RTSDevicePage(weld::Widget* pPage, RTSDialog* pParent)
             || int(bAutoIsPDF) == m_pParent->m_aJobData.m_nPDFDevice);
 
     OUString sStr = m_xLevelBox->get_text(0);
-    m_xLevelBox->insert(0, m_xLevelBox->get_id(0), sStr.replaceAll("%s", bAutoIsPDF ? m_xLevelBox->get_text(5) : m_xLevelBox->get_text(1)), nullptr);
+    m_xLevelBox->insert(0, m_xLevelBox->get_id(0), sStr.replaceAll("%s", bAutoIsPDF ? m_xLevelBox->get_text(5) : m_xLevelBox->get_text(1)), nullptr, nullptr);
     m_xLevelBox->remove(1);
 
     for (int i = 0; i < m_xLevelBox->get_count(); ++i)
