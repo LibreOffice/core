@@ -35,6 +35,8 @@
 #include <oox/ole/axcontrol.hxx>
 #include <oox/vml/vmlshape.hxx>
 #include <oox/vml/vmlshapecontainer.hxx>
+#include <tools/diagnose_ex.h>
+#include <tools/gen.hxx>
 
 namespace oox {
 namespace vml {
@@ -146,6 +148,59 @@ void Drawing::convertAndInsert() const
 {
     Reference< XShapes > xShapes( mxDrawPage, UNO_QUERY );
     mxShapes->convertAndInsert( xShapes );
+
+    // Group together form control radio buttons that are in the same groupBox
+    std::map<OUString, tools::Rectangle> GroupBoxMap;
+    std::map<Reference< XPropertySet >, tools::Rectangle> RadioButtonMap;
+    for ( sal_Int32 i = 0; i < xShapes->getCount(); ++i )
+    {
+        try
+        {
+            Reference< XControlShape > xCtrlShape( xShapes->getByIndex(i), UNO_QUERY_THROW );
+            Reference< XControlModel > xCtrlModel( xCtrlShape->getControl(), UNO_SET_THROW );
+            Reference< XServiceInfo > xModelSI (xCtrlModel, UNO_QUERY_THROW );
+            Reference< XPropertySet >  aProps( xCtrlModel, UNO_QUERY_THROW );
+
+            OUString sName;
+            aProps->getPropertyValue("Name") >>= sName;
+            const ::Point aPoint( xCtrlShape->getPosition().X, xCtrlShape->getPosition().Y );
+            const ::Size aSize( xCtrlShape->getSize().Width, xCtrlShape->getSize().Height );
+            const tools::Rectangle aRect( aPoint, aSize );
+            if ( !sName.isEmpty()
+                 && xModelSI->supportsService("com.sun.star.awt.UnoControlGroupBoxModel") )
+            {
+                GroupBoxMap[sName] = aRect;
+            }
+            else if ( xModelSI->supportsService("com.sun.star.awt.UnoControlRadioButtonModel") )
+            {
+                OUString sGroupName;
+                aProps->getPropertyValue("GroupName") >>= sGroupName;
+                // only Form Controls are affected by Group Boxes - see drawingfragment.cxx
+                if ( sGroupName == "autoGroup_formControl" )
+                    RadioButtonMap[aProps] = aRect;
+            }
+        }
+        catch (uno::Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION("oox.vml");
+        }
+    }
+    for ( auto& BoxItr : GroupBoxMap )
+    {
+        const uno::Any aGroup( OUString("autoGroup_").concat(BoxItr.first) );
+        for ( auto RadioItr = RadioButtonMap.begin(); RadioItr != RadioButtonMap.end(); )
+        {
+            if ( BoxItr.second.IsInside(RadioItr->second) )
+            {
+                RadioItr->first->setPropertyValue("GroupName", aGroup );
+                // If conflict, first created GroupBox wins
+                RadioButtonMap.erase( RadioItr++ );
+            }
+            else
+                RadioItr++;
+        }
+    }
+
 }
 
 sal_Int32 Drawing::getLocalShapeIndex( const OUString& rShapeId ) const
