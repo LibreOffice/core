@@ -5047,10 +5047,18 @@
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro6">
-     <table:table-cell table:style-name="ce27"/>
-     <table:table-cell/>
-     <table:table-cell table:style-name="ce28"/>
-     <table:table-cell table:style-name="ce32"/>
+     <table:table-cell table:style-name="ce27" table:formula="of:=SKEW(1;2)" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#DIV/0!</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:#DIV/0!" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p>#DIV/0!</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce28" table:formula="of:=ERROR.TYPE([.A32])=2" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A32])" office:value-type="string" office:string-value="=SKEW(1,2)" calcext:value-type="string">
+      <text:p>=SKEW(1,2)</text:p>
+     </table:table-cell>
      <table:table-cell table:number-columns-repeated="4"/>
      <table:table-cell office:value-type="float" office:value="900000031" calcext:value-type="float">
       <text:p>900000031</text:p>

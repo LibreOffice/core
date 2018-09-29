@@ -3321,6 +3321,13 @@ void ScInterpreter::CalculateSkewOrSkewp( bool bSkewp )
     std::vector<double> values;
     if (!CalculateSkew( fSum, fCount, vSum, values))
         return;
+     // SKEW/SKEWP's constraints: they require at least three numbers
+    if (fCount < 3.0)
+    {
+        // for interoperability with Excel
+        PushError(FormulaError::DivisionByZero);
+        return;
+    }
 
     double fMean = fSum / fCount;
 
