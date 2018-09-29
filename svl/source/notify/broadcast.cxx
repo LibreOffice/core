@@ -20,6 +20,7 @@
 #include <svl/broadcast.hxx>
 #include <svl/listener.hxx>
 #include <svl/hint.hxx>
+#include <cassert>
 #include <algorithm>
 
 void SvtBroadcaster::Normalize() const
@@ -43,6 +44,10 @@ void SvtBroadcaster::Normalize() const
 
 void SvtBroadcaster::Add( SvtListener* p )
 {
+    assert(!mbDisposing && "called inside my own destructor?");
+    assert(!mbAboutToDie && "called after PrepareForDestruction()?");
+    if (mbDisposing || mbAboutToDie)
+        return;
     maListeners.push_back(p);
     mbNormalized = false;
 }
@@ -76,6 +81,8 @@ SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC ) :
     mbAboutToDie(rBC.mbAboutToDie), mbDisposing(false),
     mbNormalized(rBC.mbNormalized), mbDestNormalized(rBC.mbDestNormalized)
 {
+    assert(!mbAboutToDie && "copying an object marked with PrepareForDestruction()?");
+
     if (mbAboutToDie)
         Normalize();
 
