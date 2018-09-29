@@ -113,13 +113,14 @@ void RTFSprms::set(Id nKeyword, RTFValue::Pointer_t pValue, RTFOverwrite eOverwr
 bool RTFSprms::erase(Id nKeyword)
 {
     ensureCopyBeforeWrite();
-    for (auto i = m_pSprms->begin(); i != m_pSprms->end(); ++i)
+
+    auto i = std::find_if(
+        m_pSprms->begin(), m_pSprms->end(),
+        [&nKeyword](RTFSprmsImpl::value_type& rEntry) { return rEntry.first == nKeyword; });
+    if (i != m_pSprms->end())
     {
-        if (i->first == nKeyword)
-        {
-            m_pSprms->erase(i);
-            return true;
-        }
+        m_pSprms->erase(i);
+        return true;
     }
     return false;
 }
@@ -127,14 +128,12 @@ bool RTFSprms::erase(Id nKeyword)
 void RTFSprms::eraseLast(Id nKeyword)
 {
     ensureCopyBeforeWrite();
-    for (auto i = m_pSprms->rbegin(); i != m_pSprms->rend(); ++i)
-    {
-        if (i->first == nKeyword)
-        {
-            m_pSprms->erase(std::next(i).base());
-            return;
-        }
-    }
+
+    auto i = std::find_if(
+        m_pSprms->rbegin(), m_pSprms->rend(),
+        [&nKeyword](RTFSprmsImpl::value_type& rEntry) { return rEntry.first == nKeyword; });
+    if (i != m_pSprms->rend())
+        m_pSprms->erase(std::next(i).base());
 }
 
 static RTFValue::Pointer_t getDefaultSPRM(Id const id, Id nStyleType)

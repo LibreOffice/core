@@ -397,13 +397,7 @@ void OOXMLPropertySet::add(const OOXMLPropertySet::Pointer_t& pPropertySet)
     {
         int x = mProperties.size();
         mProperties.resize(mProperties.size() + pSet->mProperties.size());
-        auto itSrc = pSet->mProperties.begin();
-        auto itDest = mProperties.begin() + x;
-        while (itSrc != pSet->mProperties.end())
-        {
-            *itDest = *itSrc;
-            ++itDest; ++itSrc;
-        }
+        std::copy(pSet->mProperties.begin(), pSet->mProperties.end(), mProperties.begin() + x);
     }
 }
 
@@ -780,19 +774,15 @@ void OOXMLTable::resolve(Table & rTable)
 
     int nPos = 0;
 
-    PropertySets_t::iterator it = mPropertySets.begin();
-    PropertySets_t::iterator itEnd = mPropertySets.end();
-
-    while (it != itEnd)
+    for (const auto& rPropSet : mPropertySets)
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties
-            ((*it)->getProperties());
+            (rPropSet->getProperties());
 
         if (pProperties.get() != nullptr)
             pTable->entry(nPos, pProperties);
 
         ++nPos;
-        ++it;
     }
 }
 

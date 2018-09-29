@@ -35,6 +35,7 @@
 #include "DomainMapper.hxx"
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
+#include <numeric>
 
 namespace writerfilter {
 namespace dmapper {
@@ -562,21 +563,19 @@ void DomainMapperTableManager::endOfRowAction()
     IntVectorPtr pCellWidths = getCurrentCellWidths( );
     if(!m_nTableWidth && pTableGrid->size())
     {
-        ::std::vector<sal_Int32>::const_iterator aCellIter = pTableGrid->begin();
-
 #ifdef DEBUG_WRITERFILTER
         TagLogger::getInstance().startElement("tableWidth");
 #endif
 
-        while( aCellIter != pTableGrid->end() )
+        for( const auto& rCell : *pTableGrid )
         {
 #ifdef DEBUG_WRITERFILTER
             TagLogger::getInstance().startElement("col");
-            TagLogger::getInstance().attribute("width", *aCellIter);
+            TagLogger::getInstance().attribute("width", rCell);
             TagLogger::getInstance().endElement();
 #endif
 
-             m_nTableWidth = o3tl::saturating_add(m_nTableWidth, *aCellIter++);
+            m_nTableWidth = o3tl::saturating_add(m_nTableWidth, rCell);
         }
 
         if (m_nTableWidth > 0 && !m_bTableSizeTypeInserted)
@@ -601,26 +600,18 @@ void DomainMapperTableManager::endOfRowAction()
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().startElement("gridSpans");
     {
-        ::std::vector<sal_Int32>::const_iterator aGridSpanIter = pCurrentSpans->begin();
-        ::std::vector<sal_Int32>::const_iterator aGridSpanIterEnd = pCurrentSpans->end();
-
-        while (aGridSpanIter != aGridSpanIterEnd)
+        for (const auto& rGridSpan : *pCurrentSpans)
         {
             TagLogger::getInstance().startElement("gridSpan");
-            TagLogger::getInstance().attribute("span", *aGridSpanIter);
+            TagLogger::getInstance().attribute("span", rGridSpan);
             TagLogger::getInstance().endElement();
-
-            ++aGridSpanIter;
         }
     }
     TagLogger::getInstance().endElement();
 #endif
 
     //calculate number of used grids - it has to match the size of m_aTableGrid
-    size_t nGrids = 0;
-    ::std::vector<sal_Int32>::const_iterator aGridSpanIter = pCurrentSpans->begin();
-    for( ; aGridSpanIter != pCurrentSpans->end(); ++aGridSpanIter)
-        nGrids += *aGridSpanIter;
+    size_t nGrids = std::accumulate(pCurrentSpans->begin(), pCurrentSpans->end(), sal::static_int_cast<size_t>(0));
 
     // sj: the grid is having no units... they is containing only relative values.
     // a table with a grid of "1:2:1" looks identical as if the table is having
