@@ -135,9 +135,17 @@ static void initWindow(GtvApplicationWindow* window)
 {
     GtvApplicationWindowPrivate* priv = getPrivate(window);
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
     GList *focusChain = nullptr;
     focusChain = g_list_append( focusChain, window->lokdocview );
+
     gtk_container_set_focus_chain ( GTK_CONTAINER (priv->container), focusChain );
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
     // TODO: Implement progressbar in statusbar
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(window->lokdocview));
