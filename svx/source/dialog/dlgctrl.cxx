@@ -1456,69 +1456,6 @@ void SvxXLinePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     LocalPostPaint(rRenderContext);
 }
 
-SvxXRectPreview::SvxXRectPreview(vcl::Window* pParent)
-:   SvxPreviewBase(pParent)
-    ,mpRectangleObject(nullptr)
-{
-    InitSettings(true, true);
-
-    // create RectangleObject
-    const tools::Rectangle aObjectSize(Point(), GetOutputSize());
-    mpRectangleObject = new SdrRectObj(
-        getModel(),
-        aObjectSize);
-}
-
-void SvxXRectPreview::Resize()
-{
-    const tools::Rectangle aObjectSize(Point(), GetOutputSize());
-    SdrObject *pOrigObject = mpRectangleObject;
-    if (pOrigObject)
-    {
-        mpRectangleObject = new SdrRectObj(
-            getModel(),
-            aObjectSize);
-        SetAttributes(pOrigObject->GetMergedItemSet());
-        SdrObject::Free(pOrigObject);
-    }
-    SvxPreviewBase::Resize();
-}
-
-VCL_BUILDER_FACTORY(SvxXRectPreview)
-
-SvxXRectPreview::~SvxXRectPreview()
-{
-    disposeOnce();
-}
-
-void SvxXRectPreview::dispose()
-{
-    SdrObject::Free(mpRectangleObject);
-    SvxPreviewBase::dispose();
-}
-
-void SvxXRectPreview::SetAttributes(const SfxItemSet& rItemSet)
-{
-    mpRectangleObject->SetMergedItemSet(rItemSet, true);
-    mpRectangleObject->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
-}
-
-void SvxXRectPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
-{
-    LocalPrePaint(rRenderContext);
-
-    sdr::contact::SdrObjectVector aObjectVector;
-
-    aObjectVector.push_back(mpRectangleObject);
-
-    sdr::contact::ObjectContactOfObjListPainter aPainter(getBufferDevice(), aObjectVector, nullptr);
-    sdr::contact::DisplayInfo aDisplayInfo;
-
-    aPainter.ProcessDisplay(aDisplayInfo);
-
-    LocalPostPaint(rRenderContext);
-}
-
 SvxXShadowPreview::SvxXShadowPreview()
     : mpRectangleObject(nullptr)
     , mpRectangleShadow(nullptr)
