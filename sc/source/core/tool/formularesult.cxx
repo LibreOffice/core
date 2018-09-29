@@ -107,6 +107,10 @@ void ScFormulaResult::ResolveToken( const formula::FormulaToken * p )
                 p->DecRef();
                 mbToken = false;
                 meMultiline = MULTILINE_FALSE;
+                // Take advantage of fast double result return for empty result token.
+                // by setting mfValue to 0 and turning on mbValueCached flag.
+                mfValue = 0.0;
+                mbValueCached = true;
                 break;
             case formula::svDouble:
                 mfValue = p->GetDouble();
@@ -132,6 +136,11 @@ void ScFormulaResult::Assign( const ScFormulaResult & r )
 {
     if (this == &r)
         return;
+
+    // It is important to reset the value-cache flag to that of the source
+    // unconditionally.
+    mbValueCached = r.mbValueCached;
+
     if (r.mbEmpty)
     {
         if (mbToken && mpToken)
@@ -140,6 +149,8 @@ void ScFormulaResult::Assign( const ScFormulaResult & r )
         mbEmpty = true;
         mbEmptyDisplayedAsString = r.mbEmptyDisplayedAsString;
         meMultiline = r.meMultiline;
+        // here r.mfValue will be 0.0 which is ensured in ResolveToken().
+        mfValue = 0.0;
     }
     else if (r.mbToken)
     {
