@@ -60,11 +60,11 @@ void SvtBroadcaster::Remove( SvtListener* p )
     }
 
     Normalize();
-    std::pair<ListenersType::iterator,ListenersType::iterator> r =
-        std::equal_range(maListeners.begin(), maListeners.end(), p);
 
-    if (r.first != r.second)
-        maListeners.erase(r.first, r.second);
+    auto it = std::lower_bound(maListeners.begin(), maListeners.end(), p);
+    if (it != maListeners.end() && *it == p)
+        maListeners.erase(it);
+
     if (maListeners.empty())
         ListenersGone();
 }
@@ -116,7 +116,7 @@ SvtBroadcaster::~SvtBroadcaster()
             ++dest;
 
         if (dest == maDestructedListeners.end() || *dest != *it)
-            (*it)->EndListening(*this);
+            (*it)->BroadcasterDying(*this);
     }
 }
 
