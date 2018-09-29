@@ -1176,6 +1176,73 @@ void LineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitma
     }
 }
 
+SvxLineEndLB::SvxLineEndLB(std::unique_ptr<weld::ComboBox> pControl)
+    : m_xControl(std::move(pControl))
+{
+}
+
+void SvxLineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
+{
+    if( !pList.is() )
+        return;
+
+    long nCount = pList->Count();
+    ScopedVclPtrInstance< VirtualDevice > pVD;
+    m_xControl->freeze();
+
+    for( long i = 0; i < nCount; i++ )
+    {
+        const XLineEndEntry* pEntry = pList->GetLineEnd(i);
+        const BitmapEx aBitmap = pList->GetUiBitmap( i );
+        if( !aBitmap.IsEmpty() )
+        {
+            const Size aBmpSize(aBitmap.GetSizePixel());
+            pVD->SetOutputSizePixel(Size(aBmpSize.Width() / 2, aBmpSize.Height() / 2), false);
+            pVD->DrawBitmapEx(bStart ? Point() : Point(aBmpSize.Width() / 2, 0), aBitmap);
+            m_xControl->append("", pEntry->GetName(), *pVD);
+        }
+        else
+            m_xControl->append_text(pEntry->GetName());
+    }
+
+    m_xControl->thaw();
+}
+
+void SvxLineEndLB::Append( const XLineEndEntry& rEntry, const BitmapEx& rBitmap )
+{
+    if(!rBitmap.IsEmpty())
+    {
+        ScopedVclPtrInstance< VirtualDevice > pVD;
+
+        const Size aBmpSize(rBitmap.GetSizePixel());
+        pVD->SetOutputSizePixel(Size(aBmpSize.Width() / 2, aBmpSize.Height() / 2), false);
+        pVD->DrawBitmapEx(Point(aBmpSize.Width() / 2, 0), rBitmap);
+        m_xControl->append("", rEntry.GetName(), *pVD);
+    }
+    else
+    {
+        m_xControl->append_text(rEntry.GetName());
+    }
+}
+
+void SvxLineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const BitmapEx& rBitmap )
+{
+    m_xControl->remove(nPos);
+
+    if(!rBitmap.IsEmpty())
+    {
+        ScopedVclPtrInstance< VirtualDevice > pVD;
+
+        const Size aBmpSize(rBitmap.GetSizePixel());
+        pVD->SetOutputSizePixel(Size(aBmpSize.Width() / 2, aBmpSize.Height() / 2), false);
+        pVD->DrawBitmapEx(Point(aBmpSize.Width() / 2, 0), rBitmap);
+        m_xControl->insert(nPos, "", rEntry.GetName(), nullptr, pVD);
+    }
+    else
+    {
+        m_xControl->insert_text(nPos, rEntry.GetName());
+    }
+}
 
 void SvxPreviewBase::InitSettings(bool bForeground, bool bBackground)
 {

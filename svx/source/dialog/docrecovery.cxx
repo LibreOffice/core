@@ -640,7 +640,7 @@ SaveDialog::SaveDialog(weld::Window* pParent, RecoveryCore* pCore)
          ++pIt                  )
     {
         const TURLInfo& rInfo = *pIt;
-        m_xFileListLB->insert(-1, "", rInfo.DisplayName, &rInfo.StandardImageId);
+        m_xFileListLB->append("", rInfo.DisplayName, rInfo.StandardImageId);
     }
 }
 
