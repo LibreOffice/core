@@ -1539,7 +1539,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
     const Reference< XPropertySet >& _rxField,
     const Reference< XNumberFormats >& _rxNumberFormats, sal_uInt16 _nControlObjectID,
     const OUString& _rFieldPostfix, SdrInventor _nInventor, sal_uInt16 _nLabelObjectID,
-    SdrPage* /*_pLabelPage*/, SdrPage* /*_pControlPage*/, SdrModel* _pModel, SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl)
+    SdrPage* _pLabelPage, SdrPage* _pControlPage, SdrModel* _pModel, SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl)
 {
     sal_Int32 nDataType = 0;
     OUString sFieldName;
@@ -1585,6 +1585,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
                 *_pModel,
                 _nInventor,
                 _nLabelObjectID)));
+        _pLabelPage->NbcInsertObject(pLabel.get());
 
         OSL_ENSURE( pLabel.get(), "FmXFormView::createControlLabelPair: could not create the label!" );
 
@@ -1617,6 +1618,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
             *_pModel,
              _nInventor,
              _nControlObjectID)));
+    _pControlPage->NbcInsertObject(pControl.get());
 
     OSL_ENSURE( pControl.get(), "FmXFormView::createControlLabelPair: could not create the control!" );
 
