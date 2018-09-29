@@ -676,9 +676,9 @@ ListsManager::~ListsManager( )
 void ListsManager::DisposeNumPicBullets( )
 {
     uno::Reference<drawing::XShape> xShape;
-    for (std::vector<NumPicBullet::Pointer>::iterator it = m_aNumPicBullets.begin(); it != m_aNumPicBullets.end(); ++it)
+    for (const auto& rNumPicBullet : m_aNumPicBullets)
     {
-        xShape = (*it)->GetShape();
+        xShape = rNumPicBullet->GetShape();
         if (xShape.is())
         {
             uno::Reference<lang::XComponent> xShapeComponent(xShape, uno::UNO_QUERY);
@@ -871,11 +871,11 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             if (ListLevel::Pointer pCurrentLevel = m_pCurrentDefinition->GetCurrentLevel())
             {
                 uno::Reference<drawing::XShape> xShape;
-                for (std::vector<NumPicBullet::Pointer>::iterator it = m_aNumPicBullets.begin(); it != m_aNumPicBullets.end(); ++it)
+                for (const auto& rNumPicBullet : m_aNumPicBullets)
                 {
-                    if ((*it)->GetId() == nIntValue)
+                    if (rNumPicBullet->GetId() == nIntValue)
                     {
-                        xShape = (*it)->GetShape();
+                        xShape = rNumPicBullet->GetShape();
                         break;
                     }
                 }
@@ -1177,10 +1177,9 @@ ListDef::Pointer ListsManager::GetList( sal_Int32 nId )
 void ListsManager::CreateNumberingRules( )
 {
     // Loop over the definitions
-    std::vector< ListDef::Pointer >::iterator listIt = m_aLists.begin( );
-    for ( ; listIt != m_aLists.end( ); ++listIt )
+    for ( const auto& rList : m_aLists )
     {
-        (*listIt)->CreateNumberingRules( m_rDMapper, m_xFactory );
+        rList->CreateNumberingRules( m_rDMapper, m_xFactory );
     }
 }
 

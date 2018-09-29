@@ -631,23 +631,17 @@ void DomainMapper_Impl::InitTabStopFromStyle( const uno::Sequence< style::TabSto
 
 void DomainMapper_Impl::IncorporateTabStop( const DeletableTabStop &  rTabStop )
 {
-    ::std::vector<DeletableTabStop>::iterator aIt = m_aCurrentTabStops.begin();
-    ::std::vector<DeletableTabStop>::iterator aEndIt = m_aCurrentTabStops.end();
     sal_Int32 nConverted = rTabStop.Position;
-    bool bFound = false;
-    for( ; aIt != aEndIt; ++aIt)
+    auto aIt = std::find_if(m_aCurrentTabStops.begin(), m_aCurrentTabStops.end(),
+        [&nConverted](const DeletableTabStop& rCurrentTabStop) { return rCurrentTabStop.Position == nConverted; });
+    if( aIt != m_aCurrentTabStops.end() )
     {
-        if( aIt->Position == nConverted )
-        {
-            bFound = true;
-            if( rTabStop.bDeleted )
-                m_aCurrentTabStops.erase( aIt );
-            else
-                *aIt = rTabStop;
-            break;
-        }
+        if( rTabStop.bDeleted )
+            m_aCurrentTabStops.erase( aIt );
+        else
+            *aIt = rTabStop;
     }
-    if( !bFound )
+    else
         m_aCurrentTabStops.push_back( rTabStop );
 }
 
@@ -2097,20 +2091,17 @@ void DomainMapper_Impl::CheckRedline( uno::Reference< text::XTextRange > const& 
     if( GetTopContextOfType(CONTEXT_PARAGRAPH) )
     {
         std::vector<RedlineParamsPtr>& avRedLines = GetTopContextOfType(CONTEXT_PARAGRAPH)->Redlines();
-        for( std::vector<RedlineParamsPtr>::const_iterator it = avRedLines.begin();
-             it != avRedLines.end(); ++it )
-            CreateRedline( xRange, *it );
+        for( const auto& rRedline : avRedLines )
+            CreateRedline( xRange, rRedline );
     }
     if( GetTopContextOfType(CONTEXT_CHARACTER) )
     {
         std::vector<RedlineParamsPtr>& avRedLines = GetTopContextOfType(CONTEXT_CHARACTER)->Redlines();
-        for( std::vector<RedlineParamsPtr>::const_iterator it = avRedLines.begin();
-             it != avRedLines.end(); ++it )
-            CreateRedline( xRange, *it );
+        for( const auto& rRedline : avRedLines )
+            CreateRedline( xRange, rRedline );
     }
-    std::vector<RedlineParamsPtr>::iterator pIt = m_aRedlines.top().begin( );
-    for (; pIt != m_aRedlines.top().end( ); ++pIt )
-        CreateRedline( xRange, *pIt );
+    for (const auto& rRedline : m_aRedlines.top() )
+        CreateRedline( xRange, rRedline );
 }
 
 void DomainMapper_Impl::StartParaMarkerChange( )
@@ -2931,10 +2922,9 @@ void DomainMapper_Impl::ChainTextFrames()
         OUString sChainNextName("ChainNextName");
 
         //learn about ALL of the textboxes and their chaining values first - because frames are processed in no specific order.
-        std::vector<uno::Reference< drawing::XShape > >::iterator iter;
-        for( iter = m_vTextFramesForChaining.begin(); iter != m_vTextFramesForChaining.end(); ++iter )
+        for( const auto& rTextFrame : m_vTextFramesForChaining )
         {
-            uno::Reference<text::XTextContent>  xTextContent(*iter, uno::UNO_QUERY_THROW);
+            uno::Reference<text::XTextContent>  xTextContent(rTextFrame, uno::UNO_QUERY_THROW);
             uno::Reference<beans::XPropertySet> xPropertySet(xTextContent, uno::UNO_QUERY);
             uno::Reference<beans::XPropertySetInfo> xPropertySetInfo;
             if( xPropertySet.is() )
@@ -2976,30 +2966,30 @@ void DomainMapper_Impl::ChainTextFrames()
 
             if( !sLinkChainName.isEmpty() )
             {
-                aChainStruct.xShape = *iter;
+                aChainStruct.xShape = rTextFrame;
                 aTextFramesForChainingHelper[sLinkChainName] = aChainStruct;
             }
         }
 
         //if mso-next-textbox tags are provided, create those vml-style links first. Afterwards we will make dml-style id/seq links.
-        for (ChainMap::iterator msoIter= aTextFramesForChainingHelper.begin(); msoIter != aTextFramesForChainingHelper.end(); ++msoIter)
+        for (auto& msoItem : aTextFramesForChainingHelper)
         {
             //if no mso-next-textbox, we are done.
             //if it points to itself, we are done.
-            if( !msoIter->second.s_mso_next_textbox.isEmpty()
-                && msoIter->second.s_mso_next_textbox != msoIter->first )
+            if( !msoItem.second.s_mso_next_textbox.isEmpty()
+                && msoItem.second.s_mso_next_textbox != msoItem.first )
             {
-                ChainMap::iterator nextFinder=aTextFramesForChainingHelper.find(msoIter->second.s_mso_next_textbox);
+                ChainMap::iterator nextFinder=aTextFramesForChainingHelper.find(msoItem.second.s_mso_next_textbox);
                 if( nextFinder != aTextFramesForChainingHelper.end() )
                 {
                     //if the frames have no name yet, then set them.  LinkDisplayName / ChainName are read-only.
-                    if( !msoIter->second.bShapeNameSet )
+                    if( !msoItem.second.bShapeNameSet )
                     {
-                        uno::Reference< container::XNamed > xNamed( msoIter->second.xShape, uno::UNO_QUERY );
+                        uno::Reference< container::XNamed > xNamed( msoItem.second.xShape, uno::UNO_QUERY );
                         if ( xNamed.is() )
                         {
-                            xNamed->setName( msoIter->first );
-                            msoIter->second.bShapeNameSet = true;
+                            xNamed->setName( msoItem.first );
+                            msoItem.second.bShapeNameSet = true;
                         }
                     }
                     if( !nextFinder->second.bShapeNameSet )
@@ -3012,7 +3002,7 @@ void DomainMapper_Impl::ChainTextFrames()
                         }
                     }
 
-                    uno::Reference<text::XTextContent>  xTextContent(msoIter->second.xShape, uno::UNO_QUERY_THROW);
+                    uno::Reference<text::XTextContent>  xTextContent(msoItem.second.xShape, uno::UNO_QUERY_THROW);
                     uno::Reference<beans::XPropertySet> xPropertySet(xTextContent, uno::UNO_QUERY);
 
                     //The reverse chaining happens automatically, so only one direction needs to be set
@@ -3029,21 +3019,21 @@ void DomainMapper_Impl::ChainTextFrames()
         const sal_Int32 nDirection = 1;
 
         //Finally - go through and attach the chains based on matching ID and incremented sequence number (dml-style).
-        for (ChainMap::iterator outer_iter= aTextFramesForChainingHelper.begin(); outer_iter != aTextFramesForChainingHelper.end(); ++outer_iter)
+        for (const auto& rOuter : aTextFramesForChainingHelper)
         {
-            if( outer_iter->second.s_mso_next_textbox.isEmpty() )  //non-empty ones already handled earlier - so skipping them now.
+            if( rOuter.second.s_mso_next_textbox.isEmpty() )  //non-empty ones already handled earlier - so skipping them now.
             {
-                for (ChainMap::iterator inner_iter=aTextFramesForChainingHelper.begin(); inner_iter != aTextFramesForChainingHelper.end(); ++inner_iter)
+                for (const auto& rInner : aTextFramesForChainingHelper)
                 {
-                    if ( inner_iter->second.nId == outer_iter->second.nId )
+                    if ( rInner.second.nId == rOuter.second.nId )
                     {
-                        if (  inner_iter->second.nSeq == ( outer_iter->second.nSeq + nDirection ) )
+                        if ( rInner.second.nSeq == ( rOuter.second.nSeq + nDirection ) )
                         {
-                            uno::Reference<text::XTextContent>  xTextContent(outer_iter->second.xShape, uno::UNO_QUERY_THROW);
+                            uno::Reference<text::XTextContent>  xTextContent(rOuter.second.xShape, uno::UNO_QUERY_THROW);
                             uno::Reference<beans::XPropertySet> xPropertySet(xTextContent, uno::UNO_QUERY);
 
                             //The reverse chaining happens automatically, so only one direction needs to be set
-                            xPropertySet->setPropertyValue(sChainNextName, uno::makeAny(inner_iter->first));
+                            xPropertySet->setPropertyValue(sChainNextName, uno::makeAny(rInner.first));
                             break ; //there cannot be more than one next frame
                         }
                     }
