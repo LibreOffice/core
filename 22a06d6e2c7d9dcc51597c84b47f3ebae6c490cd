@@ -16,6 +16,24 @@
       "revId": "22a06d6e2c7d9dcc51597c84b47f3ebae6c490cd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_4104c17b",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableManager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-09-29T20:19:08Z",
+      "side": 1,
+      "message": "imo, in such cases, functional syntax\n\n    size_t(0)\n\nis even better, since it is the explicit creation of a value of specified type (like \"calling a constructor\").",
+      "parentUuid": "ff0f0b1f_61e6a5eb",
+      "revId": "22a06d6e2c7d9dcc51597c84b47f3ebae6c490cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
