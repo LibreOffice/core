@@ -398,15 +398,15 @@ public:
     virtual Size GetOptimalSize() const override;
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC XRectPreview : public PreviewBase
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXRectPreview : public PreviewBase
 {
 private:
     SdrObject* mpRectangleObject;
 
 public:
-    XRectPreview();
+    SvxXRectPreview();
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
-    virtual ~XRectPreview() override;
+    virtual ~SvxXRectPreview() override;
 
     void SetAttributes(const SfxItemSet& rItemSet);
 
