@@ -326,15 +326,6 @@ class SvxLineEndDefTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 
 private:
-    VclPtr<Edit>                m_pEdtName;
-    VclPtr<LineEndLB>           m_pLbLineEnds;
-    VclPtr<PushButton>          m_pBtnAdd;
-    VclPtr<PushButton>          m_pBtnModify;
-    VclPtr<PushButton>          m_pBtnDelete;
-    VclPtr<PushButton>          m_pBtnLoad;
-    VclPtr<PushButton>          m_pBtnSave;
-    VclPtr<SvxXLinePreview>     m_pCtlPreview;
-
     const SfxItemSet&   rOutAttrs;
     const SdrObject*    pPolyObj;
 
@@ -348,17 +339,28 @@ private:
     sal_uInt16          nDlgType;
     sal_Int32*          pPosLineEndLb;
 
-    DECL_LINK( ClickAddHdl_Impl, Button*, void );
-    DECL_LINK( ClickModifyHdl_Impl, Button*, void );
-    DECL_LINK( ClickDeleteHdl_Impl, Button*, void );
-    DECL_LINK( ClickLoadHdl_Impl, Button*, void );
-    DECL_LINK( ClickSaveHdl_Impl, Button*, void );
-    DECL_LINK( SelectLineEndHdl_Impl, ListBox&, void );
+    XLinePreview m_aCtlPreview;
+    std::unique_ptr<weld::Entry> m_xEdtName;
+    std::unique_ptr<SvxLineEndLB> m_xLbLineEnds;
+    std::unique_ptr<weld::Button> m_xBtnAdd;
+    std::unique_ptr<weld::Button> m_xBtnModify;
+    std::unique_ptr<weld::Button> m_xBtnDelete;
+    std::unique_ptr<weld::Button> m_xBtnLoad;
+    std::unique_ptr<weld::Button> m_xBtnSave;
+    std::unique_ptr<weld::CustomWeld> m_xCtlPreview;
 
+    DECL_LINK(ClickAddHdl_Impl, weld::Button&, void);
+    DECL_LINK(ClickModifyHdl_Impl, weld::Button&, void);
+    DECL_LINK(ClickDeleteHdl_Impl, weld::Button&, void);
+    DECL_LINK(ClickLoadHdl_Impl, weld::Button&, void);
+    DECL_LINK(ClickSaveHdl_Impl, weld::Button&, void);
+    DECL_LINK(SelectLineEndHdl_Impl, weld::ComboBox&, void);
+
+    void SelectLineEndHdl_Impl();
     void CheckChanges_Impl();
 
 public:
-    SvxLineEndDefTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
+    SvxLineEndDefTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxLineEndDefTabPage() override;
     virtual void dispose() override;
 
