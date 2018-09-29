@@ -27,7 +27,7 @@
                 <child>
                   <object class="GtkToolButton" id="fontstyle">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="is_important">True</property>
                     <property name="action_name">.uno:StyleApply</property>
                   </object>
@@ -61,7 +61,7 @@
                 <child>
                   <object class="GtkToolButton" id="styleupdateexample">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="is_important">True</property>
                     <property name="action_name">.uno:StyleUpdateByExample</property>
                   </object>
@@ -84,7 +84,7 @@
                 <child>
                   <object class="GtkToolButton" id="stylenewexample">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="is_important">True</property>
                     <property name="action_name">.uno:StyleNewByExample</property>
                   </object>
