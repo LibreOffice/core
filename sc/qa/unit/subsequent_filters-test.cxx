@@ -1720,6 +1720,33 @@ void ScFiltersTest::testActiveXOptionButtonGroup()
     CPPUNIT_ASSERT_EQUAL( sGroupName4, sGroupName5 );
     CPPUNIT_ASSERT( sGroupName2 != sGroupName5 );
     CPPUNIT_ASSERT( sGroupName != sGroupName5 );
+
+    OUString sGroupName7; //Form radiobutton autogrouped by GroupBox
+    xControlShape.set(xIA_DrawPage->getByIndex(7), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("GroupName") >>= sGroupName7;
+    CPPUNIT_ASSERT_EQUAL( OUString("autoGroup_Group Box 7"), sGroupName7 );
+
+    OUString sGroupName8;
+    xControlShape.set(xIA_DrawPage->getByIndex(8), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("GroupName") >>= sGroupName8;
+    CPPUNIT_ASSERT_EQUAL( sGroupName7, sGroupName8 );
+    CPPUNIT_ASSERT( sGroupName4 != sGroupName8 );
+    CPPUNIT_ASSERT( sGroupName2 != sGroupName8 );
+    CPPUNIT_ASSERT( sGroupName != sGroupName8 );
+
+    OUString sGroupName9; //Form radiobutton not fully inside GroupBox
+    xControlShape.set(xIA_DrawPage->getByIndex(9), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("GroupName") >>= sGroupName9;
+    CPPUNIT_ASSERT_EQUAL( sGroupName4, sGroupName9 );
+
+    OUString sGroupName10; //ActiveX unaffected by GroupBox
+    xControlShape.set(xIA_DrawPage->getByIndex(10), uno::UNO_QUERY_THROW);
+    xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("GroupName") >>= sGroupName10;
+    CPPUNIT_ASSERT_EQUAL( sGroupName, sGroupName10 );
 }
 
 void ScFiltersTest::testChartImportODS()

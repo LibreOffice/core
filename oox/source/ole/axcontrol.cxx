@@ -1556,13 +1556,8 @@ void AxMorphDataModelBase::convertProperties( PropertyMap& rPropMap, const Contr
     rConv.convertColor( rPropMap, PROP_TextColor, mnTextColor );
     if ( mnDisplayStyle == AX_DISPLAYSTYLE_OPTBUTTON )
     {
-        // Form Radio Controls (non-ActiveX) have no group name, but autoGroup
-        // with their group box, or frame, or sheet, or document.
-        // So ensure that SOME name is given for a group name
-        // TODO: ActiveX controls without a Group name shouldn't autogroup
-        //    with non-ActiveX option buttons.
-        // TODO: each application should test if control's area is fully inside
-        //    a GroupBox, and give those a separate group name.
+        // If unspecified, radio buttons autoGroup in the same document/sheet
+        // NOTE: form controls should not autoGroup with ActiveX controls - see drawingfragment.cxx
         OUString sGroupName = !maGroupName.isEmpty() ? maGroupName : "autoGroup_";
         rPropMap.setProperty( PROP_GroupName, sGroupName );
     }
