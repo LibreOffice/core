@@ -1176,6 +1176,73 @@ void LineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitma
     }
 }
 
+SvxLineEndLB::SvxLineEndLB(std::unique_ptr<weld::ComboBox> pControl)
+    : m_xControl(std::move(pControl))
+{
+}
+
+void SvxLineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
+{
+    if( !pList.is() )
+        return;
+
+    long nCount = pList->Count();
+    ScopedVclPtrInstance< VirtualDevice > pVD;
+    m_xControl->freeze();
+
+    for( long i = 0; i < nCount; i++ )
+    {
+        const XLineEndEntry* pEntry = pList->GetLineEnd(i);
+        const BitmapEx aBitmap = pList->GetUiBitmap( i );
+        if( !aBitmap.IsEmpty() )
+        {
+            const Size aBmpSize(aBitmap.GetSizePixel());
+            pVD->SetOutputSizePixel(Size(aBmpSize.Width() / 2, aBmpSize.Height()), false);
+            pVD->DrawBitmapEx(bStart ? Point() : Point(aBmpSize.Width() / 2, 0), aBitmap);
+            m_xControl->append("", pEntry->GetName(), *pVD);
+        }
+        else
+            m_xControl->append_text(pEntry->GetName());
+    }
+
+    m_xControl->thaw();
+}
+
+void SvxLineEndLB::Append( const XLineEndEntry& rEntry, const BitmapEx& rBitmap )
+{
+    if(!rBitmap.IsEmpty())
+    {
+        ScopedVclPtrInstance< VirtualDevice > pVD;
+
+        const Size aBmpSize(rBitmap.GetSizePixel());
+        pVD->SetOutputSizePixel(Size(aBmpSize.Width() / 2, aBmpSize.Height() / 2), false);
+        pVD->DrawBitmapEx(Point(aBmpSize.Width() / 2, 0), rBitmap);
+        m_xControl->append("", rEntry.GetName(), *pVD);
+    }
+    else
+    {
+        m_xControl->append_text(rEntry.GetName());
+    }
+}
+
+void SvxLineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const BitmapEx& rBitmap )
+{
+    m_xControl->remove(nPos);
+
+    if(!rBitmap.IsEmpty())
+    {
+        ScopedVclPtrInstance< VirtualDevice > pVD;
+
+        const Size aBmpSize(rBitmap.GetSizePixel());
+        pVD->SetOutputSizePixel(Size(aBmpSize.Width() / 2, aBmpSize.Height() / 2), false);
+        pVD->DrawBitmapEx(Point(aBmpSize.Width() / 2, 0), rBitmap);
+        m_xControl->insert(nPos, "", rEntry.GetName(), nullptr, pVD);
+    }
+    else
+    {
+        m_xControl->insert_text(nPos, rEntry.GetName());
+    }
+}
 
 void SvxPreviewBase::InitSettings(bool bForeground, bool bBackground)
 {
@@ -1456,6 +1523,134 @@ void SvxXLinePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     LocalPostPaint(rRenderContext);
 }
 
+void XLinePreview::Resize()
+{
+    PreviewBase::Resize();
+
+    const Size aOutputSize(GetOutputSize());
+    const sal_Int32 nDistance(500);
+    const sal_Int32 nAvailableLength(aOutputSize.Width() - (4 * nDistance));
+
+    // create DrawObectA
+    const sal_Int32 aYPosA(aOutputSize.Height() / 2);
+    const basegfx::B2DPoint aPointA1( nDistance,  aYPosA);
+    const basegfx::B2DPoint aPointA2( aPointA1.getX() + ((nAvailableLength * 14) / 20), aYPosA );
+    basegfx::B2DPolygon aPolygonA;
+    aPolygonA.append(aPointA1);
+    aPolygonA.append(aPointA2);
+    mpLineObjA->SetPathPoly(basegfx::B2DPolyPolygon(aPolygonA));
+
+    // create DrawObectB
+    const sal_Int32 aYPosB1((aOutputSize.Height() * 3) / 4);
+    const sal_Int32 aYPosB2((aOutputSize.Height() * 1) / 4);
+    const basegfx::B2DPoint aPointB1( aPointA2.getX() + nDistance,  aYPosB1);
+    const basegfx::B2DPoint aPointB2( aPointB1.getX() + ((nAvailableLength * 2) / 20), aYPosB2 );
+    const basegfx::B2DPoint aPointB3( aPointB2.getX() + ((nAvailableLength * 2) / 20), aYPosB1 );
+    basegfx::B2DPolygon aPolygonB;
+    aPolygonB.append(aPointB1);
+    aPolygonB.append(aPointB2);
+    aPolygonB.append(aPointB3);
+    mpLineObjB->SetPathPoly(basegfx::B2DPolyPolygon(aPolygonB));
+
+    // create DrawObectC
+    basegfx::B2DPolygon aPolygonC;
+    const basegfx::B2DPoint aPointC1( aPointB3.getX() + nDistance,  aYPosB1);
+    const basegfx::B2DPoint aPointC2( aPointC1.getX() + ((nAvailableLength * 1) / 20), aYPosB2 );
+    const basegfx::B2DPoint aPointC3( aPointC2.getX() + ((nAvailableLength * 1) / 20), aYPosB1 );
+    aPolygonC.append(aPointC1);
+    aPolygonC.append(aPointC2);
+    aPolygonC.append(aPointC3);
+    mpLineObjC->SetPathPoly(basegfx::B2DPolyPolygon(aPolygonC));
+}
+
+XLinePreview::XLinePreview()
+    : mpLineObjA(nullptr)
+    , mpLineObjB(nullptr)
+    , mpLineObjC(nullptr)
+    , mpGraphic(nullptr)
+    , mbWithSymbol(false)
+{
+}
+
+void XLinePreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+{
+    PreviewBase::SetDrawingArea(pDrawingArea);
+
+    mpLineObjA = new SdrPathObj(getModel(), OBJ_LINE);
+    mpLineObjB = new SdrPathObj(getModel(), OBJ_PLIN);
+    mpLineObjC = new SdrPathObj(getModel(), OBJ_PLIN);
+
+    Resize();
+    Invalidate();
+}
+
+XLinePreview::~XLinePreview()
+{
+    SdrObject *pFoo = mpLineObjA;
+    SdrObject::Free( pFoo );
+    pFoo = mpLineObjB;
+    SdrObject::Free( pFoo );
+    pFoo = mpLineObjC;
+    SdrObject::Free( pFoo );
+}
+
+void XLinePreview::SetSymbol(Graphic* p,const Size& s)
+{
+    mpGraphic = p;
+    maSymbolSize = s;
+}
+
+void XLinePreview::ResizeSymbol(const Size& s)
+{
+    if ( s != maSymbolSize )
+    {
+        maSymbolSize = s;
+        Invalidate();
+    }
+}
+
+void XLinePreview::SetLineAttributes(const SfxItemSet& rItemSet)
+{
+    // Set ItemSet at objects
+    mpLineObjA->SetMergedItemSet(rItemSet);
+
+    // At line joints, do not use arrows
+    SfxItemSet aTempSet(rItemSet);
+    aTempSet.ClearItem(XATTR_LINESTART);
+    aTempSet.ClearItem(XATTR_LINEEND);
+
+    mpLineObjB->SetMergedItemSet(aTempSet);
+    mpLineObjC->SetMergedItemSet(aTempSet);
+}
+
+void XLinePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+{
+    LocalPrePaint(rRenderContext);
+
+    // paint objects to buffer device
+    sdr::contact::SdrObjectVector aObjectVector;
+    aObjectVector.push_back(mpLineObjA);
+    aObjectVector.push_back(mpLineObjB);
+    aObjectVector.push_back(mpLineObjC);
+
+    sdr::contact::ObjectContactOfObjListPainter aPainter(getBufferDevice(), aObjectVector, nullptr);
+    sdr::contact::DisplayInfo aDisplayInfo;
+
+    // do processing
+    aPainter.ProcessDisplay(aDisplayInfo);
+
+    if ( mbWithSymbol && mpGraphic )
+    {
+        const Size aOutputSize(GetOutputSize());
+        Point aPos = Point( aOutputSize.Width() / 3, aOutputSize.Height() / 2 );
+        aPos.AdjustX( -(maSymbolSize.Width() / 2) );
+        aPos.AdjustY( -(maSymbolSize.Height() / 2) );
+        mpGraphic->Draw(&getBufferDevice(), aPos, maSymbolSize);
+    }
+
+    LocalPostPaint(rRenderContext);
+}
+
 SvxXShadowPreview::SvxXShadowPreview()
     : mpRectangleObject(nullptr)
     , mpRectangleShadow(nullptr)
@@ -1565,6 +1760,10 @@ PreviewBase::PreviewBase()
 void PreviewBase::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     CustomWidgetController::SetDrawingArea(pDrawingArea);
+    Size aSize(getPreviewStripSize(pDrawingArea->get_ref_device()));
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+    SetOutputSizePixel(aSize);
+
     mpBufferDevice = VclPtr<VirtualDevice>::Create(pDrawingArea->get_ref_device());
     mpBufferDevice->SetMapMode(MapMode(MapUnit::Map100thMM));
 }
