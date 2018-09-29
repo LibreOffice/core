@@ -65,6 +65,15 @@ bool SvtListener::EndListening( SvtBroadcaster& rBroadcaster )
     return true;
 }
 
+// called from the SvtBroadcaster destructor, used to avoid calling
+// back into the broadcaster again
+void SvtListener::BroadcasterDying( SvtBroadcaster& rBroadcaster )
+{
+    BroadcastersType::iterator it = maBroadcasters.find(&rBroadcaster);
+    assert (it != maBroadcasters.end());
+    maBroadcasters.erase(it);
+}
+
 void SvtListener::EndListeningAll()
 {
     BroadcastersType::iterator it = maBroadcasters.begin();
