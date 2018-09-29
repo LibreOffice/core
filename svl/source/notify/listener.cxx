@@ -19,6 +19,7 @@
 
 #include <svl/listener.hxx>
 #include <svl/broadcast.hxx>
+#include <cassert>
 
 SvtListener::QueryBase::QueryBase( sal_uInt16 nId ) : mnId(nId) {}
 SvtListener::QueryBase::~QueryBase() {}
@@ -63,6 +64,15 @@ bool SvtListener::EndListening( SvtBroadcaster& rBroadcaster )
     rBroadcaster.Remove(this);
     maBroadcasters.erase(it);
     return true;
+}
+
+// called from the SvtBroadcaster destructor, used to avoid calling
+// back into the broadcaster again
+void SvtListener::BroadcasterDying( SvtBroadcaster& rBroadcaster )
+{
+    BroadcastersType::iterator it = maBroadcasters.find(&rBroadcaster);
+    assert (it != maBroadcasters.end());
+    maBroadcasters.erase(it);
 }
 
 void SvtListener::EndListeningAll()
