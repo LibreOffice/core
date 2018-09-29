@@ -909,36 +909,33 @@ css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTabl
 #endif
 
     css::uno::Sequence<css::beans::PropertyValues> aRowProperties( m_aRowProperties.size() );
-    PropertyMapVector1::const_iterator aRowIter = m_aRowProperties.begin();
-    PropertyMapVector1::const_iterator aRowIterEnd = m_aRowProperties.end();
     sal_Int32 nRow = 0;
-    while( aRowIter != aRowIterEnd )
+    for( const auto& rRow : m_aRowProperties )
     {
 #ifdef DEBUG_WRITERFILTER
         TagLogger::getInstance().startElement("rowProps.row");
 #endif
-        if( aRowIter->get() )
+        if( rRow.get() )
         {
             //set default to 'break across pages"
-            (*aRowIter)->Insert( PROP_IS_SPLIT_ALLOWED, uno::makeAny(true ), false );
+            rRow->Insert( PROP_IS_SPLIT_ALLOWED, uno::makeAny(true ), false );
             // tblHeader is only our property, remove before the property map hits UNO
-            (*aRowIter)->Erase(PROP_TBL_HEADER);
+            rRow->Erase(PROP_TBL_HEADER);
 
             if (lcl_hideMarks(m_aCellProperties[nRow]) && lcl_emptyRow(m_aTableRanges, nRow))
             {
                 // We have CellHideMark on all cells, and also all cells are empty:
                 // Force the row height to be exactly as specified, and not just as the minimum suggestion.
-                (*aRowIter)->Insert(PROP_SIZE_TYPE, uno::makeAny(text::SizeType::FIX));
+                rRow->Insert(PROP_SIZE_TYPE, uno::makeAny(text::SizeType::FIX));
             }
 
-            aRowProperties[nRow] = (*aRowIter)->GetPropertyValues();
+            aRowProperties[nRow] = rRow->GetPropertyValues();
 #ifdef DEBUG_WRITERFILTER
-            (*aRowIter)->dumpXml();
+            rRow->dumpXml();
             lcl_DumpPropertyValues(aRowProperties[nRow]);
 #endif
         }
         ++nRow;
-        ++aRowIter;
 #ifdef DEBUG_WRITERFILTER
         TagLogger::getInstance().endElement();
 #endif

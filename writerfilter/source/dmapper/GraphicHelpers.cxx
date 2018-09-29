@@ -271,20 +271,14 @@ void GraphicZOrderHelper::addItem(uno::Reference<beans::XPropertySet> const& pro
 // added in the proper z-order, it is necessary to find the proper index.
 sal_Int32 GraphicZOrderHelper::findZOrder( sal_Int32 relativeHeight, bool bOldStyle )
 {
-    Items::const_iterator it = items.begin();
-    while( it != items.end())
-    {
-        // std::map is iterated sorted by key
-
-        // Old-style ordering differs in what should happen when there is already an item with the same z-order:
-        // we belong under it in case of new-style, but we belong above it in case of old-style.
-        bool bCond = bOldStyle ? (it->first > relativeHeight) : (it->first >= relativeHeight);
-
-        if( bCond )
-            break; // this is the first one higher, we belong right before it
-        else
-            ++it;
-    }
+    // std::map is iterated sorted by key
+    auto it = std::find_if(items.cbegin(), items.cend(),
+        [relativeHeight, bOldStyle](const Items::value_type& rItem) {
+            // Old-style ordering differs in what should happen when there is already an item with the same z-order:
+            // we belong under it in case of new-style, but we belong above it in case of old-style.
+            return bOldStyle ? (rItem.first > relativeHeight) : (rItem.first >= relativeHeight);
+        }
+    );
     sal_Int32 itemZOrderOffset(0); // before the item
     if( it == items.end()) // we're topmost
     {

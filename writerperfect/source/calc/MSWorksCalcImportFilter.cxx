@@ -105,15 +105,11 @@ public:
     /** returns the ith sub streams name */
     const char* subStreamName(unsigned id) override
     {
-        std::map<std::string, rtl::OUString>::const_iterator it = m_nameToPathMap.begin();
-        for (unsigned i = 0; i < id; ++i)
-        {
-            if (it == m_nameToPathMap.end())
-                return nullptr;
-            ++it;
-        }
-        if (it == m_nameToPathMap.end())
+        if (m_nameToPathMap.size() < id)
             return nullptr;
+
+        std::map<std::string, rtl::OUString>::const_iterator it = m_nameToPathMap.begin();
+        std::advance(it, id);
         return it->first.c_str();
     }
     /** returns true if a substream with name exists */

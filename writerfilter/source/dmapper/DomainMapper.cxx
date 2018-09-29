@@ -1902,17 +1902,16 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "lang", m_pImpl->m_aSubInteropGrabBag);
         else if (nSprmId == NS_ooxml::LN_EG_RPrBase_color)
         {
-            std::vector<beans::PropertyValue>::iterator aIter = m_pImpl->m_aSubInteropGrabBag.begin();
-            for (; aIter != m_pImpl->m_aSubInteropGrabBag.end(); ++aIter)
+            for (const auto& rItem : m_pImpl->m_aSubInteropGrabBag)
             {
-                if (aIter->Name == "val")
-                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_ORIGINAL_COLOR, aIter->Value, true, CHAR_GRAB_BAG);
-                else if (aIter->Name == "themeColor")
-                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_COLOR, aIter->Value, true, CHAR_GRAB_BAG);
-                else if (aIter->Name == "themeShade")
-                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_COLOR_SHADE, aIter->Value, true, CHAR_GRAB_BAG);
-                else if (aIter->Name == "themeTint")
-                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_COLOR_TINT, aIter->Value, true, CHAR_GRAB_BAG);
+                if (rItem.Name == "val")
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_ORIGINAL_COLOR, rItem.Value, true, CHAR_GRAB_BAG);
+                else if (rItem.Name == "themeColor")
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_COLOR, rItem.Value, true, CHAR_GRAB_BAG);
+                else if (rItem.Name == "themeShade")
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_COLOR_SHADE, rItem.Value, true, CHAR_GRAB_BAG);
+                else if (rItem.Name == "themeTint")
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_THEME_COLOR_TINT, rItem.Value, true, CHAR_GRAB_BAG);
             }
             if (bTempGrabBag)
                 //disable and clear DomainMapper grab bag if it wasn't enabled before
@@ -2768,15 +2767,13 @@ void DomainMapper::processDeferredCharacterProperties( const std::map< sal_Int32
 {
     assert( m_pImpl->GetTopContextType() == CONTEXT_CHARACTER );
     PropertyMapPtr rContext = m_pImpl->GetTopContext();
-    for( std::map< sal_Int32, uno::Any >::const_iterator it = deferredCharacterProperties.begin();
-         it != deferredCharacterProperties.end();
-         ++it )
+    for( const auto& rProp : deferredCharacterProperties )
     {
-        sal_Int32 Id = it->first;
+        sal_Int32 Id = rProp.first;
         sal_Int32 nIntValue = 0;
         OUString sStringValue;
-        it->second >>= nIntValue;
-        it->second >>= sStringValue;
+        rProp.second >>= nIntValue;
+        rProp.second >>= sStringValue;
         switch( Id )
         {
         case NS_ooxml::LN_EG_RPrBase_sz:

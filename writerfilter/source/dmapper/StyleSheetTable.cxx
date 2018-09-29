@@ -319,43 +319,27 @@ StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper,
 
 OUString StyleSheetTable_Impl::HasListCharStyle( const PropertyValueVector_t& rPropValues )
 {
-    ListCharStylePropertyVector_t::const_iterator aListVectorIter = m_aListCharStylePropertyVector.begin();
-    while( aListVectorIter != m_aListCharStylePropertyVector.end() )
+    for( const auto& rListVector : m_aListCharStylePropertyVector )
     {
+        const auto& rPropertyValues = rListVector.aPropertyValues;
         //if size is identical
-        if( aListVectorIter->aPropertyValues.size() == rPropValues.size() )
+        if( rPropertyValues.size() == rPropValues.size() )
         {
             bool bBreak = false;
             //then search for all contained properties
-            PropertyValueVector_t::const_iterator aList1Iter = rPropValues.begin();
-            while( aList1Iter != rPropValues.end() && !bBreak)
+            for( const auto& rPropVal1 : rPropValues)
             {
                 //find the property
-                bool bElementFound = false;
-                PropertyValueVector_t::const_iterator aList2Iter = aListVectorIter->aPropertyValues.begin();
-                while( aList2Iter != aListVectorIter->aPropertyValues.end() && !bBreak )
-                {
-                    if( aList2Iter->Name == aList1Iter->Name )
-                    {
-                        bElementFound = true;
-                        if( aList2Iter->Value != aList1Iter->Value )
-                            bBreak = true;
-                        break;
-                    }
-                    ++aList2Iter;
-                }
+                auto aListIter = std::find_if(rPropertyValues.begin(), rPropertyValues.end(),
+                    [&rPropVal1](const css::beans::PropertyValue& rPropVal2) { return rPropVal2.Name == rPropVal1.Name; });
                 //set break flag if property hasn't been found
-                if(!bElementFound )
-                {
-                    bBreak = true;
+                bBreak = (aListIter == rPropertyValues.end()) || (aListIter->Value != rPropVal1.Value);
+                if( bBreak )
                     break;
-                }
-                ++aList1Iter;
             }
             if( !bBreak )
-                return aListVectorIter->sCharStyleName;
+                return rListVector.sCharStyleName;
         }
-        ++aListVectorIter;
     }
     return OUString();
 }
@@ -883,15 +867,12 @@ public:
 
 void PropValVector::Insert(const beans::PropertyValue& rVal)
 {
-    auto aIt = m_aValues.begin();
-    while (aIt != m_aValues.end())
+    auto aIt = std::find_if(m_aValues.begin(), m_aValues.end(),
+        [&rVal](beans::PropertyValue& rPropVal) { return rPropVal.Name > rVal.Name; });
+    if (aIt != m_aValues.end())
     {
-        if (aIt->Name > rVal.Name)
-        {
-            m_aValues.insert( aIt, rVal );
-            return;
-        }
-        ++aIt;
+        m_aValues.insert( aIt, rVal );
+        return;
     }
     m_aValues.push_back(rVal);
 }
@@ -929,10 +910,8 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
             std::vector< ::std::pair<OUString, uno::Reference<style::XStyle>> > aMissingParent;
             std::vector< ::std::pair<OUString, uno::Reference<style::XStyle>> > aMissingFollow;
             std::vector<beans::PropertyValue> aTableStylesVec;
-            std::vector< StyleSheetEntryPtr >::iterator aIt = m_pImpl->m_aStyleSheetEntries.begin();
-            while( aIt != m_pImpl->m_aStyleSheetEntries.end() )
+            for( auto& pEntry : m_pImpl->m_aStyleSheetEntries )
             {
-                StyleSheetEntryPtr pEntry = *aIt;
                 if( pEntry->nStyleTypeCode == STYLE_TYPE_CHAR || pEntry->nStyleTypeCode == STYLE_TYPE_PARA || pEntry->nStyleTypeCode == STYLE_TYPE_LIST )
                 {
                     bool bParaStyle = pEntry->nStyleTypeCode == STYLE_TYPE_PARA;
@@ -947,7 +926,6 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                         // When pasting, don't update existing styles.
                         if (!m_pImpl->m_bIsNewDoc)
                         {
-                            ++aIt;
                             continue;
                         }
                         xStyles->getByName( sConvertedStyleName ) >>= xStyle;
@@ -1187,7 +1165,6 @@ void StyleSheetTable::ApplyStyleSheets( const FontTablePtr& rFontTable )
                     TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(pEntry.get());
                     aTableStylesVec.push_back(pTableEntry->GetInteropGrabBag());
                 }
-                ++aIt;
             }
 
             // Update the styles that were created before their parents or next-styles
@@ -1423,13 +1400,11 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
     if( bExtendedSearch )
     {
         //search for the rWWName in the IdentifierD of the existing styles and convert the sStyleName member
-        std::vector< StyleSheetEntryPtr >::iterator aIt = m_pImpl->m_aStyleSheetEntries.begin();
         //TODO: performance issue - put styles list into a map sorted by its sStyleIdentifierD members
-        while( aIt != m_pImpl->m_aStyleSheetEntries.end() )
+        for( const auto& rStyleSheetEntryPtr : m_pImpl->m_aStyleSheetEntries )
         {
-            if( rWWName == ( *aIt )->sStyleIdentifierD )
-                sRet = ( *aIt )->sStyleName;
-            ++aIt;
+            if( rWWName == rStyleSheetEntryPtr->sStyleIdentifierD )
+                sRet = rStyleSheetEntryPtr->sStyleName;
         }
     }
 
@@ -1575,18 +1550,16 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
         uno::Reference< style::XStyle > xStyle( xDocFactory->createInstance(
             getPropertyName( PROP_SERVICE_CHAR_STYLE )), uno::UNO_QUERY_THROW);
         uno::Reference< beans::XPropertySet > xStyleProps(xStyle, uno::UNO_QUERY_THROW );
-        PropertyValueVector_t::const_iterator aCharPropIter = rCharProperties.begin();
-        while( aCharPropIter != rCharProperties.end())
+        for( const auto& rCharProp : rCharProperties)
         {
             try
             {
-                xStyleProps->setPropertyValue( aCharPropIter->Name, aCharPropIter->Value );
+                xStyleProps->setPropertyValue( rCharProp.Name, rCharProp.Value );
             }
             catch( const uno::Exception& )
             {
                 OSL_FAIL( "Exception in StyleSheetTable::getOrCreateCharStyle - Style::setPropertyValue");
             }
-            ++aCharPropIter;
         }
         xCharStyles->insertByName( sListLabel, uno::makeAny( xStyle) );
         m_pImpl->m_aListCharStylePropertyVector.emplace_back( sListLabel, rCharProperties );

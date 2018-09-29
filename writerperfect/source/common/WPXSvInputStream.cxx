@@ -224,11 +224,11 @@ void OLEStorageImpl::traverse(const tools::SvRef<SotStorage>& rStorage, const rt
 
     rStorage->FillInfoList(&infos);
 
-    for (SvStorageInfoList::const_iterator aIt = infos.begin(); infos.end() != aIt; ++aIt)
+    for (const auto& info : infos)
     {
-        if (aIt->IsStream())
+        if (info.IsStream())
         {
-            rtl::OUString baseName = aIt->GetName(), rvngName = baseName;
+            rtl::OUString baseName = info.GetName(), rvngName = baseName;
             // librevenge::RVNGOLEStream ignores the first character when is a control code, so ...
             if (!rvngName.isEmpty() && rvngName.toChar() < 32)
                 rvngName = rvngName.copy(1);
@@ -237,11 +237,11 @@ void OLEStorageImpl::traverse(const tools::SvRef<SotStorage>& rStorage, const rt
                 rtl::OUStringToOString(concatPath(rPath, rvngName), RTL_TEXTENCODING_UTF8));
             maNameMap[concatPath(rPath, rvngName)] = maStreams.size() - 1;
         }
-        else if (aIt->IsStorage())
+        else if (info.IsStorage())
         {
-            const rtl::OUString aPath = concatPath(rPath, aIt->GetName());
+            const rtl::OUString aPath = concatPath(rPath, info.GetName());
             SotStorageRefWrapper aStorage;
-            aStorage.ref = rStorage->OpenSotStorage(aIt->GetName(), StreamMode::STD_READ);
+            aStorage.ref = rStorage->OpenSotStorage(info.GetName(), StreamMode::STD_READ);
             maStorageMap[aPath] = aStorage;
 
             // deep-first traversal

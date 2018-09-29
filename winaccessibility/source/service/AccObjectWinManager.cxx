@@ -443,14 +443,12 @@ int AccObjectWinManager::UpdateAccSelection(XAccessible* pXAcc)
             NotifyWinEvent(EVENT_OBJECT_SELECTIONADD,pAccObj->GetParentHWND(), OBJID_CLIENT,pAccChildObj->GetResID());
     }
 
-    IAccSelectionList::iterator iter = oldSelection.begin();
-    while(iter!=oldSelection.end())
+    for (const auto& rEntry : oldSelection)
     {
-        pAccObj->GetSelection().erase(iter->first);
-        pAccChildObj = iter->second;
+        pAccObj->GetSelection().erase(rEntry.first);
+        pAccChildObj = rEntry.second;
         if(pAccChildObj != nullptr)
             NotifyWinEvent(EVENT_OBJECT_SELECTIONREMOVE,pAccObj->GetParentHWND(), OBJID_CLIENT,pAccChildObj->GetResID());
-        ++iter;
     }
     return 0;
 
@@ -475,16 +473,10 @@ void AccObjectWinManager::DeleteAccChildNode( AccObject* pObj )
    */
 void AccObjectWinManager::DeleteFromHwndXAcc(XAccessible const * pXAcc )
 {
-    XHWNDToXAccHash::iterator iter = HwndXAcc.begin();
-    while(iter!=HwndXAcc.end())
-    {
-        if(iter->second == pXAcc )
-        {
-            HwndXAcc.erase(iter);
-            return;
-        }
-        ++iter;
-    }
+    auto iter = std::find_if(HwndXAcc.begin(), HwndXAcc.end(),
+        [&pXAcc](XHWNDToXAccHash::value_type& rEntry) { return rEntry.second == pXAcc; });
+    if (iter != HwndXAcc.end())
+        HwndXAcc.erase(iter);
 }
 
 /**
