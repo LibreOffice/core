@@ -2778,6 +2778,14 @@ namespace
         OUString sUILang = Application::GetSettings().GetUILanguageTag().getBcp47();
         return load_icon_by_name(rIconName, sIconTheme, sUILang);
     }
+
+    GdkPixbuf* load_icon_from_surface(VirtualDevice& rDevice)
+    {
+        Size aSize(rDevice.GetOutputSizePixel());
+        cairo_surface_t* surface = get_underlying_cairo_surface(rDevice);
+        return gdk_pixbuf_get_from_surface(surface, 0, 0, aSize.Width(), aSize.Height());
+    }
+
 }
 
 class GtkInstanceButton : public GtkInstanceContainer, public virtual weld::Button
@@ -3181,13 +3189,11 @@ public:
         }
         if (pDevice)
         {
-            cairo_surface_t* surface = get_underlying_cairo_surface(*pDevice);
             if (gtk_check_version(3, 20, 0) == nullptr)
                 gtk_image_set_from_surface(m_pImage, get_underlying_cairo_surface(*pDevice));
             else
             {
-                Size aSize(pDevice->GetOutputSizePixel());
-                GdkPixbuf* pixbuf = gdk_pixbuf_get_from_surface(surface, 0, 0, aSize.Width(), aSize.Height());
+                GdkPixbuf* pixbuf = load_icon_from_surface(*pDevice);
                 gtk_image_set_from_pixbuf(m_pImage, pixbuf);
                 g_object_unref(pixbuf);
             }
@@ -3646,11 +3652,11 @@ namespace
         return found;
     }
 
-    void insert_row(GtkListStore* pListStore, int pos, const OUString& rId, const OUString& rText, const OUString* pImage)
+    void insert_row(GtkListStore* pListStore, int pos, const OUString& rId, const OUString& rText, const OUString* pIconName, VirtualDevice* pDevice)
     {
         GtkTreeIter iter;
         gtk_list_store_insert(pListStore, &iter, pos);
-        if (!pImage)
+        if (!pIconName && !pDevice)
         {
             gtk_list_store_set(pListStore, &iter,
                     0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
@@ -3661,21 +3667,29 @@ namespace
         {
             GdkPixbuf* pixbuf = nullptr;
 
-            if (pImage->lastIndexOf('.') != pImage->getLength() - 4)
+            if (pIconName)
             {
-                assert((*pImage == "dialog-warning" || *pImage == "dialog-error" || *pImage == "dialog-information") && "unknown stock image");
+                if (pIconName->lastIndexOf('.') != pIconName->getLength() - 4)
+                {
+                    assert((*pIconName== "dialog-warning" || *pIconName== "dialog-error" ||*pIconName== "dialog-information") &&
+                           "unknown stock image");
 
-                GError *error = nullptr;
-                GtkIconTheme *icon_theme = gtk_icon_theme_get_default();
-                pixbuf = gtk_icon_theme_load_icon(icon_theme, OUStringToOString(*pImage, RTL_TEXTENCODING_UTF8).getStr(),
-                                                  16, GTK_ICON_LOOKUP_USE_BUILTIN, &error);
+                    GError *error = nullptr;
+                    GtkIconTheme *icon_theme = gtk_icon_theme_get_default();
+                    pixbuf = gtk_icon_theme_load_icon(icon_theme, OUStringToOString(*pIconName, RTL_TEXTENCODING_UTF8).getStr(),
+                                                      16, GTK_ICON_LOOKUP_USE_BUILTIN, &error);
+                }
+                else
+                {
+                    const AllSettings& rSettings = Application::GetSettings();
+                    pixbuf = load_icon_by_name(*pIconName,
+                                               rSettings.GetStyleSettings().DetermineIconTheme(),
+                                               rSettings.GetUILanguageTag().getBcp47());
+                }
             }
             else
             {
-                const AllSettings& rSettings = Application::GetSettings();
-                pixbuf = load_icon_by_name(*pImage,
-                                           rSettings.GetStyleSettings().DetermineIconTheme(),
-                                           rSettings.GetUILanguageTag().getBcp47());
+                pixbuf = load_icon_from_surface(*pDevice);
             }
 
             gtk_list_store_set(pListStore, &iter,
@@ -3754,10 +3768,10 @@ public:
         enable_notify_events();
     }
 
-    virtual void insert(int pos, const OUString& rId, const OUString& rText, const OUString* pImage) override
+    virtual void insert(int pos, const OUString& rId, const OUString& rText, const OUString* pIconName, VirtualDevice* pImageSurface) override
     {
         disable_notify_events();
-        insert_row(m_pListStore, pos, rId, rText, pImage);
+        insert_row(m_pListStore, pos, rId, rText, pIconName, pImageSurface);
         enable_notify_events();
     }
 
@@ -4876,10 +4890,10 @@ public:
         enable_notify_events();
     }
 
-    virtual void insert(int pos, const OUString& rId, const OUString& rText, const OUString* pImage) override
+    virtual void insert(int pos, const OUString& rId, const OUString& rText, const OUString* pIconName, VirtualDevice* pImageSurface) override
     {
         disable_notify_events();
-        insert_row(GTK_LIST_STORE(gtk_combo_box_get_model(m_pComboBox)), pos, rId, rText, pImage);
+        insert_row(GTK_LIST_STORE(gtk_combo_box_get_model(m_pComboBox)), pos, rId, rText, pIconName, pImageSurface);
         enable_notify_events();
     }
 
