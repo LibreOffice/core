@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_217d4d1c",
+        "filename": "oox/source/vml/vmldrawing.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-29T18:23:58Z",
+      "side": 1,
+      "message": "Maps are simple, convenient to use and I like the way it works, but probably way more power than I need because I don\u0027t need sorting/finding etc. But something like std::vector\u003cpair xxx\u003e\u003e seems ugly/cumbersome.",
+      "range": {
+        "startLine": 153,
+        "startChar": 4,
+        "endLine": 153,
+        "endChar": 12
+      },
+      "revId": "54cc8c4ca480258cef0eeae7bb5c6588c58a0ab1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_017a4923",
+        "filename": "oox/source/vml/vmldrawing.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-29T18:23:58Z",
+      "side": 1,
+      "message": "All of these are _THROW, so in the end my understanding is that I have guaranteed that all of these are valid, and non-zero.",
+      "range": {
+        "startLine": 162,
+        "startChar": 59,
+        "endLine": 162,
+        "endChar": 74
+      },
+      "revId": "54cc8c4ca480258cef0eeae7bb5c6588c58a0ab1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_a18efd24",
+        "filename": "oox/source/vml/vmldrawing.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-29T18:23:58Z",
+      "side": 1,
+      "message": "I don\u0027t get it.  Why isn\u0027t there a CTOR that accepts a position and an awt::Size? or even better an awt::Rectangle? Sure, I guess I could create one, but now I\u0027m scared to try. (Maybe if I tried, I\u0027d find out why not - like maybe tools compiles before awt...)",
+      "range": {
+        "startLine": 168,
+        "startChar": 42,
+        "endLine": 168,
+        "endChar": 55
+      },
+      "revId": "54cc8c4ca480258cef0eeae7bb5c6588c58a0ab1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_e176353f",
+        "filename": "oox/source/vml/vmldrawing.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-29T18:23:58Z",
+      "side": 1,
+      "message": "If any single shape fails (and I haven\u0027t seen that happen yet), then just ignore it and move on. No harm done and no loss.",
+      "range": {
+        "startLine": 185,
+        "startChar": 12,
+        "endLine": 185,
+        "endChar": 47
+      },
+      "revId": "54cc8c4ca480258cef0eeae7bb5c6588c58a0ab1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_6198e569",
+        "filename": "oox/source/vml/vmldrawing.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-09-29T18:23:58Z",
+      "side": 1,
+      "message": "One possible side-benefit of using a map. Form id names are not editable, and they automatically increment during creation. It looks like we also process them in that order already, but in case we don\u0027t, the map should still sort the groupBox\u0027s in order.",
+      "range": {
+        "startLine": 196,
+        "startChar": 18,
+        "endLine": 196,
+        "endChar": 59
+      },
+      "revId": "54cc8c4ca480258cef0eeae7bb5c6588c58a0ab1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
