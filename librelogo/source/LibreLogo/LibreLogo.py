@@ -968,7 +968,7 @@ def __go__(shapename, n, dot = False, preciseAngle = -1):
     if shape and not _.pen and not dot:
         _.continuous = False
         return
-    c, c2 = __Point__(pos.X + turtle.BoundRect.Width / 2.0, pos.Y + turtle.BoundRect.Height / 2.0), __Point__(round(dx), round(dy))
+    c, c2 = __Point__(pos.X + turtle.BoundRect.Width / 2.0, pos.Y + turtle.BoundRect.Height / 2.0), __Point__(round(dx / __MM10_TO_TWIP__), round(dy / __MM10_TO_TWIP__))
     if shape and "LineShape" in shape.ShapeType:
             if _.continuous or dot:
                 last = shape.PolyPolygon[-1][-1]
