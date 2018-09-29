@@ -378,7 +378,7 @@ void SdDefineCustomShowDlg::ClickButtonHdl2(void const * p)
             {
                 OUString aStr = m_xLbPages->get_text(i);
                 SdPage* pPage = rDoc.GetSdPage(i, PageKind::Standard);
-                m_xLbCustomPages->insert(nPosCP, OUString::number(reinterpret_cast<sal_uInt64>(pPage)), aStr, nullptr);
+                m_xLbCustomPages->insert(nPosCP, OUString::number(reinterpret_cast<sal_uInt64>(pPage)), aStr, nullptr, nullptr);
                 m_xLbCustomPages->select(nPosCP != -1 ? nPosCP : m_xLbCustomPages->n_children() - 1);
 
                 if (nPosCP != -1)

@@ -687,7 +687,7 @@ void InsertStringSorted(const OUString& rId, const OUString& rEntry, weld::Combo
             break;
         ++nOffset;
     }
-    rToFill.insert(nOffset, rId, rEntry, nullptr);
+    rToFill.insert(nOffset, rId, rEntry, nullptr, nullptr);
 }
 
 void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted, bool bWithDefault)
