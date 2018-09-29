@@ -65,7 +65,7 @@
     3. Select the locale in the Language list box => MUST be assertion free.
     3.a. Assertions are only shown at the very first time a number formatter
          is created, respectively the first time a specific locale data is
-         used.  To repeat steps 1.-3. you'd need to create another spreadsheet
+         used. To repeat steps 1.-3. you'd need to create another spreadsheet
          document.
 
     ===========================================================================
@@ -103,13 +103,13 @@
 <!ATTLIST Locale versionDTD CDATA #FIXED "2.0.3">
 <!-- Version identifier to prevent mismatching data files being submitted
      because of older files being copied as templates. The version should be
-     less than or equal to the OOo release, or the OOo release number plus some
-     extension, like "2.0.enhanced", to be able to easily determine the
-     corresponding OOo version. New versions of the DTD with new required
-     elements SHOULD REALLY result in a new versionDTD here and
-     LOCALE_VERSION_DTD in ../LocaleNode.cxx, and *.xml files MUST be adapted
-     then, otherwise building the data or checking it with a validating parser
-     will throw an error.
+     less than or equal to the LibreOffice release, or the LibreOffice release
+     number plus some extension, like "2.0.enhanced", to be able to easily
+     determine the corresponding LibreOffice version. New versions of the DTD
+     with new required elements SHOULD REALLY result in a new versionDTD here
+     and LOCALE_VERSION_DTD in ../LocaleNode.cxx, and *.xml files MUST be
+     adapted then, otherwise building the data or checking it with a validating
+     parser will throw an error.
 -->
 <!ATTLIST Locale allowUpdateFromCLDR (yes|no) #REQUIRED>
 <!-- Whether some data elements may be (automatically) updated from the Common
@@ -319,7 +319,7 @@
 <!-- The unoid of a gregorian calendar MUST be lower case "gregorian",
      calendars MUST match the names defined in the OASIS OpenDocument Format
      (ODF) 1.2 or later specification. The implementation name registered with
-     the OOo service resgistry MUST match, e.g.
+     the LibreOffice service registry MUST match, e.g.
      com.sun.star.i18n.Calendar_gregorian
 -->
 <!ATTLIST Calendar default (true|false) #REQUIRED >
@@ -442,7 +442,7 @@
      codes for compatibility with StarOffice5 and StarOffice4.
      Every locale data file MUST contain exactly one currency having this set to "true",
      and that currency MUST be used in format codes 12..17.
-     For European countries using the EURo it MUST be the old currency, for example, DM.
+     For European countries using EUR it MUST be the old currency, for example, DM.
 -->
 <!ATTLIST Currency  legacyOnly (true|false) #IMPLIED >
 <!-- If this Currency element exists only to be able to correctly load legacy
@@ -510,8 +510,8 @@
 	See Collation Customization in ICU User Guide for syntax,
 	http://www.icu-project.org/userguide/Collate_Customization.html
 
-	There are two ways to add language specific tailoring in OpenOffice.org.
-	For small tailoring, you can directly add it in locale data here. For 
+	There are two ways to add language specific tailoring in LibreOffice.
+	For small tailoring, you can directly add it in locale data here. For
 	large tailoring, it is suggested to put the data under collator/data, so
 	it will be compiled to a binary format in build time and improve performance
 	in run time.
@@ -608,7 +608,7 @@
 <!ELEMENT ForbiddenLineBeginCharacters (#PCDATA)>
 <!ELEMENT ForbiddenLineEndCharacters (#PCDATA)>
 
-<!-- optional break iterator rules for the languages. 
+<!-- optional break iterator rules for the languages.
      if defined, 5 rules should be all listed, each of them can be blank and default will be used.
      order of the rules is significant!
 -->
