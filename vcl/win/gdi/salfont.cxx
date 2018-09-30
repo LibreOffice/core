@@ -1328,7 +1328,7 @@ void WinSalGraphics::ClearDevFontCache()
 
 bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
-    rtl::Reference<WinFontInstance> pFont = mpWinFontEntry[rGlyph.m_nFallbackLevel];
+    rtl::Reference<WinFontInstance> pFont = static_cast<WinFontInstance*>(rGlyph.m_pFontInstance);
     assert(pFont.is());
 
     if (pFont.is() && pFont->GetCachedGlyphBoundRect(rGlyph.m_aGlyphId, rRect))
@@ -1546,7 +1546,7 @@ bool WinSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
     // rescaling needed for the tools::PolyPolygon conversion
     if( rB2DPolyPoly.count() )
     {
-        rtl::Reference<WinFontInstance> pFont = mpWinFontEntry[rGlyph.m_nFallbackLevel];
+        rtl::Reference<WinFontInstance> pFont = static_cast<WinFontInstance*>(rGlyph.m_pFontInstance);
         assert(pFont.is());
         float fFontScale = pFont.is() ? pFont->GetScale() : 1.0;
         const double fFactor(fFontScale/256);

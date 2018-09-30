@@ -735,11 +735,7 @@ void GenPspGraphics::GetFontMetric(ImplFontMetricDataRef& rxFontMetric, int nFal
 
 bool GenPspGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
-    const int nLevel = rGlyph.m_nFallbackLevel;
-    if( nLevel >= MAX_FALLBACK )
-        return false;
-
-    FreetypeFont* pSF = m_pFreetypeFont[ nLevel ];
+    FreetypeFont* pSF = getFreetypeFontFromGlyph(rGlyph);
     if( !pSF )
         return false;
 
@@ -749,11 +745,7 @@ bool GenPspGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle
 bool GenPspGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
     basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
-    const int nLevel = rGlyph.m_nFallbackLevel;
-    if( nLevel >= MAX_FALLBACK )
-        return false;
-
-    FreetypeFont* pSF = m_pFreetypeFont[ nLevel ];
+    FreetypeFont* pSF = getFreetypeFontFromGlyph(rGlyph);
     if( !pSF )
         return false;
 

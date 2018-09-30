@@ -570,7 +570,7 @@ bool GenericSalLayout::LayoutText(ImplLayoutArgs& rArgs, const SalLayoutGlyphs* 
 
                 Point aNewPos(aCurrPos.X() + nXOffset, aCurrPos.Y() + nYOffset);
                 const GlyphItem aGI(nCharPos, nCharCount, nGlyphIndex, aNewPos, nGlyphFlags,
-                                    nAdvance, nXOffset);
+                                    nAdvance, nXOffset, mpFont.get());
                 m_GlyphItems.push_back(aGI);
 
                 aCurrPos.AdjustX(nAdvance );
@@ -767,7 +767,7 @@ void GenericSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
             int const nFlags = GlyphItem::IS_IN_CLUSTER | GlyphItem::IS_RTL_GLYPH;
             while (nCopies--)
             {
-                GlyphItem aKashida(nCharPos, 0, nKashidaIndex, aPos, nFlags, nKashidaWidth, 0);
+                GlyphItem aKashida(nCharPos, 0, nKashidaIndex, aPos, nFlags, nKashidaWidth, 0, mpFont.get());
                 pGlyphIter = m_GlyphItems.insert(pGlyphIter, aKashida);
                 aPos.AdjustX(nKashidaWidth );
                 aPos.AdjustX( -nOverlap );
