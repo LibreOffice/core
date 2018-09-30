@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_24555b51",
+        "filename": "sw/qa/python/xcontrolshape.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-09-30T23:44:56Z",
+      "side": 1,
+      "message": "what is the error exactly?",
+      "revId": "67a5271eceb756c1543ff0a4ff2b33a0ad1c6eea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
