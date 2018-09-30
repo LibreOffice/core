@@ -498,6 +498,29 @@ IMPL_LINK(SalInstanceWidget, FocusOutListener, VclWindowEvent&, rEvent, void)
         signal_focus_out();
 }
 
+namespace
+{
+    Image createImage(const OUString& rImage)
+    {
+        if (rImage.lastIndexOf('.') != rImage.getLength() - 4)
+        {
+            assert((rImage == "dialog-warning" || rImage == "dialog-error" || rImage == "dialog-information") && "unknown stock image");
+            if (rImage == "dialog-warning")
+                return Image(BitmapEx(IMG_WARN));
+            else if (rImage == "dialog-error")
+                return Image(BitmapEx(IMG_ERROR));
+            else if (rImage == "dialog-information")
+                return Image(BitmapEx(IMG_INFO));
+        }
+        return Image(BitmapEx(rImage));
+    }
+
+    Image createImage(VirtualDevice& rDevice)
+    {
+        return Image(BitmapEx(rDevice.GetBitmapEx(Point(), rDevice.GetOutputSizePixel())));
+    }
+}
+
 class SalInstanceMenu : public weld::Menu
 {
 private:
@@ -530,6 +553,25 @@ public:
     {
         m_xMenu->ShowItem(m_xMenu->GetItemId(rIdent), bShow);
     }
+
+    virtual void insert(int pos, const OUString& rId, const OUString& rStr,
+                        const OUString* pIconName, VirtualDevice* pImageSurface) override
+    {
+        const auto nCount = m_xMenu->GetItemCount();
+        const sal_uInt16 nLastId = nCount ? m_xMenu->GetItemId(nCount-1) : 0;
+        const sal_uInt16 nNewid = nLastId + 1;
+        m_xMenu->InsertItem(nNewid, rStr, MenuItemBits::NONE,
+                            OUStringToOString(rId, RTL_TEXTENCODING_UTF8), pos == -1 ? MENU_APPEND : pos);
+        if (pIconName)
+        {
+            m_xMenu->SetItemImage(nNewid, createImage(*pIconName));
+        }
+        else if (pImageSurface)
+        {
+            m_xMenu->SetItemImage(nNewid, createImage(*pImageSurface));
+        }
+    }
+
     virtual ~SalInstanceMenu() override
     {
         if (m_bTakeOwnership)
@@ -1592,29 +1634,6 @@ IMPL_LINK(SalInstanceEntry, CursorListener, VclWindowEvent&, rEvent, void)
         return;
     if (rEvent.GetId() == VclEventId::EditSelectionChanged || rEvent.GetId() == VclEventId::EditCaretChanged)
         signal_cursor_position();
-}
-
-namespace
-{
-    Image createImage(const OUString& rImage)
-    {
-        if (rImage.lastIndexOf('.') != rImage.getLength() - 4)
-        {
-            assert((rImage == "dialog-warning" || rImage == "dialog-error" || rImage == "dialog-information") && "unknown stock image");
-            if (rImage == "dialog-warning")
-                return Image(BitmapEx(IMG_WARN));
-            else if (rImage == "dialog-error")
-                return Image(BitmapEx(IMG_ERROR));
-            else if (rImage == "dialog-information")
-                return Image(BitmapEx(IMG_INFO));
-        }
-        return Image(BitmapEx(rImage));
-    }
-
-    Image createImage(VirtualDevice& rDevice)
-    {
-        return Image(BitmapEx(rDevice.GetBitmapEx(Point(), rDevice.GetOutputSizePixel())));
-    }
 }
 
 class SalInstanceTreeView : public SalInstanceContainer, public virtual weld::TreeView

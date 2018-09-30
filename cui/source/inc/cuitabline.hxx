@@ -25,7 +25,7 @@
 #include <svx/tabarea.hxx>
 
 enum class PageType;
-class SvxColorListBox;
+class ColorListBox;
 
 class SvxLineTabDialog final : public SfxTabDialog
 {
@@ -81,7 +81,7 @@ public:
 struct SvxBmpItemInfo
 {
     std::unique_ptr<SvxBrushItem> pBrushItem;
-    sal_uInt16          nItemId;
+    OUString sItemId;
 };
 
 class SvxLineTabPage : public SfxTabPage
@@ -90,34 +90,6 @@ class SvxLineTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
     static const sal_uInt16 pLineRanges[];
 private:
-    VclPtr<VclBox>             m_pBoxColor;
-    VclPtr<LineLB>             m_pLbLineStyle;
-    VclPtr<SvxColorListBox>    m_pLbColor;
-    VclPtr<VclBox>             m_pBoxWidth;
-    VclPtr<MetricField>        m_pMtrLineWidth;
-    VclPtr<VclBox>             m_pBoxTransparency;
-    VclPtr<MetricField>        m_pMtrTransparent;
-
-    VclPtr<VclFrame>           m_pFlLineEnds;
-    VclPtr<VclBox>             m_pBoxArrowStyles;
-    VclPtr<LineEndLB>          m_pLbStartStyle;
-    VclPtr<VclBox>             m_pBoxStart;
-    VclPtr<MetricField>        m_pMtrStartWidth;
-    VclPtr<TriStateBox>        m_pTsbCenterStart;
-    VclPtr<VclBox>             m_pBoxEnd;
-    VclPtr<LineEndLB>          m_pLbEndStyle;
-    VclPtr<MetricField>        m_pMtrEndWidth;
-    VclPtr<TriStateBox>        m_pTsbCenterEnd;
-    VclPtr<CheckBox>           m_pCbxSynchronize;
-    VclPtr<SvxXLinePreview>    m_pCtlPreview;
-
-    VclPtr<VclFrame>           m_pFLEdgeStyle;
-    VclPtr<VclGrid>            m_pGridEdgeCaps;
-    VclPtr<ListBox>            m_pLBEdgeStyle;
-
-    // LineCaps
-    VclPtr<ListBox>             m_pLBCapStyle;
-
     //#58425# symbols on a line (e. g. StarChart) ->
     /** a list of symbols to be shown in menu. Symbol at position SID_ATTR_SYMBOLTYPE is to be shown in preview.
         The list position is to be used cyclic. */
@@ -129,15 +101,12 @@ private:
     long                m_nSymbolType;
     /// attributes for the shown symbols; only necessary if not equal to line properties
     SfxItemSet*         m_pSymbolAttr;
-    VclPtr<VclFrame>           m_pFlSymbol;
-    VclPtr<VclGrid>            m_pGridIconSize;
-    VclPtr<MenuButton>         m_pSymbolMB;
-    VclPtr<MetricField>        m_pSymbolWidthMF;
-    VclPtr<MetricField>        m_pSymbolHeightMF;
-    VclPtr<CheckBox>           m_pSymbolRatioCB;
+
     std::vector<OUString>      m_aGrfNames;
     std::vector< std::unique_ptr<SvxBmpItemInfo> >
-                               m_aGrfBrushItems;
+                               m_aGalleryBrushItems;
+    std::vector< std::unique_ptr<SvxBmpItemInfo> >
+                               m_aSymbolBrushItems;
     bool                m_bLastWidthModified;
     Size                m_aSymbolLastSize;
     Graphic             m_aSymbolGraphic;
@@ -166,41 +135,76 @@ private:
 
     sal_Int32           m_nActLineWidth;
 
-    // handler for gallery popup menu button + size
-    DECL_LINK( GraphicHdl_Impl, MenuButton *, void );
-    DECL_LINK( MenuCreateHdl_Impl, MenuButton *, void );
-    DECL_LINK( SizeHdl_Impl, Edit&, void );
-    DECL_LINK( RatioHdl_Impl, Button*, void );
+    XLinePreview m_aCtlPreview;
+    std::unique_ptr<weld::Widget> m_xBoxColor;
+    std::unique_ptr<SvxLineLB> m_xLbLineStyle;
+    std::unique_ptr<ColorListBox> m_xLbColor;
+    std::unique_ptr<weld::Widget> m_xBoxWidth;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrLineWidth;
+    std::unique_ptr<weld::Widget> m_xBoxTransparency;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrTransparent;
+    std::unique_ptr<weld::Widget> m_xFlLineEnds;
+    std::unique_ptr<weld::Widget> m_xBoxArrowStyles;
+    std::unique_ptr<SvxLineEndLB> m_xLbStartStyle;
+    std::unique_ptr<weld::Widget> m_xBoxStart;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrStartWidth;
+    std::unique_ptr<weld::CheckButton> m_xTsbCenterStart;
+    std::unique_ptr<weld::Widget> m_xBoxEnd;
+    std::unique_ptr<SvxLineEndLB> m_xLbEndStyle;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrEndWidth;
+    std::unique_ptr<weld::CheckButton> m_xTsbCenterEnd;
+    std::unique_ptr<weld::CheckButton> m_xCbxSynchronize;
+    std::unique_ptr<weld::Menu> m_xMenu;
+    std::unique_ptr<weld::Menu> m_xGalleryMenu;
+    std::unique_ptr<weld::Menu> m_xSymbolsMenu;
+    std::unique_ptr<weld::CustomWeld> m_xCtlPreview;
 
-    DECL_LINK( ClickInvisibleHdl_Impl, ListBox&, void );
-    DECL_LINK( ChangeStartClickHdl_Impl, Button*, void );
-    DECL_LINK( ChangeStartListBoxHdl_Impl, ListBox&, void );
-    DECL_LINK( ChangeStartModifyHdl_Impl, Edit&, void );
-    void ChangeStartHdl_Impl(void const *);
-    DECL_LINK( ChangeEndListBoxHdl_Impl, ListBox&, void );
-    DECL_LINK( ChangeEndModifyHdl_Impl, Edit&, void );
-    DECL_LINK( ChangeEndClickHdl_Impl, Button*, void );
-    void ChangeEndHdl_Impl(void const *);
-    DECL_LINK( ChangePreviewListBoxHdl_Impl, SvxColorListBox&, void );
-    DECL_LINK( ChangePreviewModifyHdl_Impl, Edit&, void );
-    void ChangePreviewHdl_Impl(void const *);
-    DECL_LINK( ChangeTransparentHdl_Impl, Edit&, void );
-
-    DECL_LINK( ChangeEdgeStyleHdl_Impl, ListBox&, void );
+    std::unique_ptr<weld::Widget> m_xFLEdgeStyle;
+    std::unique_ptr<weld::Widget> m_xGridEdgeCaps;
+    std::unique_ptr<weld::ComboBox> m_xLBEdgeStyle;
 
     // LineCaps
-    DECL_LINK( ChangeCapStyleHdl_Impl, ListBox&, void );
+    std::unique_ptr<weld::ComboBox> m_xLBCapStyle;
+
+    std::unique_ptr<weld::Widget> m_xFlSymbol;
+    std::unique_ptr<weld::Widget> m_xGridIconSize;
+    std::unique_ptr<weld::MenuButton> m_xSymbolMB;
+    std::unique_ptr<weld::MetricSpinButton> m_xSymbolWidthMF;
+    std::unique_ptr<weld::MetricSpinButton> m_xSymbolHeightMF;
+    std::unique_ptr<weld::CheckButton> m_xSymbolRatioCB;
+
+    // handler for gallery popup menu button + size
+    DECL_LINK(GraphicHdl_Impl, const OString&, void);
+    void MenuCreate();
+    DECL_LINK(SizeHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(RatioHdl_Impl, weld::ToggleButton&, void);
+
+    DECL_LINK(ClickInvisibleHdl_Impl, weld::ComboBox&, void);
+    void ClickInvisibleHdl_Impl();
+    DECL_LINK(ChangeStartClickHdl_Impl, weld::Button&, void);
+    DECL_LINK(ChangeStartListBoxHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(ChangeStartModifyHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(ChangeEndListBoxHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(ChangeEndModifyHdl_Impl, weld::MetricSpinButton&, void);
+    DECL_LINK(ChangeEndClickHdl_Impl, weld::Button&, void);
+    DECL_LINK(ChangePreviewListBoxHdl_Impl, ColorListBox&, void);
+    DECL_LINK(ChangePreviewModifyHdl_Impl, weld::MetricSpinButton&, void);
+    void ChangePreviewHdl_Impl(const weld::MetricSpinButton*);
+    DECL_LINK(ChangeTransparentHdl_Impl, weld::MetricSpinButton&, void);
+
+    DECL_LINK(ChangeEdgeStyleHdl_Impl, weld::ComboBox&, void);
+
+    // LineCaps
+    DECL_LINK(ChangeCapStyleHdl_Impl, weld::ComboBox&, void);
 
     void FillXLSet_Impl();
 
-    void InitSymbols(MenuButton const * pButton);
-    void SymbolSelected(MenuButton const * pButton);
     void FillListboxes();
 public:
 
     void ShowSymbolControls(bool bOn);
 
-    SvxLineTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
+    SvxLineTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SvxLineTabPage() override;
     virtual void dispose() override;
 
