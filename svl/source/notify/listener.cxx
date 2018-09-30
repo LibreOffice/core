@@ -90,6 +90,7 @@ void SvtListener::EndListeningAll()
 
 void SvtListener::CopyAllBroadcasters( const SvtListener& r )
 {
+    EndListeningAll();
     BroadcastersType aCopy(r.maBroadcasters);
     maBroadcasters.swap(aCopy);
     BroadcastersType::iterator it = maBroadcasters.begin();

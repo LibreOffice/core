@@ -55,6 +55,7 @@ public:
     bool EndListening( SvtBroadcaster& rBroadcaster );
     void EndListeningAll();
 
+    /// Overwrites existing broadcasters with the ones from the specified listener
     void CopyAllBroadcasters( const SvtListener& r );
     bool HasBroadcaster() const;
 
