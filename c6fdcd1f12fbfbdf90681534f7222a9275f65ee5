@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_e44e43c0",
+        "filename": "sw/qa/python/check_xmodifiable2.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-09-30T23:52:19Z",
+      "side": 1,
+      "message": "hmm, what does this test do?",
+      "revId": "c6fdcd1f12fbfbdf90681534f7222a9275f65ee5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_c44b3fae",
+        "filename": "sw/qa/python/check_xmodifiable2.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-09-30T23:52:19Z",
+      "side": 1,
+      "message": "Can you also check of a normal manipulation of document content leads to isModified() returning true?",
+      "revId": "c6fdcd1f12fbfbdf90681534f7222a9275f65ee5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
