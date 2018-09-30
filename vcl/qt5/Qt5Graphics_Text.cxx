@@ -154,11 +154,7 @@ void Qt5Graphics::GetGlyphWidths(const PhysicalFontFace* /*pPFF*/, bool /*bVerti
 
 bool Qt5Graphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
-    const int nLevel = rGlyph.m_nFallbackLevel;
-    if (nLevel >= MAX_FALLBACK)
-        return false;
-
-    Qt5Font* pFont = m_pTextStyle[nLevel].get();
+    Qt5Font* pFont = static_cast<Qt5Font*>(rGlyph.m_pFontInstance);
     if (!pFont)
         return false;
 

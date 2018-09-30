@@ -96,8 +96,9 @@ public:
     virtual bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
 
     // methods using glyph indexing
-    virtual bool    GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int&,
-                                 const PhysicalFontFace** pFallbackFont = nullptr) const = 0;
+    virtual bool    GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
+                                 const PhysicalFontFace** pFallbackFont = nullptr,
+                                 int* const pFallbackLevel = nullptr) const = 0;
     virtual bool    GetOutline( SalGraphics&, basegfx::B2DPolyPolygonVector& ) const;
     virtual bool    GetBoundRect( SalGraphics&, tools::Rectangle& ) const;
 

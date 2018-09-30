@@ -41,10 +41,10 @@ struct VCL_DLLPUBLIC GlyphItem
     sal_GlyphId m_aGlyphId;
     Point m_aLinearPos; // absolute position of non rotated string
 
-    int m_nFallbackLevel;
+    LogicalFontInstance* m_pFontInstance;
 
     GlyphItem(int nCharPos, int nCharCount, sal_GlyphId aGlyphId, const Point& rLinearPos,
-              long nFlags, int nOrigWidth, int nXOffset)
+              long nFlags, int nOrigWidth, int nXOffset, LogicalFontInstance* pFontInstance)
         : m_nFlags(nFlags)
         , m_nCharPos(nCharPos)
         , m_nCharCount(nCharCount)
@@ -53,7 +53,7 @@ struct VCL_DLLPUBLIC GlyphItem
         , m_nXOffset(nXOffset)
         , m_aGlyphId(aGlyphId)
         , m_aLinearPos(rLinearPos)
-        , m_nFallbackLevel(0)
+        , m_pFontInstance(pFontInstance)
     {
     }
 
