@@ -28,16 +28,12 @@ void SvtBroadcaster::Normalize() const
     if (!mbNormalized)
     {
         std::sort(maListeners.begin(), maListeners.end());
-        ListenersType::iterator itUniqueEnd = std::unique(maListeners.begin(), maListeners.end());
-        maListeners.erase(itUniqueEnd, maListeners.end());
         mbNormalized = true;
     }
 
     if (!mbDestNormalized)
     {
         std::sort(maDestructedListeners.begin(), maDestructedListeners.end());
-        ListenersType::iterator itUniqueEnd = std::unique(maDestructedListeners.begin(), maDestructedListeners.end());
-        maDestructedListeners.erase(itUniqueEnd, maDestructedListeners.end());
         mbDestNormalized = true;
     }
 }
