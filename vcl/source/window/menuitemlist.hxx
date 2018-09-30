@@ -22,6 +22,7 @@
 #include <vcl/keycod.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/vcllayout.hxx>
+#include <fontinstance.hxx>
 
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 

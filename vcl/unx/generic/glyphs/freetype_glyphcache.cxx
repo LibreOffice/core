@@ -591,12 +591,12 @@ void FreetypeFont::ApplyGlyphTransform(bool bVertical, FT_Glyph pGlyphFT ) const
 bool FreetypeFont::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
     assert(mpFontInstance.is());
-    if (mpFontInstance.is() && mpFontInstance->GetCachedGlyphBoundRect(rGlyph.maGlyphId, rRect))
+    if (mpFontInstance.is() && mpFontInstance->GetCachedGlyphBoundRect(rGlyph.m_aGlyphId, rRect))
         return true;
 
     FT_Activate_Size( maSizeFT );
 
-    FT_Error rc = FT_Load_Glyph(maFaceFT, rGlyph.maGlyphId, mnLoadFlags);
+    FT_Error rc = FT_Load_Glyph(maFaceFT, rGlyph.m_aGlyphId, mnLoadFlags);
 
     if (rc != FT_Err_Ok)
         return false;
@@ -616,7 +616,7 @@ bool FreetypeFont::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& 
 
     rRect = tools::Rectangle(aBbox.xMin, -aBbox.yMax, aBbox.xMax, -aBbox.yMin);
     if (mpFontInstance.is())
-        mpFontInstance->CacheGlyphBoundRect(rGlyph.maGlyphId, rRect);
+        mpFontInstance->CacheGlyphBoundRect(rGlyph.m_aGlyphId, rRect);
 
     FT_Done_Glyph( pGlyphFT );
 
@@ -894,7 +894,7 @@ bool FreetypeFont::GetGlyphOutline(const GlyphItem& rGlyph,
     nLoadFlags |= FT_LOAD_TARGET_LIGHT;
 #endif
 
-    FT_Error rc = FT_Load_Glyph(maFaceFT, rGlyph.maGlyphId, nLoadFlags);
+    FT_Error rc = FT_Load_Glyph(maFaceFT, rGlyph.m_aGlyphId, nLoadFlags);
     if( rc != FT_Err_Ok )
         return false;
 

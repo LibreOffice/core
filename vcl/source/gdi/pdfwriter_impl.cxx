@@ -6198,7 +6198,7 @@ void PDFWriterImpl::registerGlyph(const GlyphItem* pGlyph,
                                   sal_uInt8& nMappedGlyph,
                                   sal_Int32& nMappedFontObject)
 {
-    const int nFontGlyphId = pGlyph->maGlyphId;
+    const int nFontGlyphId = pGlyph->m_aGlyphId;
     FontSubset& rSubset = m_aSubsets[ pFont ];
     // search for font specific glyphID
     FontMapping::iterator it = rSubset.m_aMapping.find( nFontGlyphId );
@@ -6356,7 +6356,7 @@ void PDFWriterImpl::drawVerticalGlyphs(
             long nOffsetY = rGlyphs[i+1].m_aPos.Y() - rGlyphs[i].m_aPos.Y();
             nXOffset += static_cast<int>(sqrt(double(nOffsetX*nOffsetX + nOffsetY*nOffsetY)));
         }
-        if( ! rGlyphs[i].m_pGlyph->maGlyphId )
+        if( ! rGlyphs[i].m_pGlyph->m_aGlyphId )
             continue;
 
         aDeltaPos = rRotScale.transform( aDeltaPos );
@@ -6652,9 +6652,9 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         // * Keep generating (now) redundant ToUnicode entries for
         //   compatibility with old tools not supporting ActualText.
 
-        assert(pGlyph->mnCharCount >= 0);
-        for (int n = 0; n < pGlyph->mnCharCount; n++)
-            aCodeUnits.push_back(rText[pGlyph->mnCharPos + n]);
+        assert(pGlyph->m_nCharCount >= 0);
+        for (int n = 0; n < pGlyph->m_nCharCount; n++)
+            aCodeUnits.push_back(rText[pGlyph->m_nCharPos + n]);
 
         bool bUseActualText = false;
 
@@ -6673,7 +6673,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         {
             for (const auto& rSubset : m_aSubsets[pFont].m_aSubsets)
             {
-                const auto& it = rSubset.m_aMapping.find(pGlyph->maGlyphId);
+                const auto& it = rSubset.m_aMapping.find(pGlyph->m_aGlyphId);
                 if (it != rSubset.m_aMapping.cend() && it->second.codes() != aCodeUnits)
                 {
                     bUseActualText = true;
@@ -6692,13 +6692,13 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         SalGraphics *pGraphics = GetGraphics();
         if (pGraphics)
             nGlyphWidth = m_aFontCache.getGlyphWidth(pFont,
-                                                     pGlyph->maGlyphId,
+                                                     pGlyph->m_aGlyphId,
                                                      pGlyph->IsVertical(),
                                                      pGraphics);
 
         int nCharPos = -1;
         if (bUseActualText || pGlyph->IsInCluster())
-            nCharPos = pGlyph->mnCharPos;
+            nCharPos = pGlyph->m_nCharPos;
 
         aGlyphs.emplace_back(aPos,
                              pGlyph,
@@ -6770,12 +6770,12 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
             if (!aRun.front().m_pGlyph->IsRTLGlyph())
             {
                 nCharPos = aRun.front().m_nCharPos;
-                nCharCount = aRun.front().m_pGlyph->mnCharCount;
+                nCharCount = aRun.front().m_pGlyph->m_nCharCount;
             }
             else
             {
                 nCharPos = aRun.back().m_nCharPos;
-                nCharCount = aRun.back().m_pGlyph->mnCharCount;
+                nCharCount = aRun.back().m_pGlyph->m_nCharCount;
             }
 
             if (nCharPos >= 0 && nCharCount)
@@ -6834,7 +6834,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                     if( !nWidth )
                         aStartPt = aPos;
 
-                    nWidth += pGlyph->mnNewWidth;
+                    nWidth += pGlyph->m_nNewWidth;
                 }
                 else if( nWidth > 0 )
                 {
@@ -6927,7 +6927,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         if (pGlyph->IsSpacing())
         {
             Point aAdjOffset = aOffset;
-            aAdjOffset.AdjustX((pGlyph->mnNewWidth - nEmphWidth) / 2 );
+            aAdjOffset.AdjustX((pGlyph->m_nNewWidth - nEmphWidth) / 2 );
             aAdjOffset = aRotScale.transform( aAdjOffset );
 
             aAdjOffset -= Point( nEmphWidth2, nEmphHeight2 );

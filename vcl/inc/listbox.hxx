@@ -23,6 +23,7 @@
 #include <vcl/button.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/quickselectionengine.hxx>
+#include <vcl/glyphitem.hxx>
 #include <vcl/vcllayout.hxx>
 
 #include <set>

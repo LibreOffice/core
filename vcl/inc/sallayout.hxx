@@ -45,7 +45,6 @@
 class SalGraphics;
 class PhysicalFontFace;
 class GenericSalLayout;
-struct GlyphItem;
 enum class SalLayoutFlags;
 namespace vcl {
     class TextLayoutCache;
