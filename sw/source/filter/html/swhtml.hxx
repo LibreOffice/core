@@ -347,7 +347,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     OUString      m_aScriptURL;     // script URL
     OUString      m_aStyleSource;   // content of current style sheet
     OUString      m_aContents;      // text of current marquee, field and so
-    OUString      m_sTitle;
+    OUStringBuffer m_sTitle;
     OUString      m_aUnknownToken;  // a started unknown token
     OUString      m_aBulletGrfs[MAXLEVEL];
     OUString      m_sJmpMark;
