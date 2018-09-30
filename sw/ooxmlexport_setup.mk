@@ -133,6 +133,10 @@ $(eval $(call gb_CppunitTest_use_packages,sw_ooxmlexport$(1),\
 
 $(call gb_CppunitTest_get_target,sw_ooxmlexport$(1)) : $(call gb_Library_get_target,iti)
 
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_use_package,sw_ooxmlexport$(1),ooo_fonts))
+endif
+
 endef
 
 # vim: set noet sw=4 ts=4:

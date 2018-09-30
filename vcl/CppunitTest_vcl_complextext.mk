@@ -24,10 +24,6 @@ $(eval $(call gb_CppunitTest_use_externals,vcl_complextext,\
 	harfbuzz \
 ))
 
-ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
-$(eval $(call gb_CppunitTest_use_package,vcl_complextext,fonts_dejavu))
-endif
-
 $(eval $(call gb_CppunitTest_use_libraries,vcl_complextext, \
 	comphelper \
 	cppu \
@@ -52,5 +48,9 @@ $(eval $(call gb_CppunitTest_use_components,vcl_complextext,\
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_complextext))
+
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_use_package,vcl_complextext,ooo_fonts))
+endif
 
 # vim: set noet sw=4 ts=4:

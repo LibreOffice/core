@@ -73,8 +73,7 @@ $(call gb_CppunitTest_get_target,sw_uiwriter): \
     $(call gb_Library_get_target,textconv_dict)
 
 ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
-$(call gb_CppunitTest_get_target,sw_uiwriter): \
-    $(call gb_ExternalPackage_get_target,fonts_liberation)
+$(eval $(call gb_CppunitTest_use_package,sw_uiwriter,ooo_fonts))
 endif
 
 # vim: set noet sw=4 ts=4:

@@ -82,4 +82,8 @@ $(eval $(call gb_CppunitTest_use_components,desktop_lib,\
 
 $(eval $(call gb_CppunitTest_use_configuration,desktop_lib))
 
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_use_package,desktop_lib,ooo_fonts))
+endif
+
 # vim: set noet sw=4 ts=4:

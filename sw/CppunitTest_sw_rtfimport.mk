@@ -95,4 +95,8 @@ $(eval $(call gb_CppunitTest_use_uiconfigs,sw_rtfimport,\
     modules/swriter \
 ))
 
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_use_package,sw_rtfimport,ooo_fonts))
+endif
+
 # vim: set noet sw=4 ts=4:

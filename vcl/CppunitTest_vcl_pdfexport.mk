@@ -42,4 +42,8 @@ $(eval $(call gb_CppunitTest_use_rdb,vcl_pdfexport,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_pdfexport))
 
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(eval $(call gb_CppunitTest_use_package,vcl_pdfexport,ooo_fonts))
+endif
+
 # vim: set noet sw=4 ts=4:
