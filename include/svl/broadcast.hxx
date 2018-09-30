@@ -74,6 +74,7 @@ public:
     void PrepareForDestruction();
 
 private:
+    /// contains only one of each listener, which is enforced by SvtListener
     mutable ListenersType maListeners;
 
     /// When the broadcaster is about to die, collect listeners that asked for removal.
