@@ -38,9 +38,8 @@
 using namespace css::accessibility;
 using namespace css::uno;
 
-Qt5AccessibleWidget::Qt5AccessibleWidget(Qt5Widget* pFrame, vcl::Window* pWindow)
-    : m_pFrame(pFrame)
-    , m_pWindow(pWindow)
+Qt5AccessibleWidget::Qt5AccessibleWidget(Qt5Widget* /* pFrame */, vcl::Window* pWindow)
+    : m_pWindow(pWindow)
 {
 }
 
@@ -628,12 +627,13 @@ QAccessibleInterface* Qt5AccessibleWidget::customFactory(const QString& classnam
     if (classname == QLatin1String("Qt5Widget") && object && object->isWidgetType())
     {
         return new Qt5AccessibleWidget(static_cast<Qt5Widget*>(object),
-                                       (static_cast<Qt5Widget*>(object))->m_pFrame->GetWindow());
+                                       static_cast<Qt5Widget*>(object)->m_pFrame->GetWindow());
     }
     if (classname == QLatin1String("Qt5VclWindow") && object)
     {
-        if (dynamic_cast<Qt5VclWindow*>(object) != nullptr)
-            return new Qt5AccessibleWidget((static_cast<Qt5VclWindow*>(object))->m_pWindow);
+        Qt5VclWindow* pWindow = dynamic_cast<Qt5VclWindow*>(object);
+        if (pWindow != nullptr)
+            return new Qt5AccessibleWidget(pWindow->m_pWindow);
     }
 
     return nullptr;
