@@ -259,7 +259,7 @@ public:
     virtual void insert_text(int pos, const OUString& rStr) = 0;
     void append_text(const OUString& rStr) { insert_text(-1, rStr); }
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
-                        const OUString* pIconName, VirtualDevice* pImageSufface)
+                        const OUString* pIconName, VirtualDevice* pImageSurface)
         = 0;
     void append(const OUString& rId, const OUString& rStr)
     {
