@@ -58,6 +58,7 @@ public:
     OString         getLocalId() const;
     OString         getResourceType() const;    ///< Get the type of component from which entry is extracted
     TYPE            getType() const;            ///< Get the type of entry
+    OString const & getMsgCtxt() const;
     OString const & getMsgId() const;
     OString const & getMsgStr() const;
     bool            isFuzzy() const;
