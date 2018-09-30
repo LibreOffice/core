@@ -1001,7 +1001,9 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
             switch( nToken )
             {
             case HtmlTokenId::TITLE_OFF:
-                if( IsNewDoc() && !m_sTitle.isEmpty() )
+            {
+                OUString sTitle = m_sTitle.makeStringAndClear();
+                if( IsNewDoc() && !sTitle.isEmpty() )
                 {
                     if( m_xDoc->GetDocShell() ) {
                         uno::Reference<document::XDocumentPropertiesSupplier>
@@ -1011,39 +1013,39 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
                             xDPS->getDocumentProperties());
                         OSL_ENSURE(xDocProps.is(), "no DocumentProperties");
                         if (xDocProps.is()) {
-                            xDocProps->setTitle(m_sTitle);
+                            xDocProps->setTitle(sTitle);
                         }
 
-                        m_xDoc->GetDocShell()->SetTitle( m_sTitle );
+                        m_xDoc->GetDocShell()->SetTitle(sTitle);
                     }
                 }
                 m_bInTitle = false;
-                m_sTitle.clear();
                 break;
+            }
 
             case HtmlTokenId::NONBREAKSPACE:
-                m_sTitle += " ";
+                m_sTitle.append(" ");
                 break;
 
             case HtmlTokenId::SOFTHYPH:
-                m_sTitle += "-";
+                m_sTitle.append("-");
                 break;
 
             case HtmlTokenId::TEXTTOKEN:
-                m_sTitle += aToken;
+                m_sTitle.append(aToken);
                 break;
 
             default:
-                m_sTitle += "<";
+                m_sTitle.append("<");
                 if( (nToken >= HtmlTokenId::ONOFF_START) && isOffToken(nToken) )
-                    m_sTitle += "/";
-                m_sTitle += sSaveToken;
+                    m_sTitle.append("/");
+                m_sTitle.append(sSaveToken);
                 if( !aToken.isEmpty() )
                 {
-                    m_sTitle += " ";
-                    m_sTitle += aToken;
+                    m_sTitle.append(" ");
+                    m_sTitle.append(aToken);
                 }
-                m_sTitle += ">";
+                m_sTitle.append(">");
                 break;
             }
 
