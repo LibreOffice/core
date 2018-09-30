@@ -59,7 +59,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, c
     bool        bSyntErrWarn = false;
     bool        bOverflowWarn = false;
 
-    OUString&   aData = aDifParser.aData;
+    OUStringBuffer& rData = aDifParser.m_aData;
 
     rIn.Seek( 0 );
 
@@ -71,7 +71,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, c
 
         aPrgrsBar.Progress();
 
-        const bool bData = !aData.isEmpty();
+        const bool bData = !rData.isEmpty();
 
         switch( eTopic )
         {
@@ -80,7 +80,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, c
                 if( aDifParser.nVector != 0 || aDifParser.nVal != 1 )
                     bSyntErrWarn = true;
                 if( bData )
-                    pDoc->RenameTab( nBaseTab, aData);
+                    pDoc->RenameTab(nBaseTab, rData.toString());
             }
                 break;
             case T_VECTORS:
@@ -138,6 +138,8 @@ ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, c
 
             aPrgrsBar.Progress();
             ScAddress aPos(nColCnt, nRowCnt, nBaseTab);
+
+            OUString aData = rData.toString();
 
             switch( eCurrent )
             {
@@ -359,9 +361,9 @@ TOPIC DifParser::GetNextTopic()
                 OSL_ENSURE( aLine.getLength() >= 2,
                     "+GetNextTopic(): <String> is too short!" );
                 if( aLine.getLength() > 2 )
-                    aData = aLine.copy( 1, aLine.getLength() - 2 );
+                    m_aData.append(aLine.copy(1, aLine.getLength() - 2));
                 else
-                    aData.clear();
+                    m_aData.truncate();
                 eS = S_END;
                 break;
             case S_END:
@@ -384,14 +386,14 @@ TOPIC DifParser::GetNextTopic()
     return eRet;
 }
 
-static void lcl_DeEscapeQuotesDif( OUString& rString )
+static void lcl_DeEscapeQuotesDif(OUStringBuffer& rString)
 {
     //  Special handling for DIF import: Escaped (duplicated) quotes are resolved.
     //  Single quote characters are left in place because older versions didn't
     //  escape quotes in strings (and Excel doesn't when using the clipboard).
     //  The quotes around the string are removed before this function is called.
 
-    rString = rString.replaceAll("\"\"", "\"");
+    rString = rString.toString().replaceAll("\"\"", "\"");
 }
 
 // Determine if passed in string is numeric data and set fVal/nNumFormat if so
@@ -494,7 +496,7 @@ DATASET DifParser::GetNextDataset()
             }
             break;
         case '0':                   // Numeric Data
-            pCurrentBuffer++;       // value in fVal, 2. line in aData
+            pCurrentBuffer++;       // value in fVal, 2. line in m_aData
             if( *pCurrentBuffer == ',' )
             {
                 pCurrentBuffer++;
@@ -503,15 +505,14 @@ DATASET DifParser::GetNextDataset()
                 ReadNextLine( aTmpLine );
                 if ( eRet == D_SYNT_ERROR )
                 {   // for broken records write "#ERR: data" to cell
-                    OUStringBuffer aTmp("#ERR: ");
-                    aTmp.append(pCurrentBuffer).append(" (");
-                    aTmp.append(aTmpLine).append(')');
-                    aData = aTmp.makeStringAndClear();
+                    m_aData = "#ERR: ";
+                    m_aData.append(pCurrentBuffer).append(" (");
+                    m_aData.append(aTmpLine).append(')');
                     eRet = D_STRING;
                 }
                 else
                 {
-                    aData = aTmpLine;
+                    m_aData = aTmpLine;
                 }
             }
             break;
@@ -532,19 +533,19 @@ DATASET DifParser::GetNextDataset()
                         // Single line string
                         if( nLineLength >= 2 && pLine[nLineLength - 1] == '"' )
                         {
-                            aData = aLine.copy( 1, nLineLength - 2 );
-                            lcl_DeEscapeQuotesDif( aData );
+                            m_aData = aLine.copy( 1, nLineLength - 2 );
+                            lcl_DeEscapeQuotesDif(m_aData);
                             eRet = D_STRING;
                         }
                     }
                     else
                     {
                         // Multiline string
-                        aData = aLine.copy( 1 );
+                        m_aData = aLine.copy( 1 );
                         bool bContinue = true;
                         while ( bContinue )
                         {
-                            aData = aData + "\n";
+                            m_aData.append("\n");
                             bContinue = !rIn.eof() && ReadNextLine( aLine );
                             if( bContinue )
                             {
@@ -555,12 +556,12 @@ DATASET DifParser::GetNextDataset()
                                     bContinue = !LookAhead();
                                     if( bContinue )
                                     {
-                                        aData = aData + aLine;
+                                        m_aData.append(aLine);
                                     }
                                     else if( pLine[nLineLength - 1] == '"' )
                                     {
-                                        aData = aData + aLine.copy(0, nLineLength -1 );
-                                        lcl_DeEscapeQuotesDif( aData );
+                                        m_aData.append(aLine.copy(0, nLineLength -1));
+                                        lcl_DeEscapeQuotesDif(m_aData);
                                         eRet = D_STRING;
                                     }
                                 }

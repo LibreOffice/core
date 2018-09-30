@@ -58,7 +58,7 @@ enum DATASET { D_BOT, D_EOD, D_NUMERIC, D_STRING, D_UNKNOWN, D_SYNT_ERROR };
 class DifParser
 {
 public:
-    OUString            aData;
+    OUStringBuffer      m_aData;
     double              fVal;
     sal_uInt32          nVector;
     sal_uInt32          nVal;
