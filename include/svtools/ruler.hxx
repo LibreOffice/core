@@ -28,6 +28,7 @@
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/field.hxx>
+#include <vcl/glyphitem.hxx>
 #include <vcl/vcllayout.hxx>
 
 #include <svtools/accessibleruler.hxx>

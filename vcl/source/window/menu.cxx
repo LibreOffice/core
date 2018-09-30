@@ -43,6 +43,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/IDialogRenderable.hxx>
+#include <vcl/glyphitem.hxx>
 
 #include <salinst.hxx>
 #include <svdata.hxx>

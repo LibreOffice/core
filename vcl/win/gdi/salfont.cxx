@@ -1328,10 +1328,10 @@ void WinSalGraphics::ClearDevFontCache()
 
 bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
-    rtl::Reference<WinFontInstance> pFont = mpWinFontEntry[rGlyph.mnFallbackLevel];
+    rtl::Reference<WinFontInstance> pFont = mpWinFontEntry[rGlyph.m_nFallbackLevel];
     assert(pFont.is());
 
-    if (pFont.is() && pFont->GetCachedGlyphBoundRect(rGlyph.maGlyphId, rRect))
+    if (pFont.is() && pFont->GetCachedGlyphBoundRect(rGlyph.m_aGlyphId, rRect))
         return true;
 
     HDC hDC = getHDC();
@@ -1355,7 +1355,7 @@ bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle
     GLYPHMETRICS aGM;
     aGM.gmptGlyphOrigin.x = aGM.gmptGlyphOrigin.y = 0;
     aGM.gmBlackBoxX = aGM.gmBlackBoxY = 0;
-    DWORD nSize = ::GetGlyphOutlineW(hDC, rGlyph.maGlyphId, nGGOFlags, &aGM, 0, nullptr, &aMat);
+    DWORD nSize = ::GetGlyphOutlineW(hDC, rGlyph.m_aGlyphId, nGGOFlags, &aGM, 0, nullptr, &aMat);
     if (pFont.is() && hFont != pFont->GetHFONT())
         SelectObject(hDC, hFont);
     if( nSize == GDI_ERROR )
@@ -1368,7 +1368,7 @@ bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle
     rRect.SetTop(static_cast<int>( fFontScale * rRect.Top() ));
     rRect.SetBottom(static_cast<int>( fFontScale * rRect.Bottom() ) + 1);
 
-    pFont->CacheGlyphBoundRect(rGlyph.maGlyphId, rRect);
+    pFont->CacheGlyphBoundRect(rGlyph.m_aGlyphId, rRect);
 
     return true;
 }
@@ -1389,14 +1389,14 @@ bool WinSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
     nGGOFlags |= GGO_GLYPH_INDEX;
 
     GLYPHMETRICS aGlyphMetrics;
-    const DWORD nSize1 = ::GetGlyphOutlineW(hDC, rGlyph.maGlyphId, nGGOFlags, &aGlyphMetrics, 0, nullptr, &aMat);
+    const DWORD nSize1 = ::GetGlyphOutlineW(hDC, rGlyph.m_aGlyphId, nGGOFlags, &aGlyphMetrics, 0, nullptr, &aMat);
     if( !nSize1 )       // blank glyphs are ok
         return true;
     else if( nSize1 == GDI_ERROR )
         return false;
 
     BYTE* pData = new BYTE[ nSize1 ];
-    const DWORD nSize2 = ::GetGlyphOutlineW(hDC, rGlyph.maGlyphId, nGGOFlags,
+    const DWORD nSize2 = ::GetGlyphOutlineW(hDC, rGlyph.m_aGlyphId, nGGOFlags,
               &aGlyphMetrics, nSize1, pData, &aMat );
 
     if( nSize1 != nSize2 )
@@ -1546,7 +1546,7 @@ bool WinSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
     // rescaling needed for the tools::PolyPolygon conversion
     if( rB2DPolyPoly.count() )
     {
-        rtl::Reference<WinFontInstance> pFont = mpWinFontEntry[rGlyph.mnFallbackLevel];
+        rtl::Reference<WinFontInstance> pFont = mpWinFontEntry[rGlyph.m_nFallbackLevel];
         assert(pFont.is());
         float fFontScale = pFont.is() ? pFont->GetScale() : 1.0;
         const double fFactor(fFontScale/256);

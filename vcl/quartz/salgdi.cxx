@@ -371,7 +371,7 @@ bool AquaSalGraphics::AddTempDevFont( PhysicalFontCollection*,
 
 bool AquaSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPolygon& rPolyPoly)
 {
-    const int nFallbackLevel = rGlyph.mnFallbackLevel;
+    const int nFallbackLevel = rGlyph.m_nFallbackLevel;
     if (nFallbackLevel < MAX_FALLBACK && mpTextStyle[nFallbackLevel])
     {
         const bool bRC = mpTextStyle[nFallbackLevel]->GetGlyphOutline(rGlyph, rPolyPoly);
@@ -382,7 +382,7 @@ bool AquaSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyP
 
 bool AquaSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect )
 {
-    const int nFallbackLevel = rGlyph.mnFallbackLevel;
+    const int nFallbackLevel = rGlyph.m_nFallbackLevel;
     if (nFallbackLevel < MAX_FALLBACK && mpTextStyle[nFallbackLevel])
     {
         const bool bRC = mpTextStyle[nFallbackLevel]->GetGlyphBoundRect(rGlyph, rRect);
@@ -440,7 +440,7 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
             }
         }
 
-        aGlyphIds.push_back(pGlyph->maGlyphId);
+        aGlyphIds.push_back(pGlyph->m_aGlyphId);
         aGlyphPos.push_back(aGCPos);
         aGlyphOrientation.push_back(bUprightGlyph);
     }

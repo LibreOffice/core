@@ -54,6 +54,7 @@
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <doc.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <vcl/glyphitem.hxx>
 #include <vcl/vcllayout.hxx>
 #include <docsh.hxx>
 #include <strings.hrc>

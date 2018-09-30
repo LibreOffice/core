@@ -139,10 +139,10 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef const & rxFontMetric )
 
 bool CoreTextStyle::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect )
 {
-    if (GetCachedGlyphBoundRect(rGlyph.maGlyphId, rRect))
+    if (GetCachedGlyphBoundRect(rGlyph.m_aGlyphId, rRect))
         return true;
 
-    CGGlyph nCGGlyph = rGlyph.maGlyphId;
+    CGGlyph nCGGlyph = rGlyph.m_aGlyphId;
     CTFontRef aCTFontRef = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.11 kCTFontDefaultOrientation
@@ -159,7 +159,7 @@ bool CoreTextStyle::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle&
     long xMax = ceil(aCGRect.origin.x + aCGRect.size.width);
     long yMax = ceil(aCGRect.origin.y + aCGRect.size.height);
     rRect = tools::Rectangle(xMin, -yMax, xMax, -yMin);
-    CacheGlyphBoundRect(rGlyph.maGlyphId, rRect);
+    CacheGlyphBoundRect(rGlyph.m_aGlyphId, rRect);
     return true;
 }
 
@@ -219,7 +219,7 @@ bool CoreTextStyle::GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPol
 {
     rResult.clear();
 
-    CGGlyph nCGGlyph = rGlyph.maGlyphId;
+    CGGlyph nCGGlyph = rGlyph.m_aGlyphId;
     CTFontRef pCTFont = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
