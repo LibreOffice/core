@@ -764,6 +764,11 @@ public:
         return convert_value_to(m_xSpinButton->get_value(), eDestUnit);
     }
 
+    // typically you only need to call this if set_text (e.g. with "") was
+    // previously called to display some arbitrary text instead of the
+    // formatted value and now you want to show it as formattted again
+    void reformat() { set_value(get_value(m_eSrcUnit), m_eSrcUnit); }
+
     void set_range(int min, int max, FieldUnit eValueUnit)
     {
         min = convert_value_from(min, eValueUnit);
