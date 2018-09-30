@@ -26,6 +26,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/tabdlg.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/weld.hxx>
 #include <svtools/simptabl.hxx>
 #include <vcl/svlbitm.hxx>
 #include <svtools/svmedit2.hxx>
@@ -381,36 +382,35 @@ public:
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener) override;
 };
 
-class SaveDialog : public Dialog
+class SaveDialog : public weld::GenericDialogController
 {
-    // member
-    private:
-        VclPtr<ListBox>        m_pFileListLB;
-        VclPtr<OKButton>       m_pOkBtn;
-        RecoveryCore*   m_pCore;
+// member
+private:
+    RecoveryCore*   m_pCore;
+    std::unique_ptr<weld::TreeView> m_xFileListLB;
+    std::unique_ptr<weld::Button> m_xOkBtn;
 
-    // interface
-    public:
-        /** @short  create all child controls of this dialog.
+// interface
+public:
+    /** @short  create all child controls of this dialog.
 
-            @descr  The dialog isn't shown nor it starts any
-                    action by itself!
+        @descr  The dialog isn't shown nor it starts any
+                action by itself!
 
-            @param  pParent
-                    can point to a parent window.
-                    If its set to 0, the defmodal-dialog-parent
-                    is used automatically.
+        @param  pParent
+                can point to a parent window.
+                If its set to 0, the defmodal-dialog-parent
+                is used automatically.
 
-            @param  pCore
-                    provides access to the recovery core service
-                    and the current list of open documents,
-                    which should be shown inside this dialog.
-         */
-        SaveDialog(vcl::Window* pParent, RecoveryCore* pCore);
-        virtual ~SaveDialog() override;
-        virtual void dispose() override;
+        @param  pCore
+                provides access to the recovery core service
+                and the current list of open documents,
+                which should be shown inside this dialog.
+     */
+    SaveDialog(weld::Window* pParent, RecoveryCore* pCore);
+    virtual ~SaveDialog() override;
 
-        DECL_LINK(OKButtonHdl, Button*, void);
+    DECL_LINK(OKButtonHdl, weld::Button&, void);
 };
 
 class SaveProgressDialog : public weld::GenericDialogController
