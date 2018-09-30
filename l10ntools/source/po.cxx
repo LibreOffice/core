@@ -29,7 +29,7 @@ class GenPoEntry
 {
 private:
     OString    m_sExtractCom;
-    OString    m_sReference;
+    std::vector<OString>    m_sReferences;
     OString    m_sMsgCtxt;
     OString    m_sMsgId;
     OString    m_sMsgStr;
@@ -40,7 +40,7 @@ private:
 public:
     GenPoEntry();
 
-    const OString& getReference() const    { return m_sReference; }
+    const std::vector<OString>& getReference() const    { return m_sReferences; }
     const OString& getMsgCtxt() const      { return m_sMsgCtxt; }
     const OString& getMsgId() const        { return m_sMsgId; }
     const OString& getMsgStr() const       { return m_sMsgStr; }
@@ -53,7 +53,7 @@ public:
                         }
     void        setReference(const OString& rReference)
                         {
-                            m_sReference = rReference;
+                            m_sReferences.push_back(rReference);
                         }
     void        setMsgCtxt(const OString& rMsgCtxt)
                         {
@@ -114,7 +114,7 @@ namespace
 
 GenPoEntry::GenPoEntry()
     : m_sExtractCom( OString() )
-    , m_sReference( OString() )
+    , m_sReferences( std::vector<OString>() )
     , m_sMsgCtxt( OString() )
     , m_sMsgId( OString() )
     , m_sMsgStr( OString() )
@@ -132,8 +132,11 @@ void GenPoEntry::writeToFile(std::ofstream& rOFStream) const
         rOFStream
             << "#. "
             << m_sExtractCom.replaceAll("\n","\n#. ") << std::endl;
-    if ( !m_sReference.isEmpty() )
-        rOFStream << "#: " << m_sReference << std::endl;
+    if ( !m_sReferences.empty() )
+    {
+        for(std::vector<OString>::const_iterator it =  m_sReferences.begin(); it != m_sReferences.end(); ++it)
+            rOFStream << "#: " << *it << std::endl;
+    }
     if ( m_bFuzzy )
         rOFStream << "#, fuzzy" << std::endl;
     if ( m_bCFormat )
@@ -172,7 +175,7 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
         }
         else if (sLine.startsWith("#: "))
         {
-            m_sReference = sLine.copy(3);
+            m_sReferences.push_back(sLine.copy(3));
         }
         else if (sLine.startsWith("#, fuzzy"))
         {
@@ -251,7 +254,7 @@ PoEntry::PoEntry(
     m_pGenPo->setMsgId(rText);
     m_pGenPo->setExtractCom(
         ( !rHelpText.isEmpty() ?  rHelpText + "\n" : OString()) +
-        genKeyId( m_pGenPo->getReference() + rGroupId + rLocalId + rResType + rText ) );
+        genKeyId( m_pGenPo->getReference().front() + rGroupId + rLocalId + rResType + rText ) );
     m_bIsInitialized = true;
 }
 
@@ -300,7 +303,7 @@ PoEntry& PoEntry::operator=(PoEntry&& rPo)
 OString const & PoEntry::getSourceFile() const
 {
     assert( m_bIsInitialized );
-    return m_pGenPo->getReference();
+    return m_pGenPo->getReference().front();
 }
 
 OString PoEntry::getGroupId() const
@@ -491,7 +494,7 @@ namespace
 // Check the validity of read entry
 bool lcl_CheckInputEntry(const GenPoEntry& rEntry)
 {
-    return !rEntry.getReference().isEmpty() &&
+    return !rEntry.getReference().empty() &&
            !rEntry.getMsgCtxt().isEmpty() &&
            !rEntry.getMsgId().isEmpty();
 }
