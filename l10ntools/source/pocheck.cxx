@@ -28,7 +28,10 @@ static void checkStyleNames(const OString& aLanguage)
     PoIfstream aPoInput;
     aPoInput.open(aPoPath);
     if( !aPoInput.isOpen() )
+    {
         std::cerr << "Warning: Cannot open " << aPoPath << std::endl;
+        return;
+    }
 
     for(;;)
     {
@@ -91,7 +94,10 @@ static void checkStyleNames(const OString& aLanguage)
     }
     aPoInput.open(aPoPath);
     if( !aPoInput.isOpen() )
+    {
         std::cerr << "Warning: Cannot open " << aPoPath << std::endl;
+        return;
+    }
     PoOfstream aPoOutput;
     aPoOutput.open(aPoPath+".new");
     PoHeader aTmp("sw/source/ui/utlui");
@@ -126,7 +132,6 @@ static void checkStyleNames(const OString& aLanguage)
         osl::File::move(aPoPathURL + ".new", aPoPathURL);
     else
         osl::File::remove(aPoPathURL + ".new");
-
 }
 
 // Translated spreadsheet function names must be unique
@@ -147,7 +152,10 @@ static void checkFunctionNames(const OString& aLanguage)
     PoIfstream aPoInput;
     aPoInput.open(aPoPaths[0]);
     if( !aPoInput.isOpen() )
+    {
         std::cerr << "Warning: Cannot open " << aPoPaths[0] << std::endl;
+        return;
+    }
 
     for(;;)
     {
@@ -178,7 +186,10 @@ static void checkFunctionNames(const OString& aLanguage)
         "/scaddins/source/analysis.po";
     aPoInput.open(aPoPaths[1]);
     if( !aPoInput.isOpen() )
+    {
         std::cerr << "Warning: Cannot open " << aPoPaths[1] << std::endl;
+        return;
+    }
 
     for(;;)
     {
@@ -210,7 +221,10 @@ static void checkFunctionNames(const OString& aLanguage)
               "/scaddins/source/datefunc.po";
     aPoInput.open(aPoPaths[2]);
     if( !aPoInput.isOpen() )
+    {
         std::cerr << "Warning: Cannot open " << aPoPaths[2] << std::endl;
+        return;
+    }
 
     for(;;)
     {
@@ -241,7 +255,10 @@ static void checkFunctionNames(const OString& aLanguage)
               "/scaddins/source/pricing.po";
     aPoInput.open(aPoPaths[3]);
     if( !aPoInput.isOpen() )
+    {
         std::cerr << "Warning: Cannot open " << aPoPaths[3] << std::endl;
+        return;
+    }
 
     for(;;)
     {
@@ -362,10 +379,13 @@ static void checkVerticalBar(const OString& aLanguage)
                       "/instsetoo_native/inc_openoffice/windows/msi_languages.po";
     PoIfstream aPoInput;
     aPoInput.open(aPoPath);
+    if( !aPoInput.isOpen() )
+    {
+        std::cerr << "Warning: Cannot open " << aPoPath << std::endl;
+        return;
+    }
     PoOfstream aPoOutput;
     aPoOutput.open(aPoPath+".new");
-    if( !aPoInput.isOpen() )
-        std::cerr << "Warning: Cannot open " << aPoPath << std::endl;
     PoHeader aTmp("instsetoo_native/inc_openoffice/windows/msi_languages");
     aPoOutput.writeHeader(aTmp);
     bool bError = false;
@@ -412,10 +432,13 @@ static void checkMathSymbolNames(const OString& aLanguage)
                       "/starmath/source.po";
     PoIfstream aPoInput;
     aPoInput.open(aPoPath);
+    if( !aPoInput.isOpen() )
+    {
+        std::cerr << "Warning: Cannot open " << aPoPath << std::endl;
+        return;
+    }
     PoOfstream aPoOutput;
     aPoOutput.open(aPoPath+".new");
-    if( !aPoInput.isOpen() )
-        std::cerr << "Warning: Cannot open " << aPoPath << std::endl;
     PoHeader aTmp("starmath/source");
     aPoOutput.writeHeader(aTmp);
     bool bError = false;
