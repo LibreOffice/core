@@ -353,6 +353,7 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
             try
             {
                 SdrObject* pNewObj(pSdrObject->CloneSdrObject(pSdrObject->getSdrModelFromSdrObject()));
+                m_pPage->NbcInsertObject(pNewObj);
                 aCopies.emplace_back(pNewObj->getUnoShape(),uno::UNO_QUERY);
                 if ( _bEraseAnddNoClone )
                 {
