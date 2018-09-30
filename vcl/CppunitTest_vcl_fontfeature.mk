@@ -20,11 +20,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_fontfeature, \
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_fontfeature,boost_headers))
 
-ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
-$(call gb_CppunitTest_get_target,vcl_fontfeature): \
-    $(call gb_ExternalPackage_get_target,fonts_libertineg)
-endif
-
 $(eval $(call gb_CppunitTest_use_libraries,vcl_fontfeature, \
 	comphelper \
 	cppu \
@@ -50,5 +45,7 @@ $(eval $(call gb_CppunitTest_use_components,vcl_fontfeature,\
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_fontfeature))
+
+$(eval $(call gb_CppunitTest_use_more_fonts,vcl_fontfeature))
 
 # vim: set noet sw=4 ts=4:

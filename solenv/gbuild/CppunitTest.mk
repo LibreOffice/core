@@ -373,6 +373,14 @@ $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Executable_get_target,$(2))
 
 endef
 
+define gb_CppunitTest_use_more_fonts
+ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+$(call gb_CppunitTest_get_target,$(1)) : \
+    $(foreach font,$(gb_Package_MODULE_ooo_fonts),$(call gb_Package_get_target,$(font)))
+endif
+
+endef
+
 define gb_CppunitTest_use_java_ure
 $(call gb_CppunitTest_get_target,$(1)) : JAVA_URE := $(true)
 $(call gb_CppunitTest_get_target,$(1)) : \
