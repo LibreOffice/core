@@ -2973,6 +2973,7 @@ private:
     GtkWindow* m_pMenuHack;
     GtkWidget* m_pPopover;
     gulong m_nSignalId;
+    std::unique_ptr<GtkInstanceMenu> m_xPopup;
 
     static void signalToggled(GtkWidget*, gpointer widget)
     {
@@ -3230,6 +3231,8 @@ public:
 
     virtual void set_popover(weld::Widget* pPopover) override
     {
+        m_xPopup.reset();
+
         GtkInstanceWidget* pPopoverWidget = dynamic_cast<GtkInstanceWidget*>(pPopover);
         assert(pPopoverWidget);
         m_pPopover = pPopoverWidget->getWidget();
@@ -3260,6 +3263,17 @@ public:
             gtk_menu_button_set_popover(m_pMenuButton, m_pPopover);
             gtk_widget_show_all(m_pPopover);
         }
+    }
+
+    virtual weld::Menu* get_popup() override
+    {
+        if (!m_xPopup)
+        {
+            GtkMenu* pMenu = gtk_menu_button_get_popup(m_pMenuButton);
+            if (pMenu)
+                m_xPopup.reset(new GtkInstanceMenu>(pMenu, false));
+        }
+        return m_xPopup.get();
     }
 
     virtual ~GtkInstanceMenuButton() override

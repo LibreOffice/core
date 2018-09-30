@@ -460,6 +460,16 @@ public:
     virtual void connect_toggled(const Link<ToggleButton&, void>& rLink) { m_aToggleHdl = rLink; }
 };
 
+class VCL_DLLPUBLIC Menu
+{
+public:
+    virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) = 0;
+    virtual void set_sensitive(const OString& rIdent, bool bSensitive) = 0;
+    virtual void set_active(const OString& rIdent, bool bActive) = 0;
+    virtual void show(const OString& rIdent, bool bShow) = 0;
+    virtual ~Menu() {}
+};
+
 class VCL_DLLPUBLIC MenuButton : virtual public ToggleButton
 {
 protected:
@@ -475,6 +485,7 @@ public:
     virtual OString get_item_help_id(const OString& rIdent) const = 0;
 
     virtual void set_popover(weld::Widget* pPopover) = 0;
+    virtual weld::Menu* get_popup() = 0;
 };
 
 class VCL_DLLPUBLIC CheckButton : virtual public ToggleButton
@@ -1030,16 +1041,6 @@ public:
     virtual a11yref get_accessible_parent() = 0;
     virtual a11yrelationset get_accessible_relation_set() = 0;
     virtual Point get_accessible_location() = 0;
-};
-
-class VCL_DLLPUBLIC Menu
-{
-public:
-    virtual OString popup_at_rect(weld::Widget* pParent, const tools::Rectangle& rRect) = 0;
-    virtual void set_sensitive(const OString& rIdent, bool bSensitive) = 0;
-    virtual void set_active(const OString& rIdent, bool bActive) = 0;
-    virtual void show(const OString& rIdent, bool bShow) = 0;
-    virtual ~Menu() {}
 };
 
 class VCL_DLLPUBLIC SizeGroup

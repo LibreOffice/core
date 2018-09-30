@@ -294,21 +294,14 @@ public:
     OUString get_active_text() const { return m_xControl->get_active_text(); }
     void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xControl->connect_changed(rLink); }
     int get_count() const { return m_xControl->get_count(); }
+    void append_text(const OUString& rStr) { m_xControl->append_text(rStr); }
+    bool get_value_changed_from_saved() const { return m_xControl->get_value_changed_from_saved(); }
+    void save_value() { m_xControl->save_value(); }
+    void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
+    bool get_sensitive() const { return m_xControl->get_sensitive(); }
 };
 
 /************************************************************************/
-
-class SAL_WARN_UNUSED SVX_DLLPUBLIC LineEndLB : public ListBox
-{
-
-public:
-    LineEndLB( vcl::Window* pParent, WinBits aWB );
-
-    void Fill( const XLineEndListRef &pList, bool bStart = true );
-
-    void    Append( const XLineEndEntry& rEntry, const BitmapEx& rBitmap );
-    void    Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const BitmapEx& rBitmap );
-};
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxLineEndLB
 {
@@ -331,6 +324,11 @@ public:
     OUString get_active_text() const { return m_xControl->get_active_text(); }
     void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xControl->connect_changed(rLink); }
     int get_count() const { return m_xControl->get_count(); }
+    void append_text(const OUString& rStr) { m_xControl->append_text(rStr); }
+    bool get_value_changed_from_saved() const { return m_xControl->get_value_changed_from_saved(); }
+    void save_value() { m_xControl->save_value(); }
+    void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
+    bool get_sensitive() const { return m_xControl->get_sensitive(); }
 };
 
 class SdrObject;
@@ -424,33 +422,6 @@ public:
 |* SvxLinePreview
 |*
 \************************************************************************/
-
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXLinePreview : public SvxPreviewBase
-{
-private:
-    SdrPathObj*                                     mpLineObjA;
-    SdrPathObj*                                     mpLineObjB;
-    SdrPathObj*                                     mpLineObjC;
-
-    Graphic*                                        mpGraphic;
-    bool                                            mbWithSymbol;
-    Size                                            maSymbolSize;
-
-public:
-    SvxXLinePreview( vcl::Window* pParent );
-    virtual ~SvxXLinePreview() override;
-    virtual void dispose() override;
-
-    void SetLineAttributes(const SfxItemSet& rItemSet);
-
-    void ShowSymbol( bool b ) { mbWithSymbol = b; };
-    void SetSymbol( Graphic* p, const Size& s );
-    void ResizeSymbol( const Size& s );
-
-    virtual void Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
-    virtual void Resize() override;
-    virtual Size GetOptimalSize() const override;
-};
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC XLinePreview : public PreviewBase
 {

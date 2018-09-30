@@ -1111,6 +1111,7 @@ class SalInstanceMenuButton : public SalInstanceButton, public virtual weld::Men
 {
 private:
     VclPtr<::MenuButton> m_xMenuButton;
+    std::unique_ptr<SalInstanceMenu> m_xPopup;
 
     DECL_LINK(MenuSelectHdl, ::MenuButton*, void);
 
@@ -1173,8 +1174,20 @@ public:
 
     virtual void set_popover(weld::Widget* pPopover) override
     {
+        m_xPopup.reset();
         SalInstanceWidget* pPopoverWidget = dynamic_cast<SalInstanceWidget*>(pPopover);
         m_xMenuButton->SetPopover(pPopoverWidget ? pPopoverWidget->getWidget() : nullptr);
+    }
+
+    virtual weld::Menu* get_popup() override
+    {
+        if (!m_xPopup)
+        {
+            PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
+            if (pMenu)
+                m_xPopup.reset(new SalInstanceMenu(pMenu, false));
+        }
+        return m_xPopup.get();
     }
 
     virtual ~SalInstanceMenuButton() override
