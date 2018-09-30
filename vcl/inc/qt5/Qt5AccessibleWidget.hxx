@@ -28,7 +28,6 @@ class Qt5Frame;
 class Qt5Widget;
 
 class VCLPLUG_QT5_PUBLIC Qt5AccessibleWidget : public QObject, public QAccessibleInterface
-//public QAccessibleActionInterface
 {
     Q_OBJECT
 
