@@ -6502,8 +6502,6 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
     const int nMaxGlyphs = 256;
 
-    const GlyphItem* pGlyph = nullptr;
-    const PhysicalFontFace* pFallbackFont = nullptr;
     std::vector<sal_Ucs> aCodeUnits;
     bool bVertical = m_aCurrentPDFState.m_aFont.IsVertical();
     int nIndex = 0;
@@ -6622,6 +6620,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
     FontMetric aRefDevFontMetric = GetFontMetric();
     const PhysicalFontFace* pDevFont = GetFontInstance()->GetFontFace();
+    const GlyphItem* pGlyph = nullptr;
+    const PhysicalFontFace* pFallbackFont = nullptr;
 
     // collect the glyphs into a single array
     std::vector< PDFGlyph > aGlyphs;

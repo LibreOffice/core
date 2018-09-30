@@ -989,9 +989,9 @@ MultiSalLayout::MultiSalLayout( std::unique_ptr<SalLayout> pBaseLayout )
 ,   mnLevel( 1 )
 ,   mbIncomplete( false )
 {
-    //maFallbackRuns[0].Clear();
-    mpFallbackFonts[ 0 ] = nullptr;
-    mpLayouts[ 0 ]  = std::move(pBaseLayout);
+    assert(dynamic_cast<GenericSalLayout*>(pBaseLayout.get()));
+
+    mpLayouts[ 0 ].reset(static_cast<GenericSalLayout*>(pBaseLayout.release()));
     mnUnitsPerPixel = mpLayouts[ 0 ]->GetUnitsPerPixel();
 }
 
@@ -1006,13 +1006,13 @@ MultiSalLayout::~MultiSalLayout()
 }
 
 void MultiSalLayout::AddFallback( std::unique_ptr<SalLayout> pFallback,
-    ImplLayoutRuns const & rFallbackRuns, const PhysicalFontFace* pFallbackFont )
+    ImplLayoutRuns const & rFallbackRuns)
 {
+    assert(dynamic_cast<GenericSalLayout*>(pFallback.get()));
     if( mnLevel >= MAX_FALLBACK )
         return;
 
-    mpFallbackFonts[ mnLevel ]  = pFallbackFont;
-    mpLayouts[ mnLevel ]        = std::move(pFallback);
+    mpLayouts[ mnLevel ].reset(static_cast<GenericSalLayout*>(pFallback.release()));
     maFallbackRuns[ mnLevel-1 ] = rFallbackRuns;
     ++mnLevel;
 }
@@ -1153,7 +1153,6 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             if( nLevel != n )
             {
                 mpLayouts[ nLevel ]         = std::move(mpLayouts[ n ]);
-                mpFallbackFonts[ nLevel ]   = mpFallbackFonts[ n ];
                 maFallbackRuns[ nLevel ]    = maFallbackRuns[ n ];
             }
             ++nLevel;
@@ -1511,8 +1510,9 @@ bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
     nStart &= ~GF_FONTMASK;
     for(; nLevel < mnLevel; ++nLevel, nStart=0 )
     {
-        SalLayout& rLayout = *mpLayouts[ nLevel ];
+        GenericSalLayout& rLayout = *mpLayouts[ nLevel ];
         rLayout.InitFont();
+        const PhysicalFontFace* pFontFace = rLayout.GetFont().GetFontFace();
         if (rLayout.GetNextGlyph(pGlyph, rPos, nStart))
         {
             int nFontTag = nLevel << GF_FONTSHIFT;
@@ -1520,7 +1520,7 @@ bool MultiSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
             // FIXME: This cast is ugly!
             const_cast<GlyphItem*>(*pGlyph)->mnFallbackLevel = nLevel;
             if (pFallbackFont)
-                *pFallbackFont = mpFallbackFonts[nLevel];
+                *pFallbackFont = pFontFace;
             rPos += maDrawBase;
             rPos += maDrawOffset;
             return true;
