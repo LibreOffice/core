@@ -179,14 +179,15 @@ IMPL_LINK_NOARG( SelectPersonaDialog, ActionOK, Button*, void )
 
     if( !aSelectedPersona.isEmpty() )
     {
-        m_pSearchThread = new SearchAndParseThread( this, aSelectedPersona, false );
-        m_pSearchThread->launch();
+        m_pGetPersonaThread = new GetPersonaThread( this, aSelectedPersona );
+        m_pGetPersonaThread->launch();
     }
 
     else
     {
-        if( m_pSearchThread.is() )
+        if ( m_pSearchThread.is() )
             m_pSearchThread->StopExecution();
+
         EndDialog( RET_OK );
     }
 }
@@ -195,6 +196,8 @@ IMPL_LINK_NOARG( SelectPersonaDialog, ActionCancel, Button*, void )
 {
     if( m_pSearchThread.is() )
         m_pSearchThread->StopExecution();
+    if( m_pGetPersonaThread.is() )
+        m_pGetPersonaThread->StopExecution();
 
     EndDialog();
 }
@@ -203,6 +206,8 @@ IMPL_LINK( SelectPersonaDialog, SelectPersona, Button*, pButton, void )
 {
     if( m_pSearchThread.is() )
         m_pSearchThread->StopExecution();
+    if ( m_pGetPersonaThread.is() )
+        return;
 
     for( sal_Int32 index = 0; index < MAX_RESULTS; index++ )
     {
@@ -701,12 +706,14 @@ bool getPreviewFile( const OUString& rURL, OUString *pPreviewFile, OUString *pPe
     OUString gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
     rtl::Bootstrap::expandMacros( gallery );
     gallery += "/user/gallery/personas/" + aSlug + "/";
-    osl::Directory::createPath( gallery );
 
     OUString aPreviewFile( INetURLObject( aPreviewURL ).getName() );
 
     try {
-        xFileAccess->copy( aPreviewURL, gallery + aPreviewFile );
+        osl::Directory::createPath( gallery );
+
+        if ( !xFileAccess->exists( gallery + aPreviewFile ) )
+            xFileAccess->copy( aPreviewURL, gallery + aPreviewFile );
     }
     catch ( const uno::Exception & )
     {
@@ -721,209 +728,207 @@ bool getPreviewFile( const OUString& rURL, OUString *pPreviewFile, OUString *pPe
 
 void SearchAndParseThread::execute()
 {
-    if( m_aURL.startsWith( "https://" ) )
+    m_pPersonaDialog->ClearSearchResults();
+    OUString sProgress( CuiResId( RID_SVXSTR_SEARCHING ) ), sError;
+    m_pPersonaDialog->SetProgress( sProgress );
+
+    PersonasDocHandler* pHandler = new PersonasDocHandler();
+    Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+    Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
+    Reference< xml::sax::XDocumentHandler > xDocHandler = pHandler;
+    uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
+    uno::Reference< io::XInputStream > xStream;
+    xParser->setDocumentHandler( xDocHandler );
+
+    if( !m_bDirectURL )
     {
-        m_pPersonaDialog->ClearSearchResults();
-        OUString sProgress( CuiResId( RID_SVXSTR_SEARCHING ) ), sError;
-        m_pPersonaDialog->SetProgress( sProgress );
+        if ( !xFileAccess.is() )
+            return;
 
-        PersonasDocHandler* pHandler = new PersonasDocHandler();
-        Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
-        Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
-        Reference< xml::sax::XDocumentHandler > xDocHandler = pHandler;
-        uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
-        uno::Reference< io::XInputStream > xStream;
-        xParser->setDocumentHandler( xDocHandler );
+        try {
+            css:: uno::Reference< task::XInteractionHandler > xIH(
+                        css::task::InteractionHandler::createWithParent( xContext, nullptr ) );
 
-        if( !m_bDirectURL )
-        {
-            if ( !xFileAccess.is() )
-                return;
+            xFileAccess->setInteractionHandler( new comphelper::SimpleFileAccessInteraction( xIH ) );
 
-            try {
-                css:: uno::Reference< task::XInteractionHandler > xIH(
-                    css::task::InteractionHandler::createWithParent( xContext, nullptr ) );
-
-                xFileAccess->setInteractionHandler( new comphelper::SimpleFileAccessInteraction( xIH ) );
-
-                xStream = xFileAccess->openFileRead( m_aURL );
-                if( !xStream.is() )
-                {
-                    // in case of a returned CommandFailedException
-                    // SimpleFileAccess serves it, returning an empty stream
-                    SolarMutexGuard aGuard;
-                    sError = CuiResId(RID_SVXSTR_SEARCHERROR);
-                    sError = sError.replaceAll("%1", m_aURL);
-                    m_pPersonaDialog->SetProgress( OUString() );
-
-                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
-                                                              VclMessageType::Error, VclButtonsType::Ok,
-                                                              sError));
-                    xBox->run();
-                    return;
-                }
-            }
-            catch (...)
+            xStream = xFileAccess->openFileRead( m_aURL );
+            if( !xStream.is() )
             {
-                // a catch all clause, in case the exception is not
-                // served elsewhere
+                // in case of a returned CommandFailedException
+                // SimpleFileAccess serves it, returning an empty stream
+                SolarMutexGuard aGuard;
+                sError = CuiResId(RID_SVXSTR_SEARCHERROR);
+                sError = sError.replaceAll("%1", m_aURL);
+                m_pPersonaDialog->SetProgress( OUString() );
+
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                                                           VclMessageType::Error, VclButtonsType::Ok,
+                                                                                           sError));
+                xBox->run();
+                return;
+            }
+        }
+        catch (...)
+        {
+            // a catch all clause, in case the exception is not
+            // served elsewhere
+            SolarMutexGuard aGuard;
+            sError = CuiResId(RID_SVXSTR_SEARCHERROR);
+            sError = sError.replaceAll("%1", m_aURL);
+            m_pPersonaDialog->SetProgress( OUString() );
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                                                       VclMessageType::Error, VclButtonsType::Ok,
+                                                                                       sError));
+            xBox->run();
+            return;
+        }
+
+        xml::sax::InputSource aParserInput;
+        aParserInput.aInputStream = xStream;
+        xParser->parseStream( aParserInput );
+
+        if( !pHandler->hasResults() )
+        {
+            sProgress = CuiResId( RID_SVXSTR_NORESULTS );
+            m_pPersonaDialog->SetProgress( sProgress );
+            return;
+        }
+    }
+
+    std::vector<OUString> vLearnmoreURLs;
+    sal_Int32 nIndex = 0;
+    GraphicFilter aFilter;
+    Graphic aGraphic;
+
+    if( !m_bDirectURL )
+        vLearnmoreURLs = pHandler->getLearnmoreURLs();
+    else
+        vLearnmoreURLs.push_back( m_aURL );
+
+    for (auto const& learnMoreUrl : vLearnmoreURLs)
+    {
+        OUString sPreviewFile, aPersonaSetting;
+        bool bResult = getPreviewFile( learnMoreUrl, &sPreviewFile, &aPersonaSetting );
+        // parsing is buggy at times, as HTML is not proper. Skip it.
+        if(aPersonaSetting.isEmpty() || !bResult)
+        {
+            if( m_bDirectURL )
+            {
                 SolarMutexGuard aGuard;
                 sError = CuiResId(RID_SVXSTR_SEARCHERROR);
                 sError = sError.replaceAll("%1", m_aURL);
                 m_pPersonaDialog->SetProgress( OUString() );
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
-                                                          VclMessageType::Error, VclButtonsType::Ok,
-                                                          sError));
+                                                                                           VclMessageType::Error, VclButtonsType::Ok,
+                                                                                           sError));
                 xBox->run();
                 return;
             }
-
-            xml::sax::InputSource aParserInput;
-            aParserInput.aInputStream = xStream;
-            xParser->parseStream( aParserInput );
-
-            if( !pHandler->hasResults() )
-            {
-                sProgress = CuiResId( RID_SVXSTR_NORESULTS );
-                m_pPersonaDialog->SetProgress( sProgress );
-                return;
-            }
+            continue;
         }
+        INetURLObject aURLObj( sPreviewFile );
 
-        std::vector<OUString> vLearnmoreURLs;
-        sal_Int32 nIndex = 0;
-        GraphicFilter aFilter;
-        Graphic aGraphic;
-
-        if( !m_bDirectURL )
-            vLearnmoreURLs = pHandler->getLearnmoreURLs();
-        else
-            vLearnmoreURLs.push_back( m_aURL );
-
-        for (auto const& learnMoreUrl : vLearnmoreURLs)
-        {
-            OUString sPreviewFile, aPersonaSetting;
-            bool bResult = getPreviewFile( learnMoreUrl, &sPreviewFile, &aPersonaSetting );
-            // parsing is buggy at times, as HTML is not proper. Skip it.
-            if(aPersonaSetting.isEmpty() || !bResult)
-            {
-                if( m_bDirectURL )
-                {
-                    SolarMutexGuard aGuard;
-                    sError = CuiResId(RID_SVXSTR_SEARCHERROR);
-                    sError = sError.replaceAll("%1", m_aURL);
-                    m_pPersonaDialog->SetProgress( OUString() );
-                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
-                                                              VclMessageType::Error, VclButtonsType::Ok,
-                                                              sError));
-                    xBox->run();
-                    return;
-                }
-                continue;
-            }
-            INetURLObject aURLObj( sPreviewFile );
-
-            // Stop the thread if requested -- before taking the solar mutex.
-            if( !m_bExecute )
-                return;
-
-            // for VCL to be able to create bitmaps / do visual changes in the thread
-            SolarMutexGuard aGuard;
-            aFilter.ImportGraphic( aGraphic, aURLObj );
-            BitmapEx aBmp = aGraphic.GetBitmapEx();
-
-            m_pPersonaDialog->SetImages( Image( aBmp ), nIndex++ );
-            m_pPersonaDialog->setOptimalLayoutSize();
-            m_pPersonaDialog->AddPersonaSetting( aPersonaSetting );
-            if (nIndex >= MAX_RESULTS)
-                break;
-        }
-
+        // Stop the thread if requested -- before taking the solar mutex.
         if( !m_bExecute )
             return;
 
+        // for VCL to be able to create bitmaps / do visual changes in the thread
         SolarMutexGuard aGuard;
-        sProgress.clear();
-        m_pPersonaDialog->SetProgress( sProgress );
+        aFilter.ImportGraphic( aGraphic, aURLObj );
+        BitmapEx aBmp = aGraphic.GetBitmapEx();
+
+        m_pPersonaDialog->SetImages( Image( aBmp ), nIndex++ );
         m_pPersonaDialog->setOptimalLayoutSize();
+        m_pPersonaDialog->AddPersonaSetting( aPersonaSetting );
+        if (nIndex >= MAX_RESULTS)
+            break;
     }
 
-    else
-    {
-        OUString sProgress( CuiResId( RID_SVXSTR_APPLYPERSONA ) ), sError;
-        m_pPersonaDialog->SetProgress( sProgress );
+    if( !m_bExecute )
+        return;
 
-        uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
-        if ( !xFileAccess.is() )
-            return;
+    SolarMutexGuard aGuard;
+    sProgress.clear();
+    m_pPersonaDialog->SetProgress( sProgress );
+    m_pPersonaDialog->setOptimalLayoutSize();
+}
 
-        OUString aSlug, aName, aHeaderURL, aFooterURL, aTextColor, aAccentColor;
-        OUString aPersonaSetting;
+GetPersonaThread::GetPersonaThread( SelectPersonaDialog* pDialog,
+                          const OUString& rSelectedPersona ) :
+            Thread( "cuiPersonasGetPersonaThread" ),
+            m_pPersonaDialog( pDialog ),
+            m_aSelectedPersona( rSelectedPersona ),
+            m_bExecute( true )
+{
+}
 
-        // get the required fields from m_aURL
-        sal_Int32 nOldIndex = 0;
-        sal_Int32 nNewIndex = m_aURL.indexOf( ';', nOldIndex );
-        aSlug = m_aURL.copy( nOldIndex, ( nNewIndex - nOldIndex ) );
+GetPersonaThread::~GetPersonaThread()
+{
+    //TODO: Clean-up
+}
 
-        nOldIndex = nNewIndex + 1;
-        nNewIndex = m_aURL.indexOf( ';', nOldIndex );
-        aName = m_aURL.copy(nOldIndex , ( nNewIndex - nOldIndex ) );
+void GetPersonaThread::execute()
+{
+    OUString sProgress( CuiResId( RID_SVXSTR_APPLYPERSONA ) ), sError;
+    m_pPersonaDialog->SetProgress( sProgress );
 
-        nOldIndex = nNewIndex + 1;
-        nNewIndex = m_aURL.indexOf( ';', nOldIndex );
-        aHeaderURL = m_aURL.copy(nOldIndex , ( nNewIndex - nOldIndex ) );
+    uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
+    if ( !xFileAccess.is() )
+        return;
 
-        nOldIndex = nNewIndex + 1;
-        nNewIndex = m_aURL.indexOf( ';', nOldIndex );
-        aFooterURL = m_aURL.copy( nOldIndex,  ( nNewIndex - nOldIndex ) );
+    OUString aSlug, aName, aHeaderURL, aFooterURL, aTextColor, aAccentColor;
+    OUString aPersonaSetting;
 
-        nOldIndex = nNewIndex + 1;
-        nNewIndex = m_aURL.indexOf( ';', nOldIndex );
-        aTextColor = m_aURL.copy( nOldIndex, ( nNewIndex - nOldIndex ) );
+    // get the required fields from m_aSelectedPersona
+    sal_Int32 nIndex = 0;
 
-        nOldIndex = nNewIndex + 1;
-        nNewIndex = m_aURL.getLength();
-        aAccentColor = m_aURL.copy( nOldIndex, ( nNewIndex - nOldIndex ) );
+    aSlug = m_aSelectedPersona.getToken(0, ';', nIndex);
+    aName = m_aSelectedPersona.getToken(0, ';', nIndex);
+    aHeaderURL = m_aSelectedPersona.getToken(0, ';', nIndex);
+    aFooterURL = m_aSelectedPersona.getToken(0, ';', nIndex);
+    aTextColor = m_aSelectedPersona.getToken(0, ';', nIndex);
+    aAccentColor = m_aSelectedPersona.getToken(0, ';', nIndex);
 
-        // copy the images to the user's gallery
-        OUString gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
-        rtl::Bootstrap::expandMacros( gallery );
-        gallery += "/user/gallery/personas/";
+    // copy the images to the user's gallery
+    OUString gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+    rtl::Bootstrap::expandMacros( gallery );
+    gallery += "/user/gallery/personas/";
+
+    OUString aHeaderFile( aSlug + "/" + INetURLObject( aHeaderURL ).getName() );
+    OUString aFooterFile( aSlug + "/" + INetURLObject( aFooterURL ).getName() );
+
+    try {
         osl::Directory::createPath( gallery );
 
-        OUString aHeaderFile( INetURLObject( aHeaderURL ).getName() );
-        OUString aFooterFile( INetURLObject( aFooterURL ).getName() );
-
-        aHeaderFile = aSlug + "/" + aHeaderFile;
-        aFooterFile = aSlug + "/" + aFooterFile;
-
-        try {
+        if ( !xFileAccess->exists(gallery + aHeaderFile) )
             xFileAccess->copy( aHeaderURL, gallery + aHeaderFile );
+
+        if ( !xFileAccess->exists(gallery + aFooterFile) )
             xFileAccess->copy( aFooterURL, gallery + aFooterFile );
-        }
-        catch ( const uno::Exception & )
-        {
-            SolarMutexGuard aGuard;
-            sError = CuiResId( RID_SVXSTR_SEARCHERROR );
-            sError = sError.replaceAll("%1", m_aURL);
-            m_pPersonaDialog->SetProgress( OUString() );
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
-                                                      VclMessageType::Error, VclButtonsType::Ok,
-                                                      sError));
-            xBox->run();
-            return;
-        }
-
-        if( !m_bExecute )
-            return;
-
-        SolarMutexGuard aGuard;
-
-        aPersonaSetting = aSlug + ";" + aName + ";" + aHeaderFile + ";" + aFooterFile
-                + ";" + aTextColor + ";" + aAccentColor;
-        m_pPersonaDialog->SetAppliedPersonaSetting( aPersonaSetting );
-        m_pPersonaDialog->EndDialog( RET_OK );
     }
+    catch ( const uno::Exception & )
+    {
+        SolarMutexGuard aGuard;
+        sError = CuiResId( RID_SVXSTR_SEARCHERROR );
+        sError = sError.replaceAll("%1", m_aSelectedPersona);
+        m_pPersonaDialog->SetProgress( OUString() );
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                                                   VclMessageType::Error, VclButtonsType::Ok,
+                                                                                   sError));
+        xBox->run();
+        return;
+    }
+
+    if( !m_bExecute )
+        return;
+
+    SolarMutexGuard aGuard;
+
+    aPersonaSetting = aSlug + ";" + aName + ";" + aHeaderFile + ";" + aFooterFile
+            + ";" + aTextColor + ";" + aAccentColor;
+
+    m_pPersonaDialog->SetAppliedPersonaSetting( aPersonaSetting );
+    m_pPersonaDialog->EndDialog( RET_OK );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
