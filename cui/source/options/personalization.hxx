@@ -25,6 +25,7 @@
 class FixedText;
 class FixedHyperlink;
 class SearchAndParseThread;
+class GetPersonaThread;
 
 class SvxPersonalizationTabPage : public SfxTabPage
 {
@@ -112,7 +113,8 @@ public:
     explicit SelectPersonaDialog( vcl::Window *pParent );
     virtual ~SelectPersonaDialog() override;
     virtual void dispose() override;
-    ::rtl::Reference< SearchAndParseThread > m_pSearchThread;
+    ::rtl::Reference< SearchAndParseThread >    m_pSearchThread;
+    ::rtl::Reference< GetPersonaThread >        m_pGetPersonaThread;
 
     OUString GetSelectedPersona() const;
     void SetProgress( const OUString& );
@@ -146,6 +148,25 @@ public:
 
     SearchAndParseThread( SelectPersonaDialog* pDialog,
                           const OUString& rURL, bool bDirectURL );
+
+    void StopExecution() { m_bExecute = false; }
+};
+
+class GetPersonaThread: public salhelper::Thread
+{
+private:
+
+    VclPtr<SelectPersonaDialog> m_pPersonaDialog;
+    OUString m_aSelectedPersona;
+    std::atomic<bool> m_bExecute;
+
+    virtual ~GetPersonaThread() override;
+    virtual void execute() override;
+
+public:
+
+    GetPersonaThread( SelectPersonaDialog* pDialog,
+                          const OUString& rSelectedPersona );
 
     void StopExecution() { m_bExecute = false; }
 };
