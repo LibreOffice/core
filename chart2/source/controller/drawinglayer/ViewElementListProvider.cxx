@@ -161,7 +161,7 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
     pVDev->SetMapMode(MapMode(MapUnit::Map100thMM));
 
     std::unique_ptr<SdrModel> pModel(
-        new SdrModel());
+        new SdrModel(nullptr, nullptr, true));
 
     pModel->GetItemPool().FreezeIdRanges();
     SdrPage* pPage = new SdrPage( *pModel, false );

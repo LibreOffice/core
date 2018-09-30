@@ -1608,13 +1608,6 @@ private:
         }
     }
 
-    void add_to_map(GtkMenuItem* pMenuItem)
-    {
-        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pMenuItem));
-        OString id(pStr, pStr ? strlen(pStr) : 0);
-        m_aMap[id] = pMenuItem;
-    }
-
     static void signalActivate(GtkMenuItem* pItem, gpointer widget)
     {
         MenuHelper* pThis = static_cast<MenuHelper*>(widget);
@@ -1632,8 +1625,14 @@ public:
         if (!m_pMenu)
             return;
         gtk_container_foreach(GTK_CONTAINER(m_pMenu), collect, this);
-        for (auto& a : m_aMap)
-            g_signal_connect(a.second, "activate", G_CALLBACK(signalActivate), this);
+    }
+
+    void add_to_map(GtkMenuItem* pMenuItem)
+    {
+        const gchar* pStr = gtk_buildable_get_name(GTK_BUILDABLE(pMenuItem));
+        OString id(pStr, pStr ? strlen(pStr) : 0);
+        m_aMap[id] = pMenuItem;
+        g_signal_connect(pMenuItem, "activate", G_CALLBACK(signalActivate), this);
     }
 
     void disable_item_notify_events()
@@ -1788,6 +1787,18 @@ public:
     virtual void show(const OString& rIdent, bool bShow) override
     {
         show_item(rIdent, bShow);
+    }
+
+
+    virtual void insert(int pos, const OUString& rId, const OUString& rStr,
+                        const OUString* /*pIconName*/, VirtualDevice* /*pImageSufface*/) override
+    {
+        GtkWidget *pItem = gtk_menu_item_new_with_label(MapToGtkAccelerator(rStr).getStr());
+        gtk_buildable_set_name(GTK_BUILDABLE(pItem), OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr());
+        gtk_menu_shell_append(GTK_MENU_SHELL(m_pMenu), pItem);
+        add_to_map(GTK_MENU_ITEM(pItem));
+        if (pos != -1)
+            gtk_menu_reorder_child(m_pMenu, pItem, pos);
     }
 };
 

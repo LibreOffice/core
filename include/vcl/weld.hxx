@@ -1039,6 +1039,23 @@ public:
     virtual void set_sensitive(const OString& rIdent, bool bSensitive) = 0;
     virtual void set_active(const OString& rIdent, bool bActive) = 0;
     virtual void show(const OString& rIdent, bool bShow) = 0;
+
+    virtual void insert(int pos, const OUString& rId, const OUString& rStr,
+                        const OUString* pIconName, VirtualDevice* pImageSufface)
+        = 0;
+    void append(const OUString& rId, const OUString& rStr)
+    {
+        insert(-1, rId, rStr, nullptr, nullptr);
+    }
+    void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
+    {
+        insert(-1, rId, rStr, &rImage, nullptr);
+    }
+    void append(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
+    {
+        insert(-1, rId, rStr, nullptr, &rImage);
+    }
+
     virtual ~Menu() {}
 };
 
