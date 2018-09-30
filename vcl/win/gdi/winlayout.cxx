@@ -305,8 +305,7 @@ std::unique_ptr<SalLayout> WinSalGraphics::GetTextLayout(ImplLayoutArgs& /*rArgs
     assert(mpWinFontEntry[nFallbackLevel]->GetFontFace());
 
     mpWinFontEntry[nFallbackLevel]->SetGraphics(this);
-    GenericSalLayout *aLayout = new GenericSalLayout(*mpWinFontEntry[nFallbackLevel]);
-    return std::unique_ptr<SalLayout>(aLayout);
+    return o3tl::make_unique<GenericSalLayout>(*mpWinFontEntry[nFallbackLevel]);
 }
 
 WinFontInstance::WinFontInstance(const WinFontFace& rPFF, const FontSelectPattern& rFSP)

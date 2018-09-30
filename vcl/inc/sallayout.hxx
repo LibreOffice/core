@@ -44,6 +44,7 @@
 
 class SalGraphics;
 class PhysicalFontFace;
+class GenericSalLayout;
 struct GlyphItem;
 enum class SalLayoutFlags;
 namespace vcl {
@@ -137,8 +138,7 @@ public:
 
     // used only by OutputDevice::ImplLayout, TODO: make friend
     explicit        MultiSalLayout( std::unique_ptr<SalLayout> pBaseLayout );
-    void            AddFallback( std::unique_ptr<SalLayout> pFallbackLayout,
-                                 ImplLayoutRuns const &, const PhysicalFontFace* pFallbackFont );
+    void            AddFallback(std::unique_ptr<SalLayout> pFallbackLayout, ImplLayoutRuns const &);
     bool            LayoutText(ImplLayoutArgs&, const SalLayoutGlyphs*) override;
     void            AdjustLayout(ImplLayoutArgs&) override;
     void            InitFont() const override;
@@ -149,17 +149,10 @@ public:
     virtual         ~MultiSalLayout() override;
 
 private:
-    // dummy implementations
-    void            MoveGlyph(int, long) override {}
-    void            DropGlyph(int) override {}
-    void            Simplify(bool) override {}
-
                     MultiSalLayout( const MultiSalLayout& ) = delete;
                     MultiSalLayout& operator=( const MultiSalLayout& ) = delete;
 
-private:
-    std::unique_ptr<SalLayout> mpLayouts[ MAX_FALLBACK ];
-    const PhysicalFontFace* mpFallbackFonts[ MAX_FALLBACK ];
+    std::unique_ptr<GenericSalLayout> mpLayouts[ MAX_FALLBACK ];
     ImplLayoutRuns  maFallbackRuns[ MAX_FALLBACK ];
     int             mnLevel;
     bool            mbIncomplete;
@@ -167,6 +160,8 @@ private:
 
 class VCL_PLUGIN_PUBLIC GenericSalLayout : public SalLayout
 {
+    friend void MultiSalLayout::AdjustLayout(ImplLayoutArgs&);
+
 public:
                     GenericSalLayout(LogicalFontInstance&);
                     ~GenericSalLayout() override;
@@ -191,13 +186,12 @@ public:
     bool            GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int&,
                                  const PhysicalFontFace** pFallbackFont = nullptr) const final override;
 
-protected:
-    // for glyph+font+script fallback
-    void            MoveGlyph(int nStart, long nNewXPos) final override;
-    void            DropGlyph(int nStart) final override;
-    void            Simplify(bool bIsBase) final override;
-
 private:
+    // for glyph+font+script fallback
+    void            MoveGlyph(int nStart, long nNewXPos);
+    void            DropGlyph(int nStart);
+    void            Simplify(bool bIsBase);
+
                     GenericSalLayout( const GenericSalLayout& ) = delete;
                     GenericSalLayout& operator=( const GenericSalLayout& ) = delete;
 

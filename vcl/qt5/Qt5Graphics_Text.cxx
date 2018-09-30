@@ -182,9 +182,9 @@ public:
 
 std::unique_ptr<SalLayout> Qt5Graphics::GetTextLayout(ImplLayoutArgs&, int nFallbackLevel)
 {
-    if (m_pTextStyle[nFallbackLevel])
-        return std::unique_ptr<SalLayout>(new Qt5CommonSalLayout(*m_pTextStyle[nFallbackLevel]));
-    return std::unique_ptr<SalLayout>();
+    if (!m_pTextStyle[nFallbackLevel])
+        return nullptr;
+    return o3tl::make_unique<Qt5CommonSalLayout>(*m_pTextStyle[nFallbackLevel]);
 }
 
 void Qt5Graphics::DrawTextLayout(const GenericSalLayout& rLayout)
