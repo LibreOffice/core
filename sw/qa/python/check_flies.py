@@ -1,4 +1,4 @@
-'''
+"""
   This is file is part of the LibreOffice project.
 
   This Source Code Form is subject to the terms of the Mozilla Public
@@ -14,14 +14,13 @@
     License, Version 2.0 (the "License"); you may not use this file
     except in compliance with the License. You may obtain a copy of
     the License at http://www.apache.org/licenses/LICENSE-2.0 .
-'''
+"""
 
 from org.libreoffice.unotest import UnoInProcess
 import unittest
 
 
 class CheckFlies(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls._uno = UnoInProcess()
@@ -46,22 +45,28 @@ class CheckFlies(unittest.TestCase):
         xEmbeddedFrames = xTGOS.getEmbeddedObjects()
         nCurrentFrameIdx = 0
 
-        print (xEmbeddedFrames)
+        print(xEmbeddedFrames)
         for sFrameName in xEmbeddedFrames.getElementNames():
             vExpectedEmbeddedFrames.remove(sFrameName)
             # raises ValueError if not found
-            print (sFrameName)
+            print(sFrameName)
             xEmbeddedFrames[sFrameName]
-            self.assertTrue(xEmbeddedFrames.hasByName(sFrameName),
-                            "Could not find embedded frame by name.")
+            self.assertTrue(
+                xEmbeddedFrames.hasByName(sFrameName),
+                "Could not find embedded frame by name.",
+            )
 
-        self.assertTrue(not(vExpectedEmbeddedFrames),
-                        "Missing expected embedded frames.")
+        self.assertTrue(
+            not (vExpectedEmbeddedFrames), "Missing expected embedded frames."
+        )
 
         xEmbeddedFramesIdx = xEmbeddedFrames
 
-        self.assertEqual(nEmbeddedFrames, len(xEmbeddedFramesIdx),
-                         "Unexpected number of embedded frames reported")
+        self.assertEqual(
+            nEmbeddedFrames,
+            len(xEmbeddedFramesIdx),
+            "Unexpected number of embedded frames reported",
+        )
 
         for nCurrentFrameIdx in range(len(xEmbeddedFramesIdx)):
             xEmbeddedFramesIdx[nCurrentFrameIdx]
@@ -76,15 +81,18 @@ class CheckFlies(unittest.TestCase):
             # raises ValueError if not found
             xGraphicFrames[sFrameName]
             self.assertTrue(
-                sFrameName in xGraphicFrames,
-                "Could not find graphics frame by name.")
+                sFrameName in xGraphicFrames, "Could not find graphics frame by name."
+            )
         self.assertTrue(
-            not(vExpectedGraphicFrames),
-            "Missing expected graphics frames.")
+            not (vExpectedGraphicFrames), "Missing expected graphics frames."
+        )
 
         xGraphicFramesIdx = xGraphicFrames
-        self.assertEqual(nGraphicFrames, len(xGraphicFramesIdx),
-                         "Unexpected number of graphics frames reported")
+        self.assertEqual(
+            nGraphicFrames,
+            len(xGraphicFramesIdx),
+            "Unexpected number of graphics frames reported",
+        )
 
         for nCurrentFrameIdx in range(len(xGraphicFramesIdx)):
             xGraphicFramesIdx[nCurrentFrameIdx]
@@ -100,16 +108,16 @@ class CheckFlies(unittest.TestCase):
             # raises ValueError if not found
             xTextFrames[sFrameName]
             self.assertTrue(
-                sFrameName in xTextFrames,
-                "Could not find text frame by name.")
+                sFrameName in xTextFrames, "Could not find text frame by name."
+            )
 
-        self.assertTrue(
-            not(vExpectedTextFrames), "Missing expected text frames.")
+        self.assertTrue(not (vExpectedTextFrames), "Missing expected text frames.")
 
         xTextFramesIdx = xTextFrames
 
-        self.assertEqual(nTextFrames, len(xTextFrames),
-                         "Unexpected number of text frames reported")
+        self.assertEqual(
+            nTextFrames, len(xTextFrames), "Unexpected number of text frames reported"
+        )
 
         for nCurrentFrameIdx in range(len(xTextFramesIdx)):
             xTextFramesIdx[nCurrentFrameIdx]

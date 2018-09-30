@@ -47,8 +47,7 @@ class CheckIndex(unittest.TestCase):
         the corresponding Cursor
         """
         self.xDoc = self.__class__._uno.openEmptyWriterDoc()
-        self.xIndex = self.xDoc.createInstance(
-            "com.sun.star.text.ContentIndex")
+        self.xIndex = self.xDoc.createInstance("com.sun.star.text.ContentIndex")
         self.xBodyText = self.xDoc.getText()
         self.xCursor = self.xBodyText.createTextCursor()
         self.xIndex.setPropertyValue("CreateFromOutline", True)
@@ -62,11 +61,11 @@ class CheckIndex(unittest.TestCase):
         Dispose Index and Document and check if the index was
         deleted while the tests
         """
-        self.assertFalse(self.listener.m_disposed,
-                         "Unexpected disparue of the Refresh Listener!")
+        self.assertFalse(
+            self.listener.m_disposed, "Unexpected disparue of the Refresh Listener!"
+        )
         self.xIndex.dispose()
-        self.assertTrue(self.listener.m_disposed,
-                        "Could not dispose Refresh Listener")
+        self.assertTrue(self.listener.m_disposed, "Could not dispose Refresh Listener")
         self.xDoc.dispose()
 
     def insert_heading(self, text):
@@ -74,8 +73,7 @@ class CheckIndex(unittest.TestCase):
         Insert a Heading at the end of the document
         """
         self.xCursor.gotoEnd(False)
-        self.xBodyText.insertControlCharacter(self.xCursor,
-                                              PARAGRAPH_BREAK, False)
+        self.xBodyText.insertControlCharacter(self.xCursor, PARAGRAPH_BREAK, False)
         self.xCursor.gotoEnd(False)
         self.xCursor.setString(text)
         self.xCursor.gotoStartOfParagraph(True)
@@ -95,9 +93,11 @@ class CheckIndex(unittest.TestCase):
         self.xCursor.gotoStartOfParagraph(True)
         # Get String at current position and search for the heading
         text = self.xCursor.getString()
-        self.assertGreaterEqual(text.find(heading), 0,
-                                "Failed to insert heading at index "
-                                "and retrieve it again!")
+        self.assertGreaterEqual(
+            text.find(heading),
+            0,
+            "Failed to insert heading at index " "and retrieve it again!",
+        )
 
     def test_index_update(self):
         """
@@ -113,9 +113,11 @@ class CheckIndex(unittest.TestCase):
         self.xCursor.gotoStartOfParagraph(True)
         # Get String at current position and search for the heading
         text = self.xCursor.getString()
-        self.assertGreaterEqual(text.find(heading), 0,
-                                "Failed to insert a heading at Index and "
-                                "retrieve it again!")
+        self.assertGreaterEqual(
+            text.find(heading),
+            0,
+            "Failed to insert a heading at Index and " "retrieve it again!",
+        )
 
 
 if __name__ == "__main__":

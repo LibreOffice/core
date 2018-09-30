@@ -14,25 +14,30 @@ from com.sun.star.beans import PropertyValue
 from com.sun.star.uno import RuntimeException
 from com.sun.star.table import BorderLine
 from com.sun.star.table import BorderLine2
-from com.sun.star.table.BorderLineStyle import (DOUBLE, SOLID, EMBOSSED,
-                                                THICKTHIN_LARGEGAP, DASHED, DOTTED)
+from com.sun.star.table.BorderLineStyle import (
+    DOUBLE,
+    SOLID,
+    EMBOSSED,
+    THICKTHIN_LARGEGAP,
+    DASHED,
+    DOTTED,
+)
 from com.sun.star.util import XNumberFormats
 from com.sun.star.lang import Locale
 
 
 class CheckTable(unittest.TestCase):
-
     def _fill_table(self, xTable):
 
         for x in range(3):
             for y in range(3):
-                xTable[y,x].String = 'Cell %d %d' % (x, y)
+                xTable[y, x].String = "Cell %d %d" % (x, y)
 
     def _check_table(self, xTable):
 
         for x in range(3):
             for y in range(3):
-                self.assertEqual('Cell %d %d' % (x, y), xTable[y,x].String)
+                self.assertEqual("Cell %d %d" % (x, y), xTable[y, x].String)
 
     @classmethod
     def setUpClass(cls):
@@ -92,12 +97,12 @@ class CheckTable(unittest.TestCase):
 
         self.__test_borderDistance(border)
 
-    # set border
-        border.TopLine = BorderLine(0,      11, 19, 19)
-        border.BottomLine = BorderLine(0xFF,   00, 11, 00)
+        # set border
+        border.TopLine = BorderLine(0, 11, 19, 19)
+        border.BottomLine = BorderLine(0xFF, 00, 11, 00)
         border.HorizontalLine = BorderLine(0xFF00, 00, 90, 00)
         xTable.setPropertyValue("TableBorder", border)
-    # read set border
+        # read set border
         border = xTable.getPropertyValue("TableBorder")
 
         self.assertTrue(border.IsTopLineValid)
@@ -143,9 +148,13 @@ class CheckTable(unittest.TestCase):
         self.assertEqual(SOLID, border2.BottomLine.LineStyle)
         self.assertEqual(11, border2.BottomLine.LineWidth)
 
-        self.__test_borderAssertsWithLineStyle(border2.LeftLine, border2.IsLeftLineValid)
+        self.__test_borderAssertsWithLineStyle(
+            border2.LeftLine, border2.IsLeftLineValid
+        )
 
-        self.__test_borderAssertsWithLineStyle(border2.RightLine, border2.IsRightLineValid)
+        self.__test_borderAssertsWithLineStyle(
+            border2.RightLine, border2.IsRightLineValid
+        )
 
         self.assertTrue(border2.IsHorizontalLineValid)
         self.assertEqual(0, border2.HorizontalLine.InnerLineWidth)
@@ -155,16 +164,18 @@ class CheckTable(unittest.TestCase):
         self.assertEqual(SOLID, border2.HorizontalLine.LineStyle)
         self.assertEqual(90, border2.HorizontalLine.LineWidth)
 
-        self.__test_borderAssertsWithLineStyle(border2.VerticalLine, border2.IsVerticalLineValid)
+        self.__test_borderAssertsWithLineStyle(
+            border2.VerticalLine, border2.IsVerticalLineValid
+        )
 
         self.__test_borderDistance(border2)
-    # set border2
+        # set border2
         border2.RightLine = BorderLine2(0, 0, 0, 0, THICKTHIN_LARGEGAP, 120)
         border2.LeftLine = BorderLine2(0, 0, 0, 0, EMBOSSED, 90)
         border2.VerticalLine = BorderLine2(0xFF, 0, 90, 0, DOTTED, 0)
         border2.HorizontalLine = BorderLine2(0xFF00, 0, 0, 0, DASHED, 11)
         xTable.setPropertyValue("TableBorder2", border2)
-    # read set border2
+        # read set border2
         border2 = xTable.getPropertyValue("TableBorder2")
 
         self.assertTrue(border2.IsTopLineValid)
@@ -217,29 +228,29 @@ class CheckTable(unittest.TestCase):
 
         self.__test_borderDistance(border2)
 
-    # close document
+        # close document
         xDoc.dispose()
 
     def test_fdo58242(self):
         xDoc = CheckTable._uno.openEmptyWriterDoc()
-    # insert table
+        # insert table
         xTable = xDoc.createInstance("com.sun.star.text.TextTable")
         xTable.initialize(3, 3)
         xText = xDoc.getText()
         xCursor = xText.createTextCursor()
         xText.insertTextContent(xCursor, xTable, False)
-    # get anchor
+        # get anchor
         xAnchor = xTable.getAnchor()
 
-    # check all properties on the anchor - shouldn't crash despite
-    # pointing to a non-SwTextNode
+        # check all properties on the anchor - shouldn't crash despite
+        # pointing to a non-SwTextNode
         xPropsInfo = xAnchor.getPropertySetInfo()
         for i in xPropsInfo.getProperties():
             try:
                 xAnchor.getPropertyValue(i.Name)
             except RuntimeException:
                 pass
-    # close document
+        # close document
         xDoc.dispose()
 
     def test_descriptions(self):
@@ -263,33 +274,33 @@ class CheckTable(unittest.TestCase):
         xTable.ChartRowAsLabel = False
         self.assertEqual(0, len(xTable.RowDescriptions))
         self.assertEqual(0, len(xTable.ColumnDescriptions))
-        self.RowDescriptions = ('foo', 'bar', 'baz')  # no labels, thus noop
-        self.ColumnDescriptions = ('foo', 'bar', 'baz')  # no labels, thus noop
+        self.RowDescriptions = ("foo", "bar", "baz")  # no labels, thus noop
+        self.ColumnDescriptions = ("foo", "bar", "baz")  # no labels, thus noop
         self._check_table(xTable)
         # now check with labels
         xTable.ChartColumnAsLabel = True
         xTable.ChartRowAsLabel = True
         self.assertEqual(2, len(xTable.RowDescriptions))
-        self.assertEqual('Cell 0 1', xTable.RowDescriptions[0])
-        self.assertEqual('Cell 0 2', xTable.RowDescriptions[1])
+        self.assertEqual("Cell 0 1", xTable.RowDescriptions[0])
+        self.assertEqual("Cell 0 2", xTable.RowDescriptions[1])
         self.assertEqual(2, len(xTable.ColumnDescriptions))
-        self.assertEqual('Cell 1 0', xTable.ColumnDescriptions[0])
-        self.assertEqual('Cell 2 0', xTable.ColumnDescriptions[1])
+        self.assertEqual("Cell 1 0", xTable.ColumnDescriptions[0])
+        self.assertEqual("Cell 2 0", xTable.ColumnDescriptions[1])
         with self.assertRaises(Exception):
-            xTable.RowDescriptions = ('foo',)  # too short
+            xTable.RowDescriptions = ("foo",)  # too short
         with self.assertRaises(Exception):
-            xTable.ColumnDescriptions = ('foo',)  # too short
+            xTable.ColumnDescriptions = ("foo",)  # too short
         self._check_table(xTable)
-        xTable.RowDescriptions = ('fooRow', 'bazRow')
-        xTable.ColumnDescriptions = ('fooColumn', 'bazColumn')
-        self.assertEqual('fooRow', xTable[1,0].String)
-        self.assertEqual('bazRow', xTable[2,0].String)
-        self.assertEqual('fooColumn', xTable[0,1].String)
-        self.assertEqual('bazColumn', xTable[0,2].String)
-        xTable[1,0].String = 'Cell 0 1'  # reset changes values ...
-        xTable[2,0].String = 'Cell 0 2'
-        xTable[0,1].String = 'Cell 1 0'
-        xTable[0,2].String = 'Cell 2 0'
+        xTable.RowDescriptions = ("fooRow", "bazRow")
+        xTable.ColumnDescriptions = ("fooColumn", "bazColumn")
+        self.assertEqual("fooRow", xTable[1, 0].String)
+        self.assertEqual("bazRow", xTable[2, 0].String)
+        self.assertEqual("fooColumn", xTable[0, 1].String)
+        self.assertEqual("bazColumn", xTable[0, 2].String)
+        xTable[1, 0].String = "Cell 0 1"  # reset changes values ...
+        xTable[2, 0].String = "Cell 0 2"
+        xTable[0, 1].String = "Cell 1 0"
+        xTable[0, 2].String = "Cell 2 0"
         self._check_table(xTable)  # ... to ensure the rest was untouched
         # check disconnected table excepts, but doesn't crash
         xTable2 = xDoc.createInstance("com.sun.star.text.TextTable")
@@ -331,7 +342,9 @@ class CheckTable(unittest.TestCase):
         self.assertEqual(xTable.Data, ((4, 55, 66), (7, 88, 99), (10, 1111, 1212)))
         xTable.ChartColumnAsLabel = False
         xTable.ChartRowAsLabel = False
-        self.assertEqual(xTable.Data, ((1, 2, 3), (4, 55, 66), (7, 88, 99), (10, 1111, 1212)))
+        self.assertEqual(
+            xTable.Data, ((1, 2, 3), (4, 55, 66), (7, 88, 99), (10, 1111, 1212))
+        )
         xDoc.dispose()
 
     def test_remove_colrow(self):
@@ -344,19 +357,19 @@ class CheckTable(unittest.TestCase):
         xTable.ChartRowAsLabel = False
         xTable.Data = ((1, 2, 3), (4, 5, 6), (7, 8, 9), (10, 11, 12))
         xRows = xTable.Rows
-        self.assertEqual(xRows.ImplementationName, 'SwXTableRows')
-        self.assertTrue(xRows.supportsService('com.sun.star.text.TableRows'))
-        self.assertFalse(xRows.supportsService('foo'))
-        self.assertIn('com.sun.star.text.TableRows', xRows.SupportedServiceNames)
-        self.assertNotIn('foo', xRows.SupportedServiceNames)
+        self.assertEqual(xRows.ImplementationName, "SwXTableRows")
+        self.assertTrue(xRows.supportsService("com.sun.star.text.TableRows"))
+        self.assertFalse(xRows.supportsService("foo"))
+        self.assertIn("com.sun.star.text.TableRows", xRows.SupportedServiceNames)
+        self.assertNotIn("foo", xRows.SupportedServiceNames)
         xRows.removeByIndex(1, 2)
         self.assertEqual(xTable.Data, ((1, 2, 3), (10, 11, 12)))
         xCols = xTable.Columns
-        self.assertEqual(xCols.ImplementationName, 'SwXTableColumns')
-        self.assertTrue(xCols.supportsService('com.sun.star.text.TableColumns'))
-        self.assertFalse(xCols.supportsService('foo'))
-        self.assertIn('com.sun.star.text.TableColumns', xCols.SupportedServiceNames)
-        self.assertNotIn('foo', xCols.SupportedServiceNames)
+        self.assertEqual(xCols.ImplementationName, "SwXTableColumns")
+        self.assertTrue(xCols.supportsService("com.sun.star.text.TableColumns"))
+        self.assertFalse(xCols.supportsService("foo"))
+        self.assertIn("com.sun.star.text.TableColumns", xCols.SupportedServiceNames)
+        self.assertNotIn("foo", xCols.SupportedServiceNames)
         xCols.removeByIndex(1, 1)
         self.assertEqual(xTable.Data, ((1, 3), (10, 12)))
         xDoc.dispose()
@@ -372,7 +385,7 @@ class CheckTable(unittest.TestCase):
         xTable.Data = ((1, 2, 3), (4, 5, 6), (7, 8, 9), (10, 11, 12))
         xRows = xTable.Rows
         xRows.insertByIndex(1, 2)
-        nan = float('nan')
+        nan = float("nan")
         self.assertEqual(xTable.Data[0], (1, 2, 3))
         self.assertEqual(xTable.Data[3], (4, 5, 6))
         self.assertEqual(xTable.Data[4], (7, 8, 9))
@@ -412,33 +425,49 @@ class CheckTable(unittest.TestCase):
         xTable.ChartColumnAsLabel = False
         xTable.ChartRowAsLabel = False
         xTable.Data = ((1, 2, 3), (4, 5, 6), (7, 8, 9), (10, 11, 12))
-        self.assertTrue(xTable.Name == 'Table1')
-        self.assertIn('com.sun.star.text.GenericTextDocument', xDoc.SupportedServiceNames)
-        xChartdataprovider = xDoc.createInstance('com.sun.star.chart2.data.DataProvider')
-        self.assertEqual(xChartdataprovider.ImplementationName, 'SwChartDataProvider')
-        self.assertTrue(xChartdataprovider.supportsService('com.sun.star.chart2.data.DataProvider'))
-        self.assertFalse(xChartdataprovider.supportsService('foo'))
-        self.assertIn('com.sun.star.chart2.data.DataProvider', xChartdataprovider.SupportedServiceNames)
+        self.assertTrue(xTable.Name == "Table1")
+        self.assertIn(
+            "com.sun.star.text.GenericTextDocument", xDoc.SupportedServiceNames
+        )
+        xChartdataprovider = xDoc.createInstance(
+            "com.sun.star.chart2.data.DataProvider"
+        )
+        self.assertEqual(xChartdataprovider.ImplementationName, "SwChartDataProvider")
+        self.assertTrue(
+            xChartdataprovider.supportsService("com.sun.star.chart2.data.DataProvider")
+        )
+        self.assertFalse(xChartdataprovider.supportsService("foo"))
+        self.assertIn(
+            "com.sun.star.chart2.data.DataProvider",
+            xChartdataprovider.SupportedServiceNames,
+        )
         pv = PropertyValue()
-        pv.Name = 'CellRangeRepresentation'
-        pv.Value = 'Table1.A1:C2'
+        pv.Name = "CellRangeRepresentation"
+        pv.Value = "Table1.A1:C2"
         xDataSource = xChartdataprovider.createDataSource((pv,))
         self.assertEqual(len(xDataSource.DataSequences), 3)
         expected_values = ((1, 4), (2, 5), (3, 6))
-        expected_cellrange = ('A1:A2', 'B1:B2', 'C1:C2')
+        expected_cellrange = ("A1:A2", "B1:B2", "C1:C2")
 
         for col in range(3):
             xSeq = xDataSource.DataSequences[col].Values
-            self.assertEqual(xSeq.ImplementationName, 'SwChartDataSequence')
-            self.assertTrue(xSeq.supportsService('com.sun.star.chart2.data.DataSequence'))
-            self.assertFalse(xSeq.supportsService('foo'))
-            self.assertIn('com.sun.star.chart2.data.DataSequence', xSeq.SupportedServiceNames)
-            self.assertEqual(xSeq.SourceRangeRepresentation, 'Table1.%s' % expected_cellrange[col])
+            self.assertEqual(xSeq.ImplementationName, "SwChartDataSequence")
+            self.assertTrue(
+                xSeq.supportsService("com.sun.star.chart2.data.DataSequence")
+            )
+            self.assertFalse(xSeq.supportsService("foo"))
+            self.assertIn(
+                "com.sun.star.chart2.data.DataSequence", xSeq.SupportedServiceNames
+            )
+            self.assertEqual(
+                xSeq.SourceRangeRepresentation, "Table1.%s" % expected_cellrange[col]
+            )
             self.assertEqual(xSeq.Data, expected_values[col])
             self.assertEqual(xSeq.NumericalData, expected_values[col])
             self.assertEqual(
-                    [int(txtval) for txtval in xSeq.TextualData],
-                    [val for val in expected_values[col]])
+                [int(txtval) for txtval in xSeq.TextualData],
+                [val for val in expected_values[col]],
+            )
 
             xSeq.Role = "One xSeq to rule them all"
             self.assertEqual("One xSeq to rule them all", xSeq.Role)
@@ -454,35 +483,43 @@ class CheckTable(unittest.TestCase):
         xContext = CheckTable._uno.getContext()
         xServiceManager = xContext.ServiceManager
         xDispatcher = xServiceManager.createInstanceWithContext(
-            'com.sun.star.frame.DispatchHelper', xContext)
+            "com.sun.star.frame.DispatchHelper", xContext
+        )
         xTable = xDoc.createInstance("com.sun.star.text.TextTable")
         xTable.initialize(1, 1)
         xCursor = xDoc.Text.createTextCursor()
         xDoc.Text.insertTextContent(xCursor, xTable, False)
         # Setup numberformat for the cell
         xNumberFormats = xDoc.NumberFormats
-        xLocale = Locale('en', 'US', '')
-        format_string = '#,##0.00 [$€-407];[RED]-#,##0.00 [$€-407]'
+        xLocale = Locale("en", "US", "")
+        format_string = "#,##0.00 [$€-407];[RED]-#,##0.00 [$€-407]"
         key = xNumberFormats.queryKey(format_string, xLocale, True)
         if key == -1:
             key = xNumberFormats.addNew(format_string, xLocale)
         # Apply the format on the first cell
-        xTable[0,0].NumberFormat = key
-        xDispatcher.executeDispatch(xDocFrame, '.uno:GoToStartOfDoc', '', 0, ())
-        xDispatcher.executeDispatch(xDocFrame, '.uno:InsertText', '', 0,
-                                    (PropertyValue('Text', 0, '3', 0),))
-        xDispatcher.executeDispatch(xDocFrame, '.uno:JumpToNextCell', '', 0, ())
+        xTable[0, 0].NumberFormat = key
+        xDispatcher.executeDispatch(xDocFrame, ".uno:GoToStartOfDoc", "", 0, ())
+        xDispatcher.executeDispatch(
+            xDocFrame, ".uno:InsertText", "", 0, (PropertyValue("Text", 0, "3", 0),)
+        )
+        xDispatcher.executeDispatch(xDocFrame, ".uno:JumpToNextCell", "", 0, ())
         # Check that the formatting we set up is not destroyed
-        self.assertEqual(xTable[0,0].getString(), '3.00 €')
-        self.assertEqual(xTable[0,0].getValue(), 3)
+        self.assertEqual(xTable[0, 0].getString(), "3.00 €")
+        self.assertEqual(xTable[0, 0].getValue(), 3)
         # Verify that it works with number recognition turned on as well
-        xDispatcher.executeDispatch(xDocFrame, '.uno:TableNumberRecognition', '', 0,
-                                    (PropertyValue('TableNumberRecognition', 0, True, 0),))
-        xDispatcher.executeDispatch(xDocFrame, '.uno:InsertText', '', 0,
-                                    (PropertyValue('Text', 0, '4', 0),))
-        xDispatcher.executeDispatch(xDocFrame, '.uno:JumpToNextCell', '', 0, ())
-        self.assertEqual(xTable[1,0].getString(), '4.00 €')
-        self.assertEqual(xTable[1,0].getValue(), 4)
+        xDispatcher.executeDispatch(
+            xDocFrame,
+            ".uno:TableNumberRecognition",
+            "",
+            0,
+            (PropertyValue("TableNumberRecognition", 0, True, 0),),
+        )
+        xDispatcher.executeDispatch(
+            xDocFrame, ".uno:InsertText", "", 0, (PropertyValue("Text", 0, "4", 0),)
+        )
+        xDispatcher.executeDispatch(xDocFrame, ".uno:JumpToNextCell", "", 0, ())
+        self.assertEqual(xTable[1, 0].getString(), "4.00 €")
+        self.assertEqual(xTable[1, 0].getValue(), 4)
         xDoc.dispose()
 
     def test_numberRecognition(self):
@@ -491,28 +528,44 @@ class CheckTable(unittest.TestCase):
         xContext = CheckTable._uno.getContext()
         xServiceManager = xContext.ServiceManager
         xDispatcher = xServiceManager.createInstanceWithContext(
-            'com.sun.star.frame.DispatchHelper', xContext)
-        xTable = xDoc.createInstance('com.sun.star.text.TextTable')
+            "com.sun.star.frame.DispatchHelper", xContext
+        )
+        xTable = xDoc.createInstance("com.sun.star.text.TextTable")
         xTable.initialize(2, 1)
         xCursor = xDoc.Text.createTextCursor()
         xDoc.Text.insertTextContent(xCursor, xTable, False)
-        xDispatcher.executeDispatch(xDocFrame, '.uno:GoToStartOfDoc', '', 0, ())
-        xDispatcher.executeDispatch(xDocFrame, '.uno:InsertText', '', 0,
-                                    (PropertyValue('Text', 0, '2015-10-30', 0),))
-        xDispatcher.executeDispatch(xDocFrame, '.uno:JumpToNextCell', '', 0, ())
+        xDispatcher.executeDispatch(xDocFrame, ".uno:GoToStartOfDoc", "", 0, ())
+        xDispatcher.executeDispatch(
+            xDocFrame,
+            ".uno:InsertText",
+            "",
+            0,
+            (PropertyValue("Text", 0, "2015-10-30", 0),),
+        )
+        xDispatcher.executeDispatch(xDocFrame, ".uno:JumpToNextCell", "", 0, ())
         # Without number recognition 2015-10-30 should not be interpreted as a date
-        self.assertEqual(xTable[0,0].getString(), '2015-10-30')
-        self.assertEqual(xTable[0,0].getValue(), 0)
+        self.assertEqual(xTable[0, 0].getString(), "2015-10-30")
+        self.assertEqual(xTable[0, 0].getValue(), 0)
         # Activate number recognition
-        xDispatcher.executeDispatch(xDocFrame, '.uno:TableNumberRecognition', '', 0,
-                                    (PropertyValue('TableNumberRecognition', 0, True, 0),))
-        xDispatcher.executeDispatch(xDocFrame, '.uno:InsertText', '', 0,
-                                    (PropertyValue('Text', 0, '2015-10-30', 0),))
-        xDispatcher.executeDispatch(xDocFrame, '.uno:JumpToNextCell', '', 0, ())
+        xDispatcher.executeDispatch(
+            xDocFrame,
+            ".uno:TableNumberRecognition",
+            "",
+            0,
+            (PropertyValue("TableNumberRecognition", 0, True, 0),),
+        )
+        xDispatcher.executeDispatch(
+            xDocFrame,
+            ".uno:InsertText",
+            "",
+            0,
+            (PropertyValue("Text", 0, "2015-10-30", 0),),
+        )
+        xDispatcher.executeDispatch(xDocFrame, ".uno:JumpToNextCell", "", 0, ())
         # With number recognition it should now be a date, confirm by checking
         # the string and value of the cell.
-        self.assertEqual(xTable[1,0].getString(), '2015-10-30')
-        self.assertEqual(xTable[1,0].getValue(), 42307.0)
+        self.assertEqual(xTable[1, 0].getString(), "2015-10-30")
+        self.assertEqual(xTable[1, 0].getValue(), 42307.0)
         xDoc.dispose()
 
     def test_tableTemplate(self):
@@ -527,7 +580,6 @@ class CheckTable(unittest.TestCase):
         self.assertEqual(xTable.getPropertyValue("TableTemplateName"), "")
         xDoc.dispose()
 
-
     def test_unoNames(self):
         xDoc = CheckTable._uno.openEmptyWriterDoc()
         xTable = xDoc.createInstance("com.sun.star.text.TextTable")
@@ -537,26 +589,37 @@ class CheckTable(unittest.TestCase):
         xText.insertTextContent(xCursor, xTable, False)
 
         self.assertEqual("SwXTextTable", xTable.ImplementationName)
-        self.assertEqual(("com.sun.star.document.LinkTarget",
-                          "com.sun.star.text.TextTable",
-                          "com.sun.star.text.TextContent",
-                          "com.sun.star.text.TextSortable"), xTable.SupportedServiceNames)
-        self.assertEqual(b'', xTable.ImplementationId.value)
+        self.assertEqual(
+            (
+                "com.sun.star.document.LinkTarget",
+                "com.sun.star.text.TextTable",
+                "com.sun.star.text.TextContent",
+                "com.sun.star.text.TextSortable",
+            ),
+            xTable.SupportedServiceNames,
+        )
+        self.assertEqual(b"", xTable.ImplementationId.value)
 
-        xCell = xTable[1,1]
+        xCell = xTable[1, 1]
         self.assertEqual("SwXCell", xCell.ImplementationName)
-        self.assertEqual(("com.sun.star.text.CellProperties",), xCell.SupportedServiceNames)
-        self.assertEqual(b'', xCell.ImplementationId.value)
+        self.assertEqual(
+            ("com.sun.star.text.CellProperties",), xCell.SupportedServiceNames
+        )
+        self.assertEqual(b"", xCell.ImplementationId.value)
 
         xRow = xTable.Rows[0]
         self.assertEqual("SwXTextTableRow", xRow.ImplementationName)
-        self.assertEqual(("com.sun.star.text.TextTableRow",), xRow.SupportedServiceNames)
-        self.assertEqual(b'', xRow.ImplementationId.value)
+        self.assertEqual(
+            ("com.sun.star.text.TextTableRow",), xRow.SupportedServiceNames
+        )
+        self.assertEqual(b"", xRow.ImplementationId.value)
 
         xTableCursor = xTable.createCursorByCellName("A1")
         self.assertEqual("SwXTextTableCursor", xTableCursor.ImplementationName)
-        self.assertEqual(("com.sun.star.text.TextTableCursor",), xTableCursor.SupportedServiceNames)
-        self.assertEqual(b'', xTableCursor.ImplementationId.value)
+        self.assertEqual(
+            ("com.sun.star.text.TextTableCursor",), xTableCursor.SupportedServiceNames
+        )
+        self.assertEqual(b"", xTableCursor.ImplementationId.value)
 
         xDoc.dispose()
 
@@ -570,13 +633,17 @@ class CheckTable(unittest.TestCase):
         xTable.ChartRowAsLabel = False
         xTable.Data = ((1, 2, 3), (4, 5, 6), (7, 8, 9), (10, 11, 12))
 
-        xChartDataProvider = xDoc.createInstance('com.sun.star.chart2.data.DataProvider')
+        xChartDataProvider = xDoc.createInstance(
+            "com.sun.star.chart2.data.DataProvider"
+        )
 
-        self.assertEqual('', xChartDataProvider.convertRangeToXML(''))
-        self.assertEqual('', xChartDataProvider.convertRangeFromXML(''))
-        self.assertEqual('.A1;.A1', xChartDataProvider.convertRangeFromXML('<some xml>'))
+        self.assertEqual("", xChartDataProvider.convertRangeToXML(""))
+        self.assertEqual("", xChartDataProvider.convertRangeFromXML(""))
+        self.assertEqual(
+            ".A1;.A1", xChartDataProvider.convertRangeFromXML("<some xml>")
+        )
 
-        xml = xChartDataProvider.convertRangeToXML('Table1.A1:C3')
+        xml = xChartDataProvider.convertRangeToXML("Table1.A1:C3")
 
         self.assertEqual("Table1.$A$1:.$C$3", xml)
 
@@ -623,7 +690,8 @@ class CheckTable(unittest.TestCase):
         self.assertEqual(xTable.Data[2], (float(7), float(8), float(9)))
         xDoc.dispose()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

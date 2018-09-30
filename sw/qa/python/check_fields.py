@@ -12,7 +12,6 @@ from org.libreoffice.unotest import UnoInProcess
 
 
 class CheckFields(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls._uno = UnoInProcess()
@@ -23,7 +22,15 @@ class CheckFields(unittest.TestCase):
         cls._uno.tearDown()
 
     def test_fdo39694_load(self):
-        placeholders = ["<Kadr1>", "<Kadr2>", "<Kadr3>", "<Kadr4>", "<Pnname>", "<Pvname>", "<Pgeboren>"]
+        placeholders = [
+            "<Kadr1>",
+            "<Kadr2>",
+            "<Kadr3>",
+            "<Kadr4>",
+            "<Pnname>",
+            "<Pvname>",
+            "<Pgeboren>",
+        ]
         xDoc = self.__class__._uno.openTemplateFromTDOC("fdo39694.ott")
         xEnumerationAccess = xDoc.getTextFields()
         xFieldEnum = xEnumerationAccess.createEnumeration()
@@ -31,8 +38,10 @@ class CheckFields(unittest.TestCase):
             if xField.supportsService("com.sun.star.text.TextField.JumpEdit"):
                 xAnchor = xField.getAnchor()
                 read_content = xAnchor.getString()
-                self.assertTrue(read_content in placeholders,
-                                "field %s is not contained: " % read_content)
+                self.assertTrue(
+                    read_content in placeholders,
+                    "field %s is not contained: " % read_content,
+                )
         xDoc.close(True)
 
     def test_fdo42073(self):
@@ -49,5 +58,6 @@ class CheckFields(unittest.TestCase):
         self.assertEqual(content, read_content)
         xDoc.close(True)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

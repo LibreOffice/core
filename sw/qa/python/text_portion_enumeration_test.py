@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-'''
+"""
 This file is part of the LibreOffice project.
 
 This Source Code Form is subject to the terms of the Mozilla Public
@@ -16,7 +16,7 @@ This file incorporates work covered by the following license notice:
    License, Version 2.0 (the "License"); you may not use this file
    except in compliance with the License. You may obtain a copy of
    the License at http://www.apache.org/licenses/LICENSE-2.0 .
-'''
+"""
 import uno
 import unittest
 import os.path
@@ -29,11 +29,16 @@ from com.sun.star.rdf.URIs import ODF_PREFIX, ODF_SUFFIX
 from com.sun.star.i18n.NumberFormatIndex import NUMBER_INT
 from com.sun.star.text.ControlCharacter import PARAGRAPH_BREAK, HARD_HYPHEN
 from com.sun.star.text.TextContentAnchorType import (
-                AT_CHARACTER, AS_CHARACTER, AT_PARAGRAPH, AT_PAGE, AT_FRAME)
+    AT_CHARACTER,
+    AS_CHARACTER,
+    AT_PARAGRAPH,
+    AT_PAGE,
+    AT_FRAME,
+)
 
 
-class TreeNode():
-    '''base class for tree nodes. only instance: root of tree.'''
+class TreeNode:
+    """base class for tree nodes. only instance: root of tree."""
 
     def __init__(self, content=None):
         self.content = content
@@ -65,7 +70,6 @@ class TreeNode():
 
 
 class ContentNode(TreeNode):
-
     def __init__(self, content):
         super().__init__(content)
 
@@ -87,7 +91,6 @@ class ContentNode(TreeNode):
 
 
 class TextNode(ContentNode):
-
     def __init__(self, content):
         super().__init__(content)
         self.nodetype = "Text"
@@ -97,7 +100,6 @@ class TextNode(ContentNode):
 
 
 class TextFieldNode(ContentNode):
-
     def __init__(self, content):
         super().__init__(content)
         self.nodetype = "TextField"
@@ -126,7 +128,6 @@ class ControlCharacterNode(TreeNode):
 
 
 class FootnoteNode(TreeNode):
-
     def __init__(self, label):
         super().__init__()
         self.label = label
@@ -154,13 +155,16 @@ class FrameNode(TreeNode):
 
     def __str__(self):
         return "{}\tname: {}\tanchor: {}".format(
-                super().__str__(),self.name, self.str_anchor(self.anchor))
+            super().__str__(), self.name, self.str_anchor(self.anchor)
+        )
 
     def __eq__(self, other):
         try:
-            return (other.name == self.name and
-                    other.anchor == self.anchor and
-                    super().__eq__(other))
+            return (
+                other.name == self.name
+                and other.anchor == self.anchor
+                and super().__eq__(other)
+            )
         except AttributeError:
             return False
 
@@ -168,11 +172,13 @@ class FrameNode(TreeNode):
         return self._dup(FrameNode, self.name, self.anchor)
 
     def str_anchor(self, anchor):
-        anchors = {str(AS_CHARACTER): "AS_CHARACTER",
-                   str(AT_CHARACTER): "AT_CHARACTER",
-                   str(AT_PARAGRAPH): "AT_PARAGRAPH",
-                   str(AT_PAGE): "AT_PAGE",
-                   str(AT_FRAME): "AT_FRAME"}
+        anchors = {
+            str(AS_CHARACTER): "AS_CHARACTER",
+            str(AT_CHARACTER): "AT_CHARACTER",
+            str(AT_PARAGRAPH): "AT_PARAGRAPH",
+            str(AT_PAGE): "AT_PAGE",
+            str(AT_FRAME): "AT_FRAME",
+        }
         try:
             return anchors[str(anchor)]
         except KeyError:
@@ -188,12 +194,12 @@ class MetaNode(TreeNode):
 
     def __str__(self):
         return "{}\txmlid: {}#{}".format(
-            super().__str__(), self.xmlid.First, self.xmlid.Second)
+            super().__str__(), self.xmlid.First, self.xmlid.Second
+        )
 
     def __eq__(self, other):
         try:
-            return (type(other) == type(self) and
-                    MetaNode.eq(other.xmlid, self.xmlid))
+            return type(other) == type(self) and MetaNode.eq(other.xmlid, self.xmlid)
         except AttributeError:
             return False
 
@@ -214,13 +220,16 @@ class MarkNode(TreeNode):
 
     def __str__(self):
         return "{}\tisPoint: {}\tisStart: {}".format(
-                super().__str__(), self.ispoint, self.isstart)
+            super().__str__(), self.ispoint, self.isstart
+        )
 
     def __eq__(self, other):
         try:
-            return (other.name == self.name and
-                    other.ispoint == self.ispoint and
-                    other.isstart == self.isstart)
+            return (
+                other.name == self.name
+                and other.ispoint == self.ispoint
+                and other.isstart == self.isstart
+            )
         except AttributeError:
             return False
 
@@ -233,13 +242,16 @@ class BookmarkNode(MarkNode):
 
     def __str__(self):
         return "{}\txmlid: {}#{}".format(
-            super().__str__(), self.xmlid.First, self.xmlid.Second)
+            super().__str__(), self.xmlid.First, self.xmlid.Second
+        )
 
     def __eq__(self, other):
         try:
-            return (type(other) == type(self) and
-                    super().__eq__(other) and
-                    MetaNode.eq(other.xmlid, self.xmlid))
+            return (
+                type(other) == type(self)
+                and super().__eq__(other)
+                and MetaNode.eq(other.xmlid, self.xmlid)
+            )
         except AttributeError:
             return False
 
@@ -248,7 +260,6 @@ class BookmarkNode(MarkNode):
 
 
 class BookmarkStartNode(BookmarkNode):
-
     def __init__(self, name, xmlid=StringPair()):
         super().__init__(name, xmlid)
         self.ispoint = False
@@ -259,7 +270,6 @@ class BookmarkStartNode(BookmarkNode):
 
 
 class BookmarkEndNode(BookmarkNode):
-
     def __init__(self, name, xmlid=StringPair()):
         super().__init__(name, xmlid)
         self.ispoint = False
@@ -275,7 +285,7 @@ class ReferenceMarkNode(MarkNode):
         self.nodetype = "ReferenceMark"
 
     def __eq__(self, other):
-        return (type(other) == type(self) and super().__eq__(other))
+        return type(other) == type(self) and super().__eq__(other)
 
     def dup(self):
         return self._dup(ReferenceMarkNode, self.name)
@@ -307,7 +317,7 @@ class DocumentIndexMarkNode(MarkNode):
         self.nodetype = "DocumentIndexMark"
 
     def __eq__(self, other):
-        return (type(other) == type(self) and super().__eq__(other))
+        return type(other) == type(self) and super().__eq__(other)
 
     def dup(self):
         return self._dup(DocumentIndexMarkNode, self.name)
@@ -388,7 +398,7 @@ class MetaFieldNode(MetaNode):
         return self._dup(MetaFieldNode, self.xmlid)
 
 
-class Range():
+class Range:
     def __init__(self, start, end, node):
         self.start = start
         self.end = end
@@ -396,8 +406,7 @@ class Range():
         self.extent = end - start
 
 
-class Inserter():
-
+class Inserter:
     def __init__(self, xDoc):
         self.xDoc = xDoc
         self.xText = xDoc.getText()
@@ -497,13 +506,11 @@ class Inserter():
         return xContent
 
     def makemetafield(self):
-        xMeta = self.xDoc.createInstance(
-                                "com.sun.star.text.textfield.MetadataField")
+        xMeta = self.xDoc.createInstance("com.sun.star.text.textfield.MetadataField")
         return xMeta
 
 
 class TreeInserter(Inserter):
-
     def __init__(self, xDoc):
         super().__init__(xDoc)
         self._bookmarkstarts = {}
@@ -606,9 +613,9 @@ class RangeInserter(Inserter):
         self.initparagraph()
 
     # def inserttext(self, pos, text):
-        # self.xCursor.gotoStartOfParagraph(False)
-        # self.xCursor.goRight(pos, False)
-        # self.inserttext(self.xCursor, text)
+    # self.xCursor.gotoStartOfParagraph(False)
+    # self.xCursor.goRight(pos, False)
+    # self.inserttext(self.xCursor, text)
 
     def insertrange(self, range):
         self.xCursor.gotoStartOfParagraph(False)
@@ -667,8 +674,7 @@ class RangeInserter(Inserter):
         return None
 
 
-class EnumConverter():
-
+class EnumConverter:
     def __init__(self):
         self._stack = []
 
@@ -676,7 +682,7 @@ class EnumConverter():
         root = TreeNode()
         self._stack.append(root)
         ret = self.convertchildren(xEnum)
-        assert (len(self._stack)==0), "EnumConverter.convert: stack is not empty"
+        assert len(self._stack) == 0, "EnumConverter.convert: stack is not empty"
         return ret
 
     def convertchildren(self, xEnum):
@@ -700,7 +706,7 @@ class EnumConverter():
                     node2 = self.convertchildren(xEnumChildren)
                     print(node)
                     print(node2)
-                    assert (node2 is node), "stack error: meta-field"
+                    assert node2 is node, "stack error: meta-field"
                 else:
                     content = xField.Content
                     isFixed = xField.IsFixed
@@ -714,7 +720,7 @@ class EnumConverter():
                 label = xFootnote.getLabel()
                 node = FootnoteNode(label)
             elif type_ == "Frame":
-                xCEA = xPortion.createContentEnumeration('')
+                xCEA = xPortion.createContentEnumeration("")
                 while xCEA.hasMoreElements():
                     xFrame = xCEA.nextElement()
                     anchor = xFrame.AnchorType
@@ -770,7 +776,9 @@ class EnumConverter():
                     continue
                 else:
                     node = self._stack.pop()
-                    assert (isinstance(node, RubyNode)), "stack error: Ruby expected; is: {}".format(str(node))
+                    assert isinstance(
+                        node, RubyNode
+                    ), "stack error: Ruby expected; is: {}".format(str(node))
             elif type_ == "InContentMetadata":
                 xMeta = xPortion.InContentMetadata
                 xmlid = xMeta.MetadataReference
@@ -778,7 +786,7 @@ class EnumConverter():
                 self._stack.append(node)
                 xEnumChildren = xMeta.createEnumeration()
                 node2 = self.convertchildren(xEnumChildren)
-                assert (node2 is node), "stack error: meta"
+                assert node2 is node, "stack error: meta"
             elif type_ == "SoftPageBreak":
                 node = SoftPageBreakNode()
             else:
@@ -788,22 +796,23 @@ class EnumConverter():
         return ret
 
 
-class FuzzyTester():
-    '''this is where we nail the pudding to the wall'''
+class FuzzyTester:
+    """this is where we nail the pudding to the wall"""
+
     def __init__(self):
         self.diffcontent = 0
         self.diffmissing = 0
         self.diffnesting = 0
         self.diffspuriousemptytext = 0
-        self.diffsequence = 0 # ignored?
+        self.diffsequence = 0  # ignored?
         self.stackexpected = []
         self.stackactual = []
         self.bufferexpected = []
         self.bufferactual = []
 
     def dotest(self, expected, actual):
-        '''idea: traverse both trees, enumerate nodes, stopping at content nodes.
-        then compare buffers.'''
+        """idea: traverse both trees, enumerate nodes, stopping at content nodes.
+        then compare buffers."""
         assert "__ROOT__" == expected.nodetype
         assert "__ROOT__" == actual.nodetype
         self.stackexpected.append((expected, expected.createenumeration()))
@@ -813,14 +822,15 @@ class FuzzyTester():
             self.traverse(self.stackactual, self.bufferactual)
             self.testbuffer()
         if self.diffsequence:
-            print("warning: {} differences in sequence".format(
-                                                    self.diffsequence))
+            print("warning: {} differences in sequence".format(self.diffsequence))
         if self.diffspuriousemptytext:
-            print("warning: {} spurious empty text nodes".format(
-                                                    self.diffspuriousemptytext))
+            print(
+                "warning: {} spurious empty text nodes".format(
+                    self.diffspuriousemptytext
+                )
+            )
         if self.diffnesting:
-            print("WARNING: {} differences in nesting".format(
-                                                    self.diffnesting))
+            print("WARNING: {} differences in nesting".format(self.diffnesting))
         assert self.diffcontent == 0
         assert self.diffmissing == 0
 
@@ -834,9 +844,11 @@ class FuzzyTester():
                     node_enum = node.createenumeration()
                     stack.append((node, node_enum))
                 if node.content:
-                    if not (isinstance(node, TextNode) and # spurious empty text?
-                            len(node.content) == 0):
-                        return # break here
+                    if not (
+                        isinstance(node, TextNode)
+                        and len(node.content) == 0  # spurious empty text?
+                    ):
+                        return  # break here
             except StopIteration:
                 buffer.append(stack[-1][0])
                 stack.pop()
@@ -879,8 +891,8 @@ class FuzzyTester():
                     # FIXME how bad is this?
                     self.printdiff("position differs", i, j)
                     # a hacky hack
-                    min_ = min(i,j)
-                    max_ = max(min(lenactual-1, i),j)
+                    min_ = min(i, j)
+                    max_ = max(min(lenactual - 1, i), j)
                     for k in range(min_, max_):
                         tmp = tmp_bufferactual[k]
                         if tmp and tmp.isnesting:
@@ -889,7 +901,7 @@ class FuzzyTester():
                     self.diffsequence += 1
                 tmp_bufferactual[j] = None
             except ValueError:
-                print('perdrix')
+                print("perdrix")
                 self.printmissing(node)
                 self.diffmissing += 1
         for j, node in enumerate(tmp_bufferactual):
@@ -898,7 +910,7 @@ class FuzzyTester():
                 if isinstance(node, TextNode) and len(node.content) == 0:
                     self.diffspuriousemptytext += 1
                 else:
-                    print('renard')
+                    print("renard")
                     self.diffmissing += 1
         self.testterminatingnode()
         self.bufferexpected[:] = []
@@ -908,8 +920,9 @@ class FuzzyTester():
         print("{}:\texpected: {}\tactual: {}".format(prefix, expected, actual))
 
     def printnesting(self, node, nesting):
-        print("node: {} possibly moved across nesting {}".format(
-                                                    str(node), str(nesting)))
+        print(
+            "node: {} possibly moved across nesting {}".format(str(node), str(nesting))
+        )
 
     def printmissing(self, node):
         print("   missing node: {}".format(str(node)))
@@ -953,7 +966,9 @@ class TextPortionEnumerationTest(unittest.TestCase):
         root.appendchild(txtf)
         self.dotest(root)
 
-    @unittest.skip("FIXME this is converted to a text portion: ControlCharacter is obsolete")
+    @unittest.skip(
+        "FIXME this is converted to a text portion: ControlCharacter is obsolete"
+    )
     def test_control_char(self):
         root = TreeNode()
         cchr = ControlCharacterNode(HARD_HYPHEN)
@@ -963,7 +978,7 @@ class TextPortionEnumerationTest(unittest.TestCase):
     @unittest.skip("FIXME: insert a soft page break: not done")
     def test_soft_page_break(self):
         root = TreeNode()
-        spbk =SoftPageBreakNode()
+        spbk = SoftPageBreakNode()
         text = TextNode("abc")
         root.appendchild(spbk)
         root.appendchild(text)
@@ -1666,9 +1681,11 @@ class TextPortionEnumerationTest(unittest.TestCase):
         rby2 = RubyNode(self.mkname("ruby"))
         inserter.insertrange(Range(0, 2, rby2))
         root = TreeNode()
-        root.appendchild(rby2.dup()
+        root.appendchild(
+            rby2.dup()
             .appendchild(TextNode("1"))
-            .appendchild(url1.dup().appendchild(TextNode("2"))))
+            .appendchild(url1.dup().appendchild(TextNode("2")))
+        )
         root.appendchild(url1.dup().appendchild(TextNode("34")))
         root.appendchild(TextNode("56789"))
         self.dotest(root, False)
@@ -1676,27 +1693,34 @@ class TextPortionEnumerationTest(unittest.TestCase):
         rby3 = RubyNode(self.mkname("ruby"))
         inserter.insertrange(Range(3, 5, rby3))
         root = TreeNode()
-        root.appendchild(rby2.dup()
-                .appendchild(TextNode("1"))
-                .appendchild(url1.dup().appendchild(TextNode("2"))))
+        root.appendchild(
+            rby2.dup()
+            .appendchild(TextNode("1"))
+            .appendchild(url1.dup().appendchild(TextNode("2")))
+        )
         root.appendchild(url1.dup().appendchild(TextNode("3")))
-        root.appendchild(rby3.dup()
-                .appendchild(url1.dup().appendchild(TextNode("4")))
-                .appendchild(TextNode("5")))
+        root.appendchild(
+            rby3.dup()
+            .appendchild(url1.dup().appendchild(TextNode("4")))
+            .appendchild(TextNode("5"))
+        )
         root.appendchild(TextNode("6789"))
         self.dotest(root, False)
         # around
         rby4 = RubyNode(self.mkname("ruby"))
         inserter.insertrange(Range(2, 3, rby4))
         root = TreeNode()
-        root.appendchild(rby2.dup()
-                .appendchild(TextNode("1"))
-                .appendchild(url1.dup().appendchild(TextNode("2"))))
-        root.appendchild(rby4.dup()
-                .appendchild(url1.dup().appendchild(TextNode("3"))))
-        root.appendchild(rby3.dup()
-                .appendchild(url1.dup().appendchild(TextNode("4")))
-                .appendchild(TextNode("5")))
+        root.appendchild(
+            rby2.dup()
+            .appendchild(TextNode("1"))
+            .appendchild(url1.dup().appendchild(TextNode("2")))
+        )
+        root.appendchild(rby4.dup().appendchild(url1.dup().appendchild(TextNode("3"))))
+        root.appendchild(
+            rby3.dup()
+            .appendchild(url1.dup().appendchild(TextNode("4")))
+            .appendchild(TextNode("5"))
+        )
         root.appendchild(TextNode("6789"))
         self.dotest(root, False)
         # inside
@@ -1705,18 +1729,20 @@ class TextPortionEnumerationTest(unittest.TestCase):
         rby6 = RubyNode(self.mkname("ruby"))
         inserter.insertrange(Range(7, 8, rby6))
         root = TreeNode()
-        root.appendchild(rby2.dup()
-                .appendchild(TextNode("1"))
-                .appendchild(url1.dup().appendchild(TextNode("2"))))
-        root.appendchild(rby4.dup()
-                .appendchild(url1.dup().appendchild(TextNode("3"))))
-        root.appendchild(rby3.dup()
-                .appendchild(url1.dup().appendchild(TextNode("4")))
-                .appendchild(TextNode("5")))
+        root.appendchild(
+            rby2.dup()
+            .appendchild(TextNode("1"))
+            .appendchild(url1.dup().appendchild(TextNode("2")))
+        )
+        root.appendchild(rby4.dup().appendchild(url1.dup().appendchild(TextNode("3"))))
+        root.appendchild(
+            rby3.dup()
+            .appendchild(url1.dup().appendchild(TextNode("4")))
+            .appendchild(TextNode("5"))
+        )
         root.appendchild(TextNode("6"))
         root.appendchild(url5.dup().appendchild(TextNode("7")))
-        root.appendchild(rby6.dup()
-                .appendchild(url5.dup().appendchild(TextNode("8"))))
+        root.appendchild(rby6.dup().appendchild(url5.dup().appendchild(TextNode("8"))))
         root.appendchild(url5.dup().appendchild(TextNode("9")))
         self.dotest(root, False)
 
@@ -1731,9 +1757,11 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(0, 3, url2))
         root = TreeNode()
         root.appendchild(url2.dup().appendchild(TextNode("1")))
-        root.appendchild(rby1.dup()
-                .appendchild(url2.dup().appendchild(TextNode("23")))
-                .appendchild(TextNode("456")))
+        root.appendchild(
+            rby1.dup()
+            .appendchild(url2.dup().appendchild(TextNode("23")))
+            .appendchild(TextNode("456"))
+        )
         root.appendchild(TextNode("789"))
         self.dotest(root, False)
         ## overlap right
@@ -1741,10 +1769,12 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(5, 7, url3))
         root = TreeNode()
         root.appendchild(url2.dup().appendchild(TextNode("1")))
-        root.appendchild(rby1.dup()
-                .appendchild(url2.dup().appendchild(TextNode("23")))
-                .appendchild(TextNode("45"))
-                .appendchild(url3.dup().appendchild(TextNode("6"))))
+        root.appendchild(
+            rby1.dup()
+            .appendchild(url2.dup().appendchild(TextNode("23")))
+            .appendchild(TextNode("45"))
+            .appendchild(url3.dup().appendchild(TextNode("6")))
+        )
         root.appendchild(url3.dup().appendchild(TextNode("7")))
         root.appendchild(TextNode("89"))
         self.dotest(root, False)
@@ -1753,9 +1783,9 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(1, 8, url4))
         root = TreeNode()
         root.appendchild(url2.dup().appendchild(TextNode("1")))
-        root.appendchild(rby1.dup()
-                .appendchild(url4.dup()
-                    .appendchild(TextNode("23456"))))
+        root.appendchild(
+            rby1.dup().appendchild(url4.dup().appendchild(TextNode("23456")))
+        )
         root.appendchild(url4.dup().appendchild(TextNode("78")))
         root.appendchild(TextNode("9"))
         self.dotest(root, False)
@@ -1764,13 +1794,12 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(3, 5, url5))
         root = TreeNode()
         root.appendchild(url2.dup().appendchild(TextNode("1")))
-        root.appendchild(rby1.dup()
-                .appendchild(url4.dup()
-                    .appendchild(TextNode("23")))
-                .appendchild(url5.dup()
-                    .appendchild(TextNode("45")))
-                .appendchild(url4.dup()
-                    .appendchild(TextNode("6"))))
+        root.appendchild(
+            rby1.dup()
+            .appendchild(url4.dup().appendchild(TextNode("23")))
+            .appendchild(url5.dup().appendchild(TextNode("45")))
+            .appendchild(url4.dup().appendchild(TextNode("6")))
+        )
         root.appendchild(url4.dup().appendchild(TextNode("78")))
         root.appendchild(TextNode("9"))
         self.dotest(root, False)
@@ -1829,9 +1858,11 @@ class TextPortionEnumerationTest(unittest.TestCase):
         met2 = MetaNode(self.mkid("id"))
         inserter.insertrange(Range(0, 2, met2))
         root = TreeNode()
-        root.appendchild(met2.dup()
-                .appendchild(TextNode("1"))
-                .appendchild(url1.dup().appendchild(TextNode("2"))))
+        root.appendchild(
+            met2.dup()
+            .appendchild(TextNode("1"))
+            .appendchild(url1.dup().appendchild(TextNode("2")))
+        )
         root.appendchild(url1.dup().appendchild(TextNode("34")))
         root.appendchild(TextNode("56789"))
         self.dotest(root, False)
@@ -1840,13 +1871,17 @@ class TextPortionEnumerationTest(unittest.TestCase):
         # inserter.insertrange(Range(4-1, 6-1, met3))
         inserter.insertrange(Range(4, 6, met3))
         root = TreeNode()
-        root.appendchild(met2.dup()
-                .appendchild(TextNode("1"))
-                .appendchild(url1.dup().appendchild(TextNode("2"))))
+        root.appendchild(
+            met2.dup()
+            .appendchild(TextNode("1"))
+            .appendchild(url1.dup().appendchild(TextNode("2")))
+        )
         root.appendchild(url1.dup().appendchild(TextNode("3")))
-        root.appendchild(met3.dup()
-                .appendchild(url1.dup().appendchild(TextNode("4")))
-                .appendchild(TextNode("5")))
+        root.appendchild(
+            met3.dup()
+            .appendchild(url1.dup().appendchild(TextNode("4")))
+            .appendchild(TextNode("5"))
+        )
         root.appendchild(TextNode("6789"))
         self.dotest(root, False)
         ## around
@@ -1854,14 +1889,17 @@ class TextPortionEnumerationTest(unittest.TestCase):
         # inserter.insertrange(Range(3-1, 4-1, met4))
         inserter.insertrange(Range(3, 4, met4))
         root = TreeNode()
-        root.appendchild(met2.dup()
-                .appendchild(TextNode("1"))
-                .appendchild(url1.dup().appendchild(TextNode("2"))))
-        root.appendchild(met4.dup()
-                .appendchild(url1.dup().appendchild(TextNode("3"))))
-        root.appendchild(met3.dup()
-                .appendchild(url1.dup().appendchild(TextNode("4")))
-                .appendchild(TextNode("5")))
+        root.appendchild(
+            met2.dup()
+            .appendchild(TextNode("1"))
+            .appendchild(url1.dup().appendchild(TextNode("2")))
+        )
+        root.appendchild(met4.dup().appendchild(url1.dup().appendchild(TextNode("3"))))
+        root.appendchild(
+            met3.dup()
+            .appendchild(url1.dup().appendchild(TextNode("4")))
+            .appendchild(TextNode("5"))
+        )
         root.appendchild(TextNode("6789"))
         self.dotest(root, False)
         ## inside
@@ -1872,18 +1910,20 @@ class TextPortionEnumerationTest(unittest.TestCase):
         # inserter.insertrange(Range(10-3, 11-3, met6))
         inserter.insertrange(Range(10, 11, met6))
         root = TreeNode()
-        root.appendchild(met2.dup()
-                .appendchild(TextNode("1"))
-                .appendchild(url1.dup().appendchild(TextNode("2"))))
-        root.appendchild(met4.dup()
-                .appendchild(url1.dup().appendchild(TextNode("3"))))
-        root.appendchild(met3.dup()
-                .appendchild(url1.dup().appendchild(TextNode("4")))
-                .appendchild(TextNode("5")))
+        root.appendchild(
+            met2.dup()
+            .appendchild(TextNode("1"))
+            .appendchild(url1.dup().appendchild(TextNode("2")))
+        )
+        root.appendchild(met4.dup().appendchild(url1.dup().appendchild(TextNode("3"))))
+        root.appendchild(
+            met3.dup()
+            .appendchild(url1.dup().appendchild(TextNode("4")))
+            .appendchild(TextNode("5"))
+        )
         root.appendchild(TextNode("6"))
         root.appendchild(url5.dup().appendchild(TextNode("7")))
-        root.appendchild(met6.dup()
-                .appendchild(url5.dup().appendchild(TextNode("8"))))
+        root.appendchild(met6.dup().appendchild(url5.dup().appendchild(TextNode("8"))))
         root.appendchild(url5.dup().appendchild(TextNode("9")))
         self.dotest(root, False)
 
@@ -1897,9 +1937,11 @@ class TextPortionEnumerationTest(unittest.TestCase):
         met2 = MetaNode(self.mkid("id"))
         inserter.insertrange(Range(0, 2, met2))
         root = TreeNode()
-        root.appendchild(met2.dup()
-                .appendchild(TextNode("1"))
-                .appendchild(rby1.dup().appendchild(TextNode("2"))))
+        root.appendchild(
+            met2.dup()
+            .appendchild(TextNode("1"))
+            .appendchild(rby1.dup().appendchild(TextNode("2")))
+        )
         root.appendchild(rby1.dup().appendchild(TextNode("34")))
         root.appendchild(TextNode("56789"))
         self.dotest(root, False)
@@ -1908,13 +1950,17 @@ class TextPortionEnumerationTest(unittest.TestCase):
         # inserter.insertrange(Range(4-1, 6-1, met3))
         inserter.insertrange(Range(4, 6, met3))
         root = TreeNode()
-        root.appendchild(met2.dup()
-                .appendchild(TextNode("1"))
-                .appendchild(rby1.dup().appendchild(TextNode("2"))))
+        root.appendchild(
+            met2.dup()
+            .appendchild(TextNode("1"))
+            .appendchild(rby1.dup().appendchild(TextNode("2")))
+        )
         root.appendchild(rby1.dup().appendchild(TextNode("3")))
-        root.appendchild(met3.dup()
-                .appendchild(rby1.dup().appendchild(TextNode("4")))
-                .appendchild(TextNode("5")))
+        root.appendchild(
+            met3.dup()
+            .appendchild(rby1.dup().appendchild(TextNode("4")))
+            .appendchild(TextNode("5"))
+        )
         root.appendchild(TextNode("6789"))
         self.dotest(root, False)
         ## around
@@ -1922,14 +1968,17 @@ class TextPortionEnumerationTest(unittest.TestCase):
         # inserter.insertrange(Range(3-1, 4-1, met4))
         inserter.insertrange(Range(3, 4, met4))
         root = TreeNode()
-        root.appendchild(met2.dup()
-                .appendchild(TextNode("1"))
-                .appendchild(rby1.dup().appendchild(TextNode("2"))))
-        root.appendchild(met4.dup()
-                .appendchild(rby1.dup().appendchild(TextNode("3"))))
-        root.appendchild(met3.dup()
-                .appendchild(rby1.dup().appendchild(TextNode("4")))
-                .appendchild(TextNode("5")))
+        root.appendchild(
+            met2.dup()
+            .appendchild(TextNode("1"))
+            .appendchild(rby1.dup().appendchild(TextNode("2")))
+        )
+        root.appendchild(met4.dup().appendchild(rby1.dup().appendchild(TextNode("3"))))
+        root.appendchild(
+            met3.dup()
+            .appendchild(rby1.dup().appendchild(TextNode("4")))
+            .appendchild(TextNode("5"))
+        )
         root.appendchild(TextNode("6789"))
         self.dotest(root, False)
         ## inside
@@ -1940,20 +1989,24 @@ class TextPortionEnumerationTest(unittest.TestCase):
         # inserter.insertrange(Range(10-3, 11-3, met6))
         inserter.insertrange(Range(10, 11, met6))
         root = TreeNode()
-        root.appendchild(met2.dup()
-                .appendchild(TextNode("1"))
-                .appendchild(rby1.dup().appendchild(TextNode("2"))))
-        root.appendchild(met4.dup()
-                .appendchild(rby1.dup().appendchild(TextNode("3"))))
-        root.appendchild(met3.dup()
-                .appendchild(rby1.dup().appendchild(TextNode("4")))
-                .appendchild(TextNode("5")))
+        root.appendchild(
+            met2.dup()
+            .appendchild(TextNode("1"))
+            .appendchild(rby1.dup().appendchild(TextNode("2")))
+        )
+        root.appendchild(met4.dup().appendchild(rby1.dup().appendchild(TextNode("3"))))
+        root.appendchild(
+            met3.dup()
+            .appendchild(rby1.dup().appendchild(TextNode("4")))
+            .appendchild(TextNode("5"))
+        )
         root.appendchild(TextNode("6"))
-        root.appendchild(rby5.dup()
-                .appendchild(TextNode("7"))
-                .appendchild(met6.dup()
-                    .appendchild(TextNode("8")))
-                .appendchild(TextNode("9")))
+        root.appendchild(
+            rby5.dup()
+            .appendchild(TextNode("7"))
+            .appendchild(met6.dup().appendchild(TextNode("8")))
+            .appendchild(TextNode("9"))
+        )
         self.dotest(root, False)
 
     def test_range_meta_hyperlink(self):
@@ -1968,9 +2021,11 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(0, 4, url2))
         root = TreeNode()
         root.appendchild(url2.dup().appendchild(TextNode("1")))
-        root.appendchild(met1.dup()
-                .appendchild(url2.dup().appendchild(TextNode("23")))
-                .appendchild(TextNode("456")))
+        root.appendchild(
+            met1.dup()
+            .appendchild(url2.dup().appendchild(TextNode("23")))
+            .appendchild(TextNode("456"))
+        )
         root.appendchild(TextNode("789"))
         self.dotest(root, False)
         ## overlap right
@@ -1979,10 +2034,12 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(6, 8, url3))
         root = TreeNode()
         root.appendchild(url2.dup().appendchild(TextNode("1")))
-        root.appendchild(met1.dup()
-                .appendchild(url2.dup().appendchild(TextNode("23")))
-                .appendchild(TextNode("45"))
-                .appendchild(url3.dup().appendchild(TextNode("6"))))
+        root.appendchild(
+            met1.dup()
+            .appendchild(url2.dup().appendchild(TextNode("23")))
+            .appendchild(TextNode("45"))
+            .appendchild(url3.dup().appendchild(TextNode("6")))
+        )
         root.appendchild(url3.dup().appendchild(TextNode("7")))
         root.appendchild(TextNode("89"))
         self.dotest(root, False)
@@ -1992,9 +2049,9 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(1, 9, url4))
         root = TreeNode()
         root.appendchild(url2.dup().appendchild(TextNode("1")))
-        root.appendchild(met1.dup()
-                .appendchild(url4.dup()
-                    .appendchild(TextNode("23456"))))
+        root.appendchild(
+            met1.dup().appendchild(url4.dup().appendchild(TextNode("23456")))
+        )
         root.appendchild(url4.dup().appendchild(TextNode("78")))
         root.appendchild(TextNode("9"))
         self.dotest(root, False)
@@ -2004,13 +2061,12 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(4, 6, url5))
         root = TreeNode()
         root.appendchild(url2.dup().appendchild(TextNode("1")))
-        root.appendchild(met1.dup()
-                .appendchild(url4.dup()
-                    .appendchild(TextNode("23")))
-                .appendchild(url5.dup()
-                    .appendchild(TextNode("45")))
-                .appendchild(url4.dup()
-                    .appendchild(TextNode("6"))))
+        root.appendchild(
+            met1.dup()
+            .appendchild(url4.dup().appendchild(TextNode("23")))
+            .appendchild(url5.dup().appendchild(TextNode("45")))
+            .appendchild(url4.dup().appendchild(TextNode("6")))
+        )
         root.appendchild(url4.dup().appendchild(TextNode("78")))
         root.appendchild(TextNode("9"))
         self.dotest(root, False)
@@ -2027,9 +2083,11 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(0, 3, rby2))
         root = TreeNode()
         root.appendchild(rby2.dup().appendchild(TextNode("1")))
-        root.appendchild(met1.dup()
-                .appendchild(rby2.dup().appendchild(TextNode("2")))
-                .appendchild(TextNode("345")))
+        root.appendchild(
+            met1.dup()
+            .appendchild(rby2.dup().appendchild(TextNode("2")))
+            .appendchild(TextNode("345"))
+        )
         root.appendchild(TextNode("6789"))
         self.dotest(root, False)
         ## overlap right
@@ -2038,10 +2096,12 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(5, 7, rby3))
         root = TreeNode()
         root.appendchild(rby2.dup().appendchild(TextNode("1")))
-        root.appendchild(met1.dup()
-                .appendchild(rby2.dup().appendchild(TextNode("2")))
-                .appendchild(TextNode("34"))
-                .appendchild(rby3.dup().appendchild(TextNode("5"))))
+        root.appendchild(
+            met1.dup()
+            .appendchild(rby2.dup().appendchild(TextNode("2")))
+            .appendchild(TextNode("34"))
+            .appendchild(rby3.dup().appendchild(TextNode("5")))
+        )
         root.appendchild(rby3.dup().appendchild(TextNode("6")))
         root.appendchild(TextNode("789"))
         self.dotest(root, False)
@@ -2051,10 +2111,11 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(1, 7, rby4))
         root = TreeNode()
         root.appendchild(rby2.dup().appendchild(TextNode("1")))
-        root.appendchild(rby4.dup()
-                .appendchild(met1.dup()
-                    .appendchild(TextNode("2345")))
-                .appendchild(TextNode("6")))
+        root.appendchild(
+            rby4.dup()
+            .appendchild(met1.dup().appendchild(TextNode("2345")))
+            .appendchild(TextNode("6"))
+        )
         root.appendchild(TextNode("789"))
         self.dotest(root, False)
         ## inside
@@ -2066,14 +2127,16 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(9, 10, rby6))
         root = TreeNode()
         root.appendchild(rby2.dup().appendchild(TextNode("1")))
-        root.appendchild(rby4.dup()
-                .appendchild(met1.dup()
-                    .appendchild(TextNode("2345")))
-                .appendchild(TextNode("6")))
-        root.appendchild(met5.dup()
-                .appendchild(TextNode("7"))
-                .appendchild(rby6.dup()
-                    .appendchild(TextNode("8"))))
+        root.appendchild(
+            rby4.dup()
+            .appendchild(met1.dup().appendchild(TextNode("2345")))
+            .appendchild(TextNode("6"))
+        )
+        root.appendchild(
+            met5.dup()
+            .appendchild(TextNode("7"))
+            .appendchild(rby6.dup().appendchild(TextNode("8")))
+        )
         root.appendchild(TextNode("9"))
         self.dotest(root, False)
         ## inside, with invalid range that includes the dummy char
@@ -2082,15 +2145,16 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(7, 9, rby7))
         root = TreeNode()
         root.appendchild(rby2.dup().appendchild(TextNode("1")))
-        root.appendchild(rby4.dup()
-                .appendchild(met1.dup()
-                    .appendchild(TextNode("2345")))
-                .appendchild(TextNode("6")))
-        root.appendchild(met5.dup()
-                .appendchild(rby7.dup()
-                    .appendchild(TextNode("7")))
-                .appendchild(rby6.dup()
-                    .appendchild(TextNode("8"))))
+        root.appendchild(
+            rby4.dup()
+            .appendchild(met1.dup().appendchild(TextNode("2345")))
+            .appendchild(TextNode("6"))
+        )
+        root.appendchild(
+            met5.dup()
+            .appendchild(rby7.dup().appendchild(TextNode("7")))
+            .appendchild(rby6.dup().appendchild(TextNode("8")))
+        )
         root.appendchild(TextNode("9"))
         self.dotest(root, False)
         ## around, at same position as meta
@@ -2099,13 +2163,12 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(7, 10, rby8))
         root = TreeNode()
         root.appendchild(rby2.dup().appendchild(TextNode("1")))
-        root.appendchild(rby4.dup()
-                .appendchild(met1.dup()
-                    .appendchild(TextNode("2345")))
-                .appendchild(TextNode("6")))
-        root.appendchild(rby8.dup()
-                .appendchild(met5.dup()
-                    .appendchild(TextNode("78"))))
+        root.appendchild(
+            rby4.dup()
+            .appendchild(met1.dup().appendchild(TextNode("2345")))
+            .appendchild(TextNode("6"))
+        )
+        root.appendchild(rby8.dup().appendchild(met5.dup().appendchild(TextNode("78"))))
         root.appendchild(TextNode("9"))
         self.dotest(root, False)
 
@@ -2148,8 +2211,9 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(3, 7, met4))
         root = TreeNode()
         root.appendchild(TextNode("123"))
-        root.appendchild(met4.dup()
-                .appendchild(met1.dup().appendchild(TextNode("456"))))
+        root.appendchild(
+            met4.dup().appendchild(met1.dup().appendchild(TextNode("456")))
+        )
         root.appendchild(TextNode("789"))
         self.dotest(root, False)
         ## inside
@@ -2158,11 +2222,13 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(6, 8, met5))
         root = TreeNode()
         root.appendchild(TextNode("123"))
-        root.appendchild(met4.dup()
-                .appendchild(met1.dup()
-                    .appendchild(TextNode("4"))
-                    .appendchild(met5.dup()
-                        .appendchild(TextNode("56")))))
+        root.appendchild(
+            met4.dup().appendchild(
+                met1.dup()
+                .appendchild(TextNode("4"))
+                .appendchild(met5.dup().appendchild(TextNode("56")))
+            )
+        )
         root.appendchild(TextNode("789"))
         self.dotest(root, False)
 
@@ -2180,14 +2246,17 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(5, 8, met3))
         root = TreeNode()
         root.appendchild(TextNode("1"))
-        root.appendchild(met1.dup()
-                .appendchild(TextNode("2"))
-                .appendchild(met2.dup()
-                    .appendchild(TextNode("3"))
-                    .appendchild(met3.dup()
-                        .appendchild(TextNode("456")))
-                    .appendchild(TextNode("7")))
-                .appendchild(TextNode("8")))
+        root.appendchild(
+            met1.dup()
+            .appendchild(TextNode("2"))
+            .appendchild(
+                met2.dup()
+                .appendchild(TextNode("3"))
+                .appendchild(met3.dup().appendchild(TextNode("456")))
+                .appendchild(TextNode("7"))
+            )
+            .appendchild(TextNode("8"))
+        )
         root.appendchild(TextNode("9"))
         self.dotest(root, False)
         ## split ruby at every meta start!
@@ -2195,20 +2264,22 @@ class TextPortionEnumerationTest(unittest.TestCase):
         # inserter.insertrange(Range(0, 7-3, rby4))
         inserter.insertrange(Range(0, 7, rby4))
         root = TreeNode()
-        root.appendchild(rby4.dup()
-                .appendchild(TextNode("1")))
-        root.appendchild(met1.dup()
-                .appendchild(rby4.dup()
-                    .appendchild(TextNode("2")))
-                .appendchild(met2.dup()
-                    .appendchild(rby4.dup()
-                        .appendchild(TextNode("3")))
-                    .appendchild(met3.dup()
-                        .appendchild(rby4.dup()
-                            .appendchild(TextNode("4")))
-                        .appendchild(TextNode("56")))
-                    .appendchild(TextNode("7")))
-                .appendchild(TextNode("8")))
+        root.appendchild(rby4.dup().appendchild(TextNode("1")))
+        root.appendchild(
+            met1.dup()
+            .appendchild(rby4.dup().appendchild(TextNode("2")))
+            .appendchild(
+                met2.dup()
+                .appendchild(rby4.dup().appendchild(TextNode("3")))
+                .appendchild(
+                    met3.dup()
+                    .appendchild(rby4.dup().appendchild(TextNode("4")))
+                    .appendchild(TextNode("56"))
+                )
+                .appendchild(TextNode("7"))
+            )
+            .appendchild(TextNode("8"))
+        )
         root.appendchild(TextNode("9"))
         self.dotest(root, False)
         ## split ruby at every meta end!
@@ -2216,26 +2287,24 @@ class TextPortionEnumerationTest(unittest.TestCase):
         # inserter.insertrange(Range(8-3, 12-3, rby5))
         inserter.insertrange(Range(8, 12, rby5))
         root = TreeNode()
-        root.appendchild(rby4.dup()
-                .appendchild(TextNode("1")))
-        root.appendchild(met1.dup()
-                .appendchild(rby4.dup()
-                    .appendchild(TextNode("2")))
-                .appendchild(met2.dup()
-                    .appendchild(rby4.dup()
-                        .appendchild(TextNode("3")))
-                    .appendchild(met3.dup()
-                        .appendchild(rby4.dup()
-                            .appendchild(TextNode("4")))
-                        .appendchild(TextNode("5"))
-                        .appendchild(rby5.dup()
-                            .appendchild(TextNode("6"))))
-                    .appendchild(rby5.dup()
-                        .appendchild(TextNode("7"))))
-                .appendchild(rby5.dup()
-                    .appendchild(TextNode("8"))))
-        root.appendchild(rby5.dup()
-                .appendchild(TextNode("9")))
+        root.appendchild(rby4.dup().appendchild(TextNode("1")))
+        root.appendchild(
+            met1.dup()
+            .appendchild(rby4.dup().appendchild(TextNode("2")))
+            .appendchild(
+                met2.dup()
+                .appendchild(rby4.dup().appendchild(TextNode("3")))
+                .appendchild(
+                    met3.dup()
+                    .appendchild(rby4.dup().appendchild(TextNode("4")))
+                    .appendchild(TextNode("5"))
+                    .appendchild(rby5.dup().appendchild(TextNode("6")))
+                )
+                .appendchild(rby5.dup().appendchild(TextNode("7")))
+            )
+            .appendchild(rby5.dup().appendchild(TextNode("8")))
+        )
+        root.appendchild(rby5.dup().appendchild(TextNode("9")))
         self.dotest(root, False)
 
     def test_range3(self):
@@ -2247,28 +2316,26 @@ class TextPortionEnumerationTest(unittest.TestCase):
         met2 = MetaNode(self.mkid("id"))
         inserter.insertrange(Range(2, 7, met2))
         root = TreeNode()
-        root.appendchild(rby1.dup()
-                .appendchild(TextNode("12"))
-                .appendchild(met2.dup()
-                    .appendchild(TextNode("34567")))
-                .appendchild(TextNode("89")))
+        root.appendchild(
+            rby1.dup()
+            .appendchild(TextNode("12"))
+            .appendchild(met2.dup().appendchild(TextNode("34567")))
+            .appendchild(TextNode("89"))
+        )
         self.dotest(root, False)
         ## overwrite outer ruby, split remains at inner meta!
         rby3 = RubyNode(self.mkname("ruby"))
         # inserter.insertrange(Range(5-1, 6-1, rby3))
         inserter.insertrange(Range(5, 6, rby3))
         root = TreeNode()
-        root.appendchild(rby1.dup()
-                .appendchild(TextNode("12")))
-        root.appendchild(met2.dup()
-                .appendchild(rby1.dup()
-                    .appendchild(TextNode("34")))
-                .appendchild(rby3.dup()
-                    .appendchild(TextNode("5")))
-                .appendchild(rby1.dup()
-                    .appendchild(TextNode("67"))))
-        root.appendchild(rby1.dup()
-                .appendchild(TextNode("89")))
+        root.appendchild(rby1.dup().appendchild(TextNode("12")))
+        root.appendchild(
+            met2.dup()
+            .appendchild(rby1.dup().appendchild(TextNode("34")))
+            .appendchild(rby3.dup().appendchild(TextNode("5")))
+            .appendchild(rby1.dup().appendchild(TextNode("67")))
+        )
+        root.appendchild(rby1.dup().appendchild(TextNode("89")))
         self.dotest(root, False)
 
     def test_range4(self):
@@ -2286,44 +2353,46 @@ class TextPortionEnumerationTest(unittest.TestCase):
         # inserter.insertrange(Range(5-2, 8-2, met4))
         inserter.insertrange(Range(5, 8, met4))
         root = TreeNode()
-        root.appendchild(rby1.dup()
-                .appendchild(TextNode("1"))
-                .appendchild(met2.dup()
-                    .appendchild(TextNode("2"))
-                    .appendchild(met3.dup()
-                        .appendchild(TextNode("3"))
-                        .appendchild(met4.dup()
-                            .appendchild(TextNode("456")))
-                        .appendchild(TextNode("7")))
-                    .appendchild(TextNode("8")))
-                .appendchild(TextNode("9")))
+        root.appendchild(
+            rby1.dup()
+            .appendchild(TextNode("1"))
+            .appendchild(
+                met2.dup()
+                .appendchild(TextNode("2"))
+                .appendchild(
+                    met3.dup()
+                    .appendchild(TextNode("3"))
+                    .appendchild(met4.dup().appendchild(TextNode("456")))
+                    .appendchild(TextNode("7"))
+                )
+                .appendchild(TextNode("8"))
+            )
+            .appendchild(TextNode("9"))
+        )
         self.dotest(root, False)
         ## overwrite outer ruby, split remains at every inner meta!
         rby5 = RubyNode(self.mkname("ruby"))
         # inserter.insertrange(Range(7-3, 8-3, rby5))
         inserter.insertrange(Range(7, 8, rby5))
         root = TreeNode()
-        root.appendchild(rby1.dup()
-                .appendchild(TextNode("1")))
-        root.appendchild(met2.dup()
-                .appendchild(rby1.dup()
-                    .appendchild(TextNode("2")))
-                .appendchild(met3.dup()
-                    .appendchild(rby1.dup()
-                        .appendchild(TextNode("3")))
-                    .appendchild(met4.dup()
-                        .appendchild(rby1.dup()
-                            .appendchild(TextNode("4")))
-                        .appendchild(rby5.dup()
-                            .appendchild(TextNode("5")))
-                        .appendchild(rby1.dup()
-                            .appendchild(TextNode("6"))))
-                    .appendchild(rby1.dup()
-                        .appendchild(TextNode("7"))))
-                .appendchild(rby1.dup()
-                    .appendchild(TextNode("8"))))
-        root.appendchild(rby1.dup()
-                .appendchild(TextNode("9")))
+        root.appendchild(rby1.dup().appendchild(TextNode("1")))
+        root.appendchild(
+            met2.dup()
+            .appendchild(rby1.dup().appendchild(TextNode("2")))
+            .appendchild(
+                met3.dup()
+                .appendchild(rby1.dup().appendchild(TextNode("3")))
+                .appendchild(
+                    met4.dup()
+                    .appendchild(rby1.dup().appendchild(TextNode("4")))
+                    .appendchild(rby5.dup().appendchild(TextNode("5")))
+                    .appendchild(rby1.dup().appendchild(TextNode("6")))
+                )
+                .appendchild(rby1.dup().appendchild(TextNode("7")))
+            )
+            .appendchild(rby1.dup().appendchild(TextNode("8")))
+        )
+        root.appendchild(rby1.dup().appendchild(TextNode("9")))
         self.dotest(root, False)
 
     def test_range5(self):
@@ -2341,39 +2410,40 @@ class TextPortionEnumerationTest(unittest.TestCase):
         # inserter.insertrange(Range(8-2, 10-2, met4))
         inserter.insertrange(Range(8, 10, met4))
         root = TreeNode()
-        root.appendchild(rby1.dup()
-                .appendchild(TextNode("1"))
-                .appendchild(met2.dup().appendchild(TextNode("23")))
-                .appendchild(TextNode("4"))
-                .appendchild(met3.dup().appendchild(TextNode("5")))
-                .appendchild(TextNode("6"))
-                .appendchild(met4.dup().appendchild(TextNode("78")))
-                .appendchild(TextNode("9")))
+        root.appendchild(
+            rby1.dup()
+            .appendchild(TextNode("1"))
+            .appendchild(met2.dup().appendchild(TextNode("23")))
+            .appendchild(TextNode("4"))
+            .appendchild(met3.dup().appendchild(TextNode("5")))
+            .appendchild(TextNode("6"))
+            .appendchild(met4.dup().appendchild(TextNode("78")))
+            .appendchild(TextNode("9"))
+        )
         self.dotest(root, False)
         ## overwrite outer ruby, but split at inner metas!
         rby5 = RubyNode(self.mkname("ruby"))
         # inserter.insertrange(Range(3-1, 10-3, rby5))
         inserter.insertrange(Range(3, 10, rby5))
         root = TreeNode()
-        root.appendchild(rby1.dup()
-                .appendchild(TextNode("1")))
-        root.appendchild(met2.dup()
-                .appendchild(rby1.dup()
-                    .appendchild(TextNode("2")))
-                .appendchild(rby5.dup()
-                    .appendchild(TextNode("3"))))
-        root.appendchild(rby5.dup()
-                .appendchild(TextNode("4"))
-                .appendchild(met3.dup()
-                    .appendchild(TextNode("5")))
-                .appendchild(TextNode("6")))
-        root.appendchild(met4.dup()
-                .appendchild(rby5.dup()
-                    .appendchild(TextNode("7")))
-                .appendchild(rby1.dup()
-                    .appendchild(TextNode("8"))))
-        root.appendchild(rby1.dup()
-                .appendchild(TextNode("9")))
+        root.appendchild(rby1.dup().appendchild(TextNode("1")))
+        root.appendchild(
+            met2.dup()
+            .appendchild(rby1.dup().appendchild(TextNode("2")))
+            .appendchild(rby5.dup().appendchild(TextNode("3")))
+        )
+        root.appendchild(
+            rby5.dup()
+            .appendchild(TextNode("4"))
+            .appendchild(met3.dup().appendchild(TextNode("5")))
+            .appendchild(TextNode("6"))
+        )
+        root.appendchild(
+            met4.dup()
+            .appendchild(rby5.dup().appendchild(TextNode("7")))
+            .appendchild(rby1.dup().appendchild(TextNode("8")))
+        )
+        root.appendchild(rby1.dup().appendchild(TextNode("9")))
         self.dotest(root, False)
 
     def test_range6(self):
@@ -2390,12 +2460,15 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(5, 7, met3))
         root = TreeNode()
         root.appendchild(TextNode("1"))
-        root.appendchild(met1.dup()
-                .appendchild(TextNode("2"))
-                .appendchild(met2.dup()
-                    .appendchild(TextNode("3"))
-                    .appendchild(met3.dup()
-                        .appendchild(TextNode("45")))))
+        root.appendchild(
+            met1.dup()
+            .appendchild(TextNode("2"))
+            .appendchild(
+                met2.dup()
+                .appendchild(TextNode("3"))
+                .appendchild(met3.dup().appendchild(TextNode("45")))
+            )
+        )
         root.appendchild(TextNode("6789"))
         self.dotest(root, False)
         ## split at 3 metas, all at same position
@@ -2404,16 +2477,20 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(7, 10, rby4))
         root = TreeNode()
         root.appendchild(TextNode("1"))
-        root.appendchild(met1.dup()
-                .appendchild(TextNode("2"))
-                .appendchild(met2.dup()
-                    .appendchild(TextNode("3"))
-                    .appendchild(met3.dup()
-                        .appendchild(TextNode("4"))
-                        .appendchild(rby4.dup()
-                            .appendchild(TextNode("5"))))))
-        root.appendchild(rby4.dup()
-                .appendchild(TextNode("67")))
+        root.appendchild(
+            met1.dup()
+            .appendchild(TextNode("2"))
+            .appendchild(
+                met2.dup()
+                .appendchild(TextNode("3"))
+                .appendchild(
+                    met3.dup()
+                    .appendchild(TextNode("4"))
+                    .appendchild(rby4.dup().appendchild(TextNode("5")))
+                )
+            )
+        )
+        root.appendchild(rby4.dup().appendchild(TextNode("67")))
         root.appendchild(TextNode("89"))
         self.dotest(root, False)
 
@@ -2427,11 +2504,8 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(3, 5, met2))
         root = TreeNode()
         root.appendchild(TextNode("1"))
-        root.appendchild(url1.dup()
-                .appendchild(TextNode("23")))
-        root.appendchild(met2.dup()
-                .appendchild(url1.dup()
-                    .appendchild(TextNode("45"))))
+        root.appendchild(url1.dup().appendchild(TextNode("23")))
+        root.appendchild(met2.dup().appendchild(url1.dup().appendchild(TextNode("45"))))
         root.appendchild(TextNode("6789"))
         self.dotest(root, False)
         ## this should result in not splitting the hyperlink, but due to API
@@ -2441,16 +2515,13 @@ class TextPortionEnumerationTest(unittest.TestCase):
         inserter.insertrange(Range(5, 8, rby3))
         root = TreeNode()
         root.appendchild(TextNode("1"))
-        root.appendchild(url1.dup()
-                .appendchild(TextNode("23")))
-        root.appendchild(met2.dup()
-                .appendchild(url1.dup()
-                    .appendchild(TextNode("4")))
-                .appendchild(rby3.dup()
-                    .appendchild(url1.dup()
-                        .appendchild(TextNode("5")))))
-        root.appendchild(rby3.dup()
-                .appendchild(TextNode("67")))
+        root.appendchild(url1.dup().appendchild(TextNode("23")))
+        root.appendchild(
+            met2.dup()
+            .appendchild(url1.dup().appendchild(TextNode("4")))
+            .appendchild(rby3.dup().appendchild(url1.dup().appendchild(TextNode("5"))))
+        )
+        root.appendchild(rby3.dup().appendchild(TextNode("67")))
         root.appendchild(TextNode("89"))
         self.dotest(root, False)
 
@@ -2472,19 +2543,19 @@ class TextPortionEnumerationTest(unittest.TestCase):
         meta5 = MetaNode(id5)
         meta6 = MetaFieldNode(id6)
         root = TreeNode()
-        root.appendchild(meta1.dup()
-                .appendchild(TextNode("1")))
+        root.appendchild(meta1.dup().appendchild(TextNode("1")))
         root.appendchild(TextNode("2"))
-        root.appendchild(meta2.dup()
-                .appendchild(meta3.dup()
-                    .appendchild(TextNode("34"))
-                    .appendchild(meta4.dup()
-                        .appendchild(TextNode("56")))
-                    .appendchild(meta5.dup())
-                    .appendchild(TextNode("7"))))
+        root.appendchild(
+            meta2.dup().appendchild(
+                meta3.dup()
+                .appendchild(TextNode("34"))
+                .appendchild(meta4.dup().appendchild(TextNode("56")))
+                .appendchild(meta5.dup())
+                .appendchild(TextNode("7"))
+            )
+        )
         root.appendchild(TextNode("8"))
-        root.appendchild(meta6.dup()
-                .appendchild(TextNode("9")))
+        root.appendchild(meta6.dup().appendchild(TextNode("9")))
 
         inserter = RangeInserter(xDoc)
         text = TextNode("123456789")
@@ -2500,7 +2571,7 @@ class TextPortionEnumerationTest(unittest.TestCase):
 
         xDocText = xDoc.getText()
         xDocTextCursor = xDocText.createTextCursor()
-        xDocTextCursor.gotoNextParagraph(False) # second paragraph
+        xDocTextCursor.gotoNextParagraph(False)  # second paragraph
         #  X12XX34X56X78X9
         #  1  23  4  5  6
         #   1       452  6
@@ -2521,16 +2592,17 @@ class TextPortionEnumerationTest(unittest.TestCase):
             id3,
             None,
             id6,
-            id6)
+            id6,
+        )
         for i, ntc in enumerate(nestedTextContent):
             oNTC = xDocTextCursor.NestedTextContent
             if ntc is None:
-                self.assertIsNone(oNTC,
-                            "unexpected NestedTextContent at: {}".format(i))
+                self.assertIsNone(oNTC, "unexpected NestedTextContent at: {}".format(i))
             else:
                 xmlid = oNTC.MetadataReference
-                self.assertTrue(MetaNode.eq(ntc, xmlid),
-                            "wrong NestedTextContent at: {}".format(i))
+                self.assertTrue(
+                    MetaNode.eq(ntc, xmlid), "wrong NestedTextContent at: {}".format(i)
+                )
             xDocTextCursor.goRight(1, False)
 
         try:
@@ -2550,7 +2622,7 @@ class TextPortionEnumerationTest(unittest.TestCase):
         xParent4 = xMeta4.getParent()
         self.assertIsNotNone(xParent4, "getParent(): None")
         xmlid = xParent4.MetadataReference
-        self. assertTrue(MetaNode.eq(xmlid, id3), "getParent(): wrong")
+        self.assertTrue(MetaNode.eq(xmlid, id3), "getParent(): wrong")
 
         xParent5 = xMeta5.getParent()
         self.assertIsNotNone(xParent5, "getParent(): None")
@@ -2597,12 +2669,14 @@ class TextPortionEnumerationTest(unittest.TestCase):
             pass
 
         xTextCursorStart = xMeta.createTextCursorByRange(xStart)
-        self.assertIsNotNone(xTextCursorStart,
-                    "createTextCursorByRange(): failed for start")
+        self.assertIsNotNone(
+            xTextCursorStart, "createTextCursorByRange(): failed for start"
+        )
 
         xTextCursorEnd = xMeta.createTextCursorByRange(xEnd)
-        self.assertIsNotNone(xTextCursorEnd,
-                             "createTextCursorByRange(): failed for end")
+        self.assertIsNotNone(
+            xTextCursorEnd, "createTextCursorByRange(): failed for end"
+        )
 
         ## move outside meta
         xDocTextCursor.gotoStart(False)
@@ -2643,13 +2717,15 @@ class TextPortionEnumerationTest(unittest.TestCase):
 
         xMeta.insertControlCharacter(xStart, HARD_HYPHEN, False)
         string = xMeta.getString()
-        self.assertEqual('\u2011' + 'A45B', string,
-                                "getString(): invalid string returned")
+        self.assertEqual(
+            "\u2011" + "A45B", string, "getString(): invalid string returned"
+        )
 
         xMeta.insertControlCharacter(xEnd, HARD_HYPHEN, False)
         string = xMeta.getString()
-        self.assertEqual('\u2011' + 'A45B' + '\u2011', string,
-                                "getString(): invalid string returned")
+        self.assertEqual(
+            "\u2011" + "A45B" + "\u2011", string, "getString(): invalid string returned"
+        )
 
         xMeta.setString("45")
         try:
@@ -2680,9 +2756,9 @@ class TextPortionEnumerationTest(unittest.TestCase):
 
         root = TreeNode()
         root.appendchild(TextNode("12"))
-        root.appendchild(meta.dup()
-                .appendchild(field1.dup())
-                .appendchild(TextNode("45")))
+        root.appendchild(
+            meta.dup().appendchild(field1.dup()).appendchild(TextNode("45"))
+        )
         root.appendchild(TextNode("6789"))
         self.dotest(root, False)
 
@@ -2690,10 +2766,12 @@ class TextPortionEnumerationTest(unittest.TestCase):
 
         root = TreeNode()
         root.appendchild(TextNode("12"))
-        root.appendchild(meta.dup()
-                .appendchild(field1.dup())
-                .appendchild(TextNode("45"))
-                .appendchild(field2.dup()))
+        root.appendchild(
+            meta.dup()
+            .appendchild(field1.dup())
+            .appendchild(TextNode("45"))
+            .appendchild(field2.dup())
+        )
         root.appendchild(TextNode("6789"))
         self.dotest(root, False)
 
@@ -2716,23 +2794,23 @@ class TextPortionEnumerationTest(unittest.TestCase):
         # root = TreeNode()
         # root.appendchild(TextNode("12"))
         # root.appendchild(ruby.dup()
-                # .appendchild(meta.dup()
-                    # .appendchild(TextNode("45"))
-                    # .appendchild(field2.dup())))
+        # .appendchild(meta.dup()
+        # .appendchild(TextNode("45"))
+        # .appendchild(field2.dup())))
         # root.appendchild(TextNode("6789"))
         # self.dotest(root, False)
 
         xEnum = xMeta.createEnumeration()
         self.assertIsNotNone("createEnumeration(): returns None", xEnum)
 
-        self.assertTrue(xEnum.hasMoreElements(),"hasNext(): first missing")
+        self.assertTrue(xEnum.hasMoreElements(), "hasNext(): first missing")
         xPortion = xEnum.nextElement()
         type_ = xPortion.TextPortionType
         self.assertEqual("Text", type_, "first: not text")
         txt = xPortion.getString()
         self.assertEqual("45", txt, "first: text differs")
 
-        self.assertTrue(xEnum.hasMoreElements(),"hasNext(): second missing")
+        self.assertTrue(xEnum.hasMoreElements(), "hasNext(): second missing")
         xPortion = xEnum.nextElement()
         type_ = xPortion.TextPortionType
         self.assertEqual("TextField", type_, "second: not text")
@@ -2744,8 +2822,9 @@ class TextPortionEnumerationTest(unittest.TestCase):
 
         try:
             xCursor = xMeta.createTextCursor()
-            self.assertIsNone(xCursor,
-                        "createTextCursor(): succeeds on disposed object?")
+            self.assertIsNone(
+                xCursor, "createTextCursor(): succeeds on disposed object?"
+            )
         except RuntimeException:
             pass
 
@@ -2804,8 +2883,10 @@ class TextPortionEnumerationTest(unittest.TestCase):
         string = xMetaCursor.getString()
         self.assertEqual("Two ", string, "gotoNextWord(): wrong string")
 
-        bSuccess = xMetaCursor.gotoNextWord(False)  # at end of "words", cannot leave metafield
-        self.assertFalse(bSuccess,"gotoNextWord(): succeeded")
+        bSuccess = xMetaCursor.gotoNextWord(
+            False
+        )  # at end of "words", cannot leave metafield
+        self.assertFalse(bSuccess, "gotoNextWord(): succeeded")
         xMetaCursor.collapseToEnd()
         bSuccess = xMetaCursor.gotoPreviousWord(True)  # at start of "words"
         self.assertTrue(bSuccess, "gotoPreviousWord(): failed")
@@ -2843,11 +2924,12 @@ class TextPortionEnumerationTest(unittest.TestCase):
         xMetaCursor.gotoStart(False)
 
         bSuccess = xMetaCursor.gotoNextSentence(True)
-        self.assertTrue(bSuccess,"gotoNextSentence(): failed")
+        self.assertTrue(bSuccess, "gotoNextSentence(): failed")
 
         string = xMetaCursor.getString()
-        self.assertEqual("This is a sentence. ", string,
-                            "gotoNextSentence(): wrong string")
+        self.assertEqual(
+            "This is a sentence. ", string, "gotoNextSentence(): wrong string"
+        )
 
         bSuccess = xMetaCursor.gotoNextSentence(False)
         self.assertFalse(bSuccess, "gotoNextSentence(): succeeded")
@@ -2859,8 +2941,11 @@ class TextPortionEnumerationTest(unittest.TestCase):
         self.assertTrue(bSuccess, "gotoPreviousSentence(): failed")
 
         string = xMetaCursor.getString()
-        self.assertEqual("Another sentence. Sentence 3.", string,
-                                "gotoPreviousSentence(): wrong string")
+        self.assertEqual(
+            "Another sentence. Sentence 3.",
+            string,
+            "gotoPreviousSentence(): wrong string",
+        )
 
         bSuccess = xMetaCursor.gotoPreviousSentence(False)
         self.assertFalse(bSuccess, "gotoPreviousSentence(): succeeded")
@@ -2868,16 +2953,16 @@ class TextPortionEnumerationTest(unittest.TestCase):
         self.assertTrue(bSuccess, "gotoEndOfSentence(): failed")
 
         string = xMetaCursor.getString()
-        self.assertEqual("This is a sentence.", string,
-                            "gotoEndOfSentence(): wrong string")
+        self.assertEqual(
+            "This is a sentence.", string, "gotoEndOfSentence(): wrong string"
+        )
 
         xMetaCursor.gotoEnd(False)
         bSuccess = xMetaCursor.gotoStartOfSentence(True)
-        self.assertTrue(bSuccess,"gotoStartOfSentence(): failed")
+        self.assertTrue(bSuccess, "gotoStartOfSentence(): failed")
 
         string = xMetaCursor.getString()
-        self.assertEqual("Sentence 3.", string,
-                         "gotoStartOfSentence(): wrong string")
+        self.assertEqual("Sentence 3.", string, "gotoStartOfSentence(): wrong string")
 
         xMeta.setString("")
         bSuccess = xMetaCursor.gotoEndOfSentence(False)
@@ -2911,64 +2996,87 @@ class TextPortionEnumerationTest(unittest.TestCase):
         self.assertTrue(bSuccess, "gotoEndOfWord(): failed")
         string = xDocTextCursor.getString()
         self.assertEqual("Text", string, "gotoEndOfWord(): wrong string")
-        self.assertNotEqual("a","b")
+        self.assertNotEqual("a", "b")
 
-    class AttachHelper():
-        def isattribute(self): pass
-        def mktreenode(self): pass
-        def mktextcontent(self, inserter, node): pass
-        def postinserted(self, node, xContent): pass
+    class AttachHelper:
+        def isattribute(self):
+            pass
+
+        def mktreenode(self):
+            pass
+
+        def mktextcontent(self, inserter, node):
+            pass
+
+        def postinserted(self, node, xContent):
+            pass
 
     def test_meta_xtextattach_toxmark(self):
         class Helper(self.AttachHelper):
             def isattribute(_):
                 return True
+
             def mktreenode(_):
                 return DocumentIndexMarkNode(self.mkname("toxmark"))
+
             def mktextcontent(_, inserter, node):
                 return inserter.makedocumentindexmark(node.name)
+
         self.do_meta_xtextattach(Helper())
 
     def test_meta_xtextattach_refmark(self):
         class Helper(self.AttachHelper):
             def isattribute(_):
                 return True
+
             def mktreenode(_):
                 return ReferenceMarkNode(self.mkname("refmark"))
+
             def mktextcontent(_, inserter, node):
                 return inserter.makereferencemark(node.name)
+
         self.do_meta_xtextattach(Helper())
 
     def test_meta_xtextattach_textfield(self):
         class Helper(self.AttachHelper):
             def isattribute(_):
                 return False
+
             def mktreenode(_):
                 return TextFieldNode(self.mkname("field"))
+
             def mktextcontent(_, inserter, node):
                 return inserter.maketextfield(node.content)
+
         self.do_meta_xtextattach(Helper())
 
     def test_meta_xtextattach_footnote(self):
         class Helper(self.AttachHelper):
             def isattribute(_):
                 return False
+
             def mktreenode(_):
                 return FootnoteNode(self.mkname("ftn"))
+
             def mktextcontent(_, inserter, node):
                 return inserter.makefootnote(node.label)
+
         self.do_meta_xtextattach(Helper())
 
     def test_meta_xtextattach_meta(self):
         class Helper(self.AttachHelper):
             def isattribute(_):
                 return True
+
             def mktreenode(_):
                 return MetaNode(self.mkid("id"))
+
             def mktextcontent(_, inserter, node):
                 return inserter.makemeta()
+
             def postinserted(_, node, xContent):
                 xContent.MetadataReference = node.xmlid
+
         self.do_meta_xtextattach(Helper())
 
     def do_meta_xtextattach(self, helper):
@@ -3006,10 +3114,12 @@ class TextPortionEnumerationTest(unittest.TestCase):
 
         root = TreeNode()
         root.appendchild(TextNode("12"))
-        root.appendchild(met1.dup()
-                .appendchild(nod1.dup())
-                .appendchild(TextNode("AB"))
-                .appendchild(nod2.dup()))
+        root.appendchild(
+            met1.dup()
+            .appendchild(nod1.dup())
+            .appendchild(TextNode("AB"))
+            .appendchild(nod2.dup())
+        )
         root.appendchild(TextNode("6789"))
         self.dotest(root, False)
 
@@ -3035,10 +3145,12 @@ class TextPortionEnumerationTest(unittest.TestCase):
 
         root = TreeNode()
         root.appendchild(TextNode("12"))
-        root.appendchild(met1.dup()
-                .appendchild(nod1.dup())
-                .appendchild(TextNode("AB"))
-                .appendchild(nod2.dup()))
+        root.appendchild(
+            met1.dup()
+            .appendchild(nod1.dup())
+            .appendchild(TextNode("AB"))
+            .appendchild(nod2.dup())
+        )
         root.appendchild(TextNode("6789"))
         self.dotest(root, False)
 
@@ -3067,10 +3179,12 @@ class TextPortionEnumerationTest(unittest.TestCase):
 
             root = TreeNode()
             root.appendchild(TextNode("12"))
-            root.appendchild(met1.dup()
-                    .appendchild(nod1.dup())
-                    .appendchild(TextNode("AB"))
-                    .appendchild(nod2.dup()))
+            root.appendchild(
+                met1.dup()
+                .appendchild(nod1.dup())
+                .appendchild(TextNode("AB"))
+                .appendchild(nod2.dup())
+            )
             root.appendchild(TextNode("6789"))
             self.dotest(root, False)
 
@@ -3095,10 +3209,12 @@ class TextPortionEnumerationTest(unittest.TestCase):
 
             root = TreeNode()
             root.appendchild(TextNode("12"))
-            root.appendchild(met1.dup()
-                    .appendchild(nod1.dup())
-                    .appendchild(TextNode("AB"))
-                    .appendchild(nod2.dup()))
+            root.appendchild(
+                met1.dup()
+                .appendchild(nod1.dup())
+                .appendchild(TextNode("AB"))
+                .appendchild(nod2.dup())
+            )
             root.appendchild(TextNode("6789"))
             self.dotest(root, False)
 
@@ -3125,10 +3241,12 @@ class TextPortionEnumerationTest(unittest.TestCase):
 
             root = TreeNode()
             root.appendchild(TextNode("12"))
-            root.appendchild(met1.dup()
-                    .appendchild(nod1.dup())
-                    .appendchild(TextNode("AB"))
-                    .appendchild(nod2.dup()))
+            root.appendchild(
+                met1.dup()
+                .appendchild(nod1.dup())
+                .appendchild(TextNode("AB"))
+                .appendchild(nod2.dup())
+            )
             root.appendchild(TextNode("6789"))
             self.dotest(root, False)
 
@@ -3150,10 +3268,12 @@ class TextPortionEnumerationTest(unittest.TestCase):
 
             root = TreeNode()
             root.appendchild(TextNode("12"))
-            root.appendchild(met1.dup()
-                    .appendchild(nod1.dup())
-                    .appendchild(TextNode("AB"))
-                    .appendchild(nod2.dup()))
+            root.appendchild(
+                met1.dup()
+                .appendchild(nod1.dup())
+                .appendchild(TextNode("AB"))
+                .appendchild(nod2.dup())
+            )
             root.appendchild(TextNode("6789"))
             self.dotest(root, False)
 
@@ -3179,10 +3299,12 @@ class TextPortionEnumerationTest(unittest.TestCase):
 
             root = TreeNode()
             root.appendchild(TextNode("12"))
-            root.appendchild(met1.dup()
-                    .appendchild(nod1.dup())
-                    .appendchild(TextNode("AB"))
-                    .appendchild(nod2.dup()))
+            root.appendchild(
+                met1.dup()
+                .appendchild(nod1.dup())
+                .appendchild(TextNode("AB"))
+                .appendchild(nod2.dup())
+            )
             root.appendchild(TextNode("6789"))
             self.dotest(root, False)
 
@@ -3219,8 +3341,9 @@ class TextPortionEnumerationTest(unittest.TestCase):
 
         xGraph.addStatement(xMetaField, xOdfPrefix, xPrefix)
         xGraph.addStatement(xMetaField, xOdfSuffix, xSuffix)
-        self.assertEqual("fooabcbar", xMetaField.getPresentation(False),
-                         "getPresentation(): wrong")
+        self.assertEqual(
+            "fooabcbar", xMetaField.getPresentation(False), "getPresentation(): wrong"
+        )
         inserter.insertrange(Range(0, 0, text))
 
     def test_metafield_xpropertyset(self):
@@ -3239,10 +3362,14 @@ class TextPortionEnumerationTest(unittest.TestCase):
 
         self.assertIsNotNone(xMetaField, "PropertySet: not supported?")
         xPropertySetInfo = xMetaField.getPropertySetInfo()
-        self.assertTrue(xPropertySetInfo.hasPropertyByName("NumberFormat"),
-                        'hasPropertyByName("NumberFormat"):')
-        self.assertTrue(xPropertySetInfo.hasPropertyByName("IsFixedLanguage"),
-                        'hasPropertyByName("IsFixedLanguage"):')
+        self.assertTrue(
+            xPropertySetInfo.hasPropertyByName("NumberFormat"),
+            'hasPropertyByName("NumberFormat"):',
+        )
+        self.assertTrue(
+            xPropertySetInfo.hasPropertyByName("IsFixedLanguage"),
+            'hasPropertyByName("IsFixedLanguage"):',
+        )
 
         def_ = xMetaField.NumberFormat
         print("NumberFormat: default is {}".format(def_))
@@ -3282,7 +3409,7 @@ class TextPortionEnumerationTest(unittest.TestCase):
             if xComp:
                 self.checkloadmeta(xComp)
                 with TemporaryDirectory() as tempdir:
-                    if os.altsep: # we need URL so replace "\" with "/"
+                    if os.altsep:  # we need URL so replace "\" with "/"
                         tempdir = tempdir.replace(os.sep, os.altsep)
                     file = tempdir + "/" + filename
                     self.dostore(xComp, file)
@@ -3300,48 +3427,65 @@ class TextPortionEnumerationTest(unittest.TestCase):
         xText = xTextDoc.getText()
         print("Checking meta(-field)s in loaded test document...")
         root = TreeNode()
-        root.appendchild(RubyNode("ruby1")
-                .appendchild(TextNode("1")))
-        root.appendchild(MetaNode(self.mkid_("id1"))
-                .appendchild(TextNode("2")))
-        root.appendchild(MetaFieldNode(self.mkid_("id2"))
-                .appendchild(TextNode("3")))
-        root.appendchild(RubyNode("ruby2")
-                .appendchild(MetaNode(self.mkid_("id3"))
-                    .appendchild(TextNode("4"))))
-        root.appendchild(RubyNode("ruby3")
-                .appendchild(MetaFieldNode(self.mkid_("id4"))
-                    .appendchild(TextNode("5"))))
-        root.appendchild(MetaNode(self.mkid_("id5"))
-                .appendchild(RubyNode("ruby4")
-                    .appendchild(TextNode("6"))))
-        root.appendchild(MetaFieldNode(self.mkid_("id6"))
-                .appendchild(RubyNode("ruby5")
-                    .appendchild(TextNode("7"))))
-        root.appendchild(MetaNode(self.mkid_("id7"))
-                .appendchild(MetaNode(self.mkid_("id8"))
-                    .appendchild(TextNode("8"))))
-        root.appendchild(MetaNode(self.mkid_("id9"))
-                .appendchild(MetaFieldNode(self.mkid_("id10"))
-                    .appendchild(TextNode("9"))))
-        root.appendchild(MetaFieldNode(self.mkid_("id11"))
-                .appendchild(MetaNode(self.mkid_("id12"))
-                    .appendchild(TextNode("10"))))
-        root.appendchild(MetaFieldNode(self.mkid_("id13"))
-                .appendchild(MetaFieldNode(self.mkid_("id14"))
-                    .appendchild(TextNode("11"))))
-        root.appendchild(MetaNode(self.mkid_("id15"))
-                .appendchild(RubyNode("ruby6")
-                    .appendchild(MetaFieldNode(self.mkid_("id16"))
-                        .appendchild(TextNode("12")))))
+        root.appendchild(RubyNode("ruby1").appendchild(TextNode("1")))
+        root.appendchild(MetaNode(self.mkid_("id1")).appendchild(TextNode("2")))
+        root.appendchild(MetaFieldNode(self.mkid_("id2")).appendchild(TextNode("3")))
+        root.appendchild(
+            RubyNode("ruby2").appendchild(
+                MetaNode(self.mkid_("id3")).appendchild(TextNode("4"))
+            )
+        )
+        root.appendchild(
+            RubyNode("ruby3").appendchild(
+                MetaFieldNode(self.mkid_("id4")).appendchild(TextNode("5"))
+            )
+        )
+        root.appendchild(
+            MetaNode(self.mkid_("id5")).appendchild(
+                RubyNode("ruby4").appendchild(TextNode("6"))
+            )
+        )
+        root.appendchild(
+            MetaFieldNode(self.mkid_("id6")).appendchild(
+                RubyNode("ruby5").appendchild(TextNode("7"))
+            )
+        )
+        root.appendchild(
+            MetaNode(self.mkid_("id7")).appendchild(
+                MetaNode(self.mkid_("id8")).appendchild(TextNode("8"))
+            )
+        )
+        root.appendchild(
+            MetaNode(self.mkid_("id9")).appendchild(
+                MetaFieldNode(self.mkid_("id10")).appendchild(TextNode("9"))
+            )
+        )
+        root.appendchild(
+            MetaFieldNode(self.mkid_("id11")).appendchild(
+                MetaNode(self.mkid_("id12")).appendchild(TextNode("10"))
+            )
+        )
+        root.appendchild(
+            MetaFieldNode(self.mkid_("id13")).appendchild(
+                MetaFieldNode(self.mkid_("id14")).appendchild(TextNode("11"))
+            )
+        )
+        root.appendchild(
+            MetaNode(self.mkid_("id15")).appendchild(
+                RubyNode("ruby6").appendchild(
+                    MetaFieldNode(self.mkid_("id16")).appendchild(TextNode("12"))
+                )
+            )
+        )
 
         class MetaNode_(MetaNode):
             def __init__(self, id):
                 super().__init__(id)
+
             def __eq__(self, other):
                 return isinstance(other, MetaNode)
-        root.appendchild(MetaNode_(self.mkid_(""))
-                .appendchild(TextNode("13")))
+
+        root.appendchild(MetaNode_(self.mkid_("")).appendchild(TextNode("13")))
         root.appendchild(TextNode(" X X "))
         self._dotest(xTextDoc, root, False)
         print("...done")
@@ -3354,7 +3498,7 @@ class TextPortionEnumerationTest(unittest.TestCase):
             if xComp:
                 self.checkloadxmlid(xComp)
                 with TemporaryDirectory() as tempdir:
-                    if os.altsep: # we need URL so replace "\" with "/"
+                    if os.altsep:  # we need URL so replace "\" with "/"
                         tempdir = tempdir.replace(os.sep, os.altsep)
                     file = tempdir + "/" + filename
                     self.dostore(xComp, file)
@@ -3375,95 +3519,165 @@ class TextPortionEnumerationTest(unittest.TestCase):
         print("Checking bookmarks in loaded test document...")
         xBookmarks = xTextDoc.getBookmarks()
         xMark1 = xBookmarks["mk1"]
-        self.assertTrue(self.eq(xMark1.MetadataReference,
-                                StringPair("content.xml", "id90")), "mark1")
+        self.assertTrue(
+            self.eq(xMark1.MetadataReference, StringPair("content.xml", "id90")),
+            "mark1",
+        )
         xMark2 = xBookmarks["mk2"]
         result = xRepo.getStatementRDFa(xMark2)
-        self.assertTrue(len(result.First) == 1 and
-                        result.First[0].Subject.StringValue == "uri:foo" and
-                        result.First[0].Predicate.StringValue == "uri:bar" and
-                        result.First[0].Object.Value == "a fooish bar",
-                        "mark2")
+        self.assertTrue(
+            len(result.First) == 1
+            and result.First[0].Subject.StringValue == "uri:foo"
+            and result.First[0].Predicate.StringValue == "uri:bar"
+            and result.First[0].Object.Value == "a fooish bar",
+            "mark2",
+        )
         xMark3 = xBookmarks["mk3"]
-        self.assertTrue(self.eq(xMark3.MetadataReference,
-                        StringPair("content.xml", "id91")), "mark3")
+        self.assertTrue(
+            self.eq(xMark3.MetadataReference, StringPair("content.xml", "id91")),
+            "mark3",
+        )
         print("...done")
 
         print("Checking sections in loaded test document...")
         xSections = xTextDoc.getTextSections()
         xSection1 = xSections["Section 1"]
-        self.assertTrue(self.eq(xSection1.MetadataReference,
-                        StringPair("content.xml", "idSection1")), "idsection1")
+        self.assertTrue(
+            self.eq(
+                xSection1.MetadataReference, StringPair("content.xml", "idSection1")
+            ),
+            "idsection1",
+        )
         xSection2 = xSections["Section 2"]
-        self.assertTrue(self.eq(xSection2.MetadataReference,
-                        StringPair("content.xml", "idSection2")),"idSection2")
+        self.assertTrue(
+            self.eq(
+                xSection2.MetadataReference, StringPair("content.xml", "idSection2")
+            ),
+            "idSection2",
+        )
         xSection3 = xSections["Table of Contents1_Head"]
-        self.assertTrue(self.eq(xSection3.MetadataReference,
-                        StringPair("content.xml", "idTOCTitle")), "idTOCTitle")
+        self.assertTrue(
+            self.eq(
+                xSection3.MetadataReference, StringPair("content.xml", "idTOCTitle")
+            ),
+            "idTOCTitle",
+        )
         xSection4 = xSections["Alphabetical Index1_Head"]
-        self.assertTrue(self.eq(xSection4.MetadataReference,
-                        StringPair("content.xml", "idAITitle")), "idAITitle")
+        self.assertTrue(
+            self.eq(
+                xSection4.MetadataReference, StringPair("content.xml", "idAITitle")
+            ),
+            "idAITitle",
+        )
         xSection5 = xSections["Illustration Index1_Head"]
-        self.assertTrue(self.eq(xSection5.MetadataReference,
-                        StringPair("content.xml", "idIITitle")), "idIITitle")
+        self.assertTrue(
+            self.eq(
+                xSection5.MetadataReference, StringPair("content.xml", "idIITitle")
+            ),
+            "idIITitle",
+        )
         xSection6 = xSections["Index of Tables1_Head"]
-        self.assertTrue(self.eq(xSection6.MetadataReference,
-                        StringPair("content.xml", "idIOTTitle")), "idIOTTitle")
+        self.assertTrue(
+            self.eq(
+                xSection6.MetadataReference, StringPair("content.xml", "idIOTTitle")
+            ),
+            "idIOTTitle",
+        )
         xSection7 = xSections["User-Defined1_Head"]
-        self.assertTrue(self.eq(xSection7.MetadataReference,
-                        StringPair("content.xml", "idUDTitle")), "idUDTitle")
+        self.assertTrue(
+            self.eq(
+                xSection7.MetadataReference, StringPair("content.xml", "idUDTitle")
+            ),
+            "idUDTitle",
+        )
         xSection8 = xSections["Table of Objects1_Head"]
-        self.assertTrue(self.eq(xSection8.MetadataReference,
-                        StringPair("content.xml", "idTOOTitle")), "idTOOTitle")
+        self.assertTrue(
+            self.eq(
+                xSection8.MetadataReference, StringPair("content.xml", "idTOOTitle")
+            ),
+            "idTOOTitle",
+        )
         xSection9 = xSections["Bibliography1_Head"]
-        self.assertTrue(self.eq(xSection9.MetadataReference,
-                        StringPair("content.xml", "idBibTitle")), "idBibTitle")
+        self.assertTrue(
+            self.eq(
+                xSection9.MetadataReference, StringPair("content.xml", "idBibTitle")
+            ),
+            "idBibTitle",
+        )
         print("...done")
 
         print("Checking indexes in loaded test document...")
         xIndexes = xTextDoc.getDocumentIndexes()
         xIndex1 = xIndexes["Table of Contents1"]
-        self.assertTrue(self.eq(xIndex1.MetadataReference,
-                        StringPair("content.xml", "idTOC")), "idTOC")
+        self.assertTrue(
+            self.eq(xIndex1.MetadataReference, StringPair("content.xml", "idTOC")),
+            "idTOC",
+        )
         xIndex1s = xSections["Table of Contents1"]
-        self.assertTrue(self.eq(xIndex1s.MetadataReference,
-                        StringPair("content.xml", "idTOC")), "idTOC")
+        self.assertTrue(
+            self.eq(xIndex1s.MetadataReference, StringPair("content.xml", "idTOC")),
+            "idTOC",
+        )
         xIndex2 = xIndexes["Alphabetical Index1"]
-        self.assertTrue(self.eq(xIndex2.MetadataReference,
-                        StringPair("content.xml", "idAI")), "idAI")
+        self.assertTrue(
+            self.eq(xIndex2.MetadataReference, StringPair("content.xml", "idAI")),
+            "idAI",
+        )
         xIndex2s = xSections["Alphabetical Index1"]
-        self.assertTrue(self.eq(xIndex2s.MetadataReference,
-                        StringPair("content.xml", "idAI")), "idAI")
+        self.assertTrue(
+            self.eq(xIndex2s.MetadataReference, StringPair("content.xml", "idAI")),
+            "idAI",
+        )
         xIndex3 = xIndexes["Illustration Index1"]
-        self.assertTrue(self.eq(xIndex3.MetadataReference,
-                        StringPair("content.xml", "idII")), "idII")
+        self.assertTrue(
+            self.eq(xIndex3.MetadataReference, StringPair("content.xml", "idII")),
+            "idII",
+        )
         xIndex3s = xSections["Table of Figures1"]
-        self.assertTrue(self.eq(xIndex3s.MetadataReference,
-                        StringPair("content.xml", "idII")), "idII")
+        self.assertTrue(
+            self.eq(xIndex3s.MetadataReference, StringPair("content.xml", "idII")),
+            "idII",
+        )
         xIndex4 = xIndexes["Index of Tables1"]
-        self.assertTrue(self.eq(xIndex4.MetadataReference,
-                        StringPair("content.xml", "idIOT")), "idIOT")
+        self.assertTrue(
+            self.eq(xIndex4.MetadataReference, StringPair("content.xml", "idIOT")),
+            "idIOT",
+        )
         xIndex4s = xSections["Index of Tables1"]
-        self.assertTrue(self.eq(xIndex4s.MetadataReference,
-                        StringPair("content.xml", "idIOT")), "idIOT")
+        self.assertTrue(
+            self.eq(xIndex4s.MetadataReference, StringPair("content.xml", "idIOT")),
+            "idIOT",
+        )
         xIndex5 = xIndexes["User-Defined1"]
-        self.assertTrue(self.eq(xIndex5.MetadataReference,
-                        StringPair("content.xml", "idUD")), "idUD")
+        self.assertTrue(
+            self.eq(xIndex5.MetadataReference, StringPair("content.xml", "idUD")),
+            "idUD",
+        )
         xIndex5s = xSections["User-Defined1"]
-        self.assertTrue(self.eq(xIndex5s.MetadataReference,
-                        StringPair("content.xml", "idUD")), "idUD")
+        self.assertTrue(
+            self.eq(xIndex5s.MetadataReference, StringPair("content.xml", "idUD")),
+            "idUD",
+        )
         xIndex6 = xIndexes["Table of Objects1"]
-        self.assertTrue(self.eq(xIndex6.MetadataReference,
-                        StringPair("content.xml", "idTOO")), "idTOO")
+        self.assertTrue(
+            self.eq(xIndex6.MetadataReference, StringPair("content.xml", "idTOO")),
+            "idTOO",
+        )
         xIndex6s = xSections["Table of Objects1"]
-        self.assertTrue(self.eq(xIndex6s.MetadataReference,
-                        StringPair("content.xml", "idTOO")), "idTOO")
+        self.assertTrue(
+            self.eq(xIndex6s.MetadataReference, StringPair("content.xml", "idTOO")),
+            "idTOO",
+        )
         xIndex7 = xIndexes["Bibliography1"]
-        self.assertTrue(self.eq(xIndex7.MetadataReference,
-                        StringPair("content.xml", "idBib")), "idBib")
+        self.assertTrue(
+            self.eq(xIndex7.MetadataReference, StringPair("content.xml", "idBib")),
+            "idBib",
+        )
         xIndex7s = xSections["Bibliography1"]
-        self.assertTrue(self.eq(xIndex7s.MetadataReference,
-                        StringPair("content.xml", "idBib")), "idBib")
+        self.assertTrue(
+            self.eq(xIndex7s.MetadataReference, StringPair("content.xml", "idBib")),
+            "idBib",
+        )
         print("...done")
 
     def dotest(self, intree, insert=True):
@@ -3477,15 +3691,16 @@ class TextPortionEnumerationTest(unittest.TestCase):
         xText = xDoc.getText()
         xTextEnum = xText.createEnumeration()
         ## skip to right paragraph
-        xTextEnum.nextElement(); # skip first -- always empty!
-        xElement = xTextEnum.nextElement() # second contains test case
+        xTextEnum.nextElement()
+        # skip first -- always empty!
+        xElement = xTextEnum.nextElement()  # second contains test case
         xEnum = xElement.createEnumeration()
         outtree = EnumConverter().convert(xEnum)
         self._dumptree(outtree, "O: ")
         FuzzyTester().dotest(intree, outtree)
 
     def _dumptree(self, tree, prefix):
-        print('{}{}'.format(prefix, str(tree)))
+        print("{}{}".format(prefix, str(tree)))
         children = tree.createenumeration()
         for node in children:
             self._dumptree(node, "{}  ".format(prefix))
@@ -3502,9 +3717,8 @@ class TextPortionEnumerationTest(unittest.TestCase):
         return StringPair("content.xml", id)
 
     def eq(self, left, right):
-        return (left.First == right.First and
-                left.Second == right.Second)
+        return left.First == right.First and left.Second == right.Second
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

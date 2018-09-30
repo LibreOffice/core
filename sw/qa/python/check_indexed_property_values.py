@@ -1,4 +1,4 @@
-'''
+"""
   This file is part of the LibreOffice project.
 
   This Source Code Form is subject to the terms of the Mozilla Public
@@ -14,7 +14,7 @@
     License, Version 2.0 (the "License"); you may not use this file
     except in compliance with the License. You may obtain a copy of
     the License at http://www.apache.org/licenses/LICENSE-2.0 .
-'''
+"""
 
 import unittest
 import unohelper
@@ -28,7 +28,6 @@ from com.sun.star.lang import IndexOutOfBoundsException
 
 
 class CheckIndexedPropertyValues(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls._uno = UnoInProcess()
@@ -41,8 +40,9 @@ class CheckIndexedPropertyValues(unittest.TestCase):
 
     def test_checkIndexedPropertyValues(self):
         xServiceManager = self.xContext.ServiceManager
-        xCont = xServiceManager.createInstanceWithContext('com.sun.star.document.IndexedPropertyValues',
-                                                          self.xContext)
+        xCont = xServiceManager.createInstanceWithContext(
+            "com.sun.star.document.IndexedPropertyValues", self.xContext
+        )
 
         p1 = PropertyValue(Name="Jupp", Value="GoodGuy")
         prop1 = uno.Any("[]com.sun.star.beans.PropertyValue", (p1,))
@@ -67,10 +67,15 @@ class CheckIndexedPropertyValues(unittest.TestCase):
         self.assertEqual(p2.Value, ret[0].Value)
 
         xCont.removeByIndex(0)
-        self.assertTrue(not(xCont.hasElements()) and len(xCont) == 0, "Could not remove PropertyValue")
+        self.assertTrue(
+            not (xCont.hasElements()) and len(xCont) == 0,
+            "Could not remove PropertyValue",
+        )
         uno.invoke(xCont, "insertByIndex", (0, prop1))
         uno.invoke(xCont, "insertByIndex", (1, prop2))
-        self.assertTrue(xCont.hasElements() and len(xCont) == 2, "Did not insert PropertyValue")
+        self.assertTrue(
+            xCont.hasElements() and len(xCont) == 2, "Did not insert PropertyValue"
+        )
 
         uno.invoke(xCont, "insertByIndex", (1, prop2))
         uno.invoke(xCont, "insertByIndex", (1, prop3))

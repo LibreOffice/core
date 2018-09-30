@@ -1,4 +1,4 @@
-'''
+"""
   This file is part of the LibreOffice project.
 
   This Source Code Form is subject to the terms of the Mozilla Public
@@ -14,15 +14,15 @@
     License, Version 2.0 (the "License"); you may not use this file
     except in compliance with the License. You may obtain a copy of
     the License at http://www.apache.org/licenses/LICENSE-2.0 .
-'''
+"""
 
 import unittest
 from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.text.ControlCharacter import PARAGRAPH_BREAK
 from com.sun.star.awt.FontUnderline import SINGLE
 
-class CheckChangeColor(unittest.TestCase):
 
+class CheckChangeColor(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls._uno = UnoInProcess()
@@ -78,7 +78,9 @@ class CheckChangeColor(unittest.TestCase):
 
         self.assertEqual(xDoc.getText().createTextCursor().CharColor, self.RED)
         self.assertEqual(xDoc.getText().createTextCursor().CharBackColor, self.BLUE)
-        self.assertEqual(xDoc.getText().createTextCursor().CharUnderlineColor, self.GREEN)
+        self.assertEqual(
+            xDoc.getText().createTextCursor().CharUnderlineColor, self.GREEN
+        )
 
         xDoc.dispose()
 
@@ -96,5 +98,6 @@ class CheckChangeColor(unittest.TestCase):
 
         xDoc.dispose()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

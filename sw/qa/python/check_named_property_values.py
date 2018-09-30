@@ -1,4 +1,4 @@
-'''
+"""
   This file is part of the LibreOffice project.
 
   This Source Code Form is subject to the terms of the Mozilla Public
@@ -14,7 +14,7 @@
     License, Version 2.0 (the "License"); you may not use this file
     except in compliance with the License. You may obtain a copy of
     the License at http://www.apache.org/licenses/LICENSE-2.0 .
-'''
+"""
 
 import unittest
 import unohelper
@@ -30,7 +30,6 @@ from com.sun.star.container import NoSuchElementException
 
 
 class CheckNamedPropertyValues(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls._uno = UnoInProcess()
@@ -44,8 +43,9 @@ class CheckNamedPropertyValues(unittest.TestCase):
     def test_checkNamedPropertyValues(self):
 
         xServiceManager = self.xContext.ServiceManager
-        xCont = xServiceManager.createInstanceWithContext('com.sun.star.document.NamedPropertyValues',
-                                                          self.xContext)
+        xCont = xServiceManager.createInstanceWithContext(
+            "com.sun.star.document.NamedPropertyValues", self.xContext
+        )
 
         p1 = PropertyValue(Name="Jupp", Value="GoodGuy")
         prop1 = uno.Any("[]com.sun.star.beans.PropertyValue", (p1,))
@@ -54,7 +54,7 @@ class CheckNamedPropertyValues(unittest.TestCase):
         prop2 = uno.Any("[]com.sun.star.beans.PropertyValue", (p2,))
 
         t = xCont.getElementType()
-        self.assertFalse(xCont.hasElements(),  "Initial container is not empty")
+        self.assertFalse(xCont.hasElements(), "Initial container is not empty")
 
         uno.invoke(xCont, "insertByName", ("prop1", prop1))
         ret = xCont["prop1"]

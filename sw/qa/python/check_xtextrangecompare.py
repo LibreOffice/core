@@ -13,7 +13,6 @@ from com.sun.star.lang import IllegalArgumentException
 
 
 class XTextRangeCompare(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls._uno = UnoInProcess()
@@ -163,5 +162,5 @@ class XTextRangeCompare(unittest.TestCase):
         xDoc.close(True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

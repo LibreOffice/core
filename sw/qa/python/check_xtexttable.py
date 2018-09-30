@@ -13,7 +13,6 @@ import random
 
 
 class XTextTable(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls._uno = UnoInProcess()
@@ -70,9 +69,9 @@ class XTextTable(unittest.TestCase):
             self.assertIsNotNone(xCell)
 
         # wrong name
-        xCell = xTable.getCellByName('WRONG CELL NAME')
+        xCell = xTable.getCellByName("WRONG CELL NAME")
         self.assertIsNone(xCell)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

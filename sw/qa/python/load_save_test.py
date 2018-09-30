@@ -1,4 +1,4 @@
-'''
+"""
   This file is part of the LibreOffice project.
 
   This Source Code Form is subject to the terms of the Mozilla Public
@@ -14,7 +14,7 @@
     License, Version 2.0 (the "License"); you may not use this file
     except in compliance with the License. You may obtain a copy of
     the License at http://www.apache.org/licenses/LICENSE-2.0 .
-'''
+"""
 
 import unittest
 import unohelper
@@ -35,9 +35,10 @@ from urllib.parse import quote
 
 
 class LoadSaveTest(unittest.TestCase):
-
     def mkPropertyValue(self, name, value):
-        return uno.createUnoStruct("com.sun.star.beans.PropertyValue", name, 0, value, 0)
+        return uno.createUnoStruct(
+            "com.sun.star.beans.PropertyValue", name, 0, value, 0
+        )
 
     @classmethod
     def setUpClass(cls):
@@ -66,24 +67,50 @@ class LoadSaveTest(unittest.TestCase):
     def tstDoc(self):
         try:
             props = [("ReadOnly", True)]
-            load_props = tuple([self.mkPropertyValue(name, value) for (name, value) in props])
+            load_props = tuple(
+                [self.mkPropertyValue(name, value) for (name, value) in props]
+            )
 
             m_xMSF = self.xContext.ServiceManager
-            desktop = m_xMSF.createInstanceWithContext('com.sun.star.frame.Desktop', self.xContext)
+            desktop = m_xMSF.createInstanceWithContext(
+                "com.sun.star.frame.Desktop", self.xContext
+            )
 
             filepath = os.path.abspath("FIXME")
             if os.name == "nt":
-                source_file = ''.join(("file:///", filepath, "/", quote(self.file_name)))
+                source_file = "".join(
+                    ("file:///", filepath, "/", quote(self.file_name))
+                )
             else:
-                source_file = ''.join(("file://", quote(filepath), "/", quote(self.file_name)))
+                source_file = "".join(
+                    ("file://", quote(filepath), "/", quote(self.file_name))
+                )
 
-            self.xDoc = desktop.loadComponentFromURL(source_file, "_blank", 0, load_props)
-            assert(self.xDoc)
+            self.xDoc = desktop.loadComponentFromURL(
+                source_file, "_blank", 0, load_props
+            )
+            assert self.xDoc
 
             if os.name == "nt":
-                target_file = ''.join(("file:///", self.m_TargetDir, quote(self.m_SourceDir), "/", quote(self.file_name)))
+                target_file = "".join(
+                    (
+                        "file:///",
+                        self.m_TargetDir,
+                        quote(self.m_SourceDir),
+                        "/",
+                        quote(self.file_name),
+                    )
+                )
             else:
-                target_file = ''.join(("file://", quote(self.m_TargetDir), quote(self.m_SourceDir), "/", quote(self.fileName)))
+                target_file = "".join(
+                    (
+                        "file://",
+                        quote(self.m_TargetDir),
+                        quote(self.m_SourceDir),
+                        "/",
+                        quote(self.fileName),
+                    )
+                )
 
             p1 = PropertyValue()
             PropValue = uno.Any("[]com.sun.star.beans.PropertyValue", (p1,))
@@ -95,8 +122,8 @@ class LoadSaveTest(unittest.TestCase):
     def getDirAndFile(self, dir):
 
         root2 = os.mkdir(dir)
-        root_path = ''.join((dir, "/", dir, ".odt"))
-        root = open(root_path, 'a')
+        root_path = "".join((dir, "/", dir, ".odt"))
+        root = open(root_path, "a")
 
         self.getDirAndFileNames(dir)
         return self.dirs, self.files
@@ -115,7 +142,7 @@ class LoadSaveTest(unittest.TestCase):
                 self.getDirAndFileNames(subfile_name)
 
         if os.path.isfile(fdName):
-            self.files.append(fdName.split('/')[-1])
+            self.files.append(fdName.split("/")[-1])
 
     def makeDirs(self, target):
         if not os.path.exists(target):
@@ -127,6 +154,6 @@ class LoadSaveTest(unittest.TestCase):
                 f = os.mkdir(target + dir)
                 self.assertTrue(os.path.exists(target + dir))
 
-        target_path = ''.join((target, dir, "/", self.m_SourceDir, ".odt"))
-        root = open(target_path, 'a')
+        target_path = "".join((target, dir, "/", self.m_SourceDir, ".odt"))
+        root = open(target_path, "a")
         filepath = os.path.abspath(target_path)

@@ -15,7 +15,6 @@ import uno
 
 
 class TestXScriptProvider(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls._uno = UnoInProcess()
@@ -31,7 +30,8 @@ class TestXScriptProvider(unittest.TestCase):
         xScriptProvider = xMasterScriptProviderFactory.createScriptProvider("")
         xScript = xScriptProvider.getScript(
             "vnd.sun.star.script:Tools.Misc.CreateNewDocument?language=Basic&"
-            "location=application")
+            "location=application"
+        )
         self.assertIsNotNone(xScript, "xScript was not loaded")
 
     def test_getScriptDocument(self):
@@ -41,7 +41,8 @@ class TestXScriptProvider(unittest.TestCase):
         xScriptProvider = xMasterScriptProviderFactory.createScriptProvider(xDoc)
         xScript = xScriptProvider.getScript(
             "vnd.sun.star.script:Standard.Module1.Main?language=Basic&"
-            "location=document")
+            "location=document"
+        )
         self.assertIsNotNone(xScript, "xScript was not loaded")
         xDoc.close(True)
 
@@ -59,16 +60,18 @@ class TestXScriptProvider(unittest.TestCase):
         with self.assertRaises(ScriptFrameworkErrorException):
             xScript = xScriptProvider.getScript(
                 "vnd.sun.star.script:NotExisting.NotExisting.NotExisting?"
-                "language=Basic&location=document")
+                "language=Basic&location=document"
+            )
 
     def createMasterScriptProviderFactory(self):
         xServiceManager = uno.getComponentContext().ServiceManager
         return xServiceManager.createInstanceWithContext(
             "com.sun.star.script.provider.MasterScriptProviderFactory",
-            uno.getComponentContext())
+            uno.getComponentContext(),
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -14,7 +14,6 @@ from com.sun.star.text.ControlCharacter import PARAGRAPH_BREAK
 
 
 class TestVarFields(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls._uno = UnoInProcess()
@@ -37,12 +36,16 @@ class TestVarFields(unittest.TestCase):
         # 0. create text field
         xField = xDoc.createInstance("com.sun.star.text.textfield.SetExpression")
         # 1. fill it with properties
-        self.__class__._uno.setProperties(xField,
-                                          {"Content": "0",
-                                           "IsVisible": True,
-                                           "Hint": "trying to reproduce fdo#55814",
-                                           "SubType": 0,  # VAR
-                                           "Value": 0.0})
+        self.__class__._uno.setProperties(
+            xField,
+            {
+                "Content": "0",
+                "IsVisible": True,
+                "Hint": "trying to reproduce fdo#55814",
+                "SubType": 0,  # VAR
+                "Value": 0.0,
+            },
+        )
         # 2. create master field
         xMaster = xDoc.createInstance("com.sun.star.text.fieldmaster.SetExpression")
         # 3. set name of the master field to "foo"
@@ -62,16 +65,12 @@ class TestVarFields(unittest.TestCase):
         xTextSection = xDoc.createInstance("com.sun.star.text.TextSection")
         # 10. fill the properties of section
         self.__class__._uno.checkProperties(
-            xTextSection,
-            {"Condition": "foo EQ 1",
-             "IsVisible": False,
-             },
-            self
-            )
+            xTextSection, {"Condition": "foo EQ 1", "IsVisible": False}, self
+        )
         # 11. Insert some text to be content on the section
-        xBodyText.insertString(xCursor,
-                               "The quick brown fox jumps over the lazy dog",
-                               True)
+        xBodyText.insertString(
+            xCursor, "The quick brown fox jumps over the lazy dog", True
+        )
         # 12. insert section
         xBodyText.insertTextContent(xCursor, xTextSection, True)
         # 12.1 insert new paragraph. Note: that's here the difference
@@ -94,12 +93,8 @@ class TestVarFields(unittest.TestCase):
         self.assertEqual(0.0, read_content)
         # 16. change the value of the field from 0 to 1 and check
         self.__class__._uno.checkProperties(
-            xField,
-            {"Value": 1.0,
-             "Content": "1"
-             },
-            self
-            )
+            xField, {"Value": 1.0, "Content": "1"}, self
+        )
         # 17. refresh document to update the fields again
         xTextFields.refresh()
         # 18. store document
@@ -115,5 +110,6 @@ class TestVarFields(unittest.TestCase):
         # reality:
         self.assertEqual("0", read_content)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

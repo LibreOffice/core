@@ -13,7 +13,6 @@ from org.libreoffice.unotest import UnoInProcess
 
 # @unittest.skip("that seems to work")
 class TestSetExpression(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls._uno = UnoInProcess()
@@ -27,21 +26,23 @@ class TestSetExpression(unittest.TestCase):
         xDoc = self.__class__._uno.openEmptyWriterDoc()
         self.__class__._uno.checkProperties(
             xDoc.createInstance("com.sun.star.text.textfield.SetExpression"),
-            {"NumberingType": 0,
-             "Content": "foo",
-             "CurrentPresentation": "bar",
-             "NumberFormat": 0,
-             "NumberingType": 0,
-             "IsShowFormula": False,
-             "IsInput": False,
-             "IsVisible": True,
-             "SequenceValue": 0,
-             "SubType": 0,
-             "Value": 1.0,
-             "IsFixedLanguage": False
-             },
-            self
-            )
+            {
+                "NumberingType": 0,
+                "Content": "foo",
+                "CurrentPresentation": "bar",
+                "NumberFormat": 0,
+                "NumberingType": 0,
+                "IsShowFormula": False,
+                "IsInput": False,
+                "IsVisible": True,
+                "SequenceValue": 0,
+                "SubType": 0,
+                "Value": 1.0,
+                "IsFixedLanguage": False,
+            },
+            self,
+        )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

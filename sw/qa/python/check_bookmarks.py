@@ -28,13 +28,13 @@ from com.sun.star.text.ControlCharacter import PARAGRAPH_BREAK
 
 class CheckBookmarks(unittest.TestCase):
     expectedHashes = {
-        'nSetupHash': 0x8f88ee1a13a55d6024f58f470723b5174dfa21bb,
-        'nInsertRandomHash': 0x5f27e87e16d2cb3ff0bcb24237aa30da3b84cf24,
-        'nDeleteRandomHash': 0x1bdaa7773cbfc73a4dc0bb3e0f801b98f648e8e7,
-        'nLinebreakHash': 0x3f30a35f195efcfe0373a3e439de05087a2ad37c,
-        'nOdfReloadHash': 0x3f30a35f195efcfe0373a3e439de05087a2ad37c,
-        'nMsWordReloadHash': 0x3f30a35f195efcfe0373a3e439de05087a2ad37c,
-        }
+        "nSetupHash": 0x8F88EE1A13A55D6024F58F470723B5174DFA21BB,
+        "nInsertRandomHash": 0x5F27E87E16D2CB3FF0BCB24237AA30DA3B84CF24,
+        "nDeleteRandomHash": 0x1BDAA7773CBFC73A4DC0BB3E0F801B98F648E8E7,
+        "nLinebreakHash": 0x3F30A35F195EFCFE0373A3E439DE05087A2AD37C,
+        "nOdfReloadHash": 0x3F30A35F195EFCFE0373A3E439DE05087A2AD37C,
+        "nMsWordReloadHash": 0x3F30A35F195EFCFE0373A3E439DE05087A2AD37C,
+    }
 
     @classmethod
     def setUpClass(cls):
@@ -42,7 +42,9 @@ class CheckBookmarks(unittest.TestCase):
         cls._uno.setUp()
         cls._xDoc = cls._uno.openEmptyWriterDoc()
         smgr = cls._uno.xContext.ServiceManager
-        cls._desktop = smgr.createInstanceWithContext("com.sun.star.frame.Desktop", cls._uno.xContext)
+        cls._desktop = smgr.createInstanceWithContext(
+            "com.sun.star.frame.Desktop", cls._uno.xContext
+        )
 
     @classmethod
     def tearDownClass(cls):
@@ -57,33 +59,39 @@ class CheckBookmarks(unittest.TestCase):
         self.xText = self.xDoc.getText()
         ## setting and testing bookmarks
         self.setupBookmarks()
-        self.assertEqual(self.expectedHashes['nSetupHash'],
-                         self.getBookmarksHash(self.xDoc))
+        self.assertEqual(
+            self.expectedHashes["nSetupHash"], self.getBookmarksHash(self.xDoc)
+        )
         ## modifying bookmarks and testing again
         self.insertRandomParts(200177)
-        self.assertEqual(self.expectedHashes['nInsertRandomHash'],
-                         self.getBookmarksHash(self.xDoc))
+        self.assertEqual(
+            self.expectedHashes["nInsertRandomHash"], self.getBookmarksHash(self.xDoc)
+        )
         ## modifying bookmarks and testing again
         self.deleteRandomParts(4711)
-        self.assertEqual(self.expectedHashes['nDeleteRandomHash'],
-                         self.getBookmarksHash(self.xDoc))
+        self.assertEqual(
+            self.expectedHashes["nDeleteRandomHash"], self.getBookmarksHash(self.xDoc)
+        )
         ## adding line breaks and testing again
         self.insertLinebreaks(7)
-        self.assertEqual(self.expectedHashes['nLinebreakHash'],
-                         self.getBookmarksHash(self.xDoc))
+        self.assertEqual(
+            self.expectedHashes["nLinebreakHash"], self.getBookmarksHash(self.xDoc)
+        )
         ## reloading document and testing again
         with TemporaryDirectory() as tempdir:
             xOdfReloadedDoc = self.reloadFrom(tempdir, "writer8", "odt")
-            self.assertEqual(self.expectedHashes['nOdfReloadHash'],
-                             self.getBookmarksHash(xOdfReloadedDoc))
+            self.assertEqual(
+                self.expectedHashes["nOdfReloadHash"],
+                self.getBookmarksHash(xOdfReloadedDoc),
+            )
             xOdfReloadedDoc.close(True)
         ## reloading document as MS Word 97 doc and testing again
-            ## MsWord Hash is unstable over different systems
-            # xMsWordReloadedDoc = self.reloadFrom(tempdir, "MS Word 97", "doc")
-            # self.assertEqual(self.expectedHashes['nMsWordReloadHash'],
-            #                  self.getBookmarksHash(xMsWordReloadedDoc))
-            # xMsWordReloadedDoc.close(True)
-        print('tests ok')
+        ## MsWord Hash is unstable over different systems
+        # xMsWordReloadedDoc = self.reloadFrom(tempdir, "MS Word 97", "doc")
+        # self.assertEqual(self.expectedHashes['nMsWordReloadHash'],
+        #                  self.getBookmarksHash(xMsWordReloadedDoc))
+        # xMsWordReloadedDoc.close(True)
+        print("tests ok")
 
     def setupBookmarks(self):
         xCursor = self.xText.createTextCursor()
@@ -102,8 +110,9 @@ class CheckBookmarks(unittest.TestCase):
         hash = sha1()
         xBookmarks = doc.getBookmarks()
         for xBookmark in xBookmarks:
-            s = '{}:{};'.format(xBookmark.Name,
-                        xBookmark.getAnchor().getString().replace("\r\n", "\n"))
+            s = "{}:{};".format(
+                xBookmark.Name, xBookmark.getAnchor().getString().replace("\r\n", "\n")
+            )
             hash.update(str.encode(s))
         return int(hash.hexdigest(), 16)
 
@@ -139,5 +148,5 @@ class CheckBookmarks(unittest.TestCase):
         return desktop.loadComponentFromURL(sFileUrl, "_default", 0, load_props)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

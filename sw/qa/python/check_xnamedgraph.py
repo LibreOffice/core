@@ -12,7 +12,6 @@ from org.libreoffice.unotest import UnoInProcess
 
 
 class XNamedGraph(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls._uno = UnoInProcess()
@@ -164,5 +163,5 @@ class XNamedGraph(unittest.TestCase):
         xGraph.removeStatements(xDMA, xPredicate, xObject)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

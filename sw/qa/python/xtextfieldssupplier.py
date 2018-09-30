@@ -15,7 +15,6 @@ import uno
 
 
 class TestXTextFieldsSupplier(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls._uno = UnoInProcess()
@@ -38,13 +37,18 @@ class TestXTextFieldsSupplier(unittest.TestCase):
         fieldTypesList = [
             "com.sun.star.text.textfield.PageNumber",
             "com.sun.star.text.textfield.Annotation",
-            "com.sun.star.text.textfield.docinfo.CreateDateTime"
+            "com.sun.star.text.textfield.docinfo.CreateDateTime",
         ]
         xFieldEnum = xTextFields.createEnumeration()
         for fieldType, xField in zip(fieldTypesList, xFieldEnum):
-            self.assertTrue(xField.supportsService(fieldType),
-                            "field " + xField.getPresentation(True) +
-                            " does not support " + fieldType + " service!")
+            self.assertTrue(
+                xField.supportsService(fieldType),
+                "field "
+                + xField.getPresentation(True)
+                + " does not support "
+                + fieldType
+                + " service!",
+            )
 
         xDoc.close(True)
 
@@ -67,15 +71,21 @@ class TestXTextFieldsSupplier(unittest.TestCase):
             "com.sun.star.text.fieldmaster.SetExpression.Figure",
         ]
         for masterName in masterNames:
-            self.assertTrue(xFieldMasters.hasByName(masterName),
-                            "TextFieldMaster has no element " + masterName)
-            self.assertIsNotNone(xFieldMasters.getByName(masterName),
-                                 "can't get " + masterName + " from TextFieldMaster")
+            self.assertTrue(
+                xFieldMasters.hasByName(masterName),
+                "TextFieldMaster has no element " + masterName,
+            )
+            self.assertIsNotNone(
+                xFieldMasters.getByName(masterName),
+                "can't get " + masterName + " from TextFieldMaster",
+            )
 
         # Ensure that invalid elements are not accessible
         invalidMasterName = "com.sun.star.text.fieldmaster.SetExpression.NoSuchMaster"
-        self.assertFalse(xFieldMasters.hasByName(invalidMasterName),
-                         "TextFieldMaster has element " + invalidMasterName)
+        self.assertFalse(
+            xFieldMasters.hasByName(invalidMasterName),
+            "TextFieldMaster has element " + invalidMasterName,
+        )
 
         with self.assertRaises(NoSuchElementException):
             xFieldMasters.getByName(invalidMasterName)
@@ -83,7 +93,7 @@ class TestXTextFieldsSupplier(unittest.TestCase):
         xDoc.close(True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
