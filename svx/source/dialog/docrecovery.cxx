@@ -646,52 +646,39 @@ void SAL_CALL WeldPluginProgress::reset()
         m_pProgressBar->set_percentage(0);
 }
 
-SaveDialog::SaveDialog(vcl::Window* pParent, RecoveryCore* pCore)
-    : Dialog(pParent, "DocRecoverySaveDialog",
-        "svx/ui/docrecoverysavedialog.ui")
+SaveDialog::SaveDialog(weld::Window* pParent, RecoveryCore* pCore)
+    : GenericDialogController(pParent, "svx/ui/docrecoverysavedialog.ui", "DocRecoverySaveDialog")
     , m_pCore(pCore)
+    , m_xFileListLB(m_xBuilder->weld_tree_view("filelist"))
+    , m_xOkBtn(m_xBuilder->weld_button("ok"))
 {
-    get(m_pFileListLB, "filelist");
-    m_pFileListLB->set_height_request(m_pFileListLB->GetTextHeight() * 10);
-    get(m_pOkBtn, "ok");
+    m_xFileListLB->set_size_request(-1, m_xFileListLB->get_height_rows(10));
 
     // Prepare the office for the following crash save step.
     // E.g. hide all open windows so the user can't influence our
     // operation .-)
     m_pCore->doEmergencySavePrepare();
 
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-    m_pOkBtn->SetClickHdl( LINK( this, SaveDialog, OKButtonHdl ) );
-    m_pFileListLB->SetControlBackground( rStyleSettings.GetDialogColor() );
+    m_xOkBtn->connect_clicked(LINK(this, SaveDialog, OKButtonHdl));
 
     // fill listbox with current open documents
-    m_pFileListLB->Clear();
 
     TURLList&                rURLs = m_pCore->getURLListAccess();
 
     for (const TURLInfo& rInfo : rURLs)
     {
-        m_pFileListLB->InsertEntry( rInfo.DisplayName, rInfo.StandardImage );
+        m_xFileListLB->append("", rInfo.DisplayName, rInfo.StandardImageId);
     }
 }
 
 SaveDialog::~SaveDialog()
 {
-    disposeOnce();
 }
 
-void SaveDialog::dispose()
-{
-    m_pFileListLB.clear();
-    m_pOkBtn.clear();
-    Dialog::dispose();
-}
-
-IMPL_LINK_NOARG(SaveDialog, OKButtonHdl, Button*, void)
+IMPL_LINK_NOARG(SaveDialog, OKButtonHdl, weld::Button&, void)
 {
     // start crash-save with progress
-    std::unique_ptr<SaveProgressDialog> xProgress(new SaveProgressDialog(GetFrameWeld(), m_pCore));
+    std::unique_ptr<SaveProgressDialog> xProgress(new SaveProgressDialog(m_xDialog.get(), m_pCore));
     short nResult = xProgress->run();
     xProgress.reset();
 
@@ -700,7 +687,7 @@ IMPL_LINK_NOARG(SaveDialog, OKButtonHdl, Button*, void)
     if (nResult == DLG_RET_OK)
         nResult = DLG_RET_OK_AUTOLUNCH;
 
-    EndDialog(nResult);
+    m_xDialog->response(nResult);
 }
 
 SaveProgressDialog::SaveProgressDialog(weld::Window* pParent, RecoveryCore* pCore)
