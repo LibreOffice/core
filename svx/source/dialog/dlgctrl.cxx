@@ -915,17 +915,6 @@ HatchingLB::HatchingLB( vcl::Window* pParent, WinBits nWinStyle)
     SetEdgeBlending(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void makeHatchingLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
-    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    VclPtrInstance<HatchingLB> pListBox(pParent, nWinStyle);
-    pListBox->EnableAutoSize(true);
-    rRet = pListBox;
-}
-
 // Fills the listbox (provisional) with strings
 
 GradientLB::GradientLB( vcl::Window* pParent, WinBits aWB)
@@ -934,34 +923,12 @@ GradientLB::GradientLB( vcl::Window* pParent, WinBits aWB)
     SetEdgeBlending(true);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void makeGradientLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
-    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    VclPtrInstance<GradientLB> pListBox(pParent, nWinStyle);
-    pListBox->EnableAutoSize(true);
-    rRet = pListBox;
-}
-
 // BitmapLB Constructor
 
 BitmapLB::BitmapLB( vcl::Window* pParent, WinBits aWB)
 :   ListBox( pParent, aWB )
 {
     SetEdgeBlending(true);
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeBitmapLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    WinBits nWinStyle = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
-    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinStyle |= WB_BORDER;
-    VclPtrInstance<BitmapLB> pListBox(pParent, nWinStyle);
-    pListBox->EnableAutoSize(true);
-    rRet = pListBox;
 }
 
 void FillTypeLB::Fill()
@@ -984,20 +951,6 @@ LineLB::LineLB(vcl::Window* pParent, WinBits aWB)
     mbAddStandardFields(true)
 {
     // No EdgeBlending for LineStyle/Dash SetEdgeBlending(true);
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeLineLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    bool bDropdown = BuilderUtils::extractDropdown(rMap);
-    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_TABSTOP;
-    if (bDropdown)
-        nWinBits |= WB_DROPDOWN;
-    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinBits |= WB_BORDER;
-    VclPtrInstance<LineLB> pListBox(pParent, nWinBits);
-    pListBox->EnableAutoSize(true);
-    rRet = pListBox;
 }
 
 void LineLB::setAddStandardFields(bool bNew)
@@ -1172,106 +1125,6 @@ void SvxLineLB::Modify(const XDashEntry& rEntry, sal_Int32 nPos, const BitmapEx&
     else
     {
         m_xControl->insert_text(nPos, rEntry.GetName());
-    }
-}
-
-// Fills the listbox (provisional) with strings
-
-LineEndLB::LineEndLB( vcl::Window* pParent, WinBits aWB )
-    : ListBox( pParent, aWB )
-{
-    // No EdgeBlending for LineEnds SetEdgeBlending(true);
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT void makeLineEndLB(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap & rMap)
-{
-    bool bDropdown = BuilderUtils::extractDropdown(rMap);
-    WinBits nWinBits = WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE|WB_TABSTOP;
-    if (bDropdown)
-        nWinBits |= WB_DROPDOWN;
-    OUString sBorder = BuilderUtils::extractCustomProperty(rMap);
-    if (!sBorder.isEmpty())
-        nWinBits |= WB_BORDER;
-    VclPtrInstance<LineEndLB> pListBox(pParent, nWinBits);
-    pListBox->EnableAutoSize(true);
-    rRet = pListBox;
-}
-
-void LineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
-{
-    if( !pList.is() )
-        return;
-
-    long nCount = pList->Count();
-    ScopedVclPtrInstance< VirtualDevice > pVD;
-    SetUpdateMode( false );
-
-    for( long i = 0; i < nCount; i++ )
-    {
-        const XLineEndEntry* pEntry = pList->GetLineEnd(i);
-        const BitmapEx aBitmap = pList->GetUiBitmap( i );
-        if( !aBitmap.IsEmpty() )
-        {
-            Size aBmpSize( aBitmap.GetSizePixel() );
-            pVD->SetOutputSizePixel( aBmpSize, false );
-            pVD->DrawBitmapEx( Point(), aBitmap );
-            InsertEntry( pEntry->GetName(),
-                Image(pVD->GetBitmapEx(
-                    bStart ? Point() : Point(aBmpSize.Width() / 2, 0),
-                    Size(aBmpSize.Width() / 2, aBmpSize.Height()))));
-        }
-        else
-            InsertEntry( pEntry->GetName() );
-    }
-
-    AdaptDropDownLineCountToMaximum();
-    SetUpdateMode( true );
-}
-
-void LineEndLB::Append( const XLineEndEntry& rEntry, const BitmapEx& rBitmap )
-{
-    if(!rBitmap.IsEmpty())
-    {
-        ScopedVclPtrInstance< VirtualDevice > pVD;
-        const Size aBmpSize(rBitmap.GetSizePixel());
-
-        pVD->SetOutputSizePixel(aBmpSize, false);
-        pVD->DrawBitmapEx(Point(), rBitmap);
-        InsertEntry(
-            rEntry.GetName(),
-            Image(pVD->GetBitmapEx(
-                Point(),
-                Size(aBmpSize.Width() / 2, aBmpSize.Height()))));
-    }
-    else
-    {
-        InsertEntry(rEntry.GetName());
-    }
-
-    AdaptDropDownLineCountToMaximum();
-}
-
-void LineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const BitmapEx& rBitmap )
-{
-    RemoveEntry( nPos );
-
-    if(!rBitmap.IsEmpty())
-    {
-        ScopedVclPtrInstance< VirtualDevice > pVD;
-        const Size aBmpSize(rBitmap.GetSizePixel());
-
-        pVD->SetOutputSizePixel(aBmpSize, false);
-        pVD->DrawBitmapEx(Point(), rBitmap);
-        InsertEntry(
-            rEntry.GetName(),
-            Image(pVD->GetBitmapEx(
-                    Point(),
-                    Size(aBmpSize.Width() / 2, aBmpSize.Height()))),
-            nPos);
-    }
-    else
-    {
-        InsertEntry(rEntry.GetName(), nPos);
     }
 }
 
@@ -1481,145 +1334,6 @@ void SvxPreviewBase::DataChanged(const DataChangedEvent& rDCEvt)
     {
         Control::DataChanged(rDCEvt);
     }
-}
-
-void SvxXLinePreview::Resize()
-{
-    SvxPreviewBase::Resize();
-
-    const Size aOutputSize(GetOutputSize());
-    const sal_Int32 nDistance(500);
-    const sal_Int32 nAvailableLength(aOutputSize.Width() - (4 * nDistance));
-
-    // create DrawObectA
-    const sal_Int32 aYPosA(aOutputSize.Height() / 2);
-    const basegfx::B2DPoint aPointA1( nDistance,  aYPosA);
-    const basegfx::B2DPoint aPointA2( aPointA1.getX() + ((nAvailableLength * 14) / 20), aYPosA );
-    basegfx::B2DPolygon aPolygonA;
-    aPolygonA.append(aPointA1);
-    aPolygonA.append(aPointA2);
-    mpLineObjA->SetPathPoly(basegfx::B2DPolyPolygon(aPolygonA));
-
-    // create DrawObectB
-    const sal_Int32 aYPosB1((aOutputSize.Height() * 3) / 4);
-    const sal_Int32 aYPosB2((aOutputSize.Height() * 1) / 4);
-    const basegfx::B2DPoint aPointB1( aPointA2.getX() + nDistance,  aYPosB1);
-    const basegfx::B2DPoint aPointB2( aPointB1.getX() + ((nAvailableLength * 2) / 20), aYPosB2 );
-    const basegfx::B2DPoint aPointB3( aPointB2.getX() + ((nAvailableLength * 2) / 20), aYPosB1 );
-    basegfx::B2DPolygon aPolygonB;
-    aPolygonB.append(aPointB1);
-    aPolygonB.append(aPointB2);
-    aPolygonB.append(aPointB3);
-    mpLineObjB->SetPathPoly(basegfx::B2DPolyPolygon(aPolygonB));
-
-    // create DrawObectC
-    basegfx::B2DPolygon aPolygonC;
-    const basegfx::B2DPoint aPointC1( aPointB3.getX() + nDistance,  aYPosB1);
-    const basegfx::B2DPoint aPointC2( aPointC1.getX() + ((nAvailableLength * 1) / 20), aYPosB2 );
-    const basegfx::B2DPoint aPointC3( aPointC2.getX() + ((nAvailableLength * 1) / 20), aYPosB1 );
-    aPolygonC.append(aPointC1);
-    aPolygonC.append(aPointC2);
-    aPolygonC.append(aPointC3);
-    mpLineObjC->SetPathPoly(basegfx::B2DPolyPolygon(aPolygonC));
-}
-
-SvxXLinePreview::SvxXLinePreview(vcl::Window* pParent)
-    : SvxPreviewBase(pParent)
-    , mpLineObjA(nullptr)
-    , mpLineObjB(nullptr)
-    , mpLineObjC(nullptr)
-    , mpGraphic(nullptr)
-    , mbWithSymbol(false)
-{
-    InitSettings( true, true );
-
-    mpLineObjA = new SdrPathObj(getModel(), OBJ_LINE);
-    mpLineObjB = new SdrPathObj(getModel(), OBJ_PLIN);
-    mpLineObjC = new SdrPathObj(getModel(), OBJ_PLIN);
-}
-
-VCL_BUILDER_FACTORY(SvxXLinePreview)
-
-Size SvxXLinePreview::GetOptimalSize() const
-{
-    return getPreviewStripSize(*this);
-}
-
-SvxXLinePreview::~SvxXLinePreview()
-{
-    disposeOnce();
-}
-
-void SvxXLinePreview::dispose()
-{
-    SdrObject *pFoo = mpLineObjA;
-    SdrObject::Free( pFoo );
-    pFoo = mpLineObjB;
-    SdrObject::Free( pFoo );
-    pFoo = mpLineObjC;
-    SdrObject::Free( pFoo );
-    SvxPreviewBase::dispose();
-}
-
-
-void SvxXLinePreview::SetSymbol(Graphic* p,const Size& s)
-{
-    mpGraphic = p;
-    maSymbolSize = s;
-}
-
-
-void SvxXLinePreview::ResizeSymbol(const Size& s)
-{
-    if ( s != maSymbolSize )
-    {
-        maSymbolSize = s;
-        Invalidate();
-    }
-}
-
-
-void SvxXLinePreview::SetLineAttributes(const SfxItemSet& rItemSet)
-{
-    // Set ItemSet at objects
-    mpLineObjA->SetMergedItemSet(rItemSet);
-
-    // At line joints, do not use arrows
-    SfxItemSet aTempSet(rItemSet);
-    aTempSet.ClearItem(XATTR_LINESTART);
-    aTempSet.ClearItem(XATTR_LINEEND);
-
-    mpLineObjB->SetMergedItemSet(aTempSet);
-    mpLineObjC->SetMergedItemSet(aTempSet);
-}
-
-
-void SvxXLinePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
-{
-    LocalPrePaint(rRenderContext);
-
-    // paint objects to buffer device
-    sdr::contact::SdrObjectVector aObjectVector;
-    aObjectVector.push_back(mpLineObjA);
-    aObjectVector.push_back(mpLineObjB);
-    aObjectVector.push_back(mpLineObjC);
-
-    sdr::contact::ObjectContactOfObjListPainter aPainter(getBufferDevice(), aObjectVector, nullptr);
-    sdr::contact::DisplayInfo aDisplayInfo;
-
-    // do processing
-    aPainter.ProcessDisplay(aDisplayInfo);
-
-    if ( mbWithSymbol && mpGraphic )
-    {
-        const Size aOutputSize(GetOutputSize());
-        Point aPos = Point( aOutputSize.Width() / 3, aOutputSize.Height() / 2 );
-        aPos.AdjustX( -(maSymbolSize.Width() / 2) );
-        aPos.AdjustY( -(maSymbolSize.Height() / 2) );
-        mpGraphic->Draw(&getBufferDevice(), aPos, maSymbolSize);
-    }
-
-    LocalPostPaint(rRenderContext);
 }
 
 void XLinePreview::Resize()
