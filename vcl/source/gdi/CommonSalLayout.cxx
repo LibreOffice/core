@@ -592,10 +592,10 @@ void GenericSalLayout::GetCharWidths(DeviceCoordinate* pCharWidths) const
 
     for (auto const& aGlyphItem : m_GlyphItems)
     {
-        const int nIndex = aGlyphItem.mnCharPos - mnMinCharPos;
+        const int nIndex = aGlyphItem.m_nCharPos - mnMinCharPos;
         if (nIndex >= nCharCount)
             continue;
-        pCharWidths[nIndex] += aGlyphItem.mnNewWidth;
+        pCharWidths[nIndex] += aGlyphItem.m_nNewWidth;
     }
 }
 
@@ -663,24 +663,24 @@ void GenericSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
     {
         // Accumulate the width difference for all characters corresponding to
         // this glyph.
-        int nCharPos = m_GlyphItems[i].mnCharPos - mnMinCharPos;
+        int nCharPos = m_GlyphItems[i].m_nCharPos - mnMinCharPos;
         DeviceCoordinate nDiff = 0;
-        for (int j = 0; j < m_GlyphItems[i].mnCharCount; j++)
+        for (int j = 0; j < m_GlyphItems[i].m_nCharCount; j++)
             nDiff += pNewCharWidths[nCharPos + j] - pOldCharWidths[nCharPos + j];
 
         if (!m_GlyphItems[i].IsRTLGlyph())
         {
             // Adjust the width and position of the first (leftmost) glyph in
             // the cluster.
-            m_GlyphItems[i].mnNewWidth += nDiff;
-            m_GlyphItems[i].maLinearPos.AdjustX(nDelta);
+            m_GlyphItems[i].m_nNewWidth += nDiff;
+            m_GlyphItems[i].m_aLinearPos.AdjustX(nDelta);
 
             // Adjust the position of the rest of the glyphs in the cluster.
             while (++i < m_GlyphItems.size())
             {
                 if (!m_GlyphItems[i].IsInCluster())
                     break;
-                m_GlyphItems[i].maLinearPos.AdjustX(nDelta);
+                m_GlyphItems[i].m_aLinearPos.AdjustX(nDelta);
             }
         }
         else if (m_GlyphItems[i].IsInCluster())
@@ -694,8 +694,8 @@ void GenericSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
             // Adjust the width and position of the first (rightmost) glyph in
             // the cluster.
             // For RTL, we put all the adjustment to the left of the glyph.
-            m_GlyphItems[i].mnNewWidth += nDiff;
-            m_GlyphItems[i].maLinearPos.AdjustX(nDelta + nDiff);
+            m_GlyphItems[i].m_nNewWidth += nDiff;
+            m_GlyphItems[i].m_aLinearPos.AdjustX(nDelta + nDiff);
 
             // Adjust the X position of all glyphs in the cluster.
             size_t j = i;
@@ -704,7 +704,7 @@ void GenericSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
                 --j;
                 if (!m_GlyphItems[j].IsInCluster())
                     break;
-                m_GlyphItems[j].maLinearPos.AdjustX(nDelta + nDiff);
+                m_GlyphItems[j].m_aLinearPos.AdjustX(nDelta + nDiff);
             }
 
             // If this glyph is Kashida-justifiable, then mark this as a
@@ -712,7 +712,7 @@ void GenericSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
             // last glyph in the cluster not the first as this would be the
             // base glyph.
             if (bKashidaJustify && m_GlyphItems[i].AllowKashida() &&
-                nDiff > m_GlyphItems[i].mnCharCount) // Rounding errors, 1 pixel per character!
+                nDiff > m_GlyphItems[i].m_nCharCount) // Rounding errors, 1 pixel per character!
             {
                 pKashidas[i] = nDiff;
                 // Move any non-spacing marks attached to this cluster as well.
@@ -721,7 +721,7 @@ void GenericSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
                 {
                     if (!m_GlyphItems[j].IsDiacritic())
                         break;
-                    m_GlyphItems[j--].maLinearPos.AdjustX(nDiff);
+                    m_GlyphItems[j--].m_aLinearPos.AdjustX(nDiff);
                 }
             }
             i++;
@@ -762,8 +762,8 @@ void GenericSalLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
                     nOverlap = nExcess / (nCopies - 1);
             }
 
-            Point aPos(pGlyphIter->maLinearPos.X() - nTotalWidth, 0);
-            int nCharPos = pGlyphIter->mnCharPos;
+            Point aPos(pGlyphIter->m_aLinearPos.X() - nTotalWidth, 0);
+            int nCharPos = pGlyphIter->m_nCharPos;
             int const nFlags = GlyphItem::IS_IN_CLUSTER | GlyphItem::IS_RTL_GLYPH;
             while (nCopies--)
             {
@@ -782,7 +782,7 @@ bool GenericSalLayout::IsKashidaPosValid(int nCharPos) const
 {
     for (auto pIter = m_GlyphItems.begin(); pIter != m_GlyphItems.end(); ++pIter)
     {
-        if (pIter->mnCharPos == nCharPos)
+        if (pIter->m_nCharPos == nCharPos)
         {
             // The position is the first glyph, this would happen if we
             // changed the text styling in the middle of a word. Since we don’t
@@ -793,7 +793,7 @@ bool GenericSalLayout::IsKashidaPosValid(int nCharPos) const
 
             // If the character is not supported by this layout, return false
             // so that fallback layouts would be checked for it.
-            if (pIter->maGlyphId == 0)
+            if (pIter->m_aGlyphId == 0)
                 break;
 
             // Search backwards for previous glyph belonging to a different
@@ -801,12 +801,12 @@ bool GenericSalLayout::IsKashidaPosValid(int nCharPos) const
             // RTL glyphs, which will be in visual order.
             for (auto pPrev = pIter - 1; pPrev != m_GlyphItems.begin(); --pPrev)
             {
-                if (pPrev->mnCharPos != nCharPos)
+                if (pPrev->m_nCharPos != nCharPos)
                 {
                     // Check if the found glyph belongs to the next character,
                     // otherwise the current glyph will be a ligature which is
                     // invalid kashida position.
-                    if (pPrev->mnCharPos == (nCharPos + 1))
+                    if (pPrev->m_nCharPos == (nCharPos + 1))
                         return true;
                     break;
                 }

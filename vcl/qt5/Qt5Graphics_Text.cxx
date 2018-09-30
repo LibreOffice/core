@@ -154,7 +154,7 @@ void Qt5Graphics::GetGlyphWidths(const PhysicalFontFace* /*pPFF*/, bool /*bVerti
 
 bool Qt5Graphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
-    const int nLevel = rGlyph.mnFallbackLevel;
+    const int nLevel = rGlyph.m_nFallbackLevel;
     if (nLevel >= MAX_FALLBACK)
         return false;
 
@@ -163,7 +163,7 @@ bool Qt5Graphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& r
         return false;
 
     QRawFont aRawFont(QRawFont::fromFont(*pFont));
-    rRect = toRectangle(aRawFont.boundingRect(rGlyph.maGlyphId).toAlignedRect());
+    rRect = toRectangle(aRawFont.boundingRect(rGlyph.m_aGlyphId).toAlignedRect());
     return true;
 }
 
@@ -209,7 +209,7 @@ void Qt5Graphics::DrawTextLayout(const GenericSalLayout& rLayout)
     int nStart = 0;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
-        glyphIndexes.push_back(pGlyph->maGlyphId);
+        glyphIndexes.push_back(pGlyph->m_aGlyphId);
         positions.push_back(QPointF(aPos.X(), aPos.Y()));
     }
 

@@ -185,7 +185,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
         cairo_glyph_t aGlyph;
-        aGlyph.index = pGlyph->maGlyphId;
+        aGlyph.index = pGlyph->m_aGlyphId;
         aGlyph.x = aPos.X();
         aGlyph.y = aPos.Y();
         cairo_glyphs.push_back(aGlyph);
@@ -444,7 +444,7 @@ void CairoTextRender::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nF
 
 bool CairoTextRender::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
-    const int nLevel = rGlyph.mnFallbackLevel;
+    const int nLevel = rGlyph.m_nFallbackLevel;
     if( nLevel >= MAX_FALLBACK )
         return false;
 
@@ -475,7 +475,7 @@ bool CairoTextRender::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangl
 bool CairoTextRender::GetGlyphOutline(const GlyphItem& rGlyph,
     basegfx::B2DPolyPolygon& rPolyPoly )
 {
-    const int nLevel = rGlyph.mnFallbackLevel;
+    const int nLevel = rGlyph.m_nFallbackLevel;
     if( nLevel >= MAX_FALLBACK )
         return false;
 
