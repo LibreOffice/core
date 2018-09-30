@@ -23,6 +23,7 @@
 #include <unx/glyphcache.hxx>
 #include <PhysicalFontFace.hxx>
 #include <fontinstance.hxx>
+#include <vcl/glyphitem.hxx>
 
 // FreetypeFontFile has the responsibility that a font file is only mapped once.
 // (#86621#) the old directly ft-managed solution caused it to be mapped
@@ -116,6 +117,14 @@ public:
     void SetFreetypeFont(FreetypeFont* p);
     FreetypeFont* GetFreetypeFont() const { return mpFreetypeFont; }
 };
+
+inline FreetypeFont* getFreetypeFontFromGlyph(const GlyphItem& rGlyph)
+{
+    assert(rGlyph.m_pFontInstance);
+    if (!rGlyph.m_pFontInstance)
+        return nullptr;
+    return static_cast<FreetypeFontInstance*>(rGlyph.m_pFontInstance)->GetFreetypeFont();
+}
 
 #endif // INCLUDED_VCL_GENERIC_GLYPHS_GCACH_FTYP_HXX
 

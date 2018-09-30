@@ -372,24 +372,12 @@ bool AquaSalGraphics::AddTempDevFont( PhysicalFontCollection*,
 
 bool AquaSalGraphics::GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPolygon& rPolyPoly)
 {
-    const int nFallbackLevel = rGlyph.m_nFallbackLevel;
-    if (nFallbackLevel < MAX_FALLBACK && mpTextStyle[nFallbackLevel])
-    {
-        const bool bRC = mpTextStyle[nFallbackLevel]->GetGlyphOutline(rGlyph, rPolyPoly);
-        return bRC;
-    }
-    return false;
+    return static_cast<CoreTextStyle*>(rGlyph.m_pFontInstance)->GetGlyphOutline(rGlyph, rPolyPoly);
 }
 
 bool AquaSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect )
 {
-    const int nFallbackLevel = rGlyph.m_nFallbackLevel;
-    if (nFallbackLevel < MAX_FALLBACK && mpTextStyle[nFallbackLevel])
-    {
-        const bool bRC = mpTextStyle[nFallbackLevel]->GetGlyphBoundRect(rGlyph, rRect);
-        return bRC;
-    }
-    return false;
+    return static_cast<CoreTextStyle*>(rGlyph.m_pFontInstance)->GetGlyphBoundRect(rGlyph, rRect);
 }
 
 void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)

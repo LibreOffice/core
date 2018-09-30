@@ -130,8 +130,9 @@ public:
     sal_Int32       GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const override;
     DeviceCoordinate FillDXArray(DeviceCoordinate* pDXArray) const override;
     void            GetCaretPositions(int nArraySize, long* pCaretXArray) const override;
-    bool            GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int&,
-                                 const PhysicalFontFace** pFallbackFont = nullptr) const override;
+    bool            GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
+                                 const PhysicalFontFace** pFallbackFont = nullptr,
+                                 int* const pFallbackLevel = nullptr) const override;
     bool            GetOutline(SalGraphics&, basegfx::B2DPolyPolygonVector&) const override;
     bool            IsKashidaPosValid(int nCharPos) const override;
 
@@ -182,8 +183,9 @@ public:
     // used by display layers
     LogicalFontInstance& GetFont() const { return *mpFont; }
 
-    bool            GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int&,
-                                 const PhysicalFontFace** pFallbackFont = nullptr) const final override;
+    bool            GetNextGlyph(const GlyphItem** pGlyph, Point& rPos, int& nStart,
+                                 const PhysicalFontFace** pFallbackFont = nullptr,
+                                 int* const pFallbackLevel = nullptr) const override;
 
 private:
     // for glyph+font+script fallback
