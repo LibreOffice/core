@@ -141,7 +141,7 @@ void GenPoEntry::writeToFile(std::ofstream& rOFStream) const
         rOFStream << "#, c-format" << std::endl;
     if ( !m_sMsgCtxt.isEmpty() )
         rOFStream << "msgctxt "
-                  << lcl_GenMsgString(m_sReference+"\n"+m_sMsgCtxt)
+                  << lcl_GenMsgString(m_sMsgCtxt)
                   << std::endl;
     rOFStream << "msgid "
               << lcl_GenMsgString(m_sMsgId) << std::endl;
@@ -200,10 +200,7 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
         }
         else if (sLine.startsWith("\"") && pLastMsg)
         {
-            if (pLastMsg != &m_sMsgCtxt || sLine != "\"" + m_sReference + "\\n\"")
-            {
-                *pLastMsg += lcl_GenNormString(sLine);
-            }
+            *pLastMsg += lcl_GenNormString(sLine);
         }
         else
             break;
@@ -234,9 +231,11 @@ PoEntry::PoEntry(
         throw WRONGHELPTEXT;
 
     m_pGenPo.reset( new GenPoEntry() );
-    m_pGenPo->setReference(rSourceFile.copy(rSourceFile.lastIndexOf('/')+1));
+    OString sReference = rSourceFile.copy(rSourceFile.lastIndexOf('/')+1);
+    m_pGenPo->setReference(sReference);
 
     OString sMsgCtxt =
+        sReference + "\n" +
         rGroupId + "\n" +
         (rLocalId.isEmpty() ? OString() : rLocalId + "\n") +
         rResType;
