@@ -641,10 +641,12 @@ bool ImplicitBoolConversion::TraverseBinNE(BinaryOperator * expr) {
 bool ImplicitBoolConversion::TraverseBinAssign(BinaryOperator * expr) {
     nested.push(std::vector<ImplicitCastExpr const *>());
     bool bRet = RecursiveASTVisitor::TraverseBinAssign(expr);
-    // /usr/include/gtk-2.0/gtk/gtktogglebutton.h: struct _GtkToggleButton:
+    // gtk-2.0/gtk/gtktogglebutton.h: struct _GtkToggleButton:
     //  guint GSEAL (active) : 1;
     // even though <http://www.gtk.org/api/2.6/gtk/GtkToggleButton.html>:
     //  "active"               gboolean              : Read / Write
+    // qt5/QtGui/qaccessible.h: struct State:
+    //  quint64 disabled : 1;
     bool bExt = false;
     MemberExpr const * me = dyn_cast<MemberExpr>(expr->getLHS());
     if (me != nullptr) {
@@ -653,7 +655,11 @@ bool ImplicitBoolConversion::TraverseBinAssign(BinaryOperator * expr) {
             && fd->getBitWidthValue(compiler.getASTContext()) == 1)
         {
             TypedefType const * t = fd->getType()->getAs<TypedefType>();
-            bExt = t != nullptr && t->getDecl()->getNameAsString() == "guint";
+            if (t != nullptr)
+            {
+                std::string sTypeName = t->getDecl()->getNameAsString();
+                bExt = (sTypeName == "guint" || sTypeName == "quint64");
+            }
         }
     }
     assert(!nested.empty());
