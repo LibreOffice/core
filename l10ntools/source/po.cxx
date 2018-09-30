@@ -354,6 +354,14 @@ bool PoEntry::isFuzzy() const
     return m_pGenPo->isFuzzy();
 }
 
+// Get message context
+const OString& PoEntry::getMsgCtxt() const
+{
+    assert( m_bIsInitialized );
+    return m_pGenPo->getMsgCtxt();
+
+}
+
 // Get translation string in merge format
 OString const & PoEntry::getMsgId() const
 {
