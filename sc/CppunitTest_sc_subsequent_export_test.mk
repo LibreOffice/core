@@ -123,4 +123,6 @@ $(eval $(call gb_CppunitTest_use_packages,sc_subsequent_export_test, \
     oox_generated \
 ))
 
+$(eval $(call gb_CppunitTest_use_more_fonts,subsequent_export_test))
+
 # vim: set noet sw=4 ts=4:
