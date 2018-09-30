@@ -562,11 +562,9 @@ QAccessibleInterface* Qt5AccessibleWidget::customFactory(const QString& classnam
     }
     if (classname == QLatin1String("Qt5XAccessible") && object)
     {
-        if (dynamic_cast<Qt5XAccessible*>(object) != nullptr)
-        {
-            Qt5XAccessible* pVclWindow = static_cast<Qt5XAccessible*>(object);
-            return new Qt5AccessibleWidget(pVclWindow->m_xAccessible);
-        }
+        Qt5XAccessible* pXAccessible = dynamic_cast<Qt5XAccessible*>(object);
+        if (pXAccessible)
+            return new Qt5AccessibleWidget(pXAccessible->m_xAccessible);
     }
 
     return nullptr;
