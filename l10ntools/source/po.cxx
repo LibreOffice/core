@@ -34,6 +34,7 @@ private:
     OString    m_sMsgId;
     OString    m_sMsgStr;
     bool       m_bFuzzy;
+    bool       m_bCFormat;
     bool       m_bNull;
 
 public:
@@ -118,6 +119,7 @@ GenPoEntry::GenPoEntry()
     , m_sMsgId( OString() )
     , m_sMsgStr( OString() )
     , m_bFuzzy( false )
+    , m_bCFormat( false )
     , m_bNull( false )
 {
 }
@@ -134,6 +136,8 @@ void GenPoEntry::writeToFile(std::ofstream& rOFStream) const
         rOFStream << "#: " << m_sReference << std::endl;
     if ( m_bFuzzy )
         rOFStream << "#, fuzzy" << std::endl;
+    if ( m_bCFormat )
+        rOFStream << "#, c-format" << std::endl;
     if ( !m_sMsgCtxt.isEmpty() )
         rOFStream << "msgctxt "
                   << lcl_GenMsgString(m_sReference+"\n"+m_sMsgCtxt)
@@ -173,6 +177,10 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
         else if (sLine.startsWith("#, fuzzy"))
         {
             m_bFuzzy = true;
+        }
+        else if (sLine.startsWith("#, c-format"))
+        {
+            m_bCFormat = true;
         }
         else if (sLine.startsWith("msgctxt "))
         {
