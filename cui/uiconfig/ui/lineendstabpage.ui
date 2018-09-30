@@ -91,7 +91,7 @@
                     <child>
                       <object class="GtkEntry" id="EDT_NAME">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="halign">start</property>
                         <property name="hexpand">True</property>
                         <property name="width_chars">30</property>
@@ -148,7 +148,7 @@
                       <object class="GtkButton" id="BTN_ADD">
                         <property name="label">gtk-add</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
@@ -163,7 +163,7 @@
                       <object class="GtkButton" id="BTN_MODIFY">
                         <property name="label" translatable="yes" context="lineendstabpage|BTN_MODIFY">_Modify</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_underline">True</property>
                       </object>
@@ -177,7 +177,7 @@
                       <object class="GtkButton" id="BTN_DELETE">
                         <property name="label">gtk-delete</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="use_stock">True</property>
                       </object>

@@ -1076,6 +1076,105 @@ void LineLB::Modify( const XDashEntry& rEntry, sal_Int32 nPos, const BitmapEx& r
     }
 }
 
+SvxLineLB::SvxLineLB(std::unique_ptr<weld::ComboBox> pControl)
+    : m_xControl(std::move(pControl))
+    , mbAddStandardFields(true)
+{
+}
+
+void SvxLineLB::setAddStandardFields(bool bNew)
+{
+    if(getAddStandardFields() != bNew)
+    {
+        mbAddStandardFields = bNew;
+    }
+}
+
+// Fills the listbox (provisional) with strings
+
+void SvxLineLB::Fill( const XDashListRef &pList )
+{
+    m_xControl->clear();
+
+    if( !pList.is() )
+        return;
+
+    ScopedVclPtrInstance< VirtualDevice > pVD;
+
+    if(getAddStandardFields())
+    {
+        // entry for 'none'
+        m_xControl->append_text(pList->GetStringForUiNoLine());
+
+        // entry for solid line
+        const BitmapEx aBitmap = pList->GetBitmapForUISolidLine();
+        const Size aBmpSize(aBitmap.GetSizePixel());
+        pVD->SetOutputSizePixel(aBmpSize, false);
+        pVD->DrawBitmapEx(Point(), aBitmap);
+        m_xControl->append("", pList->GetStringForUiSolidLine(), *pVD);
+    }
+
+    // entries for dashed lines
+
+    long nCount = pList->Count();
+    m_xControl->freeze();
+
+    for( long i = 0; i < nCount; i++ )
+    {
+        const XDashEntry* pEntry = pList->GetDash(i);
+        const BitmapEx aBitmap = pList->GetUiBitmap( i );
+        if( !aBitmap.IsEmpty() )
+        {
+            const Size aBmpSize(aBitmap.GetSizePixel());
+            pVD->SetOutputSizePixel(aBmpSize, false);
+            pVD->DrawBitmapEx(Point(), aBitmap);
+            m_xControl->append("", pEntry->GetName(), *pVD);
+        }
+        else
+        {
+            m_xControl->append_text(pEntry->GetName());
+        }
+    }
+
+    m_xControl->thaw();
+}
+
+void SvxLineLB::Append( const XDashEntry& rEntry, const BitmapEx& rBitmap )
+{
+    if (!rBitmap.IsEmpty())
+    {
+        ScopedVclPtrInstance< VirtualDevice > pVD;
+
+        const Size aBmpSize(rBitmap.GetSizePixel());
+        pVD->SetOutputSizePixel(aBmpSize, false);
+        pVD->DrawBitmapEx(Point(), rBitmap);
+        m_xControl->append("", rEntry.GetName(), *pVD);
+    }
+    else
+    {
+        m_xControl->append_text(rEntry.GetName());
+    }
+}
+
+void SvxLineLB::Modify(const XDashEntry& rEntry, sal_Int32 nPos, const BitmapEx& rBitmap)
+{
+    m_xControl->remove(nPos);
+
+    if (!rBitmap.IsEmpty())
+    {
+        ScopedVclPtrInstance< VirtualDevice > pVD;
+
+        const Size aBmpSize(rBitmap.GetSizePixel());
+        pVD->SetOutputSizePixel(aBmpSize, false);
+        pVD->DrawBitmapEx(Point(), rBitmap);
+        m_xControl->insert(nPos, "", rEntry.GetName(), nullptr, pVD);
+    }
+    else
+    {
+        m_xControl->insert_text(nPos, rEntry.GetName());
+    }
+}
+
 // Fills the listbox (provisional) with strings
 
 LineEndLB::LineEndLB( vcl::Window* pParent, WinBits aWB )

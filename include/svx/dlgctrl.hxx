@@ -268,6 +268,34 @@ public:
     void Modify(const XDashEntry& rEntry, sal_Int32 nPos, const BitmapEx& rBitmap );
 };
 
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxLineLB
+{
+private:
+    std::unique_ptr<weld::ComboBox> m_xControl;
+
+    /// defines if standard fields (none, solid) are added, default is true
+    bool        mbAddStandardFields : 1;
+
+public:
+    SvxLineLB(std::unique_ptr<weld::ComboBox> pControl);
+
+    void Fill(const XDashListRef &pList);
+    bool getAddStandardFields() const { return mbAddStandardFields; }
+    void setAddStandardFields(bool bNew);
+
+    void Append(const XDashEntry& rEntry, const BitmapEx& rBitmap );
+    void Modify(const XDashEntry& rEntry, sal_Int32 nPos, const BitmapEx& rBitmap );
+
+    void clear() { m_xControl->clear(); }
+    void remove(int nPos) { m_xControl->remove(nPos); }
+    int get_active() const { return m_xControl->get_active(); }
+    void set_active(int nPos) { m_xControl->set_active(nPos); }
+    void set_active_text(const OUString& rStr) { m_xControl->set_active_text(rStr); }
+    OUString get_active_text() const { return m_xControl->get_active_text(); }
+    void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xControl->connect_changed(rLink); }
+    int get_count() const { return m_xControl->get_count(); }
+};
+
 /************************************************************************/
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC LineEndLB : public ListBox
@@ -299,6 +327,7 @@ public:
     void remove(int nPos) { m_xControl->remove(nPos); }
     int get_active() const { return m_xControl->get_active(); }
     void set_active(int nPos) { m_xControl->set_active(nPos); }
+    void set_active_text(const OUString& rStr) { m_xControl->set_active_text(rStr); }
     OUString get_active_text() const { return m_xControl->get_active_text(); }
     void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xControl->connect_changed(rLink); }
     int get_count() const { return m_xControl->get_count(); }
