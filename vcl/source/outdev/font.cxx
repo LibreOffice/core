@@ -1300,7 +1300,7 @@ void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
     mpMetaFile = pOldMetaFile;
 }
 
-std::unique_ptr<SalLayout> OutputDevice::getFallbackFont(
+std::unique_ptr<SalLayout> OutputDevice::getFallbackLayout(
     LogicalFontInstance* pLogicalFont, int nFallbackLevel,
     ImplLayoutArgs& rLayoutArgs) const
 {
@@ -1381,14 +1381,13 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
         }
 
         // create and add glyph fallback layout to multilayout
-        std::unique_ptr<SalLayout> pFallback = getFallbackFont(pFallbackFont.get(),
+        std::unique_ptr<SalLayout> pFallback = getFallbackLayout(pFallbackFont.get(),
             nFallbackLevel, rLayoutArgs);
         if (pFallback)
         {
             if( !pMultiSalLayout )
                 pMultiSalLayout.reset( new MultiSalLayout( std::move(pSalLayout) ) );
-            pMultiSalLayout->AddFallback( std::move(pFallback),
-                rLayoutArgs.maRuns, pFallbackFont->GetFontFace() );
+            pMultiSalLayout->AddFallback(std::move(pFallback), rLayoutArgs.maRuns);
             if (nFallbackLevel == MAX_FALLBACK-1)
                 pMultiSalLayout->SetIncomplete(true);
         }
