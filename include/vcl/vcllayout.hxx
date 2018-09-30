@@ -152,11 +152,6 @@ public:
     virtual bool    GetOutline( SalGraphics&, basegfx::B2DPolyPolygonVector& ) const;
     virtual bool    GetBoundRect( SalGraphics&, tools::Rectangle& ) const;
 
-    // used by glyph+font+script fallback
-    virtual void    MoveGlyph( int nStart, long nNewXPos ) = 0;
-    virtual void    DropGlyph( int nStart ) = 0;
-    virtual void    Simplify( bool bIsBase ) = 0;
-
     virtual std::shared_ptr<vcl::TextLayoutCache>
         CreateTextLayoutCache(OUString const&) const;
     virtual const SalLayoutGlyphs* GetGlyphs() const;
