@@ -135,7 +135,7 @@ private:
 
     sal_Int32           m_nActLineWidth;
 
-    XLinePreview m_aCtlPreview;
+    SvxXLinePreview m_aCtlPreview;
     std::unique_ptr<weld::Widget> m_xBoxColor;
     std::unique_ptr<SvxLineLB> m_xLbLineStyle;
     std::unique_ptr<ColorListBox> m_xLbColor;
@@ -262,7 +262,7 @@ private:
     MapUnit             ePoolUnit;
     FieldUnit           eFUnit;
 
-    XLinePreview m_aCtlPreview;
+    SvxXLinePreview m_aCtlPreview;
     std::unique_ptr<SvxLineLB> m_xLbLineStyles;
     std::unique_ptr<weld::ComboBox> m_xLbType1;
     std::unique_ptr<weld::ComboBox> m_xLbType2;
@@ -345,7 +345,7 @@ private:
     sal_uInt16          nDlgType;
     sal_Int32*          pPosLineEndLb;
 
-    XLinePreview m_aCtlPreview;
+    SvxXLinePreview m_aCtlPreview;
     std::unique_ptr<weld::Entry> m_xEdtName;
     std::unique_ptr<SvxLineEndLB> m_xLbLineEnds;
     std::unique_ptr<weld::Button> m_xBtnAdd;
