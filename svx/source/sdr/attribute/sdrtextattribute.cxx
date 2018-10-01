@@ -44,29 +44,29 @@ namespace drawinglayer
             SdrFormTextAttribute                maSdrFormTextAttribute;
 
             // text distances
-            sal_Int32                           maTextLeftDistance;
-            sal_Int32                           maTextUpperDistance;
-            sal_Int32                           maTextRightDistance;
-            sal_Int32                           maTextLowerDistance;
+            sal_Int32 const                     maTextLeftDistance;
+            sal_Int32 const                     maTextUpperDistance;
+            sal_Int32 const                     maTextRightDistance;
+            sal_Int32 const                     maTextLowerDistance;
 
             // #i101556# use versioning from text attributes to detect changes
             sal_uInt32                          maPropertiesVersion;
 
             // text alignments
-            SdrTextHorzAdjust                   maSdrTextHorzAdjust;
-            SdrTextVertAdjust                   maSdrTextVertAdjust;
+            SdrTextHorzAdjust const             maSdrTextHorzAdjust;
+            SdrTextVertAdjust const             maSdrTextVertAdjust;
 
-            bool                                mbContour : 1;
-            bool                                mbFitToSize : 1;
-            bool                                mbAutoFit : 1;
-            bool                                mbHideContour : 1;
-            bool                                mbBlink : 1;
-            bool                                mbScroll : 1;
-            bool                                mbInEditMode : 1;
-            bool                                mbFixedCellHeight : 1;
-            bool                                mbWrongSpell : 1;
+            bool const                          mbContour : 1;
+            bool const                          mbFitToSize : 1;
+            bool const                          mbAutoFit : 1;
+            bool const                          mbHideContour : 1;
+            bool const                          mbBlink : 1;
+            bool const                          mbScroll : 1;
+            bool const                          mbInEditMode : 1;
+            bool const                          mbFixedCellHeight : 1;
+            bool const                          mbWrongSpell : 1;
 
-            bool                                mbChainable : 1;
+            bool const                          mbChainable : 1;
 
 
         public:

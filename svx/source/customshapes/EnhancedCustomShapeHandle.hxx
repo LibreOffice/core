@@ -35,7 +35,7 @@ class EnhancedCustomShapeHandle : public cppu::WeakImplHelper
     css::lang::XInitialization
 >
 {
-    sal_uInt32                                  mnIndex;
+    sal_uInt32 const                            mnIndex;
     css::uno::Reference< css::drawing::XShape > mxCustomShape;
 
 public:

@@ -85,8 +85,8 @@ private:
     Image                   aImgDefault;
     Image                   aImgReadOnly;
 
-    ::std::function<sal_Bool (const KeyEvent&,Window*)> maKeyInputHandler;
-    ::std::function<void ()> maThemeSlectionHandler;
+    ::std::function<sal_Bool (const KeyEvent&,Window*)> const maKeyInputHandler;
+    ::std::function<void ()> const maThemeSlectionHandler;
 
     void                    ImplAdjustControls();
     sal_uIntPtr             ImplInsertThemeEntry( const GalleryThemeEntry* pEntry );

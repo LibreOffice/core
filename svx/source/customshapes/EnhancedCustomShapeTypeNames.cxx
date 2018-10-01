@@ -34,7 +34,7 @@ static ::osl::Mutex& getHashMapMutex()
 struct NameTypeTable
 {
     const char* pS;
-    MSO_SPT     pE;
+    MSO_SPT const     pE;
 };
 static const NameTypeTable pNameTypeTableArray[] =
 {

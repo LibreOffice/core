@@ -71,7 +71,7 @@ namespace com { namespace sun { namespace star { namespace frame {
 struct ActionReference
 {
     css::uno::Reference< css::smarttags::XSmartTagAction > mxSmartTagAction;
-    sal_Int32 mnSmartTagIndex;
+    sal_Int32 const mnSmartTagIndex;
     ActionReference( css::uno::Reference< css::smarttags::XSmartTagAction > const & xSmartTagAction, sal_Int32 nSmartTagIndex )
         : mxSmartTagAction( xSmartTagAction), mnSmartTagIndex( nSmartTagIndex ) {}
 };

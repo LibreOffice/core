@@ -99,7 +99,7 @@ public:
 
 private:
     TableModelRef mxTable;
-    sal_Int32 mnIndex;
+    sal_Int32 const mnIndex;
     RowVector maRows;
     bool mbUndo;
 };
@@ -116,7 +116,7 @@ public:
 
 private:
     TableModelRef mxTable;
-    sal_Int32 mnIndex;
+    sal_Int32 const mnIndex;
     RowVector maRows;
     bool mbUndo;
 };
@@ -133,7 +133,7 @@ public:
 
 private:
     TableModelRef mxTable;
-    sal_Int32 mnIndex;
+    sal_Int32 const mnIndex;
     ColumnVector maColumns;
     CellVector maCells;
     bool mbUndo;
@@ -151,7 +151,7 @@ public:
 
 private:
     TableModelRef mxTable;
-    sal_Int32 mnIndex;
+    sal_Int32 const mnIndex;
     ColumnVector maColumns;
     CellVector maCells;
     bool mbUndo;

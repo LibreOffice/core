@@ -77,7 +77,7 @@ private:
     ::sfx2::sidebar::ControllerItem maShadowXDistanceController;
     ::sfx2::sidebar::ControllerItem maShadowYDistanceController;
 
-    SfxBindings* mpBindings;
+    SfxBindings* const mpBindings;
     long nX,nY,nXY;
 
     void InsertAngleValues();

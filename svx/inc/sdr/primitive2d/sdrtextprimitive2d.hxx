@@ -109,10 +109,10 @@ namespace drawinglayer
         {
         private:
             // unit contour polygon (scaled to [0.0 .. 1.0])
-            basegfx::B2DPolyPolygon             maUnitPolyPolygon;
+            basegfx::B2DPolyPolygon const             maUnitPolyPolygon;
 
             // complete contour polygon transform (scale, rotate, shear, translate)
-            basegfx::B2DHomMatrix               maObjectTransform;
+            basegfx::B2DHomMatrix const               maObjectTransform;
 
         protected:
             // local decomposition.
@@ -150,10 +150,10 @@ namespace drawinglayer
         {
         private:
             // the path to use. Each paragraph will use one Polygon.
-            basegfx::B2DPolyPolygon             maPathPolyPolygon;
+            basegfx::B2DPolyPolygon const             maPathPolyPolygon;
 
             // the Fontwork parameters
-            attribute::SdrFormTextAttribute     maSdrFormTextAttribute;
+            attribute::SdrFormTextAttribute const     maSdrFormTextAttribute;
 
         protected:
             // local decomposition.
@@ -191,17 +191,17 @@ namespace drawinglayer
         {
         private:
             // text range transformation from unit range ([0.0 .. 1.0]) to text range
-            basegfx::B2DHomMatrix                   maTextRangeTransform;
+            basegfx::B2DHomMatrix const                   maTextRangeTransform;
 
             // text alignments
-            SdrTextHorzAdjust                       maSdrTextHorzAdjust;
-            SdrTextVertAdjust                       maSdrTextVertAdjust;
+            SdrTextHorzAdjust const                       maSdrTextHorzAdjust;
+            SdrTextVertAdjust const                       maSdrTextVertAdjust;
 
-            bool                                    mbFixedCellHeight : 1;
-            bool                                    mbUnlimitedPage : 1;    // force layout with no text break
-            bool                                    mbCellText : 1;         // this is a cell text as block text
-            bool                                    mbWordWrap : 1;         // for CustomShapes text layout
-            bool                                    mbClipOnBounds : 1;     // for CustomShapes text layout
+            bool const                                    mbFixedCellHeight : 1;
+            bool const                                    mbUnlimitedPage : 1;    // force layout with no text break
+            bool const                                    mbCellText : 1;         // this is a cell text as block text
+            bool const                                    mbWordWrap : 1;         // for CustomShapes text layout
+            bool const                                    mbClipOnBounds : 1;     // for CustomShapes text layout
 
         protected:
             // local decomposition.
@@ -251,9 +251,9 @@ namespace drawinglayer
         {
         private:
             // text range transformation from unit range ([0.0 .. 1.0]) to text range
-            basegfx::B2DHomMatrix                   maTextRangeTransform;
+            basegfx::B2DHomMatrix const                   maTextRangeTransform;
 
-            bool                                    mbFixedCellHeight : 1;
+            bool const                                    mbFixedCellHeight : 1;
 
         protected:
             // local decomposition.
@@ -290,9 +290,9 @@ namespace drawinglayer
         class SdrAutoFitTextPrimitive2D : public SdrTextPrimitive2D
         {
         private:
-            ::basegfx::B2DHomMatrix                 maTextRangeTransform;   // text range transformation from unit range ([0.0 .. 1.0]) to text range
+            ::basegfx::B2DHomMatrix const                 maTextRangeTransform;   // text range transformation from unit range ([0.0 .. 1.0]) to text range
 
-            bool                                    mbWordWrap : 1;         // for CustomShapes text layout
+            bool const                                    mbWordWrap : 1;         // for CustomShapes text layout
 
         protected:
             // local decomposition.
@@ -330,7 +330,7 @@ namespace drawinglayer
         private:
             // XXX: might have position of overflowing text
 
-            ::basegfx::B2DHomMatrix maTextRangeTransform;   // text range transformation from unit range ([0.0 .. 1.0]) to text range
+            ::basegfx::B2DHomMatrix const maTextRangeTransform;   // text range transformation from unit range ([0.0 .. 1.0]) to text range
         protected:
             // local decomposition.
             virtual void create2DDecomposition(Primitive2DContainer& rContainer, const geometry::ViewInformation2D& aViewInformation) const override;
