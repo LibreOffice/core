@@ -35,12 +35,11 @@ namespace oox
 namespace shape
 {
 
-WpsContext::WpsContext(ContextHandler2Helper const& rParent, uno::Reference<drawing::XShape> xShape)
-    : ContextHandler2(rParent),
+WpsContext::WpsContext(ContextHandler2Helper const& rParent, uno::Reference<drawing::XShape> xShape, const drawingml::ShapePtr& pMasterShapePtr, const drawingml::ShapePtr& pShapePtr )
+    : ShapeContext( rParent, pMasterShapePtr, pShapePtr ),
       mxShape(std::move(xShape))
 {
-    mpShape.reset(new oox::drawingml::Shape("com.sun.star.drawing.CustomShape"));
-    mpShape->setWps(true);
+    mpShapePtr->setWps(true);
 }
 
 WpsContext::~WpsContext() = default;
@@ -53,12 +52,6 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
         break;
     case XML_cNvCnPr:
         break;
-    case XML_cNvSpPr:
-        break;
-    case XML_spPr:
-        return new oox::drawingml::ShapePropertiesContext(*this, *mpShape);
-    case XML_style:
-        return new oox::drawingml::ShapeStyleContext(*this, *mpShape);
     case XML_bodyPr:
         if (mxShape.is())
         {
@@ -189,8 +182,8 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
         break;
     case XML_txbx:
     {
-        mpShape->getCustomShapeProperties()->setShapeTypeOverride(true);
-        mpShape->setTextBox(true);
+        mpShapePtr->getCustomShapeProperties()->setShapeTypeOverride(true);
+        mpShapePtr->setTextBox(true);
         //in case if the textbox is linked, save the attributes
         //for further processing.
         if (rAttribs.hasAttribute(XML_id))
@@ -200,18 +193,19 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
             {
                 oox::drawingml::LinkedTxbxAttr linkedTxtBoxAttr ;
                 linkedTxtBoxAttr.id = id.get().toInt32();
-                mpShape->setTxbxHasLinkedTxtBox(true);
-                mpShape->setLinkedTxbxAttributes(linkedTxtBoxAttr);
+                mpShapePtr->setTxbxHasLinkedTxtBox(true);
+                mpShapePtr->setLinkedTxbxAttributes(linkedTxtBoxAttr);
             }
         }
+        return this;
     }
     break;
     case XML_linkedTxbx:
     {
         //in case if the textbox is linked, save the attributes
         //for further processing.
-        mpShape->getCustomShapeProperties()->setShapeTypeOverride(true);
-        mpShape->setTextBox(true);
+        mpShapePtr->getCustomShapeProperties()->setShapeTypeOverride(true);
+        mpShapePtr->setTextBox(true);
         OptValue<OUString> id  = rAttribs.getString(XML_id);
         OptValue<OUString> seq = rAttribs.getString(XML_seq);
         if (id.has() && seq.has())
@@ -219,14 +213,13 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
             oox::drawingml::LinkedTxbxAttr linkedTxtBoxAttr ;
             linkedTxtBoxAttr.id  = id.get().toInt32();
             linkedTxtBoxAttr.seq = seq.get().toInt32();
-            mpShape->setTxbxHasLinkedTxtBox(true);
-            mpShape->setLinkedTxbxAttributes(linkedTxtBoxAttr);
+            mpShapePtr->setTxbxHasLinkedTxtBox(true);
+            mpShapePtr->setLinkedTxbxAttributes(linkedTxtBoxAttr);
         }
     }
     break;
     default:
-        SAL_WARN("oox", "WpsContext::createFastChildContext: unhandled element: " << getBaseToken(nElementToken));
-        break;
+        return ShapeContext::onCreateContext(nElementToken, rAttribs);
     }
     return nullptr;
 }

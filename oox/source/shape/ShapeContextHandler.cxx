@@ -119,7 +119,13 @@ uno::Reference<xml::sax::XFastContextHandler> const & ShapeContextHandler::getWp
         switch (getBaseToken(nStartElement))
         {
             case XML_wsp:
-                mxWpsContext.set(new WpsContext(*rFragmentHandler, xShape));
+                mxWpsContext.set(new WpsContext(
+                                     *rFragmentHandler,
+                                     xShape,
+                                     pMasterShape,
+                                     ShapePtr(
+                                         new oox::drawingml::Shape(
+                                             "com.sun.star.drawing.CustomShape"))));
                 break;
             default:
                 break;
@@ -500,7 +506,7 @@ ShapeContextHandler::getShape()
                 pShape->setPosition(maPosition);
                 pShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShape->getFillProperties());
                 xResult = pShape->getXShape();
-                mxWpgContext.clear();
+                mxSavedShape = xResult;
             }
         }
         else if (mpShape.get() != nullptr)
