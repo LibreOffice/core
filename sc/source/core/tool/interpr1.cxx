@@ -9666,7 +9666,7 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
     {
         ScRange aLookupRange( rParam.nCol1, rParam.nRow1, rParam.nTab,
                 rParam.nCol2, rParam.nRow2, rParam.nTab);
-        ScLookupCache& rCache = pDok->GetLookupCache( aLookupRange);
+        ScLookupCache& rCache = pDok->GetLookupCache( aLookupRange, &mrContext );
         ScLookupCache::QueryCriteria aCriteria( rEntry);
         ScLookupCache::Result eCacheResult = rCache.lookup( o_rResultPos,
                 aCriteria, aPos);

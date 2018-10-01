@@ -18,6 +18,7 @@
 
 class ScDocument;
 class SvNumberFormatter;
+struct ScLookupCacheMap;
 
 // SetNumberFormat() is not thread-safe, so calls to it need to be delayed to the main thread.
 struct DelayedSetNumberFormat
@@ -33,21 +34,18 @@ struct ScInterpreterContext
     size_t mnTokenCachePos;
     std::vector<formula::FormulaToken*> maTokens;
     std::vector<DelayedSetNumberFormat> maDelayedSetNumberFormat;
+    ScLookupCacheMap* mScLookupCache; // cache for lookups like VLOOKUP and MATCH
 
     ScInterpreterContext(const ScDocument& rDoc, SvNumberFormatter* pFormatter)
         : mrDoc(rDoc)
         , mpFormatter(pFormatter)
         , mnTokenCachePos(0)
         , maTokens(TOKEN_CACHE_SIZE, nullptr)
+        , mScLookupCache(nullptr)
     {
     }
 
-    ~ScInterpreterContext()
-    {
-        for (auto p : maTokens)
-            if (p)
-                p->DecRef();
-    }
+    ~ScInterpreterContext();
 
     SvNumberFormatter* GetFormatTable() const { return mpFormatter; }
 };

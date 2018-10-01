@@ -4667,6 +4667,7 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
             for (int i = 0; i < nThreadCount; ++i)
             {
                 contexts[i] = new ScInterpreterContext(*pDocument, pNonThreadedFormatter);
+                pDocument->SetupFromNonThreadedContext(*contexts[i], i);
                 rThreadPool.pushTask(o3tl::make_unique<Executor>(aTag, i, nThreadCount, pDocument, contexts[i], mxGroup->mpTopCell->aPos, mxGroup->mnLength));
             }
 
@@ -4678,7 +4679,7 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
             for (int i = 0; i < nThreadCount; ++i)
             {
                 // This is intentionally done in this main thread in order to avoid locking.
-                pDocument->MergeBackIntoNonThreadedContext(*contexts[i]);
+                pDocument->MergeBackIntoNonThreadedContext(*contexts[i], i);
                 delete contexts[i];
             }
 
