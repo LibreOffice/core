@@ -30,6 +30,7 @@
 
 #include <vcl/svapp.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <comphelper/AccessibleImplementationHelper.hxx>
 
 #include "AccessibleKeyStroke.h"
 
@@ -175,7 +176,8 @@ STDMETHODIMP CAccActionBase::get_keyBinding(
 
     for( int index = 0;index < nCount;index++ )
     {
-        auto const wString = GetkeyBindingStrByXkeyBinding( binding.get()->getAccessibleKeyBinding(index) );
+        auto const wString = comphelper::GetkeyBindingStrByXkeyBinding(
+            binding.get()->getAccessibleKeyBinding(index));
 
         (*keyBinding)[index] = SysAllocString(o3tl::toW(wString.getStr()));
     }
@@ -214,23 +216,6 @@ STDMETHODIMP CAccActionBase::put_XInterface(hyper pXInterface)
     return S_OK;
 
     LEAVE_PROTECTED_BLOCK
-}
-
-/**
- * Helper function used for converting keybinding to string.
- *
- * @param    keySet    the key stroke sequence.
- */
-OUString CAccActionBase::GetkeyBindingStrByXkeyBinding( const Sequence< KeyStroke > &keySet )
-{
-    OUStringBuffer buf;
-    for( int iIndex = 0;iIndex < keySet.getLength();iIndex++ )
-    {
-        KeyStroke stroke = keySet[iIndex];
-        buf.append('\n');
-        buf.append(stroke.KeyChar);
-    }
-    return buf.makeStringAndClear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
