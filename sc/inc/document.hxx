@@ -170,7 +170,7 @@ class VirtualDevice;
 class ScAutoNameCache;
 class ScTemporaryChartLock;
 class ScLookupCache;
-struct ScLookupCacheMapImpl;
+struct ScLookupCacheMap;
 class SfxUndoManager;
 class ScFormulaParserPool;
 struct ScClipParam;
@@ -275,11 +275,8 @@ struct ScDocumentThreadSpecific
 {
     ScRecursionHelper*      pRecursionHelper;               // information for recursive and iterative cell formulas
 
-    ScLookupCacheMapImpl*   pLookupCacheMapImpl;            // cache for lookups like VLOOKUP and MATCH
-
     ScDocumentThreadSpecific() :
-        pRecursionHelper(nullptr),
-        pLookupCacheMapImpl(nullptr)
+        pRecursionHelper(nullptr)
     {
     }
 
@@ -455,6 +452,9 @@ private:
 
     mutable ScInterpreterContext maInterpreterContext;
 
+    osl::Mutex mScLookupMutex; // protection for thread-unsafe parts of handling ScLookup
+    std::vector<ScLookupCacheMap*> mThreadStoredScLookupCaches; // temporarily stored for computation threads
+
     sal_uInt16              nSrcVer;                        // file version (load/save)
     sal_uInt16              nFormulaTrackCount;
     HardRecalcState         eHardRecalcState;               // off, temporary, eternal
@@ -580,7 +580,8 @@ public:
         maInterpreterContext.mpFormatter = GetFormatTable();
         return maInterpreterContext;
     }
-    void MergeBackIntoNonThreadedContext( ScInterpreterContext& threadedContext );
+    void SetupFromNonThreadedContext( ScInterpreterContext& threadedContext, int threadNumber );
+    void MergeBackIntoNonThreadedContext( ScInterpreterContext& threadedContext, int threadNumber );
     void SetThreadedGroupCalcInProgress( bool set ) { (void)this; ScGlobal::bThreadedGroupCalcInProgress = set; }
     bool IsThreadedGroupCalcInProgress() const { (void)this; return ScGlobal::bThreadedGroupCalcInProgress; }
 
@@ -1289,7 +1290,7 @@ public:
 
                     /** Creates a ScLookupCache cache for the range if it
                         doesn't already exist. */
-    ScLookupCache & GetLookupCache( const ScRange & rRange );
+    ScLookupCache & GetLookupCache( const ScRange & rRange, ScInterpreterContext* pContext );
                     /** Only ScLookupCache dtor uses RemoveLookupCache(), do
                         not use elsewhere! */
     void            RemoveLookupCache( ScLookupCache & rCache );
@@ -2492,6 +2493,8 @@ private:
 
     void EndListeningGroups( const std::vector<ScAddress>& rPosArray );
     void SetNeedsListeningGroups( const std::vector<ScAddress>& rPosArray );
+
+    bool RemoveLookupCacheHelper( ScLookupCacheMap* cacheMap, ScLookupCache& rCache );
 };
 
 typedef std::unique_ptr<ScDocument, o3tl::default_delete<ScDocument>> ScDocumentUniquePtr;

@@ -189,6 +189,13 @@ private:
 
 };
 
+// Struct because including lookupcache.hxx in document.hxx isn't wanted.
+struct ScLookupCacheMap
+{
+    std::unordered_map< ScRange, std::unique_ptr<ScLookupCache>, ScLookupCache::Hash > aCacheMap;
+};
+
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
