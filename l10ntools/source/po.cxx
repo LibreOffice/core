@@ -203,7 +203,15 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
         }
         else if (sLine.startsWith("\"") && pLastMsg)
         {
-            *pLastMsg += lcl_GenNormString(sLine);
+            OString sReference;
+            if (!m_sReferences.empty())
+            {
+                sReference = m_sReferences.front();
+            }
+            if (pLastMsg != &m_sMsgCtxt || sLine != "\"" + sReference + "\\n\"")
+            {
+                *pLastMsg += lcl_GenNormString(sLine);
+            }
         }
         else
             break;
