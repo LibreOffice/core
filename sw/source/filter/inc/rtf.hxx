@@ -29,7 +29,7 @@ class RTFSurround
             sal_uInt8 nOrder : 4;
             sal_uInt8 nJunk : 3;
         } Flags;
-        sal_uInt8 nVal;
+        sal_uInt8 const nVal;
     } Value;
 public:
     RTFSurround( bool bGoldCut, sal_uInt8 nOrder ) {

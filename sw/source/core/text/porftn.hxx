@@ -26,7 +26,7 @@ class SwTextFootnote;
 
 class SwFootnotePortion : public SwFieldPortion
 {
-    SwTextFootnote *pFootnote;
+    SwTextFootnote * const pFootnote;
     sal_uInt16 nOrigHeight;
     // #i98418#
     bool mbPreferredScriptTypeSet;

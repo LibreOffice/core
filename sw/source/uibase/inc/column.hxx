@@ -98,7 +98,6 @@ class SwColumnPage : public SfxTabPage
     sal_uInt16      m_nCols;
     long            m_nColWidth[nMaxCols];
     long            m_nColDist[nMaxCols];
-    sal_uInt16      m_nMinWidth;
     SwPercentField* m_pModifiedField;
 
     std::map<weld::MetricSpinButton*, SwPercentField*> m_aPercentFieldsMap;

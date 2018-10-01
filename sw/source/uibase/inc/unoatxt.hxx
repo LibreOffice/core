@@ -166,8 +166,8 @@ class SwXAutoTextEntry final
         >
 {
     SwGlossaries*   pGlossaries;
-    OUString        sGroupName;
-    OUString        sEntryName;
+    OUString const  sGroupName;
+    OUString const  sEntryName;
     SwDocShellRef   xDocSh;
     rtl::Reference<SwXBodyText>
                     mxBodyText;
@@ -242,8 +242,6 @@ public:
 /** Implement the XNameAccess for the AutoText events */
 class SwAutoTextEventDescriptor : public SvBaseEventDescriptor
 {
-    OUString sSwAutoTextEventDescriptor;
-
     SwXAutoTextEntry& rAutoTextEntry;
 
     using SvBaseEventDescriptor::replaceByName;

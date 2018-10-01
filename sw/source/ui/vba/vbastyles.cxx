@@ -33,9 +33,9 @@ using namespace ::com::sun::star;
 
 struct BuiltinStyleTable
 {
-    sal_Int32 wdBuiltinStyle;
+    sal_Int32 const wdBuiltinStyle;
     const sal_Char* pOOoStyleName;
-    sal_Int32 wdStyleType;
+    sal_Int32 const wdStyleType;
 };
 
 static const BuiltinStyleTable aBuiltinStyleTable[] =

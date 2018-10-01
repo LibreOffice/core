@@ -79,8 +79,8 @@ using namespace ::sfx2;
 
 struct StringIdPair_Impl
 {
-    SvxSwFramePosString::StringId eHori;
-    SvxSwFramePosString::StringId eVert;
+    SvxSwFramePosString::StringId const eHori;
+    SvxSwFramePosString::StringId const eVert;
 };
 
 #define MAX_PERCENT_WIDTH   254
@@ -120,18 +120,18 @@ namespace o3tl {
 
 struct RelationMap
 {
-    SvxSwFramePosString::StringId eStrId;
-    SvxSwFramePosString::StringId eMirrorStrId;
-    LB         nLBRelation;
-    sal_Int16  nRelation;
+    SvxSwFramePosString::StringId const eStrId;
+    SvxSwFramePosString::StringId const eMirrorStrId;
+    LB const         nLBRelation;
+    sal_Int16 const  nRelation;
 };
 
 struct FrameMap
 {
-    SvxSwFramePosString::StringId eStrId;
-    SvxSwFramePosString::StringId eMirrorStrId;
-    sal_Int16  nAlign;
-    LB         nLBRelations;
+    SvxSwFramePosString::StringId const eStrId;
+    SvxSwFramePosString::StringId const eMirrorStrId;
+    sal_Int16 const  nAlign;
+    LB const         nLBRelations;
 };
 
 
@@ -768,8 +768,8 @@ namespace
 {
     struct FrameMaps
     {
-        FrameMap *pMap;
-        size_t nCount;
+        FrameMap * const pMap;
+        size_t const nCount;
     };
 }
 
@@ -828,8 +828,8 @@ namespace
 {
     struct RelationMaps
     {
-        RelationMap *pMap;
-        size_t nCount;
+        RelationMap * const pMap;
+        size_t const nCount;
     };
 }
 
@@ -2167,7 +2167,7 @@ void SwFramePage::Init(const SfxItemSet& rSet, bool bReset)
             const SvGlobalName& rFactNm( pSh->GetOLEObject()->getClassID() );
 
             struct GlobalNameId {
-                sal_uInt32 n1;
+                sal_uInt32 const n1;
                 sal_uInt16 n2, n3;
                 sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
             } const aGlbNmIds[] = { { SO3_SM_CLASSID_60 }, { SO3_SM_CLASSID_50 },

@@ -53,8 +53,6 @@ CreateMonitor::CreateMonitor(weld::Window *pParent)
     : GenericDialogController(pParent, "modules/swriter/ui/mmcreatingdialog.ui",
         "MMCreatingDialog")
     , m_sCountingPattern()
-    , m_sVariable_Total("%Y")
-    , m_sVariable_Position("%X")
     , m_nTotalCount(0)
     , m_nCurrentPosition(0)
     , m_xCounting(m_xBuilder->weld_label("progress"))
@@ -69,9 +67,12 @@ CreateMonitor::~CreateMonitor()
 
 void CreateMonitor::UpdateCountingText()
 {
+    constexpr OUStringLiteral sVariable_Total("%Y");
+    constexpr OUStringLiteral sVariable_Position("%X");
+
     OUString sText(m_sCountingPattern);
-    sText = sText.replaceAll( m_sVariable_Total, OUString::number( m_nTotalCount ) );
-    sText = sText.replaceAll( m_sVariable_Position, OUString::number( m_nCurrentPosition ) );
+    sText = sText.replaceAll( sVariable_Total, OUString::number( m_nTotalCount ) );
+    sText = sText.replaceAll( sVariable_Position, OUString::number( m_nCurrentPosition ) );
     m_xCounting->set_label(sText);
 }
 

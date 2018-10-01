@@ -118,7 +118,7 @@ enum class ParaBreakType {
  /// For querying the INet-attributes for Navigator.
 struct SwGetINetAttr
 {
-    OUString sText;
+    OUString const sText;
     const SwTextINetFormat& rINetAttr;
 
     SwGetINetAttr( const OUString& rText, const SwTextINetFormat& rAttr )

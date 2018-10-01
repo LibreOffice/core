@@ -45,7 +45,7 @@ private:
     class SwAttrStack
     {
     private:
-        SwTextAttr* m_pInitialArray[ INITIAL_NUM_ATTR ];
+        SwTextAttr*  m_pInitialArray[ INITIAL_NUM_ATTR ];
         SwTextAttr** m_pArray;
         sal_uInt16 m_nCount; // number of elements on stack
         sal_uInt16 m_nSize;  // number of positions in Array

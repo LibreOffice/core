@@ -29,7 +29,7 @@ class SwVbaVariable : public SwVbaVariable_BASE
 {
 private:
     css::uno::Reference< css::beans::XPropertyAccess > mxUserDefined;
-    OUString maVariableName;
+    OUString const maVariableName;
 
 public:
     /// @throws css::uno::RuntimeException

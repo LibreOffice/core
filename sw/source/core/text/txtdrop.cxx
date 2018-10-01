@@ -68,10 +68,10 @@ static bool lcl_IsDropFlyInter( const SwTextFormatInfo &rInf,
 class SwDropSave
 {
     SwTextPaintInfo* pInf;
-    sal_Int32 nIdx;
-    sal_Int32 nLen;
-    long nX;
-    long nY;
+    sal_Int32 const nIdx;
+    sal_Int32 const nLen;
+    long const nX;
+    long const nY;
 
 public:
     explicit SwDropSave( const SwTextPaintInfo &rInf );
