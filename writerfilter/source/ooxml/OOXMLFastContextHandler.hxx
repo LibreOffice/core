@@ -483,7 +483,9 @@ protected:
 class OOXMLFastContextHandlerWrapper : public OOXMLFastContextHandler
 {
 public:
-    explicit OOXMLFastContextHandlerWrapper(OOXMLFastContextHandler * pParent, css::uno::Reference<css::xml::sax::XFastContextHandler> const & xContext);
+    OOXMLFastContextHandlerWrapper(OOXMLFastContextHandler * pParent,
+                                   css::uno::Reference<css::xml::sax::XFastContextHandler> const & xContext,
+            rtl::Reference<OOXMLFastContextHandlerShape> const & xShapeHandler);
     virtual ~OOXMLFastContextHandlerWrapper() override;
 
     // css::xml::sax::XFastContextHandler:
@@ -523,7 +525,8 @@ protected:
     virtual Token_t getToken() const override;
 
 private:
-    css::uno::Reference<css::xml::sax::XFastContextHandler> mxContext;
+    css::uno::Reference<css::xml::sax::XFastContextHandler> mxWrappedContext;
+    rtl::Reference<OOXMLFastContextHandlerShape> mxShapeHandler;
     std::set<Id> mMyNamespaces;
     std::set<Token_t> mMyTokens;
     OOXMLPropertySet::Pointer_t mpPropertySet;
