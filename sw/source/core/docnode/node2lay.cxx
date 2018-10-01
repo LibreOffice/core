@@ -39,7 +39,7 @@ class SwNode2LayImpl
     std::unique_ptr<SwIterator<SwFrame, SwModify, sw::IteratorMode::UnwrapMulti>> pIter;
     SwModify* pMod;
     std::vector<SwFrame*> mvUpperFrames; // To collect the Upper
-    sal_uLong nIndex;        // The Index of the to-be-inserted Nodes
+    sal_uLong const nIndex;        // The Index of the to-be-inserted Nodes
     bool bMaster    : 1; // true => only Master, false => only Frames without Follow
     bool bInit      : 1; // Did we already call First() at SwClient?
 

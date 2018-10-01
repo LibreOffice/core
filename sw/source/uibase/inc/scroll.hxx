@@ -22,11 +22,11 @@
 
 class SwScrollbar: public ScrollBar
 {
-    Size    aDocSz;
-    bool    bHori       :1;     // horizontal = salTrue, otherwise vertical
-    bool    bAuto       :1;     // for scrolling mode
-    bool    bVisible    :1;     // show/hide should only set this flag
-    bool    bSizeSet    :1;     // was the size already set?
+    Size        aDocSz;
+    bool const  bHori       :1;     // horizontal = salTrue, otherwise vertical
+    bool        bAuto       :1;     // for scrolling mode
+    bool        bVisible    :1;     // show/hide should only set this flag
+    bool        bSizeSet    :1;     // was the size already set?
 
     void    AutoShow();
 

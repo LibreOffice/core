@@ -56,7 +56,7 @@ class SwCreateAddressListDialog : public SfxModalDialog
 
     VclPtr<OKButton>                m_pOK;
 
-    OUString                m_sAddressListFilterName;
+    OUString const          m_sAddressListFilterName;
     OUString                m_sURL;
 
     std::unique_ptr<SwCSVData>     m_pCSVData;

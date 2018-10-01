@@ -76,7 +76,7 @@ public:
 
 private:
     SwFrameFormat *pOld, *pNew;
-    sal_Int16 nType;
+    sal_Int16 const nType;
 };
 
 SwTableFormatCmp::SwTableFormatCmp( SwFrameFormat *pO, SwFrameFormat *pN, sal_Int16 nT )

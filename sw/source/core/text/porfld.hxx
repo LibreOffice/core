@@ -121,8 +121,8 @@ class SwNumberPortion : public SwFieldPortion
 {
 protected:
     sal_uInt16  nFixWidth;      // See Glues
-    sal_uInt16  nMinDist;       // Minimal distance to the text
-    bool    mbLabelAlignmentPosAndSpaceModeActive;
+    sal_uInt16 const  nMinDist;       // Minimal distance to the text
+    bool const    mbLabelAlignmentPosAndSpaceModeActive;
 
 public:
     SwNumberPortion( const OUString &rExpand,

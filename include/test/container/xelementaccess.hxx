@@ -28,7 +28,7 @@ public:
     virtual ~XElementAccess() {}
 
 private:
-    css::uno::Type maType;
+    css::uno::Type const maType;
 };
 
 }

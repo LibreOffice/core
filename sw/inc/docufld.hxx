@@ -376,7 +376,7 @@ public:
 
 class SwMacroFieldType : public SwFieldType
 {
-    SwDoc* m_pDoc;
+    SwDoc* const m_pDoc;
 
 public:
     SwMacroFieldType(SwDoc*);
@@ -425,7 +425,7 @@ public:
 class SwPostItFieldType : public SwFieldType
 {
 private:
-    SwDoc* mpDoc;
+    SwDoc* const mpDoc;
 public:
     SwPostItFieldType(SwDoc* pDoc);
 
@@ -668,7 +668,7 @@ public:
 
 class SwScriptFieldType : public SwFieldType
 {
-    SwDoc* m_pDoc;
+    SwDoc* const m_pDoc;
 public:
     SwScriptFieldType( SwDoc* pDoc );
 

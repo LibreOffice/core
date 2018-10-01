@@ -47,14 +47,14 @@ class SwTableSortBoxes;
 class SwUndoInsTable : public SwUndo
 {
     OUString sTableNm;
-    SwInsertTableOptions aInsTableOpts;
+    SwInsertTableOptions const aInsTableOpts;
     std::unique_ptr<SwDDEFieldType> pDDEFieldType;
     std::unique_ptr<std::vector<sal_uInt16>> pColWidth;
     std::unique_ptr<SwRedlineData>  pRedlData;
     std::unique_ptr<SwTableAutoFormat> pAutoFormat;
     sal_uLong nSttNode;
     sal_uInt16 nRows, nCols;
-    sal_uInt16 nAdjust;
+    sal_uInt16 const nAdjust;
 
 public:
     SwUndoInsTable( const SwPosition&, sal_uInt16 nCols, sal_uInt16 nRows,
@@ -74,12 +74,12 @@ public:
 class SwUndoTextToTable : public SwUndo, public SwUndRng
 {
     OUString sTableNm;
-    SwInsertTableOptions aInsTableOpts;
+    SwInsertTableOptions const aInsTableOpts;
     std::vector<sal_uLong> mvDelBoxes;
     std::unique_ptr<SwTableAutoFormat> pAutoFormat;
     SwHistory* pHistory;
-    sal_Unicode cTrenner;
-    sal_uInt16 nAdjust;
+    sal_Unicode const cTrenner;
+    sal_uInt16 const nAdjust;
     bool bSplitEnd : 1;
 
 public:
@@ -99,14 +99,14 @@ public:
 
 class SwUndoTableToText : public SwUndo
 {
-    OUString sTableNm;
+    OUString const sTableNm;
     std::unique_ptr<SwDDEFieldType> pDDEFieldType;
     std::unique_ptr<SaveTable> pTableSave;
     SwTableToTextSaves m_vBoxSaves;
     std::unique_ptr<SwHistory> pHistory;
     sal_uLong nSttNd, nEndNd;
-    sal_Unicode cTrenner;
-    sal_uInt16 nHdlnRpt;
+    sal_Unicode const cTrenner;
+    sal_uInt16 const nHdlnRpt;
     bool bCheckNumFormat : 1;
 
 public:
@@ -147,7 +147,7 @@ class SwUndoTableAutoFormat : public SwUndo
     std::unique_ptr<SaveTable> pSaveTable;
     std::vector< std::shared_ptr<SwUndoTableNumFormat> > m_Undos;
     bool bSaveContentAttr;
-    sal_uInt16 m_nRepeatHeading;
+    sal_uInt16 const m_nRepeatHeading;
 
     void UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext);
 
@@ -171,7 +171,7 @@ class SwUndoTableNdsChg : public SwUndo
     struct BoxMove
     {
         sal_uLong index;    ///< Index of this box.
-        bool      hasMoved; ///< Has this box been moved already.
+        bool const hasMoved; ///< Has this box been moved already.
         BoxMove(sal_uLong idx, bool moved=false) : index(idx), hasMoved(moved) {};
         bool operator<(const BoxMove& other) const { return index < other.index; };
     };
@@ -181,8 +181,8 @@ class SwUndoTableNdsChg : public SwUndo
     sal_uLong nSttNode, nCurrBox;
     sal_uInt16 nCount, nRelDiff, nAbsDiff;
     TableChgWidthHeightType nSetColType;
-    bool bFlag;
-    bool bSameHeight;                   // only used for SplitRow
+    bool const bFlag;
+    bool const bSameHeight;                   // only used for SplitRow
 
     SwUndoTableNdsChg(SwUndoTableNdsChg const&) = delete;
     SwUndoTableNdsChg& operator=(SwUndoTableNdsChg const&) = delete;
@@ -327,9 +327,9 @@ class SwUndoSplitTable : public SwUndo
     std::unique_ptr<SwSaveRowSpan> mpSaveRowSpan; // stores row span values at the splitting row
     std::unique_ptr<SaveTable> pSavTable;
     std::unique_ptr<SwHistory> pHistory;
-    SplitTable_HeadlineOption nMode;
+    SplitTable_HeadlineOption const nMode;
     sal_uInt16 nFormulaEnd;
-    bool bCalcNewSize;
+    bool const bCalcNewSize;
 
 public:
     SwUndoSplitTable( const SwTableNode& rTableNd, std::unique_ptr<SwSaveRowSpan> pRowSp,
@@ -352,8 +352,8 @@ class SwUndoMergeTable : public SwUndo
     sal_uLong nTableNode;
     std::unique_ptr<SaveTable> pSavTable, pSavHdl;
     std::unique_ptr<SwHistory> pHistory;
-    sal_uInt16 nMode;
-    bool bWithPrev;
+    sal_uInt16 const nMode;
+    bool const bWithPrev;
 
 public:
     SwUndoMergeTable( const SwTableNode& rTableNd, const SwTableNode& rDelTableNd,
@@ -371,8 +371,8 @@ public:
 class SwUndoTableHeadline : public SwUndo
 {
     sal_uLong nTableNd;
-    sal_uInt16 nOldHeadline;
-    sal_uInt16 nNewHeadline;
+    sal_uInt16 const nOldHeadline;
+    sal_uInt16 const nNewHeadline;
 
 public:
     SwUndoTableHeadline( const SwTable&, sal_uInt16 nOldHdl,  sal_uInt16 nNewHdl );
@@ -386,7 +386,7 @@ void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx );
 
 class SwUndoTableStyleMake : public SwUndo
 {
-    OUString m_sName;
+    OUString const m_sName;
     std::unique_ptr<SwTableAutoFormat> m_pAutoFormat;
 public:
     SwUndoTableStyleMake(const OUString& rName, const SwDoc* pDoc);

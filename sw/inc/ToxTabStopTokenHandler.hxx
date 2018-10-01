@@ -100,10 +100,10 @@ private:
     long
     CalculatePageMarginFromPageDescription(const SwTextNode& targetNode) const;
 
-    sal_uInt32 mIndexOfSectionNode;
+    sal_uInt32 const mIndexOfSectionNode;
     const SwPageDesc& mDefaultPageDescription;
-    bool mTabPositionIsRelativeToParagraphIndent;
-    TabStopReferencePolicy mTabStopReferencePolicy;
+    bool const mTabPositionIsRelativeToParagraphIndent;
+    TabStopReferencePolicy const mTabStopReferencePolicy;
 };
 
 }

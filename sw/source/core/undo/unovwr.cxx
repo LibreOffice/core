@@ -326,7 +326,7 @@ SwRewriter SwUndoOverwrite::GetRewriter() const
 
 struct UndoTransliterate_Data
 {
-    OUString        sText;
+    OUString const        sText;
     std::unique_ptr<SwHistory> pHistory;
     std::unique_ptr<Sequence< sal_Int32 >> pOffsets;
     sal_uLong           nNdIdx;

@@ -1106,7 +1106,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark
 struct RefIdsMap
 {
 private:
-    OUString aName;
+    OUString const aName;
     std::set<sal_uInt16> aIds;
     std::set<sal_uInt16> aDstIds;
     std::map<sal_uInt16, sal_uInt16> sequencedIds; /// ID numbers sorted by sequence number.

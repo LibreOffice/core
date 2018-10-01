@@ -206,7 +206,6 @@ SwFrameStyleEventDescriptor::SwFrameStyleEventDescriptor(
     sw::ICoreFrameStyle& rStyle ) :
         SvEventDescriptor(rStyle.GetEventsSupplier(),
                           aFrameStyleEvents),
-        sSwFrameStyleEventDescriptor("SwFrameStyleEventDescriptor"),
         m_rStyle(rStyle)
 {
 }
@@ -230,7 +229,7 @@ const SvxMacroItem& SwFrameStyleEventDescriptor::getMacroItem()
 
 OUString SwFrameStyleEventDescriptor::getImplementationName()
 {
-    return sSwFrameStyleEventDescriptor;
+    return OUString("SwFrameStyleEventDescriptor");
 }
 
 sal_uInt16 SwFrameStyleEventDescriptor::getMacroItemWhich() const

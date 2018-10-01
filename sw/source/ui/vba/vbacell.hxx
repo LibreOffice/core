@@ -29,8 +29,8 @@ class SwVbaCell : public SwVbaCell_BASE
 {
 private:
     css::uno::Reference< css::text::XTextTable > mxTextTable;
-    sal_Int32 mnColumn;
-    sal_Int32 mnRow;
+    sal_Int32 const mnColumn;
+    sal_Int32 const mnRow;
 
 public:
     /// @throws css::uno::RuntimeException
