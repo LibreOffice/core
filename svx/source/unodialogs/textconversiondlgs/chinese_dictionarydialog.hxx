@@ -44,11 +44,11 @@ struct DictionaryEntry final
 
     ~DictionaryEntry();
 
-    OUString m_aTerm;
-    OUString m_aMapping;
+    OUString const m_aTerm;
+    OUString const m_aMapping;
     sal_Int16     m_nConversionPropertyType; //linguistic2::ConversionPropertyType
 
-    bool     m_bNewEntry;
+    bool const     m_bNewEntry;
 };
 
 class DictionaryList : public SvSimpleTable

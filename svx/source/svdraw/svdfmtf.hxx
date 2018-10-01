@@ -47,13 +47,13 @@ class ImpSdrGDIMetaFileImport final
 {
     ::std::vector< SdrObject* > maTmpList;
     ScopedVclPtr<VirtualDevice> mpVD;
-    tools::Rectangle                   maScaleRect;
+    tools::Rectangle const      maScaleRect;
     size_t                      mnMapScalingOfs; // from here on, not edited with MapScaling
     std::unique_ptr<SfxItemSet> mpLineAttr;
     std::unique_ptr<SfxItemSet> mpFillAttr;
     std::unique_ptr<SfxItemSet> mpTextAttr;
     SdrModel*                   mpModel;
-    SdrLayerID                  mnLayer;
+    SdrLayerID const            mnLayer;
     Color                       maOldLineColor;
     sal_Int32                   mnLineWidth;
     basegfx::B2DLineJoin        maLineJoin;

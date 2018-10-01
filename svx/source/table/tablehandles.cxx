@@ -44,8 +44,8 @@ namespace sdr { namespace table {
 class OverlayTableEdge : public sdr::overlay::OverlayObject
 {
 protected:
-    basegfx::B2DPolyPolygon maPolyPolygon;
-    bool                    mbVisible;
+    basegfx::B2DPolyPolygon const maPolyPolygon;
+    bool const                    mbVisible;
 
     // geometry creation for OverlayObject
     virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;

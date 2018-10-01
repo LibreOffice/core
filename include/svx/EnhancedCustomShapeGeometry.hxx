@@ -26,18 +26,18 @@
 
 struct SvxMSDffVertPair
 {
-    sal_Int32   nValA;
-    sal_Int32   nValB;
+    sal_Int32 const   nValA;
+    sal_Int32 const   nValB;
 };
 struct SvxMSDffCalculationData
 {
-    sal_uInt16  nFlags;
-    sal_Int32   nVal[ 3 ];
+    sal_uInt16 const  nFlags;
+    sal_Int32 const   nVal[ 3 ];
 };
 struct SvxMSDffTextRectangles
 {
-    SvxMSDffVertPair    nPairA;
-    SvxMSDffVertPair    nPairB;
+    SvxMSDffVertPair const    nPairA;
+    SvxMSDffVertPair const    nPairB;
 };
 
 enum class SvxMSDffHandleFlags
@@ -64,28 +64,28 @@ namespace o3tl
 
 struct SvxMSDffHandle
 {
-    SvxMSDffHandleFlags nFlags;
+    SvxMSDffHandleFlags const nFlags;
     sal_Int32   nPositionX, nPositionY, nCenterX, nCenterY, nRangeXMin, nRangeXMax, nRangeYMin, nRangeYMax;
 };
 struct mso_CustomShape
 {
-    SvxMSDffVertPair*                       pVertices;
-    sal_uInt32                              nVertices;
-    sal_uInt16*                             pElements;
-    sal_uInt32                              nElements;
-    SvxMSDffCalculationData*                pCalculation;
-    sal_uInt32                              nCalculation;
-    sal_Int32*                              pDefData;
-    SvxMSDffTextRectangles*                 pTextRect;
-    sal_uInt32                              nTextRect;
-    sal_Int32                               nCoordWidth;
-    sal_Int32                               nCoordHeight;
-    sal_Int32                               nXRef;
-    sal_Int32                               nYRef;
-    SvxMSDffVertPair*                       pGluePoints;
-    sal_uInt32                              nGluePoints;
-    SvxMSDffHandle*                         pHandles;
-    sal_uInt32                              nHandles;
+    SvxMSDffVertPair* const                       pVertices;
+    sal_uInt32 const                              nVertices;
+    sal_uInt16* const                             pElements;
+    sal_uInt32 const                              nElements;
+    SvxMSDffCalculationData* const                pCalculation;
+    sal_uInt32 const                              nCalculation;
+    sal_Int32* const                              pDefData;
+    SvxMSDffTextRectangles* const                 pTextRect;
+    sal_uInt32 const                              nTextRect;
+    sal_Int32 const                               nCoordWidth;
+    sal_Int32 const                               nCoordHeight;
+    sal_Int32 const                               nXRef;
+    sal_Int32 const                               nYRef;
+    SvxMSDffVertPair* const                       pGluePoints;
+    sal_uInt32 const                              nGluePoints;
+    SvxMSDffHandle* const                         pHandles;
+    sal_uInt32 const                              nHandles;
 };
 
 #define MSO_I | sal_Int32(0x80000000)

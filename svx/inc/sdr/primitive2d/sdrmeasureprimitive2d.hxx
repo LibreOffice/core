@@ -48,20 +48,20 @@ namespace drawinglayer
         class SdrMeasurePrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            attribute::SdrLineShadowTextAttribute       maSdrLSTAttribute;
-            basegfx::B2DPoint                           maStart;
-            basegfx::B2DPoint                           maEnd;
-            MeasureTextPosition                         meHorizontal;
-            MeasureTextPosition                         meVertical;
-            double                                      mfDistance;
-            double                                      mfUpper;
-            double                                      mfLower;
-            double                                      mfLeftDelta;
-            double                                      mfRightDelta;
+            attribute::SdrLineShadowTextAttribute const       maSdrLSTAttribute;
+            basegfx::B2DPoint const                           maStart;
+            basegfx::B2DPoint const                           maEnd;
+            MeasureTextPosition const                         meHorizontal;
+            MeasureTextPosition const                         meVertical;
+            double const                                      mfDistance;
+            double const                                      mfUpper;
+            double const                                      mfLower;
+            double const                                      mfLeftDelta;
+            double const                                      mfRightDelta;
 
-            bool                                        mbBelow : 1;
-            bool                                        mbTextRotation : 1;
-            bool                                        mbTextAutoAngle : 1;
+            bool const                                        mbBelow : 1;
+            bool const                                        mbTextRotation : 1;
+            bool const                                        mbTextAutoAngle : 1;
 
             // internal decomposition helper
             Primitive2DReference impCreatePart(
