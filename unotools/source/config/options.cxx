@@ -42,6 +42,18 @@ ConfigurationBroadcaster::~ConfigurationBroadcaster()
 {
 }
 
+ConfigurationBroadcaster & ConfigurationBroadcaster::operator =(
+    ConfigurationBroadcaster const & other)
+{
+    if (&other != this) {
+        mpList.reset(
+            other.mpList == nullptr ? nullptr : new IMPL_ConfigurationListenerList(*other.mpList));
+        m_nBroadcastBlocked = other.m_nBroadcastBlocked;
+        m_nBlockedHint = other.m_nBlockedHint;
+    }
+    return *this;
+}
+
 void ConfigurationBroadcaster::AddListener( utl::ConfigurationListener* pListener )
 {
     if ( !mpList )
