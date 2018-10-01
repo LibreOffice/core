@@ -206,9 +206,6 @@
     <glade-widget-class title="SvxColorValueSet" name="svxcorelo-SvxColorValueSet"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="SvxPresetListBox" name="svxcorelo-SvxPresetListBox"
-                        generic-name="Set of Value Options" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="TableValueSet" name="sdlo-TableValueSet"
                         generic-name="Set of Table Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>

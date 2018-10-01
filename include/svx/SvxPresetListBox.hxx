@@ -27,23 +27,6 @@
 #include <svx/xtable.hxx>
 #include <tools/gen.hxx>
 
-class SVX_DLLPUBLIC SvxPresetListBox : public ValueSet
-{
-private:
-    sal_uInt32 nColCount;
-
-    DECL_LINK( OnMenuItemSelected, Menu*, bool );
-
-public:
-    SvxPresetListBox(vcl::Window* pParent, WinBits nWinStyle);
-
-    virtual void Resize() override;
-    virtual void Command( const CommandEvent& rEvt ) override;
-    sal_uInt32 getColumnCount() const { return nColCount; }
-
-    void DrawLayout();
-};
-
 class SVX_DLLPUBLIC PresetListBox : public SvtValueSet
 {
 private:
