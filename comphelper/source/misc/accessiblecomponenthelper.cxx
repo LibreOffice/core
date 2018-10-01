@@ -62,7 +62,7 @@ namespace comphelper
     {
         OExternalLockGuard aGuard( this );
 
-        Point aScreenLoc( 0, 0 );
+        Point aScreenLoc( getLocation() );
 
         Reference< XAccessibleComponent > xParentComponent( implGetParentContext(), UNO_QUERY );
         OSL_ENSURE( xParentComponent.is(), "OCommonAccessibleComponent::getLocationOnScreen: no parent component!" );

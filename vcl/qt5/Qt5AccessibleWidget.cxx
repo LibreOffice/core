@@ -57,6 +57,7 @@ int Qt5AccessibleWidget::childCount() const
 }
 
 int Qt5AccessibleWidget::indexOfChild(const QAccessibleInterface* /* child */) const { return 0; }
+
 QVector<QPair<QAccessibleInterface*, QAccessible::Relation>>
     Qt5AccessibleWidget::relations(QAccessible::Relation /* match */) const
 {
@@ -75,7 +76,7 @@ QRect Qt5AccessibleWidget::rect() const
 {
     Reference<XAccessibleComponent> xAccessibleComponent(m_xAccessible->getAccessibleContext(),
                                                          UNO_QUERY);
-    awt::Point aPoint = xAccessibleComponent->getLocation();
+    awt::Point aPoint = xAccessibleComponent->getLocationOnScreen();
     awt::Size aSize = xAccessibleComponent->getSize();
 
     return QRect(aPoint.X, aPoint.Y, aSize.Width, aSize.Height);
