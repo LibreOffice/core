@@ -1198,7 +1198,7 @@ void SvxLineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bi
 
 void SvxXLinePreview::Resize()
 {
-    PreviewBase::Resize();
+    SvxPreviewBase::Resize();
 
     const Size aOutputSize(GetOutputSize());
     const sal_Int32 nDistance(500);
@@ -1247,7 +1247,7 @@ SvxXLinePreview::SvxXLinePreview()
 
 void SvxXLinePreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    PreviewBase::SetDrawingArea(pDrawingArea);
+    SvxPreviewBase::SetDrawingArea(pDrawingArea);
 
     mpLineObjA = new SdrPathObj(getModel(), OBJ_LINE);
     mpLineObjB = new SdrPathObj(getModel(), OBJ_PLIN);
@@ -1332,7 +1332,7 @@ SvxXShadowPreview::SvxXShadowPreview()
 
 void SvxXShadowPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    PreviewBase::SetDrawingArea(pDrawingArea);
+    SvxPreviewBase::SetDrawingArea(pDrawingArea);
     InitSettings();
 
     // prepare size
@@ -1408,7 +1408,7 @@ void SvxXShadowPreview::Paint(vcl::RenderContext& rRenderContext, const tools::R
     rRenderContext.Pop();
 }
 
-void PreviewBase::InitSettings()
+void SvxPreviewBase::InitSettings()
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
@@ -1423,14 +1423,14 @@ void PreviewBase::InitSettings()
     Invalidate();
 }
 
-PreviewBase::PreviewBase()
+SvxPreviewBase::SvxPreviewBase()
     : mpModel(new SdrModel(nullptr, nullptr, true))
 {
     // init model
     mpModel->GetItemPool().FreezeIdRanges();
 }
 
-void PreviewBase::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+void SvxPreviewBase::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     CustomWidgetController::SetDrawingArea(pDrawingArea);
     Size aSize(getPreviewStripSize(pDrawingArea->get_ref_device()));
@@ -1441,13 +1441,13 @@ void PreviewBase::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     mpBufferDevice->SetMapMode(MapMode(MapUnit::Map100thMM));
 }
 
-PreviewBase::~PreviewBase()
+SvxPreviewBase::~SvxPreviewBase()
 {
     mpModel.reset();
     mpBufferDevice.disposeAndClear();
 }
 
-void PreviewBase::LocalPrePaint(vcl::RenderContext const & rRenderContext)
+void SvxPreviewBase::LocalPrePaint(vcl::RenderContext const & rRenderContext)
 {
     // init BufferDevice
     if (mpBufferDevice->GetOutputSizePixel() != GetOutputSizePixel())
@@ -1474,7 +1474,7 @@ void PreviewBase::LocalPrePaint(vcl::RenderContext const & rRenderContext)
     }
 }
 
-void PreviewBase::LocalPostPaint(vcl::RenderContext& rRenderContext)
+void SvxPreviewBase::LocalPostPaint(vcl::RenderContext& rRenderContext)
 {
     // copy to front (in pixel mode)
     const bool bWasEnabledSrc(mpBufferDevice->IsMapModeEnabled());
@@ -1492,7 +1492,7 @@ void PreviewBase::LocalPostPaint(vcl::RenderContext& rRenderContext)
     rRenderContext.EnableMapMode(bWasEnabledDst);
 }
 
-void PreviewBase::StyleUpdated()
+void SvxPreviewBase::StyleUpdated()
 {
     InitSettings();
     CustomWidgetController::StyleUpdated();
@@ -1503,7 +1503,7 @@ SvxXRectPreview::SvxXRectPreview()
 {
 }
 
-tools::Rectangle PreviewBase::GetPreviewSize() const
+tools::Rectangle SvxPreviewBase::GetPreviewSize() const
 {
     tools::Rectangle aObjectSize(Point(), getBufferDevice().PixelToLogic(GetOutputSizePixel()));
     return aObjectSize;
@@ -1511,7 +1511,7 @@ tools::Rectangle PreviewBase::GetPreviewSize() const
 
 void SvxXRectPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
-    PreviewBase::SetDrawingArea(pDrawingArea);
+    SvxPreviewBase::SetDrawingArea(pDrawingArea);
     InitSettings();
 
     // create RectangleObject
@@ -1527,7 +1527,7 @@ void SvxXRectPreview::Resize()
         SetAttributes(pOrigObject->GetMergedItemSet());
         SdrObject::Free(pOrigObject);
     }
-    PreviewBase::Resize();
+    SvxPreviewBase::Resize();
 }
 
 SvxXRectPreview::~SvxXRectPreview()

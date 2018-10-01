@@ -335,7 +335,7 @@ class SdrObject;
 class SdrPathObj;
 class SdrModel;
 
-class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI PreviewBase : public weld::CustomWidgetController
+class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI SvxPreviewBase : public weld::CustomWidgetController
 {
 private:
     std::unique_ptr<SdrModel> mpModel;
@@ -353,9 +353,9 @@ protected:
     void LocalPostPaint(vcl::RenderContext& rRenderContext);
 
 public:
-    PreviewBase();
+    SvxPreviewBase();
     virtual void SetDrawingArea(weld::DrawingArea*) override;
-    virtual ~PreviewBase() override;
+    virtual ~SvxPreviewBase() override;
 
     // change support
     virtual void StyleUpdated() override;
@@ -388,7 +388,7 @@ public:
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXLinePreview : public PreviewBase
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXLinePreview : public SvxPreviewBase
 {
 private:
     SdrPathObj*                                     mpLineObjA;
@@ -414,7 +414,7 @@ public:
     virtual void Resize() override;
 };
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXRectPreview : public PreviewBase
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXRectPreview : public SvxPreviewBase
 {
 private:
     SdrObject* mpRectangleObject;
@@ -436,7 +436,7 @@ public:
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXShadowPreview : public PreviewBase
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXShadowPreview : public SvxPreviewBase
 {
 private:
     Point maShadowOffset;
