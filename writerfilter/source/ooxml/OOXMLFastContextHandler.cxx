@@ -1658,6 +1658,22 @@ void OOXMLFastContextHandlerShape::setToken(Token_t nToken)
         mrShapeContext->setStartToken(nToken);
 }
 
+/// assume shapes are added consecutively, find the bottom-rightmost entry in the tree
+static uno::Reference<drawing::XShape> lcl_findLeafNodeShape( const uno::Reference<drawing::XShape>& xShape )
+{
+    // depth-first, rightmost-first tree traversal. still returns
+    // groupshape, if it's empty and the last-added shape
+    uno::Reference<container::XIndexAccess> xIndexAccess(xShape, uno::UNO_QUERY);
+    if( !xIndexAccess.is() || !xIndexAccess->getCount() )
+        return xShape;
+    else
+        return lcl_findLeafNodeShape(
+            uno::Reference<drawing::XShape>(
+                xIndexAccess->getByIndex(
+                    xIndexAccess->getCount()-1),
+                uno::UNO_QUERY));
+}
+
 void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
 {
     if ( mrShapeContext.is() && !m_bShapeSent )
@@ -1677,7 +1693,15 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
             // Notify the dmapper that the shape is ready to use
             if ( !bIsPicture )
             {
-                mpStream->startShape( xShape );
+                // did we just add a group shape? then we probably
+                // want to add the text to the last inner shape
+                // instead
+                uno::Reference<lang::XServiceInfo> xServiceInfo(xShape,
+                                                                uno::UNO_QUERY);
+                if (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
+                    mpStream->startShape( lcl_findLeafNodeShape(xShape) );
+                else
+                    mpStream->startShape( xShape );
                 m_bShapeStarted = true;
             }
         }
