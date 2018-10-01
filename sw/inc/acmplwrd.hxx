@@ -39,7 +39,7 @@ class SwAutoCompleteWord
 
     /// contains extended strings carrying source information
     editeng::SortedAutoCompleteStrings m_WordList;
-    editeng::Trie m_LookupTree;
+    editeng::Trie const m_LookupTree;
     SwAutoCompleteStringPtrDeque aLRULst;
 
     std::unique_ptr<SwAutoCompleteWord_Impl> pImpl;

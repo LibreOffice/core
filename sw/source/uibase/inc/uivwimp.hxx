@@ -92,7 +92,7 @@ class SwView_Impl
 
     // temporary document for printing text of selection / multi selection
     // in PDF export.
-    SfxObjectShellLock          xTmpSelDocSh;
+    SfxObjectShellLock const    xTmpSelDocSh;
 
     SwView*                     pView;
     rtl::Reference<SwScannerEventListener>

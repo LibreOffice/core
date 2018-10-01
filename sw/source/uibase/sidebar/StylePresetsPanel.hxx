@@ -61,7 +61,7 @@ private:
             : maURL(rURL)
         {}
 
-        OUString maURL;
+        OUString const maURL;
     };
 
     void RefreshList();

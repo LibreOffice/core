@@ -681,8 +681,8 @@ class SwHyphArgs : public SwInterHyphInfo
     const SwNode *pStart;
     const SwNode *pEnd;
           SwNode *pNode;
-    sal_uInt16 *pPageCnt;
-    sal_uInt16 *pPageSt;
+    sal_uInt16 * const pPageCnt;
+    sal_uInt16 * const pPageSt;
 
     sal_uInt32 nNode;
     sal_Int32 nPamStart;

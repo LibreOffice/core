@@ -50,9 +50,9 @@ public:
 
 class SwKernPortion : public SwLinePortion
 {
-    short nKern;
-    bool bBackground;
-    bool bGridKern;
+    short const nKern;
+    bool const bBackground;
+    bool const bGridKern;
 
 public:
 
@@ -75,7 +75,7 @@ public:
 class SwArrowPortion : public SwLinePortion
 {
     Point aPos;
-    bool bLeft;
+    bool const bLeft;
 public:
     explicit SwArrowPortion( const SwLinePortion &rPortion );
     explicit SwArrowPortion( const SwTextPaintInfo &rInf );
@@ -91,7 +91,7 @@ public:
 // The SwHangingPortion is the corresponding textportion to do that.
 class SwHangingPortion : public SwTextPortion
 {
-    sal_uInt16 nInnerWidth;
+    sal_uInt16 const nInnerWidth;
 public:
     explicit SwHangingPortion( SwPosSize aSize ) : nInnerWidth( aSize.Width() )
     {
@@ -122,7 +122,7 @@ class SwControlCharPortion : public SwLinePortion
 private:
     mutable sal_uInt16 mnViewWidth;            // used to cache a calculated value
     mutable sal_uInt16 mnHalfCharWidth;        // used to cache a calculated value
-    sal_Unicode mcChar;
+    sal_Unicode const mcChar;
 
 public:
 

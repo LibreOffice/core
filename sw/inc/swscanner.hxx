@@ -31,7 +31,7 @@ class SwTextNode;
 // during spell check
 class SwScanner
 {
-    std::function<LanguageType (sal_Int32, sal_Int32, bool)> m_pGetLangOfChar;
+    std::function<LanguageType (sal_Int32, sal_Int32, bool)> const m_pGetLangOfChar;
     OUString m_aWord;
     const OUString m_aPreDashReplacementText;
     OUString m_aText;
@@ -43,8 +43,8 @@ class SwScanner
     sal_Int32 m_nLength;
     sal_Int32 m_nOverriddenDashCount;
     LanguageType m_aCurrentLang;
-    sal_uInt16 m_nWordType;
-    bool m_bClip;
+    sal_uInt16 const m_nWordType;
+    bool const m_bClip;
 
 public:
     SwScanner(const std::function<LanguageType(sal_Int32, sal_Int32, bool)>& pGetLangOfChar,

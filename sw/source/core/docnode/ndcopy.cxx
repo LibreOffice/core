@@ -44,7 +44,7 @@
 struct MapTableFrameFormat
 {
     const SwFrameFormat *pOld;
-    SwFrameFormat *pNew;
+    SwFrameFormat * const pNew;
     MapTableFrameFormat( const SwFrameFormat *pOldFormat, SwFrameFormat*pNewFormat )
         : pOld( pOldFormat ), pNew( pNewFormat )
     {}
@@ -121,7 +121,7 @@ static bool lcl_SrchNew( const MapTableFrameFormat& rMap, SwFrameFormat** pPara 
 struct CopyTable
 {
     SwDoc* m_pDoc;
-    sal_uLong m_nOldTableSttIdx;
+    sal_uLong const m_nOldTableSttIdx;
     MapTableFrameFormats& m_rMapArr;
     SwTableLine* m_pInsLine;
     SwTableBox* m_pInsBox;

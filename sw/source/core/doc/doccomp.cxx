@@ -92,7 +92,7 @@ private:
     static sal_uLong NextIdx( const SwNode* pNd );
 
     vector< SwCompareLine* > aLines;
-    bool m_bRecordDiff;
+    bool const m_bRecordDiff;
 
     // Truncate beginning and end and add all others to the LinesArray
     void CheckRanges( CompareData& );

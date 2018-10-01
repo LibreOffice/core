@@ -223,7 +223,7 @@ private:
     OUString                m_sCurrentText;
 
     SwMailMergeConfigItem&  m_rConfigItem;
-    DialogType              m_eType;
+    DialogType const        m_eType;
 
     DECL_LINK(OKHdl_Impl, Button*, void);
     DECL_LINK(ListBoxSelectHdl_Impl, SvTreeListBox*, void);
@@ -257,8 +257,8 @@ class SwAssignFieldsDialog : public SfxModalDialog
 
     VclPtr<OKButton>                m_pOK;
 
-    OUString                m_sNone;
-    OUString                m_rPreviewString;
+    OUString const          m_sNone;
+    OUString const          m_rPreviewString;
 
     SwMailMergeConfigItem&  m_rConfigItem;
 

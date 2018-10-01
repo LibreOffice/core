@@ -59,7 +59,7 @@ class SwASCIIParser
     std::unique_ptr<SfxItemSet> pItemSet;
     long nFileSize;
     SvtScriptType nScript;
-    bool bNewDoc;
+    bool const bNewDoc;
 
     ErrCode ReadChars();
     void InsertText( const OUString& rStr );

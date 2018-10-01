@@ -123,7 +123,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     const SwDBData  aDBData;
 
     Link<ListBox&,void>    aOldNumFormatLnk;
-    OUString        sNoTmpl;
+    OUString const  sNoTmpl;
 
     SwView*         pView;
     std::unique_ptr<SwTableAutoFormat> m_xTAutoFormat;

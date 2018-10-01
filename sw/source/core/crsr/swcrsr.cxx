@@ -60,7 +60,7 @@ static const sal_uInt16 coSrchRplcThreshold = 60000;
 
 struct PercentHdl
 {
-    SwDocShell* pDSh;
+    SwDocShell* const pDSh;
     sal_uLong nActPos;
     bool bBack, bNodeIdx;
 

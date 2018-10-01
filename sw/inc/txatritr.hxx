@@ -33,7 +33,7 @@ class SwScriptIterator
     const OUString& m_rText;
     sal_Int32 m_nChgPos;
     sal_uInt16 nCurScript;
-    bool bForward;
+    bool const bForward;
 
 public:
     SwScriptIterator( const OUString& rStr, sal_Int32 nStart,

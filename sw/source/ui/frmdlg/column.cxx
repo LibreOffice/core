@@ -376,11 +376,12 @@ void SwColumnPage::ResetColWidth()
 
 }
 
+constexpr sal_uInt16 g_nMinWidth(MINLAY);
+
 // Now as TabPage
 SwColumnPage::SwColumnPage(TabPageParent pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "modules/swriter/ui/columnpage.ui", "ColumnPage", &rSet)
     , m_nFirstVis(0)
-    , m_nMinWidth(MINLAY)
     , m_pModifiedField(nullptr)
     , m_bFormat(false)
     , m_bFrame(false)
@@ -808,7 +809,7 @@ void SwColumnPage::Init()
         // set maximum number of columns
         // values below 1 are not allowed
     m_xCLNrEdt->set_max(std::max(1L,
-        std::min(long(nMaxCols), long( m_xColMgr->GetActualSize() / m_nMinWidth) )));
+        std::min(long(nMaxCols), long( m_xColMgr->GetActualSize() / g_nMinWidth) )));
 }
 
 bool SwColumnPage::isLineNotNone() const
@@ -1086,20 +1087,20 @@ void SwColumnPage::Timeout()
         if(nChanged == m_nCols - 1)
         {
             m_nColWidth[0] -= nDiff;
-            if(m_nColWidth[0] < static_cast<long>(m_nMinWidth))
+            if(m_nColWidth[0] < static_cast<long>(g_nMinWidth))
             {
-                nNewWidth -= m_nMinWidth - m_nColWidth[0];
-                m_nColWidth[0] = m_nMinWidth;
+                nNewWidth -= g_nMinWidth - m_nColWidth[0];
+                m_nColWidth[0] = g_nMinWidth;
             }
 
         }
         else if(nDiff)
         {
             m_nColWidth[nChanged + 1] -= nDiff;
-            if(m_nColWidth[nChanged + 1] < static_cast<long>(m_nMinWidth))
+            if(m_nColWidth[nChanged + 1] < static_cast<long>(g_nMinWidth))
             {
-                nNewWidth -= m_nMinWidth - m_nColWidth[nChanged + 1];
-                m_nColWidth[nChanged + 1] = m_nMinWidth;
+                nNewWidth -= g_nMinWidth - m_nColWidth[nChanged + 1];
+                m_nColWidth[nChanged + 1] = g_nMinWidth;
             }
         }
         m_nColWidth[nChanged] = nNewWidth;

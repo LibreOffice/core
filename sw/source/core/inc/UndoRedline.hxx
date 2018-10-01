@@ -33,7 +33,7 @@ class SwUndoRedline : public SwUndo, public SwUndRng
 protected:
     std::unique_ptr<SwRedlineData> mpRedlData;
     std::unique_ptr<SwRedlineSaveDatas> mpRedlSaveData;
-    SwUndoId mnUserId;
+    SwUndoId const mnUserId;
     bool mbHiddenRedlines;
 
     virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);
@@ -121,7 +121,7 @@ class SwUndoCompDoc : public SwUndo, public SwUndRng
     std::unique_ptr<SwRedlineData> pRedlData;
     std::unique_ptr<SwUndoDelete> pUnDel, pUnDel2;
     std::unique_ptr<SwRedlineSaveDatas> pRedlSaveData;
-    bool bInsert;
+    bool const bInsert;
 
 public:
     SwUndoCompDoc( const SwPaM& rRg, bool bIns );

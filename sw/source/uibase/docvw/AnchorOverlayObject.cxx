@@ -38,16 +38,16 @@ namespace sw { namespace sidebarwindows {
 class AnchorPrimitive : public drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D
 {
 private:
-    basegfx::B2DPolygon             maTriangle;
-    basegfx::B2DPolygon             maLine;
-    basegfx::B2DPolygon             maLineTop;
+    basegfx::B2DPolygon const       maTriangle;
+    basegfx::B2DPolygon const       maLine;
+    basegfx::B2DPolygon const       maLineTop;
     const AnchorState               maAnchorState;
-    basegfx::BColor                 maColor;
+    basegfx::BColor const           maColor;
 
     // discrete line width
-    double                          mfDiscreteLineWidth;
+    double const                    mfDiscreteLineWidth;
 
-    bool                            mbLineSolid : 1;
+    bool const                      mbLineSolid : 1;
 
 protected:
     virtual void create2DDecomposition(

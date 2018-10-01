@@ -2943,7 +2943,7 @@ void SwAccessibleParagraph::deselectAccessibleChild(
 class SwHyperlinkIter_Impl
 {
     const SwpHints *m_pHints;
-    sal_Int32 m_nStt;
+    sal_Int32 const m_nStt;
     sal_Int32 m_nEnd;
     size_t m_nPos;
 

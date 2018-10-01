@@ -29,8 +29,8 @@ enum class Master_CollCondition;
 
 struct CommandStruct
 {
-    Master_CollCondition nCnd;
-    sal_uLong nSubCond;
+    Master_CollCondition const nCnd;
+    sal_uLong const nSubCond;
 };
 
 sal_Int16       GetCommandContextIndex( const OUString &rContextName );

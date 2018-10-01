@@ -80,7 +80,7 @@ public:
 class SwRotationGrf : public SfxUInt16Item
 {
 private:
-    Size aUnrotatedSize;
+    Size const aUnrotatedSize;
 
     // tdf#115529 check and evtl. correct value, it is in 10th
     // degrees and *has* to be in the range [0 .. 3600[

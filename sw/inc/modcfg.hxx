@@ -127,7 +127,7 @@ class SwInsertConfig : public utl::ConfigItem
     bool            m_bCaptionOrderNumberingFirst; //#i61007# caption order starting with numbering
 
     SwInsertTableOptions    m_aInsTableOpts;
-    bool            m_bIsWeb;
+    bool const            m_bIsWeb;
 
     const css::uno::Sequence<OUString>& GetPropertyNames();
 

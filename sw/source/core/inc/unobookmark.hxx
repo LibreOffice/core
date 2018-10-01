@@ -179,7 +179,7 @@ class SwXFieldmark final
     : public SwXFieldmark_Base
 {
     ::sw::mark::ICheckboxFieldmark* getCheckboxFieldmark();
-    bool isReplacementObject;
+    bool const isReplacementObject;
 
     SwXFieldmark(bool isReplacementObject, SwDoc* pDoc);
 

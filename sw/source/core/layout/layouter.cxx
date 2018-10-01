@@ -46,7 +46,7 @@ public:
 
 class SwEndnoter
 {
-    SwLayouter*                        pMaster;
+    SwLayouter* const                  pMaster;
     SwSectionFrame*                    pSect;
     std::unique_ptr<SwFootnoteFrames>  pEndArr;
 public:

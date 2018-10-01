@@ -564,12 +564,12 @@ public:
     }
 private:
     SwDocShell &m_rDocSh;
-    bool m_bNew;
+    bool const m_bNew;
     rtl::Reference< SwDocStyleSheet > m_xTmp;
-    SfxStyleFamily m_nFamily;
+    SfxStyleFamily const m_nFamily;
     VclPtr<SfxAbstractApplyTabDialog> m_pDlg;
     rtl::Reference< SfxStyleSheetBasePool > m_xBasePool;
-    bool m_bModified;
+    bool const m_bModified;
 };
 
 IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)

@@ -43,7 +43,7 @@ class SwCSS1Parser : public SvxCSS1Parser
 
     sal_uInt16 m_nDropCapCnt;
 
-    bool m_bIsNewDoc : 1;
+    bool const m_bIsNewDoc : 1;
 
     bool m_bBodyBGColorSet : 1;
     bool m_bBodyBackgroundSet : 1;

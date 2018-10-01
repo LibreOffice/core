@@ -487,7 +487,7 @@ private:
     struct ModeStack
     {
         ModeStack   *pNext;
-        bool        bAdd,
+        bool const  bAdd,
                     bBlock,
                     bExt,
                     bIns;
@@ -512,9 +512,9 @@ private:
     {
         Point aDocPos;
         std::unique_ptr<CursorStack> pNext;
-        bool bValidCurPos : 1;
+        bool const bValidCurPos : 1;
         bool bIsFrameSel : 1;
-        SwTwips lOffset;
+        SwTwips const lOffset;
 
         CursorStack( bool bValid, bool bFrameSel, const Point &rDocPos,
                     SwTwips lOff, std::unique_ptr<CursorStack> pN )

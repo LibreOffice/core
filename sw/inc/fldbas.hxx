@@ -231,7 +231,7 @@ class SW_DLLPUBLIC SwFieldType : public SwModify, public sw::BroadcasterMixin
 {
     css::uno::WeakReference<css::beans::XPropertySet> m_wXFieldMaster;
 
-    SwFieldIds m_nWhich;
+    SwFieldIds const m_nWhich;
 
     friend void FinitUI();     ///< In order to delete pointer!
     static  std::vector<OUString>* s_pFieldNames;

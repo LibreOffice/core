@@ -157,7 +157,7 @@ public:
     SwNumRule* GetNumRule(size_t i);
     size_t GetWW8LSTInfoNum() const{return maLSTInfos.size();}
 private:
-    wwSprmParser maSprmParser;
+    wwSprmParser const maSprmParser;
     SwWW8ImplReader& rReader;
     SwDoc&           rDoc;
     const WW8Fib&    rFib;
@@ -586,31 +586,31 @@ class WW8ReaderSave
 {
 private:
     WW8PLCFxSaveAll maPLCFxSave;
-    SwPosition maTmpPos;
+    SwPosition const maTmpPos;
     std::deque<bool> maOldApos;
     std::deque<WW8FieldEntry> maOldFieldStack;
     std::unique_ptr<SwWW8FltControlStack> mxOldStck;
     std::unique_ptr<SwWW8FltAnchorStack> mxOldAnchorStck;
     std::unique_ptr<sw::util::RedlineStack> mxOldRedlines;
     std::shared_ptr<WW8PLCFMan> mxOldPlcxMan;
-    WW8FlyPara* mpWFlyPara;
-    WW8SwFlyPara* mpSFlyPara;
-    SwPaM* mpPreviousNumPaM;
+    WW8FlyPara* const mpWFlyPara;
+    WW8SwFlyPara* const mpSFlyPara;
+    SwPaM* const mpPreviousNumPaM;
     const SwNumRule* mpPrevNumRule;
     std::unique_ptr<WW8TabDesc> mxTableDesc;
-    int mnInTable;
-    sal_uInt16 mnCurrentColl;
-    sal_Unicode mcSymbol;
-    bool mbIgnoreText;
-    bool mbSymbol;
-    bool mbHdFtFootnoteEdn;
-    bool mbTxbxFlySection;
-    bool mbAnl;
-    bool mbInHyperlink;
-    bool mbPgSecBreak;
-    bool mbWasParaEnd;
-    bool mbHasBorder;
-    bool mbFirstPara;
+    int const mnInTable;
+    sal_uInt16 const mnCurrentColl;
+    sal_Unicode const mcSymbol;
+    bool const mbIgnoreText;
+    bool const mbSymbol;
+    bool const mbHdFtFootnoteEdn;
+    bool const mbTxbxFlySection;
+    bool const mbAnl;
+    bool const mbInHyperlink;
+    bool const mbPgSecBreak;
+    bool const mbWasParaEnd;
+    bool const mbHasBorder;
+    bool const mbFirstPara;
 public:
     WW8ReaderSave(SwWW8ImplReader* pRdr, WW8_CP nStart=-1);
     void Restore(SwWW8ImplReader* pRdr);
@@ -681,7 +681,7 @@ public:
     virtual bool Import(const css::uno::Reference< css::lang::XMultiServiceFactory> &rServiceFactory,
         css::uno::Reference< css::form::XFormComponent> &rFComp,
         css::awt::Size &rSz) = 0;
-    OUString msName;
+    OUString const msName;
 };
 
 class WW8FormulaCheckBox : public WW8FormulaControl
@@ -738,7 +738,7 @@ public:
         css::uno::Reference< css::drawing::XShape > *pShapeRef,
         bool bFloatingCtrl=false );
 private:
-    SwPaM *pPaM;
+    SwPaM * const pPaM;
     sal_uInt32 mnObjectId;
 };
 
@@ -923,9 +923,9 @@ public:
 class wwFrameNamer
 {
 private:
-    OUString msSeed;
+    OUString const msSeed;
     sal_Int32 mnImportedGraphicsCount;
-    bool mbIsDisabled;
+    bool const mbIsDisabled;
 
     wwFrameNamer(wwFrameNamer const&) = delete;
     wwFrameNamer& operator=(wwFrameNamer const&) = delete;
@@ -942,7 +942,7 @@ class wwSectionNamer
 {
 private:
     const SwDoc &mrDoc;
-    OUString msFileLinkSeed;
+    OUString const msFileLinkSeed;
     int mnFileSectionNo;
     wwSectionNamer(const wwSectionNamer&) = delete;
     wwSectionNamer& operator=(const wwSectionNamer&) = delete;
@@ -990,8 +990,8 @@ class SwDocShell;
 struct WW8PostProcessAttrsInfo
 {
     bool mbCopy;
-    WW8_CP mnCpStart;
-    WW8_CP mnCpEnd;
+    WW8_CP const mnCpStart;
+    WW8_CP const mnCpEnd;
     SwPaM mPaM;
     SfxItemSet mItemSet;
 
@@ -1257,7 +1257,7 @@ private:
     std::unique_ptr<WW8SmartTagData> m_pSmartTagData;
 
     sw::util::AuthorInfos m_aAuthorInfos;
-    OUString m_sBaseURL;
+    OUString const m_sBaseURL;
 
                                 // Ini-Flags:
     sal_uInt32 m_nIniFlags;            // flags from writer.ini
@@ -1291,14 +1291,14 @@ private:
 
     sal_Unicode m_cSymbol;        // symbol to be read now
 
-    sal_uInt8 m_nWantedVersion;        // originally requested WW-Doc version by Writer
+    sal_uInt8 const m_nWantedVersion;        // originally requested WW-Doc version by Writer
 
     sal_uInt8 m_nSwNumLevel;           // level number for outline / enumeration
     sal_uInt8 m_nWwNumType;            // outline / number / enumeration
     sal_uInt8 m_nListLevel;
 
-    bool m_bNewDoc;          // new document?
-    bool m_bSkipImages;      // skip images for text extraction/indexing
+    bool const m_bNewDoc;          // new document?
+    bool const m_bSkipImages;      // skip images for text extraction/indexing
     bool m_bReadNoTable;        // no tables
     bool m_bPgSecBreak;       // Page- or Sectionbreak is still to be added
     bool m_bSpec;             // special char follows in text

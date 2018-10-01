@@ -89,7 +89,7 @@ namespace /* private */
     private:
         ::rtl::Reference<MailDispatcher> mail_dispatcher_;
         uno::Reference<mail::XMailMessage> message_;
-        OUString error_message_;
+        OUString const error_message_;
     };
 
 } // namespace private

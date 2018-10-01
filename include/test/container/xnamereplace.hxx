@@ -31,7 +31,7 @@ public:
     virtual ~XNameReplace() {}
 
 private:
-    OUString maTestReplacementName;
+    OUString const maTestReplacementName;
 
 };
 

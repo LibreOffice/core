@@ -38,7 +38,7 @@ protected:
     css::uno::Reference< css::sheet::XSpreadsheet > xSheet;
 
 private:
-    OUString maNameToRemove;
+    OUString const maNameToRemove;
 };
 
 }

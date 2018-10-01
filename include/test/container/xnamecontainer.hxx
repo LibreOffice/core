@@ -31,7 +31,7 @@ public:
     virtual ~XNameContainer() {}
 
 private:
-    OUString maNameToRemove;
+    OUString const maNameToRemove;
 };
 
 }

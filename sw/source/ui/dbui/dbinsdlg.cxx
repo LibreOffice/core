@@ -113,9 +113,9 @@ struct DB_Column
     const enum class Type { FILLTEXT, COL_FIELD, COL_TEXT, SPLITPARA } eColType;
 
     union {
-        OUString* pText;
+        OUString* const pText;
         SwField* pField;
-        sal_uInt32 nFormat;
+        sal_uInt32 const nFormat;
     };
     const SwInsDBColumn* pColInfo;
 

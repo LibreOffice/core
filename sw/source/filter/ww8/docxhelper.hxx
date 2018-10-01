@@ -15,7 +15,7 @@
 struct DocxStringTokenMap
 {
     const char* pToken;
-    sal_Int32 nToken;
+    sal_Int32 const nToken;
 };
 
 sal_Int32 DocxStringGetToken(DocxStringTokenMap const * pMap, const OUString& rName);

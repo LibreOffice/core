@@ -24,8 +24,8 @@ private:
     css::uno::Reference< css::container::XIndexReplace > mxNumberingRules;
     css::uno::Reference< css::container::XNameContainer > mxStyleFamily;
     css::uno::Reference< css::beans::XPropertySet > mxStyleProps;
-    sal_Int32 mnGalleryType;
-    sal_Int32 mnTemplateType;
+    sal_Int32 const mnGalleryType;
+    sal_Int32 const mnTemplateType;
     OUString msStyleName;
 
     /// @throws css::uno::RuntimeException

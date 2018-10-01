@@ -68,28 +68,28 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg final
     VclPtr<PopupMenu>       m_xPopup;
     Timer                   m_aDeselectTimer;
     Timer                   m_aSelectTimer;
-    OUString                m_sInserted;
-    OUString                m_sDeleted;
-    OUString                m_sFormated;
-    OUString                m_sTableChgd;
-    OUString                m_sFormatCollSet;
+    OUString const          m_sInserted;
+    OUString const          m_sDeleted;
+    OUString const          m_sFormated;
+    OUString const          m_sTableChgd;
+    OUString const          m_sFormatCollSet;
     OUString                m_sFilterAction;
-    OUString                m_sAutoFormat;
+    OUString const          m_sAutoFormat;
     VclPtr<SvxTPView>       m_pTPView;
     VclPtr<SvxRedlinTable>  m_pTable; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
     Link<SvTreeListBox*,void> m_aOldSelectHdl;
     Link<SvTreeListBox*,void> m_aOldDeselectHdl;
     bool                    m_bOnlyFormatedRedlines;
-    bool                    m_bRedlnAutoFormat;
+    bool const              m_bRedlnAutoFormat;
 
     // prevent update dialog data during longer operations (cf #102657#)
     bool                    m_bInhibitActivate;
 
-    Image                   m_aInserted;
-    Image                   m_aDeleted;
-    Image                   m_aFormated;
-    Image                   m_aTableChgd;
-    Image                   m_aFormatCollSet;
+    Image const             m_aInserted;
+    Image const             m_aDeleted;
+    Image const             m_aFormated;
+    Image const             m_aTableChgd;
+    Image const             m_aFormatCollSet;
 
     DECL_DLLPRIVATE_LINK( AcceptHdl,     SvxTPView*, void );
     DECL_DLLPRIVATE_LINK( AcceptAllHdl,  SvxTPView*, void );

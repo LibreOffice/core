@@ -48,15 +48,15 @@ class SW_DLLPUBLIC SwWriteTableCell
     const SwTableBox *pBox;             // SwTableBox of the cell
     const SvxBrushItem *pBackground;    // inherited background of a row
 
-    long nHeight;                   // fix/minimum height of a row
+    long const nHeight;                   // fix/minimum height of a row
 
     sal_uInt32 nWidthOpt;           // width from option;
 
-    sal_uInt16 nRow;                // start row
-    sal_uInt16 nCol;                // start column
+    sal_uInt16 const nRow;                // start row
+    sal_uInt16 const nCol;                // start column
 
-    sal_uInt16 nRowSpan;            // spanned rows
-    sal_uInt16 nColSpan;            // spanned columns
+    sal_uInt16 const nRowSpan;            // spanned rows
+    sal_uInt16 const nColSpan;            // spanned columns
 
     bool bPrcWidthOpt;
 
@@ -98,8 +98,8 @@ class SW_DLLPUBLIC SwWriteTableRow final
     SwWriteTableCells m_Cells;       ///< all cells of the rows
     const SvxBrushItem *pBackground; // background
 
-    long nPos;                       // end position (twips) of the row
-    bool mbUseLayoutHeights;
+    long const nPos;                       // end position (twips) of the row
+    bool const mbUseLayoutHeights;
 
     SwWriteTableRow & operator= (const SwWriteTableRow &) = delete;
 
@@ -156,7 +156,7 @@ using SwWriteTableRows
 
 class SW_DLLPUBLIC SwWriteTableCol
 {
-    sal_uInt32 nPos;                    // end position of the column
+    sal_uInt32 const nPos;                    // end position of the column
 
     sal_uInt32 nWidthOpt;
 
@@ -227,24 +227,24 @@ protected:
 
     sal_uInt16 m_nBorder;             // thickness of the outer border
     sal_uInt16 m_nInnerBorder;        // thickness of the inner border
-    sal_uInt32 m_nBaseWidth;          // reference value for SwFormatFrameSize width
+    sal_uInt32 const m_nBaseWidth;          // reference value for SwFormatFrameSize width
 
     sal_uInt16 m_nHeadEndRow;         // last row of the table heading
 
-    sal_uInt16 m_nLeftSub;
-    sal_uInt16 m_nRightSub;
+    sal_uInt16 const m_nLeftSub;
+    sal_uInt16 const m_nRightSub;
 
     sal_uInt32 m_nTabWidth;           // absolute/relative width of the table
 
-    bool m_bRelWidths : 1;        // generate relative widths?
+    bool const m_bRelWidths : 1;        // generate relative widths?
     bool m_bUseLayoutHeights : 1; // use layout to determine the height?
 #ifdef DBG_UTIL
     bool m_bGetLineHeightCalled : 1;
 #endif
 
-    bool m_bColTags : 1;
-    bool m_bLayoutExport : 1;
-    bool m_bCollectBorderWidth : 1;
+    bool const m_bColTags : 1;
+    bool const m_bLayoutExport : 1;
+    bool const m_bCollectBorderWidth : 1;
 
     virtual bool ShouldExpandSub( const SwTableBox *pBox,
                                 bool bExpandedBefore, sal_uInt16 nDepth ) const;

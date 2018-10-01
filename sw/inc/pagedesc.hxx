@@ -354,7 +354,7 @@ class SwPageDescExt
 public:
     SwPageDesc m_PageDesc;
 private:
-    SwDoc * m_pDoc;
+    SwDoc * const m_pDoc;
     OUString m_sFollow;
 
     void SetPageDesc(const SwPageDesc & rPageDesc);

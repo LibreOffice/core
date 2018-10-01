@@ -290,13 +290,13 @@ static const char* FMT_USERVAR_ARY[] =
 // field types and subtypes
 struct SwFieldPack
 {
-    sal_uInt16   nTypeId;
+    sal_uInt16 const   nTypeId;
 
-    const char** pSubTypeResIds;
-    size_t       nSubTypeLength;
+    const char**       pSubTypeResIds;
+    size_t const       nSubTypeLength;
 
-    const char** pFormatResIds;
-    size_t       nFormatLength;
+    const char**       pFormatResIds;
+    size_t const       nFormatLength;
 };
 
 // strings and formats

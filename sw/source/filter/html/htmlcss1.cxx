@@ -74,9 +74,9 @@ static void lcl_swcss1_setEncoding( SwFormat& rFormat, rtl_TextEncoding eEnc );
 // Implementation of SwCSS1Parsers (actually swcss1.cxx)
 static struct SwCSS1ItemIds
 {
-    sal_uInt16 nFormatBreak;
-    sal_uInt16 nFormatPageDesc;
-    sal_uInt16 nFormatKeep;
+    sal_uInt16 const nFormatBreak;
+    sal_uInt16 const nFormatPageDesc;
+    sal_uInt16 const nFormatKeep;
 
     SwCSS1ItemIds() :
         nFormatBreak( RES_BREAK ),

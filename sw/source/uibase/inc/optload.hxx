@@ -47,7 +47,7 @@ class TextFilterAutoConvert : public TextFilter
 {
 private:
     OUString m_sLastGoodText;
-    OUString m_sNone;
+    OUString const m_sNone;
 public:
     TextFilterAutoConvert(const OUString &rNone)
         : m_sNone(rNone)
@@ -104,7 +104,7 @@ class CaptionComboBox : public ComboBox
 {
     std::vector<OUString> m_EntryList;
     std::vector<OUString> m_DelEntryList;
-    OUString              aDefault;
+    OUString const        aDefault;
 
     void InsertSorted(OUString const& rEntry);
 
@@ -163,22 +163,22 @@ private:
     VclPtr<ListBox>          m_pCharStyleLB;
     VclPtr<CheckBox>         m_pApplyBorderCB;
 
-    OUString m_sSWTable;
-    OUString m_sSWFrame;
-    OUString m_sSWGraphic;
-    OUString m_sOLE;
+    OUString const m_sSWTable;
+    OUString const m_sSWFrame;
+    OUString const m_sSWGraphic;
+    OUString const m_sOLE;
 
     OUString m_sIllustration;
     OUString m_sTable;
     OUString m_sText;
     OUString m_sDrawing;
 
-    OUString m_sBegin;
-    OUString m_sEnd;
-    OUString m_sAbove;
-    OUString m_sBelow;
+    OUString const m_sBegin;
+    OUString const m_sEnd;
+    OUString const m_sAbove;
+    OUString const m_sBelow;
 
-    OUString m_sNone;
+    OUString const m_sNone;
 
     std::unique_ptr<SwFieldMgr> pMgr;
     bool bHTMLMode;

@@ -28,10 +28,10 @@ class SwWrtShell;
 class SwTemplateDlg: public SfxStyleDialog
 {
 
-    SfxStyleFamily  nType;
+    SfxStyleFamily const  nType;
     sal_uInt16      nHtmlMode;
     SwWrtShell*     pWrtShell;
-    bool            bNewStyle;
+    bool const      bNewStyle;
 
     sal_uInt16 m_nIndentsId;
     sal_uInt16 m_nAlignId;
@@ -78,7 +78,7 @@ public:
 class SwTemplateDlgController : public SfxStyleDialogController
 {
 
-    SfxStyleFamily  nType;
+    SfxStyleFamily const  nType;
     sal_uInt16      nHtmlMode;
     SwWrtShell*     pWrtShell;
 

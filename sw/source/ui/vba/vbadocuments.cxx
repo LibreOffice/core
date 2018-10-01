@@ -54,7 +54,7 @@ getDocument( uno::Reference< uno::XComponentContext > const & xContext, const un
 
 class DocumentEnumImpl : public EnumerationHelperImpl
 {
-    uno::Any m_aApplication;
+    uno::Any const m_aApplication;
 public:
     /// @throws uno::RuntimeException
     DocumentEnumImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, const uno::Any& aApplication ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_aApplication( aApplication ) {}

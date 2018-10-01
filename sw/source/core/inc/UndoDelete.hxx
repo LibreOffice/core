@@ -55,10 +55,10 @@ class SwUndoDelete
     bool m_bBackSp : 1;        // TRUE: if Grouped and preceding content deleted
     bool m_bJoinNext: 1;       // TRUE: if range is selected forwards
     bool m_bTableDelLastNd : 1;  // TRUE: TextNode following Table inserted/deleted
-    bool m_bDelFullPara : 1;   // TRUE: entire Nodes were deleted
+    bool const m_bDelFullPara : 1;   // TRUE: entire Nodes were deleted
     bool m_bResetPgDesc : 1;   // TRUE: reset PgDsc on following node
     bool m_bResetPgBrk : 1;    // TRUE: reset PgBreak on following node
-    bool m_bFromTableCopy : 1; // TRUE: called by SwUndoTableCpyTable
+    bool const m_bFromTableCopy : 1; // TRUE: called by SwUndoTableCpyTable
 
     bool SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
                     SwTextNode* pSttTextNd, SwTextNode* pEndTextNd );

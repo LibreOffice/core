@@ -399,7 +399,7 @@ class SwXMLTableCellContext_Impl : public SvXMLImportContext
     OUString mXmlId;
     OUString m_StringValue;
 
-    SvXMLImportContextRef   m_xMyTable;
+    SvXMLImportContextRef const   m_xMyTable;
 
     double m_fValue;
     bool m_bHasValue;
@@ -728,7 +728,7 @@ void SwXMLTableCellContext_Impl::EndElement()
 
 class SwXMLTableColContext_Impl : public SvXMLImportContext
 {
-    SvXMLImportContextRef   xMyTable;
+    SvXMLImportContextRef const   xMyTable;
 
     SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(xMyTable.get()); }
 
@@ -813,7 +813,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
 
 class SwXMLTableColsContext_Impl : public SvXMLImportContext
 {
-    SvXMLImportContextRef   xMyTable;
+    SvXMLImportContextRef const   xMyTable;
 
     SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(xMyTable.get()); }
 
@@ -861,7 +861,7 @@ SvXMLImportContextRef SwXMLTableColsContext_Impl::CreateChildContext(
 
 class SwXMLTableRowContext_Impl : public SvXMLImportContext
 {
-    SvXMLImportContextRef   xMyTable;
+    SvXMLImportContextRef const xMyTable;
 
     sal_uInt32                  nRowRepeat;
 
@@ -978,9 +978,9 @@ SvXMLImportContextRef SwXMLTableRowContext_Impl::CreateChildContext(
 
 class SwXMLTableRowsContext_Impl : public SvXMLImportContext
 {
-    SvXMLImportContextRef   xMyTable;
+    SvXMLImportContextRef const   xMyTable;
 
-    bool bHeader;
+    bool const bHeader;
 
     SwXMLTableContext *GetTable() { return static_cast<SwXMLTableContext *>(xMyTable.get()); }
 
@@ -1199,9 +1199,9 @@ static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
 class TableBoxIndex
 {
 public:
-    OUString msName;
-    sal_Int32 mnWidth;
-    bool mbProtected;
+    OUString const msName;
+    sal_Int32 const mnWidth;
+    bool const mbProtected;
 
     TableBoxIndex( const OUString& rName, sal_Int32 nWidth,
                    bool bProtected ) :

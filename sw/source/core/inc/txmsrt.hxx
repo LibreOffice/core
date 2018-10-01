@@ -45,8 +45,8 @@ enum TOXSortType
 struct SwTOXSource
 {
     const SwContentNode* pNd;
-    sal_Int32 nPos;
-    bool bMainEntry;
+    sal_Int32 const nPos;
+    bool const bMainEntry;
 
     SwTOXSource( const SwContentNode* pNode, sal_Int32 n, bool bMain )
         : pNd(pNode), nPos(n), bMainEntry(bMain)
@@ -71,9 +71,9 @@ class SwTOXInternational
 {
     std::unique_ptr<IndexEntrySupplierWrapper> m_pIndexWrapper;
     std::unique_ptr<CharClass>                 m_pCharClass;
-    LanguageType               m_eLang;
-    OUString                   m_sSortAlgorithm;
-    SwTOIOptions               m_nOptions;
+    LanguageType const               m_eLang;
+    OUString                         m_sSortAlgorithm;
+    SwTOIOptions const               m_nOptions;
 
     void Init();
 
@@ -125,7 +125,7 @@ struct SwTOXSortTabBase
     const SwTOXInternational* pTOXIntl;
     sal_uLong nPos;
     sal_Int32 nCntPos;
-    sal_uInt16 nType;
+    sal_uInt16 const nType;
     static SwTOIOptions nOpt;
 
     SwTOXSortTabBase( TOXSortType nType,
@@ -189,7 +189,7 @@ struct SwTOXIndex : public SwTOXSortTabBase
 private:
     virtual TextAndReading GetText_Impl() const override;
 
-    sal_uInt8   nKeyLevel;
+    sal_uInt8 const   nKeyLevel;
 };
 
 struct SwTOXCustom : public SwTOXSortTabBase
@@ -205,8 +205,8 @@ struct SwTOXCustom : public SwTOXSortTabBase
 private:
     virtual TextAndReading GetText_Impl() const override;
 
-    TextAndReading m_aKey;
-    sal_uInt16  nLev;
+    TextAndReading const m_aKey;
+    sal_uInt16 const  nLev;
 };
 
 /**
@@ -238,11 +238,11 @@ struct SwTOXPara : public SwTOXSortTabBase
 private:
     virtual TextAndReading GetText_Impl() const override;
 
-    SwTOXElement eType;
-    sal_uInt16 m_nLevel;
+    SwTOXElement const eType;
+    sal_uInt16 const m_nLevel;
     sal_Int32 nStartIndex;
     sal_Int32 nEndIndex;
-    OUString m_sSequenceName;
+    OUString const m_sSequenceName;
 };
 
 struct SwTOXTable : public SwTOXSortTabBase

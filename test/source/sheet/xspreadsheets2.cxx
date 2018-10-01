@@ -40,10 +40,11 @@ using namespace css::uno;
 
 namespace apitest {
 
-XSpreadsheets2::XSpreadsheets2():
-    aSrcSheetName("SheetToCopy"),
-    aSrcFileName("rangenamessrc.ods"),
-    aDestFileBase("ScNamedRangeObj.ods")
+static constexpr OUStringLiteral gaSrcSheetName("SheetToCopy");
+static constexpr OUStringLiteral gaSrcFileName("rangenamessrc.ods");
+static constexpr OUStringLiteral gaDestFileBase("ScNamedRangeObj.ods");
+
+XSpreadsheets2::XSpreadsheets2()
 {
 }
 
@@ -65,7 +66,7 @@ void XSpreadsheets2::testImportedSheetNameAndIndex()
     importSheetToCopy();
 
     uno::Reference< container::XNameAccess > xDestSheetNameAccess(xDestDoc->getSheets(), UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_MESSAGE("Wrong sheet name", xDestSheetNameAccess->hasByName(aSrcSheetName));
+    CPPUNIT_ASSERT_MESSAGE("Wrong sheet name", xDestSheetNameAccess->hasByName(gaSrcSheetName));
 
 }
 
@@ -298,18 +299,18 @@ uno::Reference< sheet::XNamedRanges> XSpreadsheets2::getNamedRanges(uno::Referen
 void XSpreadsheets2::importSheetToCopy()
 {
     uno::Reference< container::XNameAccess> xSrcNameAccess(init(),UNO_QUERY_THROW);
-    xSrcSheet.set( xSrcNameAccess->getByName(aSrcSheetName), UNO_QUERY_THROW);
+    xSrcSheet.set( xSrcNameAccess->getByName(gaSrcSheetName), UNO_QUERY_THROW);
 
     uno::Reference< lang::XComponent > xDestComponent;
     if (!xDestComponent.is())
     {
-        xDestDoc = getDoc(aDestFileBase, xDestComponent);
+        xDestDoc = getDoc(gaDestFileBase, xDestComponent);
         CPPUNIT_ASSERT(xDestDoc.is());
 
         // import sheet
         uno::Reference< sheet::XSpreadsheets2 > xDestSheets (xDestDoc->getSheets(), UNO_QUERY_THROW);
         sal_Int32 nDestPos = 0;
-        sal_Int32 nDestPosEffective = xDestSheets->importSheet(xDocument, aSrcSheetName, nDestPos);
+        sal_Int32 nDestPosEffective = xDestSheets->importSheet(xDocument, gaSrcSheetName, nDestPos);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong sheet index", nDestPosEffective, nDestPos);
     }
     else
@@ -318,7 +319,7 @@ void XSpreadsheets2::importSheetToCopy()
     }
 
     uno::Reference< container::XNameAccess > xDestSheetNameAccess (xDestDoc->getSheets(), UNO_QUERY_THROW);
-    xDestSheet.set( xDestSheetNameAccess->getByName(aSrcSheetName), UNO_QUERY_THROW);
+    xDestSheet.set( xDestSheetNameAccess->getByName(gaSrcSheetName), UNO_QUERY_THROW);
 }
 
 bool XSpreadsheets2::isExternalReference(const OUString& aDestContent, const OUString& aSrcContent )
@@ -326,7 +327,7 @@ bool XSpreadsheets2::isExternalReference(const OUString& aDestContent, const OUS
     CPPUNIT_ASSERT(aDestContent.startsWith("'file://"));
 
     return  (aDestContent.endsWithIgnoreAsciiCase(aSrcContent) // same cell address
-            && aDestContent.indexOf(aSrcFileName)>0); // contains source file name
+            && aDestContent.indexOf(gaSrcFileName)>0); // contains source file name
 }
 
 }

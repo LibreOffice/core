@@ -148,7 +148,7 @@ enum StyleType
 class AttributeOutputBase
 {
 private:
-    SvtSaveOptions m_aSaveOpt;
+    SvtSaveOptions const m_aSaveOpt;
 
     OUString ConvertURL( const OUString& rUrl, bool bAbsoluteOut );
 

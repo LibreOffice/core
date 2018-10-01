@@ -907,7 +907,7 @@ public:
 class SwLayoutModeModifier
 {
     const OutputDevice& m_rOut;
-    ComplexTextLayoutFlags m_nOldLayoutMode;
+    ComplexTextLayoutFlags const m_nOldLayoutMode;
 public:
     SwLayoutModeModifier( const OutputDevice& rOutp );
     ~SwLayoutModeModifier();
@@ -918,7 +918,7 @@ public:
 class SwDigitModeModifier
 {
     const OutputDevice& rOut;
-    LanguageType nOldLanguageType;
+    LanguageType const nOldLanguageType;
 public:
     SwDigitModeModifier( const OutputDevice& rOutp, LanguageType eCurLang );
     ~SwDigitModeModifier();

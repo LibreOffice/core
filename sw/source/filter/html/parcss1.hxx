@@ -85,8 +85,8 @@ enum CSS1SelectorType
  */
 class CSS1Selector
 {
-    CSS1SelectorType eType; // the type
-    OUString aSelector;     // the selector itself
+    CSS1SelectorType const eType; // the type
+    OUString const aSelector;     // the selector itself
     CSS1Selector *pNext;    // the following component
 
 public:

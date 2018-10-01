@@ -77,7 +77,7 @@ class SwQueuedPaint
 {
 public:
     SwQueuedPaint *pNext;
-    SwViewShell      *pSh;
+    SwViewShell* const pSh;
     SwRect          aRect;
 
     SwQueuedPaint( SwViewShell *pNew, const SwRect &rRect ) :

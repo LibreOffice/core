@@ -121,7 +121,7 @@ bool CheckSplitCells( const SwCursor& rCursor, sal_uInt16 nDiv,
 class SwSelUnion
 {
     SwRect   m_aUnion;        // The rectangle enclosing the selection.
-    SwTabFrame *m_pTable;       // The (Follow-)Table for the Union.
+    SwTabFrame * const m_pTable;  // The (Follow-)Table for the Union.
 
 public:
     SwSelUnion( const SwRect &rRect, SwTabFrame *pTab ) :
@@ -156,9 +156,9 @@ typedef std::vector<std::unique_ptr<FndLine_>> FndLines_t;
 
 class FndBox_
 {
-    SwTableBox* m_pBox;
+    SwTableBox* const m_pBox;
     FndLines_t m_Lines;
-    FndLine_* m_pUpper;
+    FndLine_* const m_pUpper;
 
     SwTableLine *m_pLineBefore;   // For deleting/restoring the layout.
     SwTableLine *m_pLineBehind;
@@ -191,7 +191,7 @@ public:
 
 class FndLine_
 {
-    SwTableLine* m_pLine;
+    SwTableLine* const m_pLine;
     FndBoxes_t m_Boxes;
     FndBox_* m_pUpper;
 
