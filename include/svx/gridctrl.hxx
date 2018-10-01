@@ -64,7 +64,7 @@ enum class GridRowStatus
 
 class DbGridRow : public SvRefBase
 {
-    css::uno::Any  m_aBookmark;        // Bookmark of the row, can be set
+    css::uno::Any  m_aBookmark;        // Bookmark of the row, can be s
     ::std::vector< std::unique_ptr<::svxform::DataColumn> >
                                 m_aVariants;
     GridRowStatus               m_eStatus;
@@ -592,6 +592,17 @@ protected:
 
 private:
     using BrowseBox::InsertHandleColumn;
+
+    /*
+     * Description:
+     * Computes the new Id of the column if hidden columns are detected in the View.
+     * It takes in account the fact that hidden columns provoques the shifting of the Column's Id.
+     * It defines a new mapping between the View Id and the Model Id
+     *
+     * input: Column Id in the View
+     * output: Column Id in the Model
+    */
+    sal_uInt16 computeViewId(sal_uInt16 _nColViewId);
 };
 
 #endif // INCLUDED_SVX_GRIDCTRL_HXX
