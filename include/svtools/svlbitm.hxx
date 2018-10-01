@@ -136,7 +136,7 @@ class SVT_DLLPUBLIC SvLBoxButton : public SvLBoxItem
 {
     bool    isVis;
     SvLBoxButtonData*   pData;
-    SvLBoxButtonKind eKind;
+    SvLBoxButtonKind const eKind;
     SvItemStateFlags nItemFlags;
 
     static void ImplAdjustBoxSize( Size& io_rCtrlSize, ControlType i_eType, vcl::RenderContext const & pRenderContext);

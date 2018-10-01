@@ -108,8 +108,8 @@ uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme)
     OUString* pNames = aNames.getArray();
     struct ColorConfigEntryData_Impl
     {
-        OUStringLiteral cName;
-        bool            bCanBeVisible;
+        OUStringLiteral const cName;
+        bool const            bCanBeVisible;
     };
     static const ColorConfigEntryData_Impl cNames[] =
     {

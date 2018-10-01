@@ -55,7 +55,7 @@ static bool bEndScrollInvalidate = true;
 
 class IcnViewEdit_Impl : public MultiLineEdit
 {
-    Link<LinkParamNone*,void> aCallBackHdl;
+    Link<LinkParamNone*,void> const aCallBackHdl;
     Accelerator     aAccReturn;
     Accelerator     aAccEscape;
     Idle            maLoseFocusIdle;

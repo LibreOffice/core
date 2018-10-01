@@ -96,7 +96,7 @@ class SVT_DLLPUBLIC StatusbarController :
             Listener( const css::util::URL& rURL, const css::uno::Reference< css::frame::XDispatch >& rDispatch ) :
                 aURL( rURL ), xDispatch( rDispatch ) {}
 
-            css::util::URL                               aURL;
+            css::util::URL const                         aURL;
             css::uno::Reference< css::frame::XDispatch > xDispatch;
         };
 
