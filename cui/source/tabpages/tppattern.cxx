@@ -93,7 +93,7 @@ SvxPatternTabPage::SvxPatternTabPage(TabPageParent pParent, const SfxItemSet& rI
     , m_xCtlPixel(new SvxPixelCtl(this))
     , m_xLbColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_COLOR"), pParent.GetFrameWeld()))
     , m_xLbBackgroundColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_BACKGROUND_COLOR"), pParent.GetFrameWeld()))
-    , m_xPatternLB(new PresetListBox(m_xBuilder->weld_scrolled_window("patternpresetlistwin")))
+    , m_xPatternLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("patternpresetlistwin")))
     , m_xBtnAdd(m_xBuilder->weld_button("BTN_ADD"))
     , m_xBtnModify(m_xBuilder->weld_button("BTN_MODIFY"))
     , m_xCtlPixelWin(new weld::CustomWeld(*m_xBuilder, "CTL_PIXEL", *m_xCtlPixel))
@@ -437,7 +437,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickModifyHdl_Impl, weld::Button&, void)
 }
 
 
-IMPL_LINK_NOARG(SvxPatternTabPage, ClickRenameHdl_Impl, PresetListBox*, void)
+IMPL_LINK_NOARG(SvxPatternTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
 {
     size_t nPos = m_xPatternLB->GetSelectItemPos();
     sal_Int32 nId = m_xPatternLB->GetSelectedItemId();
@@ -479,7 +479,7 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ClickRenameHdl_Impl, PresetListBox*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxPatternTabPage, ClickDeleteHdl_Impl, PresetListBox*, void)
+IMPL_LINK_NOARG(SvxPatternTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 {
     sal_uInt16 nId = m_xPatternLB->GetSelectedItemId();
     size_t nPos = m_xPatternLB->GetSelectItemPos();

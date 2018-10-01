@@ -77,7 +77,7 @@ SvxBitmapTabPage::SvxBitmapTabPage(TabPageParent pParent, const SfxItemSet& rInA
     , m_aXFillAttr(rInAttrs.GetPool())
     , m_rXFSet(m_aXFillAttr.GetItemSet())
     , mpView(nullptr)
-    , m_xBitmapLB(new PresetListBox(m_xBuilder->weld_scrolled_window("bitmapwin")))
+    , m_xBitmapLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("bitmapwin")))
     , m_xBitmapStyleLB(m_xBuilder->weld_combo_box("bitmapstyle"))
     , m_xSizeBox(m_xBuilder->weld_container("sizebox"))
     , m_xTsbScale(m_xBuilder->weld_check_button("scaletsb"))
@@ -511,7 +511,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapHdl, SvtValueSet*, void)
 
 }
 
-IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, PresetListBox*, void)
+IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, SvxPresetListBox*, void)
 {
     sal_uInt16 nId = m_xBitmapLB->GetSelectedItemId();
     size_t nPos = m_xBitmapLB->GetSelectItemPos();
@@ -551,7 +551,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickRenameHdl, PresetListBox*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl, PresetListBox*, void)
+IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl, SvxPresetListBox*, void)
 {
     sal_uInt16 nId = m_xBitmapLB->GetSelectedItemId();
     size_t nPos = m_xBitmapLB->GetSelectItemPos();

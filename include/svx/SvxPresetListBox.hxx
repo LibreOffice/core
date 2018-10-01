@@ -27,13 +27,13 @@
 #include <svx/xtable.hxx>
 #include <tools/gen.hxx>
 
-class SVX_DLLPUBLIC PresetListBox : public SvtValueSet
+class SVX_DLLPUBLIC SvxPresetListBox : public SvtValueSet
 {
 private:
     sal_uInt32 nColCount;
     Size       aIconSize;
-    Link<PresetListBox*,void> maRenameHdl;
-    Link<PresetListBox*,void> maDeleteHdl;
+    Link<SvxPresetListBox*,void> maRenameHdl;
+    Link<SvxPresetListBox*,void> maDeleteHdl;
 
     void OnMenuItemSelected(const OString& rIdent);
 
@@ -41,18 +41,18 @@ private:
     void FillPresetListBoxImpl(ListType& pList, sal_uInt32 nStartIndex);
 
 public:
-    PresetListBox(std::unique_ptr<weld::ScrolledWindow> pWindow);
+    SvxPresetListBox(std::unique_ptr<weld::ScrolledWindow> pWindow);
 
     virtual void Resize() override;
     virtual bool ContextMenu(const Point& rPos) override;
     sal_uInt32 getColumnCount() const { return nColCount; }
     Size const & GetIconSize() const { return aIconSize; }
 
-    void SetRenameHdl( const Link<PresetListBox*,void>& rLink )
+    void SetRenameHdl( const Link<SvxPresetListBox*,void>& rLink )
     {
         maRenameHdl = rLink;
     }
-    void SetDeleteHdl( const Link<PresetListBox*,void>& rLink )
+    void SetDeleteHdl( const Link<SvxPresetListBox*,void>& rLink )
     {
         maDeleteHdl = rLink;
     }
@@ -62,9 +62,7 @@ public:
     void FillPresetListBox(XBitmapList& pList, sal_uInt32 nStartIndex = 1);
     void FillPresetListBox(XPatternList& pList, sal_uInt32 nStartIndex = 1);
     void DrawLayout();
-
 };
-
 
 #endif // INCLUDED_SVX_SVXPRESETLISTBOX_HXX
 
