@@ -34,9 +34,11 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
 #include <sal/log.hxx>
 #include <vcl/popupmenuwindow.hxx>
+#include <comphelper/AccessibleImplementationHelper.hxx>
 
 using namespace css;
 using namespace css::accessibility;
@@ -584,9 +586,27 @@ void Qt5AccessibleWidget::doAction(const QString& actionName)
     xAccessibleAction->doAccessibleAction(index);
 }
 
-QStringList Qt5AccessibleWidget::keyBindingsForAction(const QString& /* actionName */) const
+QStringList Qt5AccessibleWidget::keyBindingsForAction(const QString& actionName) const
 {
-    return QStringList();
+    QStringList keyBindings;
+    Reference<XAccessibleAction> xAccessibleAction(m_xAccessible, UNO_QUERY);
+    if (!xAccessibleAction.is())
+        return keyBindings;
+
+    int index = actionNames().indexOf(actionName);
+    if (index == -1)
+        return keyBindings;
+
+    Reference<XAccessibleKeyBinding> xKeyBinding
+        = xAccessibleAction->getAccessibleActionKeyBinding(index);
+
+    int count = xKeyBinding->getAccessibleKeyBindingCount();
+    for (int i = 0; i < count; i++)
+    {
+        Sequence<awt::KeyStroke> keyStroke = xKeyBinding->getAccessibleKeyBinding(i);
+        keyBindings.append(toQString(comphelper::GetkeyBindingStrByXkeyBinding(keyStroke)));
+    }
+    return keyBindings;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
