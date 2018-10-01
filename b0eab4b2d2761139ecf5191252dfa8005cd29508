@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_3a2696b9",
+        "filename": "vcl/inc/qt5/Qt5AccessibleWidget.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-10-01T14:35:00Z",
+      "side": 0,
+      "message": "This is used (with https://gerrit.libreoffice.org/#/c/61183 )",
+      "revId": "b0eab4b2d2761139ecf5191252dfa8005cd29508",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
