@@ -543,6 +543,7 @@ uno::Reference<text::XTextField> lcl_FindParagraphClassificationField(const uno:
     if (!xTextPortionEnumerationAccess.is())
         return xTextField;
 
+    // Enumerate text portions to find metadata fields. This is expensive, best to enumerate fields only.
     uno::Reference<container::XEnumeration> xTextPortions = xTextPortionEnumerationAccess->createEnumeration();
     while (xTextPortions->hasMoreElements())
     {
@@ -560,7 +561,6 @@ uno::Reference<text::XTextField> lcl_FindParagraphClassificationField(const uno:
         uno::Reference<text::XTextField> xField(xServiceInfo, uno::UNO_QUERY);
         if (lcl_IsParagraphClassificationField(xModel, xField, sKey))
         {
-            uno::Reference<css::text::XTextRange> xText(xField, uno::UNO_QUERY);
             xTextField = xField;
             break;
         }
@@ -1156,10 +1156,6 @@ static void lcl_ApplyParagraphClassification(SwDoc* pDoc,
     if (!xNodeSubject.is())
         return;
 
-    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xModel, uno::UNO_QUERY);
-
-    sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
-
     // Remove all paragraph classification fields.
     for (;;)
     {
@@ -1182,13 +1178,14 @@ static void lcl_ApplyParagraphClassification(SwDoc* pDoc,
                                             { return rResult.meType == svx::ClassificationType::PARAGRAPH; }),
                                   aResults.end());
 
+    sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
     std::vector<OUString> aFieldNames;
     for (size_t nIndex = 0; nIndex < aResults.size(); ++nIndex)
     {
         const svx::ClassificationResult& rResult = aResults[nIndex];
 
         const bool isLast = nIndex == 0;
-        const bool isFirst = nIndex == aResults.size() - 1;
+        const bool isFirst = (nIndex == aResults.size() - 1);
         OUString sKey;
         OUString sValue = rResult.msName;
         switch (rResult.meType)
@@ -1909,19 +1906,23 @@ void SwEditShell::RestoreMetadataFields()
     uno::Reference<container::XEnumeration> xParagraphs = xParagraphEnumerationAccess->createEnumeration();
     if (!xParagraphs.is())
         return;
+
+    static const OUString sBlank("");
+    const sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
+    const css::uno::Sequence<css::uno::Reference<rdf::XURI>> aGraphNames = SwRDFHelper::getGraphNames(xModel, MetaNS);
+
     while (xParagraphs->hasMoreElements())
     {
         uno::Reference<text::XTextContent> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
 
-        std::map<OUString, SignatureDescr> aSignatures;
-        std::vector<svx::ClassificationResult> aResults;
-
         try
         {
-            const sfx::ClassificationKeyCreator aKeyCreator(SfxClassificationHelper::getPolicyType());
-            const OUString sBlank("");
+            const css::uno::Reference<css::rdf::XResource> xSubject(xParagraph, uno::UNO_QUERY);
+            const std::map<OUString, OUString> aStatements = SwRDFHelper::getStatements(xModel, aGraphNames, xSubject);
 
-            const OUString sFieldNames = lcl_getRDF(xModel, xParagraph, ParagraphClassificationFieldNamesRDFName).second;
+            const auto it = aStatements.find(ParagraphClassificationFieldNamesRDFName);
+            const OUString sFieldNames = (it != aStatements.end() ? it->second : sBlank);
+            std::vector<svx::ClassificationResult> aResults;
             if (!sFieldNames.isEmpty())
             {
                 // Order the fields
@@ -1931,9 +1932,10 @@ void SwEditShell::RestoreMetadataFields()
                     const OUString sCurFieldName = sFieldNames.getToken(0, '/', nIndex);
                     if (sCurFieldName.isEmpty())
                         break;
-                    std::pair<OUString, OUString> fieldNameValue = lcl_getRDF(xModel, xParagraph, sCurFieldName);
-                    const OUString sName = fieldNameValue.first;
-                    const OUString sValue = fieldNameValue.second;
+
+                    const auto it2 = aStatements.find(sCurFieldName);
+                    const OUString sName = (it2 != aStatements.end() ? it->first : sBlank);
+                    const OUString sValue = (it2 != aStatements.end() ? it->second : sBlank);
 
                     if (aKeyCreator.isMarkingTextKey(sName))
                     {
@@ -1941,14 +1943,14 @@ void SwEditShell::RestoreMetadataFields()
                     }
                     else if (aKeyCreator.isCategoryNameKey(sName))
                     {
-                        const std::pair<OUString, OUString> pairAbbr = lcl_getRDF(xModel, xParent, ParagraphClassificationAbbrRDFName);
-                        const OUString sAbbreviatedName = (!pairAbbr.second.isEmpty() ? pairAbbr.second : sValue);
+                        const auto it3 = aStatements.find(ParagraphClassificationAbbrRDFName);
+                        const OUString sAbbreviatedName = (it3 != aStatements.end() && !it3->second.isEmpty() ? it3->second : sValue);
                         aResults.push_back({ svx::ClassificationType::CATEGORY, sValue, sAbbreviatedName, sBlank });
                     }
                     else if (aKeyCreator.isCategoryIdentifierKey(sName))
                     {
-                        const std::pair<OUString, OUString> pairAbbr = lcl_getRDF(xModel, xParent, ParagraphClassificationAbbrRDFName);
-                        const OUString sAbbreviatedName = (!pairAbbr.second.isEmpty() ? pairAbbr.second : sValue);
+                        const auto it3 = aStatements.find(ParagraphClassificationAbbrRDFName);
+                        const OUString sAbbreviatedName = (it3 != aStatements.end() && !it3->second.isEmpty() ? it3->second : sValue);
                         aResults.push_back({ svx::ClassificationType::CATEGORY, sBlank, sAbbreviatedName, sValue });
                     }
                     else if (aKeyCreator.isMarkingKey(sName))
@@ -1963,21 +1965,23 @@ void SwEditShell::RestoreMetadataFields()
                 while (nIndex >= 0);
             }
 
+            // Update classification based on results.
             lcl_ApplyParagraphClassification(GetDoc(), xModel, xParagraph, aResults);
 
             // Get Signatures
+            std::map<OUString, SignatureDescr> aSignatures;
             for (const auto& pair : lcl_getRDFStatements(xModel, xParagraph))
             {
-                const OUString sName = pair.first;
-                const OUString sValue = pair.second;
+                const OUString& sName = pair.first;
                 if (sName.startsWith(ParagraphSignatureRDFNamespace))
                 {
-                    OUString sSuffix = sName.copy(ParagraphSignatureRDFNamespace.getLength());
-                    sal_Int32 index = sSuffix.indexOf(":");
+                    const OUString sSuffix = sName.copy(ParagraphSignatureRDFNamespace.getLength());
+                    const sal_Int32 index = sSuffix.indexOf(":");
                     if (index >= 0)
                     {
-                        OUString id = sSuffix.copy(0, index);
-                        OUString type = sSuffix.copy(index);
+                        const OUString id = sSuffix.copy(0, index);
+                        const OUString type = sSuffix.copy(index);
+                        const OUString& sValue = pair.second;
                         if (type == ParagraphSignatureDateRDFName)
                             aSignatures[id].msDate = sValue;
                         else if (type == ParagraphSignatureUsageRDFName)
@@ -2006,6 +2010,7 @@ void SwEditShell::RestoreMetadataFields()
                     lcl_UpdateParagraphSignatureField(GetDoc(), xModel, xParagraph, xField, utf8Text);
                 }
             }
+
         }
         catch (const std::exception&)
         {
@@ -2066,8 +2071,7 @@ static OUString lcl_GetParagraphClassification(SfxClassificationHelper & rHelper
     xTextField = lcl_FindParagraphClassificationField(xModel, xParagraph, rKeyCreator.makeCategoryNameKey());
     if (xTextField.is())
     {
-        const std::pair<OUString, OUString> rdfValuePair = lcl_getRDF(xModel, xTextField, ParagraphClassificationNameRDFName);
-        return rdfValuePair.second;
+        return lcl_getRDF(xModel, xTextField, ParagraphClassificationNameRDFName).second;
     }
 
     return OUString();
