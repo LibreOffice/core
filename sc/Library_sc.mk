@@ -247,6 +247,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/interpr6 \
     sc/source/core/tool/interpr7 \
     sc/source/core/tool/interpr8 \
+    sc/source/core/tool/interpretercontext \
     sc/source/core/tool/jumpmatrix \
     sc/source/core/tool/listenerquery \
     sc/source/core/tool/lookupcache \
