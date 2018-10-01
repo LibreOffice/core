@@ -950,7 +950,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, DoubleClickHdl_Impl, SvtValueSet*, void)
 
 IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, void)
 {
-    sfx2::FileDialogHelper aFileDialog(0, FileDialogFlags::NONE, GetFrameWeld());
+    sfx2::FileDialogHelper aFileDialog(0, FileDialogFlags::NONE, GetDialogFrameWeld());
     aFileDialog.SetTitle(CuiResId(RID_SVXSTR_ADD_IMAGE));
     if ( aFileDialog.Execute() != ERRCODE_NONE )
         return;
@@ -1046,96 +1046,74 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, voi
 }
 
 // tabpage numbering options
-SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
+SvxNumOptionsTabPage::SvxNumOptionsTabPage(TabPageParent pParent,
                                const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "NumberingOptionsPage", "cui/ui/numberingoptionspage.ui", &rSet)
+    : SfxTabPage(pParent, "cui/ui/numberingoptionspage.ui", "NumberingOptionsPage", &rSet)
     , bLastWidthModified(false)
     , bModified(false)
     , bPreset(false)
     , bAutomaticCharStyles(true)
     , bHTMLMode(false)
-    , bMenuButtonInitialized(false)
     , nBullet(0xff)
     , nActNumLvl(1)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
+    , m_xLevelLB(m_xBuilder->weld_tree_view("levellb"))
+    , m_xFmtLB(m_xBuilder->weld_combo_box("numfmtlb"))
+    , m_xSeparatorFT(m_xBuilder->weld_label("separator"))
+    , m_xPrefixFT(m_xBuilder->weld_label("prefixft"))
+    , m_xPrefixED(m_xBuilder->weld_entry("prefix"))
+    , m_xSuffixFT(m_xBuilder->weld_label("suffixft"))
+    , m_xSuffixED(m_xBuilder->weld_entry("suffix"))
+    , m_xCharFmtFT(m_xBuilder->weld_label("charstyleft"))
+    , m_xCharFmtLB(m_xBuilder->weld_combo_box("charstyle"))
+    , m_xBulColorFT(m_xBuilder->weld_label("colorft"))
+    , m_xBulColLB(new ColorListBox(m_xBuilder->weld_menu_button("color"), pParent.GetFrameWeld()))
+    , m_xBulRelSizeFT(m_xBuilder->weld_label("relsizeft"))
+    , m_xBulRelSizeMF(m_xBuilder->weld_metric_spin_button("relsize", FUNIT_PERCENT))
+    , m_xAllLevelFT(m_xBuilder->weld_label("sublevelsft"))
+    , m_xAllLevelNF(m_xBuilder->weld_spin_button("sublevels"))
+    , m_xStartFT(m_xBuilder->weld_label("startatft"))
+    , m_xStartED(m_xBuilder->weld_spin_button("startat"))
+    , m_xBulletFT(m_xBuilder->weld_label("bulletft"))
+    , m_xBulletPB(m_xBuilder->weld_button("bullet"))
+    , m_xBitmapFT(m_xBuilder->weld_label("bitmapft"))
+    , m_xBitmapMB(m_xBuilder->weld_menu_button("bitmap"))
+    , m_xWidthFT(m_xBuilder->weld_label("widthft"))
+    , m_xWidthMF(m_xBuilder->weld_metric_spin_button("widthmf", FUNIT_CM))
+    , m_xHeightFT(m_xBuilder->weld_label("heightft"))
+    , m_xHeightMF(m_xBuilder->weld_metric_spin_button("heightmf", FUNIT_CM))
+    , m_xRatioCB(m_xBuilder->weld_check_button("keepratio"))
+    , m_xOrientFT(m_xBuilder->weld_label("orientft"))
+    , m_xOrientLB(m_xBuilder->weld_combo_box("orientlb"))
+    , m_xAllLevelsFrame(m_xBuilder->weld_widget("levelsframe"))
+    , m_xSameLevelCB(m_xBuilder->weld_check_button("allsame"))
+    , m_xPreviewWIN(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWIN))
 {
-    get(m_pLevelLB, "levellb");
-    get(m_pFmtLB, "numfmtlb");
-
-    get(m_pSeparatorFT, "separator");
-    get(m_pPrefixFT, "prefixft");
-    get(m_pPrefixED, "prefix");
-    get(m_pSuffixFT, "suffixft");
-    get(m_pSuffixED, "suffix");
-
-    get(m_pCharFmtFT, "charstyleft");
-    get(m_pCharFmtLB, "charstyle");
-
-    get(m_pBulColorFT, "colorft");
-    get(m_pBulColLB, "color");
-    m_pBulColLB->SetSlotId(SID_ATTR_CHAR_COLOR);
-
-    get(m_pBulRelSizeFT, "relsizeft");
-    get(m_pBulRelSizeMF, "relsize");
-    m_pBulRelSizeMF->SetMin(SVX_NUM_REL_SIZE_MIN);
-    m_pBulRelSizeMF->SetSpinSize(5);
-
-    get(m_pAllLevelFT, "sublevelsft");
-    get(m_pAllLevelNF, "sublevels");
-
-    get(m_pStartFT, "startatft");
-    get(m_pStartED, "startat");
-
-    get(m_pBulletFT, "bulletft");
-    get(m_pBulletPB, "bullet");
-    get(m_pBitmapFT, "bitmapft");
-    get(m_pBitmapMB, "bitmap");
-
-    get(m_pWidthFT, "widthft");
-    get(m_pWidthMF, "widthmf");
-    get(m_pHeightFT, "heightft");
-    get(m_pHeightMF, "heightmf");
-
-    get(m_pRatioCB, "keepratio");
-
-    get(m_pOrientFT, "orientft");
-    get(m_pOrientLB, "orientlb");
-
-    get(m_pAllLevelsFrame, "levelsframe");
-    get(m_pSameLevelCB, "allsame");
-
-    get(m_pPreviewWIN, "preview");
-
-    m_pPreviewWIN->SetBackground(Wallpaper(COL_TRANSPARENT));
+    m_xBulColLB->SetSlotId(SID_ATTR_CHAR_COLOR);
+    m_xBulRelSizeMF->set_min(SVX_NUM_REL_SIZE_MIN, FUNIT_PERCENT);
+    m_xBulRelSizeMF->set_increments(5, 50, FUNIT_PERCENT);
     SetExchangeSupport();
     aActBulletFont = lcl_GetDefaultBulletFont();
 
-    m_pBulletPB->SetClickHdl(LINK(this, SvxNumOptionsTabPage, BulletHdl_Impl));
-    m_pFmtLB->SetSelectHdl(LINK(this, SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl));
-    m_pBitmapMB->SetSelectHdl(LINK(this, SvxNumOptionsTabPage, GraphicHdl_Impl));
-    m_pBitmapMB->SetActivateHdl(LINK(this, SvxNumOptionsTabPage, PopupActivateHdl_Impl));
-    m_pLevelLB->EnableMultiSelection(true);
-    m_pLevelLB->SetSelectHdl(LINK(this, SvxNumOptionsTabPage, LevelHdl_Impl));
-    m_pCharFmtLB->SetSelectHdl(LINK(this, SvxNumOptionsTabPage, CharFmtHdl_Impl));
-    m_pWidthMF->SetModifyHdl(LINK(this, SvxNumOptionsTabPage, SizeHdl_Impl));
-    m_pHeightMF->SetModifyHdl(LINK(this, SvxNumOptionsTabPage, SizeHdl_Impl));
-    m_pRatioCB->SetClickHdl(LINK(this, SvxNumOptionsTabPage, RatioHdl_Impl));
-    m_pStartED->SetModifyHdl(LINK(this, SvxNumOptionsTabPage, EditModifyHdl_Impl));
-    m_pPrefixED->SetModifyHdl(LINK(this, SvxNumOptionsTabPage, EditModifyHdl_Impl));
-    m_pSuffixED->SetModifyHdl(LINK(this, SvxNumOptionsTabPage, EditModifyHdl_Impl));
-    m_pAllLevelNF->SetModifyHdl(LINK(this,SvxNumOptionsTabPage, AllLevelHdl_Impl));
-    m_pOrientLB->SetSelectHdl(LINK(this, SvxNumOptionsTabPage, OrientHdl_Impl));
-    m_pSameLevelCB->SetClickHdl(LINK(this, SvxNumOptionsTabPage, SameLevelHdl_Impl));
-    m_pBulRelSizeMF->SetModifyHdl(LINK(this,SvxNumOptionsTabPage, BulRelSizeHdl_Impl));
-    m_pBulColLB->SetSelectHdl(LINK(this, SvxNumOptionsTabPage, BulColorHdl_Impl));
+    m_xBulletPB->connect_clicked(LINK(this, SvxNumOptionsTabPage, BulletHdl_Impl));
+    m_xFmtLB->connect_changed(LINK(this, SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl));
+    m_xBitmapMB->connect_selected(LINK(this, SvxNumOptionsTabPage, GraphicHdl_Impl));
+    m_xLevelLB->set_selection_mode(true);
+    m_xLevelLB->connect_changed(LINK(this, SvxNumOptionsTabPage, LevelHdl_Impl));
+    m_xCharFmtLB->connect_changed(LINK(this, SvxNumOptionsTabPage, CharFmtHdl_Impl));
+    m_xWidthMF->connect_value_changed(LINK(this, SvxNumOptionsTabPage, SizeHdl_Impl));
+    m_xHeightMF->connect_value_changed(LINK(this, SvxNumOptionsTabPage, SizeHdl_Impl));
+    m_xRatioCB->connect_toggled(LINK(this, SvxNumOptionsTabPage, RatioHdl_Impl));
+    m_xStartED->connect_changed(LINK(this, SvxNumOptionsTabPage, EditModifyHdl_Impl));
+    m_xPrefixED->connect_changed(LINK(this, SvxNumOptionsTabPage, EditModifyHdl_Impl));
+    m_xSuffixED->connect_changed(LINK(this, SvxNumOptionsTabPage, EditModifyHdl_Impl));
+    m_xAllLevelNF->connect_value_changed(LINK(this,SvxNumOptionsTabPage, AllLevelHdl_Impl));
+    m_xOrientLB->connect_changed(LINK(this, SvxNumOptionsTabPage, OrientHdl_Impl));
+    m_xSameLevelCB->connect_toggled(LINK(this, SvxNumOptionsTabPage, SameLevelHdl_Impl));
+    m_xBulRelSizeMF->connect_value_changed(LINK(this,SvxNumOptionsTabPage, BulRelSizeHdl_Impl));
+    m_xBulColLB->SetSelectHdl(LINK(this, SvxNumOptionsTabPage, BulColorHdl_Impl));
     aInvalidateTimer.SetInvokeHandler(LINK(this, SvxNumOptionsTabPage, PreviewInvalidateHdl_Impl));
     aInvalidateTimer.SetTimeout(50);
-
-    Menu *pBitmapMenu = m_pBitmapMB->GetPopupMenu();
-    m_nGalleryId = pBitmapMenu->GetItemId("gallery");
-    assert(m_nGalleryId != MENU_ITEM_NOTFOUND);
-    VclPtrInstance<PopupMenu> pPopup;
-    pBitmapMenu->SetPopupMenu(m_nGalleryId, pPopup);
 
     eCoreUnit = rSet.GetPool()->GetMetric(rSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE));
 
@@ -1143,15 +1121,14 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(vcl::Window* pParent,
     sal_uInt32 nCount = SvxNumberingTypeTable::Count();
     for (sal_uInt32 i = 0; i < nCount; ++i)
     {
-        sal_Int32 nPos = m_pFmtLB->InsertEntry(SvxNumberingTypeTable::GetString(i));
-        m_pFmtLB->SetEntryData( nPos, reinterpret_cast<void*>(static_cast<sal_uIntPtr>(SvxNumberingTypeTable::GetValue(i))));
+        m_xFmtLB->append(OUString::number(SvxNumberingTypeTable::GetValue(i)), SvxNumberingTypeTable::GetString(i));
     }
 
     // Get advanced numbering types from the component.
     // Watch out for the ugly
     // 136 == 0x88 == SVX_NUM_BITMAP|0x80 == SVX_NUM_BITMAP|LINK_TOKEN
     // to not remove that.
-    SvxNumOptionsTabPageHelper::GetI18nNumbering( *m_pFmtLB, (SVX_NUM_BITMAP | LINK_TOKEN));
+    SvxNumOptionsTabPageHelper::GetI18nNumbering( *m_xFmtLB, (SVX_NUM_BITMAP | LINK_TOKEN));
 }
 
 SvxNumOptionsTabPage::~SvxNumOptionsTabPage()
@@ -1161,39 +1138,10 @@ SvxNumOptionsTabPage::~SvxNumOptionsTabPage()
 
 void SvxNumOptionsTabPage::dispose()
 {
+    m_xPreviewWIN.reset();
+    m_xBulColLB.reset();
     pActNum.reset();
     pSaveNum.reset();
-    m_pLevelLB.clear();
-    m_pFmtLB.clear();
-    m_pSeparatorFT.clear();
-    m_pPrefixFT.clear();
-    m_pPrefixED.clear();
-    m_pSuffixFT.clear();
-    m_pSuffixED.clear();
-    m_pCharFmtFT.clear();
-    m_pCharFmtLB.clear();
-    m_pBulColorFT.clear();
-    m_pBulColLB.clear();
-    m_pBulRelSizeFT.clear();
-    m_pBulRelSizeMF.clear();
-    m_pAllLevelFT.clear();
-    m_pAllLevelNF.clear();
-    m_pStartFT.clear();
-    m_pStartED.clear();
-    m_pBulletFT.clear();
-    m_pBulletPB.clear();
-    m_pBitmapFT.clear();
-    m_pBitmapMB.clear();
-    m_pWidthFT.clear();
-    m_pWidthMF.clear();
-    m_pHeightFT.clear();
-    m_pHeightMF.clear();
-    m_pRatioCB.clear();
-    m_pOrientFT.clear();
-    m_pOrientLB.clear();
-    m_pAllLevelsFrame.clear();
-    m_pSameLevelCB.clear();
-    m_pPreviewWIN.clear();
     SfxTabPage::dispose();
 }
 
@@ -1201,17 +1149,17 @@ void SvxNumOptionsTabPage::SetMetric(FieldUnit eMetric)
 {
     if(eMetric == FUNIT_MM)
     {
-        m_pWidthMF->SetDecimalDigits(1);
-        m_pHeightMF->SetDecimalDigits(1);
+        m_xWidthMF->set_digits(1);
+        m_xHeightMF->set_digits(1);
     }
-    m_pWidthMF->SetUnit( eMetric );
-    m_pHeightMF->SetUnit( eMetric );
+    m_xWidthMF->set_unit(eMetric);
+    m_xHeightMF->set_unit(eMetric);
 }
 
-VclPtr<SfxTabPage> SvxNumOptionsTabPage::Create( TabPageParent pParent,
-                                                 const SfxItemSet* rAttrSet)
+VclPtr<SfxTabPage> SvxNumOptionsTabPage::Create(TabPageParent pParent,
+                                                const SfxItemSet* rAttrSet)
 {
-    return VclPtr<SvxNumOptionsTabPage>::Create(pParent.pParent, *rAttrSet);
+    return VclPtr<SvxNumOptionsTabPage>::Create(pParent, *rAttrSet);
 };
 
 void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
@@ -1237,22 +1185,21 @@ void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
     {
         nActNumLvl = nTmpNumLvl;
         sal_uInt16 nMask = 1;
-        m_pLevelLB->SetUpdateMode(false);
-        m_pLevelLB->SetNoSelection();
-        m_pLevelLB->SelectEntryPos( pActNum->GetLevelCount(), nActNumLvl == SAL_MAX_UINT16);
+        if (nActNumLvl == SAL_MAX_UINT16)
+            m_xLevelLB->select(pActNum->GetLevelCount());
         if(nActNumLvl != SAL_MAX_UINT16)
+        {
             for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
             {
                 if(nActNumLvl & nMask)
-                    m_pLevelLB->SelectEntryPos( i );
+                    m_xLevelLB->select(i);
                 nMask <<= 1 ;
             }
-        m_pLevelLB->SetUpdateMode(true);
+        }
         *pActNum = *pSaveNum;
 
         InitControls();
     }
-
 }
 
 DeactivateRC SvxNumOptionsTabPage::DeactivatePage(SfxItemSet * _pSet)
@@ -1295,44 +1242,44 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
     pSaveNum.reset( new SvxNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule()) );
 
     // insert levels
-    if(!m_pLevelLB->GetEntryCount())
+    if (!m_xLevelLB->n_children())
     {
         for(sal_uInt16 i = 1; i <= pSaveNum->GetLevelCount(); i++)
-            m_pLevelLB->InsertEntry( OUString::number(i));
+            m_xLevelLB->append_text(OUString::number(i));
         if(pSaveNum->GetLevelCount() > 1)
         {
             OUString sEntry = "1 - " + OUString::number( pSaveNum->GetLevelCount() );
-            m_pLevelLB->InsertEntry(sEntry);
-            m_pLevelLB->SelectEntry(sEntry);
+            m_xLevelLB->append_text(sEntry);
+            m_xLevelLB->select_text(sEntry);
         }
         else
-            m_pLevelLB->SelectEntryPos(0);
+            m_xLevelLB->select(0);
     }
     else
-        m_pLevelLB->SelectEntryPos(m_pLevelLB->GetEntryCount() - 1);
+        m_xLevelLB->select(m_xLevelLB->n_children() - 1);
 
     sal_uInt16 nMask = 1;
-    m_pLevelLB->SetUpdateMode(false);
-    m_pLevelLB->SetNoSelection();
+    m_xLevelLB->unselect_all();
     if (nActNumLvl == SAL_MAX_UINT16)
     {
-        m_pLevelLB->SelectEntryPos( pSaveNum->GetLevelCount() );
+        m_xLevelLB->select( pSaveNum->GetLevelCount() );
     }
     else
+    {
         for(sal_uInt16 i = 0; i < pSaveNum->GetLevelCount(); i++)
         {
             if(nActNumLvl & nMask)
-                m_pLevelLB->SelectEntryPos( i );
+                m_xLevelLB->select( i );
             nMask <<= 1 ;
         }
-    m_pLevelLB->SetUpdateMode(true);
+    }
 
     if(!pActNum)
         pActNum.reset( new SvxNumRule(*pSaveNum) );
     else if(*pSaveNum != *pActNum)
         *pActNum = *pSaveNum;
-    m_pPreviewWIN->SetNumRule(pActNum.get());
-    m_pSameLevelCB->Check(pActNum->IsContinuousNumbering());
+    m_aPreviewWIN.SetNumRule(pActNum.get());
+    m_xSameLevelCB->set_active(pActNum->IsContinuousNumbering());
 
     SfxObjectShell* pShell;
     if ( SfxItemState::SET == rSet->GetItemState( SID_HTML_MODE, false, &pItem )
@@ -1344,61 +1291,60 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
     }
 
     bool bCharFmt = pActNum->IsFeatureSupported(SvxNumRuleFlags::CHAR_STYLE);
-    m_pCharFmtFT->Show(bCharFmt);
-    m_pCharFmtLB->Show(bCharFmt);
+    m_xCharFmtFT->show(bCharFmt);
+    m_xCharFmtLB->show(bCharFmt);
 
     bool bContinuous = pActNum->IsFeatureSupported(SvxNumRuleFlags::CONTINUOUS);
 
     bool bAllLevel = bContinuous && !bHTMLMode;
-    m_pAllLevelFT->Show(bAllLevel);
-    m_pAllLevelNF->Show(bAllLevel);
+    m_xAllLevelFT->show(bAllLevel);
+    m_xAllLevelNF->show(bAllLevel);
 
-    m_pAllLevelsFrame->Show(bContinuous);
+    m_xAllLevelsFrame->show(bContinuous);
 
     // again misusage: in Draw there is numeration only until the bitmap
     // without SVX_NUM_NUMBER_NONE
     //remove types that are unsupported by Draw/Impress
     if(!bContinuous)
     {
-        sal_Int32 nFmtCount = m_pFmtLB->GetEntryCount();
+        sal_Int32 nFmtCount = m_xFmtLB->get_count();
         for(sal_Int32 i = nFmtCount; i; i--)
         {
-            sal_uInt16 nEntryData = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pFmtLB->GetEntryData(i - 1)));
+            sal_uInt16 nEntryData = m_xFmtLB->get_id(i - 1).toUInt32();
             if(/*SVX_NUM_NUMBER_NONE == nEntryData ||*/
                 (SVX_NUM_BITMAP|LINK_TOKEN) ==  nEntryData)
-                m_pFmtLB->RemoveEntry(i - 1);
+                m_xFmtLB->remove(i - 1);
         }
     }
     //one must be enabled
     if(!pActNum->IsFeatureSupported(SvxNumRuleFlags::ENABLE_LINKED_BMP))
     {
-        sal_Int32 nPos = m_pFmtLB->GetEntryPos(reinterpret_cast<void*>(SVX_NUM_BITMAP|LINK_TOKEN));
-        if(LISTBOX_ENTRY_NOTFOUND != nPos)
-            m_pFmtLB->RemoveEntry(nPos);
+        auto nPos = m_xFmtLB->find_id(OUString::number(SVX_NUM_BITMAP|LINK_TOKEN));
+        if (nPos != -1)
+            m_xFmtLB->remove(nPos);
     }
     else if(!pActNum->IsFeatureSupported(SvxNumRuleFlags::ENABLE_EMBEDDED_BMP))
     {
-        sal_Int32 nPos = m_pFmtLB->GetEntryPos(reinterpret_cast<void*>(SVX_NUM_BITMAP));
-        if(LISTBOX_ENTRY_NOTFOUND != nPos)
-            m_pFmtLB->RemoveEntry(nPos);
+        auto nPos = m_xFmtLB->find_id(OUString::number(SVX_NUM_BITMAP));
+        if (nPos != -1)
+            m_xFmtLB->remove(nPos);
     }
 
     // MegaHack: because of a not-fixable 'design mistake/error' in Impress
     // delete all kinds of numeric enumerations
     if(pActNum->IsFeatureSupported(SvxNumRuleFlags::NO_NUMBERS))
     {
-        sal_Int32 nFmtCount = m_pFmtLB->GetEntryCount();
+        sal_Int32 nFmtCount = m_xFmtLB->get_count();
         for(sal_Int32 i = nFmtCount; i; i--)
         {
-            sal_uInt16 nEntryData = static_cast<sal_uInt16>(reinterpret_cast<sal_uLong>(m_pFmtLB->GetEntryData(i - 1)));
+            sal_uInt16 nEntryData = m_xFmtLB->get_id(i - 1).toUInt32();
             if( /*nEntryData >= SVX_NUM_CHARS_UPPER_LETTER &&*/  nEntryData <= SVX_NUM_NUMBER_NONE)
-                m_pFmtLB->RemoveEntry(i - 1);
+                m_xFmtLB->remove(i - 1);
         }
     }
 
     InitControls();
     bModified = false;
-
 }
 
 void SvxNumOptionsTabPage::InitControls()
@@ -1484,66 +1430,66 @@ void SvxNumOptionsTabPage::InitControls()
     if(bShowBitmap)
     {
         if(!bSameVOrient || eFirstOrient == text::VertOrientation::NONE)
-            m_pOrientLB->SetNoSelection();
+            m_xOrientLB->set_active(-1);
         else
-            m_pOrientLB->SelectEntryPos(
+            m_xOrientLB->set_active(
                 sal::static_int_cast< sal_Int32 >(eFirstOrient - 1));
                 // no text::VertOrientation::NONE
 
         if(bSameSize)
         {
-            SetMetricValue(*m_pHeightMF, aFirstSize.Height(), eCoreUnit);
-            SetMetricValue(*m_pWidthMF, aFirstSize.Width(), eCoreUnit);
+            SetMetricValue(*m_xHeightMF, aFirstSize.Height(), eCoreUnit);
+            SetMetricValue(*m_xWidthMF, aFirstSize.Width(), eCoreUnit);
         }
         else
         {
-            m_pHeightMF->SetText("");
-            m_pWidthMF->SetText("");
+            m_xHeightMF->set_text("");
+            m_xWidthMF->set_text("");
         }
     }
 
     if(bSameType)
     {
         sal_uInt16 nLBData = nNumberingType;
-        m_pFmtLB->SelectEntryPos(m_pFmtLB->GetEntryPos( reinterpret_cast<void*>(sal::static_int_cast<sal_uIntPtr>( nLBData ) )));
+        m_xFmtLB->set_active_id(OUString::number(nLBData));
     }
     else
-        m_pFmtLB->SetNoSelection();
+        m_xFmtLB->set_active(-1);
 
-    m_pAllLevelNF->Enable(nHighestLevel > 0 && !m_pSameLevelCB->IsChecked());
-    m_pAllLevelNF->SetMax(nHighestLevel + 1);
+    m_xAllLevelNF->set_sensitive(nHighestLevel > 0 && !m_xSameLevelCB->get_active());
+    m_xAllLevelNF->set_max(nHighestLevel + 1);
     if(bAllLevel)
     {
-        m_pAllLevelNF->SetValue(aNumFmtArr[nLvl]->GetIncludeUpperLevels());
+        m_xAllLevelNF->set_value(aNumFmtArr[nLvl]->GetIncludeUpperLevels());
     }
     else
     {
-        m_pAllLevelNF->SetText("");
+        m_xAllLevelNF->set_text("");
     }
 
     if(bBullRelSize)
     {
         if(bSameBulRelSize)
-            m_pBulRelSizeMF->SetValue(aNumFmtArr[nLvl]->GetBulletRelSize());
+            m_xBulRelSizeMF->set_value(aNumFmtArr[nLvl]->GetBulletRelSize(), FUNIT_PERCENT);
         else
-            m_pBulRelSizeMF->SetText("");
+            m_xBulRelSizeMF->set_text("");
     }
     if(bBullColor)
     {
         if(bSameBulColor)
-            m_pBulColLB->SelectEntry(aNumFmtArr[nLvl]->GetBulletColor());
+            m_xBulColLB->SelectEntry(aNumFmtArr[nLvl]->GetBulletColor());
         else
-            m_pBulColLB->SetNoSelection();
+            m_xBulColLB->SetNoSelection();
     }
     switch(nBullet)
     {
         case SHOW_NUMBERING:
             if(bSameStart)
             {
-                m_pStartED->SetValue(aNumFmtArr[nLvl]->GetStart());
+                m_xStartED->set_value(aNumFmtArr[nLvl]->GetStart());
             }
             else
-                m_pStartED->SetText("");
+                m_xStartED->set_text("");
         break;
         case SHOW_BULLET:
         break;
@@ -1552,26 +1498,26 @@ void SvxNumOptionsTabPage::InitControls()
     }
 
     if(bSamePrefix)
-        m_pPrefixED->SetText(aNumFmtArr[nLvl]->GetPrefix());
+        m_xPrefixED->set_text(aNumFmtArr[nLvl]->GetPrefix());
     else
-        m_pPrefixED->SetText("");
+        m_xPrefixED->set_text("");
     if(bSameSuffix)
-        m_pSuffixED->SetText(aNumFmtArr[nLvl]->GetSuffix());
+        m_xSuffixED->set_text(aNumFmtArr[nLvl]->GetSuffix());
     else
-        m_pSuffixED->SetText("");
+        m_xSuffixED->set_text("");
 
     if(bSameCharFmt)
     {
-        if(!sFirstCharFmt.isEmpty())
-                m_pCharFmtLB->SelectEntry(sFirstCharFmt);
+        if (!sFirstCharFmt.isEmpty())
+            m_xCharFmtLB->set_active_text(sFirstCharFmt);
         else
-            m_pCharFmtLB->SelectEntryPos( 0 );
+            m_xCharFmtLB->set_active(0);
     }
     else
-        m_pCharFmtLB->SetNoSelection();
+        m_xCharFmtLB->set_active(-1);
 
-    m_pPreviewWIN->SetLevel(nActNumLvl);
-    m_pPreviewWIN->Invalidate();
+    m_aPreviewWIN.SetLevel(nActNumLvl);
+    m_aPreviewWIN.Invalidate();
 }
 
 // 0 - Number; 1 - Bullet; 2 - Bitmap
@@ -1584,79 +1530,80 @@ void SvxNumOptionsTabPage::SwitchNumberType( sal_uInt8 nType )
     bool bBitmap = (nType == SHOW_BITMAP);
     bool bEnableBitmap = (nType == SHOW_BITMAP);
     bool bNumeric = !(bBitmap||bBullet);
-    m_pSeparatorFT->Show(bNumeric);
-    m_pPrefixFT->Show(bNumeric);
-    m_pPrefixED->Show(bNumeric);
-    m_pSuffixFT->Show(bNumeric);
-    m_pSuffixED->Show(bNumeric);
+    m_xSeparatorFT->show(bNumeric);
+    m_xPrefixFT->show(bNumeric);
+    m_xPrefixED->show(bNumeric);
+    m_xSuffixFT->show(bNumeric);
+    m_xSuffixED->show(bNumeric);
 
     bool bCharFmt = pActNum->IsFeatureSupported(SvxNumRuleFlags::CHAR_STYLE);
-    m_pCharFmtFT->Show(!bBitmap && bCharFmt);
-    m_pCharFmtLB->Show(!bBitmap && bCharFmt);
+    m_xCharFmtFT->show(!bBitmap && bCharFmt);
+    m_xCharFmtLB->show(!bBitmap && bCharFmt);
 
     // this is rather misusage, as there is no own flag
     // for complete numeration
     bool bAllLevelFeature = pActNum->IsFeatureSupported(SvxNumRuleFlags::CONTINUOUS);
     bool bAllLevel = bNumeric && bAllLevelFeature && !bHTMLMode;
-    m_pAllLevelFT->Show(bAllLevel);
-    m_pAllLevelNF->Show(bAllLevel);
+    m_xAllLevelFT->show(bAllLevel);
+    m_xAllLevelNF->show(bAllLevel);
 
-    m_pStartFT->Show(!(bBullet||bBitmap));
-    m_pStartED->Show(!(bBullet||bBitmap));
+    m_xStartFT->show(!(bBullet||bBitmap));
+    m_xStartED->show(!(bBullet||bBitmap));
 
-    m_pBulletFT->Show(bBullet);
-    m_pBulletPB->Show(bBullet);
+    m_xBulletFT->show(bBullet);
+    m_xBulletPB->show(bBullet);
     bool bBullColor = pActNum->IsFeatureSupported(SvxNumRuleFlags::BULLET_COLOR);
-    m_pBulColorFT->Show(!bBitmap && bBullColor);
-    m_pBulColLB->Show(!bBitmap && bBullColor);
+    m_xBulColorFT->show(!bBitmap && bBullColor);
+    m_xBulColLB->show(!bBitmap && bBullColor);
     bool bBullResSize = pActNum->IsFeatureSupported(SvxNumRuleFlags::BULLET_REL_SIZE);
-    m_pBulRelSizeFT->Show(!bBitmap && bBullResSize);
-    m_pBulRelSizeMF->Show(!bBitmap && bBullResSize);
+    m_xBulRelSizeFT->show(!bBitmap && bBullResSize);
+    m_xBulRelSizeMF->show(!bBitmap && bBullResSize);
 
-    m_pBitmapFT->Show(bBitmap);
-    m_pBitmapMB->Show(bBitmap);
+    m_xBitmapFT->show(bBitmap);
+    m_xBitmapMB->show(bBitmap);
+    if (bBitmap)
+        FillGalleryPopup();
 
-    m_pWidthFT->Show(bBitmap);
-    m_pWidthMF->Show(bBitmap);
-    m_pHeightFT->Show(bBitmap);
-    m_pHeightMF->Show(bBitmap);
-    m_pRatioCB->Show(bBitmap);
+    m_xWidthFT->show(bBitmap);
+    m_xWidthMF->show(bBitmap);
+    m_xHeightFT->show(bBitmap);
+    m_xHeightMF->show(bBitmap);
+    m_xRatioCB->show(bBitmap);
 
-    m_pOrientFT->Show(bBitmap &&  bAllLevelFeature);
-    m_pOrientLB->Show(bBitmap &&  bAllLevelFeature);
+    m_xOrientFT->show(bBitmap && bAllLevelFeature);
+    m_xOrientLB->show(bBitmap && bAllLevelFeature);
 
-    m_pWidthFT->Enable(bEnableBitmap);
-    m_pWidthMF->Enable(bEnableBitmap);
-    m_pHeightFT->Enable(bEnableBitmap);
-    m_pHeightMF->Enable(bEnableBitmap);
-    m_pRatioCB->Enable(bEnableBitmap);
-    m_pOrientFT->Enable(bEnableBitmap);
-    m_pOrientLB->Enable(bEnableBitmap);
+    m_xWidthFT->set_sensitive(bEnableBitmap);
+    m_xWidthMF->set_sensitive(bEnableBitmap);
+    m_xHeightFT->set_sensitive(bEnableBitmap);
+    m_xHeightMF->set_sensitive(bEnableBitmap);
+    m_xRatioCB->set_sensitive(bEnableBitmap);
+    m_xOrientFT->set_sensitive(bEnableBitmap);
+    m_xOrientLB->set_sensitive(bEnableBitmap);
 }
 
-IMPL_LINK( SvxNumOptionsTabPage, LevelHdl_Impl, ListBox&, rBox, void )
+IMPL_LINK(SvxNumOptionsTabPage, LevelHdl_Impl, weld::TreeView&, rBox, void)
 {
     sal_uInt16 nSaveNumLvl = nActNumLvl;
     nActNumLvl = 0;
-    if(rBox.IsEntryPosSelected( pActNum->GetLevelCount() ) &&
-        (rBox.GetSelectedEntryCount() == 1 || nSaveNumLvl != 0xffff))
+    auto aSelectedRows = rBox.get_selected_rows();
+    if (std::find(aSelectedRows.begin(), aSelectedRows.end(), pActNum->GetLevelCount()) != aSelectedRows.end() &&
+        (aSelectedRows.size() == 1 || nSaveNumLvl != 0xffff))
     {
         nActNumLvl = 0xFFFF;
-        rBox.SetUpdateMode(false);
         for( sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++ )
-            rBox.SelectEntryPos( i, false );
-        rBox.SetUpdateMode(true);
+            rBox.unselect(i);
     }
-    else if(rBox.GetSelectedEntryCount())
+    else if (!aSelectedRows.empty())
     {
         sal_uInt16 nMask = 1;
         for( sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++ )
         {
-            if(rBox.IsEntryPosSelected( i ))
+            if (std::find(aSelectedRows.begin(), aSelectedRows.end(), i) != aSelectedRows.end())
                 nActNumLvl |= nMask;
             nMask <<= 1;
         }
-        rBox.SelectEntryPos( pActNum->GetLevelCount(), false );
+        rBox.unselect(pActNum->GetLevelCount());
     }
     else
     {
@@ -1666,7 +1613,7 @@ IMPL_LINK( SvxNumOptionsTabPage, LevelHdl_Impl, ListBox&, rBox, void )
         {
             if(nActNumLvl & nMask)
             {
-                rBox.SelectEntryPos(i);
+                rBox.select(i);
                 break;
             }
             nMask <<=1;
@@ -1677,10 +1624,10 @@ IMPL_LINK( SvxNumOptionsTabPage, LevelHdl_Impl, ListBox&, rBox, void )
 
 IMPL_LINK_NOARG(SvxNumOptionsTabPage, PreviewInvalidateHdl_Impl, Timer *, void)
 {
-    m_pPreviewWIN->Invalidate();
+    m_aPreviewWIN.Invalidate();
 }
 
-IMPL_LINK( SvxNumOptionsTabPage, AllLevelHdl_Impl, Edit&, rBox, void )
+IMPL_LINK(SvxNumOptionsTabPage, AllLevelHdl_Impl, weld::SpinButton&, rBox, void)
 {
     sal_uInt16 nMask = 1;
     for(sal_uInt16 e = 0; e < pActNum->GetLevelCount(); e++)
@@ -1688,7 +1635,7 @@ IMPL_LINK( SvxNumOptionsTabPage, AllLevelHdl_Impl, Edit&, rBox, void )
         if(nActNumLvl & nMask)
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(e));
-            aNumFmt.SetIncludeUpperLevels(static_cast<sal_uInt8>(std::min(static_cast<NumericField&>(rBox).GetValue(), sal_Int64(e + 1))) );
+            aNumFmt.SetIncludeUpperLevels(static_cast<sal_uInt8>(std::min(rBox.get_value(), int(e + 1))) );
             pActNum->SetLevel(e, aNumFmt);
         }
         nMask <<= 1;
@@ -1696,7 +1643,7 @@ IMPL_LINK( SvxNumOptionsTabPage, AllLevelHdl_Impl, Edit&, rBox, void )
     SetModified();
 }
 
-IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox&, rBox, void )
+IMPL_LINK(SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, weld::ComboBox&, rBox, void)
 {
     OUString sSelectStyle;
     bool bShowOrient = false;
@@ -1708,7 +1655,7 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox&, rBox, void 
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
             // PAGEDESC does not exist
-            SvxNumType nNumType = static_cast<SvxNumType>(reinterpret_cast<sal_uLong>(rBox.GetSelectedEntryData()));
+            SvxNumType nNumType = static_cast<SvxNumType>(rBox.get_active_id().toUInt32());
             aNumFmt.SetNumberingType(nNumType);
             sal_uInt16 nNumberingType = aNumFmt.GetNumberingType();
             if(SVX_NUM_BITMAP == (nNumberingType&(~LINK_TOKEN)))
@@ -1742,8 +1689,8 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox&, rBox, void 
             }
             else
             {
-                aNumFmt.SetPrefix( m_pPrefixED->GetText() );
-                aNumFmt.SetSuffix( m_pSuffixED->GetText() );
+                aNumFmt.SetPrefix( m_xPrefixED->get_text() );
+                aNumFmt.SetSuffix( m_xSuffixED->get_text() );
                 SwitchNumberType(SHOW_NUMBERING);
                 pActNum->SetLevel(i, aNumFmt);
                 CheckForStartValue_Impl(nNumberingType);
@@ -1760,37 +1707,37 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox&, rBox, void 
     bool bAllLevelFeature = pActNum->IsFeatureSupported(SvxNumRuleFlags::CONTINUOUS);
     if(bShowOrient && bAllLevelFeature)
     {
-        m_pOrientFT->Show();
-        m_pOrientLB->Show();
+        m_xOrientFT->show();
+        m_xOrientLB->show();
     }
     else
     {
-        m_pOrientFT->Hide();
-        m_pOrientLB->Hide();
+        m_xOrientFT->hide();
+        m_xOrientLB->hide();
     }
     SetModified();
     if(!sSelectStyle.isEmpty())
     {
-        m_pCharFmtLB->SelectEntry(sSelectStyle);
-        CharFmtHdl_Impl(*m_pCharFmtLB);
+        m_xCharFmtLB->set_active_text(sSelectStyle);
+        CharFmtHdl_Impl(*m_xCharFmtLB);
         bAutomaticCharStyles = true;
     }
 }
 
 void SvxNumOptionsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType)
 {
-    bool bIsNull = m_pStartED->GetValue() == 0;
+    bool bIsNull = m_xStartED->get_value() == 0;
     bool bNoZeroAllowed = nNumberingType < SVX_NUM_ARABIC ||
                         SVX_NUM_CHARS_UPPER_LETTER_N == nNumberingType ||
                         SVX_NUM_CHARS_LOWER_LETTER_N == nNumberingType;
-    m_pStartED->SetMin(bNoZeroAllowed ? 1 : 0);
-    if(bIsNull && bNoZeroAllowed)
-        m_pStartED->GetModifyHdl().Call(*m_pStartED);
+    m_xStartED->set_min(bNoZeroAllowed ? 1 : 0);
+    if (bIsNull && bNoZeroAllowed)
+        EditModifyHdl_Impl(*m_xStartED);
 }
 
-IMPL_LINK( SvxNumOptionsTabPage, OrientHdl_Impl, ListBox&, rBox, void )
+IMPL_LINK(SvxNumOptionsTabPage, OrientHdl_Impl, weld::ComboBox&, rBox, void)
 {
-    sal_Int32 nPos = rBox.GetSelectedEntryPos();
+    sal_Int32 nPos = rBox.get_active();
     nPos ++; // no VERT_NONE
 
     sal_uInt16 nMask = 1;
@@ -1813,9 +1760,9 @@ IMPL_LINK( SvxNumOptionsTabPage, OrientHdl_Impl, ListBox&, rBox, void )
     SetModified(false);
 }
 
-IMPL_LINK( SvxNumOptionsTabPage, SameLevelHdl_Impl, Button*, pBox, void )
+IMPL_LINK(SvxNumOptionsTabPage, SameLevelHdl_Impl, weld::ToggleButton&, rBox, void)
 {
-    bool bSet = static_cast<CheckBox*>(pBox)->IsChecked();
+    bool bSet = rBox.get_active();
     pActNum->SetContinuousNumbering(bSet);
     bool bRepaint = false;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -1831,7 +1778,7 @@ IMPL_LINK( SvxNumOptionsTabPage, SameLevelHdl_Impl, Button*, pBox, void )
     InitControls();
 }
 
-IMPL_LINK(SvxNumOptionsTabPage, BulColorHdl_Impl, SvxColorListBox&, rColorBox, void)
+IMPL_LINK(SvxNumOptionsTabPage, BulColorHdl_Impl, ColorListBox&, rColorBox, void)
 {
     Color nSetColor = rColorBox.GetSelectEntryColor();
 
@@ -1849,9 +1796,9 @@ IMPL_LINK(SvxNumOptionsTabPage, BulColorHdl_Impl, SvxColorListBox&, rColorBox, v
     SetModified();
 }
 
-IMPL_LINK( SvxNumOptionsTabPage, BulRelSizeHdl_Impl, Edit&, rField, void)
+IMPL_LINK(SvxNumOptionsTabPage, BulRelSizeHdl_Impl, weld::MetricSpinButton&, rField, void)
 {
-    sal_uInt16 nRelSize = static_cast<sal_uInt16>(static_cast<MetricField&>(rField).GetValue());
+    sal_uInt16 nRelSize = rField.get_value(FUNIT_PERCENT);
 
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -1867,17 +1814,17 @@ IMPL_LINK( SvxNumOptionsTabPage, BulRelSizeHdl_Impl, Edit&, rField, void)
     SetModified();
 }
 
-IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton, void )
+IMPL_LINK(SvxNumOptionsTabPage, GraphicHdl_Impl, const OString&, rIdent, void)
 {
-    sal_uInt16                  nItemId = pButton->GetCurItemId();
     OUString                aGrfName;
     Size                    aSize;
     bool                bSucc(false);
-    SvxOpenGraphicDialog aGrfDlg(CuiResId(RID_SVXSTR_EDIT_GRAPHIC), GetFrameWeld());
+    SvxOpenGraphicDialog aGrfDlg(CuiResId(RID_SVXSTR_EDIT_GRAPHIC), GetDialogFrameWeld());
 
-    if(MN_GALLERY_ENTRY <= nItemId )
+    OString sNumber;
+    if (rIdent.startsWith("gallery", &sNumber))
     {
-        sal_uInt16 idx = nItemId - MN_GALLERY_ENTRY;
+        auto idx = sNumber.toUInt32();
         if (idx < aGrfNames.size())
         {
             aGrfName = aGrfNames[idx];
@@ -1889,7 +1836,7 @@ IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton, void )
             }
         }
     }
-    else
+    else if (rIdent == "fromfile")
     {
         aGrfDlg.EnableLink( false );
         aGrfDlg.AsLink( false );
@@ -1930,39 +1877,38 @@ IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton, void )
             }
             nMask <<= 1;
         }
-        m_pRatioCB->Enable();
-        m_pWidthFT->Enable();
-        m_pHeightFT->Enable();
-        m_pWidthMF->Enable();
-        m_pHeightMF->Enable();
-        SetMetricValue(*m_pWidthMF, aSize.Width(), eCoreUnit);
-        SetMetricValue(*m_pHeightMF, aSize.Height(), eCoreUnit);
-        m_pOrientFT->Enable();
-        m_pOrientLB->Enable();
+        m_xRatioCB->set_sensitive(true);
+        m_xWidthFT->set_sensitive(true);
+        m_xHeightFT->set_sensitive(true);
+        m_xWidthMF->set_sensitive(true);
+        m_xHeightMF->set_sensitive(true);
+        SetMetricValue(*m_xWidthMF, aSize.Width(), eCoreUnit);
+        SetMetricValue(*m_xHeightMF, aSize.Height(), eCoreUnit);
+        m_xOrientFT->set_sensitive(true);
+        m_xOrientLB->set_sensitive(true);
         SetModified();
         //needed due to asynchronous loading of graphics in the SvxBrushItem
         aInvalidateTimer.Start();
     }
 }
 
-IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, MenuButton *, void)
+void SvxNumOptionsTabPage::FillGalleryPopup()
 {
-    if(!bMenuButtonInitialized)
+    if (!m_xGalleryMenu)
     {
-        bMenuButtonInitialized = true;
-        EnterWait();
-        PopupMenu* pMenu = m_pBitmapMB->GetPopupMenu();
-        PopupMenu* pPopup = pMenu->GetPopupMenu(m_nGalleryId);
+        m_xGalleryMenu = m_xBuilder->weld_menu("gallerysubmenu");
+        weld::WaitObject aWait(GetDialogFrameWeld());
 
         if (GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames))
         {
-            pPopup->Clear();
             GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
 
             Graphic aGraphic;
+            ScopedVclPtrInstance< VirtualDevice > pVD;
             size_t i = 0;
             for (auto & grfName : aGrfNames)
             {
+                OUString sItemId = "gallery" + OUString::number(i);
                 INetURLObject aObj(grfName);
                 if(aObj.GetProtocol() == INetProtocol::File)
                     grfName = aObj.PathToFileName();
@@ -1980,27 +1926,24 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, MenuButton *, void)
                                                 double(MAX_BMP_HEIGHT) / static_cast<double>(aSize.Height());
                         aBitmap.Scale(nScale, nScale);
                     }
-                    Image aImage(aBitmap);
-
-                    pPopup->InsertItem(MN_GALLERY_ENTRY + i, grfName, aImage );
+                    pVD->SetOutputSizePixel(aBitmap.GetSizePixel(), false);
+                    pVD->DrawBitmapEx(Point(), aBitmap);
+                    m_xGalleryMenu->append(sItemId, grfName, *pVD);
                 }
                 else
                 {
-                    Image aImage;
-                    pPopup->InsertItem(
-                        MN_GALLERY_ENTRY + i, grfName, aImage );
+                    m_xGalleryMenu->append(sItemId, grfName);
                 }
                 ++i;
             }
             GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
         }
-        LeaveWait();
     }
 }
 
-IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl, weld::Button&, void)
 {
-    SvxCharacterMap aMap(GetFrameWeld(), nullptr, false);
+    SvxCharacterMap aMap(GetDialogFrameWeld(), nullptr, false);
 
     sal_uInt16 nMask = 1;
     const vcl::Font* pFmtFont = nullptr;
@@ -2057,13 +2000,13 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl, Button*, void)
     }
 }
 
-IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, Edit&, rField, void)
+IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, weld::MetricSpinButton&, rField, void)
 {
-    bool bWidth = &rField == m_pWidthMF;
+    bool bWidth = &rField == m_xWidthMF.get();
     bLastWidthModified = bWidth;
-    bool bRatio = m_pRatioCB->IsChecked();
-    long nWidthVal = static_cast<long>(m_pWidthMF->Denormalize(m_pWidthMF->GetValue(FUNIT_100TH_MM)));
-    long nHeightVal = static_cast<long>(m_pHeightMF->Denormalize(m_pHeightMF->GetValue(FUNIT_100TH_MM)));
+    bool bRatio = m_xRatioCB->get_active();
+    long nWidthVal = static_cast<long>(m_xWidthMF->denormalize(m_xWidthMF->get_value(FUNIT_100TH_MM)));
+    long nHeightVal = static_cast<long>(m_xHeightMF->denormalize(m_xHeightMF->get_value(FUNIT_100TH_MM)));
     nWidthVal = OutputDevice::LogicToLogic( nWidthVal ,
                                                 MapUnit::Map100thMM, eCoreUnit );
     nHeightVal = OutputDevice::LogicToLogic( nHeightVal,
@@ -2094,9 +2037,11 @@ IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, Edit&, rField, void)
                     if (bRatio)
                     {
                         aSize.setHeight( aInitSize[i].Height() + static_cast<long>(static_cast<double>(nDelta) / fSizeRatio) );
-                        m_pHeightMF->SetUserValue(m_pHeightMF->Normalize(
+#if 0 //TODO
+                        m_xHeightMF->SetUserValue(m_xHeightMF->normalize(
                             OutputDevice::LogicToLogic( aSize.Height(), eCoreUnit, MapUnit::Map100thMM )),
                                 FUNIT_100TH_MM);
+#endif
                     }
                 }
                 else
@@ -2106,9 +2051,11 @@ IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, Edit&, rField, void)
                     if (bRatio)
                     {
                         aSize.setWidth( aInitSize[i].Width() + static_cast<long>(static_cast<double>(nDelta) * fSizeRatio) );
-                        m_pWidthMF->SetUserValue(m_pWidthMF->Normalize(
+#if 0 //TODO
+                        m_xWidthMF->SetUserValue(m_xWidthMF->normalize(
                             OutputDevice::LogicToLogic( aSize.Width(), eCoreUnit, MapUnit::Map100thMM )),
                                 FUNIT_100TH_MM);
+#endif
                     }
                 }
                 const SvxBrushItem* pBrushItem =  aNumFmt.GetBrush();
@@ -2124,22 +2071,22 @@ IMPL_LINK( SvxNumOptionsTabPage, SizeHdl_Impl, Edit&, rField, void)
     SetModified(bRepaint);
 }
 
-IMPL_LINK( SvxNumOptionsTabPage, RatioHdl_Impl, Button*, pBox, void )
+IMPL_LINK(SvxNumOptionsTabPage, RatioHdl_Impl, weld::ToggleButton&, rBox, void)
 {
-    if (static_cast<CheckBox*>(pBox)->IsChecked())
+    if (rBox.get_active())
     {
         if (bLastWidthModified)
-            SizeHdl_Impl(*m_pWidthMF);
+            SizeHdl_Impl(*m_xWidthMF);
         else
-            SizeHdl_Impl(*m_pHeightMF);
+            SizeHdl_Impl(*m_xHeightMF);
     }
 }
 
-IMPL_LINK_NOARG(SvxNumOptionsTabPage, CharFmtHdl_Impl, ListBox&, void)
+IMPL_LINK_NOARG(SvxNumOptionsTabPage, CharFmtHdl_Impl, weld::ComboBox&, void)
 {
     bAutomaticCharStyles = false;
-    sal_Int32 nEntryPos = m_pCharFmtLB->GetSelectedEntryPos();
-    OUString sEntry = m_pCharFmtLB->GetSelectedEntry();
+    sal_Int32 nEntryPos = m_xCharFmtLB->get_active();
+    OUString sEntry = m_xCharFmtLB->get_active_text();
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
@@ -2160,19 +2107,21 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, CharFmtHdl_Impl, ListBox&, void)
     SetModified(false);
 };
 
-IMPL_LINK_NOARG( SvxNumOptionsTabPage, EditListBoxHdl_Impl, ListBox&, void )
+IMPL_LINK_NOARG(SvxNumOptionsTabPage, EditListBoxHdl_Impl, weld::ComboBox&, void)
 {
     EditModifyHdl_Impl(nullptr);
 }
-IMPL_LINK( SvxNumOptionsTabPage, EditModifyHdl_Impl, Edit&, rEdit, void )
+
+IMPL_LINK(SvxNumOptionsTabPage, EditModifyHdl_Impl, weld::Entry&, rEdit, void)
 {
     EditModifyHdl_Impl(&rEdit);
 }
-void SvxNumOptionsTabPage::EditModifyHdl_Impl( Edit* pEdit )
+
+void SvxNumOptionsTabPage::EditModifyHdl_Impl(weld::Entry* pEdit)
 {
-    bool bPrefix = pEdit == m_pPrefixED;
-    bool bSuffix = pEdit == m_pSuffixED;
-    bool bStart = pEdit == m_pStartED;
+    bool bPrefix = pEdit == m_xPrefixED.get();
+    bool bSuffix = pEdit == m_xSuffixED.get();
+    bool bStart = pEdit == m_xStartED.get();
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
     {
@@ -2180,11 +2129,11 @@ void SvxNumOptionsTabPage::EditModifyHdl_Impl( Edit* pEdit )
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
             if(bPrefix)
-                aNumFmt.SetPrefix( m_pPrefixED->GetText() );
+                aNumFmt.SetPrefix(m_xPrefixED->get_text());
             else if(bSuffix)
-                aNumFmt.SetSuffix( m_pSuffixED->GetText() );
+                aNumFmt.SetSuffix(m_xSuffixED->get_text());
             else if(bStart)
-                aNumFmt.SetStart( static_cast<sal_uInt16>(m_pStartED->GetValue()) );
+                aNumFmt.SetStart(m_xStartED->get_value());
             pActNum->SetLevel(i, aNumFmt);
         }
         nMask <<= 1;
@@ -2247,149 +2196,6 @@ static long lcl_DrawBullet(VirtualDevice* pVDev,
 
     pVDev->SetFont(aTmpFont);
     return nRet;
-}
-
-SvxNumberingPreview::SvxNumberingPreview(vcl::Window* pParent, WinBits nWinBits)
-    : Window(pParent, nWinBits)
-    , pActNum(nullptr)
-    , nActLevel(SAL_MAX_UINT16)
-{
-    SetBorderStyle(WindowBorderStyle::MONO);
-}
-
-VCL_BUILDER_FACTORY_ARGS(SvxNumberingPreview, WB_BORDER)
-
-// paint preview of numeration
-void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& /*rRect*/)
-{
-    Size aSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
-
-    const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-    const Color aBackColor = rStyleSettings.GetFieldColor();
-    const Color aTextColor = rStyleSettings.GetFieldTextColor();
-
-    ScopedVclPtrInstance<VirtualDevice> pVDev(rRenderContext);
-    pVDev->EnableRTL(rRenderContext.IsRTLEnabled());
-    pVDev->SetMapMode(rRenderContext.GetMapMode());
-    pVDev->SetOutputSize(aSize);
-
-    Color aLineColor(COL_LIGHTGRAY);
-    if (aLineColor == aBackColor)
-        aLineColor.Invert();
-    pVDev->SetLineColor(aLineColor);
-    pVDev->SetFillColor(aBackColor);
-
-    if (pActNum)
-    {
-        long nWidthRelation = 30; // chapter dialog
-
-        // height per level
-        long nXStep = aSize.Width() / (3 * pActNum->GetLevelCount());
-        if (pActNum->GetLevelCount() < 10)
-            nXStep /= 2;
-        long nYStart = 4;
-        // the whole height mustn't be used for a single level
-        long nYStep = (aSize.Height() - 6)/ (pActNum->GetLevelCount() > 1 ? pActNum->GetLevelCount() : 5);
-
-        aStdFont = OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, MsLangId::getSystemLanguage(), GetDefaultFontFlags::OnlyOne);
-        aStdFont.SetColor(aTextColor);
-        aStdFont.SetFillColor(aBackColor);
-
-        long nFontHeight = nYStep * 6 / 10;
-        aStdFont.SetFontSize(Size( 0, nFontHeight ));
-
-        SvxNodeNum aNum;
-        sal_uInt16 nPreNum = pActNum->GetLevel(0).GetStart();
-
-        //#i5153# painting gray or black rectangles as 'normal' numbering text
-        long nWidth = pVDev->GetTextWidth("Preview");
-        long nTextHeight = pVDev->GetTextHeight();
-        long nRectHeight = nTextHeight * 2 / 3;
-        long nTopOffset = nTextHeight - nRectHeight;
-        Color aBlackColor(COL_BLACK);
-        if (aBlackColor == aBackColor)
-            aBlackColor.Invert();
-
-        for (sal_uInt16 nLevel = 0; nLevel < pActNum->GetLevelCount(); ++nLevel, nYStart = nYStart + nYStep)
-        {
-            const SvxNumberFormat &rFmt = pActNum->GetLevel(nLevel);
-            aNum.GetLevelVal()[ nLevel ] = rFmt.GetStart();
-            long nXStart( 0 );
-            pVDev->SetFillColor( aBackColor );
-
-            if (rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION)
-            {
-                nXStart = rFmt.GetAbsLSpace() / nWidthRelation;
-            }
-            else if (rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT)
-            {
-                const long nTmpXStart((rFmt.GetIndentAt() + rFmt.GetFirstLineIndent() ) / nWidthRelation);
-                if (nTmpXStart < 0)
-                {
-                    nXStart = 0;
-                }
-                else
-                {
-                    nXStart = nTmpXStart;
-                }
-            }
-            nXStart /= 2;
-            nXStart += 2;
-            long nTextOffset = 2 * nXStep;
-            if (SVX_NUM_BITMAP == (rFmt.GetNumberingType()&(~LINK_TOKEN)))
-            {
-                if (rFmt.IsShowSymbol())
-                {
-                    long nYMiddle = nYStart + ( nFontHeight / 2 );
-                    nTextOffset = lcl_DrawGraphic(pVDev.get(), rFmt, nXStart, nYMiddle, nWidthRelation);
-                    nTextOffset = nTextOffset + nXStep;
-                }
-            }
-            else if (SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType())
-            {
-                if (rFmt.IsShowSymbol())
-                {
-                    nTextOffset =  lcl_DrawBullet(pVDev.get(), rFmt, nXStart, nYStart, aStdFont.GetFontSize());
-                    nTextOffset = nTextOffset + nXStep;
-                }
-            }
-            else
-            {
-                vcl::Font aColorFont(aStdFont);
-                Color aTmpBulletColor = rFmt.GetBulletColor();
-                if (aTmpBulletColor == COL_AUTO)
-                    aTmpBulletColor = aBackColor.IsDark() ? COL_WHITE : COL_BLACK;
-                else if (aTmpBulletColor == aBackColor)
-                    aTmpBulletColor.Invert();
-                aColorFont.SetColor(aTmpBulletColor);
-                pVDev->SetFont(aColorFont);
-                aNum.SetLevel( nLevel );
-                if (pActNum->IsContinuousNumbering())
-                    aNum.GetLevelVal()[nLevel] = nPreNum;
-                OUString aText(pActNum->MakeNumString(aNum));
-                pVDev->DrawText(Point(nXStart, nYStart), aText);
-                pVDev->SetFont(aStdFont);
-                nTextOffset = pVDev->GetTextWidth(aText);
-                nTextOffset = nTextOffset + nXStep;
-                nPreNum++;
-            }
-            //#i5153# the selected rectangle(s) should be black
-            if (0 != (nActLevel & (1<<nLevel)))
-            {
-                pVDev->SetFillColor( aBlackColor );
-                pVDev->SetLineColor( aBlackColor );
-            }
-            else
-            {
-                //#i5153# unselected levels are gray
-                pVDev->SetFillColor( aLineColor );
-                pVDev->SetLineColor( aLineColor );
-            }
-            ::tools::Rectangle aRect1(Point(nXStart + nTextOffset, nYStart + nTopOffset), Size(nWidth, nRectHeight));
-            pVDev->DrawRect(aRect1);
-        }
-    }
-    rRenderContext.DrawOutDev(Point(), aSize, Point(), aSize, *pVDev);
 }
 
 cui::NumberingPreview::NumberingPreview()
@@ -3506,8 +3312,8 @@ void SvxNumOptionsTabPage::SetModified(bool bRepaint)
     bModified = true;
     if (bRepaint)
     {
-        m_pPreviewWIN->SetLevel(nActNumLvl);
-        m_pPreviewWIN->Invalidate();
+        m_aPreviewWIN.SetLevel(nActNumLvl);
+        m_aPreviewWIN.Invalidate();
     }
 }
 
@@ -3526,7 +3332,7 @@ void SvxNumOptionsTabPage::PageCreated(const SfxAllItemSet& aSet)
         const std::vector<OUString> &aList = pListItem->GetList();
         sal_uInt32 nCount = aList.size();
         for(sal_uInt32 i = 0; i < nCount; i++)
-            m_pCharFmtLB->InsertEntry(aList[i]);
+            m_xCharFmtLB->append_text(aList[i]);
     }
     if (pMetricItem)
         SetMetric(static_cast<FieldUnit>(pMetricItem->GetValue()));
