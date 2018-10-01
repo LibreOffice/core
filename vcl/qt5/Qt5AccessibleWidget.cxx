@@ -24,13 +24,15 @@
 
 #include <Qt5Frame.hxx>
 #include <Qt5Tools.hxx>
-#include <Qt5XAccessible.hxx>
 #include <Qt5Widget.hxx>
+#include <Qt5XAccessible.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
+#include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 
 #include <sal/log.hxx>
@@ -512,29 +514,12 @@ QColor Qt5AccessibleWidget::backgroundColor() const
     return toQColor(xAccessibleComponent->getBackground());
 }
 
-void* Qt5AccessibleWidget::interface_cast(QAccessible::InterfaceType /* t */)
+void* Qt5AccessibleWidget::interface_cast(QAccessible::InterfaceType t)
 {
-    /* if (t == QAccessible::ActionInterface)
-        return static_cast<QAccessibleActionInterface*>(this); */
+    if (t == QAccessible::ActionInterface)
+        return static_cast<QAccessibleActionInterface*>(this);
     return nullptr;
 }
-
-// QAccessibleActionInterface
-/* QStringList Qt5AccessibleWidget::actionNames() const
-{
-    qDebug("Qt5AccessibleWidget::actionNames");
-    QStringList actionNames;
-    return actionNames;
-}
-void Qt5AccessibleWidget::doAction(const QString& actionName)
-{
-    qDebug("Qt5AccessibleWidget::doAction");
-}
-QStringList Qt5AccessibleWidget::keyBindingsForAction(const QString& actionName) const
-{
-    qDebug("Qt5AccessibleWidget::keyBindingsForAction");
-    return QStringList();
-} */
 
 bool Qt5AccessibleWidget::isValid() const
 {
@@ -568,6 +553,40 @@ QAccessibleInterface* Qt5AccessibleWidget::customFactory(const QString& classnam
     }
 
     return nullptr;
+}
+
+// QAccessibleActionInterface
+QStringList Qt5AccessibleWidget::actionNames() const
+{
+    QStringList actionNames;
+    Reference<XAccessibleAction> xAccessibleAction(m_xAccessible, UNO_QUERY);
+    if (!xAccessibleAction.is())
+        return actionNames;
+
+    int count = xAccessibleAction->getAccessibleActionCount();
+    for (int i = 0; i < count; i++)
+    {
+        OUString desc = xAccessibleAction->getAccessibleActionDescription(i);
+        actionNames.append(toQString(desc));
+    }
+    return actionNames;
+}
+
+void Qt5AccessibleWidget::doAction(const QString& actionName)
+{
+    Reference<XAccessibleAction> xAccessibleAction(m_xAccessible, UNO_QUERY);
+    if (!xAccessibleAction.is())
+        return;
+
+    int index = actionNames().indexOf(actionName);
+    if (index == -1)
+        return;
+    xAccessibleAction->doAccessibleAction(index);
+}
+
+QStringList Qt5AccessibleWidget::keyBindingsForAction(const QString& /* actionName */) const
+{
+    return QStringList();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
