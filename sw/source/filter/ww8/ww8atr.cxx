@@ -5509,9 +5509,6 @@ const SwRedlineData* AttributeOutputBase::GetParagraphMarkerRedline( const SwTex
             continue;
 
         const SwPosition* pCheckedEnd = pRedl->End();
-        if (!pCheckedEnd)
-            continue;
-
         const SwPosition* pCheckedStt = pRedl->Start();
         sal_uLong uStartNodeIndex = pCheckedStt->nNode.GetIndex();
         sal_uLong uStartCharIndex = pCheckedStt->nContent.GetIndex();
