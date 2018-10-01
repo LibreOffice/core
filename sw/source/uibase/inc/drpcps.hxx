@@ -63,8 +63,8 @@ class SwDropCapsPict : public weld::CustomWidgetController
     struct ScriptInfo
     {
         sal_uLong  textWidth;   ///< Physical width of this segment.
-        sal_uInt16 scriptType;  ///< Script type (e.g. Latin, Asian, Complex)
-        sal_Int32 changePos;   ///< Character position where the script changes.
+        sal_uInt16 const scriptType;  ///< Script type (e.g. Latin, Asian, Complex)
+        sal_Int32 const changePos;   ///< Character position where the script changes.
         ScriptInfo(sal_uInt16 scrptType, sal_Int32 position)
             : textWidth(0), scriptType(scrptType), changePos(position) {}
     };

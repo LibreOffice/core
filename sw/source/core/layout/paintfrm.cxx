@@ -2213,7 +2213,7 @@ struct SwLineEntry
     SwTwips mnStartPos;
     SwTwips mnEndPos;
 
-    svx::frame::Style maAttribute;
+    svx::frame::Style const maAttribute;
 
     enum OverlapType { NO_OVERLAP, OVERLAP1, OVERLAP2, OVERLAP3 };
 
@@ -4466,13 +4466,13 @@ namespace drawinglayer
         {
         private:
             /// the transformation defining the geometry of this BorderRectangle
-            basegfx::B2DHomMatrix       maB2DHomMatrix;
+            basegfx::B2DHomMatrix const       maB2DHomMatrix;
 
             /// the four styles to be used
-            svx::frame::Style           maStyleTop;
-            svx::frame::Style           maStyleRight;
-            svx::frame::Style           maStyleBottom;
-            svx::frame::Style           maStyleLeft;
+            svx::frame::Style const           maStyleTop;
+            svx::frame::Style const           maStyleRight;
+            svx::frame::Style const           maStyleBottom;
+            svx::frame::Style const           maStyleLeft;
 
         protected:
             /// local decomposition.

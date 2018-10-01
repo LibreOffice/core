@@ -57,9 +57,9 @@ using namespace ::com::sun::star;
 
 class SwHTMLTableLayoutConstraints
 {
-    sal_uInt16 nRow;                    // start row
-    sal_uInt16 nCol;                    // start column
-    sal_uInt16 nColSpan;                // the column's COLSPAN
+    sal_uInt16 const nRow;                    // start row
+    sal_uInt16 const nCol;                    // start column
+    sal_uInt16 const nColSpan;                // the column's COLSPAN
 
     std::unique_ptr<SwHTMLTableLayoutConstraints> pNext;        // the next constraint
 

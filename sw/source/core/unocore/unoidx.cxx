@@ -2707,7 +2707,7 @@ SwXDocumentIndex::TokenAccess_Impl::getSupportedServiceNames()
 
 struct TokenType_ {
     const char *pName;
-    enum FormTokenType eTokenType;
+    enum FormTokenType const eTokenType;
 };
 
 static const struct TokenType_ g_TokenTypes[] =

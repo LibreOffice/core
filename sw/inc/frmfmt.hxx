@@ -268,7 +268,7 @@ namespace sw
     };
     struct SW_DLLPUBLIC DrawFrameFormatHint final: SfxHint
     {
-        DrawFrameFormatHintId m_eId;
+        DrawFrameFormatHintId const m_eId;
         DrawFrameFormatHint(DrawFrameFormatHintId eId) : m_eId(eId) {};
         virtual ~DrawFrameFormatHint() override;
     };

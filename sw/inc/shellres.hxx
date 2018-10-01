@@ -25,40 +25,40 @@
 
 struct SW_DLLPUBLIC ShellResource
 {
-    OUString        aPostItAuthor;
-    OUString        aPostItPage;
-    OUString        aPostItLine;
+    OUString const        aPostItAuthor;
+    OUString const        aPostItPage;
+    OUString const        aPostItLine;
 
     // Calc error-strings.
-    OUString        aCalc_Syntax;
-    OUString        aCalc_ZeroDiv;
-    OUString        aCalc_Brack;
-    OUString        aCalc_Pow;
-    OUString        aCalc_Overflow;
-    OUString        aCalc_Default;
-    OUString        aCalc_Error;
+    OUString const        aCalc_Syntax;
+    OUString const        aCalc_ZeroDiv;
+    OUString const        aCalc_Brack;
+    OUString const        aCalc_Pow;
+    OUString const        aCalc_Overflow;
+    OUString const        aCalc_Default;
+    OUString const        aCalc_Error;
 
     // For GetRefField - referenced item not found.
-    OUString        aGetRefField_RefItemNotFound;
+    OUString const        aGetRefField_RefItemNotFound;
     // For some list boxes - string "none"
-    OUString        aStrNone;
+    OUString const        aStrNone;
     // For fixed fields.
-    OUString        aFixedStr;
+    OUString const        aFixedStr;
     // Custom fields of type css::util::Duration.
-    OUString        sDurationFormat;
+    OUString const        sDurationFormat;
 
     //Names of TOXs.
-    OUString        aTOXIndexName;
-    OUString        aTOXUserName;
-    OUString        aTOXContentName;
-    OUString        aTOXIllustrationsName;
-    OUString        aTOXObjectsName;
-    OUString        aTOXTablesName;
-    OUString        aTOXAuthoritiesName;
-    OUString        aTOXCitationName;
+    OUString const        aTOXIndexName;
+    OUString const        aTOXUserName;
+    OUString const        aTOXContentName;
+    OUString const        aTOXIllustrationsName;
+    OUString const        aTOXObjectsName;
+    OUString const        aTOXTablesName;
+    OUString const        aTOXAuthoritiesName;
+    OUString const        aTOXCitationName;
 
     OUString        aLinkCtrlClick;
-    OUString        aLinkClick;
+    OUString const        aLinkClick;
 
     std::vector<OUString> aDocInfoLst;
 
@@ -81,9 +81,9 @@ struct SW_DLLPUBLIC ShellResource
 private:
     void GetAutoFormatNameLst_() const;
     mutable std::unique_ptr<std::vector<OUString>> pAutoFormatNameLst;
-    OUString        sPageDescFirstName;
-    OUString        sPageDescFollowName;
-    OUString        sPageDescName;
+    OUString const        sPageDescFirstName;
+    OUString const        sPageDescFollowName;
+    OUString const        sPageDescName;
 };
 
 inline const std::vector<OUString>& ShellResource::GetAutoFormatNameLst() const

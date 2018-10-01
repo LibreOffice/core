@@ -27,9 +27,9 @@ class SwUndoSplitNode: public SwUndo
     std::unique_ptr<SwHistory> m_pHistory;
     std::unique_ptr<SwRedlineData> pRedlData;
     sal_uLong nNode;
-    sal_Int32 nContent;
+    sal_Int32 const nContent;
     bool bTableFlag : 1;
-    bool bChkTableStt : 1;
+    bool const bChkTableStt : 1;
     sal_uInt32 nParRsid;
 
 public:

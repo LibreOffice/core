@@ -85,7 +85,7 @@ namespace o3tl {
 struct CSS1PropertyEnum
 {
     const sal_Char *pName;  // property value
-    sal_uInt16 nEnum;       // and the corresponding value of enum
+    sal_uInt16 const nEnum;       // and the corresponding value of enum
 };
 
 namespace editeng { class SvxBorderLine; }
@@ -191,7 +191,7 @@ class SvxCSS1Parser : public CSS1Parser
     CSS1Map m_Pages;
     CSS1Map m_Tags;
 
-    OUString sBaseURL;
+    OUString const sBaseURL;
 
     std::unique_ptr<SfxItemSet> pSheetItemSet;  // item set of Style-Sheet
     SfxItemSet *pItemSet;       // current item set
@@ -199,7 +199,7 @@ class SvxCSS1Parser : public CSS1Parser
     std::unique_ptr<SvxCSS1PropertyInfo> pSheetPropInfo;
     SvxCSS1PropertyInfo *pPropInfo;
 
-    sal_uInt16 nMinFixLineSpace;    // minimum spacing for fixed line spacing
+    sal_uInt16 const nMinFixLineSpace;    // minimum spacing for fixed line spacing
 
     rtl_TextEncoding    eDfltEnc;
 

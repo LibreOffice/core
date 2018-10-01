@@ -52,7 +52,7 @@ class SwUndo
 {
     SwUndoId const m_nId;
     RedlineFlags   nOrigRedlineFlags;
-    ViewShellId    m_nViewShellId;
+    ViewShellId const    m_nViewShellId;
     bool m_isRepeatIgnored; ///< for multi-selection, only repeat 1st selection
 
 protected:
@@ -290,7 +290,7 @@ public:
 class SwUndoInsLayFormat : public SwUndoFlyBase
 {
     sal_uLong mnCursorSaveIndexPara;           // Cursor position
-    sal_Int32 mnCursorSaveIndexPos;            // for undo
+    sal_Int32 const mnCursorSaveIndexPos;            // for undo
 public:
     SwUndoInsLayFormat( SwFrameFormat* pFormat, sal_uLong nNodeIdx, sal_Int32 nCntIdx );
 

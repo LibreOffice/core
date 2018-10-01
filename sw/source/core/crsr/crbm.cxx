@@ -61,7 +61,7 @@ namespace
         }
 
         SwCursor* m_pCursor;
-        SwCursorSaveState m_aSaveState;
+        SwCursorSaveState const m_aSaveState;
     };
 
     bool lcl_ReverseMarkOrderingByEnd(const IDocumentMarkAccess::pMark_t& rpFirst,

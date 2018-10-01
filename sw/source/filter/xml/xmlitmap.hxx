@@ -38,14 +38,14 @@
 
 struct SvXMLItemMapEntry
 {
-    sal_uInt16 nNameSpace;      // declares the Namespace in which this item
+    sal_uInt16 const nNameSpace;      // declares the Namespace in which this item
                                 // exists
-    enum ::xmloff::token::XMLTokenEnum eLocalName;
+    enum ::xmloff::token::XMLTokenEnum const eLocalName;
                                 // the local name for the item inside
                                 // the Namespace (as an XMLTokenEnum)
     sal_uInt16 nWhichId;        // the WhichId to identify the item
                                 // in the pool
-    sal_uInt32 nMemberId;       // the memberid specifies which part
+    sal_uInt32 const nMemberId;       // the memberid specifies which part
                                 // of the item should be imported or
                                 // exported with this Namespace
                                 // and localName

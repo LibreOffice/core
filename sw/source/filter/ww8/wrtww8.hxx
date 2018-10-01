@@ -177,9 +177,9 @@ struct WW8_SepInfo
     const SwPageDesc* pPageDesc;
     const SwSectionFormat* pSectionFormat;
     const SwNode* pPDNd;
-    sal_uLong  nLnNumRestartNo;
-    ::boost::optional<sal_uInt16> oPgRestartNo;
-    bool bIsFirstParagraph;
+    sal_uLong const  nLnNumRestartNo;
+    ::boost::optional<sal_uInt16> const oPgRestartNo;
+    bool const bIsFirstParagraph;
 
     WW8_SepInfo( const SwPageDesc* pPD, const SwSectionFormat* pFormat,
                  sal_uLong nLnRestart, ::boost::optional<sal_uInt16> oPgRestart = boost::none,
@@ -304,9 +304,9 @@ sal_uInt8 maWW8_FFN[6];
     OUString msFamilyNm;
     OUString msAltNm;
     bool mbAlt;
-    FontPitch mePitch;
-    FontFamily meFamily;
-    rtl_TextEncoding meChrSet;
+    FontPitch const mePitch;
+    FontFamily const meFamily;
+    rtl_TextEncoding const meChrSet;
 public:
      wwFont( const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily,
         rtl_TextEncoding eChrSet);
@@ -343,13 +343,13 @@ public:
 class DrawObj
 {
 public:
-    WW8_CP mnCp;                // CP-Pos of references
+    WW8_CP const mnCp;                // CP-Pos of references
     sal_uInt32 mnShapeId;       // ShapeId for the SwFrameFormats
     ww8::Frame maContent;       // the frame itself
-    Point maParentPos;          // Points
+    Point const maParentPos;          // Points
     sal_Int32 mnThick;          // Border Thicknesses
-    SvxFrameDirection mnDirection; // If BiDi or not
-    unsigned int mnHdFtIndex;   // 0 for main text, +1 for each subsequent
+    SvxFrameDirection const mnDirection; // If BiDi or not
+    unsigned int const mnHdFtIndex;   // 0 for main text, +1 for each subsequent
                                 // msword hd/ft
 
     DrawObj(const ww8::Frame &rContent, WW8_CP nCp, Point aParentPos, SvxFrameDirection nDir,
@@ -453,7 +453,7 @@ class MSWordExportBase
 public:
     wwFontHelper m_aFontHelper;
     std::vector<sal_uLong> m_aChapterFieldLocs;
-    OUString m_aMainStg;
+    OUString const m_aMainStg;
     std::vector<const SwTOXType*> m_aTOXArr;
     const SfxItemSet* m_pISet;    // for double attributes
     WW8_WrPct*  m_pPiece;         // Pointer to Piece-Table
@@ -970,7 +970,7 @@ public:
     std::unique_ptr<WW8_WrPlcFootnoteEdn> pEdn;         ///< Endnotes - structure to remember them, and output
     std::unique_ptr<WW8_WrPlcSepx> pSepx;               ///< Sections/headers/footers
 
-    bool m_bDot; ///< Template or document.
+    bool const m_bDot; ///< Template or document.
 
 protected:
     SwWW8Writer        *m_pWriter;      ///< Pointer to the writer
@@ -1205,7 +1205,7 @@ protected:
 class WW8_WrPlcFootnoteEdn : public WW8_WrPlcSubDoc
 {
 private:
-    sal_uInt8 nTyp;
+    sal_uInt8 const nTyp;
 
     WW8_WrPlcFootnoteEdn(const WW8_WrPlcFootnoteEdn&) = delete;
     WW8_WrPlcFootnoteEdn& operator=(WW8_WrPlcFootnoteEdn &) = delete;
@@ -1302,7 +1302,7 @@ private:
     std::vector<WW8_CP> aPos;
     std::unique_ptr<sal_uInt8[]> pData;                // content ( structures )
     sal_uLong nDataLen;
-    sal_uInt16 nStructSiz;
+    sal_uInt16 const nStructSiz;
 
     WW8_WrPlc1(const WW8_WrPlc1&) = delete;
     WW8_WrPlc1& operator=(const WW8_WrPlc1&) = delete;
@@ -1321,7 +1321,7 @@ public:
 class WW8_WrPlcField : public WW8_WrPlc1
 {
 private:
-    sal_uInt8 nTextTyp;
+    sal_uInt8 const nTextTyp;
     sal_uInt16 nResults;
 
     WW8_WrPlcField(const WW8_WrPlcField&) = delete;
@@ -1349,10 +1349,10 @@ public:
 class GraphicDetails
 {
 public:
-    ww8::Frame maFly;                // surrounding FlyFrames
+    ww8::Frame const maFly;                // surrounding FlyFrames
     sal_uLong mnPos;                // FilePos of the graphics
-    sal_uInt16 mnWid;               // Width of the graphics
-    sal_uInt16 mnHei;               // Height of the graphics
+    sal_uInt16 const mnWid;               // Width of the graphics
+    sal_uInt16 const mnHei;               // Height of the graphics
 
     GraphicDetails(const ww8::Frame &rFly, sal_uInt16 nWid, sal_uInt16 nHei)
         : maFly(rFly), mnPos(0), mnWid(nWid), mnHei(nHei)
@@ -1403,7 +1403,7 @@ public:
 class MSWordAttrIter
 {
 private:
-    MSWordAttrIter* pOld;
+    MSWordAttrIter* const pOld;
     MSWordAttrIter(const MSWordAttrIter&) = delete;
     MSWordAttrIter& operator=(const MSWordAttrIter&) = delete;
 protected:
@@ -1430,7 +1430,7 @@ private:
     sal_Int32 nTmpSwPos;                   // for HasItem()
     rtl_TextEncoding eNdChrSet;
     sal_uInt16 nScript;
-    sal_uInt8 mnTyp;
+    sal_uInt8 const mnTyp;
 
     sal_Int32 SearchNext( sal_Int32 nStartPos );
     void SetCharSet(const EECharAttrib& rTextAttr, bool bStart);
@@ -1536,7 +1536,7 @@ class MSWordStyles
     sal_uInt16 m_aHeadingParagraphStyles[MAXLEVEL];
     std::unique_ptr<SwFormat*[]> m_pFormatA; ///< Slot <-> Character and paragraph style array (0 for list styles).
     sal_uInt16 m_nUsedSlots;
-    bool m_bListStyles; ///< If list styles are requested to be exported as well.
+    bool const m_bListStyles; ///< If list styles are requested to be exported as well.
     std::map<sal_uInt16, const SwNumRule*> m_aNumRules; ///< Slot <-> List style map.
 
     /// We need to build style id's for DOCX export; ideally we should roundtrip that, but this is good enough.

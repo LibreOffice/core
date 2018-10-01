@@ -968,8 +968,6 @@ const struct SvEventDescription aAutotextEvents[] =
 SwAutoTextEventDescriptor::SwAutoTextEventDescriptor(
     SwXAutoTextEntry& rAutoText ) :
         SvBaseEventDescriptor(aAutotextEvents),
-        sSwAutoTextEventDescriptor(
-            "SwAutoTextEventDescriptor"),
         rAutoTextEntry(rAutoText)
 {
 }
@@ -980,7 +978,7 @@ SwAutoTextEventDescriptor::~SwAutoTextEventDescriptor()
 
 OUString SwAutoTextEventDescriptor::getImplementationName()
 {
-    return sSwAutoTextEventDescriptor;
+    return OUString("SwAutoTextEventDescriptor");
 }
 
 void SwAutoTextEventDescriptor::replaceByName(

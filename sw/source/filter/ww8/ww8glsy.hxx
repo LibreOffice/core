@@ -73,7 +73,7 @@ private:
     std::shared_ptr<WW8GlossaryFib> xGlossary;
     tools::SvRef<SotStorageStream> xTableStream;
     tools::SvRef<SotStorageStream> &rStrm;
-    tools::SvRef<SotStorage> xStg;
+    tools::SvRef<SotStorage> const xStg;
     sal_uInt16 nStrings;
 
     static bool MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks, bool bSaveRelFile,

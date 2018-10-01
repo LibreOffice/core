@@ -50,7 +50,7 @@ namespace sw
 // FieldType for DDE
 class SW_DLLPUBLIC SwDDEFieldType : public SwFieldType
 {
-    OUString aName;
+    OUString const aName;
     OUString aExpansion;
 
     tools::SvRef<sfx2::SvBaseLink> refLink;

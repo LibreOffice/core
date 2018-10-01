@@ -235,8 +235,8 @@ class SwChartDataSequence :
     ::comphelper::OInterfaceContainerHelper2          m_aModifyListeners;
     css::chart2::data::DataSequenceRole               m_aRole;
 
-    OUString  m_aRowLabelText;
-    OUString  m_aColLabelText;
+    OUString const  m_aRowLabelText;
+    OUString const  m_aColLabelText;
 
     rtl::Reference<SwChartDataProvider>                m_xDataProvider;
 

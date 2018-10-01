@@ -90,7 +90,7 @@ class SwIndexMarkPane
 
     OUString        aOrgStr;
     bool            bDel;
-    bool            bNewMark;
+    bool const      bNewMark;
     bool            bSelected;
 
     bool            bPhoneticED0_ChangedByUser;
@@ -200,8 +200,8 @@ class SwAuthorMarkPane
     VclPtr<PushButton>     m_pCreateEntryPB;
     VclPtr<PushButton>     m_pEditEntryPB;
 
-    bool        bNewEntry;
-    bool        bBibAccessInitialized;
+    bool const      bNewEntry;
+    bool            bBibAccessInitialized;
 
     SwWrtShell*     pSh;
 

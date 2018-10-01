@@ -32,7 +32,7 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFormatHeader: public SfxPoolItem, public SwClient
 {
-    bool bActive;       ///< Only for controlling (creation of content).
+    bool const bActive;       ///< Only for controlling (creation of content).
 
 public:
     SwFormatHeader( bool bOn = false );
@@ -63,7 +63,7 @@ public:
 
 class SW_DLLPUBLIC SwFormatFooter: public SfxPoolItem, public SwClient
 {
-    bool bActive;       // Only for controlling (creation of content).
+    bool const bActive;       // Only for controlling (creation of content).
 
 public:
     SwFormatFooter( bool bOn = false );

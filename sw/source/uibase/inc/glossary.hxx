@@ -103,7 +103,7 @@ class SwGlossaryDlg : public SvxStandardDialog
     VclPtr<PushButton>     m_pBibBtn;
     VclPtr<PushButton>     m_pPathBtn;
 
-    OUString        sReadonlyPath;
+    OUString const        sReadonlyPath;
 
     css::uno::Reference< css::text::XAutoTextContainer2 > m_xAutoText;
     std::unique_ptr<SwOneExampleFrame>  pExampleFrame;

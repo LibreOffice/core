@@ -45,10 +45,10 @@ protected:
 
 private:
     css::uno::Reference<css::table::XCell> m_xCell;
-    css::table::CellRangeAddress m_aCellRangeAddressDependents;
-    css::table::CellRangeAddress m_aCellRangeAddressPrecedents;
-    unsigned int m_nIdxDependents;
-    unsigned int m_nIdxPrecedents;
+    css::table::CellRangeAddress const m_aCellRangeAddressDependents;
+    css::table::CellRangeAddress const m_aCellRangeAddressPrecedents;
+    unsigned int const m_nIdxDependents;
+    unsigned int const m_nIdxPrecedents;
 };
 } // namespace apitest
 

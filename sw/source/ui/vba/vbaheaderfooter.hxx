@@ -30,8 +30,8 @@ class SwVbaHeaderFooter : public SwVbaHeaderFooter_BASE
 private:
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::beans::XPropertySet > mxPageStyleProps;
-    bool mbHeader;
-    sal_Int32 mnIndex;
+    bool const mbHeader;
+    sal_Int32 const mnIndex;
 
 public:
     /// @throws css::uno::RuntimeException

@@ -30,7 +30,7 @@ class SwVbaListTemplates : public SwVbaListTemplates_BASE
 {
 private:
     css::uno::Reference< css::text::XTextDocument > mxTextDocument;
-    sal_Int32 mnGalleryType;
+    sal_Int32 const mnGalleryType;
 
 public:
     /// @throws css::uno::RuntimeException
