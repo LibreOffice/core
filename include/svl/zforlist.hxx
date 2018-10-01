@@ -176,7 +176,7 @@ enum NfIndexTableOffset
     NF_DATE_SYSTEM_SHORT = NF_DATE_START,   // 08.10.97
     NF_DATE_SYSTEM_LONG,                    // Wednesday, 8. October 1997
     NF_DATE_SYS_DDMMYY,                     // 08.10.97
-    NF_DATE_SYS_DDMMYYYY,                   // 08.10.1997
+    NF_DATE_SYS_DDMMYYYY,                   // 08.10.1997                   THE edit format, formatindex="21"
     NF_DATE_SYS_DMMMYY,                     // 8. Oct 97
     NF_DATE_SYS_DMMMYYYY,                   // 8. Oct 1997
     NF_DATE_DIN_DMMMYYYY,                   // 8. Oct. 1997                 DIN
@@ -189,7 +189,7 @@ enum NfIndexTableOffset
     NF_DATE_DIN_MMDD,                       // 10-08                        DIN
     NF_DATE_DIN_YYMMDD,                     // 97-10-08                     DIN
     NF_DATE_DIN_YYYYMMDD,                   // 1997-10-08                   DIN
-    NF_DATE_ISO_YYYYMMDD = NF_DATE_DIN_YYYYMMDD, // 1997-10-08              ISO clarify with name
+    NF_DATE_ISO_YYYYMMDD = NF_DATE_DIN_YYYYMMDD, // 1997-10-08              ISO clarify with name, formatindex="33"
     NF_DATE_SYS_MMYY,                       // 10.97
     NF_DATE_SYS_DDMMM,                      // 08.Oct
     NF_DATE_MMMM,                           // October
@@ -202,14 +202,14 @@ enum NfIndexTableOffset
     NF_TIME_HHMMSS,                         // HH:MM:SS
     NF_TIME_HHMMAMPM,                       // HH:MM AM/PM
     NF_TIME_HHMMSSAMPM,                     // HH:MM:SS AM/PM
-    NF_TIME_HH_MMSS,                        // [HH]:MM:SS
-    NF_TIME_MMSS00,                         // MM:SS,00
-    NF_TIME_HH_MMSS00,                      // [HH]:MM:SS,00
+    NF_TIME_HH_MMSS,                        // [HH]:MM:SS                   formatindex="43"
+    NF_TIME_MMSS00,                         // MM:SS,00                     formatindex="44"
+    NF_TIME_HH_MMSS00,                      // [HH]:MM:SS,00                formatindex="45"
     NF_TIME_END = NF_TIME_HH_MMSS00,
 
     NF_DATETIME_START,
     NF_DATETIME_SYSTEM_SHORT_HHMM = NF_DATETIME_START,  // 08.10.97 01:23
-    NF_DATETIME_SYS_DDMMYYYY_HHMMSS,        // 08.10.1997 01:23:45
+    NF_DATETIME_SYS_DDMMYYYY_HHMMSS,        // 08.10.1997 01:23:45          THE edit format, formatindex="47"
     NF_DATETIME_END = NF_DATETIME_SYS_DDMMYYYY_HHMMSS,
 
     NF_BOOLEAN,                             // BOOLEAN
