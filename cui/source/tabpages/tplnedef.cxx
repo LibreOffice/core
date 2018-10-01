@@ -698,7 +698,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl, weld::Button&, void)
             if( pDshLst->Load() )
             {
                 pDashList = pDshLst;
-                static_cast<SvxLineTabDialog*>( GetParentDialog() )->SetNewDashList( pDashList );
+                static_cast<SvxLineTabDialog*>(GetDialogController())->SetNewDashList( pDashList );
 
                 m_xLbLineStyles->clear();
                 m_xLbLineStyles->Fill( pDashList );

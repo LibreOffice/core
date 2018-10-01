@@ -28,38 +28,24 @@
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
 
-SvxLineTabDialog::SvxLineTabDialog
-(
-    vcl::Window* pParent,
-    const SfxItemSet* pAttr,
-    SdrModel* pModel,
-    const SdrObject* pSdrObj,
-    bool bHasObj
-) :
-
-    SfxTabDialog    ( pParent
-                      , "LineDialog"
-                      , "cui/ui/linedialog.ui"
-                      , pAttr ),
-    m_nLineTabPage(0),
-    m_nShadowTabPage(0),
-    m_nStyleTabPage(0),
-    m_nEndTabPage(0),
-    pDrawModel      ( pModel ),
-    pObj            ( pSdrObj ),
-    pColorList      ( pModel->GetColorList() ),
-    mpNewColorList  ( pModel->GetColorList() ),
-    pDashList       ( pModel->GetDashList() ),
-    pNewDashList    ( pModel->GetDashList() ),
-    pLineEndList    ( pModel->GetLineEndList() ),
-    pNewLineEndList ( pModel->GetLineEndList() ),
-    bObjSelected    ( bHasObj ),
-    nLineEndListState( ChangeType::NONE ),
-    nDashListState( ChangeType::NONE ),
-    mnColorListState( ChangeType::NONE ),
-    nPageType( PageType::Area ), // We use it here primarily to get the right attributes with FillItemSet
-    nPosDashLb( 0 ),
-    nPosLineEndLb( 0 )
+SvxLineTabDialog::SvxLineTabDialog(weld::Window* pParent, const SfxItemSet* pAttr,
+    SdrModel* pModel, const SdrObject* pSdrObj, bool bHasObj)
+    : SfxTabDialogController(pParent, "cui/ui/linedialog.ui", "LineDialog", pAttr)
+    , pDrawModel(pModel)
+    , pObj(pSdrObj)
+    , pColorList(pModel->GetColorList())
+    , mpNewColorList(pModel->GetColorList())
+    , pDashList(pModel->GetDashList())
+    , pNewDashList(pModel->GetDashList())
+    , pLineEndList(pModel->GetLineEndList())
+    , pNewLineEndList(pModel->GetLineEndList())
+    , bObjSelected(bHasObj)
+    , nLineEndListState(ChangeType::NONE)
+    , nDashListState(ChangeType::NONE)
+    , mnColorListState(ChangeType::NONE)
+    , nPageType(PageType::Area) // We use it here primarily to get the right attributes with FillItemSet
+    , nPosDashLb(0)
+    , nPosLineEndLb(0)
 {
     bool bLineOnly = false;
     if( pObj && pObj->GetObjInventor() == SdrInventor::Default )
@@ -81,19 +67,18 @@ SvxLineTabDialog::SvxLineTabDialog
 
     }
 
-    m_nLineTabPage = AddTabPage( "RID_SVXPAGE_LINE", SvxLineTabPage::Create, nullptr);
+    AddTabPage("RID_SVXPAGE_LINE", SvxLineTabPage::Create, nullptr);
     if( bLineOnly )
-        m_nShadowTabPage = AddTabPage( "RID_SVXPAGE_SHADOW", SvxShadowTabPage::Create, nullptr );
+        AddTabPage("RID_SVXPAGE_SHADOW", SvxShadowTabPage::Create, nullptr);
     else
         RemoveTabPage( "RID_SVXPAGE_SHADOW" );
 
-    m_nStyleTabPage = AddTabPage( "RID_SVXPAGE_LINE_DEF", SvxLineDefTabPage::Create, nullptr);
-    m_nEndTabPage = AddTabPage( "RID_SVXPAGE_LINEEND_DEF", SvxLineEndDefTabPage::Create, nullptr);
+    AddTabPage("RID_SVXPAGE_LINE_DEF", SvxLineDefTabPage::Create, nullptr);
+    AddTabPage("RID_SVXPAGE_LINEEND_DEF", SvxLineEndDefTabPage::Create, nullptr);
 
-    CancelButton& rBtnCancel = GetCancelButton();
-    rBtnCancel.SetClickHdl( LINK( this, SvxLineTabDialog, CancelHdlImpl ) );
+    weld::Button& rBtnCancel = GetCancelButton();
+    rBtnCancel.connect_clicked(LINK(this, SvxLineTabDialog, CancelHdlImpl));
 }
-
 
 void SvxLineTabDialog::SavePalettes()
 {
@@ -161,27 +146,25 @@ void SvxLineTabDialog::SavePalettes()
     }
 }
 
-
 short SvxLineTabDialog::Ok()
 {
     SavePalettes();
 
     // We return RET_OK if at least one TabPage in FillItemSet() returns sal_True.
     // We do this by default at the moment.
-    return SfxTabDialog::Ok();
+    return SfxTabDialogController::Ok();
 }
 
-
-IMPL_LINK_NOARG(SvxLineTabDialog, CancelHdlImpl, Button*, void)
+IMPL_LINK_NOARG(SvxLineTabDialog, CancelHdlImpl, weld::Button&, void)
 {
     SavePalettes();
 
-    EndDialog();
+    m_xDialog->response(RET_CANCEL);
 }
 
-void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SvxLineTabDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
-    if( nId ==  m_nLineTabPage)
+    if (rId == "RID_SVXPAGE_LINE")
     {
         static_cast<SvxLineTabPage&>(rPage).SetColorList( pColorList );
         static_cast<SvxLineTabPage&>(rPage).SetDashList( pDashList );
@@ -196,7 +179,7 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         static_cast<SvxLineTabPage&>(rPage).Construct();
         static_cast<SvxLineTabPage&>(rPage).SetColorChgd( &mnColorListState );
     }
-    else if(nId == m_nStyleTabPage)
+    else if (rId == "RID_SVXPAGE_LINE_DEF")
     {
         static_cast<SvxLineDefTabPage&>(rPage).SetDashList( pDashList );
         static_cast<SvxLineDefTabPage&>(rPage).SetDlgType( 0 );
@@ -205,7 +188,7 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         static_cast<SvxLineDefTabPage&>(rPage).SetDashChgd( &nDashListState );
         static_cast<SvxLineDefTabPage&>(rPage).Construct();
     }
-    else if(nId == m_nEndTabPage)
+    else if (rId == "RID_SVXPAGE_LINEEND_DEF")
     {
         static_cast<SvxLineEndDefTabPage&>(rPage).SetLineEndList( pLineEndList );
         static_cast<SvxLineEndDefTabPage&>(rPage).SetPolyObj( pObj );
@@ -215,7 +198,7 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         static_cast<SvxLineEndDefTabPage&>(rPage).SetLineEndChgd( &nLineEndListState );
         static_cast<SvxLineEndDefTabPage&>(rPage).Construct();
     }
-    else if (nId == m_nShadowTabPage)
+    else if (rId == "RID_SVXPAGE_SHADOW")
     {
         static_cast<SvxShadowTabPage&>(rPage).SetColorList( pColorList );
         static_cast<SvxShadowTabPage&>(rPage).SetPageType( nPageType );

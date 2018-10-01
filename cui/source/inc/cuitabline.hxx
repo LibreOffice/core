@@ -27,23 +27,18 @@
 enum class PageType;
 class ColorListBox;
 
-class SvxLineTabDialog final : public SfxTabDialog
+class SvxLineTabDialog final : public SfxTabDialogController
 {
-    sal_uInt16            m_nLineTabPage;
-    sal_uInt16            m_nShadowTabPage;
-    sal_uInt16            m_nStyleTabPage;
-    sal_uInt16            m_nEndTabPage;
-
     SdrModel*           pDrawModel;
     const SdrObject*    pObj;
 
-    XColorListRef         pColorList;
-    XColorListRef         mpNewColorList;
-    XDashListRef          pDashList;
-    XDashListRef          pNewDashList;
-    XLineEndListRef       pLineEndList;
-    XLineEndListRef       pNewLineEndList;
-    bool            bObjSelected;
+    XColorListRef       pColorList;
+    XColorListRef       mpNewColorList;
+    XDashListRef        pDashList;
+    XDashListRef        pNewDashList;
+    XLineEndListRef     pLineEndList;
+    XLineEndListRef     pNewLineEndList;
+    bool                bObjSelected;
 
     ChangeType          nLineEndListState;
     ChangeType          nDashListState;
@@ -53,16 +48,16 @@ class SvxLineTabDialog final : public SfxTabDialog
     sal_Int32           nPosDashLb;
     sal_Int32           nPosLineEndLb;
 
-    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
+    virtual void        PageCreated(const OString& rId, SfxTabPage &rPage) override;
 
     virtual short       Ok() override;
-    DECL_LINK( CancelHdlImpl, Button*, void );
+    DECL_LINK(CancelHdlImpl, weld::Button&, void);
     void                SavePalettes();
 
 public:
-    SvxLineTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
-                      SdrModel* pModel, const SdrObject* pObj,
-                      bool bHasObj );
+    SvxLineTabDialog(weld::Window* pParent, const SfxItemSet* pAttr,
+                     SdrModel* pModel, const SdrObject* pObj,
+                     bool bHasObj);
 
     void                SetNewDashList( XDashListRef const & pInLst)
                         { pNewDashList = pInLst; }

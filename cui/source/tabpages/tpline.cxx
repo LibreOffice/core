@@ -258,7 +258,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             ( *m_pnDashListState & ChangeType::CHANGED ) )
         {
             if( *m_pnDashListState & ChangeType::CHANGED )
-                m_pDashList = static_cast<SvxLineTabDialog*>( GetParentDialog() )->GetNewDashList();
+                m_pDashList = static_cast<SvxLineTabDialog*>(GetDialogController() )->GetNewDashList();
 
             *m_pnDashListState = ChangeType::NONE;
 
@@ -287,7 +287,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         if( ( *m_pnLineEndListState & ChangeType::MODIFIED ) || ( *m_pnLineEndListState & ChangeType::CHANGED ) )
         {
             if( *m_pnLineEndListState & ChangeType::CHANGED )
-                m_pLineEndList = static_cast<SvxLineTabDialog*>( GetParentDialog() )->GetNewLineEndList();
+                m_pLineEndList = static_cast<SvxLineTabDialog*>(GetDialogController())->GetNewLineEndList();
 
             *m_pnLineEndListState = ChangeType::NONE;
 
@@ -342,7 +342,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             if( *m_pnColorListState != ChangeType::NONE )
             {
                 if( *m_pnColorListState & ChangeType::CHANGED )
-                    m_pColorList = static_cast<SvxLineTabDialog*>( GetParentDialog() )->GetNewColorList();
+                    m_pColorList = static_cast<SvxLineTabDialog*>(GetDialogController())->GetNewColorList();
 
                 ChangePreviewHdl_Impl( nullptr );
             }

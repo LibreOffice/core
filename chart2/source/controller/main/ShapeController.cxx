@@ -256,8 +256,8 @@ void ShapeController::executeDispatch_FormatLine()
             }
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             ScopedVclPtr< SfxAbstractTabDialog > pDlg(
-                pFact->CreateSvxLineTabDialog( pChartWindow, &aAttr, &pDrawModelWrapper->getSdrModel(),
-                    pSelectedObj, bHasMarked ) );
+                pFact->CreateSvxLineTabDialog(pChartWindow->GetFrameWeld(), &aAttr, &pDrawModelWrapper->getSdrModel(),
+                    pSelectedObj, bHasMarked));
             if ( pDlg->Execute() == RET_OK )
             {
                 const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
