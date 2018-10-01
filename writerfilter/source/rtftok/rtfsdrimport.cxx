@@ -1082,10 +1082,13 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     }
 
     // Send it to dmapper
-    m_rImport.Mapper().startShape(xShape);
-    if (bClose)
+    if (xShape.is())
     {
-        m_rImport.Mapper().endShape();
+        m_rImport.Mapper().startShape(xShape);
+        if (bClose)
+        {
+            m_rImport.Mapper().endShape();
+        }
     }
     m_xShape = xShape;
 }

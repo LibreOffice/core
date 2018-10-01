@@ -1195,7 +1195,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf103664, "tdf103664.docx")
 DECLARE_OOXMLIMPORT_TEST(testTdf82824, "tdf82824.docx")
 {
     // This was text::TextContentAnchorType_AS_CHARACTER, <wp:anchor> wasn't handled on import for the chart.
-    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(2), "AnchorType"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf96218, "tdf96218.docx")

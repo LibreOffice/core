@@ -462,7 +462,7 @@ DECLARE_OOXMLEXPORT_TEST(testChartInFooter, "chart-in-footer.docx")
     {
         // If xDrawPage->getCount()==1, then document contains one shape.
         uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDrawPage->getCount()); // One shape in the doc
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xDrawPage->getCount()); // One shape in the doc
     }
 }
 
