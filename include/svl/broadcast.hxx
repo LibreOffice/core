@@ -82,7 +82,6 @@ private:
 
     /// Indicate that this broadcaster will be destructed (we indicate this on all ScColumn's broadcasters during the ScTable destruction, eg.)
     bool mbAboutToDie:1;
-    bool mbDisposing:1;
     mutable bool mbNormalized:1;
     mutable bool mbDestNormalized:1;
 };
