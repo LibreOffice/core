@@ -51,12 +51,12 @@ ShapeGroupContext::ShapeGroupContext( ContextHandler2Helper const & rParent, Sha
 {
     if( pMasterShapePtr )
         mpGroupShapePtr->setWps(pMasterShapePtr->getWps());
+    if( mpMasterShapePtr.get() && mpGroupShapePtr.get() )
+        mpMasterShapePtr->addChild( mpGroupShapePtr );
 }
 
 ShapeGroupContext::~ShapeGroupContext()
 {
-    if ( mpMasterShapePtr.get() && mpGroupShapePtr.get() )
-        mpMasterShapePtr->addChild( mpGroupShapePtr );
 }
 
 ContextHandlerRef ShapeGroupContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
