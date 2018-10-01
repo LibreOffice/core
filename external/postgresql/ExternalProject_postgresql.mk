@@ -10,7 +10,7 @@
 $(eval $(call gb_ExternalProject_ExternalProject,postgresql))
 
 $(eval $(call gb_ExternalProject_use_externals,postgresql,\
-	openldap \
+	$(if $(ENABLE_LDAP),openldap) \
 	openssl \
 	zlib \
 ))
