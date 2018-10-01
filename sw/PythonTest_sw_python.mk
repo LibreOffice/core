@@ -27,6 +27,7 @@ $(eval $(call gb_PythonTest_add_modules,sw_python,$(SRCDIR)/sw/qa/python,\
 	check_table \
 	check_xmodifiable2 \
 	check_xnamedgraph \
+	check_xrefreshable \
 	check_xtextrangecompare \
 	get_expression \
 	set_expression \
