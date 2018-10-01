@@ -27,8 +27,9 @@
 class Qt5Frame;
 class Qt5Widget;
 
-class VCLPLUG_QT5_PUBLIC Qt5AccessibleWidget : public QObject, public QAccessibleInterface
-//public QAccessibleActionInterface
+class VCLPLUG_QT5_PUBLIC Qt5AccessibleWidget : public QObject,
+                                               public QAccessibleInterface,
+                                               public QAccessibleActionInterface
 {
     Q_OBJECT
 
@@ -61,9 +62,9 @@ public:
     void* interface_cast(QAccessible::InterfaceType t) override;
 
     // QAccessibleActionInterface
-    /*  QStringList actionNames() const override;
+    QStringList actionNames() const override;
     void doAction(const QString& actionName) override;
-    QStringList keyBindingsForAction(const QString& actionName) const override; */
+    QStringList keyBindingsForAction(const QString& actionName) const override;
 
     // Factory
     static QAccessibleInterface* customFactory(const QString& classname, QObject* object);
