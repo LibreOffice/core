@@ -94,9 +94,9 @@ static vcl::Window* ImplGetCurTabWindow(const vcl::Window* pWindow)
 
 static vcl::Window* ImplGetSubChildWindow( vcl::Window* pParent, sal_uInt16 n, sal_uInt16& nIndex )
 {
-    // ignore border window
-    pParent = pParent->ImplGetWindow();
-    assert(pParent == pParent->ImplGetWindow());
+    // ignore all windows with mpClientWindow set
+    for (vcl::Window *pNewParent = pParent->ImplGetWindow();
+         pParent != pNewParent; pParent = pNewParent);
 
     vcl::Window* pFoundWindow = nullptr;
     vcl::Window* pWindow = firstLogicalChildOfParent(pParent);
