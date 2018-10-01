@@ -177,6 +177,7 @@ SvxLineTabPage::SvxLineTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs
 
     // Symbols on a line (eg star charts), MB-handler set
     m_xSymbolMB->connect_selected(LINK(this, SvxLineTabPage, GraphicHdl_Impl));
+    m_xSymbolMB->connect_toggled(LINK(this, SvxLineTabPage, MenuCreateHdl_Impl));
     m_xSymbolWidthMF->connect_value_changed(LINK(this, SvxLineTabPage, SizeHdl_Impl));
     m_xSymbolHeightMF->connect_value_changed(LINK(this, SvxLineTabPage, SizeHdl_Impl));
     m_xSymbolRatioCB->connect_toggled(LINK(this, SvxLineTabPage, RatioHdl_Impl));
@@ -193,8 +194,6 @@ void SvxLineTabPage::ShowSymbolControls(bool bOn)
 
     m_bSymbols=bOn;
     m_xFlSymbol->show(bOn);
-    if (bOn)
-        MenuCreate();
     m_aCtlPreview.ShowSymbol(bOn);
 }
 
@@ -1368,7 +1367,7 @@ void SvxLineTabPage::FillUserData()
 // #58425# Symbols on a list (e.g. StarChart)
 // Handler for the symbol selection's popup menu (NumMenueButton)
 // The following link originates from SvxNumOptionsTabPage
-void SvxLineTabPage::MenuCreate()
+IMPL_LINK_NOARG(SvxLineTabPage, MenuCreateHdl_Impl, weld::ToggleButton&, void)
 {
     ScopedVclPtrInstance< VirtualDevice > pVD;
 
@@ -1376,6 +1375,7 @@ void SvxLineTabPage::MenuCreate()
     if (!m_xGalleryMenu)
     {
         m_xGalleryMenu = m_xBuilder->weld_menu("gallerysubmenu");
+        weld::WaitObject aWait(GetDialogFrameWeld());
         // Get gallery entries
         GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, m_aGrfNames);
 

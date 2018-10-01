@@ -1155,12 +1155,14 @@ private:
     VclPtr<::MenuButton> m_xMenuButton;
 
     DECL_LINK(MenuSelectHdl, ::MenuButton*, void);
+    DECL_LINK(ActivateHdl, ::MenuButton*, void);
 
 public:
     SalInstanceMenuButton(::MenuButton* pButton, bool bTakeOwnership)
         : SalInstanceButton(pButton, bTakeOwnership)
         , m_xMenuButton(pButton)
     {
+        m_xMenuButton->SetActivateHdl(LINK(this, SalInstanceMenuButton, ActivateHdl));
         m_xMenuButton->SetSelectHdl(LINK(this, SalInstanceMenuButton, MenuSelectHdl));
     }
 
@@ -1222,12 +1224,20 @@ public:
     virtual ~SalInstanceMenuButton() override
     {
         m_xMenuButton->SetSelectHdl(Link<::MenuButton*, void>());
+        m_xMenuButton->SetActivateHdl(Link<::MenuButton*, void>());
     }
 };
 
 IMPL_LINK_NOARG(SalInstanceMenuButton, MenuSelectHdl, ::MenuButton*, void)
 {
     signal_selected(m_xMenuButton->GetCurItemIdent());
+}
+
+IMPL_LINK_NOARG(SalInstanceMenuButton, ActivateHdl, ::MenuButton*, void)
+{
+    if (notify_events_disabled())
+        return;
+    signal_toggled();
 }
 
 class SalInstanceRadioButton : public SalInstanceButton, public virtual weld::RadioButton

@@ -137,7 +137,15 @@ public:
 
     void set_sensitive(bool sensitive) { m_xButton->set_sensitive(sensitive); }
     bool get_sensitive() const { return m_xButton->get_sensitive(); }
+    void show() { m_xButton->show(); }
     void hide() { m_xButton->hide(); }
+    void show(bool bShow)
+    {
+        if (bShow)
+            show();
+        else
+            hide();
+    }
 };
 
 #endif
