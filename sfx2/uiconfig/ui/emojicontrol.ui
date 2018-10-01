@@ -22,6 +22,8 @@
           <object class="GtkNotebook" id="tab_control">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="scrollable">True</property>
+            <property name="enable_popup">True</property>
             <child>
               <object class="GtkGrid">
                 <property name="visible">True</property>
