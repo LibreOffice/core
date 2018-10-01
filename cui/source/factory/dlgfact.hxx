@@ -800,7 +800,7 @@ public:
                                                                           const SfxItemSet* pAttr,
                                                                           SdrModel* pModel,
                                                                           bool bShadow) override;
-    virtual VclPtr<SfxAbstractTabDialog>           CreateSvxLineTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr,
+    virtual VclPtr<SfxAbstractTabDialog>           CreateSvxLineTabDialog(weld::Window* pParent, const SfxItemSet* pAttr,
                                                                  SdrModel* pModel,
                                                                  const SdrObject* pObj,
                                                                  bool bHasObj ) override;
