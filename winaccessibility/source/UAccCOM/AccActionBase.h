@@ -64,8 +64,6 @@ public:
     // Override of IUNOXWrapper.
     STDMETHOD(put_XInterface)(hyper pXInterface) override;
 
-    static OUString GetkeyBindingStrByXkeyBinding( const css::uno::Sequence< css::awt::KeyStroke > &keySet );
-
 protected:
     css::uno::Reference<css::accessibility::XAccessibleAction> pRXAct;
 
