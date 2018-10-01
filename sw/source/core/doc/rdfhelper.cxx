@@ -23,31 +23,49 @@
 
 using namespace com::sun::star;
 
-std::map<OUString, OUString> SwRDFHelper::getStatements(const css::uno::Reference<css::frame::XModel>& xModel,
-                                                        const OUString& rType,
-                                                        const css::uno::Reference<css::rdf::XResource>& xSubject)
+css::uno::Sequence<uno::Reference<css::rdf::XURI>>
+SwRDFHelper::getGraphNames(const css::uno::Reference<css::frame::XModel>& xModel,
+                           const OUString& rType)
 {
-    std::map<OUString, OUString> aRet;
-
-    uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+    uno::Reference<uno::XComponentContext> xComponentContext(
+        comphelper::getProcessComponentContext());
     uno::Reference<rdf::XURI> xType = rdf::URI::create(xComponentContext, rType);
     uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(xModel, uno::UNO_QUERY);
-    uno::Sequence< uno::Reference<rdf::XURI> > aGraphNames = xDocumentMetadataAccess->getMetadataGraphsWithType(xType);
-    if (!aGraphNames.hasElements())
+    return xDocumentMetadataAccess->getMetadataGraphsWithType(xType);
+}
+
+std::map<OUString, OUString>
+SwRDFHelper::getStatements(const css::uno::Reference<css::frame::XModel>& xModel,
+                           const uno::Sequence<uno::Reference<css::rdf::XURI>>& rGraphNames,
+                           const css::uno::Reference<css::rdf::XResource>& xSubject)
+{
+    std::map<OUString, OUString> aRet;
+    if (!rGraphNames.hasElements())
         return aRet;
 
-    for (const uno::Reference<rdf::XURI>& xGraphName : aGraphNames)
+    uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(xModel, uno::UNO_QUERY);
+    const uno::Reference<rdf::XRepository>& xRepo = xDocumentMetadataAccess->getRDFRepository();
+    for (const uno::Reference<rdf::XURI>& xGraphName : rGraphNames)
     {
-        uno::Reference<rdf::XNamedGraph> xGraph = xDocumentMetadataAccess->getRDFRepository()->getGraph(xGraphName);
-        uno::Reference<container::XEnumeration> xStatements = xGraph->getStatements(xSubject, uno::Reference<rdf::XURI>(), uno::Reference<rdf::XURI>());
+        uno::Reference<rdf::XNamedGraph> xGraph = xRepo->getGraph(xGraphName);
+        uno::Reference<container::XEnumeration> xStatements = xGraph->getStatements(
+            xSubject, uno::Reference<rdf::XURI>(), uno::Reference<rdf::XURI>());
         while (xStatements->hasMoreElements())
         {
-            rdf::Statement aStatement = xStatements->nextElement().get<rdf::Statement>();
+            const rdf::Statement aStatement = xStatements->nextElement().get<rdf::Statement>();
             aRet[aStatement.Predicate->getStringValue()] = aStatement.Object->getStringValue();
         }
     }
 
     return aRet;
+}
+
+std::map<OUString, OUString>
+SwRDFHelper::getStatements(const css::uno::Reference<css::frame::XModel>& xModel,
+                           const OUString& rType,
+                           const css::uno::Reference<css::rdf::XResource>& xSubject)
+{
+    return getStatements(xModel, getGraphNames(xModel, rType), xSubject);
 }
 
 void SwRDFHelper::addStatement(const css::uno::Reference<css::frame::XModel>& xModel,
