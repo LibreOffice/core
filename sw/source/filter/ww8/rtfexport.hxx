@@ -46,7 +46,7 @@ class RtfExport : public MSWordExportBase
     MSWordSections* m_pSections;
 
     std::unique_ptr<RtfSdrExport> m_pSdrExport;
-    bool m_bOutOutlineOnly;
+    bool const m_bOutOutlineOnly;
 
 public:
     /// Access to the attribute output class.

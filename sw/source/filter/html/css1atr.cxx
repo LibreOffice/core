@@ -210,7 +210,7 @@ bool IgnorePropertyForReqIF(bool bReqIF, const OString& rProperty)
 class SwCSS1OutMode
 {
     SwHTMLWriter& rWrt;
-    sal_uInt16 nOldMode;
+    sal_uInt16 const nOldMode;
 
 public:
 

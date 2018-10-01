@@ -1329,13 +1329,13 @@ void SwTOXBaseSection::UpdateAuthorities( const SwTOXInternational& rIntl )
 static SwTOOElements lcl_IsSOObject( const SvGlobalName& rFactoryNm )
 {
     static const struct SoObjType {
-        SwTOOElements nFlag;
+        SwTOOElements const nFlag;
         // GlobalNameId
         struct GlobalNameIds {
-            sal_uInt32 n1;
+            sal_uInt32 const n1;
             sal_uInt16 n2, n3;
             sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
-        } aGlNmIds[4];
+        } const aGlNmIds[4];
     } aArr[] = {
         { SwTOOElements::Math,
           { {SO3_SM_CLASSID_60},{SO3_SM_CLASSID_50},

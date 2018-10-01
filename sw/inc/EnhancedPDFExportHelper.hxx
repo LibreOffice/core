@@ -205,8 +205,8 @@ class SwEnhancedPDFExportHelper
      * in a page range without empty pages, or -1 if this page is empty. */
     std::vector< sal_Int32 > maPageNumberMap;
 
-    bool mbSkipEmptyPages;
-    bool mbEditEngineOnly;
+    bool const mbSkipEmptyPages;
+    bool const mbEditEngineOnly;
 
     const SwPrintData& mrPrintData;
 

@@ -40,7 +40,7 @@ class SwCaptionDialog : public SvxStandardDialog
 {
     VclPtr<Edit>        m_pTextEdit;
     VclPtr<ComboBox>    m_pCategoryBox;
-    OUString     m_sNone;
+    OUString const      m_sNone;
     TextFilterAutoConvert m_aTextFilter;
     VclPtr<FixedText>   m_pFormatText;
     VclPtr<ListBox>     m_pFormatBox;

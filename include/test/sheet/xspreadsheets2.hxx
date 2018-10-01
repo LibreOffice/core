@@ -54,9 +54,6 @@ private:
     css::uno::Reference< css::sheet::XSpreadsheetDocument> xDestDoc;
     css::uno::Reference< css::sheet::XSpreadsheet > xDestSheet;
     css::uno::Reference< css::sheet::XSpreadsheet > xSrcSheet;
-    OUString aSrcSheetName;
-    OUString aSrcFileName;
-    OUString aDestFileBase;
 };
 
 }

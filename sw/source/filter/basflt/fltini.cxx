@@ -411,7 +411,7 @@ namespace
 
 struct CharSetNameMap
 {
-    rtl_TextEncoding eCode;
+    rtl_TextEncoding const eCode;
     const sal_Char* pName;
 };
 

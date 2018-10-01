@@ -36,7 +36,7 @@ class SwBlinkPortion
     Point               aPos;
     const SwLinePortion *pPor;
     const SwRootFrame     *pFrame;
-    sal_uInt16              nDir;
+    sal_uInt16 const     nDir;
 
 public:
     SwBlinkPortion(const SwLinePortion* pPortion, sal_uInt16 nDirection)

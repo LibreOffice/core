@@ -166,9 +166,9 @@ class SwImplEnterLeave
 {
 protected:
     const SwFrame* pFrame;    // the frame
-    PROT           nFunction; // the function
-    DbgAction      nAction;   // the action if needed
-    void*          pParam;    // further parameter
+    PROT const           nFunction; // the function
+    DbgAction const      nAction;   // the action if needed
+    void* const          pParam;    // further parameter
 public:
     SwImplEnterLeave( const SwFrame* pF, PROT nFunct, DbgAction nAct, void* pPar )
         : pFrame( pF ), nFunction( nFunct ), nAction( nAct ), pParam( pPar ) {}

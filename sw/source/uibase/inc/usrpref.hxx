@@ -31,7 +31,7 @@ class SwContentViewConfig : public utl::ConfigItem
 {
 private:
     SwMasterUsrPref&        rParent;
-    bool                    bWeb;
+    bool const              bWeb;
 
     css::uno::Sequence<OUString> GetPropertyNames();
 
@@ -52,7 +52,7 @@ class SwLayoutViewConfig : public utl::ConfigItem
 {
 private:
     SwMasterUsrPref&    rParent;
-    bool                bWeb;
+    bool const          bWeb;
 
     css::uno::Sequence<OUString> GetPropertyNames();
 

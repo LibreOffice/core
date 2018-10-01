@@ -35,7 +35,7 @@ class SwDropPortionPart
 {
     std::unique_ptr<SwDropPortionPart> pFollow;
     std::unique_ptr<SwFont> pFnt;
-    TextFrameIndex nLen;
+    TextFrameIndex const nLen;
     sal_uInt16 nWidth;
     bool m_bJoinBorderWithNext;
     bool m_bJoinBorderWithPrev;
@@ -64,7 +64,7 @@ class SwDropPortion : public SwTextPortion
     std::unique_ptr<SwDropPortionPart> pPart; // due to script/attribute changes
     sal_uInt16 nLines;          // Line count
     sal_uInt16 nDropHeight;     // Height
-    sal_uInt16 nDropDescent;    // Distance to the next line
+    sal_uInt16 const nDropDescent;    // Distance to the next line
     sal_uInt16 nDistance;       // Distance to the text
     sal_uInt16 nFix;            // Fixed position
     short nY;               // Y Offset

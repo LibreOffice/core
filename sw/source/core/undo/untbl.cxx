@@ -106,9 +106,9 @@ class SaveTable
     const SwTable* m_pSwTable;
     SfxItemSets m_aSets;
     SwFrameFormatsV m_aFrameFormats;
-    sal_uInt16 m_nLineCount;
+    sal_uInt16 const m_nLineCount;
     bool m_bModifyBox : 1;
-    bool m_bSaveFormula : 1;
+    bool const m_bSaveFormula : 1;
     bool m_bNewModel : 1;
 
     SaveTable(const SaveTable&) = delete;
@@ -191,9 +191,9 @@ So we need to remember not only the start node position but the end node positio
 
 struct SwTableToTextSave
 {
-    sal_uLong m_nSttNd;
+    sal_uLong const m_nSttNd;
     sal_uLong m_nEndNd;
-    sal_Int32 m_nContent;
+    sal_Int32 const m_nContent;
     std::unique_ptr<SwHistory> m_pHstry;
     // metadata references for first and last paragraph in cell
     std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
@@ -2271,7 +2271,7 @@ void SwUndoTableNumFormat::UndoImpl(::sw::UndoRedoContext & rContext)
 class RedlineFlagsInternGuard
 {
     SwDoc& mrDoc;
-    RedlineFlags meOldRedlineFlags;
+    RedlineFlags const meOldRedlineFlags;
 
 public:
     RedlineFlagsInternGuard(

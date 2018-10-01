@@ -27,10 +27,10 @@ class SwWrtShell;
 // frame dialog
 class SwFrameDlg : public SfxTabDialog
 {
-    bool m_bFormat;
-    bool m_bNew;
+    bool const m_bFormat;
+    bool const m_bNew;
     const SfxItemSet&   m_rSet;
-    OUString m_sDlgType;
+    OUString const m_sDlgType;
     SwWrtShell* m_pWrtShell;
 
     sal_uInt16 m_nStdId;

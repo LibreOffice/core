@@ -27,7 +27,7 @@ public:
 
     virtual css::uno::Reference< css::uno::XInterface > init() = 0;
 private:
-    OUString maTestName;
+    OUString const maTestName;
 
 };
 

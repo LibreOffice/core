@@ -34,7 +34,7 @@ class SW_DLLPUBLIC SwGlossaryHdl
 
     SwGlossaries&   rStatGlossaries;
     OUString        aCurGrp;
-    SfxViewFrame*   pViewFrame;
+    SfxViewFrame* const pViewFrame;
     SwWrtShell*     pWrtShell;
     std::unique_ptr<SwTextBlocks>
                     pCurGrp;

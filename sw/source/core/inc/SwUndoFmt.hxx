@@ -61,8 +61,8 @@ class SwUndoFormatDelete : public SwUndo
 protected:
     OUString sDerivedFrom;
     SwDoc * pDoc;
-    OUString sOldName;
-    SfxItemSet aOldSet;
+    OUString const sOldName;
+    SfxItemSet const aOldSet;
     sal_uInt16 nId;     // FormatId related
     bool bAuto;
 
