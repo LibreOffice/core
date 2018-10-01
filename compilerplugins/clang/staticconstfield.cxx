@@ -84,13 +84,20 @@ bool StaticConstField::TraverseConstructorInitializer(CXXCtorInitializer* init)
             return true;
     }
 
-    if (found)
-    {
-        report(DiagnosticsEngine::Warning, "field can be static const", init->getSourceLocation())
-            << init->getSourceRange();
-        report(DiagnosticsEngine::Note, "field here", init->getMember()->getLocation())
-            << init->getMember()->getSourceRange();
-    }
+    if (!found)
+        return true;
+
+    std::string fn = handler.getMainFileName();
+    loplugin::normalizeDotDotInFilePath(fn);
+
+    // unusual case where a user constructor sets a field to one value, and a copy constructor sets it to a different value
+    if (fn == SRCDIR "/sw/source/core/attr/hints.cxx")
+        return true;
+
+    report(DiagnosticsEngine::Warning, "field can be static const", init->getSourceLocation())
+        << init->getSourceRange();
+    report(DiagnosticsEngine::Note, "field here", init->getMember()->getLocation())
+        << init->getMember()->getSourceRange();
 
     return true;
 }

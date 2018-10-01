@@ -112,7 +112,7 @@ class SW_DLLPUBLIC SwRedlineData
     OUString m_sComment;
     DateTime m_aStamp;
     RedlineType_t m_eType;
-    std::size_t m_nAuthor;
+    std::size_t const m_nAuthor;
     sal_uInt16 m_nSeqNo;
 
 public:
@@ -174,7 +174,7 @@ class SW_DLLPUBLIC SwRangeRedline : public SwPaM
     SwNodeIndex* m_pContentSect;
     bool m_bDelLastPara : 1;
     bool m_bIsVisible : 1;
-    sal_uInt32 m_nId;
+    sal_uInt32 const m_nId;
 
     boost::optional<long> m_oLOKLastNodeTop;
 

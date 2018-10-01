@@ -54,7 +54,7 @@ class SwHTMLTableLayoutCnts
     sal_uInt8 nPass1Done;           ///< How many times has Pass 1 been called?
     sal_uInt8 nWidthSet;            ///< How many times has the width been set?
 
-    bool bNoBreakTag;           ///< <NOBR>-Tag over complete content.
+    bool const bNoBreakTag;           ///< <NOBR>-Tag over complete content.
 
 public:
 
@@ -86,10 +86,10 @@ class SwHTMLTableLayoutCell
 
     sal_uInt16 nRowSpan;               ///< ROWSPAN of cell.
     sal_uInt16 nColSpan;               ///< COLSPAN of cell.
-    sal_uInt16 nWidthOption;           ///< Given width of cell in Twip or %.
+    sal_uInt16 const nWidthOption;           ///< Given width of cell in Twip or %.
 
-    bool bPrcWidthOption : 1;      ///< nWidth is %-value.
-    bool bNoWrapOption : 1;        ///< NOWRAP-option.
+    bool const bPrcWidthOption : 1;      ///< nWidth is %-value.
+    bool const bNoWrapOption : 1;        ///< NOWRAP-option.
 
 public:
 
@@ -131,7 +131,7 @@ class SwHTMLTableLayoutColumn
     sal_uInt16 nWidthOption;                ///< Options of <COL> or <TD>/<TH>.
 
     bool bRelWidthOption : 1;
-    bool bLeftBorder : 1;
+    bool const bLeftBorder : 1;
 
 public:
 
@@ -178,11 +178,11 @@ class SwHTMLTableLayout
     sal_uLong m_nMin;                     ///< Minimal width of table (Twips).
     sal_uLong m_nMax;                     ///< Maximal width of table (Twips).
 
-    sal_uInt16 m_nRows;                   ///< Row count.
+    sal_uInt16 const m_nRows;                   ///< Row count.
     sal_uInt16 m_nCols;                   ///< Column count.
 
-    sal_uInt16 m_nLeftMargin;             ///< Space to left margin (from paragraph).
-    sal_uInt16 m_nRightMargin;            ///< Space to left margin (from paragraph).
+    sal_uInt16 const m_nLeftMargin;             ///< Space to left margin (from paragraph).
+    sal_uInt16 const m_nRightMargin;            ///< Space to left margin (from paragraph).
 
     sal_uInt16 m_nInhAbsLeftSpace;        ///< Space inherited from surrounding box
     sal_uInt16 m_nInhAbsRightSpace;       ///< that was added to boxes.
@@ -193,16 +193,16 @@ class SwHTMLTableLayout
     sal_uInt16 m_nRelTabWidth;            ///< Relative width of table.
 
     sal_uInt16 m_nWidthOption;            ///< Width of table (in Twips or %).
-    sal_uInt16 m_nCellPadding;            ///< Space to contents (in Twips).
-    sal_uInt16 m_nCellSpacing;            ///< Cell spacing (in Twips).
-    sal_uInt16 m_nBorder;                 /** Line strength of outer border, or rather the
+    sal_uInt16 const m_nCellPadding;            ///< Space to contents (in Twips).
+    sal_uInt16 const m_nCellSpacing;            ///< Cell spacing (in Twips).
+    sal_uInt16 const m_nBorder;                 /** Line strength of outer border, or rather the
                                         space needed for it as calculated by Netscape. */
 
-    sal_uInt16 m_nLeftBorderWidth;
-    sal_uInt16 m_nRightBorderWidth;
+    sal_uInt16 const m_nLeftBorderWidth;
+    sal_uInt16 const m_nRightBorderWidth;
     sal_uInt16 m_nInhLeftBorderWidth;
     sal_uInt16 m_nInhRightBorderWidth;
-    sal_uInt16 m_nBorderWidth;
+    sal_uInt16 const m_nBorderWidth;
 
     sal_uInt16 m_nDelayedResizeAbsAvail;  ///< Param for delayed Resize.
     sal_uInt16 m_nLastResizeAbsAvail;
@@ -210,11 +210,11 @@ class SwHTMLTableLayout
     sal_uInt8 m_nPass1Done;               ///< Reference-values for
     sal_uInt8 m_nWidthSet;                ///< the runs through loop.
 
-    SvxAdjust m_eTableAdjust;             ///< Alignment of table.
+    SvxAdjust const m_eTableAdjust;             ///< Alignment of table.
 
-    bool m_bColsOption : 1;           ///< Table has a COLS-option.
-    bool m_bColTags : 1;              ///< Table has COL/COLGRP tags.
-    bool m_bPrcWidthOption : 1;       ///< Width is given in percent.
+    bool const m_bColsOption : 1;           ///< Table has a COLS-option.
+    bool const m_bColTags : 1;              ///< Table has COL/COLGRP tags.
+    bool const m_bPrcWidthOption : 1;       ///< Width is given in percent.
     bool m_bUseRelWidth : 1;          ///< SwTable gets relative width.
 
     bool m_bMustResize : 1;           ///< Table width must be defined.

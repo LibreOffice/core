@@ -34,7 +34,7 @@ class SwObjectFormatterTextFrame : public SwObjectFormatter
         SwTextFrame& mrAnchorTextFrame;
 
         // 'master' anchor text frame
-        SwTextFrame* mpMasterAnchorTextFrame;
+        SwTextFrame* const mpMasterAnchorTextFrame;
 
         SwObjectFormatterTextFrame( SwTextFrame& _rAnchorTextFrame,
                                  const SwPageFrame& _rPageFrame,

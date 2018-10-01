@@ -95,7 +95,7 @@ using namespace ::com::sun::star::lang;
 
 class SwVbaCodeNameProvider : public ::cppu::WeakImplHelper< document::XCodeNameQuery >
 {
-    SwDocShell* mpDocShell;
+    SwDocShell* const mpDocShell;
     OUString msThisDocumentCodeName;
 public:
     explicit SwVbaCodeNameProvider( SwDocShell* pDocShell ) : mpDocShell( pDocShell ) {}
@@ -233,7 +233,7 @@ public:
 
 class SwVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper< container::XNameAccess >
 {
-    SwDocShell* mpDocShell;
+    SwDocShell* const mpDocShell;
 public:
     explicit SwVbaObjectForCodeNameProvider( SwDocShell* pDocShell ) : mpDocShell( pDocShell )
     {
@@ -277,7 +277,7 @@ public:
 struct  ProvNamesId_Type
 {
     const char *    pName;
-    SwServiceType   nType;
+    SwServiceType const   nType;
 };
 
 // note: this thing is indexed as an array, so do not insert/remove entries!

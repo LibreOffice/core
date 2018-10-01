@@ -94,9 +94,9 @@ class ModelToViewHelper
             , m_bVisible(bVisible)
         {
         }
-        sal_Int32 m_nModelPos;
-        sal_Int32 m_nViewPos;
-        bool m_bVisible;
+        sal_Int32 const m_nModelPos;
+        sal_Int32 const m_nViewPos;
+        bool const m_bVisible;
     };
     typedef std::vector< ConversionMapEntry > ConversionMap;
 

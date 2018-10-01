@@ -35,9 +35,9 @@ class SwBlockName
     friend class SwImpBlocks;
     sal_uInt16 nHashS, nHashL;     // Hash codes for testing
 public:
-    OUString aShort;               /// Shortname
+    OUString const aShort;               /// Shortname
     OUString aLong;                /// Longname
-    OUString aPackageName;         /// Package name
+    OUString const aPackageName;         /// Package name
     bool bIsOnlyTextFlagInit : 1;   /// Is the Flag valid?
     bool bIsOnlyText : 1;           /// Unformatted text
 
@@ -54,7 +54,7 @@ class SwImpBlocks
 {
     friend class SwTextBlocks;
 protected:
-    OUString m_aFile;                     // Physical file name
+    OUString const m_aFile;                     // Physical file name
     OUString m_aName;                     // Logical file name
     OUString m_aCurrentText;                      // Current text
     OUString m_aShort, m_aLong;             // Short- and longname (PutDoc)

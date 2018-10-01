@@ -74,7 +74,7 @@ SwVbaField::getServiceNames()
 class SwVbaReadFieldParams
 {
 private:
-    OUString aData;
+    OUString const aData;
     sal_Int32 nLen, nFnd, nNext, nSavPtr;
     OUString aFieldName;
 public:

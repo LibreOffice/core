@@ -65,7 +65,7 @@ protected:
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) override;
 
 public:
-    bool bTextOnly;
+    bool const bTextOnly;
     OUString &m_rText;
     SwXMLTextBlockImport(
         const css::uno::Reference< css::uno::XComponentContext >& rContext,

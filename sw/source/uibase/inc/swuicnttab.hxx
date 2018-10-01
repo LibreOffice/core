@@ -87,12 +87,12 @@ class SwMultiTOXTabDialog : public SfxTabDialog
 
     CurTOXType              m_eCurrentTOXType;
 
-    OUString                m_sUserDefinedIndex;
-    sal_uInt16              m_nInitialTOXType;
+    OUString const          m_sUserDefinedIndex;
+    sal_uInt16 const        m_nInitialTOXType;
 
     bool                m_bEditTOX;
     bool                m_bExampleCreated;
-    bool                m_bGlobalFlag;
+    bool const          m_bGlobalFlag;
 
     virtual short       Ok() override;
     std::unique_ptr<SwTOXDescription> CreateTOXDescFromTOXBase(const SwTOXBase*pCurTOX);
@@ -194,7 +194,7 @@ class SwTOXSelectTabPage : public SfxTabPage
 
     OUString        aStyleArr[MAXLEVEL];
     OUString        sAutoMarkURL;
-    OUString        sAutoMarkType;
+    OUString const  sAutoMarkType;
     OUString        sAddStyleUser;
     OUString        sAddStyleContent;
 
@@ -248,7 +248,7 @@ class SwTokenWindow : public VclHBox, public VclBuilderContainer
     bool            m_bValid;
     OUString        m_aButtonTexts[TOKEN_END]; // Text of the buttons
     OUString        m_aButtonHelpTexts[TOKEN_END]; // QuickHelpText of the buttons
-    OUString        m_sCharStyle;
+    OUString const  m_sCharStyle;
     Link<SwFormToken&,void>   m_aButtonSelectedHdl;
     VclPtr<Control>           m_pActiveCtrl;
     Link<LinkParamNone*,void> m_aModifyHdl;
@@ -388,12 +388,12 @@ class SwTOXEntryTabPage : public SfxTabPage
     VclPtr<RadioButton>    m_pThirdSortUpRB;
     VclPtr<RadioButton>    m_pThirdSortDownRB;
 
-    OUString        sDelimStr;
+    OUString const  sDelimStr;
     OUString        sLevelStr;
     OUString        sAuthTypeStr;
 
-    OUString        sNoCharStyle;
-    OUString        sNoCharSortKey;
+    OUString const  sNoCharStyle;
+    OUString const  sNoCharSortKey;
     SwForm*         m_pCurrentForm;
 
     CurTOXType      aLastTOXType;

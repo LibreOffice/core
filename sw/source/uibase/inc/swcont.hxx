@@ -58,7 +58,7 @@ enum class RegionMode
 //mini rtti
 class SwTypeNumber
 {
-    sal_uInt8 nTypeId;
+    sal_uInt8 const nTypeId;
 
     public:
         SwTypeNumber(sal_uInt8 nId) :nTypeId(nId){}
@@ -70,8 +70,8 @@ class SwTypeNumber
 class SwContent : public SwTypeNumber
 {
     const SwContentType*    pParent;
-    OUString                sContentName;
-    long                    nYPosition;
+    OUString const          sContentName;
+    long const              nYPosition;
         // most subclasses appear to use this for a tools/gen.hxx-style
         // geometric Y position, while SwOutlineContent wants to store a
         // SwOutlineNodes::size_type value (where all such values used in

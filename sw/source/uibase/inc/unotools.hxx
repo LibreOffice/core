@@ -66,9 +66,9 @@ class SW_DLLPUBLIC SwOneExampleFrame
 
     OUString        m_sArgumentURL;
 
-    SwView*         m_pModuleView;
+    SwView* const    m_pModuleView;
 
-    sal_uInt32          m_nStyleFlags;
+    sal_uInt32 const m_nStyleFlags;
 
     bool            m_bIsInitialized;
     bool            m_bServiceAvailable;

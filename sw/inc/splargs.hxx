@@ -62,8 +62,8 @@ struct SwArgsBase     // used for text conversion (Hangul/Hanja, ...)
 struct SwConversionArgs : SwArgsBase
 {
     OUString   aConvText;          // convertible text found
-    LanguageType    nConvSrcLang;       // (source) language to look for
-    LanguageType    nConvTextLang;      // language of aConvText (if the latter one was found)
+    LanguageType const nConvSrcLang;       // (source) language to look for
+    LanguageType       nConvTextLang;      // language of aConvText (if the latter one was found)
 
     // used for chinese translation
     LanguageType    nConvTargetLang;    // target language of text to be changed
@@ -89,7 +89,7 @@ struct SwSpellArgs : SwArgsBase
 
     css::uno::Reference< css::linguistic2::XSpellAlternatives > xSpellAlt;
 
-    bool bIsGrammarCheck;
+    bool const bIsGrammarCheck;
 
     SwSpellArgs(css::uno::Reference<
             css::linguistic2::XSpellChecker1 > const &rxSplChk,

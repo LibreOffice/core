@@ -36,7 +36,7 @@
 
 struct FieldResult
 {
-    sal_Int32 m_nFieldPos;
+    sal_Int32 const m_nFieldPos;
     OUString m_sExpand;
     enum { NONE, FIELD, FOOTNOTE } m_eType;
     explicit FieldResult(sal_Int32 const nPos)
@@ -57,9 +57,9 @@ typedef std::set<FieldResult, sortfieldresults> FieldResultSet;
 
 struct block
 {
-    sal_Int32 m_nStart;
-    sal_Int32 m_nLen;
-    bool m_bVisible;
+    sal_Int32 const m_nStart;
+    sal_Int32 const m_nLen;
+    bool const m_bVisible;
     FieldResultSet m_aAttrs;
     block(sal_Int32 nStart, sal_Int32 nLen, bool bVisible)
         : m_nStart(nStart), m_nLen(nLen), m_bVisible(bVisible)

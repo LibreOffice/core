@@ -1078,11 +1078,11 @@ class HTMLEndPosLst
     std::vector<sal_uInt16> aScriptLst;
 
     SwDoc *pDoc;            // the current document
-    SwDoc* pTemplate;       // the HTML template (or 0)
+    SwDoc* const pTemplate;       // the HTML template (or 0)
     boost::optional<Color> xDfltColor;// the default foreground colors
     std::set<OUString>& rScriptTextStyles;
 
-    sal_uLong nHTMLMode;
+    sal_uLong const nHTMLMode;
     bool bOutStyles : 1;    // are styles exported
 
     // Insert/remove a SttEndPos in/from the Start and End lists.

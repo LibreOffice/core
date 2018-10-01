@@ -486,11 +486,11 @@ class SwUndoReplace::Impl
     : private SwUndoSaveContent
 {
     OUString m_sOld;
-    OUString m_sIns;
+    OUString const m_sIns;
     sal_uLong m_nSttNd, m_nEndNd, m_nOffset;
     sal_Int32 m_nSttCnt, m_nEndCnt, m_nSetPos, m_nSelEnd;
     bool m_bSplitNext : 1;
-    bool m_bRegExp : 1;
+    bool const m_bRegExp : 1;
     // metadata references for paragraph and following para (if m_bSplitNext)
     std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
     std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;

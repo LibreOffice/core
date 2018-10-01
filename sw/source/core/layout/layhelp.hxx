@@ -80,8 +80,8 @@ public:
 // by controlling nested sections.
 class SwActualSection
 {
-    SwActualSection *pUpper;
-    SwSectionFrame    *pSectFrame;
+    SwActualSection * const pUpper;
+    SwSectionFrame  *pSectFrame;
     SwSectionNode   *pSectNode;
 public:
     SwActualSection( SwActualSection *pUpper,
@@ -142,8 +142,8 @@ class SwLayCacheIoImpl
 {
 private:
     struct RecTypeSize {
-        sal_uInt8 type;
-        sal_uLong size;
+        sal_uInt8 const type;
+        sal_uLong const size;
         RecTypeSize(sal_uInt8 typ, sal_uLong siz) : type(typ), size(siz) {}
     };
     std::vector<RecTypeSize> aRecords;
@@ -155,7 +155,7 @@ private:
     sal_uInt16          nMajorVersion;
     sal_uInt16          nMinorVersion;
 
-    bool            bWriteMode : 1;
+    bool const      bWriteMode : 1;
     bool            bError : 1;
 
 public:
@@ -202,8 +202,8 @@ public:
 class SwFlyCache : public SwRect // position and size
 {
 public:
-    sal_uLong nOrdNum;      ///< Id to recognize text frames
-    sal_uInt16 nPageNum;    ///< page number
+    sal_uLong const nOrdNum;      ///< Id to recognize text frames
+    sal_uInt16 const nPageNum;    ///< page number
     SwFlyCache( sal_uInt16 nP, sal_uLong nO, long nXL, long nYL, long nWL, long nHL ) :
         SwRect( nXL, nYL, nWL, nHL ), nOrdNum( nO ), nPageNum( nP ){}
 };
