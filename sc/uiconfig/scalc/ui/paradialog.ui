@@ -94,6 +94,7 @@
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="scrollable">True</property>
+            <property name="enable_popup">True</property>
             <child>
               <object class="GtkGrid">
                 <property name="visible">True</property>
