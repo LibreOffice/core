@@ -129,17 +129,14 @@ namespace svxform
         OUString m_sInstance_UI;
         OUString m_sNone_UI;
 
-        OUString m_sDoc_API;
-        OUString m_sInstance_API;
-        OUString m_sNone_API;
+        static constexpr OUStringLiteral const m_sDoc_API = "all";
+        static constexpr OUStringLiteral const m_sInstance_API = "instance";
+        static constexpr OUStringLiteral const m_sNone_API = "none";
 
         ReplaceString( const ReplaceString& ) = delete;
 
     public:
-        ReplaceString() :
-            m_sDoc_API(      "all" ),
-            m_sInstance_API( "instance" ),
-            m_sNone_API(     "none" )
+        ReplaceString()
         {
             m_sDoc_UI = SvxResId(RID_STR_REPLACE_DOC);
             m_sInstance_UI = SvxResId(RID_STR_REPLACE_INST);
@@ -160,7 +157,7 @@ namespace svxform
 
         /** convert submission replace string from UI to API.
             Use 'none' as default. */
-        OUString const & toAPI( const OUString& rStr ) const
+        OUString toAPI( const OUString& rStr ) const
         {
             if( rStr == m_sDoc_UI )
                 return m_sDoc_API;
@@ -177,18 +174,15 @@ namespace svxform
         OUString m_sPut_UI;
         OUString m_sGet_UI;
 
-        OUString m_sPost_API;
-        OUString m_sPut_API;
-        OUString m_sGet_API;
+        static constexpr OUStringLiteral m_sPost_API = "post";
+        static constexpr OUStringLiteral m_sPut_API = "put";
+        static constexpr OUStringLiteral m_sGet_API = "get";
 
         MethodString( const MethodString& ) = delete;
 
     public:
 
-        MethodString() :
-            m_sPost_API( "post" ),
-            m_sPut_API(  "put" ),
-            m_sGet_API(  "get" )
+        MethodString()
         {
             m_sPost_UI = SvxResId(RID_STR_METHOD_POST);
             m_sPut_UI  = SvxResId(RID_STR_METHOD_PUT);
@@ -207,7 +201,7 @@ namespace svxform
         }
 
         /** convert from UI to API; put is default */
-        OUString const & toAPI( const OUString& rStr ) const
+        OUString toAPI( const OUString& rStr ) const
         {
             if( rStr == m_sGet_UI )
                 return m_sGet_API;
@@ -221,8 +215,8 @@ namespace svxform
     class XFormsPage : public TabPage
     {
     private:
-        MethodString                m_aMethodString;
-        ReplaceString               m_aReplaceString;
+        MethodString const                m_aMethodString;
+        ReplaceString const               m_aReplaceString;
 
         VclPtr<ToolBox>             m_pToolBox;
         VclPtr<DataTreeListBox>     m_pItemList;
@@ -237,7 +231,7 @@ namespace svxform
 
         VclPtr<DataNavigatorWindow> m_pNaviWin;
         bool                        m_bHasModel;
-        DataGroupType               m_eGroup;
+        DataGroupType const               m_eGroup;
         // these strings are not valid on the Submission and Binding Page
         // mb: furthermore these are properties of an instance, thus
         // it would be much better to get/set them through the UIHelper
@@ -427,10 +421,10 @@ namespace svxform
 
         ItemNode*           m_pItemNode;
         DataItemType        m_eItemType;
-        OUString            m_sFL_Element;
-        OUString            m_sFL_Attribute;
-        OUString            m_sFL_Binding;
-        OUString            m_sFT_BindingExp;
+        OUString const            m_sFL_Element;
+        OUString const            m_sFL_Attribute;
+        OUString const            m_sFL_Binding;
+        OUString const            m_sFT_BindingExp;
 
         DECL_LINK(    CheckHdl, Button*, void );
         DECL_LINK(    ConditionHdl, Button*, void );
@@ -460,7 +454,7 @@ namespace svxform
         VclPtr<OKButton>               m_pOKBtn;
 
         Idle                           m_aResultIdle;
-        OUString                       m_sPropertyName;
+        OUString const                       m_sPropertyName;
 
         css::uno::Reference< css::xforms::XFormsUIHelper1 >
                                        m_xUIHelper;
@@ -543,8 +537,8 @@ namespace svxform
     class AddSubmissionDialog : public ModalDialog
     {
     private:
-        MethodString        m_aMethodString;
-        ReplaceString       m_aReplaceString;
+        MethodString const        m_aMethodString;
+        ReplaceString const       m_aReplaceString;
 
         VclPtr<Edit>        m_pNameED;
         VclPtr<Edit>        m_pActionED;
@@ -556,7 +550,7 @@ namespace svxform
 
         VclPtr<OKButton>    m_pOKBtn;
 
-        ItemNode*           m_pItemNode;
+        ItemNode* const     m_pItemNode;
 
         css::uno::Reference< css::xforms::XFormsUIHelper1 >
                             m_xUIHelper;

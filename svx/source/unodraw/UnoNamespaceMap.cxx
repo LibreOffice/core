@@ -47,8 +47,8 @@ namespace svx
     class NamespaceMap : public WeakImplHelper< XNameAccess, XServiceInfo >
     {
     private:
-        sal_uInt16* mpWhichIds;
-        SfxItemPool* mpPool;
+        sal_uInt16* const mpWhichIds;
+        SfxItemPool* const mpPool;
 
     public:
         NamespaceMap( sal_uInt16* pWhichIds, SfxItemPool* pPool );

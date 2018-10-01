@@ -32,7 +32,7 @@ class SvxLineBox : public LineLB
 {
     sal_uInt16      nCurPos;
     Timer           aDelayTimer;
-    Size            aLogicalSize;
+    Size const      aLogicalSize;
     bool            bRelease;
     SfxObjectShell* mpSh;
     css::uno::Reference< css::frame::XFrame > mxFrame;

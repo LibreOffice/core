@@ -277,7 +277,7 @@ public:
         const sdr::contact::DisplayInfo& rDisplayInfo) override;
 
 private:
-    SdrPage*    mpCurrentPage;
+    SdrPage* const    mpCurrentPage;
 };
 
 ImplExportCheckVisisbilityRedirector::ImplExportCheckVisisbilityRedirector( SdrPage* pCurrentPage )

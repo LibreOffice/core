@@ -35,7 +35,7 @@ namespace svx
     struct PropertyMapEntry
     {
         OUString       maName;
-        DataAccessDescriptorProperty      mnHandle;
+        DataAccessDescriptorProperty const      mnHandle;
     };
 
     class ODADescriptorImpl

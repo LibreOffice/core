@@ -70,7 +70,7 @@ class ImplMarkingOverlay
     basegfx::B2DPoint                               maSecondPosition;
 
     // A flag to remember if the action is for unmarking.
-    bool                                            mbUnmarking : 1;
+    bool const                                      mbUnmarking : 1;
 
 public:
     ImplMarkingOverlay(const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos, bool bUnmarking);

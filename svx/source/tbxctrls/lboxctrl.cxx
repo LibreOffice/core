@@ -53,7 +53,7 @@ class SvxPopupWindowListBox: public SfxPopupWindow
     VclPtr<ListBox> m_pListBox;
     ToolBox &       rToolBox;
     bool            bUserSel;
-    sal_uInt16      nTbxId;
+    sal_uInt16 const nTbxId;
 
 public:
     SvxPopupWindowListBox( sal_uInt16 nSlotId, const OUString& rCommandURL, sal_uInt16 nTbxId, ToolBox& rTbx );

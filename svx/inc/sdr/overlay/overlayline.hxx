@@ -30,7 +30,7 @@ namespace sdr
         class OverlayLineStriped final : public OverlayObjectWithBasePosition
         {
             // second position in pixel
-            basegfx::B2DPoint                       maSecondPosition;
+            basegfx::B2DPoint const                       maSecondPosition;
 
             // geometry creation for OverlayObject
             virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
