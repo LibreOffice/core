@@ -1677,6 +1677,7 @@ void CustomAnimationPane::showOptions(const OString& sPage)
                     changeSelection( pDlg->getResultSet(), pDlg->getPropertySet() );
                     updateControls();
                 }
+                pDlg->disposeOnce();
             });
 }
 

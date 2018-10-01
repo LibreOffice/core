@@ -133,7 +133,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                 pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxLineTabDialog( nullptr,
+            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxLineTabDialog(rReq.GetFrameWeld(),
                     &aNewAttr,
                 pDoc,
                 pObj,

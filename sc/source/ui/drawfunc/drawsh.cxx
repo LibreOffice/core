@@ -387,7 +387,7 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq )
         pView->MergeAttrFromMarked( aNewAttr, false );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxLineTabDialog( pViewData->GetDialogParent(),
+    ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxLineTabDialog( pViewData->GetFrameWeld(),
                 &aNewAttr,
             pViewData->GetDocument()->GetDrawLayer(),
             pObj,

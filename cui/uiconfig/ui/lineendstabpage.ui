@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.22.1 -->
 <interface domain="cui">
-  <requires lib="gtk+" version="3.0"/>
+  <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -20,6 +20,8 @@
       <column type="gchararray"/>
       <!-- column-name image -->
       <column type="GdkPixbuf"/>
+       <!-- column-name surface -->
+      <column type="CairoSurface"/>
     </columns>
   </object>
   <object class="GtkFrame" id="LineEndPage">
@@ -108,6 +110,18 @@
                         <property name="halign">start</property>
                         <property name="model">liststore4</property>
                         <property name="id_column">1</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext3"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                        <child>
+                          <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
+                          <attributes>
+                            <attribute name="surface">3</attribute>
+                          </attributes>
+                        </child>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -193,6 +207,7 @@
                         <property name="can_focus">False</property>
                         <property name="row_spacing">6</property>
                         <property name="column_spacing">6</property>
+                        <property name="column_homogeneous">True</property>
                         <child>
                           <object class="GtkButton" id="BTN_LOAD">
                             <property name="visible">True</property>
@@ -201,7 +216,6 @@
                             <property name="has_tooltip">True</property>
                             <property name="tooltip_text" translatable="yes" context="lineendstabpage|BTN_LOAD|tooltip_text">Load arrow styles</property>
                             <property name="halign">center</property>
-                            <property name="hexpand">True</property>
                             <property name="image">image1</property>
                           </object>
                           <packing>
@@ -217,7 +231,6 @@
                             <property name="has_tooltip">True</property>
                             <property name="tooltip_text" translatable="yes" context="lineendstabpage|BTN_SAVE|tooltip_text">Save arrow styles</property>
                             <property name="halign">center</property>
-                            <property name="hexpand">True</property>
                             <property name="image">image2</property>
                           </object>
                           <packing>

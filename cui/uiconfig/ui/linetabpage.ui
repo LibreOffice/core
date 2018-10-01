@@ -40,6 +40,8 @@
       <column type="gchararray"/>
       <!-- column-name image -->
       <column type="GdkPixbuf"/>
+      <!-- column-name surface -->
+      <column type="CairoSurface"/>
     </columns>
   </object>
   <object class="GtkListStore" id="liststore5">
@@ -50,6 +52,8 @@
       <column type="gchararray"/>
       <!-- column-name image -->
       <column type="GdkPixbuf"/>
+      <!-- column-name surface -->
+      <column type="CairoSurface"/>
     </columns>
   </object>
   <object class="GtkListStore" id="liststore6">
@@ -60,6 +64,8 @@
       <column type="gchararray"/>
       <!-- column-name image -->
       <column type="GdkPixbuf"/>
+      <!-- column-name surface -->
+      <column type="CairoSurface"/>
     </columns>
   </object>
   <object class="GtkMenu" id="menuSELECT">
@@ -121,6 +127,8 @@
   <object class="GtkBox" id="LineTabPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
@@ -174,6 +182,18 @@
                             <property name="can_focus">False</property>
                             <property name="model">liststore5</property>
                             <property name="id_column">1</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="cellrenderertext7"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                            <child>
+                              <object class="GtkCellRendererPixbuf" id="cellrenderertext11"/>
+                              <attributes>
+                                <attribute name="surface">3</attribute>
+                              </attributes>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -384,6 +404,18 @@
                                 <property name="can_focus">False</property>
                                 <property name="model">liststore4</property>
                                 <property name="id_column">1</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                                <child>
+                                  <object class="GtkCellRendererPixbuf" id="cellrenderertext2"/>
+                                  <attributes>
+                                    <attribute name="surface">3</attribute>
+                                  </attributes>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -394,8 +426,20 @@
                               <object class="GtkComboBox" id="LB_END_STYLE">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="model">liststore5</property>
+                                <property name="model">liststore6</property>
                                 <property name="id_column">1</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="cellrenderertext3"/>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                                <child>
+                                  <object class="GtkCellRendererPixbuf" id="cellrenderertext4"/>
+                                  <attributes>
+                                    <attribute name="surface">3</attribute>
+                                  </attributes>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
