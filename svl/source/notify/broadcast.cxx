@@ -63,8 +63,11 @@ void SvtBroadcaster::Remove( SvtListener* p )
     Normalize();
 
     auto it = std::lower_bound(maListeners.begin(), maListeners.end(), p);
+    assert (it != maListeners.end() && *it == p);
     if (it != maListeners.end() && *it == p)
+    {
         maListeners.erase(it);
+    }
 
     if (maListeners.empty())
         ListenersGone();
@@ -73,31 +76,16 @@ void SvtBroadcaster::Remove( SvtListener* p )
 SvtBroadcaster::SvtBroadcaster() : mbAboutToDie(false), mbDisposing(false), mbNormalized(false), mbDestNormalized(false) {}
 
 SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC ) :
-    maListeners(rBC.maListeners), maDestructedListeners(rBC.maDestructedListeners),
-    mbAboutToDie(rBC.mbAboutToDie), mbDisposing(false),
-    mbNormalized(rBC.mbNormalized), mbDestNormalized(rBC.mbDestNormalized)
+    mbAboutToDie(false), mbDisposing(false),
+    mbNormalized(true), mbDestNormalized(true)
 {
-    assert(!mbAboutToDie && "copying an object marked with PrepareForDestruction()?");
+    assert(!rBC.mbAboutToDie && "copying an object marked with PrepareForDestruction()?");
+    assert(!rBC.mbDisposing && "copying an object that is in it's destructor?");
 
-    if (mbAboutToDie)
-        Normalize();
-
-    ListenersType::const_iterator dest(maDestructedListeners.begin());
-    for (ListenersType::iterator it(maListeners.begin()); it != maListeners.end(); ++it)
+    maListeners.reserve(rBC.maListeners.size());
+    for (ListenersType::iterator it(rBC.maListeners.begin()); it != rBC.maListeners.end(); ++it)
     {
-        bool bStart = true;
-
-        if (mbAboutToDie)
-        {
-            // skip the destructed ones
-            while (dest != maDestructedListeners.end() && (*dest < *it))
-                ++dest;
-
-            bStart = (dest == maDestructedListeners.end() || *dest != *it);
-        }
-
-        if (bStart)
-            (*it)->StartListening(*this);
+         (*it)->StartListening(*this); // this will call back into this->Add()
     }
 }
 
