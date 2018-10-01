@@ -6771,7 +6771,20 @@ void ScDocumentThreadSpecific::MergeBackIntoNonThreadedData(ScDocumentThreadSpec
     // What about recursion helper and lookup cache?
 }
 
-void ScDocument::MergeBackIntoNonThreadedContext(ScInterpreterContext& threadedContext)
+void ScDocument::SetupFromNonThreadedContext(ScInterpreterContext& threadedContext, int threadNumber)
+{
+    if(int(mThreadStoredScLookupCaches.size()) >= threadNumber + 1 ) // 0-indexed
+    {
+        // It is necessary to store the VLOOKUP cache between threaded formula runs, because the results
+        // are to be shared between different formula group cells (it caches the same row for different
+        // columns). Therefore also use the thread index to make sure each thread gets back its cache,
+        // as it is decided based on thread number which rows in a formula group it handles.
+        threadedContext.mScLookupCache = mThreadStoredScLookupCaches[ threadNumber ];
+        mThreadStoredScLookupCaches[ threadNumber ] = nullptr;
+    }
+}
+
+void ScDocument::MergeBackIntoNonThreadedContext(ScInterpreterContext& threadedContext, int threadNumber)
 {
     // Move data from a context used by a calculation thread to the main thread's context.
     // Called from the main thread after the calculation thread has already finished.
@@ -6780,6 +6793,13 @@ void ScDocument::MergeBackIntoNonThreadedContext(ScInterpreterContext& threadedC
         maInterpreterContext.maDelayedSetNumberFormat.end(),
         std::make_move_iterator(threadedContext.maDelayedSetNumberFormat.begin()),
         std::make_move_iterator(threadedContext.maDelayedSetNumberFormat.end()));
+    if( threadedContext.mScLookupCache )
+    {
+        if(int(mThreadStoredScLookupCaches.size()) < threadNumber + 1 ) // 0-indexed
+            mThreadStoredScLookupCaches.resize( threadNumber + 1 );
+        mThreadStoredScLookupCaches[ threadNumber ] = threadedContext.mScLookupCache;
+        threadedContext.mScLookupCache = nullptr;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

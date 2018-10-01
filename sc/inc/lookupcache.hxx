@@ -23,6 +23,7 @@
 #include "address.hxx"
 #include <svl/listener.hxx>
 
+#include <memory>
 #include <unordered_map>
 
 class ScDocument;
@@ -188,6 +189,13 @@ private:
     ScLookupCache & operator=( const ScLookupCache & ) = delete;
 
 };
+
+// Struct because including lookupcache.hxx in document.hxx isn't wanted.
+struct ScLookupCacheMap
+{
+    std::unordered_map< ScRange, std::unique_ptr<ScLookupCache>, ScLookupCache::Hash > aCacheMap;
+};
+
 
 #endif
 
