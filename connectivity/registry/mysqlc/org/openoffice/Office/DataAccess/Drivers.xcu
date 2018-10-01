@@ -62,8 +62,8 @@
           </prop>
         </node>
         <node oor:name="BooleanComparisonMode" oor:op="replace">
-          <prop oor:name="Value" oor:type="xs:int">
-            <value>0</value>
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
           </prop>
         </node>
         <node oor:name="FormsCheckRequiredFields" oor:op="replace">
@@ -94,8 +94,8 @@
           </prop>
         </node>
         <node oor:name="BooleanComparisonMode" oor:op="replace">
-          <prop oor:name="Value" oor:type="xs:int">
-            <value>0</value>
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
           </prop>
         </node>
         <node oor:name="FormsCheckRequiredFields" oor:op="replace">
