@@ -179,7 +179,8 @@ public:
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
                             const basegfx::B2DHomMatrix& aTransformation,
                             FillProperties& rShapeOrParentShapeFillProps,
-                            ShapeIdMap* pShapeMap = nullptr );
+                            ShapeIdMap* pShapeMap = nullptr,
+                            bool bInGroup = false);
 
     const css::uno::Reference< css::drawing::XShape > &
                         getXShape() const { return mxShape; }
@@ -225,7 +226,8 @@ protected:
                             bool bClearText,
                             bool bDoNotInsertEmptyTextBody,
                             basegfx::B2DHomMatrix& aTransformation,
-                            FillProperties& rShapeOrParentShapeFillProps
+                            FillProperties& rShapeOrParentShapeFillProps,
+                            bool bInGroup = false
                              );
 
     void                addChildren(

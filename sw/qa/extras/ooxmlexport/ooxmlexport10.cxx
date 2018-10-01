@@ -475,15 +475,15 @@ DECLARE_OOXMLEXPORT_TEST(testStrict, "strict.docx")
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextGraphicObject"));
 
     // SmartArt was missing.
-    xServiceInfo.set(getShape(2), uno::UNO_QUERY);
+    xServiceInfo.set(getShape(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"));
 
     // Chart was missing.
-    xServiceInfo.set(getShape(3), uno::UNO_QUERY);
+    xServiceInfo.set(getShape(4), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextEmbeddedObject"));
 
     // Math was missing.
-    xServiceInfo.set(getShape(4), uno::UNO_QUERY);
+    xServiceInfo.set(getShape(5), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextEmbeddedObject"));
 }
 
