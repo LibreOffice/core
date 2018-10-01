@@ -114,6 +114,7 @@ public:
     void testTdf105954();
     void testTdf106702();
     void testTdf113143();
+    void testTdf115262();
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
     CPPUNIT_TEST(testTdf106059);
@@ -144,6 +145,7 @@ public:
     CPPUNIT_TEST(testTdf105954);
     CPPUNIT_TEST(testTdf106702);
     CPPUNIT_TEST(testTdf113143);
+    CPPUNIT_TEST(testTdf115262);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1492,6 +1494,50 @@ void PdfExportTest::testForcePoint71()
 {
     // I just care it doesn't crash
     topdf("forcepoint71.key");
+}
+
+void PdfExportTest::testTdf115262()
+{
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf115262.ods";
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("calc_pdf_Export");
+    auto pPdfDocument = exportAndParse(aURL, aMediaDescriptor);
+    CPPUNIT_ASSERT_EQUAL(8, FPDF_GetPageCount(pPdfDocument.get()));
+
+    // Get the 6th page.
+    PageHolder pPdfPage(FPDF_LoadPage(pPdfDocument.get(), /*page_index=*/5));
+    CPPUNIT_ASSERT(pPdfPage.get());
+
+    // Look up the position of the first image and the 400th row.
+    FPDF_TEXTPAGE pTextPage = FPDFText_LoadPage(pPdfPage.get());
+    int nPageObjectCount = FPDFPage_CountObjects(pPdfPage.get());
+    int nFirstImageTop = 0;
+    int nRowTop = 0;
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        FPDF_PAGEOBJECT pPageObject = FPDFPage_GetObject(pPdfPage.get(), i);
+        float fLeft = 0, fBottom = 0, fRight = 0, fTop = 0;
+        FPDFPageObj_GetBounds(pPageObject, &fLeft, &fBottom, &fRight, &fTop);
+
+        if (FPDFPageObj_GetType(pPageObject) == FPDF_PAGEOBJ_IMAGE)
+        {
+            nFirstImageTop = fTop;
+        }
+        else if (FPDFPageObj_GetType(pPageObject) == FPDF_PAGEOBJ_TEXT)
+        {
+            unsigned long nTextSize = FPDFTextObj_GetText(pPageObject, pTextPage, nullptr, 0);
+            std::vector<sal_Unicode> aText(nTextSize);
+            FPDFTextObj_GetText(pPageObject, pTextPage, aText.data(), nTextSize);
+            OUString sText(aText.data(), nTextSize / 2 - 1);
+            if (sText == "400")
+                nRowTop = fTop;
+        }
+    }
+    // Make sure that the top of the "400" is below the top of the image (in
+    // bottom-right-corner-based PDF coordinates).
+    // This was: expected less than 144, actual is 199.
+    CPPUNIT_ASSERT_LESS(nFirstImageTop, nRowTop);
+    FPDFText_ClosePage(pTextPage);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
