@@ -44,8 +44,10 @@ void SvtBroadcaster::Add( SvtListener* p )
     assert(!mbAboutToDie && "called after PrepareForDestruction()?");
     if (mbDisposing || mbAboutToDie)
         return;
+    // only reset mbNormalized if are going to become unsorted
+    if (!maListeners.empty() && maListeners.back() > p)
+        mbNormalized = false;
     maListeners.push_back(p);
-    mbNormalized = false;
 }
 
 void SvtBroadcaster::Remove( SvtListener* p )
