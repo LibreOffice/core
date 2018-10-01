@@ -54,12 +54,12 @@ ShapeContext::ShapeContext( ContextHandler2Helper const & rParent, ShapePtr cons
 , mpMasterShapePtr( pMasterShapePtr )
 , mpShapePtr( pShapePtr )
 {
+    if( mpMasterShapePtr.get() && mpShapePtr.get() )
+        mpMasterShapePtr->addChild( mpShapePtr );
 }
 
 ShapeContext::~ShapeContext()
 {
-    if ( mpMasterShapePtr.get() && mpShapePtr.get() )
-        mpMasterShapePtr->addChild( mpShapePtr );
 }
 
 ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )

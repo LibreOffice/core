@@ -1410,10 +1410,10 @@ void SdOOXMLExportTest2::testGroupsPosition()
     xDocShRef->DoClose();
 
     xmlDocPtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:spPr/a:xfrm/a:off", "x", "6796800");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp/p:sp[3]/p:spPr/a:xfrm/a:off", "y", "4273920");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp[1]/p:sp[1]/p:spPr/a:xfrm/a:off", "x", "4040640");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp[1]/p:sp[1]/p:spPr/a:xfrm/a:off", "y", "4273920");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp[2]/p:sp[1]/p:spPr/a:xfrm/a:off", "x", "4040640");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp[2]/p:sp[1]/p:spPr/a:xfrm/a:off", "y", "4273920");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp[2]/p:sp[3]/p:spPr/a:xfrm/a:off", "x", "6796800");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:grpSp[2]/p:sp[3]/p:spPr/a:xfrm/a:off", "y", "4273920");
 }
 
 void SdOOXMLExportTest2::testGroupsRotatedPosition()
