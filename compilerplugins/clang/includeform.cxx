@@ -14,6 +14,8 @@
 #include "compat.hxx"
 #include "plugin.hxx"
 
+// Enforces the "Rules for #include directives (C/C++)" described in README.md.
+
 namespace {
 
 class IncludeForm final: public PPCallbacks, public loplugin::RewritePlugin {
