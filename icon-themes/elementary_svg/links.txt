@@ -430,6 +430,7 @@ cmd/32/flowchartshapes.flowchart-extract.svg cmd/32/basicshapes.isosceles-triang
 cmd/32/flowchartshapes.flowchart-magnetic-disk.svg cmd/32/basicshapes.can.svg
 cmd/32/flowchartshapes.flowchart-manual-operation.svg cmd/32/basicshapes.trapezoid.svg
 cmd/32/flowchartshapes.flowchart-merge.svg cmd/32/fontworkshapetype.fontwork-triangle-down.svg
+cmd/32/fontworkgalleryfloater.svg cmd/32/fontwork.svg
 cmd/32/fontworkshapetype.fontwork-circle-pour.svg cmd/32/basicshapes.ring.svg
 cmd/32/fontworkshapetype.fontwork-fade-down.svg cmd/32/basicshapes.trapezoid.svg
 cmd/32/fontworkshapetype.fontwork-triangle-up.svg cmd/32/basicshapes.isosceles-triangle.svg
@@ -441,6 +442,7 @@ cmd/32/rectangletoolbox.svg cmd/32/basicshapes.rectangle.svg
 cmd/32/rect_rounded.svg cmd/32/basicshapes.round-rectangle.svg
 cmd/32/shapeslinemenu.svg cmd/32/line.svg
 cmd/32/shapesmenu.svg cmd/32/basicshapes.round-quadrat.svg
+cmd/32/starshapes.svg cmd/32/starshapes.star5.svg
 cmd/32/symbolshapes.svg cmd/32/symbolshapes.smiley.svg
 cmd/32/square_rounded.svg cmd/32/basicshapes.round-quadrat.svg
 
@@ -461,6 +463,7 @@ cmd/lc_flowchartshapes.flowchart-extract.svg cmd/lc_basicshapes.isosceles-triang
 cmd/lc_flowchartshapes.flowchart-magnetic-disk.svg cmd/lc_basicshapes.can.svg
 cmd/lc_flowchartshapes.flowchart-manual-operation.svg cmd/lc_basicshapes.trapezoid.svg
 cmd/lc_flowchartshapes.flowchart-merge.svg cmd/lc_fontworkshapetype.fontwork-triangle-down.svg
+cmd/lc_fontworkgalleryfloater.svg cmd/lc_fontwork.svg
 cmd/lc_fontworkshapetype.fontwork-circle-pour.svg cmd/lc_basicshapes.ring.svg
 cmd/lc_fontworkshapetype.fontwork-fade-down.svg cmd/lc_basicshapes.trapezoid.svg
 cmd/lc_fontworkshapetype.fontwork-triangle-up.svg cmd/lc_basicshapes.isosceles-triangle.svg
@@ -472,6 +475,7 @@ cmd/lc_rectangletoolbox.svg cmd/lc_basicshapes.rectangle.svg
 cmd/lc_rect_rounded.svg cmd/lc_basicshapes.round-rectangle.svg
 cmd/lc_shapeslinemenu.svg cmd/lc_line.svg
 cmd/lc_shapesmenu.svg cmd/lc_basicshapes.round-quadrat.svg
+cmd/lc_starshapes.svg cmd/lc_starshapes.star5.svg
 cmd/lc_symbolshapes.svg cmd/lc_symbolshapes.smiley.svg
 cmd/lc_square_rounded.svg cmd/lc_basicshapes.round-quadrat.svg
 
@@ -492,6 +496,7 @@ cmd/sc_flowchartshapes.flowchart-extract.svg cmd/sc_basicshapes.isosceles-triang
 cmd/sc_flowchartshapes.flowchart-magnetic-disk.svg cmd/sc_basicshapes.can.svg
 cmd/sc_flowchartshapes.flowchart-manual-operation.svg cmd/sc_basicshapes.trapezoid.svg
 cmd/sc_flowchartshapes.flowchart-merge.svg cmd/sc_fontworkshapetype.fontwork-triangle-down.svg
+cmd/sc_fontworkgalleryfloater.svg cmd/sc_fontwork.svg
 cmd/sc_fontworkshapetype.fontwork-circle-pour.svg cmd/sc_basicshapes.ring.svg
 cmd/sc_fontworkshapetype.fontwork-fade-down.svg cmd/sc_basicshapes.trapezoid.svg
 cmd/sc_fontworkshapetype.fontwork-triangle-up.svg cmd/sc_basicshapes.isosceles-triangle.svg
@@ -503,6 +508,7 @@ cmd/sc_rectangletoolbox.svg cmd/sc_basicshapes.rectangle.svg
 cmd/sc_rect_rounded.svg cmd/sc_basicshapes.round-rectangle.svg
 cmd/sc_shapeslinemenu.svg cmd/sc_line.svg
 cmd/sc_shapesmenu.svg cmd/sc_basicshapes.round-quadrat.svg
+cmd/sc_starshapes.svg cmd/sc_starshapes.star5.svg
 cmd/sc_symbolshapes.svg cmd/sc_symbolshapes.smiley.svg
 cmd/sc_square_rounded.svg cmd/sc_basicshapes.round-quadrat.svg
 
@@ -549,8 +555,6 @@ cmd/sc_previewprintoptions.svg cmd/sc_printpreview.svg
 cmd/sc_sendfax.svg cmd/sc_print.svg
 
 # Delete
-cmd/32/deleteprintarea.svg cmd/32/delete.svg
-cmd/32/deleteprintarea.svg cmd/32/delete.svg
 cmd/32/deleterecord.svg cmd/32/delete.svg
 cmd/32/dbtabledelete.svg cmd/32/delete.svg
 cmd/32/dbreportdelete.svg cmd/32/delete.svg
@@ -558,8 +562,6 @@ cmd/32/dbquerydelete.svg cmd/32/delete.svg
 cmd/32/dbformdelete.svg cmd/32/delete.svg
 cmd/32/dbclearquery.svg cmd/32/delete.svg
 
-cmd/lc_deleteprintarea.svg cmd/lc_delete.svg
-cmd/lc_deleteprintarea.svg cmd/lc_delete.svg
 cmd/lc_deleterecord.svg cmd/lc_delete.svg
 cmd/lc_dbtabledelete.svg cmd/lc_delete.svg
 cmd/lc_dbreportdelete.svg cmd/lc_delete.svg
@@ -567,7 +569,6 @@ cmd/lc_dbquerydelete.svg cmd/lc_delete.svg
 cmd/lc_dbformdelete.svg cmd/lc_delete.svg
 cmd/lc_dbclearquery.svg cmd/lc_delete.svg
 
-cmd/sc_deleteprintarea.svg cmd/sc_delete.svg
 cmd/sc_deleterecord.svg cmd/sc_delete.svg
 cmd/sc_dbtabledelete.svg cmd/sc_delete.svg
 cmd/sc_dbreportdelete.svg cmd/sc_delete.svg
@@ -681,12 +682,15 @@ cmd/sc_formatbulletsmenu.svg cmd/sc_defaultbullet.svg
 cmd/sc_formatframemenu.svg cmd/sc_chainframes.svg
 
 # Group
+cmd/32/formatgroup.svg cmd/32/group.svg
 cmd/32/formatungroup.svg cmd/32/ungroup.svg
 cmd/32/leaveallgroups.svg cmd/32/leavegroup.svg
 
+cmd/lc_formatgroup.svg cmd/lc_group.svg
 cmd/lc_formatungroup.svg cmd/lc_ungroup.svg
 cmd/lc_leaveallgroups.svg cmd/lc_leavegroup.svg
 
+cmd/sc_formatgroup.svg cmd/sc_group.svg
 cmd/sc_formatungroup.svg cmd/sc_ungroup.svg
 cmd/sc_leaveallgroups.svg cmd/sc_leavegroup.svg
 
@@ -1533,7 +1537,7 @@ formula/res/fx.svg cmd/sc_dbviewfunctions.svg
 # ==============================================
 fpicker/res/fp011.svg cmd/sc_firstpage.svg
 fpicker/res/fp014.svg cmd/sc_open.svg
-fpicker/res/fp015.svg cmd/sc_starshapes.svg
+fpicker/res/fp015.svg cmd/sc_starshapes.star5.svg
 fpicker/res/fp016.svg desktop/res/shared_16.svg
 
 # reportdesign
@@ -1553,7 +1557,7 @@ res/baswatr.svg cmd/lc_addwatch.svg
 res/dir-clos.svg cmd/sc_open.svg
 res/dir-open.svg cmd/sc_open.svg
 res/fileopen.svg cmd/sc_open.svg
-res/foldercl.svg cmd/sc_open.svg
+res/foldercl.svg formula/res/fapclose.svg
 res/folderop.svg cmd/sc_open.svg
 res/fp010.svg cmd/sc_open.svg
 res/info.svg cmd/lc_helpindex.svg
@@ -1623,8 +1627,9 @@ res/sc10868.svg cmd/sc_graphicfilterinvert.svg
 res/sc10869.svg cmd/sc_graftransparence.svg
 
 res/sc_helperdialog.svg cmd/sc_helpindex.svg
+res/sx03141.svg formula/res/fapclose.svg
 res/sx03187.svg cmd/sc_inserttable.svg
-res/sx03189.svg cmd/sc_open.svg
+res/sx03189.svg formula/res/fapclose.svg
 res/sx03202.svg cmd/sc_viewdatasourcebrowser.svg
 res/sx03256.svg cmd/sc_insertplugin.svg
 res/sx10594.svg cmd/sc_pushbutton.svg
@@ -1767,7 +1772,7 @@ startmath/res/im21108.svg cmd/lc_outlineformat.svg
 svtools/res/back_small.svg cmd/sc_prevrecord.svg
 svtools/res/back_large.svg cmd/lc_prevrecord.svg
 svtools/res/ed06.svg dbaccess/res/pkey.svg
-svtools/res/folder.svg cmd/sc_open.svg
+svtools/res/folder.svg formula/res/fapclose.svg
 svtools/res/folderop.svg cmd/sc_open.svgf
 
 # svx
@@ -1804,6 +1809,9 @@ svx/res/fontworkalignstretch_16.svg cmd/sc_text_marquee.svg
 svx/res/fw07.svg cmd/sc_alignleft.svg
 svx/res/fw08.svg cmd/sc_alignhorizontalcenter.svg
 svx/res/fw09.svg cmd/sc_alignright.svg
+svx/res/galdefs.svg formula/res/fapclose.svg
+svx/res/galnors.svg formula/res/fapclose.svg
+svx/res/galrdos.svg formula/res/fapclose.svg
 svx/res/graphic.svg cmd/lc_graphic.svg
 
 svx/res/id01.svg cmd/sc_ok.svg
