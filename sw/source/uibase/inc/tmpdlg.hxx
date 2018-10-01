@@ -81,6 +81,7 @@ class SwTemplateDlgController : public SfxStyleDialogController
     SfxStyleFamily  nType;
     sal_uInt16      nHtmlMode;
     SwWrtShell*     pWrtShell;
+    bool            bNewStyle;
 
 public:
     /// @param sPage

@@ -596,7 +596,7 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
                                                  SfxStyleFamily nRegion,
                                                  const OString& sPage,
                                                  SwWrtShell* pActShell,
-                                                 bool /*bNew*/)
+                                                 bool bNew)
     : SfxStyleDialogController(pParent,
                                "modules/swriter/ui/templatedialog" +
                                    OUString::number(static_cast<sal_uInt16>(nRegion)) + ".ui",
@@ -604,12 +604,76 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
                                rBase)
     , nType(nRegion)
     , pWrtShell(pActShell)
+    , bNewStyle(bNew)
 {
     nHtmlMode = ::GetHtmlMode(pWrtShell->GetView().GetDocShell());
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     // stitch TabPages together
     switch( nRegion )
     {
+        // paragraph styles
+        case SfxStyleFamily::Para:
+        {
+            AddTabPage("indents", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH), pFact->GetTabPageRangesFunc(RID_SVXPAGE_STD_PARAGRAPH));
+
+            AddTabPage("alignment", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_ALIGN_PARAGRAPH), pFact->GetTabPageRangesFunc(RID_SVXPAGE_ALIGN_PARAGRAPH));
+
+            AddTabPage("textflow", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH) );
+
+            AddTabPage("asiantypo",  pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       pFact->GetTabPageRangesFunc(RID_SVXPAGE_PARA_ASIAN) );
+
+            AddTabPage("font", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_NAME ) );
+
+            AddTabPage("fonteffect", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_EFFECTS ) );
+
+            AddTabPage("position", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_POSITION ) );
+
+            AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_CHAR_TWOLINES ) );
+
+            AddTabPage("highlighting", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ));
+
+            AddTabPage("tabs", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR),        pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
+
+            AddTabPage("outline", SwParagraphNumTabPage::Create, SwParagraphNumTabPage::GetRanges);
+            AddTabPage("dropcaps", SwDropCapsPage::Create, SwDropCapsPage::GetRanges );
+
+            // add Area and Transparence TabPages
+            AddTabPage("area", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ));
+            AddTabPage("transparence", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_TRANSPARENCE ) );
+
+            AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
+
+            AddTabPage("condition", SwCondCollPage::Create,
+                                        SwCondCollPage::GetRanges );
+            if( (!bNewStyle && RES_CONDTXTFMTCOLL != static_cast<SwDocStyleSheet&>(rBase).GetCollection()->Which())
+            || nHtmlMode & HTMLMODE_ON )
+                RemoveTabPage("condition");
+
+            SvtCJKOptions aCJKOptions;
+            if(nHtmlMode & HTMLMODE_ON)
+            {
+                SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
+                if (!rHtmlOpt.IsPrintLayoutExtension())
+                    RemoveTabPage("textflow");
+                RemoveTabPage("asiantypo");
+                RemoveTabPage("tabs");
+                RemoveTabPage("outline");
+                RemoveTabPage("asianlayout");
+                if(!(nHtmlMode & HTMLMODE_FULL_STYLES))
+                {
+                    RemoveTabPage("background");
+                    RemoveTabPage("dropcaps");
+                }
+            }
+            else
+            {
+                if(!aCJKOptions.IsAsianTypographyEnabled())
+                    RemoveTabPage("asiantypo");
+                if(!aCJKOptions.IsDoubleLinesEnabled())
+                    RemoveTabPage("asianlayout");
+            }
+        }
+        break;
         // page styles
         case SfxStyleFamily::Page:
         {
@@ -689,7 +753,39 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFormat);
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
 
-    if (rId == "columns")
+    if (rId == "font")
+    {
+        OSL_ENSURE(::GetActiveView(), "no active view");
+
+        SvxFontListItem aFontListItem( *static_cast<const SvxFontListItem*>(::GetActiveView()->
+            GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) );
+
+        aSet.Put (SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
+        sal_uInt32 nFlags = 0;
+        if(rPage.GetItemSet().GetParent() && 0 == (nHtmlMode & HTMLMODE_ON ))
+            nFlags = SVX_RELATIVE_MODE;
+        if( SfxStyleFamily::Char == nType )
+            nFlags = nFlags|SVX_PREVIEW_CHARACTER;
+        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlags));
+        rPage.PageCreated(aSet);
+    }
+    else if (rId == "fonteffect")
+    {
+        sal_uInt32 nFlags = SVX_ENABLE_FLASH;
+        if( SfxStyleFamily::Char == nType )
+            nFlags = nFlags|SVX_PREVIEW_CHARACTER;
+        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlags));
+        rPage.PageCreated(aSet);
+    }
+    else if (rId == "position")
+    {
+        if( SfxStyleFamily::Char == nType )
+        {
+            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_PREVIEW_CHARACTER));
+            rPage.PageCreated(aSet);
+        }
+    }
+    else if (rId == "columns")
     {
         if( nType == SfxStyleFamily::Frame )
             static_cast<SwColumnPage&>(rPage).SetFrameMode(true);
@@ -697,13 +793,18 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     }
     // do not remove; many other style dialog combinations still use the SfxTabPage
     // for the SvxBrushItem (see RID_SVXPAGE_BACKGROUND)
-    else if (rId == "background")
+    else if (rId == "background" || rId == "highlighting")
     {
         SvxBackgroundTabFlags nFlagType = SvxBackgroundTabFlags::NONE;
         if( SfxStyleFamily::Char == nType || SfxStyleFamily::Para == nType )
             nFlagType |= SvxBackgroundTabFlags::SHOW_HIGHLIGHTING;
         aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, static_cast<sal_uInt32>(nFlagType)));
         rPage.PageCreated(aSet);
+    }
+    else if (rId == "condition")
+    {
+        static_cast<SwCondCollPage&>(rPage).SetCollection(
+            static_cast<SwDocStyleSheet&>(GetStyleSheet()).GetCollection(), bNewStyle );
     }
     else if (rId == "page")
     {
@@ -765,6 +866,18 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
         }
         rPage.PageCreated(aSet);
     }
+    else if (rId == "borders")
+    {
+        if( SfxStyleFamily::Para == nType )
+        {
+            aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,static_cast<sal_uInt16>(SwBorderModes::PARA)));
+        }
+        else if( SfxStyleFamily::Frame == nType )
+        {
+            aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,static_cast<sal_uInt16>(SwBorderModes::FRAME)));
+        }
+        rPage.PageCreated(aSet);
+    }
     // inits for Area and Transparency TabPages
     // The selection attribute lists (XPropertyList derivates, e.g. XColorList for
     // the color table) need to be added as items (e.g. SvxColorTableItem) to make
@@ -783,6 +896,50 @@ void SwTemplateDlgController::PageCreated(const OString& rId, SfxTabPage &rPage 
     else if (rId == "transparence")
     {
         rPage.PageCreated(GetStyleSheet().GetItemSet());
+    }
+    else if (rId == "indents")
+    {
+        if( rPage.GetItemSet().GetParent() )
+        {
+            aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST,MM50/10));
+            aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,0x000F));
+            rPage.PageCreated(aSet);
+        }
+    }
+    else if (rId == "alignment")
+    {
+        aSet.Put(SfxBoolItem(SID_SVXPARAALIGNTABPAGE_ENABLEJUSTIFYEXT,true));
+        rPage.PageCreated(aSet);
+    }
+    else if (rId == "asianlayout")
+    {
+        if( SfxStyleFamily::Char == nType )
+        {
+            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_PREVIEW_CHARACTER));
+            rPage.PageCreated(aSet);
+        }
+    }
+    else if (rId == "outline")
+    {
+        //  handle if the current paragraph style is assigned to a list level of outline style,
+        SwTextFormatColl* pTmpColl = pWrtShell->FindTextFormatCollByName( GetStyleSheet().GetName() );
+        if( pTmpColl && pTmpColl->IsAssignedToListLevelOfOutlineStyle() )
+        {
+            static_cast<SwParagraphNumTabPage&>(rPage).DisableOutline() ;
+            static_cast<SwParagraphNumTabPage&>(rPage).DisableNumbering();
+        }//<-end
+        weld::ComboBox& rBox = static_cast<SwParagraphNumTabPage&>(rPage).GetStyleBox();
+        SfxStyleSheetBasePool* pPool = pWrtShell->GetView().GetDocShell()->GetStyleSheetPool();
+        pPool->SetSearchMask(SfxStyleFamily::Pseudo);
+        const SfxStyleSheetBase* pBase = pPool->First();
+        std::set<OUString> aNames;
+        while(pBase)
+        {
+            aNames.insert(pBase->GetName());
+            pBase = pPool->Next();
+        }
+        for(std::set<OUString>::const_iterator it = aNames.begin(); it != aNames.end(); ++it)
+            rBox.append_text(*it);
     }
 }
 
