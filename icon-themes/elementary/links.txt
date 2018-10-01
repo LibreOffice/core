@@ -430,6 +430,7 @@ cmd/32/flowchartshapes.flowchart-extract.png cmd/32/basicshapes.isosceles-triang
 cmd/32/flowchartshapes.flowchart-magnetic-disk.png cmd/32/basicshapes.can.png
 cmd/32/flowchartshapes.flowchart-manual-operation.png cmd/32/basicshapes.trapezoid.png
 cmd/32/flowchartshapes.flowchart-merge.png cmd/32/fontworkshapetype.fontwork-triangle-down.png
+cmd/32/fontworkgalleryfloater.png cmd/32/fontwork.png
 cmd/32/fontworkshapetype.fontwork-circle-pour.png cmd/32/basicshapes.ring.png
 cmd/32/fontworkshapetype.fontwork-fade-down.png cmd/32/basicshapes.trapezoid.png
 cmd/32/fontworkshapetype.fontwork-triangle-up.png cmd/32/basicshapes.isosceles-triangle.png
@@ -441,6 +442,7 @@ cmd/32/rectangletoolbox.png cmd/32/basicshapes.rectangle.png
 cmd/32/rect_rounded.png cmd/32/basicshapes.round-rectangle.png
 cmd/32/shapeslinemenu.png cmd/32/line.png
 cmd/32/shapesmenu.png cmd/32/basicshapes.round-quadrat.png
+cmd/32/starshapes.png cmd/32/starshapes.star5.png
 cmd/32/symbolshapes.png cmd/32/symbolshapes.smiley.png
 cmd/32/square_rounded.png cmd/32/basicshapes.round-quadrat.png
 
@@ -461,6 +463,7 @@ cmd/lc_flowchartshapes.flowchart-extract.png cmd/lc_basicshapes.isosceles-triang
 cmd/lc_flowchartshapes.flowchart-magnetic-disk.png cmd/lc_basicshapes.can.png
 cmd/lc_flowchartshapes.flowchart-manual-operation.png cmd/lc_basicshapes.trapezoid.png
 cmd/lc_flowchartshapes.flowchart-merge.png cmd/lc_fontworkshapetype.fontwork-triangle-down.png
+cmd/lc_fontworkgalleryfloater.png cmd/lc_fontwork.png
 cmd/lc_fontworkshapetype.fontwork-circle-pour.png cmd/lc_basicshapes.ring.png
 cmd/lc_fontworkshapetype.fontwork-fade-down.png cmd/lc_basicshapes.trapezoid.png
 cmd/lc_fontworkshapetype.fontwork-triangle-up.png cmd/lc_basicshapes.isosceles-triangle.png
@@ -472,6 +475,7 @@ cmd/lc_rectangletoolbox.png cmd/lc_basicshapes.rectangle.png
 cmd/lc_rect_rounded.png cmd/lc_basicshapes.round-rectangle.png
 cmd/lc_shapeslinemenu.png cmd/lc_line.png
 cmd/lc_shapesmenu.png cmd/lc_basicshapes.round-quadrat.png
+cmd/lc_starshapes.png cmd/lc_starshapes.star5.png
 cmd/lc_symbolshapes.png cmd/lc_symbolshapes.smiley.png
 cmd/lc_square_rounded.png cmd/lc_basicshapes.round-quadrat.png
 
@@ -492,6 +496,7 @@ cmd/sc_flowchartshapes.flowchart-extract.png cmd/sc_basicshapes.isosceles-triang
 cmd/sc_flowchartshapes.flowchart-magnetic-disk.png cmd/sc_basicshapes.can.png
 cmd/sc_flowchartshapes.flowchart-manual-operation.png cmd/sc_basicshapes.trapezoid.png
 cmd/sc_flowchartshapes.flowchart-merge.png cmd/sc_fontworkshapetype.fontwork-triangle-down.png
+cmd/sc_fontworkgalleryfloater.png cmd/sc_fontwork.png
 cmd/sc_fontworkshapetype.fontwork-circle-pour.png cmd/sc_basicshapes.ring.png
 cmd/sc_fontworkshapetype.fontwork-fade-down.png cmd/sc_basicshapes.trapezoid.png
 cmd/sc_fontworkshapetype.fontwork-triangle-up.png cmd/sc_basicshapes.isosceles-triangle.png
@@ -503,6 +508,7 @@ cmd/sc_rectangletoolbox.png cmd/sc_basicshapes.rectangle.png
 cmd/sc_rect_rounded.png cmd/sc_basicshapes.round-rectangle.png
 cmd/sc_shapeslinemenu.png cmd/sc_line.png
 cmd/sc_shapesmenu.png cmd/sc_basicshapes.round-quadrat.png
+cmd/sc_starshapes.png cmd/sc_starshapes.star5.png
 cmd/sc_symbolshapes.png cmd/sc_symbolshapes.smiley.png
 cmd/sc_square_rounded.png cmd/sc_basicshapes.round-quadrat.png
 
@@ -549,8 +555,6 @@ cmd/sc_previewprintoptions.png cmd/sc_printpreview.png
 cmd/sc_sendfax.png cmd/sc_print.png
 
 # Delete
-cmd/32/deleteprintarea.png cmd/32/delete.png
-cmd/32/deleteprintarea.png cmd/32/delete.png
 cmd/32/deleterecord.png cmd/32/delete.png
 cmd/32/dbtabledelete.png cmd/32/delete.png
 cmd/32/dbreportdelete.png cmd/32/delete.png
@@ -558,8 +562,6 @@ cmd/32/dbquerydelete.png cmd/32/delete.png
 cmd/32/dbformdelete.png cmd/32/delete.png
 cmd/32/dbclearquery.png cmd/32/delete.png
 
-cmd/lc_deleteprintarea.png cmd/lc_delete.png
-cmd/lc_deleteprintarea.png cmd/lc_delete.png
 cmd/lc_deleterecord.png cmd/lc_delete.png
 cmd/lc_dbtabledelete.png cmd/lc_delete.png
 cmd/lc_dbreportdelete.png cmd/lc_delete.png
@@ -567,7 +569,6 @@ cmd/lc_dbquerydelete.png cmd/lc_delete.png
 cmd/lc_dbformdelete.png cmd/lc_delete.png
 cmd/lc_dbclearquery.png cmd/lc_delete.png
 
-cmd/sc_deleteprintarea.png cmd/sc_delete.png
 cmd/sc_deleterecord.png cmd/sc_delete.png
 cmd/sc_dbtabledelete.png cmd/sc_delete.png
 cmd/sc_dbreportdelete.png cmd/sc_delete.png
@@ -681,12 +682,15 @@ cmd/sc_formatbulletsmenu.png cmd/sc_defaultbullet.png
 cmd/sc_formatframemenu.png cmd/sc_chainframes.png
 
 # Group
+cmd/32/formatgroup.png cmd/32/group.png
 cmd/32/formatungroup.png cmd/32/ungroup.png
 cmd/32/leaveallgroups.png cmd/32/leavegroup.png
 
+cmd/lc_formatgroup.png cmd/lc_group.png
 cmd/lc_formatungroup.png cmd/lc_ungroup.png
 cmd/lc_leaveallgroups.png cmd/lc_leavegroup.png
 
+cmd/sc_formatgroup.png cmd/sc_group.png
 cmd/sc_formatungroup.png cmd/sc_ungroup.png
 cmd/sc_leaveallgroups.png cmd/sc_leavegroup.png
 
@@ -1523,7 +1527,6 @@ extensions/res/buttonplus.png extensions/source/scanner/plus.png
 
 # formula
 # ==============================================
-formula/res/fapclose.png cmd/sc_open.png
 formula/res/faperror.png cmd/sc_cancel.png
 formula/res/fapok.png cmd/sc_ok.png
 formula/res/fapopen.png cmd/sc_open.png
@@ -1533,7 +1536,7 @@ formula/res/fx.png cmd/sc_dbviewfunctions.png
 # ==============================================
 fpicker/res/fp011.png cmd/sc_firstpage.png
 fpicker/res/fp014.png cmd/sc_open.png
-fpicker/res/fp015.png cmd/sc_starshapes.png
+fpicker/res/fp015.png cmd/sc_starshapes.star5.png
 fpicker/res/fp016.png desktop/res/shared_16.png
 
 # reportdesign
@@ -1553,7 +1556,7 @@ res/baswatr.png cmd/lc_addwatch.png
 res/dir-clos.png cmd/sc_open.png
 res/dir-open.png cmd/sc_open.png
 res/fileopen.png cmd/sc_open.png
-res/foldercl.png cmd/sc_open.png
+res/foldercl.png formula/res/fapclose.png
 res/folderop.png cmd/sc_open.png
 res/fp010.png cmd/sc_open.png
 res/info.png cmd/lc_helpindex.png
@@ -1623,8 +1626,9 @@ res/sc10868.png cmd/sc_graphicfilterinvert.png
 res/sc10869.png cmd/sc_graftransparence.png
 
 res/sc_helperdialog.png cmd/sc_helpindex.png
+res/sx03141.png formula/res/fapclose.png
 res/sx03187.png cmd/sc_inserttable.png
-res/sx03189.png cmd/sc_open.png
+res/sx03189.png formula/res/fapclose.png
 res/sx03202.png cmd/sc_viewdatasourcebrowser.png
 res/sx03256.png cmd/sc_insertplugin.png
 res/sx10594.png cmd/sc_pushbutton.png
@@ -1767,7 +1771,7 @@ startmath/res/im21108.png cmd/lc_outlineformat.png
 svtools/res/back_small.png cmd/sc_prevrecord.png
 svtools/res/back_large.png cmd/lc_prevrecord.png
 svtools/res/ed06.png dbaccess/res/pkey.png
-svtools/res/folder.png cmd/sc_open.png
+svtools/res/folder.png formula/res/fapclose.png
 svtools/res/folderop.png cmd/sc_open.pngf
 
 # svx
@@ -1804,6 +1808,9 @@ svx/res/fontworkalignstretch_16.png cmd/sc_text_marquee.png
 svx/res/fw07.png cmd/sc_alignleft.png
 svx/res/fw08.png cmd/sc_alignhorizontalcenter.png
 svx/res/fw09.png cmd/sc_alignright.png
+svx/res/galdefs.png formula/res/fapclose.png
+svx/res/galnors.png formula/res/fapclose.png
+svx/res/galrdos.png formula/res/fapclose.png
 svx/res/graphic.png cmd/lc_graphic.png
 
 svx/res/id01.png cmd/sc_ok.png
