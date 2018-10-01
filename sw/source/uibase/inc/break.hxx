@@ -45,7 +45,7 @@ class SwBreakDlg : public weld::GenericDialogController
     sal_uInt16      nKind;
     ::boost::optional<sal_uInt16>      oPgNum;
 
-    bool            bHtmlMode;
+    bool const            bHtmlMode;
 
     DECL_LINK(ToggleHdl, weld::ToggleButton&, void);
     DECL_LINK(ChangeHdl, weld::ComboBox&, void);

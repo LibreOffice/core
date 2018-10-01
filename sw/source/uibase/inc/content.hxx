@@ -36,9 +36,9 @@ class SwRangeRedline;
 
 class SwOutlineContent : public SwContent
 {
-    SwOutlineNodes::size_type nOutlinePos;
-    sal_uInt8   nOutlineLevel;
-    bool    bIsMoveable;
+    SwOutlineNodes::size_type const nOutlinePos;
+    sal_uInt8 const   nOutlineLevel;
+    bool const    bIsMoveable;
     public:
         SwOutlineContent(   const SwContentType* pCnt,
                             const OUString& rName,
@@ -57,7 +57,7 @@ class SwOutlineContent : public SwContent
 class SwRegionContent : public SwContent
 {
 
-    sal_uInt8   nRegionLevel;
+    sal_uInt8 const   nRegionLevel;
 
     public:
         SwRegionContent(    const SwContentType* pCnt,
@@ -71,7 +71,7 @@ class SwRegionContent : public SwContent
 
 class SwURLFieldContent : public SwContent
 {
-    OUString sURL;
+    OUString const sURL;
     const SwTextINetFormat* pINetAttr;
 
 public:
@@ -106,7 +106,7 @@ public:
 
 class SwGraphicContent : public SwContent
 {
-    OUString      sLink;
+    OUString const      sLink;
 public:
     SwGraphicContent(const SwContentType* pCnt, const OUString& rName, const OUString& rLink, long nYPos)
         : SwContent( pCnt, rName, nYPos ), sLink( rLink )
@@ -141,11 +141,11 @@ class SwContentType : public SwTypeNumber
     SwWrtShell*         pWrtShell;
     std::unique_ptr<SwContentArr>
                         pMember;            // array for content
-    OUString            sContentTypeName;   // name of content type
-    OUString            sSingleContentTypeName; // name of content type, singular
+    OUString const      sContentTypeName;   // name of content type
+    OUString const      sSingleContentTypeName; // name of content type, singular
     OUString            sTypeToken;         // attachment for URL
     size_t              nMemberCount;       // content count
-    ContentTypeId       nContentType;       // content type's Id
+    ContentTypeId const nContentType;       // content type's Id
     sal_uInt8           nOutlineLevel;
     bool                bDataValid :    1;
     bool                bEdit:          1;  // can this type be edited?

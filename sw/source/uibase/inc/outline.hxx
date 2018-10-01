@@ -53,7 +53,7 @@ class SwOutlineTabDialog final : public SfxTabDialogController
     std::unique_ptr<SwNumRule>  xNumRule;
     SwChapterNumRules*  pChapterNumRules;
 
-    bool                bModified : 1;
+    bool const          bModified : 1;
 
     std::unique_ptr<weld::MenuButton> m_xMenuButton;
 
@@ -78,7 +78,7 @@ public:
 
 class SwOutlineSettingsTabPage : public SfxTabPage
 {
-    OUString            aNoFormatName;
+    OUString const      aNoFormatName;
     OUString            aSaveCollNames[MAXLEVEL];
     SwWrtShell*         pSh;
     SwNumRule*          pNumRule;

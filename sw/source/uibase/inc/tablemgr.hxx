@@ -41,7 +41,7 @@ const char cParaDelim = 0x0a;
 
 class SW_DLLPUBLIC SwTableFUNC
 {
-    SwFrameFormat    *pFormat;
+    SwFrameFormat * const pFormat;
     SwWrtShell  *pSh;
     SwTabCols   aCols;
 

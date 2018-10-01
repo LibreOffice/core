@@ -32,7 +32,7 @@ private:
     css::uno::Reference< css::text::XTextTable > mxTextTable;
     css::uno::Reference< css::table::XTableRows > mxTableRows;
     css::uno::Reference< css::beans::XPropertySet > mxRowProps;
-    sal_Int32 mnIndex;
+    sal_Int32 const mnIndex;
 
 public:
     /// @throws css::uno::RuntimeException

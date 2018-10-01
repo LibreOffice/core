@@ -76,7 +76,7 @@ public:
 // TabPage printer settings additions
 class SwAddPrinterTabPage : public SfxTabPage
 {
-    OUString sNone;
+    OUString const sNone;
     bool bAttrModified;
     bool bPreview;
 
@@ -166,9 +166,9 @@ class SwStdFontTabPage : public SfxTabPage
 
     sal_uInt8 m_nFontGroup; //fontcfg.hxx: FONT_GROUP_[STANDARD|CJK|CTL]
 
-    OUString m_sScriptWestern;
-    OUString m_sScriptAsian;
-    OUString m_sScriptComplex;
+    OUString const m_sScriptWestern;
+    OUString const m_sScriptAsian;
+    OUString const m_sScriptComplex;
 
     DECL_LINK(StandardHdl, Button*, void );
     DECL_LINK(ModifyHdl, Edit&, void );
@@ -277,7 +277,7 @@ class SwMarkPreview : public vcl::Window
     Size m_aInitialSize;
 
     Color m_aBgCol;    // background
-    Color m_aTransCol; // transparency
+    Color const m_aTransCol; // transparency
     Color m_aMarkCol;  // marks
     Color m_aLineCol;  // general lines
     Color m_aShadowCol; // shadow

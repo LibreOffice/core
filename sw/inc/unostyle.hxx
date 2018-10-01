@@ -117,7 +117,7 @@ class SwXAutoStyles :
     public cppu::WeakImplHelper< css::style::XAutoStyles >,
     public SwUnoCollection
 {
-    SwDocShell *m_pDocShell;
+    SwDocShell * const m_pDocShell;
     css::uno::Reference< css::style::XAutoStyleFamily > m_xAutoCharStyles;
     css::uno::Reference< css::style::XAutoStyleFamily > m_xAutoRubyStyles;
     css::uno::Reference< css::style::XAutoStyleFamily > m_xAutoParaStyles;
@@ -146,7 +146,7 @@ class SwXAutoStyleFamily : public cppu::WeakImplHelper< css::style::XAutoStyleFa
     public SwClient
 {
     SwDocShell *m_pDocShell;
-    IStyleAccess::SwAutoStyleFamily m_eFamily;
+    IStyleAccess::SwAutoStyleFamily const m_eFamily;
 
 protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
@@ -192,9 +192,9 @@ class SwXAutoStyle : public cppu::WeakImplHelper
     public SwClient
 {
 private:
-    std::shared_ptr<SfxItemSet>                mpSet;
-    IStyleAccess::SwAutoStyleFamily     meFamily;
-    SwDoc&                              mrDoc;
+    std::shared_ptr<SfxItemSet>            mpSet;
+    IStyleAccess::SwAutoStyleFamily const  meFamily;
+    SwDoc&                                 mrDoc;
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException

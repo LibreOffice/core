@@ -75,7 +75,7 @@ using namespace ::com::sun::star;
 
 class SwShapeDescriptor_Impl
 {
-    bool m_isInReading;
+    bool const m_isInReading;
     std::unique_ptr<SwFormatHoriOrient> m_pHOrient;
     std::unique_ptr<SwFormatVertOrient> m_pVOrient;
     std::unique_ptr<SwFormatAnchor> m_pAnchor;

@@ -32,12 +32,12 @@ class SdrHHCWrapper : public SdrOutliner
     SwView*             pView;
     SdrTextObj*         pTextObj;
     std::unique_ptr<OutlinerView> pOutlView;
-    sal_Int32           nOptions;
+    sal_Int32 const     nOptions;
     sal_uInt16          nDocIndex;
-    LanguageType        nSourceLang;
-    LanguageType        nTargetLang;
+    LanguageType const  nSourceLang;
+    LanguageType const  nTargetLang;
     const vcl::Font*    pTargetFont;
-    bool                bIsInteractive;
+    bool const          bIsInteractive;
 
 public:
     SdrHHCWrapper( SwView* pVw,

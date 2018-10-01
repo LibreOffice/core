@@ -66,7 +66,7 @@ class SwCollectTableLineBoxes
     std::vector<sal_uInt16> aPosArr;
     std::vector<SwTableBox*> m_Boxes;
     SwHistory* pHst;
-    SplitTable_HeadlineOption nMode;
+    SplitTable_HeadlineOption const nMode;
     sal_uInt16 nWidth;
     bool bGetFromTop : 1;
     bool bGetValues : 1;
@@ -113,7 +113,7 @@ void sw_BoxSetSplitBoxFormats( SwTableBox* pBox, SwCollectTableLineBoxes* pSplPa
  */
 struct SwSaveRowSpan
 {
-    sal_uInt16 mnSplitLine; // the line number where the table has been splitted
+    sal_uInt16 const mnSplitLine; // the line number where the table has been splitted
     std::vector< long > mnRowSpans; // the row span attributes in this line
     SwSaveRowSpan( SwTableBoxes& rBoxes, sal_uInt16 nSplitLn );
 };

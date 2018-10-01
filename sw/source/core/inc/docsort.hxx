@@ -100,7 +100,7 @@ private:
 // sort text
 struct SwSortTextElement : public SwSortElement
 {
-    sal_uLong   nOrg;
+    sal_uLong const   nOrg;
     SwNodeIndex aPos;
 
     SwSortTextElement( const SwNodeIndex& rPos );
@@ -112,7 +112,7 @@ struct SwSortTextElement : public SwSortElement
 // sort table
 struct SwSortBoxElement : public SwSortElement
 {
-    sal_uInt16 nRow;
+    sal_uInt16 const nRow;
 
     SwSortBoxElement( sal_uInt16 nRC );
     virtual ~SwSortBoxElement() override;

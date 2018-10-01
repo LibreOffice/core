@@ -743,8 +743,8 @@ static FormTokenType lcl_GetTokenType(const OUString & sToken,
 {
     static struct
     {
-        OUString sTokenStart;
-        sal_Int16 nTokenLength;
+        OUString const sTokenStart;
+        sal_Int16 const nTokenLength;
         FormTokenType eTokenType;
     } const aTokenArr[] = {
         { SwForm::GetFormTab().copy(0, 2),         3, TOKEN_TAB_STOP },

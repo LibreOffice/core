@@ -201,8 +201,8 @@ class SwAttrCheckArr
     sal_uInt16 nArrStart, nArrLen;
     sal_uInt16 nFound, nStackCnt;
     SfxItemSet aCmpSet;
-    bool bNoColls;
-    bool bForward;
+    bool const bNoColls;
+    bool const bForward;
 
 public:
     SwAttrCheckArr( const SfxItemSet& rSet, bool bForward, bool bNoCollections );
@@ -1060,7 +1060,7 @@ bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFnCollection cons
 /// parameters for search for attributes
 struct SwFindParaAttr : public SwFindParas
 {
-    bool bValue;
+    bool const bValue;
     const SfxItemSet *pSet, *pReplSet;
     const i18nutil::SearchOptions2 *pSearchOpt;
     SwCursor& m_rCursor;

@@ -48,7 +48,7 @@ class SW_DLLPUBLIC SwHHCWrapper : public editeng::HangulHanjaConversion
     bool        m_bIsDrawObj;
     bool        m_bIsOtherContent;
     bool        m_bStartChk;
-    bool        m_bIsSelection;       ///< true if only the selected text should be converted
+    bool const  m_bIsSelection;       ///< true if only the selected text should be converted
     bool        m_bStartDone;
     bool        m_bEndDone;
 

@@ -76,18 +76,18 @@ class SW_DLLPUBLIC SwSpellPopup
 {
     VclBuilder m_aBuilder;
     VclPtr<PopupMenu> m_xPopupMenu;
-    sal_uInt16 m_nIgnoreWordId;
-    sal_uInt16 m_nAddMenuId;
-    sal_uInt16 m_nAddId;
-    sal_uInt16 m_nSpellDialogId;
-    sal_uInt16 m_nCorrectMenuId;
-    sal_uInt16 m_nCorrectDialogId;
-    sal_uInt16 m_nLangSelectionMenuId;
-    sal_uInt16 m_nLangParaMenuId;
-    sal_uInt16 m_nRedlineAcceptId;
-    sal_uInt16 m_nRedlineRejectId;
-    sal_uInt16 m_nRedlineNextId;
-    sal_uInt16 m_nRedlinePrevId;
+    sal_uInt16 const m_nIgnoreWordId;
+    sal_uInt16 const m_nAddMenuId;
+    sal_uInt16 const m_nAddId;
+    sal_uInt16 const m_nSpellDialogId;
+    sal_uInt16 const m_nCorrectMenuId;
+    sal_uInt16 const m_nCorrectDialogId;
+    sal_uInt16 const m_nLangSelectionMenuId;
+    sal_uInt16 const m_nLangParaMenuId;
+    sal_uInt16 const m_nRedlineAcceptId;
+    sal_uInt16 const m_nRedlineRejectId;
+    sal_uInt16 const m_nRedlineNextId;
+    sal_uInt16 const m_nRedlinePrevId;
     SwWrtShell* m_pSh;
     css::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionary >  >     m_aDics;
     css::uno::Reference< css::linguistic2::XSpellAlternatives > m_xSpellAlt;
@@ -103,8 +103,8 @@ class SW_DLLPUBLIC SwSpellPopup
     std::map< sal_Int16, OUString > m_aLangTable_Text;
     std::map< sal_Int16, OUString > m_aLangTable_Paragraph;
 
-    OUString  m_aDicNameSingle;
-    bool      m_bGrammarResults;    // show grammar results? Or show spellcheck results?
+    OUString   m_aDicNameSingle;
+    bool const m_bGrammarResults;    // show grammar results? Or show spellcheck results?
 
     static void fillLangPopupMenu( PopupMenu *pPopupMenu, sal_uInt16 nLangStart,
             const css::uno::Sequence< OUString >& aSeq, SwWrtShell* pWrtSh,

@@ -1329,7 +1329,7 @@ void SwTOXBaseSection::UpdateAuthorities( const SwTOXInternational& rIntl )
 static SwTOOElements lcl_IsSOObject( const SvGlobalName& rFactoryNm )
 {
     static const struct SoObjType {
-        SwTOOElements nFlag;
+        SwTOOElements const nFlag;
         // GlobalNameId
         struct GlobalNameIds {
             sal_uInt32 n1;

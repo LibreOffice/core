@@ -107,7 +107,7 @@ class SwLabCfgItem : public utl::ConfigItem
 {
 private:
     SwLabItem   aItem;
-    bool    bIsLabel;
+    bool const  bIsLabel;
 
     css::uno::Sequence<OUString> GetPropertyNames();
 

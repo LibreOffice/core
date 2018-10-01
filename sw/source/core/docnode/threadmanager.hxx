@@ -128,7 +128,7 @@ class ThreadManager final
 
         struct ThreadPred
         {
-            oslInterlockedCount mnThreadID;
+            oslInterlockedCount const mnThreadID;
             explicit ThreadPred( oslInterlockedCount nThreadID )
                 : mnThreadID( nThreadID )
             {}

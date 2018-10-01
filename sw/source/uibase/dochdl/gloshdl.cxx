@@ -64,9 +64,9 @@ const short RET_EDIT = 100;
 
 struct TextBlockInfo_Impl
 {
-    OUString sTitle;
-    OUString sLongName;
-    OUString sGroupName;
+    OUString const sTitle;
+    OUString const sLongName;
+    OUString const sGroupName;
     TextBlockInfo_Impl(OUString const& rTitle, OUString const& rLongName, OUString const& rGroupName)
         : sTitle(rTitle), sLongName(rLongName), sGroupName(rGroupName) {}
 };

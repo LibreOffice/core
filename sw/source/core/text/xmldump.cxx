@@ -30,7 +30,7 @@
 class XmlPortionDumper:public SwPortionHandler
 {
   private:
-    xmlTextWriterPtr writer;
+    xmlTextWriterPtr const writer;
     TextFrameIndex ofs;
     const OUString& m_rText;
     OUString m_aLine;

@@ -89,12 +89,12 @@ public:
 
 class SwAutoCorrExceptWord
 {
-    OUString m_sWord;
-    ACFlags m_nFlags;
-    sal_uLong m_nNode;
-    sal_Int32 m_nContent;
-    sal_Unicode m_cChar;
-    LanguageType m_eLanguage;
+    OUString const m_sWord;
+    ACFlags const m_nFlags;
+    sal_uLong const m_nNode;
+    sal_Int32 const m_nContent;
+    sal_Unicode const m_cChar;
+    LanguageType const m_eLanguage;
     bool m_bDeleted;
 
 public:

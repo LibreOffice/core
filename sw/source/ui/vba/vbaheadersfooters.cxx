@@ -32,7 +32,7 @@ private:
     uno::Reference< uno::XComponentContext > mxContext;
     uno::Reference< frame::XModel > mxModel;
     uno::Reference< beans::XPropertySet > mxPageStyleProps;
-    bool mbHeader;
+    bool const mbHeader;
 
 public:
     HeadersFootersIndexAccess( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< beans::XPropertySet >& xPageStyleProps, bool bHeader ) : mxParent( xParent ), mxContext( xContext ), mxModel( xModel ), mxPageStyleProps( xPageStyleProps ), mbHeader( bHeader ) {}

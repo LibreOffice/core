@@ -41,7 +41,7 @@ void SwLabDlg::UpdateFieldInformation(uno::Reference< frame::XModel > const & xM
 
     static const struct SwLabItemMap {
         const char* pName;
-        OUString SwLabItem:: *pValue;
+        OUString SwLabItem:: * const pValue;
     }  aArr[] = {
         { "BC_PRIV_FIRSTNAME"  , &SwLabItem::m_aPrivFirstName },
         { "BC_PRIV_NAME"       , &SwLabItem::m_aPrivName },

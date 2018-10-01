@@ -285,7 +285,7 @@ namespace sw
             void InsertTable(SwTableNode &rTableNode, SwPaM &rPaM);
             explicit InsertedTablesManager(const SwDoc &rDoc);
         private:
-            bool mbHasRoot;
+            bool const mbHasRoot;
             TableMap maTables;
         };
 

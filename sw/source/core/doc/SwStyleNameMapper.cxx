@@ -64,7 +64,7 @@ NameToIdHash    *SwStyleNameMapper::s_pParaUIMap = nullptr,
 // SwTableEntry so we can pass the length to the String CTOR
 struct SwTableEntry
 {
-    sal_uInt8 nLength;
+    sal_uInt8 const nLength;
     const sal_Char *pChar;
 };
 

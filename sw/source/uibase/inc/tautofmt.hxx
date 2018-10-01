@@ -37,19 +37,19 @@ enum AutoFormatLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
 
 class SwAutoFormatDlg : public weld::GenericDialogController
 {
-    OUString        m_aStrTitle;
-    OUString        m_aStrLabel;
-    OUString        m_aStrClose;
-    OUString        m_aStrDelTitle;
-    OUString        m_aStrDelMsg;
-    OUString        m_aStrRenameTitle;
-    OUString        m_aStrInvalidFormat;
+    OUString const  m_aStrTitle;
+    OUString const  m_aStrLabel;
+    OUString const  m_aStrClose;
+    OUString const  m_aStrDelTitle;
+    OUString const  m_aStrDelMsg;
+    OUString const  m_aStrRenameTitle;
+    OUString const  m_aStrInvalidFormat;
 
     SwWrtShell*     m_pShell;
     sal_uInt8       m_nIndex;
     sal_uInt8       m_nDfltStylePos;
     bool            m_bCoreDataChanged : 1;
-    bool            m_bSetAutoFormat : 1;
+    bool const      m_bSetAutoFormat : 1;
 
     AutoFormatPreview m_aWndPreview;
     std::unique_ptr<SwTableAutoFormatTable> m_xTableTable;

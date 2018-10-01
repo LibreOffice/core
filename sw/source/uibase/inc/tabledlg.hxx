@@ -30,7 +30,7 @@ struct TColumn;
 // table dialog
 class SwTableTabDlg : public SfxTabDialogController
 {
-    SwWrtShell* pShell;
+    SwWrtShell* const pShell;
 
     virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
 public:

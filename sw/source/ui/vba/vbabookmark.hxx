@@ -31,7 +31,7 @@ class SwVbaBookmark : public SwVbaBookmark_BASE
 private:
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::text::XTextContent > mxBookmark;
-    OUString maBookmarkName;
+    OUString const maBookmarkName;
     bool mbValid;
 
 private:

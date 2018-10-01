@@ -37,7 +37,7 @@ public:
 
 class SwHyphStrPortion : public SwHyphPortion
 {
-    OUString aExpand;
+    OUString const aExpand;
 public:
     explicit SwHyphStrPortion(const OUString &rStr)
         : aExpand(rStr + "-")

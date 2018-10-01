@@ -217,7 +217,7 @@ public:
 
 class SwBidiPortion : public SwMultiPortion
 {
-    sal_uInt8 nLevel;
+    sal_uInt8 const nLevel;
 
 public:
     SwBidiPortion(TextFrameIndex nEnd, sal_uInt8 nLv);

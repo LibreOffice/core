@@ -532,8 +532,8 @@ void SwViewOption::SetAppearanceFlag(ViewOptFlags nFlag, bool bSet, bool bSaveIn
         svtools::EditableColorConfig aEditableConfig;
         struct FlagToConfig_Impl
         {
-            ViewOptFlags                nFlag;
-            svtools::ColorConfigEntry   eEntry;
+            ViewOptFlags const                nFlag;
+            svtools::ColorConfigEntry const   eEntry;
         };
         static const FlagToConfig_Impl aFlags[] =
         {

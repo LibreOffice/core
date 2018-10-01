@@ -41,7 +41,7 @@ struct SwFillCursorPos
     sal_uInt16 nSpaceOnlyCnt;   ///< number of spaces to insert ("only spaces, no tabs" mode)
     sal_uInt16 nColumnCnt;      ///< number of necessary column breaks
     sal_Int16  eOrient;      ///< paragraph alignment
-    SwFillMode eMode;       ///< desired fill-up rule
+    SwFillMode const eMode; ///< desired fill-up rule
     SwFillCursorPos( SwFillMode eMd ) :
         nParaCnt( 0 ), nTabCnt( 0 ), nSpaceCnt( 0 ), nSpaceOnlyCnt(0), nColumnCnt( 0 ),
         eOrient( css::text::HoriOrientation::NONE ), eMode( eMd )

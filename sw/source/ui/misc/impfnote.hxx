@@ -33,7 +33,7 @@ class SwEndNoteOptionPage : public SfxTabPage
     OUString aNumChapter;
     SwWrtShell *pSh;
     bool    bPosDoc;
-    bool    bEndNote;
+    bool const bEndNote;
 
     std::unique_ptr<SwNumberingTypeListBox> m_xNumViewBox;
     std::unique_ptr<weld::Label> m_xOffsetLbl;

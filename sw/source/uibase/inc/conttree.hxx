@@ -73,21 +73,21 @@ class SwContentTree final
     , public SfxListener
 {
     VclPtr<SwNavigationPI> m_xDialog;
-    OUString            m_sSpace;
+    OUString const      m_sSpace;
     AutoTimer           m_aUpdTimer;
 
     o3tl::enumarray<ContentTypeId,SwContentType*>  m_aActiveContentArr;
     o3tl::enumarray<ContentTypeId,SwContentType*>  m_aHiddenContentArr;
     OUString            m_aContextStrings[CONTEXT_COUNT + 1];
-    OUString            m_sRemoveIdx;
-    OUString            m_sUpdateIdx;
-    OUString            m_sUnprotTable;
-    OUString            m_sRename;
-    OUString            m_sReadonlyIdx;
-    OUString            m_sInvisible;
-    OUString            m_sPostItShow;
-    OUString            m_sPostItHide;
-    OUString            m_sPostItDelete;
+    OUString const      m_sRemoveIdx;
+    OUString const      m_sUpdateIdx;
+    OUString const      m_sUnprotTable;
+    OUString const      m_sRename;
+    OUString const      m_sReadonlyIdx;
+    OUString const      m_sInvisible;
+    OUString const      m_sPostItShow;
+    OUString const      m_sPostItHide;
+    OUString const      m_sPostItDelete;
 
     SwWrtShell*         m_pHiddenShell;   // dropped Doc
     SwWrtShell*         m_pActiveShell;   // the active or a const. open view

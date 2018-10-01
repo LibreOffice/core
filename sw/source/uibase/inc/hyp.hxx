@@ -32,7 +32,7 @@ private:
     SwView* pView;
     sal_uInt16      nPageCount;     // page count for progress view
     sal_uInt16      nPageStart;     // 1st checked page
-    bool            bInSelection : 1; // separating selected text
+    bool const      bInSelection : 1; // separating selected text
     bool            bAutomatic : 1; // insert separators without further inquiry
     bool            bInfoBox : 1;   // display info-box when ending
 

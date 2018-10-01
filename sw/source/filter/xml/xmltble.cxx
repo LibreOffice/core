@@ -485,7 +485,7 @@ class SwXMLTableInfo_Impl
     const SwTable *m_pTable;
     Reference<XTextSection> m_xBaseSection;
     bool m_bBaseSectionValid;
-    sal_uInt32 m_nPrefix;
+    sal_uInt32 const m_nPrefix;
 
 public:
 

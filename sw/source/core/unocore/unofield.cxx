@@ -131,8 +131,8 @@ static const sal_uInt16 aDocInfoSubTypeFromService[] =
 
 struct ServiceIdResId
 {
-    SwFieldIds    nResId;
-    SwServiceType nServiceId;
+    SwFieldIds const    nResId;
+    SwServiceType const nServiceId;
 };
 
 static const ServiceIdResId aServiceToRes[] =
@@ -424,7 +424,7 @@ public:
     SwDoc*          m_pDoc;
     SwFieldType* m_pType;
 
-    SwFieldIds      m_nResTypeId;
+    SwFieldIds const      m_nResTypeId;
 
     OUString        m_sParam1;  // Content / Database / NumberingSeparator
     OUString        m_sParam2;  // -    /DataTablename
@@ -1135,7 +1135,7 @@ public:
     // required to access field master of not yet inserted fields
     SwClient            m_FieldTypeClient;
     bool                m_bCallUpdate;
-    SwServiceType       m_nServiceId;
+    SwServiceType const       m_nServiceId;
     OUString            m_sTypeName;
     std::unique_ptr<SwFieldProperties_Impl> m_pProps;
 

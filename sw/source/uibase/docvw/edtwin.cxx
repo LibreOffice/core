@@ -217,7 +217,7 @@ static bool lcl_goIntoTextBox(SwEditWin& rEditWin, SwWrtShell& rSh)
 class SwAnchorMarker
 {
     SdrHdl* pHdl;
-    Point aHdlPos;
+    Point const aHdlPos;
     Point aLastPos;
     bool bTopRightHandle;
 public:

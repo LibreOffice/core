@@ -54,7 +54,7 @@ class SW_DLLPUBLIC SwFlyFrameAttrMgr
     SwWrtShell* m_pOwnSh;
 
     bool    m_bAbsPos,
-                m_bNewFrame;
+            m_bNewFrame;
     bool    m_bIsInVertical;
     // #mongolianlayout#
     bool    m_bIsInVerticalL2R;

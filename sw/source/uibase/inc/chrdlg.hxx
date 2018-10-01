@@ -34,7 +34,7 @@ class SvxMacroItem;
 class SwCharDlg : public SfxTabDialogController
 {
     SwView&   m_rView;
-    SwCharDlgMode m_nDialogMode;
+    SwCharDlgMode const m_nDialogMode;
 
 public:
     SwCharDlg(weld::Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet,

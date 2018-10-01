@@ -87,7 +87,7 @@ class SwFntObj : public SwCacheObj
     sal_uInt16 m_nPrtAscent;
     sal_uInt16 m_nScrHeight;
     sal_uInt16 m_nPrtHeight;
-    sal_uInt16 m_nPropWidth;
+    sal_uInt16 const m_nPropWidth;
     sal_uInt16 m_nZoom;
     bool m_bSymbol : 1;
     bool m_bPaintBlank : 1;

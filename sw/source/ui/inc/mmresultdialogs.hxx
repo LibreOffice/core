@@ -117,7 +117,7 @@ class SwMMResultEmailDialog : public SfxModalDialog
 
     VclPtr<Button>         m_pOKButton;
 
-    OUString        m_sConfigureMail;
+    OUString const  m_sConfigureMail;
 
     OUString        m_sCC;
     OUString        m_sBCC;
@@ -168,19 +168,19 @@ class SwSendMailDialog : public Dialog
     VclPtr<PushButton>              m_pStop;
     VclPtr<PushButton>              m_pClose;
 
-    OUString                m_sContinue;
-    OUString                m_sStop;
-    OUString                m_sTransferStatus;
-    OUString                m_sErrorStatus;
-    OUString                m_sSendingTo;
-    OUString                m_sCompleted;
-    OUString                m_sFailed;
+    OUString const          m_sContinue;
+    OUString const          m_sStop;
+    OUString const          m_sTransferStatus;
+    OUString const          m_sErrorStatus;
+    OUString const          m_sSendingTo;
+    OUString const          m_sCompleted;
+    OUString const          m_sFailed;
 
     bool                    m_bCancel;
     bool                    m_bDestructionEnabled;
 
     std::unique_ptr<SwSendMailDialog_Impl> m_pImpl;
-    SwMailMergeConfigItem*  m_pConfigItem;
+    SwMailMergeConfigItem* const  m_pConfigItem;
     sal_Int32               m_nExpectedCount;
     sal_Int32               m_nSendCount;
     sal_Int32               m_nErrorCount;

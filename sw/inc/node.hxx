@@ -81,7 +81,7 @@ class SW_DLLPUBLIC SwNode
 {
     friend class SwNodes;
 
-    SwNodeType m_nNodeType;
+    SwNodeType const m_nNodeType;
 
     /// For text nodes: level of auto format. Was put here because we had still free bits.
     sal_uInt8 m_nAFormatNumLvl : 3;
@@ -100,7 +100,7 @@ private:
 
 #ifdef DBG_UTIL
     static long s_nSerial;
-    long m_nSerial;
+    long const m_nSerial;
 #endif
 
     /// all SwFrameFormat that are anchored at the node
@@ -307,7 +307,7 @@ class SAL_DLLPUBLIC_RTTI SwStartNode: public SwNode
     friend class SwEndNode;     ///< to set the theEndOfSection !!
 
     SwEndNode* m_pEndOfSection;
-    SwStartNodeType m_eStartNodeType;
+    SwStartNodeType const m_eStartNodeType;
 
     /// for the initial StartNode
     SwStartNode( SwNodes& rNodes, sal_uLong nPos );

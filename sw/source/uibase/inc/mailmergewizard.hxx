@@ -33,18 +33,18 @@ class SwMailMergeConfigItem;
 
 class SwMailMergeWizard : public ::svt::RoadmapWizard
 {
-    SwView*                 m_pSwView;
+    SwView* const           m_pSwView;
     OUString                sDocumentURL;
     bool                    m_bDocumentLoad;
 
     std::shared_ptr<SwMailMergeConfigItem> m_xConfigItem;
 
-    OUString                m_sStarting;
-    OUString                m_sDocumentType;
-    OUString                m_sAddressBlock;
-    OUString                m_sAddressList;
-    OUString                m_sGreetingsLine;
-    OUString                m_sLayout;
+    OUString const          m_sStarting;
+    OUString const          m_sDocumentType;
+    OUString const          m_sAddressBlock;
+    OUString const          m_sAddressList;
+    OUString const          m_sGreetingsLine;
+    OUString const          m_sLayout;
 
     sal_uInt16              m_nRestartPage;
 
