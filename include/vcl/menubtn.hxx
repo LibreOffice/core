@@ -38,6 +38,7 @@ private:
     std::unique_ptr<Timer> mpMenuTimer;
     VclPtr<PopupMenu> mpMenu;
     VclPtr<Window>  mpFloatingWindow;
+    OString         msCurItemIdent;
     sal_uInt16      mnCurItemId;
     bool            mbDelayMenu;
     Link<MenuButton*,void> maActivateHdl;
@@ -81,7 +82,7 @@ public:
     void            SetPopover(Window* pWindow);
 
     sal_uInt16      GetCurItemId() const { return mnCurItemId; }
-    OString         GetCurItemIdent() const;
+    OString         GetCurItemIdent() const { return msCurItemIdent; }
 
     void            SetActivateHdl( const Link<MenuButton *, void>& rLink ) { maActivateHdl = rLink; }
     void            SetSelectHdl( const Link<MenuButton *, void>& rLink ) { maSelectHdl = rLink; }

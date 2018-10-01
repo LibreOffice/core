@@ -364,6 +364,7 @@ void Menu::Select()
             if ( pStartMenu && ( pStartMenu != this ) )
             {
                 pStartMenu->nSelectedId = nSelectedId;
+                pStartMenu->sSelectedIdent = sSelectedIdent;
                 pStartMenu->aSelectHdl.Call( this );
             }
         }
@@ -690,21 +691,9 @@ MenuItemType Menu::GetItemType( sal_uInt16 nPos ) const
         return MenuItemType::DONTKNOW;
 }
 
-OString Menu::GetCurItemIdent() const
-{
-    const MenuItemData* pData = pItemList->GetData(nSelectedId);
-    return pData ? pData->sIdent : OString();
-}
-
 OString Menu::GetItemIdent(sal_uInt16 nId) const
 {
     const MenuItemData* pData = pItemList->GetData(nId);
-    return pData ? pData->sIdent : OString();
-}
-
-OString Menu::GetItemIdentFromSubMenu(sal_uInt16 nId) const
-{
-    const MenuItemData* pData = pItemList->GetDataFromSubMenu(nId);
     return pData ? pData->sIdent : OString();
 }
 
@@ -2132,13 +2121,20 @@ void Menu::ImplCallHighlight(sal_uInt16 nItem)
     ImplMenuDelData aDelData( this );
 
     nSelectedId = 0;
+    sSelectedIdent.clear();
     MenuItemData* pData = pItemList->GetDataFromPos(nItem);
-    if ( pData )
+    if (pData)
+    {
         nSelectedId = pData->nId;
+        sSelectedIdent = pData->sIdent;
+    }
     ImplCallEventListeners( VclEventId::MenuHighlight, GetItemPos( GetCurItemId() ) );
 
     if( !aDelData.isDeleted() )
+    {
         nSelectedId = 0;
+        sSelectedIdent.clear();
+    }
 }
 
 IMPL_LINK_NOARG(Menu, ImplCallSelect, void*, void)
@@ -2620,6 +2616,7 @@ bool MenuBar::HandleMenuHighlightEvent( Menu *pMenu, sal_uInt16 nHighlightEventI
         {
             pMenu->mnHighlightedItemPos = pMenu->GetItemPos( nHighlightEventId );
             pMenu->nSelectedId = nHighlightEventId;
+            pMenu->sSelectedIdent = pMenu->GetItemIdent( nHighlightEventId );
             pMenu->pStartedFrom = const_cast<MenuBar*>(this);
             pMenu->ImplCallHighlight( pMenu->mnHighlightedItemPos );
         }
@@ -2636,6 +2633,7 @@ bool Menu::HandleMenuCommandEvent( Menu *pMenu, sal_uInt16 nCommandEventId ) con
     if( pMenu )
     {
         pMenu->nSelectedId = nCommandEventId;
+        pMenu->sSelectedIdent = pMenu->GetItemIdent(nCommandEventId);
         pMenu->pStartedFrom = const_cast<Menu*>(this);
         pMenu->ImplSelect();
         return true;
@@ -2762,6 +2760,7 @@ void PopupMenu::SelectItem(sal_uInt16 nId)
 void PopupMenu::SetSelectedEntry( sal_uInt16 nId )
 {
     nSelectedId = nId;
+    sSelectedIdent = GetItemIdent(nId);
 }
 
 sal_uInt16 PopupMenu::Execute( vcl::Window* pExecWindow, const Point& rPopupPos )
@@ -2825,6 +2824,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
 
     pStartedFrom = pSFrom;
     nSelectedId = 0;
+    sSelectedIdent.clear();
     bCanceled = false;
 
     VclPtr<vcl::Window> xFocusId;
