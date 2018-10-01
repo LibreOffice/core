@@ -198,14 +198,14 @@ long BorderWidthImpl::GuessWidth( long nLine1, long nLine2, long nGap )
 class ImpLineListData
 {
 private:
-    BorderWidthImpl m_aWidthImpl;
+    BorderWidthImpl const m_aWidthImpl;
 
-    Color  ( *m_pColor1Fn )( Color );
-    Color  ( *m_pColor2Fn )( Color );
-    Color  ( *m_pColorDistFn )( Color, Color );
+    Color  ( * const m_pColor1Fn )( Color );
+    Color  ( * const m_pColor2Fn )( Color );
+    Color  ( * const m_pColorDistFn )( Color, Color );
 
-    long   m_nMinWidth;
-    SvxBorderLineStyle m_nStyle;
+    long const   m_nMinWidth;
+    SvxBorderLineStyle const m_nStyle;
 
 public:
     ImpLineListData( BorderWidthImpl aWidthImpl, SvxBorderLineStyle nStyle,
@@ -358,7 +358,7 @@ namespace {
 
 class ApplyScale
 {
-    double mfScale;
+    double const mfScale;
 public:
     explicit ApplyScale( double fScale ) : mfScale(fScale) {}
     void operator() ( double& rVal )

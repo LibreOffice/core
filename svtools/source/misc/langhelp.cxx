@@ -68,7 +68,7 @@ static std::unique_ptr<Idle> xLangpackInstaller;
 
 class InstallLangpack : public Idle
 {
-    std::vector<OUString> m_aPackages;
+    std::vector<OUString> const m_aPackages;
 public:
     explicit InstallLangpack(const std::vector<OUString>& rPackages)
         : Idle("install langpack")

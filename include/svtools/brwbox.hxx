@@ -123,10 +123,10 @@ namespace o3tl
 class BrowseEvent
 {
     VclPtr<vcl::Window>     pWin;
-    long                    nRow;
-    tools::Rectangle               aRect;
-    sal_uInt16              nCol;
-    sal_uInt16              nColId;
+    long const                    nRow;
+    tools::Rectangle const        aRect;
+    sal_uInt16 const              nCol;
+    sal_uInt16 const              nColId;
 
 public:
                         BrowseEvent( vcl::Window* pWindow,
@@ -249,9 +249,9 @@ private:
     // fdo#83943, detect if making the cursor position visible is impossible to achieve
     struct CursorMoveAttempt
     {
-        long m_nCol;
-        long m_nRow;
-        bool m_bScrolledToReachCell;
+        long const m_nCol;
+        long const m_nRow;
+        bool const m_bScrolledToReachCell;
         CursorMoveAttempt(long nCol, long nRow, bool bScrolledToReachCell)
             : m_nCol(nCol)
             , m_nRow(nRow)

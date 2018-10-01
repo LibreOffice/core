@@ -122,8 +122,8 @@ namespace svt
     class AssigmentTransientData : public IAssigmentData
     {
     protected:
-        OUString             m_sDSName;
-        OUString             m_sTableName;
+        OUString const       m_sDSName;
+        OUString const       m_sTableName;
         MapString2String     m_aAliases;
 
     public:
@@ -431,7 +431,7 @@ void AssignmentPersistentData::ImplCommit()
         /// indicates that we've an odd field number. This member is for efficiency only, it's redundant.
         bool        bOddFieldNumber : 1;
         /// indicates that we're working with the real persistent configuration
-        bool        bWorkingPersistent : 1;
+        bool const      bWorkingPersistent : 1;
 
         /// the strings to use as labels for the field selection listboxes
         std::vector<OUString>     aFieldLabels;

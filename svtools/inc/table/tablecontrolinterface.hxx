@@ -91,8 +91,8 @@ namespace svt { namespace table
 
     struct TableCell
     {
-        ColPos          nColumn;
-        RowPos          nRow;
+        ColPos const    nColumn;
+        RowPos const    nRow;
         TableCellArea   eArea;
 
         TableCell( ColPos const i_column, RowPos const i_row )

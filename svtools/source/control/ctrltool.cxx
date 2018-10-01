@@ -105,7 +105,7 @@ class ImplFontListNameInfo
     friend class FontList;
 
 private:
-    OUString                maSearchName;
+    OUString const            maSearchName;
     ImplFontListFontMetric*   mpFirst;
     FontListFontNameType    mnType;
 

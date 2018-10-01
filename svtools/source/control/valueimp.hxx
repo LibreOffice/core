@@ -337,7 +337,7 @@ private:
         css::accessibility::XAccessibleEventListener > >                mxEventListeners;
     ::osl::Mutex                                                        maMutex;
     ValueSetItem*                                                       mpParent;
-    bool                                                                mbIsTransientChildrenDisabled;
+    bool const                                                          mbIsTransientChildrenDisabled;
 
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
@@ -400,7 +400,7 @@ private:
         css::accessibility::XAccessibleEventListener > >                mxEventListeners;
     ::osl::Mutex                                                        maMutex;
     SvtValueSetItem*                                                    mpParent;
-    bool                                                                mbIsTransientChildrenDisabled;
+    bool const                                                          mbIsTransientChildrenDisabled;
 
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 

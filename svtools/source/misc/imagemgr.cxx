@@ -51,9 +51,9 @@
 struct SvtExtensionResIdMapping_Impl
 {
     const char* _pExt;
-    bool        _bExt;
+    bool const        _bExt;
     const char* pStrId;
-    SvImageId   _nImgId;
+    SvImageId const   _nImgId;
 };
 
 static SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =

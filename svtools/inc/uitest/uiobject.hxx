@@ -60,7 +60,7 @@ private:
 
     VclPtr<SvTreeListBox> mxTreeList;
 
-    SvTreeListEntry* mpEntry;
+    SvTreeListEntry* const mpEntry;
 };
 
 class SimpleTableUIObject : public TreeListUIObject

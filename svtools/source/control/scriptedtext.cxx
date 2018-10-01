@@ -38,7 +38,7 @@ private:
     vcl::Font                   maLatinFont;        /// The font for latin text portions.
     vcl::Font                   maAsianFont;        /// The font for asian text portions.
     vcl::Font                   maCmplxFont;        /// The font for complex text portions.
-    vcl::Font                   maDefltFont;        /// The default font of the output device.
+    vcl::Font const             maDefltFont;        /// The default font of the output device.
     OUString                    maText;             /// The text.
 
     vector< sal_Int32 >         maPosVec;           /// The start position of each text portion.

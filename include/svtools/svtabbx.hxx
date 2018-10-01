@@ -36,9 +36,9 @@ enum SvTabJustify
 
 struct TabListBoxEventData
 {
-    SvTreeListEntry*    m_pEntry;
-    sal_uInt16          m_nColumn;
-    OUString            m_sOldText;
+    SvTreeListEntry* const    m_pEntry;
+    sal_uInt16 const          m_nColumn;
+    OUString const            m_sOldText;
 
     TabListBoxEventData( SvTreeListEntry* pEntry, sal_uInt16 nColumn, const OUString& rOldText ) :
         m_pEntry( pEntry ), m_nColumn( nColumn ), m_sOldText( rOldText ) {}

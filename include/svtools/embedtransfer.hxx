@@ -32,7 +32,7 @@ private:
 
     css::uno::Reference< css::embed::XEmbeddedObject > m_xObj;
     std::unique_ptr<Graphic> m_pGraphic;
-    sal_Int64 m_nAspect;
+    sal_Int64 const m_nAspect;
 
     OUString maParentShellID;
 

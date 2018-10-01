@@ -99,17 +99,17 @@ private:
 
     VclPtr<OKButton>           mpBtnOK;
 
-    OUString            msEstimatedSizePix1;
-    OUString            msEstimatedSizePix2;
-    OUString            msEstimatedSizeVec;
+    OUString const            msEstimatedSizePix1;
+    OUString const            msEstimatedSizePix2;
+    OUString const            msEstimatedSizeVec;
 
-    OUString            ms1BitTreshold;
-    OUString            ms1BitDithered;
-    OUString            ms4BitGrayscale;
-    OUString            ms4BitColorPalette;
-    OUString            ms8BitGrayscale;
-    OUString            ms8BitColorPalette;
-    OUString            ms24BitColor;
+    OUString const            ms1BitTreshold;
+    OUString const            ms1BitDithered;
+    OUString const            ms4BitGrayscale;
+    OUString const            ms4BitColorPalette;
+    OUString const            ms8BitGrayscale;
+    OUString const            ms8BitColorPalette;
+    OUString const            ms24BitColor;
 
     std::unique_ptr<FilterConfigItem> mpOptionsItem;
     std::unique_ptr<FilterConfigItem> mpFilterOptionsItem;
@@ -124,8 +124,8 @@ private:
     css::awt::Size      maOriginalSize;     // the original graphic size in 1/100mm
     css::awt::Size      maSize;             // for vector graphics it always contains the logical size in 1/100mm
 
-    bool                mbIsPixelFormat;
-    bool                mbExportSelection;
+    bool const                mbIsPixelFormat;
+    bool const                mbExportSelection;
     bool                mbGraphicsSource;   // whether source document is graphics (Draw, Impress) or not (Calc, Writer)
 
     sal_Int32           mnInitialResolutionUnit;

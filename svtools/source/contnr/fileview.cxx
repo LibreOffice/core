@@ -122,7 +122,7 @@ namespace
     class CallbackTimer : public ::salhelper::Timer
     {
     protected:
-        SvtFileView_Impl* m_pTimeoutHandler;
+        SvtFileView_Impl* const m_pTimeoutHandler;
 
     public:
         explicit CallbackTimer( SvtFileView_Impl* _pHandler ) : m_pTimeoutHandler( _pHandler ) { }
@@ -171,14 +171,14 @@ private:
     SvtFileView_Impl*       mpParent;
     Timer                   maResetQuickSearch;
     OUString                maQuickSearchText;
-    OUString                msAccessibleDescText;
-    OUString                msFolder;
-    OUString                msFile;
+    OUString const          msAccessibleDescText;
+    OUString const          msFolder;
+    OUString const          msFile;
     sal_uInt32              mnSearchIndex;
     bool                    mbResizeDisabled        : 1;
     bool                    mbAutoResize            : 1;
     bool                    mbEnableDelete          : 1;
-    bool                    mbShowHeader;
+    bool const              mbShowHeader;
 
     void            DeleteEntries();
     void            DoQuickSearch( sal_Unicode rChar );
@@ -218,7 +218,7 @@ class NameTranslationList
 protected:
     INetURLObject               maTransFile;    // URL of file with translation entries
     /// for future purposes when dealing with a set of cached NameTranslationLists
-    OUString m_HashedURL;
+    OUString const m_HashedURL;
 private:
     std::unordered_map<OUString, OUString> m_Translation;
     const OUString              maTransFileName;
@@ -332,16 +332,16 @@ public:
     std::unique_ptr<NameTranslator_Impl> mpNameTrans;
     sal_uInt16              mnSortColumn;
     bool                    mbAscending     : 1;
-    bool                    mbOnlyFolder    : 1;
+    bool const              mbOnlyFolder    : 1;
     bool                    mbReplaceNames  : 1;    // translate folder names or display doc-title instead of file name
     sal_Int16               mnSuspendSelectCallback : 1;
     bool                    mbIsFirstResort : 1;
 
-    IntlWrapper             aIntlWrapper;
+    IntlWrapper const       aIntlWrapper;
 
     OUString                maViewURL;
     OUString                maCurrentFilter;
-    Image                   maFolderImage;
+    Image const             maFolderImage;
     Link<SvtFileView*,void> maOpenDoneLink;
     Reference< XCommandEnvironment >    mxCmdEnv;
 

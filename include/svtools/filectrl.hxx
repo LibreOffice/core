@@ -42,7 +42,7 @@ class SVT_DLLPUBLIC FileControl final : public vcl::Window
 {
     VclPtr<Edit>       maEdit;
     VclPtr<PushButton> maButton;
-    OUString           maButtonText;
+    OUString const           maButtonText;
     FileControlMode_Internal    mnInternalFlags;
 
     SVT_DLLPRIVATE void     Resize() override;

@@ -249,7 +249,7 @@ private:
     OUString        m_sNone;
     ScopedVclPtr<VirtualDevice>   aVirDev;
     Size            aTxtSize;
-    Color           aColor;
+    Color const     aColor;
     Color           maPaintCol;
     FieldUnit       eSourceUnit;
 };

@@ -770,7 +770,7 @@ public:
 
 class SvInplaceEdit2
 {
-    Link<SvInplaceEdit2&,void> aCallBackHdl;
+    Link<SvInplaceEdit2&,void> const aCallBackHdl;
     Accelerator   aAccReturn;
     Accelerator   aAccEscape;
     Idle          aIdle;

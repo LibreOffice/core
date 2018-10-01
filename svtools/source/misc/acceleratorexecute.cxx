@@ -46,7 +46,7 @@ class AsyncAccelExec : public cppu::WeakImplHelper<css::lang::XEventListener>
     private:
         css::uno::Reference<css::lang::XComponent> m_xFrame;
         css::uno::Reference< css::frame::XDispatch > m_xDispatch;
-        css::util::URL m_aURL;
+        css::util::URL const m_aURL;
         vcl::EventPoster m_aAsyncCallback;
     public:
 

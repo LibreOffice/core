@@ -76,7 +76,7 @@ template<typename EnumT>
 struct HTMLOptionEnum
 {
     const sal_Char *pName;  // value of an HTML option
-    EnumT           nValue; // and corresponding value of an enum
+    EnumT const     nValue; // and corresponding value of an enum
 };
 
 /** Representation of an HTML option (=attribute in a start tag).
@@ -86,9 +86,9 @@ struct HTMLOptionEnum
  */
 class SVT_DLLPUBLIC HTMLOption
 {
-    OUString aValue;          // value of the option (always as string)
-    OUString aToken;          // name of the option as string
-    HtmlOptionId nToken;        // and respective token
+    OUString const aValue;          // value of the option (always as string)
+    OUString const aToken;          // name of the option as string
+    HtmlOptionId const nToken;        // and respective token
 
 public:
 
@@ -148,7 +148,7 @@ class SVT_DLLPUBLIC HTMLParser : public SvParser<HtmlTokenId>
 private:
     mutable HTMLOptions maOptions; // options of the start tag
 
-    bool bNewDoc        : 1;        // read new Doc?
+    bool const bNewDoc  : 1;        // read new Doc?
     bool bIsInHeader    : 1;        // scan header section
     bool bReadListing   : 1;        // read listings
     bool bReadXMP       : 1;        // read XMP

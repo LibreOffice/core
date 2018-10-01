@@ -36,7 +36,7 @@ class Window;
 struct FltCallDialogParameter
 {
     VclPtr<vcl::Window> pWindow;
-    FieldUnit eFieldUnit;
+    FieldUnit const eFieldUnit;
     OUString aFilterExt;
 
     // In and Out PropertySequence for all filter dialogs
