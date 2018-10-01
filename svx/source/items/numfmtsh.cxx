@@ -773,6 +773,11 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
     {
         nNFEntry=pFormatter->GetFormatIndex(static_cast<NfIndexTableOffset>(nIndex),eCurLanguage);
 
+        if (nCurCategory == SvNumFormatType::ALL && nNFEntry != nCurFormatKey)
+            // Deprecated old currency entries, for ALL add only if used as
+            // current format key.
+            continue;
+
         const SvNumberformat* pNumEntry   = pFormatter->GetEntry(nNFEntry);
 
         if(pNumEntry==nullptr) continue;
