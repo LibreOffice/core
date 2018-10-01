@@ -67,9 +67,6 @@ public:
     static OUString GetkeyBindingStrByXkeyBinding( const css::uno::Sequence< css::awt::KeyStroke > &keySet );
 
 protected:
-
-    static OLECHAR const * getOLECHARFromKeyCode(long key);
-
     css::uno::Reference<css::accessibility::XAccessibleAction> pRXAct;
 
 private:
