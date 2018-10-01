@@ -71,7 +71,7 @@ int WINAPI wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
             argv = GetCommandArgs(&argc);
             std::size_t n = wcslen(argv[0]) + 2;
             for (int i = 1; i < argc; ++i) {
-                n += wcslen(argv[i]) + 3;
+                n += wcslen(argv[i]) + 4; // 2 doublequotes + a space + optional trailing backslash
             }
             n += MY_LENGTH(L" \"-env:OOO_CWD=2") + 4 * cwdLen +
                 MY_LENGTH(L"\"") + 1;
@@ -86,6 +86,13 @@ int WINAPI wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
             if (bFirst || EXITHELPER_NORMAL_RESTART == dwExitCode || wcsncmp(argv[i], MY_STRING(L"-env:")) == 0) {
                 p = desktop_win32::commandLineAppend(p, MY_STRING(L"\" \""));
                 p = desktop_win32::commandLineAppend(p, argv[i]);
+                const size_t arglen = wcslen(argv[i]);
+                // tdf#120249: if an argument ends with backslash, we should escape it with another
+                // backslash; otherwise, the trailing backslash will be treated as an escapement
+                // character for the following doublequote by CommandLineToArgvW in soffice.bin. See
+                // https://docs.microsoft.com/en-us/windows/desktop/api/shellapi/nf-shellapi-commandlinetoargvw
+                if (arglen && argv[i][arglen-1] == '\\')
+                    p = desktop_win32::commandLineAppend(p, MY_STRING(L"\\"));
             }
         }
 
