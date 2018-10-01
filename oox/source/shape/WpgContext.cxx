@@ -50,9 +50,8 @@ oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken
         // the default, and if we don't set it here, editeng properly inherits
         // it.
         oox::drawingml::ShapePtr pShape(new oox::drawingml::Shape("com.sun.star.drawing.CustomShape", /*bDefaultHeight=*/false));
-        return new oox::drawingml::ShapeContext(*this, mpShape, pShape);
-        // return new oox::shape::WpsContext(*this, uno::Reference<drawing::XShape>(),
-        //                                   mpShape, pShape);
+        return new oox::shape::WpsContext(*this, uno::Reference<drawing::XShape>(),
+                                          mpShape, pShape);
     }
     case XML_pic:
         return new oox::drawingml::GraphicShapeContext(*this, mpShape, std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.GraphicObjectShape"));
