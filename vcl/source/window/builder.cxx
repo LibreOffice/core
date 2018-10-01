@@ -3872,8 +3872,7 @@ VclBuilder::PackingData VclBuilder::get_window_packing_data(const vcl::Window *p
     //border windows placed around them which are what you get
     //from GetChild, so scoot up a level if necessary to get the
     //window whose position value we have
-    const vcl::Window *pPropHolder = pWindow->ImplGetWindowImpl()->mpClientWindow ?
-        pWindow->ImplGetWindowImpl()->mpClientWindow : pWindow;
+    const vcl::Window *pPropHolder = pWindow->ImplGetWindow();
 
     for (auto const& child : m_aChildren)
     {
