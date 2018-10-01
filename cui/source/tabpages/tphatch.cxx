@@ -63,7 +63,7 @@ SvxHatchTabPage::SvxHatchTabPage(TabPageParent pParent, const SfxItemSet& rInAtt
     , m_xLbLineColor(new ColorListBox(m_xBuilder->weld_menu_button("linecolorlb"), pParent.GetFrameWeld()))
     , m_xCbBackgroundColor(m_xBuilder->weld_check_button("backgroundcolor"))
     , m_xLbBackgroundColor(new ColorListBox(m_xBuilder->weld_menu_button("backgroundcolorlb"), pParent.GetFrameWeld()))
-    , m_xHatchLB(new PresetListBox(m_xBuilder->weld_scrolled_window("hatchpresetlistwin")))
+    , m_xHatchLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("hatchpresetlistwin")))
     , m_xBtnAdd(m_xBuilder->weld_button("add"))
     , m_xBtnModify(m_xBuilder->weld_button("modify"))
     , m_xHatchLBWin(new weld::CustomWeld(*m_xBuilder, "hatchpresetlist", *m_xHatchLB))
@@ -501,7 +501,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl, PresetListBox*, void)
+IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 {
     sal_uInt16 nId = m_xHatchLB->GetSelectedItemId();
     size_t nPos = m_xHatchLB->GetSelectItemPos();
@@ -527,7 +527,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl, PresetListBox*, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, PresetListBox*, void )
+IMPL_LINK_NOARG(SvxHatchTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void )
 {
     sal_uInt16 nId = m_xHatchLB->GetSelectedItemId();
     size_t nPos = m_xHatchLB->GetSelectItemPos();

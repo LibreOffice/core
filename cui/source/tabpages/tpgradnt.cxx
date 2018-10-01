@@ -68,7 +68,7 @@ SvxGradientTabPage::SvxGradientTabPage(TabPageParent pParent, const SfxItemSet& 
     , m_xMtrColorFrom(m_xBuilder->weld_metric_spin_button("colorfrommtr", FUNIT_PERCENT))
     , m_xLbColorTo(new ColorListBox(m_xBuilder->weld_menu_button("colortolb"), pParent.GetFrameWeld()))
     , m_xMtrColorTo(m_xBuilder->weld_metric_spin_button("colortomtr", FUNIT_PERCENT))
-    , m_xGradientLB(new PresetListBox(m_xBuilder->weld_scrolled_window("gradientpresetlistwin")))
+    , m_xGradientLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("gradientpresetlistwin")))
     , m_xMtrIncrement(m_xBuilder->weld_spin_button("incrementmtr"))
     , m_xCbIncrement(m_xBuilder->weld_check_button("autoincrement"))
     , m_xSliderIncrement(m_xBuilder->weld_scale("incrementslider"))
@@ -436,7 +436,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl, weld::Button&, void)
     }
 }
 
-IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl, PresetListBox*, void)
+IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl, SvxPresetListBox*, void)
 {
     sal_uInt16 nId = m_xGradientLB->GetSelectedItemId();
     size_t nPos = m_xGradientLB->GetSelectItemPos();
@@ -465,7 +465,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl, PresetListBox*, void)
         m_xBtnModify->set_sensitive(false);
 }
 
-IMPL_LINK_NOARG(SvxGradientTabPage, ClickRenameHdl_Impl, PresetListBox*, void)
+IMPL_LINK_NOARG(SvxGradientTabPage, ClickRenameHdl_Impl, SvxPresetListBox*, void)
 {
     sal_uInt16 nId = m_xGradientLB->GetSelectedItemId();
     size_t nPos = m_xGradientLB->GetSelectItemPos();
