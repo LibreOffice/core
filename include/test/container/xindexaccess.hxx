@@ -29,7 +29,7 @@ protected:
     ~XIndexAccess() {}
 
 private:
-    sal_Int32 mnItems;
+    sal_Int32 const mnItems;
 };
 
 }

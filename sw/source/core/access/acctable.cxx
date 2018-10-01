@@ -79,8 +79,8 @@ class SwAccessibleTableData_Impl
     std::list < Int32Pair_Impl > maExtents;     // cell extends for event processing only
     Point   maTabFramePos;
     const SwTabFrame *mpTabFrame;
-    bool mbIsInPagePreview;
-    bool mbOnlyTableColumnHeader;
+    bool const mbIsInPagePreview;
+    bool const mbOnlyTableColumnHeader;
 
     void CollectData( const SwFrame *pFrame );
     void CollectExtents( const SwFrame *pFrame );

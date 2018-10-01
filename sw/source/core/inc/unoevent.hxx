@@ -54,7 +54,7 @@ public:
 // All these objects are an SwXFrame, so they can use a common implementation
 class SwFrameEventDescriptor : public SvEventDescriptor
 {
-    OUString sSwFrameEventDescriptor;
+    OUString const sSwFrameEventDescriptor;
 
     SwXFrame& rFrame;
 
@@ -75,8 +75,6 @@ protected:
 
 class SwFrameStyleEventDescriptor : public SvEventDescriptor
 {
-    OUString sSwFrameStyleEventDescriptor;
-
     sw::ICoreFrameStyle& m_rStyle;
 
 public:

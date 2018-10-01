@@ -114,8 +114,8 @@ public:
 
 class CellInfo
 {
-    SwRect m_aRect;
-    WW8TableNodeInfo * m_pNodeInfo;
+    SwRect const m_aRect;
+    WW8TableNodeInfo * const m_pNodeInfo;
     unsigned long m_nFormatFrameWidth;
 
 public:
@@ -167,7 +167,7 @@ public:
                 std::greater<sal_uInt32> > Inners_t;
 
 private:
-    WW8TableInfo * mpParent;
+    WW8TableInfo * const mpParent;
     sal_uInt32 mnDepth;
     const SwNode * mpNode;
     Inners_t mInners;

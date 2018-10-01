@@ -40,7 +40,7 @@ using namespace ::com::sun::star;
 struct HTMLNumFormatTableEntry
 {
     const sal_Char *pName;
-    NfIndexTableOffset eFormat;
+    NfIndexTableOffset const eFormat;
 };
 
 static HTMLOptionEnum<SwFieldIds> aHTMLFieldTypeTable[] =

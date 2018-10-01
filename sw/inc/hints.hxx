@@ -64,15 +64,15 @@ public:
 class SwFormatChg: public SwMsgPoolItem
 {
 public:
-    SwFormat *pChangedFormat;
+    SwFormat * const pChangedFormat;
     SwFormatChg( SwFormat *pFormat );
 };
 
 class SwInsText: public SwMsgPoolItem
 {
 public:
-    sal_Int32 nPos;
-    sal_Int32 nLen;
+    sal_Int32 const nPos;
+    sal_Int32 const nLen;
 
     SwInsText( sal_Int32 nP, sal_Int32 nL );
 };
@@ -80,7 +80,7 @@ public:
 class SwDelChr: public SwMsgPoolItem
 {
 public:
-    sal_Int32 nPos;
+    sal_Int32 const nPos;
 
     SwDelChr( sal_Int32 nP );
 };
@@ -88,8 +88,8 @@ public:
 class SwDelText: public SwMsgPoolItem
 {
 public:
-    sal_Int32 nStart;
-    sal_Int32 nLen;
+    sal_Int32 const nStart;
+    sal_Int32 const nLen;
 
     SwDelText( sal_Int32 nS, sal_Int32 nL );
 };
@@ -112,8 +112,8 @@ public:
 class RedlineDelText : public SfxHint
 {
 public:
-    sal_Int32 nStart;
-    sal_Int32 nLen;
+    sal_Int32 const nStart;
+    sal_Int32 const nLen;
 
     RedlineDelText(sal_Int32 nS, sal_Int32 nL);
 };
@@ -133,9 +133,9 @@ public:
 class SwUpdateAttr : public SwMsgPoolItem
 {
 private:
-    sal_Int32 m_nStart;
-    sal_Int32 m_nEnd;
-    sal_uInt16 m_nWhichAttr;
+    sal_Int32 const m_nStart;
+    sal_Int32 const m_nEnd;
+    sal_uInt16 const m_nWhichAttr;
 
 public:
     SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW );
@@ -220,7 +220,7 @@ public:
  */
 class SwAttrSetChg: public SwMsgPoolItem
 {
-    bool m_bDelSet;
+    bool const m_bDelSet;
     SwAttrSet* m_pChgSet;           ///< what has changed
     const SwAttrSet* m_pTheChgdSet; ///< is only used to compare
 public:
@@ -247,7 +247,7 @@ public:
 class SwCondCollCondChg: public SwMsgPoolItem
 {
 public:
-    SwFormat *pChangedFormat;
+    SwFormat * const pChangedFormat;
     SwCondCollCondChg( SwFormat *pFormat );
 };
 
@@ -280,7 +280,7 @@ public:
 
 class SwStringMsgPoolItem : public SwMsgPoolItem
 {
-    OUString m_sStr;
+    OUString const m_sStr;
 public:
 
     const OUString& GetString() const { return m_sStr; }

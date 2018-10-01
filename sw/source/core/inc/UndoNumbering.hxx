@@ -28,10 +28,10 @@
 
 class SwUndoInsNum : public SwUndo, private SwUndRng
 {
-    SwNumRule aNumRule;
+    SwNumRule const aNumRule;
     std::unique_ptr<SwHistory> pHistory;
     std::unique_ptr<SwNumRule> pOldNumRule;
-    OUString sReplaceRule;
+    OUString const sReplaceRule;
     sal_uInt16 nLRSavePos;
 
 public:
@@ -61,7 +61,7 @@ class SwUndoDelNum : public SwUndo, private SwUndRng
     struct NodeLevel
     {
         sal_uLong index;
-        int level;
+        int const level;
         NodeLevel(sal_uLong idx, int lvl) : index(idx), level(lvl) {};
     };
     std::vector<NodeLevel>     aNodes;
@@ -83,7 +83,7 @@ public:
 class SwUndoMoveNum : public SwUndo, private SwUndRng
 {
     sal_uLong nNewStt;
-    long nOffset;
+    long const nOffset;
 
 public:
     SwUndoMoveNum( const SwPaM& rPam, long nOffset, bool bIsOutlMv );
@@ -97,7 +97,7 @@ public:
 
 class SwUndoNumUpDown : public SwUndo, private SwUndRng
 {
-    short nOffset;
+    short const nOffset;
 
 public:
     SwUndoNumUpDown( const SwPaM& rPam, short nOffset );
@@ -109,7 +109,7 @@ public:
 
 class SwUndoNumOrNoNum : public SwUndo
 {
-    sal_uLong nIdx;
+    sal_uLong const nIdx;
     bool mbNewNum, mbOldNum;
 
 public:
@@ -123,10 +123,10 @@ public:
 
 class SwUndoNumRuleStart : public SwUndo
 {
-    sal_uLong nIdx;
+    sal_uLong const nIdx;
     sal_uInt16 nOldStt, nNewStt;
-    bool bSetSttValue : 1;
-    bool bFlag : 1;
+    bool const bSetSttValue : 1;
+    bool const bFlag : 1;
 
 public:
     SwUndoNumRuleStart( const SwPosition& rPos, bool bDelete );

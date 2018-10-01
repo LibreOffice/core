@@ -25,7 +25,7 @@ class SwWrtShell;
 
 class SW_DLLPUBLIC SwWrtShellItem: public SfxPoolItem
 {
-    SwWrtShell*         pWrtSh;
+    SwWrtShell* const       pWrtSh;
 
 public:
                             SwWrtShellItem( SwWrtShell* pWrtSh );

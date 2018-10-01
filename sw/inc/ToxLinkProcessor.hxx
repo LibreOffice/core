@@ -61,8 +61,8 @@ private:
         StartedLink(sal_Int32 startPosition, const OUString& characterStyle) :
                 mStartPosition(startPosition), mCharacterStyle(characterStyle) {
         }
-        sal_Int32 mStartPosition;
-        OUString mCharacterStyle;
+        sal_Int32 const mStartPosition;
+        OUString const mCharacterStyle;
     };
 
     /** A link that has been encountered while parsing a tox.
@@ -76,8 +76,8 @@ private:
         {
         }
         SwFormatINetFormat mINetFormat;
-        sal_Int32 mStartTextPos;
-        sal_Int32 mEndTextPos;
+        sal_Int32 const mStartTextPos;
+        sal_Int32 const mEndTextPos;
     };
 
     std::vector<std::unique_ptr<ClosedLink>> m_ClosedLinks;

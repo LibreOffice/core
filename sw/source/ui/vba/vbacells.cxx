@@ -57,10 +57,10 @@ private:
     uno::Reference< XHelperInterface > mxParent;
     uno::Reference< uno::XComponentContext > mxContext;
     uno::Reference< css::text::XTextTable > mxTextTable;
-    sal_Int32 mnLeft;
-    sal_Int32 mnTop;
-    sal_Int32 mnRight;
-    sal_Int32 mnBottom;
+    sal_Int32 const mnLeft;
+    sal_Int32 const mnTop;
+    sal_Int32 const mnRight;
+    sal_Int32 const mnBottom;
 
 public:
     /// @throws css::uno::RuntimeException

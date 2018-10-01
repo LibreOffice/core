@@ -61,7 +61,7 @@ public:
 
 class SW_DLLPUBLIC SwPtrItem : public SfxPoolItem
 {
-    void* pMisc;
+    void* const pMisc;
 
 public:
     SwPtrItem( const sal_uInt16 nId, void* pPtr);
@@ -93,7 +93,7 @@ public:
 
 class SW_DLLPUBLIC SwPaMItem : public SfxPoolItem
 {
-    SwPaM* m_pPaM;
+    SwPaM* const m_pPaM;
 
 public:
     SwPaMItem( const sal_uInt16 nId, SwPaM* pPaM);

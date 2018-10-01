@@ -45,7 +45,7 @@ OUString ReplacePoint(const OUString& sTmpName, bool bWithCommandType = false);
 struct SeqFieldLstElem
 {
     OUString sDlgEntry;
-    sal_uInt16 nSeqNo;
+    sal_uInt16 const nSeqNo;
 
     SeqFieldLstElem( const OUString& rStr, sal_uInt16 nNo )
         : sDlgEntry( rStr ), nSeqNo( nNo )
@@ -144,7 +144,7 @@ class SwSetExpField;
 
 class SW_DLLPUBLIC SwSetExpFieldType : public SwValueFieldType
 {
-    OUString sName;
+    OUString const sName;
     const SwNode* pOutlChgNd;
     OUString      sDelim;
     sal_uInt16      nType;
@@ -278,7 +278,7 @@ inline bool SwSetExpField::IsSequenceField() const
 
 class SwInputFieldType : public SwFieldType
 {
-    SwDoc* mpDoc;
+    SwDoc* const mpDoc;
 public:
     SwInputFieldType( SwDoc* pDoc );
 
@@ -294,7 +294,7 @@ class SW_DLLPUBLIC SwInputField : public SwField
     OUString maHelp;
     OUString maToolTip;
     sal_uInt16 mnSubType;
-    bool mbIsFormField;
+    bool const mbIsFormField;
 
     SwFormatField* mpFormatField; // attribute to which the <SwInputField> belongs to
 

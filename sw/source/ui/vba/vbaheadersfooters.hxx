@@ -30,7 +30,7 @@ class SwVbaHeadersFooters : public SwVbaHeadersFooters_BASE
 private:
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::beans::XPropertySet > mxPageStyleProps;
-    bool mbHeader;
+    bool const mbHeader;
 
 public:
     SwVbaHeadersFooters( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::beans::XPropertySet >& xProps, bool isHeader );

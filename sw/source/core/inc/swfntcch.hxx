@@ -62,7 +62,7 @@ public:
 
 class SwFontAccess : public SwCacheAccess
 {
-    SwViewShell *m_pShell;
+    SwViewShell * const m_pShell;
 protected:
     virtual SwCacheObj *NewObj( ) override;
 

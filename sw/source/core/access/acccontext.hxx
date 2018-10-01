@@ -81,7 +81,7 @@ private:
     std::weak_ptr<SwAccessibleMap> m_wMap;
 
     sal_uInt32 m_nClientId;  // client id in the AccessibleEventNotifier queue
-    sal_Int16 m_nRole;        // immutable outside constructor
+    sal_Int16 const m_nRole; // immutable outside constructor
 
     // The current states (protected by mutex)
     bool m_isShowingState : 1;
