@@ -80,6 +80,7 @@ namespace utl {
         ConfigurationBroadcaster();
         ConfigurationBroadcaster(ConfigurationBroadcaster const & );
         virtual ~ConfigurationBroadcaster();
+        ConfigurationBroadcaster & operator =(ConfigurationBroadcaster const & other);
         virtual void BlockBroadcasts( bool bBlock );
     };
 
