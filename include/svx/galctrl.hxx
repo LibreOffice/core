@@ -46,7 +46,7 @@ private:
 
     GraphicObject       aGraphicObj;
     tools::Rectangle           aPreviewRect;
-    GalleryTheme*       mpTheme;
+    GalleryTheme* const       mpTheme;
 
     SVX_DLLPRIVATE bool             ImplGetGraphicCenterRect( const Graphic& rGraphic, tools::Rectangle& rResultRect ) const;
     SVX_DLLPRIVATE void             InitSettings();

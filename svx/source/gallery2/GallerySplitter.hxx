@@ -35,7 +35,7 @@ protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 private:
-    ::std::function<void ()> maDataChangeFunctor;
+    ::std::function<void ()> const maDataChangeFunctor;
 };
 
 

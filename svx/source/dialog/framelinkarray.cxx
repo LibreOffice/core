@@ -184,8 +184,8 @@ struct ArrayImpl
     std::vector<long>   maHeights;
     mutable std::vector<long>     maXCoords;
     mutable std::vector<long>     maYCoords;
-    size_t              mnWidth;
-    size_t              mnHeight;
+    size_t const        mnWidth;
+    size_t const        mnHeight;
     size_t              mnFirstClipCol;
     size_t              mnFirstClipRow;
     size_t              mnLastClipCol;

@@ -83,7 +83,7 @@ private:
     ::sfx2::sidebar::ControllerItem                     maGammaControl;
     ::sfx2::sidebar::ControllerItem                     maModeControl;
 
-    SfxBindings*                                        mpBindings;
+    SfxBindings* const                                  mpBindings;
 
     DECL_LINK( ModifyBrightnessHdl, Edit&, void );
     DECL_LINK( ModifyContrastHdl, Edit&, void );

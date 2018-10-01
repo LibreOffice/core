@@ -35,7 +35,7 @@ public:
     Point*              pOldPointAry;
     bool                bDeleteOldPoints;
     sal_uInt16          nSize;
-    sal_uInt16          nResize;
+    sal_uInt16 const    nResize;
     sal_uInt16          nPoints;
 
     ImpXPolygon( sal_uInt16 nInitSize, sal_uInt16 nResize=16 );

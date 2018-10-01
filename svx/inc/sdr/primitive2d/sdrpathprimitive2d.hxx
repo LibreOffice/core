@@ -36,9 +36,9 @@ namespace drawinglayer
         class SdrPathPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            basegfx::B2DHomMatrix                       maTransform;
-            attribute::SdrLineFillShadowTextAttribute   maSdrLFSTAttribute;
-            basegfx::B2DPolyPolygon                     maUnitPolyPolygon;
+            basegfx::B2DHomMatrix const                       maTransform;
+            attribute::SdrLineFillShadowTextAttribute const   maSdrLFSTAttribute;
+            basegfx::B2DPolyPolygon const                     maUnitPolyPolygon;
 
             // OperationSmiley: Added to be able to define a FillGeometry different from local
             // geometry. It is ignored when empty and/or equal to UnitPolyPolygon.
@@ -49,7 +49,7 @@ namespace drawinglayer
             // 'same' is in quotes since it is a UnitPolygon, so being relative to the
             // unit polygon of the local geometry (UnitPolyPolygon). The definition is complete
             // when applying the also given transfomation (maTransform)
-            basegfx::B2DPolyPolygon                     maUnitDefinitionPolyPolygon;
+            basegfx::B2DPolyPolygon const                     maUnitDefinitionPolyPolygon;
 
         protected:
             // local decomposition.

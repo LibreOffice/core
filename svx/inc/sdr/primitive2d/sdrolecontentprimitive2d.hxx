@@ -38,12 +38,12 @@ namespace drawinglayer
         {
         private:
             tools::WeakReference<SdrOle2Obj>            mpSdrOle2Obj;
-            basegfx::B2DHomMatrix                       maObjectTransform;
+            basegfx::B2DHomMatrix const                 maObjectTransform;
 
             // #i104867# The GraphicVersion number to identify in operator== if
             // the graphic has changed, but without fetching it (which may
             // be expensive, e.g. triggering chart creation)
-            sal_uInt32                                  mnGraphicVersion;
+            sal_uInt32 const                            mnGraphicVersion;
 
         protected:
             // local decomposition.

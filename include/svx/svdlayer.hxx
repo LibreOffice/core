@@ -67,7 +67,7 @@ class SVX_DLLPUBLIC SdrLayer
     bool mbLockedODF; // corresponds to ODF draw:protected
     SdrModel*  pModel; // For broadcasting
     sal_uInt16 nType;  // 0= userdefined, 1= default layer
-    SdrLayerID nID;
+    SdrLayerID const nID;
 
     SdrLayer(SdrLayerID nNewID, const OUString& rNewName);
 

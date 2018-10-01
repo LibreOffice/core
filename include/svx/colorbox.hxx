@@ -95,10 +95,10 @@ private:
     friend class ListBoxColorWrapper;
     std::unique_ptr<ColorWindow> m_xColorWindow;
     std::unique_ptr<weld::MenuButton> m_xButton;
-    weld::Window* m_pTopLevel;
+    weld::Window* const m_pTopLevel;
     Link<ColorListBox&, void> m_aSelectedLink;
     ListBoxColorWrapper m_aColorWrapper;
-    Color m_aAutoDisplayColor;
+    Color const m_aAutoDisplayColor;
     Color m_aSaveColor;
     NamedColor m_aSelectedColor;
     sal_uInt16 m_nSlotId;

@@ -42,7 +42,7 @@ private:
     INetURLObject           aSdvURL;
     INetURLObject           aStrURL;
     sal_uInt32              nId;
-    bool                    bReadOnly;
+    bool const              bReadOnly;
     bool                    bModified;
     bool                    bThemeNameFromResource;
 

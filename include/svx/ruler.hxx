@@ -104,9 +104,8 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     bool            bHorz :1;
     long            lLogicNullOffset;     // in logic coordinates
     long            lAppNullOffset;       // in logic coordinates
-    long            lMinFrame;            // minimal frame width in pixels
     long            lInitialDragPos;
-    SvxRulerSupportFlags nFlags;
+    SvxRulerSupportFlags const nFlags;
     SvxRulerDragFlags    nDragType;
     sal_uInt16      nDefTabType;
     sal_uInt16      nTabCount;

@@ -369,7 +369,7 @@ XPropertyList::CreatePropertyListFromURL( XPropertyListType t,
 }
 
 static struct {
-    XPropertyListType t;
+    XPropertyListType const t;
     const char *pExt;
 } pExtnMap[] = {
     { XPropertyListType::Color,    "soc" },

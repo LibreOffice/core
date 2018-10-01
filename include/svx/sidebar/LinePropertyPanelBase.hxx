@@ -145,7 +145,7 @@ private:
     VclPtr<LineWidthPopup> mxLineWidthPopup;
 
     // images from resource
-    Image maIMGNone;
+    Image const maIMGNone;
 
     // multi-images
     std::unique_ptr<Image[]> mpIMGWidthIcon;

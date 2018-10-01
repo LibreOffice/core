@@ -55,7 +55,7 @@ class SVX_DLLPUBLIC GraphCtrl : public Control
     Link<GraphCtrl*,void>  aMousePosLink;
     Link<GraphCtrl*,void>  aGraphSizeLink;
     Link<GraphCtrl*,void>  aUpdateLink;
-    MapMode             aMap100;
+    MapMode const          aMap100;
     Size                aGraphSize;
     Point               aMousePos;
     std::unique_ptr<GraphCtrlUserCall> pUserCall;
@@ -127,7 +127,7 @@ public:
 
 class SVX_DLLPUBLIC SvxGraphCtrl : public weld::CustomWidgetController
 {
-    MapMode             aMap100;
+    MapMode const       aMap100;
     Graphic             aGraphic;
     Size                aGraphSize;
 

@@ -129,7 +129,7 @@ enum class SdrHintKind
 class SVX_DLLPUBLIC SdrHint: public SfxHint
 {
 private:
-    SdrHintKind                             meHint;
+    SdrHintKind const                       meHint;
     const SdrObject*                        mpObj;
     const SdrPage*                          mpPage;
 

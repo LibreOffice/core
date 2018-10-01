@@ -58,7 +58,7 @@ namespace
     {
         const char* pResIdName;
         const char* pResIdDescr;
-        RectPoint  ePoint;
+        RectPoint const  ePoint;
     };
 }
 

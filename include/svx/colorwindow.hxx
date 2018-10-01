@@ -61,15 +61,15 @@ private:
     VclPtr<PushButton>  mpButtonNoneColor;
     VclPtr<PushButton>  mpButtonPicker;
     VclPtr<FixedLine>   mpAutomaticSeparator;
-    OUString            maCommand;
+    OUString const      maCommand;
     Link<const NamedColor&, void> maSelectedLink;
 
     VclPtr<vcl::Window> mxParentWindow;
     std::shared_ptr<PaletteManager> mxPaletteManager;
     BorderColorStatus&  mrBorderColorStatus;
 
-    ColorSelectFunction maColorSelectFunction;
-    bool mbReuseParentForPicker;
+    ColorSelectFunction const maColorSelectFunction;
+    bool const mbReuseParentForPicker;
 
     DECL_LINK( SelectHdl, ValueSet*, void );
     DECL_LINK( SelectPaletteHdl, ListBox&, void);
@@ -115,11 +115,11 @@ private:
     std::unique_ptr<weld::Builder> m_xBuilder;
 
     const sal_uInt16    theSlotId;
-    weld::Window* mpParentWindow;
+    weld::Window* const mpParentWindow;
     weld::MenuButton* mpMenuButton;
     std::shared_ptr<PaletteManager> mxPaletteManager;
     BorderColorStatus&  mrBorderColorStatus;
-    ColorSelectFunction maColorSelectFunction;
+    ColorSelectFunction const maColorSelectFunction;
 
     std::unique_ptr<ColorValueSet> mxColorSet;
     std::unique_ptr<ColorValueSet> mxRecentColorSet;

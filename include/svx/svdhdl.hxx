@@ -249,7 +249,7 @@ class SVX_DLLPUBLIC SdrHdlColor : public SdrHdl
     Link<SdrHdlColor*,void>     aColorChangeHdl;
 
     // use luminance values only
-    bool                        bUseLuminance : 1;
+    bool const                  bUseLuminance : 1;
 
     // create marker for this kind
     SVX_DLLPRIVATE virtual void CreateB2dIAObject() override;
@@ -284,7 +284,7 @@ private:
     Point                       a2ndPos;
 
     // is this a gradient or a transparence
-    bool                        bGradient : 1;
+    bool const                  bGradient : 1;
 
     // select which handle to move
     bool                        bMoveSingleHandle : 1;
@@ -414,7 +414,7 @@ class SVX_DLLPUBLIC SdrHdlList
 {
 protected:
     size_t                      mnFocusIndex;
-    SdrMarkView*                pView;
+    SdrMarkView* const          pView;
     std::deque<std::unique_ptr<SdrHdl>> maList;
     sal_uInt16                  nHdlSize;
 
@@ -487,20 +487,20 @@ private:
 
     // evtl. shear and rotation, equal to the object's one to allow adaption of
     // the visualization handles
-    double          mfShearX;
-    double          mfRotation;
+    double const          mfShearX;
+    double const          mfRotation;
 };
 
 
 class SVX_DLLPUBLIC SdrCropViewHdl : public SdrHdl
 {
 private:
-    basegfx::B2DHomMatrix       maObjectTransform;
-    Graphic                     maGraphic;
-    double                      mfCropLeft;
-    double                      mfCropTop;
-    double                      mfCropRight;
-    double                      mfCropBottom;
+    basegfx::B2DHomMatrix const       maObjectTransform;
+    Graphic const                     maGraphic;
+    double const                      mfCropLeft;
+    double const                      mfCropTop;
+    double const                      mfCropRight;
+    double const                      mfCropBottom;
 
 public:
     SdrCropViewHdl(

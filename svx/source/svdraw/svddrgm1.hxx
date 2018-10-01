@@ -76,7 +76,7 @@ private:
     bool                        bVertical;   // contort vertically
     bool                        bResize;     // shear and resize
     bool                        bUpSideDown; // mirror and shear/slant
-    bool                        bSlant;
+    bool const                  bSlant;
 
 public:
     SdrDragShear(SdrDragView& rNewView,bool bSlant1);
@@ -121,7 +121,7 @@ private:
     SdrHdlGradient*             pIAOHandle;
 
     // is this for gradient (or for transparency)?
-    bool                        bIsGradient : 1;
+    bool const                  bIsGradient : 1;
 
 public:
     SdrDragGradient(SdrDragView& rNewView, bool bGrad = true);

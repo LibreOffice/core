@@ -394,7 +394,7 @@ namespace
         drawinglayer::primitive2d::Primitive2DContainer     maLastTextPrimitives;
 
         /// bitfield
-        bool                    mbVisualizeSurroundingFrame : 1;
+        bool const                    mbVisualizeSurroundingFrame : 1;
 
         // geometry creation for OverlayObject, can use local *Last* values
         virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;

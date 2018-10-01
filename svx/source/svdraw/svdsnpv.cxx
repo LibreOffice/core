@@ -101,9 +101,9 @@ class ImplHelpLineOverlay
     basegfx::B2DPoint                               maPosition;
 
     // HelpLine specific stuff
-    SdrPageView*                                    mpPageView;
-    sal_uInt16                                      mnHelpLineNumber;
-    SdrHelpLineKind                                 meHelpLineKind;
+    SdrPageView* const                              mpPageView;
+    sal_uInt16 const                                mnHelpLineNumber;
+    SdrHelpLineKind const                           meHelpLineKind;
 
 public:
     ImplHelpLineOverlay(const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos,

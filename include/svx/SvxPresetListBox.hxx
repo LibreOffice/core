@@ -30,7 +30,7 @@
 class SVX_DLLPUBLIC SvxPresetListBox : public ValueSet
 {
 private:
-    sal_uInt32 nColCount;
+    static constexpr sal_uInt32 nColCount = 3;
 
     DECL_LINK( OnMenuItemSelected, Menu*, bool );
 
@@ -39,7 +39,7 @@ public:
 
     virtual void Resize() override;
     virtual void Command( const CommandEvent& rEvt ) override;
-    sal_uInt32 getColumnCount() const { return nColCount; }
+    static sal_uInt32 getColumnCount() { return nColCount; }
 
     void DrawLayout();
 };
@@ -47,8 +47,8 @@ public:
 class SVX_DLLPUBLIC PresetListBox : public SvtValueSet
 {
 private:
-    sal_uInt32 nColCount;
-    Size       aIconSize;
+    static constexpr sal_uInt32 nColCount = 3;
+    Size const       aIconSize;
     Link<PresetListBox*,void> maRenameHdl;
     Link<PresetListBox*,void> maDeleteHdl;
 
@@ -62,7 +62,7 @@ public:
 
     virtual void Resize() override;
     virtual bool ContextMenu(const Point& rPos) override;
-    sal_uInt32 getColumnCount() const { return nColCount; }
+    static sal_uInt32 getColumnCount() { return nColCount; }
     Size const & GetIconSize() const { return aIconSize; }
 
     void SetRenameHdl( const Link<PresetListBox*,void>& rLink )

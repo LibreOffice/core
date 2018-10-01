@@ -27,8 +27,7 @@
 #include <vcl/popupmenuwindow.hxx>
 
 SvxPresetListBox::SvxPresetListBox(vcl::Window* pParent, WinBits nWinStyle)
-    : ValueSet(pParent, nWinStyle),
-      nColCount(3)
+    : ValueSet(pParent, nWinStyle)
 {
     SetEdgeBlending(true);
     SetExtraSpacing(4);
@@ -94,7 +93,6 @@ IMPL_LINK(SvxPresetListBox, OnMenuItemSelected, Menu*, pMenu, bool)
 
 PresetListBox::PresetListBox(std::unique_ptr<weld::ScrolledWindow> pWindow)
     : SvtValueSet(std::move(pWindow))
-    , nColCount(3)
     , aIconSize(60, 64)
 {
     SetEdgeBlending(true);

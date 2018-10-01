@@ -102,7 +102,7 @@ struct ImpSdrPathDragData  : public SdrDragStatUserData
     sal_uInt16                  nNextNextPnt0;
     bool                        bEliminate;     // delete point? (is set by MovDrag)
 
-    bool                        mbMultiPointDrag;
+    bool const                  mbMultiPointDrag;
     const XPolyPolygon          maOrig;
     XPolyPolygon                maMove;
     std::vector<SdrHdl*>        maHandles;
@@ -496,7 +496,7 @@ class ImpPathForDragAndCreate
 {
     SdrPathObj&                 mrSdrPathObject;
     XPolyPolygon                aPathPolygon;
-    SdrObjKind                  meObjectKind;
+    SdrObjKind const            meObjectKind;
     std::unique_ptr<ImpSdrPathDragData>
                                 mpSdrPathDragData;
     bool                        mbCreating;

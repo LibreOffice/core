@@ -77,7 +77,7 @@ namespace svxform
     struct Ascii2Int16
     {
         const sal_Char* pAscii;
-        sal_Int16       nValue;
+        sal_Int16 const nValue;
     };
 
     static const Ascii2Int16* lcl_getSearchForTypeValueMap()

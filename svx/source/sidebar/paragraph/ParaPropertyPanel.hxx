@@ -102,7 +102,7 @@ private:
     ::sfx2::sidebar::ControllerItem  m_aMetricCtl;
 
     vcl::EnumContext maContext;
-    SfxBindings* mpBindings;
+    SfxBindings* const mpBindings;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
 
     DECL_LINK(ModifyIndentHdl_Impl, Edit&, void);

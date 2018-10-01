@@ -213,7 +213,7 @@ class RecoveryCore : public ::cppu::WeakImplHelper< css::frame::XStatusListener 
                     on the core dispatch implementation, we must know,
                     which URL we have to use for deregistration!
          */
-        bool m_bListenForSaving;
+        bool const m_bListenForSaving;
 
 
     // native interface
@@ -485,9 +485,9 @@ class RecoveryDialog : public Dialog
         VclPtr<RecovDocList>   m_pFileListLB;
         VclPtr<PushButton>     m_pNextBtn;
         VclPtr<PushButton>     m_pCancelBtn;
-        OUString        m_aTitleRecoveryInProgress;
-        OUString        m_aRecoveryOnlyFinish;
-        OUString        m_aRecoveryOnlyFinishDescr;
+        OUString const        m_aTitleRecoveryInProgress;
+        OUString const        m_aRecoveryOnlyFinish;
+        OUString const        m_aRecoveryOnlyFinishDescr;
 
         RecoveryCore*   m_pCore;
         css::uno::Reference< css::task::XStatusIndicator > m_xProgress;
@@ -548,7 +548,7 @@ class BrokenRecoveryDialog : public ModalDialog
 
         OUString m_sSavePath;
         RecoveryCore*   m_pCore;
-        bool        m_bBeforeRecovery;
+        bool const        m_bBeforeRecovery;
         bool        m_bExecutionNeeded;
 
 

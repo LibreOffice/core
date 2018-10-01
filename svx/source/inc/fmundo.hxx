@@ -47,9 +47,9 @@ class SdrObject;
 class FmUndoPropertyAction: public SdrUndoAction
 {
     css::uno::Reference< css::beans::XPropertySet> xObj;
-    OUString               aPropertyName;
-    css::uno::Any          aNewValue;
-    css::uno::Any          aOldValue;
+    OUString const               aPropertyName;
+    css::uno::Any const          aNewValue;
+    css::uno::Any const          aOldValue;
 
 public:
     FmUndoPropertyAction(FmFormModel& rMod, const css::beans::PropertyChangeEvent& evt);
@@ -95,7 +95,7 @@ private:
     sal_Int32       m_nIndex;       // index of the object within it's container
     css::uno::Sequence< css::script::ScriptEventDescriptor >
                     m_aEvents;      // events of the object
-    Action          m_eAction;
+    Action const          m_eAction;
 };
 
 class FmUndoModelReplaceAction : public SdrUndoAction

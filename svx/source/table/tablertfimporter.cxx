@@ -63,7 +63,7 @@ typedef std::vector< std::shared_ptr< RTFCellDefault > > RTFCellDefaultVector;
 
 struct RTFCellInfo
 {
-    SfxItemSet          maItemSet;
+    SfxItemSet const    maItemSet;
     sal_Int32           mnStartPara;
     sal_Int32           mnParaCount;
     sal_Int32           mnCellX;

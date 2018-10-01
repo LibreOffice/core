@@ -19,8 +19,8 @@ namespace sdr { namespace overlay {
 
 class SVX_DLLPUBLIC OverlayHandle final : public OverlayObjectWithBasePosition
 {
-    basegfx::B2DSize maSize;
-    Color maStrokeColor;
+    basegfx::B2DSize const maSize;
+    Color const maStrokeColor;
 
     // geometry creation for OverlayObject
     virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;

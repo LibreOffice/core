@@ -93,7 +93,7 @@ class FunctionPopup_Impl
 {
     VclBuilder        m_aBuilder;
     VclPtr<PopupMenu> m_xMenu;
-    sal_uInt32        m_nSelected;
+    sal_uInt32 const  m_nSelected;
     static sal_uInt16 id_to_function(const OString& rIdent);
     sal_uInt16 function_to_id(sal_uInt16 nFunc) const;
 public:

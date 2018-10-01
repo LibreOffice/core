@@ -44,7 +44,7 @@ private:
     {
         css::uno::Reference< css::smarttags::XSmartTagAction > m_xAction;
         css::uno::Reference< css::container::XStringKeyMap > m_xSmartTagProperties;
-        sal_uInt32 m_nActionID;
+        sal_uInt32 const m_nActionID;
         InvokeAction( css::uno::Reference< css::smarttags::XSmartTagAction > const & xAction,
                       css::uno::Reference< css::container::XStringKeyMap > const & xSmartTagProperties,
                       sal_uInt32 nActionID ) : m_xAction( xAction ), m_xSmartTagProperties( xSmartTagProperties ), m_nActionID( nActionID ) {}

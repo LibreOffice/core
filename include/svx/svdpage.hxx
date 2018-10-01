@@ -283,8 +283,8 @@ private:
 /// for the snap-to-grid in Writer
 class SdrPageGridFrame
 {
-    tools::Rectangle aPaper;
-    tools::Rectangle aUserArea;
+    tools::Rectangle const aPaper;
+    tools::Rectangle const aUserArea;
 public:
     SdrPageGridFrame(const tools::Rectangle& rPaper, const tools::Rectangle& rUser): aPaper(rPaper), aUserArea(rUser) {}
     const tools::Rectangle& GetPaperRect() const                  { return aPaper; }

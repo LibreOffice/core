@@ -71,8 +71,8 @@ private:
     VclPtr<ValueSet>        mpDirectionSet;
 
     Image       maImgDirection[9];
-    Image       maImgPerspective;
-    Image       maImgParallel;
+    Image const       maImgPerspective;
+    Image const       maImgParallel;
 
     DECL_LINK( SelectToolbarMenuHdl, ToolbarMenu*, void );
     DECL_LINK( SelectValueSetHdl, ValueSet*, void );
@@ -147,9 +147,9 @@ private:
     Image maImgLightingOn[9];
     Image maImgLightingPreview[9];
 
-    Image maImgBright;
-    Image maImgNormal;
-    Image maImgDim;
+    Image const maImgBright;
+    Image const maImgNormal;
+    Image const maImgDim;
 
     int     mnDirection;
     bool    mbDirectionEnabled;

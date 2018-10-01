@@ -110,8 +110,8 @@ class GalleryThemePopup : public ::cppu::WeakImplHelper< css::frame::XStatusList
 {
 private:
     const GalleryTheme* mpTheme;
-    sal_uInt32          mnObjectPos;
-    bool                mbPreview;
+    sal_uInt32 const    mnObjectPos;
+    bool const          mbPreview;
     VclBuilder          maBuilder;
     VclPtr<PopupMenu> mpPopupMenu;
     VclPtr<PopupMenu> mpBackgroundPopup;

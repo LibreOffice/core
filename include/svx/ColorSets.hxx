@@ -23,7 +23,7 @@ namespace svx
 
 class SVX_DLLPUBLIC ColorSet
 {
-    OUString maColorSetName;
+    OUString const maColorSetName;
     std::vector<Color> maColors;
 public:
     ColorSet(OUString const & aName);

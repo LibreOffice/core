@@ -78,7 +78,7 @@
 class SdrHdlBitmapSet
 {
     // the bitmap holding all information
-    BitmapEx                    maMarkersBitmap;
+    BitmapEx const              maMarkersBitmap;
 
     // the cropped Bitmaps for reusage
     ::std::vector< BitmapEx >   maRealMarkers;

@@ -140,8 +140,8 @@ friend class GalleryTheme;
 using TransferableHelper::CopyToClipboard;
 
     GalleryTheme*                   mpTheme;
-    SgaObjKind                      meObjectKind;
-    sal_uInt32                      mnObjectPos;
+    SgaObjKind const                meObjectKind;
+    sal_uInt32 const                mnObjectPos;
     tools::SvRef<SotStorageStream>  mxModelStream;
     std::unique_ptr<GraphicObject>  mpGraphicObject;
     std::unique_ptr<INetURLObject>  mpURL;
@@ -176,10 +176,10 @@ class GalleryHint : public SfxHint
 {
 private:
 
-    GalleryHintType     mnType;
-    OUString            maThemeName;
-    OUString            maStringData;
-    void*               mnData1;
+    GalleryHintType const     mnType;
+    OUString const            maThemeName;
+    OUString const            maStringData;
+    void* const               mnData1;
 
 public:
 

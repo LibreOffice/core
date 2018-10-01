@@ -80,7 +80,7 @@ private:
     OUString                    m_aDestDir;
     bool                        m_bDestDirRelative;
     tools::SvRef<SotStorage>    aSvDrawStorageRef;
-    Gallery*                    pParent;
+    Gallery* const              pParent;
     GalleryThemeEntry*          pThm;
     sal_uInt32                  mnThemeLockCount;
     sal_uInt32                  mnBroadcasterLockCount;

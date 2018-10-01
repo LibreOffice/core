@@ -31,14 +31,14 @@ namespace sdr
         class OverlayRectangle : public OverlayObjectWithBasePosition
         {
             // geometric definitions
-            basegfx::B2DPoint               maSecondPosition;
+            basegfx::B2DPoint const         maSecondPosition;
             const double                    mfTransparence;
             const double                    mfDiscreteGrow;
             const double                    mfDiscreteShrink;
             const double                    mfRotation;
 
             // #i53216# added CursorBlinkTime (in ms)
-            sal_uInt32                      mnBlinkTime;
+            sal_uInt32 const                mnBlinkTime;
 
             // Flag to remember which state to draw. Inited with false (0)
             bool                            mbOverlayState : 1;

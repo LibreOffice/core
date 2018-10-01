@@ -87,8 +87,8 @@ protected:
 
 private:
     uno::Reference< XNameContainer > mxTable;
-    SvxXMLTableImportContextEnum meContext;
-    bool mbOOoFormat;
+    SvxXMLTableImportContextEnum const meContext;
+    bool const mbOOoFormat;
 };
 
 

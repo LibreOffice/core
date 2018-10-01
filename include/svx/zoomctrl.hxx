@@ -45,7 +45,7 @@ public:
 class SVX_DLLPUBLIC SvxZoomPageStatusBarControl : public SfxStatusBarControl
 {
 private:
-    Image maImage;
+    Image const maImage;
 public:
     virtual void    Paint( const UserDrawEvent& rEvt ) override;
     virtual bool    MouseButtonDown( const MouseEvent & rEvt ) override;

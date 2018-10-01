@@ -35,9 +35,9 @@ namespace drawinglayer
         class SdrOle2Primitive2D : public BasePrimitive2D
         {
         private:
-            Primitive2DContainer                         maOLEContent;
-            basegfx::B2DHomMatrix                       maTransform;
-            attribute::SdrLineFillShadowTextAttribute   maSdrLFSTAttribute;
+            Primitive2DContainer const                        maOLEContent;
+            basegfx::B2DHomMatrix const                       maTransform;
+            attribute::SdrLineFillShadowTextAttribute const   maSdrLFSTAttribute;
 
         public:
             SdrOle2Primitive2D(

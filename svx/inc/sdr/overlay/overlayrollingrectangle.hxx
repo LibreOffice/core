@@ -33,10 +33,10 @@ namespace sdr
             basegfx::B2DPoint                       maSecondPosition;
 
             // Flag to switch on/off long lines to the OutputDevice bounds
-            bool                                    mbExtendedLines : 1;
+            bool const                              mbExtendedLines : 1;
 
             // Flag to switch on/off the bounds itself
-            bool                                    mbShowBounds : 1;
+            bool const                              mbShowBounds : 1;
 
             // geometry creation for OverlayObject
             virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;

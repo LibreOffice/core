@@ -25,7 +25,7 @@ class NumberingToolBoxControl;
 
 class NumberingPopup : public svtools::ToolbarMenu
 {
-    NumberingPageType mePageType;
+    NumberingPageType const mePageType;
     NumberingToolBoxControl& mrController;
     VclPtr<SvxNumValueSet> mpValueSet;
     DECL_LINK( VSSelectToolbarMenuHdl, ToolbarMenu*, void );

@@ -36,9 +36,9 @@ namespace drawinglayer
         class SdrGrafPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            ::basegfx::B2DHomMatrix                     maTransform;
-            attribute::SdrLineFillShadowTextAttribute   maSdrLFSTAttribute;
-            GraphicObject                               maGraphicObject;
+            ::basegfx::B2DHomMatrix const                     maTransform;
+            attribute::SdrLineFillShadowTextAttribute const   maSdrLFSTAttribute;
+            GraphicObject const                               maGraphicObject;
             GraphicAttr                                 maGraphicAttr;
 
         protected:

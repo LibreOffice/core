@@ -62,10 +62,10 @@ public:
     SvxNumberValueType      GetValueType() const { return eValueType; }
 
 private:
-    SvNumberFormatter*  pFormatter;
-    SvxNumberValueType  eValueType;
-    OUString            aStringVal;
-    double              nDoubleVal;
+    SvNumberFormatter* const  pFormatter;
+    SvxNumberValueType const  eValueType;
+    OUString const            aStringVal;
+    double const              nDoubleVal;
 
     std::vector<sal_uInt32> mvDelFormats;
 };

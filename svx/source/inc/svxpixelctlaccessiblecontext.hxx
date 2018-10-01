@@ -107,9 +107,9 @@ private:
     SvxPixelCtl& mrParentWindow;
     rtl::Reference<SvxPixelCtlAccessible> mxParent;
     bool m_bPixelColorOrBG;//Pixel Color Or BackGround Color
-    tools::Rectangle  maBoundingBox;
+    tools::Rectangle const  maBoundingBox;
     /// index of child in parent
-    long                                mnIndexInParent;
+    long const              mnIndexInParent;
 };
 
 class SvxPixelCtlAccessible final : public ::comphelper::OAccessibleSelectionHelper,

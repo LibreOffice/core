@@ -168,8 +168,8 @@ class SVX_DLLPUBLIC FmXFormShell final : public FmXFormShell_BASE
     FmFormArray         m_aSearchForms;
 
     struct SAL_DLLPRIVATE InvalidSlotInfo {
-        sal_uInt16 id;
-        sal_uInt8   flags;
+        sal_uInt16 const id;
+        sal_uInt8 const   flags;
         InvalidSlotInfo(sal_uInt16 slotId, sal_uInt8 flgs) : id(slotId), flags(flgs) {};
     };
     std::vector<InvalidSlotInfo> m_arrInvalidSlots;

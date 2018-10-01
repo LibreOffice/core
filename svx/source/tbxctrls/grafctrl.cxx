@@ -71,7 +71,7 @@ class ImplGrafMetricField : public MetricField
 
 private:
     Idle                maIdle;
-    OUString            maCommand;
+    OUString const      maCommand;
     Reference< XFrame > mxFrame;
 
                     DECL_LINK(ImplModifyHdl, Timer *, void);

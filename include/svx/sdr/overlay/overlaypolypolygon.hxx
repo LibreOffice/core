@@ -32,7 +32,7 @@ namespace sdr
         class SVX_DLLPUBLIC OverlayPolyPolygonStripedAndFilled final : public OverlayObject
         {
             // geometry
-            basegfx::B2DPolyPolygon             maLinePolyPolygon;
+            basegfx::B2DPolyPolygon const             maLinePolyPolygon;
 
             // geometry creation for OverlayObject
             virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;

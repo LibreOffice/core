@@ -99,7 +99,7 @@ protected:
 private:
     FontHeightToolBoxControl*                  m_pCtrl;
     OUString                                   m_aCurText;
-    Size                                       m_aLogicalSize;
+    Size const                                 m_aLogicalSize;
     bool                                       m_bRelease;
     uno::Reference< frame::XFrame >            m_xFrame;
 

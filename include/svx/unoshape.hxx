@@ -850,7 +850,7 @@ protected:
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) override;
 
 private:
-    OUString referer_;
+    OUString const referer_;
 };
 
 #endif

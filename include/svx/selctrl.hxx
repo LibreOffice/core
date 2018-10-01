@@ -38,7 +38,7 @@ public:
 
 private:
     sal_uInt16  mnState;
-    Image       maImage;
+    Image const maImage;
 };
 
 #endif
