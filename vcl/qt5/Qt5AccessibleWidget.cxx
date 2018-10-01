@@ -545,9 +545,12 @@ QObject* Qt5AccessibleWidget::object() const { return nullptr; }
 
 void Qt5AccessibleWidget::setText(QAccessible::Text /* t */, const QString& /* text */) {}
 
-QAccessibleInterface* Qt5AccessibleWidget::childAt(int /* x */, int /* y */) const
+QAccessibleInterface* Qt5AccessibleWidget::childAt(int x, int y) const
 {
-    return nullptr;
+    Reference<XAccessibleComponent> xAccessibleComponent(m_xAccessible->getAccessibleContext(),
+                                                         UNO_QUERY);
+    return QAccessible::queryAccessibleInterface(
+        new Qt5XAccessible(xAccessibleComponent->getAccessibleAtPoint(awt::Point(x, y))));
 }
 
 QAccessibleInterface* Qt5AccessibleWidget::customFactory(const QString& classname, QObject* object)
