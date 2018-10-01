@@ -2794,9 +2794,10 @@ namespace
     {
         Size aSize(rDevice.GetOutputSizePixel());
         cairo_surface_t* surface = get_underlying_cairo_surface(rDevice);
-        return gdk_pixbuf_get_from_surface(surface, 0, 0, aSize.Width(), aSize.Height());
+        double m_fXScale, m_fYScale;
+        cairo_surface_get_device_scale(surface, &m_fXScale, &m_fYScale);
+        return gdk_pixbuf_get_from_surface(surface, 0, 0, aSize.Width() * m_fXScale, aSize.Height() * m_fYScale);
     }
-
 }
 
 class GtkInstanceButton : public GtkInstanceContainer, public virtual weld::Button
@@ -3676,10 +3677,10 @@ namespace
         }
         else
         {
-            GdkPixbuf* pixbuf = nullptr;
-
             if (pIconName)
             {
+                GdkPixbuf* pixbuf = nullptr;
+
                 if (pIconName->lastIndexOf('.') != pIconName->getLength() - 4)
                 {
                     assert((*pIconName== "dialog-warning" || *pIconName== "dialog-error" ||*pIconName== "dialog-information") &&
@@ -3697,20 +3698,38 @@ namespace
                                                rSettings.GetStyleSettings().DetermineIconTheme(),
                                                rSettings.GetUILanguageTag().getBcp47());
                 }
+
+                gtk_list_store_set(pListStore, &iter,
+                        0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+                        1, OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr(),
+                        2, pixbuf,
+                        -1);
+
+                if (pixbuf)
+                    g_object_unref(pixbuf);
             }
             else
             {
-                pixbuf = load_icon_from_surface(*pDevice);
+                cairo_surface_t* surface = get_underlying_cairo_surface(*pDevice);
+
+                Size aSize(pDevice->GetOutputSizePixel());
+                cairo_surface_t* target = cairo_surface_create_similar(surface,
+                                                                        cairo_surface_get_content(surface),
+                                                                        aSize.Width(),
+                                                                        aSize.Height());
+
+                cairo_t* cr = cairo_create(target);
+                cairo_set_source_surface(cr, surface, 0, 0);
+                cairo_paint(cr);
+                cairo_destroy(cr);
+
+                gtk_list_store_set(pListStore, &iter,
+                        0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+                        1, OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr(),
+                        3, target,
+                        -1);
+                cairo_surface_destroy(target);
             }
-
-            gtk_list_store_set(pListStore, &iter,
-                    0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
-                    1, OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr(),
-                    2, pixbuf,
-                    -1);
-
-            if (pixbuf)
-                g_object_unref(pixbuf);
         }
     }
 }

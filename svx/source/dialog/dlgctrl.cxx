@@ -1150,7 +1150,7 @@ void SvxLineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
         {
             const Size aBmpSize(aBitmap.GetSizePixel());
             pVD->SetOutputSizePixel(Size(aBmpSize.Width() / 2, aBmpSize.Height()), false);
-            pVD->DrawBitmapEx(bStart ? Point() : Point(aBmpSize.Width() / 2, 0), aBitmap);
+            pVD->DrawBitmapEx(bStart ? Point() : Point(-aBmpSize.Width() / 2, 0), aBitmap);
             m_xControl->append("", pEntry->GetName(), *pVD);
         }
         else
@@ -1167,8 +1167,8 @@ void SvxLineEndLB::Append( const XLineEndEntry& rEntry, const BitmapEx& rBitmap 
         ScopedVclPtrInstance< VirtualDevice > pVD;
 
         const Size aBmpSize(rBitmap.GetSizePixel());
-        pVD->SetOutputSizePixel(Size(aBmpSize.Width() / 2, aBmpSize.Height() / 2), false);
-        pVD->DrawBitmapEx(Point(aBmpSize.Width() / 2, 0), rBitmap);
+        pVD->SetOutputSizePixel(Size(aBmpSize.Width() / 2, aBmpSize.Height()), false);
+        pVD->DrawBitmapEx(Point(-aBmpSize.Width() / 2, 0), rBitmap);
         m_xControl->append("", rEntry.GetName(), *pVD);
     }
     else
@@ -1186,8 +1186,8 @@ void SvxLineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bi
         ScopedVclPtrInstance< VirtualDevice > pVD;
 
         const Size aBmpSize(rBitmap.GetSizePixel());
-        pVD->SetOutputSizePixel(Size(aBmpSize.Width() / 2, aBmpSize.Height() / 2), false);
-        pVD->DrawBitmapEx(Point(aBmpSize.Width() / 2, 0), rBitmap);
+        pVD->SetOutputSizePixel(Size(aBmpSize.Width() / 2, aBmpSize.Height()), false);
+        pVD->DrawBitmapEx(Point(-aBmpSize.Width() / 2, 0), rBitmap);
         m_xControl->insert(nPos, "", rEntry.GetName(), nullptr, pVD);
     }
     else

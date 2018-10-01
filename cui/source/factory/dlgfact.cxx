@@ -344,6 +344,11 @@ short CuiAbstractTabController_Impl::Execute()
     return m_xDlg->execute();
 }
 
+bool CuiAbstractTabController_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return SfxTabDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 void CuiAbstractTabController_Impl::SetCurPageId( const OString &rName )
 {
     m_xDlg->SetCurPageId( rName );
@@ -1337,13 +1342,12 @@ VclPtr<AbstractSvxAreaTabDialog> AbstractDialogFactory_Impl::CreateSvxAreaTabDia
     return VclPtr<AbstractSvxAreaTabDialog_Impl>::Create(o3tl::make_unique<SvxAreaTabDialog>(pParent, pAttr, pModel, bShadow));
 }
 
-VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxLineTabDialog( vcl::Window* pParent, const SfxItemSet* pAttr, //add forSvxLineTabDialog
+VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSvxLineTabDialog(weld::Window* pParent, const SfxItemSet* pAttr, //add forSvxLineTabDialog
                                                                  SdrModel* pModel,
                                                                  const SdrObject* pObj ,
                                                                  bool bHasObj)
 {
-    VclPtrInstance<SvxLineTabDialog> pDlg( pParent, pAttr, pModel,pObj,bHasObj );
-    return VclPtr<CuiAbstractTabDialog_Impl>::Create( pDlg );
+    return VclPtr<CuiAbstractTabController_Impl>::Create(o3tl::make_unique<SvxLineTabDialog>(pParent, pAttr, pModel, pObj,bHasObj));
 }
 
 VclPtr<SfxAbstractDialog> AbstractDialogFactory_Impl::CreateCharMapDialog(weld::Window* pParent, const SfxItemSet& rAttr, bool bInsert)

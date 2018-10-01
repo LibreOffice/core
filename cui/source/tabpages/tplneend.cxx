@@ -536,7 +536,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl, weld::Button&, void)
             if( pLeList->Load() )
             {
                 pLineEndList = pLeList;
-                static_cast<SvxLineTabDialog*>( GetParentDialog() )->SetNewLineEndList( pLineEndList );
+                static_cast<SvxLineTabDialog*>(GetDialogController())->SetNewLineEndList( pLineEndList );
                 m_xLbLineEnds->clear();
                 m_xLbLineEnds->Fill( pLineEndList );
                 Reset( &rOutAttrs );
