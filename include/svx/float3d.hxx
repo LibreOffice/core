@@ -164,8 +164,8 @@ private:
     VclPtr<PushButton>         m_pBtnPerspective;
 
 // the rest ...
-    Image               aImgLightOn;
-    Image               aImgLightOff;
+    Image const         aImgLightOn;
+    Image const         aImgLightOff;
     bool                bUpdate;
     ViewType3D          eViewType;
 
@@ -173,7 +173,7 @@ private:
     std::unique_ptr<FmFormModel>         pModel;
     VclPtr<VirtualDevice> pVDev;
 
-    SfxBindings*                pBindings;
+    SfxBindings* const                   pBindings;
     std::unique_ptr<Svx3DCtrlItem>       pControllerItem;
 
     std::unique_ptr<SvxConvertTo3DItem>  pConvertTo3DItem;

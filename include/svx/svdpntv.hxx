@@ -167,7 +167,7 @@ protected:
     sal_uInt16                  mnMinMovLog;
 
     // Hold an incarnation of Drawinglayer configuration options
-    SvtOptionsDrawinglayer      maDrawinglayerOpt;
+    SvtOptionsDrawinglayer const maDrawinglayerOpt;
 
     bool                        mbPageVisible : 1;
     bool                        mbPageShadowVisible : 1;

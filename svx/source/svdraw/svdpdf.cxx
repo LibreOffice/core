@@ -125,7 +125,6 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     , mnLayer(nLay)
     , maOldLineColor()
     , mnLineWidth(0)
-    , maLineJoin(basegfx::B2DLineJoin::NONE)
     , maLineCap(css::drawing::LineCap_BUTT)
     , maDash(css::drawing::DashStyle_RECT, 0, 0, 0, 0, 0)
     , mbMov(false)
@@ -384,21 +383,7 @@ void ImpSdrPdfImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr)
             mpLineAttr->Put(XLineStyleItem(drawing::LineStyle_NONE));
         }
 
-        switch (maLineJoin)
-        {
-            case basegfx::B2DLineJoin::NONE:
-                mpLineAttr->Put(XLineJointItem(css::drawing::LineJoint_NONE));
-                break;
-            case basegfx::B2DLineJoin::Bevel:
-                mpLineAttr->Put(XLineJointItem(css::drawing::LineJoint_BEVEL));
-                break;
-            case basegfx::B2DLineJoin::Miter:
-                mpLineAttr->Put(XLineJointItem(css::drawing::LineJoint_MITER));
-                break;
-            case basegfx::B2DLineJoin::Round:
-                mpLineAttr->Put(XLineJointItem(css::drawing::LineJoint_ROUND));
-                break;
-        }
+        mpLineAttr->Put(XLineJointItem(css::drawing::LineJoint_NONE));
 
         // Add LineCap support
         mpLineAttr->Put(XLineCapItem(maLineCap));

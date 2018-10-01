@@ -182,7 +182,6 @@ EnhancedCustomShape3d::Transformation2D::Transformation2D(
     , eProjectionMode( drawing::ProjectionMode_PARALLEL )
     , fSkewAngle(0.0)
     , fSkew(0.0)
-    , fZScreen(0.0)
     , fOriginX(0.0)
     , fOriginY(0.0)
     , pMap( pM )
@@ -238,7 +237,7 @@ Point EnhancedCustomShape3d::Transformation2D::Transform2D( const basegfx::B3DPo
     {
         double fX = rPoint3D.getX() - fOriginX;
         double fY = rPoint3D.getY() - fOriginY;
-        double f = ( fZScreen - fViewPoint.getZ() ) / ( rPoint3D.getZ() - fViewPoint.getZ() );
+        double f = ( - fViewPoint.getZ() ) / ( rPoint3D.getZ() - fViewPoint.getZ() );
         aPoint2D.setX( static_cast<sal_Int32>(( fX - fViewPoint.getX() ) * f + fViewPoint.getX() + fOriginX ) );
         aPoint2D.setY( static_cast<sal_Int32>(( fY - fViewPoint.getY() ) * f + fViewPoint.getY() + fOriginY ) );
     }

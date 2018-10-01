@@ -61,7 +61,7 @@ namespace svxform
         void    CancelPendingCall();
 
     private:
-        Link<void*,void>  m_aHandler;
+        Link<void*,void> const  m_aHandler;
         ImplSVEvent * m_nEventId;
 
     private:

@@ -63,7 +63,7 @@ public:
         parent/child relationships with the shape as initiator.
         Note that NULL is a valid value for this member.
     */
-    IAccessibleParent* mpChildrenManager;
+    IAccessibleParent* const mpChildrenManager;
 
     /** Copy the given values into the members described above.
     */

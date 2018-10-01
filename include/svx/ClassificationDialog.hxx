@@ -60,7 +60,7 @@ private:
     const std::function<void()> m_aParagraphSignHandler;
 
     sal_Int32 m_nCurrentSelectedCategory;
-    sal_Int16 m_nInsertMarkings;
+    sal_Int16 const m_nInsertMarkings;
 
     DECL_LINK(ButtonClicked, Button*, void);
     DECL_LINK(SelectToolboxHdl, ToolBox*, void);

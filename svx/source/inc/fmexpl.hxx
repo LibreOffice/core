@@ -64,8 +64,8 @@ class SdrMarkList;
 class FmEntryData;
 class FmNavInsertedHint : public SfxHint
 {
-    FmEntryData* pEntryData;
-    sal_uInt32 nPos;
+    FmEntryData* const pEntryData;
+    sal_uInt32 const nPos;
 
 public:
     FmNavInsertedHint( FmEntryData* pInsertedEntryData, sal_uInt32 nRelPos );
@@ -78,7 +78,7 @@ public:
 
 class FmNavModelReplacedHint : public SfxHint
 {
-    FmEntryData* pEntryData;    // the data of the entry that has got a new model
+    FmEntryData* const pEntryData;    // the data of the entry that has got a new model
 
 public:
     FmNavModelReplacedHint( FmEntryData* pAffectedEntryData );
@@ -90,7 +90,7 @@ public:
 
 class FmNavRemovedHint : public SfxHint
 {
-    FmEntryData* pEntryData;
+    FmEntryData* const pEntryData;
 
 public:
     FmNavRemovedHint( FmEntryData* pInsertedEntryData );
@@ -102,8 +102,8 @@ public:
 
 class FmNavNameChangedHint : public SfxHint
 {
-    FmEntryData*    pEntryData;
-    OUString          aNewName;
+    FmEntryData* const    pEntryData;
+    OUString const          aNewName;
 
 public:
     FmNavNameChangedHint( FmEntryData* pData, const OUString& rNewName );
