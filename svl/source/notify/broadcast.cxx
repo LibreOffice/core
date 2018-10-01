@@ -44,8 +44,10 @@ void SvtBroadcaster::Add( SvtListener* p )
     assert(!mbAboutToDie && "called after PrepareForDestruction()?");
     if (mbDisposing || mbAboutToDie)
         return;
+    // only reset mbNormalized if we are going to become unsorted
+    if (!maListeners.empty() && maListeners.back() > p)
+        mbNormalized = false;
     maListeners.push_back(p);
-    mbNormalized = false;
 }
 
 void SvtBroadcaster::Remove( SvtListener* p )
@@ -73,7 +75,7 @@ void SvtBroadcaster::Remove( SvtListener* p )
         ListenersGone();
 }
 
-SvtBroadcaster::SvtBroadcaster() : mbAboutToDie(false), mbDisposing(false), mbNormalized(false), mbDestNormalized(false) {}
+SvtBroadcaster::SvtBroadcaster() : mbAboutToDie(false), mbDisposing(false), mbNormalized(true), mbDestNormalized(true) {}
 
 SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC ) :
     mbAboutToDie(false), mbDisposing(false),
@@ -82,11 +84,10 @@ SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC ) :
     assert(!rBC.mbAboutToDie && "copying an object marked with PrepareForDestruction()?");
     assert(!rBC.mbDisposing && "copying an object that is in it's destructor?");
 
+    rBC.Normalize(); // so that insert into ourself is in-order, and therefore we do not need to Normalize()
     maListeners.reserve(rBC.maListeners.size());
-    for (ListenersType::iterator it(rBC.maListeners.begin()); it != rBC.maListeners.end(); ++it)
-    {
-         (*it)->StartListening(*this); // this will call back into this->Add()
-    }
+    for (SvtListener* p : rBC.maListeners)
+         p->StartListening(*this); // this will call back into this->Add()
 }
 
 SvtBroadcaster::~SvtBroadcaster()
@@ -150,6 +151,7 @@ bool SvtBroadcaster::HasListeners() const
 void SvtBroadcaster::PrepareForDestruction()
 {
     mbAboutToDie = true;
+    // the reserve() serves two purpose (1) performance (2) makes sure our iterators do not become invalid
     maDestructedListeners.reserve(maListeners.size());
 }
 
