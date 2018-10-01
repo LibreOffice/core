@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_84cb071d",
+        "filename": "sw/qa/python/check_xcloseable.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-10-01T00:02:02Z",
+      "side": 1,
+      "message": "would be interesting to also check behaviour when throwing CloseVetoException",
+      "revId": "d0897cd1991c51bc7eecbc1c17dc8ed35069eaeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_64d0f3ca",
+        "filename": "sw/qa/python/check_xcloseable.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-10-01T00:02:02Z",
+      "side": 1,
+      "message": "this only make sense when throwing CloseVetoException in the listener (and make sure we can then close again \u0026 properly, see XCloseable ifc docs)",
+      "revId": "d0897cd1991c51bc7eecbc1c17dc8ed35069eaeb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
