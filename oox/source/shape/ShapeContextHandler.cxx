@@ -119,7 +119,13 @@ uno::Reference<xml::sax::XFastContextHandler> const & ShapeContextHandler::getWp
         switch (getBaseToken(nStartElement))
         {
             case XML_wsp:
-                mxWpsContext.set(new WpsContext(*rFragmentHandler, xShape));
+                mxWpsContext.set(new WpsContext(
+                                     *rFragmentHandler,
+                                     xShape,
+                                     pMasterShape,
+                                     ShapePtr(
+                                         new oox::drawingml::Shape(
+                                             "com.sun.star.drawing.CustomShape"))));
                 break;
             default:
                 break;
@@ -337,6 +343,25 @@ void SAL_CALL ShapeContextHandler::endFastElement(::sal_Int32 Element)
             mxWpsContext.clear();
         mxSavedShape.clear();
     }
+    // In case a textbox is sent in writerfilter, we add the shape
+    // (and any parent group shape) early. go through all un-processed
+    // children & add them now, too
+    // This parrots wps:wsp behaviour
+    if (Element == (NMSP_wpg | XML_wgp))
+    {
+        if (mxSavedShape.is())
+        {
+            ShapePtr pShape = dynamic_cast<WpgContext&>(*mxWpgContext.get()).getShape();
+            if (pShape)
+            {
+                basegfx::B2DHomMatrix aMatrix;
+                uno::Reference< drawing::XShapes > xShapes( mxDrawPage, uno::UNO_QUERY );
+                pShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShape->getFillProperties());
+                mxWpgContext.clear();
+            }
+            mxSavedShape.clear();
+        }
+    }
 }
 
 void SAL_CALL ShapeContextHandler::endUnknownElement
@@ -500,7 +525,7 @@ ShapeContextHandler::getShape()
                 pShape->setPosition(maPosition);
                 pShape->addShape(*mxFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShape->getFillProperties());
                 xResult = pShape->getXShape();
-                mxWpgContext.clear();
+                mxSavedShape = xResult;
             }
         }
         else if (mpShape.get() != nullptr)
