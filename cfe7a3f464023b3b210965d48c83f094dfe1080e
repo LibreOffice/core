@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_d7ef73e7",
+        "filename": "connectivity/registry/ado/org/openoffice/Office/DataAccess/Drivers.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-10-01T11:02:28Z",
+      "side": 1,
+      "message": "No. 3 is \"Microsoft Access mode\" and not a good default IMHO.",
+      "range": {
+        "startLine": 86,
+        "startChar": 19,
+        "endLine": 86,
+        "endChar": 20
+      },
+      "revId": "cfe7a3f464023b3b210965d48c83f094dfe1080e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_b7ecfff3",
+        "filename": "connectivity/registry/ado/org/openoffice/Office/DataAccess/Drivers.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-10-01T11:02:28Z",
+      "side": 1,
+      "message": "No. 3 is \"Microsoft Access mode\" and not a good default IMHO.",
+      "range": {
+        "startLine": 168,
+        "startChar": 19,
+        "endLine": 168,
+        "endChar": 20
+      },
+      "revId": "cfe7a3f464023b3b210965d48c83f094dfe1080e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
