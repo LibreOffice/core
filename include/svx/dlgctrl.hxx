@@ -423,7 +423,7 @@ public:
 |*
 \************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC XLinePreview : public PreviewBase
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxXLinePreview : public PreviewBase
 {
 private:
     SdrPathObj*                                     mpLineObjA;
@@ -435,9 +435,9 @@ private:
     Size                                            maSymbolSize;
 
 public:
-    XLinePreview();
+    SvxXLinePreview();
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
-    virtual ~XLinePreview() override;
+    virtual ~SvxXLinePreview() override;
 
     void SetLineAttributes(const SfxItemSet& rItemSet);
 

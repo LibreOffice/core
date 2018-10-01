@@ -1336,7 +1336,7 @@ void SvxPreviewBase::DataChanged(const DataChangedEvent& rDCEvt)
     }
 }
 
-void XLinePreview::Resize()
+void SvxXLinePreview::Resize()
 {
     PreviewBase::Resize();
 
@@ -1376,7 +1376,7 @@ void XLinePreview::Resize()
     mpLineObjC->SetPathPoly(basegfx::B2DPolyPolygon(aPolygonC));
 }
 
-XLinePreview::XLinePreview()
+SvxXLinePreview::SvxXLinePreview()
     : mpLineObjA(nullptr)
     , mpLineObjB(nullptr)
     , mpLineObjC(nullptr)
@@ -1385,7 +1385,7 @@ XLinePreview::XLinePreview()
 {
 }
 
-void XLinePreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
+void SvxXLinePreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     PreviewBase::SetDrawingArea(pDrawingArea);
 
@@ -1397,7 +1397,7 @@ void XLinePreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     Invalidate();
 }
 
-XLinePreview::~XLinePreview()
+SvxXLinePreview::~SvxXLinePreview()
 {
     SdrObject *pFoo = mpLineObjA;
     SdrObject::Free( pFoo );
@@ -1407,13 +1407,13 @@ XLinePreview::~XLinePreview()
     SdrObject::Free( pFoo );
 }
 
-void XLinePreview::SetSymbol(Graphic* p,const Size& s)
+void SvxXLinePreview::SetSymbol(Graphic* p,const Size& s)
 {
     mpGraphic = p;
     maSymbolSize = s;
 }
 
-void XLinePreview::ResizeSymbol(const Size& s)
+void SvxXLinePreview::ResizeSymbol(const Size& s)
 {
     if ( s != maSymbolSize )
     {
@@ -1422,7 +1422,7 @@ void XLinePreview::ResizeSymbol(const Size& s)
     }
 }
 
-void XLinePreview::SetLineAttributes(const SfxItemSet& rItemSet)
+void SvxXLinePreview::SetLineAttributes(const SfxItemSet& rItemSet)
 {
     // Set ItemSet at objects
     mpLineObjA->SetMergedItemSet(rItemSet);
@@ -1436,7 +1436,7 @@ void XLinePreview::SetLineAttributes(const SfxItemSet& rItemSet)
     mpLineObjC->SetMergedItemSet(aTempSet);
 }
 
-void XLinePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+void SvxXLinePreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
     LocalPrePaint(rRenderContext);
 
