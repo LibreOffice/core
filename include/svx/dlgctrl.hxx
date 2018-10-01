@@ -335,41 +335,6 @@ class SdrObject;
 class SdrPathObj;
 class SdrModel;
 
-class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI SvxPreviewBase : public Control
-{
-private:
-    std::unique_ptr<SdrModel> mpModel;
-    VclPtr<VirtualDevice> mpBufferDevice;
-
-protected:
-    void InitSettings(bool bForeground, bool bBackground);
-
-    // prepare buffered paint
-    void LocalPrePaint(vcl::RenderContext const & rRenderContext);
-
-    // end and output buffered paint
-    void LocalPostPaint(vcl::RenderContext& rRenderContext);
-
-public:
-    SvxPreviewBase(vcl::Window* pParent);
-    virtual ~SvxPreviewBase() override;
-    virtual void dispose() override;
-
-    // change support
-    virtual void StateChanged(StateChangedType nStateChange) override;
-    virtual void DataChanged(const DataChangedEvent& rDCEvt) override;
-
-    // dada read access
-    SdrModel& getModel() const
-    {
-        return *mpModel;
-    }
-    OutputDevice& getBufferDevice() const
-    {
-        return *mpBufferDevice;
-    }
-};
-
 class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI PreviewBase : public weld::CustomWidgetController
 {
 private:
