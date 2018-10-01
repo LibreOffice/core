@@ -112,6 +112,8 @@ mail [Re: C[++]: Normalizing include syntax ("" vs
 The UNO API include files should consistently use double quotes, for the
 benefit of external users of this API.
 
+loplugin:includeform (compilerplugins/clang/includeform.cxx) enforces these rules.
+
 
 ## Finding out more
 
