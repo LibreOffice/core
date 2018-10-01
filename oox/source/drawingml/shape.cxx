@@ -255,7 +255,8 @@ void Shape::addShape(
         const Reference< XShapes >& rxShapes,
         const basegfx::B2DHomMatrix& aTransformation,
         FillProperties& rShapeOrParentShapeFillProps,
-        ShapeIdMap* pShapeMap )
+        ShapeIdMap* pShapeMap,
+        bool bInGroup )
 {
     SAL_INFO("oox.drawingml", "Shape::addShape: id='" << msId << "'");
 
@@ -265,7 +266,7 @@ void Shape::addShape(
         if( !sServiceName.isEmpty() )
         {
             basegfx::B2DHomMatrix aMatrix( aTransformation );
-            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, false, false, aMatrix, rShapeOrParentShapeFillProps ) );
+            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, false, false, aMatrix, rShapeOrParentShapeFillProps, bInGroup ) );
 
             if( pShapeMap && !msId.isEmpty() )
             {
@@ -390,7 +391,7 @@ void Shape::addChildren(
     for (auto const& child : rMaster.maChildren)
     {
         child->setMasterTextListStyle( mpMasterTextListStyle );
-        child->addShape( rFilterBase, pTheme, rxShapes, aChildTransformation, getFillProperties(), pShapeMap );
+        child->addShape( rFilterBase, pTheme, rxShapes, aChildTransformation, getFillProperties(), pShapeMap, true );
     }
 }
 
@@ -585,7 +586,8 @@ Reference< XShape > const & Shape::createAndInsert(
         bool bClearText,
         bool bDoNotInsertEmptyTextBody,
         basegfx::B2DHomMatrix& aParentTransformation,
-        FillProperties& rShapeOrParentShapeFillProps )
+        FillProperties& rShapeOrParentShapeFillProps,
+        bool bInGroup )
 {
     bool bIsEmbMedia = false;
     SAL_INFO("oox.drawingml", "Shape::createAndInsert: id='" << msId << "' service='" << rServiceName << "'");
@@ -671,8 +673,8 @@ Reference< XShape > const & Shape::createAndInsert(
             maSize.Height ? maSize.Height : 1.0 );
     }
 
-    bool bInGroup = !aParentTransformation.isIdentity();
-    if( mbFlipH || mbFlipV || mnRotation != 0 || bInGroup )
+    bool bNoTranslation = !aParentTransformation.isIdentity();
+    if( mbFlipH || mbFlipV || mnRotation != 0 || bNoTranslation )
     {
         // calculate object's center
         basegfx::B2DPoint aCenter(0.5, 0.5);
@@ -767,7 +769,7 @@ Reference< XShape > const & Shape::createAndInsert(
             // tdf#106792 Not needed anymore due to the change in SdrPathObj::NbcResize:
             // tdf#96674: Guard against zero width or height.
 
-            if (bIsWriter && bInGroup)
+            if (bIsWriter && bNoTranslation)
                 // Writer's draw page is in twips, and these points get passed
                 // to core without any unit conversion when Writer
                 // postprocesses only the group shape itself.
