@@ -85,7 +85,7 @@ namespace svt { namespace table
         bool    impl_isValidRow( RowPos const i_row ) const;
 
         RowPos  m_nRowPos;
-        bool    m_bAllowVirtualRows;
+        bool const    m_bAllowVirtualRows;
     };
 
 
@@ -120,7 +120,7 @@ namespace svt { namespace table
     class TableCellGeometry
     {
     private:
-        TableRowGeometry    m_aRow;
+        TableRowGeometry const    m_aRow;
         TableColumnGeometry m_aCol;
 
     public:

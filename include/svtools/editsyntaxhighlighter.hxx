@@ -28,9 +28,8 @@
 class SVT_DLLPUBLIC MultiLineEditSyntaxHighlight : public MultiLineEdit
 {
     private:
-        bool                mbDoBracketHilight;
-        SyntaxHighlighter   aHighlighter;
-        svtools::ColorConfig m_aColorConfig;
+        SyntaxHighlighter const   aHighlighter;
+        svtools::ColorConfig const m_aColorConfig;
 
     private:
         void DoBracketHilight(sal_uInt16 aKey);

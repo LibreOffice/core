@@ -576,13 +576,13 @@ struct RulerSelection
 
 struct RulerUnitData
 {
-    MapUnit         eMapUnit;           // MAP_UNIT for calculation
-    long            nTickUnit;          // Unit divider
-    double          nTick1;             // Minimal step
-    double          nTick2;             // Tick quarter unit
-    double          nTick3;             // Tick half unit
-    double          nTick4;             // Tick whole unit
-    sal_Char        aUnitStr[8];        // Unit string
+    MapUnit const         eMapUnit;           // MAP_UNIT for calculation
+    long const            nTickUnit;          // Unit divider
+    double const          nTick1;             // Minimal step
+    double const          nTick2;             // Tick quarter unit
+    double const          nTick3;             // Tick half unit
+    double const          nTick4;             // Tick whole unit
+    sal_Char const        aUnitStr[8];        // Unit string
 };
 
 

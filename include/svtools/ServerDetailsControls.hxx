@@ -56,7 +56,7 @@ class DetailsContainer
 class HostDetailsContainer : public DetailsContainer
 {
     private:
-        sal_uInt16 m_nDefaultPort;
+        sal_uInt16 const m_nDefaultPort;
         OUString m_sScheme;
         OUString m_sHost;
 

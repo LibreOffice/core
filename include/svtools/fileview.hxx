@@ -190,7 +190,7 @@ protected:
 
 struct SvtContentEntry
 {
-    bool     mbIsFolder;
+    bool const     mbIsFolder;
     OUString maURL;
 
     SvtContentEntry( const OUString& rURL, bool bIsFolder ) :

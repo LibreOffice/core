@@ -40,7 +40,7 @@ namespace svt
         virtual void AddSupportedFormats() override;
         virtual bool GetData( const css::datatransfer::DataFlavor& _rFlavor, const OUString& rDestDoc ) override;
 
-        OUString     m_sContent;
+        OUString const     m_sContent;
     };
 
 

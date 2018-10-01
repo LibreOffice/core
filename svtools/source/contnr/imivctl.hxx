@@ -162,7 +162,7 @@ class SvxIconChoiceCtrl_Impl
     Idle                    aVisRectChangedIdle;
     Idle                    aCallSelectHdlIdle;
     Size                    aVirtOutputSize;
-    Size                    aImageSize;
+    Size const              aImageSize;
     Size                    aDefaultTextSize;
     Size                    aOutputSize; // Pixel
     VclPtr<SvtIconChoiceCtrl>  pView;
