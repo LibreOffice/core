@@ -1078,7 +1078,7 @@ vcl::Window* Window::GetWindow( GetWindowType nType ) const
                 return mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpOverlapWindow;
 
         case GetWindowType::Client:
-            return const_cast<vcl::Window*>(this)->ImplGetWindow();
+            return this->ImplGetWindow();
 
         case GetWindowType::RealParent:
             return ImplGetParent();

@@ -555,7 +555,7 @@ public:
     SalFrame*                           ImplGetFrame() const;
     SAL_DLLPRIVATE ImplFrameData*       ImplGetFrameData();
 
-                   vcl::Window*         ImplGetWindow();
+                   vcl::Window*         ImplGetWindow() const; ///< if this is a proxy return the client, otherwise itself
     SAL_DLLPRIVATE ImplWinData*         ImplGetWinData() const;
     SAL_DLLPRIVATE vcl::Window*         ImplGetClientWindow() const;
     SAL_DLLPRIVATE vcl::Window*         ImplGetDlgWindow( sal_uInt16 n, GetDlgWindowType nType, sal_uInt16 nStart = 0, sal_uInt16 nEnd = 0xFFFF, sal_uInt16* pIndex = nullptr );

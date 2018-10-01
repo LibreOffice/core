@@ -825,12 +825,12 @@ OString Window::GetScreenshotId() const
 
 // --------- old inline methods ---------------
 
-vcl::Window* Window::ImplGetWindow()
+vcl::Window* Window::ImplGetWindow() const
 {
     if ( mpWindowImpl->mpClientWindow )
         return mpWindowImpl->mpClientWindow;
     else
-        return this;
+        return const_cast<vcl::Window*>(this);
 }
 
 ImplFrameData* Window::ImplGetFrameData()

@@ -397,7 +397,7 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
                 nRole = accessibility::AccessibleRole::FRAME;
             else if( IsScrollable() )
                 nRole = accessibility::AccessibleRole::SCROLL_PANE;
-            else if( const_cast<vcl::Window*>(this)->ImplGetWindow()->IsMenuFloatingWindow() )
+            else if( this->ImplGetWindow()->IsMenuFloatingWindow() )
                 nRole = accessibility::AccessibleRole::WINDOW;      // #106002#, contextmenus are windows (i.e. toplevel)
             else
                 // #104051# WINDOW seems to be a bad default role, use LAYEREDPANE instead
@@ -527,7 +527,7 @@ OUString Window::GetAccessibleDescription() const
     {
         // Special code for help text windows. ZT asks the border window for the
         // description so we have to forward this request to our inner window.
-        const vcl::Window* pWin = const_cast<vcl::Window *>(this)->ImplGetWindow();
+        const vcl::Window* pWin = this->ImplGetWindow();
         if ( pWin->GetType() == WindowType::HELPTEXTWINDOW )
             aAccessibleDescription = pWin->GetHelpText();
         else
