@@ -17,6 +17,7 @@
 #include "swdllapi.h"
 
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Sequence.hxx>
 
 class SwTextNode;
 
@@ -26,6 +27,7 @@ namespace com { namespace sun { namespace star {
     }
     namespace rdf {
         class XResource;
+        class XURI;
     }
 }}}
 
@@ -33,6 +35,15 @@ namespace com { namespace sun { namespace star {
 class SW_DLLPUBLIC SwRDFHelper
 {
 public:
+    /// Gets all graph-names in RDF of a given type.
+    static css::uno::Sequence<css::uno::Reference<css::rdf::XURI>>
+    getGraphNames(const css::uno::Reference<css::frame::XModel>& xModel, const OUString& rType);
+
+    /// Gets all (XResource, key, value) statements in RDF graphs given the graph-names.
+    static std::map<OUString, OUString>
+    getStatements(const css::uno::Reference<css::frame::XModel>& xModel,
+                  const css::uno::Sequence<css::uno::Reference<css::rdf::XURI>>& rGraphNames,
+                  const css::uno::Reference<css::rdf::XResource>& xSubject);
 
     /// Gets all (XResource, key, value) statements in RDF graphs of type rType.
     static std::map<OUString, OUString> getStatements(const css::uno::Reference<css::frame::XModel>& xModel,
