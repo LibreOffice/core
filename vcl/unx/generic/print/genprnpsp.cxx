@@ -231,11 +231,13 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     if( rData.getStreamBuffer( pBuffer, nBytes ) )
     {
         pJobSetup->SetDriverDataLen( nBytes );
+        // TODO
         pJobSetup->SetDriverData( static_cast<sal_uInt8*>(pBuffer) );
     }
     else
     {
         pJobSetup->SetDriverDataLen( 0 );
+        // TODO
         pJobSetup->SetDriverData( nullptr );
     }
     pJobSetup->SetPapersizeFromSetup( rData.m_bPapersizeFromSetup );
@@ -538,12 +540,14 @@ bool PspSalInfoPrinter::Setup( weld::Window* pFrame, ImplJobSetup* pJobSetup )
     {
         aInfo.resolveDefaultBackend();
         std::free( const_cast<sal_uInt8*>(pJobSetup->GetDriverData()) );
+        // TODO
         pJobSetup->SetDriverData( nullptr );
 
         sal_uInt32 nBytes;
         void* pBuffer = nullptr;
         aInfo.getStreamBuffer( pBuffer, nBytes );
         pJobSetup->SetDriverDataLen( nBytes );
+        // TODO
         pJobSetup->SetDriverData( static_cast<sal_uInt8*>(pBuffer) );
 
         // copy everything to job setup

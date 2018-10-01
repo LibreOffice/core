@@ -644,6 +644,7 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
              rData.GetDriver() != pInfo->maDriver )
         {
             std::free( const_cast<sal_uInt8*>(rData.GetDriverData()) );
+            // TODO
             rData.SetDriverData(nullptr);
             rData.SetDriverDataLen(0);
         }

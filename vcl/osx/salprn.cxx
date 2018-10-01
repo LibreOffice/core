@@ -187,6 +187,7 @@ bool AquaSalInfoPrinter::SetPrinterData( ImplJobSetup* io_pSetupData )
         io_pSetupData->SetOrientation( mePageOrientation );
 
         io_pSetupData->SetPaperBin( 0 );
+        // TODO
         io_pSetupData->SetDriverData( static_cast<sal_uInt8*>(std::malloc( 4 )) );
         io_pSetupData->SetDriverDataLen( 4 );
     }

@@ -338,6 +338,7 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter const * pPrinter,
         if ( bDelete )
         {
             std::free( const_cast<sal_uInt8*>(pSetupData->GetDriverData()) );
+            // TODO
             pSetupData->SetDriverData( nullptr );
             pSetupData->SetDriverDataLen( 0 );
         }
@@ -433,6 +434,7 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
     if ( pSetupData->GetDriverData() )
         std::free( const_cast<sal_uInt8*>(pSetupData->GetDriverData()) );
     pSetupData->SetDriverDataLen( nDriverDataLen );
+    // TODO
     pSetupData->SetDriverData(reinterpret_cast<BYTE*>(pOutBuffer));
     pSetupData->SetSystem( JOBSETUP_SYSTEM_WINDOWS );
 

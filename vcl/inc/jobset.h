@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/prntypes.hxx>
 #include <unordered_map>
+#include <memory>
 
 // see com.sun.star.portal.client.JobSetupSystem.idl:
 #define JOBSETUP_SYSTEM_WINDOWS     1
@@ -42,7 +43,7 @@ private:
     long            mnPaperWidth;       //< paper width (100th mm)
     long            mnPaperHeight;      //< paper height (100th mm)
     sal_uInt32      mnDriverDataLen;    //< length of system specific data
-    sal_uInt8*      mpDriverData;       //< system specific data (will be streamed a byte block)
+    std::unique_ptr<sal_uInt8[]> mpDriverData; //< system specific data (will be streamed a byte block)
     bool            mbPapersizeFromSetup;
     // setup mode
     PrinterSetupMode meSetupMode;
@@ -52,7 +53,6 @@ private:
 public:
     ImplJobSetup();
     ImplJobSetup( const ImplJobSetup& rJobSetup );
-    ~ImplJobSetup();
 
     bool operator==( const ImplJobSetup& rImplJobSetup ) const;
 
@@ -86,8 +86,8 @@ public:
     sal_uInt32       GetDriverDataLen() const { return mnDriverDataLen; }
     void             SetDriverDataLen(sal_uInt32 nDriverDataLen);
 
-    const sal_uInt8* GetDriverData() const { return mpDriverData; }
-    void             SetDriverData(sal_uInt8* pDriverData);
+    const sal_uInt8* GetDriverData() const { return mpDriverData.get(); }
+    void             SetDriverData(std::unique_ptr<sal_uInt8[]> pDriverData);
 
     bool             GetPapersizeFromSetup() const { return mbPapersizeFromSetup; }
     void             SetPapersizeFromSetup(bool bPapersizeFromSetup);

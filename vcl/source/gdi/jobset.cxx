@@ -59,7 +59,6 @@ ImplJobSetup::ImplJobSetup()
     mnPaperWidth        = 0;
     mnPaperHeight       = 0;
     mnDriverDataLen     = 0;
-    mpDriverData        = nullptr;
     mbPapersizeFromSetup = false;
     meSetupMode         = PrinterSetupMode::DocumentGlobal;
 }
@@ -75,14 +74,15 @@ ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
     mnPaperWidth( rJobSetup.GetPaperWidth() ),
     mnPaperHeight( rJobSetup.GetPaperHeight() ),
     mnDriverDataLen( rJobSetup.GetDriverDataLen() ),
+    mpDriverData(),
     mbPapersizeFromSetup( rJobSetup.GetPapersizeFromSetup() ),
     meSetupMode( rJobSetup.GetPrinterSetupMode() ),
     maValueMap( rJobSetup.GetValueMap() )
  {
     if ( rJobSetup.GetDriverData() )
     {
-        mpDriverData = static_cast<sal_uInt8*>(std::malloc( mnDriverDataLen ));
-        memcpy( mpDriverData, rJobSetup.GetDriverData(), mnDriverDataLen );
+        mpDriverData.reset( new sal_uInt8[mnDriverDataLen] );
+        memcpy( mpDriverData.get(), rJobSetup.GetDriverData(), mnDriverDataLen );
     }
     else
         mpDriverData = nullptr;
@@ -90,7 +90,6 @@ ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
 
 ImplJobSetup::~ImplJobSetup()
 {
-    std::free( mpDriverData );
 }
 
 void ImplJobSetup::SetSystem(sal_uInt16 nSystem)
@@ -145,7 +144,8 @@ void ImplJobSetup::SetDriverDataLen(sal_uInt32 nDriverDataLen)
 
 void ImplJobSetup::SetDriverData(sal_uInt8* pDriverData)
 {
-    mpDriverData = pDriverData;
+    // TODO
+    mpDriverData.reset(pDriverData);
 }
 
 void ImplJobSetup::SetPapersizeFromSetup(bool bPapersizeFromSetup)
@@ -181,7 +181,9 @@ bool ImplJobSetup::operator==( const ImplJobSetup& rImplJobSetup ) const
          mbPapersizeFromSetup == rImplJobSetup.mbPapersizeFromSetup &&
          mnDriverDataLen   == rImplJobSetup.mnDriverDataLen &&
          maValueMap        == rImplJobSetup.maValueMap      &&
-         memcmp( mpDriverData, rImplJobSetup.mpDriverData, mnDriverDataLen ) == 0;
+         memcmp( mpDriverData.get(),
+                 rImplJobSetup.mpDriverData.get(),
+                 std::min(mnDriverDataLen, rImplJobSetup.mnDriverDataLen)) == 0;
 }
 
 namespace
@@ -285,6 +287,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                         sal_uInt8* pNewDriverData = static_cast<sal_uInt8*>(
                             std::malloc( rJobData.GetDriverDataLen() ));
                         memcpy( pNewDriverData, pDriverData, rJobData.GetDriverDataLen() );
+                        // TODO
                         rJobData.SetDriverData( pNewDriverData );
                     }
                 }

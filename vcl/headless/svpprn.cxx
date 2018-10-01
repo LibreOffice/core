@@ -146,11 +146,13 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     if( rData.getStreamBuffer( pBuffer, nBytes ) )
     {
         pJobSetup->SetDriverDataLen( nBytes );
+        // TODO
         pJobSetup->SetDriverData( static_cast<sal_uInt8*>(pBuffer) );
     }
     else
     {
         pJobSetup->SetDriverDataLen( 0 );
+        // TODO
         pJobSetup->SetDriverData( nullptr );
     }
 }
