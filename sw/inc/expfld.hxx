@@ -144,12 +144,12 @@ class SwSetExpField;
 
 class SW_DLLPUBLIC SwSetExpFieldType : public SwValueFieldType
 {
-    OUString sName;
-    const SwNode* pOutlChgNd;
-    OUString      sDelim;
-    sal_uInt16      nType;
-    sal_uInt8       nLevel;
-    bool        bDeleted;
+    OUString m_sName;
+    const SwNode* m_pOutlChgNd;
+    OUString      m_sDelim;
+    sal_uInt16      m_nType;
+    sal_uInt8       m_nLevel;
+    bool        m_bDeleted;
 
 protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
@@ -166,8 +166,8 @@ public:
     void                    SetSeqFormat(sal_uLong nFormat);
     sal_uLong               GetSeqFormat();
 
-    bool                IsDeleted() const       { return bDeleted; }
-    void                    SetDeleted( bool b )    { bDeleted = b; }
+    bool                IsDeleted() const       { return m_bDeleted; }
+    void                    SetDeleted( bool b )    { m_bDeleted = b; }
 
     /// Overlay, because set-field takes care for its being updated by itself.
     inline const OUString&  GetSetRefName() const;
@@ -177,16 +177,16 @@ public:
     size_t GetSeqFieldList( SwSeqFieldList& rList );
 
     /// Number sequence fields chapterwise if required.
-    const OUString& GetDelimiter() const      { return sDelim; }
-    void SetDelimiter( const OUString& s )    { sDelim = s; }
-    sal_uInt8 GetOutlineLvl() const             { return nLevel; }
-    void SetOutlineLvl( sal_uInt8 n )           { nLevel = n; }
+    const OUString& GetDelimiter() const      { return m_sDelim; }
+    void SetDelimiter( const OUString& s )    { m_sDelim = s; }
+    sal_uInt8 GetOutlineLvl() const             { return m_nLevel; }
+    void SetOutlineLvl( sal_uInt8 n )           { m_nLevel = n; }
     void SetChapter( SwSetExpField& rField, const SwNode& rNd );
 
     /** Member only for SwDoc::UpdateExpField.
      It is needed only at runtime of sequence field types! */
-    const SwNode* GetOutlineChgNd() const   { return pOutlChgNd; }
-    void SetOutlineChgNd( const SwNode* p ) { pOutlChgNd = p; }
+    const SwNode* GetOutlineChgNd() const   { return m_pOutlChgNd; }
+    void SetOutlineChgNd( const SwNode* p ) { m_pOutlChgNd = p; }
 
     virtual void        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual void        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
@@ -194,23 +194,23 @@ public:
 
 inline void SwSetExpFieldType::SetType( sal_uInt16 nTyp )
 {
-        nType = nTyp;
-        EnableFormat( !(nType & (nsSwGetSetExpType::GSE_SEQ|nsSwGetSetExpType::GSE_STRING)));
+        m_nType = nTyp;
+        EnableFormat( !(m_nType & (nsSwGetSetExpType::GSE_SEQ|nsSwGetSetExpType::GSE_STRING)));
 }
 
 inline sal_uInt16 SwSetExpFieldType::GetType() const
-    { return nType;   }
+    { return m_nType;   }
 
 inline const OUString& SwSetExpFieldType::GetSetRefName() const
-    { return sName; }
+    { return m_sName; }
 
 class SW_DLLPUBLIC SwSetExpField : public SwFormulaField
 {
-    OUString        sExpand;
-    OUString        aPText;
-    bool            bInput;
-    sal_uInt16          nSeqNo;
-    sal_uInt16          nSubType;
+    OUString        msExpand;
+    OUString        maPText;
+    bool            mbInput;
+    sal_uInt16          mnSeqNo;
+    sal_uInt16          mnSubType;
     SwFormatField * mpFormatField; /// pool item to which the SwSetExpField belongs
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
@@ -242,8 +242,8 @@ public:
     inline bool                 IsSequenceField() const;
 
     /// Logical number, sequence fields.
-    void                 SetSeqNumber( sal_uInt16 n )    { nSeqNo = n; }
-    sal_uInt16           GetSeqNumber() const        { return nSeqNo; }
+    void                 SetSeqNumber( sal_uInt16 n )    { mnSeqNo = n; }
+    sal_uInt16           GetSeqNumber() const        { return mnSeqNo; }
 
     /// Query name only.
     virtual OUString       GetPar1()   const override;
@@ -256,22 +256,22 @@ public:
 };
 
 inline const OUString& SwSetExpField::GetExpStr() const
-    { return sExpand;       }
+    { return msExpand;       }
 
 inline void SwSetExpField::ChgExpStr( const OUString& rExpand )
-    { sExpand = rExpand;    }
+    { msExpand = rExpand;    }
 
 inline void  SwSetExpField::SetPromptText(const OUString& rStr)
-    { aPText = rStr;        }
+    { maPText = rStr;        }
 
 inline const OUString& SwSetExpField::GetPromptText() const
-    { return aPText;        }
+    { return maPText;        }
 
 inline void SwSetExpField::SetInputFlag(bool bInp)
-    { bInput = bInp; }
+    { mbInput = bInp; }
 
 inline bool SwSetExpField::GetInputFlag() const
-    { return bInput; }
+    { return mbInput; }
 
 inline bool SwSetExpField::IsSequenceField() const
     { return 0 != (nsSwGetSetExpType::GSE_SEQ & static_cast<SwSetExpFieldType*>(GetTyp())->GetType()); }

@@ -489,29 +489,29 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
 SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const OUString& rName, sal_uInt16 nTyp )
     : SwValueFieldType( pDc, SwFieldIds::SetExp ),
-    sName( rName ),
-    pOutlChgNd( nullptr ),
-    sDelim( "." ),
-    nType(nTyp), nLevel( UCHAR_MAX ),
-    bDeleted( false )
+    m_sName( rName ),
+    m_pOutlChgNd( nullptr ),
+    m_sDelim( "." ),
+    m_nType(nTyp), m_nLevel( UCHAR_MAX ),
+    m_bDeleted( false )
 {
-    if( ( nsSwGetSetExpType::GSE_SEQ | nsSwGetSetExpType::GSE_STRING ) & nType )
+    if( ( nsSwGetSetExpType::GSE_SEQ | nsSwGetSetExpType::GSE_STRING ) & m_nType )
         EnableFormat(false);    // do not use Numberformatter
 }
 
 SwFieldType* SwSetExpFieldType::Copy() const
 {
-    SwSetExpFieldType* pNew = new SwSetExpFieldType(GetDoc(), sName, nType);
-    pNew->bDeleted = bDeleted;
-    pNew->sDelim = sDelim;
-    pNew->nLevel = nLevel;
+    SwSetExpFieldType* pNew = new SwSetExpFieldType(GetDoc(), m_sName, m_nType);
+    pNew->m_bDeleted = m_bDeleted;
+    pNew->m_sDelim = m_sDelim;
+    pNew->m_nLevel = m_nLevel;
 
     return pNew;
 }
 
 OUString SwSetExpFieldType::GetName() const
 {
-    return sName;
+    return m_sName;
 }
 
 void SwSetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* )
@@ -537,7 +537,7 @@ sal_uLong SwSetExpFieldType::GetSeqFormat()
 
 void SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rField )
 {
-    if( !HasWriterListeners() || !(nsSwGetSetExpType::GSE_SEQ & nType) )
+    if( !HasWriterListeners() || !(nsSwGetSetExpType::GSE_SEQ & m_nType) )
         return;
 
     std::vector<sal_uInt16> aArr;
@@ -607,7 +607,7 @@ size_t SwSetExpFieldType::GetSeqFieldList( SwSeqFieldList& rList )
 
 void SwSetExpFieldType::SetChapter( SwSetExpField& rField, const SwNode& rNd )
 {
-    const SwTextNode* pTextNd = rNd.FindOutlineNodeOfLevel( nLevel );
+    const SwTextNode* pTextNd = rNd.FindOutlineNodeOfLevel( m_nLevel );
     if( pTextNd )
     {
         SwNumRule * pRule = pTextNd->GetNumRule();
@@ -623,7 +623,7 @@ void SwSetExpFieldType::SetChapter( SwSetExpField& rField, const SwNode& rNd )
                 OUString sNumber( pRule->MakeNumString(aNum, false ));
 
                 if( !sNumber.isEmpty() )
-                    rField.ChgExpStr( sNumber + sDelim + rField.GetExpStr() );
+                    rField.ChgExpStr( sNumber + m_sDelim + rField.GetExpStr() );
             }
             else
             {
@@ -648,7 +648,7 @@ void SwSetExpFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
     case FIELD_PROP_SHORT1:
         {
-            sal_Int8 nRet = nLevel < MAXLEVEL? nLevel : -1;
+            sal_Int8 nRet = m_nLevel < MAXLEVEL? m_nLevel : -1;
             rAny <<= nRet;
         }
         break;
@@ -774,13 +774,13 @@ bool SwSeqFieldList::SeekEntry( const SeqFieldLstElem& rNew, size_t* pP ) const
 
 SwSetExpField::SwSetExpField(SwSetExpFieldType* pTyp, const OUString& rFormel,
                                         sal_uLong nFormat)
-    : SwFormulaField( pTyp, nFormat, 0.0 ), nSeqNo( USHRT_MAX ),
-    nSubType(0)
+    : SwFormulaField( pTyp, nFormat, 0.0 ), mnSeqNo( USHRT_MAX ),
+    mnSubType(0)
     , mpFormatField(nullptr)
 {
     SetFormula(rFormel);
     // ignore SubType
-    bInput = false;
+    mbInput = false;
     if( IsSequenceField() )
     {
         SwValueField::SetValue(1.0);
@@ -798,13 +798,13 @@ void SwSetExpField::SetFormatField(SwFormatField & rFormatField)
 
 OUString SwSetExpField::ExpandImpl(SwRootFrame const*const) const
 {
-    if (nSubType & nsSwExtendedSubType::SUB_CMD)
+    if (mnSubType & nsSwExtendedSubType::SUB_CMD)
     {   // we need the CommandString
         return GetTyp()->GetName() + " = " + GetFormula();
     }
-    if(!(nSubType & nsSwExtendedSubType::SUB_INVISIBLE))
+    if(!(mnSubType & nsSwExtendedSubType::SUB_INVISIBLE))
     {   // value is visible
-        return sExpand;
+        return msExpand;
     }
     return OUString();
 }
@@ -814,7 +814,7 @@ OUString SwSetExpField::GetFieldName() const
 {
     SwFieldTypesEnum const nStrType( (IsSequenceField())
                             ? TYP_SEQFLD
-                            : (bInput)
+                            : (mbInput)
                                 ? TYP_SETINPFLD
                                 : TYP_SETFLD   );
 
@@ -836,12 +836,12 @@ SwField* SwSetExpField::Copy() const
     SwSetExpField *pTmp = new SwSetExpField(static_cast<SwSetExpFieldType*>(GetTyp()),
                                             GetFormula(), GetFormat());
     pTmp->SwValueField::SetValue(GetValue());
-    pTmp->sExpand       = sExpand;
+    pTmp->msExpand       = msExpand;
     pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
     pTmp->SetLanguage(GetLanguage());
-    pTmp->aPText        = aPText;
-    pTmp->bInput        = bInput;
-    pTmp->nSeqNo        = nSeqNo;
+    pTmp->maPText        = maPText;
+    pTmp->mbInput        = mbInput;
+    pTmp->mnSeqNo        = mnSeqNo;
     pTmp->SetSubType(GetSubType());
 
     return pTmp;
@@ -850,14 +850,14 @@ SwField* SwSetExpField::Copy() const
 void SwSetExpField::SetSubType(sal_uInt16 nSub)
 {
     static_cast<SwSetExpFieldType*>(GetTyp())->SetType(nSub & 0xff);
-    nSubType = nSub & 0xff00;
+    mnSubType = nSub & 0xff00;
 
     OSL_ENSURE( (nSub & 0xff) != 3, "SubType is illegal!" );
 }
 
 sal_uInt16 SwSetExpField::GetSubType() const
 {
-    return static_cast<SwSetExpFieldType*>(GetTyp())->GetType() | nSubType;
+    return static_cast<SwSetExpFieldType*>(GetTyp())->GetType() | mnSubType;
 }
 
 void SwSetExpField::SetValue( const double& rAny )
@@ -865,9 +865,9 @@ void SwSetExpField::SetValue( const double& rAny )
     SwValueField::SetValue(rAny);
 
     if( IsSequenceField() )
-        sExpand = FormatNumber( GetValue(), static_cast<SvxNumType>(GetFormat()), GetLanguage() );
+        msExpand = FormatNumber( GetValue(), static_cast<SvxNumType>(GetFormat()), GetLanguage() );
     else
-        sExpand = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue( rAny,
+        msExpand = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue( rAny,
                                                 GetFormat(), GetLanguage());
 }
 
@@ -975,9 +975,9 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     {
     case FIELD_PROP_BOOL2:
         if(*o3tl::doAccess<bool>(rAny))
-            nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
+            mnSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
         else
-            nSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
+            mnSubType |= nsSwExtendedSubType::SUB_INVISIBLE;
         break;
     case FIELD_PROP_FORMAT:
         rAny >>= nTmp32;
@@ -996,7 +996,7 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_USHORT1:
         rAny >>= nTmp16;
-        nSeqNo = nTmp16;
+        mnSeqNo = nTmp16;
         break;
     case FIELD_PROP_PAR1:
         {
@@ -1029,13 +1029,13 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             SetSubType(static_cast<sal_uInt16>((GetSubType() & 0xff00) | nTmp32));
         break;
     case FIELD_PROP_PAR3:
-        rAny >>= aPText;
+        rAny >>= maPText;
         break;
     case FIELD_PROP_BOOL3:
         if(*o3tl::doAccess<bool>(rAny))
-            nSubType |= nsSwExtendedSubType::SUB_CMD;
+            mnSubType |= nsSwExtendedSubType::SUB_CMD;
         else
-            nSubType &= (~nsSwExtendedSubType::SUB_CMD);
+            mnSubType &= (~nsSwExtendedSubType::SUB_CMD);
         break;
     case FIELD_PROP_BOOL1:
         SetInputFlag(*o3tl::doAccess<bool>(rAny));
@@ -1058,7 +1058,7 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL2:
-        rAny <<= 0 == (nSubType & nsSwExtendedSubType::SUB_INVISIBLE);
+        rAny <<= 0 == (mnSubType & nsSwExtendedSubType::SUB_INVISIBLE);
         break;
     case FIELD_PROP_FORMAT:
         rAny <<= static_cast<sal_Int32>(GetFormat());
@@ -1067,7 +1067,7 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= static_cast<sal_Int16>(GetFormat());
         break;
     case FIELD_PROP_USHORT1:
-        rAny <<= static_cast<sal_Int16>(nSeqNo);
+        rAny <<= static_cast<sal_Int16>(mnSeqNo);
         break;
     case FIELD_PROP_PAR1:
         rAny <<= SwStyleNameMapper::GetProgName(GetPar1(), SwGetPoolIdFromName::TxtColl );
@@ -1092,10 +1092,10 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_PAR3:
-        rAny <<= aPText;
+        rAny <<= maPText;
         break;
     case FIELD_PROP_BOOL3:
-        rAny <<= 0 != (nSubType & nsSwExtendedSubType::SUB_CMD);
+        rAny <<= 0 != (mnSubType & nsSwExtendedSubType::SUB_CMD);
         break;
     case FIELD_PROP_BOOL1:
         rAny <<= GetInputFlag();
