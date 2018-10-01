@@ -585,16 +585,16 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
                 sal::static_int_cast< sal_IntPtr >( xShapeTunnel->getSomething(SvxShape::getUnoTunnelId()) ));
     }
 
-    if(!pShape || pShape->GetRegisteredIn() || !pShape->m_bDescriptor )
-    {
-        uno::RuntimeException aExcept;
-        if(pShape)
-            aExcept.Message = "object already inserted";
-        else
-            aExcept.Message = "illegal object";
-        throw aExcept;
-    }
+    // this is not a writer shape
+    if(!pShape)
+        throw uno::RuntimeException("illegal object",
+                                    static_cast< cppu::OWeakObject * > ( this ) );
 
+    // we're already registered in the model / SwXDrawPage::add() already called
+    if(pShape->GetRegisteredIn() || !pShape->m_bDescriptor )
+        return;
+
+    // we're inserted elsewhere already
     if ( pSvxShape->GetSdrObject() )
     {
         if ( pSvxShape->GetSdrObject()->IsInserted() )
