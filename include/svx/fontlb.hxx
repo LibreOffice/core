@@ -31,7 +31,7 @@ class SAL_WARN_UNUSED SvLBoxFontString : public SvLBoxString
 {
 private:
     vcl::Font                   maFont;     /// The font used by this item.
-    bool                        mbUseColor; /// true = use font color, false = default listbox color.
+    bool const                  mbUseColor; /// true = use font color, false = default listbox color.
 
 public:
                                 SvLBoxFontString();

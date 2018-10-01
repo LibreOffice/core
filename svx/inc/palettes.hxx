@@ -30,7 +30,7 @@ typedef std::vector< NamedColor > ColorList;
 class SVX_DLLPUBLIC PaletteASE : public Palette
 {
     bool        mbValidPalette;
-    OUString    maFPath;
+    OUString const    maFPath;
     OUString    maASEPaletteName;
     ColorList   maColors;
 
@@ -53,8 +53,8 @@ class SVX_DLLPUBLIC PaletteGPL : public Palette
 {
     bool        mbLoadedPalette;
     bool        mbValidPalette;
-    OUString    maFName;
-    OUString    maFPath;
+    OUString const    maFName;
+    OUString const    maFPath;
     OUString    maGPLPaletteName;
     ColorList   maColors;
 
@@ -78,8 +78,8 @@ public:
 class SVX_DLLPUBLIC PaletteSOC : public Palette
 {
     bool            mbLoadedPalette;
-    OUString        maFPath;
-    OUString        maSOCPaletteName;
+    OUString const        maFPath;
+    OUString const        maSOCPaletteName;
     XColorListRef   mpColorList;
 public:
     PaletteSOC( const OUString &rFPath, const OUString &rFName );

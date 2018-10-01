@@ -200,8 +200,8 @@ public:
 class SVX_DLLPUBLIC SdrObjUserData
 {
 protected:
-    SdrInventor                     nInventor;
-    sal_uInt16                      nIdentifier;
+    SdrInventor const                     nInventor;
+    sal_uInt16 const                      nIdentifier;
 
 private:
     void operator=(const SdrObjUserData& rData) = delete;
@@ -1044,8 +1044,8 @@ struct SVX_DLLPUBLIC SdrObjectFreeOp
 
 struct SdrObjCreatorParams
 {
-    SdrInventor nInventor;
-    sal_uInt16  nObjIdentifier;
+    SdrInventor const nInventor;
+    sal_uInt16 const  nObjIdentifier;
     SdrModel&   rSdrModel;
 };
 
