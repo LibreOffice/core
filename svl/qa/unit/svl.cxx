@@ -1213,14 +1213,14 @@ void Test::testIsNumberFormatSpecific()
     }
 
     {
-        // en-ZA uses Y/M/D format, test that Y/M/D input leads to Y/M/D output
-        // and ISO Y-M-D input leads to Y-M-D output.
+        // en-ZA uses Y-M-D and Y/M/D format, test that either are accepted.
+        // The default format changed from YY/MM/DD to YYYY-MM-DD.
         SvNumberFormatter aFormatter(m_xContext, LANGUAGE_ENGLISH_SAFRICA);
 
         std::vector<FormatInputOutput> aIO = {
-            { "1999/11/22", true, "99/11/22", 0 },      // if default YY changes to YYYY adapt this
+            { "1999/11/22", true, "1999-11-22", 0 },
             { "1999-11-22", true, "1999-11-22", 0 },
-            { "11/2/1",     true, "11/02/01", 0 },      // if default YY changes to YYYY adapt this
+            { "11/2/1",     true, "2011-02-01", 0 },
             { "99-2-11",    true, "1999-02-11", 0 },
             { "22-2-11",    true, "2022-02-11", 0 }
         };
