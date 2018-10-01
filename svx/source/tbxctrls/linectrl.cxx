@@ -245,7 +245,6 @@ class SvxLineEndWindow : public svtools::ToolbarPopup
 private:
     XLineEndListRef mpLineEndList;
     VclPtr<ValueSet> mpLineEndSet;
-    sal_uInt16 mnCols;
     sal_uInt16 mnLines;
     Size maBmpSize;
     svt::ToolboxController& mrController;
@@ -264,10 +263,11 @@ public:
     virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 };
 
+static constexpr sal_uInt16 gnCols = 2;
+
 SvxLineEndWindow::SvxLineEndWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow )
     :  ToolbarPopup ( rController.getFrameInterface(), pParentWindow, WB_STDPOPUP | WB_MOVEABLE | WB_CLOSEABLE ),
     mpLineEndSet    ( VclPtr<ValueSet>::Create(this, WinBits( WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) )),
-    mnCols          ( 2 ),
     mnLines         ( 12 ),
     mrController    ( rController )
 {
@@ -285,7 +285,7 @@ SvxLineEndWindow::SvxLineEndWindow( svt::ToolboxController& rController, vcl::Wi
     DBG_ASSERT( mpLineEndList.is(), "LineEndList not found" );
 
     mpLineEndSet->SetSelectHdl( LINK( this, SvxLineEndWindow, SelectHdl ) );
-    mpLineEndSet->SetColCount( mnCols );
+    mpLineEndSet->SetColCount( gnCols );
 
     // ValueSet fill with entries of LineEndList
     FillValueSet();
@@ -426,7 +426,7 @@ void SvxLineEndWindow::statusChanged( const css::frame::FeatureStateEvent& rEven
 void SvxLineEndWindow::SetSize()
 {
     sal_uInt16 nItemCount = mpLineEndSet->GetItemCount();
-    sal_uInt16 nMaxLines  = nItemCount / mnCols;
+    sal_uInt16 nMaxLines  = nItemCount / gnCols;
 
     WinBits nBits = mpLineEndSet->GetStyle();
     if ( mnLines == nMaxLines )

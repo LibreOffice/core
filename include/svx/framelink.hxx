@@ -206,9 +206,9 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC StyleVectorCombination
 private:
     struct OffsetAndHalfWidthAndColor
     {
-        double          mfOffset;
-        double          mfHalfWidth;
-        Color           maColor;
+        double const          mfOffset;
+        double const          mfHalfWidth;
+        Color const           maColor;
 
         OffsetAndHalfWidthAndColor(double offset, double halfWidth, Color color) :
             mfOffset(offset),

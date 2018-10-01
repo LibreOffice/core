@@ -54,8 +54,8 @@ class SAL_WARN_UNUSED E3dUndoAction : public SdrUndoAction
 class SAL_WARN_UNUSED E3dRotateUndoAction : public E3dUndoAction
 {
 private:
-    basegfx::B3DHomMatrix   maMyOldRotation;
-    basegfx::B3DHomMatrix   maMyNewRotation;
+    basegfx::B3DHomMatrix const   maMyOldRotation;
+    basegfx::B3DHomMatrix const   maMyNewRotation;
 
 public:
     E3dRotateUndoAction(

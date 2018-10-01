@@ -28,7 +28,6 @@
 
 SvxPresetListBox::SvxPresetListBox(std::unique_ptr<weld::ScrolledWindow> pWindow)
     : SvtValueSet(std::move(pWindow))
-    , nColCount(3)
     , aIconSize(60, 64)
 {
     SetEdgeBlending(true);

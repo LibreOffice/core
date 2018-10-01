@@ -29,8 +29,8 @@ namespace sdr
         class SVX_DLLPUBLIC OverlayTriangle final : public OverlayObjectWithBasePosition
         {
             // second and third position in pixel
-            basegfx::B2DPoint                       maSecondPosition;
-            basegfx::B2DPoint                       maThirdPosition;
+            basegfx::B2DPoint const                       maSecondPosition;
+            basegfx::B2DPoint const                       maThirdPosition;
 
             // geometry creation for OverlayObject
             virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;

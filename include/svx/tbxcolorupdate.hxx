@@ -53,8 +53,8 @@ namespace svx
         ToolboxButtonColorUpdater(ToolboxButtonColorUpdater &) = delete;
         void operator =(ToolboxButtonColorUpdater) = delete;
 
-        bool            mbWideButton;
-        sal_uInt16      mnBtnId;
+        bool const            mbWideButton;
+        sal_uInt16 const      mnBtnId;
         VclPtr<ToolBox> mpTbx;
         Color       maCurColor;
         tools::Rectangle   maUpdRect;

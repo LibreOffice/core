@@ -592,10 +592,10 @@ void SAL_CALL SvxShapeControl::setControl( const Reference< awt::XControlModel >
 static struct
 {
     const sal_Char* mpAPIName;
-    sal_uInt16 mnAPINameLen;
+    sal_uInt16 const mnAPINameLen;
 
     const sal_Char* mpFormName;
-    sal_uInt16 mnFormNameLen;
+    sal_uInt16 const mnFormNameLen;
 }
 const SvxShapeControlPropertyMapping[] =
 {
@@ -652,8 +652,8 @@ namespace
 
     struct EnumConversionMap
     {
-        style::ParagraphAdjust   nAPIValue;
-        sal_Int16                nFormValue;
+        style::ParagraphAdjust const   nAPIValue;
+        sal_Int16 const                nFormValue;
     };
 
     EnumConversionMap const aMapAdjustToAlign[] =

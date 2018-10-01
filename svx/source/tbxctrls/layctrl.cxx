@@ -53,16 +53,13 @@ private:
     long                nCol;
     long                nLine;
     Reference< XFrame > mxFrame;
-    OUString            maCommand;
+    OUString const      maCommand;
 
     static const long TABLE_CELLS_HORIZ;
     static const long TABLE_CELLS_VERT;
 
     long mnTableCellWidth;
     long mnTableCellHeight;
-
-    long mnTablePosX;
-    long mnTablePosY;
 
     long mnTableWidth;
     long mnTableHeight;
@@ -99,6 +96,8 @@ IMPL_LINK_NOARG(TableWindow, SelectHdl, Button*, void)
     CloseAndShowTableDialog();
 }
 
+constexpr long nTablePosX = 2;
+constexpr long nTablePosY = 2;
 
 TableWindow::TableWindow( sal_uInt16 nSlotId, vcl::Window* pParent, const OUString& rCmd,
                           const OUString& rText, const Reference< XFrame >& rFrame )
@@ -108,16 +107,14 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, vcl::Window* pParent, const OUStri
     , nLine( 0 )
     , mxFrame( rFrame )
     , maCommand( rCmd )
-    , mnTablePosX(2)
-    , mnTablePosY(2)
 {
     float fScaleFactor = GetDPIScaleFactor();
 
     mnTableCellWidth  = 15 * fScaleFactor;
     mnTableCellHeight = 15 * fScaleFactor;
 
-    mnTableWidth  = mnTablePosX + TABLE_CELLS_HORIZ*mnTableCellWidth;
-    mnTableHeight = mnTablePosY + TABLE_CELLS_VERT*mnTableCellHeight;
+    mnTableWidth  = nTablePosX + TABLE_CELLS_HORIZ*mnTableCellWidth;
+    mnTableHeight = nTablePosY + TABLE_CELLS_VERT*mnTableCellHeight;
 
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     svtools::ColorConfig aColorConfig;
@@ -136,8 +133,8 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, vcl::Window* pParent, const OUStri
 
     SetText( rText );
 
-    aTableButton->SetPosSizePixel( Point( mnTablePosX, mnTableHeight + 5 ),
-            Size( mnTableWidth - mnTablePosX, 24 ) );
+    aTableButton->SetPosSizePixel( Point( nTablePosX, mnTableHeight + 5 ),
+            Size( mnTableWidth - nTablePosX, 24 ) );
     aTableButton->SetText( SvxResId( RID_SVXSTR_MORE ) );
     aTableButton->SetClickHdl( LINK( this, TableWindow, SelectHdl ) );
     aTableButton->Show();
@@ -163,8 +160,8 @@ void TableWindow::MouseMove( const MouseEvent& rMEvt )
     Point aPos = rMEvt.GetPosPixel();
     Point aMousePos( aPos );
 
-    long nNewCol = ( aMousePos.X() - mnTablePosX + mnTableCellWidth ) / mnTableCellWidth;
-    long nNewLine = ( aMousePos.Y() - mnTablePosY + mnTableCellHeight ) / mnTableCellHeight;
+    long nNewCol = ( aMousePos.X() - nTablePosX + mnTableCellWidth ) / mnTableCellWidth;
+    long nNewLine = ( aMousePos.Y() - nTablePosY + mnTableCellHeight ) / mnTableCellHeight;
 
     Update( nNewCol, nNewLine );
 }
@@ -242,35 +239,35 @@ void TableWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
 void TableWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    const long nSelectionWidth = mnTablePosX + nCol * mnTableCellWidth;
-    const long nSelectionHeight = mnTablePosY + nLine * mnTableCellHeight;
+    const long nSelectionWidth = nTablePosX + nCol * mnTableCellWidth;
+    const long nSelectionHeight = nTablePosY + nLine * mnTableCellHeight;
 
     // the non-selected parts of the table
     rRenderContext.SetLineColor(aLineColor);
     rRenderContext.SetFillColor(aFillColor);
-    rRenderContext.DrawRect(tools::Rectangle(nSelectionWidth, mnTablePosY, mnTableWidth, nSelectionHeight));
-    rRenderContext.DrawRect(tools::Rectangle(mnTablePosX, nSelectionHeight, nSelectionWidth, mnTableHeight));
+    rRenderContext.DrawRect(tools::Rectangle(nSelectionWidth, nTablePosY, mnTableWidth, nSelectionHeight));
+    rRenderContext.DrawRect(tools::Rectangle(nTablePosX, nSelectionHeight, nSelectionWidth, mnTableHeight));
     rRenderContext.DrawRect(tools::Rectangle(nSelectionWidth, nSelectionHeight, mnTableWidth, mnTableHeight));
 
     // the selection
     if (nCol > 0 && nLine > 0)
     {
         rRenderContext.SetFillColor(aHighlightFillColor);
-        rRenderContext.DrawRect(tools::Rectangle(mnTablePosX, mnTablePosY, nSelectionWidth, nSelectionHeight));
+        rRenderContext.DrawRect(tools::Rectangle(nTablePosX, nTablePosY, nSelectionWidth, nSelectionHeight));
     }
 
     // lines inside of the table
     rRenderContext.SetLineColor(aLineColor);
     for (long i = 1; i < TABLE_CELLS_VERT; ++i)
     {
-        rRenderContext.DrawLine(Point(mnTablePosX, mnTablePosY + i*mnTableCellHeight),
-                                Point(mnTableWidth, mnTablePosY + i*mnTableCellHeight));
+        rRenderContext.DrawLine(Point(nTablePosX, nTablePosY + i*mnTableCellHeight),
+                                Point(mnTableWidth, nTablePosY + i*mnTableCellHeight));
     }
 
     for (long i = 1; i < TABLE_CELLS_HORIZ; ++i)
     {
-        rRenderContext.DrawLine(Point( mnTablePosX + i*mnTableCellWidth, mnTablePosY),
-                                Point( mnTablePosX + i*mnTableCellWidth, mnTableHeight));
+        rRenderContext.DrawLine(Point( nTablePosX + i*mnTableCellWidth, nTablePosY),
+                                Point( nTablePosX + i*mnTableCellWidth, mnTableHeight));
     }
 
     // the text near the mouse cursor telling the table dimensions
@@ -293,10 +290,10 @@ void TableWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     long nTextY = nSelectionHeight + mnTableCellHeight;
     const long nTipBorder = 2;
 
-    if (aTextSize.Width() + mnTablePosX + mnTableCellWidth + 2 * nTipBorder < nSelectionWidth)
+    if (aTextSize.Width() + nTablePosX + mnTableCellWidth + 2 * nTipBorder < nSelectionWidth)
         nTextX = nSelectionWidth - mnTableCellWidth - aTextSize.Width();
 
-    if (aTextSize.Height() + mnTablePosY + mnTableCellHeight + 2 * nTipBorder < nSelectionHeight)
+    if (aTextSize.Height() + nTablePosY + mnTableCellHeight + 2 * nTipBorder < nSelectionHeight)
         nTextY = nSelectionHeight - mnTableCellHeight - aTextSize.Height();
 
     rRenderContext.SetLineColor(aLineColor);
@@ -343,7 +340,7 @@ void TableWindow::Update( long nNewCol, long nNewLine )
     {
         nCol = nNewCol;
         nLine = nNewLine;
-        Invalidate(tools::Rectangle(mnTablePosX, mnTablePosY, mnTableWidth, mnTableHeight));
+        Invalidate(tools::Rectangle(nTablePosX, nTablePosY, mnTableWidth, mnTableHeight));
     }
 }
 
@@ -389,7 +386,7 @@ private:
     bool                bInitialKeyInput;
     bool                m_bMod1;
     Reference< XFrame > mxFrame;
-    OUString            maCommand;
+    OUString const            maCommand;
 
     void UpdateSize_Impl( long nNewCol );
 public:

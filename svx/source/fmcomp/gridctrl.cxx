@@ -130,7 +130,7 @@ class GridFieldValueListener : protected ::comphelper::OPropertyChangeListener
     osl::Mutex                          m_aMutex;
     DbGridControl&                      m_rParent;
     rtl::Reference<::comphelper::OPropertyChangeMultiplexer> m_pRealListener;
-    sal_uInt16                          m_nId;
+    sal_uInt16 const                    m_nId;
     sal_Int16                           m_nSuspended;
     bool                                m_bDisposed : 1;
 

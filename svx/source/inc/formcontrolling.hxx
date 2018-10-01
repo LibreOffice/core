@@ -71,7 +71,7 @@ namespace svx
     */
     class ControllerFeatures final
     {
-        IControllerFeatureInvalidation* m_pInvalidationCallback;    // necessary as long as m_pImpl is not yet constructed
+        IControllerFeatureInvalidation* const m_pInvalidationCallback;    // necessary as long as m_pImpl is not yet constructed
         rtl::Reference<FormControllerHelper>  m_pImpl;
 
     public:

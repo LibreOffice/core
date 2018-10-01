@@ -34,7 +34,7 @@ class EnhancedCustomShape3d final
 {
     class Transformation2D
     {
-        Point                                   aCenter;
+        Point const                  aCenter;
         css::drawing::ProjectionMode eProjectionMode;
 
         // parallel projection
@@ -42,7 +42,6 @@ class EnhancedCustomShape3d final
         double      fSkew;          // in percent
 
         // perspective projection
-        double      fZScreen;
         basegfx::B3DPoint       fViewPoint;
         double      fOriginX;
         double      fOriginY;
