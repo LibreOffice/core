@@ -87,7 +87,7 @@ void JobData::setPaperBin( int i_nPaperBin )
     }
 }
 
-bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
+bool JobData::getStreamBuffer( std::unique_ptr<sal_uInt8[]>& pData, sal_uInt32& bytes )
 {
     // consistency checks
     if( ! m_pParser )
@@ -141,8 +141,8 @@ bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
 
     // success
     bytes = static_cast<sal_uInt32>(aStream.Tell());
-    pData = std::malloc( bytes );
-    memcpy( pData, aStream.GetData(), bytes );
+    pData = std::make_unique<sal_uInt8[]>( bytes );
+    memcpy( pData.get(), aStream.GetData(), bytes );
     return true;
 }
 

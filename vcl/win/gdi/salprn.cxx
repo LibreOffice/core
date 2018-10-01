@@ -317,9 +317,7 @@ static bool ImplTestSalJobSetup( WinSalInfoPrinter const * pPrinter,
         }
         if ( bDelete )
         {
-            std::free( const_cast<sal_uInt8*>(pSetupData->GetDriverData()) );
-            pSetupData->SetDriverData( nullptr );
-            pSetupData->SetDriverDataLen( 0 );
+            pSetupData->SetDriverData( nullptr, 0 );
         }
     }
 
@@ -340,6 +338,7 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
     LONG            nRet;
     HWND            hWnd = nullptr;
     DWORD           nMode = DM_OUT_BUFFER;
+    std::unique_ptr<sal_uInt8[]> pDriverData;
     SalDriverData*  pOutBuffer = nullptr;
     BYTE const *    pInBuffer = nullptr;
 
@@ -354,7 +353,9 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
 
     // make Outputbuffer
     const std::size_t nDriverDataLen = sizeof(SalDriverData) + nSysJobSize-1;
-    pOutBuffer                  = static_cast<SalDriverData*>(rtl_allocateZeroMemory( nDriverDataLen ));
+    pDriverData = std::make_unique<sal_uInt8[]>( nDriverDataLen );
+    memset(pDriverData.get(), 0, nDriverDataLen);
+    pOutBuffer = reinterpret_cast<SalDriverData*>(pDriverData.get());
     pOutBuffer->mnSysSignature  = SAL_DRIVERDATA_SYSSIGN;
     // calculate driver data offset including structure padding
     pOutBuffer->mnDriverOffset  = sal::static_int_cast<sal_uInt16>(
@@ -390,10 +391,7 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
     ClosePrinter( hPrn );
 
     if( (nRet < 0) || (pVisibleDlgParent && (nRet == IDCANCEL)) )
-    {
-        std::free( pOutBuffer );
         return false;
-    }
 
     // fill up string buffers with 0 so they do not influence a JobSetup's memcmp
     if( reinterpret_cast<LPDEVMODEW>(pOutDevMode)->dmSize >= 64 )
@@ -410,10 +408,7 @@ static bool ImplUpdateSalJobSetup( WinSalInfoPrinter const * pPrinter, ImplJobSe
     }
 
     // update data
-    if ( pSetupData->GetDriverData() )
-        std::free( const_cast<sal_uInt8*>(pSetupData->GetDriverData()) );
-    pSetupData->SetDriverDataLen( nDriverDataLen );
-    pSetupData->SetDriverData(reinterpret_cast<BYTE*>(pOutBuffer));
+    pSetupData->SetDriverData(std::move(pDriverData), nDriverDataLen);
     pSetupData->SetSystem( JOBSETUP_SYSTEM_WINDOWS );
 
     return true;

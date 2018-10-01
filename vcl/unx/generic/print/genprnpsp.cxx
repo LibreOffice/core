@@ -226,20 +226,16 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     }
 
     // copy the whole context
-    if( pJobSetup->GetDriverData() )
-        std::free( const_cast<sal_uInt8*>(pJobSetup->GetDriverData()) );
 
     sal_uInt32 nBytes;
-    void* pBuffer = nullptr;
+    std::unique_ptr<sal_uInt8[]> pBuffer;
     if( rData.getStreamBuffer( pBuffer, nBytes ) )
     {
-        pJobSetup->SetDriverDataLen( nBytes );
-        pJobSetup->SetDriverData( static_cast<sal_uInt8*>(pBuffer) );
+        pJobSetup->SetDriverData( std::move(pBuffer), nBytes );
     }
     else
     {
-        pJobSetup->SetDriverDataLen( 0 );
-        pJobSetup->SetDriverData( nullptr );
+        pJobSetup->SetDriverData( nullptr, 0 );
     }
     pJobSetup->SetPapersizeFromSetup( rData.m_bPapersizeFromSetup );
 }
@@ -428,14 +424,12 @@ bool PspSalInfoPrinter::Setup( weld::Window* pFrame, ImplJobSetup* pJobSetup )
 
     if (SetupPrinterDriver(pFrame, aInfo))
     {
-        std::free( const_cast<sal_uInt8*>(pJobSetup->GetDriverData()) );
-        pJobSetup->SetDriverData( nullptr );
+        pJobSetup->SetDriverData( nullptr, 0 );
 
         sal_uInt32 nBytes;
-        void* pBuffer = nullptr;
+        std::unique_ptr<sal_uInt8[]> pBuffer;
         aInfo.getStreamBuffer( pBuffer, nBytes );
-        pJobSetup->SetDriverDataLen( nBytes );
-        pJobSetup->SetDriverData( static_cast<sal_uInt8*>(pBuffer) );
+        pJobSetup->SetDriverData( std::move(pBuffer), nBytes );
 
         // copy everything to job setup
         copyJobDataToJobSetup( pJobSetup, aInfo );

@@ -25,6 +25,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/prntypes.hxx>
 #include <unordered_map>
+#include <memory>
 
 // see com.sun.star.portal.client.JobSetupSystem.idl:
 #define JOBSETUP_SYSTEM_WINDOWS     1
@@ -44,7 +45,7 @@ private:
     tools::Long            mnPaperWidth;       //< paper width (100th mm)
     tools::Long            mnPaperHeight;      //< paper height (100th mm)
     sal_uInt32      mnDriverDataLen;    //< length of system specific data
-    sal_uInt8*      mpDriverData;       //< system specific data (will be streamed a byte block)
+    std::unique_ptr<sal_uInt8[]> mpDriverData; //< system specific data (will be streamed a byte block)
     bool            mbPapersizeFromSetup;
     // setup mode
     PrinterSetupMode meSetupMode;
@@ -86,10 +87,8 @@ public:
     void             SetPaperHeight(tools::Long nHeight);
 
     sal_uInt32       GetDriverDataLen() const { return mnDriverDataLen; }
-    void             SetDriverDataLen(sal_uInt32 nDriverDataLen);
-
-    const sal_uInt8* GetDriverData() const { return mpDriverData; }
-    void             SetDriverData(sal_uInt8* pDriverData);
+    const sal_uInt8* GetDriverData() const { return mpDriverData.get(); }
+    void             SetDriverData(std::unique_ptr<sal_uInt8[]> pDriverData, sal_uInt32 nDriverDataLen);
 
     bool             GetPapersizeFromSetup() const { return mbPapersizeFromSetup; }
     void             SetPapersizeFromSetup(bool bPapersizeFromSetup);

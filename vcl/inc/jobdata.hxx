@@ -69,7 +69,7 @@ struct VCL_DLLPUBLIC JobData
 
     // creates a new buffer using new
     // it is up to the user to delete it again
-    bool getStreamBuffer( void*& pData, sal_uInt32& bytes );
+    bool getStreamBuffer( std::unique_ptr<sal_uInt8[]>& pData, sal_uInt32& bytes );
     static bool constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, JobData& rJobData );
 };
 
