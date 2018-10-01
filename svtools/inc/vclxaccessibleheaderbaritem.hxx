@@ -52,7 +52,7 @@ class VCLXAccessibleHeaderBarItem final : public comphelper::OAccessibleExtended
 {
 private:
     VclPtr<HeaderBar>        m_pHeadBar;
-    sal_Int32                m_nIndexInParent;
+    sal_Int32 const          m_nIndexInParent;
 
     void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 

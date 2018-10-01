@@ -43,10 +43,10 @@ public:
     bool GetString(ErrCode nErrId, OUString &rStr) override;
 
 private:
-    sal_uInt16 nCtxId;
+    sal_uInt16 const nCtxId;
     const ErrMsgCode* pIds;
-    std::locale aResLocale;
-    OUString aArg1;
+    std::locale const aResLocale;
+    OUString const aArg1;
 };
 
 class SVT_DLLPUBLIC SfxErrorHandler : private ErrorHandler
@@ -60,10 +60,10 @@ protected:
 
 private:
 
-    ErrCodeArea          lStart;
-    ErrCodeArea          lEnd;
+    ErrCodeArea const          lStart;
+    ErrCodeArea const          lEnd;
     const ErrMsgCode*    pIds;
-    std::locale aResLocale;
+    std::locale const aResLocale;
 
     SVT_DLLPRIVATE static void GetClassString(ErrCodeClass lErrId, OUString &);
     virtual bool          CreateString(const ErrorInfo *, OUString &) const override;

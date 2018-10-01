@@ -142,7 +142,7 @@ class SVT_DLLPUBLIC Calendar final : public Control
     Date            maCurDate;
     Date            maOldCurDate;
     Date            maAnchorDate;
-    Date            maDropDate;
+    Date const      maDropDate;
     Color           maSelColor;
     Color           maOtherColor;
     sal_Int32       mnDayCount;
@@ -291,7 +291,7 @@ private:
     VclPtr<Calendar>    mpCalendar;
     VclPtr<PushButton>  mpTodayBtn;
     VclPtr<PushButton>  mpNoneBtn;
-    Date                maDefaultDate;
+    Date const          maDefaultDate;
     bool                mbToday;
     bool                mbNone;
 

@@ -180,7 +180,7 @@ private:
     tools::Rectangle GetBoundingBox();
 
     /// Name of this object.
-    ::rtl::OUString                     msName;
+    ::rtl::OUString const               msName;
 
     /// Reference to the parent object.
     css::uno::Reference< css::accessibility::XAccessible >

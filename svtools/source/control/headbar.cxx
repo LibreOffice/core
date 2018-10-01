@@ -35,8 +35,8 @@ public:
     sal_uInt16          mnId;
     HeaderBarItemBits   mnBits;
     long                mnSize;
-    OString             maHelpId;
-    Image               maImage;
+    OString const       maHelpId;
+    Image const         maImage;
     OUString            maOutText;
     OUString            maText;
     OUString            maHelpText;

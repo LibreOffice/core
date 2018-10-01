@@ -151,7 +151,7 @@ namespace {
 
 class FindByType
 {
-    SvLBoxItemType meType;
+    SvLBoxItemType const meType;
 public:
     explicit FindByType(SvLBoxItemType eType) : meType(eType) {}
     bool operator() (const std::unique_ptr<SvLBoxItem>& rpItem) const

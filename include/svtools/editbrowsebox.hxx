@@ -233,7 +233,7 @@ namespace svt
     class SVT_DLLPUBLIC EditCellController : public CellController
     {
         IEditImplementation*    m_pEditImplementation;
-        bool                    m_bOwnImplementation;   // did we create m_pEditImplementation?
+        bool const              m_bOwnImplementation;   // did we create m_pEditImplementation?
 
     public:
         EditCellController( Edit* _pEdit );
