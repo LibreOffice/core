@@ -508,8 +508,12 @@ void MenuFloatingWindow::EndExecute()
         if ( pItemData && !pItemData->bIsTemporary )
         {
             pM->nSelectedId = pItemData->nId;
-            if ( pStart )
+            pM->sSelectedIdent = pItemData->sIdent;
+            if (pStart)
+            {
                 pStart->nSelectedId = pItemData->nId;
+                pStart->sSelectedIdent = pItemData->sIdent;
+            }
 
             pM->ImplSelect();
         }
@@ -749,7 +753,10 @@ void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTime
         pMenu->ImplCallHighlight( nHighlightedItem );
     }
     else
+    {
         pMenu->nSelectedId = 0;
+        pMenu->sSelectedIdent.clear();
+    }
 
     if ( bStartPopupTimer )
     {

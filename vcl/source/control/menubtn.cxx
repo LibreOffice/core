@@ -50,7 +50,9 @@ void MenuButton::ExecuteMenu()
     {
         Point aPos(0, 1);
         tools::Rectangle aRect(aPos, aSize );
-        mnCurItemId = mpMenu->Execute(this, aRect, PopupMenuFlags::ExecuteDown);
+        mpMenu->Execute(this, aRect, PopupMenuFlags::ExecuteDown);
+        mnCurItemId = mpMenu->GetCurItemId();
+        msCurItemIdent = mpMenu->GetCurItemIdent();
     }
     else
     {
@@ -70,6 +72,7 @@ void MenuButton::ExecuteMenu()
     {
         Select();
         mnCurItemId = 0;
+        msCurItemIdent.clear();
     }
 }
 
@@ -105,12 +108,6 @@ bool MenuButton::MenuShown() const
         else
             return vcl::Window::GetDockingManager()->IsInPopupMode(mpFloatingWindow);
     }
-}
-
-OString MenuButton::GetCurItemIdent() const
-{
-    return (mnCurItemId && mpMenu) ?
-        mpMenu->GetItemIdent(mnCurItemId) : OString();
 }
 
 MenuButton::MenuButton( vcl::Window* pParent, WinBits nWinBits )
