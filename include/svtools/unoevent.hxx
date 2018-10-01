@@ -40,7 +40,7 @@ enum class SvMacroItemId : sal_uInt16;
 */
 struct SvEventDescription
 {
-    SvMacroItemId mnEvent;
+    SvMacroItemId const mnEvent;
     const sal_Char* mpEventName;
 };
 

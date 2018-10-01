@@ -34,8 +34,8 @@ private:
     {
         friend class CollatorResource;
     private:
-        OUString m_aName;
-        OUString m_aTranslation;
+        OUString const m_aName;
+        OUString const m_aTranslation;
     public:
         CollatorResourceData(const OUString& rAlgorithm, const OUString& rTranslation)
             : m_aName(rAlgorithm)

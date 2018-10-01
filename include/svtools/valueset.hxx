@@ -430,7 +430,7 @@ private:
     sal_uInt16      mnFirstLine;
     sal_uInt16      mnSpacing;
     DrawFrameStyle  mnFrameStyle;
-    Color           maColor;
+    Color const     maColor;
     OUString        maText;
     WinBits         mnStyle;
     Link<SvtValueSet*,void>  maDoubleClickHdl;

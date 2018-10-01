@@ -560,7 +560,7 @@ struct HTML_OptionEntry
         const sal_Char *sToken;
         const OUString *pUToken;
     };
-    HtmlOptionId nToken;
+    HtmlOptionId const nToken;
 };
 static HTML_OptionEntry aHTMLOptionTab[] = {
 

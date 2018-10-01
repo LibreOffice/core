@@ -122,7 +122,7 @@ class IMapCompat
     SvStream*       pRWStm;
     sal_uInt64      nCompatPos;
     sal_uInt64      nTotalSize;
-    StreamMode      nStmMode;
+    StreamMode const nStmMode;
 
                     IMapCompat( const IMapCompat& ) = delete;
     IMapCompat&     operator=( const IMapCompat& ) { return *this; }
