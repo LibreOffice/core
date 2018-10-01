@@ -31,16 +31,16 @@ namespace sdr
         class SVX_DLLPUBLIC OverlayBitmapEx final : public OverlayObjectWithBasePosition
         {
             // the Bitmap itself
-            BitmapEx                                maBitmapEx;
+            BitmapEx const                                maBitmapEx;
 
             // position of the basePosition inside the Bitmap, in pixels
-            sal_uInt16                              mnCenterX;
-            sal_uInt16                              mnCenterY;
+            sal_uInt16 const                              mnCenterX;
+            sal_uInt16 const                              mnCenterY;
 
             // optional transparency, shear and rotation
-            double                                  mfAlpha;
-            double                                  mfShearX;
-            double                                  mfRotation;
+            double const                                  mfAlpha;
+            double const                                  mfShearX;
+            double const                                  mfRotation;
 
             virtual drawinglayer::primitive2d::Primitive2DContainer createOverlayObjectPrimitive2DSequence() override;
 

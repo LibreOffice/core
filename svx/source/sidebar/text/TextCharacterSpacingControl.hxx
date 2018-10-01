@@ -50,7 +50,7 @@ private:
     VclPtr<PushButton> maLoose;
     VclPtr<PushButton> maLastCustom;
 
-    sal_uInt16          mnId;
+    sal_uInt16 const    mnId;
     long                mnCustomKern;
     short               mnLastCus;
 

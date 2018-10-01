@@ -44,7 +44,7 @@ namespace svx
     struct SvxShowCharSetItem
     {
         SvxShowCharSet&             mrParent;
-        sal_uInt16                  mnId;
+        sal_uInt16 const            mnId;
         OUString                    maText;
         tools::Rectangle                   maRect;
         rtl::Reference<SvxShowCharSetItemAcc>  m_xItem;

@@ -32,7 +32,7 @@ class SVX_DLLPUBLIC CommonStylePreviewRenderer : public sfx2::StylePreviewRender
     Color maFontColor;
     Color maBackgroundColor;
     Size maPixelSize;
-    OUString maStyleName;
+    OUString const maStyleName;
 
 public:
     CommonStylePreviewRenderer(const SfxObjectShell& rShell, OutputDevice& rOutputDev,

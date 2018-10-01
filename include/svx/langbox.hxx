@@ -142,7 +142,7 @@ public:
 private:
     std::unique_ptr<weld::ComboBox> m_xControl;
     Link<weld::ComboBox&, void> m_aChangeHdl;
-    OUString m_aAllString;
+    OUString const m_aAllString;
     std::unique_ptr<css::uno::Sequence<sal_Int16>> m_xSpellUsedLang;
     LanguageType m_eSavedLanguage;
     EditedAndValid  m_eEditedAndValid;
