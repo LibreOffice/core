@@ -132,6 +132,10 @@ interface Application
     [
         ExecMethod = MiscExec_Impl ;
     ]
+    SID_GETINVOLVED
+    [
+        ExecMethod = MiscExec_Impl ;
+    ]
     SID_SHOW_LICENSE
     [
         ExecMethod = MiscExec_Impl ;

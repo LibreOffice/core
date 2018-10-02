@@ -549,6 +549,14 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             sfx2::openUriExternally(sURL, false);
             break;
         }
+        case SID_GETINVOLVED:
+        {
+            // Open documentation page based on locales
+            //OUString sURL("https://hub.libreoffice.org/get-involved/?LOlocale=" + utl::ConfigManager::getLocale());#
+            OUString sURL("https://www.libreoffice.org/community/get-involved/");
+            sfx2::openUriExternally(sURL, false);
+            break;
+        }
         case SID_DONATION:
         {
             // Open donation page based on language + script (BCP47) with language as fall back.
