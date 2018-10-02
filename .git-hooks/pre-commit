@@ -15,8 +15,8 @@ $ENV{LC_ALL} = "C";
 sub check_whitespaces($)
 {
     my ($h) = @_;
-    my $src_limited = "c|cpp|cxx|h|hrc|hxx|idl|inl|java|swift|map|MK|pmk|pl|pm|sdi|sh|src|tab|ui|xcu|xml|xsl";
-    my $src_full = "c|cpp|cxx|h|hrc|hxx|idl|inl|java|swift|map|mk|MK|pmk|pl|pm|sdi|sh|src|tab|ui|xcu|xml|xsl";
+    my $src_limited = "c|cpp|cxx|h|hrc|hxx|idl|inl|java|swift|map|MK|pmk|pl|pm|sdi|sh|src|tab|ui|xcu|xml|xsl|py";
+    my $src_full = "c|cpp|cxx|h|hrc|hxx|idl|inl|java|swift|map|mk|MK|pmk|pl|pm|sdi|sh|src|tab|ui|xcu|xml|xsl|py";
 
     my $found_bad = 0;
     my $filename;
