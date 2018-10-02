@@ -553,105 +553,126 @@ short SvxNumberFormatShell::FillEntryList_Impl( std::vector<OUString>& rList )
      * the list position of the current format. If the list is empty
      * or if there is no current format, SELPOS_NONE is delivered.
      */
-    short nSelPos=0;
-    sal_uInt16 nPrivCat = CAT_CURRENCY;
-    nSelPos=SELPOS_NONE;
+    short nSelPos = SELPOS_NONE;
 
     aCurEntryList.clear();
 
-    if(nCurCategory==SvNumFormatType::ALL)
+    if (nCurCategory == SvNumFormatType::ALL)
     {
-        FillEListWithStd_Impl(rList,CAT_NUMBER,nSelPos);
-        FillEListWithStd_Impl(rList,CAT_PERCENT,nSelPos);
-        FillEListWithStd_Impl(rList,CAT_CURRENCY,nSelPos);
-        FillEListWithStd_Impl(rList,CAT_DATE,nSelPos);
-        FillEListWithStd_Impl(rList,CAT_TIME,nSelPos);
-        FillEListWithStd_Impl(rList,CAT_SCIENTIFIC,nSelPos);
-        FillEListWithStd_Impl(rList,CAT_FRACTION,nSelPos);
-        FillEListWithStd_Impl(rList,CAT_BOOLEAN,nSelPos);
-        FillEListWithStd_Impl(rList,CAT_TEXT,nSelPos);
+        FillEListWithStd_Impl( rList, SvNumFormatType::NUMBER, nSelPos);
+        nSelPos = FillEListWithUsD_Impl( rList, SvNumFormatType::NUMBER, nSelPos);
+
+        FillEListWithStd_Impl( rList, SvNumFormatType::PERCENT, nSelPos);
+        nSelPos = FillEListWithUsD_Impl( rList, SvNumFormatType::PERCENT, nSelPos);
+
+        FillEListWithStd_Impl( rList, SvNumFormatType::CURRENCY, nSelPos);
+        // No FillEListWithUsD_Impl() here, user defined currency formats
+        // were already added.
+
+        FillEListWithStd_Impl( rList, SvNumFormatType::DATE, nSelPos);
+        nSelPos = FillEListWithUsD_Impl( rList, SvNumFormatType::DATE, nSelPos);
+
+        FillEListWithStd_Impl( rList, SvNumFormatType::TIME, nSelPos);
+        nSelPos = FillEListWithUsD_Impl( rList, SvNumFormatType::TIME, nSelPos);
+
+        nSelPos = FillEListWithDateTime_Impl( rList, nSelPos, false);
+        nSelPos = FillEListWithUsD_Impl( rList, SvNumFormatType::DATETIME, nSelPos);
+
+        FillEListWithStd_Impl( rList, SvNumFormatType::SCIENTIFIC, nSelPos);
+        nSelPos = FillEListWithUsD_Impl( rList, SvNumFormatType::SCIENTIFIC, nSelPos);
+
+        FillEListWithStd_Impl( rList, SvNumFormatType::FRACTION, nSelPos);
+        nSelPos = FillEListWithUsD_Impl( rList, SvNumFormatType::FRACTION, nSelPos);
+
+        FillEListWithStd_Impl( rList, SvNumFormatType::LOGICAL, nSelPos);
+        nSelPos = FillEListWithUsD_Impl( rList, SvNumFormatType::LOGICAL, nSelPos);
+
+        FillEListWithStd_Impl( rList, SvNumFormatType::TEXT, nSelPos);
+        nSelPos = FillEListWithUsD_Impl( rList, SvNumFormatType::TEXT, nSelPos);
     }
     else
     {
-        CategoryToPos_Impl(nCurCategory, nPrivCat);
-        FillEListWithStd_Impl(rList,nPrivCat,nSelPos);
+        FillEListWithStd_Impl( rList, nCurCategory, nSelPos, true);
+        if (nCurCategory != SvNumFormatType::CURRENCY)
+            nSelPos = FillEListWithUsD_Impl( rList, nCurCategory, nSelPos);
+        if (nCurCategory == SvNumFormatType::DATE || nCurCategory == SvNumFormatType::TIME)
+            nSelPos = FillEListWithDateTime_Impl( rList, nSelPos, true);
     }
-
-    if( nPrivCat!=CAT_CURRENCY)
-        nSelPos=FillEListWithUsD_Impl(rList,nPrivCat,nSelPos);
 
     return nSelPos;
 }
 
 void SvxNumberFormatShell::FillEListWithStd_Impl( std::vector<OUString>& rList,
-                                                  sal_uInt16 nPrivCat,short &nSelPos )
+                                                  SvNumFormatType eCategory, short &nSelPos,
+                                                  bool bSuppressDuplicates )
 {
     /* Create a current list of format entries. The return value is
      * the list position of the current format. If the list is empty
      * or if there is no current format, SELPOS_NONE is delivered.
      */
-    DBG_ASSERT( pCurFmtTable != nullptr, "unknown NumberFormat" );
+
+    assert( pCurFmtTable != nullptr );
 
     aCurrencyFormatList.clear();
 
-    if(nPrivCat==CAT_CURRENCY)
+    NfIndexTableOffset eOffsetStart;
+    NfIndexTableOffset eOffsetEnd;
+
+    switch (eCategory)
     {
-        nSelPos=FillEListWithCurrency_Impl(rList,nSelPos);
+        case SvNumFormatType::NUMBER:
+            eOffsetStart = NF_NUMBER_START;
+            eOffsetEnd = NF_NUMBER_END;
+        break;
+        case SvNumFormatType::PERCENT:
+            eOffsetStart = NF_PERCENT_START;
+            eOffsetEnd = NF_PERCENT_END;
+        break;
+        case SvNumFormatType::CURRENCY:
+            // Currency entries are generated and assembled, ignore
+            // bSuppressDuplicates.
+            nSelPos = FillEListWithCurrency_Impl( rList, nSelPos);
+            return;
+        case SvNumFormatType::DATE:
+            eOffsetStart = NF_DATE_START;
+            eOffsetEnd = NF_DATE_END;
+        break;
+        case SvNumFormatType::TIME:
+            eOffsetStart = NF_TIME_START;
+            eOffsetEnd = NF_TIME_END;
+        break;
+        case SvNumFormatType::SCIENTIFIC:
+            eOffsetStart = NF_SCIENTIFIC_START;
+            eOffsetEnd = NF_SCIENTIFIC_END;
+        break;
+        case SvNumFormatType::FRACTION:
+            eOffsetStart = NF_FRACTION_START;
+            eOffsetEnd = NF_FRACTION_END;
+            // Fraction formats are internally generated by the number
+            // formatter and are not supposed to contain duplicates anyway.
+            nSelPos = FillEListWithFormats_Impl( rList, nSelPos, eOffsetStart, eOffsetEnd, false);
+            nSelPos = FillEListWithFormats_Impl( rList, nSelPos, NF_FRACTION_3D, NF_FRACTION_100, false);
+            return;
+        case SvNumFormatType::LOGICAL:
+            eOffsetStart = NF_BOOLEAN;
+            eOffsetEnd = NF_BOOLEAN;
+        break;
+        case SvNumFormatType::TEXT:
+            eOffsetStart = NF_TEXT;
+            eOffsetEnd = NF_TEXT;
+        break;
+        default:
+            return;
     }
-    else
-    {
-        NfIndexTableOffset eOffsetStart;
-        NfIndexTableOffset eOffsetEnd;
 
-        switch(nPrivCat)
-        {
-            case CAT_NUMBER         :eOffsetStart=NF_NUMBER_START;
-                                     eOffsetEnd=NF_NUMBER_END;
-                                     break;
-            case CAT_PERCENT        :eOffsetStart=NF_PERCENT_START;
-                                     eOffsetEnd=NF_PERCENT_END;
-                                     break;
-            case CAT_CURRENCY       :eOffsetStart=NF_CURRENCY_START;
-                                     eOffsetEnd=NF_CURRENCY_END;
-                                     break;
-            case CAT_DATE           :eOffsetStart=NF_DATE_START;
-                                     eOffsetEnd=NF_DATE_END;
-                                     break;
-            case CAT_TIME           :eOffsetStart=NF_TIME_START;
-                                     eOffsetEnd=NF_TIME_END;
-                                     break;
-            case CAT_SCIENTIFIC     :eOffsetStart=NF_SCIENTIFIC_START;
-                                     eOffsetEnd=NF_SCIENTIFIC_END;
-                                     break;
-            case CAT_FRACTION       :eOffsetStart=NF_FRACTION_START;
-                                     eOffsetEnd=NF_FRACTION_END;
-                                     nSelPos = FillEListWithFormats_Impl( rList, nSelPos, eOffsetStart, eOffsetEnd);
-                                     nSelPos = FillEListWithFormats_Impl( rList, nSelPos, NF_FRACTION_3D, NF_FRACTION_100);
-                                     return;
-            case CAT_BOOLEAN        :eOffsetStart=NF_BOOLEAN;
-                                     eOffsetEnd=NF_BOOLEAN;
-                                     break;
-            case CAT_TEXT           :eOffsetStart=NF_TEXT;
-                                     eOffsetEnd=NF_TEXT;
-                                     break;
-            default                 :return;
-        }
-
-        nSelPos=FillEListWithFormats_Impl(rList,nSelPos,eOffsetStart,eOffsetEnd);
-
-        if(nPrivCat==CAT_DATE || nPrivCat==CAT_TIME)
-        {
-            nSelPos=FillEListWithDateTime_Impl(rList,nSelPos);
-            nSelPos = FillEListWithFormats_Impl( rList, nSelPos,
-                    NF_DATETIME_ISO_YYYYMMDD_HHMMSS, NF_DATETIME_ISO_YYYYMMDD_HHMMSS);
-        }
-    }
+    nSelPos = FillEListWithFormats_Impl( rList, nSelPos, eOffsetStart, eOffsetEnd, bSuppressDuplicates);
 }
 
 short SvxNumberFormatShell::FillEListWithFormats_Impl( std::vector<OUString>& rList,
                                                        short nSelPos,
                                                        NfIndexTableOffset eOffsetStart,
-                                                       NfIndexTableOffset eOffsetEnd)
+                                                       NfIndexTableOffset eOffsetEnd,
+                                                       bool bSuppressDuplicates )
 {
     /* Create a current list of format entries. The return value is
      * the list position of the current format. If the list is empty
@@ -681,15 +702,19 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( std::vector<OUString>& rL
             nSelPos = ( !IsRemoved_Impl( nNFEntry ) ) ? aCurEntryList.size() : SELPOS_NONE;
         }
 
-        rList.push_back( aNewFormNInfo );
-        aCurEntryList.push_back( nNFEntry );
+        if (!bSuppressDuplicates || IsEssentialFormat_Impl( nMyCat, nNFEntry) ||
+                    std::find( rList.begin(), rList.end(), aNewFormNInfo) == rList.end())
+        {
+            rList.push_back( aNewFormNInfo );
+            aCurEntryList.push_back( nNFEntry );
+        }
     }
 
     return nSelPos;
 }
 
 short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<OUString>& rList,
-                                                        short nSelPos)
+                                                        short nSelPos, bool bSuppressDuplicates )
 {
     sal_uInt16  nMyType;
 
@@ -712,12 +737,53 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<OUString>& r
                 nSelPos = ( !IsRemoved_Impl( nNFEntry ) ) ? aCurEntryList.size() : SELPOS_NONE;
             }
 
-            rList.push_back( aNewFormNInfo );
-            aCurEntryList.push_back( nNFEntry );
+            if (!bSuppressDuplicates || IsEssentialFormat_Impl( nMyCat, nNFEntry) ||
+                        std::find( rList.begin(), rList.end(), aNewFormNInfo) == rList.end())
+            {
+                // Ugly hack to suppress an ISO date+time format that is the
+                // default date+time format of the locale and identical to the
+                // internally generated one to be added below.
+                if (!bSuppressDuplicates || aNewFormNInfo != "YYYY-MM-DD HH:MM:SS")
+                {
+                    rList.push_back( aNewFormNInfo );
+                    aCurEntryList.push_back( nNFEntry );
+                }
+            }
         }
     }
 
+    // Always add the internally generated ISO format.
+    nSelPos = FillEListWithFormats_Impl( rList, nSelPos,
+            NF_DATETIME_ISO_YYYYMMDD_HHMMSS, NF_DATETIME_ISO_YYYYMMDD_HHMMSS, false);
+
     return nSelPos;
+}
+
+bool SvxNumberFormatShell::IsEssentialFormat_Impl( SvNumFormatType eType, sal_uInt32 nKey )
+{
+    if (nKey == nCurFormatKey)
+        return true;
+
+    const NfIndexTableOffset nIndex = pFormatter->GetIndexTableOffset(nKey);
+    switch (nIndex)
+    {
+        // These are preferred or edit formats.
+        case NF_DATE_SYS_DDMMYYYY:
+        case NF_DATE_ISO_YYYYMMDD:
+        case NF_TIME_HH_MMSS:
+        case NF_TIME_MMSS00:
+        case NF_TIME_HH_MMSS00:
+        case NF_DATETIME_SYS_DDMMYYYY_HHMMSS:
+        case NF_DATETIME_ISO_YYYYMMDD_HHMMSS:
+            return true;
+        default:
+            ;   // nothing
+    }
+
+    if (nKey == pFormatter->GetStandardFormat( eType, eCurLanguage))
+        return true;
+
+    return false;
 }
 
 short SvxNumberFormatShell::FillEListWithCurrency_Impl( std::vector<OUString>& rList,
@@ -1023,48 +1089,52 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
 
 
 short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<OUString>& rList,
-                                                   sal_uInt16 nPrivCat, short nSelPos )
+                                                   SvNumFormatType eCategory, short nSelPos )
 {
     /* Create a current list of format entries. The return value is
      * the list position of the current format. If the list is empty
      * or if there is no current format, SELPOS_NONE is delivered.
      */
-    sal_uInt16 nMyType;
 
-    DBG_ASSERT( pCurFmtTable != nullptr, "unknown NumberFormat" );
+    assert( pCurFmtTable != nullptr );
 
     OUString        aNewFormNInfo;
 
-    bool            bAdditional = (nPrivCat != CAT_USERDEFINED &&
-                                    nCurCategory != SvNumFormatType::ALL);
+    const bool bCatDefined = (eCategory == SvNumFormatType::DEFINED);
+    const bool bCategoryMatch = (eCategory != SvNumFormatType::ALL && !bCatDefined);
 
     for( SvNumberFormatTable::const_iterator it = pCurFmtTable->begin(), aEnd = pCurFmtTable->end(); it != aEnd; ++it )
     {
-        sal_uInt32 nKey = it->first;
         const SvNumberformat* pNumEntry = it->second;
 
+        if (bCategoryMatch && pNumEntry->GetMaskedType() != eCategory)
+            continue;   // for; type does not match category if not ALL
+
+        const bool bUserDefined = bool(pNumEntry->GetType() & SvNumFormatType::DEFINED);
+        if (!bUserDefined && bCatDefined)
+            continue;   // for; not user defined in DEFINED category
+
+        if (!(bUserDefined || (!bCatDefined && pNumEntry->IsAdditionalBuiltin())))
+            continue;   // for; does not match criteria at all
+
+        const sal_uInt32 nKey = it->first;
         if ( !IsRemoved_Impl( nKey ) )
         {
-            if( (pNumEntry->GetType() & SvNumFormatType::DEFINED) ||
-                    (bAdditional && pNumEntry->IsAdditionalBuiltin()) )
-            {
-                SvNumFormatType nMyCat=pNumEntry->GetMaskedType();
-                CategoryToPos_Impl(nMyCat,nMyType);
-                aNewFormNInfo=  pNumEntry->GetFormatstring();
+            aNewFormNInfo = pNumEntry->GetFormatstring();
 
-                bool bFlag=true;
-                if(pNumEntry->HasNewCurrency())
-                {
-                    bool bTestBanking;
-                    sal_uInt16 nPos=FindCurrencyTableEntry(aNewFormNInfo,bTestBanking);
-                    bFlag=!IsInTable(nPos,bTestBanking,aNewFormNInfo);
-                }
-                if(bFlag)
-                {
-                    if ( nKey == nCurFormatKey ) nSelPos = aCurEntryList.size();
-                    rList.push_back( aNewFormNInfo );
-                    aCurEntryList.push_back( nKey );
-                }
+            bool bAdd = true;
+            if (pNumEntry->HasNewCurrency())
+            {
+                bool bTestBanking;
+                sal_uInt16 nPos = FindCurrencyTableEntry(aNewFormNInfo,bTestBanking);
+                bAdd = !IsInTable(nPos,bTestBanking,aNewFormNInfo);
+            }
+            if (bAdd)
+            {
+                if (nKey == nCurFormatKey)
+                    nSelPos = aCurEntryList.size();
+                rList.push_back( aNewFormNInfo );
+                aCurEntryList.push_back( nKey );
             }
         }
     }
