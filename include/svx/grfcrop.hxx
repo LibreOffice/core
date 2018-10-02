@@ -38,8 +38,8 @@ public:
 
     SvxGrfCrop(SvxGrfCrop const &) = default;
     SvxGrfCrop(SvxGrfCrop &&) = default;
-    SvxGrfCrop & operator =(SvxGrfCrop const &) = default;
-    SvxGrfCrop & operator =(SvxGrfCrop &&) = default;
+    SvxGrfCrop & operator =(SvxGrfCrop const &) = delete; // due to SfxPoolItem
+    SvxGrfCrop & operator =(SvxGrfCrop &&) = delete; // due to SfxPoolItem
 
     // "pure virtual methods" from SfxPoolItem
     virtual bool                operator==( const SfxPoolItem& ) const override;

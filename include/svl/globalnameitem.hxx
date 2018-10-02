@@ -36,8 +36,8 @@ public:
 
     SfxGlobalNameItem(SfxGlobalNameItem const &) = default;
     SfxGlobalNameItem(SfxGlobalNameItem &&) = default;
-    SfxGlobalNameItem & operator =(SfxGlobalNameItem const &) = default;
-    SfxGlobalNameItem & operator =(SfxGlobalNameItem &&) = default;
+    SfxGlobalNameItem & operator =(SfxGlobalNameItem const &) = delete; // due to SfxPoolItem
+    SfxGlobalNameItem & operator =(SfxGlobalNameItem &&) = delete; // due to SfxPoolItem
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

@@ -40,8 +40,8 @@ public:
 
     SfxStringListItem(SfxStringListItem const &) = default;
     SfxStringListItem(SfxStringListItem &&) = default;
-    SfxStringListItem & operator =(SfxStringListItem const &) = default;
-    SfxStringListItem & operator =(SfxStringListItem &&) = default;
+    SfxStringListItem & operator =(SfxStringListItem const &) = delete; // due to SfxPoolItem
+    SfxStringListItem & operator =(SfxStringListItem &&) = delete; // due to SfxPoolItem
 
     std::vector<OUString>&       GetList();
 

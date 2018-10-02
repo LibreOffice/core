@@ -84,8 +84,8 @@ public:
 
     RefColReorderHint(RefColReorderHint const &) = default;
     RefColReorderHint(RefColReorderHint &&) = default;
-    RefColReorderHint & operator =(RefColReorderHint const &) = default;
-    RefColReorderHint & operator =(RefColReorderHint &&) = default;
+    RefColReorderHint & operator =(RefColReorderHint const &) = delete; // due to mrColMap
+    RefColReorderHint & operator =(RefColReorderHint &&) = delete; // due to mrColMap
 
     const sc::ColRowReorderMapType& getColMap() const;
 
@@ -107,8 +107,8 @@ public:
 
     RefRowReorderHint(RefRowReorderHint const &) = default;
     RefRowReorderHint(RefRowReorderHint &&) = default;
-    RefRowReorderHint & operator =(RefRowReorderHint const &) = default;
-    RefRowReorderHint & operator =(RefRowReorderHint &&) = default;
+    RefRowReorderHint & operator =(RefRowReorderHint const &) = delete; // due to mrRowMap
+    RefRowReorderHint & operator =(RefRowReorderHint &&) = delete; // due to mrRowMap
 
     const sc::ColRowReorderMapType& getRowMap() const;
 

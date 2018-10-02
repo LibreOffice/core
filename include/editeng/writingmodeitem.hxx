@@ -34,8 +34,8 @@ public:
 
     SvxWritingModeItem(SvxWritingModeItem const &) = default;
     SvxWritingModeItem(SvxWritingModeItem &&) = default;
-    SvxWritingModeItem & operator =(SvxWritingModeItem const &) = default;
-    SvxWritingModeItem & operator =(SvxWritingModeItem &&) = default;
+    SvxWritingModeItem & operator =(SvxWritingModeItem const &) = delete; // due to SfxUInt16Item
+    SvxWritingModeItem & operator =(SvxWritingModeItem &&) = delete; // due to SfxUInt16Item
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual sal_uInt16      GetVersion( sal_uInt16 nFileVersion ) const override;

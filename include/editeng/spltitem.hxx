@@ -42,8 +42,8 @@ public:
 
     SvxFormatSplitItem(SvxFormatSplitItem const &) = default;
     SvxFormatSplitItem(SvxFormatSplitItem &&) = default;
-    SvxFormatSplitItem & operator =(SvxFormatSplitItem const &) = default;
-    SvxFormatSplitItem & operator =(SvxFormatSplitItem &&) = default;
+    SvxFormatSplitItem & operator =(SvxFormatSplitItem const &) = delete; // due to SfxBoolItem
+    SvxFormatSplitItem & operator =(SvxFormatSplitItem &&) = delete; // due to SfxBoolItem
 
     // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

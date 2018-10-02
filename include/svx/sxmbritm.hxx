@@ -37,8 +37,8 @@ public:
 
     SdrMeasureBelowRefEdgeItem(SdrMeasureBelowRefEdgeItem const &) = default;
     SdrMeasureBelowRefEdgeItem(SdrMeasureBelowRefEdgeItem &&) = default;
-    SdrMeasureBelowRefEdgeItem & operator =(SdrMeasureBelowRefEdgeItem const &) = default;
-    SdrMeasureBelowRefEdgeItem & operator =(SdrMeasureBelowRefEdgeItem &&) = default;
+    SdrMeasureBelowRefEdgeItem & operator =(SdrMeasureBelowRefEdgeItem const &) = delete; // due to SdrYesNoItem
+    SdrMeasureBelowRefEdgeItem & operator =(SdrMeasureBelowRefEdgeItem &&) = delete; // due to SdrYesNoItem
 };
 
 #endif

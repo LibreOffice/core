@@ -37,8 +37,8 @@ public:
 
     SwFormatLineNumber(SwFormatLineNumber const &) = default;
     SwFormatLineNumber(SwFormatLineNumber &&) = default;
-    SwFormatLineNumber & operator =(SwFormatLineNumber const &) = default;
-    SwFormatLineNumber & operator =(SwFormatLineNumber &&) = default;
+    SwFormatLineNumber & operator =(SwFormatLineNumber const &) = delete; // due to SfxPoolItem
+    SwFormatLineNumber & operator =(SwFormatLineNumber &&) = delete; // due to SfxPoolItem
 
     static SfxPoolItem* CreateDefault();
 

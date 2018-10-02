@@ -506,8 +506,8 @@ public:
 
     SwMacroInfo(SwMacroInfo const &) = default;
     SwMacroInfo(SwMacroInfo &&) = default;
-    SwMacroInfo & operator =(SwMacroInfo const &) = default;
-    SwMacroInfo & operator =(SwMacroInfo &&) = default;
+    SwMacroInfo & operator =(SwMacroInfo const &) = delete; // due to SdrObjUserData
+    SwMacroInfo & operator =(SwMacroInfo &&) = delete; // due to SdrObjUserData
 
     virtual std::unique_ptr<SdrObjUserData> Clone( SdrObject* pObj ) const override;
 

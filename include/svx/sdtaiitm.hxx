@@ -30,8 +30,8 @@ public:
 
     SdrTextAniStartInsideItem(SdrTextAniStartInsideItem const &) = default;
     SdrTextAniStartInsideItem(SdrTextAniStartInsideItem &&) = default;
-    SdrTextAniStartInsideItem & operator =(SdrTextAniStartInsideItem const &) = default;
-    SdrTextAniStartInsideItem & operator =(SdrTextAniStartInsideItem &&) = default;
+    SdrTextAniStartInsideItem & operator =(SdrTextAniStartInsideItem const &) = delete; // due to SdrYesNoItem
+    SdrTextAniStartInsideItem & operator =(SdrTextAniStartInsideItem &&) = delete; // due to SdrYesNoItem
 };
 
 class SVX_DLLPUBLIC SdrTextAniStopInsideItem: public SdrYesNoItem {
@@ -42,8 +42,8 @@ public:
 
     SdrTextAniStopInsideItem(SdrTextAniStopInsideItem const &) = default;
     SdrTextAniStopInsideItem(SdrTextAniStopInsideItem &&) = default;
-    SdrTextAniStopInsideItem & operator =(SdrTextAniStopInsideItem const &) = default;
-    SdrTextAniStopInsideItem & operator =(SdrTextAniStopInsideItem &&) = default;
+    SdrTextAniStopInsideItem & operator =(SdrTextAniStopInsideItem const &) = delete; // due to SdrYesNoItem
+    SdrTextAniStopInsideItem & operator =(SdrTextAniStopInsideItem &&) = delete; // due to SdrYesNoItem
 };
 
 #endif

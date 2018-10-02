@@ -54,8 +54,8 @@ public:
 
     SdrCaptionEscIsRelItem(SdrCaptionEscIsRelItem const &) = default;
     SdrCaptionEscIsRelItem(SdrCaptionEscIsRelItem &&) = default;
-    SdrCaptionEscIsRelItem & operator =(SdrCaptionEscIsRelItem const &) = default;
-    SdrCaptionEscIsRelItem & operator =(SdrCaptionEscIsRelItem &&) = default;
+    SdrCaptionEscIsRelItem & operator =(SdrCaptionEscIsRelItem const &) = delete; // due to SdrYesNoItem
+    SdrCaptionEscIsRelItem & operator =(SdrCaptionEscIsRelItem &&) = delete; // due to SdrYesNoItem
 };
 
 
@@ -73,8 +73,8 @@ public:
 
     SdrCaptionEscRelItem(SdrCaptionEscRelItem const &) = default;
     SdrCaptionEscRelItem(SdrCaptionEscRelItem &&) = default;
-    SdrCaptionEscRelItem & operator =(SdrCaptionEscRelItem const &) = default;
-    SdrCaptionEscRelItem & operator =(SdrCaptionEscRelItem &&) = default;
+    SdrCaptionEscRelItem & operator =(SdrCaptionEscRelItem const &) = delete; // due to SfxInt32Item
+    SdrCaptionEscRelItem & operator =(SdrCaptionEscRelItem &&) = delete; // due to SfxInt32Item
 };
 
 

@@ -56,8 +56,8 @@ public:
 
     ScTpPrintItem(ScTpPrintItem const &) = default;
     ScTpPrintItem(ScTpPrintItem &&) = default;
-    ScTpPrintItem & operator =(ScTpPrintItem const &) = default;
-    ScTpPrintItem & operator =(ScTpPrintItem &&) = default;
+    ScTpPrintItem & operator =(ScTpPrintItem const &) = delete; // due to SfxPoolItem
+    ScTpPrintItem & operator =(ScTpPrintItem &&) = delete; // due to SfxPoolItem
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

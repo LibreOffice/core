@@ -90,8 +90,8 @@ protected:
         sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut );
 
 public:
-    DlgEdObj(DlgEdObj const &) = default;
-    DlgEdObj(DlgEdObj &&) = default;
+    DlgEdObj(DlgEdObj const &) = delete; // due to SdrUnoObj
+    DlgEdObj(DlgEdObj &&) = delete; // due to SdrUnoObj
     DlgEdObj & operator =(DlgEdObj const &) = default;
     DlgEdObj & operator =(DlgEdObj &&) = default;
 

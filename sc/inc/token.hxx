@@ -143,8 +143,8 @@ public:
 
     ScExternalSingleRefToken(ScExternalSingleRefToken const &) = default;
     ScExternalSingleRefToken(ScExternalSingleRefToken &&) = default;
-    ScExternalSingleRefToken & operator =(ScExternalSingleRefToken const &) = default;
-    ScExternalSingleRefToken & operator =(ScExternalSingleRefToken &&) = default;
+    ScExternalSingleRefToken & operator =(ScExternalSingleRefToken const &) = delete; // due to FormulaToken
+    ScExternalSingleRefToken & operator =(ScExternalSingleRefToken &&) = delete; // due to FormulaToken
 
     virtual sal_uInt16                  GetIndex() const override;
     virtual svl::SharedString GetString() const override;
@@ -167,8 +167,8 @@ public:
 
     ScExternalDoubleRefToken(ScExternalDoubleRefToken const &) = default;
     ScExternalDoubleRefToken(ScExternalDoubleRefToken &&) = default;
-    ScExternalDoubleRefToken & operator =(ScExternalDoubleRefToken const &) = default;
-    ScExternalDoubleRefToken & operator =(ScExternalDoubleRefToken &&) = default;
+    ScExternalDoubleRefToken & operator =(ScExternalDoubleRefToken const &) = delete; // due to FormulaToken
+    ScExternalDoubleRefToken & operator =(ScExternalDoubleRefToken &&) = delete; // due to FormulaToken
 
     virtual sal_uInt16                 GetIndex() const override;
     virtual svl::SharedString GetString() const override;
@@ -194,8 +194,8 @@ public:
 
     ScExternalNameToken(ScExternalNameToken const &) = default;
     ScExternalNameToken(ScExternalNameToken &&) = default;
-    ScExternalNameToken & operator =(ScExternalNameToken const &) = default;
-    ScExternalNameToken & operator =(ScExternalNameToken &&) = default;
+    ScExternalNameToken & operator =(ScExternalNameToken const &) = delete; // due to FormulaToken
+    ScExternalNameToken & operator =(ScExternalNameToken &&) = delete; // due to FormulaToken
 
     virtual sal_uInt16              GetIndex() const override;
     virtual svl::SharedString GetString() const override;

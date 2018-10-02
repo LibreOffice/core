@@ -28,8 +28,8 @@ public:
 
     SfxGrabBagItem(SfxGrabBagItem const&) = default;
     SfxGrabBagItem(SfxGrabBagItem&&) = default;
-    SfxGrabBagItem& operator=(SfxGrabBagItem const&) = default;
-    SfxGrabBagItem& operator=(SfxGrabBagItem&&) = default;
+    SfxGrabBagItem& operator=(SfxGrabBagItem const&) = delete; // due to SfxPoolItem
+    SfxGrabBagItem& operator=(SfxGrabBagItem&&) = delete; // due to SfxPoolItem
 
     const std::map<OUString, css::uno::Any>& GetGrabBag() const { return m_aMap; }
 

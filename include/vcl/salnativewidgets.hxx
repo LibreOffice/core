@@ -271,8 +271,8 @@ class VCL_DLLPUBLIC ImplControlValue
 
         ImplControlValue(ImplControlValue const &) = default;
         ImplControlValue(ImplControlValue &&) = default;
-        ImplControlValue & operator =(ImplControlValue const &) = default;
-        ImplControlValue & operator =(ImplControlValue &&) = default;
+        ImplControlValue & operator =(ImplControlValue const &) = delete; // due to const mType
+        ImplControlValue & operator =(ImplControlValue &&) = delete; // due to const mType
 
         virtual ImplControlValue* clone() const;
 
@@ -317,8 +317,8 @@ class VCL_DLLPUBLIC ScrollbarValue : public ImplControlValue
 
         ScrollbarValue(ScrollbarValue const &) = default;
         ScrollbarValue(ScrollbarValue &&) = default;
-        ScrollbarValue & operator =(ScrollbarValue const &) = default;
-        ScrollbarValue & operator =(ScrollbarValue &&) = default;
+        ScrollbarValue & operator =(ScrollbarValue const &) = delete; // due to ImplControlValue
+        ScrollbarValue & operator =(ScrollbarValue &&) = delete; // due to ImplControlValue
 };
 
 class VCL_DLLPUBLIC SliderValue : public ImplControlValue
@@ -339,8 +339,8 @@ class VCL_DLLPUBLIC SliderValue : public ImplControlValue
 
         SliderValue(SliderValue const &) = default;
         SliderValue(SliderValue &&) = default;
-        SliderValue & operator =(SliderValue const &) = default;
-        SliderValue & operator =(SliderValue &&) = default;
+        SliderValue & operator =(SliderValue const &) = delete; // due to ImplControlValue
+        SliderValue & operator =(SliderValue &&) = delete; // due to ImplControlValue
 };
 
 /* TabitemValue:
@@ -379,8 +379,8 @@ class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
 
         TabitemValue(TabitemValue const &) = default;
         TabitemValue(TabitemValue &&) = default;
-        TabitemValue & operator =(TabitemValue const &) = default;
-        TabitemValue & operator =(TabitemValue &&) = default;
+        TabitemValue & operator =(TabitemValue const &) = delete; // due to ImplControlValue
+        TabitemValue & operator =(TabitemValue &&) = delete; // due to ImplControlValue
 
         bool isLeftAligned() const  { return bool(mnAlignment & TabitemFlags::LeftAligned); }
         bool isRightAligned() const { return bool(mnAlignment & TabitemFlags::RightAligned); }
@@ -421,8 +421,8 @@ class VCL_DLLPUBLIC SpinbuttonValue : public ImplControlValue
 
         SpinbuttonValue(SpinbuttonValue const &) = default;
         SpinbuttonValue(SpinbuttonValue &&) = default;
-        SpinbuttonValue & operator =(SpinbuttonValue const &) = default;
-        SpinbuttonValue & operator =(SpinbuttonValue &&) = default;
+        SpinbuttonValue & operator =(SpinbuttonValue const &) = delete; // due to ImplControlValue
+        SpinbuttonValue & operator =(SpinbuttonValue &&) = delete; // due to ImplControlValue
 };
 
 /*  Toolbarvalue:
@@ -439,8 +439,8 @@ public:
 
     ToolbarValue(ToolbarValue const &) = default;
     ToolbarValue(ToolbarValue &&) = default;
-    ToolbarValue & operator =(ToolbarValue const &) = default;
-    ToolbarValue & operator =(ToolbarValue &&) = default;
+    ToolbarValue & operator =(ToolbarValue const &) = delete; // due to ImplControlValue
+    ToolbarValue & operator =(ToolbarValue &&) = delete; // due to ImplControlValue
 
     tools::Rectangle           maGripRect;
     bool                mbIsTopDockingArea; // indicates that this is the top aligned dockingarea
@@ -460,8 +460,8 @@ public:
     virtual MenubarValue* clone() const override;
     MenubarValue(MenubarValue const &) = default;
     MenubarValue(MenubarValue &&) = default;
-    MenubarValue & operator =(MenubarValue const &) = default;
-    MenubarValue & operator =(MenubarValue &&) = default;
+    MenubarValue & operator =(MenubarValue const &) = delete; // due to ImplControlValue
+    MenubarValue & operator =(MenubarValue &&) = delete; // due to ImplControlValue
     int             maTopDockingAreaHeight;
 };
 
@@ -481,8 +481,8 @@ public:
     virtual MenupopupValue* clone() const override;
     MenupopupValue(MenupopupValue const &) = default;
     MenupopupValue(MenupopupValue &&) = default;
-    MenupopupValue & operator =(MenupopupValue const &) = default;
-    MenupopupValue & operator =(MenupopupValue &&) = default;
+    MenupopupValue & operator =(MenupopupValue const &) = delete; // due to ImplControlValue
+    MenupopupValue & operator =(MenupopupValue &&) = delete; // due to ImplControlValue
     tools::Rectangle       maItemRect;
 };
 
@@ -501,8 +501,8 @@ public:
 
     PushButtonValue(PushButtonValue const &) = default;
     PushButtonValue(PushButtonValue &&) = default;
-    PushButtonValue & operator =(PushButtonValue const &) = default;
-    PushButtonValue & operator =(PushButtonValue &&) = default;
+    PushButtonValue & operator =(PushButtonValue const &) = delete; // due to ImplControlValue
+    PushButtonValue & operator =(PushButtonValue &&) = delete; // due to ImplControlValue
 
     bool            mbBevelButton:1; // only used on OSX
     bool            mbSingleLine:1;  // only used on OSX

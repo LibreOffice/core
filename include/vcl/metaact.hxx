@@ -103,8 +103,8 @@ public:
                         MetaPixelAction();
     MetaPixelAction(MetaPixelAction const &) = default;
     MetaPixelAction(MetaPixelAction &&) = default;
-    MetaPixelAction & operator =(MetaPixelAction const &) = default;
-    MetaPixelAction & operator =(MetaPixelAction &&) = default;
+    MetaPixelAction & operator =(MetaPixelAction const &) = delete; // due to MetaAction
+    MetaPixelAction & operator =(MetaPixelAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaPixelAction() override;
 public:
@@ -131,8 +131,8 @@ public:
                         MetaPointAction();
     MetaPointAction(MetaPointAction const &) = default;
     MetaPointAction(MetaPointAction &&) = default;
-    MetaPointAction & operator =(MetaPointAction const &) = default;
-    MetaPointAction & operator =(MetaPointAction &&) = default;
+    MetaPointAction & operator =(MetaPointAction const &) = delete; // due to MetaAction
+    MetaPointAction & operator =(MetaPointAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaPointAction() override;
 public:
@@ -161,8 +161,8 @@ public:
                         MetaLineAction();
     MetaLineAction(MetaLineAction const &) = default;
     MetaLineAction(MetaLineAction &&) = default;
-    MetaLineAction & operator =(MetaLineAction const &) = default;
-    MetaLineAction & operator =(MetaLineAction &&) = default;
+    MetaLineAction & operator =(MetaLineAction const &) = delete; // due to MetaAction
+    MetaLineAction & operator =(MetaLineAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaLineAction() override;
 public:
@@ -193,8 +193,8 @@ public:
                         MetaRectAction();
     MetaRectAction(MetaRectAction const &) = default;
     MetaRectAction(MetaRectAction &&) = default;
-    MetaRectAction & operator =(MetaRectAction const &) = default;
-    MetaRectAction & operator =(MetaRectAction &&) = default;
+    MetaRectAction & operator =(MetaRectAction const &) = delete; // due to MetaAction
+    MetaRectAction & operator =(MetaRectAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaRectAction() override;
 public:
@@ -223,8 +223,8 @@ public:
                         MetaRoundRectAction();
     MetaRoundRectAction(MetaRoundRectAction const &) = default;
     MetaRoundRectAction(MetaRoundRectAction &&) = default;
-    MetaRoundRectAction & operator =(MetaRoundRectAction const &) = default;
-    MetaRoundRectAction & operator =(MetaRoundRectAction &&) = default;
+    MetaRoundRectAction & operator =(MetaRoundRectAction const &) = delete; // due to MetaAction
+    MetaRoundRectAction & operator =(MetaRoundRectAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaRoundRectAction() override;
 public:
@@ -254,8 +254,8 @@ public:
                         MetaEllipseAction();
     MetaEllipseAction(MetaEllipseAction const &) = default;
     MetaEllipseAction(MetaEllipseAction &&) = default;
-    MetaEllipseAction & operator =(MetaEllipseAction const &) = default;
-    MetaEllipseAction & operator =(MetaEllipseAction &&) = default;
+    MetaEllipseAction & operator =(MetaEllipseAction const &) = delete; // due to MetaAction
+    MetaEllipseAction & operator =(MetaEllipseAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaEllipseAction() override;
 public:
@@ -284,8 +284,8 @@ public:
                         MetaArcAction();
     MetaArcAction(MetaArcAction const &) = default;
     MetaArcAction(MetaArcAction &&) = default;
-    MetaArcAction & operator =(MetaArcAction const &) = default;
-    MetaArcAction & operator =(MetaArcAction &&) = default;
+    MetaArcAction & operator =(MetaArcAction const &) = delete; // due to MetaAction
+    MetaArcAction & operator =(MetaArcAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaArcAction() override;
 public:
@@ -317,8 +317,8 @@ public:
                         MetaPieAction();
     MetaPieAction(MetaPieAction const &) = default;
     MetaPieAction(MetaPieAction &&) = default;
-    MetaPieAction & operator =(MetaPieAction const &) = default;
-    MetaPieAction & operator =(MetaPieAction &&) = default;
+    MetaPieAction & operator =(MetaPieAction const &) = delete; // due to MetaAction
+    MetaPieAction & operator =(MetaPieAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaPieAction() override;
 public:
@@ -350,8 +350,8 @@ public:
                         MetaChordAction();
     MetaChordAction(MetaChordAction const &) = default;
     MetaChordAction(MetaChordAction &&) = default;
-    MetaChordAction & operator =(MetaChordAction const &) = default;
-    MetaChordAction & operator =(MetaChordAction &&) = default;
+    MetaChordAction & operator =(MetaChordAction const &) = delete; // due to MetaAction
+    MetaChordAction & operator =(MetaChordAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaChordAction() override;
 public:
@@ -382,8 +382,8 @@ public:
                         MetaPolyLineAction();
     MetaPolyLineAction(MetaPolyLineAction const &) = default;
     MetaPolyLineAction(MetaPolyLineAction &&) = default;
-    MetaPolyLineAction & operator =(MetaPolyLineAction const &) = default;
-    MetaPolyLineAction & operator =(MetaPolyLineAction &&) = default;
+    MetaPolyLineAction & operator =(MetaPolyLineAction const &) = delete; // due to MetaAction
+    MetaPolyLineAction & operator =(MetaPolyLineAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaPolyLineAction() override;
 public:
@@ -412,8 +412,8 @@ public:
                         MetaPolygonAction();
     MetaPolygonAction(MetaPolygonAction const &) = default;
     MetaPolygonAction(MetaPolygonAction &&) = default;
-    MetaPolygonAction & operator =(MetaPolygonAction const &) = default;
-    MetaPolygonAction & operator =(MetaPolygonAction &&) = default;
+    MetaPolygonAction & operator =(MetaPolygonAction const &) = delete; // due to MetaAction
+    MetaPolygonAction & operator =(MetaPolygonAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaPolygonAction() override;
 public:
@@ -440,8 +440,8 @@ public:
                         MetaPolyPolygonAction();
     MetaPolyPolygonAction(MetaPolyPolygonAction const &) = default;
     MetaPolyPolygonAction(MetaPolyPolygonAction &&) = default;
-    MetaPolyPolygonAction & operator =(MetaPolyPolygonAction const &) = default;
-    MetaPolyPolygonAction & operator =(MetaPolyPolygonAction &&) = default;
+    MetaPolyPolygonAction & operator =(MetaPolyPolygonAction const &) = delete; // due to MetaAction
+    MetaPolyPolygonAction & operator =(MetaPolyPolygonAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaPolyPolygonAction() override;
 public:
@@ -471,8 +471,8 @@ public:
                         MetaTextAction();
     MetaTextAction(MetaTextAction const &) = default;
     MetaTextAction(MetaTextAction &&) = default;
-    MetaTextAction & operator =(MetaTextAction const &) = default;
-    MetaTextAction & operator =(MetaTextAction &&) = default;
+    MetaTextAction & operator =(MetaTextAction const &) = delete; // due to MetaAction
+    MetaTextAction & operator =(MetaTextAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaTextAction() override;
 public:
@@ -545,8 +545,8 @@ public:
                         MetaStretchTextAction();
     MetaStretchTextAction(MetaStretchTextAction const &) = default;
     MetaStretchTextAction(MetaStretchTextAction &&) = default;
-    MetaStretchTextAction & operator =(MetaStretchTextAction const &) = default;
-    MetaStretchTextAction & operator =(MetaStretchTextAction &&) = default;
+    MetaStretchTextAction & operator =(MetaStretchTextAction const &) = delete; // due to MetaAction
+    MetaStretchTextAction & operator =(MetaStretchTextAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaStretchTextAction() override;
 public:
@@ -581,8 +581,8 @@ public:
                         MetaTextRectAction();
     MetaTextRectAction(MetaTextRectAction const &) = default;
     MetaTextRectAction(MetaTextRectAction &&) = default;
-    MetaTextRectAction & operator =(MetaTextRectAction const &) = default;
-    MetaTextRectAction & operator =(MetaTextRectAction &&) = default;
+    MetaTextRectAction & operator =(MetaTextRectAction const &) = delete; // due to MetaAction
+    MetaTextRectAction & operator =(MetaTextRectAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaTextRectAction() override;
 public:
@@ -616,8 +616,8 @@ public:
                         MetaTextLineAction();
     MetaTextLineAction(MetaTextLineAction const &) = default;
     MetaTextLineAction(MetaTextLineAction &&) = default;
-    MetaTextLineAction & operator =(MetaTextLineAction const &) = default;
-    MetaTextLineAction & operator =(MetaTextLineAction &&) = default;
+    MetaTextLineAction & operator =(MetaTextLineAction const &) = delete; // due to MetaAction
+    MetaTextLineAction & operator =(MetaTextLineAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaTextLineAction() override;
 public:
@@ -651,8 +651,8 @@ public:
                         MetaBmpAction();
     MetaBmpAction(MetaBmpAction const &) = default;
     MetaBmpAction(MetaBmpAction &&) = default;
-    MetaBmpAction & operator =(MetaBmpAction const &) = default;
-    MetaBmpAction & operator =(MetaBmpAction &&) = default;
+    MetaBmpAction & operator =(MetaBmpAction const &) = delete; // due to MetaAction
+    MetaBmpAction & operator =(MetaBmpAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaBmpAction() override;
 public:
@@ -682,8 +682,8 @@ public:
                         MetaBmpScaleAction();
     MetaBmpScaleAction(MetaBmpScaleAction const &) = default;
     MetaBmpScaleAction(MetaBmpScaleAction &&) = default;
-    MetaBmpScaleAction & operator =(MetaBmpScaleAction const &) = default;
-    MetaBmpScaleAction & operator =(MetaBmpScaleAction &&) = default;
+    MetaBmpScaleAction & operator =(MetaBmpScaleAction const &) = delete; // due to MetaAction
+    MetaBmpScaleAction & operator =(MetaBmpScaleAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaBmpScaleAction() override;
 public:
@@ -717,8 +717,8 @@ public:
                         MetaBmpScalePartAction();
     MetaBmpScalePartAction(MetaBmpScalePartAction const &) = default;
     MetaBmpScalePartAction(MetaBmpScalePartAction &&) = default;
-    MetaBmpScalePartAction & operator =(MetaBmpScalePartAction const &) = default;
-    MetaBmpScalePartAction & operator =(MetaBmpScalePartAction &&) = default;
+    MetaBmpScalePartAction & operator =(MetaBmpScalePartAction const &) = delete; // due to MetaAction
+    MetaBmpScalePartAction & operator =(MetaBmpScalePartAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaBmpScalePartAction() override;
 public:
@@ -752,8 +752,8 @@ public:
                         MetaBmpExAction();
     MetaBmpExAction(MetaBmpExAction const &) = default;
     MetaBmpExAction(MetaBmpExAction &&) = default;
-    MetaBmpExAction & operator =(MetaBmpExAction const &) = default;
-    MetaBmpExAction & operator =(MetaBmpExAction &&) = default;
+    MetaBmpExAction & operator =(MetaBmpExAction const &) = delete; // due to MetaAction
+    MetaBmpExAction & operator =(MetaBmpExAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaBmpExAction() override;
 public:
@@ -783,8 +783,8 @@ public:
                         MetaBmpExScaleAction();
     MetaBmpExScaleAction(MetaBmpExScaleAction const &) = default;
     MetaBmpExScaleAction(MetaBmpExScaleAction &&) = default;
-    MetaBmpExScaleAction & operator =(MetaBmpExScaleAction const &) = default;
-    MetaBmpExScaleAction & operator =(MetaBmpExScaleAction &&) = default;
+    MetaBmpExScaleAction & operator =(MetaBmpExScaleAction const &) = delete; // due to MetaAction
+    MetaBmpExScaleAction & operator =(MetaBmpExScaleAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaBmpExScaleAction() override;
 public:
@@ -818,8 +818,8 @@ public:
                         MetaBmpExScalePartAction();
     MetaBmpExScalePartAction(MetaBmpExScalePartAction const &) = default;
     MetaBmpExScalePartAction(MetaBmpExScalePartAction &&) = default;
-    MetaBmpExScalePartAction & operator =(MetaBmpExScalePartAction const &) = default;
-    MetaBmpExScalePartAction & operator =(MetaBmpExScalePartAction &&) = default;
+    MetaBmpExScalePartAction & operator =(MetaBmpExScalePartAction const &) = delete; // due to MetaAction
+    MetaBmpExScalePartAction & operator =(MetaBmpExScalePartAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaBmpExScalePartAction() override;
 public:
@@ -854,8 +854,8 @@ public:
                         MetaMaskAction();
     MetaMaskAction(MetaMaskAction const &) = default;
     MetaMaskAction(MetaMaskAction &&) = default;
-    MetaMaskAction & operator =(MetaMaskAction const &) = default;
-    MetaMaskAction & operator =(MetaMaskAction &&) = default;
+    MetaMaskAction & operator =(MetaMaskAction const &) = delete; // due to MetaAction
+    MetaMaskAction & operator =(MetaMaskAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaMaskAction() override;
 public:
@@ -889,8 +889,8 @@ public:
                         MetaMaskScaleAction();
     MetaMaskScaleAction(MetaMaskScaleAction const &) = default;
     MetaMaskScaleAction(MetaMaskScaleAction &&) = default;
-    MetaMaskScaleAction & operator =(MetaMaskScaleAction const &) = default;
-    MetaMaskScaleAction & operator =(MetaMaskScaleAction &&) = default;
+    MetaMaskScaleAction & operator =(MetaMaskScaleAction const &) = delete; // due to MetaAction
+    MetaMaskScaleAction & operator =(MetaMaskScaleAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaMaskScaleAction() override;
 public:
@@ -927,8 +927,8 @@ public:
                         MetaMaskScalePartAction();
     MetaMaskScalePartAction(MetaMaskScalePartAction const &) = default;
     MetaMaskScalePartAction(MetaMaskScalePartAction &&) = default;
-    MetaMaskScalePartAction & operator =(MetaMaskScalePartAction const &) = default;
-    MetaMaskScalePartAction & operator =(MetaMaskScalePartAction &&) = default;
+    MetaMaskScalePartAction & operator =(MetaMaskScalePartAction const &) = delete; // due to MetaAction
+    MetaMaskScalePartAction & operator =(MetaMaskScalePartAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaMaskScalePartAction() override;
 public:
@@ -964,8 +964,8 @@ public:
                         MetaGradientAction();
     MetaGradientAction(MetaGradientAction const &) = default;
     MetaGradientAction(MetaGradientAction &&) = default;
-    MetaGradientAction & operator =(MetaGradientAction const &) = default;
-    MetaGradientAction & operator =(MetaGradientAction &&) = default;
+    MetaGradientAction & operator =(MetaGradientAction const &) = delete; // due to MetaAction
+    MetaGradientAction & operator =(MetaGradientAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaGradientAction() override;
 public:
@@ -994,8 +994,8 @@ public:
                         MetaGradientExAction();
     MetaGradientExAction(MetaGradientExAction const &) = default;
     MetaGradientExAction(MetaGradientExAction &&) = default;
-    MetaGradientExAction & operator =(MetaGradientExAction const &) = default;
-    MetaGradientExAction & operator =(MetaGradientExAction &&) = default;
+    MetaGradientExAction & operator =(MetaGradientExAction const &) = delete; // due to MetaAction
+    MetaGradientExAction & operator =(MetaGradientExAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaGradientExAction() override;
 public:
@@ -1024,8 +1024,8 @@ public:
                         MetaHatchAction();
     MetaHatchAction(MetaHatchAction const &) = default;
     MetaHatchAction(MetaHatchAction &&) = default;
-    MetaHatchAction & operator =(MetaHatchAction const &) = default;
-    MetaHatchAction & operator =(MetaHatchAction &&) = default;
+    MetaHatchAction & operator =(MetaHatchAction const &) = delete; // due to MetaAction
+    MetaHatchAction & operator =(MetaHatchAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaHatchAction() override;
 public:
@@ -1054,8 +1054,8 @@ public:
                         MetaWallpaperAction();
     MetaWallpaperAction(MetaWallpaperAction const &) = default;
     MetaWallpaperAction(MetaWallpaperAction &&) = default;
-    MetaWallpaperAction & operator =(MetaWallpaperAction const &) = default;
-    MetaWallpaperAction & operator =(MetaWallpaperAction &&) = default;
+    MetaWallpaperAction & operator =(MetaWallpaperAction const &) = delete; // due to MetaAction
+    MetaWallpaperAction & operator =(MetaWallpaperAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaWallpaperAction() override;
 public:
@@ -1085,8 +1085,8 @@ public:
                         MetaClipRegionAction();
     MetaClipRegionAction(MetaClipRegionAction const &) = default;
     MetaClipRegionAction(MetaClipRegionAction &&) = default;
-    MetaClipRegionAction & operator =(MetaClipRegionAction const &) = default;
-    MetaClipRegionAction & operator =(MetaClipRegionAction &&) = default;
+    MetaClipRegionAction & operator =(MetaClipRegionAction const &) = delete; // due to MetaAction
+    MetaClipRegionAction & operator =(MetaClipRegionAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaClipRegionAction() override;
 public:
@@ -1114,8 +1114,8 @@ public:
                         MetaISectRectClipRegionAction();
     MetaISectRectClipRegionAction(MetaISectRectClipRegionAction const &) = default;
     MetaISectRectClipRegionAction(MetaISectRectClipRegionAction &&) = default;
-    MetaISectRectClipRegionAction & operator =(MetaISectRectClipRegionAction const &) = default;
-    MetaISectRectClipRegionAction & operator =(MetaISectRectClipRegionAction &&) = default;
+    MetaISectRectClipRegionAction & operator =(MetaISectRectClipRegionAction const &) = delete; // due to MetaAction
+    MetaISectRectClipRegionAction & operator =(MetaISectRectClipRegionAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaISectRectClipRegionAction() override;
 public:
@@ -1142,8 +1142,8 @@ public:
                         MetaISectRegionClipRegionAction();
     MetaISectRegionClipRegionAction(MetaISectRegionClipRegionAction const &) = default;
     MetaISectRegionClipRegionAction(MetaISectRegionClipRegionAction &&) = default;
-    MetaISectRegionClipRegionAction & operator =(MetaISectRegionClipRegionAction const &) = default;
-    MetaISectRegionClipRegionAction & operator =(MetaISectRegionClipRegionAction &&) = default;
+    MetaISectRegionClipRegionAction & operator =(MetaISectRegionClipRegionAction const &) = delete; // due to MetaAction
+    MetaISectRegionClipRegionAction & operator =(MetaISectRegionClipRegionAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaISectRegionClipRegionAction() override;
 public:
@@ -1171,8 +1171,8 @@ public:
                         MetaMoveClipRegionAction();
     MetaMoveClipRegionAction(MetaMoveClipRegionAction const &) = default;
     MetaMoveClipRegionAction(MetaMoveClipRegionAction &&) = default;
-    MetaMoveClipRegionAction & operator =(MetaMoveClipRegionAction const &) = default;
-    MetaMoveClipRegionAction & operator =(MetaMoveClipRegionAction &&) = default;
+    MetaMoveClipRegionAction & operator =(MetaMoveClipRegionAction const &) = delete; // due to MetaAction
+    MetaMoveClipRegionAction & operator =(MetaMoveClipRegionAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaMoveClipRegionAction() override;
 public:
@@ -1200,8 +1200,8 @@ public:
                         MetaLineColorAction();
     MetaLineColorAction(MetaLineColorAction const &) = default;
     MetaLineColorAction(MetaLineColorAction &&) = default;
-    MetaLineColorAction & operator =(MetaLineColorAction const &) = default;
-    MetaLineColorAction & operator =(MetaLineColorAction &&) = default;
+    MetaLineColorAction & operator =(MetaLineColorAction const &) = delete; // due to MetaAction
+    MetaLineColorAction & operator =(MetaLineColorAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaLineColorAction() override;
 public:
@@ -1227,8 +1227,8 @@ public:
                         MetaFillColorAction();
     MetaFillColorAction(MetaFillColorAction const &) = default;
     MetaFillColorAction(MetaFillColorAction &&) = default;
-    MetaFillColorAction & operator =(MetaFillColorAction const &) = default;
-    MetaFillColorAction & operator =(MetaFillColorAction &&) = default;
+    MetaFillColorAction & operator =(MetaFillColorAction const &) = delete; // due to MetaAction
+    MetaFillColorAction & operator =(MetaFillColorAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaFillColorAction() override;
 public:
@@ -1253,8 +1253,8 @@ public:
                         MetaTextColorAction();
     MetaTextColorAction(MetaTextColorAction const &) = default;
     MetaTextColorAction(MetaTextColorAction &&) = default;
-    MetaTextColorAction & operator =(MetaTextColorAction const &) = default;
-    MetaTextColorAction & operator =(MetaTextColorAction &&) = default;
+    MetaTextColorAction & operator =(MetaTextColorAction const &) = delete; // due to MetaAction
+    MetaTextColorAction & operator =(MetaTextColorAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaTextColorAction() override;
 public:
@@ -1279,8 +1279,8 @@ public:
                         MetaTextFillColorAction();
     MetaTextFillColorAction(MetaTextFillColorAction const &) = default;
     MetaTextFillColorAction(MetaTextFillColorAction &&) = default;
-    MetaTextFillColorAction & operator =(MetaTextFillColorAction const &) = default;
-    MetaTextFillColorAction & operator =(MetaTextFillColorAction &&) = default;
+    MetaTextFillColorAction & operator =(MetaTextFillColorAction const &) = delete; // due to MetaAction
+    MetaTextFillColorAction & operator =(MetaTextFillColorAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaTextFillColorAction() override;
 public:
@@ -1306,8 +1306,8 @@ public:
                         MetaTextLineColorAction();
     MetaTextLineColorAction(MetaTextLineColorAction const &) = default;
     MetaTextLineColorAction(MetaTextLineColorAction &&) = default;
-    MetaTextLineColorAction & operator =(MetaTextLineColorAction const &) = default;
-    MetaTextLineColorAction & operator =(MetaTextLineColorAction &&) = default;
+    MetaTextLineColorAction & operator =(MetaTextLineColorAction const &) = delete; // due to MetaAction
+    MetaTextLineColorAction & operator =(MetaTextLineColorAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaTextLineColorAction() override;
 public:
@@ -1333,8 +1333,8 @@ public:
                         MetaOverlineColorAction();
     MetaOverlineColorAction(MetaOverlineColorAction const &) = default;
     MetaOverlineColorAction(MetaOverlineColorAction &&) = default;
-    MetaOverlineColorAction & operator =(MetaOverlineColorAction const &) = default;
-    MetaOverlineColorAction & operator =(MetaOverlineColorAction &&) = default;
+    MetaOverlineColorAction & operator =(MetaOverlineColorAction const &) = delete; // due to MetaAction
+    MetaOverlineColorAction & operator =(MetaOverlineColorAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaOverlineColorAction() override;
 public:
@@ -1359,8 +1359,8 @@ public:
                         MetaTextAlignAction();
     MetaTextAlignAction(MetaTextAlignAction const &) = default;
     MetaTextAlignAction(MetaTextAlignAction &&) = default;
-    MetaTextAlignAction & operator =(MetaTextAlignAction const &) = default;
-    MetaTextAlignAction & operator =(MetaTextAlignAction &&) = default;
+    MetaTextAlignAction & operator =(MetaTextAlignAction const &) = delete; // due to MetaAction
+    MetaTextAlignAction & operator =(MetaTextAlignAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaTextAlignAction() override;
 public:
@@ -1384,8 +1384,8 @@ public:
                         MetaMapModeAction();
     MetaMapModeAction(MetaMapModeAction const &) = default;
     MetaMapModeAction(MetaMapModeAction &&) = default;
-    MetaMapModeAction & operator =(MetaMapModeAction const &) = default;
-    MetaMapModeAction & operator =(MetaMapModeAction &&) = default;
+    MetaMapModeAction & operator =(MetaMapModeAction const &) = delete; // due to MetaAction
+    MetaMapModeAction & operator =(MetaMapModeAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaMapModeAction() override;
 public:
@@ -1411,8 +1411,8 @@ public:
                         MetaFontAction();
     MetaFontAction(MetaFontAction const &) = default;
     MetaFontAction(MetaFontAction &&) = default;
-    MetaFontAction & operator =(MetaFontAction const &) = default;
-    MetaFontAction & operator =(MetaFontAction &&) = default;
+    MetaFontAction & operator =(MetaFontAction const &) = delete; // due to MetaAction
+    MetaFontAction & operator =(MetaFontAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaFontAction() override;
 public:
@@ -1438,8 +1438,8 @@ public:
                         MetaPushAction();
     MetaPushAction(MetaPushAction const &) = default;
     MetaPushAction(MetaPushAction &&) = default;
-    MetaPushAction & operator =(MetaPushAction const &) = default;
-    MetaPushAction & operator =(MetaPushAction &&) = default;
+    MetaPushAction & operator =(MetaPushAction const &) = delete; // due to MetaAction
+    MetaPushAction & operator =(MetaPushAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaPushAction() override;
 public:
@@ -1460,8 +1460,8 @@ public:
                         MetaPopAction();
     MetaPopAction(MetaPopAction const &) = default;
     MetaPopAction(MetaPopAction &&) = default;
-    MetaPopAction & operator =(MetaPopAction const &) = default;
-    MetaPopAction & operator =(MetaPopAction &&) = default;
+    MetaPopAction & operator =(MetaPopAction const &) = delete; // due to MetaAction
+    MetaPopAction & operator =(MetaPopAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaPopAction() override;
 public:
@@ -1481,8 +1481,8 @@ public:
                         MetaRasterOpAction();
     MetaRasterOpAction(MetaRasterOpAction const &) = default;
     MetaRasterOpAction(MetaRasterOpAction &&) = default;
-    MetaRasterOpAction & operator =(MetaRasterOpAction const &) = default;
-    MetaRasterOpAction & operator =(MetaRasterOpAction &&) = default;
+    MetaRasterOpAction & operator =(MetaRasterOpAction const &) = delete; // due to MetaAction
+    MetaRasterOpAction & operator =(MetaRasterOpAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaRasterOpAction() override;
 public:
@@ -1507,8 +1507,8 @@ public:
                         MetaTransparentAction();
     MetaTransparentAction(MetaTransparentAction const &) = default;
     MetaTransparentAction(MetaTransparentAction &&) = default;
-    MetaTransparentAction & operator =(MetaTransparentAction const &) = default;
-    MetaTransparentAction & operator =(MetaTransparentAction &&) = default;
+    MetaTransparentAction & operator =(MetaTransparentAction const &) = delete; // due to MetaAction
+    MetaTransparentAction & operator =(MetaTransparentAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaTransparentAction() override;
 public:
@@ -1539,8 +1539,8 @@ public:
                         MetaFloatTransparentAction();
     MetaFloatTransparentAction(MetaFloatTransparentAction const &) = default;
     MetaFloatTransparentAction(MetaFloatTransparentAction &&) = default;
-    MetaFloatTransparentAction & operator =(MetaFloatTransparentAction const &) = default;
-    MetaFloatTransparentAction & operator =(MetaFloatTransparentAction &&) = default;
+    MetaFloatTransparentAction & operator =(MetaFloatTransparentAction const &) = delete; // due to MetaAction
+    MetaFloatTransparentAction & operator =(MetaFloatTransparentAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaFloatTransparentAction() override;
 public:
@@ -1574,8 +1574,8 @@ public:
                         MetaEPSAction();
     MetaEPSAction(MetaEPSAction const &) = default;
     MetaEPSAction(MetaEPSAction &&) = default;
-    MetaEPSAction & operator =(MetaEPSAction const &) = default;
-    MetaEPSAction & operator =(MetaEPSAction &&) = default;
+    MetaEPSAction & operator =(MetaEPSAction const &) = delete; // due to MetaAction
+    MetaEPSAction & operator =(MetaEPSAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaEPSAction() override;
 public:
@@ -1607,8 +1607,8 @@ public:
                         MetaRefPointAction();
     MetaRefPointAction(MetaRefPointAction const &) = default;
     MetaRefPointAction(MetaRefPointAction &&) = default;
-    MetaRefPointAction & operator =(MetaRefPointAction const &) = default;
-    MetaRefPointAction & operator =(MetaRefPointAction &&) = default;
+    MetaRefPointAction & operator =(MetaRefPointAction const &) = delete; // due to MetaAction
+    MetaRefPointAction & operator =(MetaRefPointAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaRefPointAction() override;
 public:
@@ -1667,8 +1667,8 @@ public:
                         MetaLayoutModeAction();
     MetaLayoutModeAction(MetaLayoutModeAction const &) = default;
     MetaLayoutModeAction(MetaLayoutModeAction &&) = default;
-    MetaLayoutModeAction & operator =(MetaLayoutModeAction const &) = default;
-    MetaLayoutModeAction & operator =(MetaLayoutModeAction &&) = default;
+    MetaLayoutModeAction & operator =(MetaLayoutModeAction const &) = delete; // due to MetaAction
+    MetaLayoutModeAction & operator =(MetaLayoutModeAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaLayoutModeAction() override;
 public:
@@ -1692,8 +1692,8 @@ public:
                         MetaTextLanguageAction();
     MetaTextLanguageAction(MetaTextLanguageAction const &) = default;
     MetaTextLanguageAction(MetaTextLanguageAction &&) = default;
-    MetaTextLanguageAction & operator =(MetaTextLanguageAction const &) = default;
-    MetaTextLanguageAction & operator =(MetaTextLanguageAction &&) = default;
+    MetaTextLanguageAction & operator =(MetaTextLanguageAction const &) = delete; // due to MetaAction
+    MetaTextLanguageAction & operator =(MetaTextLanguageAction &&) = delete; // due to MetaAction
 protected:
     virtual             ~MetaTextLanguageAction() override;
 public:

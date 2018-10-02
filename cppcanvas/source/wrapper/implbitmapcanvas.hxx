@@ -41,8 +41,8 @@ namespace cppcanvas
 
             ImplBitmapCanvas(ImplBitmapCanvas const &) = default;
             ImplBitmapCanvas(ImplBitmapCanvas &&) = default;
-            ImplBitmapCanvas & operator =(ImplBitmapCanvas const &) = default;
-            ImplBitmapCanvas & operator =(ImplBitmapCanvas &&) = default;
+            ImplBitmapCanvas & operator =(ImplBitmapCanvas const &) = delete; // due to const mxBitmapCanvas
+            ImplBitmapCanvas & operator =(ImplBitmapCanvas &&) = delete; // due to const mxBitmapCanvas
 
             virtual ::basegfx::B2ISize      getSize() const override;
 

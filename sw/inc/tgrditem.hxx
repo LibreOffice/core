@@ -52,8 +52,8 @@ public:
 
     SwTextGridItem(SwTextGridItem const &) = default;
     SwTextGridItem(SwTextGridItem &&) = default;
-    SwTextGridItem & operator =(SwTextGridItem const &) = default;
-    SwTextGridItem & operator =(SwTextGridItem &&) = default;
+    SwTextGridItem & operator =(SwTextGridItem const &) = delete; // due to SfxPoolItem
+    SwTextGridItem & operator =(SwTextGridItem &&) = delete; // due to SfxPoolItem
 
     // "pure virtual methods" of SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;

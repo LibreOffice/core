@@ -36,8 +36,8 @@ public:
 
     SpinningProgressControlModel(SpinningProgressControlModel const &) = default;
     SpinningProgressControlModel(SpinningProgressControlModel &&) = default;
-    SpinningProgressControlModel & operator =(SpinningProgressControlModel const &) = default;
-    SpinningProgressControlModel & operator =(SpinningProgressControlModel &&) = default;
+    SpinningProgressControlModel & operator =(SpinningProgressControlModel const &) = delete; // due to SpinningProgressControlModel_Base
+    SpinningProgressControlModel & operator =(SpinningProgressControlModel &&) = delete; // due to SpinningProgressControlModel_Base
 
     virtual rtl::Reference<UnoControlModel> Clone() const override;
 

@@ -57,8 +57,8 @@ protected:
     virtual ~SdrAttrObj() override;
 
 public:
-    SdrAttrObj(SdrAttrObj const &) = default;
-    SdrAttrObj(SdrAttrObj &&) = default;
+    SdrAttrObj(SdrAttrObj const &) = delete; // due to SdrObject
+    SdrAttrObj(SdrAttrObj &&) = delete; // due to SdrObject
     SdrAttrObj & operator =(SdrAttrObj const &) = default;
     SdrAttrObj & operator =(SdrAttrObj &&) = default;
 

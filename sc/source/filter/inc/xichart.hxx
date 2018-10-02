@@ -84,8 +84,8 @@ public:
 
     XclImpChRoot(XclImpChRoot const &) = default;
     XclImpChRoot(XclImpChRoot &&) = default;
-    XclImpChRoot & operator =(XclImpChRoot const &) = default;
-    XclImpChRoot & operator =(XclImpChRoot &&) = default;
+    XclImpChRoot & operator =(XclImpChRoot const &) = delete; // due to XclImpRoot
+    XclImpChRoot & operator =(XclImpChRoot &&) = delete; // due to XclImpRoot
 
     /** Returns this root instance - for code readability in derived classes. */
     const XclImpChRoot& GetChRoot() const { return *this; }

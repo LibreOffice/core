@@ -35,8 +35,8 @@ public:
 
     SfxLockBytesItem(SfxLockBytesItem const &) = default;
     SfxLockBytesItem(SfxLockBytesItem &&) = default;
-    SfxLockBytesItem & operator =(SfxLockBytesItem const &) = default;
-    SfxLockBytesItem & operator =(SfxLockBytesItem &&) = default;
+    SfxLockBytesItem & operator =(SfxLockBytesItem const &) = delete; // due to SfxPoolItem
+    SfxLockBytesItem & operator =(SfxLockBytesItem &&) = delete; // due to SfxPoolItem
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

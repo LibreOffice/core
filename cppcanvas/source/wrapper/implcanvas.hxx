@@ -55,8 +55,8 @@ namespace cppcanvas
 
             ImplCanvas(ImplCanvas const &) = default;
             ImplCanvas(ImplCanvas &&) = default;
-            ImplCanvas & operator =(ImplCanvas const &) = default;
-            ImplCanvas & operator =(ImplCanvas &&) = default;
+            ImplCanvas & operator =(ImplCanvas const &) = delete; // due to const mxCanvas
+            ImplCanvas & operator =(ImplCanvas &&) = delete; // due to const mxCanvas
 
             virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) override;
             virtual ::basegfx::B2DHomMatrix          getTransformation() const override;

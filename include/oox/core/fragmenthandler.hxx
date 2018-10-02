@@ -95,8 +95,8 @@ public:
 
     FragmentHandler(FragmentHandler const &) = default;
     FragmentHandler(FragmentHandler &&) = default;
-    FragmentHandler & operator =(FragmentHandler const &) = default;
-    FragmentHandler & operator =(FragmentHandler &&) = default;
+    FragmentHandler & operator =(FragmentHandler const &) = delete; // due to ContextHandler
+    FragmentHandler & operator =(FragmentHandler &&) = delete; // due to ContextHandler
 
     /** Returns the com.sun.star.xml.sax.XFastContextHandler interface of this context. */
     css::uno::Reference< css::xml::sax::XFastContextHandler >

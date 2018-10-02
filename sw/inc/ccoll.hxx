@@ -48,8 +48,8 @@ public:
 
     SwCondCollItem(SwCondCollItem const &) = default;
     SwCondCollItem(SwCondCollItem &&) = default;
-    SwCondCollItem & operator =(SwCondCollItem const &) = default;
-    SwCondCollItem & operator =(SwCondCollItem &&) = default;
+    SwCondCollItem & operator =(SwCondCollItem const &) = delete; // due to SfxPoolItem
+    SwCondCollItem & operator =(SwCondCollItem &&) = delete; // due to SfxPoolItem
 
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool                operator==( const SfxPoolItem& ) const override;

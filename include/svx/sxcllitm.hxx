@@ -36,8 +36,8 @@ public:
 
     SdrCaptionLineLenItem(SdrCaptionLineLenItem const &) = default;
     SdrCaptionLineLenItem(SdrCaptionLineLenItem &&) = default;
-    SdrCaptionLineLenItem & operator =(SdrCaptionLineLenItem const &) = default;
-    SdrCaptionLineLenItem & operator =(SdrCaptionLineLenItem &&) = default;
+    SdrCaptionLineLenItem & operator =(SdrCaptionLineLenItem const &) = delete; // due to SdrMetricItem
+    SdrCaptionLineLenItem & operator =(SdrCaptionLineLenItem &&) = delete; // due to SdrMetricItem
 };
 
 /**
@@ -52,8 +52,8 @@ public:
 
     SdrCaptionFitLineLenItem(SdrCaptionFitLineLenItem const &) = default;
     SdrCaptionFitLineLenItem(SdrCaptionFitLineLenItem &&) = default;
-    SdrCaptionFitLineLenItem & operator =(SdrCaptionFitLineLenItem const &) = default;
-    SdrCaptionFitLineLenItem & operator =(SdrCaptionFitLineLenItem &&) = default;
+    SdrCaptionFitLineLenItem & operator =(SdrCaptionFitLineLenItem const &) = delete; // due to SdrYesNoItem
+    SdrCaptionFitLineLenItem & operator =(SdrCaptionFitLineLenItem &&) = delete; // due to SdrYesNoItem
 };
 
 #endif
