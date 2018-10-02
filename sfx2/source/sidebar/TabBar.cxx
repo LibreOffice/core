@@ -230,10 +230,14 @@ void TabBar::DataChanged (const DataChangedEvent& rDataChangedEvent)
 bool TabBar::EventNotify(NotifyEvent& rEvent)
 {
     MouseNotifyEvent nType = rEvent.GetType();
-    if (MouseNotifyEvent::KEYINPUT == nType)
+    if(MouseNotifyEvent::KEYINPUT == nType)
+    {
+        const vcl::KeyCode& rKeyCode = rEvent.GetKeyEvent()->GetKeyCode();
+        if((KEY_MOD1 == rKeyCode.GetModifier()) && (KEY_F5 == rKeyCode.GetCode()))
+            return vcl::Window::EventNotify(rEvent);
         return true;
-
-    if(MouseNotifyEvent::COMMAND == nType)
+    }
+    else if(MouseNotifyEvent::COMMAND == nType)
     {
         const CommandEvent& rCommandEvent = *rEvent.GetCommandEvent();
         if(rCommandEvent.GetCommand() == CommandEventId::Wheel)
