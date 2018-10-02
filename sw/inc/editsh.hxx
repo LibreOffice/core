@@ -366,7 +366,10 @@ public:
     /// Sign the paragraph at the cursor.
     void SignParagraph();
 
-    /// Validate current paragraph signatures, if any, at the cursor start.
+    /// Validate the paragraph signatures, if any, of the current text node.
+    void ValidateParagraphSignatures(SwTextNode* pNode, bool updateDontRemove);
+
+    /// Validate the current paragraph signatures, if any, at the cursor start.
     void ValidateCurrentParagraphSignatures(bool updateDontRemove);
 
     /// Validate all paragraph signatures.
