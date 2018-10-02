@@ -555,13 +555,13 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
 
             for( size_t n = 0; n < nCnt; ++n )
             {
-                bool isSubstring = MatchSubstring(aArr[ n ]->sDlgEntry, filterString);
+                bool isSubstring = MatchSubstring(aArr[ n ].sDlgEntry, filterString);
                 if(isSubstring)
                 {
-                    m_pSelectionLB->InsertEntry( aArr[ n ]->sDlgEntry );
+                    m_pSelectionLB->InsertEntry( aArr[ n ].sDlgEntry );
                 }
-                if (IsFieldEdit() && pRefField->GetSeqNo() == aArr[ n ]->nSeqNo)
-                    sOldSel = aArr[n]->sDlgEntry;
+                if (IsFieldEdit() && pRefField->GetSeqNo() == aArr[ n ].nSeqNo)
+                    sOldSel = aArr[n].sDlgEntry;
             }
         }
         else if (nTypeId == REFFLDFLAG_ENDNOTE)
@@ -572,13 +572,13 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
 
             for( size_t n = 0; n < nCnt; ++n )
             {
-                bool isSubstring = MatchSubstring(aArr[ n ]->sDlgEntry, filterString);
+                bool isSubstring = MatchSubstring(aArr[ n ].sDlgEntry, filterString);
                 if(isSubstring)
                 {
-                    m_pSelectionLB->InsertEntry( aArr[ n ]->sDlgEntry );
+                    m_pSelectionLB->InsertEntry( aArr[ n ].sDlgEntry );
                 }
-                if (IsFieldEdit() && pRefField->GetSeqNo() == aArr[ n ]->nSeqNo)
-                    sOldSel = aArr[n]->sDlgEntry;
+                if (IsFieldEdit() && pRefField->GetSeqNo() == aArr[ n ].nSeqNo)
+                    sOldSel = aArr[n].sDlgEntry;
             }
         }
         // #i83479#
@@ -661,14 +661,14 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
                 const size_t nCnt = pType->GetSeqFieldList( aArr );
                 for( size_t n = 0; n < nCnt; ++n )
                 {
-                    bool isSubstring = MatchSubstring(aArr[ n ]->sDlgEntry, filterString);
+                    bool isSubstring = MatchSubstring(aArr[ n ].sDlgEntry, filterString);
                     if(isSubstring)
                     {
-                        m_pSelectionLB->InsertEntry( aArr[ n ]->sDlgEntry );
+                        m_pSelectionLB->InsertEntry( aArr[ n ].sDlgEntry );
                     }
                     if (IsFieldEdit() && sOldSel.isEmpty() &&
-                        aArr[ n ]->nSeqNo == pRefField->GetSeqNo())
-                        sOldSel = aArr[ n ]->sDlgEntry;
+                        aArr[ n ].nSeqNo == pRefField->GetSeqNo())
+                        sOldSel = aArr[ n ].sDlgEntry;
                 }
 
                 if (IsFieldEdit() && sOldSel.isEmpty())
@@ -988,9 +988,9 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
 
             if (pSh->GetSeqFootnoteList(aArr) && aArr.SeekEntry(aElem, &nPos))
             {
-                aVal = OUString::number( aArr[nPos]->nSeqNo );
+                aVal = OUString::number( aArr[nPos].nSeqNo );
 
-                if (IsFieldEdit() && aArr[nPos]->nSeqNo == pRefField->GetSeqNo())
+                if (IsFieldEdit() && aArr[nPos].nSeqNo == pRefField->GetSeqNo())
                     bModified = true; // can happen with fields of which the references were deleted
             }
             else if (IsFieldEdit())
@@ -1009,9 +1009,9 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
 
             if (pSh->GetSeqFootnoteList(aArr, true) && aArr.SeekEntry(aElem, &nPos))
             {
-                aVal = OUString::number( aArr[nPos]->nSeqNo );
+                aVal = OUString::number( aArr[nPos].nSeqNo );
 
-                if (IsFieldEdit() && aArr[nPos]->nSeqNo == pRefField->GetSeqNo())
+                if (IsFieldEdit() && aArr[nPos].nSeqNo == pRefField->GetSeqNo())
                     bModified = true; // can happen with fields of which the reference was deleted
             }
             else if (IsFieldEdit())
@@ -1078,9 +1078,9 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
 
                 if (pType->GetSeqFieldList(aArr) && aArr.SeekEntry(aElem, &nPos))
                 {
-                    aVal = OUString::number( aArr[nPos]->nSeqNo );
+                    aVal = OUString::number( aArr[nPos].nSeqNo );
 
-                    if (IsFieldEdit() && aArr[nPos]->nSeqNo == pRefField->GetSeqNo())
+                    if (IsFieldEdit() && aArr[nPos].nSeqNo == pRefField->GetSeqNo())
                         bModified = true; // can happen with fields of which the reference was deleted
                 }
                 else if (IsFieldEdit())

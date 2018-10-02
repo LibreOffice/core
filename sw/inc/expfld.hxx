@@ -54,20 +54,14 @@ struct SeqFieldLstElem
 
 class SW_DLLPUBLIC SwSeqFieldList
 {
-    std::vector<SeqFieldLstElem*> maData;
+    std::vector<SeqFieldLstElem> maData;
 public:
-    ~SwSeqFieldList()
-    {
-        for( std::vector<SeqFieldLstElem*>::const_iterator it = maData.begin(); it != maData.end(); ++it )
-            delete *it;
-    }
-
-    bool InsertSort(SeqFieldLstElem* pNew);
+    bool InsertSort(SeqFieldLstElem aNew);
     bool SeekEntry(const SeqFieldLstElem& rNew, size_t* pPos) const;
 
     size_t Count() { return maData.size(); }
-    SeqFieldLstElem* operator[](size_t nIndex) { return maData[nIndex]; }
-    const SeqFieldLstElem* operator[](size_t nIndex) const { return maData[nIndex]; }
+    SeqFieldLstElem& operator[](size_t nIndex) { return maData[nIndex]; }
+    const SeqFieldLstElem& operator[](size_t nIndex) const { return maData[nIndex]; }
     void Clear() { maData.clear(); }
 };
 
