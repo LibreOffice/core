@@ -190,6 +190,7 @@ public:
     void testPptCrop();
     void testTdf119015();
     void testTdf120028();
+    void testTdf120028b();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -273,6 +274,7 @@ public:
     CPPUNIT_TEST(testPptCrop);
     CPPUNIT_TEST(testTdf119015);
     CPPUNIT_TEST(testTdf120028);
+    CPPUNIT_TEST(testTdf120028b);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2591,6 +2593,43 @@ void SdImportTest::testTdf120028()
     xPropSet->getPropertyValue("CharHeight") >>= fCharHeight;
     // This failed, non-scaled height was 13.5.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(11.5, fCharHeight, 1E-12);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf120028b()
+{
+    // Check that the table shape has 4 columns.
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf120028b.pptx"), PPTX);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(),
+                                                     uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDoc.is());
+
+    uno::Reference<drawing::XDrawPage> xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xPage.is());
+
+    uno::Reference<beans::XPropertySet> xShape(getShape(0, xPage));
+    CPPUNIT_ASSERT(xShape.is());
+
+    uno::Reference<table::XColumnRowRange> xModel(xShape->getPropertyValue("Model"),
+                                                  uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModel.is());
+
+    uno::Reference<table::XTableColumns> xColumns = xModel->getColumns();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xColumns->getCount());
+
+    // Check font color in the A1 cell.
+    uno::Reference<table::XCellRange> xCells(xModel, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xCell(xCells->getCellByPosition(0, 0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xCell));
+    uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
+    uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY);
+    sal_Int32 nCharColor = 0;
+    xPropSet->getPropertyValue("CharColor") >>= nCharColor;
+    // This was 0x1f497d, not white: text list style from placeholder shape
+    // from slide layout was ignored.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff), nCharColor);
 
     xDocShRef->DoClose();
 }

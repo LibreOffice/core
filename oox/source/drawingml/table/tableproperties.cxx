@@ -331,6 +331,10 @@ void TableProperties::pullFromTextBody(oox::drawingml::TextBodyPtr pTextBody, sa
         oox::drawingml::table::TableCell& rTableCell = rTableCells.back();
         TextBodyPtr pCellTextBody(new TextBody);
         rTableCell.setTextBody(pCellTextBody);
+
+        // Copy properties provided by <a:lstStyle>.
+        pCellTextBody->getTextListStyle() = pTextBody->getTextListStyle();
+
         for (sal_Int32 nParaInCol = 0; nParaInCol < nParaPerCol; ++nParaInCol)
         {
             if (nPara < pTextBody->getParagraphs().size())
