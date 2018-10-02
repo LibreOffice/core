@@ -465,7 +465,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog>       CreateOutlineTabDialog(weld::Window* pParent,
                                                 const SfxItemSet* pSwItemSet,
                                                 SwWrtShell &) = 0;
-    virtual VclPtr<SfxAbstractTabDialog>       CreateSvxNumBulletTabDialog(vcl::Window* pParent,
+    virtual VclPtr<SfxAbstractTabDialog>       CreateSvxNumBulletTabDialog(weld::Window* pParent,
                                                 const SfxItemSet* pSwItemSet,
                                                 SwWrtShell &) = 0;
     virtual VclPtr<AbstractMultiTOXTabDialog>  CreateMultiTOXTabDialog(
