@@ -25,7 +25,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="standard">
-                <property name="label" translatable="yes" context="paratemplatedialog|standard">_Standard</property>
+                <property name="label" translatable="no">_Standard</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
