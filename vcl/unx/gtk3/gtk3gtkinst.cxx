@@ -1692,6 +1692,43 @@ public:
     }
 };
 
+namespace
+{
+    GdkPixbuf* load_icon_by_name(const OUString& rIconName, const OUString& rIconTheme, const OUString& rUILang)
+    {
+        GdkPixbuf* pixbuf = nullptr;
+        auto xMemStm = ImageTree::get().getImageStream(rIconName, rIconTheme, rUILang);
+        if (xMemStm)
+        {
+            GdkPixbufLoader *pixbuf_loader = gdk_pixbuf_loader_new();
+            gdk_pixbuf_loader_write(pixbuf_loader, static_cast<const guchar*>(xMemStm->GetData()),
+                                    xMemStm->Seek(STREAM_SEEK_TO_END), nullptr);
+            gdk_pixbuf_loader_close(pixbuf_loader, nullptr);
+            pixbuf = gdk_pixbuf_loader_get_pixbuf(pixbuf_loader);
+            if (pixbuf)
+                g_object_ref(pixbuf);
+            g_object_unref(pixbuf_loader);
+        }
+        return pixbuf;
+    }
+
+    GdkPixbuf* load_icon_by_name(const OUString& rIconName)
+    {
+        OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
+        OUString sUILang = Application::GetSettings().GetUILanguageTag().getBcp47();
+        return load_icon_by_name(rIconName, sIconTheme, sUILang);
+    }
+
+    GdkPixbuf* load_icon_from_surface(VirtualDevice& rDevice)
+    {
+        Size aSize(rDevice.GetOutputSizePixel());
+        cairo_surface_t* surface = get_underlying_cairo_surface(rDevice);
+        double m_fXScale, m_fYScale;
+        cairo_surface_get_device_scale(surface, &m_fXScale, &m_fYScale);
+        return gdk_pixbuf_get_from_surface(surface, 0, 0, aSize.Width() * m_fXScale, aSize.Height() * m_fYScale);
+    }
+}
+
 class GtkInstanceMenu : public MenuHelper, public virtual weld::Menu
 {
 protected:
@@ -1789,13 +1826,38 @@ public:
         show_item(rIdent, bShow);
     }
 
-
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
-                        const OUString* /*pIconName*/, VirtualDevice* /*pImageSufface*/) override
+                        const OUString* pIconName, VirtualDevice* pImageSufface) override
     {
-        GtkWidget *pItem = gtk_menu_item_new_with_label(MapToGtkAccelerator(rStr).getStr());
+        GtkWidget* pImage = nullptr;
+        if (pIconName)
+        {
+            GdkPixbuf* pixbuf = load_icon_by_name(*pIconName);
+            if (!pixbuf)
+            {
+                pImage = gtk_image_new_from_pixbuf(pixbuf);
+                g_object_unref(pixbuf);
+            }
+        }
+        else if (pImageSufface)
+            pImage = gtk_image_new_from_surface(get_underlying_cairo_surface(*pImageSufface));
+
+        GtkWidget *pItem;
+        if (pImage)
+        {
+            GtkWidget *pBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+            GtkWidget *pLabel = gtk_label_new(MapToGtkAccelerator(rStr).getStr());
+            pItem = gtk_menu_item_new();
+            gtk_container_add(GTK_CONTAINER(pBox), pImage);
+            gtk_container_add(GTK_CONTAINER(pBox), pLabel);
+            gtk_container_add(GTK_CONTAINER(pItem), pBox);
+            gtk_widget_show_all(pItem);
+        }
+        else
+            pItem = gtk_menu_item_new_with_label(MapToGtkAccelerator(rStr).getStr());
         gtk_buildable_set_name(GTK_BUILDABLE(pItem), OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr());
         gtk_menu_shell_append(GTK_MENU_SHELL(m_pMenu), pItem);
+        gtk_widget_show(pItem);
         add_to_map(GTK_MENU_ITEM(pItem));
         if (pos != -1)
             gtk_menu_reorder_child(m_pMenu, pItem, pos);
@@ -2762,43 +2824,6 @@ public:
         g_signal_handler_disconnect(m_pNotebook, m_nSignalId);
     }
 };
-
-namespace
-{
-    GdkPixbuf* load_icon_by_name(const OUString& rIconName, const OUString& rIconTheme, const OUString& rUILang)
-    {
-        GdkPixbuf* pixbuf = nullptr;
-        auto xMemStm = ImageTree::get().getImageStream(rIconName, rIconTheme, rUILang);
-        if (xMemStm)
-        {
-            GdkPixbufLoader *pixbuf_loader = gdk_pixbuf_loader_new();
-            gdk_pixbuf_loader_write(pixbuf_loader, static_cast<const guchar*>(xMemStm->GetData()),
-                                    xMemStm->Seek(STREAM_SEEK_TO_END), nullptr);
-            gdk_pixbuf_loader_close(pixbuf_loader, nullptr);
-            pixbuf = gdk_pixbuf_loader_get_pixbuf(pixbuf_loader);
-            if (pixbuf)
-                g_object_ref(pixbuf);
-            g_object_unref(pixbuf_loader);
-        }
-        return pixbuf;
-    }
-
-    GdkPixbuf* load_icon_by_name(const OUString& rIconName)
-    {
-        OUString sIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
-        OUString sUILang = Application::GetSettings().GetUILanguageTag().getBcp47();
-        return load_icon_by_name(rIconName, sIconTheme, sUILang);
-    }
-
-    GdkPixbuf* load_icon_from_surface(VirtualDevice& rDevice)
-    {
-        Size aSize(rDevice.GetOutputSizePixel());
-        cairo_surface_t* surface = get_underlying_cairo_surface(rDevice);
-        double m_fXScale, m_fYScale;
-        cairo_surface_get_device_scale(surface, &m_fXScale, &m_fYScale);
-        return gdk_pixbuf_get_from_surface(surface, 0, 0, aSize.Width() * m_fXScale, aSize.Height() * m_fYScale);
-    }
-}
 
 class GtkInstanceButton : public GtkInstanceContainer, public virtual weld::Button
 {
