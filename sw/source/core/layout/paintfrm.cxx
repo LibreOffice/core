@@ -1246,63 +1246,61 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrame *pFrame,
         rRect = pFrame->getFramePrintArea();
         rRect.Pos() += pFrame->getFrameArea().Pos();
 
+        SwRectFn fnRect = pFrame->IsVertical() ? ( pFrame->IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
+
+        const SvxBoxItem &rBox = rAttrs.GetBox();
+        const bool bTop = 0 != (pFrame->*fnRect->fnGetTopMargin)();
+        if ( bTop )
         {
-            SwRectFn fnRect = pFrame->IsVertical() ? ( pFrame->IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
+            SwTwips nDiff = rBox.GetTop() ?
+                rBox.CalcLineSpace( SvxBoxItemLine::TOP ) :
+                rBox.GetDistance( SvxBoxItemLine::TOP );
+            if( nDiff )
+                (rRect.*fnRect->fnSubTop)( nDiff );
+        }
 
-            const SvxBoxItem &rBox = rAttrs.GetBox();
-            const bool bTop = 0 != (pFrame->*fnRect->fnGetTopMargin)();
+        const bool bBottom = 0 != (pFrame->*fnRect->fnGetBottomMargin)();
+        if ( bBottom )
+        {
+            SwTwips nDiff = 0;
+            // #i29550#
+            if ( pFrame->IsTabFrame() &&
+                 static_cast<const SwTabFrame*>(pFrame)->IsCollapsingBorders() )
+            {
+                // For collapsing borders, we have to add the height of
+                // the height of the last line
+                nDiff = static_cast<const SwTabFrame*>(pFrame)->GetBottomLineSize();
+            }
+            else
+            {
+                nDiff = rBox.GetBottom() ?
+                    rBox.CalcLineSpace( SvxBoxItemLine::BOTTOM ) :
+                    rBox.GetDistance( SvxBoxItemLine::BOTTOM );
+            }
+            if( nDiff )
+                (rRect.*fnRect->fnAddBottom)( nDiff );
+        }
+
+        if ( rBox.GetLeft() )
+            (rRect.*fnRect->fnSubLeft)( rBox.CalcLineSpace( SvxBoxItemLine::LEFT ) );
+        else
+            (rRect.*fnRect->fnSubLeft)( rBox.GetDistance( SvxBoxItemLine::LEFT ) );
+
+        if ( rBox.GetRight() )
+            (rRect.*fnRect->fnAddRight)( rBox.CalcLineSpace( SvxBoxItemLine::RIGHT ) );
+        else
+            (rRect.*fnRect->fnAddRight)( rBox.GetDistance( SvxBoxItemLine::RIGHT ) );
+
+        if ( bShadow && rAttrs.GetShadow().GetLocation() != SvxShadowLocation::NONE )
+        {
+            const SvxShadowItem &rShadow = rAttrs.GetShadow();
             if ( bTop )
-            {
-                SwTwips nDiff = rBox.GetTop() ?
-                    rBox.CalcLineSpace( SvxBoxItemLine::TOP ) :
-                    rBox.GetDistance( SvxBoxItemLine::TOP );
-                if( nDiff )
-                    (rRect.*fnRect->fnSubTop)( nDiff );
-            }
-
-            const bool bBottom = 0 != (pFrame->*fnRect->fnGetBottomMargin)();
+                (rRect.*fnRect->fnSubTop)(rShadow.CalcShadowSpace(SvxShadowItemSide::TOP));
+            (rRect.*fnRect->fnSubLeft)(rShadow.CalcShadowSpace(SvxShadowItemSide::LEFT));
             if ( bBottom )
-            {
-                SwTwips nDiff = 0;
-                // #i29550#
-                if ( pFrame->IsTabFrame() &&
-                     static_cast<const SwTabFrame*>(pFrame)->IsCollapsingBorders() )
-                {
-                    // For collapsing borders, we have to add the height of
-                    // the height of the last line
-                    nDiff = static_cast<const SwTabFrame*>(pFrame)->GetBottomLineSize();
-                }
-                else
-                {
-                    nDiff = rBox.GetBottom() ?
-                        rBox.CalcLineSpace( SvxBoxItemLine::BOTTOM ) :
-                        rBox.GetDistance( SvxBoxItemLine::BOTTOM );
-                }
-                if( nDiff )
-                    (rRect.*fnRect->fnAddBottom)( nDiff );
-            }
-
-            if ( rBox.GetLeft() )
-                (rRect.*fnRect->fnSubLeft)( rBox.CalcLineSpace( SvxBoxItemLine::LEFT ) );
-            else
-                (rRect.*fnRect->fnSubLeft)( rBox.GetDistance( SvxBoxItemLine::LEFT ) );
-
-            if ( rBox.GetRight() )
-                (rRect.*fnRect->fnAddRight)( rBox.CalcLineSpace( SvxBoxItemLine::RIGHT ) );
-            else
-                (rRect.*fnRect->fnAddRight)( rBox.GetDistance( SvxBoxItemLine::RIGHT ) );
-
-            if ( bShadow && rAttrs.GetShadow().GetLocation() != SvxShadowLocation::NONE )
-            {
-                const SvxShadowItem &rShadow = rAttrs.GetShadow();
-                if ( bTop )
-                    (rRect.*fnRect->fnSubTop)(rShadow.CalcShadowSpace(SvxShadowItemSide::TOP));
-                (rRect.*fnRect->fnSubLeft)(rShadow.CalcShadowSpace(SvxShadowItemSide::LEFT));
-                if ( bBottom )
-                    (rRect.*fnRect->fnAddBottom)
-                                    (rShadow.CalcShadowSpace( SvxShadowItemSide::BOTTOM ));
-                (rRect.*fnRect->fnAddRight)(rShadow.CalcShadowSpace(SvxShadowItemSide::RIGHT));
-            }
+                (rRect.*fnRect->fnAddBottom)
+                                (rShadow.CalcShadowSpace( SvxShadowItemSide::BOTTOM ));
+            (rRect.*fnRect->fnAddRight)(rShadow.CalcShadowSpace(SvxShadowItemSide::RIGHT));
         }
     }
 
