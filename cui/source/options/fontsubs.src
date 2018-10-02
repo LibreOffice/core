@@ -21,90 +21,78 @@
 
 
 
- // include ------------------------------------------------------------------
-
+// include ------------------------------------------------------------------
 #include "fontsubs.hrc"
 #include "helpid.hrc"
-
- // pragma -------------------------------------------------------------------
-
-
-
-
-/**************************************************************************/
-/*                                                                        */
-/*                                                                        */
-/*                                                                        */
-/**************************************************************************/
+// pragma -------------------------------------------------------------------
 
 TabPage RID_SVX_FONT_SUBSTITUTION
 {
     HelpID = HID_OFA_FONT_SUBSTITUTION ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( 260, 185 ) ;
     CheckBox CB_USETABLE
     {
         HelpID = "cui:CheckBox:RID_SVX_FONT_SUBSTITUTION:CB_USETABLE";
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 248 , 10 ) ;
+        Pos = MAP_APPFONT ( 6, 6 ) ;
+        Size = MAP_APPFONT ( 248, 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "~Apply replacement table";
+        Text [ en-US ] = "~Apply replacement table" ;
     };
     FixedText FT_FONT1
     {
-        Pos = MAP_APPFONT ( 6 , 20 ) ;
-        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 20 ) ;
+        Size = MAP_APPFONT ( 100, 8 ) ;
         Left = TRUE ;
-        Text [ en-US ] = "~Font";
+        Text [ en-US ] = "~Font" ;
     };
     ComboBox CB_FONT1
     {
         HelpID = "cui:ComboBox:RID_SVX_FONT_SUBSTITUTION:CB_FONT1";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 33 ) ;
-        Size = MAP_APPFONT ( 100 , 100 ) ;
+        Pos = MAP_APPFONT ( 6, 33 ) ;
+        Size = MAP_APPFONT ( 100, 100 ) ;
         TabStop = TRUE ;
         AutoSize = TRUE ;
         AutoHScroll = TRUE ;
         DDExtraWidth = TRUE ;
-        DropDown = TRUE;
-        Sort = TRUE;
+        DropDown = TRUE ;
+        Sort = TRUE ;
     };
     FixedText FT_FONT2
     {
-        Pos = MAP_APPFONT ( 110 , 20 ) ;
-        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Pos = MAP_APPFONT ( 110, 20 ) ;
+        Size = MAP_APPFONT ( 100, 8 ) ;
         Left = TRUE ;
-        Text [ en-US ] = "Re~place with";
+        Text [ en-US ] = "Re~place with" ;
     };
     ComboBox CB_FONT2
     {
         HelpID = "cui:ComboBox:RID_SVX_FONT_SUBSTITUTION:CB_FONT2";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 110 , 33 ) ;
-        Size = MAP_APPFONT ( 100 , 100 ) ;
+        Pos = MAP_APPFONT ( 110, 33 ) ;
+        Size = MAP_APPFONT ( 100, 100 ) ;
         TabStop = TRUE ;
         AutoSize = TRUE ;
         AutoHScroll = TRUE ;
         DDExtraWidth = TRUE ;
-        DropDown = TRUE;
-        Sort = TRUE;
+        DropDown = TRUE ;
+        Sort = TRUE ;
     };
     ImageList IL_ICON
     {
-        Prefix = "nu";
-        MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+        Prefix = "nu" ;
         IdList =
         {
             BT_SUBSTAPPLY ;
             BT_SUBSTDELETE ;
         };
-        IdCount = { 2 ; };
+        IdCount = { 2 ; } ;
     };
     ToolBox TBX_SUBSTNEWDEL
     {
-        Pos = MAP_APPFONT ( 214 , 33 ) ;
+        Pos = MAP_APPFONT ( 214, 33 ) ;
         SVLook = TRUE ;
         Border = FALSE ;
         ItemList =
@@ -125,74 +113,75 @@ TabPage RID_SVX_FONT_SUBSTITUTION
     };
     Control CLB_SUBSTITUTES
     {
-        Pos = MAP_APPFONT ( 6 , 48 ) ;
-        Size = MAP_APPFONT ( 248 , 75 ) ;
+        Pos = MAP_APPFONT ( 6, 48 ) ;
+        Size = MAP_APPFONT ( 248, 75 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
     FixedLine FL_SOURCEVIEW
     {
-        Pos = MAP_APPFONT ( 6 , 129 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 129 ) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
         Text [ en-US ] = "Font settings for HTML, Basic and SQL sources" ;
     };
     FixedText FT_FONTNAME
     {
-        Pos = MAP_APPFONT ( 6 , 142 ) ;
-        Size = MAP_APPFONT ( 57 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 142 ) ;
+        Size = MAP_APPFONT ( 57, 8 ) ;
         Text [ en-US ] = "Fonts" ;
     };
     ListBox LB_FONTNAME
     {
         HelpID = "cui:ListBox:RID_SVX_FONT_SUBSTITUTION:LB_FONTNAME";
-        Pos = MAP_APPFONT ( 65 , 140 ) ;
-        Size = MAP_APPFONT ( 100 , 68 ) ;
+        Pos = MAP_APPFONT ( 65, 140 ) ;
+        Size = MAP_APPFONT ( 100, 68 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
-        DropDown = TRUE;
+        DropDown = TRUE ;
     };
-    CheckBox  CB_NONPROP
+    CheckBox CB_NONPROP
     {
         HelpID = "cui:CheckBox:RID_SVX_FONT_SUBSTITUTION:CB_NONPROP";
-        Pos = MAP_APPFONT ( 65 , 155 ) ;
-        Size = MAP_APPFONT ( 180 , 10 ) ;
+        Pos = MAP_APPFONT ( 65, 155 ) ;
+        Size = MAP_APPFONT ( 180, 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Non-proportional fonts only" ;
     };
     FixedText FT_FONTHEIGHT
     {
-        Pos = MAP_APPFONT ( 6 , 171 ) ;
-        Size = MAP_APPFONT ( 57 , 8 ) ;
-        Text [ en-US ] ="~Size";
+        Pos = MAP_APPFONT ( 6, 171 ) ;
+        Size = MAP_APPFONT ( 57, 8 ) ;
+        Text [ en-US ] ="~Size" ;
     };
     ListBox LB_FONTHEIGHT
     {
         HelpID = "cui:ListBox:RID_SVX_FONT_SUBSTITUTION:LB_FONTHEIGHT";
-        Pos = MAP_APPFONT ( 65 , 169 ) ;
-        Size = MAP_APPFONT ( 30 , 68 ) ;
+        Pos = MAP_APPFONT ( 65, 169 ) ;
+        Size = MAP_APPFONT ( 30, 68 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
-        DropDown = TRUE;
+        DropDown = TRUE ;
     };
     String STR_HEADER1
     {
-        Text [ en-US ] = "Always";
+        Text [ en-US ] = "Always" ;
     };
     String STR_HEADER2
     {
-        Text [ en-US ] = "Screen only";
+        Text [ en-US ] = "Screen only" ;
     };
     String STR_HEADER3
     {
-        Text [ en-US ] = "Font";
+        Text [ en-US ] = "Font" ;
     };
     String STR_HEADER4
     {
-        Text [ en-US ] = "Replace with";
+        Text [ en-US ] = "Replace with" ;
     };
     String STR_AUTOMATIC
     {
-        Text [ en-US ] = "Automatic";
+        Text [ en-US ] = "Automatic" ;
     };
 };
 
+// ******************************************************************* EOF

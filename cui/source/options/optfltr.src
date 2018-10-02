@@ -20,95 +20,96 @@
  *************************************************************/
 
 
- // include -----------------------------------------------------------------
+
+// include -----------------------------------------------------------------
 #include "optfltr.hrc"
 #include <cuires.hrc>
- // pragma ------------------------------------------------------------------
+// pragma ------------------------------------------------------------------
 
 // RID_OFAPAGE_MSFILTEROPT -----------------------------------------------------
 TabPage RID_OFAPAGE_MSFILTEROPT
 {
     HelpID = "cui:TabPage:RID_OFAPAGE_MSFILTEROPT";
     OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( 260, 185 ) ;
     SVLook = TRUE ;
     Hide = TRUE ;
 
     FixedLine GB_WORD
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Microsoft Word 97/2000/XP";
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
+        Text [ en-US ] = "Microsoft Word 97/2000/XP" ;
     };
     CheckBox CB_WBAS_CODE
     {
         HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_WBAS_CODE";
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 14 ) ;
+        Size = MAP_APPFONT ( 236, 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Load Basic ~code";
+        Text [ en-US ] = "Load Basic ~code" ;
     };
     CheckBox CB_WBAS_STG
     {
         HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_WBAS_STG";
-        Pos = MAP_APPFONT ( 12 , 28 ) ;
-        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 28 ) ;
+        Size = MAP_APPFONT ( 236, 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Save ~original Basic code";
+        Text [ en-US ] = "Save ~original Basic code" ;
     };
 
     FixedLine GB_EXCEL
     {
-        Pos = MAP_APPFONT ( 6 , 44 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Pos = MAP_APPFONT ( 6, 44 ) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
         Text [ en-US ] = "Microsoft Excel 97/2000/XP";
     };
     CheckBox CB_EBAS_CODE
     {
         HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_EBAS_CODE";
-        Pos = MAP_APPFONT ( 12 , 55 ) ;
-        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 55 ) ;
+        Size = MAP_APPFONT ( 236, 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Lo~ad Basic code";
+        Text [ en-US ] = "Lo~ad Basic code" ;
     };
     CheckBox CB_EBAS_EXECTBL
     {
         HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_EBAS_EXECTBL";
-        Pos = MAP_APPFONT ( 22 , 69 ) ;
-        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Pos = MAP_APPFONT ( 22, 69 ) ;
+        Size = MAP_APPFONT ( 236, 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "E~xecutable code";
+        Text [ en-US ] = "E~xecutable code" ;
     };
     CheckBox CB_EBAS_STG
     {
         HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_EBAS_STG";
-        Pos = MAP_APPFONT ( 12 , 83 ) ;
-        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 83 ) ;
+        Size = MAP_APPFONT ( 236, 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Sa~ve original Basic code";
+        Text [ en-US ] = "Sa~ve original Basic code" ;
     };
 
     FixedLine GB_PPOINT
     {
-        Pos = MAP_APPFONT ( 6 , 99 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Microsoft PowerPoint 97/2000/XP";
+        Pos = MAP_APPFONT ( 6, 99 ) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
+        Text [ en-US ] = "Microsoft PowerPoint 97/2000/XP" ;
     };
     CheckBox CB_PBAS_CODE
     {
         HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_PBAS_CODE";
-        Pos = MAP_APPFONT ( 12 , 110 ) ;
-        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 110 ) ;
+        Size = MAP_APPFONT ( 236, 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Load Ba~sic code";
+        Text [ en-US ] = "Load Ba~sic code" ;
     };
     CheckBox CB_PBAS_STG
     {
         HelpID = "cui:CheckBox:RID_OFAPAGE_MSFILTEROPT:CB_PBAS_STG";
-        Pos = MAP_APPFONT ( 12 , 124 ) ;
-        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Pos = MAP_APPFONT ( 12, 124 ) ;
+        Size = MAP_APPFONT ( 236, 10 ) ;
         TabStop = TRUE ;
-        Text [ en-US ] = "Sav~e original Basic code";
+        Text [ en-US ] = "Sav~e original Basic code" ;
     };
 };
 
@@ -117,88 +118,53 @@ TabPage RID_OFAPAGE_MSFILTEROPT2
 {
     HelpID = "cui:TabPage:RID_OFAPAGE_MSFILTEROPT2";
     OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
+    Size = MAP_APPFONT ( 260, 185 ) ;
     SVLook = TRUE ;
     Hide = TRUE ;
 
     Control CLB_SETTINGS
     {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 248 , 147 ) ;
+        Pos = MAP_APPFONT ( 6, 6 ) ;
+        Size = MAP_APPFONT ( 248, 147 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
     String ST_HEADER1
     {
-        Text [ en-US ] = "[L]";
+        Text [ en-US ] = "[L]" ;
     };
     String ST_HEADER2
     {
-        Text [ en-US ] = "[S]";
+        Text [ en-US ] = "[S]" ;
     };
     FixedText FT_HEADER1_EXPLANATION
     {
-        Pos = MAP_APPFONT ( 6 , 160 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "[L]: Load and convert the object";
+        Pos = MAP_APPFONT ( 6, 160 ) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
+        Text [ en-US ] = "[L]: Load and convert the object" ;
     };
     FixedText FT_HEADER2_EXPLANATION
     {
-        Pos = MAP_APPFONT ( 6 , 171 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "[S]: Convert and save the object";
+        Pos = MAP_APPFONT ( 6, 171 ) ;
+        Size = MAP_APPFONT ( 248, 8 ) ;
+        Text [ en-US ] = "[S]: Convert and save the object" ;
     };
     String ST_CHG_MATH
     {
-        Text [ en-US ] = "MathType to %PRODUCTNAME Math or reverse";
+        Text [ en-US ] = "MathType to %PRODUCTNAME Math or reverse" ;
     };
     String ST_CHG_WRITER
     {
-        Text [ en-US ] = "WinWord to %PRODUCTNAME Writer or reverse";
+        Text [ en-US ] = "WinWord to %PRODUCTNAME Writer or reverse" ;
     };
     String ST_CHG_CALC
     {
-        Text [ en-US ] = "Excel to %PRODUCTNAME Calc or reverse";
+        Text [ en-US ] = "Excel to %PRODUCTNAME Calc or reverse" ;
     };
     String ST_CHG_IMPRESS
     {
-        Text [ en-US ] = "PowerPoint to %PRODUCTNAME Impress or reverse";
+        Text [ en-US ] = "PowerPoint to %PRODUCTNAME Impress or reverse" ;
     };
 };
 
- // ******************************************************************* EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// ******************************************************************* EOF
