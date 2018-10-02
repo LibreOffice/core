@@ -468,10 +468,9 @@ size_t SwEditShell::GetSeqFootnoteList( SwSeqFieldList& rList, bool bEndNotes )
                     sText += " ";
                 sText += pTextNd->GetExpandText();
 
-                SeqFieldLstElem* pNew = new SeqFieldLstElem( sText,
-                                            pTextFootnote->GetSeqRefNo() );
-                while( rList.InsertSort( pNew ) )
-                    pNew->sDlgEntry += " ";
+                SeqFieldLstElem aNew( sText, pTextFootnote->GetSeqRefNo() );
+                while( rList.InsertSort( aNew ) )
+                    aNew.sDlgEntry += " ";
             }
         }
     }
