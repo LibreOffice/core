@@ -263,7 +263,6 @@ private:
     TextForwarderPtr            mpTextForwarder;
     ViewForwarderPtr            mpViewForwarder;
     OUString                    maCellText;
-    tools::Rectangle                   maBoundBox;
     Size                        maCellSize;
 
 public:
@@ -271,7 +270,6 @@ public:
                                     vcl::Window* pWindow,
                                     EditEngine* pEditEngine,
                                     const OUString& rCellText,
-                                    const tools::Rectangle& rBoundBox,
                                     const Size& rCellSize );
     virtual                     ~ScAccessibleCsvTextData() override;
 

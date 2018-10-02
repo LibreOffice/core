@@ -120,7 +120,7 @@ cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
 cui/source/dialogs/colorpicker.cxx:719
     cui::ColorPickerDialog m_aColorPrevious class cui::ColorPreviewControl
-cui/source/factory/dlgfact.cxx:1398
+cui/source/factory/dlgfact.cxx:1418
     SvxMacroAssignDialog m_aItems class SfxItemSet
 cui/source/inc/cfgutil.hxx:190
     SvxScriptSelectorDialog m_aStylesInfo struct SfxStylesInfo_Impl
@@ -162,7 +162,7 @@ drawinglayer/source/tools/emfphelperdata.hxx:155
     emfplushelper::EmfPlusHelperData mnFrameRight sal_Int32
 drawinglayer/source/tools/emfphelperdata.hxx:156
     emfplushelper::EmfPlusHelperData mnFrameBottom sal_Int32
-editeng/source/editeng/impedit.hxx:462
+editeng/source/editeng/impedit.hxx:460
     ImpEditEngine aSelFuncSet class EditSelFunctionSet
 filter/source/flash/swfwriter.hxx:391
     swf::Writer maMovieTempFile utl::TempFile
@@ -352,16 +352,8 @@ sc/source/filter/xml/xmltransformationi.hxx:121
     ScXMLColumnNumberContext aType class rtl::OUString
 sc/source/filter/xml/xmltransformationi.hxx:155
     ScXMLDateTimeContext aType class rtl::OUString
-sc/source/ui/Accessibility/AccessibleText.cxx:52
-    ScViewForwarder maCellPos class ScAddress
-sc/source/ui/Accessibility/AccessibleText.cxx:273
-    ScPreviewCellViewForwarder maCellPos class ScAddress
-sc/source/ui/Accessibility/AccessibleText.cxx:289
-    ScPreviewHeaderCellViewForwarder maCellPos class ScAddress
-sc/source/ui/Accessibility/AccessibleText.cxx:305
-    ScPreviewNoteViewForwarder maCellPos class ScAddress
-sc/source/ui/Accessibility/AccessibleText.cxx:1309
-    ScCsvViewForwarder maBoundBox tools::Rectangle
+sc/source/ui/dataprovider/sqldataprovider.cxx:41
+    sc::SQLFetchThread maURL class rtl::OUString
 sc/source/ui/inc/acredlin.hxx:58
     ScAcceptChgDlg aReOpenIdle class Idle
 sc/source/ui/inc/anyrefdg.hxx:119
@@ -547,7 +539,7 @@ sw/source/uibase/inc/uivwimp.hxx:95
 sw/source/uibase/inc/unodispatch.hxx:46
     SwXDispatchProviderInterceptor::DispatchMutexLock_Impl aGuard class SolarMutexGuard
 toolkit/source/awt/stylesettings.cxx:90
-    toolkit::StyleMethodGuard m_aGuard class SolarMutexGuard
+    toolkit::StyleMethodGuard m_aGuard const class SolarMutexGuard
 ucb/source/ucp/gio/gio_mount.hxx:46
     OOoMountOperationClass parent_class GMountOperationClass
 ucb/source/ucp/gio/gio_mount.hxx:49
@@ -592,20 +584,20 @@ vcl/inc/unx/i18n_ic.hxx:46
     SalI18N_InputContext maSwitchIMCallback XIMCallback
 vcl/inc/unx/i18n_ic.hxx:47
     SalI18N_InputContext maDestroyCallback XIMCallback
-vcl/source/app/salvtables.cxx:1462
+vcl/source/app/salvtables.cxx:1504
     SalInstanceEntry m_aTextFilter class SalInstanceEntry::WeldTextFilter
 vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:36
     ImplOldJobSetupData cPortName char [32]
-vcl/unx/gtk3/gtk3gtkinst.cxx:2255
+vcl/unx/gtk3/gtk3gtkinst.cxx:2267
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link const AtkHyperlink
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent const AtkObject
-vcl/unx/gtk/a11y/atkwrapper.hxx:78
-    AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
+vcl/unx/gtk/a11y/atkwrapper.hxx:80
+    AtkObjectWrapperClass aParentClass const AtkObjectClass
 vcl/unx/gtk/gloactiongroup.cxx:30
     GLOAction parent_instance GObject
 vcl/unx/gtk/glomenu.cxx:20

@@ -158,11 +158,11 @@ cui/source/options/optcolor.cxx:255
     ColorConfigWindow_Impl aModuleOptions class SvtModuleOptions
 cui/source/options/optpath.cxx:79
     OptPath_Impl m_aDefOpt class SvtDefaultOptions
-cui/source/options/personalization.hxx:38
-    SvxPersonalizationTabPage m_vDefaultPersonaImages VclPtr<class PushButton> [6]
-cui/source/options/personalization.hxx:102
-    SelectPersonaDialog m_vResultList VclPtr<class PushButton> [9]
+cui/source/options/personalization.hxx:39
+    SvxPersonalizationTabPage m_vDefaultPersonaImages VclPtr<class PushButton> [3]
 cui/source/options/personalization.hxx:103
+    SelectPersonaDialog m_vResultList VclPtr<class PushButton> [9]
+cui/source/options/personalization.hxx:104
     SelectPersonaDialog m_vSearchSuggestions VclPtr<class PushButton> [6]
 cui/source/options/treeopt.cxx:469
     OptionsGroupInfo m_bLoadError _Bool
@@ -298,12 +298,6 @@ include/registry/refltype.hxx:69
     RTUik m_Data5 sal_uInt32
 include/sfx2/charmapcontrol.hxx:44
     SfxCharmapCtrl m_pFavCharView VclPtr<class SvxCharViewControl> [16]
-include/sfx2/itemconnect.hxx:234
-    sfx::ItemControlConnection maItemWrp sfx::ItemControlConnection::ItemWrapperType
-include/sfx2/itemconnect.hxx:235
-    sfx::ItemControlConnection mxCtrlWrp std::unique_ptr<ControlWrpT>
-include/sfx2/itemwrapper.hxx:115
-    sfx::SingleItemWrapper mnSlot sal_uInt16
 include/sfx2/msg.hxx:95
     SfxTypeAttrib nAID sal_uInt16
 include/sfx2/msg.hxx:96
@@ -358,27 +352,27 @@ include/test/sheet/xnamedranges.hxx:38
     apitest::XNamedRanges xSheet css::uno::Reference<css::sheet::XSpreadsheet>
 include/test/sheet/xspreadsheets2.hxx:46
     apitest::XSpreadsheets2 xDocument css::uno::Reference<css::sheet::XSpreadsheetDocument>
-include/unoidl/unoidl.hxx:443
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/noel/disk2/libo6/include/unoidl/unoidl.hxx:443:5)
 include/unoidl/unoidl.hxx:444
-    unoidl::ConstantValue::(anonymous) booleanValue _Bool
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/noel/disk2/libo6/include/unoidl/unoidl.hxx:444:5)
 include/unoidl/unoidl.hxx:445
-    unoidl::ConstantValue::(anonymous) byteValue sal_Int8
+    unoidl::ConstantValue::(anonymous) booleanValue _Bool
 include/unoidl/unoidl.hxx:446
-    unoidl::ConstantValue::(anonymous) shortValue sal_Int16
+    unoidl::ConstantValue::(anonymous) byteValue sal_Int8
 include/unoidl/unoidl.hxx:447
-    unoidl::ConstantValue::(anonymous) unsignedShortValue sal_uInt16
+    unoidl::ConstantValue::(anonymous) shortValue sal_Int16
 include/unoidl/unoidl.hxx:448
-    unoidl::ConstantValue::(anonymous) longValue sal_Int32
+    unoidl::ConstantValue::(anonymous) unsignedShortValue sal_uInt16
 include/unoidl/unoidl.hxx:449
-    unoidl::ConstantValue::(anonymous) unsignedLongValue sal_uInt32
+    unoidl::ConstantValue::(anonymous) longValue sal_Int32
 include/unoidl/unoidl.hxx:450
-    unoidl::ConstantValue::(anonymous) hyperValue sal_Int64
+    unoidl::ConstantValue::(anonymous) unsignedLongValue sal_uInt32
 include/unoidl/unoidl.hxx:451
-    unoidl::ConstantValue::(anonymous) unsignedHyperValue sal_uInt64
+    unoidl::ConstantValue::(anonymous) hyperValue sal_Int64
 include/unoidl/unoidl.hxx:452
-    unoidl::ConstantValue::(anonymous) floatValue float
+    unoidl::ConstantValue::(anonymous) unsignedHyperValue sal_uInt64
 include/unoidl/unoidl.hxx:453
+    unoidl::ConstantValue::(anonymous) floatValue float
+include/unoidl/unoidl.hxx:454
     unoidl::ConstantValue::(anonymous) doubleValue double
 include/unotest/bootstrapfixturebase.hxx:37
     test::BootstrapFixtureBase m_directories class test::Directories
@@ -659,8 +653,8 @@ ucb/source/ucp/gio/gio_mount.hxx:51
 ucb/source/ucp/gio/gio_mount.hxx:52
     OOoMountOperationClass _gtk_reserved4 void (*)(void)
 ucb/source/ucp/hierarchy/hierarchydatasupplier.cxx:73
-    hierarchy_ucp::DataSupplier_Impl m_aIterator class HierarchyEntry::iterator
-ucbhelper/source/client/proxydecider.cxx:127
+    hierarchy_ucp::DataSupplier_Impl m_aIterator const class HierarchyEntry::iterator
+ucbhelper/source/client/proxydecider.cxx:124
     ucbhelper::proxydecider_impl::InternetProxyDecider_Impl m_aEmptyProxy const struct ucbhelper::InternetProxyServer
 unoidl/source/sourceprovider-scanner.hxx:147
     unoidl::detail::SourceProviderInterfaceTypeEntityPad directMandatoryBases std::vector<DirectBase>
@@ -679,15 +673,15 @@ unoidl/source/unoidl-read.cxx:148
 unoidl/source/unoidl-read.cxx:149
     (anonymous namespace)::Entity interfaceDependencies std::set<OUString>
 unoidl/source/unoidlprovider.cxx:86
-    unoidl::detail::(anonymous namespace)::Memory16 byte unsigned char [2]
+    unoidl::detail::(anonymous namespace)::Memory16 byte const unsigned char [2]
 unoidl/source/unoidlprovider.cxx:96
-    unoidl::detail::(anonymous namespace)::Memory32 byte unsigned char [4]
+    unoidl::detail::(anonymous namespace)::Memory32 byte const unsigned char [4]
 unoidl/source/unoidlprovider.cxx:127
-    unoidl::detail::(anonymous namespace)::Memory64 byte unsigned char [8]
+    unoidl::detail::(anonymous namespace)::Memory64 byte const unsigned char [8]
 unoidl/source/unoidlprovider.cxx:455
-    unoidl::detail::MapEntry name struct unoidl::detail::(anonymous namespace)::Memory32
+    unoidl::detail::MapEntry name const struct unoidl::detail::(anonymous namespace)::Memory32
 unoidl/source/unoidlprovider.cxx:456
-    unoidl::detail::MapEntry data struct unoidl::detail::(anonymous namespace)::Memory32
+    unoidl::detail::MapEntry data const struct unoidl::detail::(anonymous namespace)::Memory32
 unotools/source/config/pathoptions.cxx:90
     SvtPathOptions_Impl m_aEmptyString const class rtl::OUString
 unotools/source/config/saveopt.cxx:77
@@ -784,8 +778,8 @@ vcl/unx/generic/print/bitmap_gfx.cxx:67
     psp::HexEncoder mpFileBuffer sal_Char [16400]
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent const AtkObject
-vcl/unx/gtk/a11y/atkwrapper.hxx:78
-    AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
+vcl/unx/gtk/a11y/atkwrapper.hxx:80
+    AtkObjectWrapperClass aParentClass const AtkObjectClass
 vcl/unx/gtk/gloactiongroup.cxx:30
     GLOAction parent_instance GObject
 vcl/unx/gtk/glomenu.cxx:20

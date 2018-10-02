@@ -1540,10 +1540,8 @@ tools::Rectangle ScAccessibleCsvCell::implGetBoundingBox() const
 ::std::unique_ptr< SvxEditSource > ScAccessibleCsvCell::implCreateEditSource()
 {
     ScCsvGrid& rGrid = implGetGrid();
-    tools::Rectangle aBoundRect( implGetBoundingBox() );
-    aBoundRect -= implGetRealPos();
 
-    ::std::unique_ptr< SvxEditSource > pEditSource( new ScAccessibilityEditSource( o3tl::make_unique<ScAccessibleCsvTextData>(&rGrid, rGrid.GetEditEngine(), maCellText, aBoundRect, implGetRealSize()) ) );
+    ::std::unique_ptr< SvxEditSource > pEditSource( new ScAccessibilityEditSource( o3tl::make_unique<ScAccessibleCsvTextData>(&rGrid, rGrid.GetEditEngine(), maCellText, implGetRealSize()) ) );
     return pEditSource;
 }
 

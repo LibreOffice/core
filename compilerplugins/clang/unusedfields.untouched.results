@@ -206,16 +206,8 @@ sc/source/filter/html/htmlpars.cxx:3030
     (anonymous namespace)::CSSHandler::MemStr mn size_t
 sc/source/filter/inc/sheetdatacontext.hxx:62
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
-sc/source/ui/Accessibility/AccessibleText.cxx:52
-    ScViewForwarder maCellPos class ScAddress
-sc/source/ui/Accessibility/AccessibleText.cxx:273
-    ScPreviewCellViewForwarder maCellPos class ScAddress
-sc/source/ui/Accessibility/AccessibleText.cxx:289
-    ScPreviewHeaderCellViewForwarder maCellPos class ScAddress
-sc/source/ui/Accessibility/AccessibleText.cxx:305
-    ScPreviewNoteViewForwarder maCellPos class ScAddress
-sc/source/ui/Accessibility/AccessibleText.cxx:1309
-    ScCsvViewForwarder maBoundBox tools::Rectangle
+sc/source/ui/dataprovider/sqldataprovider.cxx:41
+    sc::SQLFetchThread maURL class rtl::OUString
 sc/source/ui/inc/crdlg.hxx:33
     ScColOrRowDlg m_xBtnRows std::unique_ptr<weld::RadioButton>
 sc/source/ui/inc/delcodlg.hxx:39
@@ -302,6 +294,10 @@ sw/source/core/frmedt/fetab.cxx:79
     TableWait m_pWait const std::unique_ptr<SwWait>
 sw/source/core/layout/dbg_lay.cxx:170
     SwImplEnterLeave nAction enum DbgAction
+sw/source/ui/config/mailconfigpage.cxx:56
+    SwTestAccountSettingsDialog m_xEstablish std::unique_ptr<weld::Label>
+sw/source/ui/config/mailconfigpage.cxx:57
+    SwTestAccountSettingsDialog m_xFind std::unique_ptr<weld::Label>
 sw/source/ui/envelp/labfmt.hxx:75
     SwLabFormatPage m_xPreview std::unique_ptr<weld::CustomWeld>
 sw/source/ui/inc/mmresultdialogs.hxx:72
@@ -333,7 +329,7 @@ sw/source/uibase/inc/uivwimp.hxx:95
 sw/source/uibase/inc/unodispatch.hxx:46
     SwXDispatchProviderInterceptor::DispatchMutexLock_Impl aGuard class SolarMutexGuard
 toolkit/source/awt/stylesettings.cxx:90
-    toolkit::StyleMethodGuard m_aGuard class SolarMutexGuard
+    toolkit::StyleMethodGuard m_aGuard const class SolarMutexGuard
 unoidl/source/unoidlprovider.cxx:672
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference1_ rtl::Reference<UnoidlProvider>
 unoidl/source/unoidlprovider.cxx:673
@@ -344,7 +340,7 @@ vcl/inc/opengl/zone.hxx:46
     OpenGLVCLContextZone aZone const class OpenGLZone
 vcl/inc/salprn.hxx:44
     SalPrinterQueueInfo mpPortName std::unique_ptr<OUString>
-vcl/source/app/salvtables.cxx:564
+vcl/source/app/salvtables.cxx:606
     SalInstanceContainer m_xContainer VclPtr<vcl::Window>
 vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cDeviceName char [32]
@@ -356,7 +352,7 @@ vcl/unx/generic/print/prtsetup.hxx:73
     RTSPaperPage m_xContainer std::unique_ptr<weld::Widget>
 vcl/unx/generic/print/prtsetup.hxx:108
     RTSDevicePage m_xContainer std::unique_ptr<weld::Widget>
-vcl/unx/gtk3/gtk3gtkinst.cxx:2255
+vcl/unx/gtk3/gtk3gtkinst.cxx:2267
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link const AtkHyperlink

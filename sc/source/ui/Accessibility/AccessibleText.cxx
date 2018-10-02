@@ -1332,11 +1332,10 @@ void ScCsvViewForwarder::SetInvalid()
 
 ScAccessibleCsvTextData::ScAccessibleCsvTextData(
         vcl::Window* pWindow, EditEngine* pEditEngine,
-        const OUString& rCellText, const tools::Rectangle& rBoundBox, const Size& rCellSize ) :
+        const OUString& rCellText, const Size& rCellSize ) :
     mpWindow( pWindow ),
     mpEditEngine( pEditEngine ),
     maCellText( rCellText ),
-    maBoundBox( rBoundBox ),
     maCellSize( rCellSize )
 {
 }
@@ -1359,7 +1358,7 @@ void ScAccessibleCsvTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 
 ScAccessibleTextData* ScAccessibleCsvTextData::Clone() const
 {
-    return new ScAccessibleCsvTextData( mpWindow, mpEditEngine, maCellText, maBoundBox, maCellSize );
+    return new ScAccessibleCsvTextData( mpWindow, mpEditEngine, maCellText, maCellSize );
 }
 
 SvxTextForwarder* ScAccessibleCsvTextData::GetTextForwarder()

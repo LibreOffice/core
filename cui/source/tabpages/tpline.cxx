@@ -74,7 +74,6 @@ SvxLineTabPage::SvxLineTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs
     : SfxTabPage(pParent, "cui/ui/linetabpage.ui", "LineTabPage", &rInAttrs)
     , m_pSymbolList(nullptr)
     , m_bNewSize(false)
-    , m_nNumMenuGalleryItems(0)
     , m_nSymbolType(SVX_SYMBOLTYPE_UNKNOWN) // unknown respectively unchanged
     , m_pSymbolAttr(nullptr)
     , m_bLastWidthModified(false)
@@ -1380,7 +1379,6 @@ void SvxLineTabPage::MenuCreate()
         GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, m_aGrfNames);
 
         sal_uInt32 i = 0;
-        m_nNumMenuGalleryItems = m_aGrfNames.size();
         for (auto const& grfName : m_aGrfNames)
         {
             const OUString *pUIName = &grfName;
