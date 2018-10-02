@@ -4912,6 +4912,21 @@ SfxVoidItem Donation SID_DONATION
     MenuConfig = TRUE,
     GroupId = SfxGroupId::Application;
 ]
+SfxVoidItem GetInvolved SID_GETINVOLVED
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    GroupId = SfxGroupId::Application;
+]
 
 SfxVoidItem ShowLicense SID_SHOW_LICENSE
 ()
