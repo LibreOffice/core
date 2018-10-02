@@ -1753,7 +1753,7 @@ void Test::testMatrix()
     ScMatrixRef pMat, pMat2;
 
     // First, test the zero matrix type.
-    pMat = new ScFullMatrix(0, 0, 0.0);
+    pMat = new ScMatrix(0, 0, 0.0);
     SCSIZE nC, nR;
     pMat->GetDimensions(nC, nR);
     CPPUNIT_ASSERT_MESSAGE("matrix is not empty", nC == 0 && nR == 0);
@@ -1776,7 +1776,7 @@ void Test::testMatrix()
                            pMat->And() && pMat->Or());
 
     // Test the AND and OR evaluations.
-    pMat = new ScFullMatrix(2, 2, 0.0);
+    pMat = new ScMatrix(2, 2, 0.0);
 
     // Only some of the elements are non-zero.
     pMat->PutBoolean(true, 0, 0);
@@ -1791,7 +1791,7 @@ void Test::testMatrix()
     CPPUNIT_ASSERT_MESSAGE("incorrect AND result", pMat->And());
 
     // Now test the empty matrix type.
-    pMat = new ScFullMatrix(10, 20);
+    pMat = new ScMatrix(10, 20);
     pMat->GetDimensions(nC, nR);
     CPPUNIT_ASSERT_MESSAGE("matrix size is not as expected", nC == 10 && nR == 20);
     checkMatrixElements<AllEmptyMatrix>(*pMat);
@@ -1803,7 +1803,7 @@ void Test::testMatrix()
     checkMatrixElements<PartiallyFilledEmptyMatrix>(*pMat);
 
     // Test resizing.
-    pMat = new ScFullMatrix(0, 0);
+    pMat = new ScMatrix(0, 0);
     pMat->Resize(2, 2, 1.5);
     pMat->PutEmpty(1, 1);
 
@@ -1813,7 +1813,7 @@ void Test::testMatrix()
     CPPUNIT_ASSERT_MESSAGE("PutEmpty() call failed.", pMat->IsEmpty(1, 1));
 
     // Max and min values.
-    pMat = new ScFullMatrix(2, 2, 0.0);
+    pMat = new ScMatrix(2, 2, 0.0);
     pMat->PutDouble(-10, 0, 0);
     pMat->PutDouble(-12, 0, 1);
     pMat->PutDouble(-8, 1, 0);
@@ -1825,7 +1825,7 @@ void Test::testMatrix()
     CPPUNIT_ASSERT_EQUAL(-8.0, pMat->GetMaxValue(false)); // ignore text.
     pMat->PutBoolean(true, 0, 0);
     CPPUNIT_ASSERT_EQUAL(1.0, pMat->GetMaxValue(false));
-    pMat = new ScFullMatrix(2, 2, 10.0);
+    pMat = new ScMatrix(2, 2, 10.0);
     pMat->PutBoolean(false, 0, 0);
     pMat->PutDouble(12.5, 1, 1);
     CPPUNIT_ASSERT_EQUAL(0.0, pMat->GetMinValue(false));
@@ -1833,7 +1833,7 @@ void Test::testMatrix()
 
     // Convert matrix into a linear double array. String elements become NaN
     // and empty elements become 0.
-    pMat = new ScFullMatrix(3, 3);
+    pMat = new ScMatrix(3, 3);
     pMat->PutDouble(2.5, 0, 0);
     pMat->PutDouble(1.2, 0, 1);
     pMat->PutString(rPool.intern("A"), 1, 1);
@@ -1858,7 +1858,7 @@ void Test::testMatrix()
         }
     }
 
-    pMat2 = new ScFullMatrix(3, 3, 10.0);
+    pMat2 = new ScMatrix(3, 3, 10.0);
     pMat2->PutString(rPool.intern("B"), 1, 0);
     pMat2->MergeDoubleArray(aDoubles, ScMatrix::Mul);
 

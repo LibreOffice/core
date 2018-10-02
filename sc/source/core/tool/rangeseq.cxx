@@ -372,7 +372,7 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const css::uno::Any & rAny )
         if ( nMaxColCount && nRowCount )
         {
             OUString aUStr;
-            xMatrix = new ScFullMatrix(
+            xMatrix = new ScMatrix(
                     static_cast<SCSIZE>(nMaxColCount),
                     static_cast<SCSIZE>(nRowCount), 0.0);
             SCSIZE nCols, nRows;

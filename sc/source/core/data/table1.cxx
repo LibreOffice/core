@@ -2321,7 +2321,7 @@ formula::FormulaTokenRef ScTable::ResolveStaticReference( SCCOL nCol1, SCROW nRo
     else
         nMaxCol = nCol2;
 
-    ScMatrixRef pMat(new ScFullMatrix(nCol2-nCol1+1, nRow2-nRow1+1, 0.0));
+    ScMatrixRef pMat(new ScMatrix(nCol2-nCol1+1, nRow2-nRow1+1, 0.0));
     for (SCCOL nCol = nCol1; nCol <= nMaxCol; ++nCol)
     {
         if (!aCol[nCol].ResolveStaticReference(*pMat, nCol2-nCol1, nRow1, nRow2))

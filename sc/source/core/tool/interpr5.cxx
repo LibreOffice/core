@@ -285,9 +285,9 @@ ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR, bool bEmpty)
 {
     ScMatrixRef pMat;
     if (bEmpty)
-        pMat = new ScFullMatrix(nC, nR);
+        pMat = new ScMatrix(nC, nR);
     else
-        pMat = new ScFullMatrix(nC, nR, 0.0);
+        pMat = new ScMatrix(nC, nR, 0.0);
 
     pMat->SetErrorInterpreter( this);
     // A temporary matrix is mutable and ScMatrix::CloneIfConst() returns the
