@@ -146,8 +146,8 @@ cui/source/inc/cuihyperdlg.hxx:57
     SvxHlinkCtrl aRdOnlyForwarder class SfxStatusForwarder
 cui/source/inc/cuihyperdlg.hxx:77
     SvxHpLinkDlg maCtrl class SvxHlinkCtrl
-cui/source/inc/grfpage.hxx:62
-    SvxGrfCropPage bReset _Bool
+cui/source/inc/cuitabline.hxx:95
+    SvxLineTabPage m_nNumMenuGalleryItems long
 dbaccess/source/core/dataaccess/documentdefinition.cxx:287
     dbaccess::LifetimeCoupler m_xClient Reference<class com::sun::star::uno::XInterface>
 desktop/qa/desktop_lib/test_desktop_lib.cxx:178
@@ -364,8 +364,8 @@ sc/source/filter/xml/xmlexternaltabi.hxx:112
     ScXMLExternalRefCellContext mnCellType sal_Int16
 sc/source/ui/inc/AccessibleText.hxx:194
     ScAccessiblePreviewHeaderCellTextData mbRowHeader _Bool
-sc/source/ui/inc/AccessibleText.hxx:223
-    ScAccessibleHeaderTextData mbHeader _Bool
+sc/source/ui/inc/AccessibleText.hxx:266
+    ScAccessibleCsvTextData maBoundBox tools::Rectangle
 sc/source/ui/inc/datastream.hxx:108
     sc::DataStream mnSettings sal_uInt32
 sc/source/ui/inc/preview.hxx:47
@@ -394,8 +394,6 @@ slideshow/source/engine/opengl/TransitionImpl.hxx:297
     Vertex texcoord glm::vec2
 slideshow/source/engine/slideshowimpl.cxx:1043
     (anonymous namespace)::SlideShowImpl::PrefetchPropertiesFunc mpSlideShowImpl class (anonymous namespace)::SlideShowImpl *const
-slideshow/source/inc/shapeattributelayer.hxx:501
-    slideshow::internal::ShapeAttributeLayer mnCharRotationAngle double
 soltools/cpp/cpp.h:143
     macroValidator pMacro Nlist *
 starmath/inc/view.hxx:158
@@ -490,8 +488,6 @@ vcl/inc/opengl/RenderList.hxx:29
     Vertex color glm::vec4
 vcl/inc/opengl/RenderList.hxx:30
     Vertex lineData glm::vec4
-vcl/inc/printerinfomanager.hxx:100
-    psp::PrinterInfoManager::Printer m_bModified _Bool
 vcl/inc/salmenu.hxx:34
     SalItemParams nBits enum MenuItemBits
 vcl/inc/salmenu.hxx:42
@@ -536,8 +532,8 @@ vcl/unx/generic/app/wmadaptor.cxx:1270
     _mwmhints status unsigned long
 vcl/unx/gtk/a11y/atkwrapper.hxx:49
     AtkObjectWrapper aParent const AtkObject
-vcl/unx/gtk/a11y/atkwrapper.hxx:78
-    AtkObjectWrapperClass aParentClass GtkWidgetAccessibleClass
+vcl/unx/gtk/a11y/atkwrapper.hxx:80
+    AtkObjectWrapperClass aParentClass const AtkObjectClass
 vcl/unx/gtk/gloactiongroup.cxx:30
     GLOAction parent_instance GObject
 vcl/unx/gtk/glomenu.cxx:20
