@@ -595,10 +595,10 @@ size_t SwSetExpFieldType::GetSeqFieldList( SwSeqFieldList& rList )
             nullptr != ( pNd = pF->GetTextField()->GetpTextNode() ) &&
             pNd->GetNodes().IsDocNodes() )
         {
-            SeqFieldLstElem* pNew = new SeqFieldLstElem(
+            SeqFieldLstElem aNew(
                     pNd->GetExpandText(),
                     static_cast<SwSetExpField*>(pF->GetField())->GetSeqNumber() );
-            rList.InsertSort( pNew );
+            rList.InsertSort( aNew );
         }
     }
 
@@ -693,9 +693,9 @@ void SwSetExpFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
 }
 
-bool SwSeqFieldList::InsertSort( SeqFieldLstElem* pNew )
+bool SwSeqFieldList::InsertSort( SeqFieldLstElem aNew )
 {
-    OUStringBuffer aBuf(pNew->sDlgEntry);
+    OUStringBuffer aBuf(aNew.sDlgEntry);
     const sal_Int32 nLen = aBuf.getLength();
     for (sal_Int32 i = 0; i < nLen; ++i)
     {
@@ -704,12 +704,12 @@ bool SwSeqFieldList::InsertSort( SeqFieldLstElem* pNew )
             aBuf[i]=' ';
         }
     }
-    pNew->sDlgEntry = aBuf.makeStringAndClear();
+    aNew.sDlgEntry = aBuf.makeStringAndClear();
 
     size_t nPos = 0;
-    bool bRet = SeekEntry( *pNew, &nPos );
+    bool bRet = SeekEntry( aNew, &nPos );
     if( !bRet )
-        maData.insert( maData.begin() + nPos, pNew );
+        maData.insert( maData.begin() + nPos, aNew );
     return bRet;
 }
 
@@ -736,7 +736,7 @@ bool SwSeqFieldList::SeekEntry( const SeqFieldLstElem& rNew, size_t* pP ) const
             const size_t nM = nU + ( nO - nU ) / 2;
 
             //#59900# Sorting should sort number correctly (e.g. "10" after "9" not after "1")
-            const OUString rTmp1 = maData[nM]->sDlgEntry;
+            const OUString rTmp1 = maData[nM].sDlgEntry;
             sal_Int32 nFndPos1 = 0;
             const OUString sNum1( rTmp1.getToken( 0, ' ', nFndPos1 ));
             sal_Int32 nCmp;
