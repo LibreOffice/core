@@ -2104,6 +2104,8 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
     // the Size argument is irrelevant, I hope
     ScopedVclPtrInstance<VirtualDevice> pDevice(&aData, Size(1, 1), DeviceFormat::DEFAULT);
 
+    pDevice->SetOutputSizePixel(Size(nCanvasWidth, nCanvasHeight));
+
     pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 #else
