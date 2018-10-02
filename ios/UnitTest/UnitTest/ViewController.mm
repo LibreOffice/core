@@ -43,7 +43,7 @@ static unsigned char *lo_ios_app_get_cgcontext_for_buffer(unsigned char *buffer,
 {
     assert(cgc == nullptr);
 
-    cgc = CGBitmapContextCreate(buffer, width, height, 8, width*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipFirst);
+    cgc = CGBitmapContextCreate(buffer, width, height, 8, width*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little);
 
     CGContextTranslateCTM(cgc, 0, height);
     CGContextScaleCTM(cgc, 1, -1);
