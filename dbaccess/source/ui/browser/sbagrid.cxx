@@ -60,6 +60,7 @@
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/rngitem.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <vcl/waitobj.hxx>
 
@@ -877,7 +878,16 @@ void SbaGridControl::SetBrowserAttrs()
     try
     {
         Reference< XComponentContext > xContext = getContext();
-        Reference< XExecutableDialog > xExecute = ControlFontDialog::createWithGridModel( xContext, xGridModel);
+        css::beans::PropertyValue aArg;
+        css::uno::Sequence<css::uno::Any> aArguments(2);
+        aArg.Name = "IntrospectedObject";
+        aArg.Value <<= xGridModel;
+        aArguments[0] <<= aArg;
+        aArg.Name = "ParentWindow";
+        aArg.Value <<= VCLUnoHelper::GetInterface(this);
+        aArguments[1] <<= aArg;
+        Reference<XExecutableDialog> xExecute(xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.form.ControlFontDialog",
+                                              aArguments, xContext), css::uno::UNO_QUERY_THROW);
         xExecute->execute();
     }
     catch( const Exception& )
