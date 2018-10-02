@@ -27,18 +27,20 @@
 #include <Qt5Widget.hxx>
 #include <Qt5XAccessible.hxx>
 
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
+#include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <comphelper/AccessibleImplementationHelper.hxx>
 #include <sal/log.hxx>
 #include <vcl/popupmenuwindow.hxx>
-#include <comphelper/AccessibleImplementationHelper.hxx>
 
 using namespace css;
 using namespace css::accessibility;
@@ -58,10 +60,59 @@ int Qt5AccessibleWidget::childCount() const
 
 int Qt5AccessibleWidget::indexOfChild(const QAccessibleInterface* /* child */) const { return 0; }
 
+namespace
+{
+QAccessible::Relation lcl_matchRelation(short relationType)
+{
+    switch (relationType)
+    {
+        case AccessibleRelationType::CONTROLLER_FOR:
+            return QAccessible::Controller;
+        case AccessibleRelationType::CONTROLLED_BY:
+            return QAccessible::Controlled;
+        case AccessibleRelationType::LABEL_FOR:
+            return QAccessible::Label;
+        case AccessibleRelationType::LABELED_BY:
+            return QAccessible::Labelled;
+        case AccessibleRelationType::INVALID:
+        case AccessibleRelationType::CONTENT_FLOWS_FROM:
+        case AccessibleRelationType::CONTENT_FLOWS_TO:
+        case AccessibleRelationType::MEMBER_OF:
+        case AccessibleRelationType::SUB_WINDOW_OF:
+        case AccessibleRelationType::NODE_CHILD_OF:
+        case AccessibleRelationType::DESCRIBED_BY:
+        default:
+            return 0x0;
+    }
+}
+}
+
 QVector<QPair<QAccessibleInterface*, QAccessible::Relation>>
     Qt5AccessibleWidget::relations(QAccessible::Relation /* match */) const
 {
-    return QVector<QPair<QAccessibleInterface*, QAccessible::Relation>>();
+    QVector<QPair<QAccessibleInterface*, QAccessible::Relation>> relations;
+    Reference<XAccessibleRelationSet> xRelationSet
+        = m_xAccessible->getAccessibleContext()->getAccessibleRelationSet();
+    if (!xRelationSet.is())
+        return relations;
+
+    int count = xRelationSet->getRelationCount();
+    for (int i = 0; i < count; i++)
+    {
+        AccessibleRelation aRelation = xRelationSet->getRelation(i);
+        QAccessible::Relation aQRelation = lcl_matchRelation(aRelation.RelationType);
+        sal_uInt32 nTargetCount = aRelation.TargetSet.getLength();
+
+        for (sal_uInt32 i = 0; i < nTargetCount; i++)
+        {
+            Reference<XAccessible> xAccessible(aRelation.TargetSet[i], uno::UNO_QUERY);
+            relations.append(
+                QPair(QAccessible::queryAccessibleInterface(new Qt5XAccessible(xAccessible)),
+                      aQRelation));
+        }
+    }
+
+    return relations;
 }
 
 QAccessibleInterface* Qt5AccessibleWidget::focusChild() const
