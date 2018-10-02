@@ -142,7 +142,7 @@ def readCsvFile(targetFilename):
             if not line:
                 continue
 
-            curId, curDate, curTestName, curTestComment, curValue = line
+            curId, curDate, curTestName, curTestComment, curValue, currCallgrindFile = line
 
             if curTestComment not in allTests:
                 allTests.append(curTestComment)
