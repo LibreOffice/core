@@ -31,8 +31,7 @@ sal_uInt16 SvtListener::QueryBase::getId() const
 
 SvtListener::SvtListener() {}
 
-SvtListener::SvtListener( const SvtListener &r ) :
-    maBroadcasters(r.maBroadcasters) {}
+SvtListener::SvtListener( const SvtListener & )  {}
 
 SvtListener::~SvtListener() COVERITY_NOEXCEPT_FALSE
 {
