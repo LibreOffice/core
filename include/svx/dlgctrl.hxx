@@ -216,30 +216,6 @@ public:
 
 /************************************************************************/
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC HatchingLB : public ListBox
-{
-public:
-    explicit HatchingLB(vcl::Window* pParent, WinBits aWB);
-};
-
-/************************************************************************/
-
-class SAL_WARN_UNUSED SVX_DLLPUBLIC GradientLB : public ListBox
-{
-public:
-    explicit GradientLB(vcl::Window* pParent, WinBits aWB);
-};
-
-/************************************************************************/
-
-class SAL_WARN_UNUSED SVX_DLLPUBLIC BitmapLB : public ListBox
-{
-public:
-    explicit BitmapLB(vcl::Window* pParent, WinBits aWB);
-};
-
-/************************************************************************/
-
 class SAL_WARN_UNUSED SVX_DLLPUBLIC FillTypeLB : public ListBox
 {
 
@@ -262,10 +238,6 @@ public:
 
     void Fill(const XDashListRef &pList);
     bool getAddStandardFields() const { return mbAddStandardFields; }
-    void setAddStandardFields(bool bNew);
-
-    void Append(const XDashEntry& rEntry, const BitmapEx& rBitmap );
-    void Modify(const XDashEntry& rEntry, sal_Int32 nPos, const BitmapEx& rBitmap );
 };
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxLineLB

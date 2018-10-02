@@ -35,10 +35,6 @@ private:
 
 public:
                                 SvLBoxFontString();
-                                SvLBoxFontString(
-                                    const OUString& rString,
-                                    const vcl::Font& rFont,
-                                    const Color* pColor );
 
     virtual                     ~SvLBoxFontString() override;
 

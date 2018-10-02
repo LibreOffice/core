@@ -354,7 +354,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dllapi.h>
 #include <sfx2/dockwin.hxx>
-#include <sfx2/itemconnect.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>

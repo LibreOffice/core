@@ -24,7 +24,6 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
-#include <sfx2/itemconnect.hxx>
 #include <svx/svxdllapi.h>
 
 class NumericField;
