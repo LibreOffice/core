@@ -359,14 +359,16 @@ SignatureDescr lcl_getSignatureDescr(const uno::Reference<frame::XModel>& xModel
     SignatureDescr aDescr;
     aDescr.msId = sFieldId;
 
+    const OUString prefix = ParagraphSignatureRDFNamespace + sFieldId;
     const std::map<OUString, OUString> aStatements = lcl_getRDFStatements(xModel, xParagraph);
-    const auto itSig = aStatements.find(ParagraphSignatureRDFNamespace + sFieldId + ParagraphSignatureDigestRDFName);
+
+    const auto itSig = aStatements.find(prefix + ParagraphSignatureDigestRDFName);
     aDescr.msSignature = (itSig != aStatements.end() ? itSig->second : OUString());
 
-    const auto itDate = aStatements.find(ParagraphSignatureRDFNamespace + sFieldId + ParagraphSignatureDateRDFName);
+    const auto itDate = aStatements.find(prefix + ParagraphSignatureDateRDFName);
     aDescr.msDate = (itDate != aStatements.end() ? itDate->second : OUString());
 
-    const auto itUsage = aStatements.find(ParagraphSignatureRDFNamespace + sFieldId + ParagraphSignatureUsageRDFName);
+    const auto itUsage = aStatements.find(prefix + ParagraphSignatureUsageRDFName);
     aDescr.msUsage = (itUsage != aStatements.end() ? itUsage->second : OUString());
 
     return aDescr;
@@ -376,14 +378,16 @@ SignatureDescr lcl_getSignatureDescr(const uno::Reference<frame::XModel>& xModel
                                      const uno::Reference<css::text::XTextContent>& xParagraph,
                                      const uno::Reference<css::text::XTextField>& xField)
 {
-    const std::pair<OUString, OUString> pair = lcl_getRDF(xModel, xField, ParagraphSignatureIdRDFName);
-    return (!pair.second.isEmpty() ? lcl_getSignatureDescr(xModel, xParagraph, pair.second) : SignatureDescr());
+    const OUString sFieldId = lcl_getRDF(xModel, xField, ParagraphSignatureIdRDFName).second;
+    if (!sFieldId.isEmpty())
+        return lcl_getSignatureDescr(xModel, xParagraph, sFieldId);
+
+    return SignatureDescr();
 }
 
 /// Validate and create the signature field display text from the fields.
-std::pair<bool, OUString>
-lcl_MakeParagraphSignatureFieldText(const SignatureDescr& aDescr,
-                                    const OString& utf8Text)
+std::pair<bool, OUString> lcl_MakeParagraphSignatureFieldText(const SignatureDescr& aDescr,
+                                                              const OString& utf8Text)
 {
     OUString msg = SwResId(STR_INVALID_SIGNATURE);
     bool valid = false;
@@ -399,7 +403,8 @@ lcl_MakeParagraphSignatureFieldText(const SignatureDescr& aDescr,
             const std::vector<unsigned char> sig(svl::crypto::DecodeHexString(encSignature));
             SignatureInformation aInfo(0);
             valid = svl::crypto::Signing::Verify(data, false, sig, aInfo);
-            valid = valid && aInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
+            valid = valid
+                    && aInfo.nStatus == xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
 
             msg = SwResId(STR_SIGNED_BY) + ": " + aInfo.ouSubject + ", ";
             msg += aDescr.msDate;
@@ -410,7 +415,6 @@ lcl_MakeParagraphSignatureFieldText(const SignatureDescr& aDescr,
 
     return std::make_pair(valid, msg);
 }
-
 
 /// Validate and return validation result and signature field display text.
 std::pair<bool, OUString>
@@ -427,10 +431,9 @@ lcl_MakeParagraphSignatureFieldText(const uno::Reference<frame::XModel>& xModel,
 OUString lcl_getNextSignatureId(const uno::Reference<frame::XModel>& xModel,
                                 const uno::Reference<text::XTextContent>& xParagraph)
 {
-    const std::pair<OUString, OUString> pair = lcl_getRDF(xModel, xParagraph, ParagraphSignatureLastIdRDFName);
-    return OUString::number(!pair.second.isEmpty() ? pair.second.toInt32() + 1 : 1);
+    const OUString sFieldId = lcl_getRDF(xModel, xParagraph, ParagraphSignatureLastIdRDFName).second;
+    return OUString::number(!sFieldId.isEmpty() ? sFieldId.toInt32() + 1 : 1);
 }
-
 
 /// Creates and inserts Paragraph Signature Metadata field and creates the RDF entry
 uno::Reference<text::XTextField> lcl_InsertParagraphSignature(const uno::Reference<frame::XModel>& xModel,
@@ -465,10 +468,11 @@ uno::Reference<text::XTextField> lcl_InsertParagraphSignature(const uno::Referen
 
     // Now set the RDF on the paragraph, since that's what is preserved in .doc(x).
     const css::uno::Reference<css::rdf::XResource> xParaSubject(xParagraph, uno::UNO_QUERY);
+    const OUString prefix = ParagraphSignatureRDFNamespace + sId;
     SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xParaSubject, ParagraphSignatureLastIdRDFName, sId);
-    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xParaSubject, ParagraphSignatureRDFNamespace + sId + ParagraphSignatureDigestRDFName, signature);
-    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xParaSubject, ParagraphSignatureRDFNamespace + sId + ParagraphSignatureUsageRDFName, usage);
-    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xParaSubject, ParagraphSignatureRDFNamespace + sId + ParagraphSignatureDateRDFName, rBuffer.makeStringAndClear());
+    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xParaSubject, prefix + ParagraphSignatureDigestRDFName, signature);
+    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xParaSubject, prefix + ParagraphSignatureUsageRDFName, usage);
+    SwRDFHelper::addStatement(xModel, MetaNS, MetaFilename, xParaSubject, prefix + ParagraphSignatureDateRDFName, rBuffer.makeStringAndClear());
 
     return xField;
 }
@@ -511,8 +515,9 @@ bool lcl_UpdateParagraphSignatureField(SwDoc* pDoc,
                                        const uno::Reference<css::text::XTextField>& xField,
                                        const OString& utf8Text)
 {
-    const std::pair<bool, OUString> res = lcl_MakeParagraphSignatureFieldText(xModel, xParagraph, xField, utf8Text);
-    return lcl_DoUpdateParagraphSignatureField(pDoc, xField, res.second);
+    const OUString sDisplayText
+        = lcl_MakeParagraphSignatureFieldText(xModel, xParagraph, xField, utf8Text).second;
+    return lcl_DoUpdateParagraphSignatureField(pDoc, xField, sDisplayText);
 }
 
 void lcl_RemoveParagraphMetadataField(const uno::Reference<css::text::XTextField>& xField)
