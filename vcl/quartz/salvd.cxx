@@ -297,7 +297,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
         }
 #endif
         mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
-                                                 8, nBytesPerRow, GetSalData()->mxRGBSpace, kCGImageAlphaNoneSkipFirst );
+                                                 8, nBytesPerRow, GetSalData()->mxRGBSpace, kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little );
         SAL_INFO( "vcl.cg",  "CGBitmapContextCreate(" << nDX << "x" << nDY << "x32) = " << mxBitmapContext );
         xCGContext = mxBitmapContext;
 #endif
