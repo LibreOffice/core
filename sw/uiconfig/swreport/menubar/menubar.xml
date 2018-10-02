@@ -496,6 +496,7 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:QuestionAnswers"/>
       <menu:menuitem menu:id=".uno:SendFeedback"/>
+      <menu:menuitem menu:id=".uno:GetInvolved"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:SafeMode"/>
       <menu:menuseparator/>
