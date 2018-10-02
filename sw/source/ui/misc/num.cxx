@@ -876,63 +876,63 @@ void SwNumPositionTabPage::SetModified()
 }
 #endif
 
-SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(vcl::Window* pParent,
+SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(weld::Window* pParent,
                     const SfxItemSet* pSwItemSet, SwWrtShell & rSh)
-    : SfxTabDialog(pParent, "BulletsAndNumberingDialog",
-        "modules/swriter/ui/bulletsandnumbering.ui",
+    : SfxTabDialogController(pParent, "modules/swriter/ui/bulletsandnumbering.ui", "BulletsAndNumberingDialog",
         pSwItemSet)
     , rWrtSh(rSh)
+    , m_xDummyCombo(m_xBuilder->weld_combo_box("dummycombo"))
 {
-    GetUserButton()->SetClickHdl(LINK(this, SwSvxNumBulletTabDialog, RemoveNumberingHdl));
-    GetUserButton()->Enable(rWrtSh.GetNumRuleAtCurrCursorPos() != nullptr);
-    m_nSingleNumPageId = AddTabPage("singlenum", RID_SVXPAGE_PICK_SINGLE_NUM );
-    m_nBulletPageId = AddTabPage("bullets", RID_SVXPAGE_PICK_BULLET );
+    weld::Button* pButton = GetUserButton();
+    pButton->connect_clicked(LINK(this, SwSvxNumBulletTabDialog, RemoveNumberingHdl));
+    pButton->set_sensitive(rWrtSh.GetNumRuleAtCurrCursorPos() != nullptr);
+    AddTabPage("singlenum", RID_SVXPAGE_PICK_SINGLE_NUM );
+    AddTabPage("bullets", RID_SVXPAGE_PICK_BULLET );
     AddTabPage("outlinenum", RID_SVXPAGE_PICK_NUM );
     AddTabPage("graphics", RID_SVXPAGE_PICK_BMP );
-    m_nOptionsPageId = AddTabPage("customize", RID_SVXPAGE_NUM_OPTIONS );
-    m_nPositionPageId = AddTabPage("position", RID_SVXPAGE_NUM_POSITION );
+    AddTabPage("customize", RID_SVXPAGE_NUM_OPTIONS );
+    AddTabPage("position", RID_SVXPAGE_NUM_POSITION );
 }
 
 SwSvxNumBulletTabDialog::~SwSvxNumBulletTabDialog()
 {
 }
 
-void SwSvxNumBulletTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
+void SwSvxNumBulletTabDialog::PageCreated(const OString& rPageId, SfxTabPage& rPage)
 {
     // set styles' names and metric
     OUString sNumCharFormat, sBulletCharFormat;
     SwStyleNameMapper::FillUIName( RES_POOLCHR_NUM_LEVEL, sNumCharFormat );
     SwStyleNameMapper::FillUIName( RES_POOLCHR_BUL_LEVEL, sBulletCharFormat );
 
-    if (nPageId == m_nSingleNumPageId)
+    if (rPageId == "singlenum")
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
         aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat));
         aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
         rPage.PageCreated(aSet);
     }
-    else if (nPageId == m_nBulletPageId)
+    else if (rPageId == "bullets")
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
         aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
         rPage.PageCreated(aSet);
     }
-    else if (nPageId == m_nOptionsPageId)
+    else if (rPageId == "customize")
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
         aSet.Put (SfxStringItem(SID_NUM_CHAR_FMT,sNumCharFormat));
         aSet.Put (SfxStringItem(SID_BULLET_CHAR_FMT,sBulletCharFormat));
         // collect char styles
-        ScopedVclPtrInstance< ListBox > rCharFormatLB(this);
-        rCharFormatLB->Clear();
-        rCharFormatLB->InsertEntry( SwViewShell::GetShellRes()->aStrNone );
+        m_xDummyCombo->clear();
+        m_xDummyCombo->append_text(SwViewShell::GetShellRes()->aStrNone);
         SwDocShell* pDocShell = rWrtSh.GetView().GetDocShell();
-        ::FillCharStyleListBox(*rCharFormatLB.get(),  pDocShell);
+        ::FillCharStyleListBox(*m_xDummyCombo,  pDocShell);
 
         std::vector<OUString> aList;
-        aList.reserve(rCharFormatLB->GetEntryCount());
-        for (sal_Int32 j = 0; j < rCharFormatLB->GetEntryCount(); j++)
-            aList.push_back(rCharFormatLB->GetEntry(j));
+        aList.reserve(m_xDummyCombo->get_count());
+        for (sal_Int32 j = 0; j < m_xDummyCombo->get_count(); j++)
+            aList.push_back(m_xDummyCombo->get_text(j));
 
         aSet.Put( SfxStringListItem( SID_CHAR_FMT_LIST_BOX,&aList ) ) ;
 
@@ -940,7 +940,7 @@ void SwSvxNumBulletTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
         aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< sal_uInt16 >(eMetric) ) );
         rPage.PageCreated(aSet);
     }
-    else if (nPageId == m_nPositionPageId)
+    else if (rPageId == "position")
     {
         SwDocShell* pDocShell = rWrtSh.GetView().GetDocShell();
         FieldUnit eMetric = ::GetDfltMetric(dynamic_cast< const SwWebDocShell *>( pDocShell ) !=  nullptr);
@@ -952,14 +952,14 @@ void SwSvxNumBulletTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
 
 short  SwSvxNumBulletTabDialog::Ok()
 {
-    short nRet = SfxTabDialog::Ok();
-    m_pExampleSet->ClearItem(SID_PARAM_NUM_PRESET);
+    short nRet = SfxTabDialogController::Ok();
+    m_xExampleSet->ClearItem(SID_PARAM_NUM_PRESET);
     return nRet;
 }
 
-IMPL_LINK_NOARG(SwSvxNumBulletTabDialog, RemoveNumberingHdl, Button*, void)
+IMPL_LINK_NOARG(SwSvxNumBulletTabDialog, RemoveNumberingHdl, weld::Button&, void)
 {
-    EndDialog(RET_USER);
+    m_xDialog->response(RET_USER);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

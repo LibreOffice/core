@@ -1049,12 +1049,11 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateMultiTOXMarkDlg(we
     return VclPtr<AbstractMultiTOXMarkDlg_Impl>::Create(o3tl::make_unique<SwMultiTOXMarkDlg>(pParent, rTOXMgr));
 }
 
-VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSvxNumBulletTabDialog(vcl::Window* pParent,
+VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSvxNumBulletTabDialog(weld::Window* pParent,
                                                 const SfxItemSet* pSwItemSet,
                                                 SwWrtShell & rWrtSh)
 {
-    VclPtr<SfxTabDialog> pDlg = VclPtr<SwSvxNumBulletTabDialog>::Create(pParent, pSwItemSet, rWrtSh);
-    return VclPtr<AbstractTabDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractTabController_Impl>::Create(o3tl::make_unique<SwSvxNumBulletTabDialog>(pParent, pSwItemSet, rWrtSh));
 }
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateOutlineTabDialog(weld::Window* pParent,
