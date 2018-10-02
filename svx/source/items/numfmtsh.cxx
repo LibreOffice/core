@@ -486,7 +486,17 @@ bool SvxNumberFormatShell::IsUserDefined( const OUString& rFmtString )
 bool SvxNumberFormatShell::FindEntry( const OUString& rFmtString, sal_uInt32* pAt /* = NULL */ )
 {
     bool bRes=false;
-    sal_uInt32 nFound = pFormatter->TestNewString( rFmtString, eCurLanguage );
+
+    sal_uInt32 nFound = NUMBERFORMAT_ENTRY_NOT_FOUND;
+    // There may be multiple builtin entries with the same format code, first
+    // try if the current key matches.
+    const SvNumberformat* pEntry = pFormatter->GetEntry( nCurFormatKey);
+    if (pEntry && pEntry->GetLanguage() == eCurLanguage && pEntry->GetFormatstring() == rFmtString)
+        nFound = nCurFormatKey;
+
+    if (nFound == NUMBERFORMAT_ENTRY_NOT_FOUND)
+        // Find the first matching format code.
+        nFound = pFormatter->TestNewString( rFmtString, eCurLanguage );
 
     if ( nFound == NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
