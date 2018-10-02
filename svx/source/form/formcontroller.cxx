@@ -3730,8 +3730,7 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
             if ( rColInfo.bReadOnly )
                 continue;
 
-            if ( !rColInfo.xFirstControlWithInputRequired.is() && !rColInfo.xFirstGridWithInputRequiredColumn.is()
-                  && rColInfo.nNullable != ColumnValue::NO_NULLS )
+            if ( !rColInfo.xFirstControlWithInputRequired.is() && !rColInfo.xFirstGridWithInputRequiredColumn.is() )
             {
                 continue;
             }
