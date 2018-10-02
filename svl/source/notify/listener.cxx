@@ -44,20 +44,21 @@ SvtListener::~SvtListener() COVERITY_NOEXCEPT_FALSE
 
 bool SvtListener::StartListening( SvtBroadcaster& rBroadcaster )
 {
-    std::pair<BroadcastersType::iterator, bool> r =
-        maBroadcasters.insert(&rBroadcaster);
-    if (r.second)
-    {
-        // This is a new broadcaster.
-        rBroadcaster.Add(this);
-    }
-    return r.second;
+    auto it = std::lower_bound(maBroadcasters.begin(), maBroadcasters.end(), &rBroadcaster);
+    if (it != maBroadcasters.end() && *it == &rBroadcaster)
+        // already listening to this broadcaster.
+        return false;
+
+    // This is a new broadcaster.
+    maBroadcasters.insert(it, &rBroadcaster); // maintain sorting
+    rBroadcaster.Add(this);
+    return true;
 }
 
 bool SvtListener::EndListening( SvtBroadcaster& rBroadcaster )
 {
-    BroadcastersType::iterator it = maBroadcasters.find(&rBroadcaster);
-    if (it == maBroadcasters.end())
+    auto it = std::lower_bound(maBroadcasters.begin(), maBroadcasters.end(), &rBroadcaster);
+    if (it == maBroadcasters.end() || *it != &rBroadcaster)
         // Not listening to this broadcaster.
         return false;
 
@@ -70,20 +71,15 @@ bool SvtListener::EndListening( SvtBroadcaster& rBroadcaster )
 // back into the broadcaster again
 void SvtListener::BroadcasterDying( SvtBroadcaster& rBroadcaster )
 {
-    BroadcastersType::iterator it = maBroadcasters.find(&rBroadcaster);
+    auto it = std::lower_bound(maBroadcasters.begin(), maBroadcasters.end(), &rBroadcaster);
     if (it != maBroadcasters.end())
         maBroadcasters.erase(it);
 }
 
 void SvtListener::EndListeningAll()
 {
-    BroadcastersType::iterator it = maBroadcasters.begin();
-    BroadcastersType::const_iterator itEnd = maBroadcasters.end();
-    for (; it != itEnd; ++it)
-    {
-        SvtBroadcaster& rBC = **it;
-        rBC.Remove(this);
-    }
+    for (SvtBroadcaster* pBC : maBroadcasters)
+        pBC->Remove(this);
     maBroadcasters.clear();
 }
 
@@ -93,13 +89,8 @@ void SvtListener::CopyAllBroadcasters( const SvtListener& r )
     EndListeningAll();
     BroadcastersType aCopy(r.maBroadcasters);
     maBroadcasters.swap(aCopy);
-    BroadcastersType::iterator it = maBroadcasters.begin();
-    BroadcastersType::const_iterator itEnd = maBroadcasters.end();
-    for (; it != itEnd; ++it)
-    {
-        SvtBroadcaster* p = *it;
-        p->Add(this);
-    }
+    for (SvtBroadcaster* pBC : maBroadcasters)
+        pBC->Add(this);
 }
 
 bool SvtListener::HasBroadcaster() const

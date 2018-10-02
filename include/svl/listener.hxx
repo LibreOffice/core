@@ -21,7 +21,7 @@
 
 #include <svl/svldllapi.h>
 
-#include <unordered_set>
+#include <vector>
 
 class SvtBroadcaster;
 class SfxHint;
@@ -29,7 +29,7 @@ class SfxHint;
 class SVL_DLLPUBLIC SvtListener
 {
     friend class SvtBroadcaster;
-    typedef std::unordered_set<SvtBroadcaster*> BroadcastersType;
+    typedef std::vector<SvtBroadcaster*> BroadcastersType;
     BroadcastersType maBroadcasters;
 
     const SvtListener&  operator=(const SvtListener &) = delete;
