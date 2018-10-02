@@ -5037,7 +5037,7 @@
       </node>
       <node oor:name=".uno:SendFeedback" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Send Feedback...</value>
+          <value xml:lang="en-US">Send Feedback</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -5045,7 +5045,15 @@
       </node>
       <node oor:name=".uno:QuestionAnswers" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Get Help Online...</value>
+          <value xml:lang="en-US">~Get Help Online</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:GetInvolved" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Get ~Involved</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -5053,7 +5061,7 @@
       </node>
       <node oor:name=".uno:Documentation" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~User Guides...</value>
+          <value xml:lang="en-US">~User Guides</value>
         </prop>
       </node>
       <node oor:name=".uno:Donation" oor:op="replace">
@@ -5066,12 +5074,12 @@
       </node>
       <node oor:name=".uno:ShowLicense" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">License Information...</value>
+          <value xml:lang="en-US">License Information</value>
         </prop>
       </node>
       <node oor:name=".uno:ShowCredits" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">%PRODUCTNAME Credits...</value>
+          <value xml:lang="en-US">%PRODUCTNAME Credits</value>
         </prop>
       </node>
       <node oor:name=".uno:StatusBarVisible" oor:op="replace">
