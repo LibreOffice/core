@@ -30,7 +30,6 @@
 #include "filepicker_ipc_commands.hxx"
 
 #include <functional>
-#include <future>
 #include <mutex>
 #include <thread>
 #include <sstream>
@@ -105,43 +104,37 @@ public:
 
     template <typename... Args> void readResponse(uint64_t id, Args&... args)
     {
-        // read synchronously from a background thread and run the eventloop until the value becomes available
-        // this allows us to keep the GUI responsive and also enables access to the LO clipboard
         ArgsReader<Args...> argsReader(args...);
-        await(std::async(std::launch::async, [&]() {
-            while (true)
+        while (true)
+        {
+            // only let one thread read at any given time
+            std::lock_guard<std::mutex> lock(m_mutex);
+
+            // check if we need to read (and potentially wait) a response ID
+            if (m_incomingResponse == 0)
             {
-                // only let one thread read at any given time
-                std::lock_guard<std::mutex> lock(m_mutex);
-
-                // check if we need to read (and potentially wait) a response ID
-                if (m_incomingResponse == 0)
-                {
-                    m_responseStream.clear();
-                    m_responseStream.str(readResponseLine());
-                    readIpcArgs(m_responseStream, m_incomingResponse);
-                }
-
-                if (m_incomingResponse == id)
-                {
-                    // the response we are waiting for came in
-                    argsReader(m_responseStream);
-                    m_incomingResponse = 0;
-                    break;
-                }
-                else
-                {
-                    // the next response answers some other request, yield
-                    std::this_thread::yield();
-                }
+                m_responseStream.clear();
+                m_responseStream.str(readResponseLine());
+                readIpcArgs(m_responseStream, m_incomingResponse);
             }
-        }));
+
+            if (m_incomingResponse == id)
+            {
+                // the response we are waiting for came in
+                argsReader(m_responseStream);
+                m_incomingResponse = 0;
+                break;
+            }
+            else
+            {
+                // the next response answers some other request, yield
+                std::this_thread::yield();
+            }
+        }
     }
 
 private:
     std::function<void()> blockMainWindow();
-
-    static void await(const std::future<void>& future);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
