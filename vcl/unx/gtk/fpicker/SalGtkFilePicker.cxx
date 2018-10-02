@@ -1495,17 +1495,14 @@ void SalGtkFilePicker::selection_changed_cb( GtkFileChooser *, SalGtkFilePicker 
 
 void SalGtkFilePicker::update_preview_cb( GtkFileChooser *file_chooser, SalGtkFilePicker* pobjFP )
 {
-    GtkWidget *preview;
-    char *filename;
-    GdkPixbuf *pixbuf;
     gboolean have_preview = false;
 
-    preview = pobjFP->m_pPreview;
-    filename = gtk_file_chooser_get_preview_filename( file_chooser );
+    GtkWidget* preview = pobjFP->m_pPreview;
+    char* filename = gtk_file_chooser_get_preview_filename( file_chooser );
 
-    if( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( pobjFP->m_pToggles[PREVIEW] ) ) && g_file_test( filename, G_FILE_TEST_IS_REGULAR ) )
+    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(pobjFP->m_pToggles[PREVIEW])) && filename &&&& g_file_test(filename, G_FILE_TEST_IS_REGULAR))
     {
-        pixbuf = gdk_pixbuf_new_from_file_at_size(
+        GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file_at_size(
                 filename,
                 g_PreviewImageWidth,
                 g_PreviewImageHeight, nullptr );
