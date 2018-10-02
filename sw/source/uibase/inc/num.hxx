@@ -129,20 +129,18 @@ public:
 #endif
 };
 
-class SwSvxNumBulletTabDialog final : public SfxTabDialog
+class SwSvxNumBulletTabDialog final : public SfxTabDialogController
 {
     SwWrtShell&         rWrtSh;
-    sal_uInt16 m_nSingleNumPageId;
-    sal_uInt16 m_nBulletPageId;
-    sal_uInt16 m_nOptionsPageId;
-    sal_uInt16 m_nPositionPageId;
 
     virtual short   Ok() override;
-    virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage) override;
-    DECL_LINK(RemoveNumberingHdl, Button*, void);
+    virtual void    PageCreated(const OString& rPageId, SfxTabPage& rPage) override;
+    DECL_LINK(RemoveNumberingHdl, weld::Button&, void);
+
+    std::unique_ptr<weld::ComboBox> m_xDummyCombo;
 
 public:
-    SwSvxNumBulletTabDialog(vcl::Window* pParent,
+    SwSvxNumBulletTabDialog(weld::Window* pParent,
                     const SfxItemSet* pSwItemSet,
                     SwWrtShell &);
     virtual ~SwSvxNumBulletTabDialog() override;
