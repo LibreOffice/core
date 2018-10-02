@@ -21,6 +21,9 @@
 
 #include <systools/win32/uwinapi.h>
 #include <stdlib.h>
+#include <algorithm>
+#include <string>
+#include <vector>
 #include <desktop/exithelper.h>
 
 #include "../loader.hxx"
@@ -28,6 +31,38 @@
 static LPWSTR *GetCommandArgs( int *pArgc )
 {
     return CommandLineToArgvW( GetCommandLineW(), pArgc );
+}
+
+// tdf#120249: quotes in arguments need to be escaped; backslashes before quotes need doubling. See
+// https://docs.microsoft.com/en-us/windows/desktop/api/shellapi/nf-shellapi-commandlinetoargvw
+static std::wstring EscapeArg(LPCWSTR sArg)
+{
+    const size_t nOrigSize = wcslen(sArg);
+    LPCWSTR const end = sArg + nOrigSize;
+    std::wstring sResult(L"\"");
+
+    LPCWSTR lastPosQuote = sArg;
+    LPCWSTR posQuote;
+    while ((posQuote = std::find(lastPosQuote, end, L'"')) != end)
+    {
+        LPCWSTR posBackslash = posQuote;
+        while (posBackslash != lastPosQuote && *(posBackslash - 1) == L'\\')
+            --posBackslash;
+
+        sResult.append(lastPosQuote, posBackslash);
+        sResult.append((posQuote - posBackslash) * 2 + 1, L'\\'); // 2n+1 '\' to escape the '"'
+        sResult.append(1, L'"');
+        lastPosQuote = posQuote + 1;
+    }
+
+    LPCWSTR posTrailingBackslashSeq = end;
+    while (posTrailingBackslashSeq != lastPosQuote && *(posTrailingBackslashSeq - 1) == L'\\')
+        --posTrailingBackslashSeq;
+    sResult.append(lastPosQuote, posTrailingBackslashSeq);
+    sResult.append((end - posTrailingBackslashSeq) * 2, L'\\'); // 2n '\' before closing '"'
+    sResult.append(1, L'"');
+
+    return sResult;
 }
 
 int WINAPI wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
@@ -56,48 +91,46 @@ int WINAPI wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
 
     BOOL    fSuccess = FALSE;
     LPWSTR  lpCommandLine = nullptr;
-    int argc = 0;
-    LPWSTR * argv = nullptr;
     bool bFirst = true;
     WCHAR cwd[MAX_PATH];
     DWORD cwdLen = GetCurrentDirectoryW(MAX_PATH, cwd);
     if (cwdLen >= MAX_PATH) {
         cwdLen = 0;
     }
+    std::vector<std::wstring> aEscapedArgs;
 
     do
     {
         if ( bFirst ) {
-            argv = GetCommandArgs(&argc);
-            std::size_t n = wcslen(argv[0]) + 2;
-            for (int i = 1; i < argc; ++i) {
-                n += wcslen(argv[i]) + 4; // 2 doublequotes + a space + optional trailing backslash
+            int argc = 0;
+            LPWSTR* argv = GetCommandArgs(&argc);
+            std::size_t n = 0;
+            for (int i = 0; i < argc; ++i) {
+                std::wstring sEscapedArg = EscapeArg(argv[i]);
+                aEscapedArgs.push_back(sEscapedArg);
+                n += sEscapedArg.length() + 1; // a space between args
             }
+            LocalFree(argv);
             n += MY_LENGTH(L" \"-env:OOO_CWD=2") + 4 * cwdLen +
                 MY_LENGTH(L"\"") + 1;
                 // 4 * cwdLen: each char preceded by backslash, each trailing
                 // backslash doubled
             lpCommandLine = new WCHAR[n];
         }
-        WCHAR * p = desktop_win32::commandLineAppend(
-            lpCommandLine, MY_STRING(L"\""));
-        p = desktop_win32::commandLineAppend(p, argv[0]);
-        for (int i = 1; i < argc; ++i) {
-            if (bFirst || EXITHELPER_NORMAL_RESTART == dwExitCode || wcsncmp(argv[i], MY_STRING(L"-env:")) == 0) {
-                p = desktop_win32::commandLineAppend(p, MY_STRING(L"\" \""));
-                p = desktop_win32::commandLineAppend(p, argv[i]);
-                const size_t arglen = wcslen(argv[i]);
-                // tdf#120249: if an argument ends with backslash, we should escape it with another
-                // backslash; otherwise, the trailing backslash will be treated as an escapement
-                // character for the following doublequote by CommandLineToArgvW in soffice.bin. See
-                // https://docs.microsoft.com/en-us/windows/desktop/api/shellapi/nf-shellapi-commandlinetoargvw
-                if (arglen && argv[i][arglen-1] == '\\')
-                    p = desktop_win32::commandLineAppend(p, MY_STRING(L"\\"));
+        WCHAR* p = desktop_win32::commandLineAppend(lpCommandLine, aEscapedArgs[0].c_str(),
+                                                    aEscapedArgs[0].length());
+        for (size_t i = 1; i < aEscapedArgs.size(); ++i)
+        {
+            const std::wstring& rArg = aEscapedArgs[i];
+            if (bFirst || EXITHELPER_NORMAL_RESTART == dwExitCode
+                || wcsncmp(rArg.c_str(), MY_STRING(L"\"-env:")) == 0)
+            {
+                p = desktop_win32::commandLineAppend(p, MY_STRING(L" "));
+                p = desktop_win32::commandLineAppend(p, rArg.c_str(), rArg.length());
             }
         }
 
-        p = desktop_win32::commandLineAppend(
-            p, MY_STRING(L"\" \"-env:OOO_CWD="));
+        p = desktop_win32::commandLineAppend(p, MY_STRING(L" \"-env:OOO_CWD="));
         if (cwdLen == 0) {
             p = desktop_win32::commandLineAppend(p, MY_STRING(L"0"));
         } else {
@@ -181,7 +214,6 @@ int WINAPI wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
     } while ( fSuccess
               && ( EXITHELPER_CRASH_WITH_RESTART == dwExitCode || EXITHELPER_NORMAL_RESTART == dwExitCode ));
     delete[] lpCommandLine;
-    LocalFree(argv);
 
     return fSuccess ? dwExitCode : -1;
 }
