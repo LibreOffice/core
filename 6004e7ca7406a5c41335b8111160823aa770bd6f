@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_706c2d08",
+        "filename": "sw/qa/python/check_xcloseable.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2018-10-02T22:36:22Z",
+      "side": 1,
+      "message": "ugh, file has DOS lineends",
+      "revId": "6004e7ca7406a5c41335b8111160823aa770bd6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
