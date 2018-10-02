@@ -393,6 +393,14 @@ bool AquaSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangl
 
 void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
+#ifdef IOS
+    if (!CheckContext())
+    {
+        SAL_WARN("vcl.cg", "AquaSalGraphics::DrawTextLayout() without context");
+        return;
+    }
+#endif
+
     const CoreTextStyle& rStyle = *static_cast<const CoreTextStyle*>(&rLayout.GetFont());
     const FontSelectPattern& rFontSelect = rStyle.GetFontSelectPattern();
     if (rFontSelect.mnHeight == 0)
