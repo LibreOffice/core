@@ -1541,7 +1541,7 @@ void SwTextNode::Update(
     // Update the paragraph signatures.
     if (SwEditShell* pEditShell = GetDoc()->GetEditShell())
     {
-        pEditShell->ValidateCurrentParagraphSignatures(true);
+        pEditShell->ValidateParagraphSignatures(this, true);
     }
 
     // Inform LOK clients about change in position of redlines (if any)

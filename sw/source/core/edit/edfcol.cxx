@@ -1804,6 +1804,25 @@ void SwEditShell::SignParagraph()
     GetDoc()->GetIDocumentUndoRedo().EndUndo(SwUndoId::PARA_SIGN_ADD, nullptr);
 }
 
+void SwEditShell::ValidateParagraphSignatures(SwTextNode* pNode, bool updateDontRemove)
+{
+    if (!pNode || !IsParagraphSignatureValidationEnabled())
+        return;
+
+    // Table text signing is not supported.
+    if (pNode->FindTableNode() != nullptr)
+        return;
+
+    // Prevent recursive validation since this is triggered on node updates, which we do below.
+    const bool bOldValidationFlag = SetParagraphSignatureValidation(false);
+    comphelper::ScopeGuard const g([this, bOldValidationFlag] () {
+            SetParagraphSignatureValidation(bOldValidationFlag);
+        });
+
+    uno::Reference<text::XTextContent> xParentText = SwXParagraph::CreateXParagraph(*GetDoc(), pNode);
+    lcl_ValidateParagraphSignatures(GetDoc(), xParentText, updateDontRemove);
+}
+
 void SwEditShell::ValidateCurrentParagraphSignatures(bool updateDontRemove)
 {
     SwDocShell* pDocShell = GetDoc()->GetDocShell();
@@ -1813,21 +1832,7 @@ void SwEditShell::ValidateCurrentParagraphSignatures(bool updateDontRemove)
     SwPaM* pPaM = GetCursor();
     const SwPosition* pPosStart = pPaM->Start();
     SwTextNode* pNode = pPosStart->nNode.GetNode().GetTextNode();
-    if (!pNode)
-        return;
-
-    // Prevent recursive validation since this is triggered on node updates, which we do below.
-    const bool bOldValidationFlag = SetParagraphSignatureValidation(false);
-    comphelper::ScopeGuard const g([this, bOldValidationFlag] () {
-            SetParagraphSignatureValidation(bOldValidationFlag);
-        });
-
-    // Table text signing is not supported.
-    if (pNode->FindTableNode() != nullptr)
-        return;
-
-    uno::Reference<text::XTextContent> xParentText = SwXParagraph::CreateXParagraph(*pNode->GetDoc(), pNode);
-    lcl_ValidateParagraphSignatures(GetDoc(), xParentText, updateDontRemove);
+    ValidateParagraphSignatures(pNode, updateDontRemove);
 }
 
 void SwEditShell::ValidateAllParagraphSignatures(bool updateDontRemove)
