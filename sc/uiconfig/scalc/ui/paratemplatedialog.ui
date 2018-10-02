@@ -24,12 +24,12 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="standard">
-                <property name="label" translatable="no">_Standard</property>
+              <object class="GtkButton" id="reset">
+                <property name="label">gtk-revert-to-saved</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -38,12 +38,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="reset">
-                <property name="label">gtk-revert-to-saved</property>
+              <object class="GtkButton" id="standard">
+                <property name="label" translatable="no">_Standard</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -541,8 +541,8 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">standard</action-widget>
       <action-widget response="0">reset</action-widget>
+      <action-widget response="0">standard</action-widget>
       <action-widget response="-5">ok</action-widget>
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
