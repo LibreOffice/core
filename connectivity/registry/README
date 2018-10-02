@@ -1,0 +1,24 @@
+xcu files are made from several sections, the main ones are: Properties and Features
+
+Property: actual setting with its underlying type and its default value
+
+Feature: a boolean that says "let the user change that setting in the Advanced Settings UI"
+
+This is checked by using officecfg/registry/schema/org/openoffice/Office/DataAccess/Drivers.xcs
+and configmgr mechanism
+There are two kinds of properties named "Value":
+- first one is in "Property" groups and has a static oor:type="any" (can take on boolean, int and other types of values)
+- second one is in "Feature" groups and has a static oor:type="boolean" so can take on only boolean values.
+
+Each node in Feature section must have an equivalent in Property section
+Most of the time the node name of both sections should be equal,
+however there are 4 known exceptions (more?):
+- "UseBracketedOuterJoinSyntax" feature => "EnableOuterJoinEscape" property
+- "UseDOSLineEnds" feature => "PreferDosLikeLineEnds" property
+- "UseSQL92NamingConstraints" feature => "EnableSQL92Check" property
+- "UseKeywordAsBeforeAlias" feature => "GenerateASBeforeCorrelationName"
+
+See dbaccess/source/ui/dlg/DbAdminImpl.cxx, ODbDataSourceAdministrationHelper constructor, eg:
+m_aIndirectPropTranslator.emplace( <ID>, <property> )
+and dbaccess/source/ui/misc/dsmeta.cxx, lcl_getFeatureMappings() function, eg:
+{ <ID>, <feature> }
