@@ -127,8 +127,10 @@ bool SidebarDockingWindow::EventNotify(NotifyEvent& rEvent)
                     mpSidebarController->GetResourceManager()->GetPanelDescriptor( "StyleListPanel" );
             if ( xPanelDescriptor && mpSidebarController->IsDeckVisible( xPanelDescriptor->msDeckId ) )
                 Close();
+            return true;
         }
-        return true;
+        if ( !( ( KEY_MOD1 == rKeyCode.GetModifier() ) && ( KEY_F5 == rKeyCode.GetCode() ) ) )
+            return true;
     }
     else if (MouseNotifyEvent::MOUSEBUTTONDOWN == nType)
     {
