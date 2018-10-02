@@ -38,26 +38,22 @@ namespace sc
 class SQLFetchThread : public salhelper::Thread
 {
     ScDocument& mrDocument;
-    OUString maURL;
     OUString maID;
     const std::vector<std::shared_ptr<sc::DataTransformation>> maDataTransformations;
     std::function<void()> maImportFinishedHdl;
 
 public:
-    SQLFetchThread(ScDocument& rDoc, const OUString&, const OUString& rID,
-                   std::function<void()> aImportFinishedHdl,
+    SQLFetchThread(ScDocument& rDoc, const OUString& rID, std::function<void()> aImportFinishedHdl,
                    const std::vector<std::shared_ptr<sc::DataTransformation>>& rTransformations);
 
     virtual void execute() override;
 };
 
 SQLFetchThread::SQLFetchThread(
-    ScDocument& rDoc, const OUString& rURL, const OUString& rID,
-    std::function<void()> aImportFinishedHdl,
+    ScDocument& rDoc, const OUString& rID, std::function<void()> aImportFinishedHdl,
     const std::vector<std::shared_ptr<sc::DataTransformation>>& rTransformations)
     : salhelper::Thread("SQL Fetch Thread")
     , mrDocument(rDoc)
-    , maURL(rURL)
     , maID(rID)
     , maDataTransformations(rTransformations)
     , maImportFinishedHdl(aImportFinishedHdl)
@@ -155,7 +151,7 @@ void SQLDataProvider::Import()
 
     mpDoc.reset(new ScDocument(SCDOCMODE_CLIP));
     mpDoc->ResetClip(mpDocument, SCTAB(0));
-    mxSQLFetchThread = new SQLFetchThread(*mpDoc, mrDataSource.getURL(), mrDataSource.getID(),
+    mxSQLFetchThread = new SQLFetchThread(*mpDoc, mrDataSource.getID(),
                                           std::bind(&SQLDataProvider::ImportFinished, this),
                                           mrDataSource.getDataTransformation());
     mxSQLFetchThread->launch();
