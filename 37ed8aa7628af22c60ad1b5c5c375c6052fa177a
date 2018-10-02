@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_10529168",
+        "filename": "connectivity/registry/README",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-10-02T20:21:31Z",
+      "side": 1,
+      "message": "Unless I\u0027m mistaken again, dbaccess/source/ui/dlg/DbAdminImpl.cxx contains the mapping between Features and properties, in the series of:\n  m_aDirectPropTranslator.emplace( DSID_XXX, YYY )\nand\n  m_aIndirectPropTranslator.emplace( DSID_XXX, YYY )\n\nAnd I see:\n\n  m_aIndirectPropTranslator.emplace( DSID_AS_BEFORE_CORRNAME, INFO_AS_BEFORE_CORRELATION_NAME );\n\nand in dbaccess/source/ui/misc/dsmeta.cxx,\nDSID_AS_BEFORE_CORRNAME is mapped to the feature \"UseKeywordAsBeforeAlias\"\nin lcl_getFeatureMappings()\n\nand in dbaccess/inc/strings.hxx\n  #define INFO_AS_BEFORE_CORRELATION_NAME \"GenerateASBeforeCorrelationName\"\n\nSo it seems the \"UseKeywordAsBeforeAlias\" feature corresponds to the \"GenerateASBeforeCorrelationName\" property. But this property is not declared in any xcu file. But it is known in dbaccess/source/core/dataaccess/ModelImpl.cxx and connectivity/source/commontools/dbmetadata.cxx, as well as by the jdbc and odbc drivers themselves.\n\nSigh.",
+      "revId": "37ed8aa7628af22c60ad1b5c5c375c6052fa177a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
