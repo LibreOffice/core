@@ -698,7 +698,7 @@ bool ScValidationData::GetSelectionFromFormula(
         // is stored as a single value.
 
         // Use an interim matrix to create the TypedStrData below.
-        xMatRef = new ScFullMatrix(1, 1, 0.0);
+        xMatRef = new ScMatrix(1, 1, 0.0);
 
         FormulaError nErrCode = aValidationSrc.GetErrCode();
         if (nErrCode != FormulaError::NONE)

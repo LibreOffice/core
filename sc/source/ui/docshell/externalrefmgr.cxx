@@ -609,7 +609,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
 
         SCSIZE nMatrixColumns = static_cast<SCSIZE>(nDataCol2-nDataCol1+1);
         SCSIZE nMatrixRows = static_cast<SCSIZE>(nDataRow2-nDataRow1+1);
-        ScMatrixRef xMat = new ScFullMatrix( nMatrixColumns, nMatrixRows);
+        ScMatrixRef xMat = new ScMatrix( nMatrixColumns, nMatrixRows);
 
         // Needed in shrink and fill.
         vector<SCROW> aRows;
@@ -657,7 +657,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
                 {
                     nMatrixColumns = static_cast<SCSIZE>(nMaxCol-nMinCol+1);
                     nMatrixRows = static_cast<SCSIZE>(nDataRow2-nDataRow1+1);
-                    xMat = new ScFullMatrix( nMatrixColumns, nMatrixRows);
+                    xMat = new ScMatrix( nMatrixColumns, nMatrixRows);
                     xMat->GetDimensions( nMatCols, nMatRows);
                     if (nMatCols == nMatrixColumns && nMatRows == nMatrixRows)
                     {
@@ -846,19 +846,19 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
         pMat->GetDimensions( nMatCols, nMatRows);
         if (nMatCols > static_cast<SCSIZE>(nCol2 - nCol1) && nMatRows > static_cast<SCSIZE>(nRow2 - nRow1))
         {
-            ScFullMatrix::DoubleOpFunction aDoubleFunc = [=](size_t row, size_t col, double val) -> void
+            ScMatrix::DoubleOpFunction aDoubleFunc = [=](size_t row, size_t col, double val) -> void
             {
                 pTabData->setCell(col + nCol1, row + nRow1, new formula::FormulaDoubleToken(val), 0, false);
             };
-            ScFullMatrix::BoolOpFunction aBoolFunc = [=](size_t row, size_t col, bool val) -> void
+            ScMatrix::BoolOpFunction aBoolFunc = [=](size_t row, size_t col, bool val) -> void
             {
                 pTabData->setCell(col + nCol1, row + nRow1, new formula::FormulaDoubleToken(val ? 1.0 : 0.0), 0, false);
             };
-            ScFullMatrix::StringOpFunction aStringFunc = [=](size_t row, size_t col, svl::SharedString val) -> void
+            ScMatrix::StringOpFunction aStringFunc = [=](size_t row, size_t col, svl::SharedString val) -> void
             {
                 pTabData->setCell(col + nCol1, row + nRow1, new formula::FormulaStringToken(val), 0, false);
             };
-            ScFullMatrix::EmptyOpFunction aEmptyFunc = [=](size_t /*row*/, size_t /*col*/) -> void
+            ScMatrix::EmptyOpFunction aEmptyFunc = [=](size_t /*row*/, size_t /*col*/) -> void
             {
                 // Nothing. Empty cell.
             };
@@ -1597,7 +1597,7 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
 
         SCSIZE nMatrixColumns = static_cast<SCSIZE>(nCol2-nCol1+1);
         SCSIZE nMatrixRows = static_cast<SCSIZE>(nRow2-nRow1+1);
-        ScMatrixRef xMat = new ScFullMatrix( nMatrixColumns, nMatrixRows);
+        ScMatrixRef xMat = new ScMatrix( nMatrixColumns, nMatrixRows);
 
         // Check if size could be allocated and if not skip the fill, there's
         // one error element instead. But retry first with the actual data area
@@ -1620,7 +1620,7 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
             {
                 nMatrixColumns = static_cast<SCSIZE>(nDataCol2-nDataCol1+1);
                 nMatrixRows = static_cast<SCSIZE>(nDataRow2-nDataRow1+1);
-                xMat = new ScFullMatrix( nMatrixColumns, nMatrixRows);
+                xMat = new ScMatrix( nMatrixColumns, nMatrixRows);
                 xMat->GetDimensions( nMatCols, nMatRows);
                 if (nMatCols == nMatrixColumns && nMatRows == nMatrixRows)
                     pSrcDoc->FillMatrix(*xMat, nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2, &pHostDoc->GetSharedStringPool());
@@ -1653,7 +1653,7 @@ static std::unique_ptr<ScTokenArray> lcl_fillEmptyMatrix(const ScRange& rRange)
 {
     SCSIZE nC = static_cast<SCSIZE>(rRange.aEnd.Col()-rRange.aStart.Col()+1);
     SCSIZE nR = static_cast<SCSIZE>(rRange.aEnd.Row()-rRange.aStart.Row()+1);
-    ScMatrixRef xMat = new ScFullMatrix(nC, nR);
+    ScMatrixRef xMat = new ScMatrix(nC, nR);
 
     ScMatrixToken aToken(xMat);
     unique_ptr<ScTokenArray> pArray(new ScTokenArray);
