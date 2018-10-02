@@ -197,15 +197,20 @@ private:
     bool                    bIsDefaultValNum;
 
     SVX_DLLPRIVATE short FillEntryList_Impl( std::vector<OUString>& rList );
-    SVX_DLLPRIVATE void  FillEListWithStd_Impl( std::vector<OUString>& rList,sal_uInt16 aPrivCat, short &Pos);
+    SVX_DLLPRIVATE void  FillEListWithStd_Impl( std::vector<OUString>& rList, SvNumFormatType eCategory, short &Pos,
+                                                bool bSuppressDuplicates = false );
     SVX_DLLPRIVATE short FillEListWithFormats_Impl( std::vector<OUString>& rList,short nSelPos,
                                                        NfIndexTableOffset eOffsetStart,
-                                                       NfIndexTableOffset eOffsetEnd);
-    SVX_DLLPRIVATE short FillEListWithDateTime_Impl( std::vector<OUString>& rList,short nSelPos);
+                                                       NfIndexTableOffset eOffsetEnd,
+                                                       bool bSuppressDuplicates );
+    SVX_DLLPRIVATE short FillEListWithDateTime_Impl( std::vector<OUString>& rList,short nSelPos,
+                                                     bool bSuppressDuplicates );
     SVX_DLLPRIVATE short FillEListWithCurrency_Impl( std::vector<OUString>& rList,short nSelPos);
     SVX_DLLPRIVATE short FillEListWithSysCurrencys( std::vector<OUString>& rList,short nSelPos);
     SVX_DLLPRIVATE short FillEListWithUserCurrencys( std::vector<OUString>& rList,short nSelPos);
-    SVX_DLLPRIVATE short FillEListWithUsD_Impl( std::vector<OUString>& rList, sal_uInt16 nPrivCat, short Pos );
+    SVX_DLLPRIVATE short FillEListWithUsD_Impl( std::vector<OUString>& rList, SvNumFormatType eCategory, short Pos );
+
+    SVX_DLLPRIVATE bool IsEssentialFormat_Impl( SvNumFormatType eType, sal_uInt32 nKey );
 
     SVX_DLLPRIVATE ::std::vector<sal_uInt32>::iterator GetRemoved_Impl( size_t nKey );
     SVX_DLLPRIVATE bool                                IsRemoved_Impl( size_t nKey );
