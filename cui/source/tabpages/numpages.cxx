@@ -1057,6 +1057,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(TabPageParent pParent,
     , nBullet(0xff)
     , nActNumLvl(1)
     , nNumItemId(SID_ATTR_NUMBERING_RULE)
+    , m_xGrid(m_xBuilder->weld_widget("grid2"))
     , m_xLevelLB(m_xBuilder->weld_tree_view("levellb"))
     , m_xFmtLB(m_xBuilder->weld_combo_box("numfmtlb"))
     , m_xSeparatorFT(m_xBuilder->weld_label("separator"))
@@ -1130,6 +1131,12 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(TabPageParent pParent,
     // 136 == 0x88 == SVX_NUM_BITMAP|0x80 == SVX_NUM_BITMAP|LINK_TOKEN
     // to not remove that.
     SvxNumOptionsTabPageHelper::GetI18nNumbering( *m_xFmtLB, (SVX_NUM_BITMAP | LINK_TOKEN));
+
+    m_xFmtLB->set_active(0);
+
+    m_xCharFmtLB->set_size_request(m_xCharFmtLB->get_approximate_digit_width() * 10, -1);
+    Size aSize(m_xGrid->get_preferred_size());
+    m_xGrid->set_size_request(aSize.Width(), -1);
 }
 
 SvxNumOptionsTabPage::~SvxNumOptionsTabPage()
@@ -1911,7 +1918,6 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl, weld::ToggleButton&
                 INetURLObject aObj(grfName);
                 if(aObj.GetProtocol() == INetProtocol::File)
                     grfName = aObj.PathToFileName();
-
                 if(GalleryExplorer::GetGraphicObj( GALLERY_THEME_BULLETS, i, &aGraphic))
                 {
                     BitmapEx aBitmap(aGraphic.GetBitmapEx());

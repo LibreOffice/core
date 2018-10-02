@@ -667,7 +667,7 @@ public:
     virtual VclPtr<VclAbstractDialog>          CreateMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr &rTOXMgr) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateOutlineTabDialog(weld::Window* pParent, const SfxItemSet* pSwItemSet,
                                                 SwWrtShell &) override;
-    virtual VclPtr<SfxAbstractTabDialog>       CreateSvxNumBulletTabDialog(vcl::Window* pParent,
+    virtual VclPtr<SfxAbstractTabDialog>       CreateSvxNumBulletTabDialog(weld::Window* pParent,
                                                 const SfxItemSet* pSwItemSet,
                                                 SwWrtShell &) override;
     virtual VclPtr<AbstractMultiTOXTabDialog>  CreateMultiTOXTabDialog(

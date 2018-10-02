@@ -268,6 +268,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
     MapUnit             eCoreUnit;
 
     cui::NumberingPreview m_aPreviewWIN;
+    std::unique_ptr<weld::Widget> m_xGrid;
     std::unique_ptr<weld::TreeView> m_xLevelLB;
     std::unique_ptr<weld::ComboBox> m_xFmtLB;
     std::unique_ptr<weld::Label> m_xSeparatorFT;
