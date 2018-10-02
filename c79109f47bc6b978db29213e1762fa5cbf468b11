@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_b58e3725",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 5056,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-02T10:21:50Z",
+      "side": 1,
+      "message": "Discussion about a better label at BZ",
+      "range": {
+        "startLine": 5056,
+        "startChar": 34,
+        "endLine": 5056,
+        "endChar": 47
+      },
+      "revId": "c79109f47bc6b978db29213e1762fa5cbf468b11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_f576ef3e",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-02T10:21:50Z",
+      "side": 1,
+      "message": "This link is only temporarily until the correct hub exists.",
+      "range": {
+        "startLine": 556,
+        "startChar": 27,
+        "endLine": 556,
+        "endChar": 81
+      },
+      "revId": "c79109f47bc6b978db29213e1762fa5cbf468b11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
