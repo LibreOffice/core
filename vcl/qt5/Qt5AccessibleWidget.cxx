@@ -652,6 +652,9 @@ QStringList Qt5AccessibleWidget::keyBindingsForAction(const QString& actionName)
     Reference<XAccessibleKeyBinding> xKeyBinding
         = xAccessibleAction->getAccessibleActionKeyBinding(index);
 
+    if (!xKeyBinding.is())
+        return keyBindings;
+
     int count = xKeyBinding->getAccessibleKeyBindingCount();
     for (int i = 0; i < count; i++)
     {
