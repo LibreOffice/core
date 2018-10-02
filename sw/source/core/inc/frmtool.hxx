@@ -281,9 +281,6 @@ class SwBorderAttrs : public SwCacheObj
     const SvxShadowItem  &m_rShadow;
     const Size            m_aFrameSize;
 
-    // Is it a frame that can have a margin without a border?
-    bool m_bBorderDist  : 1;
-
     // the following bool values set the cached values to INVALID - until they
     // are calculated for the first time
     bool m_bTopLine     : 1;
@@ -373,8 +370,6 @@ public:
     inline bool IsLine() const;
 
     const Size &GetSize()     const { return m_aFrameSize; }
-
-    bool IsBorderDist() const { return m_bBorderDist; }
 
     // Should upper (or lower) border be evaluated for this frame?
     // #i25029# - If <_pPrevFrame> is set, its value is taken for testing, if
