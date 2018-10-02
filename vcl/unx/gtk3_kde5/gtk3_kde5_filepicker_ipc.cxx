@@ -106,6 +106,16 @@ OUString getResString(const char* pResId)
     return VclResId(pResId);
 }
 
+// handles the IPC commands for dialog execution and ends the dummy Gtk dialog once the IPC response is there
+void handleIpcForExecute(Gtk3KDE5FilePickerIpc *pFilePickerIpc, GtkWidget *pDummyDialog, bool *bResult) {
+
+    auto id = pFilePickerIpc->sendCommand(Commands::Execute);
+    pFilePickerIpc->readResponse(id, *bResult);
+
+    // end the dummy dialog
+    gtk_widget_hide(pDummyDialog);
+}
+
 // Gtk3KDE5FilePicker
 
 Gtk3KDE5FilePickerIpc::Gtk3KDE5FilePickerIpc()
@@ -143,9 +153,26 @@ sal_Int16 Gtk3KDE5FilePickerIpc::execute()
 {
     auto restoreMainWindow = blockMainWindow();
 
-    auto id = sendCommand(Commands::Execute);
+    // dummy gtk dialog that will take care of processing events,
+    // not meant to be actually seen by user
+    GtkWidget *pDummyDialog = gtk_dialog_new();
+
     bool accepted = false;
-    readResponse(id, accepted);
+
+    // send IPC command and read response in a separate thread
+    std::thread aIpcHandler(&handleIpcForExecute, this, pDummyDialog, &accepted);
+
+    // make dummy dialog not to be seen by user
+    gtk_window_set_decorated(GTK_WINDOW(pDummyDialog), false);
+    gtk_window_set_default_size(GTK_WINDOW(pDummyDialog), 0, 0);
+    // gtk_widget_set_opacity() only has the desired effect when widget is already shown
+    gtk_widget_show(pDummyDialog);
+    gtk_widget_set_opacity(pDummyDialog, 0);
+    // run dialog, leaving event processing to GTK
+    // dialog will be closed by the separate 'aIpcHandler' thread once the IPC response is there
+    gtk_dialog_run(GTK_DIALOG(pDummyDialog));
+
+    aIpcHandler.join();
 
     if (restoreMainWindow)
         restoreMainWindow();
@@ -202,14 +229,6 @@ std::function<void()> Gtk3KDE5FilePickerIpc::blockMainWindow()
         // unblock the GtkSalFrame handler
         g_signal_handler_unblock(pMainWindow, blockedHandler);
     };
-}
-
-void Gtk3KDE5FilePickerIpc::await(const std::future<void>& future)
-{
-    while (future.wait_for(std::chrono::milliseconds(1)) != std::future_status::ready)
-    {
-        GetGtkSalData()->Yield(false, true);
-    }
 }
 
 void Gtk3KDE5FilePickerIpc::writeResponseLine(const std::string& line)
