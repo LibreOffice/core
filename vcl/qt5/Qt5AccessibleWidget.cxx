@@ -62,7 +62,7 @@ int Qt5AccessibleWidget::indexOfChild(const QAccessibleInterface* /* child */) c
 
 namespace
 {
-QAccessible::Relation lcl_matchRelation(short relationType)
+QAccessible::Relation lcl_matchUnoRelation(short relationType)
 {
     switch (relationType)
     {
@@ -82,13 +82,46 @@ QAccessible::Relation lcl_matchRelation(short relationType)
         case AccessibleRelationType::NODE_CHILD_OF:
         case AccessibleRelationType::DESCRIBED_BY:
         default:
+            SAL_WARN("vcl.qt5", "Unmatched relation: " << relationType);
             return 0x0;
+    }
+}
+
+short lcl_matchQtRelation(QAccessible::Relation relationType)
+{
+    switch (relationType)
+    {
+        case QAccessible::Controller:
+            return AccessibleRelationType::CONTROLLER_FOR;
+        case QAccessible::Controlled:
+            return AccessibleRelationType::CONTROLLED_BY;
+        case QAccessible::Label:
+            return AccessibleRelationType::LABEL_FOR;
+        case QAccessible::Labelled:
+            return AccessibleRelationType::LABELED_BY;
+        default:
+            SAL_WARN("vcl.qt5", "Unmatched relation: " << relationType);
+    }
+    return 0;
+}
+
+void lcl_appendRelation(QVector<QPair<QAccessibleInterface*, QAccessible::Relation>>* relations,
+                        AccessibleRelation aRelation)
+{
+    QAccessible::Relation aQRelation = lcl_matchUnoRelation(aRelation.RelationType);
+    sal_uInt32 nTargetCount = aRelation.TargetSet.getLength();
+
+    for (sal_uInt32 i = 0; i < nTargetCount; i++)
+    {
+        Reference<XAccessible> xAccessible(aRelation.TargetSet[i], uno::UNO_QUERY);
+        relations->append(QPair(
+            QAccessible::queryAccessibleInterface(new Qt5XAccessible(xAccessible)), aQRelation));
     }
 }
 }
 
 QVector<QPair<QAccessibleInterface*, QAccessible::Relation>>
-    Qt5AccessibleWidget::relations(QAccessible::Relation /* match */) const
+Qt5AccessibleWidget::relations(QAccessible::Relation match) const
 {
     QVector<QPair<QAccessibleInterface*, QAccessible::Relation>> relations;
     Reference<XAccessibleRelationSet> xRelationSet
@@ -96,20 +129,19 @@ QVector<QPair<QAccessibleInterface*, QAccessible::Relation>>
     if (!xRelationSet.is())
         return relations;
 
-    int count = xRelationSet->getRelationCount();
-    for (int i = 0; i < count; i++)
+    if (match == QAccessible::AllRelations)
     {
-        AccessibleRelation aRelation = xRelationSet->getRelation(i);
-        QAccessible::Relation aQRelation = lcl_matchRelation(aRelation.RelationType);
-        sal_uInt32 nTargetCount = aRelation.TargetSet.getLength();
-
-        for (sal_uInt32 i = 0; i < nTargetCount; i++)
+        int count = xRelationSet->getRelationCount();
+        for (int i = 0; i < count; i++)
         {
-            Reference<XAccessible> xAccessible(aRelation.TargetSet[i], uno::UNO_QUERY);
-            relations.append(
-                QPair(QAccessible::queryAccessibleInterface(new Qt5XAccessible(xAccessible)),
-                      aQRelation));
+            AccessibleRelation aRelation = xRelationSet->getRelation(i);
+            lcl_appendRelation(&relations, aRelation);
         }
+    }
+    else
+    {
+        AccessibleRelation aRelation = xRelationSet->getRelation(lcl_matchQtRelation(match));
+        lcl_appendRelation(&relations, aRelation);
     }
 
     return relations;
