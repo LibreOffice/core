@@ -118,6 +118,28 @@ void VclQt5Clipboard::setContents(
     std::vector<Reference<datatransfer::clipboard::XClipboardListener>> aListeners(m_aListeners);
     datatransfer::clipboard::ClipboardEvent aEv;
 
+    if (m_aContents.is())
+    {
+        css::datatransfer::DataFlavor aFlavor;
+        aFlavor.MimeType = "text/plain;charset=utf-16";
+        aFlavor.DataType = cppu::UnoType<OUString>::get();
+
+        Any aValue;
+        try
+        {
+            aValue = xTrans->getTransferData(aFlavor);
+        }
+        catch (...)
+        {
+        }
+
+        OUString aString;
+        aValue >>= aString;
+
+        QClipboard* clipboard = QApplication::clipboard();
+        clipboard->setText(toQString(aString));
+    }
+
     aEv.Contents = getContents();
 
     aGuard.clear();
