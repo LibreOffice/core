@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_f5aa6f17",
+        "filename": "sw/qa/python/check_xrefreshable.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-10-02T13:45:31Z",
+      "side": 1,
+      "message": "Is the dos-style line ending intentional here?",
+      "revId": "307b1cab436f63b5e879ca65cf3c74065ee4ad14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
