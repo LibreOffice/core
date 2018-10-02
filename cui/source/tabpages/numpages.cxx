@@ -2203,7 +2203,7 @@ static long lcl_DrawBullet(VirtualDevice* pVDev,
     return nRet;
 }
 
-cui::NumberingPreview::NumberingPreview()
+SvxNumberingPreview::SvxNumberingPreview()
     : pActNum(nullptr)
     , bPosition(false)
     , nActLevel(SAL_MAX_UINT16)
@@ -2211,7 +2211,7 @@ cui::NumberingPreview::NumberingPreview()
 }
 
 // paint preview of numeration
-void cui::NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& /*rRect*/)
+void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& /*rRect*/)
 {
     Size aSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
 
