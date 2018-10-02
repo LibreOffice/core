@@ -929,8 +929,8 @@ ResultMembers& ScDPResultData::GetDimResultMembers(long nDim, const ScDPDimensio
         ScDPMember* pMember = pMembers->getByIndex(nSorted);
         if (!pResultMembers->FindMember(pMember->GetItemDataId()))
         {
-            ScDPParentDimData* pNew = new ScDPParentDimData(i, pDim, pLevel, pMember);
-            pResultMembers->InsertMember(pNew);
+            ScDPParentDimData aNew(i, pDim, pLevel, pMember);
+            pResultMembers->InsertMember(aNew);
         }
     }
 
@@ -4021,7 +4021,7 @@ void ScDPResultDimension::InitWithMembers(
 
         if ( pResultMember == nullptr )
         { //only insert found item
-            ScDPParentDimData* pMemberData = rMembers.FindMember( nDataID );
+            const ScDPParentDimData* pMemberData = rMembers.FindMember( nDataID );
             if ( pMemberData && aCompare.IsIncluded( *( pMemberData->mpMemberDesc ) ) )
                 pResultMember = InsertMember( pMemberData );
         }
@@ -4041,20 +4041,20 @@ ScDPParentDimData::ScDPParentDimData(
     SCROW nIndex, const ScDPDimension* pDim, const ScDPLevel* pLev, const ScDPMember* pMember) :
     mnOrder(nIndex), mpParentDim(pDim), mpParentLevel(pLev), mpMemberDesc(pMember) {}
 
-ScDPParentDimData* ResultMembers::FindMember( SCROW nIndex ) const
+const ScDPParentDimData* ResultMembers::FindMember( SCROW nIndex ) const
 {
-    DimMemberHash::const_iterator aRes = maMemberHash.find( nIndex );
+    auto aRes = maMemberHash.find( nIndex );
     if( aRes != maMemberHash.end()) {
-           if (  aRes->second->mpMemberDesc && aRes->second->mpMemberDesc->GetItemDataId()==nIndex )
-            return aRes->second;
+        if ( aRes->second.mpMemberDesc && aRes->second.mpMemberDesc->GetItemDataId()==nIndex )
+            return &aRes->second;
     }
     return nullptr;
 }
-void  ResultMembers::InsertMember(  ScDPParentDimData* pNew )
+void  ResultMembers::InsertMember(  const ScDPParentDimData& rNew )
 {
-    if ( !pNew->mpMemberDesc->getShowDetails() )
+    if ( !rNew.mpMemberDesc->getShowDetails() )
         mbHasHideDetailsMember = true;
-    maMemberHash.insert( std::pair< const SCROW, ScDPParentDimData *>( pNew->mpMemberDesc->GetItemDataId(), pNew ) );
+    maMemberHash.emplace( rNew.mpMemberDesc->GetItemDataId(), rNew );
 }
 
 ResultMembers::ResultMembers():
@@ -4063,8 +4063,6 @@ ResultMembers::ResultMembers():
 }
 ResultMembers::~ResultMembers()
 {
-    for ( DimMemberHash::const_iterator iter = maMemberHash.begin(); iter != maMemberHash.end(); ++iter )
-        delete iter->second;
 }
 
 LateInitParams::LateInitParams(

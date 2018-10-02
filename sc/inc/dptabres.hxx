@@ -218,11 +218,6 @@ class ScDPDataMember;
 #define SC_DPMEASURE_ALL    -1
 #define SC_DPMEASURE_ANY    -2
 
-struct MemberHashIndexFunc
-{
-    size_t operator() (SCROW rDataIndex) const { return rDataIndex; }
-};
-
 struct ScDPParentDimData
 {
     const SCROW                     mnOrder;                //! Ref
@@ -234,15 +229,13 @@ struct ScDPParentDimData
     ScDPParentDimData(SCROW nIndex, const ScDPDimension* pDim, const ScDPLevel* pLev, const ScDPMember* pMember);
 };
 
-typedef std::unordered_map < SCROW, ScDPParentDimData *, MemberHashIndexFunc>  DimMemberHash;
-
 class ResultMembers final
 {
-    DimMemberHash      maMemberHash;
+    std::unordered_map<SCROW, ScDPParentDimData> maMemberHash;
     bool mbHasHideDetailsMember;
 public:
-    ScDPParentDimData* FindMember( SCROW nIndex ) const;
-    void                             InsertMember(  ScDPParentDimData* pNew );
+    const ScDPParentDimData* FindMember( SCROW nIndex ) const;
+    void InsertMember( ScDPParentDimData const & rNew );
     bool IsHasHideDetailsMembers() const { return mbHasHideDetailsMember; }
     void SetHasHideDetailsMembers( bool b ) { mbHasHideDetailsMember = b; }
     ResultMembers();

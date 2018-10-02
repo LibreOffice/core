@@ -1267,11 +1267,10 @@ struct ImplTextObj
 {
     sal_uInt32      mnTextSize;
     int             mnInstance;
-    std::vector<ParagraphObj*> maList;
+    std::vector<std::unique_ptr<ParagraphObj>> maList;
     bool        mbHasExtendedBullets;
 
     explicit ImplTextObj( int nInstance );
-    ~ImplTextObj();
 };
 
 ImplTextObj::ImplTextObj( int nInstance )
@@ -1280,12 +1279,6 @@ ImplTextObj::ImplTextObj( int nInstance )
     mnTextSize = 0;
     mnInstance = nInstance;
     mbHasExtendedBullets = false;
-}
-
-ImplTextObj::~ImplTextObj()
-{
-    for ( std::vector<ParagraphObj*>::const_iterator it = maList.begin(); it != maList.end(); ++it )
-        delete *it;
 }
 
 TextObj::TextObj( css::uno::Reference< css::text::XSimpleText > const & rXTextRef,
@@ -1308,9 +1301,9 @@ TextObj::TextObj( css::uno::Reference< css::text::XSimpleText > const & rXTextRe
                 {
                     if ( !aXTextParagraphE->hasMoreElements() )
                         aParaFlags.bLastParagraph = true;
-                    ParagraphObj* pPara = new ParagraphObj( aXParagraph, aParaFlags, rFontCollection, rProv );
+                    std::unique_ptr<ParagraphObj> pPara(new ParagraphObj( aXParagraph, aParaFlags, rFontCollection, rProv ));
                     mpImplTextObj->mbHasExtendedBullets |= pPara->bExtendedBulletsUsed;
-                    mpImplTextObj->maList.push_back( pPara );
+                    mpImplTextObj->maList.push_back( std::move(pPara) );
                     aParaFlags.bFirstParagraph = false;
                 }
             }
@@ -1328,7 +1321,7 @@ void TextObj::ImplCalculateTextPositions()
 
 ParagraphObj* TextObj::GetParagraph(int idx)
 {
-    return mpImplTextObj->maList[idx];
+    return mpImplTextObj->maList[idx].get();
 }
 
 sal_uInt32 TextObj::ParagraphCount() const
