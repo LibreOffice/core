@@ -907,30 +907,6 @@ void SvxPixelCtl::Reset()
     Invalidate();
 }
 
-// Fills the listbox (provisional) with strings
-
-HatchingLB::HatchingLB( vcl::Window* pParent, WinBits nWinStyle)
-: ListBox( pParent, nWinStyle )
-{
-    SetEdgeBlending(true);
-}
-
-// Fills the listbox (provisional) with strings
-
-GradientLB::GradientLB( vcl::Window* pParent, WinBits aWB)
-: ListBox( pParent, aWB )
-{
-    SetEdgeBlending(true);
-}
-
-// BitmapLB Constructor
-
-BitmapLB::BitmapLB( vcl::Window* pParent, WinBits aWB)
-:   ListBox( pParent, aWB )
-{
-    SetEdgeBlending(true);
-}
-
 void FillTypeLB::Fill()
 {
     SetUpdateMode( false );
@@ -951,14 +927,6 @@ LineLB::LineLB(vcl::Window* pParent, WinBits aWB)
     mbAddStandardFields(true)
 {
     // No EdgeBlending for LineStyle/Dash SetEdgeBlending(true);
-}
-
-void LineLB::setAddStandardFields(bool bNew)
-{
-    if(getAddStandardFields() != bNew)
-    {
-        mbAddStandardFields = bNew;
-    }
 }
 
 // Fills the listbox (provisional) with strings
@@ -999,34 +967,6 @@ void LineLB::Fill( const XDashListRef &pList )
 
     AdaptDropDownLineCountToMaximum();
     SetUpdateMode( true );
-}
-
-void LineLB::Append( const XDashEntry& rEntry, const BitmapEx& rBitmap )
-{
-    if(!rBitmap.IsEmpty())
-    {
-        InsertEntry(rEntry.GetName(), Image(rBitmap));
-    }
-    else
-    {
-        InsertEntry( rEntry.GetName() );
-    }
-
-    AdaptDropDownLineCountToMaximum();
-}
-
-void LineLB::Modify( const XDashEntry& rEntry, sal_Int32 nPos, const BitmapEx& rBitmap )
-{
-    RemoveEntry( nPos );
-
-    if(!rBitmap.IsEmpty())
-    {
-        InsertEntry( rEntry.GetName(), Image(rBitmap), nPos );
-    }
-    else
-    {
-        InsertEntry( rEntry.GetName(), nPos );
-    }
 }
 
 SvxLineLB::SvxLineLB(std::unique_ptr<weld::ComboBox> pControl)

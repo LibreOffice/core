@@ -132,7 +132,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/itemwrapper.hxx>
 #include <sc.hrc>
 #include <unonames.hxx>
 

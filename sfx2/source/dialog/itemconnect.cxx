@@ -18,53 +18,11 @@
  */
 
 #include <svl/itempool.hxx>
-#include <sfx2/itemconnect.hxx>
+#include <sfx2/controlwrapper.hxx>
 #include <vector>
 #include <memory>
 
 namespace sfx {
-
-
-// Helpers
-
-
-namespace {
-
-TriState lclConvertToTriState( bool bKnown, bool bIsUnknownFlag )
-{
-    return (!bKnown && bIsUnknownFlag) ? TRISTATE_FALSE : TRISTATE_INDET;
-}
-
-} // namespace
-
-
-sal_uInt16 ItemWrapperHelper::GetWhichId( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
-{
-    return rItemSet.GetPool()->GetWhich( nSlot );
-}
-
-bool ItemWrapperHelper::IsKnownItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
-{
-    return rItemSet.GetItemState( GetWhichId( rItemSet, nSlot ) ) != SfxItemState::UNKNOWN;
-}
-
-const SfxPoolItem* ItemWrapperHelper::GetUniqueItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
-{
-    sal_uInt16 nWhich = GetWhichId( rItemSet, nSlot );
-    return (rItemSet.GetItemState( nWhich ) >= SfxItemState::DEFAULT) ? rItemSet.GetItem( nWhich ) : nullptr;
-}
-
-const SfxPoolItem& ItemWrapperHelper::GetDefaultItem( const SfxItemSet& rItemSet, sal_uInt16 nSlot )
-{
-    return rItemSet.GetPool()->GetDefaultItem( GetWhichId( rItemSet, nSlot ) );
-}
-
-void ItemWrapperHelper::RemoveDefaultItem( SfxItemSet& rDestSet, const SfxItemSet& rOldSet, sal_uInt16 nSlot )
-{
-    sal_uInt16 nWhich = GetWhichId( rDestSet, nSlot );
-    if( rOldSet.GetItemState( nWhich, false ) == SfxItemState::DEFAULT )
-        rDestSet.ClearItem( nWhich );
-}
 
 
 // Base control wrapper classes
@@ -72,56 +30,6 @@ void ItemWrapperHelper::RemoveDefaultItem( SfxItemSet& rDestSet, const SfxItemSe
 
 ControlWrapperBase::~ControlWrapperBase()
 {
-}
-
-
-// Single control wrappers
-
-
-DummyWindowWrapper::DummyWindowWrapper( vcl::Window& rWindow ) :
-    SingleControlWrapperType( rWindow )
-{
-}
-
-void* DummyWindowWrapper::GetControlValue() const
-{
-    return nullptr;
-}
-
-void DummyWindowWrapper::SetControlValue( void* )
-{
-}
-
-// Base connection classes
-
-
-ItemConnectionBase::ItemConnectionBase( ItemConnFlags nFlags ) :
-    mnFlags( nFlags )
-{
-}
-
-ItemConnectionBase::~ItemConnectionBase()
-{
-}
-
-void ItemConnectionBase::DoApplyFlags( const SfxItemSet* pItemSet )
-{
-    ApplyFlags( pItemSet );
-}
-
-void ItemConnectionBase::DoReset( const SfxItemSet* pItemSet )
-{
-    Reset( pItemSet );
-}
-
-bool ItemConnectionBase::DoFillItemSet( SfxItemSet& rDestSet, const SfxItemSet& rOldSet )
-{
-    return FillItemSet( rDestSet, rOldSet );
-}
-
-TriState ItemConnectionBase::GetShowState( bool bKnown ) const
-{
-    return lclConvertToTriState( bKnown, bool(mnFlags & ItemConnFlags::HideUnknown) );
 }
 
 
