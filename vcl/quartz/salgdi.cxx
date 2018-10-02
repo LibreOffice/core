@@ -404,6 +404,14 @@ bool AquaSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangl
 
 void AquaSalGraphics::DrawTextLayout(const CommonSalLayout& rLayout)
 {
+#ifdef IOS
+    if (!CheckContext())
+    {
+        SAL_WARN("vcl.cg", "AquaSalGraphics::DrawTextLayout() without context");
+        return;
+    }
+#endif
+
     const CoreTextStyle& rStyle = rLayout.getFontData();
     const FontSelectPattern& rFontSelect = rStyle.maFontSelData;
     if (rFontSelect.mnHeight == 0)
