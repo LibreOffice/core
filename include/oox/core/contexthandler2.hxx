@@ -231,8 +231,8 @@ public:
 
     ContextHandler2(ContextHandler2 const &) = default;
     ContextHandler2(ContextHandler2 &&) = default;
-    ContextHandler2 & operator =(ContextHandler2 const &) = default;
-    ContextHandler2 & operator =(ContextHandler2 &&) = default;
+    ContextHandler2 & operator =(ContextHandler2 const &) = delete; // due to ContextHandler
+    ContextHandler2 & operator =(ContextHandler2 &&) = delete; // due to ContextHandler
 
     // resolve ambiguity from base classes
     virtual void SAL_CALL acquire() throw() override { ContextHandler::acquire(); }

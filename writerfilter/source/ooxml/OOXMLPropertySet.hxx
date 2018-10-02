@@ -103,8 +103,8 @@ public:
 
     OOXMLBooleanValue(OOXMLBooleanValue const &) = default;
     OOXMLBooleanValue(OOXMLBooleanValue &&) = default;
-    OOXMLBooleanValue & operator =(OOXMLBooleanValue const &) = default;
-    OOXMLBooleanValue & operator =(OOXMLBooleanValue &&) = default;
+    OOXMLBooleanValue & operator =(OOXMLBooleanValue const &) = delete; // due to const mbValue
+    OOXMLBooleanValue & operator =(OOXMLBooleanValue &&) = delete; // due to const mbValue
 
     virtual int getInt() const override;
     virtual css::uno::Any getAny() const override;
@@ -123,8 +123,8 @@ public:
 
     OOXMLStringValue(OOXMLStringValue const &) = default;
     OOXMLStringValue(OOXMLStringValue &&) = default;
-    OOXMLStringValue & operator =(OOXMLStringValue const &) = default;
-    OOXMLStringValue & operator =(OOXMLStringValue &&) = default;
+    OOXMLStringValue & operator =(OOXMLStringValue const &) = delete; // due to const mStr
+    OOXMLStringValue & operator =(OOXMLStringValue &&) = delete; // due to const mStr
 
     virtual css::uno::Any getAny() const override;
     virtual OUString getString() const override;
@@ -212,8 +212,8 @@ public:
 
     OOXMLPropertySetValue(OOXMLPropertySetValue const &) = default;
     OOXMLPropertySetValue(OOXMLPropertySetValue &&) = default;
-    OOXMLPropertySetValue & operator =(OOXMLPropertySetValue const &) = default;
-    OOXMLPropertySetValue & operator =(OOXMLPropertySetValue &&) = default;
+    OOXMLPropertySetValue & operator =(OOXMLPropertySetValue const &) = delete; // due to const mpPropertySet
+    OOXMLPropertySetValue & operator =(OOXMLPropertySetValue &&) = delete; // due to const mpPropertySet
 
     virtual writerfilter::Reference<Properties>::Pointer_t getProperties() override;
 #ifdef DEBUG_WRITERFILTER
@@ -232,8 +232,8 @@ public:
 
     OOXMLIntegerValue(OOXMLIntegerValue const &) = default;
     OOXMLIntegerValue(OOXMLIntegerValue &&) = default;
-    OOXMLIntegerValue & operator =(OOXMLIntegerValue const &) = default;
-    OOXMLIntegerValue & operator =(OOXMLIntegerValue &&) = default;
+    OOXMLIntegerValue & operator =(OOXMLIntegerValue const &) = delete; // due to const mnValue
+    OOXMLIntegerValue & operator =(OOXMLIntegerValue &&) = delete; // due to const mnValue
 
     virtual int getInt() const override;
     virtual css::uno::Any getAny() const override;

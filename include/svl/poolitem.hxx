@@ -255,8 +255,8 @@ public:
 
     SfxVoidItem(SfxVoidItem const &) = default;
     SfxVoidItem(SfxVoidItem &&) = default;
-    SfxVoidItem & operator =(SfxVoidItem const &) = default;
-    SfxVoidItem & operator =(SfxVoidItem &&) = default;
+    SfxVoidItem & operator =(SfxVoidItem const &) = delete; // due to SfxPoolItem
+    SfxVoidItem & operator =(SfxVoidItem &&) = delete; // due to SfxPoolItem
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
 

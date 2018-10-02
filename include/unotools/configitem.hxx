@@ -167,8 +167,8 @@ namespace utl
 
             ConfigItem(ConfigItem const &) = default;
             ConfigItem(ConfigItem &&) = default;
-            ConfigItem & operator =(ConfigItem const &) = default;
-            ConfigItem & operator =(ConfigItem &&) = default;
+            ConfigItem & operator =(ConfigItem const &) = delete; // due to const sSubTree
+            ConfigItem & operator =(ConfigItem &&) = delete; // due to const sSubTree
 
             /** is called from the ConfigManager before application ends of from the
                 PropertyChangeListener if the sub tree broadcasts changes. */

@@ -38,8 +38,8 @@ public:
 
     SvxTwoLinesItem(SvxTwoLinesItem const &) = default;
     SvxTwoLinesItem(SvxTwoLinesItem &&) = default;
-    SvxTwoLinesItem & operator =(SvxTwoLinesItem const &) = default;
-    SvxTwoLinesItem & operator =(SvxTwoLinesItem &&) = default;
+    SvxTwoLinesItem & operator =(SvxTwoLinesItem const &) = delete; // due to SfxPoolItem
+    SvxTwoLinesItem & operator =(SvxTwoLinesItem &&) = delete; // due to SfxPoolItem
 
     // "pure virtual Methods" from SfxPoolItem
     virtual bool            operator==( const SfxPoolItem& ) const override;

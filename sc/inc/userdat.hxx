@@ -90,8 +90,8 @@ public:
 
     ScMacroInfo(ScMacroInfo const &) = default;
     ScMacroInfo(ScMacroInfo &&) = default;
-    ScMacroInfo & operator =(ScMacroInfo const &) = default;
-    ScMacroInfo & operator =(ScMacroInfo &&) = default;
+    ScMacroInfo & operator =(ScMacroInfo const &) = delete; // due to SdrObjUserData
+    ScMacroInfo & operator =(ScMacroInfo &&) = delete; // due to SdrObjUserData
 
     virtual std::unique_ptr<SdrObjUserData> Clone( SdrObject* pObj ) const override;
 

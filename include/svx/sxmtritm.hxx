@@ -31,8 +31,8 @@ public:
 
     SdrMeasureTextRota90Item(SdrMeasureTextRota90Item const &) = default;
     SdrMeasureTextRota90Item(SdrMeasureTextRota90Item &&) = default;
-    SdrMeasureTextRota90Item & operator =(SdrMeasureTextRota90Item const &) = default;
-    SdrMeasureTextRota90Item & operator =(SdrMeasureTextRota90Item &&) = default;
+    SdrMeasureTextRota90Item & operator =(SdrMeasureTextRota90Item const &) = delete; // due to SdrYesNoItem
+    SdrMeasureTextRota90Item & operator =(SdrMeasureTextRota90Item &&) = delete; // due to SdrYesNoItem
 };
 
 // Turn the calculated TextRect through 180 deg
@@ -45,8 +45,8 @@ public:
 
     SdrMeasureTextUpsideDownItem(SdrMeasureTextUpsideDownItem const &) = default;
     SdrMeasureTextUpsideDownItem(SdrMeasureTextUpsideDownItem &&) = default;
-    SdrMeasureTextUpsideDownItem & operator =(SdrMeasureTextUpsideDownItem const &) = default;
-    SdrMeasureTextUpsideDownItem & operator =(SdrMeasureTextUpsideDownItem &&) = default;
+    SdrMeasureTextUpsideDownItem & operator =(SdrMeasureTextUpsideDownItem const &) = delete; // due to SdrYesNoItem
+    SdrMeasureTextUpsideDownItem & operator =(SdrMeasureTextUpsideDownItem &&) = delete; // due to SdrYesNoItem
 };
 
 #endif

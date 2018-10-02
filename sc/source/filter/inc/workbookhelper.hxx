@@ -106,8 +106,8 @@ public:
 
     WorkbookHelper(WorkbookHelper const &) = default;
     WorkbookHelper(WorkbookHelper &&) = default;
-    WorkbookHelper & operator =(WorkbookHelper const &) = default;
-    WorkbookHelper & operator =(WorkbookHelper &&) = default;
+    WorkbookHelper & operator =(WorkbookHelper const &) = delete; // due to mrBookGlob
+    WorkbookHelper & operator =(WorkbookHelper &&) = delete; // due to mrBookGlob
 
     static WorkbookGlobalsRef constructGlobals( ExcelFilter& rFilter );
 

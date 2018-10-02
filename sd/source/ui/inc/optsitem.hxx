@@ -50,8 +50,8 @@ public:
 
     SdOptionsItem(SdOptionsItem const &) = default;
     SdOptionsItem(SdOptionsItem &&) = default;
-    SdOptionsItem & operator =(SdOptionsItem const &) = default;
-    SdOptionsItem & operator =(SdOptionsItem &&) = default;
+    SdOptionsItem & operator =(SdOptionsItem const &) = delete; // due to ConfigItem
+    SdOptionsItem & operator =(SdOptionsItem &&) = delete; // due to ConfigItem
 
     virtual void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
 

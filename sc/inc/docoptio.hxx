@@ -142,8 +142,8 @@ public:
 
     ScTpCalcItem(ScTpCalcItem const &) = default;
     ScTpCalcItem(ScTpCalcItem &&) = default;
-    ScTpCalcItem & operator =(ScTpCalcItem const &) = default;
-    ScTpCalcItem & operator =(ScTpCalcItem &&) = default;
+    ScTpCalcItem & operator =(ScTpCalcItem const &) = delete; // due to SfxPoolItem
+    ScTpCalcItem & operator =(ScTpCalcItem &&) = delete; // due to SfxPoolItem
 
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;

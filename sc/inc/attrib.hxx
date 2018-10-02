@@ -89,8 +89,8 @@ public:
 
     ScMergeFlagAttr(ScMergeFlagAttr const &) = default;
     ScMergeFlagAttr(ScMergeFlagAttr &&) = default;
-    ScMergeFlagAttr & operator =(ScMergeFlagAttr const &) = default;
-    ScMergeFlagAttr & operator =(ScMergeFlagAttr &&) = default;
+    ScMergeFlagAttr & operator =(ScMergeFlagAttr const &) = delete; // due to SfxInt16Item
+    ScMergeFlagAttr & operator =(ScMergeFlagAttr &&) = delete; // due to SfxInt16Item
 
     SfxPoolItem * Clone(SfxItemPool * pPool = nullptr) const override;
 
@@ -201,8 +201,8 @@ public:
 
     ScViewObjectModeItem(ScViewObjectModeItem const &) = default;
     ScViewObjectModeItem(ScViewObjectModeItem &&) = default;
-    ScViewObjectModeItem & operator =(ScViewObjectModeItem const &) = default;
-    ScViewObjectModeItem & operator =(ScViewObjectModeItem &&) = default;
+    ScViewObjectModeItem & operator =(ScViewObjectModeItem const &) = delete; // due to SfxEnumItem<ScVObjMode>
+    ScViewObjectModeItem & operator =(ScViewObjectModeItem &&) = delete; // due to SfxEnumItem<ScVObjMode>
 
     virtual sal_uInt16          GetValueCount() const override;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = nullptr ) const override;
@@ -246,8 +246,8 @@ public:
 
     ScPageScaleToItem(ScPageScaleToItem const &) = default;
     ScPageScaleToItem(ScPageScaleToItem &&) = default;
-    ScPageScaleToItem & operator =(ScPageScaleToItem const &) = default;
-    ScPageScaleToItem & operator =(ScPageScaleToItem &&) = default;
+    ScPageScaleToItem & operator =(ScPageScaleToItem const &) = delete; // due to SfxPoolItem
+    ScPageScaleToItem & operator =(ScPageScaleToItem &&) = delete; // due to SfxPoolItem
 
     virtual ScPageScaleToItem*  Clone( SfxItemPool* = nullptr ) const override;
 

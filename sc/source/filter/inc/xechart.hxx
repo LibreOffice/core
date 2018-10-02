@@ -85,8 +85,8 @@ public:
 
     XclExpChRoot(XclExpChRoot const &) = default;
     XclExpChRoot(XclExpChRoot &&) = default;
-    XclExpChRoot & operator =(XclExpChRoot const &) = default;
-    XclExpChRoot & operator =(XclExpChRoot &&) = default;
+    XclExpChRoot & operator =(XclExpChRoot const &) = delete; // due to XclExpRoot
+    XclExpChRoot & operator =(XclExpChRoot &&) = delete; // due to XclExpRoot
 
     /** Returns this root instance - for code readability in derived classes. */
     const XclExpChRoot& GetChRoot() const { return *this; }

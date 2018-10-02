@@ -222,8 +222,8 @@ public:
 
     ScCellTextCursor(ScCellTextCursor const &) = default;
     ScCellTextCursor(ScCellTextCursor &&) = default;
-    ScCellTextCursor & operator =(ScCellTextCursor const &) = default;
-    ScCellTextCursor & operator =(ScCellTextCursor &&) = default;
+    ScCellTextCursor & operator =(ScCellTextCursor const &) = delete; // due to SvxUnoTextCursor
+    ScCellTextCursor & operator =(ScCellTextCursor &&) = delete; // due to SvxUnoTextCursor
 
     ScCellObj&              GetCellObj() const  { return *mxTextObj; }
 
@@ -253,8 +253,8 @@ public:
 
     ScHeaderFooterTextCursor(ScHeaderFooterTextCursor const &) = default;
     ScHeaderFooterTextCursor(ScHeaderFooterTextCursor &&) = default;
-    ScHeaderFooterTextCursor & operator =(ScHeaderFooterTextCursor const &) = default;
-    ScHeaderFooterTextCursor & operator =(ScHeaderFooterTextCursor &&) = default;
+    ScHeaderFooterTextCursor & operator =(ScHeaderFooterTextCursor const &) = delete; // due to SvxUnoTextCursor
+    ScHeaderFooterTextCursor & operator =(ScHeaderFooterTextCursor &&) = delete; // due to SvxUnoTextCursor
 
                             // SvxUnoTextCursor methods reimplemented here:
     virtual css::uno::Reference< css::text::XText > SAL_CALL
@@ -283,8 +283,8 @@ public:
 
     ScDrawTextCursor(ScDrawTextCursor const &) = default;
     ScDrawTextCursor(ScDrawTextCursor &&) = default;
-    ScDrawTextCursor & operator =(ScDrawTextCursor const &) = default;
-    ScDrawTextCursor & operator =(ScDrawTextCursor &&) = default;
+    ScDrawTextCursor & operator =(ScDrawTextCursor const &) = delete; // due to SvxUnoTextCursor
+    ScDrawTextCursor & operator =(ScDrawTextCursor &&) = delete; // due to SvxUnoTextCursor
 
                             // SvxUnoTextCursor methods reimplemented here:
     virtual css::uno::Reference< css::text::XText > SAL_CALL

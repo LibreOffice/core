@@ -172,8 +172,8 @@ public:
 
     UnoMultiPageModel(UnoMultiPageModel const &) = default;
     UnoMultiPageModel(UnoMultiPageModel &&) = default;
-    UnoMultiPageModel & operator =(UnoMultiPageModel const &) = default;
-    UnoMultiPageModel & operator =(UnoMultiPageModel &&) = default;
+    UnoMultiPageModel & operator =(UnoMultiPageModel const &) = delete; // due to ControlModelContainerBase
+    UnoMultiPageModel & operator =(UnoMultiPageModel &&) = delete; // due to ControlModelContainerBase
 
     rtl::Reference<UnoControlModel> Clone() const override;
 
@@ -251,8 +251,8 @@ public:
 
     UnoPageModel(UnoPageModel const &) = default;
     UnoPageModel(UnoPageModel &&) = default;
-    UnoPageModel & operator =(UnoPageModel const &) = default;
-    UnoPageModel & operator =(UnoPageModel &&) = default;
+    UnoPageModel & operator =(UnoPageModel const &) = delete; // due to ControlModelContainerBase
+    UnoPageModel & operator =(UnoPageModel &&) = delete; // due to ControlModelContainerBase
 
     rtl::Reference<UnoControlModel> Clone() const override;
 
@@ -289,8 +289,8 @@ public:
 
     UnoFrameModel(UnoFrameModel const &) = default;
     UnoFrameModel(UnoFrameModel &&) = default;
-    UnoFrameModel & operator =(UnoFrameModel const &) = default;
-    UnoFrameModel & operator =(UnoFrameModel &&) = default;
+    UnoFrameModel & operator =(UnoFrameModel const &) = delete; // due to ControlModelContainerBase
+    UnoFrameModel & operator =(UnoFrameModel &&) = delete; // due to ControlModelContainerBase
 
     rtl::Reference<UnoControlModel> Clone() const override;
 

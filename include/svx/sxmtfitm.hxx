@@ -35,8 +35,8 @@ public:
 
     SdrMeasureTextIsFixedAngleItem(SdrMeasureTextIsFixedAngleItem const &) = default;
     SdrMeasureTextIsFixedAngleItem(SdrMeasureTextIsFixedAngleItem &&) = default;
-    SdrMeasureTextIsFixedAngleItem & operator =(SdrMeasureTextIsFixedAngleItem const &) = default;
-    SdrMeasureTextIsFixedAngleItem & operator =(SdrMeasureTextIsFixedAngleItem &&) = default;
+    SdrMeasureTextIsFixedAngleItem & operator =(SdrMeasureTextIsFixedAngleItem const &) = delete; // due to SdrYesNoItem
+    SdrMeasureTextIsFixedAngleItem & operator =(SdrMeasureTextIsFixedAngleItem &&) = delete; // due to SdrYesNoItem
 };
 
 //Angle of the text in 1/100deg. 0=horizontal; read from left to right. (n.i.)
@@ -48,8 +48,8 @@ public:
 
     SdrMeasureTextFixedAngleItem(SdrMeasureTextFixedAngleItem const &) = default;
     SdrMeasureTextFixedAngleItem(SdrMeasureTextFixedAngleItem &&) = default;
-    SdrMeasureTextFixedAngleItem & operator =(SdrMeasureTextFixedAngleItem const &) = default;
-    SdrMeasureTextFixedAngleItem & operator =(SdrMeasureTextFixedAngleItem &&) = default;
+    SdrMeasureTextFixedAngleItem & operator =(SdrMeasureTextFixedAngleItem const &) = delete; // due to SdrAngleItem
+    SdrMeasureTextFixedAngleItem & operator =(SdrMeasureTextFixedAngleItem &&) = delete; // due to SdrAngleItem
 };
 
 // The decimal places used for the measure value
@@ -61,8 +61,8 @@ public:
 
     SdrMeasureDecimalPlacesItem(SdrMeasureDecimalPlacesItem const &) = default;
     SdrMeasureDecimalPlacesItem(SdrMeasureDecimalPlacesItem &&) = default;
-    SdrMeasureDecimalPlacesItem & operator =(SdrMeasureDecimalPlacesItem const &) = default;
-    SdrMeasureDecimalPlacesItem & operator =(SdrMeasureDecimalPlacesItem &&) = default;
+    SdrMeasureDecimalPlacesItem & operator =(SdrMeasureDecimalPlacesItem const &) = delete; // due to SfxInt16Item
+    SdrMeasureDecimalPlacesItem & operator =(SdrMeasureDecimalPlacesItem &&) = delete; // due to SfxInt16Item
 };
 
 #endif

@@ -38,8 +38,8 @@ public:
 
     SfxIntegerListItem(SfxIntegerListItem const &) = default;
     SfxIntegerListItem(SfxIntegerListItem &&) = default;
-    SfxIntegerListItem & operator =(SfxIntegerListItem const &) = default;
-    SfxIntegerListItem & operator =(SfxIntegerListItem &&) = default;
+    SfxIntegerListItem & operator =(SfxIntegerListItem const &) = delete; // due to SfxPoolItem
+    SfxIntegerListItem & operator =(SfxIntegerListItem &&) = delete; // due to SfxPoolItem
 
     const std::vector< sal_Int32 >& GetList() const { return m_aList; }
 

@@ -56,8 +56,8 @@ private:
 
             SdrCustomShapeGeometryItem(SdrCustomShapeGeometryItem const &) = default;
             SdrCustomShapeGeometryItem(SdrCustomShapeGeometryItem &&) = default;
-            SdrCustomShapeGeometryItem & operator =(SdrCustomShapeGeometryItem const &) = default;
-            SdrCustomShapeGeometryItem & operator =(SdrCustomShapeGeometryItem &&) = default;
+            SdrCustomShapeGeometryItem & operator =(SdrCustomShapeGeometryItem const &) = delete; // due to SfxPoolItem
+            SdrCustomShapeGeometryItem & operator =(SdrCustomShapeGeometryItem &&) = delete; // due to SfxPoolItem
 
             virtual bool                operator==( const SfxPoolItem& ) const override;
             virtual bool GetPresentation(SfxItemPresentation ePresentation,
