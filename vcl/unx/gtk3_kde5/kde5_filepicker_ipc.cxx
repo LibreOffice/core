@@ -27,7 +27,6 @@
 
 #include <iostream>
 
-#include "filepicker_ipc_commands.hxx"
 #include "kde5_filepicker.hxx"
 
 #include <rtl/ustring.h>
@@ -53,49 +52,180 @@ static void sendIpcArg(std::ostream& stream, const QStringList& list)
     }
 }
 
-FilePickerIpc::FilePickerIpc(KDE5FilePicker* filePicker, QObject* parent)
-    : QObject(parent)
-    , m_filePicker(filePicker)
-    , m_stdinNotifier(new QSocketNotifier(fileno(stdin), QSocketNotifier::Read, this))
+void readCommandArgs(Commands command, QList<QVariant>& args)
 {
-    connect(m_stdinNotifier, &QSocketNotifier::activated, this, &FilePickerIpc::readCommands);
-}
-
-FilePickerIpc::~FilePickerIpc() = default;
-
-void FilePickerIpc::readCommands()
-{
-    // don't trigger again, loop runs until all is done
-    disconnect(m_stdinNotifier, &QSocketNotifier::activated, this, &FilePickerIpc::readCommands);
-
-    while (readCommand())
-    {
-        // read next command
-    }
-}
-
-bool FilePickerIpc::readCommand()
-{
-    if (std::cin.eof())
-        return false;
-
-    uint64_t messageId = 0;
-    Commands command;
-    readIpcArgs(std::cin, messageId, command);
-
     switch (command)
     {
         case Commands::SetTitle:
         {
             QString title;
             readIpcArgs(std::cin, title);
-            m_filePicker->setTitle(title);
-            return true;
+            args.append(title);
+            break;
         }
         case Commands::SetWinId:
         {
             sal_uIntPtr winId = 0;
             readIpcArgs(std::cin, winId);
+            QVariant aWinIdVariant;
+            aWinIdVariant.setValue(winId);
+            args.append(aWinIdVariant);
+            break;
+        }
+        case Commands::SetMultiSelectionMode:
+        {
+            bool multiSelection = false;
+            readIpcArgs(std::cin, multiSelection);
+            args.append(multiSelection);
+            break;
+        }
+        case Commands::SetDefaultName:
+        {
+            QString name;
+            readIpcArgs(std::cin, name);
+            args.append(name);
+            break;
+        }
+        case Commands::SetDisplayDirectory:
+        {
+            QString dir;
+            readIpcArgs(std::cin, dir);
+            args.append(dir);
+            break;
+        }
+        case Commands::AppendFilter:
+        {
+            QString title, filter;
+            readIpcArgs(std::cin, title, filter);
+            args.append(title);
+            args.append(filter);
+            break;
+        }
+        case Commands::SetCurrentFilter:
+        {
+            QString title;
+            readIpcArgs(std::cin, title);
+            args.append(title);
+            break;
+        }
+        case Commands::SetValue:
+        {
+            sal_Int16 controlId = 0;
+            sal_Int16 nControlAction = 0;
+            bool value = false;
+            readIpcArgs(std::cin, controlId, nControlAction, value);
+            args.append(controlId);
+            args.append(nControlAction);
+            args.append(value);
+            break;
+        }
+        case Commands::GetValue:
+        {
+            sal_Int16 controlId = 0;
+            sal_Int16 nControlAction = 0;
+            readIpcArgs(std::cin, controlId, nControlAction);
+            args.append(controlId);
+            args.append(nControlAction);
+            break;
+        }
+        case Commands::EnableControl:
+        {
+            sal_Int16 controlId = 0;
+            bool enabled = false;
+            readIpcArgs(std::cin, controlId, enabled);
+            args.append(controlId);
+            args.append(enabled);
+            break;
+        }
+        case Commands::SetLabel:
+        {
+            sal_Int16 controlId = 0;
+            QString label;
+            readIpcArgs(std::cin, controlId, label);
+            args.append(controlId);
+            args.append(label);
+            break;
+        }
+        case Commands::GetLabel:
+        {
+            sal_Int16 controlId = 0;
+            readIpcArgs(std::cin, controlId);
+            args.append(controlId);
+            break;
+        }
+        case Commands::AddCheckBox:
+        {
+            sal_Int16 controlId = 0;
+            bool hidden = false;
+            QString label;
+            readIpcArgs(std::cin, controlId, hidden, label);
+            args.append(controlId);
+            args.append(hidden);
+            args.append(label);
+            break;
+        }
+        case Commands::Initialize:
+        {
+            bool saveDialog = false;
+            readIpcArgs(std::cin, saveDialog);
+            args.append(saveDialog);
+            break;
+        }
+        default:
+        {
+            // no extra parameters/arguments
+            break;
+        }
+    };
+}
+
+void readCommands(FilePickerIpc* ipc)
+{
+    while (!std::cin.eof())
+    {
+        uint64_t messageId = 0;
+        Commands command;
+        readIpcArgs(std::cin, messageId, command);
+
+        // retrieve additional command-specific arguments
+        QList<QVariant> args;
+        readCommandArgs(command, args);
+
+        emit ipc->commandReceived(messageId, command, args);
+    }
+}
+
+FilePickerIpc::FilePickerIpc(KDE5FilePicker* filePicker, QObject* parent)
+    : QObject(parent)
+    , m_filePicker(filePicker)
+{
+    // required to be able to pass those via signal/slot
+    qRegisterMetaType<uint64_t>("uint64_t");
+    qRegisterMetaType<Commands>("Commands");
+
+    connect(this, &FilePickerIpc::commandReceived, this, &FilePickerIpc::handleCommand);
+
+    // read IPC commands and their args in a separate thread, so this does not block everything else;
+    // 'commandReceived' signal is emitted every time a command and its args have been read;
+    // thread will run until the filepicker process is terminated
+    m_ipcReaderThread = std::unique_ptr<std::thread>{ new std::thread(readCommands, this) };
+}
+
+FilePickerIpc::~FilePickerIpc() = default;
+
+bool FilePickerIpc::handleCommand(uint64_t messageId, Commands command, QList<QVariant> args)
+{
+    switch (command)
+    {
+        case Commands::SetTitle:
+        {
+            QString title = args.takeFirst().toString();
+            m_filePicker->setTitle(title);
+            return true;
+        }
+        case Commands::SetWinId:
+        {
+            sal_uIntPtr winId = args.takeFirst().value<sal_uIntPtr>();
             m_filePicker->setWinId(winId);
             return true;
         }
@@ -106,22 +236,19 @@ bool FilePickerIpc::readCommand()
         }
         case Commands::SetMultiSelectionMode:
         {
-            bool multiSelection = false;
-            readIpcArgs(std::cin, multiSelection);
+            bool multiSelection = args.takeFirst().toBool();
             m_filePicker->setMultiSelectionMode(multiSelection);
             return true;
         }
         case Commands::SetDefaultName:
         {
-            QString name;
-            readIpcArgs(std::cin, name);
+            QString name = args.takeFirst().toString();
             m_filePicker->setDefaultName(name);
             return true;
         }
         case Commands::SetDisplayDirectory:
         {
-            QString dir;
-            readIpcArgs(std::cin, dir);
+            QString dir = args.takeFirst().toString();
             m_filePicker->setDisplayDirectory(dir);
             return true;
         }
@@ -155,15 +282,14 @@ bool FilePickerIpc::readCommand()
         }
         case Commands::AppendFilter:
         {
-            QString title, filter;
-            readIpcArgs(std::cin, title, filter);
+            QString title = args.takeFirst().toString();
+            QString filter = args.takeFirst().toString();
             m_filePicker->appendFilter(title, filter);
             return true;
         }
         case Commands::SetCurrentFilter:
         {
-            QString title;
-            readIpcArgs(std::cin, title);
+            QString title = args.takeFirst().toString();
             m_filePicker->setCurrentFilter(title);
             return true;
         }
@@ -174,57 +300,50 @@ bool FilePickerIpc::readCommand()
         }
         case Commands::SetValue:
         {
-            sal_Int16 controlId = 0;
-            sal_Int16 nControlAction = 0;
-            bool value = false;
-            readIpcArgs(std::cin, controlId, nControlAction, value);
+            sal_Int16 controlId = args.takeFirst().value<sal_Int16>();
+            sal_Int16 nControlAction = args.takeFirst().value<sal_Int16>();
+            bool value = args.takeFirst().toBool();
             m_filePicker->setValue(controlId, nControlAction, value);
             return true;
         }
         case Commands::GetValue:
         {
-            sal_Int16 controlId = 0;
-            sal_Int16 nControlAction = 0;
-            readIpcArgs(std::cin, controlId, nControlAction);
+            sal_Int16 controlId = args.takeFirst().value<sal_Int16>();
+            sal_Int16 nControlAction = args.takeFirst().value<sal_Int16>();
             sendIpcArgs(std::cout, messageId, m_filePicker->getValue(controlId, nControlAction));
             return true;
         }
         case Commands::EnableControl:
         {
-            sal_Int16 controlId = 0;
-            bool enabled = false;
-            readIpcArgs(std::cin, controlId, enabled);
+            sal_Int16 controlId = args.takeFirst().value<sal_Int16>();
+            bool enabled = args.takeFirst().toBool();
             m_filePicker->enableControl(controlId, enabled);
             return true;
         }
         case Commands::SetLabel:
         {
-            sal_Int16 controlId = 0;
-            QString label;
-            readIpcArgs(std::cin, controlId, label);
+            sal_Int16 controlId = args.takeFirst().value<sal_Int16>();
+            QString label = args.takeFirst().toString();
             m_filePicker->setLabel(controlId, label);
             return true;
         }
         case Commands::GetLabel:
         {
-            sal_Int16 controlId = 0;
-            readIpcArgs(std::cin, controlId);
+            sal_Int16 controlId = args.takeFirst().value<sal_Int16>();
             sendIpcArgs(std::cout, messageId, m_filePicker->getLabel(controlId));
             return true;
         }
         case Commands::AddCheckBox:
         {
-            sal_Int16 controlId = 0;
-            bool hidden = false;
-            QString label;
-            readIpcArgs(std::cin, controlId, hidden, label);
+            sal_Int16 controlId = args.takeFirst().value<sal_Int16>();
+            bool hidden = args.takeFirst().toBool();
+            QString label = args.takeFirst().toString();
             m_filePicker->addCheckBox(controlId, label, hidden);
             return true;
         }
         case Commands::Initialize:
         {
-            bool saveDialog = false;
-            readIpcArgs(std::cin, saveDialog);
+            bool saveDialog = args.takeFirst().toBool();
             m_filePicker->initialize(saveDialog);
             return true;
         }

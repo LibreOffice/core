@@ -19,7 +19,12 @@
 
 #pragma once
 
+#include <memory>
+#include <thread>
+
 #include <QObject>
+
+#include "filepicker_ipc_commands.hxx"
 
 class KDE5FilePicker;
 class WinIdEmbedder;
@@ -32,14 +37,15 @@ public:
     explicit FilePickerIpc(KDE5FilePicker* filePicker, QObject* parent = nullptr);
     ~FilePickerIpc() override;
 
-private Q_SLOTS:
-    void readCommands();
-
 private:
-    bool readCommand();
-
     KDE5FilePicker* m_filePicker = nullptr;
-    QSocketNotifier* m_stdinNotifier = nullptr;
+    std::unique_ptr<std::thread> m_ipcReaderThread;
+
+private Q_SLOTS:
+    bool handleCommand(uint64_t messageId, Commands command, QList<QVariant> args);
+
+Q_SIGNALS:
+    bool commandReceived(uint64_t messageId, Commands command, QList<QVariant> args);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
