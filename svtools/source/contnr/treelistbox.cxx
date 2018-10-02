@@ -2408,11 +2408,6 @@ Point SvTreeListBox::GetEntryPosition( SvTreeListEntry* pEntry ) const
     return pImpl->GetEntryPosition( pEntry );
 }
 
-void SvTreeListBox::ShowEntry( SvTreeListEntry* pEntry )
-{
-    MakeVisible( pEntry );
-}
-
 void SvTreeListBox::MakeVisible( SvTreeListEntry* pEntry )
 {
     pImpl->MakeVisible(pEntry);

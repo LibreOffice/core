@@ -142,10 +142,6 @@ public:
     explicit     ControlWrapperBase() {}
     virtual             ~ControlWrapperBase();
 
-    /** Derived classes enable, disable, show, or hide control(s).
-        @descr  Will do nothing, if the corresponding parameter is TRISTATE_INDET. */
-    virtual void        ModifyControl( TriState eShow ) = 0;
-
 private:
                         ControlWrapperBase( const ControlWrapperBase& ) = delete;
     ControlWrapperBase& operator=( const ControlWrapperBase& ) = delete;
@@ -183,10 +179,6 @@ public:
     /** Returns a reference to the control this connection works on. */
     ControlT&    GetControl() { return mrControl; }
 
-    /** Enables, disables, shows, or hides the control.
-        @descr  Does nothing, if the corresponding parameter is TRISTATE_INDET. */
-    virtual void        ModifyControl( TriState eShow ) override;
-
     /** Derived classes return the value the control contains. */
     virtual ValueT      GetControlValue() const = 0;
     /** Derived classes set the contents of the control to the passed value. */
@@ -194,23 +186,6 @@ public:
 
 private:
     ControlT&           mrControl;  /// The control of this wrapper.
-};
-
-
-/** A dummy wrapper for a VCL Window that does nothing special.
-
-    This wrapper is used to implement the DummyItemConnection. It does not
-    connect an item to a control, but handles the special flags to disable or
-    hide a control, if an item is unknown.
- */
-class SFX2_DLLPUBLIC DummyWindowWrapper:
-    public SingleControlWrapper< vcl::Window, void* >
-{
-public:
-    explicit            DummyWindowWrapper( vcl::Window& rWindow );
-
-    virtual void*       GetControlValue() const override;
-    virtual void        SetControlValue( void* ) override;
 };
 
 
@@ -286,14 +261,6 @@ PosT PosValueMapper< PosT, ValueT >::GetPosFromValue( ValueT nValue ) const
 
 
 // Single control wrappers
-
-
-template< typename ControlT, typename ValueT >
-inline void SingleControlWrapper< ControlT, ValueT >::ModifyControl( TriState eShow )
-{
-    if( eShow != TRISTATE_INDET )
-        mrControl.Show( eShow == TRISTATE_TRUE );
-}
 
 
 template< typename ValueT >

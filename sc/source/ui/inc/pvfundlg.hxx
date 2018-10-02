@@ -33,7 +33,7 @@
 #include <vcl/field.hxx>
 #include <vcl/weld.hxx>
 #include <svx/checklbx.hxx>
-#include <sfx2/itemconnect.hxx>
+#include <sfx2/controlwrapper.hxx>
 #include <pivot.hxx>
 
 #include <memory>

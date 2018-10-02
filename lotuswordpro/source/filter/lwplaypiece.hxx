@@ -203,7 +203,6 @@ public:
     LwpColumnInfo();
     ~LwpColumnInfo();
     void Read(LwpObjectStream *pStrm);
-    double GetWidth(){return LwpTools::ConvertFromUnitsToMetric(m_nWidth);}
     double GetGap(){return LwpTools::ConvertFromUnitsToMetric(m_nGap);}
 private:
     sal_Int32 m_nWidth;

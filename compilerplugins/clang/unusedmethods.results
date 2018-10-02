@@ -420,7 +420,7 @@ include/editeng/hyphenzoneitem.hxx:65
     _Bool SvxHyphenZoneItem::IsPageEnd() const
 include/filter/msfilter/mstoolbar.hxx:103
      Indent::Indent(_Bool)
-include/formula/opcode.hxx:520
+include/formula/opcode.hxx:518
     class std::__cxx11::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > OpCodeEnumToString(enum OpCode)
 include/formula/tokenarray.hxx:180
     class formula::FormulaTokenArrayReferencesIterator formula::FormulaTokenArrayReferencesIterator::operator++(int)
@@ -554,40 +554,30 @@ include/sfx2/charwin.hxx:63
     void SvxCharView::connect_focus_in(const class Link<class weld::Widget &, void> &)
 include/sfx2/charwin.hxx:64
     void SvxCharView::connect_focus_out(const class Link<class weld::Widget &, void> &)
-include/sfx2/controlwrapper.hxx:150
-    _Bool sfx::ControlWrapperBase::IsControlDontKnow() const
-include/sfx2/controlwrapper.hxx:152
-    void sfx::ControlWrapperBase::SetControlDontKnow(_Bool)
-include/sfx2/controlwrapper.hxx:235
-     sfx::MetricFieldWrapper::MetricFieldWrapper<ValueT>(class MetricField &,enum FieldUnit)
+include/sfx2/controlwrapper.hxx:147
+    void sfx::ControlWrapperBase::ModifyControl(enum TriState)
+include/sfx2/controlwrapper.hxx:210
+     sfx::DummyWindowWrapper::DummyWindowWrapper(class vcl::Window &)
 include/sfx2/docfilt.hxx:83
     _Bool SfxFilter::GetGpgEncryption() const
-include/sfx2/itemconnect.hxx:215
-     sfx::ItemControlConnection::ItemControlConnection<ItemWrpT, ControlWrpT>(unsigned short,type-parameter-?-? *,enum ItemConnFlags)
-include/sfx2/itemconnect.hxx:221
-     sfx::ItemControlConnection::ItemControlConnection<ItemWrpT, ControlWrpT>(unsigned short,typename type-parameter-?-?::ControlType &,enum ItemConnFlags)
-include/sfx2/itemconnect.hxx:254
-     sfx::DummyItemConnection::DummyItemConnection(unsigned short,class vcl::Window &,enum ItemConnFlags)
-include/sfx2/itemconnect.hxx:286
-     sfx::ListBoxConnection::ListBoxConnection<ItemWrpT>(unsigned short,class ListBox &,const typename ItemControlConnection<type-parameter-?-?, ListBoxWrapper<typename type-parameter-?-?::ItemValueType> >::ControlWrapperType::MapEntryType *,enum ItemConnFlags)
-include/sfx2/itemconnect.hxx:306
-     sfx::ItemConnectionArray::ItemConnectionArray()
-include/sfx2/itemconnect.hxx:311
-    void sfx::ItemConnectionArray::AddConnection(class sfx::ItemConnectionBase *)
-include/sfx2/itemwrapper.hxx:92
-     sfx::SingleItemWrapper::SingleItemWrapper<ItemT, ValueT>(unsigned short)
-include/sfx2/itemwrapper.hxx:97
-    unsigned short sfx::SingleItemWrapper::GetSlotId() const
-include/sfx2/itemwrapper.hxx:103
-    const type-parameter-?-? * sfx::SingleItemWrapper::GetUniqueItem(const class SfxItemSet &) const
-include/sfx2/itemwrapper.hxx:107
-    const type-parameter-?-? & sfx::SingleItemWrapper::GetDefaultItem(const class SfxItemSet &) const
-include/sfx2/itemwrapper.hxx:110
-    type-parameter-?-? sfx::SingleItemWrapper::GetItemValue(const type-parameter-?-? &) const
-include/sfx2/itemwrapper.hxx:112
-    void sfx::SingleItemWrapper::SetItemValue(type-parameter-?-? &,type-parameter-?-?) const
-include/sfx2/itemwrapper.hxx:133
-     sfx::ValueItemWrapper::ValueItemWrapper<ItemT, ValueT, InternalValueT>(unsigned short)
+include/sfx2/itemconnect.hxx:166
+    void sfx::ItemConnectionBase::DoApplyFlags(const class SfxItemSet *)
+include/sfx2/itemconnect.hxx:168
+    void sfx::ItemConnectionBase::DoReset(const class SfxItemSet *)
+include/sfx2/itemconnect.hxx:170
+    _Bool sfx::ItemConnectionBase::DoFillItemSet(class SfxItemSet &,const class SfxItemSet &)
+include/sfx2/itemconnect.hxx:173
+     sfx::ItemConnectionBase::ItemConnectionBase(enum ItemConnFlags)
+include/sfx2/itemconnect.hxx:183
+    enum TriState sfx::ItemConnectionBase::GetShowState(_Bool) const
+include/sfx2/itemwrapper.hxx:43
+    _Bool sfx::ItemWrapperHelper::IsKnownItem(const class SfxItemSet &,unsigned short)
+include/sfx2/itemwrapper.hxx:47
+    const class SfxPoolItem * sfx::ItemWrapperHelper::GetUniqueItem(const class SfxItemSet &,unsigned short)
+include/sfx2/itemwrapper.hxx:50
+    const class SfxPoolItem & sfx::ItemWrapperHelper::GetDefaultItem(const class SfxItemSet &,unsigned short)
+include/sfx2/itemwrapper.hxx:53
+    void sfx::ItemWrapperHelper::RemoveDefaultItem(class SfxItemSet &,const class SfxItemSet &,unsigned short)
 include/sfx2/lokcharthelper.hxx:41
     void LokChartHelper::Invalidate()
 include/sfx2/msg.hxx:120
@@ -602,6 +592,10 @@ include/svtools/ctrlbox.hxx:208
     long LineListBox::GetWidth() const
 include/svtools/dialogcontrolling.hxx:167
     void svt::ControlDependencyManager::enableOnCheckMark(class CheckBox &,class vcl::Window &,class vcl::Window &)
+include/svtools/imagemgr.hxx:124
+    class rtl::OUString SvFileInformationManager::GetFileImageId(const class INetURLObject &)
+include/svtools/treelistbox.hxx:689
+    void SvTreeListBox::ShowEntry(class SvTreeListEntry *)
 include/svx/ClassificationEditView.hxx:42
     void svx::ClassificationEditView::SetCharAttributes()
 include/svx/ClassificationEditView.hxx:48
@@ -610,20 +604,34 @@ include/svx/ClassificationField.hxx:48
     const class rtl::OUString & svx::ClassificationResult::getDisplayText() const
 include/svx/ClassificationField.hxx:53
     _Bool svx::ClassificationResult::operator==(const class svx::ClassificationResult &) const
+include/svx/dlgctrl.hxx:222
+     HatchingLB::HatchingLB(class vcl::Window *,long)
+include/svx/dlgctrl.hxx:230
+     GradientLB::GradientLB(class vcl::Window *,long)
+include/svx/dlgctrl.hxx:238
+     BitmapLB::BitmapLB(class vcl::Window *,long)
+include/svx/dlgctrl.hxx:265
+    void LineLB::setAddStandardFields(_Bool)
+include/svx/dlgctrl.hxx:267
+    void LineLB::Append(const class XDashEntry &,const class BitmapEx &)
+include/svx/dlgctrl.hxx:268
+    void LineLB::Modify(const class XDashEntry &,int,const class BitmapEx &)
+include/svx/dlgctrl.hxx:300
+    void SvxLineLB::set_sensitive(_Bool)
+include/svx/dlgctrl.hxx:301
+    _Bool SvxLineLB::get_sensitive() const
+include/svx/dlgctrl.hxx:323
+    void SvxLineEndLB::set_active_text(const class rtl::OUString &)
+include/svx/fontlb.hxx:38
+     SvLBoxFontString::SvLBoxFontString(const class rtl::OUString &,const class vcl::Font &,const class Color *)
 include/svx/framelink.hxx:201
     _Bool svx::frame::operator>(const class svx::frame::Style &,const class svx::frame::Style &)
 include/svx/framelink.hxx:238
     _Bool svx::frame::StyleVectorCombination::operator<(const class svx::frame::StyleVectorCombination &) const
-include/svx/orienthelper.hxx:86
-    void svx::OrientationHelper::EnableStackedTriState(_Bool)
 include/svx/svdlayer.hxx:75
     _Bool SdrLayer::operator==(const class SdrLayer &) const
 include/svx/svdpntv.hxx:462
     _Bool SdrPaintView::IsSwapAsynchron() const
-include/svx/svdundo.hxx:190
-     SdrUndoMoveObj::SdrUndoMoveObj(class SdrObject &)
-include/svx/svdundo.hxx:525
-     SdrUndoMoveLayer::SdrUndoMoveLayer(unsigned short,class SdrLayerAdmin &,class SdrModel &,unsigned short)
 include/svx/xpoly.hxx:82
     _Bool XPolygon::operator==(const class XPolygon &) const
 include/tools/bigint.hxx:86
@@ -798,47 +806,49 @@ include/vcl/weld.hxx:172
     class rtl::OUString weld::Notebook::get_tab_label_text(const class rtl::OString &) const
 include/vcl/weld.hxx:198
     struct SystemEnvData weld::Window::get_system_data() const
-include/vcl/weld.hxx:345
+include/vcl/weld.hxx:341
+    void weld::TreeView::append(const class rtl::OUString &,const class rtl::OUString &,class VirtualDevice &)
+include/vcl/weld.hxx:354
     void weld::TreeView::set_top_entry(int)
-include/vcl/weld.hxx:375
+include/vcl/weld.hxx:385
     void weld::TreeView::select_all()
-include/vcl/weld.hxx:503
+include/vcl/weld.hxx:520
     void weld::Entry::signal_insert_text(class rtl::OUString &)
-include/vcl/weld.hxx:515
+include/vcl/weld.hxx:532
     int weld::Entry::get_position() const
-include/vcl/weld.hxx:575
+include/vcl/weld.hxx:592
     int weld::SpinButton::get_min() const
-include/vcl/weld.hxx:835
+include/vcl/weld.hxx:857
     class Size weld::MetricSpinButton::get_size_request() const
-include/vcl/weld.hxx:846
+include/vcl/weld.hxx:868
     void weld::MetricSpinButton::set_position(int)
-include/vcl/weld.hxx:893
+include/vcl/weld.hxx:915
     _Bool weld::TimeSpinButton::get_sensitive() const
-include/vcl/weld.hxx:894
+include/vcl/weld.hxx:916
     _Bool weld::TimeSpinButton::get_visible() const
-include/vcl/weld.hxx:895
+include/vcl/weld.hxx:917
     void weld::TimeSpinButton::grab_focus()
-include/vcl/weld.hxx:896
+include/vcl/weld.hxx:918
     _Bool weld::TimeSpinButton::has_focus() const
-include/vcl/weld.hxx:897
+include/vcl/weld.hxx:919
     void weld::TimeSpinButton::show(_Bool)
-include/vcl/weld.hxx:898
+include/vcl/weld.hxx:920
     void weld::TimeSpinButton::hide()
-include/vcl/weld.hxx:899
+include/vcl/weld.hxx:921
     void weld::TimeSpinButton::save_value()
-include/vcl/weld.hxx:900
+include/vcl/weld.hxx:922
     _Bool weld::TimeSpinButton::get_value_changed_from_saved() const
-include/vcl/weld.hxx:991
+include/vcl/weld.hxx:1013
     void weld::DrawingArea::connect_key_release(const class Link<const class KeyEvent &, _Bool> &)
-include/vcl/weld.hxx:1017
-    void weld::Menu::set_sensitive(const class rtl::OString &,_Bool)
-include/vcl/weld.hxx:1018
+include/vcl/weld.hxx:1040
     void weld::Menu::set_active(const class rtl::OString &,_Bool)
-include/vcl/weld.hxx:1027
+include/vcl/weld.hxx:1050
+    void weld::Menu::append(const class rtl::OUString &,const class rtl::OUString &,const class rtl::OUString &)
+include/vcl/weld.hxx:1066
     void weld::SizeGroup::set_mode(enum VclSizeGroupMode)
-include/vcl/weld.hxx:1049
+include/vcl/weld.hxx:1088
     class std::unique_ptr<class weld::Window, struct std::default_delete<class weld::Window> > weld::Builder::weld_window(const class rtl::OString &,_Bool)
-include/vcl/weld.hxx:1160
+include/vcl/weld.hxx:1199
     class rtl::OUString weld::MessageDialogController::get_primary_text() const
 include/vcl/window.hxx:430
     const char * ImplDbgCheckWindow(const void *)
@@ -846,8 +856,8 @@ include/vcl/window.hxx:1239
     class Size vcl::Window::PaintActiveFloatingWindow(class VirtualDevice &) const
 libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.hxx:35
     void openLokDialog(struct _GtkWidget *,void *)
-lotuswordpro/source/filter/lwplaypiece.hxx:219
-    double LwpLayoutColumns::GetColWidth(unsigned short)
+lotuswordpro/source/filter/lwplaypiece.hxx:206
+    double LwpColumnInfo::GetWidth()
 o3tl/qa/cow_wrapper_clients.hxx:140
     _Bool o3tltests::cow_wrapper_client4::operator==(const class o3tltests::cow_wrapper_client4 &) const
 o3tl/qa/cow_wrapper_clients.hxx:141
@@ -872,8 +882,6 @@ sc/inc/datamapper.hxx:85
     void sc::ExternalDataSource::setURL(const class rtl::OUString &)
 sc/inc/datamapper.hxx:86
     void sc::ExternalDataSource::setProvider(const class rtl::OUString &)
-sc/inc/documentlinkmgr.hxx:65
-    void sc::DocumentLinkManager::disconnectDdeLinks()
 sc/inc/dpfilteredcache.hxx:143
     void ScDPFilteredCache::dump() const
 sc/inc/formulacell.hxx:460
@@ -970,7 +978,7 @@ sc/source/ui/inc/viewdata.hxx:407
     long ScViewData::GetLOKDocHeightPixel() const
 sc/source/ui/inc/viewdata.hxx:540
     _Bool ScViewData::IsGridMode() const
-scaddins/source/analysis/analysishelper.hxx:818
+scaddins/source/analysis/analysishelper.hxx:819
     _Bool sca::analysis::ScaDate::operator>=(const class sca::analysis::ScaDate &) const
 sccomp/source/solver/DifferentialEvolution.hxx:67
     int DifferentialEvolutionAlgorithm::getLastChange()
@@ -1034,10 +1042,6 @@ slideshow/source/engine/animationfactory.cxx:548
     typename type-parameter-?-?::ValueType slideshow::internal::(anonymous namespace)::GenericAnimation::getUnderlyingValue() const
 slideshow/source/engine/opengl/TransitionImpl.hxx:180
     void OGLTransitionImpl::finish(double,double,double,double,double)
-slideshow/source/inc/shapeattributelayer.hxx:380
-    _Bool slideshow::internal::ShapeAttributeLayer::isCharRotationAngleValid() const
-slideshow/source/inc/shapeattributelayer.hxx:387
-    void slideshow::internal::ShapeAttributeLayer::setCharRotationAngle(const double &)
 svgio/inc/svgstyleattributes.hxx:346
     class svgio::svgreader::SvgNumber svgio::svgreader::SvgStyleAttributes::getStrokeDashOffset() const
 svgio/inc/svgstyleattributes.hxx:370
@@ -1120,8 +1124,6 @@ sw/inc/extinput.hxx:48
     class SwExtTextInput * SwExtTextInput::GetPrev()
 sw/inc/extinput.hxx:49
     const class SwExtTextInput * SwExtTextInput::GetPrev() const
-sw/inc/fesh.hxx:538
-    void SwFEShell::BreakMark()
 sw/inc/IDocumentLinksAdministration.hxx:53
     _Bool IDocumentLinksAdministration::GetData(const class rtl::OUString &,const class rtl::OUString &,class com::sun::star::uno::Any &) const
 sw/inc/IDocumentLinksAdministration.hxx:55
@@ -1312,12 +1314,12 @@ vcl/source/fontsubset/xlat.hxx:34
     unsigned short vcl::TranslateChar15(unsigned short)
 vcl/source/fontsubset/xlat.hxx:35
     unsigned short vcl::TranslateChar16(unsigned short)
+workdir/LexTarget/l10ntools/source/cfglex.cxx:3721
+    void YYWarning(const char *)
 workdir/LexTarget/l10ntools/source/xrmlex.cxx:715
     void YYWarning()
-workdir/LexTarget/l10ntools/source/xrmlex.cxx:2211
-    void YYWarning(const char *)
-writerfilter/source/dmapper/TableData.hxx:329
-    void writerfilter::dmapper::TableData::insertCellProperties(unsigned int,class tools::SvRef<class writerfilter::dmapper::TablePropertyMap>)
+writerfilter/source/dmapper/TableData.hxx:174
+    void writerfilter::dmapper::RowData::insertCellProperties(unsigned int,class tools::SvRef<class writerfilter::dmapper::TablePropertyMap>)
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:176
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> *, class std::__cxx1998::vector<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> > > >, class std::__debug::vector<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> > > > writerfilter::ooxml::OOXMLPropertySet::begin() const
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:177

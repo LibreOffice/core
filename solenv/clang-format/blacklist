@@ -6805,8 +6805,6 @@ include/sfx2/htmlmode.hxx
 include/sfx2/infobar.hxx
 include/sfx2/inputdlg.hxx
 include/sfx2/ipclient.hxx
-include/sfx2/itemconnect.hxx
-include/sfx2/itemwrapper.hxx
 include/sfx2/linkmgr.hxx
 include/sfx2/linksrc.hxx
 include/sfx2/lnkbase.hxx

@@ -31,17 +31,6 @@ SvLBoxFontString::SvLBoxFontString()
 {
 }
 
-SvLBoxFontString::SvLBoxFontString( const OUString& rString,
-        const vcl::Font& rFont, const Color* pColor ) :
-    SvLBoxString( rString ),
-    maFont( rFont ),
-    mbUseColor( pColor != nullptr )
-{
-    SetText(rString);
-    if(pColor)
-        maFont.SetColor(*pColor);
-}
-
 SvLBoxFontString::~SvLBoxFontString()
 {
 }

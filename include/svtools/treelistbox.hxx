@@ -686,7 +686,6 @@ public:
     void            SetSpaceBetweenEntries( short nSpace );
     short           GetSpaceBetweenEntries() const {return nEntryHeightOffs;}
     Point           GetEntryPosition( SvTreeListEntry* ) const;
-    void            ShowEntry( SvTreeListEntry* );  // !!!OBSOLETE, use MakeVisible
     void            MakeVisible( SvTreeListEntry* pEntry );
     void            MakeVisible( SvTreeListEntry* pEntry, bool bMoveToTop );
 
