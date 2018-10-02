@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_b5199789",
+        "filename": "svx/source/fmcomp/gridctrl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2854,
+      "author": {
+        "id": 1001759
+      },
+      "writtenOn": "2018-10-02T14:14:51Z",
+      "side": 1,
+      "message": "that is the column id in View (user\u0027s point of view)",
+      "range": {
+        "startLine": 2854,
+        "startChar": 33,
+        "endLine": 2854,
+        "endChar": 34
+      },
+      "revId": "d0848153e00e7a7271091e37025b1d13d9ecc83f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_951e936e",
+        "filename": "svx/source/fmcomp/gridctrl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2855,
+      "author": {
+        "id": 1001759
+      },
+      "writtenOn": "2018-10-02T14:14:51Z",
+      "side": 1,
+      "message": "it needs to be computed because the column id in the View doesn\u0027t make sens anymore.(some columns are hidden now)\nif the id is not computed again. It is impossible to get the\ncontent of the cell in the column that has been chosen",
+      "range": {
+        "startLine": 2855,
+        "startChar": 54,
+        "endLine": 2855,
+        "endChar": 56
+      },
+      "revId": "d0848153e00e7a7271091e37025b1d13d9ecc83f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_f52dcfa8",
+        "filename": "svx/source/fmcomp/gridctrl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2858,
+      "author": {
+        "id": 1001759
+      },
+      "writtenOn": "2018-10-02T14:14:51Z",
+      "side": 1,
+      "message": "the three variable should be equal because there aren\u0027t any hidden columns",
+      "range": {
+        "startLine": 2858,
+        "startChar": 45,
+        "endLine": 2858,
+        "endChar": 46
+      },
+      "revId": "d0848153e00e7a7271091e37025b1d13d9ecc83f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
