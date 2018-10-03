@@ -104,7 +104,16 @@ short AbstractSdVectorizeDlg_Impl::Execute()
 
 IMPL_ABSTDLG_BASE(AbstractSdPublishingDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractHeaderFooterDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractBulletDialog_Impl);
+
+short AbstractBulletDialog_Impl::Execute()
+{
+    return m_xDlg->execute();
+}
+
+bool AbstractBulletDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return SfxTabDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
 
 AbstractBreakDlg_Impl::AbstractBreakDlg_Impl(std::unique_ptr<::sd::BreakDlg> pDlg)
     : m_xDlg(std::move(pDlg))
@@ -205,27 +214,27 @@ void SdAbstractTabController_Impl::SetText( const OUString& rStr )
 
 void AbstractBulletDialog_Impl::SetCurPageId( const OString& rName )
 {
-    static_cast< ::sd::OutlineBulletDlg*>(pDlg.get())->SetCurPageId( rName );
+    m_xDlg->SetCurPageId( rName );
 }
 
 const SfxItemSet* AbstractBulletDialog_Impl::GetOutputItemSet() const
 {
-    return static_cast< ::sd::OutlineBulletDlg*>(pDlg.get())->GetOutputItemSet();
+    return static_cast< ::sd::OutlineBulletDlg*>(m_xDlg.get())->GetBulletOutputItemSet();
 }
 
 const sal_uInt16* AbstractBulletDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
-    return static_cast< ::sd::OutlineBulletDlg*>(pDlg.get())->GetInputRanges( pItem );
+    return m_xDlg->GetInputRanges(pItem);
 }
 
 void AbstractBulletDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
-     static_cast< ::sd::OutlineBulletDlg*>(pDlg.get())->SetInputSet( pInSet );
+     m_xDlg->SetInputSet(pInSet);
 }
 
 void AbstractBulletDialog_Impl::SetText( const OUString& rStr )
 {
-    static_cast< ::sd::OutlineBulletDlg*>(pDlg.get())->SetText( rStr );
+    m_xDlg->set_title(rStr);
 }
 
 void SdPresLayoutTemplateDlg_Impl::SetCurPageId( const OString& rName )
@@ -422,9 +431,9 @@ VclPtr<AbstractMorphDlg> SdAbstractDialogFactory_Impl::CreateMorphDlg(weld::Wind
     return VclPtr<AbstractMorphDlg_Impl>::Create(o3tl::make_unique<::sd::MorphDlg>(pParent, pObj1, pObj2));
 }
 
-VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdOutlineBulletTabDlg(vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView )
+VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdOutlineBulletTabDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView)
 {
-    return VclPtr<AbstractBulletDialog_Impl>::Create( VclPtr<::sd::OutlineBulletDlg>::Create( pParent, pAttr, pView ) );
+    return VclPtr<AbstractBulletDialog_Impl>::Create(o3tl::make_unique<::sd::OutlineBulletDlg>(pParent, pAttr, pView));
 }
 
 VclPtr<SfxAbstractTabDialog> SdAbstractDialogFactory_Impl::CreateSdParagraphTabDlg(weld::Window* pParent, const SfxItemSet* pAttr )

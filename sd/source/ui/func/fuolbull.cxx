@@ -82,7 +82,7 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
 
         // create and execute dialog
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSdOutlineBulletTabDlg(mpViewShell->GetActiveWindow(), &aNewAttr, mpView) );
+        ScopedVclPtr<SfxAbstractTabDialog> pDlg( pFact->CreateSdOutlineBulletTabDlg(mpViewShell->GetFrameWeld(), &aNewAttr, mpView) );
         if ( pPageItem )
             pDlg->SetCurPageId( OUStringToOString( pPageItem->GetValue(), RTL_TEXTENCODING_UTF8 ) );
         sal_uInt16 nResult = pDlg->Execute();
