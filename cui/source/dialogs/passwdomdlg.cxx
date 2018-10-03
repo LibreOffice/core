@@ -70,7 +70,7 @@ IMPL_LINK_NOARG(PasswordToOpenModifyDialog, OkBtnClickHdl, weld::Button&, void)
 }
 
 PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(weld::Window * pParent, sal_uInt16 nMaxPasswdLen, bool bIsPasswordToModify)
-    : GenericDialogController(pParent, "cui/ui/password.ui", "PasswordDialog")
+    : SfxDialogController(pParent, "cui/ui/password.ui", "PasswordDialog")
     , m_xPasswdToOpenED(m_xBuilder->weld_entry("newpassEntry"))
     , m_xReenterPasswdToOpenED(m_xBuilder->weld_entry("confirmpassEntry"))
     , m_xOptionsExpander(m_xBuilder->weld_expander("expander"))

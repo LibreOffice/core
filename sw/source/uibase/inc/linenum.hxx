@@ -19,13 +19,13 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_LINENUM_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_LINENUM_HXX
 
-#include <vcl/weld.hxx>
+#include <sfx2/basedlgs.hxx>
 #include "numberingtypelistbox.hxx"
 
 class SwView;
 class SwWrtShell;
 
-class SwLineNumberingDlg : public weld::GenericDialogController
+class SwLineNumberingDlg : public SfxDialogController
 {
 private:
     SwWrtShell* m_pSh;

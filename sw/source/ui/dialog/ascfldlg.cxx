@@ -61,7 +61,7 @@ const sal_Int32 nDialogExtraDataLen = 11;      // 12345678901
 
 SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
                                     SvStream* pStream )
-    : GenericDialogController(pParent, "modules/swriter/ui/asciifilterdialog.ui", "AsciiFilterDialog")
+    : SfxDialogController(pParent, "modules/swriter/ui/asciifilterdialog.ui", "AsciiFilterDialog")
     , m_bSaveLineStatus(true)
     , m_xCharSetLB(new TextEncodingBox(m_xBuilder->weld_combo_box("charset")))
     , m_xFontFT(m_xBuilder->weld_label("fontft"))

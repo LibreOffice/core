@@ -35,7 +35,7 @@
 #include <tblafmt.hxx>
 #include <itabenum.hxx>
 
-class SwInsTableDlg : public weld::GenericDialogController
+class SwInsTableDlg : public SfxDialogController
 {
     TextFilter      m_aTextFilter;
 

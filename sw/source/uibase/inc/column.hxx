@@ -42,7 +42,7 @@ class SwColMgr;
 class SwWrtShell;
 class SwColumnPage;
 
-class SwColumnDlg : public weld::GenericDialogController
+class SwColumnDlg : public SfxDialogController
 {
     SwWrtShell&         m_rWrtShell;
     VclPtr<SwColumnPage>       m_pTabPage;

@@ -41,7 +41,7 @@ namespace sd {
 #define TOKEN ';'
 
 CopyDlg::CopyDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pInView)
-    : GenericDialogController(pWindow, "modules/sdraw/ui/copydlg.ui", "DuplicateDialog")
+    : SfxDialogController(pWindow, "modules/sdraw/ui/copydlg.ui", "DuplicateDialog")
     , mrOutAttrs(rInAttrs)
     , maUIScale(pInView->GetDoc().GetUIScale())
     , mpView(pInView)
