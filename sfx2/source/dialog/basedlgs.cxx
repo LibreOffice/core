@@ -153,24 +153,36 @@ void SfxModalDialog::CreateOutputItemSet( const SfxItemSet& rSet )
     }
 }
 
+namespace
+{
+    void InstallLOKNotifierCallback(Dialog& rDialog)
+    {
+        if (rDialog.GetLOKNotifier())
+            return;
+
+        SfxViewShell* pViewShell = SfxViewShell::Current();
+        if (!pViewShell)
+            return;
+
+        // There are some dialogs, like Hyperlink dialog, which inherit from
+        // SfxModalDialog even though they are modeless, i.e., their Execute method
+        // isn't called.
+        rDialog.SetLOKNotifier(pViewShell);
+        std::vector<vcl::LOKPayloadItem> aItems;
+        aItems.emplace_back("type", "dialog");
+        aItems.emplace_back("size", rDialog.GetSizePixel().toString());
+        if (!rDialog.GetText().isEmpty())
+            aItems.emplace_back("title", rDialog.GetText().toUtf8());
+        pViewShell->notifyWindow(rDialog.GetLOKWindowId(), "created", aItems);
+    }
+}
 
 void SfxModalDialog::StateChanged( StateChangedType nType )
 {
     if (comphelper::LibreOfficeKit::isActive())
     {
-        if (nType == StateChangedType::InitShow && !GetLOKNotifier())
-        {
-            // There are some dialogs, like Hyperlink dialog, which inherit from
-            // SfxModalDialog even though they are modeless, i.e., their Execute method
-            // isn't called.
-            SetLOKNotifier(SfxViewShell::Current());
-            std::vector<vcl::LOKPayloadItem> aItems;
-            aItems.emplace_back("type", "dialog");
-            aItems.emplace_back("size", GetSizePixel().toString());
-            if (!GetText().isEmpty())
-                aItems.emplace_back("title", GetText().toUtf8());
-            SfxViewShell::Current()->notifyWindow(GetLOKWindowId(), "created", aItems);
-        }
+        if (nType == StateChangedType::InitShow)
+            InstallLOKNotifierCallback(*this);
         else if (nType == StateChangedType::Visible &&
                  !IsVisible() &&
                  GetLOKNotifier())
@@ -182,7 +194,6 @@ void SfxModalDialog::StateChanged( StateChangedType nType )
 
     ModalDialog::StateChanged(nType);
 }
-
 
 void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
 {
@@ -223,17 +234,8 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
             }
         }
 
-        SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (comphelper::LibreOfficeKit::isActive() && pViewShell && !GetLOKNotifier())
-        {
-            SetLOKNotifier(pViewShell);
-            std::vector<vcl::LOKPayloadItem> aItems;
-            aItems.emplace_back("type", "dialog");
-            aItems.emplace_back("size", GetSizePixel().toString());
-            if (!GetText().isEmpty())
-                aItems.emplace_back("title", GetText().toUtf8());
-            pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
-        }
+        if (comphelper::LibreOfficeKit::isActive())
+            InstallLOKNotifierCallback(*this);
 
         pImpl->bConstructed = true;
     }
