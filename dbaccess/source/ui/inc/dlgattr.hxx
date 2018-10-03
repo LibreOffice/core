@@ -27,17 +27,15 @@ class SvNumberFormatter;
 namespace dbaui
 {
 
-    class SbaSbAttrDlg : public SfxTabDialog
+    class SbaSbAttrDlg : public SfxTabDialogController
     {
         std::unique_ptr<SvxNumberInfoItem> pNumberInfoItem;
-        sal_uInt32 m_nNumberFormatId;
 
     public:
-        SbaSbAttrDlg(vcl::Window * pParent, const SfxItemSet*, SvNumberFormatter*, bool bHasFormat);
+        SbaSbAttrDlg(weld::Window * pParent, const SfxItemSet*, SvNumberFormatter*, bool bHasFormat);
         virtual ~SbaSbAttrDlg() override;
-        virtual void dispose() override;
 
-        virtual void  PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage ) override;
+        virtual void  PageCreated(const OString& rPageId, SfxTabPage& rTabPage) override;
     };
 }   // namespace dbaui
 

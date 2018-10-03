@@ -845,12 +845,12 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
     }
 
     {   // want the dialog to be destroyed before our set
-        ScopedVclPtrInstance< SbaSbAttrDlg > aDlg(_pParent, pFormatDescriptor.get(), _pFormatter, _bHasFormat);
-        if (RET_OK == aDlg->Execute())
+        SbaSbAttrDlg aDlg(_pParent->GetFrameWeld(), pFormatDescriptor.get(), _pFormatter, _bHasFormat);
+        if (RET_OK == aDlg.execute())
         {
             // ItemSet->UNO
             // UNO-properties
-            const SfxItemSet* pSet = aDlg->GetExampleSet();
+            const SfxItemSet* pSet = aDlg.GetExampleSet();
             // (of course we could put the modified items directly into the column, but then the UNO-model
             // won't reflect these changes, and why do we have a model, then ?)
 
@@ -868,7 +868,7 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
             bRet = true;
         }
             // deleted formats
-        const SfxItemSet* pResult = aDlg->GetOutputItemSet();
+        const SfxItemSet* pResult = aDlg.GetOutputItemSet();
         if (pResult)
         {
             const SfxPoolItem* pItem = pResult->GetItem( SID_ATTR_NUMBERFORMAT_INFO );
