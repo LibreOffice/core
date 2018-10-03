@@ -19,32 +19,25 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DLGSIZE_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_DLGSIZE_HXX
 
-#include <vcl/dialog.hxx>
-
-#include <vcl/field.hxx>
-
-#include <vcl/button.hxx>
-
-#include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 
 namespace dbaui
 {
 
-    class DlgSize final : public ModalDialog
+    class DlgSize final : public weld::GenericDialogController
     {
     private:
         sal_Int32       m_nPrevValue, m_nStandard;
         void            SetValue( sal_Int32 nVal );
 
-        DECL_LINK( CbClickHdl, Button *, void );
+        DECL_LINK(CbClickHdl, weld::ToggleButton&, void);
 
-        VclPtr<MetricField>    m_pMF_VALUE;
-        VclPtr<CheckBox>       m_pCB_STANDARD;
+        std::unique_ptr<weld::MetricSpinButton> m_xMF_VALUE;
+        std::unique_ptr<weld::CheckButton> m_xCB_STANDARD;
 
     public:
-        DlgSize( vcl::Window * pParent, sal_Int32 nVal, bool bRow, sal_Int32 _nAlternativeStandard = -1 );
+        DlgSize(weld::Window * pParent, sal_Int32 nVal, bool bRow, sal_Int32 _nAlternativeStandard = -1);
         virtual ~DlgSize() override;
-        virtual void dispose() override;
         sal_Int32 GetValue();
     };
 }   // namespace dbaui

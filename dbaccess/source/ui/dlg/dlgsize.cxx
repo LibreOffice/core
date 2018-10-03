@@ -26,70 +26,56 @@ namespace dbaui
 #define DEF_ROW_HEIGHT  45
 #define DEF_COL_WIDTH   227
 
-DlgSize::DlgSize( vcl::Window* pParent, sal_Int32 nVal, bool bRow, sal_Int32 _nAlternativeStandard )
-    : ModalDialog(pParent, bRow ? OUString("RowHeightDialog") : OUString("ColWidthDialog"),
-        bRow ? OUString("dbaccess/ui/rowheightdialog.ui") : OUString("dbaccess/ui/colwidthdialog.ui"))
+DlgSize::DlgSize(weld::Window* pParent, sal_Int32 nVal, bool bRow, sal_Int32 _nAlternativeStandard )
+    : GenericDialogController(pParent, bRow ? OUString("dbaccess/ui/rowheightdialog.ui") : OUString("dbaccess/ui/colwidthdialog.ui"),
+                              bRow ? OString("RowHeightDialog") : OString("ColWidthDialog"))
     , m_nPrevValue(nVal)
     , m_nStandard(bRow ? DEF_ROW_HEIGHT : DEF_COL_WIDTH)
+    , m_xMF_VALUE(m_xBuilder->weld_metric_spin_button("value", FUNIT_CM))
+    , m_xCB_STANDARD(m_xBuilder->weld_check_button("automatic"))
 {
-    get(m_pMF_VALUE, "value");
-    get(m_pCB_STANDARD, "automatic");
-
     if ( _nAlternativeStandard > 0 )
         m_nStandard = _nAlternativeStandard;
-    m_pCB_STANDARD->SetClickHdl(LINK(this,DlgSize,CbClickHdl));
+    m_xCB_STANDARD->connect_toggled(LINK(this,DlgSize,CbClickHdl));
 
-    m_pMF_VALUE->EnableEmptyFieldValue(true);
     bool bDefault = -1 == nVal;
-    m_pCB_STANDARD->Check(bDefault);
+    m_xCB_STANDARD->set_active(bDefault);
     if (bDefault)
     {
         SetValue(m_nStandard);
         m_nPrevValue = m_nStandard;
     }
-    LINK(this,DlgSize,CbClickHdl).Call(m_pCB_STANDARD);
+    CbClickHdl(*m_xCB_STANDARD);
 }
 
 DlgSize::~DlgSize()
 {
-    disposeOnce();
 }
-
-void DlgSize::dispose()
-{
-    m_pMF_VALUE.clear();
-    m_pCB_STANDARD.clear();
-    ModalDialog::dispose();
-}
-
 
 void DlgSize::SetValue( sal_Int32 nVal )
 {
-    m_pMF_VALUE->SetValue(nVal, FUNIT_CM );
+    m_xMF_VALUE->set_value(nVal, FUNIT_CM );
 }
 
 sal_Int32 DlgSize::GetValue()
 {
-    if (m_pCB_STANDARD->IsChecked())
+    if (m_xCB_STANDARD->get_active())
         return -1;
-    return static_cast<sal_Int32>(m_pMF_VALUE->GetValue( FUNIT_CM ));
+    return static_cast<sal_Int32>(m_xMF_VALUE->get_value( FUNIT_CM ));
 }
 
-IMPL_LINK( DlgSize, CbClickHdl, Button *, pButton, void )
+IMPL_LINK_NOARG(DlgSize, CbClickHdl, weld::ToggleButton&, void)
 {
-    if( pButton == m_pCB_STANDARD )
+    m_xMF_VALUE->set_sensitive(m_xCB_STANDARD->get_active());
+    if (!m_xCB_STANDARD->get_active())
     {
-        m_pMF_VALUE->Enable(!m_pCB_STANDARD->IsChecked());
-        if (m_pCB_STANDARD->IsChecked())
-        {
-            m_nPrevValue = static_cast<sal_Int32>(m_pMF_VALUE->GetValue(FUNIT_CM));
-                // don't use getValue as this will use m_pCB_STANDARD->to determine if we're standard
-            m_pMF_VALUE->SetEmptyFieldValue();
-        }
-        else
-        {
-            SetValue( m_nPrevValue );
-        }
+        // don't use getValue as this will use m_xCB_STANDARD->to determine if we're standard
+        m_nPrevValue = static_cast<sal_Int32>(m_xMF_VALUE->get_value(FUNIT_CM));
+        m_xMF_VALUE->set_text("");
+    }
+    else
+    {
+        SetValue(m_nPrevValue);
     }
 }
 
