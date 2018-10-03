@@ -1,11 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
-  <!-- interface-requires gtk+ 3.0 -->
-  <!-- interface-requires LibreOffice 1.0 -->
-  <object class="GtkVBox" id="HeaderFooterContent">
+  <requires lib="gtk+" version="3.18"/>
+  <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkImage" id="imageBTN_DATE">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">sc/res/date.png</property>
+  </object>
+  <object class="GtkImage" id="imageBTN_FILE">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">sc/res/file.png</property>
+  </object>
+  <object class="GtkImage" id="imageBTN_PAGE">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">sc/res/page.png</property>
+  </object>
+  <object class="GtkImage" id="imageBTN_PAGES">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">sc/res/pages.png</property>
+  </object>
+  <object class="GtkImage" id="imageBTN_TABLE">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">sc/res/table.png</property>
+  </object>
+  <object class="GtkImage" id="imageBTN_TEXT">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">sc/res/text.png</property>
+  </object>
+  <object class="GtkImage" id="imageBTN_TIME">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">sc/res/time.png</property>
+  </object>
+  <object class="GtkBox" id="HeaderFooterContent">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
+    <property name="orientation">vertical</property>
     <property name="spacing">6</property>
     <child>
       <object class="GtkGrid" id="grid1">
@@ -18,48 +55,42 @@
           <object class="GtkLabel" id="labelFT_LEFT">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
             <property name="label" translatable="yes" context="headerfootercontent|labelFT_LEFT">_Left area</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">textviewWND_LEFT</property>
+            <property name="xalign">0</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="labelFT_CENTER">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
             <property name="label" translatable="yes" context="headerfootercontent|labelFT_CENTER">_Center area</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">textviewWND_CENTER</property>
+            <property name="xalign">0</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="labelFT_RIGHT">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
             <property name="label" translatable="yes" context="headerfootercontent|labelFT_RIGHT">R_ight area</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">textviewWND_RIGHT</property>
+            <property name="xalign">0</property>
           </object>
           <packing>
             <property name="left_attach">2</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -72,8 +103,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -84,8 +113,6 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -96,8 +123,6 @@
           <packing>
             <property name="left_attach">2</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
       </object>
@@ -115,17 +140,18 @@
         <property name="row_spacing">12</property>
         <property name="column_spacing">6</property>
         <child>
-          <object class="GtkVBox" id="box2">
+          <object class="GtkBox" id="box2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
             <child>
               <object class="GtkLabel" id="labelFT_H_DEFINED">
                 <property name="can_focus">False</property>
                 <property name="vexpand">True</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="headerfootercontent|labelFT_H_DEFINED">_Header</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">comboLB_DEFINED</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -137,10 +163,10 @@
               <object class="GtkLabel" id="labelFT_F_DEFINED">
                 <property name="can_focus">False</property>
                 <property name="vexpand">True</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="headerfootercontent|labelFT_F_DEFINED">_Footer</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">comboLB_DEFINED</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -152,21 +178,20 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkVBox" id="box3">
+          <object class="GtkBox" id="box3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkLabel" id="labelFT_H_CUSTOM">
                 <property name="can_focus">False</property>
                 <property name="vexpand">True</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="headerfootercontent|labelFT_H_CUSTOM">Custom header</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -178,8 +203,8 @@
               <object class="GtkLabel" id="labelFT_F_CUSTOM">
                 <property name="can_focus">False</property>
                 <property name="vexpand">True</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="headerfootercontent|labelFT_F_CUSTOM">Custom footer</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -191,12 +216,10 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkHBox" id="box">
+          <object class="GtkBox" id="box">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="spacing">12</property>
@@ -312,20 +335,16 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkComboBox" id="comboLB_DEFINED">
+          <object class="GtkComboBoxText" id="comboLB_DEFINED">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
       </object>
@@ -374,8 +393,9 @@
       </packing>
     </child>
     <child>
-      <object class="GtkVBox" id="box4">
+      <object class="GtkBox" id="box4">
         <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkLabel" id="labelSTR_HF_NONE_IN_BRACKETS">
@@ -468,41 +488,6 @@
         <property name="position">4</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkImage" id="imageBTN_DATE">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sc/res/date.png</property>
-  </object>
-  <object class="GtkImage" id="imageBTN_FILE">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sc/res/file.png</property>
-  </object>
-  <object class="GtkImage" id="imageBTN_PAGE">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sc/res/page.png</property>
-  </object>
-  <object class="GtkImage" id="imageBTN_PAGES">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sc/res/pages.png</property>
-  </object>
-  <object class="GtkImage" id="imageBTN_TABLE">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sc/res/table.png</property>
-  </object>
-  <object class="GtkImage" id="imageBTN_TEXT">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sc/res/text.png</property>
-  </object>
-  <object class="GtkImage" id="imageBTN_TIME">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sc/res/time.png</property>
   </object>
   <object class="GtkMenu" id="popup">
     <property name="visible">True</property>
