@@ -3840,7 +3840,7 @@ public:
         GtkTreeIter iter;
         gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(m_pListStore), &iter, nullptr, pos);
         GdkRGBA aColor{rColor.GetRed()/255.0, rColor.GetGreen()/255.0, rColor.GetBlue()/255.0, 0};
-        gtk_list_store_set(m_pListStore, &iter, 3, &aColor, -1);
+        gtk_list_store_set(m_pListStore, &iter, 4, &aColor, -1);
     }
 
     virtual void remove(int pos) override
