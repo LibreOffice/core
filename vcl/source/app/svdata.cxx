@@ -159,7 +159,7 @@ namespace
                     maTimer->Start();
                 }
 
-                maEntries[rData] = rData->getHoldCyclesInSeconds();
+                maEntries[rData] = rData->calculateCombinedHoldCyclesInSeconds();
             }
         }
 
@@ -186,7 +186,7 @@ namespace
 
             if(aFound != maEntries.end())
             {
-                aFound->second = rData->getHoldCyclesInSeconds();
+                aFound->second = rData->calculateCombinedHoldCyclesInSeconds();
             }
         }
 
