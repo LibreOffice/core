@@ -22,6 +22,7 @@
 #include <memory>
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
+#include <sfx2/basedlgs.hxx>
 #include <sal/types.h>
 #include <vcl/button.hxx>
 #include <vcl/layout.hxx>
@@ -224,7 +225,7 @@ public:
     virtual bool selectPageByUIXMLDescription(const OString& rUIXMLDescription) override;
 };
 
-class SFX2_DLLPUBLIC SfxTabDialogController : public weld::GenericDialogController
+class SFX2_DLLPUBLIC SfxTabDialogController : public SfxDialogController
 {
 protected:
     std::unique_ptr<weld::Notebook> m_xTabCtrl;
