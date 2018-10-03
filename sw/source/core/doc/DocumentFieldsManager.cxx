@@ -1446,7 +1446,7 @@ void DocumentFieldsManager::FieldsToCalc( SwCalc& rCalc, const SetGetExpField& r
     {
         SetGetExpFields::const_iterator const itLast =
             mpUpdateFields->GetSortLst()->upper_bound(
-                const_cast<SetGetExpField*>(&rToThisField));
+                &rToThisField);
         for( SetGetExpFields::const_iterator it = mpUpdateFields->GetSortLst()->begin(); it != itLast; ++it )
             lcl_CalcField( m_rDoc, rCalc, **it, pMgr );
     }
@@ -1496,8 +1496,7 @@ void DocumentFieldsManager::FieldsToExpand( SwHashTable<HashStr> & rHashTable,
     rHashTable.resize(nTableSize);
 
     SetGetExpFields::const_iterator const itLast =
-        mpUpdateFields->GetSortLst()->upper_bound(
-            const_cast<SetGetExpField*>(&rToThisField));
+        mpUpdateFields->GetSortLst()->upper_bound(&rToThisField);
 
     for( SetGetExpFields::const_iterator it = mpUpdateFields->GetSortLst()->begin(); it != itLast; ++it )
     {

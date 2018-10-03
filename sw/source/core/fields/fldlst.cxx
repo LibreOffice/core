@@ -69,8 +69,8 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, bool bBuildTmpLst )
                     else
                     {
                         SwNodeIndex aIdx( rTextNode );
-                        SetGetExpField* pNew = new SetGetExpField(aIdx, pTextField );
-                        mpSrtLst->insert( pNew );
+                        std::unique_ptr<SetGetExpField> pNew(new SetGetExpField(aIdx, pTextField ));
+                        mpSrtLst->insert( std::move(pNew) );
                     }
                 }
             }
@@ -154,8 +154,8 @@ bool SwInputFieldList::BuildSortLst()
                     if( maTmpLst.end() == it )
                     {
                         SwNodeIndex aIdx( rTextNode );
-                        SetGetExpField* pNew = new SetGetExpField(aIdx, pTextField );
-                        mpSrtLst->insert( pNew );
+                        std::unique_ptr<SetGetExpField> pNew(new SetGetExpField(aIdx, pTextField ));
+                        mpSrtLst->insert( std::move(pNew) );
                     }
                     else
                         maTmpLst.erase( it );

@@ -102,10 +102,8 @@ public:
     void SetBodyPos( const SwContentFrame& rFrame );
 };
 
-class SetGetExpFields : public o3tl::sorted_vector<SetGetExpField*, o3tl::less_ptr_to<SetGetExpField> >
+class SetGetExpFields : public o3tl::sorted_vector<std::unique_ptr<SetGetExpField>, o3tl::less_uniqueptr_to<SetGetExpField> >
 {
-public:
-    ~SetGetExpFields() { DeleteAndDestroyAll(); }
 };
 
 // struct for saving strings from the SetExp's string fields

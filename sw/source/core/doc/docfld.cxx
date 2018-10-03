@@ -791,7 +791,6 @@ void SwDocUpdateField::InsDelFieldInFieldLst( bool bIns, const SwTextField& rFie
         for( SetGetExpFields::size_type n = 0; n < pFieldSortLst->size(); ++n )
             if( &rField == (*pFieldSortLst)[ n ]->GetPointer() )
             {
-                delete (*pFieldSortLst)[n];
                 pFieldSortLst->erase(n);
                 n--; // one field can occur multiple times
             }
@@ -1001,7 +1000,7 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFiel
     const SwContentFrame* pFrame = rTextNd.getLayoutFrame(
         rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp);
 
-    SetGetExpField* pNew = nullptr;
+    std::unique_ptr<SetGetExpField> pNew;
     bool bIsInBody = false;
 
     if( !pFrame || pFrame->IsInDocBody() )
@@ -1015,7 +1014,7 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFiel
         // fields in hidden sections. So: In order to be updated, a field 1)
         // must have a frame, or 2) it must be in the document body.
         if( (pFrame != nullptr) || bIsInBody )
-            pNew = new SetGetExpField( aIdx, &rTField );
+            pNew.reset(new SetGetExpField( aIdx, &rTField ));
     }
     else
     {
@@ -1023,7 +1022,7 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFiel
         SwPosition aPos( rDoc.GetNodes().GetEndOfPostIts() );
         bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrame );
         OSL_ENSURE(bResult, "where is the Field");
-        pNew = new SetGetExpField( aPos.nNode, &rTField, &aPos.nContent );
+        pNew.reset(new SetGetExpField( aPos.nNode, &rTField, &aPos.nContent ));
     }
 
     // always set the BodyTextFlag in GetExp or DB fields
@@ -1040,14 +1039,13 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFiel
     }
 #endif
     if( pNew != nullptr )
-        if( !pFieldSortLst->insert( pNew ).second )
-            delete pNew;
+        pFieldSortLst->insert( std::move(pNew) );
 }
 
 void SwDocUpdateField::GetBodyNode( const SwSectionNode& rSectNd )
 {
     const SwDoc& rDoc = *rSectNd.GetDoc();
-    SetGetExpField* pNew = nullptr;
+    std::unique_ptr<SetGetExpField> pNew;
 
     if( rSectNd.GetIndex() < rDoc.GetNodes().GetEndOfExtras().GetIndex() )
     {
@@ -1072,16 +1070,15 @@ void SwDocUpdateField::GetBodyNode( const SwSectionNode& rSectNd )
 
             bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrame );
             OSL_ENSURE(bResult, "where is the Field");
-            pNew = new SetGetExpField( rSectNd, &aPos );
+            pNew.reset(new SetGetExpField( rSectNd, &aPos ));
 
         } while( false );
     }
 
     if( !pNew )
-        pNew = new SetGetExpField( rSectNd );
+        pNew.reset(new SetGetExpField( rSectNd ));
 
-    if( !pFieldSortLst->insert( pNew ).second )
-        delete pNew;
+    pFieldSortLst->insert( std::move(pNew) );
 }
 
 void SwDocUpdateField::InsertFieldType( const SwFieldType& rType )
