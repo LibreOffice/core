@@ -375,8 +375,11 @@ public:
     /// Validate all paragraph signatures.
     void ValidateAllParagraphSignatures(bool updateDontRemove);
 
-    /// Restore the metadata fields, if missing, from the RDF metadata.
-    void RestoreMetadataFields();
+    /// Restore the metadata fields, if missing, from the RDF metadata
+    /// and validate the signatures and update the signature metadata fields.
+    /// Needed since deleting the metadata field doesn't remove the RDF
+    /// and editing docs using software that don't support paragraph signing.
+    void RestoreMetadataFieldsAndValidateParagraphSignatures();
 
     /// Ensure that the classification of the doc is never lower than
     /// the paragraph with the highest classification.

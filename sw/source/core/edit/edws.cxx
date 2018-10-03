@@ -17,11 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <editsh.hxx>
+
 #include <officecfg/Office/Common.hxx>
 #include <unotools/configmgr.hxx>
 #include <vcl/window.hxx>
 
-#include <editsh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentState.hxx>
@@ -52,12 +53,8 @@ SwEditShell::SwEditShell( SwDoc& rDoc, vcl::Window *pWindow, const SwViewOption 
         GetDoc()->GetIDocumentUndoRedo().DoUndo(true);
     }
 
-    // Restore the tscp metadata fields
-    RestoreMetadataFields();
-
-    // Update the paragraph signatures.
-    // Since this ctor is called only on creating/loading the doc, we validate once only.
-    ValidateAllParagraphSignatures(true);
+    // Restore the paragraph metadata fields and validate signatures.
+    RestoreMetadataFieldsAndValidateParagraphSignatures();
 }
 
 SwEditShell::~SwEditShell() // USED
