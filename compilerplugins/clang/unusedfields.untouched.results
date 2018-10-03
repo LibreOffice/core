@@ -118,6 +118,8 @@ include/sfx2/msg.hxx:117
     SfxType0 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:119
     SfxType0 nAttribs sal_uInt16
+include/svl/broadcast.hxx:85
+    SvtBroadcaster mbDisposing _Bool
 include/svtools/ctrlbox.hxx:353
     SvtLineListBox m_xLineSetWin std::unique_ptr<weld::CustomWeld>
 include/svtools/genericunodialog.hxx:218

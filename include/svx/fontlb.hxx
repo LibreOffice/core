@@ -29,10 +29,6 @@
 /** A list box string item which stores its text and font. */
 class SAL_WARN_UNUSED SvLBoxFontString : public SvLBoxString
 {
-private:
-    vcl::Font                   maFont;     /// The font used by this item.
-    bool                        mbUseColor; /// true = use font color, false = default listbox color.
-
 public:
                                 SvLBoxFontString();
 

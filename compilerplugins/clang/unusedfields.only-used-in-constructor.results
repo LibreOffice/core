@@ -204,6 +204,8 @@ include/sfx2/msg.hxx:117
     SfxType0 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:119
     SfxType0 nAttribs sal_uInt16
+include/svl/broadcast.hxx:85
+    SvtBroadcaster mbDisposing _Bool
 include/svl/ondemand.hxx:58
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
 include/svx/ClassificationDialog.hxx:59
@@ -584,7 +586,7 @@ vcl/inc/unx/i18n_ic.hxx:46
     SalI18N_InputContext maSwitchIMCallback XIMCallback
 vcl/inc/unx/i18n_ic.hxx:47
     SalI18N_InputContext maDestroyCallback XIMCallback
-vcl/source/app/salvtables.cxx:1504
+vcl/source/app/salvtables.cxx:1514
     SalInstanceEntry m_aTextFilter class SalInstanceEntry::WeldTextFilter
 vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cDeviceName char [32]

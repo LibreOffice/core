@@ -146,8 +146,6 @@ cui/source/inc/cuihyperdlg.hxx:57
     SvxHlinkCtrl aRdOnlyForwarder class SfxStatusForwarder
 cui/source/inc/cuihyperdlg.hxx:77
     SvxHpLinkDlg maCtrl class SvxHlinkCtrl
-cui/source/inc/cuitabline.hxx:95
-    SvxLineTabPage m_nNumMenuGalleryItems long
 dbaccess/source/core/dataaccess/documentdefinition.cxx:287
     dbaccess::LifetimeCoupler m_xClient Reference<class com::sun::star::uno::XInterface>
 desktop/qa/desktop_lib/test_desktop_lib.cxx:178
@@ -364,8 +362,6 @@ sc/source/filter/xml/xmlexternaltabi.hxx:112
     ScXMLExternalRefCellContext mnCellType sal_Int16
 sc/source/ui/inc/AccessibleText.hxx:194
     ScAccessiblePreviewHeaderCellTextData mbRowHeader _Bool
-sc/source/ui/inc/AccessibleText.hxx:266
-    ScAccessibleCsvTextData maBoundBox tools::Rectangle
 sc/source/ui/inc/datastream.hxx:108
     sc::DataStream mnSettings sal_uInt32
 sc/source/ui/inc/preview.hxx:47

@@ -27,7 +27,6 @@
 
 SvLBoxFontString::SvLBoxFontString()
     : SvLBoxString()
-    , mbUseColor(false)
 {
 }
 
@@ -44,13 +43,10 @@ void SvLBoxFontString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::Render
                              const SvViewDataEntry* pView, const SvTreeListEntry& rEntry)
 {
     rRenderContext.Push(PushFlags::FONT);
-    vcl::Font aNewFont(maFont);
+    vcl::Font aNewFont;
     bool bSel = pView->IsSelected();
-    if (!mbUseColor || bSel)       // selection always gets highlight color
-    {
-        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-        aNewFont.SetColor(bSel ? rStyleSettings.GetHighlightTextColor() : rStyleSettings.GetFieldTextColor());
-    }
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    aNewFont.SetColor(bSel ? rStyleSettings.GetHighlightTextColor() : rStyleSettings.GetFieldTextColor());
 
     rRenderContext.SetFont(aNewFont);
     SvLBoxString::Paint(rPos, rDev, rRenderContext, pView, rEntry);
@@ -60,7 +56,7 @@ void SvLBoxFontString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::Render
 void SvLBoxFontString::InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEntry, SvViewDataItem* pViewData )
 {
     vcl::Font aOldFont( pView->GetFont() );
-    pView->Control::SetFont( maFont );
+    pView->Control::SetFont( vcl::Font() );
     SvLBoxString::InitViewData( pView, pEntry, pViewData);
     pView->Control::SetFont( aOldFont );
 }
