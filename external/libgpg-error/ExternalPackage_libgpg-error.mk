@@ -15,7 +15,7 @@ ifneq ($(DISABLE_DYNLOADING),TRUE)
 
 ifeq ($(OS),LINUX)
 
-$(eval $(call gb_ExternalPackage_add_file,libgpg-error,$(LIBO_LIB_FOLDER)/libgpg-error.so.0,src/.libs/libgpg-error.so.0.22.0))
+$(eval $(call gb_ExternalPackage_add_file,libgpg-error,$(LIBO_LIB_FOLDER)/libgpg-error.so.0,src/.libs/libgpg-error.so.0.24.3))
 
 else ifeq ($(OS),MACOSX)
 
