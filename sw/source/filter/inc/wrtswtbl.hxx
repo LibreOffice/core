@@ -200,14 +200,12 @@ inline bool SwWriteTableCol::operator<( const SwWriteTableCol& rCol ) const
 }
 
 struct SwWriteTableColLess {
-    bool operator()(SwWriteTableCol const * lhs, SwWriteTableCol const * rhs) {
+    bool operator()(std::unique_ptr<SwWriteTableCol> const & lhs, std::unique_ptr<SwWriteTableCol> const & rhs) {
         return lhs->GetPos() < rhs->GetPos();
     }
 };
 
-class SwWriteTableCols : public o3tl::sorted_vector<SwWriteTableCol*, SwWriteTableColLess> {
-public:
-    ~SwWriteTableCols() { DeleteAndDestroyAll(); }
+class SwWriteTableCols : public o3tl::sorted_vector<std::unique_ptr<SwWriteTableCol>, SwWriteTableColLess> {
 };
 
 class SwTable;
