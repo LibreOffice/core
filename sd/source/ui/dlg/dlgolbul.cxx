@@ -46,26 +46,22 @@ namespace sd {
 /**
  * Constructor of tab dialog: append pages to the dialog
  */
-OutlineBulletDlg::OutlineBulletDlg(
-    vcl::Window* pParent,
-    const SfxItemSet* pAttr,
-    ::sd::View* pView )
-    : SfxTabDialog( pParent, "BulletsAndNumberingDialog",
-        "modules/sdraw/ui/bulletsandnumbering.ui")
-    , aInputSet( *pAttr )
-    , bTitle(false)
-    , pSdView(pView)
+OutlineBulletDlg::OutlineBulletDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView)
+    : SfxTabDialogController(pParent, "modules/sdraw/ui/bulletsandnumbering.ui", "BulletsAndNumberingDialog")
+    , m_aInputSet(*pAttr)
+    , m_bTitle(false)
+    , m_pSdView(pView)
 {
-    aInputSet.MergeRange( SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL );
-    aInputSet.Put( *pAttr );
+    m_aInputSet.MergeRange(SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL);
+    m_aInputSet.Put(*pAttr);
 
-    pOutputSet.reset( new SfxItemSet( *pAttr ) );
-    pOutputSet->ClearItem();
+    m_xOutputSet.reset( new SfxItemSet( *pAttr ) );
+    m_xOutputSet->ClearItem();
 
     bool bOutliner = false;
 
     // special treatment if a title object is selected
-    if( pView )
+    if (pView)
     {
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         const size_t nCount = rMarkList.GetMarkCount();
@@ -78,7 +74,7 @@ OutlineBulletDlg::OutlineBulletDlg(
                 switch(pObj->GetObjIdentifier())
                 {
                 case OBJ_TITLETEXT:
-                    bTitle = true;
+                    m_bTitle = true;
                     break;
                 case OBJ_OUTLINETEXT:
                     bOutliner = true;
@@ -88,7 +84,7 @@ OutlineBulletDlg::OutlineBulletDlg(
         }
     }
 
-    if( SfxItemState::SET != aInputSet.GetItemState(EE_PARA_NUMBULLET))
+    if( SfxItemState::SET != m_aInputSet.GetItemState(EE_PARA_NUMBULLET))
     {
         const SvxNumBulletItem *pItem = nullptr;
         if(bOutliner)
@@ -100,17 +96,17 @@ OutlineBulletDlg::OutlineBulletDlg(
         }
 
         if( pItem == nullptr )
-            pItem = aInputSet.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
+            pItem = m_aInputSet.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
 
         DBG_ASSERT( pItem, "No EE_PARA_NUMBULLET in Pool! [CL]" );
 
         std::unique_ptr<SfxPoolItem> pNewItem(pItem->CloneSetWhich(EE_PARA_NUMBULLET));
-        aInputSet.Put(*pNewItem);
+        m_aInputSet.Put(*pNewItem);
     }
 
-    if(bTitle && aInputSet.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET )
+    if (m_bTitle && m_aInputSet.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET )
     {
-        const SvxNumBulletItem* pItem = aInputSet.GetItem<SvxNumBulletItem>(EE_PARA_NUMBULLET);
+        const SvxNumBulletItem* pItem = m_aInputSet.GetItem<SvxNumBulletItem>(EE_PARA_NUMBULLET);
         SvxNumRule* pRule = pItem->GetNumRule();
         if(pRule)
         {
@@ -118,80 +114,68 @@ OutlineBulletDlg::OutlineBulletDlg(
             aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS );
 
             SvxNumBulletItem aNewItem( aNewRule, EE_PARA_NUMBULLET );
-            aInputSet.Put(aNewItem);
+            m_aInputSet.Put(aNewItem);
         }
     }
 
-    SetInputSet( &aInputSet );
+    SetInputSet(&m_aInputSet);
 
-    if(!bTitle)
+    if (!m_bTitle)
         AddTabPage("singlenum", RID_SVXPAGE_PICK_SINGLE_NUM);
     else
         RemoveTabPage("singlenum");
 
     AddTabPage("bullets", RID_SVXPAGE_PICK_BULLET);
     AddTabPage("graphics", RID_SVXPAGE_PICK_BMP);
-    m_nOptionsId = AddTabPage("customize", RID_SVXPAGE_NUM_OPTIONS);
-    m_nPositionId = AddTabPage("position", RID_SVXPAGE_NUM_POSITION);
+    AddTabPage("customize", RID_SVXPAGE_NUM_OPTIONS);
+    AddTabPage("position", RID_SVXPAGE_NUM_POSITION);
 }
 
 OutlineBulletDlg::~OutlineBulletDlg()
 {
-    disposeOnce();
 }
 
-void OutlineBulletDlg::dispose()
+void OutlineBulletDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
-    pOutputSet.reset();
-    SfxTabDialog::dispose();
-}
-
-void OutlineBulletDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
-{
-    if (nId == m_nOptionsId)
+    if (!m_pSdView)
+        return;
+    if (rId == "customize")
     {
-        if( pSdView )
-        {
-            FieldUnit eMetric = pSdView->GetDoc().GetUIUnit();
-            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM,static_cast<sal_uInt16>(eMetric)));
-            rPage.PageCreated(aSet);
-        }
+        FieldUnit eMetric = m_pSdView->GetDoc().GetUIUnit();
+        SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+        aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM,static_cast<sal_uInt16>(eMetric)));
+        rPage.PageCreated(aSet);
     }
-    else if (nId == m_nPositionId)
+    else if (rId == "position")
     {
-        if( pSdView )
-        {
-            FieldUnit eMetric = pSdView->GetDoc().GetUIUnit();
-            SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-            aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM,static_cast<sal_uInt16>(eMetric)));
-            rPage.PageCreated(aSet);
-        }
+        FieldUnit eMetric = m_pSdView->GetDoc().GetUIUnit();
+        SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
+        aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM,static_cast<sal_uInt16>(eMetric)));
+        rPage.PageCreated(aSet);
     }
 }
 
-const SfxItemSet* OutlineBulletDlg::GetOutputItemSet() const
+const SfxItemSet* OutlineBulletDlg::GetBulletOutputItemSet() const
 {
-    SfxItemSet aSet( *SfxTabDialog::GetOutputItemSet() );
-    pOutputSet->Put( aSet );
+    SfxItemSet aSet(*GetOutputItemSet());
+    m_xOutputSet->Put(aSet);
 
     const SfxPoolItem *pItem = nullptr;
-    if( SfxItemState::SET == pOutputSet->GetItemState(pOutputSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE), false, &pItem ))
+    if( SfxItemState::SET == m_xOutputSet->GetItemState(m_xOutputSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE), false, &pItem ))
     {
-        SdBulletMapper::MapFontsInNumRule( *static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule(), *pOutputSet );
-
-// #i35937 - removed EE_PARA_BULLETSTATE setting
+        SdBulletMapper::MapFontsInNumRule(*static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule(), *m_xOutputSet);
+        // #i35937 - removed EE_PARA_BULLETSTATE setting
     }
 
-    if(bTitle && pOutputSet->GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET )
+    if (m_bTitle && m_xOutputSet->GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET)
     {
-        const SvxNumBulletItem* pBulletItem = pOutputSet->GetItem<SvxNumBulletItem>(EE_PARA_NUMBULLET);
+        const SvxNumBulletItem* pBulletItem = m_xOutputSet->GetItem<SvxNumBulletItem>(EE_PARA_NUMBULLET);
         SvxNumRule* pRule = pBulletItem->GetNumRule();
         if(pRule)
             pRule->SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS, false );
     }
 
-    return pOutputSet.get();
+    return m_xOutputSet.get();
 }
 
 } // end of namespace sd

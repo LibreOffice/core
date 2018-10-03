@@ -154,10 +154,17 @@ public:
     virtual void        SetText( const OUString& rStr ) override;
 };
 
-
 class AbstractBulletDialog_Impl : public SfxAbstractTabDialog
 {
-    DECL_ABSTDLG_BASE( AbstractBulletDialog_Impl,SfxTabDialog )
+protected:
+    std::shared_ptr<SfxTabDialogController> m_xDlg;
+public:
+    explicit AbstractBulletDialog_Impl(std::unique_ptr<SfxTabDialogController> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual bool  StartExecuteAsync(AsyncContext &rCtx) override;
     virtual void                SetCurPageId( const OString& rName ) override;
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem ) override;
@@ -324,7 +331,7 @@ public:
     virtual VclPtr<AbstractSdInsertLayerDlg>   CreateSdInsertLayerDlg(weld::Window* pParent, const SfxItemSet& rInAttrs, bool bDeletable, const OUString& aStr) override;
     virtual VclPtr<AbstractSdInsertPagesObjsDlg> CreateSdInsertPagesObjsDlg(vcl::Window* pParent, const SdDrawDocument* pDoc, SfxMedium* pSfxMedium, const OUString& rFileName ) override;
     virtual VclPtr<AbstractMorphDlg>           CreateMorphDlg(weld::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2) override;
-    virtual VclPtr<SfxAbstractTabDialog>       CreateSdOutlineBulletTabDlg(vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView) override;
+    virtual VclPtr<SfxAbstractTabDialog>       CreateSdOutlineBulletTabDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdParagraphTabDlg(weld::Window* pParent, const SfxItemSet* pAttr) override;
     virtual VclPtr<AbstractSdStartPresDlg>     CreateSdStartPresentationDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs,
                                                                      const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList ) override;
