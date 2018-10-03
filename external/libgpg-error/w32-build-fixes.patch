@@ -57,7 +57,7 @@ diff -ur libgpg-error.org/src/estream-printf.c libgpg-error/src/estream-printf.c
 @@ -99,9 +99,9 @@
  
  CLEANFILES = err-sources.h err-codes.h code-to-errno.h code-from-errno.h \
- 	gpg-error.h gpgrt.h \
+ 	gpg-error.h gpgrt.h gpgrt-config \
 -        mkerrcodes mkerrcodes.h gpg-error.def mkw32errmap.tab.h \
 +        mkerrcodes.exe mkerrcodes.h gpg-error.def mkw32errmap.tab.h \
  	mkw32errmap.map.c err-sources-sym.h err-codes-sym.h errnos-sym.h \
@@ -108,7 +108,7 @@ diff -ru libgpg-error.orig/src/Makefile.in libgpg-error/src/Makefile.in
 @@ -493,9 +493,9 @@
  tmp_files = _mkerrcodes.h _gpg-error.def.h mkw32errmap.tab.h mkw32errmap.map.c
  CLEANFILES = err-sources.h err-codes.h code-to-errno.h code-from-errno.h \
- 	gpg-error.h gpgrt.h \
+ 	gpg-error.h gpgrt.h gpgrt-config \
 -        mkerrcodes mkerrcodes.h gpg-error.def mkw32errmap.tab.h \
 +        mkerrcodes.exe mkerrcodes.h gpg-error.def mkw32errmap.tab.h \
  	mkw32errmap.map.c err-sources-sym.h err-codes-sym.h errnos-sym.h \
