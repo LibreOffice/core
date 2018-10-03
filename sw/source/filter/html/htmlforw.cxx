@@ -1332,7 +1332,7 @@ void SwHTMLWriter::GetControls()
         // collect the paragraph-bound controls
         for( size_t i=0; i<m_pHTMLPosFlyFrames->size(); i++ )
         {
-            const SwHTMLPosFlyFrame* pPosFlyFrame = (*m_pHTMLPosFlyFrames)[ i ];
+            const SwHTMLPosFlyFrame* pPosFlyFrame = (*m_pHTMLPosFlyFrames)[ i ].get();
             if( HtmlOut::Control != pPosFlyFrame->GetOutFn() )
                 continue;
 
