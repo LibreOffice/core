@@ -53,7 +53,7 @@
 using namespace css;
 
 SvxCharacterMap::SvxCharacterMap(weld::Window* pParent, const SfxItemSet* pSet, bool bInsert)
-    : GenericDialogController(pParent, "cui/ui/specialcharacters.ui", "SpecialCharactersDialog")
+    : SfxDialogController(pParent, "cui/ui/specialcharacters.ui", "SpecialCharactersDialog")
     , m_xVirDev(VclPtr<VirtualDevice>::Create())
     , pSubsetMap( nullptr )
     , isSearchMode(true)

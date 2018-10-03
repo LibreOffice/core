@@ -2152,6 +2152,11 @@ public:
         return new GtkInstanceContainer(GTK_CONTAINER(gtk_dialog_get_content_area(m_pDialog)), false);
     }
 
+    virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>&) override
+    {
+        //not implemented for the gtk variant
+    }
+
     virtual ~GtkInstanceDialog() override
     {
         g_signal_handler_disconnect(m_pDialog, m_nCloseSignalId);
