@@ -29,7 +29,7 @@
 
 class SvxSpellWrapper;
 
-class SvxHyphenWordDialog : public weld::GenericDialogController
+class SvxHyphenWordDialog : public SfxDialogController
 {
     OUString            m_aLabel;
     SvxSpellWrapper     *const m_pHyphWrapper;

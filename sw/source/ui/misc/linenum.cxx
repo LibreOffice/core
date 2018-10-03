@@ -64,7 +64,7 @@ static void lcl_setLineNumbering(const OUString& rName, SwWrtShell* pSh, bool bL
 }
 
 SwLineNumberingDlg::SwLineNumberingDlg(const SwView& rVw)
-    : GenericDialogController(rVw.GetViewFrame()->GetWindow().GetFrameWeld(),
+    : SfxDialogController(rVw.GetViewFrame()->GetWindow().GetFrameWeld(),
             "modules/swriter/ui/linenumbering.ui", "LineNumberingDialog")
     , m_pSh(rVw.GetWrtShellPtr())
     , m_xBodyContent(m_xBuilder->weld_widget("content"))

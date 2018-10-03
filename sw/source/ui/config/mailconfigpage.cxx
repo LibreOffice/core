@@ -41,7 +41,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::mail;
 using namespace ::com::sun::star::beans;
 
-class SwTestAccountSettingsDialog : public weld::GenericDialogController
+class SwTestAccountSettingsDialog : public SfxDialogController
 {
     ImplSVEvent*        m_pPostedEvent;
     OUString            m_sCompleted;
@@ -70,7 +70,7 @@ public:
     virtual ~SwTestAccountSettingsDialog() override;
 };
 
-class SwAuthenticationSettingsDialog : public weld::GenericDialogController
+class SwAuthenticationSettingsDialog : public SfxDialogController
 {
     SwMailMergeConfigItem& m_rConfigItem;
 
@@ -226,7 +226,7 @@ IMPL_LINK(SwMailConfigPage, SecureHdl, Button*, pBox, void)
 }
 
 SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pParent)
-    : GenericDialogController(pParent->GetFrameWeld(), "modules/swriter/ui/testmailsettings.ui", "TestMailSettings")
+    : SfxDialogController(pParent->GetFrameWeld(), "modules/swriter/ui/testmailsettings.ui", "TestMailSettings")
     , m_bStop(false)
     , m_pParent(pParent)
     , m_xStopPB(m_xBuilder->weld_button("stop"))
@@ -383,7 +383,7 @@ SwMailConfigDlg::SwMailConfigDlg(weld::Window* pParent, SfxItemSet& rSet)
 
 SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
     weld::Window* pParent, SwMailMergeConfigItem& rItem)
-    : GenericDialogController(pParent, "modules/swriter/ui/authenticationsettingsdialog.ui", "AuthenticationSettingsDialog")
+    : SfxDialogController(pParent, "modules/swriter/ui/authenticationsettingsdialog.ui", "AuthenticationSettingsDialog")
     , m_rConfigItem(rItem)
     , m_xAuthenticationCB(m_xBuilder->weld_check_button("authentication"))
     , m_xSeparateAuthenticationRB(m_xBuilder->weld_radio_button("separateauthentication"))
