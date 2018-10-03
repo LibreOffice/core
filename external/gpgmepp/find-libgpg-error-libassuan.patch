@@ -44,15 +44,27 @@ diff --git a/src/Makefile.am b/src/Makefile.am
 index ce6f1d4..6b1d835 100644
 --- src/Makefile.am
 +++ src/Makefile.am
-@@ -97,10 +97,10 @@ endif
+@@ -26,7 +26,7 @@
+ m4data_DATA = gpgme.m4
+ nodist_include_HEADERS = gpgme.h
  
- # We use a global CFLAGS setting for all library
+-bin_PROGRAMS = gpgme-tool gpgme-json
++bin_PROGRAMS = gpgme-tool
+ 
+ if BUILD_W32_GLIB
+ ltlib_gpgme_glib = libgpgme-glib.la
+@@ -97,13 +97,10 @@
+ 
+ # We use a global CFLAGS setting for all libraries
  # versions, because then every object file is only compiled once.
 -AM_CFLAGS = @LIBASSUAN_CFLAGS@ @GLIB_CFLAGS@
 +AM_CFLAGS = @LIBASSUAN_CFLAGS@ @GPG_ERROR_CFLAGS@ @GLIB_CFLAGS@
  
  gpgme_tool_SOURCES = gpgme-tool.c argparse.c argparse.h
 -gpgme_tool_LDADD = libgpgme.la @LIBASSUAN_LIBS@
+-
+-gpgme_json_SOURCES = gpgme-json.c cJSON.c cJSON.h
+-gpgme_json_LDADD = -lm libgpgme.la $(GPG_ERROR_LIBS)
 +gpgme_tool_LDADD = libgpgme.la @LIBASSUAN_LIBS@ @GPG_ERROR_LIBS@
  
  
