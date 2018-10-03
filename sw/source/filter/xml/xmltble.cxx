@@ -95,9 +95,7 @@ struct SwXMLTableColumnCmpWidth_Impl
     }
 };
 
-class SwXMLTableColumns_Impl : public o3tl::sorted_vector<SwXMLTableColumn_Impl*, o3tl::less_ptr_to<SwXMLTableColumn_Impl> > {
-public:
-    ~SwXMLTableColumns_Impl() { DeleteAndDestroyAll(); }
+class SwXMLTableColumns_Impl : public o3tl::sorted_vector<std::unique_ptr<SwXMLTableColumn_Impl>, o3tl::less_uniqueptr_to<SwXMLTableColumn_Impl> > {
 };
 
 class SwXMLTableColumnsSortByWidth_Impl : public o3tl::sorted_vector<SwXMLTableColumn_Impl*, SwXMLTableColumnCmpWidth_Impl> {};
@@ -140,11 +138,10 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
             if( nBox < nBoxes-1U || nWidth==0 )
             {
                 nCPos = nCPos + SwWriteTable::GetBoxWidth( pBox );
-                SwXMLTableColumn_Impl *pCol =
-                    new SwXMLTableColumn_Impl( nCPos );
+                std::unique_ptr<SwXMLTableColumn_Impl> pCol(
+                    new SwXMLTableColumn_Impl( nCPos ));
 
-                if( !aCols.insert( pCol ).second )
-                    delete pCol;
+                aCols.insert( std::move(pCol) );
 
                 if( nBox==nBoxes-1U )
                 {
@@ -580,7 +577,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
         const size_t nColumns = rCols.size();
         for( size_t nColumn=0U; nColumn<nColumns; ++nColumn )
         {
-            SwXMLTableColumn_Impl *pColumn = rCols[nColumn];
+            SwXMLTableColumn_Impl *pColumn = rCols[nColumn].get();
 
             sal_uInt32 nOldCPos = nCPos;
             nCPos = pColumn->GetPos();
@@ -1002,12 +999,12 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
     size_t nColumn = 0U;
     const size_t nColumns = rCols.size();
     sal_Int32 nColRep = 1;
-    SwXMLTableColumn_Impl *pColumn = (nColumns > 0) ? rCols[0U] : nullptr;
+    SwXMLTableColumn_Impl *pColumn = (nColumns > 0) ? rCols.front().get() : nullptr;
     while( pColumn )
     {
         nColumn++;
         SwXMLTableColumn_Impl *pNextColumn =
-            (nColumn < nColumns) ? rCols[nColumn] : nullptr;
+            (nColumn < nColumns) ? rCols[nColumn].get() : nullptr;
         if( pNextColumn &&
             pNextColumn->GetStyleName() == pColumn->GetStyleName() )
         {
