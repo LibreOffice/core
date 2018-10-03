@@ -790,10 +790,10 @@ void SbaGridControl::SetColWidth(sal_uInt16 nColId)
         Any aWidth = xAffectedCol->getPropertyValue(PROPERTY_WIDTH);
         sal_Int32 nCurWidth = aWidth.hasValue() ? ::comphelper::getINT32(aWidth) : -1;
 
-        ScopedVclPtrInstance< DlgSize > aDlgColWidth(this, nCurWidth, false);
-        if (aDlgColWidth->Execute())
+        DlgSize aDlgColWidth(GetFrameWeld(), nCurWidth, false);
+        if (aDlgColWidth.run() == RET_OK)
         {
-            sal_Int32 nValue = aDlgColWidth->GetValue();
+            sal_Int32 nValue = aDlgColWidth.GetValue();
             Any aNewWidth;
             if (-1 == nValue)
             {   // set to default
@@ -819,10 +819,10 @@ void SbaGridControl::SetRowHeight()
     Any aHeight = xCols->getPropertyValue(PROPERTY_ROW_HEIGHT);
     sal_Int32 nCurHeight = aHeight.hasValue() ? ::comphelper::getINT32(aHeight) : -1;
 
-    ScopedVclPtrInstance< DlgSize > aDlgRowHeight(this, nCurHeight, true);
-    if (aDlgRowHeight->Execute())
+    DlgSize aDlgRowHeight(GetFrameWeld(), nCurHeight, true);
+    if (aDlgRowHeight.run() == RET_OK)
     {
-        sal_Int32 nValue = aDlgRowHeight->GetValue();
+        sal_Int32 nValue = aDlgRowHeight.GetValue();
         Any aNewHeight;
         if (sal_Int16(-1) == nValue)
         {   // set to default

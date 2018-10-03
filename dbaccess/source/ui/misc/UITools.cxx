@@ -987,10 +987,10 @@ void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId
 
     Size aDefaultMM = _pBox->PixelToLogic( Size( nDefaultWidth, 0 ), MapMode( MapUnit::MapMM ) );
 
-    ScopedVclPtrInstance< DlgSize > aColumnSizeDlg( _pBox, nColSize, false, aDefaultMM.Width() * 10 );
-    if ( aColumnSizeDlg->Execute() )
+    DlgSize aColumnSizeDlg(_pBox->GetFrameWeld(), nColSize, false, aDefaultMM.Width() * 10);
+    if (aColumnSizeDlg.run() == RET_OK)
     {
-        sal_Int32 nValue = aColumnSizeDlg->GetValue();
+        sal_Int32 nValue = aColumnSizeDlg.GetValue();
         if ( -1 == nValue )
         {   // default width
             nValue = _pBox->GetDefaultColumnWidth( _pBox->GetColumnTitle( _nColId ) );
