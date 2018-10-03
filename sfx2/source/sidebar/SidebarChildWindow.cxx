@@ -24,6 +24,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <helpids.h>
 #include <sfx2/dockwin.hxx>
+#include <comphelper/lok.hxx>
 
 namespace sfx2 { namespace sidebar {
 
@@ -57,6 +58,13 @@ SidebarChildWindow::SidebarChildWindow (vcl::Window* pParentWindow, sal_uInt16 n
                         pDockingParent->GetSizePixel().Height()));
         }
         pDockingParent->Initialize(pInfo);
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            // Undock for Lok.
+            pDockingParent->SetFloatingSize(Size(400, 600));
+            pDockingParent->SetFloatingMode(true);
+        }
     }
     SetHideNotDelete(true);
 
