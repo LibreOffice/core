@@ -33,15 +33,14 @@
 using namespace dbaui;
 
 
-SbaSbAttrDlg::SbaSbAttrDlg(vcl::Window* pParent, const SfxItemSet* pCellAttrs,
+SbaSbAttrDlg::SbaSbAttrDlg(weld::Window* pParent, const SfxItemSet* pCellAttrs,
     SvNumberFormatter* pFormatter, bool bHasFormat)
-    : SfxTabDialog(pParent, "FieldDialog", "dbaccess/ui/fielddialog.ui", pCellAttrs)
-    , m_nNumberFormatId(0)
+    : SfxTabDialogController(pParent, "dbaccess/ui/fielddialog.ui", "FieldDialog", pCellAttrs)
 {
     pNumberInfoItem.reset( new SvxNumberInfoItem( pFormatter, 0 ) );
 
     if (bHasFormat)
-        m_nNumberFormatId = AddTabPage("format", RID_SVXPAGE_NUMBERFORMAT);
+        AddTabPage("format", RID_SVXPAGE_NUMBERFORMAT);
     else
         RemoveTabPage("format");
     AddTabPage("alignment", RID_SVXPAGE_ALIGNMENT);
@@ -49,19 +48,12 @@ SbaSbAttrDlg::SbaSbAttrDlg(vcl::Window* pParent, const SfxItemSet* pCellAttrs,
 
 SbaSbAttrDlg::~SbaSbAttrDlg()
 {
-    disposeOnce();
 }
 
-void SbaSbAttrDlg::dispose()
-{
-    pNumberInfoItem.reset();
-    SfxTabDialog::dispose();
-}
-
-void SbaSbAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
+void SbaSbAttrDlg::PageCreated(const OString& rPageId, SfxTabPage& rTabPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-    if (nPageId == m_nNumberFormatId)
+    if (rPageId == "format")
     {
         aSet.Put (SvxNumberInfoItem( pNumberInfoItem->GetNumberFormatter(), static_cast<sal_uInt16>(SID_ATTR_NUMBERFORMAT_INFO)));
         rTabPage.PageCreated(aSet);

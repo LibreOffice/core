@@ -406,6 +406,7 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
     {
         case SfxItemState::UNKNOWN:
             m_xEdIndent->hide();
+            m_xFtIndent->hide();
             break;
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
@@ -429,6 +430,7 @@ void AlignmentTabPage::Reset(const SfxItemSet* pCoreAttrs)
     {
         case SfxItemState::UNKNOWN:
             m_xLbVerAlign->hide();
+            m_xFtVerAlign->hide();
             break;
         case SfxItemState::DISABLED:
         case SfxItemState::READONLY:
