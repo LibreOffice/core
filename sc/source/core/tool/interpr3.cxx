@@ -2868,8 +2868,10 @@ void ScInterpreter::ScKurt()
     if ( !CalculateSkew(fSum,fCount,vSum,values) )
         return;
 
-    if (fCount == 0.0)
+    // ODF 1.2 constraints: # of numbers >= 4
+    if (fCount < 4.0)
     {
+        // for interoperability with Excel
         PushError( FormulaError::DivisionByZero);
         return;
     }
