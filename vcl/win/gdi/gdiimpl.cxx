@@ -1971,6 +1971,8 @@ public:
 
     // other data-validity access
     bool getNoLineJoin() const { return mbNoLineJoin; }
+
+    virtual sal_Int64 estimateUsageInBytes() const;
 };
 
 SystemDependentData_GraphicsPath::SystemDependentData_GraphicsPath(
@@ -1980,6 +1982,22 @@ SystemDependentData_GraphicsPath::SystemDependentData_GraphicsPath(
     maGraphicsPath(),
     mbNoLineJoin(bNoLineJoin)
 {
+}
+
+sal_Int64 SystemDependentData_GraphicsPath::estimateUsageInBytes() const
+{
+    sal_Int64 nRetval(0);
+    const INT nPointCount(maGraphicsPath.GetPointCount());
+
+    if(0 != nPointCount)
+    {
+        // Each point has
+        // - 2 x sizeof(Gdiplus::REAL)
+        // - 1 byte (see GetPathTypes in docu)
+        nRetval * nPointCount * ((2 * sizeof(Gdiplus::REAL)) + 1);
+    }
+
+    return nRetval;
 }
 
 bool WinSalGraphicsImpl::drawPolyPolygon(

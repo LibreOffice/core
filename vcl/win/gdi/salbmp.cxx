@@ -105,6 +105,8 @@ public:
 
     const std::shared_ptr<Gdiplus::Bitmap>& getGdiPlusBitmap() const { return mpGdiPlusBitmap; }
     void setGdiPlusBitmap(const std::shared_ptr<Gdiplus::Bitmap>& rNew) { mpGdiPlusBitmap = rNew; }
+
+    virtual sal_Int64 estimateUsageInBytes() const;
 };
 
 SystemDependentData_GdiPlusBitmap::SystemDependentData_GdiPlusBitmap(
@@ -113,6 +115,59 @@ SystemDependentData_GdiPlusBitmap::SystemDependentData_GdiPlusBitmap(
     mpGdiPlusBitmap(),
     mpAssociatedAlpha(nullptr)
 {
+}
+
+sal_Int64 SystemDependentData_GdiPlusBitmap::estimateUsageInBytes() const
+{
+    sal_Int64 nRetval(0);
+
+    if(mpGdiPlusBitmap)
+    {
+        const UINT nWidth(mpGdiPlusBitmap->GetWidth());
+        const UINT nHeight(mpGdiPlusBitmap->GetHeight());
+
+        if(0 != nWidth && 0 != nHeight)
+        {
+            nRetval = nWidth * nHeight;
+
+            switch(mpGdiPlusBitmap->GetPixelFormat())
+            {
+                case PixelFormat1bppIndexed:
+                    nRetval /= 8;
+                    break;
+                case PixelFormat4bppIndexed:
+                    nRetval /= 4;
+                    break;
+                case PixelFormat16bppGrayScale:
+                case PixelFormat16bppRGB555:
+                case PixelFormat16bppRGB565:
+                case PixelFormat16bppARGB1555:
+                    nRetval *= 2;
+                    break;
+                case PixelFormat24bppRGB:
+                    nRetval *= 3;
+                    break;
+                case PixelFormat32bppRGB:
+                case PixelFormat32bppARGB:
+                case PixelFormat32bppPARGB:
+                case PixelFormat32bppCMYK:
+                    nRetval *= 4;
+                    break;
+                case PixelFormat48bppRGB:
+                    nRetval *= 6;
+                    break;
+                case PixelFormat64bppARGB:
+                case PixelFormat64bppPARGB:
+                    nRetval *= 8;
+                    break;
+                default:
+                case PixelFormat8bppIndexed:
+                    break;
+            }
+        }
+    }
+
+    return nRetval;
 }
 
 std::shared_ptr< Gdiplus::Bitmap > WinSalBitmap::ImplGetGdiPlusBitmap(const WinSalBitmap* pAlphaSource) const
