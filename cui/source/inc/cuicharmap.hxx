@@ -45,7 +45,7 @@ namespace svx
 class SvxShowText : public weld::CustomWidgetController
 {
 private:
-    VclPtr<VirtualDevice> m_xVirDev;
+    ScopedVclPtr<VirtualDevice> m_xVirDev;
     OUString m_sText;
     long mnY;
     bool mbCenter;
@@ -74,7 +74,7 @@ private:
 
     void            init();
 
-    VclPtr<VirtualDevice> m_xVirDev;
+    ScopedVclPtr<VirtualDevice> m_xVirDev;
     vcl::Font           aFont;
     const SubsetMap*    pSubsetMap;
     bool                isSearchMode;
