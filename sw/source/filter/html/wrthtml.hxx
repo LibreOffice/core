@@ -200,10 +200,7 @@ struct HTMLControl
     }
 };
 
-class HTMLControls : public o3tl::sorted_vector<HTMLControl*, o3tl::less_ptr_to<HTMLControl> > {
-public:
-    // will free any items still in the vector
-    ~HTMLControls() { DeleteAndDestroyAll(); }
+class HTMLControls : public o3tl::sorted_vector<std::unique_ptr<HTMLControl>, o3tl::less_uniqueptr_to<HTMLControl> > {
 };
 
 struct SwHTMLFormatInfo

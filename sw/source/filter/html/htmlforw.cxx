@@ -1310,7 +1310,7 @@ static void AddControl( HTMLControls& rControls,
         std::unique_ptr<HTMLControl> pHCntrl(new HTMLControl( xFormComps, nNodeIdx ));
         HTMLControls::const_iterator it = rControls.find( pHCntrl.get() );
         if( it == rControls.end() )
-            rControls.insert( pHCntrl.release() );
+            rControls.insert( std::move(pHCntrl) );
         else
         {
             if( (*it)->xFormComps==xFormComps )
