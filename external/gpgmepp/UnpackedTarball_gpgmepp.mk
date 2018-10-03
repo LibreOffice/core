@@ -13,8 +13,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,gpgmepp,$(GPGME_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,gpgmepp,0))
 
-# * external/gpgmepp/version.patch upstream at <https://dev.gnupg.org/T4168> "gpgme: `make dist`
-#   introduced VERSION can clash with new C++ <version>":
 $(eval $(call gb_UnpackedTarball_add_patches,gpgmepp, \
     external/gpgmepp/find-libgpg-error-libassuan.patch \
     external/gpgmepp/fix-autoconf-macros.patch \
@@ -28,6 +26,5 @@ $(eval $(call gb_UnpackedTarball_add_patches,gpgmepp, \
     $(if $(filter LINUX,$(OS)),external/gpgmepp/asan.patch) \
     $(if $(filter LINUX,$(OS)),external/gpgmepp/rpath.patch) \
     external/gpgmepp/gcc9.patch \
-    external/gpgmepp/version.patch \
 ))
 # vim: set noet sw=4 ts=4:
