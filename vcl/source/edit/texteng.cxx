@@ -30,6 +30,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/edit.hxx>
 #include <sal/log.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -2536,7 +2537,7 @@ void TextEngine::SetAttrib( const TextAttrib& rAttr, sal_uInt32 nPara, sal_Int32
         if ( nEnd > nMax )
             nEnd = nMax;
 
-        pNode->GetCharAttribs().InsertAttrib( new TextCharAttrib( rAttr, nStart, nEnd ) );
+        pNode->GetCharAttribs().InsertAttrib( o3tl::make_unique<TextCharAttrib>( rAttr, nStart, nEnd ) );
         pTEParaPortion->MarkSelectionInvalid( nStart );
 
         mbFormatted = false;

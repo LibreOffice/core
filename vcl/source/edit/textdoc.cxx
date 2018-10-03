@@ -58,7 +58,7 @@ void TextCharAttribList::Clear()
     maAttribs.clear();
 }
 
-void TextCharAttribList::InsertAttrib( TextCharAttrib* pAttrib )
+void TextCharAttribList::InsertAttrib( std::unique_ptr<TextCharAttrib> pAttrib )
 {
     if ( pAttrib->IsEmpty() )
         mbHasEmptyAttribs = true;
@@ -69,11 +69,11 @@ void TextCharAttribList::InsertAttrib( TextCharAttrib* pAttrib )
         [nStart](std::unique_ptr<TextCharAttrib>& rAttrib) { return rAttrib->GetStart() > nStart; });
     if (it != maAttribs.end())
     {
-        maAttribs.insert( it, std::unique_ptr<TextCharAttrib>(pAttrib) );
+        maAttribs.insert( it, std::move(pAttrib) );
         bInserted = true;
     }
     if ( !bInserted )
-        maAttribs.push_back( std::unique_ptr<TextCharAttrib>(pAttrib) );
+        maAttribs.push_back( std::move(pAttrib) );
 }
 
 void TextCharAttribList::ResortAttribs()
@@ -305,20 +305,20 @@ std::unique_ptr<TextNode> TextNode::Split( sal_Int32 nPos )
             // !FindAttrib only sensible if traversing backwards through the list!
             if ( !pNew->maCharAttribs.FindAttrib( rAttrib.Which(), 0 ) )
             {
-                TextCharAttrib* pNewAttrib = new TextCharAttrib( rAttrib );
+                std::unique_ptr<TextCharAttrib> pNewAttrib(new TextCharAttrib( rAttrib ));
                 pNewAttrib->GetStart() = 0;
                 pNewAttrib->GetEnd() = 0;
-                pNew->maCharAttribs.InsertAttrib( pNewAttrib );
+                pNew->maCharAttribs.InsertAttrib( std::move(pNewAttrib) );
             }
         }
         else if ( rAttrib.IsInside( nPos ) || ( !nPos && !rAttrib.GetStart() ) )
         {
             // If cutting at the very beginning, the attribute has to be
             // copied and changed
-            TextCharAttrib* pNewAttrib = new TextCharAttrib( rAttrib );
+            std::unique_ptr<TextCharAttrib> pNewAttrib(new TextCharAttrib( rAttrib ));
             pNewAttrib->GetStart() = 0;
             pNewAttrib->GetEnd() = rAttrib.GetEnd()-nPos;
-            pNew->maCharAttribs.InsertAttrib( pNewAttrib );
+            pNew->maCharAttribs.InsertAttrib( std::move(pNewAttrib) );
             // trim
             rAttrib.GetEnd() = nPos;
         }
@@ -327,7 +327,7 @@ std::unique_ptr<TextNode> TextNode::Split( sal_Int32 nPos )
             SAL_WARN_IF( rAttrib.GetStart() < nPos, "vcl", "Start < nPos!" );
             SAL_WARN_IF( rAttrib.GetEnd() < nPos, "vcl", "End < nPos!" );
             // move all into the new node (this)
-            pNew->maCharAttribs.InsertAttrib(maCharAttribs.RemoveAttrib(nAttr).release());
+            pNew->maCharAttribs.InsertAttrib(maCharAttribs.RemoveAttrib(nAttr));
             rAttrib.GetStart() = rAttrib.GetStart() - nPos;
             rAttrib.GetEnd() = rAttrib.GetEnd() - nPos;
             nAttr--;
@@ -370,10 +370,10 @@ void TextNode::Append( const TextNode& rNode )
 
         if ( !bMelted )
         {
-            TextCharAttrib* pNewAttrib = new TextCharAttrib( rAttrib );
+            std::unique_ptr<TextCharAttrib> pNewAttrib(new TextCharAttrib( rAttrib ));
             pNewAttrib->GetStart() = pNewAttrib->GetStart() + nOldLen;
             pNewAttrib->GetEnd() = pNewAttrib->GetEnd() + nOldLen;
-            maCharAttribs.InsertAttrib( pNewAttrib );
+            maCharAttribs.InsertAttrib( std::move(pNewAttrib) );
         }
     }
 }

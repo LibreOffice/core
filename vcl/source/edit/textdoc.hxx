@@ -51,7 +51,7 @@ public:
         return pReleased;
     }
 
-    void            InsertAttrib( TextCharAttrib* pAttrib );
+    void            InsertAttrib( std::unique_ptr<TextCharAttrib> pAttrib );
 
     void            DeleteEmptyAttribs();
     void            ResortAttribs();
