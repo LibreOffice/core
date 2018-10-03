@@ -1457,7 +1457,7 @@ SfxTabDialogController::SfxTabDialogController
                                   // can be NULL, when Pages are onDemand
     bool bEditFmt                 // when yes -> additional Button for standard
 )
-    : GenericDialogController(pParent, rUIXMLDescription, rID)
+    : SfxDialogController(pParent, rUIXMLDescription, rID)
     , m_xTabCtrl(m_xBuilder->weld_notebook("tabcontrol"))
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
     , m_xApplyBtn(m_xBuilder->weld_button("apply"))
