@@ -41,6 +41,8 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/rdf/XMetadatable.hpp>
+#include <com/sun/star/rdf/URI.hpp>
+#include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 
@@ -263,8 +265,16 @@ std::map<OUString, OUString> lcl_getRDFStatements(const uno::Reference<frame::XM
 {
     try
     {
+        // Create the graph name we are interested in to avoid enumerating all graphs,
+        // which is quite slow, considering the thousands of times we invoke this helper.
+        uno::Reference<rdf::XDocumentMetadataAccess> xDocMetadataAccess(xModel, uno::UNO_QUERY);
+        uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+        uno::Reference<rdf::XURI> xGraphName
+            = rdf::URI::createNS(xContext, xDocMetadataAccess->getStringValue(), MetaFilename);
+        const uno::Sequence<uno::Reference<rdf::XURI>> aGraphNames({ xGraphName });
+
         const css::uno::Reference<css::rdf::XResource> xSubject(xRef, uno::UNO_QUERY);
-        return SwRDFHelper::getStatements(xModel, MetaNS, xSubject);
+        return SwRDFHelper::getStatements(xModel, aGraphNames, xSubject);
     }
     catch (const ::css::uno::Exception&)
     {
