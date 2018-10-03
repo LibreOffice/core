@@ -282,7 +282,7 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
 
     // Remember old namespace map.
     if( pRewindMap )
-        xContext->PutRewindMap( pRewindMap.release() );
+        xContext->PutRewindMap( std::move(pRewindMap) );
 
     // Push context on stack.
     m_vContexts.push_back( xContext );
@@ -314,7 +314,7 @@ rName
         m_vContexts.pop_back();
 
         // Get a namespace map to rewind.
-        SvXMLNamespaceMap *pRewindMap = xContext->TakeRewindMap();
+        std::unique_ptr<SvXMLNamespaceMap> pRewindMap = xContext->TakeRewindMap();
 
         // Delete the current context.
         xContext = nullptr;
@@ -322,7 +322,7 @@ rName
         // Rewind a namespace map.
         if( pRewindMap )
         {
-            m_pNamespaceMap.reset( pRewindMap );
+            m_pNamespaceMap = std::move( pRewindMap );
         }
     }
 }
