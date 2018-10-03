@@ -11,5 +11,5 @@ diff -ur gpgmepp.org/Makefile.am gpgmepp/Makefile.am
 -SUBDIRS = src ${tests} doc lang
 +SUBDIRS = src ${tests} lang
  
- # Fix the version of the spec file and create a file named VERSION
- # to be used for patch's Prereq: feature.
+ # Fix the version of the spec file.
+ dist-hook: gen-ChangeLog

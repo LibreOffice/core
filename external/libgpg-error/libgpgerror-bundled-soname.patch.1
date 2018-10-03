@@ -3,7 +3,7 @@
 @@ -540,7 +540,7 @@
  @HAVE_LD_VERSION_SCRIPT_TRUE@libgpg_error_vers_opt = -Wl,--version-script=$(srcdir)/gpg-error.vers
  libgpg_error_la_LDFLAGS = \
-   $(no_undefined) $(export_symbols) $(libgpg_error_vers_opt) \
+   -no-undefined $(export_symbols) $(libgpg_error_vers_opt) \
 -  $(extra_ltoptions) -version-info \
 +  $(extra_ltoptions) -release lo -version-info \
    @LIBGPG_ERROR_LT_CURRENT@:@LIBGPG_ERROR_LT_REVISION@:@LIBGPG_ERROR_LT_AGE@
