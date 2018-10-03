@@ -24,6 +24,7 @@ How to add a new image set:
          scp2 compilation crashes when using a dash '-'.
          It evidently splits the name into two strings.
    ^ It's probably not true anymore with filelists.
+   ^ if this gets changed, IconThemeSelector::SetPreferredIconTheme needs to change too
 
 - Add its name (new_set) to WITH_THEMES variable in configure.ac
 
