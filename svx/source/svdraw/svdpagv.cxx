@@ -100,23 +100,6 @@ void SdrPageView::ClearPageWindows()
     maPageWindows.clear();
 }
 
-std::unique_ptr<SdrPageWindow> SdrPageView::RemovePageWindow(SdrPageWindow& rOld)
-{
-    auto aFindResult = ::std::find_if(maPageWindows.begin(), maPageWindows.end(),
-                        [&](const std::unique_ptr<SdrPageWindow> & p) { return p.get() == &rOld; } );
-
-    if(aFindResult != maPageWindows.end())
-    {
-        // remember return value
-        std::unique_ptr<SdrPageWindow> pSdrPageWindow = std::move(*aFindResult);
-        maPageWindows.erase(aFindResult);
-        return pSdrPageWindow;
-    }
-
-    return nullptr;
-}
-
-
 SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
 :   mrView(rNewView),
     // col_auto color lets the view takes the default SvxColorConfig entry

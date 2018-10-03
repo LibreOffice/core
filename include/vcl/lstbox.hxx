@@ -88,7 +88,6 @@ private:
     sal_uInt16                  mnLineCount;
 
     bool            mbDDAutoSize : 1;
-    bool            mbEdgeBlending : 1;
 
 private:
     SAL_DLLPRIVATE void    ImplInitListBoxData();
@@ -254,9 +253,6 @@ public:
     sal_uInt16          GetDisplayLineCount() const;
 
     void                EnableMirroring();
-
-    bool                GetEdgeBlending() const { return mbEdgeBlending; }
-    void                SetEdgeBlending(bool bNew);
 
     /** checks whether a certain point lies within the bounds of
         a listbox item and returns the item as well as the character position

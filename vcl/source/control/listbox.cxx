@@ -82,7 +82,6 @@ void ListBox::ImplInitListBoxData()
     mnLineCount     = 0;
     m_nMaxWidthChars = -1;
     mbDDAutoSize    = true;
-    mbEdgeBlending  = false;
 }
 
 void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
@@ -128,7 +127,7 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
         mpImplWin->SetUserDrawHdl( LINK( this, ListBox, ImplUserDrawHdl ) );
         mpImplWin->Show();
         mpImplWin->GetDropTarget()->addDropTargetListener(xDrop);
-        mpImplWin->SetEdgeBlending(GetEdgeBlending());
+        mpImplWin->SetEdgeBlending(false);
 
         mpBtn = VclPtr<ImplBtn>::Create( this, WB_NOLIGHTBORDER | WB_RECTSTYLE );
         ImplInitDropDownButton( mpBtn );
@@ -149,7 +148,7 @@ void ListBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mpImplLB->SetFocusHdl( LINK( this, ListBox, ImplFocusHdl ) );
     mpImplLB->SetListItemSelectHdl( LINK( this, ListBox, ImplListItemSelectHdl ) );
     mpImplLB->SetPosPixel( Point() );
-    mpImplLB->SetEdgeBlending(GetEdgeBlending());
+    mpImplLB->SetEdgeBlending(false);
     mpImplLB->Show();
 
     mpImplLB->GetDropTarget()->addDropTargetListener(xDrop);
@@ -1443,36 +1442,6 @@ bool ListBox::set_property(const OString &rKey, const OUString &rValue)
     else
         return Control::set_property(rKey, rValue);
     return true;
-}
-
-void ListBox::SetEdgeBlending(bool bNew)
-{
-    if(mbEdgeBlending != bNew)
-    {
-        mbEdgeBlending = bNew;
-
-        if(IsDropDownBox())
-        {
-            assert(mpImplWin);
-            mpImplWin->Invalidate();
-        }
-        else
-        {
-            mpImplLB->Invalidate();
-        }
-
-        if(mpImplWin)
-        {
-            mpImplWin->SetEdgeBlending(GetEdgeBlending());
-        }
-
-        if(mpImplLB)
-        {
-            mpImplLB->SetEdgeBlending(GetEdgeBlending());
-        }
-
-        Invalidate();
-    }
 }
 
 FactoryFunction ListBox::GetUITestFactory() const

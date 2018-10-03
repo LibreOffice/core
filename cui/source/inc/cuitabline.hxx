@@ -169,7 +169,6 @@ private:
 
     // handler for gallery popup menu button + size
     DECL_LINK(GraphicHdl_Impl, const OString&, void);
-    void MenuCreate();
     DECL_LINK(SizeHdl_Impl, weld::MetricSpinButton&, void);
     DECL_LINK(MenuCreateHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(RatioHdl_Impl, weld::ToggleButton&, void);
