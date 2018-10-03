@@ -674,9 +674,9 @@ static void lcl_MakeFieldLst(
             if ( pCFrame != nullptr
                  && ( bInReadOnly || !pCFrame->IsProtected() ) )
             {
-                SetGetExpField* pNew = new SetGetExpField( SwNodeIndex( rTextNode ), pTextField );
+                std::unique_ptr<SetGetExpField> pNew(new SetGetExpField( SwNodeIndex( rTextNode ), pTextField ));
                 pNew->SetBodyPos( *pCFrame );
-                rLst.insert( pNew );
+                rLst.insert( std::move(pNew) );
             }
         }
     }
