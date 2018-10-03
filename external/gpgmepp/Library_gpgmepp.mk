@@ -26,6 +26,7 @@ $(eval $(call gb_Library_set_include,gpgmepp,\
     -I$(call gb_UnpackedTarball_get_dir,gpgmepp)/lang/cpp/src/interfaces \
     -I$(call gb_UnpackedTarball_get_dir,gpgmepp) \
     -I$(call gb_UnpackedTarball_get_dir,gpgmepp)/src \
+    -I$(call gb_UnpackedTarball_get_dir,gpgmepp)/conf \
     -I$(call gb_UnpackedTarball_get_dir,libgpg-error)/src \
     $$(INCLUDE) \
 ))
