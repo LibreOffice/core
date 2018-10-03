@@ -477,10 +477,6 @@
                         generic-name="IntellectualPropertyPartEdit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
 
-    <glade-widget-class title="Combo Image Button" name="sclo-ScExtIButton"
-                        generic-name="Combo Image Button" parent="GtkButton"
-                        icon-name="widget-gtk-button"/>
-
     <glade-widget-class title="Open Document ListBox" name="dbulo-OpenDocumentListBox"
                         generic-name="Open Document ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>

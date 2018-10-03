@@ -24,6 +24,7 @@
 #include <svx/pageitem.hxx>
 #include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/menubtn.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/virdev.hxx>
 #include <scdllapi.h>
@@ -95,38 +96,6 @@ private:
 
     Link<ScEditWindow&,void> aObjectSelectLink;
     std::function<void (ScEditWindow&)> m_GetFocusLink;
-};
-
-class SC_DLLPUBLIC ScExtIButton final : public ImageButton
-{
-    Idle            aIdle;
-    VclPtr<PopupMenu>        pPopupMenu;
-    Link<ScExtIButton&,void> aMLink;
-    sal_uInt16      nSelected;
-    OString         aSelectedIdent;
-
-                    DECL_DLLPRIVATE_LINK( TimerHdl, Timer*, void );
-
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt) override;
-    virtual void    Click() override;
-
-    void            StartPopup();
-
-public:
-
-    ScExtIButton(vcl::Window* pParent, WinBits nBits );
-    virtual ~ScExtIButton() override;
-    virtual void dispose() override;
-
-    void            SetPopupMenu(PopupMenu* pPopUp);
-
-    sal_uInt16      GetSelected() const { return nSelected;}
-    const OString&  GetSelectedIdent() const { return aSelectedIdent;}
-
-    void            SetMenuHdl( const Link<ScExtIButton&,void>& rLink ) { aMLink = rLink; }
-
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) override;
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TPHFEDIT_HXX

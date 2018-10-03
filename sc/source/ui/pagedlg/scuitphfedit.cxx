@@ -91,7 +91,7 @@ ScHFEditPage::ScHFEditPage( vcl::Window*             pParent,
     m_pBtnFile->SetPopupMenu(get_menu("popup"));
 
     m_pLbDefined->SetSelectHdl( LINK( this, ScHFEditPage, ListHdl_Impl ) );
-    m_pBtnFile->SetMenuHdl( LINK( this, ScHFEditPage, MenuHdl ) );
+    m_pBtnFile->SetSelectHdl( LINK( this, ScHFEditPage, MenuHdl ) );
     m_pBtnText->SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
     m_pBtnPage->SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
     m_pBtnLastPage->SetClickHdl( LINK( this, ScHFEditPage, ClickHdl ) );
@@ -799,13 +799,12 @@ IMPL_LINK( ScHFEditPage, ClickHdl, Button*, pBtn, void )
     m_pEditFocus->GrabFocus();
 }
 
-IMPL_LINK( ScHFEditPage, MenuHdl, ScExtIButton&, rBtn, void )
+IMPL_LINK(ScHFEditPage, MenuHdl, MenuButton*, pBtn, void)
 {
     if (!m_pEditFocus)
         return;
 
-    SAL_WARN_IF(rBtn.GetSelected() == 0, "sc.ui", "nothing selected");
-    OString sSelectedId = rBtn.GetSelectedIdent();
+    OString sSelectedId = pBtn->GetCurItemIdent();
 
     if (sSelectedId == "title")
     {
