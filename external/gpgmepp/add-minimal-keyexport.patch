@@ -26,8 +26,8 @@
  {
      d->lastop = Private::Export;
      Data::Private *const dp = keyData.impl();
--    return Error(d->lasterr = gpgme_op_export(d->ctx, pattern, 0, dp ? dp->data : 0));
-+    return Error(d->lasterr = gpgme_op_export(d->ctx, pattern, minimal ? GPGME_EXPORT_MODE_MINIMAL : 0, dp ? dp->data : 0));
+-    return Error(d->lasterr = gpgme_op_export(d->ctx, pattern, 0, dp ? dp->data : nullptr));
++    return Error(d->lasterr = gpgme_op_export(d->ctx, pattern, minimal ? GPGME_EXPORT_MODE_MINIMAL : 0, dp ? dp->data : nullptr));
  }
  
 -Error Context::exportPublicKeys(const char *patterns[], Data &keyData)
@@ -39,8 +39,8 @@
      }
  #endif
      Data::Private *const dp = keyData.impl();
--    return Error(d->lasterr = gpgme_op_export_ext(d->ctx, patterns, 0, dp ? dp->data : 0));
-+    return Error(d->lasterr = gpgme_op_export_ext(d->ctx, patterns, minimal ? GPGME_EXPORT_MODE_MINIMAL : 0, dp ? dp->data : 0));
+-    return Error(d->lasterr = gpgme_op_export_ext(d->ctx, patterns, 0, dp ? dp->data : nullptr));
++    return Error(d->lasterr = gpgme_op_export_ext(d->ctx, patterns, minimal ? GPGME_EXPORT_MODE_MINIMAL : 0, dp ? dp->data : nullptr));
  }
  
 -Error Context::startPublicKeyExport(const char *pattern, Data &keyData)
@@ -48,8 +48,8 @@
  {
      d->lastop = Private::Export;
      Data::Private *const dp = keyData.impl();
--    return Error(d->lasterr = gpgme_op_export_start(d->ctx, pattern, 0, dp ? dp->data : 0));
-+    return Error(d->lasterr = gpgme_op_export_start(d->ctx, pattern, minimal ? GPGME_EXPORT_MODE_MINIMAL : 0, dp ? dp->data : 0));
+-    return Error(d->lasterr = gpgme_op_export_start(d->ctx, pattern, 0, dp ? dp->data : nullptr));
++    return Error(d->lasterr = gpgme_op_export_start(d->ctx, pattern, minimal ? GPGME_EXPORT_MODE_MINIMAL : 0, dp ? dp->data : nullptr));
  }
  
 -Error Context::startPublicKeyExport(const char *patterns[], Data &keyData)
@@ -61,8 +61,8 @@
      }
  #endif
      Data::Private *const dp = keyData.impl();
--    return Error(d->lasterr = gpgme_op_export_ext_start(d->ctx, patterns, 0, dp ? dp->data : 0));
-+    return Error(d->lasterr = gpgme_op_export_ext_start(d->ctx, patterns, minimal ? GPGME_EXPORT_MODE_MINIMAL : 0, dp ? dp->data : 0));
+-    return Error(d->lasterr = gpgme_op_export_ext_start(d->ctx, patterns, 0, dp ? dp->data : nullptr));
++    return Error(d->lasterr = gpgme_op_export_ext_start(d->ctx, patterns, minimal ? GPGME_EXPORT_MODE_MINIMAL : 0, dp ? dp->data : nullptr));
  }
  
  ImportResult Context::importKeys(const Data &data)

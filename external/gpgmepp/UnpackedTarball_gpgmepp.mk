@@ -13,10 +13,6 @@ $(eval $(call gb_UnpackedTarball_set_tarball,gpgmepp,$(GPGME_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,gpgmepp,0))
 
-# * external/gpgmepp/add-gpgme_set_global_flag-wrapper.patch upstreamed at
-#   <https://dev.gnupg.org/T4471> "No gpgmepp API to call gpgme_set_global_flag"
-# * external/gpgmepp/version.patch upstream at <https://dev.gnupg.org/T4168> "gpgme: `make dist`
-#   introduced VERSION can clash with new C++ <version>":
 $(eval $(call gb_UnpackedTarball_add_patches,gpgmepp, \
     external/gpgmepp/find-libgpg-error-libassuan.patch \
     external/gpgmepp/fix-autoconf-macros.patch \
@@ -27,11 +23,9 @@ $(eval $(call gb_UnpackedTarball_add_patches,gpgmepp, \
     $(if $(filter MSC,$(COM)),external/gpgmepp/w32-fix-libtool.patch.1) \
     $(if $(filter MSC,$(COM)),external/gpgmepp/w32-add-initializer.patch.1) \
     external/gpgmepp/w32-build-fixes-2.patch \
-    external/gpgmepp/add-gpgme_set_global_flag-wrapper.patch \
     $(if $(filter LINUX,$(OS)),external/gpgmepp/asan.patch) \
     $(if $(filter LINUX,$(OS)),external/gpgmepp/rpath.patch) \
     external/gpgmepp/gcc9.patch \
-    external/gpgmepp/version.patch \
     external/gpgmepp/ubsan.patch \
 ))
 # vim: set noet sw=4 ts=4:
