@@ -256,7 +256,7 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
         sal_Int32 nCount = aColNames.getLength();
         for (sal_Int32 n = 0; n < nCount; ++n)
         {
-            SwInsDBColumn* pNew = new SwInsDBColumn( pColNames[n] );
+            std::unique_ptr<SwInsDBColumn> pNew(new SwInsDBColumn( pColNames[n] ));
             Any aCol = xCols->getByName(pColNames[n]);
             Reference <XPropertySet> xCol;
             aCol >>= xCol;
@@ -319,10 +319,9 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                 }
                 break;
             }
-            if( !aDBColumns.insert( pNew ).second )
+            if( !aDBColumns.insert( std::move(pNew) ).second )
             {
                 OSL_ENSURE( false, "Spaltenname mehrfach vergeben?" );
-                delete pNew;
             }
         }
     }
@@ -1013,7 +1012,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             SwInsDBColumn aSrch( m_pLbTableCol->GetEntry( n ) );
             SwInsDBColumns::const_iterator it = aDBColumns.find( &aSrch );
             if (it != aDBColumns.end())
-                aColFields.push_back(*it);
+                aColFields.push_back(it->get());
             else {
                 OSL_ENSURE( false, "database column not found" );
             }
@@ -1603,7 +1602,7 @@ void SwInsertDBColAutoPilot::ImplCommit()
     SvNumberFormatter& rNFormatr = *pView->GetWrtShell().GetNumberFormatter();
     for(size_t nCol = 0; nCol < aDBColumns.size(); nCol++)
     {
-        SwInsDBColumn* pColumn = aDBColumns[nCol];
+        SwInsDBColumn* pColumn = aDBColumns[nCol].get();
         OUString sColumnInsertNode(sNewNode + "/__");
         if( nCol < 10 )
             sColumnInsertNode += "00";
@@ -1711,7 +1710,7 @@ void SwInsertDBColAutoPilot::Load()
                     continue;
                 sal_Int16 nIndex = 0;
                 pSubProps[1] >>= nIndex;
-                SwInsDBColumn* pInsDBColumn = new SwInsDBColumn(sColumn);
+                std::unique_ptr<SwInsDBColumn> pInsDBColumn(new SwInsDBColumn(sColumn));
                 if(pSubProps[2].hasValue())
                     pInsDBColumn->bHasFormat = *o3tl::doAccess<bool>(pSubProps[2]);
                 if(pSubProps[3].hasValue())
@@ -1734,7 +1733,7 @@ void SwInsertDBColAutoPilot::Load()
                 pInsDBColumn->nUsrNumFormat = rNFormatr.GetEntryKey( pInsDBColumn->sUsrNumFormat,
                                                         pInsDBColumn->eUsrNumFormatLng );
 
-                pNewData->aDBColumns.insert(pInsDBColumn);
+                pNewData->aDBColumns.insert(std::move(pInsDBColumn));
             }
             OUString sTmp( pNewData->sTableList );
             if( !sTmp.isEmpty() )
