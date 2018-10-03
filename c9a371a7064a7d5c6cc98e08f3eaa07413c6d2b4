@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_eb4e0ec0",
+        "filename": "bin/gla11y",
+        "patchSetId": 2
+      },
+      "lineNbr": 997,
+      "author": {
+        "id": 1001814
+      },
+      "writtenOn": "2018-10-03T12:56:59Z",
+      "side": 1,
+      "message": "Please use elm_name_line() to pretty-print elements, so the class and line number also get printed in addition to id (I submitted the change in the label-for part in https://gerrit.libreoffice.org/#/c/61300/ )",
+      "range": {
+        "startLine": 997,
+        "startChar": 107,
+        "endLine": 997,
+        "endChar": 113
+      },
+      "revId": "c9a371a7064a7d5c6cc98e08f3eaa07413c6d2b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
