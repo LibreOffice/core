@@ -10,3 +10,13 @@ Avoid MFC dependency - can go with very basic includes instead
  
  
  VS_VERSION_INFO VERSIONINFO
+--- lang/cpp/src/importresult.cpp~	2020-06-11 16:00:46.410830500 +0200
++++ lang/cpp/src/importresult.cpp	2020-06-11 16:00:25.987900000 +0200
+@@ -35,7 +35,6 @@
+ #include <cstring>
+ 
+ #include <string.h>
+-#include <strings.h>
+ #include <istream>
+ #include <iterator>
+ 

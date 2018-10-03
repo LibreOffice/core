@@ -52,107 +52,6 @@ diff -ur libgpg-error.org/src/estream-printf.c libgpg-error/src/estream-printf.c
  #include <stdarg.h>
  #include <errno.h>
  #include <stddef.h>
---- src/Makefile.am	2017-02-28 13:33:38.000000000 +0100
-+++ src/Makefile.am~	2017-09-10 21:52:19.739988146 +0200
-@@ -99,9 +99,9 @@
- 
- CLEANFILES = err-sources.h err-codes.h code-to-errno.h code-from-errno.h \
- 	gpg-error.h gpgrt.h \
--        mkerrcodes mkerrcodes.h gpg-error.def mkw32errmap.tab.h \
-+        mkerrcodes.exe mkerrcodes.h gpg-error.def mkw32errmap.tab.h \
- 	mkw32errmap.map.c err-sources-sym.h err-codes-sym.h errnos-sym.h \
--	gpg-extra/errno.h mkheader $(tmp_files) lock-obj-pub.native.h
-+	gpg-extra/errno.h mkheader.exe $(tmp_files) lock-obj-pub.native.h
- 
- 
- #
-@@ -251,7 +251,7 @@
- 
- # It is correct to use $(CC_FOR_BUILD) here.  We want to run the
- # program at build time.
--mkerrcodes: mkerrcodes.c mkerrcodes.h Makefile
-+mkerrcodes.exe: mkerrcodes.c mkerrcodes.h Makefile
- 	$(CC_FOR_BUILD) -I. -I$(srcdir) -o $@ $(srcdir)/mkerrcodes.c
- 
- if HAVE_W32CE_SYSTEM
-@@ -261,7 +261,7 @@
- 	$(CC_FOR_BUILD) -I. -I$(srcdir) -o $@ $(srcdir)/mkw32errmap.c
- endif
- 
--code-from-errno.h: mkerrcodes Makefile
-+code-from-errno.h: mkerrcodes.exe Makefile
- 	./mkerrcodes | $(AWK) -f $(srcdir)/mkerrcodes2.awk >$@
- 
- errnos-sym.h: Makefile mkstrtable.awk errnos.in
-@@ -270,7 +270,7 @@
- 		$(srcdir)/errnos.in >$@
- 
- 
--mkheader: mkheader.c Makefile
-+mkheader.exe: mkheader.c Makefile
- 	$(CC_FOR_BUILD) -g -O0 -I. -I$(srcdir) -o $@ $(srcdir)/mkheader.c
- 
- parts_of_gpg_error_h = 	 	\
-@@ -297,7 +297,7 @@
- 
- # We also depend on versioninfo.rc because that is build by
- # config.status and thus has up-to-date version numbers.
--gpg-error.h: Makefile mkheader $(parts_of_gpg_error_h) \
-+gpg-error.h: Makefile mkheader.exe $(parts_of_gpg_error_h) \
-              versioninfo.rc ../config.h
- 	$(pre_mkheader_cmds)
- 	./mkheader $(host_os) $(host_triplet)  $(srcdir)/gpg-error.h.in \
-diff -ru libgpg-error.orig/src/Makefile.in libgpg-error/src/Makefile.in
---- src/Makefile.in	2017-02-28 15:03:41.000000000 +0100
-+++ src/Makefile.in~	2017-09-10 21:53:48.447987149 +0200
-@@ -493,9 +493,9 @@
- tmp_files = _mkerrcodes.h _gpg-error.def.h mkw32errmap.tab.h mkw32errmap.map.c
- CLEANFILES = err-sources.h err-codes.h code-to-errno.h code-from-errno.h \
- 	gpg-error.h gpgrt.h \
--        mkerrcodes mkerrcodes.h gpg-error.def mkw32errmap.tab.h \
-+        mkerrcodes.exe mkerrcodes.h gpg-error.def mkw32errmap.tab.h \
- 	mkw32errmap.map.c err-sources-sym.h err-codes-sym.h errnos-sym.h \
--	gpg-extra/errno.h mkheader $(tmp_files) lock-obj-pub.native.h
-+	gpg-extra/errno.h mkheader.exe $(tmp_files) lock-obj-pub.native.h
- 
- 
- #
-@@ -1309,7 +1309,7 @@
- 
- # It is correct to use $(CC_FOR_BUILD) here.  We want to run the
- # program at build time.
--mkerrcodes: mkerrcodes.c mkerrcodes.h Makefile
-+mkerrcodes.exe: mkerrcodes.c mkerrcodes.h Makefile
- 	$(CC_FOR_BUILD) -I. -I$(srcdir) -o $@ $(srcdir)/mkerrcodes.c
- 
- # It is correct to use $(CC_FOR_BUILD) here.  We want to run the
-@@ -1317,7 +1317,7 @@
- @HAVE_W32CE_SYSTEM_TRUE@mkw32errmap: mkw32errmap.c mkw32errmap.tab.h Makefile
- @HAVE_W32CE_SYSTEM_TRUE@	$(CC_FOR_BUILD) -I. -I$(srcdir) -o $@ $(srcdir)/mkw32errmap.c
- 
--code-from-errno.h: mkerrcodes Makefile
-+code-from-errno.h: mkerrcodes.exe Makefile
- 	./mkerrcodes | $(AWK) -f $(srcdir)/mkerrcodes2.awk >$@
- 
- errnos-sym.h: Makefile mkstrtable.awk errnos.in
-@@ -1325,7 +1325,7 @@
- 		-v prefix=GPG_ERR_ -v pkg_namespace=errnos_ \
- 		$(srcdir)/errnos.in >$@
- 
--mkheader: mkheader.c Makefile
-+mkheader.exe: mkheader.c Makefile
- 	$(CC_FOR_BUILD) -g -O0 -I. -I$(srcdir) -o $@ $(srcdir)/mkheader.c
- 
- @FORCE_USE_SYSCFG_FALSE@./lock-obj-pub.native.h: Makefile gen-posix-lock-obj$(EXEEXT) posix-lock-obj.h
-@@ -1333,7 +1333,7 @@
- 
- # We also depend on versioninfo.rc because that is build by
- # config.status and thus has up-to-date version numbers.
--gpg-error.h: Makefile mkheader $(parts_of_gpg_error_h) \
-+gpg-error.h: Makefile mkheader.exe $(parts_of_gpg_error_h) \
-              versioninfo.rc ../config.h
- 	$(pre_mkheader_cmds)
- 	./mkheader $(host_os) $(host_triplet)  $(srcdir)/gpg-error.h.in \
 --- src/mkheader.c	2016-11-16 13:22:03.000000000 +0100
 +++ src/mkheader.c~	2017-02-19 17:35:32.172009000 +0100
 @@ -16,7 +16,11 @@
@@ -204,3 +103,19 @@ diff -ur libgpg-error.org/src/w32-estream.c libgpg-error/src/w32-estream.c
  /*
   * In order to support es_poll on Windows, we create a proxy shim that
   * we use as the estream I/O functions.  This shim creates reader and
+--- src/spawn-w32.c	    2019-08-22 12:30:38.000000000 +0200
++++ src/spawn-w32.c~	2020-05-26 01:37:17.759077700 +0200
+@@ -34,7 +34,11 @@
+ #ifdef HAVE_SIGNAL_H
+ # include <signal.h>
+ #endif
+-#include <unistd.h>
++#ifdef _WIN32
++# include <io.h>
++#else
++# include <unistd.h>
++#endif
+ #include <fcntl.h>
+ #ifdef HAVE_STAT
+ # include <sys/stat.h>
+
