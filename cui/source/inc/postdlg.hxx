@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_POSTDLG_HXX
 #define INCLUDED_CUI_SOURCE_INC_POSTDLG_HXX
 
-#include <vcl/weld.hxx>
+#include <sfx2/basedlgs.hxx>
 
 // class SvxPostItDialog -------------------------------------------------
 /*
@@ -34,7 +34,7 @@
     <SvxPostItTextItem><SID_ATTR_POSTIT_TEXT>
 */
 
-class SvxPostItDialog : public weld::GenericDialogController
+class SvxPostItDialog : public SfxDialogController
 {
 public:
     SvxPostItDialog(weld::Window* pParent, const SfxItemSet& rCoreSet,

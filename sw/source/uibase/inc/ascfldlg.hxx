@@ -30,7 +30,7 @@ class SwAsciiOptions;
 class SvStream;
 class SwDocShell;
 
-class SwAsciiFilterDlg : public weld::GenericDialogController
+class SwAsciiFilterDlg : public SfxDialogController
 {
     bool m_bSaveLineStatus;
     OUString m_sExtraData;
