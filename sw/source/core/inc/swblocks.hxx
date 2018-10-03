@@ -48,7 +48,7 @@ public:
     bool operator< ( const SwBlockName& r ) const { return aShort <  r.aShort; }
 };
 
-class SwBlockNames : public o3tl::sorted_vector<SwBlockName*, o3tl::less_ptr_to<SwBlockName> > {};
+class SwBlockNames : public o3tl::sorted_vector<std::unique_ptr<SwBlockName>, o3tl::less_uniqueptr_to<SwBlockName> > {};
 
 class SwImpBlocks
 {

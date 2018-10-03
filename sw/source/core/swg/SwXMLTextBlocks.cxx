@@ -148,13 +148,12 @@ void SwXMLTextBlocks::AddName( const OUString& rShort, const OUString& rLong,
     sal_uInt16 nIdx = GetIndex( rShort );
     if (nIdx != USHRT_MAX)
     {
-        delete m_aNames[nIdx];
         m_aNames.erase( m_aNames.begin() + nIdx );
     }
-    SwBlockName* pNew = new SwBlockName( rShort, rLong, rPackageName );
+    std::unique_ptr<SwBlockName> pNew(new SwBlockName( rShort, rLong, rPackageName ));
     pNew->bIsOnlyTextFlagInit = true;
     pNew->bIsOnlyText = bOnlyText;
-    m_aNames.insert( pNew );
+    m_aNames.insert( std::move(pNew) );
     m_bInfoChanged = true;
 }
 
