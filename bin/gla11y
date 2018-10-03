@@ -995,7 +995,7 @@ def check_a11y_relation(filename, tree):
             elif len(label_for_elm[oid]) == 1:
                 paired = label_for_elm[oid][0]
                 if visible != is_visible(paired):
-                    warn(filename, tree, obj, "visibility-conflict", "visibility conflicts with paired " + paired.attrib.get('id'))
+                    warn(filename, tree, obj, "visibility-conflict", "visibility conflicts with paired " + elm_name_line(paired))
         if oid in mnemonic_for_elm:
             if len(mnemonic_for_elm[oid]) > 1:
                 warn(filename, tree, obj, "duplicate-mnemonic", "is referenced by multiple mnemonic_widget " + elms_names_lines(mnemonic_for_elm[oid]))
