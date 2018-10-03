@@ -190,14 +190,14 @@ IMPL_LINK( SwSendQueryBox_Impl, ModifyHdl, weld::Entry&, rEdit, void)
     m_xOKPB->set_sensitive(bIsEmptyAllowed  || !rEdit.get_text().isEmpty());
 }
 
-class SwCopyToDialog : public weld::GenericDialogController
+class SwCopyToDialog : public SfxDialogController
 {
     std::unique_ptr<weld::Entry> m_xCCED;
     std::unique_ptr<weld::Entry> m_xBCCED;
 
 public:
     explicit SwCopyToDialog(weld::Window* pParent)
-        : GenericDialogController(pParent, "modules/swriter/ui/ccdialog.ui", "CCDialog")
+        : SfxDialogController(pParent, "modules/swriter/ui/ccdialog.ui", "CCDialog")
         , m_xCCED(m_xBuilder->weld_entry("cc"))
         , m_xBCCED(m_xBuilder->weld_entry("bcc"))
     {
@@ -211,7 +211,7 @@ public:
 };
 
 SwMMResultSaveDialog::SwMMResultSaveDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "modules/swriter/ui/mmresultsavedialog.ui", "MMResultSaveDialog")
+    : SfxDialogController(pParent, "modules/swriter/ui/mmresultsavedialog.ui", "MMResultSaveDialog")
     , m_bCancelSaving(false)
     , m_xSaveAsOneRB(m_xBuilder->weld_radio_button("singlerb"))
     , m_xSaveIndividualRB(m_xBuilder->weld_radio_button("individualrb"))
@@ -243,7 +243,7 @@ SwMMResultSaveDialog::~SwMMResultSaveDialog()
 }
 
 SwMMResultPrintDialog::SwMMResultPrintDialog(weld::Window* pParent)
-    : GenericDialogController(pParent, "modules/swriter/ui/mmresultprintdialog.ui", "MMResultPrintDialog")
+    : SfxDialogController(pParent, "modules/swriter/ui/mmresultprintdialog.ui", "MMResultPrintDialog")
     , m_xPrinterFT(m_xBuilder->weld_label("printerft"))
     , m_xPrinterLB(m_xBuilder->weld_combo_box_text("printers"))
     , m_xPrinterSettingsPB(m_xBuilder->weld_button("printersettings"))

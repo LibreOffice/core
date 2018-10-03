@@ -35,7 +35,7 @@ class SwWrtShell;
 
 enum AutoFormatLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
 
-class SwAutoFormatDlg : public weld::GenericDialogController
+class SwAutoFormatDlg : public SfxDialogController
 {
     OUString        m_aStrTitle;
     OUString        m_aStrLabel;

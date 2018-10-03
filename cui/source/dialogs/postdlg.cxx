@@ -35,7 +35,7 @@
 
 SvxPostItDialog::SvxPostItDialog(weld::Window* pParent, const SfxItemSet& rCoreSet,
     bool bPrevNext)
-    : GenericDialogController(pParent, "cui/ui/comment.ui", "CommentDialog")
+    : SfxDialogController(pParent, "cui/ui/comment.ui", "CommentDialog")
     , m_rSet(rCoreSet)
     , m_xLastEditFT(m_xBuilder->weld_label("lastedit"))
     , m_xAltTitle(m_xBuilder->weld_label("alttitle"))

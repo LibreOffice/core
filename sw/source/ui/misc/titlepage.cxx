@@ -150,7 +150,7 @@ sal_uInt16 SwTitlePageDlg::GetInsertPosition() const
 }
 
 SwTitlePageDlg::SwTitlePageDlg(weld::Window *pParent)
-    : GenericDialogController(pParent, "modules/swriter/ui/titlepage.ui", "DLG_TITLEPAGE")
+    : SfxDialogController(pParent, "modules/swriter/ui/titlepage.ui", "DLG_TITLEPAGE")
     , mpPageFormatDesc(nullptr)
     , m_xUseExistingPagesRB(m_xBuilder->weld_radio_button("RB_USE_EXISTING_PAGES"))
     , m_xPageCountNF(m_xBuilder->weld_spin_button("NF_PAGE_COUNT"))

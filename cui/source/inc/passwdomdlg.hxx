@@ -19,11 +19,10 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_PASSWDOMDLG_HXX
 #define INCLUDED_CUI_SOURCE_INC_PASSWDOMDLG_HXX
 
-#include <vcl/weld.hxx>
+#include <sfx2/basedlgs.hxx>
 #include <memory>
 
-
-class PasswordToOpenModifyDialog : public weld::GenericDialogController
+class PasswordToOpenModifyDialog : public SfxDialogController
 {
     std::unique_ptr<weld::Entry> m_xPasswdToOpenED;
     std::unique_ptr<weld::Entry> m_xReenterPasswdToOpenED;

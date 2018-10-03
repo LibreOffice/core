@@ -124,7 +124,7 @@ const SfxItemSet* SvxZoomDialog::GetOutputItemSet() const
 }
 
 SvxZoomDialog::SvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet)
-    : GenericDialogController(pParent, "cui/ui/zoomdialog.ui", "ZoomDialog")
+    : SfxDialogController(pParent, "cui/ui/zoomdialog.ui", "ZoomDialog")
     , m_rSet(rCoreSet)
     , m_bModified(false)
     , m_xOptimalBtn(m_xBuilder->weld_radio_button("optimal"))

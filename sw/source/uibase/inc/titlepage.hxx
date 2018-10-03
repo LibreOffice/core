@@ -10,13 +10,13 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_TITLEPAGE_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_TITLEPAGE_HXX
 
-#include <vcl/weld.hxx>
+#include <sfx2/basedlgs.hxx>
 
 namespace vcl { class Window; }
 class SwWrtShell;
 class SwPageDesc;
 
-class SwTitlePageDlg : public weld::GenericDialogController
+class SwTitlePageDlg : public SfxDialogController
 {
 private:
     SwWrtShell *mpSh;
