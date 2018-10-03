@@ -45,7 +45,7 @@ namespace svx
 class SvxShowText : public weld::CustomWidgetController
 {
 private:
-    VclPtr<VirtualDevice> m_xVirDev;
+    ScopedVclPtr<VirtualDevice> m_xVirDev;
     OUString m_sText;
     long mnY;
     bool mbCenter;
@@ -68,13 +68,13 @@ public:
 
 /** The main purpose of this dialog is to enable the use of characters
     that are not easily accessible from the keyboard. */
-class SvxCharacterMap : public weld::GenericDialogController
+class SvxCharacterMap : public SfxDialogController
 {
 private:
 
     void            init();
 
-    VclPtr<VirtualDevice> m_xVirDev;
+    ScopedVclPtr<VirtualDevice> m_xVirDev;
     vcl::Font           aFont;
     std::unique_ptr<const SubsetMap> pSubsetMap;
     bool                isSearchMode;
