@@ -41,8 +41,8 @@ class XMLTransformerContext : public ::salhelper::SimpleReferenceObject
 
     std::unique_ptr<SvXMLNamespaceMap>   m_xRewindMap;
 
-    SvXMLNamespaceMap  *TakeRewindMap() { return m_xRewindMap.release(); }
-    void PutRewindMap( SvXMLNamespaceMap *p ) { m_xRewindMap.reset(p); }
+    std::unique_ptr<SvXMLNamespaceMap>  TakeRewindMap() { return std::move(m_xRewindMap); }
+    void PutRewindMap( std::unique_ptr<SvXMLNamespaceMap> p ) { m_xRewindMap = std::move(p); }
 
 protected:
 
