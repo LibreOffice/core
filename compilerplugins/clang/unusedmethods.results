@@ -46,6 +46,8 @@ connectivity/source/inc/OTypeInfo.hxx:46
     _Bool connectivity::OTypeInfo::operator==(const struct connectivity::OTypeInfo &) const
 connectivity/source/inc/OTypeInfo.hxx:47
     _Bool connectivity::OTypeInfo::operator!=(const struct connectivity::OTypeInfo &) const
+cui/source/inc/cuitabline.hxx:172
+    void SvxLineTabPage::MenuCreate()
 dbaccess/source/filter/hsqldb/fbalterparser.hxx:20
     void dbahsql::FbAlterStmtParser::ensureProperTableLengths() const
 dbaccess/source/filter/hsqldb/parseschema.hxx:82
@@ -328,6 +330,8 @@ include/codemaker/global.hxx:60
     class FileStream & operator<<(class FileStream &,const class rtl::OStringBuffer *)
 include/codemaker/global.hxx:61
     class FileStream & operator<<(class FileStream &,const class rtl::OStringBuffer &)
+include/comphelper/AccessibleImplementationHelper.hxx:37
+    class rtl::OUString comphelper::GetkeyBindingStrByXkeyBinding(const class com::sun::star::uno::Sequence<struct com::sun::star::awt::KeyStroke> &)
 include/comphelper/automationinvokedzone.hxx:28
      comphelper::Automation::AutomationInvokedZone::AutomationInvokedZone()
 include/comphelper/basicio.hxx:52
@@ -554,30 +558,8 @@ include/sfx2/charwin.hxx:63
     void SvxCharView::connect_focus_in(const class Link<class weld::Widget &, void> &)
 include/sfx2/charwin.hxx:64
     void SvxCharView::connect_focus_out(const class Link<class weld::Widget &, void> &)
-include/sfx2/controlwrapper.hxx:147
-    void sfx::ControlWrapperBase::ModifyControl(enum TriState)
-include/sfx2/controlwrapper.hxx:210
-     sfx::DummyWindowWrapper::DummyWindowWrapper(class vcl::Window &)
 include/sfx2/docfilt.hxx:83
     _Bool SfxFilter::GetGpgEncryption() const
-include/sfx2/itemconnect.hxx:166
-    void sfx::ItemConnectionBase::DoApplyFlags(const class SfxItemSet *)
-include/sfx2/itemconnect.hxx:168
-    void sfx::ItemConnectionBase::DoReset(const class SfxItemSet *)
-include/sfx2/itemconnect.hxx:170
-    _Bool sfx::ItemConnectionBase::DoFillItemSet(class SfxItemSet &,const class SfxItemSet &)
-include/sfx2/itemconnect.hxx:173
-     sfx::ItemConnectionBase::ItemConnectionBase(enum ItemConnFlags)
-include/sfx2/itemconnect.hxx:183
-    enum TriState sfx::ItemConnectionBase::GetShowState(_Bool) const
-include/sfx2/itemwrapper.hxx:43
-    _Bool sfx::ItemWrapperHelper::IsKnownItem(const class SfxItemSet &,unsigned short)
-include/sfx2/itemwrapper.hxx:47
-    const class SfxPoolItem * sfx::ItemWrapperHelper::GetUniqueItem(const class SfxItemSet &,unsigned short)
-include/sfx2/itemwrapper.hxx:50
-    const class SfxPoolItem & sfx::ItemWrapperHelper::GetDefaultItem(const class SfxItemSet &,unsigned short)
-include/sfx2/itemwrapper.hxx:53
-    void sfx::ItemWrapperHelper::RemoveDefaultItem(class SfxItemSet &,const class SfxItemSet &,unsigned short)
 include/sfx2/lokcharthelper.hxx:41
     void LokChartHelper::Invalidate()
 include/sfx2/msg.hxx:120
@@ -594,8 +576,6 @@ include/svtools/dialogcontrolling.hxx:167
     void svt::ControlDependencyManager::enableOnCheckMark(class CheckBox &,class vcl::Window &,class vcl::Window &)
 include/svtools/imagemgr.hxx:124
     class rtl::OUString SvFileInformationManager::GetFileImageId(const class INetURLObject &)
-include/svtools/treelistbox.hxx:689
-    void SvTreeListBox::ShowEntry(class SvTreeListEntry *)
 include/svx/ClassificationEditView.hxx:42
     void svx::ClassificationEditView::SetCharAttributes()
 include/svx/ClassificationEditView.hxx:48
@@ -604,32 +584,20 @@ include/svx/ClassificationField.hxx:48
     const class rtl::OUString & svx::ClassificationResult::getDisplayText() const
 include/svx/ClassificationField.hxx:53
     _Bool svx::ClassificationResult::operator==(const class svx::ClassificationResult &) const
-include/svx/dlgctrl.hxx:222
-     HatchingLB::HatchingLB(class vcl::Window *,long)
-include/svx/dlgctrl.hxx:230
-     GradientLB::GradientLB(class vcl::Window *,long)
-include/svx/dlgctrl.hxx:238
-     BitmapLB::BitmapLB(class vcl::Window *,long)
-include/svx/dlgctrl.hxx:265
-    void LineLB::setAddStandardFields(_Bool)
-include/svx/dlgctrl.hxx:267
-    void LineLB::Append(const class XDashEntry &,const class BitmapEx &)
-include/svx/dlgctrl.hxx:268
-    void LineLB::Modify(const class XDashEntry &,int,const class BitmapEx &)
-include/svx/dlgctrl.hxx:300
+include/svx/dlgctrl.hxx:272
     void SvxLineLB::set_sensitive(_Bool)
-include/svx/dlgctrl.hxx:301
+include/svx/dlgctrl.hxx:273
     _Bool SvxLineLB::get_sensitive() const
-include/svx/dlgctrl.hxx:323
+include/svx/dlgctrl.hxx:295
     void SvxLineEndLB::set_active_text(const class rtl::OUString &)
-include/svx/fontlb.hxx:38
-     SvLBoxFontString::SvLBoxFontString(const class rtl::OUString &,const class vcl::Font &,const class Color *)
 include/svx/framelink.hxx:201
     _Bool svx::frame::operator>(const class svx::frame::Style &,const class svx::frame::Style &)
 include/svx/framelink.hxx:238
     _Bool svx::frame::StyleVectorCombination::operator<(const class svx::frame::StyleVectorCombination &) const
 include/svx/svdlayer.hxx:75
     _Bool SdrLayer::operator==(const class SdrLayer &) const
+include/svx/svdpagv.hxx:96
+    class std::unique_ptr<class SdrPageWindow, struct std::default_delete<class SdrPageWindow> > SdrPageView::RemovePageWindow(class SdrPageWindow &)
 include/svx/svdpntv.hxx:462
     _Bool SdrPaintView::IsSwapAsynchron() const
 include/svx/xpoly.hxx:82
@@ -734,6 +702,8 @@ include/vcl/inputctx.hxx:63
     _Bool InputContext::operator!=(const class InputContext &) const
 include/vcl/ITiledRenderable.hxx:288
     class Pointer vcl::ITiledRenderable::getPointer()
+include/vcl/lstbox.hxx:259
+    void ListBox::SetEdgeBlending(_Bool)
 include/vcl/opengl/OpenGLHelper.hxx:61
     void OpenGLHelper::renderToFile(long,long,const class rtl::OUString &)
 include/vcl/opengl/OpenGLHelper.hxx:91
@@ -762,7 +732,7 @@ include/vcl/settings.hxx:708
     _Bool AllSettings::operator!=(const class AllSettings &) const
 include/vcl/svapp.hxx:178
      ApplicationEvent::ApplicationEvent(enum ApplicationEvent::Type,const class std::__debug::vector<class rtl::OUString, class std::allocator<class rtl::OUString> > &)
-include/vcl/svapp.hxx:812
+include/vcl/svapp.hxx:807
     void Application::AppEvent(const class ApplicationEvent &)
 include/vcl/svmain.hxx:27
     _Bool ImplSVMainHook(int *)
@@ -856,8 +826,6 @@ include/vcl/window.hxx:1239
     class Size vcl::Window::PaintActiveFloatingWindow(class VirtualDevice &) const
 libreofficekit/qa/gtktiledviewer/gtv-signal-handlers.hxx:35
     void openLokDialog(struct _GtkWidget *,void *)
-lotuswordpro/source/filter/lwplaypiece.hxx:206
-    double LwpColumnInfo::GetWidth()
 o3tl/qa/cow_wrapper_clients.hxx:140
     _Bool o3tltests::cow_wrapper_client4::operator==(const class o3tltests::cow_wrapper_client4 &) const
 o3tl/qa/cow_wrapper_clients.hxx:141
@@ -1236,11 +1204,11 @@ vcl/inc/impgraph.hxx:57
     _Bool GraphicID::operator==(const class GraphicID &) const
 vcl/inc/opengl/BufferObject.hxx:50
     void vcl::BufferObject::unbind()
-vcl/inc/opengl/PackedTextureAtlas.hxx:44
+vcl/inc/opengl/PackedTextureAtlas.hxx:47
      PackedTextureAtlasManager::PackedTextureAtlasManager(int,int)
-vcl/inc/opengl/PackedTextureAtlas.hxx:46
+vcl/inc/opengl/PackedTextureAtlas.hxx:50
     class OpenGLTexture PackedTextureAtlasManager::InsertBuffer(int,int,int,int,const unsigned char *)
-vcl/inc/opengl/PackedTextureAtlas.hxx:48
+vcl/inc/opengl/PackedTextureAtlas.hxx:52
     class std::__debug::vector<unsigned int, class std::allocator<unsigned int> > PackedTextureAtlasManager::ReduceTextureNumber(int)
 vcl/inc/opengl/salbmp.hxx:86
     const class BitmapPalette & OpenGLSalBitmap::GetBitmapPalette() const
@@ -1314,12 +1282,10 @@ vcl/source/fontsubset/xlat.hxx:34
     unsigned short vcl::TranslateChar15(unsigned short)
 vcl/source/fontsubset/xlat.hxx:35
     unsigned short vcl::TranslateChar16(unsigned short)
-workdir/LexTarget/l10ntools/source/cfglex.cxx:3721
-    void YYWarning(const char *)
 workdir/LexTarget/l10ntools/source/xrmlex.cxx:715
     void YYWarning()
-writerfilter/source/dmapper/TableData.hxx:174
-    void writerfilter::dmapper::RowData::insertCellProperties(unsigned int,class tools::SvRef<class writerfilter::dmapper::TablePropertyMap>)
+workdir/LexTarget/l10ntools/source/xrmlex.cxx:2211
+    void YYWarning(const char *)
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:176
     class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<const class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> *, class std::__cxx1998::vector<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> > > >, class std::__debug::vector<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty>, class std::allocator<class tools::SvRef<class writerfilter::ooxml::OOXMLProperty> > > > writerfilter::ooxml::OOXMLPropertySet::begin() const
 writerfilter/source/ooxml/OOXMLPropertySet.hxx:177

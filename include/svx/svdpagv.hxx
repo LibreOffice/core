@@ -93,7 +93,6 @@ private:
 
     // interface to SdrPageWindow
     void ClearPageWindows();
-    std::unique_ptr<SdrPageWindow> RemovePageWindow(SdrPageWindow& rOld);
 public:
     sal_uInt32 PageWindowCount() const { return maPageWindows.size(); }
     SdrPageWindow* FindPageWindow( SdrPaintWindow& rPaintWindow ) const;
