@@ -486,7 +486,7 @@ ErrCode SwHTMLWriter::WriteStream()
         m_pHTMLPosFlyFrames.reset();
     }
 
-    m_aHTMLControls.DeleteAndDestroyAll();
+    m_aHTMLControls.clear();
 
     m_CharFormatInfos.clear();
     m_TextCollInfos.clear();
