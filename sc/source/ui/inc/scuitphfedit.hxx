@@ -67,7 +67,7 @@ private:
     VclPtr<ListBox>         m_pLbDefined;
     VclPtr<FixedText>       m_pFtCustomHF;
     VclPtr<PushButton>      m_pBtnText;
-    VclPtr<ScExtIButton>    m_pBtnFile;
+    VclPtr<MenuButton>      m_pBtnFile;
     VclPtr<PushButton>      m_pBtnTable;
     VclPtr<PushButton>      m_pBtnPage;
     VclPtr<PushButton>      m_pBtnLastPage;
@@ -99,7 +99,7 @@ private:
     static bool IsExtFileNameEntry(const EditTextObject* pTextObj);
     DECL_LINK( ListHdl_Impl, ListBox&, void);
     DECL_LINK( ClickHdl, Button*, void );
-    DECL_LINK( MenuHdl, ScExtIButton&, void );
+    DECL_LINK( MenuHdl, MenuButton*, void );
 };
 
 class ScRightHeaderEditPage : public ScHFEditPage
