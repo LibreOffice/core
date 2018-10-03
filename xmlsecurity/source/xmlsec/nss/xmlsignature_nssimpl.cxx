@@ -51,6 +51,10 @@ template <> struct default_delete<xmlSecKeysMngr>
 {
     void operator()(xmlSecKeysMngrPtr ptr) { SecurityEnvironment_NssImpl::destroyKeysManager(ptr); }
 };
+template <> struct default_delete<xmlSecDSigCtx>
+{
+    void operator()(xmlSecDSigCtxPtr ptr) { xmlSecDSigCtxDestroy(ptr); }
+};
 }
 
 class XMLSignature_NssImpl
@@ -86,7 +90,6 @@ SAL_CALL XMLSignature_NssImpl::generate(
     const Reference< XSecurityEnvironment >& aEnvironment
 )
 {
-    xmlSecDSigCtxPtr pDsigCtx = nullptr ;
     xmlNodePtr pNode = nullptr ;
 
     if( !aTemplate.is() )
@@ -140,7 +143,7 @@ SAL_CALL XMLSignature_NssImpl::generate(
     }
 
     //Create Signature context
-    pDsigCtx = xmlSecDSigCtxCreate(pMngr.get());
+    std::unique_ptr<xmlSecDSigCtx> pDsigCtx(xmlSecDSigCtxCreate(pMngr.get()));
     if( pDsigCtx == nullptr )
     {
         //throw XMLSignatureException() ;
@@ -149,7 +152,7 @@ SAL_CALL XMLSignature_NssImpl::generate(
     }
 
     //Sign the template
-    if( xmlSecDSigCtxSign( pDsigCtx , pNode ) == 0 )
+    if( xmlSecDSigCtxSign( pDsigCtx.get() , pNode ) == 0 )
     {
         if (pDsigCtx->status == xmlSecDSigStatusSucceeded)
             aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
@@ -160,9 +163,6 @@ SAL_CALL XMLSignature_NssImpl::generate(
     {
         aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_UNKNOWN);
     }
-
-
-    xmlSecDSigCtxDestroy( pDsigCtx ) ;
 
     //Unregistered the stream/URI binding
     if( xUriBinding.is() )
@@ -178,7 +178,6 @@ SAL_CALL XMLSignature_NssImpl::validate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XXMLSecurityContext >& aSecurityCtx
 ) {
-    xmlSecDSigCtxPtr pDsigCtx = nullptr ;
     xmlNodePtr pNode = nullptr ;
     //sal_Bool valid ;
 
@@ -235,7 +234,7 @@ SAL_CALL XMLSignature_NssImpl::validate(
         }
 
         //Create Signature context
-        pDsigCtx = xmlSecDSigCtxCreate(pMngr.get());
+        std::unique_ptr<xmlSecDSigCtx> pDsigCtx(xmlSecDSigCtxCreate(pMngr.get()));
         if( pDsigCtx == nullptr )
         {
             clearErrorRecorder();
@@ -246,7 +245,7 @@ SAL_CALL XMLSignature_NssImpl::validate(
         pDsigCtx->keyInfoReadCtx.flags |= XMLSEC_KEYINFO_FLAGS_X509DATA_DONT_VERIFY_CERTS;
 
         //Verify signature
-        int rs = xmlSecDSigCtxVerify( pDsigCtx , pNode );
+        int rs = xmlSecDSigCtxVerify( pDsigCtx.get() , pNode );
 
         // Also verify manifest: this is empty for ODF, but contains everything (except signature metadata) for OOXML.
         xmlSecSize nReferenceCount = xmlSecPtrListGetSize(&pDsigCtx->manifestReferences);
@@ -265,14 +264,12 @@ SAL_CALL XMLSignature_NssImpl::validate(
         if (rs == 0 && pDsigCtx->status == xmlSecDSigStatusSucceeded && nReferenceCount == nReferenceGood)
         {
             aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
-            xmlSecDSigCtxDestroy( pDsigCtx ) ;
             break;
         }
         else
         {
             aTemplate->setStatus(css::xml::crypto::SecurityOperationStatus_UNKNOWN);
         }
-        xmlSecDSigCtxDestroy( pDsigCtx ) ;
     }
 
 
