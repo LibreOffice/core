@@ -1,23 +1,8 @@
 diff -ur libassuan.org/configure.ac libassuan/configure.ac
 --- configure.ac	2017-02-16 18:32:51.549527554 +0100
 +++ configure.ac~	2017-02-16 18:32:59.893497890 +0100
-@@ -44,6 +44,14 @@
- # the decimalized short revision number, a beta version string and a
- # flag indicating a development version (mym4_isbeta).  Note that the
- # m4 processing is done by autoconf and not during the configure run.
-+m4_define([m4_chomp_all],
-+[m4_format([[%.*s]], m4_bregexp(m4_translit([[$1]], [
-+/], [/ ]), [/*$]), [$1])])
-+
-+m4_define([m4_argn],
-+[m4_assert([0 < $1])]dnl
-+[m4_pushdef([_$0], [_m4_popdef([_$0])]m4_dquote([$]m4_incr([$1])))_$0($@)])
-+m4_define([m4_esyscmd_s], [m4_chomp_all(m4_esyscmd([$1]))])
- m4_define([mym4_verslist], m4_split(m4_esyscmd([./autogen.sh --find-version] \
-                            mym4_package mym4_major mym4_minor mym4_micro),[:]))
- m4_define([mym4_isbeta],       m4_argn(2, mym4_verslist))
 @@ -75,7 +80,22 @@
- VERSION=$PACKAGE_VERSION
+ AC_SUBST(LIBASSUAN_LT_REVISION)
  
  AC_CONFIG_AUX_DIR([build-aux])
 -AM_INIT_AUTOMAKE([serial-tests dist-bzip2 no-dist-gzip])
@@ -40,17 +25,3 @@ diff -ur libassuan.org/configure.ac libassuan/configure.ac
  AM_MAINTAINER_MODE
  AC_CONFIG_SRCDIR(src/assuan.h.in)
  AC_CONFIG_MACRO_DIR(m4)
-@@ -475,10 +475,12 @@
-               [Defined if LOCAL_PEEREID is supported (NetBSD specific)])
-   else
-     # (Open)Solaris
--    AC_CHECK_FUNCS([getpeerucred], AC_CHECK_HEADERS([ucred.h]))
-+    AC_CHECK_FUNCS([getpeerucred])
-     if test $ac_cv_func_getpeerucred != yes; then
-         # FreeBSD
-         AC_CHECK_FUNCS([getpeereid])
-+    else
-+        AC_CHECK_HEADERS([ucred.h])
-     fi
-   fi
- fi

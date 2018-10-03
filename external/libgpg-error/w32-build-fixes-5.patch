@@ -1,0 +1,144 @@
+--- src/gpg-error.c	2020-06-06 00:18:40.199791000 +0200
++++ src/gpg-error.c~	2020-06-05 18:44:14.223182300 +0200
+@@ -61,6 +61,11 @@
+ #define drop_locale_dir(dir)
+ #endif
+ 
++#ifdef _WIN32
++# define strncasecmp _strnicmp
++# define strcasecmp _stricmp
++#endif
++
+ static void
+ i18n_init (void)
+ {
+--- src/logging.c	2020-06-05 18:58:59.254413200 +0200
++++ src/logging.c~	2019-12-12 15:23:37.000000000 +0100
+@@ -44,7 +44,11 @@
+ # include <netinet/in.h>
+ # include <arpa/inet.h>
+ #endif /*!HAVE_W32_SYSTEM*/
++#ifdef _WIN32
++# include <io.h>
++#else
++# include <unistd.h>
++#endif
+-#include <unistd.h>
+ #include <fcntl.h>
+ /* #include <execinfo.h> */
+ 
+@@ -57,6 +53,15 @@
+ 
+ 
+ #ifdef HAVE_W32_SYSTEM
++# ifndef  S_IRUSR
++#  define S_IRUSR _S_IREAD
++# endif
++# ifndef  S_IWUSR
++#  define S_IWUSR _S_IWRITE
++# endif
++# ifndef  S_IXUSR
++#  define S_IXUSR 0x00400000
++# endif
+ # ifndef S_IRWXG
+ #  define S_IRGRP S_IRUSR
+ #  define S_IWGRP S_IWUSR
+--- src/Makefile.am	2020-06-06 01:01:31.931459300 +0200
++++ src/Makefile.am~	2020-02-06 18:39:06.000000000 +0100
+@@ -213,7 +213,7 @@
+ # without the extra_cppflags because they may include am -idirafter
+ # which is not supported by the RC compiler.
+ libgpg_error_la_CPPFLAGS = -DLOCALEDIR=\"$(localedir)\" $(extra_cppflags)
++libgpg_error_la_LIBADD = $(gpg_error_res) $(intllibs) $(socklibs) -ladvapi32 $(LIBTHREAD)
+-libgpg_error_la_LIBADD = $(gpg_error_res) $(intllibs) $(socklibs) $(LIBTHREAD)
+ 
+ gpg_error_SOURCES = strsource-sym.c strerror-sym.c gpg-error.c
+ gpg_error_CPPFLAGS = -DPKGDATADIR=\"$(pkgdatadir)\" \
+--- src/Makefile.in	2020-06-06 01:01:31.931459300 +0200
++++ src/Makefile.in~	2020-02-06 18:39:06.000000000 +0100
+@@ -659,7 +659,7 @@
+ # without the extra_cppflags because they may include am -idirafter
+ # which is not supported by the RC compiler.
+ libgpg_error_la_CPPFLAGS = -DLOCALEDIR=\"$(localedir)\" $(extra_cppflags)
++libgpg_error_la_LIBADD = $(gpg_error_res) $(intllibs) $(socklibs) -ladvapi32 $(LIBTHREAD)
+-libgpg_error_la_LIBADD = $(gpg_error_res) $(intllibs) $(socklibs) $(LIBTHREAD)
+ gpg_error_SOURCES = strsource-sym.c strerror-sym.c gpg-error.c
+ gpg_error_CPPFLAGS = -DPKGDATADIR=\"$(pkgdatadir)\" \
+                      -DLOCALEDIR=\"$(localedir)\" $(extra_cppflags)
+--- src/spawn-w32.c	2020-06-05 18:47:05.807099200 +0200
++++ src/spawn-w32.c~	2020-06-05 18:44:14.114035900 +0200
+@@ -834,7 +834,11 @@
+   /* We don't use ENVP.  */
+   (void)envp;
+ 
++#ifdef _WIN32
++  if (_access (pgmname, 04))
++#else
+   if (access (pgmname, X_OK))
++#endif
+     return _gpg_err_code_from_syserror ();
+ 
+   /* Prepare security attributes.  */
+--- src/sysutils.c	2020-06-06 00:23:52.457265500 +0200
++++ src/sysutils.c~	2019-12-12 15:23:37.000000000 +0100
+@@ -22,7 +22,11 @@
+ #include <stdlib.h>
+ #include <stdint.h>
+ #include <string.h>
++#ifdef _WIN32
++# include <io.h>
++#else
++# include <unistd.h>
++#endif
+-#include <unistd.h>
+ #include <errno.h>
+ #ifdef HAVE_W32_SYSTEM
+ # include <windows.h>
+@@ -274,11 +270,12 @@
+ gpg_err_code_t
+ _gpgrt_mkdir (const char *name, const char *modestr)
+ {
++#ifdef _WIN32
+-#ifdef HAVE_W32CE_SYSTEM
+   wchar_t *wname;
+   (void)modestr;
+ 
++  size_t size;
++  wname = utf8_to_wchar (name, -1, &size);
+-  wname = utf8_to_wchar (name);
+   if (!wname)
+     return _gpg_err_code_from_syserror ();
+   if (!CreateDirectoryW (wname, NULL))
+--- src/visibility.c	2020-06-05 18:54:56.410442900 +0200
++++ src/visibility.c~	2019-01-04 12:56:54.000000000 +0100
+@@ -1067,11 +1067,7 @@
+ _gpgrt_log_assert (const char *expr, const char *file,
+                    int line, const char *func)
+ {
+-#ifdef GPGRT_HAVE_MACRO_FUNCTION
+   _gpgrt__log_assert (expr, file, line, func);
+-#else
+-  _gpgrt__log_assert (expr, file, line);
+-#endif
+ }
+ 
+ 
+--- src/w32-add.h	2020-06-06 00:32:38.502203300 +0200
++++ src/w32-add.h~	2018-12-07 14:48:19.000000000 +0100
+@@ -65,3 +65,5 @@
+ char *gpgrt_w32_reg_query_string (const char *root,
+                                   const char *dir,
+                                   const char *name);
++
++wchar_t *utf8_to_wchar (const char *string, size_t length, size_t *retlen);
+--- src/w32-gettext.c	2020-06-06 00:33:24.680341900 +0200
++++ src/w32-gettext.c~	2020-06-05 18:44:14.254481700 +0200
+@@ -1355,7 +1355,7 @@
+    string STRING.  Caller must free this value. On failure returns
+    NULL.  The result of calling this function with STRING set to NULL
+    is not defined. */
++wchar_t *
+-static wchar_t *
+ utf8_to_wchar (const char *string, size_t length, size_t *retlen)
+ {
+   int n;
