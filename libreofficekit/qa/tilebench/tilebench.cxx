@@ -72,6 +72,7 @@ static void dumpTile(const int nWidth, const int nHeight, const int mode, const 
     static int counter = 0;
     NSString *path = [NSString stringWithFormat:@"%@/dump_tile_%d.ppm", documentsDirectory, counter++];
     std::ofstream ofs([path UTF8String]);
+    std::cerr << "---> Dumping tile\n";
 #endif
     ofs << "P6\n"
         << nWidth << " "
@@ -312,6 +313,11 @@ static void testDialog( Document *pDocument, const char *uno_cmd )
     pDocument->destroyView(view);
 }
 
+static void documentCallback(const int type, const char* p, void* data)
+{
+    std::cerr << "Document callback " << type << ": " << (p ? p : "(null)") << "\n";
+}
+
 int main( int argc, char* argv[] )
 {
     int arg = 2;
@@ -381,6 +387,8 @@ int main( int argc, char* argv[] )
 
     if (pDocument)
     {
+        pDocument->initializeForRendering("{\".uno:Author\":{\"type\":\"string\",\"value\":\"Local Host #0\"}}");
+        pDocument->registerCallback(documentCallback, 0);
         if (!strcmp(mode, "--tile"))
         {
             const int max_parts = (argc > arg ? atoi(argv[arg++]) : -1);
