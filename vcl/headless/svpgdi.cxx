@@ -1056,6 +1056,8 @@ public:
     cairo_path_t* getCairoPath() { return mpCairoPath; }
     bool getNoJoin() const { return mbNoJoin; }
     bool getAntiAliasB2DDraw() const { return mbAntiAliasB2DDraw; }
+
+    virtual sal_Int64 estimateUsageInBytes() const override;
 };
 
 SystemDependentData_CairoPath::SystemDependentData_CairoPath(
@@ -1077,6 +1079,22 @@ SystemDependentData_CairoPath::~SystemDependentData_CairoPath()
         cairo_path_destroy(mpCairoPath);
         mpCairoPath = nullptr;
     }
+}
+
+sal_Int64 SystemDependentData_CairoPath::estimateUsageInBytes() const
+{
+    sal_Int64 nRetval(0);
+
+    if(nullptr != mpCairoPath)
+    {
+        // per node
+        // - num_data incarnations of
+        // - sizeof(cairo_path_data_t) which is a union of defines and point data
+        //   thus may 2 x sizeof(double)
+        nRetval = mpCairoPath->num_data * sizeof(cairo_path_data_t);
+    }
+
+    return nRetval;
 }
 
 bool SvpSalGraphics::drawPolyLine(

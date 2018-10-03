@@ -89,6 +89,12 @@ namespace basegfx
         // a single, globally used one, but not necessarily
         SystemDependentDataManager&     mrSystemDependentDataManager;
 
+        // Buffered CalculatedCycles, result of estimations using
+        // getHoldCyclesInSeconds and estimateUsageInBytes, executed
+        // using getHoldCyclesInSeconds. StartValue is 0 to detect
+        // not-yet-calculated state
+        sal_uInt32                      mnCalculatedCycles;
+
     public:
         SystemDependentData(
             SystemDependentDataManager& rSystemDependentDataManager);
@@ -102,6 +108,12 @@ namespace basegfx
         // allow access to call startUsage/endUsage/touchUsage
         // using getSystemDependentDataManager()
         SystemDependentDataManager& getSystemDependentDataManager() { return mrSystemDependentDataManager; }
+
+        // Calculate HoldCyclesInSeconds based on using
+        // getHoldCyclesInSeconds and estimateUsageInBytes, the
+        // result is crated once on-demand and buffered in
+        // mnCalculatedCycles
+        sal_uInt32 calculateCombinedHoldCyclesInSeconds() const;
 
         // Number of cycles a SystemDependentDataManager should/might
         // hold this instance in seconds - does not have to be used,
