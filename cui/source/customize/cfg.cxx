@@ -1901,7 +1901,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         for (auto const& entry : *entries)
         {
             m_xMenuListBox->append(OUString::number(reinterpret_cast<sal_uInt64>(entry)),
-                                   SvxConfigPageHelper::stripHotKey(entry->GetName()), "");
+                                   SvxConfigPageHelper::stripHotKey(entry->GetName()));
             mpEntries->push_back(entry);
             if (entry == selection)
             {
