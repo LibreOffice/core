@@ -69,6 +69,34 @@
 		BEA20D302163C2570032F67B /* salgdicommon.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdicommon.cxx; path = ../../vcl/quartz/salgdicommon.cxx; sourceTree = "<group>"; };
 		BEA20D312163C2570032F67B /* salbmp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salbmp.cxx; path = ../../vcl/quartz/salbmp.cxx; sourceTree = "<group>"; };
 		BEA20D322163C2570032F67B /* salgdi.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdi.cxx; path = ../../vcl/quartz/salgdi.cxx; sourceTree = "<group>"; };
+		BEA20D372164BAB80032F67B /* salusereventlist.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salusereventlist.cxx; path = ../../vcl/source/app/salusereventlist.cxx; sourceTree = "<group>"; };
+		BEA20D382164BAB80032F67B /* dbggui.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbggui.cxx; path = ../../vcl/source/app/dbggui.cxx; sourceTree = "<group>"; };
+		BEA20D392164BAB80032F67B /* IconThemeInfo.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IconThemeInfo.cxx; path = ../../vcl/source/app/IconThemeInfo.cxx; sourceTree = "<group>"; };
+		BEA20D3A2164BAB80032F67B /* timer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = timer.cxx; path = ../../vcl/source/app/timer.cxx; sourceTree = "<group>"; };
+		BEA20D3B2164BAB80032F67B /* customweld.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = customweld.cxx; path = ../../vcl/source/app/customweld.cxx; sourceTree = "<group>"; };
+		BEA20D3C2164BAB80032F67B /* vclevent.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vclevent.cxx; path = ../../vcl/source/app/vclevent.cxx; sourceTree = "<group>"; };
+		BEA20D3D2164BAB80032F67B /* settings.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = settings.cxx; path = ../../vcl/source/app/settings.cxx; sourceTree = "<group>"; };
+		BEA20D3E2164BAB80032F67B /* salplug.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salplug.cxx; path = ../../vcl/source/app/salplug.cxx; sourceTree = "<group>"; };
+		BEA20D3F2164BAB80032F67B /* i18nhelp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = i18nhelp.cxx; path = ../../vcl/source/app/i18nhelp.cxx; sourceTree = "<group>"; };
+		BEA20D402164BAB80032F67B /* sound.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sound.cxx; path = ../../vcl/source/app/sound.cxx; sourceTree = "<group>"; };
+		BEA20D412164BAB80032F67B /* svapp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svapp.cxx; path = ../../vcl/source/app/svapp.cxx; sourceTree = "<group>"; };
+		BEA20D422164BAB80032F67B /* idle.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = idle.cxx; path = ../../vcl/source/app/idle.cxx; sourceTree = "<group>"; };
+		BEA20D432164BAB80032F67B /* help.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = help.cxx; path = ../../vcl/source/app/help.cxx; sourceTree = "<group>"; };
+		BEA20D442164BAB80032F67B /* IconThemeSelector.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IconThemeSelector.cxx; path = ../../vcl/source/app/IconThemeSelector.cxx; sourceTree = "<group>"; };
+		BEA20D452164BAB80032F67B /* brand.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = brand.cxx; path = ../../vcl/source/app/brand.cxx; sourceTree = "<group>"; };
+		BEA20D462164BAB80032F67B /* IconThemeScanner.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = IconThemeScanner.cxx; path = ../../vcl/source/app/IconThemeScanner.cxx; sourceTree = "<group>"; };
+		BEA20D472164BAB80032F67B /* session.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = session.cxx; path = ../../vcl/source/app/session.cxx; sourceTree = "<group>"; };
+		BEA20D482164BAB80032F67B /* unohelp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unohelp.cxx; path = ../../vcl/source/app/unohelp.cxx; sourceTree = "<group>"; };
+		BEA20D492164BAB80032F67B /* svdata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svdata.cxx; path = ../../vcl/source/app/svdata.cxx; sourceTree = "<group>"; };
+		BEA20D4A2164BAB80032F67B /* dndhelp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dndhelp.cxx; path = ../../vcl/source/app/dndhelp.cxx; sourceTree = "<group>"; };
+		BEA20D4B2164BAB80032F67B /* salvtables.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salvtables.cxx; path = ../../vcl/source/app/salvtables.cxx; sourceTree = "<group>"; };
+		BEA20D4C2164BAB80032F67B /* scheduler.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = scheduler.cxx; path = ../../vcl/source/app/scheduler.cxx; sourceTree = "<group>"; };
+		BEA20D4D2164BAB80032F67B /* ITiledRenderable.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ITiledRenderable.cxx; path = ../../vcl/source/app/ITiledRenderable.cxx; sourceTree = "<group>"; };
+		BEA20D4E2164BAB80032F67B /* stdtext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = stdtext.cxx; path = ../../vcl/source/app/stdtext.cxx; sourceTree = "<group>"; };
+		BEA20D4F2164BAB80032F67B /* unohelp2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = unohelp2.cxx; path = ../../vcl/source/app/unohelp2.cxx; sourceTree = "<group>"; };
+		BEA20D502164BAB80032F67B /* svmain.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svmain.cxx; path = ../../vcl/source/app/svmain.cxx; sourceTree = "<group>"; };
+		BEA20D522164BB0D0032F67B /* iosinst.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = iosinst.cxx; path = ../../vcl/ios/iosinst.cxx; sourceTree = "<group>"; };
+		BEA20D532164BB0E0032F67B /* dummies.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dummies.cxx; path = ../../vcl/ios/dummies.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +190,16 @@
 		BEA20D2B2163C2360032F67B /* vcl */ = {
 			isa = PBXGroup;
 			children = (
+				BEA20D342164BA8B0032F67B /* app */,
+				BEA20D512164BAF00032F67B /* ios */,
+				BEA20D332164BA7C0032F67B /* quartz */,
+			);
+			name = vcl;
+			sourceTree = "<group>";
+		};
+		BEA20D332164BA7C0032F67B /* quartz */ = {
+			isa = PBXGroup;
+			children = (
 				BEA20D2D2163C2570032F67B /* ctfonts.cxx */,
 				BEA20D312163C2570032F67B /* salbmp.cxx */,
 				BEA20D322163C2570032F67B /* salgdi.cxx */,
@@ -170,7 +208,49 @@
 				BEA20D2F2163C2570032F67B /* salvd.cxx */,
 				BEA20D2E2163C2570032F67B /* utils.cxx */,
 			);
-			name = vcl;
+			name = quartz;
+			sourceTree = "<group>";
+		};
+		BEA20D342164BA8B0032F67B /* app */ = {
+			isa = PBXGroup;
+			children = (
+				BEA20D452164BAB80032F67B /* brand.cxx */,
+				BEA20D3B2164BAB80032F67B /* customweld.cxx */,
+				BEA20D382164BAB80032F67B /* dbggui.cxx */,
+				BEA20D4A2164BAB80032F67B /* dndhelp.cxx */,
+				BEA20D432164BAB80032F67B /* help.cxx */,
+				BEA20D3F2164BAB80032F67B /* i18nhelp.cxx */,
+				BEA20D392164BAB80032F67B /* IconThemeInfo.cxx */,
+				BEA20D462164BAB80032F67B /* IconThemeScanner.cxx */,
+				BEA20D442164BAB80032F67B /* IconThemeSelector.cxx */,
+				BEA20D422164BAB80032F67B /* idle.cxx */,
+				BEA20D4D2164BAB80032F67B /* ITiledRenderable.cxx */,
+				BEA20D3E2164BAB80032F67B /* salplug.cxx */,
+				BEA20D372164BAB80032F67B /* salusereventlist.cxx */,
+				BEA20D4B2164BAB80032F67B /* salvtables.cxx */,
+				BEA20D4C2164BAB80032F67B /* scheduler.cxx */,
+				BEA20D472164BAB80032F67B /* session.cxx */,
+				BEA20D3D2164BAB80032F67B /* settings.cxx */,
+				BEA20D402164BAB80032F67B /* sound.cxx */,
+				BEA20D4E2164BAB80032F67B /* stdtext.cxx */,
+				BEA20D412164BAB80032F67B /* svapp.cxx */,
+				BEA20D492164BAB80032F67B /* svdata.cxx */,
+				BEA20D502164BAB80032F67B /* svmain.cxx */,
+				BEA20D3A2164BAB80032F67B /* timer.cxx */,
+				BEA20D482164BAB80032F67B /* unohelp.cxx */,
+				BEA20D4F2164BAB80032F67B /* unohelp2.cxx */,
+				BEA20D3C2164BAB80032F67B /* vclevent.cxx */,
+			);
+			name = app;
+			sourceTree = "<group>";
+		};
+		BEA20D512164BAF00032F67B /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				BEA20D532164BB0E0032F67B /* dummies.cxx */,
+				BEA20D522164BB0D0032F67B /* iosinst.cxx */,
+			);
+			name = ios;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
