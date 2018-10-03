@@ -296,7 +296,7 @@ sal_uInt16 SwWriteTable::GetLeftSpace( sal_uInt16 nCol ) const
     {
         nSpace = nSpace + m_nLeftSub;
 
-        const SwWriteTableCol *pCol = m_aCols[nCol];
+        const SwWriteTableCol *pCol = m_aCols[nCol].get();
         if( pCol->HasLeftBorder() )
             nSpace = nSpace + m_nBorder;
     }
@@ -315,7 +315,7 @@ SwWriteTable::GetRightSpace(size_t const nCol, sal_uInt16 nColSpan) const
     {
         nSpace += (m_nCellSpacing + m_nRightSub);
 
-        const SwWriteTableCol *pCol = m_aCols[nCol+nColSpan-1];
+        const SwWriteTableCol *pCol = m_aCols[nCol+nColSpan-1].get();
         if( pCol->HasRightBorder() )
             nSpace = nSpace + m_nBorder;
     }
@@ -468,10 +468,9 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
             if( nBox < nBoxes-1 || (nParentLineWidth==0 && nLine==0)  )
             {
                 nCPos = nCPos + GetBoxWidth( pBox );
-                SwWriteTableCol *pCol = new SwWriteTableCol( nCPos );
+                std::unique_ptr<SwWriteTableCol> pCol(new SwWriteTableCol( nCPos ));
 
-                if( !m_aCols.insert( pCol ).second )
-                    delete pCol;
+                m_aCols.insert( std::move(pCol) );
 
                 if( nBox==nBoxes-1 )
                 {
@@ -680,7 +679,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
                     // above can be changed.
                     if (!(nBorderMask & 4) && nOldCol < m_aCols.size())
                     {
-                        SwWriteTableCol *pCol = m_aCols[nOldCol];
+                        SwWriteTableCol *pCol = m_aCols[nOldCol].get();
                         OSL_ENSURE(pCol, "No TableCol found, panic!");
                         if (pCol)
                             pCol->bLeftBorder = false;
@@ -688,7 +687,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
 
                     if (!(nBorderMask & 8))
                     {
-                        SwWriteTableCol *pCol = m_aCols[nCol];
+                        SwWriteTableCol *pCol = m_aCols[nCol].get();
                         OSL_ENSURE(pCol, "No TableCol found, panic!");
                         if (pCol)
                             pCol->bRightBorder = false;
@@ -743,8 +742,8 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwTableLines& rLines, lo
 
     // First the table structure set. Behind the table is in each
     // case the end of a column
-    SwWriteTableCol *pCol = new SwWriteTableCol( nParentWidth );
-    m_aCols.insert( pCol );
+    std::unique_ptr<SwWriteTableCol> pCol(new SwWriteTableCol( nParentWidth ));
+    m_aCols.insert( std::move(pCol) );
     m_bUseLayoutHeights = true;
     CollectTableRowsCols( 0, 0, 0, nParentWidth, rLines, nMaxDepth - 1 );
 
@@ -785,8 +784,8 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayo
     // First set the table structure.
     for( sal_uInt16 nCol=0; nCol<nCols; ++nCol )
     {
-        SwWriteTableCol *pCol =
-            new SwWriteTableCol( (nCol+1)*COL_DFLT_WIDTH );
+        std::unique_ptr<SwWriteTableCol> pCol(
+            new SwWriteTableCol( (nCol+1)*COL_DFLT_WIDTH ));
 
         if( m_bColTags )
         {
@@ -796,7 +795,7 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayo
                                pLayoutCol->IsRelWidthOption() );
         }
 
-        m_aCols.insert( pCol );
+        m_aCols.insert( std::move(pCol) );
     }
 
     for( sal_uInt16 nRow=0; nRow<nRows; ++nRow )
@@ -851,11 +850,11 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayo
             MergeBoxBorders( pBox, nRow, nCol, nRowSpan, nColSpan,
                                 nTopBorder, nBottomBorder );
 
-            SwWriteTableCol *pCol = m_aCols[nCol];
+            SwWriteTableCol *pCol = m_aCols[nCol].get();
             if( !(nBorderMask & 4) )
                 pCol->bLeftBorder = false;
 
-            pCol = m_aCols[nCol+nColSpan-1];
+            pCol = m_aCols[nCol+nColSpan-1].get();
             if( !(nBorderMask & 8) )
                 pCol->bRightBorder = false;
 

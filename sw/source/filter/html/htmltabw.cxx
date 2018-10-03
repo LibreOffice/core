@@ -587,10 +587,10 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
 
     bool bColsHaveBorder = false;
     bool bColsHaveBorderOnly = true;
-    SwWriteTableCol *pCol = m_aCols[0];
+    SwWriteTableCol *pCol = m_aCols[0].get();
     for( SwWriteTableCols::size_type nCol=1; nCol<m_aCols.size(); ++nCol )
     {
-        SwWriteTableCol *pNextCol = m_aCols[nCol];
+        SwWriteTableCol *pNextCol = m_aCols[nCol].get();
         bool bBorder = ( pCol->bRightBorder || pNextCol->bLeftBorder );
         bColsHaveBorder |= bBorder;
         bColsHaveBorderOnly &= bBorder;
@@ -736,7 +736,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         {
             rWrt.OutNewLine(); // </COL> in new line
 
-            const SwWriteTableCol *pColumn = m_aCols[nCol];
+            const SwWriteTableCol *pColumn = m_aCols[nCol].get();
 
             HtmlWriter html(rWrt.Strm(), rWrt.maNamespace);
             html.start(OOO_STRING_SVTOOLS_HTML_col);
