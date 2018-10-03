@@ -40,7 +40,7 @@ namespace sd {
 
 BreakDlg::BreakDlg(weld::Window* pWindow, DrawView* pDrView, DrawDocShell* pShell,
     sal_uLong nSumActionCount, sal_uLong nObjCount)
-    : GenericDialogController(pWindow, "modules/sdraw/ui/breakdialog.ui", "BreakDialog")
+    : SfxDialogController(pWindow, "modules/sdraw/ui/breakdialog.ui", "BreakDialog")
     , m_xFiObjInfo(m_xBuilder->weld_label("metafiles"))
     , m_xFiActInfo(m_xBuilder->weld_label("metaobjects"))
     , m_xFiInsInfo(m_xBuilder->weld_label("drawingobjects"))

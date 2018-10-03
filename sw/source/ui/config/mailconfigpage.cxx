@@ -73,7 +73,7 @@ public:
     virtual void dispose() override;
 };
 
-class SwAuthenticationSettingsDialog : public weld::GenericDialogController
+class SwAuthenticationSettingsDialog : public SfxDialogController
 {
     SwMailMergeConfigItem& m_rConfigItem;
 
@@ -393,7 +393,7 @@ SwMailConfigDlg::SwMailConfigDlg(vcl::Window* pParent, SfxItemSet& rSet)
 
 SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(
     weld::Window* pParent, SwMailMergeConfigItem& rItem)
-    : GenericDialogController(pParent, "modules/swriter/ui/authenticationsettingsdialog.ui", "AuthenticationSettingsDialog")
+    : SfxDialogController(pParent, "modules/swriter/ui/authenticationsettingsdialog.ui", "AuthenticationSettingsDialog")
     , m_rConfigItem(rItem)
     , m_xAuthenticationCB(m_xBuilder->weld_check_button("authentication"))
     , m_xSeparateAuthenticationRB(m_xBuilder->weld_radio_button("separateauthentication"))

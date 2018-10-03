@@ -24,7 +24,7 @@
 #include <svx/zoom_def.hxx>
 #include <vcl/weld.hxx>
 
-class SvxZoomDialog : public weld::GenericDialogController
+class SvxZoomDialog : public SfxDialogController
 {
 private:
     const SfxItemSet&           m_rSet;

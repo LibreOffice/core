@@ -71,7 +71,7 @@ public:
     bool                        IsSaveVersionOnClose() const { return m_bIsSaveVersionOnClose; }
 };
 
-class SfxViewVersionDialog_Impl : public weld::GenericDialogController
+class SfxViewVersionDialog_Impl : public SfxDialogController
 {
 private:
     SfxVersionInfo&   m_rInfo;

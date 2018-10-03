@@ -24,7 +24,7 @@
 #include <shellres.hxx>
 #include <tautofmt.hxx>
 
-class SwStringInputDlg : public weld::GenericDialogController
+class SwStringInputDlg : public SfxDialogController
 {
 private:
     std::unique_ptr<weld::Label> m_xLabel;
@@ -33,7 +33,7 @@ private:
 public:
     SwStringInputDlg(weld::Window* pParent, const OUString& rTitle,
         const OUString& rEditTitle, const OUString& rDefault)
-        : GenericDialogController(pParent, "modules/swriter/ui/stringinput.ui",
+        : SfxDialogController(pParent, "modules/swriter/ui/stringinput.ui",
                 "StringInputDialog")
         , m_xLabel(m_xBuilder->weld_label("name"))
         , m_xEdInput(m_xBuilder->weld_entry("edit"))
@@ -53,7 +53,7 @@ public:
 // AutoFormat-Dialogue:
 SwAutoFormatDlg::SwAutoFormatDlg(weld::Window* pParent, SwWrtShell* pWrtShell,
                                  bool bAutoFormat, const SwTableAutoFormat* pSelFormat)
-    : GenericDialogController(pParent, "modules/swriter/ui/autoformattable.ui",
+    : SfxDialogController(pParent, "modules/swriter/ui/autoformattable.ui",
             "AutoFormatTableDialog")
     , m_aStrTitle(SwResId(STR_ADD_AUTOFORMAT_TITLE))
     , m_aStrLabel(SwResId(STR_ADD_AUTOFORMAT_LABEL))

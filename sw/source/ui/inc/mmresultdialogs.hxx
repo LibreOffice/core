@@ -44,7 +44,7 @@ namespace com{ namespace sun{ namespace star{
 }}}
 
 /// Dialog implementing the saving as of the result document.
-class SwMMResultSaveDialog : public weld::GenericDialogController
+class SwMMResultSaveDialog : public SfxDialogController
 {
     bool                   m_bCancelSaving;
 
@@ -65,7 +65,7 @@ public:
 };
 
 /// Dialog implementing the printing of the result document.
-class SwMMResultPrintDialog : public weld::GenericDialogController
+class SwMMResultPrintDialog : public SfxDialogController
 {
     VclPtr<Printer>        m_pTempPrinter;
 

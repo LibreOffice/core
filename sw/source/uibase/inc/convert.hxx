@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_CONVERT_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CONVERT_HXX
 
-#include <vcl/weld.hxx>
+#include <sfx2/basedlgs.hxx>
 
 class VclContainer;
 class SwTableAutoFormat;
@@ -27,7 +27,7 @@ class SwView;
 class SwWrtShell;
 struct SwInsertTableOptions;
 
-class SwConvertTableDlg : public weld::GenericDialogController
+class SwConvertTableDlg : public SfxDialogController
 {
     std::unique_ptr<weld::RadioButton> m_xTabBtn;
     std::unique_ptr<weld::RadioButton> m_xSemiBtn;
