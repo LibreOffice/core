@@ -73,6 +73,9 @@ SwRDFHelper::getStatements(const css::uno::Reference<css::frame::XModel>& xModel
     for (const uno::Reference<rdf::XURI>& xGraphName : rGraphNames)
     {
         uno::Reference<rdf::XNamedGraph> xGraph = xRepo->getGraph(xGraphName);
+        if (!xGraph.is())
+            continue;
+
         uno::Reference<container::XEnumeration> xStatements = xGraph->getStatements(
             xSubject, uno::Reference<rdf::XURI>(), uno::Reference<rdf::XURI>());
         while (xStatements->hasMoreElements())
