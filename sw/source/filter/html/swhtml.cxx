@@ -691,8 +691,7 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
                 m_nContextStMin = 0;
             }
 
-            if( !m_aParaAttrs.empty() )
-                m_aParaAttrs.clear();
+            m_aParaAttrs.clear();
 
             SetAttr( false );
 
@@ -1236,8 +1235,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
                 // if there are temporary paragraph attributes and the
                 // paragraph isn't empty then the paragraph attributes
                 // are final.
-                if( !m_aParaAttrs.empty() )
-                    m_aParaAttrs.clear();
+                m_aParaAttrs.clear();
 
                 SetAttr();
             }
@@ -1525,8 +1523,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
             // if there are temporary paragraph attributes and the
             // paragraph isn't empty then the paragraph attributes
             // are final.
-            if( !m_aParaAttrs.empty() )
-                m_aParaAttrs.clear();
+            m_aParaAttrs.clear();
 
             SetAttr();
         }
@@ -2139,8 +2136,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
         eMode = AM_SPACE;
 
     // the hard attributes of this paragraph will never be invalid again
-    if( !m_aParaAttrs.empty() )
-        m_aParaAttrs.clear();
+    m_aParaAttrs.clear();
 
     SwTextNode *pTextNode = (AM_SPACE==eMode || AM_NOSPACE==eMode) ?
         m_pPam->GetPoint()->nNode.GetNode().GetTextNode() : nullptr;
@@ -3194,8 +3190,7 @@ void SwHTMLParser::DeleteAttr( HTMLAttr* pAttr )
     // be set here and then the pointers become invalid!
     OSL_ENSURE(m_aParaAttrs.empty(),
         "Danger: there are non-final paragraph attributes");
-    if( !m_aParaAttrs.empty() )
-        m_aParaAttrs.clear();
+    m_aParaAttrs.clear();
 
     // The list header is saved in the attribute
     HTMLAttr **ppHead = pAttr->ppHead;
@@ -3253,8 +3248,7 @@ void SwHTMLParser::SaveAttrTab(std::shared_ptr<HTMLAttrTable> const & rNewAttrTa
     // be set here and then the pointers become invalid!
     OSL_ENSURE(m_aParaAttrs.empty(),
             "Danger: there are non-final paragraph attributes");
-    if( !m_aParaAttrs.empty() )
-        m_aParaAttrs.clear();
+    m_aParaAttrs.clear();
 
     HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(m_xAttrTab.get());
     HTMLAttr** pSaveAttributes = reinterpret_cast<HTMLAttr**>(rNewAttrTab.get());
@@ -3281,8 +3275,7 @@ void SwHTMLParser::SplitAttrTab( std::shared_ptr<HTMLAttrTable> const & rNewAttr
     // be set here and then the pointers become invalid!
     OSL_ENSURE(m_aParaAttrs.empty(),
             "Danger: there are non-final paragraph attributes");
-    if( !m_aParaAttrs.empty() )
-        m_aParaAttrs.clear();
+    m_aParaAttrs.clear();
 
     const SwNodeIndex& nSttIdx = m_pPam->GetPoint()->nNode;
     SwNodeIndex nEndIdx( nSttIdx );
@@ -3381,8 +3374,7 @@ void SwHTMLParser::RestoreAttrTab(std::shared_ptr<HTMLAttrTable> const & rNewAtt
     // be set here and then the pointers become invalid!
     OSL_ENSURE(m_aParaAttrs.empty(),
             "Danger: there are non-final paragraph attributes");
-    if( !m_aParaAttrs.empty() )
-        m_aParaAttrs.clear();
+    m_aParaAttrs.clear();
 
     HTMLAttr** pHTMLAttributes = reinterpret_cast<HTMLAttr**>(m_xAttrTab.get());
     HTMLAttr** pSaveAttributes = reinterpret_cast<HTMLAttr**>(rNewAttrTab.get());
@@ -5271,8 +5263,7 @@ void SwHTMLParser::InsertHorzRule()
     SetTextCollAttrs(m_aContexts.back().get());
 
     // the hard attributes of the current paragraph will never become invalid
-    if( !m_aParaAttrs.empty() )
-        m_aParaAttrs.clear();
+    m_aParaAttrs.clear();
 
     if( nSize>0 || bColor || bNoShade )
     {

@@ -295,8 +295,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
                     }
                 }
             }
-            if( !aFlyFrameArr.empty() )
-                aFlyFrameArr.clear();
+            aFlyFrameArr.clear();
 
             mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
             if( mxDoc->getIDocumentRedlineAccess().IsRedlineOn() )

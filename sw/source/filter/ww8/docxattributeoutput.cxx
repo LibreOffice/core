@@ -3562,8 +3562,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
 
     // We should clear the TableStyle map. In case of Table inside multiple tables it contains the
     // table border style of the previous table.
-    if (! m_aTableStyleConf.empty())
-        m_aTableStyleConf.clear();
+    m_aTableStyleConf.clear();
 
     // Extract properties from grab bag
     for( const auto & rGrabBagElement : aGrabBag )

@@ -74,8 +74,7 @@ void FastAttributeList::clear()
     maAttributeTokens.clear();
     maAttributeValues.resize(1);
     assert(maAttributeValues[0] == 0);
-    if (!maUnknownAttributes.empty())
-        maUnknownAttributes.clear();
+    maUnknownAttributes.clear();
 }
 
 void FastAttributeList::add( sal_Int32 nToken, const sal_Char* pValue, size_t nValueLength )

@@ -179,10 +179,7 @@ void OMarkableOutputStream::closeOutput()
     MutexGuard guard( m_mutex );
     // all marks must be cleared and all
 
-    if( ! m_mapMarks.empty() )
-    {
-        m_mapMarks.clear();
-     }
+    m_mapMarks.clear();
     m_nCurrentPos = m_pBuffer->getSize();
       checkMarksAndFlush();
 

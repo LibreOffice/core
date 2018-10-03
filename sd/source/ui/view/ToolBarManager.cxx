@@ -1203,10 +1203,7 @@ void ToolBarList::ClearGroup (sd::ToolBarManager::ToolBarGroup eGroup)
     Groups::iterator iGroup (maGroups.find(eGroup));
     if (iGroup != maGroups.end())
     {
-        if ( ! iGroup->second.empty())
-        {
-            iGroup->second.clear();
-        }
+        iGroup->second.clear();
     }
 }
 

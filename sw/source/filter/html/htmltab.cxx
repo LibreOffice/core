@@ -2815,8 +2815,7 @@ void SectionSaveStruct::Restore( SwHTMLParser& rParser )
     rParser.m_bNoParSpace = false;
     rParser.m_nOpenParaToken = HtmlTokenId::NONE;
 
-    if( !rParser.m_aParaAttrs.empty() )
-        rParser.m_aParaAttrs.clear();
+    rParser.m_aParaAttrs.clear();
 }
 
 class CellSaveStruct : public SectionSaveStruct
@@ -3360,8 +3359,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 m_nFontStHeadStart = m_nFontStMin;
 
                 // The hard attributes on that paragraph are never gonna be invalid anymore
-                if( !m_aParaAttrs.empty() )
-                    m_aParaAttrs.clear();
+                m_aParaAttrs.clear();
             }
 
             // create a table context

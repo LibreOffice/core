@@ -1290,8 +1290,7 @@ std::unique_ptr<SwMultiCreator> SwTextSizeInfo::GetMultiCreator(TextFrameIndex &
         if( !bOn && !aEnd.empty() )
             n2Start = aEnd.back();
 
-        if( !aEnd.empty() )
-            aEnd.clear();
+        aEnd.clear();
 
         // now, search for the end of the ROTATE portion, similar to above
         bOn = true;
