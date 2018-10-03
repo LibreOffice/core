@@ -561,8 +561,8 @@ bool sw_GetPostIts(
                 if (pSrtLst)
                 {
                     SwNodeIndex aIdx( pTextField->GetTextNode() );
-                    PostItField_* pNew = new PostItField_( aIdx, pTextField );
-                    pSrtLst->insert( pNew );
+                    std::unique_ptr<PostItField_> pNew(new PostItField_( aIdx, pTextField ));
+                    pSrtLst->insert( std::move(pNew) );
                 }
                 else
                     break;  // we just wanted to check for the existence of postits ...

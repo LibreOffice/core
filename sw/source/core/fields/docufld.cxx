@@ -2194,7 +2194,7 @@ bool SwRefPageGetFieldType::MakeSetList( SetGetExpFields& rTmpLst )
                     rTextNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(),
                     nullptr, &tmp);
 
-                SetGetExpField* pNew;
+                std::unique_ptr<SetGetExpField> pNew;
 
                 if( !pFrame ||
                      pFrame->IsInDocBody() ||
@@ -2204,7 +2204,7 @@ bool SwRefPageGetFieldType::MakeSetList( SetGetExpFields& rTmpLst )
                 {
                     //  create index for determination of the TextNode
                     SwNodeIndex aIdx( rTextNd );
-                    pNew = new SetGetExpField( aIdx, pTField );
+                    pNew.reset( new SetGetExpField( aIdx, pTField ) );
                 }
                 else
                 {
@@ -2212,12 +2212,11 @@ bool SwRefPageGetFieldType::MakeSetList( SetGetExpFields& rTmpLst )
                     SwPosition aPos( m_pDoc->GetNodes().GetEndOfPostIts() );
                     bool const bResult = GetBodyTextNode( *m_pDoc, aPos, *pFrame );
                     OSL_ENSURE(bResult, "where is the Field?");
-                    pNew = new SetGetExpField( aPos.nNode, pTField,
-                                                &aPos.nContent );
+                    pNew.reset( new SetGetExpField( aPos.nNode, pTField,
+                                                &aPos.nContent ) );
                 }
 
-                if( !rTmpLst.insert( pNew ).second)
-                    delete pNew;
+                rTmpLst.insert( std::move(pNew) );
             }
     }
 

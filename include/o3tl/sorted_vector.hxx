@@ -243,6 +243,26 @@ public:
         tmp.release();
         return ret;
     }
+    /**
+     * implement upper_bound for sorted_vectors containing std::unique_ptr
+     */
+    typename super_sorted_vector::const_iterator upper_bound( typename Value::element_type const * x ) const
+    {
+        Value tmp(const_cast<typename Value::element_type*>(x));
+        auto ret = super_sorted_vector::upper_bound(tmp);
+        tmp.release();
+        return ret;
+    }
+    /**
+     * implement lower_bound for sorted_vectors containing std::unique_ptr
+     */
+    typename super_sorted_vector::const_iterator lower_bound( typename Value::element_type const * x ) const
+    {
+        Value tmp(const_cast<typename Value::element_type*>(x));
+        auto ret = super_sorted_vector::lower_bound(tmp);
+        tmp.release();
+        return ret;
+    }
 };
 
 
