@@ -3345,11 +3345,10 @@ namespace {
 class TransferListenersHandler
 {
 public:
-    typedef std::vector<SvtListener*> ListenersType;
     struct Entry
     {
         size_t mnRow;
-        ListenersType maListeners;
+        std::vector<SvtListener*> maListeners;
     };
     typedef std::vector<Entry> ListenerListType;
 
@@ -3362,22 +3361,14 @@ public:
     {
         assert(pBroadcaster);
 
-        // It's important to make a copy here.
-        SvtBroadcaster::ListenersType aLis = pBroadcaster->GetAllListeners();
-        if (aLis.empty())
+        // It's important to make a copy of the broadcasters listener list here
+        Entry aEntry { nRow, pBroadcaster->GetAllListeners() };
+        if (aEntry.maListeners.empty())
             // No listeners to transfer.
             return;
 
-        Entry aEntry;
-        aEntry.mnRow = nRow;
-
-        SvtBroadcaster::ListenersType::iterator it = aLis.begin(), itEnd = aLis.end();
-        for (; it != itEnd; ++it)
-        {
-            SvtListener* pLis = *it;
+        for (SvtListener* pLis : aEntry.maListeners)
             pLis->EndListening(*pBroadcaster);
-            aEntry.maListeners.push_back(pLis);
-        }
 
         maListenerList.push_back(aEntry);
 
