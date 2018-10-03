@@ -31,6 +31,7 @@
 #include <basic/sbmeth.hxx>
 #include "vbacontrols.hxx"
 #include <sal/log.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -45,12 +46,14 @@ using namespace ::com::sun::star;
 //     the models in ControlModels can be accessed by name
 // also the XDialog is a XControl ( to access the model above
 
-ScVbaUserForm::ScVbaUserForm( uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& xContext ) :  ScVbaUserForm_BASE( getXSomethingFromArgs< XHelperInterface >( aArgs, 0 ), xContext, getXSomethingFromArgs< uno::XInterface >( aArgs, 1 ), getXSomethingFromArgs< frame::XModel >( aArgs, 2 ), static_cast< ooo::vba::AbstractGeometryAttributes* >(nullptr) ),  mbDispose( true )
+ScVbaUserForm::ScVbaUserForm( uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& xContext )
+    :  ScVbaUserForm_BASE( getXSomethingFromArgs< XHelperInterface >( aArgs, 0 ), xContext, getXSomethingFromArgs< uno::XInterface >( aArgs, 1 ), getXSomethingFromArgs< frame::XModel >( aArgs, 2 ), nullptr ),
+       mbDispose( true )
 {
     m_xDialog.set( m_xControl, uno::UNO_QUERY_THROW );
     uno::Reference< awt::XControl > xControl( m_xDialog, uno::UNO_QUERY_THROW );
     m_xProps.set( xControl->getModel(), uno::UNO_QUERY_THROW );
-    setGeometryHelper( new UserFormGeometryHelper( xControl, 0.0, 0.0 ) );
+    setGeometryHelper( o3tl::make_unique<UserFormGeometryHelper>( xControl, 0.0, 0.0 ) );
     if ( aArgs.getLength() >= 4 )
         aArgs[ 3 ] >>= m_sLibName;
 }

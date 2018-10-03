@@ -37,7 +37,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::uno::XInterface >& xControl,
         const css::uno::Reference< css::frame::XModel >& xModel,
-        ov::AbstractGeometryAttributes* pGeomHelper);
+        std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper);
 
    // Attributes
     virtual sal_Int32 SAL_CALL getValue() override;

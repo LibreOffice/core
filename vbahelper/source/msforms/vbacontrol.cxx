@@ -124,11 +124,12 @@ ScVbaControlListener::disposing( const lang::EventObject& )
 
 //ScVbaControl
 
-ScVbaControl::ScVbaControl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< ::uno::XInterface >& xControl,  const css::uno::Reference< css::frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper ) : ControlImpl_BASE( xParent, xContext ), m_xControl( xControl ), m_xModel( xModel )
+ScVbaControl::ScVbaControl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< ::uno::XInterface >& xControl,  const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper )
+    : ControlImpl_BASE( xParent, xContext ), m_xControl( xControl ), m_xModel( xModel )
 {
     //add listener
     m_xEventListener.set( new ScVbaControlListener( this ) );
-    setGeometryHelper( pGeomHelper );
+    setGeometryHelper( std::move(pGeomHelper) );
     uno::Reference< lang::XComponent > xComponent( m_xControl, uno::UNO_QUERY_THROW );
     xComponent->addEventListener( m_xEventListener );
 
@@ -159,9 +160,9 @@ ScVbaControl::~ScVbaControl()
 }
 
 void
-ScVbaControl::setGeometryHelper( AbstractGeometryAttributes* pHelper )
+ScVbaControl::setGeometryHelper( std::unique_ptr<AbstractGeometryAttributes> pHelper )
 {
-    mpGeometryHelper.reset( pHelper );
+    mpGeometryHelper = std::move( pHelper );
 }
 
 void ScVbaControl::removeResource()
@@ -605,32 +606,32 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ )
     switch( nClassId )
     {
         case form::FormComponentType::COMBOBOX:
-            return new ScVbaComboBox( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
+            return new ScVbaComboBox( xVbaParent, xContext, xControlShape, xModel, std::move(xGeoHelper) );
         case form::FormComponentType::COMMANDBUTTON:
         {
             bool bToggle = false;
             xProps->getPropertyValue( "Toggle" ) >>= bToggle;
             if ( bToggle )
-                return new ScVbaToggleButton( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
+                return new ScVbaToggleButton( xVbaParent, xContext, xControlShape, xModel, std::move(xGeoHelper) );
             else
-                return new VbaButton( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
+                return new VbaButton( xVbaParent, xContext, xControlShape, xModel, std::move(xGeoHelper) );
         }
         case form::FormComponentType::FIXEDTEXT:
-            return new ScVbaLabel( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
+            return new ScVbaLabel( xVbaParent, xContext, xControlShape, xModel, std::move(xGeoHelper) );
         case form::FormComponentType::TEXTFIELD:
-            return new ScVbaTextBox( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
+            return new ScVbaTextBox( xVbaParent, xContext, xControlShape, xModel, std::move(xGeoHelper) );
         case form::FormComponentType::CHECKBOX:
-            return new ScVbaCheckbox( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
+            return new ScVbaCheckbox( xVbaParent, xContext, xControlShape, xModel, std::move(xGeoHelper) );
         case form::FormComponentType::RADIOBUTTON:
-            return new ScVbaRadioButton( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
+            return new ScVbaRadioButton( xVbaParent, xContext, xControlShape, xModel, std::move(xGeoHelper) );
         case form::FormComponentType::LISTBOX:
-            return new ScVbaListBox( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
+            return new ScVbaListBox( xVbaParent, xContext, xControlShape, xModel, std::move(xGeoHelper) );
         case form::FormComponentType::SPINBUTTON:
-            return new ScVbaSpinButton( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
+            return new ScVbaSpinButton( xVbaParent, xContext, xControlShape, xModel, std::move(xGeoHelper) );
         case form::FormComponentType::IMAGECONTROL:
-            return new ScVbaImage( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
+            return new ScVbaImage( xVbaParent, xContext, xControlShape, xModel, std::move(xGeoHelper) );
         case form::FormComponentType::SCROLLBAR:
-            return new ScVbaScrollBar( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
+            return new ScVbaScrollBar( xVbaParent, xContext, xControlShape, xModel, std::move(xGeoHelper) );
     }
     throw uno::RuntimeException( "Unsupported control." );
 }
@@ -649,45 +650,45 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ )
     ::std::unique_ptr< UserFormGeometryHelper > xGeoHelper( new UserFormGeometryHelper( xControl, fOffsetX, fOffsetY ) );
 
     if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlCheckBoxModel" ) )
-        xVBAControl.set( new ScVbaCheckbox( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
+        xVBAControl.set( new ScVbaCheckbox( xVbaParent, xContext, xControl, xModel, std::move(xGeoHelper) ) );
     else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" ) )
-        xVBAControl.set( new ScVbaRadioButton( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
+        xVBAControl.set( new ScVbaRadioButton( xVbaParent, xContext, xControl, xModel, std::move(xGeoHelper) ) );
     else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlEditModel" ) )
-        xVBAControl.set( new ScVbaTextBox( xVbaParent, xContext, xControl, xModel, xGeoHelper.release(), true ) );
+        xVBAControl.set( new ScVbaTextBox( xVbaParent, xContext, xControl, xModel, std::move(xGeoHelper), true ) );
     else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlButtonModel" ) )
     {
         bool bToggle = false;
         xProps->getPropertyValue( "Toggle" ) >>= bToggle;
         if ( bToggle )
-            xVBAControl.set( new ScVbaToggleButton( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
+            xVBAControl.set( new ScVbaToggleButton( xVbaParent, xContext, xControl, xModel, std::move(xGeoHelper) ) );
         else
-            xVBAControl.set( new VbaButton( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
+            xVBAControl.set( new VbaButton( xVbaParent, xContext, xControl, xModel, std::move(xGeoHelper) ) );
     }
     else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlComboBoxModel" ) )
-        xVBAControl.set( new ScVbaComboBox( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
+        xVBAControl.set( new ScVbaComboBox( xVbaParent, xContext, xControl, xModel, std::move(xGeoHelper) ) );
     else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlListBoxModel" ) )
-        xVBAControl.set( new ScVbaListBox( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
+        xVBAControl.set( new ScVbaListBox( xVbaParent, xContext, xControl, xModel, std::move(xGeoHelper) ) );
     else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlFixedTextModel" ) )
-        xVBAControl.set( new ScVbaLabel( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
+        xVBAControl.set( new ScVbaLabel( xVbaParent, xContext, xControl, xModel, std::move(xGeoHelper) ) );
     else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlImageControlModel" ) )
-        xVBAControl.set( new ScVbaImage( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
+        xVBAControl.set( new ScVbaImage( xVbaParent, xContext, xControl, xModel, std::move(xGeoHelper) ) );
     else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlProgressBarModel" ) )
-        xVBAControl.set( new ScVbaProgressBar( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
+        xVBAControl.set( new ScVbaProgressBar( xVbaParent, xContext, xControl, xModel, std::move(xGeoHelper) ) );
     else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlGroupBoxModel" ) )
-        xVBAControl.set( new ScVbaFrame( xVbaParent, xContext, xControl, xModel, xGeoHelper.release(), xDialog ) );
+        xVBAControl.set( new ScVbaFrame( xVbaParent, xContext, xControl, xModel, std::move(xGeoHelper), xDialog ) );
     else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlScrollBarModel" ) )
-        xVBAControl.set( new ScVbaScrollBar( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
+        xVBAControl.set( new ScVbaScrollBar( xVbaParent, xContext, xControl, xModel, std::move(xGeoHelper) ) );
     else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoMultiPageModel" ) )
-        xVBAControl.set( new ScVbaMultiPage( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
+        xVBAControl.set( new ScVbaMultiPage( xVbaParent, xContext, xControl, xModel, std::move(xGeoHelper) ) );
     else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlSpinButtonModel" ) )
-        xVBAControl.set( new ScVbaSpinButton( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
+        xVBAControl.set( new ScVbaSpinButton( xVbaParent, xContext, xControl, xModel, std::move(xGeoHelper) ) );
     else if ( xServiceInfo->supportsService( "com.sun.star.custom.awt.UnoControlSystemAXContainerModel" ) )
-        xVBAControl.set( new VbaSystemAXControl( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
+        xVBAControl.set( new VbaSystemAXControl( xVbaParent, xContext, xControl, xModel, std::move(xGeoHelper) ) );
     // #FIXME implement a page control
     else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoPageModel" ) )
-        xVBAControl.set( new ScVbaControl( xVbaParent, xContext, xControl, xModel, xGeoHelper.release() ) );
+        xVBAControl.set( new ScVbaControl( xVbaParent, xContext, xControl, xModel, std::move(xGeoHelper) ) );
     else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoFrameModel" ) )
-        xVBAControl.set( new ScVbaFrame( xVbaParent, xContext, xControl, xModel, xGeoHelper.release(), xDialog ) );
+        xVBAControl.set( new ScVbaFrame( xVbaParent, xContext, xControl, xModel, std::move(xGeoHelper), xDialog ) );
     if( xVBAControl.is() )
         return xVBAControl;
     throw uno::RuntimeException( "Unsupported control." );

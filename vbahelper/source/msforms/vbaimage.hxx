@@ -29,7 +29,7 @@ typedef cppu::ImplInheritanceHelper< ScVbaControl, ov::msforms::XImage > ImageIm
 class ScVbaImage : public ImageImpl_BASE
 {
 public:
-    ScVbaImage( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper  );
+    ScVbaImage( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper  );
     virtual sal_Int32 SAL_CALL getBackColor() override;
     virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) override;
     //XHelperInterface

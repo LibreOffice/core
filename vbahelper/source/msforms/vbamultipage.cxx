@@ -57,8 +57,8 @@ ScVbaMultiPage::ScVbaMultiPage(
         const uno::Reference< uno::XComponentContext >& xContext,
         const uno::Reference< uno::XInterface >& xControl,
         const uno::Reference< frame::XModel >& xModel,
-        AbstractGeometryAttributes* pGeomHelper) :
-    MultiPageImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
+        std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper) :
+    MultiPageImpl_BASE( xParent, xContext, xControl, xModel, std::move(pGeomHelper) )
 {
 }
 

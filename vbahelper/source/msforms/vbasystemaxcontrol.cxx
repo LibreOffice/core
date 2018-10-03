@@ -22,8 +22,8 @@ using namespace com::sun::star;
 using namespace ooo::vba;
 
 
-VbaSystemAXControl::VbaSystemAXControl(  const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper )
-: SystemAXControlImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
+VbaSystemAXControl::VbaSystemAXControl(  const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, std::unique_ptr<AbstractGeometryAttributes> pGeomHelper )
+: SystemAXControlImpl_BASE( xParent, xContext, xControl, xModel, std::move(pGeomHelper) )
 , m_xControlInvocation( xControl, uno::UNO_QUERY_THROW )
 {
 }

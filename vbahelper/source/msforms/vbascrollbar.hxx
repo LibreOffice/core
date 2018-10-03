@@ -31,7 +31,7 @@ typedef cppu::ImplInheritanceHelper< ScVbaControl, ov::msforms::XScrollBar > Scr
 class ScVbaScrollBar : public ScrollBarImpl_BASE
 {
 public:
-    ScVbaScrollBar( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper  );
+    ScVbaScrollBar( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper  );
    // Attributes
     virtual css::uno::Any SAL_CALL getValue() override;
     virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
