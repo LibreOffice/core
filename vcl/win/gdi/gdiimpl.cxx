@@ -1955,31 +1955,55 @@ class SystemDependentData_GraphicsPath : public basegfx::SystemDependentData
 {
 private:
     // the path data itself
-    Gdiplus::GraphicsPath           maGraphicsPath;
+    std::shared_ptr<Gdiplus::GraphicsPath>  mpGraphicsPath;
 
     // all other values the triangulation is based on and
     // need to be compared with to check for data validity
-    bool                            mbNoLineJoin;
+    bool                                    mbNoLineJoin;
 
 public:
     SystemDependentData_GraphicsPath(
         basegfx::SystemDependentDataManager& rSystemDependentDataManager,
+        std::shared_ptr<Gdiplus::GraphicsPath>& rpGraphicsPath,
         bool bNoLineJoin);
-    // non-const getter to allow manipulation. That way, we do not need
-    // to copy it (with unknown costs)
-    Gdiplus::GraphicsPath& getGraphicsPath() { return maGraphicsPath; }
+
+    // read access to Gdiplus::GraphicsPath
+    std::shared_ptr<Gdiplus::GraphicsPath>& getGraphicsPath() { return mpGraphicsPath; }
 
     // other data-validity access
     bool getNoLineJoin() const { return mbNoLineJoin; }
+
+    virtual sal_Int64 estimateUsageInBytes() const override;
 };
 
 SystemDependentData_GraphicsPath::SystemDependentData_GraphicsPath(
     basegfx::SystemDependentDataManager& rSystemDependentDataManager,
+    std::shared_ptr<Gdiplus::GraphicsPath>& rpGraphicsPath,
     bool bNoLineJoin)
 :   basegfx::SystemDependentData(rSystemDependentDataManager),
-    maGraphicsPath(),
+    mpGraphicsPath(rpGraphicsPath),
     mbNoLineJoin(bNoLineJoin)
 {
+}
+
+sal_Int64 SystemDependentData_GraphicsPath::estimateUsageInBytes() const
+{
+    sal_Int64 nRetval(0);
+
+    if(mpGraphicsPath)
+    {
+        const INT nPointCount(mpGraphicsPath->GetPointCount());
+
+        if(0 != nPointCount)
+        {
+            // Each point has
+            // - 2 x sizeof(Gdiplus::REAL)
+            // - 1 byte (see GetPathTypes in docu)
+            nRetval = nPointCount * ((2 * sizeof(Gdiplus::REAL)) + 1);
+        }
+    }
+
+    return nRetval;
 }
 
 bool WinSalGraphicsImpl::drawPolyPolygon(
@@ -2018,17 +2042,20 @@ bool WinSalGraphicsImpl::drawPolyPolygon(
         aGraphics.SetTransform(&aMatrix);
     }
 
+    // prepare local instabce of Gdiplus::GraphicsPath
+    std::shared_ptr<Gdiplus::GraphicsPath> pGraphicsPath;
+
     // try to access buffered data
     std::shared_ptr<SystemDependentData_GraphicsPath> pSystemDependentData_GraphicsPath(
         rPolyPolygon.getSystemDependentData<SystemDependentData_GraphicsPath>());
 
-    if(!pSystemDependentData_GraphicsPath)
+    if(pSystemDependentData_GraphicsPath)
     {
-        // add to buffering mechanism
-        pSystemDependentData_GraphicsPath = rPolyPolygon.addOrReplaceSystemDependentData<SystemDependentData_GraphicsPath>(
-            ImplGetSystemDependentDataManager(),
-            false);
-
+        // copy buffered data
+        pGraphicsPath = pSystemDependentData_GraphicsPath->getGraphicsPath();
+    }
+    else
+    {
         // Note: In principle we could use the same buffered geometry at line
         // and fill polygons. Checked that in a first try, used
         // GraphicsPath::AddPath from Gdiplus combined with below used
@@ -2056,23 +2083,31 @@ bool WinSalGraphicsImpl::drawPolyPolygon(
         // (at least for now...)
 
         // create data
+        pGraphicsPath.reset(new Gdiplus::GraphicsPath());
+
         for(sal_uInt32 a(0); a < nCount; a++)
         {
             if(0 != a)
             {
                 // #i101491# not needed for first run
-                pSystemDependentData_GraphicsPath->getGraphicsPath().StartFigure();
+                pGraphicsPath->StartFigure();
             }
 
             impAddB2DPolygonToGDIPlusGraphicsPathReal(
-                pSystemDependentData_GraphicsPath->getGraphicsPath(),
+                *pGraphicsPath,
                 rPolyPolygon.getB2DPolygon(a),
                 rObjectToDevice, // not used due to the two 'false' values below, but to not forget later
                 false,
                 false);
 
-            pSystemDependentData_GraphicsPath->getGraphicsPath().CloseFigure();
+            pGraphicsPath->CloseFigure();
         }
+
+        // add to buffering mechanism
+        rPolyPolygon.addOrReplaceSystemDependentData<SystemDependentData_GraphicsPath>(
+            ImplGetSystemDependentDataManager(),
+            pGraphicsPath,
+            false);
     }
 
     if(mrParent.getAntiAliasB2DDraw())
@@ -2122,7 +2157,7 @@ bool WinSalGraphicsImpl::drawPolyPolygon(
     // use created or buffered data
     aGraphics.FillPath(
         &aSolidBrush,
-        &pSystemDependentData_GraphicsPath->getGraphicsPath());
+        &(*pGraphicsPath));
 
     return true;
 }
@@ -2222,6 +2257,9 @@ bool WinSalGraphicsImpl::drawPolyLine(
         }
     }
 
+    // prepare local instabce of Gdiplus::GraphicsPath
+    std::shared_ptr<Gdiplus::GraphicsPath> pGraphicsPath;
+
     // try to access buffered data
     std::shared_ptr<SystemDependentData_GraphicsPath> pSystemDependentData_GraphicsPath(
         rPolygon.getSystemDependentData<SystemDependentData_GraphicsPath>());
@@ -2236,16 +2274,18 @@ bool WinSalGraphicsImpl::drawPolyLine(
         }
     }
 
-    if(!pSystemDependentData_GraphicsPath)
+    if(pSystemDependentData_GraphicsPath)
     {
-        // add to buffering mechanism
-        pSystemDependentData_GraphicsPath = rPolygon.addOrReplaceSystemDependentData<SystemDependentData_GraphicsPath>(
-            ImplGetSystemDependentDataManager(),
-            bNoLineJoin);
-
+        // copy buffered data
+        pGraphicsPath = pSystemDependentData_GraphicsPath->getGraphicsPath();
+    }
+    else
+    {
         // fill data of buffered data
+        pGraphicsPath.reset(new Gdiplus::GraphicsPath());
+
         impAddB2DPolygonToGDIPlusGraphicsPathReal(
-            pSystemDependentData_GraphicsPath->getGraphicsPath(),
+            *pGraphicsPath,
             rPolygon,
             rObjectToDevice,
             bNoLineJoin,
@@ -2254,8 +2294,14 @@ bool WinSalGraphicsImpl::drawPolyLine(
         if(rPolygon.isClosed() && !bNoLineJoin)
         {
             // #i101491# needed to create the correct line joins
-            pSystemDependentData_GraphicsPath->getGraphicsPath().CloseFigure();
+            pGraphicsPath->CloseFigure();
         }
+
+        // add to buffering mechanism
+        rPolygon.addOrReplaceSystemDependentData<SystemDependentData_GraphicsPath>(
+            ImplGetSystemDependentDataManager(),
+            pGraphicsPath,
+            bNoLineJoin);
     }
 
     if(mrParent.getAntiAliasB2DDraw())
@@ -2269,7 +2315,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
 
     aGraphics.DrawPath(
         &aPen,
-        &pSystemDependentData_GraphicsPath->getGraphicsPath());
+        &(*pGraphicsPath));
 
     return true;
 }
