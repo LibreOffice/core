@@ -29,31 +29,22 @@ class View;
 /**
  * Bullet-Tab-Dialog
  */
-class OutlineBulletDlg
-    : public SfxTabDialog
+class OutlineBulletDlg : public SfxTabDialogController
 {
 public:
-    OutlineBulletDlg (
-        vcl::Window* pParent,
-        const SfxItemSet* pAttr,
-        ::sd::View* pView );
+    OutlineBulletDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView);
     virtual ~OutlineBulletDlg () override;
-    virtual void dispose() override;
 
-    const SfxItemSet* GetOutputItemSet() const;
+    const SfxItemSet* GetBulletOutputItemSet() const;
 
 protected:
-    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
+    virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
 
 private:
-    using SfxTabDialog::GetOutputItemSet;
-
-    SfxItemSet  aInputSet;
-    std::unique_ptr<SfxItemSet> pOutputSet;
-    sal_uInt16  m_nOptionsId;
-    sal_uInt16  m_nPositionId;
-    bool    bTitle;
-    ::sd::View  *pSdView;
+    SfxItemSet m_aInputSet;
+    std::unique_ptr<SfxItemSet> m_xOutputSet;
+    bool m_bTitle;
+    ::sd::View *m_pSdView;
 };
 
 } // end of namespace sd
