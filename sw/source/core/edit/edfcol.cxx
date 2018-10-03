@@ -1902,7 +1902,7 @@ static uno::Reference<text::XTextField> lcl_GetParagraphMetadataFieldAtIndex(con
     return xTextField;
 }
 
-void SwEditShell::RestoreMetadataFields()
+void SwEditShell::RestoreMetadataFieldsAndValidateParagraphSignatures()
 {
     SwDocShell* pDocShell = GetDoc()->GetDocShell();
     if (!pDocShell || !IsParagraphSignatureValidationEnabled())
@@ -2028,6 +2028,7 @@ void SwEditShell::RestoreMetadataFields()
                 }
             }
 
+            lcl_ValidateParagraphSignatures(GetDoc(), xParagraph, true); // Validate and Update signatures.
         }
         catch (const std::exception&)
         {
@@ -2118,7 +2119,7 @@ static OUString lcl_GetHighestClassificationParagraphClass(SwPaM* pCursor)
     while (xParagraphs->hasMoreElements())
     {
         uno::Reference<text::XTextContent> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
-        OUString sCurrentClass = lcl_GetParagraphClassification(aHelper, aKeyCreator, xModel, xParagraph);
+        const OUString sCurrentClass = lcl_GetParagraphClassification(aHelper, aKeyCreator, xModel, xParagraph);
         sHighestClass = aHelper.GetHigherClass(sHighestClass, sCurrentClass);
     }
 
@@ -2131,7 +2132,7 @@ void SwEditShell::ClassifyDocPerHighestParagraphClass()
     if (!pDocShell)
         return;
 
-    // bail out as early as possible if we don't have paragraph classification
+    // Bail out as early as possible if we don't have paragraph classification.
     if (!SwRDFHelper::hasMetadataGraph(pDocShell->GetBaseModel(), MetaNS))
         return;
 
