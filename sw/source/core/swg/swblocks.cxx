@@ -102,7 +102,6 @@ SwImpBlocks::SwImpBlocks( const OUString& rFile )
 
 SwImpBlocks::~SwImpBlocks()
 {
-    m_aNames.DeleteAndDestroyAll();
 }
 
 /**
@@ -140,7 +139,7 @@ sal_uInt16 SwImpBlocks::GetIndex( const OUString& rShort ) const
     const sal_uInt16 nHash = Hash( s );
     for( size_t i = 0; i < m_aNames.size(); i++ )
     {
-        const SwBlockName* pName = m_aNames[ i ];
+        const SwBlockName* pName = m_aNames[ i ].get();
         if( pName->nHashS == nHash
          && pName->aShort == s )
             return i;
@@ -153,7 +152,7 @@ sal_uInt16 SwImpBlocks::GetLongIndex( const OUString& rLong ) const
     sal_uInt16 nHash = Hash( rLong );
     for( size_t i = 0; i < m_aNames.size(); i++ )
     {
-        const SwBlockName* pName = m_aNames[ i ];
+        const SwBlockName* pName = m_aNames[ i ].get();
         if( pName->nHashL == nHash
          && pName->aLong == rLong )
             return i;
@@ -188,13 +187,12 @@ void SwImpBlocks::AddName( const OUString& rShort, const OUString& rLong,
     sal_uInt16 nIdx = GetIndex( rShort );
     if( nIdx != USHRT_MAX )
     {
-        delete m_aNames[nIdx];
         m_aNames.erase( m_aNames.begin() + nIdx );
     }
-    SwBlockName* pNew = new SwBlockName( rShort, rLong );
+    std::unique_ptr<SwBlockName> pNew(new SwBlockName( rShort, rLong ));
     pNew->bIsOnlyTextFlagInit = true;
     pNew->bIsOnlyText = bOnlyText;
-    m_aNames.insert( pNew );
+    m_aNames.insert( std::move(pNew) );
 }
 
 bool SwImpBlocks::IsFileChanged() const
@@ -312,7 +310,6 @@ bool SwTextBlocks::Delete( sal_uInt16 n )
             nErr = pImp->Delete( n );
             if( !nErr )
             {
-                delete pImp->m_aNames[n];
                 pImp->m_aNames.erase( pImp->m_aNames.begin() + n );
             }
             if( n == pImp->m_nCurrentIndex )
@@ -356,7 +353,6 @@ void SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString* l )
             if( !nErr )
             {
                 bool bOnlyText = pImp->m_aNames[ n ]->bIsOnlyText;
-                delete pImp->m_aNames[n];
                 pImp->m_aNames.erase( pImp->m_aNames.begin() + n );
                 pImp->AddName( aNew, aLong, bOnlyText );
                 nErr = pImp->MakeBlockList();
@@ -539,7 +535,7 @@ bool SwTextBlocks::IsOnlyTextBlock( sal_uInt16 nIdx ) const
     bool bRet = false;
     if( pImp && !pImp->m_bInPutMuchBlocks )
     {
-        SwBlockName* pBlkNm = pImp->m_aNames[ nIdx ];
+        SwBlockName* pBlkNm = pImp->m_aNames[ nIdx ].get();
         if( !pBlkNm->bIsOnlyTextFlagInit &&
             !pImp->IsFileChanged() && !pImp->OpenFile() )
         {
