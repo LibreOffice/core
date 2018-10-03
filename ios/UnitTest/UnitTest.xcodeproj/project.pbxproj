@@ -62,6 +62,13 @@
 		BE535623215D189E0068B3B7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		BEA1A6FD215D1D9700A9323B /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		BEA1A6FF215D1D9F00A9323B /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
+		BEA20D2C2163C2570032F67B /* salgdiutils.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdiutils.cxx; path = ../../vcl/quartz/salgdiutils.cxx; sourceTree = "<group>"; };
+		BEA20D2D2163C2570032F67B /* ctfonts.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ctfonts.cxx; path = ../../vcl/quartz/ctfonts.cxx; sourceTree = "<group>"; };
+		BEA20D2E2163C2570032F67B /* utils.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = utils.cxx; path = ../../vcl/quartz/utils.cxx; sourceTree = "<group>"; };
+		BEA20D2F2163C2570032F67B /* salvd.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salvd.cxx; path = ../../vcl/quartz/salvd.cxx; sourceTree = "<group>"; };
+		BEA20D302163C2570032F67B /* salgdicommon.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdicommon.cxx; path = ../../vcl/quartz/salgdicommon.cxx; sourceTree = "<group>"; };
+		BEA20D312163C2570032F67B /* salbmp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salbmp.cxx; path = ../../vcl/quartz/salbmp.cxx; sourceTree = "<group>"; };
+		BEA20D322163C2570032F67B /* salgdi.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdi.cxx; path = ../../vcl/quartz/salgdi.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +110,7 @@
 		BE535608215D189A0068B3B7 = {
 			isa = PBXGroup;
 			children = (
+				BEA20D2A2163C2210032F67B /* Core */,
 				BE535613215D189A0068B3B7 /* UnitTest */,
 				BE535612215D189A0068B3B7 /* Products */,
 				BEA1A6FC215D1D9700A9323B /* Frameworks */,
@@ -141,6 +149,28 @@
 				BEA1A6FD215D1D9700A9323B /* libz.tbd */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BEA20D2A2163C2210032F67B /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				BEA20D2B2163C2360032F67B /* vcl */,
+			);
+			name = Core;
+			sourceTree = "<group>";
+		};
+		BEA20D2B2163C2360032F67B /* vcl */ = {
+			isa = PBXGroup;
+			children = (
+				BEA20D2D2163C2570032F67B /* ctfonts.cxx */,
+				BEA20D312163C2570032F67B /* salbmp.cxx */,
+				BEA20D322163C2570032F67B /* salgdi.cxx */,
+				BEA20D302163C2570032F67B /* salgdicommon.cxx */,
+				BEA20D2C2163C2570032F67B /* salgdiutils.cxx */,
+				BEA20D2F2163C2570032F67B /* salvd.cxx */,
+				BEA20D2E2163C2570032F67B /* utils.cxx */,
+			);
+			name = vcl;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
