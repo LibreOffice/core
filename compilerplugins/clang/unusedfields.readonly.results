@@ -332,6 +332,10 @@ include/svtools/ctrlbox.hxx:454
     FontSizeBox nPtRelStep short
 include/svtools/editsyntaxhighlighter.hxx:33
     MultiLineEditSyntaxHighlight m_aColorConfig svtools::ColorConfig
+include/svx/fontlb.hxx:33
+    SvLBoxFontString maFont vcl::Font
+include/svx/fontlb.hxx:34
+    SvLBoxFontString mbUseColor _Bool
 include/svx/sdr/overlay/overlayanimatedbitmapex.hxx:51
     sdr::overlay::OverlayAnimatedBitmapEx mbOverlayState _Bool
 include/svx/sdr/overlay/overlaymanager.hxx:73
