@@ -98,21 +98,77 @@ private:
 
 public:
     SystemDependentData_GdiPlusBitmap(
-        basegfx::SystemDependentDataManager& rSystemDependentDataManager);
+        basegfx::SystemDependentDataManager& rSystemDependentDataManager,
+        const std::shared_ptr<Gdiplus::Bitmap>& rGdiPlusBitmap,
+        const WinSalBitmap* pAssociatedAlpha);
 
     const WinSalBitmap* getAssociatedAlpha() const { return mpAssociatedAlpha; }
-    void setAssociatedAlpha(const WinSalBitmap* pNew) { mpAssociatedAlpha = pNew; }
-
     const std::shared_ptr<Gdiplus::Bitmap>& getGdiPlusBitmap() const { return mpGdiPlusBitmap; }
-    void setGdiPlusBitmap(const std::shared_ptr<Gdiplus::Bitmap>& rNew) { mpGdiPlusBitmap = rNew; }
+
+    virtual sal_Int64 estimateUsageInBytes() const override;
 };
 
 SystemDependentData_GdiPlusBitmap::SystemDependentData_GdiPlusBitmap(
-    basegfx::SystemDependentDataManager& rSystemDependentDataManager)
+    basegfx::SystemDependentDataManager& rSystemDependentDataManager,
+    const std::shared_ptr<Gdiplus::Bitmap>& rGdiPlusBitmap,
+    const WinSalBitmap* pAssociatedAlpha)
 :   basegfx::SystemDependentData(rSystemDependentDataManager),
-    mpGdiPlusBitmap(),
-    mpAssociatedAlpha(nullptr)
+    mpGdiPlusBitmap(rGdiPlusBitmap),
+    mpAssociatedAlpha(pAssociatedAlpha)
 {
+}
+
+sal_Int64 SystemDependentData_GdiPlusBitmap::estimateUsageInBytes() const
+{
+    sal_Int64 nRetval(0);
+
+    if(mpGdiPlusBitmap)
+    {
+        const UINT nWidth(mpGdiPlusBitmap->GetWidth());
+        const UINT nHeight(mpGdiPlusBitmap->GetHeight());
+
+        if(0 != nWidth && 0 != nHeight)
+        {
+            nRetval = nWidth * nHeight;
+
+            switch(mpGdiPlusBitmap->GetPixelFormat())
+            {
+                case PixelFormat1bppIndexed:
+                    nRetval /= 8;
+                    break;
+                case PixelFormat4bppIndexed:
+                    nRetval /= 4;
+                    break;
+                case PixelFormat16bppGrayScale:
+                case PixelFormat16bppRGB555:
+                case PixelFormat16bppRGB565:
+                case PixelFormat16bppARGB1555:
+                    nRetval *= 2;
+                    break;
+                case PixelFormat24bppRGB:
+                    nRetval *= 3;
+                    break;
+                case PixelFormat32bppRGB:
+                case PixelFormat32bppARGB:
+                case PixelFormat32bppPARGB:
+                case PixelFormat32bppCMYK:
+                    nRetval *= 4;
+                    break;
+                case PixelFormat48bppRGB:
+                    nRetval *= 6;
+                    break;
+                case PixelFormat64bppARGB:
+                case PixelFormat64bppPARGB:
+                    nRetval *= 8;
+                    break;
+                default:
+                case PixelFormat8bppIndexed:
+                    break;
+            }
+        }
+    }
+
+    return nRetval;
 }
 
 std::shared_ptr< Gdiplus::Bitmap > WinSalBitmap::ImplGetGdiPlusBitmap(const WinSalBitmap* pAlphaSource) const
@@ -144,23 +200,25 @@ std::shared_ptr< Gdiplus::Bitmap > WinSalBitmap::ImplGetGdiPlusBitmap(const WinS
     }
     else if(maSize.Width() > 0 && maSize.Height() > 0)
     {
-        // add to buffering mechanism
-        pSystemDependentData_GdiPlusBitmap = addOrReplaceSystemDependentData<SystemDependentData_GdiPlusBitmap>(
-            ImplGetSystemDependentDataManager());
-
         // create and set data
+        const WinSalBitmap* pAssociatedAlpha(nullptr);
+
         if(pAlphaSource)
         {
             aRetval.reset(const_cast< WinSalBitmap* >(this)->ImplCreateGdiPlusBitmap(*pAlphaSource));
-            pSystemDependentData_GdiPlusBitmap->setGdiPlusBitmap(aRetval);
-            pSystemDependentData_GdiPlusBitmap->setAssociatedAlpha(pAlphaSource);
+            pAssociatedAlpha = pAlphaSource;
         }
         else
         {
             aRetval.reset(const_cast< WinSalBitmap* >(this)->ImplCreateGdiPlusBitmap());
-            pSystemDependentData_GdiPlusBitmap->setGdiPlusBitmap(aRetval);
-            pSystemDependentData_GdiPlusBitmap->setAssociatedAlpha(nullptr);
+            pAssociatedAlpha = nullptr;
         }
+
+        // add to buffering mechanism
+        addOrReplaceSystemDependentData<SystemDependentData_GdiPlusBitmap>(
+            ImplGetSystemDependentDataManager(),
+            aRetval,
+            pAssociatedAlpha);
     }
 
     return aRetval;
