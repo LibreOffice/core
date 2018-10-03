@@ -34,6 +34,7 @@
 #include <docfld.hxx>
 #include <fldbas.hxx>
 #include <vcl/scheduler.hxx>
+#include <editsh.hxx>
 
 namespace sw
 {
@@ -174,6 +175,9 @@ IMPL_LINK_NOARG( DocumentTimerManager, DoIdleJobs, Timer*, void )
         m_rDoc.getIDocumentFieldsAccess().UpdateExpFields( nullptr, false );  // Updates ExpressionFields
         m_rDoc.getIDocumentFieldsAccess().UpdateTableFields(nullptr);  // Tables
         m_rDoc.getIDocumentFieldsAccess().UpdateRefFields();  // References
+
+        // Validate and update the paragraph signatures.
+        m_rDoc.GetEditShell()->ValidateAllParagraphSignatures(true);
 
         pTmpRoot->EndAllAction();
 
