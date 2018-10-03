@@ -127,7 +127,13 @@ SfxModalDialog::SfxModalDialog(vcl::Window *pParent, const OUString& rID, const 
     pInputSet(nullptr),
     pOutputSet(nullptr)
 {
+    SetInstallLOKNotifierHdl(LINK(this, SfxModalDialog, InstallLOKNotifierHdl));
     GetDialogData_Impl();
+}
+
+IMPL_LINK_NOARG(SfxModalDialog, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
+{
+    return SfxViewShell::Current();
 }
 
 SfxModalDialog::~SfxModalDialog()
@@ -153,37 +159,11 @@ void SfxModalDialog::CreateOutputItemSet( const SfxItemSet& rSet )
     }
 }
 
-namespace
-{
-    void InstallLOKNotifierCallback(Dialog& rDialog)
-    {
-        if (rDialog.GetLOKNotifier())
-            return;
-
-        SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (!pViewShell)
-            return;
-
-        // There are some dialogs, like Hyperlink dialog, which inherit from
-        // SfxModalDialog even though they are modeless, i.e., their Execute method
-        // isn't called.
-        rDialog.SetLOKNotifier(pViewShell);
-        std::vector<vcl::LOKPayloadItem> aItems;
-        aItems.emplace_back("type", "dialog");
-        aItems.emplace_back("size", rDialog.GetSizePixel().toString());
-        if (!rDialog.GetText().isEmpty())
-            aItems.emplace_back("title", rDialog.GetText().toUtf8());
-        pViewShell->notifyWindow(rDialog.GetLOKWindowId(), "created", aItems);
-    }
-}
-
 void SfxModalDialog::StateChanged( StateChangedType nType )
 {
     if (comphelper::LibreOfficeKit::isActive())
     {
-        if (nType == StateChangedType::InitShow)
-            InstallLOKNotifierCallback(*this);
-        else if (nType == StateChangedType::Visible &&
+        if (nType == StateChangedType::Visible &&
                  !IsVisible() &&
                  GetLOKNotifier())
         {
@@ -233,9 +213,6 @@ void SfxModelessDialog::StateChanged( StateChangedType nStateChange )
                 SetPosPixel( aPos );
             }
         }
-
-        if (comphelper::LibreOfficeKit::isActive())
-            InstallLOKNotifierCallback(*this);
 
         pImpl->bConstructed = true;
     }
@@ -310,7 +287,13 @@ SfxModelessDialog::SfxModelessDialog(SfxBindings* pBindinx,
     const OUString& rUIXMLDescription)
     : ModelessDialog(pParent, rID, rUIXMLDescription)
 {
+    SetInstallLOKNotifierHdl(LINK(this, SfxModelessDialog, InstallLOKNotifierHdl));
     Init(pBindinx, pCW);
+}
+
+IMPL_LINK_NOARG(SfxModelessDialog, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
+{
+    return SfxViewShell::Current();
 }
 
 void SfxModelessDialog::Init(SfxBindings *pBindinx, SfxChildWindow *pCW)
@@ -741,6 +724,18 @@ void SfxSingleTabDialog::SetTabPage(SfxTabPage* pTabPage)
         if (!sHelpId.isEmpty())
             SetHelpId(sHelpId);
     }
+}
+
+SfxDialogController::SfxDialogController(weld::Widget* pParent, const OUString& rUIFile,
+                                         const OString& rDialogId)
+    : GenericDialogController(pParent, rUIFile, rDialogId)
+{
+    m_xDialog->SetInstallLOKNotifierHdl(LINK(this, SfxDialogController, InstallLOKNotifierHdl));
+}
+
+IMPL_LINK_NOARG(SfxDialogController, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
+{
+    return SfxViewShell::Current();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

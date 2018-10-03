@@ -676,6 +676,11 @@ public:
         return m_xDialog->StartExecuteAsync(aCtx);
     }
 
+    virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink) override
+    {
+        m_xDialog->SetInstallLOKNotifierHdl(rLink);
+    }
+
     virtual int run() override
     {
         VclButtonBox* pActionArea = m_xDialog->get_action_area();

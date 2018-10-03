@@ -23,6 +23,11 @@
 typedef css::uno::Reference<css::accessibility::XAccessible> a11yref;
 typedef css::uno::Reference<css::accessibility::XAccessibleRelationSet> a11yrelationset;
 
+namespace vcl
+{
+class ILibreOfficeKitNotifier;
+}
+
 namespace weld
 {
 class Container;
@@ -225,6 +230,9 @@ public:
     virtual void set_default_response(int response) = 0;
     virtual Button* get_widget_for_response(int response) = 0;
     virtual Container* weld_content_area() = 0;
+
+    virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink)
+        = 0;
 };
 
 class VCL_DLLPUBLIC MessageDialog : virtual public Dialog

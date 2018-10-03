@@ -343,6 +343,7 @@ struct DialogImpl
     long    mnResult;
     bool    mbStartedModal;
     VclAbstractDialog::AsyncContext maEndCtx;
+    Link<void*, vcl::ILibreOfficeKitNotifier*> m_aInstallLOKNotifierHdl;
 
     DialogImpl() : mnResult( -1 ), mbStartedModal( false ) {}
 
@@ -717,10 +718,30 @@ Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize)
                 std::max<long>(h, 480 - 50));
 }
 
+void Dialog::SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink)
+{
+    mpDialogImpl->m_aInstallLOKNotifierHdl = rLink;
+}
+
 void Dialog::StateChanged( StateChangedType nType )
 {
     if (nType == StateChangedType::InitShow)
     {
+        if (comphelper::LibreOfficeKit::isActive() && !GetLOKNotifier())
+        {
+            vcl::ILibreOfficeKitNotifier* pViewShell = mpDialogImpl->m_aInstallLOKNotifierHdl.Call(nullptr);
+            if (pViewShell)
+            {
+                SetLOKNotifier(pViewShell);
+                std::vector<vcl::LOKPayloadItem> aItems;
+                aItems.emplace_back("type", "dialog");
+                aItems.emplace_back("size", GetSizePixel().toString());
+                if (!GetText().isEmpty())
+                    aItems.emplace_back("title", GetText().toUtf8());
+                pViewShell->notifyWindow(GetLOKWindowId(), "created", aItems);
+            }
+        }
+
         DoInitialLayout();
 
         if ( !HasChildPathFocus() || HasFocus() )
@@ -826,6 +847,13 @@ bool Dialog::ImplStartExecuteModal()
 
     ImplSVData* pSVData = ImplGetSVData();
 
+    const bool bKitActive = comphelper::LibreOfficeKit::isActive();
+    if (bKitActive && !GetLOKNotifier())
+    {
+        if (vcl::ILibreOfficeKitNotifier* pViewShell = mpDialogImpl->m_aInstallLOKNotifierHdl.Call(nullptr))
+            SetLOKNotifier(pViewShell);
+    }
+
     switch ( Application::GetDialogCancelMode() )
     {
     case Application::DialogCancelMode::Off:
@@ -887,7 +915,7 @@ bool Dialog::ImplStartExecuteModal()
     }
     mbInExecute = true;
     // no real modality in LibreOfficeKit
-    if (!comphelper::LibreOfficeKit::isActive())
+    if (!bKitActive)
         SetModalInputMode(true);
 
     // FIXME: no layouting, workaround some clipping issues
@@ -907,7 +935,7 @@ bool Dialog::ImplStartExecuteModal()
     xEventBroadcaster->documentEventOccured(aObject);
     UITestLogger::getInstance().log("DialogExecute");
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (bKitActive)
     {
         if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
         {

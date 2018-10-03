@@ -27,6 +27,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/timer.hxx>
+#include <vcl/weld.hxx>
 
 class TabPage;
 class SfxTabPage;
@@ -55,6 +56,7 @@ private:
 
     SAL_DLLPRIVATE void SetDialogData_Impl();
     SAL_DLLPRIVATE void GetDialogData_Impl();
+    DECL_DLLPRIVATE_LINK(InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
 
 protected:
     SfxModalDialog(vcl::Window *pParent, const OUString& rID, const OUString& rUIXMLDescription);
@@ -86,6 +88,7 @@ class SFX2_DLLPUBLIC SfxModelessDialog: public ModelessDialog
 
     void Init(SfxBindings *pBindinx, SfxChildWindow *pCW);
 
+    DECL_DLLPRIVATE_LINK(InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
 protected:
     SfxModelessDialog( SfxBindings*, SfxChildWindow*,
         vcl::Window*, const OUString& rID, const OUString& rUIXMLDescription );
@@ -104,7 +107,6 @@ public:
                             { return *pBindings; }
 
     DECL_LINK(TimerHdl, Timer *, void);
-
 };
 
 // class SfxFloatingWindow --------------------------------------------------
@@ -187,6 +189,14 @@ protected:
 
 private:
     std::unique_ptr<SingleTabDlgImpl>   pImpl;
+};
+
+class SFX2_DLLPUBLIC SfxDialogController : public weld::GenericDialogController
+{
+private:
+    DECL_DLLPRIVATE_LINK(InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
+public:
+    SfxDialogController(weld::Widget* pParent, const OUString& rUIFile, const OString& rDialogId);
 };
 
 #endif
