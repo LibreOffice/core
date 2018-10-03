@@ -33,7 +33,7 @@ class DrawView;
 /**
  * dialog to break meta files
  */
-class BreakDlg : public weld::GenericDialogController
+class BreakDlg : public SfxDialogController
 {
 public:
     BreakDlg(weld::Window* pWindow, DrawView* pDrView, DrawDocShell* pShell,

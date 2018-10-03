@@ -450,7 +450,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton, void )
 }
 
 SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl(weld::Window *pParent, SfxVersionInfo& rInfo, bool bEdit)
-    : GenericDialogController(pParent, "sfx/ui/versioncommentdialog.ui", "VersionCommentDialog")
+    : SfxDialogController(pParent, "sfx/ui/versioncommentdialog.ui", "VersionCommentDialog")
     , m_rInfo(rInfo)
     , m_xDateTimeText(m_xBuilder->weld_label("timestamp"))
     , m_xSavedByText(m_xBuilder->weld_label("author"))
