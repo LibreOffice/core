@@ -2160,6 +2160,12 @@ void SwEditShell::ClassifyDocPerHighestParagraphClass()
 
     const SfxClassificationPolicyType eHighestClassType = SfxClassificationHelper::stringToPolicyType(sHighestClass);
 
+    // Prevent paragraph signature validation since the below changes (f.e. watermarking) are benign.
+    const bool bOldValidationFlag = SetParagraphSignatureValidation(false);
+    comphelper::ScopeGuard const g([this, bOldValidationFlag]() {
+        SetParagraphSignatureValidation(bOldValidationFlag);
+    });
+
     // Check the origin, if "manual" (created via advanced classification dialog),
     // then we just need to set the category name.
     if (sfx::getCreationOriginProperty(xPropertyContainer, aKeyCreator) == sfx::ClassificationCreationOrigin::MANUAL)
