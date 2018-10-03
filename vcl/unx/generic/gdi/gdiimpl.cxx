@@ -1674,6 +1674,8 @@ public:
     const basegfx::B2DLineJoin& getJoin() const { return meJoin; }
     const css::drawing::LineCap& getCap() const { return meCap; }
     double getMiterMinimumAngle() const { return mfMiterMinimumAngle; }
+
+    virtual sal_Int64 estimateUsageInBytes() const override;
 };
 
 SystemDependentData_Triangulation::SystemDependentData_Triangulation(
@@ -1690,6 +1692,18 @@ SystemDependentData_Triangulation::SystemDependentData_Triangulation(
     meCap(eCap),
     mfMiterMinimumAngle(fMiterMinimumAngle)
 {
+}
+
+sal_Int64 SystemDependentData_Triangulation::estimateUsageInBytes() const
+{
+    sal_Int64 nRetval(0);
+
+    if(!maTriangles.empty())
+    {
+        nRetval = maTriangles.size() * sizeof(basegfx::triangulator::B2DTriangle);
+    }
+
+    return nRetval;
 }
 
 bool X11SalGraphicsImpl::drawPolyLine(
