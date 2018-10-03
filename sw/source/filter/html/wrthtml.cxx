@@ -488,23 +488,13 @@ ErrCode SwHTMLWriter::WriteStream()
 
     m_aHTMLControls.DeleteAndDestroyAll();
 
-    if (!m_CharFormatInfos.empty())
-        m_CharFormatInfos.clear();
-
-    if (!m_TextCollInfos.empty())
-        m_TextCollInfos.clear();
-
-    if(!m_aImgMapNames.empty())
-        m_aImgMapNames.clear();
-
+    m_CharFormatInfos.clear();
+    m_TextCollInfos.clear();
+    m_aImgMapNames.clear();
     m_aImplicitMarks.clear();
-
     m_aOutlineMarks.clear();
-
     m_aOutlineMarkPoss.clear();
-
     m_aNumRuleNames.clear();
-
     m_aScriptParaStyles.clear();
     m_aScriptTextStyles.clear();
 

@@ -2073,10 +2073,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
     {
         if ( !pTEParaPortion->GetTextPortions().empty() )
             pTEParaPortion->GetTextPortions().Reset();
-        if ( !pTEParaPortion->GetLines().empty() )
-        {
-            pTEParaPortion->GetLines().clear();
-        }
+        pTEParaPortion->GetLines().clear();
         CreateAndInsertEmptyLine( nPara );
         pTEParaPortion->SetValid();
         return nOldLineCount != pTEParaPortion->GetLines().size();

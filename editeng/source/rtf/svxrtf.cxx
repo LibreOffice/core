@@ -97,10 +97,8 @@ SvParserState SvxRTFParser::CallParser()
 
     if( !aColorTbl.empty() )
         ClearColorTbl();
-    if (!m_FontTable.empty())
-        m_FontTable.clear();
-    if (!m_StyleTable.empty())
-        m_StyleTable.clear();
+    m_FontTable.clear();
+    m_StyleTable.clear();
     if( !aAttrStack.empty() )
         ClearAttrStack();
 

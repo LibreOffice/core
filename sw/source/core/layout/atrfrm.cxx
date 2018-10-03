@@ -836,8 +836,7 @@ SwFormatCol& SwFormatCol::operator=( const SwFormatCol& rCpy )
     m_aWidthAdjustValue = rCpy.m_aWidthAdjustValue;
     m_bOrtho      = rCpy.IsOrtho();
 
-    if ( !m_aColumns.empty() )
-        m_aColumns.clear();
+    m_aColumns.clear();
     for ( sal_uInt16 i = 0; i < rCpy.GetNumCols(); ++i )
     {
         m_aColumns.emplace_back(rCpy.GetColumns()[i] );
@@ -941,8 +940,7 @@ void SwFormatCol::Init( sal_uInt16 nNumCols, sal_uInt16 nGutterWidth, sal_uInt16
 {
     // Deleting seems to be a bit radical on the first sight; but otherwise we
     // have to initialize all values of the remaining SwColumns.
-    if ( !m_aColumns.empty() )
-        m_aColumns.clear();
+    m_aColumns.clear();
     for ( sal_uInt16 i = 0; i < nNumCols; ++i )
     {
         m_aColumns.emplace_back( );

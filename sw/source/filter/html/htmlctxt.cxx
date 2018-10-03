@@ -174,8 +174,7 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
     // be set here and then the pointers become invalid!
     OSL_ENSURE(m_aParaAttrs.empty(),
         "Danger: there are non-final paragraph attributes");
-    if( !m_aParaAttrs.empty() )
-        m_aParaAttrs.clear();
+    m_aParaAttrs.clear();
 
     const SwNodeIndex* pOldEndPara = &m_pPam->GetPoint()->nNode;
 #ifndef NDEBUG

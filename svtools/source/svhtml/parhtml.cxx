@@ -1029,8 +1029,7 @@ HtmlTokenId HTMLParser::GetNextToken_()
     }
 
     // Delete options
-    if (!maOptions.empty())
-        maOptions.clear();
+    maOptions.clear();
 
     if( !IsParserWorking() )        // Don't continue if already an error occurred
         return HtmlTokenId::NONE;
