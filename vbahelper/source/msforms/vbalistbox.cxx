@@ -25,8 +25,8 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-ScVbaListBox::ScVbaListBox( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< css::uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper )
-    : ListBoxImpl_BASE(xParent, xContext, xControl, xModel, pGeomHelper)
+ScVbaListBox::ScVbaListBox( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< css::uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper )
+    : ListBoxImpl_BASE(xParent, xContext, xControl, xModel, std::move(pGeomHelper))
     , m_nIndex(0)
 {
     mpListHelper.reset( new ListControlHelper( m_xProps ) );

@@ -23,7 +23,8 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-ScVbaRadioButton::ScVbaRadioButton( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, AbstractGeometryAttributes* pGeomHelper ) : RadioButtonImpl_BASE( xParent, xContext, xControl, xModel, pGeomHelper )
+ScVbaRadioButton::ScVbaRadioButton( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< uno::XInterface >& xControl, const uno::Reference< frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper )
+    : RadioButtonImpl_BASE( xParent, xContext, xControl, xModel, std::move(pGeomHelper) )
 {
 }
 

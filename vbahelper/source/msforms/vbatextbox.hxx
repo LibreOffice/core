@@ -31,7 +31,7 @@ class ScVbaTextBox : public TextBoxImpl_BASE
 {
     bool const mbDialog;
 public:
-    ScVbaTextBox( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper, bool bDialog = false );
+    ScVbaTextBox( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, std::unique_ptr<ov::AbstractGeometryAttributes> pGeomHelper, bool bDialog = false );
    // Attributes
     virtual css::uno::Any SAL_CALL getValue() override;
     virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
