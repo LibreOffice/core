@@ -36,6 +36,7 @@
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
+#include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <comphelper/AccessibleImplementationHelper.hxx>
@@ -694,6 +695,42 @@ QStringList Qt5AccessibleWidget::keyBindingsForAction(const QString& actionName)
         keyBindings.append(toQString(comphelper::GetkeyBindingStrByXkeyBinding(keyStroke)));
     }
     return keyBindings;
+}
+
+QVariant Qt5AccessibleWidget::currentValue() const
+{
+    Reference<XAccessibleValue> xValue(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    if (!xValue.is())
+        return QVariant();
+    double aDouble = 0;
+    xValue->getCurrentValue() >>= aDouble;
+    return QVariant(aDouble);
+}
+QVariant Qt5AccessibleWidget::maximumValue() const
+{
+    Reference<XAccessibleValue> xValue(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    if (!xValue.is())
+        return QVariant();
+    double aDouble = 0;
+    xValue->getMaximumValue() >>= aDouble;
+    return QVariant(aDouble);
+}
+QVariant Qt5AccessibleWidget::minimumStepSize() const { return QVariant(); }
+QVariant Qt5AccessibleWidget::minimumValue() const
+{
+    Reference<XAccessibleValue> xValue(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    if (!xValue.is())
+        return QVariant();
+    double aDouble = 0;
+    xValue->getMinimumValue() >>= aDouble;
+    return QVariant(aDouble);
+}
+void Qt5AccessibleWidget::setCurrentValue(const QVariant& value)
+{
+    Reference<XAccessibleValue> xValue(m_xAccessible->getAccessibleContext(), UNO_QUERY);
+    if (!xValue.is())
+        return;
+    xValue->setCurrentValue(Any(value.toDouble()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
