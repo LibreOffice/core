@@ -1954,8 +1954,8 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
     mxOldAnchorStck(std::move(pRdr->m_xAnchorStck)),
     mxOldRedlines(std::move(pRdr->m_xRedlineStack)),
     mxOldPlcxMan(pRdr->m_xPlcxMan),
-    mpWFlyPara(pRdr->m_xWFlyPara.release()),
-    mpSFlyPara(pRdr->m_xSFlyPara.release()),
+    mpWFlyPara(std::move(pRdr->m_xWFlyPara)),
+    mpSFlyPara(std::move(pRdr->m_xSFlyPara)),
     mpPreviousNumPaM(pRdr->m_pPreviousNumPaM),
     mpPrevNumRule(pRdr->m_pPrevNumRule),
     mxTableDesc(std::move(pRdr->m_xTableDesc)),
@@ -2008,8 +2008,8 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp) :
 
 void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
 {
-    pRdr->m_xWFlyPara.reset(mpWFlyPara);
-    pRdr->m_xSFlyPara.reset(mpSFlyPara);
+    pRdr->m_xWFlyPara = std::move(mpWFlyPara);
+    pRdr->m_xSFlyPara = std::move(mpSFlyPara);
     pRdr->m_pPreviousNumPaM = mpPreviousNumPaM;
     pRdr->m_pPrevNumRule = mpPrevNumRule;
     pRdr->m_xTableDesc = std::move(mxTableDesc);
@@ -6533,10 +6533,10 @@ std::unique_ptr<SdrObjUserData> SwMacroInfo::Clone( SdrObject* /*pObj*/ ) const
    return std::unique_ptr<SdrObjUserData>(new SwMacroInfo( *this ));
 }
 
-std::unique_ptr<SfxItemSet> SwWW8ImplReader::SetCurrentItemSet(SfxItemSet* pItemSet)
+std::unique_ptr<SfxItemSet> SwWW8ImplReader::SetCurrentItemSet(std::unique_ptr<SfxItemSet> pItemSet)
 {
     std::unique_ptr<SfxItemSet> xRet(std::move(m_xCurrentItemSet));
-    m_xCurrentItemSet.reset(pItemSet);
+    m_xCurrentItemSet = std::move(pItemSet);
     return xRet;
 }
 

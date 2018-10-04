@@ -593,8 +593,8 @@ private:
     std::unique_ptr<SwWW8FltAnchorStack> mxOldAnchorStck;
     std::unique_ptr<sw::util::RedlineStack> mxOldRedlines;
     std::shared_ptr<WW8PLCFMan> mxOldPlcxMan;
-    WW8FlyPara* const mpWFlyPara;
-    WW8SwFlyPara* const mpSFlyPara;
+    std::unique_ptr<WW8FlyPara> mpWFlyPara;
+    std::unique_ptr<WW8SwFlyPara> mpSFlyPara;
     SwPaM* const mpPreviousNumPaM;
     const SwNumRule* mpPrevNumRule;
     std::unique_ptr<WW8TabDesc> mxTableDesc;
@@ -1879,7 +1879,7 @@ public:     // really private, but can only be done public
     SwDoc& GetDoc() const           { return m_rDoc; }
     sal_uInt16 GetCurrentColl()  const     { return m_nCurrentColl; }
     void SetNCurrentColl( sal_uInt16 nColl ) { m_nCurrentColl = nColl;    }
-    std::unique_ptr<SfxItemSet> SetCurrentItemSet(SfxItemSet* pItemSet);
+    std::unique_ptr<SfxItemSet> SetCurrentItemSet(std::unique_ptr<SfxItemSet> pItemSet);
     sal_uInt16 StyleUsingLFO( sal_uInt16 nLFOIndex ) const ;
     const SwFormat* GetStyleWithOrgWWName( OUString const & rName ) const ;
 

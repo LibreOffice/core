@@ -5301,8 +5301,8 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
         return;
 
     // Clear the list early, this method may be called recursively.
-    std::unique_ptr< std::vector<PostponedDrawing> > pPostponedDMLDrawings(m_pPostponedDMLDrawings.release());
-    std::unique_ptr< std::vector<PostponedOLE> > pPostponedOLEs(m_pPostponedOLEs.release());
+    std::unique_ptr< std::vector<PostponedDrawing> > pPostponedDMLDrawings(std::move(m_pPostponedDMLDrawings));
+    std::unique_ptr< std::vector<PostponedOLE> > pPostponedOLEs(std::move(m_pPostponedOLEs));
 
     for( const auto & rPostponedDrawing : *pPostponedDMLDrawings )
     {
