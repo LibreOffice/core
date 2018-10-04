@@ -26,31 +26,27 @@
 
 struct SwCSVData;
 
-class SwCustomizeAddressListDialog : public SfxModalDialog
+class SwCustomizeAddressListDialog : public SfxDialogController
 {
-    VclPtr<ListBox>     m_pFieldsLB;
+    std::unique_ptr<SwCSVData> m_xNewData;
+    std::unique_ptr<weld::TreeView> m_xFieldsLB;
+    std::unique_ptr<weld::Button> m_xAddPB;
+    std::unique_ptr<weld::Button> m_xDeletePB;
+    std::unique_ptr<weld::Button> m_xRenamePB;
+    std::unique_ptr<weld::Button> m_xUpPB;
+    std::unique_ptr<weld::Button> m_xDownPB;
 
-    VclPtr<PushButton>  m_pAddPB;
-    VclPtr<PushButton>  m_pDeletePB;
-    VclPtr<PushButton>  m_pRenamePB;
-
-    VclPtr<PushButton>  m_pUpPB;
-    VclPtr<PushButton>  m_pDownPB;
-
-    std::unique_ptr<SwCSVData> m_pNewData;
-
-    DECL_LINK(AddRenameHdl_Impl, Button*, void);
-    DECL_LINK(DeleteHdl_Impl, Button*, void);
-    DECL_LINK(UpDownHdl_Impl, Button*, void);
-    DECL_LINK(ListBoxSelectHdl_Impl, ListBox&, void);
+    DECL_LINK(AddRenameHdl_Impl, weld::Button&, void);
+    DECL_LINK(DeleteHdl_Impl, weld::Button&, void);
+    DECL_LINK(UpDownHdl_Impl, weld::Button&, void);
+    DECL_LINK(ListBoxSelectHdl_Impl, weld::TreeView&, void);
 
     void UpdateButtons();
 public:
-    SwCustomizeAddressListDialog(vcl::Window* pParent, const SwCSVData& rOldData);
+    SwCustomizeAddressListDialog(weld::Window* pParent, const SwCSVData& rOldData);
     virtual ~SwCustomizeAddressListDialog() override;
-    virtual void dispose() override;
 
-    std::unique_ptr<SwCSVData>  ReleaseNewData() { return std::move(m_pNewData);}
+    std::unique_ptr<SwCSVData>  ReleaseNewData() { return std::move(m_xNewData);}
 };
 
 class SwAddRenameEntryDialog : public SfxDialogController
