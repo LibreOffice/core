@@ -41,7 +41,6 @@
 class FreetypeFont;
 class FreetypeFontInstance;
 class FreetypeFontInfo;
-class GlyphData;
 class FontConfigFontOptions;
 class PhysicalFontCollection;
 class FreetypeFont;
@@ -71,13 +70,6 @@ public:
     void                    ClearFontOptions();
 
 private:
-    friend class FreetypeFont;
-    // used by FreetypeFont class only
-    void                    AddedGlyph( GlyphData& );
-    void                    RemovingGlyph();
-    void                    UsingGlyph( GlyphData const & );
-
-private:
     void                    InitFreetype();
     void                    GarbageCollect();
     FreetypeFont*           CreateFont(LogicalFontInstance* pLogicalFont);
@@ -92,30 +84,10 @@ private:
     FontList                maFontList;
     static constexpr sal_uLong gnMaxSize = 1500000;  // max overall cache size in bytes
     mutable sal_uLong       mnBytesUsed;
-    mutable long            mnLruIndex;
-    mutable int             mnGlyphCount;
     FreetypeFont*           mpCurrentGCFont;
 
     FontInfoList            m_aFontInfoList;
     sal_IntPtr              m_nMaxFontId;
-};
-
-class GlyphData
-{
-public:
-                            GlyphData() : mnLruValue(0) {}
-
-    const tools::Rectangle&        GetBoundRect() const        { return maBoundRect; }
-    void                    SetBoundRect(tools::Rectangle r)   { maBoundRect = r; }
-
-    void                    SetLruValue( int n ) const  { mnLruValue = n; }
-    long                    GetLruValue() const         { return mnLruValue;}
-
-private:
-    tools::Rectangle               maBoundRect;
-
-    // used by GlyphCache for cache LRU algorithm
-    mutable long            mnLruValue;
 };
 
 class VCL_DLLPUBLIC FreetypeFont final
@@ -139,7 +111,7 @@ public:
     const FontCharMapRef    GetFontCharMap() const;
     bool                    GetFontCapabilities(vcl::FontCapabilities &) const;
 
-    const tools::Rectangle&        GetGlyphBoundRect(const GlyphItem& rGlyph);
+    bool                    GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&);
     bool                    GetGlyphOutline(const GlyphItem& rGlyph, basegfx::B2DPolyPolygon&) const;
     bool                    GetAntialiasAdvice() const;
 
@@ -156,14 +128,9 @@ private:
     long                    Release() const;
     sal_uLong               GetByteCount() const { return mnBytesUsed; }
 
-    void                    InitGlyphData(const GlyphItem&, GlyphData&) const;
-    void                    GarbageCollect( long );
     void                    ReleaseFromGarbageCollect();
 
     void                    ApplyGlyphTransform(bool bVertical, FT_Glyph) const;
-
-    typedef std::unordered_map<sal_GlyphId, GlyphData> GlyphList;
-    mutable GlyphList       maGlyphList;
 
     rtl::Reference<FreetypeFontInstance> mpFontInstance;
 

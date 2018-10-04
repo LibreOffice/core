@@ -33,8 +33,6 @@
 
 GlyphCache::GlyphCache()
 :   mnBytesUsed(sizeof(GlyphCache)),
-    mnLruIndex(0),
-    mnGlyphCount(0),
     mpCurrentGCFont(nullptr)
     , m_nMaxFontId(0)
 {
@@ -48,14 +46,6 @@ GlyphCache::~GlyphCache()
 
 void GlyphCache::ClearFontCache()
 {
-    for (auto& font : maFontList)
-    {
-        FreetypeFont* pFreetypeFont = font.second.get();
-        // free all pFreetypeFont related data
-        pFreetypeFont->GarbageCollect( mnLruIndex+0x10000000 );
-        font.second.reset();
-    }
-
     maFontList.clear();
     mpCurrentGCFont = nullptr;
     m_aFontInfoList.clear();
@@ -206,10 +196,7 @@ FreetypeFont* GlyphCache::CacheFont(LogicalFontInstance* pFontInstance)
 void GlyphCache::UncacheFont( FreetypeFont& rFreetypeFont )
 {
     if( (rFreetypeFont.Release() <= 0) && (gnMaxSize <= mnBytesUsed) )
-    {
         mpCurrentGCFont = &rFreetypeFont;
-        GarbageCollect();
-    }
 }
 
 void GlyphCache::GarbageCollect()
@@ -230,19 +217,13 @@ void GlyphCache::GarbageCollect()
     FreetypeFont* const pFreetypeFont = mpCurrentGCFont;
     mpCurrentGCFont = pFreetypeFont->mpNextGCFont;
 
-    if( (pFreetypeFont == mpCurrentGCFont)    // no other fonts
-    ||  (pFreetypeFont->GetRefCount() > 0) )  // font still used
-    {
-        // try to garbage collect at least a few bytes
-        pFreetypeFont->GarbageCollect( mnLruIndex - mnGlyphCount/2 );
-    }
-    else // current GC font is unreferenced
+    if( (pFreetypeFont != mpCurrentGCFont)    // no other fonts
+    &&  (pFreetypeFont->GetRefCount() <= 0) )  // font still used
     {
         SAL_WARN_IF( (pFreetypeFont->GetRefCount() != 0), "vcl",
             "GlyphCache::GC detected RefCount underflow" );
 
         // free all pFreetypeFont related data
-        pFreetypeFont->GarbageCollect( mnLruIndex+0x10000000 );
         if( pFreetypeFont == mpCurrentGCFont )
             mpCurrentGCFont = nullptr;
         mnBytesUsed -= pFreetypeFont->GetByteCount();
@@ -257,26 +238,6 @@ void GlyphCache::GarbageCollect()
 
         maFontList.erase(pFreetypeFont->GetFontInstance());
     }
-}
-
-inline void GlyphCache::UsingGlyph( GlyphData const & rGlyphData )
-{
-    rGlyphData.SetLruValue( mnLruIndex++ );
-}
-
-inline void GlyphCache::AddedGlyph( GlyphData& rGlyphData )
-{
-    ++mnGlyphCount;
-    mnBytesUsed += sizeof( rGlyphData );
-    UsingGlyph( rGlyphData );
-    if( mnBytesUsed > gnMaxSize )
-        GarbageCollect();
-}
-
-inline void GlyphCache::RemovingGlyph()
-{
-    mnBytesUsed -= sizeof( GlyphData );
-    --mnGlyphCount;
 }
 
 void FreetypeFont::ReleaseFromGarbageCollect()
@@ -294,42 +255,6 @@ long FreetypeFont::Release() const
 {
     SAL_WARN_IF( mnRefCount <= 0, "vcl", "FreetypeFont: RefCount underflow" );
     return --mnRefCount;
-}
-
-const tools::Rectangle& FreetypeFont::GetGlyphBoundRect(const GlyphItem& rGlyph)
-{
-    // usually the GlyphData is cached
-    GlyphList::iterator it = maGlyphList.find(rGlyph.maGlyphId);
-    if( it != maGlyphList.end() ) {
-        GlyphData& rGlyphData = it->second;
-        GlyphCache::GetInstance().UsingGlyph( rGlyphData );
-        return rGlyphData.GetBoundRect();
-    }
-
-    // sometimes not => we need to create and initialize it ourselves
-    GlyphData& rGlyphData = maGlyphList[rGlyph.maGlyphId];
-    mnBytesUsed += sizeof( GlyphData );
-    InitGlyphData(rGlyph, rGlyphData);
-    GlyphCache::GetInstance().AddedGlyph( rGlyphData );
-    return rGlyphData.GetBoundRect();
-}
-
-void FreetypeFont::GarbageCollect( long nMinLruIndex )
-{
-    GlyphList::iterator it = maGlyphList.begin();
-    while( it != maGlyphList.end() )
-    {
-        GlyphData& rGD = it->second;
-        if( (nMinLruIndex - rGD.GetLruValue()) > 0 )
-        {
-            OSL_ASSERT( mnBytesUsed >= sizeof(GlyphData) );
-            mnBytesUsed -= sizeof( GlyphData );
-            GlyphCache::GetInstance().RemovingGlyph();
-            it = maGlyphList.erase( it );
-        }
-        else
-            ++it;
-    }
 }
 
 FreetypeFontInstance::FreetypeFontInstance(const PhysicalFontFace& rPFF, const FontSelectPattern& rFSP)
