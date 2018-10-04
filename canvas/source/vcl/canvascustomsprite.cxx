@@ -28,6 +28,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/types.hxx>
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/alpha.hxx>

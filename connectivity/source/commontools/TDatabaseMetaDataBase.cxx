@@ -22,6 +22,7 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/evtlistenerhlp.hxx>
+#include <comphelper/types.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <resource/sharedresources.hxx>
 #include <strings.hrc>

@@ -37,6 +37,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/types.hxx>
 #include <tools/debug.hxx>
 
 #include <algorithm>

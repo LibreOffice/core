@@ -45,6 +45,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <comphelper/types.hxx>
 #include <rtl/digest.h>
 #include <sfx2/signaturestate.hxx>
 #include <tools/debug.hxx>

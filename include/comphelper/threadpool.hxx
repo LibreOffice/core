@@ -14,7 +14,6 @@
 #include <rtl/ref.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <mutex>
-#include <thread>
 #include <condition_variable>
 #include <vector>
 #include <memory>
@@ -22,7 +21,6 @@
 namespace comphelper
 {
 class ThreadTaskTag;
-class ThreadPool;
 
 class COMPHELPER_DLLPUBLIC ThreadTask
 {

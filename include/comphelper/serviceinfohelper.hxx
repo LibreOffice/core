@@ -23,9 +23,11 @@
 #include <sal/config.h>
 
 #include <initializer_list>
+#include <rtl/ustring.hxx>
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/comphelperdllapi.h>
+
+namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
 
 namespace comphelper {
 

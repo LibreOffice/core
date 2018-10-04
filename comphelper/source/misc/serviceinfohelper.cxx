@@ -19,8 +19,7 @@
 
 
 #include <comphelper/serviceinfohelper.hxx>
-
-// #####################################################################
+#include <com/sun/star/uno/Sequence.hxx>
 
 namespace comphelper
 {

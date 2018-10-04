@@ -27,6 +27,7 @@
 #include <comphelper/hash.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/docpasswordhelper.hxx>
+#include <com/sun/star/beans/NamedValue.hpp>
 
 #define DEBUG_MSO_ENCRYPTION_STD97 0
 

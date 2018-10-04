@@ -28,9 +28,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 
 #include <memory>
-#include <algorithm>
 #include <vector>
-
 
 namespace comphelper
 {

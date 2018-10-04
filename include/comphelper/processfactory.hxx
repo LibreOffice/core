@@ -20,12 +20,14 @@
 #ifndef INCLUDED_COMPHELPER_PROCESSFACTORY_HXX
 #define INCLUDED_COMPHELPER_PROCESSFACTORY_HXX
 
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
 
 namespace com { namespace sun { namespace star { namespace lang {
     class XMultiServiceFactory;
 } } } }
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace comphelper
 {
