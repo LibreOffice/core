@@ -20,10 +20,12 @@
 #ifndef INCLUDED_COMPHELPER_STREAMSECTION_HXX
 #define INCLUDED_COMPHELPER_STREAMSECTION_HXX
 
-#include <com/sun/star/io/XMarkableStream.hpp>
-#include <com/sun/star/io/XDataInputStream.hpp>
-#include <com/sun/star/io/XDataOutputStream.hpp>
+#include <com/sun/star/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
+
+namespace com { namespace sun { namespace star { namespace io { class XDataInputStream; } } } }
+namespace com { namespace sun { namespace star { namespace io { class XDataOutputStream; } } } }
+namespace com { namespace sun { namespace star { namespace io { class XMarkableStream; } } } }
 
 namespace comphelper
 {

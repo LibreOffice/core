@@ -24,6 +24,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 
 #include <vcl/waitobj.hxx>
 #include <vcl/svapp.hxx>

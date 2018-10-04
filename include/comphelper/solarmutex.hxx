@@ -22,7 +22,8 @@
 
 #include <sal/config.h>
 
-#include <osl/thread.hxx>
+#include <assert.h>
+#include <osl/thread.h>
 #include <osl/mutex.hxx>
 #include <comphelper/comphelperdllapi.h>
 

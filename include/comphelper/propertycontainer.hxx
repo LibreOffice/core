@@ -22,9 +22,11 @@
 
 #include <comphelper/propertycontainerhelper.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <com/sun/star/uno/Type.hxx>
 #include <comphelper/comphelperdllapi.h>
 
+
+namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class Type; } } } }
 
 namespace comphelper
 {

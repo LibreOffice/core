@@ -21,13 +21,12 @@
 
 #include <sal/config.h>
 
-#include <math.h>
 #include <memory>
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
+
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
 
 namespace comphelper
 {

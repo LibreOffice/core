@@ -32,6 +32,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <vcl/svapp.hxx>
+#include <o3tl/deleter.hxx>
 
 
 // VDev RevDevice provider

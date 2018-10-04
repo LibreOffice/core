@@ -20,6 +20,7 @@
 #include <comphelper/enumhelper.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/report/XReportComponent.hpp>
 #include <com/sun/star/report/ForceNewPage.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

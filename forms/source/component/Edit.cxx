@@ -37,6 +37,7 @@
 #include <connectivity/dbconversion.hxx>
 
 #include <comphelper/property.hxx>
+#include <comphelper/types.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 

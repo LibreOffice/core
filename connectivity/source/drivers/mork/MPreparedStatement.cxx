@@ -11,6 +11,7 @@
 #include "MPreparedStatement.hxx"
 #include "MResultSetMetaData.hxx"
 #include <connectivity/dbtools.hxx>
+#include <comphelper/types.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <sal/log.hxx>
 
