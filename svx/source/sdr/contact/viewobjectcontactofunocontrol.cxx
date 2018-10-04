@@ -41,6 +41,7 @@
 #include <com/sun/star/awt/InvalidateStyle.hpp>
 #include <com/sun/star/util/XModeChangeListener.hpp>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 

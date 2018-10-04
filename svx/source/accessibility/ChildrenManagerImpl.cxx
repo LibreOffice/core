@@ -32,6 +32,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <comphelper/types.hxx>
 
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>

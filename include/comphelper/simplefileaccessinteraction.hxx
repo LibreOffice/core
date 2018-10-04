@@ -12,8 +12,10 @@
 
 #include <sal/config.h>
 #include <ucbhelper/interceptedinteraction.hxx>
-#include <com/sun/star/task/XInteractionHandler.hpp>
 #include <comphelper/comphelperdllapi.h>
+
+namespace com { namespace sun { namespace star { namespace task { class XInteractionHandler; } } } }
+namespace com { namespace sun { namespace star { namespace task { class XInteractionRequest; } } } }
 
 namespace comphelper {
 /** An interaction handler wrapper for simple file access.

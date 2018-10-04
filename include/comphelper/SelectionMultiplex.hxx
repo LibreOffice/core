@@ -21,11 +21,12 @@
 #define INCLUDED_COMPHELPER_SELECTIONMULTIPLEX_HXX
 
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ref.hxx>
 
+namespace com { namespace sun { namespace star { namespace view { class XSelectionSupplier; } } } }
 
 //= selection helper classes
 

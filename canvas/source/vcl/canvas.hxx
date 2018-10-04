@@ -33,6 +33,8 @@
 
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
+#include <comphelper/types.hxx>
+#include <cppu/unotype.hxx>
 
 #include <canvas/base/basemutexhelper.hxx>
 #include <canvas/base/integerbitmapbase.hxx>

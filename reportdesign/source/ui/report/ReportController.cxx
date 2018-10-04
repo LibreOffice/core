@@ -35,6 +35,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/types.hxx>
 
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/view/PaperFormat.hpp>

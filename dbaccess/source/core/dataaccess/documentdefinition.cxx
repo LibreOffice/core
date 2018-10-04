@@ -27,6 +27,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/types.hxx>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/Size.hpp>

@@ -20,6 +20,7 @@
 #include <statusbarcontroller.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/types.hxx>
 #include <svx/zoomsliderctrl.hxx>
 #include <svx/zoomctrl.hxx>
 #include <svx/svxids.hrc>

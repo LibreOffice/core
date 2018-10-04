@@ -21,10 +21,11 @@
 
 #include <osl/mutex.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
+ #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <osl/file.hxx>
 #include <comphelper/comphelperdllapi.h>
+
+namespace osl { class File; }
 
 namespace comphelper
 {

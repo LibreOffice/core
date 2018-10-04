@@ -22,6 +22,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
+#include <comphelper/types.hxx>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
 #include <TConnection.hxx>

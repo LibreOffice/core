@@ -30,6 +30,8 @@
 #include <vcl/toolbox.hxx>
 #include <comphelper/accessiblewrapper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/types.hxx>
+#include <cppuhelper/typeprovider.hxx>
 
 using namespace ::comphelper;
 using namespace ::com::sun::star;
