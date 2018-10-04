@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_0877053d",
+        "filename": "dbaccess/Module_dbaccess.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-04T11:38:49Z",
+      "side": 1,
+      "message": "what is a \"be file\" (or is that a typo)?",
+      "revId": "f104b3cafee63b47a735cfdce0f05dab2eedbb91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
