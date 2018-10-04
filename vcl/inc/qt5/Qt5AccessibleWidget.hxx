@@ -19,6 +19,7 @@
 #include <QtGui/QAccessible>
 #include <QtGui/QAccessibleActionInterface>
 #include <QtGui/QAccessibleInterface>
+#include <QtGui/QAccessibleValueInterface>
 #include <QtGui/QColor>
 #include <QtGui/QWindow>
 
@@ -65,6 +66,8 @@ public:
     QStringList actionNames() const override;
     void doAction(const QString& actionName) override;
     QStringList keyBindingsForAction(const QString& actionName) const override;
+
+    QAccessibleValueInterface* valueInterface();
 
     // Factory
     static QAccessibleInterface* customFactory(const QString& classname, QObject* object);
