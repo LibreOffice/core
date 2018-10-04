@@ -394,8 +394,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
     SfxModalDialog(pParent, "CreateAddressList", "modules/swriter/ui/createaddresslist.ui"),
     m_sAddressListFilterName( SwResId(    ST_FILTERNAME)),
     m_sURL(rURL),
-    m_pCSVData( new SwCSVData ),
-    m_pFindDlg(nullptr)
+    m_pCSVData( new SwCSVData )
 {
     get(m_pNewPB, "NEW");
     get(m_pDeletePB, "DELETE");
@@ -509,7 +508,7 @@ void SwCreateAddressListDialog::dispose()
     m_pNextPB.clear();
     m_pEndPB.clear();
     m_pOK.clear();
-    m_pFindDlg.disposeAndClear();
+    m_xFindDlg.reset();
     SfxModalDialog::dispose();
 }
 
@@ -549,20 +548,20 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, DeleteHdl_Impl, Button*, void)
 
 IMPL_LINK_NOARG(SwCreateAddressListDialog, FindHdl_Impl, Button*, void)
 {
-    if(!m_pFindDlg)
+    if (!m_xFindDlg)
     {
-        m_pFindDlg = VclPtr<SwFindEntryDialog>::Create(this);
-        ListBox& rColumnBox = m_pFindDlg->GetFieldsListBox();
+        m_xFindDlg.reset(new SwFindEntryDialog(this));
+        weld::ComboBox& rColumnBox = m_xFindDlg->GetFieldsListBox();
         std::vector< OUString >::iterator    aHeaderIter;
         for(aHeaderIter = m_pCSVData->aDBColumnHeaders.begin();
                     aHeaderIter != m_pCSVData->aDBColumnHeaders.end();
                     ++aHeaderIter)
-            rColumnBox.InsertEntry(*aHeaderIter);
-        rColumnBox.SelectEntryPos( 0 );
-        m_pFindDlg->Show();
+            rColumnBox.append_text(*aHeaderIter);
+        rColumnBox.set_active(0);
+        m_xFindDlg->show();
     }
     else
-        m_pFindDlg->Show(!m_pFindDlg->IsVisible());
+        m_xFindDlg->show(!m_xFindDlg->get_visible());
 }
 
 IMPL_LINK(SwCreateAddressListDialog, CustomizeHdl_Impl, Button*, pButton, void)
@@ -577,15 +576,15 @@ IMPL_LINK(SwCreateAddressListDialog, CustomizeHdl_Impl, Button*, pButton, void)
     pDlg.reset();
 
     //update find dialog
-    if(m_pFindDlg)
+    if (m_xFindDlg)
     {
-        ListBox& rColumnBox = m_pFindDlg->GetFieldsListBox();
-        rColumnBox.Clear();
+        weld::ComboBox& rColumnBox = m_xFindDlg->GetFieldsListBox();
+        rColumnBox.clear();
         std::vector< OUString >::iterator    aHeaderIter;
         for(aHeaderIter = m_pCSVData->aDBColumnHeaders.begin();
                     aHeaderIter != m_pCSVData->aDBColumnHeaders.end();
                     ++aHeaderIter)
-            rColumnBox.InsertEntry(*aHeaderIter);
+            rColumnBox.append_text(*aHeaderIter);
     }
 }
 
@@ -741,54 +740,39 @@ void SwCreateAddressListDialog::Find(const OUString& rSearch, sal_Int32 nColumn)
 }
 
 SwFindEntryDialog::SwFindEntryDialog(SwCreateAddressListDialog* pParent)
-    : ModelessDialog(pParent, "FindEntryDialog",
-        "modules/swriter/ui/findentrydialog.ui")
+    : GenericDialogController(pParent->GetFrameWeld(), "modules/swriter/ui/findentrydialog.ui", "FindEntryDialog")
     , m_pParent(pParent)
+    , m_xFindED(m_xBuilder->weld_entry("entry"))
+    , m_xFindOnlyCB(m_xBuilder->weld_check_button("findin"))
+    , m_xFindOnlyLB(m_xBuilder->weld_combo_box("area"))
+    , m_xFindPB(m_xBuilder->weld_button("find"))
+    , m_xCancel(m_xBuilder->weld_button("cancel"))
 {
-    get(m_pCancel, "cancel");
-    get(m_pFindPB, "find");
-    get(m_pFindOnlyLB, "area");
-    get(m_pFindOnlyCB, "findin");
-    get(m_pFindED, "entry");
-    m_pFindPB->SetClickHdl(LINK(this, SwFindEntryDialog, FindHdl_Impl));
-    m_pFindED->SetModifyHdl(LINK(this, SwFindEntryDialog, FindEnableHdl_Impl));
-    m_pCancel->SetClickHdl(LINK(this, SwFindEntryDialog, CloseHdl_Impl));
+    m_xFindPB->connect_clicked(LINK(this, SwFindEntryDialog, FindHdl_Impl));
+    m_xFindED->connect_changed(LINK(this, SwFindEntryDialog, FindEnableHdl_Impl));
+    m_xCancel->connect_clicked(LINK(this, SwFindEntryDialog, CloseHdl_Impl));
 }
 
 SwFindEntryDialog::~SwFindEntryDialog()
 {
-    disposeOnce();
 }
 
-void SwFindEntryDialog::dispose()
-{
-    m_pFindED.clear();
-    m_pFindOnlyCB.clear();
-    m_pFindOnlyLB.clear();
-    m_pFindPB.clear();
-    m_pCancel.clear();
-    m_pParent.clear();
-    ModelessDialog::dispose();
-}
-
-
-IMPL_LINK_NOARG(SwFindEntryDialog, FindHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwFindEntryDialog, FindHdl_Impl, weld::Button&, void)
 {
     sal_Int32 nColumn = -1;
-    if(m_pFindOnlyCB->IsChecked())
-        nColumn = m_pFindOnlyLB->GetSelectedEntryPos();
-    if(nColumn != LISTBOX_ENTRY_NOTFOUND)
-        m_pParent->Find(m_pFindED->GetText(), nColumn);
+    if (m_xFindOnlyCB->get_active())
+        nColumn = m_xFindOnlyLB->get_active();
+    m_pParent->Find(m_xFindED->get_text(), nColumn);
 }
 
-IMPL_LINK_NOARG(SwFindEntryDialog, FindEnableHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SwFindEntryDialog, FindEnableHdl_Impl, weld::Entry&, void)
 {
-    m_pFindPB->Enable(!m_pFindED->GetText().isEmpty());
+    m_xFindPB->set_sensitive(!m_xFindED->get_text().isEmpty());
 }
 
-IMPL_LINK_NOARG(SwFindEntryDialog, CloseHdl_Impl, Button*, void)
+IMPL_LINK_NOARG(SwFindEntryDialog, CloseHdl_Impl, weld::Button&, void)
 {
-    Show(false);
+    m_xDialog->show(false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
