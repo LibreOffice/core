@@ -16,6 +16,24 @@
       "revId": "ca1142a44e7ae87750e8760120487850c79551d7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_681201b4",
+        "filename": "vcl/inc/fontinstance.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-10-04T12:31:15Z",
+      "side": 1,
+      "message": "Oh - they were, until I had to move them for the LogicalFontInstance \u003c\u003e FontCache compile cycle.\n\nWill remove the inline.",
+      "parentUuid": "ff0f0b1f_c8134db8",
+      "revId": "ca1142a44e7ae87750e8760120487850c79551d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
