@@ -26,6 +26,7 @@
 #include <Qt5Tools.hxx>
 #include <Qt5Widget.hxx>
 #include <Qt5XAccessible.hxx>
+#include <Qt5AccessibleValue.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -694,6 +695,11 @@ QStringList Qt5AccessibleWidget::keyBindingsForAction(const QString& actionName)
         keyBindings.append(toQString(comphelper::GetkeyBindingStrByXkeyBinding(keyStroke)));
     }
     return keyBindings;
+}
+
+QAccessibleValueInterface* Qt5AccessibleWidget::valueInterface()
+{
+    return new Qt5AccessibleValue(m_xAccessible);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
