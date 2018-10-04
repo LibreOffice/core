@@ -2210,6 +2210,12 @@ public:
         return GtkToVcl(ret);
     }
 
+    virtual void show() override
+    {
+        sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(m_pDialog)));
+        gtk_widget_show(m_pWidget);
+    }
+
     static int VclToGtk(int nResponse)
     {
         if (nResponse == RET_OK)

@@ -25,6 +25,7 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 #include <vector>
 
 class SwAddressControl_Impl;
@@ -60,7 +61,7 @@ class SwCreateAddressListDialog : public SfxModalDialog
     OUString                m_sURL;
 
     std::unique_ptr<SwCSVData>     m_pCSVData;
-    VclPtr<SwFindEntryDialog>      m_pFindDlg;
+    std::unique_ptr<SwFindEntryDialog> m_xFindDlg;
 
     DECL_LINK(NewHdl_Impl, Button*, void);
     DECL_LINK(DeleteHdl_Impl, Button*, void);
@@ -82,29 +83,30 @@ public:
     void                    Find( const OUString& rSearch, sal_Int32 nColumn);
 };
 
-class SwFindEntryDialog : public ModelessDialog
+class SwFindEntryDialog : public weld::GenericDialogController
 {
-    VclPtr<Edit>         m_pFindED;
-    VclPtr<CheckBox>     m_pFindOnlyCB;
-    VclPtr<ListBox>      m_pFindOnlyLB;
-
-    VclPtr<PushButton>   m_pFindPB;
-    VclPtr<CancelButton> m_pCancel;
-
     VclPtr<SwCreateAddressListDialog>  m_pParent;
 
-    DECL_LINK(FindHdl_Impl, Button*, void);
-    DECL_LINK(FindEnableHdl_Impl, Edit&, void);
-    DECL_LINK(CloseHdl_Impl, Button*, void);
+    std::unique_ptr<weld::Entry> m_xFindED;
+    std::unique_ptr<weld::CheckButton> m_xFindOnlyCB;
+    std::unique_ptr<weld::ComboBox> m_xFindOnlyLB;
+    std::unique_ptr<weld::Button> m_xFindPB;
+    std::unique_ptr<weld::Button> m_xCancel;
+
+    DECL_LINK(FindHdl_Impl, weld::Button&, void);
+    DECL_LINK(FindEnableHdl_Impl, weld::Entry&, void);
+    DECL_LINK(CloseHdl_Impl, weld::Button&, void);
 
 public:
     SwFindEntryDialog(SwCreateAddressListDialog* pParent);
     virtual ~SwFindEntryDialog() override;
-    virtual void dispose() override;
 
-    ListBox& GetFieldsListBox()
+    void show(bool bShow = true) { m_xDialog->show(bShow); }
+    bool get_visible() const { return m_xDialog->get_visible(); }
+
+    weld::ComboBox& GetFieldsListBox()
     {
-        return *m_pFindOnlyLB;
+        return *m_xFindOnlyLB;
     }
 };
 
