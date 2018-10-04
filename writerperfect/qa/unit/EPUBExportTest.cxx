@@ -286,8 +286,7 @@ void EPUBExportTest::testMimetype()
     OString aExpected("application/epub+zip");
     CPPUNIT_ASSERT(aMemoryStream.GetSize() > static_cast<sal_uInt64>(38 + aExpected.getLength()));
 
-    OString aActual(static_cast<const char*>(aMemoryStream.GetBuffer()) + 38,
-                    aExpected.getLength());
+    OString aActual(static_cast<const char*>(aMemoryStream.GetData()) + 38, aExpected.getLength());
     // This failed: actual data was some garbage, not the uncompressed mime type.
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
@@ -907,7 +906,7 @@ void EPUBExportTest::testSVG()
 
     // This failed, there was a '<!DOCTYPE' line between the xml and the svg
     // one, causing a validation error.
-    OString aActual(static_cast<const char*>(aMemoryStream.GetBuffer()), aExpected.getLength());
+    OString aActual(static_cast<const char*>(aMemoryStream.GetData()), aExpected.getLength());
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 
     // This failed, we used the xlink attribute namespace, but we did not
