@@ -564,16 +564,15 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, FindHdl_Impl, Button*, void)
         m_xFindDlg->show(!m_xFindDlg->get_visible());
 }
 
-IMPL_LINK(SwCreateAddressListDialog, CustomizeHdl_Impl, Button*, pButton, void)
+IMPL_LINK_NOARG(SwCreateAddressListDialog, CustomizeHdl_Impl, Button*, void)
 {
-    VclPtrInstance< SwCustomizeAddressListDialog > pDlg(pButton, *m_pCSVData);
-    if(RET_OK == pDlg->Execute())
+    SwCustomizeAddressListDialog aDlg(GetFrameWeld(), *m_pCSVData);
+    if (aDlg.run() == RET_OK)
     {
-        m_pCSVData = pDlg->ReleaseNewData();
+        m_pCSVData = aDlg.ReleaseNewData();
         m_pAddressControl->SetData(*m_pCSVData);
         m_pAddressControl->SetCurrentDataSet(m_pAddressControl->GetCurrentDataSet());
     }
-    pDlg.reset();
 
     //update find dialog
     if (m_xFindDlg)
