@@ -85,7 +85,7 @@ public:
     ~CoreTextStyle() override;
 
     void       GetFontMetric( ImplFontMetricDataRef const & );
-    bool       GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&) const;
+    bool       GetGlyphBoundRect(const GlyphItem&, tools::Rectangle&);
     bool       GetGlyphOutline(const GlyphItem&, basegfx::B2DPolyPolygon&) const;
 
     CFMutableDictionaryRef  GetStyleDict( void ) const { return mpStyleDict; }
