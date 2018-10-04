@@ -100,7 +100,7 @@ sal_Bool VclQt5Clipboard::supportsService(const OUString& ServiceName)
 Reference<css::datatransfer::XTransferable> VclQt5Clipboard::getContents()
 {
     if (!m_aContents.is())
-        m_aContents = new Qt5Transferable();
+        m_aContents = new Qt5Transferable;
 
     return m_aContents;
 }
