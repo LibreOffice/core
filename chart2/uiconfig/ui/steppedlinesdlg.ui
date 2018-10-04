@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
   <!-- interface-local-resource-path /home/eric/Documents/computers/libreoffice/core/icon-themes/galaxy/chart2 -->
   <object class="GtkDialog" id="SteppedLinesDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -130,7 +136,6 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">step_center_x_rb</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
