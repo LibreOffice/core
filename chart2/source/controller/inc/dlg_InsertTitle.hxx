@@ -20,18 +20,18 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_INSERTTITLE_HXX
 
 #include "res_Titles.hxx"
-#include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
 #include <memory>
 
 namespace chart
 {
-class SchTitleDlg : public ModalDialog
+class SchTitleDlg : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr< TitleResources >  m_xTitleResources;
+    std::unique_ptr<SchTitleResources>  m_xTitleResources;
 
 public:
-    SchTitleDlg( vcl::Window* pParent, const TitleDialogData& rInput );
+    SchTitleDlg(weld::Window* pParent, const TitleDialogData& rInput);
 
     void getResult( TitleDialogData& rOutput );
 };
