@@ -53,31 +53,29 @@ public:
     std::unique_ptr<SwCSVData>  ReleaseNewData() { return std::move(m_pNewData);}
 };
 
-class SwAddRenameEntryDialog : public SfxModalDialog
+class SwAddRenameEntryDialog : public SfxDialogController
 {
-    VclPtr<Edit>     m_pFieldNameED;
-    VclPtr<OKButton> m_pOK;
     const std::vector< OUString >& m_rCSVHeader;
+    std::unique_ptr<weld::Entry> m_xFieldNameED;
+    std::unique_ptr<weld::Button> m_xOK;
 
-    DECL_LINK(ModifyHdl_Impl, Edit&, void);
+    DECL_LINK(ModifyHdl_Impl, weld::Entry&, void);
 protected:
-    SwAddRenameEntryDialog(vcl::Window* pParent, const OUString& rID,
-        const OUString& rUIXMLDescription, const std::vector< OUString >& rCSVHeader);
-    virtual ~SwAddRenameEntryDialog() override;
-    virtual void dispose() override;
+    SwAddRenameEntryDialog(weld::Window* pParent, const OUString& rUIXMLDescription,
+        const OString& rID, const std::vector< OUString >& rCSVHeader);
 
 public:
-    void                SetFieldName(const OUString& rName) {m_pFieldNameED->SetText(rName);}
-    OUString            GetFieldName() const {return m_pFieldNameED->GetText();};
+    void                SetFieldName(const OUString& rName) { m_xFieldNameED->set_text(rName); }
+    OUString            GetFieldName() const { return m_xFieldNameED->get_text(); }
 
 };
 
 class SwAddEntryDialog : public SwAddRenameEntryDialog
 {
 public:
-    SwAddEntryDialog(vcl::Window* pParent, const std::vector< OUString >& rCSVHeader)
-        : SwAddRenameEntryDialog(pParent, "AddEntryDialog",
-            "modules/swriter/ui/addentrydialog.ui", rCSVHeader)
+    SwAddEntryDialog(weld::Window* pParent, const std::vector< OUString >& rCSVHeader)
+        : SwAddRenameEntryDialog(pParent, "modules/swriter/ui/addentrydialog.ui",
+                                 "AddEntryDialog", rCSVHeader)
     {
     }
 };
@@ -85,9 +83,9 @@ public:
 class SwRenameEntryDialog : public SwAddRenameEntryDialog
 {
 public:
-    SwRenameEntryDialog(vcl::Window* pParent, const std::vector< OUString >& rCSVHeader)
-        : SwAddRenameEntryDialog(pParent, "RenameEntryDialog",
-            "modules/swriter/ui/renameentrydialog.ui", rCSVHeader)
+    SwRenameEntryDialog(weld::Window* pParent, const std::vector< OUString >& rCSVHeader)
+        : SwAddRenameEntryDialog(pParent, "modules/swriter/ui/renameentrydialog.ui",
+                                 "RenameEntryDialog", rCSVHeader)
     {
     }
 };
