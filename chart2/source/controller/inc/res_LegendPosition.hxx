@@ -20,6 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_RES_LEGENDPOSITION_HXX
 
 #include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 #include <svl/itemset.hxx>
 
 class VclBuilderContainer;
@@ -66,6 +67,43 @@ private:
     VclPtr<RadioButton>    m_pRbtBottom;
 
     Link<LinkParamNone*,void> m_aChangeLink;
+};
+
+
+class SchLegendPositionResources final
+{
+
+public:
+    //constructor without Display checkbox
+    SchLegendPositionResources(weld::Builder& rBuilder);
+    //constructor inclusive Display checkbox
+    SchLegendPositionResources(weld::Builder& rBuilder, const css::uno::Reference<
+                       css::uno::XComponentContext>& xCC );
+    ~SchLegendPositionResources();
+
+    void writeToResources( const css::uno::Reference< css::frame::XModel >& xChartModel );
+    void writeToModel( const css::uno::Reference< css::frame::XModel >& xChartModel ) const;
+
+    void initFromItemSet( const SfxItemSet& rInAttrs );
+    void writeToItemSet( SfxItemSet& rOutAttrs ) const;
+
+    void SetChangeHdl( const Link<LinkParamNone*,void>& rLink );
+
+    DECL_LINK(PositionEnableHdl, weld::ToggleButton&, void);
+    DECL_LINK(PositionChangeHdl, weld::ToggleButton&, void);
+
+private:
+    void impl_setRadioButtonToggleHdl();
+
+private:
+    css::uno::Reference< css::uno::XComponentContext>    m_xCC;
+    Link<LinkParamNone*,void> m_aChangeLink;
+
+    std::unique_ptr<weld::CheckButton> m_xCbxShow;
+    std::unique_ptr<weld::RadioButton> m_xRbtLeft;
+    std::unique_ptr<weld::RadioButton> m_xRbtRight;
+    std::unique_ptr<weld::RadioButton> m_xRbtTop;
+    std::unique_ptr<weld::RadioButton> m_xRbtBottom;
 };
 
 } //namespace chart

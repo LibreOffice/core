@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_INSERTLEGEND_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_INSERTLEGEND_HXX
 
-#include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
 
 #include <memory>
 
@@ -31,13 +31,13 @@ namespace com { namespace sun { namespace star { namespace uno { class XComponen
 namespace chart
 {
 
-class SchLegendDlg : public ModalDialog
+class SchLegendDlg : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr < LegendPositionResources >    m_xLegendPositionResources;
+    std::unique_ptr<SchLegendPositionResources> m_xLegendPositionResources;
 
 public:
-    SchLegendDlg( vcl::Window* pParent, const css::uno::Reference< css::uno::XComponentContext>& xCC );
+    SchLegendDlg(weld::Window* pParent, const css::uno::Reference< css::uno::XComponentContext>& xCC);
 
     void init( const css::uno::Reference< css::frame::XModel >& xChartModel );
     void writeToModel( const css::uno::Reference< css::frame::XModel >& xChartModel ) const;
