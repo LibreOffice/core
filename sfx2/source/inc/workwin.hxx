@@ -84,6 +84,7 @@ namespace o3tl
 struct SfxChild_Impl
 {
     VclPtr<vcl::Window>             pWin;
+    weld::DialogController*         pController;
     Size                            aSize;
     SfxChildAlignment               eAlign;
     SfxChildVisibility              nVisible;
@@ -92,10 +93,18 @@ struct SfxChild_Impl
 
     SfxChild_Impl( vcl::Window& rChild, const Size& rSize,
                    SfxChildAlignment eAlignment, bool bIsVisible ):
-        pWin(&rChild), aSize(rSize), eAlign(eAlignment), bResize(false),
+        pWin(&rChild), pController(nullptr), aSize(rSize), eAlign(eAlignment), bResize(false),
         bSetFocus( false )
     {
         nVisible = bIsVisible ? SfxChildVisibility::VISIBLE : SfxChildVisibility::NOT_VISIBLE;
+    }
+
+    SfxChild_Impl(weld::DialogController& rChild,
+                  SfxChildAlignment eAlignment):
+        pWin(nullptr), pController(&rChild), eAlign(eAlignment), bResize(false),
+        bSetFocus( false )
+    {
+        nVisible = pController->getDialog()->get_visible() ? SfxChildVisibility::VISIBLE : SfxChildVisibility::NOT_VISIBLE;
     }
 };
 
@@ -239,7 +248,9 @@ public:
     // Methods for all Child windows
     void                    DataChanged_Impl();
     void                    ReleaseChild_Impl( vcl::Window& rWindow );
+    void                    ReleaseChild_Impl(weld::DialogController&);
     SfxChild_Impl*          RegisterChild_Impl( vcl::Window& rWindow, SfxChildAlignment eAlign );
+    SfxChild_Impl*          RegisterChild_Impl(weld::DialogController& rController, SfxChildAlignment eAlign);
     void                    ShowChildren_Impl();
     void                    HideChildren_Impl();
     bool                    PrepareClose_Impl();
