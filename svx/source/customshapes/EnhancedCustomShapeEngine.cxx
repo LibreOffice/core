@@ -72,9 +72,9 @@ class EnhancedCustomShapeEngine : public cppu::WeakImplHelper
     css::uno::Reference< css::drawing::XShape >      mxShape;
     bool                                    mbForceGroupWithText;
 
-    SdrObject* ImplForceGroupWithText(
+    std::unique_ptr<SdrObject, SdrObjectFreeOp> ImplForceGroupWithText(
         const SdrObjCustomShape& rSdrObjCustomShape,
-        SdrObject* pRenderedShape);
+        std::unique_ptr<SdrObject, SdrObjectFreeOp> pRenderedShape);
 
 public:
                             EnhancedCustomShapeEngine();
@@ -149,9 +149,9 @@ Sequence< OUString > SAL_CALL EnhancedCustomShapeEngine::getSupportedServiceName
 }
 
 // XCustomShapeEngine
-SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText(
+std::unique_ptr<SdrObject, SdrObjectFreeOp> EnhancedCustomShapeEngine::ImplForceGroupWithText(
     const SdrObjCustomShape& rSdrObjCustomShape,
-    SdrObject* pRenderedShape)
+    std::unique_ptr<SdrObject, SdrObjectFreeOp> pRenderedShape)
 {
     const bool bHasText(rSdrObjCustomShape.HasText());
 
@@ -164,20 +164,20 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText(
         {
             if ( pRenderedShape )
             {
-                if ( dynamic_cast<const SdrObjGroup*>( pRenderedShape) ==  nullptr )
+                if ( dynamic_cast<const SdrObjGroup*>( pRenderedShape.get() ) ==  nullptr )
                 {
-                    SdrObject* pTmp = pRenderedShape;
-                    pRenderedShape = new SdrObjGroup(rSdrObjCustomShape.getSdrModelFromSdrObject());
-                    static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
+                    auto pTmp = std::move(pRenderedShape);
+                    pRenderedShape.reset(new SdrObjGroup(rSdrObjCustomShape.getSdrModelFromSdrObject()));
+                    static_cast<SdrObjGroup*>(pRenderedShape.get())->GetSubList()->NbcInsertObject( pTmp.release() );
                 }
 
-                static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject(
+                static_cast<SdrObjGroup*>(pRenderedShape.get())->GetSubList()->NbcInsertObject(
                     pShadowGeometry->CloneSdrObject(pShadowGeometry->getSdrModelFromSdrObject()),
                     0);
             }
             else
             {
-                pRenderedShape = pShadowGeometry->CloneSdrObject(pShadowGeometry->getSdrModelFromSdrObject());
+                pRenderedShape.reset( pShadowGeometry->CloneSdrObject(pShadowGeometry->getSdrModelFromSdrObject()) );
             }
         }
 
@@ -185,10 +185,10 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText(
         if ( bHasText )
         {
             // #i37011# also create a text object and add at rPos + 1
-            SdrObject* pTextObj = SdrObjFactory::MakeNewObject(
+            std::unique_ptr<SdrObject, SdrObjectFreeOp> pTextObj( SdrObjFactory::MakeNewObject(
                 rSdrObjCustomShape.getSdrModelFromSdrObject(),
                 rSdrObjCustomShape.GetObjInventor(),
-                OBJ_TEXT);
+                OBJ_TEXT) );
 
             // Copy text content
             OutlinerParaObject* pParaObj(rSdrObjCustomShape.GetOutlinerParaObject());
@@ -234,26 +234,26 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText(
 
             if ( pRenderedShape )
             {
-                if ( dynamic_cast<const SdrObjGroup*>( pRenderedShape) ==  nullptr )
+                if ( dynamic_cast<const SdrObjGroup*>( pRenderedShape.get() ) == nullptr )
                 {
-                    SdrObject* pTmp = pRenderedShape;
-                    pRenderedShape = new SdrObjGroup(rSdrObjCustomShape.getSdrModelFromSdrObject());
-                    static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
+                    auto pTmp = std::move(pRenderedShape);
+                    pRenderedShape.reset(new SdrObjGroup(rSdrObjCustomShape.getSdrModelFromSdrObject()));
+                    static_cast<SdrObjGroup*>(pRenderedShape.get())->GetSubList()->NbcInsertObject( pTmp.release() );
                 }
-                static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pTextObj );
+                static_cast<SdrObjGroup*>(pRenderedShape.get())->GetSubList()->NbcInsertObject( pTextObj.release() );
             }
             else
-                pRenderedShape = pTextObj;
+                pRenderedShape = std::move(pTextObj);
         }
 
         // force group
         if ( pRenderedShape )
         {
-            if ( dynamic_cast<const SdrObjGroup*>( pRenderedShape) ==  nullptr )
+            if ( dynamic_cast<const SdrObjGroup*>( pRenderedShape.get() ) ==  nullptr )
             {
-                SdrObject* pTmp = pRenderedShape;
-                pRenderedShape = new SdrObjGroup(rSdrObjCustomShape.getSdrModelFromSdrObject());
-                static_cast<SdrObjGroup*>(pRenderedShape)->GetSubList()->NbcInsertObject( pTmp );
+                auto pTmp = std::move(pRenderedShape);
+                pRenderedShape.reset(new SdrObjGroup(rSdrObjCustomShape.getSdrModelFromSdrObject()));
+                static_cast<SdrObjGroup*>(pRenderedShape.get())->GetSubList()->NbcInsertObject( pTmp.release() );
             }
         }
     }
@@ -361,9 +361,9 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
 
     if ( mbForceGroupWithText )
     {
-        xRenderedShape.reset(ImplForceGroupWithText(
+        xRenderedShape = ImplForceGroupWithText(
             rSdrObjCustomShape,
-            xRenderedShape.release()));
+            std::move(xRenderedShape));
     }
 
     Reference< drawing::XShape > xShape;
