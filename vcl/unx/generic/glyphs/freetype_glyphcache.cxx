@@ -347,8 +347,7 @@ rtl::Reference<LogicalFontInstance> FreetypeFontFace::CreateFontInstance(const F
 // FreetypeFont
 
 FreetypeFont::FreetypeFont(LogicalFontInstance* pFontInstance, FreetypeFontInfo* pFI )
-:   maGlyphList( 0),
-    mpFontInstance(static_cast<FreetypeFontInstance*>(pFontInstance)),
+:   mpFontInstance(static_cast<FreetypeFontInstance*>(pFontInstance)),
     mnRefCount(1),
     mnBytesUsed( sizeof(FreetypeFont) ),
     mpPrevGCFont( nullptr ),
@@ -589,14 +588,18 @@ void FreetypeFont::ApplyGlyphTransform(bool bVertical, FT_Glyph pGlyphFT ) const
     }
 }
 
-void FreetypeFont::InitGlyphData(const GlyphItem& rGlyph, GlyphData& rGD ) const
+bool FreetypeFont::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
+    assert(mpFontInstance.is());
+    if (mpFontInstance.is() && mpFontInstance->GetCachedGlyphBoundRect(rGlyph.maGlyphId, rRect))
+        return true;
+
     FT_Activate_Size( maSizeFT );
 
     FT_Error rc = FT_Load_Glyph(maFaceFT, rGlyph.maGlyphId, mnLoadFlags);
 
     if (rc != FT_Err_Ok)
-        return;
+        return false;
 
     if (mbArtBold)
         FT_GlyphSlot_Embolden(maFaceFT->glyph);
@@ -604,16 +607,20 @@ void FreetypeFont::InitGlyphData(const GlyphItem& rGlyph, GlyphData& rGD ) const
     FT_Glyph pGlyphFT;
     rc = FT_Get_Glyph(maFaceFT->glyph, &pGlyphFT);
     if (rc != FT_Err_Ok)
-        return;
+        return false;
 
     ApplyGlyphTransform(rGlyph.IsVertical(), pGlyphFT);
 
     FT_BBox aBbox;
     FT_Glyph_Get_CBox( pGlyphFT, FT_GLYPH_BBOX_PIXELS, &aBbox );
 
-    rGD.SetBoundRect(tools::Rectangle(aBbox.xMin, -aBbox.yMax, aBbox.xMax, -aBbox.yMin));
+    rRect = tools::Rectangle(aBbox.xMin, -aBbox.yMax, aBbox.xMax, -aBbox.yMin);
+    if (mpFontInstance.is())
+        mpFontInstance->CacheGlyphBoundRect(rGlyph.maGlyphId, rRect);
 
     FT_Done_Glyph( pGlyphFT );
+
+    return true;
 }
 
 bool FreetypeFont::GetAntialiasAdvice() const
