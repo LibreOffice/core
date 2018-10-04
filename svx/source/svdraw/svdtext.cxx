@@ -93,7 +93,7 @@ OutlinerParaObject* SdrText::GetOutlinerParaObject() const
 }
 
 /** returns the current OutlinerParaObject and removes it from this instance */
-OutlinerParaObject* SdrText::RemoveOutlinerParaObject()
+std::unique_ptr<OutlinerParaObject> SdrText::RemoveOutlinerParaObject()
 {
     // Update HitTestOutliner
     const SdrTextObj* pTestObj(mrObject.getSdrModelFromSdrObject().GetHitTestOutliner().GetTextObj());
@@ -103,7 +103,7 @@ OutlinerParaObject* SdrText::RemoveOutlinerParaObject()
         mrObject.getSdrModelFromSdrObject().GetHitTestOutliner().SetTextObj(nullptr);
     }
 
-    OutlinerParaObject* pOPO = mpOutlinerParaObject.release();
+    std::unique_ptr<OutlinerParaObject> pOPO = std::move(mpOutlinerParaObject);
     mbPortionInfoChecked = false;
 
     return pOPO;
