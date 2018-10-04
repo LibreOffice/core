@@ -348,9 +348,9 @@ void SdrModel::Undo()
             pDo->Undo();
             if(!pRedoStack)
                 pRedoStack.reset(new std::deque<std::unique_ptr<SfxUndoAction>>);
-            SfxUndoAction* p = pUndoStack->front().release();
+            std::unique_ptr<SfxUndoAction> p = std::move(pUndoStack->front());
             pUndoStack->pop_front();
-            pRedoStack->emplace_front(p);
+            pRedoStack->emplace_front(std::move(p));
             mbUndoEnabled = bWasUndoEnabled;
         }
     }
@@ -372,9 +372,9 @@ void SdrModel::Redo()
             pDo->Redo();
             if(!pUndoStack)
                 pUndoStack.reset(new std::deque<std::unique_ptr<SfxUndoAction>>);
-            SfxUndoAction* p = pRedoStack->front().release();
+            std::unique_ptr<SfxUndoAction> p = std::move(pRedoStack->front());
             pRedoStack->pop_front();
-            pUndoStack->emplace_front(p);
+            pUndoStack->emplace_front(std::move(p));
             mbUndoEnabled = bWasUndoEnabled;
         }
     }
@@ -514,8 +514,7 @@ void SdrModel::EndUndo()
             {
                 if(pCurrentUndoGroup->GetActionCount()!=0)
                 {
-                    SdrUndoAction* pUndo=pCurrentUndoGroup.release();
-                    ImpPostUndoAction(std::unique_ptr<SdrUndoAction>(pUndo));
+                    ImpPostUndoAction(std::move(pCurrentUndoGroup));
                 }
                 else
                 {

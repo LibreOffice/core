@@ -867,11 +867,11 @@ SdrObject* isOver(const tools::Rectangle& _rRect, SdrPage const & _rPage, SdrVie
     return pOverlappedObj;
 }
 
-static bool checkArrayForOccurrence(SdrObject const * _pObjToCheck, SdrUnoObj* _pIgnore[], int _nListLength)
+static bool checkArrayForOccurrence(SdrObject const * _pObjToCheck, std::unique_ptr<SdrUnoObj, SdrObjectFreeOp> _pIgnore[], int _nListLength)
 {
     for(int i=0;i<_nListLength;i++)
     {
-        SdrObject *pIgnore = _pIgnore[i];
+        SdrObject *pIgnore = _pIgnore[i].get();
         if (pIgnore == _pObjToCheck)
         {
             return true;
@@ -880,7 +880,7 @@ static bool checkArrayForOccurrence(SdrObject const * _pObjToCheck, SdrUnoObj* _
     return false;
 }
 
-SdrObject* isOver(const tools::Rectangle& _rRect,SdrPage const & _rPage,SdrView const & _rView,bool _bAllObjects, SdrUnoObj * _pIgnoreList[], int _nIgnoreListLength)
+SdrObject* isOver(const tools::Rectangle& _rRect,SdrPage const & _rPage,SdrView const & _rView,bool _bAllObjects, std::unique_ptr<SdrUnoObj, SdrObjectFreeOp> _pIgnoreList[], int _nIgnoreListLength)
 {
     SdrObject* pOverlappedObj = nullptr;
     SdrObjListIter aIter(&_rPage,SdrIterMode::DeepNoGroups);
