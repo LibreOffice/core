@@ -43,7 +43,7 @@ inline const sal_Char* lclFindCharacter( const sal_Char* pcBeg, const sal_Char* 
 
 inline bool lclIsWhiteSpace( sal_Char cChar )
 {
-    return cChar < 32;
+    return cChar <= 32;
 }
 
 const sal_Char* lclFindWhiteSpace( const sal_Char* pcBeg, const sal_Char* pcEnd )
