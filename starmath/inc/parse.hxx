@@ -89,27 +89,27 @@ class SmParser
     std::unique_ptr<SmNode> DoSubSup(TG nActiveGroup, SmNode *pGivenNode);
     std::unique_ptr<SmNode> DoOpSubSup();
     std::unique_ptr<SmNode> DoPower();
-    SmBlankNode *DoBlank();
-    SmNode *DoTerm(bool bGroupNumberIdent);
-    SmNode *DoEscape();
-    SmOperNode *DoOperator();
+    std::unique_ptr<SmBlankNode> DoBlank();
+    std::unique_ptr<SmNode> DoTerm(bool bGroupNumberIdent);
+    std::unique_ptr<SmNode> DoEscape();
+    std::unique_ptr<SmOperNode> DoOperator();
     std::unique_ptr<SmNode> DoOper();
-    SmStructureNode *DoUnOper();
+    std::unique_ptr<SmStructureNode> DoUnOper();
     std::unique_ptr<SmNode> DoAlign(bool bUseExtraSpaces = true);
     std::unique_ptr<SmStructureNode> DoFontAttribut();
     std::unique_ptr<SmStructureNode> DoAttribut();
     std::unique_ptr<SmStructureNode> DoFont();
     std::unique_ptr<SmStructureNode> DoFontSize();
     std::unique_ptr<SmStructureNode> DoColor();
-    SmStructureNode *DoBrace();
-    SmBracebodyNode *DoBracebody(bool bIsLeftRight);
-    SmTextNode *DoFunction();
-    SmTableNode *DoBinom();
-    SmStructureNode *DoStack();
-    SmStructureNode *DoMatrix();
-    SmSpecialNode *DoSpecial();
-    SmGlyphSpecialNode *DoGlyphSpecial();
-    SmExpressionNode *DoError(SmParseError Error);
+    std::unique_ptr<SmStructureNode> DoBrace();
+    std::unique_ptr<SmBracebodyNode> DoBracebody(bool bIsLeftRight);
+    std::unique_ptr<SmTextNode> DoFunction();
+    std::unique_ptr<SmTableNode> DoBinom();
+    std::unique_ptr<SmStructureNode> DoStack();
+    std::unique_ptr<SmStructureNode> DoMatrix();
+    std::unique_ptr<SmSpecialNode> DoSpecial();
+    std::unique_ptr<SmGlyphSpecialNode> DoGlyphSpecial();
+    std::unique_ptr<SmExpressionNode> DoError(SmParseError Error);
     // end of grammar
 
 public:
