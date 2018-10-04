@@ -177,7 +177,9 @@ public:
         ScTokenArray aCode2;
 
         ScInterpreterContext aContext(mrDoc, mpFormatter);
-        sal_uInt16 nNumNonOpenClose = mrCode.GetLen();
+        const formula::FormulaToken* pLastDoubleResultToken = nullptr;
+        const formula::FormulaToken* pLastStringResultToken = nullptr;
+        std::vector<bool> aReuseFlags(mrCode.GetLen(), true);
 
         for (SCROW i = mnIdx; i <= mnLastIdx; ++i, maBatchTopPos.IncRow())
         {
@@ -213,7 +215,14 @@ public:
                                 aCode2.AddString(rPool.intern(OUString(pStr)));
                             else
                             {
-                                if ( ( pTargetTok->GetType() == formula::svString ) && ( nNumNonOpenClose > 1 ) )
+                                bool bReuseToken = aReuseFlags[nTokIdx];
+                                if (bReuseToken && pTargetTok == pLastStringResultToken)
+                                {
+                                    bReuseToken = false;
+                                    aReuseFlags[nTokIdx] = bReuseToken;
+                                }
+                                // Once aReuseFlags[nTokIdx] is set to false, it will continue to be so.
+                                if ( ( pTargetTok->GetType() == formula::svString ) && bReuseToken )
                                     pTargetTok->SetString(rPool.intern(OUString(pStr)));
                                 else
                                 {
@@ -227,7 +236,7 @@ public:
                             // Value of NaN represents an empty cell.
                             if ( !pTargetTok )
                                 aCode2.AddToken(ScEmptyCellToken(false, false));
-                            else if ( ( pTargetTok->GetType() != formula::svEmptyCell ) || ( nNumNonOpenClose == 1 ) )
+                            else if ( pTargetTok->GetType() != formula::svEmptyCell )
                             {
                                 ScEmptyCellToken* pEmptyTok = new ScEmptyCellToken(false, false);
                                 aCode2.ReplaceToken(nTokIdx, pEmptyTok, formula::FormulaTokenArray::CODE_ONLY);
@@ -240,7 +249,14 @@ public:
                                 aCode2.AddDouble(fVal);
                             else
                             {
-                                if ( ( pTargetTok->GetType() == formula::svDouble ) && ( nNumNonOpenClose > 1 ) )
+                                bool bReuseToken = aReuseFlags[nTokIdx];
+                                if (bReuseToken && pTargetTok == pLastDoubleResultToken)
+                                {
+                                    bReuseToken = false;
+                                    aReuseFlags[nTokIdx] = bReuseToken;
+                                }
+                                // Once aReuseFlags[nTokIdx] is set to false, it will continue to be so.
+                                if ( ( pTargetTok->GetType() == formula::svDouble ) && bReuseToken )
                                     pTargetTok->GetDoubleAsReference() = fVal;
                                 else
                                 {
@@ -292,16 +308,8 @@ public:
                     break;
                     default:
                         if ( !pTargetTok )
-                        {
-                            if ( p->GetType() == formula::svSep )
-                            {
-                                OpCode eOp = p->GetOpCode();
-                                if ( eOp == ocOpen || eOp == ocClose )
-                                    --nNumNonOpenClose;
-                            }
-
                             aCode2.AddToken(*p);
-                        }
+
                 } // end of switch statement
             } // end of formula token for loop
 
@@ -314,6 +322,14 @@ public:
             ScInterpreter aInterpreter(pDest, &mrDoc, aContext, maBatchTopPos, aCode2);
             aInterpreter.Interpret();
             mrResults[i] = aInterpreter.GetResultToken();
+            const auto* pResultToken = mrResults[i].get();
+            if (pResultToken)
+            {
+                if (pResultToken->GetType() == formula::svDouble)
+                    pLastDoubleResultToken = pResultToken;
+                else if (pResultToken->GetType() == formula::svString)
+                    pLastStringResultToken = pResultToken;
+            }
         } // Row iteration for loop end
     } // operator () end
 
