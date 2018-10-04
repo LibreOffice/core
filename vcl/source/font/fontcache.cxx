@@ -84,7 +84,9 @@ bool ImplFontCache::IFSD_Equal::operator()(const FontSelectPattern& rA, const Fo
 }
 
 ImplFontCache::ImplFontCache()
-:   mpLastHitCacheEntry( nullptr )
+    : mpLastHitCacheEntry( nullptr )
+    // The cache limit is set by the rough number of characters needed to read your average Asian newspaper.
+    , m_aBoundRectCache(3000)
 {}
 
 ImplFontCache::~ImplFontCache()
@@ -174,6 +176,9 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFont
                     ++it_next;
                     continue;
                 }
+                m_aBoundRectCache.remove_if([&pFontEntry] (GlpyhBoundRectCachePair const& rPair)
+                    { return rPair.first.m_pFont == pFontEntry; } );
+
                 maFontInstanceList.erase(it_next);
                 if (mpLastHitCacheEntry == pFontEntry)
                     mpLastHitCacheEntry = nullptr;
@@ -233,6 +238,35 @@ void ImplFontCache::Invalidate()
     for (auto const & pair : maFontInstanceList)
         pair.second->mpFontCache = nullptr;
     maFontInstanceList.clear();
+    m_aBoundRectCache.clear();
+}
+
+bool ImplFontCache::GetCachedGlyphBoundRect(LogicalFontInstance *pFont, sal_GlyphId nID, tools::Rectangle &rRect)
+{
+    if (!pFont->GetFontCache())
+        return false;
+    assert(pFont->GetFontCache() == this);
+    if (pFont->GetFontCache() != this)
+        return false;
+
+    auto it = m_aBoundRectCache.find(GlpyhBoundRectCacheKey(pFont, nID));
+    if (it != m_aBoundRectCache.end())
+    {
+        rRect = it->second;
+        return true;
+    }
+    return false;
+}
+
+void ImplFontCache::CacheGlyphBoundRect(LogicalFontInstance *pFont, sal_GlyphId nID, tools::Rectangle &rRect)
+{
+    if (!pFont->GetFontCache())
+        return;
+    assert(pFont->GetFontCache() == this);
+    if (pFont->GetFontCache() != this)
+        return;
+
+    m_aBoundRectCache.insert({GlpyhBoundRectCacheKey(pFont, nID), rRect});
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

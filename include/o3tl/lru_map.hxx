@@ -123,6 +123,22 @@ public:
         }
     }
 
+    template<class UnaryPredicate>
+    void remove_if(UnaryPredicate pred)
+    {
+        list_iterator_t i = mLruList.begin();
+        while (i != mLruList.end())
+        {
+            if (pred(*i))
+            {
+                mLruMap.erase(i->first);
+                i = mLruList.erase(i);
+            }
+            else
+                ++i;
+        }
+    }
+
     const list_const_iterator_t end() const
     {
         return mLruList.cend();
