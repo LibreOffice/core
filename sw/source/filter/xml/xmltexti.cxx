@@ -153,7 +153,7 @@ SwXMLTextImportHelper::SwXMLTextImportHelper(
     pRedlineHelper( nullptr )
 {
     uno::Reference<XPropertySet> xDocPropSet( rModel, UNO_QUERY );
-    pRedlineHelper = new XMLRedlineImportHelper(
+    pRedlineHelper = new XMLRedlineImportHelper(rImport,
         bInsertM || bBlockM, xDocPropSet, rInfoSet );
 }
 

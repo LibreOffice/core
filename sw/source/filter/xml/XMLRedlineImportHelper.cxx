@@ -32,6 +32,9 @@
 #include <tools/datetime.hxx>
 #include <poolfmt.hxx>
 #include <unoredline.hxx>
+#include <DocumentRedlineManager.hxx>
+#include "xmlimp.hxx"
+#include <officecfg/Office/Common.hxx>
 #include <o3tl/any.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <vcl/svapp.hxx>
@@ -231,9 +234,12 @@ static const char g_sRecordChanges[] = "RecordChanges";
 static const char g_sRedlineProtectionKey[] = "RedlineProtectionKey";
 
 XMLRedlineImportHelper::XMLRedlineImportHelper(
+    SvXMLImport & rImport,
     bool bNoRedlinesPlease,
     const Reference<XPropertySet> & rModel,
-    const Reference<XPropertySet> & rImportInfo ) :
+    const Reference<XPropertySet> & rImportInfo )
+    :   m_rImport(rImport)
+    ,
         sInsertion( GetXMLToken( XML_INSERTION )),
         sDeletion( GetXMLToken( XML_DELETION )),
         sFormatChange( GetXMLToken( XML_FORMAT_CHANGE )),
@@ -337,7 +343,21 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
 
         aAny <<= bShowChanges;
         if ( bHandleShowChanges )
-            xModelPropertySet->setPropertyValue( g_sShowChanges, aAny );
+        {
+            if (officecfg::Office::Common::Misc::ExperimentalMode::get(comphelper::getProcessComponentContext()))
+            {
+                aAny <<= true;
+                xModelPropertySet->setPropertyValue( g_sShowChanges, aAny );
+                // TODO maybe we need some property for the view-setting?
+                SwDoc *const pDoc(SwImport::GetDocFromXMLImport(m_rImport));
+                assert(pDoc);
+                pDoc->GetDocumentRedlineManager().SetHideRedlines(!bShowChanges);
+            }
+            else
+            {
+                xModelPropertySet->setPropertyValue( g_sShowChanges, aAny );
+            }
+        }
         else
             xImportInfoPropertySet->setPropertyValue( g_sShowChanges, aAny );
 
