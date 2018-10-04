@@ -30,6 +30,7 @@ in this Software without prior written authorization from the X Consortium.
 
 #include "def.h"
 #include <string.h>
+#include <assert.h>
 
 static void remove_dotdot( char * );
 static int isdot( char const * );
@@ -242,7 +243,9 @@ int issymbolic(char *dir, char *component)
     struct stat st;
     char    buf[ BUFSIZ ], **pp;
 
-    sprintf(buf, "%s%s%s", dir, *dir ? "/" : "", component);
+    int n = snprintf(buf, BUFSIZ, "%s%s%s", dir, *dir ? "/" : "", component);
+    assert(n < BUFSIZ);
+    (void) n;
     for (pp=notdotdot; *pp; pp++)
         if (strcmp(*pp, buf) == 0)
             return TRUE;
