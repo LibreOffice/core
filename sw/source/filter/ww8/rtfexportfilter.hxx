@@ -69,14 +69,6 @@ public:
     RtfWriter m_aWriter;
 };
 
-OUString RtfExport_getImplementationName();
-css::uno::Sequence<OUString> RtfExport_getSupportedServiceNames() noexcept;
-/// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface>
-RtfExport_createInstance(const css::uno::Reference<css::uno::XComponentContext>& xCtx);
-
-#define IMPL_NAME_RTFEXPORT "com.sun.star.comp.Writer.RtfExport"
-
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_RTFEXPORTFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

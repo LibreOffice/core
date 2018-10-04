@@ -18,7 +18,8 @@
  -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="msword" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.Writer.RtfExport">
+  <implementation name="com.sun.star.comp.Writer.RtfExport"
+    constructor="com_sun_star_comp_Writer_RtfExport_get_implementation">
     <service name="com.sun.star.comp.Writer.RtfExport"/>
   </implementation>
   <implementation name="com.sun.star.comp.Writer.DocxExport">
