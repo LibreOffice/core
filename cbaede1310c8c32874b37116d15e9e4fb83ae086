@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_086385de",
+        "filename": "svx/source/fmcomp/gridctrl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2796,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-10-04T12:55:44Z",
+      "side": 1,
+      "message": "Since this computes a column model id when given a column view id, how about calling it getColumnModelId?\n\nOr did I misunderstand something?",
+      "range": {
+        "startLine": 2796,
+        "startChar": 26,
+        "endLine": 2796,
+        "endChar": 45
+      },
+      "revId": "cbaede1310c8c32874b37116d15e9e4fb83ae086",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_a87a5985",
+        "filename": "svx/source/fmcomp/gridctrl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2850,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-10-04T12:55:44Z",
+      "side": 1,
+      "message": "It looks like in all code paths, nColViewId is always set to nColId. So why a new variable?",
+      "range": {
+        "startLine": 2850,
+        "startChar": 12,
+        "endLine": 2850,
+        "endChar": 36
+      },
+      "revId": "cbaede1310c8c32874b37116d15e9e4fb83ae086",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_886f95c4",
+        "filename": "svx/source/fmcomp/gridctrl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2852,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-10-04T12:55:44Z",
+      "side": 1,
+      "message": "use \" \u003c\u003d x\" instead of \"\u003c x +1\"; more readable",
+      "range": {
+        "startLine": 2852,
+        "startChar": 58,
+        "endLine": 2852,
+        "endChar": 84
+      },
+      "revId": "cbaede1310c8c32874b37116d15e9e4fb83ae086",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
