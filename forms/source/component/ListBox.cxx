@@ -41,6 +41,7 @@
 #include <comphelper/basicio.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <connectivity/dbconversion.hxx>

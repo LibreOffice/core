@@ -20,11 +20,8 @@
 #ifndef INCLUDED_COMPHELPER_UNO3_HXX
 #define INCLUDED_COMPHELPER_UNO3_HXX
 
-#include <rtl/instance.hxx>
-#include <comphelper/types.hxx>
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <comphelper/sequence.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
 
 namespace comphelper

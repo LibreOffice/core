@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <comphelper/string.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>

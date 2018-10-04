@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <comphelper/sequenceashashmap.hxx>
 

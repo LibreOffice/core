@@ -18,6 +18,7 @@
  */
 
 #include "Numeric.hxx"
+#include <comphelper/types.hxx>
 
 namespace frm
 {

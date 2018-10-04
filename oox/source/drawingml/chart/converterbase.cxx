@@ -30,6 +30,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/diagnose.h>
 #include <basegfx/numeric/ftools.hxx>
 #include <oox/core/xmlfilterbase.hxx>

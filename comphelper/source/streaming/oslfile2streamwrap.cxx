@@ -22,6 +22,7 @@
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <comphelper/oslfile2streamwrap.hxx>
+#include <osl/file.hxx>
 
 #include <algorithm>
 

@@ -20,6 +20,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_TCONNECTION_HXX
 
 #include <rtl/textenc.h>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>

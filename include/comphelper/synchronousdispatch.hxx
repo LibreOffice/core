@@ -22,10 +22,8 @@
 
 #include <comphelper/comphelperdllapi.h>
 
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
-
-#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/Reference.h>
+#include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace uno {
@@ -33,6 +31,9 @@ namespace com { namespace sun { namespace star {
     namespace lang {
         class XComponent; }
 } } }
+
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
 
 
 namespace comphelper

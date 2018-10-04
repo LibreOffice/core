@@ -22,6 +22,7 @@
 #include <osl/diagnose.h>
 #include <uno/data.h>
 #include <com/sun/star/uno/genfunc.h>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <rtl/ustrbuf.hxx>

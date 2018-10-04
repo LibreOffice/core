@@ -36,6 +36,7 @@
 #include <vcl/settings.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <comphelper/types.hxx>
 #include <vcl/window.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/miscopt.hxx>

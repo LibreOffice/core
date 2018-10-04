@@ -75,6 +75,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 
 #include <comphelper/extract.hxx>
+#include <comphelper/types.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>

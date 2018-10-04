@@ -22,17 +22,19 @@
 
 #include <sal/config.h>
 
-#include <cstddef>
 #include <vector>
 #include <comphelper/comphelperdllapi.h>
 #include <sal/types.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Sequence.h>
+#include <com/sun/star/uno/Reference.hxx>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/i18n/XCollator.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+
+namespace com { namespace sun { namespace star { namespace i18n { class XBreakIterator; } } } }
+namespace com { namespace sun { namespace star { namespace i18n { class XCollator; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 // OUString helper functions that are not widespread or mature enough to
 // go into the stable URE API:

@@ -51,6 +51,7 @@
 #include <unotools/streamhelper.hxx>
 #include <comphelper/guarding.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/types.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svl/urihelper.hxx>
 

@@ -19,7 +19,7 @@
 
 
 #include <comphelper/SelectionMultiplex.hxx>
-
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 namespace comphelper
 {

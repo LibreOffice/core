@@ -21,7 +21,7 @@
 #define INCLUDED_COMPHELPER_PROPSTATE_HXX
 
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Sequence.h>
 
 
 #include <cppuhelper/propshlp.hxx>
