@@ -21,6 +21,7 @@
 
 #include "TitleDialogData.hxx"
 #include <vcl/fixed.hxx>
+#include <vcl/weld.hxx>
 
 class VclBuilderContainer;
 class Edit;
@@ -58,6 +59,37 @@ private:
     VclPtr<FixedText> m_pFT_SecondaryYAxis;
     VclPtr<Edit> m_pEd_SecondaryXAxis;
     VclPtr<Edit> m_pEd_SecondaryYAxis;
+};
+
+class SchTitleResources final
+{
+public:
+    SchTitleResources(weld::Builder& rBuilder, bool bShowSecondaryAxesTitle);
+    ~SchTitleResources();
+
+    void writeToResources( const TitleDialogData& rInput );
+    void readFromResources( TitleDialogData& rOutput );
+
+    bool IsModified();
+    void ClearModifyFlag();
+
+private:
+    std::unique_ptr<weld::Label> m_xFT_Main;
+    std::unique_ptr<weld::Label> m_xFT_Sub;
+    std::unique_ptr<weld::Entry> m_xEd_Main;
+    std::unique_ptr<weld::Entry> m_xEd_Sub;
+
+    std::unique_ptr<weld::Label> m_xFT_XAxis;
+    std::unique_ptr<weld::Label> m_xFT_YAxis;
+    std::unique_ptr<weld::Label> m_xFT_ZAxis;
+    std::unique_ptr<weld::Entry> m_xEd_XAxis;
+    std::unique_ptr<weld::Entry> m_xEd_YAxis;
+    std::unique_ptr<weld::Entry> m_xEd_ZAxis;
+
+    std::unique_ptr<weld::Label> m_xFT_SecondaryXAxis;
+    std::unique_ptr<weld::Label> m_xFT_SecondaryYAxis;
+    std::unique_ptr<weld::Entry> m_xEd_SecondaryXAxis;
+    std::unique_ptr<weld::Entry> m_xEd_SecondaryYAxis;
 };
 
 } //namespace chart

@@ -172,13 +172,13 @@ void ChartController::executeDispatch_InsertTitles()
         aDialogInput.readFromModel( getModel() );
 
         SolarMutexGuard aGuard;
-        ScopedVclPtrInstance< SchTitleDlg > aDlg( GetChartWindow(), aDialogInput );
-        if( aDlg->Execute() == RET_OK )
+        SchTitleDlg aDlg(GetChartFrame(), aDialogInput);
+        if (aDlg.run() == RET_OK)
         {
             // lock controllers till end of block
             ControllerLockGuardUNO aCLGuard( getModel() );
             TitleDialogData aDialogOutput(impl_createReferenceSizeProvider());
-            aDlg->getResult( aDialogOutput );
+            aDlg.getResult(aDialogOutput);
             bool bChanged = aDialogOutput.writeDifferenceToModel( getModel(), m_xCC, &aDialogInput );
             if( bChanged )
                 aUndoGuard.commit();
