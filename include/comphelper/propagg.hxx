@@ -20,7 +20,11 @@
 #ifndef INCLUDED_COMPHELPER_PROPAGG_HXX
 #define INCLUDED_COMPHELPER_PROPAGG_HXX
 
-#include <com/sun/star/uno/XAggregation.hpp>
+#include <com/sun/star/beans/Property.hpp>
+#include <com/sun/star/beans/PropertyState.hpp>
+#include <com/sun/star/beans/XPropertiesChangeListener.hpp>
+#include <com/sun/star/beans/XVetoableChangeListener.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
 #include <comphelper/propstate.hxx>
 #include <comphelper/comphelperdllapi.h>
 

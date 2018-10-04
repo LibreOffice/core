@@ -25,6 +25,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/numbers.hxx>
+#include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <o3tl/any.hxx>

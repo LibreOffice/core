@@ -20,7 +20,6 @@
 #ifndef INCLUDED_COMPHELPER_PROPERTYCONTAINERHELPER_HXX
 #define INCLUDED_COMPHELPER_PROPERTYCONTAINERHELPER_HXX
 
-#include <cppuhelper/propshlp.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include <vector>

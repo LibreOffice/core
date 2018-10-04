@@ -22,6 +22,7 @@
 
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
+#include <comphelper/types.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

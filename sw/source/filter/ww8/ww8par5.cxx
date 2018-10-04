@@ -40,6 +40,7 @@
 #include <ucbhelper/commandenvironment.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <hintids.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>

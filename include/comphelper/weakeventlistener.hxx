@@ -22,11 +22,13 @@
 
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/uno/XWeak.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <comphelper/comphelperdllapi.h>
 
+
+namespace com { namespace sun { namespace star { namespace lang { class XComponent; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XEventListener; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XWeak; } } } }
 
 namespace comphelper
 {

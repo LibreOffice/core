@@ -23,10 +23,10 @@
 #include <cppuhelper/proptypehlp.hxx>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/beans/Property.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <type_traits>
 #include <comphelper/comphelperdllapi.h>
-#include <cppu/unotype.hxx>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
 
 namespace comphelper
 {

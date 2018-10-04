@@ -37,6 +37,7 @@
 #include "TableFieldInfo.hxx"
 #include <UITools.hxx>
 #include <svtools/treelistentry.hxx>
+#include <comphelper/types.hxx>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;

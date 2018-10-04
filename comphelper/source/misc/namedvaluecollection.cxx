@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>

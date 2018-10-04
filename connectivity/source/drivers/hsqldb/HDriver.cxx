@@ -48,6 +48,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/types.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <strings.hrc>

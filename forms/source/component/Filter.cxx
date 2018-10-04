@@ -48,6 +48,7 @@
 #include <com/sun/star/awt/XItemList.hpp>
 
 #include <comphelper/property.hxx>
+#include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>

@@ -20,11 +20,12 @@
 #ifndef INCLUDED_COMPHELPER_NUMBERS_HXX
 #define INCLUDED_COMPHELPER_NUMBERS_HXX
 
-#include <com/sun/star/util/XNumberFormats.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#include <com/sun/star/lang/Locale.hpp>
+#include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Reference.h>
 #include <comphelper/comphelperdllapi.h>
 
+namespace com { namespace sun { namespace star { namespace util { class XNumberFormats; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XNumberFormatter; } } } }
 
 namespace comphelper
 {

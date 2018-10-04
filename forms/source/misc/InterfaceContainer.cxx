@@ -40,6 +40,7 @@
 #include <comphelper/eventattachermgr.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <tools/debug.hxx>

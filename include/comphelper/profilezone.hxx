@@ -10,11 +10,9 @@
 #ifndef INCLUDED_COMPHELPER_PROFILEZONE_HXX
 #define INCLUDED_COMPHELPER_PROFILEZONE_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Sequence.h>
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ustring.hxx>
-
-#include <vector>
 
 // implementation of XToolkitExperimental profiling API
 

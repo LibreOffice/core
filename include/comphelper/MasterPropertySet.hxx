@@ -22,11 +22,12 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <comphelper/PropertyInfoHash.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <comphelper/solarmutex.hxx>
 #include <rtl/ref.hxx>
 #include <map>
+
+namespace comphelper { class SolarMutex; }
+namespace comphelper { struct PropertyInfo; }
 
 namespace comphelper
 {

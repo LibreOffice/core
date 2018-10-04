@@ -55,6 +55,7 @@
 #include <sdbdatacolumn.hxx>
 
 #include <comphelper/property.hxx>
+#include <comphelper/types.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <algorithm>

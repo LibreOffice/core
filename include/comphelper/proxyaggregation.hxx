@@ -20,11 +20,8 @@
 #ifndef INCLUDED_COMPHELPER_PROXYAGGREGATION_HXX
 #define INCLUDED_COMPHELPER_PROXYAGGREGATION_HXX
 
-#include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/compbase_ex.hxx>
@@ -33,6 +30,8 @@
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XAggregation; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XComponent; } } } }
 
 /* class hierarchy herein:
 

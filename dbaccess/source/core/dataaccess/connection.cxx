@@ -48,6 +48,7 @@
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
+#include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 

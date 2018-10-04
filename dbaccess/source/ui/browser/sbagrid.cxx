@@ -70,6 +70,7 @@
 #include <connectivity/dbconversion.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/types.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <browserids.hxx>
