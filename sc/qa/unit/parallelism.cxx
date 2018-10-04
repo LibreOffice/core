@@ -52,6 +52,7 @@ public:
     void testVLOOKUPSUM();
     void testSingleRef();
     void testSUMIFImplicitRange();
+    void testTdf119904();
 
     CPPUNIT_TEST_SUITE(ScParallelismTest);
     CPPUNIT_TEST(testSUMIFS);
@@ -60,6 +61,7 @@ public:
     CPPUNIT_TEST(testVLOOKUPSUM);
     CPPUNIT_TEST(testSingleRef);
     CPPUNIT_TEST(testSUMIFImplicitRange);
+    CPPUNIT_TEST(testTdf119904);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -392,6 +394,30 @@ void ScParallelismTest::testSUMIFImplicitRange()
     {
         OString aMsg = "At row " + OString::number(i);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), nConstCellValue, static_cast<size_t>(m_pDoc->GetValue(2, i, 0)));
+    }
+    m_pDoc->DeleteTab(0);
+}
+
+void ScParallelismTest::testTdf119904()
+{
+    m_pDoc->InsertTab(0, "1");
+
+    const size_t nNumRows = 200;
+    for (size_t i = 0; i < nNumRows; ++i)
+    {
+        m_pDoc->SetValue(0, i, 0, static_cast<double>(i));
+        m_pDoc->SetFormula(ScAddress(1, i, 0), (i % 2) ? OUString("=TRUE()") : OUString("=FALSE()"), formula::FormulaGrammar::GRAM_NATIVE_UI);
+        m_pDoc->SetFormula(ScAddress(2, i, 0), OUString("=IF(B") + OUString::number(i+1) +
+                           OUString("; A") + OUString::number(i+1) +
+                           OUString("; \"\")"), formula::FormulaGrammar::GRAM_NATIVE_UI);
+    }
+
+    m_xDocShell->DoHardRecalc();
+
+    for (size_t i = 0; i < nNumRows; ++i)
+    {
+        OString aMsg = "At row " + OString::number(i);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), (i % 2) ? i : 0, static_cast<size_t>(m_pDoc->GetValue(2, i, 0)));
     }
     m_pDoc->DeleteTab(0);
 }
