@@ -25,6 +25,9 @@
 
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <tools/gen.hxx>
+#include <vcl/vcllayout.hxx>
+
 #include <unordered_map>
 #include <memory>
 
@@ -66,6 +69,9 @@ public: // TODO: make data members private
 
     const PhysicalFontFace* GetFontFace() const { return m_pFontFace.get(); }
     const ImplFontCache* GetFontCache() const { return mpFontCache; }
+
+    bool GetCachedGlyphBoundRect(sal_GlyphId, tools::Rectangle &);
+    void CacheGlyphBoundRect(sal_GlyphId nID, tools::Rectangle &);
 
     int GetKashidaWidth();
 
