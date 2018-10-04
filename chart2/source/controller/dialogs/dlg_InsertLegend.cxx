@@ -25,11 +25,9 @@ namespace chart
 
 using namespace ::com::sun::star;
 
-SchLegendDlg::SchLegendDlg(vcl::Window* pWindow, const uno::Reference< uno::XComponentContext>& xCC )
-    : ModalDialog(pWindow
-    ,"dlg_InsertLegend"
-    ,"modules/schart/ui/dlg_InsertLegend.ui")
-    , m_xLegendPositionResources( new LegendPositionResources(*this,xCC) )
+SchLegendDlg::SchLegendDlg(weld::Window* pWindow, const uno::Reference< uno::XComponentContext>& xCC)
+    : GenericDialogController(pWindow, "modules/schart/ui/dlg_InsertLegend.ui", "dlg_InsertLegend")
+    , m_xLegendPositionResources(new SchLegendPositionResources(*m_xBuilder, xCC))
 {
 }
 

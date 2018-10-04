@@ -225,13 +225,13 @@ void ChartController::executeDispatch_OpenLegendDialog()
     {
         //prepare and open dialog
         SolarMutexGuard aGuard;
-        ScopedVclPtrInstance< SchLegendDlg > aDlg( GetChartWindow(), m_xCC );
-        aDlg->init( getModel() );
-        if( aDlg->Execute() == RET_OK )
+        SchLegendDlg aDlg(GetChartFrame(), m_xCC);
+        aDlg.init( getModel() );
+        if (aDlg.run() == RET_OK)
         {
             // lock controllers till end of block
             ControllerLockGuardUNO aCLGuard( getModel() );
-            aDlg->writeToModel( getModel() );
+            aDlg.writeToModel( getModel() );
             aUndoGuard.commit();
         }
     }
