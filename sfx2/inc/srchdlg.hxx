@@ -32,51 +32,43 @@ namespace sfx2 {
 // SearchDialog
 
 
-class SearchDialog : public ModelessDialog
+class SearchDialog : public weld::GenericDialogController
 {
 private:
-    VclPtr<ComboBox>           m_pSearchEdit;
-    VclPtr<CheckBox>           m_pWholeWordsBox;
-    VclPtr<CheckBox>           m_pMatchCaseBox;
-    VclPtr<CheckBox>           m_pWrapAroundBox;
-    VclPtr<CheckBox>           m_pBackwardsBox;
-    VclPtr<PushButton>         m_pFindBtn;
-
     Link<SearchDialog&,void>   m_aFindHdl;
     Link<LinkParamNone*,void>  m_aCloseHdl;
 
     OUString            m_sConfigName;
-    OString             m_sWinState;
 
-    bool                m_bIsConstructed;
+    std::unique_ptr<weld::ComboBox> m_xSearchEdit;
+    std::unique_ptr<weld::CheckButton> m_xWholeWordsBox;
+    std::unique_ptr<weld::CheckButton> m_xMatchCaseBox;
+    std::unique_ptr<weld::CheckButton> m_xWrapAroundBox;
+    std::unique_ptr<weld::CheckButton> m_xBackwardsBox;
+    std::unique_ptr<weld::Button> m_xFindBtn;
 
     void                LoadConfig();
     void                SaveConfig();
 
-    DECL_LINK(FindHdl, Button *, void);
+    DECL_LINK(FindHdl, weld::Button&, void);
 
 public:
-    SearchDialog( vcl::Window* pWindow, const OUString& rConfigName );
+    SearchDialog(weld::Window* pWindow, const OUString& rConfigName);
+    static void runAsync(std::shared_ptr<SearchDialog>& rController);
     virtual ~SearchDialog() override;
-    virtual void dispose() override;
 
     void         SetFindHdl( const Link<SearchDialog&,void>& rLink ) { m_aFindHdl = rLink; }
     void         SetCloseHdl( const Link<LinkParamNone*,void>& rLink ) { m_aCloseHdl = rLink; }
 
-    OUString     GetSearchText() const { return m_pSearchEdit->GetText(); }
-    void         SetSearchText( const OUString& _rText ) { m_pSearchEdit->SetText( _rText ); }
-    bool         IsOnlyWholeWords() const { return m_pWholeWordsBox->IsChecked(); }
-    bool         IsMarchCase() const { return m_pMatchCaseBox->IsChecked(); }
-    bool         IsWrapAround() const { return m_pWrapAroundBox->IsChecked(); }
-    bool         IsSearchBackwards() const { return m_pBackwardsBox->IsChecked(); }
+    OUString     GetSearchText() const { return m_xSearchEdit->get_active_text(); }
+    void         SetSearchText( const OUString& _rText ) { m_xSearchEdit->set_entry_text( _rText ); }
+    bool         IsOnlyWholeWords() const { return m_xWholeWordsBox->get_active(); }
+    bool         IsMarchCase() const { return m_xMatchCaseBox->get_active(); }
+    bool         IsWrapAround() const { return m_xWrapAroundBox->get_active(); }
+    bool         IsSearchBackwards() const { return m_xBackwardsBox->get_active(); }
 
-    void            SetFocusOnEdit();
-
-    virtual bool    Close() override;
-    virtual void    Move() override;
-    virtual void    StateChanged( StateChangedType nStateChange ) override;
+    void         SetFocusOnEdit();
 };
-
 
 } // namespace sfx2
 

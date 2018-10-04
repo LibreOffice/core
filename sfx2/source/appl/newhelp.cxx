@@ -1863,7 +1863,6 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     aOnStartupText      ( SfxResId( RID_HELP_ONSTARTUP_TEXT ) ),
     pHelpWin            ( pParent ),
     pTextWin            ( VclPtr<TextWin_Impl>::Create( this ) ),
-    pSrchDlg            ( nullptr ),
     nMinPos             ( 0 ),
     bIsDebug            ( false ),
     bIsIndexOn          ( false ),
@@ -1924,7 +1923,7 @@ void SfxHelpTextWindow_Impl::dispose()
 
     bIsInClose = true;
     SvtMiscOptions().RemoveListenerLink( LINK( this, SfxHelpTextWindow_Impl, NotifyHdl ) );
-    pSrchDlg.disposeAndClear();
+    m_xSrchDlg.reset();
     aToolBox.disposeAndClear();
     aOnStartupCB.disposeAndClear();
     pHelpWin.clear();
@@ -2205,7 +2204,7 @@ void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
 {
     bool bWrapAround = ( nullptr == pDlg );
     if ( bWrapAround )
-        pDlg = pSrchDlg;
+        pDlg = m_xSrchDlg.get();
     DBG_ASSERT( pDlg, "invalid search dialog" );
     OUString sSearchText = pDlg->GetSearchText();
     try
@@ -2265,11 +2264,11 @@ void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
                 }
                 else
                 {
-                    assert(pSrchDlg && "no search dialog");
-                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(pSrchDlg->GetFrameWeld(),
+                    assert(m_xSrchDlg && "no search dialog");
+                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xSrchDlg->getDialog(),
                                                               VclMessageType::Info, VclButtonsType::Ok, SfxResId(STR_INFO_NOSEARCHTEXTFOUND)));
                     xBox->run();
-                    pSrchDlg->SetFocusOnEdit();
+                    m_xSrchDlg->SetFocusOnEdit();
                 }
             }
         }
@@ -2280,12 +2279,10 @@ void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
     }
 }
 
-
 IMPL_LINK_NOARG( SfxHelpTextWindow_Impl, CloseHdl, LinkParamNone*, void )
 {
-    pSrchDlg.clear();
+    m_xSrchDlg.reset();
 }
-
 
 IMPL_LINK( SfxHelpTextWindow_Impl, CheckHdl, Button*, pButton, void )
 {
@@ -2571,22 +2568,22 @@ void SfxHelpTextWindow_Impl::CloseFrame()
 
 void SfxHelpTextWindow_Impl::DoSearch()
 {
-    if ( !pSrchDlg )
+    if (!m_xSrchDlg)
     {
         // create the search dialog
-        pSrchDlg = VclPtr<sfx2::SearchDialog>::Create( pTextWin, "HelpSearchDialog" );
+        m_xSrchDlg.reset(new sfx2::SearchDialog(pTextWin->GetFrameWeld(), "HelpSearchDialog"));
         // set handler
-        pSrchDlg->SetFindHdl( LINK( this, SfxHelpTextWindow_Impl, FindHdl ) );
-        pSrchDlg->SetCloseHdl( LINK( this, SfxHelpTextWindow_Impl, CloseHdl ) );
+        m_xSrchDlg->SetFindHdl( LINK( this, SfxHelpTextWindow_Impl, FindHdl ) );
+        m_xSrchDlg->SetCloseHdl( LINK( this, SfxHelpTextWindow_Impl, CloseHdl ) );
         // get selected text of the help page to set it as the search text
         Reference< XTextRange > xCursor = getCursor();
         if ( xCursor.is() )
         {
             OUString sText = xCursor->getString();
             if ( !sText.isEmpty() )
-                pSrchDlg->SetSearchText( sText );
+                m_xSrchDlg->SetSearchText( sText );
         }
-        pSrchDlg->Show();
+        sfx2::SearchDialog::runAsync(m_xSrchDlg);
     }
 }
 
