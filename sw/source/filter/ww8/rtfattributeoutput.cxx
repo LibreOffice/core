@@ -1769,7 +1769,7 @@ void RtfAttributeOutput::writeTextFrame(const ww8::Frame& rFrame, bool bTextBox)
         // Save table state, in case the inner text also contains a table.
         ww8::WW8TableInfo::Pointer_t pTableInfoOrig = m_rExport.m_pTableInfo;
         m_rExport.m_pTableInfo = std::make_shared<ww8::WW8TableInfo>();
-        std::unique_ptr<SwWriteTable> pTableWrt(m_pTableWrt.release());
+        std::unique_ptr<SwWriteTable> pTableWrt(std::move(m_pTableWrt));
         sal_uInt32 nTableDepth = m_nTableDepth;
 
         m_nTableDepth = 0;
