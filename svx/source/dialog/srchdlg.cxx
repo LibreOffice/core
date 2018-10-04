@@ -1098,6 +1098,8 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
         memcpy( pImpl->pRanges.get(), pTmp, sizeof(sal_uInt16) * nCnt );
     }
 
+    bool bSetOptimalLayoutSize = false;
+
     // See to it that are the texts of the attributes are correct
     OUString aDesc;
 
@@ -1113,7 +1115,11 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
 
             if ( !aDesc.isEmpty() )
             {
-                m_pSearchAttrText->Show();
+                if (!m_pSearchAttrText->IsVisible())
+                {
+                    m_pSearchAttrText->Show();
+                    bSetOptimalLayoutSize = true;
+                }
                 bFormat |= true;
             }
         }
@@ -1131,11 +1137,18 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
 
             if ( !aDesc.isEmpty() )
             {
-                m_pReplaceAttrText->Show();
+                if (!m_pReplaceAttrText->IsVisible())
+                {
+                    m_pReplaceAttrText->Show();
+                    bSetOptimalLayoutSize = true;
+                }
                 bFormat |= true;
             }
         }
     }
+
+    if (bSetOptimalLayoutSize)
+        setOptimalLayoutSize();
 }
 
 
@@ -1554,8 +1567,12 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl, Button*, void)
 
             if(!sDesc.isEmpty())
             {
-                m_pSearchAttrText->Show();
-                m_pReplaceAttrText->Show();
+                if (!m_pReplaceAttrText->IsVisible() || !m_pReplaceAttrText->IsVisible())
+                {
+                    m_pSearchAttrText->Show();
+                    m_pReplaceAttrText->Show();
+                    setOptimalLayoutSize();
+                }
             }
         }
         m_pFormatBtn->Disable();
@@ -1581,8 +1598,12 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl, Button*, void)
 
         if(!sDesc.isEmpty())
         {
-            m_pSearchAttrText->Show();
-            m_pReplaceAttrText->Show();
+            if (!m_pReplaceAttrText->IsVisible() || !m_pReplaceAttrText->IsVisible())
+            {
+                m_pSearchAttrText->Show();
+                m_pReplaceAttrText->Show();
+                setOptimalLayoutSize();
+            }
         }
 
         EnableControl_Impl(m_pFormatBtn);
@@ -2073,18 +2094,31 @@ IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl, Button*, void)
     bFormat = false;
     m_pLayoutBtn->Check( false );
 
+    bool bSetOptimalLayoutSize = false;
+
     if ( bSearch )
     {
         pSearchList->Clear();
         m_pSearchAttrText->SetText( "" );
-        m_pSearchAttrText->Hide();
+        if (m_pSearchAttrText->IsVisible())
+        {
+            m_pSearchAttrText->Hide();
+            bSetOptimalLayoutSize = true;
+        }
     }
     else
     {
         pReplaceList->Clear();
         m_pReplaceAttrText->SetText( "" );
-        m_pReplaceAttrText->Hide();
+        if (m_pReplaceAttrText->IsVisible())
+        {
+            m_pReplaceAttrText->Hide();
+            bSetOptimalLayoutSize = true;
+        }
     }
+
+    if (bSetOptimalLayoutSize)
+        setOptimalLayoutSize();
 
     pImpl->bSaveToModule = false;
     TemplateHdl_Impl(m_pLayoutBtn);
@@ -2197,24 +2231,34 @@ void SvxSearchDialog::PaintAttrText_Impl()
     if ( !bFormat && !aDesc.isEmpty() )
         bFormat = true;
 
+    bool bSetOptimalLayoutSize = false;
+
     if ( bSearch )
     {
         m_pSearchAttrText->SetText( aDesc );
-        if(!aDesc.isEmpty())
+        if (!aDesc.isEmpty() && !m_pSearchAttrText->IsVisible())
+        {
             m_pSearchAttrText->Show();
+            bSetOptimalLayoutSize = true;
+        }
 
         FocusHdl_Impl(*m_pSearchLB);
     }
     else
     {
         m_pReplaceAttrText->SetText( aDesc );
-        if(!aDesc.isEmpty())
+        if (!aDesc.isEmpty() && !m_pReplaceAttrText->IsVisible())
+        {
             m_pReplaceAttrText->Show();
+            bSetOptimalLayoutSize = true;
+        }
 
         FocusHdl_Impl(*m_pReplaceLB);
     }
-}
 
+    if (bSetOptimalLayoutSize)
+        setOptimalLayoutSize();
+}
 
 void SvxSearchDialog::SetModifyFlag_Impl( const Control* pCtrl )
 {
