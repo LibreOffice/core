@@ -333,41 +333,29 @@ IMPL_LINK_NOARG(SplinePropertiesDialog, SplineTypeListBoxHdl, weld::ComboBox&, v
     m_xMF_SplineOrder->set_sensitive(m_xLB_Spline_Type->get_active() == B_SPLINE_POS);
 }
 
-class SteppedPropertiesDialog : public ModalDialog
+class SteppedPropertiesDialog : public weld::GenericDialogController
 {
 public:
-    explicit SteppedPropertiesDialog( vcl::Window* pParent );
-    virtual ~SteppedPropertiesDialog() override { disposeOnce(); }
-    virtual void dispose() override;
+    explicit SteppedPropertiesDialog(weld::Window* pParent);
 
     void fillControls( const ChartTypeParameter& rParameter );
     void fillParameter( ChartTypeParameter& rParameter, bool bSteppedLines );
 
 private:
-    VclPtr<RadioButton> m_pRB_Start;
-    VclPtr<RadioButton> m_pRB_End;
-    VclPtr<RadioButton> m_pRB_CenterX;
-    VclPtr<RadioButton> m_pRB_CenterY;
+    std::unique_ptr<weld::RadioButton> m_xRB_Start;
+    std::unique_ptr<weld::RadioButton> m_xRB_End;
+    std::unique_ptr<weld::RadioButton> m_xRB_CenterX;
+    std::unique_ptr<weld::RadioButton> m_xRB_CenterY;
 };
 
-SteppedPropertiesDialog::SteppedPropertiesDialog( vcl::Window* pParent )
-    : ModalDialog( pParent, "SteppedLinesDialog", "modules/schart/ui/steppedlinesdlg.ui")
+SteppedPropertiesDialog::SteppedPropertiesDialog(weld::Window* pParent)
+    : GenericDialogController(pParent, "modules/schart/ui/steppedlinesdlg.ui", "SteppedLinesDialog")
+    , m_xRB_Start(m_xBuilder->weld_radio_button("step_start_rb"))
+    , m_xRB_End(m_xBuilder->weld_radio_button("step_end_rb"))
+    , m_xRB_CenterX(m_xBuilder->weld_radio_button("step_center_x_rb"))
+    , m_xRB_CenterY(m_xBuilder->weld_radio_button("step_center_y_rb"))
 {
-    get(m_pRB_Start, "step_start_rb");
-    get(m_pRB_End, "step_end_rb");
-    get(m_pRB_CenterX, "step_center_x_rb");
-    get(m_pRB_CenterY, "step_center_y_rb");
-
-    SetText(SchResId(STR_DLG_STEPPED_LINE_PROPERTIES));
-}
-
-void SteppedPropertiesDialog::dispose()
-{
-    m_pRB_Start.clear();
-    m_pRB_End.clear();
-    m_pRB_CenterX.clear();
-    m_pRB_CenterY.clear();
-    ModalDialog::dispose();
+    m_xDialog->set_title(SchResId(STR_DLG_STEPPED_LINE_PROPERTIES));
 }
 
 void SteppedPropertiesDialog::fillControls( const ChartTypeParameter& rParameter )
@@ -375,16 +363,16 @@ void SteppedPropertiesDialog::fillControls( const ChartTypeParameter& rParameter
     switch(rParameter.eCurveStyle)
     {
         case CurveStyle_STEP_END:
-            m_pRB_End->Check();
+            m_xRB_End->set_active(true);
             break;
         case CurveStyle_STEP_CENTER_X:
-            m_pRB_CenterX->Check();
+            m_xRB_CenterX->set_active(true);
             break;
         case CurveStyle_STEP_CENTER_Y:
-            m_pRB_CenterY->Check();
+            m_xRB_CenterY->set_active(true);
             break;
         default: // includes CurveStyle_STEP_START
-            m_pRB_Start->Check();
+            m_xRB_Start->set_active(true);
             break;
     }
 }
@@ -392,13 +380,13 @@ void SteppedPropertiesDialog::fillParameter( ChartTypeParameter& rParameter, boo
 {
     if (!bSteppedLines)
         rParameter.eCurveStyle=CurveStyle_LINES;
-    else if(m_pRB_CenterY->IsChecked())
+    else if(m_xRB_CenterY->get_active())
         rParameter.eCurveStyle=CurveStyle_STEP_CENTER_Y;
-    else if(m_pRB_Start->IsChecked())
+    else if(m_xRB_Start->get_active())
         rParameter.eCurveStyle=CurveStyle_STEP_START;
-    else if(m_pRB_End->IsChecked())
+    else if(m_xRB_End->get_active())
         rParameter.eCurveStyle=CurveStyle_STEP_END;
-    else if(m_pRB_CenterX->IsChecked())
+    else if(m_xRB_CenterX->get_active())
         rParameter.eCurveStyle=CurveStyle_STEP_CENTER_X;
 }
 
@@ -428,7 +416,7 @@ private:
     VclPtr<ListBox>    m_pLB_LineType;
     VclPtr<PushButton> m_pPB_DetailsDialog;
     std::unique_ptr<SplinePropertiesDialog> m_xSplinePropertiesDialog;
-    VclPtr< SteppedPropertiesDialog > m_pSteppedPropertiesDialog;
+    std::unique_ptr<SteppedPropertiesDialog> m_xSteppedPropertiesDialog;
 };
 
 SplineResourceGroup::SplineResourceGroup(VclBuilderContainer* pWindow)
@@ -453,11 +441,11 @@ SplinePropertiesDialog& SplineResourceGroup::getSplinePropertiesDialog()
 
 SteppedPropertiesDialog& SplineResourceGroup::getSteppedPropertiesDialog()
 {
-    if( !m_pSteppedPropertiesDialog.get() )
+    if (!m_xSteppedPropertiesDialog)
     {
-        m_pSteppedPropertiesDialog.reset( VclPtr<SteppedPropertiesDialog>::Create( m_pPB_DetailsDialog->GetParentDialog() ) );
+        m_xSteppedPropertiesDialog.reset(new SteppedPropertiesDialog(m_pPB_DetailsDialog->GetFrameWeld()));
     }
-    return *m_pSteppedPropertiesDialog;
+    return *m_xSteppedPropertiesDialog;
 }
 
 void SplineResourceGroup::showControls( bool bShow )
@@ -546,7 +534,7 @@ IMPL_LINK_NOARG(SplineResourceGroup, SteppedDetailsDialogHdl, Button*, void)
 
     const sal_Int32 iOldLineTypePos = m_pLB_LineType->GetSelectedEntryPos();
     m_pLB_LineType->SelectEntryPos(POS_LINETYPE_STEPPED);
-    if( getSteppedPropertiesDialog().Execute() == RET_OK )
+    if (getSteppedPropertiesDialog().run() == RET_OK)
     {
         if( m_pChangeListener )
             m_pChangeListener->stateChanged(this);
