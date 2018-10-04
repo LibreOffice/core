@@ -118,7 +118,7 @@ bool AquaSalGraphics::CheckContext()
         {
             const CGSize aLayerSize = { static_cast<CGFloat>(nWidth), static_cast<CGFloat>(nHeight) };
             NSGraphicsContext* pNSGContext = [NSGraphicsContext graphicsContextWithWindow: mpFrame->getNSWindow()];
-            CGContextRef xCGContext = static_cast<CGContextRef>([pNSGContext graphicsPort]);
+            CGContextRef xCGContext = [pNSGContext CGContext];
             mxLayer = CGLayerCreateWithContext( xCGContext, aLayerSize, nullptr );
             SAL_INFO( "vcl.cg", "CGLayerCreateWithContext(" << xCGContext << "," << aLayerSize << ",NULL) = " << mxLayer );
             if( mxLayer )
@@ -192,7 +192,7 @@ void AquaSalGraphics::UpdateWindow( NSRect& )
     NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
     if( (mxLayer != nullptr) && (pContext != nullptr) )
     {
-        CGContextRef rCGContext = static_cast<CGContextRef>([pContext graphicsPort]);
+        CGContextRef rCGContext = [pContext CGContext];
         SAL_INFO( "vcl.cg", "[[NSGraphicsContext currentContext] graphicsPort] = " << rCGContext );
 
         CGMutablePathRef rClip = mpFrame->getClipPath();

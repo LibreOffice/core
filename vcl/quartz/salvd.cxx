@@ -270,7 +270,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
                 NSGraphicsContext* pNSContext = [NSGraphicsContext graphicsContextWithWindow: pNSWindow];
                 if( pNSContext )
                 {
-                    xCGContext = static_cast<CGContextRef>([pNSContext graphicsPort]);
+                    xCGContext = [pNSContext CGContext];
                 }
             }
             else
