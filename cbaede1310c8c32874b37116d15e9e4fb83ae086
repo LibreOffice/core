@@ -25,6 +25,29 @@
     },
     {
       "key": {
+        "uuid": "ff0f0b1f_c8610d3c",
+        "filename": "svx/source/fmcomp/gridctrl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2841,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-10-04T13:39:46Z",
+      "side": 1,
+      "message": "Let\u0027s try to understand the code step by step. This is called \"nColId\" but I don\u0027t see how it could be a column id. Reading the code of GetColumnAtXPosPixel, this returns an index in mvCols. Not an column id! So this is actually the ViewPos plus 1. So it seems to me this should be something like:\nsal_uInt16 nColId \u003d GetColumnId(GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X()))\nor\nsal_uInt16 nColViewPos \u003d GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X()) - 1",
+      "range": {
+        "startLine": 2841,
+        "startChar": 23,
+        "endLine": 2841,
+        "endChar": 29
+      },
+      "revId": "cbaede1310c8c32874b37116d15e9e4fb83ae086",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff0f0b1f_a87a5985",
         "filename": "svx/source/fmcomp/gridctrl.cxx",
         "patchSetId": 4
@@ -64,6 +87,52 @@
         "startChar": 58,
         "endLine": 2852,
         "endChar": 84
+      },
+      "revId": "cbaede1310c8c32874b37116d15e9e4fb83ae086",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_e84bb1ad",
+        "filename": "svx/source/fmcomp/gridctrl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2864,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-10-04T13:39:46Z",
+      "side": 1,
+      "message": "What is the second argument of canCopyCellText? Is it a column id or a view position? I honestly don\u0027t know. The second argument is called _nColId, and it contains the test\n _nColId \u003c\u003d ColCount()\nthat is\n _nColId \u003c\u003d mvCols.size()\n\nThat test does not make sense to me. If _nColId were an index into mvCols, then the correct test is\n _nColId \u003c mvCols.size()\nwhich is the same as\n _nColId \u003c ColCount()\nIf _nColId were a View Positions, then the correct test is:\n _nColId \u003c GetViewColCount()\nwhich is the same as\n _nColId \u003c ColCount() - 1",
+      "range": {
+        "startLine": 2864,
+        "startChar": 43,
+        "endLine": 2864,
+        "endChar": 53
+      },
+      "revId": "cbaede1310c8c32874b37116d15e9e4fb83ae086",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_28d769c2",
+        "filename": "svx/source/fmcomp/gridctrl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2869,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-10-04T13:39:46Z",
+      "side": 1,
+      "message": "What is the second argument of copyCellText? A column id? A view position? A model position?\nIt passes its second argument to GetModelColumnPos, so it seems it is a column id.\n\ncanCopyCellText and copyCellText should really, really, really take the same arguments IMHO.",
+      "range": {
+        "startLine": 2869,
+        "startChar": 39,
+        "endLine": 2869,
+        "endChar": 50
       },
       "revId": "cbaede1310c8c32874b37116d15e9e4fb83ae086",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
