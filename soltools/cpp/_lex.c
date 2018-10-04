@@ -668,7 +668,7 @@ Source *
         len = strlen(str);
         s->inb = domalloc(len + 4);
         s->inp = s->inb;
-        strncpy((char *) s->inp, str, len);
+        memcpy((char *) s->inp, str, len);
     }
     else
     {
