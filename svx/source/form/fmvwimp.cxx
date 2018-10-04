@@ -1333,8 +1333,8 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
         if (!nOBJID)
             return nullptr;
 
-        SdrUnoObj* pLabel( nullptr );
-        SdrUnoObj* pControl( nullptr );
+        std::unique_ptr<SdrUnoObj, SdrObjectFreeOp> pLabel;
+        std::unique_ptr<SdrUnoObj, SdrObjectFreeOp> pControl;
         if  (   !createControlLabelPair( *pOutDev, 0, 0, xField, xNumberFormats, nOBJID, sLabelPostfix,
                     pLabel, pControl, xDataSource, sDataSource, sCommand, nCommandType )
             )
@@ -1347,23 +1347,22 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
         bool bCheckbox = ( OBJ_FM_CHECKBOX == nOBJID );
         OSL_ENSURE( !bCheckbox || !pLabel, "FmXFormView::implCreateFieldControl: why was there a label created for a check box?" );
         if ( bCheckbox )
-            return pControl;
+            return pControl.release();
 
         SdrObjGroup* pGroup  = new SdrObjGroup(getView()->getSdrModelFromSdrView());
         SdrObjList* pObjList = pGroup->GetSubList();
-        pObjList->InsertObject( pLabel );
-        pObjList->InsertObject( pControl );
+        pObjList->InsertObject( pLabel.release() );
+        pObjList->InsertObject( pControl.release() );
 
         if ( bDateNTimeField )
         {   // so far we created a date field only, but we also need a time field
-            pLabel = pControl = nullptr;
             if  (   createControlLabelPair( *pOutDev, 0, 1000, xField, xNumberFormats, OBJ_FM_TIMEFIELD,
                         SvxResId(RID_STR_POSTFIX_TIME), pLabel, pControl,
                         xDataSource, sDataSource, sCommand, nCommandType )
                 )
             {
-                pObjList->InsertObject( pLabel );
-                pObjList->InsertObject( pControl );
+                pObjList->InsertObject( pLabel.release() );
+                pObjList->InsertObject( pControl.release() );
             }
         }
 
@@ -1436,8 +1435,8 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
         // xform control or submission button?
         if ( !xSubmission.is() )
         {
-            SdrUnoObj* pLabel( nullptr );
-            SdrUnoObj* pControl( nullptr );
+            std::unique_ptr<SdrUnoObj, SdrObjectFreeOp> pLabel;
+            std::unique_ptr<SdrUnoObj, SdrObjectFreeOp> pControl;
             if  (   !createControlLabelPair( *pOutDev, 0, 0, nullptr, xNumberFormats, nOBJID, sLabelPostfix,
                         pLabel, pControl, nullptr, "", "", -1 )
                 )
@@ -1457,14 +1456,14 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
             bool bCheckbox = ( OBJ_FM_CHECKBOX == nOBJID );
             OSL_ENSURE( !bCheckbox || !pLabel, "FmXFormView::implCreateXFormsControl: why was there a label created for a check box?" );
             if ( bCheckbox )
-                return pControl;
+                return pControl.release();
 
 
             // group objects
             SdrObjGroup* pGroup  = new SdrObjGroup(getView()->getSdrModelFromSdrView());
             SdrObjList* pObjList = pGroup->GetSubList();
-            pObjList->InsertObject(pLabel);
-            pObjList->InsertObject(pControl);
+            pObjList->InsertObject(pLabel.release());
+            pObjList->InsertObject(pControl.release());
 
             return pGroup;
         }
@@ -1512,7 +1511,8 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
 bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
         const Reference< XPropertySet >& _rxField, const Reference< XNumberFormats >& _rxNumberFormats,
         sal_uInt16 _nControlObjectID, const OUString& _rFieldPostfix,
-        SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl,
+        std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpLabel,
+        std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpControl,
         const Reference< XDataSource >& _rxDataSource, const OUString& _rDataSourceName,
         const OUString& _rCommand, const sal_Int32 _nCommandType )
 {
@@ -1526,8 +1526,6 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
         _rFieldPostfix,
         SdrInventor::FmForm,
         OBJ_FM_FIXEDTEXT,
-        nullptr,
-        nullptr,
 
         // tdf#118963 Hand over a SdrModel to SdrObject-creation. It uses the local m_pView
         // and already returning false when nullptr == getView() could be done, but m_pView
@@ -1559,7 +1557,8 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
     const Reference< XPropertySet >& _rxField,
     const Reference< XNumberFormats >& _rxNumberFormats, sal_uInt16 _nControlObjectID,
     const OUString& _rFieldPostfix, SdrInventor _nInventor, sal_uInt16 _nLabelObjectID,
-    SdrPage* /*_pLabelPage*/, SdrPage* /*_pControlPage*/, SdrModel& _rModel, SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl)
+    SdrModel& _rModel,
+    std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpLabel, std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpControl)
 {
     sal_Int32 nDataType = 0;
     OUString sFieldName;
@@ -1714,8 +1713,8 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
         FormControlFactory::initializeFieldDependentProperties( _rxField, xControlSet, _rxNumberFormats );
     }
 
-    _rpLabel = pLabel.release();
-    _rpControl = pControl.release();
+    _rpLabel = std::move(pLabel);
+    _rpControl = std::move(pControl);
     return true;
 }
 

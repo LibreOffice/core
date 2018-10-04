@@ -95,15 +95,13 @@ public:
         sal_uInt16 _nControlObjectID,
         SdrInventor _nInventor,
         sal_uInt16 _nLabelObjectID,
-        SdrPage* _pLabelPage,
-        SdrPage* _pControlPage,
 
         // tdf#118963 Need a SdrModel for SdrObject creation. To make the
         // demand clear, hand over a SdrMldel&
         SdrModel& _rModel,
 
-        SdrUnoObj*& _rpLabel,
-        SdrUnoObj*& _rpControl
+        std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpLabel,
+        std::unique_ptr<SdrUnoObj, SdrObjectFreeOp>& _rpControl
     );
 
     virtual SdrPageView* ShowSdrPage(SdrPage* pPage) override;
