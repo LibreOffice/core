@@ -1337,7 +1337,7 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
             // Show the Context menu
             if( !IsReadOnly() )
             {
-                sal_uInt16 nColId = GetColumnAtXPosPixel(aMenuPos.X());
+                sal_uInt16 nColId = GetColumnId(GetColumnAtXPosPixel(aMenuPos.X()));
                 long   nRow = GetRowAtYPosPixel(aMenuPos.Y());
 
                 if ( HANDLE_ID != nColId )

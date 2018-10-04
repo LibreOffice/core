@@ -2754,7 +2754,7 @@ void DbGridControl::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
     if (!m_pSeekCursor || IsResizing())
         return;
 
-    sal_uInt16 nColId = GetColumnAtXPosPixel(rPosPixel.X());
+    sal_uInt16 nColId = GetColumnId(GetColumnAtXPosPixel(rPosPixel.X()));
     long   nRow = GetRowAtYPosPixel(rPosPixel.Y());
     if (nColId != HandleColumnId && nRow >= 0)
     {

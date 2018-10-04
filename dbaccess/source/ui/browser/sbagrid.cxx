@@ -1253,8 +1253,8 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
             // without an empty row we're not in update mode
             break;
 
-        long    nRow = GetRowAtYPosPixel(rEvt.maPosPixel.Y(), false);
-        sal_uInt16  nCol = GetColumnAtXPosPixel(rEvt.maPosPixel.X());
+        const long        nRow = GetRowAtYPosPixel(rEvt.maPosPixel.Y(), false);
+        const sal_uInt16  nCol = GetColumnId(GetColumnAtXPosPixel(rEvt.maPosPixel.X()));
 
         long nCorrectRowCount = GetRowCount();
         if (GetOptions() & DbGridControlOptions::Insert)
@@ -1262,7 +1262,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
         if (IsCurrentAppending())
             --nCorrectRowCount; // the current data record doesn't really exist, we are appending a new one
 
-        if ((nCol == BROWSER_INVALIDID) || (nRow >= nCorrectRowCount) || GetColumnId(nCol) == 0  || GetColumnId(nCol) == BROWSER_INVALIDID )
+        if ((nCol == BROWSER_INVALIDID) || (nRow >= nCorrectRowCount) || nCol == 0  || nCol == BROWSER_INVALIDID )
             // no valid cell under the mouse cursor
             break;
 
