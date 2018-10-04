@@ -49,7 +49,7 @@ class VclQt5Clipboard
 
 public:
     explicit VclQt5Clipboard();
-    virtual ~VclQt5Clipboard();
+    virtual ~VclQt5Clipboard() override;
 
     /*
      * XServiceInfo
