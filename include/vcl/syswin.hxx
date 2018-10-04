@@ -24,6 +24,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/builder.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/window.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
@@ -41,26 +42,6 @@ class TaskPaneList;
 #define ICON_DATABASE_DOCUMENT          12
 #define ICON_MATH_DOCUMENT              13
 #define ICON_MACROLIBRARY               1
-
-enum class WindowStateMask {
-    NONE             = 0x0000,
-    X                = 0x0001,
-    Y                = 0x0002,
-    Width            = 0x0004,
-    Height           = 0x0008,
-    State            = 0x0010,
-    Minimized        = 0x0020,
-    MaximizedX       = 0x0100,
-    MaximizedY       = 0x0200,
-    MaximizedWidth   = 0x0400,
-    MaximizedHeight  = 0x0800,
-    Pos              = X | Y,
-    All              = X | Y | Width | Height | MaximizedX | MaximizedY | MaximizedWidth | MaximizedHeight | State | Minimized
-};
-namespace o3tl
-{
-    template<> struct typed_flags<WindowStateMask> : is_typed_flags<WindowStateMask, 0x0f3f> {};
-}
 
 enum class WindowStateState {
     NONE           = 0x0000,
