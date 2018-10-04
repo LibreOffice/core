@@ -403,8 +403,8 @@ void SwView::Scroll( const tools::Rectangle &rRect, sal_uInt16 nRangeX, sal_uInt
     tools::Rectangle aOldVisArea( m_aVisArea );
     long nDiffY = 0;
 
-    vcl::Window* pCareWn = SwViewShell::GetCareWin(GetWrtShell());
-    weld::Dialog* pCareDialog = SwViewShell::GetCareDialog();
+    vcl::Window* pCareWn = SwViewShell::GetCareWin();
+    weld::Window* pCareDialog = SwViewShell::GetCareDialog(GetWrtShell());
     if (pCareWn || pCareDialog)
     {
         int x, y, width, height;

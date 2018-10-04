@@ -93,7 +93,7 @@
 bool SwViewShell::mbLstAct = false;
 ShellResource *SwViewShell::mpShellRes = nullptr;
 vcl::DeleteOnDeinit< VclPtr<vcl::Window> > SwViewShell::mpCareWindow(new VclPtr<vcl::Window>);
-vcl::DeleteOnDeinit<std::shared_ptr<weld::Dialog>> SwViewShell::mpCareDialog(new std::shared_ptr<weld::Dialog>);
+vcl::DeleteOnDeinit<std::shared_ptr<weld::Window>> SwViewShell::mpCareDialog(new std::shared_ptr<weld::Window>);
 
 static bool bInSizeNotify = false;
 
@@ -581,7 +581,7 @@ const SwRect& SwViewShell::VisArea() const
 
 void SwViewShell::MakeVisible( const SwRect &rRect )
 {
-    if ( !VisArea().IsInside( rRect ) || IsScrollMDI( this, rRect ) || GetCareWin(*this) || GetCareDialog() )
+    if ( !VisArea().IsInside( rRect ) || IsScrollMDI( this, rRect ) || GetCareWin() || GetCareDialog(*this) )
     {
         if ( !IsViewLocked() )
         {
@@ -609,19 +609,23 @@ void SwViewShell::MakeVisible( const SwRect &rRect )
     }
 }
 
-vcl::Window* SwViewShell::CareChildWin(SwViewShell const & rVSh)
+weld::Window* SwViewShell::CareChildWin(SwViewShell const & rVSh)
 {
-    if(rVSh.mpSfxViewShell)
-    {
+    if (!rVSh.mpSfxViewShell)
+        return nullptr;
 #if HAVE_FEATURE_DESKTOP
-        const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
-        SfxViewFrame* pVFrame = rVSh.mpSfxViewShell->GetViewFrame();
-        const SfxChildWindow* pChWin = pVFrame->GetChildWindow( nId );
-        vcl::Window *pWin = pChWin ? pChWin->GetWindow() : nullptr;
-        if ( pWin && pWin->IsVisible() )
-            return pWin;
+    const sal_uInt16 nId = SvxSearchDialogWrapper::GetChildWindowId();
+    SfxViewFrame* pVFrame = rVSh.mpSfxViewShell->GetViewFrame();
+    SfxChildWindow* pChWin = pVFrame->GetChildWindow( nId );
+    if (!pChWin)
+        return nullptr;
+    weld::DialogController* pController = pChWin->GetController().get();
+    if (!pController)
+        return nullptr;
+    weld::Window* pWin = pController->getDialog();
+    if (pWin && pWin->get_visible())
+        return pWin;
 #endif
-    }
     return nullptr;
 }
 
@@ -2503,7 +2507,7 @@ void SwViewShell::SetCareWin( vcl::Window* pNew )
     (*mpCareWindow.get()) = pNew;
 }
 
-void SwViewShell::SetCareDialog(const std::shared_ptr<weld::Dialog>& rNew)
+void SwViewShell::SetCareDialog(const std::shared_ptr<weld::Window>& rNew)
 {
     (*mpCareDialog.get()) = rNew;
 }

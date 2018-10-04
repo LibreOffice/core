@@ -14,15 +14,15 @@
 
 SFX_IMPL_CHILDWINDOW_WITHID(SwWordCountWrapper, FN_WORDCOUNT_DIALOG)
 
-SwWordCountWrapper::SwWordCountWrapper(   vcl::Window *pParentWindow,
+SwWordCountWrapper::SwWordCountWrapper(vcl::Window *pParentWindow,
                             sal_uInt16 nId,
                             SfxBindings* pBindings,
-                            SfxChildWinInfo* pInfo ) :
-        SfxChildWindow(pParentWindow, nId)
+                            SfxChildWinInfo* pInfo )
+    : SfxChildWindow(pParentWindow, nId)
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    xAbstDlg.reset(pFact->CreateSwWordCountDialog(pBindings, this, pParentWindow, pInfo));
-    SetWindow(xAbstDlg->GetWindow());
+    xAbstDlg.reset(pFact->CreateSwWordCountDialog(pBindings, this, pParentWindow->GetFrameWeld(), pInfo));
+    SetController(xAbstDlg->GetController());
 }
 
 SwWordCountWrapper::~SwWordCountWrapper()
