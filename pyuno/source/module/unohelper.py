@@ -64,7 +64,7 @@ def _propertymode_to_str( mode ):
     if PROP_ATTR_READONLY & mode:
         ret = ret + "readonly "
     if PROP_ATTR_TRANSIENT & mode:
-        ret = ret + "tranient "
+        ret = ret + "transient "
     if PROP_ATTR_CONSTRAINED & mode:
         ret = ret + "constrained "
     if PROP_ATTR_BOUND & mode:
