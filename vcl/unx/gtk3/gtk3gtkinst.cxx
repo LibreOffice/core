@@ -2169,11 +2169,7 @@ public:
         m_xDialogController = rDialogController;
         m_aFunc = func;
 
-        if (!gtk_widget_get_visible(m_pWidget))
-        {
-            sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(m_pDialog)));
-            gtk_widget_show(m_pWidget);
-        }
+        show();
 
         m_nResponseSignalId = g_signal_connect(m_pDialog, "response", G_CALLBACK(signalAsyncResponse), this);
 
@@ -2212,8 +2208,11 @@ public:
 
     virtual void show() override
     {
-        sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(m_pDialog)));
-        gtk_widget_show(m_pWidget);
+        if (!gtk_widget_get_visible(m_pWidget))
+        {
+            sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(m_pDialog)));
+            gtk_widget_show(m_pWidget);
+        }
     }
 
     static int VclToGtk(int nResponse)
