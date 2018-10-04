@@ -27,6 +27,7 @@
 
 #include <map>
 
+class SvXMLImport;
 class RedlineInfo;
 class SwRedlineData;
 class SwDoc;
@@ -40,6 +41,8 @@ typedef std::map< OUString, RedlineInfo* > RedlineMapType;
 
 class XMLRedlineImportHelper final
 {
+    SvXMLImport & m_rImport;
+
     const OUString sInsertion;
     const OUString sDeletion;
     const OUString sFormatChange;
@@ -60,6 +63,7 @@ class XMLRedlineImportHelper final
 public:
 
     XMLRedlineImportHelper(
+        SvXMLImport & rImport,
         bool bIgnoreRedlines,       // ignore redlines mode
         // property sets of model + import info for saving + restoring the
         // redline mode
