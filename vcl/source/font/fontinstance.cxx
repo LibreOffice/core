@@ -147,5 +147,18 @@ void LogicalFontInstance::IgnoreFallbackForUnicode( sal_UCS4 cChar, FontWeight e
         mpUnicodeFallbackList->erase( it );
 }
 
+bool LogicalFontInstance::GetCachedGlyphBoundRect(sal_GlyphId nID, tools::Rectangle &rRect)
+{
+    if (!mpFontCache)
+        return false;
+    return mpFontCache->GetCachedGlyphBoundRect(this, nID, rRect);
+}
+
+void LogicalFontInstance::CacheGlyphBoundRect(sal_GlyphId nID, tools::Rectangle &rRect)
+{
+    if (!mpFontCache)
+        return;
+    mpFontCache->CacheGlyphBoundRect(this, nID, rRect);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
