@@ -30,7 +30,7 @@ void XMLBase64ImportContext::startElement(
 
 void XMLBase64ImportContext::endElement(const OUString& /*rName*/)
 {
-    m_aBinaryData.append(static_cast<const unsigned char*>(m_aStream.GetBuffer()),
+    m_aBinaryData.append(static_cast<const unsigned char*>(m_aStream.GetData()),
                          m_aStream.GetSize());
 }
 

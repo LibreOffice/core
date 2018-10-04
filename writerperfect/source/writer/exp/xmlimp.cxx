@@ -335,7 +335,7 @@ void XMLOfficeDocContext::HandleFixedLayoutPage(const FixedLayoutPage& rPage, bo
     librevenge::RVNGPropertyList aImageProperties;
     aImageProperties.insert("librevenge:mime-type", "image/svg+xml");
     librevenge::RVNGBinaryData aBinaryData;
-    aBinaryData.append(static_cast<const unsigned char*>(aMemoryStream.GetBuffer()),
+    aBinaryData.append(static_cast<const unsigned char*>(aMemoryStream.GetData()),
                        aMemoryStream.GetSize());
     aImageProperties.insert("office:binary-data", aBinaryData);
     mrImport.GetGenerator().insertBinaryObject(aImageProperties);
@@ -372,7 +372,7 @@ XMLImport::XMLImport(const uno::Reference<uno::XComponentContext>& xContext,
         SvFileStream aStream(aCoverImage, StreamMode::READ);
         SvMemoryStream aMemoryStream;
         aMemoryStream.WriteStream(aStream);
-        aBinaryData.append(static_cast<const unsigned char*>(aMemoryStream.GetBuffer()),
+        aBinaryData.append(static_cast<const unsigned char*>(aMemoryStream.GetData()),
                            aMemoryStream.GetSize());
         librevenge::RVNGPropertyList aCoverImageProperties;
         aCoverImageProperties.insert("office:binary-data", aBinaryData);
@@ -433,7 +433,7 @@ PopupState XMLImport::FillPopupData(const OUString& rURL, librevenge::RVNGProper
     librevenge::RVNGBinaryData aBinaryData;
     SvMemoryStream aMemoryStream;
     aMemoryStream.WriteStream(aStream);
-    aBinaryData.append(static_cast<const unsigned char*>(aMemoryStream.GetBuffer()),
+    aBinaryData.append(static_cast<const unsigned char*>(aMemoryStream.GetData()),
                        aMemoryStream.GetSize());
     rPropList.insert("office:binary-data", aBinaryData);
 
