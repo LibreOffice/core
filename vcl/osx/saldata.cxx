@@ -255,7 +255,11 @@ NSStatusItem* SalData::getStatusItem()
             pData->mpStatusItem = [pStatBar statusItemWithLength: NSVariableStatusItemLength];
             [pData->mpStatusItem retain];
             OOStatusItemView* pView = [[OOStatusItemView alloc] init];
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+                // "'setView:' is deprecated: first deprecated in macOS 10.14 - Use the standard
+                // button property instead"
             [pData->mpStatusItem setView: pView ];
+SAL_WNODEPRECATED_DECLARATIONS_POP
             [pView display];
         }
     }

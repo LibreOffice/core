@@ -115,7 +115,11 @@ namespace
       { NSRTFPboardType, "text/rtf", "Rich Text Format", false },
       { NSTIFFPboardType, "image/png", "Portable Network Graphics", false },
       { NSHTMLPboardType, "text/html", "Plain Html", false },
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+          // "'NSFilenamesPboardType' is deprecated: first deprecated in macOS 10.14 - Create
+          // multiple pasteboard items with NSPasteboardTypeFileURL or kUTTypeFileURL instead"
       { NSFilenamesPboardType, "application/x-openoffice-filelist;windows_formatname=\"FileList\"", "FileList", false },
+SAL_WNODEPRECATED_DECLARATIONS_POP
       { PBTYPE_SESX, FLAVOR_SESX, "Star Embed Source (XML)", false },
       { PBTYPE_SLSDX, FLAVOR_SLSDX, "Star Link Source Descriptor (XML)", false },
       { PBTYPE_ESX, FLAVOR_ESX, "Star Embed Source (XML)", false },
@@ -567,7 +571,11 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavo
             {
               dp = DataProviderPtr_t( new PNGDataProvider( data, NSTIFFFileType));
             }
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+              // "'NSFilenamesPboardType' is deprecated: first deprecated in macOS 10.14 - Create
+              // multiple pasteboard items with NSPasteboardTypeFileURL or kUTTypeFileURL instead"
           else if ([systemFlavor caseInsensitiveCompare: NSFilenamesPboardType] == NSOrderedSame)
+SAL_WNODEPRECATED_DECLARATIONS_POP
             {
               dp = DataProviderPtr_t(new FileListDataProvider(data));
             }
@@ -614,7 +622,11 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavo
     {
       dp = DataProviderPtr_t( new PNGDataProvider(systemData, NSTIFFFileType));
     }
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+      // "'NSFilenamesPboardType' is deprecated: first deprecated in macOS 10.14 - Create multiple
+      // pasteboard items with NSPasteboardTypeFileURL or kUTTypeFileURL instead"
   else if ([systemFlavor caseInsensitiveCompare: NSFilenamesPboardType] == NSOrderedSame)
+SAL_WNODEPRECATED_DECLARATIONS_POP
     {
       //dp = DataProviderPtr_t(new FileListDataProvider(systemData));
     }
