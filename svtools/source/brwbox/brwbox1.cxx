@@ -2232,7 +2232,7 @@ bool BrowseBox::IsCursorMoveAllowed( long, sal_uInt16 ) const
 /*  [Description]
 
     This virtual method is always called before the cursor is moved directly.
-    By means of 'return sal_False', we avoid doing this if e.g. a record
+    By means of 'return false', we avoid doing this if e.g. a record
     contradicts any rules.
 
     This method is not called, if the cursor movement results from removing or
