@@ -24,11 +24,11 @@
 namespace chart
 {
 
-SchTitleDlg::SchTitleDlg(vcl::Window* pWindow, const TitleDialogData& rInput )
-    : ModalDialog(pWindow, "InsertTitleDialog", "modules/schart/ui/inserttitledlg.ui")
-    , m_xTitleResources(new TitleResources(*this, true))
+SchTitleDlg::SchTitleDlg(weld::Window* pWindow, const TitleDialogData& rInput)
+    : GenericDialogController(pWindow, "modules/schart/ui/inserttitledlg.ui", "InsertTitleDialog")
+    , m_xTitleResources(new SchTitleResources(*m_xBuilder, true))
 {
-    SetText( ObjectNameProvider::getName(OBJECTTYPE_TITLE, true));
+    m_xDialog->set_title(ObjectNameProvider::getName(OBJECTTYPE_TITLE, true));
     m_xTitleResources->writeToResources( rInput );
 }
 
