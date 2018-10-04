@@ -34,8 +34,10 @@ namespace o3tl
 template<typename Key, typename Value, class KeyHash = std::hash<Key>>
 class lru_map final
 {
-private:
+public:
     typedef typename std::pair<Key, Value> key_value_pair_t;
+
+private:
     typedef std::list<key_value_pair_t> list_t;
     typedef typename list_t::iterator list_iterator_t;
     typedef typename list_t::const_iterator list_const_iterator_t;
@@ -58,6 +60,7 @@ private:
             mLruList.pop_back();
         }
     }
+
 public:
     typedef list_iterator_t iterator;
     typedef list_const_iterator_t const_iterator;
@@ -124,6 +127,28 @@ public:
             mLruList.splice(mLruList.begin(), mLruList, i->second);
             return i->second;
         }
+    }
+
+    // reverse-iterates the list removing all items matching the predicate
+    template<class UnaryPredicate>
+    void remove_if(UnaryPredicate pred)
+    {
+        auto it = mLruList.rbegin();
+        while (it != mLruList.rend())
+        {
+            if (pred(*it))
+            {
+                mLruMap.erase(it->first);
+                it = decltype(it){ mLruList.erase(std::next(it).base()) };
+            }
+            else
+                ++it;
+        }
+    }
+
+    const list_const_iterator_t begin() const
+    {
+        return mLruList.cbegin();
     }
 
     const list_const_iterator_t end() const
