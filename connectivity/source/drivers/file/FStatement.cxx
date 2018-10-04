@@ -32,6 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include <strings.hrc>
 #include <algorithm>

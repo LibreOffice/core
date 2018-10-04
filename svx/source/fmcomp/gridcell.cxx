@@ -51,6 +51,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/types.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <i18nlangtag/lang.h>

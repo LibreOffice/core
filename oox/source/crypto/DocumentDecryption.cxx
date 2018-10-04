@@ -13,6 +13,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/implbase.hxx>
 
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <oox/crypto/AgileEngine.hxx>

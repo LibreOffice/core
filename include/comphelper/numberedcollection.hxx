@@ -22,19 +22,17 @@
 
 #include <comphelper/comphelperdllapi.h>
 
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase.hxx>
 
-#include <functional>
 #include <unordered_map>
 #include <vector>
 
+namespace com { namespace sun { namespace star { namespace uno { class XInterface; } } } }
 
 namespace comphelper{
 

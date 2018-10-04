@@ -36,6 +36,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/uno3.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 using namespace dbtools;

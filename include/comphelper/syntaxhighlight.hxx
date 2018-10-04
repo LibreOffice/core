@@ -23,10 +23,6 @@
 
 #include <comphelper/comphelperdllapi.h>
 
-#ifdef UNX
-#include <sys/resource.h>
-#endif
-
 #include <vector>
 #include <memory>
 

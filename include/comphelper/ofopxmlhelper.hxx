@@ -20,13 +20,15 @@
 #ifndef INCLUDED_COMPHELPER_OFOPXMLHELPER_HXX
 #define INCLUDED_COMPHELPER_OFOPXMLHELPER_HXX
 
-#include <com/sun/star/beans/StringPair.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/Sequence.h>
 
 #include <comphelper/comphelperdllapi.h>
 
+namespace com { namespace sun { namespace star { namespace beans { struct StringPair; } } } }
+namespace com { namespace sun { namespace star { namespace io { class XInputStream; } } } }
+namespace com { namespace sun { namespace star { namespace io { class XOutputStream; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <class interface_type> class Reference; } } } }
 
 namespace comphelper
 {

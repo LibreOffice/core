@@ -32,6 +32,7 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/types.hxx>
 
 namespace calc
 {

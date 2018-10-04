@@ -105,6 +105,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <dbaccess/dbaundomanager.hxx>
 #include <editeng/paperinf.hxx>
 #include <framework/titlehelper.hxx>

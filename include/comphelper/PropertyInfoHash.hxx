@@ -21,7 +21,7 @@
 #define INCLUDED_COMPHELPER_PROPERTYINFOHASH_HXX
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/Type.h>
 #include <unordered_map>
 
 namespace comphelper

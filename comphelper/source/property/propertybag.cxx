@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/propertybag.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/PropertyExistException.hpp>
@@ -25,6 +26,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/NotRemoveableException.hpp>
+#include <com/sun/star/beans/UnknownPropertyException.hpp>
 
 #include <map>
 

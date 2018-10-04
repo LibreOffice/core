@@ -20,6 +20,7 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/propertysethelper.hxx>
 #include <osl/diagnose.h>
+#include <rtl/ref.hxx>
 
 #include <memory>
 

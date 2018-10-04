@@ -18,6 +18,9 @@
  */
 
 #include <comphelper/streamsection.hxx>
+#include <com/sun/star/io/XMarkableStream.hpp>
+#include <com/sun/star/io/XDataInputStream.hpp>
+#include <com/sun/star/io/XDataOutputStream.hpp>
 #include <osl/diagnose.h>
 
 namespace comphelper

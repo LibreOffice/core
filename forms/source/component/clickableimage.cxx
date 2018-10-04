@@ -44,6 +44,7 @@
 #include <services.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <svtools/imageresourceaccess.hxx>
 #define LOCAL_URL_PREFIX    '#'

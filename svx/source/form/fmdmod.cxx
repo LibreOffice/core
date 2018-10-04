@@ -23,6 +23,7 @@
 #include <fmobj.hxx>
 #include <svx/unoshape.hxx>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <svx/fmglob.hxx>
 
 using namespace ::svxform;

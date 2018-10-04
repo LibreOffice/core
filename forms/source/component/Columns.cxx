@@ -35,6 +35,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/basicio.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/types.hxx>
 #include <services.hxx>
 #include <strings.hrc>
 #include <tools/debug.hxx>

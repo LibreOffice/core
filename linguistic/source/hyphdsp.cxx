@@ -23,6 +23,7 @@
 #include <algorithm>
 
 #include <cppuhelper/factory.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
