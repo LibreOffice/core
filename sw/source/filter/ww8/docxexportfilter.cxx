@@ -129,11 +129,6 @@ extern "C"
         DocxExport_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
         nullptr, 0
     },
-    {
-        RtfExport_createInstance, RtfExport_getImplementationName,
-        RtfExport_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
-        nullptr, 0
-    },
     { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
 };
 
