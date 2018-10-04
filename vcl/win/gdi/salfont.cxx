@@ -60,11 +60,6 @@
 
 using namespace vcl;
 
-// GetGlyphOutlineW() seems to be a little slow, and doesn't seem to do its own caching (tested on Windows10).
-// TODO include the font as part of the cache key, then we won't need to clear it on font change
-// The cache limit is set by the rough number of characters needed to read your average Asian newspaper.
-static o3tl::lru_map<sal_GlyphId, tools::Rectangle> g_BoundRectCache(3000);
-
 static const int MAXFONTHEIGHT = 2048;
 
 static inline FIXED FixedFromDouble( double d )
@@ -846,8 +841,6 @@ HFONT WinSalGraphics::ImplDoSetFont(FontSelectPattern const & i_rFont,
                                     float& o_rFontScale,
                                     HFONT& o_rOldFont)
 {
-    // clear the cache on font change
-    g_BoundRectCache.clear();
     HFONT hNewFont = nullptr;
 
     LOGFONTW aLogFont;
@@ -1335,15 +1328,11 @@ void WinSalGraphics::ClearDevFontCache()
 
 bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle& rRect)
 {
-    auto it = g_BoundRectCache.find(rGlyph.maGlyphId);
-    if (it != g_BoundRectCache.end())
-    {
-        rRect = it->second;
-        return true;
-    }
-
     rtl::Reference<WinFontInstance> pFont = mpWinFontEntry[rGlyph.mnFallbackLevel];
     assert(pFont.is());
+
+    if (pFont.is() && pFont->GetCachedGlyphBoundRect(rGlyph.maGlyphId, rRect))
+        return true;
 
     HDC hDC = getHDC();
     HFONT hFont = static_cast<HFONT>(GetCurrentObject(hDC, OBJ_FONT));
@@ -1379,7 +1368,7 @@ bool WinSalGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle
     rRect.SetTop(static_cast<int>( fFontScale * rRect.Top() ));
     rRect.SetBottom(static_cast<int>( fFontScale * rRect.Bottom() ) + 1);
 
-    g_BoundRectCache.insert({rGlyph.maGlyphId, rRect});
+    pFont->CacheGlyphBoundRect(rGlyph.maGlyphId, rRect);
 
     return true;
 }
