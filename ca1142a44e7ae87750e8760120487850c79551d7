@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_c8134db8",
+        "filename": "vcl/inc/fontinstance.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-10-04T12:26:11Z",
+      "side": 1,
+      "message": "these are not inline?",
+      "revId": "ca1142a44e7ae87750e8760120487850c79551d7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
