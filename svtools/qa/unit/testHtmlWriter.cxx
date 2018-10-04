@@ -25,7 +25,7 @@ OString extractFromStream(SvMemoryStream& rStream)
     rStream.WriteChar('\0');
     rStream.Flush();
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
-    return OString(static_cast<const sal_Char*>(rStream.GetBuffer()));
+    return OString(static_cast<const sal_Char*>(rStream.GetData()));
 }
 
 }

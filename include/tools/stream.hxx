@@ -666,11 +666,11 @@ public:
 
     virtual void    ResetError() override;
 
-    const void*    GetBuffer();
-    sal_uInt64     GetSize();
+    sal_uInt64      GetSize();
     std::size_t     GetEndOfData() const { return nEndOfData; }
     const void*     GetData() { Flush(); return pBuf; }
 
+    // return the buffer currently in use, and allocate a new buffer internally
     void*           SwitchBuffer();
     // the buffer is not owned by this class
     void            SetBuffer( void* pBuf, std::size_t nSize, std::size_t nEOF );
