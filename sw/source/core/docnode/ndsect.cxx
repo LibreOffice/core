@@ -186,7 +186,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     if (bUndo)
     {
         pUndoInsSect = new SwUndoInsSection(rRange, rNewData, pAttr, pTOXBase);
-        GetIDocumentUndoRedo().AppendUndo( pUndoInsSect );
+        GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndoInsSect) );
         GetIDocumentUndoRedo().DoUndo(false);
     }
 
@@ -536,7 +536,7 @@ void SwDoc::DelSectionFormat( SwSectionFormat *pFormat, bool bDelNodes )
             {
                 SwNodeIndex aUpdIdx( *pIdx );
                 SwPaM aPaM( *pSectNd->EndOfSectionNode(), *pSectNd );
-                GetIDocumentUndoRedo().AppendUndo( new SwUndoDelete( aPaM ));
+                GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoDelete>( aPaM ));
                 if( pFootnoteEndAtTextEnd )
                     GetFootnoteIdxs().UpdateFootnote( aUpdIdx );
                 getIDocumentState().SetModified();

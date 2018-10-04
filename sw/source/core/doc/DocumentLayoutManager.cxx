@@ -163,7 +163,7 @@ SwFrameFormat *DocumentLayoutManager::MakeLayoutFormat( RndStdIds eRequest, cons
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
                 m_rDoc.GetIDocumentUndoRedo().AppendUndo(
-                    new SwUndoInsLayFormat(pFormat, 0, 0));
+                    o3tl::make_unique<SwUndoInsLayFormat>(pFormat, 0, 0));
             }
         }
         break;
@@ -233,7 +233,7 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo() &&
         (RES_FLYFRMFMT == nWh || RES_DRAWFRMFMT == nWh))
     {
-        m_rDoc.GetIDocumentUndoRedo().AppendUndo( new SwUndoDelLayFormat( pFormat ));
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoDelLayFormat>( pFormat ));
     }
     else
     {
@@ -416,7 +416,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
 
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo(new SwUndoInsLayFormat(pDest,0,0));
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo(o3tl::make_unique<SwUndoInsLayFormat>(pDest,0,0));
         }
 
         // Make sure that FlyFrames in FlyFrames are copied
@@ -446,7 +446,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
 
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo(new SwUndoInsLayFormat(pDest,0,0));
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo(o3tl::make_unique<SwUndoInsLayFormat>(pDest,0,0));
         }
     }
 

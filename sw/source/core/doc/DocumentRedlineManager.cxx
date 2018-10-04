@@ -2060,13 +2060,11 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
 
     if (bSaveInUndo && m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        SwUndoRedline* pUndo = new SwUndoRedline( SwUndoId::REDLINE, rRange );
+        std::unique_ptr<SwUndoRedline> pUndo(new SwUndoRedline( SwUndoId::REDLINE, rRange ));
         if( pUndo->GetRedlSaveCount() )
         {
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
         }
-        else
-            delete pUndo;
     }
 
     const SwPosition* pStt = rRange.Start(),
@@ -2297,8 +2295,8 @@ bool DocumentRedlineManager::AcceptRedline( SwRedlineTable::size_type nPos, bool
 
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
-                SwUndo *const pUndo( new SwUndoAcceptRedline(*pTmp) );
-                m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(
+                    o3tl::make_unique<SwUndoAcceptRedline>(*pTmp) );
             }
 
             bRet |= lcl_AcceptRedline( *mpRedlineTable, nPos, bCallDelete );
@@ -2354,7 +2352,7 @@ bool DocumentRedlineManager::AcceptRedline( const SwPaM& rPam, bool bCallDelete 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         m_rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::ACCEPT_REDLINE, nullptr );
-        m_rDoc.GetIDocumentUndoRedo().AppendUndo( new SwUndoAcceptRedline( aPam ));
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoAcceptRedline>( aPam ));
     }
 
     int nRet = lcl_AcceptRejectRedl( lcl_AcceptRedline, *mpRedlineTable,
@@ -2436,8 +2434,8 @@ bool DocumentRedlineManager::RejectRedline( SwRedlineTable::size_type nPos, bool
 
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
-                SwUndo *const pUndo( new SwUndoRejectRedline( *pTmp ) );
-                m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(
+                    o3tl::make_unique<SwUndoRejectRedline>( *pTmp ) );
             }
 
             bRet |= lcl_RejectRedline( *mpRedlineTable, nPos, bCallDelete );
@@ -2493,7 +2491,7 @@ bool DocumentRedlineManager::RejectRedline( const SwPaM& rPam, bool bCallDelete 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         m_rDoc.GetIDocumentUndoRedo().StartUndo( SwUndoId::REJECT_REDLINE, nullptr );
-        m_rDoc.GetIDocumentUndoRedo().AppendUndo( new SwUndoRejectRedline(aPam) );
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoRejectRedline>(aPam) );
     }
 
     int nRet = lcl_AcceptRejectRedl( lcl_RejectRedline, *mpRedlineTable,

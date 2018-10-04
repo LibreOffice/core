@@ -290,7 +290,7 @@ SwFlyFrameFormat* SwDoc::MakeFlySection_( const SwPosition& rAnchPos,
         sal_uLong nNodeIdx = rAnchPos.nNode.GetIndex();
         const sal_Int32 nCntIdx = rAnchPos.nContent.GetIndex();
         GetIDocumentUndoRedo().AppendUndo(
-            new SwUndoInsLayFormat( pFormat, nNodeIdx, nCntIdx ));
+            o3tl::make_unique<SwUndoInsLayFormat>( pFormat, nNodeIdx, nCntIdx ));
     }
 
     getIDocumentState().SetModified();
@@ -975,21 +975,21 @@ SwDoc::InsertLabel(
         OUString const& rCharacterStyle,
         bool const bCpyBrd )
 {
-    SwUndoInsertLabel * pUndo(nullptr);
+    std::unique_ptr<SwUndoInsertLabel> pUndo;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        pUndo = new SwUndoInsertLabel(
+        pUndo.reset(new SwUndoInsertLabel(
                         eType, rText, rSeparator, rNumberingSeparator,
-                        bBefore, nId, rCharacterStyle, bCpyBrd, this );
+                        bBefore, nId, rCharacterStyle, bCpyBrd, this ));
     }
 
-    SwFlyFrameFormat *const pNewFormat = lcl_InsertLabel(*this, mpTextFormatCollTable.get(), pUndo,
+    SwFlyFrameFormat *const pNewFormat = lcl_InsertLabel(*this, mpTextFormatCollTable.get(), pUndo.get(),
             eType, rText, rSeparator, rNumberingSeparator, bBefore,
             nId, nNdIdx, rCharacterStyle, bCpyBrd);
 
     if (pUndo)
     {
-        GetIDocumentUndoRedo().AppendUndo(pUndo);
+        GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
     }
     else
     {
@@ -1260,22 +1260,22 @@ SwFlyFrameFormat* SwDoc::InsertDrawLabel(
     if (!pOldFormat)
         return nullptr;
 
-    SwUndoInsertLabel * pUndo = nullptr;
+    std::unique_ptr<SwUndoInsertLabel> pUndo;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().ClearRedo();
-        pUndo = new SwUndoInsertLabel(
+        pUndo.reset(new SwUndoInsertLabel(
             LTYPE_DRAW, rText, rSeparator, rNumberSeparator, false,
-            nId, rCharacterStyle, false, this );
+            nId, rCharacterStyle, false, this ));
     }
 
     SwFlyFrameFormat *const pNewFormat = lcl_InsertDrawLabel(
-        *this, mpTextFormatCollTable.get(), pUndo, pOldFormat,
+        *this, mpTextFormatCollTable.get(), pUndo.get(), pOldFormat,
         rText, rSeparator, rNumberSeparator, nId, rCharacterStyle, rSdrObj);
 
     if (pUndo)
     {
-        GetIDocumentUndoRedo().AppendUndo( pUndo );
+        GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
     }
     else
     {

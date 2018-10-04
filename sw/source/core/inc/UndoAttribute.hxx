@@ -172,7 +172,7 @@ public:
 
     SwUndoFormatAttr* GetUndo() const  { return m_pUndo.get(); }
     // release the undo object (so it is not deleted here), and return it
-    SwUndoFormatAttr* ReleaseUndo()    { return m_pUndo.release(); }
+    std::unique_ptr<SwUndoFormatAttr> ReleaseUndo()    { return std::move(m_pUndo); }
 };
 
 class SwUndoMoveLeftMargin : public SwUndo, private SwUndRng

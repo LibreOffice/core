@@ -61,9 +61,9 @@ public:
     void SetUpdateFootnoteFlag(bool const bFlag)   { m_bUpdateFootnote = bFlag; }
 };
 
-SwUndo * MakeUndoDelSection(SwSectionFormat const&);
+std::unique_ptr<SwUndo> MakeUndoDelSection(SwSectionFormat const&);
 
-SwUndo * MakeUndoUpdateSection(SwSectionFormat const&, bool const);
+std::unique_ptr<SwUndo> MakeUndoUpdateSection(SwSectionFormat const&, bool const);
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOSECTION_HXX
 

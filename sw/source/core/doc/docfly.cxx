@@ -589,7 +589,7 @@ void SwDoc::SetFlyFrameTitle( SwFlyFrameFormat& rFlyFrameFormat,
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().AppendUndo( new SwUndoFlyStrAttr( rFlyFrameFormat,
+        GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoFlyStrAttr>( rFlyFrameFormat,
                                           SwUndoId::FLYFRMFMT_TITLE,
                                           rFlyFrameFormat.GetObjTitle(),
                                           sNewTitle ) );
@@ -612,7 +612,7 @@ void SwDoc::SetFlyFrameDescription( SwFlyFrameFormat& rFlyFrameFormat,
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().AppendUndo( new SwUndoFlyStrAttr( rFlyFrameFormat,
+        GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoFlyStrAttr>( rFlyFrameFormat,
                                           SwUndoId::FLYFRMFMT_DESCRIPTION,
                                           rFlyFrameFormat.GetObjDescription(),
                                           sNewDescription ) );
@@ -635,7 +635,7 @@ bool SwDoc::SetFrameFormatToFly( SwFrameFormat& rFormat, SwFrameFormat& rNewForm
     if (bUndo)
     {
         pUndo = new SwUndoSetFlyFormat( rFormat, rNewFormat );
-        GetIDocumentUndoRedo().AppendUndo(pUndo);
+        GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
     }
 
     // #i32968# Inserting columns in the section causes MakeFrameFormat to put

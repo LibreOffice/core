@@ -266,7 +266,7 @@ void SwDoc::SetFootnoteInfo(const SwFootnoteInfo& rInfo)
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().AppendUndo( new SwUndoFootNoteInfo(rOld, this) );
+        GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoFootNoteInfo>(rOld, this) );
     }
 
     bool bFootnotePos  = rInfo.ePos != rOld.ePos;
@@ -337,8 +337,8 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
 
     if(GetIDocumentUndoRedo().DoesUndo())
     {
-        SwUndo *const pUndo( new SwUndoEndNoteInfo( GetEndNoteInfo(), this ) );
-        GetIDocumentUndoRedo().AppendUndo(pUndo);
+        GetIDocumentUndoRedo().AppendUndo(
+            o3tl::make_unique<SwUndoEndNoteInfo>( GetEndNoteInfo(), this ) );
     }
 
     bool bNumChg  = rInfo.nFootnoteOffset != GetEndNoteInfo().nFootnoteOffset;
@@ -413,11 +413,11 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
     size_t nPos = 0;
     rFootnoteArr.SeekEntry( pStt->nNode, &nPos );
 
-    SwUndoChangeFootNote* pUndo = nullptr;
+    std::unique_ptr<SwUndoChangeFootNote> pUndo;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().ClearRedo(); // AppendUndo far below, so leave it
-        pUndo = new SwUndoChangeFootNote( rPam, rNumStr, nNumber, bIsEndNote );
+        pUndo.reset(new SwUndoChangeFootNote( rPam, rNumStr, nNumber, bIsEndNote ));
     }
 
     SwTextFootnote* pTextFootnote;
@@ -487,7 +487,7 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
     {
         if( pUndo )
         {
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
+            GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
         }
 
         if ( bTypeChgd )
@@ -504,8 +504,6 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
         }
         getIDocumentState().SetModified();
     }
-    else
-        delete pUndo;
     return bChg;
 }
 

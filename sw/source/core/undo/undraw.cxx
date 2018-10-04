@@ -65,7 +65,7 @@ void SwDoc::AddDrawUndo( std::unique_ptr<SdrUndoAction> pUndo )
         if( pSh && pSh->HasDrawView() )
             pMarkList = &pSh->GetDrawView()->GetMarkedObjectList();
 
-        GetIDocumentUndoRedo().AppendUndo( new SwSdrUndo(std::move(pUndo), pMarkList, this) );
+        GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwSdrUndo>(std::move(pUndo), pMarkList, this) );
     }
 }
 

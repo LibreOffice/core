@@ -357,7 +357,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
     if( GetIDocumentUndoRedo().DoesUndo() )
     {
         GetIDocumentUndoRedo().AppendUndo(
-            new SwUndoInsTable( rPos, nCols, nRows, static_cast<sal_uInt16>(eAdjust),
+            o3tl::make_unique<SwUndoInsTable>( rPos, nCols, nRows, static_cast<sal_uInt16>(eAdjust),
                                       rInsTableOpts, pTAFormat, pColArr,
                                       aTableName));
     }
@@ -647,7 +647,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
         GetIDocumentUndoRedo().StartUndo( SwUndoId::TEXTTOTABLE, nullptr );
         pUndo = new SwUndoTextToTable( aOriginal, rInsTableOpts, cCh,
                     static_cast<sal_uInt16>(eAdjust), pTAFormat );
-        GetIDocumentUndoRedo().AppendUndo( pUndo );
+        GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
 
         // Do not add splitting the TextNode to the Undo history
         GetIDocumentUndoRedo().DoUndo( false );
@@ -1462,26 +1462,26 @@ bool SwDoc::TableToText( const SwTableNode* pTableNd, sal_Unicode cCh )
         pESh->ClearMark();
 
     SwNodeRange aRg( *pTableNd, 0, *pTableNd->EndOfSectionNode() );
-    SwUndoTableToText* pUndo = nullptr;
+    std::unique_ptr<SwUndoTableToText> pUndo;
     SwNodeRange* pUndoRg = nullptr;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().ClearRedo();
         pUndoRg = new SwNodeRange( aRg.aStart, -1, aRg.aEnd, +1 );
-        pUndo = new SwUndoTableToText( pTableNd->GetTable(), cCh );
+        pUndo.reset(new SwUndoTableToText( pTableNd->GetTable(), cCh ));
     }
 
     SwTableFormulaUpdate aMsgHint( &pTableNd->GetTable() );
     aMsgHint.m_eFlags = TBL_BOXNAME;
     getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
-    bool bRet = GetNodes().TableToText( aRg, cCh, pUndo );
+    bool bRet = GetNodes().TableToText( aRg, cCh, pUndo.get() );
     if( pUndoRg )
     {
         ++pUndoRg->aStart;
         --pUndoRg->aEnd;
         pUndo->SetRange( *pUndoRg );
-        GetIDocumentUndoRedo().AppendUndo(pUndo);
+        GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
         delete pUndoRg;
     }
 
@@ -1724,11 +1724,11 @@ bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
         return false;
 
     SwTableSortBoxes aTmpLst;
-    SwUndoTableNdsChg* pUndo = nullptr;
+    std::unique_ptr<SwUndoTableNdsChg> pUndo;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        pUndo = new SwUndoTableNdsChg( SwUndoId::TABLE_INSCOL, rBoxes, *pTableNd,
-                                     0, 0, nCnt, bBehind, false );
+        pUndo.reset(new SwUndoTableNdsChg( SwUndoId::TABLE_INSCOL, rBoxes, *pTableNd,
+                                     0, 0, nCnt, bBehind, false ));
         aTmpLst.insert( rTable.GetTabSortBoxes() );
     }
 
@@ -1754,10 +1754,8 @@ bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
         if( bRet )
         {
             pUndo->SaveNewBoxes( *pTableNd, aTmpLst );
-            GetIDocumentUndoRedo().AppendUndo( pUndo );
+            GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
         }
-        else
-            delete pUndo;
     }
     return bRet;
 }
@@ -1784,11 +1782,11 @@ bool SwDoc::InsertRow( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
         return false;
 
     SwTableSortBoxes aTmpLst;
-    SwUndoTableNdsChg* pUndo = nullptr;
+    std::unique_ptr<SwUndoTableNdsChg> pUndo;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        pUndo = new SwUndoTableNdsChg( SwUndoId::TABLE_INSROW,rBoxes, *pTableNd,
-                                     0, 0, nCnt, bBehind, false );
+        pUndo.reset(new SwUndoTableNdsChg( SwUndoId::TABLE_INSROW,rBoxes, *pTableNd,
+                                     0, 0, nCnt, bBehind, false ));
         aTmpLst.insert( rTable.GetTabSortBoxes() );
     }
 
@@ -1814,10 +1812,8 @@ bool SwDoc::InsertRow( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
         if( bRet )
         {
             pUndo->SaveNewBoxes( *pTableNd, aTmpLst );
-            GetIDocumentUndoRedo().AppendUndo( pUndo );
+            GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
         }
-        else
-            delete pUndo;
     }
     return bRet;
 
@@ -2057,12 +2053,12 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
                     bSavePageBreak = true;
                 }
             }
-            SwUndoDelete* pUndo = new SwUndoDelete( aPaM );
+            std::unique_ptr<SwUndoDelete> pUndo(new SwUndoDelete( aPaM ));
             if( bNewTextNd )
                 pUndo->SetTableDelLastNd();
             pUndo->SetPgBrkFlags( bSavePageBreak, bSavePageDesc );
             pUndo->SetTableName(pTableNd->GetTable().GetFrameFormat()->GetName());
-            GetIDocumentUndoRedo().AppendUndo( pUndo );
+            GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
         }
         else
         {
@@ -2112,11 +2108,11 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
         return true;
     }
 
-    SwUndoTableNdsChg* pUndo = nullptr;
+    std::unique_ptr<SwUndoTableNdsChg> pUndo;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        pUndo = new SwUndoTableNdsChg( SwUndoId::TABLE_DELBOX, aSelBoxes, *pTableNd,
-                                     nMin, nMax, 0, false, false );
+        pUndo.reset(new SwUndoTableNdsChg( SwUndoId::TABLE_DELBOX, aSelBoxes, *pTableNd,
+                                     nMin, nMax, 0, false, false ));
     }
 
     bool bRet(false);
@@ -2135,7 +2131,7 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
             if (pUndo)
                 pUndo->ReNewBoxes( aSelBoxes );
         }
-        bRet = rTable.DeleteSel( this, aSelBoxes, nullptr, pUndo, true, true );
+        bRet = rTable.DeleteSel( this, aSelBoxes, nullptr, pUndo.get(), true, true );
         if (bRet)
         {
             GetDocShell()->GetFEShell()->UpdateTableStyleFormatting();
@@ -2149,10 +2145,8 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
     {
         if( bRet )
         {
-            GetIDocumentUndoRedo().AppendUndo( pUndo );
+            GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
         }
-        else
-            delete pUndo;
     }
 
     return bRet;
@@ -2175,11 +2169,11 @@ bool SwDoc::SplitTable( const SwSelBoxes& rBoxes, bool bVert, sal_uInt16 nCnt,
 
     std::vector<sal_uLong> aNdsCnts;
     SwTableSortBoxes aTmpLst;
-    SwUndoTableNdsChg* pUndo = nullptr;
+    std::unique_ptr<SwUndoTableNdsChg> pUndo;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        pUndo = new SwUndoTableNdsChg( SwUndoId::TABLE_SPLIT, rBoxes, *pTableNd, 0, 0,
-                                     nCnt, bVert, bSameHeight );
+        pUndo.reset(new SwUndoTableNdsChg( SwUndoId::TABLE_SPLIT, rBoxes, *pTableNd, 0, 0,
+                                     nCnt, bVert, bSameHeight ));
 
         aTmpLst.insert( rTable.GetTabSortBoxes() );
         if( !bVert )
@@ -2223,10 +2217,8 @@ bool SwDoc::SplitTable( const SwSelBoxes& rBoxes, bool bVert, sal_uInt16 nCnt,
                 pUndo->SaveNewBoxes( *pTableNd, aTmpLst );
             else
                 pUndo->SaveNewBoxes( *pTableNd, aTmpLst, rBoxes, aNdsCnts );
-            GetIDocumentUndoRedo().AppendUndo( pUndo );
+            GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
         }
-        else
-            delete pUndo;
     }
 
     return bRet;
@@ -2256,21 +2248,21 @@ TableMergeErr SwDoc::MergeTable( SwPaM& rPam )
     RedlineFlags eOld = getIDocumentRedlineAccess().GetRedlineFlags();
     getIDocumentRedlineAccess().SetRedlineFlags_intern(eOld | RedlineFlags::Ignore);
 
-    SwUndoTableMerge *const pUndo( (GetIDocumentUndoRedo().DoesUndo())
-        ?   new SwUndoTableMerge( rPam )
-        :   nullptr );
+    std::unique_ptr<SwUndoTableMerge> pUndo;
+    if (GetIDocumentUndoRedo().DoesUndo())
+        pUndo.reset(new SwUndoTableMerge( rPam ));
 
     // Find the Boxes via the Layout
     SwSelBoxes aBoxes;
     SwSelBoxes aMerged;
     SwTableBox* pMergeBox;
 
-    if( !rTable.PrepareMerge( rPam, aBoxes, aMerged, &pMergeBox, pUndo ) )
+    if( !rTable.PrepareMerge( rPam, aBoxes, aMerged, &pMergeBox, pUndo.get() ) )
     {   // No cells found to merge
         getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
         if( pUndo )
         {
-            delete pUndo;
+            pUndo.reset();
             SwUndoId nLastUndoId(SwUndoId::EMPTY);
             if (GetIDocumentUndoRedo().GetLastUndoInfo(nullptr, & nLastUndoId)
                 && (SwUndoId::REDLINE == nLastUndoId))
@@ -2314,7 +2306,7 @@ TableMergeErr SwDoc::MergeTable( SwPaM& rPam )
         aMsgHint.m_eFlags = TBL_BOXPTR;
         getIDocumentFieldsAccess().UpdateTableFields( &aMsgHint );
 
-        if( pTableNd->GetTable().Merge( this, aBoxes, aMerged, pMergeBox, pUndo ))
+        if( pTableNd->GetTable().Merge( this, aBoxes, aMerged, pMergeBox, pUndo.get() ))
         {
             nRet = TableMergeErr::Ok;
 
@@ -2322,11 +2314,9 @@ TableMergeErr SwDoc::MergeTable( SwPaM& rPam )
             getIDocumentFieldsAccess().SetFieldsDirty( true, nullptr, 0 );
             if( pUndo )
             {
-                GetIDocumentUndoRedo().AppendUndo( pUndo );
+                GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
             }
         }
-        else
-            delete pUndo;
 
         rPam.GetPoint()->nNode = *pMergeBox->GetSttNd();
         rPam.Move();
@@ -2883,7 +2873,7 @@ void SwDoc::SetTabCols(SwTable& rTab, const SwTabCols &rNew, const SwTabCols &rO
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-            new SwUndoAttrTable( *rTab.GetTableNode(), true ));
+            o3tl::make_unique<SwUndoAttrTable>( *rTab.GetTableNode(), true ));
     }
     rTab.SetTabCols( rNew, rOld, pStart, bCurRowOnly );
       ::ClearFEShellTabCols(*this, nullptr);
@@ -2898,7 +2888,7 @@ void SwDoc::SetRowsToRepeat( SwTable &rTable, sal_uInt16 nSet )
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-            new SwUndoTableHeadline(rTable, rTable.GetRowsToRepeat(), nSet) );
+            o3tl::make_unique<SwUndoTableHeadline>(rTable, rTable.GetRowsToRepeat(), nSet) );
     }
 
     SwMsgPoolItem aChg( RES_TBLHEADLINECHG );
@@ -3154,7 +3144,7 @@ bool SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnM
         {
             pUndo = new SwUndoSplitTable(
                         *pNew, std::move(pSaveRowSp), eHdlnMode, bCalcNewSize);
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
+            GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
             if( aHistory.Count() )
                 pUndo->SaveFormula( aHistory );
         }
@@ -3486,7 +3476,7 @@ bool SwDoc::MergeTable( const SwPosition& rPos, bool bWithPrev, sal_uInt16 nMode
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         pUndo = new SwUndoMergeTable( *pTableNd, *pDelTableNd, bWithPrev, nMode );
-        GetIDocumentUndoRedo().AppendUndo(pUndo);
+        GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
         pHistory = new SwHistory;
     }
 
@@ -3744,7 +3734,7 @@ bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat
     if (bUndo)
     {
         pUndo = new SwUndoTableAutoFormat( *pTableNd, rNew );
-        GetIDocumentUndoRedo().AppendUndo(pUndo);
+        GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
         GetIDocumentUndoRedo().DoUndo(false);
     }
 
@@ -3960,7 +3950,7 @@ bool SwDoc::SetColRowWidthHeight( SwTableBox& rCurrentBox, TableChgWidthHeightTy
                                     SwTwips nAbsDiff, SwTwips nRelDiff )
 {
     SwTableNode* pTableNd = const_cast<SwTableNode*>(rCurrentBox.GetSttNd()->FindTableNode());
-    SwUndo* pUndo = nullptr;
+    std::unique_ptr<SwUndo> pUndo;
 
     if( (TableChgWidthHeightType::InsertDeleteMode & eType) && dynamic_cast<const SwDDETable*>( &pTableNd->GetTable()) !=  nullptr)
         return false;
@@ -3996,7 +3986,7 @@ bool SwDoc::SetColRowWidthHeight( SwTableBox& rCurrentBox, TableChgWidthHeightTy
     GetIDocumentUndoRedo().DoUndo(bUndo); // SetColWidth can turn it off
     if( pUndo )
     {
-        GetIDocumentUndoRedo().AppendUndo( pUndo );
+        GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
     }
 
     if( bRet )
@@ -4034,7 +4024,7 @@ void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
             static_cast<const SwTableBoxNumFormat*>(pNumFormatItem)->GetValue() ))
         return ;
 
-    SwUndoTableNumFormat* pUndo = nullptr;
+    std::unique_ptr<SwUndoTableNumFormat> pUndo;
 
     bool bIsEmptyTextNd;
     bool bChgd = true;
@@ -4049,7 +4039,7 @@ void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
             if (GetIDocumentUndoRedo().DoesUndo())
             {
                 GetIDocumentUndoRedo().StartUndo( SwUndoId::TABLE_AUTOFMT, nullptr );
-                pUndo = new SwUndoTableNumFormat( rBox );
+                pUndo.reset(new SwUndoTableNumFormat( rBox ));
                 pUndo->SetNumFormat( nFormatIdx, fNumber );
             }
 
@@ -4122,7 +4112,7 @@ void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
             if (GetIDocumentUndoRedo().DoesUndo())
             {
                 GetIDocumentUndoRedo().StartUndo( SwUndoId::TABLE_AUTOFMT, nullptr );
-                pUndo = new SwUndoTableNumFormat( rBox );
+                pUndo.reset(new SwUndoTableNumFormat( rBox ));
             }
 
             pBoxFormat = static_cast<SwTableBoxFormat*>(rBox.ClaimFrameFormat());
@@ -4148,7 +4138,7 @@ void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
         if( pUndo )
         {
             pUndo->SetBox( rBox );
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
+            GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
             GetIDocumentUndoRedo().EndUndo( SwUndoId::END, nullptr );
         }
 
@@ -4171,7 +4161,7 @@ void SwDoc::SetTableBoxFormulaAttrs( SwTableBox& rBox, const SfxItemSet& rSet )
 {
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().AppendUndo( new SwUndoTableNumFormat(rBox, &rSet) );
+        GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoTableNumFormat>(rBox, &rSet) );
     }
 
     SwFrameFormat* pBoxFormat = rBox.ClaimFrameFormat();
@@ -4214,7 +4204,8 @@ void SwDoc::ClearLineNumAttrs( SwPosition const & rPos )
                 if( GetIDocumentUndoRedo().DoesUndo() )
                 {
                     GetIDocumentUndoRedo().ClearRedo();
-                    GetIDocumentUndoRedo().AppendUndo( pUndo = new SwUndoDelNum( aPam ) );
+                    pUndo = new SwUndoDelNum( aPam );
+                    GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
                 }
                 else
                     pUndo = nullptr;
@@ -4250,7 +4241,7 @@ void SwDoc::ClearBoxNumAttrs( const SwNodeIndex& rNode )
         {
             if (GetIDocumentUndoRedo().DoesUndo())
             {
-                GetIDocumentUndoRedo().AppendUndo(new SwUndoTableNumFormat(*pBox));
+                GetIDocumentUndoRedo().AppendUndo(o3tl::make_unique<SwUndoTableNumFormat>(*pBox));
             }
 
             SwFrameFormat* pBoxFormat = pBox->ClaimFrameFormat();
@@ -4292,11 +4283,11 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
     bool const bUndo( GetIDocumentUndoRedo().DoesUndo() );
     if( !pCpyTable && !pInsTableNd )
     {
-        SwUndoCpyTable* pUndo = nullptr;
+        std::unique_ptr<SwUndoCpyTable> pUndo;
         if (bUndo)
         {
             GetIDocumentUndoRedo().ClearRedo();
-            pUndo = new SwUndoCpyTable(this);
+            pUndo.reset(new SwUndoCpyTable(this));
         }
 
         {
@@ -4307,17 +4298,12 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
 
         if( pUndo )
         {
-            if( !bRet )
-            {
-                delete pUndo;
-                pUndo = nullptr;
-            }
-            else
+            if( bRet )
             {
                 pInsTableNd = GetNodes()[ rInsPos.nNode.GetIndex() - 1 ]->FindTableNode();
 
                 pUndo->SetTableSttIdx( pInsTableNd->GetIndex() );
-                GetIDocumentUndoRedo().AppendUndo( pUndo );
+                GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
             }
         }
     }
@@ -4329,11 +4315,11 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
                                   RedlineFlags::ShowInsert |
                                   RedlineFlags::ShowDelete );
 
-        SwUndoTableCpyTable* pUndo = nullptr;
+        std::unique_ptr<SwUndoTableCpyTable> pUndo;
         if (bUndo)
         {
             GetIDocumentUndoRedo().ClearRedo();
-            pUndo = new SwUndoTableCpyTable(this);
+            pUndo.reset(new SwUndoTableCpyTable(this));
             GetIDocumentUndoRedo().DoUndo(false);
         }
 
@@ -4353,8 +4339,6 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
                 if( pUndo )
                 {
                     GetIDocumentUndoRedo().DoUndo(bUndo);
-                    delete pUndo;
-                    pUndo = nullptr;
                 }
                 return false;
             }
@@ -4387,13 +4371,13 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
 
             // Copy Table to the selected Lines
             bRet = pInsTableNd->GetTable().InsTable( pSrcTableNd->GetTable(),
-                                                        *pBoxes, pUndo );
+                                                        *pBoxes, pUndo.get() );
         }
         else
         {
             SwNodeIndex aNdIdx( *pSttNd, 1 );
             bRet = pInsTableNd->GetTable().InsTable( pSrcTableNd->GetTable(),
-                                                    aNdIdx, pUndo );
+                                                    aNdIdx, pUndo.get() );
         }
 
         xCpyDoc.clear();
@@ -4402,11 +4386,9 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
         {
             // If the Table could not be copied, delete the Undo object
             GetIDocumentUndoRedo().DoUndo(bUndo);
-            if( !bRet && pUndo->IsEmpty() )
-                delete pUndo;
-            else
+            if( bRet || !pUndo->IsEmpty() )
             {
-                GetIDocumentUndoRedo().AppendUndo(pUndo);
+                GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
             }
         }
 
@@ -4429,9 +4411,9 @@ bool SwDoc::InsCopyOfTable( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
 bool SwDoc::UnProtectTableCells( SwTable& rTable )
 {
     bool bChgd = false;
-    SwUndoAttrTable *const pUndo = (GetIDocumentUndoRedo().DoesUndo())
-        ?   new SwUndoAttrTable( *rTable.GetTableNode() )
-        :   nullptr;
+    std::unique_ptr<SwUndoAttrTable> pUndo;
+    if (GetIDocumentUndoRedo().DoesUndo())
+        pUndo.reset(new SwUndoAttrTable( *rTable.GetTableNode() ));
 
     SwTableSortBoxes& rSrtBox = rTable.GetTabSortBoxes();
     for (size_t i = rSrtBox.size(); i; )
@@ -4448,10 +4430,8 @@ bool SwDoc::UnProtectTableCells( SwTable& rTable )
     {
         if( bChgd )
         {
-            GetIDocumentUndoRedo().AppendUndo( pUndo );
+            GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
         }
-        else
-            delete pUndo;
     }
     return bChgd;
 }
@@ -4473,9 +4453,9 @@ bool SwDoc::UnProtectCells( const SwSelBoxes& rBoxes )
     bool bChgd = false;
     if( !rBoxes.empty() )
     {
-        SwUndoAttrTable *const pUndo = (GetIDocumentUndoRedo().DoesUndo())
-                ? new SwUndoAttrTable( *rBoxes[0]->GetSttNd()->FindTableNode() )
-                : nullptr;
+        std::unique_ptr<SwUndoAttrTable> pUndo;
+        if (GetIDocumentUndoRedo().DoesUndo())
+            pUndo.reset(new SwUndoAttrTable( *rBoxes[0]->GetSttNd()->FindTableNode() ));
 
         std::map<SwFrameFormat*, SwTableBoxFormat*> aFormatsMap;
         for (size_t i = rBoxes.size(); i; )
@@ -4503,10 +4483,8 @@ bool SwDoc::UnProtectCells( const SwSelBoxes& rBoxes )
         {
             if( bChgd )
             {
-                GetIDocumentUndoRedo().AppendUndo( pUndo );
+                GetIDocumentUndoRedo().AppendUndo( std::move(pUndo) );
             }
-            else
-                delete pUndo;
         }
     }
     return bChgd;
@@ -4604,9 +4582,8 @@ SwTableAutoFormat* SwDoc::MakeTableStyle(const OUString& rName, bool bBroadcast)
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        SwUndo * pUndo = new SwUndoTableStyleMake(rName, this);
-
-        GetIDocumentUndoRedo().AppendUndo(pUndo);
+        GetIDocumentUndoRedo().AppendUndo(
+            o3tl::make_unique<SwUndoTableStyleMake>(rName, this));
     }
 
     if (bBroadcast)
@@ -4641,9 +4618,8 @@ std::unique_ptr<SwTableAutoFormat> SwDoc::DelTableStyle(const OUString& rName, b
 
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            SwUndo * pUndo = new SwUndoTableStyleDelete(std::move(pReleasedFormat), vAffectedTables, this);
-
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
+            GetIDocumentUndoRedo().AppendUndo(
+                o3tl::make_unique<SwUndoTableStyleDelete>(std::move(pReleasedFormat), vAffectedTables, this));
         }
     }
 
@@ -4672,9 +4648,8 @@ void SwDoc::ChgTableStyle(const OUString& rName, const SwTableAutoFormat& rNewFo
 
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            SwUndo * pUndo = new SwUndoTableStyleUpdate(*pFormat, aOldFormat, this);
-
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
+            GetIDocumentUndoRedo().AppendUndo(
+                o3tl::make_unique<SwUndoTableStyleUpdate>(*pFormat, aOldFormat, this));
         }
     }
 }

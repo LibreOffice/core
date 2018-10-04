@@ -23,6 +23,7 @@
 #include <sal/types.h>
 
 #include "swundo.hxx"
+#include <memory>
 
 class SwRewriter;
 class SwNodes;
@@ -193,7 +194,7 @@ public:
         @remark     calls ClearRedo(), except for SwUndoId::START/SwUndoId::END.
         @remark     does nothing if !DoesUndo().
     */
-    virtual void AppendUndo(SwUndo *const pUndo) = 0;
+    virtual void AppendUndo(std::unique_ptr<SwUndo> pUndo) = 0;
 
     /** Delete all Redo actions.
     */

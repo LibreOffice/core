@@ -328,9 +328,9 @@ public:
     void SetTableChgMode( TableChgMode eMode )  { m_eTableChgMode = eMode; }
 
     bool SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eType,
-                        SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
+                        SwTwips nAbsDiff, SwTwips nRelDiff, std::unique_ptr<SwUndo>* ppUndo );
     bool SetRowHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eType,
-                        SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
+                        SwTwips nAbsDiff, SwTwips nRelDiff, std::unique_ptr<SwUndo>* ppUndo );
     void RegisterToFormat( SwFormat& rFormat );
 #ifdef DBG_UTIL
     void CheckConsistency() const;

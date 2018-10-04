@@ -391,7 +391,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     if( bUndo && !pRedlUndo )
     {
         pUndoSort = new SwUndoSort(rPaM, rOpt);
-        GetIDocumentUndoRedo().AppendUndo(pUndoSort);
+        GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndoSort));
     }
 
     GetIDocumentUndoRedo().DoUndo(false);
@@ -425,7 +425,7 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
             pRedlUndo->SetSaveRange( *pRedlPam );
             // UGLY: temp. enable Undo
             GetIDocumentUndoRedo().DoUndo(true);
-            GetIDocumentUndoRedo().AppendUndo( pRedlUndo );
+            GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pRedlUndo) );
             GetIDocumentUndoRedo().DoUndo(false);
         }
 
@@ -548,7 +548,7 @@ bool SwDoc::SortTable(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
         pUndoSort = new SwUndoSort( rBoxes[0]->GetSttIdx(),
                                     rBoxes.back()->GetSttIdx(),
                                    *pTableNd, rOpt, aFlatBox.HasItemSets() );
-        GetIDocumentUndoRedo().AppendUndo(pUndoSort);
+        GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndoSort));
     }
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
