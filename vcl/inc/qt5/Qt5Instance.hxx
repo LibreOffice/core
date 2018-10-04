@@ -112,6 +112,8 @@ public:
 
     virtual css::uno::Reference<css::uno::XInterface>
     CreateClipboard(const css::uno::Sequence<css::uno::Any>& i_rArguments) override;
+    virtual css::uno::Reference<css::uno::XInterface> CreateDragSource() override;
+    virtual css::uno::Reference<css::uno::XInterface> CreateDropTarget() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

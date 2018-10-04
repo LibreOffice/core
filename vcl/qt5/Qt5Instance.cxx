@@ -25,6 +25,7 @@
 #include <Qt5Bitmap.hxx>
 #include <Qt5Clipboard.hxx>
 #include <Qt5Data.hxx>
+#include <Qt5DragAndDrop.hxx>
 #include <Qt5FilePicker.hxx>
 #include <Qt5Frame.hxx>
 #include <Qt5Menu.hxx>
@@ -239,6 +240,16 @@ Qt5Instance::CreateClipboard(const css::uno::Sequence<css::uno::Any>& arguments)
         static_cast<cppu::OWeakObject*>(new VclQt5Clipboard()));
 
     return xClipboard;
+}
+
+Reference<XInterface> Qt5Instance::CreateDragSource()
+{
+    return Reference<XInterface>(static_cast<cppu::OWeakObject*>(new Qt5DragSource()));
+}
+
+Reference<XInterface> Qt5Instance::CreateDropTarget()
+{
+    return Reference<XInterface>(static_cast<cppu::OWeakObject*>(new Qt5DropTarget()));
 }
 
 extern "C" {
