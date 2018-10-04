@@ -36,42 +36,27 @@ namespace sfx2 {
 // SearchDialog
 
 
-SearchDialog::SearchDialog(vcl::Window* pWindow, const OUString& rConfigName)
-    : ModelessDialog(pWindow, "SearchDialog", "sfx/ui/searchdialog.ui")
+SearchDialog::SearchDialog(weld::Window* pWindow, const OUString& rConfigName)
+    : GenericDialogController(pWindow, "sfx/ui/searchdialog.ui", "SearchDialog")
     , m_sConfigName(rConfigName)
-    , m_bIsConstructed(false)
-
+    , m_xSearchEdit(m_xBuilder->weld_combo_box("searchterm"))
+    , m_xWholeWordsBox(m_xBuilder->weld_check_button("wholewords"))
+    , m_xMatchCaseBox(m_xBuilder->weld_check_button("matchcase"))
+    , m_xWrapAroundBox(m_xBuilder->weld_check_button("wrap"))
+    , m_xBackwardsBox(m_xBuilder->weld_check_button("backwards"))
+    , m_xFindBtn(m_xBuilder->weld_button("ok"))
 {
-    get(m_pSearchEdit, "searchterm");
-    get(m_pWholeWordsBox, "wholewords");
-    get(m_pMatchCaseBox, "matchcase");
-    get(m_pWrapAroundBox, "wrap");
-    get(m_pBackwardsBox, "backwards");
-    get(m_pFindBtn, "search");
-
     // set handler
-    m_pFindBtn->SetClickHdl( LINK( this, SearchDialog, FindHdl ) );
+    m_xFindBtn->connect_clicked(LINK(this, SearchDialog, FindHdl));
     // load config: old search strings and the status of the check boxes
     LoadConfig();
     // the search edit should have the focus
-    m_pSearchEdit->GrabFocus();
+    m_xSearchEdit->grab_focus();
 }
 
 SearchDialog::~SearchDialog()
 {
-    disposeOnce();
-}
-
-void SearchDialog::dispose()
-{
     SaveConfig();
-    m_pSearchEdit.clear();
-    m_pWholeWordsBox.clear();
-    m_pMatchCaseBox.clear();
-    m_pWrapAroundBox.clear();
-    m_pBackwardsBox.clear();
-    m_pFindBtn.clear();
-    ModelessDialog::dispose();
 }
 
 void SearchDialog::LoadConfig()
@@ -79,7 +64,6 @@ void SearchDialog::LoadConfig()
     SvtViewOptions aViewOpt( EViewType::Dialog, m_sConfigName );
     if ( aViewOpt.Exists() )
     {
-        m_sWinState = OUStringToOString(aViewOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US);
         Any aUserItem = aViewOpt.GetUserItem( "UserItem" );
         OUString sUserData;
         if ( aUserItem >>= sUserData )
@@ -87,90 +71,68 @@ void SearchDialog::LoadConfig()
             DBG_ASSERT( comphelper::string::getTokenCount(sUserData, ';') == 5, "invalid config data" );
             sal_Int32 nIdx = 0;
             OUString sSearchText = sUserData.getToken( 0, ';', nIdx );
-            m_pWholeWordsBox->Check( sUserData.getToken( 0, ';', nIdx ).toInt32() == 1 );
-            m_pMatchCaseBox->Check( sUserData.getToken( 0, ';', nIdx ).toInt32() == 1 );
-            m_pWrapAroundBox->Check( sUserData.getToken( 0, ';', nIdx ).toInt32() == 1 );
-            m_pBackwardsBox->Check( sUserData.getToken( 0, ';', nIdx ).toInt32() == 1 );
+            m_xWholeWordsBox->set_active( sUserData.getToken( 0, ';', nIdx ).toInt32() == 1 );
+            m_xMatchCaseBox->set_active( sUserData.getToken( 0, ';', nIdx ).toInt32() == 1 );
+            m_xWrapAroundBox->set_active( sUserData.getToken( 0, ';', nIdx ).toInt32() == 1 );
+            m_xBackwardsBox->set_active( sUserData.getToken( 0, ';', nIdx ).toInt32() == 1 );
 
             nIdx = 0;
             while ( nIdx != -1 )
-                m_pSearchEdit->InsertEntry( sSearchText.getToken( 0, '\t', nIdx ) );
-            m_pSearchEdit->SelectEntryPos(0);
+                m_xSearchEdit->append_text(sSearchText.getToken( 0, '\t', nIdx));
+            m_xSearchEdit->set_active(0);
         }
     }
     else
-        m_pWrapAroundBox->Check();
+        m_xWrapAroundBox->set_active(true);
 }
 
 void SearchDialog::SaveConfig()
 {
     SvtViewOptions aViewOpt( EViewType::Dialog, m_sConfigName );
-    aViewOpt.SetWindowState(OStringToOUString(m_sWinState, RTL_TEXTENCODING_ASCII_US));
     OUString sUserData;
-    sal_Int32 i = 0, nCount = std::min( m_pSearchEdit->GetEntryCount(), static_cast<sal_Int32>(MAX_SAVE_COUNT) );
+    int i = 0, nCount = std::min(m_xSearchEdit->get_count(), static_cast<int>(MAX_SAVE_COUNT));
     for ( ; i < nCount; ++i )
     {
-        sUserData += m_pSearchEdit->GetEntry(i);
+        sUserData += m_xSearchEdit->get_text(i);
         sUserData += "\t";
     }
     sUserData = comphelper::string::stripStart(sUserData, '\t');
     sUserData += ";";
-    sUserData += OUString::number( m_pWholeWordsBox->IsChecked() ? 1 : 0 );
+    sUserData += OUString::number( m_xWholeWordsBox->get_active() ? 1 : 0 );
     sUserData += ";";
-    sUserData += OUString::number( m_pMatchCaseBox->IsChecked() ? 1 : 0 );
+    sUserData += OUString::number( m_xMatchCaseBox->get_active() ? 1 : 0 );
     sUserData += ";";
-    sUserData += OUString::number( m_pWrapAroundBox->IsChecked() ? 1 : 0 );
+    sUserData += OUString::number( m_xWrapAroundBox->get_active() ? 1 : 0 );
     sUserData += ";";
-    sUserData += OUString::number( m_pBackwardsBox->IsChecked() ? 1 : 0 );
+    sUserData += OUString::number( m_xBackwardsBox->get_active() ? 1 : 0 );
 
     Any aUserItem = makeAny( sUserData );
     aViewOpt.SetUserItem( "UserItem", aUserItem );
 }
 
-IMPL_LINK_NOARG(SearchDialog, FindHdl, Button*, void)
+IMPL_LINK_NOARG(SearchDialog, FindHdl, weld::Button&, void)
 {
-    OUString sSrchTxt = m_pSearchEdit->GetText();
-    sal_Int32 nPos = m_pSearchEdit->GetEntryPos( sSrchTxt );
-    if ( nPos > 0 && nPos != COMBOBOX_ENTRY_NOTFOUND )
-        m_pSearchEdit->RemoveEntryAt(nPos);
-    if ( nPos > 0 )
-        m_pSearchEdit->InsertEntry( sSrchTxt, 0 );
+    OUString sSrchTxt = m_xSearchEdit->get_active_text();
+    auto nPos = m_xSearchEdit->find_text(sSrchTxt);
+    if (nPos != 0)
+    {
+        if (nPos != -1)
+            m_xSearchEdit->remove(nPos);
+        m_xSearchEdit->insert_text(0, sSrchTxt);
+    }
     m_aFindHdl.Call( *this );
 }
 
 void SearchDialog::SetFocusOnEdit()
 {
-    Selection aSelection( 0, m_pSearchEdit->GetText().getLength() );
-    m_pSearchEdit->SetSelection( aSelection );
-    m_pSearchEdit->GrabFocus();
+    m_xSearchEdit->select_entry_region(0, -1);
+    m_xSearchEdit->grab_focus();
 }
 
-bool SearchDialog::Close()
+void SearchDialog::runAsync(std::shared_ptr<SearchDialog>& rController)
 {
-    bool bRet = ModelessDialog::Close();
-    m_aCloseHdl.Call( nullptr );
-    return bRet;
+    weld::DialogController::runAsync(rController, [=](sal_Int32 /*nResult*/){ rController->m_aCloseHdl.Call(nullptr); });
 }
-
-void SearchDialog::StateChanged( StateChangedType nStateChange )
-{
-    if ( nStateChange == StateChangedType::InitShow )
-    {
-        if (!m_sWinState.isEmpty())
-            SetWindowState( m_sWinState );
-        m_bIsConstructed = true;
-    }
-
-    ModelessDialog::StateChanged( nStateChange );
-}
-
-void SearchDialog::Move()
-{
-    ModelessDialog::Move();
-    if ( m_bIsConstructed && IsReallyVisible() )
-        m_sWinState = GetWindowState( WindowStateMask::Pos | WindowStateMask::State );
-}
-
 
 } // namespace sfx2
 
