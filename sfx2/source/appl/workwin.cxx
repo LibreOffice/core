@@ -864,7 +864,6 @@ bool SfxWorkWindow::PrepareClose_Impl()
     return true;
 }
 
-
 SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( vcl::Window& rWindow,
                     SfxChildAlignment eAlign )
 {
@@ -885,6 +884,19 @@ SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( vcl::Window& rWindow,
     return aChildren.back();
 }
 
+SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( weld::DialogController& rController,
+                    SfxChildAlignment eAlign )
+{
+    DBG_ASSERT( aChildren.size() < 255, "too many children" );
+    DBG_ASSERT( SfxChildAlignValid(eAlign), "invalid align" );
+
+    SfxChild_Impl *pChild = new SfxChild_Impl(rController, eAlign);
+
+    aChildren.push_back(pChild);
+    bSorted = false;
+    nChildren++;
+    return aChildren.back();
+}
 
 void SfxWorkWindow::ReleaseChild_Impl( vcl::Window& rWindow )
 {
