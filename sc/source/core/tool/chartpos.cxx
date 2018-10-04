@@ -406,7 +406,6 @@ void ScChartPositioner::CreatePositionMap()
     {   // create an entry without data
         RowMap& rCol = aColMap[0];
         nColCount = 1;
-        assert ( rCol.empty() );
         rCol[ 0 ] = nullptr;
         nRowCount = 1;
         nColAdd = 0;
