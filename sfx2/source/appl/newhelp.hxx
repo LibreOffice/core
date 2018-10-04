@@ -433,7 +433,7 @@ private:
 
     VclPtr<SfxHelpWindow_Impl>     pHelpWin;
     VclPtr<vcl::Window>            pTextWin;
-    VclPtr<sfx2::SearchDialog>     pSrchDlg;
+    std::shared_ptr<sfx2::SearchDialog> m_xSrchDlg;
     css::uno::Reference < css::frame::XFrame2 >
                             xFrame;
     css::uno::Reference< css::i18n::XBreakIterator >
