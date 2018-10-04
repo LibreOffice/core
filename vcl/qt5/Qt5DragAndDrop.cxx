@@ -1,0 +1,209 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+#include <com/sun/star/awt/MouseButton.hpp>
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
+#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
+#include <cppuhelper/supportsservice.hxx>
+#include <sal/log.hxx>
+
+#include <Qt5DragAndDrop.hxx>
+#include <Qt5Frame.hxx>
+
+using namespace com::sun::star;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+
+Qt5DragSource::~Qt5DragSource()
+{
+    //if (m_pFrame)
+    //    m_pFrame->deregisterDragSource(this);
+}
+
+void Qt5DragSource::deinitialize() { m_pFrame = nullptr; }
+
+sal_Bool Qt5DragSource::isDragImageSupported() { return true; }
+
+sal_Int32 Qt5DragSource::getDefaultCursor(sal_Int8) { return 0; }
+
+void Qt5DragSource::initialize(const css::uno::Sequence<css::uno::Any>& rArguments)
+{
+    if (rArguments.getLength() < 2)
+    {
+        throw RuntimeException("DragSource::initialize: Cannot install window event handler",
+                               static_cast<OWeakObject*>(this));
+    }
+
+    sal_IntPtr nFrame = 0;
+    rArguments.getConstArray()[1] >>= nFrame;
+
+    if (!nFrame)
+    {
+        throw RuntimeException("DragSource::initialize: missing SalFrame",
+                               static_cast<OWeakObject*>(this));
+    }
+
+    m_pFrame = reinterpret_cast<Qt5Frame*>(nFrame);
+    m_pFrame->registerDragSource(this);
+}
+
+void Qt5DragSource::startDrag(
+    const datatransfer::dnd::DragGestureEvent& rEvent, sal_Int8 sourceActions, sal_Int32 /*cursor*/,
+    sal_Int32 /*image*/, const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
+    const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener)
+{
+    m_xListener = rListener;
+    m_xTrans = rTrans;
+
+    if (m_pFrame)
+    {
+        css::uno::Sequence<css::datatransfer::DataFlavor> aFormats
+            = rTrans->getTransferDataFlavors();
+
+        int nDragButton = 1; // default to left button
+        css::awt::MouseEvent aEvent;
+        if (rEvent.Event >>= aEvent)
+        {
+            if (aEvent.Buttons & css::awt::MouseButton::LEFT)
+                nDragButton = 1;
+            else if (aEvent.Buttons & css::awt::MouseButton::RIGHT)
+                nDragButton = 3;
+            else if (aEvent.Buttons & css::awt::MouseButton::MIDDLE)
+                nDragButton = 2;
+        }
+    }
+    else
+        dragFailed();
+}
+
+void Qt5DragSource::dragFailed()
+{
+    if (m_xListener.is())
+    {
+        datatransfer::dnd::DragSourceDropEvent aEv;
+        aEv.DropAction = datatransfer::dnd::DNDConstants::ACTION_NONE;
+        aEv.DropSuccess = false;
+        auto xListener = m_xListener;
+        m_xListener.clear();
+        xListener->dragDropEnd(aEv);
+    }
+}
+
+OUString SAL_CALL Qt5DragSource::getImplementationName()
+{
+    return OUString("com.sun.star.datatransfer.dnd.VclQt5DragSource");
+}
+
+sal_Bool SAL_CALL Qt5DragSource::supportsService(OUString const& ServiceName)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> SAL_CALL Qt5DragSource::getSupportedServiceNames()
+{
+    Sequence<OUString> aRet{ "com.sun.star.datatransfer.dnd.Qt5DragSource" };
+    return aRet;
+}
+
+Qt5DropTarget::Qt5DropTarget()
+    : WeakComponentImplHelper(m_aMutex)
+    , m_pFrame(nullptr)
+    , m_bActive(false)
+    , m_nDefaultActions(0)
+{
+}
+
+OUString SAL_CALL Qt5DropTarget::getImplementationName()
+{
+    return OUString("com.sun.star.datatransfer.dnd.VclQt5DropTarget");
+}
+
+sal_Bool SAL_CALL Qt5DropTarget::supportsService(OUString const& ServiceName)
+{
+    return cppu::supportsService(this, ServiceName);
+}
+
+css::uno::Sequence<OUString> SAL_CALL Qt5DropTarget::getSupportedServiceNames()
+{
+    Sequence<OUString> aRet{ "com.sun.star.datatransfer.dnd.Qt5DropTarget" };
+    return aRet;
+}
+
+Qt5DropTarget::~Qt5DropTarget()
+{
+    if (m_pFrame)
+        ;
+    //m_pFrame->deregisterDropTarget(this);
+}
+
+void Qt5DropTarget::deinitialize()
+{
+    m_pFrame = nullptr;
+    m_bActive = false;
+}
+
+void Qt5DropTarget::initialize(const Sequence<Any>& rArguments)
+{
+    if (rArguments.getLength() < 2)
+    {
+        throw RuntimeException("DropTarget::initialize: Cannot install window event handler",
+                               static_cast<OWeakObject*>(this));
+    }
+
+    sal_IntPtr nFrame = 0;
+    rArguments.getConstArray()[1] >>= nFrame;
+
+    if (!nFrame)
+    {
+        throw RuntimeException("DropTarget::initialize: missing SalFrame",
+                               static_cast<OWeakObject*>(this));
+    }
+
+    m_pFrame = reinterpret_cast<Qt5Frame*>(nFrame);
+    //m_pFrame->registerDropTarget(this);
+    m_bActive = true;
+}
+
+void Qt5DropTarget::addDropTargetListener(
+    const Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)
+{
+    ::osl::Guard<::osl::Mutex> aGuard(m_aMutex);
+
+    m_aListeners.push_back(xListener);
+}
+
+void Qt5DropTarget::removeDropTargetListener(
+    const Reference<css::datatransfer::dnd::XDropTargetListener>& xListener)
+{
+    ::osl::Guard<::osl::Mutex> aGuard(m_aMutex);
+
+    m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), xListener),
+                       m_aListeners.end());
+}
+
+sal_Bool Qt5DropTarget::isActive() { return m_bActive; }
+
+void Qt5DropTarget::setActive(sal_Bool bActive) { m_bActive = bActive; }
+
+sal_Int8 Qt5DropTarget::getDefaultActions() { return m_nDefaultActions; }
+
+void Qt5DropTarget::setDefaultActions(sal_Int8 nDefaultActions)
+{
+    m_nDefaultActions = nDefaultActions;
+}
+
+void Qt5DropTarget::acceptDrag(sal_Int8 dragOperation) {return;}
+void Qt5DropTarget::rejectDrag() {return;}
+
+void Qt5DropTarget::acceptDrop(sal_Int8 dropOperation){return;}
+void Qt5DropTarget::rejectDrop(){return;}
+void Qt5DropTarget::dropComplete(sal_Bool success){return;}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

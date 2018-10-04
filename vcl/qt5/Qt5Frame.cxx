@@ -27,6 +27,7 @@
 #include <Qt5MainWindow.hxx>
 #include <Qt5Data.hxx>
 #include <Qt5Menu.hxx>
+#include <Qt5DragAndDrop.hxx>
 
 #include <QtCore/QPoint>
 #include <QtCore/QSize>
@@ -132,6 +133,14 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
         maGeometry.nLeftDecoration = 0;
         maGeometry.nRightDecoration = 0;
     }
+
+    m_aSystemData.nSize = sizeof(SystemEnvData);
+    //m_aSystemData.aWindow = GetNativeWindowHandle(m_pWindow);
+    m_aSystemData.aShellWindow = reinterpret_cast<sal_IntPtr>(this);
+    //m_aSystemData.pSalFrame = this;
+    //m_aSystemData.pWidget = m_pQWidget;
+    //m_aSystemData.nScreen = m_nXScreen.getXScreen();
+    m_aSystemData.pToolkit = "qt5";
 }
 
 Qt5Frame::~Qt5Frame()
@@ -833,6 +842,33 @@ void Qt5Frame::SetScreenNumber(unsigned int nScreen)
 void Qt5Frame::SetApplicationID(const OUString&)
 {
     // So the hope is that QGuiApplication deals with this properly..
+}
+
+// Drag'n'drop foo
+void Qt5Frame::registerDragSource(Qt5DragSource* pDragSource)
+{
+    assert(!m_pDragSource);
+    m_pDragSource = pDragSource;
+}
+
+void Qt5Frame::deregisterDragSource(Qt5DragSource const* pDragSource)
+{
+    assert(m_pDragSource == pDragSource);
+    (void)pDragSource;
+    m_pDragSource = nullptr;
+}
+
+void Qt5Frame::registerDropTarget(Qt5DropTarget* pDropTarget)
+{
+    assert(!m_pDropTarget);
+    m_pDropTarget = pDropTarget;
+}
+
+void Qt5Frame::deregisterDropTarget(Qt5DropTarget const* pDropTarget)
+{
+    assert(m_pDropTarget == pDropTarget);
+    (void)pDropTarget;
+    m_pDropTarget = nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
