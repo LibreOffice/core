@@ -196,6 +196,7 @@ public:
     virtual void set_busy_cursor(bool bBusy) = 0;
     virtual void window_move(int x, int y) = 0;
     virtual void set_modal(bool bModal) = 0;
+    virtual bool get_modal() const = 0;
     virtual bool get_extents_relative_to(Window& rRelative, int& x, int& y, int& width, int& height)
         = 0;
 

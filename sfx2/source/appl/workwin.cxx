@@ -864,7 +864,6 @@ bool SfxWorkWindow::PrepareClose_Impl()
     return true;
 }
 
-
 SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( vcl::Window& rWindow,
                     SfxChildAlignment eAlign )
 {
@@ -885,6 +884,19 @@ SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( vcl::Window& rWindow,
     return aChildren.back();
 }
 
+SfxChild_Impl* SfxWorkWindow::RegisterChild_Impl( weld::DialogController& rController,
+                    SfxChildAlignment eAlign )
+{
+    DBG_ASSERT( aChildren.size() < 255, "too many children" );
+    DBG_ASSERT( SfxChildAlignValid(eAlign), "invalid align" );
+
+    SfxChild_Impl *pChild = new SfxChild_Impl(rController, eAlign);
+
+    aChildren.push_back(pChild);
+    bSorted = false;
+    nChildren++;
+    return aChildren.back();
+}
 
 void SfxWorkWindow::ReleaseChild_Impl( vcl::Window& rWindow )
 {
@@ -1324,7 +1336,10 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, bool bSetFocus )
         {
             // The window is not docked or docked outside of one split windows
             // and must therefore be registered explicitly as a Child
-            pCW->pCli = RegisterChild_Impl(*(pChildWin->GetWindow()), pChildWin->GetAlignment());
+            if (pChildWin->GetController())
+                pCW->pCli = RegisterChild_Impl(*(pChildWin->GetController()), pChildWin->GetAlignment());
+            else
+                pCW->pCli = RegisterChild_Impl(*(pChildWin->GetWindow()), pChildWin->GetAlignment());
             pCW->pCli->nVisible = SfxChildVisibility::VISIBLE;
             if ( pChildWin->GetAlignment() != SfxChildAlignment::NOALIGNMENT && bIsFullScreen )
                 pCW->pCli->nVisible ^= SfxChildVisibility::ACTIVE;
@@ -2382,8 +2397,12 @@ void SfxWorkWindow::DataChanged_Impl()
     for (n=0; n<nCount; n++)
     {
         SfxChildWin_Impl*pCW = aChildWins[n].get();
-        if ( pCW && pCW->pWin )
-            pCW->pWin->GetWindow()->UpdateSettings( Application::GetSettings() );
+        if (pCW && pCW->pWin)
+        {
+            // TODO does this really have any meaning ?
+            if (pCW->pWin->GetWindow())
+                pCW->pWin->GetWindow()->UpdateSettings(Application::GetSettings());
+        }
     }
 
     ArrangeChildren_Impl();
