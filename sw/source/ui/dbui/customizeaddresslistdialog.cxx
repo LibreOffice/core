@@ -85,19 +85,19 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, Button*, pButton, voi
     if(nPos == LISTBOX_ENTRY_NOTFOUND)
         nPos = 0;
 
-    ScopedVclPtr<SwAddRenameEntryDialog> pDlg;
+    std::unique_ptr<SwAddRenameEntryDialog> xDlg;
     if (bRename)
-        pDlg.disposeAndReset(VclPtr<SwRenameEntryDialog>::Create(pButton, m_pNewData->aDBColumnHeaders));
+        xDlg.reset(new SwRenameEntryDialog(GetFrameWeld(), m_pNewData->aDBColumnHeaders));
     else
-        pDlg.disposeAndReset(VclPtr<SwAddEntryDialog>::Create(pButton, m_pNewData->aDBColumnHeaders));
-    if(bRename)
+        xDlg.reset(new SwAddEntryDialog(GetFrameWeld(), m_pNewData->aDBColumnHeaders));
+    if (bRename)
     {
         OUString aTemp = m_pFieldsLB->GetEntry(nPos);
-        pDlg->SetFieldName(aTemp);
+        xDlg->SetFieldName(aTemp);
     }
-    if(RET_OK == pDlg->Execute())
+    if (xDlg->run() == RET_OK)
     {
-        OUString sNew = pDlg->GetFieldName();
+        OUString sNew = xDlg->GetFieldName();
         if(bRename)
         {
             m_pNewData->aDBColumnHeaders[nPos] = sNew;
@@ -177,32 +177,20 @@ void SwCustomizeAddressListDialog::UpdateButtons()
 
 
 SwAddRenameEntryDialog::SwAddRenameEntryDialog(
-        vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,
+        weld::Window* pParent, const OUString& rUIXMLDescription, const OString& rID,
         const std::vector< OUString >& rCSVHeader)
-    : SfxModalDialog(pParent, rID, rUIXMLDescription)
+    : SfxDialogController(pParent, rUIXMLDescription, rID)
     , m_rCSVHeader(rCSVHeader)
+    , m_xFieldNameED(m_xBuilder->weld_entry("entry"))
+    , m_xOK(m_xBuilder->weld_button("ok"))
 {
-    get(m_pOK, "ok");
-    get(m_pFieldNameED, "entry");
-    m_pFieldNameED->SetModifyHdl(LINK(this, SwAddRenameEntryDialog, ModifyHdl_Impl));
-    ModifyHdl_Impl(*m_pFieldNameED);
+    m_xFieldNameED->connect_changed(LINK(this, SwAddRenameEntryDialog, ModifyHdl_Impl));
+    ModifyHdl_Impl(*m_xFieldNameED);
 }
 
-SwAddRenameEntryDialog::~SwAddRenameEntryDialog()
+IMPL_LINK(SwAddRenameEntryDialog, ModifyHdl_Impl, weld::Entry&, rEdit, void)
 {
-    disposeOnce();
-}
-
-void SwAddRenameEntryDialog::dispose()
-{
-    m_pFieldNameED.clear();
-    m_pOK.clear();
-    SfxModalDialog::dispose();
-}
-
-IMPL_LINK(SwAddRenameEntryDialog, ModifyHdl_Impl, Edit&, rEdit, void)
-{
-    OUString sEntry = rEdit.GetText();
+    OUString sEntry = rEdit.get_text();
     bool bFound = sEntry.isEmpty();
 
     if(!bFound)
@@ -217,7 +205,7 @@ IMPL_LINK(SwAddRenameEntryDialog, ModifyHdl_Impl, Edit&, rEdit, void)
                 break;
             }
     }
-    m_pOK->Enable(!bFound);
+    m_xOK->set_sensitive(!bFound);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
