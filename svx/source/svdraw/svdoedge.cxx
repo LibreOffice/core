@@ -1792,9 +1792,10 @@ void SdrEdgeObj::AddToHdlList(SdrHdlList& rHdlList) const
             sal_uInt32 nO1(aEdgeInfo.nObj1Lines > 0 ? aEdgeInfo.nObj1Lines - 1 : 0);
             sal_uInt32 nO2(aEdgeInfo.nObj2Lines > 0 ? aEdgeInfo.nObj2Lines - 1 : 0);
             sal_uInt32 nM(aEdgeInfo.nMiddleLine != 0xFFFF ? 1 : 0);
-            for(sal_uInt32 nNum = 0; nNum < (nO1 + nO2 + nM); ++nNum)
+            for(sal_uInt32 i = 0; i < (nO1 + nO2 + nM); ++i)
             {
                 sal_Int32 nPt(0);
+                sal_uInt32 nNum = i;
                 std::unique_ptr<ImpEdgeHdl> pHdl(new ImpEdgeHdl(Point(),SdrHdlKind::Poly));
                 if (nNum<nO1) {
                     nPt=nNum+1;
@@ -1820,7 +1821,7 @@ void SdrEdgeObj::AddToHdlList(SdrHdlList& rHdlList) const
                     aPos.setX( aPos.X() / 2 );
                     aPos.setY( aPos.Y() / 2 );
                     pHdl->SetPos(aPos);
-                    pHdl->SetPointNum(nNum + 2);
+                    pHdl->SetPointNum(i + 2);
                     rHdlList.AddHdl(std::move(pHdl));
                 }
             }
