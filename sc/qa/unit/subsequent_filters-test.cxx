@@ -234,6 +234,7 @@ public:
 
     void testPageScalingXLSX();
     void testActiveXCheckboxXLSX();
+    void testtdf120301_xmlSpaceParsingXLSX();
 #ifdef UNX
     void testUnicodeFileNameGnumeric();
 #endif
@@ -371,6 +372,7 @@ public:
 
     CPPUNIT_TEST(testPageScalingXLSX);
     CPPUNIT_TEST(testActiveXCheckboxXLSX);
+    CPPUNIT_TEST(testtdf120301_xmlSpaceParsingXLSX);
 #ifdef UNX
     CPPUNIT_TEST(testUnicodeFileNameGnumeric);
 #endif
@@ -4137,6 +4139,23 @@ void ScFiltersTest::testActiveXCheckboxXLSX()
     xPropertySet->getPropertyValue("State") >>= nState;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), nState);
 
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testtdf120301_xmlSpaceParsingXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("tdf120301_xmlSpaceParsing.", FORMAT_XLSX);
+    uno::Reference< frame::XModel > xModel = xDocSh->GetModel();
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(xModel, UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIA(xDoc->getSheets(), UNO_QUERY_THROW);
+    uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( xIA->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference< container::XIndexAccess > xIA_DrawPage(xDrawPageSupplier->getDrawPage(), UNO_QUERY_THROW);
+
+    uno::Reference< drawing::XControlShape > xControlShape(xIA_DrawPage->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > XPropSet( xControlShape->getControl(), uno::UNO_QUERY_THROW );
+    OUString sCaption;
+    XPropSet->getPropertyValue("Label") >>= sCaption;
+    CPPUNIT_ASSERT_EQUAL(OUString("Check Box 1"), sCaption);
     xDocSh->DoClose();
 }
 
