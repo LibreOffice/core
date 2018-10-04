@@ -790,6 +790,8 @@ void Dialog::DataChanged( const DataChangedEvent& rDCEvt )
 
 bool Dialog::Close()
 {
+    fprintf(stderr, "Dialog::Close %p %d %d\n", this, IsInExecute(), mpDialogImpl->maEndCtx.isSet());
+
     VclPtr<vcl::Window> xWindow = this;
     CallEventListeners( VclEventId::WindowClose );
     if ( xWindow->IsDisposed() )
@@ -819,7 +821,7 @@ bool Dialog::Close()
         return bRet;
     }
 
-    if ( IsInExecute() )
+    if (IsInExecute() || mpDialogImpl->maEndCtx.isSet())
     {
         EndDialog();
         mbInClose = false;
@@ -832,11 +834,11 @@ bool Dialog::Close()
     }
 }
 
-bool Dialog::ImplStartExecuteModal()
+bool Dialog::ImplStartExecute(bool bModal)
 {
     setDeferredProperties();
 
-    if ( mbInExecute || mpDialogImpl->maEndCtx.isSet() )
+    if (IsInExecute() || mpDialogImpl->maEndCtx.isSet())
     {
 #ifdef DBG_UTIL
         SAL_WARN( "vcl", "Dialog::StartExecuteModal() is called in Dialog::StartExecuteModal(): "
@@ -915,7 +917,7 @@ bool Dialog::ImplStartExecuteModal()
     }
     mbInExecute = true;
     // no real modality in LibreOfficeKit
-    if (!bKitActive)
+    if (!bKitActive && bModal)
         SetModalInputMode(true);
 
     // FIXME: no layouting, workaround some clipping issues
@@ -927,13 +929,17 @@ bool Dialog::ImplStartExecuteModal()
     ShowFlags showFlags = bForceFocusAndToFront ? ShowFlags::ForegroundTask : ShowFlags::NONE;
     Show(true, showFlags);
 
-    pSVData->maAppData.mnModalMode++;
+    if (bModal)
+        pSVData->maAppData.mnModalMode++;
 
     css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
     css::document::DocumentEvent aObject;
     aObject.EventName = "DialogExecute";
     xEventBroadcaster->documentEventOccured(aObject);
-    UITestLogger::getInstance().log("ModalDialogExecuted Id:" + get_id());
+    if (bModal)
+        UITestLogger::getInstance().log("ModalDialogExecuted Id:" + get_id());
+    else
+        UITestLogger::getInstance().log("ModelessDialogExecuted Id:" + get_id());
 
     if (bKitActive)
     {
@@ -1015,7 +1021,7 @@ short Dialog::Execute()
             mbInSyncExecute = false;
         });
 
-    if ( !ImplStartExecuteModal() )
+    if ( !ImplStartExecute(true) )
         return 0;
 
     // Yield util EndDialog is called or dialog gets destroyed
@@ -1054,7 +1060,10 @@ short Dialog::Execute()
 // virtual
 bool Dialog::StartExecuteAsync( VclAbstractDialog::AsyncContext &rCtx )
 {
-    if ( !ImplStartExecuteModal() )
+    fprintf(stderr, "StartExecuteAsync %p %d %d\n", this, IsInExecute(), mpDialogImpl->maEndCtx.isSet());
+
+    const bool bModal = GetType() != WindowType::MODELESSDIALOG;
+    if (!ImplStartExecute(bModal))
     {
         rCtx.mxOwner.disposeAndClear();
         rCtx.mxOwnerDialog.reset();
@@ -1062,7 +1071,8 @@ bool Dialog::StartExecuteAsync( VclAbstractDialog::AsyncContext &rCtx )
     }
 
     mpDialogImpl->maEndCtx = rCtx;
-    mpDialogImpl->mbStartedModal = true;
+    mpDialogImpl->mbStartedModal = bModal;
+    fprintf(stderr, "started modal is %d\n", mpDialogImpl->mbStartedModal);
 
     return true;
 }
@@ -1112,16 +1122,20 @@ void Dialog::EndDialog( long nResult )
     mpDialogImpl->mnResult = nResult;
 
     if ( mpDialogImpl->mbStartedModal )
-    {
         ImplEndExecuteModal();
-        if (mpDialogImpl->maEndCtx.isSet())
-        {
-            mpDialogImpl->maEndCtx.maEndDialogFn(nResult);
-            mpDialogImpl->maEndCtx.maEndDialogFn = nullptr;
-        }
+
+    if (mpDialogImpl->maEndCtx.isSet())
+    {
+        mpDialogImpl->maEndCtx.maEndDialogFn(nResult);
+        mpDialogImpl->maEndCtx.maEndDialogFn = nullptr;
+    }
+
+    if ( mpDialogImpl->mbStartedModal )
+    {
         mpDialogImpl->mbStartedModal = false;
         mpDialogImpl->mnResult = -1;
     }
+
     mbInExecute = false;
 
     // Destroy ourselves (if we have a context with VclPtr owner)
@@ -1479,15 +1493,18 @@ ModalDialog::ModalDialog( vcl::Window* pParent, const OUString& rID, const OUStr
 {
 }
 
-void ModelessDialog::Activate()
+void Dialog::Activate()
 {
-    css::uno::Reference< css::uno::XComponentContext > xContext(
-            comphelper::getProcessComponentContext() );
-    css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
-    css::document::DocumentEvent aObject;
-    aObject.EventName = "ModelessDialogVisible";
-    xEventBroadcaster->documentEventOccured(aObject);
-    Dialog::Activate();
+    if (GetType() == WindowType::MODELESSDIALOG)
+    {
+        css::uno::Reference< css::uno::XComponentContext > xContext(
+                comphelper::getProcessComponentContext() );
+        css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
+        css::document::DocumentEvent aObject;
+        aObject.EventName = "ModelessDialogVisible";
+        xEventBroadcaster->documentEventOccured(aObject);
+    }
+    SystemWindow::Activate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

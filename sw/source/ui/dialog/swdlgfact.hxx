@@ -74,10 +74,17 @@ bool Class::StartExecuteAsync(VclAbstractDialog::AsyncContext &rCtx) \
 class SwWordCountFloatDlg;
 class AbstractSwWordCountFloatDlg_Impl : public AbstractSwWordCountFloatDlg
 {
-    DECL_ABSTDLG_BASE(AbstractSwWordCountFloatDlg_Impl,SwWordCountFloatDlg)
-    virtual void                UpdateCounts() override;
-    virtual void                SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat) override;
-    virtual vcl::Window *            GetWindow() override; //this method is added for return a Window type pointer
+protected:
+    std::shared_ptr<SwWordCountFloatDlg> m_xDlg;
+public:
+    explicit AbstractSwWordCountFloatDlg_Impl(std::unique_ptr<SwWordCountFloatDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual void  UpdateCounts() override;
+    virtual void  SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat) override;
+    virtual std::shared_ptr<SfxModelessDialogController> GetController() override;
 };
 
 class AbstractSwInsertAbstractDlg_Impl : public AbstractSwInsertAbstractDlg
@@ -598,7 +605,7 @@ public:
     virtual VclPtr<SfxAbstractDialog> CreateSwDropCapsDialog(weld::Window* pParent, const SfxItemSet& rSet) override;
     virtual VclPtr<SfxAbstractDialog> CreateSwBackgroundDialog(weld::Window* pParent, const SfxItemSet& rSet) override;
     virtual VclPtr<AbstractSwWordCountFloatDlg> CreateSwWordCountDialog(SfxBindings* pBindings,
-        SfxChildWindow* pChild, vcl::Window *pParent, SfxChildWinInfo* pInfo) override;
+        SfxChildWindow* pChild, weld::Window *pParent, SfxChildWinInfo* pInfo) override;
     virtual VclPtr<AbstractSwInsertAbstractDlg> CreateSwInsertAbstractDlg() override;
     virtual VclPtr<SfxAbstractDialog> CreateSwAddressAbstractDlg(vcl::Window* pParent, const SfxItemSet& rSet) override;
     virtual VclPtr<AbstractSwAsciiFilterDlg>  CreateSwAsciiFilterDlg(weld::Window* pParent, SwDocShell& rDocSh,

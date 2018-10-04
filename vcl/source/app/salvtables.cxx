@@ -737,6 +737,18 @@ public:
         m_xWindow->ImplGetFrame()->SetModal(bModal);
     }
 
+    virtual bool get_modal() const override
+    {
+#if 0
+        if (const ::Dialog* pDialog = dynamic_cast<const ::Dialog*>(m_xWindow.get()))
+        {
+            return pDialog->IsModalInputMode();
+        }
+#endif
+        fprintf(stderr, "get modal is %d\n", m_xWindow->ImplGetFrame()->GetModal());
+        return m_xWindow->ImplGetFrame()->GetModal();
+    }
+
     virtual void window_move(int x, int y) override
     {
         m_xWindow->SetPosPixel(Point(x, y));
