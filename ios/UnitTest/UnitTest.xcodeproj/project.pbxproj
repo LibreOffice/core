@@ -97,6 +97,18 @@
 		BEA20D502164BAB80032F67B /* svmain.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svmain.cxx; path = ../../vcl/source/app/svmain.cxx; sourceTree = "<group>"; };
 		BEA20D522164BB0D0032F67B /* iosinst.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = iosinst.cxx; path = ../../vcl/ios/iosinst.cxx; sourceTree = "<group>"; };
 		BEA20D532164BB0E0032F67B /* dummies.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dummies.cxx; path = ../../vcl/ios/dummies.cxx; sourceTree = "<group>"; };
+		BEA20D652166596F0032F67B /* svpvd.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpvd.cxx; path = ../../vcl/headless/svpvd.cxx; sourceTree = "<group>"; };
+		BEA20D662166596F0032F67B /* svpframe.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpframe.cxx; path = ../../vcl/headless/svpframe.cxx; sourceTree = "<group>"; };
+		BEA20D672166596F0032F67B /* svpbmp.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpbmp.cxx; path = ../../vcl/headless/svpbmp.cxx; sourceTree = "<group>"; };
+		BEA20D682166596F0032F67B /* svpcairotextrender.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpcairotextrender.cxx; path = ../../vcl/headless/svpcairotextrender.cxx; sourceTree = "<group>"; };
+		BEA20D692166596F0032F67B /* svpgdi.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpgdi.cxx; path = ../../vcl/headless/svpgdi.cxx; sourceTree = "<group>"; };
+		BEA20D6A2166596F0032F67B /* svpglyphcache.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpglyphcache.cxx; path = ../../vcl/headless/svpglyphcache.cxx; sourceTree = "<group>"; };
+		BEA20D6B2166596F0032F67B /* svpinst.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpinst.cxx; path = ../../vcl/headless/svpinst.cxx; sourceTree = "<group>"; };
+		BEA20D6C2166596F0032F67B /* svptext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svptext.cxx; path = ../../vcl/headless/svptext.cxx; sourceTree = "<group>"; };
+		BEA20D6D2166596F0032F67B /* headlessinst.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = headlessinst.cxx; path = ../../vcl/headless/headlessinst.cxx; sourceTree = "<group>"; };
+		BEA20D6E2166596F0032F67B /* svpdata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpdata.cxx; path = ../../vcl/headless/svpdata.cxx; sourceTree = "<group>"; };
+		BEA20D6F2166596F0032F67B /* svpdummies.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpdummies.cxx; path = ../../vcl/headless/svpdummies.cxx; sourceTree = "<group>"; };
+		BEA20D702166596F0032F67B /* svpprn.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpprn.cxx; path = ../../vcl/headless/svpprn.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,6 +203,7 @@
 			isa = PBXGroup;
 			children = (
 				BEA20D342164BA8B0032F67B /* app */,
+				BEA20D642166594D0032F67B /* headless */,
 				BEA20D512164BAF00032F67B /* ios */,
 				BEA20D332164BA7C0032F67B /* quartz */,
 			);
@@ -251,6 +264,25 @@
 				BEA20D522164BB0D0032F67B /* iosinst.cxx */,
 			);
 			name = ios;
+			sourceTree = "<group>";
+		};
+		BEA20D642166594D0032F67B /* headless */ = {
+			isa = PBXGroup;
+			children = (
+				BEA20D6D2166596F0032F67B /* headlessinst.cxx */,
+				BEA20D672166596F0032F67B /* svpbmp.cxx */,
+				BEA20D682166596F0032F67B /* svpcairotextrender.cxx */,
+				BEA20D6E2166596F0032F67B /* svpdata.cxx */,
+				BEA20D6F2166596F0032F67B /* svpdummies.cxx */,
+				BEA20D662166596F0032F67B /* svpframe.cxx */,
+				BEA20D692166596F0032F67B /* svpgdi.cxx */,
+				BEA20D6A2166596F0032F67B /* svpglyphcache.cxx */,
+				BEA20D6B2166596F0032F67B /* svpinst.cxx */,
+				BEA20D702166596F0032F67B /* svpprn.cxx */,
+				BEA20D6C2166596F0032F67B /* svptext.cxx */,
+				BEA20D652166596F0032F67B /* svpvd.cxx */,
+			);
+			name = headless;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
