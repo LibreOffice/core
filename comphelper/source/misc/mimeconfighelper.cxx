@@ -20,6 +20,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 
 #include <osl/diagnose.h>

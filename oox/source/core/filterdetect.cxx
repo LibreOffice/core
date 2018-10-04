@@ -35,6 +35,7 @@
 #include <oox/crypto/DocumentDecryption.hxx>
 
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 
 using namespace ::com::sun::star;
 

@@ -155,3 +155,49 @@ blacklist:
     - com/sun/star/task/XInteractionDisapprove.hpp
     - com/sun/star/task/XInteractionRequest.hpp
     - com/sun/star/task/XInteractionRetry.hpp
+    include/comphelper/SelectionMultiplex.hxx:
+    # base class has to be a complete type
+    - com/sun/star/view/XSelectionChangeListener.hpp
+    include/comphelper/namedvaluecollection.hxx:
+    # Needed for template class
+    - com/sun/star/beans/PropertyValue.hpp
+    - com/sun/star/beans/NamedValue.hpp
+    include/comphelper/numberedcollection.hxx:
+    # base class has to be a complete type
+    - com/sun/star/frame/XUntitledNumbers.hpp
+    include/comphelper/oslfile2streamwrap.hxx:
+    # base class has to be a complete type
+    - com/sun/star/io/XInputStream.hpp
+    - com/sun/star/io/XOutputStream.hpp
+    include/comphelper/propmultiplex.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertyChangeListener.hpp
+    include/comphelper/propertystatecontainer.hxx:
+    # base class has to be a complete type
+    - com/sun/star/beans/XPropertyState.hpp
+    include/comphelper/seqstream.hxx:
+    # base class has to be a complete type
+    - com/sun/star/io/XInputStream.hpp
+    - com/sun/star/io/XSeekable.hpp
+    include/comphelper/sequence.hxx:
+    # Needed for implicit dtor
+    - com/sun/star/uno/Sequence.hxx
+    include/comphelper/sequenceashashmap.hxx:
+    # Needed for implicit dtor
+    - com/sun/star/uno/Sequence.hxx
+    include/comphelper/servicedecl.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/uno/XComponentContext.hpp
+    include/comphelper/servicehelper.hxx:
+    # Needed for macro
+    - rtl/instance.hxx
+    include/comphelper/simplefileaccessinteraction.hxx:
+    # base class has to be a complete type
+    - com/sun/star/task/XInteractionHandler.hpp
+    include/comphelper/unique_disposing_ptr.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    include/comphelper/uno3.hxx:
+    # Needed for macro
+    - comphelper/sequence.hxx

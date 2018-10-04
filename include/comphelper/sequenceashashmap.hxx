@@ -20,14 +20,13 @@
 #ifndef INCLUDED_COMPHELPER_SEQUENCEASHASHMAP_HXX
 #define INCLUDED_COMPHELPER_SEQUENCEASHASHMAP_HXX
 
-#include <algorithm>
 #include <unordered_map>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
 
 #include <comphelper/comphelperdllapi.h>
 
+namespace com { namespace sun { namespace star { namespace beans { struct NamedValue; } } } }
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
 
 namespace comphelper{
 

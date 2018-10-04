@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <comphelper/numberedcollection.hxx>
 #include <com/sun/star/frame/UntitledNumbersConst.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 namespace comphelper{
 

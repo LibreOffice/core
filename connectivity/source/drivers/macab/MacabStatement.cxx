@@ -28,6 +28,7 @@
 #include "macabcondition.hxx"
 #include "macaborder.hxx"
 #include <TConnection.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
 #include <resource/sharedresources.hxx>
 #include <strings.hrc>

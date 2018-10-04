@@ -24,8 +24,9 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <comphelper/comphelperdllapi.h>
-#include <rtl/ref.hxx>
 #include <memory>
+
+namespace rtl { template <class reference_type> class Reference; }
 
 namespace comphelper
 {

@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppunit/Message.h>

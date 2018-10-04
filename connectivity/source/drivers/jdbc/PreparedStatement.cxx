@@ -27,6 +27,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/FValue.hxx>
 #include <connectivity/dbexception.hxx>

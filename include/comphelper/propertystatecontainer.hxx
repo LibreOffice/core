@@ -24,10 +24,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/uno3.hxx>
-#include <osl/diagnose.h>
 #include <comphelper/comphelperdllapi.h>
-
-#include <map>
 
 
 namespace comphelper

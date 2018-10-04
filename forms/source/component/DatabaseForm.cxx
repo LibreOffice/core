@@ -61,6 +61,7 @@
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/types.hxx>
 #include <rtl/math.hxx>
 #include <rtl/tencinfo.h>
 #include <svl/inettype.hxx>

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_COMPHELPER_SEQUENCE_HXX
 #define INCLUDED_COMPHELPER_SEQUENCE_HXX
 
-#include <algorithm>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/comphelperdllapi.h>

@@ -71,6 +71,7 @@
 #include <comphelper/interaction.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqlerror.hxx>

@@ -20,6 +20,8 @@
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/i18n/CharType.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/XCollator.hpp>
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>

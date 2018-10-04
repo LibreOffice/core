@@ -23,7 +23,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <uno/environment.h>
 
 #include <functional>
 #include <initializer_list>

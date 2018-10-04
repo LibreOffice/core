@@ -56,6 +56,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
