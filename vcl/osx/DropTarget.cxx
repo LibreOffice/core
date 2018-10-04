@@ -381,7 +381,11 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     if (parentWnd == nil && (wndStyles == topWndStyle))
     {
         [wnd registerDraggingDestinationHandler:mDropTargetHelper];
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+            // "'NSFilenamesPboardType' is deprecated: first deprecated in macOS 10.14 - Create
+            // multiple pasteboard items with NSPasteboardTypeFileURL or kUTTypeFileURL instead"
         [wnd registerForDraggedTypes: [NSArray arrayWithObjects: NSFilenamesPboardType, nil]];
+SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 }
 

@@ -760,7 +760,11 @@ void AquaSalMenu::statusLayout()
 {
     if( GetSalData()->mpStatusItem )
     {
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+            // "'view' is deprecated: first deprecated in macOS 10.14 - Use the standard button
+            // property instead"
         NSView* pNSView = [GetSalData()->mpStatusItem view];
+SAL_WNODEPRECATED_DECLARATIONS_POP
         if( [pNSView isMemberOfClass: [OOStatusItemView class]] ) // well of course it is
             [static_cast<OOStatusItemView*>(pNSView) layout];
         else
@@ -826,7 +830,11 @@ tools::Rectangle AquaSalMenu::GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, S
     if( ! pItem )
         return tools::Rectangle();
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        // "'view' is deprecated: first deprecated in macOS 10.14 - Use the standard button property
+        // instead"
     NSView* pNSView = [pItem view];
+SAL_WNODEPRECATED_DECLARATIONS_POP
     if( ! pNSView )
         return tools::Rectangle();
     NSWindow* pNSWin = [pNSView window];

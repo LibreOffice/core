@@ -1094,7 +1094,11 @@ static Color getColor( NSColor* pSysColor, const Color& rDefault, NSWindow* pWin
     if( pSysColor )
     {
         // transform to RGB
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+            // "'colorUsingColorSpaceName:device:' is deprecated: first deprecated in macOS 10.14 -
+            // Use -colorUsingType: or -colorUsingColorSpace: instead"
         NSColor* pRBGColor = [pSysColor colorUsingColorSpaceName: NSDeviceRGBColorSpace device: [pWin deviceDescription]];
+SAL_WNODEPRECATED_DECLARATIONS_POP
         if( pRBGColor )
         {
             CGFloat r = 0, g = 0, b = 0, a = 0;
@@ -1150,7 +1154,12 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
 
     OSX_SALDATA_RUNINMAIN( UpdateSettings( rSettings ) )
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        // "'lockFocus' is deprecated: first deprecated in macOS 10.14 - To draw, subclass NSView
+        // and implement -drawRect:; AppKit's automatic deferred display mechanism will call
+        // -drawRect: as necessary to display the view."
     [mpNSView lockFocus];
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
 
@@ -1230,7 +1239,12 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     // don't draw frame around each and every toolbar
     ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames = true;
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        // "'unlockFocus' is deprecated: first deprecated in macOS 10.14 - To draw, subclass NSView
+        // and implement -drawRect:; AppKit's automatic deferred display mechanism will call
+        // -drawRect: as necessary to display the view."
     [mpNSView unlockFocus];
+SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 
 const SystemEnvData* AquaSalFrame::GetSystemData() const

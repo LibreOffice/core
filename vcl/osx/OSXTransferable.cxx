@@ -112,7 +112,11 @@ Any SAL_CALL OSXTransferable::getTransferData( const DataFlavor& aFlavor )
       : mDataFlavorMapper->openOfficeToSystemFlavor(aFlavor, bInternal);
   DataProviderPtr_t dp;
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+      // "'NSFilenamesPboardType' is deprecated: first deprecated in macOS 10.14 - Create multiple
+      // pasteboard items with NSPasteboardTypeFileURL or kUTTypeFileURL instead"
   if ([sysFormat caseInsensitiveCompare: NSFilenamesPboardType] == NSOrderedSame)
+SAL_WNODEPRECATED_DECLARATIONS_POP
     {
       NSArray* sysData = [mPasteboard propertyListForType: const_cast<NSString *>(sysFormat)];
       dp = DataFlavorMapper::getDataProvider(sysFormat, sysData);
