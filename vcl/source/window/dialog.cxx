@@ -1488,15 +1488,18 @@ ModalDialog::ModalDialog( vcl::Window* pParent, const OUString& rID, const OUStr
 {
 }
 
-void ModelessDialog::Activate()
+void Dialog::Activate()
 {
-    css::uno::Reference< css::uno::XComponentContext > xContext(
-            comphelper::getProcessComponentContext() );
-    css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
-    css::document::DocumentEvent aObject;
-    aObject.EventName = "ModelessDialogVisible";
-    xEventBroadcaster->documentEventOccured(aObject);
-    Dialog::Activate();
+    if (GetType() == WindowType::MODELESSDIALOG)
+    {
+        css::uno::Reference< css::uno::XComponentContext > xContext(
+                comphelper::getProcessComponentContext() );
+        css::uno::Reference<css::frame::XGlobalEventBroadcaster> xEventBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
+        css::document::DocumentEvent aObject;
+        aObject.EventName = "ModelessDialogVisible";
+        xEventBroadcaster->documentEventOccured(aObject);
+    }
+    SystemWindow::Activate();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
