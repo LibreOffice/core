@@ -2057,6 +2057,11 @@ public:
         gtk_window_set_modal(m_pWindow, bModal);
     }
 
+    virtual bool get_modal() const override
+    {
+        return gtk_window_get_modal(m_pWindow);
+    }
+
     virtual void resize_to_request() override
     {
         gtk_window_resize(m_pWindow, 1, 1);
@@ -2232,11 +2237,7 @@ public:
         m_xDialogController = rDialogController;
         m_aFunc = func;
 
-        if (!gtk_widget_get_visible(m_pWidget))
-        {
-            sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(m_pDialog)));
-            gtk_widget_show(m_pWidget);
-        }
+        show();
 
         m_nResponseSignalId = g_signal_connect(m_pDialog, "response", G_CALLBACK(signalAsyncResponse), this);
 
@@ -2275,8 +2276,11 @@ public:
 
     virtual void show() override
     {
-        sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(m_pDialog)));
-        gtk_widget_show(m_pWidget);
+        if (!gtk_widget_get_visible(m_pWidget))
+        {
+            sort_native_button_order(GTK_BOX(gtk_dialog_get_action_area(m_pDialog)));
+            gtk_widget_show(m_pWidget);
+        }
     }
 
     static int VclToGtk(int nResponse)

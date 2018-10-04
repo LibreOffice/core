@@ -831,6 +831,18 @@ namespace
         return bResizable;
     }
 
+    bool extractModal(VclBuilder::stringmap &rMap)
+    {
+        bool bModal = false;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("modal"));
+        if (aFind != rMap.end())
+        {
+            bModal = toBool(aFind->second);
+            rMap.erase(aFind);
+        }
+        return bModal;
+    }
+
     bool extractDecorated(VclBuilder::stringmap &rMap)
     {
         bool bDecorated = true;
@@ -1527,6 +1539,11 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         if (extractResizable(rMap))
             nBits |= WB_SIZEABLE;
         xWindow = VclPtr<Dialog>::Create(pParent, nBits, !pParent ? Dialog::InitFlag::NoParent : Dialog::InitFlag::Default);
+        if (!m_bLegacy && !extractModal(rMap))
+        {
+            fprintf(stderr, "setting as MODELESS\n");
+            xWindow->SetType(WindowType::MODELESSDIALOG);
+        }
     }
     else if (name == "GtkMessageDialog")
     {
