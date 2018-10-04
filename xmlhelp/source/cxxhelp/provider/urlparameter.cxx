@@ -31,6 +31,7 @@
 #include <libxslt/xslt.h>
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
+#include <libxslt/security.h>
 #include "db.hxx"
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -847,14 +848,29 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 
         xmlDocPtr doc = xmlParseFile("vnd.sun.star.zip:/");
 
-        xmlDocPtr res = xsltApplyStylesheet(cur, doc, parameter);
-        if (res)
+        xmlDocPtr res = nullptr;
+        xsltTransformContextPtr transformContext = xsltNewTransformContext(cur, doc);
+        if (transformContext)
         {
-            xmlChar *doc_txt_ptr=nullptr;
-            int doc_txt_len;
-            xsltSaveResultToString(&doc_txt_ptr, &doc_txt_len, res, cur);
-            addToBuffer(reinterpret_cast<char*>(doc_txt_ptr), doc_txt_len);
-            xmlFree(doc_txt_ptr);
+            xsltSecurityPrefsPtr securityPrefs = xsltNewSecurityPrefs();
+            if (securityPrefs)
+            {
+                xsltSetSecurityPrefs(securityPrefs, XSLT_SECPREF_READ_FILE, xsltSecurityAllow);
+                if (xsltSetCtxtSecurityPrefs(securityPrefs, transformContext) == 0)
+                {
+                    res = xsltApplyStylesheetUser(cur, doc, parameter, nullptr, nullptr, transformContext);
+                    if (res)
+                    {
+                        xmlChar *doc_txt_ptr=nullptr;
+                        int doc_txt_len;
+                        xsltSaveResultToString(&doc_txt_ptr, &doc_txt_len, res, cur);
+                        addToBuffer(reinterpret_cast<char*>(doc_txt_ptr), doc_txt_len);
+                        xmlFree(doc_txt_ptr);
+                    }
+                }
+                xsltFreeSecurityPrefs(securityPrefs);
+            }
+            xsltFreeTransformContext(transformContext);
         }
         xmlPopInputCallbacks(); //filePatch
         xmlPopInputCallbacks(); //helpPatch
