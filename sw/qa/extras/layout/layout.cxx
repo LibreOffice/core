@@ -33,6 +33,7 @@ public:
     void testRedlineFlysInFlys();
     void testRedlineFlysAtFlys();
     void testRedlineSections();
+    void testRedlineTables();
     void testTdf116830();
     void testTdf116925();
     void testTdf117028();
@@ -56,6 +57,7 @@ public:
     CPPUNIT_TEST(testRedlineFlysInFlys);
     CPPUNIT_TEST(testRedlineFlysAtFlys);
     CPPUNIT_TEST(testRedlineSections);
+    CPPUNIT_TEST(testRedlineTables);
     CPPUNIT_TEST(testTdf116830);
     CPPUNIT_TEST(testTdf116925);
     CPPUNIT_TEST(testTdf117028);
@@ -1993,6 +1995,82 @@ void SwLayoutWriter::testRedlineSections()
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
     discardDumpedLayout();
     CheckRedlineSectionsHidden();
+}
+
+void SwLayoutWriter::testRedlineTables()
+{
+    // currently need experimental mode
+    Resetter _([]() {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Misc::ExperimentalMode::set(false, pBatch);
+        return pBatch->commit();
+    });
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Misc::ExperimentalMode::set(true, pBatch);
+    pBatch->commit();
+
+    createDoc("redline_table.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwRootFrame* pLayout(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+    CPPUNIT_ASSERT(pLayout->IsHideRedlines());
+
+    // verify after load
+    discardDumpedLayout();
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged", "paraPropsNodeIndex", "12");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nType", "POR_PARA");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "foar");
+
+    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
+    // why is this needed explicitly?
+    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    // show: nothing is merged
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//merged");
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    CPPUNIT_ASSERT_EQUAL(0, xmlXPathNodeSetGetLength(pXmlNodes));
+    xmlXPathFreeObject(pXmlObj);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "fo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[2]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[2]", "Portion", "o");
+
+    assertXPath(pXmlDoc,
+                "/root/page[1]/body/tab[1]/row[1]/cell[1]/txt[1]/anchored/fly[1]/txt[1]/Text[1]",
+                "nType", "POR_PARA");
+    assertXPath(pXmlDoc,
+                "/root/page[1]/body/tab[1]/row[1]/cell[1]/txt[1]/anchored/fly[1]/txt[1]/Text[1]",
+                "Portion", "FRAME");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[1]/txt[1]/Text[1]", "nType",
+                "POR_PARA");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[1]/txt[1]/Text[1]", "Portion",
+                "aaa");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[2]/cell[2]/txt[1]/Text[1]", "nType",
+                "POR_PARA");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[2]/cell[2]/txt[1]/Text[1]", "Portion",
+                "ddd");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text[1]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text[1]", "Portion", "b");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text[2]", "nType", "POR_TXT");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text[2]", "Portion", "ar");
+
+    // verify after hide
+    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    CPPUNIT_ASSERT(pLayout->IsHideRedlines());
+    // why is this needed explicitly?
+    pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged", "paraPropsNodeIndex", "12");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nType", "POR_PARA");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "foar");
 }
 
 void SwLayoutWriter::testTdf116830()
