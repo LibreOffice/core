@@ -37,6 +37,7 @@ $(eval $(call gb_PythonTest_add_modules,sw_python,$(SRCDIR)/sw/qa/python,\
 	xscriptprovider \
 	xtextfieldssupplier \
 	xcontrolshape \
+	xtextcontent \
 ))
 
 # vim: set noet sw=4 ts=4:
