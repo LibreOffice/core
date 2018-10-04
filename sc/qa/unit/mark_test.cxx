@@ -97,6 +97,8 @@ public:
     void testDeleteTabBeforeSelected();
     void testDeleteTabAfterSelected();
 
+    void testScMarkArraySearch();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSimpleMark_Simple);
     CPPUNIT_TEST(testSimpleMark_Column);
@@ -107,10 +109,11 @@ public:
     CPPUNIT_TEST(testInsertTabAfterSelected);
     CPPUNIT_TEST(testDeleteTabBeforeSelected);
     CPPUNIT_TEST(testDeleteTabAfterSelected);
+    CPPUNIT_TEST(testScMarkArraySearch);
     CPPUNIT_TEST_SUITE_END();
 
 private:
-
+    void testScMarkArraySearch_check(ScMarkArray & ar, SCROW nRow, bool expectStatus, SCSIZE nIndexExpect);
 };
 
 static void lcl_GetSortedRanges( const ScRangeList& rRangeList, ScRangeList& rRangeListOut )
@@ -844,6 +847,106 @@ void Test::testDeleteTabAfterSelected()
     aMark.DeleteTab(1);
     CPPUNIT_ASSERT_EQUAL(SCTAB(1), aMark.GetSelectCount());
     CPPUNIT_ASSERT_EQUAL(SCTAB(0), aMark.GetFirstSelected());
+}
+
+void Test::testScMarkArraySearch_check(ScMarkArray & ar, SCROW nRow, bool expectStatus, SCSIZE nIndexExpect)
+{
+    SCSIZE nIndex = 0;
+    bool status = ar.Search(nRow, nIndex);
+    CPPUNIT_ASSERT_EQUAL(expectStatus, status);
+    CPPUNIT_ASSERT_EQUAL(nIndexExpect, nIndex);
+}
+
+void Test::testScMarkArraySearch()
+{
+    // empty
+    {
+        ScMarkArray ar;
+        testScMarkArraySearch_check(ar, -1, false, 0);
+        testScMarkArraySearch_check(ar, 100, false, 0);
+    }
+
+    // one range
+    {
+        ScMarkArray ar;
+        ar.SetMarkArea(10, 20, true);
+
+        // 0-9,10-20,21+
+
+        testScMarkArraySearch_check(ar, -100, true, 0);
+        testScMarkArraySearch_check(ar, -1, true, 0);
+
+        testScMarkArraySearch_check(ar, 0,  true, 0);
+        testScMarkArraySearch_check(ar, 5,  true, 0);
+        testScMarkArraySearch_check(ar, 9,  true, 0);
+        testScMarkArraySearch_check(ar, 10, true, 1);
+        testScMarkArraySearch_check(ar, 11, true, 1);
+        testScMarkArraySearch_check(ar, 19, true, 1);
+        testScMarkArraySearch_check(ar, 20, true, 1);
+        testScMarkArraySearch_check(ar, 21, true, 2);
+        testScMarkArraySearch_check(ar, 22, true, 2);
+    }
+
+    // three ranges
+    {
+        ScMarkArray ar;
+        ar.SetMarkArea(10, 20, true);
+        ar.SetMarkArea(21, 30, true);
+        ar.SetMarkArea(50, 100, true);
+
+        // 0-9,10-30,31-49,50-100,101+
+
+        testScMarkArraySearch_check(ar, -100, true, 0);
+        testScMarkArraySearch_check(ar, -1, true, 0);
+
+        testScMarkArraySearch_check(ar, 5,  true, 0);
+        testScMarkArraySearch_check(ar, 15, true, 1);
+        testScMarkArraySearch_check(ar, 25, true, 1);
+        testScMarkArraySearch_check(ar, 35, true, 2);
+        testScMarkArraySearch_check(ar, 55, true, 3);
+        testScMarkArraySearch_check(ar, 20, true, 1);
+        testScMarkArraySearch_check(ar, 21, true, 1);
+    }
+
+    // three single-row ranges
+    {
+        ScMarkArray ar;
+        ar.SetMarkArea(4, 4, true);
+        ar.SetMarkArea(6, 6, true);
+        ar.SetMarkArea(8, 8, true);
+
+        testScMarkArraySearch_check(ar, -100, true, 0);
+        testScMarkArraySearch_check(ar, -1, true, 0);
+
+        testScMarkArraySearch_check(ar, 3,  true, 0);
+        testScMarkArraySearch_check(ar, 4, true, 1);
+        testScMarkArraySearch_check(ar, 5, true, 2);
+        testScMarkArraySearch_check(ar, 6, true, 3);
+        testScMarkArraySearch_check(ar, 7, true, 4);
+        testScMarkArraySearch_check(ar, 8, true, 5);
+        testScMarkArraySearch_check(ar, 9, true, 6);
+        testScMarkArraySearch_check(ar, 10, true, 6);
+    }
+
+    // one range
+    {
+        ScMarkArray ar;
+        ar.SetMarkArea(10, MAXROW, true);
+
+        // 0-10,11+
+
+        testScMarkArraySearch_check(ar, -100, true, 0);
+        testScMarkArraySearch_check(ar, -1, true, 0);
+
+        testScMarkArraySearch_check(ar, 0,  true, 0);
+        testScMarkArraySearch_check(ar, 5,  true, 0);
+        testScMarkArraySearch_check(ar, 9,  true, 0);
+        testScMarkArraySearch_check(ar, 10, true, 1);
+        testScMarkArraySearch_check(ar, 11, true, 1);
+        testScMarkArraySearch_check(ar, 12, true, 1);
+        testScMarkArraySearch_check(ar, 200, true, 1);
+        testScMarkArraySearch_check(ar, MAXROW, true, 1);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

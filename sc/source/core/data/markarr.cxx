@@ -60,40 +60,41 @@ void ScMarkArray::Reset( bool bMarked )
     pData[0].bMarked = bMarked;
 }
 
+// Iterative implementation of Binary Search
 bool ScMarkArray::Search( SCROW nRow, SCSIZE& nIndex ) const
 {
-    long    nHi         = static_cast<long>(nCount) - 1;
-    long    i           = 0;
-    bool    bFound      = (nCount == 1);
     if (pData)
     {
+        long    nHi         = static_cast<long>(nCount) - 1;
+        long    i           = 0;
         long    nLo         = 0;
-        long    nStartRow   = 0;
-        while ( !bFound && nLo <= nHi )
+
+        while ( nLo <= nHi )
         {
             i = (nLo + nHi) / 2;
-            if (i > 0)
-                nStartRow = (long) pData[i - 1].nRow;
+
+            if (pData[i].nRow < nRow)
+            {
+                // If [nRow] greater, ignore left half
+                nLo = i + 1;
+            }
+            else if ((i > 0) && (pData[i - 1].nRow >= nRow))
+            {
+                // If [nRow] is smaller, ignore right half
+                nHi = i - 1;
+            }
             else
-                nStartRow = -1;
-            long nEndRow = (long) pData[i].nRow;
-            if (nEndRow < (long) nRow)
-                nLo = ++i;
-            else
-                if (nStartRow >= (long) nRow)
-                    nHi = --i;
-                else
-                    bFound = true;
+            {
+                // found
+                nIndex=static_cast<SCSIZE>(i);
+                return true;
+            }
         }
     }
-    else
-        bFound = false;
 
-    if (bFound)
-        nIndex=(SCSIZE)i;
-    else
-        nIndex=0;
-    return bFound;
+    // not found
+    nIndex=0;
+    return false;
 }
 
 bool ScMarkArray::GetMark( SCROW nRow ) const
