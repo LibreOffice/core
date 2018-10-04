@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_c8046dc9",
+        "filename": "sw/qa/python/xtext.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-10-04T10:11:18Z",
+      "side": 1,
+      "message": "Does this again need a fix in the implementation?",
+      "revId": "fd975e9eab2bf78d345911c9918d81aa727e8379",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
