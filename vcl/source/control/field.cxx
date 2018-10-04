@@ -612,7 +612,12 @@ sal_Int64 NumericFormatter::GetValue() const
 
 sal_Int64 NumericFormatter::GetSavedIntValue() const
 {
-    return GetField() ? GetValueFromString(GetField()->GetSavedValue()) : 0;
+    if (!GetField())
+        return 0;
+    const OUString& rStr = GetField()->GetSavedValue();
+    if (rStr.isEmpty())
+        return 0;
+    return GetValueFromString(rStr);
 }
 
 bool NumericFormatter::IsValueModified() const
