@@ -196,8 +196,14 @@ public:
     virtual void set_busy_cursor(bool bBusy) = 0;
     virtual void window_move(int x, int y) = 0;
     virtual void set_modal(bool bModal) = 0;
+    virtual bool get_modal() const = 0;
     virtual bool get_extents_relative_to(Window& rRelative, int& x, int& y, int& width, int& height)
         = 0;
+    virtual bool get_resizable() const = 0;
+    virtual Size get_size() const = 0;
+    virtual Point get_position() const = 0;
+    virtual void set_window_state(const OString& rStr) = 0;
+    virtual OString get_window_state(WindowStateMask nMask) const = 0;
 
     virtual css::uno::Reference<css::awt::XWindow> GetXWindow() = 0;
 
