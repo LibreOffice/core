@@ -2773,7 +2773,7 @@ bool DbGridControl::canCopyCellText(sal_Int32 _nRow, sal_uInt16 _nColId)
     return  (_nRow >= 0)
         &&  (_nRow < GetRowCount())
         &&  (_nColId != HandleColumnId)
-        &&  (_nColId <= ColCount());
+        &&  (GetModelColumnPos(_nColId) != GRID_COLUMN_NOT_FOUND);
 }
 
 void DbGridControl::copyCellText(sal_Int32 _nRow, sal_uInt16 _nColId)
@@ -2820,7 +2820,7 @@ void DbGridControl::Command(const CommandEvent& rEvt)
                 }
             }
 
-            sal_uInt16 nColId = GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X());
+            sal_uInt16 nColId = GetColumnId(GetColumnAtXPosPixel(rEvt.GetMousePosPixel().X()));
             long   nRow = GetRowAtYPosPixel(rEvt.GetMousePosPixel().Y());
 
             if (nColId == HandleColumnId)
