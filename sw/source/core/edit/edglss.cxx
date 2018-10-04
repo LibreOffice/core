@@ -311,7 +311,7 @@ bool SwEditShell::GetSelectedText( OUString &rBuf, ParaBreakType nHndlParaBrk )
             {
                 aStream.WriteUInt16( '\0' );
 
-                const sal_Unicode *p = static_cast<sal_Unicode const *>(aStream.GetBuffer());
+                const sal_Unicode *p = static_cast<sal_Unicode const *>(aStream.GetData());
                 if (p)
                     rBuf = OUString(p);
                 else

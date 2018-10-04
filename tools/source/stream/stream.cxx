@@ -1653,11 +1653,6 @@ SvMemoryStream::~SvMemoryStream()
     }
 }
 
-const void* SvMemoryStream::GetBuffer()
-{
-    return GetData();
-}
-
 sal_uInt64 SvMemoryStream::GetSize()
 {
     Flush();
