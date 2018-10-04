@@ -236,6 +236,10 @@ $(call gb_CppunitTest_get_target,$(1)) : $(if $(filter $(2),$(true)),, \
         $(if $(ENABLE_KDE4),$(call gb_Library_get_target,vclplug_kde4)) \
         $(if $(ENABLE_QT5),$(call gb_Library_get_target,vclplug_qt5)) \
 	 )
+else ifeq ($(OS),MACOSX)
+$(call gb_CppunitTest_get_target,$(1)): $(call gb_Library_get_target,vclplug_osx)
+else ifeq ($(OS),WNT)
+$(call gb_CppunitTest_get_target,$(1)): $(call gb_Library_get_target,vclplug_win)
 endif
 
 endef
