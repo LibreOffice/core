@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_086dc597",
+        "filename": "sw/qa/python/check_xautotextgroup.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2018-10-04T10:09:52Z",
+      "side": 1,
+      "message": "What is the expected outcome here? Just that it passes?",
+      "revId": "b89abb8d3946d8e23c5570f1126f6f4a860c3509",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
