@@ -742,8 +742,7 @@ bool GenPspGraphics::GetGlyphBoundRect(const GlyphItem& rGlyph, tools::Rectangle
     if( !pSF )
         return false;
 
-    rRect = pSF->GetGlyphBoundRect(rGlyph);
-    return true;
+    return pSF->GetGlyphBoundRect(rGlyph, rRect);
 }
 
 bool GenPspGraphics::GetGlyphOutline(const GlyphItem& rGlyph,
