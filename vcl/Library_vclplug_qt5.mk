@@ -86,6 +86,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/Qt5Bitmap \
     vcl/qt5/Qt5Clipboard \
     vcl/qt5/Qt5Data \
+    vcl/qt5/Qt5DragAndDrop \
     vcl/qt5/Qt5FilePicker \
     vcl/qt5/Qt5Font \
     vcl/qt5/Qt5FontFace \
