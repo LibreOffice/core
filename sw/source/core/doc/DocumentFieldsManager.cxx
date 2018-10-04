@@ -464,8 +464,8 @@ void DocumentFieldsManager::PutValueToField(const SwPosition & rPos,
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo() &&
         pField->QueryValue(aOldVal, nWhich))
     {
-        SwUndo *const pUndo(new SwUndoFieldFromAPI(rPos, aOldVal, rVal, nWhich));
-        m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo(
+            o3tl::make_unique<SwUndoFieldFromAPI>(rPos, aOldVal, rVal, nWhich));
     }
 
     pField->PutValue(rVal, nWhich);
@@ -492,8 +492,8 @@ bool DocumentFieldsManager::UpdateField(SwTextField * pDstTextField, SwField & r
             SwPosition aPosition( pDstTextField->GetTextNode() );
             aPosition.nContent = pDstTextField->GetStart();
 
-            SwUndo *const pUndo( new SwUndoFieldFromDoc( aPosition, *pDstField, rSrcField, pMsgHint, bUpdateFields) );
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo(
+                o3tl::make_unique<SwUndoFieldFromDoc>( aPosition, *pDstField, rSrcField, pMsgHint, bUpdateFields) );
         }
 
         pDstFormatField->SetField(rSrcField.CopyField());

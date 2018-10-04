@@ -1876,7 +1876,7 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
 
             // need the SaveSections!
             rDoc.GetIDocumentUndoRedo().DoUndo( true );
-            SwUndo* pUndo = nullptr;
+            std::unique_ptr<SwUndo> pUndo;
 
             switch( extractPosition(nSetColType) )
             {
@@ -1898,13 +1898,14 @@ void SwUndoTableNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
 
             if( pUndo )
             {
+                auto pSwUndoTableNdsChg = static_cast<SwUndoTableNdsChg *>(pUndo.get());
                 m_pDelSects->insert(m_pDelSects->begin(),
                     std::make_move_iterator(
-                        static_cast<SwUndoTableNdsChg *>(pUndo)->m_pDelSects->begin()),
+                        pSwUndoTableNdsChg->m_pDelSects->begin()),
                     std::make_move_iterator(
-                        static_cast<SwUndoTableNdsChg *>(pUndo)->m_pDelSects->end()));
-                static_cast<SwUndoTableNdsChg *>(pUndo)->m_pDelSects->clear();
-                delete pUndo;
+                        pSwUndoTableNdsChg->m_pDelSects->end()));
+                pSwUndoTableNdsChg->m_pDelSects->clear();
+                pUndo.reset();
             }
             rDoc.GetIDocumentUndoRedo().DoUndo( false );
 

@@ -242,9 +242,9 @@ SwUndo* UndoManager::GetLastUndo()
     return dynamic_cast<SwUndo*>(pAction);
 }
 
-void UndoManager::AppendUndo(SwUndo *const pUndo)
+void UndoManager::AppendUndo(std::unique_ptr<SwUndo> pUndo)
 {
-    AddUndoAction(pUndo);
+    AddUndoAction(pUndo.release());
 }
 
 void UndoManager::ClearRedo()

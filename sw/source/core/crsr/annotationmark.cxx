@@ -69,7 +69,7 @@ namespace sw { namespace mark
 
         if (io_pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
-            io_pDoc->GetIDocumentUndoRedo().AppendUndo( new SwUndoInsBookmark(*this) );
+            io_pDoc->GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoInsBookmark>(*this) );
         }
         io_pDoc->getIDocumentState().SetModified();
     }

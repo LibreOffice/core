@@ -363,8 +363,8 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().StartUndo(SwUndoId::OUTLINE_LR, nullptr);
-        SwUndo *const pUndoOLR( new SwUndoOutlineLeftRight( rPam, nOffset ) );
-        GetIDocumentUndoRedo().AppendUndo(pUndoOLR);
+        GetIDocumentUndoRedo().AppendUndo(
+            o3tl::make_unique<SwUndoOutlineLeftRight>( rPam, nOffset ) );
     }
 
     // 2. Apply the new style to all Nodes
@@ -834,7 +834,7 @@ OUString SwDoc::SetNumRule( const SwPaM& rPam,
         // Start/End for attributes!
         GetIDocumentUndoRedo().StartUndo( SwUndoId::INSNUM, nullptr );
         pUndo = new SwUndoInsNum( rPam, rRule );
-        GetIDocumentUndoRedo().AppendUndo(pUndo);
+        GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
     }
 
     SwNumRule* pNewOrChangedNumRule = FindNumRulePtr( rRule.GetName() );
@@ -966,8 +966,8 @@ void SwDoc::SetNumRuleStart( const SwPosition& rPos, bool bFlag )
         {
             if (GetIDocumentUndoRedo().DoesUndo())
             {
-                SwUndo *const pUndo( new SwUndoNumRuleStart(rPos, bFlag) );
-                GetIDocumentUndoRedo().AppendUndo(pUndo);
+                GetIDocumentUndoRedo().AppendUndo(
+                    o3tl::make_unique<SwUndoNumRuleStart>(rPos, bFlag) );
             }
 
             pTextNd->SetListRestart(bFlag);
@@ -988,8 +988,8 @@ void SwDoc::SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt )
         {
             if (GetIDocumentUndoRedo().DoesUndo())
             {
-                SwUndo *const pUndo( new SwUndoNumRuleStart(rPos, nStt) );
-                GetIDocumentUndoRedo().AppendUndo(pUndo);
+                GetIDocumentUndoRedo().AppendUndo(
+                    o3tl::make_unique<SwUndoNumRuleStart>(rPos, nStt) );
             }
             pTextNd->SetAttrListRestartValue( nStt );
 
@@ -1016,9 +1016,8 @@ bool SwDoc::DelNumRule( const OUString& rName, bool bBroadcast )
     {
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            SwUndo * pUndo =
-                new SwUndoNumruleDelete(*(*mpNumRuleTable)[nPos], this);
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
+            GetIDocumentUndoRedo().AppendUndo(
+                o3tl::make_unique<SwUndoNumruleDelete>(*(*mpNumRuleTable)[nPos], this));
         }
 
         if (bBroadcast)
@@ -1050,7 +1049,7 @@ void SwDoc::ChgNumRuleFormats( const SwNumRule& rRule )
         {
             pUndo = new SwUndoInsNum( *pRule, rRule, this );
             pUndo->GetHistory();
-            GetIDocumentUndoRedo().AppendUndo( pUndo );
+            GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
         }
         ::lcl_ChgNumRule( *this, rRule );
         if (pUndo)
@@ -1074,8 +1073,8 @@ bool SwDoc::RenameNumRule(const OUString & rOldName, const OUString & rNewName,
     {
         if (GetIDocumentUndoRedo().DoesUndo())
         {
-            SwUndo * pUndo = new SwUndoNumruleRename(rOldName, rNewName, this);
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
+            GetIDocumentUndoRedo().AppendUndo(
+                o3tl::make_unique<SwUndoNumruleRename>(rOldName, rNewName, this));
         }
 
         SwNumRule::tTextNodeList aTextNodeList;
@@ -1137,7 +1136,7 @@ bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
             // Start/End for attributes!
             GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
             pUndo = new SwUndoInsNum( rPos, *pNewRule, rOldRule );
-            GetIDocumentUndoRedo().AppendUndo(pUndo);
+            GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
         }
 
         SwNumRule::tTextNodeList aTextNodeList;
@@ -1297,7 +1296,7 @@ void SwDoc::DelNumRules( const SwPaM& rPam )
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         pUndo = new SwUndoDelNum( rPam );
-        GetIDocumentUndoRedo().AppendUndo(pUndo);
+        GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
     }
     else
         pUndo = nullptr;
@@ -1666,8 +1665,8 @@ bool SwDoc::NumUpDown( const SwPaM& rPam, bool bDown )
         {
             if (GetIDocumentUndoRedo().DoesUndo())
             {
-                SwUndo *const pUndo( new SwUndoNumUpDown(rPam, nDiff) );
-                GetIDocumentUndoRedo().AppendUndo(pUndo);
+                GetIDocumentUndoRedo().AppendUndo(
+                    o3tl::make_unique<SwUndoNumUpDown>(rPam, nDiff) );
             }
 
             for(sal_uLong nTmp = nStt; nTmp <= nEnd; ++nTmp )
@@ -1969,8 +1968,8 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                 // Still NEEDS to be optimized (even after 14 years)
                 getIDocumentRedlineAccess().SetRedlineFlags(
                    RedlineFlags::On | RedlineFlags::ShowInsert | RedlineFlags::ShowDelete );
-                SwUndo *const pUndo(new SwUndoRedlineDelete(aPam, SwUndoId::DELETE));
-                GetIDocumentUndoRedo().AppendUndo(pUndo);
+                GetIDocumentUndoRedo().AppendUndo(
+                    o3tl::make_unique<SwUndoRedlineDelete>(aPam, SwUndoId::DELETE));
             }
 
             SwRangeRedline* pNewRedline = new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, aPam );
@@ -2006,11 +2005,11 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
         nRedlEndNd = pREnd->nNode.GetIndex();
     }
 
-    SwUndoMoveNum* pUndo = nullptr;
+    std::unique_ptr<SwUndoMoveNum> pUndo;
     sal_uLong nMoved = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        pUndo = new SwUndoMoveNum( rPam, nOffset, bIsOutlMv );
+        pUndo.reset(new SwUndoMoveNum( rPam, nOffset, bIsOutlMv ));
         nMoved = rPam.End()->nNode.GetIndex() - rPam.Start()->nNode.GetIndex() + 1;
     }
 
@@ -2024,7 +2023,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
         // number of moved paragraphs is nMoved, I know, where the new
         // position is.
         pUndo->SetStartNode( aIdx.GetIndex() - nMoved );
-        GetIDocumentUndoRedo().AppendUndo(pUndo);
+        GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
     }
 
     if( pOwnRedl )
@@ -2067,10 +2066,8 @@ bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, bool bDel )
 
             if (GetIDocumentUndoRedo().DoesUndo())
             {
-                SwUndoNumOrNoNum * pUndo =
-                    new SwUndoNumOrNoNum(rIdx, bOldNum, bNewNum);
-
-                GetIDocumentUndoRedo().AppendUndo(pUndo);
+                GetIDocumentUndoRedo().AppendUndo(
+                    o3tl::make_unique<SwUndoNumOrNoNum>(rIdx, bOldNum, bNewNum));
             }
         }
         else if (bDel && pTextNd->GetNumRule(false) &&
@@ -2178,8 +2175,8 @@ sal_uInt16 SwDoc::MakeNumRule( const OUString &rName,
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        SwUndo * pUndo = new SwUndoNumruleCreate(pNew, this);
-        GetIDocumentUndoRedo().AppendUndo(pUndo);
+        GetIDocumentUndoRedo().AppendUndo(
+            o3tl::make_unique<SwUndoNumruleCreate>(pNew, this));
     }
 
     if (bBroadcast)

@@ -1045,7 +1045,7 @@ void SwUndoInsertLabel::SetFlys( SwFrameFormat& rOldFly, SfxItemSet const & rChg
         rOldFly.SetFormatAttr( rChgSet );
         if ( aTmp.GetUndo() )
         {
-            OBJECT.pUndoAttr = aTmp.ReleaseUndo();
+            OBJECT.pUndoAttr = aTmp.ReleaseUndo().release();
         }
         OBJECT.pUndoFly = new SwUndoInsLayFormat( &rNewFly,0,0 );
     }

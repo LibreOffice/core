@@ -172,7 +172,7 @@ void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
             SwUndoResetAttr* pUndo = new SwUndoResetAttr(
                 SwPosition( rTextNd, SwIndex( &rTextNd, pTextTOXMark->GetStart() ) ),
                 RES_TXTATR_TOXMARK );
-            GetIDocumentUndoRedo().AppendUndo( pUndo );
+            GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
 
             aRHst.reset(new SwRegHistory(rTextNd, &pUndo->GetHistory()));
             rTextNd.GetpSwpHints()->Register(aRHst.get());

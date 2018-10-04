@@ -293,9 +293,9 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };
 
-SwUndo * MakeUndoDelSection(SwSectionFormat const& rFormat)
+std::unique_ptr<SwUndo> MakeUndoDelSection(SwSectionFormat const& rFormat)
 {
-    return new SwUndoDelSection(rFormat, *rFormat.GetSection(),
+    return o3tl::make_unique<SwUndoDelSection>(rFormat, *rFormat.GetSection(),
                 rFormat.GetContent().GetContentIdx());
 }
 
@@ -395,10 +395,10 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 };
 
-SwUndo *
+std::unique_ptr<SwUndo>
 MakeUndoUpdateSection(SwSectionFormat const& rFormat, bool const bOnlyAttr)
 {
-    return new SwUndoUpdateSection(*rFormat.GetSection(),
+    return o3tl::make_unique<SwUndoUpdateSection>(*rFormat.GetSection(),
                 rFormat.GetContent().GetContentIdx(), bOnlyAttr);
 }
 

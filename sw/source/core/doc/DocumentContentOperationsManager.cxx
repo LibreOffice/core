@@ -1672,13 +1672,13 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
         // (with start/end nodes clamped) and move them to
         // the desired position.
 
-        SwUndoCpyDoc* pUndo = nullptr;
+        std::unique_ptr<SwUndoCpyDoc> pUndo;
         // Save the Undo area
         SwPaM aPam( rPos );
         if (pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
             pDoc->GetIDocumentUndoRedo().ClearRedo();
-            pUndo = new SwUndoCpyDoc( aPam );
+            pUndo.reset(new SwUndoCpyDoc( aPam ));
         }
 
         {
@@ -1711,7 +1711,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
         if (pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
             pUndo->SetInsertRange( aPam );
-            pDoc->GetIDocumentUndoRedo().AppendUndo(pUndo);
+            pDoc->GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
         }
 
         if( pRedlineRange )
@@ -1846,11 +1846,11 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
             ::PaMCorrAbs( aDelPam, aTmpPos );
         }
 
-        SwUndoDelete* pUndo = new SwUndoDelete( aDelPam, true );
+        std::unique_ptr<SwUndoDelete> pUndo(new SwUndoDelete( aDelPam, true ));
 
         *rPam.GetPoint() = *aDelPam.GetPoint();
         pUndo->SetPgBrkFlags( bSavePageBreak, bSavePageDesc );
-        m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
         rPam.DeleteMark();
     }
     else
@@ -1955,11 +1955,11 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     bool bUpdateFootnote = false;
     SwFootnoteIdxs aTmpFntIdx;
 
-    SwUndoMove * pUndoMove = nullptr;
+    std::unique_ptr<SwUndoMove> pUndoMove;
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         m_rDoc.GetIDocumentUndoRedo().ClearRedo();
-        pUndoMove = new SwUndoMove( rPaM, rPos );
+        pUndoMove.reset(new SwUndoMove( rPaM, rPos ));
         pUndoMove->SetMoveRedlines( eMvFlags == SwMoveFlags::REDLINES );
     }
     else
@@ -2074,7 +2074,6 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         // after a MoveRange() the Mark is deleted
         if ( rPaM.HasMark() ) // => no Move occurred!
         {
-            delete pUndoMove;
             return false;
         }
     }
@@ -2136,7 +2135,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         // The newly inserted range is now inbetween SPoint and GetMark.
         pUndoMove->SetDestRange( aSavePam, *rPaM.GetPoint(),
                                     bJoin, bCorrSavePam );
-        m_rDoc.GetIDocumentUndoRedo().AppendUndo( pUndoMove );
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo( std::move(pUndoMove) );
     }
     else
     {
@@ -2213,10 +2212,10 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
     bool bUpdateFootnote = false;
     SwFootnoteIdxs aTmpFntIdx;
 
-    SwUndoMove* pUndo = nullptr;
+    std::unique_ptr<SwUndoMove> pUndo;
     if ((SwMoveFlags::CREATEUNDOOBJ & eMvFlags ) && m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        pUndo = new SwUndoMove( &m_rDoc, rRange, rPos );
+        pUndo.reset(new SwUndoMove( &m_rDoc, rRange, rPos ));
     }
     else
     {
@@ -2277,8 +2276,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
     else
     {
         aIdx = rRange.aStart;
-        delete pUndo;
-        pUndo = nullptr;
+        pUndo.reset();
     }
 
     // move the Flys to the new position
@@ -2312,7 +2310,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
     if( pUndo )
     {
         pUndo->SetDestRange( aIdx, rPos, *pSaveInsPos );
-        m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
     }
 
     pSaveInsPos.reset();
@@ -2418,8 +2416,8 @@ bool DocumentContentOperationsManager::Overwrite( const SwPaM &rRg, const OUStri
             }
             if (!bMerged)
             {
-                SwUndo *const pUndoOW( new SwUndoOverwrite(&m_rDoc, rPt, c) );
-                m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndoOW);
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(
+                    o3tl::make_unique<SwUndoOverwrite>(&m_rDoc, rPt, c) );
             }
         }
         else
@@ -2503,9 +2501,9 @@ bool DocumentContentOperationsManager::InsertString( const SwPaM &rRg, const OUS
         OUString const ins(pNode->InsertText(rStr, rPos.nContent, nInsertMode));
         if (bDoesUndo)
         {
-            SwUndoInsert * const pUndo( new SwUndoInsert(rPos.nNode,
-                    rPos.nContent.GetIndex(), ins.getLength(), nInsertMode));
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo(
+                o3tl::make_unique<SwUndoInsert>(rPos.nNode,
+                        rPos.nContent.GetIndex(), ins.getLength(), nInsertMode));
         }
     }
     else
@@ -2531,7 +2529,7 @@ bool DocumentContentOperationsManager::InsertString( const SwPaM &rRg, const OUS
         {
             pUndo = new SwUndoInsert( rPos.nNode, nInsPos, 0, nInsertMode,
                             !rCC.isLetterNumeric( rStr, 0 ) );
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo( pUndo );
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
         }
 
         OUString const ins(pNode->InsertText(rStr, rPos.nContent, nInsertMode));
@@ -2544,7 +2542,7 @@ bool DocumentContentOperationsManager::InsertString( const SwPaM &rRg, const OUS
             {
                 pUndo = new SwUndoInsert(rPos.nNode, nInsPos, 1, nInsertMode,
                             !rCC.isLetterNumeric(ins, i));
-                m_rDoc.GetIDocumentUndoRedo().AppendUndo( pUndo );
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
             }
         }
     }
@@ -2573,9 +2571,9 @@ void DocumentContentOperationsManager::TransliterateText(
     const SwPaM& rPaM,
     utl::TransliterationWrapper& rTrans )
 {
-    SwUndoTransliterate *const pUndo = (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
-        ?   new SwUndoTransliterate( rPaM, rTrans )
-        :   nullptr;
+    std::unique_ptr<SwUndoTransliterate> pUndo;
+    if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
+        pUndo.reset(new SwUndoTransliterate( rPaM, rTrans ));
 
     const SwPosition* pStt = rPaM.Start(),
                        * pEnd = rPaM.End();
@@ -2614,7 +2612,7 @@ void DocumentContentOperationsManager::TransliterateText(
             ++aIdx;
             if( pTNd )
                 pTNd->TransliterateText(
-                        rTrans, nSttCnt, pTNd->GetText().getLength(), pUndo);
+                        rTrans, nSttCnt, pTNd->GetText().getLength(), pUndo.get());
         }
 
         for( ; aIdx.GetIndex() < nEndNd; ++aIdx )
@@ -2623,24 +2621,22 @@ void DocumentContentOperationsManager::TransliterateText(
             if (pTNd)
             {
                 pTNd->TransliterateText(
-                        rTrans, 0, pTNd->GetText().getLength(), pUndo);
+                        rTrans, 0, pTNd->GetText().getLength(), pUndo.get());
             }
         }
 
         if( nEndCnt && nullptr != ( pTNd = pEnd->nNode.GetNode().GetTextNode() ))
-            pTNd->TransliterateText( rTrans, 0, nEndCnt, pUndo );
+            pTNd->TransliterateText( rTrans, 0, nEndCnt, pUndo.get() );
     }
     else if( pTNd && nSttCnt < nEndCnt )
-        pTNd->TransliterateText( rTrans, nSttCnt, nEndCnt, pUndo );
+        pTNd->TransliterateText( rTrans, nSttCnt, nEndCnt, pUndo.get() );
 
     if( pUndo )
     {
         if( pUndo->HasData() )
         {
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
         }
-        else
-            delete pUndo;
     }
     m_rDoc.getIDocumentState().SetModified();
 }
@@ -2729,7 +2725,7 @@ void DocumentContentOperationsManager::ReRead( SwPaM& rPam, const OUString& rGrf
     {
         if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
         {
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo(new SwUndoReRead(rPam, *pGrfNd));
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo(o3tl::make_unique<SwUndoReRead>(rPam, *pGrfNd));
         }
 
         // Because we don't know if we can mirror the graphic, the mirror attribute is always reset
@@ -2846,7 +2842,7 @@ SwDrawFrameFormat* DocumentContentOperationsManager::InsertDrawObj(
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        m_rDoc.GetIDocumentUndoRedo().AppendUndo( new SwUndoInsLayFormat(pFormat, 0, 0) );
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoInsLayFormat>(pFormat, 0, 0) );
     }
 
     m_rDoc.getIDocumentState().SetModified();
@@ -2873,7 +2869,7 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
         if( pNode->IsTextNode() )
         {
             pUndo = new SwUndoSplitNode( &m_rDoc, rPos, bChkTableStart );
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
         }
     }
 
@@ -3014,7 +3010,7 @@ bool DocumentContentOperationsManager::AppendTextNode( SwPosition& rPos )
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        m_rDoc.GetIDocumentUndoRedo().AppendUndo( new SwUndoInsert( rPos.nNode ) );
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoInsert>( rPos.nNode ) );
     }
 
     // To-Do - add 'SwExtraRedlineTable' also ?
@@ -3120,20 +3116,20 @@ bool DocumentContentOperationsManager::InsertPoolItem(
         return false;
 
     SwDataChanged aTmp( rRg );
-    SwUndoAttr* pUndoAttr = nullptr;
+    std::unique_ptr<SwUndoAttr> pUndoAttr;
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         m_rDoc.GetIDocumentUndoRedo().ClearRedo();
-        pUndoAttr = new SwUndoAttr( rRg, rHt, nFlags );
+        pUndoAttr.reset(new SwUndoAttr( rRg, rHt, nFlags ));
     }
 
     SfxItemSet aSet( m_rDoc.GetAttrPool(), {{rHt.Which(), rHt.Which()}} );
     aSet.Put( rHt );
-    const bool bRet = lcl_InsAttr( &m_rDoc, rRg, aSet, nFlags, pUndoAttr, bExpandCharToPara );
+    const bool bRet = lcl_InsAttr( &m_rDoc, rRg, aSet, nFlags, pUndoAttr.get(), bExpandCharToPara );
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        m_rDoc.GetIDocumentUndoRedo().AppendUndo( pUndoAttr );
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo( std::move(pUndoAttr) );
     }
 
     if( bRet )
@@ -3147,18 +3143,18 @@ void DocumentContentOperationsManager::InsertItemSet ( const SwPaM &rRg, const S
                             const SetAttrMode nFlags )
 {
     SwDataChanged aTmp( rRg );
-    SwUndoAttr* pUndoAttr = nullptr;
+    std::unique_ptr<SwUndoAttr> pUndoAttr;
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         m_rDoc.GetIDocumentUndoRedo().ClearRedo();
-        pUndoAttr = new SwUndoAttr( rRg, rSet, nFlags );
+        pUndoAttr.reset(new SwUndoAttr( rRg, rSet, nFlags ));
     }
 
-    bool bRet = lcl_InsAttr( &m_rDoc, rRg, rSet, nFlags, pUndoAttr );
+    bool bRet = lcl_InsAttr( &m_rDoc, rRg, rSet, nFlags, pUndoAttr.get() );
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
-        m_rDoc.GetIDocumentUndoRedo().AppendUndo( pUndoAttr );
+        m_rDoc.GetIDocumentUndoRedo().AppendUndo( std::move(pUndoAttr) );
     }
 
     if( bRet )
@@ -3665,7 +3661,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
                 && pUndoRedlineDel->CanGrouping(*undos.front());
             if (!bMerged)
             {
-                m_rDoc.GetIDocumentUndoRedo().AppendUndo(undos.front().release());
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::move(undos.front()));
             }
             undos.clear(); // prevent unmatched EndUndo
         }
@@ -3674,11 +3670,11 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
             m_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::DELETE, &aRewriter);
             for (auto& it : MarkUndos)
             {
-                m_rDoc.GetIDocumentUndoRedo().AppendUndo(it.release());
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::move(it));
             }
             for (auto & it : undos)
             {
-                m_rDoc.GetIDocumentUndoRedo().AppendUndo(it.release());
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::move(it));
             }
         }
     }
@@ -3819,7 +3815,7 @@ bool DocumentContentOperationsManager::DeleteRangeImplImpl(SwPaM & rPam)
         }
         if (!bMerged)
         {
-            m_rDoc.GetIDocumentUndoRedo().AppendUndo( new SwUndoDelete( rPam ) );
+            m_rDoc.GetIDocumentUndoRedo().AppendUndo( o3tl::make_unique<SwUndoDelete>( rPam ) );
         }
 
         m_rDoc.getIDocumentState().SetModified();
@@ -4059,9 +4055,8 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
 
             if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
             {
-                SwUndo *const pUndoRD =
-                    new SwUndoRedlineDelete( aDelPam, SwUndoId::REPLACE );
-                m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndoRD);
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(
+                    o3tl::make_unique<SwUndoRedlineDelete>( aDelPam, SwUndoId::REPLACE ));
             }
             m_rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( nsRedlineType_t::REDLINE_DELETE, aDelPam ), true);
 
@@ -4103,7 +4098,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
             if (bDoesUndo)
             {
                 pUndoRpl = new SwUndoReplace(aDelPam, sRepl, bRegExReplace);
-                m_rDoc.GetIDocumentUndoRedo().AppendUndo(pUndoRpl);
+                m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndoRpl));
             }
             ::sw::UndoGuard const undoGuard(m_rDoc.GetIDocumentUndoRedo());
 
@@ -4292,7 +4287,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     if (pDoc->GetIDocumentUndoRedo().DoesUndo())
     {
         pUndo = new SwUndoCpyDoc(*pCopyPam);
-        pDoc->GetIDocumentUndoRedo().AppendUndo( pUndo );
+        pDoc->GetIDocumentUndoRedo().AppendUndo( std::unique_ptr<SwUndo>(pUndo) );
     }
 
     RedlineFlags eOld = pDoc->getIDocumentRedlineAccess().GetRedlineFlags();
