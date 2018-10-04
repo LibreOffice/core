@@ -1388,6 +1388,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bClippedPictures = false;
     bool bBackgroundParaOverDrawings = false;
     bool bTabOverMargin = false;
+    bool bTabOverMarginValue = false;
     bool bPropLineSpacingShrinksFirstLine = false;
     bool bSubtractFlysAnchoredAtFlys = false;
     bool bDisableOffPagePositioning = false;
@@ -1478,7 +1479,10 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                 else if ( pValues->Name == "BackgroundParaOverDrawings" )
                     bBackgroundParaOverDrawings = true;
                 else if ( pValues->Name == "TabOverMargin" )
+                {
                     bTabOverMargin = true;
+                    pValues->Value >>= bTabOverMarginValue;
+                }
                 else if ( pValues->Name == "PropLineSpacingShrinksFirstLine" )
                     bPropLineSpacingShrinksFirstLine = true;
                 else if (pValues->Name == "SubtractFlysAnchoredAtFlys")
@@ -1638,6 +1642,14 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     if ( !bTabOverMargin )
         xProps->setPropertyValue("TabOverMargin", makeAny( false ) );
+
+    if (bTabOverMarginValue)
+        // Let TabOverMargin imply the new default for
+        // PrinterIndependentLayout, knowing the first is set by Word import
+        // filters and Word defaults to our new default as well.
+        xProps->setPropertyValue(
+            "PrinterIndependentLayout",
+            uno::Any(static_cast<sal_Int16>(document::PrinterIndependentLayout::HIGH_RESOLUTION)));
 
     if (!bPropLineSpacingShrinksFirstLine)
         xProps->setPropertyValue("PropLineSpacingShrinksFirstLine", makeAny(false));

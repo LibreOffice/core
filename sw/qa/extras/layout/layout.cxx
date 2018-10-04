@@ -49,6 +49,7 @@ public:
     void testTdf117188();
     void testTdf117187();
     void testTdf119875();
+    void testTdf120287();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testRedlineFootnotes);
@@ -73,6 +74,7 @@ public:
     CPPUNIT_TEST(testTdf117188);
     CPPUNIT_TEST(testTdf117187);
     CPPUNIT_TEST(testTdf119875);
+    CPPUNIT_TEST(testTdf120287);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1443,6 +1445,16 @@ void SwLayoutWriter::testTdf119875()
     // The first section had the same top value as the second one, so they
     // overlapped.
     CPPUNIT_ASSERT_LESS(nSecondTop, nFirstTop);
+}
+
+void SwLayoutWriter::testTdf120287()
+{
+    createDoc("tdf120287.fodt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // This was 2, TabOverMargin Word-specific compat flag did not imply
+    // default-in-Word printer-independent layout, resulting in an additional
+    // line break.
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/LineBreak", 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
