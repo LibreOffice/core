@@ -11,9 +11,12 @@ import unittest
 from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.container import NoSuchElementException
 from com.sun.star.lang import IllegalArgumentException
-
+from com.sun.star.uno import RuntimeException
 
 class XAutoTextContainer(unittest.TestCase):
+    # 0 indicates the path of the Office Basis layer
+    # 1 indicates the path of the user directory
+    GROUP_POSTFIX = '*1'
 
     @classmethod
     def setUpClass(self):
@@ -35,8 +38,8 @@ class XAutoTextContainer(unittest.TestCase):
         # group name must contain a-z, A-z, 0-9, '_', ' ' only
         xNames = ['Name', 'TEST', 'Name2', '_With_underscore_', 'with space', '123456']
         for xName in xNames:
-            xAutoTextContainer.insertNewByName(xName)
-            xAutoTextContainer.removeByName(xName)
+            xAutoTextContainer.insertNewByName(xName+self.GROUP_POSTFIX)
+            xAutoTextContainer.removeByName(xName+self.GROUP_POSTFIX)
 
     def test_insertNewByName_Spaces(self):
         # initialization
@@ -47,14 +50,14 @@ class XAutoTextContainer(unittest.TestCase):
         # perform unit test
         # add
         xName = '  spaces  '
-        xAutoTextContainer.insertNewByName(xName)
+        xAutoTextContainer.insertNewByName(xName+self.GROUP_POSTFIX)
 
         # try to remove
         with self.assertRaises(NoSuchElementException):
-            xAutoTextContainer.removeByName(xName)
+            xAutoTextContainer.removeByName(xName+self.GROUP_POSTFIX)
 
         # remove trimmed
-        xAutoTextContainer.removeByName('spaces')
+        xAutoTextContainer.removeByName('spaces'+self.GROUP_POSTFIX)
 
     def test_insertNewByName_Several(self):
         # initialization
@@ -63,17 +66,20 @@ class XAutoTextContainer(unittest.TestCase):
             return
 
         # perform unit test
-        xAutoTextGroup1 = xAutoTextContainer.insertNewByName("atc_name1")
-        xAutoTextGroup2 = xAutoTextContainer.insertNewByName("atc_name2")
-        xAutoTextGroup3 = xAutoTextContainer.insertNewByName("atc_name3")
+        xAutoTextGroup1 = xAutoTextContainer.insertNewByName(
+            "atc_name1"+self.GROUP_POSTFIX)
+        xAutoTextGroup2 = xAutoTextContainer.insertNewByName(
+            "atc_name2"+self.GROUP_POSTFIX)
+        xAutoTextGroup3 = xAutoTextContainer.insertNewByName(
+            "atc_name3"+self.GROUP_POSTFIX)
 
-        self.assertEqual("atc_name1*0", xAutoTextGroup1.getName())
-        self.assertEqual("atc_name2*0", xAutoTextGroup2.getName())
-        self.assertEqual("atc_name3*0", xAutoTextGroup3.getName())
+        self.assertEqual("atc_name1"+self.GROUP_POSTFIX, xAutoTextGroup1.getName())
+        self.assertEqual("atc_name2"+self.GROUP_POSTFIX, xAutoTextGroup2.getName())
+        self.assertEqual("atc_name3"+self.GROUP_POSTFIX, xAutoTextGroup3.getName())
 
-        xAutoTextContainer.removeByName("atc_name1")
-        xAutoTextContainer.removeByName("atc_name2")
-        xAutoTextContainer.removeByName("atc_name3")
+        xAutoTextContainer.removeByName("atc_name1"+self.GROUP_POSTFIX)
+        xAutoTextContainer.removeByName("atc_name2"+self.GROUP_POSTFIX)
+        xAutoTextContainer.removeByName("atc_name3"+self.GROUP_POSTFIX)
 
     def test_insertNewByName_DifferentCase(self):
         # initialization
@@ -82,26 +88,26 @@ class XAutoTextContainer(unittest.TestCase):
             return
 
         # perform unit test
-        xAutoTextGroup1 = xAutoTextContainer.insertNewByName("myname")
-        xAutoTextGroup2 = xAutoTextContainer.insertNewByName("MYNAME")
-        xAutoTextGroup3 = xAutoTextContainer.insertNewByName("MyName")
+        xAutoTextGroup1 = xAutoTextContainer.insertNewByName("myname"+self.GROUP_POSTFIX)
+        xAutoTextGroup2 = xAutoTextContainer.insertNewByName("MYNAME"+self.GROUP_POSTFIX)
+        xAutoTextGroup3 = xAutoTextContainer.insertNewByName("MyName"+self.GROUP_POSTFIX)
 
-        self.assertEqual("myname*0", xAutoTextGroup1.getName())
+        self.assertEqual("myname"+self.GROUP_POSTFIX, xAutoTextGroup1.getName())
 
         # Note: different platforms could support different cases
         #       in container names
         validName2 = False
-        validName2 |= (xAutoTextGroup2.getName() == "MYNAME*0")
+        validName2 |= (xAutoTextGroup2.getName() == "MYNAME"+self.GROUP_POSTFIX)
         validName2 |= (xAutoTextGroup2.getName()[:5] == "group")
 
         validName3 = False
-        validName3 |= (xAutoTextGroup3.getName() == "MyName*0")
+        validName3 |= (xAutoTextGroup3.getName() == "MyName"+self.GROUP_POSTFIX)
         validName3 |= (xAutoTextGroup3.getName()[:5] == "group")
 
         self.assertTrue(validName2)
         self.assertTrue(validName3)
 
-        xAutoTextContainer.removeByName("myname")
+        xAutoTextContainer.removeByName("myname"+self.GROUP_POSTFIX)
 
         xName = xAutoTextGroup2.getName()
         xName = xName[:xName.find('*')]
@@ -141,30 +147,32 @@ class XAutoTextContainer(unittest.TestCase):
             return
 
         # perform unit test
-        xAutoTextContainer.insertNewByName('GroupName')
+        xAutoTextContainer.insertNewByName('GroupName'+self.GROUP_POSTFIX)
 
         with self.assertRaises(NoSuchElementException):
-            xAutoTextContainer.removeByName('groupname')
+            xAutoTextContainer.removeByName('groupname'+self.GROUP_POSTFIX)
 
         with self.assertRaises(NoSuchElementException):
-            xAutoTextContainer.removeByName('GROUPNAME')
+            xAutoTextContainer.removeByName('GROUPNAME'+self.GROUP_POSTFIX)
 
-        xAutoTextContainer.removeByName('GroupName')
+        xAutoTextContainer.removeByName('GroupName'+self.GROUP_POSTFIX)
 
     def createAutoTextContainer(self):
         xServiceManager = self._uno.xContext.ServiceManager
         self.assertIsNotNone(xServiceManager)
-        xAutoTextContainer = xServiceManager.createInstance("com.sun.star.text.AutoTextContainer")
+        xAutoTextContainer = xServiceManager.createInstance(
+            "com.sun.star.text.AutoTextContainer")
         self.assertIsNotNone(xAutoTextContainer)
 
         # Note that in some systems the user may lack of
         # write access to the Office Basis directory
-        xAutoTextGroup = xAutoTextContainer.insertNewByName("_PermCheck1")
+        xAutoTextGroup = xAutoTextContainer.insertNewByName(
+            "_PermCheck1"+self.GROUP_POSTFIX)
         try:
             titles = xAutoTextGroup.getTitles()
         except RuntimeException:
             return None
-        xAutoTextContainer.removeByName("_PermCheck1")
+        xAutoTextContainer.removeByName("_PermCheck1"+self.GROUP_POSTFIX)
 
         # ok, we have permissions
         return xAutoTextContainer
