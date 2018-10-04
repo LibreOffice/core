@@ -146,6 +146,7 @@ bool GetSplitSizeFromString( const OUString& rStr, Size& rSize )
 SfxChildWindow::SfxChildWindow(vcl::Window *pParentWindow, sal_uInt16 nId)
     : pParent(pParentWindow)
     , nType(nId)
+    , pController(nullptr)
     , eChildAlignment(SfxChildAlignment::NOALIGNMENT)
     , pImpl(new SfxChildWindow_Impl)
 {
@@ -270,7 +271,7 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
 
     DBG_ASSERT(pFact && (pChild || !rInfo.bVisible), "ChildWindow-Typ not registered!");
 
-    if ( pChild && !pChild->pWindow )
+    if (pChild && (!pChild->pWindow && !pChild->pController))
     {
         DELETEZ(pChild);
         SAL_INFO("sfx.appl", "ChildWindow has no Window!");
@@ -321,24 +322,27 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
 {
 
     SfxChildWinInfo aInfo(pImpl->pFact->aInfo);
-    aInfo.aPos  = pWindow->GetPosPixel();
-    aInfo.aSize = pWindow->GetSizePixel();
-    if ( pWindow->IsSystemWindow() )
+    if (pWindow)    // TODO
     {
-        WindowStateMask nMask = WindowStateMask::Pos | WindowStateMask::State;
-        if ( pWindow->GetStyle() & WB_SIZEABLE )
-            nMask |= ( WindowStateMask::Width | WindowStateMask::Height );
-        aInfo.aWinState = static_cast<SystemWindow*>(pWindow.get())->GetWindowState( nMask );
-    }
-    else if (DockingWindow* pDockingWindow = dynamic_cast<DockingWindow*>(pWindow.get()))
-    {
-        if (pDockingWindow->GetFloatingWindow())
-            aInfo.aWinState = pDockingWindow->GetFloatingWindow()->GetWindowState();
-        else if (SfxDockingWindow* pSfxDockingWindow = dynamic_cast<SfxDockingWindow*>(pDockingWindow))
+        aInfo.aPos  = pWindow->GetPosPixel();
+        aInfo.aSize = pWindow->GetSizePixel();
+        if ( pWindow->IsSystemWindow() )
         {
-            SfxChildWinInfo aTmpInfo;
-            pSfxDockingWindow->FillInfo( aTmpInfo );
-            aInfo.aExtraString = aTmpInfo.aExtraString;
+            WindowStateMask nMask = WindowStateMask::Pos | WindowStateMask::State;
+            if ( pWindow->GetStyle() & WB_SIZEABLE )
+                nMask |= ( WindowStateMask::Width | WindowStateMask::Height );
+            aInfo.aWinState = static_cast<SystemWindow*>(pWindow.get())->GetWindowState( nMask );
+        }
+        else if (DockingWindow* pDockingWindow = dynamic_cast<DockingWindow*>(pWindow.get()))
+        {
+            if (pDockingWindow->GetFloatingWindow())
+                aInfo.aWinState = pDockingWindow->GetFloatingWindow()->GetWindowState();
+            else if (SfxDockingWindow* pSfxDockingWindow = dynamic_cast<SfxDockingWindow*>(pDockingWindow))
+            {
+                SfxChildWinInfo aTmpInfo;
+                pSfxDockingWindow->FillInfo( aTmpInfo );
+                aInfo.aExtraString = aTmpInfo.aExtraString;
+            }
         }
     }
 
@@ -608,12 +612,20 @@ void SfxChildWindow::SetVisible_Impl( bool bVis )
 
 void SfxChildWindow::Hide()
 {
-    pWindow->Hide();
+    fprintf(stderr, "hide it %p\n", pController);
+    if (pController)
+        pController->getDialog()->hide();
+    else
+        pWindow->Hide();
 }
 
 void SfxChildWindow::Show( ShowFlags nFlags )
 {
-    pWindow->Show(true, nFlags);
+    fprintf(stderr, "show it %p\n", pController);
+    if (pController)
+        pController->getDialog()->show();
+    else
+        pWindow->Show(true, nFlags);
 }
 
 vcl::Window* SfxChildWindow::GetContextWindow( SfxModule const *pModule ) const
@@ -646,7 +658,15 @@ bool SfxChildWindow::QueryClose()
     }
 
     if ( bAllow )
-        bAllow = !GetWindow()->IsInModalMode();
+    {
+        if (GetController())
+        {
+            weld::Dialog* pDialog = GetController()->getDialog();
+            bAllow = pDialog->get_visible() && pDialog->get_modal();
+        }
+        else if (GetWindow())
+            bAllow = !GetWindow()->IsInModalMode();
+    }
 
     return bAllow;
 }
