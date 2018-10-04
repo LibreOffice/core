@@ -547,7 +547,7 @@ SalGraphics* AquaSalInfoPrinter::StartPage( ImplJobSetup* i_pSetupData, bool i_b
     if( i_bNewJobData && i_pSetupData )
         SetPrinterData( i_pSetupData );
 
-    CGContextRef rContext = static_cast<CGContextRef>([[NSGraphicsContext currentContext] graphicsPort]);
+    CGContextRef rContext = [[NSGraphicsContext currentContext] CGContext];
 
     SetupPrinterGraphics( rContext );
 

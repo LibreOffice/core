@@ -953,7 +953,7 @@ NSImage* CreateNSImage( const Image& rImage )
     {
         [pImage lockFocusFlipped:YES];
         NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
-        CGContextRef rCGContext = static_cast<CGContextRef>([pContext graphicsPort]);
+        CGContextRef rCGContext = [pContext CGContext];
 
         const CGRect aDstRect = { {0, 0}, { static_cast<CGFloat>(aSize.Width()), static_cast<CGFloat>(aSize.Height()) } };
         CGContextDrawImage( rCGContext, aDstRect, xImage );
