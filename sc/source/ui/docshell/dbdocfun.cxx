@@ -93,7 +93,7 @@ bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange )
     }
     else
     {
-        bOk = pDocColl->getNamedDBs().insert(pNew.release());
+        bOk = pDocColl->getNamedDBs().insert(std::move(pNew));
     }
     if ( bCompile )
         rDoc.CompileHybridFormula();
@@ -164,13 +164,13 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
     {
         ScDocShellModificator aModificator( rDocShell );
 
-        ScDBData* pNewData = new ScDBData(rNew, **iterOld);
+        std::unique_ptr<ScDBData> pNewData(new ScDBData(rNew, **iterOld));
 
         std::unique_ptr<ScDBCollection> pUndoColl( new ScDBCollection( *pDocColl ) );
 
         rDoc.PreprocessDBDataUpdate();
         rDBs.erase(iterOld);
-        bool bInserted = rDBs.insert(pNewData);
+        bool bInserted = rDBs.insert(std::move(pNewData));
         if (!bInserted)                             // error -> restore old state
         {
             rDoc.SetDBCollection(std::move(pUndoColl));       // belongs to the document then

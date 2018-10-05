@@ -442,7 +442,7 @@ void SAL_CALL ScXMLDatabaseRangeContext::endFastElement( sal_Int32 /*nElement*/ 
         if (pData.get())
         {
             setAutoFilterFlags(*pDoc, *pData);
-            (void)pDoc->GetDBCollection()->getNamedDBs().insert(pData.release());
+            (void)pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pData));
         }
     }
 }

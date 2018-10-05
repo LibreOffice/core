@@ -1579,8 +1579,8 @@ void Test::testSharedFormulaUpdateOnDBChange()
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch DB collection object.", pDBs);
 
     // Define database range 'MyRange' for A1:A2.
-    ScDBData* pData = new ScDBData("MyRange", 0, 0, 0, 0, 1);
-    bool bInserted = pDBs->getNamedDBs().insert(pData);
+    std::unique_ptr<ScDBData> pData(new ScDBData("MyRange", 0, 0, 0, 0, 1));
+    bool bInserted = pDBs->getNamedDBs().insert(std::move(pData));
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new database range.", bInserted);
 
     // Insert in C2:C4 a group of formula cells that reference MyRange.
@@ -1602,8 +1602,8 @@ void Test::testSharedFormulaUpdateOnDBChange()
 
     // Change the range referenced by MyRange to A1:A4.
     ScDBCollection aNewDBs(m_pDoc);
-    ScDBData* pNewData = new ScDBData("MyRange", 0, 0, 0, 0, 3);
-    bInserted = aNewDBs.getNamedDBs().insert(pNewData);
+    std::unique_ptr<ScDBData> pNewData(new ScDBData("MyRange", 0, 0, 0, 0, 3));
+    bInserted = aNewDBs.getNamedDBs().insert(std::move(pNewData));
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new database range.", bInserted);
 
     std::vector<ScRange> aDeleted;

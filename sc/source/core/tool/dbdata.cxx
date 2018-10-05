@@ -1152,9 +1152,9 @@ auto ScDBCollection::NamedDBs::findByUpperName2(const OUString& rName) -> iterat
         m_DBs.begin(), m_DBs.end(), FindByUpperName(rName));
 }
 
-bool ScDBCollection::NamedDBs::insert(ScDBData* p)
+bool ScDBCollection::NamedDBs::insert(std::unique_ptr<ScDBData> pData)
 {
-    unique_ptr<ScDBData> pData(p);
+    auto p = pData.get();
     if (!pData->GetIndex())
         pData->SetIndex(mrParent.nEntryIndex++);
 
