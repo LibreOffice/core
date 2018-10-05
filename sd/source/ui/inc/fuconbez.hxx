@@ -47,7 +47,7 @@ public:
     void    SetEditMode(sal_uInt16 nMode);
     sal_uInt16  GetEditMode() { return nEditMode; }
 
-    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle) override;
+    virtual SdrObjectUniquePtr CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle) override;
 
 private:
     FuConstructBezierPolygon (
