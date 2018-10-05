@@ -1458,7 +1458,7 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
         }
     }
 
-    rDoc.GetDPCollection()->InsertNewTable(pDestObj.release());
+    rDoc.GetDPCollection()->InsertNewTable(std::move(pDestObj));
 
     rDestObj.ReloadGroupTableData();
     rDestObj.SyncAllDimensionMembers();
