@@ -49,7 +49,7 @@ private:
 void ScDataProvidersTest::testCSVImport()
 {
     ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 10, 10);
-    bool bInserted = m_pDoc->GetDBCollection()->getNamedDBs().insert(pDBData);
+    bool bInserted = m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     CPPUNIT_ASSERT(bInserted);
 
     OUString aFileURL;
@@ -77,7 +77,7 @@ void ScDataProvidersTest::testCSVImport()
 void ScDataProvidersTest::testDataLargerThanDB()
 {
     ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 1, 1);
-    bool bInserted = m_pDoc->GetDBCollection()->getNamedDBs().insert(pDBData);
+    bool bInserted = m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     CPPUNIT_ASSERT(bInserted);
 
     OUString aFileURL;
@@ -105,7 +105,7 @@ void ScDataProvidersTest::testDataLargerThanDB()
 void ScDataProvidersTest::testHTMLImport()
 {
     ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 10, 10);
-    bool bInserted = m_pDoc->GetDBCollection()->getNamedDBs().insert(pDBData);
+    bool bInserted = m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     CPPUNIT_ASSERT(bInserted);
 
     OUString aFileURL;
@@ -145,7 +145,7 @@ void ScDataProvidersTest::testHTMLImport()
 void ScDataProvidersTest::testXMLImport()
 {
     ScDBData* pDBData = new ScDBData("testDB", 0, 0, 0, 10, 10);
-    bool bInserted = m_pDoc->GetDBCollection()->getNamedDBs().insert(pDBData);
+    bool bInserted = m_pDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     CPPUNIT_ASSERT(bInserted);
 
     OUString aFileURL;

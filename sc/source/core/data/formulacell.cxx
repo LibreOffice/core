@@ -469,7 +469,7 @@ void adjustDBRange(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScD
     if (!pNewDBData)
     {
         pNewDBData = new ScDBData(*pDBData);
-        bool ins = aNewNamedDBs.insert(pNewDBData);
+        bool ins = aNewNamedDBs.insert(std::unique_ptr<ScDBData>(pNewDBData));
         assert(ins); (void)ins;
     }
     pToken->SetIndex(pNewDBData->GetIndex());

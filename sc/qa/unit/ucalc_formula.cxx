@@ -155,10 +155,10 @@ void Test::testFormulaCreateStringFromTokens()
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aDBs); ++i)
     {
-        ScDBData* pData = new ScDBData(
+        std::unique_ptr<ScDBData> pData( new ScDBData(
             OUString::createFromAscii(
-                aDBs[i].pName), aDBs[i].nTab, aDBs[i].nCol1, aDBs[i].nRow1, aDBs[i].nCol2,aDBs[i].nRow2);
-        bool bInserted = pDBs->getNamedDBs().insert(pData);
+                aDBs[i].pName), aDBs[i].nTab, aDBs[i].nCol1, aDBs[i].nRow1, aDBs[i].nCol2,aDBs[i].nRow2) );
+        bool bInserted = pDBs->getNamedDBs().insert(std::move(pData));
         CPPUNIT_ASSERT_MESSAGE(
             OString(
                 "Failed to insert \"" + OString(aDBs[i].pName) + "\"").getStr(),
@@ -6792,8 +6792,8 @@ void Test::testFuncTableRef()
 
         // Insert "table" database range definition for A1:B4, with default
         // HasHeader=true and HasTotals=false.
-        ScDBData* pData = new ScDBData( "table", 0,0,0, 1,3);
-        bool bInserted = pDBs->getNamedDBs().insert(pData);
+        std::unique_ptr<ScDBData> pData(new ScDBData( "table", 0,0,0, 1,3));
+        bool bInserted = pDBs->getNamedDBs().insert(std::move(pData));
         CPPUNIT_ASSERT_MESSAGE( "Failed to insert \"table\" database range.", bInserted);
     }
 
@@ -6970,8 +6970,8 @@ void Test::testFuncTableRef()
         CPPUNIT_ASSERT_MESSAGE("Failed to fetch DB collection object.", pDBs);
 
         // Insert "headerless" database range definition for E10:F12, without headers.
-        ScDBData* pData = new ScDBData( "hltable", 0, 4,9, 5,11, true, false);
-        bool bInserted = pDBs->getNamedDBs().insert(pData);
+        std::unique_ptr<ScDBData> pData(new ScDBData( "hltable", 0, 4,9, 5,11, true, false));
+        bool bInserted = pDBs->getNamedDBs().insert(std::move(pData));
         CPPUNIT_ASSERT_MESSAGE( "Failed to insert \"hltable\" database range.", bInserted);
     }
 

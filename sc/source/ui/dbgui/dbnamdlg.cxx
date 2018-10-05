@@ -455,16 +455,16 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl, Button*, void)
                 {
                     //  insert new area
 
-                    ScDBData* pNewEntry = new ScDBData( aNewName, aStart.Tab(),
+                    std::unique_ptr<ScDBData> pNewEntry(new ScDBData( aNewName, aStart.Tab(),
                                                         aStart.Col(), aStart.Row(),
                                                         aEnd.Col(), aEnd.Row(),
                                                         true, m_pBtnHeader->IsChecked(),
-                                                        m_pBtnTotals->IsChecked() );
+                                                        m_pBtnTotals->IsChecked() ));
                     pNewEntry->SetDoSize( m_pBtnDoSize->IsChecked() );
                     pNewEntry->SetKeepFmt( m_pBtnKeepFmt->IsChecked() );
                     pNewEntry->SetStripData( m_pBtnStripData->IsChecked() );
 
-                    bool ins = aLocalDbCol.getNamedDBs().insert(pNewEntry);
+                    bool ins = aLocalDbCol.getNamedDBs().insert(std::move(pNewEntry));
                     assert(ins); (void)ins;
                 }
 
