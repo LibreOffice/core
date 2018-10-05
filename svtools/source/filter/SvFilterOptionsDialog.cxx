@@ -69,6 +69,7 @@ class SvFilterOptionsDialog : public cppu::WeakImplHelper
     uno::Reference< lang::XComponent >
         mxSourceDocument;
 
+    css::uno::Reference<css::awt::XWindow> mxParent;
     OUString        maDialogTitle;
     FieldUnit       meFieldUnit;
     bool            mbExportSelection;
@@ -123,8 +124,19 @@ void SAL_CALL SvFilterOptionsDialog::release() throw()
 }
 
 // XInitialization
-void SAL_CALL SvFilterOptionsDialog::initialize( const uno::Sequence< uno::Any > & )
+void SAL_CALL SvFilterOptionsDialog::initialize(const uno::Sequence<uno::Any>& rArguments)
 {
+    for(const uno::Any& rArgument : rArguments)
+    {
+        beans::PropertyValue aProperty;
+        if (rArgument >>= aProperty)
+        {
+            if( aProperty.Name == "ParentWindow" )
+            {
+                aProperty.Value >>= mxParent;
+            }
+        }
+    }
 }
 
 // XServiceInfo
@@ -222,9 +234,7 @@ sal_Int16 SvFilterOptionsDialog::execute()
         }
         if ( nFormat < nFilterCount )
         {
-            vcl::Window* pParent = Application::GetDefDialogParent();
-            //TODO
-            FltCallDialogParameter aFltCallDlgPara(pParent ? pParent->GetFrameWeld() : nullptr, meFieldUnit);
+            FltCallDialogParameter aFltCallDlgPara(Application::GetFrameWeld(mxParent), meFieldUnit);
             aFltCallDlgPara.aFilterData = maFilterDataSequence;
             aFltCallDlgPara.aFilterExt = aGraphicFilter.GetExportFormatShortName( nFormat );
             bool bIsPixelFormat( aGraphicFilter.IsExportPixelFormat( nFormat ) );
