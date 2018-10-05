@@ -58,6 +58,7 @@ public:
     void testTdf117187();
     void testTdf119875();
     void testTdf120287();
+    void testTdf120287b();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testRedlineFootnotes);
@@ -88,6 +89,7 @@ public:
     CPPUNIT_TEST(testTdf117187);
     CPPUNIT_TEST(testTdf119875);
     CPPUNIT_TEST(testTdf120287);
+    CPPUNIT_TEST(testTdf120287b);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2557,6 +2559,16 @@ void SwLayoutWriter::testTdf120287()
     // default-in-Word printer-independent layout, resulting in an additional
     // line break.
     assertXPath(pXmlDoc, "/root/page/body/txt[1]/LineBreak", 1);
+}
+
+void SwLayoutWriter::testTdf120287b()
+{
+    createDoc("tdf120287b.fodt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // This was 1418, TabOverMargin did the right split of the paragraph to two
+    // lines, but then calculated a too large tab portion size on the first
+    // line.
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/Text[@nType='POR_TABRIGHT']", "nWidth", "17");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
