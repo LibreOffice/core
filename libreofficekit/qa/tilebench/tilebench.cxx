@@ -380,6 +380,8 @@ int main( int argc, char* argv[] )
 
     Document *pDocument = nullptr;
 
+    pOffice->setOptionalFeatures(LOK_FEATURE_NO_TILED_ANNOTATIONS);
+
     aTimes.emplace_back("load document");
     if (doc_url != nullptr)
         pDocument = pOffice->documentLoad(doc_url);
