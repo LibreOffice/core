@@ -21,10 +21,12 @@
 #define INCLUDED_BASEGFX_POLYGON_B2DTRAPEZOID_HXX
 
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vector>
 #include <basegfx/basegfxdllapi.h>
 
+
+namespace basegfx { class B2DPolyPolygon; }
+namespace basegfx { class B2DPoint; }
 
 namespace basegfx
 {

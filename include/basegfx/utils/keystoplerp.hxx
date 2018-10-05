@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASEGFX_UTILS_KEYSTOPLERP_HXX
 #define INCLUDED_BASEGFX_UTILS_KEYSTOPLERP_HXX
 
-#include <basegfx/numeric/ftools.hxx>
 #include <vector>
 #include <basegfx/basegfxdllapi.h>
 

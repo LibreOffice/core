@@ -23,7 +23,6 @@
 #include <ostream>
 
 #include <basegfx/tuple/b2ituple.hxx>
-#include <basegfx/vector/b2enums.hxx>
 #include <basegfx/basegfxdllapi.h>
 
 namespace basegfx

@@ -21,15 +21,14 @@
 #define INCLUDED_BASEGFX_POLYGON_B2DPOLYPOLYGONTOOLS_HXX
 
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/vector/b2dvector.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
-#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <vector>
 #include <set>
 #include <basegfx/basegfxdllapi.h>
 
+
+namespace com { namespace sun { namespace star { namespace drawing { struct PolyPolygonBezierCoords; } } } }
 
 namespace basegfx
 {
