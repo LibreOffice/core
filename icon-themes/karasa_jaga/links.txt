@@ -48,7 +48,6 @@ cmd/32/charmapcontrol.png cmd/32/insertsymbol.png
 cmd/32/circle.png cmd/32/basicshapes.circle.png
 cmd/32/circlepie.png cmd/32/basicshapes.circle-pie.png
 cmd/32/closedocs.png cmd/32/closedoc.png
-cmd/32/closepreview.png cmd/32/closedoc.png
 cmd/32/columnoperations.png cmd/32/entirecolumn.png
 cmd/32/commentchange.png cmd/32/commentchangetracking.png
 cmd/32/commonalignbottom.png cmd/32/alignbottom.png
@@ -74,7 +73,7 @@ cmd/32/editpastespecialmenu.png cmd/32/pastespecial.png
 cmd/32/ellipse.png cmd/32/basicshapes.ellipse.png
 cmd/32/ellipsetoolbox.png cmd/32/basicshapes.ellipse.png
 cmd/32/es/underlinesimple.png cmd/32/es/underline.png
-cmd/32/exitsearch.png cmd/32/closedoc.png
+cmd/32/exitsearch.png cmd/32/closepreview.png
 cmd/32/fieldmenu.png cmd/32/insertfield.png
 cmd/32/fieldnames.png cmd/32/fields.png
 cmd/32/fillcolor.png cmd/32/formatarea.png
@@ -374,7 +373,6 @@ cmd/lc_charmapcontrol.png cmd/lc_insertsymbol.png
 cmd/lc_circle.png cmd/lc_basicshapes.circle.png
 cmd/lc_circlepie.png cmd/lc_basicshapes.circle-pie.png
 cmd/lc_closedocs.png cmd/lc_closedoc.png
-cmd/lc_closepreview.png cmd/lc_closedoc.png
 cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
 cmd/lc_commentchange.png cmd/lc_commentchangetracking.png
 cmd/lc_commonalignbottom.png cmd/lc_alignbottom.png
@@ -399,7 +397,7 @@ cmd/lc_dsbeditdoc.png cmd/lc_editdoc.png
 cmd/lc_editpastespecialmenu.png cmd/lc_pastespecial.png
 cmd/lc_ellipse.png cmd/lc_basicshapes.ellipse.png
 cmd/lc_ellipsetoolbox.png cmd/lc_basicshapes.ellipse.png
-cmd/lc_exitsearch.png cmd/lc_closedoc.png
+cmd/lc_exitsearch.png cmd/lc_closepreview.png
 cmd/lc_fieldmenu.png cmd/lc_insertfield.png
 cmd/lc_fieldnames.png cmd/lc_fields.png
 cmd/lc_fillcolor.png cmd/lc_formatarea.png
@@ -649,7 +647,6 @@ cmd/sc_charmapcontrol.png cmd/sc_insertsymbol.png
 cmd/sc_circle.png cmd/sc_basicshapes.circle.png
 cmd/sc_circlepie.png cmd/sc_basicshapes.circle-pie.png
 cmd/sc_closedocs.png cmd/sc_closedoc.png
-cmd/sc_closepreview.png cmd/sc_closedoc.png
 cmd/sc_columnoperations.png cmd/sc_entirecolumn.png
 cmd/sc_commentchange.png cmd/sc_commentchangetracking.png
 cmd/sc_commonalignbottom.png cmd/sc_alignbottom.png
@@ -674,7 +671,7 @@ cmd/sc_dsbeditdoc.png cmd/sc_editdoc.png
 cmd/sc_editpastespecialmenu.png cmd/sc_pastespecial.png
 cmd/sc_ellipse.png cmd/sc_basicshapes.ellipse.png
 cmd/sc_ellipsetoolbox.png cmd/sc_basicshapes.ellipse.png
-cmd/sc_exitsearch.png cmd/sc_closedoc.png
+cmd/sc_exitsearch.png cmd/sc_closepreview.png
 cmd/sc_fieldmenu.png cmd/sc_insertfield.png
 cmd/sc_fieldnames.png cmd/sc_fields.png
 cmd/sc_fillcolor.png cmd/sc_formatarea.png
@@ -909,6 +906,7 @@ res/fileopen.png formula/res/fapclose.png
 res/foldercl.png formula/res/fapclose.png
 res/fp010.png cmd/sc_upsearch.png
 res/fp015.png fpicker/res/fp014.png
+res/grafikei.png cmd/sc_graphic.png
 res/im30827.png res/im30820.png
 res/lc05303.png cmd/lc_quit.png
 res/lc05504.png cmd/lc_print.png
@@ -1014,9 +1012,11 @@ res/sc16670.png cmd/sc_sbaexecutesql.png
 res/so03127.png res/so03126.png
 res/so03227.png res/odg_16_8.png
 res/sx03123.png res/odp_16_8.png
+res/sx03127.png res/sx03126.png
 res/sx03129.png dbaccess/res/db.png
 res/sx03130.png res/odp_16_8.png
 res/sx03131.png res/so03126.png
+res/sx03132.png res/sx03126.png
 res/sx03137.png res/sx03125.png
 res/sx03140.png res/sx03125.png
 res/sx03141.png formula/res/fapclose.png
@@ -1030,6 +1030,7 @@ res/sx03160.png res/odg_16_8.png
 res/sx03162.png res/odt_16_8.png
 res/sx03163.png res/ott_16_8.png
 res/sx03165.png cmd/sc_save.png
+res/sx03188.png res/sx03126.png
 res/sx03189.png formula/res/fapclose.png
 res/sx03218.png res/sx03217.png
 res/sx03219.png res/sx03125.png
