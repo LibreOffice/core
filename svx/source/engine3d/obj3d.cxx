@@ -114,7 +114,7 @@ bool E3dObject::IsBreakObjPossible()
     return false;
 }
 
-SdrAttrObj* E3dObject::GetBreakObj()
+std::unique_ptr<SdrAttrObj,SdrObjectFreeOp> E3dObject::GetBreakObj()
 {
     return nullptr;
 }
