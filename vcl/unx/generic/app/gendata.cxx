@@ -17,20 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_UNX_GENERIC_GDI_GCACH_XPEER_HXX
-#define INCLUDED_VCL_UNX_GENERIC_GDI_GCACH_XPEER_HXX
+#include <unx/gendata.hxx>
 
+#include <unx/fontmanager.hxx>
 #include <unx/glyphcache.hxx>
 
-class X11GlyphCache : public GlyphCache
+GenericUnixSalData::GenericUnixSalData(GenericUnixSalDataType const t, SalInstance* const pInstance)
+    : m_eType(t)
+    , m_pDisplay(nullptr)
+    , m_pGlyphCache(new GlyphCache)
 {
-public:
-    explicit X11GlyphCache();
-    virtual ~X11GlyphCache() override;
-    static X11GlyphCache& GetInstance();
-    static void  KillInstance();
-};
+    m_pInstance = pInstance;
+    SetSalData(this);
+}
 
-#endif // INCLUDED_VCL_UNX_GENERIC_GDI_GCACH_XPEER_HXX
+GenericUnixSalData::~GenericUnixSalData() {}
+
+void GenericUnixSalData::InitGlyphCache() { m_pGlyphCache.reset(new GlyphCache); }
+
+void GenericUnixSalData::InitPrintFontManager()
+{
+    GetGlyphCache();
+    m_pPrintFontManager.reset(new psp::PrintFontManager);
+    m_pPrintFontManager->initialize();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

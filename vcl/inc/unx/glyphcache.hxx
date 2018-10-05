@@ -50,7 +50,7 @@ class SvpGcpHelper;
 namespace basegfx { class B2DPolyPolygon; }
 namespace vcl { struct FontCapabilities; }
 
-class VCL_DLLPUBLIC GlyphCache
+class VCL_DLLPUBLIC GlyphCache final
 {
 public:
     explicit                GlyphCache();
