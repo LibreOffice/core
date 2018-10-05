@@ -1497,6 +1497,9 @@ sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
         else
             nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
         break;
+    case SvNumFormatType::NUMBER:
+        nKey = GetStandardFormat( eType, eLang );
+        break;
     default:
         nKey = GetStandardFormat( fNumber, nFIndex, eType, eLang );
     }
