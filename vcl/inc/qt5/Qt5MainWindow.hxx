@@ -35,6 +35,8 @@ class Qt5MainWindow : public QMainWindow
 public:
     Qt5MainWindow(Qt5Frame& rFrame, QWidget* parent = Q_NULLPTR,
                   Qt::WindowFlags f = Qt::WindowFlags());
+
+    Qt5Frame* getFrame() { return m_pFrame; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

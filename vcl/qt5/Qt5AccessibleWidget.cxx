@@ -22,6 +22,7 @@
 
 #include <QtGui/QAccessibleInterface>
 
+#include <Qt5MainWindow.hxx>
 #include <Qt5Frame.hxx>
 #include <Qt5Tools.hxx>
 #include <Qt5Widget.hxx>
@@ -638,6 +639,11 @@ QAccessibleInterface* Qt5AccessibleWidget::customFactory(const QString& classnam
         Qt5XAccessible* pXAccessible = dynamic_cast<Qt5XAccessible*>(object);
         if (pXAccessible)
             return new Qt5AccessibleWidget(pXAccessible->m_xAccessible);
+    }
+    if (classname == QLatin1String("Qt5MainWindow") && object)
+    {
+        Qt5MainWindow* pMainWindow = static_cast<Qt5MainWindow*>(object);
+        return new Qt5AccessibleWidget(pMainWindow->getFrame()->GetWindow()->GetAccessible());
     }
 
     return nullptr;
