@@ -1577,7 +1577,7 @@ void E3dView::BreakSingle3DObj(E3dObject* pObj)
     }
     else
     {
-        SdrAttrObj* pNewObj = pObj->GetBreakObj();
+        SdrAttrObj* pNewObj = pObj->GetBreakObj().release();
         if(pNewObj)
         {
             InsertObjectAtView(pNewObj, *GetSdrPageView(), SdrInsertFlags::DONTMARK);

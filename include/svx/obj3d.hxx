@@ -150,7 +150,7 @@ public:
 
     // break up
     virtual bool IsBreakObjPossible();
-    virtual SdrAttrObj* GetBreakObj();
+    virtual std::unique_ptr<SdrAttrObj,SdrObjectFreeOp> GetBreakObj();
 };
 
 /*************************************************************************
