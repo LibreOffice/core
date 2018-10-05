@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_2ecc1188",
+        "filename": "icon-themes/karasa_jaga/res/lx03140.png",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-10-05T15:24:20Z",
+      "side": 1,
+      "message": "This file should be 32 × 32 px.",
+      "revId": "69d58d4275dc52b028ed3779a91bfcdfa6786237",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
