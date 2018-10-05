@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <unx/freetype_glyphcache.hxx>
+#include <unx/gendata.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
@@ -30,8 +31,6 @@
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 
-static GlyphCache* pInstance = nullptr;
-
 GlyphCache::GlyphCache()
 :   mnBytesUsed(sizeof(GlyphCache)),
     mnLruIndex(0),
@@ -39,8 +38,6 @@ GlyphCache::GlyphCache()
     mpCurrentGCFont(nullptr)
     , m_nMaxFontId(0)
 {
-    pInstance = this;
-
     InitFreetype();
 }
 
@@ -159,7 +156,9 @@ bool GlyphCache::IFSD_Equal::operator()(const rtl::Reference<LogicalFontInstance
 
 GlyphCache& GlyphCache::GetInstance()
 {
-    return *pInstance;
+    GenericUnixSalData* const pSalData(GetGenericUnixSalData());
+    assert(pSalData);
+    return *pSalData->GetGlyphCache();
 }
 
 FreetypeFont* GlyphCache::CacheFont(LogicalFontInstance* pFontInstance)

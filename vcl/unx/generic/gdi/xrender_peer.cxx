@@ -21,7 +21,7 @@
 #include <unx/salunx.h>
 #include <unx/saldisp.hxx>
 
-#include "xrender_peer.hxx"
+#include <unx/x11/xrender_peer.hxx>
 
 XRenderPeer::XRenderPeer()
     : mpDisplay( vcl_sal::getSalDisplay(GetGenericUnixSalData())->GetDisplay() )
