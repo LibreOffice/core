@@ -578,7 +578,7 @@ void SwAccessibleParagraph::UpdatePortionData()
 
     // build new portion data
     m_pPortionData.reset( new SwAccessiblePortionData(
-        pFrame->GetTextNode(), GetMap()->GetShell()->GetViewOptions() ) );
+        pFrame, GetMap()->GetShell()->GetViewOptions()) );
     pFrame->VisitPortions( *m_pPortionData );
 
     OSL_ENSURE( m_pPortionData != nullptr, "UpdatePortionData() failed" );
@@ -624,9 +624,9 @@ SwXTextPortion* SwAccessibleParagraph::CreateUnoPortion(
                 IsValidRange(nStartIndex, nEndIndex, GetString().getLength()),
                 "please check parameters before calling this method" );
 
-    const sal_Int32 nStart = GetPortionData().GetModelPosition( nStartIndex );
+    const sal_Int32 nStart = GetPortionData().GetCoreViewPosition(nStartIndex);
     const sal_Int32 nEnd = (nEndIndex == -1) ? (nStart + 1) :
-                        GetPortionData().GetModelPosition( nEndIndex );
+                        GetPortionData().GetCoreViewPosition(nEndIndex);
 
     // create UNO cursor
     SwTextNode* pTextNode = const_cast<SwTextNode*>( GetTextNode() );
@@ -741,7 +741,7 @@ bool SwAccessibleParagraph::GetWordBoundary(
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
 
     // get locale for this position
-    const sal_Int32 nModelPos = GetPortionData().GetModelPosition( nPos );
+    const sal_Int32 nModelPos = GetPortionData().GetCoreViewPosition(nPos);
     lang::Locale aLocale = g_pBreakIt->GetLocale(
                           GetTextNode()->GetLang( nModelPos ) );
 
@@ -808,7 +808,7 @@ bool SwAccessibleParagraph::GetGlyphBoundary(
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
 
     // get locale for this position
-    const sal_Int32 nModelPos = GetPortionData().GetModelPosition( nPos );
+    const sal_Int32 nModelPos = GetPortionData().GetCoreViewPosition(nPos);
     lang::Locale aLocale = g_pBreakIt->GetLocale(
                           GetTextNode()->GetLang( nModelPos ) );
 
@@ -1263,7 +1263,7 @@ sal_Bool SAL_CALL SwAccessibleParagraph::setCaretPosition( sal_Int32 nIndex )
     {
         // create pam for selection
         SwTextNode* pNode = const_cast<SwTextNode*>( GetTextNode() );
-        SwIndex aIndex( pNode, GetPortionData().GetModelPosition(nIndex));
+        SwIndex aIndex(pNode, GetPortionData().GetCoreViewPosition(nIndex));
         SwPosition aStartPos( *pNode, aIndex );
         SwPaM aPaM( aStartPos );
 
@@ -2476,12 +2476,12 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
     {
         // create pam for selection
         SwTextNode* pNode = const_cast<SwTextNode*>( GetTextNode() );
-        SwIndex aIndex( pNode, GetPortionData().GetModelPosition(nStartIndex));
+        SwIndex aIndex(pNode, GetPortionData().GetCoreViewPosition(nStartIndex));
         SwPosition aStartPos( *pNode, aIndex );
         SwPaM aPaM( aStartPos );
         aPaM.SetMark();
         aPaM.GetPoint()->nContent =
-            GetPortionData().GetModelPosition(nEndIndex);
+            GetPortionData().GetCoreViewPosition(nEndIndex);
 
         // set PaM at cursor shell
         bRet = Select( aPaM );
@@ -3118,7 +3118,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkIndex( sal_Int32 nCharInde
         const SwTextFrame *pTextFrame = static_cast<const SwTextFrame*>( GetFrame() );
         SwHyperlinkIter_Impl aHIter( pTextFrame );
 
-        const sal_Int32 nIdx = GetPortionData().GetModelPosition( nCharIndex );
+        const sal_Int32 nIdx = GetPortionData().GetCoreViewPosition(nCharIndex);
         sal_Int32 nPos = 0;
         const SwTextAttr *pHt = aHIter.next();
         while( pHt && !(nIdx >= pHt->GetStart() && nIdx < *pHt->GetAnyEnd()) )
@@ -3336,8 +3336,8 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection( sal_Int32, sal_Int32 sta
         pCursorShell->StartAction();
         SwPaM* aPaM = pCursorShell->CreateCursor();
         aPaM->SetMark();
-        aPaM->GetPoint()->nContent = GetPortionData().GetModelPosition(startOffset);
-        aPaM->GetMark()->nContent =  GetPortionData().GetModelPosition(endOffset);
+        aPaM->GetPoint()->nContent = GetPortionData().GetCoreViewPosition(startOffset);
+        aPaM->GetMark()->nContent =  GetPortionData().GetCoreViewPosition(endOffset);
         pCursorShell->EndAction();
     }
 

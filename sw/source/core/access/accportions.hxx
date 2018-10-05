@@ -26,7 +26,7 @@
 #include <memory>
 #include <vector>
 
-class SwTextNode;
+class SwTextFrame;
 struct SwSpecialPos;
 class SwViewOption;
 namespace com { namespace sun { namespace star {
@@ -38,46 +38,43 @@ namespace com { namespace sun { namespace star {
  */
 class SwAccessiblePortionData : public SwPortionHandler
 {
-    // the node this portion is referring to
-    const SwTextNode* m_pTextNode;
+    // the frame this portion is referring to
+    SwTextFrame const* m_pTextFrame;
 
     // variables used while collecting the data
     OUStringBuffer m_aBuffer;
-    sal_Int32 m_nModelPosition;
+    TextFrameIndex m_nViewPosition;
     const SwViewOption* m_pViewOptions;
 
-    // the accessible string
+    /// the accessible string
+    /// note that the content is different both from the string in the text
+    /// node(s) as well as the string in the text frame, so there are 3
+    /// different index spaces involved.
     OUString m_sAccessibleString;
 
     // positions array
     // instances of Position_t must always include the minimum and
     // maximum positions as first/last elements (to simplify the
     // algorithms)
-    typedef std::vector<sal_Int32> Positions_t;
+    typedef std::vector<sal_Int32> AccessiblePositions;
+    typedef std::vector<TextFrameIndex> FramePositions;
 
-    Positions_t m_aLineBreaks;        /// position of line breaks
-    Positions_t m_aModelPositions;    /// position of portion breaks in the model
-    Positions_t m_aAccessiblePositions;   /// portion breaks in sAccessibleString
-    Positions_t m_aFieldPosition;
+    AccessiblePositions m_aLineBreaks; /// position of line breaks
+    FramePositions m_ViewPositions; /// position of portion breaks in the core view
+    AccessiblePositions m_aAccessiblePositions; /// portion breaks in m_sAccessibleString
+    AccessiblePositions m_aFieldPosition;
 
     typedef std::vector<sal_uInt8> PortionAttrs_t;
     PortionAttrs_t m_aPortionAttrs;   /// additional portion attributes
 
-    std::unique_ptr<Positions_t> m_pSentences;    /// positions of sentence breaks
+    std::unique_ptr<AccessiblePositions> m_pSentences; /// positions of sentence breaks
 
-    size_t m_nBeforePortions;     /// # of portions before first model character
+    size_t m_nBeforePortions;     /// # of portions before first core character
     bool m_bFinished;
-
-    /// returns the index of the first position whose value is smaller
-    /// or equal, and whose following value is equal or larger
-    static size_t FindBreak( const Positions_t& rPositions, sal_Int32 nValue );
-
-    /// like FindBreak, but finds the last equal or larger position
-    static size_t FindLastBreak( const Positions_t& rPositions, sal_Int32 nValue );
 
     /// fill the boundary with the values from rPositions[nPos]
     static void FillBoundary(css::i18n::Boundary& rBound,
-                      const Positions_t& rPositions,
+                      const AccessiblePositions& rPositions,
                       size_t nPos );
 
     /// Access to portion attributes
@@ -87,10 +84,10 @@ class SwAccessiblePortionData : public SwPortionHandler
 
     // helper method for GetEditableRange(...):
     void AdjustAndCheck( sal_Int32 nPos, size_t& nPortionNo,
-                         sal_Int32& nCorePos, bool& bEdit ) const;
+                         TextFrameIndex& rCorePos, bool& bEdit) const;
 
 public:
-    SwAccessiblePortionData( const SwTextNode* pTextNd,
+    SwAccessiblePortionData( const SwTextFrame* pTextFrame,
                              const SwViewOption* pViewOpt );
     virtual ~SwAccessiblePortionData() override;
 
@@ -125,12 +122,12 @@ public:
     ///  boundaries. In this case, only part of a paragraph is represented
     ///  through this object. This method determines whether one particular
     ///  position is valid for this object or not.)
-    bool IsValidCorePosition( sal_Int32 nPos ) const;
-    sal_Int32 GetFirstValidCorePosition() const;
-    sal_Int32 GetLastValidCorePosition() const;
+    bool IsValidCorePosition(TextFrameIndex nPos) const;
+    TextFrameIndex GetFirstValidCorePosition() const;
+    TextFrameIndex GetLastValidCorePosition() const;
 
-    /// get the position in the accessibility string for a given model position
-    sal_Int32 GetAccessiblePosition( sal_Int32 nPos ) const;
+    /// get the position in the accessibility string for a given view position
+    sal_Int32 GetAccessiblePosition(TextFrameIndex nPos) const;
 
     // #i89175#
     sal_Int32 GetLineCount() const;
@@ -138,15 +135,15 @@ public:
     void GetBoundaryOfLine( const sal_Int32 nLineNo,
                             css::i18n::Boundary& rLineBound );
 
-    /// get the position in the model string for a given
+    /// get the position in the core view string for a given
     /// (accessibility) position
-    sal_Int32 GetModelPosition( sal_Int32 nPos ) const;
+    TextFrameIndex GetCoreViewPosition(sal_Int32 nPos) const;
 
     /// fill a SwSpecialPos structure, suitable for calling
     /// SwTextFrame->GetCharRect
     /// Returns the core position, and fills rpPos either with NULL or
     /// with the &rPos, after putting the appropriate data into it.
-    sal_Int32 FillSpecialPos( sal_Int32 nPos,
+    TextFrameIndex FillSpecialPos(sal_Int32 nPos,
                            SwSpecialPos& rPos,
                            SwSpecialPos*& rpPos ) const;
 
@@ -164,7 +161,8 @@ public:
     ///          or not at all. This can be used to test whether editing
     ///          that range would be legal
     bool GetEditableRange( sal_Int32 nStart, sal_Int32 nEnd,
-                               sal_Int32& nCoreStart, sal_Int32& nCoreEnd ) const;
+           TextFrameIndex& rCoreStart, TextFrameIndex& rCoreEnd) const;
+
 private:
     typedef std::pair<sal_Int32,sal_Int32> PAIR_POS;
     typedef std::vector<PAIR_POS> VEC_PAIR_POS;
