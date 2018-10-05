@@ -531,8 +531,7 @@ void SwAccessibleParagraph::InvalidateFocus_()
 SwAccessibleParagraph::SwAccessibleParagraph(
         std::shared_ptr<SwAccessibleMap> const& pInitMap,
         const SwTextFrame& rTextFrame )
-    : SwClient( const_cast<SwTextNode*>(rTextFrame.GetTextNode()) ) // #i108125#
-    , SwAccessibleContext( pInitMap, AccessibleRole::PARAGRAPH, &rTextFrame )
+    : SwAccessibleContext( pInitMap, AccessibleRole::PARAGRAPH, &rTextFrame )
     , m_sDesc()
     , m_pPortionData( nullptr )
     , m_pHyperTextData( nullptr )
@@ -544,6 +543,7 @@ SwAccessibleParagraph::SwAccessibleParagraph(
     , mpParaChangeTrackInfo( new SwParaChangeTrackingInfo( rTextFrame ) ) // #i108125#
     , m_bLastHasSelection(false)  //To add TEXT_SELECTION_CHANGED event
 {
+    StartListening(const_cast<SwTextFrame&>(rTextFrame));
     m_bIsHeading = IsHeading();
     //Get the real heading level, Heading1 ~ Heading10
     m_nHeadingLevel = GetRealHeadingLevel();
@@ -3519,11 +3519,9 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getNumberOfLineWithCaret()
 }
 
 // #i108125#
-void SwAccessibleParagraph::Modify( const SfxPoolItem* pOld, const SfxPoolItem* /*pNew*/ )
+void SwAccessibleParagraph::Notify(SfxBroadcaster&, const SfxHint&)
 {
     mpParaChangeTrackInfo->reset();
-
-    CheckRegistration( pOld );
 }
 
 bool SwAccessibleParagraph::GetSelectionAtIndex(
