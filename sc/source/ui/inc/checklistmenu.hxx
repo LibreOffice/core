@@ -355,7 +355,7 @@ public:
      * popup window class manages its life time; no explicit deletion of the
      * instance is needed in the client code.
      */
-    void setExtendedData(ExtendedData* p);
+    void setExtendedData(std::unique_ptr<ExtendedData> p);
 
     /**
      * Get the store auxiliary data, or NULL if no such data is stored.
