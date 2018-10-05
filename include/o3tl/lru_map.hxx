@@ -11,6 +11,7 @@
 #ifndef INCLUDED_O3TL_LRU_MAP_HXX
 #define INCLUDED_O3TL_LRU_MAP_HXX
 
+#include <cassert>
 #include <list>
 #include <unordered_map>
 
@@ -74,7 +75,8 @@ public:
             // add to front of the list
             mLruList.push_front(rPair);
             // add the list position (iterator) to the map
-            mLruMap[rPair.first] = mLruList.begin();
+            auto it = mLruList.begin();
+            mLruMap[it->first] = it;
             checkLRU();
         }
         else // already exists -> replace value
@@ -95,7 +97,8 @@ public:
             // add to front of the list
             mLruList.push_front(std::move(rPair));
             // add the list position (iterator) to the map
-            mLruMap[rPair.first] = mLruList.begin();
+            auto it = mLruList.begin();
+            mLruMap[it->first] = it;
             checkLRU();
         }
         else // already exists -> replace value
@@ -130,7 +133,8 @@ public:
 
     size_t size() const
     {
-        return mLruList.size();
+        assert(mLruMap.size() == mLruList.size());
+        return mLruMap.size();
     }
 
     void clear()
