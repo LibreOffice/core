@@ -252,22 +252,24 @@ cmd/sc_recsave.svg cmd/sc_save.svg
 cmd/32/textfittosizetool.svg cmd/32/text_marquee.svg
 cmd/32/texttoolbox.svg cmd/32/text.svg
 cmd/32/drawtext.svg cmd/32/text.svg
-cmd/32/doubleclicktextedit.svg cmd/32/pickthrough.svg
 cmd/32/fontworkcharacterspacingfloater.svg cmd/32/spacing.svg
 cmd/32/fontheight.svg cmd/32/scaletext.svg
+cmd/32/pickthrough.svg cmd/32/doubleclicktextedit.svg
+
 cmd/lc_textfittosizetool.svg cmd/lc_text_marquee.svg
 cmd/lc_texttoolbox.svg cmd/lc_text.svg
 cmd/lc_drawtext.svg cmd/lc_text.svg
-cmd/lc_doubleclicktextedit.svg cmd/lc_pickthrough.svg
 cmd/lc_fontworkcharacterspacingfloater.svg cmd/lc_spacing.svg
 cmd/lc_fontheight.svg cmd/lc_scaletext.svg
+cmd/lc_pickthrough.svg cmd/lc_doubleclicktextedit.svg
+
 cmd/sc_textfittosizetool.svg cmd/sc_text_marquee.svg
 cmd/sc_texttoolbox.svg cmd/sc_text.svg
 cmd/sc_drawtext.svg cmd/sc_text.svg
 cmd/sc_edit.svg cmd/sc_text.svg
-cmd/sc_doubleclicktextedit.svg cmd/sc_pickthrough.svg
 cmd/sc_fontworkcharacterspacingfloater.svg cmd/sc_spacing.svg
 cmd/sc_fontheight.svg cmd/sc_scaletext.svg
+cmd/sc_pickthrough.svg cmd/sc_doubleclicktextedit.svg
 
 # Object
 cmd/32/objectcatalog.svg cmd/32/dbnewform.svg
