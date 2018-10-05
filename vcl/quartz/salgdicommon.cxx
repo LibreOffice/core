@@ -40,39 +40,7 @@
 #endif
 #include <sft.hxx>
 
-
-#if defined(IOS) && defined(DBG_UTIL)
-
-// Variables in TiledView.m
-extern int DBG_DRAW_ROUNDS, DBG_DRAW_COUNTER, DBG_DRAW_DEPTH;
-
-#define DBG_DRAW_OPERATION(s,v) \
-    do { \
-        if (DBG_DRAW_ROUNDS >= 0) { \
-            if (DBG_DRAW_COUNTER++ > DBG_DRAW_ROUNDS) \
-                return v; \
-            SAL_DEBUG("===> " << s << " " << DBG_DRAW_COUNTER); \
-        } \
-    } while (false)
-
-#define DBG_DRAW_OPERATION_EXIT(s) \
-    do { \
-        if (DBG_DRAW_ROUNDS >= 0) \
-            SAL_DEBUG("<=== " << s << " " << DBG_DRAW_COUNTER); \
-    } while (false)
-
-#define DBG_DRAW_OPERATION_EXIT_EARLY(s) DBG_DRAW_OPERATION_EXIT(s << " exit early " << __LINE__)
-
-#else
-
-#define DBG_DRAW_OPERATION(s,v) /* empty */
-#define DBG_DRAW_OPERATION_EXIT(s) /* empty */
-#define DBG_DRAW_OPERATION_EXIT_EARLY(s) /* empty */
-
-#endif
-
 using namespace vcl;
-
 
 static const basegfx::B2DPoint aHalfPointOfs ( 0.5, 0.5 );
 
@@ -603,8 +571,6 @@ bool AquaSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
                                        const SalBitmap& rSrcBitmap,
                                        const SalBitmap& rAlphaBmp )
 {
-    DBG_DRAW_OPERATION("drawAlphaBitmap", true);
-
     if (rTR.mnSrcWidth != rTR.mnDestWidth || rTR.mnSrcHeight != rTR.mnDestHeight)
     {
         // TODO - would be better to scale it by the native code
@@ -613,18 +579,12 @@ bool AquaSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
 
     // An image mask can't have a depth > 8 bits (should be 1 to 8 bits)
     if( rAlphaBmp.GetBitCount() > 8 )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawAlphaBitmap");
         return false;
-    }
 
     // are these two tests really necessary? (see vcl/unx/source/gdi/salgdi2.cxx)
     // horizontal/vertical mirroring not implemented yet
     if( rTR.mnDestWidth < 0 || rTR.mnDestHeight < 0 )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawAlphaBitmap");
         return false;
-    }
 
     const QuartzSalBitmap& rSrcSalBmp = static_cast<const QuartzSalBitmap&>(rSrcBitmap);
     const QuartzSalBitmap& rMaskSalBmp = static_cast<const QuartzSalBitmap&>(rAlphaBmp);
@@ -632,10 +592,7 @@ bool AquaSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
                                                          rTR.mnSrcY, rTR.mnSrcWidth,
                                                          rTR.mnSrcHeight );
     if( !xMaskedImage )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawAlphaBitmap");
         return false;
-    }
 
     if ( CheckContext() )
     {
@@ -648,7 +605,6 @@ bool AquaSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     SAL_INFO( "vcl.cg", "CGImageRelease(" << xMaskedImage << ")");
     CGImageRelease(xMaskedImage);
 
-    DBG_DRAW_OPERATION_EXIT("drawAlphaBitmap");
     return true;
 }
 
@@ -656,13 +612,8 @@ bool AquaSalGraphics::drawTransformedBitmap(
     const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX, const basegfx::B2DPoint& rY,
     const SalBitmap& rSrcBitmap, const SalBitmap* pAlphaBmp )
 {
-    DBG_DRAW_OPERATION("drawTransformedBitmap", true);
-
     if( !CheckContext() )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawTransformedBitmap");
         return true;
-    }
 
     // get the Quartz image
     CGImageRef xImage = nullptr;
@@ -675,10 +626,7 @@ bool AquaSalGraphics::drawTransformedBitmap(
     else
         xImage = rSrcSalBmp.CreateWithMask( *pMaskSalBmp, 0, 0, (int)aSize.Width(), (int)aSize.Height() );
     if( !xImage )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawTransformedBitmap");
         return false;
-    }
 
     // setup the image transformation
     // using the rNull,rX,rY points as destinations for the (0,0),(0,Width),(Height,0) source points
@@ -709,20 +657,14 @@ bool AquaSalGraphics::drawTransformedBitmap(
     const CGRect aDstRect = CGRectApplyAffineTransform( aSrcRect, aCGMat );
     RefreshRect( aDstRect );
 
-    DBG_DRAW_OPERATION_EXIT("drawTransformedBitmap");
     return true;
 }
 
 bool AquaSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
                                      long nHeight, sal_uInt8 nTransparency )
 {
-    DBG_DRAW_OPERATION("drawAlphaRect", true);
-
     if( !CheckContext() )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawAlphaRect");
         return true;
-    }
 
     // save the current state
     SAL_INFO( "vcl.cg", "CGContextSaveGState(" << mrContext << ") " << ++mnContextStackDepth );
@@ -749,28 +691,19 @@ bool AquaSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
     CGContextRestoreGState(mrContext);
     RefreshRect( aRect );
 
-    DBG_DRAW_OPERATION_EXIT("drawAlphaRect");
     return true;
 }
 
 void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap )
 {
-    DBG_DRAW_OPERATION("drawBitmap",);
-
     if( !CheckContext() )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawBitmap");
         return;
-    }
 
     const QuartzSalBitmap& rBitmap = static_cast<const QuartzSalBitmap&>(rSalBitmap);
     CGImageRef xImage = rBitmap.CreateCroppedImage( (int)rPosAry.mnSrcX, (int)rPosAry.mnSrcY,
                                                     (int)rPosAry.mnSrcWidth, (int)rPosAry.mnSrcHeight );
     if( !xImage )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawBitmap");
         return;
-    }
 
     const CGRect aDstRect = CGRectMake(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
     SAL_INFO( "vcl.cg", "CGContextDrawImage(" << mrContext << "," << aDstRect << "," << xImage << ")" );
@@ -779,30 +712,20 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rS
     SAL_INFO( "vcl.cg", "CGImageRelease(" << xImage << ")" );
     CGImageRelease( xImage );
     RefreshRect( aDstRect );
-
-    DBG_DRAW_OPERATION_EXIT("drawBitmap");
 }
 
 void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
                                   const SalBitmap& rTransparentBitmap )
 {
-    DBG_DRAW_OPERATION("drawBitmap",);
-
     if( !CheckContext() )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawBitmap");
         return;
-    }
 
     const QuartzSalBitmap& rBitmap = static_cast<const QuartzSalBitmap&>(rSalBitmap);
     const QuartzSalBitmap& rMask = static_cast<const QuartzSalBitmap&>(rTransparentBitmap);
     CGImageRef xMaskedImage( rBitmap.CreateWithMask( rMask, rPosAry.mnSrcX, rPosAry.mnSrcY,
                                                      rPosAry.mnSrcWidth, rPosAry.mnSrcHeight ) );
     if( !xMaskedImage )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawBitmap");
         return;
-    }
 
     const CGRect aDstRect = CGRectMake(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
     SAL_INFO( "vcl.cg", "CGContextDrawImage(" << mrContext << "," << aDstRect << "," << xMaskedImage << ")" );
@@ -810,8 +733,6 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rS
     SAL_INFO( "vcl.cg", "CGImageRelease(" << xMaskedImage << ")" );
     CGImageRelease( xMaskedImage );
     RefreshRect( aDstRect );
-
-    DBG_DRAW_OPERATION_EXIT("drawBitmap");
 }
 
 #ifndef IOS
@@ -868,22 +789,16 @@ bool AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight,
 
 void AquaSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
-    DBG_DRAW_OPERATION("drawLine",);
-
     if( nX1 == nX2 && nY1 == nY2 )
     {
         // #i109453# platform independent code expects at least one pixel to be drawn
         drawPixel( nX1, nY1 );
 
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawLine");
         return;
     }
 
     if( !CheckContext() )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawLine");
         return;
-    }
 
     SAL_INFO( "vcl.cg", "CGContextBeginPath(" << mrContext << ")" );
     CGContextBeginPath( mrContext );
@@ -897,29 +812,19 @@ void AquaSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
     tools::Rectangle aRefreshRect( nX1, nY1, nX2, nY2 );
     (void) aRefreshRect;
     // Is a call to RefreshRect( aRefreshRect ) missing here?
-
-    DBG_DRAW_OPERATION_EXIT("drawLine");
 }
 
 void AquaSalGraphics::drawMask( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap, SalColor nMaskColor )
 {
-    DBG_DRAW_OPERATION("drawMask",);
-
     if( !CheckContext() )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawMask");
         return;
-    }
 
     const QuartzSalBitmap& rBitmap = static_cast<const QuartzSalBitmap&>(rSalBitmap);
     CGImageRef xImage = rBitmap.CreateColorMask( rPosAry.mnSrcX, rPosAry.mnSrcY,
                                                  rPosAry.mnSrcWidth, rPosAry.mnSrcHeight,
                                                  nMaskColor );
     if( !xImage )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawMask");
         return;
-    }
 
     const CGRect aDstRect = CGRectMake(rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight);
     SAL_INFO( "vcl.cg", "CGContextDrawImage(" << mrContext << "," << aDstRect << "," << xImage << ")" );
@@ -927,8 +832,6 @@ void AquaSalGraphics::drawMask( const SalTwoRect& rPosAry, const SalBitmap& rSal
     SAL_INFO( "vcl.cg", "CGImageRelease(" << xImage << ")" );
     CGImageRelease( xImage );
     RefreshRect( aDstRect );
-
-    DBG_DRAW_OPERATION_EXIT("drawMask");
 }
 
 void AquaSalGraphics::drawPixel( long nX, long nY )
@@ -950,22 +853,14 @@ bool AquaSalGraphics::drawPolyLine( const basegfx::B2DPolygon& rPolyLine,
                                     css::drawing::LineCap eLineCap,
                                     double fMiterMinimumAngle)
 {
-    DBG_DRAW_OPERATION("drawPolyLine", true);
-
     // short circuit if there is nothing to do
     const int nPointCount = rPolyLine.count();
     if( nPointCount <= 0 )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyLine");
         return true;
-    }
 
 #ifdef IOS
     if( !CheckContext() )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyLine");
         return false;
-    }
 #endif
 
     // #i101491# Aqua does not support B2DLineJoin::NONE; return false to use
@@ -973,10 +868,7 @@ bool AquaSalGraphics::drawPolyLine( const basegfx::B2DPolygon& rPolyLine,
     // #i104886# linejoin-mode and thus the above only applies to "fat" lines
     if( (basegfx::B2DLineJoin::NONE == eLineJoin) &&
         (rLineWidths.getX() > 1.3) )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyLine");
         return false;
-    }
 
     // setup line attributes
     CGLineJoin aCGLineJoin = kCGLineJoinMiter;
@@ -1048,7 +940,6 @@ bool AquaSalGraphics::drawPolyLine( const basegfx::B2DPolygon& rPolyLine,
     SAL_INFO( "vcl.cg", "CGPathRelease(" << xPath << ")" );
     CGPathRelease( xPath );
 
-    DBG_DRAW_OPERATION_EXIT("drawPolyLine");
     return true;
 }
 
@@ -1060,22 +951,14 @@ bool AquaSalGraphics::drawPolyLineBezier( sal_uInt32, const SalPoint*, const Pol
 bool AquaSalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly,
                                        double fTransparency )
 {
-    DBG_DRAW_OPERATION("drawPolyPolygon", true);
-
     // short circuit if there is nothing to do
     const int nPolyCount = rPolyPoly.count();
     if( nPolyCount <= 0 )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyPolygon");
         return true;
-    }
 
     // ignore invisible polygons
     if( (fTransparency >= 1.0) || (fTransparency < 0) )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyPolygon");
         return true;
-    }
 
     // setup poly-polygon path
     CGMutablePathRef xPath = CGPathCreateMutable();
@@ -1110,7 +993,6 @@ bool AquaSalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly,
             SAL_WARN( "vcl.quartz", "Neither pen nor brush visible" );
             SAL_INFO( "vcl.cg", "CGPathRelease(" << xPath << ")" );
             CGPathRelease( xPath );
-            DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyPolygon");
             return true;
         }
 
@@ -1138,25 +1020,16 @@ bool AquaSalGraphics::drawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly,
     SAL_INFO( "vcl.cg", "CGPathRelease(" << xPath << ")" );
     CGPathRelease( xPath );
 
-    DBG_DRAW_OPERATION_EXIT("drawPolyPolygon");
     return true;
 }
 
 void AquaSalGraphics::drawPolyPolygon( sal_uInt32 nPolyCount, const sal_uInt32 *pPoints, PCONSTSALPOINT  *ppPtAry )
 {
-    DBG_DRAW_OPERATION("drawPolyPolygon",);
-
     if( nPolyCount <= 0 )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyPolygon");
         return;
-    }
 
     if( !CheckContext() )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyPolygon");
         return;
-    }
 
     // find bound rect
     long leftX = 0, topY = 0, maxWidth = 0, maxHeight = 0;
@@ -1203,7 +1076,6 @@ void AquaSalGraphics::drawPolyPolygon( sal_uInt32 nPolyCount, const sal_uInt32 *
     else
     {
         SAL_WARN( "vcl.quartz", "Neither pen nor brush visible" );
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyPolygon");
         return;
     }
 
@@ -1268,25 +1140,15 @@ void AquaSalGraphics::drawPolyPolygon( sal_uInt32 nPolyCount, const sal_uInt32 *
     CGContextDrawPath( mrContext, eMode );
 
     RefreshRect( leftX, topY, maxWidth, maxHeight );
-
-    DBG_DRAW_OPERATION_EXIT("drawPolyPolygon");
 }
 
 void AquaSalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint *pPtAry )
 {
-    DBG_DRAW_OPERATION("drawPolygon",);
-
     if( nPoints <= 1 )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolygon");
         return;
-    }
 
     if( !CheckContext() )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolygon");
         return;
-    }
 
     long nX = 0, nY = 0, nWidth = 0, nHeight = 0;
     getBoundRect( nPoints, pPtAry, nX, nY, nWidth, nHeight );
@@ -1344,8 +1206,6 @@ void AquaSalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint *pPtAry )
     SAL_INFO( "vcl.cg", "CGContextDrawPath(" << mrContext << "," << eMode << ")" );
     CGContextDrawPath( mrContext, eMode );
     RefreshRect( nX, nY, nWidth, nHeight );
-
-    DBG_DRAW_OPERATION_EXIT("drawPolygon");
 }
 
 bool AquaSalGraphics::drawPolygonBezier( sal_uInt32, const SalPoint*, const PolyFlags* )
@@ -1361,13 +1221,8 @@ bool AquaSalGraphics::drawPolyPolygonBezier( sal_uInt32, const sal_uInt32*,
 
 void AquaSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 {
-    DBG_DRAW_OPERATION("drawRect",);
-
     if( !CheckContext() )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawRect");
         return;
-    }
 
     CGRect aRect( CGRectMake(nX, nY, nWidth, nHeight) );
     if( IsPenVisible() )
@@ -1389,25 +1244,15 @@ void AquaSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
         CGContextStrokeRect( mrContext, aRect );
     }
     RefreshRect( nX, nY, nWidth, nHeight );
-
-    DBG_DRAW_OPERATION_EXIT("drawRect");
 }
 
 void AquaSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
 {
-    DBG_DRAW_OPERATION("drawPolyLine",);
-
     if( nPoints < 1 )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyLine");
         return;
-    }
 
     if( !CheckContext() )
-    {
-        DBG_DRAW_OPERATION_EXIT_EARLY("drawPolyLine");
         return;
-    }
 
     long nX = 0, nY = 0, nWidth = 0, nHeight = 0;
     getBoundRect( nPoints, pPtAry, nX, nY, nWidth, nHeight );
@@ -1430,8 +1275,6 @@ void AquaSalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
     CGContextStrokePath(mrContext);
 
     RefreshRect( nX, nY, nWidth, nHeight );
-
-    DBG_DRAW_OPERATION_EXIT("drawPolyLine");
 }
 
 sal_uInt16 AquaSalGraphics::GetBitCount() const
