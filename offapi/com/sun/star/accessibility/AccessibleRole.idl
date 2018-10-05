@@ -99,8 +99,7 @@ constants AccessibleRole
 
     /** Date editor role.
 
-        <p>A DATE_EDITOR is a component that allows users to
-        edit java.util.Date and java.util.Time objects.</p>
+        <p>A DATE_EDITOR is a component that allows users to edit date and time.</p>
     */
     const short DATE_EDITOR = 8;
 
