@@ -229,6 +229,7 @@ namespace cppcanvas
              */
             void initArrayAction( rendering::RenderState&                   o_rRenderState,
                                   uno::Reference< rendering::XTextLayout >& o_rTextLayout,
+                                  double&                                   nLayoutWidth,
                                   const ::basegfx::B2DPoint&                rStartPoint,
                                   const OUString&                    rText,
                                   sal_Int32                                 nStartPos,
@@ -260,6 +261,9 @@ namespace cppcanvas
                                   "::cppcanvas::internal::initArrayAction(): Invalid font" );
 
                 o_rTextLayout->applyLogicalAdvancements( rOffsets );
+
+                const double* pOffsets(rOffsets.getConstArray());
+                nLayoutWidth = *std::max_element(pOffsets, pOffsets + rOffsets.getLength());
             }
 
             double getLineWidth( ::VirtualDevice const &         rVDev,
@@ -280,6 +284,7 @@ namespace cppcanvas
                                    double&                                          o_rMinPos,
                                    double&                                          o_rMaxPos,
                                    const uno::Reference< rendering::XTextLayout >&  rOrigTextLayout,
+                                   double                                           nLayoutWidth,
                                    const ::cppcanvas::internal::Action::Subset&     rSubset )
             {
                 ENSURE_OR_THROW( rSubset.mnSubsetEnd > rSubset.mnSubsetBegin,
@@ -291,12 +296,6 @@ namespace cppcanvas
                 ENSURE_OR_THROW( aOrigOffsets.getLength() >= rSubset.mnSubsetEnd,
                                   "::cppcanvas::internal::calcSubsetOffsets(): invalid subset range range" );
 
-                // TODO(F3): It currently seems that for RTL text, the
-                // DX offsets are nevertheless increasing in logical
-                // text order (I'd expect they are decreasing,
-                // mimicking the fact that the text is output
-                // right-to-left). This breaks text effects for ALL
-                // RTL languages.
 
                 // determine leftmost position in given subset range -
                 // as the DX array contains the output positions
@@ -317,6 +316,16 @@ namespace cppcanvas
                                                       0 : rSubset.mnSubsetBegin-1),
                                           pOffsets + rSubset.mnSubsetEnd )) );
 
+                // Logical advancements always increase in logical text order.
+                // For RTL text, nMaxPos is the distance from the right edge to
+                // the leftmost position in the subset, so we have to convert
+                // it to the offset from the origin (i.e. left edge ).
+                // LTR: |---- min --->|---- max --->|            |
+                // RTL: |             |<--- max ----|<--- min ---|
+                //      |<- nOffset ->|                          |
+                const double nOffset = rOrigTextLayout->getMainTextDirection()
+                    ? nLayoutWidth - nMaxPos : nMinPos;
+
 
                 // adapt render state, to move text output to given offset
 
@@ -326,18 +335,18 @@ namespace cppcanvas
                 // with the output offset. Neglected for now, as it
                 // does not matter for drawing layer output
 
-                if( rSubset.mnSubsetBegin > 0 )
+                if (nOffset > 0.0)
                 {
                     ::basegfx::B2DHomMatrix aTranslation;
                     if( rOrigTextLayout->getFont()->getFontRequest().FontDescription.IsVertical == css::util::TriState_YES )
                     {
                         // vertical text -> offset in y direction
-                        aTranslation.translate( 0.0, nMinPos );
+                        aTranslation.translate(0.0, nOffset);
                     }
                     else
                     {
                         // horizontal text -> offset in x direction
-                        aTranslation.translate( nMinPos, 0.0 );
+                        aTranslation.translate(nOffset, 0.0);
                     }
 
                     ::canvas::tools::appendToRenderState( io_rRenderState,
@@ -415,6 +424,7 @@ namespace cppcanvas
                 Subset to prepare
              */
             void createSubsetLayout( uno::Reference< rendering::XTextLayout >&  io_rTextLayout,
+                                     double                                     nLayoutWidth,
                                      rendering::RenderState&                    io_rRenderState,
                                      double&                                    o_rMinPos,
                                      double&                                    o_rMaxPos,
@@ -453,6 +463,7 @@ namespace cppcanvas
                                            o_rMinPos,
                                            o_rMaxPos,
                                            io_rTextLayout,
+                                           nLayoutWidth,
                                            rSubset ) );
                 }
 
@@ -1069,6 +1080,7 @@ namespace cppcanvas
                 uno::Reference< rendering::XTextLayout >    mxTextLayout;
                 const CanvasSharedPtr                       mpCanvas;
                 rendering::RenderState                      maState;
+                double                                      mnLayoutWidth;
             };
 
             TextArrayAction::TextArrayAction( const ::basegfx::B2DPoint&        rStartPoint,
@@ -1084,6 +1096,7 @@ namespace cppcanvas
             {
                 initArrayAction( maState,
                                  mxTextLayout,
+                                 mnLayoutWidth,
                                  rStartPoint,
                                  rString,
                                  nStartPos,
@@ -1107,6 +1120,7 @@ namespace cppcanvas
             {
                 initArrayAction( maState,
                                  mxTextLayout,
+                                 mnLayoutWidth,
                                  rStartPoint,
                                  rString,
                                  nStartPos,
@@ -1143,6 +1157,7 @@ namespace cppcanvas
 
                 double nDummy0, nDummy1;
                 createSubsetLayout( xTextLayout,
+                                    mnLayoutWidth,
                                     aLocalState,
                                     nDummy0,
                                     nDummy1,
@@ -1181,6 +1196,7 @@ namespace cppcanvas
 
                 double nDummy0, nDummy1;
                 createSubsetLayout( xTextLayout,
+                                    mnLayoutWidth,
                                     aLocalState,
                                     nDummy0,
                                     nDummy1,
@@ -1274,6 +1290,7 @@ namespace cppcanvas
                 const ::basegfx::B2DSize                        maShadowOffset;
                 const ::Color                                   maShadowColor;
                 const ::Color                                   maTextFillColor;
+                double                                          mnLayoutWidth;
             };
 
             EffectTextArrayAction::EffectTextArrayAction( const ::basegfx::B2DPoint&        rStartPoint,
@@ -1309,6 +1326,7 @@ namespace cppcanvas
 
                 initArrayAction( maState,
                                  mxTextLayout,
+                                 mnLayoutWidth,
                                  rStartPoint,
                                  rText,
                                  nStartPos,
@@ -1352,6 +1370,7 @@ namespace cppcanvas
 
                 initArrayAction( maState,
                                  mxTextLayout,
+                                 mnLayoutWidth,
                                  rStartPoint,
                                  rText,
                                  nStartPos,
@@ -1484,6 +1503,7 @@ namespace cppcanvas
                 double nMaxPos(aTextBounds.X2 - aTextBounds.X1);
 
                 createSubsetLayout( xTextLayout,
+                                    mnLayoutWidth,
                                     aLocalState,
                                     nMinPos,
                                     nMaxPos,
@@ -1555,6 +1575,7 @@ namespace cppcanvas
                 double nMaxPos(aTextBounds.X2 - aTextBounds.X1);
 
                 createSubsetLayout( xTextLayout,
+                                    mnLayoutWidth,
                                     aLocalState,
                                     nMinPos,
                                     nMaxPos,
