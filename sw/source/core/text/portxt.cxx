@@ -397,7 +397,8 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
                           ! rInf.GetLast()->IsErgoSumPortion() &&
                           lcl_HasContent(*static_cast<SwFieldPortion*>(rInf.GetLast()),rInf ) ) ) ) )
         {
-            if ( rInf.X() + aGuess.BreakWidth() <= rInf.Width() )
+            // GetLineWidth() takes care of DocumentSettingId::TAB_OVER_MARGIN.
+            if (aGuess.BreakWidth() <= rInf.GetLineWidth())
                 Width( aGuess.BreakWidth() );
             else
                 // this actually should not happen
