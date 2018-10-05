@@ -236,7 +236,8 @@ namespace cppcanvas
                                   const uno::Sequence< double >&            rOffsets,
                                   const CanvasSharedPtr&                    rCanvas,
                                   const OutDevState&                        rState,
-                                  const ::basegfx::B2DHomMatrix*            pTextTransform )
+                                  const ::basegfx::B2DHomMatrix*            pTextTransform,
+                                  double &                                  nLayoutWidth)
             {
                 ENSURE_OR_THROW( rOffsets.getLength(),
                                   "::cppcanvas::internal::initArrayAction(): zero-length DX array" );
@@ -260,6 +261,9 @@ namespace cppcanvas
                                   "::cppcanvas::internal::initArrayAction(): Invalid font" );
 
                 o_rTextLayout->applyLogicalAdvancements( rOffsets );
+
+                const double* pOffsets(rOffsets.getConstArray());
+                nLayoutWidth = *std::max_element(pOffsets, pOffsets + rOffsets.getLength());
             }
 
             double getLineWidth( ::VirtualDevice const &         rVDev,
@@ -280,7 +284,8 @@ namespace cppcanvas
                                    double&                                          o_rMinPos,
                                    double&                                          o_rMaxPos,
                                    const uno::Reference< rendering::XTextLayout >&  rOrigTextLayout,
-                                   const ::cppcanvas::internal::Action::Subset&     rSubset )
+                                   const ::cppcanvas::internal::Action::Subset&     rSubset,
+                                   double                                           nLayoutWidth)
             {
                 ENSURE_OR_THROW( rSubset.mnSubsetEnd > rSubset.mnSubsetBegin,
                                   "::cppcanvas::internal::calcSubsetOffsets(): invalid subset range range" );
@@ -291,12 +296,6 @@ namespace cppcanvas
                 ENSURE_OR_THROW( aOrigOffsets.getLength() >= rSubset.mnSubsetEnd,
                                   "::cppcanvas::internal::calcSubsetOffsets(): invalid subset range range" );
 
-                // TODO(F3): It currently seems that for RTL text, the
-                // DX offsets are nevertheless increasing in logical
-                // text order (I'd expect they are decreasing,
-                // mimicking the fact that the text is output
-                // right-to-left). This breaks text effects for ALL
-                // RTL languages.
 
                 // determine leftmost position in given subset range -
                 // as the DX array contains the output positions
@@ -317,6 +316,16 @@ namespace cppcanvas
                                                       0 : rSubset.mnSubsetBegin-1),
                                           pOffsets + rSubset.mnSubsetEnd )) );
 
+                // Logical advancements always increase in logical text order.
+                // For RTL text, nMaxPos is the distance from the right edge to
+                // the leftmost position in the subset, so we have to convert
+                // it to the offset from the origin (i.e. left edge ).
+                // LTR: |---- min --->|---- max --->|            |
+                // RTL: |             |<--- max ----|<--- min ---|
+                //      |<- nOffset ->|                          |
+                const double nOffset = rOrigTextLayout->getMainTextDirection()
+                    ? nLayoutWidth - nMaxPos : nMinPos;
+
 
                 // adapt render state, to move text output to given offset
 
@@ -326,18 +335,18 @@ namespace cppcanvas
                 // with the output offset. Neglected for now, as it
                 // does not matter for drawing layer output
 
-                if( rSubset.mnSubsetBegin > 0 )
+                if (nOffset > 0.0)
                 {
                     ::basegfx::B2DHomMatrix aTranslation;
                     if( rOrigTextLayout->getFont()->getFontRequest().FontDescription.IsVertical == css::util::TriState_YES )
                     {
                         // vertical text -> offset in y direction
-                        aTranslation.translate( 0.0, nMinPos );
+                        aTranslation.translate(0.0, nOffset);
                     }
                     else
                     {
                         // horizontal text -> offset in x direction
-                        aTranslation.translate( nMinPos, 0.0 );
+                        aTranslation.translate(nOffset, 0.0);
                     }
 
                     ::canvas::tools::appendToRenderState( io_rRenderState,
@@ -419,7 +428,8 @@ namespace cppcanvas
                                      double&                                    o_rMinPos,
                                      double&                                    o_rMaxPos,
                                      const ::basegfx::B2DHomMatrix&             rTransformation,
-                                     const Action::Subset&                      rSubset )
+                                     const Action::Subset&                      rSubset,
+                                     double nLayoutWidth)
             {
                 ::canvas::tools::prependToRenderState(io_rRenderState, rTransformation);
 
@@ -453,7 +463,7 @@ namespace cppcanvas
                                            o_rMinPos,
                                            o_rMaxPos,
                                            io_rTextLayout,
-                                           rSubset ) );
+                                           rSubset, nLayoutWidth));
                 }
 
                 io_rTextLayout = xTextLayout;
@@ -1069,6 +1079,7 @@ namespace cppcanvas
                 uno::Reference< rendering::XTextLayout >    mxTextLayout;
                 const CanvasSharedPtr                       mpCanvas;
                 rendering::RenderState                      maState;
+                double                                      mnLayoutWidth;
             };
 
             TextArrayAction::TextArrayAction( const ::basegfx::B2DPoint&        rStartPoint,
@@ -1090,7 +1101,7 @@ namespace cppcanvas
                                  nLen,
                                  rOffsets,
                                  rCanvas,
-                                 rState, nullptr );
+                                 rState, nullptr, mnLayoutWidth);
             }
 
             TextArrayAction::TextArrayAction( const ::basegfx::B2DPoint&        rStartPoint,
@@ -1114,7 +1125,7 @@ namespace cppcanvas
                                  rOffsets,
                                  rCanvas,
                                  rState,
-                                 &rTextTransform );
+                                 &rTextTransform, mnLayoutWidth);
             }
 
             bool TextArrayAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
@@ -1147,7 +1158,8 @@ namespace cppcanvas
                                     nDummy0,
                                     nDummy1,
                                     rTransformation,
-                                    rSubset );
+                                    rSubset,
+                                    mnLayoutWidth);
 
                 if( !xTextLayout.is() )
                     return true; // empty layout, render nothing
@@ -1185,7 +1197,8 @@ namespace cppcanvas
                                     nDummy0,
                                     nDummy1,
                                     rTransformation,
-                                    rSubset );
+                                    rSubset,
+                                    mnLayoutWidth);
 
                 if( !xTextLayout.is() )
                     return ::basegfx::B2DRange(); // empty layout, empty bounds
@@ -1274,6 +1287,7 @@ namespace cppcanvas
                 const ::basegfx::B2DSize                        maShadowOffset;
                 const ::Color                                   maShadowColor;
                 const ::Color                                   maTextFillColor;
+                double                                          mnLayoutWidth;
             };
 
             EffectTextArrayAction::EffectTextArrayAction( const ::basegfx::B2DPoint&        rStartPoint,
@@ -1315,7 +1329,7 @@ namespace cppcanvas
                                  nLen,
                                  rOffsets,
                                  rCanvas,
-                                 rState, nullptr );
+                                 rState, nullptr, mnLayoutWidth);
             }
 
             EffectTextArrayAction::EffectTextArrayAction( const ::basegfx::B2DPoint&        rStartPoint,
@@ -1359,7 +1373,7 @@ namespace cppcanvas
                                  rOffsets,
                                  rCanvas,
                                  rState,
-                                 &rTextTransform );
+                                 &rTextTransform, mnLayoutWidth);
             }
 
             css::uno::Reference<css::rendering::XPolyPolygon2D> EffectTextArrayAction::queryTextBounds(const uno::Reference<rendering::XCanvas>& rCanvas) const
@@ -1488,7 +1502,8 @@ namespace cppcanvas
                                     nMinPos,
                                     nMaxPos,
                                     rTransformation,
-                                    rSubset );
+                                    rSubset,
+                                    mnLayoutWidth);
 
                 if( !xTextLayout.is() )
                     return true; // empty layout, render nothing
@@ -1559,7 +1574,8 @@ namespace cppcanvas
                                     nMinPos,
                                     nMaxPos,
                                     rTransformation,
-                                    rSubset );
+                                    rSubset,
+                                    mnLayoutWidth);
 
                 if( !xTextLayout.is() )
                     return ::basegfx::B2DRange(); // empty layout, empty bounds
