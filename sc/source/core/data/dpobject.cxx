@@ -3706,9 +3706,7 @@ void ScDPCollection::WriteRefsTo( ScDPCollection& r ) const
             if (!bFound)
             {
                 // none found, re-insert deleted object (see ScUndoDataPilot::Undo)
-
-                ScDPObject* pDestObj = new ScDPObject(rSrcObj);
-                r.InsertNewTable(pDestObj);
+                r.InsertNewTable(o3tl::make_unique<ScDPObject>(rSrcObj));
             }
         }
         OSL_ENSURE( maTables.size() == r.maTables.size(), "WriteRefsTo: couldn't restore all entries" );
@@ -3778,14 +3776,14 @@ void ScDPCollection::FreeTable(const ScDPObject* pDPObject)
     maTables.erase(std::remove_if(maTables.begin(), maTables.end(), funcRemoveCondition), maTables.end());
 }
 
-void ScDPCollection::InsertNewTable(ScDPObject* pDPObj)
+void ScDPCollection::InsertNewTable(std::unique_ptr<ScDPObject> pDPObj)
 {
     const ScRange& rOutRange = pDPObj->GetOutRange();
     const ScAddress& s = rOutRange.aStart;
     const ScAddress& e = rOutRange.aEnd;
     mpDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), ScMF::DpTable);
 
-    maTables.push_back(std::unique_ptr<ScDPObject>(pDPObj));
+    maTables.push_back(std::move(pDPObj));
 }
 
 bool ScDPCollection::HasTable(const ScDPObject* pDPObj) const

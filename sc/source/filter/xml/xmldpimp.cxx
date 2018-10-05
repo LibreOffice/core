@@ -450,7 +450,7 @@ void SAL_CALL ScXMLDataPilotTableContext::endFastElement( sal_Int32 /*nElement*/
     if (!bTargetRangeAddress)
         return;
 
-    ScDPObject* pDPObject(new ScDPObject(pDoc));
+    std::unique_ptr<ScDPObject> pDPObject(new ScDPObject(pDoc));
     pDPObject->SetName(sDataPilotTableName);
     pDPObject->SetTag(sApplicationData);
     pDPObject->SetOutRange(aTargetRangeAddress);
@@ -467,7 +467,7 @@ void SAL_CALL ScXMLDataPilotTableContext::endFastElement( sal_Int32 /*nElement*/
             aImportDesc.aObject = sSourceObject;
             aImportDesc.nType = sheet::DataImportMode_SQL;
             aImportDesc.bNative = bIsNative;
-            rPivotSources.appendDBSource(pDPObject, aImportDesc);
+            rPivotSources.appendDBSource(pDPObject.get(), aImportDesc);
         }
         break;
         case TABLE :
@@ -476,7 +476,7 @@ void SAL_CALL ScXMLDataPilotTableContext::endFastElement( sal_Int32 /*nElement*/
             aImportDesc.aDBName = sDatabaseName;
             aImportDesc.aObject = sSourceObject;
             aImportDesc.nType = sheet::DataImportMode_TABLE;
-            rPivotSources.appendDBSource(pDPObject, aImportDesc);
+            rPivotSources.appendDBSource(pDPObject.get(), aImportDesc);
         }
         break;
         case QUERY :
@@ -485,14 +485,14 @@ void SAL_CALL ScXMLDataPilotTableContext::endFastElement( sal_Int32 /*nElement*/
             aImportDesc.aDBName = sDatabaseName;
             aImportDesc.aObject = sSourceObject;
             aImportDesc.nType = sheet::DataImportMode_QUERY;
-            rPivotSources.appendDBSource(pDPObject, aImportDesc);
+            rPivotSources.appendDBSource(pDPObject.get(), aImportDesc);
         }
         break;
         case SERVICE :
         {
             ScDPServiceDesc aServiceDesc(sServiceName, sServiceSourceName, sServiceSourceObject,
                                 sServiceUsername, sServicePassword);
-            rPivotSources.appendServiceSource(pDPObject, aServiceDesc);
+            rPivotSources.appendServiceSource(pDPObject.get(), aServiceDesc);
         }
         break;
         case CELLRANGE :
@@ -506,13 +506,13 @@ void SAL_CALL ScXMLDataPilotTableContext::endFastElement( sal_Int32 /*nElement*/
                 else
                     aSheetDesc.SetSourceRange(aSourceCellRangeAddress);
                 aSheetDesc.SetQueryParam(aSourceQueryParam);
-                rPivotSources.appendSheetSource(pDPObject, aSheetDesc);
+                rPivotSources.appendSheetSource(pDPObject.get(), aSheetDesc);
             }
         }
         break;
     }
 
-    rPivotSources.appendSelectedPages(pDPObject, maSelectedPages);
+    rPivotSources.appendSelectedPages(pDPObject.get(), maSelectedPages);
 
     pDPSave->SetRowGrand(maRowGrandTotal.mbVisible);
     pDPSave->SetColumnGrand(maColGrandTotal.mbVisible);
@@ -536,9 +536,9 @@ void SAL_CALL ScXMLDataPilotTableContext::endFastElement( sal_Int32 /*nElement*/
     if ( pDPCollection->GetByName(pDPObject->GetName()) )
         pDPObject->SetName( OUString() );     // ignore the invalid name, create a new name in AfterXMLLoading
 
-    pDPCollection->InsertNewTable(pDPObject);
+    SetButtons(pDPObject.get());
 
-    SetButtons(pDPObject);
+    pDPCollection->InsertNewTable(std::move(pDPObject));
 }
 
 void ScXMLDataPilotTableContext::SetGrandTotal(

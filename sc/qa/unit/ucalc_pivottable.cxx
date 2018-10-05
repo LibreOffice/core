@@ -222,7 +222,7 @@ void Test::testPivotTable()
         m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
-    pDPs->InsertNewTable(pDPObj);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
                            size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
@@ -266,7 +266,7 @@ void Test::testPivotTable()
     // don't reload the cache which should force the copy to use the old data
     // from the cache.
     ScDPObject* pDPObj2 = new ScDPObject(*pDPObj);
-    pDPs->InsertNewTable(pDPObj2);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj2));
 
     aOutRange = pDPObj2->GetOutRange();
     pDPObj2->ClearTableData();
@@ -351,7 +351,7 @@ void Test::testPivotTable()
 
     pDPObj = createDPFromRange(
         m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
-    pDPs->InsertNewTable(pDPObj);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
                            size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
@@ -401,7 +401,7 @@ void Test::testPivotTableLabels()
         m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
-    pDPs->InsertNewTable(pDPObj);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
                            size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
@@ -456,7 +456,7 @@ void Test::testPivotTableDateLabels()
         m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
-    pDPs->InsertNewTable(pDPObj);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
                            size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
@@ -538,7 +538,7 @@ void Test::testPivotTableFilters()
         m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, true);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
-    pDPs->InsertNewTable(pDPObj);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
                            size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
@@ -697,7 +697,7 @@ void Test::testPivotTableNamedSource()
     CPPUNIT_ASSERT_MESSAGE("Failed to create a new pivot table object.", pDPObj);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
-    pDPs->InsertNewTable(pDPObj);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
                            size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
@@ -972,7 +972,7 @@ void Test::testPivotTableDuplicateDataFields()
         m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
-    pDPs->InsertNewTable(pDPObj);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
                            size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
@@ -1063,7 +1063,7 @@ void Test::testPivotTableNormalGrouping()
         m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
-    pDPs->InsertNewTable(pDPObj);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
                            size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
@@ -1223,7 +1223,7 @@ void Test::testPivotTableNumberGrouping()
         m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
-    pDPs->InsertNewTable(pDPObj);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
                            size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
@@ -1306,7 +1306,7 @@ void Test::testPivotTableDateGrouping()
         m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
-    pDPs->InsertNewTable(pDPObj);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
                            size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
@@ -1477,7 +1477,7 @@ void Test::testPivotTableEmptyRows()
         m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
-    pDPs->InsertNewTable(pDPObj);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
                            size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
@@ -1602,7 +1602,7 @@ void Test::testPivotTableTextNumber()
         m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
-    pDPs->InsertNewTable(pDPObj);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
                            size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
@@ -1684,7 +1684,7 @@ void Test::testPivotTableCaseInsensitiveStrings()
         m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
-    pDPs->InsertNewTable(pDPObj);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
                            size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
@@ -1773,7 +1773,7 @@ void Test::testPivotTableNumStability()
         m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
-    pDPs->InsertNewTable(pDPObj);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
                            size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
@@ -1843,7 +1843,7 @@ void Test::testPivotTableFieldReference()
         m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
-    pDPs->InsertNewTable(pDPObj);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
                            size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
@@ -2082,7 +2082,7 @@ void Test::testFuncGETPIVOTDATA()
     }
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
-    pDPs->InsertNewTable(pDPObj);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
                            size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
@@ -2143,7 +2143,7 @@ void Test::testFuncGETPIVOTDATA()
         pDPObj = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
     }
 
-    pDPs->InsertNewTable(pDPObj);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     aOutRange = refresh(pDPObj);
 
     {
@@ -2238,7 +2238,7 @@ void Test::testFuncGETPIVOTDATALeafAccess()
     pDPObj = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
-    pDPs->InsertNewTable(pDPObj);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
                            size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
@@ -2333,7 +2333,7 @@ void Test::testPivotTableRepeatItemLabels()
         m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
-    pDPs->InsertNewTable(pDPObj);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
                            size_t(1), pDPs->GetCount());
     pDPObj->SetName(pDPs->CreateNewName());
@@ -2413,13 +2413,13 @@ void Test::testPivotTableDPCollection()
 
     // Add 2 DP objects
     ScDPObject* pDPObj = createDPFromRange(m_pDoc, aDataRange , aFields, nFieldCount, false);
-    pDPs->InsertNewTable(pDPObj);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj));
     pDPObj->SetName("DP1"); // set custom name
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1), pDPs->GetCount());
 
     ScDPObject* pDPObj2 = createDPFromRange(m_pDoc, aDataRange, aFields, nFieldCount, false);
-    pDPs->InsertNewTable(pDPObj2);
+    pDPs->InsertNewTable(std::unique_ptr<ScDPObject>(pDPObj2));
     pDPObj2->SetName("DP2"); // set custom name
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be two DP tables", size_t(2), pDPs->GetCount());
