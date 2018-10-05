@@ -92,7 +92,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/dtrans/X11_transferable \
     vcl/unx/generic/gdi/cairo_xlib_cairo \
     vcl/unx/generic/gdi/x11cairotextrender \
-    vcl/unx/generic/gdi/gcach_xpeer \
 	vcl/unx/generic/gdi/gdiimpl \
 	vcl/unx/generic/gdi/openglx11cairotextrender \
     vcl/unx/generic/gdi/salbmp \

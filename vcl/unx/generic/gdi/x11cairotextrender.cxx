@@ -20,7 +20,7 @@
 #include "x11cairotextrender.hxx"
 #include <unx/saldisp.hxx>
 #include <unx/salvd.h>
-#include "gcach_xpeer.hxx"
+#include <unx/glyphcache.hxx>
 #include <X11/Xregion.h>
 #include <cairo.h>
 
@@ -31,7 +31,7 @@ X11CairoTextRender::X11CairoTextRender(X11SalGraphics& rParent)
 
 GlyphCache& X11CairoTextRender::getPlatformGlyphCache()
 {
-    return X11GlyphCache::GetInstance();
+    return GlyphCache::GetInstance();
 }
 
 cairo_t* X11CairoTextRender::getCairoContext()

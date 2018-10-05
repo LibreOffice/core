@@ -32,7 +32,7 @@
 #include <unx/salvd.h>
 #include <unx/x11/x11gdiimpl.h>
 #include <unx/x11/xlimits.hxx>
-#include "xrender_peer.hxx"
+#include <unx/x11/xrender_peer.hxx>
 #include <salframe.hxx>
 
 #include <unx/printergfx.hxx>

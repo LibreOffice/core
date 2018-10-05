@@ -17641,7 +17641,6 @@ vcl/inc/unx/desktops.hxx
 vcl/inc/unx/fc_fontoptions.hxx
 vcl/inc/unx/fontmanager.hxx
 vcl/inc/unx/freetype_glyphcache.hxx
-vcl/inc/unx/gendata.hxx
 vcl/inc/unx/gendisp.hxx
 vcl/inc/unx/geninst.h
 vcl/inc/unx/genprn.h
@@ -17691,6 +17690,7 @@ vcl/inc/unx/wmadaptor.hxx
 vcl/inc/unx/x11/x11gdiimpl.h
 vcl/inc/unx/x11/x11sys.hxx
 vcl/inc/unx/x11/xlimits.hxx
+vcl/inc/unx/x11/xrender_peer.hxx
 vcl/inc/unx/x11_cursors/ase_curs.h
 vcl/inc/unx/x11_cursors/ase_mask.h
 vcl/inc/unx/x11_cursors/asn_curs.h
@@ -18319,7 +18319,6 @@ vcl/unx/generic/gdi/salvd.cxx
 vcl/unx/generic/gdi/x11cairotextrender.cxx
 vcl/unx/generic/gdi/x11cairotextrender.hxx
 vcl/unx/generic/gdi/xrender_peer.cxx
-vcl/unx/generic/gdi/xrender_peer.hxx
 vcl/unx/generic/glyphs/freetype_glyphcache.cxx
 vcl/unx/generic/glyphs/glyphcache.cxx
 vcl/unx/generic/print/bitmap_gfx.cxx
