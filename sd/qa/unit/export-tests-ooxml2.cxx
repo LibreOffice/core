@@ -1889,7 +1889,7 @@ static inline double getAdjustmentValue( uno::Reference<beans::XPropertySet>& xS
     if (aIterator != aGeomPropVec.end())
     {
         uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustment;
-        double fResult;
+        double fResult = 0.0;
         aIterator->Value >>= aAdjustment;
         aAdjustment[0].Value >>= fResult;
         return fResult;
