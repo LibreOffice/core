@@ -31,7 +31,7 @@ namespace o3tl
  * for most of the operations with a combination unordered map and linked list.
  *
  **/
-template<typename Key, typename Value, class KeyHash = std::hash<Key>>
+template<typename Key, typename Value, class KeyHash = std::hash<Key>, class KeyEqual = std::equal_to<Key>>
 class lru_map final
 {
 public:
@@ -42,7 +42,7 @@ private:
     typedef typename list_t::iterator list_iterator_t;
     typedef typename list_t::const_iterator list_const_iterator_t;
 
-    typedef std::unordered_map<Key, list_iterator_t, KeyHash> map_t;
+    typedef std::unordered_map<Key, list_iterator_t, KeyHash, KeyEqual> map_t;
     typedef typename map_t::iterator map_iterator_t;
     typedef typename map_t::const_iterator map_const_iterator_t;
 
@@ -65,8 +65,9 @@ public:
     typedef list_iterator_t iterator;
     typedef list_const_iterator_t const_iterator;
 
+    // a size of 0 effectively disables the LRU cleanup code
     lru_map(size_t nMaxSize)
-        : mMaxSize(nMaxSize)
+        : mMaxSize(nMaxSize ? nMaxSize : std::min(mLruMap.max_size(), mLruList.max_size()))
     {}
 
     void insert(key_value_pair_t& rPair)
