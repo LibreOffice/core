@@ -822,7 +822,7 @@ define gb_LinkTarget_add_exception_object
 $(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS))
 endef
 
-define gb_LinkTarget_add_asmbojects
+define gb_LinkTarget_add_asmobjects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_asmobject,$(1),$(obj),$(3)))
 endef
 
