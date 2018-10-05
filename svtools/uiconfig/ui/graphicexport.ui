@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="svt">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -21,52 +21,28 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <object class="GtkListStore" id="liststore1">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="graphicexport|liststore1">pixels/cm</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="graphicexport|liststore1">pixels/inch</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="graphicexport|liststore1">pixels/meter</col>
-      </row>
-    </data>
+  <object class="GtkAdjustment" id="adjustment4">
+    <property name="upper">999.99000000000001</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
-  <object class="GtkListStore" id="liststore2">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="graphicexport|liststore2">inches</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="graphicexport|liststore2">cm</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="graphicexport|liststore2">mm</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="graphicexport|liststore2">points</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="graphicexport|liststore2">pixels</col>
-      </row>
-    </data>
+  <object class="GtkAdjustment" id="adjustment5">
+    <property name="upper">999.99000000000001</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
   <object class="GtkDialog" id="GraphicExportDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="graphicexport|GraphicExportDialog">%1 Options</property>
     <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -158,7 +134,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="graphicexport|label5">Width:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">widthmf-nospin</property>
+                            <property name="mnemonic_widget">widthmf</property>
                             <property name="xalign">1</property>
                           </object>
                           <packing>
@@ -172,7 +148,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="graphicexport|label6">Height:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">heightmf-nospin</property>
+                            <property name="mnemonic_widget">heightmf</property>
                             <property name="xalign">1</property>
                           </object>
                           <packing>
@@ -186,7 +162,7 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes" context="graphicexport|resolutionft">Resolution:</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">resolutionmf-nospin</property>
+                            <property name="mnemonic_widget">resolutionmf</property>
                             <property name="xalign">1</property>
                           </object>
                           <packing>
@@ -195,9 +171,10 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="widthmf-nospin">
+                          <object class="GtkSpinButton" id="widthmf">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                             <property name="xalign">1</property>
                             <property name="adjustment">adjustment3</property>
                             <property name="digits">2</property>
@@ -208,11 +185,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="heightmf-nospin">
+                          <object class="GtkSpinButton" id="heightmf">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                             <property name="xalign">1</property>
-                            <property name="adjustment">adjustment3</property>
+                            <property name="adjustment">adjustment4</property>
                             <property name="digits">2</property>
                           </object>
                           <packing>
@@ -221,11 +199,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="resolutionmf-nospin">
+                          <object class="GtkSpinButton" id="resolutionmf">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                             <property name="xalign">1</property>
-                            <property name="adjustment">adjustment3</property>
+                            <property name="adjustment">adjustment5</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -233,10 +212,16 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBox" id="widthlb">
+                          <object class="GtkComboBoxText" id="widthlb">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="model">liststore2</property>
+                            <items>
+                              <item translatable="yes" context="graphicexport|liststore2">inches</item>
+                              <item translatable="yes" context="graphicexport|liststore2">cm</item>
+                              <item translatable="yes" context="graphicexport|liststore2">mm</item>
+                              <item translatable="yes" context="graphicexport|liststore2">points</item>
+                              <item translatable="yes" context="graphicexport|liststore2">pixels</item>
+                            </items>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -244,10 +229,14 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBox" id="resolutionlb">
+                          <object class="GtkComboBoxText" id="resolutionlb">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="model">liststore1</property>
+                            <items>
+                              <item translatable="yes" context="graphicexport|liststore1">pixels/cm</item>
+                              <item translatable="yes" context="graphicexport|liststore1">pixels/inch</item>
+                              <item translatable="yes" context="graphicexport|liststore1">pixels/meter</item>
+                            </items>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -290,7 +279,7 @@
                     <property name="top_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkComboBox" id="colordepthlb">
+                      <object class="GtkComboBoxText" id="colordepthlb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -334,6 +323,7 @@
                           <object class="GtkSpinButton" id="compressionjpgnf">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                             <property name="xalign">1</property>
                             <property name="adjustment">adjustment1</property>
                           </object>
@@ -345,10 +335,11 @@
                         <child>
                           <object class="GtkScale" id="compressionjpgsb">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can_focus">True</property>
                             <property name="valign">center</property>
                             <property name="hexpand">True</property>
                             <property name="adjustment">adjustment1</property>
+                            <property name="digits">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -396,6 +387,7 @@
                           <object class="GtkSpinButton" id="compressionpngnf">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="activates_default">True</property>
                             <property name="xalign">1</property>
                             <property name="adjustment">adjustment2</property>
                           </object>
@@ -407,10 +399,11 @@
                         <child>
                           <object class="GtkScale" id="compressionpngsb">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can_focus">True</property>
                             <property name="valign">center</property>
                             <property name="hexpand">True</property>
                             <property name="adjustment">adjustment2</property>
+                            <property name="digits">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -605,7 +598,6 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">binarycb</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -745,7 +737,6 @@
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">color1rb</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -814,7 +805,6 @@
                                 <property name="xalign">0.059999998658895493</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">level1rb</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -883,7 +873,6 @@
                                 <property name="xalign">0</property>
                                 <property name="active">True</property>
                                 <property name="draw_indicator">True</property>
-                                <property name="group">compresslzw</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>

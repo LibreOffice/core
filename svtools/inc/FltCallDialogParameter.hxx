@@ -35,14 +35,14 @@ class Window;
 
 struct FltCallDialogParameter
 {
-    VclPtr<vcl::Window> pWindow;
+    weld::Window* pWindow;
     FieldUnit const eFieldUnit;
     OUString aFilterExt;
 
     // In and Out PropertySequence for all filter dialogs
     css::uno::Sequence<css::beans::PropertyValue> aFilterData;
 
-    FltCallDialogParameter(vcl::Window* pW, FieldUnit eFiUni)
+    FltCallDialogParameter(weld::Window* pW, FieldUnit eFiUni)
         : pWindow(pW)
         , eFieldUnit(eFiUni){};
 };
