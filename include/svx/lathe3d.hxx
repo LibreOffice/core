@@ -111,7 +111,7 @@ public:
 
     // break up
     virtual bool IsBreakObjPossible() override;
-    virtual SdrAttrObj* GetBreakObj() override;
+    virtual std::unique_ptr<SdrAttrObj,SdrObjectFreeOp> GetBreakObj() override;
 };
 
 #endif // INCLUDED_SVX_LATHE3D_HXX

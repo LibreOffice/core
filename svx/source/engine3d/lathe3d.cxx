@@ -187,12 +187,12 @@ bool E3dLatheObj::IsBreakObjPossible()
     return true;
 }
 
-SdrAttrObj* E3dLatheObj::GetBreakObj()
+std::unique_ptr<SdrAttrObj,SdrObjectFreeOp> E3dLatheObj::GetBreakObj()
 {
     // create PathObj
     basegfx::B3DPolyPolygon aLathePoly3D(basegfx::utils::createB3DPolyPolygonFromB2DPolyPolygon(maPolyPoly2D));
     basegfx::B2DPolyPolygon aTransPoly(TransformToScreenCoor(aLathePoly3D));
-    SdrPathObj* pPathObj = new SdrPathObj(getSdrModelFromSdrObject(), OBJ_PLIN, aTransPoly);
+    std::unique_ptr<SdrPathObj,SdrObjectFreeOp> pPathObj(new SdrPathObj(getSdrModelFromSdrObject(), OBJ_PLIN, aTransPoly));
 
     // Set Attribute
     SfxItemSet aSet(GetObjectItemSet());
@@ -202,7 +202,7 @@ SdrAttrObj* E3dLatheObj::GetBreakObj()
 
     pPathObj->SetMergedItemSet(aSet);
 
-    return pPathObj;
+    return std::unique_ptr<SdrAttrObj,SdrObjectFreeOp>(pPathObj.release());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
