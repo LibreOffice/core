@@ -291,12 +291,6 @@ namespace cppcanvas
                 ENSURE_OR_THROW( aOrigOffsets.getLength() >= rSubset.mnSubsetEnd,
                                   "::cppcanvas::internal::calcSubsetOffsets(): invalid subset range range" );
 
-                // TODO(F3): It currently seems that for RTL text, the
-                // DX offsets are nevertheless increasing in logical
-                // text order (I'd expect they are decreasing,
-                // mimicking the fact that the text is output
-                // right-to-left). This breaks text effects for ALL
-                // RTL languages.
 
                 // determine leftmost position in given subset range -
                 // as the DX array contains the output positions
@@ -317,6 +311,15 @@ namespace cppcanvas
                                                       0 : rSubset.mnSubsetBegin-1),
                                           pOffsets + rSubset.mnSubsetEnd )) );
 
+                // For RTL text, nMaxPos is the distance from the right edge to the leftmost position in the subset,
+                // so we have to convert it to the offset from the origin (i.e. left edge ).
+                // LTR: |---- min --->|---- max --->|            |
+                // RTL: |             |<--- max ----|<--- min ---|
+                //      |<- nOffset ->|                          |
+                const bool bRTL = rOrigTextLayout->getMainTextDirection() != 0;
+                const double nOffset =  bRTL ?
+                    (*std::max_element(pOffsets, pOffsets + aOrigOffsets.getLength()) - nMaxPos) : nMinPos;
+
 
                 // adapt render state, to move text output to given offset
 
@@ -326,18 +329,18 @@ namespace cppcanvas
                 // with the output offset. Neglected for now, as it
                 // does not matter for drawing layer output
 
-                if( rSubset.mnSubsetBegin > 0 )
+                if (nOffset > 0.0)
                 {
                     ::basegfx::B2DHomMatrix aTranslation;
                     if( rOrigTextLayout->getFont()->getFontRequest().FontDescription.IsVertical == css::util::TriState_YES )
                     {
                         // vertical text -> offset in y direction
-                        aTranslation.translate( 0.0, nMinPos );
+                        aTranslation.translate(0.0, nOffset);
                     }
                     else
                     {
                         // horizontal text -> offset in x direction
-                        aTranslation.translate( nMinPos, 0.0 );
+                        aTranslation.translate(nOffset, 0.0);
                     }
 
                     ::canvas::tools::appendToRenderState( io_rRenderState,
