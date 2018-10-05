@@ -94,15 +94,16 @@ SvtBroadcaster::~SvtBroadcaster()
     Normalize();
 
     {
+        auto dest(maDestructedListeners.data());
         SfxHint aHint(SfxHintId::Dying);
-        ListenersType::const_iterator dest(maDestructedListeners.begin());
         for (ListenersType::iterator it(maListeners.begin()); it != maListeners.end(); ++it)
         {
+            auto destEnd(dest + maDestructedListeners.size());
             // skip the destructed ones
-            while (dest != maDestructedListeners.end() && (*dest < *it))
+            while (dest != destEnd && (*dest < *it))
                 ++dest;
 
-            if (dest == maDestructedListeners.end() || *dest != *it)
+            if (dest == destEnd || *dest != *it)
                 (*it)->Notify(aHint);
         }
     }
@@ -113,14 +114,15 @@ SvtBroadcaster::~SvtBroadcaster()
     // listeners, with the exception of those that already asked to be removed
     // during their own destruction
     {
-        ListenersType::const_iterator dest(maDestructedListeners.begin());
+        auto dest(maDestructedListeners.data());
         for (ListenersType::iterator it(maListeners.begin()); it != maListeners.end(); ++it)
         {
+            auto destEnd(dest + maDestructedListeners.size());
             // skip the destructed ones
-            while (dest != maDestructedListeners.end() && (*dest < *it))
+            while (dest != destEnd && (*dest < *it))
                 ++dest;
 
-            if (dest == maDestructedListeners.end() || *dest != *it)
+            if (dest == destEnd || *dest != *it)
                 (*it)->BroadcasterDying(*this);
         }
     }
