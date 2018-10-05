@@ -79,8 +79,14 @@ bool GfxLink::IsNative() const
 const sal_uInt8* GfxLink::GetData() const
 {
     if( IsSwappedOut() )
-        const_cast<GfxLink*>(this)->SwapIn();
-
+    {
+        auto pData = GetSwapInData();
+        if (pData)
+        {
+            mpSwapInData = pData;
+            mpSwapOutData.reset();
+        }
+    }
     return mpSwapInData.get();
 }
 
@@ -163,19 +169,6 @@ void GfxLink::SwapOut()
                     mpSwapInData.reset();
                 }
             }
-        }
-    }
-}
-
-void GfxLink::SwapIn()
-{
-    if( IsSwappedOut() )
-    {
-        auto pData = GetSwapInData();
-        if (pData)
-        {
-            mpSwapInData = pData;
-            mpSwapOutData.reset();
         }
     }
 }
