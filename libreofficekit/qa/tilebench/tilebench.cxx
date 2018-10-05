@@ -390,7 +390,7 @@ int main( int argc, char* argv[] )
     if (pDocument)
     {
         pDocument->initializeForRendering("{\".uno:Author\":{\"type\":\"string\",\"value\":\"Local Host #0\"}}");
-        pDocument->registerCallback(documentCallback, 0);
+        pDocument->registerCallback(documentCallback, nullptr);
         if (!strcmp(mode, "--tile"))
         {
             const int max_parts = (argc > arg ? atoi(argv[arg++]) : -1);
