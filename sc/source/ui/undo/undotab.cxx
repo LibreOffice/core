@@ -462,19 +462,16 @@ bool ScUndoRenameTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 }
 
 ScUndoMoveTab::ScUndoMoveTab(
-    ScDocShell* pNewDocShell, vector<SCTAB>* pOldTabs, vector<SCTAB>* pNewTabs,
-    vector<OUString>* pOldNames, vector<OUString>* pNewNames) :
+    ScDocShell* pNewDocShell, std::unique_ptr<vector<SCTAB>> pOldTabs, std::unique_ptr<vector<SCTAB>> pNewTabs,
+    std::unique_ptr<vector<OUString>> pOldNames, std::unique_ptr<vector<OUString>> pNewNames) :
     ScSimpleUndo( pNewDocShell ),
-    mpOldTabs(pOldTabs), mpNewTabs(pNewTabs),
-    mpOldNames(pOldNames), mpNewNames(pNewNames)
+    mpOldTabs(std::move(pOldTabs)), mpNewTabs(std::move(pNewTabs)),
+    mpOldNames(std::move(pOldNames)), mpNewNames(std::move(pNewNames))
 {
-    if (mpOldNames && mpOldTabs->size() != mpOldNames->size())
-        // The sizes differ.  Something is wrong.
-        mpOldNames.reset();
-
-    if (mpNewNames && mpNewTabs->size() != mpNewNames->size())
-        // The sizes differ.  Something is wrong.
-        mpNewNames.reset();
+    // The sizes differ.  Something is wrong.
+    assert(!mpOldNames || mpOldTabs->size() == mpOldNames->size());
+    // The sizes differ.  Something is wrong.
+    assert(!mpNewNames || mpNewTabs->size() == mpNewNames->size());
 }
 
 ScUndoMoveTab::~ScUndoMoveTab()
@@ -566,18 +563,17 @@ bool ScUndoMoveTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 
 ScUndoCopyTab::ScUndoCopyTab(
     ScDocShell* pNewDocShell,
-    vector<SCTAB>* pOldTabs, vector<SCTAB>* pNewTabs,
-    vector<OUString>* pNewNames) :
+    std::unique_ptr<vector<SCTAB>> pOldTabs, std::unique_ptr<vector<SCTAB>> pNewTabs,
+    std::unique_ptr<vector<OUString>> pNewNames) :
     ScSimpleUndo( pNewDocShell ),
-    mpOldTabs(pOldTabs),
-    mpNewTabs(pNewTabs),
-    mpNewNames(pNewNames)
+    mpOldTabs(std::move(pOldTabs)),
+    mpNewTabs(std::move(pNewTabs)),
+    mpNewNames(std::move(pNewNames))
 {
     pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 
-    if (mpNewNames && mpNewTabs->size() != mpNewNames->size())
-        // The sizes differ.  Something is wrong.
-        mpNewNames.reset();
+    // The sizes differ.  Something is wrong.
+    assert(!mpNewNames || mpNewTabs->size() == mpNewNames->size());
 }
 
 ScUndoCopyTab::~ScUndoCopyTab()

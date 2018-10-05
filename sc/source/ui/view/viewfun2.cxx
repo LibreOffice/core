@@ -2966,13 +2966,13 @@ void ScViewFunc::MoveTable(
             {
                 pDocShell->GetUndoManager()->AddUndoAction(
                         new ScUndoCopyTab(
-                            pDocShell, pSrcTabs.release(), pDestTabs.release(), pDestNames.release()));
+                            pDocShell, std::move(pSrcTabs), std::move(pDestTabs), std::move(pDestNames)));
             }
             else
             {
                 pDocShell->GetUndoManager()->AddUndoAction(
                         new ScUndoMoveTab(
-                            pDocShell, pSrcTabs.release(), pDestTabs.release(), pTabNames.release(), pDestNames.release()));
+                            pDocShell, std::move(pSrcTabs), std::move(pDestTabs), std::move(pTabNames), std::move(pDestNames)));
             }
         }
 

@@ -937,7 +937,7 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
                 unique_ptr< vector<SCTAB> > pSrcList(new vector<SCTAB>(1, nSrcTab));
                 unique_ptr< vector<SCTAB> > pDestList(new vector<SCTAB>(1, nDestTab));
                 GetUndoManager()->AddUndoAction(
-                        new ScUndoCopyTab(this, pSrcList.release(), pDestList.release()));
+                        new ScUndoCopyTab(this, std::move(pSrcList), std::move(pDestList)));
             }
 
             bool bVbaEnabled = m_aDocument.IsInVBAMode();
@@ -1004,7 +1004,7 @@ bool ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, bool bCopy, bool bRec
             unique_ptr< vector<SCTAB> > pSrcList(new vector<SCTAB>(1, nSrcTab));
             unique_ptr< vector<SCTAB> > pDestList(new vector<SCTAB>(1, nDestTab));
             GetUndoManager()->AddUndoAction(
-                    new ScUndoMoveTab(this, pSrcList.release(), pDestList.release()));
+                    new ScUndoMoveTab(this, std::move(pSrcList), std::move(pDestList)));
         }
 
         Broadcast( ScTablesHint( SC_TAB_MOVED, nSrcTab, nDestTab ) );
