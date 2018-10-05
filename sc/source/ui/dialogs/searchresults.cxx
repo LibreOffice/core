@@ -26,7 +26,6 @@ namespace sc {
 SearchResultsDlg::SearchResultsDlg( SfxBindings* _pBindings, vcl::Window* pParent ) :
     ModelessDialog(pParent, "SearchResultsDialog", "modules/scalc/ui/searchresults.ui"),
     aSkipped( ScResId( SCSTR_SKIPPED ) ),
-    aTotal( ScResId( SCSTR_TOTAL ) ),
     mpBindings(_pBindings), mpDoc(nullptr)
 {
     get(mpSearchResults, "lbSearchResults");
@@ -148,7 +147,8 @@ void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatche
         }
     }
 
-    OUString aSearchResults = ScGlobal::ReplaceOrAppend( aTotal, "%1", OUString::number( aList.mnCount ) );
+    OUString aTotal(ScResId(SCSTR_TOTAL, aList.mnCount));
+    OUString aSearchResults = aTotal.replaceFirst("%1", OUString::number(aList.mnCount));
     if (aList.mnCount > ListWrapper::mnMaximum)
         aSearchResults += " " + ScGlobal::ReplaceOrAppend( aSkipped, "%1", OUString::number( ListWrapper::mnMaximum ) );
     mpSearchResults->SetText(aSearchResults);
