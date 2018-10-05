@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_2b008334",
+        "filename": "sw/qa/python/check_xautotextcontainer.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-05T09:11:43Z",
+      "side": 1,
+      "message": "is this check still necessary, now that no modification of instdir should happen any more (IIUC)?",
+      "revId": "34dc3c02f6d529f5a6a3c7ae0c6d564dda23072d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
