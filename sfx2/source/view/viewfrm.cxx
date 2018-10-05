@@ -1237,7 +1237,8 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     pInfoBar->addButton(xGetInvolvedButton);
                 }
 
-                if (bUpdateLastTimeGetInvolvedShown)
+                if (bUpdateLastTimeGetInvolvedShown
+                    && !officecfg::Setup::Product::LastTimeGetInvolvedShown::isReadOnly())
                 {
                     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
                     officecfg::Setup::Product::LastTimeGetInvolvedShown::set(nNow, batch);
