@@ -99,6 +99,7 @@ $(eval $(foreach method,\
 	add_precompiled_header \
 	set_private_extract_of_public_api \
 	add_bison_files \
+	add_flex_files \
 ,\
 	$(call gb_Executable_forward_to_Linktarget,$(method))\
 ))
