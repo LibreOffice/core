@@ -59,7 +59,6 @@ class SwAccessiblePortionData : public SwPortionHandler
     Positions_t m_aModelPositions;    /// position of portion breaks in the model
     Positions_t m_aAccessiblePositions;   /// portion breaks in sAccessibleString
     Positions_t m_aFieldPosition;
-    Positions_t m_aAttrFieldType;
 
     typedef std::vector<sal_uInt8> PortionAttrs_t;
     PortionAttrs_t m_aPortionAttrs;   /// additional portion attributes
@@ -102,7 +101,6 @@ public:
     virtual void Skip(TextFrameIndex nLength) override;
     virtual void Finish() override;
 
-    virtual void SetAttrFieldType( sal_uInt16 nAttrFieldType ) override;
     bool FillBoundaryIFDateField( css::i18n::Boundary& rBound, const sal_Int32 nPos );
     bool IsIndexInFootnode(sal_Int32 nIndex);
     bool IsInGrayPortion( sal_Int32 nPos );

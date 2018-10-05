@@ -460,10 +460,6 @@ void SwFieldPortion::HandlePortion( SwPortionHandler& rPH ) const
         nW = m_pFont->GetSize(m_pFont->GetActual()).Width();
     }
     rPH.Special( GetLen(), m_aExpand, GetWhichPor(), nH, nW, m_pFont );
-    if( GetWhichPor() == POR_FLD )
-    {
-        rPH.SetAttrFieldType(m_nAttrFieldType);
-    }
 }
 
 SwPosSize SwFieldPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
