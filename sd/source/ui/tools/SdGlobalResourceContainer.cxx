@@ -68,8 +68,7 @@ private:
     /** All instances of SdGlobalResource in this vector are owned by the
         container and will be destroyed when the container is destroyed.
     */
-    typedef ::std::vector<SdGlobalResource*> ResourceList;
-    ResourceList maResources;
+    std::vector<std::unique_ptr<SdGlobalResource>> maResources;
 
     typedef ::std::vector<std::shared_ptr<SdGlobalResource> > SharedResourceList;
     SharedResourceList maSharedResources;
@@ -89,27 +88,17 @@ SdGlobalResourceContainer& SdGlobalResourceContainer::Instance()
 //===== SdGlobalResourceContainer =============================================
 
 void SdGlobalResourceContainer::AddResource (
-    ::std::unique_ptr<SdGlobalResource> && pResource)
+    ::std::unique_ptr<SdGlobalResource> pResource)
 {
     ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
-    Implementation::ResourceList::iterator iResource;
-    iResource = ::std::find (
-        mpImpl->maResources.begin(),
-        mpImpl->maResources.end(),
-        pResource.get());
-    if (iResource == mpImpl->maResources.end())
-        mpImpl->maResources.push_back(pResource.get());
-    else
-    {
-        // Because the given resource is a unique_ptr it is highly unlikely
-        // that we come here.  But who knows?
-        SAL_WARN ( "sd.tools",
-            "SdGlobalResourceContainer:AddResource(): Resource added twice.");
-    }
-    // We can not put the unique_ptr into the vector so we release the
-    // unique_ptr and document that we take ownership explicitly.
-    pResource.release();
+    assert( std::none_of(
+                mpImpl->maResources.begin(),
+                mpImpl->maResources.end(),
+                [&](const std::unique_ptr<SdGlobalResource>& p) { return p == pResource; })
+            && "duplicate resource?");
+
+    mpImpl->maResources.push_back(std::move(pResource));
 }
 
 void SdGlobalResourceContainer::AddResource (
@@ -162,13 +151,13 @@ SdGlobalResourceContainer::~SdGlobalResourceContainer()
     // container.  This is because a resource A added before resource B
     // may have been created due to a request of B.  Thus B depends on A and
     // should be destroyed first.
-    Implementation::ResourceList::reverse_iterator iResource;
-    for (iResource = mpImpl->maResources.rbegin();
+    for (auto iResource = mpImpl->maResources.rbegin();
          iResource != mpImpl->maResources.rend();
          ++iResource)
     {
-        delete *iResource;
+        iResource->reset();
     }
+
 
     // The SharedResourceList has not to be released manually.  We just
     // assert resources that are still held by someone other than us.
