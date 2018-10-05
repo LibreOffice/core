@@ -47,7 +47,7 @@ public:
 
     virtual void StartPresentation(bool bStart) override;
     virtual LanguageType GetInputLanguage() override { return LANGUAGE_SYSTEM; }
-    virtual const SystemEnvData* GetSystemData() const override { return nullptr; }
+    //virtual const SystemEnvData* GetSystemData() const override;
     virtual SalPointerState GetPointerState() override { return SalPointerState(); }
     virtual KeyIndicatorState GetIndicatorState() override { return KeyIndicatorState(); }
 };
