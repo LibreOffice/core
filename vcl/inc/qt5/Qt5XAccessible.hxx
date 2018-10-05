@@ -15,6 +15,7 @@
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
+#include "Qt5AccessibleWidget.hxx"
 #include <vcl/window.hxx>
 
 class Qt5Frame;
@@ -27,8 +28,13 @@ class VCLPLUG_QT5_PUBLIC Qt5XAccessible : public QObject
     Q_OBJECT
 
 public:
+    Qt5XAccessible(css::uno::Reference<css::accessibility::XAccessible> xAccessible,
+                   Qt5AccessibleWidget* pAccessibleWidget);
     Qt5XAccessible(css::uno::Reference<css::accessibility::XAccessible> xAccessible);
+
     css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
+private:
+    Qt5AccessibleWidget* m_pAccessibleWidget;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
