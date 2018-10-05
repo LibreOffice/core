@@ -1304,17 +1304,17 @@ void FuText::DoubleClick(const MouseEvent& )
 /** Removed the insertion of default text and putting a new text
     object directly into edit mode.
 */
-SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle)
+SdrObjectUniquePtr FuText::CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle)
 {
-    SdrObject* pObj = SdrObjFactory::MakeNewObject(
+    SdrObjectUniquePtr pObj( SdrObjFactory::MakeNewObject(
         mpView->getSdrModelFromSdrView(),
         mpView->GetCurrentObjInventor(),
         mpView->GetCurrentObjIdentifier(),
-        nullptr);
+        nullptr) );
 
     if(pObj)
     {
-        if( auto pText = dynamic_cast< SdrTextObj *>( pObj ) )
+        if( auto pText = dynamic_cast< SdrTextObj *>( pObj.get() ) )
         {
             pText->SetLogicRect(rRectangle);
 
