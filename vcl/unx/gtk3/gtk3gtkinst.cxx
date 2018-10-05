@@ -1181,6 +1181,7 @@ protected:
     GtkWidget* m_pWidget;
 private:
     bool m_bTakeOwnership;
+    bool m_bFrozen;
     gulong m_nFocusInSignalId;
     gulong m_nFocusOutSignalId;
 
@@ -1202,6 +1203,7 @@ public:
     GtkInstanceWidget(GtkWidget* pWidget, bool bTakeOwnership)
         : m_pWidget(pWidget)
         , m_bTakeOwnership(bTakeOwnership)
+        , m_bFrozen(false)
         , m_nFocusInSignalId(0)
         , m_nFocusOutSignalId(0)
     {
@@ -1485,12 +1487,16 @@ public:
     virtual void freeze() override
     {
         gtk_widget_freeze_child_notify(m_pWidget);
+        m_bFrozen = true;
     }
 
     virtual void thaw() override
     {
         gtk_widget_thaw_child_notify(m_pWidget);
+        m_bFrozen = false;
     }
+
+    bool get_frozen() const { return m_bFrozen; }
 
     virtual ~GtkInstanceWidget() override
     {
@@ -4936,6 +4942,22 @@ public:
         return get(pos, id_column);
     }
 
+    // https://gitlab.gnome.org/GNOME/gtk/issues/94
+    // when a super tall combobox menu is activated, and the selected entry is sufficiently
+    // far down the list, then the menu doesn't appear under wayland
+    void bodge_wayland_menu_not_appearing()
+    {
+        if (get_frozen())
+            return;
+#if defined(GDK_WINDOWING_WAYLAND)
+        GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
+        if (GDK_IS_WAYLAND_DISPLAY(pDisplay))
+        {
+            gtk_combo_box_set_wrap_width(m_pComboBox, get_count() > 30 ? 1 : 0);
+        }
+#endif
+    }
+
     virtual void insert_text(int pos, const OUString& rText) override
     {
         disable_notify_events();
@@ -4944,6 +4966,7 @@ public:
         gtk_list_store_insert(pListStore, &iter, pos);
         gtk_list_store_set(pListStore, &iter, 0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(), -1);
         enable_notify_events();
+        bodge_wayland_menu_not_appearing();
     }
 
     virtual void remove(int pos) override
@@ -4954,6 +4977,7 @@ public:
         gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(pListStore), &iter, nullptr, pos);
         gtk_list_store_remove(pListStore, &iter);
         enable_notify_events();
+        bodge_wayland_menu_not_appearing();
     }
 
     virtual void insert(int pos, const OUString& rId, const OUString& rText, const OUString* pIconName, VirtualDevice* pImageSurface) override
@@ -4961,6 +4985,7 @@ public:
         disable_notify_events();
         insert_row(GTK_LIST_STORE(gtk_combo_box_get_model(m_pComboBox)), pos, rId, rText, pIconName, pImageSurface);
         enable_notify_events();
+        bodge_wayland_menu_not_appearing();
     }
 
     virtual int get_count() const override
@@ -4985,6 +5010,7 @@ public:
         GtkTreeModel *pModel = gtk_combo_box_get_model(m_pComboBox);
         gtk_list_store_clear(GTK_LIST_STORE(pModel));
         enable_notify_events();
+        bodge_wayland_menu_not_appearing();
     }
 
     virtual void make_sorted() override
@@ -5098,6 +5124,7 @@ public:
             gtk_tree_sortable_set_sort_column_id(pSortable, 0, GTK_SORT_ASCENDING);
         }
         GtkInstanceContainer::thaw();
+        bodge_wayland_menu_not_appearing();
     }
 
     virtual ~GtkInstanceComboBox() override
