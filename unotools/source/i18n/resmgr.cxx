@@ -206,6 +206,7 @@ namespace Translate
         {
             sContext = OString(pContextAndId, pId - pContextAndId);
             ++pId;
+            assert(!strchr(pId, '\004') && "should be using nget, not get");
         }
 
         //if it's a key id locale, generate it here
@@ -217,6 +218,31 @@ namespace Translate
 
         //otherwise translate it
         const std::string ret = boost::locale::pgettext(sContext.getStr(), pId, loc);
+        return ExpandVariables(createFromUtf8(ret.data(), ret.size()));
+    }
+
+    OUString nget(const char* pContextAndIds, int n, const std::locale &loc)
+    {
+        OString sContextIdId(pContextAndIds);
+        std::vector<OString> aContextIdId;
+        sal_Int32 nIndex = 0;
+        do
+        {
+            aContextIdId.push_back(sContextIdId.getToken(0, '\004', nIndex));
+        }
+        while (nIndex >= 0);
+        assert(aContextIdId.size() == 3 && "should be using get, not nget");
+
+        //if it's a key id locale, generate it here
+        if (std::use_facet<boost::locale::info>(loc).language() == "qtz")
+        {
+            OString sKeyId(genKeyId(aContextIdId[0] + "|" + aContextIdId[1]));
+            int nForm = n == 0 ? 1 : 2;
+            return OUString::fromUtf8(sKeyId) + OUStringLiteral1(0x2016) + createFromUtf8(aContextIdId[nForm].getStr(), aContextIdId[nForm].getLength());
+        }
+
+        //otherwise translate it
+        const std::string ret = boost::locale::npgettext(aContextIdId[0].getStr(), aContextIdId[1].getStr(), aContextIdId[2].getStr(), n, loc);
         return ExpandVariables(createFromUtf8(ret.data(), ret.size()));
     }
 

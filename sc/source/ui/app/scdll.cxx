@@ -113,6 +113,11 @@ OUString ScResId(const char* pId)
     return Translate::get(pId, SC_MOD()->GetResLocale());
 }
 
+OUString ScResId(const char* pId, int nCardinality)
+{
+    return Translate::nget(pId, nCardinality, SC_MOD()->GetResLocale());
+}
+
 void ScDLL::Init()
 {
     if ( SfxApplication::GetModule(SfxToolsModule::Calc) )    // Module already active
