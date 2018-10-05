@@ -28,6 +28,7 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
+#include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 
 // predefines
 #define nMinSegments sal_uInt32(1)

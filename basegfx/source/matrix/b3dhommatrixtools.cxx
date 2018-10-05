@@ -18,6 +18,7 @@
  */
 
 #include <basegfx/matrix/b3dhommatrixtools.hxx>
+#include <com/sun/star/drawing/HomogenMatrix.hpp>
 
 namespace basegfx
 {

@@ -20,6 +20,7 @@
 #include <osl/diagnose.h>
 #include <basegfx/polygon/b3dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
+#include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/range/b3drange.hxx>
 #include <basegfx/point/b2dpoint.hxx>

@@ -22,7 +22,6 @@
 
 #include <sal/types.h>
 #include <basegfx/numeric/ftools.hxx>
-#include <algorithm>
 #include <basegfx/basegfxdllapi.h>
 
 namespace basegfx

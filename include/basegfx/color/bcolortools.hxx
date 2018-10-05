@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASEGFX_COLOR_BCOLORTOOLS_HXX
 #define INCLUDED_BASEGFX_COLOR_BCOLORTOOLS_HXX
 
-#include <sal/types.h>
 #include <basegfx/basegfxdllapi.h>
 
 

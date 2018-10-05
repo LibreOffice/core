@@ -21,7 +21,6 @@
 #define INCLUDED_BASEGFX_RANGE_B1DRANGE_HXX
 
 #include <basegfx/range/basicrange.hxx>
-#include <basegfx/basegfxdllapi.h>
 
 
 namespace basegfx

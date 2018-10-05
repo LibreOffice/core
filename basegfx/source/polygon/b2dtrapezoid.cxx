@@ -20,6 +20,7 @@
 #include <basegfx/polygon/b2dtrapezoid.hxx>
 #include <basegfx/range/b1drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <osl/diagnose.h>
 

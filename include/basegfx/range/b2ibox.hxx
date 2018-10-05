@@ -21,14 +21,9 @@
 #define INCLUDED_BASEGFX_RANGE_B2IBOX_HXX
 
 #include <ostream>
-#include <vector>
 
-#include <basegfx/point/b2ipoint.hxx>
-#include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
-#include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/range/basicbox.hxx>
-#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {

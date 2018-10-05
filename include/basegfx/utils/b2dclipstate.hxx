@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASEGFX_UTILS_B2DCLIPSTATE_HXX
 #define INCLUDED_BASEGFX_UTILS_B2DCLIPSTATE_HXX
 
-#include <sal/types.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <basegfx/basegfxdllapi.h>
 
@@ -28,8 +27,6 @@
 namespace basegfx
 {
     class B2DRange;
-    class B2DPolyRange;
-    class B2DPolygon;
     class B2DPolyPolygon;
     class B2DHomMatrix;
 
