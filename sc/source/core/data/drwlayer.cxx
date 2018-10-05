@@ -296,6 +296,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
     rAdmin.NewLayer("hinten",   sal_uInt8(SC_LAYER_BACK));
     rAdmin.NewLayer("intern",   sal_uInt8(SC_LAYER_INTERN));
     rAdmin.NewLayer("Controls", sal_uInt8(SC_LAYER_CONTROLS));
+    rAdmin.SetControlLayerName("Controls");
     rAdmin.NewLayer("hidden",   sal_uInt8(SC_LAYER_HIDDEN));
     // "Controls" is new - must also be created when loading
 
