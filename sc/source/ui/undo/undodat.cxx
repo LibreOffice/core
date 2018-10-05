@@ -1457,9 +1457,7 @@ void ScUndoDataPilot::Undo()
     else if (xOldDPObject)
     {
         //  re-insert deleted object
-
-        ScDPObject* pDestObj = new ScDPObject(*xOldDPObject);
-        rDoc.GetDPCollection()->InsertNewTable(pDestObj);
+        rDoc.GetDPCollection()->InsertNewTable(o3tl::make_unique<ScDPObject>(*xOldDPObject));
     }
 
     if (xNewUndoDoc)
