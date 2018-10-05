@@ -594,7 +594,7 @@ void SwMacrosTest::setUp()
     // which is a private symbol to us, gets called
     m_xWriterComponent =
         getMultiServiceFactory()->createInstance("com.sun.star.comp.Writer.TextDocument");
-    CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xWriterComponent.is());
+    CPPUNIT_ASSERT_MESSAGE("no writer component!", m_xWriterComponent.is());
     mxDesktop = css::frame::Desktop::create( comphelper::getComponentContext(getMultiServiceFactory()) );
 }
 
