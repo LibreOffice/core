@@ -93,6 +93,7 @@ void DocumentDrawModelManager::InitDrawModel()
 
     sLayerNm = "Controls";
     mnControls = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
+    mpDrawModel->GetLayerAdmin().SetControlLayerName(sLayerNm);
 
     // add invisible layers corresponding to the visible ones.
     {
