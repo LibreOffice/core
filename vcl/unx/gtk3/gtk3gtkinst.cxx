@@ -3379,7 +3379,16 @@ public:
 
     virtual void set_value(int value) override
     {
+        disable_notify_events();
         gtk_range_set_value(GTK_RANGE(m_pScale), value);
+        enable_notify_events();
+    }
+
+    virtual void set_range(int min, int max) override
+    {
+        disable_notify_events();
+        gtk_range_set_range(GTK_RANGE(m_pScale), min, max);
+        enable_notify_events();
     }
 
     virtual int get_value() const override
