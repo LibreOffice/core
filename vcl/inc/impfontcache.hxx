@@ -69,7 +69,8 @@ private:
     // cache of recently used font instances
     struct IFSD_Equal { bool operator()( const FontSelectPattern&, const FontSelectPattern& ) const; };
     struct IFSD_Hash { size_t operator()( const FontSelectPattern& ) const; };
-    typedef std::unordered_map<FontSelectPattern, rtl::Reference<LogicalFontInstance>, IFSD_Hash, IFSD_Equal> FontInstanceList;
+    typedef o3tl::lru_map<FontSelectPattern, rtl::Reference<LogicalFontInstance>, IFSD_Hash, IFSD_Equal> FontInstanceList;
+    typedef FontInstanceList::key_value_pair_t FontInstanceListPair;
 
     LogicalFontInstance* mpLastHitCacheEntry; ///< keeps the last hit cache entry
     FontInstanceList maFontInstanceList;
