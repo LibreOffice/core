@@ -37,17 +37,19 @@ GlyphCache::GlyphCache()
     mnLruIndex(0),
     mnGlyphCount(0),
     mpCurrentGCFont(nullptr)
+    , m_nMaxFontId(0)
 {
     pInstance = this;
-    mpFtManager.reset( new FreetypeManager );
+
+    InitFreetype();
 }
 
 GlyphCache::~GlyphCache()
 {
-    InvalidateAllGlyphs();
+    ClearFontCache();
 }
 
-void GlyphCache::InvalidateAllGlyphs()
+void GlyphCache::ClearFontCache()
 {
     for (auto& font : maFontList)
     {
@@ -59,6 +61,7 @@ void GlyphCache::InvalidateAllGlyphs()
 
     maFontList.clear();
     mpCurrentGCFont = nullptr;
+    m_aFontInfoList.clear();
 }
 
 void GlyphCache::ClearFontOptions()
@@ -159,26 +162,6 @@ GlyphCache& GlyphCache::GetInstance()
     return *pInstance;
 }
 
-void GlyphCache::AddFontFile( const OString& rNormalizedName, int nFaceNum,
-    sal_IntPtr nFontId, const FontAttributes& rDFA)
-{
-    if( mpFtManager )
-        mpFtManager->AddFontFile( rNormalizedName, nFaceNum, nFontId, rDFA);
-}
-
-void GlyphCache::AnnounceFonts( PhysicalFontCollection* pFontCollection ) const
-{
-    if( mpFtManager )
-        mpFtManager->AnnounceFonts( pFontCollection );
-}
-
-void GlyphCache::ClearFontCache()
-{
-    InvalidateAllGlyphs();
-    if (mpFtManager)
-        mpFtManager->ClearFontList();
-}
-
 FreetypeFont* GlyphCache::CacheFont(LogicalFontInstance* pFontInstance)
 {
     // a serverfont request has a fontid > 0
@@ -195,9 +178,7 @@ FreetypeFont* GlyphCache::CacheFont(LogicalFontInstance* pFontInstance)
     }
 
     // font not cached yet => create new font item
-    FreetypeFont* pNew = nullptr;
-    if (mpFtManager)
-        pNew = mpFtManager->CreateFont(pFontInstance);
+    FreetypeFont* pNew = CreateFont(pFontInstance);
 
     if( pNew )
     {

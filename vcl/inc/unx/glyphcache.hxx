@@ -38,7 +38,7 @@
 
 #include <unordered_map>
 
-class FreetypeManager;
+class FreetypeFont;
 class FreetypeFontInstance;
 class FreetypeFontInfo;
 class GlyphData;
@@ -68,7 +68,6 @@ public:
     FreetypeFont*           CacheFont(LogicalFontInstance* pFontInstance);
     void                    UncacheFont( FreetypeFont& );
     void                    ClearFontCache();
-    void                    InvalidateAllGlyphs();
     void                    ClearFontOptions();
 
 private:
@@ -79,13 +78,16 @@ private:
     void                    UsingGlyph( GlyphData const & );
 
 private:
+    void                    InitFreetype();
     void                    GarbageCollect();
+    FreetypeFont*           CreateFont(LogicalFontInstance* pLogicalFont);
 
     // the GlyphCache's FontList matches a font request to a serverfont instance
     // the FontList key's mpFontData member is reinterpreted as integer font id
     struct IFSD_Equal{  bool operator()( const rtl::Reference<LogicalFontInstance>&, const rtl::Reference<LogicalFontInstance>& ) const; };
     struct IFSD_Hash{ size_t operator()( const rtl::Reference<LogicalFontInstance>& ) const; };
     typedef std::unordered_map<rtl::Reference<LogicalFontInstance>,std::unique_ptr<FreetypeFont>,IFSD_Hash,IFSD_Equal > FontList;
+    typedef std::unordered_map<sal_IntPtr, std::unique_ptr<FreetypeFontInfo>> FontInfoList;
 
     FontList                maFontList;
     static constexpr sal_uLong gnMaxSize = 1500000;  // max overall cache size in bytes
@@ -94,7 +96,8 @@ private:
     mutable int             mnGlyphCount;
     FreetypeFont*           mpCurrentGCFont;
 
-    std::unique_ptr<FreetypeManager>  mpFtManager;
+    FontInfoList            m_aFontInfoList;
+    sal_IntPtr              m_nMaxFontId;
 };
 
 class GlyphData
