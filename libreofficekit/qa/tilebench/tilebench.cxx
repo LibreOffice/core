@@ -313,7 +313,7 @@ static void testDialog( Document *pDocument, const char *uno_cmd )
     pDocument->destroyView(view);
 }
 
-static void documentCallback(const int type, const char* p, void* data)
+static void documentCallback(const int type, const char* p, void*)
 {
     std::cerr << "Document callback " << type << ": " << (p ? p : "(null)") << "\n";
 }
