@@ -48,12 +48,12 @@
 #include <shlwapi.h>
 #include <winver.h>
 
-GlobalGlyphCache * GlobalGlyphCache::get() {
+GlobalOpenGLGlyphCache * GlobalOpenGLGlyphCache::get() {
     SalData * data = GetSalData();
-    if (!data->m_pGlobalGlyphCache) {
-        data->m_pGlobalGlyphCache.reset(new GlobalGlyphCache);
+    if (!data->m_pGlobalOpenGLGlyphCache) {
+        data->m_pGlobalOpenGLGlyphCache.reset(new GlobalOpenGLGlyphCache);
     }
-    return data->m_pGlobalGlyphCache.get();
+    return data->m_pGlobalOpenGLGlyphCache.get();
 }
 
 bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, SalGraphics& rGraphics)
@@ -200,12 +200,12 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
 
     pTxt->ReleaseFont();
 
-    if (!GlyphCache::ReserveTextureSpace(aElement, nBitmapWidth, nBitmapHeight))
+    if (!OpenGLGlyphCache::ReserveTextureSpace(aElement, nBitmapWidth, nBitmapHeight))
         return false;
     if (!aDC.copyToTexture(aElement.maTexture))
         return false;
 
-    maGlyphCache.PutDrawElementInCache(aElement, nGlyphIndex);
+    maOpenGLGlyphCache.PutDrawElementInCache(aElement, nGlyphIndex);
 
     SelectFont(aDC.getCompatibleHDC(), hOrigFont);
 
@@ -418,7 +418,7 @@ bool WinSalGraphics::CacheGlyphs(const GenericSalLayout& rLayout)
     const GlyphItem* pGlyph;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
-        if (!rFont.GetGlyphCache().IsGlyphCached(pGlyph->maGlyphId))
+        if (!rFont.GetOpenGLGlyphCache().IsGlyphCached(pGlyph->maGlyphId))
         {
             if (!rFont.CacheGlyphToAtlas(hDC, hFONT, pGlyph->maGlyphId, *this))
                 return false;
@@ -449,7 +449,7 @@ bool WinSalGraphics::DrawCachedGlyphs(const GenericSalLayout& rLayout)
     const GlyphItem* pGlyph;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
-        OpenGLGlyphDrawElement& rElement(rFont.GetGlyphCache().GetDrawElement(pGlyph->maGlyphId));
+        OpenGLGlyphDrawElement& rElement(rFont.GetOpenGLGlyphCache().GetDrawElement(pGlyph->maGlyphId));
         OpenGLTexture& rTexture = rElement.maTexture;
 
         if (!rTexture)
