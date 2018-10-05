@@ -8,18 +8,26 @@
  *
  */
 
+#include <Qt5AccessibleEventListener.hxx>
+#include <Qt5AccessibleWidget.hxx>
 #include <Qt5MainWindow.hxx>
 #include <Qt5MainWindow.moc>
-#include <Qt5AccessibleWidget.hxx>
 
 #include <QtGui/QAccessible>
 #include <QtGui/QCloseEvent>
+
+#include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
+
+using namespace css::accessibility;
+using namespace css::uno;
 
 Qt5MainWindow::Qt5MainWindow(Qt5Frame& rFrame, QWidget* parent, Qt::WindowFlags f)
     : QMainWindow(parent, f)
     , m_pFrame(&rFrame)
 {
-    QAccessible::installFactory(Qt5AccessibleWidget::customFactory);
 }
 
 void Qt5MainWindow::closeEvent(QCloseEvent* pEvent)
