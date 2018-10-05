@@ -1389,22 +1389,6 @@ sal_uInt32 SvNumberFormatter::GetTimeFormat( double fNumber, LanguageType eLnge 
     }
 }
 
-sal_uInt32 SvNumberFormatter::GetStandardFormat( double fNumber, sal_uInt32 nFIndex,
-                                                 SvNumFormatType eType, LanguageType eLnge )
-{
-    ::osl::MutexGuard aGuard( GetInstanceMutex() );
-    if ( IsSpecialStandardFormat( nFIndex, eLnge ) )
-        return nFIndex;
-
-    switch( eType )
-    {
-        case SvNumFormatType::TIME :
-            return GetTimeFormat( fNumber, eLnge);
-        default:
-            return GetStandardFormat( eType, eLnge );
-    }
-}
-
 sal_uInt32 SvNumberFormatter::GuessDateTimeFormat( SvNumFormatType& rType, double fNumber, LanguageType eLnge )
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
@@ -1489,7 +1473,12 @@ sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
             // displayed.
         }
         else
-            nKey = GetStandardFormat( fNumber, nFIndex, eType, eLang );
+        {
+            if ( IsSpecialStandardFormat( nFIndex, eLang ) )
+                nKey = nFIndex;
+            else
+                nKey = GetTimeFormat( fNumber, eLang);
+        }
         break;
     case SvNumFormatType::DATETIME :
         if (nFIndex == GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, eLang) || (pFormat && pFormat->IsIso8601( 0 )))
@@ -1497,8 +1486,14 @@ sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
         else
             nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
         break;
+    case SvNumFormatType::NUMBER:
+        nKey = GetStandardFormat( eType, eLang );
+        break;
     default:
-        nKey = GetStandardFormat( fNumber, nFIndex, eType, eLang );
+        if ( IsSpecialStandardFormat( nFIndex, eLang ) )
+            nKey = nFIndex;
+        else
+            nKey = GetStandardFormat( eType, eLang );
     }
     return nKey;
 }

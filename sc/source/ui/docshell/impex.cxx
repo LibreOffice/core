@@ -1205,7 +1205,7 @@ static bool lcl_PutString(
                     sal_uLong nFormat = pDocFormatter->GetStandardFormat( nType, eDocLang );
                     // maybe there is a special format including seconds or milliseconds
                     if (nFound > 5)
-                        nFormat = pDocFormatter->GetStandardFormat( fDays, nFormat, nType, eDocLang);
+                        nFormat = pDocFormatter->GetEditFormat( fDays, nFormat, nType, eDocLang, nullptr );
 
                     ScAddress aPos(nCol,nRow,nTab);
                     if ( bUseDocImport )

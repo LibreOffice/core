@@ -625,12 +625,6 @@ public:
         NF_TIME_HH_MMSS00, if that format is passed in nFIndex. */
     sal_uInt32 GetStandardFormat( sal_uInt32 nFIndex, SvNumFormatType eType, LanguageType eLnge );
 
-    /** Return the format index of the default format of a type for language/country.
-        Maybe not the default format but a special builtin format, e.g. for
-        NF_TIME_HH_MMSS00, or NF_TIME_HH_MMSS if fNumber >= 1.0  */
-    sal_uInt32 GetStandardFormat( double fNumber, sal_uInt32 nFIndex, SvNumFormatType eType,
-                                  LanguageType eLnge );
-
     /// Whether nFIndex is a special builtin format
     bool IsSpecialStandardFormat( sal_uInt32 nFIndex, LanguageType eLnge );
 

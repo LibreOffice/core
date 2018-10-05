@@ -1427,8 +1427,8 @@ static OUString lcl_Calculate( const OUString& rFormula, ScDocument* pDoc, const
     if ( pCalc->IsValue() )
     {
         double n = pCalc->GetValue();
-        sal_uInt32 nFormat = aFormatter.GetStandardFormat( n, 0,
-                pCalc->GetFormatType(), ScGlobal::eLnge );
+        sal_uInt32 nFormat = aFormatter.GetEditFormat( n, 0,
+                pCalc->GetFormatType(), ScGlobal::eLnge, nullptr );
         aFormatter.GetInputLineString( n, nFormat, aValue );
         //! display OutputString but insert InputLineString
     }
