@@ -124,11 +124,15 @@ public:
     }
 
     bool VisitFunctionDecl(const FunctionDecl* );
-    bool VisitCompoundStmt(const CompoundStmt* );
     bool VisitCXXDeleteExpr(const CXXDeleteExpr* );
     bool TraverseFunctionDecl(FunctionDecl* );
+#if CLANG_VERSION >= 50000
+    bool TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl* );
+#endif
     bool TraverseCXXMethodDecl(CXXMethodDecl* );
     bool TraverseCXXConstructorDecl(CXXConstructorDecl* );
+    bool TraverseCXXConversionDecl(CXXConversionDecl* );
+    bool TraverseCXXDestructorDecl(CXXDestructorDecl* );
     bool TraverseConstructorInitializer(CXXCtorInitializer*);
 
 private:
@@ -139,7 +143,7 @@ private:
     void CheckLoopDelete(const FunctionDecl*, const CXXDeleteExpr* );
     void CheckDeleteExpr(const FunctionDecl*, const CXXDeleteExpr*);
     void CheckParenExpr(const FunctionDecl*, const ParenExpr*);
-    void CheckDeleteExpr(const FunctionDecl*, const CXXDeleteExpr*,
+    void CheckMemberDeleteExpr(const FunctionDecl*, const CXXDeleteExpr*,
         const MemberExpr*, StringRef message);
     FunctionDecl const * mpCurrentFunctionDecl = nullptr;
     std::string fn;
@@ -270,7 +274,7 @@ void UseUniquePtr::CheckDeleteExpr(const FunctionDecl* functionDecl, const CXXDe
         if (fn == SRCDIR "/sc/source/filter/html/htmlpars.cxx")
             return;
 
-        CheckDeleteExpr(functionDecl, deleteExpr, memberExpr,
+        CheckMemberDeleteExpr(functionDecl, deleteExpr, memberExpr,
             "unconditional call to delete on a member, should be using std::unique_ptr");
         return;
     }
@@ -422,7 +426,7 @@ void UseUniquePtr::CheckDeleteExpr(const FunctionDecl* functionDecl, const CXXDe
     {
        auto baseMemberExpr = dyn_cast<MemberExpr>(arrayExpr->getBase()->IgnoreParenImpCasts());
        if (baseMemberExpr)
-            CheckDeleteExpr(functionDecl, deleteExpr, baseMemberExpr,
+            CheckMemberDeleteExpr(functionDecl, deleteExpr, baseMemberExpr,
                 "unconditional call to delete on an array member, should be using std::unique_ptr");
     }
 }
@@ -441,7 +445,302 @@ void UseUniquePtr::CheckParenExpr(const FunctionDecl* functionDecl, const ParenE
     CheckDeleteExpr(functionDecl, deleteExpr);
 }
 
-void UseUniquePtr::CheckDeleteExpr(const FunctionDecl* functionDecl, const CXXDeleteExpr* deleteExpr,
+void UseUniquePtr::CheckLoopDelete(const FunctionDecl* functionDecl, const Stmt* bodyStmt)
+{
+    if (auto deleteExpr = dyn_cast<CXXDeleteExpr>(bodyStmt))
+        CheckLoopDelete(functionDecl, deleteExpr);
+    else if (auto compoundStmt = dyn_cast<CompoundStmt>(bodyStmt))
+    {
+        for (auto i = compoundStmt->body_begin(); i != compoundStmt->body_end(); ++i)
+        {
+            if (auto deleteExpr = dyn_cast<CXXDeleteExpr>(*i))
+                CheckLoopDelete(functionDecl, deleteExpr);
+        }
+    }
+}
+
+void UseUniquePtr::CheckLoopDelete(const FunctionDecl* functionDecl, const CXXDeleteExpr* deleteExpr)
+{
+    const MemberExpr* memberExpr = nullptr;
+    const VarDecl* varDecl = nullptr;
+    const Expr* subExpr = deleteExpr->getArgument();
+    // drill down looking for a MemberExpr
+    for (;;)
+    {
+        subExpr = subExpr->IgnoreParenImpCasts();
+        if ((memberExpr = dyn_cast<MemberExpr>(subExpr)))
+        {
+            if (memberExpr->getMemberDecl()->getName() == "first" || memberExpr->getMemberDecl()->getName() == "second")
+            {
+                subExpr = memberExpr->getBase();
+                memberExpr = nullptr;
+            }
+            else
+                break;
+        }
+        else if (auto declRefExpr = dyn_cast<DeclRefExpr>(subExpr))
+        {
+            if ((varDecl = dyn_cast<VarDecl>(declRefExpr->getDecl())))
+                break;
+        }
+        else if (auto arraySubscriptExpr = dyn_cast<ArraySubscriptExpr>(subExpr))
+            subExpr = arraySubscriptExpr->getBase();
+        else if (auto cxxOperatorCallExpr = dyn_cast<CXXOperatorCallExpr>(subExpr))
+        {
+            // look for deletes of an iterator object where the iterator is over a member field
+            if (auto declRefExpr = dyn_cast<DeclRefExpr>(cxxOperatorCallExpr->getArg(0)->IgnoreImpCasts()))
+            {
+                if (auto iterVarDecl = dyn_cast<VarDecl>(declRefExpr->getDecl()))
+                {
+                    auto init = iterVarDecl->getInit();
+                    if (init)
+                    {
+                        init = init->IgnoreImplicit();
+                        if (auto x = dyn_cast<CXXConstructExpr>(init))
+                            if (x->getNumArgs() == 1)
+                                init = x->getArg(0)->IgnoreImplicit();
+                        if (auto x = dyn_cast<CXXMemberCallExpr>(init))
+                            init = x->getImplicitObjectArgument();
+                        if ((memberExpr = dyn_cast<MemberExpr>(init)))
+                            break;
+                        // look for deletes of an iterator object where the iterator is over a var
+                        if (auto declRefExpr2 = dyn_cast<DeclRefExpr>(init))
+                        {
+                            if ((varDecl = dyn_cast<VarDecl>(declRefExpr2->getDecl())))
+                                break;
+                        }
+                    }
+                }
+            }
+            // look for deletes like "delete m_pField[0]"
+            if (cxxOperatorCallExpr->getOperator() == OO_Subscript)
+            {
+                subExpr = cxxOperatorCallExpr->getArg(0)->IgnoreImpCasts();
+                if ((memberExpr = dyn_cast<MemberExpr>(subExpr)))
+                    break;
+                if (auto declRefExpr = dyn_cast<DeclRefExpr>(subExpr))
+                {
+                    if ((varDecl = dyn_cast<VarDecl>(declRefExpr->getDecl())))
+                        break;
+                }
+            }
+            break;
+        }
+        else
+           break;
+    }
+
+    if (memberExpr)
+    {
+        // OStorage_Impl::Commit very complicated ownership passing going on
+        if (fn == SRCDIR "/package/source/xstor/xstorage.cxx")
+            return;
+        // complicated
+        if (fn == SRCDIR "/vcl/source/gdi/print.cxx")
+            return;
+        // linked list
+        if (fn == SRCDIR "/basic/source/runtime/runtime.cxx")
+            return;
+        // complicated
+        if (fn == SRCDIR "/sw/source/core/bastyp/swcache.cxx")
+            return;
+
+        CheckMemberDeleteExpr(functionDecl, deleteExpr, memberExpr, "rather manage with std::some_container<std::unique_ptr<T>>");
+    }
+
+    if (varDecl)
+    {
+        // ignore if the value for the var comes from somewhere else
+        if (varDecl->hasInit() && isa<ExplicitCastExpr>(varDecl->getInit()->IgnoreImpCasts()))
+            return;
+
+        if (startswith(fn, SRCDIR "/vcl/qa/"))
+            return;
+        // linked list
+        if (fn == SRCDIR "/registry/source/reflwrit.cxx")
+            return;
+        // linked list
+        if (fn == SRCDIR "/tools/source/generic/config.cxx")
+            return;
+        // linked lists
+        if (fn == SRCDIR "/vcl/source/gdi/regband.cxx")
+            return;
+        // linked lists
+        if (fn == SRCDIR "/vcl/source/gdi/regionband.cxx")
+            return;
+        // linked list
+        if (fn == SRCDIR "/vcl/source/gdi/octree.cxx")
+            return;
+        // linked list
+        if (fn == SRCDIR "/vcl/source/app/scheduler.cxx")
+            return;
+        // linked list
+        if (fn == SRCDIR "/vcl/source/filter/wmf/wmfwr.cxx")
+            return;
+        // linked list
+        if (fn == SRCDIR "/vcl/source/filter/graphicfilter.cxx")
+            return;
+        // valid code
+        if (fn == SRCDIR "/vcl/source/app/salvtables.cxx")
+            return;
+        // undo code is tricky
+        if (fn == SRCDIR "/svl/source/undo/undo.cxx")
+            return;
+        // subclass that messes with parent class in constructor/destructor, yuck
+        if (fn == SRCDIR "/svtools/source/contnr/imivctl1.cxx")
+            return;
+        // SQLParseNode
+        if (fn == SRCDIR "/connectivity/source/parse/sqlnode.cxx")
+            return;
+        // the whole svx model/contact/view thing confuses me
+        if (fn == SRCDIR "/svx/source/sdr/contact/viewcontact.cxx")
+            return;
+        if (fn == SRCDIR "/svx/source/sdr/contact/objectcontact.cxx")
+            return;
+        // no idea
+        if (fn == SRCDIR "/svx/source/unodialogs/textconversiondlgs/chinese_dictionarydialog.cxx")
+            return;
+        // SdrUndo stuff
+        if (fn == SRCDIR "/svx/source/svdraw/svdundo.cxx")
+            return;
+        // TODO the lazydelete stuff should probably just be ripped out altogether nowthat we have VclPtr
+        if (fn == SRCDIR "/vcl/source/helper/lazydelete.cxx")
+            return;
+        // linked list
+        if (fn == SRCDIR "/filter/source/graphicfilter/idxf/dxfblkrd.cxx")
+            return;
+        if (fn == SRCDIR "/filter/source/graphicfilter/idxf/dxftblrd.cxx")
+            return;
+        if (fn == SRCDIR "/lotuswordpro/source/filter/utlist.cxx")
+            return;
+        if (fn == SRCDIR "/lotuswordpro/source/filter/lwpfribptr.cxx")
+            return;
+        // valid
+        if (fn == SRCDIR "/sd/source/ui/sidebar/MasterPagesSelector.cxx")
+            return;
+        // linked list
+        if (fn == SRCDIR "/sd/source/filter/ppt/pptatom.cxx")
+            return;
+        // linked list
+        if (fn == SRCDIR "/sc/source/core/data/funcdesc.cxx")
+            return;
+        // linked list
+        if (fn == SRCDIR "/sw/source/core/crsr/crsrsh.cxx")
+            return;
+        // no idea
+        if (fn == SRCDIR "/sw/source/core/docnode/nodes.cxx")
+            return;
+        // linked list
+        if (fn == SRCDIR "/sw/source/core/unocore/unocrsr.cxx")
+            return;
+        // linked list
+        if (fn == SRCDIR "/filter/source/graphicfilter/idxf/dxfentrd.cxx")
+            return;
+        // linked list
+        if (fn == SRCDIR "/filter/source/graphicfilter/ios2met/ios2met.cxx")
+            return;
+        // sometimes owning, sometimes not
+        if (fn == SRCDIR "/sw/qa/core/Test-BigPtrArray.cxx")
+            return;
+
+
+        report(
+            DiagnosticsEngine::Warning,
+            "loopdelete: rather manage this var with std::some_container<std::unique_ptr<T>>",
+            compat::getBeginLoc(deleteExpr))
+            << deleteExpr->getSourceRange();
+        report(
+            DiagnosticsEngine::Note,
+            "var is here",
+            compat::getBeginLoc(varDecl))
+            << varDecl->getSourceRange();
+    }
+}
+
+void UseUniquePtr::CheckCXXForRangeStmt(const FunctionDecl* functionDecl, const CXXForRangeStmt* cxxForRangeStmt)
+{
+    CXXDeleteExpr const * deleteExpr = nullptr;
+    if (auto compoundStmt = dyn_cast<CompoundStmt>(cxxForRangeStmt->getBody()))
+    {
+        for (auto i = compoundStmt->body_begin(); i != compoundStmt->body_end(); ++i)
+            if ((deleteExpr = dyn_cast<CXXDeleteExpr>(*i)))
+                break;
+    }
+    else
+        deleteExpr = dyn_cast<CXXDeleteExpr>(cxxForRangeStmt->getBody());
+    if (!deleteExpr)
+        return;
+
+    // check for delete of member
+    if (auto memberExpr = dyn_cast<MemberExpr>(cxxForRangeStmt->getRangeInit()))
+    {
+        auto fieldDecl = dyn_cast<FieldDecl>(memberExpr->getMemberDecl());
+        if (!fieldDecl)
+            return;
+
+        // appears to just randomly leak stuff, and it involves some lex/yacc stuff
+        if (fn == SRCDIR "/idlc/source/aststack.cxx")
+            return;
+        // complicated
+        if (fn == SRCDIR "/vcl/source/gdi/print.cxx")
+            return;
+        // sometimes it's an owning field, sometimes not
+        if (fn == SRCDIR "/i18npool/source/localedata/localedata.cxx")
+            return;
+
+        CheckMemberDeleteExpr(functionDecl, deleteExpr, memberExpr, "rather manage this with std::some_container<std::unique_ptr<T>>");
+    }
+
+    // check for delete of var
+    if (auto declRefExpr = dyn_cast<DeclRefExpr>(cxxForRangeStmt->getRangeInit()->IgnoreParenImpCasts()))
+    {
+        auto varDecl = dyn_cast<VarDecl>(declRefExpr->getDecl());
+        if (!varDecl)
+            return;
+
+        // don't feel like messing with this part of sfx2
+        if (fn == SRCDIR "/sfx2/source/control/msgpool.cxx")
+            return;
+        if (fn == SRCDIR "/sfx2/source/doc/doctemplates.cxx")
+            return;
+        // lex/yacc
+        if (fn == SRCDIR "/hwpfilter/source/grammar.cxx")
+            return;
+        if (fn == SRCDIR "/hwpfilter/source/formula.cxx")
+            return;
+        // no idea why, but ui tests crash afterwards in weird ways
+        if (fn == SRCDIR "/svtools/source/control/roadmap.cxx")
+            return;
+        // sometimes it owns it, sometimes it does not
+        if (fn == SRCDIR "/dbaccess/source/ui/misc/WCopyTable.cxx")
+            return;
+        // SfxPoolItem array
+        if (fn == SRCDIR "/dbaccess/source/ui/misc/UITools.cxx")
+            return;
+        // SfxPoolItem array
+        if (fn == SRCDIR "/sw/source/core/bastyp/init.cxx")
+            return;
+        // SfxPoolItem array
+        if (fn == SRCDIR "/reportdesign/source/ui/misc/UITools.cxx")
+            return;
+        // SfxPoolItem array
+        if (fn == SRCDIR "/reportdesign/source/ui/report/ReportController.cxx")
+            return;
+
+        report(
+            DiagnosticsEngine::Warning,
+            "rather manage this var with std::some_container<std::unique_ptr<T>>",
+            compat::getBeginLoc(deleteExpr))
+            << deleteExpr->getSourceRange();
+        report(
+            DiagnosticsEngine::Note,
+            "var is here",
+            compat::getBeginLoc(varDecl))
+            << varDecl->getSourceRange();
+    }
+}
+
+void UseUniquePtr::CheckMemberDeleteExpr(const FunctionDecl* functionDecl, const CXXDeleteExpr* deleteExpr,
     const MemberExpr* memberExpr, StringRef message)
 {
     // ignore union games
@@ -524,205 +823,6 @@ void UseUniquePtr::CheckDeleteExpr(const FunctionDecl* functionDecl, const CXXDe
         << fieldDecl->getSourceRange();
 }
 
-void UseUniquePtr::CheckLoopDelete(const FunctionDecl* functionDecl, const Stmt* bodyStmt)
-{
-    if (auto deleteExpr = dyn_cast<CXXDeleteExpr>(bodyStmt))
-        CheckLoopDelete(functionDecl, deleteExpr);
-    else if (auto compoundStmt = dyn_cast<CompoundStmt>(bodyStmt))
-    {
-        for (auto i = compoundStmt->body_begin(); i != compoundStmt->body_end(); ++i)
-        {
-            if (auto deleteExpr = dyn_cast<CXXDeleteExpr>(*i))
-                CheckLoopDelete(functionDecl, deleteExpr);
-        }
-    }
-}
-
-void UseUniquePtr::CheckLoopDelete(const FunctionDecl* functionDecl, const CXXDeleteExpr* deleteExpr)
-{
-    const MemberExpr* memberExpr = nullptr;
-    const Expr* subExpr = deleteExpr->getArgument();
-    // drill down looking for a MemberExpr
-    for (;;)
-    {
-        subExpr = subExpr->IgnoreImpCasts();
-        if ((memberExpr = dyn_cast<MemberExpr>(subExpr)))
-            break;
-        else if (auto arraySubscriptExpr = dyn_cast<ArraySubscriptExpr>(subExpr))
-            subExpr = arraySubscriptExpr->getBase();
-        else if (auto cxxOperatorCallExpr = dyn_cast<CXXOperatorCallExpr>(subExpr))
-        {
-            // look for deletes of an iterator object where the iterator is over a member field
-            if (auto declRefExpr = dyn_cast<DeclRefExpr>(cxxOperatorCallExpr->getArg(0)->IgnoreImpCasts()))
-            {
-                if (auto varDecl = dyn_cast<VarDecl>(declRefExpr->getDecl()))
-                {
-                    auto init = varDecl->getInit();
-                    if (init)
-                    {
-                        if (auto x = dyn_cast<ExprWithCleanups>(init))
-                            init = x->getSubExpr();
-                        if (auto x = dyn_cast<CXXBindTemporaryExpr>(init))
-                            init = x->getSubExpr();
-                        if (auto x = dyn_cast<CXXMemberCallExpr>(init))
-                            init = x->getImplicitObjectArgument();
-                        memberExpr = dyn_cast<MemberExpr>(init);
-                    }
-                    break;
-                }
-            }
-            // look for deletes like "delete m_pField[0]"
-            if (cxxOperatorCallExpr->getOperator() == OO_Subscript)
-            {
-                memberExpr = dyn_cast<MemberExpr>(cxxOperatorCallExpr->getArg(0));
-            }
-            break;
-        }
-        else
-           break;
-    }
-    if (!memberExpr)
-        return;
-
-    // OStorage_Impl::Commit very complicated ownership passing going on
-    if (fn == SRCDIR "/package/source/xstor/xstorage.cxx")
-        return;
-    // complicated
-    if (fn == SRCDIR "/vcl/source/gdi/print.cxx")
-        return;
-    // linked list
-    if (fn == SRCDIR "/basic/source/runtime/runtime.cxx")
-        return;
-
-    CheckDeleteExpr(functionDecl, deleteExpr, memberExpr, "rather manage with std::some_container<std::unique_ptr<T>>");
-}
-
-void UseUniquePtr::CheckCXXForRangeStmt(const FunctionDecl* functionDecl, const CXXForRangeStmt* cxxForRangeStmt)
-{
-    CXXDeleteExpr const * deleteExpr = nullptr;
-    if (auto compoundStmt = dyn_cast<CompoundStmt>(cxxForRangeStmt->getBody()))
-    {
-        for (auto i = compoundStmt->body_begin(); i != compoundStmt->body_end(); ++i)
-            if ((deleteExpr = dyn_cast<CXXDeleteExpr>(*i)))
-                break;
-    }
-    else
-        deleteExpr = dyn_cast<CXXDeleteExpr>(cxxForRangeStmt->getBody());
-    if (!deleteExpr)
-        return;
-
-    if (auto memberExpr = dyn_cast<MemberExpr>(cxxForRangeStmt->getRangeInit()))
-    {
-        auto fieldDecl = dyn_cast<FieldDecl>(memberExpr->getMemberDecl());
-        if (!fieldDecl)
-            return;
-
-        // appears to just randomly leak stuff, and it involves some lex/yacc stuff
-        if (fn == SRCDIR "/idlc/source/aststack.cxx")
-            return;
-        // complicated
-        if (fn == SRCDIR "/vcl/source/gdi/print.cxx")
-            return;
-
-        CheckDeleteExpr(functionDecl, deleteExpr, memberExpr, "rather manage this with std::some_container<std::unique_ptr<T>>");
-    }
-
-    if (auto declRefExpr = dyn_cast<DeclRefExpr>(cxxForRangeStmt->getRangeInit()))
-    {
-        auto varDecl = dyn_cast<VarDecl>(declRefExpr->getDecl());
-        if (!varDecl)
-            return;
-
-        // don't feel like messing with this part of sfx2
-        if (fn == SRCDIR "/sfx2/source/control/msgpool.cxx")
-            return;
-        if (fn == SRCDIR "/sfx2/source/doc/doctemplates.cxx")
-            return;
-        // lex/yacc
-        if (fn == SRCDIR "/hwpfilter/source/grammar.cxx")
-            return;
-        if (fn == SRCDIR "/hwpfilter/source/formula.cxx")
-            return;
-        // no idea why, but ui tests crash afterwards in weird ways
-        if (fn == SRCDIR "/svtools/source/control/roadmap.cxx")
-            return;
-        // sometimes it owns it, sometimes it does not
-        if (fn == SRCDIR "/dbaccess/source/ui/misc/WCopyTable.cxx")
-            return;
-        // SfxPoolItem array
-        if (fn == SRCDIR "/dbaccess/source/ui/misc/UITools.cxx")
-            return;
-        // SfxPoolItem array
-        if (fn == SRCDIR "/sw/source/core/bastyp/init.cxx")
-            return;
-        // SfxPoolItem array
-        if (fn == SRCDIR "/reportdesign/source/ui/misc/UITools.cxx")
-            return;
-        // SfxPoolItem array
-        if (fn == SRCDIR "/reportdesign/source/ui/report/ReportController.cxx")
-            return;
-
-        report(
-            DiagnosticsEngine::Warning,
-            "rather manage this var with std::some_container<std::unique_ptr<T>>",
-            compat::getBeginLoc(deleteExpr))
-            << deleteExpr->getSourceRange();
-        report(
-            DiagnosticsEngine::Note,
-            "var is here",
-            compat::getBeginLoc(varDecl))
-            << varDecl->getSourceRange();
-    }
-}
-
-bool UseUniquePtr::VisitCompoundStmt(const CompoundStmt* compoundStmt)
-{
-    if (ignoreLocation(compoundStmt))
-        return true;
-    if (isInUnoIncludeFile(compat::getBeginLoc(compoundStmt)))
-        return true;
-    if (compoundStmt->size() == 0) {
-        return true;
-    }
-
-    auto lastStmt = compoundStmt->body_back();
-    if (compoundStmt->size() > 1) {
-        if (isa<ReturnStmt>(lastStmt))
-            lastStmt = *(++compoundStmt->body_rbegin());
-    }
-    auto deleteExpr = dyn_cast<CXXDeleteExpr>(lastStmt);
-    if (deleteExpr == nullptr) {
-        return true;
-    }
-
-    auto declRefExpr = dyn_cast<DeclRefExpr>(deleteExpr->getArgument()->IgnoreParenImpCasts());
-    if (!declRefExpr)
-        return true;
-    auto varDecl = dyn_cast<VarDecl>(declRefExpr->getDecl());
-    if (!varDecl)
-        return true;
-    if (!varDecl->hasInit()
-        || !isa<CXXNewExpr>(
-            varDecl->getInit()->IgnoreImplicit()->IgnoreParenImpCasts()))
-        return true;
-    // determine if the var is declared inside the same block as the delete.
-    // @TODO there should surely be a better way to do this
-    if (compat::getBeginLoc(varDecl) < compat::getBeginLoc(compoundStmt))
-        return true;
-
-    report(
-        DiagnosticsEngine::Warning,
-        "deleting a local variable at the end of a block, is a sure sign it should be using std::unique_ptr for that var",
-        compat::getBeginLoc(deleteExpr))
-        << deleteExpr->getSourceRange();
-    report(
-        DiagnosticsEngine::Note,
-        "var is here",
-        compat::getBeginLoc(varDecl))
-        << varDecl->getSourceRange();
-    return true;
-}
-
 bool UseUniquePtr::TraverseFunctionDecl(FunctionDecl* functionDecl)
 {
     if (ignoreLocation(functionDecl))
@@ -749,6 +849,21 @@ bool UseUniquePtr::TraverseCXXMethodDecl(CXXMethodDecl* methodDecl)
     return ret;
 }
 
+#if CLANG_VERSION >= 50000
+bool UseUniquePtr::TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl* methodDecl)
+{
+    if (ignoreLocation(methodDecl))
+        return true;
+
+    auto oldCurrent = mpCurrentFunctionDecl;
+    mpCurrentFunctionDecl = methodDecl;
+    bool ret = RecursiveASTVisitor::TraverseCXXDeductionGuideDecl(methodDecl);
+    mpCurrentFunctionDecl = oldCurrent;
+
+    return ret;
+}
+#endif
+
 bool UseUniquePtr::TraverseCXXConstructorDecl(CXXConstructorDecl* methodDecl)
 {
     if (ignoreLocation(methodDecl))
@@ -762,6 +877,64 @@ bool UseUniquePtr::TraverseCXXConstructorDecl(CXXConstructorDecl* methodDecl)
     return ret;
 }
 
+bool UseUniquePtr::TraverseCXXConversionDecl(CXXConversionDecl* methodDecl)
+{
+    if (ignoreLocation(methodDecl))
+        return true;
+
+    auto oldCurrent = mpCurrentFunctionDecl;
+    mpCurrentFunctionDecl = methodDecl;
+    bool ret = RecursiveASTVisitor::TraverseCXXConversionDecl(methodDecl);
+    mpCurrentFunctionDecl = oldCurrent;
+
+    return ret;
+}
+
+bool UseUniquePtr::TraverseCXXDestructorDecl(CXXDestructorDecl* methodDecl)
+{
+    if (ignoreLocation(methodDecl))
+        return true;
+
+    auto oldCurrent = mpCurrentFunctionDecl;
+    mpCurrentFunctionDecl = methodDecl;
+    bool ret = RecursiveASTVisitor::TraverseCXXDestructorDecl(methodDecl);
+    mpCurrentFunctionDecl = oldCurrent;
+
+    return ret;
+}
+
+bool UseUniquePtr::TraverseConstructorInitializer(CXXCtorInitializer * ctorInit)
+{
+    if (!ctorInit->getSourceLocation().isValid() || ignoreLocation(ctorInit->getSourceLocation()))
+        return true;
+    if (!ctorInit->getMember())
+        return true;
+    if (!loplugin::TypeCheck(ctorInit->getMember()->getType()).Class("unique_ptr").StdNamespace())
+        return true;
+    auto constructExpr = dyn_cast_or_null<CXXConstructExpr>(ctorInit->getInit());
+    if (!constructExpr || constructExpr->getNumArgs() == 0)
+        return true;
+    auto init = constructExpr->getArg(0)->IgnoreImpCasts();
+    if (!isa<DeclRefExpr>(init))
+        return true;
+
+    StringRef fn = getFileNameOfSpellingLoc(compiler.getSourceManager().getSpellingLoc(ctorInit->getSourceLocation()));
+    // don't feel like fiddling with the yacc parser
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/idlc/"))
+        return true;
+    // cannot change URE
+    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/cppu/source/helper/purpenv/helper_purpenv_Environment.cxx"))
+        return true;
+
+    report(
+        DiagnosticsEngine::Warning,
+        "should be passing via std::unique_ptr param",
+        ctorInit->getSourceLocation())
+        << ctorInit->getSourceRange();
+    return RecursiveASTVisitor<UseUniquePtr>::TraverseConstructorInitializer(ctorInit);
+}
+
+// Only checks for calls to delete on a pointer param
 bool UseUniquePtr::VisitCXXDeleteExpr(const CXXDeleteExpr* deleteExpr)
 {
     if (!mpCurrentFunctionDecl)
@@ -945,37 +1118,6 @@ bool UseUniquePtr::VisitCXXDeleteExpr(const CXXDeleteExpr* deleteExpr)
     return true;
 }
 
-bool UseUniquePtr::TraverseConstructorInitializer(CXXCtorInitializer * ctorInit)
-{
-    if (!ctorInit->getSourceLocation().isValid() || ignoreLocation(ctorInit->getSourceLocation()))
-        return true;
-    if (!ctorInit->getMember())
-        return true;
-    if (!loplugin::TypeCheck(ctorInit->getMember()->getType()).Class("unique_ptr").StdNamespace())
-        return true;
-    auto constructExpr = dyn_cast_or_null<CXXConstructExpr>(ctorInit->getInit());
-    if (!constructExpr || constructExpr->getNumArgs() == 0)
-        return true;
-    auto init = constructExpr->getArg(0)->IgnoreImpCasts();
-    if (!isa<DeclRefExpr>(init))
-        return true;
-
-    StringRef fn = getFileNameOfSpellingLoc(compiler.getSourceManager().getSpellingLoc(ctorInit->getSourceLocation()));
-    // don't feel like fiddling with the yacc parser
-    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/idlc/"))
-        return true;
-    // cannot change URE
-    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/cppu/source/helper/purpenv/helper_purpenv_Environment.cxx"))
-        return true;
-
-
-    report(
-        DiagnosticsEngine::Warning,
-        "should be passing via std::unique_ptr param",
-        ctorInit->getSourceLocation())
-        << ctorInit->getSourceRange();
-    return RecursiveASTVisitor<UseUniquePtr>::TraverseConstructorInitializer(ctorInit);
-}
 
 loplugin::Plugin::Registration< UseUniquePtr > X("useuniqueptr", false);
 
