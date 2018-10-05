@@ -26,6 +26,7 @@
 
 #include <headless/svpgdi.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/sysdata.hxx>
 
 #include <QtCore/QObject>
 
@@ -67,6 +68,8 @@ class VCLPLUG_QT5_PUBLIC Qt5Frame : public QObject, public SalFrame
     SalFrameStyleFlags m_nStyle;
     Qt5Frame* m_pParent;
     PointerStyle m_ePointerStyle;
+
+    SystemEnvData m_aSystemData;
 
     Qt5Menu* m_pSalMenu;
 
@@ -160,7 +163,7 @@ public:
     virtual LanguageType GetInputLanguage() override;
     virtual void UpdateSettings(AllSettings& rSettings) override;
     virtual void Beep() override;
-    virtual const SystemEnvData* GetSystemData() const override;
+    virtual const SystemEnvData* GetSystemData() const override { return &m_aSystemData; }
     virtual SalPointerState GetPointerState() override;
     virtual KeyIndicatorState GetIndicatorState() override;
     virtual void SimulateKeyPress(sal_uInt16 nKeyCode) override;

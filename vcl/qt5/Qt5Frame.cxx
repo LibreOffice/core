@@ -133,6 +133,14 @@ Qt5Frame::Qt5Frame(Qt5Frame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
         maGeometry.nLeftDecoration = 0;
         maGeometry.nRightDecoration = 0;
     }
+
+    m_aSystemData.nSize = sizeof(SystemEnvData);
+    //m_aSystemData.aWindow = GetNativeWindowHandle(m_pWindow);
+    m_aSystemData.aShellWindow = reinterpret_cast<sal_IntPtr>(this);
+    //m_aSystemData.pSalFrame = this;
+    //m_aSystemData.pWidget = m_pQWidget;
+    //m_aSystemData.nScreen = m_nXScreen.getXScreen();
+    m_aSystemData.pToolkit = "qt5";
 }
 
 Qt5Frame::~Qt5Frame()
@@ -143,6 +151,7 @@ Qt5Frame::~Qt5Frame()
         delete m_pTopLevel;
     else
         delete m_pQWidget;
+    m_aSystemData.aShellWindow = 0;
 }
 
 void Qt5Frame::Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtentsWidth,
@@ -779,8 +788,6 @@ void Qt5Frame::UpdateSettings(AllSettings& rSettings)
 }
 
 void Qt5Frame::Beep() { QApplication::beep(); }
-
-const SystemEnvData* Qt5Frame::GetSystemData() const { return nullptr; }
 
 SalFrame::SalPointerState Qt5Frame::GetPointerState()
 {
