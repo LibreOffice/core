@@ -208,7 +208,7 @@ void AquaSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 {
     SAL_INFO( "vcl.virdev", "AquaSalVirtualDevice::SetSize() this=" << this <<
-              " (" << nDX << "x" << nDY << ") mbForeignContext=" << mbForeignContext );
+              " (" << nDX << "x" << nDY << ") mbForeignContext=" << (mbForeignContext ? "YES" : "NO"));
 
     if( mbForeignContext )
     {

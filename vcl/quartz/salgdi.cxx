@@ -396,7 +396,7 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 #ifdef IOS
     if (!CheckContext())
     {
-        SAL_WARN("vcl.cg", "AquaSalGraphics::DrawTextLayout() without context");
+        SAL_WARN("vcl.quartz", "AquaSalGraphics::DrawTextLayout() without context");
         return;
     }
 #endif
@@ -404,7 +404,10 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     const CoreTextStyle& rStyle = *static_cast<const CoreTextStyle*>(&rLayout.GetFont());
     const FontSelectPattern& rFontSelect = rStyle.GetFontSelectPattern();
     if (rFontSelect.mnHeight == 0)
+    {
+        SAL_WARN("vcl.quartz", "AquaSalGraphics::DrawTextLayout(): rFontSelect.mnHeight is zero!?");
         return;
+    }
 
     CTFontRef pFont = static_cast<CTFontRef>(CFDictionaryGetValue(rStyle.GetStyleDict(), kCTFontAttributeName));
     CGAffineTransform aRotMatrix = CGAffineTransformMakeRotation(-rStyle.mfFontRotation);
@@ -443,13 +446,39 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
     }
 
     if (aGlyphIds.empty())
+    {
+        SAL_WARN("vcl.quartz", "aGlyphIds is empty!?");
         return;
+    }
 
+    assert(aGlyphIds.size() == aGlyphPos.size());
+#if 0
+    std::cerr << "aGlyphIds:[";
+    for (unsigned i = 0; i < aGlyphIds.size(); i++)
+    {
+        if (i > 0)
+            std::cerr << ",";
+        std::cerr << aGlyphIds[i];
+    }
+    std::cerr << "]\n";
+    std::cerr << "aGlyphPos:[";
+    for (unsigned i = 0; i < aGlyphPos.size(); i++)
+    {
+        if (i > 0)
+            std::cerr << ",";
+        std::cerr << aGlyphPos[i];
+    }
+    std::cerr << "]\n";
+#endif
+
+    SAL_INFO("vcl.cg", "CGContextSaveGState(" << mrContext << ") " << ++mnContextStackDepth );
     CGContextSaveGState(mrContext);
 
     // The view is vertically flipped (no idea why), flip it back.
+    SAL_INFO("vcl.cg", "CGContextScaleCTM(" << mrContext << ",1,-1)");
     CGContextScaleCTM(mrContext, 1.0, -1.0);
     CGContextSetShouldAntialias(mrContext, !mbNonAntialiasedText);
+    SAL_INFO("vcl.cg", "CGContextSetFillColor(" << mrContext << "," << maTextColor << ")");
     CGContextSetFillColor(mrContext, maTextColor.AsArray());
 
     auto aIt = aGlyphOrientation.cbegin();
@@ -462,15 +491,22 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
         size_t nStartIndex = std::distance(aGlyphOrientation.cbegin(), aIt);
         size_t nLen = std::distance(aIt, aNext);
 
+        SAL_INFO("vcl.cg", "CGContextSaveGState(" << mrContext << ") " << ++mnContextStackDepth );
         CGContextSaveGState(mrContext);
         if (rStyle.mfFontRotation && !bUprightGlyph)
+        {
+            SAL_INFO("vcl.cg", "CGContextRotateCTM(" << mrContext << "," << rStyle.mfFontRotation << ")");
             CGContextRotateCTM(mrContext, rStyle.mfFontRotation);
+        }
+        SAL_INFO("vcl.cg", "CTFontDrawGlyphs() @" << nStartIndex << ":" << nLen << "," << mrContext);
         CTFontDrawGlyphs(pFont, &aGlyphIds[nStartIndex], &aGlyphPos[nStartIndex], nLen, mrContext);
+        SAL_INFO("vcl.cg", "CGContextRestoreGState(" << mrContext << ") " << mnContextStackDepth-- );
         CGContextRestoreGState(mrContext);
 
         aIt = aNext;
     }
 
+    SAL_INFO( "vcl.cg", "CGContextRestoreGState(" << mrContext << ") " << mnContextStackDepth-- );
     CGContextRestoreGState(mrContext);
 }
 
