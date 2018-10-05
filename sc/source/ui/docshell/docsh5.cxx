@@ -309,7 +309,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
                 pNoNameData = new ScDBData( aNewName, nTab,
                                 nStartCol,nStartRow, nEndCol,nEndRow,
                                 true, bHasHeader );
-                bool ins = rDBs.insert(pNoNameData);
+                bool ins = rDBs.insert(std::unique_ptr<ScDBData>(pNoNameData));
                 assert(ins); (void)ins;
             }
             else
