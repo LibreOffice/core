@@ -153,7 +153,6 @@
 
 Qt5Data::Qt5Data(SalInstance* pInstance)
     : GenericUnixSalData(SAL_DATA_QT5, pInstance)
-    , m_pGlyphCache(new GlyphCache())
 {
     ImplSVData* pSVData = ImplGetSVData();
 

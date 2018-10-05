@@ -67,6 +67,8 @@
 #include <unx/salobj.h>
 #include <unx/sm.hxx>
 #include <unx/wmadaptor.hxx>
+#include <unx/x11/xrender_peer.hxx>
+#include <unx/glyphcache.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 
@@ -322,7 +324,28 @@ void SalDisplay::doDestruct()
 
     m_pWMAdaptor.reset();
     X11SalBitmap::ImplDestroyCache();
-    X11SalGraphics::releaseGlyphPeer();
+
+    if (ImplGetSVData())
+    {
+        SalDisplay* pSalDisp = vcl_sal::getSalDisplay(pData);
+        Display* const pX11Disp = pSalDisp->GetDisplay();
+        int nMaxScreens = pSalDisp->GetXScreenCount();
+        XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
+
+        for (int i = 0; i < nMaxScreens; i++)
+        {
+            SalDisplay::RenderEntryMap& rMap = pSalDisp->GetRenderEntries(SalX11Screen(i));
+            for (auto const& elem : rMap)
+            {
+                if (elem.second.m_aPixmap)
+                    ::XFreePixmap(pX11Disp, elem.second.m_aPixmap);
+                if (elem.second.m_aPicture)
+                    rRenderPeer.FreePicture(elem.second.m_aPicture);
+            }
+            rMap.clear();
+        }
+    }
+    GlyphCache::GetInstance().ClearFontCache();
 
     if( IsDisplay() )
     {
