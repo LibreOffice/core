@@ -262,7 +262,7 @@ public:
             Deletes p if it could not be inserted, i.e. duplicate name.
             @return <TRUE/> if inserted, else <FALSE/>.
          */
-        bool insert(ScDBData* p);
+        bool insert(std::unique_ptr<ScDBData> p);
 
         void erase(const iterator& itr);
         bool empty() const;

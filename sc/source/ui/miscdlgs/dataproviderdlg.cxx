@@ -966,7 +966,7 @@ ScDataProviderDlg::ScDataProviderDlg(vcl::Window* pParent, std::shared_ptr<ScDoc
     mpList->addEntry(mpDataProviderCtrl);
     mpIndex++;
     pDBData = new ScDBData("data", 0, 0, 0, MAXCOL, MAXROW);
-    bool bSuccess = mpDoc->GetDBCollection()->getNamedDBs().insert(pDBData);
+    bool bSuccess = mpDoc->GetDBCollection()->getNamedDBs().insert(std::unique_ptr<ScDBData>(pDBData));
     SAL_WARN_IF(!bSuccess, "sc", "temporary warning");
 
     InitMenu();
