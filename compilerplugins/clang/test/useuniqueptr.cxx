@@ -96,7 +96,7 @@ class Class8 {
     std::unordered_map<int, int*> m_pbar; // expected-note {{member is here [loplugin:useuniqueptr]}}
     ~Class8()
     {
-        for (auto i : m_pbar)
+        for (auto & i : m_pbar)
             delete i.second; // expected-error {{rather manage this with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
     }
 };
@@ -251,7 +251,48 @@ namespace foo20
 };
 
 //  ------------------------------------------------------------------------------------------------
+// tests for deleting when looping via iterators
+//  ------------------------------------------------------------------------------------------------
+
+void foo21()
+{
+    std::vector<bool*> vec; // expected-note {{var is here [loplugin:useuniqueptr]}}
+    for(auto it = vec.begin(); it != vec.end(); ++it)
+        delete *it; // expected-error {{rather manage this var with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+}
+
+void foo22()
+{
+    std::unordered_map<int, float*> map; // expected-note {{var is here [loplugin:useuniqueptr]}}
+    for(auto it = map.begin(); it != map.end(); ++it)
+        delete it->second; // expected-error {{rather manage this var with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+}
+
+class Foo23
+{
+    std::unordered_map<int, float*> map; // expected-note {{member is here [loplugin:useuniqueptr]}}
+    ~Foo23()
+    {
+        for(auto it = map.begin(); it != map.end(); ++it)
+            delete it->second; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+    }
+};
+
+class Foo24
+{
+    typedef std::vector<int*> HTMLAttrs;
+    HTMLAttrs m_aSetAttrTab; // expected-note {{member is here [loplugin:useuniqueptr]}}
+    ~Foo24()
+    {
+        for ( HTMLAttrs::const_iterator it = m_aSetAttrTab.begin(); it != m_aSetAttrTab.end(); ++it )
+            delete *it; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
+    }
+};
+
+//  ------------------------------------------------------------------------------------------------
 // tests for passing owning pointers to constructors
+//  ------------------------------------------------------------------------------------------------
+
 
 class Bravo1
 {
@@ -267,5 +308,6 @@ class Bravo2
         : m_field1(std::move(p)) // no warning expected
     {}
 };
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
