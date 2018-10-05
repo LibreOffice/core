@@ -200,17 +200,17 @@ void FuConstructArc::Activate()
     FuConstruct::Activate();
 }
 
-SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle)
+SdrObjectUniquePtr FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle)
 {
 
-    SdrObject* pObj = SdrObjFactory::MakeNewObject(
+    SdrObjectUniquePtr pObj(SdrObjFactory::MakeNewObject(
         mpView->getSdrModelFromSdrView(),
         mpView->GetCurrentObjInventor(),
-        mpView->GetCurrentObjIdentifier());
+        mpView->GetCurrentObjIdentifier()));
 
     if(pObj)
     {
-        if( dynamic_cast< const SdrCircObj *>( pObj ) !=  nullptr)
+        if( dynamic_cast< const SdrCircObj *>( pObj.get() ) !=  nullptr)
         {
             ::tools::Rectangle aRect(rRectangle);
 

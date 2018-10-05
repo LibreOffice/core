@@ -615,12 +615,13 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         if(pPageView)
         {
             // create the default object
-            SdrObject* pObj = GetCurrentFunction()->CreateDefaultObject(nSId, aNewObjectRectangle);
+            SdrObjectUniquePtr pObj = GetCurrentFunction()->CreateDefaultObject(nSId, aNewObjectRectangle);
 
             if(pObj)
             {
+                auto pObjTmp = pObj.get();
                 // insert into page
-                GetView()->InsertObjectAtView(pObj, *pPageView);
+                GetView()->InsertObjectAtView(pObj.release(), *pPageView);
 
                 // Now that pFuActual has done what it was created for we
                 // can switch on the edit mode for callout objects.
@@ -635,7 +636,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                             ExecuteList(SID_TEXTEDIT, SfxCallMode::SYNCHRON |
                                 SfxCallMode::RECORD, { &aItem });
                         // Put text object into edit mode.
-                        GetView()->SdrBeginTextEdit(static_cast<SdrTextObj*>(pObj), pPageView);
+                        GetView()->SdrBeginTextEdit(static_cast<SdrTextObj*>(pObjTmp), pPageView);
                         break;
                     }
                 }

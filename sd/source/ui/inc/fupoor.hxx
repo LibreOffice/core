@@ -24,6 +24,7 @@
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <vcl/vclptr.hxx>
+#include <svx/svdobj.hxx>
 
 #include <helper/simplereferencecomponent.hxx>
 
@@ -89,7 +90,7 @@ public:
 
     void StartDelayToScrollTimer ();
 
-    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle);
+    virtual SdrObjectUniquePtr CreateDefaultObject(const sal_uInt16 nID, const ::tools::Rectangle& rRectangle);
 
     /** is called when the current function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also
