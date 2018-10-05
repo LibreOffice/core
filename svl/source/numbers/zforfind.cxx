@@ -649,6 +649,46 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
                 break;  // for
             }
         }
+        if (!res)
+        {
+            // Brutal hack for German locales that know "Januar" or "Jänner".
+            /* TODO: add alternative month names to locale data? if there are
+             * more languages.. */
+            const LanguageTag& rLanguageTag = pFormatter->GetLanguageTag();
+            if (rLanguageTag.getLanguage() == "de")
+            {
+                if (rLanguageTag.getCountry() == "AT")
+                {
+                    // Locale data has Jänner/Jän
+                    assert(pUpperMonthText[0] == u"J\u00C4NNER");
+                    if (StringContainsWord( "JANUAR", rString, nPos))
+                    {
+                        nPos += 6;
+                        res = 1;
+                    }
+                    else if (StringContainsWord( "JAN", rString, nPos))
+                    {
+                        nPos += 3;
+                        res = -1;
+                    }
+                }
+                else
+                {
+                    // Locale data has Januar/Jan
+                    assert(pUpperMonthText[0] == "JANUAR");
+                    if (StringContainsWord( u"J\u00C4NNER", rString, nPos))
+                    {
+                        nPos += 6;
+                        res = 1;
+                    }
+                    else if (StringContainsWord( u"J\u00C4N", rString, nPos))
+                    {
+                        nPos += 3;
+                        res = -1;
+                    }
+                }
+            }
+        }
     }
 
     return res;
