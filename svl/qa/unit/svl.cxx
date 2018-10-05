@@ -1152,7 +1152,7 @@ void checkSpecificNumberFormats( SvNumberFormatter& rFormatter,
     {
         sal_uInt32 nIndex = 0;
         double fNumber = 0;
-        OUString aString( OUString::createFromAscii( rVec[i].mpInput));
+        OUString aString( OUString::fromUtf8( rVec[i].mpInput));
         const bool bIsNumber = rFormatter.IsNumberFormat( aString, nIndex, fNumber);
         CPPUNIT_ASSERT_EQUAL_MESSAGE( OString( OString(pName) + " " + OString::number(i) +
                     (rVec[i].mbNumber ? " not recognized: " : " should not be recognized: ") +
@@ -1164,7 +1164,7 @@ void checkSpecificNumberFormats( SvNumberFormatter& rFormatter,
             Color* pColor;
             rFormatter.GetOutputString( fNumber, nIndex, aString, &pColor);
             CPPUNIT_ASSERT_EQUAL_MESSAGE( OString( OString(pName) + " " + OString::number(i)  + " mismatch").getStr(),
-                    OUString::createFromAscii( rVec[i].mpOutput), aString);
+                    OUString::fromUtf8( rVec[i].mpOutput), aString);
         }
     }
 }
