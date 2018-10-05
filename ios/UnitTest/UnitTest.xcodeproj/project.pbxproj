@@ -109,6 +109,89 @@
 		BEA20D6E2166596F0032F67B /* svpdata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpdata.cxx; path = ../../vcl/headless/svpdata.cxx; sourceTree = "<group>"; };
 		BEA20D6F2166596F0032F67B /* svpdummies.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpdummies.cxx; path = ../../vcl/headless/svpdummies.cxx; sourceTree = "<group>"; };
 		BEA20D702166596F0032F67B /* svpprn.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svpprn.cxx; path = ../../vcl/headless/svpprn.cxx; sourceTree = "<group>"; };
+		BEA20DC221678BB60032F67B /* lokcharthelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = lokcharthelper.cxx; path = ../../sfx2/source/view/lokcharthelper.cxx; sourceTree = "<group>"; };
+		BEA20DC4216797C00032F67B /* pdffontcache.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = pdffontcache.hxx; path = ../../vcl/source/gdi/pdffontcache.hxx; sourceTree = "<group>"; };
+		BEA20DC5216797C00032F67B /* impgraph.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = impgraph.cxx; path = ../../vcl/source/gdi/impgraph.cxx; sourceTree = "<group>"; };
+		BEA20DC6216797C00032F67B /* base14.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = base14.cxx; path = ../../vcl/source/gdi/base14.cxx; sourceTree = "<group>"; };
+		BEA20DC7216797C00032F67B /* bmpfast.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bmpfast.cxx; path = ../../vcl/source/gdi/bmpfast.cxx; sourceTree = "<group>"; };
+		BEA20DC8216797C00032F67B /* vectorgraphicdata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vectorgraphicdata.cxx; path = ../../vcl/source/gdi/vectorgraphicdata.cxx; sourceTree = "<group>"; };
+		BEA20DC9216797C00032F67B /* pdfwriter_impl2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pdfwriter_impl2.cxx; path = ../../vcl/source/gdi/pdfwriter_impl2.cxx; sourceTree = "<group>"; };
+		BEA20DCA216797C00032F67B /* mapmod.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mapmod.cxx; path = ../../vcl/source/gdi/mapmod.cxx; sourceTree = "<group>"; };
+		BEA20DCB216797C00032F67B /* bitmap3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bitmap3.cxx; path = ../../vcl/source/gdi/bitmap3.cxx; sourceTree = "<group>"; };
+		BEA20DCC216797C00032F67B /* pdfwriter.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pdfwriter.cxx; path = ../../vcl/source/gdi/pdfwriter.cxx; sourceTree = "<group>"; };
+		BEA20DCD216797C00032F67B /* salmisc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salmisc.cxx; path = ../../vcl/source/gdi/salmisc.cxx; sourceTree = "<group>"; };
+		BEA20DCE216797C00032F67B /* impvect.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = impvect.hxx; path = ../../vcl/source/gdi/impvect.hxx; sourceTree = "<group>"; };
+		BEA20DCF216797C00032F67B /* oldprintadaptor.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = oldprintadaptor.cxx; path = ../../vcl/source/gdi/oldprintadaptor.cxx; sourceTree = "<group>"; };
+		BEA20DD0216797C00032F67B /* extoutdevdata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = extoutdevdata.cxx; path = ../../vcl/source/gdi/extoutdevdata.cxx; sourceTree = "<group>"; };
+		BEA20DD1216797C10032F67B /* cvtgrf.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cvtgrf.cxx; path = ../../vcl/source/gdi/cvtgrf.cxx; sourceTree = "<group>"; };
+		BEA20DD2216797C10032F67B /* graphictools.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = graphictools.cxx; path = ../../vcl/source/gdi/graphictools.cxx; sourceTree = "<group>"; };
+		BEA20DD3216797C10032F67B /* gdimetafiletools.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gdimetafiletools.cxx; path = ../../vcl/source/gdi/gdimetafiletools.cxx; sourceTree = "<group>"; };
+		BEA20DD4216797C10032F67B /* genVerticalOrientationData.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; name = genVerticalOrientationData.pl; path = ../../vcl/source/gdi/genVerticalOrientationData.pl; sourceTree = "<group>"; };
+		BEA20DD5216797C10032F67B /* bmpacc3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bmpacc3.cxx; path = ../../vcl/source/gdi/bmpacc3.cxx; sourceTree = "<group>"; };
+		BEA20DD6216797C10032F67B /* print.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = print.cxx; path = ../../vcl/source/gdi/print.cxx; sourceTree = "<group>"; };
+		BEA20DD7216797C10032F67B /* configsettings.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = configsettings.cxx; path = ../../vcl/source/gdi/configsettings.cxx; sourceTree = "<group>"; };
+		BEA20DD8216797C10032F67B /* print3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = print3.cxx; path = ../../vcl/source/gdi/print3.cxx; sourceTree = "<group>"; };
+		BEA20DD9216797C10032F67B /* graph.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = graph.cxx; path = ../../vcl/source/gdi/graph.cxx; sourceTree = "<group>"; };
+		BEA20DDA216797C10032F67B /* octree.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = octree.cxx; path = ../../vcl/source/gdi/octree.cxx; sourceTree = "<group>"; };
+		BEA20DDB216797C10032F67B /* scrptrun.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = scrptrun.cxx; path = ../../vcl/source/gdi/scrptrun.cxx; sourceTree = "<group>"; };
+		BEA20DDC216797C10032F67B /* regionband.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = regionband.cxx; path = ../../vcl/source/gdi/regionband.cxx; sourceTree = "<group>"; };
+		BEA20DDD216797C10032F67B /* gdimtf.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gdimtf.cxx; path = ../../vcl/source/gdi/gdimtf.cxx; sourceTree = "<group>"; };
+		BEA20DDE216797C10032F67B /* pdfextoutdevdata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pdfextoutdevdata.cxx; path = ../../vcl/source/gdi/pdfextoutdevdata.cxx; sourceTree = "<group>"; };
+		BEA20DDF216797C10032F67B /* pdffontcache.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pdffontcache.cxx; path = ../../vcl/source/gdi/pdffontcache.cxx; sourceTree = "<group>"; };
+		BEA20DE0216797C10032F67B /* textlayout.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textlayout.cxx; path = ../../vcl/source/gdi/textlayout.cxx; sourceTree = "<group>"; };
+		BEA20DE1216797C10032F67B /* virdev.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = virdev.cxx; path = ../../vcl/source/gdi/virdev.cxx; sourceTree = "<group>"; };
+		BEA20DE2216797C10032F67B /* embeddedfontshelper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = embeddedfontshelper.cxx; path = ../../vcl/source/gdi/embeddedfontshelper.cxx; sourceTree = "<group>"; };
+		BEA20DE3216797C10032F67B /* salgdiimpl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdiimpl.cxx; path = ../../vcl/source/gdi/salgdiimpl.cxx; sourceTree = "<group>"; };
+		BEA20DE4216797C10032F67B /* gfxlink.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gfxlink.cxx; path = ../../vcl/source/gdi/gfxlink.cxx; sourceTree = "<group>"; };
+		BEA20DE5216797C10032F67B /* alpha.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = alpha.cxx; path = ../../vcl/source/gdi/alpha.cxx; sourceTree = "<group>"; };
+		BEA20DE6216797C10032F67B /* hatch.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hatch.cxx; path = ../../vcl/source/gdi/hatch.cxx; sourceTree = "<group>"; };
+		BEA20DE7216797C10032F67B /* svmconverter.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = svmconverter.cxx; path = ../../vcl/source/gdi/svmconverter.cxx; sourceTree = "<group>"; };
+		BEA20DE8216797C10032F67B /* pngwrite.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pngwrite.cxx; path = ../../vcl/source/gdi/pngwrite.cxx; sourceTree = "<group>"; };
+		BEA20DE9216797C10032F67B /* gradient.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gradient.cxx; path = ../../vcl/source/gdi/gradient.cxx; sourceTree = "<group>"; };
+		BEA20DEA216797C10032F67B /* pngread.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pngread.cxx; path = ../../vcl/source/gdi/pngread.cxx; sourceTree = "<group>"; };
+		BEA20DEB216797C10032F67B /* salgdilayout.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdilayout.cxx; path = ../../vcl/source/gdi/salgdilayout.cxx; sourceTree = "<group>"; };
+		BEA20DEC216797C20032F67B /* bitmapex.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bitmapex.cxx; path = ../../vcl/source/gdi/bitmapex.cxx; sourceTree = "<group>"; };
+		BEA20DED216797C20032F67B /* lineinfo.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = lineinfo.cxx; path = ../../vcl/source/gdi/lineinfo.cxx; sourceTree = "<group>"; };
+		BEA20DEE216797C20032F67B /* animate.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = animate.cxx; path = ../../vcl/source/gdi/animate.cxx; sourceTree = "<group>"; };
+		BEA20DEF216797C20032F67B /* bmpacc.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bmpacc.cxx; path = ../../vcl/source/gdi/bmpacc.cxx; sourceTree = "<group>"; };
+		BEA20DF0216797C20032F67B /* pdfwriter_impl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pdfwriter_impl.cxx; path = ../../vcl/source/gdi/pdfwriter_impl.cxx; sourceTree = "<group>"; };
+		BEA20DF1216797C20032F67B /* wall.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = wall.cxx; path = ../../vcl/source/gdi/wall.cxx; sourceTree = "<group>"; };
+		BEA20DF2216797C20032F67B /* impvect.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = impvect.cxx; path = ../../vcl/source/gdi/impvect.cxx; sourceTree = "<group>"; };
+		BEA20DF3216797C20032F67B /* impanmvw.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = impanmvw.cxx; path = ../../vcl/source/gdi/impanmvw.cxx; sourceTree = "<group>"; };
+		BEA20DF4216797C20032F67B /* print2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = print2.cxx; path = ../../vcl/source/gdi/print2.cxx; sourceTree = "<group>"; };
+		BEA20DF5216797C20032F67B /* metaact.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = metaact.cxx; path = ../../vcl/source/gdi/metaact.cxx; sourceTree = "<group>"; };
+		BEA20DF6216797C20032F67B /* CommonSalLayout.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CommonSalLayout.cxx; path = ../../vcl/source/gdi/CommonSalLayout.cxx; sourceTree = "<group>"; };
+		BEA20DF7216797C20032F67B /* pdfwriter_impl.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = pdfwriter_impl.hxx; path = ../../vcl/source/gdi/pdfwriter_impl.hxx; sourceTree = "<group>"; };
+		BEA20DF8216797C20032F67B /* dibtools.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dibtools.cxx; path = ../../vcl/source/gdi/dibtools.cxx; sourceTree = "<group>"; };
+		BEA20DF9216797C20032F67B /* sallayout.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = sallayout.cxx; path = ../../vcl/source/gdi/sallayout.cxx; sourceTree = "<group>"; };
+		BEA20DFA216797C20032F67B /* bmpacc2.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bmpacc2.cxx; path = ../../vcl/source/gdi/bmpacc2.cxx; sourceTree = "<group>"; };
+		BEA20DFB216797C20032F67B /* regband.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = regband.cxx; path = ../../vcl/source/gdi/regband.cxx; sourceTree = "<group>"; };
+		BEA20DFC216797C20032F67B /* jobset.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = jobset.cxx; path = ../../vcl/source/gdi/jobset.cxx; sourceTree = "<group>"; };
+		BEA20DFD216797C20032F67B /* VerticalOrientationData.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VerticalOrientationData.cxx; path = ../../vcl/source/gdi/VerticalOrientationData.cxx; sourceTree = "<group>"; };
+		BEA20DFE216797C20032F67B /* region.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = region.cxx; path = ../../vcl/source/gdi/region.cxx; sourceTree = "<group>"; };
+		BEA20DFF216797C20032F67B /* salnativewidgets-none.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "salnativewidgets-none.cxx"; path = "../../vcl/source/gdi/salnativewidgets-none.cxx"; sourceTree = "<group>"; };
+		BEA20E012167A47B0032F67B /* gradient.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gradient.cxx; path = ../../vcl/source/outdev/gradient.cxx; sourceTree = "<group>"; };
+		BEA20E022167A47C0032F67B /* polygon.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = polygon.cxx; path = ../../vcl/source/outdev/polygon.cxx; sourceTree = "<group>"; };
+		BEA20E032167A47C0032F67B /* text.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = text.cxx; path = ../../vcl/source/outdev/text.cxx; sourceTree = "<group>"; };
+		BEA20E042167A47C0032F67B /* outdevstate.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = outdevstate.cxx; path = ../../vcl/source/outdev/outdevstate.cxx; sourceTree = "<group>"; };
+		BEA20E052167A47C0032F67B /* wallpaper.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = wallpaper.cxx; path = ../../vcl/source/outdev/wallpaper.cxx; sourceTree = "<group>"; };
+		BEA20E062167A47C0032F67B /* line.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = line.cxx; path = ../../vcl/source/outdev/line.cxx; sourceTree = "<group>"; };
+		BEA20E072167A47C0032F67B /* curvedshapes.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = curvedshapes.cxx; path = ../../vcl/source/outdev/curvedshapes.cxx; sourceTree = "<group>"; };
+		BEA20E082167A47C0032F67B /* map.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = map.cxx; path = ../../vcl/source/outdev/map.cxx; sourceTree = "<group>"; };
+		BEA20E092167A47C0032F67B /* clipping.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = clipping.cxx; path = ../../vcl/source/outdev/clipping.cxx; sourceTree = "<group>"; };
+		BEA20E0A2167A47C0032F67B /* bitmap.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bitmap.cxx; path = ../../vcl/source/outdev/bitmap.cxx; sourceTree = "<group>"; };
+		BEA20E0B2167A47C0032F67B /* font.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = font.cxx; path = ../../vcl/source/outdev/font.cxx; sourceTree = "<group>"; };
+		BEA20E0C2167A47C0032F67B /* hatch.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hatch.cxx; path = ../../vcl/source/outdev/hatch.cxx; sourceTree = "<group>"; };
+		BEA20E0D2167A47C0032F67B /* nativecontrols.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = nativecontrols.cxx; path = ../../vcl/source/outdev/nativecontrols.cxx; sourceTree = "<group>"; };
+		BEA20E0E2167A47C0032F67B /* polyline.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = polyline.cxx; path = ../../vcl/source/outdev/polyline.cxx; sourceTree = "<group>"; };
+		BEA20E0F2167A47C0032F67B /* rect.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = rect.cxx; path = ../../vcl/source/outdev/rect.cxx; sourceTree = "<group>"; };
+		BEA20E102167A47C0032F67B /* outdevstatestack.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = outdevstatestack.cxx; path = ../../vcl/source/outdev/outdevstatestack.cxx; sourceTree = "<group>"; };
+		BEA20E112167A47C0032F67B /* textline.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textline.cxx; path = ../../vcl/source/outdev/textline.cxx; sourceTree = "<group>"; };
+		BEA20E122167A47C0032F67B /* outdev.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = outdev.cxx; path = ../../vcl/source/outdev/outdev.cxx; sourceTree = "<group>"; };
+		BEA20E132167A47C0032F67B /* transparent.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = transparent.cxx; path = ../../vcl/source/outdev/transparent.cxx; sourceTree = "<group>"; };
+		BEA20E142167A47C0032F67B /* vclreferencebase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = vclreferencebase.cxx; path = ../../vcl/source/outdev/vclreferencebase.cxx; sourceTree = "<group>"; };
+		BEA20E152167A47C0032F67B /* mask.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mask.cxx; path = ../../vcl/source/outdev/mask.cxx; sourceTree = "<group>"; };
+		BEA20E162167A47C0032F67B /* pixel.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pixel.cxx; path = ../../vcl/source/outdev/pixel.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,6 +277,7 @@
 		BEA20D2A2163C2210032F67B /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				BEA20DC021678B960032F67B /* sfx2 */,
 				BEA20D2B2163C2360032F67B /* vcl */,
 			);
 			name = Core;
@@ -203,8 +287,10 @@
 			isa = PBXGroup;
 			children = (
 				BEA20D342164BA8B0032F67B /* app */,
+				BEA20DC3216797A00032F67B /* gdi */,
 				BEA20D642166594D0032F67B /* headless */,
 				BEA20D512164BAF00032F67B /* ios */,
+				BEA20E002167A4550032F67B /* outdev */,
 				BEA20D332164BA7C0032F67B /* quartz */,
 			);
 			name = vcl;
@@ -283,6 +369,118 @@
 				BEA20D652166596F0032F67B /* svpvd.cxx */,
 			);
 			name = headless;
+			sourceTree = "<group>";
+		};
+		BEA20DC021678B960032F67B /* sfx2 */ = {
+			isa = PBXGroup;
+			children = (
+				BEA20DC121678B9E0032F67B /* view */,
+			);
+			name = sfx2;
+			sourceTree = "<group>";
+		};
+		BEA20DC121678B9E0032F67B /* view */ = {
+			isa = PBXGroup;
+			children = (
+				BEA20DC221678BB60032F67B /* lokcharthelper.cxx */,
+			);
+			name = view;
+			sourceTree = "<group>";
+		};
+		BEA20DC3216797A00032F67B /* gdi */ = {
+			isa = PBXGroup;
+			children = (
+				BEA20DE5216797C10032F67B /* alpha.cxx */,
+				BEA20DEE216797C20032F67B /* animate.cxx */,
+				BEA20DC6216797C00032F67B /* base14.cxx */,
+				BEA20DCB216797C00032F67B /* bitmap3.cxx */,
+				BEA20DEC216797C20032F67B /* bitmapex.cxx */,
+				BEA20DEF216797C20032F67B /* bmpacc.cxx */,
+				BEA20DFA216797C20032F67B /* bmpacc2.cxx */,
+				BEA20DD5216797C10032F67B /* bmpacc3.cxx */,
+				BEA20DC7216797C00032F67B /* bmpfast.cxx */,
+				BEA20DF6216797C20032F67B /* CommonSalLayout.cxx */,
+				BEA20DD7216797C10032F67B /* configsettings.cxx */,
+				BEA20DD1216797C10032F67B /* cvtgrf.cxx */,
+				BEA20DF8216797C20032F67B /* dibtools.cxx */,
+				BEA20DE2216797C10032F67B /* embeddedfontshelper.cxx */,
+				BEA20DD0216797C00032F67B /* extoutdevdata.cxx */,
+				BEA20DD3216797C10032F67B /* gdimetafiletools.cxx */,
+				BEA20DDD216797C10032F67B /* gdimtf.cxx */,
+				BEA20DD4216797C10032F67B /* genVerticalOrientationData.pl */,
+				BEA20DE4216797C10032F67B /* gfxlink.cxx */,
+				BEA20DE9216797C10032F67B /* gradient.cxx */,
+				BEA20DD9216797C10032F67B /* graph.cxx */,
+				BEA20DD2216797C10032F67B /* graphictools.cxx */,
+				BEA20DE6216797C10032F67B /* hatch.cxx */,
+				BEA20DF3216797C20032F67B /* impanmvw.cxx */,
+				BEA20DC5216797C00032F67B /* impgraph.cxx */,
+				BEA20DF2216797C20032F67B /* impvect.cxx */,
+				BEA20DCE216797C00032F67B /* impvect.hxx */,
+				BEA20DFC216797C20032F67B /* jobset.cxx */,
+				BEA20DED216797C20032F67B /* lineinfo.cxx */,
+				BEA20DCA216797C00032F67B /* mapmod.cxx */,
+				BEA20DF5216797C20032F67B /* metaact.cxx */,
+				BEA20DDA216797C10032F67B /* octree.cxx */,
+				BEA20DCF216797C00032F67B /* oldprintadaptor.cxx */,
+				BEA20DDE216797C10032F67B /* pdfextoutdevdata.cxx */,
+				BEA20DDF216797C10032F67B /* pdffontcache.cxx */,
+				BEA20DC4216797C00032F67B /* pdffontcache.hxx */,
+				BEA20DF0216797C20032F67B /* pdfwriter_impl.cxx */,
+				BEA20DF7216797C20032F67B /* pdfwriter_impl.hxx */,
+				BEA20DC9216797C00032F67B /* pdfwriter_impl2.cxx */,
+				BEA20DCC216797C00032F67B /* pdfwriter.cxx */,
+				BEA20DEA216797C10032F67B /* pngread.cxx */,
+				BEA20DE8216797C10032F67B /* pngwrite.cxx */,
+				BEA20DD6216797C10032F67B /* print.cxx */,
+				BEA20DF4216797C20032F67B /* print2.cxx */,
+				BEA20DD8216797C10032F67B /* print3.cxx */,
+				BEA20DFB216797C20032F67B /* regband.cxx */,
+				BEA20DFE216797C20032F67B /* region.cxx */,
+				BEA20DDC216797C10032F67B /* regionband.cxx */,
+				BEA20DE3216797C10032F67B /* salgdiimpl.cxx */,
+				BEA20DEB216797C10032F67B /* salgdilayout.cxx */,
+				BEA20DF9216797C20032F67B /* sallayout.cxx */,
+				BEA20DCD216797C00032F67B /* salmisc.cxx */,
+				BEA20DFF216797C20032F67B /* salnativewidgets-none.cxx */,
+				BEA20DDB216797C10032F67B /* scrptrun.cxx */,
+				BEA20DE7216797C10032F67B /* svmconverter.cxx */,
+				BEA20DE0216797C10032F67B /* textlayout.cxx */,
+				BEA20DC8216797C00032F67B /* vectorgraphicdata.cxx */,
+				BEA20DFD216797C20032F67B /* VerticalOrientationData.cxx */,
+				BEA20DE1216797C10032F67B /* virdev.cxx */,
+				BEA20DF1216797C20032F67B /* wall.cxx */,
+			);
+			name = gdi;
+			sourceTree = "<group>";
+		};
+		BEA20E002167A4550032F67B /* outdev */ = {
+			isa = PBXGroup;
+			children = (
+				BEA20E0A2167A47C0032F67B /* bitmap.cxx */,
+				BEA20E092167A47C0032F67B /* clipping.cxx */,
+				BEA20E072167A47C0032F67B /* curvedshapes.cxx */,
+				BEA20E0B2167A47C0032F67B /* font.cxx */,
+				BEA20E012167A47B0032F67B /* gradient.cxx */,
+				BEA20E0C2167A47C0032F67B /* hatch.cxx */,
+				BEA20E062167A47C0032F67B /* line.cxx */,
+				BEA20E082167A47C0032F67B /* map.cxx */,
+				BEA20E152167A47C0032F67B /* mask.cxx */,
+				BEA20E0D2167A47C0032F67B /* nativecontrols.cxx */,
+				BEA20E122167A47C0032F67B /* outdev.cxx */,
+				BEA20E042167A47C0032F67B /* outdevstate.cxx */,
+				BEA20E102167A47C0032F67B /* outdevstatestack.cxx */,
+				BEA20E162167A47C0032F67B /* pixel.cxx */,
+				BEA20E022167A47C0032F67B /* polygon.cxx */,
+				BEA20E0E2167A47C0032F67B /* polyline.cxx */,
+				BEA20E0F2167A47C0032F67B /* rect.cxx */,
+				BEA20E032167A47C0032F67B /* text.cxx */,
+				BEA20E112167A47C0032F67B /* textline.cxx */,
+				BEA20E132167A47C0032F67B /* transparent.cxx */,
+				BEA20E142167A47C0032F67B /* vclreferencebase.cxx */,
+				BEA20E052167A47C0032F67B /* wallpaper.cxx */,
+			);
+			name = outdev;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
