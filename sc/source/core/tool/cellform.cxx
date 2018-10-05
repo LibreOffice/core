@@ -46,7 +46,7 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uInt32 nFormat, OUStrin
         break;
         case CELLTYPE_VALUE:
         {
-            double nValue = rCell.mfValue;
+            const double & nValue = rCell.mfValue;
             if (!bNullVals && nValue == 0.0)
                 rString.clear();
             else
@@ -76,7 +76,7 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uInt32 nFormat, OUStrin
                 }
                 else
                 {
-                    FormulaError nErrCode = pFCell->GetErrCode();
+                    const FormulaError nErrCode = pFCell->GetErrCode();
 
                     if (nErrCode != FormulaError::NONE)
                         rString = ScGlobal::GetErrorString(nErrCode);
@@ -120,36 +120,34 @@ OUString ScCellFormat::GetString(
 void ScCellFormat::GetInputString(
     ScRefCellValue& rCell, sal_uInt32 nFormat, OUString& rString, SvNumberFormatter& rFormatter, const ScDocument* pDoc )
 {
-    OUString aString = rString;
     switch (rCell.meType)
     {
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
-            aString = rCell.getString(pDoc);
+            rString = rCell.getString(pDoc);
         break;
         case CELLTYPE_VALUE:
-            rFormatter.GetInputLineString(rCell.mfValue, nFormat, aString );
+            rFormatter.GetInputLineString(rCell.mfValue, nFormat, rString );
         break;
         case CELLTYPE_FORMULA:
         {
             ScFormulaCell* pFC = rCell.mpFormula;
             if (pFC->IsEmptyDisplayedAsString())
-                aString = EMPTY_OUSTRING;
+                rString = EMPTY_OUSTRING;
             else if (pFC->IsValue())
-                rFormatter.GetInputLineString(pFC->GetValue(), nFormat, aString);
+                rFormatter.GetInputLineString(pFC->GetValue(), nFormat, rString);
             else
-                aString = pFC->GetString().getString();
+                rString = pFC->GetString().getString();
 
-            FormulaError nErrCode = pFC->GetErrCode();
+            const FormulaError nErrCode = pFC->GetErrCode();
             if (nErrCode != FormulaError::NONE)
-                aString = EMPTY_OUSTRING;
+                rString = EMPTY_OUSTRING;
         }
         break;
         default:
-            aString = EMPTY_OUSTRING;
+            rString = EMPTY_OUSTRING;
             break;
     }
-    rString = aString;
 }
 
 OUString ScCellFormat::GetOutputString( ScDocument& rDoc, const ScAddress& rPos, ScRefCellValue& rCell )
