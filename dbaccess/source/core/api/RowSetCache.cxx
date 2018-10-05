@@ -1247,7 +1247,7 @@ bool ORowSetCache::previous(  )
 void ORowSetCache::refreshRow(  )
 {
     if(isAfterLast())
-        throw SQLException(DBA_RES(RID_STR_NO_REFESH_AFTERLAST),nullptr,SQLSTATE_GENERAL,1000,Any() );
+        throw SQLException(DBA_RES(RID_STR_NO_REFRESH_AFTERLAST),nullptr,SQLSTATE_GENERAL,1000,Any() );
     OSL_ENSURE(m_aMatrixIter != m_pMatrix->end(),"refreshRow() called for invalid row!");
     m_xCacheSet->refreshRow();
     m_xCacheSet->fillValueRow(*m_aMatrixIter,m_nPosition);

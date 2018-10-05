@@ -46,7 +46,7 @@
 #define RID_STR_NO_XQUERIESSUPPLIER                 NC_("RID_STR_NO_XQUERIESSUPPLIER", "The interface XQueriesSupplier is not available.")
 #define RID_STR_NO_ABS_ZERO                         NC_("RID_STR_NO_ABS_ZERO", "An 'absolute(0)' call is not allowed.")
 #define RID_STR_NO_RELATIVE                         NC_("RID_STR_NO_RELATIVE", "Relative positioning is not allowed in this state.")
-#define RID_STR_NO_REFESH_AFTERLAST                 NC_("RID_STR_NO_REFESH_AFTERLAST", "A row cannot be refreshed when the ResultSet is positioned after the last row.")
+#define RID_STR_NO_REFRESH_AFTERLAST                NC_("RID_STR_NO_REFRESH_AFTERLAST", "A row cannot be refreshed when the ResultSet is positioned after the last row.")
 #define RID_STR_NO_MOVETOINSERTROW_CALLED           NC_("RID_STR_NO_MOVETOINSERTROW_CALLED", "A new row cannot be inserted when the ResultSet is not first moved to the insert row.")
 #define RID_STR_NO_UPDATEROW                        NC_("RID_STR_NO_UPDATEROW", "A row cannot be modified in this state")
 #define RID_STR_NO_DELETEROW                        NC_("RID_STR_NO_DELETEROW", "A row cannot be deleted in this state.")
