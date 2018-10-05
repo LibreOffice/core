@@ -1067,13 +1067,12 @@ void OQueryController::loadViewSettings( const ::comphelper::NamedValueCollectio
 
 void OQueryController::execute_QueryPropDlg()
 {
-    ScopedVclPtrInstance<QueryPropertiesDialog> aQueryPropDlg(
-        getContainer(), m_bDistinct, m_nLimit );
+    QueryPropertiesDialog aQueryPropDlg(getContainer()->GetFrameWeld(), m_bDistinct, m_nLimit);
 
-    if( aQueryPropDlg->Execute() == RET_OK )
+    if (aQueryPropDlg.run() == RET_OK)
     {
-        m_bDistinct = aQueryPropDlg->getDistinct();
-        m_nLimit = aQueryPropDlg->getLimit();
+        m_bDistinct = aQueryPropDlg.getDistinct();
+        m_nLimit = aQueryPropDlg.getLimit();
         InvalidateFeature( SID_QUERY_DISTINCT_VALUES );
         InvalidateFeature( SID_QUERY_LIMIT, nullptr, true );
     }

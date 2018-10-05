@@ -126,10 +126,6 @@
       </properties>
     </glade-widget-class>
 
-    <glade-widget-class title="Limit ListBox" name="dbulo-LimitBox"
-                        generic-name="LimitBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox"/>
-
     <glade-widget-class title="OSQL NameComboBox" name="dbulo-OSQLNameComboBox"
                         generic-name="OSQLNameComboBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>

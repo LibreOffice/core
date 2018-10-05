@@ -106,8 +106,6 @@ void LimitBox::LoadDefaultLimits()
     }
 }
 
-VCL_BUILDER_FACTORY_ARGS( LimitBox, WB_DROPDOWN | WB_VSCROLL )
-
 } ///dbaui namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

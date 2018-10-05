@@ -10,8 +10,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYPROPERTIESDIALOG_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYPROPERTIESDIALOG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>
 #include "LimitBox.hxx"
 
@@ -22,38 +21,27 @@ namespace dbaui
  * Dialog to set such properties of a query as distinct values and limit
  * It can be opened form Edit menu in Query Design View
  */
-class QueryPropertiesDialog : public ModalDialog
+class QueryPropertiesDialog : public weld::GenericDialogController
 {
 
 public:
 
     QueryPropertiesDialog(
-        vcl::Window* pParent, const bool bDistinct, const sal_Int64 nLimit );
+        weld::Window* pParent, const bool bDistinct, const sal_Int64 nLimit );
     virtual ~QueryPropertiesDialog() override;
-    virtual void dispose() override;
-    bool getDistinct() const;
+    bool getDistinct() const
+    {
+        return m_xRB_Distinct->get_active();
+    }
+
     sal_Int64 getLimit() const;
 
 private:
 
-    VclPtr<RadioButton> m_pRB_Distinct;
-    VclPtr<RadioButton> m_pRB_NonDistinct;
-
-    VclPtr<LimitBox> m_pLB_Limit;
-
+    std::unique_ptr<weld::RadioButton> m_xRB_Distinct;
+    std::unique_ptr<weld::RadioButton> m_xRB_NonDistinct;
+    std::unique_ptr<weld::ComboBox> m_xLB_Limit;
 };
-
-
-inline bool QueryPropertiesDialog::getDistinct() const
-{
-    return m_pRB_Distinct->IsChecked();
-}
-
-inline sal_Int64 QueryPropertiesDialog::getLimit() const
-{
-    return m_pLB_Limit->GetValue();
-}
-
 
 } ///dbaui namespace
 
