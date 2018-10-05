@@ -113,6 +113,7 @@ class SvxSwPosSizeTabPage : public SfxTabPage
 
 public:
     SvxSwPosSizeTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
+    virtual void dispose() override;
     virtual ~SvxSwPosSizeTabPage() override;
 
     static VclPtr<SfxTabPage> Create( TabPageParent, const SfxItemSet* );
