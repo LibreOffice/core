@@ -161,7 +161,7 @@ void BitmapColorTest::getColor()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Red wrong", sal_uInt8(255), aColor.GetRed());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Green wrong", sal_uInt8(128), aColor.GetGreen());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Blue wrong", sal_uInt8(64), aColor.GetBlue());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Transparecy wrong", sal_uInt8(32), aColor.GetTransparency());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Transparency wrong", sal_uInt8(32), aColor.GetTransparency());
 }
 
 void BitmapColorTest::setValue()
