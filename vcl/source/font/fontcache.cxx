@@ -85,13 +85,14 @@ bool ImplFontCache::IFSD_Equal::operator()(const FontSelectPattern& rA, const Fo
 
 ImplFontCache::ImplFontCache()
     : mpLastHitCacheEntry( nullptr )
+    , maFontInstanceList(0)
     // The cache limit is set by the rough number of characters needed to read your average Asian newspaper.
     , m_aBoundRectCache(3000)
 {}
 
 ImplFontCache::~ImplFontCache()
 {
-    for (auto & rLFI : maFontInstanceList)
+    for (const auto & rLFI : maFontInstanceList)
         rLFI.second->mpFontCache = nullptr;
 }
 
@@ -115,7 +116,7 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFont
         pFontInstance = mpLastHitCacheEntry;
     else
     {
-        FontInstanceList::iterator it = maFontInstanceList.find( aFontSelData );
+        FontInstanceList::const_iterator it = maFontInstanceList.find( aFontSelData );
         if( it != maFontInstanceList.end() )
             pFontInstance = (*it).second;
     }
@@ -130,7 +131,7 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFont
             aFontSelData.maSearchName = pFontFamily->GetSearchName();
 
             // check if an indirectly matching logical font instance is already cached
-            FontInstanceList::iterator it = maFontInstanceList.find( aFontSelData );
+            FontInstanceList::const_iterator it = maFontInstanceList.find( aFontSelData );
             if( it != maFontInstanceList.end() )
                 pFontInstance = (*it).second;
         }
@@ -168,25 +169,24 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFont
 
         if (maFontInstanceList.size() >= FONTCACHE_MAX)
         {
-            // remove entries from font instance cache that are only referenced by the cache
-            FontInstanceList::iterator it_next = maFontInstanceList.begin();
-            while( it_next != maFontInstanceList.end() )
+            struct limit_exception : public std::exception {};
+            try
             {
-                LogicalFontInstance* pFontEntry = (*it_next).second.get();
-                if( pFontEntry->m_nCount > 1 )
-                {
-                    ++it_next;
-                    continue;
-                }
-                m_aBoundRectCache.remove_if([&pFontEntry] (GlpyhBoundRectCachePair const& rPair)
-                    { return rPair.first.m_pFont == pFontEntry; } );
-
-                maFontInstanceList.erase(it_next);
-                if (mpLastHitCacheEntry == pFontEntry)
-                    mpLastHitCacheEntry = nullptr;
-                // just remove one entry, which will bring us back under FONTCACHE_MAX size again
-                break;
+                maFontInstanceList.remove_if([this] (FontInstanceListPair const& rFontPair)
+                    {
+                        if (maFontInstanceList.size() < FONTCACHE_MAX)
+                            throw limit_exception();
+                        LogicalFontInstance* pFontEntry = rFontPair.second.get();
+                        if (pFontEntry->m_nCount > 1)
+                            return false;
+                        m_aBoundRectCache.remove_if([&pFontEntry] (GlpyhBoundRectCachePair const& rGlyphPair)
+                            { return rGlyphPair.first.m_pFont == pFontEntry; });
+                        if (mpLastHitCacheEntry == pFontEntry)
+                            mpLastHitCacheEntry = nullptr;
+                        return true;
+                    });
             }
+            catch (limit_exception) {}
         }
 
         assert(pFontInstance);
