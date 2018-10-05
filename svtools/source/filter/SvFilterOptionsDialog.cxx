@@ -222,12 +222,16 @@ sal_Int16 SvFilterOptionsDialog::execute()
         }
         if ( nFormat < nFilterCount )
         {
-            FltCallDialogParameter aFltCallDlgPara( Application::GetDefDialogParent(), meFieldUnit );
+            vcl::Window* pParent = Application::GetDefDialogParent();
+            //TODO
+            FltCallDialogParameter aFltCallDlgPara(pParent ? pParent->GetFrameWeld() : nullptr, meFieldUnit);
             aFltCallDlgPara.aFilterData = maFilterDataSequence;
             aFltCallDlgPara.aFilterExt = aGraphicFilter.GetExportFormatShortName( nFormat );
             bool bIsPixelFormat( aGraphicFilter.IsExportPixelFormat( nFormat ) );
-            if ( ScopedVclPtrInstance<ExportDialog>( aFltCallDlgPara, mxContext, mxSourceDocument, mbExportSelection,
-                        bIsPixelFormat, mbGraphicsSource, xGraphic )->Execute() == RET_OK )
+
+            ExportDialog aDialog(aFltCallDlgPara, mxContext, mxSourceDocument, mbExportSelection,
+                        bIsPixelFormat, mbGraphicsSource, xGraphic);
+            if (aDialog.run() == RET_OK)
                 nRet = ui::dialogs::ExecutableDialogResults::OK;
 
             // taking the out parameter from the dialog

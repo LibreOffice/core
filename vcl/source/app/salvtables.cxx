@@ -1433,6 +1433,12 @@ public:
         m_xScale->SetThumbPos(value);
     }
 
+    virtual void set_range(int min, int max) override
+    {
+        m_xScale->SetRangeMin(min);
+        m_xScale->SetRangeMax(max);
+    }
+
     virtual int get_value() const override
     {
         return m_xScale->GetThumbPos();

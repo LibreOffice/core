@@ -503,6 +503,7 @@ protected:
 public:
     virtual void set_value(int value) = 0;
     virtual int get_value() const = 0;
+    virtual void set_range(int min, int max) = 0;
     void connect_value_changed(const Link<Scale&, void>& rLink) { m_aValueChangedHdl = rLink; }
 };
 
