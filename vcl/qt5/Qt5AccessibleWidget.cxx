@@ -28,6 +28,7 @@
 #include <Qt5XAccessible.hxx>
 #include <Qt5AccessibleText.hxx>
 #include <Qt5AccessibleValue.hxx>
+#include <Qt5AccessibleEventListener.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -38,6 +39,8 @@
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
+#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <comphelper/AccessibleImplementationHelper.hxx>
@@ -51,6 +54,14 @@ using namespace css::uno;
 Qt5AccessibleWidget::Qt5AccessibleWidget(const Reference<XAccessible> xAccessible)
     : m_xAccessible(xAccessible)
 {
+    Reference<XAccessibleContext> xContext(xAccessible, UNO_QUERY);
+    Reference<XAccessibleEventBroadcaster> xBroadcaster(xContext, UNO_QUERY);
+    if (xBroadcaster.is())
+    {
+        Reference<XAccessibleEventListener> xListener(
+            new Qt5AccessibleEventListener(xAccessible, this));
+        xBroadcaster->addAccessibleEventListener(xListener);
+    }
 }
 
 QWindow* Qt5AccessibleWidget::window() const { return nullptr; }
