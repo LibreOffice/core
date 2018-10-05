@@ -66,8 +66,11 @@ $(eval $(call gb_Library_use_externals,cui,\
 	boost_headers \
 	$(call gb_Helper_optional,OPENCL,\
 		clew) \
+    curl \
     icuuc \
     icu_headers \
+    orcus-parser \
+    orcus \
 ))
 ifeq ($(DISABLE_GUI),)
 $(eval $(call gb_Library_use_externals,cui,\
