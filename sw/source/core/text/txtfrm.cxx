@@ -1823,6 +1823,8 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
         }
     }
 
+    Broadcast(SfxHint()); // notify SwAccessibleParagraph
+
     // while locked ignore all modifications
     if( IsLocked() )
         return;
