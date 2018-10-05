@@ -2008,9 +2008,9 @@ void ScCheckListMenuWindow::close(bool bOK)
     EndPopupMode();
 }
 
-void ScCheckListMenuWindow::setExtendedData(ExtendedData* p)
+void ScCheckListMenuWindow::setExtendedData(std::unique_ptr<ExtendedData> p)
 {
-    mpExtendedData.reset(p);
+    mpExtendedData = std::move(p);
 }
 
 ScCheckListMenuWindow::ExtendedData* ScCheckListMenuWindow::getExtendedData()

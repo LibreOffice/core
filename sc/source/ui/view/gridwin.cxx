@@ -662,7 +662,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         return;
 
     pData->mpData = pDBData;
-    mpAutoFilterPopup->setExtendedData(pData.release());
+    mpAutoFilterPopup->setExtendedData(std::move(pData));
 
     ScQueryParam aParam;
     pDBData->GetQueryParam(aParam);
