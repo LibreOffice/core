@@ -20,30 +20,30 @@
 #include <Qt5Frame.hxx>
 #include <Qt5Frame.moc>
 
-#include <Qt5Tools.hxx>
-#include <Qt5Instance.hxx>
-#include <Qt5Graphics.hxx>
-#include <Qt5Widget.hxx>
-#include <Qt5MainWindow.hxx>
 #include <Qt5Data.hxx>
+#include <Qt5Graphics.hxx>
+#include <Qt5Instance.hxx>
+#include <Qt5MainWindow.hxx>
 #include <Qt5Menu.hxx>
+#include <Qt5Tools.hxx>
+#include <Qt5Widget.hxx>
 
 #include <QtCore/QPoint>
 #include <QtCore/QSize>
 #include <QtGui/QIcon>
-#include <QtGui/QWindow>
 #include <QtGui/QScreen>
-#include <QtWidgets/QStyle>
-#include <QtWidgets/QToolTip>
+#include <QtGui/QWindow>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDesktopWidget>
-#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QStyle>
+#include <QtWidgets/QToolTip>
 
 #include <saldatabasic.hxx>
-#include <window.h>
 #include <vcl/layout.hxx>
 #include <vcl/syswin.hxx>
+#include <window.h>
 
 #include <cairo.h>
 #include <headless/svpgdi.hxx>

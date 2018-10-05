@@ -20,6 +20,7 @@
 #include <Qt5Widget.hxx>
 #include <Qt5Widget.moc>
 
+#include <Qt5AccessibleWidget.hxx>
 #include <Qt5Frame.hxx>
 #include <Qt5Graphics.hxx>
 #include <Qt5Tools.hxx>

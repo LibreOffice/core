@@ -80,6 +80,7 @@ $(eval $(call gb_Library_add_libs,vclplug_qt5,\
 endif
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
+    vcl/qt5/Qt5AccessibleEventListener \
     vcl/qt5/Qt5AccessibleText \
     vcl/qt5/Qt5AccessibleValue \
     vcl/qt5/Qt5AccessibleWidget \
