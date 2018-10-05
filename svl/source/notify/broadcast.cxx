@@ -94,15 +94,21 @@ SvtBroadcaster::~SvtBroadcaster()
     Normalize();
 
     {
+        // Visual Studio 15.8.6 seems to have a problem in debug mode where it complains about
+        // inompatible iterators. I think it is being a little too aggressive in detecting when
+        // the vector has changed underneath the iterator. Here, we know we should be able to
+        // do that because we have reserved space in the vector. To workaround this bug,
+        // use raw pointers.
+        auto dest(maDestructedListeners.data());
+        auto destEnd(dest + maDestructedListeners.size());
         SfxHint aHint(SfxHintId::Dying);
-        ListenersType::const_iterator dest(maDestructedListeners.begin());
         for (ListenersType::iterator it(maListeners.begin()); it != maListeners.end(); ++it)
         {
             // skip the destructed ones
-            while (dest != maDestructedListeners.end() && (*dest < *it))
+            while (dest != destEnd && (*dest < *it))
                 ++dest;
 
-            if (dest == maDestructedListeners.end() || *dest != *it)
+            if (dest == destEnd || *dest != *it)
                 (*it)->Notify(aHint);
         }
     }
@@ -113,14 +119,15 @@ SvtBroadcaster::~SvtBroadcaster()
     // listeners, with the exception of those that already asked to be removed
     // during their own destruction
     {
-        ListenersType::const_iterator dest(maDestructedListeners.begin());
+        auto dest(maDestructedListeners.data());
+        auto destEnd(dest + maDestructedListeners.size());
         for (ListenersType::iterator it(maListeners.begin()); it != maListeners.end(); ++it)
         {
             // skip the destructed ones
-            while (dest != maDestructedListeners.end() && (*dest < *it))
+            while (dest != destEnd && (*dest < *it))
                 ++dest;
 
-            if (dest == maDestructedListeners.end() || *dest != *it)
+            if (dest == destEnd || *dest != *it)
                 (*it)->BroadcasterDying(*this);
         }
     }
