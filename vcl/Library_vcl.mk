@@ -454,7 +454,7 @@ vcl_headless_code= \
 vcl_headless_freetype_code=\
     vcl/headless/svpprn \
     vcl/headless/svptext \
-    vcl/headless/svpglyphcache \
+    vcl/unx/generic/app/gendata \
     vcl/unx/generic/gdi/cairotextrender \
     vcl/unx/generic/glyphs/freetype_glyphcache \
     vcl/unx/generic/glyphs/glyphcache \

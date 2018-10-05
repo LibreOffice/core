@@ -111,30 +111,14 @@ PrintFontManager::PrintFont::PrintFont()
 {
 }
 
-GenericUnixSalData::GenericUnixSalData(GenericUnixSalDataType const t, SalInstance *const pInstance)
-    : m_eType(t), m_pDisplay(nullptr)
-{
-    m_pInstance = pInstance; SetSalData(this);
-}
-
-GenericUnixSalData::~GenericUnixSalData()
-{
-}
-
 /*
  *  one instance only
  */
 PrintFontManager& PrintFontManager::get()
 {
-    GenericUnixSalData *const pSalData(GetGenericUnixSalData());
+    GenericUnixSalData* const pSalData(GetGenericUnixSalData());
     assert(pSalData);
-
-    if (!pSalData->m_pPrintFontManager)
-    {
-        pSalData->m_pPrintFontManager.reset( new PrintFontManager );
-        pSalData->m_pPrintFontManager->initialize();
-    }
-    return *pSalData->m_pPrintFontManager;
+    return *pSalData->GetPrintFontManager();
 }
 
 /*

@@ -38,6 +38,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <unx/gendata.hxx>
 
 #if ENABLE_CAIRO_CANVAS
 #   if defined CAIRO_VERSION && CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 10, 0)
@@ -2107,6 +2108,13 @@ bool SvpSalGraphics::supportsOperation(OutDevSupportType eType) const
             return true;
     }
     return false;
+}
+
+GlyphCache& SvpSalGraphics::getPlatformGlyphCache()
+{
+    GenericUnixSalData* const pSalData(GetGenericUnixSalData());
+    assert(pSalData);
+    return *pSalData->GetGlyphCache();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
