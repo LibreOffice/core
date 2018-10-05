@@ -155,7 +155,7 @@ css::uno::Sequence< css::accessibility::TextSegment >
     // assumption:
     // value of <nCharIndex> is in range [0..length of accessible text)
 
-    const sal_Int32 nCoreCharIndex = mrPortionData.GetModelPosition( nCharIndex );
+    const sal_Int32 nCoreCharIndex = mrPortionData.GetCoreViewPosition(nCharIndex);
     // Handling of portions with core length == 0 at the beginning of the
     // paragraph - e.g. numbering portion.
     if ( mrPortionData.GetAccessiblePosition( nCoreCharIndex ) > nCharIndex )
