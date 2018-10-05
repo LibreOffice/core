@@ -58,48 +58,48 @@ struct OpenGLGlyphDrawElement
     }
 };
 
-class GlyphCache;
+class OpenGLGlyphCache;
 
-struct GlobalGlyphCache
+struct GlobalOpenGLGlyphCache
 {
-    GlobalGlyphCache()
+    GlobalOpenGLGlyphCache()
         : maPackedTextureAtlas(2048, 2048)
     {}
 
     PackedTextureAtlasManager maPackedTextureAtlas;
-    std::unordered_set<GlyphCache*> maGlyphCaches;
+    std::unordered_set<OpenGLGlyphCache*> maOpenGLGlyphCaches;
 
-    static GlobalGlyphCache * get();
+    static GlobalOpenGLGlyphCache * get();
 };
 
-class GlyphCache
+class OpenGLGlyphCache
 {
 private:
     std::unordered_map<int, OpenGLGlyphDrawElement> maOpenGLTextureCache;
 
 public:
-    GlyphCache()
+    OpenGLGlyphCache()
     {
-        GlobalGlyphCache::get()->maGlyphCaches.insert(this);
+        GlobalOpenGLGlyphCache::get()->maOpenGLGlyphCaches.insert(this);
     }
 
-    ~GlyphCache()
+    ~OpenGLGlyphCache()
     {
-        GlobalGlyphCache::get()->maGlyphCaches.erase(this);
+        GlobalOpenGLGlyphCache::get()->maOpenGLGlyphCaches.erase(this);
     }
 
     static bool ReserveTextureSpace(OpenGLGlyphDrawElement& rElement, int nWidth, int nHeight)
     {
-        GlobalGlyphCache* pGlobalGlyphCache = GlobalGlyphCache::get();
-        rElement.maTexture = pGlobalGlyphCache->maPackedTextureAtlas.Reserve(nWidth, nHeight);
+        GlobalOpenGLGlyphCache* pGlobalOpenGLGlyphCache = GlobalOpenGLGlyphCache::get();
+        rElement.maTexture = pGlobalOpenGLGlyphCache->maPackedTextureAtlas.Reserve(nWidth, nHeight);
         if (!rElement.maTexture)
             return false;
-        std::vector<GLuint> aTextureIDs = pGlobalGlyphCache->maPackedTextureAtlas.ReduceTextureNumber(8);
+        std::vector<GLuint> aTextureIDs = pGlobalOpenGLGlyphCache->maPackedTextureAtlas.ReduceTextureNumber(8);
         if (!aTextureIDs.empty())
         {
-            for (auto& pGlyphCache: pGlobalGlyphCache->maGlyphCaches)
+            for (auto& pOpenGLGlyphCache: pGlobalOpenGLGlyphCache->maOpenGLGlyphCaches)
             {
-                pGlyphCache->RemoveTextures(aTextureIDs);
+                pOpenGLGlyphCache->RemoveTextures(aTextureIDs);
             }
         }
         return true;
@@ -150,8 +150,6 @@ class WinFontInstance : public LogicalFontInstance
 public:
     virtual ~WinFontInstance() override;
 
-    bool CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, SalGraphics& rGraphics);
-    GlyphCache& GetGlyphCache() { return maGlyphCache; }
     bool hasHScale() const;
 
     void SetGraphics(WinSalGraphics*);
@@ -166,6 +164,9 @@ public:
 
     const WinFontFace * GetFontFace() const { return static_cast<const WinFontFace *>(LogicalFontInstance::GetFontFace()); }
 
+    bool CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, SalGraphics& rGraphics);
+    OpenGLGlyphCache& GetOpenGLGlyphCache() { return maOpenGLGlyphCache; }
+
 private:
     explicit WinFontInstance(const WinFontFace&, const FontSelectPattern&);
 
@@ -174,7 +175,7 @@ private:
     WinSalGraphics *m_pGraphics;
     HFONT m_hFont;
     float m_fScale;
-    GlyphCache maGlyphCache;
+    OpenGLGlyphCache maOpenGLGlyphCache;
 };
 
 class TextOutRenderer
