@@ -1053,7 +1053,7 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                     {
                         WW8ReaderSave aSave(this, nNewStartCp -1);
                         bool bOldEmbeddObj = m_bEmbeddObj;
-                        // bEmbedd Ordinarily would have been set by field
+                        // bEmbeddObj Ordinarily would have been set by field
                         // parse, but this is impossible here so...
                         m_bEmbeddObj = true;
 
