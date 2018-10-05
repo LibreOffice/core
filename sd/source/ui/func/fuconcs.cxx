@@ -234,12 +234,12 @@ const OUString& FuConstructCustomShape::GetShapeType() const
     return aCustomShape;
 }
 
-SdrObject* FuConstructCustomShape::CreateDefaultObject(const sal_uInt16, const ::tools::Rectangle& rRectangle)
+SdrObjectUniquePtr FuConstructCustomShape::CreateDefaultObject(const sal_uInt16, const ::tools::Rectangle& rRectangle)
 {
-    SdrObject* pObj = SdrObjFactory::MakeNewObject(
+    SdrObjectUniquePtr pObj(SdrObjFactory::MakeNewObject(
         mpView->getSdrModelFromSdrView(),
         mpView->GetCurrentObjInventor(),
-        mpView->GetCurrentObjIdentifier());
+        mpView->GetCurrentObjIdentifier()));
 
     if( pObj )
     {
@@ -247,9 +247,9 @@ SdrObject* FuConstructCustomShape::CreateDefaultObject(const sal_uInt16, const :
         if ( doConstructOrthogonal() )
             ImpForceQuadratic( aRect );
         pObj->SetLogicRect( aRect );
-        SetAttributes( pObj );
+        SetAttributes( pObj.get() );
         SfxItemSet aAttr(mpDoc->GetPool());
-        SetStyleSheet(aAttr, pObj);
+        SetStyleSheet(aAttr, pObj.get());
         pObj->SetMergedItemSet(aAttr);
     }
     return pObj;
