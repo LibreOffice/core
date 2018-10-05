@@ -53,7 +53,7 @@ typedef std::unordered_map< OUString,
                          css::beans::PropertyValue > tAccParaPropValMap;
 
 class SwAccessibleParagraph :
-        public SwClient, // #i108125#
+        public SfxListener,
         public SwAccessibleContext,
         public css::accessibility::XAccessibleEditableText,
         public css::accessibility::XAccessibleSelection,
@@ -225,7 +225,7 @@ protected:
                               sal_Int32 nPos,
                               sal_Int16 aTextType );
 
-    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew) override;
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
 public:
 
