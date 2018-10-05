@@ -86,26 +86,6 @@ private:
     FontCharMapRef  mxFontCharMap;
 };
 
-class FreetypeManager
-{
-public:
-                        FreetypeManager();
-                        ~FreetypeManager();
-
-    void                AddFontFile( const OString& rNormalizedName,
-                            int nFaceNum, sal_IntPtr nFontId, const FontAttributes&);
-    void                AnnounceFonts( PhysicalFontCollection* ) const;
-    void                ClearFontList();
-
-    FreetypeFont* CreateFont(LogicalFontInstance* pLogicalFont);
-
-private:
-    typedef std::unordered_map<sal_IntPtr, std::unique_ptr<FreetypeFontInfo>> FontList;
-    FontList            maFontList;
-
-    sal_IntPtr          mnMaxFontId;
-};
-
 class FreetypeFontFace : public PhysicalFontFace
 {
 private:

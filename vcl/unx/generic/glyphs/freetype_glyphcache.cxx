@@ -86,8 +86,6 @@ static int nDefaultPrioEmbedded    = 2;
 static int nDefaultPrioAutoHint    = 1;
 static int nDefaultPrioAntiAlias   = 1;
 
-// FreetypeManager
-
 FreetypeFontFile::FreetypeFontFile( const OString& rNativeFileName )
 :   maNativeFileName( rNativeFileName ),
     mpFileMap( nullptr ),
@@ -260,8 +258,7 @@ void FreetypeFontInfo::AnnounceFont( PhysicalFontCollection* pFontCollection )
     pFontCollection->Add( pFD );
 }
 
-FreetypeManager::FreetypeManager()
-:   mnMaxFontId( 0 )
+void GlyphCache::InitFreetype()
 {
     /*FT_Error rcFT =*/ FT_Init_FreeType( &aLibFT );
 
@@ -291,42 +288,32 @@ FT_Face FreetypeFont::GetFtFace() const
     return maFaceFT;
 }
 
-FreetypeManager::~FreetypeManager()
-{
-    ClearFontList();
-}
-
-void FreetypeManager::AddFontFile( const OString& rNormalizedName,
+void GlyphCache::AddFontFile( const OString& rNormalizedName,
     int nFaceNum, sal_IntPtr nFontId, const FontAttributes& rDevFontAttr)
 {
     if( rNormalizedName.isEmpty() )
         return;
 
-    if( maFontList.find( nFontId ) != maFontList.end() )
+    if( m_aFontInfoList.find( nFontId ) != m_aFontInfoList.end() )
         return;
 
     FreetypeFontInfo* pFontInfo = new FreetypeFontInfo( rDevFontAttr,
         rNormalizedName, nFaceNum, nFontId);
-    maFontList[ nFontId ].reset(pFontInfo);
-    if( mnMaxFontId < nFontId )
-        mnMaxFontId = nFontId;
+    m_aFontInfoList[ nFontId ].reset(pFontInfo);
+    if( m_nMaxFontId < nFontId )
+        m_nMaxFontId = nFontId;
 }
 
-void FreetypeManager::AnnounceFonts( PhysicalFontCollection* pToAdd ) const
+void GlyphCache::AnnounceFonts( PhysicalFontCollection* pToAdd ) const
 {
-    for (auto const& font : maFontList)
+    for (auto const& font : m_aFontInfoList)
     {
         FreetypeFontInfo* pFreetypeFontInfo = font.second.get();
         pFreetypeFontInfo->AnnounceFont( pToAdd );
     }
 }
 
-void FreetypeManager::ClearFontList( )
-{
-    maFontList.clear();
-}
-
-FreetypeFont* FreetypeManager::CreateFont(LogicalFontInstance* pFontInstance)
+FreetypeFont* GlyphCache::CreateFont(LogicalFontInstance* pFontInstance)
 {
     // find a FontInfo matching to the font id
     if (!pFontInstance)
@@ -337,8 +324,8 @@ FreetypeFont* FreetypeManager::CreateFont(LogicalFontInstance* pFontInstance)
         return nullptr;
 
     sal_IntPtr nFontId = pFontFace->GetFontId();
-    FontList::iterator it = maFontList.find(nFontId);
-    FreetypeFontInfo* pFontInfo = it != maFontList.end() ? it->second.get() : nullptr;
+    FontInfoList::iterator it = m_aFontInfoList.find(nFontId);
+    FreetypeFontInfo* pFontInfo = it != m_aFontInfoList.end() ? it->second.get() : nullptr;
 
     if (!pFontInfo)
         return nullptr;
