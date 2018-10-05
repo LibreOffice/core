@@ -1266,6 +1266,36 @@ void Test::testIsNumberFormatSpecific()
 
         checkSpecificNumberFormats( aFormatter, aIO, "[es-ES] date");
     }
+
+    {
+        // Test that de-DE accepts Januar and Jänner.
+        SvNumberFormatter aFormatter(m_xContext, LANGUAGE_GERMAN);
+
+        const sal_uInt32 n = aFormatter.GetFormatIndex( NF_DATE_SYS_DDMMYYYY, LANGUAGE_GERMAN);
+        std::vector<FormatInputOutput> aIO = {
+            { "23. Januar 1999", true, "23.01.1999", n },
+            { "23. J\xC3\xA4nner 1999", true, "23.01.1999", n },
+            { "23. Jan. 1999", true, "23.01.1999", n },
+            { "23. J\xC3\xA4n. 1999", true, "23.01.1999", n },
+        };
+
+        checkSpecificNumberFormats( aFormatter, aIO, "[de-DE] date January month names");
+    }
+
+    {
+        // Test that de-AT accepts Januar and Jänner.
+        SvNumberFormatter aFormatter(m_xContext, LANGUAGE_GERMAN_AUSTRIAN);
+
+        const sal_uInt32 n = aFormatter.GetFormatIndex( NF_DATE_SYS_DDMMYYYY, LANGUAGE_GERMAN_AUSTRIAN);
+        std::vector<FormatInputOutput> aIO = {
+            { "23. Januar 1999", true, "23.01.1999", n },
+            { "23. J\xC3\xA4nner 1999", true, "23.01.1999", n },
+            { "23. Jan. 1999", true, "23.01.1999", n },
+            { "23. J\xC3\xA4n. 1999", true, "23.01.1999", n },
+        };
+
+        checkSpecificNumberFormats( aFormatter, aIO, "[de-AT] date January month names");
+    }
 }
 
 void Test::testUserDefinedNumberFormats()
