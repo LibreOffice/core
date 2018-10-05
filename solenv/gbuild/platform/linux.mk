@@ -266,6 +266,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(call gb_Library_is_udk_versioned,$(1)),-Wl$(COMMA)-h$(notdir $(1)).$(gb_UDK_MAJOR)) \
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) \
+		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \

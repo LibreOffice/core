@@ -307,6 +307,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(subst \d,$$,$(RPATH)) \
 		$(T_LDFLAGS) $(gb_macos_LDFLAGS) \
 		$(call gb_LinkTarget__get_liblinkflags,$(LINKED_LIBS)) \
+		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \

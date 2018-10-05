@@ -107,6 +107,8 @@ $(or \
 endef
 
 $(eval $(foreach method,\
+	add_asmobject \
+	add_asmobjects \
 	add_cobject \
 	add_cobjects \
 	add_cxxobject \

@@ -424,7 +424,9 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	rm -f $(1) && \
 	RESPONSEFILE=`$(gb_MKTEMP)` && \
-	echo "$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+	echo "\
+		$(foreach object,$(ASMXXOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
+		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(NATIVERES) " > $${RESPONSEFILE} && \

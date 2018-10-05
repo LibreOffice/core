@@ -28,6 +28,7 @@ COM := MSC
 gb_TMPDIR:=$(if $(TMPDIR),$(shell cygpath -m $(TMPDIR)),$(shell cygpath -m /tmp))
 gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
 
+gb_AS := ml
 gb_CC := cl
 gb_CXX := cl
 gb_LINK := link
@@ -36,6 +37,9 @@ gb_CLASSPATHSEP := ;
 gb_RC := rc
 
 # use CC/CXX if they are nondefaults
+ifneq ($(origin AS),default)
+gb_AS := $(AS)
+endif
 ifneq ($(origin CC),default)
 gb_CC := $(CC)
 gb_GCCP := $(CC)
@@ -272,15 +276,13 @@ $(call gb_Output_announce,$(2),$(true),ASM,3)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	unset INCLUDE && \
-	$(gb_CC) \
+	$(gb_AS) \
 		$(DEFS) \
-		$(T_CFLAGS) \
-		-FD$(PDBFILE) \
-		$(CFLAGS) \
-		-I$(dir $(3)) \
-		$(INCLUDE) \
-		-c $(3) \
-		-Fo$(1))
+		-safeseh \
+		-Cp \
+		-coff \
+		-Fo$(1) \
+		-c $(3))
 endef
 
 # CObject class
@@ -449,7 +451,9 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	rm -f $(1) && \
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100, \
-	    $(call gb_Helper_convert_native,$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+	    $(call gb_Helper_convert_native,\
+		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
+		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(PCHOBJS) $(NATIVERES))) && \

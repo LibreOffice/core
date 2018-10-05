@@ -70,7 +70,7 @@ gb_AsmObject_get_source = $(1)/$(2)$(gb_AsmObject_EXT)
 
 define gb_AsmObject__rules
 $$(call gb_AsmObject_get_target,%) : $$(call gb_AsmObject_get_source,$(1),%)
-	$$(call gb_AsmObject__command,$$@,$$*,$$<))
+	$$(call gb_AsmObject__command,$$@,$$*,$$<)
 
 endef
 

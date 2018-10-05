@@ -331,9 +331,11 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	$(if $(DLLTARGET), echo LIBRARY	$(DLLBASE) INITINSTANCE TERMINSTANCE > $(DLLDEF) &&) \
 	$(if $(DLLTARGET), echo DATA MULTIPLE >> $(DLLDEF) &&) \
 	RESPONSEFILE=$(call var2filecr,$(shell $(gb_MKTEMP)),1, \
-	    $(call gb_Helper_convert_native,$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+	    $(call gb_Helper_convert_native,\
+		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(PCHOBJS))) && \
 	$(if $(DLLTARGET), echo EXPORTS >> $(DLLDEF) &&) \
 	$(if $(DLLTARGET), emxexp @$${RESPONSEFILE} | fix_exp_file | sort | uniq | fix_def_ord >> $(DLLDEF) &&) \
