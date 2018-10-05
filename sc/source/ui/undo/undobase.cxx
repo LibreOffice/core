@@ -77,7 +77,7 @@ bool ScSimpleUndo::Merge( SfxUndoAction *pNextAction )
         // ScUndoDraw is later deleted by the UndoManager
 
         ScUndoDraw* pCalcUndo = static_cast<ScUndoDraw*>(pNextAction);
-        pDetectiveUndo.reset( pCalcUndo->ReleaseDrawUndo() );
+        pDetectiveUndo = pCalcUndo->ReleaseDrawUndo();
         return true;
     }
 
