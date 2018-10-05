@@ -23,6 +23,7 @@
 #include <vcl/event.hxx>
 #include <vcl/timer.hxx>
 #include <sfx2/request.hxx>
+#include <svx/svdobj.hxx>
 
 class ScDrawView;
 class ScTabViewShell;
@@ -97,7 +98,7 @@ public:
     void    StopDragTimer();
 
     // Create default drawing objects via keyboard
-    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle);
+    virtual SdrObjectUniquePtr CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle);
 
 protected:
     static void ImpForceQuadratic(tools::Rectangle& rRect);

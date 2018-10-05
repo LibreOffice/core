@@ -50,7 +50,7 @@ public:
     void    StopEditMode();
 
     // Create default drawing objects via keyboard
-    virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle) override;
+    virtual SdrObjectUniquePtr CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle) override;
 
 private:
     std::unique_ptr<SdrOutliner> MakeOutliner();

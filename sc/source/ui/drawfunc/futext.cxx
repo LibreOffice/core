@@ -636,23 +636,22 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
 }
 
 // Create default drawing objects via keyboard
-SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle)
+SdrObjectUniquePtr FuText::CreateDefaultObject(const sal_uInt16 nID, const tools::Rectangle& rRectangle)
 {
     // case SID_DRAW_TEXT:
     // case SID_DRAW_TEXT_VERTICAL:
     // case SID_DRAW_TEXT_MARQUEE:
     // case SID_DRAW_NOTEEDIT:
 
-    SdrObject* pObj = SdrObjFactory::MakeNewObject(
+    SdrObjectUniquePtr pObj(SdrObjFactory::MakeNewObject(
         *pDrDoc,
         pView->GetCurrentObjInventor(),
-        pView->GetCurrentObjIdentifier());
+        pView->GetCurrentObjIdentifier()));
 
     if(pObj)
     {
-        if(dynamic_cast<const SdrTextObj*>( pObj) !=  nullptr)
+        if(auto pText = dynamic_cast<SdrTextObj*>( pObj.get() ))
         {
-            SdrTextObj* pText = static_cast<SdrTextObj*>(pObj);
             pText->SetLogicRect(rRectangle);
 
             // don't set default text, start edit mode instead
@@ -690,7 +689,7 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const tools::Rectan
                 pObj->SetMergedItemSetAndBroadcast(aSet);
             }
 
-            SetInEditMode( pObj );      // start edit mode
+            SetInEditMode( pObj.get() );      // start edit mode
         }
         else
         {
