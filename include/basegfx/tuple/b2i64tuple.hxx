@@ -21,7 +21,6 @@
 #define INCLUDED_BASEGFX_TUPLE_B2I64TUPLE_HXX
 
 #include <sal/types.h>
-#include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/basegfxdllapi.h>
 
 

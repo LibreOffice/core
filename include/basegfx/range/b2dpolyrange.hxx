@@ -27,7 +27,6 @@
 
 namespace basegfx
 {
-    class B2DTuple;
     class B2DRange;
     class B2DPolyPolygon;
     class B2DHomMatrix;

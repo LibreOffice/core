@@ -29,12 +29,10 @@ namespace com { namespace sun { namespace star { namespace geometry
 {
     struct AffineMatrix2D;
     struct AffineMatrix3D;
-    struct Matrix2D;
     struct RealPoint2D;
     struct RealSize2D;
     struct RealRectangle2D;
     struct RealRectangle3D;
-    struct IntegerPoint2D;
     struct IntegerSize2D;
     struct IntegerRectangle2D;
     struct RealBezierSegment2D;
@@ -48,8 +46,6 @@ namespace com { namespace sun { namespace star { namespace rendering
 
 namespace com { namespace sun { namespace star { namespace awt
 {
-    struct Point;
-    struct Size;
     struct Rectangle;
 } } } }
 
@@ -61,9 +57,7 @@ namespace basegfx
     class B2DPoint;
     class B2DRange;
     class B3DRange;
-    class B2IBox;
     class B2IVector;
-    class B2IPoint;
     class B2IRange;
     class B2DPolygon;
     class B2DPolyPolygon;

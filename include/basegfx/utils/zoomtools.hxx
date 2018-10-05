@@ -10,7 +10,6 @@
 #ifndef INCLUDED_BASEGFX_UTILS_ZOOMTOOLS_HXX
 #define INCLUDED_BASEGFX_UTILS_ZOOMTOOLS_HXX
 
-#include <sal/types.h>
 #include <basegfx/basegfxdllapi.h>
 
 

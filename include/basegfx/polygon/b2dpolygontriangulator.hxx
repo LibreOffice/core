@@ -20,9 +20,13 @@
 #ifndef INCLUDED_BASEGFX_POLYGON_B2DPOLYGONTRIANGULATOR_HXX
 #define INCLUDED_BASEGFX_POLYGON_B2DPOLYGONTRIANGULATOR_HXX
 
-#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/basegfxdllapi.h>
 
+#include <vector>
+
+namespace basegfx { class B2DPolyPolygon; }
 
 namespace basegfx
 {

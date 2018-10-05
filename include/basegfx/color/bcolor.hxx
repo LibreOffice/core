@@ -25,13 +25,9 @@
 #include <ostream>
 
 #include <basegfx/tuple/b3dtuple.hxx>
-#include <vector>
 #include <basegfx/basegfxdllapi.h>
 #include <o3tl/clamp.hxx>
 
-namespace com { namespace sun { namespace star { namespace rendering {
-    class XGraphicDevice;
-}}}}
 
 namespace basegfx
 {

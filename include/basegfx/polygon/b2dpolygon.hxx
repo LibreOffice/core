@@ -21,21 +21,19 @@
 #define INCLUDED_BASEGFX_POLYGON_B2DPOLYGON_HXX
 
 #include <ostream>
+#include <vector>
 
 #include <sal/types.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <basegfx/vector/b2enums.hxx>
-#include <basegfx/range/b2drange.hxx>
 #include <basegfx/basegfxdllapi.h>
 
 class ImplB2DPolygon;
-class SalGraphicsImpl;
 
 namespace basegfx
 {
-    class B2DPolygon;
     class B2DPoint;
-    class B2DVector;
+    class B2DRange;
     class B2DHomMatrix;
     class B2DCubicBezier;
     class SystemDependentData;
