@@ -18,6 +18,7 @@
  */
 
 #include <basegfx/raster/rasterconvert3d.hxx>
+#include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/point/b3dpoint.hxx>

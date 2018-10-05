@@ -28,7 +28,6 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/basegfxdllapi.h>
 
 namespace basegfx

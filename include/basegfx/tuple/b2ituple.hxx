@@ -21,8 +21,6 @@
 #define INCLUDED_BASEGFX_TUPLE_B2ITUPLE_HXX
 
 #include <sal/types.h>
-#include <basegfx/numeric/ftools.hxx>
-#include <algorithm>
 #include <basegfx/basegfxdllapi.h>
 
 namespace basegfx

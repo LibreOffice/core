@@ -23,9 +23,11 @@
 #include <sal/types.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/vector/b2dvector.hxx>
-#include <basegfx/range/b2drange.hxx>
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/basegfxdllapi.h>
 
+namespace basegfx { class B2DRange; }
 
 namespace basegfx
 {

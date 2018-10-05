@@ -20,8 +20,6 @@
 #ifndef INCLUDED_BASEGFX_UTILS_LERP_HXX
 #define INCLUDED_BASEGFX_UTILS_LERP_HXX
 
-#include <sal/types.h>
-
 namespace basegfx
 {
     namespace utils
