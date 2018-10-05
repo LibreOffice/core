@@ -1475,7 +1475,7 @@ void XclImpPivotTable::Convert()
     }
 
     // create the DataPilot
-    ScDPObject* pDPObj = new ScDPObject( &GetDocRef() );
+    std::unique_ptr<ScDPObject> pDPObj(new ScDPObject( &GetDocRef() ));
     pDPObj->SetName( maPTInfo.maTableName );
     if (!maPTInfo.maDataName.isEmpty())
         aSaveData.GetDataLayoutDimension()->SetLayoutName(maPTInfo.maDataName);
@@ -1488,8 +1488,8 @@ void XclImpPivotTable::Convert()
     pDPObj->SetOutRange( aOutRange );
     pDPObj->SetHeaderLayout( maPTViewEx9Info.mnGridLayout == 0 );
 
-    GetDoc().GetDPCollection()->InsertNewTable(pDPObj);
-    mpDPObj = pDPObj;
+    mpDPObj = pDPObj.get();
+    GetDoc().GetDPCollection()->InsertNewTable(std::move(pDPObj));
 
     ApplyFieldInfo();
     ApplyMergeFlags(aOutRange, aSaveData);
