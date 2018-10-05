@@ -28,6 +28,7 @@
 #include <tools/ref.hxx>
 #include <tools/debug.hxx>
 
+#include "basic/basicdllapi.h"
 #include <basic/sbxdef.hxx>
 
 class SvStream;
@@ -70,11 +71,11 @@ class SbxBase;
 class SbxFactory;
 class SbxObject;
 
-DBG_NAMEEX(SbxBase)
+DBG_NAMEEX_VISIBILITY(SbxBase, BASIC_DLLPUBLIC)
 
 class SbxBaseImpl;
 
-class SbxBase : virtual public SvRefBase
+class BASIC_DLLPUBLIC SbxBase : virtual public SvRefBase
 {
     SbxBaseImpl* mpSbxBaseImpl; // Impl data
 

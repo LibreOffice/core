@@ -25,6 +25,7 @@
 #define _SB_SBMOD_HXX
 
 #include <com/sun/star/script/XInvocation.hpp>
+#include "basic/basicdllapi.h"
 #include <basic/sbdef.hxx>
 #include <basic/sbxobj.hxx>
 #include <basic/sbxdef.hxx>
@@ -47,7 +48,7 @@ struct ClassModuleRunInitItem;
 struct SbClassData;
 class SbModuleImpl;
 
-class SbModule : public SbxObject
+class BASIC_DLLPUBLIC SbModule : public SbxObject
 {
     friend class    TestToolObj;    // allows module initialisation at runtime
     friend class    SbiCodeGen;
@@ -156,7 +157,7 @@ SV_DECL_IMPL_REF(SbModule)
 class SbClassModuleImpl;
 
 // Object class for instances of class modules
-class SbClassModuleObject : public SbModule
+class BASIC_DLLPUBLIC SbClassModuleObject : public SbModule
 {
     SbClassModuleImpl* mpSbClassModuleImpl;
 

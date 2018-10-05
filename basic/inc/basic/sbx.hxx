@@ -30,6 +30,7 @@
 #include "svl/lstner.hxx"
 #include <basic/sbxdef.hxx>
 #include <basic/sbxform.hxx>
+#include "basic/basicdllapi.h"
 
 #ifndef __SBX_SBXOBJECT_HXX
 #include <basic/sbxobj.hxx>
@@ -86,7 +87,7 @@ SV_DECL_PTRARR_DEL(SbxParams,SbxParamInfo*,4,4)
 #ifndef __SBX_SBXINFO
 #define __SBX_SBXINFO
 
-class SbxInfo : public SvRefBase
+class BASIC_DLLPUBLIC SbxInfo : public SvRefBase
 {
     friend class SbxVariable;
     friend class SbMethod;
@@ -121,7 +122,7 @@ public:
 #ifndef __SBX_SBXHINT_HXX
 #define __SBX_SBXHINT_HXX
 
-class SbxHint : public SfxSimpleHint
+class BASIC_DLLPUBLIC SbxHint : public SfxSimpleHint
 {
     SbxVariable* pVar;
 public:
@@ -136,7 +137,7 @@ public:
 #define __SBX_SBXALIAS_HXX
 
 // SbxAlias is an alias for a var or object
-class SbxAlias : public SbxVariable, public SfxListener
+class BASIC_DLLPUBLIC SbxAlias : public SbxVariable, public SfxListener
 {
     SbxVariableRef xAlias;
     virtual ~SbxAlias();
@@ -163,7 +164,7 @@ class SbxVariableRef;
 
 class SbxArrayImpl;
 
-class SbxArray : public SbxBase
+class BASIC_DLLPUBLIC SbxArray : public SbxBase
 {
 // #100883 Method to set method directly to parameter array
     friend class SbMethod;
@@ -221,7 +222,7 @@ struct SbxDim;
 
 class SbxDimArrayImpl;
 
-class SbxDimArray : public SbxArray
+class BASIC_DLLPUBLIC SbxDimArray : public SbxArray
 {
     SbxDimArrayImpl* mpSbxDimArrayImpl;   // Impl data
 
@@ -277,7 +278,7 @@ public:
 #ifndef __SBX_SBXCOLLECTION_HXX
 #define __SBX_SBXCOLLECTION_HXX
 
-class SbxCollection : public SbxObject
+class BASIC_DLLPUBLIC SbxCollection : public SbxObject
 {
     void Initialize();
 protected:
@@ -306,7 +307,7 @@ public:
 #ifndef __SBX_SBXSTDCOLLECTION_HXX
 #define __SBX_SBXSTDCOLLECTION_HXX
 
-class SbxStdCollection : public SbxCollection
+class BASIC_DLLPUBLIC SbxStdCollection : public SbxCollection
 {
 protected:
     String aElemClass;

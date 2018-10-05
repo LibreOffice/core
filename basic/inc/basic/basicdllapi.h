@@ -21,36 +21,17 @@
 
 
 
-#ifndef _BASRDLL_HXX
-#define _BASRDLL_HXX
+#ifndef INCLUDED_BASICDLLAPI_H
+#define INCLUDED_BASICDLLAPI_H
 
-class ResMgr;
+#include "sal/types.h"
 
-#include <vcl/accel.hxx>
-#include "basic/basicdllapi.h"
+#if defined(BASIC_DLLIMPLEMENTATION)
+#define BASIC_DLLPUBLIC  SAL_DLLPUBLIC_EXPORT
+#else
+#define BASIC_DLLPUBLIC  SAL_DLLPUBLIC_IMPORT
+#endif
+#define BASIC_DLLPRIVATE SAL_DLLPRIVATE
 
-class BASIC_DLLPUBLIC BasicDLL
-{
-private:
-    ResMgr*     pSttResMgr;
-    ResMgr*     pBasResMgr;
+#endif /* INCLUDED_BASICDLLAPI_H */
 
-    sal_Bool        bDebugMode;
-    sal_Bool        bBreakEnabled;
-
-public:
-                BasicDLL();
-                ~BasicDLL();
-
-    ResMgr*     GetSttResMgr() const { return pSttResMgr; }
-    ResMgr*     GetBasResMgr() const { return pBasResMgr; }
-
-    static void BasicBreak();
-
-    static void EnableBreak( sal_Bool bEnable );
-    static void SetDebugMode( sal_Bool bDebugMode );
-};
-
-#define BASIC_DLL() (*(BasicDLL**)GetAppData( SHL_BASIC ) )
-
-#endif //_BASRDLL_HXX

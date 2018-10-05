@@ -24,6 +24,8 @@
 #ifndef BASICMANAGERREPOSITORY_HXX
 #define BASICMANAGERREPOSITORY_HXX
 
+#include "basic/basicdllapi.h"
+
 /** === begin UNO includes === **/
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -42,7 +44,7 @@ namespace basic
     /** specifies a callback for instances which are interested in BasicManagers
         created by the BasicManagerRepository.
     */
-    class SAL_NO_VTABLE BasicManagerCreationListener
+    class BASIC_DLLPUBLIC SAL_NO_VTABLE BasicManagerCreationListener
     {
     public:
         /** is called when a BasicManager has been created
@@ -64,7 +66,7 @@ namespace basic
     //====================================================================
     //= BasicManagerRepository
     //====================================================================
-    class BasicManagerRepository
+    class BASIC_DLLPUBLIC BasicManagerRepository
     {
     public:
         /** returns the BasicManager belonging to the given document

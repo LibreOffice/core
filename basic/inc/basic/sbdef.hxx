@@ -25,6 +25,7 @@
 #define _SB_SBDEF_HXX
 
 #include <basic/sbxdef.hxx>
+#include "basic/basicdllapi.h"
 #include <svl/svarray.hxx>
 
 #define _BASIC_TEXTPORTIONS
@@ -65,17 +66,17 @@ class SbTextPortions;
 
 // Returns type name for Basic type, array flag is ignored
 // implementation: basic/source/runtime/methods.cxx
-String getBasicTypeName( SbxDataType eType );
+BASIC_DLLPUBLIC String getBasicTypeName( SbxDataType eType );
 
 // Returns type name for Basic objects, especially
 // important for SbUnoObj instances
 // implementation: basic/source/classes/sbunoobj.cxx
 class SbxObject;
-String getBasicObjectTypeName( SbxObject* pObj );
+BASIC_DLLPUBLIC String getBasicObjectTypeName( SbxObject* pObj );
 
 // Allows Basic IDE to set watch mode to suppress errors
 // implementation: basic/source/runtime/runtime.cxx
-void setBasicWatchMode( bool bOn );
+BASIC_DLLPUBLIC void setBasicWatchMode( bool bOn );
 
 // Debug Flags:
 #define SbDEBUG_BREAK       0x0001          // Break-Callback

@@ -57,6 +57,7 @@ my_components = \
     component/animations/source/animcore/animcore \
     component/avmedia/util/avmedia \
     component/basctl/util/basctl \
+    component/basic/util/sb \
     component/binaryurp/source/binaryurp \
     component/canvas/source/factory/canvasfactory \
     component/canvas/source/simplecanvas/simplecanvas \
@@ -177,7 +178,6 @@ my_components = \
     pythonloader \
     pythonscript \
     res \
-    sb \
     scn \
     scriptframe \
     sdbc2 \

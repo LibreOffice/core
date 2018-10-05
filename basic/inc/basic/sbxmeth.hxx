@@ -25,10 +25,11 @@
 #define __SBX_SBXMETHOD_HXX
 
 #include <basic/sbxvar.hxx>
+#include "basic/basicdllapi.h"
 
 class SbxMethodImpl;
 
-class SbxMethod : public SbxVariable
+class BASIC_DLLPUBLIC SbxMethod : public SbxVariable
 {
     SbxMethodImpl* mpSbxMethodImpl; // Impl data
     bool           mbIsRuntimeFunction;

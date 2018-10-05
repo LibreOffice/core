@@ -24,6 +24,7 @@
 #ifndef _SB_SBSTAR_HXX
 #define _SB_SBSTAR_HXX
 
+#include "basic/basicdllapi.h"
 #include <basic/sbx.hxx>
 #include <basic/sbxobj.hxx>
 #ifndef _RTL_USTRING_HXX
@@ -48,7 +49,7 @@ class DocBasicItem;
 
 class StarBASICImpl;
 
-class StarBASIC : public SbxObject
+class BASIC_DLLPUBLIC StarBASIC : public SbxObject
 {
     friend class SbiScanner;
     friend class SbiExpression; // Access to RTL

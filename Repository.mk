@@ -280,6 +280,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     cosv \
     ooopathutils \
     salcpprt \
+    sample \
     sldshw_s \
     vclmain \
     udm \

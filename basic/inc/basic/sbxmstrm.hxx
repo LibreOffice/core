@@ -27,10 +27,11 @@
 #include <tools/stream.hxx>
 #include <basic/sbxdef.hxx>
 #include <basic/sbxcore.hxx>
+#include "basic/basicdllapi.h"
 
 SV_DECL_REF(SbxMemoryStream)
 
-class SbxMemoryStream : public SbxBase, public SvMemoryStream
+class BASIC_DLLPUBLIC SbxMemoryStream : public SbxBase, public SvMemoryStream
 {
   public:
     SbxMemoryStream(sal_uIntPtr nInitSize_=512, sal_uIntPtr nResize_=64) :

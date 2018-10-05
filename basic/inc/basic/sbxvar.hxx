@@ -28,11 +28,12 @@
 #include <tools/string.hxx>
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 #include <basic/sbxcore.hxx>
+#include "basic/basicdllapi.h"
 
 #ifndef __SBX_64
 #define __SBX_64
 
-struct SbxINT64
+struct BASIC_DLLPUBLIC SbxINT64
 {
     sal_Int32 nHigh; sal_uInt32 nLow;
 
@@ -111,7 +112,7 @@ struct SbxINT64
                                     / CURRENCY_FACTOR; }
 };
 
-struct SbxUINT64
+struct BASIC_DLLPUBLIC SbxUINT64
 {
     sal_uInt32 nHigh; sal_uInt32 nLow;
     void Set(double n)
@@ -157,7 +158,7 @@ struct SbxUINT64
 class BigInt;
 class SbxDecimal;
 
-struct SbxValues
+struct BASIC_DLLPUBLIC SbxValues
 {
     union {
         sal_Unicode     nChar;
@@ -224,7 +225,7 @@ struct SbxValues;
 
 class SbxValueImpl;
 
-class SbxValue : public SbxBase
+class BASIC_DLLPUBLIC SbxValue : public SbxBase
 {
     SbxValueImpl* mpSbxValueImplImpl;   // Impl data
 
@@ -437,7 +438,7 @@ class SfxBroadcaster;
 class SbxVariableImpl;
 class StarBASIC;
 
-class SbxVariable : public SbxValue
+class BASIC_DLLPUBLIC SbxVariable : public SbxValue
 {
     friend class SbMethod;
 

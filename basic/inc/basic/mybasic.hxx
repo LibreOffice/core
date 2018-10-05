@@ -25,12 +25,13 @@
 #define _MYBASIC_HXX
 
 #include <basic/sbstar.hxx>
+#include "basic/basicdllapi.h"
 
 class BasicApp;
 class AppBasEd;
 class ErrorEntry;
 
-class BasicError {
+class BASIC_DLLPUBLIC BasicError {
     AppBasEd* pWin;
     sal_uInt16  nLine, nCol1, nCol2;
     String aText;
@@ -44,7 +45,7 @@ DECLARE_LIST( ErrorList, BasicError* )
 #define SBXID_MYBASIC   0x594D      // MyBasic: MY
 #define SBXCR_TEST      0x54534554  // TEST
 
-class MyBasic : public StarBASIC
+class BASIC_DLLPUBLIC MyBasic : public StarBASIC
 {
     SbError nError;
     virtual sal_Bool ErrorHdl();

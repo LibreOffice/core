@@ -28,6 +28,7 @@
 #include "tools/list.hxx"
 #include "svl/svarray.hxx"
 #include <basic/sbxdef.hxx>
+#include "basic/basicdllapi.h"
 
 class SbxFactory;
 class SbxVariable;
@@ -37,7 +38,7 @@ SV_DECL_PTRARR_DEL(SbxFacs,SbxFactory*,5,5)
 DECLARE_LIST(SbxVarList_Impl, SbxVariable*)
 
 // AppData-Struktur for SBX:
-struct SbxAppData
+struct BASIC_DLLPUBLIC SbxAppData
 {
     SbxError            eSbxError;  // Error code
     SbxFacs             aFacs;      // Factories
@@ -51,6 +52,6 @@ struct SbxAppData
     ~SbxAppData();
 };
 
-SbxAppData* GetSbxData_Impl();
+BASIC_DLLPUBLIC SbxAppData* GetSbxData_Impl();
 
 #endif

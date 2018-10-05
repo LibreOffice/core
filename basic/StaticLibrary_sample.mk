@@ -1,4 +1,4 @@
-#**************************************************************
+###############################################################
 #  
 #  Licensed to the Apache Software Foundation (ASF) under one
 #  or more contributor license agreements.  See the NOTICE file
@@ -17,29 +17,29 @@
 #  specific language governing permissions and limitations
 #  under the License.
 #  
-#**************************************************************
+###############################################################
 
 
 
-PRJ=..$/..
+$(eval $(call gb_StaticLibrary_StaticLibrary,sample))
 
-PRJNAME=basic
-TARGET=uno
+$(eval $(call gb_StaticLibrary_add_precompiled_header,sample,$(SRCDIR)/basic/inc/pch/precompiled_sample))
 
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_StaticLibrary_add_api,sample,\
+	offapi \
+	udkapi \
+))
 
-# --- Settings ------------------------------------------------------------
+$(eval $(call gb_StaticLibrary_set_include,sample,\
+	-I$(SRCDIR)/basic/inc \
+	-I$(SRCDIR)/basic/inc/pch \
+	-I$(SRCDIR)/basic/source/inc \
+	$$(INCLUDE) \
+))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_StaticLibrary_add_noexception_objects,sample,\
+	basic/source/sample/collelem \
+	basic/source/sample/object \
+))
 
-SLOFILES= \
-    $(SLO)$/namecont.obj \
-    $(SLO)$/scriptcont.obj \
-    $(SLO)$/dlgcont.obj \
-    $(SLO)$/sbmodule.obj \
-    $(SLO)$/sbservices.obj \
-    $(SLO)$/modsizeexceeded.obj
-
-# --- Targets --------------------------------------------------------------
-
-.INCLUDE :  target.mk
+# vim: set noet sw=4 ts=4:

@@ -25,13 +25,14 @@
 #define _SB_SBMETH_HXX
 
 #include <tools/errcode.hxx>
+#include "basic/basicdllapi.h"
 #include <basic/sbxmeth.hxx>
 #include <basic/sbdef.hxx>
 
 class SbModule;
 class SbMethodImpl;
 
-class SbMethod : public SbxMethod
+class BASIC_DLLPUBLIC SbMethod : public SbxMethod
 {
     friend class SbiRuntime;
     friend class SbiFactory;
@@ -77,7 +78,7 @@ public:
 SV_DECL_IMPL_REF(SbMethod)
 #endif
 
-class SbIfaceMapperMethod : public SbMethod
+class BASIC_DLLPUBLIC SbIfaceMapperMethod : public SbMethod
 {
     friend class SbiRuntime;
 

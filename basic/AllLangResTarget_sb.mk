@@ -20,24 +20,27 @@
 #**************************************************************
 
 
-PRJ=..$/..
 
-PRJNAME=basic
-TARGET=basicmgr
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,sb))
 
-# --- Settings -----------------------------------------------------------
+$(eval $(call gb_AllLangResTarget_set_reslocation,sb,basic))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_AllLangResTarget_add_srs,sb,\
+	sb/res \
+))
 
+$(eval $(call gb_SrsTarget_SrsTarget,sb/res))
 
-# --- Allgemein -----------------------------------------------------------
+$(eval $(call gb_SrsTarget_set_include,sb/res,\
+	$$(INCLUDE) \
+	-I$(OUTDIR)/inc \
+	-I$(WORKDIR)/inc/basic \
+	-I$(SRCDIR)/basic/inc \
+	-I$(SRCDIR)/basic/inc/basic \
+	-I$(SRCDIR)/basic/source/inc \
+))
 
-SLOFILES= \
-        $(SLO)$/basmgr.obj \
-        $(SLO)$/basicmanagerrepository.obj\
-        $(SLO)$/vbahelper.obj
-
-# --- Targets -------------------------------------------------------------
-
-.INCLUDE :  target.mk
+$(eval $(call gb_SrsTarget_add_files,sb/res,\
+	basic/source/classes/sb.src \
+	basic/source/sbx/format.src \
+))

@@ -27,6 +27,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <rtl/ustring.hxx>
+#include "basic/basicdllapi.h"
 
 namespace basic {
 namespace vba {
@@ -47,7 +48,7 @@ namespace vba {
     @param rxModel
         A document model determining the type of the documents.
  */
-::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > createDocumentsEnumeration(
+BASIC_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > createDocumentsEnumeration(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel );
 
 // ============================================================================
@@ -66,7 +67,7 @@ namespace vba {
     @param bLockControllers
         Passing true will lock all controllers, passing false will unlock them.
  */
-void lockControllersOfAllDocuments(
+BASIC_DLLPUBLIC void lockControllersOfAllDocuments(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
     sal_Bool bLockControllers );
 
@@ -87,7 +88,7 @@ void lockControllersOfAllDocuments(
         Passing true will enable all container windows of all controllers,
         passing false will disable them.
  */
-void enableContainerWindowsOfAllDocuments(
+BASIC_DLLPUBLIC void enableContainerWindowsOfAllDocuments(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
     sal_Bool bEnableWindows );
 
@@ -103,7 +104,7 @@ void enableContainerWindowsOfAllDocuments(
     @param rPath
         The new working directory.
  */
-void registerCurrentDirectory(
+BASIC_DLLPUBLIC void registerCurrentDirectory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
     const ::rtl::OUString& rPath );
 
@@ -120,7 +121,7 @@ void registerCurrentDirectory(
         The working directory of the specified application, or an empty string
         on error (e.g. if the passed document reference is empty).
  */
-::rtl::OUString getCurrentDirectory(
+BASIC_DLLPUBLIC ::rtl::OUString getCurrentDirectory(
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel );
 
 // ============================================================================

@@ -24,11 +24,12 @@
 #ifndef __SBX_SBXPROPERTY_HXX
 #define __SBX_SBXPROPERTY_HXX
 
+#include "basic/basicdllapi.h"
 #include <basic/sbxvar.hxx>
 
 class SbxPropertyImpl;
 
-class SbxProperty : public SbxVariable
+class BASIC_DLLPUBLIC SbxProperty : public SbxVariable
 {
     SbxPropertyImpl* mpSbxPropertyImpl; // Impl data
 

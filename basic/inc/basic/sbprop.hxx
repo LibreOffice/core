@@ -26,10 +26,11 @@
 
 #include <basic/sbxprop.hxx>
 #include <basic/sbdef.hxx>
+#include "basic/basicdllapi.h"
 
 class SbModule;
 
-class SbProperty : public SbxProperty
+class BASIC_DLLPUBLIC SbProperty : public SbxProperty
 {
     friend class SbiFactory;
     friend class SbModule;
@@ -49,7 +50,7 @@ public:
 SV_DECL_IMPL_REF(SbProperty)
 #endif
 
-class SbProcedureProperty : public SbxProperty
+class BASIC_DLLPUBLIC SbProcedureProperty : public SbxProperty
 {
     bool mbSet;     // Flag for set command
 

@@ -24,6 +24,7 @@
 #define _SB_OBJMOD_HXX
 
 #include <rtl/ref.hxx>
+#include "basic/basicdllapi.h"
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
 #include <com/sun/star/script/ModuleInfo.hpp>
@@ -35,7 +36,7 @@ namespace css = ::com::sun::star;
 
 // Basic-Module for excel object.
 
-class SbObjModule : public SbModule
+class BASIC_DLLPUBLIC SbObjModule : public SbModule
 {
     SbObjModule( const SbObjModule& );
     SbObjModule();

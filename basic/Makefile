@@ -19,39 +19,14 @@
 #  
 #**************************************************************
 
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-PRJ=..$/..
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-PRJNAME=basic
-TARGET=comp
-
-# --- Settings ------------------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-SLOFILES= \
-    $(SLO)$/buffer.obj      \
-    $(SLO)$/codegen.obj		\
-    $(SLO)$/dim.obj			\
-    $(SLO)$/exprgen.obj		\
-    $(SLO)$/exprnode.obj	\
-    $(SLO)$/exprtree.obj	\
-    $(SLO)$/io.obj			\
-    $(SLO)$/loops.obj		\
-    $(SLO)$/parser.obj		\
-    $(SLO)$/sbcomp.obj		\
-    $(SLO)$/scanner.obj		\
-    $(SLO)$/symtbl.obj		\
-    $(SLO)$/token.obj
-
-EXCEPTIONSFILES= \
-    $(SLO)$/codegen.obj     \
-    $(SLO)$/dim.obj         \
-    $(SLO)$/exprtree.obj    \
-    $(SLO)$/parser.obj      \
-    $(SLO)$/sbcomp.obj
-
-# --- Targets --------------------------------------------------------------
-
-.INCLUDE :  target.mk
+# vim: set noet sw=4 ts=4:

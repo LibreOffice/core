@@ -29,13 +29,14 @@
 #include <vcl/graph.hxx>
 #endif
 #include <basic/sbxfac.hxx>
+#include "basic/basicdllapi.h"
 class StarBASIC;
 class SbStdFactory;
 
 //--------------------
 // class SbStdFactory
 //--------------------
-class SbStdFactory : public SbxFactory
+class BASIC_DLLPUBLIC SbStdFactory : public SbxFactory
 {
 public:
     SbStdFactory();
@@ -46,7 +47,7 @@ public:
 //--------------------
 // class SbStdPicture
 //--------------------
-class SbStdPicture : public SbxObject
+class BASIC_DLLPUBLIC SbStdPicture : public SbxObject
 {
 protected:
     Graphic     aGraphic;
@@ -72,7 +73,7 @@ public:
 //-----------------
 // class SbStdFont
 //-----------------
-class SbStdFont : public SbxObject
+class BASIC_DLLPUBLIC SbStdFont : public SbxObject
 {
 protected:
     sal_Bool    bBold;
@@ -116,7 +117,7 @@ public:
 //----------------------
 // class SbStdClipboard
 //----------------------
-class SbStdClipboard : public SbxObject
+class BASIC_DLLPUBLIC SbStdClipboard : public SbxObject
 {
 protected:
 

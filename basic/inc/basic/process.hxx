@@ -26,13 +26,14 @@
 
 #include <tools/string.hxx>
 #include <vos/process.hxx>
+#include "basic/basicdllapi.h"
 
 #include <map>
 
 typedef std::map< String, String > Environment;
 typedef Environment::value_type EnvironmentVariable;
 
-class Process
+class BASIC_DLLPUBLIC Process
 {
     // Internal members and methods
     vos::OArgumentList *pArgumentList;

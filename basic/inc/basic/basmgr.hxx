@@ -26,13 +26,14 @@
 
 #include <tools/string.hxx>
 #include <svl/brdcst.hxx>
+#include "basic/basicdllapi.h"
 #include <basic/sbstar.hxx>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/script/XStarBasicAccess.hpp>
 
 
 // Basic XML Import/Export
-com::sun::star::uno::Reference< com::sun::star::script::XStarBasicAccess >
+BASIC_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::script::XStarBasicAccess >
     getStarBasicAccess( BasicManager* pMgr );
 
 
@@ -61,7 +62,7 @@ class SotStorage;
 
 #define BASERR_REASON_STDLIB            0x0100
 
-class BasicError
+class BASIC_DLLPUBLIC BasicError
 {
 private:
     sal_uIntPtr nErrorId;
@@ -92,7 +93,7 @@ class BasicErrorManager;
 namespace basic { class BasicManagerCleaner; }
 
 // Library password handling for 5.0 documents
-class OldBasicPassword
+class BASIC_DLLPUBLIC OldBasicPassword
 {
 public:
     virtual void setLibraryPassword( const String& rLibraryName, const String& rPassword ) = 0;
@@ -129,7 +130,7 @@ struct BasicManagerImpl;
 
 #define LIB_NOTFOUND    0xFFFF
 
-class BasicManager : public SfxBroadcaster
+class BASIC_DLLPUBLIC BasicManager : public SfxBroadcaster
 {
     friend class LibraryContainer_Impl;
     friend class StarBasicAccess_Impl;
@@ -259,6 +260,6 @@ private:
                                const String& LinkTargetURL );
 };
 
-void SetAppBasicManager( BasicManager* pBasMgr );
+BASIC_DLLPUBLIC void SetAppBasicManager( BasicManager* pBasMgr );
 
 #endif  //_BASMGR_HXX

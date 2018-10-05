@@ -21,34 +21,14 @@
 
 
 
-PRJ=..$/..
+$(eval $(call gb_Module_Module,basic))
 
-PRJNAME=basic
-TARGET=sample
-
-# --- Settings ------------------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-# --- Allgemein ------------------------------------------------------------
-
-CXXFILES = \
-    object.cxx 		\
-    collelem.cxx
+$(eval $(call gb_Module_add_targets,basic,\
+	AllLangResTarget_sb \
+	Library_sb \
+	Package_inc \
+	StaticLibrary_sample \
+))
 
 
-OBJFILES = \
-    $(OBJ)$/object.obj 	\
-    $(OBJ)$/collelem.obj
-
-
-LIBTARGET = NO
-
-LIB1TARGET=$(LB)$/sample.lib
-LIB1ARCHIV=$(LB)$/libsample.a
-
-LIB1OBJFILES = $(OBJFILES)
-
-# --- Targets ------------------------------------------------------------
-
-.INCLUDE :  target.mk
+# vim: set noet sw=4 ts=4:

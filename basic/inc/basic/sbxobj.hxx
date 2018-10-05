@@ -25,6 +25,7 @@
 #define _SBX_SBXOBJECT_HXX
 
 #include <svl/lstner.hxx>
+#include "basic/basicdllapi.h"
 #include <basic/sbxvar.hxx>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -34,7 +35,7 @@ class SvDispatch;
 
 class SbxObjectImpl;
 
-class SbxObject : public SbxVariable, public SfxListener
+class BASIC_DLLPUBLIC SbxObject : public SbxVariable, public SfxListener
 {
     SbxObjectImpl* mpSbxObjectImpl; // Impl data
 

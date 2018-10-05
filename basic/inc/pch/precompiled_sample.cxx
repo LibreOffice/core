@@ -21,36 +21,5 @@
 
 
 
-#ifndef _BASRDLL_HXX
-#define _BASRDLL_HXX
+#include "precompiled_sample.hxx"
 
-class ResMgr;
-
-#include <vcl/accel.hxx>
-#include "basic/basicdllapi.h"
-
-class BASIC_DLLPUBLIC BasicDLL
-{
-private:
-    ResMgr*     pSttResMgr;
-    ResMgr*     pBasResMgr;
-
-    sal_Bool        bDebugMode;
-    sal_Bool        bBreakEnabled;
-
-public:
-                BasicDLL();
-                ~BasicDLL();
-
-    ResMgr*     GetSttResMgr() const { return pSttResMgr; }
-    ResMgr*     GetBasResMgr() const { return pBasResMgr; }
-
-    static void BasicBreak();
-
-    static void EnableBreak( sal_Bool bEnable );
-    static void SetDebugMode( sal_Bool bDebugMode );
-};
-
-#define BASIC_DLL() (*(BasicDLL**)GetAppData( SHL_BASIC ) )
-
-#endif //_BASRDLL_HXX

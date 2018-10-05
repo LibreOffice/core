@@ -79,9 +79,10 @@
 */
 #define _with_sprintf   // use a)
 
+#include "basic/basicdllapi.h"
 #include <tools/string.hxx>
 
-class SbxBasicFormater {
+class BASIC_DLLPUBLIC SbxBasicFormater {
   public:
     // Constructor takes signs for decimal point, thousand separation sign
     // and necessary resource strings.
