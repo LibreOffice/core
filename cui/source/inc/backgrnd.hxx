@@ -30,8 +30,6 @@
 
 class BackgroundPreviewImpl;
 class SvxOpenGraphicDialog;
-struct SvxBackgroundTable_Impl;
-struct SvxBackgroundPage_Impl;
 class SvxBrushItem;
 
 /** class SvxBackgroundTabPage --------------------------------------------
@@ -85,10 +83,20 @@ private:
     OUString    aBgdGraphicPath;
     OUString    aBgdGraphicFilter;
 
-    std::unique_ptr<SvxBackgroundPage_Impl> pPageImpl;
+    std::unique_ptr<Idle> m_pLoadIdle;
+    bool        m_bIsImportDlgInExecute = false;
+
     std::unique_ptr<SvxOpenGraphicDialog> pImportDlg;
 
-    std::unique_ptr<SvxBackgroundTable_Impl> pTableBck_Impl;///< Items for Sw-Table must be corrected
+    ///< Items for Sw-Table must be corrected
+    std::unique_ptr<SvxBrushItem>   m_pCellBrush;
+    std::unique_ptr<SvxBrushItem>   m_pRowBrush;
+    std::unique_ptr<SvxBrushItem>   m_pTableBrush;
+    sal_uInt16      m_nCellWhich = 0;
+    sal_uInt16      m_nRowWhich = 0;
+    sal_uInt16      m_nTableWhich = 0;
+    sal_Int32       m_nActPos = 0;
+
     std::unique_ptr<SvxBrushItem> pHighlighting;
 
     std::unique_ptr<SvxRectCtl> m_xWndPosition;
