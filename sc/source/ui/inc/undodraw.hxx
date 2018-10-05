@@ -37,7 +37,7 @@ public:
                             ScUndoDraw( std::unique_ptr<SfxUndoAction> pUndo, ScDocShell* pDocSh );
     virtual                 ~ScUndoDraw() override;
 
-    SfxUndoAction*          ReleaseDrawUndo()   { return pDrawUndo.release(); }
+    std::unique_ptr<SfxUndoAction> ReleaseDrawUndo()   { return std::move(pDrawUndo); }
 
     virtual void            Undo() override;
     virtual void            Redo() override;
