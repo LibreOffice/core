@@ -26,6 +26,7 @@
 #include "xiroot.hxx"
 #include <oox/ole/olehelper.hxx>
 #include <rtl/ustring.hxx>
+#include <svx/svdobj.hxx>
 #include <map>
 #include <memory>
 #include <vector>
@@ -49,7 +50,6 @@ struct SdrObjectFreeOp;
 
 // Drawing objects ============================================================
 
-typedef std::unique_ptr< SdrObject, SdrObjectFreeOp > SdrObjectPtr;
 class XclImpDrawObjBase;
 typedef std::shared_ptr< XclImpDrawObjBase > XclImpDrawObjRef;
 
@@ -124,7 +124,7 @@ public:
     /** Returns the needed size on the progress bar (calls virtual DoGetProgressSize() function). */
     std::size_t         GetProgressSize() const;
     /** Creates and returns an SdrObject from the contained data. Caller takes ownership! */
-    SdrObjectPtr        CreateSdrObject( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect, bool bIsDff ) const;
+    SdrObjectUniquePtr        CreateSdrObject( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect, bool bIsDff ) const;
     /** Additional processing for the passed SdrObject before insertion into
         the drawing page (calls virtual DoPreProcessSdrObj() function). */
     void                PreProcessSdrObject( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
@@ -169,7 +169,7 @@ protected:
     /** Derived classes may return a progress bar size different from 1. */
     virtual std::size_t DoGetProgressSize() const;
     /** Derived classes create and return a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const;
+    virtual SdrObjectUniquePtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const;
     /** Derived classes may perform additional processing for the passed SdrObject before insertion. */
     virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const;
     /** Derived classes may perform additional processing for the passed SdrObject after insertion. */
@@ -251,7 +251,7 @@ private:
     /** Returns a progress bar size that takes all group children into account. */
     virtual std::size_t DoGetProgressSize() const override;
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
+    virtual SdrObjectUniquePtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
 
     XclImpDrawObjVector maChildren;         /// Grouped objects.
     sal_uInt16          mnFirstUngrouped;   /// Object identifier of first object not grouped into this group.
@@ -271,7 +271,7 @@ private:
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
     virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
+    virtual SdrObjectUniquePtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
 
     XclObjLineData      maLineData;     /// BIFF5 line formatting.
     sal_uInt16          mnArrows;       /// Line arrows.
@@ -298,7 +298,7 @@ protected:
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
     virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
+    virtual SdrObjectUniquePtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
 
 protected:
     XclObjFillData      maFillData;     /// BIFF5 fill formatting.
@@ -314,7 +314,7 @@ public:
 
 protected:
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
+    virtual SdrObjectUniquePtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
 };
 
 /** An arc object. */
@@ -331,7 +331,7 @@ private:
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
     virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
+    virtual SdrObjectUniquePtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
 
     XclObjFillData      maFillData;     /// BIFF5 fill formatting.
     XclObjLineData      maLineData;     /// BIFF5 line formatting.
@@ -353,7 +353,7 @@ private:
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
     virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
+    virtual SdrObjectUniquePtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
 
     typedef std::vector< Point > PointVector;
     PointVector         maCoords;       /// Coordinates relative to bounding rectangle.
@@ -389,7 +389,7 @@ protected:
     /** Reads the contents of the a BIFF5 OBJ record from the passed stream. */
     virtual void        DoReadObj5( XclImpStream& rStrm, sal_uInt16 nNameLen, sal_uInt16 nMacroSize ) override;
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
+    virtual SdrObjectUniquePtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
     /** Inserts the contained text data at the passed object. */
     virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const override;
 
@@ -419,7 +419,7 @@ protected:
     /** Returns the needed size on the progress bar. */
     virtual std::size_t DoGetProgressSize() const override;
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
+    virtual SdrObjectUniquePtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
     /** Converts the chart document. */
     virtual void        DoPostProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const override;
 
@@ -463,7 +463,7 @@ public:
     bool         HasCellLink() const { return mxCellLink != nullptr; }
 
     /** Returns the SdrObject from the passed control shape and sets the bounding rectangle. */
-    SdrObjectPtr        CreateSdrObjectFromShape(
+    SdrObjectUniquePtr        CreateSdrObjectFromShape(
                             const css::uno::Reference< css::drawing::XShape >& rxShape,
                             const tools::Rectangle& rAnchorRect ) const;
 
@@ -517,7 +517,7 @@ protected:
     void                ConvertLabel( ScfPropertySet& rPropSet ) const;
 
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
+    virtual SdrObjectUniquePtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
     /** Additional processing on the SdrObject, calls new virtual function DoProcessControl(). */
     virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const override;
 
@@ -832,7 +832,7 @@ protected:
     /** Reads the contents of the specified subrecord of a BIFF8 OBJ record from stream. */
     virtual void        DoReadObj8SubRec( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize ) override;
     /** Creates and returns a new SdrObject from the contained data. Caller takes ownership! */
-    virtual SdrObjectPtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
+    virtual SdrObjectUniquePtr DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const override;
     /** Override to do additional processing on the SdrObject. */
     virtual void        DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject& rSdrObj ) const override;
 
@@ -939,9 +939,9 @@ public:
     void                FinalizeDrawing();
 
     /** Creates the SdrObject for the passed Excel TBX form control object. */
-    SdrObjectPtr        CreateSdrObject( const XclImpTbxObjBase& rTbxObj, const tools::Rectangle& rAnchorRect );
+    SdrObjectUniquePtr        CreateSdrObject( const XclImpTbxObjBase& rTbxObj, const tools::Rectangle& rAnchorRect );
     /** Creates the SdrObject for the passed Excel OLE object or OCX form control object. */
-    SdrObjectPtr        CreateSdrObject( const XclImpPictureObj& rPicObj, const tools::Rectangle& rAnchorRect );
+    SdrObjectUniquePtr        CreateSdrObject( const XclImpPictureObj& rPicObj, const tools::Rectangle& rAnchorRect );
 
     /** Returns true, if the conversion of OLE objects is supported. */
     bool                SupportsOleObjects() const;
