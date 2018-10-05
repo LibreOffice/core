@@ -201,3 +201,11 @@ blacklist:
     include/comphelper/uno3.hxx:
     # Needed for macro
     - comphelper/sequence.hxx
+    include/basegfx/polygon/b2dpolygontools.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx
+    include/basegfx/utils/unopolypolygon.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/rendering/XBezierPolyPolygon2D.hpp
+    - com/sun/star/rendering/XLinePolyPolygon2D.hpp

@@ -28,7 +28,6 @@ class ImplB3DPolygon;
 
 namespace basegfx
 {
-    class B3DPolygon;
     class B3DPoint;
     class B3DHomMatrix;
     class B3DVector;

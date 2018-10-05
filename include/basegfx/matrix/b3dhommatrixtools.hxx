@@ -20,9 +20,22 @@
 #ifndef INCLUDED_BASEGFX_MATRIX_B3DHOMMATRIXTOOLS_HXX
 #define INCLUDED_BASEGFX_MATRIX_B3DHOMMATRIXTOOLS_HXX
 
-#include <sal/types.h>
+#include <basegfx/basegfxdllapi.h>
 #include <basegfx/matrix/b3dhommatrix.hxx>
-#include <com/sun/star/drawing/HomogenMatrix.hpp>
+
+namespace com
+{
+namespace sun
+{
+namespace star
+{
+namespace drawing
+{
+struct HomogenMatrix;
+}
+}
+}
+}
 
 namespace basegfx
 {

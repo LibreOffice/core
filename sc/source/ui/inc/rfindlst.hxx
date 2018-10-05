@@ -25,6 +25,8 @@
 #include <address.hxx>
 #include <tools/solar.h>
 
+#include <vector>
+
 struct ScRangeFindData
 {
     ScRange    aRef;

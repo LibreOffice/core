@@ -27,6 +27,8 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <cppuhelper/implbase.hxx>
 
+#include <vector>
+
 typedef cppu::ImplInheritanceHelper< VbaDocumentBase, ooo::vba::word::XDocument, ooo::vba::XSinkCaller > SwVbaDocument_BASE;
 
 class SwVbaDocument : public SwVbaDocument_BASE

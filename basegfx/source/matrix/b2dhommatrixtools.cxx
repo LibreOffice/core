@@ -18,6 +18,7 @@
  */
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/range/b2drange.hxx>
 
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>

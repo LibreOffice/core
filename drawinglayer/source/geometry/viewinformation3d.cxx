@@ -24,6 +24,7 @@
 #include <com/sun/star/geometry/RealRectangle3D.hpp>
 #include <basegfx/utils/canvastools.hxx>
 #include <rtl/instance.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
 
 using namespace com::sun::star;

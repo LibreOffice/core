@@ -20,8 +20,6 @@
 #ifndef INCLUDED_BASEGFX_VECTOR_B2ENUMS_HXX
 #define INCLUDED_BASEGFX_VECTOR_B2ENUMS_HXX
 
-#include <sal/types.h>
-
 namespace basegfx
 {
     /** Descriptor for the mathematical orientations of two 2D Vectors

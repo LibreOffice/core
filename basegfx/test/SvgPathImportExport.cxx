@@ -23,6 +23,7 @@
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 namespace basegfx

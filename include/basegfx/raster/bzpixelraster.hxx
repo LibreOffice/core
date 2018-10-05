@@ -20,13 +20,9 @@
 #ifndef INCLUDED_BASEGFX_RASTER_BZPIXELRASTER_HXX
 #define INCLUDED_BASEGFX_RASTER_BZPIXELRASTER_HXX
 
-#include <basegfx/basegfxdllapi.h>
 #include <basegfx/pixel/bpixel.hxx>
-#include <basegfx/raster/bzpixelraster.hxx>
-#include <osl/diagnose.h>
 #include <sal/types.h>
 #include <memory>
-#include <algorithm>
 #include <string.h>
 
 namespace basegfx
