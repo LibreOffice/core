@@ -595,6 +595,16 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage(TabPageParent pParent, const SfxItemSet
 
 SvxSwPosSizeTabPage::~SvxSwPosSizeTabPage()
 {
+    disposeOnce();
+}
+
+void SvxSwPosSizeTabPage::dispose()
+{
+    m_xWidthMF.reset();
+    m_xHeightMF.reset();
+    m_xHoriByMF.reset();
+    m_xVertByMF.reset();
+    SfxTabPage::dispose();
 }
 
 namespace
