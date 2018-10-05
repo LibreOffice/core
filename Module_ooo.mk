@@ -33,6 +33,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     basctl \
     basebmp \
     basegfx \
+    basic \
     binaryurp \
     canvas \
     codemaker \
@@ -54,6 +55,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     framework \
     i18nutil \
     idl \
+    idlc \
     io \
     javaunohelper \
     jurt \
