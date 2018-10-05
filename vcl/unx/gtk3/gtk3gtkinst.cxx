@@ -4728,6 +4728,7 @@ class GtkInstanceComboBox : public GtkInstanceContainer, public virtual weld::Co
 {
 private:
     GtkComboBox* m_pComboBox;
+    GtkCssProvider *m_pProviderBodge;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     gboolean m_bPopupActive;
     gulong m_nChangedSignalId;
@@ -4840,6 +4841,7 @@ public:
     GtkInstanceComboBox(GtkComboBox* pComboBox, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pComboBox), bTakeOwnership)
         , m_pComboBox(pComboBox)
+        , m_pProviderBodge(nullptr)
         , m_bPopupActive(false)
         , m_nChangedSignalId(g_signal_connect(m_pComboBox, "changed", G_CALLBACK(signalChanged), this))
         , m_nPopupShownSignalId(g_signal_connect(m_pComboBox, "notify::popup-shown", G_CALLBACK(signalPopupShown), this))
@@ -4958,11 +4960,31 @@ public:
     {
         if (get_frozen())
             return;
+        if (gtk_combo_box_get_has_entry(m_pComboBox))
+            return;
 #if defined(GDK_WINDOWING_WAYLAND)
         GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
         if (GDK_IS_WAYLAND_DISPLAY(pDisplay))
         {
-            gtk_combo_box_set_wrap_width(m_pComboBox, get_count() > 30 ? 1 : 0);
+            if (get_count() > 30)
+            {
+                if (!m_pProviderBodge)
+                {
+                    m_pProviderBodge = gtk_css_provider_new();
+                    gtk_css_provider_load_from_data(m_pProviderBodge, "* { -GtkComboBox-appears-as-list: true; }", -1, nullptr);
+                    GtkStyleContext *pStyleContext = gtk_widget_get_style_context(m_pWidget);
+                    gtk_style_context_add_provider(pStyleContext, GTK_STYLE_PROVIDER(m_pProviderBodge), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+                }
+            }
+            else
+            {
+                if (m_pProviderBodge)
+                {
+                    GtkStyleContext *pStyleContext = gtk_widget_get_style_context(m_pWidget);
+                    gtk_style_context_remove_provider(pStyleContext, GTK_STYLE_PROVIDER(m_pProviderBodge));
+                    m_pProviderBodge = nullptr;
+                }
+            }
         }
 #endif
     }
