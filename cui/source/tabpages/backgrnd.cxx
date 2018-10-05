@@ -67,24 +67,6 @@ const sal_uInt16 SvxBackgroundTabPage::pPageRanges[] =
     0
 };
 
-struct SvxBackgroundTable_Impl
-{
-    std::unique_ptr<SvxBrushItem>   pCellBrush;
-    std::unique_ptr<SvxBrushItem>   pRowBrush;
-    std::unique_ptr<SvxBrushItem>   pTableBrush;
-    sal_uInt16      nCellWhich;
-    sal_uInt16      nRowWhich;
-    sal_uInt16      nTableWhich;
-    sal_Int32       nActPos;
-
-    SvxBackgroundTable_Impl()
-        : nCellWhich(0)
-        , nRowWhich(0)
-        , nTableWhich(0)
-        , nActPos(0)
-    {}
-};
-
 struct SvxBackgroundPage_Impl
 {
     std::unique_ptr<Idle> pLoadIdle;
@@ -290,7 +272,6 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(TabPageParent pParent, const SfxItemS
     , bHighlighting(false)
     , bCharBackColor(false)
     , m_bColorSelected(false)
-    , pPageImpl(new SvxBackgroundPage_Impl)
     , m_xWndPosition(new SvxRectCtl(this))
     , m_xBackgroundColorSet(new ColorValueSet(m_xBuilder->weld_scrolled_window("backgroundcolorsetwin")))
     , m_xPreview1(new BackgroundPreviewImpl)
@@ -349,9 +330,11 @@ SvxBackgroundTabPage::~SvxBackgroundTabPage()
 
 void SvxBackgroundTabPage::dispose()
 {
-    pPageImpl.reset();
+    m_pLoadIdle.reset();
     pImportDlg.reset();
-    pTableBck_Impl.reset();
+    m_pCellBrush.reset();
+    m_pRowBrush.reset();
+    m_pTableBrush.reset();
     m_xPreviewWin2.reset();
     m_xPreviewWin1.reset();
     m_xBackgroundColorSetWin.reset();
@@ -461,40 +444,32 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
     {
         if (m_xTblLBox->get_visible())
         {
-            int nValue = m_xTblLBox->get_active();
-
-            if ( pTableBck_Impl )
-            {
-                pTableBck_Impl->pCellBrush.reset();
-                pTableBck_Impl->pRowBrush.reset();
-                pTableBck_Impl->pTableBrush.reset();
-            }
-            else
-                pTableBck_Impl.reset( new SvxBackgroundTable_Impl() );
-
-            pTableBck_Impl->nActPos = nValue;
+            m_pCellBrush.reset();
+            m_pRowBrush.reset();
+            m_pTableBrush.reset();
+            m_nActPos = m_xTblLBox->get_active();
 
             nWhich = GetWhich( SID_ATTR_BRUSH );
             if ( rSet->GetItemState( nWhich, false ) >= SfxItemState::DEFAULT )
             {
                 aBgdAttr = static_cast<const SvxBrushItem&>(rSet->Get(nWhich));
-                pTableBck_Impl->pCellBrush.reset(new SvxBrushItem(aBgdAttr));
+                m_pCellBrush.reset(new SvxBrushItem(aBgdAttr));
             }
-            pTableBck_Impl->nCellWhich = nWhich;
+            m_nCellWhich = nWhich;
 
             if ( rSet->GetItemState( SID_ATTR_BRUSH_ROW, false ) >= SfxItemState::DEFAULT )
             {
                 aBgdAttr = static_cast<const SvxBrushItem&>(rSet->Get(SID_ATTR_BRUSH_ROW));
-                pTableBck_Impl->pRowBrush.reset(new SvxBrushItem(aBgdAttr));
+                m_pRowBrush.reset(new SvxBrushItem(aBgdAttr));
             }
-            pTableBck_Impl->nRowWhich = SID_ATTR_BRUSH_ROW;
+            m_nRowWhich = SID_ATTR_BRUSH_ROW;
 
             if ( rSet->GetItemState( SID_ATTR_BRUSH_TABLE, false ) >= SfxItemState::DEFAULT )
             {
                 aBgdAttr = static_cast<const SvxBrushItem&>(rSet->Get(SID_ATTR_BRUSH_TABLE));
-                pTableBck_Impl->pTableBrush.reset(new SvxBrushItem(aBgdAttr));
+                m_pTableBrush.reset(new SvxBrushItem(aBgdAttr));
             }
-            pTableBck_Impl->nTableWhich = SID_ATTR_BRUSH_TABLE;
+            m_nTableWhich = SID_ATTR_BRUSH_TABLE;
 
             TblDestinationHdl_Impl(*m_xTblLBox);
             m_xTblLBox->save_value();
@@ -537,10 +512,10 @@ void SvxBackgroundTabPage::FillUserData()
 
 bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
-    if ( pPageImpl->pLoadIdle && pPageImpl->pLoadIdle->IsActive() )
+    if ( m_pLoadIdle && m_pLoadIdle->IsActive() )
     {
-        pPageImpl->pLoadIdle->Stop();
-        LoadIdleHdl_Impl( pPageImpl->pLoadIdle.get() );
+        m_pLoadIdle->Stop();
+        LoadIdleHdl_Impl( m_pLoadIdle.get() );
     }
 
     bool bModified = false;
@@ -706,38 +681,38 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
     if (m_xTblLBox->get_visible())
     {
         // the current condition has already been put
-        if( nSlot != SID_ATTR_BRUSH && pTableBck_Impl->pCellBrush)
+        if( nSlot != SID_ATTR_BRUSH && m_pCellBrush)
         {
             const SfxPoolItem* pOldCell =
                 GetOldItem( *rCoreSet, SID_ATTR_BRUSH );
 
-            if ( *pTableBck_Impl->pCellBrush != *pOldCell )
+            if ( *m_pCellBrush != *pOldCell )
             {
-                rCoreSet->Put( *pTableBck_Impl->pCellBrush );
+                rCoreSet->Put( *m_pCellBrush );
                 bModified = true;
             }
         }
 
-        if( nSlot != SID_ATTR_BRUSH_ROW && pTableBck_Impl->pRowBrush)
+        if( nSlot != SID_ATTR_BRUSH_ROW && m_pRowBrush)
         {
             const SfxPoolItem* pOldRow =
                 GetOldItem( *rCoreSet, SID_ATTR_BRUSH_ROW );
 
-            if ( *pTableBck_Impl->pRowBrush != *pOldRow )
+            if ( *m_pRowBrush != *pOldRow )
             {
-                rCoreSet->Put( *pTableBck_Impl->pRowBrush );
+                rCoreSet->Put( *m_pRowBrush );
                 bModified = true;
             }
         }
 
-        if( nSlot != SID_ATTR_BRUSH_TABLE && pTableBck_Impl->pTableBrush)
+        if( nSlot != SID_ATTR_BRUSH_TABLE && m_pTableBrush)
         {
             const SfxPoolItem* pOldTable =
                 GetOldItem( *rCoreSet, SID_ATTR_BRUSH_TABLE );
 
-            if ( *pTableBck_Impl->pTableBrush != *pOldTable )
+            if ( *m_pTableBrush != *pOldTable )
             {
-                rCoreSet->Put( *pTableBck_Impl->pTableBrush );
+                rCoreSet->Put( *m_pTableBrush );
                 bModified = true;
             }
         }
@@ -769,7 +744,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
 /** virtual method; is called on deactivation */
 DeactivateRC SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if ( pPageImpl->bIsImportDlgInExecute )
+    if ( m_bIsImportDlgInExecute )
         return DeactivateRC::KeepPage;
 
     if ( _pSet )
@@ -799,9 +774,9 @@ void SvxBackgroundTabPage::ShowSelector()
         m_xBtnPosition->connect_toggled(HDL(RadioClickHdl_Impl));
 
         // delayed loading via timer (because of UI-Update)
-        pPageImpl->pLoadIdle.reset( new Idle("DelayedLoad") );
-        pPageImpl->pLoadIdle->SetPriority( TaskPriority::LOWEST );
-        pPageImpl->pLoadIdle->SetInvokeHandler(
+        m_pLoadIdle.reset( new Idle("DelayedLoad") );
+        m_pLoadIdle->SetPriority( TaskPriority::LOWEST );
+        m_pLoadIdle->SetInvokeHandler(
             LINK( this, SvxBackgroundTabPage, LoadIdleHdl_Impl ) );
 
         bAllowShowSelector = false;
@@ -1065,7 +1040,7 @@ IMPL_LINK(SvxBackgroundTabPage, RadioClickHdl_Impl, weld::ToggleButton&, rBtn, v
 */
 IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl, weld::Button&, void)
 {
-    if ( pPageImpl->pLoadIdle->IsActive() )
+    if ( m_pLoadIdle->IsActive() )
         return;
     bool bHtml = 0 != ( nHtmlMode & HTMLMODE_ON );
 
@@ -1075,9 +1050,9 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl, weld::Button&, void)
         pImportDlg->EnableLink(false);
     pImportDlg->SetPath(aBgdGraphicPath, m_xBtnLink->get_active());
 
-    pPageImpl->bIsImportDlgInExecute = true;
+    m_bIsImportDlgInExecute = true;
     ErrCode nErr = pImportDlg->Execute();
-    pPageImpl->bIsImportDlgInExecute = false;
+    m_bIsImportDlgInExecute = false;
 
     if( !nErr )
     {
@@ -1089,7 +1064,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl, weld::Button&, void)
         if (!m_xBtnLink->get_active() && !m_xBtnPreview->get_active())
             m_xBtnPreview->set_active(true);
         // timer-delayed loading of the graphic
-        pPageImpl->pLoadIdle->Start();
+        m_pLoadIdle->Start();
     }
     else
         pImportDlg.reset();
@@ -1101,9 +1076,9 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl, weld::Button&, void)
 */
 IMPL_LINK( SvxBackgroundTabPage, LoadIdleHdl_Impl, Timer*, pIdle, void )
 {
-    if ( pIdle == pPageImpl->pLoadIdle.get() )
+    if ( pIdle == m_pLoadIdle.get() )
     {
-        pPageImpl->pLoadIdle->Stop();
+        m_pLoadIdle->Stop();
 
         if ( pImportDlg )
         {
@@ -1161,30 +1136,30 @@ void SvxBackgroundTabPage::ShowTblControl()
 IMPL_LINK(SvxBackgroundTabPage, TblDestinationHdl_Impl, weld::ComboBox&, rBox, void)
 {
     int nSelPos = rBox.get_active();
-    if( pTableBck_Impl && pTableBck_Impl->nActPos != nSelPos)
+    if( m_nActPos != nSelPos)
     {
         std::unique_ptr<SvxBrushItem> xItemHolder;
         SvxBrushItem* pActItem = nullptr;
         sal_uInt16 nWhich = 0;
-        switch(pTableBck_Impl->nActPos)
+        switch(m_nActPos)
         {
         case TBL_DEST_CELL:
-            pActItem = pTableBck_Impl->pCellBrush.get();
-            nWhich = pTableBck_Impl->nCellWhich;
+            pActItem = m_pCellBrush.get();
+            nWhich = m_nCellWhich;
             break;
         case TBL_DEST_ROW:
-            pActItem = pTableBck_Impl->pRowBrush.get();
-            nWhich = pTableBck_Impl->nRowWhich;
+            pActItem = m_pRowBrush.get();
+            nWhich = m_nRowWhich;
             break;
         case TBL_DEST_TBL:
-            pActItem = pTableBck_Impl->pTableBrush.get();
-            nWhich = pTableBck_Impl->nTableWhich;
+            pActItem = m_pTableBrush.get();
+            nWhich = m_nTableWhich;
             break;
         default:
             pActItem = nullptr;
             break;
         }
-        pTableBck_Impl->nActPos = nSelPos;
+        m_nActPos = nSelPos;
         if(!pActItem)
         {
             xItemHolder.reset(new SvxBrushItem(nWhich));
@@ -1215,18 +1190,18 @@ IMPL_LINK(SvxBackgroundTabPage, TblDestinationHdl_Impl, weld::ComboBox&, rBox, v
         switch(nSelPos)
         {
         case TBL_DEST_CELL:
-            pActItem = pTableBck_Impl->pCellBrush.get();
+            pActItem = m_pCellBrush.get();
             m_xLbSelect->set_sensitive(true);
-            nWhich = pTableBck_Impl->nCellWhich;
+            nWhich = m_nCellWhich;
             break;
         case TBL_DEST_ROW:
-            pActItem = pTableBck_Impl->pRowBrush.get();
-            nWhich = pTableBck_Impl->nRowWhich;
+            pActItem = m_pRowBrush.get();
+            nWhich = m_nRowWhich;
             break;
         case TBL_DEST_TBL:
-            pActItem = pTableBck_Impl->pTableBrush.get();
+            pActItem = m_pTableBrush.get();
             m_xLbSelect->set_sensitive(true);
-            nWhich = pTableBck_Impl->nTableWhich;
+            nWhich = m_nTableWhich;
             break;
         default:
             // The item will be new'ed again below, but that will be the
