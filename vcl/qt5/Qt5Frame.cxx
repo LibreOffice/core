@@ -151,6 +151,7 @@ Qt5Frame::~Qt5Frame()
         delete m_pTopLevel;
     else
         delete m_pQWidget;
+    m_aSystemData.aShellWindow = 0;
 }
 
 void Qt5Frame::Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtentsWidth,
@@ -787,8 +788,6 @@ void Qt5Frame::UpdateSettings(AllSettings& rSettings)
 }
 
 void Qt5Frame::Beep() { QApplication::beep(); }
-
-const SystemEnvData* Qt5Frame::GetSystemData() const { return nullptr; }
 
 SalFrame::SalPointerState Qt5Frame::GetPointerState()
 {

@@ -222,6 +222,11 @@ void KDE5SalFrame::ReleaseGraphics(SalGraphics* pSalGraph)
     m_bGraphicsInUse = false;
 }
 
+//const SystemEnvData* KDE5SalFrame::GetSystemData() const
+//{
+//   return Qt5Frame::GetSystemData();
+//}
+
 void KDE5SalFrame::StartPresentation(bool bStart)
 {
     // disable screensaver for running preso
