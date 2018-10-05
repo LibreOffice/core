@@ -1041,6 +1041,7 @@ struct SVX_DLLPUBLIC SdrObjectFreeOp
         SdrObject::Free(obj);
     }
 };
+typedef std::unique_ptr< SdrObject, SdrObjectFreeOp > SdrObjectUniquePtr;
 
 struct SdrObjCreatorParams
 {
