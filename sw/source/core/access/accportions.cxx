@@ -75,7 +75,6 @@ SwAccessiblePortionData::SwAccessiblePortionData(
     m_aModelPositions(),
     m_aAccessiblePositions(),
     m_aFieldPosition(),
-    m_aAttrFieldType(),
     m_aPortionAttrs(),
     m_nBeforePortions( 0 ),
     m_bFinished( false )
@@ -118,11 +117,6 @@ void SwAccessiblePortionData::Text(TextFrameIndex const nLength,
     // update buffer + nModelPosition
     m_aBuffer.appendCopy( m_pTextNode->GetText(), m_nModelPosition, nLength );
     m_nModelPosition += nLength;
-}
-
-void SwAccessiblePortionData::SetAttrFieldType( sal_uInt16 nAttrFieldType )
-{
-    m_aAttrFieldType.push_back(nAttrFieldType);
 }
 
 void SwAccessiblePortionData::Special(

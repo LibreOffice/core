@@ -96,8 +96,6 @@ public:
      * paragraph's portions have been processed.
      */
     virtual void Finish() = 0;
-    virtual void SetAttrFieldType( sal_uInt16 )
-    { return; }
 };
 
 #endif
