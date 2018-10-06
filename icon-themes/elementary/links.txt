@@ -702,11 +702,6 @@ cmd/32/recundo.png cmd/32/undo.png
 cmd/lc_recundo.png cmd/lc_undo.png
 cmd/sc_recundo.png cmd/sc_undo.png
 
-# Bezier
-cmd/32/bezieredge.png cmd/32/bezierappend.png
-cmd/lc_bezieredge.png cmd/lc_bezierappend.png
-cmd/sc_bezieredge.png cmd/sc_bezierappend.png
-
 # Label
 cmd/32/addname.png cmd/32/label.png
 cmd/lc_addname.png cmd/lc_label.png

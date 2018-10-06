@@ -702,11 +702,6 @@ cmd/32/recundo.svg cmd/32/undo.svg
 cmd/lc_recundo.svg cmd/lc_undo.svg
 cmd/sc_recundo.svg cmd/sc_undo.svg
 
-# Bezier
-cmd/32/bezieredge.svg cmd/32/bezierappend.svg
-cmd/lc_bezieredge.svg cmd/lc_bezierappend.svg
-cmd/sc_bezieredge.svg cmd/sc_bezierappend.svg
-
 # Label
 cmd/32/addname.svg cmd/32/label.svg
 cmd/lc_addname.svg cmd/lc_label.svg
