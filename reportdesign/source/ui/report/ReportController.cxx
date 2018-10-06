@@ -1565,8 +1565,8 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             {
                 if ( !aArgs.getLength() )
                 {
-                    ScopedVclPtrInstance< OPageNumberDialog > aDlg(getView(),m_xReportDefinition,this);
-                    aDlg->Execute();
+                    OPageNumberDialog aDlg(getFrameWeld(), m_xReportDefinition, this);
+                    aDlg.execute();
                 }
                 else
                     createPageNumber(aArgs);
