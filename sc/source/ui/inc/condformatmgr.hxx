@@ -64,6 +64,7 @@ private:
     VclPtr<PushButton> m_pBtnEdit;
     std::unique_ptr<ScConditionalFormatList> mpFormatList;
     VclPtr<ScCondFormatManagerWindow> m_pCtrlManager;
+    void UpdateButtonSensitivity();
 
     DECL_LINK(RemoveBtnHdl, Button*, void);
     DECL_LINK(EditBtnClickHdl, Button*, void);
