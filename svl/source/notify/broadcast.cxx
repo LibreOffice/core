@@ -40,8 +40,9 @@ void SvtBroadcaster::Normalize() const
 
 void SvtBroadcaster::Add( SvtListener* p )
 {
-    assert(!mbAboutToDie && "called inside my own destructor / after PrepareForDestruction()?");
-    if (mbAboutToDie)
+    assert(!mbDisposing && "called inside my own destructor?");
+    assert(!mbAboutToDie && "called after PrepareForDestruction()?");
+    if (mbDisposing || mbAboutToDie)
         return;
     // only reset mbNormalized if we are going to become unsorted
     if (!maListeners.empty() && maListeners.back() > p)
@@ -51,12 +52,13 @@ void SvtBroadcaster::Add( SvtListener* p )
 
 void SvtBroadcaster::Remove( SvtListener* p )
 {
+    if (mbDisposing)
+        return;
+
     if (mbAboutToDie)
     {
-        // only reset mbDestNormalized if we are going to become unsorted
-        if (!maDestructedListeners.empty() && maDestructedListeners.back() > p)
-            mbDestNormalized = false;
         maDestructedListeners.push_back(p);
+        mbDestNormalized = false;
         return;
     }
 
@@ -73,13 +75,14 @@ void SvtBroadcaster::Remove( SvtListener* p )
         ListenersGone();
 }
 
-SvtBroadcaster::SvtBroadcaster() : mbAboutToDie(false), mbNormalized(true), mbDestNormalized(true) {}
+SvtBroadcaster::SvtBroadcaster() : mbAboutToDie(false), mbDisposing(false), mbNormalized(true), mbDestNormalized(true) {}
 
 SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC ) :
-    mbAboutToDie(false),
+    mbAboutToDie(false), mbDisposing(false),
     mbNormalized(true), mbDestNormalized(true)
 {
-    assert(!rBC.mbAboutToDie && "copying an object marked with PrepareForDestruction() / that is in it's destructor?");
+    assert(!rBC.mbAboutToDie && "copying an object marked with PrepareForDestruction()?");
+    assert(!rBC.mbDisposing && "copying an object that is in it's destructor?");
 
     rBC.Normalize(); // so that insert into ourself is in-order, and therefore we do not need to Normalize()
     maListeners.reserve(rBC.maListeners.size());
@@ -89,54 +92,41 @@ SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC ) :
 
 SvtBroadcaster::~SvtBroadcaster()
 {
-    PrepareForDestruction();
-
-    Normalize();
-
-    {
-        auto dest(maDestructedListeners.data());
-        SfxHint aHint(SfxHintId::Dying);
-        for (ListenersType::iterator it(maListeners.begin()); it != maListeners.end(); ++it)
-        {
-            auto destEnd(dest + maDestructedListeners.size());
-            // skip the destructed ones
-            while (dest != destEnd && (*dest < *it))
-                ++dest;
-
-            if (dest == destEnd || *dest != *it)
-                (*it)->Notify(aHint);
-        }
-    }
+    mbDisposing = true;
+    Broadcast( SfxHint(SfxHintId::Dying) );
 
     Normalize();
 
     // now when both lists are sorted, we can linearly unregister all
     // listeners, with the exception of those that already asked to be removed
     // during their own destruction
+    ListenersType::const_iterator dest(maDestructedListeners.begin());
+    for (ListenersType::iterator it(maListeners.begin()); it != maListeners.end(); ++it)
     {
-        auto dest(maDestructedListeners.data());
-        for (ListenersType::iterator it(maListeners.begin()); it != maListeners.end(); ++it)
-        {
-            auto destEnd(dest + maDestructedListeners.size());
-            // skip the destructed ones
-            while (dest != destEnd && (*dest < *it))
-                ++dest;
+        // skip the destructed ones
+        while (dest != maDestructedListeners.end() && (*dest < *it))
+            ++dest;
 
-            if (dest == destEnd || *dest != *it)
-                (*it)->BroadcasterDying(*this);
-        }
+        if (dest == maDestructedListeners.end() || *dest != *it)
+            (*it)->BroadcasterDying(*this);
     }
 }
 
 void SvtBroadcaster::Broadcast( const SfxHint &rHint )
 {
-    assert(!mbAboutToDie && "broadcasting after PrepareForDestruction() / from inside my own destructor?");
-    if (mbAboutToDie)
-        return;
+    Normalize();
 
+    ListenersType::const_iterator dest(maDestructedListeners.begin());
     ListenersType aListeners(maListeners); // this copy is important to avoid erasing entries while iterating
-    for (SvtListener * p : aListeners)
-        p->Notify(rHint);
+    for (ListenersType::iterator it(aListeners.begin()); it != aListeners.end(); ++it)
+    {
+        // skip the destructed ones
+        while (dest != maDestructedListeners.end() && (*dest < *it))
+            ++dest;
+
+        if (dest == maDestructedListeners.end() || *dest != *it)
+            (*it)->Notify(rHint);
+    }
 }
 
 void SvtBroadcaster::ListenersGone() {}
