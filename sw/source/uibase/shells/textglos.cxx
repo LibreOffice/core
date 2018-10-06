@@ -54,7 +54,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
         case FN_EXPAND_GLOSSARY:
         {
             bool bReturn;
-            bReturn = pGlosHdl->ExpandGlossary();
+            bReturn = pGlosHdl->ExpandGlossary(rReq.GetFrameWeld());
             rReq.SetReturnValue( SfxBoolItem( nSlot, bReturn ) );
             rReq.Done();
         }
