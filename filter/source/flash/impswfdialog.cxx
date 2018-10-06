@@ -24,83 +24,58 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
 
-ImpSWFDialog::ImpSWFDialog( vcl::Window* pParent, Sequence< PropertyValue >& rFilterData ) :
-    ModalDialog( pParent, "ImpSWFDialog", "filter/ui/impswfdialog.ui" ),
-
-    maConfigItem( "Office.Common/Filter/Flash/Export/", &rFilterData )
+ImpSWFDialog::ImpSWFDialog(weld::Window* pParent, Sequence< PropertyValue >& rFilterData)
+    : GenericDialogController(pParent, "filter/ui/impswfdialog.ui", "ImpSWFDialog")
+    , maConfigItem("Office.Common/Filter/Flash/Export/", &rFilterData)
+    , mxNumFldQuality(m_xBuilder->weld_spin_button("quality"))
+    , mxCheckExportAll(m_xBuilder->weld_check_button("exportall"))
+    , mxCheckExportBackgrounds(m_xBuilder->weld_check_button("exportbackgrounds"))
+    , mxCheckExportBackgroundObjects(m_xBuilder->weld_check_button("exportbackgroundobjects"))
+    , mxCheckExportSlideContents(m_xBuilder->weld_check_button("exportslidecontents"))
+    , mxCheckExportSound(m_xBuilder->weld_check_button("exportsound"))
+    , mxCheckExportOLEAsJPEG(m_xBuilder->weld_check_button("exportoleasjpeg"))
+    , mxCheckExportMultipleFiles(m_xBuilder->weld_check_button("exportmultiplefiles"))
 {
-    get(mpNumFldQuality,"quality");
-    get(mpCheckExportAll,"exportall");
-    get(mpCheckExportMultipleFiles,"exportmultiplefiles");
-    get(mpCheckExportBackgrounds,"exportbackgrounds");
-    get(mpCheckExportBackgroundObjects,"exportbackgroundobjects");
-    get(mpCheckExportSlideContents,"exportslidecontents");
-    get(mpCheckExportSound,"exportsound");
-    get(mpCheckExportOLEAsJPEG,"exportoleasjpeg");
-
     const sal_uLong nCompressMode = maConfigItem.ReadInt32( "CompressMode", 75 );
-    mpNumFldQuality->SetValue( nCompressMode );
+    mxNumFldQuality->set_value(nCompressMode);
 
-    mpCheckExportAll->Check();
-    mpCheckExportSlideContents->Check();
-    mpCheckExportSound->Check();
+    mxCheckExportAll->set_active(true);
+    mxCheckExportSlideContents->set_active(true);
+    mxCheckExportSound->set_active(true);
 
-    mpCheckExportAll->SetToggleHdl( LINK( this, ImpSWFDialog, OnToggleCheckbox ) );
+    mxCheckExportAll->connect_toggled(LINK(this, ImpSWFDialog, OnToggleCheckbox));
 
-    mpCheckExportBackgrounds->Disable();
-    mpCheckExportBackgroundObjects->Disable();
-    mpCheckExportSlideContents->Disable();
+    mxCheckExportBackgrounds->set_sensitive(false);
+    mxCheckExportBackgroundObjects->set_sensitive(false);
+    mxCheckExportSlideContents->set_sensitive(false);
 }
-
 
 ImpSWFDialog::~ImpSWFDialog()
 {
-    disposeOnce();
 }
-
-
-void ImpSWFDialog::dispose()
-{
-    mpNumFldQuality.clear();
-    mpCheckExportAll.clear();
-    mpCheckExportBackgrounds.clear();
-    mpCheckExportBackgroundObjects.clear();
-    mpCheckExportSlideContents.clear();
-    mpCheckExportSound.clear();
-    mpCheckExportOLEAsJPEG.clear();
-    mpCheckExportMultipleFiles.clear();
-    maConfigItem.WriteModifiedConfig();
-    ModalDialog::dispose();
-}
-
 
 Sequence< PropertyValue > ImpSWFDialog::GetFilterData()
 {
-    sal_Int32 nCompressMode = static_cast<sal_Int32>(mpNumFldQuality->GetValue());
+    sal_Int32 nCompressMode = static_cast<sal_Int32>(mxNumFldQuality->get_value());
     maConfigItem.WriteInt32( "CompressMode" , nCompressMode );
-    maConfigItem.WriteBool( "ExportAll", mpCheckExportAll->IsChecked() );
-    maConfigItem.WriteBool( "ExportBackgrounds", mpCheckExportBackgrounds->IsChecked() );
-    maConfigItem.WriteBool( "ExportBackgroundObjects", mpCheckExportBackgroundObjects->IsChecked() );
-    maConfigItem.WriteBool( "ExportSlideContents", mpCheckExportSlideContents->IsChecked() );
-    maConfigItem.WriteBool( "ExportSound", mpCheckExportSound->IsChecked() );
-    maConfigItem.WriteBool( "ExportOLEAsJPEG", mpCheckExportOLEAsJPEG->IsChecked() );
-    maConfigItem.WriteBool( "ExportMultipleFiles", mpCheckExportMultipleFiles->IsChecked() );
+    maConfigItem.WriteBool( "ExportAll", mxCheckExportAll->get_active() );
+    maConfigItem.WriteBool( "ExportBackgrounds", mxCheckExportBackgrounds->get_active() );
+    maConfigItem.WriteBool( "ExportBackgroundObjects", mxCheckExportBackgroundObjects->get_active() );
+    maConfigItem.WriteBool( "ExportSlideContents", mxCheckExportSlideContents->get_active() );
+    maConfigItem.WriteBool( "ExportSound", mxCheckExportSound->get_active() );
+    maConfigItem.WriteBool( "ExportOLEAsJPEG", mxCheckExportOLEAsJPEG->get_active() );
+    maConfigItem.WriteBool( "ExportMultipleFiles", mxCheckExportMultipleFiles->get_active() );
 
     Sequence< PropertyValue > aRet( maConfigItem.GetFilterData() );
 
     return aRet;
 }
 
-
-/// This is called whenever the user toggles one of the checkboxes
-IMPL_LINK( ImpSWFDialog, OnToggleCheckbox, CheckBox&, rBox, void )
+IMPL_LINK_NOARG(ImpSWFDialog, OnToggleCheckbox, weld::ToggleButton&, void)
 {
-    if (&rBox == mpCheckExportAll)
-    {
-        mpCheckExportBackgrounds->Enable(!mpCheckExportBackgrounds->IsEnabled());
-        mpCheckExportBackgroundObjects->Enable(!mpCheckExportBackgroundObjects->IsEnabled());
-        mpCheckExportSlideContents->Enable(!mpCheckExportSlideContents->IsEnabled());
-    }
+    mxCheckExportBackgrounds->set_sensitive(!mxCheckExportBackgrounds->get_sensitive());
+    mxCheckExportBackgroundObjects->set_sensitive(!mxCheckExportBackgroundObjects->get_sensitive());
+    mxCheckExportSlideContents->set_sensitive(!mxCheckExportSlideContents->get_sensitive());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

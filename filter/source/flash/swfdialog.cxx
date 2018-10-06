@@ -21,15 +21,13 @@
 #include "swfdialog.hxx"
 #include "swfuno.hxx"
 #include "impswfdialog.hxx"
-#include <vcl/svapp.hxx>
-#include <vcl/dialog.hxx>
 #include <svl/solar.hrc>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -111,16 +109,14 @@ OUString SAL_CALL SWFDialog::getImplementationName()
     return SWFDialog_getImplementationName();
 }
 
-
 Sequence< OUString > SAL_CALL SWFDialog::getSupportedServiceNames()
 {
     return SWFDialog_getSupportedServiceNames();
 }
 
-
 svt::OGenericUnoDialog::Dialog SWFDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
-    VclPtr<::Dialog> pRet;
+    std::unique_ptr<weld::DialogController> xRet;
 
     if (mxSrcDoc.is())
     {
@@ -144,21 +140,19 @@ svt::OGenericUnoDialog::Dialog SWFDialog::createDialog(const css::uno::Reference
         {
         }
 */
-        pRet.reset(VclPtr<ImpSWFDialog>::Create(VCLUnoHelper::GetWindow(rParent), maFilterData));
+        xRet.reset(new ImpSWFDialog(Application::GetFrameWeld(rParent), maFilterData));
     }
 
-    return svt::OGenericUnoDialog::Dialog(pRet);
+    return svt::OGenericUnoDialog::Dialog(std::move(xRet));
 }
-
 
 void SWFDialog::executedDialog( sal_Int16 nExecutionResult )
 {
     if (nExecutionResult && m_aDialog)
-        maFilterData = static_cast< ImpSWFDialog* >(m_aDialog.m_xVclDialog.get())->GetFilterData();
+        maFilterData = static_cast<ImpSWFDialog*>(m_aDialog.m_xWeldDialog.get())->GetFilterData();
 
     destroyDialog();
 }
-
 
 Reference< XPropertySetInfo > SAL_CALL SWFDialog::getPropertySetInfo()
 {
@@ -166,12 +160,10 @@ Reference< XPropertySetInfo > SAL_CALL SWFDialog::getPropertySetInfo()
     return xInfo;
 }
 
-
 ::cppu::IPropertyArrayHelper& SWFDialog::getInfoHelper()
 {
     return *getArrayHelper();
 }
-
 
 ::cppu::IPropertyArrayHelper* SWFDialog::createArrayHelper() const
 {
@@ -179,7 +171,6 @@ Reference< XPropertySetInfo > SAL_CALL SWFDialog::getPropertySetInfo()
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
-
 
 Sequence< PropertyValue > SAL_CALL SWFDialog::getPropertyValues()
 {

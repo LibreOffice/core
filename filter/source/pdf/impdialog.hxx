@@ -22,14 +22,6 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/group.hxx>
 #include <vcl/pdfwriter.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/weld.hxx>
