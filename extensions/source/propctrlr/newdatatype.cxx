@@ -28,15 +28,13 @@ namespace pcr
     //= NewDataTypeDialog
 
 
-    NewDataTypeDialog::NewDataTypeDialog( vcl::Window* _pParent, const OUString& _rNameBase, const std::vector< OUString >& _rProhibitedNames )
-        : ModalDialog( _pParent, "DataTypeDialog",
-        "modules/spropctrlr/ui/datatypedialog.ui" )
+    NewDataTypeDialog::NewDataTypeDialog(weld::Window* pParent, const OUString& _rNameBase, const std::vector< OUString >& _rProhibitedNames)
+        : GenericDialogController(pParent, "modules/spropctrlr/ui/datatypedialog.ui", "DataTypeDialog")
         , m_aProhibitedNames( _rProhibitedNames.begin(), _rProhibitedNames.end() )
+        , m_xName(m_xBuilder->weld_entry("entry"))
+        , m_xOK(m_xBuilder->weld_button("ok"))
     {
-        get(m_pName, "entry");
-        get(m_pOK, "ok");
-
-        m_pName->SetModifyHdl( LINK( this, NewDataTypeDialog, OnNameModified ) );
+        m_xName->connect_changed(LINK(this, NewDataTypeDialog, OnNameModified));
 
         // find an initial name
         // for this, first remove trailing digits
@@ -61,32 +59,22 @@ namespace pcr
         }
         while ( m_aProhibitedNames.find( sInitialName ) != m_aProhibitedNames.end() );
 
-        m_pName->SetText( sInitialName );
-        OnNameModified( *m_pName );
+        m_xName->set_text(sInitialName);
+        OnNameModified(*m_xName);
     }
 
     NewDataTypeDialog::~NewDataTypeDialog()
     {
-        disposeOnce();
     }
 
-    void NewDataTypeDialog::dispose()
-    {
-        m_pName.clear();
-        m_pOK.clear();
-        ModalDialog::dispose();
-    }
-
-    IMPL_LINK_NOARG( NewDataTypeDialog, OnNameModified, Edit&, void )
+    IMPL_LINK_NOARG(NewDataTypeDialog, OnNameModified, weld::Entry&, void)
     {
         OUString sCurrentName = GetName();
         bool bNameIsOK = ( !sCurrentName.isEmpty() )
                       && ( m_aProhibitedNames.find( sCurrentName ) == m_aProhibitedNames.end() );
 
-        m_pOK->Enable( bNameIsOK );
+        m_xOK->set_sensitive(bNameIsOK);
     }
-
-
 } // namespace pcr
 
 

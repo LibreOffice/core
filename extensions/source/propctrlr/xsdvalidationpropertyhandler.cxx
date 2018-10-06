@@ -488,11 +488,11 @@ namespace pcr
         std::vector< OUString > aExistentNames;
         m_pHelper->getAvailableDataTypeNames( aExistentNames );
 
-        ScopedVclPtrInstance<NewDataTypeDialog> aDialog( nullptr, pType->getName(), aExistentNames );  // TODO/eForms: proper parent
-        if ( aDialog->Execute() != RET_OK )
+        NewDataTypeDialog aDialog( nullptr, pType->getName(), aExistentNames );  // TODO/eForms: proper parent
+        if (aDialog.run() != RET_OK)
             return false;
 
-        _rNewName = aDialog->GetName();
+        _rNewName = aDialog.GetName();
         return true;
     }
 
