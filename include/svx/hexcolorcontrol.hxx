@@ -22,10 +22,6 @@
 
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <vcl/dialog.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/builderfactory.hxx>
 #include <vcl/weld.hxx>
 #include <sot/exchange.hxx>
 #include <sax/tools/converter.hxx>
