@@ -19,12 +19,6 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_DLGNAME_HXX
 #define INCLUDED_CUI_SOURCE_INC_DLGNAME_HXX
 
-
-#include <vcl/edit.hxx>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/vclmedit.hxx>
 #include <vcl/weld.hxx>
 
 /// Dialog for editing a name

@@ -23,11 +23,6 @@
 #include <pastedlg.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/insdlg.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/group.hxx>
-#include <vcl/lstbox.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <svtools/strings.hrc>

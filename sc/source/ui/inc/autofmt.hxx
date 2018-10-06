@@ -25,7 +25,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/morebtn.hxx>
-#include <vcl/dialog.hxx>
 #include <svtools/scriptedtext.hxx>
 #include <svx/framelinkarray.hxx>
 #include <scdllapi.h>

@@ -20,14 +20,9 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_CUIGRFFLT_HXX
 #define INCLUDED_CUI_SOURCE_INC_CUIGRFFLT_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/button.hxx>
-#include <vcl/timer.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/group.hxx>
 #include <tools/helpers.hxx>
 #include <vcl/GraphicObject.hxx>
+#include <vcl/timer.hxx>
 #include <svx/graphctl.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/rectenum.hxx>

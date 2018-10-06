@@ -22,15 +22,14 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/errcode.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/button.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/weld.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/docfilt.hxx>
 

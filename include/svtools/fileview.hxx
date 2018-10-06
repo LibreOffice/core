@@ -26,7 +26,6 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/image.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/weld.hxx>
 #include <rtl/ustring.hxx>

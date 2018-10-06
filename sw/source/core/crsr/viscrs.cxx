@@ -19,7 +19,6 @@
 
 #include <config_features.h>
 
-#include <vcl/dialog.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>

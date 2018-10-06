@@ -23,12 +23,6 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
-#include <vcl/button.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace util {
