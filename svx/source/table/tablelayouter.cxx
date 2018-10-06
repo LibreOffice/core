@@ -174,14 +174,37 @@ sal_Int32 TableLayouter::getColumnWidth( sal_Int32 nColumn ) const
 sal_Int32 TableLayouter::calcPreferredColumnWidth( sal_Int32 nColumn, Size aSize ) const
 {
     sal_Int32 nRet = 0;
-    if ( isValidColumn(nColumn) )
+    for ( sal_uInt32 nRow = 0; nRow < static_cast<sal_uInt32>(maRows.size()); ++nRow )
     {
-        for ( sal_uInt32 nRow = 0; nRow < static_cast<sal_uInt32>(maRows.size()); ++nRow )
+        // Account for the space desired by spanned columns.
+        // Only the last spanned cell will try to ensure sufficient space,
+        // by looping through the previous columns, subtracting their portion.
+        sal_Int32 nWish = 0;
+        sal_Int32 nSpannedColumn = nColumn;
+        bool bFindSpan = true;
+        while ( bFindSpan && isValidColumn(nSpannedColumn) )
         {
-            CellRef xCell( getCell( CellPos( nColumn, nRow ) ) );
-            if ( xCell.is() && !xCell->isMerged() && xCell->getColumnSpan() == 1 )
-                nRet = std::max( nRet, xCell->calcPreferredWidth(aSize) );
+            // recursive function call gets earlier portion of spanned column.
+            if ( nSpannedColumn < nColumn )
+                nWish -= calcPreferredColumnWidth( nSpannedColumn, aSize );
+
+            CellRef xCell( getCell( CellPos( nSpannedColumn, nRow ) ) );
+            if ( xCell.is() && !xCell->isMerged()
+                 && (xCell->getColumnSpan() == 1 || nSpannedColumn < nColumn) )
+            {
+                nWish += xCell->calcPreferredWidth(aSize);
+                bFindSpan = false;
+            }
+            else if ( xCell.is() && xCell->isMerged()
+                      && nColumn == nSpannedColumn
+                      && isValidColumn(nColumn + 1) )
+            {
+                xCell = getCell( CellPos( nColumn + 1, nRow ) );
+                bFindSpan = xCell.is() && !xCell->isMerged();
+            }
+            nSpannedColumn--;
         }
+        nRet = std::max( nRet, nWish );
     }
     return nRet;
 }
@@ -1062,7 +1085,8 @@ void TableLayouter::UpdateBorderLayout()
 void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea,
                                        sal_Int32 nFirstCol,
                                        sal_Int32 nLastCol,
-                                       const bool bOptimize )
+                                       const bool bOptimize,
+                                       const bool bMinimize )
 {
     if( mxTable.is() ) try
     {
@@ -1071,7 +1095,7 @@ void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea,
         const Size aSize(0xffffff, 0xffffff);
 
         //special case - optimize a single column
-        if ( bOptimize && nFirstCol == nLastCol )
+        if ( (bOptimize || bMinimize) && nFirstCol == nLastCol )
         {
             const sal_Int32 nWish = calcPreferredColumnWidth(nFirstCol, aSize);
             if ( nWish < getColumnWidth(nFirstCol) )
@@ -1080,7 +1104,7 @@ void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea,
                 xColSet->setPropertyValue( gsSize, Any( nWish ) );
 
                 //FitWidth automatically distributes the new excess space
-                LayoutTable( rArea, /*bFitWidth=*/true, /*bFitHeight=*/false );
+                LayoutTable( rArea, /*bFitWidth=*/!bMinimize, /*bFitHeight=*/false );
             }
         }
 
@@ -1098,7 +1122,7 @@ void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea,
         const sal_Int32 nEqualWidth = nAllWidth / (nLastCol-nFirstCol+1);
 
         //pass 1 - collect unneeded space (from an equal width perspective)
-        if ( bOptimize )
+        if ( bMinimize || bOptimize )
         {
             for( sal_Int32 nCol = nFirstCol; nCol <= nLastCol; ++nCol )
             {
@@ -1114,9 +1138,9 @@ void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea,
         sal_Int32 nWidth = nEqualWidth;
         for( sal_Int32 nCol = nFirstCol; nCol <= nLastCol; ++nCol )
         {
-            if( nCol == nLastCol )
+            if ( !bMinimize && nCol == nLastCol )
                 nWidth = nAllWidth; // last column gets rounding/logic errors
-            else if ( bOptimize && fAllWish )
+            else if ( (bMinimize || bOptimize) && fAllWish )
             {
                 //pass 2 - first come, first served when requesting from the
                 //  unneeded pool, or proportionally allocate excess.
@@ -1132,7 +1156,7 @@ void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea,
                     if ( aWish[nIndex] > nEqualWidth )
                         nUnused -= aWish[nIndex] - nEqualWidth;
 
-                    if ( nDistributeExcess > 0 )
+                    if ( !bMinimize && nDistributeExcess > 0 )
                         nWidth += nWidth / fAllWish * nDistributeExcess;
                 }
             }
@@ -1143,7 +1167,7 @@ void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea,
             nAllWidth -= nWidth;
         }
 
-        LayoutTable( rArea, true, false );
+        LayoutTable( rArea, !bMinimize, false );
     }
     catch( Exception& )
     {
@@ -1155,17 +1179,32 @@ void TableLayouter::DistributeColumns( ::tools::Rectangle& rArea,
 void TableLayouter::DistributeRows( ::tools::Rectangle& rArea,
                                     sal_Int32 nFirstRow,
                                     sal_Int32 nLastRow,
-                                    const bool bOptimize )
+                                    const bool bOptimize,
+                                    const bool bMinimize )
 {
     if( mxTable.is() ) try
     {
         const sal_Int32 nRowCount = mxTable->getRowCount();
+        Reference< XTableRows > xRows( mxTable->getRows(), UNO_QUERY_THROW );
+        sal_Int32 nMinHeight = 0;
+
+        //special case - minimize a single row
+        if ( bMinimize && nFirstRow == nLastRow )
+        {
+            const sal_Int32 nWish = std::max( maRows[nFirstRow].mnMinSize, nMinHeight );
+            if ( nWish < getRowHeight(nFirstRow) )
+            {
+                Reference< XPropertySet > xRowSet( xRows->getByIndex( nFirstRow ), UNO_QUERY_THROW );
+                xRowSet->setPropertyValue( gsSize, Any( nWish ) );
+
+                LayoutTable( rArea, /*bFitWidth=*/false, /*bFitHeight=*/!bMinimize );
+            }
+        }
 
         if( (nFirstRow < 0) || (nFirstRow>= nLastRow) || (nLastRow >= nRowCount) )
             return;
 
         sal_Int32 nAllHeight = 0;
-        sal_Int32 nMinHeight = 0;
 
         for( sal_Int32 nRow = nFirstRow; nRow <= nLastRow; ++nRow )
         {
@@ -1176,7 +1215,7 @@ void TableLayouter::DistributeRows( ::tools::Rectangle& rArea,
         const sal_Int32 nRows = (nLastRow-nFirstRow+1);
         sal_Int32 nHeight = nAllHeight / nRows;
 
-        if( nHeight < nMinHeight && !bOptimize )
+        if ( !(bMinimize || bOptimize) && nHeight < nMinHeight )
         {
             sal_Int32 nNeededHeight = nRows * nMinHeight;
             rArea.AdjustBottom(nNeededHeight - nAllHeight );
@@ -1184,10 +1223,9 @@ void TableLayouter::DistributeRows( ::tools::Rectangle& rArea,
             nAllHeight = nRows * nMinHeight;
         }
 
-        Reference< XTableRows > xRows( mxTable->getRows(), UNO_QUERY_THROW );
         for( sal_Int32 nRow = nFirstRow; nRow <= nLastRow; ++nRow )
         {
-            if ( bOptimize )
+            if ( bMinimize || bOptimize )
                 nHeight = maRows[nRow].mnMinSize;
             else if ( nRow == nLastRow )
                 nHeight = nAllHeight; // last row get round errors
@@ -1198,10 +1236,7 @@ void TableLayouter::DistributeRows( ::tools::Rectangle& rArea,
             nAllHeight -= nHeight;
         }
 
-        if ( bOptimize )
-            rArea.AdjustBottom( -nAllHeight );
-
-        LayoutTable( rArea, false, true );
+        LayoutTable( rArea, false, !bMinimize );
     }
     catch( Exception& )
     {

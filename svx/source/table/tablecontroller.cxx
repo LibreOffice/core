@@ -476,6 +476,7 @@ void SvxTableController::GetState( SfxItemSet& rSet )
                     rSet.DisableItem(SID_TABLE_SPLIT_CELLS);
                 break;
 
+            case SID_TABLE_OPTIMAL_ROW_HEIGHT:
             case SID_TABLE_DISTRIBUTE_COLUMNS:
             case SID_TABLE_DISTRIBUTE_ROWS:
             {
@@ -1003,20 +1004,28 @@ void SvxTableController::Execute( SfxRequest& rReq )
         SplitMarkedCells(rReq);
         break;
 
+    case SID_TABLE_MINIMAL_COLUMN_WIDTH:
+        DistributeColumns(/*bOptimize=*/true, /*bMinimize=*/true);
+        break;
+
     case SID_TABLE_OPTIMAL_COLUMN_WIDTH:
-        DistributeColumns(/*bOptimize=*/true);
+        DistributeColumns(/*bOptimize=*/true, /*bMinimize=*/false);
         break;
 
     case SID_TABLE_DISTRIBUTE_COLUMNS:
-        DistributeColumns(/*bOptimize=*/false);
+        DistributeColumns(/*bOptimize=*/false, /*bMinimize=*/false);
+        break;
+
+    case SID_TABLE_MINIMAL_ROW_HEIGHT:
+        DistributeRows(/*bOptimize=*/true, /*bMinimize=*/true);
         break;
 
     case SID_TABLE_OPTIMAL_ROW_HEIGHT:
-        DistributeRows(/*bOptimize=*/true);
+        DistributeRows(/*bOptimize=*/true, /*bMinimize=*/false);
         break;
 
     case SID_TABLE_DISTRIBUTE_ROWS:
-        DistributeRows(/*bOptimize=*/false);
+        DistributeRows(/*bOptimize=*/false, /*bMinimize=*/false);
         break;
 
     case SID_TABLE_VERT_BOTTOM:
@@ -1301,7 +1310,7 @@ void SvxTableController::SplitMarkedCells(const SfxRequest& rReq)
     }
 }
 
-void SvxTableController::DistributeColumns(const bool bOptimize)
+void SvxTableController::DistributeColumns(const bool bOptimize, const bool bMinimize)
 {
     if(!checkTableObject())
         return;
@@ -1318,13 +1327,13 @@ void SvxTableController::DistributeColumns(const bool bOptimize)
 
     CellPos aStart, aEnd;
     getSelectedCells( aStart, aEnd );
-    rTableObj.DistributeColumns( aStart.mnCol, aEnd.mnCol, bOptimize );
+    rTableObj.DistributeColumns( aStart.mnCol, aEnd.mnCol, bOptimize, bMinimize );
 
     if( bUndo )
         rModel.EndUndo();
 }
 
-void SvxTableController::DistributeRows(const bool bOptimize)
+void SvxTableController::DistributeRows(const bool bOptimize, const bool bMinimize)
 {
     if(!checkTableObject())
         return;
@@ -1341,7 +1350,7 @@ void SvxTableController::DistributeRows(const bool bOptimize)
 
     CellPos aStart, aEnd;
     getSelectedCells( aStart, aEnd );
-    rTableObj.DistributeRows( aStart.mnRow, aEnd.mnRow, bOptimize );
+    rTableObj.DistributeRows( aStart.mnRow, aEnd.mnRow, bOptimize, bMinimize );
 
     if( bUndo )
         rModel.EndUndo();
