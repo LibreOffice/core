@@ -29,7 +29,6 @@
 
 class SdDrawDocument;
 class SfxRequest;
-class Dialog;
 class SdrObject;
 class CommandEvent;
 class HelpEvent;
@@ -151,8 +150,6 @@ protected:
     SdDrawDocument* mpDoc;
 
     sal_uInt16          nSlotId;
-
-    VclPtr<Dialog>             pDialog;
 
     Timer               aScrollTimer;           ///< for auto-scrolling
     DECL_LINK( ScrollHdl, Timer *, void );
