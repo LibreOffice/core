@@ -24,7 +24,6 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/field.hxx>
 
 #include <svtools/extensionlistbox.hxx>

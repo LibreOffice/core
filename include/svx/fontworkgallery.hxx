@@ -22,40 +22,28 @@
 #define INCLUDED_SVX_FONTWORKGALLERY_HXX
 
 #include <svx/svxdllapi.h>
-
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/field.hxx>
-#include <vcl/weld.hxx>
-
 #include <svtools/valueset.hxx>
-
 #include <sfx2/tbxctrl.hxx>
-
+#include <vcl/weld.hxx>
 #include <vector>
 
 class FmFormModel;
 class SdrView;
-namespace vcl { class Window; }
 class SdrTextObj;
 class SdrObject;
 class SdrModel;
-
 class SfxBindings;
-
 
 namespace svx
 {
 
-class SAL_WARN_UNUSED FontworkCharacterSpacingDialog : public ModalDialog
+class SAL_WARN_UNUSED FontworkCharacterSpacingDialog : public weld::GenericDialogController
 {
-    VclPtr<MetricField> m_pMtrScale;
+    std::unique_ptr<weld::MetricSpinButton> m_xMtrScale;
 
 public:
-    FontworkCharacterSpacingDialog( vcl::Window* pParent, sal_Int32 nScale );
+    FontworkCharacterSpacingDialog(weld::Window* pParent, sal_Int32 nScale);
     virtual ~FontworkCharacterSpacingDialog() override;
-    virtual void dispose() override;
 
     sal_Int32 getScale() const;
 };
