@@ -155,7 +155,7 @@ def processIWYUOutput(iwyuOutput, moduleRules):
                     toRemove.append("%s:%s: %s" % (currentFileName, lineno, include))
                 continue
 
-            match = re.match("- (.*);  // lines (.*)-.*", line)
+            match = re.match("- (.*;(?: })*)*  // lines (.*)-.*", line)
             if match:
                 fwdDecl = match.group(1)
                 lineno = match.group(2)
