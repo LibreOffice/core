@@ -27,7 +27,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <connectivity/dbexception.hxx>
-#include <vcl/dialog.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace dbaui;
 using namespace dbtools;
@@ -144,9 +144,9 @@ Reference<XPropertySetInfo>  SAL_CALL OSQLMessageDialog::getPropertySetInfo()
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-svt::OGenericUnoDialog::Dialog OSQLMessageDialog::createDialog(vcl::Window* _pParent)
+svt::OGenericUnoDialog::Dialog OSQLMessageDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
-    weld::Window* pParent = _pParent ? _pParent->GetFrameWeld() : nullptr;
+    weld::Window* pParent = Application::GetFrameWeld(rParent);
     if ( m_aException.hasValue() )
         return svt::OGenericUnoDialog::Dialog(o3tl::make_unique<OSQLMessageBox>(pParent, SQLExceptionInfo(m_aException), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, m_sHelpURL));
 

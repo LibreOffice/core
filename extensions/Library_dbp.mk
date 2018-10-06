@@ -40,6 +40,7 @@ $(eval $(call gb_Library_use_libraries,dbp,\
 	svt \
 	vcl \
 	tl \
+	tk \
 	svl \
 	sfx \
 	dbtools \

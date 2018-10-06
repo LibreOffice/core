@@ -26,6 +26,7 @@
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <comphelper/processfactory.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 using namespace dbaui;
 
@@ -104,9 +105,9 @@ Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialogSetup::getPropertySetInfo(
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-svt::OGenericUnoDialog::Dialog ODBTypeWizDialogSetup::createDialog(vcl::Window* _pParent)
+svt::OGenericUnoDialog::Dialog ODBTypeWizDialogSetup::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
-    return svt::OGenericUnoDialog::Dialog(VclPtr<ODbTypeWizDialogSetup>::Create(_pParent, m_pDatasourceItems.get(), m_aContext, m_aInitialSelection));
+    return svt::OGenericUnoDialog::Dialog(VclPtr<ODbTypeWizDialogSetup>::Create(VCLUnoHelper::GetWindow(rParent), m_pDatasourceItems.get(), m_aContext, m_aInitialSelection));
 }
 
 void ODBTypeWizDialogSetup::executedDialog(sal_Int16 _nExecutionResult)

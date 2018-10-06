@@ -31,6 +31,7 @@ $(eval $(call gb_Library_use_libraries,dbmm,\
     svxcore \
     svx \
     tl \
+    tk \
     ucbhelper \
     utl \
     vcl \

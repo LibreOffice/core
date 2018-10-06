@@ -29,6 +29,7 @@
 #include <directsql.hxx>
 #include <stringconstants.hxx>
 #include <datasourceconnector.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
 
@@ -77,10 +78,11 @@ namespace dbaui
 
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ODirectSQLDialog )
 
-    svt::OGenericUnoDialog::Dialog ODirectSQLDialog::createDialog(vcl::Window* _pParent)
+    svt::OGenericUnoDialog::Dialog ODirectSQLDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
         // obtain all the objects needed for the dialog
         Reference< XConnection > xConnection = m_xActiveConnection;
+        auto _pParent = VCLUnoHelper::GetWindow(rParent);
         if ( !xConnection.is() )
         {
             try

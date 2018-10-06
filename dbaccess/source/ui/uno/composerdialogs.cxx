@@ -27,6 +27,7 @@
 #include <queryorder.hxx>
 #include <comphelper/processfactory.hxx>
 #include <connectivity/dbtools.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 
@@ -76,7 +77,7 @@ namespace dbaui
 
     IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( ComposerDialog )
 
-    svt::OGenericUnoDialog::Dialog ComposerDialog::createDialog(vcl::Window* _pParent)
+    svt::OGenericUnoDialog::Dialog ComposerDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
         // obtain all the objects needed for the dialog
         Reference< XConnection > xConnection;
@@ -122,7 +123,7 @@ namespace dbaui
             return svt::OGenericUnoDialog::Dialog();
         }
 
-        return svt::OGenericUnoDialog::Dialog(createComposerDialog(_pParent, xConnection, xColumns));
+        return svt::OGenericUnoDialog::Dialog(createComposerDialog(VCLUnoHelper::GetWindow(rParent), xConnection, xColumns));
     }
 
     // RowsetFilterDialog

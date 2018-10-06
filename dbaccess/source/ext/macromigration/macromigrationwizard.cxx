@@ -18,6 +18,7 @@
  */
 
 #include "macromigrationwizard.hxx"
+#include <toolkit/helper/vclunohelper.hxx>
 #include <core_resource.hxx>
 #include <strings.hrc>
 
@@ -47,9 +48,9 @@ namespace dbmm
         return *(new MacroMigrationDialogService( _rxContext ) );
     }
 
-    svt::OGenericUnoDialog::Dialog MacroMigrationDialogService::createDialog(vcl::Window* _pParent)
+    svt::OGenericUnoDialog::Dialog MacroMigrationDialogService::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
-        return svt::OGenericUnoDialog::Dialog(VclPtr<MacroMigrationDialog>::Create(_pParent, m_aContext, m_xDocument));
+        return svt::OGenericUnoDialog::Dialog(VclPtr<MacroMigrationDialog>::Create(VCLUnoHelper::GetWindow(rParent), m_aContext, m_xDocument));
     }
 
     Sequence< sal_Int8 > SAL_CALL MacroMigrationDialogService::getImplementationId()

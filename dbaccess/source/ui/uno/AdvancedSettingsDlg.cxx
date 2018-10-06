@@ -25,6 +25,7 @@
 #include <advancedsettingsdlg.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/proparrhlp.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 namespace dbaui
 {
@@ -66,7 +67,7 @@ namespace dbaui
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
     protected:
     // OGenericUnoDialog overridables
-        virtual svt::OGenericUnoDialog::Dialog createDialog(vcl::Window* _pParent) override;
+        virtual svt::OGenericUnoDialog::Dialog createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
     };
 
     OAdvancedSettingsDialog::OAdvancedSettingsDialog(const Reference< XComponentContext >& _rxORB)
@@ -122,9 +123,9 @@ namespace dbaui
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
 
-    svt::OGenericUnoDialog::Dialog OAdvancedSettingsDialog::createDialog(vcl::Window* _pParent)
+    svt::OGenericUnoDialog::Dialog OAdvancedSettingsDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
-        return svt::OGenericUnoDialog::Dialog(VclPtr<AdvancedSettingsDialog>::Create(_pParent, m_pDatasourceItems.get(), m_aContext, m_aInitialSelection));
+        return svt::OGenericUnoDialog::Dialog(VclPtr<AdvancedSettingsDialog>::Create(VCLUnoHelper::GetWindow(rParent), m_pDatasourceItems.get(), m_aContext, m_aInitialSelection));
     }
 
 }   // namespace dbaui

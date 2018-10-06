@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/beans/NamedValue.hpp>
-
+#include <toolkit/helper/vclunohelper.hxx>
 #include "pcrservices.hxx"
 #include "pcrunodialogs.hxx"
 #include "formstrings.hxx"
@@ -124,9 +124,9 @@ namespace pcr
         return new ::cppu::OPropertyArrayHelper( aProps );
     }
 
-    svt::OGenericUnoDialog::Dialog OTabOrderDialog::createDialog( vcl::Window* _pParent )
+    svt::OGenericUnoDialog::Dialog OTabOrderDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
-        return svt::OGenericUnoDialog::Dialog(VclPtr<TabOrderDialog>::Create( _pParent, m_xTabbingModel, m_xControlContext, m_aContext));
+        return svt::OGenericUnoDialog::Dialog(VclPtr<TabOrderDialog>::Create(VCLUnoHelper::GetWindow(rParent), m_xTabbingModel, m_xControlContext, m_aContext));
     }
 
     void OTabOrderDialog::initialize( const Sequence< Any >& aArguments )

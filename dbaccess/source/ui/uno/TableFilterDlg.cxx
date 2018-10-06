@@ -22,6 +22,7 @@
 #include "TableFilterDlg.hxx"
 #include <TablesSingleDlg.hxx>
 #include <comphelper/processfactory.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 using namespace dbaui;
 
@@ -91,9 +92,9 @@ Reference<XPropertySetInfo>  SAL_CALL OTableFilterDialog::getPropertySetInfo()
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-svt::OGenericUnoDialog::Dialog OTableFilterDialog::createDialog(vcl::Window* _pParent)
+svt::OGenericUnoDialog::Dialog OTableFilterDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
-    return svt::OGenericUnoDialog::Dialog(VclPtr<OTableSubscriptionDialog>::Create(_pParent, m_pDatasourceItems.get(), m_aContext, m_aInitialSelection));
+    return svt::OGenericUnoDialog::Dialog(VclPtr<OTableSubscriptionDialog>::Create(VCLUnoHelper::GetWindow(rParent), m_pDatasourceItems.get(), m_aContext, m_aInitialSelection));
 }
 
 }   // namespace dbaui

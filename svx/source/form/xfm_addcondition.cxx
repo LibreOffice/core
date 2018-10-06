@@ -22,6 +22,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <datanavi.hxx>
 #include <fmservs.hxx>
 
@@ -137,12 +138,12 @@ namespace svxform
         return new ::cppu::OPropertyArrayHelper( aProperties );
     }
 
-    svt::OGenericUnoDialog::Dialog OAddConditionDialog::createDialog(vcl::Window* _pParent)
+    svt::OGenericUnoDialog::Dialog OAddConditionDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
         if ( !m_xBinding.is() || m_sFacetName.isEmpty() )
             throw RuntimeException( OUString(), *this );
 
-        return svt::OGenericUnoDialog::Dialog(VclPtr<AddConditionDialog>::Create(_pParent, m_sFacetName, m_xBinding));
+        return svt::OGenericUnoDialog::Dialog(VclPtr<AddConditionDialog>::Create(VCLUnoHelper::GetWindow(rParent), m_sFacetName, m_xBinding));
     }
 
     void OAddConditionDialog::executedDialog( sal_Int16 _nExecutionResult )
