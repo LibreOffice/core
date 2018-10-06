@@ -97,7 +97,6 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/devicecoordinate.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/edit.hxx>

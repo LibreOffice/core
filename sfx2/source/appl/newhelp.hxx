@@ -32,7 +32,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/treelistbox.hxx>
 #include <unotools/moduleoptions.hxx>
