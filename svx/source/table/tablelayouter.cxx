@@ -1205,27 +1205,39 @@ void TableLayouter::DistributeRows( ::tools::Rectangle& rArea,
             return;
 
         sal_Int32 nAllHeight = 0;
+        sal_Int32 nMaxHeight = 0;
 
         for( sal_Int32 nRow = nFirstRow; nRow <= nLastRow; ++nRow )
         {
             nMinHeight = std::max( maRows[nRow].mnMinSize, nMinHeight );
+            nMaxHeight = std::max( maRows[nRow].mnSize, nMaxHeight );
             nAllHeight += maRows[nRow].mnSize;
         }
 
         const sal_Int32 nRows = (nLastRow-nFirstRow+1);
         sal_Int32 nHeight = nAllHeight / nRows;
 
-        if ( !(bMinimize || bOptimize) && nHeight < nMinHeight )
+        if ( !bMinimize && nHeight < nMaxHeight )
         {
-            sal_Int32 nNeededHeight = nRows * nMinHeight;
-            rArea.AdjustBottom(nNeededHeight - nAllHeight );
-            nHeight = nMinHeight;
-            nAllHeight = nRows * nMinHeight;
+            if ( !bOptimize )
+            {
+                sal_Int32 nNeededHeight = nRows * nMaxHeight;
+                rArea.AdjustBottom(nNeededHeight - nAllHeight );
+                nHeight = nMaxHeight;
+                nAllHeight = nRows * nMaxHeight;
+            }
+            else if ( nHeight < nMinHeight )
+            {
+                sal_Int32 nNeededHeight = nRows * nMinHeight;
+                rArea.AdjustBottom(nNeededHeight - nAllHeight );
+                nHeight = nMinHeight;
+                nAllHeight = nRows * nMinHeight;
+            }
         }
 
         for( sal_Int32 nRow = nFirstRow; nRow <= nLastRow; ++nRow )
         {
-            if ( bMinimize || bOptimize )
+            if ( bMinimize )
                 nHeight = maRows[nRow].mnMinSize;
             else if ( nRow == nLastRow )
                 nHeight = nAllHeight; // last row get round errors
