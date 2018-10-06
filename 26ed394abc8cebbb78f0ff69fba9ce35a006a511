@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_71b66cdc",
+        "filename": "sfx2/source/sidebar/SidebarDockingWindow.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-06T07:56:29Z",
+      "side": 1,
+      "message": "Why do we hardcode customizable key bindings?",
+      "range": {
+        "startLine": 132,
+        "startChar": 8,
+        "endLine": 132,
+        "endChar": 94
+      },
+      "revId": "26ed394abc8cebbb78f0ff69fba9ce35a006a511",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
