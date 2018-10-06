@@ -28,7 +28,6 @@ $(eval $(call gb_Library_use_libraries,flash,\
 	vcl \
 	utl \
 	tl \
-	tk \
 	i18nlangtag \
 	comphelper \
 	basegfx \
