@@ -113,9 +113,13 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         This method returns a sequence of advancements, one for each
         character in the input string (<em>not</em> for every
         glyph. There might be multiple glyphs per input character, or
-        multiple input characters per glyph). Adding up all
-        advancements yields the total advancement of this layout. To
-        manipulate the layout of a string on the level of characters,
+        multiple input characters per glyph).
+
+        The advancements are the distance to the leftmost edge (LTR)
+        or the rightmost edge (RTL). The maximum of the advancments
+        can be regarded as the width the whole text.
+
+        To manipulate the layout of a string on the level of characters,
         this method can be used to query for the layout's default
         advancements, which can subsequently be changed and applied to
         the layout via
