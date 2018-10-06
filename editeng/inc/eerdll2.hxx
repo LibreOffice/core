@@ -23,6 +23,7 @@
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <rtl/ref.hxx>
+#include <vcl/virdev.hxx>
 
 class SfxPoolItem;
 class VirtualDevice;

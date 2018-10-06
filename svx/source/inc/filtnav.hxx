@@ -34,9 +34,6 @@
 #include <vcl/image.hxx>
 #include <svtools/treelistbox.hxx>
 
-#include <vcl/dialog.hxx>
-#include <vcl/group.hxx>
-#include <vcl/dockwin.hxx>
 #include <svx/fmtools.hxx>
 #include "fmexch.hxx"
 #include "sqlparserclient.hxx"

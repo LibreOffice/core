@@ -19,10 +19,6 @@
 
 
 #include <unotools/resmgr.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
 #include <com/sun/star/linguistic2/LanguageGuessing.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
@@ -43,6 +39,7 @@
 #include <editeng/numdef.hxx>
 #include <svl/itempool.hxx>
 #include <svl/grabbagitem.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
 #include <editeng/autokernitem.hxx>

@@ -27,8 +27,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 
 #include <svtools/valueset.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 

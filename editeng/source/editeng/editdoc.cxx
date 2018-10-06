@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <memory>
-#include <vcl/wrkwin.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/svapp.hxx>
-
 #include <editeng/tstpitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/fontitem.hxx>
@@ -64,9 +59,11 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <libxml/xmlwriter.h>
 
+#include <algorithm>
 #include <cassert>
 #include <limits>
-#include <algorithm>
+#include <memory>
+#include <set>
 
 using namespace ::com::sun::star;
 

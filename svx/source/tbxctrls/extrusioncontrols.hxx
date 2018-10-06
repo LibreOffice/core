@@ -22,11 +22,6 @@
 #include <svx/svxdllapi.h>
 
 #include <svtools/treelistbox.hxx>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
-
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>
