@@ -34,8 +34,6 @@
 
 #include <sfx2/app.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 
 namespace com { namespace sun { namespace star { namespace uno {
