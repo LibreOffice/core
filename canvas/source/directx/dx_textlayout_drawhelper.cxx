@@ -68,7 +68,8 @@ namespace dxcanvas
         const css::uno::Reference<
             css::rendering::XCanvasFont >&     rCanvasFont,
         const css::geometry::Matrix2D&         rFontMatrix,
-        bool                                   bAlphaSurface )
+        bool                                   bAlphaSurface,
+        bool bIsRTL)
     {
         HDC hdc = rGraphics->GetHDC();
 
@@ -209,7 +210,8 @@ namespace dxcanvas
                                               aText,
                                               pDXArray.get(),
                                               rText.StartPosition,
-                                              rText.Length );
+                                              rText.Length,
+                                              bIsRTL ? SalLayoutFlags::BiDiRtl : SalLayoutFlags::NONE);
             }
             else
             {
