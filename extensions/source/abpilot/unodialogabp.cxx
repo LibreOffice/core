@@ -21,6 +21,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include "abspilot.hxx"
 #include <comphelper/sequence.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #define PROPERTY_ID_DATASOURCENAME  3
 
@@ -110,9 +111,9 @@ namespace abp
         }
     }
 
-    svt::OGenericUnoDialog::Dialog OABSPilotUno::createDialog(vcl::Window* _pParent)
+    svt::OGenericUnoDialog::Dialog OABSPilotUno::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
-        return svt::OGenericUnoDialog::Dialog(VclPtr<OAddressBookSourcePilot>::Create(_pParent, m_aContext));
+        return svt::OGenericUnoDialog::Dialog(VclPtr<OAddressBookSourcePilot>::Create(VCLUnoHelper::GetWindow(rParent), m_aContext));
     }
 
 

@@ -32,6 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <svtools/genericunodialog.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/implbase.hxx>
 
 namespace dbaui
@@ -105,7 +106,7 @@ namespace dbaui
 
     protected:
         // OGenericUnoDialog overridables
-        virtual svt::OGenericUnoDialog::Dialog createDialog(vcl::Window* _pParent) override;
+        virtual svt::OGenericUnoDialog::Dialog createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
         using OTextConnectionSettingsDialog_BASE::getFastPropertyValue;
     };
 
@@ -202,9 +203,9 @@ namespace dbaui
         return new ::cppu::OPropertyArrayHelper( aProps );
     }
 
-    svt::OGenericUnoDialog::Dialog OTextConnectionSettingsDialog::createDialog(vcl::Window* _pParent)
+    svt::OGenericUnoDialog::Dialog OTextConnectionSettingsDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
-        return svt::OGenericUnoDialog::Dialog(VclPtr<TextConnectionSettingsDialog>::Create(_pParent, *m_pDatasourceItems));
+        return svt::OGenericUnoDialog::Dialog(VclPtr<TextConnectionSettingsDialog>::Create(VCLUnoHelper::GetWindow(rParent), *m_pDatasourceItems));
     }
 
     void SAL_CALL OTextConnectionSettingsDialog::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )

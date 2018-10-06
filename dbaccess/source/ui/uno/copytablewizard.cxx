@@ -68,6 +68,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <svtools/genericunodialog.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>
 #include <vcl/waitobj.hxx>
@@ -193,7 +194,7 @@ namespace dbaui
         virtual ~CopyTableWizard() override;
 
         // OGenericUnoDialog overridables
-        virtual svt::OGenericUnoDialog::Dialog createDialog(vcl::Window* _pParent) override;
+        virtual svt::OGenericUnoDialog::Dialog createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
         virtual void executedDialog( sal_Int16 _nExecutionResult ) override;
 
     private:
@@ -1509,13 +1510,13 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments )
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
 
-svt::OGenericUnoDialog::Dialog CopyTableWizard::createDialog( vcl::Window* _pParent )
+svt::OGenericUnoDialog::Dialog CopyTableWizard::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
     OSL_PRECOND( isInitialized(), "CopyTableWizard::createDialog: not initialized!" );
         // this should have been prevented in ::execute already
 
     VclPtrInstance<OCopyTableWizard> pWizard(
-        _pParent,
+        VCLUnoHelper::GetWindow(rParent),
         m_sDestinationTable,
         m_nOperation,
         *m_pSourceObject,

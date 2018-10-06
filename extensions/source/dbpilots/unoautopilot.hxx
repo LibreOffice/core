@@ -21,6 +21,7 @@
 #define INCLUDED_EXTENSIONS_SOURCE_DBPILOTS_UNOAUTOPILOT_HXX
 
 #include <svtools/genericunodialog.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <componentmodule.hxx>
@@ -104,9 +105,9 @@ namespace dbp
 
     private:
         // OGenericUnoDialog overridables
-        virtual svt::OGenericUnoDialog::Dialog createDialog(vcl::Window* _pParent) override
+        virtual svt::OGenericUnoDialog::Dialog createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override
         {
-            return svt::OGenericUnoDialog::Dialog(VclPtr<TYPE>::Create(_pParent, m_xObjectModel, m_aContext));
+            return svt::OGenericUnoDialog::Dialog(VclPtr<TYPE>::Create(VCLUnoHelper::GetWindow(rParent), m_xObjectModel, m_aContext));
         }
 
         virtual void implInitialize(const css::uno::Any& _rValue) override

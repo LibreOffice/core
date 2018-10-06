@@ -29,6 +29,7 @@
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <toolkit/helper/vclunohelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -117,7 +118,7 @@ Sequence< OUString > SAL_CALL SWFDialog::getSupportedServiceNames()
 }
 
 
-svt::OGenericUnoDialog::Dialog SWFDialog::createDialog( vcl::Window* pParent )
+svt::OGenericUnoDialog::Dialog SWFDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
     VclPtr<::Dialog> pRet;
 
@@ -143,7 +144,7 @@ svt::OGenericUnoDialog::Dialog SWFDialog::createDialog( vcl::Window* pParent )
         {
         }
 */
-        pRet.reset( VclPtr<ImpSWFDialog>::Create( pParent, maFilterData ) );
+        pRet.reset(VclPtr<ImpSWFDialog>::Create(VCLUnoHelper::GetWindow(rParent), maFilterData));
     }
 
     return svt::OGenericUnoDialog::Dialog(pRet);

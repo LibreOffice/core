@@ -166,7 +166,7 @@ namespace svt
             but the application-wide solar mutex is (to guard the not thread-safe ctor of the dialog).
             @param      pParent     the parent window for the new dialog
         */
-        virtual OGenericUnoDialog::Dialog createDialog(vcl::Window* _pParent) = 0;
+        virtual OGenericUnoDialog::Dialog createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) = 0;
 
         /// called to destroy the dialog used. deletes m_pDialog and resets it to NULL
         void destroyDialog();

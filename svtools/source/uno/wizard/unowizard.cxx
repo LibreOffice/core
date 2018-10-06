@@ -33,6 +33,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svtools/genericunodialog.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
@@ -131,7 +132,7 @@ namespace {
         virtual ~Wizard() override;
 
     protected:
-        virtual OGenericUnoDialog::Dialog createDialog(vcl::Window* _pParent) override;
+        virtual OGenericUnoDialog::Dialog createDialog(const css::uno::Reference<css::awt::XWindow>& rParent) override;
 
     private:
         css::uno::Sequence< css::uno::Sequence< sal_Int16 > >         m_aWizardSteps;
@@ -252,9 +253,9 @@ namespace {
             return OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
     }
 
-    svt::OGenericUnoDialog::Dialog Wizard::createDialog( vcl::Window* i_pParent )
+    svt::OGenericUnoDialog::Dialog Wizard::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
     {
-        VclPtrInstance<WizardShell> pDialog( i_pParent, m_xController, m_aWizardSteps );
+        VclPtrInstance<WizardShell> pDialog(VCLUnoHelper::GetWindow(rParent), m_xController, m_aWizardSteps);
         pDialog->SetHelpId(  lcl_getHelpId( m_sHelpURL ) );
         pDialog->setTitleBase( m_sTitle );
         return OGenericUnoDialog::Dialog(pDialog);

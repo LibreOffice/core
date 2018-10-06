@@ -22,6 +22,7 @@
 #include "UserSettingsDlg.hxx"
 #include <UserAdminDlg.hxx>
 #include <comphelper/processfactory.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 using namespace dbaui;
 
@@ -91,9 +92,9 @@ Reference<XPropertySetInfo>  SAL_CALL OUserSettingsDialog::getPropertySetInfo()
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
-svt::OGenericUnoDialog::Dialog OUserSettingsDialog::createDialog(vcl::Window* _pParent)
+svt::OGenericUnoDialog::Dialog OUserSettingsDialog::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
-    return svt::OGenericUnoDialog::Dialog(VclPtr<OUserAdminDlg>::Create(_pParent, m_pDatasourceItems.get(), m_aContext, m_aInitialSelection, m_xActiveConnection));
+    return svt::OGenericUnoDialog::Dialog(VclPtr<OUserAdminDlg>::Create(VCLUnoHelper::GetWindow(rParent), m_pDatasourceItems.get(), m_aContext, m_aInitialSelection, m_xActiveConnection));
 }
 
 }   // namespace dbaui

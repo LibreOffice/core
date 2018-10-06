@@ -22,13 +22,6 @@
 #define INCLUDED_SVTOOLS_SOURCE_FILTER_EXPORTDIALOG_HXX
 
 #include <FltCallDialogParameter.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/slider.hxx>
 #include <vcl/weld.hxx>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
