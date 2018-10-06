@@ -18,6 +18,7 @@
  */
 
 
+#include <comphelper/DisableInteractionHelper.hxx>
 #include <comphelper/documentinfo.hxx>
 
 #include <cppuhelper/implementationentry.hxx>
@@ -450,6 +451,49 @@ MasterScriptProvider::parseLocationName( const OUString& location )
     return temp;
 }
 
+namespace
+{
+template <typename Proc> bool FindProviderAndApply(ProviderCache& rCache, Proc p)
+{
+    auto pass = [&rCache, &p]() -> bool
+    {
+        bool bResult = false;
+        for (auto& rProv : rCache.getAllProviders())
+        {
+            Reference<container::XNameContainer> xCont(rProv, UNO_QUERY);
+            if (!xCont.is())
+            {
+                continue;
+            }
+            try
+            {
+                bResult = p(xCont);
+                break;
+            }
+            catch (Exception& e)
+            {
+                SAL_INFO("scripting.provider", "ignoring " << e);
+            }
+        }
+        return bResult;
+    };
+    bool bSuccess = false;
+    // 1. Try to perform the operation without trying to enable JVM (if disabled)
+    // This allows us to avoid useless user interaction in case when other provider
+    // (not JVM) actually handles the operation.
+    {
+        css::uno::ContextLayer layer(
+            new comphelper::NoEnableJavaInteractionContext(css::uno::getCurrentContext()));
+        bSuccess = pass();
+    }
+    // 2. Now retry asking to enable JVM in case we didn't succeed first time
+    if (!bSuccess)
+    {
+        bSuccess = pass();
+    }
+    return bSuccess;
+}
+} // namespace
 
 // Register Package
 void SAL_CALL
@@ -487,29 +531,12 @@ MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
                 "insertByName cannot instantiate "
                 "child script providers." );
         }
-        Sequence < Reference< provider::XScriptProvider > > xSProviders =
-            providerCache()->getAllProviders();
-        sal_Int32 index = 0;
-
-        for ( ; index < xSProviders.getLength(); index++ )
-        {
-            Reference< container::XNameContainer > xCont( xSProviders[ index ], UNO_QUERY );
-            if ( !xCont.is() )
-            {
-                continue;
-            }
-            try
-            {
-                xCont->insertByName( aName, aElement );
-                break;
-            }
-            catch ( Exception& e )
-            {
-                SAL_INFO("scripting.provider", "ignoring " << e);
-            }
-
-        }
-        if ( index == xSProviders.getLength() )
+        const bool bSuccess = FindProviderAndApply(
+            *providerCache(), [&aName, &aElement](Reference<container::XNameContainer>& xCont) {
+                xCont->insertByName(aName, aElement);
+                return true;
+            });
+        if (!bSuccess)
         {
             // No script providers could process the package
             throw lang::IllegalArgumentException( "Failed to register package for " + aName,
@@ -550,27 +577,12 @@ MasterScriptProvider::removeByName( const OUString& Name )
                 "removeByName() cannot instantiate "
                 "child script providers." );
         }
-        Sequence < Reference< provider::XScriptProvider > > xSProviders =
-            providerCache()->getAllProviders();
-        sal_Int32 index = 0;
-        for ( ; index < xSProviders.getLength(); index++ )
-        {
-            Reference< container::XNameContainer > xCont( xSProviders[ index ], UNO_QUERY );
-            if ( !xCont.is() )
-            {
-                continue;
-            }
-            try
-            {
-                xCont->removeByName( Name );
-                break;
-            }
-            catch ( Exception& )
-            {
-            }
-
-        }
-        if ( index == xSProviders.getLength() )
+        const bool bSuccess = FindProviderAndApply(
+            *providerCache(), [&Name](Reference<container::XNameContainer>& xCont) {
+                xCont->removeByName(Name);
+                return true;
+            });
+        if (!bSuccess)
         {
             // No script providers could process the package
             throw lang::IllegalArgumentException( "Failed to revoke package for " + Name,
@@ -632,28 +644,10 @@ MasterScriptProvider::hasByName( const OUString& aName )
                 "removeByName() cannot instantiate "
                 "child script providers." );
         }
-        Sequence < Reference< provider::XScriptProvider > > xSProviders =
-            providerCache()->getAllProviders();
-        for ( sal_Int32 index = 0; index < xSProviders.getLength(); index++ )
-        {
-            Reference< container::XNameContainer > xCont( xSProviders[ index ], UNO_QUERY );
-            if ( !xCont.is() )
-            {
-                continue;
-            }
-            try
-            {
-                result = xCont->hasByName( aName );
-                if ( result )
-                {
-                    break;
-                }
-            }
-            catch ( Exception& )
-            {
-            }
-
-        }
+        result = FindProviderAndApply(
+            *providerCache(), [&aName](Reference<container::XNameContainer>& xCont) {
+                return xCont->hasByName(aName);
+            });
     }
     return result;
 }
