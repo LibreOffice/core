@@ -1111,12 +1111,7 @@ void SidebarController::RequestCloseDeck()
     mbIsDeckRequestedOpen = false;
     UpdateDeckOpenState();
 
-    if (mpCurrentDeck.get())
-    {
-        sal_Int32 nIndex(mpTabBar->GetDeckIndexForId(mpCurrentDeck->GetId()));
-        maFocusManager.GrabFocusButton(nIndex);
-    }
-    else
+    if (!mpCurrentDeck.get())
         mpTabBar->RemoveDeckHighlight();
 }
 

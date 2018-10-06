@@ -87,7 +87,6 @@ public:
     void HighlightDeck (const OUString& rsDeckId);
     void RemoveDeckHighlight ();
     OUString const & GetDeckIdForIndex (const sal_Int32 nIndex) const;
-    sal_Int32 GetDeckIndexForId (const OUString& rsDeckId);
     void ToggleHideFlag (const sal_Int32 nIndex);
     void RestoreHideFlags();
 

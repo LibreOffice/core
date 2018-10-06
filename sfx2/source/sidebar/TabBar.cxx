@@ -37,6 +37,8 @@
 
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 
+#include <sfx2/app.hxx>
+
 using namespace css;
 using namespace css::uno;
 
@@ -297,9 +299,10 @@ Image TabBar::GetItemImage(const DeckDescriptor& rDeckDescriptor) const
         mxFrame);
 }
 
-IMPL_LINK(TabBar::Item, HandleClick, Button*, pBtn, void)
+IMPL_LINK_NOARG(TabBar::Item, HandleClick, Button*, void)
 {
-    pBtn->GrabFocus();
+    vcl::Window* pFocusWin = Application::GetFocusWindow();
+    pFocusWin->GrabFocusToDocument();
     try
     {
         maDeckActivationFunctor(msDeckId);
@@ -313,18 +316,6 @@ OUString const & TabBar::GetDeckIdForIndex (const sal_Int32 nIndex) const
     if (nIndex<0 || static_cast<size_t>(nIndex)>=maItems.size())
         throw RuntimeException();
     return maItems[nIndex].msDeckId;
-}
-
-sal_Int32 TabBar::GetDeckIndexForId (const OUString& rsDeckId)
-{
-    sal_Int32 nIndex(1);
-    for (auto const& item : maItems)
-    {
-        if (item.msDeckId == rsDeckId)
-            return nIndex;
-        nIndex++;
-    }
-    return 0;
 }
 
 void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
