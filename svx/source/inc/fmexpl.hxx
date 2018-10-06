@@ -40,12 +40,6 @@
 
 #include <svtools/treelistbox.hxx>
 
-#include <vcl/dialog.hxx>
-#include <vcl/group.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/dockwin.hxx>
 #include <svx/fmview.hxx>
 
 #include "fmexch.hxx"

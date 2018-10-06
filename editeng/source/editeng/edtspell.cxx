@@ -18,10 +18,6 @@
  */
 
 
-#include <vcl/wrkwin.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/svapp.hxx>
-
 #include "impedit.hxx"
 #include <sal/log.hxx>
 #include <editeng/editview.hxx>

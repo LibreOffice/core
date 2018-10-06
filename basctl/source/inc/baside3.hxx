@@ -23,13 +23,7 @@
 #include "layout.hxx"
 #include "bastypes.hxx"
 #include "propbrw.hxx"
-
 #include <svl/undo.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/fixed.hxx>
-
 #include <memory>
 
 class Printer;

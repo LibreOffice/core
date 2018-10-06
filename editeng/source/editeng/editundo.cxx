@@ -18,9 +18,6 @@
  */
 
 #include <memory>
-#include <vcl/wrkwin.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/svapp.hxx>
 #include "impedit.hxx"
 #include "editundo.hxx"
 #include <editeng/editview.hxx>

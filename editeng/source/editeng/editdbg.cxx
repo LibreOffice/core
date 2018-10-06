@@ -19,10 +19,8 @@
 
 
 #include <memory>
-#include <vcl/wrkwin.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/weld.hxx>
 
 #include <editeng/lspcitem.hxx>
 #include <editeng/lrspitem.hxx>

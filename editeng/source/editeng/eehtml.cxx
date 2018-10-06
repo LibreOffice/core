@@ -18,9 +18,7 @@
  */
 
 
-#include <vcl/wrkwin.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 #include "eehtml.hxx"
 #include <editeng/adjustitem.hxx>
 #include <editeng/flditem.hxx>

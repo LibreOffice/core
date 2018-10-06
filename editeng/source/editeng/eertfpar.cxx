@@ -19,9 +19,6 @@
 
 #include <comphelper/string.hxx>
 #include <utility>
-#include <vcl/wrkwin.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/svapp.hxx>
 
 #include "eertfpar.hxx"
 #include "impedit.hxx"

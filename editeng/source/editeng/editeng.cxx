@@ -22,8 +22,6 @@
 
 #include <comphelper/lok.hxx>
 #include <config_global.h>
-#include <vcl/wrkwin.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 
@@ -1060,7 +1058,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                     bDebugPaint = !bDebugPaint;
                     OStringBuffer aInfo("DebugPaint: ");
                     aInfo.append(bDebugPaint ? "On" : "Off");
-                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+                    std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pEditView->GetWindow()->GetFrameWeld(),
                                                                   VclMessageType::Info, VclButtonsType::Ok,
                                                                   OStringToOUString(aInfo.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US)));
                     xInfoBox->run();
