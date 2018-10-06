@@ -7659,7 +7659,6 @@ include/test/util/xsearchable.hxx
 include/test/xmldiff.hxx
 include/test/xmltesttools.hxx
 include/toolkit/awt/animatedimagespeer.hxx
-include/toolkit/awt/scrollabledialog.hxx
 include/toolkit/awt/vclxaccessiblecomponent.hxx
 include/toolkit/awt/vclxbitmap.hxx
 include/toolkit/awt/vclxcontainer.hxx
@@ -16674,6 +16673,7 @@ toolkit/inc/helper/accessibilityclient.hxx
 toolkit/inc/helper/imagealign.hxx
 toolkit/inc/helper/tkresmgr.hxx
 toolkit/inc/helper/btndlg.hxx
+toolkit/inc/helper/scrollabledialog.hxx
 toolkit/inc/helper/unopropertyarrayhelper.hxx
 toolkit/inc/helper/unowrapper.hxx
 toolkit/source/awt/animatedimagespeer.cxx

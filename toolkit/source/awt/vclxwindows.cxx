@@ -18,7 +18,7 @@
  */
 
 #include <toolkit/awt/vclxwindows.hxx>
-#include <toolkit/awt/scrollabledialog.hxx>
+#include <helper/scrollabledialog.hxx>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
