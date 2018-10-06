@@ -207,7 +207,8 @@ namespace dxcanvas
             maLogicalAdvancements,
             mpFont.get(),
             mpFont->getFontMatrix(),
-            bAlphaSurface);
+            bAlphaSurface,
+            mnTextDirection != 0);
 
         return true;
     }

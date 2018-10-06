@@ -57,7 +57,8 @@ namespace dxcanvas
                        const css::uno::Reference<
                                css::rendering::XCanvasFont >&  rCanvasFont,
                        const css::geometry::Matrix2D&          rFontMatrix,
-                       bool                                                 bAlphaSurface );
+                       bool                                                 bAlphaSurface,
+                       bool bIsRTL);
 
         css::geometry::RealRectangle2D queryTextBounds(
             const css::rendering::StringContext&   rText,
