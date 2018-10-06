@@ -95,8 +95,16 @@ public:
     sal_Int32 getHorizontalEdge( int nEdgeY, sal_Int32* pnMin, sal_Int32* pnMax );
     sal_Int32 getVerticalEdge( int nEdgeX , sal_Int32* pnMin, sal_Int32* pnMax);
 
-    void DistributeColumns( ::tools::Rectangle& rArea, sal_Int32 nFirstCol, sal_Int32 nLastCol, const bool bOptimize );
-    void DistributeRows( ::tools::Rectangle& rArea, sal_Int32 nFirstRow, sal_Int32 nLastRow, const bool bOptimize );
+    void DistributeColumns( ::tools::Rectangle& rArea,
+                            sal_Int32 nFirstCol,
+                            sal_Int32 nLastCol,
+                            const bool bOptimize,
+                            const bool bMinimize );
+    void DistributeRows( ::tools::Rectangle& rArea,
+                         sal_Int32 nFirstRow,
+                         sal_Int32 nLastRow,
+                         const bool bOptimize,
+                         const bool bMinimize );
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
 private:
