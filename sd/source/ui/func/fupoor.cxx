@@ -29,7 +29,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
-#include <vcl/dialog.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XLayer.hpp>
 #include <com/sun/star/drawing/XLayerManager.hpp>
@@ -72,7 +71,6 @@ FuPoor::FuPoor (
       mpDocSh( pDrDoc->GetDocSh() ),
       mpDoc(pDrDoc),
       nSlotId( rReq.GetSlot() ),
-      pDialog(nullptr),
       bIsInDragMode(false),
       bNoScrollUntilInside (true),
       bScrollable (false),
@@ -98,15 +96,10 @@ FuPoor::~FuPoor()
     aDragTimer.Stop();
     aScrollTimer.Stop();
     aDelayToScrollTimer.Stop();
-    pDialog.disposeAndClear();
 }
 
 void FuPoor::Activate()
 {
-    if (pDialog)
-    {
-        pDialog->Show();
-    }
 }
 
 void FuPoor::Deactivate()
@@ -115,11 +108,6 @@ void FuPoor::Deactivate()
     aScrollTimer.Stop();
     aDelayToScrollTimer.Stop ();
     bScrollable = bDelayActive = false;
-
-    if (pDialog)
-    {
-        pDialog->Hide();
-    }
 
     if (mpWindow && mpWindow->IsMouseCaptured())
         mpWindow->ReleaseMouse();
