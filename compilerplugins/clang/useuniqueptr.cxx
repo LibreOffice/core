@@ -603,7 +603,7 @@ void UseUniquePtr::CheckLoopDelete(const FunctionDecl* functionDecl, const CXXDe
         // SdrUndo stuff
         if (fn == SRCDIR "/svx/source/svdraw/svdundo.cxx")
             return;
-        // TODO the lazydelete stuff should probably just be ripped out altogether nowthat we have VclPtr
+        // TODO the lazydelete stuff should probably just be ripped out altogether now that we have VclPtr
         if (fn == SRCDIR "/vcl/source/helper/lazydelete.cxx")
             return;
         // linked list
