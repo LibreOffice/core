@@ -204,25 +204,6 @@ FontworkBar::~FontworkBar()
     SetRepeatTarget(nullptr);
 }
 
-static vcl::Window* ImpGetViewWin(SdrView const * pView)
-{
-    if( pView )
-    {
-        const sal_uInt32 nCount(pView->PaintWindowCount());
-        for(sal_uInt32 nNum(0); nNum < nCount; nNum++)
-        {
-            OutputDevice* pOut = &(pView->GetPaintWindow(nNum)->GetOutputDevice());
-
-            if(OUTDEV_WINDOW == pOut->GetOutDevType())
-            {
-                return static_cast<vcl::Window*>(pOut);
-            }
-        }
-    }
-
-    return nullptr;
-}
-
 namespace svx {
 bool checkForSelectedFontWork( SdrView const * pSdrView, sal_uInt32& nCheckStatus )
 {
@@ -431,8 +412,8 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest const & rReq, SfxBindin
     {
         case SID_FONTWORK_GALLERY_FLOATER:
         {
-            ScopedVclPtrInstance< FontWorkGalleryDialog > aDlg( pSdrView, ImpGetViewWin(pSdrView) );
-            aDlg->Execute();
+            FontWorkGalleryDialog aDlg(rReq.GetFrameWeld(), pSdrView);
+            aDlg.run();
         }
         break;
 
