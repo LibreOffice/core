@@ -624,28 +624,20 @@ com_sun_star_comp_svx_FontworkCharacterSpacingControl_get_implementation(
     return cppu::acquire(new FontworkCharacterSpacingControl(xContext));
 }
 
-
-FontworkCharacterSpacingDialog::FontworkCharacterSpacingDialog( vcl::Window* pParent, sal_Int32 nScale )
-:   ModalDialog( pParent, "FontworkSpacingDialog" , "svx/ui/fontworkspacingdialog.ui" )
+FontworkCharacterSpacingDialog::FontworkCharacterSpacingDialog(weld::Window* pParent, sal_Int32 nScale)
+    : GenericDialogController(pParent, "svx/ui/fontworkspacingdialog.ui", "FontworkSpacingDialog")
+    , m_xMtrScale(m_xBuilder->weld_metric_spin_button("entry", FUNIT_PERCENT))
 {
-    get(m_pMtrScale, "entry");
-    m_pMtrScale->SetValue( nScale );
+    m_xMtrScale->set_value(nScale, FUNIT_PERCENT);
 }
 
 FontworkCharacterSpacingDialog::~FontworkCharacterSpacingDialog()
 {
-    disposeOnce();
-}
-
-void FontworkCharacterSpacingDialog::dispose()
-{
-    m_pMtrScale.clear();
-    ModalDialog::dispose();
 }
 
 sal_Int32 FontworkCharacterSpacingDialog::getScale() const
 {
-    return static_cast<sal_Int32>(m_pMtrScale->GetValue());
+    return static_cast<sal_Int32>(m_xMtrScale->get_value(FUNIT_PERCENT));
 }
 
 }
