@@ -33,7 +33,6 @@
 #include <editeng/numdef.hxx>
 #include <editeng/svxenum.hxx>
 #include <svtools/ctrlbox.hxx>
-#include <vcl/dialog.hxx>
 
 #define MN_GALLERY_ENTRY 100
 

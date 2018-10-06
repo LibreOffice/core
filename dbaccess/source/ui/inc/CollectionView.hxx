@@ -24,6 +24,7 @@
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/dialog.hxx>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

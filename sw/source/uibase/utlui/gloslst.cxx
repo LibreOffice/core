@@ -18,7 +18,6 @@
  */
 
 #include <tools/urlobj.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>

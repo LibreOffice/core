@@ -21,7 +21,6 @@
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTBASIC_HXX
 
 #include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
 #include <sfx2/tabdlg.hxx>
 
 class SvxBasicIDEOptionsPage: public SfxTabPage

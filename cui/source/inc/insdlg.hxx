@@ -24,17 +24,8 @@
 #include <com/sun/star/embed/XStorage.hpp>
 
 #include <svtools/insdlg.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/field.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
-#include <svtools/svmedit.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
-
-class VclFrame;
 
 class INetURLObject;
 

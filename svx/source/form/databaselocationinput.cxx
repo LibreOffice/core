@@ -122,8 +122,7 @@ namespace svx
         {
             if ( ::utl::UCBContentHelper::Exists( sURL ) )
             {
-                vcl::Window* pWin = m_rLocationInput.GetSystemWindow();
-                std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pWin ? pWin->GetFrameWeld() : nullptr,
+                std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(m_rLocationInput.GetFrameWeld(),
                                                                VclMessageType::Question, VclButtonsType::YesNo,
                                                                SvxResId(RID_STR_ALREADYEXISTOVERWRITE)));
                 if (xQueryBox->run() != RET_YES)

@@ -11,6 +11,7 @@
 #include <svx/ClassificationEditView.hxx>
 #include <svx/ClassificationField.hxx>
 
+#include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <svl/itemset.hxx>

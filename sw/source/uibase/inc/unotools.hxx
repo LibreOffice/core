@@ -21,7 +21,6 @@
 
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
-#include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/idle.hxx>
