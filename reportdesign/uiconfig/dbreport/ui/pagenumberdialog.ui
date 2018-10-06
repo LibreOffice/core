@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="rpt">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkDialog" id="PageNumberDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="pagenumberdialog|PageNumberDialog">Page Numbers</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -104,7 +110,6 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">pagenofm</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -120,7 +125,6 @@
                         <property name="hexpand">True</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
-                        <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">pagen</property>
                       </object>
@@ -183,7 +187,6 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">bottompage</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -273,10 +276,10 @@
                       <object class="GtkLabel" id="alignment_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="pagenumberdialog|alignment_label">_Alignment:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">alignment</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
