@@ -65,6 +65,7 @@
 #include <vcl/help.hxx>
 #include <vcl/vclmedit.hxx>
 #include <o3tl/make_unique.hxx>
+#include <uno/current_context.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -541,6 +542,36 @@ namespace
     }
 }
 
+namespace
+{
+class NoEnableJavaInteractionContext : public cppu::WeakImplHelper<css::uno::XCurrentContext>
+{
+public:
+    explicit NoEnableJavaInteractionContext(
+        css::uno::Reference<css::uno::XCurrentContext> const& xContext)
+        : mxContext(xContext)
+    {
+    }
+    NoEnableJavaInteractionContext(const NoEnableJavaInteractionContext&) = delete;
+    NoEnableJavaInteractionContext& operator=(const NoEnableJavaInteractionContext&) = delete;
+
+private:
+    virtual ~NoEnableJavaInteractionContext() override {}
+
+    virtual css::uno::Any SAL_CALL getValueByName(OUString const& Name) override
+    {
+        if (Name == "DontEnableJava")
+            return css::uno::Any(true);
+        else if (mxContext.is())
+            return mxContext->getValueByName(Name);
+        else
+            return css::uno::Any();
+    }
+
+    css::uno::Reference<css::uno::XCurrentContext> mxContext;
+};
+
+} // namespace
 
 void SfxConfigGroupListBox::FillScriptList(const css::uno::Reference< css::script::browse::XBrowseNode >& xRootNode,
                                            SvTreeListEntry* pParentEntry, bool bCheapChildrenOnDemand)
@@ -548,6 +579,10 @@ void SfxConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
     try {
         if ( xRootNode->hasChildNodes() )
         {
+            // tdf#120362: Don't ask to enable disabled Java when filling script list
+            css::uno::ContextLayer layer(
+                new NoEnableJavaInteractionContext(css::uno::getCurrentContext()));
+
             Sequence< Reference< browse::XBrowseNode > > children =
                 xRootNode->getChildNodes();
             bool bIsRootNode = false;

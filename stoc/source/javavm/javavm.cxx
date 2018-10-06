@@ -778,6 +778,13 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         }
         case JFW_E_JAVA_DISABLED:
         {
+            bool bDontEnableJava = false;
+            auto xContext(css::uno::getCurrentContext());
+            if (xContext.is())
+                xContext->getValueByName("DontEnableJava") >>= bDontEnableJava;
+            if (bDontEnableJava)
+                return css::uno::Any();
+
             //QueryBox:
             //%PRODUCTNAME requires a Java runtime environment (JRE) to perform
             //this task. However, use of a JRE has been disabled. Do you want to
