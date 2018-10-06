@@ -27,7 +27,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <tools/debug.hxx>
-#include <toolkit/awt/scrollabledialog.hxx>
+#include <helper/scrollabledialog.hxx>
 #include <toolkit/helper/property.hxx>
 
 

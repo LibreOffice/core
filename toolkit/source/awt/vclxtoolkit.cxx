@@ -124,10 +124,10 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
-#include <toolkit/awt/scrollabledialog.hxx>
 #include <comphelper/profilezone.hxx>
 
 #include <helper/msgbox.hxx>
+#include <helper/scrollabledialog.hxx>
 #include <helper/unowrapper.hxx>
 
 #if defined(_WIN32)
