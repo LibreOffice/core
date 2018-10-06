@@ -18,36 +18,25 @@
  */
 
 #include <swtypes.hxx>
-
 #include <selglos.hxx>
 
-#include <vcl/layout.hxx>
-
-SwSelGlossaryDlg::SwSelGlossaryDlg(vcl::Window * pParent, const OUString &rShortName)
-    : ModalDialog(pParent, "InsertAutoTextDialog",
-        "modules/swriter/ui/insertautotextdialog.ui")
+SwSelGlossaryDlg::SwSelGlossaryDlg(weld::Window * pParent, const OUString &rShortName)
+    : GenericDialogController(pParent, "modules/swriter/ui/insertautotextdialog.ui", "InsertAutoTextDialog")
+    , m_xFrame(m_xBuilder->weld_frame("frame"))
+    , m_xGlosBox(m_xBuilder->weld_tree_view("treeview"))
 {
-    VclFrame *pFrame(get<VclFrame>("frame"));
-    pFrame->set_label(pFrame->get_label() + rShortName);
-    get(m_pGlosBox, "treeview");
-    m_pGlosBox->set_height_request(m_pGlosBox->GetTextHeight() * 10);
-    m_pGlosBox->SetDoubleClickHdl(LINK(this, SwSelGlossaryDlg, DoubleClickHdl));
+    m_xFrame->set_label(m_xFrame->get_label() + rShortName);
+    m_xGlosBox->set_size_request(-1, m_xGlosBox->get_height_rows(10));
+    m_xGlosBox->connect_row_activated(LINK(this, SwSelGlossaryDlg, DoubleClickHdl));
 }
 
 SwSelGlossaryDlg::~SwSelGlossaryDlg()
 {
-    disposeOnce();
 }
 
-void SwSelGlossaryDlg::dispose()
+IMPL_LINK_NOARG(SwSelGlossaryDlg, DoubleClickHdl, weld::TreeView&, void)
 {
-    m_pGlosBox.clear();
-    ModalDialog::dispose();
-}
-
-IMPL_LINK_NOARG(SwSelGlossaryDlg, DoubleClickHdl, ListBox&, void)
-{
-    EndDialog(RET_OK);
+    m_xDialog->response(RET_OK);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

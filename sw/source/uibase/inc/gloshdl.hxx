@@ -39,7 +39,7 @@ class SW_DLLPUBLIC SwGlossaryHdl
     std::unique_ptr<SwTextBlocks>
                     pCurGrp;
 
-    SAL_DLLPRIVATE bool  Expand( const OUString& rShortName,
+    SAL_DLLPRIVATE bool  Expand(weld::Window* pParent, const OUString& rShortName,
                     SwGlossaries* pGlossaries,
                     std::unique_ptr<SwTextBlocks> pGlossary );
 
@@ -70,7 +70,7 @@ public:
     bool    DelGlossary(const OUString&);
     bool    CopyToClipboard(SwWrtShell& rSh, const OUString& rShortName);
 
-    bool    ExpandGlossary();
+    bool    ExpandGlossary(weld::Window* pParent);
     bool    InsertGlossary(const OUString &rName);
 
     void    SetMacros(const OUString& rName,
