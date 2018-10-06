@@ -19,13 +19,8 @@
 #ifndef INCLUDED_REPORTDESIGN_SOURCE_UI_INC_PAGENUMBER_HXX
 #define INCLUDED_REPORTDESIGN_SOURCE_UI_INC_PAGENUMBER_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/field.hxx>
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 #include <com/sun/star/report/XReportDefinition.hpp>
-
 
 namespace rptui
 {
@@ -35,30 +30,26 @@ class OReportController;
 |* Groups and Sorting dialog
 |*
 \************************************************************************/
-class OPageNumberDialog :   public ModalDialog
+class OPageNumberDialog : public weld::GenericDialogController
 {
-    VclPtr<RadioButton>                            m_pPageN;
-    VclPtr<RadioButton>                            m_pPageNofM;
-
-    VclPtr<RadioButton>                            m_pTopPage;
-    VclPtr<RadioButton>                            m_pBottomPage;
-    VclPtr<ListBox>                                m_pAlignmentLst;
-
-    VclPtr<CheckBox>                               m_pShowNumberOnFirstPage;
-
     ::rptui::OReportController*                    m_pController;
     css::uno::Reference< css::report::XReportDefinition>
                                                    m_xHoldAlive;
+    std::unique_ptr<weld::RadioButton> m_xPageN;
+    std::unique_ptr<weld::RadioButton> m_xPageNofM;
+    std::unique_ptr<weld::RadioButton> m_xTopPage;
+    std::unique_ptr<weld::RadioButton> m_xBottomPage;
+    std::unique_ptr<weld::ComboBox> m_xAlignmentLst;
+    std::unique_ptr<weld::CheckButton> m_xShowNumberOnFirstPage;
 
     OPageNumberDialog(const OPageNumberDialog&) = delete;
     void operator =(const OPageNumberDialog&) = delete;
 public:
-    OPageNumberDialog( vcl::Window* pParent
-                        ,const css::uno::Reference< css::report::XReportDefinition>& _xHoldAlive
-                        ,::rptui::OReportController* _pController);
+    OPageNumberDialog(weld::Window* pParent,
+                      const css::uno::Reference< css::report::XReportDefinition>& _xHoldAlive,
+                      ::rptui::OReportController* _pController);
     virtual ~OPageNumberDialog() override;
-    virtual void    dispose() override;
-    virtual short   Execute() override;
+    void execute();
 };
 
 } // namespace rptui
