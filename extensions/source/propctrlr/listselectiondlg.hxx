@@ -20,35 +20,30 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_LISTSELECTIONDLG_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_LISTSELECTIONDLG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/layout.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 namespace pcr
 {
-    class ListSelectionDialog : public ModalDialog
+    class ListSelectionDialog : public weld::GenericDialogController
     {
     private:
-        VclPtr<ListBox>        m_pEntries;
-
-        css::uno::Reference< css::beans::XPropertySet >
-                               m_xListBox;
-        OUString               m_sPropertyName;
+        css::uno::Reference<css::beans::XPropertySet> m_xListBox;
+        OUString m_sPropertyName;
+        std::unique_ptr<weld::Frame> m_xFrame;
+        std::unique_ptr<weld::TreeView> m_xEntries;
 
     public:
         ListSelectionDialog(
-            vcl::Window* _pParent,
+            weld::Window* _pParent,
             const css::uno::Reference< css::beans::XPropertySet >& _rxListBox,
             const OUString& _rPropertyName,
             const OUString& _rPropertyUIName
         );
         virtual ~ListSelectionDialog() override;
-        virtual void dispose() override;
 
-        // Dialog overridables
-        virtual short   Execute() override;
+        short   execute();
 
     private:
         void    initialize( );
@@ -59,7 +54,6 @@ namespace pcr
         void    selectEntries   ( const css::uno::Sequence< sal_Int16 >& /* [in ] */ _rSelection );
         void    collectSelection(       std::vector< sal_Int16 >& /* [out] */ _rSelection );
     };
-
 
 } // namespacepcr
 

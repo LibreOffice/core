@@ -29,39 +29,31 @@ namespace pcr
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
 
-    ListSelectionDialog::ListSelectionDialog(vcl::Window* _pParent, const Reference< XPropertySet >& _rxListBox,
+    ListSelectionDialog::ListSelectionDialog(weld::Window* pParent, const Reference< XPropertySet >& _rxListBox,
             const OUString& _rPropertyName, const OUString& _rPropertyUIName)
-        : ModalDialog( _pParent, "ListSelectDialog", "modules/spropctrlr/ui/listselectdialog.ui" )
-        ,m_xListBox     ( _rxListBox     )
-        ,m_sPropertyName( _rPropertyName )
+        : GenericDialogController(pParent, "modules/spropctrlr/ui/listselectdialog.ui", "ListSelectDialog")
+        , m_xListBox     ( _rxListBox     )
+        , m_sPropertyName( _rPropertyName )
+        , m_xFrame(m_xBuilder->weld_frame("frame"))
+        , m_xEntries(m_xBuilder->weld_tree_view("treeview"))
     {
         OSL_PRECOND( m_xListBox.is(), "ListSelectionDialog::ListSelectionDialog: invalid list box!" );
 
-        get(m_pEntries, "treeview");
-        Size aSize(LogicToPixel(Size(85, 97), MapMode(MapUnit::MapAppFont)));
-        m_pEntries->set_width_request(aSize.Width());
-        m_pEntries->set_height_request(aSize.Height());
+        m_xEntries->set_size_request(m_xEntries->get_approximate_digit_width() * 40, m_xEntries->get_height_rows(9));
 
-        SetText(_rPropertyUIName);
-        get<VclFrame>("frame")->set_label(_rPropertyUIName);
+        m_xDialog->set_title(_rPropertyUIName);
+        m_xFrame->set_label(_rPropertyUIName);
 
         initialize( );
     }
 
     ListSelectionDialog::~ListSelectionDialog()
     {
-        disposeOnce();
     }
 
-    void ListSelectionDialog::dispose()
+    short ListSelectionDialog::execute()
     {
-        m_pEntries.clear();
-        ModalDialog::dispose();
-    }
-
-    short ListSelectionDialog::Execute()
-    {
-        short nResult = ModalDialog::Execute();
+        short nResult = m_xDialog->run();
 
         if ( RET_OK == nResult )
             commitSelection();
@@ -75,14 +67,12 @@ namespace pcr
         if ( !m_xListBox.is() )
             return;
 
-        m_pEntries->SetStyle( GetStyle() | WB_SIMPLEMODE );
-
         try
         {
             // initialize the multi-selection flag
             bool bMultiSelection = false;
             OSL_VERIFY( m_xListBox->getPropertyValue( PROPERTY_MULTISELECTION ) >>= bMultiSelection );
-            m_pEntries->EnableMultiSelection( bMultiSelection );
+            m_xEntries->set_selection_mode(bMultiSelection);
 
             // fill the list box with all entries
             Sequence< OUString > aListEntries;
@@ -99,7 +89,6 @@ namespace pcr
             OSL_FAIL( "ListSelectionDialog::initialize: caught an exception!" );
         }
     }
-
 
     void ListSelectionDialog::commitSelection()
     {
@@ -119,29 +108,28 @@ namespace pcr
         }
     }
 
-
     void ListSelectionDialog::fillEntryList( const Sequence< OUString >& _rListEntries )
     {
-        m_pEntries->Clear();
-        for ( auto const & entry : _rListEntries )
-            m_pEntries->InsertEntry( entry );
+        m_xEntries->freeze();
+        m_xEntries->clear();
+        for (auto const & entry : _rListEntries)
+            m_xEntries->append_text(entry);
+        m_xEntries->thaw();
     }
-
 
     void ListSelectionDialog::collectSelection( std::vector< sal_Int16 >& /* [out] */ _rSelection )
     {
-        const sal_Int32 nSelectedCount = m_pEntries->GetSelectedEntryCount( );
-        _rSelection.resize( nSelectedCount );
-        for ( sal_Int32 selected = 0; selected < nSelectedCount; ++selected )
-            _rSelection[selected] = static_cast< sal_Int16 >( m_pEntries->GetSelectedEntryPos( selected ) );
+        auto aSelection = m_xEntries->get_selected_rows();
+        _rSelection.resize(aSelection.size());
+        for (auto row : aSelection)
+            _rSelection.push_back(row);
     }
-
 
     void ListSelectionDialog::selectEntries( const Sequence< sal_Int16 >& /* [in ] */ _rSelection )
     {
-        m_pEntries->SetNoSelection();
-        for ( auto const & selection : _rSelection )
-            m_pEntries->SelectEntryPos( selection );
+        m_xEntries->unselect_all();
+        for (auto const & selection : _rSelection)
+            m_xEntries->select(selection);
     }
 
 
