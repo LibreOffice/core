@@ -20,10 +20,7 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_NEWDATATYPE_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_PROPCTRLR_NEWDATATYPE_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
+#include <vcl/weld.hxx>
 
 #include <set>
 #include <vector>
@@ -32,24 +29,22 @@
 namespace pcr
 {
     //= NewDataTypeDialog
-    class NewDataTypeDialog : public ModalDialog
+    class NewDataTypeDialog : public weld::GenericDialogController
     {
     private:
-        VclPtr<Edit>           m_pName;
-        VclPtr<OKButton>       m_pOK;
+        std::set<OUString> m_aProhibitedNames;
 
-        std::set< OUString > m_aProhibitedNames;
-
+        std::unique_ptr<weld::Entry> m_xName;
+        std::unique_ptr<weld::Button> m_xOK;
     public:
-        NewDataTypeDialog(vcl::Window* _pParent, const OUString& _rNameBase,
+        NewDataTypeDialog(weld::Window* _pParent, const OUString& _rNameBase,
             const std::vector< OUString >& _rProhibitedNames );
         virtual ~NewDataTypeDialog() override;
-        virtual void dispose() override;
 
-        OUString GetName() const { return m_pName->GetText(); }
+        OUString GetName() const { return m_xName->get_text(); }
 
     private:
-        DECL_LINK( OnNameModified, Edit&, void );
+        DECL_LINK(OnNameModified, weld::Entry&, void);
     };
 
 
