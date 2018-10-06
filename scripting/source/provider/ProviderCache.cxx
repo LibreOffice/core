@@ -88,16 +88,13 @@ ProviderCache::getAllProviders()
 
     ::osl::Guard< osl::Mutex > aGuard( m_mutex );
     Sequence < Reference< provider::XScriptProvider > > providers (  m_hProviderDetailsCache.size() );
-    ProviderDetails_hash::iterator h_itEnd =  m_hProviderDetailsCache.end();
-    ProviderDetails_hash::iterator h_it = m_hProviderDetailsCache.begin();
     // should assert if size !>  0
     if (  !m_hProviderDetailsCache.empty() )
     {
         sal_Int32 providerIndex = 0;
-        sal_Int32 index = 0;
-        for ( index = 0; h_it !=  h_itEnd; ++h_it, index++ )
+        for (auto& rDetail : m_hProviderDetailsCache)
         {
-            Reference< provider::XScriptProvider > xScriptProvider  = h_it->second.provider;
+            Reference<provider::XScriptProvider> xScriptProvider = rDetail.second.provider;
             if ( xScriptProvider.is() )
             {
                 providers[ providerIndex++ ] = xScriptProvider;
@@ -107,7 +104,7 @@ ProviderCache::getAllProviders()
                 // create provider
                 try
                 {
-                    xScriptProvider  = createProvider( h_it->second );
+                    xScriptProvider = createProvider(rDetail.second);
                     providers[ providerIndex++ ] = xScriptProvider;
                 }
                 catch ( const Exception& )
@@ -117,7 +114,7 @@ ProviderCache::getAllProviders()
             }
         }
 
-        if ( providerIndex < index )
+        if (providerIndex < providers.getLength())
         {
             providers.realloc( providerIndex );
         }
