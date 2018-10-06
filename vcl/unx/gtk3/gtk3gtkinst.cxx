@@ -2808,12 +2808,21 @@ private:
         return -1;
     }
 
+    // https://developer.gnome.org/hig-book/unstable/controls-notebooks.html.en#controls-too-many-tabs
+    // tdf#120371 If you have more than about six tabs in a notebook ... place
+    // the list control on the left-hand side of the window
+    void update_tab_pos()
+    {
+        gtk_notebook_set_tab_pos(m_pNotebook, get_n_pages() > 6 ? GTK_POS_LEFT : GTK_POS_TOP);
+    }
+
 public:
     GtkInstanceNotebook(GtkNotebook* pNotebook, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pNotebook), bTakeOwnership)
         , m_pNotebook(pNotebook)
         , m_nSignalId(g_signal_connect(pNotebook, "switch-page", G_CALLBACK(signalSwitchPage), this))
     {
+        update_tab_pos();
     }
 
     virtual int get_current_page() const override
@@ -2879,6 +2888,7 @@ public:
     {
         disable_notify_events();
         gtk_notebook_remove_page(m_pNotebook, get_page_number(rIdent));
+        update_tab_pos();
         enable_notify_events();
     }
 
