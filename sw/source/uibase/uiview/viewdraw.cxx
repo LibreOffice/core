@@ -144,10 +144,9 @@ void SwView::ExecDraw(SfxRequest& rReq)
     }
     else if ( nSlotId == SID_FONTWORK_GALLERY_FLOATER )
     {
-        vcl::Window*  pWin = &( m_pWrtShell->GetView().GetViewFrame()->GetWindow() );
+        vcl::Window& rWin = m_pWrtShell->GetView().GetViewFrame()->GetWindow();
 
-        if ( pWin )
-            pWin->EnterWait();
+        rWin.EnterWait();
 
         if( !m_pWrtShell->HasDrawView() )
             m_pWrtShell->MakeDrawView();
@@ -156,9 +155,9 @@ void SwView::ExecDraw(SfxRequest& rReq)
         if ( pSdrView )
         {
             SdrObject* pObj = nullptr;
-            ScopedVclPtrInstance< svx::FontWorkGalleryDialog > aDlg( pSdrView, pWin );
-            aDlg->SetSdrObjectRef( &pObj, pSdrView->GetModel() );
-            aDlg->Execute();
+            svx::FontWorkGalleryDialog aDlg(rWin.GetFrameWeld(), pSdrView);
+            aDlg.SetSdrObjectRef( &pObj, pSdrView->GetModel() );
+            aDlg.run();
             if ( pObj )
             {
                 Size            aDocSize( m_pWrtShell->GetDocSize() );
@@ -174,12 +173,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
                     aPos.setY( aDocSize.Height() / 2 + rVisArea.Top() );
 
                 if( aPrefSize.Width() && aPrefSize.Height() )
-                {
-                    if( pWin )
-                        aSize = pWin->PixelToLogic(aPrefSize, MapMode(MapUnit::MapTwip));
-                    else
-                        aSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MapMode(MapUnit::MapTwip));
-                }
+                    aSize = rWin.PixelToLogic(aPrefSize, MapMode(MapUnit::MapTwip));
                 else
                     aSize = Size( 2835, 2835 );
 
@@ -188,8 +182,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
                 rReq.Ignore ();
             }
         }
-        if( pWin )
-            pWin->LeaveWait();
+        rWin.LeaveWait();
     }
     else if ( m_nFormSfxId != USHRT_MAX )
         GetViewFrame()->GetDispatcher()->Execute( SID_FM_LEAVE_CREATE );
