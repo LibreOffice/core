@@ -742,21 +742,20 @@ bool ScTPValidationHelp::FillItemSet( SfxItemSet* rArgSet )
 
 // Error Alert Page
 
-ScTPValidationError::ScTPValidationError( vcl::Window*           pParent,
-                                          const SfxItemSet& rArgSet )
+ScTPValidationError::ScTPValidationError(TabPageParent pParent,
+                                         const SfxItemSet& rArgSet)
 
     :   SfxTabPage      ( pParent,
-                          "ErrorAlertTabPage" , "modules/scalc/ui/erroralerttabpage.ui" ,
+                          "modules/scalc/ui/erroralerttabpage.ui", "ErrorAlertTabPage",
                           &rArgSet )
+    , m_xTsbShow(m_xBuilder->weld_check_button("tsbshow"))
+    , m_xLbAction(m_xBuilder->weld_combo_box("actionCB"))
+    , m_xBtnSearch(m_xBuilder->weld_button("browseBtn"))
+    , m_xEdtTitle(m_xBuilder->weld_entry("erroralert_title"))
+    , m_xFtError(m_xBuilder->weld_label("errormsg_label"))
+    , m_xEdError(m_xBuilder->weld_text_view("errorMsg"))
 {
-    get(m_pTsbShow,"tsbshow");
-    get(m_pLbAction,"actionCB");
-    get(m_pBtnSearch,"browseBtn");
-    get(m_pEdtTitle,"erroralert_title");
-    get(m_pFtError,"errormsg_label");
-    get(m_pEdError,"errorMsg");
-    m_pEdError->set_height_request(m_pEdError->GetTextHeight() * 12);
-    m_pEdError->set_width_request(m_pEdError->approximate_char_width() * 50);
+    m_xEdError->set_size_request(m_xEdError->get_approximate_digit_width() * 40, m_xEdError->get_height_rows(12));
     Init();
 }
 
@@ -765,32 +764,20 @@ ScTPValidationError::~ScTPValidationError()
     disposeOnce();
 }
 
-void ScTPValidationError::dispose()
-{
-    m_pTsbShow.clear();
-    m_pLbAction.clear();
-    m_pBtnSearch.clear();
-    m_pEdtTitle.clear();
-    m_pFtError.clear();
-    m_pEdError.clear();
-    SfxTabPage::dispose();
-}
-
 void ScTPValidationError::Init()
 {
-    m_pLbAction->SetSelectHdl( LINK( this, ScTPValidationError, SelectActionHdl ) );
-    m_pBtnSearch->SetClickHdl( LINK( this, ScTPValidationError, ClickSearchHdl ) );
+    m_xLbAction->connect_changed(LINK(this, ScTPValidationError, SelectActionHdl));
+    m_xBtnSearch->connect_clicked(LINK( this, ScTPValidationError, ClickSearchHdl));
 
-    m_pLbAction->SelectEntryPos( 0 );
-    m_pTsbShow->EnableTriState( false );
+    m_xLbAction->set_active(0);
 
-    SelectActionHdl( *m_pLbAction.get() );
+    SelectActionHdl(*m_xLbAction);
 }
 
-VclPtr<SfxTabPage> ScTPValidationError::Create( TabPageParent    pParent,
-                                                const SfxItemSet*  rArgSet )
+VclPtr<SfxTabPage> ScTPValidationError::Create(TabPageParent pParent,
+                                               const SfxItemSet* rArgSet)
 {
-    return VclPtr<ScTPValidationError>::Create( pParent.pParent, *rArgSet );
+    return VclPtr<ScTPValidationError>::Create(pParent, *rArgSet);
 }
 
 void ScTPValidationError::Reset( const SfxItemSet* rArgSet )
@@ -798,49 +785,49 @@ void ScTPValidationError::Reset( const SfxItemSet* rArgSet )
     const SfxPoolItem* pItem;
 
     if ( rArgSet->GetItemState( FID_VALID_SHOWERR, true, &pItem ) == SfxItemState::SET )
-        m_pTsbShow->SetState( static_cast<const SfxBoolItem*>(pItem)->GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
+        m_xTsbShow->set_state( static_cast<const SfxBoolItem*>(pItem)->GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
     else
-        m_pTsbShow->SetState( TRISTATE_TRUE );   // check by default
+        m_xTsbShow->set_state( TRISTATE_TRUE );   // check by default
 
     if ( rArgSet->GetItemState( FID_VALID_ERRSTYLE, true, &pItem ) == SfxItemState::SET )
-        m_pLbAction->SelectEntryPos( static_cast<const SfxAllEnumItem*>(pItem)->GetValue() );
+        m_xLbAction->set_active( static_cast<const SfxAllEnumItem*>(pItem)->GetValue() );
     else
-        m_pLbAction->SelectEntryPos( 0 );
+        m_xLbAction->set_active( 0 );
 
     if ( rArgSet->GetItemState( FID_VALID_ERRTITLE, true, &pItem ) == SfxItemState::SET )
-        m_pEdtTitle->SetText( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+        m_xEdtTitle->set_text( static_cast<const SfxStringItem*>(pItem)->GetValue() );
     else
-        m_pEdtTitle->SetText( EMPTY_OUSTRING );
+        m_xEdtTitle->set_text( EMPTY_OUSTRING );
 
     if ( rArgSet->GetItemState( FID_VALID_ERRTEXT, true, &pItem ) == SfxItemState::SET )
-        m_pEdError->SetText( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+        m_xEdError->set_text( static_cast<const SfxStringItem*>(pItem)->GetValue() );
     else
-        m_pEdError->SetText( EMPTY_OUSTRING );
+        m_xEdError->set_text( EMPTY_OUSTRING );
 
-    SelectActionHdl( *m_pLbAction.get() );
+    SelectActionHdl( *m_xLbAction.get() );
 }
 
 bool ScTPValidationError::FillItemSet( SfxItemSet* rArgSet )
 {
-    rArgSet->Put( SfxBoolItem( FID_VALID_SHOWERR, m_pTsbShow->GetState() == TRISTATE_TRUE ) );
-    rArgSet->Put( SfxAllEnumItem( FID_VALID_ERRSTYLE, m_pLbAction->GetSelectedEntryPos() ) );
-    rArgSet->Put( SfxStringItem( FID_VALID_ERRTITLE, m_pEdtTitle->GetText() ) );
-    rArgSet->Put( SfxStringItem( FID_VALID_ERRTEXT, m_pEdError->GetText() ) );
+    rArgSet->Put( SfxBoolItem( FID_VALID_SHOWERR, m_xTsbShow->get_state() == TRISTATE_TRUE ) );
+    rArgSet->Put( SfxAllEnumItem( FID_VALID_ERRSTYLE, m_xLbAction->get_active() ) );
+    rArgSet->Put( SfxStringItem( FID_VALID_ERRTITLE, m_xEdtTitle->get_text() ) );
+    rArgSet->Put( SfxStringItem( FID_VALID_ERRTEXT, m_xEdError->get_text() ) );
 
     return true;
 }
 
-IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl, ListBox&, void)
+IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl, weld::ComboBox&, void)
 {
-    ScValidErrorStyle eStyle = static_cast<ScValidErrorStyle>(m_pLbAction->GetSelectedEntryPos());
+    ScValidErrorStyle eStyle = static_cast<ScValidErrorStyle>(m_xLbAction->get_active());
     bool bMacro = ( eStyle == SC_VALERR_MACRO );
 
-    m_pBtnSearch->Enable( bMacro );
-    m_pFtError->Enable( !bMacro );
-    m_pEdError->Enable( !bMacro );
+    m_xBtnSearch->set_sensitive( bMacro );
+    m_xFtError->set_sensitive( !bMacro );
+    m_xEdError->set_sensitive( !bMacro );
 }
 
-IMPL_LINK_NOARG(ScTPValidationError, ClickSearchHdl, Button*, void)
+IMPL_LINK_NOARG(ScTPValidationError, ClickSearchHdl, weld::Button&, void)
 {
     // Use static SfxApplication method to bring up selector dialog for
     // choosing a script
@@ -848,7 +835,7 @@ IMPL_LINK_NOARG(ScTPValidationError, ClickSearchHdl, Button*, void)
 
     if ( !aScriptURL.isEmpty() )
     {
-        m_pEdtTitle->SetText( aScriptURL );
+        m_xEdtTitle->set_text( aScriptURL );
     }
 }
 

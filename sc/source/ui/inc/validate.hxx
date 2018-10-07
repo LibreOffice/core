@@ -279,23 +279,22 @@ public:
 class ScTPValidationError : public SfxTabPage
 {
 private:
-    VclPtr<TriStateBox> m_pTsbShow;
-    VclPtr<ListBox> m_pLbAction;
-    VclPtr<PushButton> m_pBtnSearch;
-    VclPtr<Edit> m_pEdtTitle;
-    VclPtr<FixedText> m_pFtError;
-    VclPtr<VclMultiLineEdit> m_pEdError;
+    std::unique_ptr<weld::CheckButton> m_xTsbShow;
+    std::unique_ptr<weld::ComboBox> m_xLbAction;
+    std::unique_ptr<weld::Button> m_xBtnSearch;
+    std::unique_ptr<weld::Entry> m_xEdtTitle;
+    std::unique_ptr<weld::Label> m_xFtError;
+    std::unique_ptr<weld::TextView> m_xEdError;
 
     void    Init();
 
     // Handler ------------------------
-    DECL_LINK(SelectActionHdl, ListBox&, void);
-    DECL_LINK(ClickSearchHdl, Button*, void);
+    DECL_LINK(SelectActionHdl, weld::ComboBox&, void);
+    DECL_LINK(ClickSearchHdl, weld::Button&, void);
 
 public:
-            ScTPValidationError( vcl::Window* pParent, const SfxItemSet& rArgSet );
-            virtual ~ScTPValidationError() override;
-    virtual void dispose() override;
+    ScTPValidationError(TabPageParent pParent, const SfxItemSet& rArgSet);
+    virtual ~ScTPValidationError() override;
 
     static  VclPtr<SfxTabPage> Create      ( TabPageParent pParent, const SfxItemSet* rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) override;
