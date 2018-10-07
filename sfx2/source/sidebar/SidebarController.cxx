@@ -30,6 +30,7 @@
 #include <sfx2/sidebar/ContextList.hxx>
 
 
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/titledockwin.hxx>
@@ -543,16 +544,16 @@ void SidebarController::OpenThenToggleDeck (
         pSplitWindow->FadeIn();
     else if ( IsDeckVisible( rsDeckId ) )
     {
-        if ( pSplitWindow )
-        {
-            // tdf#67627 Clicking a second time on a Deck icon will close the Deck
-            RequestCloseDeck();
-            return;
-        }
-        else if( !WasFloatingDeckClosed() )
+        if( !WasFloatingDeckClosed() )
         {
             // tdf#88241 Summoning an undocked sidebar a second time should close sidebar
             mpParentWindow->Close();
+            return;
+        }
+        else
+        {
+            // tdf#67627 Clicking a second time on a Deck icon will close the Deck
+            RequestCloseDeck();
             return;
         }
     }
@@ -1151,14 +1152,16 @@ void SidebarController::UpdateDeckOpenState()
         // No state requested.
         return;
 
-    sal_Int32 nTabBarDefaultWidth = TabBar::GetDefaultWidth() * mpTabBar->GetDPIScaleFactor();
+    const sal_Int32 nTabBarDefaultWidth = TabBar::GetDefaultWidth() * mpTabBar->GetDPIScaleFactor();
 
     // Update (change) the open state when it either has not yet been initialized
     // or when its value differs from the requested state.
-    if ( ! mbIsDeckOpen
-        || mbIsDeckOpen.get() != mbIsDeckRequestedOpen.get())
+    if ( mbIsDeckOpen && mbIsDeckOpen.get() == mbIsDeckRequestedOpen.get() )
+        return;
+
+    if (mbIsDeckRequestedOpen.get())
     {
-        if (mbIsDeckRequestedOpen.get())
+        if (!mpParentWindow->IsFloatingMode())
         {
             if (mnSavedSidebarWidth <= nTabBarDefaultWidth)
                 SetChildWindowWidth(SidebarChildWindow::GetDefaultWidth(mpParentWindow));
@@ -1167,18 +1170,42 @@ void SidebarController::UpdateDeckOpenState()
         }
         else
         {
-            if ( ! mpParentWindow->IsFloatingMode())
-                mnSavedSidebarWidth = SetChildWindowWidth(nTabBarDefaultWidth);
-            if (mnWidthOnSplitterButtonDown > nTabBarDefaultWidth)
-                mnSavedSidebarWidth = mnWidthOnSplitterButtonDown;
-            mpParentWindow->SetStyle(mpParentWindow->GetStyle() & ~WB_SIZEABLE);
+            // Show the Deck by resizing back to the original size (before hiding).
+            Size aNewSize(mpParentWindow->GetFloatingWindow()->GetSizePixel());
+            Point aNewPos(mpParentWindow->GetFloatingWindow()->GetPosPixel());
+
+            aNewPos.setX(aNewPos.X() - mnSavedSidebarWidth + nTabBarDefaultWidth);
+            aNewSize.setWidth(mnSavedSidebarWidth);
+
+            mpParentWindow->GetFloatingWindow()->SetPosSizePixel(aNewPos, aNewSize);
+        }
+    }
+    else
+    {
+        if ( ! mpParentWindow->IsFloatingMode())
+            mnSavedSidebarWidth = SetChildWindowWidth(nTabBarDefaultWidth);
+        else
+        {
+            // Hide the Deck by resizing to the width of the TabBar.
+            Size aNewSize(mpParentWindow->GetFloatingWindow()->GetSizePixel());
+            Point aNewPos(mpParentWindow->GetFloatingWindow()->GetPosPixel());
+            mnSavedSidebarWidth = aNewSize.Width(); // Save the current width to restore.
+
+            aNewPos.setX(aNewPos.X() + mnSavedSidebarWidth - nTabBarDefaultWidth);
+            aNewSize.setWidth(nTabBarDefaultWidth);
+
+            mpParentWindow->GetFloatingWindow()->SetPosSizePixel(aNewPos, aNewSize);
         }
 
-        mbIsDeckOpen = mbIsDeckRequestedOpen.get();
-        if (mbIsDeckOpen.get() && mpCurrentDeck)
-            mpCurrentDeck->Show(mbIsDeckOpen.get());
-        NotifyResize();
+        if (mnWidthOnSplitterButtonDown > nTabBarDefaultWidth)
+            mnSavedSidebarWidth = mnWidthOnSplitterButtonDown;
+        mpParentWindow->SetStyle(mpParentWindow->GetStyle() & ~WB_SIZEABLE);
     }
+
+    mbIsDeckOpen = mbIsDeckRequestedOpen.get();
+    if (mbIsDeckOpen.get() && mpCurrentDeck)
+        mpCurrentDeck->Show(mbIsDeckOpen.get());
+    NotifyResize();
 }
 
 bool SidebarController::CanModifyChildWindowWidth()
