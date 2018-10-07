@@ -28,17 +28,16 @@ namespace rptui
 |* Page setup tab dialog
 |*
 \************************************************************************/
-class ORptPageDialog : public SfxTabDialog
+class ORptPageDialog : public SfxTabDialogController
 {
 private:
     ORptPageDialog(const ORptPageDialog&) = delete;
     void operator =(const ORptPageDialog&) = delete;
 
-    sal_uInt16 m_nCharBgdId;
 public:
 
-    ORptPageDialog(vcl::Window* pParent, const SfxItemSet* pAttr, const OUString &rDialog);
-    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
+    ORptPageDialog(weld::Window* pParent, const SfxItemSet* pAttr, const OUString &rDialog);
+    virtual void PageCreated(const OString& rId, SfxTabPage &rPage) override;
 };
 
 } // namespace rptui

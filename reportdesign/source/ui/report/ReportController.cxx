@@ -2422,16 +2422,16 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         }
 
         {   // want the dialog to be destroyed before our set
-            ScopedVclPtrInstance<ORptPageDialog> aDlg(
-                getView(), pDescriptor.get(),_xSection.is()
+            ORptPageDialog aDlg(
+                getFrameWeld(), pDescriptor.get(),_xSection.is()
                            ? OUString("BackgroundDialog")
                            : OUString("PageDialog"));
-            if (RET_OK == aDlg->Execute())
+            if (aDlg.execute() == RET_OK)
             {
 
                 // ItemSet->UNO
                 // UNO-properties
-                const SfxItemSet* pSet = aDlg->GetOutputItemSet();
+                const SfxItemSet* pSet = aDlg.GetOutputItemSet();
                 if ( _xSection.is() )
                 {
                     const SfxPoolItem* pItem;
