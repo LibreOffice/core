@@ -198,11 +198,7 @@ $(eval $(call gb_CppunitTest_use_components,emfio_wmf,\
 
 $(eval $(call gb_CppunitTest_use_configuration,emfio_wmf))
 
-# See gb_CppunitTest__use_vcl (solenv/gbuild/CppunitTest.mk; headless):
-ifeq ($(USING_X11),TRUE)
-$(call gb_CppunitTest_get_target,emfio_wmf): \
-    $(call gb_Library_get_target,desktop_detector)
-endif
+$(eval $(call gb_CppunitTest_use_vcl_non_headless,emfio_wmf))
 
 # Hack to suppress ASan ODR violation warnings about symbols present in both the
 # vcl objects linked into this test library and the vcl library (which gets
