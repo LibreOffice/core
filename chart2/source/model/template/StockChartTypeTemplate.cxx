@@ -20,14 +20,8 @@
 #include "StockChartTypeTemplate.hxx"
 #include <DataSeriesHelper.hxx>
 #include "StockDataInterpreter.hxx"
-#include <CartesianCoordinateSystem.hxx>
-#include <AxisHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
-#include <servicenames_coosystems.hxx>
-#include <AxisIndexDefines.hxx>
-#include <com/sun/star/chart2/AxisType.hpp>
-#include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>

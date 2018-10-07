@@ -19,10 +19,8 @@
 
 #include <ChartModel.hxx>
 #include <servicenames.hxx>
-#include <MediaDescriptorHelper.hxx>
 #include <DataSourceHelper.hxx>
 #include <ChartModelHelper.hxx>
-#include <DiagramHelper.hxx>
 #include <DisposeHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <ObjectIdentifier.hxx>
@@ -33,7 +31,6 @@
 #include <ChartView.hxx>
 #include <PopupRequest.hxx>
 #include <ModifyListenerHelper.hxx>
-#include <svx/charthelper.hxx>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
@@ -46,25 +43,15 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/embed/XEmbedObjectCreator.hpp>
-#include <com/sun/star/embed/XEmbedPersist.hpp>
-#include <com/sun/star/embed/EmbedStates.hpp>
-#include <com/sun/star/embed/XComponentSupplier.hpp>
-#include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
-#include <com/sun/star/drawing/Hatch.hpp>
-#include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/document/DocumentProperties.hpp>
-#include <com/sun/star/chart2/XTimeBased.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 
 #include <sal/log.hxx>
 #include <svl/zforlist.hxx>

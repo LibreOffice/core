@@ -26,10 +26,7 @@
 #include <DiagramHelper.hxx>
 #include <ThreeDHelper.hxx>
 #include <CloneHelper.hxx>
-#include <AxisHelper.hxx>
 #include <SceneProperties.hxx>
-#include <DisposeHelper.hxx>
-#include <BaseGFXHelper.hxx>
 #include <unonames.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
@@ -38,17 +35,13 @@
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
-#include <com/sun/star/drawing/CameraGeometry.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
-#include <iterator>
-#include <functional>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;

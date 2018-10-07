@@ -18,14 +18,12 @@
  */
 
 #include "NetChartType.hxx"
-#include <PropertyHelper.hxx>
 #include <PolarCoordinateSystem.hxx>
 #include <servicenames_charttypes.hxx>
 #include <AxisIndexDefines.hxx>
 #include <AxisHelper.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 
 using namespace ::com::sun::star;

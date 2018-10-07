@@ -30,11 +30,12 @@
 #include <EventListenerHelper.hxx>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 using namespace ::com::sun::star;
 

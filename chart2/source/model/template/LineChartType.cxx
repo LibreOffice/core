@@ -25,7 +25,8 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/CurveStyle.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 using namespace ::com::sun::star;
 

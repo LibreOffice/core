@@ -18,7 +18,6 @@
  */
 
 #include "NetChartTypeTemplate.hxx"
-#include <PolarCoordinateSystem.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <DataSeriesHelper.hxx>
