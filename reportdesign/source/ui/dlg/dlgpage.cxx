@@ -36,11 +36,9 @@ namespace rptui
 |*
 \************************************************************************/
 
-ORptPageDialog::ORptPageDialog( vcl::Window* pParent, const SfxItemSet* pAttr, const OUString &rDialog)
-    : SfxTabDialog (pParent, rDialog, "modules/dbreport/ui/" +
-        rDialog.toAsciiLowerCase() +
-        ".ui", pAttr)
-    , m_nCharBgdId(0)
+ORptPageDialog::ORptPageDialog(weld::Window* pParent, const SfxItemSet* pAttr, const OUString &rDialog)
+    : SfxTabDialogController(pParent, "modules/dbreport/ui/" +
+        rDialog.toAsciiLowerCase() + ".ui", rDialog.toUtf8(), pAttr)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
@@ -59,7 +57,7 @@ ORptPageDialog::ORptPageDialog( vcl::Window* pParent, const SfxItemSet* pAttr, c
         AddTabPage("fonteffects", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), nullptr );
         AddTabPage("position", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_POSITION ), nullptr );
         AddTabPage("asianlayout", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_TWOLINES ), nullptr );
-        m_nCharBgdId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr );
+        AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr );
         AddTabPage("alignment", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ), nullptr );
     }
     else
@@ -70,10 +68,10 @@ ORptPageDialog::ORptPageDialog( vcl::Window* pParent, const SfxItemSet* pAttr, c
         RemoveTabPage("asianlayout");
 }
 
-void ORptPageDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void ORptPageDialog::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-    if (nId == m_nCharBgdId)
+    if (rId == "background")
     {
         aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_HIGHLIGHTING)));
         rPage.PageCreated(aSet);
