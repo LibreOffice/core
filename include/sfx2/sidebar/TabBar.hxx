@@ -92,6 +92,9 @@ public:
 
     void UpdateFocusManager (FocusManager& rFocusManager);
 
+    /// Enables/Disables the menu button. Used by LoKit.
+    void EnableMenuButton(const bool bEnable);
+
 private:
     css::uno::Reference<css::frame::XFrame> mxFrame;
     VclPtr<CheckBox> mpMenuButton;
