@@ -186,7 +186,7 @@ rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFont
                         return true;
                     });
             }
-            catch (limit_exception) {}
+            catch (limit_exception&) {}
         }
 
         assert(pFontInstance);
