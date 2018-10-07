@@ -435,11 +435,10 @@ bool ScTpSubTotalGroup3::FillItemSet( SfxItemSet* rArgSet ) { return FILLSET(3);
 
 // options tab page:
 
-ScTpSubTotalOptions::ScTpSubTotalOptions( vcl::Window*               pParent,
-                                          const SfxItemSet&     rArgSet )
+ScTpSubTotalOptions::ScTpSubTotalOptions(TabPageParent pParent, const SfxItemSet& rArgSet)
 
         :   SfxTabPage      ( pParent,
-                              "SubTotalOptionsPage", "modules/scalc/ui/subtotaloptionspage.ui" ,
+                              "modules/scalc/ui/subtotaloptionspage.ui", "SubTotalOptionsPage",
                               &rArgSet ),
             pViewData       ( nullptr ),
             pDoc            ( nullptr ),
@@ -447,37 +446,22 @@ ScTpSubTotalOptions::ScTpSubTotalOptions( vcl::Window*               pParent,
             rSubTotalData   ( static_cast<const ScSubTotalItem&>(
                               rArgSet.Get( nWhichSubTotals )).
                                 GetSubTotalData() )
+    , m_xBtnPagebreak(m_xBuilder->weld_check_button("pagebreak"))
+    , m_xBtnCase(m_xBuilder->weld_check_button("case"))
+    , m_xBtnSort(m_xBuilder->weld_check_button("sort"))
+    , m_xFlSort(m_xBuilder->weld_label("label2"))
+    , m_xBtnAscending(m_xBuilder->weld_radio_button("ascending"))
+    , m_xBtnDescending(m_xBuilder->weld_radio_button("descending"))
+    , m_xBtnFormats(m_xBuilder->weld_check_button("formats"))
+    , m_xBtnUserDef(m_xBuilder->weld_check_button("btnuserdef"))
+    , m_xLbUserDef(m_xBuilder->weld_combo_box("lbuserdef"))
 {
-    get(pBtnPagebreak,"pagebreak");
-    get(pBtnCase,"case");
-    get(pBtnSort,"sort");
-    get(pFlSort,"label2");
-    get(pBtnAscending,"ascending");
-    get(pBtnDescending,"descending");
-    get(pBtnFormats,"formats");
-    get(pBtnUserDef,"btnuserdef");
-    get(pLbUserDef,"lbuserdef");
-
     Init();
 }
 
 ScTpSubTotalOptions::~ScTpSubTotalOptions()
 {
     disposeOnce();
-}
-
-void ScTpSubTotalOptions::dispose()
-{
-    pBtnPagebreak.clear();
-    pBtnCase.clear();
-    pBtnSort.clear();
-    pFlSort.clear();
-    pBtnAscending.clear();
-    pBtnDescending.clear();
-    pBtnFormats.clear();
-    pBtnUserDef.clear();
-    pLbUserDef.clear();
-    SfxTabPage::dispose();
 }
 
 void ScTpSubTotalOptions::Init()
@@ -490,41 +474,41 @@ void ScTpSubTotalOptions::Init()
 
     OSL_ENSURE( pViewData && pDoc, "ViewData or Document not found!" );
 
-    pBtnSort->SetClickHdl    ( LINK( this, ScTpSubTotalOptions, CheckHdl ) );
-    pBtnUserDef->SetClickHdl ( LINK( this, ScTpSubTotalOptions, CheckHdl ) );
+    m_xBtnSort->connect_clicked( LINK( this, ScTpSubTotalOptions, CheckHdl ) );
+    m_xBtnUserDef->connect_clicked( LINK( this, ScTpSubTotalOptions, CheckHdl ) );
 
     FillUserSortListBox();
 }
 
-VclPtr<SfxTabPage> ScTpSubTotalOptions::Create( TabPageParent pParent,
-                                                const SfxItemSet* rArgSet )
+VclPtr<SfxTabPage> ScTpSubTotalOptions::Create(TabPageParent pParent,
+                                               const SfxItemSet* rArgSet)
 {
-    return VclPtr<ScTpSubTotalOptions>::Create( pParent.pParent, *rArgSet );
+    return VclPtr<ScTpSubTotalOptions>::Create(pParent, *rArgSet);
 }
 
 void ScTpSubTotalOptions::Reset( const SfxItemSet* /* rArgSet */ )
 {
-    pBtnPagebreak->Check ( rSubTotalData.bPagebreak );
-    pBtnCase->Check      ( rSubTotalData.bCaseSens );
-    pBtnFormats->Check   ( rSubTotalData.bIncludePattern );
-    pBtnSort->Check      ( rSubTotalData.bDoSort );
-    pBtnAscending->Check ( rSubTotalData.bAscending );
-    pBtnDescending->Check( !rSubTotalData.bAscending );
+    m_xBtnPagebreak->set_active( rSubTotalData.bPagebreak );
+    m_xBtnCase->set_active( rSubTotalData.bCaseSens );
+    m_xBtnFormats->set_active( rSubTotalData.bIncludePattern );
+    m_xBtnSort->set_active( rSubTotalData.bDoSort );
+    m_xBtnAscending->set_active( rSubTotalData.bAscending );
+    m_xBtnDescending->set_active( !rSubTotalData.bAscending );
 
     if ( rSubTotalData.bUserDef )
     {
-        pBtnUserDef->Check();
-        pLbUserDef->Enable();
-        pLbUserDef->SelectEntryPos( rSubTotalData.nUserIndex );
+        m_xBtnUserDef->set_active(true);
+        m_xLbUserDef->set_sensitive(true);
+        m_xLbUserDef->set_active(rSubTotalData.nUserIndex);
     }
     else
     {
-        pBtnUserDef->Check( false );
-        pLbUserDef->Disable();
-        pLbUserDef->SelectEntryPos( 0 );
+        m_xBtnUserDef->set_active( false );
+        m_xLbUserDef->set_sensitive(false);
+        m_xLbUserDef->set_active(0);
     }
 
-    CheckHdl( pBtnSort );
+    CheckHdl(*m_xBtnSort);
 }
 
 bool ScTpSubTotalOptions::FillItemSet( SfxItemSet* rArgSet )
@@ -538,15 +522,15 @@ bool ScTpSubTotalOptions::FillItemSet( SfxItemSet* rArgSet )
             theSubTotalData = static_cast<const ScSubTotalItem*>(pItem)->GetSubTotalData();
     }
 
-    theSubTotalData.bPagebreak      = pBtnPagebreak->IsChecked();
+    theSubTotalData.bPagebreak      = m_xBtnPagebreak->get_active();
     theSubTotalData.bReplace        = true;
-    theSubTotalData.bCaseSens       = pBtnCase->IsChecked();
-    theSubTotalData.bIncludePattern = pBtnFormats->IsChecked();
-    theSubTotalData.bDoSort         = pBtnSort->IsChecked();
-    theSubTotalData.bAscending      = pBtnAscending->IsChecked();
-    theSubTotalData.bUserDef        = pBtnUserDef->IsChecked();
-    theSubTotalData.nUserIndex      = (pBtnUserDef->IsChecked())
-                                    ? pLbUserDef->GetSelectedEntryPos()
+    theSubTotalData.bCaseSens       = m_xBtnCase->get_active();
+    theSubTotalData.bIncludePattern = m_xBtnFormats->get_active();
+    theSubTotalData.bDoSort         = m_xBtnSort->get_active();
+    theSubTotalData.bAscending      = m_xBtnAscending->get_active();
+    theSubTotalData.bUserDef        = m_xBtnUserDef->get_active();
+    theSubTotalData.nUserIndex      = (m_xBtnUserDef->get_active())
+                                    ? m_xLbUserDef->get_active()
                                     : 0;
 
     rArgSet->Put( ScSubTotalItem( nWhichSubTotals, &theSubTotalData ) );
@@ -558,51 +542,53 @@ void ScTpSubTotalOptions::FillUserSortListBox()
 {
     ScUserList* pUserLists = ScGlobal::GetUserList();
 
-    pLbUserDef->Clear();
+    m_xLbUserDef->freeze();
+    m_xLbUserDef->clear();
     if ( pUserLists )
     {
         size_t nCount = pUserLists->size();
         for ( size_t i=0; i<nCount; ++i )
-            pLbUserDef->InsertEntry( (*pUserLists)[i].GetString() );
+            m_xLbUserDef->append_text((*pUserLists)[i].GetString() );
     }
+    m_xLbUserDef->thaw();
 }
 
 // Handler:
 
-IMPL_LINK( ScTpSubTotalOptions, CheckHdl, Button*, pBox, void )
+IMPL_LINK(ScTpSubTotalOptions, CheckHdl, weld::Button&, rBox, void)
 {
-    if ( pBox == pBtnSort )
+    if (&rBox == m_xBtnSort.get())
     {
-        if ( pBtnSort->IsChecked() )
+        if ( m_xBtnSort->get_active() )
         {
-            pFlSort->Enable();
-            pBtnFormats->Enable();
-            pBtnUserDef->Enable();
-            pBtnAscending->Enable();
-            pBtnDescending->Enable();
+            m_xFlSort->set_sensitive(true);
+            m_xBtnFormats->set_sensitive(true);
+            m_xBtnUserDef->set_sensitive(true);
+            m_xBtnAscending->set_sensitive(true);
+            m_xBtnDescending->set_sensitive(true);
 
-            if ( pBtnUserDef->IsChecked() )
-                pLbUserDef->Enable();
+            if ( m_xBtnUserDef->get_active() )
+                m_xLbUserDef->set_sensitive(true);
         }
         else
         {
-            pFlSort->Disable();
-            pBtnFormats->Disable();
-            pBtnUserDef->Disable();
-            pBtnAscending->Disable();
-            pBtnDescending->Disable();
-            pLbUserDef->Disable();
+            m_xFlSort->set_sensitive(false);
+            m_xBtnFormats->set_sensitive(false);
+            m_xBtnUserDef->set_sensitive(false);
+            m_xBtnAscending->set_sensitive(false);
+            m_xBtnDescending->set_sensitive(false);
+            m_xLbUserDef->set_sensitive(false);
         }
     }
-    else if ( pBox == pBtnUserDef )
+    else if (&rBox == m_xBtnUserDef.get())
     {
-        if ( pBtnUserDef->IsChecked() )
+        if ( m_xBtnUserDef->get_active() )
         {
-            pLbUserDef->Enable();
-            pLbUserDef->GrabFocus();
+            m_xLbUserDef->set_sensitive(true);
+            m_xLbUserDef->grab_focus();
         }
         else
-            pLbUserDef->Disable();
+            m_xLbUserDef->set_sensitive(false);
     }
 }
 
