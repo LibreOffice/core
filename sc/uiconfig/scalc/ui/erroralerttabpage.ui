@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sc">
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.18"/>
   <object class="GtkBox" id="ErrorAlertTabPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -55,33 +56,29 @@
                   <object class="GtkLabel" id="action_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="erroralerttabpage|action_label">_Action:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">actionCB</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="title_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="yalign">0</property>
                     <property name="label" translatable="yes" context="erroralerttabpage|title_label">_Title:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">erroralert_title</property>
+                    <property name="xalign">0</property>
+                    <property name="yalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -91,7 +88,7 @@
                     <property name="vexpand">True</property>
                     <property name="shadow_type">in</property>
                     <child>
-                      <object class="GtkTextView" id="errorMsg:border">
+                      <object class="GtkTextView" id="errorMsg">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="vexpand">True</property>
@@ -102,36 +99,33 @@
                     <property name="left_attach">1</property>
                     <property name="top_attach">2</property>
                     <property name="width">2</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkEntry" id="erroralert_title">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
                     <property name="width">2</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="errormsg_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="yalign">0</property>
                     <property name="label" translatable="yes" context="erroralerttabpage|errormsg_label">_Error message:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">errorMsg:border</property>
+                    <property name="mnemonic_widget">errorMsg</property>
+                    <property name="xalign">0</property>
+                    <property name="yalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -145,8 +139,6 @@
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -164,8 +156,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
