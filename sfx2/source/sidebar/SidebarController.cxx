@@ -974,7 +974,8 @@ SidebarController::CreatePopupMenu(const ::std::vector<TabBar::DeckMenuData>& rM
     FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
     if (pMenuWindow != nullptr)
     {
-        pMenuWindow->SetPopupModeFlags(pMenuWindow->GetPopupModeFlags() | FloatWinPopupFlags::NoMouseUpClose);
+        pMenuWindow->SetPopupModeFlags(pMenuWindow->GetPopupModeFlags()
+                                       | FloatWinPopupFlags::NoMouseUpClose);
     }
 
     // Create sub menu for customization (hiding of deck tabs), only on desktop.
@@ -1008,6 +1009,7 @@ SidebarController::CreatePopupMenu(const ::std::vector<TabBar::DeckMenuData>& rM
                 pCustomizationMenu->CheckItem(nSubMenuIndex, rItem.mbIsEnabled && rItem.mbIsActive);
             }
         }
+
         ++nIndex;
     }
 
@@ -1179,6 +1181,9 @@ void SidebarController::UpdateDeckOpenState()
             aNewSize.setWidth(mnSavedSidebarWidth);
 
             mpParentWindow->GetFloatingWindow()->SetPosSizePixel(aNewPos, aNewSize);
+            // Sidebar wide enought to render the menu; enable it.
+            if (comphelper::LibreOfficeKit::isActive())
+                mpTabBar->EnableMenuButton(true);
         }
     }
     else
@@ -1196,8 +1201,10 @@ void SidebarController::UpdateDeckOpenState()
             aNewSize.setWidth(nTabBarDefaultWidth);
 
             mpParentWindow->GetFloatingWindow()->SetPosSizePixel(aNewPos, aNewSize);
+            // Sidebar too narrow to render the menu; disable it.
+            if (comphelper::LibreOfficeKit::isActive())
+                mpTabBar->EnableMenuButton(false);
         }
-
         if (mnWidthOnSplitterButtonDown > nTabBarDefaultWidth)
             mnSavedSidebarWidth = mnWidthOnSplitterButtonDown;
         mpParentWindow->SetStyle(mpParentWindow->GetStyle() & ~WB_SIZEABLE);
