@@ -261,7 +261,7 @@ void lru_map_test::testRemoveIf()
         });
         CPPUNIT_ASSERT(false); // not reached
     }
-    catch (limit_except)
+    catch (limit_except&)
     {
         // contains 7..4
         CPPUNIT_ASSERT_EQUAL(size_t(4), lru.size());
