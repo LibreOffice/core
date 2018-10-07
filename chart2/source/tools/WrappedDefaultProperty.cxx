@@ -21,7 +21,8 @@
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertyState.hpp>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertyState; } } } }
 
 using namespace ::com::sun::star;
 

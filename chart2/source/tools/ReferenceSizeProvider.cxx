@@ -22,7 +22,6 @@
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <AxisHelper.hxx>
-#include <DataSeriesHelper.hxx>
 
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>

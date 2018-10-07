@@ -28,7 +28,6 @@
 #include <AxisHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <DiagramHelper.hxx>
-#include <AxisIndexDefines.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -42,6 +41,8 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
+
+namespace com { namespace sun { namespace star { namespace drawing { class XShape; } } } }
 
 namespace chart
 {

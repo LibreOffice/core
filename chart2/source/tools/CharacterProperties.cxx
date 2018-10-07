@@ -21,19 +21,13 @@
 
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
-#include <com/sun/star/awt/FontFamily.hpp>
-#include <com/sun/star/awt/CharSet.hpp>
-#include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
-#include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/text/FontRelief.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
-#include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>

@@ -21,7 +21,6 @@
 
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
-#include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star;
 

@@ -18,8 +18,6 @@
  */
 
 #include <RegressionCurveCalculator.hxx>
-#include <RegressionCalculationHelper.hxx>
-#include <servicenames_coosystems.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <rtl/math.hxx>

@@ -24,7 +24,6 @@
 #include <DataSeriesHelper.hxx>
 #include <DataSource.hxx>
 #include <ControllerLockGuard.hxx>
-#include <PropertyHelper.hxx>
 #include <CachedDataSequence.hxx>
 #include <LabeledDataSequence.hxx>
 #include <unonames.hxx>

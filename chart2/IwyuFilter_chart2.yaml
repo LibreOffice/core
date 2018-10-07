@@ -292,10 +292,24 @@ blacklist:
     - com/sun/star/util/XCloneable.hpp
     - com/sun/star/util/XModifyBroadcaster.hpp
     - com/sun/star/util/XModifyListener.hpp
-    chart2/source/tools/ImplOPropertySet.hxx:
-    # base class has to be a complete type
-    - com/sun/star/beans/PropertyState.hpp
-    - com/sun/star/uno/Sequence.hxx
+    chart2/source/tools/ImplOPropertySet.cxx:
+    # Needed for template
+    - com/sun/star/style/XStyle.hpp
+    chart2/source/tools/LinePropertiesHelper.cxx:
+    # Needed for template
+    - com/sun/star/drawing/LineDash.hpp
+    chart2/source/tools/LifeTime.cxx:
+    # Has to be complete type
+    - com/sun/star/util/CloseVetoException.hpp
+    chart2/source/tools/MediaDescriptorHelper.cxx:
+    # Needed for template
+    - com/sun/star/embed/XStorage.hpp
+    chart2/source/tools/ObjectIdentifier.cxx:
+    # Needed for template
+    - com/sun/star/drawing/XShape.hpp
+    chart2/source/tools/RangeHighlighter.cxx:
+    # Needed for template
+    - com/sun/star/drawing/XShape.hpp
     chart2/source/tools/RegressionEquation.hxx:
     # base class has to be a complete type
     - com/sun/star/chart2/XTitle.hpp
@@ -303,6 +317,15 @@ blacklist:
     - com/sun/star/util/XCloneable.hpp
     - com/sun/star/util/XModifyBroadcaster.hpp
     - com/sun/star/util/XModifyListener.hpp
+    chart2/source/tools/RegressionEquation.cxx:
+    # Needed for template
+    - com/sun/star/awt/Size.hpp
+    - com/sun/star/chart2/RelativePosition.hpp
+    chart2/source/tools/UserDefinedProperties.cxx:
+    # Needs a complete type
+    - com/sun/star/beans/Property.hpp
+    # Needed for template
+    - com/sun/star/container/XNameContainer.hpp
     chart2/source/view/inc/3DChartObjects.hxx:
     # base class has to be a complete type
     - boost/shared_array.hpp

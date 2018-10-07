@@ -18,7 +18,6 @@
  */
 
 #include <CachedDataSequence.hxx>
-#include <PropertyHelper.hxx>
 #include <CommonFunctors.hxx>
 #include <ModifyListenerHelper.hxx>
 
@@ -27,8 +26,6 @@
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <rtl/math.hxx>
 
 using namespace ::com::sun::star;
 

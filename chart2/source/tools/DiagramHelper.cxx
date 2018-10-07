@@ -18,15 +18,12 @@
  */
 
 #include <DiagramHelper.hxx>
-#include <LegendHelper.hxx>
-#include <PropertyHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <AxisHelper.hxx>
 #include <ContainerHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
-#include <CommonConverters.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <servicenames_charttypes.hxx>
 #include <RelativePositionHelper.hxx>
@@ -35,7 +32,6 @@
 #include <unonames.hxx>
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
-#include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XDiagramPositioning.hpp>
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
@@ -43,7 +39,6 @@
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#include <com/sun/star/chart2/InterpretedData.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
@@ -52,12 +47,11 @@
 
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <unotools/saveopt.hxx>
 #include <rtl/math.hxx>
-#include <svl/zformat.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <comphelper/sequence.hxx>

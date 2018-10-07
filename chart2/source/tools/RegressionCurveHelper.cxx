@@ -29,12 +29,10 @@
 #include "RegressionCurveModel.hxx"
 #include <ChartTypeHelper.hxx>
 #include <ChartModelHelper.hxx>
-#include <PropertyHelper.hxx>
 #include <ResId.hxx>
 #include <strings.hrc>
 #include <DiagramHelper.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <tools/diagnose_ex.h>

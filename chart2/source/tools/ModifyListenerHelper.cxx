@@ -20,7 +20,6 @@
 #include <ModifyListenerHelper.hxx>
 #include <WeakListenerAdapter.hxx>
 
-#include <cppuhelper/interfacecontainer.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
