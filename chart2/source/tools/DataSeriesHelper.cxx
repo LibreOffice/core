@@ -18,7 +18,6 @@
  */
 
 #include <DataSeriesHelper.hxx>
-#include <DiagramHelper.hxx>
 #include <DataSource.hxx>
 #include <ContainerHelper.hxx>
 #include <unonames.hxx>

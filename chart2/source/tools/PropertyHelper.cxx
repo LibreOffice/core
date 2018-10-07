@@ -19,7 +19,6 @@
 
 #include <PropertyHelper.hxx>
 #include <ContainerHelper.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <osl/diagnose.h>

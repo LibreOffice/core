@@ -18,11 +18,8 @@
  */
 
 #include <WrappedIgnoreProperty.hxx>
-#include <com/sun/star/awt/Gradient.hpp>
-#include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/RectanglePoint.hpp>

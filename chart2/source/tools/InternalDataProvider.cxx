@@ -20,15 +20,12 @@
 #include <rtl/math.hxx>
 
 #include <iterator>
-#include <valarray>
 
 #include <InternalDataProvider.hxx>
 #include <LabeledDataSequence.hxx>
 #include <DataSource.hxx>
-#include <PropertyHelper.hxx>
 #include <XMLRangeHelper.hxx>
 #include <ContainerHelper.hxx>
-#include <CommonConverters.hxx>
 #include <CommonFunctors.hxx>
 #include <UncachedDataSequence.hxx>
 #include <DataSourceHelper.hxx>
@@ -37,11 +34,8 @@
 #include <DiagramHelper.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
-#include <rtl/ustrbuf.hxx>
-#include <unotools/charclass.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/property.hxx>
@@ -49,6 +43,8 @@
 
 #include <vector>
 #include <algorithm>
+
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
 
 using namespace ::com::sun::star;
 using namespace ::std;

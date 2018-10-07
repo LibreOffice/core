@@ -20,17 +20,15 @@
 #include "RegressionCurveModel.hxx"
 #include <LinePropertiesHelper.hxx>
 #include <RegressionCurveHelper.hxx>
-#include <RegressionCalculationHelper.hxx>
 #include "RegressionEquation.hxx"
 #include <CloneHelper.hxx>
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <rtl/math.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 using namespace ::com::sun::star;
 

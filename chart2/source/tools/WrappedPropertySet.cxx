@@ -20,7 +20,6 @@
 #include <WrappedPropertySet.hxx>
 #include <cppuhelper/propshlp.hxx>
 
-#include <tools/solar.h>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 

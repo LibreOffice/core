@@ -19,7 +19,6 @@
 
 #include <SceneProperties.hxx>
 #include <ChartTypeHelper.hxx>
-#include <ThreeDHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>

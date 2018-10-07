@@ -20,7 +20,6 @@
 #include <ErrorBar.hxx>
 #include <ContainerHelper.hxx>
 #include <EventListenerHelper.hxx>
-#include <PropertyHelper.hxx>
 #include <CloneHelper.hxx>
 #include <ModifyListenerHelper.hxx>
 
@@ -29,15 +28,12 @@
 #include <svl/itemprop.hxx>
 #include <vcl/svapp.hxx>
 
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 
-#include <rtl/math.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 

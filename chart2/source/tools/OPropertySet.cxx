@@ -22,7 +22,6 @@
 #include <cppuhelper/queryinterface.hxx>
 
 #include <vector>
-#include <algorithm>
 #include <memory>
 
 using namespace ::com::sun::star;

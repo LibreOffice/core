@@ -18,7 +18,6 @@
  */
 
 #include <WrappedProperty.hxx>
-#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <tools/diagnose_ex.h>

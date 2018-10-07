@@ -21,7 +21,6 @@
 #include <DiagramHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <AxisHelper.hxx>
-#include <CommonConverters.hxx>
 #include <DataSourceHelper.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
@@ -29,8 +28,6 @@
 #include <unonames.hxx>
 
 #include <com/sun/star/chart2/AxisType.hpp>
-#include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <tools/diagnose_ex.h>
 
 namespace chart
