@@ -691,19 +691,13 @@ IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl, Button*, void)
 
 // Input Help Page
 
-ScTPValidationHelp::ScTPValidationHelp( vcl::Window*         pParent,
-                                          const SfxItemSet& rArgSet )
-
-    :   SfxTabPage      ( pParent,
-                          "ValidationHelpTabPage" , "modules/scalc/ui/validationhelptabpage.ui" ,
-                          &rArgSet )
+ScTPValidationHelp::ScTPValidationHelp(TabPageParent pParent, const SfxItemSet& rArgSet)
+    : SfxTabPage(pParent, "modules/scalc/ui/validationhelptabpage.ui", "ValidationHelpTabPage", &rArgSet)
+    , m_xTsbHelp(m_xBuilder->weld_check_button("tsbhelp"))
+    , m_xEdtTitle(m_xBuilder->weld_entry("title"))
+    , m_xEdInputHelp(m_xBuilder->weld_text_view("inputhelp"))
 {
-    get(pTsbHelp,"tsbhelp");
-    get(pEdtTitle,"title");
-    get(pEdInputHelp,"inputhelp");
-    pEdInputHelp->set_height_request(pEdInputHelp->GetTextHeight() * 12);
-    pEdInputHelp->set_width_request(pEdInputHelp->approximate_char_width() * 50);
-    Init();
+    m_xEdInputHelp->set_size_request(m_xEdInputHelp->get_approximate_digit_width() * 40, m_xEdInputHelp->get_height_rows(13));
 }
 
 ScTPValidationHelp::~ScTPValidationHelp()
@@ -711,23 +705,10 @@ ScTPValidationHelp::~ScTPValidationHelp()
     disposeOnce();
 }
 
-void ScTPValidationHelp::dispose()
+VclPtr<SfxTabPage> ScTPValidationHelp::Create(TabPageParent pParent,
+                                              const SfxItemSet* rArgSet)
 {
-    pTsbHelp.clear();
-    pEdtTitle.clear();
-    pEdInputHelp.clear();
-    SfxTabPage::dispose();
-}
-
-void ScTPValidationHelp::Init()
-{
-    pTsbHelp->EnableTriState( false );
-}
-
-VclPtr<SfxTabPage> ScTPValidationHelp::Create( TabPageParent pParent,
-                                               const SfxItemSet*  rArgSet )
-{
-    return VclPtr<ScTPValidationHelp>::Create( pParent.pParent, *rArgSet );
+    return VclPtr<ScTPValidationHelp>::Create(pParent, *rArgSet);
 }
 
 void ScTPValidationHelp::Reset( const SfxItemSet* rArgSet )
@@ -735,26 +716,26 @@ void ScTPValidationHelp::Reset( const SfxItemSet* rArgSet )
     const SfxPoolItem* pItem;
 
     if ( rArgSet->GetItemState( FID_VALID_SHOWHELP, true, &pItem ) == SfxItemState::SET )
-        pTsbHelp->SetState( static_cast<const SfxBoolItem*>(pItem)->GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
+        m_xTsbHelp->set_state( static_cast<const SfxBoolItem*>(pItem)->GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
     else
-        pTsbHelp->SetState( TRISTATE_FALSE );
+        m_xTsbHelp->set_state( TRISTATE_FALSE );
 
     if ( rArgSet->GetItemState( FID_VALID_HELPTITLE, true, &pItem ) == SfxItemState::SET )
-        pEdtTitle->SetText( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+        m_xEdtTitle->set_text( static_cast<const SfxStringItem*>(pItem)->GetValue() );
     else
-        pEdtTitle->SetText( EMPTY_OUSTRING );
+        m_xEdtTitle->set_text( EMPTY_OUSTRING );
 
     if ( rArgSet->GetItemState( FID_VALID_HELPTEXT, true, &pItem ) == SfxItemState::SET )
-        pEdInputHelp->SetText( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+        m_xEdInputHelp->set_text( static_cast<const SfxStringItem*>(pItem)->GetValue() );
     else
-        pEdInputHelp->SetText( EMPTY_OUSTRING );
+        m_xEdInputHelp->set_text( EMPTY_OUSTRING );
 }
 
 bool ScTPValidationHelp::FillItemSet( SfxItemSet* rArgSet )
 {
-    rArgSet->Put( SfxBoolItem( FID_VALID_SHOWHELP, pTsbHelp->GetState() == TRISTATE_TRUE ) );
-    rArgSet->Put( SfxStringItem( FID_VALID_HELPTITLE, pEdtTitle->GetText() ) );
-    rArgSet->Put( SfxStringItem( FID_VALID_HELPTEXT, pEdInputHelp->GetText() ) );
+    rArgSet->Put( SfxBoolItem( FID_VALID_SHOWHELP, m_xTsbHelp->get_state() == TRISTATE_TRUE ) );
+    rArgSet->Put( SfxStringItem( FID_VALID_HELPTITLE, m_xEdtTitle->get_text() ) );
+    rArgSet->Put( SfxStringItem( FID_VALID_HELPTEXT, m_xEdInputHelp->get_text() ) );
 
     return true;
 }
