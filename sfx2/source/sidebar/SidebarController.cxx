@@ -959,12 +959,15 @@ void SidebarController::ShowPopupMenu (
     // pass toolbox button rect so the menu can stay open on button up
     tools::Rectangle aBox (rButtonBox);
     aBox.Move(mpTabBar->GetPosPixel().X(), 0);
-    pMenu->Execute(mpParentWindow, aBox, PopupMenuFlags::ExecuteDown);
+    const PopupMenuFlags aMenuDirection
+        = (comphelper::LibreOfficeKit::isActive() ? PopupMenuFlags::ExecuteLeft
+                                                  : PopupMenuFlags::ExecuteDown);
+    pMenu->Execute(mpParentWindow, aBox, aMenuDirection);
     pMenu.disposeAndClear();
 }
 
-VclPtr<PopupMenu> SidebarController::CreatePopupMenu (
-    const ::std::vector<TabBar::DeckMenuData>& rMenuData) const
+VclPtr<PopupMenu>
+SidebarController::CreatePopupMenu(const ::std::vector<TabBar::DeckMenuData>& rMenuData) const
 {
     // Create the top level popup menu.
     auto pMenu = VclPtr<PopupMenu>::Create();
@@ -974,8 +977,9 @@ VclPtr<PopupMenu> SidebarController::CreatePopupMenu (
         pMenuWindow->SetPopupModeFlags(pMenuWindow->GetPopupModeFlags() | FloatWinPopupFlags::NoMouseUpClose);
     }
 
-    // Create sub menu for customization (hiding of deck tabs.)
-    VclPtr<PopupMenu> pCustomizationMenu = VclPtr<PopupMenu>::Create();
+    // Create sub menu for customization (hiding of deck tabs), only on desktop.
+    VclPtr<PopupMenu> pCustomizationMenu
+        = (comphelper::LibreOfficeKit::isActive() ? nullptr : VclPtr<PopupMenu>::Create());
 
     // Add one entry for every tool panel element to individually make
     // them visible or hide them.
@@ -987,35 +991,49 @@ VclPtr<PopupMenu> SidebarController::CreatePopupMenu (
         pMenu->CheckItem(nMenuIndex, rItem.mbIsCurrentDeck);
         pMenu->EnableItem(nMenuIndex, rItem.mbIsEnabled && rItem.mbIsActive);
 
-        const sal_Int32 nSubMenuIndex (nIndex+MID_FIRST_HIDE);
-        if (rItem.mbIsCurrentDeck)
+        if (!comphelper::LibreOfficeKit::isActive())
         {
-            // Don't allow the currently visible deck to be disabled.
-            pCustomizationMenu->InsertItem(nSubMenuIndex, rItem.msDisplayName, MenuItemBits::RADIOCHECK);
-            pCustomizationMenu->CheckItem(nSubMenuIndex);
-        }
-        else
-        {
-            pCustomizationMenu->InsertItem(nSubMenuIndex, rItem.msDisplayName, MenuItemBits::CHECKABLE);
-            pCustomizationMenu->CheckItem(nSubMenuIndex, rItem.mbIsEnabled && rItem.mbIsActive);
+            const sal_Int32 nSubMenuIndex(nIndex + MID_FIRST_HIDE);
+            if (rItem.mbIsCurrentDeck)
+            {
+                // Don't allow the currently visible deck to be disabled.
+                pCustomizationMenu->InsertItem(nSubMenuIndex, rItem.msDisplayName,
+                                               MenuItemBits::RADIOCHECK);
+                pCustomizationMenu->CheckItem(nSubMenuIndex);
+            }
+            else
+            {
+                pCustomizationMenu->InsertItem(nSubMenuIndex, rItem.msDisplayName,
+                                               MenuItemBits::CHECKABLE);
+                pCustomizationMenu->CheckItem(nSubMenuIndex, rItem.mbIsEnabled && rItem.mbIsActive);
+            }
         }
         ++nIndex;
     }
 
     pMenu->InsertSeparator();
 
-    // Add entry for docking or un-docking the tool panel.
-    if (mpParentWindow->IsFloatingMode())
-        pMenu->InsertItem(MID_LOCK_TASK_PANEL, SfxResId(STR_SFX_DOCK));
-    else
-        pMenu->InsertItem(MID_UNLOCK_TASK_PANEL, SfxResId(STR_SFX_UNDOCK));
+    // LOK doesn't support docked/undocked; Sidebar is floating but rendered docked in browser.
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        // Add entry for docking or un-docking the tool panel.
+        if (mpParentWindow->IsFloatingMode())
+            pMenu->InsertItem(MID_LOCK_TASK_PANEL, SfxResId(STR_SFX_DOCK));
+        else
+            pMenu->InsertItem(MID_UNLOCK_TASK_PANEL, SfxResId(STR_SFX_UNDOCK));
+    }
 
     pMenu->InsertItem(MID_HIDE_SIDEBAR, SfxResId(SFX_STR_SIDEBAR_HIDE_SIDEBAR));
-    pCustomizationMenu->InsertSeparator();
-    pCustomizationMenu->InsertItem(MID_RESTORE_DEFAULT, SfxResId(SFX_STR_SIDEBAR_RESTORE));
 
-    pMenu->InsertItem(MID_CUSTOMIZATION, SfxResId(SFX_STR_SIDEBAR_CUSTOMIZATION));
-    pMenu->SetPopupMenu(MID_CUSTOMIZATION, pCustomizationMenu);
+    // No Restore or Customize options for LoKit.
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        pCustomizationMenu->InsertSeparator();
+        pCustomizationMenu->InsertItem(MID_RESTORE_DEFAULT, SfxResId(SFX_STR_SIDEBAR_RESTORE));
+
+        pMenu->InsertItem(MID_CUSTOMIZATION, SfxResId(SFX_STR_SIDEBAR_CUSTOMIZATION));
+        pMenu->SetPopupMenu(MID_CUSTOMIZATION, pCustomizationMenu);
+    }
 
     pMenu->RemoveDisabledEntries(false);
 
