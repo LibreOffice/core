@@ -411,6 +411,11 @@ IMPL_LINK_NOARG(TabBar, OnToolboxClicked, Button*, void)
     mpMenuButton->Check(false);
 }
 
+void TabBar::EnableMenuButton(const bool bEnable)
+{
+    mpMenuButton->Enable(bEnable);
+}
+
 } } // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
