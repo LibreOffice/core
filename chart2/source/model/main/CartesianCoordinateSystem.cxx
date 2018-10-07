@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <CartesianCoordinateSystem.hxx>
 #include <servicenames_coosystems.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -27,6 +26,8 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace
 {

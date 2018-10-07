@@ -23,9 +23,7 @@
 #include <CartesianCoordinateSystem.hxx>
 #include <AxisHelper.hxx>
 #include <AxisIndexDefines.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
-#include <com/sun/star/chart2/CurveStyle.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;

@@ -20,8 +20,6 @@
 #include <ChartTypeManager.hxx>
 #include <StackMode.hxx>
 
-#include <CartesianCoordinateSystem.hxx>
-
 #include "LineChartTypeTemplate.hxx"
 #include "BarChartTypeTemplate.hxx"
 #include "ColumnLineChartTypeTemplate.hxx"
@@ -31,20 +29,15 @@
 #include "StockChartTypeTemplate.hxx"
 #include "NetChartTypeTemplate.hxx"
 #include "BubbleChartTypeTemplate.hxx"
-#include <config_features.h>
-#include <cppuhelper/component_context.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
-#include <com/sun/star/chart/ChartSolidType.hpp>
-#include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 
 #include <algorithm>
 #include <iterator>
-#include <functional>
 #include <o3tl/functional.hxx>
 #include <map>
 

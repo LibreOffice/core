@@ -18,15 +18,9 @@
  */
 
 #include "ColumnLineDataInterpreter.hxx"
-#include <DataSeries.hxx>
-#include <DataSeriesHelper.hxx>
-#include <CommonConverters.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/chart2/data/XDataSink.hpp>
+#include <osl/diagnose.h>
 
-#include <vector>
 #include <algorithm>
-#include <iterator>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

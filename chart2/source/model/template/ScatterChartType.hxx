@@ -20,7 +20,6 @@
 #define INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_SCATTERCHARTTYPE_HXX
 
 #include "ChartType.hxx"
-#include <com/sun/star/chart2/CurveStyle.hpp>
 
 namespace chart
 {

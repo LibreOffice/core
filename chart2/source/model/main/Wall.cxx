@@ -23,22 +23,13 @@
 #include <UserDefinedProperties.hxx>
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
-#include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/drawing/LineDash.hpp>
-#include <com/sun/star/drawing/LineJoint.hpp>
-#include <rtl/uuid.h>
-#include <cppuhelper/queryinterface.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <vector>
 #include <algorithm>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::beans::PropertyAttribute;
 
 using ::com::sun::star::beans::Property;
 

@@ -20,7 +20,8 @@
 #include <PolarCoordinateSystem.hxx>
 #include <servicenames_coosystems.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 using namespace ::com::sun::star;
 
