@@ -1151,6 +1151,10 @@ void SidebarController::UpdateDeckOpenState()
                 aNewSize.setWidth(mnSavedSidebarWidth);
 
                 mpParentWindow->GetFloatingWindow()->SetPosSizePixel(aNewPos, aNewSize);
+
+                // Sidebar wide enought to render the menu; enable it.
+                if (comphelper::LibreOfficeKit::isActive())
+                    mpTabBar->EnableMenuButton(true);
             }
         }
         else
@@ -1168,6 +1172,10 @@ void SidebarController::UpdateDeckOpenState()
                 aNewSize.setWidth(nTabBarDefaultWidth);
 
                 mpParentWindow->GetFloatingWindow()->SetPosSizePixel(aNewPos, aNewSize);
+
+                // Sidebar too narrow to render the menu; disable it.
+                if (comphelper::LibreOfficeKit::isActive())
+                    mpTabBar->EnableMenuButton(false);
             }
 
             if (mnWidthOnSplitterButtonDown > nTabBarDefaultWidth)
