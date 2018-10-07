@@ -1753,8 +1753,12 @@ IMPL_LINK( SvxConfigPage, MoveHdl, Button *, pButton, void )
 IMPL_LINK_NOARG( SvxConfigPage, FunctionDoubleClickHdl, SvTreeListBox *, bool )
 {
     if ( m_pAddCommandButton->IsEnabled() )
+    {
         m_pAddCommandButton->Click();
-    return false;
+        return false;
+    }
+    else
+        return true;
 }
 
 IMPL_LINK_NOARG( SvxConfigPage, SelectFunctionHdl, SvTreeListBox *, void )
