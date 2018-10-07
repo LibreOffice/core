@@ -111,7 +111,7 @@ namespace basegfx
 
         // Calculate HoldCyclesInSeconds based on using
         // getHoldCyclesInSeconds and estimateUsageInBytes, the
-        // result is crated once on-demand and buffered in
+        // result is created once on-demand and buffered in
         // mnCalculatedCycles
         sal_uInt32 calculateCombinedHoldCyclesInSeconds() const;
 

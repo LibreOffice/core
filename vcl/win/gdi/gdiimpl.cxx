@@ -2042,7 +2042,7 @@ bool WinSalGraphicsImpl::drawPolyPolygon(
         aGraphics.SetTransform(&aMatrix);
     }
 
-    // prepare local instabce of Gdiplus::GraphicsPath
+    // prepare local instance of Gdiplus::GraphicsPath
     std::shared_ptr<Gdiplus::GraphicsPath> pGraphicsPath;
 
     // try to access buffered data
@@ -2257,7 +2257,7 @@ bool WinSalGraphicsImpl::drawPolyLine(
         }
     }
 
-    // prepare local instabce of Gdiplus::GraphicsPath
+    // prepare local instance of Gdiplus::GraphicsPath
     std::shared_ptr<Gdiplus::GraphicsPath> pGraphicsPath;
 
     // try to access buffered data

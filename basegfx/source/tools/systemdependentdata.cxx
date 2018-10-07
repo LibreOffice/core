@@ -89,7 +89,7 @@ namespace basegfx
                 // a corresponding scaling factor
                 const double fScaleToMB(3600.0 / (1024.0 * 1024.0 * 10.0));
 
-                // also use a multiplier to move the start point higer
+                // also use a multiplier to move the start point higher
                 const double fMultiplierSeconds(10.0);
 
                 // calculate
