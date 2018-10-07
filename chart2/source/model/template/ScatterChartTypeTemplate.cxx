@@ -19,7 +19,6 @@
 
 #include "ScatterChartTypeTemplate.hxx"
 #include "XYDataInterpreter.hxx"
-#include <CartesianCoordinateSystem.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <DataSeriesHelper.hxx>

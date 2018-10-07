@@ -18,14 +18,10 @@
  */
 
 #include "FilledNetChartType.hxx"
-#include <PropertyHelper.hxx>
-#include <PolarCoordinateSystem.hxx>
-#include <Scaling.hxx>
 #include <servicenames_charttypes.hxx>
-#include <AxisIndexDefines.hxx>
-#include <com/sun/star/chart2/AxisType.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

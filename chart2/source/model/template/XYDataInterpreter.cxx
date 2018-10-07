@@ -21,11 +21,9 @@
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <CommonConverters.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <tools/diagnose_ex.h>
-#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;

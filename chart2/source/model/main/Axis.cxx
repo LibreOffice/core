@@ -33,15 +33,8 @@
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
-#include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/drawing/LineDash.hpp>
-#include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <rtl/uuid.h>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 

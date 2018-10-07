@@ -24,14 +24,12 @@
 #include <CloneHelper.hxx>
 #include <ModifyListenerHelper.hxx>
 #include "Axis.hxx"
-#include <AxisHelper.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
-#include <iterator>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 

@@ -40,7 +40,6 @@
 #include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -54,7 +53,6 @@
 #include <vcl/cvtgrf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>

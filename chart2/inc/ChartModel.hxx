@@ -19,8 +19,6 @@
 #ifndef INCLUDED_CHART2_INC_CHARTMODEL_HXX
 #define INCLUDED_CHART2_INC_CHARTMODEL_HXX
 
-#include <config_features.h>
-
 #include <LifeTime.hxx>
 
 #include <com/sun/star/frame/XStorable2.hpp>
@@ -53,7 +51,6 @@
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/weakagg.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <vcl/GraphicObject.hxx>
 
@@ -66,6 +63,7 @@ namespace com { namespace sun { namespace star { namespace document { class XFil
 namespace com { namespace sun { namespace star { namespace embed { class XStorage; } } } }
 namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XAggregation; } } } }
 
 class SvNumberFormatter;
 

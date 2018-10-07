@@ -25,14 +25,13 @@
 #include <ModifyListenerHelper.hxx>
 
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <rtl/uuid.h>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <vector>
 #include <algorithm>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 using namespace ::com::sun::star;
 

@@ -22,9 +22,7 @@
 #include <FillProperties.hxx>
 #include <CharacterProperties.hxx>
 #include <UserDefinedProperties.hxx>
-#include <LegendHelper.hxx>
 #include <ModifyListenerHelper.hxx>
-#include <CloneHelper.hxx>
 #include <PropertyHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -36,6 +34,8 @@
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;

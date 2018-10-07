@@ -19,14 +19,10 @@
 
 #include "BubbleChartTypeTemplate.hxx"
 #include "BubbleDataInterpreter.hxx"
-#include <CartesianCoordinateSystem.hxx>
-#include <Scaling.hxx>
-#include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <DataSeriesHelper.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <PropertyHelper.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <tools/diagnose_ex.h>

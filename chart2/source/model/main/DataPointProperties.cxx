@@ -26,8 +26,6 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
-#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
-#include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>

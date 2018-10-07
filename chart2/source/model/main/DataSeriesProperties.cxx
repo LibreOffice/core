@@ -19,12 +19,8 @@
 
 #include "DataSeriesProperties.hxx"
 #include "DataPointProperties.hxx"
-#include "DataPoint.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
-
-#include <algorithm>
 
 using namespace ::com::sun::star;
 
