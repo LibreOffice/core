@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_SDXFER_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_SDXFER_HXX
 
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/lstner.hxx>
 

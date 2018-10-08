@@ -42,7 +42,7 @@
 #include <svl/itemset.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <svtools/miscopt.hxx>
 #include <svl/whiter.hxx>
 #include <svx/zoomslideritem.hxx>

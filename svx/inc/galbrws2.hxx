@@ -25,7 +25,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <svl/lstner.hxx>
 #include <svx/galctrl.hxx>
 #include <svtools/miscopt.hxx>

@@ -26,7 +26,7 @@
 #include <sot/formats.hxx>
 
 #include <vector>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 
 class SvObjectServer
 {

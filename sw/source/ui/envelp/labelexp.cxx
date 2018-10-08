@@ -21,7 +21,7 @@
 #include <com/sun/star/text/AutoTextContainer.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <swtypes.hxx>
 #include "labfmt.hxx"
 #include <unotools.hxx>

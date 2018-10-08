@@ -12,7 +12,7 @@
 #include <PivotLayoutTreeList.hxx>
 #include <PivotLayoutDialog.hxx>
 #include <reffact.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <o3tl/make_unique.hxx>
 
 #include <rangeutl.hxx>

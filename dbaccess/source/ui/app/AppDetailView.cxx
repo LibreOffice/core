@@ -39,8 +39,8 @@
 #include <vcl/svapp.hxx>
 #include <callbacks.hxx>
 #include <dbaccess/IController.hxx>
-#include <svtools/treelistentry.hxx>
-#include <svtools/viewdataentry.hxx>
+#include <vcl/treelistentry.hxx>
+#include <vcl/viewdataentry.hxx>
 #include <algorithm>
 #include <dbtreelistbox.hxx>
 #include <imageprovider.hxx>

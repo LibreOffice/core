@@ -52,7 +52,7 @@
           </packing>
         </child>
         <child>
-          <object class="svtlo-SvTreeListBox" id="signatures:border">
+          <object class="vcllo-SvTreeListBox" id="signatures:border">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
