@@ -33,7 +33,7 @@
 
 struct HelpHistoryEntry_Impl
 {
-    OUString  aURL;
+    OUString const  aURL;
     css::uno::Any    aViewData;
 
     HelpHistoryEntry_Impl( const OUString& rURL, const css::uno::Any& rViewData ) :

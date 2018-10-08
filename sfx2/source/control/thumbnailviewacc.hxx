@@ -123,7 +123,7 @@ private:
     ::std::vector< css::uno::Reference<
         css::accessibility::XAccessibleEventListener > >   mxEventListeners;
     VclPtr<ThumbnailView>                                               mpParent;
-    bool                                                                mbIsTransientChildrenDisabled;
+    bool const                                             mbIsTransientChildrenDisabled;
     /// The current FOCUSED state.
     bool mbIsFocused;
 
@@ -171,7 +171,7 @@ private:
                                                                         mxEventListeners;
     ::osl::Mutex                                                        maMutex;
     ThumbnailViewItem*                                                  mpParent;
-    bool                                                                mbIsTransientChildrenDisabled;
+    bool const                                                          mbIsTransientChildrenDisabled;
 
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 

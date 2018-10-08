@@ -105,7 +105,7 @@ private:
     mutable std::set<rtl::OUString> maProcessedApplications;
     std::map<OUString, OUString> maLastActiveDecks;
 
-    SvtMiscOptions maMiscOptions;
+    SvtMiscOptions const maMiscOptions;
 
     void ReadDeckList();
     void ReadPanelList();

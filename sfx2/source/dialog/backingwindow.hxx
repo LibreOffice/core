@@ -83,7 +83,7 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
 
     std::vector< VclPtr<vcl::Window> > maDndWindows;
 
-    Color maButtonsTextColor;
+    Color const maButtonsTextColor;
     tools::Rectangle maStartCentButtons;
 
     bool mbInitControls;

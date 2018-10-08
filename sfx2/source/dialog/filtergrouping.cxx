@@ -188,7 +188,7 @@ namespace sfx2
     struct ReadGlobalFilter
     {
     protected:
-        OConfigurationNode      m_aClassesNode;
+        OConfigurationNode const m_aClassesNode;
         FilterClassReferrer&    m_aClassReferrer;
 
     public:
@@ -265,7 +265,7 @@ namespace sfx2
     struct ReadLocalFilter
     {
     protected:
-        OConfigurationNode      m_aClassesNode;
+        OConfigurationNode const m_aClassesNode;
         FilterClassList&        m_rClasses;
 
     public:
@@ -524,7 +524,7 @@ namespace sfx2
 
     struct FindGroupEntry
     {
-        FilterGroupEntryReferrer::mapped_type aLookingFor;
+        FilterGroupEntryReferrer::mapped_type const aLookingFor;
         explicit FindGroupEntry( FilterGroupEntryReferrer::mapped_type const & _rLookingFor ) : aLookingFor( _rLookingFor ) { }
 
         bool operator() ( const MapGroupEntry2GroupEntry::value_type& _rMapEntry )
@@ -716,7 +716,7 @@ namespace sfx2
         protected:
             Reference< XFilterManager >         m_xFilterManager;
             FileDialogHelper_Impl*              m_pFileDlgImpl;
-            bool                                m_bAddExtension;
+            bool const                          m_bAddExtension;
 
         public:
             AppendFilter( const Reference< XFilterManager >& _rxFilterManager,

@@ -36,7 +36,7 @@ class BindDispatch_Impl :   public ::cppu::WeakImplHelper< css::frame::XStatusLi
 {
 friend class SfxStateCache;
     css::uno::Reference< css::frame::XDispatch >   xDisp;
-    css::util::URL                     aURL;
+    css::util::URL const               aURL;
     css::frame::FeatureStateEvent      aStatus;
     SfxStateCache*          pCache;
     const SfxSlot*          pSlot;
@@ -60,7 +60,7 @@ class SfxStateCache
 friend class BindDispatch_Impl;
     rtl::Reference<BindDispatch_Impl>
                             mxDispatch;
-    sal_uInt16              nId;           // Slot-Id
+    sal_uInt16 const        nId;           // Slot-Id
     SfxControllerItem*      pInternalController;
     css::uno::Reference < css::frame::XDispatch > xMyDispatch;
     SfxControllerItem*      pController;    // Pointer to first bound Controller (interlinked with each other)

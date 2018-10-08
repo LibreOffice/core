@@ -85,14 +85,12 @@ private:
     bool isAcceptedFile(const OUString &rURL) const;
 
     long mnItemMaxSize;
-    long mnTextHeight;
-    long mnItemPadding;
     size_t mnLastMouseDownItem;
 
     /// Image that appears when there is no recent document.
-    Image maWelcomeImage;
-    OUString maWelcomeLine1;
-    OUString maWelcomeLine2;
+    Image const maWelcomeImage;
+    OUString const maWelcomeLine1;
+    OUString const maWelcomeLine2;
 };
 
 } // namespace sfx2

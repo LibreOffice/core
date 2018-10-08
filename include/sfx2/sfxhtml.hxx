@@ -37,7 +37,7 @@ class SFX2_DLLPUBLIC SfxHTMLParser : public HTMLParser
 {
     OUString                aScriptType;
 
-    SfxMedium*              pMedium;
+    SfxMedium* const        pMedium;
     std::unique_ptr<SfxMedium> pDLMedium;   // Medium for Download Files
 
     ScriptType eScriptType;

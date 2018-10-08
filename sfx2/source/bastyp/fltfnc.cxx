@@ -127,7 +127,7 @@ static inline OUString ToUpper_Impl( const OUString &rStr )
 class SfxFilterContainer_Impl
 {
 public:
-    OUString            aName;
+    OUString const      aName;
 
     explicit SfxFilterContainer_Impl( const OUString& rName )
         : aName( rName )
@@ -233,7 +233,7 @@ std::shared_ptr<const SfxFilter> SfxFilterContainer::GetDefaultFilter_Impl( cons
 class SfxFilterMatcher_Impl
 {
 public:
-    OUString     aName;
+    OUString const              aName;
     mutable SfxFilterList_Impl* pList;      // is created on demand
 
     void InitForIterating() const;

@@ -53,9 +53,9 @@ namespace com { namespace sun { namespace star { namespace text { class XTextRan
 class ContentListBox_Impl : public SvTreeListBox
 {
 private:
-    Image           aOpenBookImage;
-    Image           aClosedBookImage;
-    Image           aDocumentImage;
+    Image const     aOpenBookImage;
+    Image const     aClosedBookImage;
+    Image const     aDocumentImage;
 
     void            InitRoot();
     void            ClearChildren( SvTreeListEntry* pParent );
@@ -293,7 +293,7 @@ private:
 
     Link<SfxHelpIndexWindow_Impl*,void> aSelectFactoryLink;
     Link<Control*,bool>                 aPageDoubleClickLink;
-    Link<IndexTabPage_Impl&,void>       aIndexKeywordLink;
+    Link<IndexTabPage_Impl&,void> const aIndexKeywordLink;
     OUString                            sKeyword;
 
     VclPtr<SfxHelpWindow_Impl>     pParentWin;
@@ -424,10 +424,10 @@ private:
     Idle                    aSelectIdle;
     Image                   aIndexOnImage;
     Image                   aIndexOffImage;
-    OUString                aIndexOnText;
-    OUString                aIndexOffText;
+    OUString const          aIndexOnText;
+    OUString const          aIndexOffText;
     OUString                aSearchText;
-    OUString                aOnStartupText;
+    OUString const          aOnStartupText;
     OUString                sCurrentFactory;
 
     VclPtr<SfxHelpWindow_Impl>     pHelpWin;
