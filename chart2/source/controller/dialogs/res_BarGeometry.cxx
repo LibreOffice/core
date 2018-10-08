@@ -18,6 +18,7 @@
  */
 
 #include "res_BarGeometry.hxx"
+#include <vcl/builder.hxx>
 
 namespace chart
 {

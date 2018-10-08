@@ -25,6 +25,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svl/intitem.hxx>
+#include <svx/orienthelper.hxx>
 
 namespace chart
 {

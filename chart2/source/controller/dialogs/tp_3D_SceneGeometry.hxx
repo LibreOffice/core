@@ -19,15 +19,13 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_3D_SCENEGEOMETRY_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_3D_SCENEGEOMETRY_HXX
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <basegfx/matrix/b3dhommatrix.hxx>
-
 #include <vcl/tabpage.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/button.hxx>
 
-#include <ControllerLockGuard.hxx>
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace chart { class ControllerLockHelper; }
 
 namespace chart
 {

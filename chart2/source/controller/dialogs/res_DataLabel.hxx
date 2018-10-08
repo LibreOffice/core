@@ -24,7 +24,6 @@
 #include <svl/itemset.hxx>
 #include <TextDirectionListBox.hxx>
 #include <svx/dialcontrol.hxx>
-#include <sfx2/tabdlg.hxx>
 
 class SvNumberFormatter;
 

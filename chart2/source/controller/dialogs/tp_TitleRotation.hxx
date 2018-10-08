@@ -21,9 +21,10 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/dialcontrol.hxx>
-#include <svx/orienthelper.hxx>
 #include <vcl/fixed.hxx>
 #include <TextDirectionListBox.hxx>
+
+namespace svx { class OrientationHelper; }
 
 namespace chart
 {

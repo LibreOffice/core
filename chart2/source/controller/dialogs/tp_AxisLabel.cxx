@@ -23,6 +23,7 @@
 #include <chartview/ChartSfxItemIds.hxx>
 
 #include <svx/chrtitem.hxx>
+#include <svx/orienthelper.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
