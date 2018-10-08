@@ -664,10 +664,10 @@ public:
     ParaPortion* operator[](sal_Int32 nPos);
     const ParaPortion* operator[](sal_Int32 nPos) const;
 
-    ParaPortion* Release(sal_Int32 nPos);
+    std::unique_ptr<ParaPortion> Release(sal_Int32 nPos);
     void Remove(sal_Int32 nPos);
-    void Insert(sal_Int32 nPos, ParaPortion* p);
-    void Append(ParaPortion* p);
+    void Insert(sal_Int32 nPos, std::unique_ptr<ParaPortion> p);
+    void Append(std::unique_ptr<ParaPortion> p);
     sal_Int32 Count() const;
 
 #if OSL_DEBUG_LEVEL > 0
