@@ -477,6 +477,26 @@ protected:
 
 public:
     void connect_selected(const Link<const OString&, void>& rLink) { m_aSelectHdl = rLink; }
+
+    virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
+                             const OUString* pIconName, VirtualDevice* pImageSufface, bool bCheck)
+        = 0;
+    void append_item(const OUString& rId, const OUString& rStr)
+    {
+        insert_item(-1, rId, rStr, nullptr, nullptr, false);
+    }
+    void append_item_check(const OUString& rId, const OUString& rStr)
+    {
+        insert_item(-1, rId, rStr, nullptr, nullptr, true);
+    }
+    void append_item(const OUString& rId, const OUString& rStr, const OUString& rImage)
+    {
+        insert_item(-1, rId, rStr, &rImage, nullptr, false);
+    }
+    void append_item(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
+    {
+        insert_item(-1, rId, rStr, nullptr, &rImage, false);
+    }
     virtual void set_item_active(const OString& rIdent, bool bActive) = 0;
     virtual void set_item_label(const OString& rIdent, const OUString& rLabel) = 0;
     virtual void set_item_help_id(const OString& rIdent, const OString& rHelpId) = 0;
@@ -1050,19 +1070,23 @@ public:
     virtual void show(const OString& rIdent, bool bShow) = 0;
 
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
-                        const OUString* pIconName, VirtualDevice* pImageSufface)
+                        const OUString* pIconName, VirtualDevice* pImageSufface, bool bCheck)
         = 0;
     void append(const OUString& rId, const OUString& rStr)
     {
-        insert(-1, rId, rStr, nullptr, nullptr);
+        insert(-1, rId, rStr, nullptr, nullptr, false);
+    }
+    void append_check(const OUString& rId, const OUString& rStr)
+    {
+        insert(-1, rId, rStr, nullptr, nullptr, true);
     }
     void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
     {
-        insert(-1, rId, rStr, &rImage, nullptr);
+        insert(-1, rId, rStr, &rImage, nullptr, false);
     }
     void append(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
     {
-        insert(-1, rId, rStr, nullptr, &rImage);
+        insert(-1, rId, rStr, nullptr, &rImage, false);
     }
 
     virtual ~Menu() {}

@@ -519,6 +519,24 @@ namespace
     {
         return Image(BitmapEx(rDevice.GetBitmapEx(Point(), rDevice.GetOutputSizePixel())));
     }
+
+    void insert_to_menu(PopupMenu* pMenu, int pos, const OUString& rId, const OUString& rStr,
+                        const OUString* pIconName, VirtualDevice* pImageSurface, bool bCheck)
+    {
+        const auto nCount = pMenu->GetItemCount();
+        const sal_uInt16 nLastId = nCount ? pMenu->GetItemId(nCount-1) : 0;
+        const sal_uInt16 nNewid = nLastId + 1;
+        pMenu->InsertItem(nNewid, rStr, bCheck ? MenuItemBits::CHECKABLE : MenuItemBits::NONE,
+                            OUStringToOString(rId, RTL_TEXTENCODING_UTF8), pos == -1 ? MENU_APPEND : pos);
+        if (pIconName)
+        {
+            pMenu->SetItemImage(nNewid, createImage(*pIconName));
+        }
+        else if (pImageSurface)
+        {
+            pMenu->SetItemImage(nNewid, createImage(*pImageSurface));
+        }
+    }
 }
 
 class SalInstanceMenu : public weld::Menu
@@ -555,21 +573,9 @@ public:
     }
 
     virtual void insert(int pos, const OUString& rId, const OUString& rStr,
-                        const OUString* pIconName, VirtualDevice* pImageSurface) override
+                        const OUString* pIconName, VirtualDevice* pImageSurface, bool bCheck) override
     {
-        const auto nCount = m_xMenu->GetItemCount();
-        const sal_uInt16 nLastId = nCount ? m_xMenu->GetItemId(nCount-1) : 0;
-        const sal_uInt16 nNewid = nLastId + 1;
-        m_xMenu->InsertItem(nNewid, rStr, MenuItemBits::NONE,
-                            OUStringToOString(rId, RTL_TEXTENCODING_UTF8), pos == -1 ? MENU_APPEND : pos);
-        if (pIconName)
-        {
-            m_xMenu->SetItemImage(nNewid, createImage(*pIconName));
-        }
-        else if (pImageSurface)
-        {
-            m_xMenu->SetItemImage(nNewid, createImage(*pImageSurface));
-        }
+        insert_to_menu(m_xMenu, pos, rId, rStr, pIconName, pImageSurface, bCheck);
     }
 
     virtual ~SalInstanceMenu() override
@@ -1196,6 +1202,12 @@ public:
         return false;
     }
 
+    virtual void insert_item(int pos, const OUString& rId, const OUString& rStr,
+                             const OUString* pIconName, VirtualDevice* pImageSurface, bool bCheck) override
+    {
+        insert_to_menu(m_xMenuButton->GetPopupMenu(), pos, rId, rStr, pIconName, pImageSurface, bCheck);
+    }
+
     virtual void set_item_active(const OString& rIdent, bool bActive) override
     {
         PopupMenu* pMenu = m_xMenuButton->GetPopupMenu();
@@ -1616,6 +1628,7 @@ public:
     virtual void set_font(const vcl::Font& rFont) override
     {
         m_xEntry->SetFont(rFont);
+        m_xEntry->Invalidate();
     }
 
     virtual void connect_cursor_position(const Link<Entry&, void>& rLink) override
