@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_SOURCE_INC_SVIMPBOX_HXX
-#define INCLUDED_SVTOOLS_SOURCE_INC_SVIMPBOX_HXX
+#ifndef INCLUDED_VCL_SOURCE_INC_SVIMPBOX_HXX
+#define INCLUDED_VCL_SOURCE_INC_SVIMPBOX_HXX
 
+#include <vcl/dllapi.h>
 #include <vcl/seleng.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/vclevent.hxx>
@@ -27,7 +28,6 @@
 #include <o3tl/enumarray.hxx>
 #include <memory>
 #include <vector>
-#include "svtaccessiblefactory.hxx"
 
 class SvTreeListBox;
 class Point;
@@ -84,7 +84,7 @@ namespace o3tl
 #define NODE_BMP_TABDIST_NOTVALID   -2000000
 #define FIRST_ENTRY_TAB             1
 
-class SvImpLBox
+class VCL_DLLPUBLIC SvImpLBox
 {
 friend class ImpLBSelEng;
 friend class SvTreeListBox;
@@ -99,9 +99,6 @@ private:
 
     VclPtr<ScrollBar>    aHorSBar;
     VclPtr<ScrollBarBox> aScrBarBox;
-
-    ::svt::AccessibleFactoryAccess
-                        m_aFactoryAccess;
 
     static Image*       s_pDefCollapsed;
     static Image*       s_pDefExpanded;
@@ -411,6 +408,6 @@ inline void SvImpLBox::TreeInserted( SvTreeListEntry* pInsTree )
     EntryInserted( pInsTree );
 }
 
-#endif // INCLUDED_SVTOOLS_SOURCE_INC_SVIMPBOX_HXX
+#endif // INCLUDED_VCL_SOURCE_INC_SVIMPBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

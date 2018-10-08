@@ -29,7 +29,7 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/runtime/FormController.hpp>
 #include <vcl/scrbar.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <vcl/builderfactory.hxx>
 
 namespace pcr

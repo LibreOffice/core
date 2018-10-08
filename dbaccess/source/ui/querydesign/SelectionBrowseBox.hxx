@@ -24,7 +24,7 @@
 #include <JoinExchange.hxx>
 #include <QEnumTypes.hxx>
 #include <com/sun/star/util/XNumberFormatter.hpp>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 
 namespace connectivity
 {

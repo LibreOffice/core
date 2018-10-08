@@ -18,7 +18,7 @@
  */
 
 #include <marktree.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

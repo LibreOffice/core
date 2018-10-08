@@ -31,7 +31,7 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <comphelper/string.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <sal/log.hxx>
 
 #include <vector>

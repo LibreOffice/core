@@ -600,13 +600,7 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
 #include <svtools/toolboxcontroller.hxx>
-#include <svtools/transfer.hxx>
-#include <svtools/treelist.hxx>
-#include <svtools/treelistbox.hxx>
-#include <svtools/treelistentries.hxx>
-#include <svtools/treelistentry.hxx>
 #include <svtools/valueset.hxx>
-#include <svtools/viewdataentry.hxx>
 #include <svx/Palette.hxx>
 #include <svx/PaletteManager.hxx>
 #include <svx/SvxColorValueSet.hxx>
@@ -683,6 +677,12 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/unotoolsdllapi.h>
+#include <vcl/transfer.hxx>
+#include <vcl/treelist.hxx>
+#include <vcl/treelistbox.hxx>
+#include <vcl/treelistentries.hxx>
+#include <vcl/treelistentry.hxx>
+#include <vcl/viewdataentry.hxx>
 #include <viewopt.hxx>
 #include <wdocsh.hxx>
 

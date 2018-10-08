@@ -22,7 +22,7 @@
 
 #include <types.hxx>
 #include <svtools/tabbar.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 
 class ScViewData;
 

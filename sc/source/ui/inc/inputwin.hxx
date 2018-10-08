@@ -29,7 +29,7 @@
 #include <vcl/combobox.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/window.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 
 class EditView;
 class ScAccessibleEditLineTextData;

@@ -29,7 +29,7 @@
 #include <IClipBoardTest.hxx>
 #include "AppTitleWindow.hxx"
 #include <AppElementType.hxx>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <VertSplitView.hxx>
 
 #include <vector>

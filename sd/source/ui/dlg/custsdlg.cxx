@@ -29,7 +29,7 @@
 #include <customshowlist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <unotools/charclass.hxx>
 
 // SdCustomShowDlg

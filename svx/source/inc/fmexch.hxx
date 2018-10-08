@@ -24,7 +24,7 @@
 #include <set>
 
 #include <sot/exchange.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/form/XForms.hpp>

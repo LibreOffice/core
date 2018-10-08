@@ -397,17 +397,11 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/framestatuslistener.hxx>
-#include <svtools/imap.hxx>
-#include <svtools/imapobj.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/svlbitm.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/toolboxcontroller.hxx>
-#include <svtools/transfer.hxx>
-#include <svtools/treelistbox.hxx>
-#include <svtools/treelistentry.hxx>
 #include <svtools/valueset.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -526,5 +520,11 @@
 #include <svx/xtable.hxx>
 #include <svx/xtextit0.hxx>
 #include <svx/zoomslideritem.hxx>
+#include <vcl/imap.hxx>
+#include <vcl/imapobj.hxx>
+#include <vcl/svlbitm.hxx>
+#include <vcl/transfer.hxx>
+#include <vcl/treelistbox.hxx>
+#include <vcl/treelistentry.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

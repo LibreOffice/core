@@ -22,7 +22,7 @@
 #include <sal/types.h>
 #include <sfx2/dockwin.hxx>
 #include <svl/lstner.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <svtools/valueset.hxx>
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/xtable.hxx>

@@ -23,7 +23,7 @@
 #include <svtools/langtab.hxx>
 #include <svtools/simptabl.hxx>
 #include <svtools/svtabbx.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <svx/checklbx.hxx>
 #include <svx/langbox.hxx>
 #include <vcl/button.hxx>
