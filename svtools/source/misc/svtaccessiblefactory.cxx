@@ -110,15 +110,6 @@ namespace svt
             }
 
             virtual css::uno::Reference< css::accessibility::XAccessible >
-                createAccessibleTreeListBox(
-                    SvTreeListBox& /*_rListBox*/,
-                    const css::uno::Reference< css::accessibility::XAccessible >& /*_xParent*/
-                ) const override
-            {
-                return nullptr;
-            }
-
-            virtual css::uno::Reference< css::accessibility::XAccessible >
                 createAccessibleBrowseBoxHeaderBar(
                     const css::uno::Reference< css::accessibility::XAccessible >& /*rxParent*/,
                     IAccessibleTableProvider& /*_rOwningTable*/,

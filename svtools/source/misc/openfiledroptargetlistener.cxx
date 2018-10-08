@@ -26,7 +26,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <sot/filelist.hxx>
 
 #include <osl/file.hxx>

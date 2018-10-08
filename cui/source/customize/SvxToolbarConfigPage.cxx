@@ -46,9 +46,9 @@
 #include <sfx2/filedlghelper.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/svlbitm.hxx>
-#include <svtools/treelistentry.hxx>
-#include <svtools/viewdataentry.hxx>
+#include <vcl/svlbitm.hxx>
+#include <vcl/treelistentry.hxx>
+#include <vcl/viewdataentry.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>

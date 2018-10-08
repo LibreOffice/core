@@ -362,11 +362,8 @@
 #include <svl/stylesheetuser.hxx>
 #include <svl/svldllapi.h>
 #include <svtools/ehdl.hxx>
-#include <svtools/svlbitm.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
-#include <svtools/transfer.hxx>
-#include <svtools/treelistentry.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dlgutil.hxx>
@@ -462,5 +459,8 @@
 #include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
+#include <vcl/svlbitm.hxx>
+#include <vcl/transfer.hxx>
+#include <vcl/treelistentry.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

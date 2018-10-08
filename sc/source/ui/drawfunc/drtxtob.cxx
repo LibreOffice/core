@@ -53,7 +53,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svtools/cliplistener.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <svl/whiter.hxx>
 #include <svl/languageoptions.hxx>
 

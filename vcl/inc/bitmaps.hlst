@@ -143,6 +143,9 @@
 #define IMG_ERROR   "dbaccess/res/exerror.png"
 #define IMG_INFO    "dbaccess/res/exinfo.png"
 
+#define RID_BMP_TREENODE_COLLAPSED  "res/plus.png"
+#define RID_BMP_TREENODE_EXPANDED   "res/minus.png"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

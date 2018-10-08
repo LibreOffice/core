@@ -43,7 +43,7 @@
 
 #include <editeng/outliner.hxx>
 #include <svx/svditer.hxx>
-#include <svtools/imapobj.hxx>
+#include <vcl/imapobj.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <boost/property_tree/json_parser.hpp>
 #include <comphelper/lok.hxx>

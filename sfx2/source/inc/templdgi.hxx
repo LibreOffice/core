@@ -31,7 +31,7 @@ class SfxTemplateControllerItem;
 #include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
 #include <svl/lstner.hxx>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <svl/eitem.hxx>
 
 #include <svl/style.hxx>

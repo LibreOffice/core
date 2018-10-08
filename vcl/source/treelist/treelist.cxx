@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/treelist.hxx>
-#include <svtools/treelistentry.hxx>
-#include <svtools/viewdataentry.hxx>
+#include <vcl/treelist.hxx>
+#include <vcl/treelistentry.hxx>
+#include <vcl/viewdataentry.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/make_unique.hxx>
 

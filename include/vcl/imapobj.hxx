@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_IMAPOBJ_HXX
-#define INCLUDED_SVTOOLS_IMAPOBJ_HXX
+#ifndef INCLUDED_VCL_IMAPOBJ_HXX
+#define INCLUDED_VCL_IMAPOBJ_HXX
 
-#include <svtools/svtdllapi.h>
+#include <vcl/dllapi.h>
 #include <svl/macitem.hxx>
 #include <rtl/strbuf.hxx>
 
@@ -48,7 +48,7 @@ class SvStream;
 #define IMAP_ERR_OK         0x00000000L
 #define IMAP_ERR_FORMAT     0x00000001L
 
-class SVT_DLLPUBLIC IMapObject
+class VCL_DLLPUBLIC IMapObject
 {
     friend class        ImageMap;
 
