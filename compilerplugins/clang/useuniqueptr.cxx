@@ -499,6 +499,8 @@ void UseUniquePtr::CheckLoopDelete(const FunctionDecl* functionDecl, const CXXDe
                         if (auto x = dyn_cast<CXXConstructExpr>(init))
                             if (x->getNumArgs() == 1)
                                 init = x->getArg(0)->IgnoreImplicit();
+                        if (auto x = dyn_cast<CXXBindTemporaryExpr>(init))
+                            init = x->getSubExpr();
                         if (auto x = dyn_cast<CXXMemberCallExpr>(init))
                             init = x->getImplicitObjectArgument();
                         if ((memberExpr = dyn_cast<MemberExpr>(init)))

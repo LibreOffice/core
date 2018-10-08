@@ -278,7 +278,6 @@ class Foo23
     }
 };
 
-#if CLANG_VERSION >= 60000
 class Foo24
 {
     typedef std::vector<int*> HTMLAttrs;
@@ -289,7 +288,6 @@ class Foo24
             delete *it; // expected-error {{rather manage with std::some_container<std::unique_ptr<T>> [loplugin:useuniqueptr]}}
     }
 };
-#endif
 
 //  ------------------------------------------------------------------------------------------------
 // tests for passing owning pointers to constructors
