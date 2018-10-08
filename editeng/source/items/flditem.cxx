@@ -289,7 +289,7 @@ SvxFieldItem::SvxFieldItem( const SvxFieldData& rField, const sal_uInt16 nId ) :
 
 SvxFieldItem::SvxFieldItem( const SvxFieldItem& rItem ) :
     SfxPoolItem ( rItem )
-    , mpField( rItem.GetField() ? rItem.GetField()->Clone() : nullptr )
+    , mpField( rItem.mpField ? rItem.mpField->Clone() : nullptr )
 {
 }
 
