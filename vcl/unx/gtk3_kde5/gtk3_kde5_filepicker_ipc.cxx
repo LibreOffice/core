@@ -107,8 +107,8 @@ OUString getResString(const char* pResId)
 }
 
 // handles the IPC commands for dialog execution and ends the dummy Gtk dialog once the IPC response is there
-void handleIpcForExecute(Gtk3KDE5FilePickerIpc* pFilePickerIpc, GtkWidget* pDummyDialog,
-                         bool* bResult)
+static void handleIpcForExecute(Gtk3KDE5FilePickerIpc* pFilePickerIpc, GtkWidget* pDummyDialog,
+                                bool* bResult)
 {
     auto id = pFilePickerIpc->sendCommand(Commands::Execute);
     pFilePickerIpc->readResponse(id, *bResult);

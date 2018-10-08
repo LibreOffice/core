@@ -52,7 +52,7 @@ static void sendIpcArg(std::ostream& stream, const QStringList& list)
     }
 }
 
-void readCommandArgs(Commands command, QList<QVariant>& args)
+static void readCommandArgs(Commands command, QList<QVariant>& args)
 {
     switch (command)
     {
@@ -179,7 +179,7 @@ void readCommandArgs(Commands command, QList<QVariant>& args)
     };
 }
 
-void readCommands(FilePickerIpc* ipc)
+static void readCommands(FilePickerIpc* ipc)
 {
     while (!std::cin.eof())
     {
