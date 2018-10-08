@@ -1847,6 +1847,7 @@ void SwTextFormatter::FeedInf( SwTextFormatInfo &rInf ) const
     rInf.Left( Left() );
     rInf.Right( Right() );
     rInf.First( FirstLeft() );
+    rInf.LeftMargin(GetLeftMargin());
 
     rInf.RealWidth( sal_uInt16(rInf.Right() - GetLeftMargin()) );
     rInf.Width( rInf.RealWidth() );

@@ -488,6 +488,8 @@ class SwTextFormatInfo : public SwTextPaintInfo
     SwTwips m_nLeft;              // Left margin
     SwTwips m_nRight;             // Right margin
     SwTwips m_nFirst;             // EZE
+    /// First or left margin, depending on context.
+    SwTwips m_nLeftMargin = 0;
     sal_uInt16 m_nRealWidth;      // "real" line width
     sal_uInt16 m_nWidth;          // "virtual" line width
     sal_uInt16 m_nLineHeight;     // Final height after CalcLine
@@ -555,6 +557,7 @@ public:
     void Right( const SwTwips nNew ) { m_nRight = nNew; }
     SwTwips First() const { return m_nFirst; }
     void First( const SwTwips nNew ) { m_nFirst = nNew; }
+    void LeftMargin( const SwTwips nNew) { m_nLeftMargin = nNew; }
     sal_uInt16 RealWidth() const { return m_nRealWidth; }
     void RealWidth( const sal_uInt16 nNew ) { m_nRealWidth = nNew; }
     sal_uInt16 ForcedLeftMargin() const { return m_nForcedLeftMargin; }
