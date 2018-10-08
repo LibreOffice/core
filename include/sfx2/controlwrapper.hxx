@@ -68,8 +68,8 @@ public:
     /** A helper struct that contains a list position - value pair. */
     struct MapEntryType
     {
-        PosT                mnPos;      /// Position in the list.
-        ValueT              mnValue;    /// Corresponding value.
+        PosT const          mnPos;      /// Position in the list.
+        ValueT const        mnValue;    /// Corresponding value.
     };
 
     /** Constructs the map helper with the passed map.

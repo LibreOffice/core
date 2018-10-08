@@ -68,7 +68,7 @@ class SFX2_DLLPUBLIC ThumbnailViewItem
 public:
 
     ThumbnailView &mrParent;
-    sal_uInt16 mnId;
+    sal_uInt16 const mnId;
     bool mbVisible;
     bool mbSelected;
     bool mbHover;

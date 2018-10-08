@@ -45,7 +45,7 @@ class SFX2_DLLPUBLIC SfxObjectFactory
 private:
     const OUString          m_sFactoryName;
     std::unique_ptr<SfxObjectFactory_Impl> pImpl;      // Additional Data
-    SfxObjectShellFlags     nFlags;
+    SfxObjectShellFlags const nFlags;
 
 public:
     SfxObjectFactory( const SvGlobalName &rName, SfxObjectShellFlags nFlags, const OUString& sFactoryName );

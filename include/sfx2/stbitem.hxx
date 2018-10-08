@@ -39,9 +39,9 @@ typedef SfxStatusBarControl* (*SfxStatusBarControlCtor)( sal_uInt16 nSlotId, sal
 
 struct SfxStbCtrlFactory
 {
-    SfxStatusBarControlCtor pCtor;
+    SfxStatusBarControlCtor const pCtor;
     const std::type_info&   nTypeId;
-    sal_uInt16              nSlotId;
+    sal_uInt16 const        nSlotId;
 
     SfxStbCtrlFactory( SfxStatusBarControlCtor pTheCtor,
             const std::type_info& nTheTypeId, sal_uInt16 nTheSlotId ):
@@ -58,8 +58,8 @@ class UserDrawEvent;
 
 class SFX2_DLLPUBLIC SfxStatusBarControl: public svt::StatusbarController
 {
-    sal_uInt16         nSlotId;
-    sal_uInt16         nId;
+    sal_uInt16 const   nSlotId;
+    sal_uInt16 const   nId;
     VclPtr<StatusBar>  pBar;
 
 protected:

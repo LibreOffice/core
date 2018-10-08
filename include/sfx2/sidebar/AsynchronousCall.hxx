@@ -43,7 +43,7 @@ public:
     void CancelRequest();
 
 private:
-    Action maAction;
+    Action const maAction;
     ImplSVEvent * mnCallId;
 
     DECL_LINK(HandleUserCall, void*, void);

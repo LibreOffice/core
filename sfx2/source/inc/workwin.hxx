@@ -101,7 +101,7 @@ struct SfxChild_Impl
 
 struct SfxChildWin_Impl
 {
-    sal_uInt16                      nSaveId;       // the ChildWindow-Id
+    sal_uInt16 const                nSaveId;       // the ChildWindow-Id
     sal_uInt16                      nInterfaceId;  // the current context
     sal_uInt16                      nId;           // current Id
     SfxChildWindow*                 pWin;
@@ -174,7 +174,6 @@ class LayoutManagerListener : public ::cppu::WeakImplHelper<
         bool                                             m_bHasFrame;
         SfxWorkWindow*                                   m_pWrkWin;
         css::uno::WeakReference< css::frame::XFrame >    m_xFrame;
-        OUString                                         m_aLayoutManagerPropName;
 };
 
 class SfxWorkWindow final
@@ -205,13 +204,9 @@ class SfxWorkWindow final
     bool                    bIsFullScreen : 1;
     bool                    bShowStatusBar : 1;
     sal_Int32               m_nLock;
-    OUString                m_aStatusBarResName;
-    OUString                m_aLayoutManagerPropName;
-    OUString                m_aTbxTypeName;
-    OUString                m_aProgressBarResName;
     css::uno::Reference< css::lang::XComponent > m_xLayoutManagerListener;
     SfxFrame*               pMasterFrame;
-    SfxFrame*               pFrame;
+    SfxFrame* const         pFrame;
 
     void                    CreateChildWin_Impl(SfxChildWin_Impl*,bool);
     void                    RemoveChildWin_Impl(SfxChildWin_Impl*);

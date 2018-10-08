@@ -264,7 +264,7 @@ private:
 
 class SFX2_DLLPUBLIC SfxViewFrameItem: public SfxPoolItem
 {
-    SfxViewFrame*           pFrame;
+    SfxViewFrame* const     pFrame;
 
 public:
                             SfxViewFrameItem( SfxViewFrame *pViewFrame ):

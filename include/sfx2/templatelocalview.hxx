@@ -67,7 +67,7 @@ public:
 
 private:
 
-    FILTER_APPLICATION mApp;
+    FILTER_APPLICATION const mApp;
 };
 
 

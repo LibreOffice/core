@@ -109,7 +109,7 @@ private:
     ItemContainer maItems;
     const ::std::function<void (const OUString& rsDeckId)> maDeckActivationFunctor;
     sal_Int32 mnMenuSeparatorY;
-    PopupMenuProvider maPopupMenuProvider;
+    PopupMenuProvider const maPopupMenuProvider;
 
     VclPtr<RadioButton> CreateTabItem (const DeckDescriptor& rDeckDescriptor);
     Image GetItemImage (const DeckDescriptor& rDeskDescriptor) const;

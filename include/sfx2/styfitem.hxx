@@ -29,7 +29,7 @@
 
 struct SFX2_DLLPUBLIC SfxFilterTuple
 {
-    OUString aName;
+    OUString const aName;
     SfxStyleSearchBits nFlags;
     SfxFilterTuple(const OUString& rName, SfxStyleSearchBits nArg)
         : aName(rName)
@@ -42,9 +42,9 @@ typedef std::vector<SfxFilterTuple> SfxStyleFilter;
 
 class SFX2_DLLPUBLIC SfxStyleFamilyItem
 {
-    SfxStyleFamily  nFamily;
-    OUString        aText;
-    Image           aImage;
+    SfxStyleFamily const  nFamily;
+    OUString const        aText;
+    Image const           aImage;
     SfxStyleFilter  aFilterList;
 
 public:

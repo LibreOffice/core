@@ -30,7 +30,7 @@ enum class InfoBarType {
 class SFX2_DLLPUBLIC SfxInfoBarContainerChild : public SfxChildWindow
 {
     private:
-        SfxBindings* m_pBindings;
+        SfxBindings* const m_pBindings;
 
     public:
         SfxInfoBarContainerChild( vcl::Window* pParent,
@@ -49,7 +49,7 @@ class SFX2_DLLPUBLIC SfxInfoBarContainerChild : public SfxChildWindow
 class SFX2_DLLPUBLIC SfxInfoBarWindow : public vcl::Window
 {
     private:
-        OUString                           m_sId;
+        OUString const            m_sId;
         InfoBarType m_eType;
         VclPtr<FixedImage>        m_pImage;
         VclPtr<FixedText>           m_pMessage;

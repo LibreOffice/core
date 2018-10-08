@@ -52,11 +52,11 @@ SfxCompareSlots_bsearch( const void* pSmaller, const void* pBigger )
 
 struct SfxObjectUI_Impl
 {
-    sal_uInt16         nPos;
-    SfxVisibilityFlags nFlags;
-    sal_uInt32         nObjId;
-    bool               bContext;
-    SfxShellFeature    nFeature;
+    sal_uInt16 const         nPos;
+    SfxVisibilityFlags const nFlags;
+    sal_uInt32 const         nObjId;
+    bool                     bContext;
+    SfxShellFeature const    nFeature;
 
     SfxObjectUI_Impl(sal_uInt16 n, SfxVisibilityFlags f, sal_uInt32 nId, SfxShellFeature nFeat) :
         nPos(n),

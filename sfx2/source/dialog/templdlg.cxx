@@ -82,7 +82,7 @@ namespace
 
 class StyleLBoxString : public SvLBoxString
 {
-    SfxStyleFamily meStyleFamily;
+    SfxStyleFamily const meStyleFamily;
     SvViewDataItem* mpViewData;
 
 public:
@@ -505,8 +505,8 @@ typedef std::vector<std::unique_ptr<StyleTree_Impl>> StyleTreeArr_Impl;
 class StyleTree_Impl
 {
 private:
-    OUString aName;
-    OUString aParent;
+    OUString const aName;
+    OUString const aParent;
     StyleTreeArr_Impl pChildren;
 
 public:

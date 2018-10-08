@@ -77,7 +77,7 @@ using namespace ::com::sun::star::beans;
 
 class SfxEventAsyncer_Impl : public SfxListener
 {
-    SfxEventHint           aHint;
+    SfxEventHint const     aHint;
     std::unique_ptr<Idle>  pIdle;
 
 public:

@@ -62,7 +62,7 @@ using namespace ::com::sun::star::uno;
 
 struct ResIdToResName
 {
-    ToolbarId   eId;
+    ToolbarId const   eId;
     const char* pName;
 };
 
@@ -127,12 +127,13 @@ static const ResIdToResName pToolBarResToName[] =
 // Sort the Children according their alignment
 // The order corresponds to the enum SfxChildAlignment (->CHILDWIN.HXX).
 
+static constexpr OUStringLiteral g_aLayoutManagerPropName = "LayoutManager";
+
 // Help to make changes to the alignment compatible!
 LayoutManagerListener::LayoutManagerListener(
     SfxWorkWindow* pWrkWin ) :
     m_bHasFrame( false ),
-    m_pWrkWin( pWrkWin ),
-    m_aLayoutManagerPropName( "LayoutManager" )
+    m_pWrkWin( pWrkWin )
 {
 }
 
@@ -156,7 +157,7 @@ void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFr
             {
                 try
                 {
-                    Any aValue = xPropSet->getPropertyValue( m_aLayoutManagerPropName );
+                    Any aValue = xPropSet->getPropertyValue( g_aLayoutManagerPropName );
                     aValue >>= xLayoutManager;
 
                     if ( xLayoutManager.is() )
@@ -220,7 +221,7 @@ void SAL_CALL LayoutManagerListener::dispose()
         {
             try
             {
-                css::uno::Any aValue = xPropSet->getPropertyValue( m_aLayoutManagerPropName );
+                css::uno::Any aValue = xPropSet->getPropertyValue( g_aLayoutManagerPropName );
                 aValue >>= xLayoutManager;
 
                 // remove as listener from layout manager
@@ -455,6 +456,9 @@ void SfxWorkWindow::Sort_Impl()
     bSorted = true;
 }
 
+static constexpr OUStringLiteral g_aStatusBarResName( "private:resource/statusbar/statusbar" );
+static constexpr OUStringLiteral g_aTbxTypeName( "private:resource/toolbar/" );
+static constexpr OUStringLiteral g_aProgressBarResName( "private:resource/progressbar/progressbar" );
 
 // constructor for workwin of a Frame
 
@@ -478,10 +482,6 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMast
     bShowStatusBar( sal_False ),
 #endif
     m_nLock( 0 ),
-    m_aStatusBarResName( "private:resource/statusbar/statusbar" ),
-    m_aLayoutManagerPropName( "LayoutManager" ),
-    m_aTbxTypeName( "private:resource/toolbar/" ),
-    m_aProgressBarResName( "private:resource/progressbar/progressbar" ),
     pMasterFrame( pMaster ),
     pFrame( pFrm )
 {
@@ -617,7 +617,7 @@ void SfxWorkWindow::DeleteControllers_Impl()
     {
         try
         {
-            Any aValue = xPropSet->getPropertyValue( m_aLayoutManagerPropName );
+            Any aValue = xPropSet->getPropertyValue( g_aLayoutManagerPropName );
             aValue >>= xLayoutManager;
         }
         catch ( Exception& )
@@ -1096,15 +1096,15 @@ Reference< css::task::XStatusIndicator > SfxWorkWindow::GetStatusIndicator()
 
     if ( xPropSet.is() )
     {
-        Any aValue = xPropSet->getPropertyValue( m_aLayoutManagerPropName );
+        Any aValue = xPropSet->getPropertyValue( g_aLayoutManagerPropName );
         aValue >>= xLayoutManager;
         if ( xLayoutManager.is() )
         {
-            xLayoutManager->createElement( m_aProgressBarResName );
-            xLayoutManager->showElement( m_aProgressBarResName );
+            xLayoutManager->createElement( g_aProgressBarResName );
+            xLayoutManager->showElement( g_aProgressBarResName );
 
             Reference< css::ui::XUIElement > xProgressBar =
-                xLayoutManager->getElement( m_aProgressBarResName );
+                xLayoutManager->getElement( g_aProgressBarResName );
             if ( xProgressBar.is() )
             {
                 xStatusIndicator.set( xProgressBar->getRealInterface(), UNO_QUERY );
@@ -1161,7 +1161,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl2()
 
     if ( xPropSet.is() )
     {
-        Any aValue = xPropSet->getPropertyValue( m_aLayoutManagerPropName );
+        Any aValue = xPropSet->getPropertyValue( g_aLayoutManagerPropName );
         aValue >>= xLayoutManager;
     }
 
@@ -1195,15 +1195,13 @@ void SfxWorkWindow::UpdateObjectBars_Impl2()
         bool bModesMatching = (nUpdateMode != SfxVisibilityFlags::Invisible) && ((nTbxMode & nUpdateMode) == nUpdateMode);
         if ( bDestroy || sfx2::SfxNotebookBar::IsActive())
         {
-            OUString aTbxId( m_aTbxTypeName );
-            aTbxId += GetResourceURLFromToolbarId(eId);
+            OUString aTbxId = g_aTbxTypeName + GetResourceURLFromToolbarId(eId);
             xLayoutManager->destroyElement( aTbxId );
         }
         else if ( eId != ToolbarId::None && ( ( bModesMatching && !bIsFullScreen ) ||
                                 ( bIsFullScreen && bFullScreenTbx ) ) )
         {
-            OUString aTbxId( m_aTbxTypeName );
-            aTbxId += GetResourceURLFromToolbarId(eId);
+            OUString aTbxId = g_aTbxTypeName + GetResourceURLFromToolbarId(eId);
             if ( !IsDockingAllowed() && !xLayoutManager->isElementFloating( aTbxId ))
                 xLayoutManager->destroyElement( aTbxId );
             else
@@ -1216,8 +1214,7 @@ void SfxWorkWindow::UpdateObjectBars_Impl2()
         else if ( eId != ToolbarId::None )
         {
             // Delete the Toolbox at this Position if possible
-            OUString aTbxId( m_aTbxTypeName );
-            aTbxId += GetResourceURLFromToolbarId(eId);
+            OUString aTbxId = g_aTbxTypeName + GetResourceURLFromToolbarId(eId);
             xLayoutManager->destroyElement( aTbxId );
         }
     }
@@ -1439,7 +1436,7 @@ void SfxWorkWindow::UpdateStatusBar_Impl()
     Reference< css::beans::XPropertySet > xPropSet( GetFrameInterface(), UNO_QUERY );
     Reference< css::frame::XLayoutManager > xLayoutManager;
 
-    Any aValue = xPropSet->getPropertyValue( m_aLayoutManagerPropName );
+    Any aValue = xPropSet->getPropertyValue( g_aLayoutManagerPropName );
     aValue >>= xLayoutManager;
 
     // No status bar, if no ID is required or when in FullScreenView or
@@ -1450,14 +1447,14 @@ void SfxWorkWindow::UpdateStatusBar_Impl()
         // Id has changed, thus create a suitable Statusbarmanager, this takes
         // over the  current status bar;
         if ( xLayoutManager.is() )
-            xLayoutManager->requestElement( m_aStatusBarResName );
+            xLayoutManager->requestElement( g_aStatusBarResName );
     }
     else
     {
         // Destroy the current StatusBar
         // The Manager only creates the Status bar, does not destroy it.
         if ( xLayoutManager.is() )
-            xLayoutManager->destroyElement( m_aStatusBarResName );
+            xLayoutManager->destroyElement( g_aStatusBarResName );
     }
 }
 
