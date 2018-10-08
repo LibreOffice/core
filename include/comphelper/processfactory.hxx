@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_PROCESSFACTORY_HXX
 #define INCLUDED_COMPHELPER_PROCESSFACTORY_HXX
 
-#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/comphelperdllapi.h>
 
 namespace com { namespace sun { namespace star { namespace lang {
