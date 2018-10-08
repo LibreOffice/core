@@ -1809,11 +1809,10 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     else if (name == "GtkTreeView")
     {
         //To-Do
-        //a) move svtools SvTreeViewBox into vcl
-        //b) make that the default target for GtkTreeView
-        //c) remove the non-drop down mode of ListBox and convert
+        //a) make SvTreeViewBox the default target for GtkTreeView
+        //b) remove the non-drop down mode of ListBox and convert
         //   everything over to SvTreeViewBox
-        //d) remove the users of makeSvTreeViewBox
+        //c) remove the users of makeSvTreeViewBox
         extractModel(id, rMap);
         WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
         if (m_bLegacy)

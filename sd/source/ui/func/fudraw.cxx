@@ -32,7 +32,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <svx/svdpagv.hxx>
-#include <svtools/imapobj.hxx>
+#include <vcl/imapobj.hxx>
 #include <svx/svxids.hrc>
 #include <svx/obj3d.hxx>
 #include <svx/scene3d.hxx>

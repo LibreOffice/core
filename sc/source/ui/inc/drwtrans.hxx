@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_DRWTRANS_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <charthelper.hxx>

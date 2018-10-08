@@ -152,7 +152,6 @@
 #include <svl/stritem.hxx>
 #include <svl/svldllapi.h>
 #include <svtools/svtdllapi.h>
-#include <svtools/treelistentry.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
@@ -167,5 +166,6 @@
 #include <uno/data.h>
 #include <unotools/fontdefs.hxx>
 #include <unotools/unotoolsdllapi.h>
+#include <vcl/treelistentry.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,7 +38,7 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 
 #include <svx/fmview.hxx>
 

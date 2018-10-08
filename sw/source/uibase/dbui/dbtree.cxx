@@ -38,7 +38,7 @@
 #include <dbtree.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 
 #include <bitmaps.hlst>
 
