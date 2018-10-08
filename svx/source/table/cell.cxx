@@ -821,7 +821,7 @@ void Cell::AddUndo()
     if( rObj.IsInserted() && rObj.getSdrModelFromSdrObject().IsUndoEnabled() )
     {
         CellRef xCell( this );
-        rObj.getSdrModelFromSdrObject().AddUndo( new CellUndo( &rObj, xCell ) );
+        rObj.getSdrModelFromSdrObject().AddUndo( o3tl::make_unique<CellUndo>( &rObj, xCell ) );
 
         // Undo action for the after-text-edit-ended stack.
         SdrTableObj* pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(&rObj);

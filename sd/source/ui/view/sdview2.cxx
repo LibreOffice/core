@@ -743,7 +743,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
                                 }
 
                                 // create undo action with old and new sizes
-                                SdAnimationPrmsUndoAction* pAction = new SdAnimationPrmsUndoAction(&mrDoc, pPickObj, bCreated);
+                                std::unique_ptr<SdAnimationPrmsUndoAction> pAction(new SdAnimationPrmsUndoAction(&mrDoc, pPickObj, bCreated));
                                 pAction->SetActive(pInfo->mbActive, pInfo->mbActive);
                                 pAction->SetEffect(pInfo->meEffect, pInfo->meEffect);
                                 pAction->SetTextEffect(pInfo->meTextEffect, pInfo->meTextEffect);
@@ -764,7 +764,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
 
                                 OUString aString(SdResId(STR_UNDO_ANIMATION));
                                 pAction->SetComment(aString);
-                                mpDocSh->GetUndoManager()->AddUndoAction(pAction);
+                                mpDocSh->GetUndoManager()->AddUndoAction(std::move(pAction));
                                 pInfo->meClickAction = eClickAction;
                                 pInfo->SetBookmark( aBookmark );
                                 mrDoc.SetChanged();

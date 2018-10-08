@@ -501,7 +501,7 @@ public:
     void BegUndo(const OUString& rComment); // open Undo group
     void BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrRepeatFunc eFunc); // open Undo group
     void EndUndo();                       // close Undo group
-    void AddUndo(SdrUndoAction* pUndo);
+    void AddUndo(std::unique_ptr<SdrUndoAction> pUndo);
     sal_uInt16 GetUndoBracketLevel() const                       { return nUndoLevel; }
     // only after the first BegUndo or before the last EndUndo:
     void SetUndoComment(const OUString& rComment);

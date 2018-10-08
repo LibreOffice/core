@@ -620,7 +620,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         pUndoMgr->EnterListAction(aComment, aComment, 0, mpViewShell->GetViewShellBase().GetViewShellId());
 
         // create undo group
-        SdUndoGroup* pUndoGroup = new SdUndoGroup(mpDoc);
+        std::unique_ptr<SdUndoGroup> pUndoGroup(new SdUndoGroup(mpDoc));
         pUndoGroup->SetComment(aComment);
 
         // for the path effect, remember some stuff
@@ -789,7 +789,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             }
         }
         // Set the Undo Group in of the Undo Manager
-        pUndoMgr->AddUndoAction(pUndoGroup);
+        pUndoMgr->AddUndoAction(std::move(pUndoGroup));
         pUndoMgr->LeaveListAction();
 
         // Model changed

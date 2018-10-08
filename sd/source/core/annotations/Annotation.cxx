@@ -351,7 +351,7 @@ void Annotation::createChangeUndo()
 {
     SdrModel* pModel = GetModel(); // TTTT should use reference
     if( pModel && pModel->IsUndoEnabled() )
-        pModel->AddUndo( new UndoAnnotation( *this ) );
+        pModel->AddUndo( o3tl::make_unique<UndoAnnotation>( *this ) );
 
     if( pModel )
     {
@@ -374,12 +374,12 @@ Reference< XText > SAL_CALL Annotation::getTextRange()
     return Reference< XText >( m_TextRange.get() );
 }
 
-SdrUndoAction* CreateUndoInsertOrRemoveAnnotation( const Reference< XAnnotation >& xAnnotation, bool bInsert )
+std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation( const Reference< XAnnotation >& xAnnotation, bool bInsert )
 {
     Annotation* pAnnotation = dynamic_cast< Annotation* >( xAnnotation.get() );
     if( pAnnotation )
     {
-        return new UndoInsertOrRemoveAnnotation( *pAnnotation, bInsert );
+        return o3tl::make_unique< UndoInsertOrRemoveAnnotation >( *pAnnotation, bInsert );
     }
     else
     {

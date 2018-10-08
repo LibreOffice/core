@@ -701,7 +701,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         nRetMask = sal_uInt16( nullptr != pStyleSheet );
                         if ( pStyleSheet && !pScMod->GetIsWaterCan() )
                         {
-                            ScUndoApplyPageStyle* pUndoAction = nullptr;
+                            std::unique_ptr<ScUndoApplyPageStyle> pUndoAction;
                             SCTAB nTabCount = rDoc.GetTableCount();
                             ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
                             for (; itr != itrEnd && *itr < nTabCount; ++itr)
@@ -712,13 +712,13 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                     rDoc.SetPageStyle( *itr, aStyleName );
                                     ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(true), *itr ).UpdatePages();
                                     if( !pUndoAction )
-                                        pUndoAction = new ScUndoApplyPageStyle( pDocSh, aStyleName );
+                                        pUndoAction.reset(new ScUndoApplyPageStyle( pDocSh, aStyleName ));
                                     pUndoAction->AddSheetAction( *itr, aOldName );
                                 }
                             }
                             if( pUndoAction )
                             {
-                                pDocSh->GetUndoManager()->AddUndoAction( pUndoAction );
+                                pDocSh->GetUndoManager()->AddUndoAction( std::move(pUndoAction) );
                                 pDocSh->SetDocumentModified();
                                 rBindings.Invalidate( SID_STYLE_FAMILY4 );
                                 rBindings.Invalidate( SID_STATUS_PAGESTYLE );
@@ -933,7 +933,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
         if ( bAddUndo && bUndo)
             pDocSh->GetUndoManager()->AddUndoAction(
-                        new ScUndoModifyStyle( pDocSh, eFamily, aOldData, aNewData ) );
+                        o3tl::make_unique<ScUndoModifyStyle>( pDocSh, eFamily, aOldData, aNewData ) );
 
         if ( bStyleToMarked )
         {

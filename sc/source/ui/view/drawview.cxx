@@ -220,7 +220,7 @@ void ScDrawView::SetMarkedToLayer( SdrLayerID nLayerNo )
             SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
             if ( dynamic_cast<const SdrUnoObj*>( pObj) ==  nullptr && (pObj->GetLayer() != SC_LAYER_INTERN) )
             {
-                AddUndo( new SdrUndoObjectLayerChange( *pObj, pObj->GetLayer(), nLayerNo) );
+                AddUndo( o3tl::make_unique<SdrUndoObjectLayerChange>( *pObj, pObj->GetLayer(), nLayerNo) );
                 pObj->SetLayer( nLayerNo );
             }
         }
@@ -870,7 +870,7 @@ void ScDrawView::DeleteMarked()
             delete pNote;
             // add the undo action for the note
             if( bUndo )
-                pUndoMgr->AddUndoAction( new ScUndoReplaceNote( *pDocShell, pCaptData->maStart, aNoteData, false, pDrawLayer->GetCalcUndo() ) );
+                pUndoMgr->AddUndoAction( o3tl::make_unique<ScUndoReplaceNote>( *pDocShell, pCaptData->maStart, aNoteData, false, pDrawLayer->GetCalcUndo() ) );
             // repaint the cell to get rid of the note marker
             if( pDocShell )
                 pDocShell->PostPaintCell( pCaptData->maStart );
@@ -988,7 +988,7 @@ SdrObject* ScDrawView::ApplyGraphicToObject(
     }
     else if(rHitObject.IsClosedObj() && !dynamic_cast< SdrOle2Obj* >(&rHitObject))
     {
-        AddUndo(new SdrUndoAttrObj(rHitObject));
+        AddUndo(o3tl::make_unique<SdrUndoAttrObj>(rHitObject));
 
         SfxItemSet aSet(GetModel()->GetItemPool(), svl::Items<XATTR_FILLSTYLE, XATTR_FILLBITMAP>{});
 

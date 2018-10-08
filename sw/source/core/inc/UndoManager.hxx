@@ -82,7 +82,7 @@ public:
     void SetView(SwView* pView) override;
 
     // SfxUndoManager
-    virtual void AddUndoAction(SfxUndoAction *pAction,
+    virtual void AddUndoAction(std::unique_ptr<SfxUndoAction> pAction,
                                    bool bTryMerg = false) override;
     virtual bool Undo() override;
     virtual bool Redo() override;

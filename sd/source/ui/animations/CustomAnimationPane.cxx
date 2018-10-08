@@ -296,7 +296,7 @@ void CustomAnimationPane::addUndo()
     {
         SdPage* pPage = SdPage::getImplementation( mxCurrentPage );
         if( pPage )
-            pManager->AddUndoAction( new UndoAnimation( mrBase.GetDocShell()->GetDoc(), pPage ) );
+            pManager->AddUndoAction( o3tl::make_unique<UndoAnimation>( mrBase.GetDocShell()->GetDoc(), pPage ) );
     }
 }
 
@@ -2527,7 +2527,7 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
             {
                 SdPage* pPage = SdPage::getImplementation( mxCurrentPage );
                 if( pPage )
-                    pManager->AddUndoAction( new UndoAnimationPath( mrBase.GetDocShell()->GetDoc(), pPage, pEffect->getNode() ) );
+                    pManager->AddUndoAction( o3tl::make_unique<UndoAnimationPath>( mrBase.GetDocShell()->GetDoc(), pPage, pEffect->getNode() ) );
             }
 
             pEffect->updatePathFromSdrPathObj( *pPathObj );

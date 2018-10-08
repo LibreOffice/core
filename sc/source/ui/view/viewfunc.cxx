@@ -618,7 +618,7 @@ void ScViewFunc::EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& r
             if (bUndo)
             {
                 pDocSh->GetUndoManager()->AddUndoAction(
-                    new ScUndoEnterValue(pDocSh, aPos, aUndoCell, rValue));
+                    o3tl::make_unique<ScUndoEnterValue>(pDocSh, aPos, aUndoCell, rValue));
             }
 
             pDocSh->PostPaintCell( aPos );
@@ -725,7 +725,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             if ( bRecord )
             {   //  because of ChangeTrack current first
                 pDocSh->GetUndoManager()->AddUndoAction(
-                    new ScUndoEnterData(pDocSh, ScAddress(nCol,nRow,nTab), aOldValues, aString, std::move(pUndoData)));
+                    o3tl::make_unique<ScUndoEnterData>(pDocSh, ScAddress(nCol,nRow,nTab), aOldValues, aString, std::move(pUndoData)));
             }
 
             HideAllCursors();
@@ -1081,7 +1081,7 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
         pDoc->CopyToDocument( aCopyRange, InsertDeleteFlags::ATTRIB, bCopyOnlyMarked, *pUndoDoc, &aFuncMark );
 
         pDocSh->GetUndoManager()->AddUndoAction(
-            new ScUndoSelectionAttr(
+            o3tl::make_unique<ScUndoSelectionAttr>(
                 pDocSh, aFuncMark,
                 aMarkRange.aStart.Col(), aMarkRange.aStart.Row(), aMarkRange.aStart.Tab(),
                 aMarkRange.aEnd.Col(), aMarkRange.aEnd.Row(), aMarkRange.aEnd.Tab(),
@@ -1193,7 +1193,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
             pUndoAttr = new ScUndoSelectionAttr(
                 pDocSh, aFuncMark, nStartCol, nStartRow, nStartTab,
                 nEndCol, nEndRow, nEndTab, std::move(pUndoDoc), bMulti, &rAttr );
-            pDocSh->GetUndoManager()->AddUndoAction(pUndoAttr);
+            pDocSh->GetUndoManager()->AddUndoAction(std::unique_ptr<ScUndoSelectionAttr>(pUndoAttr));
             pEditDataArray = pUndoAttr->GetDataArray();
         }
 
@@ -1234,10 +1234,10 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
 
         if (bRecord)
         {
-            ScUndoCursorAttr* pUndo = new ScUndoCursorAttr(
-                pDocSh, nCol, nRow, nTab, pOldPat.get(), pNewPat, &rAttr );
+            std::unique_ptr<ScUndoCursorAttr> pUndo(new ScUndoCursorAttr(
+                pDocSh, nCol, nRow, nTab, pOldPat.get(), pNewPat, &rAttr ));
             pUndo->SetEditData(std::move(pOldEditData), std::move(pNewEditData));
-            pDocSh->GetUndoManager()->AddUndoAction(pUndo);
+            pDocSh->GetUndoManager()->AddUndoAction(std::move(pUndo));
         }
         pOldPat.reset();     // is copied in undo (Pool)
 
@@ -1368,7 +1368,7 @@ void ScViewFunc::SetStyleSheetToMarked( const SfxStyleSheet* pStyleSheet )
 
             OUString aName = pStyleSheet->GetName();
             pDocSh->GetUndoManager()->AddUndoAction(
-                new ScUndoSelectionStyle( pDocSh, aFuncMark, aMarkRange, aName, std::move(pUndoDoc) ) );
+                o3tl::make_unique<ScUndoSelectionStyle>( pDocSh, aFuncMark, aMarkRange, aName, std::move(pUndoDoc) ) );
         }
 
         rDoc.ApplySelectionStyle( static_cast<const ScStyleSheet&>(*pStyleSheet), aFuncMark );
@@ -1402,7 +1402,7 @@ void ScViewFunc::SetStyleSheetToMarked( const SfxStyleSheet* pStyleSheet )
 
             OUString aName = pStyleSheet->GetName();
             pDocSh->GetUndoManager()->AddUndoAction(
-                new ScUndoSelectionStyle( pDocSh, aUndoMark, aMarkRange, aName, std::move(pUndoDoc) ) );
+                o3tl::make_unique<ScUndoSelectionStyle>( pDocSh, aUndoMark, aMarkRange, aName, std::move(pUndoDoc) ) );
         }
 
         ScMarkData::iterator itr = aFuncMark.begin(), itrEnd = aFuncMark.end();
@@ -1876,7 +1876,7 @@ void ScViewFunc::DeleteMulti( bool bRows )
     if (bRecord)
     {
         pDocSh->GetUndoManager()->AddUndoAction(
-            new ScUndoDeleteMulti(
+            o3tl::make_unique<ScUndoDeleteMulti>(
                 pDocSh, bRows, bNeedRefresh, nTab, aSpans, std::move(pUndoDoc), std::move(pUndoData)));
     }
 
@@ -2230,7 +2230,7 @@ void ScViewFunc::SetWidthOrHeight(
     if (bRecord)
     {
         pDocSh->GetUndoManager()->AddUndoAction(
-            new ScUndoWidthOrHeight(
+            o3tl::make_unique<ScUndoWidthOrHeight>(
                 pDocSh, aMarkData, nStart, nCurTab, nEnd, nCurTab,
                 std::move(pUndoDoc), aUndoRanges, std::move(pUndoTab), eMode, nSizeTwips, bWidth));
     }

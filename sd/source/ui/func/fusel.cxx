@@ -792,10 +792,10 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         {
                             // Added UNDOs for the WaterCan mode. This was never done in
                             // the past, thus it was missing all the time.
-                            SdrUndoAction* pUndoAttr = mpDoc->GetSdrUndoFactory().CreateUndoAttrObject(*pWaterCanCandidate, true, true);
+                            std::unique_ptr<SdrUndoAction> pUndoAttr = mpDoc->GetSdrUndoFactory().CreateUndoAttrObject(*pWaterCanCandidate, true, true);
                             mpView->BegUndo(pUndoAttr->GetComment());
                             mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoGeoObject(*pWaterCanCandidate));
-                            mpView->AddUndo(pUndoAttr);
+                            mpView->AddUndo(std::move(pUndoAttr));
 
                             pWaterCanCandidate->SetStyleSheet (pStyleSheet, false);
 

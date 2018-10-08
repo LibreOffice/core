@@ -564,7 +564,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                 if (bUndo)
                 {
                     pScDocSh->GetUndoManager()->AddUndoAction(
-                        new ScUndoInsertTab( pScDocSh, nNewTab,
+                        o3tl::make_unique<ScUndoInsertTab>( pScDocSh, nNewTab,
                                              true/*bAppend*/, aTabName ) );
                 }
 
@@ -727,7 +727,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
     {
         // add undo action the same way as in SdrEditView::InsertObjectAtView
         // (using UndoActionHdl etc.)
-        pView->AddUndo(new SdrUndoNewObj(*pObj));
+        pView->AddUndo(o3tl::make_unique<SdrUndoNewObj>(*pObj));
     }
 
     // BM/IHA --

@@ -85,7 +85,7 @@ void DocFuncUtil::addDeleteContentsUndo(
             pDocSh, rMark, rRange, std::move(pUndoDoc), bMulti, nFlags, bDrawUndo));
     pUndo->SetDataSpans(pSpans);
 
-    pUndoMgr->AddUndoAction(pUndo.release());
+    pUndoMgr->AddUndoAction(std::move(pUndo));
 }
 
 std::unique_ptr<ScSimpleUndo::DataSpansType> DocFuncUtil::getNonEmptyCellSpans(

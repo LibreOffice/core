@@ -261,7 +261,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
             // ChartHelper::AdaptDefaultsForChart( xObj );
 
             pPage->InsertObject( pObj );
-            pModel->AddUndo( new SdrUndoInsertObj( *pObj ) );
+            pModel->AddUndo( o3tl::make_unique<SdrUndoInsertObj>( *pObj ) );
     }
 }
 
@@ -276,7 +276,7 @@ void SAL_CALL ScChartsObj::removeByName( const OUString& aName )
         ScDrawLayer* pModel = rDoc.GetDrawLayer();     // is not zero
         SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));    // is not zero
 
-        pModel->AddUndo( new SdrUndoDelObj( *pObj ) );
+        pModel->AddUndo( o3tl::make_unique<SdrUndoDelObj>( *pObj ) );
         pPage->RemoveObject( pObj->GetOrdNum() );
 
         //! Notify etc.???
@@ -508,7 +508,7 @@ void ScChartObj::Update_Impl( const ScRangeListRef& rRanges, bool bColHeaders, b
         if (bUndo)
         {
             pDocShell->GetUndoManager()->AddUndoAction(
-                new ScUndoChartData( pDocShell, aChartName, rRanges, bColHeaders, bRowHeaders, false ) );
+                o3tl::make_unique<ScUndoChartData>( pDocShell, aChartName, rRanges, bColHeaders, bRowHeaders, false ) );
         }
         rDoc.UpdateChartArea( aChartName, rRanges, bColHeaders, bRowHeaders, false );
     }

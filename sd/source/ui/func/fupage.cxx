@@ -387,8 +387,8 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent)
 
             if( mbMasterPage )
             {
-                StyleSheetUndoAction* pAction = new StyleSheetUndoAction(mpDoc, static_cast<SfxStyleSheet*>(pStyleSheet), &(*pTempSet.get()));
-                mpDocSh->GetUndoManager()->AddUndoAction(pAction);
+                mpDocSh->GetUndoManager()->AddUndoAction(
+                    o3tl::make_unique<StyleSheetUndoAction>(mpDoc, static_cast<SfxStyleSheet*>(pStyleSheet), &(*pTempSet.get())));
                 pStyleSheet->GetItemSet().Put( *(pTempSet.get()) );
                 sdr::properties::CleanupFillProperties( pStyleSheet->GetItemSet() );
                 pStyleSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
@@ -552,7 +552,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     if( mpBackgroundObjUndoAction )
     {
         // set merge flag, because a SdUndoGroupAction could have been inserted before
-        mpDocSh->GetUndoManager()->AddUndoAction( mpBackgroundObjUndoAction.release(), true );
+        mpDocSh->GetUndoManager()->AddUndoAction( std::move(mpBackgroundObjUndoAction), true );
     }
 
     // Objects can not be bigger than ViewSize

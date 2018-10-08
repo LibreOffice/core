@@ -308,9 +308,9 @@ void Outliner::UndoActionEnd()
     pEditEngine->UndoActionEnd();
 }
 
-void Outliner::InsertUndo( EditUndo* pUndo )
+void Outliner::InsertUndo( std::unique_ptr<EditUndo> pUndo )
 {
-    pEditEngine->GetUndoManager().AddUndoAction( pUndo );
+    pEditEngine->GetUndoManager().AddUndoAction( std::move(pUndo) );
 }
 
 bool Outliner::IsInUndo()

@@ -546,11 +546,11 @@ private:
     void                TextModified();
     void                CalcHeight( ParaPortion* pPortion );
 
-    void                InsertUndo( EditUndo* pUndo, bool bTryMerge = false );
+    void                InsertUndo( std::unique_ptr<EditUndo> pUndo, bool bTryMerge = false );
     void                ResetUndoManager();
     bool            HasUndoManager() const  { return pUndoManager != nullptr; }
 
-    EditUndoSetAttribs* CreateAttribUndo( EditSelection aSel, const SfxItemSet& rSet );
+    std::unique_ptr<EditUndoSetAttribs> CreateAttribUndo( EditSelection aSel, const SfxItemSet& rSet );
 
     std::unique_ptr<EditTextObject> GetEmptyTextObject();
 
