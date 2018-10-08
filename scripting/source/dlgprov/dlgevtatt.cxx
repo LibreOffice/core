@@ -81,7 +81,7 @@ namespace dlgprov
     Reference< awt::XControl > m_xControl;
         Reference< XInterface > m_xHandler;
     Reference< beans::XIntrospectionAccess > m_xIntrospectionAccess;
-    bool m_bDialogProviderMode;
+    bool const m_bDialogProviderMode;
 
         virtual void firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* pRet ) override;
 
@@ -99,7 +99,7 @@ namespace dlgprov
     {
         protected:
         OUString msDialogCodeName;
-        OUString msDialogLibName;
+        OUString const msDialogLibName;
         Reference<  script::XScriptListener > mxListener;
         virtual void firing_impl( const script::ScriptEvent& aScriptEvent, uno::Any* pRet ) override;
         public:
