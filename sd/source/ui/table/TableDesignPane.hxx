@@ -101,7 +101,7 @@ private:
 class TableDesignPane : public PanelLayout
 {
 private:
-    TableDesignWidget aImpl;
+    TableDesignWidget const aImpl;
 public:
     TableDesignPane( vcl::Window* pParent, ViewShellBase& rBase )
         : PanelLayout(pParent, "TableDesignPanel",

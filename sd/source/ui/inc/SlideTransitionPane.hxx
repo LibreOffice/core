@@ -108,7 +108,7 @@ private:
     DECL_LINK(LateInitCallback, Timer *, void);
 
     ViewShellBase &   mrBase;
-    SdDrawDocument *  mpDrawDoc;
+    SdDrawDocument * const  mpDrawDoc;
 
     VclPtr<ValueSet>     mpVS_TRANSITION_ICONS;
     VclPtr<FixedText>    mpFT_VARIANT;
@@ -131,7 +131,7 @@ private:
     bool         mbHasSelection;
     bool         mbUpdatingControls;
     bool         mbIsMainViewChangePending;
-    bool         mbHorizontalLayout;
+    bool const   mbHorizontalLayout;
 
     std::vector<OUString>  maSoundList;
     mutable OUString maCurrentSoundFile;

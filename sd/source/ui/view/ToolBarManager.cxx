@@ -160,8 +160,8 @@ private:
     class ShellDescriptor
     {public:
         ShellDescriptor (ShellId nId,sd::ToolBarManager::ToolBarGroup eGroup);
-        ShellId mnId;
-        sd::ToolBarManager::ToolBarGroup meGroup;
+        ShellId const mnId;
+        sd::ToolBarManager::ToolBarGroup const meGroup;
         friend bool operator<(const ShellDescriptor& r1, const ShellDescriptor& r2)
         { return r1.mnId < r2.mnId; }
     };

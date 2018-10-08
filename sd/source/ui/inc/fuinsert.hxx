@@ -44,7 +44,7 @@ private:
         SfxRequest& rReq,
         bool replaceExistingImage);
 
-    bool mbReplaceExistingImage;
+    bool const mbReplaceExistingImage;
 };
 
 /************************************************************************/

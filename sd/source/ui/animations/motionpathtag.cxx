@@ -72,7 +72,7 @@ static const int DRGPIX     = 2;                               // Drag MinMove i
 class PathDragMove : public SdrDragMove
 {
 private:
-    basegfx::B2DPolyPolygon         maPathPolyPolygon;
+    basegfx::B2DPolyPolygon const   maPathPolyPolygon;
 
 protected:
     virtual void createSdrDragEntries() override;
@@ -135,7 +135,7 @@ bool PathDragMove::EndSdrDrag(bool /*bCopy*/)
 class PathDragResize : public SdrDragResize
 {
 private:
-    basegfx::B2DPolyPolygon         maPathPolyPolygon;
+    basegfx::B2DPolyPolygon const   maPathPolyPolygon;
 
 protected:
     virtual void createSdrDragEntries() override;
@@ -194,7 +194,7 @@ bool PathDragResize::EndSdrDrag(bool /*bCopy*/)
 class PathDragObjOwn : public SdrDragObjOwn
 {
 private:
-    basegfx::B2DPolyPolygon         maPathPolyPolygon;
+    basegfx::B2DPolyPolygon const   maPathPolyPolygon;
 
 protected:
     virtual void createSdrDragEntries() override;
@@ -253,7 +253,7 @@ public:
     virtual bool isMarkable() const override;
 
 private:
-    SdrPathObj* mpPathObj;
+    SdrPathObj* const mpPathObj;
 };
 
 SdPathHdl::SdPathHdl( const SmartTagReference& xTag, SdrPathObj* pPathObj )

@@ -58,7 +58,7 @@ namespace sd
             sal_Int32 aRet, aRead;
             std::vector<char> aBuffer;
             int mSocket;
-            bool usingCSocket;
+            bool const usingCSocket;
     };
 }
 

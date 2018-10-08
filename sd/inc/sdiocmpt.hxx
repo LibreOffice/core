@@ -30,7 +30,7 @@ protected:
     SvStream&                   rStream;
     sal_uInt32                  nSubRecSiz;
     sal_uInt32                  nSubRecPos;
-    StreamMode                  nMode;
+    StreamMode const            nMode;
     bool                        bOpen;
 
 protected:

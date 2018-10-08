@@ -83,7 +83,7 @@ public:
     bool operator() (const ShellDescriptor& rDescriptor)
     { return rDescriptor.mnId == mnId; }
 private:
-    ShellId mnId;
+    ShellId const mnId;
 };
 
 } // end of anonymous namespace

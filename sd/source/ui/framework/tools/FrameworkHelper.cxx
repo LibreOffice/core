@@ -100,10 +100,10 @@ public:
     virtual void SAL_CALL notifyConfigurationChange (const ConfigurationChangeEvent& rEvent) override;
 
 private:
-    OUString msEventType;
+    OUString const msEventType;
     Reference<XConfigurationController> mxConfigurationController;
-    ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter maFilter;
-    ::sd::framework::FrameworkHelper::Callback maCallback;
+    ::sd::framework::FrameworkHelper::ConfigurationChangeEventFilter const maFilter;
+    ::sd::framework::FrameworkHelper::Callback const maCallback;
 };
 
 //----- LifetimeController ----------------------------------------------------

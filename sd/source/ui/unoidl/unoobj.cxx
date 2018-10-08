@@ -1039,7 +1039,7 @@ uno::Any SdXShape::GetStyleSheet() const
 class SdUnoEventsAccess : public cppu::WeakImplHelper< css::container::XNameReplace, css::lang::XServiceInfo >
 {
 private:
-    SdXShape*   mpShape;
+    SdXShape* const   mpShape;
 
 public:
     explicit SdUnoEventsAccess(SdXShape* pShape) throw();

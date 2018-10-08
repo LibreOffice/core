@@ -72,9 +72,9 @@ public:
         const CacheKey maKey;
     };
 
-    CacheKey maKey;
-    sal_Int32 mnPriorityInClass;
-    RequestPriorityClass meClass;
+    CacheKey const maKey;
+    sal_Int32 const mnPriorityInClass;
+    RequestPriorityClass const meClass;
 };
 
 class RequestQueue::Container

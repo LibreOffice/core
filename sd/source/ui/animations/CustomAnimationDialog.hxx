@@ -115,7 +115,7 @@ public:
     sal_Int32 getControlType() const { return mnType; }
 
 protected:
-    sal_Int32           mnType;
+    sal_Int32 const  mnType;
 };
 
 class PropertyControl : public ListBox

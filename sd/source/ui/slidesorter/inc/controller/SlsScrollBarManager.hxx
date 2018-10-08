@@ -179,9 +179,7 @@ private:
     /** The width and height of the border at the inside of the window which
         when entered while in drag mode leads to a scrolling of the window.
     */
-    Size maScrollBorder;
-    double mnHorizontalScrollFactor;
-    double mnVerticalScrollFactor;
+    Size const maScrollBorder;
     /** The only task of this little window is to paint the little square at
         the bottom right corner left by the two scroll bars (when both are
         visible).
