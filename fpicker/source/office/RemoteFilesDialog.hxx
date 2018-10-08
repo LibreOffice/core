@@ -15,7 +15,7 @@
 #include <svtools/place.hxx>
 #include <svtools/PlaceEditDialog.hxx>
 #include <svtools/breadcrumb.hxx>
-#include <svtools/fileview.hxx>
+#include <vcl/fileview.hxx>
 
 #include <vcl/errinf.hxx>
 

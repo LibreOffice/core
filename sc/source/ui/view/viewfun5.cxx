@@ -40,7 +40,7 @@
 #include <sot/storage.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/graph.hxx>
 
 #include <comphelper/lok.hxx>

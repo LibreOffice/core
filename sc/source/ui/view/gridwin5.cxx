@@ -24,7 +24,7 @@
 #include <editeng/editview.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpagv.hxx>
-#include <svtools/imapobj.hxx>
+#include <vcl/imapobj.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
