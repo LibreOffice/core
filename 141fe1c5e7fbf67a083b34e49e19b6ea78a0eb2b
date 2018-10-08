@@ -16,6 +16,24 @@
       "revId": "141fe1c5e7fbf67a083b34e49e19b6ea78a0eb2b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_c20444c9",
+        "filename": "test/source/bootstrapfixture.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-10-08T14:18:52Z",
+      "side": 1,
+      "message": "It did help some larger unit tests, where the call in Scheduler::ImplDeInitScheduler took ages, because most test just added tasks, but never processed them.\n\nFor a debug build (AKA OSL_DEBUG_LEVEL \u003e 0) Scheduler::ImplDeInitScheduler processes all pending tasks on shutdown. The linear walk of all the tasks took ages.\n\nBut since commit d0bd1880f4edf6b5a1657e675aa10a6418003d99 we just walk the list until we find two pending events, as we don\u0027t have to check all task for the highest priority one. That is generally much faster.\n\nFor non-debug builds we currently don\u0027t care about pending tasks on shutdown. Might help there too, but I never checked.",
+      "parentUuid": "ff0f0b1f_a264b0ba",
+      "revId": "141fe1c5e7fbf67a083b34e49e19b6ea78a0eb2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
