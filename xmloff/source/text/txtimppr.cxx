@@ -199,7 +199,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
         if( !pFontStyleName )
         {
             aAny <<= OUString();
-    #if OSL_DEBUG_LEVEL > 0
+    #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
                 sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 1 );
                 assert(nTmp == CTF_FONTSTYLENAME || nTmp == CTF_FONTSTYLENAME_CJK || nTmp == CTF_FONTSTYLENAME_CTL);
@@ -212,7 +212,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
         {
             aAny <<= sal_Int16(css::awt::FontFamily::DONTKNOW);
 
-    #if OSL_DEBUG_LEVEL > 0
+    #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
                 sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 2 );
                 assert(nTmp == CTF_FONTFAMILY || nTmp == CTF_FONTFAMILY_CJK || nTmp == CTF_FONTFAMILY_CTL);
@@ -224,7 +224,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
         if( !pFontPitch )
         {
             aAny <<= sal_Int16(css::awt::FontPitch::DONTKNOW);
-    #if OSL_DEBUG_LEVEL > 0
+    #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
                 sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 3 );
                 assert(nTmp == CTF_FONTPITCH || nTmp == CTF_FONTPITCH_CJK || nTmp == CTF_FONTPITCH_CTL);
@@ -236,7 +236,7 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
         if( !pFontCharSet )
         {
             aAny <<= static_cast<sal_Int16>(osl_getThreadTextEncoding());
-    #if OSL_DEBUG_LEVEL > 0
+    #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
                 sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 4 );
                 assert(nTmp == CTF_FONTCHARSET || nTmp == CTF_FONTCHARSET_CJK || nTmp == CTF_FONTCHARSET_CTL);
@@ -289,7 +289,7 @@ void lcl_SeparateBorder(
 {
     if( pAllBorderDistance && !pBorderDistances[nIndex] )
     {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
         sal_Int16 nTmp = rMapper->GetEntryContextId(
                                     pAllBorderDistance->mnIndex + nIndex + 1 );
         if (CTF_CHARALLBORDERDISTANCE ==
@@ -311,7 +311,7 @@ void lcl_SeparateBorder(
     }
     if( pAllBorder && !pBorders[nIndex] )
     {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
         sal_Int16 nTmp = rMapper->GetEntryContextId(
                                         pAllBorder->mnIndex + nIndex + 1 );
         if (CTF_CHARALLBORDER ==
@@ -545,7 +545,7 @@ void XMLTextImportPropertyMapper::finished(
         if (pAllParaMargin && !pParaMargins[i]
             && isNotDefaultRelSize(pAllParaMargin, getPropertySetMapper()))
         {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
             sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                         pAllParaMargin->mnIndex + (2*i) + 2 );
             assert(nTmp >= CTF_PARALEFTMARGIN &&
@@ -556,7 +556,7 @@ void XMLTextImportPropertyMapper::finished(
         }
         if (pAllMargin && !pMargins[i])
         {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
             sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                         pAllMargin->mnIndex + i + 1 );
             assert(nTmp >= CTF_MARGINLEFT && nTmp <= CTF_MARGINBOTTOM);
