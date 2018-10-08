@@ -52,6 +52,9 @@ public:
     void Flush();
 };
 
+/// Clears the pre-calculated text glyphs in all SwFntObj instances.
+void SwClearFntCacheTextGlyphs();
+
 // Font cache, global variable, created/destroyed in txtinit.cxx
 extern SwFntCache *pFntCache;
 extern SwFntObj *pLastFont;

@@ -92,6 +92,7 @@
 #include <rootfrm.hxx>
 #include <fldupde.hxx>
 #include <calbck.hxx>
+#include <fntcache.hxx>
 #include <o3tl/numeric.hxx>
 #include <tools/datetimeutils.hxx>
 #include <sal/log.hxx>
@@ -2877,6 +2878,7 @@ void SwDoc::SetTabCols(SwTable& rTab, const SwTabCols &rNew, const SwTabCols &rO
     }
     rTab.SetTabCols( rNew, rOld, pStart, bCurRowOnly );
       ::ClearFEShellTabCols(*this, nullptr);
+    SwClearFntCacheTextGlyphs();
     getIDocumentState().SetModified();
 }
 
