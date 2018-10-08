@@ -518,7 +518,7 @@ void ScDrawView::SetMarkedOriginalSize()
         {
             tools::Rectangle aDrawRect = pObj->GetLogicRect();
 
-            pUndoGroup->AddAction( new SdrUndoGeoObj( *pObj ) );
+            pUndoGroup->AddAction( o3tl::make_unique<SdrUndoGeoObj>( *pObj ) );
             pObj->Resize( aDrawRect.TopLeft(), Fraction( aOriginalSize.Width(), aDrawRect.GetWidth() ),
                                                  Fraction( aOriginalSize.Height(), aDrawRect.GetHeight() ) );
             ++nDone;
@@ -581,7 +581,7 @@ void ScDrawView::FitToCellSize()
         aCellRect.setHeight(static_cast<double>(aGraphicRect.GetHeight()) * fScaleMin);
     }
 
-    pUndoGroup->AddAction( new SdrUndoGeoObj( *pObj ) );
+    pUndoGroup->AddAction( o3tl::make_unique<SdrUndoGeoObj>( *pObj ) );
 
     pObj->SetSnapRect(aCellRect);
 
