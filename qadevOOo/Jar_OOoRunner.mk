@@ -590,7 +590,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/table/_XCellRange \
     qadevOOo/tests/java/ifc/table/_XTableChart \
     qadevOOo/tests/java/ifc/table/_XTableCharts \
-    qadevOOo/tests/java/ifc/table/_XTableChartsSupplier \
     qadevOOo/tests/java/ifc/table/_XTableColumns \
     qadevOOo/tests/java/ifc/table/_XTableRows \
     qadevOOo/tests/java/ifc/task/_XInteractionHandler \
