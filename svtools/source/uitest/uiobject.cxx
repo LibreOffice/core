@@ -10,7 +10,7 @@
 #include <memory>
 #include <uitest/uiobject.hxx>
 
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <svtools/simptabl.hxx>
 
 TreeListUIObject::TreeListUIObject(const VclPtr<SvTreeListBox>& xTreeList):

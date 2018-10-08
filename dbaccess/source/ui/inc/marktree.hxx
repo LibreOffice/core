@@ -22,7 +22,7 @@
 
 #include "dbtreelistbox.hxx"
 
-#include <svtools/svlbitm.hxx>
+#include <vcl/svlbitm.hxx>
 
 namespace dbaui
 {
