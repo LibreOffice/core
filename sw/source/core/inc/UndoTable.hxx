@@ -166,7 +166,7 @@ using SwUndoSaveSections = std::vector<std::unique_ptr<SwUndoSaveSection, o3tl::
 
 class SwUndoTableNdsChg : public SwUndo
 {
-    std::unique_ptr<SaveTable> pSaveTable;
+    std::unique_ptr<SaveTable> m_pSaveTable;
     std::set<sal_uLong> m_Boxes;
     struct BoxMove
     {
@@ -175,14 +175,14 @@ class SwUndoTableNdsChg : public SwUndo
         BoxMove(sal_uLong idx, bool moved=false) : index(idx), hasMoved(moved) {};
         bool operator<(const BoxMove& other) const { return index < other.index; };
     };
-    std::unique_ptr< std::set<BoxMove> > pNewSttNds;
+    std::unique_ptr< std::set<BoxMove> > m_pNewSttNds;
     std::unique_ptr<SwUndoSaveSections> m_pDelSects;
-    long nMin, nMax;        // for redo of delete column
-    sal_uLong nSttNode, nCurrBox;
-    sal_uInt16 nCount, nRelDiff, nAbsDiff;
-    TableChgWidthHeightType nSetColType;
-    bool const bFlag;
-    bool const bSameHeight;                   // only used for SplitRow
+    long m_nMin, m_nMax;        // for redo of delete column
+    sal_uLong m_nSttNode, m_nCurrBox;
+    sal_uInt16 m_nCount, m_nRelDiff, m_nAbsDiff;
+    TableChgWidthHeightType m_nSetColType;
+    bool const m_bFlag;
+    bool const m_bSameHeight;                   // only used for SplitRow
 
     SwUndoTableNdsChg(SwUndoTableNdsChg const&) = delete;
     SwUndoTableNdsChg& operator=(SwUndoTableNdsChg const&) = delete;
@@ -212,11 +212,11 @@ public:
     void SetColWidthParam( sal_uLong nBoxIdx, sal_uInt16 nMode, TableChgWidthHeightType nType,
                             SwTwips nAbsDif, SwTwips nRelDif )
     {
-        nCurrBox = nBoxIdx;
-        nCount = nMode;
-        nSetColType = nType;
-        nAbsDiff = static_cast<sal_uInt16>(nAbsDif);
-        nRelDiff = static_cast<sal_uInt16>(nRelDif);
+        m_nCurrBox = nBoxIdx;
+        m_nCount = nMode;
+        m_nSetColType = nType;
+        m_nAbsDiff = static_cast<sal_uInt16>(nAbsDif);
+        m_nRelDiff = static_cast<sal_uInt16>(nRelDif);
     }
 };
 
