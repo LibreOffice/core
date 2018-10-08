@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_TRANSFER_HXX
-#define INCLUDED_SVTOOLS_TRANSFER_HXX
+#ifndef INCLUDED_VCL_TRANSFER_HXX
+#define INCLUDED_VCL_TRANSFER_HXX
 
-#include <svtools/svtdllapi.h>
+#include <vcl/dllapi.h>
 #include <tools/globname.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
@@ -79,7 +79,7 @@ struct TransferableObjectDescriptor
         : mnViewAspect(css::embed::Aspects::MSOLE_CONTENT)
     {}
 
-    SVT_DLLPUBLIC friend SvStream&  WriteTransferableObjectDescriptor( SvStream& rOStm, const TransferableObjectDescriptor& rObjDesc );
+    VCL_DLLPUBLIC friend SvStream&  WriteTransferableObjectDescriptor( SvStream& rOStm, const TransferableObjectDescriptor& rObjDesc );
 };
 
 struct AcceptDropEvent
@@ -121,7 +121,7 @@ struct ExecuteDropEvent
         mbDefault( false ) {}
 };
 
-class SVT_DLLPUBLIC TransferableHelper : public cppu::WeakImplHelper< css::datatransfer::XTransferable2,
+class VCL_DLLPUBLIC TransferableHelper : public cppu::WeakImplHelper< css::datatransfer::XTransferable2,
                                                            css::datatransfer::clipboard::XClipboardOwner,
                                                            css::datatransfer::dnd::XDragSourceListener,
                                                            css::lang::XUnoTunnel >
@@ -211,7 +211,7 @@ protected:
 
 private:
 
-    SVT_DLLPRIVATE void             ImplFlush();
+    VCL_DLLPRIVATE void             ImplFlush();
 
 protected:
 
@@ -261,7 +261,7 @@ public:
 
 struct TransferableDataHelper_Impl;
 
-class SVT_DLLPUBLIC TransferableDataHelper final
+class VCL_DLLPUBLIC TransferableDataHelper final
 {
     friend class DropTargetHelper;
 
@@ -358,7 +358,7 @@ public:
                                              const css::datatransfer::DataFlavor& rRequestFlavor );
 };
 
-class SVT_DLLPUBLIC DragSourceHelper
+class VCL_DLLPUBLIC DragSourceHelper
 {
 private:
 
@@ -404,7 +404,7 @@ public:
     virtual             ~DragSourceHelper();
 };
 
-class SVT_DLLPUBLIC DropTargetHelper
+class VCL_DLLPUBLIC DropTargetHelper
 {
 private:
 
@@ -472,7 +472,7 @@ public:
 
 struct TransferDataContainer_Impl;
 
-class SVT_DLLPUBLIC TransferDataContainer : public TransferableHelper
+class VCL_DLLPUBLIC TransferDataContainer : public TransferableHelper
 {
     std::unique_ptr<TransferDataContainer_Impl> pImpl;
 

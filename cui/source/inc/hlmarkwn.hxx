@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <vcl/button.hxx>
 #include <vcl/floatwin.hxx>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 
 #include "hlmarkwn_def.hxx"
 class SvxHyperlinkTabPageBase;

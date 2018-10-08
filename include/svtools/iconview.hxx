@@ -21,7 +21,7 @@
 #define INCLUDED_SVTOOLS_ICONVIEW_HXX
 
 #include <svtools/svtdllapi.h>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 
 class IconView : public SvTreeListBox
 {

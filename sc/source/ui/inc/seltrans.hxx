@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_SELTRANS_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_SELTRANS_HXX
 
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <rtl/ref.hxx>
 
 class ScTabView;

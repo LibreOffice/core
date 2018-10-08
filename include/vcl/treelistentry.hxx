@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_TREELISTENTRY_HXX
-#define INCLUDED_SVTOOLS_TREELISTENTRY_HXX
+#ifndef INCLUDED_VCL_TREELISTENTRY_HXX
+#define INCLUDED_VCL_TREELISTENTRY_HXX
 
-#include <svtools/svtdllapi.h>
+#include <vcl/dllapi.h>
 #include <tools/solar.h>
-#include <svtools/treelistbox.hxx>
-#include <svtools/treelistentries.hxx>
+#include <vcl/treelistbox.hxx>
+#include <vcl/treelistentries.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <vector>
@@ -47,8 +47,7 @@ namespace o3tl
     template<> struct typed_flags<SvTLEntryFlags> : is_typed_flags<SvTLEntryFlags, 0x801f> {};
 }
 
-
-class SVT_DLLPUBLIC SvTreeListEntry
+class VCL_DLLPUBLIC SvTreeListEntry
 {
     friend class SvTreeList;
     friend class SvListView;

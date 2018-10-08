@@ -31,7 +31,7 @@
 #include <vcl/idle.hxx>
 
 #include <svtools/svmedit.hxx>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/eitem.hxx>

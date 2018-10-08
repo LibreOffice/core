@@ -45,7 +45,7 @@
 #include <vcl/weld.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
-#include <svtools/imap.hxx>
+#include <vcl/imap.hxx>
 #include <sot/storage.hxx>
 #include <vcl/graph.hxx>
 #include <svl/urihelper.hxx>
@@ -59,12 +59,12 @@
 #include <svl/urlbmk.hxx>
 #include <svtools/htmlout.hxx>
 #include <svx/hlnkitem.hxx>
-#include <svtools/inetimg.hxx>
+#include <vcl/inetimg.hxx>
 #include <editeng/paperinf.hxx>
 #include <svx/fmview.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <sfx2/docfilt.hxx>
-#include <svtools/imapobj.hxx>
+#include <vcl/imapobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/streamwrap.hxx>

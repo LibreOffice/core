@@ -23,7 +23,7 @@
 #include <sal/config.h>
 
 #include <o3tl/typed_flags_set.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <svx/dataaccessdescriptor.hxx>

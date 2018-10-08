@@ -28,7 +28,7 @@
 #include <vcl/lstbox.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/headbar.hxx>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <vcl/combobox.hxx>
 #include <svl/lstner.hxx>
 #include <o3tl/typed_flags_set.hxx>

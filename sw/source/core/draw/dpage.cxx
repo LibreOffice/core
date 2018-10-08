@@ -18,7 +18,7 @@
  */
 
 #include <basic/basmgr.hxx>
-#include <svtools/imapobj.hxx>
+#include <vcl/imapobj.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/securityoptions.hxx>
 #include <vcl/help.hxx>

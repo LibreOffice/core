@@ -12,7 +12,7 @@
 #include <osl/security.hxx>
 #include <osl/thread.h>
 #include <sal/log.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <unotools/securityoptions.hxx>
 #include "certpath.hxx"
 

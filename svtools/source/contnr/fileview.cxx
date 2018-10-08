@@ -17,12 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <svtools/iconview.hxx>
-#include "fileview.hxx"
 #include <sal/config.h>
 #include <sal/log.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <svtools/fileview.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/imagemgr.hxx>
@@ -30,7 +29,7 @@
 #include <svtools/svtabbx.hxx>
 #include <svtools/strings.hrc>
 #include <bitmaps.hlst>
-#include <svtools/viewdataentry.hxx>
+#include <vcl/viewdataentry.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include "contentenumeration.hxx"
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
@@ -419,50 +418,52 @@ inline void SvtFileView_Impl::EndEditing()
         mpCurView->EndEditing();
 }
 
-// functions -------------------------------------------------------------
-
-OUString CreateExactSizeText( sal_Int64 nSize )
+namespace
 {
-    double fSize( static_cast<double>(nSize) );
-    int nDec;
+    // functions -------------------------------------------------------------
 
-    long nMega = 1024 * 1024;
-    long nGiga = nMega * 1024;
-
-    OUString aUnitStr(' ');
-
-    if ( nSize < 10000 )
+    OUString CreateExactSizeText( sal_Int64 nSize )
     {
-        aUnitStr += SvtResId(STR_SVT_BYTES );
-        nDec = 0;
-    }
-    else if ( nSize < nMega )
-    {
-        fSize /= 1024;
-        aUnitStr += SvtResId(STR_SVT_KB);
-        nDec = 1;
-    }
-    else if ( nSize < nGiga )
-    {
-        fSize /= nMega;
-        aUnitStr += SvtResId(STR_SVT_MB);
-        nDec = 2;
-    }
-    else
-    {
-        fSize /= nGiga;
-        aUnitStr += SvtResId(STR_SVT_GB);
-        nDec = 3;
-    }
+        double fSize( static_cast<double>(nSize) );
+        int nDec;
 
-    OUString aSizeStr( ::rtl::math::doubleToUString( fSize,
-                rtl_math_StringFormat_F, nDec,
-                SvtSysLocale().GetLocaleData().getNumDecimalSep()[0]) );
-    aSizeStr += aUnitStr;
+        long nMega = 1024 * 1024;
+        long nGiga = nMega * 1024;
 
-    return aSizeStr;
+        OUString aUnitStr(' ');
+
+        if ( nSize < 10000 )
+        {
+            aUnitStr += SvtResId(STR_SVT_BYTES );
+            nDec = 0;
+        }
+        else if ( nSize < nMega )
+        {
+            fSize /= 1024;
+            aUnitStr += SvtResId(STR_SVT_KB);
+            nDec = 1;
+        }
+        else if ( nSize < nGiga )
+        {
+            fSize /= nMega;
+            aUnitStr += SvtResId(STR_SVT_MB);
+            nDec = 2;
+        }
+        else
+        {
+            fSize /= nGiga;
+            aUnitStr += SvtResId(STR_SVT_GB);
+            nDec = 3;
+        }
+
+        OUString aSizeStr( ::rtl::math::doubleToUString( fSize,
+                    rtl_math_StringFormat_F, nDec,
+                    SvtSysLocale().GetLocaleData().getNumDecimalSep()[0]) );
+        aSizeStr += aUnitStr;
+
+        return aSizeStr;
+    }
 }
-
 
 ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
                                           SvtFileView_Impl* pParent,
