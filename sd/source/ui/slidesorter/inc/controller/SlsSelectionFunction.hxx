@@ -24,7 +24,7 @@
 #include <controller/SlsFocusManager.hxx>
 #include <controller/SlsInsertionIndicatorHandler.hxx>
 #include <fupoor.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <memory>
 
 namespace sd { namespace slidesorter {

@@ -57,7 +57,7 @@
 #include <strings.hrc>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/svlbitm.hxx>
+#include <vcl/svlbitm.hxx>
 #include <listviewitems.hxx>
 #include "AppDetailView.hxx"
 #include <linkeddocuments.hxx>
@@ -68,12 +68,12 @@
 #include <UITools.hxx>
 #include <algorithm>
 #include <iterator>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/docfilt.hxx>
-#include <svtools/fileview.hxx>
+#include <vcl/fileview.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <defaultobjectnamecheck.hxx>

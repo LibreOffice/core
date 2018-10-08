@@ -22,8 +22,8 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <svtools/treelistentry.hxx>
-#include <svtools/viewdataentry.hxx>
+#include <vcl/treelistentry.hxx>
+#include <vcl/viewdataentry.hxx>
 
 SvLBoxFontString::SvLBoxFontString()
     : SvLBoxString()

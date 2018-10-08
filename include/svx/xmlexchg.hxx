@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_XMLEXCHG_HXX
 
 #include <rtl/ustring.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <svx/svxdllapi.h>
 
 namespace com {

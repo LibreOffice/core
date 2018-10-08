@@ -343,7 +343,6 @@
 #include <svtools/headbar.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/tabbar.hxx>
-#include <svtools/transfer.hxx>
 #include <svtools/treelist.hxx>
 #include <svtools/treelistbox.hxx>
 #include <svtools/treelistentries.hxx>
@@ -385,5 +384,6 @@
 #include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
+#include <vcl/transfer.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

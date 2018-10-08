@@ -18,7 +18,7 @@
  */
 
 #include <CommandCategoryListBox.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

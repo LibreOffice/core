@@ -52,7 +52,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/strings.hrc>
 #include <bitmaps.hlst>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 
 namespace svxform
 {

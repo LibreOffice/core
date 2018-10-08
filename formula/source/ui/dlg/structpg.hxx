@@ -24,7 +24,7 @@
 #include <svtools/svmedit.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <formula/IFunctionDescription.hxx>
 
 namespace formula
