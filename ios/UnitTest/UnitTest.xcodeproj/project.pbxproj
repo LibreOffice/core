@@ -29,6 +29,7 @@
 		BE53561E215D189E0068B3B7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE53561D215D189E0068B3B7 /* Assets.xcassets */; };
 		BE535621215D189E0068B3B7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE53561F215D189E0068B3B7 /* LaunchScreen.storyboard */; };
 		BE535624215D189E0068B3B7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BE535623215D189E0068B3B7 /* main.m */; };
+		BE93D41D216B4ECA007A39F4 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE93D41B216B378E007A39F4 /* MobileCoreServices.framework */; };
 		BEA1A6FE215D1D9700A9323B /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA1A6FD215D1D9700A9323B /* libz.tbd */; };
 		BEA1A700215D1D9F00A9323B /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA1A6FF215D1D9F00A9323B /* libiconv.tbd */; };
 /* End PBXBuildFile section */
@@ -60,6 +61,7 @@
 		BE535620215D189E0068B3B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BE535622215D189E0068B3B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BE535623215D189E0068B3B7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BE93D41B216B378E007A39F4 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		BEA1A6FD215D1D9700A9323B /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		BEA1A6FF215D1D9F00A9323B /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
 		BEA20D2C2163C2570032F67B /* salgdiutils.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = salgdiutils.cxx; path = ../../vcl/quartz/salgdiutils.cxx; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE93D41D216B4ECA007A39F4 /* MobileCoreServices.framework in Frameworks */,
 				BEA1A700215D1D9F00A9323B /* libiconv.tbd in Frameworks */,
 				BEA1A6FE215D1D9700A9323B /* libz.tbd in Frameworks */,
 			);
@@ -268,6 +271,7 @@
 		BEA1A6FC215D1D9700A9323B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BE93D41B216B378E007A39F4 /* MobileCoreServices.framework */,
 				BEA1A6FF215D1D9F00A9323B /* libiconv.tbd */,
 				BEA1A6FD215D1D9700A9323B /* libz.tbd */,
 			);
