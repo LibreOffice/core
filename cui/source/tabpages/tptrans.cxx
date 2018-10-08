@@ -292,7 +292,7 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
             }
         }
     }
-    else if (m_xLbTrgrGradientType->get_active())
+    else if (m_xGridGradient->get_sensitive())
     {
         // transparence gradient, fill ItemSet from values
         if (!bGradActive
