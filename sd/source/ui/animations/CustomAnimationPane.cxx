@@ -107,21 +107,21 @@ using ::com::sun::star::uno::Exception;
 
 namespace sd {
 
-void fillRepeatComboBox( ListBox* pBox )
+void fillRepeatComboBox(weld::ComboBox& rBox)
 {
     OUString aNone( SdResId( STR_CUSTOMANIMATION_REPEAT_NONE ) );
-    pBox->InsertEntry(aNone);
-    pBox->InsertEntry(OUString::number(2));
-    pBox->InsertEntry(OUString::number(3));
-    pBox->InsertEntry(OUString::number(4));
-    pBox->InsertEntry(OUString::number(5));
-    pBox->InsertEntry(OUString::number(10));
+    rBox.append_text(aNone);
+    rBox.append_text(OUString::number(2));
+    rBox.append_text(OUString::number(3));
+    rBox.append_text(OUString::number(4));
+    rBox.append_text(OUString::number(5));
+    rBox.append_text(OUString::number(10));
 
     OUString aUntilClick( SdResId( STR_CUSTOMANIMATION_REPEAT_UNTIL_NEXT_CLICK ) );
-    pBox->InsertEntry(aUntilClick);
+    rBox.append_text(aUntilClick);
 
     OUString aEndOfSlide( SdResId( STR_CUSTOMANIMATION_REPEAT_UNTIL_END_OF_SLIDE ) );
-    pBox->InsertEntry(aEndOfSlide);
+    rBox.append_text(aEndOfSlide);
 }
 
 CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
@@ -1664,21 +1664,20 @@ void CustomAnimationPane::changeSelection( STLPropertySet const * pResultSet, ST
     }
 }
 
-void CustomAnimationPane::showOptions(const OString& sPage)
+void CustomAnimationPane::showOptions(const OString& rPage)
 {
-    std::unique_ptr<STLPropertySet> pSet = createSelectionSet();
+    std::unique_ptr<STLPropertySet> xSet = createSelectionSet();
 
-    auto pDlg = VclPtr<CustomAnimationDialog>::Create(this, std::move(pSet), sPage);
+    std::shared_ptr<CustomAnimationDialog> xDlg(new CustomAnimationDialog(GetFrameWeld(), std::move(xSet), rPage));
 
-    pDlg->StartExecuteAsync([=](sal_Int32 nResult){
-                if (nResult )
-                {
-                    addUndo();
-                    changeSelection( pDlg->getResultSet(), pDlg->getPropertySet() );
-                    updateControls();
-                }
-                pDlg->disposeOnce();
-            });
+    weld::DialogController::runAsync(xDlg, [=](sal_Int32 nResult){
+        if (nResult )
+        {
+            addUndo();
+            changeSelection(xDlg->getResultSet(), xDlg->getPropertySet());
+            updateControls();
+        }
+    });
 }
 
 void CustomAnimationPane::onChangeCurrentPage()

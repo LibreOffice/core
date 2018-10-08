@@ -194,7 +194,7 @@ private:
     ScopeLock maSelectionLock;
 };
 
-void fillRepeatComboBox( ListBox* pBox );
+void fillRepeatComboBox(weld::ComboBox& rBox);
 
 }
 
