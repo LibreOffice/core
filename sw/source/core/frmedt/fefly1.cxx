@@ -20,7 +20,7 @@
 #include <hintids.hxx>
 #include <o3tl/any.hxx>
 #include <svl/itemiter.hxx>
-#include <svtools/imapobj.hxx>
+#include <vcl/imapobj.hxx>
 #include <svtools/soerr.hxx>
 #include <editeng/protitem.hxx>
 #include <svx/svdogrp.hxx>

@@ -16,11 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_FILEVIEW_HXX
-#define INCLUDED_SVTOOLS_FILEVIEW_HXX
+#ifndef INCLUDED_VCL_FILEVIEW_HXX
+#define INCLUDED_VCL_FILEVIEW_HXX
 
 #include <memory>
-#include <svtools/svtdllapi.h>
+#include <vcl/dllapi.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <vcl/ctrl.hxx>
@@ -67,7 +67,7 @@ struct FileViewAsyncAction
     }
 };
 
-class SVT_DLLPUBLIC SvtFileView : public Control
+class VCL_DLLPUBLIC SvtFileView : public Control
 {
 private:
     std::unique_ptr<SvtFileView_Impl> mpImpl;
@@ -208,7 +208,7 @@ enum QueryDeleteResult_Impl
     QUERYDELETE_ALL = 101
 };
 
-class SVT_DLLPUBLIC QueryDeleteDlg_Impl :  public weld::MessageDialogController
+class VCL_DLLPUBLIC QueryDeleteDlg_Impl :  public weld::MessageDialogController
 {
 private:
     std::unique_ptr<weld::Button> m_xAllButton;
@@ -222,6 +222,6 @@ public:
 
 }
 
-#endif // INCLUDED_SVTOOLS_FILEVIEW_HXX
+#endif // INCLUDED_VCL_FILEVIEW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

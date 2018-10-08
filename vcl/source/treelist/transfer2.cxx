@@ -28,9 +28,9 @@
 #include <comphelper/fileformat.h>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #include <svl/urlbmk.hxx>
-#include <svtools/inetimg.hxx>
-#include <svtools/imap.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/inetimg.hxx>
+#include <vcl/imap.hxx>
+#include <vcl/transfer.hxx>
 
 
 using namespace ::com::sun::star::uno;

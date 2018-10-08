@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_TREELISTBOX_HXX
-#define INCLUDED_SVTOOLS_TREELISTBOX_HXX
+#ifndef INCLUDED_VCL_TREELISTBOX_HXX
+#define INCLUDED_VCL_TREELISTBOX_HXX
 
-#include <svtools/svtdllapi.h>
+#include <vcl/dllapi.h>
 
 #include <deque>
 #include <memory>
@@ -36,8 +36,8 @@
 #include <vcl/image.hxx>
 #include <tools/gen.hxx>
 #include <tools/contnr.hxx>
-#include <svtools/treelist.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/treelist.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/idle.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
@@ -120,7 +120,7 @@ enum class SvTreeAccRoleType
 
 enum class SvLBoxItemType {String, Button, ContextBmp};
 
-class SvLBoxTab
+class VCL_DLLPUBLIC SvLBoxTab
 {
     long    nPos;
 public:
@@ -138,7 +138,7 @@ public:
     bool    IsEditable() const { return bool(nFlags & SvLBoxTabFlags::EDITABLE); }
 };
 
-class SVT_DLLPUBLIC SvLBoxItem
+class VCL_DLLPUBLIC SvLBoxItem
 {
 public:
                         SvLBoxItem();
@@ -192,7 +192,7 @@ namespace o3tl
 
 struct SvTreeListBoxImpl;
 
-class SVT_DLLPUBLIC SvTreeListBox
+class VCL_DLLPUBLIC SvTreeListBox
                 :public Control
                 ,public SvListView
                 ,public DropTargetHelper
@@ -271,8 +271,8 @@ private:
     // call. The AddBox method is called from the GetDragFinishedHdl() and the
     // remove is called in the link callback and in the dtor. So it can't be
     // called for a deleted object.
-    SVT_DLLPRIVATE static void AddBoxToDDList_Impl( const SvTreeListBox& rB );
-    SVT_DLLPRIVATE static void RemoveBoxFromDDList_Impl( const SvTreeListBox& rB );
+    VCL_DLLPRIVATE static void AddBoxToDDList_Impl( const SvTreeListBox& rB );
+    VCL_DLLPRIVATE static void RemoveBoxFromDDList_Impl( const SvTreeListBox& rB );
     DECL_DLLPRIVATE_LINK( DragFinishHdl_Impl, sal_Int8, void );
 
 protected:
@@ -522,16 +522,16 @@ public:
 
 protected:
 
-    SVT_DLLPRIVATE void         SetEntryHeight( SvTreeListEntry const * pEntry );
-    SVT_DLLPRIVATE void         AdjustEntryHeight( const Image& rBmp );
-    SVT_DLLPRIVATE void         AdjustEntryHeight();
+    VCL_DLLPRIVATE void         SetEntryHeight( SvTreeListEntry const * pEntry );
+                   void         AdjustEntryHeight( const Image& rBmp );
+    VCL_DLLPRIVATE void         AdjustEntryHeight();
 
-    SVT_DLLPRIVATE void         ImpEntryInserted( SvTreeListEntry* pEntry );
-    SVT_DLLPRIVATE void         PaintEntry1( SvTreeListEntry&, long nLine, vcl::RenderContext& rRenderContext );
+    VCL_DLLPRIVATE void         ImpEntryInserted( SvTreeListEntry* pEntry );
+    VCL_DLLPRIVATE void         PaintEntry1( SvTreeListEntry&, long nLine, vcl::RenderContext& rRenderContext );
 
-    SVT_DLLPRIVATE void         InitTreeView();
-    SVT_DLLPRIVATE SvLBoxItem*  GetItem_Impl( SvTreeListEntry*, long nX, SvLBoxTab** ppTab );
-    SVT_DLLPRIVATE void         ImplInitStyle();
+    VCL_DLLPRIVATE void         InitTreeView();
+    VCL_DLLPRIVATE SvLBoxItem*  GetItem_Impl( SvTreeListEntry*, long nX, SvLBoxTab** ppTab );
+    VCL_DLLPRIVATE void         ImplInitStyle();
 
     void            SetupDragOrigin();
     void            EditItemText( SvTreeListEntry* pEntry, SvLBoxString* pItem,

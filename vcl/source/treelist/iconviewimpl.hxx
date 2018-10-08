@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_SOURCE_INC_ICONVIEWIMPL_HXX
-#define INCLUDED_SVTOOLS_SOURCE_INC_ICONVIEWIMPL_HXX
+#ifndef INCLUDED_VCL_SOURCE_INC_ICONVIEWIMPL_HXX
+#define INCLUDED_VCL_SOURCE_INC_ICONVIEWIMPL_HXX
 
 #include "svimpbox.hxx"
 
@@ -63,6 +63,6 @@ protected:
     void AdjustScrollBars( Size& rSize ) override;
 };
 
-#endif // INCLUDED_SVTOOLS_SOURCE_INC_ICONVIEWIMPL_HXX
+#endif // INCLUDED_VCL_SOURCE_INC_ICONVIEWIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

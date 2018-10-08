@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SVTOOLS_TREELISTENTRIES_HXX
-#define INCLUDED_SVTOOLS_TREELISTENTRIES_HXX
+#ifndef INCLUDED_VCL_TREELISTENTRIES_HXX
+#define INCLUDED_VCL_TREELISTENTRIES_HXX
 
 #include <vector>
 #include <memory>

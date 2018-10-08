@@ -23,7 +23,7 @@
 #include <memory>
 #include <pres.hxx>
 #include <tools/gen.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <svx/fmview.hxx>
 #include <svx/svdpage.hxx>
 #include <vcl/idle.hxx>

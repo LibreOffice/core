@@ -54,7 +54,7 @@
 #include <osl/security.hxx>
 #include <rtl/bootstrap.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <officecfg/Office/Recovery.hxx>
 #include <o3tl/make_unique.hxx>
 namespace svx{

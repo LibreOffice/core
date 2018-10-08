@@ -21,7 +21,7 @@
 #include <sot/formats.hxx>
 #include <tools/stream.hxx>
 
-#include <svtools/inetimg.hxx>
+#include <vcl/inetimg.hxx>
 
 static const sal_Unicode TOKEN_SEPARATOR = '\001';
 

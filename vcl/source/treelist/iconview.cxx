@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/iconview.hxx>
-#include <svtools/treelistentry.hxx>
-#include <svtools/fileview.hxx>
-#include <iconviewimpl.hxx>
+#include <vcl/iconview.hxx>
+#include <vcl/treelistentry.hxx>
+#include <vcl/fileview.hxx>
+#include "iconviewimpl.hxx"
 
 IconView::IconView( vcl::Window* pParent, WinBits nBits )
 : SvTreeListBox( pParent, nBits )

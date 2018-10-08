@@ -52,7 +52,7 @@
 #include <sfx2/printer.hxx>
 #include <comphelper/classids.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <svl/urlbmk.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdograf.hxx>

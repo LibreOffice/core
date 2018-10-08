@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_ICONVIEW_HXX
-#define INCLUDED_SVTOOLS_ICONVIEW_HXX
+#ifndef INCLUDED_VCL_ICONVIEW_HXX
+#define INCLUDED_VCL_ICONVIEW_HXX
 
-#include <svtools/svtdllapi.h>
-#include <svtools/treelistbox.hxx>
+#include <vcl/dllapi.h>
+#include <vcl/treelistbox.hxx>
 
-class IconView : public SvTreeListBox
+class VCL_DLLPUBLIC IconView : public SvTreeListBox
 {
 public:
     IconView( vcl::Window* pParent, WinBits nBits );

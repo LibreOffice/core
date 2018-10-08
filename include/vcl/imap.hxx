@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_IMAP_HXX
-#define INCLUDED_SVTOOLS_IMAP_HXX
+#ifndef INCLUDED_VCL_IMAP_HXX
+#define INCLUDED_VCL_IMAP_HXX
 
-#include <svtools/imapobj.hxx>
-#include <svtools/svtdllapi.h>
+#include <vcl/imapobj.hxx>
+#include <vcl/dllapi.h>
 #include <tools/stream.hxx>
 #include <memory>
 #include <vector>
@@ -32,7 +32,7 @@ class Size;
 class Fraction;
 class IMapObject;
 
-class SVT_DLLPUBLIC ImageMap final
+class VCL_DLLPUBLIC ImageMap final
 {
 private:
 
@@ -133,6 +133,6 @@ public:
                     ~IMapCompat();
 };
 
-#endif // INCLUDED_SVTOOLS_IMAP_HXX
+#endif // INCLUDED_VCL_IMAP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
