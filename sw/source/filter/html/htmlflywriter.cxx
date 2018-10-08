@@ -30,8 +30,8 @@
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmltokn.h>
-#include <svtools/imap.hxx>
-#include <svtools/imapobj.hxx>
+#include <vcl/imap.hxx>
+#include <vcl/imapobj.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/xoutbmp.hxx>

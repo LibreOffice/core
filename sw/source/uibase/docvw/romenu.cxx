@@ -22,9 +22,9 @@
 
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include <svtools/imap.hxx>
-#include <svtools/inetimg.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/imap.hxx>
+#include <vcl/inetimg.hxx>
+#include <vcl/transfer.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/gallery.hxx>

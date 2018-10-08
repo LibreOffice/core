@@ -21,7 +21,7 @@
 
 #include <svx/svxdllapi.h>
 
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/popupmenucontrollerbase.hxx>

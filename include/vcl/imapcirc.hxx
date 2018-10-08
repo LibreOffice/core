@@ -16,16 +16,16 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_IMAPCIRC_HXX
-#define INCLUDED_SVTOOLS_IMAPCIRC_HXX
+#ifndef INCLUDED_VCL_IMAPCIRC_HXX
+#define INCLUDED_VCL_IMAPCIRC_HXX
 
-#include <svtools/svtdllapi.h>
+#include <vcl/dllapi.h>
 #include <tools/gen.hxx>
-#include <svtools/imapobj.hxx>
+#include <vcl/imapobj.hxx>
 
 class Fraction;
 
-class SVT_DLLPUBLIC IMapCircleObject : public IMapObject
+class VCL_DLLPUBLIC IMapCircleObject : public IMapObject
 {
     Point               aCenter;
     sal_Int32               nRadius;

@@ -44,9 +44,9 @@
 #include <vcl/wrkwin.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/svditer.hxx>
-#include <svtools/imaprect.hxx>
-#include <svtools/imapcirc.hxx>
-#include <svtools/imappoly.hxx>
+#include <vcl/imaprect.hxx>
+#include <vcl/imapcirc.hxx>
+#include <vcl/imappoly.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <svx/svdopath.hxx>

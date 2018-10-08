@@ -48,7 +48,7 @@
 #include <core_resource.hxx>
 #include <strings.hrc>
 #include <strings.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <o3tl/make_unique.hxx>
 
 using namespace dbaui;

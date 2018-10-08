@@ -21,7 +21,7 @@
 #include <vcl/waitobj.hxx>
 #include <rtl/ustring.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>

@@ -17,22 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_IMAPPOLY_HXX
-#define INCLUDED_SVTOOLS_IMAPPOLY_HXX
+#ifndef INCLUDED_VCL_IMAPPOLY_HXX
+#define INCLUDED_VCL_IMAPPOLY_HXX
 
-#include <svtools/svtdllapi.h>
-#include <svtools/imapobj.hxx>
+#include <vcl/dllapi.h>
+#include <vcl/imapobj.hxx>
 #include <tools/poly.hxx>
 
 class Fraction;
 
-class SVT_DLLPUBLIC IMapPolygonObject : public IMapObject
+class VCL_DLLPUBLIC IMapPolygonObject : public IMapObject
 {
     tools::Polygon aPoly;
     tools::Rectangle           aEllipse;
     bool                bEllipse;
 
-    SVT_DLLPRIVATE void ImpConstruct( const tools::Polygon& rPoly, bool bPixel );
+    VCL_DLLPRIVATE void ImpConstruct( const tools::Polygon& rPoly, bool bPixel );
 
 protected:
 

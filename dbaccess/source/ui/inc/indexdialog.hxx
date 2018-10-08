@@ -30,7 +30,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <vcl/toolbox.hxx>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <unotools/viewoptions.hxx>
 #include "indexes.hxx"
 #include <dbaccess/ToolBoxHelper.hxx>

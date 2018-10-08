@@ -447,7 +447,6 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <svtools/treelistentries.hxx>
 #include <svtools/valueset.hxx>
-#include <svtools/viewdataentry.hxx>
 #include <svx/Palette.hxx>
 #include <svx/SvxColorValueSet.hxx>
 #include <svx/XPropertyEntry.hxx>
@@ -582,5 +581,6 @@
 #include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
+#include <vcl/viewdataentry.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

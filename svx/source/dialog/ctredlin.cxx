@@ -25,8 +25,8 @@
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <unotools/textsearch.hxx>
-#include <svtools/svlbitm.hxx>
-#include <svtools/viewdataentry.hxx>
+#include <vcl/svlbitm.hxx>
+#include <vcl/viewdataentry.hxx>
 #include <unotools/charclass.hxx>
 
 #include <editeng/unolingu.hxx>

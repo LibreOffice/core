@@ -25,11 +25,11 @@
 #include <vcl/window.hxx>
 #include <o3tl/numeric.hxx>
 #include <svl/urihelper.hxx>
-#include <svtools/imap.hxx>
-#include <svtools/imapobj.hxx>
-#include <svtools/imapcirc.hxx>
-#include <svtools/imaprect.hxx>
-#include <svtools/imappoly.hxx>
+#include <vcl/imap.hxx>
+#include <vcl/imapobj.hxx>
+#include <vcl/imapcirc.hxx>
+#include <vcl/imaprect.hxx>
+#include <vcl/imappoly.hxx>
 
 #include <string.h>
 #include <math.h>
