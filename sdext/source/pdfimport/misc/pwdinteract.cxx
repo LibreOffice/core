@@ -46,7 +46,7 @@ class PDFPasswordRequest:
 {
 private:
     mutable osl::Mutex            m_aMutex;
-    uno::Any                      m_aRequest;
+    uno::Any const                m_aRequest;
     OUString                 m_aPassword;
     bool                          m_bSelected;
 
