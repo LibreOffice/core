@@ -36,8 +36,8 @@ namespace stoc_impreg
 
 struct Link
 {
-    OUString m_name;
-    OUString m_target;
+    OUString const m_name;
+    OUString const m_target;
 
     Link( OUString const & name, OUString const & target )
         : m_name( name )

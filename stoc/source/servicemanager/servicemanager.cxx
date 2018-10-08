@@ -194,7 +194,7 @@ Any ServiceEnumeration_Impl::nextElement()
 
 class PropertySetInfo_Impl : public WeakImplHelper< beans::XPropertySetInfo >
 {
-    Sequence< beans::Property > m_properties;
+    Sequence< beans::Property > const m_properties;
 
 public:
     explicit PropertySetInfo_Impl( Sequence< beans::Property > const & properties )

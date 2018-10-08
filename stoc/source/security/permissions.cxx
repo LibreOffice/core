@@ -109,7 +109,7 @@ class SocketPermission : public Permission
     mutable OUString m_ip;
     mutable bool m_resolveErr;
     mutable bool m_resolvedHost;
-    bool m_wildCardHost;
+    bool const m_wildCardHost;
 
     inline bool resolveHost() const;
 
@@ -268,10 +268,10 @@ OUString SocketPermission::toString() const
 class FilePermission : public Permission
 {
     static char const * s_actions [];
-    sal_Int32 m_actions;
+    sal_Int32 const m_actions;
 
     OUString m_url;
-    bool m_allFiles;
+    bool const m_allFiles;
 
 public:
     FilePermission(
@@ -418,7 +418,7 @@ OUString FilePermission::toString() const
 
 class RuntimePermission : public Permission
 {
-    OUString m_name;
+    OUString const m_name;
 
 public:
     RuntimePermission(

@@ -96,7 +96,7 @@ namespace svgio
             // advancing rotation index
             sal_uInt32                  mnRotationIndex;
 
-            bool                        mbLengthAdjust : 1; // true = spacing, false = spacingAndGlyphs
+            bool const                  mbLengthAdjust : 1; // true = spacing, false = spacingAndGlyphs
             bool                        mbAbsoluteX : 1;
 
         public:
