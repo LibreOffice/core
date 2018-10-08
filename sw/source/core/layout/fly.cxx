@@ -18,7 +18,7 @@
  */
 
 #include <svl/itemiter.hxx>
-#include <svtools/imap.hxx>
+#include <vcl/imap.hxx>
 #include <tools/helpers.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/opaqitem.hxx>

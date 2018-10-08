@@ -23,9 +23,9 @@
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/menu.hxx>
-#include <svtools/imapobj.hxx>
-#include <svtools/transfer.hxx>
-#include <svtools/imap.hxx>
+#include <vcl/imapobj.hxx>
+#include <vcl/transfer.hxx>
+#include <vcl/imap.hxx>
 #include <sfx2/frame.hxx>
 #include <svx/graphctl.hxx>
 #include <svl/itempool.hxx>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_AVMEDIA_SOURCE_VIEWER_MEDIAWINDOW_IMPL_HXX
 #define INCLUDED_AVMEDIA_SOURCE_VIEWER_MEDIAWINDOW_IMPL_HXX
 
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/syschild.hxx>
 
 #include <mediacontrol.hxx>

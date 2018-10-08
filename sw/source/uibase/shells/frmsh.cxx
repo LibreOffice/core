@@ -21,10 +21,10 @@
 
 #include <hintids.hxx>
 #include <svl/whiter.hxx>
-#include <svtools/imapobj.hxx>
+#include <vcl/imapobj.hxx>
 #include <svtools/miscopt.hxx>
 #include <svl/srchitem.hxx>
-#include <svtools/imap.hxx>
+#include <vcl/imap.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <basic/sbstar.hxx>
 #include <svl/rectitem.hxx>

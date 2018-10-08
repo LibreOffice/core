@@ -166,7 +166,7 @@ Use the browse button to select a database file.</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="svtlo-SvTreeListBox" id="inuselb:border">
+                          <object class="vcllo-SvTreeListBox" id="inuselb:border">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>

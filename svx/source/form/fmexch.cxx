@@ -23,8 +23,8 @@
 #include <svl/itempool.hxx>
 
 #include <sot/formats.hxx>
-#include <svtools/treelistbox.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistbox.hxx>
+#include <vcl/treelistentry.hxx>
 #include <tools/diagnose_ex.h>
 
 
