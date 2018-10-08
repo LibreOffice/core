@@ -309,8 +309,7 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
                         mpModel->BegUndo(SvxResId(STR_EditDelete),
                             pObj->TakeObjNameSingul(), SdrRepeatFunc::Delete);
 
-                        SdrUndoAction * pAction = mpModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj);
-                        mpModel->AddUndo(pAction);
+                        mpModel->AddUndo(mpModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
                     }
 
                     OSL_VERIFY( mpPage->RemoveObject( nNum ) == pObj );

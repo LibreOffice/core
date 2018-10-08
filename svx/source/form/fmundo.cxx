@@ -54,6 +54,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -702,7 +703,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             // add their undo actions out-of-order
 
             SolarMutexGuard aSolarGuard;
-            rModel.AddUndo(new FmUndoPropertyAction(rModel, evt));
+            rModel.AddUndo(o3tl::make_unique<FmUndoPropertyAction>(rModel, evt));
         }
     }
     else

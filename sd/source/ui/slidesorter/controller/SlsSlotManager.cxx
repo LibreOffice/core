@@ -946,11 +946,11 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
             SdrLayerIDSet aVisibleLayers = pPageToRename->TRG_GetMasterPageVisibleLayers();
 
             // (#67720#)
-            ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
-                pDocument, pUndoPage, rName, pUndoPage->GetAutoLayout(),
-                aVisibleLayers.IsSet( nBackground ),
-                aVisibleLayers.IsSet( nBgObj ));
-            pManager->AddUndoAction( pAction );
+            pManager->AddUndoAction(
+                o3tl::make_unique<ModifyPageUndoAction>(
+                    pDocument, pUndoPage, rName, pUndoPage->GetAutoLayout(),
+                    aVisibleLayers.IsSet( nBackground ),
+                    aVisibleLayers.IsSet( nBgObj )));
 
             // rename
             pPageToRename->SetName( rName );
@@ -968,7 +968,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const OUStri
         if (pPageToRename != nullptr)
         {
             const OUString aOldLayoutName( pPageToRename->GetLayoutName() );
-            pManager->AddUndoAction( new RenameLayoutTemplateUndoAction( pDocument, aOldLayoutName, rName ) );
+            pManager->AddUndoAction( o3tl::make_unique<RenameLayoutTemplateUndoAction>( pDocument, aOldLayoutName, rName ) );
             pDocument->RenameLayoutTemplate( aOldLayoutName, rName );
         }
     }

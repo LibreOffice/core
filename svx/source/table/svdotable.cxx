@@ -1854,7 +1854,7 @@ void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
     {
         // These actions should be on the undo stack after text edit.
         for (std::unique_ptr<SdrUndoAction>& pAction : mpImpl->maUndos)
-            getSdrModelFromSdrObject().AddUndo(pAction.release());
+            getSdrModelFromSdrObject().AddUndo( std::move(pAction));
         mpImpl->maUndos.clear();
 
         getSdrModelFromSdrObject().AddUndo(getSdrModelFromSdrObject().GetSdrUndoFactory().CreateUndoGeoObject(*this));

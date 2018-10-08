@@ -160,7 +160,7 @@ void TextApiObject::SetText( OutlinerParaObject const & rText )
 {
     SdrModel* pModel = mpSource->GetDoc();
     if( pModel && pModel->IsUndoEnabled() )
-        pModel->AddUndo( new UndoTextAPIChanged( *pModel, this ) );
+        pModel->AddUndo( o3tl::make_unique<UndoTextAPIChanged>( *pModel, this ) );
 
     mpSource->SetText( rText );
     maSelection.nStartPara = EE_PARA_MAX_COUNT;

@@ -164,7 +164,7 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
                 xObject->setVisualAreaSize(nAspect, aAwtSize);
 
             pPage->InsertObject(pObject);
-            pModel->AddUndo(new SdrUndoInsertObj(*pObject));
+            pModel->AddUndo(o3tl::make_unique<SdrUndoInsertObj>(*pObject));
     }
 }
 
@@ -177,7 +177,7 @@ void SAL_CALL TablePivotCharts::removeByName(const OUString& rName)
         ScDocument& rDoc = m_pDocShell->GetDocument();
         ScDrawLayer* pModel = rDoc.GetDrawLayer();
         SdrPage* pPage = pModel->GetPage(sal_uInt16(m_nTab));
-        pModel->AddUndo(new SdrUndoDelObj(*pObject));
+        pModel->AddUndo(o3tl::make_unique<SdrUndoDelObj>(*pObject));
         pPage->RemoveObject(pObject->GetOrdNum());
     }
 }

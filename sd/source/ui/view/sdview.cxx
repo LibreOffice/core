@@ -843,7 +843,7 @@ bool View::RestoreDefaultText( SdrTextObj* pTextObj )
  */
 void View::SetMarkedOriginalSize()
 {
-    SdrUndoGroup* pUndoGroup = new SdrUndoGroup(mrDoc);
+    std::unique_ptr<SdrUndoGroup> pUndoGroup(new SdrUndoGroup(mrDoc));
     const size_t nCount = GetMarkedObjectCount();
     bool            bOK = false;
 
@@ -908,10 +908,8 @@ void View::SetMarkedOriginalSize()
     if( bOK )
     {
         pUndoGroup->SetComment(SdResId(STR_UNDO_ORIGINALSIZE));
-        mpDocSh->GetUndoManager()->AddUndoAction(pUndoGroup);
+        mpDocSh->GetUndoManager()->AddUndoAction(std::move(pUndoGroup));
     }
-    else
-        delete pUndoGroup;
 }
 
 /**
@@ -1292,7 +1290,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
         return;
 
     const bool bUndoEnabled = pSdrModel->IsUndoEnabled();
-    SdrUndoGroup* pUndoGroup = bUndoEnabled ? new SdrUndoGroup(*pSdrModel) : nullptr;
+    std::unique_ptr<SdrUndoGroup> pUndoGroup(bUndoEnabled ? new SdrUndoGroup(*pSdrModel) : nullptr);
 
     const bool bToggleOn = ShouldToggleOn( bToggle, bHandleBullets );
 
@@ -1384,11 +1382,9 @@ void View::ChangeMarkedObjectsBulletsNumbering(
     if ( bUndoEnabled && pUndoGroup->GetActionCount() > 0 )
     {
         pSdrModel->BegUndo();
-        pSdrModel->AddUndo(pUndoGroup);
+        pSdrModel->AddUndo(std::move(pUndoGroup));
         pSdrModel->EndUndo();
     }
-    else
-        delete pUndoGroup;
 }
 
 } // end of namespace sd

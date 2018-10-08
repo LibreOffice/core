@@ -153,10 +153,10 @@ IMPL_LINK_NOARG(OSqlEdit, OnUndoActionTimer, Timer *, void)
     {
         OJoinController& rController = m_pView->getContainerWindow()->getDesignView()->getController();
         SfxUndoManager& rUndoMgr = rController.GetUndoManager();
-        OSqlEditUndoAct* pUndoAct = new OSqlEditUndoAct( this );
+        std::unique_ptr<OSqlEditUndoAct> pUndoAct(new OSqlEditUndoAct( this ));
 
         pUndoAct->SetOriginalText( m_strOrigText );
-        rUndoMgr.AddUndoAction( pUndoAct );
+        rUndoMgr.AddUndoAction( std::move(pUndoAct) );
 
         rController.InvalidateFeature(SID_UNDO);
         rController.InvalidateFeature(SID_REDO);

@@ -41,6 +41,7 @@
 #include <SqlNameEdit.hxx>
 #include <TableRowExchange.hxx>
 #include <sot/storage.hxx>
+#include <o3tl/make_unique.hxx>
 #include <UITools.hxx>
 #include "TableFieldControl.hxx"
 #include <dsntypes.hxx>
@@ -507,7 +508,7 @@ void OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
                 // If FieldDescr exists, the field is deleted and the old content restored
                 if (pActFieldDescr)
                 {
-                    GetUndoManager().AddUndoAction(new OTableEditorTypeSelUndoAct(this, nRow, FIELD_TYPE, pActFieldDescr->getTypeInfo()));
+                    GetUndoManager().AddUndoAction(o3tl::make_unique<OTableEditorTypeSelUndoAct>(this, nRow, FIELD_TYPE, pActFieldDescr->getTypeInfo()));
                     SwitchType(TOTypeInfoSP());
                     pActFieldDescr = pActRow->GetActFieldDescr();
                 }
@@ -658,14 +659,14 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
         nInvalidateTypeEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, InvalidateFieldType), nullptr, true );
         pActFieldDescr = pActRow->GetActFieldDescr();
         pDescrWin->DisplayData( pActFieldDescr );
-        GetUndoManager().AddUndoAction( new OTableEditorTypeSelUndoAct(this, nRow, nColId+1, TOTypeInfoSP()) );
+        GetUndoManager().AddUndoAction( o3tl::make_unique<OTableEditorTypeSelUndoAct>(this, nRow, nColId+1, TOTypeInfoSP()) );
     }
 
     if( nColId != FIELD_TYPE )
-        GetUndoManager().AddUndoAction( new OTableDesignCellUndoAct(this, nRow, nColId) );
+        GetUndoManager().AddUndoAction( o3tl::make_unique<OTableDesignCellUndoAct>(this, nRow, nColId) );
     else
     {
-        GetUndoManager().AddUndoAction(new OTableEditorTypeSelUndoAct(this, GetCurRow(), nColId, GetFieldDescr(GetCurRow())->getTypeInfo()));
+        GetUndoManager().AddUndoAction(o3tl::make_unique<OTableEditorTypeSelUndoAct>(this, GetCurRow(), nColId, GetFieldDescr(GetCurRow())->getTypeInfo()));
         resetType();
     }
 
@@ -799,7 +800,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
     RowInserted( nRow,vInsertedUndoRedoRows.size() );
 
     // Create the Undo-Action
-    GetUndoManager().AddUndoAction( new OTableEditorInsUndoAct(this, nRow,vInsertedUndoRedoRows) );
+    GetUndoManager().AddUndoAction( o3tl::make_unique<OTableEditorInsUndoAct>(this, nRow,vInsertedUndoRedoRows) );
     GetView()->getController().setModified( true );
     InvalidateFeatures();
 }
@@ -808,7 +809,7 @@ void OTableEditorCtrl::DeleteRows()
 {
     OSL_ENSURE(GetView()->getController().isDropAllowed(),"Call of DeleteRows not valid here. Please check isDropAllowed!");
     // Create the Undo-Action
-    GetUndoManager().AddUndoAction( new OTableEditorDelUndoAct(this) );
+    GetUndoManager().AddUndoAction( o3tl::make_unique<OTableEditorDelUndoAct>(this) );
 
     // Delete all marked rows
     long nIndex = FirstSelectedRow();
@@ -845,7 +846,7 @@ void OTableEditorCtrl::InsertNewRows( long nRow )
     long nInsertRows = GetSelectRowCount();
     if( !nInsertRows )
         nInsertRows = 1;
-    GetUndoManager().AddUndoAction( new OTableEditorInsNewUndoAct(this, nRow, nInsertRows) );
+    GetUndoManager().AddUndoAction( o3tl::make_unique<OTableEditorInsNewUndoAct>(this, nRow, nInsertRows) );
     // Insert the number of selected rows
     for( long i=nRow; i<(nRow+nInsertRows); i++ )
         m_pRowList->insert( m_pRowList->begin()+i ,std::make_shared<OTableRow>());
@@ -1525,7 +1526,7 @@ void OTableEditorCtrl::SetPrimaryKey( bool bSet )
         }
     }
 
-    GetUndoManager().AddUndoAction( new OPrimKeyUndoAct(this, aDeletedPrimKeys, aInsertedPrimKeys) );
+    GetUndoManager().AddUndoAction( o3tl::make_unique<OPrimKeyUndoAct>(this, aDeletedPrimKeys, aInsertedPrimKeys) );
 
     // Invalidate the handle-columns
     InvalidateHandleColumn();

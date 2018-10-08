@@ -479,11 +479,11 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
         return;
     }
 
-    SdUndoGroup* pUndoGroup(nullptr);
+    std::unique_ptr<SdUndoGroup> pUndoGroup;
     SfxViewShell* pViewShell(GetViewShell());
     if (pViewShell)
     {
-        pUndoGroup = new SdUndoGroup(GetDoc());
+        pUndoGroup.reset(new SdUndoGroup(GetDoc()));
         pUndoGroup->SetComment(SdResId(STR_UNDO_CHANGE_PAGEFORMAT));
     }
     Broadcast (ViewShellHint(ViewShellHint::HINT_PAGE_RESIZE_START));
@@ -492,7 +492,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     GetDoc()->AdaptPageSizeForAllPages(
         rNewSize,
         ePageKind,
-        pUndoGroup,
+        pUndoGroup.get(),
         nLeft,
         nRight,
         nUpper,
@@ -511,7 +511,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     // handed over undo group to undo manager
     if (pViewShell)
     {
-        pViewShell->GetViewFrame()->GetObjectShell()->GetUndoManager()->AddUndoAction(pUndoGroup);
+        pViewShell->GetViewFrame()->GetObjectShell()->GetUndoManager()->AddUndoAction(std::move(pUndoGroup));
     }
 
     // calculate View-Sizes

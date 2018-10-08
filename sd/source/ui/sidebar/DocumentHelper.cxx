@@ -272,12 +272,11 @@ void DocumentHelper::ProvideStyles (
         SfxUndoManager* pUndoManager = rTargetDocument.GetDocSh()->GetUndoManager();
        if (pUndoManager != nullptr)
        {
-           SdMoveStyleSheetsUndoAction* pMovStyles =
-               new SdMoveStyleSheetsUndoAction (
+           pUndoManager->AddUndoAction (
+               o3tl::make_unique<SdMoveStyleSheetsUndoAction>(
                    &rTargetDocument,
                    aCreatedStyles,
-                   true);
-           pUndoManager->AddUndoAction (pMovStyles);
+                   true));
        }
     }
 }
@@ -408,9 +407,9 @@ void DocumentHelper::AssignMasterPageToPage (
         // not override the new master page) and assign the master page to
         // the regular slide.
         rDocument.GetDocSh()->GetUndoManager()->AddUndoAction(
-            new SdBackgroundObjUndoAction(
+            o3tl::make_unique<SdBackgroundObjUndoAction>(
                 rDocument, *pPage, pPage->getSdrPageProperties().GetItemSet()),
-            true);
+                true);
         pPage->getSdrPageProperties().PutItem(XFillStyleItem(drawing::FillStyle_NONE));
 
         rDocument.SetMasterPage (

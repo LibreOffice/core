@@ -575,8 +575,8 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const ::t
 
         if( bUndo )
         {
-            pUndoManager->AddUndoAction( new UndoObjectPresentationKind( *pSdrObj ) );
-            pUndoManager->AddUndoAction( new UndoObjectUserCall(*pSdrObj) );
+            pUndoManager->AddUndoAction( o3tl::make_unique<UndoObjectPresentationKind>( *pSdrObj ) );
+            pUndoManager->AddUndoAction( o3tl::make_unique<UndoObjectUserCall>(*pSdrObj) );
         }
 
         InsertPresObj(pSdrObj, eObjKind);
@@ -738,7 +738,7 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const ::tools
                             const bool bUndo = pUndoManager && pUndoManager->IsInListAction() && IsInserted();
 
                             if( bUndo )
-                                pUndoManager->AddUndoAction( new UndoObjectUserCall(*pObj) );
+                                pUndoManager->AddUndoAction( o3tl::make_unique<UndoObjectUserCall>(*pObj) );
 
                             // Object was resized by user and does not listen to its slide anymore
                             pObj->SetUserCall(nullptr);
@@ -2228,7 +2228,7 @@ SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, 
         {
             pUndoManager->AddUndoAction( getSdrModelFromSdrPage().GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
             pUndoManager->AddUndoAction( getSdrModelFromSdrPage().GetSdrUndoFactory().CreateUndoAttrObject( *pObj, true, true ) );
-            pUndoManager->AddUndoAction( new UndoObjectUserCall( *pObj ) );
+            pUndoManager->AddUndoAction( o3tl::make_unique<UndoObjectUserCall>( *pObj ) );
         }
 
             pObj->AdjustToMaxRect(rRect);
@@ -2291,7 +2291,7 @@ SdrObject* SdPage::InsertAutoLayoutShape(SdrObject* pObj, PresObjKind eObjKind, 
         if( !IsPresObj( pObj ) )
         {
             if( bUndo )
-                pUndoManager->AddUndoAction( new UndoObjectPresentationKind( *pObj ) );
+                pUndoManager->AddUndoAction( o3tl::make_unique<UndoObjectPresentationKind>( *pObj ) );
 
             InsertPresObj( pObj, eObjKind );
         }

@@ -67,7 +67,7 @@ void ScDrawView::SetPageAnchored()
         for( size_t i=0; i<nCount; ++i )
         {
             SdrObject* pObj = pMark->GetMark(i)->GetMarkedSdrObj();
-            AddUndo (new ScUndoAnchorData( pObj, pDoc, nTab ));
+            AddUndo (o3tl::make_unique<ScUndoAnchorData>( pObj, pDoc, nTab ));
             ScDrawLayer::SetPageAnchored( *pObj );
         }
         EndUndo();
@@ -95,7 +95,7 @@ void ScDrawView::SetCellAnchored(bool bResizeWithCell)
         for( size_t i=0; i<nCount; ++i )
         {
             SdrObject* pObj = pMark->GetMark(i)->GetMarkedSdrObj();
-            AddUndo (new ScUndoAnchorData( pObj, pDoc, nTab ));
+            AddUndo (o3tl::make_unique<ScUndoAnchorData>( pObj, pDoc, nTab ));
             ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, nTab, bResizeWithCell);
         }
         EndUndo();

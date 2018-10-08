@@ -687,14 +687,14 @@ void SdrObject::SetName(const OUString& rStr)
         if ( getSdrModelFromSdrObject().IsUndoEnabled() )
         {
             bUndo = true;
-            SdrUndoAction* pUndoAction =
+            std::unique_ptr<SdrUndoAction> pUndoAction =
                     SdrUndoFactory::CreateUndoObjectStrAttr(
                                                     *this,
                                                     SdrUndoObjStrAttr::ObjStrAttrType::Name,
                                                     GetName(),
                                                     rStr );
             getSdrModelFromSdrObject().BegUndo( pUndoAction->GetComment() );
-            getSdrModelFromSdrObject().AddUndo( pUndoAction );
+            getSdrModelFromSdrObject().AddUndo( std::move(pUndoAction) );
         }
         pPlusData->aObjName = rStr;
         // Undo/Redo for setting object's name (#i73249#)
@@ -731,14 +731,14 @@ void SdrObject::SetTitle(const OUString& rStr)
         if ( getSdrModelFromSdrObject().IsUndoEnabled() )
         {
             bUndo = true;
-            SdrUndoAction* pUndoAction =
+            std::unique_ptr<SdrUndoAction> pUndoAction =
                     SdrUndoFactory::CreateUndoObjectStrAttr(
                                                     *this,
                                                     SdrUndoObjStrAttr::ObjStrAttrType::Title,
                                                     GetTitle(),
                                                     rStr );
             getSdrModelFromSdrObject().BegUndo( pUndoAction->GetComment() );
-            getSdrModelFromSdrObject().AddUndo( pUndoAction );
+            getSdrModelFromSdrObject().AddUndo( std::move(pUndoAction) );
         }
         pPlusData->aObjTitle = rStr;
         // Undo/Redo for setting object's title (#i73249#)
@@ -775,14 +775,14 @@ void SdrObject::SetDescription(const OUString& rStr)
         if ( getSdrModelFromSdrObject().IsUndoEnabled() )
         {
             bUndo = true;
-            SdrUndoAction* pUndoAction =
+            std::unique_ptr<SdrUndoAction> pUndoAction =
                     SdrUndoFactory::CreateUndoObjectStrAttr(
                                                     *this,
                                                     SdrUndoObjStrAttr::ObjStrAttrType::Description,
                                                     GetDescription(),
                                                     rStr );
             getSdrModelFromSdrObject().BegUndo( pUndoAction->GetComment() );
-            getSdrModelFromSdrObject().AddUndo( pUndoAction );
+            getSdrModelFromSdrObject().AddUndo( std::move(pUndoAction) );
         }
         pPlusData->aObjDescription = rStr;
         // Undo/Redo for setting object's description (#i73249#)

@@ -45,6 +45,7 @@
 #include <svl/eitem.hxx>
 #include <editeng/editstat.hxx>
 #include <sal/log.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
@@ -403,7 +404,7 @@ void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
         pOwner->ImplCalcBulletText( nPara, false, false );
 
         if( !pOwner->IsInUndo() && pOwner->IsUndoEnabled() )
-            pOwner->InsertUndo( new OutlinerUndoCheckPara( pOwner, nPara ) );
+            pOwner->InsertUndo( o3tl::make_unique<OutlinerUndoCheckPara>( pOwner, nPara ) );
     }
 
     if( !pOwner->IsInUndo() && pOwner->IsUndoEnabled() )
@@ -476,7 +477,7 @@ void OutlinerView::Indent( short nDiff )
                 pOwner->pEditEngine->QuickMarkInvalid( ESelection( nPara, 0, nPara, 0 ) );
 
                 if( bUndo )
-                    pOwner->InsertUndo( new OutlinerUndoChangeParaFlags( pOwner, nPara, nPrevFlags, pPara->nFlags ) );
+                    pOwner->InsertUndo( o3tl::make_unique<OutlinerUndoChangeParaFlags>( pOwner, nPara, nPrevFlags, pPara->nFlags ) );
 
                 continue;
             }

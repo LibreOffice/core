@@ -310,11 +310,11 @@ void OSelectionBrowseBox::ColumnMoved( sal_uInt16 nColId, bool _bCreateUndo )
             // create the undo action
             if ( !m_bInUndoMode && _bCreateUndo )
             {
-                OTabFieldMovedUndoAct* pUndoAct = new OTabFieldMovedUndoAct(this);
+                std::unique_ptr<OTabFieldMovedUndoAct> pUndoAct(new OTabFieldMovedUndoAct(this));
                 pUndoAct->SetColumnPosition( nOldPos + 1);
                 pUndoAct->SetTabFieldDescr(pOldEntry);
 
-                getDesignView()->getController().addUndoActionAndInvalidate(pUndoAct);
+                getDesignView()->getController().addUndoActionAndInvalidate(std::move(pUndoAct));
             }
         }
     }
@@ -1289,10 +1289,10 @@ void OSelectionBrowseBox::RemoveField(sal_uInt16 nColumnId )
     // trigger UndoAction
     if ( !m_bInUndoMode )
     {
-        OTabFieldDelUndoAct* pUndoAction = new OTabFieldDelUndoAct( this );
+        std::unique_ptr<OTabFieldDelUndoAct> pUndoAction(new OTabFieldDelUndoAct( this ));
         pUndoAction->SetTabFieldDescr(pDesc);
         pUndoAction->SetColumnPosition(nPos);
-        rController.addUndoActionAndInvalidate( pUndoAction );
+        rController.addUndoActionAndInvalidate( std::move(pUndoAction) );
     }
 
     RemoveColumn(nColumnId);
@@ -1578,10 +1578,10 @@ OTableFieldDescRef OSelectionBrowseBox::InsertField(const OTableFieldDescRef& _r
     if ( !m_bInUndoMode )
     {
         // trigger UndoAction
-        OTabFieldCreateUndoAct* pUndoAction = new OTabFieldCreateUndoAct( this );
+        std::unique_ptr<OTabFieldCreateUndoAct> pUndoAction(new OTabFieldCreateUndoAct( this ));
         pUndoAction->SetTabFieldDescr( pEntry );
         pUndoAction->SetColumnPosition(_nColumnPosition);
-        getDesignView()->getController().addUndoActionAndInvalidate( pUndoAction );
+        getDesignView()->getController().addUndoActionAndInvalidate( std::move(pUndoAction) );
     }
 
     return pEntry;
@@ -2322,10 +2322,10 @@ void OSelectionBrowseBox::ColumnResized(sal_uInt16 nColId)
         if ( !m_bInUndoMode )
         {
             // create the undo action
-            OTabFieldSizedUndoAct* pUndo = new OTabFieldSizedUndoAct(this);
+            std::unique_ptr<OTabFieldSizedUndoAct> pUndo(new OTabFieldSizedUndoAct(this));
             pUndo->SetColumnPosition( nPos );
             pUndo->SetOriginalWidth(pEntry->GetColWidth());
-            getDesignView()->getController().addUndoActionAndInvalidate(pUndo);
+            getDesignView()->getController().addUndoActionAndInvalidate(std::move(pUndo));
         }
         pEntry->SetColWidth(sal_uInt16(GetColumnWidth(nColId)));
     }
@@ -2452,12 +2452,12 @@ void OSelectionBrowseBox::appendUndoAction(const OUString& _rOldValue,const OUSt
 {
     if ( !m_bInUndoMode && _rNewValue != _rOldValue )
     {
-        OTabFieldCellModifiedUndoAct* pUndoAct = new OTabFieldCellModifiedUndoAct(this);
+        std::unique_ptr<OTabFieldCellModifiedUndoAct> pUndoAct(new OTabFieldCellModifiedUndoAct(this));
         pUndoAct->SetCellIndex(_nRow);
         OSL_ENSURE(GetColumnPos(GetCurColumnId()) != BROWSER_INVALIDID,"Current position isn't valid!");
         pUndoAct->SetColumnPosition( GetColumnPos(GetCurColumnId()) );
         pUndoAct->SetCellContents(_rOldValue);
-        getDesignView()->getController().addUndoActionAndInvalidate(pUndoAct);
+        getDesignView()->getController().addUndoActionAndInvalidate(std::move(pUndoAct));
     }
 }
 

@@ -24,6 +24,7 @@
 #include <svx/xpoly.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/svdundo.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 class SfxUndoAction;
@@ -180,13 +181,13 @@ public:
     void BegUndo(const OUString& rComment) { mpModel->BegUndo(rComment); } // open undo-grouping
     void BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrRepeatFunc eFunc=SdrRepeatFunc::NONE) { mpModel->BegUndo(rComment,rObjDescr,eFunc); } // open undo-grouping
     void EndUndo();                                                   // close undo-grouping  (incl. BroadcastEdges)
-    void AddUndo(SdrUndoAction* pUndo)   { mpModel->AddUndo(pUndo);    } // add action
+    void AddUndo(std::unique_ptr<SdrUndoAction> pUndo)   { mpModel->AddUndo(std::move(pUndo));    } // add action
     // only after first BegUndo or before last EndUndo:
     void SetUndoComment(const OUString& rComment, const OUString& rObjDescr) { mpModel->SetUndoComment(rComment,rObjDescr); }
     bool IsUndoEnabled() const;
 
-    std::vector< SdrUndoAction* > CreateConnectorUndo( SdrObject& rO );
-    void AddUndoActions( std::vector< SdrUndoAction* >& );
+    std::vector< std::unique_ptr<SdrUndoAction> > CreateConnectorUndo( SdrObject& rO );
+    void AddUndoActions( std::vector< std::unique_ptr<SdrUndoAction> > );
 
     // Layermanagement with Undo.
     void InsertNewLayer(const OUString& rName, sal_uInt16 nPos);

@@ -250,7 +250,7 @@ void lcl_CreateUndoForPages(
 
     OUString aComment( SdResId(STR_UNDO_SLIDE_PARAMS) );
     pManager->EnterListAction(aComment, aComment, 0, rBase.GetViewShellId());
-    SdUndoGroup* pUndoGroup = new SdUndoGroup( pDoc );
+    std::unique_ptr<SdUndoGroup> pUndoGroup(new SdUndoGroup( pDoc ));
     pUndoGroup->SetComment( aComment );
 
     ::std::vector< SdPage * >::const_iterator aIt( rpPages->begin());
@@ -260,7 +260,7 @@ void lcl_CreateUndoForPages(
         pUndoGroup->AddAction( new sd::UndoTransition( pDoc, (*aIt) ) );
     }
 
-    pManager->AddUndoAction( pUndoGroup );
+    pManager->AddUndoAction( std::move(pUndoGroup) );
     pManager->LeaveListAction();
 }
 

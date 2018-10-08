@@ -1318,14 +1318,14 @@ void SdrDragObjOwn::MoveSdrDrag(const Point& rNoSnapPnt)
 bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
 {
     Hide();
-    std::vector< SdrUndoAction* > vConnectorUndoActions;
+    std::vector< std::unique_ptr<SdrUndoAction> > vConnectorUndoActions;
     bool bRet = false;
     SdrObject* pObj = GetDragObj();
 
     if(pObj)
     {
-        SdrUndoAction* pUndo = nullptr;
-        SdrUndoAction* pUndo2 = nullptr;
+        std::unique_ptr<SdrUndoAction> pUndo;
+        std::unique_ptr<SdrUndoAction> pUndo2;
         const bool bUndo = getSdrDragView().IsUndoEnabled();
 
         if( bUndo )
@@ -1375,7 +1375,7 @@ bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
         bRet = pObj->applySpecialDrag(DragStat());
         if (DragStat().IsEndDragChangesLayout())
         {
-            auto pGeoUndo = dynamic_cast<SdrUndoGeoObj*>(pUndo);
+            auto pGeoUndo = dynamic_cast<SdrUndoGeoObj*>(pUndo.get());
             if (pGeoUndo)
                 pGeoUndo->SetSkipChangeLayout(true);
         }
@@ -1391,32 +1391,17 @@ bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
         {
             if( bUndo )
             {
-                getSdrDragView().AddUndoActions( vConnectorUndoActions );
+                getSdrDragView().AddUndoActions( std::move(vConnectorUndoActions) );
 
                 if ( pUndo )
                 {
-                    getSdrDragView().AddUndo(pUndo);
+                    getSdrDragView().AddUndo(std::move(pUndo));
                 }
 
                 if ( pUndo2 )
                 {
-                    getSdrDragView().AddUndo(pUndo2);
+                    getSdrDragView().AddUndo(std::move(pUndo2));
                 }
-            }
-        }
-        else
-        {
-            if( bUndo )
-            {
-                std::vector< SdrUndoAction* >::iterator vConnectorUndoIter( vConnectorUndoActions.begin() );
-
-                while( vConnectorUndoIter != vConnectorUndoActions.end() )
-                {
-                    delete *vConnectorUndoIter++;
-                }
-
-                delete pUndo;
-                delete pUndo2;
             }
         }
 

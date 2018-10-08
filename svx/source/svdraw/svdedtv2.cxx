@@ -1732,8 +1732,7 @@ void SdrEditView::GroupMarked()
                 --nm;
                 SdrMark* pM=GetSdrMarkByIndex(nm);
                 SdrObject* pObj = pM->GetMarkedSdrObj();
-                    std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pObj ) );
-                    AddUndoActions( vConnectorUndoActions );
+                    AddUndoActions( CreateConnectorUndo( *pObj ) );
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoRemoveObject( *pObj ));
             }
         }
