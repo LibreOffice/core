@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_d755281f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-08T11:42:04Z",
+      "side": 1,
+      "message": "I could have been more specific here: \"At least when building on macOS 10.14 against 10.14 SDK, both master and libreoffice-6-1 (the latter with a8eb515599526b5b69647a842b2889b6f56de2c8 \u0027macOS SDK 10.14 is out\u0027 locally cherry-picked) ...\"",
+      "revId": "e659c6a1857fbb8e5a6e8ff60fe241483eea32dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
