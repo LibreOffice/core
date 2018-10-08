@@ -23,6 +23,9 @@
 #include "unx/fontmanager.hxx"
 #include "unx/gendata.hxx"
 
+class GlyphCache
+{
+};
 
 std::unique_ptr<SalPrinter> SvpSalInstance::CreatePrinter( SalInfoPrinter* /* pInfoPrinter */ )
 {
@@ -125,15 +128,18 @@ bool AquaSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
 using namespace psp;
 
 GenericUnixSalData::GenericUnixSalData(GenericUnixSalDataType const t, SalInstance *const pInstance)
-    : m_eType(t), m_pDisplay(nullptr), m_pPrintFontManager(nullptr)
+    : m_eType(t)
+    , m_pDisplay(nullptr)
+    , m_pGlyphCache(new GlyphCache)
+    , m_pPrintFontManager(nullptr)
 {
-    m_pInstance = pInstance; SetSalData(this);
+    m_pInstance = pInstance;
+    SetSalData(this);
 }
 
 GenericUnixSalData::~GenericUnixSalData()
 {
 }
-
 
 PrintFontManager::~PrintFontManager()
 {
