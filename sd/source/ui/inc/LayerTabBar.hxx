@@ -74,13 +74,11 @@ public:
     // otherwise it returns value of rName.
     static OUString convertToLocalizedName(const OUString& rName);
 
-private:
-    DrawViewShell* pDrViewSh;
-
     // TabBar
     virtual void        Select() override;
     virtual void        DoubleClick() override;
-    virtual void        MouseButtonDown(const MouseEvent& rMEvt) override;
+
+    virtual void SD_DLLPUBLIC MouseButtonDown(const MouseEvent& rMEvt) override; // export for unit test
 
     virtual void        Command(const CommandEvent& rCEvt) override;
 
@@ -93,6 +91,9 @@ private:
     // DropTargetHelper
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) override;
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) override;
+
+private:
+    DrawViewShell* pDrViewSh;
 
     // Expects not-localized, real layer name in rText and writes it to maAuxiliaryText.
     void SetLayerName( sal_uInt16 nPageId, const OUString& rText );
