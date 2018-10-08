@@ -22,7 +22,7 @@
 #include <sfx2/app.hxx>
 #include <svl/aeitem.hxx>
 #include <svtools/svtabbx.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/defaultoptions.hxx>

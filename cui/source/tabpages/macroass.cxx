@@ -31,8 +31,8 @@
 #include <sfx2/objsh.hxx>
 #include <vcl/fixed.hxx>
 #include <headertablistbox.hxx>
-#include <svtools/svlbitm.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/svlbitm.hxx>
+#include <vcl/treelistentry.hxx>
 #include <o3tl/make_unique.hxx>
 
 using ::com::sun::star::uno::Reference;

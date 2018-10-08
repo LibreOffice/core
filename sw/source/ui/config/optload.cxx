@@ -43,7 +43,7 @@
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 
 #include <svtools/insdlg.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <tools/resary.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>

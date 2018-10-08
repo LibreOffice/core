@@ -419,16 +419,10 @@
 #include <svtools/headbar.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
-#include <svtools/iconview.hxx>
 #include <svtools/imagemgr.hxx>
-#include <svtools/imap.hxx>
-#include <svtools/imapcirc.hxx>
-#include <svtools/imappoly.hxx>
-#include <svtools/imaprect.hxx>
 #include <svtools/imgdef.hxx>
 #include <svtools/inettbc.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/svlbitm.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
@@ -437,5 +431,11 @@
 #include <svtools/treelistbox.hxx>
 #include <svtools/treelistentry.hxx>
 #include <svtools/viewdataentry.hxx>
+#include <vcl/iconview.hxx>
+#include <vcl/svlbitm.hxx>
+#include <vcl/imap.hxx>
+#include <vcl/imapcirc.hxx>
+#include <vcl/imappoly.hxx>
+#include <vcl/imaprect.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

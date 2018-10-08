@@ -146,7 +146,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svtlo-SvTreeListBox" id="tree:border">
+                          <object class="vcllo-SvTreeListBox" id="tree:border">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="hexpand">True</property>

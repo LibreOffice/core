@@ -57,7 +57,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <sot/storage.hxx>
 #include <vcl/graph.hxx>
 #include <svx/unomodel.hxx>

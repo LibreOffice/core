@@ -31,7 +31,7 @@
 
 #include <vcl/ctrl.hxx>
 #include <svtools/valueset.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <sfx2/shell.hxx>
 #include <xmloff/autolayout.hxx>
 
