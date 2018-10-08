@@ -21,9 +21,9 @@
 #include <vcl/help.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <macroass.hxx>
-#include <svtools/imaprect.hxx>
-#include <svtools/imapcirc.hxx>
-#include <svtools/imappoly.hxx>
+#include <vcl/imaprect.hxx>
+#include <vcl/imapcirc.hxx>
+#include <vcl/imappoly.hxx>
 #include <svl/urlbmk.hxx>
 #include <svx/xoutbmp.hxx>
 #include <cuiimapwnd.hxx>

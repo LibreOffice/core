@@ -24,10 +24,10 @@
 #include <sal/types.h>
 #include <svx/svxdllapi.h>
 #include <svtools/simptabl.hxx>
-#include <svtools/svlbitm.hxx>
+#include <vcl/svlbitm.hxx>
 #include <svtools/svtabbx.hxx>
-#include <svtools/treelistbox.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistbox.hxx>
+#include <vcl/treelistentry.hxx>
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
 #include <tools/date.hxx>

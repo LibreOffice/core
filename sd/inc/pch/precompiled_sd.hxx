@@ -431,7 +431,6 @@
 #include <svtools/langtab.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/svtdllapi.h>
-#include <svtools/transfer.hxx>
 #include <svx/SvxColorChildWindow.hxx>
 #include <svx/bmpmask.hxx>
 #include <svx/dialmgr.hxx>
@@ -564,6 +563,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/useroptions.hxx>
+#include <vcl/transfer.hxx>
 #include <xmloff/autolayout.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

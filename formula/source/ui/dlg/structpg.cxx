@@ -20,7 +20,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/builderfactory.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 
 #include "structpg.hxx"
 #include <formula/formdata.hxx>

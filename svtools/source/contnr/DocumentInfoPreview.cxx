@@ -40,7 +40,6 @@
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
 
-#include "fileview.hxx"
 #include <templwin.hrc>
 #include "templwin.hxx"
 

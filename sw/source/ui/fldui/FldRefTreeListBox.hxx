@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UI_FLDUI_FLDREFTREELISTBOX_HXX
 #define INCLUDED_SW_SOURCE_UI_FLDUI_FLDREFTREELISTBOX_HXX
 
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 
 class SwFieldRefTreeListBox : public SvTreeListBox
 {

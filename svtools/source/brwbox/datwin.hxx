@@ -24,7 +24,7 @@
 #include <svtools/brwhead.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/image.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <memory>
 #include <vector>
 

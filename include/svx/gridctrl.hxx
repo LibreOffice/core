@@ -34,7 +34,7 @@
 #include <svtools/editbrowsebox.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/propmultiplex.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>

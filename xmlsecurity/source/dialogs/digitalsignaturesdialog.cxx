@@ -48,7 +48,7 @@
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 
 #include <strings.hrc>
 #include <resourcemanager.hxx>

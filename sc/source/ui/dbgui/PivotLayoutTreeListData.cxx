@@ -14,7 +14,7 @@
 #include <PivotLayoutDialog.hxx>
 
 #include <vcl/builderfactory.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <pivot.hxx>
 #include <scabstdlg.hxx>
 #include <globstr.hrc>

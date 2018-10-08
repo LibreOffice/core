@@ -30,7 +30,7 @@
 #include <tox.hxx>
 #include "toxmgr.hxx"
 #include <svx/checklbx.hxx>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <vcl/menubtn.hxx>
 #include <svx/langbox.hxx>
 
