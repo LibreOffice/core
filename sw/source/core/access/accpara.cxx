@@ -205,8 +205,17 @@ bool SwAccessibleParagraph::GetSelection(
     if( pCursor != nullptr )
     {
         // get SwPosition for my node
-        const SwTextNode* pNode = GetTextNode();
-        sal_uLong nHere = pNode->GetIndex();
+        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+        sal_uLong nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
+        sal_uLong nLastNode;
+        if (sw::MergedPara const*const pMerged = pFrame->GetMergedPara())
+        {
+            nLastNode = pMerged->pLastNode->GetIndex();
+        }
+        else
+        {
+            nLastNode = nFirstNode;
+        }
 
         // iterate over ring
         for(SwPaM& rTmpCursor : pCursor->GetRingContainer())
@@ -214,19 +223,18 @@ bool SwAccessibleParagraph::GetSelection(
             // ignore, if no mark
             if( rTmpCursor.HasMark() )
             {
-                // check whether nHere is 'inside' pCursor
+                // check whether frame's node(s) are 'inside' pCursor
                 SwPosition* pStart = rTmpCursor.Start();
                 sal_uLong nStartIndex = pStart->nNode.GetIndex();
                 SwPosition* pEnd = rTmpCursor.End();
                 sal_uLong nEndIndex = pEnd->nNode.GetIndex();
-                if( ( nHere >= nStartIndex ) &&
-                    ( nHere <= nEndIndex )      )
+                if ((nStartIndex <= nLastNode) && (nFirstNode <= nEndIndex))
                 {
                     // translate start and end positions
 
                     // start position
                     sal_Int32 nLocalStart = -1;
-                    if( nHere > nStartIndex )
+                    if (nStartIndex < nFirstNode)
                     {
                         // selection starts in previous node:
                         // then our local selection starts with the paragraph
@@ -234,13 +242,13 @@ bool SwAccessibleParagraph::GetSelection(
                     }
                     else
                     {
-                        OSL_ENSURE( nHere == nStartIndex,
-                                    "miscalculated index" );
+                        assert(FrameContainsNode(*pFrame, nStartIndex));
 
                         // selection starts in this node:
                         // then check whether it's before or inside our part of
                         // the paragraph, and if so, get the proper position
-                        const sal_Int32 nCoreStart = pStart->nContent.GetIndex();
+                        const TextFrameIndex nCoreStart =
+                            pFrame->MapModelToViewPos(*pStart);
                         if( nCoreStart <
                             GetPortionData().GetFirstValidCorePosition() )
                         {
@@ -262,7 +270,7 @@ bool SwAccessibleParagraph::GetSelection(
 
                     // end position
                     sal_Int32 nLocalEnd = -1;
-                    if( nHere < nEndIndex )
+                    if (nLastNode < nEndIndex)
                     {
                         // selection ends in following node:
                         // then our local selection extends to the end
@@ -271,12 +279,12 @@ bool SwAccessibleParagraph::GetSelection(
                     }
                     else
                     {
-                        OSL_ENSURE( nHere == nEndIndex,
-                                    "miscalculated index" );
+                        assert(FrameContainsNode(*pFrame, nEndIndex));
 
                         // selection ends in this node: then select everything
                         // before our part of the node
-                        const sal_Int32 nCoreEnd = pEnd->nContent.GetIndex();
+                        const TextFrameIndex nCoreEnd =
+                            pFrame->MapModelToViewPos(*pEnd);
                         if( nCoreEnd >
                                 GetPortionData().GetLastValidCorePosition() )
                         {
@@ -2475,13 +2483,12 @@ sal_Bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 n
     if( pCursorShell != nullptr )
     {
         // create pam for selection
-        SwTextNode* pNode = const_cast<SwTextNode*>( GetTextNode() );
-        SwIndex aIndex(pNode, GetPortionData().GetCoreViewPosition(nStartIndex));
-        SwPosition aStartPos( *pNode, aIndex );
-        SwPaM aPaM( aStartPos );
+        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+        TextFrameIndex const nStart(GetPortionData().GetCoreViewPosition(nStartIndex));
+        TextFrameIndex const nEnd(GetPortionData().GetCoreViewPosition(nEndIndex));
+        SwPaM aPaM(pFrame->MapViewToModelPos(nStart));
         aPaM.SetMark();
-        aPaM.GetPoint()->nContent =
-            GetPortionData().GetCoreViewPosition(nEndIndex);
+        *aPaM.GetPoint() = pFrame->MapViewToModelPos(nEnd);
 
         // set PaM at cursor shell
         bRet = Select( aPaM );
@@ -3342,10 +3349,11 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection( sal_Int32, sal_Int32 sta
     {
         // create pam for selection
         pCursorShell->StartAction();
+        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
         SwPaM* aPaM = pCursorShell->CreateCursor();
         aPaM->SetMark();
-        aPaM->GetPoint()->nContent = GetPortionData().GetCoreViewPosition(startOffset);
-        aPaM->GetMark()->nContent =  GetPortionData().GetCoreViewPosition(endOffset);
+        *aPaM->GetPoint() = pFrame->MapViewToModelPos(GetPortionData().GetCoreViewPosition(startOffset));
+        *aPaM->GetMark() = pFrame->MapViewToModelPos(GetPortionData().GetCoreViewPosition(endOffset));
         pCursorShell->EndAction();
     }
 
@@ -3547,8 +3555,17 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
     if( pCursor != nullptr )
     {
         // get SwPosition for my node
-        const SwTextNode* pNode = GetTextNode();
-        sal_uLong nHere = pNode->GetIndex();
+        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+        sal_uLong nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
+        sal_uLong nLastNode;
+        if (sw::MergedPara const*const pMerged = pFrame->GetMergedPara())
+        {
+            nLastNode = pMerged->pLastNode->GetIndex();
+        }
+        else
+        {
+            nLastNode = nFirstNode;
+        }
 
         // iterate over ring
         for(SwPaM& rTmpCursor : pCursor->GetRingContainer())
@@ -3556,13 +3573,12 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
             // ignore, if no mark
             if( rTmpCursor.HasMark() )
             {
-                // check whether nHere is 'inside' pCursor
+                // check whether frame's node(s) are 'inside' pCursor
                 SwPosition* pStart = rTmpCursor.Start();
                 sal_uLong nStartIndex = pStart->nNode.GetIndex();
                 SwPosition* pEnd = rTmpCursor.End();
                 sal_uLong nEndIndex = pEnd->nNode.GetIndex();
-                if( ( nHere >= nStartIndex ) &&
-                    ( nHere <= nEndIndex )      )
+                if ((nStartIndex <= nLastNode) && (nFirstNode <= nEndIndex))
                 {
                     if( nSelected == 0 )
                     {
@@ -3570,7 +3586,7 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
 
                         // start position
                         sal_Int32 nLocalStart = -1;
-                        if( nHere > nStartIndex )
+                        if (nStartIndex < nFirstNode)
                         {
                             // selection starts in previous node:
                             // then our local selection starts with the paragraph
@@ -3578,12 +3594,13 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
                         }
                         else
                         {
-                            assert(nHere == nStartIndex);
+                            assert(FrameContainsNode(*pFrame, nStartIndex));
 
                             // selection starts in this node:
                             // then check whether it's before or inside our part of
                             // the paragraph, and if so, get the proper position
-                            const sal_Int32 nCoreStart = pStart->nContent.GetIndex();
+                            const TextFrameIndex nCoreStart =
+                                pFrame->MapModelToViewPos(*pStart);
                             if( nCoreStart <
                                 GetPortionData().GetFirstValidCorePosition() )
                             {
@@ -3606,7 +3623,7 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
 
                         // end position
                         sal_Int32 nLocalEnd = -1;
-                        if( nHere < nEndIndex )
+                        if (nLastNode < nEndIndex)
                         {
                             // selection ends in following node:
                             // then our local selection extends to the end
@@ -3615,11 +3632,12 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
                         }
                         else
                         {
-                            assert(nHere == nEndIndex);
+                            assert(FrameContainsNode(*pFrame, nEndIndex));
 
                             // selection ends in this node: then select everything
                             // before our part of the node
-                            const sal_Int32 nCoreEnd = pEnd->nContent.GetIndex();
+                            const TextFrameIndex nCoreEnd =
+                                pFrame->MapModelToViewPos(*pEnd);
                             if( nCoreEnd >
                                     GetPortionData().GetLastValidCorePosition() )
                             {
