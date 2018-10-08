@@ -178,8 +178,8 @@ struct binuno_Proxy : public uno_Interface
 {
     oslInterlockedCount m_nRefCount;
     ::rtl::Reference< ProxyRoot > m_root;
-    UnoInterfaceReference m_target;
-    OUString m_oid;
+    UnoInterfaceReference const m_target;
+    OUString const m_oid;
     TypeDescription m_typeDescr;
 
     inline binuno_Proxy(

@@ -39,7 +39,7 @@ class IdlCompFieldImpl
     , public XIdlField
     , public XIdlField2
 {
-    sal_Int32                   _nOffset;
+    sal_Int32 const             _nOffset;
 
 public:
     IdlCompFieldImpl( IdlReflectionServiceImpl * pReflection, const OUString & rName,

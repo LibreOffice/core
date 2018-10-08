@@ -38,7 +38,7 @@ namespace svgio
             std::unique_ptr<basegfx::B2DPolygon>    mpPolygon;
             std::unique_ptr<basegfx::B2DHomMatrix>  mpaTransform;
 
-            bool                        mbIsPolyline : 1; // true = polyline, false = polygon
+            bool const                  mbIsPolyline : 1; // true = polyline, false = polygon
 
         public:
             SvgPolyNode(

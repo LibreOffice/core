@@ -68,43 +68,28 @@ using namespace osl;
 
 namespace {
 
-struct StringPool
-{
-    OUString slash_UNO_slash_REGISTRY_LINKS;
-    OUString slash_IMPLEMENTATIONS;
-    OUString slash_UNO;
-    OUString slash_UNO_slash_SERVICES;
-    OUString slash_UNO_slash_SINGLETONS;
-    OUString slash_SERVICES;
-    OUString slash_UNO_slash_LOCATION;
-    OUString slash_UNO_slash_ACTIVATOR;
-    OUString colon_old;
-    OUString com_sun_star_registry_SimpleRegistry;
-    OUString Registry;
-    StringPool()
-        : slash_UNO_slash_REGISTRY_LINKS( "/UNO/REGISTRY_LINKS")
-        , slash_IMPLEMENTATIONS( "/IMPLEMENTATIONS" )
-        , slash_UNO( "/UNO")
-        , slash_UNO_slash_SERVICES( "/UNO/SERVICES")
-        , slash_UNO_slash_SINGLETONS( "/UNO/SINGLETONS")
-        , slash_SERVICES( "/SERVICES/" )
-        , slash_UNO_slash_LOCATION( "/UNO/LOCATION" )
-        , slash_UNO_slash_ACTIVATOR( "/UNO/ACTIVATOR" )
-        , colon_old( ":old")
-        , com_sun_star_registry_SimpleRegistry("com.sun.star.registry.SimpleRegistry" )
-        , Registry( "Registry" )
-        {}
-    StringPool(const StringPool&) = delete;
-    StringPool& operator=(const StringPool&) = delete;
-};
-
-const StringPool &spool()
-{
-    static StringPool s_pool;
-
-    return s_pool;
-}
-
+static constexpr OUStringLiteral slash_UNO_slash_REGISTRY_LINKS
+        = "/UNO/REGISTRY_LINKS";
+static constexpr OUStringLiteral slash_IMPLEMENTATIONS
+        =  "/IMPLEMENTATIONS";
+static constexpr OUStringLiteral slash_UNO
+        = "/UNO";
+static constexpr OUStringLiteral slash_UNO_slash_SERVICES
+        = "/UNO/SERVICES";
+static constexpr OUStringLiteral slash_UNO_slash_SINGLETONS
+        = "/UNO/SINGLETONS";
+static constexpr OUStringLiteral slash_SERVICES
+        = "/SERVICES/";
+static constexpr OUStringLiteral slash_UNO_slash_LOCATION
+        = "/UNO/LOCATION";
+static constexpr OUStringLiteral slash_UNO_slash_ACTIVATOR
+        = "/UNO/ACTIVATOR";
+static constexpr OUStringLiteral colon_old
+        = ":old";
+static constexpr OUStringLiteral com_sun_star_registry_SimpleRegistry
+        = "com.sun.star.registry.SimpleRegistry";
+static constexpr OUStringLiteral Registry
+        = "Registry";
 
 //  static deleteAllLinkReferences()
 
@@ -113,7 +98,7 @@ void deleteAllLinkReferences(const Reference < XSimpleRegistry >& xReg,
     // throw ( InvalidRegistryException, RuntimeException )
 {
     Reference < XRegistryKey > xKey = xSource->openKey(
-        spool().slash_UNO_slash_REGISTRY_LINKS );
+        slash_UNO_slash_REGISTRY_LINKS );
 
     if (xKey.is() && (xKey->getValueType() == RegistryValueType_ASCIILIST))
     {
@@ -241,13 +226,12 @@ OUString searchImplForLink(
     const OUString& implName )
     // throw ( InvalidRegistryException, RuntimeException )
 {
-    const StringPool & pool = spool();
-    Reference < XRegistryKey > xKey = xRootKey->openKey( pool.slash_IMPLEMENTATIONS );
+    Reference < XRegistryKey > xKey = xRootKey->openKey( slash_IMPLEMENTATIONS );
     if (xKey.is())
     {
         Sequence< Reference < XRegistryKey > > subKeys( xKey->openKeys() );
         const Reference < XRegistryKey > * pSubKeys = subKeys.getConstArray();
-        OUString key_name( pool.slash_UNO + linkName );
+        OUString key_name( slash_UNO + linkName );
 
         for (sal_Int32 i = 0; i < subKeys.getLength(); i++)
         {
@@ -282,8 +266,7 @@ OUString searchLinkTargetForImpl(const Reference < XRegistryKey >& xRootKey,
 {
 //      try
 //      {
-        const StringPool & pool = spool();
-        Reference < XRegistryKey > xKey = xRootKey->openKey( pool.slash_IMPLEMENTATIONS );
+        Reference < XRegistryKey > xKey = xRootKey->openKey( slash_IMPLEMENTATIONS );
 
         if (xKey.is())
         {
@@ -297,7 +280,7 @@ OUString searchLinkTargetForImpl(const Reference < XRegistryKey >& xRootKey,
                 xImplKey = pSubKeys[i];
 
                 OUString tmpImplName = xImplKey->getKeyName().copy(strlen("/IMPLEMENTATIONS/"));
-                OUString qualifiedLinkName( pool.slash_UNO );
+                OUString qualifiedLinkName( slash_UNO );
                 qualifiedLinkName += linkName;
                 if (tmpImplName == implName &&
                     xImplKey->getKeyType( qualifiedLinkName ) == RegistryKeyType_LINK)
@@ -437,7 +420,7 @@ void prepareUserLink(const Reference < XSimpleRegistry >& xDest,
         if (!oldImplName.isEmpty())
         {
             createUniqueSubEntry(xDest->getRootKey()->createKey(
-                linkName + spool().colon_old ), oldImplName);
+                linkName + colon_old ), oldImplName);
         }
     }
 
@@ -493,7 +476,7 @@ void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
     }
 
     Reference < XRegistryKey > xOldKey = xRootKey->openKey(
-        linkName + spool().colon_old );
+        linkName + colon_old );
     if (xOldKey.is())
     {
         if (xOldKey->getValueType() == RegistryValueType_ASCIILIST)
@@ -667,12 +650,11 @@ void deleteAllImplementations(   const Reference < XSimpleRegistry >& xReg,
         Reference < XRegistryKey > xImplKey;
         bool hasLocationUrl = false;
 
-        const StringPool &pool = spool();
         for (sal_Int32 i = 0; i < subKeys.getLength(); i++)
         {
             xImplKey = pSubKeys[i];
             Reference < XRegistryKey > xKey = xImplKey->openKey(
-                pool.slash_UNO_slash_LOCATION );
+                slash_UNO_slash_LOCATION );
 
             if (xKey.is() && (xKey->getValueType() == RegistryValueType_ASCII))
             {
@@ -690,7 +672,7 @@ void deleteAllImplementations(   const Reference < XSimpleRegistry >& xReg,
 
                     deleteAllLinkReferences(xReg, xImplKey);
 
-                    xKey = xImplKey->openKey( pool.slash_UNO );
+                    xKey = xImplKey->openKey( slash_UNO );
                     if (xKey.is())
                     {
                         Sequence< Reference < XRegistryKey > > subKeys2 = xKey->openKeys();
@@ -701,11 +683,11 @@ void deleteAllImplementations(   const Reference < XSimpleRegistry >& xReg,
 
                             for (sal_Int32 j = 0; j < subKeys2.getLength(); j++)
                             {
-                                if (pSubKeys2[j]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_SERVICES ) &&
-                                    pSubKeys2[j]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_REGISTRY_LINKS ) &&
-                                    pSubKeys2[j]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_ACTIVATOR ) &&
-                                    pSubKeys2[j]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_SINGLETONS ) &&
-                                    pSubKeys2[j]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_LOCATION) )
+                                if (pSubKeys2[j]->getKeyName() != (xImplKey->getKeyName() + slash_UNO_slash_SERVICES ) &&
+                                    pSubKeys2[j]->getKeyName() != (xImplKey->getKeyName() + slash_UNO_slash_REGISTRY_LINKS ) &&
+                                    pSubKeys2[j]->getKeyName() != (xImplKey->getKeyName() + slash_UNO_slash_ACTIVATOR ) &&
+                                    pSubKeys2[j]->getKeyName() != (xImplKey->getKeyName() + slash_UNO_slash_SINGLETONS ) &&
+                                    pSubKeys2[j]->getKeyName() != (xImplKey->getKeyName() + slash_UNO_slash_LOCATION) )
                                 {
                                     prepareUserKeys(xReg, xKey, pSubKeys2[j], implName, false);
                                 }
@@ -1031,8 +1013,6 @@ void prepareRegistry(
             "prepareRegistry(): source registry is empty" );
     }
 
-    const StringPool & pool = spool();
-
     const Reference < XRegistryKey >* pSubKeys = subKeys.getConstArray();
     Reference < XRegistryKey > xImplKey;
 
@@ -1041,7 +1021,7 @@ void prepareRegistry(
         xImplKey = pSubKeys[i];
 
         Reference < XRegistryKey >  xKey = xImplKey->openKey(
-            pool.slash_UNO_slash_SERVICES );
+            slash_UNO_slash_SERVICES );
 
         if (xKey.is())
         {
@@ -1063,11 +1043,11 @@ void prepareRegistry(
 
                 createUniqueSubEntry(
                     xDest->getRootKey()->createKey(
-                        pool.slash_SERVICES + serviceName ),
+                        slash_SERVICES + serviceName ),
                     implName);
             }
 
-            xKey = xImplKey->openKey( pool.slash_UNO );
+            xKey = xImplKey->openKey( slash_UNO );
             if (xKey.is())
             {
                 Sequence< Reference < XRegistryKey > > subKeys2 = xKey->openKeys();
@@ -1078,9 +1058,9 @@ void prepareRegistry(
 
                     for (sal_Int32 j = 0; j < subKeys2.getLength(); j++)
                     {
-                        if (pSubKeys2[j]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_SERVICES) &&
-                            pSubKeys2[j]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_REGISTRY_LINKS ) &&
-                            pSubKeys2[j]->getKeyName() != (xImplKey->getKeyName() + pool.slash_UNO_slash_SINGLETONS ))
+                        if (pSubKeys2[j]->getKeyName() != (xImplKey->getKeyName() + slash_UNO_slash_SERVICES) &&
+                            pSubKeys2[j]->getKeyName() != (xImplKey->getKeyName() + slash_UNO_slash_REGISTRY_LINKS ) &&
+                            pSubKeys2[j]->getKeyName() != (xImplKey->getKeyName() + slash_UNO_slash_SINGLETONS ))
                         {
                             prepareUserKeys(xDest, xKey, pSubKeys2[j], implName, true);
                         }
@@ -1090,7 +1070,7 @@ void prepareRegistry(
         }
 
         // update LOCATION entry
-        xKey = xImplKey->createKey( pool.slash_UNO_slash_LOCATION );
+        xKey = xImplKey->createKey( slash_UNO_slash_LOCATION );
 
         if (xKey.is())
         {
@@ -1098,14 +1078,14 @@ void prepareRegistry(
         }
 
         // update ACTIVATOR entry
-        xKey = xImplKey->createKey( pool.slash_UNO_slash_ACTIVATOR );
+        xKey = xImplKey->createKey( slash_UNO_slash_ACTIVATOR );
 
         if (xKey.is())
         {
             xKey->setAsciiValue(implementationLoaderUrl);
         }
 
-        xKey = xImplKey->openKey( pool.slash_UNO_slash_SERVICES );
+        xKey = xImplKey->openKey( slash_UNO_slash_SERVICES );
 
         if (xKey.is() && (xKey->getValueType() == RegistryValueType_ASCIILIST))
         {
@@ -1136,7 +1116,7 @@ void findImplementations(    const Reference < XRegistryKey > & xSource,
     try
     {
         Reference < XRegistryKey > xKey = xSource->openKey(
-            spool().slash_UNO_slash_SERVICES );
+            slash_UNO_slash_SERVICES );
 
         if (xKey.is() && (xKey->getKeyNames().getLength() > 0))
         {
@@ -1285,7 +1265,7 @@ Reference< XSimpleRegistry > ImplementationRegistration::getRegistryFromServiceM
 
         try {  // the implementation does not support XIntrospectionAccess !
 
-            Any aAny = xPropSet->getPropertyValue( spool().Registry );
+            Any aAny = xPropSet->getPropertyValue( Registry );
 
             if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE ) {
                 aAny >>= xRegistry;
@@ -1486,7 +1466,7 @@ sal_Bool ImplementationRegistration::revokeImplementation(const OUString& locati
         Reference < XPropertySet > xPropSet( m_xSMgr, UNO_QUERY );
         if( xPropSet.is() ) {
             try {
-                Any aAny = xPropSet->getPropertyValue( spool().Registry );
+                Any aAny = xPropSet->getPropertyValue( Registry );
 
                 if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
                 {
@@ -1554,7 +1534,7 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
                     Reference < XRegistryKey > xImpl;
 
                     { // only necessary for deleting the temporary variable of rootkey
-                        xImpl = xReg->getRootKey()->createKey( spool().slash_IMPLEMENTATIONS );
+                        xImpl = xReg->getRootKey()->createKey( slash_IMPLEMENTATIONS );
                     }
                     if (xAct->writeRegistryInfo(xImpl, implementationLoaderUrl, locationUrl))
                     {
@@ -1607,17 +1587,16 @@ void ImplementationRegistration::doRevoke(
     {
         std::vector<OUString> aNames;
 
-        const StringPool &pool = spool();
         Reference < XRegistryKey > xRootKey( xDest->getRootKey() );
 
         Reference < XRegistryKey > xKey =
-            xRootKey->openKey( pool.slash_IMPLEMENTATIONS );
+            xRootKey->openKey( slash_IMPLEMENTATIONS );
         if (xKey.is() && xKey->isValid())
         {
             deleteAllImplementations(xDest, xKey, locationUrl, aNames);
         }
 
-        xKey = xRootKey->openKey( pool.slash_SERVICES );
+        xKey = xRootKey->openKey( slash_SERVICES );
         if (xKey.is())
         {
             for (auto const& name : aNames)
@@ -1662,7 +1641,7 @@ void ImplementationRegistration::doRegister(
             xReg->open(OUString() /* in mem */, false, true);
 
             { // only necessary for deleting the temporary variable of rootkey
-                xSourceKey = xReg->getRootKey()->createKey( spool().slash_IMPLEMENTATIONS );
+                xSourceKey = xReg->getRootKey()->createKey( slash_IMPLEMENTATIONS );
             }
 
             bool bSuccess =
@@ -1706,7 +1685,7 @@ Reference< XSimpleRegistry > ImplementationRegistration::createTemporarySimpleRe
 
     Reference < XSimpleRegistry > xReg(
         rSMgr->createInstanceWithContext(
-            spool().com_sun_star_registry_SimpleRegistry,   xCtx ),
+            com_sun_star_registry_SimpleRegistry,   xCtx ),
         UNO_QUERY);
     OSL_ASSERT( xReg.is() );
     return xReg;
