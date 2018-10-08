@@ -28,6 +28,7 @@
 #include <pres.hxx>
 #include <unotools/caserotate.hxx>
 #include <unotools/options.hxx>
+#include <sddllapi.h>
 
 namespace svx { namespace sidebar { class SelectionChangeHandler; } }
 namespace com { namespace sun { namespace star { namespace lang { class XEventListener; } } } }
@@ -338,7 +339,7 @@ public:
 
     /** Return a pointer to the tab control for layers.
     */
-    LayerTabBar* GetLayerTabControl();
+    SD_DLLPUBLIC LayerTabBar* GetLayerTabControl(); // export for unit test
 
     /** Renames the given slide using an SvxNameDialog
 
