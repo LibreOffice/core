@@ -146,6 +146,8 @@ public:
         else
             hide();
     }
+    void set_help_id(const OString& rHelpId) { m_xButton->set_help_id(rHelpId); }
+    weld::MenuButton& get_widget() { return *m_xButton; }
 };
 
 #endif
