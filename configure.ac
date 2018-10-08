@@ -10080,6 +10080,15 @@ if test "x$enable_kde4" = "xyes"; then
 fi
 AC_SUBST(ENABLE_KDE4)
 
+ENABLE_KDE5=""
+if test "x$enable_kde5" = "xyes"; then
+    ENABLE_KDE5="TRUE"
+    AC_DEFINE(ENABLE_KDE5)
+    R="$R kde5"
+    enable_qt5=yes
+fi
+AC_SUBST(ENABLE_KDE5)
+
 ENABLE_QT5=""
 if test "x$enable_qt5" = "xyes"; then
     ENABLE_QT5="TRUE"
@@ -10087,14 +10096,6 @@ if test "x$enable_qt5" = "xyes"; then
     R="$R qt5"
 fi
 AC_SUBST(ENABLE_QT5)
-
-ENABLE_KDE5=""
-if test "x$enable_kde5" = "xyes"; then
-    ENABLE_KDE5="TRUE"
-    AC_DEFINE(ENABLE_KDE5)
-    R="$R kde5"
-fi
-AC_SUBST(ENABLE_KDE5)
 
 ENABLE_GTK3_KDE5=""
 if test "x$enable_gtk3_kde5" = "xyes"; then
