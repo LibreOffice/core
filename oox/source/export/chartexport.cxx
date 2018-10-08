@@ -75,6 +75,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -1178,6 +1179,16 @@ void ChartExport::exportPlotArea( const Reference< css::chart::XChartDocument >&
         Reference< beans::XPropertySet > xWallPropSet( xWallFloorSupplier->getWall(), uno::UNO_QUERY );
         if( xWallPropSet.is() )
         {
+            uno::Any aAny = xWallPropSet->getPropertyValue("LineStyle");
+            sal_Int32 eChartType = getChartType( );
+            // Export LineStyle_NONE instead of default linestyle of PlotArea border, because LibreOffice
+            // make invisible the Wall shape properties, in case of these charts. Or in the future set
+            // the default LineStyle of these charts to LineStyle_NONE.
+            bool noSupportWallProp = ( (eChartType == chart::TYPEID_PIE) || (eChartType == chart::TYPEID_RADARLINE) || (eChartType == chart::TYPEID_RADARAREA) );
+            if ( noSupportWallProp && (aAny != drawing::LineStyle_NONE) )
+            {
+                xWallPropSet->setPropertyValue( "LineStyle", uno::Any(drawing::LineStyle_NONE) );
+            }
             exportShapeProps( xWallPropSet );
         }
     }
