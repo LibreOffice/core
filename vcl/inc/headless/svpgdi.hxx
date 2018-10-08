@@ -27,7 +27,9 @@
 
 #include <salgdi.hxx>
 #include <sallayout.hxx>
+#ifndef IOS
 #include "svpcairotextrender.hxx"
+#endif
 #include <impfontmetricdata.hxx>
 
 #ifdef IOS
