@@ -20,7 +20,7 @@
 #define INCLUDED_SVTOOLS_SVTABBX_HXX
 
 #include <svtools/svtdllapi.h>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <svtools/accessibletableprovider.hxx>
 
 #include <memory>

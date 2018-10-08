@@ -32,7 +32,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/simptabl.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxdlg.hxx>
 #include <svx/flagsdef.hxx>

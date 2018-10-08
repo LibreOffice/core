@@ -27,7 +27,7 @@
 #include <vcl/svapp.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/viewoptions.hxx>
-#include <svtools/fileview.hxx>
+#include <vcl/fileview.hxx>
 #include <svtools/inettbc.hxx>
 #include "iodlg.hxx"
 #include <bitmaps.hlst>

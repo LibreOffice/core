@@ -18,8 +18,8 @@
  */
 
 #include <memory>
-#include <svtools/treelistentry.hxx>
-#include <svtools/treelist.hxx>
+#include <vcl/treelistentry.hxx>
+#include <vcl/treelist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

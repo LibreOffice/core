@@ -23,7 +23,7 @@
         - SelectAll( false ) => only repaint the deselected entries
 */
 
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/accel.hxx>
@@ -36,12 +36,10 @@
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 
-#include <svtools/svmedit.hxx>
-#include <svtools/svlbitm.hxx>
-#include <svtools/treelistentry.hxx>
-#include <svtools/viewdataentry.hxx>
+#include <vcl/svlbitm.hxx>
+#include <vcl/treelistentry.hxx>
+#include <vcl/viewdataentry.hxx>
 #include <svimpbox.hxx>
-#include <uitest/uiobject.hxx>
 
 #include <set>
 #include <string.h>
@@ -3610,7 +3608,7 @@ css::uno::Reference< XAccessible > SvTreeListBox::CreateAccessible()
         {
             // need to be done here to get the vclxwindow later on in the accessible
             css::uno::Reference< css::awt::XWindowPeer > xTemp(GetComponentInterface());
-            xAccessible = pImpl->m_aFactoryAccess.getFactory().createAccessibleTreeListBox( *this, xAccParent );
+            //TODO xAccessible = pImpl->m_aFactoryAccess.getFactory().createAccessibleTreeListBox( *this, xAccParent );
         }
     }
     return xAccessible;
@@ -3680,7 +3678,8 @@ bool SvTreeListBox::set_property(const OString &rKey, const OUString &rValue)
 
 FactoryFunction SvTreeListBox::GetUITestFactory() const
 {
-    return TreeListUIObject::create;
+    return nullptr;
+//TODO    return TreeListUIObject::create;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

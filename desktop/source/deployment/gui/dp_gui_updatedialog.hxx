@@ -27,7 +27,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <svtools/svlbitm.hxx>
+#include <vcl/svlbitm.hxx>
 #include <svx/checklbx.hxx>
 #include <tools/link.hxx>
 #include <vcl/layout.hxx>

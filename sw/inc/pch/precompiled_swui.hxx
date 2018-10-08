@@ -600,7 +600,6 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
 #include <svtools/toolboxcontroller.hxx>
-#include <svtools/transfer.hxx>
 #include <svtools/treelist.hxx>
 #include <svtools/treelistbox.hxx>
 #include <svtools/treelistentries.hxx>
@@ -683,6 +682,7 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/unotoolsdllapi.h>
+#include <vcl/transfer.hxx>
 #include <viewopt.hxx>
 #include <wdocsh.hxx>
 

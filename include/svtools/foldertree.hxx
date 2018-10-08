@@ -17,7 +17,6 @@
 #include <officecfg/Office/Common.hxx>
 
 #include <svtools/svtdllapi.h>
-#include <svtools/treelistentry.hxx>
 
 #include <tools/urlobj.hxx>
 
@@ -25,6 +24,7 @@
 
 #include <vcl/image.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/treelistentry.hxx>
 
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;

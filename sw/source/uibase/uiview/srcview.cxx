@@ -36,7 +36,7 @@
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <unotools/saveopt.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
 #include <svx/svxids.hrc>

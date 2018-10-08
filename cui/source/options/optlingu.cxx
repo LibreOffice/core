@@ -43,9 +43,9 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <unotools/extendedsecurityoptions.hxx>
-#include <svtools/svlbitm.hxx>
-#include <svtools/treelistbox.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/svlbitm.hxx>
+#include <vcl/treelistbox.hxx>
+#include <vcl/treelistentry.hxx>
 #include <svtools/langhelp.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

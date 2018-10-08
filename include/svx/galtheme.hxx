@@ -28,7 +28,7 @@
 #include <vcl/weld.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/lstner.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/galmisc.hxx>
 #include <memory>

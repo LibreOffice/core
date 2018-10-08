@@ -22,7 +22,7 @@
 #include "dbexchange.hxx"
 #include "TableWindowListBox.hxx"
 
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/implbase1.hxx>
 
