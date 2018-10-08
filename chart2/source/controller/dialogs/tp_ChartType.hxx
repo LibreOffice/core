@@ -26,13 +26,12 @@
 #include "ChartTypeTemplateProvider.hxx"
 #include <TimerTriggeredControllerLock.hxx>
 
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <svtools/wizardmachine.hxx>
-#include <svtools/valueset.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
+namespace weld { class CustomWeld; }
+
+class SvtValueSet;
 
 namespace chart
 {
@@ -41,7 +40,6 @@ class Dim3DLookResourceGroup;
 class StackingResourceGroup;
 class SplineResourceGroup;
 class GeometryResourceGroup;
-class ChartTypeParameter;
 class SortByXValuesResourceGroup;
 
 class ChartTypeTabPage final : public ResourceChangeListener, public svt::OWizardPage, public ChartTypeTemplateProvider

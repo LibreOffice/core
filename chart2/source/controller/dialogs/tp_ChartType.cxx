@@ -25,8 +25,11 @@
 #include "res_BarGeometry.hxx"
 #include <ControllerLockGuard.hxx>
 #include <unonames.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <svtools/controldims.hxx>
+#include <svtools/valueset.hxx>
 
 #include <vcl/weld.hxx>
 #include <tools/diagnose_ex.h>

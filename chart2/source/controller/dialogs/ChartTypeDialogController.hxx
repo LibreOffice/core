@@ -28,10 +28,12 @@
 #include <ThreeDHelper.hxx>
 
 #include <com/sun/star/chart2/CurveStyle.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/weld.hxx>
+
+namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartTypeTemplate; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
 
 class SvtValueSet;
 

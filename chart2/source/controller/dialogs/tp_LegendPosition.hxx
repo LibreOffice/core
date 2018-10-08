@@ -20,9 +20,10 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_LEGENDPOSITION_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/weld.hxx>
+
 #include <res_LegendPosition.hxx>
-#include <TextDirectionListBox.hxx>
+
+namespace chart { class TextDirectionListBox; }
 
 namespace chart
 {

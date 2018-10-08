@@ -21,8 +21,13 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/dialcontrol.hxx>
-#include <vcl/customweld.hxx>
-#include <vcl/weld.hxx>
+
+namespace weld {
+    class CheckButton;
+    class CustomWeld;
+    class Frame;
+    class SpinButton;
+}
 
 namespace chart
 {

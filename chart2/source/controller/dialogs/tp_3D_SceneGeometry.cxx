@@ -23,6 +23,7 @@
 #include <DiagramHelper.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ThreeDHelper.hxx>
+#include <ControllerLockGuard.hxx>
 #include <rtl/math.hxx>
 #include <editeng/unoprnms.hxx>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
