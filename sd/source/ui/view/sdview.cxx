@@ -886,7 +886,7 @@ void View::SetMarkedOriginalSize()
                     {
                         ::tools::Rectangle   aDrawRect( pObj->GetLogicRect() );
 
-                        pUndoGroup->AddAction( mrDoc.GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
+                        pUndoGroup->AddAction( std::unique_ptr<SdrUndoAction>(mrDoc.GetSdrUndoFactory().CreateUndoGeoObject( *pObj )) );
                         pObj->Resize( aDrawRect.TopLeft(), Fraction( aOleSize.Width(), aDrawRect.GetWidth() ),
                                                            Fraction( aOleSize.Height(), aDrawRect.GetHeight() ) );
                     }
@@ -896,7 +896,7 @@ void View::SetMarkedOriginalSize()
             {
                 const SdrGrafObj* pSdrGrafObj = static_cast< const SdrGrafObj* >(pObj);
                 const Size aSize = pSdrGrafObj->getOriginalSize( );
-                pUndoGroup->AddAction( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj ) );
+                pUndoGroup->AddAction( std::unique_ptr<SdrUndoAction>(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj )) );
                 ::tools::Rectangle aRect( pObj->GetLogicRect() );
                 aRect.SetSize( aSize );
                 pObj->SetLogicRect( aRect );
@@ -1334,8 +1334,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
                     pOutliner->SetText(*(pText->GetOutlinerParaObject()));
                     if (bUndoEnabled)
                     {
-                        SdrUndoObjSetText* pTxtUndo = dynamic_cast< SdrUndoObjSetText* >(pSdrModel->GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, nCellIndex));
-                        pUndoGroup->AddAction(pTxtUndo);
+                        pUndoGroup->AddAction(std::unique_ptr<SdrUndoAction>(pSdrModel->GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, nCellIndex)));
                     }
                     if ( !bToggleOn )
                     {
@@ -1365,8 +1364,8 @@ void View::ChangeMarkedObjectsBulletsNumbering(
             pOutliner->SetText(*pParaObj);
             if (bUndoEnabled)
             {
-                SdrUndoObjSetText* pTxtUndo = dynamic_cast< SdrUndoObjSetText* >(pSdrModel->GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, 0));
-                pUndoGroup->AddAction(pTxtUndo);
+                pUndoGroup->AddAction(
+                    std::unique_ptr<SdrUndoAction>(pSdrModel->GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, 0)));
             }
             if ( !bToggleOn )
             {
