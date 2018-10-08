@@ -22,8 +22,8 @@
 #include <vcl/print.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/imapobj.hxx>
-#include <svtools/imap.hxx>
+#include <vcl/imapobj.hxx>
+#include <vcl/imap.hxx>
 #include <svl/urihelper.hxx>
 #include <svtools/soerr.hxx>
 #include <sfx2/progress.hxx>

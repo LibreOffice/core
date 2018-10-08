@@ -27,7 +27,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/scene3d.hxx>
 #include <drawview.hxx>
-#include <svtools/imapobj.hxx>
+#include <vcl/imapobj.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/securityoptions.hxx>

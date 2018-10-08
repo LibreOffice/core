@@ -91,20 +91,12 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/contnr/contentenumeration \
     svtools/source/contnr/fileview \
     svtools/source/contnr/foldertree \
-    svtools/source/contnr/iconview \
-    svtools/source/contnr/iconviewimpl \
     svtools/source/contnr/imivctl1 \
     svtools/source/contnr/imivctl2 \
     svtools/source/contnr/ivctrl \
     svtools/source/contnr/simptabl \
-    svtools/source/contnr/svimpbox \
-    svtools/source/contnr/svlbitm \
     svtools/source/contnr/svtabbx \
     svtools/source/contnr/templwin \
-    svtools/source/contnr/treelist \
-    svtools/source/contnr/treelistbox \
-    svtools/source/contnr/treelistentry \
-    svtools/source/contnr/viewdataentry \
     svtools/source/control/accessibleruler \
     svtools/source/control/asynclink \
     svtools/source/control/autocmpledit \
@@ -169,9 +161,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/misc/filechangedchecker \
     svtools/source/misc/imagemgr \
     svtools/source/misc/imageresourceaccess \
-    svtools/source/misc/imap \
-    svtools/source/misc/imap2 \
-    svtools/source/misc/imap3 \
     svtools/source/misc/langtab \
     svtools/source/misc/langhelp \
     svtools/source/misc/openfiledroptargetlistener \
@@ -180,8 +169,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/misc/svtaccessiblefactory \
     svtools/source/misc/svtresid \
     svtools/source/misc/templatefoldercache \
-    svtools/source/misc/transfer \
-    svtools/source/misc/transfer2 \
     svtools/source/misc/unitconv \
     svtools/source/svhtml/htmlkywd \
     svtools/source/svhtml/htmlout \
@@ -221,7 +208,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/uno/wizard/unowizard \
     svtools/source/uno/wizard/wizardpagecontroller \
     svtools/source/uno/wizard/wizardshell \
-    svtools/source/urlobj/inetimg \
 ))
 
 ifeq ($(OS),WNT)

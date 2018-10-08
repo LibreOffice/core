@@ -25,7 +25,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdotext.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/imapobj.hxx>
+#include <vcl/imapobj.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdpagv.hxx>

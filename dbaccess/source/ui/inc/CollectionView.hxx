@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_COLLECTIONVIEW_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_COLLECTIONVIEW_HXX
 
-#include <svtools/fileview.hxx>
+#include <vcl/fileview.hxx>
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>

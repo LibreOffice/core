@@ -404,6 +404,58 @@ protected:
     virtual OUString get_name() const override;
 };
 
+class SvTreeListBox;
+class SvTreeListEntry;
+
+class UITEST_DLLPUBLIC TreeListUIObject : public WindowUIObject
+{
+public:
+    TreeListUIObject(const VclPtr<SvTreeListBox>& xTreeList);
+
+    virtual StringMap get_state() override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    virtual std::unique_ptr<UIObject> get_child(const OUString& rID) override;
+
+    virtual std::set<OUString> get_children() const override;
+
+protected:
+
+    virtual OUString get_name() const override;
+
+private:
+
+    VclPtr<SvTreeListBox> mxTreeList;
+};
+
+class UITEST_DLLPUBLIC TreeListEntryUIObject : public UIObject
+{
+public:
+
+    TreeListEntryUIObject(const VclPtr<SvTreeListBox>& xTreeList, SvTreeListEntry* pEntry);
+
+    virtual StringMap get_state() override;
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    virtual std::unique_ptr<UIObject> get_child(const OUString& rID) override;
+
+    virtual std::set<OUString> get_children() const override;
+
+    virtual OUString get_type() const override;
+
+private:
+
+    VclPtr<SvTreeListBox> mxTreeList;
+
+    SvTreeListEntry* const mpEntry;
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

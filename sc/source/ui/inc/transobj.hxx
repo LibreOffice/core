@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_TRANSOBJ_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_TRANSOBJ_HXX
 
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <global.hxx>
 #include <address.hxx>
 #include <document.hxx>

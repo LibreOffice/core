@@ -20,7 +20,7 @@
 #ifndef INCLUDED_FPICKER_SOURCE_OFFICE_OFFICECONTROLACCESS_HXX
 #define INCLUDED_FPICKER_SOURCE_OFFICE_OFFICECONTROLACCESS_HXX
 
-#include <svtools/fileview.hxx>
+#include <vcl/fileview.hxx>
 #include <vcl/lstbox.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include "pickercallbacks.hxx"

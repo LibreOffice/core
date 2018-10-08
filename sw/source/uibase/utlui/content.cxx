@@ -83,7 +83,7 @@
 #include <postithelper.hxx>
 #include <redline.hxx>
 #include <docary.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 
 #include <swabstdlg.hxx>
 #include <globals.hrc>

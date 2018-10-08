@@ -27,8 +27,8 @@
 
 #include <fmturl.hxx>
 
-#include <svtools/imap.hxx>
-#include <svtools/imapobj.hxx>
+#include <vcl/imap.hxx>
+#include <vcl/imapobj.hxx>
 
 #include <accmap.hxx>
 
