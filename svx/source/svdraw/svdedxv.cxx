@@ -905,8 +905,10 @@ void SdrObjEditView::ImpChainingEventHdl()
             const int nText = 0; // XXX: hardcoded index (SdrTextObj::getText handles only 0)
 
             const bool bUndoEnabled = GetModel() && IsUndoEnabled();
-            SdrUndoObjSetText *pTxtUndo = bUndoEnabled ? dynamic_cast< SdrUndoObjSetText* >
-                ( GetModel()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, nText ) ) : nullptr;
+            std::unique_ptr<SdrUndoObjSetText> pTxtUndo;
+            if (bUndoEnabled)
+                pTxtUndo.reset(dynamic_cast< SdrUndoObjSetText* >
+                                ( GetModel()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, nText ).release() ));
 
             // trigger actual chaining
             pTextObj->onChainingEvent();
@@ -916,13 +918,12 @@ void SdrObjEditView::ImpChainingEventHdl()
                 pTxtUndo->AfterSetText();
                 if (!pTxtUndo->IsDifferent())
                 {
-                    delete pTxtUndo;
-                    pTxtUndo=nullptr;
+                    pTxtUndo.reset();
                 }
             }
 
             if (pTxtUndo)
-                AddUndo(pTxtUndo);
+                AddUndo(std::move(pTxtUndo));
 
             //maCursorEvent = new CursorChainingEvent(pTextChain->GetCursorEvent(pTextObj));
             //SdrTextObj *pNextLink = pTextObj->GetNextLinkInChain();
@@ -1435,7 +1436,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
         {
             pTEOutliner->CompleteOnlineSpelling();
 
-            SdrUndoObjSetText* pTxtUndo = nullptr;
+            std::unique_ptr<SdrUndoObjSetText> pTxtUndo;
 
             if( bModified )
             {
@@ -1444,7 +1445,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                     if( pTEObj->getText( nText ) == pTEObj->getActiveText() )
                         break;
 
-                pTxtUndo = dynamic_cast< SdrUndoObjSetText* >( GetModel()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTEObj, nText ) );
+                pTxtUndo.reset( dynamic_cast< SdrUndoObjSetText* >( GetModel()->GetSdrUndoFactory().CreateUndoObjectSetText(*pTEObj, nText ).release() ) );
             }
             DBG_ASSERT( !bModified || pTxtUndo, "svx::SdrObjEditView::EndTextEdit(), could not create undo action!" );
             // Set old CalcFieldValue-Handler again, this
@@ -1472,12 +1473,11 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                 pTxtUndo->AfterSetText();
                 if (!pTxtUndo->IsDifferent())
                 {
-                    delete pTxtUndo;
-                    pTxtUndo=nullptr;
+                    pTxtUndo.reset();
                 }
             }
             // check deletion of entire TextObj
-            SdrUndoAction* pDelUndo=nullptr;
+            std::unique_ptr<SdrUndoAction> pDelUndo;
             bool bDelObj=false;
             if (pTEObj!=nullptr && bTextEditNewObj)
             {
@@ -1496,21 +1496,17 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
                     }
                 }
             }
-            if (pTxtUndo!=nullptr)
+            if (pTxtUndo)
             {
                 if( bUndo )
-                    AddUndo(pTxtUndo);
+                    AddUndo(std::move(pTxtUndo));
                 eRet=SdrEndTextEditKind::Changed;
             }
             if (pDelUndo!=nullptr)
             {
                 if( bUndo )
                 {
-                    AddUndo(pDelUndo);
-                }
-                else
-                {
-                    delete pDelUndo;
+                    AddUndo(std::move(pDelUndo));
                 }
                 eRet=SdrEndTextEditKind::Deleted;
                 DBG_ASSERT(pTEObj->getParentSdrObjListFromSdrObject()!=nullptr,"SdrObjEditView::SdrEndTextEdit(): Fatal: Object edited doesn't have an ObjList!");

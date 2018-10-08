@@ -738,7 +738,7 @@ public:
     bool            IsUndoEnabled() const;
     void            UndoActionStart( sal_uInt16 nId );
     void            UndoActionEnd();
-    void            InsertUndo( EditUndo* pUndo );
+    void            InsertUndo( std::unique_ptr<EditUndo> pUndo );
     bool            IsInUndo();
 
     void            ClearModifyFlag();

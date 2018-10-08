@@ -494,7 +494,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         case SID_ATTR_LONG_LRSPACE:
             if (pArgs)
             {
-                SdUndoGroup* pUndoGroup = new SdUndoGroup(GetDoc());
+                std::unique_ptr<SdUndoGroup> pUndoGroup(new SdUndoGroup(GetDoc()));
                 pUndoGroup->SetComment(SdResId(STR_UNDO_CHANGE_PAGEBORDER));
 
                 const SvxLongLRSpaceItem& rLRSpace = static_cast<const SvxLongLRSpaceItem&>(
@@ -553,13 +553,13 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 
                 // give the undo group to the undo manager
                 GetViewFrame()->GetObjectShell()->GetUndoManager()->
-                                                    AddUndoAction(pUndoGroup);
+                                                    AddUndoAction(std::move(pUndoGroup));
             }
             break;
         case SID_ATTR_LONG_ULSPACE:
             if (pArgs)
             {
-                SdUndoGroup* pUndoGroup = new SdUndoGroup(GetDoc());
+                std::unique_ptr<SdUndoGroup> pUndoGroup(new SdUndoGroup(GetDoc()));
                 pUndoGroup->SetComment(SdResId(STR_UNDO_CHANGE_PAGEBORDER));
 
                 const SvxLongULSpaceItem& rULSpace = static_cast<const SvxLongULSpaceItem&>(
@@ -619,7 +619,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 
                 // give the undo group to the undo manager
                 GetViewFrame()->GetObjectShell()->GetUndoManager()->
-                                                    AddUndoAction(pUndoGroup);
+                                                    AddUndoAction(std::move(pUndoGroup));
             }
             break;
         case SID_RULER_OBJECT:

@@ -49,6 +49,7 @@
 #include <strings.hrc>
 #include <strings.hxx>
 #include <svtools/treelistentry.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -67,13 +68,13 @@ namespace
         @param  _bOwner         is the undo action the owner
     */
     void addUndoAction( OQueryTableView const * _pView,
-                        OQueryTabConnUndoAction* _pUndoAction,
+                        std::unique_ptr<OQueryTabConnUndoAction> _pUndoAction,
                         OQueryTableConnection* _pConnection,
                         bool _bOwner = false)
     {
         _pUndoAction->SetOwnership(_bOwner);
         _pUndoAction->SetConnection(_pConnection);
-        _pView->getDesignView()->getController().addUndoActionAndInvalidate(_pUndoAction);
+        _pView->getDesignView()->getController().addUndoActionAndInvalidate(std::move(_pUndoAction));
     }
     /** openJoinDialog opens the join dialog with this connection data
         @param  _pView              the view which we use
@@ -110,7 +111,7 @@ namespace
         // add an undo action
         if ( _bAddUndo )
             addUndoAction(  _pView,
-                            new OQueryAddTabConnUndoAction(_pView),
+                            o3tl::make_unique<OQueryAddTabConnUndoAction>(_pView),
                             static_cast< OQueryTableConnection*>(_pConnection));
         // redraw
         _pConnection->RecalcLines();
@@ -421,16 +422,14 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
     // No need to initialize, as that happens in ShowTabWin
 
     // New UndoAction
-    OQueryTabWinShowUndoAct* pUndoAction = new OQueryTabWinShowUndoAct(this);
+    std::unique_ptr<OQueryTabWinShowUndoAct> pUndoAction(new OQueryTabWinShowUndoAct(this));
     pUndoAction->SetTabWin(pNewTabWin); // Window
-    bool bSuccess = ShowTabWin(pNewTabWin, pUndoAction,bAppend);
+    bool bSuccess = ShowTabWin(pNewTabWin, pUndoAction.get(), bAppend);
     if(!bSuccess)
     {
         // reset table window
         pUndoAction->SetTabWin(nullptr);
         pUndoAction->SetOwnership(false);
-
-        delete pUndoAction;
         return;
     }
 
@@ -531,7 +530,7 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
     }
 
     // My parent needs to be informed about the delete
-    m_pView->getController().addUndoActionAndInvalidate( pUndoAction );
+    m_pView->getController().addUndoActionAndInvalidate( std::move(pUndoAction) );
 }
 
 void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest)
@@ -631,7 +630,7 @@ bool OQueryTableView::RemoveConnection(VclPtr<OTableConnection>& rConnection, bo
 
     // add undo action
     addUndoAction(this,
-                  new OQueryDelTabConnUndoAction(this),
+                  o3tl::make_unique<OQueryDelTabConnUndoAction>(this),
                   xConnection.get(),
                   true);
 
@@ -688,16 +687,16 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
         rUndoMgr.EnterListAction(DBA_RES(STR_QUERY_UNDO_TABWINDELETE) , OUString(), 0, ViewShellId(-1));
 
         // add the Undo-Action
-        OQueryTabWinDelUndoAct* pUndoAction = new OQueryTabWinDelUndoAct(this);
+        std::unique_ptr<OQueryTabWinDelUndoAct> pUndoAction(new OQueryTabWinDelUndoAct(this));
         pUndoAction->SetTabWin(static_cast< OQueryTableWindow*>(pTabWin));
 
         // and hide the window
-        HideTabWin(static_cast< OQueryTableWindow*>(pTabWin), pUndoAction);
+        HideTabWin(static_cast< OQueryTableWindow*>(pTabWin), pUndoAction.get());
 
         // Undo Actions and delete the fields in SelectionBrowseBox
         pParent->TableDeleted( static_cast< OQueryTableWindowData*>(pTabWin->GetData().get())->GetAliasName() );
 
-        m_pView->getController().addUndoActionAndInvalidate( pUndoAction );
+        m_pView->getController().addUndoActionAndInvalidate( std::move(pUndoAction) );
         rUndoMgr.LeaveListAction();
 
         modified();

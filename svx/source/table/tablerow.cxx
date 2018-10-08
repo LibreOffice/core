@@ -286,7 +286,7 @@ void SAL_CALL TableRow::setFastPropertyValue( sal_Int32 nHandle, const Any& aVal
     {
         if( pUndo )
         {
-            rModel.AddUndo( pUndo.release() );
+            rModel.AddUndo( std::move(pUndo) );
         }
         mxTableModel->setModified(true);
     }

@@ -58,7 +58,7 @@ namespace dbaui
             additionally invalidates the UNDO and REDO slot
             @param  pAction the undo action to add
         */
-        void addUndoActionAndInvalidate( SfxUndoAction* pAction );
+        void addUndoActionAndInvalidate( std::unique_ptr<SfxUndoAction> pAction );
 
         // OGenericUnoController
         virtual FeatureState    GetState( sal_uInt16 nId ) const override;

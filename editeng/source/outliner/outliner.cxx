@@ -52,6 +52,7 @@
 #include <svl/itempool.hxx>
 #include <libxml/xmlwriter.h>
 #include <sal/log.hxx>
+#include <o3tl/make_unique.hxx>
 
 // calculate if it's RTL or not
 #include <unicode/ubidi.h>
@@ -275,7 +276,7 @@ void Outliner::SetNumberingStartValue( sal_Int32 nPara, sal_Int16 nNumberingStar
     if( pPara && pPara->GetNumberingStartValue() != nNumberingStartValue )
     {
         if( IsUndoEnabled() && !IsInUndo() )
-            InsertUndo( new OutlinerUndoChangeParaNumberingRestart( this, nPara,
+            InsertUndo( o3tl::make_unique<OutlinerUndoChangeParaNumberingRestart>( this, nPara,
                 pPara->GetNumberingStartValue(), nNumberingStartValue,
                 pPara->IsParaIsNumberingRestart(), pPara->IsParaIsNumberingRestart() ) );
 
@@ -299,7 +300,7 @@ void Outliner::SetParaIsNumberingRestart( sal_Int32 nPara, bool bParaIsNumbering
     if( pPara && (pPara->IsParaIsNumberingRestart() != bParaIsNumberingRestart) )
     {
         if( IsUndoEnabled() && !IsInUndo() )
-            InsertUndo( new OutlinerUndoChangeParaNumberingRestart( this, nPara,
+            InsertUndo( o3tl::make_unique<OutlinerUndoChangeParaNumberingRestart>( this, nPara,
                 pPara->GetNumberingStartValue(), pPara->GetNumberingStartValue(),
                 pPara->IsParaIsNumberingRestart(), bParaIsNumberingRestart ) );
 
@@ -737,7 +738,7 @@ void Outliner::ImplInitDepth( sal_Int32 nPara, sal_Int16 nDepth, bool bCreateUnd
 
         if ( bUndo )
         {
-            InsertUndo( new OutlinerUndoChangeDepth( this, nPara, nOldDepth, nDepth ) );
+            InsertUndo( o3tl::make_unique<OutlinerUndoChangeDepth>( this, nPara, nOldDepth, nDepth ) );
         }
 
         pEditEngine->SetUpdateMode( bUpdate );
@@ -759,19 +760,19 @@ bool Outliner::Expand( Paragraph const * pPara )
 {
     if ( pParaList->HasHiddenChildren( pPara ) )
     {
-        OLUndoExpand* pUndo = nullptr;
+        std::unique_ptr<OLUndoExpand> pUndo;
         bool bUndo = IsUndoEnabled() && !IsInUndo();
         if( bUndo )
         {
             UndoActionStart( OLUNDO_EXPAND );
-            pUndo = new OLUndoExpand( this, OLUNDO_EXPAND );
+            pUndo.reset( new OLUndoExpand( this, OLUNDO_EXPAND ) );
             pUndo->nCount = pParaList->GetAbsPos( pPara );
         }
         pParaList->Expand( pPara );
         InvalidateBullet(pParaList->GetAbsPos(pPara));
         if( bUndo )
         {
-            InsertUndo( pUndo );
+            InsertUndo( std::move(pUndo) );
             UndoActionEnd();
         }
         return true;
@@ -783,7 +784,7 @@ bool Outliner::Collapse( Paragraph const * pPara )
 {
     if ( pParaList->HasVisibleChildren( pPara ) ) // expanded
     {
-        OLUndoExpand* pUndo = nullptr;
+        std::unique_ptr<OLUndoExpand> pUndo;
         bool bUndo = false;
 
         if( !IsInUndo() && IsUndoEnabled() )
@@ -791,7 +792,7 @@ bool Outliner::Collapse( Paragraph const * pPara )
         if( bUndo )
         {
             UndoActionStart( OLUNDO_COLLAPSE );
-            pUndo = new OLUndoExpand( this, OLUNDO_COLLAPSE );
+            pUndo.reset( new OLUndoExpand( this, OLUNDO_COLLAPSE ) );
             pUndo->nCount = pParaList->GetAbsPos( pPara );
         }
 
@@ -799,7 +800,7 @@ bool Outliner::Collapse( Paragraph const * pPara )
         InvalidateBullet(pParaList->GetAbsPos(pPara));
         if( bUndo )
         {
-            InsertUndo( pUndo );
+            InsertUndo( std::move(pUndo) );
             UndoActionEnd();
         }
         return true;
@@ -1991,7 +1992,7 @@ void Outliner::SetParaFlag( Paragraph* pPara,  ParaFlag nFlag )
     if( pPara && !pPara->HasFlag( nFlag ) )
     {
         if( IsUndoEnabled() && !IsInUndo() )
-            InsertUndo( new OutlinerUndoChangeParaFlags( this, GetAbsPos( pPara ), pPara->nFlags, pPara->nFlags|nFlag ) );
+            InsertUndo( o3tl::make_unique<OutlinerUndoChangeParaFlags>( this, GetAbsPos( pPara ), pPara->nFlags, pPara->nFlags|nFlag ) );
 
         pPara->SetFlag( nFlag );
     }

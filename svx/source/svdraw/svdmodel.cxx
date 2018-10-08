@@ -560,25 +560,21 @@ void SdrModel::SetUndoComment(const OUString& rComment, const OUString& rObjDesc
     }
 }
 
-void SdrModel::AddUndo(SdrUndoAction* pUndo)
+void SdrModel::AddUndo(std::unique_ptr<SdrUndoAction> pUndo)
 {
     if( mpImpl->mpUndoManager )
     {
-        mpImpl->mpUndoManager->AddUndoAction( pUndo );
+        mpImpl->mpUndoManager->AddUndoAction( std::move(pUndo) );
     }
-    else if( !IsUndoEnabled() )
-    {
-        delete pUndo;
-    }
-    else
+    else if( IsUndoEnabled() )
     {
         if (pCurrentUndoGroup)
         {
-            pCurrentUndoGroup->AddAction(std::unique_ptr<SdrUndoAction>(pUndo));
+            pCurrentUndoGroup->AddAction(std::move(pUndo));
         }
         else
         {
-            ImpPostUndoAction(std::unique_ptr<SdrUndoAction>(pUndo));
+            ImpPostUndoAction(std::move(pUndo));
         }
     }
 }

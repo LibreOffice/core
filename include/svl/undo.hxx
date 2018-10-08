@@ -190,7 +190,7 @@ public:
     virtual                 ~SfxUndoManager();
 
     void                    SetMaxUndoActionCount( size_t nMaxUndoActionCount );
-    virtual void            AddUndoAction( SfxUndoAction *pAction, bool bTryMerg=false );
+    virtual void            AddUndoAction( std::unique_ptr<SfxUndoAction> pAction, bool bTryMerg=false );
     virtual size_t          GetUndoActionCount( bool const i_currentLevel = CurrentLevel ) const;
     OUString                GetUndoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const;
     SfxUndoAction*          GetUndoAction( size_t nNo=0 ) const;

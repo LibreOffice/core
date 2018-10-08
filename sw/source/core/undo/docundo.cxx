@@ -244,7 +244,7 @@ SwUndo* UndoManager::GetLastUndo()
 
 void UndoManager::AppendUndo(std::unique_ptr<SwUndo> pUndo)
 {
-    AddUndoAction(pUndo.release());
+    AddUndoAction(std::move(pUndo));
 }
 
 void UndoManager::ClearRedo()
@@ -511,9 +511,9 @@ SwUndo * UndoManager::RemoveLastUndo()
 
 // SfxUndoManager
 
-void UndoManager::AddUndoAction(SfxUndoAction *pAction, bool bTryMerge)
+void UndoManager::AddUndoAction(std::unique_ptr<SfxUndoAction> pAction, bool bTryMerge)
 {
-    SwUndo *const pUndo( dynamic_cast<SwUndo *>(pAction) );
+    SwUndo *const pUndo( dynamic_cast<SwUndo *>(pAction.get()) );
     if (pUndo)
     {
         if (RedlineFlags::NONE == pUndo->GetRedlineFlags())
@@ -525,7 +525,7 @@ void UndoManager::AddUndoAction(SfxUndoAction *pAction, bool bTryMerge)
             pUndo->IgnoreRepeat();
         }
     }
-    SdrUndoManager::AddUndoAction(pAction, bTryMerge);
+    SdrUndoManager::AddUndoAction(std::move(pAction), bTryMerge);
     // if the undo nodes array is too large, delete some actions
     while (UNDO_ACTION_LIMIT < GetUndoNodes().Count())
     {

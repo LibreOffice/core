@@ -2022,7 +2022,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
 
             SfxUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
-            SdLayerModifyUndoAction* pAction = new SdLayerModifyUndoAction(
+            std::unique_ptr<SdLayerModifyUndoAction> pAction( new SdLayerModifyUndoAction(
                 GetDoc(),
                 pLayer,
                 // old values
@@ -2039,8 +2039,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 bIsVisible,
                 bIsLocked,
                 bIsPrintable
-                );
-            pManager->AddUndoAction( pAction );
+                ) );
+            pManager->AddUndoAction( std::move(pAction) );
 
             ModifyLayer( pLayer, aLayerName, aLayerTitle, aLayerDesc, bIsVisible, bIsLocked, bIsPrintable );
 

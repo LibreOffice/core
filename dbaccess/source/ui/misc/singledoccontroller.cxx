@@ -77,10 +77,10 @@ namespace dbaui
         return m_pData->m_xUndoManager->GetSfxUndoManager();
     }
 
-    void OSingleDocumentController::addUndoActionAndInvalidate(SfxUndoAction *_pAction)
+    void OSingleDocumentController::addUndoActionAndInvalidate(std::unique_ptr<SfxUndoAction> _pAction)
     {
         // add undo action
-        GetUndoManager().AddUndoAction( _pAction );
+        GetUndoManager().AddUndoAction( std::move(_pAction) );
 
         // when we add an undo action the controller was modified
         setModified( true );

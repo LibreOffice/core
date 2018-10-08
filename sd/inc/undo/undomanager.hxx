@@ -33,7 +33,7 @@ public:
 
     virtual void            EnterListAction(const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId, ViewShellId nViewShellId) override;
 
-    virtual void            AddUndoAction( SfxUndoAction *pAction, bool bTryMerg=false ) override;
+    virtual void            AddUndoAction( std::unique_ptr<SfxUndoAction> pAction, bool bTryMerg=false ) override;
 
     /** Set or reset the undo manager linked with the called undo manager.
     */

@@ -526,10 +526,9 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
             static_cast< SdrObjCustomShape& >(
                 *pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj()));
         SdrModel& rModel(rSdrObjCustomShape.getSdrModelFromSdrObject());
-        SdrUndoAction* pUndo(
-            rModel.IsUndoEnabled()
-                ? rModel.GetSdrUndoFactory().CreateUndoAttrObject(rSdrObjCustomShape)
-                : nullptr);
+        std::unique_ptr<SdrUndoAction> pUndo;
+        if (rModel.IsUndoEnabled())
+            pUndo = rModel.GetSdrUndoFactory().CreateUndoAttrObject(rSdrObjCustomShape);
 
         if(pUndo)
         {
@@ -561,7 +560,7 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
 
         if (pUndo)
         {
-            rModel.AddUndo(pUndo);
+            rModel.AddUndo(std::move(pUndo));
             rModel.EndUndo();
         }
     }

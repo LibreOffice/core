@@ -1567,7 +1567,7 @@ bool SwFEShell::Paste(const Graphic &rGrf, const OUString& rURL)
         }
         else
         {
-            pView->AddUndo(new SdrUndoAttrObj(*pObj));
+            pView->AddUndo(o3tl::make_unique<SdrUndoAttrObj>(*pObj));
 
             SfxItemSet aSet(pView->GetModel()->GetItemPool(), svl::Items<XATTR_FILLSTYLE, XATTR_FILLBITMAP>{});
 

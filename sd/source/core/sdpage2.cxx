@@ -25,6 +25,7 @@
 #include <editeng/outliner.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdundo.hxx>
 #include <editeng/outlobj.hxx>
 #include <svl/urihelper.hxx>
 #include <editeng/xmlcnitm.hxx>
@@ -571,9 +572,9 @@ void SdPage::addAnnotation( const Reference< XAnnotation >& xAnnotation, int nIn
 
     if( getSdrModelFromSdrPage().IsUndoEnabled() )
     {
-        SdrUndoAction* pAction = CreateUndoInsertOrRemoveAnnotation( xAnnotation, true );
+        std::unique_ptr<SdrUndoAction> pAction = CreateUndoInsertOrRemoveAnnotation( xAnnotation, true );
         if( pAction )
-            getSdrModelFromSdrPage().AddUndo( pAction );
+            getSdrModelFromSdrPage().AddUndo( std::move(pAction) );
     }
 
     SetChanged();
@@ -588,9 +589,9 @@ void SdPage::removeAnnotation( const Reference< XAnnotation >& xAnnotation )
 {
     if( getSdrModelFromSdrPage().IsUndoEnabled() )
     {
-        SdrUndoAction* pAction = CreateUndoInsertOrRemoveAnnotation( xAnnotation, false );
+        std::unique_ptr<SdrUndoAction> pAction = CreateUndoInsertOrRemoveAnnotation( xAnnotation, false );
         if( pAction )
-            getSdrModelFromSdrPage().AddUndo( pAction );
+            getSdrModelFromSdrPage().AddUndo( std::move(pAction) );
     }
 
     AnnotationVector::iterator iter = std::find( maAnnotations.begin(), maAnnotations.end(), xAnnotation );

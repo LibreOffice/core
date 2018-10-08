@@ -843,7 +843,7 @@ bool View::RestoreDefaultText( SdrTextObj* pTextObj )
  */
 void View::SetMarkedOriginalSize()
 {
-    SdrUndoGroup* pUndoGroup = new SdrUndoGroup(mrDoc);
+    std::unique_ptr<SdrUndoGroup> pUndoGroup(new SdrUndoGroup(mrDoc));
     const size_t nCount = GetMarkedObjectCount();
     bool            bOK = false;
 
@@ -886,7 +886,7 @@ void View::SetMarkedOriginalSize()
                     {
                         ::tools::Rectangle   aDrawRect( pObj->GetLogicRect() );
 
-                        pUndoGroup->AddAction( std::unique_ptr<SdrUndoAction>(mrDoc.GetSdrUndoFactory().CreateUndoGeoObject( *pObj )) );
+                        pUndoGroup->AddAction( mrDoc.GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
                         pObj->Resize( aDrawRect.TopLeft(), Fraction( aOleSize.Width(), aDrawRect.GetWidth() ),
                                                            Fraction( aOleSize.Height(), aDrawRect.GetHeight() ) );
                     }
@@ -896,7 +896,7 @@ void View::SetMarkedOriginalSize()
             {
                 const SdrGrafObj* pSdrGrafObj = static_cast< const SdrGrafObj* >(pObj);
                 const Size aSize = pSdrGrafObj->getOriginalSize( );
-                pUndoGroup->AddAction( std::unique_ptr<SdrUndoAction>(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj )) );
+                pUndoGroup->AddAction( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj ) );
                 ::tools::Rectangle aRect( pObj->GetLogicRect() );
                 aRect.SetSize( aSize );
                 pObj->SetLogicRect( aRect );
@@ -908,10 +908,8 @@ void View::SetMarkedOriginalSize()
     if( bOK )
     {
         pUndoGroup->SetComment(SdResId(STR_UNDO_ORIGINALSIZE));
-        mpDocSh->GetUndoManager()->AddUndoAction(pUndoGroup);
+        mpDocSh->GetUndoManager()->AddUndoAction(std::move(pUndoGroup));
     }
-    else
-        delete pUndoGroup;
 }
 
 /**
@@ -1292,7 +1290,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
         return;
 
     const bool bUndoEnabled = pSdrModel->IsUndoEnabled();
-    SdrUndoGroup* pUndoGroup = bUndoEnabled ? new SdrUndoGroup(*pSdrModel) : nullptr;
+    std::unique_ptr<SdrUndoGroup> pUndoGroup(bUndoEnabled ? new SdrUndoGroup(*pSdrModel) : nullptr);
 
     const bool bToggleOn = ShouldToggleOn( bToggle, bHandleBullets );
 
@@ -1334,7 +1332,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
                     pOutliner->SetText(*(pText->GetOutlinerParaObject()));
                     if (bUndoEnabled)
                     {
-                        pUndoGroup->AddAction(std::unique_ptr<SdrUndoAction>(pSdrModel->GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, nCellIndex)));
+                        pUndoGroup->AddAction(pSdrModel->GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, nCellIndex));
                     }
                     if ( !bToggleOn )
                     {
@@ -1365,7 +1363,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
             if (bUndoEnabled)
             {
                 pUndoGroup->AddAction(
-                    std::unique_ptr<SdrUndoAction>(pSdrModel->GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, 0)));
+                    pSdrModel->GetSdrUndoFactory().CreateUndoObjectSetText(*pTextObj, 0));
             }
             if ( !bToggleOn )
             {
@@ -1384,11 +1382,9 @@ void View::ChangeMarkedObjectsBulletsNumbering(
     if ( bUndoEnabled && pUndoGroup->GetActionCount() > 0 )
     {
         pSdrModel->BegUndo();
-        pSdrModel->AddUndo(pUndoGroup);
+        pSdrModel->AddUndo(std::move(pUndoGroup));
         pSdrModel->EndUndo();
     }
-    else
-        delete pUndoGroup;
 }
 
 } // end of namespace sd

@@ -1070,7 +1070,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
             if( bUndo )
             {
                 rModel.BegUndo(SvxResId(STR_TABLE_STYLE));
-                rModel.AddUndo(new TableStyleUndo(rTableObj));
+                rModel.AddUndo(o3tl::make_unique<TableStyleUndo>(rTableObj));
             }
 
             rTableObj.setTableStyle( xNewTableStyle );
@@ -1164,7 +1164,7 @@ void SvxTableController::SetTableStyleSettings( const SfxItemSet* pArgs )
     if( bUndo )
     {
         rModel.BegUndo( SvxResId(STR_TABLE_STYLE_SETTINGS) );
-        rModel.AddUndo(new TableStyleUndo(rTableObj));
+        rModel.AddUndo(o3tl::make_unique<TableStyleUndo>(rTableObj));
     }
 
     rTableObj.setTableStyleSettings( aSettings );

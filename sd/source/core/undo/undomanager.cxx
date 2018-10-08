@@ -36,16 +36,12 @@ void UndoManager::EnterListAction(const OUString &rComment, const OUString& rRep
     }
 }
 
-void UndoManager::AddUndoAction( SfxUndoAction *pAction, bool bTryMerg /* = sal_False */ )
+void UndoManager::AddUndoAction( std::unique_ptr<SfxUndoAction> pAction, bool bTryMerg /* = sal_False */ )
 {
     if( !IsDoing() )
     {
         ClearLinkedRedoActions();
-        SdrUndoManager::AddUndoAction( pAction, bTryMerg );
-    }
-    else
-    {
-        delete pAction;
+        SdrUndoManager::AddUndoAction( std::move(pAction), bTryMerg );
     }
 }
 

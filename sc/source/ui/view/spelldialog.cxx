@@ -124,7 +124,7 @@ void ScSpellDialogChildWindow::Reset()
             SCROW nOldRow = rCursor.Row();
             SCCOL nNewCol = mpViewData->GetCurX();
             SCROW nNewRow = mpViewData->GetCurY();
-            mpDocShell->GetUndoManager()->AddUndoAction( new ScUndoConversion(
+            mpDocShell->GetUndoManager()->AddUndoAction( o3tl::make_unique<ScUndoConversion>(
                 mpDocShell, mpViewData->GetMarkData(),
                 nOldCol, nOldRow, nTab, std::move(mxUndoDoc),
                 nNewCol, nNewRow, nTab, std::move(mxRedoDoc),
