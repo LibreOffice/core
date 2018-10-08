@@ -15,19 +15,49 @@
 
 #include <QtWidgets/QApplication>
 #include <QtGui/QClipboard>
+#include <QtCore/QMimeData>
 
 #include <Qt5Clipboard.hxx>
 #include <Qt5Tools.hxx>
+namespace
+{
+bool lcl_hasHtml(const css::uno::Sequence<css::datatransfer::DataFlavor>& rFormats)
+{
+    for (int i = 0; i < rFormats.getLength(); ++i)
+    {
+        const css::datatransfer::DataFlavor& rFlavor = rFormats[i];
+
+        if (rFlavor.MimeType == "text/html")
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+}
 
 std::vector<css::datatransfer::DataFlavor> Qt5Transferable::getTransferDataFlavorsAsVector()
 {
     std::vector<css::datatransfer::DataFlavor> aVector;
 
-    // FIXME: this is fake
+    const QClipboard* clipboard = QApplication::clipboard();
+    const QMimeData* mimeData = clipboard->mimeData();
     css::datatransfer::DataFlavor aFlavor;
-    aFlavor.MimeType = "text/plain;charset=utf-16";
-    aFlavor.DataType = cppu::UnoType<OUString>::get();
-    aVector.push_back(aFlavor);
+
+    if (mimeData->hasHtml())
+    {
+        aFlavor.MimeType = "text/html";
+        aFlavor.DataType = cppu::UnoType<Sequence<sal_Int8>>::get();
+        aVector.push_back(aFlavor);
+    }
+
+    if (mimeData->hasText())
+    {
+        aFlavor.MimeType = "text/plain;charset=utf-16";
+        aFlavor.DataType = cppu::UnoType<OUString>::get();
+        aVector.push_back(aFlavor);
+    }
 
     return aVector;
 }
@@ -53,14 +83,23 @@ css::uno::Any SAL_CALL
 Qt5Transferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
 {
     css::uno::Any aRet;
+    const QClipboard* clipboard = QApplication::clipboard();
+    const QMimeData* mimeData = clipboard->mimeData();
 
     if (rFlavor.MimeType == "text/plain;charset=utf-16")
     {
-        const QClipboard* clipboard = QApplication::clipboard();
-        QString clipboardContent = clipboard->text();
+        QString clipboardContent = mimeData->text();
         OUString sContent = toOUString(clipboardContent);
 
         aRet <<= sContent.replaceAll("\r\n", "\n");
+    }
+    else if (rFlavor.MimeType == "text/html")
+    {
+        QString clipboardContent = mimeData->html();
+        Sequence<sal_Int8> aSeq(
+            reinterpret_cast<const sal_Int8*>(clipboardContent.toStdString().c_str()),
+            clipboardContent.length());
+        aRet <<= aSeq;
     }
 
     return aRet;
@@ -120,6 +159,8 @@ void VclQt5Clipboard::setContents(
 
     if (m_aContents.is())
     {
+        css::uno::Sequence<css::datatransfer::DataFlavor> aFormats
+            = xTrans->getTransferDataFlavors();
         css::datatransfer::DataFlavor aFlavor;
         aFlavor.MimeType = "text/plain;charset=utf-16";
         aFlavor.DataType = cppu::UnoType<OUString>::get();
