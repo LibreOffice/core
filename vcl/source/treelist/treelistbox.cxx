@@ -23,25 +23,24 @@
         - SelectAll( false ) => only repaint the deselected entries
 */
 
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/builderfactory.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/uitest/uiobject.hxx>
 #include <sot/formats.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <rtl/instance.hxx>
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
 
-#include <svtools/svmedit.hxx>
-#include <svtools/svlbitm.hxx>
-#include <svtools/treelistentry.hxx>
-#include <svtools/viewdataentry.hxx>
-#include <svimpbox.hxx>
-#include <uitest/uiobject.hxx>
+#include <vcl/svlbitm.hxx>
+#include <vcl/treelistentry.hxx>
+#include <vcl/viewdataentry.hxx>
+#include <vcl/svimpbox.hxx>
 
 #include <set>
 #include <string.h>
@@ -3595,25 +3594,6 @@ void SvTreeListBox::EnableList( bool _bEnable )
     Window::Enable(_bEnable);
     // then invalidate
     Invalidate(tools::Rectangle(Point(), GetSizePixel()));
-}
-
-css::uno::Reference< XAccessible > SvTreeListBox::CreateAccessible()
-{
-    vcl::Window* pParent = GetAccessibleParentWindow();
-    DBG_ASSERT( pParent, "SvTreeListBox::CreateAccessible - accessible parent not found" );
-
-    css::uno::Reference< XAccessible > xAccessible;
-    if ( pParent )
-    {
-        css::uno::Reference< XAccessible > xAccParent = pParent->GetAccessible();
-        if ( xAccParent.is() )
-        {
-            // need to be done here to get the vclxwindow later on in the accessible
-            css::uno::Reference< css::awt::XWindowPeer > xTemp(GetComponentInterface());
-            xAccessible = pImpl->m_aFactoryAccess.getFactory().createAccessibleTreeListBox( *this, xAccParent );
-        }
-    }
-    return xAccessible;
 }
 
 void SvTreeListBox::FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, ::utl::AccessibleStateSetHelper& rStateSet ) const

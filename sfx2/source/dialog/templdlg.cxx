@@ -63,8 +63,8 @@
 #include <appdata.hxx>
 #include <sfx2/viewfrm.hxx>
 
-#include <svtools/svlbitm.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/svlbitm.hxx>
+#include <vcl/treelistentry.hxx>
 #include <comphelper/string.hxx>
 
 #include <sfx2/StyleManager.hxx>

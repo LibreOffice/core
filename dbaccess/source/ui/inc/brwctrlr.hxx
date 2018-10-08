@@ -39,7 +39,7 @@
 #include <com/sun/star/frame/XModule.hpp>
 
 #include <vcl/timer.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <osl/thread.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <svtools/cliplistener.hxx>

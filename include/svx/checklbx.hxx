@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/contnr.hxx>
 #include <tools/solar.h>

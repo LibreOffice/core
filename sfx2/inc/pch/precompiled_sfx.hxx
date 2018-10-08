@@ -387,7 +387,6 @@
 #include <svtools/embedhlp.hxx>
 #include <svtools/helpopt.hxx>
 #include <svtools/imagemgr.hxx>
-#include <svtools/imapobj.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/parhtml.hxx>
@@ -395,7 +394,6 @@
 #include <svtools/soerr.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
-#include <svtools/treelistentry.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -531,5 +529,7 @@
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
+#include <vcl/imapobj.hxx>
+#include <vcl/treelistentry.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

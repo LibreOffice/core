@@ -33,7 +33,7 @@
 #include <vcl/combobox.hxx>
 #include <vcl/idle.hxx>
 #include <svl/slstitm.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/galctrl.hxx>

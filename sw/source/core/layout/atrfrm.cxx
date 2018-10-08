@@ -25,8 +25,8 @@
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
 #include <svtools/unoimap.hxx>
-#include <svtools/imap.hxx>
-#include <svtools/imapobj.hxx>
+#include <vcl/imap.hxx>
+#include <vcl/imapobj.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <frmfmt.hxx>
 #include <unocoll.hxx>

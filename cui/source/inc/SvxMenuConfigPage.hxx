@@ -24,7 +24,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/toolbox.hxx>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <svtools/svmedit2.hxx>
 #include <svtools/svmedit.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

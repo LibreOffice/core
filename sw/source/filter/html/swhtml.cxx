@@ -38,7 +38,7 @@
 
 #include <vcl/errinf.hxx>
 #include <svl/stritem.hxx>
-#include <svtools/imap.hxx>
+#include <vcl/imap.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/ctrltool.hxx>

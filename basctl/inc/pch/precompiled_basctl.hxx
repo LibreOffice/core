@@ -449,12 +449,7 @@
 #include <svtools/statusbarcontroller.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/toolboxcontroller.hxx>
-#include <svtools/transfer.hxx>
-#include <svtools/treelist.hxx>
-#include <svtools/treelistentries.hxx>
-#include <svtools/treelistentry.hxx>
 #include <svtools/valueset.hxx>
-#include <svtools/viewdataentry.hxx>
 #include <svx/Palette.hxx>
 #include <svx/PaletteManager.hxx>
 #include <svx/SvxColorValueSet.hxx>
@@ -586,6 +581,11 @@
 #include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
+#include <vcl/transfer.hxx>
+#include <vcl/treelist.hxx>
+#include <vcl/treelistentries.hxx>
+#include <vcl/treelistentry.hxx>
+#include <vcl/viewdataentry.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

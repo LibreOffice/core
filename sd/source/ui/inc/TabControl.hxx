@@ -21,7 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_TABCONTROL_HXX
 
 #include <svtools/tabbar.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 
 namespace sd {
 
