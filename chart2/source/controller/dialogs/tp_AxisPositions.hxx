@@ -21,9 +21,7 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svtools/fmtfield.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
-#include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
 
 namespace chart

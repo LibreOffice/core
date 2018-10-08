@@ -22,14 +22,14 @@
 
 #include <TimerTriggeredControllerLock.hxx>
 
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <svtools/wizardmachine.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <memory>
 
-#include <res_LegendPosition.hxx>
-#include <res_Titles.hxx>
+namespace chart { class LegendPositionResources; }
+namespace chart { class TitleResources; }
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace chart
 {
