@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_82e64ce8",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1538,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-08T16:33:45Z",
+      "side": 1,
+      "message": "that comment puzzles me;  when/where was what like that?",
+      "range": {
+        "startLine": 1538,
+        "startChar": 7,
+        "endLine": 1538,
+        "endChar": 55
+      },
+      "revId": "616fd241838069e18c59064e33c4b24f5ae112c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
