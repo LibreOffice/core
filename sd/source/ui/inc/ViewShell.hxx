@@ -354,7 +354,7 @@ public:
 
     /** Return the type of the shell.
     */
-    ShellType GetShellType() const;
+    SD_DLLPUBLIC ShellType GetShellType() const; //Export for unit test
 
     /** This method is more or less an alias to Deactivate().  It is called
         before an object of this class is taken from the stack of view
