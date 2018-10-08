@@ -24,8 +24,8 @@
 #include <strings.hrc>
 #include <dialmgr.hxx>
 
-#include <svtools/svlbitm.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/svlbitm.hxx>
+#include <vcl/treelistentry.hxx>
 
 enum MSFltrPg2_CheckBoxEntries {
     Math,

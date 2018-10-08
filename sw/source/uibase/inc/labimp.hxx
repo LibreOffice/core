@@ -24,7 +24,7 @@
 #include <vcl/fixed.hxx>
 #include <svtools/svmedit.hxx>
 #include <vcl/field.hxx>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include "label.hxx"
 #include "labimg.hxx"
 

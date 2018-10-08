@@ -22,9 +22,9 @@
 
 #include <sot/formats.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/imap.hxx>
+#include <vcl/imap.hxx>
 #include <svl/hint.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <svx/svdobj.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/XProgressMonitor.hpp>

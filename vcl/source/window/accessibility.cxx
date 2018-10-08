@@ -143,7 +143,7 @@ void Window::SetAccessible( const css::uno::Reference< css::accessibility::XAcce
     mpWindowImpl->mxAccessible = x;
 }
 
-// skip all border windows that are no top level frames
+// skip all border windows that are not top level frames
 bool Window::ImplIsAccessibleCandidate() const
 {
     if( !mpWindowImpl->mbBorderWin )

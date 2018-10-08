@@ -67,10 +67,10 @@
 
 #include <svl/urihelper.hxx>
 #include <svl/filenotation.hxx>
-#include <svtools/treelistbox.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/treelistbox.hxx>
+#include <vcl/transfer.hxx>
 #include <svtools/cliplistener.hxx>
-#include <svtools/svlbitm.hxx>
+#include <vcl/svlbitm.hxx>
 #include <svtools/insdlg.hxx>
 
 #include <comphelper/sequence.hxx>

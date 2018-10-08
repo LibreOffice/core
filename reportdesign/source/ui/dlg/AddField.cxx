@@ -42,7 +42,7 @@
 
 #include <comphelper/property.hxx>
 #include <svtools/imgdef.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 
 namespace rptui
 {

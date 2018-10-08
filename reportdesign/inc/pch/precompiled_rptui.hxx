@@ -441,8 +441,6 @@
 #include <svtools/statusbarcontroller.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/toolboxcontroller.hxx>
-#include <svtools/transfer.hxx>
-#include <svtools/treelistentries.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/viewdataentry.hxx>
 #include <svx/Palette.hxx>
@@ -578,5 +576,7 @@
 #include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/unotoolsdllapi.h>
+#include <vcl/transfer.hxx>
+#include <vcl/treelistentries.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

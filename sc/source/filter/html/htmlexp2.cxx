@@ -26,7 +26,7 @@
 #include <sot/exchange.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <svtools/embedtransfer.hxx>
 #include <svl/urihelper.hxx>
 #include <tools/urlobj.hxx>
