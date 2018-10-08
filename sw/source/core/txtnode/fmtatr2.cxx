@@ -180,6 +180,7 @@ SwFormatINetFormat::SwFormatINetFormat( const OUString& rURL, const OUString& rT
 
 SwFormatINetFormat::SwFormatINetFormat( const SwFormatINetFormat& rAttr )
     : SfxPoolItem( RES_TXTATR_INETFMT )
+    , sw::BroadcasterMixin()
     , msURL( rAttr.GetValue() )
     , msTargetFrame( rAttr.msTargetFrame )
     , msINetFormatName( rAttr.msINetFormatName )

@@ -23,28 +23,33 @@
 #include <com/sun/star/accessibility/XAccessibleHyperlink.hpp>
 #include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <svl/listener.hxx>
+
 #include <fmtinfmt.hxx>
 
 class SwAccessibleParagraph;
 class SwTextAttr;
 
-class SwAccessibleHyperlink :
-        public ::cppu::WeakImplHelper<
-        css::accessibility::XAccessibleHyperlink >
+class SwAccessibleHyperlink
+    : public ::cppu::WeakImplHelper<css::accessibility::XAccessibleHyperlink>
+    , public SvtListener
 {
     friend class SwAccessibleParagraph;
     friend class SwAccessibleHyperTextData;
-    size_t m_nHintPosition;
+    SwFormatINetFormat * m_pHyperlink;
     ::rtl::Reference< SwAccessibleParagraph > m_xParagraph;
     sal_Int32 m_nStartIndex;
     sal_Int32 m_nEndIndex;
 
-    SwAccessibleHyperlink( size_t nHintPos,
-                           SwAccessibleParagraph *p,
+    SwAccessibleHyperlink(SwTextAttr &,
+                          SwAccessibleParagraph &,
                               sal_Int32 nStt, sal_Int32 nEnd    );
+    virtual ~SwAccessibleHyperlink() override;
 
-    const SwTextAttr *GetTextAttr() const;
+    const SwFormatINetFormat* GetTextAttr() const;
     void Invalidate();
+
+    virtual void Notify(SfxHint const& rHint) override;
 
 public:
     // XAccessibleAction

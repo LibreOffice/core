@@ -3066,8 +3066,8 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
                                 max( aHIter.startIdx(), pHt->GetStart() ) );
                             const sal_Int32 nTmpHEnd= GetPortionData().GetAccessiblePosition(
                                 min( aHIter.endIdx(), *pHt->GetAnyEnd() ) );
-                            xRet = new SwAccessibleHyperlink( aHIter.getCurrHintPos(),
-                                this, nTmpHStt, nTmpHEnd );
+                            xRet = new SwAccessibleHyperlink(*pHt,
+                                *this, nTmpHStt, nTmpHEnd );
                         }
                         if( aIter != m_pHyperTextData->end() )
                         {
