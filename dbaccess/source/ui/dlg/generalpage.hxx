@@ -85,6 +85,11 @@ namespace dbaui
         virtual void fillWindows(std::vector< std::unique_ptr<ISaveValueWrapper> >& _rControlList) override;
 
         void onTypeSelected(const OUString& _sURLPrefix);
+
+        /**
+         * Initializes the listbox, which contains entires each representing a
+         * connection to an existing database.
+         */
         void initializeTypeList();
 
         void implSetCurrentType( const OUString& _eType );
