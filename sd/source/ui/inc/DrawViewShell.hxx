@@ -338,7 +338,7 @@ public:
 
     /** Return a pointer to the tab control for layers.
     */
-    LayerTabBar* GetLayerTabControl();
+    SD_DLLPUBLIC LayerTabBar* GetLayerTabControl(); // export for unit test
 
     /** Renames the given slide using an SvxNameDialog
 
