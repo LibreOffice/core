@@ -495,10 +495,14 @@ void UseUniquePtr::CheckLoopDelete(const FunctionDecl* functionDecl, const CXXDe
                     auto init = iterVarDecl->getInit();
                     if (init)
                     {
-                        init = init->IgnoreImplicit();
+                        init = compat::IgnoreImplicit(init);
+                        if (!compat::CPlusPlus17(compiler.getLangOpts()))
+                            if (auto x = dyn_cast<CXXConstructExpr>(init))
+                                if (x->isElidable())
+                                    init = compat::IgnoreImplicit(x->getArg(0));
                         if (auto x = dyn_cast<CXXConstructExpr>(init))
                             if (x->getNumArgs() == 1)
-                                init = x->getArg(0)->IgnoreImplicit();
+                                init = compat::IgnoreImplicit(x->getArg(0));
                         if (auto x = dyn_cast<CXXMemberCallExpr>(init))
                             init = x->getImplicitObjectArgument();
                         if ((memberExpr = dyn_cast<MemberExpr>(init)))

@@ -193,6 +193,45 @@ inline llvm::StringRef getImmediateMacroNameForDiagnostics(
 #endif
 }
 
+inline clang::Expr const * IgnoreImplicit(clang::Expr const * expr) {
+#if CLANG_VERSION >= 80000
+    return expr->IgnoreImplicit();
+#else
+    using namespace clang;
+    // Copy from Clang's lib/AST/Stmt.cpp, including <https://reviews.llvm.org/D50666> "Fix
+    // Stmt::ignoreImplicit":
+    Stmt const *s = expr;
+
+    Stmt const *lasts = nullptr;
+
+    while (s != lasts) {
+        lasts = s;
+
+        if (auto *ewc = dyn_cast<ExprWithCleanups>(s))
+            s = ewc->getSubExpr();
+
+        if (auto *mte = dyn_cast<MaterializeTemporaryExpr>(s))
+            s = mte->GetTemporaryExpr();
+
+        if (auto *bte = dyn_cast<CXXBindTemporaryExpr>(s))
+            s = bte->getSubExpr();
+
+        if (auto *ice = dyn_cast<ImplicitCastExpr>(s))
+            s = ice->getSubExpr();
+    }
+
+    return static_cast<Expr const *>(s);
+#endif
+}
+
+inline bool CPlusPlus17(clang::LangOptions const & opts) {
+#if CLANG_VERSION >= 60000
+    return opts.CPlusPlus17;
+#else
+    return opts.CPlusPlus1z;
+#endif
+}
+
 // Work around <http://reviews.llvm.org/D22128>:
 //
 // SfxErrorHandler::GetClassString (svtools/source/misc/ehdl.cxx):
