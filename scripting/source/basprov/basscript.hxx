@@ -51,7 +51,7 @@ namespace basprov
     {
     private:
         SbMethodRef         m_xMethod;
-        OUString            m_funcName;
+        OUString const      m_funcName;
         BasicManager*       m_documentBasicManager;
         css::uno::Reference< css::document::XScriptInvocationContext >
                             m_xDocumentScriptContext;

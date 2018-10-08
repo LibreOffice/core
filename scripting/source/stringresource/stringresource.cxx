@@ -1307,7 +1307,7 @@ void StringResourcePersistenceImpl::implWriteLocaleBinary
 
 class BinaryInput
 {
-    Sequence< sal_Int8 >                    m_aData;
+    Sequence< sal_Int8 > const              m_aData;
     Reference< XComponentContext >          m_xContext;
 
     const sal_Int8*                         m_pData;

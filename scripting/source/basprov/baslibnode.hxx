@@ -44,12 +44,12 @@ namespace basprov
     {
     private:
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
-        OUString                                              m_sScriptingContext;
-        BasicManager*                                         m_pBasicManager;
+        OUString const                                        m_sScriptingContext;
+        BasicManager* const                                   m_pBasicManager;
         css::uno::Reference< css::script::XLibraryContainer > m_xLibContainer;
         css::uno::Reference< css::container::XNameContainer > m_xLibrary;
-        OUString                                              m_sLibName;
-        bool                                                  m_bIsAppScript;
+        OUString const                                        m_sLibName;
+        bool const                                            m_bIsAppScript;
 
     public:
         BasicLibraryNodeImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext,

@@ -178,8 +178,8 @@ typedef std::unordered_map<
 
 struct TranslatePropMap
 {
-    OUString sEventInfo;   //OO event name
-    TranslateInfo aTransInfo;
+    OUString const sEventInfo;   //OO event name
+    TranslateInfo const aTransInfo;
 };
 
 static bool ApproveAll(const ScriptEvent& evt, void const * pPara); //allow all types of controls to execute the event
@@ -190,7 +190,7 @@ static bool DenyMouseDrag(const ScriptEvent& evt, void const * pPara); //used fo
 struct TypeList
 {
     uno::Type const * pTypeList;
-    int nListLength;
+    int const nListLength;
 };
 
 Type const typeXFixedText = cppu::UnoType<awt::XFixedText>::get();
@@ -296,7 +296,7 @@ public:
 private:
     Reference< XComponentContext > m_xCtx;
     Reference< XInterface > m_xControl;
-    bool m_bDispose;
+    bool const m_bDispose;
 };
 
 static bool
