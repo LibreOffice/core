@@ -59,7 +59,7 @@ SmGraphicAccessibleBaseClass;
 class SmGraphicAccessible final :
     public SmGraphicAccessibleBaseClass
 {
-    OUString                            aAccName;
+    OUString const                      aAccName;
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32                          nClientId;
 
@@ -300,7 +300,7 @@ SmEditAccessibleBaseClass;
 class SmEditAccessible :
     public SmEditAccessibleBaseClass
 {
-    OUString                                aAccName;
+    OUString const                          aAccName;
     std::unique_ptr<::accessibility::AccessibleTextHelper> pTextHelper;
     VclPtr<SmEditWindow>                    pWin;
 

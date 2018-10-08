@@ -276,10 +276,10 @@ void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool, const SvtLinguO
 {
     // set fonts to be used
     struct FontDta {
-        LanguageType    nFallbackLang;
+        LanguageType const    nFallbackLang;
         LanguageType    nLang;
-        DefaultFontType nFontType;
-        sal_uInt16      nFontInfoId;
+        DefaultFontType const nFontType;
+        sal_uInt16 const      nFontInfoId;
         } aTable[3] =
     {
         // info to get western font to be used

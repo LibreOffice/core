@@ -38,7 +38,7 @@ private:
     void HandleVerticalBrace( const SmVerticalBraceNode* pNode, int nLevel ) override;
     void HandleBlank() override;
     ::sax_fastparser::FSHelperPtr m_pSerializer;
-    oox::core::OoxmlVersion version;
+    oox::core::OoxmlVersion const version;
     /// needed to determine markup for nested run properties
     oox::drawingml::DocumentType const m_DocumentType;
 };

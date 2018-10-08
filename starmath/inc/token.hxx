@@ -128,10 +128,10 @@ struct SmToken
 struct SmTokenTableEntry
 {
     const sal_Char* pIdent;
-    SmTokenType     eType;
-    sal_Unicode     cMathChar;
-    TG              nGroup;
-    sal_uInt16      nLevel;
+    SmTokenType const     eType;
+    sal_Unicode const     cMathChar;
+    TG const              nGroup;
+    sal_uInt16 const      nLevel;
 };
 
 #endif

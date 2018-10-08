@@ -28,8 +28,8 @@ class SmDocShell;
 class SmFormatAction: public SfxUndoAction
 {
     SmDocShell  *pDoc;
-    SmFormat    aOldFormat;
-    SmFormat    aNewFormat;
+    SmFormat const    aOldFormat;
+    SmFormat const    aNewFormat;
 
 public:
     SmFormatAction(SmDocShell *pDocSh, const SmFormat& rOldFormat, const SmFormat& rNewFormat);
