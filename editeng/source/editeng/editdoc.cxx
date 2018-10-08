@@ -695,14 +695,14 @@ const ParaPortion* ParaPortionList::operator [](sal_Int32 nPos) const
     return 0 <= nPos && nPos < static_cast<sal_Int32>(maPortions.size()) ? maPortions[nPos].get() : nullptr;
 }
 
-ParaPortion* ParaPortionList::Release(sal_Int32 nPos)
+std::unique_ptr<ParaPortion> ParaPortionList::Release(sal_Int32 nPos)
 {
     if (nPos < 0 || static_cast<sal_Int32>(maPortions.size()) <= nPos)
     {
         SAL_WARN( "editeng", "ParaPortionList::Release - out of bounds pos " << nPos);
         return nullptr;
     }
-    ParaPortion* p = maPortions[nPos].release();
+    std::unique_ptr<ParaPortion> p = std::move(maPortions[nPos]);
     maPortions.erase(maPortions.begin()+nPos);
     return p;
 }
@@ -717,19 +717,19 @@ void ParaPortionList::Remove(sal_Int32 nPos)
     maPortions.erase(maPortions.begin()+nPos);
 }
 
-void ParaPortionList::Insert(sal_Int32 nPos, ParaPortion* p)
+void ParaPortionList::Insert(sal_Int32 nPos, std::unique_ptr<ParaPortion> p)
 {
     if (nPos < 0 || static_cast<sal_Int32>(maPortions.size()) < nPos)
     {
         SAL_WARN( "editeng", "ParaPortionList::Insert - out of bounds pos " << nPos);
         return;
     }
-    maPortions.insert(maPortions.begin()+nPos, std::unique_ptr<ParaPortion>(p));
+    maPortions.insert(maPortions.begin()+nPos, std::move(p));
 }
 
-void ParaPortionList::Append(ParaPortion* p)
+void ParaPortionList::Append(std::unique_ptr<ParaPortion> p)
 {
-    maPortions.push_back(std::unique_ptr<ParaPortion>(p));
+    maPortions.push_back(std::move(p));
 }
 
 sal_Int32 ParaPortionList::Count() const

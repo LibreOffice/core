@@ -246,8 +246,7 @@ void ImpEditEngine::InitDoc(bool bKeepParaAttribs)
 
     GetParaPortions().Reset();
 
-    ParaPortion* pIniPortion = new ParaPortion( aEditDoc[0] );
-    GetParaPortions().Insert(0, pIniPortion);
+    GetParaPortions().Insert(0, o3tl::make_unique<ParaPortion>( aEditDoc[0] ));
 
     bFormatted = false;
 
@@ -2162,17 +2161,18 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
     for (long i = aOldPositions.Min(); i <= aOldPositions.Max(); i++  )
     {
         // always aOldPositions.Min(), since Remove().
-        ParaPortion* pTmpPortion = GetParaPortions().Release(aOldPositions.Min());
+        std::unique_ptr<ParaPortion> pTmpPortion = GetParaPortions().Release(aOldPositions.Min());
         aEditDoc.Release( aOldPositions.Min() );
-        aTmpPortionList.Append(pTmpPortion);
+        aTmpPortionList.Append(std::move(pTmpPortion));
     }
 
     sal_Int32 nRealNewPos = pDestPortion ? GetParaPortions().GetPos( pDestPortion ) : GetParaPortions().Count();
     OSL_ENSURE( nRealNewPos != EE_PARA_NOT_FOUND, "ImpMoveParagraphs: Invalid Position!" );
 
-    for (sal_Int32 i = 0; i < aTmpPortionList.Count(); ++i)
+    sal_Int32 i = 0;
+    while( aTmpPortionList.Count() > 0 )
     {
-        ParaPortion* pTmpPortion = aTmpPortionList[i];
+        std::unique_ptr<ParaPortion> pTmpPortion = aTmpPortionList.Release(0);
         if ( i == 0 )
             aSelection.Min().SetNode( pTmpPortion->GetNode() );
 
@@ -2182,7 +2182,8 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
         ContentNode* pN = pTmpPortion->GetNode();
         aEditDoc.Insert(nRealNewPos+i, pN);
 
-        GetParaPortions().Insert(nRealNewPos+i, pTmpPortion);
+        GetParaPortions().Insert(nRealNewPos+i, std::move(pTmpPortion));
+        ++i;
     }
 
     aEndMovingParagraphsHdl.Call( aMoveParagraphsInfo );
@@ -2206,9 +2207,6 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
         CalcHeight( pRecalc3 );
     if ( pRecalc4 )
         CalcHeight( pRecalc4 );
-
-    while( aTmpPortionList.Count() > 0 )
-        aTmpPortionList.Release( aTmpPortionList.Count() - 1 );
 
 #if OSL_DEBUG_LEVEL > 0
     ParaPortionList::DbgCheck(GetParaPortions(), aEditDoc);
@@ -2884,7 +2882,7 @@ EditPaM ImpEditEngine::ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttrib
     // Here, as in undo, but also in all other methods.
     sal_Int32 nPos = GetParaPortions().GetPos( pPortion );
     ParaPortion* pNewPortion = new ParaPortion( aPaM.GetNode() );
-    GetParaPortions().Insert(nPos+1, pNewPortion);
+    GetParaPortions().Insert(nPos+1, std::unique_ptr<ParaPortion>(pNewPortion));
     ParaAttribsChanged( pNewPortion->GetNode() );
     if ( IsCallParaInsertedOrDeleted() )
         GetEditEnginePtr()->ParagraphInserted( nPos+1 );
@@ -2916,8 +2914,7 @@ EditPaM ImpEditEngine::ImpFastInsertParagraph( sal_Int32 nPara )
 
     aEditDoc.Insert(nPara, pNode);
 
-    ParaPortion* pNewPortion = new ParaPortion( pNode );
-    GetParaPortions().Insert(nPara, pNewPortion);
+    GetParaPortions().Insert(nPara, o3tl::make_unique<ParaPortion>( pNode ));
     if ( IsCallParaInsertedOrDeleted() )
         GetEditEnginePtr()->ParagraphInserted( nPara );
 
