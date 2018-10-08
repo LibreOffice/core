@@ -55,6 +55,7 @@
 #include <extended/accessibleeditbrowseboxcell.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <extended/AccessibleGridControl.hxx>
 #include <svtools/accessibletable.hxx>
 #include <vcl/popupmenuwindow.hxx>
@@ -142,12 +143,6 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleTextWindowContext(
             VCLXWindow* pVclXWindow, TextEngine& rEngine, TextView& rView
-        ) const override;
-
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-        createAccessibleTreeListBox(
-            SvTreeListBox& _rListBox,
-            const css::uno::Reference< css::accessibility::XAccessible >& _xParent
         ) const override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible >
@@ -314,6 +309,23 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLX
             xContext = static_cast<XAccessibleContext*>(new VCLXAccessibleTabControl( _pXWindow ));
         }
 
+        else if ( nType == WindowType::TREELISTBOX )
+        {
+            vcl::Window* pParent = pWindow->GetAccessibleParentWindow();
+            DBG_ASSERT(pParent, "SvTreeListBox::CreateAccessible - accessible parent not found");
+            if (pParent)
+            {
+                css::uno::Reference< XAccessible > xAccParent = pParent->GetAccessible();
+                DBG_ASSERT(xAccParent.is(), "SvTreeListBox::CreateAccessible - accessible parent not found");
+                if (xAccParent.is())
+                {
+                    xContext = static_cast<XAccessibleContext*>(new AccessibleListBox(*static_cast<SvTreeListBox*>(pWindow.get()), xAccParent));
+                    return xContext;
+                }
+            }
+            xContext = static_cast<XAccessibleContext*>(new VCLXAccessibleComponent( _pXWindow ));
+        }
+
         else if ( nType == WindowType::TABPAGE && pWindow->GetAccessibleParentWindow() && pWindow->GetAccessibleParentWindow()->GetType() == WindowType::TABCONTROL )
         {
             xContext = new VCLXAccessibleTabPageWindow( _pXWindow );
@@ -391,12 +403,6 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleTextWindowCon
     VCLXWindow* pVclXWindow, TextEngine& rEngine, TextView& rView ) const
 {
     return new Document( pVclXWindow, rEngine, rView );
-}
-
-Reference< XAccessible > AccessibleFactory::createAccessibleTreeListBox(
-    SvTreeListBox& _rListBox, const Reference< XAccessible >& _xParent ) const
-{
-    return new AccessibleListBox( _rListBox, _xParent );
 }
 
 Reference< XAccessible > AccessibleFactory::createAccessibleBrowseBoxHeaderBar(

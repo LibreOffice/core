@@ -35,7 +35,7 @@
 #include <cppuhelper/compbase9.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/accessibletexthelper.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <tools/gen.hxx>
 #include <extended/listboxaccessible.hxx>
 

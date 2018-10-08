@@ -31,7 +31,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <svtools/svtabbx.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 
 #include <strings.hrc>
 #include <sfx2/linkmgr.hxx>

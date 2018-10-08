@@ -23,7 +23,7 @@
 #include <svl/filenotation.hxx>
 #include <helpids.h>
 #include <svtools/editbrowsebox.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include <vcl/field.hxx>

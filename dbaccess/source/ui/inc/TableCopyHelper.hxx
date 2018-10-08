@@ -23,7 +23,7 @@
 #include "commontypes.hxx"
 #include <svx/dataaccessdescriptor.hxx>
 #include <sot/storage.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 

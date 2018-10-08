@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_LNKTRANS_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_LNKTRANS_HXX
 
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <rtl/ustring.hxx>
 
 class ScLinkTransferObj : public TransferableHelper
