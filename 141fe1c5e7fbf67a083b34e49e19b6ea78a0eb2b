@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_a264b0ba",
+        "filename": "test/source/bootstrapfixture.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-08T14:06:17Z",
+      "side": 1,
+      "message": "why only for those OSL_DEBUG_LEVEL values?",
+      "revId": "141fe1c5e7fbf67a083b34e49e19b6ea78a0eb2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
