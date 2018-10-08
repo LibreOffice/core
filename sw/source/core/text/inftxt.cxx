@@ -1706,9 +1706,25 @@ SwTwips SwTextFormatInfo::GetLineWidth()
     if (pLastTab->GetTabPos() <= Width())
         return nLineWidth;
 
+    // Calculate the width that starts at the left (or in case of first line:
+    // first) margin, but ends after the right paragraph margin:
+    //
+    // +--------------------+
+    // |LL|              |RR|
+    // +--------------------+
+    // ^ m_nLeftMargin (absolute)
+    //    ^ nLeftMarginWidth (relative to m_nLeftMargin), X() is relative to this
+    //                   ^ right margin
+    //                      ^ paragraph right
+    // <--------------------> is GetTextFrame()->getFrameArea().Width()
+    //    <-------------->    is Width()
+    //    <-----------------> is what we need to be able to compare to X() (nTextFrameWidth)
+    SwTwips nLeftMarginWidth = m_nLeftMargin - GetTextFrame()->getFrameArea().Left();
+    SwTwips nTextFrameWidth = GetTextFrame()->getFrameArea().Width() - nLeftMarginWidth;
+
     // If there is one such tab portion, then text is allowed to use the full
-    // text frame area (even over the actual tab portion).
-    nLineWidth = GetTextFrame()->getFrameArea().Width() - X();
+    // text frame area to the right (RR above, but not LL).
+    nLineWidth = nTextFrameWidth - X();
 
     return nLineWidth;
 }

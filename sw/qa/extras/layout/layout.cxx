@@ -59,6 +59,7 @@ public:
     void testTdf119875();
     void testTdf120287();
     void testTdf120287b();
+    void testTdf120287c();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testRedlineFootnotes);
@@ -90,6 +91,7 @@ public:
     CPPUNIT_TEST(testTdf119875);
     CPPUNIT_TEST(testTdf120287);
     CPPUNIT_TEST(testTdf120287b);
+    CPPUNIT_TEST(testTdf120287c);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2569,6 +2571,15 @@ void SwLayoutWriter::testTdf120287b()
     // lines, but then calculated a too large tab portion size on the first
     // line.
     assertXPath(pXmlDoc, "/root/page/body/txt[1]/Text[@nType='POR_TABRIGHT']", "nWidth", "17");
+}
+
+void SwLayoutWriter::testTdf120287c()
+{
+    createDoc("tdf120287c.fodt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // This was 2, the second line was not broken into a 2nd and a 3rd one,
+    // rendering text outside the paragraph frame.
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/LineBreak", 3);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
