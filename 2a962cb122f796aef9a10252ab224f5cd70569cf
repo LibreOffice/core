@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_2294208b",
+        "filename": "include/comphelper/processfactory.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-08T13:32:10Z",
+      "side": 1,
+      "message": "This should be Reference.hxx, since only there we have inline methods definitions; and without this, we have errors like\n\n    /tinderbox/buildslave/build/workdir/CxxObject/desktop/source/app/crashreport.o: In function `CrashReporter::writeCommonInfo()\u0027:\n    /tinderbox/buildslave/source/libo-master/desktop/source/app/crashreport.cxx:76: undefined reference to `com::sun::star::uno::Reference\u003ccom::sun::star::uno::XComponentContext\u003e::~Reference()\u0027\n    /tinderbox/buildslave/source/libo-master/desktop/source/app/crashreport.cxx:107: undefined reference to `com::sun::star::uno::Reference\u003ccom::sun::star::uno::XComponentContext\u003e::~Reference()\u0027\n    collect2: error: ld returned 1 exit status\n    /tinderbox/buildslave/source/libo-master/desktop/Library_crashreport.mk:10: recipe for target \u0027/tinderbox/buildslave/build/instdir/program/libcrashreport.so\u0027 failed\n    make[1]: *** [/tinderbox/buildslave/build/instdir/program/libcrashreport.so] Error 1\n    make[1]: *** Waiting for unfinished jobs....\n    Makefile:286: recipe for target \u0027build\u0027 failed\n    make: *** [build] Error 2",
+      "range": {
+        "startLine": 23,
+        "startChar": 27,
+        "endLine": 23,
+        "endChar": 38
+      },
+      "revId": "2a962cb122f796aef9a10252ab224f5cd70569cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
