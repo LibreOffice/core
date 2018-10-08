@@ -598,7 +598,6 @@ linux-gnu*|k*bsd*-gnu*)
     build_gstreamer_0_10=yes
     test_kde4=yes
     test_kde5=yes
-    test_qt5=yes
     test_gtk3_kde5=yes
     if test "$enable_fuzzers" != yes; then
         test_freetype=yes
@@ -694,7 +693,6 @@ freebsd*)
     build_gstreamer_0_10=yes
     test_kde4=yes
     test_kde5=yes
-    test_qt5=yes
     test_gtk3_kde5=yes
     test_freetype=yes
     AC_MSG_CHECKING([the FreeBSD operating system release])
@@ -725,7 +723,6 @@ freebsd*)
     build_gstreamer_0_10=yes
     test_kde4=yes
     test_kde5=yes
-    test_qt5=yes
     test_gtk3_kde5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread -lpthread"
@@ -753,7 +750,6 @@ dragonfly*)
     build_gstreamer_0_10=yes
     test_kde4=yes
     test_kde5=yes
-    test_qt5=yes
     test_gtk3_kde5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread"
@@ -779,7 +775,6 @@ linux-android*)
     test_gtk=no
     test_kde4=no
     test_kde5=no
-    test_qt5=no
     test_gtk3_kde5=no
     test_randr=no
     test_xrender=no
@@ -4690,8 +4685,19 @@ fi
 
 if test "$OS" = "HAIKU"; then
     enable_cairo_canvas=yes
-    test_qt5=yes
     test_kde5=yes
+fi
+
+if test "$test_kde5" = "yes"; then
+    test_qt5=yes
+fi
+
+if test "$test_kde5" = "yes" -a  "$enable_kde5" = "yes"; then
+    if test "$enable_qt5" = "no"; then
+        AC_MSG_ERROR([KDE5 support depends on QT5, so it conflicts with --disable-qt5])
+    else
+        enable_qt5=yes
+    fi
 fi
 
 dnl ===================================================================
