@@ -272,7 +272,14 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
                     xCGContext = static_cast<CGContextRef>([pNSContext graphicsPort]);
                 }
             }
-            else
+            // At least on macOS 10.14 during CppunitTests (that have hidden windows), it happens
+            // that the above
+            //
+            //   [NSGraphicsContext graphicsContextWithWindow: pNSWindow]
+            //
+            // returns nil for unclear reasons; so use the below fallback even if there is a
+            // pNSWindow but obtaining a graphics context for it fails:
+            if (xCGContext == nullptr)
             {
                 // fall back to a bitmap context
                 mnBitmapDepth = 32;
