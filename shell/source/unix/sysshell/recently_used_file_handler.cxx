@@ -340,7 +340,7 @@ namespace /* private */ {
         bool operator() (const std::unique_ptr<recently_used_item> & item) const
             { return (item->uri_ == uri_); }
     private:
-        string_t uri_;
+        string_t const uri_;
     };
 
 
