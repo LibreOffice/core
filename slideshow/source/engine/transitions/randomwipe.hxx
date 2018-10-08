@@ -40,7 +40,7 @@ public:
     virtual ::basegfx::B2DPolyPolygon operator () ( double t ) override;
 private:
     ::std::unique_ptr< ::basegfx::B2DPoint []> m_positions;
-    sal_Int32 m_nElements;
+    sal_Int32 const m_nElements;
     ::basegfx::B2DPolygon m_rect;
 };
 

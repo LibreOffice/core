@@ -140,13 +140,13 @@ namespace slideshow
             void transform( const ::basegfx::B2DHomMatrix& rTransform );
 
         private:
-            ViewLayerSharedPtr                                          mpViewLayer;
+            ViewLayerSharedPtr const                                    mpViewLayer;
 
             ::cppcanvas::CustomSpriteSharedPtr                          mpSprite;
             ::basegfx::B2DSize                                          maEffectiveSpriteSizePixel;
             ::basegfx::B2DSize                                          maContentPixelOffset;
 
-            double                                                      mnSpritePrio;
+            double const                                                mnSpritePrio;
             double                                                      mnAlpha;
             ::boost::optional< ::basegfx::B2DPoint >                    maPosPixel;
             ::boost::optional< ::basegfx::B2DPolyPolygon >              maClip;

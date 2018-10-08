@@ -146,7 +146,7 @@ namespace slideshow
             void implInitializePlayerWindow( const ::basegfx::B2DRectangle& rBounds,
                                              const css::uno::Sequence< css::uno::Any >& rVCLDeviceParams,
                                              const OUString& rMimeType );
-            ViewLayerSharedPtr                    mpViewLayer;
+            ViewLayerSharedPtr const              mpViewLayer;
             VclPtr< SystemChildWindow >           mpMediaWindow;
             VclPtr< vcl::Window >                 mpEventHandlerParent;
             mutable css::awt::Point               maWindowOffset;

@@ -300,7 +300,7 @@ namespace slideshow
 
                 Needed for sprite creation
             */
-            ViewLayerSharedPtr                          mpViewLayer;
+            ViewLayerSharedPtr const                    mpViewLayer;
 
             /// A set of cached mtf/canvas combinations
             mutable RendererCacheVector                 maRenderers;

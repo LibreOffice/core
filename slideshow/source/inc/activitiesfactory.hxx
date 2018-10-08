@@ -90,7 +90,7 @@ namespace ActivitiesFactory
             (wouldn't have a clue, then, how to scale the
             animation over time).
         */
-        double                                          mnMinDuration;
+        double const                                    mnMinDuration;
 
         /** Minimal number of frames for this activity.
 
@@ -100,7 +100,7 @@ namespace ActivitiesFactory
             is over, the activity will be prolonged until
             mnMinNumberOfFrames are rendered.
         */
-        sal_uInt32                                      mnMinNumberOfFrames;
+        sal_uInt32 const                                mnMinNumberOfFrames;
 
         /** Number of repeats for the simple duration
 
@@ -113,10 +113,10 @@ namespace ActivitiesFactory
         ::boost::optional<double> const                 maRepeats;
 
         /// Fraction of simple time to accelerate animation
-        double                                          mnAcceleration;
+        double const                                    mnAcceleration;
 
         /// Fraction of simple time to decelerate animation
-        double                                          mnDeceleration;
+        double const                                    mnDeceleration;
 
         /// Shape, to get bounds from
         ShapeSharedPtr                                  mpShape;
@@ -125,7 +125,7 @@ namespace ActivitiesFactory
         ::basegfx::B2DVector                            maSlideBounds;
 
         /// When true, activity is played reversed after mnDuration.
-        bool                                            mbAutoReverse;
+        bool const                                      mbAutoReverse;
     };
 
     /** Create an activity from an XAnimate node.

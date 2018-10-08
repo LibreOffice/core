@@ -648,7 +648,7 @@ namespace slideshow
                 }
 
             private:
-                DrawShapeSubsetting::IndexClassificator meClass;
+                DrawShapeSubsetting::IndexClassificator const meClass;
                 sal_Int32                               mnCurrCount;
             };
         }
@@ -723,10 +723,10 @@ namespace slideshow
                 }
 
             private:
-                sal_Int32                                                       mnNodeIndex;
+                sal_Int32 const                                                 mnNodeIndex;
                 DrawShapeSubsetting::IndexClassificatorVector::const_iterator&  mrLastBegin;
                 DrawShapeSubsetting::IndexClassificatorVector::const_iterator&  mrLastEnd;
-                DrawShapeSubsetting::IndexClassificator                         meClass;
+                DrawShapeSubsetting::IndexClassificator const                   meClass;
             };
 
             DocTreeNode makeTreeNode( const DrawShapeSubsetting::IndexClassificatorVector::const_iterator& rBegin,

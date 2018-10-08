@@ -33,8 +33,8 @@ struct TransitionInfo
 
     // {
 
-    sal_Int16       mnTransitionType;
-    sal_Int16       mnTransitionSubType;
+    sal_Int16 const       mnTransitionType;
+    sal_Int16 const       mnTransitionSubType;
 
     // }
 
@@ -54,16 +54,16 @@ struct TransitionInfo
     };
 
     /// class of effect handling
-    TransitionClass meTransitionClass;
+    TransitionClass const meTransitionClass;
 
     /// Rotation angle of clip polygon
-    double          mnRotationAngle;
+    double const          mnRotationAngle;
 
     /// X scaling of clip polygon (negative values mirror)
-    double          mnScaleX;
+    double const          mnScaleX;
 
     /// Y scaling of clip polygon (negative values mirror)
-    double          mnScaleY;
+    double const          mnScaleY;
 
     /** This enum determines the method how to reverse
         a parametric clip polygon transition.
@@ -102,7 +102,7 @@ struct TransitionInfo
 
         @see ReverseMethod
     */
-    ReverseMethod   meReverseMethod;
+    ReverseMethod const   meReverseMethod;
 
     /** When true, transition 'out' effects are realized
         by inverting the parameter sweep direction (1->0
@@ -110,20 +110,20 @@ struct TransitionInfo
         realized by changing inside and outside areas of
         the parametric poly-polygon.
     */
-    bool            mbOutInvertsSweep;
+    bool const            mbOutInvertsSweep;
 
     /** when true, scale clip polygon isotropically to
         target size.  when false, scale is
         anisotropically.
     */
-    bool            mbScaleIsotrophically;
+    bool const            mbScaleIsotrophically;
 
 
     /// Compare against type and subtype
     class Comparator
     {
-        sal_Int16 mnTransitionType;
-        sal_Int16 mnTransitionSubType;
+        sal_Int16 const mnTransitionType;
+        sal_Int16 const mnTransitionSubType;
     public:
         Comparator( sal_Int16 nTransitionType,
                     sal_Int16 nTransitionSubType )

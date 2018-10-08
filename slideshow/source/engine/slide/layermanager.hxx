@@ -344,7 +344,7 @@ namespace slideshow
                 is, no extra layers are created, and the slideshow runs
                 potentially faster.
              */
-            bool                     mbDisableAnimationZOrder;
+            bool const               mbDisableAnimationZOrder;
         };
 
         typedef ::std::shared_ptr< LayerManager > LayerManagerSharedPtr;

@@ -248,7 +248,7 @@ namespace slideshow
             basegfx::B2DRange          maBounds;
             basegfx::B2DRange          maNewBounds;
             bool                       mbBoundsDirty;     // true, if view layers need resize
-            bool                       mbBackgroundLayer; // true, if this
+            bool const                 mbBackgroundLayer; // true, if this
                                                           // layer is the
                                                           // special
                                                           // background layer

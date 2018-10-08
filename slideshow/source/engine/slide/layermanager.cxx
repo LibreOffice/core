@@ -594,7 +594,7 @@ namespace slideshow
                 }
 
             private:
-                ::cppcanvas::CanvasSharedPtr mpCanvas;
+                ::cppcanvas::CanvasSharedPtr const mpCanvas;
             };
         }
 

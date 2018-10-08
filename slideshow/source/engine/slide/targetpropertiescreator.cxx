@@ -321,10 +321,10 @@ namespace internal
         private:
             XShapeHash&                         mrShapeHash;
             uno::Reference< drawing::XShape >   mxTargetShape;
-            sal_Int16                           mnParagraphIndex;
+            sal_Int16 const                     mnParagraphIndex;
 
             // get initial or final state
-            bool                                mbInitial;
+            bool const                          mbInitial;
         };
     }
 
