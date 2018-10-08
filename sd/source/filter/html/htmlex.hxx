@@ -79,7 +79,7 @@ class HtmlExport final
     std::vector< SdPage* > maPages;
     std::vector< SdPage* > maNotesPages;
 
-    OUString maPath;
+    OUString const maPath;
 
     SdDrawDocument* mpDoc;
     ::sd::DrawDocShell* mpDocSh;
@@ -125,7 +125,6 @@ class HtmlExport final
     Color maFirstPageColor;
     bool mbDocColors;
 
-    OUString   maHTMLExtension;
     std::vector<OUString> maHTMLFiles;
     std::vector<OUString> maImageFiles;
     std::vector<OUString> maThumbnailFiles;

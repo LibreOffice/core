@@ -77,7 +77,7 @@ public:
     void ProcessAllRequests();
 
 private:
-    std::weak_ptr<ContainerAdapter> mpWeakContainer;
+    std::weak_ptr<ContainerAdapter> const mpWeakContainer;
     class PreviewCreationRequest;
     class RequestQueue;
     std::unique_ptr<RequestQueue> mpRequestQueue;

@@ -358,10 +358,6 @@ private:
 
     WrappedShapeEventImplMap    maShapeEventMap;
 
-    OUString msOnClick;
-    OUString msBookmark;
-    OUString msVerb;
-
     css::uno::Reference< css::drawing::XDrawPage > mxPreviewDrawPage;
     css::uno::Reference< css::animations::XAnimationNode > mxPreviewAnimationNode;
 

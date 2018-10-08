@@ -33,7 +33,7 @@ private:
     VclPtr<CheckBox>               m_pCbxLink;
     VclPtr<CheckBox>               m_pCbxMasters;
 
-    SfxMedium*              pMedium;
+    SfxMedium* const        pMedium;
     const SdDrawDocument*   mpDoc;
     const OUString&         rName;
 

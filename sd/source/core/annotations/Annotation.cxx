@@ -111,7 +111,7 @@ private:
     // disposed, do it here.
     virtual void SAL_CALL disposing() override;
 
-    sal_uInt32 m_nId;
+    sal_uInt32 const m_nId;
     SdPage* mpPage;
     RealPoint2D m_Position;
     RealSize2D m_Size;
@@ -131,7 +131,7 @@ public:
 
 protected:
     rtl::Reference< Annotation > mxAnnotation;
-    bool mbInsert;
+    bool const mbInsert;
     int mnIndex;
 };
 

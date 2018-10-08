@@ -154,7 +154,7 @@ private:
     bool isValidSlideNumber( sal_Int32 nSlideNumber ) const { return (nSlideNumber >= 0) && (nSlideNumber < mnSlideCount); }
 
 private:
-    Mode meMode;
+    Mode const meMode;
     sal_Int32 mnStartSlideNumber;
     std::vector< sal_Int32 > maSlideNumbers;
     std::vector< bool > maSlideVisible;
@@ -467,6 +467,10 @@ void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow 
     }
 }
 
+static constexpr OUStringLiteral gsOnClick( "OnClick" );
+static constexpr OUStringLiteral gsBookmark( "Bookmark" );
+static constexpr OUStringLiteral gsVerb( "Verb" );
+
 SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc, vcl::Window* pParentWindow )
 : SlideshowImplBase( m_aMutex )
 , mxModel(pDoc->getUnoModel(),UNO_QUERY_THROW)
@@ -493,9 +497,6 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 , mnUserPaintColor( 0x80ff0000L )
 , mbUsePen(false)
 , mdUserPaintStrokeWidth ( 150.0 )
-, msOnClick( "OnClick" )
-, msBookmark( "Bookmark" )
-, msVerb( "Verb" )
 , mnEndShowEvent(nullptr)
 , mnContextMenuEvent(nullptr)
 , mxPresentation( xPresentation )
@@ -1257,11 +1258,11 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes > const & xShapes )
                 continue;
 
             Reference< XPropertySetInfo > xSetInfo( xSet->getPropertySetInfo() );
-            if( !xSetInfo.is() || !xSetInfo->hasPropertyByName( msOnClick ) )
+            if( !xSetInfo.is() || !xSetInfo->hasPropertyByName( gsOnClick ) )
                 continue;
 
             WrappedShapeEventImplPtr pEvent( new WrappedShapeEventImpl );
-            xSet->getPropertyValue( msOnClick ) >>= pEvent->meClickAction;
+            xSet->getPropertyValue( gsOnClick ) >>= pEvent->meClickAction;
 
             switch( pEvent->meClickAction )
             {
@@ -1272,8 +1273,8 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes > const & xShapes )
             case ClickAction_STOPPRESENTATION:
                 break;
             case ClickAction_BOOKMARK:
-                if( xSetInfo->hasPropertyByName( msBookmark ) )
-                    xSet->getPropertyValue( msBookmark ) >>= pEvent->maStrBookmark;
+                if( xSetInfo->hasPropertyByName( gsBookmark ) )
+                    xSet->getPropertyValue( gsBookmark ) >>= pEvent->maStrBookmark;
                 if( getSlideNumberForBookmark( pEvent->maStrBookmark ) == -1 )
                     continue;
                 break;
@@ -1281,12 +1282,12 @@ void SlideshowImpl::registerShapeEvents( Reference< XShapes > const & xShapes )
             case ClickAction_SOUND:
             case ClickAction_PROGRAM:
             case ClickAction_MACRO:
-                if( xSetInfo->hasPropertyByName( msBookmark ) )
-                    xSet->getPropertyValue( msBookmark ) >>= pEvent->maStrBookmark;
+                if( xSetInfo->hasPropertyByName( gsBookmark ) )
+                    xSet->getPropertyValue( gsBookmark ) >>= pEvent->maStrBookmark;
                 break;
             case ClickAction_VERB:
-                if( xSetInfo->hasPropertyByName( msVerb ) )
-                    xSet->getPropertyValue( msVerb ) >>= pEvent->mnVerb;
+                if( xSetInfo->hasPropertyByName( gsVerb ) )
+                    xSet->getPropertyValue( gsVerb ) >>= pEvent->mnVerb;
                 break;
             default:
                 continue; // skip all others

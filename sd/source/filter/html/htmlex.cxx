@@ -342,10 +342,12 @@ void lclAppendStyle(OUStringBuffer& aBuffer, const OUString& aTag, const OUStrin
 
 } // anonymous namespace
 
-static const OUStringLiteral gaHTMLHeader(
+static constexpr OUStringLiteral gaHTMLHeader(
             "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\r\n"
             "     \"http://www.w3.org/TR/html4/transitional.dtd\">\r\n"
             "<html>\r\n<head>\r\n" );
+
+static constexpr OUStringLiteral gaHTMLExtension = STR_HTMLEXP_DEFAULT_EXTENSION;
 
 // constructor for the html export helper classes
 HtmlExport::HtmlExport(
@@ -371,14 +373,13 @@ HtmlExport::HtmlExport(
         maTextColor(COL_BLACK),
         maBackColor(COL_WHITE),
         mbDocColors(false),
-        maHTMLExtension(STR_HTMLEXP_DEFAULT_EXTENSION),
         maIndexUrl("index"),
         meScript( SCRIPT_ASP ),
         mpButtonSet( new ButtonSet() )
 {
     bool bChange = mpDoc->IsChanged();
 
-    maIndexUrl += maHTMLExtension;
+    maIndexUrl += gaHTMLExtension;
 
     InitExportParameters( rParams );
 
@@ -1163,7 +1164,7 @@ bool HtmlExport::WriteHtml( const OUString& rFileName, bool bAddExtension, const
 
     OUString aFileName( rFileName );
     if( bAddExtension )
-        aFileName += maHTMLExtension;
+        aFileName += gaHTMLExtension;
 
     meEC.SetContext( STR_HTMLEXP_ERROR_CREATE_FILE, rFileName );
     EasyFile aFile;
@@ -2159,7 +2160,7 @@ void HtmlExport::CreateFileNames()
             aHTMLFileName = maIndex;
         else
         {
-            aHTMLFileName = "img" + OUString::number(nSdPage) + maHTMLExtension;
+            aHTMLFileName = "img" + OUString::number(nSdPage) + gaHTMLExtension;
         }
 
         maHTMLFiles[nSdPage] = aHTMLFileName;
@@ -2182,7 +2183,7 @@ void HtmlExport::CreateFileNames()
 
         maThumbnailFiles[nSdPage] = aThumbnailFileName;
 
-        maTextFiles[nSdPage] = "text" + OUString::number(nSdPage) + maHTMLExtension;
+        maTextFiles[nSdPage] = "text" + OUString::number(nSdPage) + gaHTMLExtension;
 
         SdPage* pSdPage = maPages[ nSdPage ];
 
@@ -2194,7 +2195,7 @@ void HtmlExport::CreateFileNames()
         maFramePage = maIndex;
     else
     {
-        maFramePage = "siframes" + maHTMLExtension;
+        maFramePage = "siframes" + gaHTMLExtension;
     }
 }
 
@@ -2314,21 +2315,21 @@ bool HtmlExport::CreateFrames()
 
     // substitute HTML file extension
     OUString aPlaceHolder(".$EXT");
-    aFunction = aFunction.replaceAll(aPlaceHolder, maHTMLExtension);
+    aFunction = aFunction.replaceAll(aPlaceHolder, gaHTMLExtension);
     aStr.append(aFunction);
 
     aTmp = JS_NavigateRel;
-    aTmp = aTmp.replaceAll(aPlaceHolder, maHTMLExtension);
+    aTmp = aTmp.replaceAll(aPlaceHolder, gaHTMLExtension);
     aStr.append(aTmp);
 
     if(mbImpress)
     {
         aTmp = JS_ExpandOutline;
-        aTmp = aTmp.replaceAll(aPlaceHolder, maHTMLExtension);
+        aTmp = aTmp.replaceAll(aPlaceHolder, gaHTMLExtension);
         aStr.append(aTmp);
 
         aTmp = JS_CollapseOutline;
-        aTmp = aTmp.replaceAll(aPlaceHolder, maHTMLExtension);
+        aTmp = aTmp.replaceAll(aPlaceHolder, gaHTMLExtension);
         aStr.append(aTmp);
     }
     aStr.append("// -->\r\n</script>\r\n");
@@ -2342,11 +2343,11 @@ bool HtmlExport::CreateFrames()
     {
         aStr.append("  <frameset rows=\"42,*\">\r\n");
         aStr.append("    <frame src=\"navbar3");
-        aStr.append(maHTMLExtension);
+        aStr.append(gaHTMLExtension);
         aStr.append("\" name=\"navbar2\" marginwidth=\"4\" marginheight=\"4\" scrolling=\"no\">\r\n");
     }
     aStr.append("    <frame src=\"outline0");
-    aStr.append(maHTMLExtension);
+    aStr.append(gaHTMLExtension);
     aStr.append("\" name=\"outline\">\r\n");
     if(mbImpress)
         aStr.append("  </frameset>\r\n");
@@ -2361,7 +2362,7 @@ bool HtmlExport::CreateFrames()
         aStr.append("  <frameset rows=\"42,*\">\r\n");
 
     aStr.append("    <frame src=\"navbar0");
-    aStr.append(maHTMLExtension);
+    aStr.append(gaHTMLExtension);
     aStr.append("\" name=\"navbar1\" marginwidth=\"4\" marginheight=\"4\" scrolling=\"no\">\r\n");
 
     aStr.append("    <frame src=\"");
@@ -2371,7 +2372,7 @@ bool HtmlExport::CreateFrames()
     if(mbNotes)
     {
         aStr.append("    <frame src=\"note0");
-        aStr.append(maHTMLExtension);
+        aStr.append(gaHTMLExtension);
         aStr.append("\" name=\"notes\">\r\n");
     }
     aStr.append("  </frameset>\r\n");
@@ -2492,7 +2493,7 @@ bool HtmlExport::CreateNavBarFrames()
             if(mnButtonThema != -1)
                 aButton = CreateImage(GetButtonName(BTN_TEXT), aButton);
 
-            OUString aText0("text0" + maHTMLExtension);
+            OUString aText0("text0" + gaHTMLExtension);
             aStr.append(CreateLink(aText0, aButton, "_top"));
             aStr.append("\r\n");
         }

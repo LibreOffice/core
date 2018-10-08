@@ -91,8 +91,8 @@ namespace sd
 
 const int nDateTimeFormatsCount = 12;
 struct DateAndTimeFormat {
-    SvxDateFormat meDateFormat;
-    SvxTimeFormat meTimeFormat;
+    SvxDateFormat const meDateFormat;
+    SvxTimeFormat const meTimeFormat;
 };
 DateAndTimeFormat const nDateTimeFormats[nDateTimeFormatsCount] =
 {
@@ -144,7 +144,7 @@ private:
     SdDrawDocument*    mpDoc;
     LanguageType        meOldLanguage;
 
-    bool            mbHandoutMode;
+    bool const          mbHandoutMode;
 
     DECL_LINK( UpdateOnClickHdl, Button*, void );
     DECL_LINK( LanguageChangeHdl, ListBox&, void );

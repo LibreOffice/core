@@ -84,7 +84,7 @@ public:
         const css::lang::EventObject& rEvent) override;
 
 private:
-    sal_uInt16 mnChildWindowId;
+    sal_uInt16 const mnChildWindowId;
     ViewShellBase& mrViewShellBase;
     ::std::unique_ptr<SfxShell> mpShell;
 

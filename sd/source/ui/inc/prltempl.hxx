@@ -54,7 +54,7 @@ private:
     sal_uInt16            mnTextAtt;
     sal_uInt16            mnBackground;
 
-    PresentationObjects ePO;
+    PresentationObjects const ePO;
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) override;
 

@@ -71,12 +71,12 @@ public:
     IconProvider();
 
     // Regular icons.
-    Image maImgPage;
-    Image maImgPageExcl;
-    Image maImgPageObjsExcl;
-    Image maImgPageObjs;
-    Image maImgObjects;
-    Image maImgGroup;
+    Image const maImgPage;
+    Image const maImgPageExcl;
+    Image const maImgPageObjsExcl;
+    Image const maImgPageObjs;
+    Image const maImgObjects;
+    Image const maImgGroup;
 };
 
 bool SdPageObjsTLB::bIsInDrag = false;

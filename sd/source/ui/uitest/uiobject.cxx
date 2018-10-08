@@ -26,7 +26,7 @@ public:
 private:
     VclPtr<sd::Window> mxWindow;
 
-    OUString maName;
+    OUString const maName;
 };
 
 namespace {

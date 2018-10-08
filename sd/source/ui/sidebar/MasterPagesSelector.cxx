@@ -61,6 +61,11 @@ using namespace ::com::sun::star::text;
 
 namespace sd { namespace sidebar {
 
+    /** menu entry that is executed as default action when the left mouse button is
+        clicked over a master page.
+    */
+static const char gsDefaultClickAction[] = "applyselect";
+
 MasterPagesSelector::MasterPagesSelector (
     vcl::Window* pParent,
     SdDrawDocument& rDocument,
@@ -72,7 +77,6 @@ MasterPagesSelector::MasterPagesSelector (
       mpContainer(rpContainer),
       mrDocument(rDocument),
       mrBase(rBase),
-      msDefaultClickAction("applyselect"),
       maCurrentItemList(),
       maTokenToValueSetIndex(),
       maLockedMasterPages(),
@@ -171,7 +175,7 @@ IMPL_LINK_NOARG(MasterPagesSelector, ClickHandler, ValueSet*, void)
     // We use the framework to assign the clicked-on master page because we
     // so use the same mechanism as the context menu does (where we do not
     // have the option to call the assignment method directly.)
-    ExecuteCommand(msDefaultClickAction);
+    ExecuteCommand(gsDefaultClickAction);
 }
 
 IMPL_LINK(MasterPagesSelector, RightClickHandler, const MouseEvent&, rEvent, void)

@@ -576,8 +576,8 @@ namespace
 {
 struct ApiNameMap
 {
-    OUStringLiteral mpApiName;
-    sal_uInt32 mnHelpId;
+    OUStringLiteral const mpApiName;
+    sal_uInt32 const mnHelpId;
 } const pApiNameMap[]
     = { { OUStringLiteral("title"), HID_PSEUDOSHEET_TITLE },
         { OUStringLiteral("subtitle"), HID_PSEUDOSHEET_SUBTITLE },

@@ -116,7 +116,7 @@ public:
     virtual SdPage* operator () (SdDrawDocument* pDocument) override;
     virtual int GetCostIndex() override;
 private:
-    OUString msURL;
+    OUString const msURL;
     SfxObjectShellLock mxDocumentShell;
     ::sd::DrawDocShell* LoadDocument (const OUString& sFileName);
 };
@@ -133,7 +133,7 @@ public:
     virtual int GetCostIndex() override;
     virtual bool NeedsPageObject() override;
 private:
-    OUString msURL;
+    OUString const msURL;
 };
 
 /** Create an empty default master page.
@@ -158,7 +158,7 @@ public:
     virtual SdPage* operator() (SdDrawDocument* pDocument) override;
     virtual int GetCostIndex() override;
 private:
-    SdPage* mpPage;
+    SdPage* const mpPage;
 };
 
 } } // end of namespace sd::sidebar

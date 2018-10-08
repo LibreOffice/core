@@ -35,9 +35,9 @@ namespace sd
 
     struct ClientInfo
     {
-        OUString mName;
+        OUString const mName;
 
-        bool mbIsAlreadyAuthorised;
+        bool const mbIsAlreadyAuthorised;
 
         enum PROTOCOL { NETWORK = 1, BLUETOOTH };
         ClientInfo( const OUString& rName,
