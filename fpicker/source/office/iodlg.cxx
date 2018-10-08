@@ -37,10 +37,10 @@
 #include <svl/urihelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
-#include <svtools/fileview.hxx>
+#include <vcl/fileview.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/svtabbx.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 
 #include <fpicker/strings.hrc>
 #include <svtools/helpids.h>

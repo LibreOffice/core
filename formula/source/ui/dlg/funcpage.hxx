@@ -26,7 +26,7 @@
 
 #include <vcl/tabctrl.hxx>
 #include <vcl/button.hxx>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 
 #include <vector>
 

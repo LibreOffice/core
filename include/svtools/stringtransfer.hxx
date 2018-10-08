@@ -21,7 +21,7 @@
 #define INCLUDED_SVTOOLS_STRINGTRANSFER_HXX
 
 #include <svtools/svtdllapi.h>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 
 
 namespace svt

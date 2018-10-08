@@ -37,7 +37,7 @@
 #include <editeng/scripttypeitem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/event.hxx>
-#include <svtools/imap.hxx>
+#include <vcl/imap.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 #include <unotools/eventcfg.hxx>

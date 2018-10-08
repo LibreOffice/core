@@ -109,7 +109,7 @@
                     <property name="column_spacing">12</property>
                     <property name="row_homogeneous">True</property>
                     <child>
-                      <object class="svtlo-SvTreeListBox" id="tree:border">
+                      <object class="vcllo-SvTreeListBox" id="tree:border">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>

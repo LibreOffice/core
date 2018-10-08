@@ -27,11 +27,11 @@
 
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
-#include <svtools/imap.hxx>
-#include <svtools/imapcirc.hxx>
-#include <svtools/imapobj.hxx>
-#include <svtools/imappoly.hxx>
-#include <svtools/imaprect.hxx>
+#include <vcl/imap.hxx>
+#include <vcl/imapcirc.hxx>
+#include <vcl/imapobj.hxx>
+#include <vcl/imappoly.hxx>
+#include <vcl/imaprect.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/tencinfo.h>
 #include <tools/tenccvt.hxx>

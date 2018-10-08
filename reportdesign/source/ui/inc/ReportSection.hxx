@@ -26,7 +26,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include "ReportDefines.hxx"
 #include "dlgedfunc.hxx"
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <rtl/ref.hxx>
 #include <memory>
 

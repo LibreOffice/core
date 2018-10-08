@@ -22,8 +22,8 @@
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <svtools/transfer.hxx>
-#include <svtools/treelistbox.hxx>
+#include <vcl/transfer.hxx>
+#include <vcl/treelistbox.hxx>
 #include <vcl/floatwin.hxx>
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/containermultiplexer.hxx>
