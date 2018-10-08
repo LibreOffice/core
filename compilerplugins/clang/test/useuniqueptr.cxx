@@ -278,7 +278,7 @@ class Foo23
     }
 };
 
-#if CLANG_VERSION >= 50000
+#if CLANG_VERSION >= 60000
 class Foo24
 {
     typedef std::vector<int*> HTMLAttrs;
