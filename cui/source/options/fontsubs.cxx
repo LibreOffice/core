@@ -21,7 +21,7 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svtools/svlbitm.hxx>
+#include <vcl/svlbitm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svtools/fontsubstconfig.hxx>

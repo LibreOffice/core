@@ -18,9 +18,9 @@
 
 #include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/svlbitm.hxx>
-#include <svtools/treelistentry.hxx>
-#include <svtools/viewdataentry.hxx>
+#include <vcl/svlbitm.hxx>
+#include <vcl/treelistentry.hxx>
+#include <vcl/viewdataentry.hxx>
 #include <sfx2/objsh.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

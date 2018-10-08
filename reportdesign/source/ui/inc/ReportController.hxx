@@ -49,7 +49,7 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <svl/lstner.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <svx/svdedtv.hxx>
 #include <sfx2/zoomitem.hxx>
 

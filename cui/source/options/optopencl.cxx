@@ -41,7 +41,7 @@
 #include <strings.hrc>
 #include <dialmgr.hxx>
 #include "optopencl.hxx"
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 
 SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, "OptOpenCLPage", "cui/ui/optopenclpage.ui", &rSet),
