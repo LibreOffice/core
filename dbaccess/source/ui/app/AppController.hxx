@@ -39,7 +39,7 @@
 #include <cppuhelper/implbase5.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <sot/storage.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <vcl/timer.hxx>
 

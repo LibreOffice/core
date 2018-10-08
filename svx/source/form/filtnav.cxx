@@ -49,9 +49,9 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/settings.hxx>
 #include <tools/diagnose_ex.h>
-#include <svtools/svlbitm.hxx>
-#include <svtools/treelistentry.hxx>
-#include <svtools/viewdataentry.hxx>
+#include <vcl/svlbitm.hxx>
+#include <vcl/treelistentry.hxx>
+#include <vcl/viewdataentry.hxx>
 
 #include <bitmaps.hlst>
 

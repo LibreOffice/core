@@ -308,7 +308,7 @@
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/svtdllapi.h>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <svtools/treelist.hxx>
 #include <svtools/treelistbox.hxx>
 #include <svtools/treelistentries.hxx>

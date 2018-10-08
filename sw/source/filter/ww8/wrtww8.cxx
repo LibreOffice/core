@@ -84,8 +84,8 @@
 #include <txtinet.hxx>
 #include <fmturl.hxx>
 #include <fesh.hxx>
-#include <svtools/imap.hxx>
-#include <svtools/imapobj.hxx>
+#include <vcl/imap.hxx>
+#include <vcl/imapobj.hxx>
 #include <tools/urlobj.hxx>
 #include <mdiexp.hxx>
 #include <strings.hrc>

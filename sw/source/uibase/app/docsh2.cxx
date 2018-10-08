@@ -40,7 +40,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/request.hxx>

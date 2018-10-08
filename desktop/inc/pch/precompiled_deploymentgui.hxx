@@ -101,9 +101,6 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <svtools/controldims.hxx>
 #include <svtools/svtdllapi.h>
-#include <svtools/transfer.hxx>
-#include <svtools/treelist.hxx>
-#include <svtools/treelistbox.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
@@ -116,5 +113,8 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <unotools/configmgr.hxx>
+#include <vcl/transfer.hxx>
+#include <vcl/treelist.hxx>
+#include <vcl/treelistbox.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

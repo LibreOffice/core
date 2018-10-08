@@ -28,8 +28,8 @@
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <svtools/headbar.hxx>
-#include <svtools/svlbitm.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/svlbitm.hxx>
+#include <vcl/treelistentry.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>

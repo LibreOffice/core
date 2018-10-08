@@ -28,7 +28,7 @@
 #include <com/sun/star/security/CertificateCharacters.hpp>
 
 #include <resourcemanager.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <unotools/useroptions.hxx>
 
 using namespace css;
