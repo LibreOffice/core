@@ -51,6 +51,9 @@
 #include <sdpage.hxx>
 #include <comphelper/base64.hxx>
 
+// only while debugging
+#include <toolkit/helper/vclunohelper.hxx>
+
 using namespace ::com::sun::star;
 
 /// Impress miscellaneous tests.
@@ -68,6 +71,7 @@ public:
     void testTdf101242_settings();
     void testTdf119392();
     void testTdf67248();
+    void testTdf119956();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf96206);
@@ -81,6 +85,7 @@ public:
     CPPUNIT_TEST(testTdf101242_settings);
     CPPUNIT_TEST(testTdf119392);
     CPPUNIT_TEST(testTdf67248);
+    CPPUNIT_TEST(testTdf119956);
     CPPUNIT_TEST_SUITE_END();
 
 virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -137,16 +142,35 @@ sd::DrawDocShellRef SdMiscTest::Load(const OUString& rURL, sal_Int32 nFormat)
 
     sd::ViewShell *pViewShell = xDocSh->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
+
+    // Draw has no slidesorter, Impress never shows a LayerTabBar
     sd::slidesorter::SlideSorterViewShell* pSSVS = nullptr;
-    for (int i = 0; i < 1000; i++)
+    if (DocumentType::Draw != xDocSh->GetDocumentType())
     {
-        // Process all Tasks - slide sorter is created here
-        while (Scheduler::ProcessTaskScheduling());
-        if ((pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase())) != nullptr)
-            break;
-        osl::Thread::wait(std::chrono::milliseconds(100));
+        for (int i = 0; i < 1000; i++)
+        {
+            // Process all Tasks - slide sorter is created here
+            while (Scheduler::ProcessTaskScheduling());
+            if ((pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase())) != nullptr)
+                break;
+            osl::Thread::wait(std::chrono::milliseconds(100));
+        }
+        CPPUNIT_ASSERT(pSSVS);
     }
-    CPPUNIT_ASSERT(pSSVS);
+    // Only for degugging
+    uno::Reference<awt::XWindow> xContainerWindow = xTargetFrame->getContainerWindow();
+    VclPtr<vcl::Window> pContainerWindow = VCLUnoHelper::GetWindow(xContainerWindow);
+    uno::Reference<awt::XWindow> xComponentWindow = xTargetFrame->getComponentWindow();
+    VclPtr<vcl::Window> pComponentWindow = VCLUnoHelper::GetWindow(xComponentWindow);
+    // pContainerWindow > [WorkWindow] > SystemWindow > vcl::Window > mpWindowImpl > [ptr] > maText
+    // gives the text on the title bar. You can see whether the document is opened in Draw or Impress.
+
+    // xModel2 > [SdXImpressDocument] > mpDocShell > ... > mpViewShell > ... > mpContenteWindow
+    // gives size of the center pane in maViewSize, maViewOrigin, maWinPos.
+    // Width is 3x document width, height is 2x document height, the document is centered in that area.
+    // Those values are correct.
+
+    // Size of pContainerWindow and pContentWindow seem to be wrong. But why?
 
     return xDocSh;
 }
@@ -497,7 +521,7 @@ void SdMiscTest::testTdf119392()
     // Loads a document which has two user layers "V--" and "V-L". Inserts a new layer "-P-" between them.
     // Checks, that the bitfields in the saved file have the bits in the correct order.
 
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf119392_InsertLayer.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("sd/qa/unit/data/tdf119392_InsertLayer.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
     // Insert layer "-P-", not visible, printable, not locked
     SdrView* pView = xDocShRef -> GetViewShell()->GetView();
@@ -542,10 +566,18 @@ void SdMiscTest::testTdf67248()
     // The document tdf67248.odg has been created with a German UI. It has a user layer named "Background".
     // On opening the user layer must still exists. The error was, that it was merged into the standard
     // layer "background".
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf67248.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("sd/qa/unit/data/tdf67248.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
     SdrLayerAdmin& rLayerAdmin = xDocShRef->GetDoc()->GetLayerAdmin();
     CPPUNIT_ASSERT_EQUAL( sal_uInt16(6), rLayerAdmin.GetLayerCount());
+
+    xDocShRef->DoClose();
+}
+
+void SdMiscTest::testTdf119956()
+{
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("sd/qa/unit/data/tdf119956.odg"), ODG);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
 
     xDocShRef->DoClose();
 }

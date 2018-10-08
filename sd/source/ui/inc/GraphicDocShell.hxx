@@ -31,7 +31,7 @@ namespace sd {
 /**
  * document shell for draw documents
  */
-class GraphicDocShell
+class SD_DLLPUBLIC GraphicDocShell
     : public DrawDocShell
 {
 public:

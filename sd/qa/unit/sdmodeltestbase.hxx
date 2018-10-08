@@ -20,6 +20,7 @@
 
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
+#include <GraphicDocShell.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/color.hxx>
@@ -147,7 +148,7 @@ protected:
             pFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
             std::shared_ptr<const SfxFilter> pFilt(pFilter);
 
-            ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false, DocumentType::Draw);
+            ::sd::DrawDocShellRef xDocShRef = new ::sd::GraphicDocShell(SfxObjectCreateMode::EMBEDDED);
             SfxMedium* pSrcMed = new SfxMedium(rURL, StreamMode::STD_READ, pFilt, std::move(pParams));
             if ( !xDocShRef->DoLoad(pSrcMed) || !xDocShRef.is() )
             {
