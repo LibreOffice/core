@@ -20,14 +20,14 @@
 #include <test/xmltesttools.hxx>
 #include <test/mtfxmldump.hxx>
 #include <test/setupvcl.hxx>
-#include <unotest/bootstrapfixturebase.hxx>
+#include <test/bootstrapfixture.hxx>
 #include <vcl/wmf.hxx>
 #include <vcl/metaact.hxx>
 #include <mtftools.hxx>
 
 using namespace css;
 
-class WmfTest : public test::BootstrapFixtureBase, public XmlTestTools
+class WmfTest : public test::BootstrapFixture, public XmlTestTools
 {
     OUString maDataUrl;
 
@@ -38,19 +38,9 @@ class WmfTest : public test::BootstrapFixtureBase, public XmlTestTools
 
 public:
     WmfTest() :
+        BootstrapFixture(true, false),
         maDataUrl("/emfio/qa/cppunit/wmf/data/")
     {}
-
-    // Hack around missing "once per class" setUp/tearDown in CppUnit; must be
-    // called before/after all other tests:
-    void globalSetUp() { test::setUpVcl(); }
-    // void globalTearDown() { /* DeInitVCL(); */ }
-        // on e.g. Mac OS X, DeInitVCL() causes more trouble than it's worth,
-        // calling VclPtr<WorkWindow>::disposeAndClear -> ... ->
-        // vcl::Window::dispose -> UnoWrapper::WindowDestroy (tk) -> ... ->
-        // Application::GetSolarMutex in the vcl library (linked from tk)
-        // instead of the vcl objects linked into the unit test library, which
-        // isn't initialized
 
     void testNonPlaceableWmf();
     void testSine();
@@ -63,7 +53,6 @@ public:
     void testETO_PDY();
 
     CPPUNIT_TEST_SUITE(WmfTest);
-    CPPUNIT_TEST(globalSetUp);
     CPPUNIT_TEST(testNonPlaceableWmf);
     CPPUNIT_TEST(testSine);
     CPPUNIT_TEST(testEmfProblem);
