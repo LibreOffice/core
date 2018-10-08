@@ -44,6 +44,7 @@
 #include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <svx/unoshape.hxx>
 #include <osl/mutex.hxx>
+#include <o3tl/make_unique.hxx>
 
 namespace rptui
 {
@@ -310,7 +311,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     // add their undo actions out-of-order
 
     SolarMutexGuard aSolarGuard;
-    ORptUndoPropertyAction* pUndo = nullptr;
+    std::unique_ptr<ORptUndoPropertyAction> pUndo;
     try
     {
         uno::Reference< report::XSection> xSection( xSet, uno::UNO_QUERY );
@@ -318,9 +319,9 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
         {
             uno::Reference< report::XGroup> xGroup = xSection->getGroup();
             if ( xGroup.is() )
-                pUndo = new OUndoPropertyGroupSectionAction( m_pImpl->m_rModel, _rEvent, OGroupHelper::getMemberFunction( xSection ), xGroup );
+                pUndo.reset(new OUndoPropertyGroupSectionAction( m_pImpl->m_rModel, _rEvent, OGroupHelper::getMemberFunction( xSection ), xGroup ));
             else
-                pUndo = new OUndoPropertyReportSectionAction( m_pImpl->m_rModel, _rEvent, OReportHelper::getMemberFunction( xSection ), xSection->getReportDefinition() );
+                pUndo.reset(new OUndoPropertyReportSectionAction( m_pImpl->m_rModel, _rEvent, OReportHelper::getMemberFunction( xSection ), xSection->getReportDefinition() ));
         }
     }
     catch(const Exception&)
@@ -329,9 +330,9 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     }
 
     if ( pUndo == nullptr )
-        pUndo = new ORptUndoPropertyAction( m_pImpl->m_rModel, _rEvent );
+        pUndo.reset(new ORptUndoPropertyAction( m_pImpl->m_rModel, _rEvent ));
 
-    m_pImpl->m_rModel.GetSdrUndoManager()->AddUndoAction( pUndo );
+    m_pImpl->m_rModel.GetSdrUndoManager()->AddUndoAction( std::move(pUndo) );
     pController->InvalidateAll();
 }
 
@@ -391,7 +392,7 @@ void SAL_CALL OXUndoEnvironment::elementInserted(const ContainerEvent& evt)
             if ( xContainer.is() )
             {
                 m_pImpl->m_rModel.GetSdrUndoManager()->AddUndoAction(
-                    new OUndoContainerAction( m_pImpl->m_rModel, rptui::Inserted, xContainer.get(),
+                    o3tl::make_unique<OUndoContainerAction>( m_pImpl->m_rModel, rptui::Inserted, xContainer.get(),
                         xIface, RID_STR_UNDO_ADDFUNCTION ) );
             }
         }
@@ -457,7 +458,7 @@ void SAL_CALL OXUndoEnvironment::elementRemoved(const ContainerEvent& evt)
             uno::Reference< report::XFunctions> xFunctions(evt.Source,uno::UNO_QUERY);
             if ( xFunctions.is() )
             {
-                m_pImpl->m_rModel.GetSdrUndoManager()->AddUndoAction( new OUndoContainerAction(
+                m_pImpl->m_rModel.GetSdrUndoManager()->AddUndoAction( o3tl::make_unique<OUndoContainerAction>(
                     m_pImpl->m_rModel, rptui::Removed, xFunctions.get(), xIface, RID_STR_UNDO_ADDFUNCTION ) );
             }
         }

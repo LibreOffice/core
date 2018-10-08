@@ -2686,7 +2686,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 
     bool bChanges = false;
     bool bLenChanged = false;
-    EditUndoTransliteration* pUndo = nullptr;
+    std::unique_ptr<EditUndoTransliteration> pUndo;
 
     utl::TransliterationWrapper aTransliterationWrapper( ::comphelper::getProcessComponentContext(), nTransliterationMode );
     bool bConsiderLanguage = aTransliterationWrapper.needLanguageForTheMode();
@@ -2919,7 +2919,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 aNewSel = aSel;
 
                 ESelection aESel( CreateESel( aSel ) );
-                pUndo = new EditUndoTransliteration(pEditEngine, aESel, nTransliterationMode);
+                pUndo.reset(new EditUndoTransliteration(pEditEngine, aESel, nTransliterationMode));
 
                 const bool bSingleNode = aSel.Min().GetNode()== aSel.Max().GetNode();
                 const bool bHasAttribs = aSel.Min().GetNode()->GetCharAttribs().HasAttrib( aSel.Min().GetIndex(), aSel.Max().GetIndex() );
@@ -2959,7 +2959,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
     {
         ESelection aESel( CreateESel( aNewSel ) );
         pUndo->SetNewSelection( aESel );
-        InsertUndo( pUndo );
+        InsertUndo( std::move(pUndo) );
     }
 
     if ( bChanges )

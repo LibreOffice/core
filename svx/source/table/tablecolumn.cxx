@@ -212,7 +212,7 @@ void SAL_CALL TableColumn::setFastPropertyValue( sal_Int32 nHandle, const Any& a
     {
         if( pUndo )
         {
-            rModel.AddUndo( pUndo.release() );
+            rModel.AddUndo( std::move(pUndo) );
         }
         mxTableModel->setModified(true);
     }

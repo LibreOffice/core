@@ -19,37 +19,38 @@
 
 #include <undo/undofactory.hxx>
 #include <undo/undoobjects.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace sd;
 
-SdrUndoAction* UndoFactory::CreateUndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect )
+std::unique_ptr<SdrUndoAction> UndoFactory::CreateUndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect )
 {
-    return new UndoRemoveObject( rObject, bOrdNumDirect );
+    return o3tl::make_unique<UndoRemoveObject>( rObject, bOrdNumDirect );
 }
 
-SdrUndoAction* UndoFactory::CreateUndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect )
+std::unique_ptr<SdrUndoAction> UndoFactory::CreateUndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect )
 {
-    return new UndoDeleteObject( rObject, bOrdNumDirect );
+    return o3tl::make_unique<UndoDeleteObject>( rObject, bOrdNumDirect );
 }
 
-SdrUndoAction* UndoFactory::CreateUndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText )
+std::unique_ptr<SdrUndoAction> UndoFactory::CreateUndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText )
 {
-    return new UndoObjectSetText( rNewObj, nText );
+    return o3tl::make_unique<UndoObjectSetText>( rNewObj, nText );
 }
 
-SdrUndoAction* UndoFactory::CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect )
+std::unique_ptr<SdrUndoAction> UndoFactory::CreateUndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect )
 {
-    return new UndoReplaceObject( rOldObject, rNewObject, bOrdNumDirect );
+    return o3tl::make_unique<UndoReplaceObject>( rOldObject, rNewObject, bOrdNumDirect );
 }
 
-SdrUndoAction* UndoFactory::CreateUndoGeoObject( SdrObject& rObject )
+std::unique_ptr<SdrUndoAction> UndoFactory::CreateUndoGeoObject( SdrObject& rObject )
 {
-    return new UndoGeoObject( rObject );
+    return o3tl::make_unique<UndoGeoObject>( rObject );
 }
 
-SdrUndoAction* UndoFactory::CreateUndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText )
+std::unique_ptr<SdrUndoAction> UndoFactory::CreateUndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText )
 {
-    return new UndoAttrObject( rObject, bStyleSheet1, bSaveText );
+    return o3tl::make_unique<UndoAttrObject>( rObject, bStyleSheet1, bSaveText );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

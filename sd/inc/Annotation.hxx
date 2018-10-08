@@ -37,7 +37,7 @@ enum class CommentNotificationType { Add, Modify, Remove };
 
 void createAnnotation( css::uno::Reference< css::office::XAnnotation >& xAnnotation, SdPage* pPage );
 
-SdrUndoAction* CreateUndoInsertOrRemoveAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, bool bInsert );
+std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, bool bInsert );
 
 void CreateChangeUndo(const css::uno::Reference< css::office::XAnnotation >& xAnnotation);
 

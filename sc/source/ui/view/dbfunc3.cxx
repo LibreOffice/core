@@ -524,7 +524,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
         if (bRecord)
         {
             pDocSh->GetUndoManager()->AddUndoAction(
-                new ScUndoSubTotals( pDocSh, nTab,
+                o3tl::make_unique<ScUndoSubTotals>( pDocSh, nTab,
                                         rParam, aNewParam.nRow2,
                                         std::move(pUndoDoc), std::move(pUndoTab), // pUndoDBData,
                                         std::move(pUndoRange), std::move(pUndoDB) ) );
@@ -611,7 +611,7 @@ bool ScDBFunc::MakePivotTable(
         if (bUndo)
         {
             pDocSh->GetUndoManager()->AddUndoAction(
-                        new ScUndoInsertTab( pDocSh, nNewTab, bAppend, lcl_MakePivotTabName( aName, i ) ));
+                        o3tl::make_unique<ScUndoInsertTab>( pDocSh, nNewTab, bAppend, lcl_MakePivotTabName( aName, i ) ));
         }
 
         GetViewData().InsertTab( nNewTab );
@@ -2231,7 +2231,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
             }
 
             GetViewData().GetDocShell()->GetUndoManager()->AddUndoAction(
-                new ScUndoRepeatDB( GetViewData().GetDocShell(), nTab,
+                o3tl::make_unique<ScUndoRepeatDB>( GetViewData().GetDocShell(), nTab,
                                         nStartCol, nStartRow, nEndCol, nEndRow,
                                         nNewEndRow,
                                         nCurX, nCurY,

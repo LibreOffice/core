@@ -29,6 +29,7 @@
 #include <strings.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <o3tl/make_unique.hxx>
 
 namespace rptui
 {
@@ -176,7 +177,7 @@ void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
             SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
             if ( dynamic_cast< const OCustomShape *>( pObj ) !=  nullptr )
             {
-                AddUndo( new SdrUndoObjectLayerChange( *pObj, pObj->GetLayer(), _nLayerNo) );
+                AddUndo( o3tl::make_unique<SdrUndoObjectLayerChange>( *pObj, pObj->GetLayer(), _nLayerNo) );
                 pObj->SetLayer( _nLayerNo );
                 OObjectBase& rBaseObj = dynamic_cast<OObjectBase&>(*pObj);
                 try

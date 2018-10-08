@@ -215,7 +215,7 @@ void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
                 if(pDrView)
                 {
                     SfxUndoManager* pManager = rDoc.GetDocSh()->GetUndoManager();
-                    SdLayerModifyUndoAction* pAction = new SdLayerModifyUndoAction(
+                    std::unique_ptr<SdLayerModifyUndoAction> pAction(new SdLayerModifyUndoAction(
                         &rDoc,
                         pLayer,
                         aName,
@@ -230,8 +230,8 @@ void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
                         bNewVisible,
                         bNewLocked,
                         bNewPrintable
-                        );
-                    pManager->AddUndoAction(pAction);
+                        ));
+                    pManager->AddUndoAction(std::move(pAction));
                 }
             }
 
@@ -383,7 +383,7 @@ void LayerTabBar::EndRenaming()
             if( pDrView )
             {
                 SfxUndoManager* pManager = rDoc.GetDocSh()->GetUndoManager();
-                SdLayerModifyUndoAction* pAction = new SdLayerModifyUndoAction(
+                std::unique_ptr<SdLayerModifyUndoAction> pAction(new SdLayerModifyUndoAction(
                     &rDoc,
                     pLayer,
                     aLayerName,
@@ -398,8 +398,8 @@ void LayerTabBar::EndRenaming()
                     pDrView->IsLayerVisible(aLayerName),
                     pDrView->IsLayerLocked(aLayerName),
                     pDrView->IsLayerPrintable(aLayerName)
-                    );
-                pManager->AddUndoAction( pAction );
+                    ));
+                pManager->AddUndoAction( std::move(pAction) );
             }
 
             // First notify View since SetName() calls ResetActualLayer() and

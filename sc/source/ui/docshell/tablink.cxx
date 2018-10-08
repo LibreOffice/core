@@ -145,7 +145,7 @@ void ScTableLink::Closed()
     if (bAddUndo && bUndo)
     {
         pImpl->m_pDocSh->GetUndoManager()->AddUndoAction(
-                new ScUndoRemoveLink( pImpl->m_pDocSh, aFileName ) );
+                o3tl::make_unique<ScUndoRemoveLink>( pImpl->m_pDocSh, aFileName ) );
 
         bAddUndo = false;   // only once
     }
@@ -384,7 +384,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
 
     if (bAddUndo && bUndo)
         pImpl->m_pDocSh->GetUndoManager()->AddUndoAction(
-                    new ScUndoRefreshLink( pImpl->m_pDocSh, std::move(pUndoDoc) ) );
+                    o3tl::make_unique<ScUndoRefreshLink>( pImpl->m_pDocSh, std::move(pUndoDoc) ) );
 
     //  Paint (may be several tables)
 

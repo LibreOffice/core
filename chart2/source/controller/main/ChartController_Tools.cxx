@@ -417,7 +417,7 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
                         }
 
                         pDestPage->InsertObject( pNewObj );
-                        m_pDrawViewWrapper->AddUndo( new SdrUndoInsertObj( *pNewObj ) );
+                        m_pDrawViewWrapper->AddUndo( o3tl::make_unique<SdrUndoInsertObj>( *pNewObj ) );
                         xSelShape = xShape;
                     }
                 }
@@ -480,7 +480,7 @@ void ChartController::impl_PasteStringAsTextShape( const OUString& rString, cons
                 if ( pObj )
                 {
                     m_pDrawViewWrapper->BegUndo( SvxResId( RID_SVX_3D_UNDO_EXCHANGE_PASTE ) );
-                    m_pDrawViewWrapper->AddUndo( new SdrUndoInsertObj( *pObj ) );
+                    m_pDrawViewWrapper->AddUndo( o3tl::make_unique<SdrUndoInsertObj>( *pObj ) );
                     m_pDrawViewWrapper->EndUndo();
 
                     impl_switchDiagramPositioningToExcludingPositioning();

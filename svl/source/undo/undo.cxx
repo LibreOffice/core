@@ -595,15 +595,16 @@ bool SfxUndoManager::ImplAddUndoAction_NoNotify( SfxUndoAction *pAction, bool bT
 }
 
 
-void SfxUndoManager::AddUndoAction( SfxUndoAction *pAction, bool bTryMerge )
+void SfxUndoManager::AddUndoAction( std::unique_ptr<SfxUndoAction> pAction, bool bTryMerge )
 {
     UndoManagerGuard aGuard( *m_xData );
 
     // add
-    if ( ImplAddUndoAction_NoNotify( pAction, bTryMerge, true, aGuard ) )
+    auto pActionTmp = pAction.get();
+    if ( ImplAddUndoAction_NoNotify( pAction.release(), bTryMerge, true, aGuard ) )
     {
         // notify listeners
-        aGuard.scheduleNotification( &SfxUndoListener::undoActionAdded, pAction->GetComment() );
+        aGuard.scheduleNotification( &SfxUndoListener::undoActionAdded, pActionTmp->GetComment() );
     }
 }
 

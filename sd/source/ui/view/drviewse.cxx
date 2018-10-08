@@ -783,7 +783,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 mpDrawView->UnmarkAllPoints();
 
                 if( bUndo )
-                    mpDrawView->AddUndo(new SdrUndoGeoObj(*pPathObj));
+                    mpDrawView->AddUndo(o3tl::make_unique<SdrUndoGeoObj>(*pPathObj));
 
                 pPathObj->ToggleClosed();
 

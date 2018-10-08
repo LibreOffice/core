@@ -1268,7 +1268,7 @@ bool FmXFormShell::executeControlConversionSlot_Lock(const Reference<XFormCompon
             DBG_ASSERT(pModel != nullptr, "FmXFormShell::executeControlConversionSlot: my shell has no model !");
             if (pModel && pModel->IsUndoEnabled() )
             {
-                pModel->AddUndo(new FmUndoModelReplaceAction(*pModel, pFormObject, xOldModel));
+                pModel->AddUndo(o3tl::make_unique<FmUndoModelReplaceAction>(*pModel, pFormObject, xOldModel));
             }
             else
             {

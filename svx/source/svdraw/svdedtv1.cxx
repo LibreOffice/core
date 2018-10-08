@@ -137,9 +137,9 @@ void SdrEditView::SetMarkedObjRect(const tools::Rectangle& rRect)
         EndUndo();
 }
 
-std::vector< SdrUndoAction* > SdrEditView::CreateConnectorUndo( SdrObject& rO )
+std::vector< std::unique_ptr<SdrUndoAction> > SdrEditView::CreateConnectorUndo( SdrObject& rO )
 {
-    std::vector< SdrUndoAction* > vUndoActions;
+    std::vector< std::unique_ptr<SdrUndoAction> > vUndoActions;
 
     if ( rO.GetBroadcaster() )
     {
@@ -164,11 +164,10 @@ std::vector< SdrUndoAction* > SdrEditView::CreateConnectorUndo( SdrObject& rO )
     return vUndoActions;
 }
 
-void SdrEditView::AddUndoActions( std::vector< SdrUndoAction* >& rUndoActions )
+void SdrEditView::AddUndoActions( std::vector< std::unique_ptr<SdrUndoAction> > aUndoActions )
 {
-    std::vector< SdrUndoAction* >::iterator aUndoActionIter( rUndoActions.begin() );
-    while( aUndoActionIter != rUndoActions.end() )
-        AddUndo( *aUndoActionIter++ );
+    for (auto & rAction : aUndoActions)
+        AddUndo( std::move(rAction) );
 }
 
 void SdrEditView::MoveMarkedObj(const Size& rSiz, bool bCopy)
@@ -194,8 +193,7 @@ void SdrEditView::MoveMarkedObj(const Size& rSiz, bool bCopy)
         SdrObject* pO=pM->GetMarkedSdrObj();
         if( bUndo )
         {
-            std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pO ) );
-            AddUndoActions( vConnectorUndoActions );
+            AddUndoActions( CreateConnectorUndo( *pO ) );
             AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*pO,rSiz));
         }
         pO->Move(rSiz);
@@ -226,8 +224,7 @@ void SdrEditView::ResizeMarkedObj(const Point& rRef, const Fraction& xFact, cons
         SdrObject* pO=pM->GetMarkedSdrObj();
         if( bUndo )
         {
-            std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pO ) );
-            AddUndoActions( vConnectorUndoActions );
+            AddUndoActions( CreateConnectorUndo( *pO ) );
             AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
         }
         pO->Resize(rRef,xFact,yFact);
@@ -255,8 +252,7 @@ void SdrEditView::ResizeMultMarkedObj(const Point& rRef,
         SdrObject* pO=pM->GetMarkedSdrObj();
         if( bUndo )
         {
-            std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pO ) );
-            AddUndoActions( vConnectorUndoActions );
+            AddUndoActions( CreateConnectorUndo( *pO ) );
             AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
         }
 
@@ -330,8 +326,7 @@ void SdrEditView::RotateMarkedObj(const Point& rRef, long nAngle, bool bCopy)
             if( bUndo )
             {
                 // extra undo actions for changed connector which now may hold its laid out path (SJ)
-                std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pO ) );
-                AddUndoActions( vConnectorUndoActions );
+                AddUndoActions( CreateConnectorUndo( *pO ) );
 
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
             }
@@ -394,8 +389,7 @@ void SdrEditView::MirrorMarkedObj(const Point& rRef1, const Point& rRef2, bool b
             if( bUndo )
             {
                 // extra undo actions for changed connector which now may hold its laid out path (SJ)
-                std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pO ) );
-                AddUndoActions( vConnectorUndoActions );
+                AddUndoActions( CreateConnectorUndo( *pO ) );
 
                 AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
             }
@@ -480,8 +474,7 @@ void SdrEditView::ShearMarkedObj(const Point& rRef, long nAngle, bool bVShear, b
         SdrObject* pO=pM->GetMarkedSdrObj();
         if( bUndo )
         {
-            std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pO ) );
-            AddUndoActions( vConnectorUndoActions );
+            AddUndoActions( CreateConnectorUndo( *pO ) );
             AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
         }
         pO->Shear(rRef,nAngle,nTan,bVShear);
@@ -1040,14 +1033,11 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
 
         if( bUndo )
         {
-            std::vector< SdrUndoAction* > vConnectorUndoActions;
             SdrEdgeObj* pEdgeObj = dynamic_cast< SdrEdgeObj* >( pObj );
             if ( pEdgeObj )
                 bPossibleGeomChange = true;
             else
-                vConnectorUndoActions = CreateConnectorUndo( *pObj );
-
-            AddUndoActions( vConnectorUndoActions );
+                AddUndoActions( CreateConnectorUndo( *pObj ) );
         }
 
         // new geometry undo

@@ -3771,13 +3771,13 @@ void OReportController::switchReportSection(const sal_Int16 _nId)
             const OUString sUndoAction(RptResId(bSwitchOn ? RID_STR_UNDO_ADD_REPORTHEADERFOOTER : RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER));
             pUndoContext.reset( new UndoContext( getUndoManager(), sUndoAction ) );
 
-            addUndoAction(new OReportSectionUndo(*(m_aReportModel),SID_REPORTHEADER_WITHOUT_UNDO
+            addUndoAction(o3tl::make_unique<OReportSectionUndo>(*(m_aReportModel),SID_REPORTHEADER_WITHOUT_UNDO
                                                             ,::std::mem_fn(&OReportHelper::getReportHeader)
                                                             ,m_xReportDefinition
                                                             ,bSwitchOn ? Inserted : Removed
                                                             ));
 
-            addUndoAction(new OReportSectionUndo(*(m_aReportModel),SID_REPORTFOOTER_WITHOUT_UNDO
+            addUndoAction(o3tl::make_unique<OReportSectionUndo>(*(m_aReportModel),SID_REPORTFOOTER_WITHOUT_UNDO
                                                             ,::std::mem_fn(&OReportHelper::getReportFooter)
                                                             ,m_xReportDefinition
                                                             ,bSwitchOn ? Inserted : Removed
@@ -3818,14 +3818,14 @@ void OReportController::switchPageSection(const sal_Int16 _nId)
             const OUString sUndoAction(RptResId(bSwitchOn ? RID_STR_UNDO_ADD_REPORTHEADERFOOTER : RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER));
             pUndoContext.reset( new UndoContext( getUndoManager(), sUndoAction ) );
 
-            addUndoAction(new OReportSectionUndo(*m_aReportModel
+            addUndoAction(o3tl::make_unique<OReportSectionUndo>(*m_aReportModel
                                                             ,SID_PAGEHEADER_WITHOUT_UNDO
                                                             ,::std::mem_fn(&OReportHelper::getPageHeader)
                                                             ,m_xReportDefinition
                                                             ,bSwitchOn ? Inserted : Removed
                                                             ));
 
-            addUndoAction(new OReportSectionUndo(*m_aReportModel
+            addUndoAction(o3tl::make_unique<OReportSectionUndo>(*m_aReportModel
                                                             ,SID_PAGEFOOTER_WITHOUT_UNDO
                                                             ,::std::mem_fn(&OReportHelper::getPageFooter)
                                                             ,m_xReportDefinition
@@ -3872,7 +3872,7 @@ void OReportController::modifyGroup(const bool _bAppend, const Sequence< Propert
             rUndoEnv.AddElement( xGroup->getFunctions() );
         }
 
-        addUndoAction( new OGroupUndo(
+        addUndoAction( o3tl::make_unique<OGroupUndo>(
             *m_aReportModel,
             _bAppend ? RID_STR_UNDO_APPEND_GROUP : RID_STR_UNDO_REMOVE_GROUP,
             _bAppend ? Inserted : Removed,
@@ -3906,7 +3906,7 @@ void OReportController::createGroupSection(const bool _bUndo,const bool _bHeader
         {
             const OXUndoEnvironment::OUndoEnvLock aLock(m_aReportModel->GetUndoEnv());
             if ( _bUndo )
-                addUndoAction(new OGroupSectionUndo(*m_aReportModel
+                addUndoAction(o3tl::make_unique<OGroupSectionUndo>(*m_aReportModel
                                                                 ,_bHeader ? SID_GROUPHEADER_WITHOUT_UNDO : SID_GROUPFOOTER_WITHOUT_UNDO
                                                                 ,_bHeader ? ::std::mem_fn(&OGroupHelper::getHeader) : ::std::mem_fn(&OGroupHelper::getFooter)
                                                                 ,xGroup
@@ -4362,9 +4362,9 @@ void OReportController::clearUndoManager() const
 }
 
 
-void OReportController::addUndoAction( SfxUndoAction* i_pAction )
+void OReportController::addUndoAction( std::unique_ptr<SfxUndoAction> i_pAction )
 {
-    getUndoManager().AddUndoAction( i_pAction );
+    getUndoManager().AddUndoAction( std::move(i_pAction) );
 
     InvalidateFeature( SID_UNDO );
     InvalidateFeature( SID_REDO );

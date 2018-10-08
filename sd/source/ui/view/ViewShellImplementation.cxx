@@ -170,9 +170,9 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
         {
             OUString aComment( SdResId(STR_UNDO_MODIFY_PAGE) );
             pUndoManager->EnterListAction(aComment, aComment, 0, mrViewShell.GetViewShellBase().GetViewShellId());
-            ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
-                pDocument, pUndoPage, aNewName, aNewAutoLayout, bBVisible, bBObjsVisible);
-            pUndoManager->AddUndoAction(pAction);
+            pUndoManager->AddUndoAction(
+                o3tl::make_unique<ModifyPageUndoAction>(
+                    pDocument, pUndoPage, aNewName, aNewAutoLayout, bBVisible, bBObjsVisible));
 
             // Clear the selection because the selected object may be removed as
             // a result of the assignment of the layout.
@@ -216,7 +216,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
                 bSetModified = static_cast<const SfxBoolItem&>(pArgs->Get(SID_MODIFYPAGE)).GetValue();
             }
 
-            pUndoManager->AddUndoAction( new UndoAutoLayoutPosAndSize( *pUndoPage ) );
+            pUndoManager->AddUndoAction( o3tl::make_unique<UndoAutoLayoutPosAndSize>( *pUndoPage ) );
             pUndoManager->LeaveListAction();
 
             pDocument->SetChanged(bSetModified);

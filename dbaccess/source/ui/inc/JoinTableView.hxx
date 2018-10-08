@@ -318,7 +318,7 @@ namespace dbaui
             modified
             @param _pAction a possible undo action to add at the controller
         */
-        void invalidateAndModify(SfxUndoAction *_pAction);
+        void invalidateAndModify(std::unique_ptr<SfxUndoAction> _pAction);
 
     private:
         using Window::Scroll;
