@@ -118,9 +118,9 @@ Extension  ::=  SEQUENCE  {
 */
 
 typedef struct {
-    SECItem extnID;
-    SECItem critical;
-    SECItem extnValue;
+    SECItem const extnID;
+    SECItem const critical;
+    SECItem const extnValue;
 } Extension;
 
 /*

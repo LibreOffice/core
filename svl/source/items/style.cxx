@@ -388,7 +388,7 @@ struct DoesStyleMatchStyleSheetPredicate final : public svl::StyleSheetPredicate
         return bMatches;
     }
 
-    SfxStyleSheetIterator *mIterator;
+    SfxStyleSheetIterator * const mIterator;
 };
 
 }

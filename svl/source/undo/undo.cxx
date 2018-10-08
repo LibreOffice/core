@@ -1298,11 +1298,11 @@ void SfxUndoManager::EmptyActionsChanged()
 
 struct SfxListUndoAction::Impl
 {
-    sal_uInt16 mnId;
-    ViewShellId mnViewShellId;
+    sal_uInt16 const mnId;
+    ViewShellId const mnViewShellId;
 
     OUString maComment;
-    OUString maRepeatComment;
+    OUString const maRepeatComment;
 
     Impl( sal_uInt16 nId, ViewShellId nViewShellId, const OUString& rComment, const OUString& rRepeatComment ) :
         mnId(nId), mnViewShellId(nViewShellId), maComment(rComment), maRepeatComment(rRepeatComment) {}

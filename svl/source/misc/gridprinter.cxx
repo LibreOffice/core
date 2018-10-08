@@ -51,7 +51,7 @@ typedef mdds::multi_type_matrix<matrix_trait> MatrixImplType;
 struct GridPrinter::Impl
 {
     MatrixImplType maMatrix;
-    bool mbPrint;
+    bool const mbPrint;
 
     Impl( size_t nRows, size_t nCols, bool bPrint ) :
         maMatrix(nRows, nCols, OUString()), mbPrint(bPrint) {}
