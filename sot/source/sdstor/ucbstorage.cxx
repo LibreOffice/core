@@ -405,7 +405,7 @@ public:
     OUString                    m_aURL;         // the full path name to create the content
     OUString                    m_aContentType;
     OUString                    m_aOriginalContentType;
-    OString                     m_aKey;
+    OString const               m_aKey;
     ::ucbhelper::Content*       m_pContent;     // the content that provides the data
     Reference<XInputStream>     m_rSource;      // the stream covering the original data of the content
     std::unique_ptr<SvStream>   m_pStream;      // the stream worked on; for readonly streams it is the original stream of the content
@@ -416,7 +416,7 @@ public:
     bool                        m_bSourceRead;  // Source still contains useful information
     bool                        m_bModified;    // only modified streams will be sent to the original content
     bool                        m_bCommited;    // sending the streams is coordinated by the root storage of the package
-    bool                        m_bDirect;      // the storage and its streams are opened in direct mode; for UCBStorages
+    bool const                  m_bDirect;      // the storage and its streams are opened in direct mode; for UCBStorages
                                                 // this means that the root storage does an autocommit when its external
                                                 // reference is destroyed
     bool                        m_bIsOLEStorage;// an OLEStorage on a UCBStorageStream makes this an Autocommit-stream
@@ -466,7 +466,7 @@ public:
     ErrCode                     m_nError;
     StreamMode                  m_nMode;        // open mode ( read/write/trunc/nocreate/sharing )
     bool                        m_bCommited;    // sending the streams is coordinated by the root storage of the package
-    bool                        m_bDirect;      // the storage and its streams are opened in direct mode; for UCBStorages
+    bool const                  m_bDirect;      // the storage and its streams are opened in direct mode; for UCBStorages
                                                 // this means that the root storage does an autocommit when its external
                                                 // reference is destroyed
     bool                        m_bIsRoot;      // marks this storage as root storages that manages all commits and reverts
@@ -478,7 +478,7 @@ public:
 
     UCBStorageElementList_Impl  m_aChildrenList;
 
-    bool                        m_bRepairPackage;
+    bool const                  m_bRepairPackage;
     Reference< XProgressHandler > m_xProgressHandler;
 
                                 UCBStorage_Impl( const ::ucbhelper::Content&, const OUString&, StreamMode, UCBStorage*, bool,
@@ -529,7 +529,7 @@ struct UCBStorageElement_Impl
 {
     OUString                    m_aName;        // the actual URL relative to the root "folder"
     OUString                    m_aOriginalName;// the original name in the content
-    sal_uLong                   m_nSize;
+    sal_uLong const             m_nSize;
     bool                        m_bIsFolder;    // Only true when it is a UCBStorage !
     bool                        m_bIsStorage;   // Also true when it is an OLEStorage !
     bool                        m_bIsRemoved;   // element will be removed on commit

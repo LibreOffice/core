@@ -38,9 +38,9 @@ static Nlist *nlist[NLSIZE];
 
 struct kwtab
 {
-    char *kw;
-    int val;
-    int flag;
+    char * const kw;
+    int const val;
+    int const flag;
 };
 
 static struct kwtab kwtab[] =
