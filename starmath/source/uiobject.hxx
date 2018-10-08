@@ -20,7 +20,7 @@ class ElementUIObject : public UIObject
 {
 private:
     VclPtr<SmElementsControl> mxElementsSelector;
-    OUString maID;
+    OUString const maID;
 
 public:
 

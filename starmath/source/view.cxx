@@ -853,7 +853,7 @@ struct SmViewShell_Impl
 {
     std::unique_ptr<sfx2::DocumentInserter> pDocInserter;
     std::unique_ptr<SfxRequest> pRequest;
-    SvtMiscOptions          aOpts;
+    SvtMiscOptions const        aOpts;
 };
 
 

@@ -926,7 +926,7 @@ public:
 class SmXMLRowContext_Impl : public SmXMLDocContext_Impl
 {
 protected:
-    size_t nElementCount;
+    size_t const nElementCount;
 
 public:
     SmXMLRowContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,

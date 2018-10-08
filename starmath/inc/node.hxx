@@ -98,7 +98,7 @@ class SmNode : public SmRect
     SmFace      maFace;
 
     SmToken     maNodeToken;
-    SmNodeType      meType;
+    SmNodeType const meType;
     SmScaleMode     meScaleMode;
     RectHorAlign    meRectHorAlign;
     FontChangeMask  mnFlags;
@@ -435,7 +435,7 @@ public:
  */
 class SmSpecialNode : public SmTextNode
 {
-    bool mbIsFromGreekSymbolSet;
+    bool const mbIsFromGreekSymbolSet;
 
 protected:
     SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, sal_uInt16 _nFontDesc);

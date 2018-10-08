@@ -66,7 +66,7 @@ class SmParser
     std::set< OUString >   m_aUsedSymbols;
 
     // CharClass representing a locale for parsing numbers
-    CharClass m_aNumCC;
+    CharClass const m_aNumCC;
     // pointer to System locale's CharClass, which is alive inside SM_MOD()
     const CharClass* m_pSysCC;
 

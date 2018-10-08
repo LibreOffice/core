@@ -33,8 +33,8 @@ class SmNode;
 class SmElement
 {
     std::unique_ptr<SmNode> mpNode;
-    OUString        maText;
-    OUString        maHelpText;
+    OUString const          maText;
+    OUString const          maHelpText;
 public:
     Point mBoxLocation;
     Size  mBoxSize;

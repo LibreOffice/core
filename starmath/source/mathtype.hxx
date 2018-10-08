@@ -151,7 +151,7 @@ private:
     void TypeFaceToString(OUString &rRet,sal_uInt8 nFace);
 
     OUStringBuffer &rRet;
-    SmNode *pTree;
+    SmNode * const pTree;
 
     sal_uInt8 nHAlign;
 
