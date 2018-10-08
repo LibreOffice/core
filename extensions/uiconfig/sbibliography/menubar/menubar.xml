@@ -21,7 +21,6 @@
             <menu:menuitem menu:id=".uno:Bib/InsertRecord"/>
             <menu:menuitem menu:id=".uno:Bib/DeleteRecord"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:Bib/autoFilter"/>
             <menu:menuitem menu:id=".uno:Bib/standardFilter"/>
             <menu:menuitem menu:id=".uno:Bib/removeFilter"/>
             <menu:menuseparator/>
