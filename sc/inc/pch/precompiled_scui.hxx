@@ -139,8 +139,6 @@
 #include <svtools/collatorres.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/svlbitm.hxx>
-#include <svtools/treelistentry.hxx>
 #include <svx/algitem.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/dlgutil.hxx>
@@ -161,6 +159,8 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/useroptions.hxx>
 #include <userlist.hxx>
+#include <vcl/svlbitm.hxx>
+#include <vcl/treelistentry.hxx>
 #include <viewopti.hxx>
 #include <zforauto.hxx>
 

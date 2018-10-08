@@ -405,9 +405,6 @@
 #include <svtools/svtresid.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <svtools/toolboxcontroller.hxx>
-#include <svtools/transfer.hxx>
-#include <svtools/treelistbox.hxx>
-#include <svtools/treelistentry.hxx>
 #include <svtools/valueset.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -526,5 +523,8 @@
 #include <svx/xtable.hxx>
 #include <svx/xtextit0.hxx>
 #include <svx/zoomslideritem.hxx>
+#include <vcl/transfer.hxx>
+#include <vcl/treelistbox.hxx>
+#include <vcl/treelistentry.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

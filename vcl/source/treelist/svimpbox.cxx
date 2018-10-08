@@ -26,19 +26,17 @@
 #include <memory>
 #include <stack>
 
-#include <svtools/treelistbox.hxx>
-#include <svtools/iconview.hxx>
-#include <svtools/svlbitm.hxx>
-#include <svimpbox.hxx>
-#include <iconviewimpl.hxx>
+#include <vcl/treelistbox.hxx>
+#include <vcl/svlbitm.hxx>
+#include <vcl/svimpbox.hxx>
 #include <rtl/instance.hxx>
 #include <tools/wintypes.hxx>
 #include <bitmaps.hlst>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
-#include <svtools/treelistentry.hxx>
-#include <svtools/viewdataentry.hxx>
+#include <vcl/treelistentry.hxx>
+#include <vcl/viewdataentry.hxx>
 
 // #i27063# (pl), #i32300# (pb) never access VCL after DeInitVCL - also no destructors
 Image*  SvImpLBox::s_pDefCollapsed      = nullptr;

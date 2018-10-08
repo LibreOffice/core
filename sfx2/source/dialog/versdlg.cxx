@@ -31,7 +31,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <tools/datetime.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <svtools/miscopt.hxx>
 
 #include <versdlg.hxx>

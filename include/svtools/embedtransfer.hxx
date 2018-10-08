@@ -22,7 +22,7 @@
 
 #include <svtools/svtdllapi.h>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <memory>
 
 class Graphic;

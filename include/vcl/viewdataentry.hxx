@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_VIEWDATAENTRY_HXX
-#define INCLUDED_SVTOOLS_VIEWDATAENTRY_HXX
+#ifndef INCLUDED_VCL_VIEWDATAENTRY_HXX
+#define INCLUDED_VCL_VIEWDATAENTRY_HXX
 
-#include <svtools/svtdllapi.h>
+#include <vcl/dllapi.h>
 #include <tools/solar.h>
 #include <tools/gen.hxx>
 
@@ -40,7 +40,7 @@ struct SvViewDataItem
  * highlighted. When an entry is only highlighted, it looks visually
  * highlighted, but not logically selected.
  */
-class SVT_DLLPUBLIC SvViewDataEntry
+class VCL_DLLPUBLIC SvViewDataEntry
 {
     friend class SvTreeList;
 

@@ -28,7 +28,7 @@
 #include <editeng/spltitem.hxx>
 #include <editeng/widwitem.hxx>
 #include <sot/exchange.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 
 #include <sc.hrc>
 #include <drtxtob.hxx>

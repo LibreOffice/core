@@ -18,7 +18,7 @@
  */
 
 #include <svtools/iconview.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <svtools/fileview.hxx>
 #include <iconviewimpl.hxx>
 

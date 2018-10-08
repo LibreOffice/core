@@ -24,7 +24,7 @@
 #include <tools/fract.hxx>
 #include <svl/undo.hxx>
 #include <svl/fstathelper.hxx>
-#include <svtools/imap.hxx>
+#include <vcl/imap.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>

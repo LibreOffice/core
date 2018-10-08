@@ -19,7 +19,7 @@
 
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <runtime.hxx>
 #include <sbstdobj.hxx>
 
