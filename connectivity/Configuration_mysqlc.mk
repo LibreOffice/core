@@ -7,13 +7,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Configuration_Configuration,driver_mysql))
+$(eval $(call gb_Configuration_Configuration,driver_mysqlc))
 
-$(eval $(call gb_Configuration_add_spool_modules,driver_mysql,connectivity/registry/mysql,\
-	org/openoffice/Office/DataAccess/Drivers-mysql.xcu \
+$(eval $(call gb_Configuration_add_spool_modules,driver_mysqlc,connectivity/registry/mysqlc,\
+	org/openoffice/Office/DataAccess/Drivers-mysqlc.xcu \
 ))
 
-$(eval $(call gb_Configuration_add_localized_datas,driver_mysql,connectivity/registry/mysql,\
+$(eval $(call gb_Configuration_add_localized_datas,driver_mysqlc,connectivity/registry/mysqlc,\
 	org/openoffice/Office/DataAccess/Drivers.xcu \
 ))
 

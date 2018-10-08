@@ -40,6 +40,8 @@ ifneq ($(ENABLE_JAVA),)
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_hsqldb \
 	Configuration_jdbc \
+	Configuration_mysql \
+	Library_mysql \
 	Jar_sdbc_hsqldb \
 	Library_hsqldb \
 	Library_jdbc \
@@ -81,9 +83,8 @@ endif
 
 ifeq ($(ENABLE_MARIADBC),TRUE)
 $(eval $(call gb_Module_add_targets,connectivity,\
-	Configuration_mysql \
+	Configuration_mysqlc \
 	Library_mysqlc \
-	Library_mysql \
 ))
 endif
 
