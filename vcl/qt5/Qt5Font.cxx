@@ -35,7 +35,9 @@ static QFont::Weight GetQFontWeight(FontWeight eWeight)
             return QFont::Light;
         case FontWeight_FORCE_EQUAL_SIZE:
             assert(false && "FontWeight_FORCE_EQUAL_SIZE not implementable for QFont");
+#ifdef NDEBUG // MacOS clang: fallthrough annotation in unreachable code [-Werror,-Wimplicit-fallthrough]
             SAL_FALLTHROUGH;
+#endif
         case WEIGHT_SEMILIGHT:
             SAL_FALLTHROUGH;
         case WEIGHT_DONTKNOW:
