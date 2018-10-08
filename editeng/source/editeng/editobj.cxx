@@ -67,10 +67,10 @@ static std::unique_ptr<XEditAttribute> MakeXEditAttribute( SfxItemPool& rPool, c
 }
 
 XEditAttribute::XEditAttribute( const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE )
+    : pItem(&rAttr)
+    , nStart(nS)
+    , nEnd(nE)
 {
-    pItem = &rAttr;
-    nStart = nS;
-    nEnd = nE;
 }
 
 XEditAttribute::~XEditAttribute()
@@ -90,12 +90,14 @@ void XEditAttribute::SetItem(const SfxPoolItem& rNew)
 }
 
 XParaPortionList::XParaPortionList(
-    OutputDevice* pRefDev, sal_uLong nPW, sal_uInt16 _nStretchX, sal_uInt16 _nStretchY) :
-    aRefMapMode(pRefDev->GetMapMode()), nStretchX(_nStretchX), nStretchY(_nStretchY)
+    OutputDevice* pRefDev, sal_uLong nPW, sal_uInt16 _nStretchX, sal_uInt16 _nStretchY)
+    : nRefDevPtr(pRefDev)
+    , eRefDevType(pRefDev->GetOutDevType())
+    , aRefMapMode(pRefDev->GetMapMode())
+    , nStretchX(_nStretchX)
+    , nStretchY(_nStretchY)
+    , nPaperWidth(nPW)
 {
-    nRefDevPtr = pRefDev;
-    nPaperWidth = nPW;
-    eRefDevType = pRefDev->GetOutDevType();
 }
 
 void XParaPortionList::push_back(XParaPortion* p)
@@ -495,13 +497,14 @@ static EditEngineItemPool* getEditEngineItemPool(SfxItemPool* pPool)
     return pRetval;
 }
 
-EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, SfxItemPool* pP ) :
-    mpFront(pFront)
+EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, SfxItemPool* pP )
+    : mpFront(pFront)
+    , nMetric(0xFFFF)
+    , nUserType(OutlinerMode::DontKnow)
+    , nScriptType(SvtScriptType::NONE)
+    , bVertical(false)
+    , bIsTopToBottomVert(false)
 {
-    nMetric = 0xFFFF;
-    nUserType = OutlinerMode::DontKnow;
-    pPortionInfo = nullptr;
-
     // #i101239# ensure target is a EditEngineItemPool, else
     // fallback to pool ownership. This is needed to ensure that at
     // pool destruction time of an alien pool, the pool is still alive.
@@ -525,21 +528,17 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, SfxItemPool* pP 
         // it is sure now that the pool is an EditEngineItemPool
         pPool->AddSfxItemPoolUser(*mpFront);
     }
-
-    bVertical = false;
-    bIsTopToBottomVert = false;
-    nScriptType = SvtScriptType::NONE;
 }
 
-EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, const EditTextObjectImpl& r ) :
-    mpFront(pFront)
+EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, const EditTextObjectImpl& r )
+    : mpFront(pFront)
+    , nMetric(r.nMetric)
+    , nUserType(r.nUserType)
+    , nScriptType(r.nScriptType)
+    , bVertical(r.bVertical)
+    , bIsTopToBottomVert(r.bIsTopToBottomVert)
 {
-    nMetric = r.nMetric;
-    nUserType = r.nUserType;
-    bVertical = r.bVertical;
-    bIsTopToBottomVert = r.bIsTopToBottomVert;
-    nScriptType = r.nScriptType;
-    pPortionInfo = nullptr;    // Do not copy PortionInfo
+    // Do not copy PortionInfo
 
     if ( !r.bOwnerOfPool )
     {
