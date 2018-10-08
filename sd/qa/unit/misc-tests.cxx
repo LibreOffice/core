@@ -20,6 +20,7 @@
 #include <com/sun/star/frame/XModel2.hpp>
 
 #include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
@@ -50,6 +51,14 @@
 #include <chrono>
 #include <sdpage.hxx>
 #include <comphelper/base64.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <GraphicViewShell.hxx>
+#include <LayerTabBar.hxx>
+#include <vcl/window.hxx>
+#include <vcl/event.hxx>
+#include <vcl/keycodes.hxx>
+
+
 
 using namespace ::com::sun::star;
 
@@ -68,6 +77,7 @@ public:
     void testTdf101242_settings();
     void testTdf119392();
     void testTdf67248();
+    void testTdf119956();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf96206);
@@ -81,6 +91,7 @@ public:
     CPPUNIT_TEST(testTdf101242_settings);
     CPPUNIT_TEST(testTdf119392);
     CPPUNIT_TEST(testTdf67248);
+    CPPUNIT_TEST(testTdf119956);
     CPPUNIT_TEST_SUITE_END();
 
 virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -118,6 +129,17 @@ sd::DrawDocShellRef SdMiscTest::Load(const OUString& rURL, sal_Int32 nFormat)
     uno::Reference< frame::XFrame > xTargetFrame = xDesktop->findFrame("_blank", 0);
     CPPUNIT_ASSERT(xTargetFrame.is());
 
+    // This ContainerWindow corresponds to the outermost window of a running LibreOffice.
+    // It needs a non-zero size and must be shown. Otherwise visible elements like the
+    // LayerTabBar in Draw have zero size and cannot get mouse events.
+    // The here used size is freely chosen.
+    uno::Reference<awt::XWindow> xContainerWindow = xTargetFrame->getContainerWindow();
+    xContainerWindow->setPosSize(0, 0, 1024, 768, awt::PosSize::SIZE);
+    CPPUNIT_ASSERT(xContainerWindow.is());
+    VclPtr<vcl::Window> pContainerWindow = VCLUnoHelper::GetWindow(xContainerWindow);
+    CPPUNIT_ASSERT(pContainerWindow);
+    pContainerWindow->Show(true);
+
     // 1. Open the document
     sd::DrawDocShellRef xDocSh = loadURL(rURL, nFormat);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.is());
@@ -137,16 +159,29 @@ sd::DrawDocShellRef SdMiscTest::Load(const OUString& rURL, sal_Int32 nFormat)
 
     sd::ViewShell *pViewShell = xDocSh->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
-    sd::slidesorter::SlideSorterViewShell* pSSVS = nullptr;
-    for (int i = 0; i < 1000; i++)
+
+    // Draw has no slidesorter, Impress never shows a LayerTabBar
+    if (DocumentType::Draw == xDocSh->GetDocumentType())
     {
-        // Process all Tasks - slide sorter is created here
-        while (Scheduler::ProcessTaskScheduling());
-        if ((pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase())) != nullptr)
-            break;
-        osl::Thread::wait(std::chrono::milliseconds(100));
+        sd::GraphicViewShell* pGraphicViewShell = dynamic_cast<sd::GraphicViewShell*>(xDocSh -> GetViewShell());
+        CPPUNIT_ASSERT(pGraphicViewShell);
+        sd::LayerTabBar* pLayerTabBar = pGraphicViewShell->GetLayerTabControl();
+        CPPUNIT_ASSERT(pLayerTabBar);
+        pLayerTabBar->StateChanged(StateChangedType::InitShow);
     }
-    CPPUNIT_ASSERT(pSSVS);
+    else
+    {
+        sd::slidesorter::SlideSorterViewShell* pSSVS = nullptr;
+        for (int i = 0; i < 1000; i++)
+        {
+            // Process all Tasks - slide sorter is created here
+            while (Scheduler::ProcessTaskScheduling());
+            if ((pSSVS = sd::slidesorter::SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase())) != nullptr)
+                break;
+            osl::Thread::wait(std::chrono::milliseconds(100));
+        }
+        CPPUNIT_ASSERT(pSSVS);
+    }
 
     return xDocSh;
 }
@@ -497,7 +532,7 @@ void SdMiscTest::testTdf119392()
     // Loads a document which has two user layers "V--" and "V-L". Inserts a new layer "-P-" between them.
     // Checks, that the bitfields in the saved file have the bits in the correct order.
 
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf119392_InsertLayer.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("sd/qa/unit/data/tdf119392_InsertLayer.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
     // Insert layer "-P-", not visible, printable, not locked
     SdrView* pView = xDocShRef -> GetViewShell()->GetView();
@@ -542,10 +577,48 @@ void SdMiscTest::testTdf67248()
     // The document tdf67248.odg has been created with a German UI. It has a user layer named "Background".
     // On opening the user layer must still exists. The error was, that it was merged into the standard
     // layer "background".
-    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("/sd/qa/unit/data/tdf67248.odg"), ODG);
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("sd/qa/unit/data/tdf67248.odg"), ODG);
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
     SdrLayerAdmin& rLayerAdmin = xDocShRef->GetDoc()->GetLayerAdmin();
     CPPUNIT_ASSERT_EQUAL( sal_uInt16(6), rLayerAdmin.GetLayerCount());
+
+    xDocShRef->DoClose();
+}
+
+void SdMiscTest::testTdf119956()
+{
+    sd::DrawDocShellRef xDocShRef = Load(m_directories.getURLFromSrc("sd/qa/unit/data/tdf119956.odg"), ODG);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocShRef.is());
+    sd::GraphicViewShell* pGraphicViewShell = dynamic_cast<sd::GraphicViewShell*>(xDocShRef -> GetViewShell());
+    CPPUNIT_ASSERT(pGraphicViewShell);
+    sd::LayerTabBar* pLayerTabBar = pGraphicViewShell->GetLayerTabControl();
+    CPPUNIT_ASSERT(pLayerTabBar);
+
+    // Alt+Click sets a tab in edit mode, so that you can rename it.
+    // The error was, that Alt+Click on a tab, which was not the current tab, did not set the clicked tab
+    // as current tab. In consequence the entered text was applied to the wrong tab.
+
+    // The test document has the layers "layout", "controls", "measurelines" and "Layer4" in this order
+    // The "pagePos" is 0, 1, 2, 3
+    // Make sure, that tab "layout" is the current tab.
+    MouseEvent aSyntheticMouseEvent;
+    if (pLayerTabBar->GetCurPagePos() != 0)
+    {
+        sal_uInt16 nIdOfTabPos0(pLayerTabBar->GetPageId(0));
+        tools::Rectangle aTabPos0Rect(pLayerTabBar->GetPageRect(nIdOfTabPos0));
+        aSyntheticMouseEvent = MouseEvent(aTabPos0Rect.Center(), 1, MouseEventModifiers::SYNTHETIC, MOUSE_LEFT, 0);
+        pLayerTabBar->MouseButtonDown(aSyntheticMouseEvent);
+    }
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pLayerTabBar->GetCurPagePos());
+
+    // Alt+Click on tab "Layer4"
+    sal_uInt16 nIdOfTabPos3(pLayerTabBar->GetPageId(3));
+    tools::Rectangle aTabPos3Rect(pLayerTabBar->GetPageRect(nIdOfTabPos3));
+    aSyntheticMouseEvent = MouseEvent(aTabPos3Rect.Center(), 1, MouseEventModifiers::SYNTHETIC, MOUSE_LEFT, KEY_MOD2);
+    pLayerTabBar->MouseButtonDown(aSyntheticMouseEvent);
+
+    // Make sure, tab 3 is current tab now.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pLayerTabBar->GetCurPagePos());
 
     xDocShRef->DoClose();
 }
