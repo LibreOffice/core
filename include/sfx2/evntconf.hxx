@@ -35,9 +35,9 @@ class SvxMacroTableDtor;
 
 struct SFX2_DLLPUBLIC SfxEventName
 {
-    SvMacroItemId mnId;
-    OUString      maEventName;
-    OUString      maUIName;
+    SvMacroItemId const mnId;
+    OUString const      maEventName;
+    OUString const      maUIName;
 
             SfxEventName( SvMacroItemId nId,
                              const OUString& rEventName,

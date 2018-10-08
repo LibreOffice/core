@@ -142,7 +142,7 @@ struct SfxSecurityPage_Impl
     bool                m_bNewPasswordIsValid;
     OUString            m_aNewPassword;
 
-    OUString            m_aEndRedliningWarning;
+    OUString const      m_aEndRedliningWarning;
     bool                m_bEndRedliningWarningDone;
 
     std::unique_ptr<weld::CheckButton> m_xOpenReadonlyCB;

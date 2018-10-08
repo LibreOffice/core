@@ -62,7 +62,7 @@ struct TabPageParent
         return pParent->GetFrameWeld();
     }
     VclPtr<vcl::Window> pParent;
-    weld::Container* pPage;
+    weld::Container* const pPage;
     weld::DialogController* pController;
 };
 

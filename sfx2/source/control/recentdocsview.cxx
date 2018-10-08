@@ -116,11 +116,12 @@ static std::map<ApplicationType,OUString> EncryptedBitmapForExtension =
     { ApplicationType::TYPE_MATH, BMP_128X128_MATH_DOC }
 };
 
+static constexpr long gnTextHeight = 30;
+static constexpr long gnItemPadding = 5;
+
 RecentDocsView::RecentDocsView( vcl::Window* pParent )
     : ThumbnailView(pParent)
     , mnFileTypes(ApplicationType::TYPE_NONE)
-    , mnTextHeight(30)
-    , mnItemPadding(5)
     , mnLastMouseDownItem(THUMBNAILVIEW_ITEM_NOTFOUND)
     , maWelcomeImage(BitmapEx(BMP_WELCOME))
     , maWelcomeLine1(SfxResId(STR_WELCOME_LINE1))
@@ -131,7 +132,7 @@ RecentDocsView::RecentDocsView( vcl::Window* pParent )
 
     SetStyle(GetStyle() | WB_VSCROLL);
     setItemMaxTextLength( 30 );
-    setItemDimensions( mnItemMaxSize, mnItemMaxSize, mnTextHeight, mnItemPadding );
+    setItemDimensions( mnItemMaxSize, mnItemMaxSize, gnTextHeight, gnItemPadding );
 
     maFillColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsBackgroundColor::get());
     maTextColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsTextColor::get());
@@ -333,7 +334,7 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     }
     else
     {
-        set_width_request(mnTextHeight + mnItemMaxSize + 2 * mnItemPadding);
+        set_width_request(gnTextHeight + mnItemMaxSize + 2 * gnItemPadding);
     }
 
     if (mItemList.empty())

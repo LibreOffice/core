@@ -23,15 +23,15 @@
 
 VCL_BUILDER_FACTORY(TemplateDefaultView)
 
-static const int gnItemPadding(5); //TODO:: Change padding to 10. It looks really crowded and occupied.
+static constexpr int gnItemPadding(5); //TODO:: Change padding to 10. It looks really crowded and occupied.
+static constexpr long gnTextHeight = 30;
 
 TemplateDefaultView::TemplateDefaultView( Window* pParent)
     : TemplateLocalView(pParent, WB_TABSTOP)
-    , mnTextHeight(30)
 {
     tools::Rectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
     mnItemMaxSize = std::min(aScreen.GetWidth(),aScreen.GetHeight()) > 800 ? 256 : 192;
-    ThumbnailView::setItemDimensions( mnItemMaxSize, mnItemMaxSize, mnTextHeight, gnItemPadding );
+    ThumbnailView::setItemDimensions( mnItemMaxSize, mnItemMaxSize, gnTextHeight, gnItemPadding );
     updateThumbnailDimensions(mnItemMaxSize);
 
     // startcenter specific settings
@@ -46,7 +46,7 @@ void TemplateDefaultView::reload()
 {
     TemplateLocalView::reload();
     // Set preferred width
-    set_width_request(mnTextHeight + mnItemMaxSize + 2*gnItemPadding);
+    set_width_request(gnTextHeight + mnItemMaxSize + 2*gnItemPadding);
 }
 
 void TemplateDefaultView::showAllTemplates()

@@ -59,7 +59,7 @@ class IFrameObject : public ::cppu::WeakImplHelper <
     css::uno::Reference < css::uno::XComponentContext > mxContext;
     css::uno::Reference < css::frame::XFrame2 > mxFrame;
     css::uno::Reference < css::embed::XEmbeddedObject > mxObj;
-    SfxItemPropertyMap  maPropMap;
+    SfxItemPropertyMap const  maPropMap;
     SfxFrameDescriptor  maFrmDescr;
 
 public:

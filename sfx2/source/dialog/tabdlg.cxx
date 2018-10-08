@@ -59,8 +59,8 @@ struct TabPageImpl
 
 struct Data_Impl
 {
-    sal_uInt16 nId;               // The ID
-    OString sId;                  // The ID
+    sal_uInt16 const nId;               // The ID
+    OString const sId;                  // The ID
     CreateTabPage fnCreatePage;   // Pointer to Factory
     GetTabPageRanges fnGetRanges; // Pointer to Ranges-Function
     VclPtr<SfxTabPage> pTabPage;         // The TabPage itself

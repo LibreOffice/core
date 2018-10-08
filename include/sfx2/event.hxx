@@ -189,9 +189,9 @@ inline std::basic_ostream<charT, traits> & operator <<(
 
 class SFX2_DLLPUBLIC SfxEventHint : public SfxHint
 {
-    SfxObjectShell*     pObjShell;
-    OUString            aEventName;
-    SfxEventHintId      nEventId;
+    SfxObjectShell* const     pObjShell;
+    OUString const            aEventName;
+    SfxEventHintId const      nEventId;
 
 public:
     SfxEventHint( SfxEventHintId nId, const OUString& aName, SfxObjectShell *pObj )
@@ -234,8 +234,8 @@ class Printer;
 
 class SfxPrintingHint : public SfxViewEventHint
 {
-    css::view::PrintableState mnPrintableState;
-    css::uno::Sequence < css::beans::PropertyValue > aOpts;
+    css::view::PrintableState const mnPrintableState;
+    css::uno::Sequence < css::beans::PropertyValue > const aOpts;
 public:
         SfxPrintingHint(
                 css::view::PrintableState nState,

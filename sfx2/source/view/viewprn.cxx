@@ -56,8 +56,8 @@ using namespace com::sun::star::uno;
 
 class SfxPrinterController : public vcl::PrinterController, public SfxListener
 {
-    Any                                     maCompleteSelection;
-    Any                                     maSelection;
+    Any const                               maCompleteSelection;
+    Any const                               maSelection;
     Reference< view::XRenderable >          mxRenderable;
     mutable VclPtr<Printer>                 mpLastPrinter;
     mutable Reference<awt::XDevice>         mxDevice;
@@ -65,8 +65,8 @@ class SfxPrinterController : public vcl::PrinterController, public SfxListener
     SfxObjectShell*                         mpObjectShell;
     bool        m_bOrigStatus;
     bool        m_bNeedsChange;
-    bool        m_bApi;
-    bool        m_bTempPrinter;
+    bool const        m_bApi;
+    bool const        m_bTempPrinter;
     util::DateTime  m_aLastPrinted;
     OUString m_aLastPrintedBy;
 
@@ -407,7 +407,7 @@ void SfxPrinterController::jobFinished( css::view::PrintableState nState )
 class SfxDialogExecutor_Impl
 {
 private:
-    SfxViewShell*           _pViewSh;
+    SfxViewShell* const           _pViewSh;
     PrinterSetupDialog&  _rSetupParent;
     std::unique_ptr<SfxItemSet> _pOptions;
     bool                    _bHelpDisabled;

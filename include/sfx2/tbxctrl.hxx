@@ -46,9 +46,9 @@ typedef SfxToolBoxControl* (*SfxToolBoxControlCtor)( sal_uInt16 nSlotId, sal_uIn
 
 struct SfxTbxCtrlFactory
 {
-    SfxToolBoxControlCtor   pCtor;
-    const std::type_info&       nTypeId;
-    sal_uInt16                  nSlotId;
+    SfxToolBoxControlCtor const   pCtor;
+    const std::type_info&         nTypeId;
+    sal_uInt16 const              nSlotId;
 
     SfxTbxCtrlFactory( SfxToolBoxControlCtor pTheCtor,
             const std::type_info& nTheTypeId, sal_uInt16 nTheSlotId ):
@@ -70,7 +70,7 @@ friend class SfxFrameStatusListener;
     bool                                                   m_bFloating;
     bool                                                   m_bCascading;
     Link<SfxPopupWindow*,void>                             m_aDeleteLink;
-    sal_uInt16                                             m_nId;
+    sal_uInt16 const                                       m_nId;
     css::uno::Reference< css::frame::XFrame > const        m_xFrame;
     rtl::Reference<SfxFrameStatusListener>                 m_xStatusListener;
 

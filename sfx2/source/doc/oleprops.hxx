@@ -211,7 +211,7 @@ protected:
     void         SetPropType( sal_Int32 nPropType ) { mnPropType = nPropType; }
 
 private:
-    sal_Int32           mnPropId;
+    sal_Int32 const     mnPropId;
     sal_Int32           mnPropType;
 };
 
@@ -337,7 +337,7 @@ private:
     SfxOleCodePageProperty maCodePageProp;      /// The codepage property.
     SfxOleDictionaryProperty maDictProp;        /// The dictionary property.
     sal_uInt64          mnStartPos;             /// Start stream position of the section.
-    bool                mbSupportsDict;         /// true = section supports dictionary.
+    bool const          mbSupportsDict;         /// true = section supports dictionary.
 };
 
 typedef std::shared_ptr< SfxOleSection > SfxOleSectionRef;

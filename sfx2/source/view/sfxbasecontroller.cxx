@@ -109,8 +109,8 @@ using ::com::sun::star::ui::XSidebarProvider;
 
 struct GroupIDToCommandGroup
 {
-    SfxGroupId  nGroupID;
-    sal_Int16   nCommandGroup;
+    SfxGroupId const  nGroupID;
+    sal_Int16 const   nCommandGroup;
 };
 
 static bool                 bGroupIDMapInitialized = false;
@@ -333,7 +333,7 @@ public:
 
 private:
 
-    SfxBaseController*      m_pController;
+    SfxBaseController* const      m_pController;
 
 } ; // class IMPL_SfxBaseController_ListenerContainer
 

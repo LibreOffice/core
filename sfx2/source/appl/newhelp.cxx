@@ -243,8 +243,8 @@ namespace sfx2
 
 struct IndexEntry_Impl
 {
-    bool        m_bSubEntry;
-    OUString        m_aURL;
+    bool const        m_bSubEntry;
+    OUString const    m_aURL;
 
     IndexEntry_Impl( const OUString& rURL, bool bSubEntry ) :
         m_bSubEntry( bSubEntry ), m_aURL( rURL ) {}
@@ -254,8 +254,8 @@ struct IndexEntry_Impl
 
 struct ContentEntry_Impl
 {
-    OUString    aURL;
-    bool    bIsFolder;
+    OUString const aURL;
+    bool const     bIsFolder;
 
     ContentEntry_Impl( const OUString& rURL, bool bFolder ) :
         aURL( rURL ), bIsFolder( bFolder ) {}

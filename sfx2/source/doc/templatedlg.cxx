@@ -133,8 +133,8 @@ public:
 
 private:
 
-    OUString maKeyword;
-    FILTER_APPLICATION meApp;
+    OUString const maKeyword;
+    FILTER_APPLICATION const meApp;
 };
 
 /***

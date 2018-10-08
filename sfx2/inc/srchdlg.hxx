@@ -38,7 +38,7 @@ private:
     Link<SearchDialog&,void>   m_aFindHdl;
     Link<LinkParamNone*,void>  m_aCloseHdl;
 
-    OUString            m_sConfigName;
+    OUString const            m_sConfigName;
 
     std::unique_ptr<weld::ComboBox> m_xSearchEdit;
     std::unique_ptr<weld::CheckButton> m_xWholeWordsBox;

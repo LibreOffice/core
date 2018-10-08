@@ -31,7 +31,6 @@ public:
 
 private:
     long    mnItemMaxSize;
-    long    mnTextHeight;
 };
 
 #endif // INCLUDED_SFX2_TEMPLATEDEFAULTVIEW_HXX

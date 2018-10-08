@@ -65,7 +65,7 @@ private:
     OUString                     m_AutoloadURL;
     bool                         m_isAutoloadEnabled;
     OUString                     m_DefaultTarget;
-    OUString                     m_TemplateName;
+    OUString const               m_TemplateName;
     OUString                     m_Author;
     css::util::DateTime          m_CreationDate;
     OUString                     m_ModifiedBy;
@@ -262,7 +262,7 @@ struct CustomPropertyLine;
 class CustomPropertiesEdit : public Edit
 {
 private:
-    CustomPropertyLine*             m_pLine;
+    CustomPropertyLine* const       m_pLine;
 
 public:
     CustomPropertiesEdit(vcl::Window* pParent, WinBits nStyle, CustomPropertyLine* pLine)
@@ -277,7 +277,7 @@ public:
 class CustomPropertiesTypeBox : public ListBox
 {
 private:
-    CustomPropertyLine*             m_pLine;
+    CustomPropertyLine* const       m_pLine;
 
 public:
     CustomPropertiesTypeBox(vcl::Window* pParent, CustomPropertyLine* pLine);
@@ -309,7 +309,7 @@ public:
 
 class CustomPropertiesDurationField : public Edit
 {
-    CustomPropertyLine*             m_pLine;
+    CustomPropertyLine* const       m_pLine;
     css::util::Duration             m_aDuration;
 protected:
     virtual void    RequestHelp(const HelpEvent& rEvt) override;
@@ -333,7 +333,7 @@ public:
 class CustomPropertiesRemoveButton : public ImageButton
 {
 private:
-    CustomPropertyLine*             m_pLine;
+    CustomPropertyLine* const       m_pLine;
 
 public:
     CustomPropertiesRemoveButton(vcl::Window* pParent, WinBits nStyle, CustomPropertyLine* pLine)
