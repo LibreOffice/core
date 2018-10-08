@@ -3591,7 +3591,7 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
                                      GetPortionData().GetLastValidCorePosition() )
                             {
                                 SAL_WARN_IF(
-                                    GetPortionData().IsValidCorePosition(
+                                    !GetPortionData().IsValidCorePosition(
                                                                   nCoreStart),
                                     "sw.a11y",
                                     "problem determining valid core position");
@@ -3630,7 +3630,7 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
                             {
                                 // selection is inside our part of this para
                                 SAL_WARN_IF(
-                                    GetPortionData().IsValidCorePosition(
+                                    !GetPortionData().IsValidCorePosition(
                                                                   nCoreEnd),
                                     "sw.a11y",
                                     "problem determining valid core position");
