@@ -24,6 +24,7 @@
 #include <CustomAnimationPreset.hxx>
 #include <vcl/tabdlg.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 
 class TabControl;
 class OKButton;
@@ -118,6 +119,38 @@ protected:
     sal_Int32 const  mnType;
 };
 
+class SdPropertySubControl
+{
+public:
+    explicit SdPropertySubControl(weld::Container* pParent, sal_Int32 nType)
+        : mxBuilder(Application::CreateBuilder(pParent, "modules/simpress/ui/customanimationfragment.ui"))
+        , mxContainer(mxBuilder->weld_container("EffectFragment"))
+        , mnType( nType )
+    {
+    }
+
+    virtual ~SdPropertySubControl();
+
+    virtual             css::uno::Any getValue() = 0;
+    virtual             void setValue( const css::uno::Any& rValue, const OUString& rPresetId ) = 0;
+
+    static std::unique_ptr<SdPropertySubControl>
+                        create( sal_Int32 nType,
+                                weld::Label* pLabel,
+                                weld::Container* pParent,
+                                weld::Window* pTopLevel,
+                                const css::uno::Any& rValue,
+                                const OUString& rPresetId,
+                                const Link<LinkParamNone*,void>& rModifyHdl );
+
+    sal_Int32 getControlType() const { return mnType; }
+
+protected:
+    std::unique_ptr<weld::Builder> mxBuilder;
+    std::unique_ptr<weld::Container> mxContainer;
+    sal_Int32           mnType;
+};
+
 class PropertyControl : public ListBox
 {
 public:
@@ -139,27 +172,25 @@ class CustomAnimationEffectTabPage;
 class CustomAnimationTextAnimTabPage;
 class STLPropertySet;
 
-class CustomAnimationDialog : public TabDialog
+class CustomAnimationDialog : public weld::GenericDialogController
 {
 public:
-    CustomAnimationDialog(vcl::Window* pParent, std::unique_ptr<STLPropertySet> pSet, const OString& Page);
+    CustomAnimationDialog(weld::Window* pParent, std::unique_ptr<STLPropertySet> pSet, const OString& Page);
     virtual ~CustomAnimationDialog() override;
-    virtual void dispose() override;
 
     STLPropertySet* getResultSet();
-    STLPropertySet* getPropertySet() const { return mpSet.get(); }
+    STLPropertySet* getPropertySet() const { return mxSet.get(); }
 
     static std::unique_ptr<STLPropertySet> createDefaultSet();
 
 private:
-    std::unique_ptr<STLPropertySet> mpSet;
-    std::unique_ptr<STLPropertySet> mpResultSet;
+    std::unique_ptr<STLPropertySet> mxSet;
+    std::unique_ptr<STLPropertySet> mxResultSet;
 
-    VclPtr<TabControl> mpTabControl;
-
-    VclPtr<CustomAnimationDurationTabPage> mpDurationTabPage;
-    VclPtr<CustomAnimationEffectTabPage> mpEffectTabPage;
-    VclPtr<CustomAnimationTextAnimTabPage> mpTextAnimTabPage;
+    std::unique_ptr<weld::Notebook> mxTabControl;
+    std::unique_ptr<CustomAnimationDurationTabPage> mxDurationTabPage;
+    std::unique_ptr<CustomAnimationEffectTabPage> mxEffectTabPage;
+    std::unique_ptr<CustomAnimationTextAnimTabPage> mxTextAnimTabPage;
 };
 
 }
