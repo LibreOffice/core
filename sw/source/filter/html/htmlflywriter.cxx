@@ -105,8 +105,7 @@ const HtmlFrmOpts HTML_FRMOPTS_MULTICOL       =
     HtmlFrmOpts::AnySize |
     HtmlFrmOpts::AbsSize |
     HtmlFrmOpts::Dir;
-const HtmlFrmOpts HTML_FRMOPTS_MULTICOL_CNTNR =
-    HTML_FRMOPTS_MULTICOL;
+
 const HtmlFrmOpts HTML_FRMOPTS_MULTICOL_CSS1  =
     HtmlFrmOpts::SAlign |
     HtmlFrmOpts::SSize |
@@ -1611,8 +1610,7 @@ static Writer & OutHTML_FrameFormatAsMulticol( Writer& rWrt,
     rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
     // WIDTH
-    HtmlFrmOpts nFrameFlags = bInCntnr ? HTML_FRMOPTS_MULTICOL_CNTNR
-                                : HTML_FRMOPTS_MULTICOL;
+    HtmlFrmOpts nFrameFlags = HTML_FRMOPTS_MULTICOL;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bInCntnr )
         nFrameFlags |= HTML_FRMOPTS_MULTICOL_CSS1;
     rHTMLWrt.OutFrameFormatOptions( rFrameFormat, aEmptyOUStr, nFrameFlags );
