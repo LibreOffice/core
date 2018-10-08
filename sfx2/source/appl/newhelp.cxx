@@ -29,7 +29,7 @@
 #include "panelist.hxx"
 #include <srchdlg.hxx>
 #include <sfx2/sfxhelp.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <sal/log.hxx>
 
 #include <sfx2/strings.hrc>

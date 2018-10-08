@@ -106,7 +106,7 @@
 #include <vcl/weld.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <sal/log.hxx>
 
 #ifdef LINUX

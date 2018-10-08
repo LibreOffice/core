@@ -28,7 +28,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/combobox.hxx>
 #include <svl/slstitm.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/brwbox.hxx>
 #include <vcl/GraphicObject.hxx>

@@ -19,7 +19,7 @@
 
 #include <radiobtnbox.hxx>
 
-#include <svtools/svlbitm.hxx>
+#include <vcl/svlbitm.hxx>
 
 namespace svx {
 

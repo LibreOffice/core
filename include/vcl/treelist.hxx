@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVTOOLS_TREELIST_HXX
-#define INCLUDED_SVTOOLS_TREELIST_HXX
+#ifndef INCLUDED_VCL_TREELIST_HXX
+#define INCLUDED_VCL_TREELIST_HXX
 
-#include <svtools/svtdllapi.h>
-#include <svtools/treelistentries.hxx>
-#include <svtools/viewdataentry.hxx>
+#include <vcl/dllapi.h>
+#include <vcl/treelistentries.hxx>
+#include <vcl/viewdataentry.hxx>
 
 #include <tools/solar.h>
 #include <tools/link.hxx>
@@ -63,7 +63,7 @@ struct SvSortData
     const SvTreeListEntry* pRight;
 };
 
-class SVT_DLLPUBLIC SvTreeList final
+class VCL_DLLPUBLIC SvTreeList final
 {
     typedef std::vector<SvListView*> ListViewsType;
 
@@ -106,26 +106,26 @@ class SVT_DLLPUBLIC SvTreeList final
     static void         Expand( SvListView*,SvTreeListEntry* pParent );
     static void         Collapse( SvListView*,SvTreeListEntry* pParent );
 
-    SVT_DLLPRIVATE void SetAbsolutePositions();
+    VCL_DLLPRIVATE void SetAbsolutePositions();
 
-    SVT_DLLPRIVATE void CloneChildren(
+    VCL_DLLPRIVATE void CloneChildren(
         SvTreeListEntries& rDst, sal_uLong& rCloneCount, SvTreeListEntries& rSrc, SvTreeListEntry& rNewParent) const;
 
     /**
      * Invalidate the cached position data to have them re-generated before
      * the next access.
      */
-    SVT_DLLPRIVATE static void SetListPositions( SvTreeListEntries& rEntries );
+    VCL_DLLPRIVATE static void SetListPositions( SvTreeListEntries& rEntries );
 
     // rPos is not changed for SortModeNone
-    SVT_DLLPRIVATE void GetInsertionPos(
+    VCL_DLLPRIVATE void GetInsertionPos(
                             SvTreeListEntry const * pEntry,
                             SvTreeListEntry* pParent,
                             sal_uLong& rPos
                         );
 
-    SVT_DLLPRIVATE void ResortChildren( SvTreeListEntry* pParent );
-    SVT_DLLPRIVATE void ReverseChildren( SvTreeListEntry* pParent );
+    VCL_DLLPRIVATE void ResortChildren( SvTreeListEntry* pParent );
+    VCL_DLLPRIVATE void ReverseChildren( SvTreeListEntry* pParent );
 
     SvTreeList(const SvTreeList&) = delete;
     SvTreeList& operator= (const SvTreeList&) = delete;
@@ -224,7 +224,7 @@ public:
     void                Reverse();
 };
 
-class SVT_DLLPUBLIC SvListView
+class VCL_DLLPUBLIC SvListView
 {
     friend class SvTreeList;
 

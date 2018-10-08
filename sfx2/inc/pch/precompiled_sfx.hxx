@@ -387,7 +387,6 @@
 #include <svtools/embedhlp.hxx>
 #include <svtools/helpopt.hxx>
 #include <svtools/imagemgr.hxx>
-#include <svtools/imapobj.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/parhtml.hxx>
@@ -531,5 +530,6 @@
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
+#include <vcl/imapobj.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

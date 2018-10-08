@@ -37,7 +37,7 @@
 #include <cppuhelper/implbase5.hxx>
 #include "callbacks.hxx"
 #include <vcl/timer.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <sot/storage.hxx>
 #include "TableCopyHelper.hxx"

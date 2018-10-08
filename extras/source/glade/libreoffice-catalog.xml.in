@@ -289,7 +289,7 @@
     <glade-widget-class title="Extended Macro Library" name="basctllo-ExtTreeListBox"
                         generic-name="Extended Macro Library List" parent="basctllo-TreeListBox"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="Tree List" name="svtlo-SvTreeListBox"
+    <glade-widget-class title="Tree List" name="vcllo-SvTreeListBox"
                         generic-name="Tree List" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview">
       <properties>
@@ -304,40 +304,40 @@
     </glade-widget-class>
 
     <glade-widget-class title="Chart Series ListBox" name="chartcontrollerlo-SeriesListBox"
-                        generic-name="Chart Series ListBox" parent="svtlo-SvTreeListBox"
+                        generic-name="Chart Series ListBox" parent="vcllo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Hyperlink Tree Box" name="cuilo-SvxHlmarkTreeLBox"
-                        generic-name="Hyperlink Tree Box" parent="svtlo-SvTreeListBox"
+                        generic-name="Hyperlink Tree Box" parent="vcllo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Content List Box" name="sfxlo-ContentListBox"
-                        generic-name="Content List Box" parent="svtlo-SvTreeListBox"
+                        generic-name="Content List Box" parent="vcllo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="DD ListBox" name="swuilo-DDListBox"
-                        generic-name="DD ListBox" parent="svtlo-SvTreeListBox"
+                        generic-name="DD ListBox" parent="vcllo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Animation ListBox" name="sdlo-CustomAnimationList"
-                        generic-name="Animation ListBox" parent="svtlo-SvTreeListBox"
+                        generic-name="Animation ListBox" parent="vcllo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Tab List" name="svtlo-SvTabListBox"
-                        generic-name="Tab List" parent="svtlo-SvTreeListBox"
+                        generic-name="Tab List" parent="vcllo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="CheckBox List" name="basctllo-CheckBox"
                         generic-name="CheckBox List" parent="svtlo-SvTabListBox"
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="SwIdxTreeListBox" name="swuilo-SwIdxTreeListBox"
-                        generic-name="SwIdxTreeListBox" parent="svtlo-SvTreeListBox"
+                        generic-name="SwIdxTreeListBox" parent="vcllo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Tooltip Tree List" name="swuilo-SwFldRefTreeListBox"
-                        generic-name="Tooltip Tree List" parent="svtlo-SvTreeListBox"
+                        generic-name="Tooltip Tree List" parent="vcllo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Tab Order ListBox" name="pcrlo-TabOrderListBox"
-                        generic-name="TabOrderListBox" parent="svtlo-SvTreeListBox"
+                        generic-name="TabOrderListBox" parent="vcllo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Page Objs ListBox" name="sdlo-SdPageObjsTLB"
-                        generic-name="SdPageObjsTLB" parent="svtlo-SvTreeListBox"
+                        generic-name="SdPageObjsTLB" parent="vcllo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Page List Control" name="sduilo-SdPageListControl"
-                        generic-name="Page List Control" parent="svtlo-SvTreeListBox"
+                        generic-name="Page List Control" parent="vcllo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Checked Tree List" name="svxlo-SvxCheckListBox"
                         generic-name="Checked Tree List" parent="GtkTreeView"

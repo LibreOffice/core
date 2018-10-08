@@ -58,7 +58,7 @@
 #include <comphelper/classids.hxx>
 
 #include <sot/formats.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <svl/solar.hrc>

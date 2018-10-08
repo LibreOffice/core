@@ -23,7 +23,7 @@
 #include <thesdlg.hxx>
 
 #include <svtools/ehdl.hxx>
-#include <svtools/svlbitm.hxx>
+#include <vcl/svlbitm.hxx>
 #include <svx/checklbx.hxx>
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>

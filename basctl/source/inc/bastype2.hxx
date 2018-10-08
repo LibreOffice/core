@@ -26,7 +26,7 @@
 
 #include "doceventnotifier.hxx"
 
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <basic/sbstar.hxx>
 #include "sbxitem.hxx"
 #include "basobj.hxx"

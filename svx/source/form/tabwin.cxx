@@ -50,7 +50,7 @@
 #include <comphelper/property.hxx>
 #include <sfx2/frame.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <vcl/settings.hxx>
 #include <tabwin.hrc>
 

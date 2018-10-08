@@ -20,7 +20,7 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEROWEXCHANGE_HXX
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <memory>
 
 namespace dbaui

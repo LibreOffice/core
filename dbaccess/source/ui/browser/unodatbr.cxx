@@ -107,9 +107,9 @@
 #include <svl/filenotation.hxx>
 #include <svl/intitem.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <svtools/svlbitm.hxx>
-#include <svtools/treelistbox.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/svlbitm.hxx>
+#include <vcl/treelistbox.hxx>
+#include <vcl/treelistentry.hxx>
 #include <svx/algitem.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/databaseregistrationui.hxx>
