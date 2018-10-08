@@ -57,6 +57,7 @@ public:
     void testDisplayUnits();
     // void testFdo74115WallGradientFill();
     void testFdo74115WallBitmapFill();
+    void testPieChartWallLineStyle();
     void testBarChartRotation();
     void testShapeFollowedByChart();
     void testPieChartDataLabels();
@@ -140,6 +141,7 @@ public:
     CPPUNIT_TEST(testDisplayUnits);
     // CPPUNIT_TEST(testFdo74115WallGradientFill);
     CPPUNIT_TEST(testFdo74115WallBitmapFill);
+    CPPUNIT_TEST(testPieChartWallLineStyle);
     CPPUNIT_TEST(testBarChartRotation);
     CPPUNIT_TEST(testShapeFollowedByChart);
     CPPUNIT_TEST(testPieChartDataLabels);
@@ -710,6 +712,14 @@ void Chart2ExportTest::testFdo74115WallBitmapFill()
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:blipFill");
+}
+
+void Chart2ExportTest::testPieChartWallLineStyle()
+{
+    load("/chart2/qa/extras/data/odt/", "testPieChartWallLineStyle.odt");
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:ln/a:noFill");
 }
 
 //The below test case tests the built in marker 'x' for Office 2010 in Line charts
