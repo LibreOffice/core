@@ -465,7 +465,6 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
         // belonging to the primary key are in the result set, allow updateable result sets
         // otherwise, don't
         OUString table, schema;
-        std::vector< OUString > sourceTableKeys;
         std::vector< OString > vec;
         tokenizeSQL( cmd, vec );
         OUString sourceTable =
@@ -478,7 +477,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
             OString aReason;
             if( sourceTable.getLength() )
             {
-                sourceTableKeys = lookupKeys(
+                std::vector< OUString > sourceTableKeys = lookupKeys(
                     pSettings->tables.is() ?
                            pSettings->tables : data->tableSupplier->getTables() ,
                     sourceTable,

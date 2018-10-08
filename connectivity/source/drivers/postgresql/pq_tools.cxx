@@ -1084,10 +1084,10 @@ void extractNameValuePairsFromInsert( String2StringMap & map, const OString & la
             n +=2;
         }
 
-        std::vector< OString > names;
         n ++;
         if( vec[n].equalsIgnoreAsciiCase( "(" ) )
         {
+            std::vector< OString> names;
 //             printf( "2\n" );
             // extract names
             n++;
