@@ -154,17 +154,17 @@ private:
     {
     public:
         Cell (const sal_Int32 nCharacterIndex, const sal_Int32 nCharacterCount, const double nCellWidth);
-        sal_Int32 mnCharacterIndex;
-        sal_Int32 mnCharacterCount;
-        double mnCellWidth;
+        sal_Int32 const mnCharacterIndex;
+        sal_Int32 const mnCharacterCount;
+        double const mnCellWidth;
     };
 
     class Line
     {
     public:
         Line (const sal_Int32 nLineStartCharacterIndex, const sal_Int32 nLineEndCharacterIndex);
-        sal_Int32 mnLineStartCharacterIndex;
-        sal_Int32 mnLineEndCharacterIndex;
+        sal_Int32 const mnLineStartCharacterIndex;
+        sal_Int32 const mnLineEndCharacterIndex;
         sal_Int32 mnLineStartCellIndex;
         sal_Int32 mnLineEndCellIndex;
         css::uno::Reference<css::rendering::XTextLayout> mxLayoutedLine;

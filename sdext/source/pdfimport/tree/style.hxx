@@ -37,9 +37,9 @@ namespace pdfi
     public:
         struct Style
         {
-            OString             Name;
-            PropertyMap              Properties;
-            OUString            Contents;
+            OString const            Name;
+            PropertyMap const        Properties;
+            OUString const           Contents;
             Element*                 ContainedElement;
             std::vector< Style* >    SubStyles;
 

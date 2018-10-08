@@ -80,7 +80,7 @@ namespace
     {
         const sal_Char*     pAsciiServiceName;
         const sal_Char*     pAsciiImplementationName;
-        ComponentFactory    pFactory;
+        ComponentFactory const    pFactory;
 
         ComponentDescription()
             :pAsciiServiceName( nullptr )

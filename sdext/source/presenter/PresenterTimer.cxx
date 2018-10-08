@@ -48,7 +48,7 @@ public:
         const sal_Int64 nRepeatInterval,
         const sal_Int32 nTaskId);
 
-    PresenterTimer::Task maTask;
+    PresenterTimer::Task const maTask;
     TimeValue maDueTime;
     const sal_Int64 mnRepeatInterval;
     const sal_Int32 mnTaskId;

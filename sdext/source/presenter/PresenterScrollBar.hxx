@@ -157,7 +157,7 @@ protected:
     double mnThumbSize;
     double mnLineHeight;
     css::geometry::RealPoint2D maDragAnchor;
-    ::std::function<void (double)> maThumbMotionListener;
+    ::std::function<void (double)> const maThumbMotionListener;
     Area meButtonDownArea;
     Area meMouseMoveArea;
     css::geometry::RealRectangle2D maBox[AreaCount];

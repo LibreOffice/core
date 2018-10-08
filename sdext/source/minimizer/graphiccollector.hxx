@@ -33,11 +33,11 @@
 
 struct GraphicSettings
 {
-    bool    mbJPEGCompression;
-    sal_Int32   mnJPEGQuality;
+    bool const    mbJPEGCompression;
+    sal_Int32 const   mnJPEGQuality;
     bool    mbRemoveCropArea;
-    sal_Int32   mnImageResolution;
-    bool    mbEmbedLinkedGraphics;
+    sal_Int32 const   mnImageResolution;
+    bool const    mbEmbedLinkedGraphics;
 
     GraphicSettings( bool bJPEGCompression, sal_Int32 nJPEGQuality, bool bRemoveCropArea,
                         sal_Int32 nImageResolution, bool bEmbedLinkedGraphics )

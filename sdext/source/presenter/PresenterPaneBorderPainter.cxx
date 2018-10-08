@@ -81,7 +81,7 @@ namespace {
         SharedBitmapDescriptor mpBottom;
         SharedBitmapDescriptor mpBottomRight;
         SharedBitmapDescriptor mpBottomCallout;
-        SharedBitmapDescriptor mpEmpty;
+        SharedBitmapDescriptor const mpEmpty;
         PresenterTheme::SharedFontDescriptor mpFont;
         sal_Int32 mnFontXOffset;
         sal_Int32 mnFontYOffset;

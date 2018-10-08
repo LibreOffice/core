@@ -117,7 +117,7 @@ namespace {
         virtual void Execute() override;
         virtual Any GetState() const override;
     private:
-        bool mbOn;
+        bool const mbOn;
         rtl::Reference<PresenterController> mpPresenterController;
     };
 
@@ -130,7 +130,7 @@ namespace {
         virtual void Execute() override;
         virtual Any GetState() const override;
     private:
-        bool mbOn;
+        bool const mbOn;
         rtl::Reference<PresenterController> mpPresenterController;
     };
 
@@ -143,7 +143,7 @@ namespace {
         virtual void Execute() override;
         virtual Any GetState() const override;
     private:
-        bool mbOn;
+        bool const mbOn;
         rtl::Reference<PresenterController> mpPresenterController;
     };
 

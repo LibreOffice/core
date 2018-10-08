@@ -63,7 +63,6 @@ private:
     css::geometry::RealSize2D maSize;
     css::geometry::RealPoint2D maLocation;
     bool mbIsVisible;
-    double mnAlpha;
 
     void ProvideSprite();
     void DisposeSprite();
