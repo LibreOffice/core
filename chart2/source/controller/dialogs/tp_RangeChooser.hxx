@@ -21,15 +21,11 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_RANGECHOOSER_HXX
 
 #include <RangeSelectionListener.hxx>
-#include <TabPageNotifiable.hxx>
 
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/data/XDataProvider.hpp>
-#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <svtools/wizardmachine.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <com/sun/star/sheet/XRangeSelection.hpp>
+
+namespace chart { class TabPageNotifiable; }
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartTypeTemplate; } } } }
 
 namespace chart
 {

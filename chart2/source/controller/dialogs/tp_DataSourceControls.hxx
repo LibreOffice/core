@@ -19,13 +19,11 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_DATASOURCECONTROLS_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_DATASOURCECONTROLS_HXX
 
-#include <com/sun/star/chart2/XChartType.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
-#include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
-
-#include <svtools/svtabbx.hxx>
 #include <vcl/treelistbox.hxx>
 #include <vcl/treelistentry.hxx>
+
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartType; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
 
 namespace chart
 {

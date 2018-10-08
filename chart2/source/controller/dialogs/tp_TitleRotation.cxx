@@ -21,6 +21,7 @@
 
 #include "TabPageIds.h"
 #include <chartview/ChartSfxItemIds.hxx>
+#include <TextDirectionListBox.hxx>
 
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>

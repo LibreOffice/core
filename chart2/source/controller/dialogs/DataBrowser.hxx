@@ -21,9 +21,7 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_DATABROWSER_HXX
 
 #include <svtools/editbrowsebox.hxx>
-#include <vcl/outdev.hxx>
 #include <svtools/fmtfield.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <memory>
 #include <vector>
@@ -33,6 +31,10 @@ namespace com { namespace sun { namespace star {
         class XChartDocument;
     }
 }}}
+
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+
+class OutputDevice;
 
 namespace chart
 {

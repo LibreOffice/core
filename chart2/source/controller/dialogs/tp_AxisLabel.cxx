@@ -21,6 +21,7 @@
 
 #include "TabPageIds.h"
 #include <chartview/ChartSfxItemIds.hxx>
+#include <TextDirectionListBox.hxx>
 
 #include <svx/chrtitem.hxx>
 #include <svl/intitem.hxx>

@@ -21,6 +21,7 @@
 #include <ResId.hxx>
 #include <strings.hrc>
 #include <helpids.h>
+#include <ChartModel.hxx>
 
 #include "tp_ChartType.hxx"
 #include "tp_RangeChooser.hxx"
