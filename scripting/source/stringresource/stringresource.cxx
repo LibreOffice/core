@@ -62,17 +62,9 @@ namespace stringresource
 
 ::osl::Mutex& getMutex()
 {
-    static ::osl::Mutex* s_pMutex = nullptr;
-    if ( !s_pMutex )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if ( !s_pMutex )
-        {
-            static ::osl::Mutex s_aMutex;
-            s_pMutex = &s_aMutex;
-        }
-    }
-    return *s_pMutex;
+    static ::osl::Mutex s_aMutex;
+
+    return s_aMutex;
 }
 
 
