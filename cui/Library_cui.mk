@@ -66,7 +66,8 @@ $(eval $(call gb_Library_use_externals,cui,\
 	boost_headers \
 	$(call gb_Helper_optional,OPENCL,\
 		clew) \
-    curl \
+    $(call gb_Helper_optional,DESKTOP,\
+		curl) \
     icuuc \
     icu_headers \
     orcus-parser \
@@ -174,7 +175,8 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/options/optpath \
     cui/source/options/optsave \
     cui/source/options/optupdt \
-    cui/source/options/personalization \
+    $(call gb_Helper_optional,DESKTOP,\
+        cui/source/options/personalization) \
     cui/source/options/personasdochandler \
     cui/source/options/radiobtnbox \
     cui/source/options/sdbcdriverenum \
