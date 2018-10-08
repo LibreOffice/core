@@ -85,7 +85,7 @@ public:
 
 class SVX_DLLPUBLIC SdrUndoGroup final : public SdrUndoAction
 {
-    std::vector<SdrUndoAction*> aBuf;
+    std::vector<std::unique_ptr<SdrUndoAction>> maActions;
 
     // No expanded description of the Action (contains %O)
     OUString                    aComment;
@@ -98,9 +98,9 @@ public:
     virtual ~SdrUndoGroup() override;
 
     void Clear();
-    sal_Int32 GetActionCount() const { return aBuf.size(); }
-    SdrUndoAction* GetAction(sal_Int32 nNum) const { return aBuf[nNum]; }
-    void AddAction(SdrUndoAction* pAct);
+    sal_Int32 GetActionCount() const { return maActions.size(); }
+    SdrUndoAction* GetAction(sal_Int32 nNum) const { return maActions[nNum].get(); }
+    void AddAction(std::unique_ptr<SdrUndoAction> pAct);
 
     void SetComment(const OUString& rStr) { aComment=rStr; }
     void SetObjDescription(const OUString& rStr) { aObjDescription=rStr; }

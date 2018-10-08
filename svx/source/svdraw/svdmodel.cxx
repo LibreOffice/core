@@ -574,7 +574,7 @@ void SdrModel::AddUndo(SdrUndoAction* pUndo)
     {
         if (pCurrentUndoGroup)
         {
-            pCurrentUndoGroup->AddAction(pUndo);
+            pCurrentUndoGroup->AddAction(std::unique_ptr<SdrUndoAction>(pUndo));
         }
         else
         {

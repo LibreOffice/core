@@ -110,44 +110,33 @@ ViewShellId SdrUndoAction::GetViewShellId() const
 
 SdrUndoGroup::SdrUndoGroup(SdrModel& rNewMod)
 :   SdrUndoAction(rNewMod),
-    aBuf(),
     eFunction(SdrRepeatFunc::NONE)
 {}
 
 SdrUndoGroup::~SdrUndoGroup()
 {
-    Clear();
 }
 
 void SdrUndoGroup::Clear()
 {
-    for (sal_Int32 nu=0; nu<GetActionCount(); nu++) {
-        SdrUndoAction* pAct=GetAction(nu);
-        delete pAct;
-    }
-    aBuf.clear();
+    maActions.clear();
 }
 
-void SdrUndoGroup::AddAction(SdrUndoAction* pAct)
+void SdrUndoGroup::AddAction(std::unique_ptr<SdrUndoAction> pAct)
 {
-    aBuf.push_back(pAct);
+    maActions.push_back(std::move(pAct));
 }
 
 void SdrUndoGroup::Undo()
 {
-    for (sal_Int32 nu=GetActionCount(); nu>0;) {
-        nu--;
-        SdrUndoAction* pAct=GetAction(nu);
-        pAct->Undo();
-    }
+    for (auto it = maActions.rbegin(); it != maActions.rend(); ++it)
+        (*it)->Undo();
 }
 
 void SdrUndoGroup::Redo()
 {
-    for (sal_Int32 nu=0; nu<GetActionCount(); nu++) {
-        SdrUndoAction* pAct=GetAction(nu);
-        pAct->Redo();
-    }
+    for (std::unique_ptr<SdrUndoAction> & pAction : maActions)
+        pAction->Redo();
 }
 
 OUString SdrUndoGroup::GetComment() const
@@ -282,7 +271,7 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
         for(size_t nObjNum = 0; nObjNum < nObjCount; ++nObjNum)
         {
             pUndoGroup->AddAction(
-                new SdrUndoAttrObj(*pOL->GetObj(nObjNum), bStyleSheet1));
+                o3tl::make_unique<SdrUndoAttrObj>(*pOL->GetObj(nObjNum), bStyleSheet1));
         }
     }
 
@@ -585,7 +574,7 @@ SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj)
         pUndoGroup.reset(new SdrUndoGroup(pObj->getSdrModelFromSdrObject()));
         const size_t nObjCount = pOL->GetObjCount();
         for (size_t nObjNum = 0; nObjNum<nObjCount; ++nObjNum) {
-            pUndoGroup->AddAction(new SdrUndoGeoObj(*pOL->GetObj(nObjNum)));
+            pUndoGroup->AddAction(o3tl::make_unique<SdrUndoGeoObj>(*pOL->GetObj(nObjNum)));
         }
     }
     else
@@ -1431,7 +1420,7 @@ SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg)
                         pUndoGroup.reset( new SdrUndoGroup(rMod) );
                     }
 
-                    pUndoGroup->AddAction(rMod.GetSdrUndoFactory().CreateUndoPageRemoveMasterPage(*pDrawPage));
+                    pUndoGroup->AddAction(std::unique_ptr<SdrUndoAction>(rMod.GetSdrUndoFactory().CreateUndoPageRemoveMasterPage(*pDrawPage)));
                 }
             }
         }

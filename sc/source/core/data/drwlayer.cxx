@@ -1193,7 +1193,7 @@ void ScDrawLayer::AddCalcUndo( std::unique_ptr<SdrUndoAction> pUndo )
         if (!pUndoGroup)
             pUndoGroup.reset(new SdrUndoGroup(*this));
 
-        pUndoGroup->AddAction( pUndo.release() );
+        pUndoGroup->AddAction( std::move(pUndo) );
     }
 }
 
