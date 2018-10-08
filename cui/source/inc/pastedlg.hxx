@@ -23,7 +23,7 @@
 #include <map>
 #include <sot/formats.hxx>
 #include <tools/globname.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <vcl/weld.hxx>
 
 struct TransferableObjectDescriptor;

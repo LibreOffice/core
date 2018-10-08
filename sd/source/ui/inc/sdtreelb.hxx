@@ -22,7 +22,7 @@
 
 #include <pres.hxx>
 #include <sddllapi.h>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <svl/urlbmk.hxx>
 #include <tools/ref.hxx>
 #include "sdxfer.hxx"

@@ -333,7 +333,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svtlo-SvTreeListBox" id="keys:border">
+                      <object class="vcllo-SvTreeListBox" id="keys:border">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>

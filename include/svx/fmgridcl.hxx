@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 
 #include <svx/gridctrl.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <svx/svxdllapi.h>
 #include <memory>
 

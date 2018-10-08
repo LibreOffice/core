@@ -44,7 +44,7 @@
 #include <UITools.hxx>
 #include <osl/diagnose.h>
 #include <svtools/imgdef.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <TablesSingleDlg.hxx>
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/exc_hlp.hxx>
