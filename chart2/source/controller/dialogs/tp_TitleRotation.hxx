@@ -21,9 +21,15 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/dialcontrol.hxx>
-#include <vcl/customweld.hxx>
-#include <vcl/weld.hxx>
-#include <TextDirectionListBox.hxx>
+
+namespace chart { class TextDirectionListBox; }
+namespace weld {
+    class CheckButton;
+    class CustomWeld;
+    class Label;
+    class SpinButton;
+    class ToggleButton;
+}
 
 namespace chart
 {

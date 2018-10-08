@@ -20,15 +20,18 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_DIALOGMODEL_HXX
 
 #include <TimerTriggeredControllerLock.hxx>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-
-#include <ChartModel.hxx>
+#include <rtl/ustring.hxx>
 
 #include <map>
 #include <memory>
 #include <vector>
+
+namespace chart { class ChartModel; }
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com { namespace sun { namespace star { namespace uno { template <class E> class Sequence; } } } }
 
 namespace com { namespace sun { namespace star { namespace chart2 {
     class XDataSeriesContainer;
