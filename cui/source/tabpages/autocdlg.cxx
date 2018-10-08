@@ -23,7 +23,7 @@
 #include <vcl/keycodes.hxx>
 #include <vcl/settings.hxx>
 #include <sot/exchange.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <unotools/syslocale.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
@@ -39,7 +39,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <svl/eitem.hxx>
 #include <svl/languageoptions.hxx>
-#include <svtools/svlbitm.hxx>
+#include <vcl/svlbitm.hxx>
 #include <svx/SmartTagMgr.hxx>
 #include <com/sun/star/smarttags/XSmartTagRecognizer.hpp>
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>

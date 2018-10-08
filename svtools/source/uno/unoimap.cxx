@@ -39,10 +39,10 @@
 #include <vcl/svapp.hxx>
 #include <svtools/unoevent.hxx>
 #include <svtools/unoimap.hxx>
-#include <svtools/imap.hxx>
-#include <svtools/imapcirc.hxx>
-#include <svtools/imaprect.hxx>
-#include <svtools/imappoly.hxx>
+#include <vcl/imap.hxx>
+#include <vcl/imapcirc.hxx>
+#include <vcl/imaprect.hxx>
+#include <vcl/imappoly.hxx>
 
 using namespace comphelper;
 using namespace cppu;

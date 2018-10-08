@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svtools/treelistbox.hxx>
-#include <svtools/iconview.hxx>
+#include <vcl/treelistbox.hxx>
+#include <vcl/iconview.hxx>
 #include "fileview.hxx"
 #include <sal/config.h>
 #include <sal/log.hxx>
-#include <svtools/treelistentry.hxx>
-#include <svtools/fileview.hxx>
+#include <vcl/treelistentry.hxx>
+#include <vcl/fileview.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/strings.hrc>
 #include <bitmaps.hlst>
-#include <svtools/viewdataentry.hxx>
+#include <vcl/viewdataentry.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include "contentenumeration.hxx"
 #include <svtools/AccessibleBrowseBoxObjType.hxx>

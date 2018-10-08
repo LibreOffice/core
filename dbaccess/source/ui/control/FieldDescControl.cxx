@@ -37,7 +37,7 @@
 #include <svl/rngitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/numuno.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatPreviewer.hpp>

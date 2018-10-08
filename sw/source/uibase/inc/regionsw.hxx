@@ -27,7 +27,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/layout.hxx>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <editeng/brushitem.hxx>

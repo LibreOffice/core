@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_GLOSSARY_HXX
 
 #include <vcl/edit.hxx>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <svx/stddlg.hxx>
 
 #include <vcl/button.hxx>

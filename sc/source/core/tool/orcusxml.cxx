@@ -9,7 +9,7 @@
 
 #include <orcusxml.hxx>
 
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 
 ScOrcusXMLTreeParam::EntryData::EntryData(EntryType eType)
     : mnNamespaceID(0)

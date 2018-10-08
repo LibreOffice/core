@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_TABWIN_HXX
 #define INCLUDED_SVX_SOURCE_INC_TABWIN_HXX
 
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <vcl/floatwin.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
@@ -27,7 +27,7 @@
 #include <com/sun/star/form/XForm.hpp>
 
 #include <comphelper/propmultiplex.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <connectivity/dbtools.hxx>
 
 

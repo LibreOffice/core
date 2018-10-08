@@ -274,7 +274,6 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svtools/svtdllapi.h>
-#include <svtools/transfer.hxx>
 #include <svx/algitem.hxx>
 #include <svx/itextprovider.hxx>
 #include <svx/msdffdef.hxx>
@@ -324,6 +323,7 @@
 #include <unotools/textsearch.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <userdat.hxx>
+#include <vcl/transfer.hxx>
 #include <viewopti.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -13,8 +13,8 @@
 #include <document.hxx>
 #include <tokenarray.hxx>
 
-#include <svtools/treelistbox.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistbox.hxx>
+#include <vcl/treelistentry.hxx>
 #include <ucbhelper/content.hxx>
 #include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
