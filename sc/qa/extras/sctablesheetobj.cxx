@@ -37,6 +37,7 @@
 #include <test/sheet/xsubtotalcalculatable.hxx>
 #include <test/sheet/xuniquecellformatrangessupplier.hxx>
 #include <test/table/xcolumnrowrange.hxx>
+#include <test/table/xtablechartssupplier.hxx>
 #include <test/util/xindent.hxx>
 #include <test/util/xmergeable.hxx>
 #include <test/util/xreplaceable.hxx>
@@ -85,6 +86,7 @@ class ScTableSheetObj : public CalcUnoApiTest, public apitest::Scenario,
                                                public apitest::XSheetPageBreak,
                                                public apitest::XSpreadsheet,
                                                public apitest::XSubTotalCalculatable,
+                                               public apitest::XTableChartsSupplier,
                                                public apitest::XUniqueCellFormatRangesSupplier
 {
 public:
@@ -229,6 +231,9 @@ public:
     // XSubTotalCalculatable
     CPPUNIT_TEST(testCreateSubTotalDescriptor);
     CPPUNIT_TEST(testApplyRemoveSubTotals);
+
+    // XTableChartsSupplier
+    CPPUNIT_TEST(testGetCharts);
 
     // XUniqueCellFormatRangesSupplier
     CPPUNIT_TEST(testGetUniqueCellFormatRanges);
