@@ -2682,4 +2682,10 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
     return false;
 }
 
+void SwClearFntCacheTextGlyphs()
+{
+    for (SwFntObj* pFntObj = pFntCache->First(); pFntObj; pFntObj = SwFntCache::Next(pFntObj))
+        pFntObj->GetTextGlyphs().clear();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
