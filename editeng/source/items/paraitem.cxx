@@ -535,12 +535,13 @@ bool SvxOrphansItem::GetPresentation
 // class SvxHyphenZoneItem -----------------------------------------------
 
 SvxHyphenZoneItem::SvxHyphenZoneItem( const bool bHyph, const sal_uInt16 nId ) :
-    SfxPoolItem( nId )
+    SfxPoolItem( nId ),
+    bHyphen(bHyph),
+    bPageEnd(true),
+    nMinLead(0),
+    nMinTrail(0),
+    nMaxHyphens(255)
 {
-    bHyphen = bHyph;
-    bPageEnd = true;
-    nMinLead = nMinTrail = 0;
-    nMaxHyphens = 255;
 }
 
 
