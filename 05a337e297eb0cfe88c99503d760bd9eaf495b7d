@@ -34,6 +34,24 @@
       "revId": "05a337e297eb0cfe88c99503d760bd9eaf495b7d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_c24c4478",
+        "filename": "compilerplugins/clang/test/useuniqueptr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-10-08T12:33:09Z",
+      "side": 1,
+      "message": "and I\u0027m trying to do better than last time we had this situation, where we simply disabled the test in the solenv/ makefile, which is not ideal for catching regressions",
+      "parentUuid": "ff0f0b1f_02359cda",
+      "revId": "05a337e297eb0cfe88c99503d760bd9eaf495b7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
