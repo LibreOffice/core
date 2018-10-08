@@ -100,7 +100,7 @@ class StgPage : public salhelper::SimpleReferenceObject
     const sal_Int32 mnPage;                // page index
     std::unique_ptr<sal_uInt8[]>
                     mpData;                // nSize bytes
-    short           mnSize;                // size of this page
+    short const     mnSize;                // size of this page
              StgPage( short nData, sal_Int32 nPage );
     virtual ~StgPage() override;
 public:

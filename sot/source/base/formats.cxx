@@ -50,7 +50,7 @@ using namespace ::com::sun::star::datatransfer;
 
 struct SotDestinationEntry_Impl
 {
-    SotExchangeDest         nDestination;
+    SotExchangeDest const   nDestination;
     const SotAction_Impl*   aDefaultActions;
     const SotAction_Impl*   aMoveActions;
     const SotAction_Impl*   aCopyActions;
