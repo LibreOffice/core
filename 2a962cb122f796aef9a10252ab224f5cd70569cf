@@ -2,6 +2,108 @@
   "comments": [
     {
       "key": {
+        "uuid": "ff0f0b1f_a2edd026",
+        "filename": "include/comphelper/PropertyInfoHash.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-08T13:47:05Z",
+      "side": 1,
+      "message": "why? including the \"implemention-detail\" .h file instead of the \"real\" .hxx URE include file is rarely the right thing (as has already been discussed in the context of these IWYU changes, IIRC), and leads to issues like the one now fixed with \u003chttps://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d078a81d5ba9f44b642e3e8b838fc4fe48a91810a\u003e \"Fix undefined css::uno::Reference\u003ccss::uno::XComponentContext\u003e dtor\"",
+      "revId": "2a962cb122f796aef9a10252ab224f5cd70569cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_62f7b8f7",
+        "filename": "include/comphelper/namecontainer.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-08T13:47:05Z",
+      "side": 1,
+      "message": "ibid",
+      "revId": "2a962cb122f796aef9a10252ab224f5cd70569cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_42dcb473",
+        "filename": "include/comphelper/namecontainer.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-08T13:47:05Z",
+      "side": 1,
+      "message": "ibid",
+      "revId": "2a962cb122f796aef9a10252ab224f5cd70569cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_02e6bc45",
+        "filename": "include/comphelper/numberedcollection.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-08T13:47:05Z",
+      "side": 1,
+      "message": "ibid",
+      "revId": "2a962cb122f796aef9a10252ab224f5cd70569cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_c2d1e459",
+        "filename": "include/comphelper/numbers.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-08T13:47:05Z",
+      "side": 1,
+      "message": "ibid",
+      "revId": "2a962cb122f796aef9a10252ab224f5cd70569cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_a2d6f04e",
+        "filename": "include/comphelper/ofopxmlhelper.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-08T13:47:05Z",
+      "side": 1,
+      "message": "ibid",
+      "revId": "2a962cb122f796aef9a10252ab224f5cd70569cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff0f0b1f_2294208b",
         "filename": "include/comphelper/processfactory.hxx",
         "patchSetId": 7
@@ -19,6 +121,166 @@
         "endLine": 23,
         "endChar": 38
       },
+      "revId": "2a962cb122f796aef9a10252ab224f5cd70569cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_82cbeca3",
+        "filename": "include/comphelper/processfactory.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-08T13:47:05Z",
+      "side": 1,
+      "message": "ibid",
+      "parentUuid": "ff0f0b1f_2294208b",
+      "range": {
+        "startLine": 23,
+        "startChar": 27,
+        "endLine": 23,
+        "endChar": 38
+      },
+      "revId": "2a962cb122f796aef9a10252ab224f5cd70569cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_62d0d851",
+        "filename": "include/comphelper/profilezone.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-08T13:47:05Z",
+      "side": 1,
+      "message": "ibid",
+      "revId": "2a962cb122f796aef9a10252ab224f5cd70569cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_42c5d48d",
+        "filename": "include/comphelper/propstate.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-08T13:47:05Z",
+      "side": 1,
+      "message": "ibid",
+      "revId": "2a962cb122f796aef9a10252ab224f5cd70569cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_22c2e086",
+        "filename": "include/comphelper/proxyaggregation.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-08T13:47:05Z",
+      "side": 1,
+      "message": "ibid",
+      "revId": "2a962cb122f796aef9a10252ab224f5cd70569cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_02bfdcfb",
+        "filename": "include/comphelper/storagehelper.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-08T13:47:05Z",
+      "side": 1,
+      "message": "ibid",
+      "revId": "2a962cb122f796aef9a10252ab224f5cd70569cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_e2bbc80b",
+        "filename": "include/comphelper/streamsection.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-08T13:47:05Z",
+      "side": 1,
+      "message": "ibid",
+      "revId": "2a962cb122f796aef9a10252ab224f5cd70569cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_c23684b5",
+        "filename": "include/comphelper/string.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-08T13:47:05Z",
+      "side": 1,
+      "message": "ibid",
+      "revId": "2a962cb122f796aef9a10252ab224f5cd70569cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_a23b909a",
+        "filename": "include/comphelper/synchronousdispatch.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-08T13:47:05Z",
+      "side": 1,
+      "message": "ibid",
+      "revId": "2a962cb122f796aef9a10252ab224f5cd70569cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_82408c09",
+        "filename": "include/comphelper/weakbag.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-08T13:47:05Z",
+      "side": 1,
+      "message": "ibid",
       "revId": "2a962cb122f796aef9a10252ab224f5cd70569cf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
