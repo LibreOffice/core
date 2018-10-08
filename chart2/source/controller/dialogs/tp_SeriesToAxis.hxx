@@ -20,7 +20,14 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_SERIESTOAXIS_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/weld.hxx>
+
+namespace weld {
+    class CheckButton;
+    class MetricSpinButton;
+    class RadioButton;
+    class ToggleButton;
+    class Widget;
+}
 
 namespace chart
 {

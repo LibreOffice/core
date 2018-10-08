@@ -30,6 +30,7 @@
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/PieChartOffsetMode.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <svtools/controldims.hxx>
 #include <svtools/valueset.hxx>

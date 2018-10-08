@@ -23,9 +23,11 @@
 #include "ChartTypeTemplateProvider.hxx"
 #include "DialogModel.hxx"
 #include <RangeSelectionHelper.hxx>
+#include <TabPageNotifiable.hxx>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XComponentSupplier.hpp>
+#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <svtools/miscopt.hxx>
 
 namespace
