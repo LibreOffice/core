@@ -70,6 +70,24 @@
       "revId": "05a337e297eb0cfe88c99503d760bd9eaf495b7d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_226660ef",
+        "filename": "compilerplugins/clang/test/useuniqueptr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-10-08T12:57:25Z",
+      "side": 1,
+      "message": "yay!",
+      "parentUuid": "ff0f0b1f_826f6cc4",
+      "revId": "05a337e297eb0cfe88c99503d760bd9eaf495b7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
