@@ -432,7 +432,6 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/svtresid.hxx>
 #include <svtools/toolboxcontroller.hxx>
-#include <svtools/transfer.hxx>
 #include <svtools/valueset.hxx>
 #include <toolkit/dllapi.h>
 #include <toolkit/helper/macros.hxx>
@@ -590,5 +589,6 @@
 #include <svx/xpoly.hxx>
 #include <svx/xpool.hxx>
 #include <svx/xtable.hxx>
+#include <vcl/transfer.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

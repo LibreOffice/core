@@ -44,7 +44,7 @@
 #include <vcl/txtattr.hxx>
 #include <vcl/settings.hxx>
 #include <svtools/textwindowpeer.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/help.hxx>
 #include <cppuhelper/implbase.hxx>

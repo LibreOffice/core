@@ -11,8 +11,8 @@
 #include "optHeaderTabListbox.hxx"
 
 #include <vcl/builderfactory.hxx>
-#include <svtools/svlbitm.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/svlbitm.hxx>
+#include <vcl/treelistentry.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>

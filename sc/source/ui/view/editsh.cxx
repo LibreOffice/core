@@ -54,7 +54,7 @@
 #include <svtools/cliplistener.hxx>
 #include <svl/whiter.hxx>
 #include <sot/formats.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <svl/stritem.hxx>
 
 #include <editsh.hxx>

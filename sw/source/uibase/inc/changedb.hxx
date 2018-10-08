@@ -22,7 +22,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <svx/stddlg.hxx>
 #include "dbtree.hxx"
 

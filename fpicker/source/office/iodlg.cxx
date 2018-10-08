@@ -40,7 +40,7 @@
 #include <svtools/fileview.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/svtabbx.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 
 #include <fpicker/strings.hrc>
 #include <svtools/helpids.h>

@@ -24,7 +24,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/vclptr.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 
 #include "callbacks.hxx"
 #include "TableConnectionData.hxx"

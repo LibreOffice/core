@@ -18,14 +18,14 @@
  */
 
 
-#ifndef INCLUDED_SVTOOLS_SVLBITM_HXX
-#define INCLUDED_SVTOOLS_SVLBITM_HXX
+#ifndef INCLUDED_VCL_SVLBITM_HXX
+#define INCLUDED_VCL_SVLBITM_HXX
 
 #include <memory>
-#include <svtools/svtdllapi.h>
+#include <vcl/dllapi.h>
 #include <tools/link.hxx>
 #include <vcl/image.hxx>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 class SvTreeListEntry;
@@ -57,7 +57,7 @@ namespace o3tl
 
 struct SvLBoxButtonData_Impl;
 
-class SVT_DLLPUBLIC SvLBoxButtonData
+class VCL_DLLPUBLIC SvLBoxButtonData
 {
 private:
     Link<SvLBoxButtonData*,void> aLink;
@@ -67,8 +67,8 @@ private:
     bool                    bDataOk;
     std::vector<Image>      aBmps;  // indices s. constants BMP_ ....
 
-    SVT_DLLPRIVATE void     SetWidthAndHeight();
-    SVT_DLLPRIVATE void     InitData( bool _bRadioBtn, const Control* pControlForSettings );
+    VCL_DLLPRIVATE void     SetWidthAndHeight();
+    VCL_DLLPRIVATE void     InitData( bool _bRadioBtn, const Control* pControlForSettings );
 public:
                             // include creating default images (CheckBox or RadioButton)
                             SvLBoxButtonData( const Control* pControlForSettings );
@@ -100,7 +100,7 @@ public:
 
 // **********************************************************************
 
-class SVT_DLLPUBLIC SvLBoxString : public SvLBoxItem
+class VCL_DLLPUBLIC SvLBoxString : public SvLBoxItem
 {
 protected:
     OUString maText;
@@ -132,7 +132,7 @@ public:
     virtual std::unique_ptr<SvLBoxItem> Clone(SvLBoxItem const * pSource) const override;
 };
 
-class SVT_DLLPUBLIC SvLBoxButton : public SvLBoxItem
+class VCL_DLLPUBLIC SvLBoxButton : public SvLBoxItem
 {
     bool    isVis;
     SvLBoxButtonData*   pData;
@@ -222,7 +222,7 @@ inline void SvLBoxButton::SetStateHilighted( bool bHilight )
 
 struct SvLBoxContextBmp_Impl;
 
-class SVT_DLLPUBLIC SvLBoxContextBmp : public SvLBoxItem
+class VCL_DLLPUBLIC SvLBoxContextBmp : public SvLBoxItem
 {
     std::unique_ptr<SvLBoxContextBmp_Impl>  m_pImpl;
 public:
