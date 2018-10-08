@@ -619,7 +619,7 @@ struct HasFamilyPredicate : svl::StyleSheetPredicate
     {
         return sheet.GetFamily() == meFamily;
     }
-    SfxStyleFamily meFamily;
+    SfxStyleFamily const meFamily;
 };
 
 }

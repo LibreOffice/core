@@ -38,11 +38,11 @@ public:
     sal_Int32 mnRightBorder;
     sal_Int32 mnTopBorder;
     sal_Int32 mnBottomBorder;
-    sal_Int32 mnVerticalGap;
-    sal_Int32 mnHorizontalGap;
-    Size maMinimalSize;
-    Size maPreferredSize;
-    Size maMaximalSize;
+    sal_Int32 const mnVerticalGap;
+    sal_Int32 const mnHorizontalGap;
+    Size const maMinimalSize;
+    Size const maPreferredSize;
+    Size const maMaximalSize;
     sal_Int32 mnMinimalColumnCount;
     sal_Int32 mnMaximalColumnCount;
     sal_Int32 mnPageCount;

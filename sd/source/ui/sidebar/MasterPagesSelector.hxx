@@ -99,10 +99,6 @@ protected:
 
     SdDrawDocument& mrDocument;
     ViewShellBase& mrBase;
-    /** menu entry that is executed as default action when the left mouse button is
-        clicked over a master page.
-    */
-    OString msDefaultClickAction;
 
     SdPage* GetSelectedMasterPage();
 

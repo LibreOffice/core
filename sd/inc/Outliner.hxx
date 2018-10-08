@@ -45,12 +45,12 @@ class Window;
 struct SearchSelection
 {
     /// 0-based index of the page that has the selection.
-    int m_nPage;
+    int const m_nPage;
     /**
      * List of selection rectangles in twips -- multiple rectangles only in
      * case the selection spans over more layout lines.
      */
-    OString m_aRectangles;
+    OString const m_aRectangles;
 
     SearchSelection(int nPage, const OString& rRectangles);
 

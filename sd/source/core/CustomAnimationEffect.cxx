@@ -2680,7 +2680,7 @@ struct ImplStlTextGroupSortHelper
 {
     explicit ImplStlTextGroupSortHelper( bool bReverse ) : mbReverse( bReverse ) {};
     bool operator()( const CustomAnimationEffectPtr& p1, const CustomAnimationEffectPtr& p2 );
-    bool mbReverse;
+    bool const mbReverse;
     sal_Int32 getTargetParagraph( const CustomAnimationEffectPtr& p1 );
 };
 

@@ -168,7 +168,7 @@ public:
 
 private:
     css::uno::Reference<css::accessibility::XAccessible> mxParent;
-    sal_uInt16 mnPageNumber;
+    sal_uInt16 const mnPageNumber;
     ::sd::slidesorter::SlideSorter& mrSlideSorter;
     sal_uInt32 mnClientId;
 

@@ -92,9 +92,9 @@ public:
         static SotClipboardFormatId mnListBoxDropFormatId;
 
         SdPageObjsTLB&      mrParent;
-        INetBookmark        maBookmark;
+        INetBookmark const      maBookmark;
         ::sd::DrawDocShell&     mrDocShell;
-        NavigatorDragType   meDragType;
+        NavigatorDragType const   meDragType;
         SAL_DLLPRIVATE virtual               ~SdPageObjsTransferable() override;
 
         SAL_DLLPRIVATE virtual void      AddSupportedFormats() override;
@@ -124,8 +124,8 @@ private:
     SdDrawDocument*         mpBookmarkDoc;
     SfxMedium*              mpMedium;
     SfxMedium*              mpOwnMedium;
-    Image                   maImgOle;
-    Image                   maImgGraphic;
+    Image const             maImgOle;
+    Image const             maImgGraphic;
     bool                    mbLinkableSelected;
     OUString                maDocName;
     ::sd::DrawDocShellRef   mxBookmarkDocShRef; ///< for the loading of bookmarks

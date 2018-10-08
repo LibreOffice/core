@@ -1549,7 +1549,7 @@ sal_uInt32 AnimationExporter::GetValueTypeForAttributeName( const OUString& rAtt
     struct Entry
     {
         const sal_Char* pName;
-        sal_uInt8       nType;
+        sal_uInt8 nType;
     };
     static const Entry lcl_attributeMap[] =
     {

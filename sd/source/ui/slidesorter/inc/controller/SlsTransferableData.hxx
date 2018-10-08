@@ -46,8 +46,8 @@ public:
         Representative (const BitmapEx& rBitmap, const bool bIsExcluded)
             : maBitmap(rBitmap), mbIsExcluded(bIsExcluded) {}
 
-        BitmapEx maBitmap;
-        bool mbIsExcluded;
+        BitmapEx const maBitmap;
+        bool const mbIsExcluded;
     };
 
     static SdTransferable* CreateTransferable (

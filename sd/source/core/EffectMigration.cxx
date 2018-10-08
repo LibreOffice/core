@@ -48,7 +48,7 @@ using ::com::sun::star::beans::NamedValue;
 
 struct deprecated_FadeEffect_conversion_table_entry
 {
-    FadeEffect  meFadeEffect;
+    FadeEffect const  meFadeEffect;
     const sal_Char* mpPresetId;
 }
 
@@ -219,7 +219,7 @@ FadeEffect EffectMigration::GetFadeEffect( const SdPage* pPage )
 
 struct deprecated_AnimationEffect_conversion_table_entry
 {
-    AnimationEffect meEffect;
+    AnimationEffect const meEffect;
     const sal_Char* mpPresetId;
     const sal_Char* mpPresetSubType;
 }

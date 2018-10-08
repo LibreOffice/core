@@ -47,8 +47,8 @@ public:
     TemplateEntry   (const OUString& rsTitle, const OUString& rsPath)
         :   msTitle(rsTitle), msPath(rsPath) {}
 
-    OUString msTitle;
-    OUString msPath;
+    OUString const msTitle;
+    OUString const msPath;
 };
 
 /** This class scans the template folders for impress templates.  There are

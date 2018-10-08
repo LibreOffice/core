@@ -71,8 +71,8 @@ struct snewfoil_value_info
 {
     const char* msBmpResId;
     const char* mpStrResId;
-    WritingMode meWritingMode;
-    AutoLayout maAutoLayout;
+    WritingMode const meWritingMode;
+    AutoLayout const maAutoLayout;
 };
 
 static const snewfoil_value_info notes[] =
