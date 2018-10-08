@@ -284,14 +284,35 @@ IMPL_LINK( SelectPersonaDialog, SearchPersonas, Button*, pButton, void )
     if( searchTerm.isEmpty( ) )
         return;
 
+    // Direct url of a persona given
     if ( searchTerm.startsWith( "https://addons.mozilla.org/" ) )
     {
         OUString sSlug = searchTerm.getToken( 6, '/' );
 
+        // Check if we got the slug
+        if ( sSlug.isEmpty() )
+        {
+            SolarMutexGuard aGuard;
+            OUString sError = CuiResId( RID_SVXSTR_INVALIDPERSONAURL );
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(nullptr,
+                                                                                       VclMessageType::Error, VclButtonsType::Ok,
+                                                                                       sError));
+            xBox->run();
+            return;
+        }
+
+        // Remove invalid characters
+        searchTerm = searchTerm.replaceAll("?", "");
+
         m_pSearchThread = new SearchAndParseThread( this, sSlug, true );
     }
+    // Search term given
     else
     {
+        // Remove invalid characters
+        searchTerm = searchTerm.replaceAll("/", "");
+        searchTerm = searchTerm.replaceAll("?", "");
+
         // 15 results so that invalid and duplicate search results whose names, textcolors etc. are null can be skipped
         OUString rSearchURL = "https://addons.mozilla.org/api/v3/addons/search/?q=" + searchTerm + "&type=persona&page_size=15";
 
