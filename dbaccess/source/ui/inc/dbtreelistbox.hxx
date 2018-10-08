@@ -24,7 +24,7 @@
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <vcl/timer.hxx>
 
 #include <memory>

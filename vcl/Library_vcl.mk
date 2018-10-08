@@ -229,6 +229,19 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/outdev/vclreferencebase \
     vcl/source/outdev/nativecontrols \
     vcl/source/outdev/map \
+    vcl/source/treelist/imap \
+    vcl/source/treelist/imap2 \
+    vcl/source/treelist/imap3 \
+    vcl/source/treelist/inetimg \
+    vcl/source/treelist/transfer \
+    vcl/source/treelist/transfer2 \
+    vcl/source/treelist/viewdataentry \
+    vcl/source/treelist/treelist \
+    vcl/source/treelist/treelistbox \
+    vcl/source/treelist/treelistentry \
+    vcl/source/treelist/svimpbox \
+    vcl/source/treelist/svlbitm \
+    vcl/source/treelist/uiobject \
     vcl/source/gdi/alpha \
     vcl/source/gdi/animate \
     vcl/source/gdi/bitmap3 \

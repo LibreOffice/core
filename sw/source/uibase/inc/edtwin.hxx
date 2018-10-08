@@ -26,7 +26,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/window.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <swevent.hxx>
 #include <swtypes.hxx>
 

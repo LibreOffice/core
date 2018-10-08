@@ -21,7 +21,7 @@
 #define INCLUDED_SVX_FONTLB_HXX
 
 #include <svtools/svtabbx.hxx>
-#include <svtools/svlbitm.hxx>
+#include <vcl/svlbitm.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svxdllapi.h>
 

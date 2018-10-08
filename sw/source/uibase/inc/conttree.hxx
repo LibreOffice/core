@@ -20,8 +20,8 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CONTTREE_HXX
 
 #include <svl/lstner.hxx>
-#include <svtools/treelistbox.hxx>
-#include <svtools/svlbitm.hxx>
+#include <vcl/treelistbox.hxx>
+#include <vcl/svlbitm.hxx>
 #include "swcont.hxx"
 
 #include <map>

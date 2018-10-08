@@ -24,8 +24,8 @@
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 
 #include <svtools/svtabbx.hxx>
-#include <svtools/treelistbox.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistbox.hxx>
+#include <vcl/treelistentry.hxx>
 
 namespace chart
 {

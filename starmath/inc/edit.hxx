@@ -22,7 +22,7 @@
 #include <vcl/window.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <editeng/editdata.hxx>
 #include <svtools/colorcfg.hxx>
 #include <memory>

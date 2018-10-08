@@ -21,8 +21,8 @@
 #include <scopetools.hxx>
 #include <viewdata.hxx>
 
-#include <svtools/svlbitm.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/svlbitm.hxx>
+#include <vcl/treelistentry.hxx>
 
 #if HAVE_FEATURE_OPENCL
 #include <formulagroup.hxx>
