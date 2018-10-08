@@ -85,8 +85,8 @@ namespace dlgprov
     {
     private:
         css::uno::Reference< css::script::XScriptListener > m_xScriptListener;
-        OUString m_sScriptType;
-        OUString m_sScriptCode;
+        OUString const m_sScriptType;
+        OUString const m_sScriptCode;
 
         void firing_impl( const css::script::AllEventObject& Event, css::uno::Any* pRet );
 
