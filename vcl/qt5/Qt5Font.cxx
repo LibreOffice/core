@@ -35,8 +35,11 @@ static QFont::Weight GetQFontWeight(FontWeight eWeight)
             return QFont::Light;
         case FontWeight_FORCE_EQUAL_SIZE:
             assert(false && "FontWeight_FORCE_EQUAL_SIZE not implementable for QFont");
+            SAL_FALLTHROUGH;
         case WEIGHT_SEMILIGHT:
+            SAL_FALLTHROUGH;
         case WEIGHT_DONTKNOW:
+            SAL_FALLTHROUGH;
         case WEIGHT_NORMAL:
             return QFont::Normal;
         case WEIGHT_MEDIUM:
