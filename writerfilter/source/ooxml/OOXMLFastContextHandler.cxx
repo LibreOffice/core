@@ -1658,22 +1658,6 @@ void OOXMLFastContextHandlerShape::setToken(Token_t nToken)
         mrShapeContext->setStartToken(nToken);
 }
 
-/// assume shapes are added consecutively, find the bottom-rightmost entry in the tree
-static uno::Reference<drawing::XShape> lcl_findLeafNodeShape( const uno::Reference<drawing::XShape>& xShape )
-{
-    // depth-first, rightmost-first tree traversal. still returns
-    // groupshape, if it's empty and the last-added shape
-    uno::Reference<container::XIndexAccess> xIndexAccess(xShape, uno::UNO_QUERY);
-    if( !xIndexAccess.is() || !xIndexAccess->getCount() )
-        return xShape;
-    else
-        return lcl_findLeafNodeShape(
-            uno::Reference<drawing::XShape>(
-                xIndexAccess->getByIndex(
-                    xIndexAccess->getCount()-1),
-                uno::UNO_QUERY));
-}
-
 void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
 {
     if ( mrShapeContext.is() && !m_bShapeSent )
@@ -1693,6 +1677,7 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
             // Notify the dmapper that the shape is ready to use
             if ( !bIsPicture )
             {
+#if 0
                 // did we just add a group shape? then we probably
                 // want to add the text to the last inner shape
                 // instead
@@ -1701,6 +1686,7 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
                 if (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
                     mpStream->startShape( lcl_findLeafNodeShape(xShape) );
                 else
+#endif
                     mpStream->startShape( xShape );
                 m_bShapeStarted = true;
             }
@@ -1765,15 +1751,19 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
                                                            pChildContext,
                                                            this);
 
-                    if (!bGroupShape || Element == Token_t(NMSP_wps | XML_wsp) )
+                    if (!bGroupShape)
                     {
                         pWrapper->addNamespace(NMSP_doc);
                         pWrapper->addNamespace(NMSP_vmlWord);
                         pWrapper->addNamespace(NMSP_vmlOffice);
                         pWrapper->addToken( NMSP_vml|XML_textbox );
+                    }
+#if 0
+                    if (Element == Token_t(NMSP_wps | XML_wsp) )
+                    {
                         pWrapper->addToken( NMSP_doc|XML_txbxContent );
                     }
-
+#endif
                     xContextHandler.set(pWrapper);
                 }
                 else
