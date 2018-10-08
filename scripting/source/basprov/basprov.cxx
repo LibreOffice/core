@@ -76,21 +76,13 @@ namespace basprov
 
     static Sequence< OUString > getSupportedServiceNames_BasicProviderImpl()
     {
-        static Sequence< OUString >* pNames = nullptr;
-        if ( !pNames )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pNames )
-            {
-                static Sequence< OUString > aNames(4);
-                aNames.getArray()[0] = "com.sun.star.script.provider.ScriptProviderForBasic";
-                aNames.getArray()[1] = "com.sun.star.script.provider.LanguageScriptProvider";
-                aNames.getArray()[2] = "com.sun.star.script.provider.ScriptProvider";
-                aNames.getArray()[3] = "com.sun.star.script.browse.BrowseNode";
-                pNames = &aNames;
-            }
-        }
-        return *pNames;
+        static Sequence< OUString > s_Names{
+            "com.sun.star.script.provider.ScriptProviderForBasic",
+            "com.sun.star.script.provider.LanguageScriptProvider",
+            "com.sun.star.script.provider.ScriptProvider",
+            "com.sun.star.script.browse.BrowseNode"};
+
+        return s_Names;
     }
 
 

@@ -838,19 +838,9 @@ SfxObjectShell* SfxObjectShell::GetObjectShell()
 
 uno::Sequence< OUString > SfxObjectShell::GetEventNames()
 {
-    static uno::Sequence< OUString >* pEventNameContainer = nullptr;
+    static uno::Sequence< OUString > s_EventNameContainer(rtl::Reference<GlobalEventConfig>(new GlobalEventConfig)->getElementNames());
 
-    if ( !pEventNameContainer )
-    {
-        SolarMutexGuard aGuard;
-        if ( !pEventNameContainer )
-        {
-            static uno::Sequence< OUString > aEventNameContainer = rtl::Reference<GlobalEventConfig>(new GlobalEventConfig)->getElementNames();
-            pEventNameContainer = &aEventNameContainer;
-        }
-    }
-
-    return *pEventNameContainer;
+    return s_EventNameContainer;
 }
 
 
