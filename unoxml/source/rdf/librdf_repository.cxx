@@ -53,6 +53,7 @@
 #include <com/sun/star/rdf/Literal.hpp>
 
 #include <rtl/ref.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/exc_hlp.hxx>
