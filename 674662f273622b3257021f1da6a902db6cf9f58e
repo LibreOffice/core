@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_e21748ed",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-08T14:55:10Z",
+      "side": 1,
+      "message": "No valid theme found at %1.",
+      "range": {
+        "startLine": 374,
+        "startChar": 89,
+        "endLine": 374,
+        "endChar": 142
+      },
+      "revId": "674662f273622b3257021f1da6a902db6cf9f58e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_a2d71024",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-08T14:55:10Z",
+      "side": 1,
+      "message": "The search term has to contain of a slash... (makes no sense)",
+      "range": {
+        "startLine": 294,
+        "startChar": 8,
+        "endLine": 294,
+        "endChar": 30
+      },
+      "revId": "674662f273622b3257021f1da6a902db6cf9f58e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
