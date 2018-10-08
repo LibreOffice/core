@@ -34,15 +34,15 @@ class SdTabTemplateDlg : public SfxStyleDialog
 {
 private:
     const SfxObjectShell&   rDocShell;
-    SdrView*                pSdrView;
+    SdrView* const                pSdrView;
 
-    XColorListRef         pColorList;
-    XGradientListRef      pGradientList;
-    XHatchListRef         pHatchingList;
-    XBitmapListRef        pBitmapList;
-    XPatternListRef       pPatternList;
-    XDashListRef          pDashList;
-    XLineEndListRef       pLineEndList;
+    XColorListRef const         pColorList;
+    XGradientListRef const      pGradientList;
+    XHatchListRef const         pHatchingList;
+    XBitmapListRef const        pBitmapList;
+    XPatternListRef const       pPatternList;
+    XDashListRef const          pDashList;
+    XLineEndListRef const       pLineEndList;
 
     sal_uInt16 m_nLineId;
     sal_uInt16 m_nAreaId;

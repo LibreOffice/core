@@ -38,7 +38,7 @@ class SdSnapLineDlg : public weld::GenericDialogController
 private:
     int                 nXValue;
     int                 nYValue;
-    Fraction            aUIScale;
+    Fraction const      aUIScale;
 
     std::unique_ptr<weld::Label> m_xFtX;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldX;

@@ -253,7 +253,7 @@ private:
     double mfGroupingAuto;
     sal_Int32 mnLastPara;
     sal_Int8 mnDepthFlags[PARA_LEVELS];
-    sal_Int32 mnGroupId;
+    sal_Int32 const mnGroupId;
 };
 
 typedef std::shared_ptr< CustomAnimationTextGroup > CustomAnimationTextGroupPtr;

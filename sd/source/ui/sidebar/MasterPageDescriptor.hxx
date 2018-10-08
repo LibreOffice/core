@@ -201,12 +201,12 @@ public:
     sal_Int32 mnUseCount;
 
     class URLComparator { public:
-        OUString msURL;
+        OUString const msURL;
         explicit URLComparator (const OUString& sURL);
         bool operator() (const SharedMasterPageDescriptor& rDescriptor);
     };
     class StyleNameComparator { public:
-        OUString msStyleName;
+        OUString const msStyleName;
         explicit StyleNameComparator (const OUString& sStyleName);
         bool operator() (const SharedMasterPageDescriptor& rDescriptor);
     };
@@ -219,7 +219,7 @@ public:
         explicit AllComparator(const SharedMasterPageDescriptor& rDescriptor);
         bool operator() (const SharedMasterPageDescriptor& rDescriptor);
     private:
-        SharedMasterPageDescriptor mpDescriptor;
+        SharedMasterPageDescriptor const mpDescriptor;
     };
 
 };

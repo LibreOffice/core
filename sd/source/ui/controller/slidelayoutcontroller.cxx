@@ -70,7 +70,7 @@ protected:
     void SelectHdl(void const *);
 private:
     SlideLayoutController& mrController;
-    bool mbInsertPage;
+    bool const mbInsertPage;
     VclPtr<ValueSet> mpLayoutSet1;
     VclPtr<ValueSet> mpLayoutSet2;
 };
@@ -79,7 +79,7 @@ struct snewfoil_value_info_layout
 {
     const char* msBmpResId;
     const char* mpStrResId;
-    AutoLayout maAutoLayout;
+    AutoLayout const maAutoLayout;
 };
 
 static const snewfoil_value_info_layout notes[] =

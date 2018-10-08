@@ -74,7 +74,7 @@ private:
             { return maToken==rDescriptor.maToken; }
 
         private:
-            ::sd::sidebar::MasterPageContainer::Token maToken;
+            ::sd::sidebar::MasterPageContainer::Token const maToken;
         };
     };
 
@@ -87,7 +87,6 @@ private:
 
     typedef ::std::vector<Descriptor> MasterPageList;
     MasterPageList mvMasterPages;
-    unsigned long int mnMaxListSize;
     std::shared_ptr<MasterPageContainer> mpContainer;
 
     RecentlyUsedMasterPages();

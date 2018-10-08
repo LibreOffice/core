@@ -77,7 +77,7 @@ enum class EppLayout
 struct PHLayout
 {
     EppLayout   nLayout;
-    sal_uInt8   nPlaceHolder[ 8 ];
+    sal_uInt8 nPlaceHolder[ 8 ];
 
     sal_uInt8   nUsedObjectPlaceHolder;
     sal_uInt8   nTypeOfTitle;
@@ -146,7 +146,7 @@ struct FontCollectionEntry
         sal_Int16               Pitch;
         sal_Int16               CharSet;
 
-        OUString                Original;
+        OUString const          Original;
 
         FontCollectionEntry( const OUString& rName, sal_Int16 nFamily, sal_Int16 nPitch, sal_Int16 nCharSet ) :
                             Scaling ( 1.0 ),
@@ -344,9 +344,9 @@ protected:
     sal_uInt32          mnPages;            ///< number of Slides ( w/o master pages & notes & handout )
     sal_uInt32          mnMasterPages;
 
-    Fraction                        maFraction;
-    MapMode                         maMapModeSrc;
-    MapMode                         maMapModeDest;
+    Fraction const     maFraction;
+    MapMode const      maMapModeSrc;
+    MapMode const      maMapModeDest;
     css::awt::Size     maDestPageSize;
     css::awt::Size     maPageSize; // #i121183# Keep size in logic coordinates (100th mm)
     css::awt::Size     maNotesPageSize;

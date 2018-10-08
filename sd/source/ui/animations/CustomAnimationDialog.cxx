@@ -107,7 +107,7 @@ private:
     std::map< sal_uInt16, OUString > maPropertyValues;
     VclPtr<ListBox> mpControl;
     DECL_LINK(OnSelect, ListBox&, void);
-    Link<LinkParamNone*,void> maModifyLink;
+    Link<LinkParamNone*,void> const maModifyLink;
 };
 
 PresetPropertyBox::PresetPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const OUString& aPresetId, const Link<LinkParamNone*,void>& rModifyHdl )
@@ -188,7 +188,7 @@ public:
 private:
     VclPtr<SvxColorListBox> mpControl;
     DECL_LINK(OnSelect, SvxColorListBox&, void);
-    Link<LinkParamNone*,void> maModifyLink;
+    Link<LinkParamNone*,void> const maModifyLink;
 };
 
 ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl )
@@ -249,7 +249,7 @@ public:
 
 private:
     VclPtr<FontNameBox>         mpControl;
-    Link<LinkParamNone*,void>   maModifyHdl;
+    Link<LinkParamNone*,void> const   maModifyHdl;
     DECL_LINK(ControlSelectHdl, ComboBox&, void);
 };
 
@@ -417,7 +417,7 @@ private:
     VclPtr<DropdownMenuBox> mpControl;
     VclPtr<PopupMenu> mpMenu;
     VclPtr<MetricField> mpMetric;
-    Link<LinkParamNone*,void> maModifyHdl;
+    Link<LinkParamNone*,void> const maModifyHdl;
 };
 
 CharHeightPropertyBox::CharHeightPropertyBox(sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl)
@@ -497,7 +497,7 @@ private:
     VclPtr<DropdownMenuBox>   mpControl;
     VclPtr<PopupMenu>         mpMenu;
     VclPtr<MetricField>       mpMetric;
-    Link<LinkParamNone*,void> maModifyHdl;
+    Link<LinkParamNone*,void> const maModifyHdl;
 };
 
 TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl )
@@ -597,7 +597,7 @@ private:
     VclPtr<DropdownMenuBox>   mpControl;
     VclPtr<PopupMenu>         mpMenu;
     VclPtr<MetricField>       mpMetric;
-    Link<LinkParamNone*,void> maModifyHdl;
+    Link<LinkParamNone*,void> const maModifyHdl;
 };
 
 RotationPropertyBox::RotationPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, const Any& rValue, const Link<LinkParamNone*,void>& rModifyHdl )
@@ -716,7 +716,7 @@ private:
     VclPtr<DropdownMenuBox>   mpControl;
     VclPtr<PopupMenu>         mpMenu;
     VclPtr<MetricField>       mpMetric;
-    Link<LinkParamNone*,void> maModifyHdl;
+    Link<LinkParamNone*,void> const maModifyHdl;
     int                       mnDirection;
 };
 
@@ -893,7 +893,7 @@ private:
     VclPtr<DropdownMenuBox>   mpControl;
     VclPtr<PopupMenu>         mpMenu;
     VclPtr<Edit>              mpEdit;
-    Link<LinkParamNone*,void> maModifyHdl;
+    Link<LinkParamNone*,void> const maModifyHdl;
 
     float mfFontWeight;
     awt::FontSlant meFontSlant;

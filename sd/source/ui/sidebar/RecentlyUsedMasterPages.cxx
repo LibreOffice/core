@@ -85,10 +85,11 @@ RecentlyUsedMasterPages&  RecentlyUsedMasterPages::Instance()
     return *mpInstance;
 }
 
+static constexpr size_t gnMaxListSize(8);
+
 RecentlyUsedMasterPages::RecentlyUsedMasterPages()
     : maListeners(),
       mvMasterPages(),
-      mnMaxListSize(8),
       mpContainer(new MasterPageContainer())
 {
 }
@@ -341,7 +342,7 @@ void RecentlyUsedMasterPages::AddMasterPage (
                 mpContainer->GetStyleNameForToken(aToken)));
 
         // Shorten list to maximal size.
-        while (mvMasterPages.size() > mnMaxListSize)
+        while (mvMasterPages.size() > gnMaxListSize)
         {
             mvMasterPages.pop_back ();
         }

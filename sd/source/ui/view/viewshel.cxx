@@ -1208,10 +1208,10 @@ void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
 
 class KeepSlideSorterInSyncWithPageChanges
 {
-    sd::slidesorter::view::SlideSorterView::DrawLock m_aDrawLock;
-    sd::slidesorter::controller::SlideSorterController::ModelChangeLock m_aModelLock;
-    sd::slidesorter::controller::PageSelector::UpdateLock m_aUpdateLock;
-    sd::slidesorter::controller::SelectionObserver::Context m_aContext;
+    sd::slidesorter::view::SlideSorterView::DrawLock const m_aDrawLock;
+    sd::slidesorter::controller::SlideSorterController::ModelChangeLock const m_aModelLock;
+    sd::slidesorter::controller::PageSelector::UpdateLock const m_aUpdateLock;
+    sd::slidesorter::controller::SelectionObserver::Context const m_aContext;
 
 public:
     explicit KeepSlideSorterInSyncWithPageChanges(sd::slidesorter::SlideSorter const & rSlideSorter)

@@ -50,8 +50,8 @@ namespace sd {
     struct ClientInfoInternal:
         ClientInfo
     {
-        BufferedStreamSocket *mpStreamSocket;
-        OUString mPin;
+        BufferedStreamSocket * const mpStreamSocket;
+        OUString const mPin;
 
         ClientInfoInternal( const OUString& rName,
                             BufferedStreamSocket *pSocket,

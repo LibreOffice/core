@@ -1529,8 +1529,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
 class ImplRenderPaintProc : public sdr::contact::ViewObjectContactRedirector
 {
     const SdrLayerAdmin&    rLayerAdmin;
-    SdrPageView*            pSdrPageView;
-    vcl::PDFExtOutDevData*  pPDFExtOutDevData;
+    SdrPageView* const            pSdrPageView;
+    vcl::PDFExtOutDevData* const  pPDFExtOutDevData;
 
     vcl::PDFWriter::StructElement ImplBegStructureTag( SdrObject& rObject );
 

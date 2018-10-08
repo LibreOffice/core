@@ -69,7 +69,7 @@ private:
 
 struct snewfoil_value_info
 {
-    sal_uInt16 mnId;
+    sal_uInt16 const mnId;
     const char* msBmpResId;
     const char* mpStrResId;
     const char* msUnoCommand;

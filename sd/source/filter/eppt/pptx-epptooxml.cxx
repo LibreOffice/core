@@ -148,7 +148,7 @@ enum PPTXLayout
 
 struct PPTXLayoutInfo
 {
-    int nType;
+    int const nType;
     const char* sName;
     const char* sType;
 };

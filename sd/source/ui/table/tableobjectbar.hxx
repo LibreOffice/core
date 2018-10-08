@@ -49,7 +49,7 @@ private:
     /// SfxInterface initializer.
     static void InitInterface_Impl();
 
-    ::sd::View* mpView;
+    ::sd::View* const mpView;
     ::sd::ViewShell* mpViewSh;
 };
 

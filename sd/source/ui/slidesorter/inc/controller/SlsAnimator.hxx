@@ -94,7 +94,7 @@ private:
     class Animation;
     typedef ::std::vector<std::shared_ptr<Animation> > AnimationList;
     AnimationList maAnimations;
-    ::canvas::tools::ElapsedTime maElapsedTime;
+    ::canvas::tools::ElapsedTime const maElapsedTime;
 
     std::unique_ptr<view::SlideSorterView::DrawLock, o3tl::default_delete<view::SlideSorterView::DrawLock>> mpDrawLock;
 

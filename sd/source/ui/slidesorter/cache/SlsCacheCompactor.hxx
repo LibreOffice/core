@@ -63,7 +63,7 @@ public:
 
 protected:
     BitmapCache& mrCache;
-    sal_Int32 mnMaximalCacheSize;
+    sal_Int32 const mnMaximalCacheSize;
 
     CacheCompactor(
         BitmapCache& rCache,
