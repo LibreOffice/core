@@ -101,7 +101,11 @@ class SwAccessibleParagraph :
 
     // determine the current selection. Fill the values with
     // -1 if there is no selection in the this paragraph
-    bool GetSelection(sal_Int32& nStart, sal_Int32& nEnd);
+    // @param pSelection (optional) check only Nth selection in ring
+    bool GetSelectionAtIndex(sal_Int32 * pSelection, sal_Int32& nStart, sal_Int32& nEnd);
+    bool GetSelection(sal_Int32& nStart, sal_Int32& nEnd) {
+        return GetSelectionAtIndex(nullptr, nStart, nEnd);
+    }
 
     // helper for GetSelection and getCaretPosition
     // #i27301# - add parameter <_bForSelection>, which indicates,
@@ -368,7 +372,6 @@ public:
     virtual sal_Int32 SAL_CALL  addSelection( sal_Int32 selectionIndex, sal_Int32 startOffset, sal_Int32 endOffset) override;
     // XAccessibleExtendedAttributes
     virtual css::uno::Any SAL_CALL getExtendedAttributes() override ;
-    bool GetSelectionAtIndex(sal_Int32 nIndex, sal_Int32& nStart, sal_Int32& nEnd);
     sal_Int32 GetRealHeadingLevel();
     // XAccessibleComponent
     bool m_bLastHasSelection;
