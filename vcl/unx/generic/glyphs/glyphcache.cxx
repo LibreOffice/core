@@ -196,7 +196,10 @@ FreetypeFont* GlyphCache::CacheFont(LogicalFontInstance* pFontInstance)
 void GlyphCache::UncacheFont( FreetypeFont& rFreetypeFont )
 {
     if( (rFreetypeFont.Release() <= 0) && (gnMaxSize <= mnBytesUsed) )
+    {
         mpCurrentGCFont = &rFreetypeFont;
+        GarbageCollect();
+    }
 }
 
 void GlyphCache::GarbageCollect()
