@@ -269,11 +269,8 @@ void ModulWindow::CheckCompileBasic()
 
             GetShell()->GetViewFrame()->GetWindow().EnterWait();
 
-            if( bModified )
-            {
-                AssertValidEditEngine();
-                GetEditorWindow().SetSourceInBasic();
-            }
+            AssertValidEditEngine();
+            GetEditorWindow().SetSourceInBasic();
 
             bool bWasModified = GetBasic()->IsModified();
 
