@@ -16,6 +16,24 @@
       "revId": "05a337e297eb0cfe88c99503d760bd9eaf495b7d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_02359cda",
+        "filename": "compilerplugins/clang/test/useuniqueptr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-10-08T12:29:39Z",
+      "side": 1,
+      "message": "earlier versions of clang (like the one on jenkins) do not generate this warning, not sure why",
+      "parentUuid": "ff0f0b1f_4212745a",
+      "revId": "05a337e297eb0cfe88c99503d760bd9eaf495b7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
