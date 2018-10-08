@@ -33,7 +33,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 class PathService : public ::cppu::WeakImplHelper< css::frame::XConfigManager, css::lang::XServiceInfo >
 {
-    SvtPathOptions m_aOptions;
+    SvtPathOptions const m_aOptions;
 
 public:
     PathService()
