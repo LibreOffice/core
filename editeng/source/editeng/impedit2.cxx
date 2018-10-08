@@ -2390,12 +2390,7 @@ EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, sal_uInt8 n
     if ( ( nDelMode == DeleteMode::RestOfContent ) || ( aDelStart.GetNode() == aDelEnd.GetNode() ) )
         return ImpDeleteSelection( EditSelection( aDelStart, aDelEnd ) );
 
-    // Decide now if to delete selection (RESTOFCONTENTS)
-    bool bSpecialBackward = ( nMode == DEL_LEFT ) && ( nDelMode == DeleteMode::Simple );
-    if ( aStatus.IsAnyOutliner() )
-        bSpecialBackward = false;
-
-    return ImpConnectParagraphs( aDelStart.GetNode(), aDelEnd.GetNode(), bSpecialBackward );
+    return ImpConnectParagraphs(aDelStart.GetNode(), aDelEnd.GetNode());
 }
 
 EditPaM ImpEditEngine::ImpDeleteSelection(const EditSelection& rCurSel)
