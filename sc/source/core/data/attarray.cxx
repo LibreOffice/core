@@ -191,6 +191,9 @@ bool ScAttrArray::Concat(SCSIZE nPos)
  * no attribute in a column => nCount==1, one attribute somewhere => nCount == 3
  * (ie. one run with no attribute + one attribute + another run with no attribute)
  * so a range of identical attributes is only one entry in ScAttrArray.
+ *
+ * Iterative implementation of Binary Search
+ * The same implementation was used inside ScMarkArray::Search().
  */
 
 bool ScAttrArray::Search( SCROW nRow, SCSIZE& nIndex ) const
@@ -202,33 +205,40 @@ bool ScAttrArray::Search( SCROW nRow, SCSIZE& nIndex ) const
         nIndex = it - mvData.begin();
     return it != mvData.end(); */
 
-    long nHi = static_cast<long>(mvData.size()) - 1;
-    long i = 0;
-    bool bFound = (mvData.size() == 1);
-    long nLo = 0;
-    long nStartRow = 0;
-    while ( !bFound && nLo <= nHi )
+    if (mvData.size() == 1)
     {
-        i = (nLo + nHi) / 2;
-        if (i > 0)
-            nStartRow = static_cast<long>(mvData[i - 1].nEndRow);
-        else
-            nStartRow = -1;
-        const long nEndRow = static_cast<long>(mvData[i].nEndRow);
-        if (nEndRow < static_cast<long>(nRow))
-            nLo = ++i;
-        else
-            if (nStartRow >= static_cast<long>(nRow))
-                nHi = --i;
-            else
-                bFound = true;
+        nIndex = 0;
+        return true;
     }
 
-    if (bFound)
-        nIndex=static_cast<SCSIZE>(i);
-    else
-        nIndex=0;
-    return bFound;
+    long nHi = static_cast<long>(mvData.size()) - 1;
+    long i = 0;
+    long nLo = 0;
+
+    while ( nLo <= nHi )
+    {
+        i = (nLo + nHi) / 2;
+
+        if (mvData[i].nEndRow < nRow)
+        {
+            // If [nRow] greater, ignore left half
+            nLo = i + 1;
+        }
+        else  if ((i > 0) && (mvData[i - 1].nEndRow >= nRow))
+        {
+            // If [nRow] is smaller, ignore right half
+            nHi = i - 1;
+        }
+        else
+        {
+            // found
+            nIndex=static_cast<SCSIZE>(i);
+            return true;
+        }
+    }
+
+    nIndex=0;
+    return false;
 }
 
 const ScPatternAttr* ScAttrArray::GetPattern( SCROW nRow ) const
