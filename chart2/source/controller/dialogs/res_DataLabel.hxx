@@ -19,14 +19,11 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_DATALABEL_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_DATALABEL_HXX
 
-#include <vcl/button.hxx>
-#include <vcl/layout.hxx>
 #include <svl/itemset.hxx>
-#include <TextDirectionListBox.hxx>
 #include <svx/dialcontrol.hxx>
-#include <sfx2/tabdlg.hxx>
 
 class SvNumberFormatter;
+namespace chart { class SchTextDirectionListBox; }
 
 namespace chart
 {

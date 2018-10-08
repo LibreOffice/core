@@ -20,8 +20,10 @@
 #include "tp_3D_SceneAppearance.hxx"
 #include <ChartModelHelper.hxx>
 #include <ThreeDHelper.hxx>
+#include <ControllerLockGuard.hxx>
 #include <rtl/math.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/ShadeMode.hpp>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;

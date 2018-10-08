@@ -23,8 +23,9 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <svx/dialcontrol.hxx>
-#include <svx/orienthelper.hxx>
 #include <TextDirectionListBox.hxx>
+
+namespace svx { class OrientationHelper; }
 
 namespace chart
 {

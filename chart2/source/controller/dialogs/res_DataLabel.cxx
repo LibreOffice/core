@@ -19,6 +19,7 @@
 
 #include "res_DataLabel.hxx"
 
+#include <TextDirectionListBox.hxx>
 #include <chartview/ChartSfxItemIds.hxx>
 #include "dlg_NumberFormat.hxx"
 

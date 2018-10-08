@@ -20,7 +20,9 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_CHARTTYPETEMPLATEPROVIDER_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_CHARTTYPETEMPLATEPROVIDER_HXX
 
-#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartTypeTemplate; } } } }
 
 namespace chart
 {

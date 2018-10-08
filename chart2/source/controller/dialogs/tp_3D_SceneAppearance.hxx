@@ -20,13 +20,11 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_3D_SCENEAPPEARANCE_HXX
 
 #include <vcl/tabpage.hxx>
-#include <vcl/field.hxx>
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
-#include <com/sun/star/drawing/ShadeMode.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 
-#include <ControllerLockGuard.hxx>
+namespace chart { class ControllerLockHelper; }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
 
 namespace chart
 {

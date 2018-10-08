@@ -19,11 +19,13 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_DATABROWSERMODEL_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_DATABROWSERMODEL_HXX
 
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <memory>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartDocument; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace com { namespace sun { namespace star { namespace chart2 {
     class XDataSeries;

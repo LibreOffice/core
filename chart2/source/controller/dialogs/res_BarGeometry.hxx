@@ -19,9 +19,10 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_BARGEOMETRY_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_BARGEOMETRY_HXX
 
-#include <vcl/builder.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
+
+class VclBuilderContainer;
 
 namespace chart
 {
