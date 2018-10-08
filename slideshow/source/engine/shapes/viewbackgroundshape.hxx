@@ -76,7 +76,7 @@ namespace slideshow
 
             /** The view layer this object is part of.
              */
-            ViewLayerSharedPtr                                  mpViewLayer;
+            ViewLayerSharedPtr const                            mpViewLayer;
 
             /// Generated content bitmap, already with correct output size
             mutable css::uno::Reference< css::rendering::XBitmap >  mxBitmap;

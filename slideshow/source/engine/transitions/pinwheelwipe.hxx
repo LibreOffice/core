@@ -34,7 +34,7 @@ public:
     explicit PinWheelWipe( sal_Int32 blades ) : m_blades(blades) {}
     virtual ::basegfx::B2DPolyPolygon operator () ( double t ) override;
 private:
-    sal_Int32 m_blades;
+    sal_Int32 const m_blades;
 };
 
 }

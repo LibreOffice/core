@@ -79,14 +79,14 @@ private:
 private:
     css::uno::Reference<css::animations::XAnimate>  mxAnimateNode;
     ShapeAttributeLayerHolder                       maAttributeLayerHolder;
-    ::basegfx::B2DVector                            maSlideSize;
+    ::basegfx::B2DVector const                      maSlideSize;
     AnimationActivitySharedPtr                      mpActivity;
 
     /// When valid, this node has a plain target shape
     AttributableShapeSharedPtr                      mpShape;
     /// When valid, this is a subsetted target shape
     ShapeSubsetSharedPtr                            mpShapeSubset;
-    SubsettableShapeManagerSharedPtr                mpSubsetManager;
+    SubsettableShapeManagerSharedPtr const          mpSubsetManager;
     bool                                            mbIsIndependentSubset;
 };
 

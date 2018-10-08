@@ -103,7 +103,7 @@ public:
 private:
     ::canvas::tools::ElapsedTime    maTimer;
     double                          mnNextTime;
-    std::weak_ptr<Activity>       mpActivity;
+    std::weak_ptr<Activity> const   mpActivity;
     ActivitiesQueue&                mrActivityQueue;
 };
 

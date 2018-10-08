@@ -52,10 +52,10 @@ struct NodeContext
         {}
 
     /// Context as passed to createAnimationNode()
-    SlideShowContext                 maContext;
+    SlideShowContext const           maContext;
 
     /// Size in user coordinate space of the corresponding slide
-    ::basegfx::B2DVector             maSlideSize;
+    ::basegfx::B2DVector const       maSlideSize;
 
     /// Shape to be used (provided by parent, e.g. for iterations)
     ShapeSubsetSharedPtr             mpMasterShapeSubset;

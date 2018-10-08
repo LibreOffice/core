@@ -237,7 +237,7 @@ private:
     sal_Int16                                           mnCurrentCursor;
 
     /// True, when intrinsic shape animations are allowed
-    bool                                                mbIntrinsicAnimationsAllowed;
+    bool const                                          mbIntrinsicAnimationsAllowed;
 
     /// True, when user paint overlay is enabled
     bool                                                mbUserPaintOverlayEnabled;

@@ -135,9 +135,9 @@ namespace slideshow
             //ShapeSubset(const ShapeSubset&);
             //ShapeSubset& operator=( const ShapeSubset& );
 
-            AttributableShapeSharedPtr       mpOriginalShape;
+            AttributableShapeSharedPtr const mpOriginalShape;
             AttributableShapeSharedPtr       mpSubsetShape;
-            DocTreeNode                      maTreeNode;
+            DocTreeNode const                maTreeNode;
             SubsettableShapeManagerSharedPtr mpShapeManager;
         };
     }

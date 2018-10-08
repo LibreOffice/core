@@ -150,7 +150,7 @@ private:
         one used by SlideShowImpl: it is not paused or modified by
         animations.
     */
-    canvas::tools::ElapsedTime maTimer;
+    canvas::tools::ElapsedTime const maTimer;
     /** Time between the display of frames.  Enforced only when mbIsActive
         is <TRUE/>.
     */

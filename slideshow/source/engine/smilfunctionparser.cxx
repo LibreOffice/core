@@ -510,7 +510,7 @@ namespace slideshow
                 }
 
             private:
-                ParserContextSharedPtr  mpParserContext; // might get modified during parsing
+                ParserContextSharedPtr const  mpParserContext; // might get modified during parsing
             };
 
             const ParserContextSharedPtr& getParserContext()

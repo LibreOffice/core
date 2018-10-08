@@ -109,9 +109,9 @@ private:
 
 struct OGLFormat
 {
-    GLint  nInternalFormat;
-    GLenum eFormat;
-    GLenum eType;
+    GLint const  nInternalFormat;
+    GLenum const eFormat;
+    GLenum const eType;
 };
 
 /* channel ordering: (0:rgba, 1:bgra, 2:argb, 3:abgr)
