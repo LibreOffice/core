@@ -224,7 +224,7 @@ public:
         PresenterConfigurationAccess& rConfiguration,
         ReadContext& rReadContext);
 
-    OUString msConfigurationNodeName;
+    OUString const msConfigurationNodeName;
     std::shared_ptr<Theme> mpParentTheme;
     SharedBitmapDescriptor mpBackground;
     PaneStyleContainer maPaneStyles;
