@@ -132,7 +132,7 @@ std::string curlGet(const OString& rURL)
     return response_body;
 }
 
-// Downloads and saves the file at the given rURL to to a local path (sFileURL)
+// Downloads and saves the file at the given rURL to a local path (sFileURL)
 void curlDownload(const OString& rURL, const OUString& sFileURL)
 {
     CURL* curl = curl_easy_init();
