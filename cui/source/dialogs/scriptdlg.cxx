@@ -54,7 +54,7 @@
 
 #include <basic/sbx.hxx>
 #include <svtools/imagemgr.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <tools/urlobj.hxx>
 #include <vector>
 #include <algorithm>

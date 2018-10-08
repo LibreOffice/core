@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CONTENT_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CONTENT_HXX
 
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <address.hxx>
 #include <tools/solar.h>
 #include <o3tl/enumarray.hxx>

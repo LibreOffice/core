@@ -419,7 +419,6 @@
 #include <svtools/headbar.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
-#include <svtools/iconview.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imapcirc.hxx>
@@ -437,5 +436,6 @@
 #include <svtools/treelistbox.hxx>
 #include <svtools/treelistentry.hxx>
 #include <svtools/viewdataentry.hxx>
+#include <vcl/iconview.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

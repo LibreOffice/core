@@ -25,7 +25,7 @@
 #include <vcl/vclptr.hxx>
 #include <tools/multisel.hxx>
 #include <svtools/headbar.hxx>
-#include <svtools/transfer.hxx>
+#include <vcl/transfer.hxx>
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <svtools/accessibletableprovider.hxx>
 #include <vector>

@@ -21,7 +21,7 @@
 #define INCLUDED_CUI_SOURCE_INC_SCRIPTDLG_HXX
 
 #include <memory>
-#include <svtools/treelistbox.hxx>
+#include <vcl/treelistbox.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>

@@ -30,8 +30,8 @@
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
-#include <svtools/treelistbox.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistbox.hxx>
+#include <vcl/treelistentry.hxx>
 #include <svtools/svmedit.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/sqlerror.hxx>

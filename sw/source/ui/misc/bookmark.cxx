@@ -22,7 +22,7 @@
 #include <vcl/weld.hxx>
 #include <vcl/builderfactory.hxx>
 #include <svtools/headbar.hxx>
-#include <svtools/treelistentry.hxx>
+#include <vcl/treelistentry.hxx>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 
 #include <swabstdlg.hxx>
