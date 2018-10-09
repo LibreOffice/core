@@ -4827,7 +4827,22 @@ void DomainMapper_Impl::SetBookmarkName( const OUString& rBookmarkName )
 {
     BookmarkMap_t::iterator aBookmarkIter = m_aBookmarkMap.find( m_sCurrentBkmkId );
     if( aBookmarkIter != m_aBookmarkMap.end() )
+    {
+        // fields are internal bookmarks: consume redundant "normal" bookmark
+        if ( IsOpenField() )
+        {
+            FFDataHandler::Pointer_t  pFFDataHandler(GetTopFieldContext()->getFFDataHandler());
+            if ( IsOpenFieldCommand() || (pFFDataHandler && pFFDataHandler->getName() == rBookmarkName) )
+            {
+                // HACK: At the END marker, StartOrEndBookmark will START
+                // a bookmark which will eventually be abandoned, not created.
+                m_aBookmarkMap.erase(aBookmarkIter);
+                return;
+            }
+        }
+
         aBookmarkIter->second.m_sBookmarkName = rBookmarkName;
+    }
     else
         m_sCurrentBkmkName = rBookmarkName;
 }
