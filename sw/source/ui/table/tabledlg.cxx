@@ -702,6 +702,7 @@ SwTableColumnPage::SwTableColumnPage(TabPageParent pParent, const SfxItemSet& rS
     , pTableData(nullptr)
     , nTableWidth(0)
     , nMinWidth(MINLAY)
+    , nMetFields(MET_FIELDS)
     , nNoOfCols(0)
     , nNoOfVisibleCols(0)
     , bModified(false)
@@ -727,6 +728,24 @@ SwTableColumnPage::SwTableColumnPage(TabPageParent pParent, const SfxItemSet& rS
     , m_xDownBtn(m_xBuilder->weld_button("back"))
 {
     SetExchangeSupport();
+
+    //tdf#120420 keeping showing column width fields unless
+    //the dialog begins to grow, then stop adding them
+    weld::Window* pTopLevel = pParent.GetFrameWeld();
+    Size aOrigSize = pTopLevel->get_preferred_size();
+    for (sal_uInt16 i = 0; i < MET_FIELDS; ++i)
+    {
+        m_aFieldArr[i].show();
+        m_aTextArr[i]->show();
+
+        if (pTopLevel->get_preferred_size().Width() > aOrigSize.Width())
+        {
+            nMetFields = i + 1;
+            m_aTextArr[i]->set_grid_width(1);
+            m_xUpBtn->set_grid_left_attach(nMetFields * 2 - 1);
+            break;
+        }
+    }
 
     const SfxPoolItem* pItem;
     Init(SfxItemState::SET == rSet.GetItemState( SID_HTML_MODE, false,&pItem )
@@ -763,7 +782,7 @@ void  SwTableColumnPage::Reset( const SfxItemSet* )
         }
         sal_Int64 nMinTwips = m_aFieldArr[0].NormalizePercent( nMinWidth );
         sal_Int64 nMaxTwips = m_aFieldArr[0].NormalizePercent( nTableWidth );
-        for( sal_uInt16 i = 0; (i < MET_FIELDS) && (i < nNoOfVisibleCols); i++ )
+        for( sal_uInt16 i = 0; (i < nMetFields) && (i < nNoOfVisibleCols); i++ )
         {
             m_aFieldArr[i].SetPrcntValue( m_aFieldArr[i].NormalizePercent(
                                                 GetVisibleWidth(i) ), FUNIT_TWIP );
@@ -773,10 +792,12 @@ void  SwTableColumnPage::Reset( const SfxItemSet* )
             m_aTextArr[i]->set_sensitive(true);
         }
 
-        if( nNoOfVisibleCols > MET_FIELDS )
+        if (nNoOfVisibleCols > nMetFields)
+        {
             m_xUpBtn->set_sensitive(true);
+        }
 
-        for( sal_uInt16 i = nNoOfVisibleCols; i < MET_FIELDS; ++i )
+        for( sal_uInt16 i = nNoOfVisibleCols; i < nMetFields; ++i )
         {
             m_aFieldArr[i].set_text(OUString());
             m_aTextArr[i]->set_sensitive(false);
@@ -790,7 +811,7 @@ void  SwTableColumnPage::Init(bool bWeb)
 {
     FieldUnit aMetric = ::GetDfltMetric(bWeb);
     Link<weld::MetricSpinButton&,void> aLk = LINK(this, SwTableColumnPage, ValueChangedHdl);
-    for (sal_uInt16 i = 0; i < MET_FIELDS; ++i)
+    for (sal_uInt16 i = 0; i < nMetFields; ++i)
     {
         aValueTable[i] = i;
         m_aFieldArr[i].SetMetric(aMetric);
@@ -820,13 +841,13 @@ IMPL_LINK(SwTableColumnPage, AutoClickHdl, weld::Button&, rControl, void)
     }
     if (&rControl == m_xUpBtn.get())
     {
-        if( aValueTable[ MET_FIELDS -1 ] < nNoOfVisibleCols -1  )
+        if( aValueTable[ nMetFields -1 ] < nNoOfVisibleCols -1  )
         {
             for(sal_uInt16 & rn : aValueTable)
                 rn += 1;
         }
     }
-    for( sal_uInt16 i = 0; (i < nNoOfVisibleCols ) && ( i < MET_FIELDS); i++ )
+    for( sal_uInt16 i = 0; (i < nNoOfVisibleCols ) && ( i < nMetFields); i++ )
     {
         OUString sEntry('~');
         OUString sIndex = OUString::number( aValueTable[i] + 1 );
@@ -835,7 +856,7 @@ IMPL_LINK(SwTableColumnPage, AutoClickHdl, weld::Button&, rControl, void)
     }
 
     m_xDownBtn->set_sensitive(aValueTable[0] > 0);
-    m_xUpBtn->set_sensitive(aValueTable[ MET_FIELDS -1 ] < nNoOfVisibleCols -1 );
+    m_xUpBtn->set_sensitive(aValueTable[ nMetFields -1 ] < nNoOfVisibleCols -1 );
     UpdateCols(0);
 }
 
@@ -879,7 +900,7 @@ void SwTableColumnPage::ModifyHdl(const weld::MetricSpinButton* pField)
     SwPercentField *pEdit = nullptr;
     sal_uInt16 i;
 
-    for( i = 0; i < MET_FIELDS; i++)
+    for( i = 0; i < nMetFields; i++)
     {
         if (pField == m_aFieldArr[i].get())
         {
@@ -888,7 +909,7 @@ void SwTableColumnPage::ModifyHdl(const weld::MetricSpinButton* pField)
         }
     }
 
-    if (MET_FIELDS <= i || !pEdit)
+    if (nMetFields <= i || !pEdit)
     {
         OSL_ENSURE(false, "cannot happen.");
         return;
@@ -1004,7 +1025,7 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nCurrentPos )
     if(!bPercentMode)
         m_xSpaceED->set_value(m_xSpaceED->normalize(pTableData->GetSpace() - nTableWidth), FUNIT_TWIP);
 
-    for( sal_uInt16 i = 0; ( i < nNoOfVisibleCols ) && ( i < MET_FIELDS ); i++)
+    for( sal_uInt16 i = 0; ( i < nNoOfVisibleCols ) && ( i < nMetFields ); i++)
     {
         m_aFieldArr[i].SetPrcntValue(m_aFieldArr[i].NormalizePercent(
                         GetVisibleWidth(aValueTable[i]) ), FUNIT_TWIP);
@@ -1014,7 +1035,7 @@ void SwTableColumnPage::UpdateCols( sal_uInt16 nCurrentPos )
 void SwTableColumnPage::ActivatePage( const SfxItemSet& )
 {
     bPercentMode = pTableData->GetWidthPercent() != 0;
-    for( sal_uInt16 i = 0; (i < MET_FIELDS) && (i < nNoOfVisibleCols); i++ )
+    for( sal_uInt16 i = 0; (i < nMetFields) && (i < nNoOfVisibleCols); i++ )
     {
         m_aFieldArr[i].SetRefValue(pTableData->GetWidth());
         m_aFieldArr[i].ShowPercent( bPercentMode );
