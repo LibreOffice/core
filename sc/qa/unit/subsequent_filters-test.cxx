@@ -2766,7 +2766,7 @@ void ScFiltersTest::testMiscRowHeights()
 
     static const TestParam::RowData MultiLineOptData[] =
     {
-        // Row 0 is 12.63 mm, but optimal flag is set
+        // Row 0 is 12.63 mm and optimal flag is set => 12.36 mm
         { 0, 0, 0, 1236, CHECK_OPTIMAL, true  },
         // Row 1 is 11.99 mm and optimal flag is NOT set
         { 1, 1, 0, 1199, CHECK_OPTIMAL, false  },
@@ -2799,9 +2799,8 @@ void ScFiltersTest::testOptimalHeightReset()
     ScDocument& rDoc = xDocSh->GetDocument();
     // open document in read/write mode ( otherwise optimal height stuff won't
     // be triggered ) *and* you can't delete cell contents.
-    int nHeight = rDoc.GetRowHeight(nRow, nTab, false);
-    // Due to some minor differences on Mac this comparison is made bit fuzzy
-    CPPUNIT_ASSERT_LESSEQUAL( 8, abs( nHeight - 701 ) );
+    int nHeight = sc::TwipsToHMM ( rDoc.GetRowHeight(nRow, nTab, false) );
+    CPPUNIT_ASSERT_EQUAL(1236, nHeight);
 
     ScDocFunc &rFunc = xDocSh->GetDocFunc();
 

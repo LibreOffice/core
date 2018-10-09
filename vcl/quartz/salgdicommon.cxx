@@ -1432,8 +1432,15 @@ void AquaSalGraphics::ImplDrawPixel( long nX, long nY, const RGBAColor& rColor )
 
 #ifndef IOS
 
-void AquaSalGraphics::initResolution( NSWindow* )
+void AquaSalGraphics::initResolution(NSWindow* nsWindow)
 {
+    if (!nsWindow)
+    {
+        if (Application::IsBitmapRendering())
+            mnRealDPIX = mnRealDPIY = 96;
+        return;
+    }
+
     // #i100617# read DPI only once; there is some kind of weird caching going on
     // if the main screen changes
     // FIXME: this is really unfortunate and needs to be investigated

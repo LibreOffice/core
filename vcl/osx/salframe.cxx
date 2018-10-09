@@ -200,6 +200,9 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
+    if (Application::IsBitmapRendering())
+        return;
+
     // #i91990# support GUI-less (daemon) execution
     @try
     {
@@ -208,7 +211,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
     }
     @catch ( id exception )
     {
-        return;
+        std::abort();
     }
 
     if( mnStyle & SalFrameStyleFlags::TOOLTIP )
@@ -538,7 +541,7 @@ void AquaSalFrame::SetMaxClientSize( long nWidth, long nHeight )
 
 void AquaSalFrame::GetClientSize( long& rWidth, long& rHeight )
 {
-    if( mbShown || mbInitShow )
+    if (mbShown || mbInitShow || Application::IsBitmapRendering())
     {
         rWidth  = maGeometry.nWidth;
         rHeight = maGeometry.nHeight;
@@ -550,12 +553,68 @@ void AquaSalFrame::GetClientSize( long& rWidth, long& rHeight )
     }
 }
 
+SalEvent AquaSalFrame::PreparePosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)
+{
+    SalEvent nEvent = SalEvent::NONE;
+    assert(mpNSWindow || Application::IsBitmapRendering());
+
+    if (nFlags & (SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y))
+    {
+        mbPositioned = true;
+        nEvent = SalEvent::Move;
+    }
+
+    if (nFlags & (SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT))
+    {
+        mbSized = true;
+        nEvent = (nEvent == SalEvent::Move) ? SalEvent::MoveResize : SalEvent::Resize;
+    }
+
+    if (Application::IsBitmapRendering())
+    {
+        if (nFlags & SAL_FRAME_POSSIZE_X)
+            maGeometry.nX = nX;
+        if (nFlags & SAL_FRAME_POSSIZE_Y)
+            maGeometry.nY = nY;
+        if (nFlags & SAL_FRAME_POSSIZE_WIDTH)
+        {
+            maGeometry.nWidth = nWidth;
+            if (mnMaxWidth > 0 && maGeometry.nWidth > static_cast<unsigned int>(mnMaxWidth))
+                maGeometry.nWidth = mnMaxWidth;
+            if (mnMinWidth > 0 && maGeometry.nWidth < static_cast<unsigned int>(mnMinWidth))
+                maGeometry.nWidth = mnMinWidth;
+        }
+        if (nFlags & SAL_FRAME_POSSIZE_HEIGHT)
+        {
+            maGeometry.nHeight = nHeight;
+            if (mnMaxHeight > 0 && maGeometry.nHeight > static_cast<unsigned int>(mnMaxHeight))
+                maGeometry.nHeight = mnMaxHeight;
+            if (mnMinHeight > 0 && maGeometry.nHeight < static_cast<unsigned int>(mnMinHeight))
+                maGeometry.nHeight = mnMinHeight;
+        }
+        if (nEvent != SalEvent::NONE)
+            CallCallback(nEvent, nullptr);
+    }
+
+    return nEvent;
+}
+
 void AquaSalFrame::SetWindowState( const SalFrameState* pState )
 {
-    if (!mpNSWindow)
+    if (!mpNSWindow && !Application::IsBitmapRendering())
         return;
 
     OSX_SALDATA_RUNINMAIN( SetWindowState( pState ) )
+
+    sal_uInt16 nFlags = 0;
+    nFlags |= ((pState->mnMask & WindowStateMask::X) ? SAL_FRAME_POSSIZE_X : 0);
+    nFlags |= ((pState->mnMask & WindowStateMask::Y) ? SAL_FRAME_POSSIZE_Y : 0);
+    nFlags |= ((pState->mnMask & WindowStateMask::Width) ? SAL_FRAME_POSSIZE_WIDTH : 0);
+    nFlags |= ((pState->mnMask & WindowStateMask::Height) ? SAL_FRAME_POSSIZE_HEIGHT : 0);
+
+    SalEvent nEvent = PreparePosSize(pState->mnX, pState->mnY, pState->mnWidth, pState->mnHeight, nFlags);
+    if (Application::IsBitmapRendering())
+        return;
 
     // set normal state
     NSRect aStateRect = [mpNSWindow frame];
@@ -596,17 +655,6 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
     // get new geometry
     UpdateFrameGeometry();
 
-    SalEvent nEvent = SalEvent::NONE;
-    if( pState->mnMask & (WindowStateMask::X | WindowStateMask::Y) )
-    {
-        mbPositioned = true;
-        nEvent = SalEvent::Move;
-    }
-    if( pState->mnMask & (WindowStateMask::Width | WindowStateMask::Height) )
-    {
-        mbSized = true;
-        nEvent = (nEvent == SalEvent::Move) ? SalEvent::MoveResize : SalEvent::Resize;
-    }
     // send event that we were moved/sized
     if( nEvent != SalEvent::NONE )
         CallCallback( nEvent, nullptr );
@@ -623,8 +671,22 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
 
 bool AquaSalFrame::GetWindowState( SalFrameState* pState )
 {
-    if ( !mpNSWindow )
+    if (!mpNSWindow)
+    {
+        if (Application::IsBitmapRendering())
+        {
+            pState->mnMask = WindowStateMask::X | WindowStateMask::Y
+                             | WindowStateMask::Width | WindowStateMask::Height
+                             | WindowStateMask::State;
+            pState->mnX = maGeometry.nX;
+            pState->mnY = maGeometry.nY;
+            pState->mnWidth = maGeometry.nWidth;
+            pState->mnHeight = maGeometry.nHeight;
+            pState->mnState = WindowStateState::Normal;
+            return TRUE;
+        }
         return FALSE;
+    }
 
     OSX_SALDATA_RUNINMAIN_UNION( GetWindowState( pState ), boolean )
 
@@ -691,8 +753,12 @@ void AquaSalFrame::SetApplicationID( const OUString &/*rApplicationID*/ )
 
 void AquaSalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay )
 {
-    if ( !mpNSWindow )
+    if (!mpNSWindow)
+    {
+        if (Application::IsBitmapRendering() && bFullScreen)
+            SetPosSize(0, 0, 1024, 768, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT);
         return;
+    }
 
     SAL_INFO("vcl.osx", OSL_THIS_FUNC << ": mbFullScreen=" << mbFullScreen << ", bFullScreen=" << bFullScreen);
 
@@ -1152,7 +1218,8 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
         // "'lockFocus' is deprecated: first deprecated in macOS 10.14 - To draw, subclass NSView
         // and implement -drawRect:; AppKit's automatic deferred display mechanism will call
         // -drawRect: as necessary to display the view."
-    [mpNSView lockFocus];
+    if (![mpNSView lockFocusIfCanDraw])
+        return;
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
@@ -1254,27 +1321,17 @@ void AquaSalFrame::Beep()
 
 void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)
 {
-    if ( !mpNSWindow )
+    if (!mpNSWindow && !Application::IsBitmapRendering())
         return;
 
     OSX_SALDATA_RUNINMAIN( SetPosSize( nX, nY, nWidth, nHeight, nFlags ) )
 
-    SalEvent nEvent = SalEvent::NONE;
+    SalEvent nEvent = PreparePosSize(nX, nY, nWidth, nHeight, nFlags);
+    if (Application::IsBitmapRendering())
+        return;
 
     if( [mpNSWindow isMiniaturized] )
         [mpNSWindow deminiaturize: NSApp]; // expand the window
-
-    if (nFlags & (SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y))
-    {
-        mbPositioned = true;
-        nEvent = SalEvent::Move;
-    }
-
-    if (nFlags & (SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT))
-    {
-        mbSized = true;
-        nEvent = (nEvent == SalEvent::Move) ? SalEvent::MoveResize : SalEvent::Resize;
-    }
 
     NSRect aFrameRect = [mpNSWindow frame];
     NSRect aContentRect = [NSWindow contentRectForFrameRect: aFrameRect styleMask: mnStyleMask];
@@ -1343,8 +1400,12 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_u
 
 void AquaSalFrame::GetWorkArea( tools::Rectangle& rRect )
 {
-    if ( !mpNSWindow )
+    if (!mpNSWindow)
+    {
+        if (Application::IsBitmapRendering())
+            rRect = tools::Rectangle(Point(0, 0), Size(1024, 768));
         return;
+    }
 
     OSX_SALDATA_RUNINMAIN( GetWorkArea( rRect ) )
 
@@ -1530,7 +1591,8 @@ void AquaSalFrame::SetParent( SalFrame* pNewParent )
 {
     bool bShown = mbShown;
     // remove from child list
-    Show( FALSE );
+    if (bShown)
+        Show(FALSE);
     mpParent = static_cast<AquaSalFrame*>(pNewParent);
     // insert to correct parent and paint
     Show( bShown );
