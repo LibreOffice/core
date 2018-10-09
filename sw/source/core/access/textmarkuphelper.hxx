@@ -30,13 +30,14 @@ struct TextSegment;
 } } } }
 
 class SwAccessiblePortionData;
-class SwTextNode;
+class SwTextFrame;
 class SwWrongList; // #i108125#
+
 class SwTextMarkupHelper
 {
     public:
         SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
-                            const SwTextNode& rTextNode );
+                            const SwTextFrame& rTextFrame);
         SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
                             const SwWrongList& rTextMarkupList ); // #i108125#
 
@@ -64,8 +65,7 @@ class SwTextMarkupHelper
 
         const SwAccessiblePortionData& mrPortionData;
 
-        // #i108125#
-        const SwTextNode* mpTextNode;
+        SwTextFrame const* m_pTextFrame;
         const SwWrongList* mpTextMarkupList;
 };
 #endif

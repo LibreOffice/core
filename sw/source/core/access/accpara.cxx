@@ -3039,7 +3039,8 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getTextMarkupCount( sal_Int32 nTextMar
         break;
         default:
         {
-            pTextMarkupHelper.reset( new SwTextMarkupHelper( GetPortionData(), *GetTextNode() ) );
+            SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+            pTextMarkupHelper.reset(new SwTextMarkupHelper(GetPortionData(), *pFrame));
         }
     }
 
@@ -3249,7 +3250,8 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::addSelection( sal_Int32, sal_Int32 sta
         break;
         default:
         {
-            pTextMarkupHelper.reset( new SwTextMarkupHelper( GetPortionData(), *GetTextNode() ) );
+            SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+            pTextMarkupHelper.reset(new SwTextMarkupHelper(GetPortionData(), *pFrame));
         }
     }
 
@@ -3283,7 +3285,8 @@ uno::Sequence< /*accessibility::*/TextSegment > SAL_CALL
         break;
         default:
         {
-            pTextMarkupHelper.reset( new SwTextMarkupHelper( GetPortionData(), *GetTextNode() ) );
+            SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+            pTextMarkupHelper.reset(new SwTextMarkupHelper(GetPortionData(), *pFrame));
         }
     }
 
