@@ -481,7 +481,7 @@ namespace basprov
     }
 
 
-    static struct ::cppu::ImplementationEntry s_component_entries [] =
+    static struct ::cppu::ImplementationEntry const s_component_entries [] =
     {
         {
             create_BasicProviderImpl, getImplementationName_BasicProviderImpl,

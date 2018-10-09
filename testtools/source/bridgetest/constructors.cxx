@@ -439,7 +439,7 @@ css::uno::Sequence< OUString > getSupportedServiceNames2() {
     return s;
 }
 
-::cppu::ImplementationEntry entries[] = {
+::cppu::ImplementationEntry const entries[] = {
     { &create, &getImplementationName, &getSupportedServiceNames,
       &::cppu::createSingleComponentFactory, nullptr, 0 },
     { &create2, &getImplementationName2, &getSupportedServiceNames2,
