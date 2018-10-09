@@ -1751,14 +1751,16 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
 {
     // create PaM for character at position <nIndex>
     std::unique_ptr<SwPaM> pPaM;
+    const TextFrameIndex nCorePos(GetPortionData().GetCoreViewPosition(nIndex));
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    SwPosition const aModelPos(pFrame->MapViewToModelPos(nCorePos));
+    SwTextNode *const pTextNode(aModelPos.nNode.GetNode().GetTextNode());
     {
-        const SwTextNode* pTextNode( GetTextNode() );
-        std::unique_ptr<SwPosition> pStartPos( new SwPosition( *pTextNode ) );
-        pStartPos->nContent.Assign( const_cast<SwTextNode*>(pTextNode), nIndex );
-        std::unique_ptr<SwPosition> pEndPos( new SwPosition( *pTextNode ) );
-        pEndPos->nContent.Assign( const_cast<SwTextNode*>(pTextNode), nIndex+1 );
-
-        pPaM.reset(new SwPaM( *pStartPos, *pEndPos ));
+        SwPosition const aEndPos(*pTextNode,
+            aModelPos.nContent.GetIndex() == pTextNode->Len()
+                ? pTextNode->Len() // ???
+                : aModelPos.nContent.GetIndex() + 1);
+        pPaM.reset(new SwPaM(aModelPos, aEndPos));
     }
 
     // retrieve character attributes for the created PaM <pPaM>
@@ -1771,7 +1773,6 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     //    SwXTextCursor::GetCursorAttr( *pPaM, aSet, sal_True, sal_True );
     // get character attributes from automatic paragraph style and merge these into <aSet>
     {
-        const SwTextNode* pTextNode( GetTextNode() );
         if ( pTextNode->HasSwAttrSet() )
         {
             SfxItemSet aAutomaticParaStyleCharAttrs( pPaM->GetDoc()->GetAttrPool(),
