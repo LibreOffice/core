@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_3dd0c5f7",
+        "filename": "sfx2/source/sidebar/SidebarDockingWindow.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-10-09T08:30:46Z",
+      "side": 1,
+      "message": "This will query commandinfoprovider every time a key input event arrives which can be ... well, often. Frequent configuration queries tend to slow things down sometimes.  \n\nCan the shortcut be queried somewhere else and only once, so all that\u0027s done here in EventNotify would be the comparison?",
+      "revId": "a1749446076b43d618ab5ba1492046a9e7ccba2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_1dcd015d",
+        "filename": "sfx2/source/sidebar/SidebarDockingWindow.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-10-09T08:30:46Z",
+      "side": 1,
+      "message": "the same here",
+      "revId": "a1749446076b43d618ab5ba1492046a9e7ccba2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_fdd92d22",
+        "filename": "sfx2/source/sidebar/TabBar.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-10-09T08:30:46Z",
+      "side": 1,
+      "message": "everywhere",
+      "revId": "a1749446076b43d618ab5ba1492046a9e7ccba2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
