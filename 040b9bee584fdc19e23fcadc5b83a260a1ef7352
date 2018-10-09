@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_0f45c4b3",
+        "filename": "test/source/table/xtablechartssupplier.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000723
+      },
+      "writtenOn": "2018-10-09T21:24:33Z",
+      "side": 1,
+      "message": "You should only include header files you are using.",
+      "revId": "040b9bee584fdc19e23fcadc5b83a260a1ef7352",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
