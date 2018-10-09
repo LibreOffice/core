@@ -1724,7 +1724,7 @@ void UpdateMergedParaForMove(sw::MergedPara & rMerged,
             if(nDeleted)
             {
                 // InvalidateRange/lcl_SetScriptInval was called sufficiently for SwInsText
-                lcl_SetWrong(rTextFrame, rDestNode, nStart, -nDeleted, false);
+                lcl_SetWrong(rTextFrame, rDestNode, nStart, it.first - it.second, false);
                 if (rTextFrame.HasFollow())
                 {
                     TextFrameIndex const nIndex(sw::MapModelToView(rMerged, &rDestNode, nStart));
