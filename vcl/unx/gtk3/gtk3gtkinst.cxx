@@ -4793,6 +4793,7 @@ class GtkInstanceComboBox : public GtkInstanceContainer, public vcl::ISearchable
 {
 private:
     GtkComboBox* m_pComboBox;
+    GtkMenu* m_pMenu;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
     gboolean m_bPopupActive;
@@ -4816,6 +4817,7 @@ private:
 
     void signal_popup_shown()
     {
+        m_aQuickSelectionEngine.Reset();
         gboolean bIsShown(false);
         g_object_get(m_pComboBox, "popup-shown", &bIsShown, nullptr);
         if (m_bPopupActive != bIsShown)
@@ -4903,7 +4905,8 @@ private:
         g_object_unref(pCompletion);
     }
 
-    // support typeahead for the case where there is no entry widget, typing ahead
+    // in the absence of a built-in solution for https://gitlab.gnome.org/GNOME/gtk/issues/310
+    // a) support typeahead for the case where there is no entry widget, typing ahead
     // into the button itself will select via the vcl selection engine, a matching
     // entry
     static gboolean signalKeyPress(GtkWidget*, GdkEventKey* pEvent, gpointer widget)
@@ -4959,9 +4962,34 @@ private:
         return reinterpret_cast<sal_Int64>(entry) - 1;
     }
 
+    int get_selected_entry() const
+    {
+        if (m_bPopupActive && m_pMenu)
+        {
+            GList* pChildren = gtk_container_get_children(GTK_CONTAINER(m_pMenu));
+            auto nRet = g_list_index(pChildren, gtk_menu_shell_get_selected_item(GTK_MENU_SHELL(m_pMenu)));
+            g_list_free(pChildren);
+            return nRet;
+        }
+        else
+            return get_active();
+    }
+
+    void set_selected_entry(int nSelect)
+    {
+        if (m_bPopupActive && m_pMenu)
+        {
+            GList* pChildren = gtk_container_get_children(GTK_CONTAINER(m_pMenu));
+            gtk_menu_shell_select_item(GTK_MENU_SHELL(m_pMenu), GTK_WIDGET(g_list_nth_data(pChildren, nSelect)));
+            g_list_free(pChildren);
+        }
+        else
+            set_active(nSelect);
+    }
+
     virtual vcl::StringEntryIdentifier CurrentEntry(OUString& out_entryText) const override
     {
-        int nCurrentPos = get_active();
+        int nCurrentPos = get_selected_entry();
         return typeahead_getEntry((nCurrentPos == -1) ? 0 : nCurrentPos, out_entryText);
     }
 
@@ -4974,7 +5002,7 @@ private:
     virtual void SelectEntry(vcl::StringEntryIdentifier entry) override
     {
         int nSelect = typeahead_getEntryPos(entry);
-        if (nSelect == get_active())
+        if (nSelect == get_selected_entry())
         {
             // ignore that. This method is a callback from the QuickSelectionEngine, which means the user attempted
             // to select the given entry by typing its starting letters. No need to act.
@@ -4986,13 +5014,39 @@ private:
         if (nSelect >= nCount)
             nSelect = nCount ? nCount-1 : -1;
 
-        set_active(nSelect);
+        set_selected_entry(nSelect);
+    }
+
+    // b) support typeahead for the menu itself, typing into the menu will
+    // select via the vcl selection engine, a matching entry. Clearly
+    // this is cheating, brittle and not a long term solution.
+    void install_menu_typeahead()
+    {
+        AtkObject* pAtkObj = gtk_combo_box_get_popup_accessible(m_pComboBox);
+        if (!pAtkObj)
+            return;
+        if (!GTK_IS_ACCESSIBLE(pAtkObj))
+            return;
+        GtkWidget* pWidget = gtk_accessible_get_widget(GTK_ACCESSIBLE(pAtkObj));
+        if (!pWidget)
+            return;
+        if (!GTK_IS_MENU(pWidget))
+            return;
+        m_pMenu = GTK_MENU(pWidget);
+
+        guint nSignalId = g_signal_lookup("key-press-event", GTK_TYPE_MENU);
+        gulong nOriginalMenuKeyPressEventId = g_signal_handler_find(m_pMenu, G_SIGNAL_MATCH_DATA, nSignalId, 0,
+                                                                    nullptr, nullptr, m_pComboBox);
+
+        g_signal_handler_block(m_pMenu, nOriginalMenuKeyPressEventId);
+        g_signal_connect(m_pMenu, "key-press-event", G_CALLBACK(signalKeyPress), this);
     }
 
 public:
     GtkInstanceComboBox(GtkComboBox* pComboBox, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pComboBox), bTakeOwnership)
         , m_pComboBox(pComboBox)
+        , m_pMenu(nullptr)
         , m_aQuickSelectionEngine(*this)
         , m_bPopupActive(false)
         , m_nChangedSignalId(g_signal_connect(m_pComboBox, "changed", G_CALLBACK(signalChanged), this))
@@ -5034,6 +5088,7 @@ public:
             m_nEntryActivateSignalId = 0;
             m_nKeyPressEventSignalId = g_signal_connect(m_pWidget, "key-press-event", G_CALLBACK(signalKeyPress), this);
         }
+        install_menu_typeahead();
     }
 
     virtual int get_active() const override
