@@ -1458,7 +1458,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
         // get screen array
         std::unique_ptr<long[]> pScrArray(new long[sal_Int32(rInf.GetLen())]);
-        SwTextGlyphsKey aGlyphsKey{ &rInf.GetOut(), rInf.GetText(), rInf.GetIdx(), rInf.GetLen() };
+        SwTextGlyphsKey aGlyphsKey{ &rInf.GetOut(), rInf.GetText(), sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()) };
         SalLayoutGlyphs* pGlyphs = lcl_CreateLayout(aGlyphsKey, m_aTextGlyphs[aGlyphsKey]);
         rInf.GetOut().GetTextArray( rInf.GetText(), pScrArray.get(),
                         sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()), nullptr, pGlyphs);
@@ -1473,7 +1473,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 if( !m_pPrtFont->IsSameInstance( m_pPrinter->GetFont() ) )
                     m_pPrinter->SetFont( *m_pPrtFont );
             }
-            aGlyphsKey = SwTextGlyphsKey{ m_pPrinter, rInf.GetText(), rInf.GetIdx(), rInf.GetLen() };
+            aGlyphsKey = SwTextGlyphsKey{ m_pPrinter, rInf.GetText(), sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()) };
             pGlyphs = lcl_CreateLayout(aGlyphsKey, m_aTextGlyphs[aGlyphsKey]);
             m_pPrinter->GetTextArray(rInf.GetText(), pKernArray.get(),
                     sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()), nullptr, pGlyphs);
@@ -2047,7 +2047,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         }
         else
         {
-            SwTextGlyphsKey aGlyphsKey{ &rInf.GetOut(), rInf.GetText(), rInf.GetIdx(), nLn };
+            SwTextGlyphsKey aGlyphsKey{ &rInf.GetOut(), rInf.GetText(), sal_Int32(rInf.GetIdx()), sal_Int32(nLn) };
             SalLayoutGlyphs* pGlyphs = lcl_CreateLayout(aGlyphsKey, m_aTextGlyphs[aGlyphsKey]);
             aTextSize.setWidth( rInf.GetOut().GetTextWidth( rInf.GetText(),
                                    sal_Int32(rInf.GetIdx()), sal_Int32(nLn),
@@ -2084,7 +2084,7 @@ TextFrameIndex SwFntObj::GetCursorOfst(SwDrawTextInfo &rInf)
     {
         m_pPrinter->SetLayoutMode( rInf.GetOut().GetLayoutMode() );
         m_pPrinter->SetDigitLanguage( rInf.GetOut().GetDigitLanguage() );
-        SwTextGlyphsKey aGlyphsKey{ m_pPrinter, rInf.GetText(), rInf.GetIdx(), rInf.GetLen() };
+        SwTextGlyphsKey aGlyphsKey{ m_pPrinter, rInf.GetText(), sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()) };
         SalLayoutGlyphs* pGlyphs = lcl_CreateLayout(aGlyphsKey, m_aTextGlyphs[aGlyphsKey]);
         m_pPrinter->GetTextArray( rInf.GetText(), pKernArray.get(),
                 sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()), nullptr, pGlyphs);
@@ -2499,7 +2499,7 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, long nTextWidth
         {
             SwFntAccess aFntAccess(m_aSub[m_nActual].m_nFontCacheId, m_aSub[m_nActual].m_nFontIndex,
                                    &m_aSub[m_nActual], rInf.GetShell());
-            SwTextGlyphsKey aGlyphsKey{ &rInf.GetOut(), *pTmpText, nTmpIdx, nTmpLen };
+            SwTextGlyphsKey aGlyphsKey{ &rInf.GetOut(), *pTmpText, sal_Int32(nTmpIdx), sal_Int32(nTmpLen) };
             SalLayoutGlyphs* pGlyphs
                 = lcl_CreateLayout(aGlyphsKey, aFntAccess.Get()->GetTextGlyphs()[aGlyphsKey]);
             nTextBreak = TextFrameIndex(rInf.GetOut().GetTextBreak(
