@@ -173,7 +173,10 @@ static AquaSalFrame* getMouseContainerFrame()
     NSRect aRect = { { static_cast<CGFloat>(pFrame->maGeometry.nX), static_cast<CGFloat>(pFrame->maGeometry.nY) },
                      { static_cast<CGFloat>(pFrame->maGeometry.nWidth), static_cast<CGFloat>(pFrame->maGeometry.nHeight) } };
     pFrame->VCLToCocoa( aRect );
-    NSWindow* pNSWindow = [super initWithContentRect: aRect styleMask: mpFrame->getStyleMask() backing: NSBackingStoreBuffered defer: NO ];
+    NSWindow* pNSWindow = [super initWithContentRect: aRect
+                                 styleMask: mpFrame->getStyleMask()
+                                 backing: NSBackingStoreBuffered
+                                 defer: Application::IsHeadlessModeEnabled()];
 
     // Disallow full-screen mode on macOS >= 10.11 where it is enabled by default. We don't want it
     // for now as it will just be confused with LibreOffice's home-grown full-screen concept, with
