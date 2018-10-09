@@ -409,7 +409,7 @@ namespace sw { namespace mark
         switch(eType)
         {
             case IDocumentMarkAccess::MarkType::TEXT_FIELDMARK:
-                pMark = std::shared_ptr<IMark>(new TextFieldmark(rPaM));
+                pMark = std::shared_ptr<IMark>(new TextFieldmark(rPaM, rName));
                 break;
             case IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK:
                 pMark = std::shared_ptr<IMark>(new CheckboxFieldmark(rPaM));
