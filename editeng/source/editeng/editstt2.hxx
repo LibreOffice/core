@@ -81,8 +81,11 @@ public:
     bool    AutoPageHeight() const
                 { return bool( nControlBits & EEControlBits::AUTOPAGESIZEY ); }
 
-    bool    MarkFields() const
-                { return bool( nControlBits & EEControlBits::MARKFIELDS ); }
+    bool    MarkNonUrlFields() const
+                { return bool( nControlBits & EEControlBits::MARKNONURLFIELDS ); }
+
+    bool    MarkUrlFields() const
+                { return bool( nControlBits & EEControlBits::MARKURLFIELDS ); }
 
     bool    DoRestoreFont() const
                 { return bool( nControlBits & EEControlBits::RESTOREFONT ); }

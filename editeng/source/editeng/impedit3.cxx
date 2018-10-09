@@ -3182,7 +3182,12 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                     pDXArray = pLine->GetCharPosArray().data() + (nIndex - pLine->GetStart());
 
                                     // Paint control characters (#i55716#)
-                                    if ( aStatus.MarkFields() )
+                                    /* XXX: Given that there's special handling
+                                     * only for some specific characters
+                                     * (U+200B ZERO WIDTH SPACE and U+2060 WORD
+                                     * JOINER) it is assumed to be not relevant
+                                     * for MarkUrlFields(). */
+                                    if ( aStatus.MarkNonUrlFields() )
                                     {
                                         sal_Int32 nTmpIdx;
                                         const sal_Int32 nTmpEnd = nTextStart + rTextPortion.GetLen();
