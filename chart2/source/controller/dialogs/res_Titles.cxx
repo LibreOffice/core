@@ -174,28 +174,6 @@ SchTitleResources::~SchTitleResources()
 {
 }
 
-bool SchTitleResources::IsModified()
-{
-    return m_xEd_Main->get_value_changed_from_saved()
-        || m_xEd_Sub->get_value_changed_from_saved()
-        || m_xEd_XAxis->get_value_changed_from_saved()
-        || m_xEd_YAxis->get_value_changed_from_saved()
-        || m_xEd_ZAxis->get_value_changed_from_saved()
-        || m_xEd_SecondaryXAxis->get_value_changed_from_saved()
-        || m_xEd_SecondaryYAxis->get_value_changed_from_saved();
-}
-
-void SchTitleResources::ClearModifyFlag()
-{
-    m_xEd_Main->save_value();
-    m_xEd_Sub->save_value();
-    m_xEd_XAxis->save_value();
-    m_xEd_YAxis->save_value();
-    m_xEd_ZAxis->save_value();
-    m_xEd_SecondaryXAxis->save_value();
-    m_xEd_SecondaryYAxis->save_value();
-}
-
 void SchTitleResources::writeToResources( const TitleDialogData& rInput )
 {
     m_xFT_Main->set_sensitive( rInput.aPossibilityList[0] );

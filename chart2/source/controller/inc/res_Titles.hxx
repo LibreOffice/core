@@ -70,9 +70,6 @@ public:
     void writeToResources( const TitleDialogData& rInput );
     void readFromResources( TitleDialogData& rOutput );
 
-    bool IsModified();
-    void ClearModifyFlag();
-
 private:
     std::unique_ptr<weld::Label> m_xFT_Main;
     std::unique_ptr<weld::Label> m_xFT_Sub;

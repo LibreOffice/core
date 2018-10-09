@@ -208,8 +208,6 @@ public:
     const CancelButton& GetCancelButton() const { return *m_pCancelBtn; }
     CancelButton&       GetCancelButton() { return *m_pCancelBtn; }
 
-    const PushButton*   GetUserButton() const { return m_pUserBtn; }
-    PushButton*         GetUserButton() { return m_pUserBtn; }
     void                RemoveResetButton();
     void                RemoveStandardButton();
 

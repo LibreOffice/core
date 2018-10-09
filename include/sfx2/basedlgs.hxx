@@ -215,7 +215,6 @@ public:
     virtual             ~SfxSingleTabDialogController() override;
 
     void                SetTabPage(SfxTabPage* pTabPage);
-    SfxTabPage*         GetTabPage() const { return m_xSfxPage; }
     weld::Button&       GetOKButton() const { return *m_xOKBtn; }
 
     const SfxItemSet*   GetOutputItemSet() const { return m_xOutputSet.get(); }

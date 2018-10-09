@@ -10,7 +10,6 @@
 #include <config_folders.h>
 
 #include "personalization.hxx"
-#include "personasdochandler.hxx"
 
 #include <comphelper/processfactory.hxx>
 #include <officecfg/Office/Common.hxx>
