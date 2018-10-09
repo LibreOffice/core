@@ -151,7 +151,6 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkSpinButton" id="width2">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
@@ -168,11 +167,11 @@
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">1</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="width3">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
@@ -187,13 +186,13 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">3</property>
+                    <property name="left_attach">4</property>
                     <property name="top_attach">1</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="width4">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
@@ -208,13 +207,13 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">4</property>
+                    <property name="left_attach">6</property>
                     <property name="top_attach">1</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="width5">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
@@ -229,13 +228,13 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">5</property>
+                    <property name="left_attach">8</property>
                     <property name="top_attach">1</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="width6">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
@@ -250,30 +249,30 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">6</property>
+                    <property name="left_attach">10</property>
                     <property name="top_attach">1</property>
                     <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="6">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="label">_6</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">width6</property>
                   </object>
                   <packing>
-                    <property name="left_attach">6</property>
+                    <property name="left_attach">10</property>
                     <property name="top_attach">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="1">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="label">_1</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">width1</property>
@@ -285,9 +284,9 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="2">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="label">_2</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">width2</property>
@@ -295,53 +294,56 @@
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">0</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="3">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="label">_3</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">width3</property>
                   </object>
                   <packing>
-                    <property name="left_attach">3</property>
+                    <property name="left_attach">4</property>
                     <property name="top_attach">0</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="5">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="label">_5</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">width5</property>
                   </object>
                   <packing>
-                    <property name="left_attach">5</property>
+                    <property name="left_attach">8</property>
                     <property name="top_attach">0</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="4">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="label">_4</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">width4</property>
                   </object>
                   <packing>
-                    <property name="left_attach">4</property>
+                    <property name="left_attach">6</property>
                     <property name="top_attach">0</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="width1">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
@@ -387,7 +389,7 @@
                     <property name="always_show_image">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">7</property>
+                    <property name="left_attach">11</property>
                     <property name="top_attach">0</property>
                   </packing>
                 </child>

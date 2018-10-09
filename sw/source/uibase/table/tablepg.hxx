@@ -99,6 +99,7 @@ class SwTableColumnPage : public SfxTabPage
     SwTableRep*     pTableData;
     SwTwips         nTableWidth;
     SwTwips         nMinWidth;
+    int             nMetFields;
     sal_uInt16      nNoOfCols;
     sal_uInt16      nNoOfVisibleCols;
     // Remember the width, when switching to autoalign

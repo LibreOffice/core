@@ -1346,6 +1346,12 @@ public:
         return nAttach;
     }
 
+    virtual void set_grid_width(int nCols) override
+    {
+        GtkContainer* pParent = GTK_CONTAINER(gtk_widget_get_parent(m_pWidget));
+        gtk_container_child_set(pParent, m_pWidget, "width", nCols, nullptr);
+    }
+
     virtual void set_grid_top_attach(int nAttach) override
     {
         GtkContainer* pParent = GTK_CONTAINER(gtk_widget_get_parent(m_pWidget));

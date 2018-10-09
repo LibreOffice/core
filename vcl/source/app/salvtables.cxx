@@ -341,6 +341,11 @@ public:
         return m_xWidget->get_grid_left_attach();
     }
 
+    virtual void set_grid_width(int nCols) override
+    {
+        m_xWidget->set_grid_width(nCols);
+    }
+
     virtual void set_grid_top_attach(int nAttach) override
     {
         m_xWidget->set_grid_top_attach(nAttach);
