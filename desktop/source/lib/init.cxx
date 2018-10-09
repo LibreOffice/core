@@ -3834,7 +3834,7 @@ static void preloadData()
 
     for (const auto& aLocale : aLocales)
     {
-        //TODO: Add more types and cache more aggessively. For now this initializes the fontcache.
+        //TODO: Add more types and cache more aggressively. For now this initializes the fontcache.
         using namespace ::com::sun::star::i18n::ScriptType;
         LanguageType nLang;
         nLang = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType(aLocale, false), LATIN);
