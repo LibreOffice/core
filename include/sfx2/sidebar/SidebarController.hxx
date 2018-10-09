@@ -168,6 +168,8 @@ public:
 
     tools::Rectangle GetDeckDragArea() const;
 
+    css::uno::Reference<css::frame::XFrame> getXFrame() {return mxFrame;}
+
 private:
     SidebarController(
         SidebarDockingWindow* pParentWindow,

@@ -54,7 +54,8 @@ TabBar::TabBar(vcl::Window* pParentWindow,
       maItems(),
       maDeckActivationFunctor(rDeckActivationFunctor),
       maPopupMenuProvider(rPopupMenuProvider),
-      pParentSidebarController(rParentSidebarController)
+      pParentSidebarController(rParentSidebarController),
+      mpAccel(svt::AcceleratorExecute::createAcceleratorHelper())
 {
 
     SetBackground(Theme::GetPaint(Theme::Paint_TabBarBackground).GetWallpaper());
@@ -63,6 +64,8 @@ TabBar::TabBar(vcl::Window* pParentWindow,
     mpMenuButton->SetClickHdl(LINK(this, TabBar, OnToolboxClicked));
     mpMenuButton->SetQuickHelpText(SfxResId(SFX_STR_SIDEBAR_SETTINGS));
     Layout();
+
+    mpAccel->init(comphelper::getProcessComponentContext(), mxFrame);
 
 #ifdef DEBUG
     SetText(OUString("TabBar"));
@@ -233,7 +236,8 @@ bool TabBar::EventNotify(NotifyEvent& rEvent)
     if(MouseNotifyEvent::KEYINPUT == nType)
     {
         const vcl::KeyCode& rKeyCode = rEvent.GetKeyEvent()->GetKeyCode();
-        if((KEY_MOD1 == rKeyCode.GetModifier()) && (KEY_F5 == rKeyCode.GetCode()))
+        const OUString aCommand(mpAccel->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rKeyCode)));
+        if (".uno:Sidebar" == aCommand)
             return vcl::Window::EventNotify(rEvent);
         return true;
     }

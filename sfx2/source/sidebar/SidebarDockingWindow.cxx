@@ -121,7 +121,13 @@ bool SidebarDockingWindow::EventNotify(NotifyEvent& rEvent)
     if (MouseNotifyEvent::KEYINPUT == nType)
     {
         const vcl::KeyCode& rKeyCode = rEvent.GetKeyEvent()->GetKeyCode();
-        if ( ( 0 == rKeyCode.GetModifier() ) && ( KEY_F11 == rKeyCode.GetCode() ) )
+        if (!mpAccel)
+        {
+            mpAccel = svt::AcceleratorExecute::createAcceleratorHelper();
+            mpAccel->init(comphelper::getProcessComponentContext(), mpSidebarController->getXFrame());
+        }
+        const OUString aCommand(mpAccel->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rKeyCode)));
+        if (".uno:DesignerDialog" == aCommand)
         {
             std::shared_ptr<PanelDescriptor> xPanelDescriptor =
                     mpSidebarController->GetResourceManager()->GetPanelDescriptor( "StyleListPanel" );
@@ -129,7 +135,7 @@ bool SidebarDockingWindow::EventNotify(NotifyEvent& rEvent)
                 Close();
             return true;
         }
-        if ( !( ( KEY_MOD1 == rKeyCode.GetModifier() ) && ( KEY_F5 == rKeyCode.GetCode() ) ) )
+        if (".uno:Sidebar" != aCommand)
             return true;
     }
     else if (MouseNotifyEvent::MOUSEBUTTONDOWN == nType)
