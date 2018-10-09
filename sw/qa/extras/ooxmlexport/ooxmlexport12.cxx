@@ -723,6 +723,45 @@ DECLARE_OOXMLEXPORT_TEST(testObjectCrossReference, "object_cross_reference.odt")
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(21), nIndex);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf120224_textControlCrossRef, "tdf120224_textControlCrossRef.docx")
+{
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(),
+                                                                 uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+    xRunEnum->nextElement(); //Text
+    uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldStart"),
+                         getProperty<OUString>(xPropertySet, "TextPortionType"));
+    uno::Reference<container::XNamed> xBookmark(
+        getProperty<uno::Reference<beans::XPropertySet>>(xPropertySet, "Bookmark"), uno::UNO_QUERY);
+
+    // Critical test: does TextField's bookmark name match cross-reference?
+    const OUString& sTextFieldName(xBookmark->getName());
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(
+        xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    CPPUNIT_ASSERT(xFields->hasMoreElements());
+    xPropertySet.set(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sTextFieldName, getProperty<OUString>(xPropertySet, "SourceName"));
+
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(),
+                                                            uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBookmarksByName(xBookmarksSupplier->getBookmarks(),
+                                                            uno::UNO_QUERY);
+    // TextFields should not be turned into real bookmarks.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xBookmarksByIdx->getCount());
+
+    // The actual name isn't critical, but if it fails, it is worth asking why.
+    CPPUNIT_ASSERT_EQUAL(OUString("Text1"), sTextFieldName);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf117504_numberingIndent, "tdf117504_numberingIndent.docx")
 {
     OUString sName = getProperty<OUString>(getParagraph(1), "NumberingStyleName");
