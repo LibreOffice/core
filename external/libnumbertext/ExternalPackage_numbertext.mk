@@ -20,6 +20,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,libnumbertext_numbertext,$(L
 	data/en.sor \
 	data/eo.sor \
 	data/es.sor \
+	data/et.sor \
 	data/fi.sor \
 	data/fr.sor \
 	data/fr.sor \

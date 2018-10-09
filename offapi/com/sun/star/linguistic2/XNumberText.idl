@@ -46,10 +46,12 @@ module com { module sun { module star { module linguistic2 {
         <li>en-NZ : New Zealand English</li>
         <li>eo : Esperanto</li>
         <li>es : Spanish</li>
+        <li>et : Estonian</li>
         <li>fi : Finnish</li>
         <li>fr : French</li>
         <li>fr-BE : Belgian French</li>
         <li>fr-CH : Swiss French</li>
+        <li>gl : Galician</li>
         <li>he : Hebrew</li>
         <li>hr : Croatian</li>
         <li>hu : Hungarian</li>
@@ -64,7 +66,10 @@ module com { module sun { module star { module linguistic2 {
         <li>lt : Lithuanian</li>
         <li>lv : Latvian</li>
         <li>ms : Malay</li>
+        <li>nb : Bokmål (Norwegian)</li>
         <li>nl : Dutch</li>
+        <li>nn : Nynorsk (Norwegian)</li>
+        <li>no : Norwegian (Bokmål)</li>
         <li>pl : Polish</li>
         <li>pt-BR : Portuguese (Brasilian)</li>
         <li>pt-PT : Portuguese (Portugal)</li>
@@ -73,11 +78,13 @@ module com { module sun { module star { module linguistic2 {
         <li>ru : Russian</li>
         <li>sh : Serbian (written with latin characters)</li>
         <li>sl : Slovenian</li>
+        <li>sq : Albanian</li>
         <li>sr : Serbian (written with cyrillic characters) (added with OOo 3.4)</li>
         <li>Suzhou : Suzhou numerals</li>
         <li>sv : Swedish</li>
         <li>th : Thai</li>
         <li>tr : Turkish</li>
+        <li>uk : Ukrainian</li>
         <li>vi : Vietnamese</li>
         <li>zh : Chinese</li>
     </ul>
