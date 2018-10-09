@@ -2001,7 +2001,7 @@ struct RTFSymbol
     bool operator<(const RTFSymbol& rOther) const;
 };
 
-extern RTFSymbol aRTFControlWords[];
+extern RTFSymbol const aRTFControlWords[];
 extern int nRTFControlWords;
 
 /// Represents an RTF Math Control Word
@@ -2013,7 +2013,7 @@ struct RTFMathSymbol
     bool operator<(const RTFMathSymbol& rOther) const;
 };
 
-extern RTFMathSymbol aRTFMathControlWords[];
+extern RTFMathSymbol const aRTFMathControlWords[];
 extern int nRTFMathControlWords;
 
 } // namespace rtftok

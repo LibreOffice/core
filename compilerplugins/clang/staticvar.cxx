@@ -76,7 +76,10 @@ public:
             // aHTMLOptionTab is ordered by useful grouping, so let it sort at runtime
             || fn == SRCDIR "/svtools/source/svhtml/htmlkywd.cxx"
             // TODO sorting some of these tables will be a lot of work...
-            || fn == SRCDIR "/sw/source/filter/ww8/ww8par6.cxx")
+            || fn == SRCDIR "/sw/source/filter/ww8/ww8par6.cxx"
+            // this only triggers on older versions of clang, not sure why
+            // in any case, it is actually about the array in vcl/inc/units.hrc, which we can't change
+            || fn == SRCDIR "/vcl/source/app/svdata.cxx")
             return;
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
@@ -198,7 +201,7 @@ bool StaticVar::VisitVarDecl(VarDecl const* varDecl)
     return true;
 }
 
-loplugin::Plugin::Registration<StaticVar> X("staticvar", false);
+loplugin::Plugin::Registration<StaticVar> X("staticvar", true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

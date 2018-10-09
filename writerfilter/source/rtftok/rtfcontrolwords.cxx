@@ -15,7 +15,7 @@ namespace writerfilter
 {
 namespace rtftok
 {
-RTFSymbol aRTFControlWords[] = {
+RTFSymbol const aRTFControlWords[] = {
     // sKeyword nControlType nIndex
     { "'", CONTROL_SYMBOL, RTF_HEXCHAR, 0 },
     { "-", CONTROL_SYMBOL, RTF_OPTHYPH, 0 },
@@ -1848,7 +1848,7 @@ bool RTFSymbol::operator<(const RTFSymbol& rOther) const
     return std::strcmp(sKeyword, rOther.sKeyword) < 0;
 }
 
-RTFMathSymbol aRTFMathControlWords[] = {
+RTFMathSymbol const aRTFMathControlWords[] = {
     // eKeyword nToken eDestination
     { RTF_MOMATH, M_TOKEN(oMath), Destination::MOMATH },
     { RTF_MF, M_TOKEN(f), Destination::MF },
