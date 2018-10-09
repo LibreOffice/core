@@ -75,6 +75,7 @@ public:
 
     virtual void set_grid_left_attach(int nAttach) = 0;
     virtual int get_grid_left_attach() const = 0;
+    virtual void set_grid_width(int nCols) = 0;
     virtual void set_grid_top_attach(int nAttach) = 0;
     virtual int get_grid_top_attach() const = 0;
 
