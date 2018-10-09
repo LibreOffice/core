@@ -1437,8 +1437,10 @@ ColorWindow::ColorWindow(std::shared_ptr<PaletteManager> const & rPaletteManager
 
     mxPaletteListBox->connect_changed(LINK(this, ColorWindow, SelectPaletteHdl));
     std::vector<OUString> aPaletteList = mxPaletteManager->GetPaletteList();
+    mxPaletteListBox->freeze();
     for (std::vector<OUString>::iterator it = aPaletteList.begin(); it != aPaletteList.end(); ++it)
         mxPaletteListBox->append_text(*it);
+    mxPaletteListBox->thaw();
     OUString aPaletteName( officecfg::Office::Common::UserColors::PaletteName::get() );
     mxPaletteListBox->set_active_text(aPaletteName);
     const int nSelectedEntry(mxPaletteListBox->get_active());
