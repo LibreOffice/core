@@ -36,27 +36,26 @@ using namespace com::sun::star;
 namespace {
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    const SwWrongList* getTextMarkupList( const SwTextNode& rTextNode,
-                                          const sal_Int32 nTextMarkupType )
+    SwWrongList const* (SwTextNode::*
+        getTextMarkupFunc(const sal_Int32 nTextMarkupType))() const
     {
-        const SwWrongList* pTextMarkupList( nullptr );
         switch ( nTextMarkupType )
         {
             case text::TextMarkupType::SPELLCHECK:
             {
-                pTextMarkupList = rTextNode.GetWrong();
+                return &SwTextNode::GetWrong;
             }
             break;
             case text::TextMarkupType::PROOFREADING:
             {
                 // support not implemented yet
-                pTextMarkupList = nullptr;
+                return nullptr;
             }
             break;
             case text::TextMarkupType::SMARTTAG:
             {
                 // support not implemented yet
-                pTextMarkupList = nullptr;
+                return nullptr;
             }
             break;
             default:
@@ -64,17 +63,14 @@ namespace {
                 throw lang::IllegalArgumentException();
             }
         }
-
-        return pTextMarkupList;
     }
 }
 
 // implementation of class <SwTextMarkupoHelper>
 SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
-                                        const SwTextNode& rTextNode )
+                                        const SwTextFrame& rTextFrame)
     : mrPortionData( rPortionData )
-    // #i108125#
-    , mpTextNode( &rTextNode )
+    , m_pTextFrame(&rTextFrame)
     , mpTextMarkupList( nullptr )
 {
 }
@@ -83,7 +79,7 @@ SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionD
 SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
                                         const SwWrongList& rTextMarkupList )
     : mrPortionData( rPortionData )
-    , mpTextNode( nullptr )
+    , m_pTextFrame( nullptr )
     , mpTextMarkupList( &rTextMarkupList )
 {
 }
@@ -92,14 +88,19 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
 {
     sal_Int32 nTextMarkupCount( 0 );
 
-    // #i108125#
-    const SwWrongList* pTextMarkupList =
-                            mpTextMarkupList
-                            ? mpTextMarkupList
-                            : getTextMarkupList( *mpTextNode, nTextMarkupType );
-    if ( pTextMarkupList )
+    if (mpTextMarkupList)
     {
-        nTextMarkupCount = pTextMarkupList->Count();
+        nTextMarkupCount = mpTextMarkupList->Count();
+    }
+    else
+    {
+        assert(m_pTextFrame);
+        SwWrongList const* (SwTextNode::*const pGetWrongList)() const = getTextMarkupFunc(nTextMarkupType);
+        if (pGetWrongList)
+        {
+            sw::WrongListIteratorCounter iter(*m_pTextFrame, pGetWrongList);
+            nTextMarkupCount = iter.GetElementCount();
+        }
     }
 
     return nTextMarkupCount;
@@ -119,22 +120,31 @@ css::accessibility::TextSegment
     aTextMarkupSegment.SegmentStart = -1;
     aTextMarkupSegment.SegmentEnd = -1;
 
-    // #i108125#
-    const SwWrongList* pTextMarkupList =
-                            mpTextMarkupList
-                            ? mpTextMarkupList
-                            : getTextMarkupList( *mpTextNode, nTextMarkupType );
-    if ( pTextMarkupList )
+    std::unique_ptr<sw::WrongListIteratorCounter> pIter;
+    if (mpTextMarkupList)
     {
-        const SwWrongArea* pTextMarkup =
-                pTextMarkupList->GetElement( static_cast<sal_uInt16>(nTextMarkupIndex) );
-        if ( pTextMarkup )
+        pIter.reset(new sw::WrongListIteratorCounter(*mpTextMarkupList));
+    }
+    else
+    {
+        assert(m_pTextFrame);
+        SwWrongList const* (SwTextNode::*const pGetWrongList)() const = getTextMarkupFunc(nTextMarkupType);
+        if (pGetWrongList)
         {
-            const OUString rText = mrPortionData.GetAccessibleString();
+            pIter.reset(new sw::WrongListIteratorCounter(*m_pTextFrame, pGetWrongList));
+        }
+    }
+
+    if (pIter)
+    {
+        auto const oElement(pIter->GetElementAt(nTextMarkupIndex));
+        if (oElement)
+        {
+            const OUString& rText = mrPortionData.GetAccessibleString();
             const sal_Int32 nStartPos =
-                            mrPortionData.GetAccessiblePosition( pTextMarkup->mnPos );
+                            mrPortionData.GetAccessiblePosition(oElement->first);
             const sal_Int32 nEndPos =
-                            mrPortionData.GetAccessiblePosition( pTextMarkup->mnPos + pTextMarkup->mnLen );
+                            mrPortionData.GetAccessiblePosition(oElement->second);
             aTextMarkupSegment.SegmentText = rText.copy( nStartPos, nEndPos - nStartPos );
             aTextMarkupSegment.SegmentStart = nStartPos;
             aTextMarkupSegment.SegmentEnd = nEndPos;
@@ -155,7 +165,7 @@ css::uno::Sequence< css::accessibility::TextSegment >
     // assumption:
     // value of <nCharIndex> is in range [0..length of accessible text)
 
-    const sal_Int32 nCoreCharIndex = mrPortionData.GetCoreViewPosition(nCharIndex);
+    const TextFrameIndex nCoreCharIndex = mrPortionData.GetCoreViewPosition(nCharIndex);
     // Handling of portions with core length == 0 at the beginning of the
     // paragraph - e.g. numbering portion.
     if ( mrPortionData.GetAccessiblePosition( nCoreCharIndex ) > nCharIndex )
@@ -163,30 +173,37 @@ css::uno::Sequence< css::accessibility::TextSegment >
         return uno::Sequence< css::accessibility::TextSegment >();
     }
 
-    // #i108125#
-    const SwWrongList* pTextMarkupList =
-                            mpTextMarkupList
-                            ? mpTextMarkupList
-                            : getTextMarkupList( *mpTextNode, nTextMarkupType );
-    std::vector< css::accessibility::TextSegment > aTmpTextMarkups;
-    if ( pTextMarkupList )
+    std::unique_ptr<sw::WrongListIteratorCounter> pIter;
+    if (mpTextMarkupList)
     {
-        const OUString rText = mrPortionData.GetAccessibleString();
-
-        const sal_uInt16 nTextMarkupCount = pTextMarkupList->Count();
-        for ( sal_uInt16 nTextMarkupIdx = 0; nTextMarkupIdx < nTextMarkupCount; ++nTextMarkupIdx )
+        pIter.reset(new sw::WrongListIteratorCounter(*mpTextMarkupList));
+    }
+    else
+    {
+        assert(m_pTextFrame);
+        SwWrongList const* (SwTextNode::*const pGetWrongList)() const = getTextMarkupFunc(nTextMarkupType);
+        if (pGetWrongList)
         {
-            const SwWrongArea* pTextMarkup = pTextMarkupList->GetElement( nTextMarkupIdx );
-            OSL_ENSURE( pTextMarkup,
-                    "<SwTextMarkupHelper::getTextMarkup(..)> - missing <SwWrongArea> instance" );
-            if ( pTextMarkup &&
-                 pTextMarkup->mnPos <= nCoreCharIndex &&
-                 nCoreCharIndex < ( pTextMarkup->mnPos + pTextMarkup->mnLen ) )
+            pIter.reset(new sw::WrongListIteratorCounter(*m_pTextFrame, pGetWrongList));
+        }
+    }
+
+    std::vector< css::accessibility::TextSegment > aTmpTextMarkups;
+    if (pIter)
+    {
+        const OUString& rText = mrPortionData.GetAccessibleString();
+        sal_uInt16 count(pIter->GetElementCount());
+        for (sal_uInt16 i = 0; i < count; ++i)
+        {
+            auto const oElement(pIter->GetElementAt(i));
+            if (oElement &&
+                oElement->first <= nCoreCharIndex &&
+                nCoreCharIndex < oElement->second)
             {
                 const sal_Int32 nStartPos =
-                    mrPortionData.GetAccessiblePosition( pTextMarkup->mnPos );
+                    mrPortionData.GetAccessiblePosition(oElement->first);
                 const sal_Int32 nEndPos =
-                    mrPortionData.GetAccessiblePosition( pTextMarkup->mnPos + pTextMarkup->mnLen );
+                    mrPortionData.GetAccessiblePosition(oElement->second);
                 css::accessibility::TextSegment aTextMarkupSegment;
                 aTextMarkupSegment.SegmentText = rText.copy( nStartPos, nEndPos - nStartPos );
                 aTextMarkupSegment.SegmentStart = nStartPos;
