@@ -239,7 +239,7 @@ bool needToSyncRepository(OUString const & name)
 
 
 namespace {
-inline OUString encodeForRcFile( OUString const & str )
+OUString encodeForRcFile( OUString const & str )
 {
     // escape $\{} (=> rtl bootstrap files)
     OUStringBuffer buf;

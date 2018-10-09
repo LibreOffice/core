@@ -74,7 +74,7 @@ template<typename T, typename U = T>
 static Sequence<T> cloneSequence(const Sequence<T>& val);
 
 
-inline static Sequence< OUString > getSupportedServiceNames()
+static Sequence< OUString > getSupportedServiceNames()
 {
     OUString aName( SERVICENAME );
     return Sequence< OUString >( &aName, 1 );
@@ -1045,7 +1045,7 @@ Sequence<T> cloneSequence(const Sequence<T>& val)
 }
 
 template< class T >
-static inline bool makeSurrogate(
+static bool makeSurrogate(
     Reference< T > & rOut, Reference< T > const & rOriginal )
 {
     rOut.clear();

@@ -173,7 +173,7 @@ static void ChkOutDev( const SwTextSizeInfo &rInf )
 }
 #endif
 
-static inline TextFrameIndex GetMinLen( const SwTextSizeInfo &rInf )
+static TextFrameIndex GetMinLen( const SwTextSizeInfo &rInf )
 {
     const TextFrameIndex nTextLen(rInf.GetText().getLength());
     if (rInf.GetLen() == TextFrameIndex(COMPLETE_STRING))

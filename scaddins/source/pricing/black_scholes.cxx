@@ -86,16 +86,16 @@ namespace bs {
 
 // helper functions
 
-static inline double sqr(double x) {
+static double sqr(double x) {
     return x*x;
 }
 // normal density (see also ScInterpreter::phi)
-static inline double dnorm(double x) {
+static double dnorm(double x) {
     //return (1.0/sqrt(2.0*M_PI))*exp(-0.5*x*x); // windows may not have M_PI
     return 0.39894228040143268*exp(-0.5*x*x);
 }
 // cumulative normal distribution (see also ScInterpreter::integralPhi)
-static inline double pnorm(double x) {
+static double pnorm(double x) {
     //return 0.5*(erf(sqrt(0.5)*x)+1.0);       // windows may not have erf
     return 0.5 * ::rtl::math::erfc(-x * 0.7071067811865475);
 }

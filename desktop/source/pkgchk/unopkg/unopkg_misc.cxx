@@ -223,7 +223,7 @@ OUString makeAbsoluteFileUrl(
 namespace {
 
 
-inline void printf_space( sal_Int32 space )
+void printf_space( sal_Int32 space )
 {
     while (space--)
         dp_misc::writeConsole("  ");

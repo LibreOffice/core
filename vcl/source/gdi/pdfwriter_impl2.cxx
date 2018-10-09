@@ -1547,7 +1547,7 @@ static const long setRun[256] =
     4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 7, 8, /* 0xf0 - 0xff */
 };
 
-static inline bool isSet( const Scanline i_pLine, long i_nIndex )
+static bool isSet( const Scanline i_pLine, long i_nIndex )
 {
     return (i_pLine[ i_nIndex/8 ] & (0x80 >> (i_nIndex&7))) != 0;
 }

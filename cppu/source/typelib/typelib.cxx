@@ -78,7 +78,7 @@ struct AlignSize_Impl
 // the value of the maximal alignment
 static sal_Int32 nMaxAlignment = static_cast<sal_Int32>( reinterpret_cast<sal_Size>(&reinterpret_cast<AlignSize_Impl *>(16)->dDouble) - 16);
 
-static inline sal_Int32 adjustAlignment( sal_Int32 nRequestedAlignment )
+static sal_Int32 adjustAlignment( sal_Int32 nRequestedAlignment )
 {
     if( nRequestedAlignment > nMaxAlignment )
         nRequestedAlignment = nMaxAlignment;
@@ -88,19 +88,19 @@ static inline sal_Int32 adjustAlignment( sal_Int32 nRequestedAlignment )
 /**
  * Calculate the new size of the structure.
  */
-static inline sal_Int32 newAlignedSize(
+static sal_Int32 newAlignedSize(
     sal_Int32 OldSize, sal_Int32 ElementSize, sal_Int32 NeededAlignment )
 {
     NeededAlignment = adjustAlignment( NeededAlignment );
     return (OldSize + NeededAlignment -1) / NeededAlignment * NeededAlignment + ElementSize;
 }
 
-static inline bool reallyWeak( typelib_TypeClass eTypeClass )
+static bool reallyWeak( typelib_TypeClass eTypeClass )
 {
     return TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( eTypeClass );
 }
 
-static inline sal_Int32 getDescriptionSize( typelib_TypeClass eTypeClass )
+static sal_Int32 getDescriptionSize( typelib_TypeClass eTypeClass )
 {
     OSL_ASSERT( typelib_TypeClass_TYPEDEF != eTypeClass );
 
@@ -358,7 +358,7 @@ extern "C" void SAL_CALL typelib_typedescription_revokeCallback(
     }
 }
 
-static inline void typelib_typedescription_initTables(
+static void typelib_typedescription_initTables(
     typelib_TypeDescription * pTD )
 {
     typelib_InterfaceTypeDescription * pITD = reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD);
@@ -1275,7 +1275,7 @@ void deleteExceptions(
 }
 
 // frees anything except typelib_TypeDescription base!
-static inline void typelib_typedescription_destructExtendedMembers(
+static void typelib_typedescription_destructExtendedMembers(
     typelib_TypeDescription * pTD )
 {
     OSL_ASSERT( typelib_TypeClass_TYPEDEF != pTD->eTypeClass );
@@ -1585,7 +1585,7 @@ extern "C" void SAL_CALL typelib_typedescription_register(
 }
 
 
-static inline bool type_equals(
+static bool type_equals(
     typelib_TypeDescriptionReference const * p1, typelib_TypeDescriptionReference const * p2 )
 {
     return (p1 == p2 ||

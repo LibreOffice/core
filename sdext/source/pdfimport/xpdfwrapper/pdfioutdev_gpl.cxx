@@ -67,7 +67,7 @@ namespace pdfi
 {
 
 /// cut off very small numbers & clamp value to zero
-static inline double normalize( double val )
+static double normalize( double val )
 {
     return fabs(val) < 0.0000001 ? 0.0 : val;
 }
@@ -415,12 +415,12 @@ static void writeImage_( OutputBuffer&     o_rOutputBuf,
 // forwarders
 
 
-static inline void writeImageLF( OutputBuffer&     o_rOutputBuf,
+static void writeImageLF( OutputBuffer&     o_rOutputBuf,
                           Stream*           str,
                           int               width,
                           int               height,
                           GfxImageColorMap* colorMap ) { writeImage_(o_rOutputBuf,str,width,height,colorMap); }
-static inline void writeMaskLF( OutputBuffer&     o_rOutputBuf,
+static void writeMaskLF( OutputBuffer&     o_rOutputBuf,
                          Stream*           str,
                          int               width,
                          int               height,

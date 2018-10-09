@@ -744,8 +744,7 @@ bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString > c
     return bRet;
 }
 
-static inline
-OUString lcl_extractSetPropertyName( const OUString& rInPath, const OUString& rPrefix )
+static OUString lcl_extractSetPropertyName( const OUString& rInPath, const OUString& rPrefix )
 {
     OUString const sSubPath = dropPrefixFromConfigurationPath( rInPath, rPrefix);
     return extractFirstFromConfigurationPath( sSubPath );

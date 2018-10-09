@@ -1312,7 +1312,7 @@ SwContentNode* SwNodes::GoPrevious(SwNodeIndex *pIdx)
     return static_cast<SwContentNode*>(pNd);
 }
 
-static inline bool TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, sal_uLong nStt, sal_uLong nEnd )
+static bool TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, sal_uLong nStt, sal_uLong nEnd )
 {
     return nStt < nSttIdx && nEnd >= nSttIdx &&
             nStt < nEndIdx && nEnd >= nEndIdx;

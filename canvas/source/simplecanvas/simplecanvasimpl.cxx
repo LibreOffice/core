@@ -45,7 +45,7 @@ using namespace canvas;
 
 namespace
 {
-    inline uno::Sequence< double > color2Sequence( sal_Int32 nColor )
+    uno::Sequence< double > color2Sequence( sal_Int32 nColor )
     {
         // TODO(F3): Color management
         uno::Sequence< double > aRes( 4 );
@@ -58,7 +58,7 @@ namespace
         return aRes;
     }
 
-    inline uno::Reference< rendering::XPolyPolygon2D > rect2Poly( uno::Reference<rendering::XGraphicDevice> const& xDevice,
+    uno::Reference< rendering::XPolyPolygon2D > rect2Poly( uno::Reference<rendering::XGraphicDevice> const& xDevice,
                                                                   geometry::RealRectangle2D const&                 rRect )
     {
         uno::Sequence< geometry::RealPoint2D > rectSequence( 4 );

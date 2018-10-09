@@ -70,7 +70,7 @@ bool SwView::IsDocumentBorder()
            SvxZoomType::PAGEWIDTH_NOBORDER == m_pWrtShell->GetViewOptions()->GetZoomType();
 }
 
-static inline long GetLeftMargin( SwView const &rView )
+static long GetLeftMargin( SwView const &rView )
 {
     SvxZoomType eType = rView.GetWrtShell().GetViewOptions()->GetZoomType();
     long lRet = rView.GetWrtShell().GetAnyCurRect(CurRectType::PagePrt).Left();

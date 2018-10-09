@@ -705,7 +705,7 @@ void lcl_GetColumnTypes(
     }
 }
 
-inline void lcl_getLongVarCharEditString( OUString& rString,
+void lcl_getLongVarCharEditString( OUString& rString,
         const ScRefCellValue& rCell, ScFieldEditEngine& rEditEngine )
 {
     if (!rCell.mpEditText)
@@ -715,7 +715,7 @@ inline void lcl_getLongVarCharEditString( OUString& rString,
     rString = rEditEngine.GetText( LINEEND_CRLF );
 }
 
-inline void lcl_getLongVarCharString(
+void lcl_getLongVarCharString(
     OUString& rString, ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, SvNumberFormatter& rNumFmt )
 {
     Color* pColor;

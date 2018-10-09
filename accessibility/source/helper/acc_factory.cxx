@@ -70,7 +70,7 @@ using namespace ::svt::table;
 
 namespace {
 
-inline bool hasFloatingChild(vcl::Window *pWindow)
+bool hasFloatingChild(vcl::Window *pWindow)
 {
     vcl::Window * pChild = pWindow->GetAccessibleChildWindow(0);
     return pChild && pChild->GetType() == WindowType::FLOATINGWINDOW;

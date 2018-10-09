@@ -609,13 +609,13 @@ awt::Size lcl_placeLegendEntries(
 }
 
 // #i109336# Improve auto positioning in chart
-inline sal_Int32 lcl_getLegendLeftRightMargin()
+sal_Int32 lcl_getLegendLeftRightMargin()
 {
     return 210;  // 1/100 mm
 }
 
 // #i109336# Improve auto positioning in chart
-inline sal_Int32 lcl_getLegendTopBottomMargin()
+sal_Int32 lcl_getLegendTopBottomMargin()
 {
     return 185;  // 1/100 mm
 }

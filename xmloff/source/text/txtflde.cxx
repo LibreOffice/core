@@ -250,25 +250,25 @@ SvXMLEnumStringMapEntry<FieldIdEnum> const aFieldServiceNameMapping[] =
 
 
 // property accessor helper functions
-static inline bool GetBoolProperty(const OUString&,
+static bool GetBoolProperty(const OUString&,
                                       const Reference<XPropertySet> &);
-static inline bool GetOptionalBoolProperty(const OUString&,
+static bool GetOptionalBoolProperty(const OUString&,
                                               const Reference<XPropertySet> &,
                                               const Reference<XPropertySetInfo> &,
                                               bool bDefault);
-static inline double GetDoubleProperty(const OUString&,
+static double GetDoubleProperty(const OUString&,
                                       const Reference<XPropertySet> &);
-static inline OUString const GetStringProperty(const OUString&,
+static OUString const GetStringProperty(const OUString&,
                                         const Reference<XPropertySet> &);
-static inline sal_Int32 GetIntProperty(const OUString&,
+static sal_Int32 GetIntProperty(const OUString&,
                                       const Reference<XPropertySet> &);
-static inline sal_Int16 GetInt16Property(const OUString&,
+static sal_Int16 GetInt16Property(const OUString&,
                                         const Reference<XPropertySet> &);
-static inline sal_Int8 GetInt8Property(const OUString&,
+static sal_Int8 GetInt8Property(const OUString&,
                                       const Reference<XPropertySet> &);
-static inline util::DateTime const GetDateTimeProperty( const OUString& sPropName,
+static util::DateTime const GetDateTimeProperty( const OUString& sPropName,
                                            const Reference<XPropertySet> & xPropSet);
-static inline Sequence<OUString> const GetStringSequenceProperty(
+static Sequence<OUString> const GetStringSequenceProperty(
                                    const OUString& sPropName,
                                    const Reference<XPropertySet> & xPropSet);
 
@@ -3457,7 +3457,7 @@ OUString XMLTextFieldExport::MakeSequenceRefName(
 // to be relegated (does that word exist?) to a more appropriate place
 
 
-inline bool GetBoolProperty(
+bool GetBoolProperty(
     const OUString& sPropName,
     const Reference<XPropertySet> & xPropSet)
 {
@@ -3466,7 +3466,7 @@ inline bool GetBoolProperty(
     return bBool;
 }
 
-inline bool GetOptionalBoolProperty(
+bool GetOptionalBoolProperty(
     const OUString& sPropName,
     const Reference<XPropertySet> & xPropSet,
     const Reference<XPropertySetInfo> & xPropSetInfo,
@@ -3476,7 +3476,7 @@ inline bool GetOptionalBoolProperty(
         ? GetBoolProperty( sPropName, xPropSet ) : bDefault;
 }
 
-inline double GetDoubleProperty(
+double GetDoubleProperty(
     const OUString& sPropName,
     const Reference<XPropertySet> & xPropSet)
 {
@@ -3486,7 +3486,7 @@ inline double GetDoubleProperty(
     return fDouble;
 }
 
-inline OUString const GetStringProperty(
+OUString const GetStringProperty(
     const OUString& sPropName,
     const Reference<XPropertySet> & xPropSet)
 {
@@ -3496,7 +3496,7 @@ inline OUString const GetStringProperty(
     return sString;
 }
 
-inline sal_Int32 GetIntProperty(
+sal_Int32 GetIntProperty(
     const OUString& sPropName,
     const Reference<XPropertySet> & xPropSet)
 {
@@ -3506,7 +3506,7 @@ inline sal_Int32 GetIntProperty(
     return nInt;
 }
 
-inline sal_Int16 GetInt16Property(
+sal_Int16 GetInt16Property(
     const OUString& sPropName,
     const Reference<XPropertySet> & xPropSet)
 {
@@ -3516,7 +3516,7 @@ inline sal_Int16 GetInt16Property(
     return nInt;
 }
 
-inline sal_Int8 GetInt8Property(
+sal_Int8 GetInt8Property(
     const OUString& sPropName,
     const Reference<XPropertySet> & xPropSet)
 {
@@ -3526,7 +3526,7 @@ inline sal_Int8 GetInt8Property(
     return nInt;
 }
 
-inline util::DateTime const GetDateTimeProperty(
+util::DateTime const GetDateTimeProperty(
     const OUString& sPropName,
     const Reference<XPropertySet> & xPropSet)
 {
@@ -3536,7 +3536,7 @@ inline util::DateTime const GetDateTimeProperty(
     return aTime;
 }
 
-inline Sequence<OUString> const GetStringSequenceProperty(
+Sequence<OUString> const GetStringSequenceProperty(
     const OUString& sPropName,
     const Reference<XPropertySet> & xPropSet)
 {

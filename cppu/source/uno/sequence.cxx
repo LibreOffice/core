@@ -41,7 +41,7 @@ namespace cppu
 {
 
 
-static inline uno_Sequence * reallocSeq(
+static uno_Sequence * reallocSeq(
     uno_Sequence * pReallocate, std::size_t nElementSize, sal_Int32 nElements )
 {
     OSL_ASSERT( nElements >= 0 );
@@ -68,7 +68,7 @@ static inline uno_Sequence * reallocSeq(
 }
 
 
-static inline bool idefaultConstructElements(
+static bool idefaultConstructElements(
     uno_Sequence ** ppSeq,
     typelib_TypeDescriptionReference * pElementType,
     sal_Int32 nStartIndex, sal_Int32 nStopIndex,
@@ -310,7 +310,7 @@ static inline bool idefaultConstructElements(
 }
 
 
-static inline bool icopyConstructFromElements(
+static bool icopyConstructFromElements(
     uno_Sequence ** ppSeq, void * pSourceElements,
     typelib_TypeDescriptionReference * pElementType,
     sal_Int32 nStopIndex,
@@ -570,7 +570,7 @@ static inline bool icopyConstructFromElements(
 }
 
 
-static inline bool ireallocSequence(
+static bool ireallocSequence(
     uno_Sequence ** ppSequence,
     typelib_TypeDescriptionReference * pElementType,
     sal_Int32 nSize,

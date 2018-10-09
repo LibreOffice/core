@@ -126,12 +126,12 @@ LastPageSaver* OfaTreeOptionsDialog::pLastPageSaver = nullptr;
 // some stuff for easier changes for SvtViewOptions
 static char const VIEWOPT_DATANAME[] = "page data";
 
-static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const OUString& rData )
+static void SetViewOptUserItem( SvtViewOptions& rOpt, const OUString& rData )
 {
     rOpt.SetUserItem( VIEWOPT_DATANAME, Any( rData ) );
 }
 
-static inline OUString GetViewOptUserItem( const SvtViewOptions& rOpt )
+static OUString GetViewOptUserItem( const SvtViewOptions& rOpt )
 {
     Any aAny( rOpt.GetUserItem( VIEWOPT_DATANAME ) );
     OUString aUserData;

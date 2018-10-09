@@ -3632,7 +3632,7 @@ void WW8RStyle::ImportSprms(std::size_t nPosFc, short nLen, bool bPap)
     }
 }
 
-static inline short WW8SkipOdd(SvStream* pSt )
+static short WW8SkipOdd(SvStream* pSt )
 {
     if ( pSt->Tell() & 0x1 )
     {
@@ -3642,7 +3642,7 @@ static inline short WW8SkipOdd(SvStream* pSt )
     return 0;
 }
 
-static inline short WW8SkipEven(SvStream* pSt )
+static short WW8SkipEven(SvStream* pSt )
 {
     if (!(pSt->Tell() & 0x1))
     {

@@ -103,12 +103,12 @@ public:
 
 class theImplNames : public rtl::Static<ImplNames, theImplNames> {};
 
-inline OUString s_impl_name()
+OUString s_impl_name()
 {
     return OUString(IMPL_NAME);
 }
 
-inline Sequence< OUString > const & s_get_service_names()
+Sequence< OUString > const & s_get_service_names()
 {
     return theImplNames::get().getNames();
 }

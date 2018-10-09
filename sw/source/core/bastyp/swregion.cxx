@@ -135,7 +135,7 @@ void SwRegionRects::Invert()
     swap( aInvRegion );
 }
 
-static inline SwTwips CalcArea( const SwRect &rRect )
+static SwTwips CalcArea( const SwRect &rRect )
 {
     return rRect.Width() * rRect.Height();
 }

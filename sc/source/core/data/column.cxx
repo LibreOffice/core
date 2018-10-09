@@ -67,7 +67,7 @@ using namespace formula;
 
 namespace {
 
-inline bool IsAmbiguousScriptNonZero( SvtScriptType nScript )
+bool IsAmbiguousScriptNonZero( SvtScriptType nScript )
 {
     //TODO: move to a header file
     return ( nScript != SvtScriptType::LATIN &&

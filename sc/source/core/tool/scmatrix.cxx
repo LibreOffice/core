@@ -1635,7 +1635,7 @@ public:
     }
 };
 
-inline double evaluate( double fVal, ScQueryOp eOp )
+double evaluate( double fVal, ScQueryOp eOp )
 {
     if (!rtl::math::isFinite(fVal))
         return fVal;

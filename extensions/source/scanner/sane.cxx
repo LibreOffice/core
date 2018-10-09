@@ -40,7 +40,7 @@
 #else
 #define dump_state( a, b, c, d ) ;
 #endif
-static inline void dbg_msg( const char* pString, ... )
+static void dbg_msg( const char* pString, ... )
 {
 #if (OSL_DEBUG_LEVEL > 0) || defined DBG_UTIL
     va_list ap;
@@ -472,7 +472,7 @@ enum FrameStyleType {
 
 #define BYTE_BUFFER_SIZE 32768
 
-static inline sal_uInt8 ReadValue( FILE* fp, int depth )
+static sal_uInt8 ReadValue( FILE* fp, int depth )
 {
     if( depth == 16 )
     {

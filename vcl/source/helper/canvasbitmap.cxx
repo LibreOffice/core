@@ -44,7 +44,7 @@ namespace
 
     // Good ole HAKMEM tradition. Calc number of 1 bits in 32bit word,
     // unrolled loop. See e.g. Hackers Delight, p. 66
-    inline sal_Int32 bitcount( sal_uInt32 val )
+    sal_Int32 bitcount( sal_uInt32 val )
     {
         val = val - ((val >> 1) & 0x55555555);
         val = (val & 0x33333333) + ((val >> 2) & 0x33333333);

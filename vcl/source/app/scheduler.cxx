@@ -41,7 +41,7 @@
 namespace {
 
 template< typename charT, typename traits >
-inline std::basic_ostream<charT, traits> & operator <<(
+std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, const Task& task )
 {
     stream << "a: " << task.IsActive() << " p: " << static_cast<int>(task.GetPriority());
@@ -60,7 +60,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
  * @see http://clang.llvm.org/compatibility.html#undep_incomplete
  */
 template< typename charT, typename traits >
-inline std::basic_ostream<charT, traits> & operator <<(
+std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, const Timer& timer )
 {
     bool bIsIdle = (dynamic_cast<const Idle*>( &timer ) != nullptr);
@@ -78,14 +78,14 @@ inline std::basic_ostream<charT, traits> & operator <<(
 }
 
 template< typename charT, typename traits >
-inline std::basic_ostream<charT, traits> & operator <<(
+std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, const Idle& idle )
 {
     return stream << static_cast<const Timer*>( &idle );
 }
 
 template< typename charT, typename traits >
-inline std::basic_ostream<charT, traits> & operator <<(
+std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, const ImplSchedulerData& data )
 {
     stream << " i: " << data.mbInScheduler;
@@ -311,7 +311,7 @@ inline void Scheduler::UpdateSystemTimer( ImplSchedulerContext &rSchedCtx,
         Scheduler::ImplStartTimer( nMinPeriod, bForce, nTime );
 }
 
-static inline void AppendSchedulerData( ImplSchedulerContext &rSchedCtx,
+static void AppendSchedulerData( ImplSchedulerContext &rSchedCtx,
                                         ImplSchedulerData * const pSchedulerData)
 {
     assert(pSchedulerData->mpTask);
@@ -329,7 +329,7 @@ static inline void AppendSchedulerData( ImplSchedulerContext &rSchedCtx,
     pSchedulerData->mpNext = nullptr;
 }
 
-static inline ImplSchedulerData* DropSchedulerData(
+static ImplSchedulerData* DropSchedulerData(
     ImplSchedulerContext &rSchedCtx, ImplSchedulerData * const pPrevSchedulerData,
     const ImplSchedulerData * const pSchedulerData, const int nTaskPriority)
 {

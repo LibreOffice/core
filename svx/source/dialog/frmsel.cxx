@@ -97,7 +97,7 @@ FrameSelFlags lclGetFlagFromType( FrameBorderType eBorder )
 }
 
 /** Merges the rSource polypolygon into the rDest polypolygon. */
-inline void lclPolyPolyUnion( tools::PolyPolygon& rDest, const tools::PolyPolygon& rSource )
+void lclPolyPolyUnion( tools::PolyPolygon& rDest, const tools::PolyPolygon& rSource )
 {
     const tools::PolyPolygon aTmp( rDest );
     aTmp.GetUnion( rSource, rDest );

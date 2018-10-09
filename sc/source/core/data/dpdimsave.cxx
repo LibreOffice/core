@@ -272,7 +272,7 @@ bool ScDPSaveGroupDimension::IsInGroup(const ScDPItemData& rItem) const
 
 namespace {
 
-inline bool isInteger(double fValue)
+bool isInteger(double fValue)
 {
     return rtl::math::approxEqual(fValue, rtl::math::approxFloor(fValue));
 }

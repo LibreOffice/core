@@ -37,7 +37,7 @@
 
 namespace {
 
-inline OString toByteString(rtl_uString const * str) {
+OString toByteString(rtl_uString const * str) {
     return OString(
         str->buffer, str->length, RTL_TEXTENCODING_UTF8,
         OUSTRING_TO_OSTRING_CVTFLAGS);

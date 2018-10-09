@@ -135,14 +135,14 @@ struct DIBV5Header : public DIBInfoHeader
     {}
 };
 
-inline sal_uInt16 discretizeBitcount( sal_uInt16 nInputCount )
+sal_uInt16 discretizeBitcount( sal_uInt16 nInputCount )
 {
     return ( nInputCount <= 1 ) ? 1 :
            ( nInputCount <= 4 ) ? 4 :
            ( nInputCount <= 8 ) ? 8 : 24;
 }
 
-inline bool isBitfieldCompression( ScanlineFormat nScanlineFormat )
+bool isBitfieldCompression( ScanlineFormat nScanlineFormat )
 {
     return (ScanlineFormat::N16BitTcLsbMask == nScanlineFormat) || (ScanlineFormat::N32BitTcMask == nScanlineFormat);
 }

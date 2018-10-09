@@ -268,10 +268,10 @@ struct CountryEntryPred_Language
     explicit             CountryEntryPred_Language( LanguageType eLanguage ) :
                                     meLanguage( eLanguage ) {}
 
-    inline bool                 operator()( const CountryEntry& rCmp ) const;
+    bool                 operator()( const CountryEntry& rCmp ) const;
 };
 
-inline bool CountryEntryPred_Language::operator()( const CountryEntry& rCmp ) const
+bool CountryEntryPred_Language::operator()( const CountryEntry& rCmp ) const
 {
     //  rCmp.mbUseSubLang==true  -> compare full language type
     //  rCmp.mbUseSubLang==false -> compare primary language only

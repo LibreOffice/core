@@ -22,7 +22,7 @@
 
 namespace  {
 
-inline bool isSpace( sal_Unicode cChar )
+bool isSpace( sal_Unicode cChar )
 {
     return
         cChar == ' '    || cChar == '\t'    ||
@@ -30,12 +30,12 @@ inline bool isSpace( sal_Unicode cChar )
         cChar == 0x0c   || cChar == 0x0b;
 }
 
-inline bool isProtect( sal_Unicode cChar )
+bool isProtect( sal_Unicode cChar )
 {
     return cChar == '`' || cChar == '\'' || cChar == '"';
 }
 
-inline void CopyUntil( char*& pTo, const char*& pFrom, char cUntil, bool bIncludeUntil = false )
+void CopyUntil( char*& pTo, const char*& pFrom, char cUntil, bool bIncludeUntil = false )
 {
     do
     {
@@ -66,7 +66,7 @@ inline void CopyUntil( char*& pTo, const char*& pFrom, char cUntil, bool bInclud
         pFrom++;
 }
 
-inline void CopyUntil( sal_Unicode*& pTo, const sal_Unicode*& pFrom, sal_Unicode cUntil, bool bIncludeUntil = false )
+void CopyUntil( sal_Unicode*& pTo, const sal_Unicode*& pFrom, sal_Unicode cUntil, bool bIncludeUntil = false )
 {
     do
     {

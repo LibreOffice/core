@@ -48,7 +48,7 @@ void ScPrintSaverTab::SetRepeat( const ScRange* pCol, const ScRange* pRow )
     mpRepeatRow.reset(pRow ? new ScRange(*pRow) : nullptr);
 }
 
-static inline bool PtrEqual( const ScRange* p1, const ScRange* p2 )
+static bool PtrEqual( const ScRange* p1, const ScRange* p2 )
 {
     return ( !p1 && !p2 ) || ( p1 && p2 && *p1 == *p2 );
 }

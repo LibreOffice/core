@@ -44,7 +44,7 @@ using ::rtl::OString;
 
 /** print last error of pipe system.
  */
-static inline void printPipeError( ::osl::Pipe const & aPipe )
+static void printPipeError( ::osl::Pipe const & aPipe )
 {
     oslPipeError nError = aPipe.getError( );
     printf("#printPipeError# " );

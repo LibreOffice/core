@@ -208,7 +208,7 @@ inline void AdapterImpl::release()
 }
 
 
-static inline void constructRuntimeException(
+static void constructRuntimeException(
     uno_Any * pExc, const OUString & rMsg )
 {
     RuntimeException exc( rMsg );
@@ -218,7 +218,7 @@ static inline void constructRuntimeException(
 }
 
 
-static inline bool type_equals(
+static bool type_equals(
     typelib_TypeDescriptionReference * pType1,
     typelib_TypeDescriptionReference * pType2 )
 {
@@ -755,7 +755,7 @@ FactoryImpl::~FactoryImpl()
 }
 
 
-static inline AdapterImpl * lookup_adapter(
+static AdapterImpl * lookup_adapter(
     t_ptr_set ** pp_adapter_set,
     t_ptr_map & map, void * key, Sequence< Type > const & rTypes )
 {

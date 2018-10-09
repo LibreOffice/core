@@ -832,7 +832,7 @@ XclExpScToken XclExpFmlaCompImpl::GetNextToken()
 namespace {
 
 /** Returns the Excel token ID of a comparison operator or EXC_TOKID_NONE. */
-inline sal_uInt8 lclGetCompareTokenId( OpCode eOpCode )
+sal_uInt8 lclGetCompareTokenId( OpCode eOpCode )
 {
     switch( eOpCode )
     {
@@ -848,13 +848,13 @@ inline sal_uInt8 lclGetCompareTokenId( OpCode eOpCode )
 }
 
 /** Returns the Excel token ID of a string concatenation operator or EXC_TOKID_NONE. */
-inline sal_uInt8 lclGetConcatTokenId( OpCode eOpCode )
+sal_uInt8 lclGetConcatTokenId( OpCode eOpCode )
 {
     return (eOpCode == ocAmpersand) ? EXC_TOKID_CONCAT : EXC_TOKID_NONE;
 }
 
 /** Returns the Excel token ID of an addition/subtraction operator or EXC_TOKID_NONE. */
-inline sal_uInt8 lclGetAddSubTokenId( OpCode eOpCode )
+sal_uInt8 lclGetAddSubTokenId( OpCode eOpCode )
 {
     switch( eOpCode )
     {
@@ -866,7 +866,7 @@ inline sal_uInt8 lclGetAddSubTokenId( OpCode eOpCode )
 }
 
 /** Returns the Excel token ID of a multiplication/division operator or EXC_TOKID_NONE. */
-inline sal_uInt8 lclGetMulDivTokenId( OpCode eOpCode )
+sal_uInt8 lclGetMulDivTokenId( OpCode eOpCode )
 {
     switch( eOpCode )
     {
@@ -878,19 +878,19 @@ inline sal_uInt8 lclGetMulDivTokenId( OpCode eOpCode )
 }
 
 /** Returns the Excel token ID of a power operator or EXC_TOKID_NONE. */
-inline sal_uInt8 lclGetPowTokenId( OpCode eOpCode )
+sal_uInt8 lclGetPowTokenId( OpCode eOpCode )
 {
     return (eOpCode == ocPow) ? EXC_TOKID_POWER : EXC_TOKID_NONE;
 }
 
 /** Returns the Excel token ID of a trailing unary operator or EXC_TOKID_NONE. */
-inline sal_uInt8 lclGetUnaryPostTokenId( OpCode eOpCode )
+sal_uInt8 lclGetUnaryPostTokenId( OpCode eOpCode )
 {
     return (eOpCode == ocPercentSign) ? EXC_TOKID_PERCENT : EXC_TOKID_NONE;
 }
 
 /** Returns the Excel token ID of a leading unary operator or EXC_TOKID_NONE. */
-inline sal_uInt8 lclGetUnaryPreTokenId( OpCode eOpCode )
+sal_uInt8 lclGetUnaryPreTokenId( OpCode eOpCode )
 {
     switch( eOpCode )
     {
@@ -903,19 +903,19 @@ inline sal_uInt8 lclGetUnaryPreTokenId( OpCode eOpCode )
 }
 
 /** Returns the Excel token ID of a reference list operator or EXC_TOKID_NONE. */
-inline sal_uInt8 lclGetListTokenId( OpCode eOpCode, bool bStopAtSep )
+sal_uInt8 lclGetListTokenId( OpCode eOpCode, bool bStopAtSep )
 {
     return ((eOpCode == ocUnion) || (!bStopAtSep && (eOpCode == ocSep))) ? EXC_TOKID_LIST : EXC_TOKID_NONE;
 }
 
 /** Returns the Excel token ID of a reference intersection operator or EXC_TOKID_NONE. */
-inline sal_uInt8 lclGetIntersectTokenId( OpCode eOpCode )
+sal_uInt8 lclGetIntersectTokenId( OpCode eOpCode )
 {
     return (eOpCode == ocIntersect) ? EXC_TOKID_ISECT : EXC_TOKID_NONE;
 }
 
 /** Returns the Excel token ID of a reference range operator or EXC_TOKID_NONE. */
-inline sal_uInt8 lclGetRangeTokenId( OpCode eOpCode )
+sal_uInt8 lclGetRangeTokenId( OpCode eOpCode )
 {
     return (eOpCode == ocRange) ? EXC_TOKID_RANGE : EXC_TOKID_NONE;
 }
@@ -1218,7 +1218,7 @@ void XclExpFmlaCompImpl::ProcessBoolean( const XclExpScToken& rTokData )
 
 namespace {
 
-inline bool lclGetTokenString( OUString& rString, const XclExpScToken& rTokData )
+bool lclGetTokenString( OUString& rString, const XclExpScToken& rTokData )
 {
     bool bIsStr = (rTokData.GetType() == svString) && (rTokData.GetOpCode() == ocPush);
     if( bIsStr )
@@ -1771,22 +1771,22 @@ void XclExpFmlaCompImpl::AppendTrailingParam( XclExpFuncData& rFuncData )
 
 namespace {
 
-inline bool lclIsRefRel2D( const ScSingleRefData& rRefData )
+bool lclIsRefRel2D( const ScSingleRefData& rRefData )
 {
     return rRefData.IsColRel() || rRefData.IsRowRel();
 }
 
-inline bool lclIsRefDel2D( const ScSingleRefData& rRefData )
+bool lclIsRefDel2D( const ScSingleRefData& rRefData )
 {
     return rRefData.IsColDeleted() || rRefData.IsRowDeleted();
 }
 
-inline bool lclIsRefRel2D( const ScComplexRefData& rRefData )
+bool lclIsRefRel2D( const ScComplexRefData& rRefData )
 {
     return lclIsRefRel2D( rRefData.Ref1 ) || lclIsRefRel2D( rRefData.Ref2 );
 }
 
-inline bool lclIsRefDel2D( const ScComplexRefData& rRefData )
+bool lclIsRefDel2D( const ScComplexRefData& rRefData )
 {
     return lclIsRefDel2D( rRefData.Ref1 ) || lclIsRefDel2D( rRefData.Ref2 );
 }
@@ -2204,25 +2204,25 @@ sal_uInt16 XclExpFmlaCompImpl::PopOperandPos()
 
 namespace {
 
-inline void lclAppend( ScfUInt8Vec& orVector, sal_uInt16 nData )
+void lclAppend( ScfUInt8Vec& orVector, sal_uInt16 nData )
 {
     orVector.resize( orVector.size() + 2 );
     ShortToSVBT16( nData, &*(orVector.end() - 2) );
 }
 
-inline void lclAppend( ScfUInt8Vec& orVector, sal_uInt32 nData )
+void lclAppend( ScfUInt8Vec& orVector, sal_uInt32 nData )
 {
     orVector.resize( orVector.size() + 4 );
     UInt32ToSVBT32( nData, &*(orVector.end() - 4) );
 }
 
-inline void lclAppend( ScfUInt8Vec& orVector, double fData )
+void lclAppend( ScfUInt8Vec& orVector, double fData )
 {
     orVector.resize( orVector.size() + 8 );
     DoubleToSVBT64( fData, &*(orVector.end() - 8) );
 }
 
-inline void lclAppend( ScfUInt8Vec& orVector, const XclExpRoot& rRoot, const OUString& rString, XclStrFlags nStrFlags )
+void lclAppend( ScfUInt8Vec& orVector, const XclExpRoot& rRoot, const OUString& rString, XclStrFlags nStrFlags )
 {
     XclExpStringRef xXclStr = XclExpStringHelper::CreateString( rRoot, rString, nStrFlags, EXC_TOK_STR_MAXLEN );
     size_t nSize = orVector.size();

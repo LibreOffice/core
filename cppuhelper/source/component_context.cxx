@@ -59,7 +59,7 @@ using rtl::OUStringBuffer;
 namespace cppu
 {
 
-static inline void try_dispose( Reference< XInterface > const & xInstance )
+static void try_dispose( Reference< XInterface > const & xInstance )
 {
     Reference< lang::XComponent > xComp( xInstance, UNO_QUERY );
     if (xComp.is())
@@ -68,7 +68,7 @@ static inline void try_dispose( Reference< XInterface > const & xInstance )
     }
 }
 
-static inline void try_dispose( Reference< lang::XComponent > const & xComp )
+static void try_dispose( Reference< lang::XComponent > const & xComp )
 {
     if (xComp.is())
     {

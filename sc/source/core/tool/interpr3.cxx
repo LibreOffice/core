@@ -60,7 +60,7 @@ protected:
 //template< class T > double lcl_IterateInverse( const T& rFunction, double x0, double x1, bool& rConvError )
 
 /** u*w<0.0 fails for values near zero */
-static inline bool lcl_HasChangeOfSign( double u, double w )
+static bool lcl_HasChangeOfSign( double u, double w )
 {
     return (u < 0.0 && w > 0.0) || (u > 0.0 && w < 0.0);
 }

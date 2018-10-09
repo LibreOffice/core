@@ -48,7 +48,7 @@
 namespace
 {
 
-inline bool determineTextureFormat(sal_uInt16 nBits, GLenum& nFormat, GLenum& nType)
+bool determineTextureFormat(sal_uInt16 nBits, GLenum& nFormat, GLenum& nType)
 {
     switch(nBits)
     {
@@ -75,7 +75,7 @@ inline bool determineTextureFormat(sal_uInt16 nBits, GLenum& nFormat, GLenum& nT
     return false;
 }
 
-inline bool isValidBitCount( sal_uInt16 nBitCount )
+bool isValidBitCount( sal_uInt16 nBitCount )
 {
     return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) || (nBitCount == 16) || (nBitCount == 24) || (nBitCount == 32);
 }

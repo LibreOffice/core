@@ -1426,7 +1426,7 @@ void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const SCROW* pPosY
     }
 }
 
-static inline void ShowHide( vcl::Window* pWin, bool bShow )
+static void ShowHide( vcl::Window* pWin, bool bShow )
 {
     OSL_ENSURE(pWin || !bShow, "window is not present");
     if (pWin)
@@ -2310,14 +2310,12 @@ void ScTabView::SetAutoSpellData( SCCOL nPosX, SCROW nPosY, const std::vector<ed
 namespace
 {
 
-inline
 long lcl_GetRowHeightPx(const ScDocument* pDoc, SCROW nRow, SCTAB nTab)
 {
     const sal_uInt16 nSize = pDoc->GetRowHeight(nRow, nTab);
     return ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
 }
 
-inline
 long lcl_GetColWidthPx(const ScDocument* pDoc, SCCOL nCol, SCTAB nTab)
 {
     const sal_uInt16 nSize = pDoc->GetColWidth(nCol, nTab);

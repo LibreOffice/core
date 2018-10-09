@@ -87,7 +87,7 @@ using namespace ::com::sun::star::style;
 
 namespace
 {
-    inline SvtBroadcaster& GetPageDescNotifier(SwDoc* pDoc)
+    SvtBroadcaster& GetPageDescNotifier(SwDoc* pDoc)
     {
         return pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier();
     }

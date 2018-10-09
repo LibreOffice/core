@@ -98,7 +98,7 @@ using namespace ::com::sun::star;
 ///     selected text. Or in other words, the language a spell checker would use.
 ///     If there is more than one language LANGUAGE_DONTKNOW will be returned.
 // check if nScriptType includes the script type associated to nLang
-static inline bool lcl_checkScriptType( SvtScriptType nScriptType, LanguageType nLang )
+static bool lcl_checkScriptType( SvtScriptType nScriptType, LanguageType nLang )
 {
     return bool(nScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ));
 }

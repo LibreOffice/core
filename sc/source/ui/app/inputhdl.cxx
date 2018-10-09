@@ -478,7 +478,7 @@ void ScInputHandler::DeleteRangeFinder()
     }
 }
 
-static inline OUString GetEditText(const EditEngine* pEng)
+static OUString GetEditText(const EditEngine* pEng)
 {
     return ScEditUtil::GetSpaceDelimitedString(*pEng);
 }

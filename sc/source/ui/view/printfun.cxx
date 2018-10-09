@@ -78,17 +78,17 @@
 
 namespace{
 
-inline bool lcl_GetBool(const SfxItemSet* pSet, sal_uInt16 nWhich)
+bool lcl_GetBool(const SfxItemSet* pSet, sal_uInt16 nWhich)
 {
     return static_cast<const SfxBoolItem&>(pSet->Get(nWhich)).GetValue();
 }
 
-inline sal_uInt16 lcl_GetUShort(const SfxItemSet* pSet, sal_uInt16 nWhich)
+sal_uInt16 lcl_GetUShort(const SfxItemSet* pSet, sal_uInt16 nWhich)
 {
     return static_cast<const SfxUInt16Item&>(pSet->Get(nWhich)).GetValue();
 }
 
-inline bool lcl_GetShow(const SfxItemSet* pSet, sal_uInt16 nWhich)
+bool lcl_GetShow(const SfxItemSet* pSet, sal_uInt16 nWhich)
 {
     return ScVObjMode::VOBJ_MODE_SHOW == static_cast<const ScViewObjectModeItem&>(pSet->Get(nWhich)).GetValue();
 }

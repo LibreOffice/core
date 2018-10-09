@@ -130,7 +130,7 @@ bool rtl_arena_segment_populate(rtl_arena_type * arena)
     @precond  arena->m_lock acquired.
     @precond  (*ppSegment == 0)
 */
-inline void rtl_arena_segment_get(
+void rtl_arena_segment_get(
     rtl_arena_type * arena,
     rtl_arena_segment_type ** ppSegment
 )
@@ -151,7 +151,7 @@ inline void rtl_arena_segment_get(
     @precond  arena->m_lock acquired.
     @postcond (*ppSegment == 0)
  */
-inline void rtl_arena_segment_put(
+void rtl_arena_segment_put(
     rtl_arena_type * arena,
     rtl_arena_segment_type ** ppSegment
 )
@@ -178,7 +178,7 @@ inline void rtl_arena_segment_put(
 /**
     @precond arena->m_lock acquired.
 */
-inline void rtl_arena_freelist_insert (
+void rtl_arena_freelist_insert (
     rtl_arena_type * arena,
     rtl_arena_segment_type * segment
 )
@@ -195,7 +195,7 @@ inline void rtl_arena_freelist_insert (
 /**
     @precond arena->m_lock acquired.
 */
-inline void rtl_arena_freelist_remove(
+void rtl_arena_freelist_remove(
     rtl_arena_type * arena,
     rtl_arena_segment_type * segment
 )
@@ -281,7 +281,7 @@ void rtl_arena_hash_rescale(
 /**
     Insert arena hash, and update stats.
 */
-inline void rtl_arena_hash_insert(
+void rtl_arena_hash_insert(
     rtl_arena_type * arena,
     rtl_arena_segment_type * segment
 )

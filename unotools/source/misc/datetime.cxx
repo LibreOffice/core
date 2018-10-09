@@ -144,7 +144,7 @@ namespace
         else
             return false;
     }
-    inline bool getISO8601TimeToken(const OUString &i_str, sal_Int32 &io_index, OUString &o_strInt, bool &o_bFraction, OUString &o_strFrac)
+    bool getISO8601TimeToken(const OUString &i_str, sal_Int32 &io_index, OUString &o_strInt, bool &o_bFraction, OUString &o_strFrac)
     {
         OUString resInt;
         OUString resFrac;
@@ -161,7 +161,7 @@ namespace
             return true;
         }
     }
-    inline bool getISO8601TimeZoneToken(const OUString &i_str, sal_Int32 &io_index, OUString &o_strInt)
+    bool getISO8601TimeZoneToken(const OUString &i_str, sal_Int32 &io_index, OUString &o_strInt)
     {
         const sal_Unicode c0 = '0';
         const sal_Unicode c9 = '9';

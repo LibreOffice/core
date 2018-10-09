@@ -43,7 +43,7 @@ using ::rtl::OUStringToOString;
 
 /** print a UNI_CODE String. And also print some comments of the string.
 */
-static inline void printUString( const ::rtl::OUString & str, const sal_Char * msg )
+static void printUString( const ::rtl::OUString & str, const sal_Char * msg )
 {
     if ( msg != nullptr )
     {
@@ -54,7 +54,7 @@ static inline void printUString( const ::rtl::OUString & str, const sal_Char * m
     printf("%s\n", aString.getStr( ) );
 }
 
-static inline ::rtl::OUString getModulePath()
+static ::rtl::OUString getModulePath()
 {
     ::rtl::OUString suDirPath;
     ::osl::Module::getUrlFromAddress(

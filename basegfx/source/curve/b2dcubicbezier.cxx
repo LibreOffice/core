@@ -907,7 +907,7 @@ namespace basegfx
 
     namespace
     {
-        inline void impCheckExtremumResult(double fCandidate, std::vector< double >& rResult)
+        void impCheckExtremumResult(double fCandidate, std::vector< double >& rResult)
         {
             // check for range ]0.0 .. 1.0[ with excluding 1.0 and 0.0 clearly
             // by using the equalZero test, NOT ::more or ::less which will use the

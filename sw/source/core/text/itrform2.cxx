@@ -77,7 +77,7 @@ namespace {
     bool lcl_HasSameBorder(const SwFont& rFirst, const SwFont& rSecond);
 }
 
-static inline void ClearFly( SwTextFormatInfo &rInf )
+static void ClearFly( SwTextFormatInfo &rInf )
 {
     delete rInf.GetFly();
     rInf.SetFly(nullptr);

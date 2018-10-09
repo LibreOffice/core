@@ -84,7 +84,7 @@
 
 using namespace com::sun::star;
 
-static inline bool GetRealURL( const SwGrfNode& rNd, OUString& rText )
+static bool GetRealURL( const SwGrfNode& rNd, OUString& rText )
 {
     bool bRet = rNd.GetFileFilterNms( &rText, nullptr );
     if( bRet )

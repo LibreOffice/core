@@ -45,7 +45,7 @@ namespace
 {
 
 // A Follow on the same page as its master is nasty.
-inline bool IsNastyFollow( const SwTextFrame *pFrame )
+bool IsNastyFollow( const SwTextFrame *pFrame )
 {
     OSL_ENSURE( !pFrame->IsFollow() || !pFrame->GetPrev() ||
             static_cast<const SwTextFrame*>(pFrame->GetPrev())->GetFollow() == pFrame,

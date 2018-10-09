@@ -173,13 +173,13 @@ bool SwCursorShell::GotoFootnoteAnchor()
     return bRet;
 }
 
-static inline bool CmpLE( const SwTextFootnote& rFootnote, sal_uLong nNd, sal_Int32 nCnt )
+static bool CmpLE( const SwTextFootnote& rFootnote, sal_uLong nNd, sal_Int32 nCnt )
 {
     const sal_uLong nTNd = rFootnote.GetTextNode().GetIndex();
     return nTNd < nNd || ( nTNd == nNd && rFootnote.GetStart() <= nCnt );
 }
 
-static inline bool CmpL( const SwTextFootnote& rFootnote, sal_uLong nNd, sal_Int32 nCnt )
+static bool CmpL( const SwTextFootnote& rFootnote, sal_uLong nNd, sal_Int32 nCnt )
 {
     const sal_uLong nTNd = rFootnote.GetTextNode().GetIndex();
     return nTNd < nNd || ( nTNd == nNd && rFootnote.GetStart() < nCnt );

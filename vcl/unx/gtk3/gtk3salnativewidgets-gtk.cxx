@@ -2774,7 +2774,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
 /************************************************************************
  * helper for GtkSalFrame
  ************************************************************************/
-static inline ::Color getColor( const GdkRGBA& rCol )
+static ::Color getColor( const GdkRGBA& rCol )
 {
     return ::Color( static_cast<int>(rCol.red * 0xFFFF) >> 8, static_cast<int>(rCol.green * 0xFFFF) >> 8, static_cast<int>(rCol.blue * 0xFFFF) >> 8 );
 }

@@ -52,7 +52,7 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-inline void lclSetValueOrClearAny( Any& orAny, const OptValue< double >& rofValue )
+void lclSetValueOrClearAny( Any& orAny, const OptValue< double >& rofValue )
 {
     if( rofValue.has() ) orAny <<= rofValue.get(); else orAny.clear();
 }

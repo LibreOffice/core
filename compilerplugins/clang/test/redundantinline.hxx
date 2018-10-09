@@ -52,27 +52,29 @@ void f3() {}
 S3::operator int() { return 0; }
 
 struct S4 {
-    inline S4() {} // expected-error {{[loplugin:redundantinline]}}
-    inline ~S4() { f1(); } // expected-error {{[loplugin:redundantinline]}}
+    inline S4() {} // expected-error {{function definition redundantly declared 'inline' [loplugin:redundantinline]}}
+    inline ~S4() { f1(); } // expected-error {{function definition redundantly declared 'inline' [loplugin:redundantinline]}}
 
-    inline void f1() { (void)this; } // expected-error {{[loplugin:redundantinline]}}
+    inline void f1() { (void)this; } // expected-error {{function definition redundantly declared 'inline' [loplugin:redundantinline]}}
 
-    static inline void f2() {} // expected-error {{[loplugin:redundantinline]}}
+    static inline void f2() {} // expected-error {{function definition redundantly declared 'inline' [loplugin:redundantinline]}}
 
-    inline void operator +() {} // expected-error {{[loplugin:redundantinline]}}
+    inline void operator +() {} // expected-error {{function definition redundantly declared 'inline' [loplugin:redundantinline]}}
 
-    inline operator int() { return 0; } // expected-error {{[loplugin:redundantinline]}}
+    inline operator int() { return 0; } // expected-error {{function definition redundantly declared 'inline' [loplugin:redundantinline]}}
 
-    friend inline void f4() {} // expected-error {{[loplugin:redundantinline]}}
+    friend inline void f4() {} // expected-error {{function definition redundantly declared 'inline' [loplugin:redundantinline]}}
 
     static constexpr int f5() { return 0; }
 
-    static constexpr inline int f6() { return 0; } // expected-error {{[loplugin:redundantinline]}}
+    static constexpr inline int f6() { return 0; } // expected-error {{function definition redundantly declared 'inline' [loplugin:redundantinline]}}
 };
 
 constexpr int f5() { return 0; }
 
-constexpr inline int f6() { return 0; } // expected-error {{[loplugin:redundantinline]}}
+constexpr inline int f6() { return 0; } // expected-error {{function definition redundantly declared 'inline' [loplugin:redundantinline]}}
+
+static inline int f7() { return 0; }
 
 #endif
 

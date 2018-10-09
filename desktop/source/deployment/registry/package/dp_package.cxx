@@ -1277,7 +1277,7 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
     return *pBundle;
 }
 
-inline bool isBundle_( OUString const & mediaType )
+bool isBundle_( OUString const & mediaType )
 {
     // xxx todo: additional parsing?
     return !mediaType.isEmpty() &&

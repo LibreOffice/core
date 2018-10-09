@@ -249,7 +249,7 @@ void OutputDevice::DrawGradientToMetafile ( const tools::PolyPolygon& rPolyPoly,
 
 namespace
 {
-    inline sal_uInt8 GetGradientColorValue( long nValue )
+    sal_uInt8 GetGradientColorValue( long nValue )
     {
         if ( nValue < 0 )
             return 0;

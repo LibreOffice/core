@@ -717,7 +717,7 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
 
 //              Merge (combine documents)
 
-static inline bool lcl_Equal( const ScChangeAction* pA, const ScChangeAction* pB, bool bIgnore100Sec )
+static bool lcl_Equal( const ScChangeAction* pA, const ScChangeAction* pB, bool bIgnore100Sec )
 {
     return pA && pB &&
         pA->GetActionNumber() == pB->GetActionNumber() &&

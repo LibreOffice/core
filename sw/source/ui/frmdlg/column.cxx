@@ -75,7 +75,7 @@ using namespace ::com::sun::star;
 // static data
 static const sal_uInt16 nVisCols = 3;
 
-static inline bool IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
+static bool IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
 {
     rWrtSh.SwapPam();
     bool bRet = pSect == rWrtSh.GetCurrSection();
@@ -348,9 +348,6 @@ SfxItemSet* SwColumnDlg::EvalCurrentSelection(void)
 }
 
 static
-#if OSL_DEBUG_LEVEL < 2
-inline
-#endif
 sal_uInt16 GetMaxWidth( SwColMgr const * pColMgr, sal_uInt16 nCols )
 {
     sal_uInt16 nMax = pColMgr->GetActualSize();

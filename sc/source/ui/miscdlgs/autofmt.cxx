@@ -450,7 +450,7 @@ void ScAutoFmtPreview::CalcCellArray( bool bFitWidthP )
     aPrvSize.setHeight( maArray.GetHeight() + 4 );
 }
 
-static inline void lclSetStyleFromBorder( svx::frame::Style& rStyle, const ::editeng::SvxBorderLine* pBorder )
+static void lclSetStyleFromBorder( svx::frame::Style& rStyle, const ::editeng::SvxBorderLine* pBorder )
 {
     rStyle.Set( pBorder, 1.0 / TWIPS_PER_POINT, 5 );
 }

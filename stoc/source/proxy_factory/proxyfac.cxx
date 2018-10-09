@@ -164,7 +164,7 @@ struct ProxyRoot : public ::cppu::OWeakAggObject
     // XAggregation
     virtual Any SAL_CALL queryAggregation( Type const & rType ) override;
 
-    inline ProxyRoot( ::rtl::Reference< FactoryImpl > const & factory,
+    ProxyRoot( ::rtl::Reference< FactoryImpl > const & factory,
                       Reference< XInterface > const & xTarget );
 
     ::rtl::Reference< FactoryImpl > m_factory;
@@ -182,7 +182,7 @@ struct binuno_Proxy : public uno_Interface
     OUString const m_oid;
     TypeDescription m_typeDescr;
 
-    inline binuno_Proxy(
+    binuno_Proxy(
         ::rtl::Reference< ProxyRoot > const & root,
         UnoInterfaceReference const & target,
         OUString const & oid, TypeDescription const & typeDescr );
@@ -281,7 +281,7 @@ static void binuno_proxy_dispatch(
 }
 
 
-inline binuno_Proxy::binuno_Proxy(
+binuno_Proxy::binuno_Proxy(
     ::rtl::Reference< ProxyRoot > const & root,
     UnoInterfaceReference const & target,
     OUString const & oid, TypeDescription const & typeDescr )
@@ -296,7 +296,7 @@ inline binuno_Proxy::binuno_Proxy(
     uno_Interface::pDispatcher = binuno_proxy_dispatch;
 }
 
-inline ProxyRoot::ProxyRoot(
+ProxyRoot::ProxyRoot(
     ::rtl::Reference< FactoryImpl > const & factory,
     Reference< XInterface > const & xTarget )
     : m_factory( factory )

@@ -1338,7 +1338,7 @@ sal_Int32 typeNameToDataType( const OUString &typeName, const OUString &typtype 
 }
 
 namespace {
-    inline bool isSystemColumn( sal_Int16 attnum )
+    bool isSystemColumn( sal_Int16 attnum )
     {
         return attnum <= 0;
     }

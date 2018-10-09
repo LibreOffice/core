@@ -44,7 +44,7 @@ rtl_TextEncoding getCharsetEncoding(const sal_Char * pBegin,
     @return  True if nChar is a US-ASCII white space character (US-ASCII
     0x09 or 0x20).
  */
-inline bool isWhiteSpace(sal_uInt32 nChar)
+bool isWhiteSpace(sal_uInt32 nChar)
 {
     return nChar == '\t' || nChar == ' ';
 }
@@ -58,7 +58,7 @@ inline bool isWhiteSpace(sal_uInt32 nChar)
     corresponding weight (0--63); if nChar is the US-ASCII Base 64 padding
     character (US-ASCII '='), return -1; otherwise, return -2.
  */
-inline int getBase64Weight(sal_uInt32 nChar)
+int getBase64Weight(sal_uInt32 nChar)
 {
     return rtl::isAsciiUpperCase(nChar) ? int(nChar - 'A') :
            rtl::isAsciiLowerCase(nChar) ? int(nChar - 'a' + 26) :
@@ -68,7 +68,7 @@ inline int getBase64Weight(sal_uInt32 nChar)
            nChar == '=' ? -1 : -2;
 }
 
-inline bool startsWithLineFolding(const sal_Unicode * pBegin,
+bool startsWithLineFolding(const sal_Unicode * pBegin,
                                             const sal_Unicode * pEnd)
 {
     DBG_ASSERT(pBegin && pBegin <= pEnd,
@@ -78,7 +78,7 @@ inline bool startsWithLineFolding(const sal_Unicode * pBegin,
            && isWhiteSpace(pBegin[2]); // CR, LF
 }
 
-inline rtl_TextEncoding translateFromMIME(rtl_TextEncoding
+rtl_TextEncoding translateFromMIME(rtl_TextEncoding
                                                         eEncoding)
 {
 #if defined(_WIN32)
@@ -89,7 +89,7 @@ inline rtl_TextEncoding translateFromMIME(rtl_TextEncoding
 #endif
 }
 
-inline bool isMIMECharsetEncoding(rtl_TextEncoding eEncoding)
+bool isMIMECharsetEncoding(rtl_TextEncoding eEncoding)
 {
     return rtl_isOctetTextEncoding(eEncoding);
 }
@@ -182,7 +182,7 @@ std::unique_ptr<sal_Char[]> convertFromUnicode(const sal_Unicode * pBegin,
     @return  A pointer past the UTF-16 characters put into the buffer
     (i.e., pBuffer + 1 or pBuffer + 2).
  */
-inline sal_Unicode * putUTF32Character(sal_Unicode * pBuffer,
+sal_Unicode * putUTF32Character(sal_Unicode * pBuffer,
                                                  sal_uInt32 nUTF32)
 {
     DBG_ASSERT(rtl::isUnicodeCodePoint(nUTF32), "putUTF32Character(): Bad char");

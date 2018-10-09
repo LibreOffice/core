@@ -289,7 +289,7 @@ bool ScFormulaResult::IsEmptyDisplayedAsString() const
 
 namespace {
 
-inline bool isValue( formula::StackVar sv )
+bool isValue( formula::StackVar sv )
 {
     return sv == formula::svDouble || sv == formula::svError
         || sv == formula::svEmptyCell
@@ -300,7 +300,7 @@ inline bool isValue( formula::StackVar sv )
         || sv == formula::svUnknown;
 }
 
-inline bool isString( formula::StackVar sv )
+bool isString( formula::StackVar sv )
 {
     switch (sv)
     {

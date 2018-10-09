@@ -170,8 +170,7 @@ get_value( const uno::Sequence< beans::PropertyValue >& rAttributeList,
 #define get_weight_value( list, index ) get_value( list, index, Weight2String )
 #define get_language_string( list, index ) get_value( list, index, Locale2String )
 
-static inline
-double toPoint(sal_Int16 n)
+static double toPoint(sal_Int16 n)
 {
     // 100th mm -> pt
     return static_cast<double>(n * 72) / 2540;

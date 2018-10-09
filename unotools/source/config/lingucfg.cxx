@@ -68,7 +68,7 @@ static bool lcl_SetLocale( LanguageType &rLanguage, const uno::Any &rVal )
     return bSucc;
 }
 
-static inline const OUString lcl_LanguageToCfgLocaleStr( LanguageType nLanguage )
+static const OUString lcl_LanguageToCfgLocaleStr( LanguageType nLanguage )
 {
     OUString aRes;
     if (LANGUAGE_SYSTEM != nLanguage)

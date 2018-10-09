@@ -38,7 +38,7 @@ namespace cppu
 
 // due to static Reflection destruction from usr, there must be a mutex leak (#73272#)
 // this is used to lock all instances of OWeakConnectionPoint and OWeakRefListener as well as OWeakObject::m_pWeakConnectionPoint
-inline static Mutex & getWeakMutex()
+static Mutex & getWeakMutex()
 {
     static Mutex * s_pMutex = nullptr;
     if (! s_pMutex)

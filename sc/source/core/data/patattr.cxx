@@ -113,12 +113,12 @@ SfxPoolItem* ScPatternAttr::Clone( SfxItemPool *pPool ) const
     return pPattern;
 }
 
-static inline bool StrCmp( const OUString* pStr1, const OUString* pStr2 )
+static bool StrCmp( const OUString* pStr1, const OUString* pStr2 )
 {
     return ( pStr1 ? ( pStr2 && ( *pStr1 == *pStr2 ) ) : ( pStr2 == nullptr ) );
 }
 
-static inline bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
+static bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
 {
     // #i62090# The SfxItemSet in the SfxSetItem base class always has the same ranges
     // (single range from ATTR_PATTERN_START to ATTR_PATTERN_END), and the items are pooled,
@@ -1109,7 +1109,7 @@ bool ScPatternAttr::IsVisible() const
     return false;
 }
 
-static inline bool OneEqual( const SfxItemSet& rSet1, const SfxItemSet& rSet2, sal_uInt16 nId )
+static bool OneEqual( const SfxItemSet& rSet1, const SfxItemSet& rSet2, sal_uInt16 nId )
 {
     const SfxPoolItem* pItem1 = &rSet1.Get(nId);
     const SfxPoolItem* pItem2 = &rSet2.Get(nId);

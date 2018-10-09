@@ -148,7 +148,7 @@ void appendPolyLine(vcl::LineBuilder& rBuilder, const basegfx::B2DPolygon& rPoly
     }
 }
 
-inline void appendTrapezoid(std::vector<Vertex>& rVertices, std::vector<GLuint>& rIndices,
+void appendTrapezoid(std::vector<Vertex>& rVertices, std::vector<GLuint>& rIndices,
                        GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2,
                        GLfloat x3, GLfloat y3, GLfloat x4, GLfloat y4,
                        Color nColor, GLfloat fTransparency)

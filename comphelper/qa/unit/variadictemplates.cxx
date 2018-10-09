@@ -32,7 +32,7 @@ namespace {
 namespace detail {
 
 template <typename T>
-inline void extract(
+void extract(
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> const& seq,
     sal_Int32 nArg, T & v,
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
@@ -54,7 +54,7 @@ inline void extract(
 }
 
 template <typename T>
-inline void extract(
+void extract(
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> const& seq,
     sal_Int32 nArg, ::boost::optional<T> & v,
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
@@ -70,7 +70,7 @@ inline void extract(
 } // namespace detail
 
 template < typename T0, typename T1, typename T2, typename T3, typename T4 >
-inline void unwrapArgsBaseline(
+void unwrapArgsBaseline(
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > const& seq,
     T0& v0, T1& v1, T2& v2, T3& v3, T4& v4,
     ::com::sun::star::uno::Reference<

@@ -36,7 +36,7 @@ namespace
             }
             GError*& getRef() { return m_pError; }
     };
-    inline GDBusProxy* lcl_GetPackageKitProxy(const OUString& sInterface)
+    GDBusProxy* lcl_GetPackageKitProxy(const OUString& sInterface)
     {
         const OString sFullInterface = OUStringToOString("org.freedesktop.PackageKit." + sInterface, RTL_TEXTENCODING_ASCII_US);
         GDBusProxy* proxy = nullptr;

@@ -29,7 +29,7 @@ const sal_Unicode pDelimiters[] = {
     '=','(',')','+','-','*','/','^','&',' ','{','}','<','>',':', 0
 };
 
-inline bool IsText( sal_Unicode c )
+bool IsText( sal_Unicode c )
 {
     bool bFound = ScGlobal::UnicodeStrChr( pDelimiters, c );
     if (bFound)
@@ -41,7 +41,7 @@ inline bool IsText( sal_Unicode c )
     return c != sep;
 }
 
-inline bool IsText( bool& bQuote, sal_Unicode c )
+bool IsText( bool& bQuote, sal_Unicode c )
 {
     if (c == '\'')
     {
