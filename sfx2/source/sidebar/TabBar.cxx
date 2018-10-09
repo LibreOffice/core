@@ -233,7 +233,13 @@ bool TabBar::EventNotify(NotifyEvent& rEvent)
     if(MouseNotifyEvent::KEYINPUT == nType)
     {
         const vcl::KeyCode& rKeyCode = rEvent.GetKeyEvent()->GetKeyCode();
-        if((KEY_MOD1 == rKeyCode.GetModifier()) && (KEY_F5 == rKeyCode.GetCode()))
+        if (!mpAccel)
+        {
+            mpAccel = svt::AcceleratorExecute::createAcceleratorHelper();
+            mpAccel->init(comphelper::getProcessComponentContext(), mxFrame);
+        }
+        const OUString aCommand(mpAccel->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rKeyCode)));
+        if (".uno:Sidebar" == aCommand)
             return vcl::Window::EventNotify(rEvent);
         return true;
     }

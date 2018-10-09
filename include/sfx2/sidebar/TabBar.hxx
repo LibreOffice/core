@@ -31,6 +31,7 @@
 
 #include <functional>
 
+#include <svtools/acceleratorexecute.hxx>
 
 class Button;
 class CheckBox;
@@ -119,6 +120,7 @@ private:
     DECL_LINK(OnToolboxClicked, Button*, void);
 
     SidebarController* pParentSidebarController;
+    std::unique_ptr<svt::AcceleratorExecute> mpAccel;
 
 };
 
