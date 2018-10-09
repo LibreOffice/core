@@ -200,6 +200,9 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
+    if (Application::IsBitmapRendering())
+        return;
+
     // #i91990# support GUI-less (daemon) execution
     @try
     {
@@ -1159,7 +1162,8 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
         // "'lockFocus' is deprecated: first deprecated in macOS 10.14 - To draw, subclass NSView
         // and implement -drawRect:; AppKit's automatic deferred display mechanism will call
         // -drawRect: as necessary to display the view."
-    [mpNSView lockFocus];
+    if (![mpNSView lockFocusIfCanDraw])
+        return;
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
