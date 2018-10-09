@@ -129,6 +129,8 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(TabPageParent pParent, const Sf
     {
         SfxStyleSheetBase* pPoolStyle = pPool->First();
 
+        m_xFollowLb->freeze();
+
         while ( pPoolStyle )
         {
             m_xFollowLb->append_text(pPoolStyle->GetName());
@@ -138,6 +140,8 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(TabPageParent pParent, const Sf
         // A new Template is not yet in the Pool
         if (m_xFollowLb->find_text(pStyle->GetName()) == -1)
             m_xFollowLb->append_text(pStyle->GetName());
+
+        m_xFollowLb->thaw();
     }
     else
     {
@@ -148,6 +152,8 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(TabPageParent pParent, const Sf
 
     if ( pStyle->HasParentSupport() && pPool )
     {
+        m_xBaseLb->freeze();
+
         if ( pStyle->HasClearParentSupport() )
             // the base template can be set to NULL
             m_xBaseLb->append_text(SfxResId(STR_NONE));
@@ -162,6 +168,8 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(TabPageParent pParent, const Sf
                 m_xBaseLb->append_text(aStr);
             pPoolStyle = pPool->Next();
         }
+
+        m_xBaseLb->thaw();
     }
     else
     {
