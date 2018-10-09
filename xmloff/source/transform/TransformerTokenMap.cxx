@@ -21,7 +21,7 @@
 
 using namespace ::xmloff::token;
 
-XMLTransformerTokenMap::XMLTransformerTokenMap( XMLTokenEnum *pInit )
+XMLTransformerTokenMap::XMLTransformerTokenMap( XMLTokenEnum const *pInit )
 {
     if( pInit )
     {

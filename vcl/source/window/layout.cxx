@@ -825,7 +825,7 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
 
 struct ButtonOrder
 {
-    OString const m_aType;
+    const char* m_aType;
     int const m_nPriority;
 };
 

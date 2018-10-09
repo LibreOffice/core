@@ -479,7 +479,7 @@ static void TrueTypeTableDispose_post(TrueTypeTable *_this)
 static struct {
     sal_uInt32 tag;
     void (*f)(TrueTypeTable *);
-} vtable1[] =
+} const vtable1[] =
 {
     {0,      TrueTypeTableDispose_generic},
     {T_head, TrueTypeTableDispose_head},
@@ -800,7 +800,7 @@ static int GetRawData_post(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *le
 static struct {
     sal_uInt32 tag;
     int (*f)(TrueTypeTable *, sal_uInt8 **, sal_uInt32 *, sal_uInt32 *);
-} vtable2[] =
+} const vtable2[] =
 {
     {0,      GetRawData_generic},
     {T_head, GetRawData_head},

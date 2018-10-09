@@ -494,7 +494,7 @@ static const Value CaseMappingValue[] = {
 
 #define MaxCaseMappingExtras 3
 
-static Mapping CaseMappingExtra[] = {
+static Mapping const CaseMappingExtra[] = {
     {0x80, 0, {0x0000, 0x0000, 0x0000}}, // 0x0000 (0 0x0)
     {0x60, 1, {0x0131, 0x0000, 0x0000}}, // 0x0049 (1 0x1)
     {0x8a, 0, {0x0000, 0x0000, 0x0000}}, // 0x0049 (2 0x2)

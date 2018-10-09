@@ -847,7 +847,7 @@ FontFamily PrintFontManager::matchFamilyName( const OUString& rFamily )
     } family_t;
 
 #define InitializeClass( p, a ) p, sizeof(p) - 1, a
-    const family_t pFamilyMatch[] =  {
+    static const family_t pFamilyMatch[] =  {
         { InitializeClass( "arial",                  FAMILY_SWISS )  },
         { InitializeClass( "arioso",                 FAMILY_SCRIPT ) },
         { InitializeClass( "avant garde",            FAMILY_SWISS )  },

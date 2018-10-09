@@ -136,7 +136,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef const & rObj
                 sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
             }
             aGlNmIds[4];
-        } aArr[] = {
+        } const aArr[] = {
             { OLE_STARMATH_2_MATHTYPE, "MathType 3.x",
                 {{SO3_SM_CLASSID_60}, {SO3_SM_CLASSID_50},
                  {SO3_SM_CLASSID_40}, {SO3_SM_CLASSID_30 }}},

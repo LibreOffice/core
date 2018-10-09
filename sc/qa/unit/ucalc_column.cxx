@@ -99,7 +99,7 @@ void Test::testSetFormula()
 {
     m_pDoc->InsertTab(0, "Test");
 
-    struct aInputs
+    static struct aInputs
     {
         const char* aName;
         SCROW nRow;
@@ -108,7 +108,7 @@ void Test::testSetFormula()
         const char* aFormula2;      // Represents the formula that is actually stored in the cell.
         formula::FormulaGrammar::Grammar eGram;
 
-    } aTest[] = {
+    } const aTest[] = {
         { "Rock and Roll" ,5 , 4 , "=SUM($D$2:$F$3)"             ,"=SUM($D$2:$F$3)" , formula::FormulaGrammar::Grammar::GRAM_ENGLISH     },
         { "Blues"         ,5 , 5 , "=A1-$C2+B$3-$F$4"            ,"=A1-$C2+B$3-$F$4", formula::FormulaGrammar::Grammar::GRAM_NATIVE      },
         { "Acoustic"      ,6 , 6 , "=A1-$C2+B$3-$F$4"            ,"=A1-$C2+B$3-$F$4", formula::FormulaGrammar::Grammar::GRAM_NATIVE_XL_A1},

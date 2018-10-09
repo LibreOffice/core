@@ -87,14 +87,14 @@ using namespace ::com::sun::star::form;
 const sal_uInt16 TABINDEX_MIN = 0;
 const sal_uInt16 TABINDEX_MAX = 32767;
 
-static HTMLOptionEnum<FormSubmitMethod> aHTMLFormMethodTable[] =
+static HTMLOptionEnum<FormSubmitMethod> const aHTMLFormMethodTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_METHOD_get,   FormSubmitMethod_GET    },
     { OOO_STRING_SVTOOLS_HTML_METHOD_post,  FormSubmitMethod_POST   },
     { nullptr,                              FormSubmitMethod(0)     }
 };
 
-static HTMLOptionEnum<FormSubmitEncoding> aHTMLFormEncTypeTable[] =
+static HTMLOptionEnum<FormSubmitEncoding> const aHTMLFormEncTypeTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_ET_url,       FormSubmitEncoding_URL          },
     { OOO_STRING_SVTOOLS_HTML_ET_multipart, FormSubmitEncoding_MULTIPART    },
@@ -104,7 +104,7 @@ static HTMLOptionEnum<FormSubmitEncoding> aHTMLFormEncTypeTable[] =
 
 enum HTMLWordWrapMode { HTML_WM_OFF, HTML_WM_HARD, HTML_WM_SOFT };
 
-static HTMLOptionEnum<HTMLWordWrapMode> aHTMLTextAreaWrapTable[] =
+static HTMLOptionEnum<HTMLWordWrapMode> const aHTMLTextAreaWrapTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_WW_off,      HTML_WM_OFF     },
     { OOO_STRING_SVTOOLS_HTML_WW_hard,     HTML_WM_HARD    },

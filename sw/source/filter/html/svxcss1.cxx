@@ -3091,7 +3091,7 @@ struct CSS1PropEntry
     {   { sCSS1_P_##p }, ParseCSS1_##p }
 
 // the table with assignments
-static CSS1PropEntry aCSS1PropFnTab[] =
+static CSS1PropEntry const aCSS1PropFnTab[] =
 {
     CSS1_PROP_ENTRY(background),
     CSS1_PROP_ENTRY(background_color),
@@ -3148,32 +3148,25 @@ static CSS1PropEntry aCSS1PropFnTab[] =
     CSS1_PROP_ENTRY(so_language)
 };
 
-extern "C"
-{
-static int CSS1PropEntryCompare( const void *pFirst, const void *pSecond)
+static bool CSS1PropEntryCompare( const CSS1PropEntry &rFirst, const CSS1PropEntry &rSecond)
 {
     int nRet;
-    if( static_cast<const CSS1PropEntry*>(pFirst)->pFunc )
+    if( rFirst.pFunc )
     {
-        if( static_cast<const CSS1PropEntry*>(pSecond)->pFunc )
-            nRet = strcmp( static_cast<const CSS1PropEntry*>(pFirst)->sName ,
-                    static_cast<const CSS1PropEntry*>(pSecond)->sName );
+        if( rSecond.pFunc )
+            nRet = strcmp( rFirst.sName, rSecond.sName );
         else
-            nRet = -1 * static_cast<const CSS1PropEntry*>(pSecond)->pName->compareToAscii(
-                            static_cast<const CSS1PropEntry*>(pFirst)->sName );
+            nRet = -1 * rSecond.pName->compareToAscii( rFirst.sName );
     }
     else
     {
-        if( static_cast<const CSS1PropEntry*>(pSecond)->pFunc )
-            nRet = static_cast<const CSS1PropEntry*>(pFirst)->pName->compareToAscii(
-                        static_cast<const CSS1PropEntry*>(pSecond)->sName );
+        if( rSecond.pFunc )
+            nRet = rFirst.pName->compareToAscii( rSecond.sName );
         else
-            nRet = static_cast<const CSS1PropEntry*>(pFirst)->pName->compareTo(
-                        *static_cast<const CSS1PropEntry*>(pSecond)->pName );
+            nRet = rFirst.pName->compareTo( *rSecond.pName );
     }
 
-    return nRet;
-}
+    return nRet < 0;
 }
 
 void SvxCSS1Parser::ParseProperty( const OUString& rProperty,
@@ -3185,10 +3178,8 @@ void SvxCSS1Parser::ParseProperty( const OUString& rProperty,
 
     if( !bSortedPropFns )
     {
-        qsort( static_cast<void*>(aCSS1PropFnTab),
-                sizeof( aCSS1PropFnTab ) / sizeof( CSS1PropEntry ),
-                sizeof( CSS1PropEntry ),
-                CSS1PropEntryCompare );
+        assert( std::is_sorted( std::begin(aCSS1PropFnTab), std::end(aCSS1PropFnTab),
+                                CSS1PropEntryCompare ) );
         bSortedPropFns = true;
     }
 
@@ -3198,14 +3189,11 @@ void SvxCSS1Parser::ParseProperty( const OUString& rProperty,
     aSrch.pName = &aTmp;
     aSrch.pFunc = nullptr;
 
-    void* pFound;
-    if( nullptr != ( pFound = bsearch( &aSrch,
-                        static_cast<void*>(aCSS1PropFnTab),
-                        sizeof( aCSS1PropFnTab ) / sizeof( CSS1PropEntry ),
-                        sizeof( CSS1PropEntry ),
-                        CSS1PropEntryCompare )))
+    auto it = std::lower_bound( std::begin(aCSS1PropFnTab), std::end(aCSS1PropFnTab), aSrch,
+                                CSS1PropEntryCompare );
+    if( it != std::end(aCSS1PropFnTab) )
     {
-        (static_cast<CSS1PropEntry*>(pFound)->pFunc)( pExpr, *pItemSet, *pPropInfo, *this );
+        it->pFunc( pExpr, *pItemSet, *pPropInfo, *this );
     }
 }
 

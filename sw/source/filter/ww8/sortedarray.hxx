@@ -57,7 +57,7 @@ namespace ww
             : mpWwSprmTab(pWwSprmTab), mnNoElems(nNoElems)
         {
             OSL_ENSURE(mnNoElems && pWwSprmTab, "WW8: empty Array: Don't do that");
-            std::sort(mpWwSprmTab, mpWwSprmTab + mnNoElems);
+            assert( std::is_sorted(mpWwSprmTab, mpWwSprmTab + mnNoElems) );
 #if OSL_DEBUG_LEVEL > 1
             bool bBroken=false;
             OUString sError;

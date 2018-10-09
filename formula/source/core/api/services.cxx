@@ -33,7 +33,7 @@ using namespace ::com::sun::star::registry;
 namespace
 {
 
-cppu::ImplementationEntry entries[] = {
+cppu::ImplementationEntry const entries[] = {
     { &FormulaOpCodeMapperObj::create, &FormulaOpCodeMapperObj::getImplementationName_Static, &FormulaOpCodeMapperObj::getSupportedServiceNames_Static,
         &cppu::createSingleComponentFactory, nullptr, 0 },
     { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }

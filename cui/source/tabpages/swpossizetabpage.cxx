@@ -97,7 +97,7 @@ namespace o3tl {
     template<> struct typed_flags<LB> : is_typed_flags<LB, 0x0fffff> {};
 }
 
-static RelationMap aRelationMap[] =
+static RelationMap const aRelationMap[] =
 {
     {SwFPos::FRAME,         SwFPos::FRAME,             LB::Frame,           RelOrientation::FRAME},
     {SwFPos::PRTAREA,       SwFPos::PRTAREA,           LB::PrintArea,         RelOrientation::PRINT_AREA},
@@ -125,7 +125,7 @@ static RelationMap aRelationMap[] =
     {SwFPos::REL_LINE,  SwFPos::REL_LINE,   LB::VertLine,   RelOrientation::TEXT_LINE}
 };
 
-static RelationMap aAsCharRelationMap[] =
+static RelationMap const aAsCharRelationMap[] =
 {
     {SwFPos::REL_BASE,  SwFPos::REL_BASE,   LB::RelBase,   RelOrientation::FRAME},
     {SwFPos::REL_CHAR,  SwFPos::REL_CHAR,   LB::RelChar,   RelOrientation::FRAME},
@@ -139,7 +139,7 @@ static RelationMap aAsCharRelationMap[] =
 #define HORI_PAGE_REL   (LB::RelPageFrame|LB::RelPagePrintArea|LB::RelPageLeft| \
                         LB::RelPageRight)
 
-static FrmMap aHPageMap[] =
+static FrmMap const aHPageMap[] =
 {
     {SwFPos::LEFT,       SwFPos::MIR_LEFT,       HoriOrientation::LEFT,      HORI_PAGE_REL},
     {SwFPos::RIGHT,      SwFPos::MIR_RIGHT,      HoriOrientation::RIGHT,     HORI_PAGE_REL},
@@ -147,14 +147,14 @@ static FrmMap aHPageMap[] =
     {SwFPos::FROMLEFT,   SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      HORI_PAGE_REL}
 };
 
-static FrmMap aHPageHtmlMap[] =
+static FrmMap const aHPageHtmlMap[] =
 {
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      LB::RelPageFrame}
 };
 
 #define VERT_PAGE_REL   (LB::RelPageFrame|LB::RelPagePrintArea)
 
-static FrmMap aVPageMap[] =
+static FrmMap const aVPageMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       VERT_PAGE_REL},
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,    VERT_PAGE_REL},
@@ -162,7 +162,7 @@ static FrmMap aVPageMap[] =
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      VERT_PAGE_REL}
 };
 
-static FrmMap aVPageHtmlMap[] =
+static FrmMap const aVPageHtmlMap[] =
 {
     {SwFPos::FROMTOP, SwFPos::FROMTOP,        VertOrientation::NONE,      LB::RelPageFrame}
 };
@@ -174,7 +174,7 @@ static FrmMap aVPageHtmlMap[] =
 #define HORI_FRAME_REL  (LB::FlyRelPageFrame|LB::FlyRelPagePrintArea| \
                         LB::FlyRelPageLeft|LB::FlyRelPageRight)
 
-static FrmMap aHFrameMap[] =
+static FrmMap const aHFrameMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       HoriOrientation::LEFT,  HORI_FRAME_REL},
     {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      HoriOrientation::RIGHT,     HORI_FRAME_REL},
@@ -182,7 +182,7 @@ static FrmMap aHFrameMap[] =
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      HORI_FRAME_REL}
 };
 
-static FrmMap aHFlyHtmlMap[] =
+static FrmMap const aHFlyHtmlMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       HoriOrientation::LEFT,      LB::FlyRelPageFrame},
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      LB::FlyRelPageFrame}
@@ -192,7 +192,7 @@ static FrmMap aHFlyHtmlMap[] =
 // #i22305#
 #define VERT_FRAME_REL   (LB::VertFrame|LB::FlyVertPrintArea)
 
-static FrmMap aVFrameMap[] =
+static FrmMap const aVFrameMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       VERT_FRAME_REL},
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,    VERT_FRAME_REL},
@@ -200,17 +200,17 @@ static FrmMap aVFrameMap[] =
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      VERT_FRAME_REL}
 };
 
-static FrmMap aVFlyHtmlMap[] =
+static FrmMap const aVFlyHtmlMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       LB::FlyVertFrame},
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      LB::FlyVertFrame}
 };
 
-static FrmMap aVMultiSelectionMap[] =
+static FrmMap const aVMultiSelectionMap[] =
 {
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      LB::NONE}
 };
-static FrmMap aHMultiSelectionMap[] =
+static FrmMap const aHMultiSelectionMap[] =
 {
     {SwFPos::FROMLEFT,      SwFPos::FROMLEFT,       HoriOrientation::NONE,      LB::NONE}
 };
@@ -223,7 +223,7 @@ static FrmMap aHMultiSelectionMap[] =
                         LB::RelPageFrame|LB::RelPagePrintArea|LB::RelFrameLeft| \
                         LB::RelFrameRight)
 
-static FrmMap aHParaMap[] =
+static FrmMap const aHParaMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       HoriOrientation::LEFT,      HORI_PARA_REL},
     {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      HoriOrientation::RIGHT,     HORI_PARA_REL},
@@ -233,13 +233,13 @@ static FrmMap aHParaMap[] =
 
 #define HTML_HORI_PARA_REL  (LB::Frame|LB::PrintArea)
 
-static FrmMap aHParaHtmlMap[] =
+static FrmMap const aHParaHtmlMap[] =
 {
     {SwFPos::LEFT,  SwFPos::LEFT,   HoriOrientation::LEFT,      HTML_HORI_PARA_REL},
     {SwFPos::RIGHT, SwFPos::RIGHT,  HoriOrientation::RIGHT,     HTML_HORI_PARA_REL}
 };
 
-static FrmMap aHParaHtmlAbsMap[] =
+static FrmMap const aHParaHtmlAbsMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       HoriOrientation::LEFT,      HTML_HORI_PARA_REL},
     {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      HoriOrientation::RIGHT,     HTML_HORI_PARA_REL}
@@ -249,7 +249,7 @@ static FrmMap aHParaHtmlAbsMap[] =
 #define VERT_PARA_REL   (LB::VertFrame|LB::VertPrintArea| \
                          LB::RelPageFrame|LB::RelPagePrintArea)
 
-static FrmMap aVParaMap[] =
+static FrmMap const aVParaMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       VERT_PARA_REL},
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,    VERT_PARA_REL},
@@ -257,7 +257,7 @@ static FrmMap aVParaMap[] =
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      VERT_PARA_REL}
 };
 
-static FrmMap aVParaHtmlMap[] =
+static FrmMap const aVParaHtmlMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       LB::VertPrintArea}
 };
@@ -319,12 +319,12 @@ static FrmMap aVCharMap[] =
 };
 
 
-static FrmMap aVCharHtmlMap[] =
+static FrmMap const aVCharHtmlMap[] =
 {
     {SwFPos::BELOW,         SwFPos::BELOW,          VertOrientation::CHAR_BOTTOM,   LB::RelChar}
 };
 
-static FrmMap aVCharHtmlAbsMap[] =
+static FrmMap const aVCharHtmlAbsMap[] =
 {
     {SwFPos::TOP,    SwFPos::TOP,            VertOrientation::TOP,           LB::RelChar},
     {SwFPos::BELOW,  SwFPos::BELOW,          VertOrientation::CHAR_BOTTOM,   LB::RelChar}
@@ -333,7 +333,7 @@ static FrmMap aVCharHtmlAbsMap[] =
     anchored as character
  --------------------------------------------------------------------*/
 
-static FrmMap aVAsCharMap[] =
+static FrmMap const aVAsCharMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,           LB::RelBase},
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,        LB::RelBase},
@@ -350,7 +350,7 @@ static FrmMap aVAsCharMap[] =
     {SwFPos::FROMBOTTOM,    SwFPos::FROMBOTTOM,     VertOrientation::NONE,          LB::RelBase}
 };
 
-static FrmMap aVAsCharHtmlMap[] =
+static FrmMap const aVAsCharHtmlMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,           LB::RelBase},
     {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::CENTER,        LB::RelBase},
@@ -477,7 +477,7 @@ static LB lcl_GetLBRelationsForRelations( const sal_uInt16 _nRel )
 {
     LB nLBRelations = LB::NONE;
 
-    for (RelationMap & nRelMapPos : aRelationMap)
+    for (RelationMap const & nRelMapPos : aRelationMap)
     {
         if ( nRelMapPos.nRelation == _nRel )
         {
@@ -611,14 +611,14 @@ namespace
 {
     struct FrmMaps
     {
-        FrmMap *pMap;
+        FrmMap const *pMap;
         size_t nCount;
     };
 }
 
 void SvxSwPosSizeTabPage::setOptimalFrmWidth()
 {
-    const FrmMaps aMaps[] = {
+    static const FrmMaps aMaps[] = {
         { aHPageMap, SAL_N_ELEMENTS(aHPageMap) },
         { aHPageHtmlMap, SAL_N_ELEMENTS(aHPageHtmlMap) },
         { aVPageMap, SAL_N_ELEMENTS(aVPageMap) },
@@ -670,14 +670,14 @@ namespace
 {
     struct RelationMaps
     {
-        RelationMap *pMap;
+        RelationMap const *pMap;
         size_t nCount;
     };
 }
 
 void SvxSwPosSizeTabPage::setOptimalRelWidth()
 {
-    const RelationMaps aMaps[] = {
+    static const RelationMaps aMaps[] = {
         { aRelationMap, SAL_N_ELEMENTS(aRelationMap) },
         { aAsCharRelationMap, SAL_N_ELEMENTS(aAsCharRelationMap) }
     };
@@ -1249,7 +1249,7 @@ IMPL_LINK(SvxSwPosSizeTabPage, PosHdl, weld::ComboBox&, rLB, void)
     bool bHori = &rLB == m_xHoriLB.get();
     weld::ComboBox* pRelLB = bHori ? m_xHoriToLB.get() : m_xVertToLB.get();
     weld::Label* pRelFT = bHori ? m_xHoriToFT.get() : m_xVertToFT.get();
-    FrmMap *pMap = bHori ? m_pHMap : m_pVMap;
+    FrmMap const *pMap = bHori ? m_pHMap : m_pVMap;
 
 
     sal_uInt16 nMapPos = GetMapPos(pMap, rLB);

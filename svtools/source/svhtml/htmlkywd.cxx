@@ -18,6 +18,7 @@
  */
 
 
+#include <algorithm>
 #include <limits.h>
 #include <sal/types.h>
 #include <stdlib.h>
@@ -37,164 +38,149 @@ struct HTML_TokenEntry
     HtmlTokenId nToken;
 };
 
-// Flag: RTF token table has already been sorted
-static bool bSortKeyWords = false;
-
-static HTML_TokenEntry aHTMLTokenTab[] = {
-    {{OOO_STRING_SVTOOLS_HTML_area},            HtmlTokenId::AREA}, // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_base},            HtmlTokenId::BASE}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_comment},     HtmlTokenId::COMMENT},
-    {{OOO_STRING_SVTOOLS_HTML_doctype},      HtmlTokenId::DOCTYPE},
-    {{OOO_STRING_SVTOOLS_HTML_embed},       HtmlTokenId::EMBED},    // Netscape 2.0
-    {{OOO_STRING_SVTOOLS_HTML_horzrule},        HtmlTokenId::HORZRULE},
-    {{OOO_STRING_SVTOOLS_HTML_image},          HtmlTokenId::IMAGE},
-    {{OOO_STRING_SVTOOLS_HTML_input},          HtmlTokenId::INPUT},
-    {{OOO_STRING_SVTOOLS_HTML_linebreak},      HtmlTokenId::LINEBREAK},
-    {{OOO_STRING_SVTOOLS_HTML_link},            HtmlTokenId::LINK}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_meta},            HtmlTokenId::META}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_option},        HtmlTokenId::OPTION},
-    {{OOO_STRING_SVTOOLS_HTML_param},       HtmlTokenId::PARAM},    // HotJava
-    {{OOO_STRING_SVTOOLS_HTML_spacer},      HtmlTokenId::SPACER},   // Netscape 3.0b5
-
+// this array is sorted by the name (even if it doesn't look like it from the constant names)
+static HTML_TokenEntry const aHTMLTokenTab[] = {
+    {{OOO_STRING_SVTOOLS_HTML_comment},         HtmlTokenId::COMMENT},
+    {{OOO_STRING_SVTOOLS_HTML_doctype},         HtmlTokenId::DOCTYPE},
+    {{OOO_STRING_SVTOOLS_HTML_anchor},          HtmlTokenId::ANCHOR_ON},
     {{OOO_STRING_SVTOOLS_HTML_abbreviation},    HtmlTokenId::ABBREVIATION_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_acronym},     HtmlTokenId::ACRONYM_ON},   // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_address},      HtmlTokenId::ADDRESS_ON},
-    {{OOO_STRING_SVTOOLS_HTML_anchor},        HtmlTokenId::ANCHOR_ON},
-    {{OOO_STRING_SVTOOLS_HTML_applet},      HtmlTokenId::APPLET_ON},    // HotJava
-    {{OOO_STRING_SVTOOLS_HTML_author},      HtmlTokenId::AUTHOR_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_banner},      HtmlTokenId::BANNER_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_acronym},         HtmlTokenId::ACRONYM_ON},   // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_address},         HtmlTokenId::ADDRESS_ON},
+    {{OOO_STRING_SVTOOLS_HTML_applet},          HtmlTokenId::APPLET_ON},    // HotJava
+    {{OOO_STRING_SVTOOLS_HTML_area},            HtmlTokenId::AREA}, // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_author},          HtmlTokenId::AUTHOR_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_bold},            HtmlTokenId::BOLD_ON},
+    {{OOO_STRING_SVTOOLS_HTML_banner},          HtmlTokenId::BANNER_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_base},            HtmlTokenId::BASE}, // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_basefont},        HtmlTokenId::BASEFONT_ON},  // Netscape
     {{OOO_STRING_SVTOOLS_HTML_bigprint},        HtmlTokenId::BIGPRINT_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_blink},       HtmlTokenId::BLINK_ON}, // Netscape
-    {{OOO_STRING_SVTOOLS_HTML_blockquote},    HtmlTokenId::BLOCKQUOTE_ON},
-    {{OOO_STRING_SVTOOLS_HTML_blockquote30},    HtmlTokenId::BLOCKQUOTE30_ON},  // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_blink},           HtmlTokenId::BLINK_ON}, // Netscape
+    {{OOO_STRING_SVTOOLS_HTML_blockquote},      HtmlTokenId::BLOCKQUOTE_ON},
     {{OOO_STRING_SVTOOLS_HTML_body},            HtmlTokenId::BODY_ON},
-    {{OOO_STRING_SVTOOLS_HTML_bold},            HtmlTokenId::BOLD_ON},
-    {{OOO_STRING_SVTOOLS_HTML_caption},     HtmlTokenId::CAPTION_ON},   // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_center},      HtmlTokenId::CENTER_ON},    // Netscape
-    {{OOO_STRING_SVTOOLS_HTML_citiation},      HtmlTokenId::CITIATION_ON},
+    {{OOO_STRING_SVTOOLS_HTML_blockquote30},    HtmlTokenId::BLOCKQUOTE30_ON},  // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_linebreak},       HtmlTokenId::LINEBREAK},
+    {{OOO_STRING_SVTOOLS_HTML_caption},         HtmlTokenId::CAPTION_ON},   // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_center},          HtmlTokenId::CENTER_ON},    // Netscape
+    {{OOO_STRING_SVTOOLS_HTML_citiation},       HtmlTokenId::CITIATION_ON},
+    {{OOO_STRING_SVTOOLS_HTML_code},            HtmlTokenId::CODE_ON},
     {{OOO_STRING_SVTOOLS_HTML_col},             HtmlTokenId::COL_ON}, // HTML 3 Table Model Draft
     {{OOO_STRING_SVTOOLS_HTML_colgroup},        HtmlTokenId::COLGROUP_ON}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_code},            HtmlTokenId::CODE_ON},
-    {{OOO_STRING_SVTOOLS_HTML_credit},      HtmlTokenId::CREDIT_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_dd},            HtmlTokenId::DD_ON},
-    {{OOO_STRING_SVTOOLS_HTML_deflist},      HtmlTokenId::DEFLIST_ON},
-    {{OOO_STRING_SVTOOLS_HTML_deletedtext}, HtmlTokenId::DELETEDTEXT_ON},   // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_dirlist},      HtmlTokenId::DIRLIST_ON},
+    {{OOO_STRING_SVTOOLS_HTML_comment2},        HtmlTokenId::COMMENT2_ON},
+    {{OOO_STRING_SVTOOLS_HTML_credit},          HtmlTokenId::CREDIT_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_dd},              HtmlTokenId::DD_ON},
+    {{OOO_STRING_SVTOOLS_HTML_deletedtext},     HtmlTokenId::DELETEDTEXT_ON},   // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_definstance},     HtmlTokenId::DEFINSTANCE_ON},
+    {{OOO_STRING_SVTOOLS_HTML_dirlist},         HtmlTokenId::DIRLIST_ON},
     {{OOO_STRING_SVTOOLS_HTML_division},        HtmlTokenId::DIVISION_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_dt},            HtmlTokenId::DT_ON},
+    {{OOO_STRING_SVTOOLS_HTML_deflist},         HtmlTokenId::DEFLIST_ON},
+    {{OOO_STRING_SVTOOLS_HTML_dt},              HtmlTokenId::DT_ON},
     {{OOO_STRING_SVTOOLS_HTML_emphasis},        HtmlTokenId::EMPHASIS_ON},
-    {{OOO_STRING_SVTOOLS_HTML_figure},      HtmlTokenId::FIGURE_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_font},            HtmlTokenId::FONT_ON}, // Netscape
+    {{OOO_STRING_SVTOOLS_HTML_embed},           HtmlTokenId::EMBED},    // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_figure},          HtmlTokenId::FIGURE_ON},    // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_footnote},        HtmlTokenId::FOOTNOTE_ON},  // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_font},            HtmlTokenId::FONT_ON}, // Netscape
     {{OOO_STRING_SVTOOLS_HTML_form},            HtmlTokenId::FORM_ON},
-    {{OOO_STRING_SVTOOLS_HTML_frame},       HtmlTokenId::FRAME_ON}, // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_frame},           HtmlTokenId::FRAME_ON}, // Netscape 2.0
     {{OOO_STRING_SVTOOLS_HTML_frameset},        HtmlTokenId::FRAMESET_ON},  // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_head1},           HtmlTokenId::HEAD1_ON},
+    {{OOO_STRING_SVTOOLS_HTML_head2},           HtmlTokenId::HEAD2_ON},
+    {{OOO_STRING_SVTOOLS_HTML_head3},           HtmlTokenId::HEAD3_ON},
+    {{OOO_STRING_SVTOOLS_HTML_head4},           HtmlTokenId::HEAD4_ON},
+    {{OOO_STRING_SVTOOLS_HTML_head5},           HtmlTokenId::HEAD5_ON},
+    {{OOO_STRING_SVTOOLS_HTML_head6},           HtmlTokenId::HEAD6_ON},
     {{OOO_STRING_SVTOOLS_HTML_head},            HtmlTokenId::HEAD_ON},
-    {{OOO_STRING_SVTOOLS_HTML_head1},          HtmlTokenId::HEAD1_ON},
-    {{OOO_STRING_SVTOOLS_HTML_head2},          HtmlTokenId::HEAD2_ON},
-    {{OOO_STRING_SVTOOLS_HTML_head3},          HtmlTokenId::HEAD3_ON},
-    {{OOO_STRING_SVTOOLS_HTML_head4},          HtmlTokenId::HEAD4_ON},
-    {{OOO_STRING_SVTOOLS_HTML_head5},          HtmlTokenId::HEAD5_ON},
-    {{OOO_STRING_SVTOOLS_HTML_head6},          HtmlTokenId::HEAD6_ON},
+    {{OOO_STRING_SVTOOLS_HTML_horzrule},        HtmlTokenId::HORZRULE},
     {{OOO_STRING_SVTOOLS_HTML_html},            HtmlTokenId::HTML_ON},
-    {{OOO_STRING_SVTOOLS_HTML_iframe},      HtmlTokenId::IFRAME_ON},    // IE 3.0b2
+    {{OOO_STRING_SVTOOLS_HTML_italic},          HtmlTokenId::ITALIC_ON},
+    {{OOO_STRING_SVTOOLS_HTML_iframe},          HtmlTokenId::IFRAME_ON},    // IE 3.0b2
+    {{OOO_STRING_SVTOOLS_HTML_image},           HtmlTokenId::IMAGE},
+    {{OOO_STRING_SVTOOLS_HTML_input},           HtmlTokenId::INPUT},
     {{OOO_STRING_SVTOOLS_HTML_insertedtext},    HtmlTokenId::INSERTEDTEXT_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_italic},        HtmlTokenId::ITALIC_ON},
     {{OOO_STRING_SVTOOLS_HTML_keyboard},        HtmlTokenId::KEYBOARD_ON},
     {{OOO_STRING_SVTOOLS_HTML_language},        HtmlTokenId::LANGUAGE_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_li},            HtmlTokenId::LI_ON},
-    {{OOO_STRING_SVTOOLS_HTML_listheader},  HtmlTokenId::LISTHEADER_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_map},         HtmlTokenId::MAP_ON},   // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_listheader},      HtmlTokenId::LISTHEADER_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_li},              HtmlTokenId::LI_ON},
+    {{OOO_STRING_SVTOOLS_HTML_link},            HtmlTokenId::LINK}, // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_listing},         HtmlTokenId::LISTING_ON},
+    {{OOO_STRING_SVTOOLS_HTML_map},             HtmlTokenId::MAP_ON},   // Netscape 2.0
+    {{OOO_STRING_SVTOOLS_HTML_marquee},         HtmlTokenId::MARQUEE_ON},
     {{OOO_STRING_SVTOOLS_HTML_menulist},        HtmlTokenId::MENULIST_ON},
+    {{OOO_STRING_SVTOOLS_HTML_meta},            HtmlTokenId::META}, // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_multicol},        HtmlTokenId::MULTICOL_ON},  // Netscape 3.0b5
     {{OOO_STRING_SVTOOLS_HTML_nobr},            HtmlTokenId::NOBR_ON},  // Netscape
-    {{OOO_STRING_SVTOOLS_HTML_noembed},     HtmlTokenId::NOEMBED_ON},   // Netscape 2.0 ???
-    {{OOO_STRING_SVTOOLS_HTML_noframe},     HtmlTokenId::NOFRAMES_ON},  // Netscape 2.0 ???
+    {{OOO_STRING_SVTOOLS_HTML_noembed},         HtmlTokenId::NOEMBED_ON},   // Netscape 2.0 ???
+    {{OOO_STRING_SVTOOLS_HTML_noframe},         HtmlTokenId::NOFRAMES_ON},  // Netscape 2.0 ???
     {{OOO_STRING_SVTOOLS_HTML_noframes},        HtmlTokenId::NOFRAMES_ON},  // Netscape 2.0
     {{OOO_STRING_SVTOOLS_HTML_noscript},        HtmlTokenId::NOSCRIPT_ON},  // Netscape 3.0
     {{OOO_STRING_SVTOOLS_HTML_note},            HtmlTokenId::NOTE_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_object},     HtmlTokenId::OBJECT_ON},
-    {{OOO_STRING_SVTOOLS_HTML_orderlist},      HtmlTokenId::ORDERLIST_ON},
-    {{OOO_STRING_SVTOOLS_HTML_parabreak},      HtmlTokenId::PARABREAK_ON},
-    {{OOO_STRING_SVTOOLS_HTML_person},      HtmlTokenId::PERSON_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_plaintext},   HtmlTokenId::PLAINTEXT_ON}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_preformtxt},    HtmlTokenId::PREFORMTXT_ON},
-    {{OOO_STRING_SVTOOLS_HTML_sample},        HtmlTokenId::SAMPLE_ON},
-    {{OOO_STRING_SVTOOLS_HTML_script},        HtmlTokenId::SCRIPT_ON}, // HTML 3.2
-    {{OOO_STRING_SVTOOLS_HTML_select},        HtmlTokenId::SELECT_ON},
-    {{OOO_STRING_SVTOOLS_HTML_shortquote},  HtmlTokenId::SHORTQUOTE_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_smallprint},  HtmlTokenId::SMALLPRINT_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_object},          HtmlTokenId::OBJECT_ON},
+    {{OOO_STRING_SVTOOLS_HTML_orderlist},       HtmlTokenId::ORDERLIST_ON},
+    {{OOO_STRING_SVTOOLS_HTML_option},          HtmlTokenId::OPTION},
+    {{OOO_STRING_SVTOOLS_HTML_parabreak},       HtmlTokenId::PARABREAK_ON},
+    {{OOO_STRING_SVTOOLS_HTML_param},           HtmlTokenId::PARAM},    // HotJava
+    {{OOO_STRING_SVTOOLS_HTML_person},          HtmlTokenId::PERSON_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_plaintext2},      HtmlTokenId::PLAINTEXT2_ON},
+    {{OOO_STRING_SVTOOLS_HTML_preformtxt},      HtmlTokenId::PREFORMTXT_ON},
+    {{OOO_STRING_SVTOOLS_HTML_shortquote},      HtmlTokenId::SHORTQUOTE_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_strikethrough},   HtmlTokenId::STRIKETHROUGH_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_sample},          HtmlTokenId::SAMPLE_ON},
+    {{OOO_STRING_SVTOOLS_HTML_script},          HtmlTokenId::SCRIPT_ON}, // HTML 3.2
+    {{OOO_STRING_SVTOOLS_HTML_sdfield},         HtmlTokenId::SDFIELD_ON},
+    {{OOO_STRING_SVTOOLS_HTML_select},          HtmlTokenId::SELECT_ON},
+    {{OOO_STRING_SVTOOLS_HTML_smallprint},      HtmlTokenId::SMALLPRINT_ON},    // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_spacer},          HtmlTokenId::SPACER},   // Netscape 3.0b5
     {{OOO_STRING_SVTOOLS_HTML_span},            HtmlTokenId::SPAN_ON},  // Style Sheets
-    {{OOO_STRING_SVTOOLS_HTML_strikethrough}, HtmlTokenId::STRIKETHROUGH_ON},    // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_strong},        HtmlTokenId::STRONG_ON},
-    {{OOO_STRING_SVTOOLS_HTML_style},       HtmlTokenId::STYLE_ON}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_subscript},   HtmlTokenId::SUBSCRIPT_ON}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_superscript}, HtmlTokenId::SUPERSCRIPT_ON},   // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_table},       HtmlTokenId::TABLE_ON}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_tabledata},   HtmlTokenId::TABLEDATA_ON}, // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_tableheader}, HtmlTokenId::TABLEHEADER_ON},   // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_tablerow},        HtmlTokenId::TABLEROW_ON},  // HTML 3.0
-    {{OOO_STRING_SVTOOLS_HTML_tbody},          HtmlTokenId::TBODY_ON}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_teletype},        HtmlTokenId::TELETYPE_ON},
+    {{OOO_STRING_SVTOOLS_HTML_strike},          HtmlTokenId::STRIKE_ON},
+    {{OOO_STRING_SVTOOLS_HTML_strong},          HtmlTokenId::STRONG_ON},
+    {{OOO_STRING_SVTOOLS_HTML_style},           HtmlTokenId::STYLE_ON}, // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_subscript},       HtmlTokenId::SUBSCRIPT_ON}, // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_superscript},     HtmlTokenId::SUPERSCRIPT_ON},   // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_plaintext},       HtmlTokenId::PLAINTEXT_ON}, // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_table},           HtmlTokenId::TABLE_ON}, // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_tbody},           HtmlTokenId::TBODY_ON}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_tabledata},       HtmlTokenId::TABLEDATA_ON}, // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_textarea},        HtmlTokenId::TEXTAREA_ON},
-    {{OOO_STRING_SVTOOLS_HTML_tfoot},          HtmlTokenId::TFOOT_ON}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_thead},          HtmlTokenId::THEAD_ON}, // HTML 3 Table Model Draft
-    {{OOO_STRING_SVTOOLS_HTML_title},          HtmlTokenId::TITLE_ON},
-    {{OOO_STRING_SVTOOLS_HTML_underline},      HtmlTokenId::UNDERLINE_ON},
-    {{OOO_STRING_SVTOOLS_HTML_unorderlist},  HtmlTokenId::UNORDERLIST_ON},
+    {{OOO_STRING_SVTOOLS_HTML_tfoot},           HtmlTokenId::TFOOT_ON}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_tableheader},     HtmlTokenId::TABLEHEADER_ON},   // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_thead},           HtmlTokenId::THEAD_ON}, // HTML 3 Table Model Draft
+    {{OOO_STRING_SVTOOLS_HTML_title},           HtmlTokenId::TITLE_ON},
+    {{OOO_STRING_SVTOOLS_HTML_tablerow},        HtmlTokenId::TABLEROW_ON},  // HTML 3.0
+    {{OOO_STRING_SVTOOLS_HTML_teletype},        HtmlTokenId::TELETYPE_ON},
+    {{OOO_STRING_SVTOOLS_HTML_underline},       HtmlTokenId::UNDERLINE_ON},
+    {{OOO_STRING_SVTOOLS_HTML_unorderlist},     HtmlTokenId::UNORDERLIST_ON},
     {{OOO_STRING_SVTOOLS_HTML_variable},        HtmlTokenId::VARIABLE_ON},
-
-    {{OOO_STRING_SVTOOLS_HTML_xmp},         HtmlTokenId::XMP_ON},
-    {{OOO_STRING_SVTOOLS_HTML_listing},     HtmlTokenId::LISTING_ON},
-
-    {{OOO_STRING_SVTOOLS_HTML_definstance},  HtmlTokenId::DEFINSTANCE_ON},
-    {{OOO_STRING_SVTOOLS_HTML_strike},        HtmlTokenId::STRIKE_ON},
-
-    {{OOO_STRING_SVTOOLS_HTML_comment2},        HtmlTokenId::COMMENT2_ON},
-    {{OOO_STRING_SVTOOLS_HTML_marquee},         HtmlTokenId::MARQUEE_ON},
-    {{OOO_STRING_SVTOOLS_HTML_plaintext2},    HtmlTokenId::PLAINTEXT2_ON},
-
-    {{OOO_STRING_SVTOOLS_HTML_sdfield},     HtmlTokenId::SDFIELD_ON}
+    {{OOO_STRING_SVTOOLS_HTML_xmp},             HtmlTokenId::XMP_ON},
 };
 
 
-extern "C"
+static bool HTMLKeyCompare( const HTML_TokenEntry &rFirstEntry, const HTML_TokenEntry &rSecondEntry)
 {
-
-static int HTMLKeyCompare( const void *pFirst, const void *pSecond)
-{
-    HTML_TokenEntry const * pFirstEntry = static_cast<HTML_TokenEntry const *>(pFirst);
-    HTML_TokenEntry const * pSecondEntry = static_cast<HTML_TokenEntry const *>(pSecond);
     int nRet = 0;
-    if( HtmlTokenId::INVALID == pFirstEntry->nToken )
+    if( HtmlTokenId::INVALID == rFirstEntry.nToken )
     {
-        if( HtmlTokenId::INVALID == pSecondEntry->nToken )
-            nRet = pFirstEntry->pUToken->compareTo( *pSecondEntry->pUToken );
+        if( HtmlTokenId::INVALID == rSecondEntry.nToken )
+            nRet = rFirstEntry.pUToken->compareTo( *rSecondEntry.pUToken );
         else
-            nRet = pFirstEntry->pUToken->compareToAscii( pSecondEntry->sToken );
+            nRet = rFirstEntry.pUToken->compareToAscii( rSecondEntry.sToken );
     }
     else
     {
-        if( HtmlTokenId::INVALID == pSecondEntry->nToken )
-            nRet = -1 * pSecondEntry->pUToken->compareToAscii( pFirstEntry->sToken );
+        if( HtmlTokenId::INVALID == rSecondEntry.nToken )
+            nRet = -1 * rSecondEntry.pUToken->compareToAscii( rFirstEntry.sToken );
         else
-            nRet = strcmp( pFirstEntry->sToken, pSecondEntry->sToken );
+            nRet = strcmp( rFirstEntry.sToken, rSecondEntry.sToken );
     }
 
-    return nRet;
-}
-
+    return nRet < 0;
 }
 
 HtmlTokenId GetHTMLToken( const OUString& rName )
 {
+    static bool bSortKeyWords = false;
     if( !bSortKeyWords )
     {
-        qsort( static_cast<void*>(aHTMLTokenTab),
-                SAL_N_ELEMENTS( aHTMLTokenTab ),
-                sizeof( HTML_TokenEntry ),
-                HTMLKeyCompare );
+        assert( std::is_sorted( std::begin(aHTMLTokenTab), std::end(aHTMLTokenTab),
+                                HTMLKeyCompare ) );
         bSortKeyWords = true;
     }
 
@@ -203,18 +189,14 @@ HtmlTokenId GetHTMLToken( const OUString& rName )
     if( rName.startsWith( OOO_STRING_SVTOOLS_HTML_comment ))
         return HtmlTokenId::COMMENT;
 
-    void* pFound;
     HTML_TokenEntry aSrch;
     aSrch.pUToken = &rName;
     aSrch.nToken = HtmlTokenId::INVALID;
 
-    pFound = bsearch( &aSrch,
-                      static_cast<void*>(aHTMLTokenTab),
-                      SAL_N_ELEMENTS( aHTMLTokenTab ),
-                      sizeof( HTML_TokenEntry ),
-                      HTMLKeyCompare );
-    if( nullptr != pFound )
-        nRet = static_cast<HTML_TokenEntry*>(pFound)->nToken;
+    auto findIts = std::equal_range( std::begin(aHTMLTokenTab), std::end(aHTMLTokenTab),
+                                     aSrch, HTMLKeyCompare );
+    if( findIts.first != findIts.second )
+        nRet = findIts.first->nToken;
     return nRet;
 }
 
@@ -231,7 +213,7 @@ struct HTML_CharEntry
 // Flag: RTF token table has already been sorted
 static bool bSortCharKeyWords = false;
 
-static HTML_CharEntry aHTMLCharNameTab[] = {
+static HTML_CharEntry const aHTMLCharNameTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_C_lt},             60},
     {{OOO_STRING_SVTOOLS_HTML_C_gt},             62},
     {{OOO_STRING_SVTOOLS_HTML_C_amp},        38},
@@ -496,57 +478,45 @@ static HTML_CharEntry aHTMLCharNameTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_S_diams},     9830}
 };
 
-extern "C"
+static bool HTMLCharNameCompare( const HTML_CharEntry &rFirstEntry, const HTML_CharEntry &rSecondEntry)
 {
-
-static int HTMLCharNameCompare( const void *pFirst, const void *pSecond)
-{
-    HTML_CharEntry const * pFirstEntry = static_cast<HTML_CharEntry const *>(pFirst);
-    HTML_CharEntry const * pSecondEntry = static_cast<HTML_CharEntry const *>(pSecond);
     int nRet = 0;
-    if( USHRT_MAX == pFirstEntry->cChar )
+    if( USHRT_MAX == rFirstEntry.cChar )
     {
-        if( USHRT_MAX == pSecondEntry->cChar )
-            nRet = pFirstEntry->pUName->compareTo( *pSecondEntry->pUName );
+        if( USHRT_MAX == rSecondEntry.cChar )
+            nRet = rFirstEntry.pUName->compareTo( *rSecondEntry.pUName );
         else
-            nRet = pFirstEntry->pUName->compareToAscii( pSecondEntry->sName );
+            nRet = rFirstEntry.pUName->compareToAscii( rSecondEntry.sName );
     }
     else
     {
-        if( USHRT_MAX == pSecondEntry->cChar )
-            nRet = -1 * pSecondEntry->pUName->compareToAscii( pFirstEntry->sName );
+        if( USHRT_MAX == rSecondEntry.cChar )
+            nRet = -1 * rSecondEntry.pUName->compareToAscii( rFirstEntry.sName );
         else
-            nRet = strcmp( pFirstEntry->sName, pSecondEntry->sName );
+            nRet = strcmp( rFirstEntry.sName, rSecondEntry.sName );
     }
 
-    return nRet;
+    return nRet < 0;
 }
-
-} // extern "C"
 
 sal_Unicode GetHTMLCharName( const OUString& rName )
 {
     if( !bSortCharKeyWords )
     {
-        qsort( static_cast<void*>(aHTMLCharNameTab),
-                SAL_N_ELEMENTS( aHTMLCharNameTab ),
-                sizeof( HTML_CharEntry ),
-                HTMLCharNameCompare );
+        assert( std::is_sorted( std::begin(aHTMLCharNameTab), std::end(aHTMLCharNameTab),
+                                HTMLCharNameCompare ) );
         bSortCharKeyWords = true;
     }
 
     sal_Unicode cRet = 0;
-    void* pFound;
     HTML_CharEntry aSrch;
     aSrch.pUName = &rName;
     aSrch.cChar = USHRT_MAX;
 
-    if( nullptr != ( pFound = bsearch( &aSrch,
-                        static_cast<void*>(aHTMLCharNameTab),
-                        SAL_N_ELEMENTS( aHTMLCharNameTab),
-                        sizeof( HTML_CharEntry ),
-                        HTMLCharNameCompare )))
-        cRet = static_cast<HTML_CharEntry*>(pFound)->cChar;
+    auto findIts = std::equal_range( std::begin(aHTMLCharNameTab), std::end(aHTMLCharNameTab),
+                                     aSrch, HTMLCharNameCompare );
+    if (findIts.first != findIts.second)
+        cRet = findIts.first->cChar;
     return cRet;
 }
 
@@ -560,9 +530,9 @@ struct HTML_OptionEntry
         const sal_Char *sToken;
         const OUString *pUToken;
     };
-    HtmlOptionId const nToken;
+    HtmlOptionId nToken;
 };
-static HTML_OptionEntry aHTMLOptionTab[] = {
+static HTML_OptionEntry const aHTMLOptionTab[] = {
 
 // Attributes without value
     {{OOO_STRING_SVTOOLS_HTML_O_checked},   HtmlOptionId::CHECKED},
@@ -717,29 +687,27 @@ static HTML_OptionEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_start},     HtmlOptionId::START}, // Netscape 2.0 vs IExplorer 2.0
 };
 
+static bool HTML_OptionEntryCompare( const HTML_OptionEntry &rFirstEntry, const HTML_OptionEntry &rSecondEntry)
+{
+    return HTMLKeyCompare( reinterpret_cast<const HTML_TokenEntry &>(rFirstEntry), reinterpret_cast<const HTML_TokenEntry &>(rSecondEntry));
+}
+
 HtmlOptionId GetHTMLOption( const OUString& rName )
 {
     if( !bSortOptionKeyWords )
     {
-        qsort( static_cast<void*>(aHTMLOptionTab),
-                SAL_N_ELEMENTS( aHTMLOptionTab ),
-                sizeof( HTML_OptionEntry ),
-                HTMLKeyCompare );
+        assert( std::is_sorted( std::begin(aHTMLOptionTab), std::end(aHTMLOptionTab), HTML_OptionEntryCompare ) );
         bSortOptionKeyWords = true;
     }
 
     HtmlOptionId nRet = HtmlOptionId::UNKNOWN;
-    void* pFound;
-    HTML_TokenEntry aSrch;
+    HTML_OptionEntry aSrch;
     aSrch.pUToken = &rName;
-    aSrch.nToken = HtmlTokenId::INVALID;
+    aSrch.nToken = HtmlOptionId::UNKNOWN;
 
-    if( nullptr != ( pFound = bsearch( &aSrch,
-                        static_cast<void*>(aHTMLOptionTab),
-                        SAL_N_ELEMENTS( aHTMLOptionTab ),
-                        sizeof( HTML_OptionEntry ),
-                        HTMLKeyCompare )))
-        nRet = static_cast<HTML_OptionEntry*>(pFound)->nToken;
+    auto findIts = std::equal_range( std::begin(aHTMLOptionTab), std::end(aHTMLOptionTab), aSrch, HTML_OptionEntryCompare);
+    if (findIts.first != findIts.second)
+        nRet = findIts.first->nToken;
     return nRet;
 }
 
@@ -762,7 +730,7 @@ static bool bSortColorKeyWords = false;
 // Color names are not exported (source:
 // "http://www.uio.no/~mnbjerke/colors_w.html")
 // "http://www.infi.net/wwwimages/colorindex.html" seem to be buggy.
-static HTML_ColorEntry aHTMLColorNameTab[] = {
+static HTML_ColorEntry const aHTMLColorNameTab[] = {
     { { "aliceblue" }, 0x00f0f8ffUL },
     { { "antiquewhite" }, 0x00faebd7UL },
     { { "aqua" }, 0x0000ffffUL },
@@ -905,59 +873,47 @@ static HTML_ColorEntry aHTMLColorNameTab[] = {
     { { "yellowgreen" }, 0x009acd32UL }
 };
 
-extern "C"
+static bool HTMLColorNameCompare( const HTML_ColorEntry & rFirstEntry, const HTML_ColorEntry rSecondEntry)
 {
-
-static int HTMLColorNameCompare( const void *pFirst, const void *pSecond)
-{
-    HTML_ColorEntry const * pFirstEntry = static_cast<HTML_ColorEntry const *>(pFirst);
-    HTML_ColorEntry const * pSecondEntry = static_cast<HTML_ColorEntry const *>(pSecond);
     int nRet = 0;
-    if( HTML_NO_COLOR == pFirstEntry->nColor )
+    if( HTML_NO_COLOR == rFirstEntry.nColor )
     {
-        if( HTML_NO_COLOR == pSecondEntry->nColor )
-            nRet = pFirstEntry->pUName->compareTo( *pSecondEntry->pUName );
+        if( HTML_NO_COLOR == rSecondEntry.nColor )
+            nRet = rFirstEntry.pUName->compareTo( *rSecondEntry.pUName );
         else
-            nRet = pFirstEntry->pUName->compareToAscii( pSecondEntry->sName );
+            nRet = rFirstEntry.pUName->compareToAscii( rSecondEntry.sName );
     }
     else
     {
-        if( HTML_NO_COLOR  == pSecondEntry->nColor )
-            nRet = -1 * pSecondEntry->pUName->compareToAscii( pFirstEntry->sName );
+        if( HTML_NO_COLOR  == rSecondEntry.nColor )
+            nRet = -1 * rSecondEntry.pUName->compareToAscii( rFirstEntry.sName );
         else
-            nRet = strcmp( pFirstEntry->sName, pSecondEntry->sName );
+            nRet = strcmp( rFirstEntry.sName, rSecondEntry.sName );
     }
 
-    return nRet;
+    return nRet < 0;
 }
-
-} // extern "C"
 
 sal_uInt32 GetHTMLColor( const OUString& rName )
 {
     if( !bSortColorKeyWords )
     {
-        qsort( static_cast<void*>(aHTMLColorNameTab),
-                SAL_N_ELEMENTS( aHTMLColorNameTab ),
-                sizeof( HTML_ColorEntry ),
-                HTMLColorNameCompare );
+        assert( std::is_sorted( std::begin(aHTMLColorNameTab), std::end(aHTMLColorNameTab),
+                                HTMLColorNameCompare ) );
         bSortColorKeyWords = true;
     }
 
     sal_uInt32 nRet = HTML_NO_COLOR;
-    void* pFound;
     HTML_ColorEntry aSrch;
     OUString aLowerCase(rName.toAsciiLowerCase());
 
     aSrch.pUName = &aLowerCase;
     aSrch.nColor = HTML_NO_COLOR;
 
-    if( nullptr != ( pFound = bsearch( &aSrch,
-                        static_cast<void*>(aHTMLColorNameTab),
-                        SAL_N_ELEMENTS( aHTMLColorNameTab),
-                        sizeof( HTML_ColorEntry ),
-                        HTMLColorNameCompare )))
-        nRet = static_cast<HTML_ColorEntry*>(pFound)->nColor;
+    auto findIts = std::equal_range( std::begin(aHTMLColorNameTab), std::end(aHTMLColorNameTab),
+                                     aSrch, HTMLColorNameCompare );
+    if (findIts.first != findIts.second)
+        nRet = findIts.first->nColor;
 
     return nRet;
 }

@@ -30,7 +30,7 @@ namespace ucb { namespace ucp { namespace ext
 
     //= descriptors for the services implemented in this component
 
-    static struct ::cppu::ImplementationEntry s_aServiceEntries[] =
+    static struct ::cppu::ImplementationEntry const s_aServiceEntries[] =
     {
         {
             ContentProvider::Create,

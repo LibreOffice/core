@@ -220,12 +220,12 @@ namespace frm
                     )
                 {
                     bool bLoad = KEY_F11 == nCode;
-                    struct
+                    static struct
                     {
                         const sal_Char* pDescription;
                         const sal_Char* pExtension;
                         EETextFormat    eFormat;
-                    } aExportFormats[] =
+                    } const aExportFormats[] =
                     {
                         { "OASIS OpenDocument (*.xml)", "*.xml", EETextFormat::Xml },
                         { "HyperText Markup Language (*.html)", "*.html", EETextFormat::Html },
