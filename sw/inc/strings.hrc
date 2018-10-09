@@ -21,6 +21,7 @@
 #define INCLUDED_SW_INC_STRINGS_HRC
 
 #define NC_(Context, String) (Context "\004" u8##String)
+#define NNC_(Context, StringSingular, StringPlural) (Context "\004" u8##StringSingular "\004" u8##StringPlural)
 
 // Format names
 #define STR_POOLCHR_FOOTNOTE                    NC_("STR_POOLCHR_FOOTNOTE", "Footnote Characters")
@@ -464,8 +465,8 @@
 #define STR_PASTE_CLIPBOARD_UNDO                NC_("STR_PASTE_CLIPBOARD_UNDO", "Paste clipboard")
 #define STR_YIELDS                              NC_("STR_YIELDS", "→")
 #define STR_OCCURRENCES_OF                      NC_("STR_OCCURRENCES_OF", "occurrences of")
-#define STR_UNDO_TABS                           NC_("STR_UNDO_TABS", "$1 tab(s)")
-#define STR_UNDO_NLS                            NC_("STR_UNDO_NLS", "$1 line break(s)")
+#define STR_UNDO_TABS                           NNC_("STR_UNDO_TABS", "One tab", "$1 tabs")
+#define STR_UNDO_NLS                            NNC_("STR_UNDO_NLS", "One line break","$1 line breaks")
 #define STR_UNDO_PAGEBREAKS                     NC_("STR_UNDO_PAGEBREAKS", "page break")
 #define STR_UNDO_COLBRKS                        NC_("STR_UNDO_COLBRKS", "column break")
 #define STR_UNDO_REDLINE_INSERT                 NC_("STR_UNDO_REDLINE_INSERT", "Insert $1")

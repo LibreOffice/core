@@ -637,7 +637,7 @@ void lclAppendScalePageCount( OUString& rText, sal_uInt16 nPages )
     rText += ": ";
     if( nPages )
     {
-        OUString aPages( ScResId( STR_SCATTR_PAGE_SCALE_PAGES ) );
+        OUString aPages(ScResId(STR_SCATTR_PAGE_SCALE_PAGES, nPages));
         rText += aPages.replaceFirst( "%1", OUString::number( nPages ) );
     }
     else
