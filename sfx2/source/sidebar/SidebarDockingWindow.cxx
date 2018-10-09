@@ -25,6 +25,8 @@
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 
+#include <vcl/commandinfoprovider.hxx>
+
 using namespace css;
 using namespace css::uno;
 
@@ -121,7 +123,8 @@ bool SidebarDockingWindow::EventNotify(NotifyEvent& rEvent)
     if (MouseNotifyEvent::KEYINPUT == nType)
     {
         const vcl::KeyCode& rKeyCode = rEvent.GetKeyEvent()->GetKeyCode();
-        if ( ( 0 == rKeyCode.GetModifier() ) && ( KEY_F11 == rKeyCode.GetCode() ) )
+        if ((vcl::CommandInfoProvider::GetCommandShortcut(".uno:DesignerDialog", mpSidebarController->getXFrame()) ==
+               rKeyCode.GetName()))
         {
             std::shared_ptr<PanelDescriptor> xPanelDescriptor =
                     mpSidebarController->GetResourceManager()->GetPanelDescriptor( "StyleListPanel" );
@@ -129,7 +132,8 @@ bool SidebarDockingWindow::EventNotify(NotifyEvent& rEvent)
                 Close();
             return true;
         }
-        if ( !( ( KEY_MOD1 == rKeyCode.GetModifier() ) && ( KEY_F5 == rKeyCode.GetCode() ) ) )
+        if (!(vcl::CommandInfoProvider::GetCommandShortcut( ".uno:Sidebar", mpSidebarController->getXFrame()) ==
+                rKeyCode.GetName()))
             return true;
     }
     else if (MouseNotifyEvent::MOUSEBUTTONDOWN == nType)
