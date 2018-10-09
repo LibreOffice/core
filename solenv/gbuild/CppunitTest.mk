@@ -25,6 +25,11 @@ export MAX_CONCURRENCY=4
 export MOZILLA_CERTIFICATE_FOLDER=0
 # Avoid hanging if the cups daemon requests a password.
 export SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION=1
+# Default unit tests to run with the headless plugin, if not set by the user
+ifeq ($(SAL_USE_VCLPLUGIN),)
+	SAL_USE_VCLPLUGIN := svp
+	export SAL_USE_VCLPLUGIN
+endif
 
 gb_CppunitTest_UNITTESTFAILED ?= $(GBUILDDIR)/platform/unittest-failed-default.sh
 gb_CppunitTest_PYTHONDEPS ?= $(call gb_Library_get_target,pyuno_wrapper) $(if $(SYSTEM_PYTHON),,$(call gb_Package_get_target,python3))
@@ -119,8 +124,8 @@ ifneq ($(gb_SUPPRESS_TESTS),)
 else
 	$(call gb_Output_announce,$*,$(true),CUT,2)
 	$(call gb_Helper_abbreviate_dirs,\
-	        $(if $(gb_CppunitTest_vcl_hide_windows),export VCL_HIDE_WINDOWS=1 && ) \
-	        $(if $(gb_CppunitTest_vcl_show_windows),unset VCL_HIDE_WINDOWS && ) \
+		$(if $(and $(gb_CppunitTest__vcl_no_svp), \
+			$(filter svp,$(SAL_USE_VCLPLUGIN))),unset SAL_USE_VCLPLUGIN &&) \
 		mkdir -p $(dir $@) && \
 		rm -fr $@.user && cp -r $(WORKDIR)/unittest $@.user && \
 		$(if $(gb_CppunitTest__use_confpreinit), \
@@ -256,15 +261,14 @@ $(call gb_CppunitTest__use_vcl,$(1),$(true))
 endef
 
 define gb_CppunitTest_use_vcl_non_headless
-$(call gb_CppunitTest_get_target,$(1)) : HEADLESS :=
-$(call gb_CppunitTest_get_target,$(1)) : gb_CppunitTest_vcl_hide_windows := $(true)
+$(call gb_CppunitTest_get_target,$(1)) : gb_CppunitTest__vcl_no_svp := $(true)
 $(call gb_CppunitTest__use_vcl,$(1),$(false))
 
 endef
 
 define gb_CppunitTest_use_vcl_non_headless_with_windows
 $(call gb_CppunitTest_get_target,$(1)) : HEADLESS :=
-$(call gb_CppunitTest_get_target,$(1)) : gb_CppunitTest_vcl_show_windows := $(true)
+$(call gb_CppunitTest_get_target,$(1)) : gb_CppunitTest__vcl_no_svp := $(true)
 $(call gb_CppunitTest__use_vcl,$(1),$(false))
 
 endef

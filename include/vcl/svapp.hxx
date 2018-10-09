@@ -219,6 +219,12 @@ private:
     std::vector<OUString> aData;
 };
 
+enum class DialogCancelMode {
+    Off,      ///< do not automatically cancel dialogs
+    Silent,   ///< silently cancel any dialogs
+    Fatal     ///< cancel any dialogs by std::abort
+};
+
 /**
  @brief Base class used mainly for the LibreOffice Desktop class.
 
@@ -236,12 +242,6 @@ private:
 class VCL_DLLPUBLIC Application
 {
 public:
-    enum class DialogCancelMode {
-        Off,      ///< do not automatically cancel dialogs
-        Silent,   ///< silently cancel any dialogs
-        Fatal     ///< cancel any dialogs by std::abort
-    };
-
     /** @name Initialization
         The following functions perform initialization and deinitialization
         of the application.

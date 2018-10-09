@@ -1804,7 +1804,7 @@ bool SfxObjectShell::IsContinueImportOnFilterExceptions(const OUString& aErrMess
 {
     if (mbContinueImportOnFilterExceptions == undefined)
     {
-        if (Application::GetDialogCancelMode() == Application::DialogCancelMode::Off)
+        if (Application::GetDialogCancelMode() == DialogCancelMode::Off)
         {
             // Ask the user to try to continue or abort loading
             OUString aMessage = SfxResId(STR_QMSG_ERROR_OPENING_FILE);

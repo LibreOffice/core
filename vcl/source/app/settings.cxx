@@ -208,7 +208,6 @@ struct ImplMiscData
     TriState                        mnEnableATT;
     bool                            mbEnableLocalizedDecimalSep;
     TriState                        mnDisablePrinting;
-    bool                            mbPseudoHeadless;
 };
 
 struct ImplHelpData
@@ -2318,10 +2317,6 @@ ImplMiscData::ImplMiscData() :
 {
     static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); // set default without UI
     mbEnableLocalizedDecimalSep = (pEnv != nullptr);
-    // Should we display any windows?
-
-    // need to hardly mask here for now, needs to be adapted of course...
-    mbPseudoHeadless = getenv("VCL_HIDE_WINDOWS") || comphelper::LibreOfficeKit::isActive();
 }
 
 MiscSettings::MiscSettings()
@@ -2496,11 +2491,6 @@ void MiscSettings::SetEnableLocalizedDecimalSep( bool bEnable )
 bool MiscSettings::GetEnableLocalizedDecimalSep() const
 {
     return mxData->mbEnableLocalizedDecimalSep;
-}
-
-bool MiscSettings::GetPseudoHeadless() const
-{
-    return mxData->mbPseudoHeadless;
 }
 
 HelpSettings::HelpSettings()
