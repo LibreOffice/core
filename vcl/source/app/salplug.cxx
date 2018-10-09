@@ -62,9 +62,11 @@ oslModule pCloseModule = nullptr;
 
 SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
 {
-#ifdef HEADLESS_VCLPLUG
     if (rModuleBase == "svp")
+#ifdef HEADLESS_VCLPLUG
         return svp_create_SalInstance();
+#else
+        return nullptr;
 #endif
 
     SalInstance* pInst = nullptr;
@@ -209,25 +211,29 @@ SalInstance* autodetect_plugin()
 }
 #endif // DESKTOPDETECT
 
-#ifdef HEADLESS_VCLPLUG
-// HACK to obtain Application::IsHeadlessModeEnabled early on, before
-// Application::EnableHeadlessMode has potentially been called:
-bool IsHeadlessModeRequested()
+void EvaluateHeadlessMode(bool bUsePlugin)
 {
-    if (Application::IsHeadlessModeEnabled()) {
-        return true;
+    if (Application::IsHeadlessModeEnabled())
+        return;
+
+    if (bUsePlugin)
+    {
+        Application::EnableHeadlessMode(false);
+        return;
     }
+
     sal_uInt32 n = rtl_getAppCommandArgCount();
-    for (sal_uInt32 i = 0; i < n; ++i) {
+    for (sal_uInt32 i = 0; i < n; ++i)
+    {
         OUString arg;
         rtl_getAppCommandArg(i, &arg.pData);
-        if ( arg == "--headless" || arg == "-headless" ) {
-            return true;
+        if (arg == "--headless" || arg == "-headless")
+        {
+            SAL_WARN("vcl", "Headless mode requested via cmdline but not already enabled!");
+            Application::EnableHeadlessMode(false);
         }
     }
-    return false;
 }
-#endif
 
 } // anonymous namespace
 
@@ -236,12 +242,9 @@ SalInstance *CreateSalInstance()
     SalInstance *pInst = nullptr;
 
     OUString aUsePlugin;
-#ifdef HEADLESS_VCLPLUG
-    if( IsHeadlessModeRequested() )
-        aUsePlugin = "svp";
-    else
-#endif
-        rtl::Bootstrap::get( "SAL_USE_VCLPLUGIN", aUsePlugin );
+    rtl::Bootstrap::get("SAL_USE_VCLPLUGIN", aUsePlugin);
+    SAL_INFO_IF(!aUsePlugin.isEmpty(), "vcl", "Requested VCL plugin: " << aUsePlugin);
+    EvaluateHeadlessMode(aUsePlugin == "svp");
 
     if( !aUsePlugin.isEmpty() )
         pInst = tryInstance( aUsePlugin, true );
