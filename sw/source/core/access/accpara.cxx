@@ -147,20 +147,21 @@ sal_Int32 SwAccessibleParagraph::GetCaretPos()
 
     if( pCaret != nullptr )
     {
-        const SwTextNode* pNode = GetTextNode();
+        SwTextFrame const*const pTextFrame(static_cast<SwTextFrame const*>(GetFrame()));
+        assert(pTextFrame);
 
         // check whether the point points into 'our' node
         SwPosition* pPoint = pCaret->GetPoint();
-        if( pNode->GetIndex() == pPoint->nNode.GetIndex() )
+        if (sw::FrameContainsNode(*pTextFrame, pPoint->nNode.GetIndex()))
         {
             // same node? Then check whether it's also within 'our' part
             // of the paragraph
-            const sal_Int32 nIndex = pPoint->nContent.GetIndex();
+            const TextFrameIndex nIndex = pTextFrame->MapModelToViewPos(*pPoint);
             if(!GetPortionData().IsValidCorePosition( nIndex ) ||
-                ( GetPortionData().IsZeroCorePositionData() && nIndex== 0) )
+                (GetPortionData().IsZeroCorePositionData()
+                  && nIndex == TextFrameIndex(0)))
             {
-                const SwTextFrame *pTextFrame = dynamic_cast<const SwTextFrame*>( GetFrame()  );
-                bool bFormat = (pTextFrame && pTextFrame->HasPara());
+                bool bFormat = pTextFrame->HasPara();
                 if(bFormat)
                 {
                     ClearPortionData();
@@ -501,17 +502,17 @@ SwXTextPortion* SwAccessibleParagraph::CreateUnoPortion(
                 IsValidRange(nStartIndex, nEndIndex, GetString().getLength()),
                 "please check parameters before calling this method" );
 
-    const sal_Int32 nStart = GetPortionData().GetCoreViewPosition(nStartIndex);
-    const sal_Int32 nEnd = (nEndIndex == -1) ? (nStart + 1) :
-                        GetPortionData().GetCoreViewPosition(nEndIndex);
+    const TextFrameIndex nStart = GetPortionData().GetCoreViewPosition(nStartIndex);
+    const TextFrameIndex nEnd = (nEndIndex == -1)
+            ? (nStart + TextFrameIndex(1))
+            : GetPortionData().GetCoreViewPosition(nEndIndex);
 
     // create UNO cursor
-    SwTextNode* pTextNode = const_cast<SwTextNode*>( GetTextNode() );
-    SwIndex aIndex( pTextNode, nStart );
-    SwPosition aStartPos( *pTextNode, aIndex );
-    auto pUnoCursor(pTextNode->GetDoc()->CreateUnoCursor( aStartPos ));
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    SwPosition aStartPos(pFrame->MapViewToModelPos(nStart));
+    auto pUnoCursor(const_cast<SwDoc&>(pFrame->GetDoc()).CreateUnoCursor(aStartPos));
     pUnoCursor->SetMark();
-    pUnoCursor->GetMark()->nContent = nEnd;
+    *pUnoCursor->GetMark() = pFrame->MapViewToModelPos(nEnd);
 
     // create a (dummy) text portion to be returned
     uno::Reference<text::XText> aEmpty;
@@ -618,9 +619,9 @@ bool SwAccessibleParagraph::GetWordBoundary(
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
 
     // get locale for this position
-    const sal_Int32 nModelPos = GetPortionData().GetCoreViewPosition(nPos);
-    lang::Locale aLocale = g_pBreakIt->GetLocale(
-                          GetTextNode()->GetLang( nModelPos ) );
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    const TextFrameIndex nCorePos = GetPortionData().GetCoreViewPosition(nPos);
+    lang::Locale aLocale = g_pBreakIt->GetLocale(pFrame->GetLangOfChar(nCorePos, 0, true));
 
     // which type of word are we interested in?
     // (DICTIONARY_WORD includes punctuation, ANY_WORD doesn't.)
@@ -685,9 +686,9 @@ bool SwAccessibleParagraph::GetGlyphBoundary(
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
 
     // get locale for this position
-    const sal_Int32 nModelPos = GetPortionData().GetCoreViewPosition(nPos);
-    lang::Locale aLocale = g_pBreakIt->GetLocale(
-                          GetTextNode()->GetLang( nModelPos ) );
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    const TextFrameIndex nCorePos = GetPortionData().GetCoreViewPosition(nPos);
+    lang::Locale aLocale = g_pBreakIt->GetLocale(pFrame->GetLangOfChar(nCorePos, 0, true));
 
     // get word boundary, as the Break-Iterator sees fit.
     const sal_Int16 nIterMode = i18n::CharacterIteratorMode::SKIPCELL;
@@ -781,8 +782,7 @@ lang::Locale SAL_CALL SwAccessibleParagraph::getLocale()
         throw uno::RuntimeException("no SwTextFrame", static_cast<cppu::OWeakObject*>(this));
     }
 
-    const SwTextNode *pTextNd = pTextFrame->GetTextNode();
-    lang::Locale aLoc( g_pBreakIt->GetLocale( pTextNd->GetLang( 0 ) ) );
+    lang::Locale aLoc(g_pBreakIt->GetLocale(pTextFrame->GetLangOfChar(TextFrameIndex(0), 0, true)));
 
     return aLoc;
 }
@@ -833,11 +833,10 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
     SwCursorShell *pCursorSh = GetCursorShell();
     SwPaM *pCursor = GetCursor( false ); // #i27301# - consider new method signature
     const SwTextFrame *pTextFrame = static_cast<const SwTextFrame*>( GetFrame() );
-    const SwTextNode* pTextNd = pTextFrame->GetTextNode();
 
-    if( pCursorSh != nullptr && pTextNd != nullptr &&
+    if (pCursorSh != nullptr &&
         ( pCursor == nullptr ||
-           pCursor->GetPoint()->nNode.GetIndex() != pTextNd->GetIndex() ||
+          !sw::FrameContainsNode(*pTextFrame, pCursor->GetPoint()->nNode.GetIndex()) ||
           !pTextFrame->IsInside(pTextFrame->MapModelToViewPos(*pCursor->GetPoint()))))
     {
         // create pam for selection
@@ -1139,9 +1138,9 @@ sal_Bool SAL_CALL SwAccessibleParagraph::setCaretPosition( sal_Int32 nIndex )
     if( pCursorShell != nullptr )
     {
         // create pam for selection
-        SwTextNode* pNode = const_cast<SwTextNode*>( GetTextNode() );
-        SwIndex aIndex(pNode, GetPortionData().GetCoreViewPosition(nIndex));
-        SwPosition aStartPos( *pNode, aIndex );
+        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+        TextFrameIndex const nFrameIndex(GetPortionData().GetCoreViewPosition(nIndex));
+        SwPosition aStartPos(pFrame->MapViewToModelPos(nFrameIndex));
         SwPaM aPaM( aStartPos );
 
         // set PaM at cursor shell
@@ -1188,26 +1187,25 @@ css::uno::Sequence< css::style::TabStop > SwAccessibleParagraph::GetCurrentTabSt
     aMoveState.m_bRealHeight = true;
     aMoveState.m_bRealWidth = true;
     SwSpecialPos aSpecialPos;
-    SwTextNode* pNode = const_cast<SwTextNode*>( GetTextNode() );
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
 
     /*  #i12332# FillSpecialPos does not accept nIndex ==
          GetString().getLength(). In that case nPos is set to the
          length of the string in the core. This way GetCharRect
          returns the rectangle for a cursor at the end of the
          paragraph. */
-    const sal_Int32 nPos = bBehindText
-        ? pNode->GetText().getLength()
+    const TextFrameIndex nPos = bBehindText
+        ? TextFrameIndex(pFrame->GetText().getLength())
         : GetPortionData().FillSpecialPos(nIndex, aSpecialPos, aMoveState.m_pSpecialPos );
 
     // call GetCharRect
     SwRect aCoreRect;
-    SwIndex aIndex( pNode, nPos );
-    SwPosition aPosition( *pNode, aIndex );
+    SwPosition aPosition(pFrame->MapViewToModelPos(nPos));
     GetFrame()->GetCharRect( aCoreRect, aPosition, &aMoveState );
 
     // already get the caret position
     css::uno::Sequence< css::style::TabStop > tabs;
-    const sal_Int32 nStrLen = GetTextNode()->GetText().getLength();
+    const sal_Int32 nStrLen = pFrame->GetText().getLength();
     if( nStrLen > 0 )
     {
         SwFrame* pTFrame = const_cast<SwFrame*>(GetFrame());
@@ -2174,21 +2172,20 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
     aMoveState.m_bRealHeight = true;
     aMoveState.m_bRealWidth = true;
     SwSpecialPos aSpecialPos;
-    SwTextNode* pNode = const_cast<SwTextNode*>( GetTextNode() );
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
 
     /**  #i12332# FillSpecialPos does not accept nIndex ==
          GetString().getLength(). In that case nPos is set to the
          length of the string in the core. This way GetCharRect
          returns the rectangle for a cursor at the end of the
          paragraph. */
-    const sal_Int32 nPos = bBehindText
-        ? pNode->GetText().getLength()
+    const TextFrameIndex nPos = bBehindText
+        ? TextFrameIndex(pFrame->GetText().getLength())
         : GetPortionData().FillSpecialPos(nIndex, aSpecialPos, aMoveState.m_pSpecialPos );
 
     // call GetCharRect
     SwRect aCoreRect;
-    SwIndex aIndex( pNode, nPos );
-    SwPosition aPosition( *pNode, aIndex );
+    SwPosition aPosition(pFrame->MapViewToModelPos(nPos));
     GetFrame()->GetCharRect( aCoreRect, aPosition, &aMoveState );
 
     // translate core coordinates into accessibility coordinates
@@ -2225,11 +2222,6 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
 
     ThrowIfDisposed();
 
-    // construct SwPosition (where GetCursorOfst() will put the result into)
-    SwTextNode* pNode = const_cast<SwTextNode*>( GetTextNode() );
-    SwIndex aIndex( pNode, 0);
-    SwPosition aPos( *pNode, aIndex );
-
     // construct Point (translate into layout coordinates)
     vcl::Window *pWin = GetWindow();
     if (!pWin)
@@ -2264,14 +2256,17 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     OSL_ENSURE( GetFrame() != nullptr, "The text frame has vanished!" );
     OSL_ENSURE( GetFrame()->IsTextFrame(), "The text frame has mutated!" );
     const SwTextFrame* pFrame = static_cast<const SwTextFrame*>( GetFrame() );
+    // construct SwPosition (where GetCursorOfst() will put the result into)
+    SwTextNode* pNode = const_cast<SwTextNode*>(pFrame->GetTextNodeFirst());
+    SwPosition aPos(*pNode, 0);
     SwCursorMoveState aMoveState;
     aMoveState.m_bPosMatchesBounds = true;
     const bool bSuccess = pFrame->GetCursorOfst( &aPos, aCorePoint, &aMoveState );
 
-    SwIndex aContentIdx = aPos.nContent;
-    const sal_Int32 nIndex = aContentIdx.GetIndex();
-    if ( nIndex > 0 )
+    TextFrameIndex nIndex = pFrame->MapModelToViewPos(aPos);
+    if (TextFrameIndex(0) < nIndex)
     {
+        assert(bSuccess);
         SwRect aResultRect;
         pFrame->GetCharRect( aResultRect, aPos );
         bool bVert = pFrame->IsVertical();
@@ -2281,19 +2276,20 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
              ( bVert && aResultRect.Pos().getY() > aCorePoint.getY()) ||
              ( bR2L  && aResultRect.Right()   < aCorePoint.getX()) )
         {
-            SwIndex aIdxPrev( pNode, nIndex - 1);
-            SwPosition aPosPrev( *pNode, aIdxPrev );
+            SwPosition aPosPrev(pFrame->MapViewToModelPos(nIndex - TextFrameIndex(1)));
             SwRect aResultRectPrev;
             pFrame->GetCharRect( aResultRectPrev, aPosPrev );
             if ( (!bVert && aResultRectPrev.Pos().getX() < aCorePoint.getX() && aResultRect.Pos().getY() == aResultRectPrev.Pos().getY()) ||
                  ( bVert && aResultRectPrev.Pos().getY() < aCorePoint.getY() && aResultRect.Pos().getX() == aResultRectPrev.Pos().getX()) ||
                  (  bR2L && aResultRectPrev.Right()   > aCorePoint.getX() && aResultRect.Pos().getY() == aResultRectPrev.Pos().getY()) )
-                aPos = aPosPrev;
+            {
+                --nIndex;
+            }
         }
     }
 
-    return bSuccess ?
-        GetPortionData().GetAccessiblePosition( aPos.nContent.GetIndex() )
+    return bSuccess
+        ? GetPortionData().GetAccessiblePosition(nIndex)
         : -1;
 }
 
@@ -2665,29 +2661,26 @@ sal_Bool SwAccessibleParagraph::replaceText(
     if( !IsEditableState() )
         return false;
 
-    SwTextNode* pNode = const_cast<SwTextNode*>( GetTextNode() );
-
     // translate positions
-    sal_Int32 nStart;
-    sal_Int32 nEnd;
+    TextFrameIndex nStart;
+    TextFrameIndex nEnd;
     bool bSuccess = GetPortionData().GetEditableRange(
                                     nStartIndex, nEndIndex, nStart, nEnd );
 
     // edit only if the range is editable
     if( bSuccess )
     {
+        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
         // create SwPosition for nStartIndex
-        SwIndex aIndex( pNode, nStart );
-        SwPosition aStartPos( *pNode, aIndex );
+        SwPosition aStartPos(pFrame->MapViewToModelPos(nStart));
 
         // create SwPosition for nEndIndex
-        SwPosition aEndPos( aStartPos );
-        aEndPos.nContent = nEnd;
+        SwPosition aEndPos(pFrame->MapViewToModelPos(nEnd));
 
         // now create XTextRange as helper and set string
         const uno::Reference<text::XTextRange> xRange(
             SwXTextRange::CreateXTextRange(
-                *pNode->GetDoc(), aStartPos, &aEndPos));
+                const_cast<SwDoc&>(pFrame->GetDoc()), aStartPos, &aEndPos));
         xRange->setString(sReplacement);
 
         // delete portion data
