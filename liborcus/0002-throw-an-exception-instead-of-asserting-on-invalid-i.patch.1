@@ -19,7 +19,7 @@ index 3f80da0e..271f0248 100644
          }
  
 -        assert(is_delim(c));
-+        if (is_delim(c))
++        if (!is_delim(c))
 +            throw csv_parse_error("expected a delimiter");
 +
          next();
