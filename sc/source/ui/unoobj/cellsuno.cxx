@@ -6555,8 +6555,7 @@ void ScCellObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry, c
         {
             OUString aStrVal;
             aValue >>= aStrVal;
-            OUString aString(aStrVal);
-            SetString_Impl(aString, true, false);   // interpret locally
+            SetString_Impl(aStrVal, true, false);   // interpret locally
         }
         else if ( pEntry->nWID == SC_WID_UNO_FORMRT || pEntry->nWID == SC_WID_UNO_FORMRT2
                   || pEntry->nWID == SC_WID_UNO_CELLCONTENTTYPE )
