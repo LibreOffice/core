@@ -47,7 +47,7 @@ SwAbstractDialogFactory* SwAbstractDialogFactory::Create()
         fp = reinterpret_cast<SwAbstractDialogFactory* (SAL_CALL*)()>(
             aDialogLibrary.getFunctionSymbol( "SwCreateDialogFactory" ));
 #else
-    fp = SwCreateDialogFactory();
+    fp = SwCreateDialogFactory;
 #endif
 #endif
     if ( fp )
