@@ -133,12 +133,12 @@ class XmlPortionDumper:public SwPortionHandler
             xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nHeight"), "%i", static_cast<int>(nHeight));
         if (nWidth > 0)
             xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nWidth"), "%i", static_cast<int>(nWidth));
-        if (nLength > 0)
+        if (nLength > TextFrameIndex(0))
             xmlTextWriterWriteAttribute(writer, BAD_CAST("Portion"),
-                                        BAD_CAST(m_rText.copy(ofs, nLength).toUtf8().getStr()));
+                BAD_CAST(m_rText.copy(sal_Int32(ofs), sal_Int32(nLength)).toUtf8().getStr()));
 
         xmlTextWriterEndElement( writer );
-        m_aLine += m_rText.copy(ofs, nLength);
+        m_aLine += m_rText.copy(sal_Int32(ofs), sal_Int32(nLength));
         ofs += nLength;
     }
 
