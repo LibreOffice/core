@@ -34,6 +34,7 @@
 #include <tools/stream.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/ImageTree.hxx>
+#include <vcl/quickselectionengine.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/weld.hxx>
 
@@ -4404,9 +4405,19 @@ static MouseEventModifiers ImplGetMouseMoveMode(sal_uInt16 nCode)
 
 namespace
 {
+    AtkObject* (*default_drawing_area_get_accessible)(GtkWidget *widget);
 
-AtkObject* (*default_drawing_area_get_accessible)(GtkWidget *widget);
-
+    KeyEvent GtkToVcl(GdkEventKey& rEvent)
+    {
+        sal_uInt16 nKeyCode = GtkSalFrame::GetKeyCode(rEvent.keyval);
+        if (nKeyCode == 0)
+        {
+            guint updated_keyval = GtkSalFrame::GetKeyValFor(gdk_keymap_get_default(), rEvent.hardware_keycode, rEvent.group);
+            nKeyCode = GtkSalFrame::GetKeyCode(updated_keyval);
+        }
+        nKeyCode |= GtkSalFrame::GetKeyModCode(rEvent.state);
+        return KeyEvent(gdk_keyval_to_unicode(rEvent.keyval), nKeyCode, 0);
+    }
 }
 
 class GtkInstanceDrawingArea : public GtkInstanceWidget, public virtual weld::DrawingArea
@@ -4615,14 +4626,7 @@ private:
     }
     gboolean signal_key(GdkEventKey* pEvent)
     {
-        sal_uInt16 nKeyCode = GtkSalFrame::GetKeyCode(pEvent->keyval);
-        if (nKeyCode == 0)
-        {
-            guint updated_keyval = GtkSalFrame::GetKeyValFor(gdk_keymap_get_default(), pEvent->hardware_keycode, pEvent->group);
-            nKeyCode = GtkSalFrame::GetKeyCode(updated_keyval);
-        }
-        nKeyCode |= GtkSalFrame::GetKeyModCode(pEvent->state);
-        KeyEvent aKeyEvt(gdk_keyval_to_unicode(pEvent->keyval), nKeyCode, 0);
+        KeyEvent aKeyEvt(GtkToVcl(*pEvent));
 
         bool bProcessed;
         if (pEvent->type == GDK_KEY_PRESS)
@@ -4775,14 +4779,16 @@ namespace
     }
 }
 
-class GtkInstanceComboBox : public GtkInstanceContainer, public virtual weld::ComboBox
+class GtkInstanceComboBox : public GtkInstanceContainer, public vcl::ISearchableStringList, public virtual weld::ComboBox
 {
 private:
     GtkComboBox* m_pComboBox;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
+    vcl::QuickSelectionEngine m_aQuickSelectionEngine;
     gboolean m_bPopupActive;
     gulong m_nChangedSignalId;
     gulong m_nPopupShownSignalId;
+    gulong m_nKeyPressEventSignalId;
     gulong m_nEntryActivateSignalId;
 
     static void signalChanged(GtkComboBox*, gpointer widget)
@@ -4887,10 +4893,97 @@ private:
         g_object_unref(pCompletion);
     }
 
+    // support typeahead for the case where there is no entry widget, typing ahead
+    // into the button itself will select via the vcl selection engine, a matching
+    // entry
+    static gboolean signalKeyPress(GtkWidget*, GdkEventKey* pEvent, gpointer widget)
+    {
+        GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
+        return pThis->signal_key_press(pEvent);
+    }
+
+    bool signal_key_press(GdkEventKey* pEvent)
+    {
+        KeyEvent aKEvt(GtkToVcl(*pEvent));
+
+        vcl::KeyCode aKeyCode = aKEvt.GetKeyCode();
+
+        bool bDone = false;
+
+        switch (aKeyCode.GetCode())
+        {
+            case KEY_DOWN:
+            case KEY_UP:
+            case KEY_PAGEUP:
+            case KEY_PAGEDOWN:
+            case KEY_HOME:
+            case KEY_END:
+            case KEY_LEFT:
+            case KEY_RIGHT:
+            case KEY_RETURN:
+                m_aQuickSelectionEngine.Reset();
+                break;
+            default:
+                bDone = m_aQuickSelectionEngine.HandleKeyEvent(aKEvt);
+                break;
+        }
+
+        return bDone;
+    }
+
+    vcl::StringEntryIdentifier typeahead_getEntry(int nPos, OUString& out_entryText) const
+    {
+        int nEntryCount(get_count());
+        if (nPos >= nEntryCount)
+            nPos = 0;
+        out_entryText = get_text(nPos);
+
+        // vcl::StringEntryIdentifier does not allow for 0 values, but our position is 0-based
+        // => normalize
+        return reinterpret_cast<vcl::StringEntryIdentifier>(nPos + 1);
+    }
+
+    static int typeahead_getEntryPos(vcl::StringEntryIdentifier entry)
+    {
+        // our pos is 0-based, but StringEntryIdentifier does not allow for a NULL
+        return reinterpret_cast<sal_Int64>(entry) - 1;
+    }
+
+    virtual vcl::StringEntryIdentifier CurrentEntry(OUString& out_entryText) const override
+    {
+        int nCurrentPos = get_active();
+        return typeahead_getEntry((nCurrentPos == -1) ? 0 : nCurrentPos, out_entryText);
+    }
+
+    virtual vcl::StringEntryIdentifier NextEntry(vcl::StringEntryIdentifier currentEntry, OUString& out_entryText) const override
+    {
+        int nNextPos = typeahead_getEntryPos(currentEntry) + 1;
+        return typeahead_getEntry(nNextPos, out_entryText);
+    }
+
+    virtual void SelectEntry(vcl::StringEntryIdentifier entry) override
+    {
+        int nSelect = typeahead_getEntryPos(entry);
+        if (nSelect == get_active())
+        {
+            // ignore that. This method is a callback from the QuickSelectionEngine, which means the user attempted
+            // to select the given entry by typing its starting letters. No need to act.
+            return;
+        }
+
+        // normalize
+        int nCount = get_count();
+        if (nSelect >= nCount)
+            nSelect = nCount ? nCount-1 : -1;
+
+        set_active(nSelect);
+    }
+
 public:
     GtkInstanceComboBox(GtkComboBox* pComboBox, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pComboBox), bTakeOwnership)
         , m_pComboBox(pComboBox)
+        , m_aQuickSelectionEngine(*this)
         , m_bPopupActive(false)
         , m_nChangedSignalId(g_signal_connect(m_pComboBox, "changed", G_CALLBACK(signalChanged), this))
         , m_nPopupShownSignalId(g_signal_connect(m_pComboBox, "notify::popup-shown", G_CALLBACK(signalPopupShown), this))
@@ -4924,9 +5017,13 @@ public:
         {
             setup_completion(pEntry);
             m_nEntryActivateSignalId = g_signal_connect(pEntry, "activate", G_CALLBACK(signalEntryActivate), this);
+            m_nKeyPressEventSignalId = 0;
         }
         else
+        {
             m_nEntryActivateSignalId = 0;
+            m_nKeyPressEventSignalId = g_signal_connect(m_pWidget, "key-press-event", G_CALLBACK(signalKeyPress), this);
+        }
     }
 
     virtual int get_active() const override
@@ -5152,6 +5249,8 @@ public:
     {
         if (GtkEntry* pEntry = get_entry())
             g_signal_handler_block(pEntry, m_nEntryActivateSignalId);
+        else
+            g_signal_handler_block(m_pComboBox, m_nKeyPressEventSignalId);
         g_signal_handler_block(m_pComboBox, m_nChangedSignalId);
         g_signal_handler_block(m_pComboBox, m_nPopupShownSignalId);
         GtkInstanceContainer::disable_notify_events();
@@ -5164,6 +5263,8 @@ public:
         g_signal_handler_unblock(m_pComboBox, m_nChangedSignalId);
         if (GtkEntry* pEntry = get_entry())
             g_signal_handler_unblock(pEntry, m_nEntryActivateSignalId);
+        else
+            g_signal_handler_unblock(m_pComboBox, m_nKeyPressEventSignalId);
     }
 
     virtual void freeze() override
@@ -5193,6 +5294,8 @@ public:
     {
         if (GtkEntry* pEntry = get_entry())
             g_signal_handler_disconnect(pEntry, m_nEntryActivateSignalId);
+        else
+            g_signal_handler_disconnect(m_pComboBox, m_nKeyPressEventSignalId);
         g_signal_handler_disconnect(m_pComboBox, m_nChangedSignalId);
         g_signal_handler_disconnect(m_pComboBox, m_nPopupShownSignalId);
     }
