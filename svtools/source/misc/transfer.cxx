@@ -121,13 +121,31 @@ static OUString ImplGetParameterString( const TransferableObjectDescriptor& rObj
 
     if( !rObjDesc.maTypeName.isEmpty() )
     {
-        aParams += ";typename=\""  + rObjDesc.maTypeName + "\"";
+        // the type name might contain unacceptable characters, encode all of them
+        sal_Bool pToAccept[128];
+        for (sal_Bool & rb : pToAccept)
+            rb = false;
+
+        const char aQuotedParamChars[] =
+            "()<>@,;:/[]?=!#$&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~. ";
+
+        for ( sal_Int32 nInd = 0; nInd < RTL_CONSTASCII_LENGTH(aQuotedParamChars); ++nInd )
+        {
+            sal_Unicode nChar = aQuotedParamChars[nInd];
+            if ( nChar < 128 )
+                pToAccept[nChar] = true;
+        }
+
+        aParams += ";typename=\""
+            + rtl::Uri::encode(
+                rObjDesc.maTypeName, pToAccept, rtl_UriEncodeIgnoreEscapes,
+                RTL_TEXTENCODING_UTF8)
+            + "\"";
     }
 
     if( !rObjDesc.maDisplayName.isEmpty() )
     {
         // the display name might contain unacceptable characters, encode all of them
-        // this seems to be the only parameter currently that might contain such characters
         sal_Bool pToAccept[128];
         for (sal_Bool & rb : pToAccept)
             rb = false;
@@ -187,7 +205,7 @@ static void ImplSetParameterString( TransferableObjectDescriptor& rObjDesc, cons
 
             if( xMimeType->hasParameter( aTypeNameString ) )
             {
-                rObjDesc.maTypeName = xMimeType->getParameterValue( aTypeNameString );
+                rObjDesc.maTypeName = ::rtl::Uri::decode( xMimeType->getParameterValue( aTypeNameString ), rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
             }
 
             if( xMimeType->hasParameter( aDisplayNameString ) )
@@ -1201,8 +1219,9 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
                 if( !rFlavor.MimeType.isEmpty() )
                     xMimeType = xMimeFact->createMimeContentType( rFlavor.MimeType );
             }
-            catch( const css::uno::Exception& )
+            catch( const css::uno::Exception& e)
             {
+                SAL_WARN("svtools.misc", "Something went wrong with calling to createMimeContentType: \"" << e << "\"");
             }
 
             aFlavorEx.MimeType = rFlavor.MimeType;
