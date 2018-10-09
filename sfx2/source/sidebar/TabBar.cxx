@@ -37,6 +37,8 @@
 
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 
+#include <vcl/commandinfoprovider.hxx>
+
 using namespace css;
 using namespace css::uno;
 
@@ -233,7 +235,7 @@ bool TabBar::EventNotify(NotifyEvent& rEvent)
     if(MouseNotifyEvent::KEYINPUT == nType)
     {
         const vcl::KeyCode& rKeyCode = rEvent.GetKeyEvent()->GetKeyCode();
-        if((KEY_MOD1 == rKeyCode.GetModifier()) && (KEY_F5 == rKeyCode.GetCode()))
+        if(vcl::CommandInfoProvider::GetCommandShortcut(".uno:Sidebar", mxFrame) == rKeyCode.GetName())
             return vcl::Window::EventNotify(rEvent);
         return true;
     }
