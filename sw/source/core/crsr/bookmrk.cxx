@@ -407,9 +407,12 @@ namespace sw { namespace mark
         xmlTextWriterEndElement(pWriter);
     }
 
-    TextFieldmark::TextFieldmark(const SwPaM& rPaM)
+    TextFieldmark::TextFieldmark(const SwPaM& rPaM, const OUString& rName)
         : Fieldmark(rPaM)
-    { }
+    {
+        if ( !rName.isEmpty() )
+            m_aName = rName;
+    }
 
     void TextFieldmark::InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode const eMode)
     {
