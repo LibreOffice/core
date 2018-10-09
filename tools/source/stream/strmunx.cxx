@@ -179,7 +179,7 @@ public:
 
 static ErrCode GetSvError( int nErrno )
 {
-    static struct { int nErr; ErrCode sv; } errArr[] =
+    static struct { int nErr; ErrCode sv; } const errArr[] =
     {
         { 0,            ERRCODE_NONE },
         { EACCES,       SVSTREAM_ACCESS_DENIED },
@@ -231,7 +231,7 @@ static ErrCode GetSvError( int nErrno )
 
 static ErrCode GetSvError( oslFileError nErrno )
 {
-    static struct { oslFileError nErr; ErrCode sv; } errArr[] =
+    static struct { oslFileError nErr; ErrCode sv; } const errArr[] =
     {
         { osl_File_E_None,        ERRCODE_NONE },
         { osl_File_E_ACCES,       SVSTREAM_ACCESS_DENIED },

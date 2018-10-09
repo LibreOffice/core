@@ -40,8 +40,8 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     ::tools::Rectangle           m_aWorkArea;
     Point               m_aAnchorPos;
 
-    FrmMap* m_pVMap;
-    FrmMap* m_pHMap;
+    FrmMap const * m_pVMap;
+    FrmMap const * m_pHMap;
     const SdrView*      m_pSdrView;
 
     // initial values

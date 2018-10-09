@@ -25,7 +25,7 @@
 
 using namespace com::sun::star::sdbc;
 
-TypeInfoDef mysqlc_types[] = {
+TypeInfoDef const mysqlc_types[] = {
 
     // ------------- MySQL-Type: BIT. SDBC-Type: Bit -------------
     {

@@ -38,9 +38,9 @@ namespace xmloff
 #define MAP_CONST_P( name, prefix, token, type, context ){ name, sizeof(name)-1, prefix, token, type|XML_TYPE_PROP_PARAGRAPH, context, SvtSaveOptions::ODFVER_010, false }
 #define MAP_END()   { nullptr, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010, false }
 
-    static XMLPropertyMapEntry* getControlStylePropertyMap_Access( )
+    static XMLPropertyMapEntry const * getControlStylePropertyMap_Access( )
     {
-        static XMLPropertyMapEntry aControlStyleProperties[] =
+        static XMLPropertyMapEntry const aControlStyleProperties[] =
         {
             MAP_CONST( PROPERTY_BACKGROUNDCOLOR, XML_NAMESPACE_FO,      XML_BACKGROUND_COLOR,       XML_TYPE_COLOR, 0 ),
             MAP_CONST_P( PROPERTY_ALIGN,          XML_NAMESPACE_FO,       XML_TEXT_ALIGN,             XML_TYPE_TEXT_ALIGN, 0 ),
@@ -93,13 +93,13 @@ namespace xmloff
         }
     };
 
-    static void implSortMap(XMLPropertyMapEntry* _pMap)
+    static void implSortMap(XMLPropertyMapEntry const * _pMap)
     {
-        XMLPropertyMapEntry* pEnd;
+        XMLPropertyMapEntry const * pEnd;
         // determine the last element
         for ( pEnd = _pMap; pEnd->msApiName; ++pEnd)
             ;
-        ::std::sort(_pMap, pEnd, XMLPropertyMapEntryLess());
+        assert( ::std::is_sorted(_pMap, pEnd, XMLPropertyMapEntryLess()) );
     }
 
     void initializePropertyMaps()

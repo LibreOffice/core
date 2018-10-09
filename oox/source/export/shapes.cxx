@@ -233,7 +233,7 @@ static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
         char const* pMediaType;
         char const* pProgID;
         char const* pSuffix;
-    } s_Mapping[] = {
+    } const s_Mapping[] = {
         { {SO3_SW_CLASSID_60}, "MS Word 2007 XML", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Word.Document.12", "docx" },
         { {SO3_SC_CLASSID_60}, "Calc MS Excel 2007 XML", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Excel.Sheet.12", "xlsx" },
         { {SO3_SIMPRESS_CLASSID_60}, "Impress MS PowerPoint 2007 XML", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "PowerPoint.Show.12", "pptx" },

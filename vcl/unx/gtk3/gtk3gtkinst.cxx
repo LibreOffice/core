@@ -2037,7 +2037,7 @@ namespace
 {
     struct ButtonOrder
     {
-        OString m_aType;
+        const char * m_aType;
         int m_nPriority;
     };
 

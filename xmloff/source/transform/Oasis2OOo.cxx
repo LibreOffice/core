@@ -101,7 +101,7 @@ enum XMLUserDefinedTransformerAction
 #define RENAME_ENTRY( f, s ) \
     (static_cast< sal_Int32 >(f) | (static_cast< sal_Int32 >(s) << 16))
 
-static XMLTransformerActionInit aActionTable[] =
+static XMLTransformerActionInit const aActionTable[] =
 {
     // add office:class from <office:document> and <office:document-content>
     ENTRY0( OFFICE, DOCUMENT, XML_ETACTION_DOCUMENT ),
@@ -561,7 +561,7 @@ static XMLTransformerActionInit aActionTable[] =
 };
 
 // XML_ETACTION_STYLE
-static XMLTransformerActionInit aStyleActionTable[] =
+static XMLTransformerActionInit const aStyleActionTable[] =
 {
     ENTRY0( STYLE, FAMILY, XML_ATACTION_STYLE_FAMILY ),
     ENTRY1( STYLE, NAME, XML_ATACTION_DECODE_STYLE_NAME,
@@ -595,7 +595,7 @@ static XMLTransformerActionInit aStyleActionTable[] =
 };
 
 // OASIS_FRAME_ELEM_ACTIONS
-static XMLTransformerActionInit aFrameActionTable[] =
+static XMLTransformerActionInit const aFrameActionTable[] =
 {
     ENTRY0( DRAW, TEXT_BOX, XML_ETACTION_COPY ),
     ENTRY0( DRAW, IMAGE, XML_ETACTION_COPY ),
@@ -608,7 +608,7 @@ static XMLTransformerActionInit aFrameActionTable[] =
 };
 
 // OASIS_EVENT_ELEM_ACTIONS
-static XMLTransformerActionInit aEventActionTable[] =
+static XMLTransformerActionInit const aEventActionTable[] =
 {
     ENTRY0( XLINK, HREF, XML_ATACTION_HREF ),
     ENTRY1( SCRIPT, LANGUAGE, XML_ATACTION_REMOVE_NAMESPACE_PREFIX,
@@ -619,13 +619,13 @@ static XMLTransformerActionInit aEventActionTable[] =
 };
 
 // OASIS_EVENT_ELEM_ACTIONS
-static XMLTransformerActionInit aDlgActionTable[] =
+static XMLTransformerActionInit const aDlgActionTable[] =
 {
     ENTRY0( DLG, BORDER, XML_ATACTION_DLG_BORDER )
 };
 
 // action table for OASIS_MASTER_PAGE_ACTIONS
-static XMLTransformerActionInit aMasterPageActionTable[] =
+static XMLTransformerActionInit const aMasterPageActionTable[] =
 {
     ENTRY1( STYLE, NAME, XML_ATACTION_DECODE_STYLE_NAME,
                  XML_FAMILY_TYPE_MASTER_PAGE ),
@@ -639,7 +639,7 @@ static XMLTransformerActionInit aMasterPageActionTable[] =
 };
 
 // action table for OASIS_TEXT_STYLE_REF_ACTIONS
-static XMLTransformerActionInit aTextStyleRefActionTable[] =
+static XMLTransformerActionInit const aTextStyleRefActionTable[] =
 {
     ENTRY1( TEXT, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
                 XML_FAMILY_TYPE_TEXT ),
@@ -650,7 +650,7 @@ static XMLTransformerActionInit aTextStyleRefActionTable[] =
 };
 
 // action table for OASIS_PARA_STYLE_REF_ACTIONS
-static XMLTransformerActionInit aParaStyleRefActionTable[] =
+static XMLTransformerActionInit const aParaStyleRefActionTable[] =
 {
     ENTRY1( TEXT, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
                 XML_FAMILY_TYPE_PARAGRAPH ),
@@ -658,7 +658,7 @@ static XMLTransformerActionInit aParaStyleRefActionTable[] =
 };
 
 // action table for OASIS_LIST_STYLE_REF_ACTIONS
-static XMLTransformerActionInit aListStyleRefActionTable[] =
+static XMLTransformerActionInit const aListStyleRefActionTable[] =
 {
     ENTRY1( TEXT, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
                 XML_FAMILY_TYPE_LIST ),
@@ -666,7 +666,7 @@ static XMLTransformerActionInit aListStyleRefActionTable[] =
 };
 
 // action table for OASIS_MASTER_PAGE_REF_ACTIONS
-static XMLTransformerActionInit aMasterPageRefActionTable[] =
+static XMLTransformerActionInit const aMasterPageRefActionTable[] =
 {
     ENTRY1( DRAW, MASTER_PAGE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
                 XML_FAMILY_TYPE_MASTER_PAGE ),
@@ -674,7 +674,7 @@ static XMLTransformerActionInit aMasterPageRefActionTable[] =
 };
 
 // action table for OASIS_MAP_STYLE_REF_ACTIONS
-static XMLTransformerActionInit aMapStyleRefActionTable[] =
+static XMLTransformerActionInit const aMapStyleRefActionTable[] =
 {
     ENTRY1( STYLE, APPLY_STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
                 XML_FAMILY_TYPE_END ),
@@ -682,14 +682,14 @@ static XMLTransformerActionInit aMapStyleRefActionTable[] =
 };
 
 // action table for OASIS_TABLE_STYLE_REF_ACTIONS (#i40011#, #i40015#)
-static XMLTransformerActionInit aTableStyleRefActionTable[] =
+static XMLTransformerActionInit const aTableStyleRefActionTable[] =
 {
     ENTRY1( TABLE, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
                 XML_FAMILY_TYPE_END ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-static XMLTransformerActionInit aFontFaceActionTable[] =
+static XMLTransformerActionInit const aFontFaceActionTable[] =
 {
     ENTRY1Q( SVG, FONT_FAMILY, XML_ATACTION_RENAME,
                         XML_NAMESPACE_FO, XML_FONT_FAMILY ),
@@ -699,7 +699,7 @@ static XMLTransformerActionInit aFontFaceActionTable[] =
 };
 
 // action table for OASIS_PARA_ACTIONS
-static XMLTransformerActionInit aParaActionTable[] =
+static XMLTransformerActionInit const aParaActionTable[] =
 {
     ENTRY1( TEXT, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
                 XML_FAMILY_TYPE_PARAGRAPH ),
@@ -712,7 +712,7 @@ static XMLTransformerActionInit aParaActionTable[] =
 
 // !!ATTENTION!! If you change something here, please also change
 // aConnectorActionTable if appropriate
-static XMLTransformerActionInit aShapeActionTable[] =
+static XMLTransformerActionInit const aShapeActionTable[] =
 {
     ENTRY1( DRAW, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
                 XML_FAMILY_TYPE_GRAPHIC ),
@@ -761,7 +761,7 @@ static XMLTransformerActionInit aShapeActionTable[] =
 };
 
 // OASIS_ANIMATION_ACTIONS
-static XMLTransformerActionInit aAnimationActionTable[] =
+static XMLTransformerActionInit const aAnimationActionTable[] =
 {
     ENTRY0( DRAW, SHAPE_ID, XML_ATACTION_DECODE_ID ),
     ENTRY0( PRESENTATION, DELAY,       XML_ATACTION_RNG2ISO_DATETIME ),
@@ -771,7 +771,7 @@ static XMLTransformerActionInit aAnimationActionTable[] =
 };
 
 // OOO_CONNECTOR_ACTIONS
-static XMLTransformerActionInit aConnectorActionTable[] =
+static XMLTransformerActionInit const aConnectorActionTable[] =
 {
     ENTRY1( DRAW, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
                 XML_FAMILY_TYPE_GRAPHIC ),
@@ -802,7 +802,7 @@ static XMLTransformerActionInit aConnectorActionTable[] =
 };
 
 // OASIS_INDEX_ENTRY_TAB_STOP_ACTIONS
-static XMLTransformerActionInit aIndexEntryTabStopActionTable[] =
+static XMLTransformerActionInit const aIndexEntryTabStopActionTable[] =
 {
     ENTRY0( STYLE, POSITION, XML_ATACTION_IN2INCH ),
     ENTRY1( TEXT, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
@@ -811,7 +811,7 @@ static XMLTransformerActionInit aIndexEntryTabStopActionTable[] =
 };
 
 // OASIS_TAB_STOP_ACTIONS
-static XMLTransformerActionInit aTabStopActionTable[] =
+static XMLTransformerActionInit const aTabStopActionTable[] =
 {
     ENTRY0( STYLE, POSITION, XML_ATACTION_IN2INCH ),
     ENTRY1Q( STYLE, LEADER_TEXT, XML_ATACTION_RENAME,
@@ -825,7 +825,7 @@ static XMLTransformerActionInit aTabStopActionTable[] =
 };
 
 // OASIS_LINENUMBERING_ACTIONS
-static XMLTransformerActionInit aLineNumberingActionTable[] =
+static XMLTransformerActionInit const aLineNumberingActionTable[] =
 {
     ENTRY0( TEXT, OFFSET, XML_ATACTION_IN2INCH ),
     ENTRY1( TEXT, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
@@ -835,7 +835,7 @@ static XMLTransformerActionInit aLineNumberingActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-static XMLTransformerActionInit aFootnoteSepActionTable[] =
+static XMLTransformerActionInit const aFootnoteSepActionTable[] =
 {
     ENTRY0( STYLE, WIDTH, XML_ATACTION_IN2INCH ),
     ENTRY0( STYLE, DISTANCE_BEFORE_SEP, XML_ATACTION_IN2INCH ),
@@ -844,7 +844,7 @@ static XMLTransformerActionInit aFootnoteSepActionTable[] =
 };
 
 // OASIS_NOTES_ACTIONS (processed by special context)
-static XMLTransformerActionInit aNotesActionTable[] =
+static XMLTransformerActionInit const aNotesActionTable[] =
 {
     ENTRY0( TEXT, NOTE_CLASS, XML_ATACTION_STYLE_FAMILY ),
     ENTRY1( TEXT, CITATION_STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
@@ -859,7 +859,7 @@ static XMLTransformerActionInit aNotesActionTable[] =
 };
 
 // OASIS_DROP_CAP_ACTIONS
-static XMLTransformerActionInit aDropCapActionTable[] =
+static XMLTransformerActionInit const aDropCapActionTable[] =
 {
     ENTRY0( STYLE, DISTANCE, XML_ATACTION_IN2INCH ),
     ENTRY1( STYLE, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
@@ -867,7 +867,7 @@ static XMLTransformerActionInit aDropCapActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-static XMLTransformerActionInit aColumnsActionTable[] =
+static XMLTransformerActionInit const aColumnsActionTable[] =
 {
     ENTRY0( STYLE, COLUMN_GAP, XML_ATACTION_IN2INCH ),
     ENTRY0( STYLE, SPACE_BEFORE, XML_ATACTION_REMOVE ),
@@ -881,7 +881,7 @@ static XMLTransformerActionInit aColumnsActionTable[] =
 };
 
 // OASIS_TEXT_VALUE_TYPE_ACTIONS
-static XMLTransformerActionInit aTextValueTypeActionTable[] =
+static XMLTransformerActionInit const aTextValueTypeActionTable[] =
 {
     ENTRY1Q( OFFICE, VALUE_TYPE, XML_ATACTION_RENAME,
            XML_NAMESPACE_TEXT, XML_VALUE_TYPE ),
@@ -902,7 +902,7 @@ static XMLTransformerActionInit aTextValueTypeActionTable[] =
 };
 
 // OASIS_TABLE_VALUE_TYPE_ACTIONS
-static XMLTransformerActionInit aTableValueTypeActionTable[] =
+static XMLTransformerActionInit const aTableValueTypeActionTable[] =
 {
     ENTRY1Q( OFFICE, VALUE_TYPE, XML_ATACTION_RENAME,
            XML_NAMESPACE_TABLE, XML_VALUE_TYPE ),
@@ -927,7 +927,7 @@ static XMLTransformerActionInit aTableValueTypeActionTable[] =
 };
 
 // action table for OASIS_ANNOTATION_ACTIONS
-static XMLTransformerActionInit aAnnotationActionTable[] =
+static XMLTransformerActionInit const aAnnotationActionTable[] =
 {
     ENTRY1Q( DC, CREATOR, XML_ETACTION_MOVE_TO_ATTR,
                 XML_NAMESPACE_OFFICE, XML_AUTHOR ),
@@ -940,7 +940,7 @@ static XMLTransformerActionInit aAnnotationActionTable[] =
 };
 
 // action table for OASIS_CHANGE_INFO_ACTIONS
-static XMLTransformerActionInit aChangeInfoActionTable[] =
+static XMLTransformerActionInit const aChangeInfoActionTable[] =
 {
     ENTRY1Q( DC, CREATOR, XML_ETACTION_MOVE_TO_ATTR,
                 XML_NAMESPACE_OFFICE, XML_CHG_AUTHOR ),
@@ -950,7 +950,7 @@ static XMLTransformerActionInit aChangeInfoActionTable[] =
 };
 
 // OASIS_BACKGROUND_IMAGE_ACTIONS
-static XMLTransformerActionInit aBackgroundImageActionTable[] =
+static XMLTransformerActionInit const aBackgroundImageActionTable[] =
 {
     ENTRY1Q( DRAW, OPACITY, XML_ATACTION_RENAME_NEG_PERCENT,
                      XML_NAMESPACE_DRAW, XML_TRANSPARENCY ),
@@ -959,7 +959,7 @@ static XMLTransformerActionInit aBackgroundImageActionTable[] =
 };
 
 // OASIS_DDE_CONNECTION_DECL
-static XMLTransformerActionInit aDDEConnectionDeclActionTable[] =
+static XMLTransformerActionInit const aDDEConnectionDeclActionTable[] =
 {
     ENTRY1Q( OFFICE, NAME, XML_ATACTION_RENAME,
                      XML_NAMESPACE_TEXT, XML_NAME ),
@@ -967,7 +967,7 @@ static XMLTransformerActionInit aDDEConnectionDeclActionTable[] =
 };
 
 // OASIS_FORM_CONTROL_ACTIONS
-static XMLTransformerActionInit aFormControlActionTable[] =
+static XMLTransformerActionInit const aFormControlActionTable[] =
 {
     ENTRY0( FORM, NAME, XML_ATACTION_MOVE_TO_ELEM ),
     ENTRY2QN( FORM, CONTROL_IMPLEMENTATION,
@@ -980,7 +980,7 @@ static XMLTransformerActionInit aFormControlActionTable[] =
 };
 
 // OASIS_FORM_COLUMN_ACTIONS
-static XMLTransformerActionInit aFormColumnActionTable[] =
+static XMLTransformerActionInit const aFormColumnActionTable[] =
 {
     ENTRY1Q( FORM, TEXT_STYLE_NAME, XML_ATACTION_RENAME_DECODE_STYLE_NAME_REF,
                         XML_NAMESPACE_FORM, XML_COLUMN_STYLE_NAME ),
@@ -992,7 +992,7 @@ static XMLTransformerActionInit aFormColumnActionTable[] =
 };
 
 // OASIS_FORM_PROP_ACTIONS
-static XMLTransformerActionInit aFormPropActionTable[] =
+static XMLTransformerActionInit const aFormPropActionTable[] =
 {
     ENTRY1Q( OFFICE, VALUE_TYPE, XML_ATACTION_RENAME,
                           XML_NAMESPACE_FORM, XML_PROPERTY_TYPE ),
@@ -1006,7 +1006,7 @@ static XMLTransformerActionInit aFormPropActionTable[] =
 };
 
 // OASIS_XLINK_ACTIONS
-static XMLTransformerActionInit aXLinkActionTable[] =
+static XMLTransformerActionInit const aXLinkActionTable[] =
 {
     ENTRY1( XLINK, HREF, XML_ATACTION_URI_OASIS, sal_uInt32(false) ),
     ENTRY0( TABLE, REFRESH_DELAY, XML_ATACTION_RNG2ISO_DATETIME ),
@@ -1014,7 +1014,7 @@ static XMLTransformerActionInit aXLinkActionTable[] =
 };
 
 // OASIS_CONFIG_ITEM_SET_ACTIONS
-static XMLTransformerActionInit aConfigItemSetActionTable[] =
+static XMLTransformerActionInit const aConfigItemSetActionTable[] =
 {
     ENTRY1( CONFIG, NAME, XML_ATACTION_REMOVE_NAMESPACE_PREFIX,
                     XML_NAMESPACE_OOO ),
@@ -1022,7 +1022,7 @@ static XMLTransformerActionInit aConfigItemSetActionTable[] =
 };
 
 // OASIS_FORMULA_ACTIONS
-static XMLTransformerActionInit aFormulaActionTable[] =
+static XMLTransformerActionInit const aFormulaActionTable[] =
 {
     ENTRY0( TEXT, CONDITION, XML_ATACTION_REMOVE_ANY_NAMESPACE_PREFIX ),
     ENTRY0( TEXT, FORMULA, XML_ATACTION_REMOVE_ANY_NAMESPACE_PREFIX ),
@@ -1032,7 +1032,7 @@ static XMLTransformerActionInit aFormulaActionTable[] =
 };
 
 // OASIS_CONTENT_VALIDATION_ACTIONS
-static XMLTransformerActionInit aContentValidationActionTable[] =
+static XMLTransformerActionInit const aContentValidationActionTable[] =
 {
     ENTRY0( TABLE, CONDITION, XML_ATACTION_REMOVE_ANY_NAMESPACE_PREFIX ),
     ENTRY0( TABLE, DISPLAY_LIST, XML_ATACTION_REMOVE ),
@@ -1040,7 +1040,7 @@ static XMLTransformerActionInit aContentValidationActionTable[] =
 };
 
 // OASIS_DDE_CONV_MODE_ACTIONS
-static XMLTransformerActionInit aDDEConvModeActionTable[] =
+static XMLTransformerActionInit const aDDEConvModeActionTable[] =
 {
     ENTRY1Q( TABLE, KEEP_TEXT, XML_ATACTION_RENAME,
                         XML_NAMESPACE_TABLE, XML_LET_TEXT ),
@@ -1048,7 +1048,7 @@ static XMLTransformerActionInit aDDEConvModeActionTable[] =
 };
 
 // OASIS_DATAPILOT_MEMBER_ACTIONS
-static XMLTransformerActionInit aDataPilotMemberActionTable[] =
+static XMLTransformerActionInit const aDataPilotMemberActionTable[] =
 {
     ENTRY1Q( TABLE, SHOW_DETAILS, XML_ATACTION_RENAME,
                         XML_NAMESPACE_TABLE, XML_DISPLAY_DETAILS ),
@@ -1056,7 +1056,7 @@ static XMLTransformerActionInit aDataPilotMemberActionTable[] =
 };
 
 // OASIS_DATAPILOT_LEVEL_ACTIONS
-static XMLTransformerActionInit aDataPilotLevelActionTable[] =
+static XMLTransformerActionInit const aDataPilotLevelActionTable[] =
 {
     ENTRY1Q( TABLE, SHOW_EMPTY, XML_ATACTION_RENAME,
                         XML_NAMESPACE_TABLE, XML_DISPLAY_EMPTY ),
@@ -1064,7 +1064,7 @@ static XMLTransformerActionInit aDataPilotLevelActionTable[] =
 };
 
 // OASIS_SOURCE_SERVICE_ACTIONS
-static XMLTransformerActionInit aSourceServiceActionTable[] =
+static XMLTransformerActionInit const aSourceServiceActionTable[] =
 {
     ENTRY1Q( TABLE, USER_NAME, XML_ATACTION_RENAME,
                         XML_NAMESPACE_TABLE, XML_USERNAME ),
@@ -1072,7 +1072,7 @@ static XMLTransformerActionInit aSourceServiceActionTable[] =
 };
 
 // OASIS_CHART_ACTIONS
-static XMLTransformerActionInit aChartActionTable[] =
+static XMLTransformerActionInit const aChartActionTable[] =
 {
     ENTRY0( CHART, CLASS, XML_ATACTION_REMOVE_ANY_NAMESPACE_PREFIX ),
     ENTRY1( DRAW, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
@@ -1083,7 +1083,7 @@ static XMLTransformerActionInit aChartActionTable[] =
 };
 
 // OASIS_FORM_ACTIONS
-static XMLTransformerActionInit aFormActionTable[] =
+static XMLTransformerActionInit const aFormActionTable[] =
 {
     ENTRY2QN( FORM, CONTROL_IMPLEMENTATION,
                     XML_ATACTION_RENAME_REMOVE_NAMESPACE_PREFIX,
@@ -1094,7 +1094,7 @@ static XMLTransformerActionInit aFormActionTable[] =
 };
 
 // OASIS_ALPHABETICAL_INDEX_MARK_ACTIONS
-static XMLTransformerActionInit aAlphabeticalIndexMarkActionTable[] =
+static XMLTransformerActionInit const aAlphabeticalIndexMarkActionTable[] =
 {
     ENTRY1Q( TEXT, MAIN_ENTRY, XML_ATACTION_RENAME,
                         XML_NAMESPACE_TEXT, XML_MAIN_ETRY ),
@@ -1102,7 +1102,7 @@ static XMLTransformerActionInit aAlphabeticalIndexMarkActionTable[] =
 };
 
 // OASIS_DRAW_AREA_POLYGON_ACTIONS (to be added to OASIS_SHAPE_ACTIONS)
-static XMLTransformerActionInit aDrawAreaPolygonActionTable[] =
+static XMLTransformerActionInit const aDrawAreaPolygonActionTable[] =
 {
     ENTRY1Q( DRAW, POINTS, XML_ATACTION_RENAME,
              XML_NAMESPACE_SVG, XML_POINTS ),
@@ -1110,7 +1110,7 @@ static XMLTransformerActionInit aDrawAreaPolygonActionTable[] =
 };
 
 // OASIS_SCRIPT_ACTIONS
-static XMLTransformerActionInit aScriptActionTable[] =
+static XMLTransformerActionInit const aScriptActionTable[] =
 {
     ENTRY1( SCRIPT, LANGUAGE, XML_ATACTION_REMOVE_NAMESPACE_PREFIX, XML_NAMESPACE_OOO ),
     ENTRY1Q( OOO, NAME, XML_ATACTION_RENAME, XML_NAMESPACE_SCRIPT, XML_NAME ),
@@ -1119,7 +1119,7 @@ static XMLTransformerActionInit aScriptActionTable[] =
 };
 
 // OASIS_DATETIME_ACTIONS
-static XMLTransformerActionInit aDateTimeActionTable[] =
+static XMLTransformerActionInit const aDateTimeActionTable[] =
 {
     ENTRY0( TEXT,   DATE_VALUE,        XML_ATACTION_RNG2ISO_DATETIME ),
     ENTRY0( TEXT,   TIME_VALUE,        XML_ATACTION_RNG2ISO_DATETIME ),
@@ -1138,7 +1138,7 @@ static XMLTransformerActionInit aDateTimeActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID,     XML_ATACTION_EOT )
 };
 
-static XMLTokenEnum aTokenMap[] =
+static XMLTokenEnum const aTokenMap[] =
 {
     XML_NONE, XML_SOLID, XML_DOTTED, XML_DASH, XML_LONG_DASH, XML_DOT_DASH,
     XML_DOT_DOT_DASH, XML_WAVE, XML_SMALL_WAVE, XML_TOKEN_END

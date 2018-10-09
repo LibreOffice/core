@@ -1266,7 +1266,7 @@ bool XMLStyleOOoTContext::IsPersistent() const
 XMLTransformerActions *XMLStyleOOoTContext::CreateTransformerActions(
         sal_uInt16 nType )
 {
-    XMLTransformerActionInit *pInit = nullptr;
+    XMLTransformerActionInit const *pInit = nullptr;
 
     switch( nType )
     {

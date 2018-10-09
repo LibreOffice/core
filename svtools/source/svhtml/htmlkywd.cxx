@@ -18,6 +18,7 @@
  */
 
 
+#include <algorithm>
 #include <limits.h>
 #include <sal/types.h>
 #include <stdlib.h>
@@ -40,7 +41,7 @@ struct HTML_TokenEntry
 // Flag: RTF token table has already been sorted
 static bool bSortKeyWords = false;
 
-static HTML_TokenEntry aHTMLTokenTab[] = {
+static HTML_TokenEntry const aHTMLTokenTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_area},            HtmlTokenId::AREA}, // Netscape 2.0
     {{OOO_STRING_SVTOOLS_HTML_base},            HtmlTokenId::BASE}, // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_comment},     HtmlTokenId::COMMENT},
@@ -159,42 +160,33 @@ static HTML_TokenEntry aHTMLTokenTab[] = {
 };
 
 
-extern "C"
+static bool HTMLKeyCompare( const HTML_TokenEntry &rFirstEntry, const HTML_TokenEntry &rSecondEntry)
 {
-
-static int HTMLKeyCompare( const void *pFirst, const void *pSecond)
-{
-    HTML_TokenEntry const * pFirstEntry = static_cast<HTML_TokenEntry const *>(pFirst);
-    HTML_TokenEntry const * pSecondEntry = static_cast<HTML_TokenEntry const *>(pSecond);
     int nRet = 0;
-    if( HtmlTokenId::INVALID == pFirstEntry->nToken )
+    if( HtmlTokenId::INVALID == rFirstEntry.nToken )
     {
-        if( HtmlTokenId::INVALID == pSecondEntry->nToken )
-            nRet = pFirstEntry->pUToken->compareTo( *pSecondEntry->pUToken );
+        if( HtmlTokenId::INVALID == rSecondEntry.nToken )
+            nRet = rFirstEntry.pUToken->compareTo( *rSecondEntry.pUToken );
         else
-            nRet = pFirstEntry->pUToken->compareToAscii( pSecondEntry->sToken );
+            nRet = rFirstEntry.pUToken->compareToAscii( rSecondEntry.sToken );
     }
     else
     {
-        if( HtmlTokenId::INVALID == pSecondEntry->nToken )
-            nRet = -1 * pSecondEntry->pUToken->compareToAscii( pFirstEntry->sToken );
+        if( HtmlTokenId::INVALID == rSecondEntry.nToken )
+            nRet = -1 * rSecondEntry.pUToken->compareToAscii( rFirstEntry.sToken );
         else
-            nRet = strcmp( pFirstEntry->sToken, pSecondEntry->sToken );
+            nRet = strcmp( rFirstEntry.sToken, rSecondEntry.sToken );
     }
 
-    return nRet;
-}
-
+    return nRet < 0;
 }
 
 HtmlTokenId GetHTMLToken( const OUString& rName )
 {
     if( !bSortKeyWords )
     {
-        qsort( static_cast<void*>(aHTMLTokenTab),
-                SAL_N_ELEMENTS( aHTMLTokenTab ),
-                sizeof( HTML_TokenEntry ),
-                HTMLKeyCompare );
+        assert( std::is_sorted( std::begin(aHTMLTokenTab), std::end(aHTMLTokenTab),
+                                HTMLKeyCompare ) );
         bSortKeyWords = true;
     }
 
@@ -203,18 +195,14 @@ HtmlTokenId GetHTMLToken( const OUString& rName )
     if( rName.startsWith( OOO_STRING_SVTOOLS_HTML_comment ))
         return HtmlTokenId::COMMENT;
 
-    void* pFound;
     HTML_TokenEntry aSrch;
     aSrch.pUToken = &rName;
     aSrch.nToken = HtmlTokenId::INVALID;
 
-    pFound = bsearch( &aSrch,
-                      static_cast<void*>(aHTMLTokenTab),
-                      SAL_N_ELEMENTS( aHTMLTokenTab ),
-                      sizeof( HTML_TokenEntry ),
-                      HTMLKeyCompare );
-    if( nullptr != pFound )
-        nRet = static_cast<HTML_TokenEntry*>(pFound)->nToken;
+    auto findIts = std::equal_range( std::begin(aHTMLTokenTab), std::end(aHTMLTokenTab),
+                                     aSrch, HTMLKeyCompare );
+    if( findIts.first != findIts.second )
+        nRet = findIts.first->nToken;
     return nRet;
 }
 
@@ -231,7 +219,7 @@ struct HTML_CharEntry
 // Flag: RTF token table has already been sorted
 static bool bSortCharKeyWords = false;
 
-static HTML_CharEntry aHTMLCharNameTab[] = {
+static HTML_CharEntry const aHTMLCharNameTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_C_lt},             60},
     {{OOO_STRING_SVTOOLS_HTML_C_gt},             62},
     {{OOO_STRING_SVTOOLS_HTML_C_amp},        38},
@@ -496,57 +484,45 @@ static HTML_CharEntry aHTMLCharNameTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_S_diams},     9830}
 };
 
-extern "C"
+static bool HTMLCharNameCompare( const HTML_CharEntry &rFirstEntry, const HTML_CharEntry &rSecondEntry)
 {
-
-static int HTMLCharNameCompare( const void *pFirst, const void *pSecond)
-{
-    HTML_CharEntry const * pFirstEntry = static_cast<HTML_CharEntry const *>(pFirst);
-    HTML_CharEntry const * pSecondEntry = static_cast<HTML_CharEntry const *>(pSecond);
     int nRet = 0;
-    if( USHRT_MAX == pFirstEntry->cChar )
+    if( USHRT_MAX == rFirstEntry.cChar )
     {
-        if( USHRT_MAX == pSecondEntry->cChar )
-            nRet = pFirstEntry->pUName->compareTo( *pSecondEntry->pUName );
+        if( USHRT_MAX == rSecondEntry.cChar )
+            nRet = rFirstEntry.pUName->compareTo( *rSecondEntry.pUName );
         else
-            nRet = pFirstEntry->pUName->compareToAscii( pSecondEntry->sName );
+            nRet = rFirstEntry.pUName->compareToAscii( rSecondEntry.sName );
     }
     else
     {
-        if( USHRT_MAX == pSecondEntry->cChar )
-            nRet = -1 * pSecondEntry->pUName->compareToAscii( pFirstEntry->sName );
+        if( USHRT_MAX == rSecondEntry.cChar )
+            nRet = -1 * rSecondEntry.pUName->compareToAscii( rFirstEntry.sName );
         else
-            nRet = strcmp( pFirstEntry->sName, pSecondEntry->sName );
+            nRet = strcmp( rFirstEntry.sName, rSecondEntry.sName );
     }
 
-    return nRet;
+    return nRet < 0;
 }
-
-} // extern "C"
 
 sal_Unicode GetHTMLCharName( const OUString& rName )
 {
     if( !bSortCharKeyWords )
     {
-        qsort( static_cast<void*>(aHTMLCharNameTab),
-                SAL_N_ELEMENTS( aHTMLCharNameTab ),
-                sizeof( HTML_CharEntry ),
-                HTMLCharNameCompare );
+        assert( std::is_sorted( std::begin(aHTMLCharNameTab), std::end(aHTMLCharNameTab),
+                                HTMLCharNameCompare ) );
         bSortCharKeyWords = true;
     }
 
     sal_Unicode cRet = 0;
-    void* pFound;
     HTML_CharEntry aSrch;
     aSrch.pUName = &rName;
     aSrch.cChar = USHRT_MAX;
 
-    if( nullptr != ( pFound = bsearch( &aSrch,
-                        static_cast<void*>(aHTMLCharNameTab),
-                        SAL_N_ELEMENTS( aHTMLCharNameTab),
-                        sizeof( HTML_CharEntry ),
-                        HTMLCharNameCompare )))
-        cRet = static_cast<HTML_CharEntry*>(pFound)->cChar;
+    auto findIts = std::equal_range( std::begin(aHTMLCharNameTab), std::end(aHTMLCharNameTab),
+                                     aSrch, HTMLCharNameCompare );
+    if (findIts.first != findIts.second)
+        cRet = findIts.first->cChar;
     return cRet;
 }
 
@@ -560,9 +536,9 @@ struct HTML_OptionEntry
         const sal_Char *sToken;
         const OUString *pUToken;
     };
-    HtmlOptionId const nToken;
+    HtmlOptionId nToken;
 };
-static HTML_OptionEntry aHTMLOptionTab[] = {
+static HTML_OptionEntry const aHTMLOptionTab[] = {
 
 // Attributes without value
     {{OOO_STRING_SVTOOLS_HTML_O_checked},   HtmlOptionId::CHECKED},
@@ -717,29 +693,27 @@ static HTML_OptionEntry aHTMLOptionTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_O_start},     HtmlOptionId::START}, // Netscape 2.0 vs IExplorer 2.0
 };
 
+static bool HTML_OptionEntryCompare( const HTML_OptionEntry &rFirstEntry, const HTML_OptionEntry &rSecondEntry)
+{
+    return HTMLKeyCompare( reinterpret_cast<const HTML_TokenEntry &>(rFirstEntry), reinterpret_cast<const HTML_TokenEntry &>(rSecondEntry));
+}
+
 HtmlOptionId GetHTMLOption( const OUString& rName )
 {
     if( !bSortOptionKeyWords )
     {
-        qsort( static_cast<void*>(aHTMLOptionTab),
-                SAL_N_ELEMENTS( aHTMLOptionTab ),
-                sizeof( HTML_OptionEntry ),
-                HTMLKeyCompare );
+        assert( std::is_sorted( std::begin(aHTMLOptionTab), std::end(aHTMLOptionTab), HTML_OptionEntryCompare ) );
         bSortOptionKeyWords = true;
     }
 
     HtmlOptionId nRet = HtmlOptionId::UNKNOWN;
-    void* pFound;
-    HTML_TokenEntry aSrch;
+    HTML_OptionEntry aSrch;
     aSrch.pUToken = &rName;
-    aSrch.nToken = HtmlTokenId::INVALID;
+    aSrch.nToken = HtmlOptionId::UNKNOWN;
 
-    if( nullptr != ( pFound = bsearch( &aSrch,
-                        static_cast<void*>(aHTMLOptionTab),
-                        SAL_N_ELEMENTS( aHTMLOptionTab ),
-                        sizeof( HTML_OptionEntry ),
-                        HTMLKeyCompare )))
-        nRet = static_cast<HTML_OptionEntry*>(pFound)->nToken;
+    auto findIts = std::equal_range( std::begin(aHTMLOptionTab), std::end(aHTMLOptionTab), aSrch, HTML_OptionEntryCompare);
+    if (findIts.first != findIts.second)
+        nRet = findIts.first->nToken;
     return nRet;
 }
 
@@ -762,7 +736,7 @@ static bool bSortColorKeyWords = false;
 // Color names are not exported (source:
 // "http://www.uio.no/~mnbjerke/colors_w.html")
 // "http://www.infi.net/wwwimages/colorindex.html" seem to be buggy.
-static HTML_ColorEntry aHTMLColorNameTab[] = {
+static HTML_ColorEntry const aHTMLColorNameTab[] = {
     { { "aliceblue" }, 0x00f0f8ffUL },
     { { "antiquewhite" }, 0x00faebd7UL },
     { { "aqua" }, 0x0000ffffUL },
@@ -905,59 +879,47 @@ static HTML_ColorEntry aHTMLColorNameTab[] = {
     { { "yellowgreen" }, 0x009acd32UL }
 };
 
-extern "C"
+static bool HTMLColorNameCompare( const HTML_ColorEntry & rFirstEntry, const HTML_ColorEntry rSecondEntry)
 {
-
-static int HTMLColorNameCompare( const void *pFirst, const void *pSecond)
-{
-    HTML_ColorEntry const * pFirstEntry = static_cast<HTML_ColorEntry const *>(pFirst);
-    HTML_ColorEntry const * pSecondEntry = static_cast<HTML_ColorEntry const *>(pSecond);
     int nRet = 0;
-    if( HTML_NO_COLOR == pFirstEntry->nColor )
+    if( HTML_NO_COLOR == rFirstEntry.nColor )
     {
-        if( HTML_NO_COLOR == pSecondEntry->nColor )
-            nRet = pFirstEntry->pUName->compareTo( *pSecondEntry->pUName );
+        if( HTML_NO_COLOR == rSecondEntry.nColor )
+            nRet = rFirstEntry.pUName->compareTo( *rSecondEntry.pUName );
         else
-            nRet = pFirstEntry->pUName->compareToAscii( pSecondEntry->sName );
+            nRet = rFirstEntry.pUName->compareToAscii( rSecondEntry.sName );
     }
     else
     {
-        if( HTML_NO_COLOR  == pSecondEntry->nColor )
-            nRet = -1 * pSecondEntry->pUName->compareToAscii( pFirstEntry->sName );
+        if( HTML_NO_COLOR  == rSecondEntry.nColor )
+            nRet = -1 * rSecondEntry.pUName->compareToAscii( rFirstEntry.sName );
         else
-            nRet = strcmp( pFirstEntry->sName, pSecondEntry->sName );
+            nRet = strcmp( rFirstEntry.sName, rSecondEntry.sName );
     }
 
-    return nRet;
+    return nRet < 0;
 }
-
-} // extern "C"
 
 sal_uInt32 GetHTMLColor( const OUString& rName )
 {
     if( !bSortColorKeyWords )
     {
-        qsort( static_cast<void*>(aHTMLColorNameTab),
-                SAL_N_ELEMENTS( aHTMLColorNameTab ),
-                sizeof( HTML_ColorEntry ),
-                HTMLColorNameCompare );
+        assert( std::is_sorted( std::begin(aHTMLColorNameTab), std::end(aHTMLColorNameTab),
+                                HTMLColorNameCompare ) );
         bSortColorKeyWords = true;
     }
 
     sal_uInt32 nRet = HTML_NO_COLOR;
-    void* pFound;
     HTML_ColorEntry aSrch;
     OUString aLowerCase(rName.toAsciiLowerCase());
 
     aSrch.pUName = &aLowerCase;
     aSrch.nColor = HTML_NO_COLOR;
 
-    if( nullptr != ( pFound = bsearch( &aSrch,
-                        static_cast<void*>(aHTMLColorNameTab),
-                        SAL_N_ELEMENTS( aHTMLColorNameTab),
-                        sizeof( HTML_ColorEntry ),
-                        HTMLColorNameCompare )))
-        nRet = static_cast<HTML_ColorEntry*>(pFound)->nColor;
+    auto findIts = std::equal_range( std::begin(aHTMLColorNameTab), std::end(aHTMLColorNameTab),
+                                     aSrch, HTMLColorNameCompare );
+    if (findIts.first != findIts.second)
+        nRet = findIts.first->nColor;
 
     return nRet;
 }

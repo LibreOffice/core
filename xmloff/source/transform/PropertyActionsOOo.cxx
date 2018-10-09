@@ -25,7 +25,7 @@ using namespace ::xmloff::token;
 
 #define NO_PARAMS 0, 0, 0
 
-XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
+XMLTransformerActionInit const aGraphicPropertyOOoAttrActionTable[] =
 {
     { XML_NAMESPACE_DRAW, XML_STROKE, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
@@ -376,7 +376,7 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
-XMLTransformerActionInit aGraphicPropertyOOoElemActionTable[] =
+XMLTransformerActionInit const aGraphicPropertyOOoElemActionTable[] =
 {
     { XML_NAMESPACE_STYLE, XML_BACKGROUND_IMAGE, XML_ATACTION_COPY, NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_COLUMNS, XML_ATACTION_COPY, NO_PARAMS }, /* generated entry */
@@ -384,7 +384,7 @@ XMLTransformerActionInit aGraphicPropertyOOoElemActionTable[] =
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
-XMLTransformerActionInit aDrawingPagePropertyOOoAttrActionTable[] =
+XMLTransformerActionInit const aDrawingPagePropertyOOoAttrActionTable[] =
 {
     // style-graphic-fill-properties-attlist
     { XML_NAMESPACE_DRAW, XML_FILL_GRADIENT_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF,
@@ -401,7 +401,7 @@ XMLTransformerActionInit aDrawingPagePropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
-XMLTransformerActionInit aPageLayoutPropertyOOoAttrActionTable[] =
+XMLTransformerActionInit const aPageLayoutPropertyOOoAttrActionTable[] =
 {
     { XML_NAMESPACE_FO, XML_PAGE_WIDTH, XML_ATACTION_INCH2IN,
           NO_PARAMS }, /* generated entry */
@@ -457,7 +457,7 @@ XMLTransformerActionInit aPageLayoutPropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
-XMLTransformerActionInit aHeaderFooterPropertyOOoAttrActionTable[] =
+XMLTransformerActionInit const aHeaderFooterPropertyOOoAttrActionTable[] =
 {
     { XML_NAMESPACE_SVG, XML_HEIGHT, XML_ATACTION_INCH2IN,
           NO_PARAMS }, /* generated entry */
@@ -506,7 +506,7 @@ XMLTransformerActionInit aHeaderFooterPropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
-XMLTransformerActionInit aTextPropertyOOoAttrActionTable[] =
+XMLTransformerActionInit const aTextPropertyOOoAttrActionTable[] =
 {
     { XML_NAMESPACE_FO, XML_FONT_VARIANT, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
@@ -643,13 +643,13 @@ XMLTransformerActionInit aTextPropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
-XMLTransformerActionInit aTextPropertyOOoElemActionTable[] =
+XMLTransformerActionInit const aTextPropertyOOoElemActionTable[] =
 {
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
 
-XMLTransformerActionInit aParagraphPropertyOOoAttrActionTable[] =
+XMLTransformerActionInit const aParagraphPropertyOOoAttrActionTable[] =
 {
     { XML_NAMESPACE_FO, XML_LINE_HEIGHT, XML_ATACTION_INCH2IN,
           NO_PARAMS }, /* generated entry */
@@ -765,7 +765,7 @@ XMLTransformerActionInit aParagraphPropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
-XMLTransformerActionInit aParagraphPropertyOOoElemActionTable[] =
+XMLTransformerActionInit const aParagraphPropertyOOoElemActionTable[] =
 {
     { XML_NAMESPACE_STYLE, XML_TAB_STOPS, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
@@ -776,7 +776,7 @@ XMLTransformerActionInit aParagraphPropertyOOoElemActionTable[] =
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
-XMLTransformerActionInit aSectionPropertyOOoAttrActionTable[] =
+XMLTransformerActionInit const aSectionPropertyOOoAttrActionTable[] =
 {
     { XML_NAMESPACE_FO, XML_MARGIN_LEFT, XML_ATACTION_INCH2IN,
           NO_PARAMS }, /* generated entry */
@@ -785,7 +785,7 @@ XMLTransformerActionInit aSectionPropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
-XMLTransformerActionInit aTablePropertyOOoAttrActionTable[] =
+XMLTransformerActionInit const aTablePropertyOOoAttrActionTable[] =
 {
     { XML_NAMESPACE_STYLE, XML_WIDTH, XML_ATACTION_INCH2IN,
           NO_PARAMS }, /* generated entry */
@@ -802,14 +802,14 @@ XMLTransformerActionInit aTablePropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
-XMLTransformerActionInit aTableColumnPropertyOOoAttrActionTable[] =
+XMLTransformerActionInit const aTableColumnPropertyOOoAttrActionTable[] =
 {
     { XML_NAMESPACE_STYLE, XML_COLUMN_WIDTH, XML_ATACTION_INCH2IN,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
-XMLTransformerActionInit aTableRowPropertyOOoAttrActionTable[] =
+XMLTransformerActionInit const aTableRowPropertyOOoAttrActionTable[] =
 {
     { XML_NAMESPACE_STYLE, XML_ROW_HEIGHT, XML_ATACTION_INCH2IN,
           NO_PARAMS }, /* generated entry */
@@ -818,7 +818,7 @@ XMLTransformerActionInit aTableRowPropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
-XMLTransformerActionInit aTableCellPropertyOOoAttrActionTable[] =
+XMLTransformerActionInit const aTableCellPropertyOOoAttrActionTable[] =
 {
     { XML_NAMESPACE_FO, XML_VERTICAL_ALIGN, XML_ATACTION_RENAME,
         XMLTransformerActionInit::QNameParam( XML_NAMESPACE_STYLE,
@@ -891,14 +891,14 @@ XMLTransformerActionInit aTableCellPropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
-XMLTransformerActionInit aTableCellPropertyOOoElemActionTable[] =
+XMLTransformerActionInit const aTableCellPropertyOOoElemActionTable[] =
 {
     { XML_NAMESPACE_STYLE, XML_BACKGROUND_IMAGE, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
-XMLTransformerActionInit aListLevelPropertyOOoAttrActionTable[] =
+XMLTransformerActionInit const aListLevelPropertyOOoAttrActionTable[] =
 {
     { XML_NAMESPACE_TEXT, XML_SPACE_BEFORE, XML_ATACTION_INCH2IN,
           NO_PARAMS }, /* generated entry */
@@ -913,7 +913,7 @@ XMLTransformerActionInit aListLevelPropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
-XMLTransformerActionInit aChartPropertyOOoAttrActionTable[] =
+XMLTransformerActionInit const aChartPropertyOOoAttrActionTable[] =
 {
     { XML_NAMESPACE_CHART, XML_SCALE_TEXT, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
@@ -1049,7 +1049,7 @@ XMLTransformerActionInit aChartPropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
-XMLTransformerActionInit aChartPropertyOOoElemActionTable[] =
+XMLTransformerActionInit const aChartPropertyOOoElemActionTable[] =
 {
     { XML_NAMESPACE_STYLE, XML_SYMBOL_IMAGE, XML_ATACTION_COPY, NO_PARAMS },
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
