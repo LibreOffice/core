@@ -94,13 +94,12 @@ void AquaSalGraphics::UnsetState()
  */
 bool AquaSalGraphics::CheckContext()
 {
-    if( mbWindow && mpFrame && mpFrame->getNSWindow() )
+    if (mbWindow && mpFrame && (mpFrame->getNSWindow() || Application::IsBitmapRendering()))
     {
         const unsigned int nWidth = mpFrame->maGeometry.nWidth;
         const unsigned int nHeight = mpFrame->maGeometry.nHeight;
 
-        CGContextRef rReleaseContext = nullptr;
-        CGLayerRef   rReleaseLayer = nullptr;
+        CGLayerRef rReleaseLayer = nullptr;
 
         // check if a new drawing context is needed (e.g. after a resize)
         if( (unsigned(mnWidth) != nWidth) || (unsigned(mnHeight) != nHeight) )
@@ -108,61 +107,76 @@ bool AquaSalGraphics::CheckContext()
             mnWidth = nWidth;
             mnHeight = nHeight;
             // prepare to release the corresponding resources
-            rReleaseContext = mrContext;
-            rReleaseLayer   = mxLayer;
+            if (mxLayer)
+                rReleaseLayer = mxLayer;
+            else if (mrContext)
+            {
+                SAL_INFO("vcl.cg", "CGContextRelease(" << mrContext << ")");
+                CGContextRelease(mrContext);
+            }
             mrContext = nullptr;
             mxLayer = nullptr;
         }
 
-        if( !mrContext )
+        if (!mrContext)
         {
-            const CGSize aLayerSize = { static_cast<CGFloat>(nWidth), static_cast<CGFloat>(nHeight) };
-            NSGraphicsContext* pNSGContext = [NSGraphicsContext graphicsContextWithWindow: mpFrame->getNSWindow()];
+            if (mpFrame->getNSWindow())
+            {
+                const CGSize aLayerSize = { static_cast<CGFloat>(nWidth), static_cast<CGFloat>(nHeight) };
+                NSGraphicsContext* pNSGContext = [NSGraphicsContext graphicsContextWithWindow: mpFrame->getNSWindow()];
 SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'graphicsPort' is deprecated: first deprecated in macOS 10.14
-            CGContextRef xCGContext = static_cast<CGContextRef>([pNSGContext graphicsPort]);
+                CGContextRef xCGContext = static_cast<CGContextRef>([pNSGContext graphicsPort]);
 SAL_WNODEPRECATED_DECLARATIONS_POP
-            mxLayer = CGLayerCreateWithContext( xCGContext, aLayerSize, nullptr );
-            SAL_INFO( "vcl.cg", "CGLayerCreateWithContext(" << xCGContext << "," << aLayerSize << ",NULL) = " << mxLayer );
-            if( mxLayer )
-            {
-                mrContext = CGLayerGetContext( mxLayer );
-                SAL_INFO( "vcl.cg", "CGLayerGetContext(" << mxLayer << ") = " << mrContext );
-            }
-
-            if( mrContext )
-            {
-                // copy original layer to resized layer
-                if( rReleaseLayer )
+                mxLayer = CGLayerCreateWithContext(xCGContext, aLayerSize, nullptr);
+                SAL_INFO("vcl.cg", "CGLayerCreateWithContext(" << xCGContext << "," << aLayerSize << ",NULL) = " << mxLayer);
+                if (mxLayer)
                 {
-                    SAL_INFO( "vcl.cg", "CGContextDrawLayerAtPoint(" << mrContext << "," << CGPointZero << "," << rReleaseLayer << ")" );
-                    CGContextDrawLayerAtPoint( mrContext, CGPointZero, rReleaseLayer );
+                    mrContext = CGLayerGetContext( mxLayer );
+                    SAL_INFO( "vcl.cg", "CGLayerGetContext(" << mxLayer << ") = " << mrContext );
                 }
 
-                CGContextTranslateCTM( mrContext, 0, nHeight );
-                CGContextScaleCTM( mrContext, 1.0, -1.0 );
-                CGContextSetFillColorSpace( mrContext, GetSalData()->mxRGBSpace );
-                CGContextSetStrokeColorSpace( mrContext, GetSalData()->mxRGBSpace );
-                SAL_INFO( "vcl.cg", "CGContextSaveGState(" << mrContext << ") " << ++mnContextStackDepth );
-                CGContextSaveGState( mrContext );
+                if (rReleaseLayer)
+                {
+                    // copy original layer to resized layer
+                    if (mrContext)
+                    {
+                        SAL_INFO("vcl.cg", "CGContextDrawLayerAtPoint(" << mrContext << "," << CGPointZero << "," << rReleaseLayer << ")");
+                        CGContextDrawLayerAtPoint(mrContext, CGPointZero, rReleaseLayer);
+                    }
+                    SAL_INFO("vcl.cg", "CGLayerRelease(" << rReleaseLayer << ")");
+                    CGLayerRelease(rReleaseLayer);
+                }
+            }
+            else
+            {
+                assert(Application::IsBitmapRendering());
+                const int nBitmapDepth = 32;
+                const int nBytesPerRow = (nBitmapDepth * mnWidth) / 8;
+                void* pRawData = std::malloc(nBytesPerRow * mnHeight);
+                const int nFlags = kCGImageAlphaNoneSkipFirst;
+#ifndef MACOSX
+                nFlags |= kCGImageByteOrder32Little;
+#endif
+                mrContext = CGBitmapContextCreate(pRawData, mnWidth, mnHeight, 8, nBytesPerRow,
+                                                  GetSalData()->mxRGBSpace, nFlags);
+                SAL_INFO("vcl.cg", "CGBitmapContextCreate(" << mnWidth << "x" << mnHeight
+                                   << "x" << nBitmapDepth << ") = " << mrContext);
+            }
+
+            if (mrContext)
+            {
+                CGContextTranslateCTM(mrContext, 0, nHeight);
+                CGContextScaleCTM(mrContext, 1.0, -1.0);
+                CGContextSetFillColorSpace(mrContext, GetSalData()->mxRGBSpace);
+                CGContextSetStrokeColorSpace(mrContext, GetSalData()->mxRGBSpace);
+                SAL_INFO("vcl.cg", "CGContextSaveGState(" << mrContext << ") " << ++mnContextStackDepth);
+                CGContextSaveGState(mrContext);
                 SetState();
 
                 // re-enable XOR emulation for the new context
-                if( mpXorEmulation )
-                {
-                    mpXorEmulation->SetTarget( mnWidth, mnHeight, mnBitmapDepth, mrContext, mxLayer );
-                }
+                if (mpXorEmulation)
+                    mpXorEmulation->SetTarget(mnWidth, mnHeight, mnBitmapDepth, mrContext, mxLayer);
             }
-        }
-
-        if( rReleaseLayer )
-        {
-            SAL_INFO( "vcl.cg", "CGLayerRelease(" << rReleaseLayer << ")" );
-            CGLayerRelease( rReleaseLayer );
-        }
-        else if( rReleaseContext )
-        {
-            SAL_INFO( "vcl.cg", "CGContextRelease(" << rReleaseContext << ")" );
-            CGContextRelease( rReleaseContext );
         }
     }
 

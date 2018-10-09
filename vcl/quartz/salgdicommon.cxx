@@ -538,8 +538,6 @@ void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY,
     RefreshRect( nDstX, nDstY, nSrcWidth, nSrcHeight );
 }
 
-#ifndef IOS
-
 void AquaSalGraphics::copyResolution( AquaSalGraphics& rGraphics )
 {
     if( !rGraphics.mnRealDPIY && rGraphics.mbWindow && rGraphics.mpFrame )
@@ -549,8 +547,6 @@ void AquaSalGraphics::copyResolution( AquaSalGraphics& rGraphics )
     mnRealDPIX = rGraphics.mnRealDPIX;
     mnRealDPIY = rGraphics.mnRealDPIY;
 }
-
-#endif
 
 bool AquaSalGraphics::blendBitmap( const SalTwoRect&,
                                    const SalBitmap& )
@@ -1394,21 +1390,11 @@ Color AquaSalGraphics::getPixel( long nX, long nY )
 
 void AquaSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
 {
-#ifndef IOS
-    if( !mnRealDPIY )
-    {
+    if (!mnRealDPIY)
         initResolution( (mbWindow && mpFrame) ? mpFrame->getNSWindow() : nil );
-    }
 
     rDPIX = mnRealDPIX;
     rDPIY = mnRealDPIY;
-#else
-    // This *must* be 96 or else the iOS app will behave very badly (tiles are scaled wrongly and
-    // don't match each others at their boundaries, and other issues). But *why* it must be 96 I
-    // have no idea. The commit that changed it to 96 from (the arbitrary) 200 did not say. If you
-    // know where else 96 is explicitly or implicitly hard-coded, please modify this comment.
-    rDPIX = rDPIY = 96;
-#endif
 }
 
 void AquaSalGraphics::ImplDrawPixel( long nX, long nY, const RGBAColor& rColor )
@@ -1430,10 +1416,23 @@ void AquaSalGraphics::ImplDrawPixel( long nX, long nY, const RGBAColor& rColor )
     CGContextSetFillColor( mrContext, maFillColor.AsArray() );
 }
 
-#ifndef IOS
-
-void AquaSalGraphics::initResolution( NSWindow* )
+void AquaSalGraphics::initResolution( NSWindow* nsWindow )
 {
+#ifdef IOS
+    // This *must* be 96 or else the iOS app will behave very badly (tiles are scaled wrongly and
+    // don't match each others at their boundaries, and other issues). But *why* it must be 96 I
+    // have no idea. The commit that changed it to 96 from (the arbitrary) 200 did not say. If you
+    // know where else 96 is explicitly or implicitly hard-coded, please modify this comment.
+    (void) nsWindow;
+    mnRealDPIX = mnRealDPIY = 96;
+#else
+    if (!nsWindow)
+    {
+        if (Application::IsBitmapRendering())
+            mnRealDPIX = mnRealDPIY = 96;
+        return;
+    }
+
     // #i100617# read DPI only once; there is some kind of weird caching going on
     // if the main screen changes
     // FIXME: this is really unfortunate and needs to be investigated
@@ -1529,9 +1528,8 @@ void AquaSalGraphics::initResolution( NSWindow* )
         mnRealDPIX = pSalData->mnDPIX;
         mnRealDPIY = pSalData->mnDPIY;
     }
-}
-
 #endif
+}
 
 void AquaSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
 {

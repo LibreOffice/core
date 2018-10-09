@@ -40,6 +40,14 @@ unsigned int AquaSalSystem::GetDisplayScreenCount()
 
 tools::Rectangle AquaSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 {
+    if (Application::IsBitmapRendering())
+    {
+        tools::Rectangle aRect;
+        if (nScreen == 0)
+            aRect = tools::Rectangle(Point(0,0), Size(1024, 768));
+        return aRect;
+    }
+
     NSArray* pScreens = [NSScreen screens];
     tools::Rectangle aRet;
     NSScreen* pScreen = nil;
