@@ -144,8 +144,6 @@ include/sfx2/linkmgr.hxx:64
     _Bool sfx2::LinkManager::InsertLink(class sfx2::SvBaseLink *,unsigned short,enum SfxLinkUpdateMode,const class rtl::OUString *)
 include/sfx2/lnkbase.hxx:103
     class sfx2::SvLinkSource * sfx2::SvBaseLink::GetRealObject()
-include/svl/listener.hxx:55
-    _Bool SvtListener::EndListening(class SvtBroadcaster &)
 include/svl/macitem.hxx:92
     class SvStream & SvxMacroTableDtor::Write(class SvStream &) const
 include/svl/poolitem.hxx:173
@@ -198,9 +196,9 @@ include/vcl/texteng.hxx:279
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/toolbox.hxx:514
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:308
+include/vcl/weld.hxx:316
     _Bool weld::ComboBox::get_entry_selection_bounds(int &,int &)
-include/vcl/weld.hxx:947
+include/vcl/weld.hxx:956
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)
@@ -274,7 +272,7 @@ sw/inc/editsh.hxx:264
     _Bool SwEditShell::GetPaMParAttr(class SwPaM *,class SfxItemSet &) const
 sw/inc/editsh.hxx:635
     const class GraphicAttr * SwEditShell::GetGraphicAttr(class GraphicAttr &) const
-sw/inc/IDocumentUndoRedo.hxx:180
+sw/inc/IDocumentUndoRedo.hxx:181
     _Bool IDocumentUndoRedo::Repeat(class sw::RepeatContext &,const unsigned short)
 sw/inc/swcrsr.hxx:156
     _Bool SwCursor::ExpandToSentenceBorders(const class SwRootFrame *)

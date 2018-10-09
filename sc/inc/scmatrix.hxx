@@ -412,8 +412,6 @@ public:
     void MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& xMat1, const ScMatrixRef& xMat2,
             SvNumberFormatter& rFormatter, svl::SharedStringPool& rPool) ;
 
-    ScMatrix& operator+= ( const ScMatrix& r );
-
 #if DEBUG_MATRIX
     void Dump() const;
 #endif

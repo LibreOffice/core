@@ -265,8 +265,6 @@ private:
     std::unique_ptr<weld::Entry> m_xEdtTitle;
     std::unique_ptr<weld::TextView> m_xEdInputHelp;
 
-    void    Init();
-
 public:
     ScTPValidationHelp(TabPageParent pParent, const SfxItemSet& rArgSet);
     virtual ~ScTPValidationHelp() override;

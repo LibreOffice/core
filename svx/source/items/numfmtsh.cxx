@@ -1354,31 +1354,6 @@ short SvxNumberFormatShell::GetListPos4Entry(sal_uInt32 nIdx)
     return nSelP;
 }
 
-short SvxNumberFormatShell::GetListPos4Entry(const OUString& rFmtString)
-{
-    sal_uInt32 nAt = 0;
-    short nSelP = SELPOS_NONE;
-    if (FindEntry(rFmtString, &nAt))
-    {
-        if (NUMBERFORMAT_ENTRY_NOT_FOUND != nAt && NUMBERFORMAT_ENTRY_NEW_CURRENCY != nAt)
-        {
-            nSelP = GetListPos4Entry(nAt);
-        }
-        else
-        {
-            for (size_t i = 0; i < aCurrencyFormatList.size(); i++)
-            {
-                if (rFmtString == aCurrencyFormatList[i])
-                {
-                    nSelP = static_cast<short>(i);
-                    break;
-                }
-            }
-        }
-    }
-    return nSelP;
-}
-
 OUString SvxNumberFormatShell::GetStandardName() const
 {
     return pFormatter->GetStandardName(eCurLanguage);
