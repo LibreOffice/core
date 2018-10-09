@@ -1042,7 +1042,7 @@ void ScTiledRenderingTest::testInvalidateOnInserRowCol()
 
     // insert row
     aView.m_bInvalidateTiles = false;
-    comphelper::dispatchCommand(".uno:InsertRows", aArgs);
+    comphelper::dispatchCommand(".uno:InsertRowsBefore", aArgs);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
 
@@ -1056,7 +1056,7 @@ void ScTiledRenderingTest::testInvalidateOnInserRowCol()
 
     // insert column
     aView.m_bInvalidateTiles = false;
-    comphelper::dispatchCommand(".uno:InsertColumns", aArgs);
+    comphelper::dispatchCommand(".uno:InsertColumnsBefore", aArgs);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
 

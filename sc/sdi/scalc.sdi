@@ -2868,25 +2868,6 @@ SfxVoidItem InsertColumnBreak FID_INS_COLBRK
 ]
 
 
-/* 2015/06 Deprecated, use InsertColumnsBefore instead */
-SfxVoidItem InsertColumns FID_INS_COLUMN
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Insert;
-]
-
-
 SfxVoidItem InsertColumnsBefore FID_INS_COLUMNS_BEFORE
 ()
 [
@@ -3101,25 +3082,6 @@ SfxVoidItem InsertRowBreak FID_INS_ROWBRK
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Insert;
-]
-
-
-/* 2015/06 Deprecated, use InsertRowsBefore instead */
-SfxVoidItem InsertRows FID_INS_ROW
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Insert;
 ]
 
