@@ -237,12 +237,6 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
         const int nBytesPerRow = (mnBitmapDepth * nDX + 7) / 8;
 
         void* pRawData = std::malloc( nBytesPerRow * nDY );
-#ifdef DBG_UTIL
-        for (ssize_t i = 0; i < nBytesPerRow * nDY; i++)
-        {
-            static_cast<sal_uInt8*>(pRawData)[i] = (i & 0xFF);
-        }
-#endif
         mxBitmapContext = CGBitmapContextCreate( pRawData, nDX, nDY,
                                                  mnBitmapDepth, nBytesPerRow,
                                                  GetSalData()->mxGraySpace, kCGImageAlphaNone );
