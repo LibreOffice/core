@@ -35,10 +35,10 @@ struct VendorSupportMapEntry
     createInstance_func  createFunc;
 };
 
-extern VendorSupportMapEntry gVendorMap[];
+extern VendorSupportMapEntry const gVendorMap[];
 
 #define BEGIN_VENDOR_MAP() \
-VendorSupportMapEntry gVendorMap[] ={
+VendorSupportMapEntry const gVendorMap[] ={
 
 #define VENDOR_MAP_ENTRY(x,y) \
     {x, & y::getJavaExePaths, & y::createInstance},

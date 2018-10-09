@@ -198,7 +198,7 @@ bool StaticVar::VisitVarDecl(VarDecl const* varDecl)
     return true;
 }
 
-loplugin::Plugin::Registration<StaticVar> X("staticvar", false);
+loplugin::Plugin::Registration<StaticVar> X("staticvar", true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
