@@ -5009,6 +5009,8 @@ public:
     {
         if (get_frozen())
             return;
+        if (has_entry())
+            return;
 #if defined(GDK_WINDOWING_WAYLAND)
         GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
         if (GDK_IS_WAYLAND_DISPLAY(pDisplay))
