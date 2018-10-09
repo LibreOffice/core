@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_dd8e69cf",
+        "filename": "sw/qa/python/xtextrange.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2018-10-09T10:17:28Z",
+      "side": 1,
+      "message": "Maybe it will be nice to have an additional unit test where setString() was called twice at the same position with different values. Will it lead to string concatenation or to string overwrite behavior?!",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 40
+      },
+      "revId": "c039ac9fee4300b3222164e778353a77ca5fb078",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
