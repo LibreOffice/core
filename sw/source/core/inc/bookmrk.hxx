@@ -240,7 +240,7 @@ namespace sw {
             : public Fieldmark
         {
         public:
-            TextFieldmark(const SwPaM& rPaM);
+            TextFieldmark(const SwPaM& rPaM, const OUString& rName);
             virtual void InitDoc(SwDoc* const io_pDoc, sw::mark::InsertMode eMode) override;
             virtual void ReleaseDoc(SwDoc* const pDoc) override;
         };
