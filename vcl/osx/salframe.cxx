@@ -429,7 +429,7 @@ void AquaSalFrame::SendPaintEvent( const tools::Rectangle* pRect )
 
 void AquaSalFrame::Show(bool bVisible, bool bNoActivate)
 {
-    if ( !mpNSWindow )
+    if (!mpNSWindow || (bVisible && Application::IsHeadlessModeEnabled()))
         return;
 
     OSX_SALDATA_RUNINMAIN( Show(bVisible, bNoActivate) )
