@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_6f40c036",
+        "filename": "editeng/source/editeng/impedit2.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 2990,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-10-09T12:13:51Z",
+      "side": 1,
+      "message": "This will now disable field shading also for all fields that follow an URL field..\n\nUsing the TriState here seems to be a misunderstanding, my earlier comments about using TriState was for the detection of whether we are in Calc or not, which was done for every field instead of just once. That seems to be moot now though as there is no check for Calc anymore.\n\nI\u0027d still prefer an extra EEControlBits value that controls whether to apply a background to URL fields as well and set that only from Calc now to not interfere with other applications\u0027 behaviour, if any. If you\u0027re stuck with that just say so and I can take over.",
+      "revId": "c3b20668605e515d3329dfef187201708d6f8ff8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
