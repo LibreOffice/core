@@ -687,12 +687,13 @@ std::pair<WinBits,MessBoxStyle> ImplGetWinBits( sal_uInt32 nComponentAttribs, Wi
 
 struct ComponentInfo
 {
-    const char*     pName;
+    OUStringLiteral sName;
     WindowType      nWinType;
 };
 
-static ComponentInfo aComponentInfos [] =
+static ComponentInfo const aComponentInfos [] =
 {
+    { "animatedimages",     WindowType::CONTROL },
     { "buttondialog",       WindowType::BUTTONDIALOG },
     { "cancelbutton",       WindowType::CANCELBUTTON },
     { "checkbox",           WindowType::CHECKBOX },
@@ -712,9 +713,9 @@ static ComponentInfo aComponentInfos [] =
     { "fixedline",          WindowType::FIXEDLINE },
     { "fixedtext",          WindowType::FIXEDTEXT },
     { "floatingwindow",     WindowType::FLOATINGWINDOW },
+    { "frame",              WindowType::GROUPBOX },
     { "framewindow",        WindowType::TOOLKIT_FRAMEWINDOW },
     { "groupbox",           WindowType::GROUPBOX },
-    { "frame",              WindowType::GROUPBOX },
     { "helpbutton",         WindowType::HELPBUTTON },
     { "imagebutton",        WindowType::IMAGEBUTTON },
     { "infobox",            WindowType::INFOBOX },
@@ -740,7 +741,6 @@ static ComponentInfo aComponentInfos [] =
     { "radiobutton",        WindowType::RADIOBUTTON },
     { "scrollbar",          WindowType::SCROLLBAR },
     { "scrollbarbox",       WindowType::SCROLLBARBOX },
-    { "animatedimages",     WindowType::CONTROL },
     { "spinbutton",         WindowType::SPINBUTTON },
     { "spinfield",          WindowType::SPINFIELD },
     { "splitter",           WindowType::SPLITTER },
@@ -750,24 +750,26 @@ static ComponentInfo aComponentInfos [] =
     { "tabcontrol",         WindowType::TABCONTROL },
     { "tabdialog",          WindowType::TABDIALOG },
     { "tabpage",            WindowType::TABPAGE },
+    { "tabpagecontainer",   WindowType::CONTROL },
+    { "tabpagemodel",       WindowType::TABPAGE },
     { "timebox",            WindowType::TIMEBOX },
     { "timefield",          WindowType::TIMEFIELD },
     { "toolbox",            WindowType::TOOLBOX },
     { "tristatebox",        WindowType::TRISTATEBOX },
     { "warningbox",         WindowType::WARNINGBOX },
     { "window",             WindowType::WINDOW },
-    { "workwindow",         WindowType::WORKWINDOW },
-    { "tabpagecontainer",   WindowType::CONTROL },
-    { "tabpagemodel",       WindowType::TABPAGE }
+    { "workwindow",         WindowType::WORKWINDOW }
 };
 
-extern "C"
+bool ComponentInfoCompare( const ComponentInfo & rFirst, const ComponentInfo & rSecond)
 {
-static int ComponentInfoCompare( const void* pFirst, const void* pSecond)
-{
-    return strcmp( static_cast<ComponentInfo const *>(pFirst)->pName,
-                   static_cast<ComponentInfo const *>(pSecond)->pName );
+    return rtl_str_compare_WithLength(lhs.sName.data, lhs.sName.size, rhs.sName.data, rhs.sName.size) < 0;
 }
+
+bool ComponentInfoFindCompare( const ComponentInfo & lhs, const OUString & s)
+{
+    return rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(s.pData->buffer, s.pData->length,
+                lhs.sName.data, lhs.sName.size) > 0;
 }
 
 WindowType ImplGetComponentType( const OUString& rServiceName )
@@ -775,28 +777,22 @@ WindowType ImplGetComponentType( const OUString& rServiceName )
     static bool bSorted = false;
     if( !bSorted )
     {
-        qsort(  static_cast<void*>(aComponentInfos),
-                SAL_N_ELEMENTS( aComponentInfos ),
-                sizeof( ComponentInfo ),
-                ComponentInfoCompare );
+        assert( std::is_sorted( std::begin(aComponentInfos), std::end(aComponentInfos),
+                    ComponentInfoCompare ) );
         bSorted = true;
     }
 
 
-    ComponentInfo aSearch;
-    OString aServiceName(OUStringToOString(rServiceName, osl_getThreadTextEncoding()).toAsciiLowerCase());
     if ( !aServiceName.isEmpty() )
-        aSearch.pName = aServiceName.getStr();
+        sSearch = aServiceName;
     else
-        aSearch.pName = "window";
+        sSearch = "window";
 
-    ComponentInfo* pInf = static_cast<ComponentInfo*>(bsearch( &aSearch,
-                        static_cast<void*>(aComponentInfos),
-                        SAL_N_ELEMENTS( aComponentInfos ),
-                        sizeof( ComponentInfo ),
-                        ComponentInfoCompare ));
-
-    return pInf ? pInf->nWinType : WindowType::NONE;
+    auto it = std::lower_bound( std::begin(aComponentInfos), std::end(aComponentInfos), sSearch,
+                                ComponentInfoFindCompare );
+    if (it != std::end(aComponentInfos)  && !ComponentInfoCompare(*it, aSearch) )
+        return it->nWinType;
+    return WindowType::NONE;
 }
 
 struct MessageBoxTypeInfo
