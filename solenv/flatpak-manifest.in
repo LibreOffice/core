@@ -582,10 +582,10 @@
                     "dest-filename": "external/tarballs/35c94d2df8893241173de1d16b6034c0-swingExSrc.zip"
                 },
                 {
-                    "url": "https://dev-www.libreoffice.org/src/libnumbertext-1.0.4.tar.xz",
-                    "sha256": "349258f4c3a8b090893e847b978b22e8dc1343d4ada3bfba811b97144f1dd67b",
+                    "url": "https://dev-www.libreoffice.org/src/libnumbertext-1.0.5.tar.xz",
+                    "sha256": "e1c9086b4cecb6b25f180316f30740dfabe6a4dbaf70dddc34276fc839e4f4f7",
                     "type": "file",
-                    "dest-filename": "external/tarballs/libnumbertext-1.0.4.tar.xz"
+                    "dest-filename": "external/tarballs/libnumbertext-1.0.5.tar.xz"
                 },
                 {
                     "url": "https://dev-www.libreoffice.org/extern/49a64f3bcf20a7909ba2751349231d6652ded9cd2840e961b5164d09de3ffa63-opens___.ttf",
