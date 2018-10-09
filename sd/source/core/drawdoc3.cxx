@@ -885,7 +885,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
                 pRefPage->RemoveEmptyPresentationObjects();
         }
 
-        ///Remove processed elements, to avoid doings hacks in InsertBookmarkAsObject
+        ///Remove processed elements, to avoid doing hacks in InsertBookmarkAsObject
         if ( pExchangeList )
             pExchangeList->erase(pExchangeList->begin(),pExchangeIter);
 
