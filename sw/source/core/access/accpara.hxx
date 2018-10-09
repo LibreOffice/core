@@ -88,9 +88,6 @@ class SwAccessibleParagraph :
 
     std::unique_ptr<SwParaChangeTrackingInfo> mpParaChangeTrackInfo; // #i108125#
 
-    /// get the SwTextNode (requires frame; check before)
-    const SwTextNode* GetTextNode() const;
-
     /// get the (accessible) text string (requires frame; check before)
     OUString const & GetString();
 
