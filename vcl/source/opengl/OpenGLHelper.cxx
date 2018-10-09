@@ -972,8 +972,6 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
      * There are a number of cases that these environment variables cover:
      *  * SAL_FORCEGL forces OpenGL independent of any other option
      *  * SAL_DISABLEGL or a blacklisted driver avoid the use of OpenGL if SAL_FORCEGL is not set
-     *  * SAL_ENABLEGL overrides VCL_HIDE_WINDOWS and the configuration variable
-     *  * the configuration variable is checked if no environment variable is set
      */
 
     bSet = true;
@@ -989,17 +987,16 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
     else if (bSupportsVCLOpenGL)
     {
         static bool bEnableGLEnv = !!getenv("SAL_ENABLEGL");
+        static bool bHeadlessPlugin = (getenv("SAL_USE_VCLPLUGIN") &&
+            0 == strcmp(getenv("SAL_USE_VCLPLUGIN"), "svp"));
 
         bEnable = bEnableGLEnv;
 
-        static bool bDuringBuild = getenv("VCL_HIDE_WINDOWS");
-        if (bDuringBuild && !bEnable /* env. enable overrides */)
-            bEnable = false;
-        else if (officecfg::Office::Common::VCL::UseOpenGL::get())
+        if (officecfg::Office::Common::VCL::UseOpenGL::get())
             bEnable = true;
 
-        // Force disable in safe mode
-        if (Application::IsSafeModeEnabled())
+        // Force disable in safe mode or when running with headless plugin
+        if (bHeadlessPlugin || Application::IsSafeModeEnabled())
             bEnable = false;
 
         bRet = bEnable;

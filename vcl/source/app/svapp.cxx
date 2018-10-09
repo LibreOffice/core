@@ -75,6 +75,7 @@
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/lok.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <osl/process.h>
 
@@ -1333,7 +1334,7 @@ vcl::Window* Application::GetDefDialogParent()
     return nullptr;
 }
 
-Application::DialogCancelMode Application::GetDialogCancelMode()
+DialogCancelMode Application::GetDialogCancelMode()
 {
     return ImplGetSVData()->maAppData.meDialogCancel;
 }
@@ -1442,7 +1443,7 @@ void Application::EnableHeadlessMode( bool dialogsAreFatal )
 
 bool Application::IsHeadlessModeEnabled()
 {
-    return IsDialogCancelEnabled();
+    return IsDialogCancelEnabled() || comphelper::LibreOfficeKit::isActive();
 }
 
 static bool bConsoleOnly = false;

@@ -812,8 +812,7 @@ namespace {
 
 void SetForegroundWindow_Impl(HWND hwnd)
 {
-    static bool bUseForegroundWindow = !std::getenv("VCL_HIDE_WINDOWS");
-    if (bUseForegroundWindow)
+    if (!Application::IsHeadlessModeEnabled())
         SetForegroundWindow(hwnd);
 }
 

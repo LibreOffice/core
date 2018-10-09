@@ -864,9 +864,9 @@ bool Dialog::ImplStartExecute()
     {
         switch ( Application::GetDialogCancelMode() )
         {
-        case Application::DialogCancelMode::Off:
+        case DialogCancelMode::Off:
             break;
-        case Application::DialogCancelMode::Silent:
+        case DialogCancelMode::Silent:
             if (bModal && GetLOKNotifier())
             {
                 // check if there's already some dialog being ::Execute()d
@@ -887,7 +887,7 @@ bool Dialog::ImplStartExecute()
                     << "\"cancelled in silent mode");
             return false;
         default: // default cannot happen
-        case Application::DialogCancelMode::Fatal:
+        case DialogCancelMode::Fatal:
             std::abort();
         }
 
