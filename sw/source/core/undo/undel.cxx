@@ -658,7 +658,8 @@ static OUString lcl_DenotedPortion(const OUString& rStr, sal_Int32 nStart, sal_I
 {
     OUString aResult;
 
-    if (nEnd - nStart > 0)
+    auto nCount = nEnd - nStart;
+    if (nCount > 0)
     {
         sal_Unicode cLast = rStr[nEnd - 1];
         if (lcl_IsSpecialCharacter(cLast))
@@ -666,11 +667,11 @@ static OUString lcl_DenotedPortion(const OUString& rStr, sal_Int32 nStart, sal_I
             switch(cLast)
             {
             case CH_TXTATR_TAB:
-                aResult = SwResId(STR_UNDO_TABS);
+                aResult = SwResId(STR_UNDO_TABS, nCount);
 
                 break;
             case CH_TXTATR_NEWLINE:
-                aResult = SwResId(STR_UNDO_NLS);
+                aResult = SwResId(STR_UNDO_NLS, nCount);
 
                 break;
 
@@ -691,14 +692,13 @@ static OUString lcl_DenotedPortion(const OUString& rStr, sal_Int32 nStart, sal_I
                 break;
             }
             SwRewriter aRewriter;
-            aRewriter.AddRule(UndoArg1,
-                              OUString::number(nEnd - nStart));
+            aRewriter.AddRule(UndoArg1, OUString::number(nCount));
             aResult = aRewriter.Apply(aResult);
         }
         else
         {
             aResult = SwResId(STR_START_QUOTE);
-            aResult += rStr.copy(nStart, nEnd - nStart);
+            aResult += rStr.copy(nStart, nCount);
             aResult += SwResId(STR_END_QUOTE);
         }
     }

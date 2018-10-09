@@ -536,7 +536,7 @@ bool ScDocumentPool::GetPresentation(
             if( nPagNo )
             {
                 rText = ScResId( STR_SCATTR_PAGE_SCALETOPAGES ) + aStrSep;
-                OUString aPages( ScResId( STR_SCATTR_PAGE_SCALE_PAGES ) );
+                OUString aPages(ScResId(STR_SCATTR_PAGE_SCALE_PAGES, nPagNo));
                 aPages = aPages.replaceFirst( "%1", OUString::number( nPagNo ) );
                 rText += aPages;
             }

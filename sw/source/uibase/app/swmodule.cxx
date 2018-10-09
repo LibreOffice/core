@@ -201,6 +201,11 @@ OUString SwResId(const char* pId)
     return Translate::get(pId, SW_MOD()->GetResLocale());
 }
 
+OUString SwResId(const char* pId, int nCardinality)
+{
+    return Translate::nget(pId, nCardinality, SW_MOD()->GetResLocale());
+}
+
 uno::Reference< scanner::XScannerManager2 > const &
 SwModule::GetScannerManager()
 {
