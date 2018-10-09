@@ -12,8 +12,6 @@ pdfium_patches += visibility.patch.1
 pdfium_patches += ubsan.patch
 # Fixes build on our baseline.
 pdfium_patches += build.patch.1
-# Adds missing editing API
-pdfium_patches += 0003-svx-import-PDF-images-as-BGRA.patch.2
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
