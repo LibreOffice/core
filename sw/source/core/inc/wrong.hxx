@@ -29,6 +29,8 @@
 
 #include <vector>
 
+#include <boost/optional.hpp>
+
 #include <tools/color.hxx>
 #include <swtypes.hxx>
 #include <viewopt.hxx>
@@ -286,9 +288,9 @@ namespace sw {
 
 struct MergedPara;
 
-class WrongListIterator
+class WrongListIteratorBase
 {
-private:
+protected:
     SwWrongList const* (SwTextNode::*const m_pGetWrongList)() const;
     sw::MergedPara const*const m_pMergedPara;
     size_t m_CurrentExtent;
@@ -296,6 +298,17 @@ private:
     TextFrameIndex m_CurrentNodeIndex;
     SwWrongList const*const m_pWrongList;
 
+public:
+    /// for the text frame
+    WrongListIteratorBase(SwTextFrame const& rFrame,
+        SwWrongList const* (SwTextNode::*pGetWrongList)() const);
+    /// for SwTextSlot
+    WrongListIteratorBase(SwWrongList const& rWrongList);
+};
+
+class WrongListIterator
+    : public WrongListIteratorBase
+{
 public:
     /// for the text frame
     WrongListIterator(SwTextFrame const& rFrame,
@@ -310,6 +323,18 @@ public:
     bool MergedOrSame(SwWrongList const*const pList) const {
         return m_pMergedPara || m_pWrongList == pList;
     }
+};
+
+class WrongListIteratorCounter
+    : public WrongListIteratorBase
+{
+public:
+    WrongListIteratorCounter(SwTextFrame const& rFrame,
+        SwWrongList const* (SwTextNode::*pGetWrongList)() const);
+    WrongListIteratorCounter(SwWrongList const& rWrongList);
+
+    sal_uInt16 GetElementCount();
+    boost::optional<std::pair<TextFrameIndex, TextFrameIndex>> GetElementAt(sal_uInt16 nIndex);
 };
 
 } // namespace sw

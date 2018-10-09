@@ -664,7 +664,7 @@ void SwWrongList::Insert( const OUString& rType,
 
 namespace sw {
 
-WrongListIterator::WrongListIterator(SwTextFrame const& rFrame,
+WrongListIteratorBase::WrongListIteratorBase(SwTextFrame const& rFrame,
         SwWrongList const* (SwTextNode::*pGetWrongList)() const)
     : m_pGetWrongList(pGetWrongList)
     , m_pMergedPara(rFrame.GetMergedPara())
@@ -677,13 +677,24 @@ WrongListIterator::WrongListIterator(SwTextFrame const& rFrame,
 {
 }
 
-WrongListIterator::WrongListIterator(SwWrongList const& rWrongList)
+WrongListIteratorBase::WrongListIteratorBase(SwWrongList const& rWrongList)
     : m_pGetWrongList(nullptr)
     , m_pMergedPara(nullptr)
     , m_CurrentExtent(0)
     , m_CurrentIndex(0)
     , m_CurrentNodeIndex(0)
     , m_pWrongList(&rWrongList)
+{
+}
+
+WrongListIterator::WrongListIterator(SwTextFrame const& rFrame,
+        SwWrongList const* (SwTextNode::*pGetWrongList)() const)
+    : WrongListIteratorBase(rFrame, pGetWrongList)
+{
+}
+
+WrongListIterator::WrongListIterator(SwWrongList const& rWrongList)
+    : WrongListIteratorBase(rWrongList)
 {
 }
 
@@ -850,6 +861,118 @@ WrongListIterator::GetWrongElement(TextFrameIndex const nStart)
         return m_pWrongList->GetElement(nPos);
     }
     return nullptr;
+}
+
+WrongListIteratorCounter::WrongListIteratorCounter(SwTextFrame const& rFrame,
+        SwWrongList const* (SwTextNode::*pGetWrongList)() const)
+    : WrongListIteratorBase(rFrame, pGetWrongList)
+{
+}
+
+WrongListIteratorCounter::WrongListIteratorCounter(SwWrongList const& rWrongList)
+    : WrongListIteratorBase(rWrongList)
+{
+}
+
+sal_uInt16 WrongListIteratorCounter::GetElementCount()
+{
+    if (m_pMergedPara)
+    {
+        sal_uInt16 nRet(0);
+        m_CurrentExtent = 0;
+        m_CurrentIndex = TextFrameIndex(0);
+        SwNode const* pNode(nullptr);
+        sal_uInt16 InCurrentNode(0);
+        while (m_CurrentExtent < m_pMergedPara->extents.size())
+        {
+            sw::Extent const& rExtent(m_pMergedPara->extents[m_CurrentExtent]);
+            if (rExtent.pNode != pNode)
+            {
+                InCurrentNode = 0;
+                pNode = rExtent.pNode;
+            }
+            SwWrongList const*const pWrongList((rExtent.pNode->*m_pGetWrongList)());
+            for (; pWrongList && InCurrentNode < pWrongList->Count(); ++InCurrentNode)
+            {
+                SwWrongArea const*const pWrong(pWrongList->GetElement(InCurrentNode));
+                TextFrameIndex const nExtentEnd(
+                    m_CurrentIndex + TextFrameIndex(rExtent.nEnd - rExtent.nStart));
+                if (nExtentEnd <= TextFrameIndex(pWrong->mnPos))
+                {
+                    break; // continue outer loop
+                }
+                if (m_CurrentIndex < TextFrameIndex(pWrong->mnPos + pWrong->mnLen))
+                {
+                    ++nRet;
+                }
+            }
+            m_CurrentIndex += TextFrameIndex(rExtent.nEnd - rExtent.nStart);
+            ++m_CurrentExtent;
+        }
+        return nRet;
+    }
+    else if (m_pWrongList)
+    {
+        return m_pWrongList->Count();
+    }
+    return 0;
+}
+
+boost::optional<std::pair<TextFrameIndex, TextFrameIndex>>
+WrongListIteratorCounter::GetElementAt(sal_uInt16 nIndex)
+{
+    if (m_pMergedPara)
+    {
+        m_CurrentExtent = 0;
+        m_CurrentIndex = TextFrameIndex(0);
+        SwNode const* pNode(nullptr);
+        sal_uInt16 InCurrentNode(0);
+        while (m_CurrentExtent < m_pMergedPara->extents.size())
+        {
+            sw::Extent const& rExtent(m_pMergedPara->extents[m_CurrentExtent]);
+            if (rExtent.pNode != pNode)
+            {
+                InCurrentNode = 0;
+                pNode = rExtent.pNode;
+            }
+            SwWrongList const*const pWrongList((rExtent.pNode->*m_pGetWrongList)());
+            for (; pWrongList && InCurrentNode < pWrongList->Count(); ++InCurrentNode)
+            {
+                SwWrongArea const*const pWrong(pWrongList->GetElement(InCurrentNode));
+                TextFrameIndex const nExtentEnd(
+                    m_CurrentIndex + TextFrameIndex(rExtent.nEnd - rExtent.nStart));
+                if (nExtentEnd <= TextFrameIndex(pWrong->mnPos))
+                {
+                    break; // continue outer loop
+                }
+                if (m_CurrentIndex < TextFrameIndex(pWrong->mnPos + pWrong->mnLen))
+                {
+                    if (nIndex == 0)
+                    {
+                        return boost::optional<std::pair<TextFrameIndex, TextFrameIndex>>(
+                            std::pair<TextFrameIndex, TextFrameIndex>(
+                                m_CurrentIndex - TextFrameIndex(rExtent.nStart -
+                                    std::max(rExtent.nStart, pWrong->mnPos)),
+                                m_CurrentIndex - TextFrameIndex(rExtent.nStart -
+                                    std::min(pWrong->mnPos + pWrong->mnLen, rExtent.nEnd))));
+                    }
+                    --nIndex;
+                }
+            }
+            m_CurrentIndex += TextFrameIndex(rExtent.nEnd - rExtent.nStart);
+            ++m_CurrentExtent;
+        }
+        return boost::optional<std::pair<TextFrameIndex, TextFrameIndex>>();
+    }
+    else if (m_pWrongList)
+    {
+        SwWrongArea const*const pWrong(m_pWrongList->GetElement(nIndex));
+        return boost::optional<std::pair<TextFrameIndex, TextFrameIndex>>(
+            std::pair<TextFrameIndex, TextFrameIndex>(
+                    TextFrameIndex(pWrong->mnPos),
+                    TextFrameIndex(pWrong->mnPos + pWrong->mnLen)));
+    }
+    return boost::optional<std::pair<TextFrameIndex, TextFrameIndex>>();
 }
 
 } // namespace sw
