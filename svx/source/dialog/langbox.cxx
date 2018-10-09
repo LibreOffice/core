@@ -812,25 +812,6 @@ LanguageBox::LanguageBox(std::unique_ptr<weld::ComboBox> pControl)
 {
     m_xControl->make_sorted();
     m_xControl->connect_changed(LINK(this, LanguageBox, ChangeHdl));
-
-    m_xControl->freeze();
-    sal_uInt32 nCount = SvtLanguageTable::GetLanguageEntryCount();
-    for (sal_uInt32 i = 0; i < nCount; ++i)
-    {
-        LanguageType nLangType = SvtLanguageTable::GetLanguageTypeAtIndex(i);
-
-        bool bInsert = true;
-        if ((LANGUAGE_DONTKNOW == nLangType) || (LANGUAGE_SYSTEM == nLangType))
-        {
-            bInsert = false;
-        }
-
-        if (!bInsert)
-            continue;
-
-        InsertLanguage(nLangType);
-    }
-    m_xControl->thaw();
 }
 
 SvxLanguageBox::SvxLanguageBox( vcl::Window* pParent, WinBits nBits )
