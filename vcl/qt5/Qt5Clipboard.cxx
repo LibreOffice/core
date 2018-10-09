@@ -15,6 +15,7 @@
 
 #include <QtWidgets/QApplication>
 #include <QtGui/QClipboard>
+#include <QtCore/QBuffer>
 #include <QtCore/QMimeData>
 
 #include <Qt5Clipboard.hxx>
@@ -39,6 +40,13 @@ std::vector<css::datatransfer::DataFlavor> Qt5Transferable::getTransferDataFlavo
     {
         aFlavor.MimeType = "text/plain;charset=utf-16";
         aFlavor.DataType = cppu::UnoType<OUString>::get();
+        aVector.push_back(aFlavor);
+    }
+
+    if (mimeData->hasImage())
+    {
+        aFlavor.MimeType = "image/png";
+        aFlavor.DataType = cppu::UnoType<Sequence<sal_Int8>>::get();
         aVector.push_back(aFlavor);
     }
 
@@ -81,6 +89,20 @@ Qt5Transferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
         QString clipboardContent = mimeData->html();
         std::string aStr = clipboardContent.toStdString();
         Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(aStr.c_str()), aStr.length());
+        aRet <<= aSeq;
+    }
+    else if (rFlavor.MimeType.startsWith("image") && mimeData->hasImage())
+    {
+        QImage image = qvariant_cast<QImage>(mimeData->imageData());
+        QByteArray ba;
+        QBuffer buffer(&ba);
+        sal_Int32 nIndex = rFlavor.MimeType.indexOf('/');
+        OUString sFormat(nIndex != -1 ? rFlavor.MimeType.copy(nIndex + 1) : "png");
+
+        buffer.open(QIODevice::WriteOnly);
+        image.save(&buffer, sFormat.toUtf8().getStr());
+
+        Sequence<sal_Int8> aSeq(reinterpret_cast<const sal_Int8*>(ba.data()), ba.size());
         aRet <<= aSeq;
     }
 
