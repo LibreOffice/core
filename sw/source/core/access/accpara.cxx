@@ -116,17 +116,6 @@ namespace com { namespace sun { namespace star {
 const sal_Char sServiceName[] = "com.sun.star.text.AccessibleParagraphView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleParagraphView";
 
-const SwTextNode* SwAccessibleParagraph::GetTextNode() const
-{
-    const SwFrame* pFrame = GetFrame();
-    OSL_ENSURE( pFrame->IsTextFrame(), "The text frame has mutated!" );
-
-    const SwTextNode* pNode = static_cast<const SwTextFrame*>(pFrame)->GetTextNode();
-    OSL_ENSURE( pNode != nullptr, "A text frame without a text node." );
-
-    return pNode;
-}
-
 OUString const & SwAccessibleParagraph::GetString()
 {
     return GetPortionData().GetAccessibleString();
@@ -221,7 +210,8 @@ SwPaM* SwAccessibleParagraph::GetCursor( const bool _bForSelection )
 
 bool SwAccessibleParagraph::IsHeading() const
 {
-    const SwTextNode *pTextNd = GetTextNode();
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    const SwTextNode *pTextNd = pFrame->GetTextNodeForParaProps();
     return pTextNd->IsOutline();
 }
 
@@ -244,9 +234,10 @@ void SwAccessibleParagraph::GetStates(
 
     // FOCUSED (simulates node index of cursor)
     SwPaM* pCaret = GetCursor( false ); // #i27301# - consider adjusted method signature
-    const SwTextNode* pTextNd = GetTextNode();
-    if( pCaret != nullptr && pTextNd != nullptr &&
-        pTextNd->GetIndex() == pCaret->GetPoint()->nNode.GetIndex() &&
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    assert(pFrame);
+    if (pCaret != nullptr &&
+        sw::FrameContainsNode(*pFrame, pCaret->GetPoint()->nNode.GetIndex()) &&
         m_nOldCaretPos != -1)
     {
         vcl::Window *pWin = GetWindow();
@@ -544,7 +535,9 @@ bool SwAccessibleParagraph::IsValidRange(
 
 SwTOXSortTabBase* SwAccessibleParagraph::GetTOXSortTabBase()
 {
-    const SwTextNode* pTextNd = GetTextNode();
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    assert(pFrame);
+    const SwTextNode *const pTextNd = pFrame->GetTextNodeFirst();
     if( pTextNd )
     {
         const SwSectionNode * pSectNd = pTextNd->FindSectionNode();
@@ -582,15 +575,7 @@ const SwRangeRedline* SwAccessibleParagraph::GetRedlineAtIndex()
     if ( pCrSr )
     {
         SwPosition* pStart = pCrSr->Start();
-        const SwTextNode* pNode = GetTextNode();
-        if ( pNode )
-        {
-            const SwDoc* pDoc = pNode->GetDoc();
-            if ( pDoc )
-            {
-                pRedline = pDoc->getIDocumentRedlineAccess().GetRedline( *pStart, nullptr );
-            }
-        }
+        pRedline = pStart->GetDoc()->getIDocumentRedlineAccess().GetRedline(*pStart, nullptr);
     }
 
     return pRedline;
@@ -1253,13 +1238,11 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
     sal_Int32 nFieldIndex = GetPortionData().GetFieldIndex(nIndex);
     if (nFieldIndex >= 0)
     {
-        const SwpHints* pSwpHints = GetTextNode()->GetpSwpHints();
-        if (pSwpHints)
+        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+        sw::MergedAttrIter iter(*pFrame);
+        while (SwTextAttr const*const pHt = iter.NextAttr())
         {
-            const size_t nSize = pSwpHints->Count();
-            for( size_t i = 0; i < nSize; ++i )
             {
-                const SwTextAttr* pHt = pSwpHints->Get(i);
                 if ( ( pHt->Which() == RES_TXTATR_FIELD
                        || pHt->Which() == RES_TXTATR_ANNOTATION
                        || pHt->Which() == RES_TXTATR_INPUTFIELD )
@@ -1539,7 +1522,8 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
         const bool bOnlyCharAttrs )
 {
     // retrieve default attributes
-    const SwTextNode* pTextNode( GetTextNode() );
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    const SwTextNode *const pTextNode(pFrame->GetTextNodeForParaProps());
     std::unique_ptr<SfxItemSet> pSet;
     if ( !bOnlyCharAttrs )
     {
@@ -1876,7 +1860,8 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
         const uno::Sequence< OUString >& aRequestedAttributes,
         tAccParaPropValMap& rSupplementalAttrSeq )
 {
-    const SwTextNode* pTextNode( GetTextNode() );
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    const SwTextNode *const pTextNode(pFrame->GetTextNodeForParaProps());
     std::unique_ptr<SfxItemSet> pSet;
     pSet.reset(
         new SfxItemSet(
@@ -3062,13 +3047,22 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getSelectedPortionCount(  )
 {
     SolarMutexGuard g;
 
-    sal_Int32 nSeleted = 0;
+    sal_Int32 nSelected = 0;
     SwPaM* pCursor = GetCursor( true );
     if( pCursor != nullptr )
     {
         // get SwPosition for my node
-        const SwTextNode* pNode = GetTextNode();
-        sal_uLong nHere = pNode->GetIndex();
+        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+        sal_uLong nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
+        sal_uLong nLastNode;
+        if (sw::MergedPara const*const pMerged = pFrame->GetMergedPara())
+        {
+            nLastNode = pMerged->pLastNode->GetIndex();
+        }
+        else
+        {
+            nLastNode = nFirstNode;
+        }
 
         // iterate over ring
         for(SwPaM& rTmpCursor : pCursor->GetRingContainer())
@@ -3076,22 +3070,21 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getSelectedPortionCount(  )
             // ignore, if no mark
             if( rTmpCursor.HasMark() )
             {
-                // check whether nHere is 'inside' pCursor
+                // check whether frame's node(s) are 'inside' pCursor
                 SwPosition* pStart = rTmpCursor.Start();
                 sal_uLong nStartIndex = pStart->nNode.GetIndex();
                 SwPosition* pEnd = rTmpCursor.End();
                 sal_uLong nEndIndex = pEnd->nNode.GetIndex();
-                if( ( nHere >= nStartIndex ) &&
-                    ( nHere <= nEndIndex )      )
+                if ((nStartIndex <= nLastNode) && (nFirstNode <= nEndIndex))
                 {
-                    nSeleted++;
+                    nSelected++;
                 }
                 // else: this PaM doesn't point to this paragraph
             }
             // else: this PaM is collapsed and doesn't select anything
         }
     }
-    return nSeleted;
+    return nSelected;
 
 }
 
@@ -3133,8 +3126,17 @@ sal_Bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionInd
         bool bRet = false;
 
         // get SwPosition for my node
-        const SwTextNode* pNode = GetTextNode();
-        sal_uLong nHere = pNode->GetIndex();
+        SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+        sal_uLong nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
+        sal_uLong nLastNode;
+        if (sw::MergedPara const*const pMerged = pFrame->GetMergedPara())
+        {
+            nLastNode = pMerged->pLastNode->GetIndex();
+        }
+        else
+        {
+            nLastNode = nFirstNode;
+        }
 
         // iterate over ring
         SwPaM* pRingStart = pCursor;
@@ -3143,13 +3145,12 @@ sal_Bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionInd
             // ignore, if no mark
             if( pCursor->HasMark() )
             {
-                // check whether nHere is 'inside' pCursor
+                // check whether frame's node(s) are 'inside' pCursor
                 SwPosition* pStart = pCursor->Start();
                 sal_uLong nStartIndex = pStart->nNode.GetIndex();
                 SwPosition* pEnd = pCursor->End();
                 sal_uLong nEndIndex = pEnd->nNode.GetIndex();
-                if( ( nHere >= nStartIndex ) &&
-                    ( nHere <= nEndIndex )      )
+                if ((nStartIndex <= nLastNode) && (nFirstNode <= nEndIndex))
                 {
                     if( nSelected == 0 )
                     {
