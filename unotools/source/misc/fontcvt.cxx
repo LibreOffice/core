@@ -1135,7 +1135,7 @@ StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl()
     };
 
     //In order of preference
-    const ConvertTable aConservativeTable[] =
+    static const ConvertTable aConservativeTable[] =
     {
         {Symbol,         aAdobeSymbolTab},
         {Wingdings,      aWingDingsTab},
@@ -1173,7 +1173,7 @@ StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl()
     }
 
     //In order of preference
-    const ExtendedConvertTable aAgressiveTable[] =
+    static const ExtendedConvertTable aAgressiveTable[] =
     {
         ExtendedConvertTable(Symbol, aSymbolExtraTab2,
             sizeof(aSymbolExtraTab2)),
