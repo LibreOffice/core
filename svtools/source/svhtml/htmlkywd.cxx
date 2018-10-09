@@ -626,6 +626,11 @@ static HTML_OptionEntry aHTMLOptionTab[] = {
     {OUStringLiteral(OOO_STRING_SVTOOLS_HTML_O_start),     HtmlOptionId::START}, // Netscape 2.0 vs IExplorer 2.0
 };
 
+static bool HTML_OptionEntryCompare( const HTML_OptionEntry &rFirstEntry, const HTML_OptionEntry &rSecondEntry)
+{
+    return HTMLKeyCompare( reinterpret_cast<const HTML_TokenEntry &>(rFirstEntry), reinterpret_cast<const HTML_TokenEntry &>(rSecondEntry));
+}
+
 HtmlOptionId GetHTMLOption( const OUString& rName )
 {
     if( !bSortOptionKeyWords )
@@ -793,6 +798,170 @@ static HTML_ColorEntry const aHTMLColorNameTab[] = {
     { OUStringLiteral("yellow"), 0x00ffff00UL },
     { OUStringLiteral("yellowgreen"), 0x009acd32UL }
 };
+
+=======
+    { { "aliceblue" }, 0x00f0f8ffUL },
+    { { "antiquewhite" }, 0x00faebd7UL },
+    { { "aqua" }, 0x0000ffffUL },
+    { { "aquamarine" }, 0x007fffd4UL },
+    { { "azure" }, 0x00f0ffffUL },
+    { { "beige" }, 0x00f5f5dcUL },
+    { { "bisque" }, 0x00ffe4c4UL },
+    { { "black" }, 0x00000000UL },
+    { { "blanchedalmond" }, 0x00ffebcdUL },
+    { { "blue" }, 0x000000ffUL },
+    { { "blueviolet" }, 0x008a2be2UL },
+    { { "brown" }, 0x00a52a2aUL },
+    { { "burlywood" }, 0x00deb887UL },
+    { { "cadetblue" }, 0x005f9ea0UL },
+    { { "chartreuse" }, 0x007fff00UL },
+    { { "chocolate" }, 0x00d2691eUL },
+    { { "coral" }, 0x00ff7f50UL },
+    { { "cornflowerblue" }, 0x006495edUL },
+    { { "cornsilk" }, 0x00fff8dcUL },
+    { { "crimson" }, 0x00dc143cUL },
+    { { "cyan" }, 0x0000ffffUL },
+    { { "darkblue" }, 0x0000008bUL },
+    { { "darkcyan" }, 0x00008b8bUL },
+    { { "darkgoldenrod" }, 0x00b8860bUL },
+    { { "darkgray" }, 0x00a9a9a9UL },
+    { { "darkgreen" }, 0x00006400UL },
+    { { "darkkhaki" }, 0x00bdb76bUL },
+    { { "darkmagenta" }, 0x008b008bUL },
+    { { "darkolivegreen" }, 0x00556b2fUL },
+    { { "darkorange" }, 0x00ff8c00UL },
+    { { "darkorchid" }, 0x009932ccUL },
+    { { "darkred" }, 0x008b0000UL },
+    { { "darksalmon" }, 0x00e9967aUL },
+    { { "darkseagreen" }, 0x008fbc8fUL },
+    { { "darkslateblue" }, 0x00483d8bUL },
+    { { "darkslategray" }, 0x002f4f4fUL },
+    { { "darkturquoise" }, 0x0000ced1UL },
+    { { "darkviolet" }, 0x009400d3UL },
+    { { "deeppink" }, 0x00ff1493UL },
+    { { "deepskyblue" }, 0x0000bfffUL },
+    { { "dimgray" }, 0x00696969UL },
+    { { "dodgerblue" }, 0x001e90ffUL },
+    { { "firebrick" }, 0x00b22222UL },
+    { { "floralwhite" }, 0x00fffaf0UL },
+    { { "forestgreen" }, 0x00228b22UL },
+    { { "fuchsia" }, 0x00ff00ffUL },
+    { { "gainsboro" }, 0x00dcdcdcUL },
+    { { "ghostwhite" }, 0x00f8f8ffUL },
+    { { "gold" }, 0x00ffd700UL },
+    { { "goldenrod" }, 0x00daa520UL },
+    { { "gray" }, 0x00808080UL },
+    { { "green" }, 0x00008000UL },
+    { { "greenyellow" }, 0x00adff2fUL },
+    { { "honeydew" }, 0x00f0fff0UL },
+    { { "hotpink" }, 0x00ff69b4UL },
+    { { "indianred" }, 0x00cd5c5cUL },
+    { { "indigo" }, 0x004b0082UL },
+    { { "ivory" }, 0x00fffff0UL },
+    { { "khaki" }, 0x00f0e68cUL },
+    { { "lavender" }, 0x00e6e6faUL },
+    { { "lavenderblush" }, 0x00fff0f5UL },
+    { { "lawngreen" }, 0x007cfc00UL },
+    { { "lemonchiffon" }, 0x00fffacdUL },
+    { { "lightblue" }, 0x00add8e6UL },
+    { { "lightcoral" }, 0x00f08080UL },
+    { { "lightcyan" }, 0x00e0ffffUL },
+    { { "lightgoldenrodyellow" }, 0x00fafad2UL },
+    { { "lightgreen" }, 0x0090ee90UL },
+    { { "lightgrey" }, 0x00d3d3d3UL },
+    { { "lightpink" }, 0x00ffb6c1UL },
+    { { "lightsalmon" }, 0x00ffa07aUL },
+    { { "lightseagreen" }, 0x0020b2aaUL },
+    { { "lightskyblue" }, 0x0087cefaUL },
+    { { "lightslategray" }, 0x00778899UL },
+    { { "lightsteelblue" }, 0x00b0c4deUL },
+    { { "lightyellow" }, 0x00ffffe0UL },
+    { { "lime" }, 0x0000ff00UL },
+    { { "limegreen" }, 0x0032cd32UL },
+    { { "linen" }, 0x00faf0e6UL },
+    { { "magenta" }, 0x00ff00ffUL },
+    { { "maroon" }, 0x00800000UL },
+    { { "mediumaquamarine" }, 0x0066cdaaUL },
+    { { "mediumblue" }, 0x000000cdUL },
+    { { "mediumorchid" }, 0x00ba55d3UL },
+    { { "mediumpurple" }, 0x009370dbUL },
+    { { "mediumseagreen" }, 0x003cb371UL },
+    { { "mediumslateblue" }, 0x007b68eeUL },
+    { { "mediumspringgreen" }, 0x0000fa9aUL },
+    { { "mediumturquoise" }, 0x0048d1ccUL },
+    { { "mediumvioletred" }, 0x00c71585UL },
+    { { "midnightblue" }, 0x00191970UL },
+    { { "mintcream" }, 0x00f5fffaUL },
+    { { "mistyrose" }, 0x00ffe4e1UL },
+    { { "moccasin" }, 0x00ffe4b5UL },
+    { { "navajowhite" }, 0x00ffdeadUL },
+    { { "navy" }, 0x00000080UL },
+    { { "oldlace" }, 0x00fdf5e6UL },
+    { { "olive" }, 0x00808000UL },
+    { { "olivedrab" }, 0x006b8e23UL },
+    { { "orange" }, 0x00ffa500UL },
+    { { "orangered" }, 0x00ff4500UL },
+    { { "orchid" }, 0x00da70d6UL },
+    { { "palegoldenrod" }, 0x00eee8aaUL },
+    { { "palegreen" }, 0x0098fb98UL },
+    { { "paleturquoise" }, 0x00afeeeeUL },
+    { { "palevioletred" }, 0x00db7093UL },
+    { { "papayawhip" }, 0x00ffefd5UL },
+    { { "peachpuff" }, 0x00ffdab9UL },
+    { { "peru" }, 0x00cd853fUL },
+    { { "pink" }, 0x00ffc0cbUL },
+    { { "plum" }, 0x00dda0ddUL },
+    { { "powderblue" }, 0x00b0e0e6UL },
+    { { "purple" }, 0x00800080UL },
+    { { "red" }, 0x00ff0000UL },
+    { { "rosybrown" }, 0x00bc8f8fUL },
+    { { "royalblue" }, 0x004169e1UL },
+    { { "saddlebrown" }, 0x008b4513UL },
+    { { "salmon" }, 0x00fa8072UL },
+    { { "sandybrown" }, 0x00f4a460UL },
+    { { "seagreen" }, 0x002e8b57UL },
+    { { "seashell" }, 0x00fff5eeUL },
+    { { "sienna" }, 0x00a0522dUL },
+    { { "silver" }, 0x00c0c0c0UL },
+    { { "skyblue" }, 0x0087ceebUL },
+    { { "slateblue" }, 0x006a5acdUL },
+    { { "slategray" }, 0x00708090UL },
+    { { "snow" }, 0x00fffafaUL },
+    { { "springgreen" }, 0x0000ff7fUL },
+    { { "steelblue" }, 0x004682b4UL },
+    { { "tan" }, 0x00d2b48cUL },
+    { { "teal" }, 0x00008080UL },
+    { { "thistle" }, 0x00d8bfd8UL },
+    { { "tomato" }, 0x00ff6347UL },
+    { { "turquoise" }, 0x0040e0d0UL },
+    { { "violet" }, 0x00ee82eeUL },
+    { { "wheat" }, 0x00f5deb3UL },
+    { { "white" }, 0x00ffffffUL },
+    { { "whitesmoke" }, 0x00f5f5f5UL },
+    { { "yellow" }, 0x00ffff00UL },
+    { { "yellowgreen" }, 0x009acd32UL }
+};
+
+static bool HTMLColorNameCompare( const HTML_ColorEntry & rFirstEntry, const HTML_ColorEntry rSecondEntry)
+{
+    int nRet = 0;
+    if( HTML_NO_COLOR == rFirstEntry.nColor )
+    {
+        if( HTML_NO_COLOR == rSecondEntry.nColor )
+            nRet = rFirstEntry.pUName->compareTo( *rSecondEntry.pUName );
+        else
+            nRet = rFirstEntry.pUName->compareToAscii( rSecondEntry.sName );
+    }
+    else
+    {
+        if( HTML_NO_COLOR  == rSecondEntry.nColor )
+            nRet = -1 * rSecondEntry.pUName->compareToAscii( rFirstEntry.sName );
+        else
+            nRet = strcmp( rFirstEntry.sName, rSecondEntry.sName );
+    }
+
+    return nRet < 0;
+}
 
 sal_uInt32 GetHTMLColor( const OUString& rName )
 {
