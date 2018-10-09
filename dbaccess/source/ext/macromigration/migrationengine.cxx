@@ -184,7 +184,7 @@ namespace dbmm
                 {
                 }
             };
-            const LanguageMapping aLanguageMapping[] =
+            static const LanguageMapping aLanguageMapping[] =
             {
                 LanguageMapping( "JavaScript", eJavaScript ),
                 LanguageMapping( "BeanShell",  eBeanShell ),

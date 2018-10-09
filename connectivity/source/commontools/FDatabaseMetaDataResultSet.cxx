@@ -880,7 +880,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
 
 namespace
 {
-    cppu::ImplementationEntry entries[] = {
+    cppu::ImplementationEntry const entries[] = {
         { &ODatabaseMetaDataResultSet_CreateInstance, &ODatabaseMetaDataResultSet::getImplementationName_Static, &ODatabaseMetaDataResultSet::getSupportedServiceNames_Static,
             &cppu::createSingleComponentFactory, nullptr, 0 },
         { &ParameterSubstitution::create, &ParameterSubstitution::getImplementationName_Static, &ParameterSubstitution::getSupportedServiceNames_Static,

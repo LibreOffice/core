@@ -44,7 +44,7 @@
 using namespace css;
 
 // <UL TYPE=...>
-static HTMLOptionEnum<sal_Unicode> aHTMLULTypeTable[] =
+static HTMLOptionEnum<sal_Unicode> const aHTMLULTypeTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_ULTYPE_disc,    HTML_BULLETCHAR_DISC   },
     { OOO_STRING_SVTOOLS_HTML_ULTYPE_circle,  HTML_BULLETCHAR_CIRCLE },

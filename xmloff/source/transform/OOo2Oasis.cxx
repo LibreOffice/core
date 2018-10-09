@@ -93,7 +93,7 @@ enum XMLUserDefinedTransformerAction
 #define RENAME_ENTRY( f, s ) \
     (static_cast< sal_Int32 >(f) | (static_cast< sal_Int32 >(s) << 16))
 
-static XMLTransformerActionInit aActionTable[] =
+static XMLTransformerActionInit const aActionTable[] =
 {
     // remove office:class from <office:document> and <office:document-content>
     ENTRY0( OFFICE, DOCUMENT, XML_ETACTION_DOCUMENT ),
@@ -570,7 +570,7 @@ static XMLTransformerActionInit aActionTable[] =
 };
 
 // XML_ETACTION_STYLE
-static XMLTransformerActionInit aStyleActionTable[] =
+static XMLTransformerActionInit const aStyleActionTable[] =
 {
     ENTRY0( STYLE, FAMILY, XML_ATACTION_STYLE_FAMILY ),
     ENTRY0( STYLE, NAME, XML_ATACTION_ENCODE_STYLE_NAME ),
@@ -592,7 +592,7 @@ static XMLTransformerActionInit aStyleActionTable[] =
 };
 
 // OOO_FRAME_ELEM_ACTIONS
-static XMLTransformerActionInit aFrameElemActionTable[] =
+static XMLTransformerActionInit const aFrameElemActionTable[] =
 {
     ENTRY1Q( OFFICE, EVENTS, XML_ETACTION_RENAME_ELEM,
                       XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS ),
@@ -605,7 +605,7 @@ static XMLTransformerActionInit aFrameElemActionTable[] =
 };
 
 // OOO_FRAME_ATTR_ACTIONS
-static XMLTransformerActionInit aFrameAttrActionTable[] =
+static XMLTransformerActionInit const aFrameAttrActionTable[] =
 {
     ENTRY0( DRAW, ZINDEX, XML_ATACTION_MOVE_TO_ELEM ), /* generated entry */
     ENTRY0( DRAW, ID, XML_ATACTION_MOVE_TO_ELEM ), /* generated entry */
@@ -634,7 +634,7 @@ static XMLTransformerActionInit aFrameAttrActionTable[] =
 };
 
 // OOO_EVENT_ELEM_ACTIONS
-static XMLTransformerActionInit aEventActionTable[] =
+static XMLTransformerActionInit const aEventActionTable[] =
 {
     ENTRY0( XLINK, HREF, XML_ATACTION_HREF ),
     ENTRY1( SCRIPT, LANGUAGE, XML_ATACTION_ADD_NAMESPACE_PREFIX,
@@ -647,7 +647,7 @@ static XMLTransformerActionInit aEventActionTable[] =
 };
 
 // action table for OOO_MASTER_PAGE_ACTIONS
-static XMLTransformerActionInit aMasterPageActionTable[] =
+static XMLTransformerActionInit const aMasterPageActionTable[] =
 {
     ENTRY0( STYLE, NAME, XML_ATACTION_ENCODE_STYLE_NAME ),
     ENTRY0( STYLE, NEXT_STYLE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
@@ -657,7 +657,7 @@ static XMLTransformerActionInit aMasterPageActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-static XMLTransformerActionInit aFontDeclActionTable[] =
+static XMLTransformerActionInit const aFontDeclActionTable[] =
 {
     ENTRY1Q( FO, FONT_FAMILY, XML_ATACTION_RENAME,
                         XML_NAMESPACE_SVG, XML_FONT_FAMILY ),
@@ -667,7 +667,7 @@ static XMLTransformerActionInit aFontDeclActionTable[] =
 };
 
 // action table for OOO_PARA_ACTIONS
-static XMLTransformerActionInit aParaActionTable[] =
+static XMLTransformerActionInit const aParaActionTable[] =
 {
     ENTRY0( TEXT, STYLE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
     ENTRY0( TEXT, COND_STYLE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
@@ -678,7 +678,7 @@ static XMLTransformerActionInit aParaActionTable[] =
 };
 
 // action table for OOO_STYLE_REF_ACTIONS
-static XMLTransformerActionInit aStyleRefActionTable[] =
+static XMLTransformerActionInit const aStyleRefActionTable[] =
 {
     ENTRY0( TEXT, STYLE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
     ENTRY0( TEXT, VISITED_STYLE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
@@ -708,7 +708,7 @@ static XMLTransformerActionInit aStyleRefActionTable[] =
 // OOO_SHAPE_ACTIONS
 // !!ATTENTION!! If you change something here, please also change
 // aConnectorActionTable if appropriate
-static XMLTransformerActionInit aShapeActionTable[] =
+static XMLTransformerActionInit const aShapeActionTable[] =
 {
     ENTRY0( SVG, X, XML_ATACTION_INCH2IN ),
     ENTRY0( SVG, Y, XML_ATACTION_INCH2IN ),
@@ -753,7 +753,7 @@ static XMLTransformerActionInit aShapeActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-static XMLTransformerActionInit aConnectorActionTable[] =
+static XMLTransformerActionInit const aConnectorActionTable[] =
 {
     ENTRY0( SVG, X1, XML_ATACTION_TWIPS2IN ),
     ENTRY0( SVG, Y1, XML_ATACTION_TWIPS2IN ),
@@ -778,7 +778,7 @@ static XMLTransformerActionInit aConnectorActionTable[] =
 };
 
 // OOO_INDEX_ENTRY_TAB_STOP_ACTIONS
-static XMLTransformerActionInit aIndexEntryTabStopActionTable[] =
+static XMLTransformerActionInit const aIndexEntryTabStopActionTable[] =
 {
     ENTRY0( STYLE, POSITION, XML_ATACTION_INCH2IN ),
     ENTRY0( TEXT, STYLE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
@@ -786,7 +786,7 @@ static XMLTransformerActionInit aIndexEntryTabStopActionTable[] =
 };
 
 // OOO_TAB_STOP_ACTIONS
-static XMLTransformerActionInit aTabStopActionTable[] =
+static XMLTransformerActionInit const aTabStopActionTable[] =
 {
     ENTRY0( STYLE, POSITION, XML_ATACTION_INCH2IN ),
     ENTRY1Q( STYLE, LEADER_CHAR, XML_ATACTION_RENAME,
@@ -795,7 +795,7 @@ static XMLTransformerActionInit aTabStopActionTable[] =
 };
 
 // OOO_LINENUMBERING_ACTIONS
-static XMLTransformerActionInit aLineNumberingActionTable[] =
+static XMLTransformerActionInit const aLineNumberingActionTable[] =
 {
     ENTRY0( TEXT, OFFSET, XML_ATACTION_INCH2IN ),
     ENTRY0( TEXT, STYLE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
@@ -804,7 +804,7 @@ static XMLTransformerActionInit aLineNumberingActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-static XMLTransformerActionInit aFootnoteSepActionTable[] =
+static XMLTransformerActionInit const aFootnoteSepActionTable[] =
 {
     ENTRY0( STYLE, WIDTH, XML_ATACTION_INCH2IN ),
     ENTRY0( STYLE, DISTANCE_BEFORE_SEP, XML_ATACTION_INCH2IN ),
@@ -813,14 +813,14 @@ static XMLTransformerActionInit aFootnoteSepActionTable[] =
 };
 
 // OOO_DROP_CAP_ACTIONS
-static XMLTransformerActionInit aDropCapActionTable[] =
+static XMLTransformerActionInit const aDropCapActionTable[] =
 {
     ENTRY0( STYLE, DISTANCE, XML_ATACTION_INCH2IN ),
     ENTRY0( STYLE, STYLE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-static XMLTransformerActionInit aColumnsActionTable[] =
+static XMLTransformerActionInit const aColumnsActionTable[] =
 {
     ENTRY0( STYLE, COLUMN_GAP, XML_ATACTION_INCH2IN ),
 //  ENTRY0( STYLE, SPACE_BEFORE, XML_ATACTION_INCH2IN ),
@@ -834,7 +834,7 @@ static XMLTransformerActionInit aColumnsActionTable[] =
 };
 
 // OOO_TEXT_VALUE_TYPE_ACTIONS
-static XMLTransformerActionInit aTextValueTypeActionTable[] =
+static XMLTransformerActionInit const aTextValueTypeActionTable[] =
 {
     ENTRY1Q( TEXT, VALUE_TYPE, XML_ATACTION_RENAME,
            XML_NAMESPACE_OFFICE, XML_VALUE_TYPE ),
@@ -857,7 +857,7 @@ static XMLTransformerActionInit aTextValueTypeActionTable[] =
 };
 
 // OOO_TABLE_VALUE_TYPE_ACTIONS
-static XMLTransformerActionInit aTableValueTypeActionTable[] =
+static XMLTransformerActionInit const aTableValueTypeActionTable[] =
 {
     ENTRY1Q( TABLE, VALUE_TYPE, XML_ATACTION_RENAME,
            XML_NAMESPACE_OFFICE, XML_VALUE_TYPE ),
@@ -882,7 +882,7 @@ static XMLTransformerActionInit aTableValueTypeActionTable[] =
 };
 
 // action table for OOO_ANNOTATION_ACTIONS
-static XMLTransformerActionInit aAnnotationActionTable[] =
+static XMLTransformerActionInit const aAnnotationActionTable[] =
 {
     ENTRY1Q( OFFICE, AUTHOR, XML_ATACTION_MOVE_TO_ELEM,
                 XML_NAMESPACE_DC, XML_CREATOR ),
@@ -894,7 +894,7 @@ static XMLTransformerActionInit aAnnotationActionTable[] =
 };
 
 // action table for OOO_CHANGE_INFO_ACTIONS
-static XMLTransformerActionInit aChangeInfoActionTable[] =
+static XMLTransformerActionInit const aChangeInfoActionTable[] =
 {
     ENTRY1Q( OFFICE, CHG_AUTHOR, XML_ATACTION_MOVE_TO_ELEM,
                 XML_NAMESPACE_DC, XML_CREATOR ),
@@ -904,7 +904,7 @@ static XMLTransformerActionInit aChangeInfoActionTable[] =
 };
 
 // OOO_BACKGROUND_IMAGE_ACTIONS
-static XMLTransformerActionInit aBackgroundImageActionTable[] =
+static XMLTransformerActionInit const aBackgroundImageActionTable[] =
 {
     ENTRY1Q( DRAW, TRANSPARENCY, XML_ATACTION_RENAME_NEG_PERCENT,
                      XML_NAMESPACE_DRAW, XML_OPACITY ),
@@ -916,7 +916,7 @@ static XMLTransformerActionInit aBackgroundImageActionTable[] =
    OpenOffice.org text documents, written by OpenOffice.org, contain
    wrong value for the transparency of the background graphic (#i50322#)
 */
-static XMLTransformerActionInit aWriterBackgroundImageActionTable[] =
+static XMLTransformerActionInit const aWriterBackgroundImageActionTable[] =
 {
     ENTRY1Q( DRAW, TRANSPARENCY, XML_ATACTION_WRITER_BACK_GRAPHIC_TRANSPARENCY, XML_NAMESPACE_DRAW, XML_OPACITY ),
     ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_uInt32(true) ),
@@ -924,7 +924,7 @@ static XMLTransformerActionInit aWriterBackgroundImageActionTable[] =
 };
 
 // OOO_DDE_CONNECTION_DECL
-static XMLTransformerActionInit aDDEConnectionDeclActionTable[] =
+static XMLTransformerActionInit const aDDEConnectionDeclActionTable[] =
 {
     ENTRY1Q( TEXT, NAME, XML_ATACTION_RENAME,
                      XML_NAMESPACE_OFFICE, XML_NAME ),
@@ -932,7 +932,7 @@ static XMLTransformerActionInit aDDEConnectionDeclActionTable[] =
 };
 
 // OOO_FORM_CONTROL_ACTIONS
-static XMLTransformerActionInit aFormControlActionTable[] =
+static XMLTransformerActionInit const aFormControlActionTable[] =
 {
     ENTRY2QN( FORM, SERVICE_NAME,
                     XML_ATACTION_RENAME_ADD_NAMESPACE_PREFIX,
@@ -943,7 +943,7 @@ static XMLTransformerActionInit aFormControlActionTable[] =
 };
 
 // OOO_FORM_COLUMN_ACTIONS
-static XMLTransformerActionInit aFormColumnActionTable[] =
+static XMLTransformerActionInit const aFormColumnActionTable[] =
 {
     ENTRY1Q( FORM, COLUMN_STYLE_NAME, XML_ATACTION_RENAME_ENCODE_STYLE_NAME_REF,
                         XML_NAMESPACE_FORM, XML_TEXT_STYLE_NAME ),
@@ -955,7 +955,7 @@ static XMLTransformerActionInit aFormColumnActionTable[] =
 };
 
 // OOO_FORM_PROP_ACTIONS
-static XMLTransformerActionInit aFormPropActionTable[] =
+static XMLTransformerActionInit const aFormPropActionTable[] =
 {
     ENTRY1Q( FORM, PROPERTY_TYPE, XML_ATACTION_RENAME,
                           XML_NAMESPACE_OFFICE, XML_VALUE_TYPE ),
@@ -964,14 +964,14 @@ static XMLTransformerActionInit aFormPropActionTable[] =
 };
 
 // OOO_XLINK_ACTIONS
-static XMLTransformerActionInit aXLinkActionTable[] =
+static XMLTransformerActionInit const aXLinkActionTable[] =
 {
     ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_uInt32(false) ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
 // OOO_CONFIG_ITEM_SET_ACTIONS
-static XMLTransformerActionInit aConfigItemSetActionTable[] =
+static XMLTransformerActionInit const aConfigItemSetActionTable[] =
 {
     ENTRY1( CONFIG, NAME, XML_ATACTION_ADD_NAMESPACE_PREFIX,
                     XML_NAMESPACE_OOO ),
@@ -979,7 +979,7 @@ static XMLTransformerActionInit aConfigItemSetActionTable[] =
 };
 
 // OASIS_FORMULA_ACTIONS
-static XMLTransformerActionInit aFormulaActionTable[] =
+static XMLTransformerActionInit const aFormulaActionTable[] =
 {
     ENTRY1( TEXT, CONDITION, XML_ATACTION_ADD_NAMESPACE_PREFIX,
                      XML_NAMESPACE_OOOW ),
@@ -993,14 +993,14 @@ static XMLTransformerActionInit aFormulaActionTable[] =
 };
 
 // OOO_ERROR_MACRO_ACTIONS
-static XMLTransformerActionInit aErrorMacroActionTable[] =
+static XMLTransformerActionInit const aErrorMacroActionTable[] =
 {
     ENTRY0( TABLE, NAME, XML_ATACTION_REMOVE ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
 // OOO_DDE_CONV_MODE_ACTIONS
-static XMLTransformerActionInit aDDEConvModeActionTable[] =
+static XMLTransformerActionInit const aDDEConvModeActionTable[] =
 {
     ENTRY1Q( TABLE, LET_TEXT, XML_ATACTION_RENAME,
                         XML_NAMESPACE_TABLE, XML_KEEP_TEXT ),
@@ -1008,7 +1008,7 @@ static XMLTransformerActionInit aDDEConvModeActionTable[] =
 };
 
 // OOO_DATAPILOT_MEMBER_ACTIONS
-static XMLTransformerActionInit aDataPilotMemberActionTable[] =
+static XMLTransformerActionInit const aDataPilotMemberActionTable[] =
 {
     ENTRY1Q( TABLE, DISPLAY_DETAILS, XML_ATACTION_RENAME,
                         XML_NAMESPACE_TABLE, XML_SHOW_DETAILS ),
@@ -1016,7 +1016,7 @@ static XMLTransformerActionInit aDataPilotMemberActionTable[] =
 };
 
 // OOO_DATAPILOT_LEVEL_ACTIONS
-static XMLTransformerActionInit aDataPilotLevelActionTable[] =
+static XMLTransformerActionInit const aDataPilotLevelActionTable[] =
 {
     ENTRY1Q( TABLE, DISPLAY_EMPTY, XML_ATACTION_RENAME,
                         XML_NAMESPACE_TABLE, XML_SHOW_EMPTY ),
@@ -1024,7 +1024,7 @@ static XMLTransformerActionInit aDataPilotLevelActionTable[] =
 };
 
 // OOO_SOURCE_SERVICE_ACTIONS
-static XMLTransformerActionInit aSourceServiceActionTable[] =
+static XMLTransformerActionInit const aSourceServiceActionTable[] =
 {
     ENTRY1Q( TABLE, USERNAME, XML_ATACTION_RENAME,
                         XML_NAMESPACE_TABLE, XML_USER_NAME ),
@@ -1032,7 +1032,7 @@ static XMLTransformerActionInit aSourceServiceActionTable[] =
 };
 
 // OOO_ANIMATION_ACTIONS
-static XMLTransformerActionInit aAnimationsActionTable[] =
+static XMLTransformerActionInit const aAnimationsActionTable[] =
 {
     ENTRY0( DRAW, SHAPE_ID, XML_ATACTION_SHAPEID ),
     ENTRY0( PRESENTATION, PATH_ID, XML_ATACTION_SHAPEID ),
@@ -1040,7 +1040,7 @@ static XMLTransformerActionInit aAnimationsActionTable[] =
 };
 
 // OOO_DRAW_AREA_POLYGON_ACTIONS (to be added to OOO_SHAPE_ACTIONS)
-static XMLTransformerActionInit aDrawAreaPolygonActionTable[] =
+static XMLTransformerActionInit const aDrawAreaPolygonActionTable[] =
 {
     ENTRY1Q( SVG, POINTS, XML_ATACTION_RENAME,
              XML_NAMESPACE_DRAW, XML_POINTS ),
@@ -1048,7 +1048,7 @@ static XMLTransformerActionInit aDrawAreaPolygonActionTable[] =
 };
 
 // OOO_CHART_ACTIONS
-static XMLTransformerActionInit aChartActionTable[] =
+static XMLTransformerActionInit const aChartActionTable[] =
 {
     ENTRY1( CHART, CLASS, XML_ATACTION_ADD_NAMESPACE_PREFIX,
                      XML_NAMESPACE_CHART ),
@@ -1060,7 +1060,7 @@ static XMLTransformerActionInit aChartActionTable[] =
 };
 
 // OOO_ALPHABETICAL_INDEX_MARK_ACTIONS
-static XMLTransformerActionInit aAlphabeticalIndexMarkActionTable[] =
+static XMLTransformerActionInit const aAlphabeticalIndexMarkActionTable[] =
 {
     ENTRY1Q( TEXT, MAIN_ETRY, XML_ATACTION_RENAME,
              XML_NAMESPACE_TEXT, XML_MAIN_ENTRY ),
@@ -1068,7 +1068,7 @@ static XMLTransformerActionInit aAlphabeticalIndexMarkActionTable[] =
 };
 
 // OOO_SCRIPT_ACTIONS
-static XMLTransformerActionInit aScriptActionTable[] =
+static XMLTransformerActionInit const aScriptActionTable[] =
 {
     ENTRY1( SCRIPT, LANGUAGE, XML_ATACTION_ADD_NAMESPACE_PREFIX, XML_NAMESPACE_OOO ),
     ENTRY1Q( SCRIPT, NAME, XML_ATACTION_RENAME, XML_NAMESPACE_OOO, XML_NAME ),
@@ -1076,7 +1076,7 @@ static XMLTransformerActionInit aScriptActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-static XMLTokenEnum aTokenMap[] =
+static XMLTokenEnum const aTokenMap[] =
 {
     XML_NONE, XML_SINGLE, XML_DOUBLE, XML_BOLD, XML_BOLD_DOTTED,
     XML_BOLD_DASH, XML_BOLD_LONG_DASH, XML_BOLD_DOT_DASH,

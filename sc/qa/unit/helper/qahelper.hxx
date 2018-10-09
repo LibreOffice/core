@@ -93,7 +93,7 @@ struct TestParam
     int nImportType;
     int nExportType; // -1 for import test, otherwise this is an export test
     int nRowData;
-    RowData* pData;
+    RowData const * pData;
 };
 
 struct FileFormat {

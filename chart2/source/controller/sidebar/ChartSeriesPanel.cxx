@@ -84,7 +84,7 @@ struct LabelPlacementMap
     sal_Int32 nApi;
 };
 
-LabelPlacementMap aLabelPlacementMap[] = {
+static LabelPlacementMap const aLabelPlacementMap[] = {
     { 0, css::chart::DataLabelPlacement::TOP },
     { 1, css::chart::DataLabelPlacement::BOTTOM },
     { 2, css::chart::DataLabelPlacement::CENTER },
@@ -109,7 +109,7 @@ sal_Int32 getDataLabelPlacement(const css::uno::Reference<css::frame::XModel>& x
     sal_Int32 nPlacement = 0;
     aAny >>= nPlacement;
 
-    for (LabelPlacementMap & i : aLabelPlacementMap)
+    for (LabelPlacementMap const & i : aLabelPlacementMap)
     {
         if (i.nApi == nPlacement)
             return i.nPos;
@@ -128,7 +128,7 @@ void setDataLabelPlacement(const css::uno::Reference<css::frame::XModel>& xModel
         return;
 
     sal_Int32 nApi = 0;
-    for (LabelPlacementMap & i : aLabelPlacementMap)
+    for (LabelPlacementMap const & i : aLabelPlacementMap)
     {
         if (i.nPos == nPos)
         {

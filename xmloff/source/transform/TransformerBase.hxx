@@ -80,8 +80,8 @@ protected:
                                       const OUString& rQName );
 
 public:
-    XMLTransformerBase( XMLTransformerActionInit *pInit,
-                           ::xmloff::token::XMLTokenEnum *pTKMapInit ) throw();
+    XMLTransformerBase( XMLTransformerActionInit const *pInit,
+                           ::xmloff::token::XMLTokenEnum const *pTKMapInit ) throw();
     virtual ~XMLTransformerBase() throw() override;
 
     // css::xml::sax::XDocumentHandler

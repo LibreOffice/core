@@ -273,7 +273,7 @@ void DocumentSettings::AssignURL( XPropertyListType t, const Any* pValue,
 static struct {
     const char *pName;
     XPropertyListType t;
-} aURLPropertyNames[] = {
+} const aURLPropertyNames[] = {
     { "ColorTableURL", XPropertyListType::Color },
     { "DashTableURL", XPropertyListType::Dash },
     { "LineEndTableURL", XPropertyListType::LineEnd },

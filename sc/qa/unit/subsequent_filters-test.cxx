@@ -2735,7 +2735,7 @@ void ScFiltersTest::testFormulaDependency()
 
 void ScFiltersTest::testMiscRowHeights()
 {
-    TestParam::RowData DfltRowData[] =
+    static const TestParam::RowData DfltRowData[] =
     {
         // check rows at the beginning and end of document
         // and make sure they are reported as the default row
@@ -2744,7 +2744,7 @@ void ScFiltersTest::testMiscRowHeights()
         { 1048573, 1048575, 0, -1, 0, false  },
     };
 
-    TestParam::RowData MultiLineOptData[] =
+    static const TestParam::RowData MultiLineOptData[] =
     {
         // Row 0 is 12.63 mm, but optimal flag is set
         { 0, 0, 0, 1236, CHECK_OPTIMAL, true  },
@@ -2880,7 +2880,7 @@ void ScFiltersTest::testOutlineODS()
         size_t nIndex;
     };
 
-    OutlineData aRow[] =
+    static const OutlineData aRow[] =
     {
         { 1, 29, false, true, 0, 0 },
         { 2, 26, false, true, 1, 0 },

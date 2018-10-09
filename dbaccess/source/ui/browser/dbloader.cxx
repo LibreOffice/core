@@ -147,7 +147,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     m_aURL      = rURL;
     m_aArgs     = rArgs;
 
-    const struct ServiceNameToImplName
+    static const struct ServiceNameToImplName
     {
         const char*     pAsciiServiceName;
         const char*     pAsciiImplementationName;

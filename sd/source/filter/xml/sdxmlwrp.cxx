@@ -147,9 +147,9 @@ struct XML_SERVICES
     const sal_Char* mpSettings;
 };
 
-static XML_SERVICES* getServices( bool bImport, bool bDraw, sal_uLong nStoreVer )
+static XML_SERVICES const * getServices( bool bImport, bool bDraw, sal_uLong nStoreVer )
 {
-    static XML_SERVICES gServices[] =
+    static XML_SERVICES const gServices[] =
     {
         { sXML_export_impress_meta_oasis_service, sXML_export_impress_styles_oasis_service, sXML_export_impress_content_oasis_service, sXML_export_impress_settings_oasis_service },
         { sXML_export_draw_meta_oasis_service, sXML_export_draw_styles_oasis_service, sXML_export_draw_content_oasis_service, sXML_export_draw_settings_oasis_service },
@@ -622,7 +622,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
 
         const OUString aName( mrMedium.GetName() );
 
-        XML_SERVICES* pServices = getServices( true, IsDraw(), mnStoreVer );
+        XML_SERVICES const * pServices = getServices( true, IsDraw(), mnStoreVer );
 
         ErrCode nWarn = ERRCODE_NONE;
         ErrCode nWarn2 = ERRCODE_NONE;
@@ -915,7 +915,7 @@ bool SdXMLFilter::Export()
 
             uno::Reference< lang::XComponent > xComponent( mxModel, uno::UNO_QUERY );
 
-            XML_SERVICES* pServiceNames = getServices( false, IsDraw(), mnStoreVer );
+            XML_SERVICES const * pServiceNames = getServices( false, IsDraw(), mnStoreVer );
 
             XML_SERVICEMAP aServices[5]; sal_uInt16 i = 0;
             aServices[i  ].mpService = pServiceNames->mpStyles;

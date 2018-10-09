@@ -443,7 +443,7 @@ SalI18N_InputContext::GetWeightingOfIMStyle( XIMStyle nStyle )
     };
 
     StyleWeightingT const *pWeightPtr;
-    const StyleWeightingT pWeight[] = {
+    static const StyleWeightingT pWeight[] = {
         { XIMPreeditCallbacks, 0x10000000 },
         { XIMPreeditPosition,  0x02000000 },
         { XIMPreeditArea,      0x01000000 },

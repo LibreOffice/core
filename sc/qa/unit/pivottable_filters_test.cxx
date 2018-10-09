@@ -153,7 +153,7 @@ void ScPivotTableFiltersTest::tearDown()
 
 void ScPivotTableFiltersTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
 {
-    struct
+    static const struct
     {
         xmlChar* pPrefix;
         xmlChar* pURI;

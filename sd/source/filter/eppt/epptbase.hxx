@@ -395,8 +395,8 @@ public:
 
     bool GetPresObj() { return mbPresObj; }
 
-    static PHLayout& GetLayout( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
-    static PHLayout& GetLayout( sal_Int32 nOffset );
+    static PHLayout const & GetLayout( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
+    static PHLayout const & GetLayout( sal_Int32 nOffset );
     static sal_Int32 GetLayoutOffset( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
     static sal_Int32 GetLayoutOffsetFixed( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet );
 

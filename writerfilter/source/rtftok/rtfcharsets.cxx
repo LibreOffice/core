@@ -15,7 +15,7 @@ namespace writerfilter
 namespace rtftok
 {
 // See RTF spec v1.9.1, page 19
-RTFEncoding aRTFEncodings[] = {
+RTFEncoding const aRTFEncodings[] = {
     // charset  codepage    Windows / Mac name
     { 0, 1252 }, // ANSI
     { 1, 0 }, // Default

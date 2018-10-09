@@ -37,7 +37,7 @@ using namespace ::com::sun::star::registry;
 namespace
 {
 
-cppu::ImplementationEntry entries[] = {
+cppu::ImplementationEntry const entries[] = {
     { &OReportController::create, &OReportController::getImplementationName_Static, &OReportController::getSupportedServiceNames_Static,
         &cppu::createSingleComponentFactory, nullptr, 0 },
     { &OStatusbarController::create, &OStatusbarController::getImplementationName_Static, &OStatusbarController::getSupportedServiceNames_Static,
