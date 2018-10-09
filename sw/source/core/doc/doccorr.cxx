@@ -48,7 +48,7 @@ namespace
         return pStartNode;
     }
 
-    inline bool lcl_PosCorrAbs(SwPosition & rPos,
+    bool lcl_PosCorrAbs(SwPosition & rPos,
         const SwPosition& rStart,
         const SwPosition& rEnd,
         const SwPosition& rNewPos)
@@ -61,7 +61,7 @@ namespace
         return false;
     };
 
-    inline bool lcl_PaMCorrAbs(SwPaM & rPam,
+    bool lcl_PaMCorrAbs(SwPaM & rPam,
         const SwPosition& rStart,
         const SwPosition& rEnd,
         const SwPosition& rNewPos)
@@ -72,7 +72,7 @@ namespace
         return bRet;
     };
 
-    inline void lcl_PaMCorrRel1(SwPaM * pPam,
+    void lcl_PaMCorrRel1(SwPaM * pPam,
         SwNode const * const pOldNode,
         const SwPosition& rNewPos,
         const sal_Int32 nCntIdx)

@@ -450,7 +450,7 @@ void NWPixmapCacheList::ThemeChanged( )
 /*********************************************************
  * Make border manipulation easier
  *********************************************************/
-static inline void NW_gtk_border_set_from_border( GtkBorder& aDst, const GtkBorder * pSrc )
+static void NW_gtk_border_set_from_border( GtkBorder& aDst, const GtkBorder * pSrc )
 {
     aDst.left        = pSrc->left;
     aDst.top        = pSrc->top;
@@ -3683,7 +3683,7 @@ static tools::Rectangle NWGetToolbarRect(  SalX11Screen nScreen,
 /************************************************************************
  * helper for GtkSalFrame
  ************************************************************************/
-static inline Color getColor( const GdkColor& rCol )
+static Color getColor( const GdkColor& rCol )
 {
     return Color( rCol.red >> 8, rCol.green >> 8, rCol.blue >> 8 );
 }

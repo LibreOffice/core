@@ -44,7 +44,7 @@ double datastream_get_time(DebugTime nIdx)
 
 namespace {
 
-inline double getNow()
+double getNow()
 {
     TimeValue now;
     osl_getSystemTime(&now);

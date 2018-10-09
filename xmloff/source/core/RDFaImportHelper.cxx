@@ -138,7 +138,7 @@ struct RDFaEntry
     { }
 };
 
-static inline bool isWS(const sal_Unicode i_Char)
+static bool isWS(const sal_Unicode i_Char)
 {
     return ('\t' == i_Char) || ('\n' == i_Char) || ('\r' == i_Char)
         || (' ' == i_Char);

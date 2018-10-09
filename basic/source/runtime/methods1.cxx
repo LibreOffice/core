@@ -1828,7 +1828,7 @@ static IntervalInfo const * getIntervalInfo( const OUString& rStringCode )
     return nullptr;
 }
 
-static inline void implGetDayMonthYear( sal_Int16& rnYear, sal_Int16& rnMonth, sal_Int16& rnDay, double dDate )
+static void implGetDayMonthYear( sal_Int16& rnYear, sal_Int16& rnMonth, sal_Int16& rnDay, double dDate )
 {
     rnDay   = implGetDateDay( dDate );
     rnMonth = implGetDateMonth( dDate );
@@ -1840,7 +1840,7 @@ static inline void implGetDayMonthYear( sal_Int16& rnYear, sal_Int16& rnMonth, s
     @return the year number, truncated if necessary and in that case also
             rMonth and rDay adjusted.
  */
-static inline sal_Int16 limitDate( sal_Int32 n32Year, sal_Int16& rMonth, sal_Int16& rDay )
+static sal_Int16 limitDate( sal_Int32 n32Year, sal_Int16& rMonth, sal_Int16& rDay )
 {
     if( n32Year > SAL_MAX_INT16 )
     {
@@ -1957,7 +1957,7 @@ void SbRtl_DateAdd(StarBASIC *, SbxArray & rPar, bool)
     rPar.Get(0)->PutDate( dNewDate );
 }
 
-static inline double RoundImpl( double d )
+static double RoundImpl( double d )
 {
     return ( d >= 0 ) ? floor( d + 0.5 ) : -floor( -d + 0.5 );
 }

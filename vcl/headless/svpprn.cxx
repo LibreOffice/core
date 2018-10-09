@@ -56,7 +56,7 @@ static OUString getPdfDir( const PrinterInfo& rInfo )
     return aDir;
 }
 
-static inline int PtTo10Mu( int nPoints ) { return static_cast<int>((static_cast<double>(nPoints)*35.27777778)+0.5); }
+static int PtTo10Mu( int nPoints ) { return static_cast<int>((static_cast<double>(nPoints)*35.27777778)+0.5); }
 
 static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
 {

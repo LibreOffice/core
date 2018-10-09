@@ -273,7 +273,7 @@ void ScDetectiveFunc::Modified()
     pDoc->SetStreamValid(nTab, false);
 }
 
-static inline bool Intersect( SCCOL nStartCol1, SCROW nStartRow1, SCCOL nEndCol1, SCROW nEndRow1,
+static bool Intersect( SCCOL nStartCol1, SCROW nStartRow1, SCCOL nEndCol1, SCROW nEndRow1,
                         SCCOL nStartCol2, SCROW nStartRow2, SCCOL nEndCol2, SCROW nEndRow2 )
 {
     return nEndCol1 >= nStartCol2 && nEndCol2 >= nStartCol1 &&
@@ -711,7 +711,7 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, bool bDestPnt )
 
 #define SC_DET_TOLERANCE    50
 
-static inline bool RectIsPoints( const tools::Rectangle& rRect, const Point& rStart, const Point& rEnd )
+static bool RectIsPoints( const tools::Rectangle& rRect, const Point& rStart, const Point& rEnd )
 {
     return rRect.Left()   >= rStart.X() - SC_DET_TOLERANCE
         && rRect.Left()   <= rStart.X() + SC_DET_TOLERANCE

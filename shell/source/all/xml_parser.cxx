@@ -54,7 +54,7 @@ namespace /* private */
         return p;
     }
 
-    inline xml_parser* get_parser_instance(void* data)
+    xml_parser* get_parser_instance(void* data)
     {
         return static_cast<xml_parser*>(XML_GetUserData(
             static_cast<XML_Parser>(data)));

@@ -544,7 +544,7 @@ awt::Point WorksheetGlobals::getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) c
 
 namespace {
 
-inline sal_Int32 lclGetMidAddr( sal_Int32 nBegAddr, sal_Int32 nEndAddr, sal_Int32 nBegPos, sal_Int32 nEndPos, sal_Int32 nSearchPos )
+sal_Int32 lclGetMidAddr( sal_Int32 nBegAddr, sal_Int32 nEndAddr, sal_Int32 nBegPos, sal_Int32 nEndPos, sal_Int32 nSearchPos )
 {
     // use sal_Int64 to prevent integer overflow
     return nBegAddr + 1 + static_cast< sal_Int32 >( static_cast< sal_Int64 >( nEndAddr - nBegAddr - 2 ) * (nSearchPos - nBegPos) / (nEndPos - nBegPos) );

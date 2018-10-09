@@ -119,7 +119,7 @@ static bool is_gnome_desktop( Display* pDisplay )
 
 static bool bWasXError = false;
 
-static inline bool WasXError()
+static bool WasXError()
 {
     bool bRet = bWasXError;
     bWasXError = false;

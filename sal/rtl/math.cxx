@@ -218,7 +218,7 @@ int getBitsInFracPart(double fAbsValue)
 }
 
 template< typename T >
-inline void doubleToString(typename T::String ** pResult,
+void doubleToString(typename T::String ** pResult,
                            sal_Int32 * pResultCapacity, sal_Int32 nResultOffset,
                            double fValue, rtl_math_StringFormat eFormat,
                            sal_Int32 nDecPlaces, typename T::Char cDecSeparator,
@@ -747,7 +747,7 @@ void SAL_CALL rtl_math_doubleToUString(rtl_uString ** pResult,
 namespace {
 
 // if nExp * 10 + nAdd would result in overflow
-inline bool long10Overflow( long& nExp, int nAdd )
+bool long10Overflow( long& nExp, int nAdd )
 {
     if ( nExp > (LONG_MAX/10)
          || (nExp == (LONG_MAX/10) && nAdd > (LONG_MAX%10)) )
@@ -759,7 +759,7 @@ inline bool long10Overflow( long& nExp, int nAdd )
 }
 
 template< typename CharT >
-inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
+double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                              CharT cDecSeparator, CharT cGroupSeparator,
                              rtl_math_ConversionStatus * pStatus,
                              CharT const ** pParsedEnd)

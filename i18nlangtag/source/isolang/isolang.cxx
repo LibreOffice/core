@@ -32,7 +32,7 @@ constexpr LanguageType k0(0);
 constexpr LanguageType kSAME(0xffff);
 
 namespace {
-inline LanguageType getOverrideLang( LanguageType nLang, LanguageType nOverride )
+LanguageType getOverrideLang( LanguageType nLang, LanguageType nOverride )
 {
     return nOverride ? ((nOverride == kSAME) ? nLang : nOverride) : nLang;
 }

@@ -106,25 +106,25 @@ static const sal_Char
 
 static OUString EncryptBlockName_Imp(const OUString& rName);
 
-static inline bool NonFieldWordDelim( const sal_Unicode c )
+static bool NonFieldWordDelim( const sal_Unicode c )
 {
     return ' ' == c || '\t' == c || 0x0a == c ||
             cNonBreakingSpace == c || 0x2011 == c;
 }
 
-static inline bool IsWordDelim( const sal_Unicode c )
+static bool IsWordDelim( const sal_Unicode c )
 {
     return c == 0x1 || NonFieldWordDelim(c);
 }
 
 
-static inline bool IsLowerLetter( sal_Int32 nCharType )
+static bool IsLowerLetter( sal_Int32 nCharType )
 {
     return CharClass::isLetterType( nCharType ) &&
            ( css::i18n::KCharacterType::LOWER & nCharType);
 }
 
-static inline bool IsUpperLetter( sal_Int32 nCharType )
+static bool IsUpperLetter( sal_Int32 nCharType )
 {
     return CharClass::isLetterType( nCharType ) &&
             ( css::i18n::KCharacterType::UPPER & nCharType);

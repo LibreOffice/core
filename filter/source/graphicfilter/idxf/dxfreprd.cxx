@@ -442,11 +442,11 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
 }
 
 namespace {
-    inline bool lcl_isDec(sal_Unicode ch)
+    bool lcl_isDec(sal_Unicode ch)
     {
         return ch >= L'0' && ch <= L'9';
     }
-    inline bool lcl_isHex(sal_Unicode ch)
+    bool lcl_isHex(sal_Unicode ch)
     {
         return lcl_isDec(ch) || (ch >= L'A' && ch <= L'F') || (ch >= L'a' && ch <= L'f');
     }

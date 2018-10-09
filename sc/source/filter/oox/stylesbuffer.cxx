@@ -1395,7 +1395,7 @@ bool ApiBorderData::hasAnyOuterBorder() const
 
 namespace {
 
-inline void lclSetBorderLineWidth( BorderLine& rBorderLine,
+void lclSetBorderLineWidth( BorderLine& rBorderLine,
         sal_Int16 nOuter, sal_Int16 nDist = API_LINE_NONE, sal_Int16 nInner = API_LINE_NONE )
 {
     rBorderLine.OuterLineWidth = nOuter;
@@ -1668,7 +1668,7 @@ ApiSolidFillData::ApiSolidFillData() :
 
 namespace {
 
-inline sal_Int32 lclGetMixedColorComp( sal_Int32 nPatt, sal_Int32 nFill, sal_Int32 nAlpha )
+sal_Int32 lclGetMixedColorComp( sal_Int32 nPatt, sal_Int32 nFill, sal_Int32 nAlpha )
 {
     return ((nPatt - nFill) * nAlpha) / 0x80 + nFill;
 }

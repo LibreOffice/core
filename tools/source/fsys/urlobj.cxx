@@ -552,7 +552,7 @@ static sal_uInt32 const aMustEncodeMap[128]
 /* ~ */ PA   +PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ,
         0 };
 
-inline bool mustEncode(sal_uInt32 nUTF32, INetURLObject::Part ePart)
+bool mustEncode(sal_uInt32 nUTF32, INetURLObject::Part ePart)
 {
     return !rtl::isAscii(nUTF32) || !(aMustEncodeMap[nUTF32] & ePart);
 }

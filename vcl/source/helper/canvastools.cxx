@@ -76,7 +76,7 @@ namespace vcl
 
         namespace
         {
-            inline bool equalsLayout( const rendering::IntegerBitmapLayout& rLHS,
+            bool equalsLayout( const rendering::IntegerBitmapLayout& rLHS,
                                     const rendering::IntegerBitmapLayout& rRHS )
             {
                 return

@@ -838,33 +838,33 @@ SprmInfo wwSprmParser::GetSprmInfo(sal_uInt16 nId) const
 
 //-end
 
-static inline sal_uInt8 Get_Byte( sal_uInt8 *& p )
+static sal_uInt8 Get_Byte( sal_uInt8 *& p )
 {
     sal_uInt8 n = *p;
     p += 1;
     return n;
 }
 
-static inline sal_uInt16 Get_UShort( sal_uInt8 *& p )
+static sal_uInt16 Get_UShort( sal_uInt8 *& p )
 {
     const sal_uInt16 n = SVBT16ToShort( *reinterpret_cast<SVBT16*>(p) );
     p += 2;
     return n;
 }
 
-static inline sal_Int16 Get_Short( sal_uInt8 *& p )
+static sal_Int16 Get_Short( sal_uInt8 *& p )
 {
     return Get_UShort(p);
 }
 
-static inline sal_uInt32 Get_ULong( sal_uInt8 *& p )
+static sal_uInt32 Get_ULong( sal_uInt8 *& p )
 {
     sal_uInt32 n = SVBT32ToUInt32( *reinterpret_cast<SVBT32*>(p) );
     p += 4;
     return n;
 }
 
-static inline sal_Int32 Get_Long( sal_uInt8 *& p )
+static sal_Int32 Get_Long( sal_uInt8 *& p )
 {
     return Get_ULong(p);
 }

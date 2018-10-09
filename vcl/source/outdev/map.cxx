@@ -313,7 +313,7 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
     rMapRes.mnMapScDenomY = aTempY.GetDenominator();
 }
 
-static inline void ImplCalcMapResolution( const MapMode& rMapMode,
+static void ImplCalcMapResolution( const MapMode& rMapMode,
                                    long nDPIX, long nDPIY,
                                    ImplMapRes& rMapRes,
                                    ImplThresholdRes& rThresRes )

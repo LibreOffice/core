@@ -695,7 +695,7 @@ static const sal_Unicode* lcl_r1c1_get_col( const sal_Unicode* p,
     return pEnd;
 }
 
-static inline const sal_Unicode* lcl_r1c1_get_row(
+static const sal_Unicode* lcl_r1c1_get_row(
                                     const sal_Unicode* p,
                                     const ScAddress::Details& rDetails,
                                     ScAddress* pAddr, ScRefFlags* nFlags )
@@ -888,7 +888,7 @@ static ScRefFlags lcl_ScRange_Parse_XL_R1C1( ScRange& r,
     return nBailOutFlags;
 }
 
-static inline const sal_Unicode* lcl_a1_get_col( const sal_Unicode* p,
+static const sal_Unicode* lcl_a1_get_col( const sal_Unicode* p,
                                                  ScAddress* pAddr,
                                                  ScRefFlags* nFlags,
                                                  const OUString* pErrRef )
@@ -924,7 +924,7 @@ static inline const sal_Unicode* lcl_a1_get_col( const sal_Unicode* p,
     return p;
 }
 
-static inline const sal_Unicode* lcl_a1_get_row( const sal_Unicode* p,
+static const sal_Unicode* lcl_a1_get_row( const sal_Unicode* p,
                                                  ScAddress* pAddr,
                                                  ScRefFlags* nFlags,
                                                  const OUString* pErrRef )
@@ -1879,7 +1879,7 @@ void ScRange::ParseRows( const OUString& rStr,
     }
 }
 
-template<typename T > static inline void lcl_ScColToAlpha( T& rBuf, SCCOL nCol )
+template<typename T > static void lcl_ScColToAlpha( T& rBuf, SCCOL nCol )
 {
     if (nCol < 26*26)
     {
@@ -1910,21 +1910,21 @@ void ScColToAlpha( OUStringBuffer& rBuf, SCCOL nCol)
     lcl_ScColToAlpha(rBuf, nCol);
 }
 
-template <typename T > static inline void lcl_a1_append_c ( T &rString, int nCol, bool bIsAbs )
+template <typename T > static void lcl_a1_append_c ( T &rString, int nCol, bool bIsAbs )
 {
     if( bIsAbs )
         rString.append("$");
     lcl_ScColToAlpha( rString, sal::static_int_cast<SCCOL>(nCol) );
 }
 
-template <typename T > static inline void lcl_a1_append_r ( T &rString, sal_Int32 nRow, bool bIsAbs )
+template <typename T > static void lcl_a1_append_r ( T &rString, sal_Int32 nRow, bool bIsAbs )
 {
     if ( bIsAbs )
         rString.append("$");
     rString.append( nRow + 1 );
 }
 
-template <typename T > static inline void lcl_r1c1_append_c ( T &rString, sal_Int32 nCol, bool bIsAbs,
+template <typename T > static void lcl_r1c1_append_c ( T &rString, sal_Int32 nCol, bool bIsAbs,
                                        const ScAddress::Details& rDetails )
 {
     rString.append("C");
@@ -1941,7 +1941,7 @@ template <typename T > static inline void lcl_r1c1_append_c ( T &rString, sal_In
     }
 }
 
-template <typename T > static inline void lcl_r1c1_append_r ( T &rString, sal_Int32 nRow, bool bIsAbs,
+template <typename T > static void lcl_r1c1_append_r ( T &rString, sal_Int32 nRow, bool bIsAbs,
                                        const ScAddress::Details& rDetails )
 {
     rString.append("R");
@@ -1984,17 +1984,17 @@ static OUString getFileNameFromDoc( const ScDocument* pDoc )
 }
 
 
-static inline void lcl_string_append(OUStringBuffer &rString, const OUString &sString)
+static void lcl_string_append(OUStringBuffer &rString, const OUString &sString)
 {
     rString.append(sString);
 }
 
-static inline void lcl_string_append(OStringBuffer &rString, const OUString &sString)
+static void lcl_string_append(OStringBuffer &rString, const OUString &sString)
 {
     rString.append(OUStringToOString( sString, RTL_TEXTENCODING_UTF8  ));
 }
 
-template<typename T > static inline void lcl_Format( T& r, SCTAB nTab, SCROW nRow, SCCOL nCol, ScRefFlags nFlags,
+template<typename T > static void lcl_Format( T& r, SCTAB nTab, SCROW nRow, SCCOL nCol, ScRefFlags nFlags,
                                   const ScDocument* pDoc,
                                   const ScAddress::Details& rDetails)
 {
@@ -2182,11 +2182,11 @@ static void lcl_ScRange_Format_XL_Header( OUStringBuffer& rString, const ScRange
 }
 
 // helpers used in ScRange::Format
-static inline bool lcl_ColAbsFlagDiffer(const ScRefFlags nFlags)
+static bool lcl_ColAbsFlagDiffer(const ScRefFlags nFlags)
 {
     return static_cast<bool>(nFlags & ScRefFlags::COL_ABS) != static_cast<bool>(nFlags & ScRefFlags::COL2_ABS);
 }
-static inline bool lcl_RowAbsFlagDiffer(const ScRefFlags nFlags)
+static bool lcl_RowAbsFlagDiffer(const ScRefFlags nFlags)
 {
     return static_cast<bool>(nFlags & ScRefFlags::ROW_ABS) != static_cast<bool>(nFlags & ScRefFlags::ROW2_ABS);
 }

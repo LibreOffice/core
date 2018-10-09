@@ -1961,7 +1961,7 @@ static MouseEventModifiers ImplGetMouseButtonMode( SalMouseEvent const * pEvent 
     return nMode;
 }
 
-static inline bool ImplHandleSalMouseLeave( vcl::Window* pWindow, SalMouseEvent const * pEvent )
+static bool ImplHandleSalMouseLeave( vcl::Window* pWindow, SalMouseEvent const * pEvent )
 {
     return ImplHandleMouseEvent( pWindow, MouseNotifyEvent::MOUSEMOVE, true,
                                  pEvent->mnX, pEvent->mnY,
@@ -1969,7 +1969,7 @@ static inline bool ImplHandleSalMouseLeave( vcl::Window* pWindow, SalMouseEvent 
                                  ImplGetMouseMoveMode( pEvent ) );
 }
 
-static inline bool ImplHandleSalMouseMove( vcl::Window* pWindow, SalMouseEvent const * pEvent )
+static bool ImplHandleSalMouseMove( vcl::Window* pWindow, SalMouseEvent const * pEvent )
 {
     return ImplHandleMouseEvent( pWindow, MouseNotifyEvent::MOUSEMOVE, false,
                                  pEvent->mnX, pEvent->mnY,
@@ -1977,7 +1977,7 @@ static inline bool ImplHandleSalMouseMove( vcl::Window* pWindow, SalMouseEvent c
                                  ImplGetMouseMoveMode( pEvent ) );
 }
 
-static inline bool ImplHandleSalMouseButtonDown( vcl::Window* pWindow, SalMouseEvent const * pEvent )
+static bool ImplHandleSalMouseButtonDown( vcl::Window* pWindow, SalMouseEvent const * pEvent )
 {
     return ImplHandleMouseEvent( pWindow, MouseNotifyEvent::MOUSEBUTTONDOWN, false,
                                  pEvent->mnX, pEvent->mnY,
@@ -1990,7 +1990,7 @@ static inline bool ImplHandleSalMouseButtonDown( vcl::Window* pWindow, SalMouseE
                                  ImplGetMouseButtonMode( pEvent ) );
 }
 
-static inline bool ImplHandleSalMouseButtonUp( vcl::Window* pWindow, SalMouseEvent const * pEvent )
+static bool ImplHandleSalMouseButtonUp( vcl::Window* pWindow, SalMouseEvent const * pEvent )
 {
     return ImplHandleMouseEvent( pWindow, MouseNotifyEvent::MOUSEBUTTONUP, false,
                                  pEvent->mnX, pEvent->mnY,

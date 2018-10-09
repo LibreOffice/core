@@ -66,7 +66,7 @@ static typelib_TypeDescription * createCTD(
     const Reference< XTypeDescription > & xType );
 
 
-inline static typelib_TypeDescription * createCTD(
+static typelib_TypeDescription * createCTD(
     const Reference< XCompoundTypeDescription > & xType )
 {
     typelib_TypeDescription * pRet = nullptr;
@@ -123,7 +123,7 @@ inline static typelib_TypeDescription * createCTD(
     return pRet;
 }
 
-inline static typelib_TypeDescription * createCTD(
+static typelib_TypeDescription * createCTD(
     Reference< container::XHierarchicalNameAccess > const & access,
     const Reference< XStructTypeDescription > & xType )
 {
@@ -199,7 +199,7 @@ inline static typelib_TypeDescription * createCTD(
     return pRet;
 }
 
-inline static typelib_TypeDescription * createCTD(
+static typelib_TypeDescription * createCTD(
     const Reference< XInterfaceAttributeTypeDescription2 > & xAttribute )
 {
     typelib_TypeDescription * pRet = nullptr;
@@ -308,7 +308,7 @@ static typelib_TypeDescription * createCTD(
     return pRet;
 }
 
-inline static typelib_TypeDescription * createCTD(
+static typelib_TypeDescription * createCTD(
     Reference< container::XHierarchicalNameAccess > const & access,
     const Reference< XInterfaceTypeDescription2 > & xType )
 {
@@ -374,7 +374,7 @@ inline static typelib_TypeDescription * createCTD(
     return pRet;
 }
 
-inline static typelib_TypeDescription * createCTD( const Reference< XEnumTypeDescription > & xType )
+static typelib_TypeDescription * createCTD( const Reference< XEnumTypeDescription > & xType )
 {
     typelib_TypeDescription * pRet = nullptr;
     if (xType.is())
@@ -393,7 +393,7 @@ inline static typelib_TypeDescription * createCTD( const Reference< XEnumTypeDes
     return pRet;
 }
 
-inline static typelib_TypeDescription * createCTD(
+static typelib_TypeDescription * createCTD(
     Reference< container::XHierarchicalNameAccess > const & access,
     const Reference< XIndirectTypeDescription > & xType )
 {

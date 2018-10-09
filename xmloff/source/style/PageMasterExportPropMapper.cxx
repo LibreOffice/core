@@ -32,7 +32,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::comphelper;
 using namespace ::xmloff::token;
 
-static inline bool lcl_HasSameLineWidth( const table::BorderLine2& rLine1, const table::BorderLine2& rLine2 )
+static bool lcl_HasSameLineWidth( const table::BorderLine2& rLine1, const table::BorderLine2& rLine2 )
 {
     return  (rLine1.InnerLineWidth == rLine2.InnerLineWidth) &&
             (rLine1.OuterLineWidth == rLine2.OuterLineWidth) &&
@@ -40,7 +40,7 @@ static inline bool lcl_HasSameLineWidth( const table::BorderLine2& rLine1, const
             (rLine1.LineWidth == rLine2.LineWidth);
 }
 
-static inline void lcl_RemoveState( XMLPropertyState* pState )
+static void lcl_RemoveState( XMLPropertyState* pState )
 {
     pState->mnIndex = -1;
     pState->maValue.clear();

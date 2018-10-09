@@ -79,7 +79,7 @@ struct ImplStatusItem
     std::unique_ptr<SalLayout>          mxLayoutCache;
 };
 
-static inline long ImplCalcProgressWidth( sal_uInt16 nMax, long nSize )
+static long ImplCalcProgressWidth( sal_uInt16 nMax, long nSize )
 {
     return ((nMax*(nSize+(nSize/2)))-(nSize/2)+(STATUSBAR_PRGS_OFFSET*2));
 }

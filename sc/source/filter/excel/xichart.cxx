@@ -143,7 +143,7 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclChRectangle& rRect )
     return rStrm;
 }
 
-inline void lclSetValueOrClearAny( Any& rAny, double fValue, bool bClear )
+void lclSetValueOrClearAny( Any& rAny, double fValue, bool bClear )
 {
     if( bClear )
         rAny.clear();

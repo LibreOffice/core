@@ -38,7 +38,7 @@ namespace
             @param  _rBase      the base point
             @param  _aVector    the vector which will be added
     */
-    inline tools::Rectangle calcRect(const Point& _rBase,const Point& _aVector)
+    tools::Rectangle calcRect(const Point& _rBase,const Point& _aVector)
     {
         return tools::Rectangle( _rBase - _aVector, _rBase + _aVector );
     }

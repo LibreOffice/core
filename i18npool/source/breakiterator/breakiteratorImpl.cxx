@@ -118,7 +118,7 @@ Boundary SAL_CALL BreakIteratorImpl::nextWord( const OUString& Text, sal_Int32 n
     return result;
 }
 
-static inline bool isCJK( const Locale& rLocale ) {
+static bool isCJK( const Locale& rLocale ) {
         return rLocale.Language == "zh" || rLocale.Language == "ja" || rLocale.Language == "ko";
 }
 

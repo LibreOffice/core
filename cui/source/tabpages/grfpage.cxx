@@ -40,7 +40,7 @@
 #define TWIP_TO_INCH        1440
 
 
-static inline int lcl_GetValue(const weld::MetricSpinButton& rMetric, FieldUnit eUnit)
+static int lcl_GetValue(const weld::MetricSpinButton& rMetric, FieldUnit eUnit)
 {
     return rMetric.denormalize(rMetric.get_value(eUnit));
 }

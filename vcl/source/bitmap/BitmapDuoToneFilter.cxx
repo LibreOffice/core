@@ -15,8 +15,7 @@
 
 #include <bitmapwriteaccess.hxx>
 
-static inline sal_uInt8 lcl_getDuotoneColorComponent(sal_uInt8 base, sal_uInt16 color1,
-                                                     sal_uInt16 color2)
+static sal_uInt8 lcl_getDuotoneColorComponent(sal_uInt8 base, sal_uInt16 color1, sal_uInt16 color2)
 {
     color2 = color2 * base / 0xFF;
     color1 = color1 * (0xFF - base) / 0xFF;

@@ -71,7 +71,7 @@ using ::rtl::OString;
 
 /** get binary Path.
 */
-static inline ::rtl::OUString getExecutablePath()
+static ::rtl::OUString getExecutablePath()
 {
     ::rtl::OUString dirPath;
     osl::Module::getUrlFromAddress(

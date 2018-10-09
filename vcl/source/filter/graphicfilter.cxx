@@ -167,7 +167,7 @@ sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uLo
     return nullptr;
 }
 
-static inline OUString ImpGetExtension( const OUString &rPath )
+static OUString ImpGetExtension( const OUString &rPath )
 {
     OUString        aExt;
     INetURLObject   aURL( rPath );

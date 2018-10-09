@@ -76,14 +76,14 @@ static inline double unsigned_int64_to_double( sal_uInt64 n )
 static const double DOUBLE_SAL_UINT64_MAX =
     double(((sal_uInt64(0xffffffff)) << 32) | sal_uInt64(0xffffffff));
 
-static inline double unsigned_int64_to_double( sal_uInt64 n )
+static double unsigned_int64_to_double( sal_uInt64 n )
 {
     return static_cast<double>(n);
 }
 #endif
 
 
-static inline double round( double aVal )
+static double round( double aVal )
 {
     bool bPos   = (aVal >= 0.0);
     aVal            = ::fabs( aVal );

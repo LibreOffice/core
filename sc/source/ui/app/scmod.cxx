@@ -1519,7 +1519,7 @@ void ScModule::SetRefDialog( sal_uInt16 nId, bool bVis, SfxViewFrame* pViewFrm )
     }
 }
 
-static inline SfxChildWindow* lcl_GetChildWinFromCurrentView( sal_uInt16 nId )
+static SfxChildWindow* lcl_GetChildWinFromCurrentView( sal_uInt16 nId )
 {
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
 

@@ -46,16 +46,16 @@ c |= nSwapTmp;
 #include <algorithm>
 
 // !!! Do not inline if already the operators <<,>> are inline
-inline static void SwapUShort( sal_uInt16& r )
+static void SwapUShort( sal_uInt16& r )
     {   r = OSL_SWAPWORD(r);   }
-inline static void SwapShort( short& r )
+static void SwapShort( short& r )
     {   r = OSL_SWAPWORD(r);   }
-inline static void SwapULong( sal_uInt32& r )
+static void SwapULong( sal_uInt32& r )
     {   r = OSL_SWAPDWORD(r);   }
-inline static void SwapLongInt( sal_Int32& r )
+static void SwapLongInt( sal_Int32& r )
     {   r = OSL_SWAPDWORD(r);   }
 
-inline static void SwapUInt64( sal_uInt64& r )
+static void SwapUInt64( sal_uInt64& r )
     {
         union
         {
@@ -72,7 +72,7 @@ inline static void SwapUInt64( sal_uInt64& r )
         s.c[1] = OSL_SWAPDWORD(s.c[1]);
         r = s.n;
     }
-inline static void SwapInt64( sal_Int64& r )
+static void SwapInt64( sal_Int64& r )
     {
         union
         {
@@ -91,7 +91,7 @@ inline static void SwapInt64( sal_Int64& r )
     }
 
 #ifdef UNX
-inline static void SwapFloat( float& r )
+static void SwapFloat( float& r )
     {
         union
         {
@@ -104,7 +104,7 @@ inline static void SwapFloat( float& r )
         r = s.f;
     }
 
-inline static void SwapDouble( double& r )
+static void SwapDouble( double& r )
     {
         if( sizeof(double) != 8 )
         {

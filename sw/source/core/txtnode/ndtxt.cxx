@@ -3094,7 +3094,7 @@ SwTextAttr * SwTextNode::GetTextAttrForCharAt(
 namespace
 {
 
-inline sal_uInt16 lcl_BoundListLevel(const int nActualLevel)
+sal_uInt16 lcl_BoundListLevel(const int nActualLevel)
 {
     return static_cast<sal_uInt16>( std::min( std::max(nActualLevel, 0), MAXLEVEL-1 ) );
 }

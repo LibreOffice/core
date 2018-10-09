@@ -185,10 +185,10 @@ struct FunctionData
     FunctionParamInfo   mpParamInfos[ FUNCINFO_PARAMINFOCOUNT ]; /// Information about all parameters.
     FuncFlags           mnFlags;            /// Additional flags.
 
-    inline bool         isSupported(bool bImportFilter) const;
+    bool         isSupported(bool bImportFilter) const;
 };
 
-inline bool FunctionData::isSupported(bool bImportFilter) const
+bool FunctionData::isSupported(bool bImportFilter) const
 {
     /*  For import filters: the FuncFlags::EXPORTONLY, FuncFlags::BIFFEXPORTONLY
                             and FuncFlags::BIFFIMPORTONLY flag must not be set.

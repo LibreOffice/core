@@ -486,7 +486,7 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
     bShrink = pPattern->GetItem( ATTR_SHRINKTOFIT, pCondSet ).GetValue();
 }
 
-static inline bool SameValue( const ScRefCellValue& rCell, const ScRefCellValue& rOldCell )
+static bool SameValue( const ScRefCellValue& rCell, const ScRefCellValue& rOldCell )
 {
     return rOldCell.meType == CELLTYPE_VALUE && rCell.meType == CELLTYPE_VALUE &&
         rCell.mfValue == rOldCell.mfValue;
@@ -991,7 +991,7 @@ bool ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
     return true;
 }
 
-static inline bool StringDiffer( const ScPatternAttr*& rpOldPattern, const ScPatternAttr* pNewPattern )
+static bool StringDiffer( const ScPatternAttr*& rpOldPattern, const ScPatternAttr* pNewPattern )
 {
     OSL_ENSURE( pNewPattern, "pNewPattern" );
 
@@ -1068,7 +1068,7 @@ static inline bool StringDiffer( const ScPatternAttr*& rpOldPattern, const ScPat
     }
 }
 
-static inline void lcl_CreateInterpretProgress( bool& bProgress, ScDocument* pDoc,
+static void lcl_CreateInterpretProgress( bool& bProgress, ScDocument* pDoc,
         const ScFormulaCell* pFCell )
 {
     if ( !bProgress && pFCell->GetDirty() )
@@ -1078,7 +1078,7 @@ static inline void lcl_CreateInterpretProgress( bool& bProgress, ScDocument* pDo
     }
 }
 
-static inline bool IsAmbiguousScript( SvtScriptType nScript )
+static bool IsAmbiguousScript( SvtScriptType nScript )
 {
     return ( nScript != SvtScriptType::LATIN &&
              nScript != SvtScriptType::ASIAN &&

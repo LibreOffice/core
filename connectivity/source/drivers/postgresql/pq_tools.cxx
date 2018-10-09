@@ -95,7 +95,7 @@ OUString concatQualified( const OUString & a, const OUString &b)
     return buf.makeStringAndClear();
 }
 
-static inline OString iOUStringToOString( const OUString& str, ConnectionSettings const *settings) {
+static OString iOUStringToOString( const OUString& str, ConnectionSettings const *settings) {
     OSL_ENSURE(settings, "pgsql-sdbc: OUStringToOString got NULL settings");
     return OUStringToOString( str, ConnectionSettings::encoding );
 }
@@ -131,7 +131,7 @@ void bufferEscapeConstant( OUStringBuffer & buf, const OUString & value, Connect
     buf.append( OStringToOUString( strbuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ) );
 }
 
-static inline void ibufferQuoteConstant( OUStringBuffer & buf, const OUString & value, ConnectionSettings *settings )
+static void ibufferQuoteConstant( OUStringBuffer & buf, const OUString & value, ConnectionSettings *settings )
 {
     buf.append( "'" );
     bufferEscapeConstant( buf, value, settings );
@@ -155,7 +155,7 @@ void bufferQuoteAnyConstant( OUStringBuffer & buf, const Any &val, ConnectionSet
         buf.append( "NULL" );
 }
 
-static inline void ibufferQuoteIdentifier( OUStringBuffer & buf, const OUString &toQuote, ConnectionSettings *settings )
+static void ibufferQuoteIdentifier( OUStringBuffer & buf, const OUString &toQuote, ConnectionSettings *settings )
 {
     OSL_ENSURE(settings, "pgsql-sdbc: bufferQuoteIdentifier got NULL settings");
 

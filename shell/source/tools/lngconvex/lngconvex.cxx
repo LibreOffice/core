@@ -72,10 +72,10 @@ void ShowUsage()
     std::cout << "-rcf Name of the resource file footer" << std::endl;
 }
 
-inline OUString OStringToOUString(const OString& str)
+OUString OStringToOUString(const OString& str)
 { return OStringToOUString(str, osl_getThreadTextEncoding()); }
 
-inline OString OUStringToOString(const OUString& str)
+OString OUStringToOString(const OUString& str)
 { return OUStringToOString(str, osl_getThreadTextEncoding()); }
 
 /** Get the directory where the module

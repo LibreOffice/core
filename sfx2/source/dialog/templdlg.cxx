@@ -564,7 +564,7 @@ static void MakeTree_Impl(StyleTreeArr_Impl& rArr)
         });
 }
 
-static inline bool IsExpanded_Impl( const std::vector<OUString>& rEntries,
+static bool IsExpanded_Impl( const std::vector<OUString>& rEntries,
                              const OUString &rStr)
 {
     for (const auto & rEntry : rEntries)

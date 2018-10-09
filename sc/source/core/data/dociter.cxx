@@ -2382,7 +2382,7 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
     }
 }
 
-static inline bool IsGreater( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+static bool IsGreater( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
     return ( nRow1 > nRow2 ) || ( nRow1 == nRow2 && nCol1 > nCol2 );
 }

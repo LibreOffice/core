@@ -50,7 +50,7 @@ Sequence< sal_Int8 > OImplementationId::getImplementationId() const
 }
 
 
-static inline void copy( Sequence< Type > & rDest, const Sequence< Type > & rSource, sal_Int32 nOffset )
+static void copy( Sequence< Type > & rDest, const Sequence< Type > & rSource, sal_Int32 nOffset )
 {
     Type * pDest = rDest.getArray();
     const Type * pSource = rSource.getConstArray();

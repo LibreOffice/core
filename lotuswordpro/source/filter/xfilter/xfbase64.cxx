@@ -72,7 +72,7 @@ const  sal_Char aBase64EncodeTable[] =
  * @descr   Encode 3 byte to 4 byte.
  *          Please refer to RFC to get the base64 algorithm.
  */
-static inline void Encode_(const sal_uInt8 *src, sal_Char* dest)
+static void Encode_(const sal_uInt8 *src, sal_Char* dest)
 {
     sal_Int32 nBinaer = (src[ 0] << 16) +
         (src[1] <<  8) +

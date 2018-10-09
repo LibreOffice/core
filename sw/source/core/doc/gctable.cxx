@@ -25,7 +25,7 @@
 
 using namespace ::editeng;
 
-static inline const SvxBorderLine* GetLineTB( const SvxBoxItem* pBox, bool bTop )
+static const SvxBorderLine* GetLineTB( const SvxBoxItem* pBox, bool bTop )
 {
     return bTop ? pBox->GetTop() : pBox->GetBottom();
 }
@@ -110,7 +110,7 @@ static sal_uInt16 lcl_FindEndPosOfBorder( const SwCollectTableLineBoxes& rCollTL
     return nLastPos;
 }
 
-static inline const SvxBorderLine* lcl_GCBorder_GetBorder( const SwTableBox& rBox,
+static const SvxBorderLine* lcl_GCBorder_GetBorder( const SwTableBox& rBox,
                                                 bool bTop,
                                                 const SfxPoolItem** ppItem )
 {

@@ -43,7 +43,7 @@ namespace formula
 
 // --- helpers --------------------------------------------------------------
 
-static inline bool lcl_IsReference( OpCode eOp, StackVar eType )
+static bool lcl_IsReference( OpCode eOp, StackVar eType )
 {
     return
         (eOp == ocPush && (eType == svSingleRef || eType == svDoubleRef))

@@ -689,7 +689,7 @@ void ScBroadcastAreaSlotMachine::ComputeAreaPoints( const ScRange& rRange,
         ScAddress( rRange.aStart.Col(), rRange.aEnd.Row(), 0 ) ) - rStart;
 }
 
-static inline void ComputeNextSlot( SCSIZE & nOff, SCSIZE & nBreak, ScBroadcastAreaSlot** & pp,
+static void ComputeNextSlot( SCSIZE & nOff, SCSIZE & nBreak, ScBroadcastAreaSlot** & pp,
         SCSIZE & nStart, ScBroadcastAreaSlot** const & ppSlots, SCSIZE nRowBreak )
 {
     if ( nOff < nBreak )

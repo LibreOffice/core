@@ -300,7 +300,7 @@ static OUString & getIniFileName_Impl()
 
 // ensure the given file url has no final slash
 
-static inline void EnsureNoFinalSlash (rtl::OUString & url)
+static void EnsureNoFinalSlash (rtl::OUString & url)
 {
     sal_Int32 i = url.getLength();
 

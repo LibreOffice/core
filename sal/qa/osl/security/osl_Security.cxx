@@ -38,7 +38,7 @@ using namespace rtl;
 
 /** print a UNI_CODE String.
 */
-static inline void printUString( const ::rtl::OUString & str )
+static void printUString( const ::rtl::OUString & str )
 {
     rtl::OString aString;
 

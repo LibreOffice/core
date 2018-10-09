@@ -49,7 +49,7 @@ const sal_Int16 kYearMin = SAL_MIN_INT16;
 // Days until start of year from zero, so month and day of month can be added.
 // year 1 => 0 days, year 2 => 365 days, ...
 // year -1 => -366 days, year -2 => -731 days, ...
-inline sal_Int32 ImpYearToDays( sal_Int16 nYear )
+sal_Int32 ImpYearToDays( sal_Int16 nYear )
 {
     assert( nYear != 0 );
     sal_Int32 nOffset;
@@ -67,7 +67,7 @@ inline sal_Int32 ImpYearToDays( sal_Int16 nYear )
     return nOffset + nYr*365 + nYr/4 - nYr/100 + nYr/400;
 }
 
-inline bool ImpIsLeapYear( sal_Int16 nYear )
+bool ImpIsLeapYear( sal_Int16 nYear )
 {
     // Leap years BCE are -1, -5, -9, ...
     // See
@@ -81,7 +81,7 @@ inline bool ImpIsLeapYear( sal_Int16 nYear )
 }
 
 // All callers must have sanitized or normalized month and year values!
-inline sal_uInt16 ImplDaysInMonth( sal_uInt16 nMonth, sal_Int16 nYear )
+sal_uInt16 ImplDaysInMonth( sal_uInt16 nMonth, sal_Int16 nYear )
 {
     if ( nMonth != 2 )
         return aDaysInMonth[nMonth-1];

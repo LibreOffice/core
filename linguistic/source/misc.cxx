@@ -112,7 +112,7 @@ bool LinguIsUnspecified( const OUString & rBcp47 )
     return rBcp47 == "zxx" || rBcp47 == "und" || rBcp47 == "mul";
 }
 
-static inline sal_Int32 Minimum( sal_Int32 n1, sal_Int32 n2, sal_Int32 n3 )
+static sal_Int32 Minimum( sal_Int32 n1, sal_Int32 n2, sal_Int32 n3 )
 {
     return std::min(std::min(n1, n2), n3);
 }

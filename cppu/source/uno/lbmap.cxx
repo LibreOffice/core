@@ -268,7 +268,7 @@ uno_Mediate_Mapping::uno_Mediate_Mapping(
 }
 
 
-static inline OUString getMappingName(
+static OUString getMappingName(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
 {
     OUStringBuffer aKey( 64 );
@@ -285,7 +285,7 @@ static inline OUString getMappingName(
     return aKey.makeStringAndClear();
 }
 
-static inline OUString getBridgeName(
+static OUString getBridgeName(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
 {
     OUStringBuffer aBridgeName( 16 );
@@ -302,7 +302,7 @@ static inline OUString getBridgeName(
 
 #ifndef DISABLE_DYNLOADING
 
-static inline void setNegativeBridge( const OUString & rBridgeName )
+static void setNegativeBridge( const OUString & rBridgeName )
 {
     MappingsData & rData = getMappingsData();
     MutexGuard aGuard( rData.aNegativeLibsMutex );
@@ -337,7 +337,7 @@ static uno_ext_getMappingFunc selectMapFunc( const OUString & rBridgeName )
 
 #else
 
-static inline bool loadModule(osl::Module & rModule, const OUString & rBridgeName)
+static bool loadModule(osl::Module & rModule, const OUString & rBridgeName)
 {
     bool bNeg;
     {
@@ -472,7 +472,7 @@ static Mapping getDirectMapping(
 }
 
 
-static inline Mapping createMediateMapping(
+static Mapping createMediateMapping(
     const Environment & rFrom, const Environment & rTo,
     const Mapping & rFrom2Uno, const Mapping & rUno2To,
     const OUString & rAddPurpose )

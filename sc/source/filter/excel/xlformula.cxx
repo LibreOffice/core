@@ -923,7 +923,7 @@ void XclTokenArrayHelper::ConvertStringToList(
 
 namespace {
 
-inline bool lclGetAddress( ScAddress& rAddress, const FormulaToken& rToken, const ScAddress& rPos )
+bool lclGetAddress( ScAddress& rAddress, const FormulaToken& rToken, const ScAddress& rPos )
 {
     OpCode eOpCode = rToken.GetOpCode();
     bool bIsSingleRef = (eOpCode == ocPush) && (rToken.GetType() == svSingleRef);

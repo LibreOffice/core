@@ -227,7 +227,7 @@ static const sal_Unicode static_aLFText[] = { '\n', 0 };
 static const sal_Unicode static_aCRText[] = { '\r', 0 };
 static const sal_Unicode static_aCRLFText[] = { '\r', '\n', 0 };
 
-static inline const sal_Unicode* static_getLineEndText( LineEnd aLineEnd )
+static const sal_Unicode* static_getLineEndText( LineEnd aLineEnd )
 {
     const sal_Unicode* pRet = nullptr;
 

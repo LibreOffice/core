@@ -193,7 +193,7 @@ static void splash_setup( struct splash* splash, int const barc[3], int const fr
 #define SHIFT( x, bits ) ( ( (bits) >= 0 )? ( (x) << (bits) ): ( (x) >> -(bits) ) )
 
 // Position of the highest bit (more or less integer log2)
-static inline int HIGHEST_BIT( unsigned long x )
+static int HIGHEST_BIT( unsigned long x )
 {
     int i = 0;
     for ( ; x; ++i )
@@ -203,7 +203,7 @@ static inline int HIGHEST_BIT( unsigned long x )
 }
 
 // Number of bits set to 1
-static inline int BITS( unsigned long x )
+static int BITS( unsigned long x )
 {
     int i = 0;
     for ( ; x; x >>= 1 )

@@ -177,7 +177,7 @@ AtkStateType mapAtkState( sal_Int16 nState )
     return type;
 }
 
-static inline AtkRole getRoleForName( const gchar * name )
+static AtkRole getRoleForName( const gchar * name )
 {
     AtkRole ret = atk_role_for_name( name );
     if( ATK_ROLE_INVALID == ret )

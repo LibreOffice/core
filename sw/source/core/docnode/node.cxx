@@ -815,7 +815,7 @@ const SwTextNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
     return pRet;
 }
 
-static inline bool IsValidNextPrevNd( const SwNode& rNd )
+static bool IsValidNextPrevNd( const SwNode& rNd )
 {
     return SwNodeType::Table == rNd.GetNodeType() ||
            ( SwNodeType::ContentMask & rNd.GetNodeType() ) ||

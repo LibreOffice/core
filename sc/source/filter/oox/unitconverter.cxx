@@ -49,7 +49,7 @@ const double MM100_PER_TWIP         = MM100_PER_POINT / 20.0;
 const double MM100_PER_EMU          = 1.0 / 360.0;
 
 /** Returns true, if the passed year is a leap year. */
-inline bool lclIsLeapYear( sal_Int32 nYear )
+bool lclIsLeapYear( sal_Int32 nYear )
 {
     return ((nYear % 4) == 0) && (((nYear % 100) != 0) || ((nYear % 400) == 0));
 }

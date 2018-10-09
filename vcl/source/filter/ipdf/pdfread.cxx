@@ -53,7 +53,7 @@ int CompatibleWriter::WriteBlockCallback(FPDF_FILEWRITE* pFileWrite, const void*
 }
 
 /// Convert to inch, then assume 96 DPI.
-inline double pointToPixel(const double fPoint, const double fResolutionDPI)
+double pointToPixel(const double fPoint, const double fResolutionDPI)
 {
     return fPoint * fResolutionDPI / 72.;
 }

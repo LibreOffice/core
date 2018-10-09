@@ -46,7 +46,7 @@ using cppuhelper::detail::XExceptionThrower;
 
 struct ExceptionThrower : public uno_Interface, XExceptionThrower
 {
-    inline ExceptionThrower();
+    ExceptionThrower();
 
     virtual ~ExceptionThrower() {}
 
@@ -164,7 +164,7 @@ void ExceptionThrower::rethrowException()
 }
 
 
-inline ExceptionThrower::ExceptionThrower()
+ExceptionThrower::ExceptionThrower()
 {
     uno_Interface::acquire = ExceptionThrower_acquire_release_nop;
     uno_Interface::release = ExceptionThrower_acquire_release_nop;

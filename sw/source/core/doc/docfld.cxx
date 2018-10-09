@@ -679,7 +679,7 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
 namespace
 {
 
-inline OUString lcl_CutOffDBCommandType(const OUString& rName)
+OUString lcl_CutOffDBCommandType(const OUString& rName)
 {
     return rName.replaceFirst(OUStringLiteral1(DB_DELIM), ".").getToken(0, DB_DELIM);
 }

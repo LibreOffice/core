@@ -80,7 +80,7 @@ static OUString inv_getImplementationName()
 }
 
 // TODO: Implement centrally
-static inline Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XIdlReflection > & xRefl )
+static Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XIdlReflection > & xRefl )
 {
     return xRefl->forName( rType.getTypeName() );
 }

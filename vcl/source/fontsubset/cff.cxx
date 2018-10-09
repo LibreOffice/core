@@ -1703,7 +1703,7 @@ void Type1Emitter::emitAllCrypted()
 // #i110387# quick-and-dirty double->ascii conversion
 // needed because sprintf/ecvt/etc. alone are too localized (LC_NUMERIC)
 // also strip off trailing zeros in fraction while we are at it
-static inline int dbl2str( char* pOut, double fVal)
+static int dbl2str( char* pOut, double fVal)
 {
     const int nLen = psp::getValueOfDouble( pOut, fVal, 6);
     return nLen;

@@ -36,7 +36,7 @@ void appendTypeError(
     buf.append( '>' );
 }
 
-inline void appendChar( OUStringBuffer & buf, sal_Unicode c )
+void appendChar( OUStringBuffer & buf, sal_Unicode c )
 {
     if (c < ' ' || c > '~') {
         buf.append( "\\X" );

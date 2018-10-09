@@ -3171,7 +3171,7 @@ Point SwAccessibleMap::PixelToCore( const Point& rPoint ) const
     return aPoint;
 }
 
-static inline long lcl_CorrectCoarseValue(long aCoarseValue, long aFineValue,
+static long lcl_CorrectCoarseValue(long aCoarseValue, long aFineValue,
                                           long aRefValue, bool bToLower)
 {
     long aResult = aCoarseValue;
@@ -3190,7 +3190,7 @@ static inline long lcl_CorrectCoarseValue(long aCoarseValue, long aFineValue,
     return aResult;
 }
 
-static inline void lcl_CorrectRectangle(tools::Rectangle & rRect,
+static void lcl_CorrectRectangle(tools::Rectangle & rRect,
                                         const tools::Rectangle & rSource,
                                         const tools::Rectangle & rInGrid)
 {

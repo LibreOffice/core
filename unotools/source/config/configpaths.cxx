@@ -178,8 +178,7 @@ OUString extractFirstFromConfigurationPath(OUString const& _sInPath, OUString* _
 }
 
 // find the position after the prefix in the nested path
-static inline
-sal_Int32 lcl_findPrefixEnd(OUString const& _sNestedPath, OUString const& _sPrefixPath)
+static sal_Int32 lcl_findPrefixEnd(OUString const& _sNestedPath, OUString const& _sPrefixPath)
 {
     // TODO: currently handles only exact prefix matches
     sal_Int32 nPrefixLength = _sPrefixPath.getLength();

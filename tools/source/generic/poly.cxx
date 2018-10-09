@@ -53,7 +53,7 @@
 #define SMALL_DVALUE    0.0000001
 #define FSQRT2          1.4142135623730950488016887242097
 
-static inline double ImplGetParameter( const Point& rCenter, const Point& rPt, double fWR, double fHR )
+static double ImplGetParameter( const Point& rCenter, const Point& rPt, double fWR, double fHR )
 {
     const long nDX = rPt.X() - rCenter.X();
     double fAngle = atan2( -rPt.Y() + rCenter.Y(), ( ( nDX == 0 ) ? 0.000000001 : nDX ) );

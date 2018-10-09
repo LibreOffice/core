@@ -1230,7 +1230,7 @@ static sal_Unicode* ImplAdd9UNum( sal_Unicode* pBuf, sal_uInt32 nNumber )
     return pBuf;
 }
 
-static inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, const OUString& rStr )
+static sal_Unicode* ImplAddString( sal_Unicode* pBuf, const OUString& rStr )
 {
     if ( rStr.getLength() == 1 )
         *pBuf++ = rStr[0];
@@ -1244,14 +1244,14 @@ static inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, const OUString& rSt
     return pBuf;
 }
 
-static inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, sal_Unicode c )
+static sal_Unicode* ImplAddString( sal_Unicode* pBuf, sal_Unicode c )
 {
     *pBuf = c;
     pBuf++;
     return pBuf;
 }
 
-static inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, const sal_Unicode* pCopyBuf, sal_Int32 nLen )
+static sal_Unicode* ImplAddString( sal_Unicode* pBuf, const sal_Unicode* pCopyBuf, sal_Int32 nLen )
 {
     memcpy( pBuf, pCopyBuf, nLen * sizeof(sal_Unicode) );
     return pBuf + nLen;
@@ -1514,7 +1514,7 @@ OUString LocaleDataWrapper::getDuration( const tools::Time& rTime, bool bSec, bo
 
 // --- simple number formatting ---------------------------------------
 
-static inline size_t ImplGetNumberStringLengthGuess( const LocaleDataWrapper& rLoc, sal_uInt16 nDecimals )
+static size_t ImplGetNumberStringLengthGuess( const LocaleDataWrapper& rLoc, sal_uInt16 nDecimals )
 {
     // approximately 3.2 bits per digit
     const size_t nDig = ((sizeof(sal_Int64) * 8) / 3) + 1;

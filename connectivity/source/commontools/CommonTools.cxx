@@ -36,7 +36,7 @@
 #include <rtl/process.h>
 
 using namespace ::comphelper;
-static inline sal_Unicode rtl_ascii_toUpperCase( sal_Unicode ch )
+static sal_Unicode rtl_ascii_toUpperCase( sal_Unicode ch )
 {
     return ch >= 0x0061 && ch <= 0x007a ? ch + 0x20 : ch;
 }

@@ -88,7 +88,7 @@ sal_uInt16 lclHashVector( const ::std::vector< Type >& rVec, const ValueHasher& 
 
 /** Calculates a hash value from a vector. Uses XclDirectHasher to hash the vector elements. */
 template< typename Type >
-inline sal_uInt16 lclHashVector( const ::std::vector< Type >& rVec )
+sal_uInt16 lclHashVector( const ::std::vector< Type >& rVec )
 {
     return lclHashVector( rVec, XclDirectHasher< Type >() );
 }

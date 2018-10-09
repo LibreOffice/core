@@ -1340,7 +1340,7 @@ namespace
 {
     // Co = Cs + Cd*(1-As) premultiplied alpha -or-
     // Co = (AsCs + AdCd*(1-As)) / Ao
-    inline sal_uInt8 CalcColor( const sal_uInt8 nSourceColor, const sal_uInt8 nSourceAlpha,
+    sal_uInt8 CalcColor( const sal_uInt8 nSourceColor, const sal_uInt8 nSourceAlpha,
                                 const sal_uInt8 nDstAlpha, const sal_uInt8 nResAlpha, const sal_uInt8 nDestColor )
     {
         int c = nResAlpha ? ( static_cast<int>(nSourceAlpha)*nSourceColor + static_cast<int>(nDstAlpha)*nDestColor -
@@ -1348,7 +1348,7 @@ namespace
         return sal_uInt8( c );
     }
 
-    inline BitmapColor AlphaBlend( int nX,               int nY,
+    BitmapColor AlphaBlend( int nX,               int nY,
                                    const long            nMapX,
                                    const long            nMapY,
                                    BitmapReadAccess const *  pP,

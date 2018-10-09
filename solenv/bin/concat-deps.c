@@ -142,7 +142,7 @@ int result = 32;
 }
 #endif
 
-static inline unsigned int get_unaligned_uint(const unsigned char* cursor)
+static unsigned int get_unaligned_uint(const unsigned char* cursor)
 {
 unsigned int   result;
 
@@ -254,7 +254,7 @@ void* next;
     }
 }
 
-static inline void* pool_alloc(struct pool* pool)
+static void* pool_alloc(struct pool* pool)
 {
 void* data;
 
@@ -522,7 +522,7 @@ unsigned int i;
     }
 }
 
-static inline int compare_key(struct hash const * hash, const char* a, const char* b, int len, int const * cost)
+static int compare_key(struct hash const * hash, const char* a, const char* b, int len, int const * cost)
 {
 #ifdef HASH_STAT
     *cost += 1;
@@ -715,7 +715,7 @@ static void cancel_relative(char const * base, char** ref_cursor, char** ref_cur
     *ref_cursor_out = cursor_out;
 }
 
-static inline void eat_space(char ** token)
+static void eat_space(char ** token)
 {
     while ((' ' == **token) || ('\t' == **token)) {
         ++(*token);
@@ -726,7 +726,7 @@ static inline void eat_space(char ** token)
  * Prune LibreOffice specific duplicate dependencies to improve
  * gnumake startup time, and shrink the disk-space footprint.
  */
-static inline int
+static int
 elide_dependency(const char* key, int key_len, const char **unpacked_end)
 {
 #if 0
@@ -788,7 +788,7 @@ static void emit_unpacked_target(const char* token, const char* end)
 }
 
 /* prefix paths to absolute */
-static inline void print_fullpaths(char* line)
+static void print_fullpaths(char* line)
 {
     char* token;
     char* end;
@@ -861,7 +861,7 @@ static inline void print_fullpaths(char* line)
     }
 }
 
-static inline char * eat_space_at_end(char * end)
+static char * eat_space_at_end(char * end)
 {
     char * real_end;
     assert('\0' == *end);
@@ -875,7 +875,7 @@ static inline char * eat_space_at_end(char * end)
 }
 
 static char* phony_content_buffer;
-static inline char* generate_phony_line(char const * phony_target, char const * extension)
+static char* generate_phony_line(char const * phony_target, char const * extension)
 {
 char const * src;
 char* dest;
@@ -900,7 +900,7 @@ char* last_dot = NULL;
     return phony_content_buffer;
 }
 
-static inline int generate_phony_file(char* fn, char const * content)
+static int generate_phony_file(char* fn, char const * content)
 {
 FILE* depfile;
     depfile = fopen(fn, "w");

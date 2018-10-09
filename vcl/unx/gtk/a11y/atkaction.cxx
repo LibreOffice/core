@@ -164,7 +164,7 @@ action_wrapper_get_name (AtkAction *action,
 *  The keybindings in <full-path> should be separated by ":"
 */
 
-static inline void
+static void
 appendKeyStrokes(OStringBuffer& rBuffer, const uno::Sequence< awt::KeyStroke >& rKeyStrokes)
 {
     for( sal_Int32 i = 0; i < rKeyStrokes.getLength(); i++ )

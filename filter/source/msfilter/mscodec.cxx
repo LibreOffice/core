@@ -44,7 +44,7 @@ namespace {
 
 /** Rotates rnValue left by nBits bits. */
 template< typename Type >
-inline void lclRotateLeft( Type& rnValue, int nBits )
+void lclRotateLeft( Type& rnValue, int nBits )
 {
     OSL_ASSERT(
         nBits >= 0 &&
@@ -54,7 +54,7 @@ inline void lclRotateLeft( Type& rnValue, int nBits )
 
 /** Rotates the lower nWidth bits of rnValue left by nBits bits. */
 template< typename Type >
-inline void lclRotateLeft( Type& rnValue, sal_uInt8 nBits, sal_uInt8 nWidth )
+void lclRotateLeft( Type& rnValue, sal_uInt8 nBits, sal_uInt8 nWidth )
 {
     OSL_ASSERT( (nBits < nWidth) && (nWidth < sizeof( Type ) * 8) );
     Type nMask = static_cast< Type >( (1UL << nWidth) - 1 );
@@ -289,7 +289,7 @@ static void lcl_PrintDigest(const sal_uInt8* pDigest, const char* msg)
     printf("\n");
 }
 #else
-static inline void lcl_PrintDigest(const sal_uInt8* /*pDigest*/, const char* /*msg*/)
+static void lcl_PrintDigest(const sal_uInt8* /*pDigest*/, const char* /*msg*/)
 {
 }
 #endif

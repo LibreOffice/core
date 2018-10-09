@@ -119,7 +119,7 @@ namespace
             pMark);
     }
 
-    inline std::unique_ptr<SwPosition> lcl_PositionFromContentNode(
+    std::unique_ptr<SwPosition> lcl_PositionFromContentNode(
         SwContentNode * const pContentNode,
         const bool bAtEnd)
     {
@@ -132,7 +132,7 @@ namespace
     // else set it to the begin of the Node after rEnd, if there is one
     // else set it to the end of the node before rStt
     // else set it to the ContentNode of the Pos outside the Range
-    inline std::unique_ptr<SwPosition> lcl_FindExpelPosition(
+    std::unique_ptr<SwPosition> lcl_FindExpelPosition(
         const SwNodeIndex& rStt,
         const SwNodeIndex& rEnd,
         const SwPosition& rOtherPosition)
@@ -1205,7 +1205,7 @@ void MarkManager::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 namespace
 {
-    inline bool lcl_Greater( const SwPosition& rPos, const SwNodeIndex& rNdIdx, const SwIndex* pIdx )
+    bool lcl_Greater( const SwPosition& rPos, const SwNodeIndex& rNdIdx, const SwIndex* pIdx )
     {
         return rPos.nNode > rNdIdx || ( pIdx && rPos.nNode == rNdIdx && rPos.nContent > pIdx->GetIndex() );
     }

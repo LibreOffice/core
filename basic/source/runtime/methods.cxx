@@ -140,7 +140,7 @@ static const CharClass& GetCharClass()
     return aCharClass;
 }
 
-static inline bool isFolder( FileStatus::Type aType )
+static bool isFolder( FileStatus::Type aType )
 {
     return ( aType == FileStatus::Directory || aType == FileStatus::Volume );
 }
@@ -2587,7 +2587,7 @@ static OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLD
     return aPathStr;
 }
 
-static inline bool implCheckWildcard( const OUString& rName, SbiRTLData const * pRTLData )
+static bool implCheckWildcard( const OUString& rName, SbiRTLData const * pRTLData )
 {
     bool bMatch = true;
 

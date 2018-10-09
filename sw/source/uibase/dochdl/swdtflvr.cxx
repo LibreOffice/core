@@ -1070,7 +1070,7 @@ bool SwTransferable::CopyGlossary( SwTextBlocks& rGlossary, const OUString& rStr
     return true;
 }
 
-static inline uno::Reference < XTransferable > * lcl_getTransferPointer ( uno::Reference < XTransferable > &xRef )
+static uno::Reference < XTransferable > * lcl_getTransferPointer ( uno::Reference < XTransferable > &xRef )
 {
     return &xRef;
 }

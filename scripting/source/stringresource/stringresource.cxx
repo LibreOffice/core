@@ -1690,7 +1690,7 @@ OUString StringResourcePersistenceImpl::implGetPathForLocaleItem
 
 // White space according to Java property files specification in
 // http://java.sun.com/j2se/1.4.2/docs/api/java/util/Properties.html#load(java.io.InputStream)
-static inline bool isWhiteSpace( sal_Unicode c )
+static bool isWhiteSpace( sal_Unicode c )
 {
     bool bWhite = ( c == 0x0020 ||      // space
                     c == 0x0009 ||      // tab
@@ -1700,7 +1700,7 @@ static inline bool isWhiteSpace( sal_Unicode c )
     return bWhite;
 }
 
-static inline void skipWhites( const sal_Unicode* pBuf, sal_Int32 nLen, sal_Int32& ri )
+static void skipWhites( const sal_Unicode* pBuf, sal_Int32 nLen, sal_Int32& ri )
 {
     while( ri < nLen )
     {
@@ -1710,7 +1710,7 @@ static inline void skipWhites( const sal_Unicode* pBuf, sal_Int32 nLen, sal_Int3
     }
 }
 
-static inline bool isHexDigit( sal_Unicode c, sal_uInt16& nDigitVal )
+static bool isHexDigit( sal_Unicode c, sal_uInt16& nDigitVal )
 {
     bool bRet = true;
     if( c >= '0' && c <= '9' )
@@ -1921,7 +1921,7 @@ bool StringResourcePersistenceImpl::implReadPropertiesFile
 }
 
 
-static inline sal_Unicode getHexCharForDigit( sal_uInt16 nDigitVal )
+static sal_Unicode getHexCharForDigit( sal_uInt16 nDigitVal )
 {
     sal_Unicode cRet = ( nDigitVal < 10 ) ? ('0' + nDigitVal) : ('a' + (nDigitVal-10));
     return cRet;

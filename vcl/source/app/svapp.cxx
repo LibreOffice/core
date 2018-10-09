@@ -451,7 +451,7 @@ void Application::Execute()
     pSVData->maAppData.mbInAppExecute = false;
 }
 
-static inline bool ImplYield(bool i_bWait, bool i_bAllEvents)
+static bool ImplYield(bool i_bWait, bool i_bAllEvents)
 {
     ImplSVData* pSVData = ImplGetSVData();
 
