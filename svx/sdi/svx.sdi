@@ -10994,7 +10994,7 @@ SfxVoidItem InsertRows SID_TABLE_INSERT_ROW
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Table;
 ]
 
@@ -11012,7 +11012,7 @@ SfxVoidItem InsertColumns SID_TABLE_INSERT_COL
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::Table;
 ]
 
