@@ -2000,7 +2000,20 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         }
     }
 
-    const SwTextNode* pTextNode( GetTextNode() );
+    // sw_redlinehide: this function only needs SwWrongList for 1 character,
+    // and the end is excluded by InWrongWord(),
+    // so it ought to work to just pick the wrong-list/node that contains
+    // the character following the given nIndex
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(GetFrame()));
+    TextFrameIndex const nCorePos(GetPortionData().GetCoreViewPosition(nIndex));
+    std::pair<SwTextNode*, sal_Int32> pos(pFrame->MapViewToModel(nCorePos));
+    if (pos.first->Len() == pos.second
+        && nCorePos != TextFrameIndex(pFrame->GetText().getLength()))
+    {
+        pos = pFrame->MapViewToModel(nCorePos + TextFrameIndex(1)); // try this one instead
+        assert(pos.first->Len() != pos.second);
+    }
+    const SwTextNode *const pTextNode(pos.first);
 
     sal_Int32 nValues = rValues.size();
     for (sal_Int32 i = 0;  i < nValues;  ++i)
@@ -2067,7 +2080,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
                 const SwWrongList* pWrongList = pTextNode->GetWrong();
                 if( nullptr != pWrongList )
                 {
-                    sal_Int32 nBegin = nIndex;
+                    sal_Int32 nBegin = pos.second;
                     sal_Int32 nLen = 1;
                     if (pWrongList->InWrongWord(nBegin, nLen) && !pTextNode->IsSymbolAt(nBegin))
                     {
@@ -2088,7 +2101,7 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
                 const SwWrongList* pWrongList = pTextNode->GetWrong();
                 if( nullptr != pWrongList )
                 {
-                    sal_Int32 nBegin = nIndex;
+                    sal_Int32 nBegin = pos.second;
                     sal_Int32 nLen = 1;
                     if (pWrongList->InWrongWord(nBegin, nLen) && !pTextNode->IsSymbolAt(nBegin))
                     {
