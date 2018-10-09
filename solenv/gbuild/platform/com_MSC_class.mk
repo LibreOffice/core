@@ -428,7 +428,6 @@ endef
 
 define gb_Module_DEBUGRUNCOMMAND
 printf "\nAttach the debugger to soffice.bin\n\n"
-unset VCL_HIDE_WINDOWS && \
 OFFICESCRIPT=`mktemp` && \
 printf "$(INSTROOT)/$(LIBO_BIN_FOLDER)/soffice.exe" > $${OFFICESCRIPT} && \
 printf " --norestore --nologo '--accept=pipe,name=$(USER);urp;'\n" >> $${OFFICESCRIPT} && \

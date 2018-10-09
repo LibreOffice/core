@@ -10,9 +10,6 @@
 # to block heavy exception handling that try to acquire the solarmutex
 export LO_LEAN_EXCEPTION=1
 
-# to avoid flashing windows during tests
-export VCL_HIDE_WINDOWS=1
-
 gb_LICENSE := license.txt
 gb_README = readme_$(1).txt
 

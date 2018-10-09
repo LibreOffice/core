@@ -2322,7 +2322,7 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
             mpWindowImpl->mbSuppressAccessibilityEvents = false;
 
             mpWindowImpl->mbPaintFrame = true;
-            if (!Application::GetSettings().GetMiscSettings().GetPseudoHeadless())
+            if (!Application::IsHeadlessModeEnabled())
             {
                 bool bNoActivate(nFlags & (ShowFlags::NoActivate|ShowFlags::NoFocusChange));
                 mpWindowImpl->mpFrame->Show( true, bNoActivate );

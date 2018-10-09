@@ -153,7 +153,7 @@ struct ImplSVAppData
     bool                    mbInAppExecute = false;         // is Application::Execute() on stack
     bool                    mbAppQuit = false;              // is Application::Quit() called
     bool                    mbSettingsInit = false;         // true: Settings are initialized
-    Application::DialogCancelMode meDialogCancel = Application::DialogCancelMode::Off; // true: All Dialog::Execute() calls will be terminated immediately with return false
+    DialogCancelMode meDialogCancel = DialogCancelMode::Off; // true: All Dialog::Execute() calls will be terminated immediately with return false
 
     /** Controls whether showing any IME status window is toggled on or off.
 

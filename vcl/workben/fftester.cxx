@@ -104,7 +104,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         InitVCL();
 
-        Application::SetDialogCancelMode(Application::DialogCancelMode::Silent);
+        Application::SetDialogCancelMode(DialogCancelMode::Silent);
 
         if (strcmp(argv[2], "wmf") == 0 || strcmp(argv[2], "emf") == 0)
         {
