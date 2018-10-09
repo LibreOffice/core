@@ -173,11 +173,13 @@ SwCharURLPage::SwCharURLPage(TabPageParent pParent, const SfxItemSet& rCoreSet)
     std::unique_ptr<TargetList> pList( new TargetList );
     SfxFrame::GetDefaultTargetList(*pList);
 
+    m_xTargetFrameLB->freeze();
     size_t nCount = pList->size();
     for (size_t i = 0; i < nCount; ++i)
     {
         m_xTargetFrameLB->append_text(pList->at(i));
     }
+    m_xTargetFrameLB->thaw();
 }
 
 SwCharURLPage::~SwCharURLPage()
