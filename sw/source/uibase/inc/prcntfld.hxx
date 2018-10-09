@@ -112,6 +112,7 @@ public:
     void connect_value_changed(const Link<weld::MetricSpinButton&, void>& rLink) { m_pField->connect_value_changed(rLink); }
     void SetMetric(FieldUnit eUnit) { ::SetFieldUnit(*m_pField, eUnit); }
     void set_sensitive(bool bEnable) { m_pField->set_sensitive(bEnable); }
+    void show() { m_pField->show(); }
     bool has_focus() const { return m_pField->has_focus(); }
     void save_value() { m_pField->save_value(); }
     bool get_value_changed_from_saved() const { return m_pField->get_value_changed_from_saved(); }
