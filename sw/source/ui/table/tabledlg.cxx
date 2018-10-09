@@ -769,17 +769,25 @@ void  SwTableColumnPage::Reset( const SfxItemSet* )
                                                 GetVisibleWidth(i) ), FUNIT_TWIP );
             m_aFieldArr[i].set_min(nMinTwips, FUNIT_TWIP);
             m_aFieldArr[i].set_max(nMaxTwips, FUNIT_TWIP);
+            m_aFieldArr[i].show(true);
             m_aFieldArr[i].set_sensitive(true);
+            m_aTextArr[i]->show(true);
             m_aTextArr[i]->set_sensitive(true);
         }
 
-        if( nNoOfVisibleCols > MET_FIELDS )
+        if (nNoOfVisibleCols > MET_FIELDS)
+        {
+            m_xDownBtn->show(true);
+            m_xUpBtn->show(true);
             m_xUpBtn->set_sensitive(true);
+        }
 
         for( sal_uInt16 i = nNoOfVisibleCols; i < MET_FIELDS; ++i )
         {
             m_aFieldArr[i].set_text(OUString());
+            m_aFieldArr[i].show(false);
             m_aTextArr[i]->set_sensitive(false);
+            m_aTextArr[i]->show(false);
         }
     }
     ActivatePage(rSet);

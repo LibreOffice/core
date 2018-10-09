@@ -56,7 +56,6 @@
     <property name="icon_size">1</property>
   </object>
   <object class="GtkGrid" id="TableColumnPage">
-    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
     <property name="border_width">6</property>
@@ -151,7 +150,6 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkSpinButton" id="width2">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
@@ -172,7 +170,6 @@
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="width3">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
@@ -193,7 +190,6 @@
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="width4">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
@@ -214,7 +210,6 @@
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="width5">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
@@ -235,7 +230,6 @@
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="width6">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
@@ -257,7 +251,6 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="6">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
                     <property name="label">_6</property>
@@ -271,7 +264,6 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="1">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
                     <property name="label">_1</property>
@@ -285,7 +277,6 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="2">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
                     <property name="label">_2</property>
@@ -299,7 +290,6 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="3">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
                     <property name="label">_3</property>
@@ -313,7 +303,6 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="5">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
                     <property name="label">_5</property>
@@ -327,7 +316,6 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="4">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">False</property>
                     <property name="label">_4</property>
@@ -341,7 +329,6 @@
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="width1">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="halign">center</property>
@@ -363,7 +350,6 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="back">
-                    <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
