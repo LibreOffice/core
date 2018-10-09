@@ -23,6 +23,8 @@
 
 #include <rtl/ref.hxx>
 
+#include <svtools/acceleratorexecute.hxx>
+
 namespace sfx2 { namespace sidebar {
 
 class SidebarChildWindow;
@@ -55,6 +57,7 @@ protected:
 private:
     ::rtl::Reference<sfx2::sidebar::SidebarController> mpSidebarController;
     bool mbIsReadyToDrag;
+    std::unique_ptr<svt::AcceleratorExecute> mpAccel;
 
     void DoDispose();
 };
