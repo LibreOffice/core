@@ -67,12 +67,6 @@ const sal_uInt16 SvxBackgroundTabPage::pPageRanges[] =
     0
 };
 
-struct SvxBackgroundPage_Impl
-{
-    std::unique_ptr<Idle> pLoadIdle;
-    bool        bIsImportDlgInExecute = false;
-};
-
 /// Returns the fill style of the currently selected entry.
 static drawing::FillStyle lcl_getFillStyle(const weld::ComboBox& rLbSelect)
 {

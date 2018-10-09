@@ -88,13 +88,13 @@ connectivity/source/inc/OColumn.hxx:47
     connectivity::OColumn m_Writable _Bool
 connectivity/source/inc/OColumn.hxx:48
     connectivity::OColumn m_DefinitelyWritable _Bool
-connectivity/source/inc/TConnection.hxx:55
+connectivity/source/inc/TConnection.hxx:56
     connectivity::OMetaConnection m_aResources class connectivity::SharedResources
 connectivity/source/inc/writer/WTable.hxx:69
     connectivity::writer::OWriterTable m_nStartCol sal_Int32
-cppcanvas/source/mtfrenderer/textaction.cxx:828
+cppcanvas/source/mtfrenderer/textaction.cxx:839
     cppcanvas::internal::(anonymous namespace)::EffectTextAction maTextFillColor const ::Color
-cppcanvas/source/mtfrenderer/textaction.cxx:1661
+cppcanvas/source/mtfrenderer/textaction.cxx:1682
     cppcanvas::internal::(anonymous namespace)::OutlineAction maTextFillColor const ::Color
 cppu/source/helper/purpenv/helper_purpenv_Mapping.cxx:35
     Mapping m_from uno::Environment
@@ -330,16 +330,12 @@ include/svtools/ctrlbox.hxx:453
     FontSizeBox nPtRelMax short
 include/svtools/ctrlbox.hxx:454
     FontSizeBox nPtRelStep short
-include/svtools/editsyntaxhighlighter.hxx:33
-    MultiLineEditSyntaxHighlight m_aColorConfig svtools::ColorConfig
-include/svx/fontlb.hxx:33
-    SvLBoxFontString maFont vcl::Font
-include/svx/fontlb.hxx:34
-    SvLBoxFontString mbUseColor _Bool
+include/svtools/editsyntaxhighlighter.hxx:32
+    MultiLineEditSyntaxHighlight m_aColorConfig const svtools::ColorConfig
 include/svx/sdr/overlay/overlayanimatedbitmapex.hxx:51
     sdr::overlay::OverlayAnimatedBitmapEx mbOverlayState _Bool
 include/svx/sdr/overlay/overlaymanager.hxx:73
-    sdr::overlay::OverlayManager maDrawinglayerOpt class SvtOptionsDrawinglayer
+    sdr::overlay::OverlayManager maDrawinglayerOpt const class SvtOptionsDrawinglayer
 include/svx/svdmark.hxx:141
     SdrMarkList maPointName class rtl::OUString
 include/svx/svdmark.hxx:142
@@ -347,7 +343,7 @@ include/svx/svdmark.hxx:142
 include/svx/svdoedge.hxx:160
     SdrEdgeObj mbBoundRectCalculationRunning _Bool
 include/svx/svdpntv.hxx:170
-    SdrPaintView maDrawinglayerOpt class SvtOptionsDrawinglayer
+    SdrPaintView maDrawinglayerOpt const class SvtOptionsDrawinglayer
 include/test/sheet/xdatapilottable.hxx:31
     apitest::XDataPilotTable xCellForChange css::uno::Reference<css::table::XCell>
 include/test/sheet/xdatapilottable.hxx:32
@@ -357,7 +353,7 @@ include/test/sheet/xnamedranges.hxx:38
 include/test/sheet/xspreadsheets2.hxx:46
     apitest::XSpreadsheets2 xDocument css::uno::Reference<css::sheet::XSpreadsheetDocument>
 include/unoidl/unoidl.hxx:444
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/noel/disk2/libo6/include/unoidl/unoidl.hxx:444:5)
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/noel/disk2/libo5/include/unoidl/unoidl.hxx:444:5)
 include/unoidl/unoidl.hxx:445
     unoidl::ConstantValue::(anonymous) booleanValue _Bool
 include/unoidl/unoidl.hxx:446
@@ -441,7 +437,7 @@ sal/rtl/uuid.cxx:65
 sc/inc/compiler.hxx:127
     ScRawToken::(anonymous union)::(anonymous) eItem class ScTableRefToken::Item
 sc/inc/compiler.hxx:128
-    ScRawToken::(anonymous) table struct (anonymous struct at /media/noel/disk2/libo6/sc/inc/compiler.hxx:125:9)
+    ScRawToken::(anonymous) table struct (anonymous struct at /media/noel/disk2/libo5/sc/inc/compiler.hxx:125:9)
 sc/inc/compiler.hxx:133
     ScRawToken::(anonymous) pMat class ScMatrix *
 sc/inc/formulagroup.hxx:39
@@ -524,7 +520,7 @@ sd/source/ui/slidesorter/cache/SlsPageCacheManager.cxx:143
     sd::slidesorter::cache::PageCacheManager::RecentlyUsedPageCaches maMap std::map<key_type, mapped_type>
 sd/source/ui/slidesorter/inc/controller/SlsAnimator.hxx:97
     sd::slidesorter::controller::Animator maElapsedTime ::canvas::tools::ElapsedTime
-sd/source/ui/table/TableDesignPane.hxx:96
+sd/source/ui/table/TableDesignPane.hxx:94
     sd::TableDesignWidget m_aCheckBoxes VclPtr<class CheckBox> [6]
 sdext/source/pdfimport/inc/pdfihelper.hxx:101
     pdfi::GraphicsContext BlendMode sal_Int8
@@ -537,7 +533,7 @@ slideshow/source/engine/slideshowimpl.cxx:153
 sot/source/sdstor/ucbstorage.cxx:408
     UCBStorageStream_Impl m_aKey class rtl::OString
 starmath/source/view.cxx:856
-    SmViewShell_Impl aOpts class SvtMiscOptions
+    SmViewShell_Impl aOpts const class SvtMiscOptions
 store/source/storbios.cxx:59
     OStoreSuperBlock m_aMarked OStoreSuperBlock::L
 svl/source/crypto/cryptosign.cxx:280
@@ -547,25 +543,25 @@ svl/source/crypto/cryptosign.cxx:301
 svl/source/misc/strmadpt.cxx:55
     SvDataPipe_Impl::Page m_aBuffer sal_Int8 [1]
 svl/source/uno/pathservice.cxx:36
-    PathService m_aOptions class SvtPathOptions
+    PathService m_aOptions const class SvtPathOptions
 svtools/source/control/headbar.cxx:38
-    ImplHeadItem maHelpId class rtl::OString
+    ImplHeadItem maHelpId const class rtl::OString
 svtools/source/control/headbar.cxx:39
-    ImplHeadItem maImage class Image
+    ImplHeadItem maImage const class Image
 svtools/source/control/tabbar.cxx:208
-    ImplTabBarItem maHelpId class rtl::OString
+    ImplTabBarItem maHelpId const class rtl::OString
 svtools/source/dialogs/insdlg.cxx:46
-    OleObjectDescriptor cbSize sal_uInt32
+    OleObjectDescriptor cbSize const sal_uInt32
 svtools/source/dialogs/insdlg.cxx:47
-    OleObjectDescriptor clsid ClsId
+    OleObjectDescriptor clsid const ClsId
 svtools/source/dialogs/insdlg.cxx:48
-    OleObjectDescriptor dwDrawAspect sal_uInt32
+    OleObjectDescriptor dwDrawAspect const sal_uInt32
 svtools/source/dialogs/insdlg.cxx:49
-    OleObjectDescriptor sizel class Size
+    OleObjectDescriptor sizel const class Size
 svtools/source/dialogs/insdlg.cxx:50
-    OleObjectDescriptor pointl class Point
+    OleObjectDescriptor pointl const class Point
 svtools/source/dialogs/insdlg.cxx:51
-    OleObjectDescriptor dwStatus sal_uInt32
+    OleObjectDescriptor dwStatus const sal_uInt32
 svtools/source/dialogs/insdlg.cxx:52
     OleObjectDescriptor dwFullUserTypeName sal_uInt32
 svtools/source/dialogs/insdlg.cxx:53
@@ -576,32 +572,30 @@ svtools/source/table/gridtablerenderer.cxx:70
     svt::table::CachedSortIndicator m_sortDescending class BitmapEx
 svx/inc/sdr/overlay/overlayrectangle.hxx:44
     sdr::overlay::OverlayRectangle mbOverlayState _Bool
-svx/source/inc/datanavi.hxx:224
-    svxform::XFormsPage m_aMethodString class svxform::MethodString
-svx/source/inc/datanavi.hxx:225
-    svxform::XFormsPage m_aReplaceString class svxform::ReplaceString
-svx/source/inc/datanavi.hxx:546
-    svxform::AddSubmissionDialog m_aMethodString class svxform::MethodString
-svx/source/inc/datanavi.hxx:547
-    svxform::AddSubmissionDialog m_aReplaceString class svxform::ReplaceString
+svx/source/inc/datanavi.hxx:218
+    svxform::XFormsPage m_aMethodString const class svxform::MethodString
+svx/source/inc/datanavi.hxx:219
+    svxform::XFormsPage m_aReplaceString const class svxform::ReplaceString
+svx/source/inc/datanavi.hxx:540
+    svxform::AddSubmissionDialog m_aMethodString const class svxform::MethodString
+svx/source/inc/datanavi.hxx:541
+    svxform::AddSubmissionDialog m_aReplaceString const class svxform::ReplaceString
 svx/source/inc/gridcell.hxx:526
     DbPatternField m_pValueFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
 svx/source/inc/gridcell.hxx:527
     DbPatternField m_pPaintFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
 svx/source/svdraw/svdpdf.hxx:173
-    ImpSdrPdfImport maLineJoin basegfx::B2DLineJoin
+    ImpSdrPdfImport maLineCap const css::drawing::LineCap
 svx/source/svdraw/svdpdf.hxx:174
-    ImpSdrPdfImport maLineCap css::drawing::LineCap
-svx/source/svdraw/svdpdf.hxx:175
-    ImpSdrPdfImport maDash class XDash
+    ImpSdrPdfImport maDash const class XDash
 sw/inc/acmplwrd.hxx:42
-    SwAutoCompleteWord m_LookupTree editeng::Trie
+    SwAutoCompleteWord m_LookupTree const editeng::Trie
 sw/inc/calc.hxx:196
-    SwCalc m_aSysLocale class SvtSysLocale
+    SwCalc m_aSysLocale const class SvtSysLocale
 sw/inc/hints.hxx:223
-    SwAttrSetChg m_bDelSet _Bool
+    SwAttrSetChg m_bDelSet const _Bool
 sw/inc/shellio.hxx:142
-    SwReader pStg tools::SvRef<SotStorage>
+    SwReader pStg const tools::SvRef<SotStorage>
 sw/inc/swevent.hxx:71
     SwCallMouseEvent::(anonymous union)::(anonymous) pFormat const class SwFrameFormat *
 sw/source/core/access/accfrmobjmap.hxx:100
@@ -629,9 +623,9 @@ sw/source/core/text/atrhndl.hxx:48
 sw/source/filter/inc/rtf.hxx:32
     RTFSurround::(anonymous) nVal sal_uInt8
 sw/source/ui/dbui/dbinsdlg.cxx:116
-    DB_Column::(anonymous) pText class rtl::OUString *
+    DB_Column::(anonymous) pText class rtl::OUString *const
 sw/source/ui/dbui/dbinsdlg.cxx:118
-    DB_Column::(anonymous) nFormat sal_uInt32
+    DB_Column::(anonymous) nFormat const sal_uInt32
 sw/source/uibase/dbui/mmconfigitem.cxx:107
     SwMailMergeConfigItem_Impl m_aFemaleGreetingLines std::vector<OUString>
 sw/source/uibase/dbui/mmconfigitem.cxx:109
@@ -639,11 +633,11 @@ sw/source/uibase/dbui/mmconfigitem.cxx:109
 sw/source/uibase/dbui/mmconfigitem.cxx:111
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
 sw/source/uibase/inc/fldmgr.hxx:78
-    SwInsertField_Data m_aDBDataSource css::uno::Any
+    SwInsertField_Data m_aDBDataSource const css::uno::Any
 sw/source/uibase/inc/labimg.hxx:50
     SwLabItem m_aBin class rtl::OUString
 sw/source/uibase/inc/optload.hxx:107
-    CaptionComboBox aDefault class rtl::OUString
+    CaptionComboBox aDefault const class rtl::OUString
 toolkit/source/awt/vclxtoolkit.cxx:434
     (anonymous namespace)::VCLXToolkit mxSelection css::uno::Reference<css::datatransfer::clipboard::XClipboard>
 ucb/source/ucp/gio/gio_mount.hxx:46
@@ -792,11 +786,11 @@ writerfilter/inc/ooxml/QNameToString.hxx:41
     writerfilter::QNameToString mMap writerfilter::QNameToString::Map
 writerfilter/source/dmapper/DomainMapper_Impl.hxx:410
     writerfilter::dmapper::DomainMapper_Impl m_aSaveOpt const class SvtSaveOptions
-writerfilter/source/ooxml/OOXMLFactory.hxx:62
-    writerfilter::ooxml::AttributeInfo m_nToken const writerfilter::Token_t
 writerfilter/source/ooxml/OOXMLFactory.hxx:63
-    writerfilter::ooxml::AttributeInfo m_nResource const enum writerfilter::ooxml::ResourceType
+    writerfilter::ooxml::AttributeInfo m_nToken const writerfilter::Token_t
 writerfilter/source/ooxml/OOXMLFactory.hxx:64
+    writerfilter::ooxml::AttributeInfo m_nResource const enum writerfilter::ooxml::ResourceType
+writerfilter/source/ooxml/OOXMLFactory.hxx:65
     writerfilter::ooxml::AttributeInfo m_nRef const Id
 xmloff/inc/MultiPropertySetHelper.hxx:78
     MultiPropertySetHelper aEmptyAny const css::uno::Any
