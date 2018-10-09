@@ -93,6 +93,30 @@
       "revId": "674662f273622b3257021f1da6a902db6cf9f58e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_3d88c5c4",
+        "filename": "cui/source/options/personalization.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-09T10:14:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff0f0b1f_a2d71024",
+      "range": {
+        "startLine": 294,
+        "startChar": 8,
+        "endLine": 294,
+        "endChar": 30
+      },
+      "revId": "674662f273622b3257021f1da6a902db6cf9f58e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
