@@ -22,6 +22,30 @@
       "revId": "616fd241838069e18c59064e33c4b24f5ae112c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_1d3bc138",
+        "filename": "vcl/qa/cppunit/pdfexport/pdfexport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1538,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-10-09T09:10:58Z",
+      "side": 1,
+      "message": "Sorted out on IRC in the meantime -- but just for reference: this was documenting how the test failed (literally) without the fix. I find it useful to document how a test failed (we assert x is 100, it fails -- was it 99? was it 0? useful to know); but if I regularly use a wording that confuses you, I\u0027m open to advice on how to word these comments differently so they are more readable. :-)",
+      "parentUuid": "ff0f0b1f_82e64ce8",
+      "range": {
+        "startLine": 1538,
+        "startChar": 7,
+        "endLine": 1538,
+        "endChar": 55
+      },
+      "revId": "616fd241838069e18c59064e33c4b24f5ae112c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
