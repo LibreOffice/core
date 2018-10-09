@@ -3597,7 +3597,8 @@ void ScViewData::UpdateOutlinerFlags( Outliner& rOutl ) const
     bool bOnlineSpell = pLocalDoc->GetDocOptions().IsAutoSpell();
 
     EEControlBits nCntrl = rOutl.GetControlWord();
-    nCntrl |= EEControlBits::MARKFIELDS;
+    nCntrl |= EEControlBits::MARKNONURLFIELDS;
+    nCntrl &= ~EEControlBits::MARKURLFIELDS;    // URLs not shaded for output
     nCntrl |= EEControlBits::AUTOCORRECT;
     if( bOnlineSpell )
         nCntrl |= EEControlBits::ONLINESPELLING;

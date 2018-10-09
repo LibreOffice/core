@@ -2973,8 +2973,21 @@ bool ImpEditEngine::UpdateFields()
                 std::unique_ptr<EditCharAttribField> pCurrent(new EditCharAttribField(rField));
                 rField.Reset();
 
-                if ( aStatus.MarkFields() )
+                if (!aStatus.MarkNonUrlFields() && !aStatus.MarkUrlFields())
+                    ;   // nothing marked
+                else if (aStatus.MarkNonUrlFields() && aStatus.MarkUrlFields())
                     rField.GetFieldColor() = GetColorConfig().GetColorValue( svtools::WRITERFIELDSHADINGS ).nColor;
+                else
+                {
+                    bool bURL = false;
+                    if (const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(rField.GetItem()))
+                    {
+                        if (const SvxFieldData* pFieldData = pFieldItem->GetField())
+                            bURL = (dynamic_cast<const SvxURLField* >(pFieldData) != nullptr);
+                    }
+                    if ((bURL && aStatus.MarkUrlFields()) || (!bURL && aStatus.MarkNonUrlFields()))
+                        rField.GetFieldColor() = GetColorConfig().GetColorValue( svtools::WRITERFIELDSHADINGS ).nColor;
+                }
 
                 const OUString aFldValue =
                     GetEditEnginePtr()->CalcFieldValue(
