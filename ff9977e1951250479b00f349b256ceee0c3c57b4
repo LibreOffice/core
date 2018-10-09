@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_6f3e802a",
+        "filename": "offapi/com/sun/star/linguistic2/XNumberText.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2018-10-09T21:10:15Z",
+      "side": 1,
+      "message": "Galician code should be “gl”, not “ga”",
+      "range": {
+        "startLine": 54,
+        "startChar": 12,
+        "endLine": 54,
+        "endChar": 14
+      },
+      "revId": "ff9977e1951250479b00f349b256ceee0c3c57b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
