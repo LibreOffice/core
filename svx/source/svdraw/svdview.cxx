@@ -400,8 +400,7 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
         SdrObject* pMidObj=nullptr;
         if (pObj!=pHitObj)
         {
-            SdrObject* pObjTmp=nullptr;
-            pObjTmp=pHitObj->getParentSdrObjectFromSdrObject();
+            SdrObject* pObjTmp=pHitObj->getParentSdrObjectFromSdrObject();
             if (pObjTmp==pObj) pObjTmp=nullptr;
             while (pObjTmp!=nullptr)
             {
