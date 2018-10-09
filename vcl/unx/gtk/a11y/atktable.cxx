@@ -23,7 +23,7 @@
 
 using namespace ::com::sun::star;
 
-static inline AtkObject *
+static AtkObject *
 atk_object_wrapper_conditional_ref( const uno::Reference< accessibility::XAccessible >& rxAccessible )
 {
     if( rxAccessible.is() )

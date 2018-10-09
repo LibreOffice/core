@@ -44,7 +44,7 @@ namespace {
 const sal_uInt8 BIFF12_STRINGFLAG_FONTS         = 0x01;
 const sal_uInt8 BIFF12_STRINGFLAG_PHONETICS     = 0x02;
 
-inline bool lclNeedsRichTextFormat( const oox::xls::Font* pFont )
+bool lclNeedsRichTextFormat( const oox::xls::Font* pFont )
 {
     return pFont && pFont->needsRichTextFormat();
 }

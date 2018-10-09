@@ -98,7 +98,7 @@ using namespace com::sun::star;
 
 namespace {
 
-inline sal_uInt16 getScaleValue(SfxStyleSheetBase& rStyle, sal_uInt16 nWhich)
+sal_uInt16 getScaleValue(SfxStyleSheetBase& rStyle, sal_uInt16 nWhich)
 {
     return static_cast<const SfxUInt16Item&>(rStyle.GetItemSet().Get(nWhich)).GetValue();
 }

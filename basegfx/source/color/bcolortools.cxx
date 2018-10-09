@@ -59,7 +59,7 @@ namespace basegfx { namespace utils
         return BColor(h,s,l);
     }
 
-    static inline double hsl2rgbHelper( double nValue1, double nValue2, double nHue )
+    static double hsl2rgbHelper( double nValue1, double nValue2, double nHue )
     {
         // clamp hue to [0,360]
         nHue = fmod( nHue, 360.0 );

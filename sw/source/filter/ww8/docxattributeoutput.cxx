@@ -6316,7 +6316,7 @@ void DocxAttributeOutput::EmbedFont( const OUString& name, FontFamily family, Fo
     EmbedFontStyle( name, XML_embedBoldItalic, family, ITALIC_NORMAL, WEIGHT_BOLD, pitch );
 }
 
-static inline char toHexChar( int value )
+static char toHexChar( int value )
 {
     return value >= 10 ? value + 'A' - 10 : value + '0';
 }

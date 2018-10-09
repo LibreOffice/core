@@ -86,7 +86,7 @@ namespace
         }
     }
 
-    template < typename T > inline void tryDispose( Reference<T> &r )
+    template < typename T > void tryDispose( Reference<T> &r )
     {
         try
         {

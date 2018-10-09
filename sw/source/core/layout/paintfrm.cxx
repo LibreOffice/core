@@ -1591,7 +1591,7 @@ static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
  * @param _bBackgrdAlreadyDrawn
  * boolean (optional; default: false) indicating, if the background is already drawn.
 */
-static inline void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
+static void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
                                     OutputDevice* _pOut,
                                     const SwRect& _rAlignedPaintRect,
                                     const GraphicObject& _rGraphicObj,

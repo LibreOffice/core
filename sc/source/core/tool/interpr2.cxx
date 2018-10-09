@@ -3384,7 +3384,7 @@ void ScInterpreter::ScEuroConvert()
 // local functions
 namespace {
 
-inline void lclSplitBlock( double& rfInt, sal_Int32& rnBlock, double fValue, double fSize )
+void lclSplitBlock( double& rfInt, sal_Int32& rnBlock, double fValue, double fSize )
 {
     rnBlock = static_cast< sal_Int32 >( modf( (fValue + 0.1) / fSize, &rfInt ) * fSize + 0.1 );
 }

@@ -51,7 +51,7 @@ namespace
 {
 
 
-inline bool td_equals( typelib_InterfaceTypeDescription const * pTD1,
+bool td_equals( typelib_InterfaceTypeDescription const * pTD1,
                        typelib_InterfaceTypeDescription const * pTD2 )
 {
     return (pTD1 == pTD2 ||
@@ -80,15 +80,15 @@ struct ObjectEntry
     std::vector< InterfaceEntry > aInterfaces;
     bool mixedObject;
 
-    explicit inline ObjectEntry( const OUString & rOId_ );
+    explicit ObjectEntry( const OUString & rOId_ );
 
-    inline void append(
+    void append(
         uno_DefaultEnvironment * pEnv,
         void * pInterface, typelib_InterfaceTypeDescription * pTypeDescr,
         uno_freeProxyFunc fpFreeProxy );
-    inline InterfaceEntry * find(
+    InterfaceEntry * find(
         typelib_InterfaceTypeDescription * pTypeDescr );
-    inline sal_Int32 find( void const * iface_ptr, std::size_t pos ) const;
+    sal_Int32 find( void const * iface_ptr, std::size_t pos ) const;
 };
 
 
@@ -118,10 +118,10 @@ struct EnvironmentsData
     EnvironmentsData() : isDisposing(false) {}
     ~EnvironmentsData();
 
-    inline void getEnvironment(
+    void getEnvironment(
         uno_Environment ** ppEnv, const OUString & rEnvDcp, void * pContext );
-    inline void registerEnvironment( uno_Environment ** ppEnv );
-    inline void getRegisteredEnvironments(
+    void registerEnvironment( uno_Environment ** ppEnv );
+    void getRegisteredEnvironments(
         uno_Environment *** pppEnvs, sal_Int32 * pnLen,
         uno_memAlloc memAlloc, const OUString & rEnvDcp );
 
@@ -145,7 +145,7 @@ struct uno_DefaultEnvironment : public uno_ExtEnvironment
 };
 
 
-inline ObjectEntry::ObjectEntry( OUString const & rOId_ )
+ObjectEntry::ObjectEntry( OUString const & rOId_ )
     : oid( rOId_ ),
       nRef( 0 ),
       mixedObject( false )
@@ -154,7 +154,7 @@ inline ObjectEntry::ObjectEntry( OUString const & rOId_ )
 }
 
 
-inline void ObjectEntry::append(
+void ObjectEntry::append(
     uno_DefaultEnvironment * pEnv,
     void * pInterface, typelib_InterfaceTypeDescription * pTypeDescr,
     uno_freeProxyFunc fpFreeProxy )
@@ -179,7 +179,7 @@ inline void ObjectEntry::append(
 }
 
 
-inline InterfaceEntry * ObjectEntry::find(
+InterfaceEntry * ObjectEntry::find(
     typelib_InterfaceTypeDescription * pTypeDescr_ )
 {
     OSL_ASSERT( ! aInterfaces.empty() );
@@ -210,7 +210,7 @@ inline InterfaceEntry * ObjectEntry::find(
 }
 
 
-inline sal_Int32 ObjectEntry::find(
+sal_Int32 ObjectEntry::find(
     void const * iface_ptr, std::size_t pos ) const
 {
     std::size_t size = aInterfaces.size();
@@ -826,7 +826,7 @@ namespace
 
     class theStaticOIdPart : public rtl::Static<makeOIdPart, theStaticOIdPart> {};
 
-inline const OUString & unoenv_getStaticOIdPart()
+const OUString & unoenv_getStaticOIdPart()
 {
     return theStaticOIdPart::get().getOIdPart();
 }
@@ -912,7 +912,7 @@ EnvironmentsData::~EnvironmentsData()
 }
 
 
-inline void EnvironmentsData::getEnvironment(
+void EnvironmentsData::getEnvironment(
     uno_Environment ** ppEnv, const OUString & rEnvDcp, void * pContext )
 {
     if (*ppEnv)
@@ -934,7 +934,7 @@ inline void EnvironmentsData::getEnvironment(
 }
 
 
-inline void EnvironmentsData::registerEnvironment( uno_Environment ** ppEnv )
+void EnvironmentsData::registerEnvironment( uno_Environment ** ppEnv )
 {
     OSL_ENSURE( ppEnv, "### null ptr!" );
     uno_Environment * pEnv =  *ppEnv;
@@ -973,7 +973,7 @@ inline void EnvironmentsData::registerEnvironment( uno_Environment ** ppEnv )
 }
 
 
-inline void EnvironmentsData::getRegisteredEnvironments(
+void EnvironmentsData::getRegisteredEnvironments(
     uno_Environment *** pppEnvs, sal_Int32 * pnLen, uno_memAlloc memAlloc,
     const OUString & rEnvDcp )
 {

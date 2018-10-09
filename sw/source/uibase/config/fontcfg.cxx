@@ -31,7 +31,7 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-static inline LanguageType lcl_LanguageOfType(sal_Int16 nType, LanguageType eWestern, LanguageType eCJK, LanguageType eCTL)
+static LanguageType lcl_LanguageOfType(sal_Int16 nType, LanguageType eWestern, LanguageType eCJK, LanguageType eCTL)
 {
     return nType < FONT_STANDARD_CJK
            ? eWestern

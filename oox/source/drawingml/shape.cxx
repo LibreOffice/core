@@ -400,7 +400,7 @@ void Shape::addChildren(
     }
 }
 
-static inline void lcl_resetPropertyValue( std::vector<beans::PropertyValue>& rPropVec, const OUString& rName )
+static void lcl_resetPropertyValue( std::vector<beans::PropertyValue>& rPropVec, const OUString& rName )
 {
     auto aIterator = std::find_if( rPropVec.begin(), rPropVec.end(),
         [rName]( const beans::PropertyValue& rValue ) { return rValue.Name == rName; } );
@@ -409,7 +409,7 @@ static inline void lcl_resetPropertyValue( std::vector<beans::PropertyValue>& rP
         rPropVec.erase( aIterator );
 }
 
-static inline void lcl_setPropertyValue( std::vector<beans::PropertyValue>& rPropVec,
+static void lcl_setPropertyValue( std::vector<beans::PropertyValue>& rPropVec,
                            const OUString& rName,
                            const beans::PropertyValue& rPropertyValue )
 {
@@ -418,7 +418,7 @@ static inline void lcl_setPropertyValue( std::vector<beans::PropertyValue>& rPro
     rPropVec.push_back( rPropertyValue );
 }
 
-static inline SdrTextHorzAdjust lcl_convertAdjust( ParagraphAdjust eAdjust )
+static SdrTextHorzAdjust lcl_convertAdjust( ParagraphAdjust eAdjust )
 {
     if (eAdjust == ParagraphAdjust_LEFT)
         return SDRTEXTHORZADJUST_LEFT;
@@ -429,7 +429,7 @@ static inline SdrTextHorzAdjust lcl_convertAdjust( ParagraphAdjust eAdjust )
     return SDRTEXTHORZADJUST_LEFT;
 }
 
-static inline void lcl_createPresetShape(uno::Reference<drawing::XShape>& xShape,
+static void lcl_createPresetShape(uno::Reference<drawing::XShape>& xShape,
                                          const OUString& rClass, const OUString& rPresetType,
                                          const CustomShapePropertiesPtr& pCustomShapePropertiesPtr,
                                          const TextBodyPtr& pTextBody,

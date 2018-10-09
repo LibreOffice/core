@@ -206,7 +206,7 @@ void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
 
 namespace
 {
-    inline bool IsPrevPos( const SwPosition & rPos1, const SwPosition & rPos2 )
+    bool IsPrevPos( const SwPosition & rPos1, const SwPosition & rPos2 )
     {
         const SwContentNode* pCNd;
         return 0 == rPos2.nContent.GetIndex() &&

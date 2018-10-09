@@ -2143,7 +2143,7 @@ void SwBorderAttrs::IsLine_()
  *    pre-/succeeding paragraph.
  */
 
-static inline bool CmpLines( const editeng::SvxBorderLine *pL1, const editeng::SvxBorderLine *pL2 )
+static bool CmpLines( const editeng::SvxBorderLine *pL1, const editeng::SvxBorderLine *pL2 )
 {
     return ( ((pL1 && pL2) && (*pL1 == *pL2)) || (!pL1 && !pL2) );
 }

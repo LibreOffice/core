@@ -71,7 +71,7 @@ using namespace ::xmloff::token;
 
 namespace {
 
-inline bool IsInPrivateUseArea( sal_Unicode cChar ) { return 0xE000 <= cChar  &&  cChar <= 0xF8FF; }
+bool IsInPrivateUseArea( sal_Unicode cChar ) { return 0xE000 <= cChar  &&  cChar <= 0xF8FF; }
 
 sal_Unicode ConvertMathToMathML( sal_Unicode cChar )
 {

@@ -24,7 +24,7 @@
 #include <docsh.hxx>
 #include <sc.hrc>
 
-static inline sal_uLong TimeNow()          // seconds
+static sal_uLong TimeNow()          // seconds
 {
     return static_cast<sal_uLong>(time(nullptr));
 }

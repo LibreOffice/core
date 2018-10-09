@@ -29,7 +29,7 @@
 #include <osl/detail/android-bootstrap.h>
 #endif
 
-static inline rtl::OString OUStringToOString(const rtl_uString* s)
+static rtl::OString OUStringToOString(const rtl_uString* s)
 {
     return rtl::OUStringToOString(rtl::OUString(const_cast<rtl_uString*>(s)),
                                   osl_getThreadTextEncoding());

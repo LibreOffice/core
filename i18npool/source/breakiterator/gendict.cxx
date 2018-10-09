@@ -68,12 +68,12 @@ static sal_Int64 existMarkOffset = 0;
 static sal_uInt8 exists[0x2000];
 static sal_uInt32 charArray[0x10000];
 
-static inline void set_exists(sal_uInt32 index)
+static void set_exists(sal_uInt32 index)
 {
    exists[index>>3] |= 1 << (index & 0x07);
 }
 
-static inline void printIncludes(FILE* source_fp)
+static void printIncludes(FILE* source_fp)
 {
 #ifndef DICT_JA_ZH_IN_DATAFILE
     fputs("/* !!!The file is generated automatically. DO NOT edit the file manually!!! */\n\n", source_fp);
@@ -83,7 +83,7 @@ static inline void printIncludes(FILE* source_fp)
 #endif
 }
 
-static inline void printFunctions(FILE* source_fp, const char *lang)
+static void printFunctions(FILE* source_fp, const char *lang)
 {
 #ifndef DICT_JA_ZH_IN_DATAFILE
     fputs ("#ifndef DISABLE_DYNLOADING\n", source_fp);
@@ -105,7 +105,7 @@ static inline void printFunctions(FILE* source_fp, const char *lang)
 #endif
 }
 
-static inline void printDataArea(FILE *dictionary_fp, FILE *source_fp, vector<sal_uInt32>& lenArray)
+static void printDataArea(FILE *dictionary_fp, FILE *source_fp, vector<sal_uInt32>& lenArray)
 {
     // generate main dict. data array
 #ifndef DICT_JA_ZH_IN_DATAFILE
@@ -158,7 +158,7 @@ static inline void printDataArea(FILE *dictionary_fp, FILE *source_fp, vector<sa
 #endif
 }
 
-static inline void printLenArray(FILE* source_fp, const vector<sal_uInt32>& lenArray)
+static void printLenArray(FILE* source_fp, const vector<sal_uInt32>& lenArray)
 {
 #ifndef DICT_JA_ZH_IN_DATAFILE
     fprintf(source_fp, "static const sal_Int32 lenArray[] = {\n\t");
@@ -188,7 +188,7 @@ static inline void printLenArray(FILE* source_fp, const vector<sal_uInt32>& lenA
 /* FIXME?: what happens if in every range i there is at least one charArray != 0
        => this will make index1[] = {0x00, 0x01, 0x02,... 0xfe, 0xff }
        => then in index2, the last range will be ignored incorrectly */
-static inline void printIndex1(FILE *source_fp, sal_Int16 *set)
+static void printIndex1(FILE *source_fp, sal_Int16 *set)
 {
 #ifndef DICT_JA_ZH_IN_DATAFILE
     fprintf (source_fp, "static const sal_Int16 index1[] = {\n\t");
@@ -217,7 +217,7 @@ static inline void printIndex1(FILE *source_fp, sal_Int16 *set)
 #endif
 }
 
-static inline void printIndex2(FILE *source_fp, sal_Int16 const *set)
+static void printIndex2(FILE *source_fp, sal_Int16 const *set)
 {
 #ifndef DICT_JA_ZH_IN_DATAFILE
     fputs ("static const sal_Int32 index2[] = {\n\t", source_fp);
@@ -255,7 +255,7 @@ static inline void printIndex2(FILE *source_fp, sal_Int16 const *set)
 
 /* Generates a bitmask for the existence of sal_Unicode values in dictionary;
    it packs 8 sal_Bool values in 1 sal_uInt8 */
-static inline void printExistsMask(FILE *source_fp)
+static void printExistsMask(FILE *source_fp)
 {
 #ifndef DICT_JA_ZH_IN_DATAFILE
     fprintf (source_fp, "static const sal_uInt8 existMark[] = {\n\t");

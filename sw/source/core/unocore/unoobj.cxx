@@ -1764,7 +1764,7 @@ void SwUnoCursorHelper::SetPropertyValue(
 // SwUnoCursorHelper::SetTextFormatColl, instead of extending item set.
 // We need to get them from nodes in next call to GetCursorAttr.
 // The rest could cause similar problems in theory, so we just list them here.
-static inline bool propertyCausesSideEffectsInNodes(sal_uInt16 nWID)
+static bool propertyCausesSideEffectsInNodes(sal_uInt16 nWID)
 {
     return nWID == FN_UNO_PARA_STYLE ||
            nWID == FN_UNO_CHARFMT_SEQUENCE ||

@@ -89,7 +89,7 @@ namespace
     const sal_Unicode comma_char = ',';
     const OUString dos_newline = "\r\n";
 
-    inline bool needsQuoting(const OUString& str)
+    bool needsQuoting(const OUString& str)
     {
         static const OUString quote_trigger_chars = "\",\n\r";
         sal_Int32 len = str.getLength();
@@ -99,7 +99,7 @@ namespace
         return false;
     };
 
-    inline void appendEncodedString(OUStringBuffer& buf, const OUString& str)
+    void appendEncodedString(OUStringBuffer& buf, const OUString& str)
     {
         if(needsQuoting(str))
         {

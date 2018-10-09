@@ -963,7 +963,7 @@ SwFrameProperties_Impl::SwFrameProperties_Impl():
 {
 }
 
-static inline void lcl_FillCol ( SfxItemSet &rToSet, const ::SfxItemSet &rFromSet, const ::uno::Any *pAny)
+static void lcl_FillCol ( SfxItemSet &rToSet, const ::SfxItemSet &rFromSet, const ::uno::Any *pAny)
 {
     if ( pAny )
     {
@@ -1027,7 +1027,7 @@ SwGraphicProperties_Impl::SwGraphicProperties_Impl( ) :
 {
 }
 
-static inline void lcl_FillMirror ( SfxItemSet &rToSet, const ::SfxItemSet &rFromSet, const ::uno::Any *pHEvenMirror, const ::uno::Any *pHOddMirror, const ::uno::Any *pVMirror, bool &rRet )
+static void lcl_FillMirror ( SfxItemSet &rToSet, const ::SfxItemSet &rFromSet, const ::uno::Any *pHEvenMirror, const ::uno::Any *pHOddMirror, const ::uno::Any *pVMirror, bool &rRet )
 {
     if(pHEvenMirror || pHOddMirror || pVMirror )
     {

@@ -348,7 +348,7 @@ struct KeyAlternate
     KeyAlternate( sal_uInt16 nKey, sal_Unicode nChar = 0 ) : nKeyCode( nKey ), nCharCode( nChar ) {}
 };
 
-static inline KeyAlternate
+static KeyAlternate
 GetAlternateKeyCode( const sal_uInt16 nKeyCode )
 {
     KeyAlternate aAlternate;

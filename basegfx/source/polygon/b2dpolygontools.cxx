@@ -2161,7 +2161,7 @@ namespace basegfx
         namespace
         {
             /// return 0 for input of 0, -1 for negative and 1 for positive input
-            inline int lcl_sgn( const double n )
+            int lcl_sgn( const double n )
             {
                 return n == 0.0 ? 0 : 1 - 2*int(rtl::math::isSignBitSet(n));
             }

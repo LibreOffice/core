@@ -87,7 +87,7 @@ BreakIterator_CJK::getWordBoundary( const OUString& text, sal_Int32 anyPos,
 }
 
 namespace {
-inline bool isHangul( sal_Unicode cCh )
+bool isHangul( sal_Unicode cCh )
 {
     return (cCh >= 0xAC00 && cCh <= 0xD7AF) || (cCh >= 0x1100 && cCh <= 0x11FF);
 }

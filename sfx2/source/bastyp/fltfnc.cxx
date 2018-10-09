@@ -119,7 +119,7 @@ static void CreateFilterArr()
     theSfxFilterListener::get();
 }
 
-static inline OUString ToUpper_Impl( const OUString &rStr )
+static OUString ToUpper_Impl( const OUString &rStr )
 {
     return SvtSysLocale().GetCharClass().uppercase( rStr );
 }

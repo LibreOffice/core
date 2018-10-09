@@ -47,7 +47,7 @@ namespace stoc_sec
 {
 
 
-static inline sal_Int32 makeMask(
+static sal_Int32 makeMask(
     OUString const & items, char const * const * strings )
 {
     sal_Int32 mask = 0;
@@ -79,7 +79,7 @@ static inline sal_Int32 makeMask(
     return mask;
 }
 
-static inline OUString makeStrings(
+static OUString makeStrings(
     sal_Int32 mask, char const * const * strings )
 {
     OUStringBuffer buf( 48 );
@@ -513,7 +513,7 @@ Sequence< OUString > PermissionCollection::toStrings() const
 }
 #endif
 
-inline static bool implies(
+static bool implies(
     ::rtl::Reference< Permission > const & head, Permission const & demanded )
 {
     for ( Permission * perm = head.get(); perm; perm = perm->m_next.get() )

@@ -1027,7 +1027,7 @@ void ScInterpreter::ScMatTrans()
     For a row or column vector to be replicated the larger matrix dimension is
     returned, else the smaller dimension.
  */
-static inline SCSIZE lcl_GetMinExtent( SCSIZE n1, SCSIZE n2 )
+static SCSIZE lcl_GetMinExtent( SCSIZE n1, SCSIZE n2 )
 {
     if (n1 == 1)
         return n2;

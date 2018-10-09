@@ -144,7 +144,7 @@ void XclExpProgressBar::Progress()
 namespace {
 
 /** Fills the passed Excel address with the passed Calc cell coordinates without checking any limits. */
-inline void lclFillAddress( XclAddress& rXclPos, SCCOL nScCol, SCROW nScRow )
+void lclFillAddress( XclAddress& rXclPos, SCCOL nScCol, SCROW nScRow )
 {
     rXclPos.mnCol = static_cast< sal_uInt16 >( nScCol );
     rXclPos.mnRow = static_cast< sal_uInt32 >( nScRow );

@@ -38,7 +38,7 @@ std::size_t const nCharClassSize = 128;
 
 sal_Unicode const cEscapePrefix = 0x25; // '%'
 
-inline int getHexWeight(sal_uInt32 nUtf32)
+int getHexWeight(sal_uInt32 nUtf32)
 {
     return nUtf32 >= 0x30 && nUtf32 <= 0x39 ? // '0'--'9'
                static_cast< int >(nUtf32 - 0x30) :
@@ -49,12 +49,12 @@ inline int getHexWeight(sal_uInt32 nUtf32)
                -1; // not a hex digit
 }
 
-inline bool isValid(sal_Bool const * pCharClass, sal_uInt32 nUtf32)
+bool isValid(sal_Bool const * pCharClass, sal_uInt32 nUtf32)
 {
     return nUtf32 < nCharClassSize && pCharClass[nUtf32];
 }
 
-inline void writeUnicode(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
+void writeUnicode(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
                          sal_Unicode cChar)
 {
     rtl_uStringbuffer_insert(pBuffer, pCapacity, (*pBuffer)->length, &cChar, 1);
@@ -339,10 +339,10 @@ struct Component
 
     bool isPresent() const { return pBegin != nullptr; }
 
-    inline sal_Int32 getLength() const;
+    sal_Int32 getLength() const;
 };
 
-inline sal_Int32 Component::getLength() const
+sal_Int32 Component::getLength() const
 {
     assert(isPresent()); // taking length of non-present component
     return static_cast< sal_Int32 >(pEnd - pBegin);

@@ -77,7 +77,7 @@ namespace
 {
     const char SYLK_LF[]  = "\x1b :";
 
-    inline bool lcl_IsEndianSwap( const SvStream& rStrm )
+    bool lcl_IsEndianSwap( const SvStream& rStrm )
     {
     #ifdef OSL_BIGENDIAN
         return rStrm.GetEndian() != SvStreamEndian::BIG;
@@ -847,7 +847,7 @@ static void lcl_WriteString( SvStream& rStrm, OUString& rString, sal_Unicode cQu
     ScImportExport::WriteUnicodeOrByteString( rStrm, rString );
 }
 
-static inline void lcl_WriteSimpleString( SvStream& rStrm, const OUString& rString )
+static void lcl_WriteSimpleString( SvStream& rStrm, const OUString& rString )
 {
     ScImportExport::WriteUnicodeOrByteString( rStrm, rString );
 }
@@ -2363,7 +2363,7 @@ ScFormatFilterPlugin &ScFormatFilter::Get()
 
 // Precondition: pStr is guaranteed to be non-NULL and points to a 0-terminated
 // array.
-static inline const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr,
+static const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr,
         sal_Unicode c )
 {
     while (*pStr)

@@ -28,7 +28,7 @@ namespace basegfx
     {
         namespace
         {
-            inline double distance( const double&                   nX,
+            double distance( const double&                   nX,
                                     const double&                   nY,
                                     const ::basegfx::B2DVector&     rNormal,
                                     const double&                   nC )

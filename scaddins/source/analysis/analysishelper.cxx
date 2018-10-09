@@ -710,7 +710,7 @@ double ConvertToDec( const OUString& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim
 }
 
 
-static inline sal_Char GetMaxChar( sal_uInt16 nBase )
+static sal_Char GetMaxChar( sal_uInt16 nBase )
 {
     const sal_Char* const c = "--123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     return c[ nBase ];
@@ -769,31 +769,31 @@ double Erfc( double x )
     return ::rtl::math::erfc(x);
 }
 
-static inline bool IsNum( sal_Unicode c )
+static bool IsNum( sal_Unicode c )
 {
     return c >= '0' && c <= '9';
 }
 
 
-static inline bool IsComma( sal_Unicode c )
+static bool IsComma( sal_Unicode c )
 {
     return c == '.' || c == ',';
 }
 
 
-static inline bool IsExpStart( sal_Unicode c )
+static bool IsExpStart( sal_Unicode c )
 {
     return c == 'e' || c == 'E';
 }
 
 
-static inline bool IsImagUnit( sal_Unicode c )
+static bool IsImagUnit( sal_Unicode c )
 {
     return c == 'i' || c == 'j';
 }
 
 
-static inline sal_uInt16 GetVal( sal_Unicode c )
+static sal_uInt16 GetVal( sal_Unicode c )
 {
     return sal_uInt16( c - '0' );
 }

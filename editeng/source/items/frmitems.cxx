@@ -1388,7 +1388,7 @@ SvxBoxItem& SvxBoxItem::operator=( const SvxBoxItem& rBox )
 }
 
 
-static inline bool CmpBrdLn( const std::unique_ptr<SvxBorderLine> & pBrd1, const SvxBorderLine* pBrd2 )
+static bool CmpBrdLn( const std::unique_ptr<SvxBorderLine> & pBrd1, const SvxBorderLine* pBrd2 )
 {
     if( pBrd1.get() == pBrd2 )
         return true;
@@ -3272,7 +3272,7 @@ sal_uInt16 SvxBrushItem::GetVersion( sal_uInt16 /*nFileVersion*/ ) const
 }
 
 
-static inline sal_Int8 lcl_PercentToTransparency(long nPercent)
+static sal_Int8 lcl_PercentToTransparency(long nPercent)
 {
     // 0xff must not be returned!
     return sal_Int8(nPercent ? (50 + 0xfe * nPercent) / 100 : 0);

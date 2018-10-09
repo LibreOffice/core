@@ -86,13 +86,13 @@ static void lcl_WriteFixedString( XclExpStream& rStrm, const XclExpString& rStri
         rStrm.WriteZeroBytes( nLength - nStrBytes );
 }
 
-static inline void lcl_GenerateGUID( sal_uInt8* pGUID, bool& rValidGUID )
+static void lcl_GenerateGUID( sal_uInt8* pGUID, bool& rValidGUID )
 {
     rtl_createUuid( pGUID, rValidGUID ? pGUID : nullptr, false );
     rValidGUID = true;
 }
 
-static inline void lcl_WriteGUID( XclExpStream& rStrm, const sal_uInt8* pGUID )
+static void lcl_WriteGUID( XclExpStream& rStrm, const sal_uInt8* pGUID )
 {
     rStrm.SetSliceSize( 16 );
     for( std::size_t nIndex = 0; nIndex < 16; nIndex++ )

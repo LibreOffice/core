@@ -1860,7 +1860,7 @@ std::shared_ptr< DrawModelWrapper > ChartView::getDrawModelWrapper()
 
 namespace
 {
-inline sal_Int32 lcl_getDiagramTitleSpace()
+sal_Int32 lcl_getDiagramTitleSpace()
 {
     return 200; //=0,2 cm spacing
 }
@@ -2049,7 +2049,7 @@ awt::Rectangle ExplicitValueProvider::AddSubtractAxisTitleSizes(
 
 namespace {
 
-inline double lcl_getPageLayoutDistancePercentage()
+double lcl_getPageLayoutDistancePercentage()
 {
     return 0.02;
 }

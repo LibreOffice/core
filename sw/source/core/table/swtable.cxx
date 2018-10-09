@@ -265,7 +265,7 @@ namespace
 {
 
 template<class T>
-inline T lcl_MulDiv64(sal_uInt64 nA, sal_uInt64 nM, sal_uInt64 nD)
+T lcl_MulDiv64(sal_uInt64 nA, sal_uInt64 nM, sal_uInt64 nD)
 {
     return static_cast<T>((nA*nM)/nD);
 }

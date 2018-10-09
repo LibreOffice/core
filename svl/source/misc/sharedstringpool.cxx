@@ -19,7 +19,7 @@ namespace svl {
 
 namespace {
 
-inline sal_Int32 getRefCount( const rtl_uString* p )
+sal_Int32 getRefCount( const rtl_uString* p )
 {
     return (p->refCount & 0x3FFFFFFF);
 }

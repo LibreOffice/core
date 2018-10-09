@@ -263,7 +263,7 @@ const OUString& FilterBase::getFileUrl() const
 
 namespace {
 
-inline bool lclIsDosDrive( const OUString& rUrl, sal_Int32 nPos = 0 )
+bool lclIsDosDrive( const OUString& rUrl, sal_Int32 nPos = 0 )
 {
     return
         (rUrl.getLength() >= nPos + 3) &&

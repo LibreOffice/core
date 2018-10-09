@@ -38,13 +38,13 @@ using namespace ::oox::drawingml;
 namespace {
 
 /** Converts the passed 32-bit integer value from 1/100 mm to EMUs. */
-inline sal_Int64 lclHmmToEmu( sal_Int32 nValue )
+sal_Int64 lclHmmToEmu( sal_Int32 nValue )
 {
     return (nValue < 0) ? -1 : convertHmmToEmu( nValue );
 }
 
 /** Converts the passed 64-bit integer value from EMUs to 1/100 mm. */
-inline sal_Int32 lclEmuToHmm( sal_Int64 nValue )
+sal_Int32 lclEmuToHmm( sal_Int64 nValue )
 {
     return (nValue < 0) ? -1 : convertEmuToHmm( nValue );
 }

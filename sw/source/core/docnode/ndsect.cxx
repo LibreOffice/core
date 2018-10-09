@@ -774,7 +774,7 @@ void sw_DeleteFootnote( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd )
     }
 }
 
-static inline bool lcl_IsTOXSection(SwSectionData const& rSectionData)
+static bool lcl_IsTOXSection(SwSectionData const& rSectionData)
 {
     return (TOX_CONTENT_SECTION == rSectionData.GetType())
         || (TOX_HEADER_SECTION  == rSectionData.GetType());

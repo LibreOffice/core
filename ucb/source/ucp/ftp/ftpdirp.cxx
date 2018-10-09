@@ -29,7 +29,7 @@
 
 using namespace ftp;
 
-static inline bool ascii_isWhitespace( sal_Unicode ch )
+static bool ascii_isWhitespace( sal_Unicode ch )
 {
     return ((ch <= 0x20) && ch);
 }

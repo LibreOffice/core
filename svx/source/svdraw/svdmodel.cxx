@@ -1911,7 +1911,7 @@ void SdrModel::ReadUserDataSequenceValue(const css::beans::PropertyValue* pValue
 }
 
 template <typename T>
-static inline void addPair(std::vector< std::pair< OUString, Any > >& aUserData, const OUString& name, const T val)
+static void addPair(std::vector< std::pair< OUString, Any > >& aUserData, const OUString& name, const T val)
 {
     aUserData.push_back(std::pair< OUString, Any >(name, css::uno::makeAny(val)));
 }

@@ -46,7 +46,7 @@
 namespace {
 
 /** Fills the passed Calc address with the passed Excel cell coordinates without checking any limits. */
-inline void lclFillAddress( ScAddress& rScPos, sal_uInt16 nXclCol, sal_uInt32 nXclRow, SCTAB nScTab )
+void lclFillAddress( ScAddress& rScPos, sal_uInt16 nXclCol, sal_uInt32 nXclRow, SCTAB nScTab )
 {
     rScPos.SetCol( static_cast< SCCOL >( nXclCol ) );
     rScPos.SetRow( static_cast< SCROW >( nXclRow ) );

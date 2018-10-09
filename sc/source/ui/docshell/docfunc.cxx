@@ -4316,7 +4316,7 @@ bool ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
     return bSuccess;
 }
 
-static inline ScDirection DirFromFillDir( FillDir eDir )
+static ScDirection DirFromFillDir( FillDir eDir )
 {
     if (eDir==FILL_TO_BOTTOM)
         return DIR_BOTTOM;

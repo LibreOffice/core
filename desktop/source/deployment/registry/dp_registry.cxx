@@ -95,7 +95,7 @@ class PackageRegistryImpl : private MutexHolder, public t_helper
         Reference<deployment::XPackageRegistry> const & xBackend );
 
 protected:
-    inline void check();
+    void check();
     virtual void SAL_CALL disposing() override;
 
     virtual ~PackageRegistryImpl() override;
@@ -122,7 +122,7 @@ public:
 };
 
 
-inline void PackageRegistryImpl::check()
+void PackageRegistryImpl::check()
 {
     ::osl::MutexGuard guard( getMutex() );
     if (rBHelper.bInDispose || rBHelper.bDisposed) {

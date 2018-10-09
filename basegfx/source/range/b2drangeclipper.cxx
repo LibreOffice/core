@@ -680,7 +680,7 @@ namespace basegfx
                                  aNewEdges );
         }
 
-        inline bool isSameRect(ActiveEdge const &        rEdge,
+        bool isSameRect(ActiveEdge const &        rEdge,
                                basegfx::B2DRange const & rRect)
         {
             return &rEdge.getRect() == &rRect;
@@ -689,12 +689,12 @@ namespace basegfx
         // wow what a hack. necessary because stl's list::erase does
         // not eat reverse_iterator
         template<typename Cont, typename Iter> Iter eraseFromList(Cont&, const Iter&);
-        template<> inline ListOfEdges::iterator eraseFromList(
+        template<> ListOfEdges::iterator eraseFromList(
             ListOfEdges& rList, const ListOfEdges::iterator& aIter)
         {
             return rList.erase(aIter);
         }
-        template<> inline ListOfEdges::reverse_iterator eraseFromList(
+        template<> ListOfEdges::reverse_iterator eraseFromList(
             ListOfEdges& rList, const ListOfEdges::reverse_iterator& aIter)
         {
             return ListOfEdges::reverse_iterator(
@@ -702,7 +702,7 @@ namespace basegfx
         }
 
         template<int bPerformErase,
-                 typename Iterator> inline void processActiveEdges(
+                 typename Iterator> void processActiveEdges(
             Iterator          first,
             Iterator          last,
             ListOfEdges&      rActiveEdgeList,
@@ -761,7 +761,7 @@ namespace basegfx
             }
         }
 
-        template<int bPerformErase> inline void processActiveEdgesTopDown(
+        template<int bPerformErase> void processActiveEdgesTopDown(
             SweepLineEvent&   rCurrEvent,
             ListOfEdges&      rActiveEdgeList,
             VectorOfPolygons& rPolygonPool,
@@ -776,7 +776,7 @@ namespace basegfx
                 rRes);
         }
 
-        template<int bPerformErase> inline void processActiveEdgesBottomUp(
+        template<int bPerformErase> void processActiveEdgesBottomUp(
             SweepLineEvent&   rCurrEvent,
             ListOfEdges&      rActiveEdgeList,
             VectorOfPolygons& rPolygonPool,
@@ -824,7 +824,7 @@ namespace basegfx
                     rCurrEvent, rActiveEdgeList, rPolygonPool, rRes);
         }
 
-        inline void handleSweepLineEvent( SweepLineEvent&   rCurrEvent,
+        void handleSweepLineEvent( SweepLineEvent&   rCurrEvent,
                                           ListOfEdges&      rActiveEdgeList,
                                           VectorOfPolygons& rPolygonPool,
                                           B2DPolyPolygon&   rRes)

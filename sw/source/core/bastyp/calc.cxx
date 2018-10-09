@@ -181,7 +181,7 @@ CalcOp* FindOperator( const OUString& rSrch )
                               OperatorCompare ));
 }
 
-static inline LanguageType GetDocAppScriptLang( SwDoc const & rDoc )
+static LanguageType GetDocAppScriptLang( SwDoc const & rDoc )
 {
     return static_cast<const SvxLanguageItem&>(rDoc.GetDefault(
                GetWhichOfScript( RES_CHRATR_LANGUAGE,

@@ -24,12 +24,12 @@ namespace svx {
 
 namespace {
 
-inline void* lclEnumToVoid( SvxFrameDirection eDirection )
+void* lclEnumToVoid( SvxFrameDirection eDirection )
 {
     return reinterpret_cast< void* >( static_cast< sal_uInt32 >( eDirection ) );
 }
 
-inline SvxFrameDirection lclVoidToEnum( void* pDirection )
+SvxFrameDirection lclVoidToEnum( void* pDirection )
 {
     return static_cast< SvxFrameDirection >( reinterpret_cast< sal_IntPtr >( pDirection ) );
 }

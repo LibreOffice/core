@@ -40,7 +40,7 @@ IdlDll::~IdlDll()
 {
 }
 
-static inline SvStringHashEntry * INS( const OString& rName )
+static SvStringHashEntry * INS( const OString& rName )
 {
     sal_uInt32  nIdx;
     GetIdlApp().pHashTable->Insert( rName, &nIdx );

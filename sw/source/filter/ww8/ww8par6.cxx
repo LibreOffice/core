@@ -130,7 +130,7 @@ Color SwWW8ImplReader::GetCol(sal_uInt8 nIco)
     return nIco < SAL_N_ELEMENTS(eSwWW8ColA) ? eSwWW8ColA[nIco] : COL_AUTO;
 }
 
-static inline sal_uInt32 MSRoundTweak(sal_uInt32 x)
+static sal_uInt32 MSRoundTweak(sal_uInt32 x)
 {
     return x;
 }
@@ -1542,7 +1542,7 @@ static void FlySecur1(short& rSize, const bool bBorder)
         rSize = nMin;
 }
 
-static inline bool SetValSprm( sal_Int16* pVar, WW8PLCFx_Cp_FKP* pPap, sal_uInt16 nId )
+static bool SetValSprm( sal_Int16* pVar, WW8PLCFx_Cp_FKP* pPap, sal_uInt16 nId )
 {
     SprmResult aS = pPap->HasSprm(nId);
     if (aS.pSprm && aS.nRemainingData >= 2)
@@ -1550,7 +1550,7 @@ static inline bool SetValSprm( sal_Int16* pVar, WW8PLCFx_Cp_FKP* pPap, sal_uInt1
     return aS.pSprm != nullptr;
 }
 
-static inline bool SetValSprm( sal_Int16* pVar, const WW8RStyle* pStyle, sal_uInt16 nId )
+static bool SetValSprm( sal_Int16* pVar, const WW8RStyle* pStyle, sal_uInt16 nId )
 {
     SprmResult aS = pStyle->HasParaSprm(nId);
     if (aS.pSprm && aS.nRemainingData >= 2)

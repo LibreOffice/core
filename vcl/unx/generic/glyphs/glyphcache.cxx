@@ -61,7 +61,7 @@ void GlyphCache::ClearFontOptions()
     }
 }
 
-static inline sal_IntPtr GetFontId(const LogicalFontInstance& rFontInstance)
+static sal_IntPtr GetFontId(const LogicalFontInstance& rFontInstance)
 {
     if (rFontInstance.GetFontFace())
         return rFontInstance.GetFontFace()->GetFontId();

@@ -81,7 +81,7 @@ static bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, boo
 
 //This function gets a system path to a file [fname], creates a temp file in
 //the same folder as [fname] and returns the system path of the temp file.
-static inline OUString tempFileHelper(OUString const & fname)
+static OUString tempFileHelper(OUString const & fname)
 {
     OUString aTmpFile;
 

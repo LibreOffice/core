@@ -35,7 +35,7 @@ const char SLASH[] = "/";
 
 namespace {
 
-inline void ensure_final_slash(/*inout*/ OUString& path)
+void ensure_final_slash(/*inout*/ OUString& path)
 {
     if (!path.isEmpty() &&
         (SLASH[0] != path.pData->buffer[path.getLength() - 1]))

@@ -923,13 +923,13 @@ std::shared_ptr<OGLTransitionImpl> makeRochade()
     return makeRochadeTransition(aLeavingSlide, aEnteringSlide, aSettings);
 }
 
-static inline double randFromNeg1to1()
+static double randFromNeg1to1()
 {
     return comphelper::rng::uniform_real_distribution(-1.0, std::nextafter(1.0, DBL_MAX));
 }
 
 // TODO(Q3): extract to basegfx
-static inline glm::vec3 randNormVectorInXYPlane()
+static glm::vec3 randNormVectorInXYPlane()
 {
     glm::vec3 toReturn(randFromNeg1to1(),randFromNeg1to1(),0.0);
     return glm::normalize(toReturn);

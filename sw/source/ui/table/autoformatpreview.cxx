@@ -370,8 +370,8 @@ void AutoFormatPreview::CalcCellArray(bool _bFitWidth)
     maPreviousSize.setHeight(maArray.GetHeight() + 4);
 }
 
-static inline void lclSetStyleFromBorder(svx::frame::Style& rStyle,
-                                         const ::editeng::SvxBorderLine* pBorder)
+static void lclSetStyleFromBorder(svx::frame::Style& rStyle,
+                                  const ::editeng::SvxBorderLine* pBorder)
 {
     rStyle.Set(pBorder, 0.05, 5);
 }

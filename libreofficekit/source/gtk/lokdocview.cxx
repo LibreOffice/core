@@ -3438,7 +3438,7 @@ namespace {
 // cater for representable integer cases and we don't want to link against
 // libuno_sal, we'll have to have an own implementation. The special large
 // integer cases seems not be needed here.
-inline bool lok_approxEqual(double a, double b)
+bool lok_approxEqual(double a, double b)
 {
     static const double e48 = 1.0 / (16777216.0 * 16777216.0);
     if (a == b)

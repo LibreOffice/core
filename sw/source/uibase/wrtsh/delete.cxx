@@ -45,14 +45,14 @@ inline void SwWrtShell::CloseMark( bool bOkFlag )
 
 namespace {
 
-inline bool isUnicodeVariationSequenceSelector( sal_uInt32 nCode )
+bool isUnicodeVariationSequenceSelector( sal_uInt32 nCode )
 {
     return ( nCode >= 0xFE00 && nCode <= 0xFE0F )   // Variation Selectors block
         || ( nCode >= 0xE0100 && nCode <= 0xE01EF );// Variation Selectors Supplement block
 }
 
 // Return if the character might be a base character of a CJK ideographic variation sequence
-inline bool isCJKIVSCharacters( sal_uInt32 nCode )
+bool isCJKIVSCharacters( sal_uInt32 nCode )
 {
     return ( nCode >= 0x4E00 && nCode <= 0x9FFF )       // CJK Unified Ideographs
         || ( nCode >= 0x3400 && nCode <= 0x4DBF )       // CJK Unified Ideographs Extension A

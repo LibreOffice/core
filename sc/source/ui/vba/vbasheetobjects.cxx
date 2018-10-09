@@ -41,7 +41,7 @@ using namespace ::ooo::vba;
 namespace {
 
 template< typename Type >
-inline bool lclGetProperty( Type& orValue, const uno::Reference< beans::XPropertySet >& rxPropSet, const OUString& rPropName )
+bool lclGetProperty( Type& orValue, const uno::Reference< beans::XPropertySet >& rxPropSet, const OUString& rPropName )
 {
     try
     {
@@ -57,7 +57,7 @@ inline bool lclGetProperty( Type& orValue, const uno::Reference< beans::XPropert
 
     @throws uno::RuntimeException
 */
-inline double lclPointsToHmm( const uno::Any& rPoints )
+double lclPointsToHmm( const uno::Any& rPoints )
 {
     return PointsToHmm( ::rtl::math::approxFloor( rPoints.get< double >() / 0.75 ) * 0.75 );
 }

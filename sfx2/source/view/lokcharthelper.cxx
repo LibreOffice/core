@@ -31,12 +31,12 @@ using namespace com::sun::star;
 
 namespace {
 
-inline Point lcl_TwipsToHMM( const Point& rPoint )
+Point lcl_TwipsToHMM( const Point& rPoint )
 {
     return Point(convertTwipToMm100(rPoint.getX()), convertTwipToMm100(rPoint.getY()));
 }
 
-inline Size lcl_TwipsToHMM( const Size& rSize )
+Size lcl_TwipsToHMM( const Size& rSize )
 {
     return Size(convertTwipToMm100(rSize.getWidth()), convertTwipToMm100(rSize.getHeight()));
 }

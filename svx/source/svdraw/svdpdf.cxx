@@ -94,9 +94,9 @@ namespace
 /// dimensions are in inches, with 72 points / inch.
 /// Here we effectively render at 96 DPI (to match
 /// the image rendered in vcl::ImportPDF in pdfread.cxx).
-inline double lcl_PointToPixel(double fPoint) { return fPoint * 96. / 72.; }
+double lcl_PointToPixel(double fPoint) { return fPoint * 96. / 72.; }
 /// Convert from pixels to logic (twips).
-inline long lcl_ToLogic(double value)
+long lcl_ToLogic(double value)
 {
     // Convert to integral preserving two dp.
     const long in = static_cast<long>(value * 100.);
@@ -104,7 +104,7 @@ inline long lcl_ToLogic(double value)
     return out / 100;
 }
 
-inline double sqrt2(double a, double b) { return sqrt(a * a + b * b); }
+double sqrt2(double a, double b) { return sqrt(a * a + b * b); }
 }
 
 struct FPDFBitmapDeleter

@@ -295,7 +295,7 @@ static sal_Int32 lcl_GetRulerPos( sal_Int32 nApiPos )
 }
 
 /** Expands the sequence's size and returns the base index of the new inserted elements. */
-static inline sal_Int32 lcl_ExpandSequence( Sequence< PropertyValue >& rSeq, sal_Int32 nExp )
+static sal_Int32 lcl_ExpandSequence( Sequence< PropertyValue >& rSeq, sal_Int32 nExp )
 {
     OSL_ENSURE( nExp > 0, "lcl_ExpandSequence - invalid value" );
     rSeq.realloc( rSeq.getLength() + nExp );
@@ -303,7 +303,7 @@ static inline sal_Int32 lcl_ExpandSequence( Sequence< PropertyValue >& rSeq, sal
 }
 
 /** Fills the property value rVal with the specified name and value from the item. */
-static inline void lcl_FillProperty( PropertyValue& rVal, const OUString& rPropName, const SfxPoolItem& rItem, sal_uInt8 nMID )
+static void lcl_FillProperty( PropertyValue& rVal, const OUString& rPropName, const SfxPoolItem& rItem, sal_uInt8 nMID )
 {
     rVal.Name = rPropName;
     rItem.QueryValue( rVal.Value, nMID );
@@ -822,13 +822,13 @@ sal_Int32 ScAccessibleCsvRuler::implGetLastEqualFormatted( sal_Int32 nApiPos )
 // Grid =======================================================================
 
 /** Converts a grid columnm index to an API column index. */
-static inline sal_Int32 lcl_GetApiColumn( sal_uInt32 nGridColumn )
+static sal_Int32 lcl_GetApiColumn( sal_uInt32 nGridColumn )
 {
     return (nGridColumn != CSV_COLUMN_HEADER) ? static_cast< sal_Int32 >( nGridColumn + 1 ) : 0;
 }
 
 /** Converts an API columnm index to a ScCsvGrid column index. */
-static inline sal_uInt32 lcl_GetGridColumn( sal_Int32 nApiColumn )
+static sal_uInt32 lcl_GetGridColumn( sal_Int32 nApiColumn )
 {
     return (nApiColumn > 0) ? static_cast< sal_uInt32 >( nApiColumn - 1 ) : CSV_COLUMN_HEADER;
 }

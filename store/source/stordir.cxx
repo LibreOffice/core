@@ -43,7 +43,7 @@ using namespace store;
 /*
  * convertTextToUnicode.
  */
-static inline sal_Size convertTextToUnicode (
+static sal_Size convertTextToUnicode (
     rtl_TextToUnicodeConverter  hConverter,
     const sal_Char *pSrcBuffer, sal_Size nSrcLength,
     sal_Unicode    *pDstBuffer, sal_Size nDstLength)

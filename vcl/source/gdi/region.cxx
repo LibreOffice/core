@@ -1677,7 +1677,7 @@ void vcl::Region::GetRegionRectangles(RectangleVector& rTarget) const
     }
 }
 
-static inline bool ImplPolygonRectTest( const tools::Polygon& rPoly, tools::Rectangle* pRectOut = nullptr )
+static bool ImplPolygonRectTest( const tools::Polygon& rPoly, tools::Rectangle* pRectOut = nullptr )
 {
     bool bIsRect = false;
     const Point* pPoints = rPoly.GetConstPointAry();

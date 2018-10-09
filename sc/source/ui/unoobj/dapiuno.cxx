@@ -163,7 +163,7 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotItemMap()
     return aDataPilotItemMap_Impl;
 }
 
-inline bool lclCheckValidDouble( double fValue, bool bAuto )
+bool lclCheckValidDouble( double fValue, bool bAuto )
 {
     return bAuto || ::rtl::math::isFinite( fValue );
 }

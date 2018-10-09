@@ -354,7 +354,7 @@ static PathStatus getDerivedPath(
     return aStatus;
 }
 
-static inline PathStatus getDerivedPath(
+static PathStatus getDerivedPath(
                       OUString& _rURL,
                       Bootstrap::Impl::PathData const& _aBaseData,
                       OUString const& _sRelativeURL,
@@ -389,7 +389,7 @@ static OUString getExecutableBaseName()
     return sExecutable;
 }
 
-static inline Bootstrap::PathStatus updateStatus(Bootstrap::Impl::PathData & _rResult)
+static Bootstrap::PathStatus updateStatus(Bootstrap::Impl::PathData & _rResult)
 {
     return _rResult.status = checkStatusAndNormalizeURL(_rResult.path);
 }

@@ -282,7 +282,7 @@ OUString URIHelper::simpleNormalizedMakeRelative(
 
 namespace {
 
-inline sal_Int32 nextChar(OUString const & rStr, sal_Int32 nPos)
+sal_Int32 nextChar(OUString const & rStr, sal_Int32 nPos)
 {
     return rtl::isHighSurrogate(rStr[nPos])
            && rStr.getLength() - nPos >= 2

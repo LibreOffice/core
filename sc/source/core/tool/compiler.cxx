@@ -4087,7 +4087,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
     }
 }
 
-static inline bool lcl_UpperAsciiOrI18n( OUString& rUpper, const OUString& rOrg, FormulaGrammar::Grammar eGrammar )
+static bool lcl_UpperAsciiOrI18n( OUString& rUpper, const OUString& rOrg, FormulaGrammar::Grammar eGrammar )
 {
     if (FormulaGrammar::isODFF( eGrammar ))
     {

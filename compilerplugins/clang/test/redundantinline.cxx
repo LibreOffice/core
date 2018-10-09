@@ -11,4 +11,14 @@
 
 S1::~S1() = default;
 
+static inline int f8() { return 0; } // expected-error {{function has no external linkage but is explicitly declared 'inline' [loplugin:redundantinline]}}
+
+namespace {
+
+static inline int f9() { return 0; } // expected-error {{function has no external linkage but is explicitly declared 'inline' [loplugin:redundantinline]}}
+
+}
+
+int main() { return f8() + f9(); }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

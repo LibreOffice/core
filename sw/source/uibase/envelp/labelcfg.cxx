@@ -33,7 +33,7 @@ using namespace utl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-static inline void lcl_assertEndingItem(xmlreader::XmlReader& reader)
+static void lcl_assertEndingItem(xmlreader::XmlReader& reader)
 {
     int nsId;
     xmlreader::Span name;
@@ -43,7 +43,7 @@ static inline void lcl_assertEndingItem(xmlreader::XmlReader& reader)
     (void) res;
 }
 
-static inline OUString lcl_getValue(xmlreader::XmlReader& reader,
+static OUString lcl_getValue(xmlreader::XmlReader& reader,
                                     const xmlreader::Span& span)
 {
     int nsId;

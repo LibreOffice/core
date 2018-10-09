@@ -119,7 +119,7 @@ SvNumFormatType lcl_GetRetFormat( OpCode eOpCode )
     }
 }
 
-inline void lclPushOpCodeMapEntry( ::std::vector< sheet::FormulaOpCodeMapEntry >& rVec,
+void lclPushOpCodeMapEntry( ::std::vector< sheet::FormulaOpCodeMapEntry >& rVec,
         const OUString* pTable, sal_uInt16 nOpCode )
 {
     sheet::FormulaOpCodeMapEntry aEntry;

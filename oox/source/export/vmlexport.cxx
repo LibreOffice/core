@@ -335,14 +335,14 @@ static void impl_AddInt( sax_fastparser::FastAttributeList *pAttrList, sal_Int32
     pAttrList->add( nElement, OString::number( nValue ).getStr() );
 }
 
-static inline sal_uInt16 impl_GetUInt16( const sal_uInt8* &pVal )
+static sal_uInt16 impl_GetUInt16( const sal_uInt8* &pVal )
 {
     sal_uInt16 nRet = *pVal++;
     nRet += ( *pVal++ ) << 8;
     return nRet;
 }
 
-static inline sal_Int32 impl_GetPointComponent( const sal_uInt8* &pVal, sal_uInt16 nPointSize )
+static sal_Int32 impl_GetPointComponent( const sal_uInt8* &pVal, sal_uInt16 nPointSize )
 {
     sal_Int32 nRet = 0;
     if ( ( nPointSize == 0xfff0 ) || ( nPointSize == 4 ) )
