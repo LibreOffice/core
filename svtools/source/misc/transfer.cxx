@@ -104,6 +104,25 @@ SvStream& WriteTransferableObjectDescriptor( SvStream& rOStm, const Transferable
     return rOStm;
 }
 
+// Clean OUString given in parameter
+// by returning an other OUString containing only authorized chars
+static OUString lcl_getAuthorizedCharsString(const OUString& rInputString)
+{
+    sal_Bool pToAccept[128];
+    for (sal_Bool & rb : pToAccept)
+        rb = false;
+
+    const char aQuotedParamChars[] =
+        "()<>@,;:/[]?=!#$&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~. ";
+
+    for ( sal_Int32 nInd = 0; nInd < RTL_CONSTASCII_LENGTH(aQuotedParamChars); ++nInd )
+    {
+        sal_Unicode nChar = aQuotedParamChars[nInd];
+        if ( nChar < 128 )
+            pToAccept[nChar] = true;
+    }
+    return rtl::Uri::encode(rInputString, pToAccept, rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8);
+}
 
 // the reading of the parameter is done using the special service css::datatransfer::MimeContentType,
 // a similar approach should be implemented for creation of the mimetype string;
@@ -121,32 +140,14 @@ static OUString ImplGetParameterString( const TransferableObjectDescriptor& rObj
 
     if( !rObjDesc.maTypeName.isEmpty() )
     {
-        aParams += ";typename=\""  + rObjDesc.maTypeName + "\"";
+        // the type name might contain unacceptable characters, encode all of them
+        aParams += ";typename=\"" + lcl_getAuthorizedCharsString(rObjDesc.maTypeName) + "\"";
     }
 
     if( !rObjDesc.maDisplayName.isEmpty() )
     {
         // the display name might contain unacceptable characters, encode all of them
-        // this seems to be the only parameter currently that might contain such characters
-        sal_Bool pToAccept[128];
-        for (sal_Bool & rb : pToAccept)
-            rb = false;
-
-        const char aQuotedParamChars[] =
-            "()<>@,;:/[]?=!#$&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~. ";
-
-        for ( sal_Int32 nInd = 0; nInd < RTL_CONSTASCII_LENGTH(aQuotedParamChars); ++nInd )
-        {
-            sal_Unicode nChar = aQuotedParamChars[nInd];
-            if ( nChar < 128 )
-                pToAccept[nChar] = true;
-        }
-
-        aParams += ";displayname=\""
-            + rtl::Uri::encode(
-                rObjDesc.maDisplayName, pToAccept, rtl_UriEncodeIgnoreEscapes,
-                RTL_TEXTENCODING_UTF8)
-            + "\"";
+        aParams += ";displayname=\"" + lcl_getAuthorizedCharsString(rObjDesc.maDisplayName) + "\"";
     }
 
     aParams += ";viewaspect=\"" + OUString::number(rObjDesc.mnViewAspect)
@@ -187,7 +188,7 @@ static void ImplSetParameterString( TransferableObjectDescriptor& rObjDesc, cons
 
             if( xMimeType->hasParameter( aTypeNameString ) )
             {
-                rObjDesc.maTypeName = xMimeType->getParameterValue( aTypeNameString );
+                rObjDesc.maTypeName = ::rtl::Uri::decode( xMimeType->getParameterValue( aTypeNameString ), rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
             }
 
             if( xMimeType->hasParameter( aDisplayNameString ) )
@@ -1201,8 +1202,9 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
                 if( !rFlavor.MimeType.isEmpty() )
                     xMimeType = xMimeFact->createMimeContentType( rFlavor.MimeType );
             }
-            catch( const css::uno::Exception& )
+            catch( const css::uno::Exception& e)
             {
+                SAL_WARN("svtools.misc", "Something went wrong with calling to createMimeContentType: \"" << e << "\"");
             }
 
             aFlavorEx.MimeType = rFlavor.MimeType;
