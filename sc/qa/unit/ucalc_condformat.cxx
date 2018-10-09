@@ -562,9 +562,9 @@ void Test::testIconSet()
     m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);
     pList->InsertNew(pFormat);
 
-    struct {
+    static struct {
         double nVal; sal_Int32 nIndex;
-    } aTests[] = {
+    } const aTests[] = {
         { -1.0, 0 },
         { 0.0, 0 },
         { 1.0, 1 },
@@ -590,7 +590,7 @@ struct ScDataBarLengthData
     double nLength;
 };
 
-void testDataBarLengthImpl(ScDocument* pDoc, ScDataBarLengthData* pData, const ScRange& rRange,
+void testDataBarLengthImpl(ScDocument* pDoc, const ScDataBarLengthData* pData, const ScRange& rRange,
         double nMinVal, ScColorScaleEntryType eMinType,
         double nMaxVal, ScColorScaleEntryType eMaxType,
         double nZeroPos, databar::ScAxisPosition eAxisPos)
@@ -635,7 +635,7 @@ void Test::testDataBarLengthAutomaticAxis()
 {
     m_pDoc->InsertTab(0, "Test");
 
-    ScDataBarLengthData aValues[] = {
+    static const ScDataBarLengthData aValues[] = {
         { 2, 0 },
         { 3, 0 },
         { 4, 25.0 },
@@ -650,7 +650,7 @@ void Test::testDataBarLengthAutomaticAxis()
     testDataBarLengthImpl(m_pDoc, aValues, ScRange(0,0,0,0,7,0),
             3, COLORSCALE_VALUE, 7, COLORSCALE_VALUE, 0.0, databar::AUTOMATIC);
 
-    ScDataBarLengthData aValues2[] = {
+    static const ScDataBarLengthData aValues2[] = {
         { -6, -100 },
         { -5, -100 },
         { -4, -100 },
@@ -672,7 +672,7 @@ void Test::testDataBarLengthAutomaticAxis()
     testDataBarLengthImpl(m_pDoc, aValues2, ScRange(1,0,0,1,15,0),
             -4, COLORSCALE_VALUE, 8, COLORSCALE_VALUE, 1.0/3.0 * 100, databar::AUTOMATIC);
 
-    ScDataBarLengthData aValues3[] = {
+    static const ScDataBarLengthData aValues3[] = {
         { 2, 0.0 },
         { 3, 25.0 },
         { 4, 50.0 },
@@ -682,7 +682,7 @@ void Test::testDataBarLengthAutomaticAxis()
     testDataBarLengthImpl(m_pDoc, aValues3, ScRange(2,0,0,2,3,0),
             0, COLORSCALE_MIN, 0, COLORSCALE_MAX, 0, databar::AUTOMATIC);
 
-    ScDataBarLengthData aValues4[] = {
+    static const ScDataBarLengthData aValues4[] = {
         { 2, 40.0 },
         { 3, 60.0 },
         { 4, 80.0 },
@@ -699,7 +699,7 @@ void Test::testDataBarLengthMiddleAxis()
 {
     m_pDoc->InsertTab(0, "Test");
 
-    ScDataBarLengthData aValues[] = {
+    static const ScDataBarLengthData aValues[] = {
         { 1, 25.0 },
         { 2, 25.0 },
         { 3, 37.5 },
@@ -715,7 +715,7 @@ void Test::testDataBarLengthMiddleAxis()
     testDataBarLengthImpl(m_pDoc, aValues, ScRange(0,0,0,0,8,0),
             2, COLORSCALE_VALUE, 8, COLORSCALE_VALUE, 50.0, databar::MIDDLE);
 
-    ScDataBarLengthData aValues2[] = {
+    static const ScDataBarLengthData aValues2[] = {
         { -6, -50 },
         { -5, -50 },
         { -4, -50 },

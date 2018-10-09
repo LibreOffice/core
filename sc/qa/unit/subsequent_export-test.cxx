@@ -340,7 +340,7 @@ private:
 
 void ScExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
 {
-    struct { xmlChar* pPrefix; xmlChar* pURI; } aNamespaces[] =
+    static const struct { xmlChar* pPrefix; xmlChar* pURI; } aNamespaces[] =
     {
         { BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main") },
         { BAD_CAST("x"), BAD_CAST("http://schemas.openxmlformats.org/spreadsheetml/2006/main") },
@@ -1191,7 +1191,7 @@ void ScExportTest::testDataBarExportXLSX()
 
 void ScExportTest::testMiscRowHeightExport()
 {
-    TestParam::RowData DfltRowData[] =
+    static const TestParam::RowData DfltRowData[] =
     {
         { 0, 4, 0, 529, 0, false },
         { 5, 10, 0, 1058, 0, false },
@@ -1201,7 +1201,7 @@ void ScExportTest::testMiscRowHeightExport()
         { 1048573, 1048575, 0, 529, 0, false },
     };
 
-    TestParam::RowData EmptyRepeatRowData[] =
+    static const TestParam::RowData EmptyRepeatRowData[] =
     {
         // rows 0-4, 5-10, 17-20 are all set at various
         // heights, there is no content in the rows, there
@@ -2307,7 +2307,7 @@ const char* toBorderName( SvxBorderLineStyle eStyle )
 
 void ScExportTest::testExcelCellBorders( sal_uLong nFormatType )
 {
-    struct
+    static const struct
     {
         SCROW mnRow;
         SvxBorderLineStyle mnStyle;
@@ -2520,7 +2520,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
 
         bool check( const ScDocument& rDoc )
         {
-            CheckItem aChecks[] =
+            static const CheckItem aChecks[] =
             {
                 {  1, SC_CAT_CONTENT     , 1, 1, 0, 1, 1, 0, false },
                 {  2, SC_CAT_INSERT_ROWS , 0, 2, 0, 0, 2, 0, true },
@@ -2731,7 +2731,7 @@ void ScExportTest::testSheetTabColorsXLSX()
                 }
             }
 
-            const Color aXclColors[] =
+            static const Color aXclColors[] =
             {
                 0x0000B050, // green
                 0x00FF0000, // red

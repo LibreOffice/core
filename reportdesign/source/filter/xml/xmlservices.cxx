@@ -36,7 +36,7 @@ using namespace ::com::sun::star::registry;
 namespace
 {
 
-cppu::ImplementationEntry entries[] = {
+cppu::ImplementationEntry const entries[] = {
     { &ORptFilter::create, &ORptFilter::getImplementationName_Static, &ORptFilter::getSupportedServiceNames_Static,
         &cppu::createSingleComponentFactory, nullptr, 0 },
     { &ORptTypeDetection::create, &ORptTypeDetection::getImplementationName_Static, &ORptTypeDetection::getSupportedServiceNames_Static,

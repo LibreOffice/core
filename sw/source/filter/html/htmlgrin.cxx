@@ -75,14 +75,14 @@
 
 using namespace ::com::sun::star;
 
-HTMLOptionEnum<sal_Int16> aHTMLImgHAlignTable[] =
+HTMLOptionEnum<sal_Int16> const aHTMLImgHAlignTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_AL_left,    text::HoriOrientation::LEFT       },
     { OOO_STRING_SVTOOLS_HTML_AL_right,   text::HoriOrientation::RIGHT      },
     { nullptr,                            0               }
 };
 
-HTMLOptionEnum<sal_Int16> aHTMLImgVAlignTable[] =
+HTMLOptionEnum<sal_Int16> const aHTMLImgVAlignTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_VA_top,         text::VertOrientation::LINE_TOP       },
     { OOO_STRING_SVTOOLS_HTML_VA_texttop,     text::VertOrientation::CHAR_TOP       },

@@ -5227,11 +5227,11 @@ static bool operator<(const SprmReadInfo &rFirst, const SprmReadInfo &rSecond)
     return (rFirst.nId < rSecond.nId);
 }
 
-typedef ww::SortedArray<SprmReadInfo> wwSprmDispatcher;
+typedef ww::SortedArray<SprmReadInfo const> wwSprmDispatcher;
 
 static const wwSprmDispatcher *GetWW2SprmDispatcher()
 {
-    static SprmReadInfo aSprms[] =
+    static SprmReadInfo const aSprms[] =
     {
           {0, nullptr},                              // "0" default resp. error
                                                      // will be skipped! ,
@@ -5387,7 +5387,7 @@ static const wwSprmDispatcher *GetWW2SprmDispatcher()
 
 static const wwSprmDispatcher *GetWW6SprmDispatcher()
 {
-    static SprmReadInfo aSprms[] =
+    static SprmReadInfo const aSprms[] =
     {
         {0,                                 nullptr},                             // "0" default resp. error
                                                                                   // will be skipped!
@@ -5599,7 +5599,7 @@ static const wwSprmDispatcher *GetWW6SprmDispatcher()
 
 static const wwSprmDispatcher *GetWW8SprmDispatcher()
 {
-    static SprmReadInfo aSprms[] =
+    static SprmReadInfo const aSprms[] =
     {
         {0,                              nullptr},                                       // "0" default resp. error
 

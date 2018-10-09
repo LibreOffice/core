@@ -213,7 +213,7 @@ static struct NamesToHdl
     const char   *pFullPropName;      // full qualified name as used in configuration
     const char   *pPropName;          // property name only (atom) of above
     sal_Int32 const   nHdl;               // numeric handle representing the property
-}aNamesToHdl[] =
+} const aNamesToHdl[] =
 {
 {/*  0 */    "General/DefaultLocale",                         UPN_DEFAULT_LOCALE,                    UPH_DEFAULT_LOCALE},
 {/*  1 */    "General/DictionaryList/ActiveDictionaries",     UPN_ACTIVE_DICTIONARIES,               UPH_ACTIVE_DICTIONARIES},
@@ -281,7 +281,7 @@ bool SvtLinguConfigItem::GetHdlByName(
     const OUString &rPropertyName,
     bool bFullPropName )
 {
-    NamesToHdl *pEntry = &aNamesToHdl[0];
+    NamesToHdl const *pEntry = &aNamesToHdl[0];
 
     if (bFullPropName)
     {

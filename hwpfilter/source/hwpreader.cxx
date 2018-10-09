@@ -408,7 +408,7 @@ static struct
 }
 
 
-LineStyle[] =
+const LineStyle[] =
 {
     { 0.0, 0.0, 0.0 },
     {

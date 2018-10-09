@@ -248,7 +248,7 @@ const decomposition_table_entry_t decomposition_table[] = {
 #define FULL2HALF_ASC_FUNCTION        0x02
 #define FULL2HALF_KATAKANA_ONLY       0x04
 
-UnicodePairWithFlag full2half[] = {
+UnicodePairWithFlag const full2half[] = {
     { 0x2015, 0xFF70, FULL2HALF_ASC_FUNCTION },  // HORIZONTAL BAR --> KATAKANA-HIRAGANA PROLONGED SOUND MARK
     { 0x2018, 0x0060, FULL2HALF_ASC_FUNCTION },  // LEFT SINGLE QUOTATION MARK => GRAVE ACCENT
     { 0x2019, 0x0027, FULL2HALF_ASC_FUNCTION },  // RIGHT SINGLE QUOTATION MARK => APOSTROPHE
@@ -698,7 +698,7 @@ const sal_Unicode composition_table[][2] = {
 #define HALF2FULL_JIS_FUNCTION  0x02
 #define HALF2FULL_KATAKANA_ONLY 0x04
 
-UnicodePairWithFlag half2full[] = {
+UnicodePairWithFlag const half2full[] = {
     { 0x0020, 0x3000, HALF2FULL_NORMAL },  // SPACE --> IDEOGRAPHIC SPACE
     { 0x0021, 0xFF01, HALF2FULL_NORMAL | HALF2FULL_JIS_FUNCTION },  // EXCLAMATION MARK --> FULLWIDTH EXCLAMATION MARK
     { 0x0022, 0xFF02, HALF2FULL_NORMAL },  // QUOTATION MARK --> FULLWIDTH QUOTATION MARK

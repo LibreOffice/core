@@ -21,7 +21,7 @@
 
 #define TE(t,p,c) { HtmlOut::t, HtmlPosition::p, HtmlContainerFlags::c }
 
-AllHtmlFlags aHTMLOutFramePageFlyTable[MAX_FRMTYPES][MAX_BROWSERS] =
+AllHtmlFlags const aHTMLOutFramePageFlyTable[MAX_FRMTYPES][MAX_BROWSERS] =
 {
     {
         // text frame with table
@@ -117,7 +117,7 @@ AllHtmlFlags aHTMLOutFramePageFlyTable[MAX_FRMTYPES][MAX_BROWSERS] =
     }
 };
 
-AllHtmlFlags aHTMLOutFrameParaFrameTable[MAX_FRMTYPES][MAX_BROWSERS] =
+AllHtmlFlags const aHTMLOutFrameParaFrameTable[MAX_FRMTYPES][MAX_BROWSERS] =
 {
     {
         // text frame with table
@@ -214,7 +214,7 @@ AllHtmlFlags aHTMLOutFrameParaFrameTable[MAX_FRMTYPES][MAX_BROWSERS] =
     }
 };
 
-AllHtmlFlags aHTMLOutFrameParaPrtAreaTable[MAX_FRMTYPES][MAX_BROWSERS] =
+AllHtmlFlags const aHTMLOutFrameParaPrtAreaTable[MAX_FRMTYPES][MAX_BROWSERS] =
 {
     {
         // text frame with table
@@ -310,7 +310,7 @@ AllHtmlFlags aHTMLOutFrameParaPrtAreaTable[MAX_FRMTYPES][MAX_BROWSERS] =
     }
 };
 
-AllHtmlFlags aHTMLOutFrameParaOtherTable[MAX_FRMTYPES][MAX_BROWSERS] =
+AllHtmlFlags const aHTMLOutFrameParaOtherTable[MAX_FRMTYPES][MAX_BROWSERS] =
 {
     {
         // text frame with table
@@ -406,7 +406,7 @@ AllHtmlFlags aHTMLOutFrameParaOtherTable[MAX_FRMTYPES][MAX_BROWSERS] =
     }
 };
 
-AllHtmlFlags aHTMLOutFrameAsCharTable[MAX_FRMTYPES][MAX_BROWSERS] =
+AllHtmlFlags const aHTMLOutFrameAsCharTable[MAX_FRMTYPES][MAX_BROWSERS] =
 {
     {
         // text frame with table

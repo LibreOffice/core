@@ -1515,7 +1515,7 @@ struct CharAttr
 };
 
 // Edit corresponds to Paste-attributes
-static CharAttr aRedlineAttr[] =
+static CharAttr const aRedlineAttr[] =
 {
     { SID_ATTR_CHAR_CASEMAP,        sal_uInt16(SvxCaseMap::NotMapped) },
     { SID_ATTR_CHAR_WEIGHT,         WEIGHT_BOLD },
@@ -1696,8 +1696,8 @@ namespace
     {
         for (size_t i = 0; i != nAttrMapSize; ++i)
         {
-            CharAttr& rAttr(aRedlineAttr[pAttrMap[i]]);
-            rLB.SetEntryData(i, &rAttr);
+            CharAttr const & rAttr(aRedlineAttr[pAttrMap[i]]);
+            rLB.SetEntryData(i, const_cast<CharAttr*>(&rAttr));
             if (rAttr.nItemId == rAttrToSelect.m_nItemId &&
                 rAttr.nAttr == rAttrToSelect.m_nAttr)
                 rLB.SelectEntryPos(i);

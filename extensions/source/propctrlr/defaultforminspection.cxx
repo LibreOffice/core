@@ -102,11 +102,11 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
 
         // service names for all our handlers
-        struct
+        static struct
         {
             const sal_Char* serviceName;
             bool            isFormOnly;
-        } aFactories[] = {
+        } const aFactories[] = {
 
             // a generic handler for form component properties (must precede the ButtonNavigationHandler)
             { "com.sun.star.form.inspection.FormComponentPropertyHandler", false },
@@ -156,12 +156,12 @@ namespace pcr
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        struct
+        static struct
         {
             const sal_Char* programmaticName;
             const char* uiNameResId;
             const sal_Char* helpId;
-        } aCategories[] = {
+        } const aCategories[] = {
             { "General",    RID_STR_PROPPAGE_DEFAULT,   HID_FM_PROPDLG_TAB_GENERAL },
             { "Data",       RID_STR_PROPPAGE_DATA,      HID_FM_PROPDLG_TAB_DATA },
             { "Events",     RID_STR_EVENTS,             HID_FM_PROPDLG_TAB_EVT }

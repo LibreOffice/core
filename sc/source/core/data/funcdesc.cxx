@@ -415,7 +415,7 @@ ScFunctionList::ScFunctionList()
     // See ScFuncDescCore definition for format details.
     // This list must be sorted in order of the opcode, dbgutil builds enable _GLIBCXX_DEBUG
     // which will concept check that the list is sorted on first use to ensure this holds
-    ScFuncDescCore aDescs[] =
+    static const ScFuncDescCore aDescs[] =
     {
         { SC_OPCODE_IF, ENTRY(SC_OPCODE_IF_ARY), 0, ID_FUNCTION_GRP_LOGIC, HID_FUNC_WENN, 3, { 0, 1, 1 } },
         { SC_OPCODE_IF_ERROR, ENTRY(SC_OPCODE_IF_ERROR_ARY), 0, ID_FUNCTION_GRP_LOGIC, HID_FUNC_IFERROR, 2, { 0, 0 } },
@@ -818,10 +818,10 @@ ScFunctionList::ScFunctionList()
     // otherwise the sub resources within the resource blocks and the
     // resource blocks themselves would had to be ordered according to
     // OpCodes, which is utopian...
-    ScFuncDescCore* pDescsEnd = aDescs + SAL_N_ELEMENTS(aDescs);
+    ScFuncDescCore const * pDescsEnd = aDescs + SAL_N_ELEMENTS(aDescs);
     for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
     {
-        ScFuncDescCore *pEntry = std::lower_bound(aDescs, pDescsEnd, i,
+        const ScFuncDescCore *pEntry = std::lower_bound(aDescs, pDescsEnd, i,
             [](const ScFuncDescCore &rItem, sal_uInt16 key)
             {
                 return rItem.nOpCode < key;

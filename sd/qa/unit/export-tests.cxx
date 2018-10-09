@@ -138,7 +138,7 @@ public:
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
     {
-        struct { char const * pPrefix; char const * pURI; } namespaces[] =
+        static const struct { char const * pPrefix; char const * pURI; } namespaces[] =
         {
             // ODF
             { "anim", "urn:oasis:names:tc:opendocument:xmlns:animation:1.0" },

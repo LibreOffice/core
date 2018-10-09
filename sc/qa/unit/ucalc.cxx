@@ -611,7 +611,7 @@ void Test::testSelectionFunction()
     };
 
     {
-        Check aChecks[] =
+        static const Check aChecks[] =
         {
             { SUBTOTAL_FUNC_AVE,              3.5 },
             { SUBTOTAL_FUNC_CNT2,            12.0 },
@@ -639,7 +639,7 @@ void Test::testSelectionFunction()
     CPPUNIT_ASSERT_MESSAGE("This row should be hidden.", m_pDoc->RowHidden(5, 0));
 
     {
-        Check aChecks[] =
+        static const Check aChecks[] =
         {
             { SUBTOTAL_FUNC_AVE,              3.0 },
             { SUBTOTAL_FUNC_CNT2,             8.0 },
@@ -666,7 +666,7 @@ void Test::testSelectionFunction()
         // D3 (numeric cell containing 5.)
         ScAddress aPos(3, 2, 0);
 
-        Check aChecks[] =
+        static const Check aChecks[] =
         {
             { SUBTOTAL_FUNC_AVE,             5.0 },
             { SUBTOTAL_FUNC_CNT2,            1.0 },
@@ -690,7 +690,7 @@ void Test::testSelectionFunction()
         // B7 (string formula cell containing ="C".)
         ScAddress aPos(1, 6, 0);
 
-        Check aChecks[] =
+        static const Check aChecks[] =
         {
             { SUBTOTAL_FUNC_CNT2,            1.0 },
             { SUBTOTAL_FUNC_SELECTION_COUNT, 1.0 }
@@ -904,7 +904,7 @@ void Test::testHorizontalIterator()
             { "E", "3" }
         };
 
-        HoriIterCheck aChecks[] = {
+        static const HoriIterCheck aChecks[] = {
             { 0, 0, "A" },
             { 1, 0, "B" },
             { 0, 1, "C" },
@@ -930,7 +930,7 @@ void Test::testHorizontalIterator()
             { "D", "E" },
         };
 
-        HoriIterCheck aChecks[] = {
+        static const HoriIterCheck aChecks[] = {
             { 0, 0, "A" },
             { 1, 0, "B" },
             { 0, 1, "C" },
@@ -959,7 +959,7 @@ void Test::testHorizontalIterator()
             {  nullptr,   nullptr  },
         };
 
-        HoriIterCheck aChecks[] = {
+        static const HoriIterCheck aChecks[] = {
             { 1, 0, "A" },
             { 1, 2, "1" },
             { 0, 3, "B" },
@@ -1001,7 +1001,7 @@ void Test::testHorizontalIterator()
             {  nullptr,  "A" },
         };
 
-        HoriIterCheck aChecks[] = {
+        static const HoriIterCheck aChecks[] = {
             { 1, 2, "A" },
         };
 
@@ -1022,7 +1022,7 @@ void Test::testHorizontalIterator()
             {  nullptr,   nullptr  },
         };
 
-        HoriIterCheck aChecks[] = {
+        static const HoriIterCheck aChecks[] = {
             { 1, 2, "A" },
             { 1, 3, "1" },
         };
@@ -1517,7 +1517,7 @@ void Test::testFuncParam()
 
 void Test::testNamedRange()
 {
-    RangeNameDef aNames[] = {
+    static const RangeNameDef aNames[] = {
         { "Divisor",  "$Sheet1.$A$1:$A$1048576", 1 },
         { "MyRange1", "$Sheet1.$A$1:$A$100",     2 },
         { "MyRange2", "$Sheet1.$B$1:$B$100",     3 },
@@ -1599,7 +1599,7 @@ void Test::testInsertNameList()
 {
     m_pDoc->InsertTab(0, "Test");
 
-    RangeNameDef aNames[] = {
+    static const RangeNameDef aNames[] = {
         { "MyRange1", "$Test.$A$1:$A$100", 1 },
         { "MyRange2", "$Test.$B$1:$B$100", 2 },
         { "MyRange3", "$Test.$C$1:$C$100", 3 }
@@ -3721,7 +3721,7 @@ void Test::testCopyPasteSkipEmpty()
 
     // Check the initial condition.
     {
-        Check aChecks[] = {
+        static const Check aChecks[] = {
             { "A", COL_BLUE, true },
             { "B", COL_BLUE, true },
             { "C", COL_BLUE, true },
@@ -3752,7 +3752,7 @@ void Test::testCopyPasteSkipEmpty()
 
     // Check the content after the paste.
     {
-        Check aChecks[] = {
+        static const Check aChecks[] = {
             { "Clip1", COL_YELLOW, false },
             { "B",     COL_BLUE,   true },
             { "Clip2", COL_YELLOW, false },
@@ -3767,7 +3767,7 @@ void Test::testCopyPasteSkipEmpty()
     // Undo, and check the content.
     aUndo.Undo();
     {
-        Check aChecks[] = {
+        static const Check aChecks[] = {
             { "A", COL_BLUE, true },
             { "B", COL_BLUE, true },
             { "C", COL_BLUE, true },
@@ -3782,7 +3782,7 @@ void Test::testCopyPasteSkipEmpty()
     // Redo, and check the content again.
     aUndo.Redo();
     {
-        Check aChecks[] = {
+        static const Check aChecks[] = {
             { "Clip1", COL_YELLOW, false },
             { "B",     COL_BLUE,   true },
             { "Clip2", COL_YELLOW, false },

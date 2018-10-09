@@ -35,7 +35,7 @@ OApplicationIconControl::OApplicationIconControl(vcl::Window* _pParent)
     ,m_pActionListener(nullptr)
 {
 
-    const struct CategoryDescriptor
+    static const struct CategoryDescriptor
     {
         const char* pLabelResId;
         ElementType eType;

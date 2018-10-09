@@ -27,7 +27,7 @@ namespace framework
 
 // helper
 
-KeyMapping::KeyIdentifierInfo KeyMapping::KeyIdentifierMap[] =
+KeyMapping::KeyIdentifierInfo const KeyMapping::KeyIdentifierMap[] =
 {
     {css::awt::Key::NUM0          , "KEY_0"          },
     {css::awt::Key::NUM1          , "KEY_1"          },

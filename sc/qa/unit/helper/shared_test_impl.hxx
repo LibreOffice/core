@@ -43,7 +43,7 @@ struct DataBarData
     databar::ScAxisPosition eAxisPosition;
 };
 
-DataBarData aData[] = {
+DataBarData const aData[] = {
     { ScRange(1,2,0,1,5,0), COLORSCALE_AUTO, COLORSCALE_AUTO, databar::AUTOMATIC },
     { ScRange(3,2,0,3,5,0), COLORSCALE_MIN, COLORSCALE_MAX, databar::AUTOMATIC },
     { ScRange(5,2,0,5,5,0), COLORSCALE_PERCENTILE, COLORSCALE_PERCENT, databar::AUTOMATIC },
@@ -82,7 +82,7 @@ struct ColorScale2EntryData
     ScColorScaleEntryType eUpperType;
 };
 
-ColorScale2EntryData aData2Entry[] = {
+ColorScale2EntryData const aData2Entry[] = {
     { ScRange(1,2,0,1,5,0), COLORSCALE_MIN, COLORSCALE_MAX },
     { ScRange(3,2,0,3,5,0), COLORSCALE_PERCENTILE, COLORSCALE_PERCENT },
     { ScRange(5,2,0,5,5,0), COLORSCALE_VALUE, COLORSCALE_FORMULA }
@@ -121,7 +121,7 @@ struct ColorScale3EntryData
     ScColorScaleEntryType eUpperType;
 };
 
-ColorScale3EntryData aData3Entry[] = {
+ColorScale3EntryData const aData3Entry[] = {
     { ScRange(1,1,1,1,6,1), COLORSCALE_MIN, COLORSCALE_PERCENTILE, COLORSCALE_MAX },
     { ScRange(3,1,1,3,6,1), COLORSCALE_PERCENTILE, COLORSCALE_VALUE, COLORSCALE_PERCENT },
     { ScRange(5,1,1,5,6,1), COLORSCALE_VALUE, COLORSCALE_VALUE, COLORSCALE_FORMULA }
@@ -159,11 +159,11 @@ void testFunctionsExcel2010_Impl( ScDocument& rDoc )
 {
     // Original test case document is functions-excel-2010.xlsx
     // Which test rows to evaluate, 1-based as in UI to ease maintenance.
-    struct
+    static struct
     {
         SCROW nRow;
         bool  bEvaluate;
-    } aTests[] = {
+    } const aTests[] = {
         {  2, false },  // name=[ AGGREGATE ], result=0, expected=1
         {  3, true  },
         {  4, true  },

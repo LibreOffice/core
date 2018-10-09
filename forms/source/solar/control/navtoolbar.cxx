@@ -238,12 +238,12 @@ namespace frm
         // items. We could duplicate all the information here in our lib
         // (such as the item text and the image), but why should we?
 
-        struct FeatureDescription
+        static struct FeatureDescription
         {
             sal_uInt16      nId;
             bool        bRepeat;
             bool        bItemWindow;
-        } aSupportedFeatures[] =
+        } const aSupportedFeatures[] =
         {
             { LID_RECORD_LABEL,                     false, true },
             { FormFeature::MoveAbsolute,            false, true },
@@ -270,8 +270,8 @@ namespace frm
             { FormFeature::RemoveFilterAndSort,     false, false },
         };
 
-        FeatureDescription* pSupportedFeatures = aSupportedFeatures;
-        FeatureDescription* pSupportedFeaturesEnd = aSupportedFeatures + SAL_N_ELEMENTS( aSupportedFeatures );
+        FeatureDescription const * pSupportedFeatures = aSupportedFeatures;
+        FeatureDescription const * pSupportedFeaturesEnd = aSupportedFeatures + SAL_N_ELEMENTS( aSupportedFeatures );
         for ( ; pSupportedFeatures < pSupportedFeaturesEnd; ++pSupportedFeatures )
         {
             if ( pSupportedFeatures->nId )

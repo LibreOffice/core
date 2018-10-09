@@ -28,7 +28,7 @@ using namespace com::sun::star;
 
 namespace
 {
-    cppu::ImplementationEntry entries[] = {
+    cppu::ImplementationEntry const entries[] = {
         { &::cui::ColorPicker_createInstance, &::cui::ColorPicker_getImplementationName, &::cui::ColorPicker_getSupportedServiceNames, &cppu::createSingleComponentFactory, nullptr, 0 },
         { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
     };

@@ -21,6 +21,7 @@
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtftoken.h>
 
+#include <algorithm>
 #include <string.h>
 #include <stdlib.h>
 
@@ -37,7 +38,7 @@ struct RTF_TokenEntry
 // Flag: RTF-token table has been sorted
 static bool bSortKeyWords = false;
 
-static RTF_TokenEntry aRTFTokenTab[] = {
+static RTF_TokenEntry const aRTFTokenTab[] = {
 {{OOO_STRING_SVTOOLS_RTF_IGNORE},        RTF_IGNOREFLAG},
 {{OOO_STRING_SVTOOLS_RTF_RTF},           RTF_RTF},
 {{OOO_STRING_SVTOOLS_RTF_ANSI},          RTF_ANSITYPE},
@@ -1174,59 +1175,50 @@ static RTF_TokenEntry aRTFTokenTab[] = {
 };
 
 
-extern "C" {
-static int RTFKeyCompare( const void *pFirst, const void *pSecond)
+static bool RTFKeyCompare( const RTF_TokenEntry & rFirst, const RTF_TokenEntry & rSecond)
 {
     int nRet = 0;
-    if( -1 == static_cast<RTF_TokenEntry const *>(pFirst)->nToken )
+    if( -1 == rFirst.nToken )
     {
-        if( -1 == static_cast<RTF_TokenEntry const *>(pSecond)->nToken )
-            nRet = static_cast<RTF_TokenEntry const *>(pFirst)->pUToken->compareTo(
-                            *static_cast<RTF_TokenEntry const *>(pSecond)->pUToken );
+        if( -1 == rSecond.nToken )
+            nRet = rFirst.pUToken->compareTo(
+                            *rSecond.pUToken );
         else
         {
-            nRet = static_cast<RTF_TokenEntry const *>(pFirst)->pUToken->compareToIgnoreAsciiCaseAscii(
-                            static_cast<RTF_TokenEntry const *>(pSecond)->sToken );
+            nRet = rFirst.pUToken->compareToIgnoreAsciiCaseAscii(
+                            rSecond.sToken );
         }
     }
     else
     {
-        if( -1 == static_cast<RTF_TokenEntry const *>(pSecond)->nToken )
-            nRet = -1 * static_cast<RTF_TokenEntry const *>(pSecond)->pUToken->compareToIgnoreAsciiCaseAscii(
-                            static_cast<RTF_TokenEntry const *>(pFirst)->sToken );
+        if( -1 == rSecond.nToken )
+            nRet = -1 * rSecond.pUToken->compareToIgnoreAsciiCaseAscii(
+                            rFirst.sToken );
         else
-            nRet = strcmp( static_cast<RTF_TokenEntry const *>(pFirst)->sToken,
-                            static_cast<RTF_TokenEntry const *>(pSecond)->sToken );
+            nRet = strcmp( rFirst.sToken,
+                            rSecond.sToken );
     }
 
-    return nRet;
-}
-
+    return nRet < 0;
 }
 
 int GetRTFToken( const OUString& rSearch )
 {
     if( !bSortKeyWords )
     {
-        qsort( static_cast<void*>(aRTFTokenTab),
-                SAL_N_ELEMENTS( aRTFTokenTab ),
-                sizeof( RTF_TokenEntry ),
-                RTFKeyCompare );
+        assert( std::is_sorted( std::begin(aRTFTokenTab), std::end(aRTFTokenTab),
+                                RTFKeyCompare ) );
         bSortKeyWords = true;
     }
 
     int nRet = 0;
-    void* pFound;
     RTF_TokenEntry aSrch;
     aSrch.pUToken = &rSearch;
     aSrch.nToken = -1;
 
-    if( nullptr != ( pFound = bsearch( &aSrch,
-                        static_cast<void*>(aRTFTokenTab),
-                        SAL_N_ELEMENTS( aRTFTokenTab ),
-                        sizeof( RTF_TokenEntry ),
-                        RTFKeyCompare )))
-        nRet = static_cast<RTF_TokenEntry*>(pFound)->nToken;
+    auto findIt = std::lower_bound( std::begin(aRTFTokenTab), std::end(aRTFTokenTab), aSrch, RTFKeyCompare);
+    if (findIt != std::end(aRTFTokenTab))
+        nRet = findIt->nToken;
 
     return nRet;
 }
