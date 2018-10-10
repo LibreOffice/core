@@ -229,8 +229,15 @@ public:
 class FmShowColsDialog;
 class AbstractFmShowColsDialog_Impl : public AbstractFmShowColsDialog
 {
-    DECL_ABSTDLG_BASE(AbstractFmShowColsDialog_Impl,FmShowColsDialog)
-     virtual void   SetColumns(const css::uno::Reference< css::container::XIndexContainer>& xCols) override;
+protected:
+    std::unique_ptr<FmShowColsDialog> m_xDlg;
+public:
+    explicit AbstractFmShowColsDialog_Impl(std::unique_ptr<FmShowColsDialog> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual void SetColumns(const css::uno::Reference< css::container::XIndexContainer>& xCols) override;
 };
 
 class SvxZoomDialog;
@@ -724,7 +731,7 @@ public:
                                                 css::uno::Reference< css::linguistic2::XHyphenator >  &xHyphen,
                                                 SvxSpellWrapper* pWrapper) override;
 
-    virtual VclPtr<AbstractFmShowColsDialog> CreateFmShowColsDialog() override;
+    virtual VclPtr<AbstractFmShowColsDialog> CreateFmShowColsDialog(weld::Window* pParent) override;
     virtual VclPtr<AbstractSvxZoomDialog> CreateSvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet) override;
    // add for SvxBorderBackgroundDlg
     virtual VclPtr<SfxAbstractTabDialog> CreateSvxBorderBackgroundDlg(
