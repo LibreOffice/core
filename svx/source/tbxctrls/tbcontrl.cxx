@@ -3613,6 +3613,7 @@ void ColorListBox::SetSlotId(sal_uInt16 nSlotId, bool bShowNoneButton)
 {
     m_nSlotId = nSlotId;
     m_bShowNoneButton = bShowNoneButton;
+    m_xButton->set_popover(nullptr);
     m_xColorWindow.reset();
     m_aSelectedColor = bShowNoneButton ? GetNoneColor() : GetAutoColor(m_nSlotId);
     ShowPreview(m_aSelectedColor);
