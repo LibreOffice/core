@@ -611,7 +611,6 @@ namespace
             const FontMetric& rFontMetric = rList.GetFontName(i);
             rBox.append_text(rFontMetric.GetFamilyName());
         }
-        rBox.make_sorted();
         rBox.thaw();
     }
 }
