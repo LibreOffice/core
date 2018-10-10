@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_520fe32d",
+        "filename": "chart2/source/controller/dialogs/ChartTypeTemplateProvider.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-10-10T09:55:54Z",
+      "side": 1,
+      "message": "This is what Stephan asked earlier, for these UNO headers include the .hxx version instead of the .h version, as the .h is considered an implementation detail.",
+      "revId": "05d94b450260726ab96c7dcc28685219e08fdc97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
