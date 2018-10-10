@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_3248efca",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5109,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-10-10T17:06:54Z",
+      "side": 1,
+      "message": "I was a bit surprised that a pFFDataHandler wasn\u0027t already created by the time it hit the bookmark XML import, but for the first bookmark I don\u0027t have any info yet about the field\u0027s name.\n\nThis is where I have no real data - except that it works in practice, and it seems like probably only text and checkbox (and maybe dropdown) fields contain bookmarks anyway.",
+      "range": {
+        "startLine": 5109,
+        "startChar": 17,
+        "endLine": 5109,
+        "endChar": 35
+      },
+      "revId": "ea1fe088ee258ed629db6a3975327e535992cb07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_723e672a",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 5111,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-10-10T17:06:54Z",
+      "side": 1,
+      "message": "I probably could move this code into StartOrEndBookmark to make it feel less HACKy. The problem with that is I would need to duplicate the code for both start and end, because typically the bookmark starts without knowing it\u0027s name. That\u0027s why it fits nicely here, and the end result is the same.",
+      "range": {
+        "startLine": 5111,
+        "startChar": 19,
+        "endLine": 5111,
+        "endChar": 25
+      },
+      "revId": "ea1fe088ee258ed629db6a3975327e535992cb07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
