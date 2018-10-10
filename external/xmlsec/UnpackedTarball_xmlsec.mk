@@ -9,6 +9,7 @@
 
 xmlsec_patches :=
 xmlsec_patches += xmlsec1-configure.patch.1
+# Backport of <https://github.com/lsh123/xmlsec/pull/223>.
 xmlsec_patches += xmlsec1-vc.patch.1
 # Backport of <https://github.com/lsh123/xmlsec/pull/192>.
 xmlsec_patches += mscng-fixes.patch.1
