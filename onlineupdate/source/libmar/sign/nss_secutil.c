@@ -122,7 +122,7 @@ SECU_FilePasswd(PK11SlotInfo *slot, PRBool retry, void *arg)
     return 0;  /* no good retrying - the files contents will be the same */
   }
 
-  phrases = PORT_ZAlloc(maxPwdFileSize);
+  phrases = PORT_ZAlloc(maxPwdFileSize + 1);
 
   if (!phrases) {
     return 0; /* out of memory */
