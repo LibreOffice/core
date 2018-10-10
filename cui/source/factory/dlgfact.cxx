@@ -114,7 +114,11 @@ short AbstractSvxDistributeDialog_Impl::Execute()
 }
 
 IMPL_ABSTDLG_BASE(AbstractHangulHanjaConversionDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractFmShowColsDialog_Impl);
+
+short AbstractFmShowColsDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractHyphenWordDialog_Impl::Execute()
 {
@@ -540,9 +544,9 @@ SotClipboardFormatId AbstractPasteDialog_Impl::GetFormat( const TransferableData
     return m_xDlg->GetFormat(aHelper);
 }
 
-void  AbstractFmShowColsDialog_Impl::SetColumns(const ::Reference< css::container::XIndexContainer>& xCols)
+void AbstractFmShowColsDialog_Impl::SetColumns(const ::Reference< css::container::XIndexContainer>& xCols)
 {
-     pDlg->SetColumns(xCols);
+     m_xDlg->SetColumns(xCols);
 }
 
 void AbstractSvxZoomDialog_Impl::SetLimits( sal_uInt16 nMin, sal_uInt16 nMax )
@@ -1085,10 +1089,9 @@ VclPtr<AbstractHyphenWordDialog> AbstractDialogFactory_Impl::CreateHyphenWordDia
     return VclPtr<AbstractHyphenWordDialog_Impl>::Create(o3tl::make_unique<SvxHyphenWordDialog>(rWord, nLang, pParent, xHyphen, pWrapper));
 }
 
-VclPtr<AbstractFmShowColsDialog> AbstractDialogFactory_Impl::CreateFmShowColsDialog()
+VclPtr<AbstractFmShowColsDialog> AbstractDialogFactory_Impl::CreateFmShowColsDialog(weld::Window* pParent)
 {
-    VclPtrInstance<FmShowColsDialog> pDlg( nullptr );
-    return VclPtr<AbstractFmShowColsDialog_Impl>::Create( pDlg );
+    return VclPtr<AbstractFmShowColsDialog_Impl>::Create(o3tl::make_unique<FmShowColsDialog>(pParent));
 }
 
 VclPtr<AbstractSvxZoomDialog> AbstractDialogFactory_Impl::CreateSvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet)

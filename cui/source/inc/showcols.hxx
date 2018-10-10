@@ -20,35 +20,28 @@
 #ifndef INCLUDED_CUI_SOURCE_INC_SHOWCOLS_HXX
 #define INCLUDED_CUI_SOURCE_INC_SHOWCOLS_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/fixed.hxx>
-
-#include <vcl/button.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
-
+#include <vcl/weld.hxx>
 
 //  FmShowColsDialog
 
-
-class FmShowColsDialog final : public ModalDialog
+class FmShowColsDialog final : public weld::GenericDialogController
 {
-    VclPtr<ListBox>        m_pList;
-    VclPtr<OKButton>       m_pOK;
+    std::unique_ptr<weld::TreeView> m_xList;
+    std::unique_ptr<weld::Button> m_xOK;
 
     css::uno::Reference< css::container::XIndexAccess >   m_xColumns;
 
 public:
-    FmShowColsDialog(vcl::Window* pParent);
+    FmShowColsDialog(weld::Window* pParent);
     virtual ~FmShowColsDialog() override;
-    virtual void dispose() override;
 
     void SetColumns(const css::uno::Reference< css::container::XIndexContainer>& xCols);
 
 private:
-    DECL_LINK(OnClickedOk, Button*, void);
+    DECL_LINK(OnClickedOk, weld::Button&, void);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_SHOWCOLS_HXX
