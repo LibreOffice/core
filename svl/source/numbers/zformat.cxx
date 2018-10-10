@@ -3021,7 +3021,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
                      (rInfo.nTypeArray[i-1] == NF_SYMBOLTYPE_STRING ||
                       rInfo.nTypeArray[i-1] == NF_SYMBOLTYPE_TIME100SECSEP) ?
                      nCntPost : rInfo.sStrArray[i].getLength() );
-            for (sal_Int32 j = 0; j < nLen && nSecPos < nCntPost; j++)
+            for (sal_Int32 j = 0; j < nLen && nSecPos < nCntPost && nSecPos < sSecStr.getLength(); ++j)
             {
                 sBuff.append(sSecStr[nSecPos]);
                 nSecPos++;
@@ -3848,7 +3848,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                      (rInfo.nTypeArray[i-1] == NF_SYMBOLTYPE_STRING ||
                       rInfo.nTypeArray[i-1] == NF_SYMBOLTYPE_TIME100SECSEP) ?
                      nCntPost : rInfo.sStrArray[i].getLength() );
-            for (sal_Int32 j = 0; j < nLen && nSecPos < nCntPost; j++)
+            for (sal_Int32 j = 0; j < nLen && nSecPos < nCntPost && nSecPos < sSecStr.getLength(); ++j)
             {
                 sBuff.append(sSecStr[ nSecPos ]);
                 nSecPos++;
