@@ -4507,7 +4507,7 @@ StackVar ScInterpreter::Interpret()
             bForcedResultType = false;
     }
 
-    if( sp )
+    if (sp == 1)
     {
         pCur = pStack[ sp-1 ];
         if( pCur->GetOpCode() == ocPush )
@@ -4634,6 +4634,8 @@ StackVar ScInterpreter::Interpret()
         else
             SetError( FormulaError::UnknownStackVariable);
     }
+    else if (sp > 1)
+        SetError( FormulaError::OperatorExpected);
     else
         SetError( FormulaError::NoCode);
 
