@@ -511,6 +511,7 @@ static void WriteDop( WW8Export& rWrt )
     }
 
     if ((rWrt.pSepx && rWrt.pSepx->DocumentIsProtected()) ||
+        rWrt.m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FORM ) ||
         rDop.lKeyProtDoc != 0)
     {
         rDop.fProtEnabled =  true;
