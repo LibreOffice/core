@@ -702,6 +702,7 @@ void SwObjectFormatterTextFrame::FormatAnchorFrameAndItsPrevs( SwTextFrame& _rAn
             }
             if ( pSectFrame && pSectFrame->IsSctFrame() )
             {
+                SwFrameDeleteGuard aDeleteGuard(&_rAnchorTextFrame);
                 // #i44049#
                 _rAnchorTextFrame.LockJoin();
                 SwFrame* pFrame = pSectFrame->GetUpper()->GetLower();
