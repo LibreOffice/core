@@ -427,7 +427,6 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
         case 13:
         {
             // CreateSdStartPresentationDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs, const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList) override;
-            const std::vector<OUString> aPageNames;
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
             CPPUNIT_ASSERT(pDrawDoc);
             SfxItemSet aDlgSet(pDrawDoc->GetItemPool(), svl::Items<ATTR_PRESENT_START, ATTR_PRESENT_END>{});
@@ -451,7 +450,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             pRetval = getSdAbstractDialogFactory()->CreateSdStartPresentationDlg(
                 pWin ? pWin->GetFrameWeld() : nullptr,
                 aDlgSet,
-                aPageNames,
+                std::vector<OUString>(),
                 nullptr);
             break;
         }
