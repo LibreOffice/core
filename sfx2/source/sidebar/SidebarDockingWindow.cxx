@@ -20,9 +20,11 @@
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <tools/link.hxx>
+#include <comphelper/lok.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -75,6 +77,34 @@ void SidebarDockingWindow::GetFocus()
         mpSidebarController->GetFocusManager().GrabFocus();
     else
         SfxDockingWindow::GetFocus();
+}
+
+void SidebarDockingWindow::Resize()
+{
+    SfxDockingWindow::Resize();
+
+    NotifyResize();
+}
+
+void SidebarDockingWindow::NotifyResize()
+{
+    SAL_WARN("sw", "SfxDockingWindow::Resize: " << (long)SfxViewShell::Current());
+    if (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current())
+    {
+        SAL_WARN("sw", "SfxDockingWindow::Resize: Creating!");
+        if (!GetLOKNotifier())
+            SetLOKNotifier(SfxViewShell::Current());
+
+        if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
+        {
+            std::vector<vcl::LOKPayloadItem> aItems;
+            aItems.emplace_back("type", "deck");
+            aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
+            aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
+            pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
+            SAL_WARN("sw", "SfxDockingWindow::Resize: Created!");
+        }
+    }
 }
 
 SfxChildAlignment SidebarDockingWindow::CheckAlignment (

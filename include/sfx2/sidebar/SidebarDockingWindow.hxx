@@ -37,11 +37,14 @@ public:
     virtual ~SidebarDockingWindow() override;
     virtual void dispose() override;
 
+    void NotifyResize();
+
     using SfxDockingWindow::Close;
 
 protected:
     // Window overridables
     virtual void GetFocus() override;
+    virtual void Resize() override;
 
     virtual SfxChildAlignment CheckAlignment (
         SfxChildAlignment eCurrentAlignment,
