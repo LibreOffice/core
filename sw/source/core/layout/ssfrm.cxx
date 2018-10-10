@@ -517,6 +517,9 @@ void SwLayoutFrame::DestroyImpl()
                 }
             }
             pFrame->RemoveFromLayout();
+            //forcepoint#74, testcase swanchoredobject_considerobjwrapinfluenceonobjpos
+            if (pFrame->IsDeleteForbidden())
+                throw std::logic_error("DeleteForbidden");
             SwFrame::DestroyFrame(pFrame);
             pFrame = m_pLower;
         }

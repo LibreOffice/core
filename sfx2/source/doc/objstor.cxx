@@ -2442,7 +2442,7 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         }
 
         return xFilter->filter( aArgs );
-        }catch(const uno::Exception&)
+        }catch(...)
         {}
     }
 
