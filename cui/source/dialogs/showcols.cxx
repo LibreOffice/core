@@ -26,38 +26,30 @@
 #define CUIFM_PROP_HIDDEN "Hidden"
 #define CUIFM_PROP_LABEL  "Label"
 
-FmShowColsDialog::FmShowColsDialog(vcl::Window* pParent)
-    : ModalDialog(pParent, "ShowColDialog", "cui/ui/showcoldialog.ui")
+FmShowColsDialog::FmShowColsDialog(weld::Window* pParent)
+    : GenericDialogController(pParent, "cui/ui/showcoldialog.ui", "ShowColDialog")
+    , m_xList(m_xBuilder->weld_tree_view("treeview"))
+    , m_xOK(m_xBuilder->weld_button("ok"))
 {
-    get(m_pOK, "ok");
-    get(m_pList, "treeview");
-    m_pList->set_height_request(m_pList->GetTextHeight() * 8);
-    m_pList->set_width_request(m_pList->approximate_char_width() * 56);
-    m_pList->EnableMultiSelection(true);
-    m_pOK->SetClickHdl( LINK( this, FmShowColsDialog, OnClickedOk ) );
+    m_xList->set_size_request(m_xList->get_approximate_digit_width() * 40, m_xList->get_height_rows(8));
+    m_xList->set_selection_mode(true);
+    m_xOK->connect_clicked(LINK(this, FmShowColsDialog, OnClickedOk));
 }
 
 FmShowColsDialog::~FmShowColsDialog()
 {
-    disposeOnce();
 }
 
-void FmShowColsDialog::dispose()
-{
-    m_pList.clear();
-    m_pOK.clear();
-    ModalDialog::dispose();
-}
-
-IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk, Button*, void)
+IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk, weld::Button&, void)
 {
     DBG_ASSERT(m_xColumns.is(), "FmShowColsDialog::OnClickedOk : you should call SetColumns before executing the dialog !");
     if (m_xColumns.is())
     {
         css::uno::Reference< css::beans::XPropertySet > xCol;
-        for (sal_Int32 i=0; i < m_pList->GetSelectedEntryCount(); ++i)
+        auto nSelectedRows = m_xList->get_selected_rows();
+        for (auto i : nSelectedRows)
         {
-            m_xColumns->getByIndex(sal::static_int_cast<sal_Int32>(reinterpret_cast<sal_uIntPtr>(m_pList->GetEntryData(m_pList->GetSelectedEntryPos(i))))) >>= xCol;
+            m_xColumns->getByIndex(m_xList->get_id(i).toInt32()) >>= xCol;
             if (xCol.is())
             {
                 try
@@ -72,9 +64,8 @@ IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk, Button*, void)
         }
     }
 
-    EndDialog(RET_OK);
+    m_xDialog->response(RET_OK);
 }
-
 
 void FmShowColsDialog::SetColumns(const css::uno::Reference< css::container::XIndexContainer>& xCols)
 {
@@ -83,7 +74,7 @@ void FmShowColsDialog::SetColumns(const css::uno::Reference< css::container::XIn
         return;
     m_xColumns = xCols.get();
 
-    m_pList->Clear();
+    m_xList->clear();
 
     css::uno::Reference< css::beans::XPropertySet>  xCurCol;
     OUString sCurName;
@@ -108,7 +99,7 @@ void FmShowColsDialog::SetColumns(const css::uno::Reference< css::container::XIn
 
         // if the col is hidden, put it into the list
         if (bIsHidden)
-            m_pList->SetEntryData( m_pList->InsertEntry(sCurName), reinterpret_cast<void*>(static_cast<sal_Int64>(i)) );
+            m_xList->append(OUString::number(i), sCurName);
     }
 }
 
