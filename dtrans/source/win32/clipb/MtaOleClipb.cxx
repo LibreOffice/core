@@ -30,10 +30,6 @@
     hidden window and forward these requests via window messages.
 */
 
-#if !defined WINVER
-#define WINVER 0x0400
-#endif
-
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 

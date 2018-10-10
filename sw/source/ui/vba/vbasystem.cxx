@@ -26,9 +26,6 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #ifdef _WIN32
-#if !defined WINVER
-# define WINVER 0x0400
-#endif
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif

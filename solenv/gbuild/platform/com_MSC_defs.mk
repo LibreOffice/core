@@ -66,8 +66,7 @@ gb_COMPILERDEFS += \
 endif
 
 gb_RCDEFS := \
-	-DWINVER=0x0502 \
-	-DWIN32 \
+	$(gb_WIN_VERSION_DEFS) \
 
 gb_RCFLAGS :=
 

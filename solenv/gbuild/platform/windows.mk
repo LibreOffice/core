@@ -26,10 +26,13 @@ gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
 # current baseline is Windows 7 (NT 6.1)
 # for _WIN32_IE, if _WIN32_WINNT >= 0x0600 the derived value from
 # sdkddkver.h is sufficient
-gb_OSDEFS := \
+gb_WIN_VERSION_DEFS := \
 	-D_WIN32_WINNT=0x0601 \
 	-DWIN32 \
 	-DWNT \
+
+gb_OSDEFS := \
+	$(gb_WIN_VERSION_DEFS) \
 	-DNOMINMAX \
 	$(LFS_CFLAGS) \
 
