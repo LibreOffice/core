@@ -2892,36 +2892,13 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
 
     const SwTextFrame *pTextFrame = static_cast<const SwTextFrame*>( GetFrame() );
     SwHyperlinkIter_Impl aHIter(*pTextFrame);
-    sal_Int32 nTIndex = -1;
-    SwTOXSortTabBase* pTBase = GetTOXSortTabBase();
     SwTextNode const* pNode(nullptr);
     SwTextAttr* pHt = const_cast<SwTextAttr*>(aHIter.next(&pNode));
-    while( (nLinkIndex < getHyperLinkCount()) && nTIndex < nLinkIndex)
+    for (sal_Int32 nTIndex = 0; pHt && nTIndex <= nLinkIndex; ++nTIndex)
     {
-        sal_Int32 nHStt = -1;
-        bool bH = false;
-
-        if( pHt )
-            nHStt = pHt->GetStart();
-        bool bTOC = false;
-        // Inside TOC & get the first link
-        if( pTBase && nTIndex == -1 )
-        {
-            nTIndex++;
-            bTOC = true;
-        }
-        else if( nHStt >= 0 )
-        {
-              // only hyperlink available
-            nTIndex++;
-            bH = true;
-        }
-
         if( nTIndex == nLinkIndex )
         {   // found
-            if( bH )
             {   // it's a hyperlink
-                if( pHt )
                 {
                     if( !m_pHyperTextData )
                         m_pHyperTextData.reset( new SwAccessibleHyperTextData );
@@ -2955,15 +2932,8 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
             break;
         }
 
-        // iterate next
-        if( bH )
-            // iterate next hyperlink
-            pHt = const_cast<SwTextAttr*>(aHIter.next(&pNode));
-        else if(bTOC)
-            continue;
-        else
-            // no candidate, exit
-            break;
+        // iterate next hyperlink
+        pHt = const_cast<SwTextAttr*>(aHIter.next(&pNode));
     }
     if( !xRet.is() )
         throw lang::IndexOutOfBoundsException();
