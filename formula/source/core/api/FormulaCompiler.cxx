@@ -1401,18 +1401,37 @@ void FormulaCompiler::Factor()
             NextToken();
             CheckSetForceArrayParameter( mpToken, 0);
             eOp = Expression();
-            // Do not ignore error here, regardless of bIgnoreErrors, otherwise
-            // errors like =(1;) would also result in display of =(1~)
+            // Do not ignore error here, regardless of mbStopOnError, to not
+            // change the formula expression in case of an unexpected state.
             if (pArr->GetCodeError() == FormulaError::NONE)
             {
-                pFacToken->NewOpCode( ocUnion, FormulaToken::PrivateAccess());
-                PutCode( pFacToken);
+                // Left and right operands must be reference or function
+                // returning reference to form a range list.
+                const FormulaToken* p;
+                if (pc >= 2
+                        && ((p = pCode[-2]) != nullptr) && isPotentialRangeType( p, true, false)
+                        && ((p = pCode[-1]) != nullptr) && isPotentialRangeType( p, true, true))
+                {
+                    pFacToken->NewOpCode( ocUnion, FormulaToken::PrivateAccess());
+                    PutCode( pFacToken);
+                }
             }
         }
         if (eOp != ocClose)
             SetError( FormulaError::PairExpected);
         else
             NextToken();
+
+        /* TODO: if no conversion to ocUnion is involved this could collect
+         * such expression as a list or (matrix) vector to be passed as
+         * argument for one parameter (which in fact the ocUnion svRefList is a
+         * special case of), which would require a new StackVar type and needed
+         * to be handled by the interpreter for functions that could support it
+         * (i.e. already handle VAR_ARGS or svRefList parameters). This is also
+         * not defined by ODF.
+         * Does Excel handle =SUM((1;2))?
+         * As is, the interpreter catches extraneous uncalculated
+         * subexpressions like 1 of (1;2) as error. */
     }
     else
     {
