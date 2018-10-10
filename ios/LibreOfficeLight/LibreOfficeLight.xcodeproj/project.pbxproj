@@ -549,6 +549,10 @@
 				ENABLE_TESTABILITY = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LibreOfficeLight/LibreOfficeLight-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"IOS=1",
+				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -583,6 +587,7 @@
 				ENABLE_TESTABILITY = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LibreOfficeLight/LibreOfficeLight-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = "IOS=1";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/../../include",

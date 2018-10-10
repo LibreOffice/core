@@ -579,6 +579,13 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
                           const int nCanvasWidth, const int nCanvasHeight,
                           const int nTilePosX, const int nTilePosY,
                           const int nTileWidth, const int nTileHeight);
+#ifdef IOS
+static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
+                                     void* rCGContext,
+                                     const int nCanvasWidth, const int nCanvasHeight,
+                                     const int nTilePosX, const int nTilePosY,
+                                     const int nTileWidth, const int nTileHeight);
+#endif
 static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               unsigned char* pBuffer,
                               const int nPart,
@@ -692,6 +699,9 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->getPartName = doc_getPartName;
         m_pDocumentClass->setPartMode = doc_setPartMode;
         m_pDocumentClass->paintTile = doc_paintTile;
+#ifdef IOS
+        m_pDocumentClass->paintTileToCGContext = doc_paintTileToCGContext;
+#endif
         m_pDocumentClass->paintPartTile = doc_paintPartTile;
         m_pDocumentClass->getTileMode = doc_getTileMode;
         m_pDocumentClass->getDocumentSize = doc_getDocumentSize;
@@ -2095,29 +2105,15 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 #if defined(UNX) && !defined(MACOSX)
 
 #if defined(IOS)
-    SystemGraphicsData aData;
-    aData.rCGContext = reinterpret_cast<CGContextRef>(pBuffer);
-    // the Size argument is irrelevant, I hope
-    ScopedVclPtrInstance<VirtualDevice> pDevice(&aData, Size(1, 1), DeviceFormat::DEFAULT);
+    CGContextRef cgc = CGBitmapContextCreate(pBuffer, nCanvasWidth, nCanvasHeight, 8, nCanvasWidth*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little);
 
-    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+    CGContextTranslateCTM(cgc, 0, nCanvasHeight);
+    CGContextScaleCTM(cgc, 1, -1);
 
-    pDevice->SetOutputSizePixel(Size(nCanvasWidth, nCanvasHeight));
+    doc_paintTileToCGContext(pThis, (void*) cgc, nCanvasWidth, nCanvasHeight, nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
-    pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
-                    nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+    CGContextRelease(cgc);
 
-#if 0
-    // Draw something at least, to see that the context as such is correctly set up
-    CGContextSetRGBFillColor(aData.rCGContext, 0, 0, 1, .5);
-    CGContextFillRect(aData.rCGContext, CGRectMake(20, 0, nCanvasWidth-20, 20));
-    CGContextSetRGBFillColor(aData.rCGContext, 0, 1, 1, .5);
-    CGContextFillRect(aData.rCGContext, CGRectMake(nCanvasWidth-20, 20, 20, nCanvasHeight-20));
-    CGContextSetRGBFillColor(aData.rCGContext, 0, 1, 0, .5);
-    CGContextFillRect(aData.rCGContext, CGRectMake(0, nCanvasHeight-20, nCanvasWidth-20, 20));
-    CGContextSetRGBFillColor(aData.rCGContext, 0, 1, 1, .5);
-    CGContextFillRect(aData.rCGContext, CGRectMake(0, 0, 20, nCanvasHeight-20));
-#endif
 #else
     ScopedVclPtrInstance< VirtualDevice > pDevice(nullptr, Size(1, 1), DeviceFormat::DEFAULT) ;
 
@@ -2139,6 +2135,44 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
 #endif
 }
 
+#ifdef IOS
+
+static void doc_paintTileToCGContext(LibreOfficeKitDocument* pThis,
+                                     void* rCGContext,
+                                     const int nCanvasWidth, const int nCanvasHeight,
+                                     const int nTilePosX, const int nTilePosY,
+                                     const int nTileWidth, const int nTileHeight)
+{
+    SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
+
+    SAL_INFO( "lok.tiledrendering", "paintTileToCGContext: painting [" << nTileWidth << "x" << nTileHeight <<
+              "]@(" << nTilePosX << ", " << nTilePosY << ") to [" <<
+              nCanvasWidth << "x" << nCanvasHeight << "]px" );
+
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return;
+    }
+
+    SystemGraphicsData aData;
+    aData.rCGContext = reinterpret_cast<CGContextRef>(rCGContext);
+    // the Size argument is irrelevant, I hope
+    ScopedVclPtrInstance<VirtualDevice> pDevice(&aData, Size(1, 1), DeviceFormat::DEFAULT);
+
+    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
+
+    pDevice->SetOutputSizePixel(Size(nCanvasWidth, nCanvasHeight));
+
+    pDoc->paintTile(*pDevice.get(), nCanvasWidth, nCanvasHeight,
+                    nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+
+}
+
+#endif
 
 static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                               unsigned char* pBuffer,

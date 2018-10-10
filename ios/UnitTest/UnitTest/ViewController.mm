@@ -33,31 +33,6 @@ extern "C" {
 #import "ViewController.h"
 #include <postmac.h>
 
-// This is from online's Mobile app (as it is called at the moment);
-// should of course be factored out to some common place. Here in
-// core?
-
-static thread_local CGContextRef cgc = nullptr;
-
-static unsigned char *lo_ios_app_get_cgcontext_for_buffer(unsigned char *buffer, int width, int height)
-{
-    assert(cgc == nullptr);
-
-    cgc = CGBitmapContextCreate(buffer, width, height, 8, width*4, CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipFirst | kCGImageByteOrder32Little);
-
-    CGContextTranslateCTM(cgc, 0, height);
-    CGContextScaleCTM(cgc, 1, -1);
-
-    return (unsigned char*)cgc;
-}
-
-static void lo_ios_app_release_cgcontext_for_buffer()
-{
-    assert(cgc != nullptr);
-    CGContextRelease(cgc);
-    cgc = nullptr;
-}
-
 @interface ViewController ()
 
 @end

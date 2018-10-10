@@ -124,7 +124,7 @@ open class Document
      * rendering at different zoom levels, as the number of rendered pixels and
      * the rendered rectangle of the document are independent.
      *
-     * @param pBuffer pointer to the buffer, its size is determined by nCanvasWidth and nCanvasHeight.
+     * @param rCGContext Core Graphics context, cast to a UnsafeMutableRawPointer
      * @param nCanvasWidth number of pixels in a row of pBuffer.
      * @param nCanvasHeight number of pixels in a column of pBuffer.
      * @param nTilePosX logical X position of the top left corner of the rendered rectangle, in TWIPs.
@@ -132,7 +132,7 @@ open class Document
      * @param nTileWidth logical width of the rendered rectangle, in TWIPs.
      * @param nTileHeight logical height of the rendered rectangle, in TWIPs.
      */
-    public func paintTile( pBuffer: UnsafeMutablePointer<UInt8>,
+    public func paintTileToCGContext( rCGContext: UnsafeMutableRawPointer,
         canvasWidth: Int32,
         canvasHeight: Int32,
         tilePosX: Int32,
@@ -141,8 +141,8 @@ open class Document
         tileHeight: Int32)
     {
         print("paintTile canvasWidth=\(canvasWidth) canvasHeight=\(canvasHeight) tilePosX=\(tilePosX) tilePosY=\(tilePosY) tileWidth=\(tileWidth) tileHeight=\(tileHeight) ")
-        return docClass.paintTile(pDoc, pBuffer, canvasWidth, canvasHeight,
-                                tilePosX, tilePosY, tileWidth, tileHeight);
+        return docClass.paintTileToCGContext(pDoc, rCGContext, canvasWidth, canvasHeight,
+                                             tilePosX, tilePosY, tileWidth, tileHeight);
     }
 
     /**
@@ -562,16 +562,16 @@ public extension Document
     {
         let ctx = UIGraphicsGetCurrentContext()
         //print(ctx!)
-        let ptr = unsafeBitCast(ctx, to: UnsafeMutablePointer<UInt8>.self)
+        let ptr = unsafeBitCast(ctx, to: UnsafeMutableRawPointer.self)
         //print(ptr)
 
-        self.paintTile(pBuffer:ptr,
-                       canvasWidth: Int32(canvasSize.width),
-                       canvasHeight: Int32(canvasSize.height),
-                       tilePosX: Int32(tileRect.minX),
-                       tilePosY: Int32(tileRect.minY),
-                       tileWidth: Int32(tileRect.size.width),
-                       tileHeight: Int32(tileRect.size.height))
+        self.paintTileToCGContext(rCGContext:ptr,
+                                  canvasWidth: Int32(canvasSize.width),
+                                  canvasHeight: Int32(canvasSize.height),
+                                  tilePosX: Int32(tileRect.minX),
+                                  tilePosY: Int32(tileRect.minY),
+                                  tileWidth: Int32(tileRect.size.width),
+                                  tileHeight: Int32(tileRect.size.height))
     }
 
     public func paintTileToImage(canvasSize: CGSize,

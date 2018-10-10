@@ -309,6 +309,18 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::getPartInfo().
     char* (*getPartInfo) (LibreOfficeKitDocument* pThis, int nPart);
 
+#ifdef IOS
+    /// @see lok::Document::paintTileToCGContext().
+    void (*paintTileToCGContext) (LibreOfficeKitDocument* pThis,
+                                  void* rCGContext,
+                                  const int nCanvasWidth,
+                                  const int nCanvasHeight,
+                                  const int nTilePosX,
+                                  const int nTilePosY,
+                                  const int nTileWidth,
+                                  const int nTileHeight);
+#endif // IOS
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

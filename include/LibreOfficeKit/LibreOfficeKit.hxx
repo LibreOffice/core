@@ -550,6 +550,34 @@ public:
         mpDoc->pClass->postWindowExtTextInputEvent(mpDoc, nWindowId, nType, pText);
     }
 
+#ifdef IOS
+    /**
+     * Renders a subset of the document to a Core Graphics context.
+     *
+     * Note that the buffer size and the tile size implicitly supports
+     * rendering at different zoom levels, as the number of rendered pixels and
+     * the rendered rectangle of the document are independent.
+     *
+     * @param rCGContext the CGContextRef, cast to a void*.
+     * @param nCanvasHeight number of pixels in a column of pBuffer.
+     * @param nTilePosX logical X position of the top left corner of the rendered rectangle, in TWIPs.
+     * @param nTilePosY logical Y position of the top left corner of the rendered rectangle, in TWIPs.
+     * @param nTileWidth logical width of the rendered rectangle, in TWIPs.
+     * @param nTileHeight logical height of the rendered rectangle, in TWIPs.
+     */
+    void paintTileToCGContext(void* rCGContext,
+                              const int nCanvasWidth,
+                              const int nCanvasHeight,
+                              const int nTilePosX,
+                              const int nTilePosY,
+                              const int nTileWidth,
+                              const int nTileHeight)
+    {
+        return mpDoc->pClass->paintTileToCGContext(mpDoc, rCGContext, nCanvasWidth, nCanvasHeight,
+                                                   nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+    }
+#endif // IOS
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
