@@ -11,6 +11,7 @@
 
 //#include <com/sun/star/text/XDependentTextField.hpp>
 
+#include <IDocumentSettingAccess.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -358,6 +359,11 @@ DECLARE_WW8EXPORT_TEST(testCp1000044, "cp1000044.doc")
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     // It wasn't possible to fill out this form.
     CPPUNIT_ASSERT_EQUAL(false, bool(xStorable->isReadonly()));
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT_EQUAL( true, pDoc->getIDocumentSettingAccess().get( DocumentSettingId::PROTECT_FORM ) );
 }
 
 DECLARE_WW8EXPORT_TEST(testBorderColours, "bordercolours.doc")
