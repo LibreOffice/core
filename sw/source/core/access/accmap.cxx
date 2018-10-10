@@ -598,13 +598,13 @@ public:
 
 struct SwAccessibleParaSelection
 {
-    sal_Int32 const nStartOfSelection;
-    sal_Int32 const nEndOfSelection;
+    TextFrameIndex const nStartOfSelection;
+    TextFrameIndex const nEndOfSelection;
 
-    SwAccessibleParaSelection( const sal_Int32 _nStartOfSelection,
-                               const sal_Int32 _nEndOfSelection )
-        : nStartOfSelection( _nStartOfSelection ),
-          nEndOfSelection( _nEndOfSelection )
+    SwAccessibleParaSelection(const TextFrameIndex nStartOfSelection_,
+                              const TextFrameIndex nEndOfSelection_)
+        : nStartOfSelection(nStartOfSelection_)
+        , nEndOfSelection(nEndOfSelection_)
     {}
 };
 
@@ -1173,6 +1173,18 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                     if( pCursor != nullptr )
                     {
                         const SwTextNode* pNode = pPos->nNode.GetNode().GetTextNode();
+                        SwTextFrame const*const pFrame(static_cast<SwTextFrame*>(pNode->getLayoutFrame(pVSh->GetLayout())));
+                        sal_uLong nFirstNode(pFrame->GetTextNodeFirst()->GetIndex());
+                        sal_uLong nLastNode;
+                        if (sw::MergedPara const*const pMerged = pFrame->GetMergedPara())
+                        {
+                            nLastNode = pMerged->pLastNode->GetIndex();
+                        }
+                        else
+                        {
+                            nLastNode = nFirstNode;
+                        }
+
                         sal_uLong nHere = pNode->GetIndex();
 
                         for(SwPaM& rTmpCursor : pCursor->GetRingContainer())
@@ -1186,8 +1198,9 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                 sal_uLong nStartIndex = pStart->nNode.GetIndex();
                                 SwPosition* pEnd = rTmpCursor.End();
                                 sal_uLong nEndIndex = pEnd->nNode.GetIndex();
-                                if( ( nHere >= nStartIndex ) && (nHere <= nEndIndex)  )
+                                if ((nStartIndex <= nLastNode) && (nFirstNode <= nEndIndex))
                                 {
+                                    // FIXME: what about missing FLY_AT_CHAR?
                                     if( rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR )
                                     {
                                         if( ( ((nHere == nStartIndex) && (nIndex >= pStart->nContent.GetIndex())) || (nHere > nStartIndex) )
@@ -1206,8 +1219,9 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                     }
                                     else if( rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA )
                                     {
-                                        if( ((nHere > nStartIndex) || pStart->nContent.GetIndex() ==0 )
-                                            && (nHere < nEndIndex ) )
+                                        if (((nStartIndex < nFirstNode) ||
+                                             (nFirstNode == nStartIndex && pStart->nContent.GetIndex() == 0))
+                                            && (nLastNode < nEndIndex))
                                         {
                                             uno::Reference < XAccessible > xAcc( (*aIter).second );
                                             if( xAcc.is() )
@@ -1313,13 +1327,17 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
             {
                 SwNodeIndex nStartIndex( rTmpCursor.Start()->nNode );
                 SwNodeIndex nEndIndex( rTmpCursor.End()->nNode );
-                while(nStartIndex <= nEndIndex)
+                for (; nStartIndex <= nEndIndex; ++nStartIndex)
                 {
                     SwFrame *pFrame = nullptr;
                     if(nStartIndex.GetNode().IsContentNode())
                     {
                         SwContentNode* pCNd = static_cast<SwContentNode*>(&(nStartIndex.GetNode()));
                         pFrame = SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*pCNd).First();
+                        if (mapTemp.find(pFrame) != mapTemp.end())
+                        {
+                            continue; // sw_redlinehide: once is enough
+                        }
                     }
                     else if( nStartIndex.GetNode().IsTableNode() )
                     {
@@ -1354,7 +1372,6 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                             mapTemp.emplace( pFrame, xAcc );
                         }
                     }
-                    ++nStartIndex;
                 }
             }
         }
@@ -3313,17 +3330,19 @@ std::unique_ptr<SwAccessibleSelectedParas_Impl> SwAccessibleMap::BuildSelectedPa
                             {
                                 xWeakAcc = (*aMapIter).second;
                                 SwAccessibleParaSelection aDataEntry(
-                                    pTextNode == &(pStartPos->nNode.GetNode())
-                                                ? pStartPos->nContent.GetIndex()
-                                                : 0,
-                                    pTextNode == &(pEndPos->nNode.GetNode())
-                                                ? pEndPos->nContent.GetIndex()
-                                                : -1 );
+                                    sw::FrameContainsNode(*pTextFrame, pStartPos->nNode.GetIndex())
+                                        ? pTextFrame->MapModelToViewPos(*pStartPos)
+                                        : TextFrameIndex(0),
+
+                                    sw::FrameContainsNode(*pTextFrame, pEndPos->nNode.GetIndex())
+                                        ? pTextFrame->MapModelToViewPos(*pEndPos)
+                                        : TextFrameIndex(COMPLETE_STRING));
                                 if ( !pRetSelectedParas )
                                 {
                                     pRetSelectedParas.reset(
                                             new SwAccessibleSelectedParas_Impl);
                                 }
+                                // sw_redlinehide: should be idempotent for multiple nodes in a merged para
                                 pRetSelectedParas->emplace( xWeakAcc, aDataEntry );
                             }
                         }
