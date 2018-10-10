@@ -21,6 +21,12 @@
 #define CATEGORYCOUNT 6         // Number of persona categories
 #define MAX_RESULTS 9           // Maximum number of search results
 #define MAX_DEFAULT_PERSONAS 3  // Maximum number of default personas
+/*
+ * The category which will be loaded initially.
+   Should be a non-negative integer lower than CATEGORYCOUNT
+   Categories are defined in RID_SVXSTR_PERSONA_CATEGORIES
+ */
+#define DEFAULT_PERSONA_CATEGORY 0
 
 class FixedText;
 class FixedHyperlink;
