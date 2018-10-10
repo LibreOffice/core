@@ -3353,23 +3353,25 @@ public:
     virtual void set_popover(weld::Widget* pPopover) override
     {
         GtkInstanceWidget* pPopoverWidget = dynamic_cast<GtkInstanceWidget*>(pPopover);
-        assert(pPopoverWidget);
-        m_pPopover = pPopoverWidget->getWidget();
+        m_pPopover = pPopoverWidget ? pPopoverWidget->getWidget() : nullptr;
 
 #if defined(GDK_WINDOWING_X11)
-        //under wayland a Popover will work to "escape" the parent dialog, not
-        //so under X, so come up with this hack to use a raw GtkWindow
-        GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
-        if (GDK_IS_X11_DISPLAY(pDisplay))
+        if (!m_pMenuHack)
         {
-            m_pMenuHack = GTK_WINDOW(gtk_window_new(GTK_WINDOW_POPUP));
-            gtk_window_set_type_hint(m_pMenuHack, GDK_WINDOW_TYPE_HINT_COMBO);
-            gtk_window_set_modal(m_pMenuHack, true);
-            gtk_window_set_resizable(m_pMenuHack, false);
-            m_nSignalId = g_signal_connect(GTK_TOGGLE_BUTTON(m_pMenuButton), "toggled", G_CALLBACK(signalToggled), this);
-            g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
-            g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
-            g_signal_connect(m_pMenuHack, "key-press-event", G_CALLBACK(keyPress), this);
+            //under wayland a Popover will work to "escape" the parent dialog, not
+            //so under X, so come up with this hack to use a raw GtkWindow
+            GdkDisplay *pDisplay = gtk_widget_get_display(m_pWidget);
+            if (GDK_IS_X11_DISPLAY(pDisplay))
+            {
+                m_pMenuHack = GTK_WINDOW(gtk_window_new(GTK_WINDOW_POPUP));
+                gtk_window_set_type_hint(m_pMenuHack, GDK_WINDOW_TYPE_HINT_COMBO);
+                gtk_window_set_modal(m_pMenuHack, true);
+                gtk_window_set_resizable(m_pMenuHack, false);
+                m_nSignalId = g_signal_connect(GTK_TOGGLE_BUTTON(m_pMenuButton), "toggled", G_CALLBACK(signalToggled), this);
+                g_signal_connect(m_pMenuHack, "grab-broken-event", G_CALLBACK(signalGrabBroken), this);
+                g_signal_connect(m_pMenuHack, "button-release-event", G_CALLBACK(signalButtonRelease), this);
+                g_signal_connect(m_pMenuHack, "key-press-event", G_CALLBACK(keyPress), this);
+            }
         }
 #endif
 
