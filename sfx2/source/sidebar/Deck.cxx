@@ -68,20 +68,6 @@ Deck::Deck(const DeckDescriptor& rDeckDescriptor, vcl::Window* pParentWindow,
 
     mpVerticalScrollBar->SetScrollHdl(LINK(this, Deck, HandleVerticalScrollBarChange));
 
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        SetLOKNotifier(SfxViewShell::Current());
-
-        if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-        {
-            std::vector<vcl::LOKPayloadItem> aItems;
-            aItems.emplace_back("type", "deck");
-            aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
-            aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
-            pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
-        }
-    }
-
 #ifdef DEBUG
     SetText(OUString("Deck"));
     mpScrollClipWindow->SetText(OUString("ScrollClipWindow"));
@@ -201,12 +187,6 @@ void Deck::Resize()
         comphelper::LibreOfficeKit::isMobile(SfxLokHelper::getView()) &&
         (pNotifier = GetLOKNotifier()))
     {
-        std::vector<vcl::LOKPayloadItem> aItems;
-        aItems.emplace_back("type", "deck");
-        aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
-        aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
-        pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
-
         try
         {
             std::stringstream aStream;
@@ -271,15 +251,6 @@ void Deck::RequestLayoutInternal()
     DeckLayouter::LayoutDeck(GetContentArea(), mnMinimalWidth, mnMinimalHeight, maPanels,
                              *GetTitleBar(), *mpScrollClipWindow, *mpScrollContainer,
                              *mpFiller, *mpVerticalScrollBar);
-
-    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-    {
-        std::vector<vcl::LOKPayloadItem> aItems;
-        aItems.emplace_back("type", "deck");
-        aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
-        aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
-        pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
-    }
 }
 
 void Deck::RequestLayout()
