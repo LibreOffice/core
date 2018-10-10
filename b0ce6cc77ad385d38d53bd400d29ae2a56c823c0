@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_8fbc346a",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-10-10T07:56:26Z",
+      "side": 1,
+      "message": "it\u0027s not typo but German translation towards English.\nIf you want to do some translation, please make a separate patch.",
+      "range": {
+        "startLine": 565,
+        "startChar": 28,
+        "endLine": 565,
+        "endChar": 44
+      },
+      "revId": "b0ce6cc77ad385d38d53bd400d29ae2a56c823c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_efbdf068",
+        "filename": "xmlscript/source/xmldlg_imexp/xmldlg_expmodels.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-10-10T07:56:26Z",
+      "side": 1,
+      "message": "Both seem to exist, see https://wikidiff.com/resizeable/resizable\n\nAlso, it may have side effects here since it concerns code",
+      "range": {
+        "startLine": 1035,
+        "startChar": 53,
+        "endLine": 1035,
+        "endChar": 62
+      },
+      "revId": "b0ce6cc77ad385d38d53bd400d29ae2a56c823c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
