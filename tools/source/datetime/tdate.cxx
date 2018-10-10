@@ -362,7 +362,7 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
         // Saturday
         else if ( n1WDay == nMinimumNumberOfDaysInWeek + 1 )
         {
-            // Year after leapyear
+            // Year after leap year
             if ( Date( 1, 1, GetPrevYear() ).IsLeapYear() )
                 nWeek = 53;
             else

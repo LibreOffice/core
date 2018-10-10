@@ -562,7 +562,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     bool bPageMode = pViewData->IsPagebreakMode();
     if (bPageMode)                                      // after FindChanged
     {
-        // SetPagebreakMode initialisiert auch bPrinted Flags
+        // SetPagebreakMode also initializes bPrinted Flags
         aOutputData.SetPagebreakMode( pViewData->GetView()->GetPageBreakData() );
     }
 

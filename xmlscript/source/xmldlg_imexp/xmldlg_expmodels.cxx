@@ -1032,7 +1032,7 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
     readDefaults( false, false );
     readBoolAttr("Closeable", XMLNS_DIALOGS_PREFIX ":closeable" );
     readBoolAttr( "Moveable", XMLNS_DIALOGS_PREFIX ":moveable" );
-    readBoolAttr( "Sizeable", XMLNS_DIALOGS_PREFIX ":resizeable" );
+    readBoolAttr( "Sizeable", XMLNS_DIALOGS_PREFIX ":resizable" );
     readStringAttr( "Title", XMLNS_DIALOGS_PREFIX ":title" );
 
     readScrollableSettings();
