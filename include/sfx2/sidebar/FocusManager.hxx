@@ -76,9 +76,6 @@ private:
     std::vector<VclPtr<Button> > maButtons;
     const std::function<void(const Panel&)> maShowPanelFunctor;
     const std::function<bool(const sal_Int32)> mbIsDeckOpenFunctor;
-    bool mbObservingContentControlFocus;
-    VclPtr<vcl::Window> mpFirstFocusedContentControl;
-    VclPtr<vcl::Window> mpLastFocusedWindow;
 
     enum PanelComponent
     {

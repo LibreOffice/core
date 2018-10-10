@@ -41,10 +41,7 @@ FocusManager::FocusManager(const std::function<void(const Panel&)>& rShowPanelFu
       maPanels(),
       maButtons(),
       maShowPanelFunctor(rShowPanelFunctor),
-      mbIsDeckOpenFunctor(rIsDeckOpenFunctor),
-      mbObservingContentControlFocus(false),
-      mpFirstFocusedContentControl(nullptr),
-      mpLastFocusedWindow(nullptr)
+      mbIsDeckOpenFunctor(rIsDeckOpenFunctor)
 {
 }
 
@@ -275,11 +272,7 @@ void FocusManager::FocusPanelContent (const sal_Int32 nPanelIndex)
 
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(maPanels[nPanelIndex]->GetElementWindow());
     if (pWindow)
-    {
-        mbObservingContentControlFocus = true;
         pWindow->GrabFocus();
-        mbObservingContentControlFocus = false;
-    }
 }
 
 void FocusManager::FocusButton (const sal_Int32 nButtonIndex)
@@ -385,7 +378,6 @@ void FocusManager::HandleKeyEvent (
     const vcl::Window& rWindow)
 {
     const FocusLocation aLocation (GetFocusLocation(rWindow));
-    mpLastFocusedWindow = nullptr;
 
     switch (rKeyCode.GetCode())
     {
@@ -591,36 +583,12 @@ IMPL_LINK(FocusManager, ChildEventListener, VclWindowEvent&, rEvent, void)
                         FocusPanel(aLocation.mnIndex, true);
                         break;
 
-                    case KEY_TAB:
-                        {
-                        WindowType aWindowType = pSource->GetType();
-                        if (mpFirstFocusedContentControl!=nullptr
-                            && ( mpLastFocusedWindow == mpFirstFocusedContentControl
-                                 && !( WindowType::EDIT == aWindowType || WindowType::SPINFIELD == aWindowType ) ))
-                        {
-                            // Move focus back to panel (or deck)
-                            // title.
-                            FocusPanel(aLocation.mnIndex, true);
-                        }
-                        }
-                        break;
-
                     default:
                         break;
                 }
             }
             return;
         }
-
-        case VclEventId::WindowGetFocus:
-            // Keep track of focused controls in panel content.
-            // Remember the first focused control.  When it is later
-            // focused again due to pressing the TAB key then the
-            // focus is moved to the panel or deck title.
-            mpLastFocusedWindow = pSource;
-            if (mbObservingContentControlFocus)
-                mpFirstFocusedContentControl = pSource;
-            break;
 
         default:
             break;
