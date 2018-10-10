@@ -16,10 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if !defined WINVER
-#define WINVER 0x0400
-#endif
-
 #include <sal/macros.h>
 #include <sal/log.hxx>
 
