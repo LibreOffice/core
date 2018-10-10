@@ -835,24 +835,19 @@ css::uno::Sequence< css::uno::Any >
         if ( pCursorShell )
         {
             SwPaM *_pStartCursor = pCursorShell->GetCursor(), *_pStartCursor2 = _pStartCursor;
-            SwContentNode* pPrevNode = nullptr;
-            std::vector<SwFrame*> vFrameList;
+            std::set<SwFrame*> vFrameList;
             do
             {
                 if ( _pStartCursor && _pStartCursor->HasMark() )
                 {
                     SwContentNode* pContentNode = _pStartCursor->GetContentNode();
-                    if ( pContentNode == pPrevNode )
-                    {
-                        continue;
-                    }
-                    SwFrame* pFrame = pContentNode ? pContentNode->getLayoutFrame( pCursorShell->GetLayout() ) : nullptr;
+                    SwFrame *const pFrame = pContentNode
+                        ? pContentNode->getLayoutFrame(pCursorShell->GetLayout(), _pStartCursor->GetPoint())
+                        : nullptr;
                     if ( pFrame )
                     {
-                        vFrameList.push_back( pFrame );
+                        vFrameList.insert( pFrame );
                     }
-
-                    pPrevNode = pContentNode;
                 }
             }
 
@@ -861,7 +856,7 @@ css::uno::Sequence< css::uno::Any >
             if ( vFrameList.size() )
             {
                 uno::Sequence< uno::Any > aRet(vFrameList.size());
-                std::vector<SwFrame*>::iterator aIter = vFrameList.begin();
+                auto aIter = vFrameList.begin();
                 for ( sal_Int32 nIndex = 0; aIter != vFrameList.end(); ++aIter, nIndex++ )
                 {
                     uno::Reference< XAccessible > xAcc = pAccMap->GetContext(*aIter, false);
