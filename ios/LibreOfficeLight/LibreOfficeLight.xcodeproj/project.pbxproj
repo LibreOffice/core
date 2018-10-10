@@ -66,21 +66,21 @@
 /* Begin PBXFileReference section */
 		39284DB21FA5F207006F43E4 /* DocumentActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentActions.swift; sourceTree = "<group>"; };
 		392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ViewPrintManager.swift; path = LibreOfficeLight/ViewPrintManager.swift; sourceTree = SOURCE_ROOT; };
-		3941EF06204B4C8900082486 /* unorc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = unorc; path = ../generated/resources/unorc; sourceTree = "<group>"; };
-		3941EF07204B4C8900082486 /* fundamentalrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fundamentalrc; path = ../generated/resources/fundamentalrc; sourceTree = "<group>"; };
-		3941EF08204B4C8900082486 /* program */ = {isa = PBXFileReference; lastKnownFileType = folder; name = program; path = ../generated/resources/program; sourceTree = "<group>"; };
-		3941EF09204B4C8900082486 /* services.rdb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = services.rdb; path = ../generated/resources/services.rdb; sourceTree = "<group>"; };
-		3941EF0A204B4C8900082486 /* oovbaapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = oovbaapi.rdb; path = ../generated/resources/oovbaapi.rdb; sourceTree = "<group>"; };
-		3941EF0B204B4C8900082486 /* registry */ = {isa = PBXFileReference; lastKnownFileType = folder; name = registry; path = ../generated/resources/registry; sourceTree = "<group>"; };
-		3941EF0C204B4C8900082486 /* services */ = {isa = PBXFileReference; lastKnownFileType = folder; name = services; path = ../generated/resources/services; sourceTree = "<group>"; };
-		3941EF0D204B4C8900082486 /* offapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = offapi.rdb; path = ../generated/resources/offapi.rdb; sourceTree = "<group>"; };
-		3941EF0E204B4C8900082486 /* filter */ = {isa = PBXFileReference; lastKnownFileType = folder; name = filter; path = ../generated/resources/filter; sourceTree = "<group>"; };
-		3941EF0F204B4C8900082486 /* rc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = rc; path = ../generated/resources/rc; sourceTree = "<group>"; };
-		3941EF10204B4C8900082486 /* udkapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = udkapi.rdb; path = ../generated/resources/udkapi.rdb; sourceTree = "<group>"; };
-		3941EF11204B4C8900082486 /* icudt62l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt62l.dat; path = ../generated/resources/icudt62l.dat; sourceTree = "<group>"; };
-		3941EF12204B4C8900082486 /* welcome.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = welcome.odt; path = ../generated/resources/welcome.odt; sourceTree = "<group>"; };
-		3941EF13204B4C8900082486 /* config */ = {isa = PBXFileReference; lastKnownFileType = folder; name = config; path = ../generated/resources/config; sourceTree = "<group>"; };
-		3941EF14204B4C8900082486 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../generated/resources/share; sourceTree = "<group>"; };
+		3941EF06204B4C8900082486 /* unorc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = unorc; path = ../../workdir/CustomTarget/ios/resources/unorc; sourceTree = "<group>"; };
+		3941EF07204B4C8900082486 /* fundamentalrc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fundamentalrc; path = ../../workdir/CustomTarget/ios/resources/fundamentalrc; sourceTree = "<group>"; };
+		3941EF08204B4C8900082486 /* program */ = {isa = PBXFileReference; lastKnownFileType = folder; name = program; path = ../../workdir/CustomTarget/ios/resources/program; sourceTree = "<group>"; };
+		3941EF09204B4C8900082486 /* services.rdb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = services.rdb; path = ../../workdir/CustomTarget/ios/resources/services.rdb; sourceTree = "<group>"; };
+		3941EF0A204B4C8900082486 /* oovbaapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = oovbaapi.rdb; path = ../../workdir/CustomTarget/ios/resources/oovbaapi.rdb; sourceTree = "<group>"; };
+		3941EF0B204B4C8900082486 /* registry */ = {isa = PBXFileReference; lastKnownFileType = folder; name = registry; path = ../../workdir/CustomTarget/ios/resources/registry; sourceTree = "<group>"; };
+		3941EF0C204B4C8900082486 /* services */ = {isa = PBXFileReference; lastKnownFileType = folder; name = services; path = ../../workdir/CustomTarget/ios/resources/services; sourceTree = "<group>"; };
+		3941EF0D204B4C8900082486 /* offapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = offapi.rdb; path = ../../workdir/CustomTarget/ios/resources/offapi.rdb; sourceTree = "<group>"; };
+		3941EF0E204B4C8900082486 /* filter */ = {isa = PBXFileReference; lastKnownFileType = folder; name = filter; path = ../../workdir/CustomTarget/ios/resources/filter; sourceTree = "<group>"; };
+		3941EF0F204B4C8900082486 /* rc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = rc; path = ../../workdir/CustomTarget/ios/resources/rc; sourceTree = "<group>"; };
+		3941EF10204B4C8900082486 /* udkapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = udkapi.rdb; path = ../../workdir/CustomTarget/ios/resources/udkapi.rdb; sourceTree = "<group>"; };
+		3941EF11204B4C8900082486 /* icudt62l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt62l.dat; path = ../../workdir/CustomTarget/ios/resources/icudt62l.dat; sourceTree = "<group>"; };
+		3941EF12204B4C8900082486 /* welcome.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = welcome.odt; path = ../../workdir/CustomTarget/ios/resources/welcome.odt; sourceTree = "<group>"; };
+		3941EF13204B4C8900082486 /* config */ = {isa = PBXFileReference; lastKnownFileType = folder; name = config; path = ../../workdir/CustomTarget/ios/resources/config; sourceTree = "<group>"; };
+		3941EF14204B4C8900082486 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = ../../workdir/CustomTarget/ios/resources/share; sourceTree = "<group>"; };
 		39503A6F1F94C4AC00F19C78 /* lokit-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "lokit-Bridging-Header.h"; sourceTree = "<group>"; };
 		39514DFF2057DC55005599D0 /* shared */ = {isa = PBXFileReference; lastKnownFileType = folder; name = shared; path = ../../bridges/source/cpp_uno/shared; sourceTree = "<group>"; };
 		39514E012057DC92005599D0 /* gcc3_ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = gcc3_ios; path = ../../bridges/source/cpp_uno/gcc3_ios; sourceTree = "<group>"; };
@@ -275,7 +275,6 @@
 				TargetAttributes = {
 					397E08F91E597BD8001374E0 = {
 						CreatedOnToolsVersion = 8.2;
-						DevelopmentTeam = TM977DU7EF;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -352,7 +351,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "\nGEN=$PROJECT_DIR/../generated/$CONFIGURATION\\_$arch/libKit.dylib\ncp $GEN $TARGET_BUILD_DIR/libKit.dylib\n\n\n\n\n";
+			shellScript = "\nGEN=$PROJECT_DIR/../../workdir/CustomTarget/ios/$CONFIGURATION\\_$ARCHS/libKit.dylib\ncp $GEN $TARGET_BUILD_DIR/libKit.dylib\n\n\n\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -414,7 +413,7 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_OPTIMIZATION_PROFILE_FILE = "$(SRCROOT)/../generated/$(PROJECT_NAME).profdata";
+				CLANG_OPTIMIZATION_PROFILE_FILE = "$(SRCROOT)/../../workdir/CustomTarget/ios/$(PROJECT_NAME).profdata";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
@@ -458,7 +457,7 @@
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_MAP_FILE_PATH = "";
-				LIBRARY_SEARCH_PATHS = "$PROJECT_DIR/../generated/debug/**";
+				LIBRARY_SEARCH_PATHS = "$PROJECT_DIR/../../workdir/CustomTarget/ios/debug/**";
 				MACH_O_TYPE = mh_execute;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -468,7 +467,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
-				SYMROOT = ../generated/build;
+				SYMROOT = ../../workdir/CustomTarget/ios/build;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "arm64 x86_64";
 			};
@@ -483,7 +482,7 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_OPTIMIZATION_PROFILE_FILE = "$(SRCROOT)/../generated/$(PROJECT_NAME).profdata";
+				CLANG_OPTIMIZATION_PROFILE_FILE = "$(SRCROOT)/../../workdir/CustomTarget/ios/$(PROJECT_NAME).profdata";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
@@ -522,7 +521,7 @@
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_MAP_FILE_PATH = "";
-				LIBRARY_SEARCH_PATHS = "$PROJECT_DIR/../generated/release/**";
+				LIBRARY_SEARCH_PATHS = "$PROJECT_DIR/../../workdir/CustomTarget/ios/release/**";
 				MACH_O_TYPE = mh_execute;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
@@ -531,7 +530,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
-				SYMROOT = ../generated/build;
+				SYMROOT = ../../workdir/CustomTarget/ios/build;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "arm64 x86_64";
@@ -546,7 +545,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CLANG_WARN_INFINITE_RECURSION = NO;
 				CODE_SIGN_ENTITLEMENTS = LibreOfficeLight/LibreOfficeLight.entitlements;
-				DEVELOPMENT_TEAM = TM977DU7EF;
+				DEVELOPMENT_TEAM = J4FQ687VJK;
 				ENABLE_TESTABILITY = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LibreOfficeLight/LibreOfficeLight-Prefix.pch";
@@ -560,7 +559,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jani.Editors.LibreOfficeLight;
+				PRODUCT_BUNDLE_IDENTIFIER = org.libreoffice.ios.LibreOfficeLight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "LibreOfficeLight/lokit-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -580,7 +579,7 @@
 				CLANG_WARN_INFINITE_RECURSION = NO;
 				CODE_SIGN_ENTITLEMENTS = LibreOfficeLight/LibreOfficeLight.entitlements;
 				COPY_PHASE_STRIP = YES;
-				DEVELOPMENT_TEAM = TM977DU7EF;
+				DEVELOPMENT_TEAM = J4FQ687VJK;
 				ENABLE_TESTABILITY = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LibreOfficeLight/LibreOfficeLight-Prefix.pch";
@@ -593,7 +592,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jani.Editors.LibreOfficeLight;
+				PRODUCT_BUNDLE_IDENTIFIER = org.libreoffice.ios.LibreOfficeLight;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "LibreOfficeLight/lokit-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

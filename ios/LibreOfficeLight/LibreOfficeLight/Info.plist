@@ -1792,19 +1792,19 @@ file, You can obtain one at http://mozilla.org/MPL/2.0/.</string>
 				<string>public.composite-​content</string>
 			</array>
 			<key>UTTypeDescription</key>
-                        <string>Apple PDF pasteboard type PDF data</string>
+			<string>Apple PDF pasteboard type PDF data</string>
 			<key>UTTypeIdentifier</key>
 			<string>com.adobe.pdf</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
-                                <array>
-                                        <string>pdf</string>
-                                </array>
-                                <key>public.mime-type</key>
-                                <array>
-                                        <string>application/pdf</string>
-                                </array>
+				<array>
+					<string>pdf</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/pdf</string>
+				</array>
 			</dict>
 		</dict>
 	</array>

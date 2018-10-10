@@ -8,12 +8,12 @@
 
 
 #- Env ------------------------------------------------------------------------
-IOSGEN   = $(SRCDIR)/ios/generated
+IOSGEN  = $(BUILDDIR)/workdir/CustomTarget/ios
 IOSLIBS := $(shell \
         (export INSTDIR=$(INSTDIR);export OS=$(OS); \
          export WORKDIR=$(WORKDIR);export LIBO_LIB_FOLDER=$(LIBO_LIB_FOLDER); \
          $(SRCDIR)/bin/lo-all-static-libs))
-IOSOBJ = $(WORKDIR)/ios/Kit.o
+IOSOBJ = $(IOSGEN)/Kit.o
 IOSSRC = $(SRCDIR)/ios/source/LibreOfficeKit.c
 
 ifeq ($(ENABLE_DEBUG),TRUE)
