@@ -674,7 +674,8 @@ using namespace ::com::sun::star;
         }
 #endif
         const char* pMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
-        OSQLMessageBox aMsg(GetFrameWeld(), DBA_RES(pMessage), OUString());
+        const MessageType mt = bSuccess ? MessageType::Info : MessageType::Error;
+        OSQLMessageBox aMsg(GetFrameWeld(), DBA_RES(pMessage), OUString(), MessBoxStyle::Ok | MessBoxStyle::DefaultOk, mt);
         aMsg.run();
     }
 
