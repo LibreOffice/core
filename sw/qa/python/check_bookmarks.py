@@ -20,11 +20,11 @@
 import unittest
 import random
 import os.path
+
 from hashlib import sha1
 from tempfile import TemporaryDirectory
 from org.libreoffice.unotest import UnoInProcess, mkPropertyValues, systemPathToFileUrl
 from com.sun.star.text.ControlCharacter import PARAGRAPH_BREAK
-
 
 class CheckBookmarks(unittest.TestCase):
     expectedHashes = {
@@ -42,7 +42,8 @@ class CheckBookmarks(unittest.TestCase):
         cls._uno.setUp()
         cls._xDoc = cls._uno.openEmptyWriterDoc()
         smgr = cls._uno.xContext.ServiceManager
-        cls._desktop = smgr.createInstanceWithContext("com.sun.star.frame.Desktop", cls._uno.xContext)
+        cls._desktop = smgr.createInstanceWithContext("com.sun.star.frame.Desktop",
+                                                      cls._uno.xContext)
 
     @classmethod
     def tearDownClass(cls):
@@ -55,34 +56,41 @@ class CheckBookmarks(unittest.TestCase):
     def test_bookmarks(self):
         self.xDoc = self.__class__._xDoc
         self.xText = self.xDoc.getText()
+
         ## setting and testing bookmarks
         self.setupBookmarks()
         self.assertEqual(self.expectedHashes['nSetupHash'],
                          self.getBookmarksHash(self.xDoc))
+
         ## modifying bookmarks and testing again
         self.insertRandomParts(200177)
         self.assertEqual(self.expectedHashes['nInsertRandomHash'],
                          self.getBookmarksHash(self.xDoc))
+
         ## modifying bookmarks and testing again
         self.deleteRandomParts(4711)
         self.assertEqual(self.expectedHashes['nDeleteRandomHash'],
                          self.getBookmarksHash(self.xDoc))
+
         ## adding line breaks and testing again
         self.insertLinebreaks(7)
         self.assertEqual(self.expectedHashes['nLinebreakHash'],
                          self.getBookmarksHash(self.xDoc))
+
         ## reloading document and testing again
         with TemporaryDirectory() as tempdir:
             xOdfReloadedDoc = self.reloadFrom(tempdir, "writer8", "odt")
             self.assertEqual(self.expectedHashes['nOdfReloadHash'],
                              self.getBookmarksHash(xOdfReloadedDoc))
             xOdfReloadedDoc.close(True)
+
         ## reloading document as MS Word 97 doc and testing again
             ## MsWord Hash is unstable over different systems
             # xMsWordReloadedDoc = self.reloadFrom(tempdir, "MS Word 97", "doc")
             # self.assertEqual(self.expectedHashes['nMsWordReloadHash'],
             #                  self.getBookmarksHash(xMsWordReloadedDoc))
             # xMsWordReloadedDoc.close(True)
+
         print('tests ok')
 
     def setupBookmarks(self):
@@ -96,20 +104,24 @@ class CheckBookmarks(unittest.TestCase):
                 xBookmark.setName(s)
                 self.xText.insertTextContent(xCursor, xBookmark, True)
                 xCursor.End.setString(" ")
+
             self.xText.insertControlCharacter(xCursor.End, PARAGRAPH_BREAK, False)
 
     def getBookmarksHash(self, doc):
-        hash = sha1()
+        _hash = sha1()
         xBookmarks = doc.getBookmarks()
         for xBookmark in xBookmarks:
             s = '{}:{};'.format(xBookmark.Name,
-                        xBookmark.getAnchor().getString().replace("\r\n", "\n"))
-            hash.update(str.encode(s))
-        return int(hash.hexdigest(), 16)
+                                xBookmark.getAnchor().getString().replace("\r\n", "\n"))
+
+            _hash.update(str.encode(s))
+
+        return int(_hash.hexdigest(), 16)
 
     def insertRandomParts(self, seed):
         random.seed(seed)
         xCursor = self.xText.createTextCursor()
+
         for i in range(600):
             xCursor.goRight(random.randrange(100), False)
             xCursor.setString(str(random.getrandbits(64)))
@@ -117,6 +129,7 @@ class CheckBookmarks(unittest.TestCase):
     def deleteRandomParts(self, seed):
         random.seed(seed)
         xCursor = self.xText.createTextCursor()
+
         for i in range(600):
             xCursor.goRight(random.randrange(100), False)
             xCursor.goRight(random.randrange(20), True)
@@ -125,6 +138,7 @@ class CheckBookmarks(unittest.TestCase):
     def insertLinebreaks(self, seed):
         random.seed(seed)
         xCursor = self.xText.createTextCursor()
+
         for i in range(30):
             xCursor.goRight(random.randrange(300), False)
             self.xText.insertControlCharacter(xCursor, PARAGRAPH_BREAK, False)
@@ -137,7 +151,6 @@ class CheckBookmarks(unittest.TestCase):
         desktop = self.__class__._desktop
         load_props = mkPropertyValues(Hidden=True, ReadOnly=False)
         return desktop.loadComponentFromURL(sFileUrl, "_default", 0, load_props)
-
 
 if __name__ == '__main__':
     unittest.main()
