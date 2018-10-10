@@ -167,7 +167,7 @@ static void testTile( Document *pDocument, int max_parts,
             // whole part; meaningful only for non-writer documents.
             aTimes.emplace_back("render whole part");
             pDocument->paintTile(pPixels, nTilePixelWidth, nTilePixelHeight,
-                                 nWidth/2, 2000, 1000, 1000); // not square
+                                 nWidth/2, 2000, 1000, 1000);
             aTimes.emplace_back();
             if (dump)
                 dumpTile(nTilePixelWidth, nTilePixelHeight, mode, pPixels);
