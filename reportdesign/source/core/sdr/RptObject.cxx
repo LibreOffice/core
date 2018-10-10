@@ -595,6 +595,8 @@ OUnoObject::OUnoObject(
 :   SdrUnoObj(rSdrModel, rModelName)
     ,OObjectBase(_sComponentName)
     ,m_nObjectType(_nObjectType)
+    // tdf#119067
+    ,m_bSetDefaultLabel(false)
 {
     if ( !rModelName.isEmpty() )
         impl_initializeModel_nothrow();
@@ -608,6 +610,8 @@ OUnoObject::OUnoObject(
 :   SdrUnoObj(rSdrModel, rModelName)
     ,OObjectBase(_xComponent)
     ,m_nObjectType(_nObjectType)
+    // tdf#119067
+    ,m_bSetDefaultLabel(false)
 {
     impl_setUnoShape( uno::Reference< uno::XInterface >( _xComponent, uno::UNO_QUERY ) );
 
@@ -730,6 +734,22 @@ void OUnoObject::NbcSetLogicRect(const tools::Rectangle& rRect)
     OObjectBase::StartListening();
 }
 
+bool OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
+{
+    const bool bResult(SdrUnoObj::EndCreate(rStat, eCmd));
+
+    if(bResult)
+    {
+        // tdf#118730 remember if this object was created interactively (due to ::EndCreate being called)
+        m_bSetDefaultLabel = true;
+
+        // set geometry properties
+        SetPropsFromRect(GetLogicRect());
+    }
+
+    return bResult;
+}
+
 OUString OUnoObject::GetDefaultName(const OUnoObject* _pObj)
 {
     OUString aDefaultName = "HERE WE HAVE TO INSERT OUR NAME!";
@@ -824,31 +844,28 @@ void OUnoObject::CreateMediator(bool _bReverse)
             impl_initializeModel_nothrow();
         }
 
-        // tdf#118730 Directly do things formerly done in
-        // OUnoObject::EndCreate here
-        if(m_xReportComponent.is())
+        if(m_xReportComponent.is() && m_bSetDefaultLabel)
         {
-            // set labels
-            if ( m_xReportComponent.is() )
-            {
-                try
-                {
-                    if ( supportsService( SERVICE_FIXEDTEXT ) )
-                    {
-                        m_xReportComponent->setPropertyValue( PROPERTY_LABEL, uno::makeAny(GetDefaultName(this)) );
-                    }
-                }
-                catch(const uno::Exception&)
-                {
-                    DBG_UNHANDLED_EXCEPTION("reportdesign");
-                }
+            // tdf#118730 Directly do things formerly done in
+            // OUnoObject::EndCreate here
+            // tdf#119067 ...but *only* if result of interactive
+            // creation in Report DesignView
+            m_bSetDefaultLabel = false;
 
-                impl_initializeModel_nothrow();
+            try
+            {
+                if ( supportsService( SERVICE_FIXEDTEXT ) )
+                {
+                    m_xReportComponent->setPropertyValue(
+                        PROPERTY_LABEL,
+                        uno::makeAny(GetDefaultName(this)));
+                }
+            }
+            catch(const uno::Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION("reportdesign");
             }
         }
-
-        // tdf#118730 set geometry properties
-        SetPropsFromRect(GetLogicRect());
 
         if(!m_xMediator.is() && m_xReportComponent.is())
         {
