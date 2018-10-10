@@ -62,20 +62,6 @@ Deck::Deck(const DeckDescriptor& rDeckDescriptor, vcl::Window* pParentWindow,
 
     mpVerticalScrollBar->SetScrollHdl(LINK(this, Deck, HandleVerticalScrollBarChange));
 
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        SetLOKNotifier(SfxViewShell::Current());
-
-        if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-        {
-            std::vector<vcl::LOKPayloadItem> aItems;
-            aItems.emplace_back("type", "deck");
-            aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
-            aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
-            pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
-        }
-    }
-
 #ifdef DEBUG
     SetText(OUString("Deck"));
     mpScrollClipWindow->SetText(OUString("ScrollClipWindow"));
@@ -186,15 +172,6 @@ bool Deck::EventNotify(NotifyEvent& rEvent)
 void Deck::Resize()
 {
     Window::Resize();
-
-    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-    {
-        std::vector<vcl::LOKPayloadItem> aItems;
-        aItems.emplace_back("type", "deck");
-        aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
-        aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
-        pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
-    }
 }
 
 bool Deck::ProcessWheelEvent(CommandEvent const * pCommandEvent)
@@ -247,15 +224,6 @@ void Deck::RequestLayout()
     DeckLayouter::LayoutDeck(GetContentArea(), mnMinimalWidth, maPanels,
                              *GetTitleBar(), *mpScrollClipWindow, *mpScrollContainer,
                              *mpFiller, *mpVerticalScrollBar);
-
-    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-    {
-        std::vector<vcl::LOKPayloadItem> aItems;
-        aItems.emplace_back("type", "deck");
-        aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
-        aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
-        pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
-    }
 }
 
 vcl::Window* Deck::GetPanelParentWindow()
@@ -301,15 +269,6 @@ void Deck::ShowPanel(const Panel& rPanel)
             Point(
                 mpScrollContainer->GetPosPixel().X(),
                 -nNewThumbPos));
-
-            if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-            {
-                std::vector<vcl::LOKPayloadItem> aItems;
-                aItems.emplace_back("type", "deck");
-                aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
-                aItems.emplace_back(std::make_pair("size", GetSizePixel().toString()));
-                pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
-            }
     }
 }
 
