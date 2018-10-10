@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_6f032044",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 1301,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-10-10T08:11:17Z",
+      "side": 1,
+      "message": "Not sure it\u0027s useful to keep those commented. Let\u0027s just remove them.",
+      "revId": "854d9d6c684eb1ab94332e50199910bb65f13670",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_2ffd283a",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 6556,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-10-10T08:11:17Z",
+      "side": 1,
+      "message": "Looking closely, both Writer \u0026 DrawImpress also have the new .uno:Insert*Before and .uno:Insert*After commands, so they are no different than Calc. (And maybe we should consider hiding the deprecated commands in Writer \u0026 DrawImpress too?)",
+      "revId": "854d9d6c684eb1ab94332e50199910bb65f13670",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
