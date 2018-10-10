@@ -36,7 +36,7 @@ bool ImageToPNG( css::uno::Sequence<sal_Int8> const & rImgData,
     if( !pRep)
         return false;
 
-    NSData* pOut = [pRep representationUsingType: NSPNGFileType properties: @{ }];
+    NSData* pOut = [pRep representationUsingType: NSBitmapImageFileTypePNG properties: @{ }];
     if( !pOut)
         return false;
 

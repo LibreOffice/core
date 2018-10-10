@@ -335,7 +335,7 @@ void ControlHelper::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, co
                 bool bChecked = false;
                 rValue >>= bChecked;
                 SAL_INFO("fpicker.aqua"," value is a bool: " << bChecked);
-                [static_cast<NSButton*>(pControl) setState:(bChecked ? NSOnState : NSOffState)];
+                [static_cast<NSButton*>(pControl) setState:(bChecked ? NSControlStateValueOn : NSControlStateValueOff)];
             } else
             {
                 SAL_INFO("fpicker.aqua","Can't set value on button / list " << nControlId << " " << nControlAction);
@@ -358,7 +358,7 @@ uno::Any ControlHelper::getValue( sal_Int16 nControlId, sal_Int16 nControlAction
             aRetval = HandleGetListValue(pControl, nControlAction);
         } else if( [pControl class] == [NSButton class] ) {
             //NSLog(@"control: %@", [[pControl cell] title]);
-            bool bValue = [static_cast<NSButton*>(pControl) state] == NSOnState;
+            bool bValue = [static_cast<NSButton*>(pControl) state] == NSControlStateValueOn;
             aRetval <<= bValue;
             SAL_INFO("fpicker.aqua","value is a bool (checkbox): " << bValue);
         }
@@ -566,9 +566,9 @@ void ControlHelper::createControls()
             NSButton *button = [NSButton new];
             [button setTitle:sLabel];
 
-            [button setButtonType:NSSwitchButton];
+            [button setButtonType:NSButtonTypeSwitch];
 
-            [button setState:NSOffState];
+            [button setState:NSControlStateValueOff];
 
             if (i == AUTOEXTENSION) {
                 [button setTarget:m_pDelegate];
@@ -587,7 +587,7 @@ void ControlHelper::createControls()
     NSControl *pPreviewBox = m_pToggles[PREVIEW];
     if (pPreviewBox != nil) {
         [pPreviewBox setEnabled:NO];
-        [static_cast<NSButton*>(pPreviewBox) setState:NSOnState];
+        [static_cast<NSButton*>(pPreviewBox) setState:NSControlStateValueOn];
     }
 }
 

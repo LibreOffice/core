@@ -562,7 +562,7 @@ void AquaSalMenu::CheckItem( unsigned nPos, bool bCheck )
     if( nPos < maItems.size() )
     {
         NSMenuItem* pItem = maItems[nPos]->mpMenuItem;
-        [pItem setState: bCheck ? NSOnState : NSOffState];
+        [pItem setState: bCheck ? NSControlStateValueOn : NSControlStateValueOff];
     }
 }
 
