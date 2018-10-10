@@ -349,7 +349,7 @@ static OUString filterAccelerator( rtl::OUString const & rText )
     {
         NSButton* pBtn = static_cast<NSButton*>(pSender);
         int nTag = [pBtn tag];
-        mpController->changePropertyWithBoolValue( nTag, [pBtn state] == NSOnState );
+        mpController->changePropertyWithBoolValue( nTag, [pBtn state] == NSControlStateValueOn );
     }
     else if( [pSender isMemberOfClass: [NSMatrix class]] )
     {
@@ -660,8 +660,8 @@ static void addBool( NSView* pCurParent, long rCurX, long& rCurY, long nAttachOf
 {
     NSRect aCheckRect = { { static_cast<CGFloat>(rCurX + nAttachOffset), 0 }, { 0, 15 } };
     NSButton* pBtn = [[NSButton alloc] initWithFrame: aCheckRect];
-    [pBtn setButtonType: NSSwitchButton];                
-    [pBtn setState: bValue ? NSOnState : NSOffState];
+    [pBtn setButtonType: NSButtonTypeSwitch];                
+    [pBtn setState: bValue ? NSControlStateValueOn : NSControlStateValueOff];
     if( ! bEnabled )
         [pBtn setEnabled: NO];
     linebreakCell( [pBtn cell], rText );
@@ -731,7 +731,7 @@ static void addRadio( NSView* pCurParent, long rCurX, long& rCurY, long nAttachO
                           { static_cast<CGFloat>(280 - rCurX),
                             static_cast<CGFloat>(5*rChoices.getLength()) } };
     [pProto setTitle: @"RadioButtonGroup"];
-    [pProto setButtonType: NSRadioButton];
+    [pProto setButtonType: NSButtonTypeRadio];
     NSMatrix* pMatrix = [[NSMatrix alloc] initWithFrame: aRadioRect
                                           mode: NSRadioModeMatrix
                                           prototype: static_cast<NSCell*>(pProto)

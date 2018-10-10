@@ -105,7 +105,7 @@
         return;
     }
     uno::Any aValue;
-    aValue <<= ([static_cast<NSButton*>(sender) state] == NSOnState);
+    aValue <<= ([static_cast<NSButton*>(sender) state] == NSControlStateValueOn);
     
     filePicker->setValue(css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
 }

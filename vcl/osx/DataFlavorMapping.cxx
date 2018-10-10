@@ -111,10 +111,10 @@ namespace
    */
   static const FlavorMap flavorMap[] =
     {
-      { NSStringPboardType, "text/plain;charset=utf-16", "Unicode Text (UTF-16)", true },
-      { NSRTFPboardType, "text/rtf", "Rich Text Format", false },
-      { NSTIFFPboardType, "image/png", "Portable Network Graphics", false },
-      { NSHTMLPboardType, "text/html", "Plain Html", false },
+      { NSPasteboardTypeString, "text/plain;charset=utf-16", "Unicode Text (UTF-16)", true },
+      { NSPasteboardTypeRTF, "text/rtf", "Rich Text Format", false },
+      { NSPasteboardTypeTIFF, "image/png", "Portable Network Graphics", false },
+      { NSPasteboardTypeHTML, "text/html", "Plain Html", false },
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
           // "'NSFilenamesPboardType' is deprecated: first deprecated in macOS 10.14 - Create
           // multiple pasteboard items with NSPasteboardTypeFileURL or kUTTypeFileURL instead"
@@ -538,7 +538,7 @@ const NSString* DataFlavorMapper::openOfficeToSystemFlavor( const DataFlavor& oO
 
 NSString* DataFlavorMapper::openOfficeImageToSystemFlavor(NSPasteboard* pPasteboard)
 {
-    NSArray *supportedTypes = [NSArray arrayWithObjects: NSTIFFPboardType, nil];
+    NSArray *supportedTypes = [NSArray arrayWithObjects: NSPasteboardTypeTIFF, nil];
     NSString *sysFlavor = [pPasteboard availableTypeFromArray:supportedTypes];
     return sysFlavor;
 }
@@ -567,9 +567,9 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavo
             }
           else
           */
-          if ([systemFlavor caseInsensitiveCompare: NSTIFFPboardType] == NSOrderedSame)
+          if ([systemFlavor caseInsensitiveCompare: NSPasteboardTypeTIFF] == NSOrderedSame)
             {
-              dp = DataProviderPtr_t( new PNGDataProvider( data, NSTIFFFileType));
+              dp = DataProviderPtr_t( new PNGDataProvider( data, NSBitmapImageFileTypeTIFF));
             }
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
               // "'NSFilenamesPboardType' is deprecated: first deprecated in macOS 10.14 - Create
@@ -610,17 +610,17 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavo
 {
   DataProviderPtr_t dp;
 
-  if ([systemFlavor caseInsensitiveCompare: NSStringPboardType] == NSOrderedSame)
+  if ([systemFlavor caseInsensitiveCompare: NSPasteboardTypeString] == NSOrderedSame)
     {
       dp = DataProviderPtr_t(new UniDataProvider(systemData));
     }
-  else if ([systemFlavor caseInsensitiveCompare: NSHTMLPboardType] == NSOrderedSame)
+  else if ([systemFlavor caseInsensitiveCompare: NSPasteboardTypeHTML] == NSOrderedSame)
     {
       dp = DataProviderPtr_t(new HTMLFormatDataProvider(systemData));
     }
-  else if ([systemFlavor caseInsensitiveCompare: NSTIFFPboardType] == NSOrderedSame)
+  else if ([systemFlavor caseInsensitiveCompare: NSPasteboardTypeTIFF] == NSOrderedSame)
     {
-      dp = DataProviderPtr_t( new PNGDataProvider(systemData, NSTIFFFileType));
+      dp = DataProviderPtr_t( new PNGDataProvider(systemData, NSBitmapImageFileTypeTIFF));
     }
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
       // "'NSFilenamesPboardType' is deprecated: first deprecated in macOS 10.14 - Create multiple
@@ -665,7 +665,7 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const css::uno::Sequence<c
   {
       if( flavors[i].MimeType.startsWith("image/bmp") )
       {
-          [array addObject: NSTIFFPboardType];
+          [array addObject: NSPasteboardTypeTIFF];
       }
       else
       {
