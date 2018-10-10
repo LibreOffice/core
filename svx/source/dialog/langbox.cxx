@@ -530,8 +530,8 @@ void LanguageBox::set_active_id(const LanguageType eLangType)
         m_xControl->set_active(nAt);
 }
 
-void LanguageBox::AddLanguages( const std::vector< LanguageType >& rLanguageTypes,
-        SvxLanguageListFlags nLangList )
+void LanguageBox::AddLanguages(const std::vector< LanguageType >& rLanguageTypes,
+        SvxLanguageListFlags nLangList, std::vector<weld::ComboBoxEntry>& rEntries)
 {
     for ( auto const & nLangType : rLanguageTypes )
     {
@@ -542,7 +542,11 @@ void LanguageBox::AddLanguages( const std::vector< LanguageType >& rLanguageType
             {
                 int nAt = ImplTypeToPos(nLang);
                 if (nAt == -1)
-                    InsertLanguage( nLang );
+                {
+                    rEntries.push_back(BuildEntry(nLang));
+                    if (rEntries.back().sString.isEmpty())
+                        rEntries.pop_back();
+                }
             }
         }
     }
@@ -556,14 +560,15 @@ void LanguageBox::ImplClear()
 void LanguageBox::SetLanguageList( SvxLanguageListFlags nLangList,
         bool bHasLangNone, bool bLangNoneIsLangAll, bool bCheckSpellAvail )
 {
-    ImplClear();
-
     m_bHasLangNone          = bHasLangNone;
     m_bLangNoneIsLangAll    = bLangNoneIsLangAll;
     m_bWithCheckmark        = bCheckSpellAvail;
 
-    if ( SvxLanguageListFlags::EMPTY == nLangList )
+    if (SvxLanguageListFlags::EMPTY == nLangList)
+    {
+        ImplClear();
         return;
+    }
 
     bool bAddAvailable = (!(nLangList & SvxLanguageListFlags::ONLY_KNOWN) &&
             ((nLangList & SvxLanguageListFlags::ALL) ||
@@ -632,7 +637,7 @@ void LanguageBox::SetLanguageList( SvxLanguageListFlags nLangList,
         nCount = SvtLanguageTable::GetLanguageEntryCount();
     }
 
-    m_xControl->freeze();
+    std::vector<weld::ComboBoxEntry> aEntries;
     for ( sal_uInt32 i = 0; i < nCount; i++ )
     {
         LanguageType nLangType;
@@ -656,22 +661,26 @@ void LanguageBox::SetLanguageList( SvxLanguageListFlags nLangList,
                lcl_SeqHasLang(aHyphUsedLang, nLangType)) ||
               (bool(nLangList & SvxLanguageListFlags::THES_USED) &&
                lcl_SeqHasLang(aThesUsedLang, nLangType))) )
-            InsertLanguage( nLangType );
+        {
+            aEntries.push_back(BuildEntry(nLangType));
+            if (aEntries.back().sString.isEmpty())
+                aEntries.pop_back();
+        }
     }
 
     if (bAddAvailable)
     {
         // Spell checkers, hyphenators and thesauri may add language tags
         // unknown so far.
-        AddLanguages( aSpellAvailLang, nLangList);
-        AddLanguages( aHyphAvailLang, nLangList);
-        AddLanguages( aThesAvailLang, nLangList);
+        AddLanguages(aSpellAvailLang, nLangList, aEntries);
+        AddLanguages(aHyphAvailLang, nLangList, aEntries);
+        AddLanguages(aThesAvailLang, nLangList, aEntries);
     }
 
     if (bHasLangNone)
-        InsertLanguage( LANGUAGE_NONE );
+       aEntries.push_back(BuildEntry(LANGUAGE_NONE));
 
-    m_xControl->thaw();
+    m_xControl->insert_vector(aEntries, false);
 }
 
 int LanguageBox::ImplTypeToPos(LanguageType eType) const
@@ -681,6 +690,17 @@ int LanguageBox::ImplTypeToPos(LanguageType eType) const
 
 void LanguageBox::InsertLanguage(const LanguageType nLangType)
 {
+    weld::ComboBoxEntry aEntry = BuildEntry(nLangType);
+    if (aEntry.sString.isEmpty())
+        return;
+    if (aEntry.sImage.isEmpty())
+        m_xControl->append(aEntry.sId, aEntry.sString);
+    else
+        m_xControl->append(aEntry.sId, aEntry.sString, aEntry.sImage);
+}
+
+weld::ComboBoxEntry LanguageBox::BuildEntry(const LanguageType nLangType)
+{
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage(nLangType);
     // For obsolete and to be replaced languages check whether an entry of the
     // replacement already exists and if so don't add an entry with identical
@@ -689,7 +709,7 @@ void LanguageBox::InsertLanguage(const LanguageType nLangType)
     {
         int nAt = ImplTypeToPos( nLang );
         if (nAt != -1)
-            return;
+            return weld::ComboBoxEntry("");
     }
 
     OUString aStrEntry = SvtLanguageTable::GetLanguageString( nLang );
@@ -721,11 +741,10 @@ void LanguageBox::InsertLanguage(const LanguageType nLangType)
 
         bool bFound = m_xSpellUsedLang && lcl_SeqHasLang(*m_xSpellUsedLang, static_cast<sal_uInt16>(nRealLang));
 
-        m_xControl->append(OUString::number(static_cast<sal_uInt16>(nLangType)), aStrEntry,
-                           bFound ? OUString(RID_SVXBMP_CHECKED) : OUString(RID_SVXBMP_NOTCHECKED));
+        return weld::ComboBoxEntry(aStrEntry, OUString::number(static_cast<sal_uInt16>(nLangType)), bFound ? OUString(RID_SVXBMP_CHECKED) : OUString(RID_SVXBMP_NOTCHECKED));
     }
     else
-        m_xControl->append(OUString::number(static_cast<sal_uInt16>(nLangType)), aStrEntry);
+        return weld::ComboBoxEntry(aStrEntry, OUString::number(static_cast<sal_uInt16>(nLangType)));
 }
 
 IMPL_LINK(LanguageBox, ChangeHdl, weld::ComboBox&, rControl, void)

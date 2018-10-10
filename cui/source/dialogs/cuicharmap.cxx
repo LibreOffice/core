@@ -422,17 +422,18 @@ void SvxCharacterMap::init()
     OUString aDefStr( aFont.GetFamilyName() );
     OUString aLastName;
     int nCount = m_xVirDev->GetDevFontCount();
-    m_xFontLB->freeze();
+    std::vector<weld::ComboBoxEntry> aEntries;
+    aEntries.reserve(nCount);
     for (int i = 0; i < nCount; ++i)
     {
         OUString aFontName( m_xVirDev->GetDevFont( i ).GetFamilyName() );
         if (aFontName != aLastName)
         {
             aLastName = aFontName;
-            m_xFontLB->append(OUString::number(i), aFontName);
+            aEntries.emplace_back(aFontName, OUString::number(i));
         }
     }
-    m_xFontLB->thaw();
+    m_xFontLB->insert_vector(aEntries, true);
     // the font may not be in the list =>
     // try to find a font name token in list and select found font,
     // else select topmost entry
@@ -596,13 +597,11 @@ void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
 void SvxCharacterMap::fillAllSubsets(weld::ComboBox& rListBox)
 {
     SubsetMap aAll(nullptr);
-    rListBox.clear();
-    rListBox.freeze();
+    std::vector<weld::ComboBoxEntry> aEntries;
     for (auto & subset : aAll.GetSubsetMap())
-        rListBox.append_text(subset.GetName());
-    rListBox.thaw();
+        aEntries.emplace_back(subset.GetName());
+    rListBox.insert_vector(aEntries, true);
 }
-
 
 void SvxCharacterMap::insertCharToDoc(const OUString& sGlyph)
 {

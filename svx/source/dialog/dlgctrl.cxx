@@ -1060,7 +1060,7 @@ void SvxLineLB::Modify(const XDashEntry& rEntry, sal_Int32 nPos, const BitmapEx&
         const Size aBmpSize(rBitmap.GetSizePixel());
         pVD->SetOutputSizePixel(aBmpSize, false);
         pVD->DrawBitmapEx(Point(), rBitmap);
-        m_xControl->insert(nPos, "", rEntry.GetName(), nullptr, pVD);
+        m_xControl->insert(nPos, rEntry.GetName(), nullptr, nullptr, pVD);
     }
     else
     {
@@ -1128,7 +1128,7 @@ void SvxLineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bi
         const Size aBmpSize(rBitmap.GetSizePixel());
         pVD->SetOutputSizePixel(Size(aBmpSize.Width() / 2, aBmpSize.Height()), false);
         pVD->DrawBitmapEx(Point(-aBmpSize.Width() / 2, 0), rBitmap);
-        m_xControl->insert(nPos, "", rEntry.GetName(), nullptr, pVD);
+        m_xControl->insert(nPos, rEntry.GetName(), nullptr, nullptr, pVD);
     }
     else
     {

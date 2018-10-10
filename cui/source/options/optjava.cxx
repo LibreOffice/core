@@ -804,7 +804,7 @@ void SvxJavaParameterDlg::EditParameter()
         if ( !editedClassPath.isEmpty() && editableClassPath != editedClassPath )
         {
             m_xAssignedList->remove(nPos);
-            m_xAssignedList->insert_text(editedClassPath, nPos);
+            m_xAssignedList->insert_text(nPos, editedClassPath);
             m_xAssignedList->select(nPos);
         }
     }

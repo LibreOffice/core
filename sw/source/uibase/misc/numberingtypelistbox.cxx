@@ -113,7 +113,8 @@ void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
         }
         if (bInsert)
         {
-            m_xWidget->insert(nPos, OUString::number(nValue), SvxNumberingTypeTable::GetString(i), nullptr, nullptr);
+            OUString sId(OUString::number(nValue));
+            m_xWidget->insert(nPos, SvxNumberingTypeTable::GetString(i), &sId, nullptr, nullptr);
         }
     }
     if (nTypeFlags & SwInsertNumTypes::Extended)

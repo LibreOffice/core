@@ -154,7 +154,7 @@ void SdCustomShowDlg::SelectHdl(void const *p)
                     (*pCustomShowList)[nPos] = pCustomShow;
                     pCustomShowList->Seek(nPos);
                     m_xLbCustomShows->remove(nPos);
-                    m_xLbCustomShows->insert_text(pCustomShow->GetName(), nPos);
+                    m_xLbCustomShows->insert_text(nPos, pCustomShow->GetName());
                     m_xLbCustomShows->select(nPos);
                 }
                 if (aDlg.IsModified())
@@ -378,7 +378,8 @@ void SdDefineCustomShowDlg::ClickButtonHdl2(void const * p)
             {
                 OUString aStr = m_xLbPages->get_text(i);
                 SdPage* pPage = rDoc.GetSdPage(i, PageKind::Standard);
-                m_xLbCustomPages->insert(nPosCP, OUString::number(reinterpret_cast<sal_uInt64>(pPage)), aStr, nullptr, nullptr);
+                OUString sId(OUString::number(reinterpret_cast<sal_uInt64>(pPage)));
+                m_xLbCustomPages->insert(nPosCP, aStr, &sId, nullptr, nullptr);
                 m_xLbCustomPages->select(nPosCP != -1 ? nPosCP : m_xLbCustomPages->n_children() - 1);
 
                 if (nPosCP != -1)

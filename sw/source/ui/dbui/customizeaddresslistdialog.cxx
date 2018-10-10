@@ -103,7 +103,7 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, weld::Button&, rButto
 
         }
 
-        m_xFieldsLB->insert_text(sNew, nPos);
+        m_xFieldsLB->insert_text(nPos, sNew);
         m_xFieldsLB->select(nPos);
     }
     UpdateButtons();
@@ -135,7 +135,7 @@ IMPL_LINK(SwCustomizeAddressListDialog, UpDownHdl_Impl, weld::Button&, rButton, 
         --nPos;
     else
         ++nPos;
-    m_xFieldsLB->insert_text(aTemp, nPos);
+    m_xFieldsLB->insert_text(nPos, aTemp);
     m_xFieldsLB->select(nPos);
     //align m_xNewData
     OUString sHeader = m_xNewData->aDBColumnHeaders[nOldPos];

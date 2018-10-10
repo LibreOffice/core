@@ -189,7 +189,8 @@ SwColumnDlg::SwColumnDlg(weld::Window* pParent, SwWrtShell& rSh)
     {
         const OUString sPageStr = pApplyToLB->get_text(nPagePos) + pPageDesc->GetName();
         pApplyToLB->remove(nPagePos);
-        pApplyToLB->insert(nPagePos, OUString::number(LISTBOX_PAGE), sPageStr, nullptr, nullptr);
+        OUString sId(OUString::number(LISTBOX_PAGE));
+        pApplyToLB->insert(nPagePos, sPageStr, &sId, nullptr, nullptr);
     }
     else
         pApplyToLB->remove( nPagePos );

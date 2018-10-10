@@ -1692,12 +1692,7 @@ public:
         m_xTreeView->SetDoubleClickHdl(LINK(this, SalInstanceTreeView, DoubleClickHdl));
     }
 
-    virtual void insert_text(const OUString& rText, int pos) override
-    {
-        m_xTreeView->InsertEntry(rText, pos == -1 ? LISTBOX_APPEND : pos);
-    }
-
-    virtual void insert(int pos, const OUString& rId, const OUString& rStr, const OUString* pIconName, VirtualDevice* pImageSurface) override
+    virtual void insert(int pos, const OUString& rStr, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override
     {
         auto nInsertPos = pos == -1 ? COMBOBOX_APPEND : pos;
         sal_Int32 nInsertedAt;
@@ -1707,7 +1702,8 @@ public:
             nInsertedAt = m_xTreeView->InsertEntry(rStr, createImage(*pIconName), nInsertPos);
         else
             nInsertedAt = m_xTreeView->InsertEntry(rStr, createImage(*pImageSurface), nInsertPos);
-        m_xTreeView->SetEntryData(nInsertedAt, new OUString(rId));
+        if (pId)
+            m_xTreeView->SetEntryData(nInsertedAt, new OUString(*pId));
     }
 
     virtual void set_font_color(int pos, const Color& rColor) const override
@@ -2307,9 +2303,17 @@ public:
         return *pRet;
     }
 
-    virtual void insert_text(int pos, const OUString& rStr) override
+    virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems, bool bKeepExisting) override
     {
-        m_xComboBox->InsertEntry(rStr, pos == -1 ? COMBOBOX_APPEND : pos);
+        freeze();
+        if (!bKeepExisting)
+            clear();
+        for (const auto& rItem : rItems)
+        {
+            insert(-1, rItem.sString, rItem.sId.isEmpty() ? nullptr : &rItem.sId,
+                   rItem.sImage.isEmpty() ? nullptr : &rItem.sImage, nullptr);
+        }
+        thaw();
     }
 
     virtual int get_count() const override
@@ -2381,7 +2385,7 @@ public:
         m_xComboBox->RemoveEntry(pos);
     }
 
-    virtual void insert(int pos, const OUString& rId, const OUString& rStr, const OUString* pIconName, VirtualDevice* pImageSurface) override
+    virtual void insert(int pos, const OUString& rStr, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override
     {
         auto nInsertPos = pos == -1 ? COMBOBOX_APPEND : pos;
         sal_Int32 nInsertedAt;
@@ -2391,7 +2395,8 @@ public:
             nInsertedAt = m_xComboBox->InsertEntry(rStr, createImage(*pIconName), nInsertPos);
         else
             nInsertedAt = m_xComboBox->InsertEntry(rStr, createImage(*pImageSurface), nInsertPos);
-        m_xComboBox->SetEntryData(nInsertedAt, new OUString(rId));
+        if (pId)
+            m_xComboBox->SetEntryData(nInsertedAt, new OUString(*pId));
     }
 
     virtual bool has_entry() const override
@@ -2477,7 +2482,7 @@ public:
         m_xComboBox->RemoveEntryAt(pos);
     }
 
-    virtual void insert(int pos, const OUString& rId, const OUString& rStr, const OUString* pIconName, VirtualDevice* pImageSurface) override
+    virtual void insert(int pos, const OUString& rStr, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override
     {
         auto nInsertPos = pos == -1 ? COMBOBOX_APPEND : pos;
         sal_Int32 nInsertedAt;
@@ -2487,7 +2492,8 @@ public:
             nInsertedAt = m_xComboBox->InsertEntryWithImage(rStr, createImage(*pIconName), nInsertPos);
         else
             nInsertedAt = m_xComboBox->InsertEntryWithImage(rStr, createImage(*pImageSurface), nInsertPos);
-        m_xComboBox->SetEntryData(nInsertedAt, new OUString(rId));
+        if (pId)
+            m_xComboBox->SetEntryData(nInsertedAt, new OUString(*pId));
     }
 
     virtual void set_entry_text(const OUString& rText) override
