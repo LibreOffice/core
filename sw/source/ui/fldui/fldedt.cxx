@@ -132,6 +132,7 @@ void SwFieldEditDlg::Init()
 
         // Traveling only when more than one field
         pSh->StartAction();
+        pSh->ClearMark();
         pSh->CreateCursor();
 
         bool bMove = rMgr.GoNext();
