@@ -87,6 +87,7 @@ $(eval $(call gb_Library_use_system_win32_libs,vclplug_win,\
     imm32 \
     ole32 \
     shell32 \
+    shlwapi \
     version \
     winspool \
 ))
