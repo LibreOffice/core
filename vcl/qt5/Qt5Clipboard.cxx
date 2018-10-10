@@ -20,6 +20,22 @@
 
 #include <Qt5Clipboard.hxx>
 #include <Qt5Tools.hxx>
+namespace
+{
+void lcl_peekFormats(const css::uno::Sequence<css::datatransfer::DataFlavor>& rFormats,
+                     bool& bHasHtml, bool& bHasImage)
+{
+    for (int i = 0; i < rFormats.getLength(); ++i)
+    {
+        const css::datatransfer::DataFlavor& rFlavor = rFormats[i];
+
+        if (rFlavor.MimeType == "text/html")
+            bHasHtml = true;
+        else if (rFlavor.MimeType.startsWith("image"))
+            bHasImage = true;
+    }
+}
+}
 
 std::vector<css::datatransfer::DataFlavor> Qt5Transferable::getTransferDataFlavorsAsVector()
 {
@@ -163,9 +179,30 @@ void VclQt5Clipboard::setContents(
 
     if (m_aContents.is())
     {
+        css::uno::Sequence<css::datatransfer::DataFlavor> aFormats
+            = xTrans->getTransferDataFlavors();
+        bool bHasHtml = false, bHasImage = false;
+        lcl_peekFormats(aFormats, bHasHtml, bHasImage);
+
         css::datatransfer::DataFlavor aFlavor;
-        aFlavor.MimeType = "text/plain;charset=utf-16";
-        aFlavor.DataType = cppu::UnoType<OUString>::get();
+        QClipboard* clipboard = QApplication::clipboard();
+
+        if (bHasImage)
+        {
+            //FIXME: other image formats?
+            aFlavor.MimeType = "image/png";
+            aFlavor.DataType = cppu::UnoType<sal_Int8>::get();
+        }
+        else if (bHasHtml)
+        {
+            aFlavor.MimeType = "text/html";
+            aFlavor.DataType = cppu::UnoType<sal_Int8>::get();
+        }
+        else
+        {
+            aFlavor.MimeType = "text/plain;charset=utf-16";
+            aFlavor.DataType = cppu::UnoType<OUString>::get();
+        }
 
         Any aValue;
         try
@@ -176,11 +213,34 @@ void VclQt5Clipboard::setContents(
         {
         }
 
-        OUString aString;
-        aValue >>= aString;
+        if (aValue.getValueTypeClass() == TypeClass_STRING)
+        {
+            OUString aString;
+            aValue >>= aString;
+            clipboard->setText(toQString(aString));
+        }
+        else if (aValue.getValueType() == cppu::UnoType<Sequence<sal_Int8>>::get())
+        {
+            Sequence<sal_Int8> aData;
+            aValue >>= aData;
 
-        QClipboard* clipboard = QApplication::clipboard();
-        clipboard->setText(toQString(aString));
+            if (bHasHtml)
+            {
+                OUString aHtmlAsString(reinterpret_cast<const char*>(aData.getConstArray()),
+                                       aData.getLength(), RTL_TEXTENCODING_UTF8);
+                QMimeData* mimeData = new QMimeData;
+
+                mimeData->setHtml(toQString(aHtmlAsString));
+                clipboard->setMimeData(mimeData);
+            }
+            else if (bHasImage)
+            {
+                QImage image;
+                image.loadFromData(reinterpret_cast<const uchar*>(aData.getConstArray()),
+                                   aData.getLength());
+                clipboard->setImage(image);
+            }
+        }
     }
 
     aEv.Contents = getContents();
