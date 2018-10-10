@@ -44,11 +44,14 @@ public:
     void SetReadyToDrag( bool bStartDrag ) { mbIsReadyToDrag = bStartDrag; }
     bool IsReadyToDrag() const { return mbIsReadyToDrag; }
 
+    void NotifyResize();
+
     using SfxDockingWindow::Close;
 
 protected:
     // Window overridables
     virtual void GetFocus() override;
+    virtual void Resize() override;
 
     virtual SfxChildAlignment CheckAlignment (
         SfxChildAlignment eCurrentAlignment,

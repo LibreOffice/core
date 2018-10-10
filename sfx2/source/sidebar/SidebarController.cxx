@@ -414,6 +414,8 @@ void SidebarController::NotifyResize()
     }
 
     RestrictWidth(nMinimalWidth);
+
+    mpParentWindow->NotifyResize();
 }
 
 void SidebarController::ProcessNewWidth (const sal_Int32 nNewWidth)
