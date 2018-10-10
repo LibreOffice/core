@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_8f60b434",
+        "filename": "svtools/source/misc/transfer.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-10-10T05:54:48Z",
+      "side": 1,
+      "message": "should really pull this chunk of code out into a local function and share it with the block below",
+      "revId": "9ba418a0a0a2274215347962ed76ff0f5cc837d1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
