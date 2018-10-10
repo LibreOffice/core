@@ -208,6 +208,8 @@ SelectPersonaDialog::SelectPersonaDialog( vcl::Window *pParent )
         nIndex->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
         nIndex->Disable();
     }
+
+    m_vSearchSuggestions[DEFAULT_PERSONA_CATEGORY]->Click();
 }
 
 SelectPersonaDialog::~SelectPersonaDialog()
