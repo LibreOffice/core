@@ -281,7 +281,7 @@ void CDOTransferable::initFlavorList( )
         pEnumFormatEtc->Reset( );
 
         FORMATETC fetc;
-        while ( S_FALSE != pEnumFormatEtc->Next( 1, &fetc, nullptr ) )
+        while ( S_OK == pEnumFormatEtc->Next( 1, &fetc, nullptr ) )
         {
             // we use locales only to determine the
             // charset if there is text on the cliboard
