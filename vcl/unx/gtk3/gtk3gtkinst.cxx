@@ -3783,16 +3783,14 @@ namespace
         return found;
     }
 
-    void insert_row(GtkListStore* pListStore, int pos, const OUString& rId, const OUString& rText, const OUString* pIconName, VirtualDevice* pDevice)
+    void insert_row(GtkListStore* pListStore, GtkTreeIter& iter, int pos, const OUString* pId, const OUString& rText, const OUString* pIconName, VirtualDevice* pDevice)
     {
-        GtkTreeIter iter;
-        gtk_list_store_insert(pListStore, &iter, pos);
         if (!pIconName && !pDevice)
         {
-            gtk_list_store_set(pListStore, &iter,
-                    0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
-                    1, OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr(),
-                    -1);
+            gtk_list_store_insert_with_values(pListStore, &iter, pos,
+                                              0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+                                              1, !pId ? nullptr : OUStringToOString(*pId, RTL_TEXTENCODING_UTF8).getStr(),
+                                              -1);
         }
         else
         {
@@ -3818,11 +3816,11 @@ namespace
                                                rSettings.GetUILanguageTag().getBcp47());
                 }
 
-                gtk_list_store_set(pListStore, &iter,
-                        0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
-                        1, OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr(),
-                        2, pixbuf,
-                        -1);
+                gtk_list_store_insert_with_values(pListStore, &iter, pos,
+                                                  0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+                                                  1, !pId ? nullptr : OUStringToOString(*pId, RTL_TEXTENCODING_UTF8).getStr(),
+                                                  2, pixbuf,
+                                                  -1);
 
                 if (pixbuf)
                     g_object_unref(pixbuf);
@@ -3842,11 +3840,11 @@ namespace
                 cairo_paint(cr);
                 cairo_destroy(cr);
 
-                gtk_list_store_set(pListStore, &iter,
-                        0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
-                        1, OUStringToOString(rId, RTL_TEXTENCODING_UTF8).getStr(),
-                        3, target,
-                        -1);
+                gtk_list_store_insert_with_values(pListStore, &iter, pos,
+                                                  0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(),
+                                                  1, !pId ? nullptr : OUStringToOString(*pId, RTL_TEXTENCODING_UTF8).getStr(),
+                                                  3, target,
+                                                  -1);
                 cairo_surface_destroy(target);
             }
         }
@@ -3908,19 +3906,11 @@ public:
     {
     }
 
-    virtual void insert_text(const OUString& rText, int pos) override
+    virtual void insert(int pos, const OUString& rText, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override
     {
         disable_notify_events();
         GtkTreeIter iter;
-        gtk_list_store_insert(m_pListStore, &iter, pos);
-        gtk_list_store_set(m_pListStore, &iter, 0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(), -1);
-        enable_notify_events();
-    }
-
-    virtual void insert(int pos, const OUString& rId, const OUString& rText, const OUString* pIconName, VirtualDevice* pImageSurface) override
-    {
-        disable_notify_events();
-        insert_row(m_pListStore, pos, rId, rText, pIconName, pImageSurface);
+        insert_row(m_pListStore, iter, pos, pId, rText, pIconName, pImageSurface);
         enable_notify_events();
     }
 
@@ -4799,6 +4789,7 @@ class GtkInstanceComboBox : public GtkInstanceContainer, public vcl::ISearchable
 {
 private:
     GtkComboBox* m_pComboBox;
+    GtkTreeModel* m_pTreeModel;
     GtkMenu* m_pMenu;
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
@@ -4854,12 +4845,11 @@ private:
     OUString get(int pos, int col) const
     {
         OUString sRet;
-        GtkTreeModel *pModel = gtk_combo_box_get_model(m_pComboBox);
         GtkTreeIter iter;
-        if (gtk_tree_model_iter_nth_child(pModel, &iter, nullptr, pos))
+        if (gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos))
         {
             gchar* pStr;
-            gtk_tree_model_get(pModel, &iter, col, &pStr, -1);
+            gtk_tree_model_get(m_pTreeModel, &iter, col, &pStr, -1);
             sRet = OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
             g_free(pStr);
         }
@@ -4868,9 +4858,8 @@ private:
 
     int find(const OUString& rStr, int col) const
     {
-        GtkTreeModel *pModel = gtk_combo_box_get_model(m_pComboBox);
         GtkTreeIter iter;
-        if (!gtk_tree_model_get_iter_first(pModel, &iter))
+        if (!gtk_tree_model_get_iter_first(m_pTreeModel, &iter))
             return -1;
 
         OString aStr(OUStringToOString(rStr, RTL_TEXTENCODING_UTF8).getStr());
@@ -4878,13 +4867,13 @@ private:
         do
         {
             gchar* pStr;
-            gtk_tree_model_get(pModel, &iter, col, &pStr, -1);
+            gtk_tree_model_get(m_pTreeModel, &iter, col, &pStr, -1);
             const bool bEqual = g_strcmp0(pStr, aStr.getStr()) == 0;
             g_free(pStr);
             if (bEqual)
                 return nRet;
             ++nRet;
-        } while (gtk_tree_model_iter_next(pModel, &iter));
+        } while (gtk_tree_model_iter_next(m_pTreeModel, &iter));
 
         return -1;
     }
@@ -4902,7 +4891,7 @@ private:
         if (gtk_entry_get_completion(pEntry))
             return;
         GtkEntryCompletion* pCompletion = gtk_entry_completion_new();
-        gtk_entry_completion_set_model(pCompletion, gtk_combo_box_get_model(m_pComboBox));
+        gtk_entry_completion_set_model(pCompletion, m_pTreeModel);
         gtk_entry_completion_set_text_column(pCompletion, 0);
         gtk_entry_completion_set_inline_selection(pCompletion, true);
         gtk_entry_completion_set_inline_completion(pCompletion, true);
@@ -5052,6 +5041,7 @@ public:
     GtkInstanceComboBox(GtkComboBox* pComboBox, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pComboBox), bTakeOwnership)
         , m_pComboBox(pComboBox)
+        , m_pTreeModel(gtk_combo_box_get_model(m_pComboBox))
         , m_pMenu(nullptr)
         , m_aQuickSelectionEngine(*this)
         , m_bPopupActive(false)
@@ -5149,10 +5139,9 @@ public:
         if (!gtk_combo_box_get_active_iter(m_pComboBox, &iter))
             return OUString();
 
-        GtkTreeModel *pModel = gtk_combo_box_get_model(m_pComboBox);
         gint col = gtk_combo_box_get_entry_text_column(m_pComboBox);
         gchar* pStr = nullptr;
-        gtk_tree_model_get(pModel, &iter, col, &pStr, -1);
+        gtk_tree_model_get(m_pTreeModel, &iter, col, &pStr, -1);
         OUString sRet(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
         g_free(pStr);
 
@@ -5188,40 +5177,42 @@ public:
 #endif
     }
 
-    virtual void insert_text(int pos, const OUString& rText) override
+    virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems, bool bKeepExisting) override
     {
-        disable_notify_events();
+        freeze();
+        if (!bKeepExisting)
+            clear();
         GtkTreeIter iter;
-        GtkListStore* pListStore = GTK_LIST_STORE(gtk_combo_box_get_model(m_pComboBox));
-        gtk_list_store_insert(pListStore, &iter, pos);
-        gtk_list_store_set(pListStore, &iter, 0, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr(), -1);
-        enable_notify_events();
-        bodge_wayland_menu_not_appearing();
+        for (const auto& rItem : rItems)
+        {
+            insert_row(GTK_LIST_STORE(m_pTreeModel), iter, -1, rItem.sId.isEmpty() ? nullptr : &rItem.sId,
+                       rItem.sString, rItem.sImage.isEmpty() ? nullptr : &rItem.sImage, nullptr);
+        }
+        thaw();
     }
 
     virtual void remove(int pos) override
     {
         disable_notify_events();
         GtkTreeIter iter;
-        GtkListStore* pListStore = GTK_LIST_STORE(gtk_combo_box_get_model(m_pComboBox));
-        gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(pListStore), &iter, nullptr, pos);
-        gtk_list_store_remove(pListStore, &iter);
+        gtk_tree_model_iter_nth_child(m_pTreeModel, &iter, nullptr, pos);
+        gtk_list_store_remove(GTK_LIST_STORE(m_pTreeModel), &iter);
         enable_notify_events();
         bodge_wayland_menu_not_appearing();
     }
 
-    virtual void insert(int pos, const OUString& rId, const OUString& rText, const OUString* pIconName, VirtualDevice* pImageSurface) override
+    virtual void insert(int pos, const OUString& rText, const OUString* pId, const OUString* pIconName, VirtualDevice* pImageSurface) override
     {
         disable_notify_events();
-        insert_row(GTK_LIST_STORE(gtk_combo_box_get_model(m_pComboBox)), pos, rId, rText, pIconName, pImageSurface);
+        GtkTreeIter iter;
+        insert_row(GTK_LIST_STORE(m_pTreeModel), iter, pos, pId, rText, pIconName, pImageSurface);
         enable_notify_events();
         bodge_wayland_menu_not_appearing();
     }
 
     virtual int get_count() const override
     {
-        GtkTreeModel *pModel = gtk_combo_box_get_model(m_pComboBox);
-        return gtk_tree_model_iter_n_children(pModel, nullptr);
+        return gtk_tree_model_iter_n_children(m_pTreeModel, nullptr);
     }
 
     virtual int find_text(const OUString& rStr) const override
@@ -5237,8 +5228,7 @@ public:
     virtual void clear() override
     {
         disable_notify_events();
-        GtkTreeModel *pModel = gtk_combo_box_get_model(m_pComboBox);
-        gtk_list_store_clear(GTK_LIST_STORE(pModel));
+        gtk_list_store_clear(GTK_LIST_STORE(m_pTreeModel));
         enable_notify_events();
         bodge_wayland_menu_not_appearing();
     }
@@ -5248,8 +5238,7 @@ public:
         m_xSorter.reset(new comphelper::string::NaturalStringSorter(
                             ::comphelper::getProcessComponentContext(),
                             Application::GetSettings().GetUILanguageTag().getLocale()));
-        GtkTreeModel* pModel = gtk_combo_box_get_model(m_pComboBox);
-        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(pModel);
+        GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
         gtk_tree_sortable_set_sort_func(pSortable, 0, sort_func, m_xSorter.get(), nullptr);
         gtk_tree_sortable_set_sort_column_id(pSortable, 0, GTK_SORT_ASCENDING);
     }
@@ -5340,24 +5329,31 @@ public:
 
     virtual void freeze() override
     {
+        disable_notify_events();
+        g_object_ref(m_pTreeModel);
         GtkInstanceContainer::freeze();
+        gtk_combo_box_set_model(m_pComboBox, nullptr);
         if (m_xSorter)
         {
-            GtkTreeModel* pModel = gtk_combo_box_get_model(m_pComboBox);
-            GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(pModel);
+            GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
             gtk_tree_sortable_set_sort_column_id(pSortable, GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID, GTK_SORT_ASCENDING);
         }
+        enable_notify_events();
     }
 
     virtual void thaw() override
     {
+        disable_notify_events();
         if (m_xSorter)
         {
-            GtkTreeModel* pModel = gtk_combo_box_get_model(m_pComboBox);
-            GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(pModel);
+            GtkTreeSortable* pSortable = GTK_TREE_SORTABLE(m_pTreeModel);
             gtk_tree_sortable_set_sort_column_id(pSortable, 0, GTK_SORT_ASCENDING);
         }
+        gtk_combo_box_set_model(m_pComboBox, m_pTreeModel);
         GtkInstanceContainer::thaw();
+        g_object_unref(m_pTreeModel);
+        enable_notify_events();
+
         bodge_wayland_menu_not_appearing();
     }
 

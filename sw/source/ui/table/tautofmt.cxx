@@ -236,7 +236,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl, weld::Button&, void)
                             break;
 
                     m_xTableTable->InsertAutoFormat(n, std::move(pNewData));
-                    m_xLbFormat->insert_text(aFormatName, m_nDfltStylePos + n);
+                    m_xLbFormat->insert_text(m_nDfltStylePos + n, aFormatName);
                     m_xLbFormat->select(m_nDfltStylePos + n);
                     bFormatInserted = true;
                     m_xBtnAdd->set_sensitive(false);
@@ -336,7 +336,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl, weld::Button&, void)
                         }
 
                     m_xTableTable->InsertAutoFormat( n, std::move(p) );
-                    m_xLbFormat->insert_text(aFormatName, m_nDfltStylePos + n);
+                    m_xLbFormat->insert_text(m_nDfltStylePos + n, aFormatName);
                     m_xLbFormat->select(m_nDfltStylePos + n);
 
                     if ( !m_bCoreDataChanged )

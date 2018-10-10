@@ -253,6 +253,28 @@ public:
     virtual Container* weld_message_area() = 0;
 };
 
+struct VCL_DLLPUBLIC ComboBoxEntry
+{
+    OUString sString;
+    OUString sId;
+    OUString sImage;
+    ComboBoxEntry(const OUString& rString)
+        : sString(rString)
+    {
+    }
+    ComboBoxEntry(const OUString& rString, const OUString& rId)
+        : sString(rString)
+        , sId(rId)
+    {
+    }
+    ComboBoxEntry(const OUString& rString, const OUString& rId, const OUString& rImage)
+        : sString(rString)
+        , sId(rId)
+        , sImage(rImage)
+    {
+    }
+};
+
 class VCL_DLLPUBLIC ComboBox : virtual public Container
 {
 private:
@@ -265,22 +287,27 @@ protected:
     void signal_changed() { m_aChangeHdl.Call(*this); }
 
 public:
-    virtual void insert_text(int pos, const OUString& rStr) = 0;
-    void append_text(const OUString& rStr) { insert_text(-1, rStr); }
-    virtual void insert(int pos, const OUString& rId, const OUString& rStr,
+    virtual void insert(int pos, const OUString& rStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface)
         = 0;
+    virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems, bool bKeepExisting)
+        = 0;
+    void insert_text(int pos, const OUString& rStr)
+    {
+        insert(pos, rStr, nullptr, nullptr, nullptr);
+    }
+    void append_text(const OUString& rStr) { insert(-1, rStr, nullptr, nullptr, nullptr); }
     void append(const OUString& rId, const OUString& rStr)
     {
-        insert(-1, rId, rStr, nullptr, nullptr);
+        insert(-1, rStr, &rId, nullptr, nullptr);
     }
     void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
     {
-        insert(-1, rId, rStr, &rImage, nullptr);
+        insert(-1, rStr, &rId, &rImage, nullptr);
     }
     void append(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
     {
-        insert(-1, rId, rStr, nullptr, &rImage);
+        insert(-1, rStr, &rId, nullptr, &rImage);
     }
 
     virtual int get_count() const = 0;
@@ -334,22 +361,25 @@ protected:
     void signal_row_activated() { m_aRowActivatedHdl.Call(*this); }
 
 public:
-    virtual void insert_text(const OUString& rText, int pos) = 0;
-    virtual void insert(int pos, const OUString& rId, const OUString& rStr,
+    virtual void insert(int pos, const OUString& rStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface)
         = 0;
-    void append_text(const OUString& rText) { insert_text(rText, -1); }
+    void insert_text(int pos, const OUString& rStr)
+    {
+        insert(pos, rStr, nullptr, nullptr, nullptr);
+    }
+    void append_text(const OUString& rStr) { insert(-1, rStr, nullptr, nullptr, nullptr); }
     void append(const OUString& rId, const OUString& rStr)
     {
-        insert(-1, rId, rStr, nullptr, nullptr);
+        insert(-1, rStr, &rId, nullptr, nullptr);
     }
     void append(const OUString& rId, const OUString& rStr, const OUString& rImage)
     {
-        insert(-1, rId, rStr, &rImage, nullptr);
+        insert(-1, rStr, &rId, &rImage, nullptr);
     }
     void append(const OUString& rId, const OUString& rStr, VirtualDevice& rImage)
     {
-        insert(-1, rId, rStr, nullptr, &rImage);
+        insert(-1, rStr, &rId, nullptr, &rImage);
     }
 
     void connect_changed(const Link<TreeView&, void>& rLink) { m_aChangeHdl = rLink; }
@@ -671,14 +701,21 @@ protected:
 public:
     EntryTreeView(std::unique_ptr<Entry> xEntry, std::unique_ptr<TreeView> xTreeView);
 
-    virtual void insert_text(int pos, const OUString& rStr) override
+    virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems,
+                               bool bKeepExisting) override
     {
-        m_xTreeView->insert_text(rStr, pos);
+        m_xTreeView->freeze();
+        if (!bKeepExisting)
+            m_xTreeView->clear();
+        for (const auto& rItem : rItems)
+            m_xTreeView->insert(-1, rItem.sString, &rItem.sId, &rItem.sImage, nullptr);
+        m_xTreeView->thaw();
     }
-    virtual void insert(int pos, const OUString& rId, const OUString& rStr,
+
+    virtual void insert(int pos, const OUString& rStr, const OUString* pId,
                         const OUString* pIconName, VirtualDevice* pImageSurface) override
     {
-        m_xTreeView->insert(pos, rId, rStr, pIconName, pImageSurface);
+        m_xTreeView->insert(pos, rStr, pId, pIconName, pImageSurface);
     }
 
     virtual int get_count() const override { return m_xTreeView->n_children(); }

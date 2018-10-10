@@ -604,14 +604,15 @@ namespace
     void FillFontNames(weld::ComboBox& rBox, const FontList& rList)
     {
         // insert fonts
-        rBox.freeze();
         sal_uInt16 nFontCount = rList.GetFontNameCount();
+        std::vector<weld::ComboBoxEntry> aVector;
+        aVector.reserve(nFontCount);
         for (sal_uInt16 i = 0; i < nFontCount; ++i)
         {
             const FontMetric& rFontMetric = rList.GetFontName(i);
-            rBox.append_text(rFontMetric.GetFamilyName());
+            aVector.emplace_back(rFontMetric.GetFamilyName());
         }
-        rBox.thaw();
+        rBox.insert_vector(aVector, false);
     }
 }
 

@@ -1971,7 +1971,7 @@ IMPL_LINK_NOARG(SvxMainMenuOrganizerDialog, ModifyHdl, weld::Entry&, void)
     const int nNewMenuPos = m_xMenuListBox->find_id(m_sNewMenuEntryId);
     const int nOldSelection = m_xMenuListBox->get_selected_index();
     m_xMenuListBox->remove(nNewMenuPos);
-    m_xMenuListBox->insert(nNewMenuPos, m_sNewMenuEntryId, pNewEntryData->GetName(), nullptr, nullptr);
+    m_xMenuListBox->insert(nNewMenuPos, pNewEntryData->GetName(), &m_sNewMenuEntryId, nullptr, nullptr);
     m_xMenuListBox->select(nOldSelection);
 }
 
@@ -2009,7 +2009,7 @@ IMPL_LINK( SvxMainMenuOrganizerDialog, MoveHdl, weld::Button&, rButton, void )
     OUString sId = m_xMenuListBox->get_id(nSourceEntry);
     OUString sEntry = m_xMenuListBox->get_text(nSourceEntry);
     m_xMenuListBox->remove(nSourceEntry);
-    m_xMenuListBox->insert(nTargetEntry, sId, sEntry, nullptr, nullptr);
+    m_xMenuListBox->insert(nTargetEntry, sEntry, &sId, nullptr, nullptr);
     m_xMenuListBox->select(nTargetEntry);
 
     UpdateButtonStates();

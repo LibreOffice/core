@@ -150,6 +150,10 @@ private:
     bool m_bLangNoneIsLangAll;
     bool m_bWithCheckmark;
 
+    SVX_DLLPRIVATE weld::ComboBoxEntry BuildEntry(const LanguageType nLangType);
+    SVX_DLLPRIVATE void AddLanguages(const std::vector< LanguageType >& rLanguageTypes, SvxLanguageListFlags nLangList,
+                                     std::vector<weld::ComboBoxEntry>& rEntries);
+
     SVX_DLLPRIVATE int ImplTypeToPos(LanguageType eType) const;
     SVX_DLLPRIVATE void ImplClear();
     DECL_LINK(ChangeHdl, weld::ComboBox&, void);

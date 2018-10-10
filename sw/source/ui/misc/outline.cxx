@@ -91,7 +91,7 @@ void SwNumNamesDlg::SetUserNames(const OUString *pList[])
         if(pList[i])
         {
             m_xFormBox->remove(i);
-            m_xFormBox->insert_text(*pList[i], i);
+            m_xFormBox->insert_text(i, *pList[i]);
             if (i == nSelect && nSelect < SwChapterNumRules::nMaxRules)
                 nSelect++;
         }
