@@ -229,6 +229,9 @@ class REPORTDESIGN_DLLPUBLIC OUnoObject: public SdrUnoObj , public OObjectBase
     friend class DlgEdFactory;
 
     sal_uInt16   m_nObjectType;
+    // tdf#118730 remember if this object was created interactively (due to ::EndCreate being called)
+    bool         m_bSetDefaultLabel;
+
 protected:
     OUnoObject(SdrModel& rSdrModel,
         const OUString& _sComponentName,
@@ -246,6 +249,7 @@ protected:
     virtual void NbcMove( const Size& rSize ) override;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) override;
     virtual void NbcSetLogicRect(const tools::Rectangle& rRect) override;
+    virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) override;
 
     virtual SdrPage* GetImplPage() const override;
 
