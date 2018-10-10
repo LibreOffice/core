@@ -2327,8 +2327,11 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
                     OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
-                    if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT )
-                        AppendBookmark( pFieldmark->GetName() );
+                    if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT
+                         && GetExportFormat() != MSWordExportBase::ExportFormat::DOCX )
+                    {
+                       AppendBookmark( pFieldmark->GetName() );
+                    }
                     ww::eField eFieldId = lcl_getFieldId( pFieldmark );
                     OUString sCode = lcl_getFieldCode( pFieldmark );
                     if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
@@ -2391,8 +2394,11 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
                     OutputField( nullptr, eFieldId, OUString(), FieldFlags::Close );
 
-                    if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT )
+                    if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT
+                         && GetExportFormat() != MSWordExportBase::ExportFormat::DOCX )
+                    {
                         AppendBookmark( pFieldmark->GetName() );
+                    }
                 }
                 else if ( ch == CH_TXT_ATR_FORMELEMENT )
                 {

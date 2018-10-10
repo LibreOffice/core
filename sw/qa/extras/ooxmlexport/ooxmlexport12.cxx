@@ -723,7 +723,7 @@ DECLARE_OOXMLEXPORT_TEST(testObjectCrossReference, "object_cross_reference.odt")
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(21), nIndex);
 }
 
-DECLARE_OOXMLIMPORT_TEST(testTdf120224_textControlCrossRef, "tdf120224_textControlCrossRef.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf120224_textControlCrossRef, "tdf120224_textControlCrossRef.docx")
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
