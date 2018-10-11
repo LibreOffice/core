@@ -28,7 +28,6 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
 using namespace std;
-using namespace osl;
 
 CMimeContentType::CMimeContentType( const OUString& aCntType )
 {
@@ -52,8 +51,6 @@ OUString SAL_CALL CMimeContentType::getFullMediaType( )
 
 Sequence< OUString > SAL_CALL CMimeContentType::getParameters( )
 {
-    MutexGuard aGuard( m_aMutex );
-
     Sequence< OUString > seqParams;
 
     map< OUString, OUString >::iterator iter;
@@ -70,15 +67,12 @@ Sequence< OUString > SAL_CALL CMimeContentType::getParameters( )
 
 sal_Bool SAL_CALL CMimeContentType::hasParameter( const OUString& aName )
 {
-    MutexGuard aGuard( m_aMutex );
     return ( m_ParameterMap.end( ) != m_ParameterMap.find( aName.toAsciiLowerCase() ) );
 }
 
 OUString SAL_CALL CMimeContentType::getParameterValue( const OUString& aName )
 {
     auto const lower = aName.toAsciiLowerCase();
-
-    MutexGuard aGuard( m_aMutex );
 
     if ( !hasParameter( lower ) )
         throw NoSuchElementException( );

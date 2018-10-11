@@ -63,7 +63,6 @@ private:
     static bool isInRange( const OUString& aChr, const OUString& aRange );
 
 private:
-    ::osl::Mutex                             m_aMutex;
     OUString                            m_MediaType;
     OUString                            m_MediaSubtype;
     std::map< OUString, OUString > m_ParameterMap;
