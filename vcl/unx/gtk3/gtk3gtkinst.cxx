@@ -3416,7 +3416,8 @@ public:
         else
         {
             gtk_menu_button_set_popover(m_pMenuButton, m_pPopover);
-            gtk_widget_show_all(m_pPopover);
+            if (m_pPopover)
+                gtk_widget_show_all(m_pPopover);
         }
     }
 
