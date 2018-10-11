@@ -34,6 +34,24 @@
       "revId": "c8481c8a43ce2544275b2d70ef29a8b0cb157732",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_c5cb2b1c",
+        "filename": "odk/examples/OLE/activex/StdAfx2.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-11T10:48:06Z",
+      "side": 1,
+      "message": "I fail to see how that would change anything when using the LO SDK.  (It would be little use if the SDK contains a sal/config.h that contains information about the configuration with which the SDK has been built.  Or maybe I don\u0027t understand neither this Gerrit change nor \u003chttps://gerrit.libreoffice.org/#/c/61657\u003e.)",
+      "parentUuid": "ff0f0b1f_858773d8",
+      "revId": "c8481c8a43ce2544275b2d70ef29a8b0cb157732",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
