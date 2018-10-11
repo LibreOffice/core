@@ -6264,9 +6264,7 @@ void WW8Fib::WriteHeader(SvStream& rStrm)
     sal_uInt8 *pData = pDataPtr.get();
     memset( pData, 0, nUnencryptedHdr );
 
-    const sal_uInt64 nPos = rStrm.Tell();
-    m_cbMac = rStrm.Seek( STREAM_SEEK_TO_END );
-    rStrm.Seek(nPos);
+    m_cbMac = rStrm.TellEnd();
 
     Set_UInt16( pData, m_wIdent );
     Set_UInt16( pData, m_nFib );
@@ -6351,9 +6349,7 @@ void WW8Fib::Write(SvStream& rStrm)
     sal_uInt8 *pData = pDataPtr.get();
     memset( pData, 0, m_fcMin - nUnencryptedHdr );
 
-    const sal_uInt64 nPos = rStrm.Tell();
-    m_cbMac = rStrm.Seek( STREAM_SEEK_TO_END );
-    rStrm.Seek(nPos);
+    m_cbMac = rStrm.TellEnd();
 
     // ignore 2 longs, because they are unimportant
     pData += 2 * sizeof( sal_Int32);

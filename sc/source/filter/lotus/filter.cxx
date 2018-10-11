@@ -76,8 +76,7 @@ generate_Opcodes(LotusContext &rContext, SvStream& aStream,
     }
 
     // #i76299# seems that SvStream::IsEof() does not work correctly
-    aStream.Seek( STREAM_SEEK_TO_END );
-    sal_uInt64 const nStrmSize = aStream.Tell();
+    sal_uInt64 const nStrmSize = aStream.TellEnd();
     aStream.Seek( STREAM_SEEK_TO_BEGIN );
     while (!rContext.bEOF && aStream.good() && (aStream.Tell() < nStrmSize))
     {

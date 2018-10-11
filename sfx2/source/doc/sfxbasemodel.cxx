@@ -1919,9 +1919,8 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 aTmp.EnableKillingFile();
                 storeToURL( aTmp.GetURL(), Sequence < beans::PropertyValue >() );
                 SvStream* pStream = aTmp.GetStream( StreamMode::READ );
-                const sal_uInt32 nLen = pStream->Seek( STREAM_SEEK_TO_END );
+                const sal_uInt32 nLen = pStream->TellEnd();
                 Sequence< sal_Int8 > aSeq( nLen );
-                pStream->Seek( STREAM_SEEK_TO_BEGIN );
                 pStream->ReadBytes(aSeq.getArray(), nLen);
                 delete pStream;
                 if( aSeq.getLength() )
@@ -1947,7 +1946,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
 
                 xMetaFile->Write( aMemStm );
                 aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ),
-                                                aMemStm.Seek( STREAM_SEEK_TO_END ) );
+                                                aMemStm.TellEnd() );
             }
         }
         else if ( aFlavor.MimeType == "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" )
@@ -1965,7 +1964,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
 
                 xMetaFile->Write( aMemStm );
                 aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ),
-                                                aMemStm.Seek( STREAM_SEEK_TO_END ) );
+                                                aMemStm.TellEnd() );
             }
         }
         else if ( aFlavor.MimeType == "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" )
@@ -1984,7 +1983,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                     {
                         xStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                         aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( xStream->GetData() ),
-                                                        xStream->Seek( STREAM_SEEK_TO_END ) );
+                                                        xStream->TellEnd() );
                     }
                 }
             }
@@ -2020,7 +2019,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                     {
                         xStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                         aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( xStream->GetData() ),
-                                                        xStream->Seek( STREAM_SEEK_TO_END ) );
+                                                        xStream->TellEnd() );
                     }
                 }
             }
@@ -2061,7 +2060,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 {
                     xStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                     aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( xStream->GetData() ),
-                                                    xStream->Seek( STREAM_SEEK_TO_END ) );
+                                                    xStream->TellEnd() );
                 }
             }
         }
@@ -2083,7 +2082,7 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
                 {
                     xStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
                     aAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( xStream->GetData() ),
-                                                    xStream->Seek( STREAM_SEEK_TO_END ) );
+                                                    xStream->TellEnd() );
                 }
             }
         }

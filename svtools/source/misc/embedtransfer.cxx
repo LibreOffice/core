@@ -127,7 +127,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                                 xStg->openStorageElement( aName, embed::ElementModes::READ )->copyToStorage( xStor );
                             }
 
-                            const sal_uInt32               nLen = pStream->Seek( STREAM_SEEK_TO_END );
+                            const sal_uInt32               nLen = pStream->TellEnd();
                             css::uno::Sequence< sal_Int8 > aSeq( nLen );
 
                             pStream->Seek( STREAM_SEEK_TO_BEGIN );
@@ -159,7 +159,7 @@ bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavo
                     const_cast<GDIMetaFile*>(&aMetaFile)->Write( aMemStm );
                     uno::Any aAny;
                     aAny <<= uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ),
-                                                    aMemStm.Seek( STREAM_SEEK_TO_END ) );
+                                                    aMemStm.TellEnd() );
                     SetAny( aAny );
                     bRet = true;
                 }

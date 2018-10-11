@@ -58,9 +58,7 @@ uno::Reference< io::XInputStream > SAL_CALL UriBindingHelper::getUriBinding( con
     else
     {
         SvFileStream* pStream = new SvFileStream( uri, StreamMode::READ );
-        pStream->Seek( STREAM_SEEK_TO_END );
-        sal_uLong nBytes = pStream->Tell();
-        pStream->Seek( STREAM_SEEK_TO_BEGIN );
+        sal_uLong nBytes = pStream->TellEnd();
         SvLockBytesRef xLockBytes = new SvLockBytes( pStream, true );
         xInputStream = new utl::OInputStreamHelper( xLockBytes, nBytes );
     }

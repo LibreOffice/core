@@ -61,8 +61,7 @@ void GalleryCodec::Write( SvStream& rStmToWrite )
 {
     sal_uInt32 nPos, nCompSize;
 
-    rStmToWrite.Seek( STREAM_SEEK_TO_END );
-    const sal_uInt32 nSize = rStmToWrite.Tell();
+    const sal_uInt32 nSize = rStmToWrite.TellEnd();
     rStmToWrite.Seek( 0 );
 
     rStm.WriteChar( 'S' ).WriteChar( 'V' ).WriteChar( 'R' ).WriteChar( 'L' ).WriteChar( 'E' ).WriteChar( '2' );

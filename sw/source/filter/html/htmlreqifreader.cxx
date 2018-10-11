@@ -124,8 +124,7 @@ OString InsertOLE1Header(SvStream& rOle2, SvStream& rOle1)
     rOle1.WriteUInt32(0);
 
     // NativeDataSize
-    rOle2.Seek(STREAM_SEEK_TO_END);
-    rOle1.WriteUInt32(rOle2.Tell());
+    rOle1.WriteUInt32(rOle2.TellEnd());
 
     // Write the actual native data.
     rOle2.Seek(0);

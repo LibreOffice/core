@@ -195,10 +195,7 @@ PropItem& PropItem::operator=( PropItem& rPropItem )
         delete[] static_cast<sal_uInt8*>(SwitchBuffer());
 
         mnTextEnc = rPropItem.mnTextEnc;
-        sal_uInt32 nItemPos = rPropItem.Tell();
-        rPropItem.Seek( STREAM_SEEK_TO_END );
-        SvMemoryStream::WriteBytes(rPropItem.GetData(), rPropItem.Tell());
-        rPropItem.Seek( nItemPos );
+        SvMemoryStream::WriteBytes(rPropItem.GetData(), rPropItem.TellEnd());
     }
     return *this;
 }

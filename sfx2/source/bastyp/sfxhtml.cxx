@@ -242,11 +242,9 @@ bool SfxHTMLParser::FinishFileDownload( OUString& rStr )
         if( pStream )
             aStream.WriteStream( *pStream );
 
-        aStream.Seek( STREAM_SEEK_TO_END );
-        sal_uInt64 const nLen = aStream.Tell();
+        sal_uInt64 const nLen = aStream.TellEnd();
         aStream.Seek( 0 );
-        OString sBuffer = read_uInt8s_ToOString(aStream, nLen);
-        rStr = OStringToOUString( sBuffer, RTL_TEXTENCODING_UTF8 );
+        rStr = read_uInt8s_ToOUString(aStream, nLen, RTL_TEXTENCODING_UTF8);
     }
 
     pDLMedium.reset();

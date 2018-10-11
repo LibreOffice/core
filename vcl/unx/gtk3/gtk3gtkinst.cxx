@@ -1611,7 +1611,7 @@ namespace
         {
             GdkPixbufLoader *pixbuf_loader = gdk_pixbuf_loader_new();
             gdk_pixbuf_loader_write(pixbuf_loader, static_cast<const guchar*>(xMemStm->GetData()),
-                                    xMemStm->Seek(STREAM_SEEK_TO_END), nullptr);
+                                    xMemStm->TellEnd(), nullptr);
             gdk_pixbuf_loader_close(pixbuf_loader, nullptr);
             pixbuf = gdk_pixbuf_loader_get_pixbuf(pixbuf_loader);
             if (pixbuf)

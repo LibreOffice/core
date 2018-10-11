@@ -338,16 +338,11 @@ sal_Int64 SAL_CALL OTempFileService::getLength(  )
     ::osl::MutexGuard aGuard( maMutex );
     checkConnected();
 
-    sal_uInt32 nCurrentPos = mpStream->Tell();
     checkError();
 
-    mpStream->Seek(STREAM_SEEK_TO_END);
-    sal_uInt32 nEndPos = mpStream->Tell();
-    mpStream->Seek(nCurrentPos);
+    sal_Int64 nEndPos = mpStream->TellEnd();
 
-    checkError();
-
-    return static_cast<sal_Int64>(nEndPos);
+    return nEndPos;
 }
 
 // XStream

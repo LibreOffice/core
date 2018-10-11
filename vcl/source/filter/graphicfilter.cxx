@@ -244,10 +244,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
     sal_uInt8   sFirstBytes[ 256 ];
     sal_uLong   nFirstLong(0), nSecondLong(0);
     sal_uLong   nStreamPos = rStream.Tell();
-
-    rStream.Seek( STREAM_SEEK_TO_END );
-    sal_uLong nStreamLen = rStream.Tell() - nStreamPos;
-    rStream.Seek( nStreamPos );
+    sal_uLong   nStreamLen = rStream.remainingSize();
 
     if ( !nStreamLen )
     {
@@ -255,9 +252,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         if ( pLockBytes  )
             pLockBytes->SetSynchronMode();
 
-        rStream.Seek( STREAM_SEEK_TO_END );
-        nStreamLen = rStream.Tell() - nStreamPos;
-        rStream.Seek( nStreamPos );
+        nStreamLen = rStream.remainingSize();
     }
 
     if (!nStreamLen)
@@ -1448,7 +1443,7 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream)
     ErrCode nStatus = ImpTestOrFindFormat("", rIStream, nFormat);
 
     rIStream.Seek(nStreamBegin);
-    const sal_uInt32 nStreamLength(rIStream.Seek(STREAM_SEEK_TO_END) - nStreamBegin);
+    const sal_uInt32 nStreamLength(rIStream.remainingSize());
 
     OUString aFilterName = pConfig->GetImportFilterName(nFormat);
     OUString aExternalFilterName = pConfig->GetExternalFilterName(nFormat, false);
@@ -1849,14 +1844,13 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_SVG ) )
         {
             const sal_uInt32 nStreamPosition(rIStream.Tell());
-            const sal_uInt32 nStreamLength(rIStream.Seek(STREAM_SEEK_TO_END) - nStreamPosition);
+            const sal_uInt32 nStreamLength(rIStream.remainingSize());
 
             bool bOkay(false);
 
             if(nStreamLength > 0)
             {
                 std::vector<sal_uInt8> aTwoBytes(2);
-                rIStream.Seek(nStreamPosition);
                 rIStream.ReadBytes(&aTwoBytes[0], 2);
                 rIStream.Seek(nStreamPosition);
 
@@ -1892,7 +1886,6 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
                 else
                 {
                     VectorGraphicDataArray aNewData(nStreamLength);
-                    rIStream.Seek(nStreamPosition);
                     rIStream.ReadBytes(aNewData.begin(), nStreamLength);
 
                     if(!rIStream.GetError())
@@ -1957,12 +1950,10 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, 
             // Graphic that contains the original data and decomposes to
             // primitives on demand
 
-            const sal_uInt32 nStreamPosition(rIStream.Tell());
-            const sal_uInt32 nStreamLength(rIStream.Seek(STREAM_SEEK_TO_END) - nStreamPosition);
+            const sal_uInt32 nStreamLength(rIStream.remainingSize());
             VectorGraphicDataArray aNewData(nStreamLength);
             bool bOkay(false);
 
-            rIStream.Seek(nStreamPosition);
             rIStream.ReadBytes(aNewData.begin(), nStreamLength);
 
             if (!rIStream.GetError())

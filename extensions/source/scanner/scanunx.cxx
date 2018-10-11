@@ -40,21 +40,20 @@ BitmapTransporter::~BitmapTransporter()
 css::awt::Size BitmapTransporter::getSize()
 {
     osl::MutexGuard aGuard( m_aProtector );
-    int         nPreviousPos = m_aStream.Tell();
     css::awt::Size   aRet;
 
     // ensure that there is at least a header
-    m_aStream.Seek( STREAM_SEEK_TO_END );
-    int nLen = m_aStream.Tell();
+    int nLen = m_aStream.TellEnd();
     if( nLen > 15 )
     {
+        int nPreviousPos = m_aStream.Tell();
         m_aStream.Seek( 4 );
         m_aStream.ReadInt32( aRet.Width ).ReadInt32( aRet.Height );
+        m_aStream.Seek( nPreviousPos );
     }
     else
         aRet.Width = aRet.Height = 0;
 
-    m_aStream.Seek( nPreviousPos );
 
     return aRet;
 }
@@ -66,8 +65,7 @@ Sequence< sal_Int8 > BitmapTransporter::getDIB()
     int         nPreviousPos = m_aStream.Tell();
 
     // create return value
-    m_aStream.Seek( STREAM_SEEK_TO_END );
-    int nBytes = m_aStream.Tell();
+    int nBytes = m_aStream.TellEnd();
     m_aStream.Seek( 0 );
 
     Sequence< sal_Int8 > aValue( nBytes );

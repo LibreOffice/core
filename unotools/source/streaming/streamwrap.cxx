@@ -177,16 +177,11 @@ sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getLength(  )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkConnected();
 
-    sal_uInt32 nCurrentPos = m_pSvStream->Tell();
     checkError();
 
-    m_pSvStream->Seek(STREAM_SEEK_TO_END);
-    sal_uInt32 nEndPos = m_pSvStream->Tell();
-    m_pSvStream->Seek(nCurrentPos);
+    sal_Int64 nEndPos = m_pSvStream->TellEnd();
 
-    checkError();
-
-    return static_cast<sal_Int64>(nEndPos);
+    return nEndPos;
 }
 
 //= OOutputStreamWrapper
@@ -268,16 +263,11 @@ sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getPosition(  )
 
 sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getLength(  )
 {
-    sal_uInt32 nCurrentPos = rStream.Tell();
     checkError();
 
-    rStream.Seek(STREAM_SEEK_TO_END);
-    sal_uInt32 nEndPos = rStream.Tell();
-    rStream.Seek(nCurrentPos);
+    sal_Int64 nEndPos = rStream.TellEnd();
 
-    checkError();
-
-    return static_cast<sal_Int64>(nEndPos);
+    return nEndPos;
 }
 
 OStreamWrapper::~OStreamWrapper() = default;

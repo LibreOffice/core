@@ -262,16 +262,11 @@ sal_Int64 SAL_CALL FileStreamWrapper_Impl::getLength(  )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkConnected();
 
-    sal_uInt32 nCurrentPos = m_pSvStream->Tell();
     checkError();
 
-    m_pSvStream->Seek(STREAM_SEEK_TO_END);
-    sal_uInt32 nEndPos = m_pSvStream->Tell();
-    m_pSvStream->Seek(nCurrentPos);
+    sal_Int64 nEndPos = m_pSvStream->TellEnd();
 
-    checkError();
-
-    return static_cast<sal_Int64>(nEndPos);
+    return nEndPos;
 }
 
 
@@ -2875,8 +2870,7 @@ bool UCBStorage::IsStorageFile( SvStream* pFile )
         return false;
 
     sal_uInt64 nPos = pFile->Tell();
-    pFile->Seek( STREAM_SEEK_TO_END );
-    if ( pFile->Tell() < 4 )
+    if ( pFile->TellEnd() < 4 )
         return false;
 
     pFile->Seek(0);
@@ -2905,8 +2899,7 @@ OUString UCBStorage::GetLinkedFile( SvStream &rStream )
 {
     OUString aString;
     sal_uInt64 nPos = rStream.Tell();
-    rStream.Seek( STREAM_SEEK_TO_END );
-    if ( !rStream.Tell() )
+    if ( !rStream.TellEnd() )
         return aString;
 
     rStream.Seek(0);

@@ -860,8 +860,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
             bSuccess = false;
     }
     // get stream length
-    aConverter.Seek( STREAM_SEEK_TO_END );
-    int nPos = aConverter.Tell();
+    int nPos = aConverter.TellEnd();
 
     aConverter.Seek( 2 );
     aConverter.WriteUInt32( nPos+1 );

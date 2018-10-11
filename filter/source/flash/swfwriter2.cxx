@@ -129,8 +129,7 @@ Tag::Tag( sal_uInt8 nTagId )
 
 void Tag::write( SvStream &out )
 {
-    Seek( STREAM_SEEK_TO_END );
-    sal_uInt32 nSz = Tell();
+    sal_uInt32 nSz = TellEnd();
     Seek( STREAM_SEEK_TO_BEGIN );
 
     if( mnTagId != 0xff )

@@ -134,10 +134,8 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCursor, SvStream& rIn,
 // Calling the parser
 ErrCode SwASCIIParser::CallParser()
 {
-    rInput.Seek(STREAM_SEEK_TO_END);
     rInput.ResetError();
-
-    nFileSize = rInput.Tell();
+    nFileSize = rInput.TellEnd();
     rInput.Seek(STREAM_SEEK_TO_BEGIN);
     rInput.ResetError();
 

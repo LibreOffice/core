@@ -818,8 +818,7 @@ void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XG
                                         rFilter.GetExportFormatNumberForShortName( OUString::createFromAscii( pFilterShortName ) ),
                                             ( aFilterDataSeq.getLength() ? &aFilterDataSeq : nullptr ) );
             }
-            aMemStrm.Seek( STREAM_SEEK_TO_END );
-            pOStm->WriteBytes( aMemStrm.GetData(), aMemStrm.Tell() );
+            pOStm->WriteBytes( aMemStrm.GetData(), aMemStrm.TellEnd() );
         }
     }
 }

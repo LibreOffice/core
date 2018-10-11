@@ -111,10 +111,8 @@ void StgCache::SetPhysPageSize( short n )
     if ( n >= 512 )
     {
         m_nPageSize = n;
-        sal_uInt64 nPos = m_pStrm->Tell();
-        sal_uInt64 nFileSize = m_pStrm->Seek( STREAM_SEEK_TO_END );
+        sal_uInt64 nFileSize = m_pStrm->TellEnd();
         m_nPages = lcl_GetPageCount( nFileSize, m_nPageSize );
-        m_pStrm->Seek( nPos );
     }
 }
 
@@ -295,7 +293,7 @@ bool StgCache::Open( const OUString& rName, StreamMode nMode )
     SetStrm( pFileStrm, true );
     if( pFileStrm->IsOpen() )
     {
-        sal_uInt64 nFileSize = m_pStrm->Seek( STREAM_SEEK_TO_END );
+        sal_uInt64 nFileSize = m_pStrm->TellEnd();
         m_nPages = lcl_GetPageCount( nFileSize, m_nPageSize );
         m_pStrm->Seek( 0 );
     }

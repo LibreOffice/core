@@ -582,10 +582,7 @@ private:
             return;
         }
 
-        const sal_uLong nStreamPos(aStream->Tell());
-        aStream->Seek(STREAM_SEEK_TO_END);
-        const sal_uLong nStreamLen(aStream->Tell() - nStreamPos);
-        aStream->Seek(nStreamPos);
+        const sal_uLong nStreamLen(aStream->remainingSize());
 
         if(aStream->GetError())
         {

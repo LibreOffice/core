@@ -3367,8 +3367,7 @@ void XclImpDffConverter::ProcessDrawing( const XclImpDrawObjVector& rDrawObjs )
 
 void XclImpDffConverter::ProcessDrawing( SvStream& rDffStrm )
 {
-    rDffStrm.Seek( STREAM_SEEK_TO_END );
-    if( rDffStrm.Tell() > 0 )
+    if( rDffStrm.TellEnd() > 0 )
     {
         rDffStrm.Seek( STREAM_SEEK_TO_BEGIN );
         DffRecordHeader aHeader;
