@@ -243,6 +243,8 @@ void ScDataTableView::MouseButtonUp(const MouseEvent& rMEvt)
 {
     if (!rMEvt.IsLeft())
         return;
+    if (!mpMouseEvent) // tdf#120528 The event originated in another window, like context menu
+        return;
 
     SCCOL nStartCol = findColFromPos(mpMouseEvent->GetPosPixel().getX(), mpDoc.get());
     SCCOL nEndCol = findColFromPos(rMEvt.GetPosPixel().getX(), mpDoc.get());
