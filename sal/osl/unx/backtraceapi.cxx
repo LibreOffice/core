@@ -30,7 +30,7 @@ struct FreeGuard {
 
     ~FreeGuard() { std::free(buffer); }
 
-    char ** buffer;
+    char ** const buffer;
 };
 
 }

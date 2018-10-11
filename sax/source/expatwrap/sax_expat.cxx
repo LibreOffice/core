@@ -144,7 +144,7 @@ class SaxExpatParser_Impl
 {
 public: // module scope
     Mutex               aMutex;
-    OUString            sCDATA;
+    OUString const      sCDATA;
     bool m_bEnableDoS; // fdo#60471 thank you Adobe Illustrator
 
     css::uno::Reference< XDocumentHandler >   rDocumentHandler;
@@ -389,7 +389,7 @@ class ParserCleanup
 {
 private:
     SaxExpatParser_Impl& m_rParser;
-    XML_Parser m_xmlParser;
+    XML_Parser const m_xmlParser;
 public:
     ParserCleanup(SaxExpatParser_Impl& rParser, XML_Parser xmlParser)
         : m_rParser(rParser)

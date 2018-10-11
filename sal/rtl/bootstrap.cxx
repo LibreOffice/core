@@ -92,7 +92,7 @@ enum LookupMode {
 struct ExpandRequestLink {
     ExpandRequestLink const * next;
     Bootstrap_Impl const * file;
-    rtl::OUString key;
+    rtl::OUString const key;
 };
 
 rtl::OUString expandMacros(
@@ -314,7 +314,7 @@ struct Bootstrap_Impl
     Bootstrap_Impl * _base_ini;
 
     NameValueVector _nameValueVector;
-    OUString      _iniName;
+    OUString const _iniName;
 
     explicit Bootstrap_Impl (OUString const & rIniName);
     ~Bootstrap_Impl();

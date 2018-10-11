@@ -92,8 +92,8 @@ struct Event
 
 struct NameWithToken
 {
-    OUString msName;
-    sal_Int32 mnToken;
+    OUString const msName;
+    sal_Int32 const mnToken;
 
     NameWithToken(const OUString& sName, sal_Int32 nToken) :
         msName(sName), mnToken(nToken) {}
@@ -102,7 +102,7 @@ struct NameWithToken
 struct SaxContext
 {
     Reference< XFastContextHandler > mxContext;
-    sal_Int32 mnElementToken;
+    sal_Int32 const mnElementToken;
     OUString  maNamespace;
     OUString  maElementName;
 
