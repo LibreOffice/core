@@ -57,7 +57,8 @@ IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvi
     (void)desktopEnvironment;
 #else
     if ( desktopEnvironment.equalsIgnoreAsciiCase("kde4") ||
-         desktopEnvironment.equalsIgnoreAsciiCase("kde5") ) {
+         desktopEnvironment.equalsIgnoreAsciiCase("kde5") ||
+         desktopEnvironment.equalsIgnoreAsciiCase("lxqt") ) {
         r = "breeze";
     } else
     if ( desktopEnvironment.equalsIgnoreAsciiCase("macosx") ) {
