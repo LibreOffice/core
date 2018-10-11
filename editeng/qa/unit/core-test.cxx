@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_features.h>
+
 #include <test/bootstrapfixture.hxx>
 
 #include <cppunit/TestFixture.h>
@@ -50,8 +52,10 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
+#if HAVE_MORE_FONTS
     /// Test text portions position when percentage line spacing is set
     void testLineSpacing();
+#endif
 
     void testConstruction();
 
@@ -102,7 +106,9 @@ public:
     DECL_STATIC_LINK( Test, CalcFieldValueHdl, EditFieldInfo*, void );
 
     CPPUNIT_TEST_SUITE(Test);
+#if HAVE_MORE_FONTS
     CPPUNIT_TEST(testLineSpacing);
+#endif
     CPPUNIT_TEST(testConstruction);
     CPPUNIT_TEST(testUnoTextFields);
     CPPUNIT_TEST(testAutocorrect);
@@ -143,6 +149,7 @@ void Test::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
+#if HAVE_MORE_FONTS
 void Test::testLineSpacing()
 {
     // Create EditEngine's instance
@@ -219,6 +226,7 @@ void Test::testLineSpacing()
     // Test upper Word limit - 13200% (factor 132)
     doTest(13200, 33615, 33660);
 }
+#endif
 
 void Test::testConstruction()
 {
