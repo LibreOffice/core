@@ -345,6 +345,8 @@ SwDoc::SwDoc()
     // Create DBManager
     m_pOwnDBManager.reset(new SwDBManager(this));
     m_pDBManager = m_pOwnDBManager.get();
+#else
+    m_pDBManager = nullptr;
 #endif
 
     // create TOXTypes
