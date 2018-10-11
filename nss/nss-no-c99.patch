@@ -1492,7 +1492,6 @@
                  if (!pubValue) {
                      crv = CKR_ARGUMENTS_BAD;
                      goto ecgn_done;
-diff -ur nss/nss/cmd/lib/secutil.c nss_new/nss/cmd/lib/secutil.c
 --- a/nss/nss/cmd/lib/secutil.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/cmd/lib/secutil.c	2018-09-19 13:53:21.922607000 +0200
 @@ -217,6 +217,7 @@
@@ -1512,7 +1511,6 @@ diff -ur nss/nss/cmd/lib/secutil.c nss_new/nss/cmd/lib/secutil.c
              PORT_Free(pw);
          /* Fall Through */
          case PW_PLAINTEXT:
-diff -ur nss/nss/cmd/signtool/javascript.c nss_new/nss/cmd/signtool/javascript.c
 --- a/nss/nss/cmd/signtool/javascript.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/cmd/signtool/javascript.c	2018-09-21 18:09:42.429614100 +0200
 @@ -6,6 +6,7 @@
@@ -1532,7 +1530,6 @@ diff -ur nss/nss/cmd/signtool/javascript.c nss_new/nss/cmd/signtool/javascript.c
      if (c >= sizeof(fn)) {
          return PR_FAILURE;
      }
-diff -ur nss/nss/cmd/signtool/sign.c nss_new/nss/cmd/signtool/sign.c
 --- a/nss/nss/cmd/signtool/sign.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/cmd/signtool/sign.c	2018-09-21 18:12:32.664160400 +0200
 @@ -5,6 +5,7 @@
@@ -1609,7 +1606,6 @@ diff -ur nss/nss/cmd/signtool/sign.c nss_new/nss/cmd/signtool/sign.c
      if (count >= sizeof(fullname)) {
          return 1;
      }
-diff -ur nss/nss/lib/freebl/blake2b.c nss_new/nss/lib/freebl/blake2b.c
 --- a/nss/nss/lib/freebl/blake2b.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/freebl/blake2b.c	2018-09-06 16:22:55.312309800 +0200
 @@ -147,6 +147,7 @@
@@ -1644,7 +1640,6 @@ diff -ur nss/nss/lib/freebl/blake2b.c nss_new/nss/lib/freebl/blake2b.c
      if (ctx == NULL) {
          PORT_SetError(SEC_ERROR_INVALID_ARGS);
          return NULL;
-diff -ur nss/nss/lib/freebl/chacha20poly1305.c nss_new/nss/lib/freebl/chacha20poly1305.c
 --- a/nss/nss/lib/freebl/chacha20poly1305.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/freebl/chacha20poly1305.c	2018-09-07 03:48:50.608015600 +0200
 @@ -75,6 +75,8 @@
@@ -1665,7 +1660,6 @@ diff -ur nss/nss/lib/freebl/chacha20poly1305.c nss_new/nss/lib/freebl/chacha20po
      for (i = 0, j = adLen; i < 8; i++, j >>= 8) {
          block[i] = j;
      }
-diff -ur nss/nss/lib/freebl/ecl/ecp_25519.c nss_new/nss/lib/freebl/ecl/ecp_25519.c
 --- a/nss/nss/lib/freebl/ecl/ecp_25519.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/freebl/ecl/ecp_25519.c	2018-09-07 04:22:09.320906200 +0200
 @@ -104,6 +104,7 @@
@@ -1685,7 +1679,6 @@ diff -ur nss/nss/lib/freebl/ecl/ecp_25519.c nss_new/nss/lib/freebl/ecl/ecp_25519
      if (NSS_SecureMemcmpZero(X->data, X->len) == 0) {
          return SECFailure;
      }
-diff -ur nss/nss/lib/freebl/verified/FStar.c nss_new/nss/lib/freebl/verified/FStar.c
 --- a/nss/nss/lib/freebl/verified/FStar.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/freebl/verified/FStar.c	2018-09-10 01:27:51.192382800 +0200
 @@ -32,37 +32,45 @@
@@ -1931,7 +1924,6 @@ diff -ur nss/nss/lib/freebl/verified/FStar.c nss_new/nss/lib/freebl/verified/FSt
  }
  
  FStar_UInt128_uint128
-diff -ur nss/nss/lib/freebl/verified/Hacl_Chacha20.c nss_new/nss/lib/freebl/verified/Hacl_Chacha20.c
 --- a/nss/nss/lib/freebl/verified/Hacl_Chacha20.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/freebl/verified/Hacl_Chacha20.c	2018-09-07 05:07:09.660750000 +0200
 @@ -18,7 +18,8 @@
@@ -2084,7 +2076,6 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Chacha20.c nss_new/nss/lib/freebl/veri
          uint8_t *b = plain + (uint32_t)64U * i;
          uint8_t *o = output + (uint32_t)64U * i;
          Hacl_Impl_Chacha20_update(o, b, st, ctr + i);
-diff -ur nss/nss/lib/freebl/verified/Hacl_Chacha20_Vec128.c nss_new/nss/lib/freebl/verified/Hacl_Chacha20_Vec128.c
 --- a/nss/nss/lib/freebl/verified/Hacl_Chacha20_Vec128.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/freebl/verified/Hacl_Chacha20_Vec128.c	2018-09-07 05:31:17.778914000 +0200
 @@ -42,53 +42,83 @@
@@ -2364,9 +2355,9 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Chacha20_Vec128.c nss_new/nss/lib/free
      Hacl_Impl_Chacha20_Vec128_init(st, k, n1, ctr);
      Hacl_Impl_Chacha20_Vec128_chacha20_counter_mode(output, plain, len, st);
  }
-diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/verified/Hacl_Curve25519.c
---- a/nss/nss/lib/freebl/verified/Hacl_Curve25519.c	2018-06-21 11:24:45.000000000 +0200
-+++ b/nss/nss/lib/freebl/verified/Hacl_Curve25519.c	2018-09-07 06:13:30.375593700 +0200
+diff -u b/nss/nss/lib/freebl/verified/Hacl_Curve25519.c b/nss/nss/lib/freebl/verified/Hacl_Curve25519.c
+--- b/nss/nss/lib/freebl/verified/Hacl_Curve25519.c	2018-09-07 06:13:30.375593700 +0200
++++ b/nss/nss/lib/freebl/verified/Hacl_Curve25519.c	2018-10-11 02:49:07.152343700 +0200
 @@ -129,6 +129,7 @@
  Hacl_Bignum_Fmul_shift_reduce(uint64_t *output)
  {
@@ -2384,7 +2375,7 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
      output[0U] = (uint64_t)19U * b0;
  }
  
-@@ -177,38 +178,43 @@
+@@ -177,38 +178,45 @@
          Hacl_Bignum_Fproduct_sum_scalar_multiplication_(output, input, input2i);
          Hacl_Bignum_Fmul_shift_reduce(input);
      }
@@ -2407,8 +2398,8 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
      FStar_UInt128_t t[5U];
 -    for (uint32_t _i = 0U; _i < (uint32_t)5U; ++_i)
 +    uint32_t _i;
-+    FStar_UInt128_t b4 = t[4U];
-+    FStar_UInt128_t b0 = t[0U];
++    FStar_UInt128_t b4;
++    FStar_UInt128_t b0;
 +    FStar_UInt128_t b4_;
 +    FStar_UInt128_t b0_;
 +    uint64_t i0;
@@ -2420,6 +2411,8 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
          t[_i] = FStar_UInt128_uint64_to_uint128((uint64_t)0U);
      Hacl_Bignum_Fmul_mul_shift_reduce_(t, tmp, input21);
      Hacl_Bignum_Fproduct_carry_wide_(t);
++    b4 = t[4U];
++    b0 = t[0U];
 -    FStar_UInt128_t b4 = t[4U];
 -    FStar_UInt128_t b0 = t[0U];
 -    FStar_UInt128_t
@@ -2445,27 +2438,29 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
      output[0U] = i0_;
      output[1U] = i1_;
  }
-@@ -261,24 +267,27 @@
+@@ -261,24 +269,29 @@
  inline static void
  Hacl_Bignum_Fsquare_fsquare_(FStar_UInt128_t *tmp, uint64_t *output)
  {
--    Hacl_Bignum_Fsquare_fsquare__(tmp, output);
--    Hacl_Bignum_Fproduct_carry_wide_(tmp);
-     FStar_UInt128_t b4 = tmp[4U];
-     FStar_UInt128_t b0 = tmp[0U];
--    FStar_UInt128_t
--        b4_ = FStar_UInt128_logand(b4, FStar_UInt128_uint64_to_uint128((uint64_t)0x7ffffffffffffU));
--    FStar_UInt128_t
--        b0_ =
--            FStar_UInt128_add(b0,
++    FStar_UInt128_t b4;
++    FStar_UInt128_t b0;
 +    FStar_UInt128_t b4_;
 +    FStar_UInt128_t b0_;
 +    uint64_t i0;
 +    uint64_t i1;
 +    uint64_t i0_;
 +    uint64_t i1_;
-+    Hacl_Bignum_Fsquare_fsquare__(tmp, output);
-+    Hacl_Bignum_Fproduct_carry_wide_(tmp);
+     Hacl_Bignum_Fsquare_fsquare__(tmp, output);
+     Hacl_Bignum_Fproduct_carry_wide_(tmp);
+-    FStar_UInt128_t b4 = tmp[4U];
+-    FStar_UInt128_t b0 = tmp[0U];
+-    FStar_UInt128_t
+-        b4_ = FStar_UInt128_logand(b4, FStar_UInt128_uint64_to_uint128((uint64_t)0x7ffffffffffffU));
+-    FStar_UInt128_t
+-        b0_ =
+-            FStar_UInt128_add(b0,
++    b4 = tmp[4U];
++    b0 = tmp[0U];
 +    b4_ = FStar_UInt128_logand(b4, FStar_UInt128_uint64_to_uint128((uint64_t)0x7ffffffffffffU));
 +    b0_ = FStar_UInt128_add(b0,
                                FStar_UInt128_mul_wide((uint64_t)19U,
@@ -2484,7 +2479,7 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
      output[0U] = i0_;
      output[1U] = i1_;
  }
-@@ -286,17 +295,19 @@
+@@ -286,17 +299,19 @@
  static void
  Hacl_Bignum_Fsquare_fsquare_times_(uint64_t *input, FStar_UInt128_t *tmp, uint32_t count1)
  {
@@ -2507,7 +2502,7 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
          t[_i] = FStar_UInt128_uint64_to_uint128((uint64_t)0U);
      memcpy(output, input, (uint32_t)5U * sizeof input[0U]);
      Hacl_Bignum_Fsquare_fsquare_times_(output, t, count1);
-@@ -305,9 +316,10 @@
+@@ -305,9 +320,10 @@
  inline static void
  Hacl_Bignum_Fsquare_fsquare_times_inplace(uint64_t *output, uint32_t count1)
  {
@@ -2520,7 +2515,7 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
          t[_i] = FStar_UInt128_uint64_to_uint128((uint64_t)0U);
      Hacl_Bignum_Fsquare_fsquare_times_(output, t, count1);
  }
-@@ -319,6 +331,14 @@
+@@ -319,6 +335,14 @@
      uint64_t *a = buf;
      uint64_t *t00 = buf + (uint32_t)5U;
      uint64_t *b0 = buf + (uint32_t)10U;
@@ -2535,7 +2530,7 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
      Hacl_Bignum_Fsquare_fsquare_times(a, z, (uint32_t)1U);
      Hacl_Bignum_Fsquare_fsquare_times(t00, a, (uint32_t)2U);
      Hacl_Bignum_Fmul_fmul(b0, t00, z);
-@@ -326,9 +346,9 @@
+@@ -326,9 +350,9 @@
      Hacl_Bignum_Fsquare_fsquare_times(t00, a, (uint32_t)1U);
      Hacl_Bignum_Fmul_fmul(b0, t00, b0);
      Hacl_Bignum_Fsquare_fsquare_times(t00, b0, (uint32_t)5U);
@@ -2548,7 +2543,7 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
      Hacl_Bignum_Fmul_fmul(b1, t01, b1);
      Hacl_Bignum_Fsquare_fsquare_times(t01, b1, (uint32_t)10U);
      Hacl_Bignum_Fmul_fmul(c0, t01, b1);
-@@ -337,10 +357,10 @@
+@@ -337,10 +361,10 @@
      Hacl_Bignum_Fsquare_fsquare_times_inplace(t01, (uint32_t)10U);
      Hacl_Bignum_Fmul_fmul(b1, t01, b1);
      Hacl_Bignum_Fsquare_fsquare_times(t01, b1, (uint32_t)50U);
@@ -2563,7 +2558,7 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
      Hacl_Bignum_Fmul_fmul(c, t0, b);
      Hacl_Bignum_Fsquare_fsquare_times(t0, c, (uint32_t)100U);
      Hacl_Bignum_Fmul_fmul(t0, t0, c);
-@@ -384,12 +404,17 @@
+@@ -384,12 +408,17 @@
  Hacl_Bignum_fdifference(uint64_t *a, uint64_t *b)
  {
      uint64_t tmp[5U] = { 0U };
@@ -2586,7 +2581,7 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
      tmp[0U] = b0 + (uint64_t)0x3fffffffffff68U;
      tmp[1U] = b1 + (uint64_t)0x3ffffffffffff8U;
      tmp[2U] = b2 + (uint64_t)0x3ffffffffffff8U;
-@@ -425,9 +450,10 @@
+@@ -425,9 +454,10 @@
  inline static void
  Hacl_Bignum_fscalar(uint64_t *output, uint64_t *b, uint64_t s)
  {
@@ -2599,7 +2594,7 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
          tmp[_i] = FStar_UInt128_uint64_to_uint128((uint64_t)0U);
      {
          uint64_t xi = b[0U];
-@@ -450,6 +476,7 @@
+@@ -450,6 +480,7 @@
          tmp[4U] = FStar_UInt128_mul_wide(xi, s);
      }
      Hacl_Bignum_Fproduct_carry_wide_(tmp);
@@ -2607,7 +2602,7 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
      FStar_UInt128_t b4 = tmp[4U];
      FStar_UInt128_t b0 = tmp[0U];
      FStar_UInt128_t
-@@ -462,6 +489,7 @@
+@@ -462,6 +493,7 @@
      tmp[4U] = b4_;
      tmp[0U] = b0_;
      Hacl_Bignum_Fproduct_copy_from_wide_(output, tmp);
@@ -2615,7 +2610,7 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
  }
  
  inline static void
-@@ -493,8 +521,9 @@
+@@ -493,8 +525,9 @@
  Hacl_EC_Point_swap_conditional_(uint64_t *a, uint64_t *b, uint64_t swap1, uint32_t ctr)
  {
      if (!(ctr == (uint32_t)0U)) {
@@ -2626,7 +2621,7 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
          Hacl_EC_Point_swap_conditional_(a, b, swap1, i);
      }
  }
-@@ -538,6 +567,16 @@
+@@ -538,6 +571,16 @@
      uint64_t *origxprime = buf + (uint32_t)5U;
      uint64_t *xxprime0 = buf + (uint32_t)25U;
      uint64_t *zzprime0 = buf + (uint32_t)30U;
@@ -2643,7 +2638,7 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
      memcpy(origx, x, (uint32_t)5U * sizeof x[0U]);
      Hacl_Bignum_fsum(x, z);
      Hacl_Bignum_fdifference(z, origx);
-@@ -546,12 +585,12 @@
+@@ -546,12 +589,12 @@
      Hacl_Bignum_fdifference(zprime, origxprime);
      Hacl_Bignum_fmul(xxprime0, xprime, z);
      Hacl_Bignum_fmul(zzprime0, x, zprime);
@@ -2662,7 +2657,7 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
      memcpy(origxprime0, xxprime, (uint32_t)5U * sizeof xxprime[0U]);
      Hacl_Bignum_fsum(xxprime, zzprime);
      Hacl_Bignum_fdifference(zzprime, origxprime0);
-@@ -560,12 +599,12 @@
+@@ -560,12 +603,12 @@
      Hacl_Bignum_fmul(z3, zzzprime, qx);
      Hacl_Bignum_Fsquare_fsquare_times(xx0, x, (uint32_t)1U);
      Hacl_Bignum_Fsquare_fsquare_times(zz0, z, (uint32_t)1U);
@@ -2679,7 +2674,7 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
      Hacl_Bignum_fscalar(zzz, zz, scalar);
      Hacl_Bignum_fsum(zzz, xx);
      Hacl_Bignum_fmul(z2, zzz, zz);
-@@ -581,9 +620,10 @@
+@@ -581,9 +624,10 @@
      uint8_t byt)
  {
      uint64_t bit = (uint64_t)(byt >> (uint32_t)7U);
@@ -2691,7 +2686,7 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
      Hacl_EC_Point_swap_conditional(nq2, nqpq2, bit0);
  }
  
-@@ -596,8 +636,9 @@
+@@ -596,8 +640,9 @@
      uint64_t *q,
      uint8_t byt)
  {
@@ -2702,7 +2697,7 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
      Hacl_EC_Ladder_SmallLoop_cmult_small_loop_step(nq2, nqpq2, nq, nqpq, q, byt1);
  }
  
-@@ -613,8 +654,9 @@
+@@ -613,8 +658,9 @@
  {
      if (!(i == (uint32_t)0U)) {
          uint32_t i_ = i - (uint32_t)1U;
@@ -2713,7 +2708,7 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
          Hacl_EC_Ladder_SmallLoop_cmult_small_loop(nq, nqpq, nq2, nqpq2, q, byt_, i_);
      }
  }
-@@ -731,12 +773,16 @@
+@@ -731,12 +777,16 @@
  static void
  Hacl_EC_Format_fcontract_second_carry_full(uint64_t *input)
  {
@@ -2734,7 +2729,7 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
      input[0U] = i0_;
      input[1U] = i1_;
  }
-@@ -817,22 +863,32 @@
+@@ -817,22 +867,32 @@
      uint64_t buf0[10U] = { 0U };
      uint64_t *x0 = buf0;
      uint64_t *z = buf0 + (uint32_t)5U;
@@ -2778,9 +2773,9 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Curve25519.c nss_new/nss/lib/freebl/ve
      x[0U] = (uint64_t)1U;
      Hacl_EC_Ladder_cmult(nq, scalar, q);
      Hacl_EC_Format_scalar_of_point(mypublic, nq);
-diff -ur nss/nss/lib/freebl/verified/Hacl_Poly1305_32.c nss_new/nss/lib/freebl/verified/Hacl_Poly1305_32.c
---- a/nss/nss/lib/freebl/verified/Hacl_Poly1305_32.c	2018-06-21 11:24:45.000000000 +0200
-+++ b/nss/nss/lib/freebl/verified/Hacl_Poly1305_32.c	2018-09-14 18:37:50.838682200 +0200
+diff -u b/nss/nss/lib/freebl/verified/Hacl_Poly1305_32.c b/nss/nss/lib/freebl/verified/Hacl_Poly1305_32.c
+--- b/nss/nss/lib/freebl/verified/Hacl_Poly1305_32.c	2018-09-14 18:37:50.838682200 +0200
++++ b/nss/nss/lib/freebl/verified/Hacl_Poly1305_32.c	2018-10-11 15:49:18.984000000 +0200
 @@ -47,7 +47,8 @@
  inline static void
  Hacl_Bignum_Fproduct_copy_from_wide_(uint32_t *output, uint64_t *input)
@@ -2911,7 +2906,7 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Poly1305_32.c nss_new/nss/lib/freebl/v
 +    Hacl_Impl_Poly1305_32_State_poly1305_state scrut0;
 +    uint32_t *h;
 +    Hacl_Impl_Poly1305_32_State_poly1305_state scrut;
-+    uint32_t *r = scrut.r;
++    uint32_t *r;
      tmp[0U] = r0;
      tmp[1U] = r1;
      tmp[2U] = r2;
@@ -3228,7 +3223,6 @@ diff -ur nss/nss/lib/freebl/verified/Hacl_Poly1305_32.c nss_new/nss/lib/freebl/v
      Hacl_Impl_Poly1305_32_poly1305_last_pass(acc);
  }
  
-diff -ur nss/nss/lib/freebl/verified/kremlib.h nss_new/nss/lib/freebl/verified/kremlib.h
 --- a/nss/nss/lib/freebl/verified/kremlib.h	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/freebl/verified/kremlib.h	2018-09-07 03:48:09.669539000 +0200
 @@ -592,7 +592,7 @@
@@ -3240,7 +3234,6 @@ diff -ur nss/nss/lib/freebl/verified/kremlib.h nss_new/nss/lib/freebl/verified/k
  }
  
  static inline void
-diff -ur nss/nss/lib/freebl/verified/kremlib_base.h nss_new/nss/lib/freebl/verified/kremlib_base.h
 --- a/nss/nss/lib/freebl/verified/kremlib_base.h	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/freebl/verified/kremlib_base.h	2018-09-07 03:11:39.712507800 +0200
 @@ -16,9 +16,17 @@
@@ -3263,7 +3256,6 @@ diff -ur nss/nss/lib/freebl/verified/kremlib_base.h nss_new/nss/lib/freebl/verif
  #include <stdio.h>
  #include <stdlib.h>
  #include <string.h>
-diff -ur nss/nss/lib/pk11wrap/pk11skey.c nss_new/nss/lib/pk11wrap/pk11skey.c
 --- a/nss/nss/lib/pk11wrap/pk11skey.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/pk11wrap/pk11skey.c	2018-09-18 11:33:52.253969200 +0200
 @@ -2217,12 +2217,13 @@
@@ -3281,7 +3273,6 @@ diff -ur nss/nss/lib/pk11wrap/pk11skey.c nss_new/nss/lib/pk11wrap/pk11skey.c
                                                 &pubKey->u.ec.publicValue,
                                                 SEC_ASN1_GET(SEC_OctetStringTemplate));
          if (pubValue == NULL) {
-diff -ur nss/nss/lib/pkcs7/p7create.c nss_new/nss/lib/pkcs7/p7create.c
 --- a/nss/nss/lib/pkcs7/p7create.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/pkcs7/p7create.c	2018-09-19 13:40:41.437890500 +0200
 @@ -1263,6 +1263,7 @@
@@ -3300,7 +3291,6 @@ diff -ur nss/nss/lib/pkcs7/p7create.c nss_new/nss/lib/pkcs7/p7create.c
      pbe_algid = PK11_CreatePBEV2AlgorithmID(pbe_algorithm,
                                              cipher_algorithm,
                                              prf_algorithm,
-diff -ur nss/nss/lib/softoken/sdb.c nss_new/nss/lib/softoken/sdb.c
 --- a/nss/nss/lib/softoken/sdb.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/softoken/sdb.c	2018-09-14 18:47:11.826781200 +0200
 @@ -206,12 +206,13 @@
@@ -3318,7 +3308,6 @@ diff -ur nss/nss/lib/softoken/sdb.c nss_new/nss/lib/softoken/sdb.c
      if (!filenameWide) {
          return -1;
      }
-diff -ur nss/nss/lib/ssl/dtls13con.c nss_new/nss/lib/ssl/dtls13con.c
 --- a/nss/nss/lib/ssl/dtls13con.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/ssl/dtls13con.c	2018-09-18 12:37:53.795110600 +0200
 @@ -64,7 +64,7 @@
@@ -3330,7 +3319,6 @@ diff -ur nss/nss/lib/ssl/dtls13con.c nss_new/nss/lib/ssl/dtls13con.c
  dtls_CombineSequenceNumber(DTLSEpoch epoch, sslSequenceNumber seqNum)
  {
      PORT_Assert(seqNum <= RECORD_SEQ_MAX);
-diff -ur nss/nss/lib/ssl/selfencrypt.c nss_new/nss/lib/ssl/selfencrypt.c
 --- a/nss/nss/lib/ssl/selfencrypt.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/ssl/selfencrypt.c	2018-09-19 01:42:46.230591100 +0200
 @@ -197,30 +197,35 @@
@@ -3399,7 +3387,6 @@ diff -ur nss/nss/lib/ssl/selfencrypt.c nss_new/nss/lib/ssl/selfencrypt.c
  
      return SECSuccess;
  }
-diff -ur nss/nss/lib/ssl/ssl3con.c nss_new/nss/lib/ssl/ssl3con.c
 --- a/nss/nss/lib/ssl/ssl3con.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/ssl/ssl3con.c	2018-09-18 12:54:26.104920200 +0200
 @@ -5563,6 +5563,7 @@
@@ -3452,7 +3439,6 @@ diff -ur nss/nss/lib/ssl/ssl3con.c nss_new/nss/lib/ssl/ssl3con.c
          SSL3_SendAlert(ss, alert_fatal, alert);
          /* Reset the error code in case SSL3_SendAlert called
           * PORT_SetError(). */
-diff -ur nss/nss/lib/ssl/ssl3exthandle.c nss_new/nss/lib/ssl/ssl3exthandle.c
 --- a/nss/nss/lib/ssl/ssl3exthandle.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/ssl/ssl3exthandle.c	2018-09-18 14:20:01.612911900 +0200
 @@ -1914,6 +1914,8 @@
@@ -3475,7 +3461,6 @@ diff -ur nss/nss/lib/ssl/ssl3exthandle.c nss_new/nss/lib/ssl/ssl3exthandle.c
      if (rv != SECSuccess) {
          return SECFailure;
      }
-diff -ur nss/nss/lib/ssl/sslbloom.c nss_new/nss/lib/ssl/sslbloom.c
 --- a/nss/nss/lib/ssl/sslbloom.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/ssl/sslbloom.c	2018-09-18 13:09:01.900866100 +0200
 @@ -10,7 +10,7 @@
@@ -3487,7 +3472,6 @@ diff -ur nss/nss/lib/ssl/sslbloom.c nss_new/nss/lib/ssl/sslbloom.c
  sslBloom_Size(unsigned int bits)
  {
      return (bits >= 3) ? (1 << (bits - 3)) : 1;
-diff -ur nss/nss/lib/ssl/sslencode.c nss_new/nss/lib/ssl/sslencode.c
 --- a/nss/nss/lib/ssl/sslencode.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/ssl/sslencode.c	2018-09-18 13:43:20.673756400 +0200
 @@ -214,6 +214,8 @@
@@ -3509,7 +3493,6 @@ diff -ur nss/nss/lib/ssl/sslencode.c nss_new/nss/lib/ssl/sslencode.c
      for (i = 0; i < bytes; i++) {
          number = (number << 8) + reader->buf.buf[i + reader->offset];
      }
-diff -ur nss/nss/lib/ssl/sslnonce.c nss_new/nss/lib/ssl/sslnonce.c
 --- a/nss/nss/lib/ssl/sslnonce.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/ssl/sslnonce.c	2018-09-18 23:16:11.660366800 +0200
 @@ -439,6 +439,10 @@
@@ -3654,7 +3637,6 @@ diff -ur nss/nss/lib/ssl/sslnonce.c nss_new/nss/lib/ssl/sslnonce.c
      PORT_Assert(sec);
  
      if (sec->ci.sid) {
-diff -ur nss/nss/lib/ssl/sslsnce.c nss_new/nss/lib/ssl/sslsnce.c
 --- a/nss/nss/lib/ssl/sslsnce.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/ssl/sslsnce.c	2018-09-18 23:29:00.521322700 +0200
 @@ -732,12 +732,12 @@
@@ -3672,7 +3654,6 @@ diff -ur nss/nss/lib/ssl/sslsnce.c nss_new/nss/lib/ssl/sslsnce.c
      if (sid->u.ssl3.sessionIDLength == 0) {
          return;
      }
-diff -ur nss/nss/lib/ssl/sslsock.c nss_new/nss/lib/ssl/sslsock.c
 --- a/nss/nss/lib/ssl/sslsock.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/ssl/sslsock.c	2018-09-19 00:07:12.192937500 +0200
 @@ -53,36 +53,36 @@
@@ -3792,7 +3773,6 @@ diff -ur nss/nss/lib/ssl/sslsock.c nss_new/nss/lib/ssl/sslsock.c
  
      /* Populate sid values */
      if (ssl_DecodeResumptionToken(&sid, tokenData, tokenLen) != SECSuccess) {
-diff -ur nss/nss/lib/ssl/tls13hashstate.c nss_new/nss/lib/ssl/tls13hashstate.c
 --- a/nss/nss/lib/ssl/tls13hashstate.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/ssl/tls13hashstate.c	2018-09-19 13:22:23.746451600 +0200
 @@ -102,7 +102,10 @@
@@ -3829,7 +3809,6 @@ diff -ur nss/nss/lib/ssl/tls13hashstate.c nss_new/nss/lib/ssl/tls13hashstate.c
      return SECSuccess;
 +    }
  }
-diff -ur nss/nss/lib/util/quickder.c nss_new/nss/lib/util/quickder.c
 --- a/nss/nss/lib/util/quickder.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/util/quickder.c	2018-09-06 15:30:17.340172300 +0200
 @@ -406,13 +406,14 @@
@@ -3848,7 +3827,6 @@ diff -ur nss/nss/lib/util/quickder.c nss_new/nss/lib/util/quickder.c
      *(void**)((char*)dest + templateEntry->offset) = subdata;
      if (subdata) {
          return DecodeItem(subdata, ptrTemplate, src, arena, checkTag);
-diff -ur nss/nss/lib/util/secport.c nss_new/nss/lib/util/secport.c
 --- a/nss/nss/lib/util/secport.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/util/secport.c	2018-09-06 15:59:21.837141800 +0200
 @@ -150,13 +150,14 @@
@@ -3868,7 +3846,6 @@ diff -ur nss/nss/lib/util/secport.c nss_new/nss/lib/util/secport.c
      if (!v) {
          return NULL;
      }
-diff -ur nss/nss/lib/util/utilmod.c nss_new/nss/lib/util/utilmod.c
 --- a/nss/nss/lib/util/utilmod.c	2018-06-21 11:24:45.000000000 +0200
 +++ b/nss/nss/lib/util/utilmod.c	2018-09-06 16:12:23.959424800 +0200
 @@ -75,12 +75,13 @@
