@@ -177,59 +177,7 @@ void SAL_CALL OPreparedStatement::disposing()
     close();
 }
 
-void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
-                                            const OUString& sInput)
-{
-    SAL_INFO("connectivity.firebird",
-             "setString(" << nParameterIndex << " , " << sInput << ")");
 
-    MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-    ensurePrepared();
-
-    checkParameterIndex(nParameterIndex);
-    setParameterNull(nParameterIndex, false);
-
-    OString str = OUStringToOString(sInput , RTL_TEXTENCODING_UTF8 );
-
-    XSQLVAR* pVar = m_pInSqlda->sqlvar + (nParameterIndex - 1);
-
-    int dtype = (pVar->sqltype & ~1); // drop flag bit for now
-
-    if (str.getLength() > pVar->sqllen)
-        str = str.copy(0, pVar->sqllen);
-
-    switch (dtype) {
-    case SQL_VARYING:
-    {
-        const sal_Int32 max_varchar_len = 0xFFFF;
-        // First 2 bytes indicate string size
-        if (str.getLength() > max_varchar_len)
-        {
-            str = str.copy(0, max_varchar_len);
-        }
-        const short nLength = str.getLength();
-        memcpy(pVar->sqldata, &nLength, 2);
-        // Actual data
-        memcpy(pVar->sqldata + 2, str.getStr(), str.getLength());
-        break;
-    }
-    case SQL_TEXT:
-        memcpy(pVar->sqldata, str.getStr(), str.getLength());
-        // Fill remainder with spaces
-        memset(pVar->sqldata + str.getLength(), ' ', pVar->sqllen - str.getLength());
-        break;
-    case SQL_BLOB: // Clob
-        assert( pVar->sqlsubtype == static_cast<short>(BlobSubtype::Clob) );
-        setClob(nParameterIndex, sInput );
-        break;
-    default:
-        ::dbtools::throwSQLException(
-            "Incorrect type for setString",
-            ::dbtools::StandardSQLState::INVALID_SQL_DATA_TYPE,
-            *this);
-    }
-}
 
 Reference< XConnection > SAL_CALL OPreparedStatement::getConnection()
 {
@@ -343,6 +291,73 @@ sal_Int64 toNumericWithoutDecimalPlace(const OUString& sSource)
 }
 
 //----- XParameters -----------------------------------------------------------
+void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
+                                            const OUString& sInput)
+{
+    SAL_INFO("connectivity.firebird",
+             "setString(" << nParameterIndex << " , " << sInput << ")");
+
+    MutexGuard aGuard( m_aMutex );
+    checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+    ensurePrepared();
+
+    checkParameterIndex(nParameterIndex);
+    setParameterNull(nParameterIndex, false);
+
+    OString str = OUStringToOString(sInput , RTL_TEXTENCODING_UTF8 );
+
+    XSQLVAR* pVar = m_pInSqlda->sqlvar + (nParameterIndex - 1);
+
+    int dtype = (pVar->sqltype & ~1); // drop flag bit for now
+
+    if (str.getLength() > pVar->sqllen)
+        str = str.copy(0, pVar->sqllen);
+
+    switch (dtype) {
+    case SQL_SHORT:
+        setShort(nParameterIndex, static_cast<sal_Int16>(toNumericWithoutDecimalPlace(sInput)) );
+        break;
+    case SQL_LONG:
+        setLong(nParameterIndex, static_cast<sal_Int32>(toNumericWithoutDecimalPlace(sInput)) );
+        break;
+    case SQL_DOUBLE:
+        setLong(nParameterIndex, static_cast<sal_Int32>(sInput.toInt64()) );
+        break;
+    case SQL_INT64:
+        setLong(nParameterIndex, sInput.toInt64() );
+        break;
+
+    case SQL_VARYING:
+    {
+        const sal_Int32 max_varchar_len = 0xFFFF;
+        // First 2 bytes indicate string size
+        if (str.getLength() > max_varchar_len)
+        {
+            str = str.copy(0, max_varchar_len);
+        }
+        const short nLength = str.getLength();
+        memcpy(pVar->sqldata, &nLength, 2);
+        // Actual data
+        memcpy(pVar->sqldata + 2, str.getStr(), str.getLength());
+        break;
+    }
+    case SQL_TEXT:
+        memcpy(pVar->sqldata, str.getStr(), str.getLength());
+        // Fill remainder with spaces
+        memset(pVar->sqldata + str.getLength(), ' ', pVar->sqllen - str.getLength());
+        break;
+    case SQL_BLOB: // Clob
+        assert( pVar->sqlsubtype == static_cast<short>(BlobSubtype::Clob) );
+        setClob(nParameterIndex, sInput );
+        break;
+    default:
+        ::dbtools::throwSQLException(
+            "Incorrect type for setString",
+            ::dbtools::StandardSQLState::INVALID_SQL_DATA_TYPE,
+            *this);
+    }
+}
+
 void SAL_CALL OPreparedStatement::setNull(sal_Int32 nIndex, sal_Int32 /*nSqlType*/)
 {
     MutexGuard aGuard( m_aMutex );
