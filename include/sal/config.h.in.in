@@ -41,6 +41,14 @@
 
 #endif /* defined _MSC_VER */
 
+#ifndef _WIN32_WINNT
+#  define _WIN32_WINNT @BASELINE_WINVER@
+#else
+#  if _WIN32_WINNT < @BASELINE_WINVER@
+#    error Current LibreOffice baseline on Windows is @BASELINE_WINVER@, but your _WIN32_WINNT is smaller
+#  endif
+#endif
+
 #endif /* defined WIN32 */
 
 #if defined(__sun) || defined(LINUX) || defined(NETBSD) || defined(FREEBSD) || \

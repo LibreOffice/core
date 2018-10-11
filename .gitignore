@@ -64,6 +64,9 @@
 /README
 /AUTHORS
 /MAINTAINERS
+/include/sal/config.h
+/include/sal/config.h.in
+/solenv/gbuild/platform/windows.mk
 
 # make id
 /ID
