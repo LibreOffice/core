@@ -104,8 +104,12 @@ namespace sw {
                 {
                     while (m_CurrentHint < pHints->Count())
                     {
-                        SwTextAttr const*const pHint(pHints->Get(m_CurrentHint));
-                        if (rExtent.nEnd < pHint->GetStart())
+                        SwTextAttr *const pHint(pHints->Get(m_CurrentHint));
+                        if (rExtent.nEnd < pHint->GetStart()
+                                // <= if it has no end or isn't empty
+                            || (rExtent.nEnd == pHint->GetStart()
+                                && (!pHint->GetEnd()
+                                    || *pHint->GetEnd() != pHint->GetStart())))
                         {
                             break;
                         }
@@ -238,13 +242,18 @@ namespace sw {
                 {
                     while (0 < m_CurrentHint)
                     {
-                        SwTextAttr const*const pHint(pHints->Get(m_CurrentHint - 1));
-                        if (pHint->GetStart() < rExtent.nStart)
+                        SwTextAttr *const pHint(
+                                pHints->GetSortedByEnd(m_CurrentHint - 1));
+                        if (*pHint->GetAnyEnd() < rExtent.nStart
+                                // <= if it has end and isn't empty
+                            || (pHint->GetEnd()
+                                && *pHint->GetEnd() != pHint->GetStart()
+                                && *pHint->GetEnd() == rExtent.nStart))
                         {
                             break;
                         }
                         --m_CurrentHint;
-                        if (pHint->GetStart() <= rExtent.nEnd)
+                        if (*pHint->GetAnyEnd() <= rExtent.nEnd)
                         {
                             if (ppNode)
                             {
@@ -258,7 +267,8 @@ namespace sw {
                 if (0 < m_CurrentExtent &&
                     rExtent.pNode != m_pMerged->extents[m_CurrentExtent-1].pNode)
                 {
-                    SwpHints const*const pHints(rExtent.pNode->GetpSwpHints());
+                    SwpHints const*const pHints(
+                        m_pMerged->extents[m_CurrentExtent-1].pNode->GetpSwpHints());
                     m_CurrentHint = pHints ? pHints->Count() : 0; // reset
                 }
             }
@@ -271,7 +281,7 @@ namespace sw {
             {
                 if (0 < m_CurrentHint)
                 {
-                    SwTextAttr const*const pHint(pHints->Get(m_CurrentHint - 1));
+                    SwTextAttr const*const pHint(pHints->GetSortedByEnd(m_CurrentHint - 1));
                     --m_CurrentHint;
                     if (ppNode)
                     {

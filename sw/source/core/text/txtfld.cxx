@@ -426,9 +426,9 @@ static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTextFor
     for (SwTextAttr const* pHint = iter.PrevAttr(&pNode); pHint;
          pHint = iter.PrevAttr(&pNode))
     {
-        TextFrameIndex const nHintStart(
-            rInf.GetTextFrame()->MapModelToView(pNode, pHint->GetStart()));
-        if (nHintStart < nTextLen)
+        TextFrameIndex const nHintEnd(
+            rInf.GetTextFrame()->MapModelToView(pNode, *pHint->GetAnyEnd()));
+        if (nHintEnd < nTextLen)
         {
             break; // only those at para end are interesting
         }
