@@ -178,6 +178,24 @@
       "revId": "c8481c8a43ce2544275b2d70ef29a8b0cb157732",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_c83b429a",
+        "filename": "odk/examples/OLE/activex/StdAfx2.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-11T13:48:16Z",
+      "side": 1,
+      "message": "I still don\u0027t understand what problem you want to solve with that complicated setup in \u003chttps://gerrit.libreoffice.org/#/c/61657/\u003e.  Again, why not just revert the change made to this file?",
+      "parentUuid": "ff0f0b1f_68c5568e",
+      "revId": "c8481c8a43ce2544275b2d70ef29a8b0cb157732",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
