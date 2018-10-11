@@ -58,7 +58,7 @@ class SwContentOptPage : public SfxTabPage
     VclPtr<FixedText>  m_pMetricLabel;
     VclPtr<ListBox>    m_pMetricLB;
 
-    VclPtr<CheckBox>   m_pShowInlineTooltips;
+    VclPtr<CheckBox>   m_pShowInlineTooltipsCB;
 
     DECL_LINK(VertRulerHdl, Button*, void);
 public:

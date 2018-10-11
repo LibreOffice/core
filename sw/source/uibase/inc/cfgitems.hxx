@@ -80,6 +80,7 @@ class SW_DLLPUBLIC SwElemItem : public SfxPoolItem
     bool bFieldName         :1;
     bool bNotes             :1;
     bool bShowInlineTooltips :1;
+    bool bUseHeaderFooterMenu :1;
 
     friend class SwContentOptPage;
 
