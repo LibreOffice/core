@@ -67,10 +67,9 @@ cmd/32/insertformlist.svg cmd/32/listbox.svg
 cmd/32/insertformradio.svg cmd/32/radiobutton.svg
 cmd/32/insertformspin.svg cmd/32/spinbutton.svg
 cmd/32/insertformula.svg cmd/32/dbviewfunctions.svg
-cmd/32/insertformvscroll.svg cmd/32/scrollbar.svg
 cmd/32/insertframeinteract.svg cmd/32/insertframe.svg
 cmd/32/insertframeinteractnocolumns.svg cmd/32/insertframe.svg
-cmd/32/insertimagecontrol.svg cmd/32/drawchart.svg
+cmd/32/insertimagecontrol.svg cmd/32/imagecontrol.svg
 cmd/32/insertlistbox.svg cmd/32/listbox.svg
 cmd/32/insertnumericfield.svg cmd/32/numberformatstandard.svg
 cmd/32/insertobjectchart.svg cmd/32/drawchart.svg
@@ -122,11 +121,10 @@ cmd/lc_insertformlist.svg cmd/lc_listbox.svg
 cmd/lc_insertformradio.svg cmd/lc_radiobutton.svg
 cmd/lc_insertformspin.svg cmd/lc_spinbutton.svg
 cmd/lc_insertformula.svg cmd/lc_dbviewfunctions.svg
-cmd/lc_insertformvscroll.svg cmd/lc_scrollbar.svg
 cmd/lc_insertframeinteract.svg cmd/lc_insertframe.svg
 cmd/lc_insertframeinteractnocolumns.svg cmd/lc_insertframe.svg
 cmd/lc_insertheaderfootermenu.svg cmd/lc_editheaderandfooter.svg
-cmd/lc_insertimagecontrol.svg cmd/lc_drawchart.svg
+cmd/lc_insertimagecontrol.svg cmd/lc_imagecontrol.svg
 cmd/lc_insertlistbox.svg cmd/lc_listbox.svg
 cmd/lc_insertnumericfield.svg cmd/lc_numberformatstandard.svg
 cmd/lc_insertobjectchart.svg cmd/lc_drawchart.svg
@@ -179,11 +177,10 @@ cmd/sc_insertformlist.svg cmd/sc_listbox.svg
 cmd/sc_insertformradio.svg cmd/sc_radiobutton.svg
 cmd/sc_insertformspin.svg cmd/sc_spinbutton.svg
 cmd/sc_insertformula.svg cmd/sc_dbviewfunctions.svg
-cmd/sc_insertformvscroll.svg cmd/sc_scrollbar.svg
 cmd/sc_insertframeinteract.svg cmd/sc_insertframe.svg
 cmd/sc_insertframeinteractnocolumns.svg cmd/sc_insertframe.svg
 cmd/sc_insertheaderfootermenu.svg cmd/sc_editheaderandfooter.svg
-cmd/sc_insertimagecontrol.svg cmd/sc_drawchart.svg
+cmd/sc_insertimagecontrol.svg cmd/sc_imagecontrol.svg
 cmd/sc_insertlistbox.svg cmd/sc_listbox.svg
 cmd/sc_insertnumericfield.svg cmd/sc_numberformatstandard.svg
 cmd/sc_insertobjectchart.svg cmd/sc_drawchart.svg
@@ -290,13 +287,10 @@ cmd/sc_objects3dtoolbox.svg cmd/sc_cube.svg
 cmd/sc_convertinto3dlathefast.svg cmd/sc_convertinto3dlathe.svg
 
 # Control
-cmd/32/choosecontrols.svg cmd/32/controlproperties.svg
 cmd/32/optionstreedialog.svg cmd/32/controlproperties.svg
 
-cmd/lc_choosecontrols.svg cmd/lc_controlproperties.svg
 cmd/lc_optionstreedialog.svg cmd/lc_controlproperties.svg
 
-cmd/sc_choosecontrols.svg cmd/sc_controlproperties.svg
 cmd/sc_optionstreedialog.svg cmd/sc_controlproperties.svg
 
 # Track Change
@@ -332,13 +326,26 @@ cmd/sc_webhtml.svg cmd/sc_browseview.svg
 cmd/sc_openurl.svg cmd/sc_browseview.svg
 
 # Form
-cmd/32/hscrollbar.svg cmd/32/insertformhscroll.svg
+cmd/32/hscroll.svg cmd/32/hscrollbar.svg
+cmd/32/insertformhscroll.svg cmd/32/hscrollbar.svg
+cmd/32/insertformvscroll.svg cmd/32/scrollbar.svg
+cmd/32/scrollbarmenu.svg cmd/32/scrollbar.svg
+cmd/32/vscroll.svg cmd/32/scrollbar.svg
 cmd/32/vscrollbar.svg cmd/32/scrollbar.svg
 
-cmd/lc_hscrollbar.svg cmd/lc_insertformhscroll.svg
+
+cmd/lc_hscroll.svg cmd/lc_hscrollbar.svg
+cmd/lc_insertformhscroll.svg cmd/lc_hscrollbar.svg
+cmd/lc_insertformvscroll.svg cmd/lc_scrollbar.svg
+cmd/lc_scrollbarmenu.svg cmd/lc_scrollbar.svg
+cmd/lc_vscroll.svg cmd/lc_scrollbar.svg
 cmd/lc_vscrollbar.svg cmd/lc_scrollbar.svg
 
-cmd/sc_hscrollbar.svg cmd/sc_insertformhscroll.svg
+cmd/sc_hscroll.svg cmd/sc_hscrollbar.svg
+cmd/sc_insertformhscroll.svg cmd/sc_hscrollbar.svg
+cmd/sc_insertformvscroll.svg cmd/sc_scrollbar.svg
+cmd/sc_scrollbarmenu.svg cmd/sc_scrollbar.svg
+cmd/sc_vscroll.svg cmd/sc_scrollbar.svg
 cmd/sc_vscrollbar.svg cmd/sc_scrollbar.svg
 
 # Template Menu
@@ -399,20 +406,17 @@ cmd/32/formatimagemenu.svg cmd/32/graphic.svg
 cmd/32/grafinvert.svg cmd/32/graphicfilterinvert.svg
 cmd/32/grafmode.svg cmd/32/graphicdialog.svg
 cmd/32/graphicfilterposter.svg cmd/32/graphicdialog.svg
-cmd/32/imagebutton.svg cmd/32/gallery.svg
 
 cmd/lc_colorview.svg cmd/lc_graphicfilterinvert.svg
 cmd/lc_grafinvert.svg cmd/lc_graphicfilterinvert.svg
 cmd/lc_grafmode.svg cmd/lc_graphicdialog.svg
 cmd/lc_graphicfilterposter.svg cmd/lc_graphicdialog.svg
-cmd/lc_imagebutton.svg cmd/lc_gallery.svg
 
 cmd/sc_colorview.svg cmd/sc_graphicfilterinvert.svg
 cmd/sc_formatimagemenu.svg cmd/sc_graphic.svg
 cmd/sc_graphicfilterposter.svg cmd/sc_graphicdialog.svg
 cmd/sc_grafinvert.svg cmd/sc_graphicfilterinvert.svg
 cmd/sc_grafmode.svg cmd/sc_graphicdialog.svg
-cmd/sc_imagebutton.svg cmd/sc_gallery.svg
 
 # Shapes
 cmd/32/arrowshapes.svg cmd/32/arrowshapes.left-right-arrow.svg
@@ -713,11 +717,11 @@ cmd/lc_clickchangerotation.svg cmd/lc_toggleobjectrotatemode.svg
 cmd/sc_clickchangerotation.svg cmd/sc_toggleobjectrotatemode.svg
 
 # AddField
-cmd/32/fieldnames.svg cmd/32/addfield.svg
+cmd/32/fieldnames.svg cmd/32/fields.svg
 
-cmd/lc_fieldnames.svg cmd/lc_addfield.svg
+cmd/lc_fieldnames.svg cmd/lc_fields.svg
 
-cmd/sc_fieldnames.svg cmd/sc_addfield.svg
+cmd/sc_fieldnames.svg cmd/sc_fields.svg
 
 # Edit
 cmd/32/dsbeditdoc.svg cmd/32/editdoc.svg
@@ -1151,13 +1155,10 @@ cmd/sc_gridmenu.svg cmd/sc_gridvisible.svg
 
 # Crop
 cmd/32/grafattrcrop.svg cmd/32/crop.svg
-cmd/32/transformdialog.svg cmd/32/crop.svg
 
 cmd/lc_grafattrcrop.svg cmd/lc_crop.svg
-cmd/lc_transformdialog.svg cmd/lc_crop.svg
 
 cmd/sc_grafattrcrop.svg cmd/sc_crop.svg
-cmd/sc_transformdialog.svg cmd/sc_crop.svg
 
 # Group
 cmd/32/formatgroup.svg cmd/32/group.svg

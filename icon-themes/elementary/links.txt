@@ -67,10 +67,9 @@ cmd/32/insertformlist.png cmd/32/listbox.png
 cmd/32/insertformradio.png cmd/32/radiobutton.png
 cmd/32/insertformspin.png cmd/32/spinbutton.png
 cmd/32/insertformula.png cmd/32/dbviewfunctions.png
-cmd/32/insertformvscroll.png cmd/32/scrollbar.png
 cmd/32/insertframeinteract.png cmd/32/insertframe.png
 cmd/32/insertframeinteractnocolumns.png cmd/32/insertframe.png
-cmd/32/insertimagecontrol.png cmd/32/drawchart.png
+cmd/32/insertimagecontrol.png cmd/32/imagecontrol.png
 cmd/32/insertlistbox.png cmd/32/listbox.png
 cmd/32/insertnumericfield.png cmd/32/numberformatstandard.png
 cmd/32/insertobjectchart.png cmd/32/drawchart.png
@@ -122,11 +121,10 @@ cmd/lc_insertformlist.png cmd/lc_listbox.png
 cmd/lc_insertformradio.png cmd/lc_radiobutton.png
 cmd/lc_insertformspin.png cmd/lc_spinbutton.png
 cmd/lc_insertformula.png cmd/lc_dbviewfunctions.png
-cmd/lc_insertformvscroll.png cmd/lc_scrollbar.png
 cmd/lc_insertframeinteract.png cmd/lc_insertframe.png
 cmd/lc_insertframeinteractnocolumns.png cmd/lc_insertframe.png
 cmd/lc_insertheaderfootermenu.png cmd/lc_editheaderandfooter.png
-cmd/lc_insertimagecontrol.png cmd/lc_drawchart.png
+cmd/lc_insertimagecontrol.png cmd/lc_imagecontrol.png
 cmd/lc_insertlistbox.png cmd/lc_listbox.png
 cmd/lc_insertnumericfield.png cmd/lc_numberformatstandard.png
 cmd/lc_insertobjectchart.png cmd/lc_drawchart.png
@@ -179,11 +177,10 @@ cmd/sc_insertformlist.png cmd/sc_listbox.png
 cmd/sc_insertformradio.png cmd/sc_radiobutton.png
 cmd/sc_insertformspin.png cmd/sc_spinbutton.png
 cmd/sc_insertformula.png cmd/sc_dbviewfunctions.png
-cmd/sc_insertformvscroll.png cmd/sc_scrollbar.png
 cmd/sc_insertframeinteract.png cmd/sc_insertframe.png
 cmd/sc_insertframeinteractnocolumns.png cmd/sc_insertframe.png
 cmd/sc_insertheaderfootermenu.png cmd/sc_editheaderandfooter.png
-cmd/sc_insertimagecontrol.png cmd/sc_drawchart.png
+cmd/sc_insertimagecontrol.png cmd/sc_imagecontrol.png
 cmd/sc_insertlistbox.png cmd/sc_listbox.png
 cmd/sc_insertnumericfield.png cmd/sc_numberformatstandard.png
 cmd/sc_insertobjectchart.png cmd/sc_drawchart.png
@@ -290,13 +287,10 @@ cmd/sc_objects3dtoolbox.png cmd/sc_cube.png
 cmd/sc_convertinto3dlathefast.png cmd/sc_convertinto3dlathe.png
 
 # Control
-cmd/32/choosecontrols.png cmd/32/controlproperties.png
 cmd/32/optionstreedialog.png cmd/32/controlproperties.png
 
-cmd/lc_choosecontrols.png cmd/lc_controlproperties.png
 cmd/lc_optionstreedialog.png cmd/lc_controlproperties.png
 
-cmd/sc_choosecontrols.png cmd/sc_controlproperties.png
 cmd/sc_optionstreedialog.png cmd/sc_controlproperties.png
 
 # Track Change
@@ -332,13 +326,26 @@ cmd/sc_webhtml.png cmd/sc_browseview.png
 cmd/sc_openurl.png cmd/sc_browseview.png
 
 # Form
-cmd/32/hscrollbar.png cmd/32/insertformhscroll.png
+cmd/32/hscroll.png cmd/32/hscrollbar.png
+cmd/32/insertformhscroll.png cmd/32/hscrollbar.png
+cmd/32/insertformvscroll.png cmd/32/scrollbar.png
+cmd/32/scrollbarmenu.png cmd/32/scrollbar.png
+cmd/32/vscroll.png cmd/32/scrollbar.png
 cmd/32/vscrollbar.png cmd/32/scrollbar.png
 
-cmd/lc_hscrollbar.png cmd/lc_insertformhscroll.png
+
+cmd/lc_hscroll.png cmd/lc_hscrollbar.png
+cmd/lc_insertformhscroll.png cmd/lc_hscrollbar.png
+cmd/lc_insertformvscroll.png cmd/lc_scrollbar.png
+cmd/lc_scrollbarmenu.png cmd/lc_scrollbar.png
+cmd/lc_vscroll.png cmd/lc_scrollbar.png
 cmd/lc_vscrollbar.png cmd/lc_scrollbar.png
 
-cmd/sc_hscrollbar.png cmd/sc_insertformhscroll.png
+cmd/sc_hscroll.png cmd/sc_hscrollbar.png
+cmd/sc_insertformhscroll.png cmd/sc_hscrollbar.png
+cmd/sc_insertformvscroll.png cmd/sc_scrollbar.png
+cmd/sc_scrollbarmenu.png cmd/sc_scrollbar.png
+cmd/sc_vscroll.png cmd/sc_scrollbar.png
 cmd/sc_vscrollbar.png cmd/sc_scrollbar.png
 
 # Template Menu
@@ -399,20 +406,17 @@ cmd/32/formatimagemenu.png cmd/32/graphic.png
 cmd/32/grafinvert.png cmd/32/graphicfilterinvert.png
 cmd/32/grafmode.png cmd/32/graphicdialog.png
 cmd/32/graphicfilterposter.png cmd/32/graphicdialog.png
-cmd/32/imagebutton.png cmd/32/gallery.png
 
 cmd/lc_colorview.png cmd/lc_graphicfilterinvert.png
 cmd/lc_grafinvert.png cmd/lc_graphicfilterinvert.png
 cmd/lc_grafmode.png cmd/lc_graphicdialog.png
 cmd/lc_graphicfilterposter.png cmd/lc_graphicdialog.png
-cmd/lc_imagebutton.png cmd/lc_gallery.png
 
 cmd/sc_colorview.png cmd/sc_graphicfilterinvert.png
 cmd/sc_formatimagemenu.png cmd/sc_graphic.png
 cmd/sc_graphicfilterposter.png cmd/sc_graphicdialog.png
 cmd/sc_grafinvert.png cmd/sc_graphicfilterinvert.png
 cmd/sc_grafmode.png cmd/sc_graphicdialog.png
-cmd/sc_imagebutton.png cmd/sc_gallery.png
 
 # Shapes
 cmd/32/arrowshapes.png cmd/32/arrowshapes.left-right-arrow.png
@@ -713,11 +717,11 @@ cmd/lc_clickchangerotation.png cmd/lc_toggleobjectrotatemode.png
 cmd/sc_clickchangerotation.png cmd/sc_toggleobjectrotatemode.png
 
 # AddField
-cmd/32/fieldnames.png cmd/32/addfield.png
+cmd/32/fieldnames.png cmd/32/fields.png
 
-cmd/lc_fieldnames.png cmd/lc_addfield.png
+cmd/lc_fieldnames.png cmd/lc_fields.png
 
-cmd/sc_fieldnames.png cmd/sc_addfield.png
+cmd/sc_fieldnames.png cmd/sc_fields.png
 
 # Edit
 cmd/32/dsbeditdoc.png cmd/32/editdoc.png
@@ -743,16 +747,13 @@ cmd/sc_closewin.png cmd/sc_quit.png
 
 # Close
 cmd/32/closedocs.png cmd/32/closedoc.png
-cmd/32/closepreview.png cmd/32/closedoc.png
-cmd/32/exitsearch.png cmd/32/closedoc.png
+cmd/32/exitsearch.png cmd/32/closepreview.png
 
 cmd/lc_closedocs.png cmd/lc_closedoc.png
-cmd/lc_closepreview.png cmd/lc_closedoc.png
-cmd/lc_exitsearch.png cmd/lc_closedoc.png
+cmd/lc_exitsearch.png cmd/lc_closepreview.png
 
 cmd/sc_closedocs.png cmd/sc_closedoc.png
-cmd/sc_closepreview.png cmd/sc_closedoc.png
-cmd/sc_exitsearch.png cmd/sc_closedoc.png
+cmd/sc_exitsearch.png cmd/sc_closepreview.png
 
 # Cancel
 cmd/32/no.png cmd/32/cancel.png
@@ -1151,13 +1152,10 @@ cmd/sc_gridmenu.png cmd/sc_gridvisible.png
 
 # Crop
 cmd/32/grafattrcrop.png cmd/32/crop.png
-cmd/32/transformdialog.png cmd/32/crop.png
 
 cmd/lc_grafattrcrop.png cmd/lc_crop.png
-cmd/lc_transformdialog.png cmd/lc_crop.png
 
 cmd/sc_grafattrcrop.png cmd/sc_crop.png
-cmd/sc_transformdialog.png cmd/sc_crop.png
 
 # Group
 cmd/32/formatgroup.png cmd/32/group.png
