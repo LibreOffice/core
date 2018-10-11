@@ -347,6 +347,8 @@ SwDoc::SwDoc()
 #if HAVE_FEATURE_DBCONNECTIVITY
     // Create DBManager
     mpDBManager = new SwDBManager(this);
+#else
+    mpDBManager = nullptr;
 #endif
 
     // create TOXTypes
