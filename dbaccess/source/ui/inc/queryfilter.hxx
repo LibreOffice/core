@@ -20,15 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYFILTER_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYFILTER_HXX
 
-#include <vcl/dialog.hxx>
-
-#include <vcl/lstbox.hxx>
-
-#include <vcl/edit.hxx>
-
-#include <vcl/fixed.hxx>
-
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 #include <connectivity/sqliterator.hxx>
 
 #include <connectivity/predicateinput.hxx>
@@ -63,24 +55,10 @@ namespace com
 // DlgFilterCrit
 namespace dbaui
 {
-    class DlgFilterCrit final :public ModalDialog
-                        ,public ::svxform::OParseContextClient
+    class DlgFilterCrit final : public weld::GenericDialogController
+                              , public ::svxform::OParseContextClient
     {
     private:
-        VclPtr<ListBox>        m_pLB_WHEREFIELD1;
-        VclPtr<ListBox>        m_pLB_WHERECOMP1;
-        VclPtr<Edit>           m_pET_WHEREVALUE1;
-
-        VclPtr<ListBox>        m_pLB_WHERECOND2;
-        VclPtr<ListBox>        m_pLB_WHEREFIELD2;
-        VclPtr<ListBox>        m_pLB_WHERECOMP2;
-        VclPtr<Edit>           m_pET_WHEREVALUE2;
-
-        VclPtr<ListBox>        m_pLB_WHERECOND3;
-        VclPtr<ListBox>        m_pLB_WHEREFIELD3;
-        VclPtr<ListBox>        m_pLB_WHERECOMP3;
-        VclPtr<Edit>           m_pET_WHEREVALUE3;
-
         std::vector<OUString>  m_aSTR_COMPARE_OPERATORS;
 
         css::uno::Reference< css::sdb::XSingleSelectQueryComposer>    m_xQueryComposer;
@@ -90,35 +68,47 @@ namespace dbaui
 
         ::dbtools::OPredicateInputController    m_aPredicateInput;
 
-        static void     SelectField( ListBox& rBox, const OUString& rField );
-        DECL_LINK( ListSelectHdl, ListBox&, void );
-        DECL_LINK( ListSelectCompHdl, ListBox&, void );
+        std::unique_ptr<weld::ComboBox> m_xLB_WHEREFIELD1;
+        std::unique_ptr<weld::ComboBox> m_xLB_WHERECOMP1;
+        std::unique_ptr<weld::Entry> m_xET_WHEREVALUE1;
+
+        std::unique_ptr<weld::ComboBox> m_xLB_WHERECOND2;
+        std::unique_ptr<weld::ComboBox> m_xLB_WHEREFIELD2;
+        std::unique_ptr<weld::ComboBox> m_xLB_WHERECOMP2;
+        std::unique_ptr<weld::Entry> m_xET_WHEREVALUE2;
+
+        std::unique_ptr<weld::ComboBox> m_xLB_WHERECOND3;
+        std::unique_ptr<weld::ComboBox> m_xLB_WHEREFIELD3;
+        std::unique_ptr<weld::ComboBox> m_xLB_WHERECOMP3;
+        std::unique_ptr<weld::Entry> m_xET_WHEREVALUE3;
+
+        static void SelectField(weld::ComboBox& rBox, const OUString& rField);
+        DECL_LINK(ListSelectHdl, weld::ComboBox&, void);
+        DECL_LINK(ListSelectCompHdl, weld::ComboBox&, void);
 
         void            SetLine( int nIdx, const css::beans::PropertyValue& _rItem, bool _bOr );
         void            EnableLines();
         sal_Int32       GetOSQLPredicateType( const OUString& _rSelectedPredicate ) const;
-        static sal_Int32  GetSelectionPos(sal_Int32 eType, const ListBox& rListBox);
-        bool            getCondition(const ListBox& _rField, const ListBox& _rComp, const Edit& _rValue, css::beans::PropertyValue& _rFilter) const;
+        static sal_Int32  GetSelectionPos(sal_Int32 eType, const weld::ComboBox& rListBox);
+        bool            getCondition(const weld::ComboBox& _rField, const weld::ComboBox& _rComp, const weld::Entry& _rValue, css::beans::PropertyValue& _rFilter) const;
         void            fillLines(int &i, const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& _aValues);
 
-        css::uno::Reference< css::beans::XPropertySet > getMatchingColumn( const Edit& _rValueInput ) const;
+        css::uno::Reference< css::beans::XPropertySet > getMatchingColumn( const weld::Entry& _rValueInput ) const;
         css::uno::Reference< css::beans::XPropertySet > getColumn( const OUString& _rFieldName ) const;
         css::uno::Reference< css::beans::XPropertySet > getQueryColumn( const OUString& _rFieldName ) const;
 
     public:
-        DlgFilterCrit(  vcl::Window * pParent,
-                        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-                        const css::uno::Reference< css::sdbc::XConnection>& _rxConnection,
-                        const css::uno::Reference< css::sdb::XSingleSelectQueryComposer>& _rxComposer,
-                        const css::uno::Reference< css::container::XNameAccess>& _rxCols
-                    );
+        DlgFilterCrit(weld::Window * pParent,
+                      const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                      const css::uno::Reference< css::sdbc::XConnection>& _rxConnection,
+                      const css::uno::Reference< css::sdb::XSingleSelectQueryComposer>& _rxComposer,
+                      const css::uno::Reference< css::container::XNameAccess>& _rxCols);
         virtual ~DlgFilterCrit() override;
-        virtual void dispose() override;
 
         void            BuildWherePart();
 
     private:
-        DECL_LINK( PredicateLoseFocus, Control&, void );
+        DECL_LINK(PredicateLoseFocus, weld::Widget&, void);
     };
 
 }
