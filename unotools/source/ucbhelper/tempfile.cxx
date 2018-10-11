@@ -118,6 +118,10 @@ static bool ensuredir( const OUString& rUnqPath )
 static OUString ConstructTempDir_Impl( const OUString* pParent )
 {
     OUString aName;
+
+    // Ignore pParent on iOS. We don't want to create any temp files
+    // in the same directory where the document being edited is.
+#ifndef IOS
     if ( pParent && !pParent->isEmpty() )
     {
         // test for valid filename
@@ -136,6 +140,9 @@ static OUString ConstructTempDir_Impl( const OUString* pParent )
                 aName = aRet;
         }
     }
+#else
+    (void) pParent;
+#endif
 
     if ( aName.isEmpty() )
     {
