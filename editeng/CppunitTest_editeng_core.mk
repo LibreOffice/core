@@ -73,4 +73,6 @@ $(eval $(call gb_CppunitTest_use_components,editeng_core,\
 
 $(eval $(call gb_CppunitTest_use_configuration,editeng_core))
 
+$(eval $(call gb_CppunitTest_use_more_fonts,editeng_core))
+
 # vim: set noet sw=4 ts=4:
