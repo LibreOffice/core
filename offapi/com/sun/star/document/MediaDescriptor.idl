@@ -324,7 +324,7 @@ service MediaDescriptor
      */
     [optional,property] boolean Overwrite;
 
-    /** password for loading storing documents
+    /** password for loading or storing documents
 
         <p>
         It contains a password for loading or storing a component (if necessary).
