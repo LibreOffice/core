@@ -854,8 +854,8 @@ struct SmViewShell_Impl
     std::unique_ptr<sfx2::DocumentInserter> pDocInserter;
     std::unique_ptr<SfxRequest> pRequest;
     SvtMiscOptions const        aOpts;
+    ~SmViewShell_Impl() COVERITY_NOEXCEPT_FALSE {}
 };
-
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SmViewShell, SfxViewShell)
 

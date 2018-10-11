@@ -174,7 +174,7 @@ private:
     std::unique_ptr<ScPageBreakData>  pPageBreakData;
     std::vector<ScHighlightEntry>     maHighlightRanges;
 
-    std::unique_ptr<ScDocument>       pBrushDocument;         // cell formats for format paint brush
+    ScDocumentUniquePtr               pBrushDocument;         // cell formats for format paint brush
     std::unique_ptr<SfxItemSet>       pDrawBrushSet;          // drawing object attributes for paint brush
 
     Timer               aScrollTimer;
@@ -600,7 +600,7 @@ public:
     ScDocument*     GetBrushDocument() const        { return pBrushDocument.get(); }
     SfxItemSet*     GetDrawBrushSet() const         { return pDrawBrushSet.get(); }
     bool            IsPaintBrushLocked() const      { return bLockPaintBrush; }
-    void            SetBrushDocument( std::unique_ptr<ScDocument> pNew, bool bLock );
+    void            SetBrushDocument( ScDocumentUniquePtr pNew, bool bLock );
     void            SetDrawBrushSet( std::unique_ptr<SfxItemSet> pNew, bool bLock );
     void            ResetBrushDocument();
 
