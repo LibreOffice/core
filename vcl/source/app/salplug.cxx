@@ -189,7 +189,9 @@ SalInstance* autodetect_plugin()
               desktop == DESKTOP_XFCE  ||
               desktop == DESKTOP_MATE )
         pList = pStandardFallbackList;
-    else if( desktop == DESKTOP_KDE4 || desktop == DESKTOP_KDE5 )
+    else if( desktop == DESKTOP_KDE4 ||
+              desktop == DESKTOP_KDE5 ||
+              desktop == DESKTOP_LXQT )
         pList = pKDEFallbackList;
 
     SalInstance* pInst = nullptr;
@@ -314,7 +316,7 @@ const OUString& SalGetDesktopEnvironment()
     // Order to match desktops.hxx' DesktopType
     static const char * const desktop_strings[] = {
         "none", "unknown", "GNOME", "UNITY",
-        "XFCE", "MATE", "KDE4", "KDE5" };
+        "XFCE", "MATE", "KDE4", "KDE5", "LXQT" };
     static OUString aDesktopEnvironment;
     if( aDesktopEnvironment.isEmpty())
     {
