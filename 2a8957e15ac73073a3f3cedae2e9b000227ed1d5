@@ -22,6 +22,29 @@
       "revId": "2a8957e15ac73073a3f3cedae2e9b000227ed1d5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_45d71bc1",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3180,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T10:50:58Z",
+      "side": 1,
+      "message": "I don\u0027t think that excluding PaintDecorators as a whole is a suitable option. As I mentioned in the bug, this functions might do many other things (I missed the \"might\" in my comment to the bug). The additional functionality might get added there at some future point. And it would get excluded here.\n\nWell - now that I had another look to the problem, it looks like more suitable would be to check this option when *setting* the request to show the lines - see SwViewShell::SetShowHeaderFooterSeparator. That function should only be called rarely, so any performance penalty would be insignificant.",
+      "range": {
+        "startLine": 3180,
+        "startChar": 12,
+        "endLine": 3180,
+        "endChar": 39
+      },
+      "revId": "2a8957e15ac73073a3f3cedae2e9b000227ed1d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
