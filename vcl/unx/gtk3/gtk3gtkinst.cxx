@@ -3622,6 +3622,7 @@ public:
     {
         disable_notify_events();
         gtk_entry_set_width_chars(m_pEntry, nChars);
+        gtk_entry_set_max_width_chars(m_pEntry, nChars);
         enable_notify_events();
     }
 
