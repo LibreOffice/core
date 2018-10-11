@@ -132,8 +132,8 @@ namespace dbaui
             xParamCallback.set(_rContinuations[nParamPos], UNO_QUERY);
         OSL_ENSURE(xParamCallback.is(), "BasicInteractionHandler::implHandle(ParametersRequest): can't set the parameters without an appropriate interaction handler!s");
 
-        ScopedVclPtrInstance< OParameterDialog > aDlg(VCLUnoHelper::GetWindow(m_xParentWindow), _rParamRequest.Parameters, _rParamRequest.Connection, m_xContext);
-        sal_Int16 nResult = aDlg->Execute();
+        OParameterDialog aDlg(Application::GetFrameWeld(m_xParentWindow), _rParamRequest.Parameters, _rParamRequest.Connection, m_xContext);
+        sal_Int16 nResult = aDlg.run();
         try
         {
             switch (nResult)
@@ -141,7 +141,7 @@ namespace dbaui
                 case RET_OK:
                     if (xParamCallback.is())
                     {
-                        xParamCallback->setParameters(aDlg->getValues());
+                        xParamCallback->setParameters(aDlg.getValues());
                         xParamCallback->select();
                     }
                     break;
