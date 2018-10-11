@@ -39,10 +39,10 @@ struct ScAutoStyleData
 };
 struct ScAutoStyleInitData
 {
-    ScRange     aRange;
-    OUString    aStyle1;
-    sal_uLong   nTimeout;
-    OUString    aStyle2;
+    ScRange const     aRange;
+    OUString const    aStyle1;
+    sal_uLong const   nTimeout;
+    OUString const    aStyle2;
 
     ScAutoStyleInitData( const ScRange& rR, const OUString& rSt1, sal_uLong nT, const OUString& rSt2 ) :
         aRange(rR), aStyle1(rSt1), nTimeout(nT), aStyle2(rSt2) {}

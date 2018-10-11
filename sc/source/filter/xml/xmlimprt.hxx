@@ -196,9 +196,9 @@ typedef ::std::list<std::unique_ptr<ScMyNamedExpression>> ScMyNamedExpressions;
 
 struct ScMyLabelRange
 {
-    OUString   sLabelRangeStr;
-    OUString   sDataRangeStr;
-    bool            bColumnOrientation;
+    OUString const   sLabelRangeStr;
+    OUString const   sDataRangeStr;
+    bool const            bColumnOrientation;
 };
 
 typedef std::list< std::unique_ptr<const ScMyLabelRange> > ScMyLabelRanges;
@@ -246,9 +246,6 @@ class ScXMLImport: public SvXMLImport
     mutable std::unique_ptr<ScXMLEditAttributeMap> mpEditAttrMap;
     std::unique_ptr<ScXMLChangeTrackingImportHelper>    pChangeTrackingImportHelper;
     std::unique_ptr<ScMyStylesImportHelper>        pStylesImportHelper;
-    OUString                       sNumberFormat;
-    OUString                       sLocale;
-    OUString                       sCellStyle;
 
     rtl::Reference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
     rtl::Reference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;

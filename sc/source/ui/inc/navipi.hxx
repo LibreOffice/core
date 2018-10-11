@@ -189,12 +189,12 @@ private:
     Size            aExpandedSize;
     Idle            aContentIdle;
 
-    OUString        aStrDragMode;
-    OUString        aStrDisplay;
+    OUString const  aStrDragMode;
+    OUString const  aStrDisplay;
     OUString        aStrActive;
     OUString        aStrNotActive;
     OUString        aStrHidden;
-    OUString        aStrActiveWin;
+    OUString const  aStrActiveWin;
 
     sal_uInt16      nZoomId;
     sal_uInt16      nChangeRootId;

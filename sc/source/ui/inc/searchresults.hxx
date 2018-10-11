@@ -24,8 +24,8 @@ class SearchResultsDlg : public ModelessDialog
 {
     VclPtr<SvSimpleTable> mpList;
     VclPtr<FixedText> mpSearchResults;
-    OUString aSkipped;
-    SfxBindings* mpBindings;
+    OUString const aSkipped;
+    SfxBindings* const mpBindings;
     ScDocument* mpDoc;
 
     DECL_LINK( ListSelectHdl, SvTreeListBox*, void );

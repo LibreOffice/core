@@ -51,9 +51,9 @@ public:
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
 private:
-    ScColorScaleEntryType meType;
+    ScColorScaleEntryType const meType;
     OString maValue;
-    bool mbFirst;
+    bool const mbFirst;
 };
 
 class XclExpExtNegativeColor
@@ -63,7 +63,7 @@ public:
     void SaveXml( XclExpXmlStream& rStrm);
 
 private:
-    Color maColor;
+    Color const maColor;
 };
 
 class XclExpExtAxisColor
@@ -73,7 +73,7 @@ public:
     void SaveXml( XclExpXmlStream& rStrm );
 
 private:
-    Color maAxisColor;
+    Color const maAxisColor;
 };
 
 class XclExpExtIcon : public XclExpRecordBase, protected XclExpRoot
@@ -130,9 +130,9 @@ public:
 
 private:
     XclExpRecordRef mxEntry;
-    OString maId;
+    OString const maId;
     const char* pType;
-    sal_Int32 mnPriority;
+    sal_Int32 const mnPriority;
 };
 
 typedef std::shared_ptr<XclExpExt> XclExpExtRef;

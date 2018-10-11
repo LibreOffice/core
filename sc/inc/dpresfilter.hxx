@@ -26,12 +26,12 @@ namespace com { namespace sun { namespace star { namespace sheet {
 
 struct ScDPResultFilter
 {
-    OUString maDimName;
+    OUString const maDimName;
     OUString maValueName;
     OUString maValue;
 
     bool mbHasValue:1;
-    bool mbDataLayout:1;
+    bool const mbDataLayout:1;
 
     ScDPResultFilter(const OUString& rDimName, bool bDataLayout);
 };

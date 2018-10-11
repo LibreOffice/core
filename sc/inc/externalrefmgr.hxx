@@ -68,9 +68,9 @@ private:
     ScExternalRefLink() = delete;
     ScExternalRefLink(const ScExternalRefLink&) = delete;
 
-    sal_uInt16  mnFileId;
+    sal_uInt16 const  mnFileId;
     OUString    maFilterName;
-    ScDocument* mpDoc;
+    ScDocument* const mpDoc;
     bool        mbDoRefresh;
 };
 
@@ -392,7 +392,7 @@ public:
         ~ApiGuard();
     private:
         ScExternalRefManager* mpMgr;
-        bool mbOldInteractionEnabled;
+        bool const mbOldInteractionEnabled;
     };
 
 private:

@@ -89,7 +89,7 @@ class SC_DLLPUBLIC ScDocShell final: public SfxObjectShell, public SfxListener
 {
     ScDocument          m_aDocument;
 
-    OUString            m_aDdeTextFmt;
+    OUString const      m_aDdeTextFmt;
 
     double              m_nPrtToScreenFactor;
     std::unique_ptr<DocShell_Impl> m_pImpl;

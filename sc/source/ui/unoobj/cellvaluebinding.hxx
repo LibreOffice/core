@@ -70,7 +70,7 @@ namespace calc
         ::comphelper::OInterfaceContainerHelper2
                     m_aModifyListeners;     /// our modify listeners
         bool        m_bInitialized;         /// has XInitialization::initialize been called?
-        bool        m_bListPos;             /// constructed as ListPositionCellBinding?
+        bool const  m_bListPos;             /// constructed as ListPositionCellBinding?
 
     public:
         OCellValueBinding(

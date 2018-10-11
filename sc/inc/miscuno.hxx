@@ -78,7 +78,7 @@ class ScIndexEnumeration : public cppu::WeakImplHelper<
 {
 private:
     css::uno::Reference<css::container::XIndexAccess> xIndex;
-    OUString                sServiceName;
+    OUString const          sServiceName;
     sal_Int32               nPos;
 
 public:

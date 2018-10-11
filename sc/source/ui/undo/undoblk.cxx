@@ -1320,7 +1320,7 @@ namespace {
 
 class DataChangeNotifier
 {
-    ScHint maHint;
+    ScHint const maHint;
 public:
     DataChangeNotifier() : maHint(SfxHintId::ScDataChanged, ScAddress()) {}
 

@@ -41,7 +41,7 @@ class ScZoomSliderWnd: public vcl::Window
 private:
     struct ScZoomSliderWnd_Impl;
     std::unique_ptr<ScZoomSliderWnd_Impl> mpImpl;
-    Size aLogicalSize;
+    Size const aLogicalSize;
     css::uno::Reference<css::frame::XDispatchProvider> m_xDispatchProvider;
 
     sal_uInt16 Offset2Zoom(long nOffset) const;

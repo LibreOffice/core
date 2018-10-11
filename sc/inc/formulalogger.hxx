@@ -39,7 +39,7 @@ namespace sc {
 class FormulaLogger
 {
     std::unique_ptr<osl::File> mpLogFile;
-    std::vector<OUString> maMessages;
+    std::vector<OUString> const maMessages;
 
     sal_Int32 mnNestLevel = 0;
     const ScFormulaCellGroup* mpLastGroup = nullptr;

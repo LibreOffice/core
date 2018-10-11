@@ -1322,7 +1322,7 @@ const OUStringLiteral a5Ratings[] = {
 };
 
 struct ScIconSetBitmapMap {
-    ScIconSetType eType;
+    ScIconSetType const eType;
     const OUStringLiteral* pBitmaps;
 };
 

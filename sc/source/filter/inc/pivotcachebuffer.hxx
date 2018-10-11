@@ -190,7 +190,7 @@ struct PCFieldGroupModel
 /** Helper struct for mapping original item names from/to group item names. */
 struct PivotCacheGroupItem
 {
-    OUString     maOrigName;
+    OUString const maOrigName;
     OUString     maGroupName;
 
     explicit     PivotCacheGroupItem( const OUString& rItemName ) :

@@ -49,7 +49,7 @@ struct ScStreamEntry
 struct ScCellStyleEntry
 {
     OUString   maName;
-    ScAddress       maCellPos;
+    ScAddress const       maCellPos;
 
                 ScCellStyleEntry( const OUString& rName, const ScAddress& rPos ) :
                     maName(rName),
@@ -74,9 +74,9 @@ struct ScNoteStyleEntry
 
 struct ScTextStyleEntry
 {
-    OUString   maName;
-    ScAddress       maCellPos;
-    ESelection      maSelection;
+    OUString const   maName;
+    ScAddress const       maCellPos;
+    ESelection const      maSelection;
 
                 ScTextStyleEntry( const OUString& rName, const ScAddress& rPos, const ESelection& rSel ) :
                     maName(rName),
@@ -88,9 +88,9 @@ struct ScTextStyleEntry
 
 struct ScLoadedNamespaceEntry
 {
-    OUString   maPrefix;
-    OUString   maName;
-    sal_uInt16      mnKey;
+    OUString const   maPrefix;
+    OUString const   maName;
+    sal_uInt16 const      mnKey;
 
                 ScLoadedNamespaceEntry( const OUString& rPrefix, const OUString& rName, sal_uInt16 nKey ) :
                     maPrefix(rPrefix),

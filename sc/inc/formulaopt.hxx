@@ -92,7 +92,7 @@ public:
     const ScFormulaOptions& GetFormulaOptions() const { return theOptions; }
 
 private:
-    ScFormulaOptions theOptions;
+    ScFormulaOptions const theOptions;
 };
 
 // config item

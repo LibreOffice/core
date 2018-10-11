@@ -67,7 +67,7 @@ private:
 
     typedef std::unordered_map< OUString, ScRange > NameRangeMap;
     NameRangeMap    aRangeMap;
-    ScViewData*     pViewData;
+    ScViewData* const     pViewData;
     ScDocument*     pDoc;
     VclPtr<formula::RefEdit>       pEdActive;
     bool            bDlgLostFocus;

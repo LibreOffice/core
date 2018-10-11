@@ -250,7 +250,7 @@ using Type = ScServiceProvider::Type;
 struct ProvNamesId_Type
 {
     const char *            pName;
-    ScServiceProvider::Type nType;
+    ScServiceProvider::Type const nType;
 };
 
 const ProvNamesId_Type aProvNamesId[] =

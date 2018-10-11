@@ -97,18 +97,18 @@ typedef o3tl::sorted_vector<sal_uLong> ScHTMLColOffset;
 
 struct ScHTMLTableStackEntry
 {
-    ScRangeListRef      xLockedList;
+    ScRangeListRef const xLockedList;
     std::shared_ptr<ScEEParseEntry> xCellEntry;
     ScHTMLColOffset*    pLocalColOffset;
-    sal_uLong           nFirstTableCell;
-    SCROW               nRowCnt;
-    SCCOL               nColCntStart;
-    SCCOL               nMaxCol;
-    sal_uInt16          nTable;
+    sal_uLong const     nFirstTableCell;
+    SCROW const         nRowCnt;
+    SCCOL const         nColCntStart;
+    SCCOL const         nMaxCol;
+    sal_uInt16 const    nTable;
     sal_uInt16          nTableWidth;
     sal_uInt16          nColOffset;
-    sal_uInt16          nColOffsetStart;
-    bool                bFirstRow;
+    sal_uInt16 const    nColOffsetStart;
+    bool const          bFirstRow;
                         ScHTMLTableStackEntry( const std::shared_ptr<ScEEParseEntry>& rE,
                                 const ScRangeListRef& rL, ScHTMLColOffset* pTO,
                                 sal_uLong nFTC,
@@ -129,9 +129,9 @@ struct ScHTMLTableStackEntry
 
 struct ScHTMLAdjustStackEntry
 {
-    SCCOL               nLastCol;
-    SCROW               nNextRow;
-    SCROW               nCurRow;
+    SCCOL const         nLastCol;
+    SCROW const         nNextRow;
+    SCROW const         nCurRow;
                         ScHTMLAdjustStackEntry( SCCOL nLCol, SCROW nNRow,
                                 SCROW nCRow )
                             : nLastCol( nLCol ), nNextRow( nNRow ),
@@ -151,7 +151,7 @@ class ScHTMLLayoutParser : public ScHTMLParser
 {
 private:
     Size                aPageSize;
-    OUString            aBaseURL;
+    OUString const      aBaseURL;
     ::std::stack< std::unique_ptr<ScHTMLTableStackEntry> >
                         aTableStack;
     OUString            aString;
@@ -536,7 +536,7 @@ private:
     ScHTMLPos           maDocBasePos;       /// Resulting base address in a Calc document.
     ScHTMLParser*       mpParser;
     bool                mbBorderOn:1;       /// true = Table borders on.
-    bool                mbPreFormText:1;    /// true = Table from preformatted text (<pre> tag).
+    bool const          mbPreFormText:1;    /// true = Table from preformatted text (<pre> tag).
     bool                mbRowOn:1;          /// true = Inside of <tr> </tr>.
     bool                mbDataOn:1;         /// true = Inside of <td> </td> or <th> </th>.
     bool                mbPushEmptyLine:1;  /// true = Insert empty line before current entry.

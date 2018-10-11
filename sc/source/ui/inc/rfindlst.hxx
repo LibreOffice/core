@@ -28,7 +28,7 @@
 struct ScRangeFindData
 {
     ScRange    aRef;
-    ScRefFlags nFlags;
+    ScRefFlags const nFlags;
     sal_Int32  nSelStart;
     sal_Int32  nSelEnd;
     Color      nColor;
@@ -40,7 +40,7 @@ struct ScRangeFindData
 class ScRangeFindList
 {
     std::vector<ScRangeFindData> maEntries;
-    OUString    aDocName;
+    OUString const    aDocName;
     bool        bHidden;
     sal_uInt16  nIndexColor;
 

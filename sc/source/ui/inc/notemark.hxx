@@ -37,13 +37,13 @@ private:
     VclPtr<vcl::Window>     m_pBottomWin;
     VclPtr<vcl::Window>     m_pDiagWin;
     ScDocument* m_pDoc;
-    ScAddress   m_aDocPos;
-    OUString    m_aUserText;
+    ScAddress const   m_aDocPos;
+    OUString const    m_aUserText;
     tools::Rectangle   m_aVisRect;
     Timer       m_aTimer;
-    MapMode     m_aMapMode;
-    bool        m_bLeft;
-    bool        m_bByKeyboard;
+    MapMode const     m_aMapMode;
+    bool const        m_bLeft;
+    bool const        m_bByKeyboard;
 
     tools::Rectangle       m_aRect;
     ScDrawView*     m_pDrawView;

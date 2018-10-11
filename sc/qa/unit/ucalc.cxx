@@ -507,8 +507,8 @@ void Test::testRowForHeight()
 
     struct Check
     {
-        sal_uLong nHeight;
-        SCROW nRow;
+        sal_uLong const nHeight;
+        SCROW const nRow;
     };
 
     std::vector<Check> aChecks = {
@@ -606,8 +606,8 @@ void Test::testSelectionFunction()
 
     struct Check
     {
-        ScSubTotalFunc meFunc;
-        double mfExpected;
+        ScSubTotalFunc const meFunc;
+        double const mfExpected;
     };
 
     {
@@ -3610,8 +3610,8 @@ void Test::testCopyPasteSkipEmpty()
     struct Check
     {
         const char* mpStr;
-        Color maColor;
-        bool mbHasNote;
+        Color const maColor;
+        bool const mbHasNote;
     };
 
     struct TestRange

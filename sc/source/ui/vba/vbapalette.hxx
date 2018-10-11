@@ -32,7 +32,7 @@ class SfxObjectShell;
 class ScVbaPalette
 {
 private:
-    SfxObjectShell* m_pShell;
+    SfxObjectShell* const m_pShell;
 public:
     explicit ScVbaPalette( SfxObjectShell* pShell ) : m_pShell( pShell ) {}
     explicit ScVbaPalette( const css::uno::Reference< css::frame::XModel >& rxModel );
