@@ -255,25 +255,40 @@ oslFileError FileHandle_Impl::setSize(sal_uInt64 uSize)
         /* Save current position */
         off_t const nCurPos = lseek(m_fd, off_t(0), SEEK_CUR);
         if (nCurPos == off_t(-1))
+        {
+            int e = errno;
+            SAL_INFO("sal.file", "lseek(" << m_fd << ",0,SEEK_CUR): errno " << e << ": " << strerror(e));
             return result;
+        }
+        else
+            SAL_INFO("sal.file", "lseek(" << m_fd << ",0,SEEK_CUR): OK");
 
         /* Try 'expand' via 'lseek()' and 'write()' */
         if (lseek(m_fd, static_cast<off_t>(nSize - 1), SEEK_SET) == -1)
+        {
+            int e = errno;
+            SAL_INFO("sal.file", "lseek(" << m_fd << "," << nSize - 1 << ",SEEK_SET): errno " << e << ": " << strerror(e));
             return result;
+        }
+        else
+            SAL_INFO("sal.file", "lseek(" << m_fd << "," << nSize - 1 << ",SEEK_SET): OK");
 
         if (write(m_fd, "", size_t(1)) == -1)
         {
             /* Failure. Restore saved position */
+            int e = errno;
+            SAL_INFO("sal.file", "write(" << m_fd << ",\"\",1): errno " << e << ": " << strerror(e));
             (void) lseek(m_fd, nCurPos, SEEK_SET);
             return result;
         }
+        else
+            SAL_INFO("sal.file", "write(" << m_fd << ",\"\",1): OK");
 
         /* Success. Restore saved position */
         if (lseek(m_fd, nCurPos, SEEK_SET) == -1)
             return result;
     }
 
-    SAL_INFO("sal.file", "osl_setFileSize(" << m_fd << ", " << getSize() << ") => " << nSize);
     m_size = sal::static_int_cast< sal_uInt64 >(nSize);
     return osl_File_E_None;
 }
@@ -886,9 +901,7 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
     int fd = open_c( cpFilePath, flags, mode );
     if (fd == -1)
     {
-        int saved_errno = errno;
-        SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << ") failed: " << strerror(saved_errno));
-        return oslTranslateFileError(saved_errno);
+        return oslTranslateFileError(errno);
     }
 
 #if !HAVE_FEATURE_MACOSX_SANDBOX
@@ -898,21 +911,27 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
         int f = fcntl(fd, F_GETFL, 0);
         if (f == -1)
         {
-            int saved_errno = errno;
-            SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << "): fcntl(" << fd << ", F_GETFL) failed: " << strerror(saved_errno));
-            eRet = oslTranslateFileError(saved_errno);
+            int e = errno;
+            SAL_INFO("sal.file", "fcntl(" << fd << ",F_GETFL,0): errno " << e << ": " << strerror(e));
+            eRet = oslTranslateFileError(e);
             (void) close(fd);
+            SAL_INFO("sal.file", "close(" << fd << ")");
             return eRet;
         }
+        else
+            SAL_INFO("sal.file", "fcntl(" << fd << ",F_GETFL,0): OK");
 
         if (fcntl(fd, F_SETFL, (f & ~O_NONBLOCK)) == -1)
         {
-            int saved_errno = errno;
-            SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << "): fcntl(" << fd << ", F_SETFL) failed: " << strerror(saved_errno));
-            eRet = oslTranslateFileError(saved_errno);
+            int e = errno;
+            SAL_INFO("sal.file", "fcntl(" << fd << ",F_SETFL,(f & ~O_NONBLOCK)): errno " << e << ": " << strerror(e));
+            eRet = oslTranslateFileError(e);
             (void) close(fd);
+            SAL_INFO("sal.file", "close(" << fd << ")");
             return eRet;
         }
+        else
+            SAL_INFO("sal.file", "fcntl(" << fd << ",F_SETFL,(f & ~O_NONBLOCK)): OK");
     }
 #endif
 
@@ -920,18 +939,22 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
     struct stat aFileStat;
     if (fstat(fd, &aFileStat) == -1)
     {
-        int saved_errno = errno;
-        SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << "): fstat(" << fd << ") failed: " << strerror(saved_errno));
-        eRet = oslTranslateFileError(saved_errno);
+        int e = errno;
+        SAL_INFO("sal.file", "fstat(" << fd << "): errno " << e << ": " << strerror(e));
+        eRet = oslTranslateFileError(e);
         (void) close(fd);
+        SAL_INFO("sal.file", "close(" << fd << ")");
         return eRet;
     }
+    else
+        SAL_INFO("sal.file", "fstat(" << fd << "): OK");
 
     if (!S_ISREG(aFileStat.st_mode))
     {
         /* we only open regular files here */
         SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << "): not a regular file");
         (void) close(fd);
+        SAL_INFO("sal.file", "close(" << fd << ")");
         return osl_File_E_INVAL;
     }
 
@@ -940,14 +963,19 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
 #ifdef MACOSX
         if (flock(fd, LOCK_EX | LOCK_NB) == -1)
         {
+            int e = errno;
+            SAL_INFO("sal.file", "flock(" << fd << ",LOCK_EX|LOCK_NB): errno " << e << ": " << strerror(e));
             /* Mac OSX returns ENOTSUP for webdav drives. We should try read lock */
-            if ((errno != ENOTSUP) || ((flock(fd, LOCK_SH | LOCK_NB) == 1) && (errno != ENOTSUP)))
+            if ((e != ENOTSUP) || ((flock(fd, LOCK_SH | LOCK_NB) == 1) && (errno != ENOTSUP)))
             {
                 eRet = oslTranslateFileError(errno);
                 (void) close(fd);
+                SAL_INFO("sal.file", "close(" << fd << ")");
                 return eRet;
             }
         }
+        else
+            SAL_INFO("sal.file", "flock(" << fd << ",LOCK_EX|LOCK_NB): OK");
 #else   /* F_SETLK */
         struct flock aflock;
 
@@ -958,10 +986,11 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
 
         if (fcntl(fd, F_SETLK, &aflock) == -1)
         {
-            int saved_errno = errno;
-            SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << "): fcntl(" << fd << ", F_SETLK) failed: " << strerror(saved_errno));
-            eRet = oslTranslateFileError(saved_errno);
+            int e = errno;
+            SAL_INFO("sal.file", "fcntl(" << fd << ",F_SETLK): errno " << e << ": " << strerror(e));
+            eRet = oslTranslateFileError(e);
             (void) close(fd);
+            SAL_INFO("sal.file", "close(" << fd << ")");
             return eRet;
         }
 #endif  /* F_SETLK */
@@ -973,8 +1002,6 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
         pImpl->m_state |= FileHandle_Impl::STATE_WRITEABLE;
 
     pImpl->m_size = sal::static_int_cast< sal_uInt64 >(aFileStat.st_size);
-
-    SAL_INFO("sal.file", "osl_openFile(" << cpFilePath << ", " << ((flags & O_RDWR) ? "writeable":"readonly") << ") => " << pImpl->m_fd);
 
     *pHandle = static_cast<oslFileHandle>(pImpl);
 
@@ -1014,8 +1041,6 @@ oslFileError SAL_CALL osl_closeFile(oslFileHandle Handle)
     if (!pImpl)
         return osl_File_E_INVAL;
 
-    SAL_INFO("sal.file", "osl_closeFile(" << rtl::OString(pImpl->m_strFilePath) << ":" << pImpl->m_fd << ")");
-
     if (pImpl->m_kind == FileHandle_Impl::KIND_MEM)
     {
 #ifdef ANDROID
@@ -1037,12 +1062,17 @@ oslFileError SAL_CALL osl_closeFile(oslFileHandle Handle)
     {
         /* close, ignoring double failure */
         (void) close(pImpl->m_fd);
+        SAL_INFO("sal.file", "close(" << pImpl->m_fd << ")");
     }
     else if (close(pImpl->m_fd) == -1)
     {
+        int e = errno;
+        SAL_INFO("sal.file", "close(" << pImpl->m_fd << "): errno " << e << ": " << strerror(e));
         /* translate error code */
-        result = oslTranslateFileError(errno);
+        result = oslTranslateFileError(e);
     }
+    else
+        SAL_INFO("sal.file", "close(" << pImpl->m_fd << "): OK");
 
     (void) pthread_mutex_unlock(&(pImpl->m_mutex));
     delete pImpl;
