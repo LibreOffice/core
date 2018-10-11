@@ -455,7 +455,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
 
     const bool bURLChanged = !GetMedium() || GetMedium()->GetURLObject() != rMedium.GetURLObject();
     auto pMgr = m_xDoc->GetDBManager();
-    const bool bHasEmbedded = pMgr ? !pMgr->getEmbeddedName().isEmpty() : false;
+    const bool bHasEmbedded = pMgr && !pMgr->getEmbeddedName().isEmpty();
     bool bSaveDS = bHasEmbedded && bURLChanged;
     if (bSaveDS)
     {
