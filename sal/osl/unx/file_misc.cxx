@@ -803,15 +803,15 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
         tmpDestFile = rtl::OString(pszDestFileName) + ".osl-tmp";
         if (rename(pszDestFileName, tmpDestFile.getStr()) != 0)
         {
+            int e = errno;
+            SAL_INFO("sal.file", "rename(" << pszDestFileName << ", " << tmpDestFile
+                     << "): errno " << e << ": " << strerror(e));
             if (errno == ENOENT)
             {
                 DestFileExists = 0;
             }
             else
             {
-                int e = errno;
-                SAL_INFO("sal.file", "rename(" << pszDestFileName << ", " << tmpDestFile
-                         << "): errno " << e << ": " << strerror(e));
                 return osl_File_E_EXIST; // for want of a better error code
             }
         }
