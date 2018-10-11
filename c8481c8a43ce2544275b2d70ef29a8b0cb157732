@@ -16,6 +16,24 @@
       "revId": "c8481c8a43ce2544275b2d70ef29a8b0cb157732",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_858773d8",
+        "filename": "odk/examples/OLE/activex/StdAfx2.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-10-11T10:24:53Z",
+      "side": 1,
+      "message": "Should be addressed in change 61657.",
+      "parentUuid": "ff0f0b1f_45471b1f",
+      "revId": "c8481c8a43ce2544275b2d70ef29a8b0cb157732",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
