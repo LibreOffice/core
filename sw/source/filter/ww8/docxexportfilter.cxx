@@ -96,47 +96,17 @@ bool DocxExportFilter::exportDocument()
 }
 
 // UNO stuff so that the filter is registered
-#define IMPL_NAME "com.sun.star.comp.Writer.DocxExport"
-
-static OUString DocxExport_getImplementationName()
-{
-    return OUString( IMPL_NAME );
-}
 
 OUString DocxExportFilter::getImplementationName()
 {
-    return DocxExport_getImplementationName();
+    return OUString("com.sun.star.comp.Writer.DocxExport");
 }
 
-static uno::Sequence< OUString > DocxExport_getSupportedServiceNames() throw()
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Writer_DocxExport_get_implementation(uno::XComponentContext* pCtx,
+                                                       uno::Sequence<uno::Any> const& /*rSeq*/)
 {
-    return uno::Sequence< OUString > { "com.sun.star.document.ExportFilter" };
+    return cppu::acquire(new DocxExportFilter(pCtx));
 }
-
-/// @throws uno::Exception
-static uno::Reference< uno::XInterface > DocxExport_createInstance(const uno::Reference< uno::XComponentContext > & xCtx )
-{
-    return static_cast<cppu::OWeakObject*>(new DocxExportFilter( xCtx ));
-}
-
-extern "C"
-{
-
-::cppu::ImplementationEntry const entries [] =
-{
-    {
-        DocxExport_createInstance, DocxExport_getImplementationName,
-        DocxExport_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
-        nullptr, 0
-    },
-    { nullptr, nullptr, nullptr, nullptr, nullptr, 0 }
-};
-
-SAL_DLLPUBLIC_EXPORT void* msword_component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* pRegistryKey )
-{
-    return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, entries );
-}
-
-} // extern "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
