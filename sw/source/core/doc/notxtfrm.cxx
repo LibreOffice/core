@@ -909,6 +909,7 @@ static bool paintUsingPrimitivesHelper(
                 rTargetRange,
                 nullptr,
                 0.0,
+                rOutputDevice.isScreenComp(),
                 uno::Sequence< beans::PropertyValue >());
 
             // get a primitive processor for rendering

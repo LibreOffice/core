@@ -96,15 +96,17 @@ void ViewContactOfSdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaIte
     static_cast< SdrMediaObj& >(GetSdrObject()).mediaPropertiesChanged(rNewState);
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrMediaObj::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrMediaObj::createViewIndependentPrimitive2DSequence(bool adaptToScreenView) const
 {
     // create range using the model data directly. This is in SdrTextObj::aRect which i will access using
     // GetGeoRect() to not trigger any calculations. It's the unrotated geometry which is okay for MediaObjects ATM.
     tools::Rectangle aRectangle(GetSdrMediaObj().GetGeoRect());
-    // Hack for calc, transform position of object according
-    // to current zoom so as objects relative position to grid
-    // appears stable
-    aRectangle += GetSdrMediaObj().GetGridOffset();
+    if (adaptToScreenView) {
+        // Hack for calc, transform position of object according
+        // to current zoom so as objects relative position to grid
+        // appears stable
+        aRectangle += GetSdrMediaObj().GetGridOffset();
+    }
     const basegfx::B2DRange aRange(
         aRectangle.Left(), aRectangle.Top(),
         aRectangle.Right(), aRectangle.Bottom());

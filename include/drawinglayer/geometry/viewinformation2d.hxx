@@ -84,6 +84,11 @@ namespace drawinglayer
                 The time the view is defined for. Default is 0.0. This parameter is used e.g. for
                 animated objects
 
+                @param adaptToScreenView
+                If true, potentially adapt objects' geometries to fit a specific on-screen view.
+                (See documentation of AdaptToScreenView in
+                offapi/com/sun/star/graphic/XPrimitive2D.idl)
+
                 @param rExtendedParameters
                 A sequence of property values which allows holding various other parameters besides
                 the obvious and needed ones above. For this constructor none of the other parameters
@@ -97,6 +102,7 @@ namespace drawinglayer
                 const basegfx::B2DRange& rViewport,
                 const css::uno::Reference< css::drawing::XDrawPage >& rxDrawPage,
                 double fViewTime,
+                bool adaptToScreenView,
                 const css::uno::Sequence< css::beans::PropertyValue >& rExtendedParameters);
 
             /** Constructor: Create a ViewInformation2D
@@ -132,6 +138,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& getViewTransformation() const;
             const basegfx::B2DRange& getViewport() const;
             double getViewTime() const;
+            bool getAdaptToScreenView() const;
             const css::uno::Reference< css::drawing::XDrawPage >& getVisualizedPage() const;
 
             /// On-demand prepared Object to View transformation and its inverse for convenience

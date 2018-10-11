@@ -1703,6 +1703,7 @@ std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> ScOutputData::Create
             aViewRange,
             GetXDrawPageForSdrPage( pDrawPage ),
             0.0,
+            mpDev->isScreenComp(),
             uno::Sequence< beans::PropertyValue >() );
 
     return drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(

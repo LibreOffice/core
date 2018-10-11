@@ -59,7 +59,7 @@ sal_uInt32 ViewContactOfVirtObj::GetObjectCount() const
     return 0L;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfVirtObj::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfVirtObj::createViewIndependentPrimitive2DSequence(bool adaptToScreenView) const
 {
     // create displacement transformation if we have content
     basegfx::B2DHomMatrix aObjectMatrix;
@@ -73,7 +73,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfVirtObj::createView
 
     // use method from referenced object to get the Primitive2DContainer
     const drawinglayer::primitive2d::Primitive2DContainer xSequenceVirtual(
-        GetVirtObj().GetReferencedObj().GetViewContact().getViewIndependentPrimitive2DContainer());
+        GetVirtObj().GetReferencedObj().GetViewContact().getViewIndependentPrimitive2DContainer(adaptToScreenView));
 
     if(!xSequenceVirtual.empty())
     {

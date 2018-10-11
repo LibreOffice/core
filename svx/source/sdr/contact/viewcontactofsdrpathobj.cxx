@@ -65,7 +65,7 @@ namespace sdr
             return nPolyCount;
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrPathObj::createViewIndependentPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrPathObj::createViewIndependentPrimitive2DSequence(bool adaptToScreenView) const
         {
             const SfxItemSet& rItemSet = GetPathObj().GetMergedItemSet();
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
@@ -74,11 +74,13 @@ namespace sdr
                     GetPathObj().getText(0),
                     false));
             basegfx::B2DPolyPolygon aUnitPolyPolygon(GetPathObj().GetPathPoly());
-            Point aGridOff = GetPathObj().GetGridOffset();
-            // Hack for calc, transform position of object according
-            // to current zoom so as objects relative position to grid
-            // appears stable
-            aUnitPolyPolygon.transform( basegfx::utils::createTranslateB2DHomMatrix( aGridOff.X(), aGridOff.Y() ) );
+            if (adaptToScreenView) {
+                Point aGridOff = GetPathObj().GetGridOffset();
+                // Hack for calc, transform position of object according
+                // to current zoom so as objects relative position to grid
+                // appears stable
+                aUnitPolyPolygon.transform( basegfx::utils::createTranslateB2DHomMatrix( aGridOff.X(), aGridOff.Y() ) );
+            }
             sal_uInt32 nPolyCount(ensureGeometry(aUnitPolyPolygon));
 
             // prepare object transformation and unit polygon (direct model data)

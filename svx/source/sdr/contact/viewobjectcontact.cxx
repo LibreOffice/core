@@ -301,7 +301,7 @@ void ViewObjectContact::checkForPrimitive2DAnimations()
 drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
 {
     // get the view-independent Primitive from the viewContact
-    drawinglayer::primitive2d::Primitive2DContainer xRetval(GetViewContact().getViewIndependentPrimitive2DContainer());
+    drawinglayer::primitive2d::Primitive2DContainer xRetval(GetViewContact().getViewIndependentPrimitive2DContainer(rDisplayInfo.GetAdaptToScreenView()));
 
     if(!xRetval.empty())
     {

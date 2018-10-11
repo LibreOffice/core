@@ -217,7 +217,7 @@ SdrObject* ViewContact::TryToGetSdrObject() const
 
 // primitive stuff
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContact::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContact::createViewIndependentPrimitive2DSequence(bool) const
 {
     // This is the default implementation and should never be called (see header). If this is called,
     // someone implemented a ViewContact (VC) visualisation object without defining the visualisation by
@@ -233,10 +233,10 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContact::createViewIndepende
     return drawinglayer::primitive2d::Primitive2DContainer { xReference };
 }
 
-drawinglayer::primitive2d::Primitive2DContainer const & ViewContact::getViewIndependentPrimitive2DContainer() const
+drawinglayer::primitive2d::Primitive2DContainer const & ViewContact::getViewIndependentPrimitive2DContainer(bool adaptToScreenView) const
 {
     // local up-to-date checks. Create new list and compare.
-    drawinglayer::primitive2d::Primitive2DContainer xNew(createViewIndependentPrimitive2DSequence());
+    drawinglayer::primitive2d::Primitive2DContainer xNew(createViewIndependentPrimitive2DSequence(adaptToScreenView));
 
     if(!xNew.empty())
     {

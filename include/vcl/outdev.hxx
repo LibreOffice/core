@@ -478,6 +478,9 @@ public:
     std::vector< VCLXGraphics* > *GetUnoGraphicsList() const  { return mpUnoGraphicsList; }
     std::vector< VCLXGraphics* > *CreateUnoGraphicsList();
 
+    // Whether this is OutputDevice is targeting a screen (rather than a printer):
+    bool isScreenComp() const;
+
 protected:
 
     /** Acquire a graphics device that the output device uses to draw on.

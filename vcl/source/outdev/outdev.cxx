@@ -367,6 +367,17 @@ std::vector< VCLXGraphics* > *OutputDevice::CreateUnoGraphicsList()
     return mpUnoGraphicsList;
 }
 
+bool OutputDevice::isScreenComp() const {
+    switch (meOutDevType) {
+    case OUTDEV_PRINTER:
+        return false;
+    case OUTDEV_VIRDEV:
+        return static_cast<VirtualDevice const *>(this)->mbScreenComp;
+    default:
+        return true;
+    }
+}
+
 // Helper public function
 
 bool OutputDevice::SupportsOperation( OutDevSupportType eType ) const

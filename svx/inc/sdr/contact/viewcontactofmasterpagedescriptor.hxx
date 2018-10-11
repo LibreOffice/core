@@ -42,7 +42,7 @@ namespace sdr
             virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
 
             // This method is responsible for creating the graphical visualisation data
-            virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
+            virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence(bool) const override;
 
         public:
             // basic constructor

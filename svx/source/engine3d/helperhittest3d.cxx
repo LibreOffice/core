@@ -168,7 +168,7 @@ void getAllHit3DObjectsSortedFrontToBack(
         // the Scene's 2D transformation. Multiplying with the inverse transformation
         // will create a point relative to the 3D scene as unit-2d-object
         const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(rScene.GetViewContact());
-        basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation());
+        basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation(true/*TODO*/));
         aInverseSceneTransform.invert();
         const basegfx::B2DPoint aRelativePoint(aInverseSceneTransform * rPoint);
 
@@ -245,7 +245,7 @@ bool checkHitSingle3DObject(
         // the Scene's 2D transformation. Multiplying with the inverse transformation
         // will create a point relative to the 3D scene as unit-2d-object
         const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(pRootScene->GetViewContact());
-        basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation());
+        basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation(true/*TODO*/));
         aInverseSceneTransform.invert();
         const basegfx::B2DPoint aRelativePoint(aInverseSceneTransform * rPoint);
 

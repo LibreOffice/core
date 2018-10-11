@@ -83,7 +83,7 @@ namespace sdr
             // added when sub-groups in 3d will be added one day.
             const ViewContactOfE3dScene& rViewContact = dynamic_cast< ViewContactOfE3dScene& >(GetViewContact());
             const SdrLayerIDSet& rVisibleLayers = rDisplayInfo.GetProcessLayers();
-            drawinglayer::primitive2d::Primitive2DContainer xRetval(rViewContact.createScenePrimitive2DSequence(&rVisibleLayers));
+            drawinglayer::primitive2d::Primitive2DContainer xRetval(rViewContact.createScenePrimitive2DSequence(&rVisibleLayers, rDisplayInfo.GetAdaptToScreenView()));
 
             if(!xRetval.empty())
             {

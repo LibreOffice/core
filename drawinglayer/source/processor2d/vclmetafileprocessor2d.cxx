@@ -2056,6 +2056,7 @@ namespace drawinglayer
                             aViewRange,
                             getViewInformation2D().getVisualizedPage(),
                             getViewInformation2D().getViewTime(),
+                            getViewInformation2D().getAdaptToScreenView(),
                             getViewInformation2D().getExtendedInformationSequence());
 
                         VclPixelProcessor2D aBufferProcessor(aViewInfo, *aBufferDevice.get());

@@ -2135,7 +2135,7 @@ namespace sdr
             else
             {
                 // single object, use method from referenced object to get the Primitive2DSequence
-                xRetval = rReferencedObject.GetViewContact().getViewIndependentPrimitive2DContainer();
+                xRetval = rReferencedObject.GetViewContact().getViewIndependentPrimitive2DContainer(rDisplayInfo.GetAdaptToScreenView());
             }
 
             if(!xRetval.empty())

@@ -30,7 +30,8 @@ namespace sdr
             mbControlLayerProcessingActive(false),
             mbPageProcessingActive(true),
             mbGhostedDrawModeActive(false),
-            mbSubContentActive(false)
+            mbSubContentActive(false),
+            mAdaptToScreenView(true)
         {
         }
 

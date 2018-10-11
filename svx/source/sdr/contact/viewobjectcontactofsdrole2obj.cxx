@@ -18,6 +18,7 @@
  */
 
 #include <sdr/contact/viewobjectcontactofsdrole2obj.hxx>
+#include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 #include <sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/svdoole2.hxx>
@@ -37,7 +38,7 @@ using namespace com::sun::star;
 namespace sdr { namespace contact {
 
 drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSdrOle2Obj::createPrimitive2DSequence(
-    const DisplayInfo& /*rDisplayInfo*/) const
+    const DisplayInfo& rDisplayInfo) const
 {
     // override this method to do some things the old SdrOle2Obj::DoPaintObject did.
     // In the future, some of these may be solved different, but ATM try to stay compatible
@@ -98,7 +99,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSdrOle2Obj::c
 
         // create OLE primitive stuff directly at VC with HC as parameter
         const ViewContactOfSdrOle2Obj& rVC = static_cast< const ViewContactOfSdrOle2Obj& >(GetViewContact());
-        xRetval = rVC.createPrimitive2DSequenceWithParameters();
+        xRetval = rVC.createPrimitive2DSequenceWithParameters(rDisplayInfo.GetAdaptToScreenView());
 
         if(bIsOutplaceActive)
         {
@@ -106,7 +107,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfSdrOle2Obj::c
             if(!GetObjectContact().isOutputToPrinter() && !GetObjectContact().isOutputToRecordingMetaFile())
             {
                 // get object transformation
-                const basegfx::B2DHomMatrix aObjectMatrix(static_cast< ViewContactOfSdrOle2Obj& >(GetViewContact()).createObjectTransform());
+                const basegfx::B2DHomMatrix aObjectMatrix(static_cast< ViewContactOfSdrOle2Obj& >(GetViewContact()).createObjectTransform(rDisplayInfo.GetAdaptToScreenView()));
 
                 // shade the representation if the object is activated outplace
                 basegfx::B2DPolygon aObjectOutline(basegfx::utils::createUnitPolygon());

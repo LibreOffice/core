@@ -210,7 +210,7 @@ void DragMethod_RotateDiagram::CreateOverlayGeometry(sdr::overlay::OverlayManage
         basegfx::B2DPolyPolygon aPolyPolygon(basegfx::utils::createB2DPolyPolygonFromB3DPolyPolygon(m_aWireframePolyPolygon, aTransform));
 
         // transform to 2D view coordinates
-        aPolyPolygon.transform(rVCScene.getObjectTransformation());
+        aPolyPolygon.transform(rVCScene.getObjectTransformation(true/*TODO*/));
 
         std::unique_ptr<sdr::overlay::OverlayPolyPolygonStripedAndFilled> pNew(new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
             aPolyPolygon));

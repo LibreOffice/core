@@ -398,6 +398,8 @@ void SdrPageWindow::RedrawLayer(const SdrLayerID* pId,
             aDisplayInfo.SetWriterPageFrame(*pPageFrame);
         }
 
+        aDisplayInfo.SetAdaptToScreenView(GetPaintWindow().GetOutputDevice().isScreenComp());
+
         // paint page
         GetObjectContact().ProcessDisplay(aDisplayInfo);
     }

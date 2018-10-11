@@ -172,7 +172,7 @@ void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
     const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(pScene->GetViewContact());
     const drawinglayer::geometry::ViewInformation3D& aViewInfo3D(rVCScene.getViewInformation3D());
     basegfx::B2DPoint aScaleCenter2D(static_cast<double>(rRef.X()), static_cast<double>(rRef.Y()));
-    basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation());
+    basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation(true/*TODO*/));
 
     aInverseSceneTransform.invert();
     aScaleCenter2D = aInverseSceneTransform * aScaleCenter2D;
@@ -523,7 +523,7 @@ basegfx::B2DPolyPolygon E3dCompoundObject::TakeXorPoly() const
         const basegfx::B3DPolyPolygon aCubePolyPolygon(CreateWireframe());
         aRetval = basegfx::utils::createB2DPolyPolygonFromB3DPolyPolygon(aCubePolyPolygon,
             aViewInfo3D.getObjectToView() * GetTransform());
-        aRetval.transform(rVCScene.getObjectTransformation());
+        aRetval.transform(rVCScene.getObjectTransformation(true/*TODO*/));
     }
 
     return aRetval;
@@ -572,7 +572,7 @@ void E3dCompoundObject::AddToHdlList(SdrHdlList& rHdlList) const
                 basegfx::B2DPoint aPos2D(aPos3D.getX(), aPos3D.getY());
 
                 // to 2d world coor
-                aPos2D *= rVCScene.getObjectTransformation();
+                aPos2D *= rVCScene.getObjectTransformation(true/*TODO*/);
 
                 rHdlList.AddHdl(o3tl::make_unique<SdrHdl>(Point(basegfx::fround(aPos2D.getX()), basegfx::fround(aPos2D.getY())), SdrHdlKind::BezierWeight));
             }
@@ -624,7 +624,7 @@ void E3dCompoundObject::RecalcSnapRect()
 
                 // transform to 2D world coordinates
                 const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(pRootScene->GetViewContact());
-                aSnapRange.transform(rVCScene.getObjectTransformation());
+                aSnapRange.transform(rVCScene.getObjectTransformation(true/*TODO*/));
 
                 // snap to integer
                 maSnapRect = tools::Rectangle(
@@ -664,7 +664,7 @@ basegfx::B2DPolyPolygon E3dCompoundObject::TransformToScreenCoor(const basegfx::
         aRetval = basegfx::utils::createB2DPolyPolygonFromB3DPolyPolygon(rCandidate,
             aViewInfo3D.getObjectToView() * GetTransform());
         const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(pRootScene->GetViewContact());
-        aRetval.transform(rVCScene.getObjectTransformation());
+        aRetval.transform(rVCScene.getObjectTransformation(true/*TODO*/));
     }
 
     return aRetval;

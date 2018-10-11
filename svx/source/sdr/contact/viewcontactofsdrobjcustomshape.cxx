@@ -43,13 +43,18 @@ namespace sdr
         {
         }
 
-        basegfx::B2DRange ViewContactOfSdrObjCustomShape::getCorrectedTextBoundRect() const
+        basegfx::B2DRange ViewContactOfSdrObjCustomShape::getCorrectedTextBoundRect(
+            bool adaptToScreenView) const
         {
             tools::Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
-            aObjectBound += GetCustomShapeObj().GetGridOffset();
+            if (adaptToScreenView) {
+                aObjectBound += GetCustomShapeObj().GetGridOffset();
+            }
             tools::Rectangle aTextBound(aObjectBound);
             GetCustomShapeObj().GetTextBounds(aTextBound);
-            aTextBound += GetCustomShapeObj().GetGridOffset();
+            if (adaptToScreenView) {
+                aTextBound += GetCustomShapeObj().GetGridOffset();
+            }
             basegfx::B2DRange aTextRange(aTextBound.Left(), aTextBound.Top(), aTextBound.Right(), aTextBound.Bottom());
             const basegfx::B2DRange aObjectRange(aObjectBound.Left(), aObjectBound.Top(), aObjectBound.Right(), aObjectBound.Bottom());
 
@@ -99,7 +104,7 @@ namespace sdr
             return aTextRange;
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrObjCustomShape::createViewIndependentPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrObjCustomShape::createViewIndependentPrimitive2DSequence(bool adaptToScreenView) const
         {
             drawinglayer::primitive2d::Primitive2DContainer xRetval;
             const SfxItemSet& rItemSet = GetCustomShapeObj().GetMergedItemSet();
@@ -118,17 +123,18 @@ namespace sdr
             const SdrObject* pSdrObjRepresentation = GetCustomShapeObj().GetSdrObjectFromCustomShape();
             bool b3DShape(false);
 
-            Point aGridOff = GetCustomShapeObj().GetGridOffset();
-
             if(pSdrObjRepresentation)
             {
-                // Hack for calc, transform position of object according
-                // to current zoom so as objects relative position to grid
-                // appears stable
-                // TTTT: Need to check what *exactly* this is doing - in it's current
-                // form it's indeed pretty much a 'hack' as mentioned above and massively
-                // in the way for future changes...
-                const_cast< SdrObject* >( pSdrObjRepresentation )->SetGridOffset( aGridOff );
+                if (adaptToScreenView) {
+                    // Hack for calc, transform position of object according
+                    // to current zoom so as objects relative position to grid
+                    // appears stable
+                    // TTTT: Need to check what *exactly* this is doing - in it's current
+                    // form it's indeed pretty much a 'hack' as mentioned above and massively
+                    // in the way for future changes...
+                    Point aGridOff = GetCustomShapeObj().GetGridOffset();
+                    const_cast< SdrObject* >( pSdrObjRepresentation )->SetGridOffset( aGridOff );
+                }
 
                 // tdf#118498 The processing of SdrObjListIter for SdrIterMode::DeepNoGroups
                 // did change for 3D-Objects, it now correctly enters and iterates the
@@ -146,7 +152,7 @@ namespace sdr
                 // Thus: Just do not iterate, will check behaviour deeply.
                 b3DShape = (nullptr != dynamic_cast< const E3dObject* >(pSdrObjRepresentation));
                 const drawinglayer::primitive2d::Primitive2DContainer xNew(
-                    pSdrObjRepresentation->GetViewContact().getViewIndependentPrimitive2DContainer());
+                    pSdrObjRepresentation->GetViewContact().getViewIndependentPrimitive2DContainer(adaptToScreenView));
                 xGroup.insert(xGroup.end(), xNew.begin(), xNew.end());
             }
 
@@ -161,12 +167,15 @@ namespace sdr
                     // take unrotated snap rect as default, then get the
                     // unrotated text box. Rotation needs to be done centered
                     tools::Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
-                    // hack for calc grid sync
-                    aObjectBound += GetCustomShapeObj().GetGridOffset();
+                    if (adaptToScreenView) {
+                        // hack for calc grid sync
+                        aObjectBound += GetCustomShapeObj().GetGridOffset();
+                    }
                     const basegfx::B2DRange aObjectRange(aObjectBound.Left(), aObjectBound.Top(), aObjectBound.Right(), aObjectBound.Bottom());
 
                     // #i101684# get the text range unrotated and absolute to the object range
-                    const basegfx::B2DRange aTextRange(getCorrectedTextBoundRect());
+                    const basegfx::B2DRange aTextRange(
+                        getCorrectedTextBoundRect(adaptToScreenView));
 
                     // Rotation before scaling
                     if(!basegfx::fTools::equalZero(GetCustomShapeObj().GetExtraTextRotation(true)))

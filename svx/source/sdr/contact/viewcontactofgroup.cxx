@@ -52,7 +52,7 @@ namespace sdr
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfGroup::createViewIndependentPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfGroup::createViewIndependentPrimitive2DSequence(bool adaptToScreenView) const
         {
             drawinglayer::primitive2d::Primitive2DContainer xRetval;
             const sal_uInt32 nObjectCount(GetObjectCount());
@@ -63,7 +63,7 @@ namespace sdr
                 for(sal_uInt32 a(0); a < nObjectCount; a++)
                 {
                     const ViewContact& rCandidate(GetViewContact(a));
-                    const drawinglayer::primitive2d::Primitive2DContainer aCandSeq(rCandidate.getViewIndependentPrimitive2DContainer());
+                    const drawinglayer::primitive2d::Primitive2DContainer aCandSeq(rCandidate.getViewIndependentPrimitive2DContainer(adaptToScreenView));
 
                     xRetval.insert(xRetval.end(), aCandSeq.begin(), aCandSeq.end());
                 }
@@ -72,10 +72,12 @@ namespace sdr
             {
                 // append an invisible outline for the cases where no visible content exists
                 tools::Rectangle aCurrentBoundRect(GetSdrObjGroup().GetLastBoundRect());
-                // Hack for calc, transform position of object according
-                // to current zoom so as objects relative position to grid
-                // appears stable
-                aCurrentBoundRect += GetSdrObjGroup().GetGridOffset();
+                if (adaptToScreenView) {
+                    // Hack for calc, transform position of object according
+                    // to current zoom so as objects relative position to grid
+                    // appears stable
+                    aCurrentBoundRect += GetSdrObjGroup().GetGridOffset();
+                }
                 const basegfx::B2DRange aCurrentRange(
                     aCurrentBoundRect.Left(), aCurrentBoundRect.Top(),
                     aCurrentBoundRect.Right(), aCurrentBoundRect.Bottom());

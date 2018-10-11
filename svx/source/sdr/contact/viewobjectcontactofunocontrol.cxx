@@ -572,7 +572,8 @@ namespace sdr { namespace contact {
             @precond
                 ->m_pOutputDeviceForWindow and ->m_aControl are not <NULL/>
         */
-        void    positionAndZoomControl( const basegfx::B2DHomMatrix& _rViewTransformation ) const;
+        void    positionAndZoomControl(
+            const basegfx::B2DHomMatrix& _rViewTransformation, bool adaptToScreenView ) const;
 
         /** determines whether or not our control is printable
 
@@ -788,11 +789,11 @@ namespace sdr { namespace contact {
             ) const override;
 
     public:
-        explicit LazyControlCreationPrimitive2D( const ::rtl::Reference< ViewObjectContactOfUnoControl_Impl >& _pVOCImpl )
+        explicit LazyControlCreationPrimitive2D( const ::rtl::Reference< ViewObjectContactOfUnoControl_Impl >& _pVOCImpl, bool adaptToScreenView )
             :m_pVOCImpl( _pVOCImpl )
         {
             ENSURE_OR_THROW( m_pVOCImpl.is(), "Illegal argument." );
-            getTransformation( m_pVOCImpl->getViewContact(), m_aTransformation );
+            getTransformation( m_pVOCImpl->getViewContact(), m_aTransformation, adaptToScreenView );
         }
 
         virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
@@ -800,13 +801,13 @@ namespace sdr { namespace contact {
         // declare unique ID for this primitive class
         DeclPrimitive2DIDBlock()
 
-        static void getTransformation( const ViewContactOfUnoControl& _rVOC, ::basegfx::B2DHomMatrix& _out_Transformation );
+        static void getTransformation( const ViewContactOfUnoControl& _rVOC, ::basegfx::B2DHomMatrix& _out_Transformation, bool adaptToScreenView );
 
     private:
         void impl_positionAndZoomControl( const ::drawinglayer::geometry::ViewInformation2D& _rViewInformation ) const
         {
             if ( !_rViewInformation.getViewport().isEmpty() )
-                m_pVOCImpl->positionAndZoomControl( _rViewInformation.getObjectToViewTransformation() );
+                m_pVOCImpl->positionAndZoomControl( _rViewInformation.getObjectToViewTransformation(), _rViewInformation.getAdaptToScreenView() );
         }
 
     private:
@@ -907,7 +908,7 @@ namespace sdr { namespace contact {
     }
 
 
-    void ViewObjectContactOfUnoControl_Impl::positionAndZoomControl( const basegfx::B2DHomMatrix& _rViewTransformation ) const
+    void ViewObjectContactOfUnoControl_Impl::positionAndZoomControl( const basegfx::B2DHomMatrix& _rViewTransformation, bool adaptToScreenView ) const
     {
         OSL_PRECOND( m_aControl.is(), "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no output device or no control!" );
         if ( !m_aControl.is() )
@@ -918,12 +919,14 @@ namespace sdr { namespace contact {
             SdrUnoObj* pUnoObject( nullptr );
             if ( getUnoObject( pUnoObject ) )
             {
-                Point aGridOffset = pUnoObject->GetGridOffset();
                 tools::Rectangle aRect( pUnoObject->GetLogicRect() );
-                // Hack for calc, transform position of object according
-                // to current zoom so as objects relative position to grid
-                // appears stable
-                aRect += aGridOffset;
+                if (adaptToScreenView) {
+                    // Hack for calc, transform position of object according
+                    // to current zoom so as objects relative position to grid
+                    // appears stable
+                    Point aGridOffset = pUnoObject->GetGridOffset();
+                    aRect += aGridOffset;
+                }
                 UnoControlContactHelper::adjustControlGeometry_throw( m_aControl, aRect, _rViewTransformation, m_aZoomLevelNormalization );
             }
             else
@@ -1086,12 +1089,14 @@ namespace sdr { namespace contact {
 
             // knit the model and the control
             _out_rControl.setModel( xControlModel );
-            Point aGridOffset =  _rUnoObject.GetGridOffset();
             tools::Rectangle aRect( _rUnoObject.GetLogicRect() );
-            // Hack for calc, transform position of object according
-            // to current zoom so as objects relative position to grid
-            // appears stable
-            aRect += aGridOffset;
+            if (_rDevice.isScreenComp()) {
+                // Hack for calc, transform position of object according
+                // to current zoom so as objects relative position to grid
+                // appears stable
+                Point aGridOffset =  _rUnoObject.GetGridOffset();
+                aRect += aGridOffset;
+            }
 
             // proper geometry
             UnoControlContactHelper::adjustControlGeometry_throw(
@@ -1483,17 +1488,19 @@ namespace sdr { namespace contact {
     }
 
 
-    void LazyControlCreationPrimitive2D::getTransformation( const ViewContactOfUnoControl& _rVOC, ::basegfx::B2DHomMatrix& _out_Transformation )
+    void LazyControlCreationPrimitive2D::getTransformation( const ViewContactOfUnoControl& _rVOC, ::basegfx::B2DHomMatrix& _out_Transformation, bool adaptToScreenView )
     {
         // Do use model data directly to create the correct geometry. Do NOT
         // use getBoundRect()/getSnapRect() here; these will use the sequence of
         // primitives themselves in the long run.
         tools::Rectangle aSdrGeoData( _rVOC.GetSdrUnoObj().GetGeoRect() );
-        Point aGridOffset = _rVOC.GetSdrUnoObj().GetGridOffset();
-        // Hack for calc, transform position of object according
-        // to current zoom so as objects relative position to grid
-        // appears stable
-        aSdrGeoData += aGridOffset;
+        if (adaptToScreenView) {
+            Point aGridOffset = _rVOC.GetSdrUnoObj().GetGridOffset();
+            // Hack for calc, transform position of object according
+            // to current zoom so as objects relative position to grid
+            // appears stable
+            aSdrGeoData += aGridOffset;
+        }
         const basegfx::B2DRange aRange(
             aSdrGeoData.Left(),
             aSdrGeoData.Top(),
@@ -1561,7 +1568,7 @@ namespace sdr { namespace contact {
             // use the default mechanism. This will create a ControlPrimitive2D without
             // handing over a XControl. If not even a XControlModel exists, it will
             // create the SdrObject fallback visualisation
-            drawinglayer::primitive2d::Primitive2DContainer aTmp = rViewContactOfUnoControl.getViewIndependentPrimitive2DContainer();
+            drawinglayer::primitive2d::Primitive2DContainer aTmp = rViewContactOfUnoControl.getViewIndependentPrimitive2DContainer(_rViewInformation.getAdaptToScreenView());
             rContainer.insert(rContainer.end(), aTmp.begin(), aTmp.end());
             return;
         }
@@ -1656,7 +1663,7 @@ namespace sdr { namespace contact {
     }
 
 
-    drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfUnoControl::createPrimitive2DSequence(const DisplayInfo& /*rDisplayInfo*/) const
+    drawinglayer::primitive2d::Primitive2DContainer ViewObjectContactOfUnoControl::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
     {
         if ( m_pImpl->isDisposed() )
             // our control already died.
@@ -1673,7 +1680,7 @@ namespace sdr { namespace contact {
         if ( rControl.is() && !rControl.isDesignMode() && !rControl.isVisible() )
             return drawinglayer::primitive2d::Primitive2DContainer();
 
-        ::drawinglayer::primitive2d::Primitive2DReference xPrimitive( new LazyControlCreationPrimitive2D( m_pImpl ) );
+        ::drawinglayer::primitive2d::Primitive2DReference xPrimitive( new LazyControlCreationPrimitive2D( m_pImpl, rDisplayInfo.GetAdaptToScreenView() ) );
         return ::drawinglayer::primitive2d::Primitive2DContainer { xPrimitive };
     }
 
@@ -1692,7 +1699,9 @@ namespace sdr { namespace contact {
         #endif
 
             if ( !rViewInformation.getViewport().isEmpty() )
-                m_pImpl->positionAndZoomControl( rViewInformation.getObjectToViewTransformation() );
+                m_pImpl->positionAndZoomControl(
+                    rViewInformation.getObjectToViewTransformation(),
+                    rViewInformation.getAdaptToScreenView() );
         }
 
         return ViewObjectContactOfSdrObj::isPrimitiveVisible( _rDisplayInfo );

@@ -203,6 +203,7 @@ void ObjectContact::resetViewPort()
             aEmptyRange,
             rCurrentVI2D.getVisualizedPage(),
             rCurrentVI2D.getViewTime(),
+            rCurrentVI2D.getAdaptToScreenView(),
             rCurrentVI2D.getExtendedInformationSequence());
 
         updateViewInformation2D(aNewVI2D);

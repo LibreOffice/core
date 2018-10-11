@@ -90,7 +90,7 @@ namespace sdr
              *
              * @note ONLY based on model data
              */
-            virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
+            virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence(bool) const override;
 
         public:
             /// basic constructor, used from SdrObject.
@@ -100,7 +100,7 @@ namespace sdr
             }
         };
 
-        drawinglayer::primitive2d::Primitive2DContainer VCOfSwFlyDrawObj::createViewIndependentPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DContainer VCOfSwFlyDrawObj::createViewIndependentPrimitive2DSequence(bool) const
         {
             // currently gets not visualized, return empty sequence
             return drawinglayer::primitive2d::Primitive2DContainer();
@@ -258,7 +258,7 @@ namespace sdr
              *
              * @note ONLY based on model data
              */
-            virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
+            virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence(bool) const override;
 
         public:
             /// basic constructor, used from SdrObject.
@@ -280,7 +280,7 @@ namespace sdr
 {
     namespace contact
     {
-        drawinglayer::primitive2d::Primitive2DContainer VCOfSwVirtFlyDrawObj::createViewIndependentPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DContainer VCOfSwVirtFlyDrawObj::createViewIndependentPrimitive2DSequence(bool) const
         {
             drawinglayer::primitive2d::Primitive2DContainer xRetval;
             const SdrObject& rReferencedObject = GetSwVirtFlyDrawObj().GetReferencedObj();

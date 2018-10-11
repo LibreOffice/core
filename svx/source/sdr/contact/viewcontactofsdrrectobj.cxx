@@ -37,7 +37,7 @@ ViewContactOfSdrRectObj::~ViewContactOfSdrRectObj()
 {
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrRectObj::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrRectObj::createViewIndependentPrimitive2DSequence(bool adaptToScreenView) const
 {
     const SfxItemSet& rItemSet = GetRectObj().GetMergedItemSet();
     const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
@@ -48,10 +48,12 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrRectObj::createV
 
     // take unrotated snap rect (direct model data) for position and size
     tools::Rectangle rRectangle = GetRectObj().GetGeoRect();
-    // Hack for calc, transform position of object according
-    // to current zoom so as objects relative position to grid
-    // appears stable
-    rRectangle += GetRectObj().GetGridOffset();
+    if (adaptToScreenView) {
+        // Hack for calc, transform position of object according
+        // to current zoom so as objects relative position to grid
+        // appears stable
+        rRectangle += GetRectObj().GetGridOffset();
+    }
     const ::basegfx::B2DRange aObjectRange(
         rRectangle.Left(), rRectangle.Top(),
         rRectangle.Right(), rRectangle.Bottom() );

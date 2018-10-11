@@ -66,6 +66,11 @@ namespace sdr
             // is processing the MasterPage asSubContent and knows what it does
             bool                                            mbSubContentActive : 1;
 
+            // If true, potentially adapt objects' geometries to fit a specific on-screen view (as
+            // used by Calc, see ViewContact::createViewIndependentPrimitive2DSequence in
+            // include/svx/sdr/contact/viewcontact.hxx):
+            bool mAdaptToScreenView;
+
         public:
             // basic constructor.
             DisplayInfo();
@@ -97,6 +102,10 @@ namespace sdr
             // access to master page painting flag
             bool GetSubContentActive() const { return mbSubContentActive; }
             void SetSubContentActive(bool bNew);
+
+            // Access to AdaptToScreenView flag:
+            bool GetAdaptToScreenView() const { return mAdaptToScreenView; }
+            void SetAdaptToScreenView(bool adapt) { mAdaptToScreenView = adapt; }
         };
     } // end of namespace contact
 } // end of namespace sdr
