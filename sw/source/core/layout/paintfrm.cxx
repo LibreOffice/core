@@ -3176,8 +3176,9 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
                     pSh->DLPostPaint2(true);
                 }
             }
-
-            pPage->PaintDecorators( );
+            const bool bUseHeaderFooterMenu = pSh->GetViewOptions()->IsUseHeaderFooterMenu();
+            if ( bUseHeaderFooterMenu )
+                pPage->PaintDecorators( );
             pPage->PaintBreak();
         }
         else if ( bBookMode && pSh->GetWin() && !pSh->GetDoc()->GetDocShell()->IsInPlaceActive() )

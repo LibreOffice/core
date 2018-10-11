@@ -90,7 +90,8 @@ enum SwViewSettingsPropertyHandles
     HANDLE_VIEWSET_VERT_RULER_METRIC,
     HANDLE_VIEWSET_SCROLLBAR_TIPS,
     HANDLE_VIEWSET_INLINECHANGES_TIPS,
-    HANDLE_VIEWSET_HIDE_WHITESPACE
+    HANDLE_VIEWSET_HIDE_WHITESPACE,
+    HANDLE_VIEWSET_USE_HEADERFOOTERMENU
 };
 
 enum SwPrintSettingsPropertyHandles
@@ -120,16 +121,17 @@ static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
     static PropertyInfo const aViewSettingsMap_Impl[] =
     {
         { OUString( "HelpURL" ),             HANDLE_VIEWSET_HELP_URL             , cppu::UnoType<OUString>::get(),    PROPERTY_NONE},
-        { OUString( "HorizontalRulerMetric"),HANDLE_VIEWSET_HORI_RULER_METRIC   , cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE},
-        { OUString( "IsRasterVisible"),      HANDLE_VIEWSET_IS_RASTER_VISIBLE,       cppu::UnoType<bool>::get(),   PROPERTY_NONE},
-        { OUString( "IsSnapToRaster"),       HANDLE_VIEWSET_IS_SNAP_TO_RASTER,       cppu::UnoType<bool>::get(),   PROPERTY_NONE},
-        { OUString( "IsVertRulerRightAligned"),HANDLE_VIEWSET_VRULER_RIGHT         , cppu::UnoType<bool>::get(), PROPERTY_NONE},
-        { OUString( "ShowContentTips" ),     HANDLE_VIEWSET_SHOW_CONTENT_TIPS      , cppu::UnoType<bool>::get(), PROPERTY_NONE},
-        { OUString( "ShowInlineTooltips" ),  HANDLE_VIEWSET_INLINECHANGES_TIPS      , cppu::UnoType<bool>::get(), PROPERTY_NONE},
-        { OUString( "RasterResolutionX"),    HANDLE_VIEWSET_RASTER_RESOLUTION_X,     cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
-        { OUString( "RasterResolutionY"),    HANDLE_VIEWSET_RASTER_RESOLUTION_Y,     cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
-        { OUString( "RasterSubdivisionX"),   HANDLE_VIEWSET_RASTER_SUBDIVISION_X,    cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
-        { OUString( "RasterSubdivisionY"),   HANDLE_VIEWSET_RASTER_SUBDIVISION_Y,    cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
+        { OUString( "HorizontalRulerMetric"),HANDLE_VIEWSET_HORI_RULER_METRIC    , cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE},
+        { OUString( "IsRasterVisible"),      HANDLE_VIEWSET_IS_RASTER_VISIBLE    , cppu::UnoType<bool>::get(),   PROPERTY_NONE},
+        { OUString( "IsSnapToRaster"),       HANDLE_VIEWSET_IS_SNAP_TO_RASTER    , cppu::UnoType<bool>::get(),   PROPERTY_NONE},
+        { OUString( "IsVertRulerRightAligned"),HANDLE_VIEWSET_VRULER_RIGHT       , cppu::UnoType<bool>::get(), PROPERTY_NONE},
+        { OUString( "ShowContentTips" ),     HANDLE_VIEWSET_SHOW_CONTENT_TIPS    , cppu::UnoType<bool>::get(), PROPERTY_NONE},
+        { OUString( "ShowInlineTooltips" ),  HANDLE_VIEWSET_INLINECHANGES_TIPS   , cppu::UnoType<bool>::get(), PROPERTY_NONE},
+        { OUString( "UseHeaderFooterMenu" ), HANDLE_VIEWSET_USE_HEADERFOOTERMENU , cppu::UnoType<bool>::get(), PROPERTY_NONE},
+        { OUString( "RasterResolutionX"),    HANDLE_VIEWSET_RASTER_RESOLUTION_X  , cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
+        { OUString( "RasterResolutionY"),    HANDLE_VIEWSET_RASTER_RESOLUTION_Y  , cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
+        { OUString( "RasterSubdivisionX"),   HANDLE_VIEWSET_RASTER_SUBDIVISION_X , cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
+        { OUString( "RasterSubdivisionY"),   HANDLE_VIEWSET_RASTER_SUBDIVISION_Y , cppu::UnoType<sal_Int32>::get(),     PROPERTY_NONE},
         { OUString( "ShowAnnotations" ),     HANDLE_VIEWSET_ANNOTATIONS          , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "ShowBreaks"),           HANDLE_VIEWSET_BREAKS               , cppu::UnoType<bool>::get(), PROPERTY_NONE},
         { OUString( "ShowDrawings"),         HANDLE_VIEWSET_DRAWINGS             , cppu::UnoType<bool>::get(), PROPERTY_NONE},
@@ -594,6 +596,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_IS_SNAP_TO_RASTER     : mpViewOption->SetSnap(*o3tl::doAccess<bool>(rValue)); break;
         case  HANDLE_VIEWSET_SCROLLBAR_TIPS        : mpViewOption->SetShowScrollBarTips(*o3tl::doAccess<bool>(rValue)); break;
         case  HANDLE_VIEWSET_INLINECHANGES_TIPS    : mpViewOption->SetShowInlineTooltips(*o3tl::doAccess<bool>(rValue)); break;
+        case  HANDLE_VIEWSET_USE_HEADERFOOTERMENU  : mpViewOption->SetUseHeaderFooterMenu(*o3tl::doAccess<bool>(rValue)); break;
         case  HANDLE_VIEWSET_RASTER_RESOLUTION_X   :
         {
             sal_Int32 nTmp = 0;
