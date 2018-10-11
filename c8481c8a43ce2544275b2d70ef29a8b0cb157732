@@ -124,6 +124,24 @@
       "revId": "c8481c8a43ce2544275b2d70ef29a8b0cb157732",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_450a7b26",
+        "filename": "odk/examples/OLE/activex/StdAfx2.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-10-11T13:04:47Z",
+      "side": 1,
+      "message": "So I added a BASELINE_WINVER_ODK and set it to 0x0502, documented it in README.md and added #include \u003csal/config.h\u003e to this StdAfx2.h\n\nCommit f01580ce9c5f (\"Windows: Require at least Windows XP SP2\") changed these values all other the place to 0x0502, including the ODK example; FWIW.",
+      "parentUuid": "ff0f0b1f_a53a77e4",
+      "revId": "c8481c8a43ce2544275b2d70ef29a8b0cb157732",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
