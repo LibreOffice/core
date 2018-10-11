@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_45471b1f",
+        "filename": "odk/examples/OLE/activex/StdAfx2.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-11T07:20:32Z",
+      "side": 1,
+      "message": "note that these odk/examples files are not meant to be built with the settings from solenv/gbuild, but rather with the settings of a configured LO SDK",
+      "revId": "c8481c8a43ce2544275b2d70ef29a8b0cb157732",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
