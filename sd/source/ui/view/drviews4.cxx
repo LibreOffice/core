@@ -660,9 +660,6 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                 switch ( nId )
                                 {
                                     case OBJ_OUTLINETEXT:
-                                        aPopupId = "outlinetext";
-                                        break;
-
                                     case OBJ_CAPTION:
                                     case OBJ_TITLETEXT:
                                     case OBJ_TEXT:

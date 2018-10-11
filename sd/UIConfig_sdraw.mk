@@ -34,7 +34,6 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/sdraw,\
 	sd/uiconfig/sdraw/popupmenu/multiselect \
 	sd/uiconfig/sdraw/popupmenu/notebookbar \
 	sd/uiconfig/sdraw/popupmenu/oleobject \
-	sd/uiconfig/sdraw/popupmenu/outlinetext \
 	sd/uiconfig/sdraw/popupmenu/pagepanemaster \
 	sd/uiconfig/sdraw/popupmenu/pagepanenoselmaster \
 	sd/uiconfig/sdraw/popupmenu/pagepanenosel \
