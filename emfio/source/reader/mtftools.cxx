@@ -1333,7 +1333,7 @@ namespace emfio
 
                         mpGDIMetaFile->AddAction( new MetaCommentAction( "XPATHFILL_SEQ_BEGIN", 0,
                                                                 static_cast<const sal_uInt8*>(aMemStm.GetData()),
-                                                                aMemStm.Seek( STREAM_SEEK_TO_END ) ) );
+                                                                aMemStm.TellEnd() ) );
                         mpGDIMetaFile->AddAction( new MetaCommentAction( "XPATHFILL_SEQ_END" ) );
                     }
 

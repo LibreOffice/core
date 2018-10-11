@@ -191,8 +191,7 @@ void CompressGraphicsDialog::Update()
     SvMemoryStream aMemStream;
     aMemStream.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
     m_aGraphic.ExportNative(aMemStream);
-    aMemStream.Seek( STREAM_SEEK_TO_END );
-    sal_Int32 aNativeSize = aMemStream.Tell();
+    sal_Int32 aNativeSize = aMemStream.TellEnd();
 
     OUString aNativeSizeString = SvxResId(STR_IMAGE_CAPACITY);
     aNativeSizeString = aNativeSizeString.replaceAll("$(CAPACITY)",  OUString::number(aNativeSize / 1024));
@@ -353,8 +352,7 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, CalculateClickHdl, weld::Button&, void 
         SvMemoryStream aMemStream;
         aMemStream.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
         Compress( aMemStream );
-        aMemStream.Seek( STREAM_SEEK_TO_END );
-        aSize = aMemStream.Tell();
+        aSize = aMemStream.TellEnd();
     }
 
     if ( aSize > 0 )

@@ -356,9 +356,7 @@ DECLARE_HTMLEXPORT_TEST(testReqIfParagraph, "reqif-p.xhtml")
 {
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
-    pStream->Seek(STREAM_SEEK_TO_END);
-    sal_uInt64 nLength = pStream->Tell();
-    pStream->Seek(0);
+    sal_uInt64 nLength = pStream->TellEnd();
 
     OString aExpected("<reqif-xhtml:div><reqif-xhtml:p>aaa<reqif-xhtml:br/>\nbbb"
                       "</reqif-xhtml:p>" SAL_NEWLINE_STRING);
@@ -444,9 +442,7 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfOleImg, "reqif-ole-img.xhtml")
     // "type" attribute was missing for the inner <object> element.
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
-    pStream->Seek(STREAM_SEEK_TO_END);
-    sal_uInt64 nLength = pStream->Tell();
-    pStream->Seek(0);
+    sal_uInt64 nLength = pStream->TellEnd();
     OString aStream(read_uInt8s_ToOString(*pStream, nLength));
     CPPUNIT_ASSERT(aStream.indexOf("type=\"image/png\"") != -1);
 }
@@ -470,9 +466,7 @@ DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testReqIfPngImg, "reqif-png-img.xhtml")
     // subset.
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
-    pStream->Seek(STREAM_SEEK_TO_END);
-    sal_uInt64 nLength = pStream->Tell();
-    pStream->Seek(0);
+    sal_uInt64 nLength = pStream->TellEnd();
     OString aStream(read_uInt8s_ToOString(*pStream, nLength));
     CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:object") != -1);
 
@@ -487,9 +481,7 @@ DECLARE_HTMLEXPORT_TEST(testReqIfJpgImg, "reqif-jpg-img.xhtml")
 {
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
-    pStream->Seek(STREAM_SEEK_TO_END);
-    sal_uInt64 nLength = pStream->Tell();
-    pStream->Seek(0);
+    sal_uInt64 nLength = pStream->TellEnd();
     OString aStream(read_uInt8s_ToOString(*pStream, nLength));
     // This was image/jpeg, JPG was not converted to PNG in ReqIF mode.
     CPPUNIT_ASSERT(aStream.indexOf("type=\"image/png\"") != -1);
@@ -514,9 +506,7 @@ DECLARE_HTMLEXPORT_TEST(testReqIfTable2, "reqif-table2.odt")
 {
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
-    pStream->Seek(STREAM_SEEK_TO_END);
-    sal_uInt64 nLength = pStream->Tell();
-    pStream->Seek(0);
+    sal_uInt64 nLength = pStream->TellEnd();
     OString aStream(read_uInt8s_ToOString(*pStream, nLength));
     // This failed, <reqif-xhtml:td width="..."> was written.
     CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:td>") != -1);
@@ -526,9 +516,7 @@ DECLARE_HTMLEXPORT_TEST(testReqIfWellFormed, "reqif.odt")
 {
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
-    pStream->Seek(STREAM_SEEK_TO_END);
-    sal_uInt64 nLength = pStream->Tell();
-    pStream->Seek(0);
+    sal_uInt64 nLength = pStream->TellEnd();
     OString aStream(read_uInt8s_ToOString(*pStream, nLength));
     // This failed, <font face="..."> was written.
     CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:span style=\"font-family:") != -1);
@@ -540,9 +528,7 @@ DECLARE_HTMLEXPORT_TEST(testReqIfList, "reqif-list.xhtml")
 {
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
-    pStream->Seek(STREAM_SEEK_TO_END);
-    sal_uInt64 nLength = pStream->Tell();
-    pStream->Seek(0);
+    sal_uInt64 nLength = pStream->TellEnd();
     OString aStream(read_uInt8s_ToOString(*pStream, nLength));
     // This failed, <ul> was written.
     CPPUNIT_ASSERT(aStream.indexOf("<reqif-xhtml:ul>") != -1);
@@ -594,9 +580,7 @@ DECLARE_HTMLEXPORT_TEST(testList, "list.html")
 {
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
-    pStream->Seek(STREAM_SEEK_TO_END);
-    sal_uInt64 nLength = pStream->Tell();
-    pStream->Seek(0);
+    sal_uInt64 nLength = pStream->TellEnd();
     OString aStream(read_uInt8s_ToOString(*pStream, nLength));
     // This failed, it was <li/>, i.e. list item was closed before content
     // started.

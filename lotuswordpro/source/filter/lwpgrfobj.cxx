@@ -384,10 +384,7 @@ sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
     if (pMemGrafStream)
     {
         // read image data
-        sal_uInt32 nPos = pGrafStream->Tell();
-        pGrafStream->Seek(STREAM_SEEK_TO_END);
-        sal_uInt32 nDataLen = pGrafStream->Tell();
-        pGrafStream->Seek(nPos);
+        sal_uInt32 nDataLen = pGrafStream->TellEnd();
 
         pGrafData = new sal_uInt8 [nDataLen];
         pMemGrafStream->ReadBytes(pGrafData, nDataLen);

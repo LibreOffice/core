@@ -439,8 +439,7 @@ XclImpStream::XclImpStream( SvStream& rInStrm, const XclImpRoot& rRoot ) :
     mbValidRec( false ),
     mbValid( false )
 {
-    mrStrm.Seek( STREAM_SEEK_TO_END );
-    mnStreamSize = mrStrm.Tell();
+    mnStreamSize = mrStrm.TellEnd();
     mrStrm.Seek( STREAM_SEEK_TO_BEGIN );
 }
 

@@ -238,7 +238,7 @@ namespace
                 "XPATHSTROKE_SEQ_BEGIN",
                 0,
                 static_cast< const sal_uInt8* >(aMemStm.GetData()),
-                aMemStm.Seek(STREAM_SEEK_TO_END)));
+                aMemStm.TellEnd()));
     }
 
     void addSvtGraphicFill(const SvtGraphicFill &rFilling, GDIMetaFile& rTarget)
@@ -251,7 +251,7 @@ namespace
                 "XPATHFILL_SEQ_BEGIN",
                 0,
                 static_cast< const sal_uInt8* >(aMemStm.GetData()),
-                aMemStm.Seek(STREAM_SEEK_TO_END)));
+                aMemStm.TellEnd()));
     }
 } // end of anonymous namespace
 

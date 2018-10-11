@@ -2638,8 +2638,7 @@ void PDFObjectElement::ParseStoredObjects()
         return;
     }
 
-    aStream.Seek(STREAM_SEEK_TO_END);
-    nLength = aStream.Tell();
+    nLength = aStream.TellEnd();
     aStream.Seek(0);
     std::vector<size_t> aObjNums;
     std::vector<size_t> aOffsets;

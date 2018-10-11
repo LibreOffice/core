@@ -273,6 +273,7 @@ public:
     sal_uInt64      Seek( sal_uInt64 nPos );
     sal_uInt64      SeekRel( sal_Int64 nPos );
     sal_uInt64      Tell() const { return m_nBufFilePos + m_nBufActualPos;  }
+    sal_uInt64      TellEnd() { return Tell() + remainingSize();  }
     // length between current (Tell()) pos and end of stream
     virtual sal_uInt64 remainingSize();
     void            Flush();

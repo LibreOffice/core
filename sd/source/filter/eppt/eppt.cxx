@@ -1232,8 +1232,7 @@ void PPTWriter::ImplWriteVBA()
 {
     if ( mpVBA )
     {
-        mpVBA->Seek( STREAM_SEEK_TO_END );
-        sal_uInt32 nLen = mpVBA->Tell();
+        sal_uInt32 nLen = mpVBA->TellEnd();
         if ( nLen > 8 )
         {
             nLen -= 8;

@@ -349,7 +349,7 @@ namespace drawinglayer
                 SvMemoryStream aMemStm;
 
                 WriteSvtGraphicFill( aMemStm, *pSvtGraphicFill );
-                mpMetaFile->AddAction(new MetaCommentAction("XPATHFILL_SEQ_BEGIN", 0, static_cast< const sal_uInt8* >(aMemStm.GetData()), aMemStm.Seek(STREAM_SEEK_TO_END)));
+                mpMetaFile->AddAction(new MetaCommentAction("XPATHFILL_SEQ_BEGIN", 0, static_cast< const sal_uInt8* >(aMemStm.GetData()), aMemStm.TellEnd()));
                 mnSvtGraphicFillCount++;
             }
         }
@@ -536,7 +536,7 @@ namespace drawinglayer
                 SvMemoryStream aMemStm;
 
                 WriteSvtGraphicStroke( aMemStm, *pSvtGraphicStroke );
-                mpMetaFile->AddAction(new MetaCommentAction("XPATHSTROKE_SEQ_BEGIN", 0, static_cast< const sal_uInt8* >(aMemStm.GetData()), aMemStm.Seek(STREAM_SEEK_TO_END)));
+                mpMetaFile->AddAction(new MetaCommentAction("XPATHSTROKE_SEQ_BEGIN", 0, static_cast< const sal_uInt8* >(aMemStm.GetData()), aMemStm.TellEnd()));
                 mnSvtGraphicStrokeCount++;
             }
         }

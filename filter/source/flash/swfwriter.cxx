@@ -98,8 +98,7 @@ static void ImplCopySvStreamToXOutputStream( SvStream& rIn, Reference< XOutputSt
 {
     sal_uInt32 nBufferSize = 64*1024;
 
-    rIn.Seek( STREAM_SEEK_TO_END );
-    sal_uInt32 nSize = rIn.Tell();
+    sal_uInt32 nSize = rIn.TellEnd();
     rIn.Seek( STREAM_SEEK_TO_BEGIN );
 
     Sequence< sal_Int8 > aBuffer( std::min( nBufferSize, nSize ) );

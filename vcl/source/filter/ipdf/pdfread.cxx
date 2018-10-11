@@ -231,8 +231,7 @@ bool ImportPDF(SvStream& rStream, Bitmap& rBitmap, size_t nPageIndex,
     if (!getCompatibleStream(rStream, aMemoryStream, nPos, nSize))
         return false;
 
-    aMemoryStream.Seek(STREAM_SEEK_TO_END);
-    rPdfData = css::uno::Sequence<sal_Int8>(aMemoryStream.Tell());
+    rPdfData = css::uno::Sequence<sal_Int8>(aMemoryStream.TellEnd());
     aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
     aMemoryStream.ReadBytes(rPdfData.getArray(), rPdfData.getLength());
 
@@ -267,8 +266,7 @@ size_t ImportPDF(const OUString& rURL, std::vector<Bitmap>& rBitmaps,
     if (!getCompatibleStream(*xStream, aMemoryStream, STREAM_SEEK_TO_BEGIN, STREAM_SEEK_TO_END))
         return 0;
 
-    aMemoryStream.Seek(STREAM_SEEK_TO_END);
-    rPdfData = css::uno::Sequence<sal_Int8>(aMemoryStream.Tell());
+    rPdfData = css::uno::Sequence<sal_Int8>(aMemoryStream.TellEnd());
     aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
     aMemoryStream.ReadBytes(rPdfData.getArray(), rPdfData.getLength());
 

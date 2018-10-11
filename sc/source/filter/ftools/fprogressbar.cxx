@@ -228,11 +228,7 @@ void ScfStreamProgressBar::Progress()
 
 void ScfStreamProgressBar::Init( SfxObjectShell* pDocShell, const OUString& rText )
 {
-    sal_uInt64 const nPos = mrStrm.Tell();
-    mrStrm.Seek( STREAM_SEEK_TO_END );
-    sal_uInt64 const nSize = mrStrm.Tell();
-    mrStrm.Seek( nPos );
-
+    sal_uInt64 const nSize = mrStrm.TellEnd();
     mxProgress.reset( new ScfSimpleProgressBar( nSize, pDocShell, rText ) );
     Progress();
 }

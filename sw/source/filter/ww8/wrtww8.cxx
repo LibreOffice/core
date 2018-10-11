@@ -3122,8 +3122,7 @@ namespace
 
     ErrCode EncryptRC4(msfilter::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
     {
-        rIn.Seek(STREAM_SEEK_TO_END);
-        sal_uLong nLen = rIn.Tell();
+        sal_uLong nLen = rIn.TellEnd();
         rIn.Seek(0);
 
         sal_uInt8 in[WW_BLOCKSIZE];
@@ -3793,8 +3792,7 @@ void WW8Export::RestoreMacroCmds()
 
         if ( pStream && ERRCODE_NONE == pStream->GetError())
         {
-            pStream->Seek(STREAM_SEEK_TO_END);
-            pFib->m_lcbCmds = pStream->Tell();
+            pFib->m_lcbCmds = pStream->TellEnd();
             pStream->Seek(0);
 
             std::unique_ptr<sal_uInt8[]> pBuffer( new sal_uInt8[pFib->m_lcbCmds] );

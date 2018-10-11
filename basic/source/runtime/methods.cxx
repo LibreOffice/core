@@ -3217,9 +3217,7 @@ void SbRtl_Lof(StarBASIC *, SbxArray & rPar, bool)
             return;
         }
         SvStream* pSvStrm = pSbStrm->GetStrm();
-        sal_uInt64 const nOldPos = pSvStrm->Tell();
-        sal_uInt64 const nLen = pSvStrm->Seek( STREAM_SEEK_TO_END );
-        pSvStrm->Seek( nOldPos );
+        sal_uInt64 const nLen = pSvStrm->TellEnd();
         rPar.Get(0)->PutLong( static_cast<sal_Int32>(nLen) );
     }
 }

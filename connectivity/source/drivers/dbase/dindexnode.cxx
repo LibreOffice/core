@@ -892,7 +892,7 @@ SvStream& connectivity::dbase::WriteONDXPage(SvStream &rStream, const ONDXPage& 
     // Page doesn't exist yet
     std::size_t nSize = rPage.GetPagePos() + 1;
     nSize *= DINDEX_PAGE_SIZE;
-    if (nSize > rStream.Seek(STREAM_SEEK_TO_END))
+    if (nSize > rStream.TellEnd())
     {
         rStream.SetStreamSize(nSize);
         rStream.Seek(rPage.GetPagePos() * DINDEX_PAGE_SIZE);

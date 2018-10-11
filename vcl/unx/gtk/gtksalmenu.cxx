@@ -988,7 +988,7 @@ void GtkSalMenu::NativeSetItemIcon( unsigned nSection, unsigned nItemPos, const 
         aWriter.Write(*pMemStm);
 
         GBytes *pBytes = g_bytes_new_with_free_func(pMemStm->GetData(),
-                                                    pMemStm->Seek(STREAM_SEEK_TO_END),
+                                                    pMemStm->TellEnd(),
                                                     DestroyMemoryStream,
                                                     pMemStm);
 

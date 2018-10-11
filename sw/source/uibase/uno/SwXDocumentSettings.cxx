@@ -1021,8 +1021,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             {
                 SvMemoryStream aStream;
                 pPrinter->Store( aStream );
-                aStream.Seek ( STREAM_SEEK_TO_END );
-                sal_uInt32 nSize = aStream.Tell();
+                sal_uInt32 nSize = aStream.TellEnd();
                 aStream.Seek ( STREAM_SEEK_TO_BEGIN );
                 Sequence < sal_Int8 > aSequence( nSize );
                 aStream.ReadBytes(aSequence.getArray(), nSize);

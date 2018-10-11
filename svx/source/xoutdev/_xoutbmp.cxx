@@ -380,8 +380,7 @@ bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString, b
         SAL_WARN("svx", "XOutBitmap::GraphicToBase64() invalid Graphic? error: " << nErr );
         return false;
     }
-    aOStm.Seek(STREAM_SEEK_TO_END);
-    css::uno::Sequence<sal_Int8> aOStmSeq( static_cast<sal_Int8 const *>(aOStm.GetData()),aOStm.Tell() );
+    css::uno::Sequence<sal_Int8> aOStmSeq( static_cast<sal_Int8 const *>(aOStm.GetData()),aOStm.TellEnd() );
     OUStringBuffer aStrBuffer;
     ::comphelper::Base64::encode(aStrBuffer,aOStmSeq);
     rOUString = aStrBuffer.makeStringAndClear();

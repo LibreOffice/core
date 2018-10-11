@@ -654,7 +654,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBase
     OUString aStorName( rStorage.GetName() );
     // #i13114 removed, DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
 
-    if ( !xManagerStream.is() || xManagerStream->GetError() || ( xManagerStream->Seek( STREAM_SEEK_TO_END ) == 0 ) )
+    if ( !xManagerStream.is() || xManagerStream->GetError() || ( xManagerStream->TellEnd() == 0 ) )
     {
         ImpMgrNotLoaded( aStorName );
         return;
@@ -746,7 +746,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
     OUString aStorName( rStorage.GetName() );
     DBG_ASSERT( aStorName.getLength(), "No Storage Name!" );
 
-    if ( !xManagerStream.is() || xManagerStream->GetError() || ( xManagerStream->Seek( STREAM_SEEK_TO_END ) == 0 ) )
+    if ( !xManagerStream.is() || xManagerStream->GetError() || ( xManagerStream->TellEnd() == 0 ) )
     {
         ImpMgrNotLoaded( aStorName );
         return;
@@ -903,7 +903,7 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
         else
         {
             bool bLoaded = false;
-            if ( xBasicStream->Seek( STREAM_SEEK_TO_END ) != 0 )
+            if ( xBasicStream->TellEnd() != 0 )
             {
                 if ( !pLibInfo->GetLib().is() )
                 {

@@ -2067,8 +2067,7 @@ bool PDFWriterImpl::compressStream( SvMemoryStream* pStream )
 {
     if (!g_bDebugDisableCompression)
     {
-        pStream->Seek( STREAM_SEEK_TO_END );
-        sal_uLong nEndPos = pStream->Tell();
+        sal_uLong nEndPos = pStream->TellEnd();
         pStream->Seek( STREAM_SEEK_TO_BEGIN );
         ZCodec aCodec( 0x4000, 0x4000 );
         SvMemoryStream aStream;
@@ -2759,8 +2758,7 @@ bool PDFWriterImpl::emitTilings()
             tiling.m_aCellSize.setHeight( nH );
 
         bool bDeflate = compressStream( tiling.m_pTilingStream.get() );
-        tiling.m_pTilingStream->Seek( STREAM_SEEK_TO_END );
-        sal_uInt64 const nTilingStreamSize = tiling.m_pTilingStream->Tell();
+        sal_uInt64 const nTilingStreamSize = tiling.m_pTilingStream->TellEnd();
         tiling.m_pTilingStream->Seek( STREAM_SEEK_TO_BEGIN );
 
         // write pattern object
@@ -4536,8 +4534,7 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
 
                 bool bDeflate = compressStream( pApppearanceStream );
 
-                pApppearanceStream->Seek( STREAM_SEEK_TO_END );
-                sal_Int64 nStreamLen = pApppearanceStream->Tell();
+                sal_Int64 nStreamLen = pApppearanceStream->TellEnd();
                 pApppearanceStream->Seek( STREAM_SEEK_TO_BEGIN );
                 sal_Int32 nObject = createObject();
                 CHECK_RETURN( updateObject( nObject ) );
@@ -8525,8 +8522,7 @@ void PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     CHECK_RETURN2( updateObject( rObject.m_nObject ) );
 
     bool bFlateFilter = compressStream( rObject.m_pContentStream.get() );
-    rObject.m_pContentStream->Seek( STREAM_SEEK_TO_END );
-    sal_uLong nSize = rObject.m_pContentStream->Tell();
+    sal_uLong nSize = rObject.m_pContentStream->TellEnd();
     rObject.m_pContentStream->Seek( STREAM_SEEK_TO_BEGIN );
     if (g_bDebugDisableCompression)
     {
@@ -8610,8 +8606,7 @@ void PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
         }
         else
         {
-            rObject.m_pSoftMaskStream->Seek( STREAM_SEEK_TO_END );
-            sal_Int32 nMaskSize = static_cast<sal_Int32>(rObject.m_pSoftMaskStream->Tell());
+            sal_Int32 nMaskSize = static_cast<sal_Int32>(rObject.m_pSoftMaskStream->TellEnd());
             rObject.m_pSoftMaskStream->Seek( STREAM_SEEK_TO_BEGIN );
             sal_Int32 nMaskObject = createObject();
             aLine.append( "/SMask<</Type/Mask/S/Luminosity/G " );
@@ -8883,9 +8878,7 @@ void PDFWriterImpl::writeJPG( JPGEmit& rObject )
     CHECK_RETURN2( rObject.m_pStream );
     CHECK_RETURN2( updateObject( rObject.m_nObject ) );
 
-    sal_Int32 nLength = 0;
-    rObject.m_pStream->Seek( STREAM_SEEK_TO_END );
-    nLength = rObject.m_pStream->Tell();
+    sal_Int32 nLength = rObject.m_pStream->TellEnd();
     rObject.m_pStream->Seek( STREAM_SEEK_TO_BEGIN );
 
     sal_Int32 nMaskObject = 0;
