@@ -2772,7 +2772,8 @@ class GtkInstanceNotebook : public GtkInstanceContainer, public virtual weld::No
 {
 private:
     GtkNotebook* m_pNotebook;
-    gulong m_nSignalId;
+    gulong m_nSwitchPageSignalId;
+    gulong m_nSizeAllocateSignalId;
     mutable std::vector<std::unique_ptr<GtkInstanceContainer>> m_aPages;
 
     static void signalSwitchPage(GtkNotebook*, GtkWidget*, guint nNewPage, gpointer widget)
@@ -2814,21 +2815,52 @@ private:
         return -1;
     }
 
+    // tdf#120371
     // https://developer.gnome.org/hig-book/unstable/controls-notebooks.html.en#controls-too-many-tabs
-    // tdf#120371 If you have more than about six tabs in a notebook ... place
-    // the list control on the left-hand side of the window
+    // If you have more than about six tabs in a notebook ... place the list
+    // control on the left-hand side of the window
+
+    // if number of pages drops to 6 or less, definitely place tabs on top
     void update_tab_pos()
     {
-        gtk_notebook_set_tab_pos(m_pNotebook, get_n_pages() > 6 ? GTK_POS_LEFT : GTK_POS_TOP);
+        if (get_n_pages() <= 6)
+            gtk_notebook_set_tab_pos(m_pNotebook, GTK_POS_TOP);
+    }
+
+    // if > 6, but only if the notebook would auto-scroll, then flip tabs
+    // to left which allows themes like Ambience under Ubuntu 16.04 to keep
+    // tabs on top when they would fit
+    void signal_size_allocate()
+    {
+        gint nPages = gtk_notebook_get_n_pages(m_pNotebook);
+        if (nPages > 6 && gtk_notebook_get_tab_pos(m_pNotebook) == GTK_POS_TOP)
+        {
+            for (gint i = 0; i < nPages; ++i)
+            {
+                GtkWidget* pTabWidget = gtk_notebook_get_tab_label(m_pNotebook, gtk_notebook_get_nth_page(m_pNotebook, i));
+                if (!gtk_widget_get_child_visible(pTabWidget))
+                {
+                    gtk_notebook_set_tab_pos(m_pNotebook, GTK_POS_LEFT);
+                    break;
+                }
+            }
+        }
+    }
+
+    static void signalSizeAllocate(GtkWidget*, GdkRectangle*, gpointer widget)
+    {
+        GtkInstanceNotebook* pThis = static_cast<GtkInstanceNotebook*>(widget);
+        pThis->signal_size_allocate();
     }
 
 public:
     GtkInstanceNotebook(GtkNotebook* pNotebook, bool bTakeOwnership)
         : GtkInstanceContainer(GTK_CONTAINER(pNotebook), bTakeOwnership)
         , m_pNotebook(pNotebook)
-        , m_nSignalId(g_signal_connect(pNotebook, "switch-page", G_CALLBACK(signalSwitchPage), this))
+        , m_nSwitchPageSignalId(g_signal_connect(pNotebook, "switch-page", G_CALLBACK(signalSwitchPage), this))
     {
-        update_tab_pos();
+        if (get_n_pages() > 6)
+            m_nSizeAllocateSignalId = g_signal_connect(pNotebook, "size-allocate", G_CALLBACK(signalSizeAllocate), this);
     }
 
     virtual int get_current_page() const override
@@ -2880,14 +2912,14 @@ public:
 
     virtual void disable_notify_events() override
     {
-        g_signal_handler_block(m_pNotebook, m_nSignalId);
+        g_signal_handler_block(m_pNotebook, m_nSwitchPageSignalId);
         GtkInstanceContainer::disable_notify_events();
     }
 
     virtual void enable_notify_events() override
     {
         GtkInstanceContainer::enable_notify_events();
-        g_signal_handler_unblock(m_pNotebook, m_nSignalId);
+        g_signal_handler_unblock(m_pNotebook, m_nSwitchPageSignalId);
     }
 
     virtual void remove_page(const OString& rIdent) override
@@ -2900,7 +2932,9 @@ public:
 
     virtual ~GtkInstanceNotebook() override
     {
-        g_signal_handler_disconnect(m_pNotebook, m_nSignalId);
+        g_signal_handler_disconnect(m_pNotebook, m_nSwitchPageSignalId);
+        if (m_nSizeAllocateSignalId)
+            g_signal_handler_disconnect(m_pNotebook, m_nSizeAllocateSignalId);
     }
 };
 
