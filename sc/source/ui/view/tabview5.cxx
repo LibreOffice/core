@@ -616,7 +616,7 @@ void ScTabView::MakeVisible( const tools::Rectangle& rHMMRect )
     }
 }
 
-void ScTabView::SetBrushDocument( std::unique_ptr<ScDocument> pNew, bool bLock )
+void ScTabView::SetBrushDocument( ScDocumentUniquePtr pNew, bool bLock )
 {
     pDrawBrushSet.reset();
     pBrushDocument = std::move(pNew);

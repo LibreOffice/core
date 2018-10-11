@@ -39,7 +39,7 @@ SelectionObserver::Context::Context (SlideSorter const & rSlideSorter)
         mpSelectionObserver->StartObservation();
 }
 
-SelectionObserver::Context::~Context()
+SelectionObserver::Context::~Context() COVERITY_NOEXCEPT_FALSE
 {
     if (mpSelectionObserver)
         mpSelectionObserver->EndObservation();
