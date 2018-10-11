@@ -199,7 +199,7 @@ namespace rptui
         {
             const sal_Char* programmaticName;
             const char* uiNameResId;
-            OString    helpId;
+            OString const helpId;
         } aCategories[] = {
             { "General",    RID_STR_PROPPAGE_DEFAULT,   HID_RPT_PROPDLG_TAB_GENERAL },
             { "Data",       RID_STR_PROPPAGE_DATA,      HID_RPT_PROPDLG_TAB_DATA },

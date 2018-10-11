@@ -724,7 +724,7 @@ namespace
 {
     class UnicodeToTextConverter_Impl
     {
-        rtl_UnicodeToTextConverter m_converter;
+        rtl_UnicodeToTextConverter const m_converter;
 
         UnicodeToTextConverter_Impl()
             : m_converter (rtl_createUnicodeToTextConverter (osl_getThreadTextEncoding()))
@@ -776,7 +776,7 @@ namespace
 {
     class TextToUnicodeConverter_Impl
     {
-        rtl_TextToUnicodeConverter m_converter;
+        rtl_TextToUnicodeConverter const m_converter;
 
         TextToUnicodeConverter_Impl()
             : m_converter (rtl_createTextToUnicodeConverter (osl_getThreadTextEncoding()))

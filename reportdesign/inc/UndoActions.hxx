@@ -170,7 +170,7 @@ namespace rptui
                         m_xOwnElement;  // object owned by the action
         css::uno::Reference< css::container::XIndexContainer >
                         m_xContainer;
-        Action          m_eAction;
+        Action const    m_eAction;
 
     public:
         OUndoContainerAction(SdrModel& rMod
@@ -231,9 +231,9 @@ namespace rptui
     class REPORTDESIGN_DLLPUBLIC ORptUndoPropertyAction: public OCommentUndoAction
     {
         css::uno::Reference< css::beans::XPropertySet> m_xObj;
-        OUString               m_aPropertyName;
-        css::uno::Any          m_aNewValue;
-        css::uno::Any          m_aOldValue;
+        OUString const         m_aPropertyName;
+        css::uno::Any const    m_aNewValue;
+        css::uno::Any const    m_aOldValue;
 
         /** sets either the old value or the new value again at the property set.
          *

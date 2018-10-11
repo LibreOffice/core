@@ -80,7 +80,7 @@ class OGroupsSortingDialog :    public FloatingWindow
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                       m_pReportListener;
     css::uno::Reference< css::report::XGroups>            m_xGroups;
     css::uno::Reference< css::container::XNameAccess >    m_xColumns;
-    bool                                                  m_bReadOnly;
+    bool const                                            m_bReadOnly;
 private:
     DECL_LINK( OnControlFocusLost, Control&, void );
     DECL_LINK( OnControlFocusGot, Control&, void );

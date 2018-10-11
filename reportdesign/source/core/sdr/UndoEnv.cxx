@@ -61,7 +61,7 @@ namespace rptui
 
 struct PropertyInfo
 {
-    bool    bIsReadonlyOrTransient;
+    bool const bIsReadonlyOrTransient;
 
     explicit PropertyInfo( const bool i_bIsTransientOrReadOnly )
         :bIsReadonlyOrTransient( i_bIsTransientOrReadOnly )

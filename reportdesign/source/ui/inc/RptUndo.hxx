@@ -42,8 +42,8 @@ namespace rptui
                                                     m_aControls;
         ::std::vector< ::std::pair< OUString ,css::uno::Any> >
                                                     m_aValues;
-        Action                                      m_eAction;
-        sal_uInt16                                  m_nSlot;
+        Action const                                m_eAction;
+        sal_uInt16 const                            m_nSlot;
         bool                                        m_bInserted;
 
         virtual void    implReInsert( ) = 0;
@@ -114,7 +114,7 @@ namespace rptui
     {
         css::uno::Reference< css::report::XGroup>             m_xGroup; ///<! the group for the undo redo action
         css::uno::Reference< css::report::XReportDefinition > m_xReportDefinition; ///<! the parent report definition
-        Action                                                                          m_eAction; ///<! the current action
+        Action const                                                                    m_eAction; ///<! the current action
         sal_Int32                                                                       m_nLastPosition; ///<! the last position of the group
 
         void    implReInsert( );
