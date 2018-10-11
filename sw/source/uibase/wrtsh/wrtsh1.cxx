@@ -1831,6 +1831,11 @@ void SwWrtShell::ChangeHeaderOrFooter(
 
 void SwWrtShell::SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow )
 {
+    //tdf#118621 - Optionally disable floating header/footer menu
+    const bool bUseHeaderFooterMenu = SwFEShell::GetViewOptions()->IsUseHeaderFooterMenu();
+    if ( !bUseHeaderFooterMenu )
+        bShow = false;
+
     SwViewShell::SetShowHeaderFooterSeparator( eControl, bShow );
     if ( !bShow )
         GetView().GetEditWin().GetFrameControlsManager().HideControls( eControl );

@@ -325,6 +325,8 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             break;
             case FN_SHOW_INLINETOOLTIPS:
               aBool.SetValue( pOpt->IsShowInlineTooltips() );
+            case FN_USE_HEADERFOOTERMENU:
+              aBool.SetValue( pOpt->IsUseHeaderFooterMenu() );
 
         }
 
@@ -546,6 +548,13 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             bFlag = !pOpt->IsShowInlineTooltips();
 
         pOpt->SetShowInlineTooltips( bFlag );
+        break;
+
+    case FN_USE_HEADERFOOTERMENU:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsUseHeaderFooterMenu();
+
+        pOpt->SetUseHeaderFooterMenu( bFlag );
         break;
 
     default:

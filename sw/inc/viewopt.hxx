@@ -35,6 +35,7 @@ class SwDocShell;
 namespace svtools{ class ColorConfig;}
 
 enum class ViewOptFlags1 {
+    UseHeaderFooterMenu = 0x00000001,
     Tab           = 0x00000002,
     Blank         = 0x00000004,
     HardBlank     = 0x00000008,
@@ -62,7 +63,7 @@ enum class ViewOptFlags1 {
     Pageback      = 0x40000000
 };
 namespace o3tl {
-    template<> struct typed_flags<ViewOptFlags1> : is_typed_flags<ViewOptFlags1, 0x77dfcdfe> {};
+    template<> struct typed_flags<ViewOptFlags1> : is_typed_flags<ViewOptFlags1, 0x77dfcdff> {};
 }
 
 enum class ViewOptCoreFlags2 {
@@ -267,10 +268,15 @@ public:
     void SetShowInlineTooltips( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::ShowInlineTooltips ) : ( m_nCoreOptions &= ~ViewOptFlags1::ShowInlineTooltips); }
 
+    //show/hide interactive header/footer on top/bootom of pages
+    bool IsUseHeaderFooterMenu() const
+        { return bool(m_nCoreOptions & ViewOptFlags1::UseHeaderFooterMenu ); }
+    void SetUseHeaderFooterMenu( bool b )
+        { b ? (m_nCoreOptions |= ViewOptFlags1::UseHeaderFooterMenu ) : ( m_nCoreOptions &= ~ViewOptFlags1::UseHeaderFooterMenu); }
+
     bool IsShowHiddenChar(bool bHard = false) const
         { return !m_bReadonly && (m_nCoreOptions & ViewOptFlags1::CharHidden) &&
                             ((m_nCoreOptions & ViewOptFlags1::ViewMetachars)||bHard); }
-
     void SetShowHiddenChar( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::CharHidden ) : ( m_nCoreOptions &= ~ViewOptFlags1::CharHidden); }
 
