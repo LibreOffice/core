@@ -51,7 +51,6 @@ private:
     void init( const OUString& aCntType );
 
 private:
-    ::osl::Mutex                             m_aMutex;
     OUString                            m_MediaType;
     OUString                            m_MediaSubtype;
     std::map< OUString, OUString > m_ParameterMap;
