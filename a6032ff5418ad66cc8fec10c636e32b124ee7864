@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_e84cc677",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3179,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 0,
+      "message": "Chis change is just a leftover after reverting changes here - please restore the empty line",
+      "revId": "a6032ff5418ad66cc8fec10c636e32b124ee7864",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

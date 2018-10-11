@@ -1,0 +1,463 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_c8510211",
+        "filename": "sw/source/ui/config/optpage.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "This is irrelevant here",
+      "range": {
+        "startLine": 119,
+        "startChar": 30,
+        "endLine": 119,
+        "endChar": 32
+      },
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_a856ce05",
+        "filename": "sw/source/uibase/config/cfgitems.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "Formatting change",
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_885b0a2d",
+        "filename": "sw/source/uibase/config/cfgitems.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "formatting change",
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_6840b636",
+        "filename": "sw/source/uibase/config/cfgitems.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "formatting change",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 67
+      },
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_483df2b9",
+        "filename": "sw/source/uibase/config/cfgitems.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "formatting change",
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_284abe54",
+        "filename": "sw/source/uibase/config/cfgitems.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "formatting change",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 126,
+        "endChar": 56
+      },
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_0847fa4d",
+        "filename": "sw/source/uibase/config/cfgitems.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "formatting change",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 145,
+        "endChar": 69
+      },
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_e875e699",
+        "filename": "sw/source/uibase/config/cfgitems.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "formatting change",
+      "range": {
+        "startLine": 157,
+        "startChar": 0,
+        "endLine": 167,
+        "endChar": 57
+      },
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_c87a2287",
+        "filename": "sw/source/uibase/config/usrpref.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "formatting change",
+      "range": {
+        "startLine": 93,
+        "startChar": 0,
+        "endLine": 107,
+        "endChar": 57
+      },
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_a86feec3",
+        "filename": "sw/source/uibase/config/usrpref.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "formatting change",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 170,
+        "endChar": 110
+      },
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_88742a9b",
+        "filename": "sw/source/uibase/config/usrpref.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "formatting change",
+      "range": {
+        "startLine": 194,
+        "startChar": 0,
+        "endLine": 209,
+        "endChar": 115
+      },
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_486612f0",
+        "filename": "sw/source/uibase/config/usrpref.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "formatting change",
+      "range": {
+        "startLine": 217,
+        "startChar": 0,
+        "endLine": 219,
+        "endChar": 105
+      },
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_c82c629b",
+        "filename": "sw/source/uibase/inc/optpage.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "This is irrelevant change",
+      "range": {
+        "startLine": 61,
+        "startChar": 44,
+        "endLine": 61,
+        "endChar": 46
+      },
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_a8212ea2",
+        "filename": "sw/source/uibase/uno/unomod.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "Please also add comma after the last element here, to allow next changes without changing this line",
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_88266ab7",
+        "filename": "sw/source/uibase/uno/unomod.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "These lines should not change",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 129,
+        "endChar": 126
+      },
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_683b16d1",
+        "filename": "sw/source/uibase/uno/unomod.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "These lines should not change",
+      "range": {
+        "startLine": 131,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 135
+      },
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_e82726b6",
+        "filename": "sw/source/uibase/wrtsh/wrtsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1835,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "The check should be made only in case when bShow is true - just to avoid calling it when there\u0027s no reason for that.\n\n  if (bShow)\n    bShow \u003d SwFEShell::GetViewOptions()-\u003eIsUseHeaderFooterMenu();",
+      "range": {
+        "startLine": 1835,
+        "startChar": 4,
+        "endLine": 1835,
+        "endChar": 91
+      },
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_6812f65a",
+        "filename": "sw/source/uibase/wrtsh/wrtsh1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1839,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "I meant put the check to this function: SwViewShell::SetShowHeaderFooterSeparator (that is currently defined in a header file: sw/inc/viewsh.hxx, and should be moved to sw/source/core/view/viewsh.cxx).",
+      "range": {
+        "startLine": 1839,
+        "startChar": 4,
+        "endLine": 1839,
+        "endChar": 45
+      },
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_483852d2",
+        "filename": "sw/uiconfig/swriter/ui/viewoptionspage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "This is irrelevant change here",
+      "range": {
+        "startLine": 42,
+        "startChar": 106,
+        "endLine": 42,
+        "endChar": 124
+      },
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_28351edb",
+        "filename": "sw/uiconfig/swriter/ui/viewoptionspage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "And this",
+      "range": {
+        "startLine": 125,
+        "startChar": 104,
+        "endLine": 125,
+        "endChar": 109
+      },
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_08325af2",
+        "filename": "sw/uiconfig/swriter/ui/viewoptionspage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-11T12:57:36Z",
+      "side": 1,
+      "message": "And this",
+      "range": {
+        "startLine": 341,
+        "startChar": 112,
+        "endLine": 341,
+        "endChar": 113
+      },
+      "revId": "221d19907931514b8381e8554e008d55fd862282",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
