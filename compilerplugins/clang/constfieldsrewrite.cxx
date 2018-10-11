@@ -122,11 +122,38 @@ bool ConstFieldsRewrite::VisitFieldDecl(const FieldDecl* fieldDecl)
     if (!(found < mmappedData + mmapFilesize))
         return true;
 
+    SourceManager& SM = compiler.getSourceManager();
     auto endLoc = fieldDecl->getTypeSourceInfo()->getTypeLoc().getEndLoc();
-    endLoc = endLoc.getLocWithOffset(
-        Lexer::MeasureTokenLength(endLoc, compiler.getSourceManager(), compiler.getLangOpts()));
+    endLoc = endLoc.getLocWithOffset(Lexer::MeasureTokenLength(endLoc, SM, compiler.getLangOpts()));
 
-    if (!insertText(endLoc, " const"))
+    // Calculate how much space is available after the type declaration that we can use to
+    // overwrite with the " const". This reduces the amount of formatting fixups I need to do.
+    char const* p1 = SM.getCharacterData(endLoc);
+    bool success = false;
+    if (*p1 != ' ')
+    {
+        // Sometimes there is no space at all e.g. in
+        //     FastTokenHandlerBase *mpTokenHandler;
+        // between the "*" and the "mpTokenHandler", so add an extra space.
+        success = insertText(endLoc, " const ");
+    }
+    else
+    {
+        int spaceAvailable = 1;
+        ++p1;
+        for (; spaceAvailable < 6; ++spaceAvailable)
+        {
+            if (*p1 != ' ')
+                break;
+            ++p1;
+        }
+        if (spaceAvailable < 6)
+            success = replaceText(endLoc, spaceAvailable - 1, " const");
+        else
+            success = replaceText(endLoc, spaceAvailable, " const");
+    }
+
+    if (!success)
     {
         report(DiagnosticsEngine::Warning, "Could not mark field as const",
                compat::getBeginLoc(fieldDecl))

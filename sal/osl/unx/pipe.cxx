@@ -43,7 +43,7 @@ static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Op
 
 static struct
 {
-    int            errcode;
+    int const      errcode;
     oslPipeError   error;
 } PipeError[]= {
     { 0,               osl_Pipe_E_None              },  /* no error */

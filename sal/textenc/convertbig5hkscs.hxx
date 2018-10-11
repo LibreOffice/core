@@ -34,7 +34,7 @@ struct ImplBig5HkscsConverterData
     sal_Int32 const * m_pUnicodeToBig5Hkscs2001PlaneOffsets;
     ImplUniToDBCSHighTab const * m_pUnicodeToBig5Data;
     ImplDBCSEUDCData const * m_pEudcData;
-    int m_nEudcCount;
+    int const m_nEudcCount;
 };
 
 void * ImplCreateBig5HkscsToUnicodeContext();

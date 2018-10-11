@@ -32,7 +32,7 @@ namespace rptxml
     {
         css::uno::Reference< css::report::XFunctions >    m_xFunctions;
         css::uno::Reference< css::report::XFunction >     m_xFunction;
-        bool                                              m_bAddToReport;
+        bool const                                        m_bAddToReport;
 
         ORptFilter& GetOwnImport();
 

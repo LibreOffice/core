@@ -28,8 +28,8 @@ struct DirectoryItem_Impl
 {
     sal_Int32     m_RefCount;
 
-    rtl_uString * m_ustrFilePath;       /* holds native file name */
-    unsigned char m_DType;
+    rtl_uString * const m_ustrFilePath;       /* holds native file name */
+    unsigned char const m_DType;
 
     explicit DirectoryItem_Impl(
         rtl_uString * ustrFilePath, unsigned char DType = 0);

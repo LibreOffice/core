@@ -105,7 +105,7 @@ static bool Impl_matchString( const char* pCompStr, const char* pMatchStr )
 struct ImplStrCharsetDef
 {
     const char*             mpCharsetStr;
-    rtl_TextEncoding            meTextEncoding;
+    rtl_TextEncoding const  meTextEncoding;
 };
 
 struct ImplStrFirstPartCharsetDef

@@ -46,7 +46,7 @@ class FormulaDialog : public formula::FormulaModalDialog,
                       public formula::IControlReferenceHandler
 {
     std::shared_ptr< formula::IFunctionManager > m_aFunctionManager;
-    formula::FormEditData*             m_pFormulaData;
+    formula::FormEditData* const       m_pFormulaData;
     VclPtr<OAddFieldWindow>            m_pAddField;
     css::uno::Reference < css::beans::XPropertySet >          m_xRowSet;
     css::uno::Reference< css::report::meta::XFormulaParser>   m_xParser;

@@ -77,7 +77,7 @@ namespace reportdesign
         ::comphelper::OInterfaceContainerHelper2                  aContainerListeners;
         OReportComponentProperties                          aComponent;
         OFormatProperties                                   aFormatProperties;
-        css::container::XContainer*                         m_pOwner;
+        css::container::XContainer* const                   m_pOwner;
         ::std::vector< css::uno::Reference< css::report::XFormatCondition> >
                                                             m_aFormatConditions;
         osl::Mutex&                                         m_rMutex;

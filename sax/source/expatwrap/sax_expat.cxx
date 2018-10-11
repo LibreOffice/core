@@ -140,11 +140,12 @@ struct Entity
 };
 
 
+static constexpr OUStringLiteral gsCDATA = "CDATA";
+
 class SaxExpatParser_Impl
 {
 public: // module scope
     Mutex               aMutex;
-    OUString            sCDATA;
     bool m_bEnableDoS; // fdo#60471 thank you Adobe Illustrator
 
     css::uno::Reference< XDocumentHandler >   rDocumentHandler;
@@ -179,8 +180,7 @@ public: // module scope
 
 public:
     SaxExpatParser_Impl()
-        : sCDATA("CDATA")
-        , m_bEnableDoS(false)
+        : m_bEnableDoS(false)
         , bExceptionWasThrown(false)
         , bRTExceptionWasThrown(false)
     {
@@ -389,7 +389,7 @@ class ParserCleanup
 {
 private:
     SaxExpatParser_Impl& m_rParser;
-    XML_Parser m_xmlParser;
+    XML_Parser const m_xmlParser;
 public:
     ParserCleanup(SaxExpatParser_Impl& rParser, XML_Parser xmlParser)
         : m_rParser(rParser)
@@ -711,7 +711,7 @@ void SaxExpatParser_Impl::callbackStartElement( void *pvThis ,
             assert(awAttributes[i+1]);
             pImpl->rAttrList->AddAttribute(
                 XML_CHAR_TO_OUSTRING( awAttributes[i] ) ,
-                pImpl->sCDATA,  // expat doesn't know types
+                gsCDATA,  // expat doesn't know types
                 XML_CHAR_TO_OUSTRING( awAttributes[i+1] ) );
             i +=2;
         }

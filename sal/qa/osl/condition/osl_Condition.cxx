@@ -39,7 +39,7 @@ public:
 
 protected:
     ::osl::Condition& m_MyCon;
-    ConditionType m_MyType;
+    ConditionType const m_MyType;
 
     void SAL_CALL run() override
     {
