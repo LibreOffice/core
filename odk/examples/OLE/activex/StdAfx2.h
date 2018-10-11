@@ -44,6 +44,8 @@
 #define _ATL_APARTMENT_THREADED
 #define _ATL_STATIC_REGISTRY
 
+#include <sal/config.h>
+
 #define min(a, b)  (((a) < (b)) ? (a) : (b))
 
 #include <atlbase.h>

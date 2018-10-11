@@ -27,7 +27,7 @@ gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
 # for _WIN32_IE, if _WIN32_WINNT >= 0x0600 the derived value from
 # sdkddkver.h is sufficient
 gb_WIN_VERSION_DEFS := \
-	-D_WIN32_WINNT=0x0601 \
+	-D_WIN32_WINNT=@BASELINE_WINVER@ \
 	-DWIN32 \
 	-DWNT \
 

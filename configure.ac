@@ -17,6 +17,13 @@ if test -n "$BUILD_TYPE"; then
     AC_MSG_ERROR([You have sourced config_host.mk in this shell.  This may lead to trouble, please run in a fresh (login) shell.])
 fi
 
+# current baseline is Windows 7 (NT 6.1)
+BASELINE_WINVER=0x0601
+AC_SUBST(BASELINE_WINVER)
+# current baseline for the ODK on Windows is still XP
+BASELINE_WINVER_ODK=0x0502
+AC_SUBST(BASELINE_WINVER_ODK)
+
 save_CC=$CC
 save_CXX=$CXX
 
@@ -12847,7 +12854,9 @@ AC_CONFIG_FILES([config_host.mk
                  bin/bffvalidator.sh
                  bin/odfvalidator.sh
                  bin/officeotron.sh
+                 include/sal/config.h.in
                  instsetoo_native/util/openoffice.lst
+                 solenv/gbuild/platform/windows.mk
                  sysui/desktop/macosx/Info.plist])
 AC_CONFIG_HEADERS([config_host/config_buildid.h])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
@@ -12887,6 +12896,7 @@ AC_CONFIG_HEADERS([config_host/config_oauth2.h])
 AC_CONFIG_HEADERS([config_host/config_poppler.h])
 AC_CONFIG_HEADERS([config_host/config_python.h])
 AC_CONFIG_HEADERS([config_host/config_writerperfect.h])
+AC_CONFIG_HEADERS([include/sal/config.h])
 AC_OUTPUT
 
 if test "$CROSS_COMPILING" = TRUE; then
