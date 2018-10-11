@@ -205,7 +205,7 @@ static PyObject* PyUNO_list_iterator_next( PyObject *self )
             try {
                 aRet = me->members->xIndexAccess->getByIndex( me->members->index );
             }
-            catch( css::lang::IndexOutOfBoundsException )
+            catch( const css::lang::IndexOutOfBoundsException & )
             {
                 noMoreElements = true;
             }
