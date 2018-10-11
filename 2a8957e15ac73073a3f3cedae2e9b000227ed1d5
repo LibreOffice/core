@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_0545a3b3",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3179,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-11T10:06:40Z",
+      "side": 1,
+      "message": "Not sure if this is efficient enough",
+      "range": {
+        "startLine": 3179,
+        "startChar": 46,
+        "endLine": 3179,
+        "endChar": 93
+      },
+      "revId": "2a8957e15ac73073a3f3cedae2e9b000227ed1d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
