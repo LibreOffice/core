@@ -20,19 +20,15 @@
 #include <sal/config.h>
 
 #include <com/sun/star/container/NoSuchElementException.hpp>
+#include <rtl/ustring.hxx>
+#include <tools/inetmime.hxx>
 
 #include "mcnttype.hxx"
 
 using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace std;
 using namespace osl;
-
-const char TSPECIALS[] =  "()<>@,;:\\\"/[]?=";
-const char TOKEN[] = "!#$%&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~.";
-const char SPACE[] = " ";
-const char SEMICOLON[] = ";";
 
 CMimeContentType::CMimeContentType( const OUString& aCntType )
 {
@@ -75,267 +71,38 @@ Sequence< OUString > SAL_CALL CMimeContentType::getParameters( )
 sal_Bool SAL_CALL CMimeContentType::hasParameter( const OUString& aName )
 {
     MutexGuard aGuard( m_aMutex );
-    return ( m_ParameterMap.end( ) != m_ParameterMap.find( aName ) );
+    return ( m_ParameterMap.end( ) != m_ParameterMap.find( aName.toAsciiLowerCase() ) );
 }
 
 OUString SAL_CALL CMimeContentType::getParameterValue( const OUString& aName )
 {
+    auto const lower = aName.toAsciiLowerCase();
+
     MutexGuard aGuard( m_aMutex );
 
-    if ( !hasParameter( aName ) )
+    if ( !hasParameter( lower ) )
         throw NoSuchElementException( );
 
-    return m_ParameterMap.find( aName )->second;
+    return m_ParameterMap.find( lower )->second;
 }
 
 void CMimeContentType::init( const OUString& aCntType )
 {
-    if ( aCntType.isEmpty( ) )
-        throw IllegalArgumentException( );
-
-    m_nPos = 0;
-    m_ContentType = aCntType;
-    getSym( );
-    type();
-}
-
-void CMimeContentType::getSym()
-{
-    if ( m_nPos < m_ContentType.getLength( ) )
+    INetContentTypeParameterList params;
+    if (INetMIME::scanContentType(aCntType, &m_MediaType, &m_MediaSubtype, &params)
+        != aCntType.getStr() + aCntType.getLength())
     {
-        m_nxtSym = m_ContentType.copy(m_nPos, 1);
-        ++m_nPos;
-        return;
+        throw css::lang::IllegalArgumentException(
+            "illegal media type " + aCntType, css::uno::Reference<css::uno::XInterface>(), -1);
     }
-
-    m_nxtSym = OUString( );
-}
-
-void CMimeContentType::acceptSym( const OUString& pSymTlb )
-{
-    if ( pSymTlb.indexOf( m_nxtSym ) < 0 )
-        throw IllegalArgumentException( );
-
-    getSym();
-}
-
-void CMimeContentType::skipSpaces()
-{
-    while (m_nxtSym == SPACE)
-        getSym( );
-}
-
-void CMimeContentType::type()
-{
-    skipSpaces( );
-
-    OUString sToken(TOKEN);
-
-    // check FIRST( type )
-    if ( !isInRange( m_nxtSym, sToken ) )
-        throw IllegalArgumentException( );
-
-    // parse
-    while(  !m_nxtSym.isEmpty( ) )
-    {
-        if ( isInRange( m_nxtSym, sToken ) )
-            m_MediaType += m_nxtSym;
-        else if ( isInRange( m_nxtSym, "/ " ) )
-            break;
-        else
-            throw IllegalArgumentException( );
-        getSym( );
-    }
-
-    // check FOLLOW( type )
-    skipSpaces( );
-    acceptSym( "/" );
-
-    subtype( );
-}
-
-void CMimeContentType::subtype()
-{
-    skipSpaces( );
-
-    OUString sToken(TOKEN);
-
-    // check FIRST( subtype )
-    if ( !isInRange( m_nxtSym, sToken ) )
-        throw IllegalArgumentException( );
-
-    while( !m_nxtSym.isEmpty( ) )
-    {
-        if ( isInRange( m_nxtSym, sToken ) )
-            m_MediaSubtype += m_nxtSym;
-        else if ( isInRange( m_nxtSym, "; " ) )
-            break;
-        else
-            throw IllegalArgumentException( );
-        getSym( );
-    }
-
-    // parse the rest
-    skipSpaces( );
-    trailer();
-}
-
-void CMimeContentType::trailer()
-{
-    OUString sToken(TOKEN);
-    while( !m_nxtSym.isEmpty( ) )
-    {
-        if ( m_nxtSym == "(" )
-        {
-            getSym( );
-            comment( );
-            acceptSym( ")" );
+    for (auto const & i: params) {
+        if (!i.second.m_bConverted) {
+            throw css::lang::IllegalArgumentException(
+                "illegal parameter value in media type " + aCntType,
+                css::uno::Reference<css::uno::XInterface>(), -1);
         }
-        else if ( m_nxtSym == ";" )
-        {
-            // get the parameter name
-            getSym( );
-            skipSpaces( );
-
-            if ( !isInRange( m_nxtSym, sToken ) )
-                throw IllegalArgumentException( );
-
-            OUString pname = pName( );
-
-            skipSpaces();
-            acceptSym( "=" );
-
-            // get the parameter value
-            skipSpaces( );
-
-            OUString pvalue = pValue( );
-
-            // insert into map
-            if ( !m_ParameterMap.insert( pair < const OUString, OUString > ( pname, pvalue ) ).second )
-                throw IllegalArgumentException( );
-        }
-        else
-            throw IllegalArgumentException( );
-
-        skipSpaces( );
+        m_ParameterMap[OUString::fromUtf8(i.first)] = i.second.m_sValue;
     }
-}
-
-OUString CMimeContentType::pName( )
-{
-    OUString pname;
-
-    OUString sToken(TOKEN);
-    while( !m_nxtSym.isEmpty( ) )
-    {
-        if ( isInRange( m_nxtSym, sToken ) )
-            pname += m_nxtSym;
-        else if ( isInRange( m_nxtSym, "= " ) )
-            break;
-        else
-            throw IllegalArgumentException( );
-        getSym( );
-    }
-
-    return pname;
-}
-
-OUString CMimeContentType::pValue( )
-{
-    OUString pvalue;
-
-    OUString sToken(TOKEN);
-    // quoted pvalue
-    if ( m_nxtSym == "\"" )
-    {
-        getSym( );
-        pvalue = quotedPValue( );
-
-        if ( pvalue[pvalue.getLength() - 1] != '"' )
-            throw IllegalArgumentException( );
-
-        // remove the last quote-sign
-        pvalue = pvalue.copy(0, pvalue.getLength() - 1);
-
-        if ( pvalue.isEmpty( ) )
-            throw IllegalArgumentException( );
-    }
-    else if ( isInRange( m_nxtSym, sToken ) ) // unquoted pvalue
-    {
-        pvalue = nonquotedPValue( );
-    }
-    else
-        throw IllegalArgumentException( );
-
-    return pvalue;
-}
-
-// the following combinations within a quoted value are not allowed:
-// '";' (quote sign followed by semicolon) and '" ' (quote sign followed
-// by space)
-
-OUString CMimeContentType::quotedPValue( )
-{
-    OUString pvalue;
-    bool bAfterQuoteSign = false;
-
-    while ( !m_nxtSym.isEmpty( ) )
-    {
-        if ( bAfterQuoteSign && (
-            (m_nxtSym == SPACE) ||
-            (m_nxtSym == SEMICOLON))
-           )
-        {
-            break;
-        }
-        else if ( isInRange( m_nxtSym, OUStringLiteral(TOKEN) + TSPECIALS + SPACE ) )
-        {
-            pvalue += m_nxtSym;
-            bAfterQuoteSign = m_nxtSym == "\"";
-        }
-        else
-            throw IllegalArgumentException( );
-        getSym( );
-    }
-
-    return pvalue;
-}
-
-OUString CMimeContentType::nonquotedPValue( )
-{
-    OUString pvalue;
-
-    OUString sToken(TOKEN);
-    while ( !m_nxtSym.isEmpty( ) )
-    {
-        if ( isInRange( m_nxtSym, sToken ) )
-            pvalue += m_nxtSym;
-        else if ( isInRange( m_nxtSym, "; " ) )
-            break;
-        else
-            throw IllegalArgumentException( );
-        getSym( );
-    }
-
-    return pvalue;
-}
-
-void CMimeContentType::comment()
-{
-    while ( !m_nxtSym.isEmpty( ) )
-    {
-        if ( isInRange( m_nxtSym, OUStringLiteral(TOKEN) + SPACE ) )
-            getSym( );
-        else if ( m_nxtSym == ")" )
-            break;
-        else
-            throw IllegalArgumentException( );
-    }
-}
-
-bool CMimeContentType::isInRange( const OUString& aChr, const OUString& aRange )
-{
-    return ( aRange.indexOf( aChr ) > -1 );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
