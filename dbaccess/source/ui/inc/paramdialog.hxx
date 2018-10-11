@@ -22,12 +22,7 @@
 
 #include "commontypes.hxx"
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/group.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -52,22 +47,13 @@ namespace o3tl {
     template<> struct typed_flags<VisitFlags> : is_typed_flags<VisitFlags, 0x03> {};
 }
 
-
 namespace dbaui
 {
-
     // OParameterDialog
     class OParameterDialog final
-            :public ModalDialog
-            ,public ::svxform::OParseContextClient
+            : public weld::GenericDialogController
+            , public ::svxform::OParseContextClient
     {
-        // the controls
-        VclPtr<ListBox>        m_pAllParams;
-        VclPtr<Edit>           m_pParam;
-        VclPtr<PushButton>     m_pTravelNext;
-        VclPtr<OKButton>       m_pOKBtn;
-        VclPtr<CancelButton>   m_pCancelBtn;
-
         sal_Int32              m_nCurrentlySelected;
 
         css::uno::Reference< css::container::XIndexAccess >
@@ -88,13 +74,19 @@ namespace dbaui
         css::uno::Sequence< css::beans::PropertyValue >
                                m_aFinalValues;     /// the final values as entered by the user
 
+        // the controls
+        std::unique_ptr<weld::TreeView> m_xAllParams;
+        std::unique_ptr<weld::Entry> m_xParam;
+        std::unique_ptr<weld::Button> m_xTravelNext;
+        std::unique_ptr<weld::Button> m_xOKBtn;
+        std::unique_ptr<weld::Button> m_xCancelBtn;
+
     public:
-        OParameterDialog(vcl::Window* _pParent,
+        OParameterDialog(weld::Window* _pParent,
             const css::uno::Reference< css::container::XIndexAccess > & _rParamContainer,
             const css::uno::Reference< css::sdbc::XConnection > & _rxConnection,
             const css::uno::Reference< css::uno::XComponentContext >& rxContext);
         virtual ~OParameterDialog() override;
-        virtual void dispose() override;
 
         const css::uno::Sequence< css::beans::PropertyValue >&
                     getValues() const { return m_aFinalValues; }
@@ -103,10 +95,10 @@ namespace dbaui
         void Construct();
 
         DECL_LINK(OnVisitedTimeout, Timer*, void);
-        DECL_LINK(OnValueModified, Edit&, void);
-        DECL_LINK(OnEntryListBoxSelected, ListBox&, void);
-        DECL_LINK(OnButtonClicked, Button*, void);
-        DECL_LINK(OnValueLoseFocusHdl, Control&, void);
+        DECL_LINK(OnValueModified, weld::Entry&, void);
+        DECL_LINK(OnEntryListBoxSelected, weld::TreeView&, void);
+        DECL_LINK(OnButtonClicked, weld::Button&, void);
+        DECL_LINK(OnValueLoseFocusHdl, weld::Widget&, void);
         bool OnValueLoseFocus();
         bool OnEntrySelected();
     };
