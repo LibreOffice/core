@@ -964,9 +964,12 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
     if ( DestFileFD < 0 )
     {
         nRet=errno;
+        SAL_INFO("sal.file", "open(" << pszDestFileName << ",O_WRONLY|O_CREAT," << std::oct << mode << std::dec << "): errno " << nRet << ": " << strerror(nRet));
         osl_closeFile(SourceFileFH);
         return nRet;
     }
+    else
+        SAL_INFO("sal.file", "open(" << pszDestFileName << ",O_WRONLY|O_CREAT," << std::oct << mode << std::dec << "): OK");
 
     size_t nRemains = nSourceSize;
 
