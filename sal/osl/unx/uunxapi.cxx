@@ -24,6 +24,7 @@
 #include <limits.h>
 #include <rtl/ustring.hxx>
 #include <osl/thread.h>
+#include <sal/log.hxx>
 
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>
@@ -288,6 +289,13 @@ int open_c(const char *cpPath, int oflag, int mode)
     accessFilePathState *state = prepare_to_access_file_path(cpPath);
 
     int result = open(cpPath, oflag, mode);
+    int saved_errno = errno;
+    if (result == -1)
+    {
+        SAL_INFO("sal.file", "open(" << cpPath << ",0" << std::oct << oflag << ",0" << mode << std::dec << "): errno " << saved_errno << ": " << strerror(saved_errno));
+    }
+    else
+        SAL_INFO("sal.file", "open(" << cpPath << ",0" << std::oct << oflag << ",0" << mode << std::dec << ") => " << result);
 
 #if HAVE_FEATURE_MACOSX_SANDBOX
     if (isSandboxed && result != -1 && (oflag & O_CREAT) && (oflag & O_EXCL))
@@ -317,6 +325,8 @@ int open_c(const char *cpPath, int oflag, int mode)
 #endif
 
     done_accessing_file_path(cpPath, state);
+
+    errno = saved_errno;
 
     return result;
 }
@@ -352,6 +362,14 @@ int ftruncate_with_name(int fd, sal_uInt64 uSize, rtl_String* path)
     accessFilePathState *state = prepare_to_access_file_path(fn.getStr());
 
     int result = ftruncate(fd, uSize);
+
+    if (result < 0)
+    {
+        int e = errno;
+        SAL_INFO("sal.file", "ftruncate(" << fd << "," << uSize << "): errno " << e << ": " << strerror(e));
+    }
+    else
+        SAL_INFO("sal.file", "ftruncate(" << fd << "," << uSize << "): OK");
 
     done_accessing_file_path(fn.getStr(), state);
 
