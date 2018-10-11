@@ -309,8 +309,11 @@ void SwPostItMgr::RemoveItem( SfxBroadcaster* pBroadcast )
             SwSidebarItem* p = (*i);
             if (GetActiveSidebarWin() == p->pPostIt)
                 SetActiveSidebarWin(nullptr);
-            p->pPostIt.disposeAndClear();
+            // tdf#120487 remove from list before dispose, so comment window
+            // won't be recreated due to the entry still in the list if focus
+            // transferring from the pPostIt triggers relayout of postits
             mvPostItFields.erase(i);
+            p->pPostIt.disposeAndClear();
             delete p;
             break;
         }
