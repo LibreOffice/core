@@ -169,7 +169,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
             case IsAttrAtPos::InetAttr:
             {
-                sText = static_cast<const SfxStringItem*>(aContentAtPos.aFnd.pAttr)->GetValue();
+                sText = static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr)->GetValue();
                 sText = URIHelper::removePassword( sText,
                                         INetURLObject::EncodeMechanism::WasEncoded,
                                            INetURLObject::DecodeMechanism::Unambiguous);
