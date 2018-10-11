@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_252e67a5",
+        "filename": "sc/source/ui/view/cellsh1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1997,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2018-10-11T12:22:24Z",
+      "side": 1,
+      "message": "ScIconSetFormat::g_IconSetMap contains the number of entries for each icon set. No need to duplicate the information here.",
+      "revId": "0299320bea9084b59cbb47eeb7aa5fc960327026",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
