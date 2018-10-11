@@ -49,7 +49,6 @@
     </menu:menupopup>
   </menu:menu>
   <menu:menuseparator/>
-  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
   <menu:menuitem menu:id=".uno:RenameObject"/>
   <menu:menuitem menu:id=".uno:AssignMacro"/>
