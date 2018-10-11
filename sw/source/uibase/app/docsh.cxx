@@ -422,7 +422,8 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
     CalcLayoutForOLEObjects();  // format for OLE objects
 
     bool bURLChanged = !GetMedium() || GetMedium()->GetURLObject() != rMedium.GetURLObject();
-    if (!m_xDoc->GetDBManager()->getEmbeddedName().isEmpty() && bURLChanged)
+    auto pMgr = m_xDoc->GetDBManager();
+    if (pMgr && !pMgr->getEmbeddedName().isEmpty() && bURLChanged)
     {
         // We have an embedded data source definition, need to re-store it,
         // otherwise relative references will break when the new file is in a
