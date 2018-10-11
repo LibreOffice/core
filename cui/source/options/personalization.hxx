@@ -77,10 +77,10 @@ public:
      * And there needs to be a personas_list.txt file in the personas directory
      * which keeps the index/info of the default personas, one persona per line.
      * A line should look like this:
-     * persona_slug;Persona Name;subdir/preview.jpg;subdir/header.jpg;subdir/footer.jpg;#textcolor;#accentcolor
+     * persona_slug;Persona Name;subdir/preview.jpg;subdir/header.jpg;subdir/footer.jpg;#textcolor
      * (It is recommended to keep the subdir name the same as the slug)
      * Example line:
-     *  abstract;Abstract;abstract/preview.jpg;abstract/Header2.jpg;abstract/Footer2.jpg;#ffffff;#000000
+     *  abstract;Abstract;abstract/preview.jpg;abstract/Header2.jpg;abstract/Footer2.jpg;#ffffff
      */
     void LoadDefaultImages();
     void LoadExtensionThemes();
