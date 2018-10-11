@@ -121,7 +121,7 @@ namespace {
 class RowInfoFiller
 {
     ScDocument& mrDoc;
-    SCTAB mnTab;
+    SCTAB const mnTab;
     RowInfo* mpRowInfo;
     SCCOL mnArrX;
     SCSIZE mnArrY;

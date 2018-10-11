@@ -35,7 +35,7 @@ private:
     ScDocShell*             pDocShell;
     ScRange                 aRange;
     sal_Int32               nRefSheet;
-    bool                    bIsRange;
+    bool const              bIsRange;
 
     bool                    ParseUIString( const OUString& rUIString, ::formula::FormulaGrammar::AddressConvention eConv = ::formula::FormulaGrammar::CONV_OOO );
 

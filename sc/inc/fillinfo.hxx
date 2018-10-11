@@ -194,7 +194,7 @@ struct ScTableInfo
     std::unique_ptr<RowInfo[]>
                         mpRowInfo;
     SCSIZE              mnArrCount;
-    SCSIZE              mnArrCapacity;
+    SCSIZE const              mnArrCapacity;
     bool                mbPageMode;
 
     explicit            ScTableInfo(const SCSIZE capacity = 1024);

@@ -36,7 +36,7 @@ typedef InheritedHelperInterfaceWeakImpl< ov::excel::XInterior > ScVbaInterior_B
 class ScVbaInterior final :  public ScVbaInterior_BASE
 {
     css::uno::Reference< css::beans::XPropertySet > m_xProps;
-    ScDocument* m_pScDoc;
+    ScDocument* const m_pScDoc;
     Color m_aPattColor;
     sal_Int32 m_nPattern;
 

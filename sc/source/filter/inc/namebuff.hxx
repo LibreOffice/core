@@ -33,8 +33,8 @@ class ScTokenArray;
 class StringHashEntry
 {
 private:
-    OUString          aString;
-    sal_uInt32        nHash;
+    OUString const      aString;
+    sal_uInt32 const    nHash;
 
     static sal_uInt32   MakeHashCode( const OUString& );
 public:
@@ -74,9 +74,9 @@ class RangeNameBufferWK3 final
 private:
     struct Entry
     {
-        StringHashEntry     aStrHashEntry;
+        StringHashEntry const aStrHashEntry;
         ScComplexRefData    aScComplexRefDataRel;
-        OUString            aScAbsName;
+        OUString const      aScAbsName;
         sal_uInt16          nAbsInd;        // == 0 -> no Abs-Name yet!
         sal_uInt16          nRelInd;
         bool                bSingleRef;
@@ -127,8 +127,8 @@ class ExtSheetBuffer : public ExcRoot
 private:
     struct Cont
     {
-        OUString      aFile;
-        OUString      aTab;
+        OUString const      aFile;
+        OUString const      aTab;
         sal_uInt16    nTabNum;    // 0xFFFF -> not set yet
                                 // 0xFFFE -> tried to set, but failed
                                 // 0xFFFD -> should be in the same workbook, but not found
@@ -163,7 +163,7 @@ inline ExtSheetBuffer::ExtSheetBuffer( RootData* p ) : ExcRoot( p )
 struct ExtName
 {
     sal_uInt32        nStorageId;
-    sal_uInt16        nFlags;
+    sal_uInt16 const  nFlags;
 
     ExtName( sal_uInt16 n ) : nStorageId( 0 ), nFlags( n ) {}
 

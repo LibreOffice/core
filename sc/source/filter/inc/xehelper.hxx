@@ -196,7 +196,7 @@ public:
 
 private:
     XclExpHyperlinkRef  mxLinkRec;          /// Created HLINK record.
-    ScAddress           maScPos;            /// Cell position to set at the HLINK record.
+    ScAddress const     maScPos;            /// Cell position to set at the HLINK record.
     OUString            maUrlList;          /// List with all processed URLs.
     bool                mbMultipleUrls;     /// true = Multiple URL fields processed.
 };

@@ -172,7 +172,7 @@ private:
     ::osl::Mutex        maMutex;
     ScVbaEventsHelper&  mrVbaEvents;
     uno::Reference< frame::XModel > mxModel;
-    ScDocShell*         mpDocShell;
+    ScDocShell* const   mpDocShell;
     WindowControllerMap maControllers;          /// Maps VCL top windows to their controllers.
     std::multiset< VclPtr<vcl::Window> > m_PostedWindows; /// Keeps processWindowResizeEvent windows from being deleted between postWindowResizeEvent and processWindowResizeEvent
     VclPtr<vcl::Window>            mpActiveWindow; /// Currently activated window, to prevent multiple (de)activation.

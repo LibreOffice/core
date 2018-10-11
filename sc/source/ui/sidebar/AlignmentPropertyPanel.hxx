@@ -93,7 +93,7 @@ private:
     bool                                        mbMultiDisable : 1;
 
     vcl::EnumContext                            maContext;
-    SfxBindings*                                mpBindings;
+    SfxBindings* const                          mpBindings;
 
     DECL_LINK( MFLeftIndentMdyHdl, Edit&, void );
     DECL_LINK( CBOXMergnCellClkHdl, Button*, void );

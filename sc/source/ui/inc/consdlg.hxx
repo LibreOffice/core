@@ -74,15 +74,15 @@ private:
     VclPtr<PushButton>      pBtnAdd;
     VclPtr<PushButton>      pBtnRemove;
 
-    OUString         aStrUndefined;
+    OUString const         aStrUndefined;
 
-    ScConsolidateParam  theConsData;
+    ScConsolidateParam const  theConsData;
     ScViewData&         rViewData;
-    ScDocument*         pDoc;
+    ScDocument* const         pDoc;
     std::unique_ptr<ScRangeUtil>  pRangeUtil;
     std::unique_ptr<ScAreaData[]> pAreaData;
     size_t              nAreaDataCount;
-    sal_uInt16          nWhichCons;
+    sal_uInt16 const          nWhichCons;
 
     VclPtr<formula::RefEdit>   pRefInputEdit;
     bool                bDlgLostFocus;

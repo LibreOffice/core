@@ -659,14 +659,15 @@ SvXMLImportContext *ScXMLImport::CreateFastContext( sal_Int32 nElement,
     return pContext;
 }
 
+static constexpr OUStringLiteral gsNumberFormat(SC_UNONAME_NUMFMT);
+static constexpr OUStringLiteral gsLocale(SC_LOCALE);
+static constexpr OUStringLiteral gsCellStyle(SC_UNONAME_CELLSTYL);
+
 ScXMLImport::ScXMLImport(
     const css::uno::Reference< css::uno::XComponentContext >& rContext,
     OUString const & implementationName, SvXMLImportFlags nImportFlag)
 :   SvXMLImport( rContext, implementationName, nImportFlag ),
     pDoc( nullptr ),
-    sNumberFormat(SC_UNONAME_NUMFMT),
-    sLocale(SC_LOCALE),
-    sCellStyle(SC_UNONAME_CELLSTYL),
     mpPostProcessData(nullptr),
     aTables(*this),
     sPrevStyleName(),
@@ -1167,7 +1168,7 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const OUString& r
                 if (xProperties.is())
                 {
                     lang::Locale aLocale;
-                    if (GetDocument() && (xProperties->getPropertyValue(sLocale) >>= aLocale))
+                    if (GetDocument() && (xProperties->getPropertyValue(gsLocale) >>= aLocale))
                     {
                         {
                             ScXMLImport::MutexGuard aGuard(*this);
@@ -1267,7 +1268,7 @@ void ScXMLImport::SetType(const uno::Reference <beans::XPropertySet>& rPropertie
     if ((nCellType != util::NumberFormat::TEXT) && (nCellType != util::NumberFormat::UNDEFINED))
     {
         if (rNumberFormat == -1)
-            rProperties->getPropertyValue( sNumberFormat ) >>= rNumberFormat;
+            rProperties->getPropertyValue( gsNumberFormat ) >>= rNumberFormat;
         OSL_ENSURE(rNumberFormat != -1, "no NumberFormat");
         bool bIsStandard;
         // sCurrentCurrency may be the ISO code abbreviation if the currency
@@ -1305,18 +1306,18 @@ void ScXMLImport::SetType(const uno::Reference <beans::XPropertySet>& rPropertie
                         if (nCellType != util::NumberFormat::CURRENCY)
                         {
                             lang::Locale aLocale;
-                            if ( xNumberFormatProperties->getPropertyValue(sLocale) >>= aLocale )
+                            if ( xNumberFormatProperties->getPropertyValue(gsLocale) >>= aLocale )
                             {
                                 if (!xNumberFormatTypes.is())
                                     xNumberFormatTypes.set(uno::Reference <util::XNumberFormatTypes>(xNumberFormats, uno::UNO_QUERY));
-                                rProperties->setPropertyValue( sNumberFormat, uno::makeAny(xNumberFormatTypes->getStandardFormat(nCellType, aLocale)) );
+                                rProperties->setPropertyValue( gsNumberFormat, uno::makeAny(xNumberFormatTypes->getStandardFormat(nCellType, aLocale)) );
                             }
                         }
                         else if (!rCurrency.isEmpty() && !sCurrentCurrency.isEmpty())
                         {
                             if (sCurrentCurrency != rCurrency)
                                 if (!IsCurrencySymbol(rNumberFormat, sCurrentCurrency, rCurrency))
-                                    rProperties->setPropertyValue( sNumberFormat, uno::makeAny(SetCurrencySymbol(rNumberFormat, rCurrency)));
+                                    rProperties->setPropertyValue( gsNumberFormat, uno::makeAny(SetCurrencySymbol(rNumberFormat, rCurrency)));
                         }
                     }
                 }
@@ -1330,7 +1331,7 @@ void ScXMLImport::SetType(const uno::Reference <beans::XPropertySet>& rPropertie
         {
             if ((nCellType == util::NumberFormat::CURRENCY) && !rCurrency.isEmpty() && !sCurrentCurrency.isEmpty() &&
                 sCurrentCurrency != rCurrency && !IsCurrencySymbol(rNumberFormat, sCurrentCurrency, rCurrency))
-                rProperties->setPropertyValue( sNumberFormat, uno::makeAny(SetCurrencySymbol(rNumberFormat, rCurrency)));
+                rProperties->setPropertyValue( gsNumberFormat, uno::makeAny(SetCurrencySymbol(rNumberFormat, rCurrency)));
         }
     }
 }
@@ -1398,7 +1399,7 @@ void ScXMLImport::SetStyleToRanges()
             }
             else
             {
-                xProperties->setPropertyValue(sCellStyle, uno::makeAny(GetStyleDisplayName( XML_STYLE_FAMILY_TABLE_CELL, sPrevStyleName )));
+                xProperties->setPropertyValue(gsCellStyle, uno::makeAny(GetStyleDisplayName( XML_STYLE_FAMILY_TABLE_CELL, sPrevStyleName )));
                 sal_Int32 nNumberFormat(GetStyleNumberFormats()->GetStyleNumberFormat(sPrevStyleName));
                 bool bInsert(nNumberFormat == -1);
                 SetType(xProperties, nNumberFormat, nPrevCellType, sPrevCurrency);
@@ -1627,7 +1628,7 @@ namespace {
 
 class RangeNameInserter
 {
-    ScDocument* mpDoc;
+    ScDocument* const mpDoc;
     ScRangeName& mrRangeName;
 
 public:

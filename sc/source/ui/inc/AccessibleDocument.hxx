@@ -227,7 +227,7 @@ protected:
 
 private:
     ScTabViewShell* mpViewShell;
-    ScSplitPos      meSplitPos;
+    ScSplitPos const      meSplitPos;
     rtl::Reference<ScAccessibleSpreadsheet> mpAccessibleSpreadsheet;
     std::unique_ptr<ScChildrenShapes> mpChildrenShapes;
     ScAccessibleEditObject* mpTempAccEdit;

@@ -21,7 +21,7 @@ class HTMLDataProvider : public DataProvider
 {
 private:
 
-    ScDocument* mpDocument;
+    ScDocument* const mpDocument;
     rtl::Reference<HTMLFetchThread> mxHTMLFetchThread;
 
     ScDocumentUniquePtr mpDoc;

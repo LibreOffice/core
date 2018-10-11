@@ -119,12 +119,12 @@ public:
     }
 private:
     OUString& mrStr;
-    ScRefFlags mnFlags;
-    ScDocument* mpDoc;
-    FormulaGrammar::AddressConvention meConv;
-    sal_Unicode mcDelim;
+    ScRefFlags const mnFlags;
+    ScDocument* const mpDoc;
+    FormulaGrammar::AddressConvention const meConv;
+    sal_Unicode const mcDelim;
     bool mbFirst;
-    bool mbFullAddressNotation;
+    bool const mbFullAddressNotation;
 };
 
 }
@@ -1347,7 +1347,7 @@ public:
         return false;
     }
 private:
-    ScDocument *mpDoc;
+    ScDocument * const mpDoc;
 };
 
 void ScRangePairList::Join( const ScRangePair& r, bool bIsInList )

@@ -221,7 +221,7 @@ private:
     ScSplitPos      meSplitPos;
     ScAddress       maActiveCell;
     SCTAB           mnTab;
-    bool            mbIsSpreadsheet;
+    bool const      mbIsSpreadsheet;
     bool            mbDelIns;
     bool            mbIsFocusSend;
 
