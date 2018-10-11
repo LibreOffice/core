@@ -708,7 +708,10 @@ public:
         if (!bKeepExisting)
             m_xTreeView->clear();
         for (const auto& rItem : rItems)
-            m_xTreeView->insert(-1, rItem.sString, &rItem.sId, &rItem.sImage, nullptr);
+        {
+            m_xTreeView->insert(-1, rItem.sString, rItem.sId.isEmpty() ? nullptr : &rItem.sId,
+                                rItem.sImage.isEmpty() ? nullptr : &rItem.sImage, nullptr);
+        }
         m_xTreeView->thaw();
     }
 
