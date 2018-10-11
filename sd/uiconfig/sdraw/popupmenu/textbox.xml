@@ -18,6 +18,7 @@
   <menu:menuitem menu:id=".uno:FormatLine"/>
   <menu:menuitem menu:id=".uno:FormatArea"/>
   <menu:menuitem menu:id=".uno:TextAttributes"/>
+  <menu:menuitem menu:id=".uno:TextAutoFitToSize"/>
   <menu:menuitem menu:id=".uno:FontWork"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FontDialog"/>
