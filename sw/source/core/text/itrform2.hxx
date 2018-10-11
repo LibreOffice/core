@@ -31,6 +31,8 @@ class SwExpandPortion;
 class SwMultiPortion;
 class SwFootnotePortion;
 
+namespace sw { class MergedAttrIterByEnd; }
+
 class SwTextFormatter : public SwTextPainter
 {
     const SwFormatDrop *pDropFormat;
@@ -43,7 +45,7 @@ class SwTextFormatter : public SwTextPainter
     bool bFlyInCntBase : 1; // Base reference that sets a character-bound frame
     bool bTruncLines : 1; // Flag for extending the repaint rect, if needed
     bool bUnclipped : 1; // Flag whether repaint is larger than the fixed line height
-    size_t m_nHintEndIndex; // HACK for TryNewNoLengthPortion
+    std::unique_ptr<sw::MergedAttrIterByEnd> m_pByEndIter; // HACK for TryNewNoLengthPortion
     SwLinePortion* m_pFirstOfBorderMerge; // The first text portion of a joined border (during portion building)
 
     SwLinePortion *NewPortion( SwTextFormatInfo &rInf );

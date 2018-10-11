@@ -97,7 +97,7 @@ void SwTextFormatter::CtorInitTextFormatter( SwTextFrame *pNewFrame, SwTextForma
     nCntMidHyph = 0;
     nLeftScanIdx = TextFrameIndex(COMPLETE_STRING);
     nRightScanIdx = TextFrameIndex(0);
-    m_nHintEndIndex = 0;
+    m_pByEndIter.reset();
     m_pFirstOfBorderMerge = nullptr;
 
     if (m_nStart > TextFrameIndex(GetInfo().GetText().getLength()))
@@ -289,7 +289,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
         static_cast<SwFieldPortion*>(pRest)->IsNoLength())
     {
         // HACK: decrement again, so we pick up the suffix in next line!
-        --m_nHintEndIndex;
+        m_pByEndIter->PrevAttr();
     }
     delete pRest;
     rInf.SetRest(nullptr);
