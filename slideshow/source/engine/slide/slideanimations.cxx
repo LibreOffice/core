@@ -43,7 +43,7 @@ namespace slideshow
                               "SlideAnimations::SlideAnimations(): Invalid SlideShowContext" );
         }
 
-        SlideAnimations::~SlideAnimations()
+        SlideAnimations::~SlideAnimations() COVERITY_NOEXCEPT_FALSE
         {
             if( mpRootNode )
             {
