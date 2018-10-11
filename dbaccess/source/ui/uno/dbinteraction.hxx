@@ -67,12 +67,10 @@ namespace dbaui
         css::uno::Reference< css::awt::XWindow > m_xParentWindow;
         const css::uno::Reference< css::uno::XComponentContext >
                             m_xContext;
-        const bool          m_bFallbackToGeneric;
 
     public:
         BasicInteractionHandler(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-            const bool i_bFallbackToGeneric
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext
         );
 
         // XInitialization
@@ -103,10 +101,6 @@ namespace dbaui
                     const css::sdb::DocumentSaveRequest& _rParamRequest,
                     const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >& _rContinuations);
 
-        /// handles requests which are not SDB-specific
-        bool    implHandleUnknown(
-                    const css::uno::Reference< css::task::XInteractionRequest >& _rxRequest );
-
         /// known continuation types
         enum Continuation
         {
@@ -133,41 +127,7 @@ namespace dbaui
         explicit SQLExceptionInteractionHandler(
                 const css::uno::Reference< css::uno::XComponentContext >& rxContext
             )
-            :BasicInteractionHandler( rxContext, false )
-        {
-        }
-
-        // XServiceInfo
-        DECLARE_SERVICE_INFO();
-        /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static(  );
-        /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  );
-        static css::uno::Reference< css::uno::XInterface >
-        Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
-    };
-
-    // SQLExceptionInteractionHandler
-    /** an implementation for the legacy css.sdb.InteractionHandler
-
-        css.sdb.InteractionHandler is deprecated, as it does not only handle database related interactions,
-        but also delegates all kind of unknown requests to a css.task.InteractionHandler.
-
-        In today's architecture, there's only one central css.task.InteractionHandler, which is to be used
-        for all requests. Depending on configuration information, it decides which handler implementation
-        to delegate a request to.
-
-        SQLExceptionInteractionHandler is the delegatee which handles only database related interactions.
-        LegacyInteractionHandler is the version which first checks for a database related interaction, and
-        forwards everything else to the css.task.InteractionHandler.
-    */
-    class LegacyInteractionHandler : public BasicInteractionHandler
-    {
-    public:
-        explicit LegacyInteractionHandler(
-                const css::uno::Reference< css::uno::XComponentContext >& rxContext
-            )
-            :BasicInteractionHandler( rxContext, true )
+            :BasicInteractionHandler(rxContext)
         {
         }
 

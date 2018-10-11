@@ -43,7 +43,6 @@
 extern "C" void createRegistryInfo_OInteractionHandler()
 {
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::SQLExceptionInteractionHandler > aSQLExceptionInteractionHandler_AutoRegistration;
-    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::LegacyInteractionHandler > aLegacyInteractionHandler_AutoRegistration;
 }
 
 namespace dbaui
@@ -57,12 +56,9 @@ namespace dbaui
     using namespace ::dbtools;
 
     // BasicInteractionHandler
-    BasicInteractionHandler::BasicInteractionHandler( const Reference< XComponentContext >& rxContext, const bool i_bFallbackToGeneric )
+    BasicInteractionHandler::BasicInteractionHandler( const Reference< XComponentContext >& rxContext )
         :m_xContext( rxContext )
-        ,m_bFallbackToGeneric( i_bFallbackToGeneric )
     {
-        OSL_ENSURE( !m_bFallbackToGeneric,
-            "BasicInteractionHandler::BasicInteractionHandler: enabling legacy behavior, there should be no clients of this anymore!" );
     }
 
     void SAL_CALL BasicInteractionHandler::initialize(const Sequence<Any>& rArgs)
@@ -112,9 +108,6 @@ namespace dbaui
             implHandle( aDocuRequest, aContinuations );
             return true;
         }
-
-        if ( m_bFallbackToGeneric )
-            return implHandleUnknown( i_Request );
 
         return false;
     }
@@ -292,18 +285,6 @@ namespace dbaui
                 _rContinuations[nDisApprovePos]->select();
     }
 
-    bool BasicInteractionHandler::implHandleUnknown( const Reference< XInteractionRequest >& _rxRequest )
-    {
-        if ( m_xContext.is() )
-        {
-            Reference< XInteractionHandler2 > xFallbackHandler(
-                InteractionHandler::createWithParent(m_xContext, nullptr) );
-            xFallbackHandler->handle( _rxRequest );
-            return true;
-        }
-        return false;
-    }
-
     sal_Int32 BasicInteractionHandler::getContinuation(Continuation _eCont, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
         const Reference< XInteractionContinuation >* pContinuations = _rContinuations.getConstArray();
@@ -350,17 +331,6 @@ namespace dbaui
         SQLExceptionInteractionHandler::Create(const Reference< XMultiServiceFactory >& _rxORB)
     {
         return static_cast< XServiceInfo* >(new SQLExceptionInteractionHandler(comphelper::getComponentContext(_rxORB)));
-    }
-
-    // LegacyInteractionHandler
-    IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(LegacyInteractionHandler, "com.sun.star.comp.dbaccess.LegacyInteractionHandler")
-    IMPLEMENT_SERVICE_INFO_SUPPORTS(LegacyInteractionHandler)
-    IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(LegacyInteractionHandler, "com.sun.star.sdb.InteractionHandler")
-
-    Reference< XInterface >
-        LegacyInteractionHandler::Create(const Reference< XMultiServiceFactory >& _rxORB)
-    {
-        return static_cast< XServiceInfo* >(new LegacyInteractionHandler(comphelper::getComponentContext(_rxORB)));
     }
 
 }   // namespace dbaui
