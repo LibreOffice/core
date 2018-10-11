@@ -23,3 +23,5 @@
 
 $(eval $(call gb_Package_Package,rsc_inc,$(SRCDIR)/rsc/inc))
 $(eval $(call gb_Package_add_file,rsc_inc,inc/rsc/rscsfx.hxx,rsc/rscsfx.hxx))
+
+# vim: set noet ts=4 sw=4:

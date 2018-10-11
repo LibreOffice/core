@@ -26,9 +26,9 @@ $(eval $(call gb_Executable_Executable,rsc))
 $(eval $(call gb_Executable_add_precompiled_header,rsc,$(SRCDIR)/rsc/inc/pch/precompiled_rsc))
 
 $(eval $(call gb_Executable_set_include,rsc,\
-        $$(INCLUDE) \
-        -I$(SRCDIR)/rsc/inc \
-        -I$(SRCDIR)/rsc/inc/pch \
+	$$(INCLUDE) \
+	-I$(SRCDIR)/rsc/inc \
+	-I$(SRCDIR)/rsc/inc/pch \
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,rsc,\
@@ -37,7 +37,7 @@ $(eval $(call gb_Executable_add_linked_libs,rsc,\
 	tl \
 	vos3 \
 	stl \
-    $(gb_STDLIBS) \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,rsc,\

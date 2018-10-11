@@ -26,14 +26,14 @@ $(eval $(call gb_Executable_Executable,rsc2))
 $(eval $(call gb_Executable_add_precompiled_header,rsc2,$(SRCDIR)/rsc/inc/pch/precompiled_rsc))
 
 $(eval $(call gb_Executable_set_include,rsc2,\
-        $$(INCLUDE) \
-        -I$(SRCDIR)/rsc/inc \
-        -I$(SRCDIR)/rsc/inc/pch \
+	$$(INCLUDE) \
+	-I$(SRCDIR)/rsc/inc \
+	-I$(SRCDIR)/rsc/inc/pch \
 ))
 
 $(eval $(call gb_Executable_add_api,rsc2,\
-        offapi \
-        udkapi \
+	offapi \
+	udkapi \
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,rsc2,\
@@ -42,7 +42,7 @@ $(eval $(call gb_Executable_add_linked_libs,rsc2,\
 	tl \
 	vos3 \
 	stl \
-    $(gb_STDLIBS) \
+	$(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Executable_add_bison_files,rsc2,\
