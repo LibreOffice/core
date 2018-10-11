@@ -35,11 +35,6 @@
           <value xml:lang="en-US">Cell Edit</value>
         </prop>
       </node>
-      <node oor:name="private:resource/popupmenu/chart" oor:op="replace">
-        <prop oor:name="UIName" oor:type="xs:string">
-          <value xml:lang="en-US">Chart</value>
-        </prop>
-      </node>
       <node oor:name="private:resource/popupmenu/colheader" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Column Header</value>

@@ -52,7 +52,7 @@ void ScChartShell::InitInterface_Impl()
                                             SfxVisibilityFlags::Standard | SfxVisibilityFlags::Server,
                                             ToolbarId::Draw_Objectbar);
 
-    GetStaticInterface()->RegisterPopupMenu("chart");
+    GetStaticInterface()->RegisterPopupMenu("oleobject");
 }
 
 
