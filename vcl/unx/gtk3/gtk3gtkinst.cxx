@@ -3624,6 +3624,7 @@ public:
     {
         disable_notify_events();
         gtk_entry_set_width_chars(m_pEntry, nChars);
+        gtk_entry_set_max_width_chars(m_pEntry, nChars);
         enable_notify_events();
     }
 
@@ -5313,7 +5314,10 @@ public:
         GtkWidget* pChild = gtk_bin_get_child(GTK_BIN(m_pComboBox));
         assert(pChild && GTK_IS_ENTRY(pChild));
         GtkEntry* pEntry = GTK_ENTRY(pChild);
+        disable_notify_events();
         gtk_entry_set_width_chars(pEntry, nChars);
+        gtk_entry_set_max_width_chars(pEntry, nChars);
+        enable_notify_events();
     }
 
     virtual void select_entry_region(int nStartPos, int nEndPos) override
