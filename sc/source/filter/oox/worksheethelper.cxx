@@ -388,7 +388,7 @@ private:
     bool                   mbFastRowProgress; /// Do we have a progress bar thread ?
     ISegmentProgressBarRef mxRowProgress;   /// Progress bar for row/cell processing.
     ISegmentProgressBarRef mxFinalProgress; /// Progress bar for finalization.
-    WorksheetType       meSheetType;        /// Type of this sheet.
+    WorksheetType const       meSheetType;        /// Type of this sheet.
     Reference< XSpreadsheet > mxSheet;      /// Reference to the current sheet.
     bool                mbHasDefWidth;      /// True = default column width is set from defaultColWidth attribute.
 };

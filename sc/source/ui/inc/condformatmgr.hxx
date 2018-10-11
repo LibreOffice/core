@@ -32,7 +32,7 @@ private:
     OUString createEntryString(const ScConditionalFormat& rFormat);
     void setColSizes();
 
-    ScDocument* mpDoc;
+    ScDocument* const mpDoc;
     ScConditionalFormatList* mpFormatList;
     std::map<SvTreeListEntry*, sal_Int32> maMapLBoxEntryToCondIndex;
 

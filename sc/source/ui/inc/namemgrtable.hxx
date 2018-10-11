@@ -44,7 +44,7 @@ public:
     };
 
 private:
-    OUString maGlobalString;
+    OUString const maGlobalString;
 
     // should be const because we should not modify it here
     const std::map<OUString, std::unique_ptr<ScRangeName>>& m_RangeMap;

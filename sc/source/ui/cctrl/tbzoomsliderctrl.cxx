@@ -93,7 +93,6 @@ struct ScZoomSliderWnd::ScZoomSliderWnd_Impl
     sal_uInt16                   mnCurrentZoom;
     sal_uInt16                   mnMinZoom;
     sal_uInt16                   mnMaxZoom;
-    sal_uInt16                   mnSliderCenter;
     std::vector< long >      maSnappingPointOffsets;
     std::vector< sal_uInt16 >    maSnappingPointZooms;
     Image                    maSliderButton;
@@ -105,7 +104,6 @@ struct ScZoomSliderWnd::ScZoomSliderWnd_Impl
         mnCurrentZoom( nCurrentZoom ),
         mnMinZoom( 10 ),
         mnMaxZoom( 400 ),
-        mnSliderCenter( 100 ),
         maSnappingPointOffsets(),
         maSnappingPointZooms(),
         maSliderButton(),
@@ -115,6 +113,8 @@ struct ScZoomSliderWnd::ScZoomSliderWnd_Impl
         {
         }
 };
+
+static constexpr sal_uInt16 gnSliderCenter(100);
 
 const long nButtonWidth     = 10;
 const long nButtonHeight    = 10;
@@ -160,7 +160,7 @@ sal_uInt16 ScZoomSliderWnd::Offset2Zoom( long nOffset ) const
         if( nOffset < nControlWidth / 2 )
         {
             // first half of slider
-            const long nFirstHalfRange      = mpImpl->mnSliderCenter - mpImpl->mnMinZoom;
+            const long nFirstHalfRange      = gnSliderCenter - mpImpl->mnMinZoom;
             const long nHalfSliderWidth     = nControlWidth/2 - nSliderXOffset;
             const long nZoomPerSliderPixel  = (1000 * nFirstHalfRange) / nHalfSliderWidth;
             const long nOffsetToSliderLeft  = nOffset - nSliderXOffset;
@@ -169,11 +169,11 @@ sal_uInt16 ScZoomSliderWnd::Offset2Zoom( long nOffset ) const
         else
         {
             // second half of slider
-            const long nSecondHalfRange         = mpImpl->mnMaxZoom - mpImpl->mnSliderCenter;
+            const long nSecondHalfRange         = mpImpl->mnMaxZoom - gnSliderCenter;
             const long nHalfSliderWidth         = nControlWidth/2 - nSliderXOffset;
             const long nZoomPerSliderPixel      = 1000 * nSecondHalfRange / nHalfSliderWidth;
             const long nOffsetToSliderCenter    = nOffset - nControlWidth/2;
-            nRet = mpImpl->mnSliderCenter + sal_uInt16( nOffsetToSliderCenter * nZoomPerSliderPixel / 1000 );
+            nRet = gnSliderCenter + sal_uInt16( nOffsetToSliderCenter * nZoomPerSliderPixel / 1000 );
         }
     }
 
@@ -193,18 +193,18 @@ long ScZoomSliderWnd::Zoom2Offset( sal_uInt16 nCurrentZoom ) const
     long  nRect = nSliderXOffset;
 
     const long nHalfSliderWidth = nControlWidth/2 - nSliderXOffset;
-    if( nCurrentZoom <= mpImpl->mnSliderCenter )
+    if( nCurrentZoom <= gnSliderCenter )
     {
         nCurrentZoom = nCurrentZoom - mpImpl->mnMinZoom;
-        const long nFirstHalfRange = mpImpl->mnSliderCenter - mpImpl->mnMinZoom;
+        const long nFirstHalfRange = gnSliderCenter - mpImpl->mnMinZoom;
         const long nSliderPixelPerZoomPercent = 1000 * nHalfSliderWidth  / nFirstHalfRange;
         const long nOffset = (nSliderPixelPerZoomPercent * nCurrentZoom) / 1000;
         nRect += nOffset;
     }
     else
     {
-        nCurrentZoom = nCurrentZoom - mpImpl->mnSliderCenter;
-        const long nSecondHalfRange = mpImpl->mnMaxZoom - mpImpl->mnSliderCenter;
+        nCurrentZoom = nCurrentZoom - gnSliderCenter;
+        const long nSecondHalfRange = mpImpl->mnMaxZoom - gnSliderCenter;
         const long nSliderPixelPerZoomPercent = 1000 * nHalfSliderWidth  / nSecondHalfRange;
         const long nOffset = (nSliderPixelPerZoomPercent * nCurrentZoom) / 1000;
         nRect += nHalfSliderWidth + nOffset;
@@ -338,9 +338,9 @@ void ScZoomSliderWnd::UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem )
         mpImpl->mnMaxZoom     = pZoomSliderItem->GetMaxZoom();
 
         OSL_ENSURE( mpImpl->mnMinZoom <= mpImpl->mnCurrentZoom &&
-            mpImpl->mnMinZoom <  mpImpl->mnSliderCenter &&
+            mpImpl->mnMinZoom <  gnSliderCenter &&
             mpImpl->mnMaxZoom >= mpImpl->mnCurrentZoom &&
-            mpImpl->mnMaxZoom > mpImpl->mnSliderCenter,
+            mpImpl->mnMaxZoom > gnSliderCenter,
             "Looks like the zoom slider item is corrupted" );
        const css::uno::Sequence < sal_Int32 > rSnappingPoints = pZoomSliderItem->GetSnappingPoints();
        mpImpl->maSnappingPointOffsets.clear();

@@ -531,7 +531,7 @@ namespace {
 
 struct DataField
 {
-    long mnPos; // field index in pivot cache.
+    long const mnPos; // field index in pivot cache.
     const ScDPSaveDimension* mpDim;
 
     DataField( long nPos, const ScDPSaveDimension* pDim ) : mnPos(nPos), mpDim(pDim) {}

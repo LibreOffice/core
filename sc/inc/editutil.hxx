@@ -37,14 +37,14 @@ class ScEditEngineDefaulter;
 class ScEditUtil
 {
     ScDocument*     pDoc;
-    SCCOL           nCol;
-    SCROW           nRow;
-    SCTAB           nTab;
-    Point           aScrPos;
+    SCCOL const     nCol;
+    SCROW const     nRow;
+    SCTAB const     nTab;
+    Point const     aScrPos;
     VclPtr<OutputDevice> pDev; // MapMode has to be set
-    double          nPPTX;
-    double          nPPTY;
-    Fraction        aZoomX;
+    double const    nPPTX;
+    double const    nPPTY;
+    Fraction const  aZoomX;
     Fraction        aZoomY;
 
 public:
@@ -105,9 +105,9 @@ public:
 class ScEnginePoolHelper
 {
 protected:
-    SfxItemPool*    pEnginePool;
+    SfxItemPool* const    pEnginePool;
     SfxItemSet*     pDefaults;
-    bool            bDeleteEnginePool;
+    bool const      bDeleteEnginePool;
     bool            bDeleteDefaults;
 
                     ScEnginePoolHelper( SfxItemPool* pEnginePool, bool bDeleteEnginePool );
@@ -201,7 +201,7 @@ struct ScHeaderFieldData
 class SC_DLLPUBLIC ScFieldEditEngine : public ScEditEngineDefaulter
 {
 private:
-    ScDocument* mpDoc;
+    ScDocument* const mpDoc;
     bool bExecuteURL;
 
 public:

@@ -23,7 +23,7 @@ class ScXMLCachedRowAttrAccess
 {
     struct Cache
     {
-        sal_Int32   mnTab;
+        sal_Int32 const   mnTab;
         sal_Int32   mnRow1;
         sal_Int32   mnRow2;
         bool        mbValue;
@@ -39,7 +39,7 @@ public:
 private:
     Cache maHidden;
     Cache maFiltered;
-    ScDocument* mpDoc;
+    ScDocument* const mpDoc;
 };
 
 #endif

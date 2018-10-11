@@ -57,8 +57,8 @@ public:
     virtual bool match(const ScDPItemData &rCellData) const override;
     virtual std::vector<ScDPItemData> getMatchValues() const override;
 private:
-    std::vector<ScDPItemData> maValues;
-    ScDPNumGroupInfo maNumInfo;
+    std::vector<ScDPItemData> const maValues;
+    ScDPNumGroupInfo const maNumInfo;
 };
 
 ScDPGroupNumFilter::ScDPGroupNumFilter(const std::vector<ScDPItemData>& rValues, const ScDPNumGroupInfo& rInfo) :
@@ -116,9 +116,9 @@ public:
     virtual std::vector<ScDPItemData> getMatchValues() const override;
 
 private:
-    std::vector<ScDPItemData> maValues;
-    Date             maNullDate;
-    ScDPNumGroupInfo maNumInfo;
+    std::vector<ScDPItemData> const maValues;
+    Date const             maNullDate;
+    ScDPNumGroupInfo const maNumInfo;
 };
 
 ScDPGroupDateFilter::ScDPGroupDateFilter(
@@ -635,7 +635,7 @@ namespace {
 
 class FindCaseInsensitive
 {
-    ScDPItemData maValue;
+    ScDPItemData const maValue;
 public:
     explicit FindCaseInsensitive(const ScDPItemData& rVal) : maValue(rVal) {}
 

@@ -115,7 +115,7 @@ protected:
 private:
     ScPreviewShell*     mpViewShell;
     accessibility::AccessibleTextHelper* mpTextHelper;
-    sal_Int32           mnIndex;
+    sal_Int32 const     mnIndex;
     ScAddress           maCellPos;
     bool                mbColumnHeader;
     bool                mbRowHeader;

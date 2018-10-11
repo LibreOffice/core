@@ -62,7 +62,7 @@ private:
     std::unique_ptr<ScDelimiterTable> pFieldSepTab;
     std::unique_ptr<ScDelimiterTable> pTextSepTab;
 
-    bool m_bIsAsciiImport;
+    bool const m_bIsAsciiImport;
 
 private:
     sal_uInt16 GetCodeFromCombo( const ComboBox& rEd ) const;

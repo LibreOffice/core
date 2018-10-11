@@ -38,7 +38,7 @@ protected:
 
     static const sal_uInt16 nRowMask;
 
-    XclFunctionProvider maFuncProv;
+    XclFunctionProvider const maFuncProv;
     const XclBiff       meBiff;
 
     void                DoMulArgs( DefTokenId eId, sal_uInt8 nNumArgs );

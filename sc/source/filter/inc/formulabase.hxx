@@ -523,7 +523,7 @@ public:
 private:
     const FunctionParamInfo* mpParamInfo;
     const FunctionParamInfo* mpParamInfoEnd;
-    bool                mbParamPairs;
+    bool const                mbParamPairs;
 };
 
 // Base function provider =====================================================
@@ -563,7 +563,7 @@ protected:
 
 private:
     typedef std::shared_ptr< FunctionProviderImpl > FunctionProviderImplRef;
-    FunctionProviderImplRef mxFuncImpl;     /// Shared implementation between all copies of the provider.
+    FunctionProviderImplRef const mxFuncImpl;     /// Shared implementation between all copies of the provider.
 };
 
 // Op-code and function provider ==============================================
@@ -598,7 +598,7 @@ public:
 
 private:
     typedef std::shared_ptr< OpCodeProviderImpl > OpCodeProviderImplRef;
-    OpCodeProviderImplRef mxOpCodeImpl;     /// Shared implementation between all copies of the provider.
+    OpCodeProviderImplRef const mxOpCodeImpl;     /// Shared implementation between all copies of the provider.
 };
 
 // API formula parser wrapper =================================================

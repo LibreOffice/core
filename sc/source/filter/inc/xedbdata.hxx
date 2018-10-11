@@ -37,7 +37,7 @@ protected:
     struct Entry
     {
         const ScDBData* mpData;
-        sal_Int32       mnTableId;  /// used as [n] in table[n].xml part name.
+        sal_Int32 const mnTableId;  /// used as [n] in table[n].xml part name.
 
         Entry( const ScDBData* pData, sal_Int32 nTableId );
     };

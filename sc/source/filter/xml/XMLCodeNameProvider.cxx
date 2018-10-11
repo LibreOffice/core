@@ -47,10 +47,11 @@ bool XMLCodeNameProvider::_getCodeName( const uno::Any& aAny, OUString& rCodeNam
     return false;
 }
 
+static constexpr OUStringLiteral gsDocName( "*doc*" );
+static constexpr OUStringLiteral gsCodeNameProp( "CodeName" );
+
 XMLCodeNameProvider::XMLCodeNameProvider( ScDocument* pDoc ) :
-    mpDoc( pDoc ),
-    msDocName( "*doc*" ),
-    msCodeNameProp( "CodeName" )
+    mpDoc( pDoc )
 {
 }
 
@@ -60,7 +61,7 @@ XMLCodeNameProvider::~XMLCodeNameProvider()
 
 sal_Bool SAL_CALL XMLCodeNameProvider::hasByName( const OUString& aName )
 {
-    if( aName == msDocName )
+    if( aName == gsDocName )
         return !mpDoc->GetCodeName().isEmpty();
 
     SCTAB nCount = mpDoc->GetTableCount();
@@ -81,8 +82,8 @@ uno::Any SAL_CALL XMLCodeNameProvider::getByName( const OUString& aName )
 {
     uno::Any aRet;
     uno::Sequence<beans::PropertyValue> aProps(1);
-    aProps[0].Name = msCodeNameProp;
-    if( aName == msDocName )
+    aProps[0].Name = gsCodeNameProp;
+    if( aName == gsDocName )
     {
         OUString sUCodeName( mpDoc->GetCodeName() );
         aProps[0].Value <<= sUCodeName;
@@ -113,7 +114,7 @@ uno::Sequence< OUString > SAL_CALL XMLCodeNameProvider::getElementNames(  )
     aNames.reserve(nCount);
 
     if( !mpDoc->GetCodeName().isEmpty() )
-        aNames.push_back(msDocName);
+        aNames.push_back(gsDocName);
 
     OUString sSheetName, sCodeName;
     for( SCTAB i = 0; i < nCount; i++ )

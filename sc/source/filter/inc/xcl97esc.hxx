@@ -125,7 +125,7 @@ private:
     XclEscherClientTextbox* pAdditionalText;
     sal_uInt16              nAdditionalText;
     sal_uInt32              mnNextKey;
-    bool                    mbIsRootDff;
+    bool const              mbIsRootDff;
 };
 
 // --- class XclEscherHostAppData ------------------------------------

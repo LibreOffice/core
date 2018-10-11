@@ -102,7 +102,7 @@ public:
 private:
 
     ScDataBarFormatData* mpFormatData;
-    ScConditionalFormat* mpParent;
+    ScConditionalFormat* const mpParent;
 
     sal_Int32 mnIndex;
 };
@@ -110,7 +110,7 @@ private:
 class ScXMLIconSetFormatContext : public ScXMLImportContext
 {
     ScIconSetFormatData* mpFormatData;
-    ScConditionalFormat* mpParent;
+    ScConditionalFormat* const mpParent;
 public:
 
     ScXMLIconSetFormatContext( ScXMLImport& rImport,

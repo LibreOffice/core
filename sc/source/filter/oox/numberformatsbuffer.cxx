@@ -57,8 +57,8 @@ struct BuiltinFormat
 {
     sal_Int32           mnNumFmtId;         /// Built-in number format index.
     const sal_Char*     mpcFmtCode;         /// Format string, UTF-8, may be 0 (mnPredefId is used then).
-    sal_Int16           mnPredefId;         /// Predefined format index, if mpcFmtCode is 0.
-    sal_Int32           mnReuseId;          /// Use this format, if mpcFmtCode is 0 and mnPredefId is -1.
+    sal_Int16 const     mnPredefId;         /// Predefined format index, if mpcFmtCode is 0.
+    sal_Int32 const     mnReuseId;          /// Use this format, if mpcFmtCode is 0 and mnPredefId is -1.
 };
 
 /** Defines a literal built-in number format. */
@@ -1857,7 +1857,7 @@ public:
 
 private:
     Reference< XNumberFormats > mxNumFmts;
-    Locale              maEnUsLocale;
+    Locale const              maEnUsLocale;
 };
 
 NumberFormatFinalizer::NumberFormatFinalizer( const WorkbookHelper& rHelper ) :

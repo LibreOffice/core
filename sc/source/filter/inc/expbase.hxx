@@ -32,7 +32,7 @@ class ScExportBase
 protected:
 
     SvStream&           rStrm;
-    ScRange             aRange;
+    ScRange const       aRange;
     ScDocument*         pDoc;
     SvNumberFormatter*  pFormatter;
     std::unique_ptr<ScFieldEditEngine>

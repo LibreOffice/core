@@ -93,7 +93,7 @@ protected:
 
 private:
     XfRef               mxXf;
-    bool                mbCellXf;       /// True = cell XF, false = style XF.
+    bool const          mbCellXf;       /// True = cell XF, false = style XF.
 };
 
 class DxfContext : public WorkbookContextBase

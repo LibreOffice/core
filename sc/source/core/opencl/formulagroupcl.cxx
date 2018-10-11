@@ -1268,7 +1268,7 @@ protected:
 
 class Reduction : public SlidingFunctionBase
 {
-    int mnResultSize;
+    int const mnResultSize;
 public:
     explicit Reduction(int nResultSize) : mnResultSize(nResultSize) {}
 
@@ -3293,8 +3293,8 @@ public:
     cl_mem GetResultBuffer() const { return mpResClmem; }
 
 private:
-    ScCalcConfig mCalcConfig;
-    FormulaTreeNodeRef mpRoot;
+    ScCalcConfig const mCalcConfig;
+    FormulaTreeNodeRef const mpRoot;
     SymbolTable mSyms;
     std::string mKernelSignature, mKernelHash;
     std::string mFullProgramSrc;
@@ -3304,7 +3304,7 @@ private:
     std::set<std::string> inlineDecl;
     std::set<std::string> inlineFun;
 
-    int mnResultSize;
+    int const mnResultSize;
 };
 
 DynamicKernel::DynamicKernel( const ScCalcConfig& config, const FormulaTreeNodeRef& r, int nResultSize ) :
@@ -3672,9 +3672,9 @@ namespace {
 
 class CLInterpreterResult
 {
-    DynamicKernel* mpKernel;
+    DynamicKernel* const mpKernel;
 
-    SCROW mnGroupLength;
+    SCROW const mnGroupLength;
 
     cl_mem mpCLResBuf;
     double* mpResBuf;
@@ -3740,7 +3740,7 @@ class CLInterpreterContext
     std::shared_ptr<DynamicKernel> mpKernelStore; /// for managed kernel instance.
     DynamicKernel* mpKernel;
 
-    SCROW mnGroupLength;
+    SCROW const mnGroupLength;
 
 public:
     explicit CLInterpreterContext(SCROW nGroupLength)

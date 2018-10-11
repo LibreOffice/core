@@ -180,7 +180,7 @@ namespace {
 class WriteDatabaseRange
 {
     ScXMLExport& mrExport;
-    ScDocument* mpDoc;
+    ScDocument* const mpDoc;
     sal_Int32 mnCounter;
     ScDBCollection::RangeType meRangeType;
 public:

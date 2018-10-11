@@ -35,7 +35,7 @@ class ScMarkData;
 class ScTabDeletedHint : public SfxHint
 {
 private:
-    SCTAB   nTab;
+    SCTAB const   nTab;
 public:
             ScTabDeletedHint( SCTAB nTabNo );
     virtual ~ScTabDeletedHint() override;
@@ -46,7 +46,7 @@ public:
 class ScTabSizeChangedHint : public SfxHint
 {
 private:
-    SCTAB   nTab;
+    SCTAB const   nTab;
 public:
             ScTabSizeChangedHint( SCTAB nTabNo );
     virtual ~ScTabSizeChangedHint() override;
@@ -60,10 +60,10 @@ public:
 class ScUndoObjData : public SdrUndoObj
 {
 private:
-    ScAddress   aOldStt;
-    ScAddress   aOldEnd;
-    ScAddress   aNewStt;
-    ScAddress   aNewEnd;
+    ScAddress const   aOldStt;
+    ScAddress const   aOldEnd;
+    ScAddress const   aNewStt;
+    ScAddress const   aNewEnd;
 public:
                 ScUndoObjData( SdrObject* pObj, const ScAddress& rOS, const ScAddress& rOE,
                                                 const ScAddress& rNS, const ScAddress& rNE );
@@ -78,8 +78,8 @@ class ScUndoAnchorData : public SdrUndoObj
 private:
     bool                    mbWasCellAnchored;
     bool                    mbWasResizeWithCell;
-    ScDocument*             mpDoc;
-    SCTAB                   mnTab;
+    ScDocument* const       mpDoc;
+    SCTAB const             mnTab;
 public:
                 ScUndoAnchorData( SdrObject* pObj, ScDocument* pDoc, SCTAB nTab );
                 virtual ~ScUndoAnchorData() override;
@@ -91,7 +91,7 @@ public:
 class SC_DLLPUBLIC ScDrawLayer : public FmFormModel
 {
 private:
-    OUString        aName;
+    OUString const  aName;
     ScDocument*     pDoc;
     std::unique_ptr<SdrUndoGroup> pUndoGroup;
     bool            bRecording;

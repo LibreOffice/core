@@ -100,7 +100,7 @@ class ScEEParser
 protected:
     EditEngine*         pEdit;
     SfxItemPool*        pPool;
-    SfxItemPool*        pDocPool;
+    SfxItemPool* const  pDocPool;
     std::vector<std::shared_ptr<ScEEParseEntry>> maList;
     std::shared_ptr<ScEEParseEntry> mxActEntry;
     ColWidthsMap        maColWidths;

@@ -144,7 +144,7 @@ public:
 private:
 
     ScDocument*                 m_pDocument;
-    SfxItemPropertySet          m_aPropSet;
+    SfxItemPropertySet const    m_aPropSet;
     bool                        m_bIncludeHiddenCells;
 };
 
@@ -376,7 +376,7 @@ private:
     RangeIndexMapPtr            m_pRangeIndices;
     ExtRefListenerPtr           m_pExtRefListener;
     css::uno::Reference < css::chart2::data::XDataProvider > m_xDataProvider;
-    SfxItemPropertySet          m_aPropSet;
+    SfxItemPropertySet const    m_aPropSet;
 
     std::unique_ptr<HiddenRangeListener> m_pHiddenListener;
 

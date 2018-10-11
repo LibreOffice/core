@@ -354,7 +354,7 @@ private:
     std::stack< sax_fastparser::FSHelperPtr >   maStreams;
     XclExpXmlPathToStateMap                     maOpenedStreamMap;
 
-    bool mbExportVBA;
+    bool const mbExportVBA;
 };
 
 #endif

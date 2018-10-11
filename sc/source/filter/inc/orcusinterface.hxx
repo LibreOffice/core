@@ -84,7 +84,7 @@ class ScOrcusNamedExpression : public orcus::spreadsheet::iface::import_named_ex
 {
     ScDocumentImport& mrDoc;
     const ScOrcusGlobalSettings& mrGlobalSettings;
-    SCTAB mnTab; //< negative if global, else >= 0 for sheet-local named expressions.
+    SCTAB const mnTab; //< negative if global, else >= 0 for sheet-local named expressions.
 
 public:
     ScOrcusNamedExpression( ScDocumentImport& rDoc, const ScOrcusGlobalSettings& rGS, SCTAB nTab = -1 );
@@ -171,7 +171,7 @@ public:
 
 private:
 
-    SCTAB mnTab;
+    SCTAB const mnTab;
     ScDocument& mrDoc;
 
     std::unique_ptr<ScConditionalFormat> mpCurrentFormat;
@@ -204,7 +204,7 @@ private:
 class ScOrcusSheetProperties : public orcus::spreadsheet::iface::import_sheet_properties
 {
     ScDocumentImport& mrDoc;
-    SCTAB mnTab;
+    SCTAB const mnTab;
 public:
     ScOrcusSheetProperties(SCTAB nTab, ScDocumentImport& rDoc);
     virtual ~ScOrcusSheetProperties() override;
@@ -289,7 +289,7 @@ class ScOrcusSheet : public orcus::spreadsheet::iface::import_sheet
     friend class ScOrcusArrayFormula;
 
     ScDocumentImport& mrDoc;
-    SCTAB mnTab;
+    SCTAB const mnTab;
     ScOrcusFactory& mrFactory;
     ScOrcusStyles& mrStyles;
     sc::SharedFormulaGroups maFormulaGroups;
@@ -588,7 +588,7 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
             Matrix
         };
 
-        ScAddress maPos;
+        ScAddress const maPos;
         Type meType;
 
         OUString maStr1;

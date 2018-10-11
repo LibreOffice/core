@@ -2306,9 +2306,9 @@ template<typename T, typename U, typename return_type>
 struct MatrixIteratorWrapper
 {
 private:
-    typename T::const_iterator m_itBegin;
-    typename T::const_iterator m_itEnd;
-    U maOp;
+    typename T::const_iterator const m_itBegin;
+    typename T::const_iterator const m_itEnd;
+    U const maOp;
 public:
     MatrixIteratorWrapper(typename T::const_iterator const & itBegin, typename T::const_iterator const & itEnd, U const & aOp):
         m_itBegin(itBegin),

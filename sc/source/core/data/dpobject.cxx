@@ -117,7 +117,7 @@ class DBConnector : public ScDPCache::DBConnector
     uno::Reference<sdbc::XRowSet> mxRowSet;
     uno::Reference<sdbc::XRow> mxRow;
     uno::Reference<sdbc::XResultSetMetaData> mxMetaData;
-    Date maNullDate;
+    Date const maNullDate;
 
 public:
     DBConnector(ScDPCache& rCache, const uno::Reference<sdbc::XRowSet>& xRowSet, const Date& rNullDate);
@@ -557,7 +557,7 @@ namespace {
 class DisableGetPivotData
 {
     ScDPObject& mrDPObj;
-    bool mbOldState;
+    bool const mbOldState;
 public:
     DisableGetPivotData(ScDPObject& rObj, bool bOld) : mrDPObj(rObj), mbOldState(bOld)
     {
@@ -572,7 +572,7 @@ public:
 
 class FindIntersectingTable
 {
-    ScRange maRange;
+    ScRange const maRange;
 public:
     explicit FindIntersectingTable(const ScRange& rRange) : maRange(rRange) {}
 
@@ -584,10 +584,10 @@ public:
 
 class FindIntersectingTableByColumns
 {
-    SCCOL mnCol1;
-    SCCOL mnCol2;
-    SCROW mnRow;
-    SCTAB mnTab;
+    SCCOL const mnCol1;
+    SCCOL const mnCol2;
+    SCROW const mnRow;
+    SCTAB const mnTab;
 public:
     FindIntersectingTableByColumns(SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCTAB nTab) :
         mnCol1(nCol1), mnCol2(nCol2), mnRow(nRow), mnTab(nTab) {}
@@ -618,10 +618,10 @@ public:
 
 class FindIntersectingTableByRows
 {
-    SCCOL mnCol;
-    SCROW mnRow1;
-    SCROW mnRow2;
-    SCTAB mnTab;
+    SCCOL const mnCol;
+    SCROW const mnRow1;
+    SCROW const mnRow2;
+    SCTAB const mnTab;
 public:
     FindIntersectingTableByRows(SCCOL nCol, SCROW nRow1, SCROW nRow2, SCTAB nTab) :
         mnCol(nCol), mnRow1(nRow1), mnRow2(nRow2), mnTab(nTab) {}
@@ -653,7 +653,7 @@ public:
 class AccumulateOutputRanges
 {
     ScRangeList maRanges;
-    SCTAB mnTab;
+    SCTAB const mnTab;
 public:
     explicit AccumulateOutputRanges(SCTAB nTab) : mnTab(nTab) {}
     AccumulateOutputRanges(const AccumulateOutputRanges& r) : maRanges(r.maRanges), mnTab(r.mnTab) {}
@@ -1307,7 +1307,7 @@ namespace {
 
 class FindByName
 {
-    OUString maName; // must be all uppercase.
+    OUString const maName; // must be all uppercase.
 public:
     explicit FindByName(const OUString& rName) : maName(rName) {}
     bool operator() (const ScDPSaveDimension* pDim) const
@@ -1490,7 +1490,7 @@ bool dequote( const OUString& rSource, sal_Int32 nStartPos, sal_Int32& rEndPos, 
 struct ScGetPivotDataFunctionEntry
 {
     const sal_Char*         pName;
-    sal_Int16               eFunc;
+    sal_Int16 const               eFunc;
 };
 
 bool parseFunction( const OUString& rList, sal_Int32 nStartPos, sal_Int32& rEndPos, sal_Int16& rFunc )
@@ -2143,8 +2143,8 @@ namespace {
 
 class FindByColumn
 {
-    SCCOL mnCol;
-    PivotFunc mnMask;
+    SCCOL const mnCol;
+    PivotFunc const mnMask;
 public:
     FindByColumn(SCCOL nCol, PivotFunc nMask) : mnCol(nCol), mnMask(nMask) {}
     bool operator() (const ScPivotField& r) const
@@ -2612,7 +2612,7 @@ bool hasFieldColumn(const vector<ScPivotField>* pRefFields, SCCOL nCol)
 
 class FindByOriginalDim
 {
-    long mnDim;
+    long const mnDim;
 public:
     explicit FindByOriginalDim(long nDim) : mnDim(nDim) {}
     bool operator() (const ScPivotField& r) const
@@ -3388,7 +3388,7 @@ namespace {
  */
 class MatchByTable
 {
-    SCTAB mnTab;
+    SCTAB const mnTab;
 public:
     explicit MatchByTable(SCTAB nTab) : mnTab(nTab) {}
 

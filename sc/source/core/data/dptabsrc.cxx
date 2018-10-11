@@ -1879,7 +1879,7 @@ ScDPLevel* ScDPLevels::getByIndex(long nIndex) const
 class ScDPGlobalMembersOrder
 {
     ScDPLevel&  rLevel;
-    bool        bAscending;
+    bool const  bAscending;
 
 public:
             ScDPGlobalMembersOrder( ScDPLevel& rLev, bool bAsc ) :
