@@ -312,7 +312,7 @@ short SvInsertOleDlg::execute()
                     Image aImage = SvFileInformationManager::GetImage(aURL, true);
                     SvMemoryStream aTemp;
                     WriteDIBBitmapEx(aImage.GetBitmapEx(), aTemp);
-                    m_aIconMetaFile = Sequence<sal_Int8>(static_cast<const sal_Int8*>(aTemp.GetData()), aTemp.Seek(STREAM_SEEK_TO_END));
+                    m_aIconMetaFile = Sequence<sal_Int8>(static_cast<const sal_Int8*>(aTemp.GetData()), aTemp.TellEnd());
                     m_aIconMediaType = "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"";
                 }
             }

@@ -31,7 +31,7 @@ bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF )
     // is nice enough to copy to an own MemStream to avoid that indirect
     // parameter passing...)
     const sal_uInt32 nStreamStart(rStream.Tell());
-    const sal_uInt32 nStreamEnd(rStream.Seek(STREAM_SEEK_TO_END));
+    const sal_uInt32 nStreamEnd(rStream.TellEnd());
 
     if (nStreamStart >= nStreamEnd)
     {
@@ -41,7 +41,6 @@ bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF )
     // Read binary data to mem array
     const sal_uInt32 nStreamLength(nStreamEnd - nStreamStart);
     VectorGraphicDataArray aNewData(nStreamLength);
-    rStream.Seek(nStreamStart);
     rStream.ReadBytes(aNewData.begin(), nStreamLength);
     rStream.Seek(nStreamStart);
 

@@ -1376,7 +1376,7 @@ namespace emfio
         SetWinExt( Size( 1, 1 ) );
         SetDevExt( Size( 10000, 10000 ) );
 
-        mnEndPos=mpInputStream->Seek( STREAM_SEEK_TO_END );
+        mnEndPos=mpInputStream->TellEnd();
         mpInputStream->Seek( mnStartPos );
 
         if ( ReadHeader( ) )

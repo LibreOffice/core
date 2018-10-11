@@ -87,8 +87,7 @@ bool Exif::processJpeg(SvStream& rStream, bool bSetValue)
     sal_uInt16  aMagic16;
     sal_uInt16  aLength;
 
-    rStream.Seek(STREAM_SEEK_TO_END);
-    sal_uInt32 aSize = rStream.Tell();
+    sal_uInt32 aSize = rStream.TellEnd();
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
 
     rStream.SetEndian( SvStreamEndian::BIG );

@@ -229,10 +229,7 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     maChunkIter = maChunkSeq.begin();
 
     // estimate PNG file size (to allow sanity checks)
-    const std::size_t nStreamPos = mrPNGStream.Tell();
-    mrPNGStream.Seek( STREAM_SEEK_TO_END );
-    mnStreamSize = mrPNGStream.Tell();
-    mrPNGStream.Seek( nStreamPos );
+    mnStreamSize = mrPNGStream.TellEnd();
 
     // check the PNG header magic
     sal_uInt32 nDummy = 0;

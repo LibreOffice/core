@@ -1071,8 +1071,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
         if (rSt.ReadBytes(aBuffer.data(), nBufferSize) == nBufferSize)
         {
             aMemStream.WriteBytes(aBuffer.data(), nBufferSize);
-            aMemStream.Seek( STREAM_SEEK_TO_END );
-            sal_uInt8 nStreamSize = aMemStream.Tell();
+            sal_uInt8 nStreamSize = aMemStream.TellEnd();
             aMemStream.Seek( STREAM_SEEK_TO_BEGIN );
             bool bRet = 4 <= nStreamSize;
             if( bRet )
@@ -5466,8 +5465,7 @@ namespace
 
     void DecryptRC4(msfilter::MSCodec97& rCtx, SvStream &rIn, SvStream &rOut)
     {
-        rIn.Seek(STREAM_SEEK_TO_END);
-        const std::size_t nLen = rIn.Tell();
+        const std::size_t nLen = rIn.TellEnd();
         rIn.Seek(0);
 
         sal_uInt8 in[WW_BLOCKSIZE];
@@ -5484,9 +5482,7 @@ namespace
     void DecryptXOR(msfilter::MSCodec_XorWord95 &rCtx, SvStream &rIn, SvStream &rOut)
     {
         std::size_t nSt = rIn.Tell();
-        rIn.Seek(STREAM_SEEK_TO_END);
-        std::size_t nLen = rIn.Tell();
-        rIn.Seek(nSt);
+        std::size_t nLen = rIn.TellEnd();
 
         rCtx.InitCipher();
         rCtx.Skip(nSt);

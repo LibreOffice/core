@@ -57,9 +57,7 @@ void XOutdevTest::testPdfGraphicExport()
 
     // Assert that the output looks like a PDF.
     SvStream* pStream = aTempFile.GetStream(StreamMode::READ);
-    pStream->Seek(STREAM_SEEK_TO_END);
-    CPPUNIT_ASSERT(pStream->Tell() > 5);
-    pStream->Seek(STREAM_SEEK_TO_BEGIN);
+    CPPUNIT_ASSERT(pStream->TellEnd() > 5);
     sal_uInt8 sFirstBytes[5];
     pStream->ReadBytes(sFirstBytes, 5);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>('%'), sFirstBytes[0]);

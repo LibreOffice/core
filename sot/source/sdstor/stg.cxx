@@ -374,7 +374,7 @@ Storage::Storage( SvStream& r, bool bDirect )
     if( r.GetError() == ERRCODE_NONE )
     {
         pIo->SetStrm( &r, false );
-        sal_uInt64 nSize = r.Seek( STREAM_SEEK_TO_END );
+        sal_uInt64 nSize = r.TellEnd();
         r.Seek( 0 );
         // Initializing is OK if the stream is empty
         Init( nSize == 0 );
@@ -419,7 +419,7 @@ Storage::Storage( UCBStorageStream& rStrm, bool bDirect )
 
     pIo->SetStrm( &rStrm );
 
-    sal_uInt64 nSize = pStream->Seek( STREAM_SEEK_TO_END );
+    sal_uInt64 nSize = pStream->TellEnd();
     pStream->Seek( 0 );
     // Initializing is OK if the stream is empty
     Init( nSize == 0 );
@@ -444,7 +444,7 @@ void Storage::Init( bool bCreate )
     OSL_ENSURE( pIo, "The pointer may not be empty at this point!" );
     if( pIo->Good() && pIo->GetStrm() )
     {
-        sal_uInt64 nSize = pIo->GetStrm()->Seek( STREAM_SEEK_TO_END );
+        sal_uInt64 nSize = pIo->GetStrm()->TellEnd();
         pIo->GetStrm()->Seek( 0 );
         if( nSize )
         {

@@ -246,16 +246,6 @@ LtcUtBenValueStream * LtcBenContainer::FindValueStreamWithPropertyName(const cha
     return FindNextValueStreamWithPropertyName(sPropertyName);
 }
 
-static sal_uInt64 GetSvStreamSize(SvStream * pStream)
-{
-    sal_uInt64 nCurPos = pStream->Tell();
-    pStream->Seek(STREAM_SEEK_TO_END);
-    sal_uInt64 ulLength = pStream->Tell();
-    pStream->Seek(nCurPos);
-
-    return ulLength;
-}
-
 namespace
 {
     void readDataInBlocks(SvStream& rSt, sal_uInt64 nDLen, std::vector<sal_uInt8>& rData)
@@ -303,12 +293,12 @@ std::vector<sal_uInt8> LtcBenContainer::GetGraphicData(const char *pObjectName)
     sal_uInt64 nDLen = 0;
     if (xD)
     {
-        nDLen = GetSvStreamSize(xD.get());
+        nDLen = xD->TellEnd();
     }
     sal_uInt64 nSLen = 0;
     if (xS)
     {
-        nSLen = GetSvStreamSize(xS.get()) ;
+        nSLen = xS->TellEnd();
     }
 
     sal_uInt64 nLen = nDLen + nSLen;

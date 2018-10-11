@@ -332,7 +332,7 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
                         if( GraphicConverter::Export( aDstStm, aGraphic, ConvertDataFormat::EMF ) == ERRCODE_NONE )
                         {
                             maAny <<= ( aSeq = Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aDstStm.GetData() ),
-                                                                     aDstStm.Seek( STREAM_SEEK_TO_END ) ) );
+                                                                     aDstStm.TellEnd() ) );
                             bDone = true;
                         }
                     }
@@ -362,7 +362,7 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
                         if ( ConvertGDIMetaFileToWMF( aMtf, aDstStm, nullptr, false ) )
                         {
                             maAny <<= ( aSeq = Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aDstStm.GetData() ),
-                                                                     aDstStm.Seek( STREAM_SEEK_TO_END ) ) );
+                                                                     aDstStm.TellEnd() ) );
                             bDone = true;
                         }
                     }
@@ -676,7 +676,7 @@ bool TransferableHelper::SetBitmapEx( const BitmapEx& rBitmapEx, const DataFlavo
             WriteDIB(aBitmap, aMemStm, false, true);
         }
 
-        maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
+        maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.TellEnd() );
     }
 
     return maAny.hasValue();
@@ -690,7 +690,7 @@ bool TransferableHelper::SetGDIMetaFile( const GDIMetaFile& rMtf )
         SvMemoryStream aMemStm( 65535, 65535 );
 
         const_cast<GDIMetaFile&>(rMtf).Write( aMemStm );
-        maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Seek( STREAM_SEEK_TO_END ) );
+        maAny <<= Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.TellEnd() );
     }
 
     return maAny.hasValue();
@@ -849,7 +849,7 @@ bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjectId,
 
     if( pUserObject && WriteObject( xStm, pUserObject, nUserObjectId, rFlavor ) )
     {
-        const sal_uInt32        nLen = xStm->Seek( STREAM_SEEK_TO_END );
+        const sal_uInt32        nLen = xStm->TellEnd();
         Sequence< sal_Int8 >    aSeq( nLen );
 
         xStm->Seek( STREAM_SEEK_TO_BEGIN );

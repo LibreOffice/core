@@ -181,8 +181,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                 aTemp.SetCompressMode( aTemp.GetCompressMode() | SvStreamCompressFlags::ZBITMAP );
                 aTemp.SetVersion( SOFFICE_FILEFORMAT_40 );  // sj: up from version 40 our bitmap stream operator
                 WriteDIBBitmapEx(aBitmapEx, aTemp); // is capable of zlib stream compression
-                aTemp.Seek( STREAM_SEEK_TO_END );
-                nZippedFileSize = aTemp.Tell();
+                nZippedFileSize = aTemp.TellEnd();
             }
             if ( aBitmapEx.IsTransparent() )
             {

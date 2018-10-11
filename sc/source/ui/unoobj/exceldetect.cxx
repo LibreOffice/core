@@ -56,8 +56,7 @@ bool hasStream(const uno::Reference<io::XInputStream>& xInStream, const OUString
     if (!pStream)
         return false;
 
-    pStream->Seek(STREAM_SEEK_TO_END);
-    sal_uInt64 const nSize = pStream->Tell();
+    sal_uInt64 const nSize = pStream->TellEnd();
     pStream->Seek(0);
 
     if (!nSize)
@@ -94,8 +93,7 @@ bool isExcel40(const uno::Reference<io::XInputStream>& xInStream)
     if (!pStream)
         return false;
 
-    pStream->Seek(STREAM_SEEK_TO_END);
-    sal_uInt64 const nSize = pStream->Tell();
+    sal_uInt64 const nSize = pStream->TellEnd();
     pStream->Seek(0);
 
     if (nSize < 4)

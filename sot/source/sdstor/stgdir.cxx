@@ -738,9 +738,7 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
     if( p )
     {
         SvStream *pUnderlyingStream = m_rIo.GetStrm();
-        sal_uInt64 nCur = pUnderlyingStream->Tell();
-        sal_uInt64 nUnderlyingStreamSize = pUnderlyingStream->Seek(STREAM_SEEK_TO_END);
-        pUnderlyingStream->Seek(nCur);
+        sal_uInt64 nUnderlyingStreamSize = pUnderlyingStream->TellEnd();
 
         bool bOk(false);
         StgDirEntry* pCur = new StgDirEntry( p, STGENTRY_SIZE, nUnderlyingStreamSize, &bOk );

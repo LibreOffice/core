@@ -177,10 +177,7 @@ void SotStorageStream::SetSize(sal_uInt64 const nNewSize)
 
 sal_uInt32 SotStorageStream::GetSize() const
 {
-    sal_uInt64 nPos = Tell();
-    const_cast<SotStorageStream *>(this)->Seek( STREAM_SEEK_TO_END );
-    sal_uInt64 nSize = Tell();
-    const_cast<SotStorageStream *>(this)->Seek( nPos );
+    sal_uInt64 nSize = const_cast<SotStorageStream*>(this)->TellEnd();
     return nSize;
 }
 

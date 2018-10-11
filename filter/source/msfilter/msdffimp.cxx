@@ -5915,8 +5915,7 @@ void SvxMSDffManager::GetCtrlData(sal_uInt32 nOffsDggL)
         bool bOk;
         GetDrawingGroupContainerData( rStCtrl, nLength );
 
-        rStCtrl.Seek( STREAM_SEEK_TO_END );
-        sal_uInt32 nMaxStrPos = rStCtrl.Tell();
+        sal_uInt32 nMaxStrPos = rStCtrl.TellEnd();
 
         nPos += nLength;
         sal_uInt16 nDrawingContainerId = 1;
@@ -6531,8 +6530,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
             {
                 if ( bZCodecCompression )
                 {
-                    xOut->Seek(STREAM_SEEK_TO_END);
-                    pDbgOut->WriteBytes(xOut->GetData(), xOut->Tell());
+                    pDbgOut->WriteBytes(xOut->GetData(), xOut->TellEnd());
                     xOut->Seek(STREAM_SEEK_TO_BEGIN);
                 }
                 else

@@ -694,8 +694,7 @@ uno::Any SwMailTransferable::getTransferData( const datatransfer::DataFlavor& /*
         SvStream* pStream = aMedium.GetInStream();
         if ( aMedium.GetErrorCode() == ERRCODE_NONE && pStream)
         {
-            pStream->Seek(STREAM_SEEK_TO_END);
-            aData.realloc(pStream->Tell());
+            aData.realloc(pStream->TellEnd());
             pStream->Seek(0);
             sal_Int8 * pData = aData.getArray();
             pStream->ReadBytes( pData, aData.getLength() );

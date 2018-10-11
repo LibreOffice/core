@@ -97,7 +97,7 @@ bool SwServerObject::GetData( uno::Any & rData,
                 aMemStm.WriteChar( '\0' );        // append a zero char
                 rData <<= uno::Sequence< sal_Int8 >(
                                         static_cast<sal_Int8 const *>(aMemStm.GetData()),
-                                        aMemStm.Seek( STREAM_SEEK_TO_END ) );
+                                        aMemStm.Tell() );
                 bRet = true;
             }
             delete pPam;

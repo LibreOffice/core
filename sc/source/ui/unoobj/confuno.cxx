@@ -503,12 +503,8 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
         {
             SvMemoryStream aStream;
             pPrinter->Store( aStream );
-            aStream.Seek ( STREAM_SEEK_TO_END );
-            sal_uInt32 nSize = aStream.Tell();
-            aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-            uno::Sequence < sal_Int8 > aSequence( nSize );
-            aStream.ReadBytes(aSequence.getArray(), nSize);
-            aRet <<= aSequence;
+            aRet <<= uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aStream.GetData() ),
+                                                        aStream.TellEnd() );
         }
         else
             aRet <<= uno::Sequence<sal_Int8>();

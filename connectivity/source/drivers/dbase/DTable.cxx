@@ -528,8 +528,7 @@ void ODbaseTable::construct()
         if (m_pMemoStream)
         {
             // set the buffer exactly to the length of a record
-            m_pMemoStream->Seek(STREAM_SEEK_TO_END);
-            nFileSize = m_pMemoStream->Tell();
+            nFileSize = m_pMemoStream->TellEnd();
             m_pMemoStream->Seek(STREAM_SEEK_TO_BEGIN);
 
             // Buffersize dependent on the file size
@@ -1018,7 +1017,7 @@ bool ODbaseTable::CreateImpl()
             // Only if the file exists with length > 0 raise an error
             std::unique_ptr<SvStream> pFileStream(createStream_simpleError( aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READ));
 
-            if (pFileStream && pFileStream->Seek(STREAM_SEEK_TO_END))
+            if (pFileStream && pFileStream->TellEnd())
                 return false;
         }
     }
@@ -2026,7 +2025,7 @@ void ODbaseTable::WriteMemo(const ORowSetValue& aVariable, std::size_t& rBlockNr
 
     if (bAppend)
     {
-        sal_uInt64 const nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
+        sal_uInt64 const nStreamSize = m_pMemoStream->TellEnd();
         // fill last block
         rBlockNr = (nStreamSize / m_aMemoHeader.db_size) + ((nStreamSize % m_aMemoHeader.db_size) > 0 ? 1 : 0);
 
@@ -2090,7 +2089,7 @@ void ODbaseTable::WriteMemo(const ORowSetValue& aVariable, std::size_t& rBlockNr
     // Write the new block number
     if (bAppend)
     {
-        sal_uInt64 const nStreamSize = m_pMemoStream->Seek(STREAM_SEEK_TO_END);
+        sal_uInt64 const nStreamSize = m_pMemoStream->TellEnd();
         m_aMemoHeader.db_next = (nStreamSize / m_aMemoHeader.db_size) + ((nStreamSize % m_aMemoHeader.db_size) > 0 ? 1 : 0);
 
         // Write the new block number

@@ -208,8 +208,7 @@ static bool lcl_MayBeDBase( SvStream& rStream )
     // Empty dbf is >= 32*2+1 bytes in size.
     const size_t nEmptyDbf = nHeaderBlockSize * 2 + 1;
 
-    rStream.Seek(STREAM_SEEK_TO_END);
-    sal_uLong nSize = rStream.Tell();
+    sal_uLong nSize = rStream.TellEnd();
     if ( nSize < nEmptyDbf )
         return false;
 

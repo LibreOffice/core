@@ -249,8 +249,7 @@ sal_uInt32 PptEscherEx::EnterGroup( ::tools::Rectangle const * pBoundRect, SvMem
         }
         if ( pClientData )
         {
-            pClientData->Seek( STREAM_SEEK_TO_END );
-            sal_uInt32 nSize = pClientData->Tell();
+            sal_uInt32 nSize = pClientData->TellEnd();
             if ( nSize )
             {
                 mpOutStrm->WriteUInt32( ( ESCHER_ClientData << 16 ) | 0xf )
