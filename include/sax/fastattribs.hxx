@@ -36,9 +36,9 @@ namespace sax_fastparser
 
 struct UnknownAttribute
 {
-    OUString maNamespaceURL;
-    OString maName;
-    OString maValue;
+    OUString const maNamespaceURL;
+    OString const maName;
+    OString const maValue;
 
     UnknownAttribute( const OUString& rNamespaceURL, const OString& rName, const OString& value );
     UnknownAttribute( const OString& rName, const OString& value );
@@ -204,7 +204,7 @@ private:
     std::vector< sal_Int32 > maAttributeTokens;
     UnknownAttributeList maUnknownAttributes;
     css::uno::Reference< css::xml::sax::XFastTokenHandler > mxTokenHandler;
-    FastTokenHandlerBase *mpTokenHandler;
+    FastTokenHandlerBase * const mpTokenHandler;
 };
 
 }

@@ -211,7 +211,7 @@ private:
     }
 
 private:
-    rtl::OUString       m_path_list;
+    rtl::OUString const m_path_list;
     const sal_Unicode*  m_end;
     const sal_Unicode   m_separator;
     const sal_Unicode*  m_path_segment_begin;

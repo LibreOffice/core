@@ -47,8 +47,8 @@ namespace rptui
     struct RectangleLess
     {
         enum CompareMode { POS_LEFT,POS_RIGHT,POS_UPPER,POS_DOWN,POS_CENTER_HORIZONTAL,POS_CENTER_VERTICAL };
-        CompareMode m_eCompareMode;
-        Point       m_aRefPoint;
+        CompareMode const m_eCompareMode;
+        Point const m_aRefPoint;
         RectangleLess(CompareMode _eCompareMode,const Point& _rRefPoint ) : m_eCompareMode(_eCompareMode),m_aRefPoint(_rRefPoint){}
         bool operator() (const tools::Rectangle& lhs, const tools::Rectangle& rhs) const
         {

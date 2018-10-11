@@ -70,8 +70,8 @@ namespace rptui
         Idle                                m_aMarkIdle;
         DlgEdMode                           m_eMode;
         sal_uInt16                          m_eActObj;
-        Size                                m_aGridSizeCoarse;
-        Size                                m_aGridSizeFine;
+        Size const                          m_aGridSizeCoarse;
+        Size const                          m_aGridSizeFine;
         bool                                m_bDeleted;
 
 

@@ -46,7 +46,7 @@ typedef ::std::multimap< sal_Int16, OUString > IndexToNameMap;
     class REPORTDESIGN_DLLPUBLIC DlgEdHint: public SfxHint
     {
     private:
-        DlgEdHintKind   eHintKind;
+        DlgEdHintKind const eHintKind;
 
         DlgEdHint(DlgEdHint&) = delete;
         void operator =(DlgEdHint&) = delete;
@@ -68,7 +68,7 @@ protected:
     mutable css::uno::Reference< css::beans::XPropertyChangeListener> m_xPropertyChangeListener;
     mutable css::uno::Reference< css::report::XReportComponent>       m_xReportComponent;
     css::uno::Reference< css::uno::XInterface >                       m_xKeepShapeAlive;
-    OUString m_sComponentName;
+    OUString const m_sComponentName;
     bool        m_bIsListening;
 
     OObjectBase(const css::uno::Reference< css::report::XReportComponent>& _xComponent);
@@ -215,7 +215,7 @@ private:
     void impl_createDataProvider_nothrow( const css::uno::Reference< css::frame::XModel>& _xModel);
     virtual void impl_setUnoShape( const css::uno::Reference< css::uno::XInterface >& rxUnoShape ) override;
 
-    sal_uInt16 m_nType;
+    sal_uInt16 const m_nType;
     bool    m_bOnlyOnce;
 };
 
@@ -228,7 +228,7 @@ class REPORTDESIGN_DLLPUBLIC OUnoObject: public SdrUnoObj , public OObjectBase
     friend class OObjectBase;
     friend class DlgEdFactory;
 
-    sal_uInt16   m_nObjectType;
+    sal_uInt16 const m_nObjectType;
     // tdf#118730 remember if this object was created interactively (due to ::EndCreate being called)
     bool         m_bSetDefaultLabel;
 

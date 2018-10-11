@@ -957,7 +957,7 @@ namespace
     class ApplySectionViewAction
     {
     private:
-        SectionViewAction   m_eAction;
+        SectionViewAction const m_eAction;
 
     public:
         explicit ApplySectionViewAction()
