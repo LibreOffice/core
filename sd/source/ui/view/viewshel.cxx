@@ -1221,6 +1221,9 @@ public:
         , m_aContext(rSlideSorter)
     {
     }
+    ~KeepSlideSorterInSyncWithPageChanges() COVERITY_NOEXCEPT_FALSE
+    {
+    }
 };
 
 void ViewShell::ImpSidUndo(SfxRequest& rReq)
