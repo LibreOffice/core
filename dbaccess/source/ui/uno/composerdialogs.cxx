@@ -30,6 +30,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
+#include <vcl/svapp.hxx>
 
 extern "C" void createRegistryInfo_ComposerDialogs()
 {
@@ -123,7 +124,7 @@ namespace dbaui
             return svt::OGenericUnoDialog::Dialog();
         }
 
-        return svt::OGenericUnoDialog::Dialog(createComposerDialog(VCLUnoHelper::GetWindow(rParent), xConnection, xColumns));
+        return svt::OGenericUnoDialog::Dialog(createComposerDialog(Application::GetFrameWeld(rParent), xConnection, xColumns));
     }
 
     // RowsetFilterDialog
@@ -142,9 +143,9 @@ namespace dbaui
         return static_cast< XServiceInfo* >(new RowsetFilterDialog( comphelper::getComponentContext(_rxORB)));
     }
 
-    VclPtr<Dialog> RowsetFilterDialog::createComposerDialog( vcl::Window* _pParent, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxColumns )
+    std::unique_ptr<weld::GenericDialogController> RowsetFilterDialog::createComposerDialog(weld::Window* _pParent, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxColumns )
     {
-        return VclPtr<DlgFilterCrit>::Create( _pParent, m_aContext, _rxConnection, m_xComposer, _rxColumns );
+        return o3tl::make_unique<DlgFilterCrit>(_pParent, m_aContext, _rxConnection, m_xComposer, _rxColumns);
     }
 
     void SAL_CALL RowsetFilterDialog::initialize( const Sequence< Any >& aArguments )
@@ -171,7 +172,7 @@ namespace dbaui
         ComposerDialog::executedDialog( _nExecutionResult );
 
         if ( _nExecutionResult && m_aDialog )
-            static_cast< DlgFilterCrit* >( m_aDialog.m_xVclDialog.get() )->BuildWherePart();
+            static_cast<DlgFilterCrit*>(m_aDialog.m_xWeldDialog.get())->BuildWherePart();
     }
 
     // RowsetOrderDialog
@@ -190,9 +191,9 @@ namespace dbaui
         return static_cast< XServiceInfo* >(new RowsetOrderDialog( comphelper::getComponentContext(_rxORB)));
     }
 
-    VclPtr<Dialog> RowsetOrderDialog::createComposerDialog( vcl::Window* _pParent, const Reference< XConnection >& _rxConnection, const Reference< XNameAccess >& _rxColumns )
+    std::unique_ptr<weld::GenericDialogController> RowsetOrderDialog::createComposerDialog(weld::Window* pParent, const Reference< XConnection >& rxConnection, const Reference< XNameAccess >& rxColumns)
     {
-        return VclPtr<DlgOrderCrit>::Create( _pParent, _rxConnection, m_xComposer, _rxColumns );
+        return o3tl::make_unique<DlgOrderCrit>(pParent, rxConnection, m_xComposer, rxColumns);
     }
 
     void SAL_CALL RowsetOrderDialog::initialize( const Sequence< Any >& aArguments )
@@ -218,9 +219,9 @@ namespace dbaui
             return;
 
         if ( _nExecutionResult )
-            static_cast< DlgOrderCrit* >( m_aDialog.m_xVclDialog.get() )->BuildOrderPart();
+            static_cast< DlgOrderCrit* >( m_aDialog.m_xWeldDialog.get() )->BuildOrderPart();
         else if ( m_xComposer.is() )
-            m_xComposer->setOrder( static_cast< DlgOrderCrit* >( m_aDialog.m_xVclDialog.get() )->GetOrignalOrder() );
+            m_xComposer->setOrder( static_cast< DlgOrderCrit* >( m_aDialog.m_xWeldDialog.get() )->GetOrignalOrder() );
     }
 
 }   // namespace dbaui

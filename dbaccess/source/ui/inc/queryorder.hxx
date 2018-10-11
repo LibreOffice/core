@@ -19,15 +19,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYORDER_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_QUERYORDER_HXX
 
-#include <vcl/dialog.hxx>
-
-#include <vcl/lstbox.hxx>
-
-#include <vcl/edit.hxx>
-
-#include <vcl/fixed.hxx>
-
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 
 #define DOG_ROWS    3
 
@@ -56,33 +48,33 @@ namespace com
 // DlgOrderCrit
 namespace dbaui
 {
-    class DlgOrderCrit final : public ModalDialog
+    class DlgOrderCrit final : public weld::GenericDialogController
     {
-        VclPtr<ListBox>        m_pLB_ORDERFIELD1;
-        VclPtr<ListBox>        m_pLB_ORDERVALUE1;
-        VclPtr<ListBox>        m_pLB_ORDERFIELD2;
-        VclPtr<ListBox>        m_pLB_ORDERVALUE2;
-        VclPtr<ListBox>        m_pLB_ORDERFIELD3;
-        VclPtr<ListBox>        m_pLB_ORDERVALUE3;
         OUString               m_sOrgOrder;
 
         css::uno::Reference< css::sdb::XSingleSelectQueryComposer> m_xQueryComposer;
         css::uno::Reference< css::container::XNameAccess>          m_xColumns;
         css::uno::Reference< css::sdbc::XConnection>               m_xConnection;
 
-        VclPtr<ListBox>        m_aColumnList[DOG_ROWS];
-        VclPtr<ListBox>        m_aValueList[DOG_ROWS];
+        weld::ComboBox* m_aColumnList[DOG_ROWS];
+        weld::ComboBox* m_aValueList[DOG_ROWS];
 
-        DECL_LINK( FieldListSelectHdl, ListBox&, void );
+        std::unique_ptr<weld::ComboBox> m_xLB_ORDERFIELD1;
+        std::unique_ptr<weld::ComboBox> m_xLB_ORDERVALUE1;
+        std::unique_ptr<weld::ComboBox> m_xLB_ORDERFIELD2;
+        std::unique_ptr<weld::ComboBox> m_xLB_ORDERVALUE2;
+        std::unique_ptr<weld::ComboBox> m_xLB_ORDERFIELD3;
+        std::unique_ptr<weld::ComboBox> m_xLB_ORDERVALUE3;
+
+        DECL_LINK(FieldListSelectHdl, weld::ComboBox&, void);
         void            EnableLines();
 
     public:
-        DlgOrderCrit(   vcl::Window * pParent,
-                        const css::uno::Reference< css::sdbc::XConnection>& _rxConnection,
-                        const css::uno::Reference< css::sdb::XSingleSelectQueryComposer>& _rxComposer,
-                        const css::uno::Reference< css::container::XNameAccess>& _rxCols);
+        DlgOrderCrit(weld::Window * pParent,
+                     const css::uno::Reference< css::sdbc::XConnection>& _rxConnection,
+                     const css::uno::Reference< css::sdb::XSingleSelectQueryComposer>& _rxComposer,
+                     const css::uno::Reference< css::container::XNameAccess>& _rxCols);
         virtual ~DlgOrderCrit() override;
-        virtual void dispose() override;
 
         void            BuildOrderPart();
 
