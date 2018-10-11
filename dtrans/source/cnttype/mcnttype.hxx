@@ -49,18 +49,6 @@ public:
 private:
     /// @throws css::lang::IllegalArgumentException
     void init( const OUString& aCntType );
-    void getSym();
-    void acceptSym( const OUString& pSymTlb );
-    void skipSpaces();
-    void type();
-    void subtype();
-    void trailer();
-    OUString pName( );
-    OUString pValue( );
-    OUString quotedPValue( );
-    OUString nonquotedPValue( );
-    void comment();
-    static bool isInRange( const OUString& aChr, const OUString& aRange );
 
 private:
     ::osl::Mutex                             m_aMutex;
