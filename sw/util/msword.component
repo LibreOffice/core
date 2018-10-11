@@ -17,12 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="msword" xmlns="http://openoffice.org/2010/uno-components">
+    xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.Writer.RtfExport"
     constructor="com_sun_star_comp_Writer_RtfExport_get_implementation">
     <service name="com.sun.star.comp.Writer.RtfExport"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.DocxExport">
+  <implementation name="com.sun.star.comp.Writer.DocxExport"
+    constructor="com_sun_star_comp_Writer_DocxExport_get_implementation">
     <service name="com.sun.star.comp.Writer.DocxExport"/>
   </implementation>
 </component>
