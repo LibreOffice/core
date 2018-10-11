@@ -2861,6 +2861,8 @@ public:
     {
         if (get_n_pages() > 6)
             m_nSizeAllocateSignalId = g_signal_connect(pNotebook, "size-allocate", G_CALLBACK(signalSizeAllocate), this);
+        else
+            m_nSizeAllocateSignalId = 0;
     }
 
     virtual int get_current_page() const override
