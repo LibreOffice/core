@@ -66,10 +66,7 @@ private:
     ::osl::Mutex                             m_aMutex;
     OUString                            m_MediaType;
     OUString                            m_MediaSubtype;
-    OUString                            m_ContentType;
     std::map< OUString, OUString > m_ParameterMap;
-    sal_Int32                                m_nPos;
-    OUString                            m_nxtSym;
 };
 
 #endif
