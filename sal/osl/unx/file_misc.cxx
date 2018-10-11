@@ -697,8 +697,11 @@ static oslFileError osl_unlinkFile(const sal_Char* pszPath)
     if (nRet < 0)
     {
         nRet=errno;
+        SAL_INFO("sal.file", "unlink(" << pszPath << "): errno " << nRet << ": " << strerror(nRet));
         return oslTranslateFileError(nRet);
     }
+    else
+        SAL_INFO("sal.file", "unlink(" << pszPath << "): OK");
 
     return osl_File_E_None;
 }
@@ -712,8 +715,11 @@ static oslFileError osl_psz_moveFile(const sal_Char* pszPath, const sal_Char* ps
     if (nRet < 0)
     {
         nRet=errno;
+        SAL_INFO("sal.file", "rename(" << pszPath << "," << pszDestPath << "): errno " << nRet << ": " << strerror(nRet));
         return oslTranslateFileError(nRet);
     }
+    else
+        SAL_INFO("sal.file", "rename(" << pszPath << "," << pszDestPath << "): OK");
 
     return osl_File_E_None;
 }
@@ -796,12 +802,15 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
             else
             {
                 int e = errno;
-                SAL_INFO(
-                    "sal.osl",
-                    "rename(" << pszDestFileName << ", " << tmpDestFile
-                        << ") failed with errno " << e);
+                SAL_INFO("sal.file", "rename(" << pszDestFileName << ", " << tmpDestFile
+                         << "): errno " << e << ": " << strerror(e));
                 return osl_File_E_EXIST; // for want of a better error code
             }
+        }
+        else
+        {
+            SAL_INFO("sal.file", "rename(" << pszDestFileName << ", " << tmpDestFile
+                     << "): OK");
         }
     }
 
@@ -824,15 +833,22 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
 
     if ( nRet > 0 && DestFileExists == 1 )
     {
-        unlink(pszDestFileName);
+        if (unlink(pszDestFileName) != 0)
+        {
+            int e = errno;
+            SAL_INFO("sal.file", "unlink(" << pszDestFileName << "): errno " << e << ": " << strerror(e));
+        }
+        else
+            SAL_INFO("sal.file", "unlink(" << pszDestFileName << "): OK");
+
         if (rename(tmpDestFile.getStr(), pszDestFileName) != 0)
         {
             int e = errno;
-            SAL_WARN(
-                "sal.osl",
-                "rename(" << tmpDestFile << ", " << pszDestFileName
-                << ") failed with errno " << e);
+            SAL_INFO("sal.file", "rename(" << tmpDestFile << ", " << pszDestFileName
+                     << "): errno " << e << ": " << strerror(e));
         }
+        else
+            SAL_INFO("sal.file", "rename(" << tmpDestFile << ", " << pszDestFileName << "): OK");
     }
 
     if ( nRet > 0 )
@@ -859,9 +875,10 @@ void attemptChangeMetadata( const sal_Char* pszFileName, mode_t nMode, time_t nA
 #endif
     {
         int e = errno;
-        SAL_INFO(
-            "sal.osl", "chmod(" << pszFileName << ") failed with errno " << e);
+        SAL_INFO("sal.file", "chmod(" << pszFileName << std::oct << nMode << std::dec <<"): errno " << e << ": " << strerror(e));
     }
+    else
+        SAL_INFO("sal.file", "chmod(" << pszFileName << std::oct << nMode << std::dec <<"): OK");
 
     // No way to change utime of a symlink itself:
     if (!S_ISLNK(nMode))
@@ -871,9 +888,7 @@ void attemptChangeMetadata( const sal_Char* pszFileName, mode_t nMode, time_t nA
         if ( utime(pszFileName,&aTimeBuffer) < 0 )
         {
             int e = errno;
-            SAL_INFO(
-                "sal.osl",
-                "utime(" << pszFileName << ") failed with errno " << e);
+            SAL_INFO("sal.file", "utime(" << pszFileName << "): errno " << e);
         }
     }
 
@@ -884,9 +899,10 @@ void attemptChangeMetadata( const sal_Char* pszFileName, mode_t nMode, time_t nA
     if ( lchown(pszFileName,nUID,nGID) < 0 )
     {
         int e = errno;
-        SAL_INFO(
-            "sal.osl", "lchown(" << pszFileName << ") failed with errno " << e);
+        SAL_INFO("sal.file", "lchown(" << pszFileName << "): errno " << e);
     }
+    else
+        SAL_INFO("sal.file", "lchown(" << pszFileName << "): OK");
 }
 
 static int oslDoCopyLink(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName)
