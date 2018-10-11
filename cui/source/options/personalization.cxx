@@ -66,7 +66,6 @@ struct PersonaInfo
     OUString sHeaderURL;
     OUString sFooterURL;
     OUString sTextColor;
-    OUString sAccentColor;
 };
 
 namespace {
@@ -643,7 +642,7 @@ void SvxPersonalizationTabPage::LoadExtensionThemes()
     for( sal_Int32 nIndex = 0; nIndex < nLength; nIndex++ )
     {
         Reference< XPropertySet > xPropertySet( officecfg::Office::Common::Misc::PersonasList::get()->getByName( installedPersonas[nIndex] ), UNO_QUERY_THROW );
-        OUString aPersonaSlug, aPersonaName, aPreviewFile, aHeaderFile, aFooterFile, aTextColor, aAccentColor, aPersonaSettings;
+        OUString aPersonaSlug, aPersonaName, aPreviewFile, aHeaderFile, aFooterFile, aTextColor, aPersonaSettings;
 
         Any aValue = xPropertySet->getPropertyValue( "Slug" );
         aValue >>= aPersonaSlug;
@@ -664,11 +663,8 @@ void SvxPersonalizationTabPage::LoadExtensionThemes()
         aValue = xPropertySet->getPropertyValue( "TextColor" );
         aValue >>= aTextColor;
 
-        aValue = xPropertySet->getPropertyValue( "AccentColor" );
-        aValue >>= aAccentColor;
-
         aPersonaSettings = aPersonaSlug + ";" + aPersonaName + ";" + aPreviewFile
-                + ";" + aHeaderFile + ";" + aFooterFile + ";" + aTextColor + ";" + aAccentColor;
+                + ";" + aHeaderFile + ";" + aFooterFile + ";" + aTextColor;
         rtl::Bootstrap::expandMacros( aPersonaSettings );
         m_vExtensionPersonaSettings.push_back( aPersonaSettings );
     }
@@ -806,8 +802,6 @@ void parseResponse(const std::string& rResponse, std::vector<PersonaInfo> & aPer
                 OStringToOUString( OString(arrayElement.child("theme_data").child("footerURL").string_value().get()),
                     RTL_TEXTENCODING_UTF8 ),
                 OStringToOUString( OString(arrayElement.child("theme_data").child("textcolor").string_value().get()),
-                    RTL_TEXTENCODING_UTF8 ),
-                OStringToOUString( OString(arrayElement.child("theme_data").child("accentcolor").string_value().get()),
                     RTL_TEXTENCODING_UTF8 )
             };
 
@@ -854,8 +848,6 @@ PersonaInfo parseSingleResponse(const std::string& rResponse)
             OStringToOUString( OString(theme_data.child("footerURL").string_value().get()),
             RTL_TEXTENCODING_UTF8 ),
             OStringToOUString( OString(theme_data.child("textcolor").string_value().get()),
-            RTL_TEXTENCODING_UTF8 ),
-            OStringToOUString( OString(theme_data.child("accentcolor").string_value().get()),
             RTL_TEXTENCODING_UTF8 )
         };
 
@@ -924,8 +916,7 @@ void SearchAndParseThread::execute()
                         + ";" + personaInfos[nIndex].sName
                         + ";" + personaInfos[nIndex].sHeaderURL
                         + ";" + personaInfos[nIndex].sFooterURL
-                        + ";" + personaInfos[nIndex].sTextColor
-                        + ";" + personaInfos[nIndex].sAccentColor;
+                        + ";" + personaInfos[nIndex].sTextColor;
 
                 m_pPersonaDialog->AddPersonaSetting( aPersonaSetting );
 
@@ -987,8 +978,7 @@ void SearchAndParseThread::execute()
                     + ";" + aPersonaInfo.sName
                     + ";" + aPersonaInfo.sHeaderURL
                     + ";" + aPersonaInfo.sFooterURL
-                    + ";" + aPersonaInfo.sTextColor
-                    + ";" + aPersonaInfo.sAccentColor;
+                    + ";" + aPersonaInfo.sTextColor;
 
             m_pPersonaDialog->AddPersonaSetting( aPersonaSetting );
 
@@ -1035,7 +1025,7 @@ void GetPersonaThread::execute()
     if ( !xFileAccess.is() )
         return;
 
-    OUString aSlug, aName, aHeaderURL, aFooterURL, aTextColor, aAccentColor;
+    OUString aSlug, aName, aHeaderURL, aFooterURL, aTextColor;
     OUString aPersonaSetting;
 
     // get the required fields from m_aSelectedPersona
@@ -1046,7 +1036,6 @@ void GetPersonaThread::execute()
     aHeaderURL = m_aSelectedPersona.getToken(0, ';', nIndex);
     aFooterURL = m_aSelectedPersona.getToken(0, ';', nIndex);
     aTextColor = m_aSelectedPersona.getToken(0, ';', nIndex);
-    aAccentColor = m_aSelectedPersona.getToken(0, ';', nIndex);
 
     // copy the images to the user's gallery
     OUString gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
@@ -1084,7 +1073,7 @@ void GetPersonaThread::execute()
     SolarMutexGuard aGuard;
 
     aPersonaSetting = aSlug + ";" + aName + ";" + aHeaderFile + ";" + aFooterFile
-            + ";" + aTextColor + ";" + aAccentColor;
+            + ";" + aTextColor;
 
     m_pPersonaDialog->SetAppliedPersonaSetting( aPersonaSetting );
     m_pPersonaDialog->EndDialog( RET_OK );

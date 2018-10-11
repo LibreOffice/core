@@ -843,12 +843,6 @@
         </info>
         <value/>
       </prop>
-      <prop oor:name="AccentColor" oor:type="xs:string" oor:nillable="false">
-        <info>
-          <desc>Value of the accent color for the Persona</desc>
-        </info>
-        <value/>
-      </prop>
     </group>
   </templates>
   <component>
