@@ -134,7 +134,7 @@ namespace
     struct TokenPointers
     {
         TokenPointerRange maPointerRange[2];
-        bool              mbSkipRelName;
+        bool const        mbSkipRelName;
 
         TokenPointers( FormulaToken** pCode, sal_uInt16 nLen, FormulaToken** pRPN, sal_uInt16 nRPN,
                 bool bSkipRelName = true ) :

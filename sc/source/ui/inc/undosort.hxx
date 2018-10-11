@@ -17,7 +17,7 @@ namespace sc {
 
 class UndoSort : public ScSimpleUndo
 {
-    ReorderParam maParam;
+    ReorderParam const maParam;
 
 public:
     UndoSort( ScDocShell* pDocSh, const ReorderParam& rParam );

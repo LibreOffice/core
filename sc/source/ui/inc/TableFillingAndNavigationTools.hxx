@@ -25,7 +25,7 @@ class FormulaTemplate
 {
 private:
     OUString            mTemplate;
-    ScDocument*         mpDoc;
+    ScDocument* const   mpDoc;
     bool                mbUse3D;
 
     typedef std::map<OUString, ScRange>   RangeReplacementMap;
@@ -58,7 +58,7 @@ public:
     std::vector<ScAddress> mAddressStack;
 
     ScAddress mCurrentAddress;
-    ScAddress mMinimumAddress;
+    ScAddress const mMinimumAddress;
     ScAddress mMaximumAddress;
 
     AddressWalker(const ScAddress& aInitialAddress);
@@ -79,7 +79,7 @@ class AddressWalkerWriter : public AddressWalker
 public:
     ScDocShell*                         mpDocShell;
     ScDocument*                         mpDocument;
-    formula::FormulaGrammar::Grammar    meGrammar;
+    formula::FormulaGrammar::Grammar const    meGrammar;
 
     AddressWalkerWriter(const ScAddress& aInitialAddress, ScDocShell* pDocShell, ScDocument* pDocument,
             formula::FormulaGrammar::Grammar eGrammar );
@@ -95,8 +95,8 @@ public:
 class DataCellIterator final
 {
 private:
-    ScRange mInputRange;
-    bool    mByColumn;
+    ScRange const mInputRange;
+    bool const    mByColumn;
     SCCOL   mCol;
     SCROW   mRow;
 
@@ -113,7 +113,7 @@ public:
 class DataRangeIterator
 {
 protected:
-    ScRange   mInputRange;
+    ScRange const   mInputRange;
     sal_Int32 mIndex;
 
 public:

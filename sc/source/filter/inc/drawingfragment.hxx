@@ -132,9 +132,9 @@ private:
 
 private:
     css::uno::Reference< css::container::XIndexContainer > mxCtrlFormIC;
-    sal_Int32           mnCtrlIndex;
-    sal_Int32           mnCtrlType;
-    sal_Int32           mnDropStyle;
+    sal_Int32 const           mnCtrlIndex;
+    sal_Int32 const           mnCtrlType;
+    sal_Int32 const           mnDropStyle;
 };
 
 class VmlDrawing : public ::oox::vml::Drawing, public WorksheetHelper
@@ -187,7 +187,7 @@ private:
                             const ::oox::vml::ShapeBase& rShape ) const;
 
 private:
-    ::oox::ole::ControlConverter maControlConv;
+    ::oox::ole::ControlConverter const maControlConv;
     ::oox::vml::TextFontModel maListBoxFont;
 };
 

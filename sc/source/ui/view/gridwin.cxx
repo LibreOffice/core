@@ -200,13 +200,13 @@ class ScFilterListBox : public ListBox
 {
 private:
     VclPtr<ScGridWindow>   pGridWin;
-    SCCOL           nCol;
-    SCROW           nRow;
+    SCCOL const     nCol;
+    SCROW const     nRow;
     bool            bInit;
     bool            bCancelled;
     bool            bInSelect;
     sal_uLong       nSel;
-    ScFilterBoxMode eMode;
+    ScFilterBoxMode const eMode;
 
 protected:
     void            SelectHdl();
@@ -565,7 +565,7 @@ struct AutoFilterData : public ScCheckListMenuWindow::ExtendedData
 class AutoFilterAction : public ScMenuFloatingWindow::Action
 {
     VclPtr<ScGridWindow> mpWindow;
-    ScGridWindow::AutoFilterMode meMode;
+    ScGridWindow::AutoFilterMode const meMode;
 public:
     AutoFilterAction(ScGridWindow* p, ScGridWindow::AutoFilterMode eMode) :
         mpWindow(p), meMode(eMode) {}
@@ -578,7 +578,7 @@ public:
 class AutoFilterPopupEndAction : public ScMenuFloatingWindow::Action
 {
     VclPtr<ScGridWindow> mpWindow;
-    ScAddress maPos;
+    ScAddress const maPos;
 public:
     AutoFilterPopupEndAction(ScGridWindow* p, const ScAddress& rPos) :
         mpWindow(p), maPos(rPos) {}

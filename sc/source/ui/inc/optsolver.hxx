@@ -61,15 +61,15 @@ struct ScOptConditionRow
 /// All settings from the dialog, saved with the DocShell for the next call
 class ScOptSolverSave
 {
-    OUString    maObjective;
-    bool        mbMax;
-    bool        mbMin;
-    bool        mbValue;
-    OUString    maTarget;
-    OUString    maVariable;
-    std::vector<ScOptConditionRow> maConditions;
-    OUString    maEngine;
-    css::uno::Sequence<css::beans::PropertyValue> maProperties;
+    OUString const    maObjective;
+    bool const        mbMax;
+    bool const        mbMin;
+    bool const        mbValue;
+    OUString const    maTarget;
+    OUString const    maVariable;
+    std::vector<ScOptConditionRow> const maConditions;
+    OUString const    maEngine;
+    css::uno::Sequence<css::beans::PropertyValue> const maProperties;
 
 public:
             ScOptSolverSave( const OUString& rObjective, bool bMax, bool bMin, bool bValue,
@@ -155,8 +155,8 @@ private:
     VclPtr<PushButton>      m_pBtnCancel;
     VclPtr<PushButton>      m_pBtnSolve;
 
-    OUString        maInputError;
-    OUString        maConditionError;
+    OUString const        maInputError;
+    OUString const        maConditionError;
 
     ScDocShell*     mpDocShell;
     ScDocument&     mrDoc;

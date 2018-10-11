@@ -37,24 +37,24 @@ struct PivotTableSources
 
     struct SheetSource
     {
-        ScDPObject* mpDP;
-        ScSheetSourceDesc maDesc;
+        ScDPObject* const mpDP;
+        ScSheetSourceDesc const maDesc;
 
         SheetSource( ScDPObject* pObj, const ScSheetSourceDesc& rDesc );
     };
 
     struct DBSource
     {
-        ScDPObject* mpDP;
-        ScImportSourceDesc maDesc;
+        ScDPObject* const mpDP;
+        ScImportSourceDesc const maDesc;
 
         DBSource( ScDPObject* pObj, const ScImportSourceDesc& rDesc );
     };
 
     struct ServiceSource
     {
-        ScDPObject* mpDP;
-        ScDPServiceDesc maDesc;
+        ScDPObject* const mpDP;
+        ScDPServiceDesc const maDesc;
 
         ServiceSource( ScDPObject* pObj, const ScDPServiceDesc& rDesc );
     };

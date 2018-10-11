@@ -289,7 +289,7 @@ public:
 private:
     ::std::vector<const ScFuncDesc*>* m_pCategory; /**< list of functions in this category */
     mutable OUString m_sName; /**< name of this category */
-    sal_uInt32 m_nCategory; /**< index number of this category */
+    sal_uInt32 const m_nCategory; /**< index number of this category */
 };
 
 #define SC_FUNCGROUP_COUNT  ID_FUNCTION_GRP_ADDINS

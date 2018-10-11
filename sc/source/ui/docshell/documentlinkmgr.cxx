@@ -35,7 +35,7 @@ namespace sc {
 
 struct DocumentLinkManagerImpl
 {
-    SfxObjectShell* mpShell;
+    SfxObjectShell* const mpShell;
     std::unique_ptr<DataStream, o3tl::default_delete<DataStream>> mpDataStream;
     std::atomic<sfx2::LinkManager*> mpLinkManager;
 

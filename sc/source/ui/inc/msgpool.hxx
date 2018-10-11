@@ -46,7 +46,7 @@ class ScMessagePool: public SfxItemPool
     ScCondFormatDlgItem aCondFormatDlgItem;
 
     std::vector<SfxPoolItem*>    mvPoolDefaults;
-    ScDocumentPool*              pDocPool;
+    ScDocumentPool* const        pDocPool;
 
 public:
     ScMessagePool();

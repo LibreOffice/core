@@ -109,6 +109,8 @@
 
 using namespace com::sun::star;
 
+const sal_uInt16 ScDocument::nSrcVer = SC_CURRENT_VERSION;
+
 ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mpCellStringPool(new svl::SharedStringPool(*ScGlobal::pCharClass)),
         mpDocLinkMgr(new sc::DocumentLinkManager(pDocShell)),
@@ -133,7 +135,6 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         nMacroInterpretLevel(0),
         nInterpreterTableOpLevel(0),
         maInterpreterContext( *this, nullptr ),
-        nSrcVer( SC_CURRENT_VERSION ),
         nFormulaTrackCount(0),
         eHardRecalcState(HardRecalcState::OFF),
         nVisibleTab( 0 ),

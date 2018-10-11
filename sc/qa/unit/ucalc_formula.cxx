@@ -102,7 +102,7 @@ void Test::testFormulaCreateStringFromTokens()
 
     // Insert named ranges.
     struct {
-        bool bGlobal;
+        bool const bGlobal;
         const char* pName;
         const char* pExpr;
     } aNames[] = {
@@ -139,11 +139,11 @@ void Test::testFormulaCreateStringFromTokens()
     // Insert DB ranges.
     struct {
         const char* pName;
-        SCTAB nTab;
-        SCCOL nCol1;
-        SCROW nRow1;
-        SCCOL nCol2;
-        SCROW nRow2;
+        SCTAB const nTab;
+        SCCOL const nCol1;
+        SCROW const nRow1;
+        SCCOL const nCol2;
+        SCROW const nRow2;
     } aDBs[] = {
         { "Table1", 0, 0, 0, 10, 10 },
         { "Table2", 1, 0, 0, 10, 10 },
@@ -864,7 +864,7 @@ void Test::testFormulaHashAndTag()
 
     struct {
         const char* pFormula;
-        ScFormulaVectorState eState;
+        ScFormulaVectorState const eState;
     } aVectorTests[] = {
         { "=SUM(1;2;3;4;5)", FormulaVectorEnabled },
         { "=NOW()", FormulaVectorDisabled },
@@ -898,7 +898,7 @@ void Test::testFormulaTokenEquality()
     {
         const char* mpFormula1;
         const char* mpFormula2;
-        bool mbEqual;
+        bool const mbEqual;
     };
 
     FormulaTokenEqualityTest aTests[] = {
@@ -1015,8 +1015,8 @@ void Test::testFormulaCompilerJumpReordering()
 {
     struct TokenCheck
     {
-        OpCode meOp;
-        StackVar meType;
+        OpCode const meOp;
+        StackVar const meType;
     };
 
     // Set separators first.
@@ -1091,11 +1091,11 @@ void Test::testFormulaCompilerImplicitIntersection2Param()
 {
     struct TestCaseFormula
     {
-        OUString  aFormula;
-        ScAddress aCellAddress;
-        ScRange   aSumRange;
-        bool      bStartColRel;  // SumRange-StartCol
-        bool      bEndColRel;    // SumRange-EndCol
+        OUString const  aFormula;
+        ScAddress const aCellAddress;
+        ScRange const   aSumRange;
+        bool const      bStartColRel;  // SumRange-StartCol
+        bool const      bEndColRel;    // SumRange-EndCol
     };
 
     m_pDoc->InsertTab(0, "Formula");
@@ -1217,10 +1217,10 @@ void Test::testFormulaCompilerImplicitIntersection1ParamNoChange()
 {
     struct TestCaseFormulaNoChange
     {
-        OUString  aFormula;
-        ScAddress aCellAddress;
-        bool      bMatrixFormula;
-        bool      bForcedArray;
+        OUString const  aFormula;
+        ScAddress const aCellAddress;
+        bool const      bMatrixFormula;
+        bool const      bForcedArray;
     };
 
     m_pDoc->InsertTab(0, "Formula");
@@ -1314,9 +1314,9 @@ void Test::testFormulaCompilerImplicitIntersection1ParamWithChange()
 {
     struct TestCaseFormula
     {
-        OUString  aFormula;
-        ScAddress aCellAddress;
-        ScAddress aArgAddr;
+        OUString const  aFormula;
+        ScAddress const aCellAddress;
+        ScAddress const aArgAddr;
     };
 
     m_pDoc->InsertTab(0, "Formula");
@@ -1412,8 +1412,8 @@ void Test::testFormulaCompilerImplicitIntersectionOperators()
 {
     struct TestCase
     {
-        OUString formula[3];
-        double result[3];
+        OUString const formula[3];
+        double const result[3];
     };
 
     m_pDoc->InsertTab(0, "Test");

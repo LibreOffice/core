@@ -29,7 +29,7 @@ class ScTabView;
 
 class ScColBar : public ScHeaderControl
 {
-    ScHSplitPos              meWhich;
+    ScHSplitPos const        meWhich;
     ScHeaderFunctionSet*     mpFuncSet;
 
 public:
@@ -59,7 +59,7 @@ public:
 
 class ScRowBar : public ScHeaderControl
 {
-    ScVSplitPos              meWhich;
+    ScVSplitPos const        meWhich;
     ScHeaderFunctionSet*     mpFuncSet;
 
 public:

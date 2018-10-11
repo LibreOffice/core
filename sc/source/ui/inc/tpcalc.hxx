@@ -72,7 +72,7 @@ private:
 
     std::unique_ptr<ScDocOptions> pOldOptions;
     std::unique_ptr<ScDocOptions> pLocalOptions;
-    sal_uInt16             nWhichCalc;
+    sal_uInt16 const             nWhichCalc;
 
 private:
     void            Init();

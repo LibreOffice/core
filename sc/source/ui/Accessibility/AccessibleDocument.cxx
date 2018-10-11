@@ -110,13 +110,9 @@ ScAccessibleShapeData::~ScAccessibleShapeData()
 
 struct ScShapeDataLess
 {
-    OUString msLayerId;
-    OUString msZOrder;
-    ScShapeDataLess()
-        : msLayerId( "LayerID" ),
-        msZOrder( "ZOrder" )
-    {
-    }
+    static constexpr OUStringLiteral gsLayerId = "LayerID";
+    static constexpr OUStringLiteral gsZOrder = "ZOrder";
+
     static void ConvertLayerId(sal_Int16& rLayerID) // changes the number of the LayerId so it the accessibility order
     {
         // note: MSVC 2017 ICE's if this is written as "switch" so use "if"
@@ -137,13 +133,13 @@ struct ScShapeDataLess
             rLayerID = 3;
         }
     }
-    bool LessThanSheet(const ScAccessibleShapeData* pData) const
+    static bool LessThanSheet(const ScAccessibleShapeData* pData)
     {
         bool bResult(false);
         uno::Reference< beans::XPropertySet> xProps(pData->xShape, uno::UNO_QUERY);
         if (xProps.is())
         {
-            uno::Any aPropAny = xProps->getPropertyValue(msLayerId);
+            uno::Any aPropAny = xProps->getPropertyValue(gsLayerId);
             sal_Int16 nLayerID = 0;
             if( aPropAny >>= nLayerID )
             {
@@ -162,17 +158,17 @@ struct ScShapeDataLess
             uno::Reference< beans::XPropertySet> xProps2(pData2->xShape, uno::UNO_QUERY);
             if (xProps1.is() && xProps2.is())
             {
-                uno::Any aPropAny1 = xProps1->getPropertyValue(msLayerId);
-                uno::Any aPropAny2 = xProps2->getPropertyValue(msLayerId);
+                uno::Any aPropAny1 = xProps1->getPropertyValue(gsLayerId);
+                uno::Any aPropAny2 = xProps2->getPropertyValue(gsLayerId);
                 sal_Int16 nLayerID1(0);
                 sal_Int16 nLayerID2(0);
                 if( (aPropAny1 >>= nLayerID1) && (aPropAny2 >>= nLayerID2) )
                 {
                     if (nLayerID1 == nLayerID2)
                     {
-                        uno::Any aAny1 = xProps1->getPropertyValue(msZOrder);
+                        uno::Any aAny1 = xProps1->getPropertyValue(gsZOrder);
                         sal_Int32 nZOrder1 = 0;
-                        uno::Any aAny2 = xProps2->getPropertyValue(msZOrder);
+                        uno::Any aAny2 = xProps2->getPropertyValue(gsZOrder);
                         sal_Int32 nZOrder2 = 0;
                         if ( (aAny1 >>= nZOrder1) && (aAny2 >>= nZOrder2) )
                             bResult = (nZOrder1 < nZOrder2);
@@ -195,6 +191,11 @@ struct ScShapeDataLess
         return bResult;
     }
 };
+
+#if !HAVE_CPP_INLINE_VARIABLES
+constexpr OUStringLiteral ScShapeDataLess::gsLayerId;
+constexpr OUStringLiteral ScShapeDataLess::gsZOrder;
+#endif
 
 struct DeselectShape
 {
@@ -297,7 +298,7 @@ private:
     mutable sal_uInt32 mnShapesSelected;
     ScTabViewShell* mpViewShell;
     ScAccessibleDocument* mpAccessibleDocument;
-    ScSplitPos meSplitPos;
+    ScSplitPos const meSplitPos;
 
     void FillShapes(std::vector < uno::Reference < drawing::XShape > >& rShapes) const;
     bool FindSelectedShapesChanges(const css::uno::Reference<css::drawing::XShapes>& xShapes) const;

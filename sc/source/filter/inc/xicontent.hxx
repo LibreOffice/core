@@ -139,7 +139,7 @@ private:
 
     ScRangeList         maRanges;           /// Destination cell ranges.
     ScCondFmtPtr        mxScCondFmt;        /// Calc conditional format.
-    sal_uInt32          mnFormatIndex;      /// Index of this conditional format in list.
+    sal_uInt32 const    mnFormatIndex;      /// Index of this conditional format in list.
     sal_uInt16          mnCondCount;        /// Number of conditions to be inserted.
     sal_uInt16          mnCondIndex;        /// Condition index to be inserted next.
 };
@@ -222,7 +222,7 @@ private:
 
     OUString            maURL;          /// Source document URL.
     OUString            maTables;       /// List of source range names.
-    ScRange             maDestRange;    /// Destination range.
+    ScRange const       maDestRange;    /// Destination range.
     XclImpWebQueryMode  meMode;         /// Current mode of the web query.
     sal_uInt16          mnRefresh;      /// Refresh time in minutes.
 };

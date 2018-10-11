@@ -274,7 +274,7 @@ public:
         typedef std::vector<ScRange> RangeIndexType;
         CachesType m_Caches;
         RangeIndexType maRanges;
-        ScDocument* mpDoc;
+        ScDocument* const mpDoc;
     public:
         SheetCaches(ScDocument* pDoc);
         bool hasCache(const ScRange& rRange) const;
@@ -301,7 +301,7 @@ public:
         friend class ScDPCollection;
         typedef ::std::map<OUString, std::unique_ptr<ScDPCache>> CachesType;
         CachesType m_Caches;
-        ScDocument* mpDoc;
+        ScDocument* const mpDoc;
     public:
         NameCaches(ScDocument* pDoc);
         bool hasCache(const OUString& rName) const;
@@ -322,9 +322,9 @@ public:
      */
     struct DBType
     {
-        sal_Int32 mnSdbType;
-        OUString maDBName;
-        OUString maCommand;
+        sal_Int32 const mnSdbType;
+        OUString const maDBName;
+        OUString const maCommand;
         DBType(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand);
 
         struct less
@@ -341,7 +341,7 @@ public:
         friend class ScDPCollection;
         typedef ::std::map<DBType, std::unique_ptr<ScDPCache>, DBType::less> CachesType;
         CachesType m_Caches;
-        ScDocument* mpDoc;
+        ScDocument* const mpDoc;
     public:
         DBCaches(ScDocument* pDoc);
         bool hasCache(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand) const;

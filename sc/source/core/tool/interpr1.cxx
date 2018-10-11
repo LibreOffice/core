@@ -4671,7 +4671,7 @@ public:
 
 private:
     const ScMatrix& mrMat;
-    bool mbColVec;
+    bool const mbColVec;
 };
 
 /** returns -1 when the matrix value is smaller than the query value, 0 when
@@ -8860,8 +8860,8 @@ void ScInterpreter::ScLeft()
 }
 
 typedef struct {
-    UBlockCode from;
-    UBlockCode to;
+    UBlockCode const from;
+    UBlockCode const to;
 } UBlockScript;
 
 static const UBlockScript scriptList[] = {

@@ -182,7 +182,7 @@ protected:
     ScDBQueryParamBase(DataType eType);
 
 private:
-    DataType        meType;
+    DataType const        meType;
 };
 
 struct ScDBQueryParamInternal : public ScDBQueryParamBase, public ScQueryParamTable

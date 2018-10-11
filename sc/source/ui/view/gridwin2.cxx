@@ -427,9 +427,9 @@ public:
     }
 
 private:
-    ScDPObject*     mpDPObject;
-    long            mnDimIndex;
-    SortType        meType;
+    ScDPObject* const     mpDPObject;
+    long const            mnDimIndex;
+    SortType const        meType;
     sal_uInt16      mnUserListIndex;
     ScTabViewShell* mpViewShell;
 };

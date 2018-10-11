@@ -32,7 +32,7 @@ public:
 
 struct ScFunctionData                   // to calculate single functions
 {
-    ScSubTotalFunc  eFunc;
+    ScSubTotalFunc const  eFunc;
     double          nVal;
     long            nCount;
     bool            bError;
