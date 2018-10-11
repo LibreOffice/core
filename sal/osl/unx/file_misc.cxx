@@ -883,10 +883,10 @@ void attemptChangeMetadata( const sal_Char* pszFileName, mode_t nMode, time_t nA
 #endif
     {
         int e = errno;
-        SAL_INFO("sal.file", "chmod(" << pszFileName << std::oct << nMode << std::dec <<"): errno " << e << ": " << strerror(e));
+        SAL_INFO("sal.file", "chmod(" << pszFileName << ",0" << std::oct << nMode << std::dec <<"): errno " << e << ": " << strerror(e));
     }
     else
-        SAL_INFO("sal.file", "chmod(" << pszFileName << std::oct << nMode << std::dec <<"): OK");
+        SAL_INFO("sal.file", "chmod(" << pszFileName << ",0" << std::oct << nMode << std::dec <<"): OK");
 
     // No way to change utime of a symlink itself:
     if (!S_ISLNK(nMode))
@@ -964,12 +964,12 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
     if ( DestFileFD < 0 )
     {
         nRet=errno;
-        SAL_INFO("sal.file", "open(" << pszDestFileName << ",O_WRONLY|O_CREAT," << std::oct << mode << std::dec << "): errno " << nRet << ": " << strerror(nRet));
+        SAL_INFO("sal.file", "open(" << pszDestFileName << ",O_WRONLY|O_CREAT,0" << std::oct << mode << std::dec << "): errno " << nRet << ": " << strerror(nRet));
         osl_closeFile(SourceFileFH);
         return nRet;
     }
     else
-        SAL_INFO("sal.file", "open(" << pszDestFileName << ",O_WRONLY|O_CREAT," << std::oct << mode << std::dec << "): OK");
+        SAL_INFO("sal.file", "open(" << pszDestFileName << ",O_WRONLY|O_CREAT,0" << std::oct << mode << std::dec << "): OK");
 
     size_t nRemains = nSourceSize;
 
@@ -1005,8 +1005,15 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
     }
 
     osl_closeFile( SourceFileFH );
-    if ( close( DestFileFD ) == -1 && nRet == 0 )
-        nRet = errno;
+    if ( close( DestFileFD ) == -1 )
+    {
+        int e = errno;
+        SAL_INFO("sal.file", "close(" << DestFileFD << "): errno " << e << ": " << strerror(e));
+        if ( nRet == 0 )
+            nRet = e;
+    }
+    else
+        SAL_INFO("sal.file", "close(" << DestFileFD << "): OK");
 
     return nRet;
 }
