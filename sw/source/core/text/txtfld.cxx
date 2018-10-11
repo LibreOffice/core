@@ -309,9 +309,9 @@ static SwFieldPortion * lcl_NewMetaPortion(SwTextAttr & rHint, const bool bPrefi
 /**
  * Try to create a new portion with zero length, for an end of a hint
  * (where there is no CH_TXTATR). Because there may be multiple hint ends at a
- * given index, m_nHintEndIndex is used to keep track of the already created
+ * given index, m_pByEndIter is used to keep track of the already created
  * portions. But the portions created here may actually be deleted again,
- * due to Underflow. In that case, m_nHintEndIndex must be decremented,
+ * due to Underflow. In that case, m_pByEndIter must be decremented,
  * so the portion will be created again on the next line.
  */
 SwExpandPortion * SwTextFormatter::TryNewNoLengthPortion(SwTextFormatInfo const & rInfo)
@@ -321,26 +321,24 @@ SwExpandPortion * SwTextFormatter::TryNewNoLengthPortion(SwTextFormatInfo const 
     // sw_redlinehide: because there is a dummy character at the start of these
     // hints, it's impossible to have ends of hints from different nodes at the
     // same view position, so it's sufficient to check the hints of the current
-    // node.  However, m_nHintEndIndex exists for the whole text frame, so
+    // node.  However, m_pByEndIter exists for the whole text frame, so
     // it's necessary to iterate all hints for that purpose...
-    SwTextNode const* pNode(nullptr);
-    sw::MergedAttrIterByEnd iter(*rInfo.GetTextFrame());
-    size_t i(0);
-    for (SwTextAttr const* pHint = iter.NextAttr(&pNode); pHint;
-         pHint = iter.NextAttr(&pNode))
+    if (!m_pByEndIter)
     {
-        if (i++ < m_nHintEndIndex)
-        {
-            continue; // skip ones that were handled earlier
-        }
+        m_pByEndIter.reset(new sw::MergedAttrIterByEnd(*rInfo.GetTextFrame()));
+    }
+    SwTextNode const* pNode(nullptr);
+    for (SwTextAttr const* pHint = m_pByEndIter->NextAttr(pNode); pHint;
+         pHint = m_pByEndIter->NextAttr(pNode))
+    {
         SwTextAttr & rHint(const_cast<SwTextAttr&>(*pHint));
         TextFrameIndex const nEnd(
             rInfo.GetTextFrame()->MapModelToView(pNode, *rHint.GetAnyEnd()));
         if (nEnd > nIdx)
         {
+            m_pByEndIter->PrevAttr();
             break;
         }
-        ++m_nHintEndIndex;
         if (nEnd == nIdx)
         {
             if (RES_TXTATR_METAFIELD == rHint.Which())

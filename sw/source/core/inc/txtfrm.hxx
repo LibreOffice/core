@@ -975,11 +975,15 @@ public:
 };
 
 class MergedAttrIterByEnd
-    : public MergedAttrIterBase
 {
+private:
+    std::vector<std::pair<SwTextNode const*, SwTextAttr const*>> m_Hints;
+    SwTextNode const*const m_pNode;
+    size_t m_CurrentHint;
 public:
-    MergedAttrIterByEnd(SwTextFrame const& rFrame) : MergedAttrIterBase(rFrame) {}
-    SwTextAttr const* NextAttr(SwTextNode const** ppNode = nullptr);
+    MergedAttrIterByEnd(SwTextFrame const& rFrame);
+    SwTextAttr const* NextAttr(SwTextNode const*& rpNode);
+    void PrevAttr();
 };
 
 class MergedAttrIterReverse
