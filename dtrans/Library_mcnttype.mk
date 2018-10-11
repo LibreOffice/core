@@ -27,6 +27,7 @@ $(eval $(call gb_Library_use_libraries,mcnttype,\
 	cppu \
 	cppuhelper \
 	sal \
+	tl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,mcnttype,\
