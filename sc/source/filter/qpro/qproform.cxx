@@ -398,8 +398,8 @@ ConvErr QProToSc::Convert( std::unique_ptr<ScTokenArray>& pArray )
 
 static const struct
 {
-    DefTokenId nToken;
-    FUNC_TYPE   nType;
+    DefTokenId const nToken;
+    FUNC_TYPE const   nType;
 } aFuncMap[] = {
     { ocPush, FT_ConstFloat },
     { ocPush, FT_Cref },

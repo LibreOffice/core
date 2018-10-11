@@ -285,7 +285,7 @@ public:
 class CopyRangeData
 {
     ScDocument* mpSrc;
-    ScDocument* mpDest;
+    ScDocument* const mpDest;
 public:
     CopyRangeData(ScDocument* pSrc, ScDocument* pDest) : mpSrc(pSrc), mpDest(pDest) {}
 

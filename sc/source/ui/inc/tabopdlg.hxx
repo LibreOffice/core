@@ -72,7 +72,7 @@ private:
     ScRefAddress    theRowCell;
     ScRefAddress    theColCell;
 
-    ScDocument*         pDoc;
+    ScDocument* const         pDoc;
     const SCTAB         nCurTab;
     VclPtr<formula::RefEdit>   pEdActive;
     bool                bDlgLostFocus;

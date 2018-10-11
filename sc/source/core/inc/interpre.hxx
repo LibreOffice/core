@@ -217,7 +217,7 @@ private:
     FormulaError  mnStringNoValueError; // the error set in ConvertStringToValue() if no value
     SubtotalFlags mnSubTotalFlags;      // flags for subtotal and aggregate functions
     sal_uInt8   cPar;                   // current count of parameters
-    bool        bCalcAsShown;           // precision as shown
+    bool const  bCalcAsShown;           // precision as shown
     bool        bMatrixFormula;         // formula cell is a matrix formula
 
     VolatileType meVolatileType;

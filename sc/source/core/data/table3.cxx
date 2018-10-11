@@ -261,7 +261,7 @@ private:
 
     std::vector<std::unique_ptr<ScSortInfo[]>> mvppInfo;
     SCCOLROW        nStart;
-    SCCOLROW        mnLastIndex; /// index of last non-empty cell position.
+    SCCOLROW const  mnLastIndex; /// index of last non-empty cell position.
 
     std::vector<SCCOLROW> maOrderIndices;
     bool mbKeepQuery;
@@ -598,8 +598,8 @@ struct SortedRowFlags
 
 struct PatternSpan
 {
-    SCROW mnRow1;
-    SCROW mnRow2;
+    SCROW const mnRow1;
+    SCROW const mnRow2;
     const ScPatternAttr* mpPattern;
 
     PatternSpan( SCROW nRow1, SCROW nRow2, const ScPatternAttr* pPat ) :
@@ -646,7 +646,7 @@ namespace {
 template<typename Hint, typename ReorderMap, typename Index>
 class ReorderNotifier
 {
-    Hint maHint;
+    Hint const maHint;
 public:
     ReorderNotifier( const ReorderMap& rMap, SCTAB nTab, Index nPos1, Index nPos2 ) :
         maHint(rMap, nTab, nPos1, nPos2) {}
@@ -2255,7 +2255,7 @@ class QueryEvaluator
     svl::SharedStringPool& mrStrPool;
     const ScTable& mrTab;
     const ScQueryParam& mrParam;
-    bool mpTestEqualCondition;
+    bool const mpTestEqualCondition;
     utl::TransliterationWrapper* mpTransliteration;
     CollatorWrapper* mpCollator;
     const bool mbMatchWholeCell;

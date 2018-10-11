@@ -47,7 +47,7 @@ class ScUndoSdrCaptionObj: public SdrUndoAction
 {
 protected:
     SdrObjList* m_pObjList;
-    sal_uInt32  m_nOrdNum;
+    sal_uInt32 const  m_nOrdNum;
     std::shared_ptr< SdrCaptionObj > m_pCaptionObj;
 
     void UnmarkObject();
@@ -110,9 +110,9 @@ public:
     void            SetEditData( std::unique_ptr<EditTextObject> pOld, std::unique_ptr<EditTextObject> pNew );
 
 private:
-    SCCOL           nCol;
-    SCROW           nRow;
-    SCTAB           nTab;
+    SCCOL const     nCol;
+    SCROW const     nRow;
+    SCTAB const     nTab;
     ScPatternAttr*  pOldPattern;
     ScPatternAttr*  pNewPattern;
     ScPatternAttr*  pApplyPattern;
@@ -152,10 +152,10 @@ public:
 private:
     ValuesType maOldValues;
 
-    OUString  maNewString;
+    OUString const  maNewString;
     std::unique_ptr<EditTextObject> mpNewEditData;
     sal_uLong mnEndChangeAction;
-    ScAddress maPos;
+    ScAddress const maPos;
 
     void            DoChange() const;
     void            SetChangeTrack();
@@ -178,10 +178,10 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScAddress       aPos;
-    ScCellValue maOldCell;
-    double          nValue;
-    sal_uLong       nEndChangeAction;
+    ScAddress const   aPos;
+    ScCellValue const maOldCell;
+    double const      nValue;
+    sal_uLong         nEndChangeAction;
 
     void            SetChangeTrack();
 };
@@ -205,9 +205,9 @@ private:
     void MoveCursorToCell();
 
 private:
-    ScAddress maPos;
-    ScCellValue maOldValue;
-    ScCellValue maNewValue;
+    ScAddress const maPos;
+    ScCellValue const maOldValue;
+    ScCellValue const maNewValue;
     sal_uLong mnEndChangeAction;
 };
 
@@ -227,11 +227,11 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    SCCOL           nCol;
-    SCROW           nRow;
-    SCTAB           nTab;
-    bool            bColumn;        // Column or row break
-    bool            bInsert;        // Insert or Delete
+    SCCOL const           nCol;
+    SCROW const           nRow;
+    SCTAB const           nTab;
+    bool const            bColumn;        // Column or row break
+    bool const            bInsert;        // Insert or Delete
 
     void            DoChange( bool bInsert ) const;
 };
@@ -251,11 +251,11 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    SCTAB           nTab;
-    sal_uInt16      nOldScale;
-    sal_uInt16      nOldPages;
-    sal_uInt16      nNewScale;
-    sal_uInt16      nNewPages;
+    SCTAB const           nTab;
+    sal_uInt16 const      nOldScale;
+    sal_uInt16 const      nOldPages;
+    sal_uInt16 const      nNewScale;
+    sal_uInt16 const      nNewPages;
 
     void            DoChange( bool bUndo );
 };
@@ -276,13 +276,13 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    SCCOL           nCol;
-    SCROW           nRow;
-    SCTAB           nTab;
+    SCCOL const     nCol;
+    SCROW const     nRow;
+    SCTAB const     nTab;
     sal_uLong       nEndChangeAction;
 
-    ScCellValue maOldText;
-    ScCellValue maNewText;
+    ScCellValue const maOldText;
+    ScCellValue const maNewText;
 
     void DoChange( bool bUndo, const ScCellValue& rText );
     void SetChangeTrack( const ScCellValue& rOldCell );
@@ -323,7 +323,7 @@ private:
     void            DoRemoveNote( const ScNoteData& rNoteData );
 
 private:
-    ScAddress       maPos;
+    ScAddress const maPos;
     ScNoteData      maOldData;
     ScNoteData      maNewData;
     std::unique_ptr<SdrUndoAction> mpDrawUndo;
@@ -344,8 +344,8 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScAddress       maPos;
-    bool            mbShown;
+    ScAddress const       maPos;
+    bool const            mbShown;
 };
 
 class ScUndoDetective: public ScSimpleUndo
@@ -389,7 +389,7 @@ public:
 private:
     std::unique_ptr<ScRangeName> pOldRanges;
     std::unique_ptr<ScRangeName> pNewRanges;
-    SCTAB           mnTab;
+    SCTAB const     mnTab;
 
     void            DoChange( bool bUndo );
 };
@@ -398,7 +398,7 @@ namespace sc {
 
 class UndoSetCells : public ScSimpleUndo
 {
-    ScAddress maTopPos;
+    ScAddress const maTopPos;
     CellValues maOldValues;
     CellValues maNewValues;
 

@@ -34,9 +34,9 @@ namespace{
 
 struct XclPaperSize
 {
-    Paper               mePaper;            /// SVX paper size identifier.
-    long                mnWidth;            /// Paper width in twips.
-    long                mnHeight;           /// Paper height in twips.
+    Paper const               mePaper;            /// SVX paper size identifier.
+    long const                mnWidth;            /// Paper width in twips.
+    long const                mnHeight;           /// Paper height in twips.
 };
 
 constexpr long in2twips(double n_inch)

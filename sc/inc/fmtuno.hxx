@@ -164,7 +164,7 @@ class ScTableValidationObj : public cppu::WeakImplHelper<
                             css::lang::XServiceInfo >
 {
 private:
-    SfxItemPropertySet  aPropSet;
+    SfxItemPropertySet const  aPropSet;
     ScConditionMode     nMode;
     OUString            aExpr1;
     OUString            aExpr2;

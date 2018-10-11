@@ -310,7 +310,7 @@ orcus::spreadsheet::iface::import_sheet* ScOrcusFactory::append_sheet(
 
 class FindSheetByIndex
 {
-    SCTAB mnTab;
+    SCTAB const mnTab;
 public:
     explicit FindSheetByIndex(SCTAB nTab) : mnTab(nTab) {}
     bool operator() (const std::unique_ptr<ScOrcusSheet>& rSheet) const

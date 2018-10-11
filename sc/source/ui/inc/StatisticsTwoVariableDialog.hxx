@@ -59,15 +59,15 @@ protected:
     VclPtr<formula::RefButton> mpOutputRangeButton;
 
     // Data
-    ScViewData*         mViewData;
-    ScDocument*         mDocument;
+    ScViewData* const         mViewData;
+    ScDocument* const         mDocument;
 
-    ScRange             mVariable1Range;
-    ScRange             mVariable2Range;
+    ScRange                   mVariable1Range;
+    ScRange                   mVariable2Range;
 
-    ScAddress::Details  mAddressDetails;
-    ScAddress           mOutputAddress;
-    GroupedBy           mGroupedBy;
+    ScAddress::Details const  mAddressDetails;
+    ScAddress                 mOutputAddress;
+    GroupedBy                 mGroupedBy;
 
 private:
     // Widgets
@@ -77,8 +77,8 @@ private:
     VclPtr<RadioButton>        mpGroupByRowsRadio;
 
     VclPtr<formula::RefEdit>   mpActiveEdit;
-    ScAddress           mCurrentAddress;
-    bool                mDialogLostFocus;
+    ScAddress const            mCurrentAddress;
+    bool                       mDialogLostFocus;
 
     void Init();
     void GetRangeFromSelection();

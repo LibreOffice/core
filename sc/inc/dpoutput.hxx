@@ -76,7 +76,7 @@ private:
     SCROW                   nDataStartRow;
     SCCOL                   nTabEndCol;
     SCROW                   nTabEndRow;
-    bool                    bDoFilter:1;
+    bool const              bDoFilter:1;
     bool                    bResultsError:1;
     bool                    bSizesValid:1;
     bool                    bSizeOverflow:1;

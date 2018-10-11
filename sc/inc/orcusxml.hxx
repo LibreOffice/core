@@ -30,7 +30,7 @@ struct ScOrcusXMLTreeParam
     struct EntryData
     {
         size_t mnNamespaceID; /// numerical ID for xml namespace
-        EntryType meType;
+        EntryType const meType;
         ScAddress maLinkedPos; /// linked cell position (invalid if unlinked)
         bool mbRangeParent:1;
         bool mbLeafNode:1; /// Leaf if it has no child elements. Child Attributes don't count.

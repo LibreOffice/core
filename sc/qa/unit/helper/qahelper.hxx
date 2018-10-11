@@ -82,18 +82,18 @@ struct TestParam
 {
     struct RowData
     {
-        SCROW nStartRow;
-        SCROW nEndRow;
-        SCTAB nTab;
-        int nExpectedHeight; // -1 for default height
-        int nCheck; // currently only CHECK_OPTIMAL ( we could add CHECK_MANUAL etc.)
-        bool bOptimal;
+        SCROW const nStartRow;
+        SCROW const nEndRow;
+        SCTAB const nTab;
+        int const nExpectedHeight; // -1 for default height
+        int const nCheck; // currently only CHECK_OPTIMAL ( we could add CHECK_MANUAL etc.)
+        bool const bOptimal;
     };
     const char* sTestDoc;
-    int nImportType;
-    int nExportType; // -1 for import test, otherwise this is an export test
-    int nRowData;
-    RowData* pData;
+    int const nImportType;
+    int const nExportType; // -1 for import test, otherwise this is an export test
+    int const nRowData;
+    RowData* const pData;
 };
 
 struct FileFormat {
@@ -174,7 +174,7 @@ class SCQAHELPER_DLLPUBLIC ScBootstrapFixture : public test::BootstrapFixture
 {
     static const FileFormat aFileFormats[];
 protected:
-    OUString m_aBaseString;
+    OUString const m_aBaseString;
 
     ScDocShellRef load(
         bool bReadWrite, const OUString& rURL, const OUString& rFilter, const OUString &rUserData,

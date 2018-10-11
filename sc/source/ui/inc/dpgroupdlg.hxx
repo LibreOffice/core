@@ -85,7 +85,7 @@ private:
 
 private:
     VclPtr<DateField>          mpEdValue;
-    Date                maNullDate;
+    Date const                maNullDate;
 };
 
 class ScDPNumGroupDlg : public ModalDialog

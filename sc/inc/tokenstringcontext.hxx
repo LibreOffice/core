@@ -30,7 +30,7 @@ struct SC_DLLPUBLIC TokenStringContext
     typedef std::unordered_map<size_t, std::vector<OUString> > IndexNamesMapType;
     typedef std::unordered_map<SCTAB, IndexNameMapType> TabIndexMapType;
 
-    formula::FormulaGrammar::Grammar meGram;
+    formula::FormulaGrammar::Grammar const meGram;
     formula::FormulaCompiler::OpCodeMapPtr mxOpCodeMap;
     const ScCompiler::Convention* mpRefConv;
     OUString maErrRef;
@@ -48,7 +48,7 @@ struct SC_DLLPUBLIC TokenStringContext
 
 class SC_DLLPUBLIC CompileFormulaContext
 {
-    ScDocument* mpDoc;
+    ScDocument* const mpDoc;
     formula::FormulaGrammar::Grammar meGram;
     std::vector<OUString> maTabNames;
 

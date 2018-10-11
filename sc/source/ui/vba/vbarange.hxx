@@ -80,8 +80,8 @@ class ScVbaRange : public ScVbaRange_BASE
     css::uno::Reference< ov::XCollection > m_Borders;
     css::uno::Reference< css::table::XCellRange > mxRange;
     css::uno::Reference< css::sheet::XSheetCellRangeContainer > mxRanges;
-    bool mbIsRows;
-    bool mbIsColumns;
+    bool const mbIsRows;
+    bool const mbIsColumns;
     css::uno::Reference< ov::excel::XValidation > m_xValidation;
     /// @throws css::uno::RuntimeException
     double getCalcColWidth(const css::table::CellRangeAddress&);

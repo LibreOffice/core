@@ -479,10 +479,10 @@ class IdleCalcTextWidthScope
     ScDocument& mrDoc;
     ScAddress& mrCalcPos;
     MapMode maOldMapMode;
-    sal_uInt64 mnStartTime;
+    sal_uInt64 const mnStartTime;
     ScStyleSheetPool* mpStylePool;
-    SfxStyleSearchBits mnOldSearchMask;
-    SfxStyleFamily meOldFamily;
+    SfxStyleSearchBits const mnOldSearchMask;
+    SfxStyleFamily const meOldFamily;
     bool mbNeedMore;
     bool mbProgress;
 

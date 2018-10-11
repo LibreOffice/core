@@ -53,7 +53,7 @@ private:
     VclPtr<CheckBox>           m_pCbProtect;
     VclPtr<OKButton>           m_pBtnOk;
     const OUString      aDefScenarioName;
-    bool                bIsEdit;
+    bool const                bIsEdit;
 
     DECL_LINK( OkHdl, Button*, void);
     DECL_LINK( EnableHdl, Button*, void );

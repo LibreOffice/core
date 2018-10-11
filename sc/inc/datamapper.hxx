@@ -65,8 +65,6 @@ private:
 
     ScOrcusImportXMLParam maParam;
 
-    double mnUpdateFrequency;
-
     std::shared_ptr<DataProvider> mpDataProvider;
     std::shared_ptr<ScDBDataManager> mpDBDataManager;
 

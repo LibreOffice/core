@@ -47,7 +47,7 @@ protected:
     VclPtr<vcl::Window>     pWindow;
     SdrModel*       pDrDoc;
 
-    SfxRequest      aSfxRequest;
+    SfxRequest const      aSfxRequest;
     VclPtr<Dialog>          pDialog;
 
     Timer           aScrollTimer;           // for Autoscrolling

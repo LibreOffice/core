@@ -1637,7 +1637,7 @@ static void lcl_MoveToEnd( ScDPSaveDimension& rDim, const OUString& rItemName )
 
 struct ScOUStringCollate
 {
-    CollatorWrapper* mpCollator;
+    CollatorWrapper* const mpCollator;
 
     explicit ScOUStringCollate(CollatorWrapper* pColl) : mpCollator(pColl) {}
 

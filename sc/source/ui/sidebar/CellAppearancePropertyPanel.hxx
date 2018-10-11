@@ -87,16 +87,16 @@ private:
     ::sfx2::sidebar::ControllerItem         maBorderBLTRControl;
 
     // images
-    Image                                   maIMGCellBorder;
-    Image                                   maIMGLineStyle1;
-    Image                                   maIMGLineStyle2;
-    Image                                   maIMGLineStyle3;
-    Image                                   maIMGLineStyle4;
-    Image                                   maIMGLineStyle5;
-    Image                                   maIMGLineStyle6;
-    Image                                   maIMGLineStyle7;
-    Image                                   maIMGLineStyle8;
-    Image                                   maIMGLineStyle9;
+    Image const                             maIMGCellBorder;
+    Image const                             maIMGLineStyle1;
+    Image const                             maIMGLineStyle2;
+    Image const                             maIMGLineStyle3;
+    Image const                             maIMGLineStyle4;
+    Image const                             maIMGLineStyle5;
+    Image const                             maIMGLineStyle6;
+    Image const                             maIMGLineStyle7;
+    Image const                             maIMGLineStyle8;
+    Image const                             maIMGLineStyle9;
 
     // BorderStyle defines
     sal_uInt16                              mnInWidth;
@@ -130,7 +130,7 @@ private:
     VclPtr<CellBorderStylePopup>            mxCellBorderStylePopup;
 
     vcl::EnumContext                        maContext;
-    SfxBindings*                            mpBindings;
+    SfxBindings* const                      mpBindings;
 
     DECL_LINK(TbxCellBorderSelectHdl, ToolBox*, void);
     DECL_LINK(TbxLineStyleSelectHdl, ToolBox*, void);

@@ -1131,14 +1131,14 @@ enum XclChFrameType
 struct XclChFormatInfo
 {
     XclChObjectType     meObjType;          /// Object type for automatic format.
-    XclChPropertyMode   mePropMode;         /// Property mode for property set helper.
-    sal_uInt16          mnAutoLineColorIdx; /// Automatic line color index.
-    sal_Int16           mnAutoLineWeight;   /// Automatic line weight (hairline, single, ...).
-    sal_uInt16          mnAutoPattColorIdx; /// Automatic fill pattern color index.
-    XclChFrameType      meDefFrameType;     /// Default format type for missing frame objects.
-    bool                mbCreateDefFrame;   /// true = Create missing frame objects on import.
-    bool                mbDeleteDefFrame;   /// true = Delete default frame formatting on export.
-    bool                mbIsFrame;          /// true = Object is a frame, false = Object is a line.
+    XclChPropertyMode const   mePropMode;         /// Property mode for property set helper.
+    sal_uInt16 const          mnAutoLineColorIdx; /// Automatic line color index.
+    sal_Int16 const           mnAutoLineWeight;   /// Automatic line weight (hairline, single, ...).
+    sal_uInt16 const          mnAutoPattColorIdx; /// Automatic fill pattern color index.
+    XclChFrameType const      meDefFrameType;     /// Default format type for missing frame objects.
+    bool const                mbCreateDefFrame;   /// true = Create missing frame objects on import.
+    bool const                mbDeleteDefFrame;   /// true = Delete default frame formatting on export.
+    bool const                mbIsFrame;          /// true = Object is a frame, false = Object is a line.
 };
 
 /** Provides access to chart auto formatting for all available object types. */
@@ -1293,8 +1293,8 @@ public:
 private:
     css::uno::Reference< css::lang::XMultiServiceFactory > mxFactory;              /// Factory to create the container.
     css::uno::Reference< css::container::XNameContainer >  mxContainer;            /// Container for the objects.
-    OUString            maServiceName;          /// Service name to create the container.
-    OUString            maObjNameBase;          /// Base of names for inserted objects.
+    OUString const      maServiceName;          /// Service name to create the container.
+    OUString const      maObjNameBase;          /// Base of names for inserted objects.
     sal_Int32           mnIndex;                /// Index to create unique identifiers.
 };
 
@@ -1399,8 +1399,8 @@ struct XclChRootData
     css::uno::Reference< css::chart2::XChartDocument >
                         mxChartDoc;             /// The chart document.
     tools::Rectangle           maChartRect;            /// Position and size of the chart shape.
-    XclChTypeProvRef    mxTypeInfoProv;         /// Provides info about chart types.
-    XclChFmtInfoProvRef mxFmtInfoProv;          /// Provides info about auto formatting.
+    XclChTypeProvRef const    mxTypeInfoProv;         /// Provides info about chart types.
+    XclChFmtInfoProvRef const mxFmtInfoProv;          /// Provides info about auto formatting.
     XclChObjectTableRef mxLineDashTable;        /// Container for line dash styles.
     XclChObjectTableRef mxGradientTable;        /// Container for gradient fill styles.
     XclChObjectTableRef mxHatchTable;           /// Container for hatch fill styles.

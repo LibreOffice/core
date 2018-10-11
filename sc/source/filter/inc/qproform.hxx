@@ -52,7 +52,7 @@ enum FUNC_TYPE
 class QProToSc : public ConverterBase
 {
 private:
-    TokenId mnAddToken;
+    TokenId const mnAddToken;
     SvStream& maIn;
 
 public:

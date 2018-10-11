@@ -166,11 +166,11 @@ public:
     }
 
 private:
-    ScDocument* mpDoc;
+    ScDocument* const mpDoc;
     SCCOL mnCol;
     SCROW mnRow;
-    SCTAB mnTab;
-    StringType meStringType;
+    SCTAB const mnTab;
+    StringType const meStringType;
 };
 
 class conditional_format_handler
@@ -211,10 +211,10 @@ public:
     }
 
 private:
-    ScDocument* mpDoc;
+    ScDocument* const mpDoc;
     SCCOL mnCol;
     SCROW mnRow;
-    SCTAB mnTab;
+    SCTAB const mnTab;
 };
 
 #endif

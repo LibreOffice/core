@@ -75,7 +75,7 @@ protected:  // for usage in derived classes
     ScDocument&         mrDoc;
 
 private:
-    ScSelectionState    maSelState;         /// Selection data of the document.
+    ScSelectionState const    maSelState;         /// Selection data of the document.
     ScDocument*         mpUndoDoc;          /// Document stores all old cells for UNDO action.
     ScDocument*         mpRedoDoc;          /// Document stores all new cells for REDO action.
     LanguageType        meCurrLang;         /// Current cell language.
@@ -144,7 +144,7 @@ protected:
     virtual bool        NeedsConversion() override;
 
 private:
-    ScConversionParam   maConvParam;        /// Conversion parameters.
+    ScConversionParam const   maConvParam;        /// Conversion parameters.
 };
 
 #endif

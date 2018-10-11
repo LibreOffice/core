@@ -563,14 +563,14 @@ namespace {
 
 struct ScDPSaveGroupDimNameFunc
 {
-    OUString       maDimName;
+    OUString const       maDimName;
     explicit     ScDPSaveGroupDimNameFunc( const OUString& rDimName ) : maDimName( rDimName ) {}
     bool         operator()( const ScDPSaveGroupDimension& rGroupDim ) const { return rGroupDim.GetGroupDimName() == maDimName; }
 };
 
 struct ScDPSaveGroupSourceNameFunc
 {
-    OUString       maSrcDimName;
+    OUString const       maSrcDimName;
     explicit     ScDPSaveGroupSourceNameFunc( const OUString& rSrcDimName ) : maSrcDimName( rSrcDimName ) {}
     bool         operator()( const ScDPSaveGroupDimension& rGroupDim ) const { return rGroupDim.GetSourceDimName() == maSrcDimName; }
 };

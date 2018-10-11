@@ -55,7 +55,7 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
-    XclExpStringRef     mxResult;
+    XclExpStringRef const mxResult;
 };
 
 // Additional records for special formula ranges
@@ -118,7 +118,7 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
-    XclTokenArrayRef    mxTokArr;       /// The token array of a matrix formula.
+    XclTokenArrayRef const mxTokArr;       /// The token array of a matrix formula.
 };
 
 typedef std::shared_ptr< XclExpArray > XclExpArrayRef;
@@ -166,7 +166,7 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
-    XclTokenArrayRef    mxTokArr;       /// The token array of a shared formula.
+    XclTokenArrayRef const mxTokArr;       /// The token array of a shared formula.
     sal_uInt8           mnUsedCount;    /// Number of FORMULA records referring to this record.
 };
 
@@ -237,7 +237,7 @@ private:
     sal_uInt32          mnColInpXclRow; /// Row index of column input cell.
     sal_uInt16          mnRowInpXclCol; /// Column index of row input cell.
     sal_uInt32          mnRowInpXclRow; /// Row index of row input cell.
-    sal_uInt8           mnScMode;       /// Type of the multiple operation (Calc constant).
+    sal_uInt8 const     mnScMode;       /// Type of the multiple operation (Calc constant).
     bool                mbValid;        /// true = Contains valid references.
 };
 
@@ -368,7 +368,7 @@ private:
     virtual void        WriteContents( XclExpStream& rStrm ) override;
 
 private:
-    double              mfValue;        /// The cell value.
+    double const        mfValue;        /// The cell value.
 };
 
 /** Represents a BOOLERR record that describes a cell with a Boolean value. */
@@ -513,8 +513,8 @@ private:
 private:
     typedef ::std::vector< XclExpMultiXFId > XclExpMultiXFIdDeq;
 
-    sal_uInt16          mnMulRecId;     /// Record ID for multiple record variant.
-    std::size_t         mnContSize;     /// Data size of contents for one cell
+    sal_uInt16 const    mnMulRecId;     /// Record ID for multiple record variant.
+    std::size_t const   mnContSize;     /// Data size of contents for one cell
     XclExpMultiXFIdDeq  maXFIds;        /// The XF identifiers of the cell formatting.
 };
 
@@ -882,14 +882,14 @@ private:
     typedef XclExpRecordList< XclExpCellBase > XclExpCellList;
 
     XclExpCellList      maCellList;         /// List of cell records for this row.
-    sal_uInt32          mnXclRow;           /// Excel row index of this row.
+    sal_uInt32 const    mnXclRow;           /// Excel row index of this row.
     sal_uInt16          mnHeight;           /// Row height in twips.
     sal_uInt16          mnFlags;            /// Flags for the ROW record.
     sal_uInt16          mnXFIndex;          /// Default row formatting.
     sal_uInt8           mnOutlineLevel;     /// Outline Level of row (for OOXML)
     sal_uInt32          mnXclRowRpt;
     sal_uInt32          mnCurrentRow;
-    bool                mbAlwaysEmpty;      /// true = Do not add blank cells in Finalize().
+    bool const          mbAlwaysEmpty;      /// true = Do not add blank cells in Finalize().
     bool                mbEnabled;          /// true = Write this ROW record.
 };
 
@@ -1003,7 +1003,7 @@ private:
     XclExpShrfmlaBuffer maShrfmlaBfr;       /// Buffer for SHRFMLA records.
     XclExpTableopBuffer maTableopBfr;       /// Buffer for TABLEOP records.
     XclExpDefrowhRef    mxDefrowheight;     /// DEFROWHEIGHT record for default row format.
-    XclExpRecordRef     mxGuts;             /// GUTS record for outline areas.
+    XclExpRecordRef const mxGuts;             /// GUTS record for outline areas.
     XclExpNoteListRef   mxNoteList;         /// List of NOTE records.
     XclExpMergedcellsRef mxMergedcells;     /// MERGEDCELLS record for merged cell ranges.
     XclExpHyperlinkRef  mxHyperlinkList;    /// List of HLINK records.

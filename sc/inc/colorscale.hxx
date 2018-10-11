@@ -214,8 +214,8 @@ enum ScIconSetType
 
 struct ScIconSetMap {
     const char* pName;
-    ScIconSetType eType;
-    sal_Int32 nElements;
+    ScIconSetType const eType;
+    sal_Int32 const nElements;
 };
 
 class SC_DLLPUBLIC ScColorFormat : public ScFormatEntry
