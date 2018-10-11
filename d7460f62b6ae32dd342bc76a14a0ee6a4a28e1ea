@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_a5839704",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-10-11T08:26:02Z",
+      "side": 1,
+      "message": "This is acceptable (lambdas in general are OK), but the usual style is just use static (local) function for isGraphicNode(), so this current function is not longer than necessary. It helps the next person who has to understand this code.",
+      "revId": "d7460f62b6ae32dd342bc76a14a0ee6a4a28e1ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_c58e8b2d",
+        "filename": "sw/source/core/unocore/unotext.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1640,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-10-11T08:26:02Z",
+      "side": 1,
+      "message": "GetContentIdx() gives you an SwNodeIndex, which has an operator ++(), you could use that here to avoid the SwPaM.",
+      "revId": "d7460f62b6ae32dd342bc76a14a0ee6a4a28e1ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
