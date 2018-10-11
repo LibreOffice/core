@@ -37,6 +37,7 @@
 #include "xmlimp.hxx"
 #include <officecfg/Office/Common.hxx>
 #include <o3tl/any.hxx>
+#include <unotools/configmgr.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <vcl/svapp.hxx>
 
@@ -343,7 +344,7 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
         aAny <<= bShowChanges;
         if ( bHandleShowChanges )
         {
-            if (officecfg::Office::Common::Misc::ExperimentalMode::get(comphelper::getProcessComponentContext()))
+            if (!utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Misc::ExperimentalMode::get(comphelper::getProcessComponentContext()))
             {
                 aAny <<= true;
                 xModelPropertySet->setPropertyValue( g_sShowChanges, aAny );
