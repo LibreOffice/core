@@ -216,6 +216,10 @@ SvxBorderTabPage::SvxBorderTabPage(TabPageParent pParent, const SfxItemSet& rCor
     , mbBLTREnabled(false)
     , mbUseMarginItem(false)
     , mbAllowPaddingWithoutBorders(true)
+    , mbLeftModified(false)
+    , mbRightModified(false)
+    , mbTopModified(false)
+    , mbBottomModified(false)
     , mbSync(true)
     , mbRemoveAdjacentCellBorders(false)
     , bIsCalcDoc(false)
@@ -602,14 +606,6 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 
                 nMinValue = m_xLeftMF->get_value(FUNIT_NONE);
 
-                if ( pBoxInfoItem->IsMinDist() )
-                {
-                    m_xLeftMF->set_min(nMinValue, FUNIT_NONE);
-                    m_xRightMF->set_min(nMinValue, FUNIT_NONE);
-                    m_xTopMF->set_min(nMinValue, FUNIT_NONE);
-                    m_xBottomMF->set_min(nMinValue, FUNIT_NONE);
-                }
-
                 if ( pBoxInfoItem->IsDist() )
                 {
                     if( rSet->GetItemState( nWhichBox ) >= SfxItemState::DEFAULT )
@@ -630,6 +626,22 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
                         SetMetricValue( *m_xTopMF, nTopDist, eCoreUnit );
                         long nBottomDist = pBoxItem->GetDistance( SvxBoxItemLine::BOTTOM);
                         SetMetricValue( *m_xBottomMF, nBottomDist, eCoreUnit );
+
+                        // if the distance is set with no active border line
+                        // or it is null with an active border line
+                        // no automatic changes should be made
+                        const long nDefDist = bIsAnyBorderVisible ? pBoxInfoItem->GetDefDist() : 0;
+                        bool bDiffDist = (nDefDist != nLeftDist ||
+                                    nDefDist != nRightDist ||
+                                    nDefDist != nTopDist   ||
+                                    nDefDist != nBottomDist);
+                        if ((pBoxItem->GetSmallestDistance() || bIsAnyBorderVisible) && bDiffDist )
+                        {
+                            mbLeftModified = true;
+                            mbRightModified = true;
+                            mbTopModified = true;
+                            mbBottomModified = true;
+                        }
                     }
                     else
                     {
@@ -896,8 +908,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
             {
                 if ( mbAllowPaddingWithoutBorders
                      || ((mbHorEnabled || mbVerEnabled || (nSWMode & SwBorderModes::TABLE)) &&
-                         (m_xLeftMF->get_value_changed_from_saved()||m_xRightMF->get_value_changed_from_saved()||
-                             m_xTopMF->get_value_changed_from_saved()||m_xBottomMF->get_value_changed_from_saved()) )
+                         (mbLeftModified || mbRightModified || mbTopModified || mbBottomModified) )
                      || m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Top ) != svx::FrameBorderState::Hide
                      || m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Bottom ) != svx::FrameBorderState::Hide
                      || m_aFrameSel.GetFrameBorderState( svx::FrameBorderType::Left ) != svx::FrameBorderState::Hide
@@ -1310,21 +1321,13 @@ IMPL_LINK_NOARG(SvxBorderTabPage, LinesChanged_Impl, LinkParamNone*, void)
     if (!mbUseMarginItem && m_xLeftMF->get_visible())
     {
         bool bLineSet = m_aFrameSel.IsAnyBorderVisible();
-        bool bMinAllowed = bool(nSWMode & (SwBorderModes::FRAME|SwBorderModes::TABLE));
-        bool bSpaceModified =   m_xLeftMF->get_value_changed_from_saved() ||
-                                m_xRightMF->get_value_changed_from_saved() ||
-                                m_xTopMF->get_value_changed_from_saved() ||
-                                m_xBottomMF->get_value_changed_from_saved();
+        bool bSpaceModified =   mbLeftModified ||
+                                mbRightModified ||
+                                mbTopModified ||
+                                mbBottomModified;
 
         if(bLineSet)
         {
-            if(!bMinAllowed)
-            {
-                m_xLeftMF->set_min(nMinValue, FUNIT_NONE);
-                m_xRightMF->set_min(nMinValue, FUNIT_NONE);
-                m_xTopMF->set_min(nMinValue, FUNIT_NONE);
-                m_xBottomMF->set_min(nMinValue, FUNIT_NONE);
-            }
             if(!bSpaceModified)
             {
                 m_xLeftMF->set_value(nMinValue, FUNIT_NONE);
@@ -1380,6 +1383,15 @@ IMPL_LINK_NOARG(SvxBorderTabPage, LinesChanged_Impl, LinkParamNone*, void)
 
 IMPL_LINK( SvxBorderTabPage, ModifyDistanceHdl_Impl, weld::MetricSpinButton&, rField, void)
 {
+    if (&rField == m_xLeftMF.get())
+        mbLeftModified = true;
+    else if (&rField == m_xRightMF.get())
+        mbRightModified = true;
+    else if (&rField == m_xTopMF.get())
+        mbTopModified = true;
+    else if (&rField == m_xBottomMF.get())
+        mbBottomModified = true;
+
     if (mbSync)
     {
         const auto nVal = rField.get_value(FUNIT_NONE);
