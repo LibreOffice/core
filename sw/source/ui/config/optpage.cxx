@@ -116,7 +116,7 @@ SwContentOptPage::SwContentOptPage( vcl::Window* pParent,
     get (m_pMetricLabel, "measureunitlabel");
     get (m_pMetricLB, "measureunit");
 
-    get (m_pShowInlineTooltips,"changestooltip");
+    get (m_pShowInlineTooltipsCB,"changestooltip");
 
     /* This part is visible only with Writer/Web->View dialogue. */
     const SfxPoolItem* pItem;
@@ -194,7 +194,7 @@ void SwContentOptPage::dispose()
     m_pSettingsLabel.clear();
     m_pMetricLabel.clear();
     m_pMetricLB.clear();
-    m_pShowInlineTooltips.clear();
+    m_pShowInlineTooltipsCB.clear();
     SfxTabPage::dispose();
 }
 
@@ -240,7 +240,7 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
         m_pVRulerCBox->Check (pElemAttr->bVertRuler);
         m_pVRulerRightCBox->Check (pElemAttr->bVertRulerRight);
         m_pSmoothCBox->Check (pElemAttr->bSmoothScroll);
-        m_pShowInlineTooltips->Check (pElemAttr->bShowInlineTooltips);
+        m_pShowInlineTooltipsCB->Check (pElemAttr->bShowInlineTooltips);
     }
     m_pMetricLB->SetNoSelection();
     lcl_SelectMetricLB(m_pMetricLB, SID_ATTR_METRIC, *rSet);
@@ -263,7 +263,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
     aElem.bVertRuler            = m_pVRulerCBox->IsChecked();
     aElem.bVertRulerRight       = m_pVRulerRightCBox->IsChecked();
     aElem.bSmoothScroll         = m_pSmoothCBox->IsChecked();
-    aElem.bShowInlineTooltips   = m_pShowInlineTooltips->IsChecked();
+    aElem.bShowInlineTooltips   = m_pShowInlineTooltipsCB->IsChecked();
 
     bool bRet = !pOldAttr || aElem != *pOldAttr;
     if(bRet)

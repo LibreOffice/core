@@ -100,6 +100,18 @@ static bool bInSizeNotify = false;
 
 using namespace ::com::sun::star;
 
+void SwViewShell::SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow ) {
+
+    //tdf#118621 - Optionally disable floating header/footer menu
+    if ( bShow )
+        bShow = GetViewOptions()->IsUseHeaderFooterMenu();
+
+    if ( eControl == Header )
+        mbShowHeaderSeparator = bShow;
+    else
+        mbShowFooterSeparator = bShow;
+}
+
 void SwViewShell::ToggleHeaderFooterEdit()
 {
     mbHeaderFooterEdit = !mbHeaderFooterEdit;

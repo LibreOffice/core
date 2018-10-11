@@ -38,7 +38,7 @@ SwDocDisplayItem::SwDocDisplayItem() :
     bSpace              =
     bNonbreakingSpace   =
     bSoftHyphen         =
-    bFieldHiddenText      =
+    bFieldHiddenText    =
     bCharHiddenText     =
     bManualBreak        =
     bShowHiddenPara     = false;
@@ -55,7 +55,7 @@ SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt ) :
     bNonbreakingSpace   = rVOpt.IsHardBlank();
     bSoftHyphen         = rVOpt.IsSoftHyph();
     bCharHiddenText     = rVOpt.IsShowHiddenChar(true);
-    bFieldHiddenText      = rVOpt.IsShowHiddenField();
+    bFieldHiddenText    = rVOpt.IsShowHiddenField();
     bManualBreak        = rVOpt.IsLineBreak(true);
     bShowHiddenPara     = rVOpt.IsShowHiddenPara();
 }
@@ -76,8 +76,8 @@ bool SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
               bSpace                == rItem.bSpace              &&
               bNonbreakingSpace     == rItem.bNonbreakingSpace   &&
               bSoftHyphen           == rItem.bSoftHyphen         &&
-              bCharHiddenText       == rItem.bCharHiddenText         &&
-              bFieldHiddenText        == rItem.bFieldHiddenText         &&
+              bCharHiddenText       == rItem.bCharHiddenText     &&
+              bFieldHiddenText      == rItem.bFieldHiddenText    &&
               bManualBreak          == rItem.bManualBreak        &&
               bShowHiddenPara       == rItem.bShowHiddenPara );
 }
@@ -90,7 +90,7 @@ void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetHardBlank  (bNonbreakingSpace  );
     rVOpt.SetSoftHyph   (bSoftHyphen        );
     rVOpt.SetShowHiddenChar(bCharHiddenText );
-    rVOpt.SetShowHiddenField(bFieldHiddenText        );
+    rVOpt.SetShowHiddenField(bFieldHiddenText);
     rVOpt.SetLineBreak  (bManualBreak       );
     rVOpt.SetShowHiddenPara(bShowHiddenPara );
 }
@@ -108,21 +108,23 @@ SwElemItem::SwElemItem() :
     bFieldName          =
     bNotes              = false;
     bShowInlineTooltips = true;
+    bUseHeaderFooterMenu = true;
 }
 
 SwElemItem::SwElemItem(const SwViewOption& rVOpt) :
             SfxPoolItem( FN_PARAM_ELEM )
 {
-    bVertRuler      = rVOpt.IsViewVRuler(true);
-    bVertRulerRight = rVOpt.IsVRulerRight();
-    bCrosshair      = rVOpt.IsCrossHair();
-    bSmoothScroll   = rVOpt.IsSmoothScroll();
-    bTable              = rVOpt.IsTable();
-    bGraphic            = rVOpt.IsGraphic();
-    bDrawing            = rVOpt.IsDraw() && rVOpt.IsControl();
-    bFieldName          = rVOpt.IsFieldName();
-    bNotes              = rVOpt.IsPostIts();
-    bShowInlineTooltips = rVOpt.IsShowInlineTooltips();
+    bVertRuler           = rVOpt.IsViewVRuler(true);
+    bVertRulerRight      = rVOpt.IsVRulerRight();
+    bCrosshair           = rVOpt.IsCrossHair();
+    bSmoothScroll        = rVOpt.IsSmoothScroll();
+    bTable               = rVOpt.IsTable();
+    bGraphic             = rVOpt.IsGraphic();
+    bDrawing             = rVOpt.IsDraw() && rVOpt.IsControl();
+    bFieldName           = rVOpt.IsFieldName();
+    bNotes               = rVOpt.IsPostIts();
+    bShowInlineTooltips  = rVOpt.IsShowInlineTooltips();
+    bUseHeaderFooterMenu = rVOpt.IsUseHeaderFooterMenu();
 
 }
 
@@ -137,31 +139,33 @@ bool SwElemItem::operator==( const SfxPoolItem& rAttr ) const
 
     const SwElemItem& rItem = static_cast<const SwElemItem&>(rAttr);
 
-    return (    bVertRuler      == rItem.bVertRuler     &&
-                bVertRulerRight == rItem.bVertRulerRight&&
-                bCrosshair      == rItem.bCrosshair     &&
-                bSmoothScroll   == rItem.bSmoothScroll  &&
+    return (    bVertRuler            == rItem.bVertRuler          &&
+                bVertRulerRight       == rItem.bVertRulerRight     &&
+                bCrosshair            == rItem.bCrosshair          &&
+                bSmoothScroll         == rItem.bSmoothScroll       &&
                 bTable                == rItem.bTable              &&
                 bGraphic              == rItem.bGraphic            &&
                 bDrawing              == rItem.bDrawing            &&
                 bFieldName            == rItem.bFieldName          &&
                 bNotes                == rItem.bNotes              &&
-                bShowInlineTooltips   == rItem.bShowInlineTooltips );
+                bShowInlineTooltips   == rItem.bShowInlineTooltips &&
+                bUseHeaderFooterMenu  == rItem.bUseHeaderFooterMenu );
 }
 
 void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
 {
-    rVOpt.SetViewVRuler(bVertRuler    );
-    rVOpt.SetVRulerRight(bVertRulerRight );
-    rVOpt.SetCrossHair(bCrosshair     );
-    rVOpt.SetSmoothScroll(bSmoothScroll);
-    rVOpt.SetTable      (bTable             );
-    rVOpt.SetGraphic    (bGraphic           );
-    rVOpt.SetDraw       (bDrawing           );
-    rVOpt.SetControl    (bDrawing           );
-    rVOpt.SetFieldName  (bFieldName         );
-    rVOpt.SetPostIts    (bNotes             );
-    rVOpt.SetShowInlineTooltips( bShowInlineTooltips );
+    rVOpt.SetViewVRuler          ( bVertRuler );
+    rVOpt.SetVRulerRight         ( bVertRulerRight );
+    rVOpt.SetCrossHair           ( bCrosshair );
+    rVOpt.SetSmoothScroll        ( bSmoothScroll );
+    rVOpt.SetTable               ( bTable );
+    rVOpt.SetGraphic             ( bGraphic );
+    rVOpt.SetDraw                ( bDrawing );
+    rVOpt.SetControl             ( bDrawing );
+    rVOpt.SetFieldName           ( bFieldName );
+    rVOpt.SetPostIts             ( bNotes );
+    rVOpt.SetShowInlineTooltips  ( bShowInlineTooltips );
+    rVOpt.SetUseHeaderFooterMenu ( bUseHeaderFooterMenu );
 }
 
 // CTOR for empty Item
