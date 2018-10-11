@@ -81,7 +81,7 @@ class ScLinkTargetTypeObj : public ::cppu::WeakImplHelper<
 {
 private:
     ScDocShell*             pDocShell;
-    sal_uInt16              nType;
+    sal_uInt16 const        nType;
     OUString                aName;
 
 public:

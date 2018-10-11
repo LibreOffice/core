@@ -34,7 +34,7 @@ public:
     virtual void        onStartElement( const AttributeList& rAttribs ) override;
 
 private:
-    ScDataBarFormatData* mpTarget;
+    ScDataBarFormatData* const mpTarget;
 
     bool mbFirstEntry;
 };

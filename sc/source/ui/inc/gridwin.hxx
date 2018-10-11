@@ -134,7 +134,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     std::unique_ptr<sc::SpellCheckContext> mpSpellCheckCxt;
 
     ScViewData*             pViewData;
-    ScSplitPos              eWhich;
+    ScSplitPos const        eWhich;
     ScHSplitPos             eHWhich;
     ScVSplitPos             eVWhich;
 

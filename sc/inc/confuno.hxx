@@ -35,7 +35,7 @@ class ScDocumentConfiguration : public cppu::WeakImplHelper<
 {
 private:
     ScDocShell*             pDocShell;
-    SfxItemPropertySet      aPropSet;
+    SfxItemPropertySet const aPropSet;
 
 public:
                             ScDocumentConfiguration(ScDocShell* pDocShell);

@@ -33,7 +33,7 @@ namespace {
 
 class FindByRange
 {
-    ScRange maRange;
+    ScRange const maRange;
 public:
     explicit FindByRange(const ScRange& r) : maRange(r) {}
     bool operator() (const ScAutoStyleData& rData) const { return rData.aRange == maRange; }
@@ -41,7 +41,7 @@ public:
 
 class FindByTimeout
 {
-    sal_uLong mnTimeout;
+    sal_uLong const mnTimeout;
 public:
     explicit FindByTimeout(sal_uLong n) : mnTimeout(n) {}
     bool operator() (const ScAutoStyleData& rData) const { return rData.nTimeout >= mnTimeout; }

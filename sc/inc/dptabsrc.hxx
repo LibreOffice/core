@@ -267,7 +267,7 @@ class ScDPDimension : public cppu::WeakImplHelper<
                             css::lang::XServiceInfo >
 {
     ScDPSource*         pSource;
-    long                nDim;               // dimension index (== column ID)
+    long const          nDim;               // dimension index (== column ID)
     rtl::Reference<ScDPHierarchies> mxHierarchies;
     ScGeneralFunction   nFunction;
     OUString            aName;              // if empty, take from source
@@ -348,8 +348,8 @@ class ScDPHierarchies : public cppu::WeakImplHelper<
                             css::lang::XServiceInfo >
 {
 private:
-    ScDPSource*         pSource;
-    long                nDim;
+    ScDPSource* const   pSource;
+    long const          nDim;
     //  date columns have 3 hierarchies (flat/quarter/week), other columns only one
     // #i52547# don't offer the incomplete date hierarchy implementation
     static const long   nHierCount = 1;
@@ -384,9 +384,9 @@ class ScDPHierarchy : public cppu::WeakImplHelper<
                             css::lang::XServiceInfo >
 {
 private:
-    ScDPSource*     pSource;
-    long            nDim;
-    long            nHier;
+    ScDPSource* const     pSource;
+    long const            nDim;
+    long const            nHier;
     rtl::Reference<ScDPLevels> mxLevels;
 
 public:
@@ -415,8 +415,8 @@ class ScDPLevels : public cppu::WeakImplHelper<
 {
 private:
     ScDPSource*     pSource;
-    long            nDim;
-    long            nHier;
+    long const      nDim;
+    long const      nHier;
     long            nLevCount;
     std::unique_ptr<rtl::Reference<ScDPLevel>[]>
                     ppLevs;
@@ -452,9 +452,9 @@ class ScDPLevel : public cppu::WeakImplHelper<
 {
 private:
     ScDPSource*                 pSource;
-    long                        nDim;
-    long                        nHier;
-    long                        nLev;
+    long const                        nDim;
+    long const                        nHier;
+    long const                        nLev;
     rtl::Reference<ScDPMembers> mxMembers;
     css::uno::Sequence<sal_Int16> aSubTotals;
     css::sheet::DataPilotFieldSortInfo     aSortInfo;      // stored user settings
@@ -556,7 +556,7 @@ private:
     ScDPSource*     pSource;
     long            nDim;
     long            nHier;
-    long            nLev;
+    long const      nLev;
     long            nMbrCount;
     mutable MembersType maMembers;
     mutable ScDPMembersHashMap aHashMap;
@@ -603,10 +603,10 @@ class ScDPMember : public cppu::WeakImplHelper<
 private:
     ScDPSource*     pSource;
     long            nDim;
-    long            nHier;
-    long            nLev;
+    long const      nHier;
+    long const      nLev;
 
-    SCROW       mnDataId;
+    SCROW const     mnDataId;
     boost::optional<OUString> mpLayoutName;
 
     sal_Int32       nPosition;          // manual sorting

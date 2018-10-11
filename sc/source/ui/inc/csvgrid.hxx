@@ -76,7 +76,7 @@ private:
     Color                       maSelectColor;      /// Header color of selected columns.
 
     ScEditEnginePtr             mpEditEngine;       /// For drawing cell texts.
-    vcl::Font                  maHeaderFont;       /// Font for column and row headers.
+    vcl::Font const             maHeaderFont;       /// Font for column and row headers.
     vcl::Font                   maMonoFont;         /// Monospace font for data cells.
     Size                        maWinSize;          /// Size of the control.
     Size                        maEdEngSize;        /// Paper size for edit engine.

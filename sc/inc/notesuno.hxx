@@ -98,7 +98,7 @@ private:
 
 private:
     ScDocShell*             pDocShell;
-    ScAddress               aCellPos;
+    ScAddress const            aCellPos;
     rtl::Reference<SvxUnoText> pUnoText;
 };
 

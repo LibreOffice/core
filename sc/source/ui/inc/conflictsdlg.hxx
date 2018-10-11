@@ -75,11 +75,11 @@ public:
 class ScConflictsFinder final
 {
 private:
-    ScChangeTrack*          mpTrack;
-    sal_uLong                   mnStartShared;
-    sal_uLong                   mnEndShared;
-    sal_uLong                   mnStartOwn;
-    sal_uLong                   mnEndOwn;
+    ScChangeTrack* const    mpTrack;
+    sal_uLong const         mnStartShared;
+    sal_uLong const         mnEndShared;
+    sal_uLong const         mnStartOwn;
+    sal_uLong const         mnEndOwn;
     ScConflictsList&        mrConflictsList;
 
     static bool             DoActionsIntersect( const ScChangeAction* pAction1, const ScChangeAction* pAction2 );
@@ -122,13 +122,13 @@ private:
     VclPtr<PushButton>          m_pBtnKeepAllMine;
     VclPtr<PushButton>          m_pBtnKeepAllOthers;
 
-    OUString            maStrTitleConflict;
-    OUString            maStrUnknownUser;
+    OUString const            maStrTitleConflict;
+    OUString const            maStrUnknownUser;
 
-    ScViewData*         mpViewData;
+    ScViewData* const         mpViewData;
     ScDocument*         mpOwnDoc;
     ScChangeTrack*      mpOwnTrack;
-    ScDocument*         mpSharedDoc;
+    ScDocument* const         mpSharedDoc;
     ScChangeTrack*      mpSharedTrack;
     ScConflictsList&    mrConflictsList;
 

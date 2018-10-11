@@ -30,7 +30,7 @@ typedef InheritedHelperInterfaceWeakImpl< ov::excel::XFileDialog > ScVbaFileDial
 class ScVbaFileDialog : public ScVbaFileDialog_BASE
 {
 private:
-    sal_Int32 m_nType;
+    sal_Int32 const m_nType;
     OUString m_sTitle;
     OUString m_sInitialFileName;
     css::uno::Reference< ov::excel::XFileDialogSelectedItems> m_xItems;

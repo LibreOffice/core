@@ -36,12 +36,12 @@ struct FormulaGroupEntry
     union
     {
         ScFormulaCell* mpCell;   // non-shared formula cell
-        ScFormulaCell** mpCells; // pointer to the top formula cell in a shared group.
+        ScFormulaCell** const mpCells; // pointer to the top formula cell in a shared group.
     };
 
-    size_t mnRow;
-    size_t mnLength;
-    bool mbShared;
+    size_t const mnRow;
+    size_t const mnLength;
+    bool const mbShared;
 
     FormulaGroupEntry( ScFormulaCell** pCells, size_t nRow, size_t nLength );
 
@@ -60,8 +60,8 @@ struct FormulaGroupContext
 
     struct ColKey
     {
-        SCTAB mnTab;
-        SCCOL mnCol;
+        SCTAB const mnTab;
+        SCCOL const mnCol;
 
         struct Hash
         {

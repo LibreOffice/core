@@ -54,8 +54,8 @@ private:
     VclPtr<CloseButton>        mpButtonClose;
 
     // Data
-    ScViewData*         mpViewData;
-    ScDocument*         mpDoc;
+    ScViewData* const          mpViewData;
+    ScDocument* const          mpDoc;
 
     ScRange             maInputRange;
 

@@ -51,7 +51,7 @@ enum RevisionType
  */
 class RCCCellValueContext : public WorkbookContextBase
 {
-    sal_Int32 mnSheetIndex;
+    sal_Int32 const mnSheetIndex;
     ScAddress& mrPos;
     ScCellValue& mrCellValue;
     sal_Int32 mnType;

@@ -27,7 +27,7 @@
 
 struct ScUndoTabColorInfo
 {
-    SCTAB mnTabId;
+    SCTAB const mnTabId;
     Color maOldTabBgColor;
     Color maNewTabBgColor;
 

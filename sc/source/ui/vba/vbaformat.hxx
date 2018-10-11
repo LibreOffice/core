@@ -37,7 +37,7 @@ template< typename... Ifc >
 class ScVbaFormat : public InheritedHelperInterfaceWeakImpl< Ifc... >
 {
 typedef InheritedHelperInterfaceWeakImpl< Ifc... > ScVbaFormat_BASE;
-    css::lang::Locale m_aDefaultLocale;
+    css::lang::Locale const m_aDefaultLocale;
 protected:
     css::uno::Reference< css::beans::XPropertySet > mxPropertySet;
     css::uno::Reference< css::util::XNumberFormatsSupplier > mxNumberFormatsSupplier;
@@ -45,7 +45,7 @@ protected:
     css::uno::Reference< css::util::XNumberFormatTypes > xNumberFormatTypes;
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::beans::XPropertyState > xPropertyState;
-    bool mbCheckAmbiguoity;
+    bool const mbCheckAmbiguoity;
     bool mbAddIndent;
     /// @throws css::script::BasicErrorException
     bool isAmbiguous(const OUString& _sPropertyName);

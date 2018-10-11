@@ -72,7 +72,7 @@ public:
     }
 private:
     Reference<XAccessibleEventListener> mxListener;
-    bool mbAdd;
+    bool const mbAdd;
 };
 
 }

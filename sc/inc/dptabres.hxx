@@ -60,8 +60,8 @@ class ScDPInitState
 public:
     struct Member
     {
-        long mnSrcIndex;
-        SCROW mnNameIndex;
+        long const mnSrcIndex;
+        SCROW const mnNameIndex;
 
         Member(long nSrcIndex, SCROW nNameIndex);
     };
@@ -125,8 +125,8 @@ public:
     void    RemoveRowIndex();
 
 private:
-    ScDPResultMember*   pColResRoot;
-    ScDPResultMember*   pRowResRoot;
+    ScDPResultMember* const   pColResRoot;
+    ScDPResultMember* const   pRowResRoot;
 
     mutable IndexArray maColVisible;
     mutable IndexArray maColSorted;
@@ -137,7 +137,7 @@ private:
 struct ScDPRelativePos
 {
     long    nBasePos;       // simple count, without sort order applied
-    long    nDirection;
+    long const    nDirection;
 
     ScDPRelativePos( long nBase, long nDir );
 };
@@ -248,7 +248,7 @@ private:
     const ::std::vector<ScDPDimension*>& mppDim;
     const ::std::vector<ScDPLevel*>& mppLev;
 
-    bool mbRow:1;
+    bool const mbRow:1;
     bool mbInitChild:1;
     bool mbAllChildren:1;
 public:
@@ -331,11 +331,11 @@ class ScDPResultMember
 {
 private:
     const ScDPResultData*   pResultData;
-    ScDPParentDimData        aParentDimData;
+    ScDPParentDimData const        aParentDimData;
     std::unique_ptr<ScDPResultDimension>  pChildDimension;
     std::unique_ptr<ScDPDataMember>       pDataRoot;
     bool                    bHasElements:1;
-    bool                    bForceSubTotal:1;
+    bool const              bForceSubTotal:1;
     bool                    bHasHiddenDetails:1;
     bool                    bInitialized:1;
     bool                    bAutoHidden:1;

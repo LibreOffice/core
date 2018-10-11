@@ -69,7 +69,7 @@ public:
         virtual std::vector<ScDPItemData> getMatchValues() const override;
 
     private:
-        ScDPItemData maItem;
+        ScDPItemData const maItem;
     };
 
     /** multi-item (group) filter. */

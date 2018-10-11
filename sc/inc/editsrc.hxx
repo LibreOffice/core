@@ -96,7 +96,7 @@ class ScAnnotationEditSource : public SvxEditSource, public SfxListener
 {
 private:
     ScDocShell*             pDocShell;
-    ScAddress               aCellPos;
+    ScAddress const         aCellPos;
     std::unique_ptr<ScEditEngineDefaulter>  pEditEngine;
     std::unique_ptr<SvxEditEngineForwarder> pForwarder;
     bool                    bDataValid;
@@ -118,7 +118,7 @@ public:
 class ScSimpleEditSource : public SvxEditSource
 {
 private:
-    SvxTextForwarder*   pForwarder;
+    SvxTextForwarder* const   pForwarder;
 
 public:
                         ScSimpleEditSource( SvxTextForwarder* pForw );

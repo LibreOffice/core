@@ -86,7 +86,7 @@ private:
     typedef ::std::map< sal_Int32, ValueRangeVector >   ColSpanVectorMap;
 
     ColSpanVectorMap    maColSpans;             /// Buffered column spans, mapped by row index.
-    sal_Int32           mnCurrRow;              /// Current row index used for buffered cell import.
+    sal_Int32 const     mnCurrRow;              /// Current row index used for buffered cell import.
 };
 
 /** Manages the cell contents and cell formatting of a sheet.
@@ -210,7 +210,7 @@ private:
     struct MergedRange
     {
         ScRange             maRange;            /// The formatted cell range.
-        sal_Int32           mnHorAlign;         /// Horizontal alignment in the range.
+        sal_Int32 const     mnHorAlign;         /// Horizontal alignment in the range.
 
         explicit            MergedRange( const ScRange& rRange );
         explicit            MergedRange( const ScAddress& rAddress, sal_Int32 nHorAlign );

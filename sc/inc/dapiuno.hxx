@@ -85,7 +85,7 @@ class ScDataPilotTablesObj : public cppu::WeakImplHelper<
 {
 private:
     ScDocShell*             pDocShell;
-    SCTAB                   nTab;
+    SCTAB const             nTab;
 
     ScDataPilotTableObj*    GetObjectByIndex_Impl( sal_Int32 nIndex );
     ScDataPilotTableObj*    GetObjectByName_Impl(const OUString& aName);
@@ -138,7 +138,7 @@ class ScDataPilotDescriptorBase : public css::sheet::XDataPilotDescriptor,
                                   public SfxListener
 {
 private:
-    SfxItemPropertySet  maPropSet;
+    SfxItemPropertySet const  maPropSet;
     ScDocShell*         pDocShell;
 
 public:
@@ -388,7 +388,7 @@ private:
     ScDataPilotFieldObj*    GetObjectByName_Impl( const OUString& rName ) const;
 
 private:
-    css::uno::Any maOrient;    /// Field orientation, no value = all fields.
+    css::uno::Any const maOrient;    /// Field orientation, no value = all fields.
 };
 
 typedef ::cppu::WeakImplHelper
@@ -480,7 +480,7 @@ public:
 private:
     css::uno::Reference< css::container::XIndexAccess >
                         mxItems;
-    SfxItemPropertySet  maPropSet;
+    SfxItemPropertySet const  maPropSet;
     css::uno::Any maOrient;
 };
 
@@ -727,7 +727,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
-    SfxItemPropertySet  maPropSet;
+    SfxItemPropertySet const  maPropSet;
     sal_Int32           mnIndex;
 };
 
