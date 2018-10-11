@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -761,6 +761,14 @@ static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* p
     if (nRet < 0)
     {
         nRet=errno;
+
+#ifdef IOS
+        // Checking for nonexistent files at least in the iCloud cache directory (like
+        // "/private/var/mobile/Library/Mobile Documents/com~apple~CloudDocs/helloodt0.odt" fails
+        // with EPERM, not ENOENT.
+        if (nRet == EPERM)
+            DestFileExists=0;
+#endif
 
         if (nRet == ENOENT)
             DestFileExists=0;
