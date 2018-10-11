@@ -430,7 +430,7 @@ void XMLImportTest::testMissingNamespaceDeclaration()
 
             CPPUNIT_ASSERT_EQUAL( rParserStr, rLegacyFastParserStr );
         }
-        catch( SAXException )
+        catch( const SAXException & )
         {
         }
     }

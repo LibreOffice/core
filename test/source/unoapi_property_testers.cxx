@@ -43,7 +43,7 @@ void testBooleanOptionalProperty(uno::Reference<beans::XPropertySet> const& xPro
     {
         testBooleanProperty(xPropertySet, rName);
     }
-    catch (css::beans::UnknownPropertyException /*ex*/)
+    catch (const css::beans::UnknownPropertyException& /*ex*/)
     {
         // ignore if the property is unknown as it is optional
     }
@@ -192,7 +192,7 @@ void testStringOptionalProperty(uno::Reference<beans::XPropertySet> const& xProp
     {
         testStringProperty(xPropertySet, rName, rValue);
     }
-    catch (css::beans::UnknownPropertyException /*ex*/)
+    catch (const css::beans::UnknownPropertyException& /*ex*/)
     {
         // ignore if the property is unknown as it is optional
     }

@@ -871,11 +871,11 @@ static PyObject* PyUNO_getitem( PyObject *self, PyObject *pKey )
 
         PyErr_SetString( PyExc_TypeError, "object is not subscriptable" );
     }
-    catch( const css::lang::IndexOutOfBoundsException )
+    catch( const css::lang::IndexOutOfBoundsException & )
     {
         PyErr_SetString( PyExc_IndexError, "index out of range" );
     }
-    catch( const css::container::NoSuchElementException )
+    catch( const css::container::NoSuchElementException & )
     {
         PyErr_SetString( PyExc_KeyError, "key not found" );
     }
@@ -920,7 +920,7 @@ static int lcl_setitem_index( PyUNO const *me, PyObject *pKey, PyObject *pValue 
         {
             aValue = runtime.pyObject2Any( pValue );
         }
-        catch ( const css::uno::RuntimeException )
+        catch ( const css::uno::RuntimeException & )
         {
             // TODO pyObject2Any can't convert e.g. dicts but only throws
             // RuntimeException on failure. Fixing this will require an audit of
@@ -1041,7 +1041,7 @@ static int lcl_setitem_slice( PyUNO const *me, PyObject *pKey, PyObject *pValue 
                 {
                     aItem = runtime.pyObject2Any( rItem.get() );
                 }
-                catch ( const css::uno::RuntimeException )
+                catch ( const css::uno::RuntimeException & )
                 {
                     // TODO pyObject2Any can't convert e.g. dicts but only throws
                     // RuntimeException on failure. Fixing this will require an audit of
@@ -1100,7 +1100,7 @@ static int lcl_setitem_string( PyUNO const *me, PyObject *pKey, PyObject *pValue
         {
             aValue = runtime.pyObject2Any( pValue );
         }
-        catch( const css::uno::RuntimeException )
+        catch( const css::uno::RuntimeException & )
         {
             // TODO pyObject2Any can't convert e.g. dicts but only throws
             // RuntimeException on failure. Fixing this will require an audit of
@@ -1136,7 +1136,7 @@ static int lcl_setitem_string( PyUNO const *me, PyObject *pKey, PyObject *pValue
                         xNameContainer->insertByName( sKey, aValue );
                         return 0;
                     }
-                    catch( css::container::ElementExistException )
+                    catch( const css::container::ElementExistException & )
                     {
                         // Fall through, try replace instead
                     }
@@ -1178,19 +1178,19 @@ static int PyUNO_setitem( PyObject *self, PyObject *pKey, PyObject *pValue )
 
         PyErr_SetString( PyExc_TypeError, "list index has invalid type" );
     }
-    catch( const css::lang::IndexOutOfBoundsException )
+    catch( const css::lang::IndexOutOfBoundsException & )
     {
         PyErr_SetString( PyExc_IndexError, "list index out of range" );
     }
-    catch( const css::container::NoSuchElementException )
+    catch( const css::container::NoSuchElementException & )
     {
         PyErr_SetString( PyExc_KeyError, "key not found" );
     }
-    catch( const css::lang::IllegalArgumentException )
+    catch( const css::lang::IllegalArgumentException & )
     {
         PyErr_SetString( PyExc_TypeError, "value has invalid type" );
     }
-    catch( css::script::CannotConvertException )
+    catch( const css::script::CannotConvertException & )
     {
         PyErr_SetString( PyExc_TypeError, "value has invalid type" );
     }
@@ -1299,7 +1299,7 @@ static int PyUNO_contains( PyObject *self, PyObject *pKey )
         {
             aValue = runtime.pyObject2Any( pKey );
         }
-        catch( const css::uno::RuntimeException )
+        catch( const css::uno::RuntimeException & )
         {
             // TODO pyObject2Any can't convert e.g. dicts but only throws
             // RuntimeException on failure. Fixing this will require an audit of
@@ -1347,7 +1347,7 @@ static int PyUNO_contains( PyObject *self, PyObject *pKey )
 
         PyErr_SetString( PyExc_TypeError, "argument is not iterable" );
     }
-    catch( const css::script::CannotConvertException )
+    catch( const css::script::CannotConvertException& )
     {
         PyErr_SetString( PyExc_TypeError, "invalid type passed as left argument to 'in'" );
     }

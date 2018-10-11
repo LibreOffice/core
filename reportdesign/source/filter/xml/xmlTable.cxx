@@ -250,7 +250,7 @@ void OXMLTable::EndElement()
                                     (*aCellIter)->setSize(awt::Size(nWidth,nHeight));
                                     (*aCellIter)->setPosition(awt::Point(nPosX,nPosY));
                                 }
-                                catch(beans::PropertyVetoException)
+                                catch(const beans::PropertyVetoException &)
                                 {
                                     OSL_FAIL("Could not set the correct position or size!");
                                 }
