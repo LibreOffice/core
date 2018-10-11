@@ -22,7 +22,8 @@ certain functionality.
 
 @li @c sal.bootstrap - SAL bootstrap
 @li @c sal.debug - SAL debugging functionality
-@li @c sal.file
+@li @c sal.file - file system operations
+@li @c sal.fileio - file I/O
 @li @c sal.osl - SAL OSL library
 @li @c sal.osl.condition
 @li @c sal.osl.mutex

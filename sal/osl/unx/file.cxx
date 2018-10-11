@@ -425,7 +425,7 @@ oslFileError FileHandle_Impl::readFileAt(
         }
 
         size_t const bytes = std::min(m_buflen - bufpos, nBytesRequested);
-        SAL_INFO("sal.file", "FileHandle_Impl::readFileAt(" << m_fd << ", " << nOffset << ", " << bytes << ")");
+        SAL_INFO("sal.fileio", "FileHandle_Impl::readFileAt(" << m_fd << ", " << nOffset << ", " << bytes << ")");
 
         memcpy(&(buffer[*pBytesRead]), &(m_buffer[bufpos]), bytes);
         nBytesRequested -= bytes;
@@ -500,7 +500,7 @@ oslFileError FileHandle_Impl::writeFileAt(
         }
 
         size_t const bytes = std::min(m_bufsiz - bufpos, nBytesToWrite);
-        SAL_INFO("sal.file", "FileHandle_Impl::writeFileAt(" << m_fd << ", " << nOffset << ", " << bytes << ")");
+        SAL_INFO("sal.fileio", "FileHandle_Impl::writeFileAt(" << m_fd << ", " << nOffset << ", " << bytes << ")");
 
         memcpy(&(m_buffer[bufpos]), &(buffer[*pBytesWritten]), bytes);
         nBytesToWrite -= bytes;
