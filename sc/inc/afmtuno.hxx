@@ -90,7 +90,7 @@ class ScAutoFormatObj : public ::cppu::WeakImplHelper<
                             css::lang::XServiceInfo >
 {
 private:
-    SfxItemPropertySet      aPropSet;
+    SfxItemPropertySet const aPropSet;
     sal_uInt16              nFormatIndex;
 
     ScAutoFormatFieldObj*   GetObjectByIndex_Impl(sal_uInt16 nIndex);
@@ -157,9 +157,9 @@ class ScAutoFormatFieldObj : public ::cppu::WeakImplHelper<
                                 css::lang::XServiceInfo >
 {
 private:
-    SfxItemPropertySet      aPropSet;
-    sal_uInt16              nFormatIndex;
-    sal_uInt16              nFieldIndex;
+    SfxItemPropertySet const      aPropSet;
+    sal_uInt16 const              nFormatIndex;
+    sal_uInt16 const              nFieldIndex;
 
 public:
                             ScAutoFormatFieldObj(sal_uInt16 nFormat, sal_uInt16 nField);

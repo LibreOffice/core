@@ -54,7 +54,7 @@ double getNow()
 class CSVHandler
 {
     DataStream::Line& mrLine;
-    size_t mnColCount;
+    size_t const mnColCount;
     size_t mnCols;
     const char* mpLineHead;
 
@@ -96,7 +96,7 @@ namespace datastreams {
 class ReaderThread : public salhelper::Thread
 {
     std::unique_ptr<SvStream> mpStream;
-    size_t mnColCount;
+    size_t const mnColCount;
     bool mbTerminate;
     osl::Mutex maMtxTerminate;
 

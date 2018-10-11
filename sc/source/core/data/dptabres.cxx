@@ -138,8 +138,8 @@ public:
 class ScDPRowMembersOrder
 {
     ScDPResultDimension& rDimension;
-    long                 nMeasure;
-    bool                 bAscending;
+    long const           nMeasure;
+    bool const           bAscending;
 
 public:
             ScDPRowMembersOrder( ScDPResultDimension& rDim, long nM, bool bAsc ) :
@@ -154,8 +154,8 @@ public:
 class ScDPColMembersOrder
 {
     ScDPDataDimension& rDimension;
-    long               nMeasure;
-    bool               bAscending;
+    long const         nMeasure;
+    bool const         bAscending;
 
 public:
             ScDPColMembersOrder( ScDPDataDimension& rDim, long nM, bool bAsc ) :
@@ -2676,7 +2676,7 @@ class ScDPGroupCompare
 private:
     const ScDPResultData* pResultData;
     const ScDPInitState& rInitState;
-    long                 nDimSource;
+    long const           nDimSource;
     bool                 bIncludeAll;
     bool                 bIsBase;
     long                 nGroupBase;

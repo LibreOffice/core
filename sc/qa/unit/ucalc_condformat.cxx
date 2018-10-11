@@ -586,8 +586,8 @@ namespace {
 
 struct ScDataBarLengthData
 {
-    double nVal;
-    double nLength;
+    double const nVal;
+    double const nLength;
 };
 
 void testDataBarLengthImpl(ScDocument* pDoc, ScDataBarLengthData* pData, const ScRange& rRange,

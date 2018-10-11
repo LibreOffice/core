@@ -49,9 +49,9 @@ public:
 class ScUndoModifyStyle: public ScSimpleUndo
 {
 private:
-    SfxStyleFamily  eFamily;
-    ScStyleSaveData aOldData;
-    ScStyleSaveData aNewData;
+    SfxStyleFamily const  eFamily;
+    ScStyleSaveData const aOldData;
+    ScStyleSaveData const aNewData;
 
     static void     DoChange( ScDocShell* pDocSh,
                                 const OUString& rName, SfxStyleFamily eStyleFamily,
@@ -91,13 +91,13 @@ private:
     struct ApplyStyleEntry
     {
         SCTAB           mnTab;
-        OUString        maOldStyle;
+        OUString const  maOldStyle;
         explicit        ApplyStyleEntry( SCTAB nTab, const OUString& rOldStyle );
     };
     typedef ::std::vector< ApplyStyleEntry > ApplyStyleVec;
 
     ApplyStyleVec   maEntries;
-    OUString        maNewStyle;
+    OUString const  maNewStyle;
 };
 
 #endif

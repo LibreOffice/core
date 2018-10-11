@@ -80,12 +80,12 @@ private:
     class DrawEditParam
     {
     public:
-        SvxCellHorJustify       meHorJustAttr;      ///< alignment attribute
+        SvxCellHorJustify const       meHorJustAttr;      ///< alignment attribute
         SvxCellHorJustify       meHorJustContext;   ///< context depending on attribute, content and direction
         SvxCellHorJustify       meHorJustResult;    ///< result for EditEngine
         SvxCellVerJustify       meVerJust;
-        SvxCellJustifyMethod    meHorJustMethod;
-        SvxCellJustifyMethod    meVerJustMethod;
+        SvxCellJustifyMethod const    meHorJustMethod;
+        SvxCellJustifyMethod const    meVerJustMethod;
         SvxCellOrientation      meOrient;
         SCSIZE                  mnArrY;
         SCCOL                   mnX;
@@ -94,8 +94,8 @@ private:
         long                    mnPosX;
         long                    mnPosY;
         long                    mnInitPosX;
-        bool                    mbBreak:1;
-        bool                    mbCellIsValue:1;
+        bool const              mbBreak:1;
+        bool const              mbCellIsValue:1;
         bool                    mbAsianVertical:1;
         bool                    mbPixelToLogic:1;
         bool                    mbHyphenatorSet:1;
@@ -147,25 +147,25 @@ private:
     VclPtr<OutputDevice> pFmtDevice;   // reference for text formatting
     ScTableInfo& mrTabInfo;
     RowInfo* pRowInfo;          // Info block
-    SCSIZE nArrCount;           // occupied lines in info block
+    SCSIZE const nArrCount;           // occupied lines in info block
     ScDocument* mpDoc;          // Document
     SCTAB nTab;                 // sheet
-    long nScrX;                 // Output Startpos. (Pixel)
-    long nScrY;
+    long const nScrX;                 // Output Startpos. (Pixel)
+    long const nScrY;
     long nScrW;                 // Output size (Pixel)
     long nScrH;
     long nMirrorW;              // Visible output width for mirroring (default: nScrW)
-    SCCOL nX1;                  // Start-/End coordinates
-    SCROW nY1;                  //  ( incl. hidden )
-    SCCOL nX2;
-    SCROW nY2;
+    SCCOL const nX1;                  // Start-/End coordinates
+    SCROW const nY1;                  //  ( incl. hidden )
+    SCCOL const nX2;
+    SCROW const nY2;
     SCCOL nVisX1;               // Start-/End coordinates
     SCROW nVisY1;               //  ( visible range )
     SCCOL nVisX2;
     SCROW nVisY2;
-    ScOutputType eType;         // Screen/Printer ...
-    double mnPPTX;              // Pixel per Twips
-    double mnPPTY;
+    ScOutputType const eType;         // Screen/Printer ...
+    double const mnPPTX;              // Pixel per Twips
+    double const mnPPTY;
     Fraction aZoomX;
     Fraction aZoomY;
 
@@ -183,7 +183,7 @@ private:
     bool bSolidBackground;      // white instead of transparent
 
     bool mbUseStyleColor;
-    bool mbForceAutoColor;
+    bool const mbForceAutoColor;
 
     bool mbSyntaxMode;          // Syntax highlighting
     std::unique_ptr<Color> pValueColor;

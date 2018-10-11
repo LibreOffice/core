@@ -26,7 +26,7 @@ namespace {
 class ColumnScanner
 {
     ColumnSpanSet::ColumnSpansType& mrRanges;
-    bool mbVal;
+    bool const mbVal;
 public:
     ColumnScanner(ColumnSpanSet::ColumnSpansType& rRanges, bool bVal) :
         mrRanges(rRanges), mbVal(bVal) {}

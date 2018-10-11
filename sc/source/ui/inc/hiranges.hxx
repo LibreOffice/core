@@ -26,8 +26,8 @@
 
 struct ScHighlightEntry
 {
-    ScRange     aRef;
-    Color       aColor;
+    ScRange const     aRef;
+    Color const       aColor;
 
     ScHighlightEntry( const ScRange& rR, const Color& rC ) :
         aRef(rR), aColor(rC) {}

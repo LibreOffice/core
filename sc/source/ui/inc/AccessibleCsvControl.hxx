@@ -472,9 +472,9 @@ protected:
 
 private:
     OUString                    maCellText; /// The text contents of this cell.
-    sal_Int32                   mnLine;     /// The grid line index (core index).
-    sal_uInt32                  mnColumn;   /// The grid column index (core index).
-    sal_Int32                   mnIndex;    /// The index of the cell in the table.
+    sal_Int32 const             mnLine;     /// The grid line index (core index).
+    sal_uInt32 const            mnColumn;   /// The grid column index (core index).
+    sal_Int32 const             mnIndex;    /// The index of the cell in the table.
 
 public:
     explicit                    ScAccessibleCsvCell(

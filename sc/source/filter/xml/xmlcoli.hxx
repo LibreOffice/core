@@ -50,8 +50,8 @@ class ScXMLTableColsContext : public ScXMLImportContext
     sal_Int32   nHeaderEndCol;
     sal_Int32   nGroupStartCol;
     sal_Int32   nGroupEndCol;
-    bool        bHeader;
-    bool        bGroup;
+    bool const  bHeader;
+    bool const  bGroup;
     bool        bGroupDisplay;
 
 public:

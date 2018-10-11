@@ -83,7 +83,7 @@ private:
     sal_Int32                               mnCategorySelected;
 
     vcl::EnumContext                        maContext;
-    SfxBindings*                            mpBindings;
+    SfxBindings* const                      mpBindings;
 
     DECL_LINK(NumFormatSelectHdl, ListBox&, void);
     DECL_LINK(NumFormatValueHdl, Edit&, void);

@@ -313,8 +313,8 @@ lcl_checkRangeDimensions(
 
 class LessByReference
 {
-    ScAddress maPos;
-    DimensionSelector maFunc;
+    ScAddress const maPos;
+    DimensionSelector const maFunc;
 public:
     LessByReference(const ScAddress& rPos, const DimensionSelector& rFunc) :
         maPos(rPos), maFunc(rFunc) {}
@@ -334,8 +334,8 @@ public:
  */
 class AdjacentByReference
 {
-    ScAddress maPos;
-    DimensionSelector maFunc;
+    ScAddress const maPos;
+    DimensionSelector const maFunc;
 public:
     AdjacentByReference(const ScAddress& rPos, DimensionSelector aFunc) :
         maPos(rPos), maFunc(aFunc) {}
@@ -477,9 +477,9 @@ void adjustDBRange(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScD
 
 struct AreaListenerKey
 {
-    ScRange maRange;
-    bool mbStartFixed;
-    bool mbEndFixed;
+    ScRange const maRange;
+    bool const mbStartFixed;
+    bool const mbEndFixed;
 
     AreaListenerKey( const ScRange& rRange, bool bStartFixed, bool bEndFixed ) :
         maRange(rRange), mbStartFixed(bStartFixed), mbEndFixed(bEndFixed) {}
@@ -1425,7 +1425,7 @@ void ScFormulaCell::CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartL
 
     // DoubleRefs for binary operators were always a Matrix before version v5.0.
     // Now this is only the case when in an array formula, otherwise it's an implicit intersection
-    if ( pDocument->GetSrcVersion() < SC_MATRIX_DOUBLEREF &&
+    if ( ScDocument::GetSrcVersion() < SC_MATRIX_DOUBLEREF &&
             GetMatrixFlag() == ScMatrixMode::NONE && pCode->HasMatrixDoubleRefOps() )
     {
         cMatrixFlag = ScMatrixMode::Formula;
@@ -4618,7 +4618,7 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
             ScDocument* mpDocument;
             ScInterpreterContext* mpContext;
             const ScAddress& mrTopPos;
-            SCROW mnLength;
+            SCROW const mnLength;
 
         public:
             Executor(const std::shared_ptr<comphelper::ThreadTaskTag>& rTag,

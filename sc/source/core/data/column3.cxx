@@ -317,7 +317,7 @@ public:
 
 class DetachFormulaCellsHandler
 {
-    ScDocument* mpDoc;
+    ScDocument* const mpDoc;
     sc::EndListeningContext* mpCxt;
 
 public:
@@ -553,10 +553,10 @@ class DeleteAreaHandler
     std::vector<ScFormulaCell*> maFormulaCells;
     sc::SingleColumnSpanSet maDeleteRanges;
 
-    bool mbNumeric:1;
-    bool mbString:1;
-    bool mbFormula:1;
-    bool mbDateTime:1;
+    bool const mbNumeric:1;
+    bool const mbString:1;
+    bool const mbFormula:1;
+    bool const mbDateTime:1;
     ScColumn& mrCol;
 
 public:
@@ -809,7 +809,7 @@ class CopyAttrArrayByRange
 {
     ScAttrArray& mrDestAttrArray;
     ScAttrArray& mrSrcAttrArray;
-    long mnRowOffset;
+    long const mnRowOffset;
 public:
     CopyAttrArrayByRange(ScAttrArray& rDestAttrArray, ScAttrArray& rSrcAttrArray, long nRowOffset) :
         mrDestAttrArray(rDestAttrArray), mrSrcAttrArray(rSrcAttrArray), mnRowOffset(nRowOffset) {}
@@ -826,11 +826,11 @@ class CopyCellsFromClipHandler
     sc::CopyFromClipContext& mrCxt;
     ScColumn& mrSrcCol;
     ScColumn& mrDestCol;
-    SCTAB mnTab;
-    SCCOL mnCol;
-    SCTAB mnSrcTab;
-    SCCOL mnSrcCol;
-    long mnRowOffset;
+    SCTAB const mnTab;
+    SCCOL const mnCol;
+    SCTAB const mnSrcTab;
+    SCCOL const mnSrcCol;
+    long const mnRowOffset;
     sc::ColumnBlockPosition maDestBlockPos;
     sc::ColumnBlockPosition* mpDestBlockPos; // to save it for next iteration.
     svl::SharedStringPool* mpSharedStringPool;
@@ -1092,7 +1092,7 @@ class CopyTextAttrsFromClipHandler
 {
     sc::CellTextAttrStoreType& mrAttrs;
     sc::CellTextAttrStoreType::iterator miPos;
-    size_t mnDelta;
+    size_t const mnDelta;
 
 public:
     CopyTextAttrsFromClipHandler( sc::CellTextAttrStoreType& rAttrs, size_t nDelta ) :
@@ -1258,10 +1258,10 @@ class MixDataHandler
     sc::CellStoreType maNewCells;
     sc::CellStoreType::iterator miNewCellsPos;
 
-    size_t mnRowOffset;
-    ScPasteFunc mnFunction;
+    size_t const mnRowOffset;
+    ScPasteFunc const mnFunction;
 
-    bool mbSkipEmpty;
+    bool const mbSkipEmpty;
 
     void doFunction( size_t nDestRow, double fVal1, double fVal2 )
     {
@@ -1636,7 +1636,7 @@ namespace {
 class StartListenersHandler
 {
     sc::StartListeningContext* mpCxt;
-    bool mbAllListeners;
+    bool const mbAllListeners;
 
 public:
     StartListenersHandler( sc::StartListeningContext& rCxt, bool bAllListeners ) :
@@ -2198,8 +2198,8 @@ class StrCellIterator
 {
     typedef std::pair<sc::CellStoreType::const_iterator,size_t> PosType;
     PosType maPos;
-    sc::CellStoreType::const_iterator miBeg;
-    sc::CellStoreType::const_iterator miEnd;
+    sc::CellStoreType::const_iterator const miBeg;
+    sc::CellStoreType::const_iterator const miEnd;
     const ScDocument* mpDoc;
 public:
     StrCellIterator(const sc::CellStoreType& rCells, SCROW nStart, const ScDocument* pDoc) :
@@ -2393,8 +2393,8 @@ class FormulaToValueHandler
 {
     struct Entry
     {
-        SCROW mnRow;
-        ScCellValue maValue;
+        SCROW const mnRow;
+        ScCellValue const maValue;
 
         Entry(SCROW nRow, double f) : mnRow(nRow), maValue(f) {}
         Entry(SCROW nRow, const svl::SharedString& rStr) : mnRow(nRow), maValue(rStr) {}
@@ -2788,8 +2788,8 @@ class MaxStringLenHandler
     sal_Int32 mnMaxLen;
     const ScColumn& mrColumn;
     SvNumberFormatter* mpFormatter;
-    rtl_TextEncoding meCharSet;
-    bool mbOctetEncoding;
+    rtl_TextEncoding const meCharSet;
+    bool const mbOctetEncoding;
 
     void processCell(size_t nRow, ScRefCellValue& rCell)
     {

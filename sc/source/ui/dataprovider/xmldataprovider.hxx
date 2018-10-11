@@ -20,7 +20,7 @@ class DataTransformation;
 class XMLDataProvider : public DataProvider
 {
 private:
-    ScDocument* mpDocument;
+    ScDocument* const mpDocument;
     rtl::Reference<XMLFetchThread> mxXMLFetchThread;
     ScDocumentUniquePtr mpDoc;
 

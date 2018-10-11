@@ -30,7 +30,7 @@ public:
     };
 
 private:
-    Type meType;
+    Type const meType;
 
 protected:
     RefHint( Type eType );
@@ -49,8 +49,8 @@ public:
 
 class RefMovedHint : public RefHint
 {
-    ScRange maRange;
-    ScAddress maMoveDelta;
+    ScRange const maRange;
+    ScAddress const maMoveDelta;
     const sc::RefUpdateContext& mrCxt;
 
 public:
@@ -74,9 +74,9 @@ public:
 class RefColReorderHint : public RefHint
 {
     const sc::ColRowReorderMapType& mrColMap;
-    SCTAB mnTab;
-    SCROW mnRow1;
-    SCROW mnRow2;
+    SCTAB const mnTab;
+    SCROW const mnRow1;
+    SCROW const mnRow2;
 
 public:
     RefColReorderHint( const sc::ColRowReorderMapType& rColMap, SCTAB nTab, SCROW nRow1, SCROW nRow2 );
@@ -97,9 +97,9 @@ public:
 class RefRowReorderHint : public RefHint
 {
     const sc::ColRowReorderMapType& mrRowMap;
-    SCTAB mnTab;
-    SCCOL mnCol1;
-    SCCOL mnCol2;
+    SCTAB const mnTab;
+    SCCOL const mnCol1;
+    SCCOL const mnCol2;
 
 public:
     RefRowReorderHint( const sc::ColRowReorderMapType& rRowMap, SCTAB nTab, SCCOL nCol1, SCCOL nCol2 );

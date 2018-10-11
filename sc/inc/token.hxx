@@ -97,7 +97,7 @@ public:
 class ScMatrixToken : public formula::FormulaToken
 {
 private:
-            ScMatrixRef         pMatrix;
+            ScMatrixRef const         pMatrix;
 public:
     ScMatrixToken( const ScMatrixRef& p );
     ScMatrixToken( const ScMatrixToken& );
@@ -115,7 +115,7 @@ public:
  */
 class ScMatrixRangeToken : public formula::FormulaToken
 {
-    ScMatrixRef mpMatrix;
+    ScMatrixRef const mpMatrix;
     ScComplexRefData maRef;
 public:
     ScMatrixRangeToken( const sc::RangeMatrix& rMat );
@@ -132,8 +132,8 @@ public:
 
 class ScExternalSingleRefToken : public formula::FormulaToken
 {
-    sal_uInt16                  mnFileId;
-    svl::SharedString           maTabName;
+    sal_uInt16 const            mnFileId;
+    svl::SharedString const     maTabName;
     ScSingleRefData             maSingleRef;
 
 public:
@@ -156,8 +156,8 @@ public:
 
 class ScExternalDoubleRefToken : public formula::FormulaToken
 {
-    sal_uInt16                  mnFileId;
-    svl::SharedString           maTabName;  // name of the first sheet
+    sal_uInt16 const            mnFileId;
+    svl::SharedString const     maTabName;  // name of the first sheet
     ScComplexRefData            maDoubleRef;
 
 public:
@@ -184,8 +184,8 @@ public:
 
 class ScExternalNameToken : public formula::FormulaToken
 {
-    sal_uInt16                  mnFileId;
-    svl::SharedString           maName;
+    sal_uInt16 const                  mnFileId;
+    svl::SharedString const           maName;
 
 public:
     ScExternalNameToken() = delete;
@@ -264,7 +264,7 @@ class ScRefListToken : public formula::FormulaToken
 {
 private:
             ScRefList           aRefList;
-            bool                mbArrayResult;  // whether RefList is an array result
+            bool const          mbArrayResult;  // whether RefList is an array result
 public:
                                 ScRefListToken() :
                                     FormulaToken( formula::svRefList ), mbArrayResult(false) {}
@@ -279,8 +279,8 @@ public:
 
 class SC_DLLPUBLIC ScEmptyCellToken : public formula::FormulaToken
 {
-            bool                bInherited          :1;
-            bool                bDisplayedAsString  :1;
+            bool const          bInherited          :1;
+            bool const          bDisplayedAsString  :1;
 public:
     explicit                    ScEmptyCellToken( bool bInheritedP, bool bDisplayAsString ) :
                                     FormulaToken( formula::svEmptyCell ),
@@ -382,10 +382,10 @@ private:
 class SC_DLLPUBLIC ScHybridCellToken : public formula::FormulaToken
 {
 private:
-    double mfDouble;
-    svl::SharedString maString;
-    OUString maFormula;
-    bool mbEmptyDisplayedAsString;
+    double const mfDouble;
+    svl::SharedString const maString;
+    OUString const maFormula;
+    bool const mbEmptyDisplayedAsString;
 public:
     ScHybridCellToken(
         double f, const svl::SharedString & rStr, const OUString & rFormula, bool bEmptyDisplayedAsString );

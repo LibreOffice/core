@@ -63,11 +63,11 @@ struct FormulaLogger::GroupScope::Impl
     FormulaLogger& mrLogger;
     const ScDocument& mrDoc;
 
-    OUString maPrefix;
+    OUString const maPrefix;
     std::vector<OUString> maMessages;
 
     bool mbCalcComplete;
-    bool mbOutputEnabled;
+    bool const mbOutputEnabled;
 
     Impl( FormulaLogger& rLogger, const OUString& rPrefix, const ScDocument& rDoc,
         const ScFormulaCell& rCell, bool bOutputEnabled ) :

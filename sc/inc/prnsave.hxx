@@ -50,7 +50,7 @@ public:
 
 class ScPrintRangeSaver
 {
-    SCTAB                               nTabCount;
+    SCTAB const                         nTabCount;
     std::unique_ptr<ScPrintSaverTab[]>  pData;
 
 public:

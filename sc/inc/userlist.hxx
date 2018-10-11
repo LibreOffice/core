@@ -33,8 +33,8 @@ class SC_DLLPUBLIC ScUserListData
 public:
     struct SubStr
     {
-        OUString maReal;
-        OUString maUpper;
+        OUString const maReal;
+        OUString const maUpper;
         SubStr(const OUString& rReal, const OUString& rUpper);
     };
 private:

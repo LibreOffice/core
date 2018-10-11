@@ -611,7 +611,7 @@ class ScStringTokenIterator
 {
 public:
     explicit             ScStringTokenIterator( const ScTokenArray& rTokArr ) :
-        maIter( rTokArr ), mbSkipEmpty( true ), mbOk( true ) {}
+        maIter( rTokArr ), mbOk( true ) {}
 
     /** Returns the string of the first string token or NULL on error or empty token array. */
     rtl_uString* First();
@@ -624,7 +624,6 @@ public:
 private:
     svl::SharedString maCurString; /// Current string.
     FormulaTokenArrayPlainIterator maIter;
-    bool                        mbSkipEmpty;    /// Ignore empty strings.
     bool                        mbOk;           /// true = correct token or end of token array.
 };
 
@@ -652,7 +651,7 @@ rtl_uString* ScStringTokenIterator::Next()
         maCurString = pToken->GetString();
 
     // string found but empty -> get next token; otherwise return it
-    return (mbSkipEmpty && maCurString.isValid() && maCurString.isEmpty()) ? Next() : maCurString.getData();
+    return (maCurString.isValid() && maCurString.isEmpty()) ? Next() : maCurString.getData();
 }
 
 /** Returns the number format of the passed cell, or the standard format. */
