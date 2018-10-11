@@ -63,7 +63,7 @@ class SC_DLLPUBLIC ScValidationData : public ScConditionEntry
 private:
     sal_uInt32 nKey;               // index in attributes
 
-    ScValidationMode eDataMode;
+    ScValidationMode const eDataMode;
     bool bShowInput;
     bool bShowError;
     ScValidErrorStyle eErrorStyle;

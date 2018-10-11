@@ -40,11 +40,11 @@ enum ScPreviewLocationType
 
 struct ScPreviewLocationEntry
 {
-    ScPreviewLocationType   eType;
-    tools::Rectangle               aPixelRect;
-    ScRange                 aCellRange;
-    bool                    bRepeatCol;
-    bool                    bRepeatRow;
+    ScPreviewLocationType const   eType;
+    tools::Rectangle const        aPixelRect;
+    ScRange const                 aCellRange;
+    bool const                    bRepeatCol;
+    bool const                    bRepeatRow;
 
     ScPreviewLocationEntry( ScPreviewLocationType eNewType, const tools::Rectangle& rPixel, const ScRange& rRange,
                             bool bRepCol, bool bRepRow ) :

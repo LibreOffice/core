@@ -155,7 +155,7 @@ class ScBoundsProvider
     typedef ScPositionHelper::value_type value_type;
     typedef SCCOLROW index_type;
 
-    ScDocument* pDoc;
+    ScDocument* const pDoc;
     const SCTAB nTab;
     const bool bColumnHeader;
     const index_type MAX_INDEX;

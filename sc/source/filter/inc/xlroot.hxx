@@ -72,21 +72,21 @@ struct XclRootData
     typedef std::shared_ptr< XclTracer >             XclTracerRef;
     typedef std::shared_ptr< RootData >              RootDataRef;
 
-    XclBiff             meBiff;             /// Current BIFF version.
+    XclBiff const             meBiff;             /// Current BIFF version.
     XclOutput           meOutput;           /// Current Output format.
     SfxMedium&          mrMedium;           /// The medium to import from.
-    tools::SvRef<SotStorage>       mxRootStrg;         /// The root OLE storage of imported/exported file.
+    tools::SvRef<SotStorage> const mxRootStrg;         /// The root OLE storage of imported/exported file.
     ScDocument&         mrDoc;              /// The source or destination document.
     OUString            maDocUrl;           /// Document URL of imported/exported file.
     OUString            maBasePath;         /// Base path of imported/exported file (path of maDocUrl).
     OUString            maUserName;         /// Current user name.
     static const OUStringLiteral gaDefPassword; /// The default password used for stream encryption.
     rtl_TextEncoding    meTextEnc;          /// Text encoding to import/export byte strings.
-    LanguageType        meSysLang;          /// System language.
+    LanguageType const  meSysLang;          /// System language.
     LanguageType        meDocLang;          /// Document language (import: from file, export: from system).
     LanguageType        meUILang;           /// UI language (import: from file, export: from system).
     sal_Int16           mnDefApiScript;     /// Default script type for blank cells (API constant).
-    ScAddress           maScMaxPos;         /// Highest Calc cell position.
+    ScAddress const     maScMaxPos;         /// Highest Calc cell position.
     ScAddress           maXclMaxPos;        /// Highest Excel cell position.
     ScAddress           maMaxPos;           /// Highest position valid in Calc and Excel.
 

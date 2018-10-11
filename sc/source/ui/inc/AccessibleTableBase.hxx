@@ -226,7 +226,7 @@ public:
 
 protected:
     /// contains the range of the table, because it could be a subrange of the complete table
-    ScRange maRange;
+    ScRange const maRange;
 
     ScDocument* mpDoc;
 

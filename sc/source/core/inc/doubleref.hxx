@@ -87,7 +87,7 @@ protected:
     static void fillQueryOptions(ScQueryParamBase* pParam);
 
 private:
-    ScDocument* mpDoc;
+    ScDocument* const mpDoc;
 };
 
 class ScDBInternalRange : public ScDBRangeBase
@@ -128,7 +128,7 @@ public:
     virtual bool isRangeEqual(const ScRange& rRange) const override;
 
 private:
-    ScRange maRange;
+    ScRange const maRange;
 };
 
 class ScDBExternalRange : public ScDBRangeBase

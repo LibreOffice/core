@@ -46,8 +46,8 @@ private:
     OUString maStrWarnSameValue;
     SvNumberFormatter* mpNumberFormatter;
 
-    ScDocument* mpDoc;
-    ScAddress   maPos;
+    ScDocument* const mpDoc;
+    ScAddress const   maPos;
 
     DECL_LINK(OkBtnHdl, Button*, void);
     DECL_LINK(TypeSelectHdl, ListBox&, void);

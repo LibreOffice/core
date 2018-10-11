@@ -47,7 +47,7 @@ class ScFormulaReferenceHelper
     VclPtr<formula::RefEdit>    m_pRefEdit;               // active input field
     VclPtr<formula::RefButton>  m_pRefBtn;                // associated button
     VclPtr<vcl::Window>         m_pWindow;
-    SfxBindings*        m_pBindings;
+    SfxBindings* const          m_pBindings;
     ::std::unique_ptr<Accelerator>
                         m_pAccel;                 // for Enter/Escape
     ::std::vector<VclPtr<vcl::Window> > m_aHiddenWidgets;    // vector of hidden Controls
@@ -113,7 +113,7 @@ public:
 private:
     ScFormulaReferenceHelper
                         m_aHelper;
-    SfxBindings*        m_pMyBindings;
+    SfxBindings* const  m_pMyBindings;
 
     VclPtr<vcl::Window> m_pActiveWin;
     Idle                m_aIdle;

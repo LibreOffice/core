@@ -65,7 +65,7 @@ public:
     const ScPrintOptions&   GetPrintOptions() const { return theOptions; }
 
 private:
-    ScPrintOptions theOptions;
+    ScPrintOptions const theOptions;
 };
 
 // config item

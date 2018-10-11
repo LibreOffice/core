@@ -57,10 +57,10 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm ) override;
 
 private:
-    Color               maGridColor;        /// Grid color (<=BIFF5).
+    Color const         maGridColor;        /// Grid color (<=BIFF5).
     sal_uInt32          mnGridColorId;      /// Color ID of grid color (>=BIFF8).
     sal_uInt16          mnFlags;            /// Option flags.
-    XclAddress          maFirstXclPos;      /// First visible cell.
+    XclAddress const    maFirstXclPos;      /// First visible cell.
     sal_uInt16          mnNormalZoom;       /// Zoom factor for normal view.
     sal_uInt16          mnPageZoom;         /// Zoom factor for pagebreak preview.
 };
@@ -98,8 +98,8 @@ private:
     sal_uInt16          mnSplitX;           /// Split X position, or frozen column.
     sal_uInt32          mnSplitY;           /// Split Y position, or frozen row.
     XclAddress          maSecondXclPos;     /// First visible cell in additional panes.
-    sal_uInt8           mnActivePane;       /// Active pane (with cell cursor).
-    bool                mbFrozenPanes;      /// true = "frozen" panes; false = "split" window.
+    sal_uInt8 const     mnActivePane;       /// Active pane (with cell cursor).
+    bool const          mbFrozenPanes;      /// true = "frozen" panes; false = "split" window.
 };
 
 /** Represents a SELECTION record with selection data for a pane. */

@@ -493,7 +493,7 @@ private:
     GlueType    meGlue;
     SCCOL       mnStartCol;
     SCROW       mnStartRow;
-    ScDocument* mpDoc;
+    ScDocument* const mpDoc;
     bool mbColHeaders:1;
     bool mbRowHeaders:1;
     bool mbDummyUpperLeft:1;
@@ -1334,7 +1334,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
 
 class ShrinkRefTokenToDataRange
 {
-    ScDocument* mpDoc;
+    ScDocument* const mpDoc;
 public:
     explicit ShrinkRefTokenToDataRange(ScDocument* pDoc) : mpDoc(pDoc) {}
     void operator() (const ScTokenRef& rRef)

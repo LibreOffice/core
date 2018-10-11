@@ -177,13 +177,13 @@ struct FunctionData
 {
     const sal_Char*     mpcOdfFuncName;     /// ODF function name.
     const sal_Char*     mpcOoxFuncName;     /// OOXML function name.
-    sal_uInt16          mnBiff12FuncId;     /// BIFF12 function identifier.
-    sal_uInt16          mnBiffFuncId;       /// BIFF2-BIFF8 function identifier.
-    sal_uInt8           mnMinParamCount;    /// Minimum number of parameters.
-    sal_uInt8           mnMaxParamCount;    /// Maximum number of parameters.
-    sal_uInt8           mnRetClass;         /// BIFF token class of the return value.
-    FunctionParamInfo   mpParamInfos[ FUNCINFO_PARAMINFOCOUNT ]; /// Information about all parameters.
-    FuncFlags           mnFlags;            /// Additional flags.
+    sal_uInt16 const          mnBiff12FuncId;     /// BIFF12 function identifier.
+    sal_uInt16 const          mnBiffFuncId;       /// BIFF2-BIFF8 function identifier.
+    sal_uInt8 const           mnMinParamCount;    /// Minimum number of parameters.
+    sal_uInt8 const           mnMaxParamCount;    /// Maximum number of parameters.
+    sal_uInt8 const           mnRetClass;         /// BIFF token class of the return value.
+    FunctionParamInfo const   mpParamInfos[ FUNCINFO_PARAMINFOCOUNT ]; /// Information about all parameters.
+    FuncFlags const           mnFlags;            /// Additional flags.
 
     bool         isSupported(bool bImportFilter) const;
 };

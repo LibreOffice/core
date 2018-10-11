@@ -77,9 +77,9 @@ private:
     OUString        aStrOperations;
 
     ScViewData*     pViewData;
-    ScDocument*     pDoc;
+    ScDocument* const     pDoc;
     bool            bRefInputMode;
-    ScAddress::Details aAddrDetails;
+    ScAddress::Details const aAddrDetails;
 
     ScDBCollection  aLocalDbCol;
     ScRange         theCurArea;

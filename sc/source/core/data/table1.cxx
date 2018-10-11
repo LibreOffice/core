@@ -152,7 +152,7 @@ struct SetRowHeightOnlyFunc : public OptimalHeightsFuncObjBase
 struct SetRowHeightRangeFunc : public OptimalHeightsFuncObjBase
 {
     ScTable* mpTab;
-    double mnPPTY;
+    double const mnPPTY;
 
     SetRowHeightRangeFunc(ScTable* pTab, double nPPTY) :
         mpTab(pTab),
@@ -2031,7 +2031,7 @@ namespace {
 
 class SetTableIndex
 {
-    SCTAB mnTab;
+    SCTAB const mnTab;
 public:
     explicit SetTableIndex(SCTAB nTab) : mnTab(nTab) {}
 

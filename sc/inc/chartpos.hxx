@@ -37,9 +37,9 @@ class ScChartPositionMap
             std::unique_ptr<std::unique_ptr<ScAddress>[]> ppData;
             std::unique_ptr<std::unique_ptr<ScAddress>[]> ppColHeader;
             std::unique_ptr<std::unique_ptr<ScAddress>[]> ppRowHeader;
-            sal_uLong           nCount;
-            SCCOL               nColCount;
-            SCROW               nRowCount;
+            sal_uLong const           nCount;
+            SCCOL const               nColCount;
+            SCROW const               nRowCount;
 
                                 ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
                                     SCCOL nColAdd,      // header columns
@@ -103,7 +103,7 @@ class ScDocument;
 class ScChartPositioner final             // only parameter struct
 {
     ScRangeListRef  aRangeListRef;
-    ScDocument* pDocument;
+    ScDocument* const pDocument;
     std::unique_ptr<ScChartPositionMap> pPositionMap;
     ScChartGlue eGlue;
     SCCOL       nStartCol;

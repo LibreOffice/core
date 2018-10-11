@@ -284,7 +284,7 @@ private:
 private:
     ScDocument* mpDoc;
     ScChartListener& mrParent;
-    bool mbStart;
+    bool const mbStart;
 };
 
 }

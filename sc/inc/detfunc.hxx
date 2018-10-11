@@ -53,7 +53,7 @@ class SC_DLLPUBLIC ScDetectiveFunc
     static bool      bColorsInitialized;
 
     ScDocument*     pDoc;
-    SCTAB           nTab;
+    SCTAB const     nTab;
 
     enum class DrawPosMode
     {

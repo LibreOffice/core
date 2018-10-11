@@ -152,9 +152,9 @@ public:
 
 protected:
     XclTracer&          mrTracer;       /// Tracer for invalid addresses.
-    ScAddress           maMaxPos;       /// Default maximum position.
-    sal_uInt16          mnMaxCol;       /// Maximum column index, as 16-bit value.
-    sal_uInt32          mnMaxRow;       /// Maximum row index.
+    ScAddress const     maMaxPos;       /// Default maximum position.
+    sal_uInt16 const    mnMaxCol;       /// Maximum column index, as 16-bit value.
+    sal_uInt32 const    mnMaxRow;       /// Maximum row index.
     bool                mbColTrunc;     /// Flag for "columns truncated" warning box.
     bool                mbRowTrunc;     /// Flag for "rows truncated" warning box.
     bool                mbTabTrunc;     /// Flag for "tables truncated" warning box.

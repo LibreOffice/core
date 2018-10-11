@@ -285,6 +285,8 @@ static void lcl_SaveSeparators(
     aItem.PutProperties(aNames, aValues);
 }
 
+static constexpr OUStringLiteral gaTextSepList(SCSTR_TEXTSEP);
+
 ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatName,
                                     SvStream* pInStream, ScImportAsciiCall eCall ) :
         ModalDialog (pParent, "TextImportCsvDialog",
@@ -294,7 +296,6 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
 
         mnRowPosCount(0),
 
-        aTextSepList(SCSTR_TEXTSEP),
         mcTextSep   ( ScAsciiOptions::cDefaultTextSep ),
         meCall(eCall),
         mbDetectSpaceSep(eCall != SC_TEXTTOCOLUMNS)
@@ -431,7 +432,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
     pNfRow->SetModifyHdl( LINK( this, ScImportAsciiDlg, FirstRowHdl ) );
 
     // *** Separator characters ***
-    lcl_FillCombo( *pCbTextSep, aTextSepList, mcTextSep );
+    lcl_FillCombo( *pCbTextSep, gaTextSepList, mcTextSep );
     pCbTextSep->SetText( sTextSeparators );
 
     Link<Edit&,void> aSeparatorHdl = LINK( this, ScImportAsciiDlg, SeparatorEditHdl );
@@ -646,7 +647,7 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
         rOpt.SetFieldSeps( GetSeparators() );
         rOpt.SetMergeSeps( pCkbAsOnce->IsChecked() );
         rOpt.SetRemoveSpace( pCkbRemoveSpace->IsChecked() );
-        rOpt.SetTextSep( lcl_CharFromCombo( *pCbTextSep, aTextSepList ) );
+        rOpt.SetTextSep( lcl_CharFromCombo( *pCbTextSep, gaTextSepList ) );
     }
 
     rOpt.SetQuotedAsText(pCkbQuotedAsText->IsChecked());
@@ -776,7 +777,7 @@ void ScImportAsciiDlg::SeparatorHdl( const Control* pCtrl )
     OUString aOldFldSeps( maFieldSeparators);
     maFieldSeparators = GetSeparators();
     sal_Unicode cOldSep = mcTextSep;
-    mcTextSep = lcl_CharFromCombo( *pCbTextSep, aTextSepList );
+    mcTextSep = lcl_CharFromCombo( *pCbTextSep, gaTextSepList );
     // Any separator changed may result in completely different lines due to
     // embedded line breaks.
     if (cOldSep != mcTextSep || aOldFldSeps != maFieldSeparators)

@@ -54,8 +54,8 @@ public:
     bool    VerifyPosStr ( const OUString& rPosStr ) const;
 
 private:
-    ScViewData*     pViewData;
-    ScDocument*     pDoc;
+    ScViewData* const     pViewData;
+    ScDocument* const     pDoc;
 
     VclPtr<CheckBox>       pBtnCase;
     VclPtr<CheckBox>       pBtnRegExp;

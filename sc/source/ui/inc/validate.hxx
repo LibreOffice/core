@@ -116,12 +116,12 @@ private:
     VclPtr<formula::RefEdit>           m_pEdMax;
     VclPtr<FixedText>                  m_pFtHint;       /// Hint text for cell range validity.
 
-    OUString                    maStrMin;
-    OUString                    maStrMax;
-    OUString                    maStrValue;
-    OUString                    maStrFormula;
-    OUString                    maStrRange;
-    OUString                    maStrList;
+    OUString const                    maStrMin;
+    OUString const                    maStrMax;
+    OUString const                    maStrValue;
+    OUString const                    maStrFormula;
+    OUString const                    maStrRange;
+    OUString const                    maStrList;
     sal_Unicode                 mcFmlaSep;      /// List separator in formulas.
 
     DECL_LINK( EditSetFocusHdl, Control&, void );
@@ -171,7 +171,7 @@ class ScValidationDlg
 {
     typedef ScRefHdlrImpl<ScValidationDlg, SfxTabDialog, false> ScValidationDlgBase;
 
-    ScTabViewShell *m_pTabVwSh;
+    ScTabViewShell * const m_pTabVwSh;
     VclPtr<VclHBox> m_pHBox;
     sal_uInt16 m_nValuePageId;
     bool    m_bOwnRefHdlr:1;

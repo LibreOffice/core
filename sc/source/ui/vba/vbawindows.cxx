@@ -96,7 +96,7 @@ public:
 
 class WindowEnumImpl : public  WindowComponentEnumImpl
 {
-    uno::Any m_aApplication;
+    uno::Any const m_aApplication;
 public:
     WindowEnumImpl( const uno::Reference< uno::XComponentContext >& xContext,  const uno::Any& aApplication ): WindowComponentEnumImpl( xContext ), m_aApplication( aApplication ) {}
     virtual uno::Any SAL_CALL nextElement(  ) override

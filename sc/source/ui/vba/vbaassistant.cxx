@@ -28,8 +28,9 @@ using namespace ooo::vba;
 
 using namespace ooo::vba::office::MsoAnimationType;
 
-ScVbaAssistant::ScVbaAssistant( const uno::Reference< XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext ): ScVbaAssistantImpl_BASE(rParent, rContext),
-m_sName( "Clippit" )
+static constexpr OUStringLiteral g_sName = "Clippit";
+
+ScVbaAssistant::ScVbaAssistant( const uno::Reference< XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext ): ScVbaAssistantImpl_BASE(rParent, rContext)
 {
     m_bIsVisible = false;
     m_nPointsLeft = 795;
@@ -95,7 +96,7 @@ ScVbaAssistant::setAnimation( ::sal_Int32 _animation )
 OUString SAL_CALL
 ScVbaAssistant::Name(  )
 {
-    return m_sName;
+    return g_sName;
 }
 
 OUString
