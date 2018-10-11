@@ -457,7 +457,7 @@ private:
     osl::Mutex mScLookupMutex; // protection for thread-unsafe parts of handling ScLookup
     std::vector<ScLookupCacheMap*> mThreadStoredScLookupCaches; // temporarily stored for computation threads
 
-    sal_uInt16              nSrcVer;                        // file version (load/save)
+    static const sal_uInt16 nSrcVer;                        // file version (load/save)
     sal_uInt16              nFormulaTrackCount;
     HardRecalcState         eHardRecalcState;               // off, temporary, eternal
     SCTAB                   nVisibleTab;                    // for OLE etc., don't use inside ScDocument
@@ -471,9 +471,9 @@ private:
     // AutoCalcShellDisabled and TrackFormulas
     bool                bForcedFormulaPending;
     bool                bCalculatingFormulaTree;
-    bool                bIsClip;
-    bool                bIsUndo;
-    bool                bIsFunctionAccess;
+    bool const          bIsClip;
+    bool const          bIsUndo;
+    bool const          bIsFunctionAccess;
     bool                bIsVisible;                     // set from view ctor
 
     bool                bIsEmbedded;                    // display/adjust Embedded area?
@@ -1957,7 +1957,7 @@ public:
 
     SC_DLLPUBLIC void            CopyStdStylesFrom( const ScDocument* pSrcDoc );
 
-    sal_uLong                    GetSrcVersion() const   { return nSrcVer; }
+    static sal_uInt16            GetSrcVersion() { return nSrcVer; }
 
     void                         SetSrcCharSet( rtl_TextEncoding eNew )   { eSrcSet = eNew; }
     void                         UpdateFontCharSet();

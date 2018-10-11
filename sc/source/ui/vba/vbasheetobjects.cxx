@@ -386,7 +386,7 @@ protected:
 
 protected:
     uno::Reference< container::XIndexContainer > mxFormIC;
-    OUString maModelServiceName;
+    OUString const maModelServiceName;
     sal_Int16 /* css::form::FormComponentType */ meType;
 };
 

@@ -657,8 +657,8 @@ ScRangeData* copyRangeName( const ScRangeData* pOldRangeData, ScDocument& rNewDo
 
 struct SheetIndex
 {
-    SCTAB       mnSheet;
-    sal_uInt16  mnIndex;
+    SCTAB const       mnSheet;
+    sal_uInt16 const  mnIndex;
 
     SheetIndex( SCTAB nSheet, sal_uInt16 nIndex ) : mnSheet(nSheet < -1 ? -1 : nSheet), mnIndex(nIndex) {}
     bool operator<( const SheetIndex& r ) const

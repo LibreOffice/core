@@ -30,7 +30,7 @@ private:
     uno::Reference< XHelperInterface > mxParent;
     uno::Reference< uno::XComponentContext > mxContext;
     uno::Reference< sheet::XSheetPageBreak > mxSheetPageBreak;
-    bool m_bColumn;
+    bool const m_bColumn;
 
 public:
     RangePageBreaks( const uno::Reference< XHelperInterface >& xParent,

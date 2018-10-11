@@ -337,8 +337,8 @@ public:
 
 class RangesEnumerationImpl : public EnumerationHelperImpl
 {
-    bool mbIsRows;
-    bool mbIsColumns;
+    bool const mbIsRows;
+    bool const mbIsColumns;
 public:
     /// @throws uno::RuntimeException
     RangesEnumerationImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, bool bIsRows, bool bIsColumns ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), mbIsRows( bIsRows ), mbIsColumns( bIsColumns ) {}
@@ -350,8 +350,8 @@ public:
 
 class ScVbaRangeAreas : public ScVbaCollectionBaseImpl
 {
-    bool mbIsRows;
-    bool mbIsColumns;
+    bool const mbIsRows;
+    bool const mbIsColumns;
 public:
     ScVbaRangeAreas( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess, bool bIsRows, bool bIsColumns ) : ScVbaCollectionBaseImpl( xParent, xContext, xIndexAccess ), mbIsRows( bIsRows ), mbIsColumns( bIsColumns ) {}
 
@@ -594,9 +594,9 @@ public:
 struct CellPos
 {
     CellPos( sal_Int32 nRow, sal_Int32 nCol, sal_Int32 nArea ):m_nRow(nRow), m_nCol(nCol), m_nArea( nArea ) {};
-sal_Int32 m_nRow;
-sal_Int32 m_nCol;
-sal_Int32 m_nArea;
+sal_Int32 const m_nRow;
+sal_Int32 const m_nCol;
+sal_Int32 const m_nArea;
 };
 
 typedef ::cppu::WeakImplHelper< container::XEnumeration > CellsEnumeration_BASE;
@@ -610,7 +610,7 @@ typedef ::std::vector< CellPos > vCellPos;
 class ColumnsRowEnumeration: public CellsEnumeration_BASE
 {
     uno::Reference< excel::XRange > mxRange;
-    sal_Int32 mMaxElems;
+    sal_Int32 const mMaxElems;
     sal_Int32 mCurElem;
 
 public:
@@ -697,7 +697,7 @@ static const char CELLSTYLE[] = "CellStyle";
 class CellValueSetter : public ValueSetter
 {
 protected:
-    uno::Any maValue;
+    uno::Any const maValue;
 public:
     explicit CellValueSetter( const uno::Any& aValue );
     virtual bool processValue( const uno::Any& aValue,  const uno::Reference< table::XCell >& xCell ) override;
@@ -859,8 +859,8 @@ void CellValueGetter::visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference<
 class CellFormulaValueSetter : public CellValueSetter
 {
 private:
-    ScDocument*  m_pDoc;
-    formula::FormulaGrammar::Grammar m_eGrammar;
+    ScDocument* const  m_pDoc;
+    formula::FormulaGrammar::Grammar const m_eGrammar;
 public:
     CellFormulaValueSetter( const uno::Any& aValue, ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram ):CellValueSetter( aValue ),  m_pDoc( pDoc ), m_eGrammar( eGram ){}
 protected:
@@ -908,8 +908,8 @@ protected:
 class CellFormulaValueGetter : public CellValueGetter
 {
 private:
-    ScDocument*  m_pDoc;
-    formula::FormulaGrammar::Grammar m_eGrammar;
+    ScDocument* const  m_pDoc;
+    formula::FormulaGrammar::Grammar const m_eGrammar;
 public:
     CellFormulaValueGetter(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGram ) : CellValueGetter( ), m_pDoc( pDoc ), m_eGrammar( eGram ) {}
     virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell ) override

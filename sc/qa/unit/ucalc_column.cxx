@@ -102,11 +102,11 @@ void Test::testSetFormula()
     struct aInputs
     {
         const char* aName;
-        SCROW nRow;
-        SCCOL nCol;
+        SCROW const nRow;
+        SCCOL const nCol;
         const char* aFormula1;      // Represents the formula that is input to SetFormula function.
         const char* aFormula2;      // Represents the formula that is actually stored in the cell.
-        formula::FormulaGrammar::Grammar eGram;
+        formula::FormulaGrammar::Grammar const eGram;
 
     } aTest[] = {
         { "Rock and Roll" ,5 , 4 , "=SUM($D$2:$F$3)"             ,"=SUM($D$2:$F$3)" , formula::FormulaGrammar::Grammar::GRAM_ENGLISH     },

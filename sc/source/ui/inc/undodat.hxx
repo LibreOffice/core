@@ -57,15 +57,15 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    SCCOLROW        nStart;
-    SCCOLROW        nEnd;
-    SCTAB           nTab;
+    SCCOLROW const        nStart;
+    SCCOLROW const        nEnd;
+    SCTAB const           nTab;
     ScDocumentUniquePtr
-                    pUndoDoc;
-    bool            bColumns;
-    sal_uInt16      nLevel;
-    sal_uInt16      nEntry;
-    bool            bShow;
+                          pUndoDoc;
+    bool const            bColumns;
+    sal_uInt16 const      nLevel;
+    sal_uInt16 const      nEntry;
+    bool const            bShow;
 };
 
 class ScUndoMakeOutline: public ScSimpleUndo
@@ -86,12 +86,12 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScAddress       aBlockStart;
-    ScAddress       aBlockEnd;
+    ScAddress const       aBlockStart;
+    ScAddress const       aBlockEnd;
     std::unique_ptr<ScOutlineTable>
-                    pUndoTable;
-    bool            bColumns;
-    bool            bMake;
+                          pUndoTable;
+    bool const            bColumns;
+    bool const            bMake;
 };
 
 class ScUndoOutlineLevel: public ScSimpleUndo
@@ -110,13 +110,13 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    SCCOLROW        nStart;
-    SCCOLROW        nEnd;
-    SCTAB           nTab;
-    ScDocumentUniquePtr xUndoDoc;
+    SCCOLROW const        nStart;
+    SCCOLROW const        nEnd;
+    SCTAB const           nTab;
+    ScDocumentUniquePtr   xUndoDoc;
     std::unique_ptr<ScOutlineTable> xUndoTable;
-    bool            bColumns;
-    sal_uInt16      nLevel;
+    bool const            bColumns;
+    sal_uInt16 const      nLevel;
 };
 
 class ScUndoOutlineBlock: public ScSimpleUndo
@@ -136,11 +136,11 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScAddress       aBlockStart;
-    ScAddress       aBlockEnd;
-    ScDocumentUniquePtr xUndoDoc;
+    ScAddress const       aBlockStart;
+    ScAddress const       aBlockEnd;
+    ScDocumentUniquePtr   xUndoDoc;
     std::unique_ptr<ScOutlineTable> xUndoTable;
-    bool            bShow;
+    bool const            bShow;
 };
 
 class ScUndoRemoveAllOutlines: public ScSimpleUndo
@@ -159,9 +159,9 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScAddress       aBlockStart;
-    ScAddress       aBlockEnd;
-    ScDocumentUniquePtr xUndoDoc;
+    ScAddress const       aBlockStart;
+    ScAddress const       aBlockEnd;
+    ScDocumentUniquePtr   xUndoDoc;
     std::unique_ptr<ScOutlineTable> xUndoTable;
 };
 
@@ -181,9 +181,9 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScAddress       aBlockStart;
-    ScAddress       aBlockEnd;
-    ScDocumentUniquePtr xUndoDoc;
+    ScAddress const       aBlockStart;
+    ScAddress const       aBlockEnd;
+    ScDocumentUniquePtr   xUndoDoc;
     std::unique_ptr<ScOutlineTable> xUndoTable;
 };
 
@@ -203,10 +203,10 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    SCTAB           nTab;
-    ScSubTotalParam aParam;                         // The original passed parameter
-    SCROW           nNewEndRow;                     // Size of result
-    ScDocumentUniquePtr xUndoDoc;
+    SCTAB const           nTab;
+    ScSubTotalParam const aParam;                         // The original passed parameter
+    SCROW const           nNewEndRow;                     // Size of result
+    ScDocumentUniquePtr   xUndoDoc;
     std::unique_ptr<ScOutlineTable> xUndoTable;
     std::unique_ptr<ScRangeName> xUndoRange;
     std::unique_ptr<ScDBCollection> xUndoDB;
@@ -230,22 +230,22 @@ public:
 
 private:
     std::unique_ptr<SdrUndoAction> pDrawUndo;
-    SCTAB           nTab;
-    ScQueryParam    aQueryParam;
-    ScDocumentUniquePtr xUndoDoc;
+    SCTAB const           nTab;
+    ScQueryParam const    aQueryParam;
+    ScDocumentUniquePtr   xUndoDoc;
     std::unique_ptr<ScDBCollection> xUndoDB;                // due to source and target range
-    ScRange         aOldDest;
-    ScRange         aAdvSource;
-    bool            bIsAdvanced;
-    bool            bDestArea;
-    bool            bDoSize;
+    ScRange               aOldDest;
+    ScRange               aAdvSource;
+    bool                  bIsAdvanced;
+    bool                  bDestArea;
+    bool const            bDoSize;
 };
 
 class ScUndoAutoFilter: public ScDBFuncUndo
 {
 private:
-    OUString aDBName;
-    bool            bFilterSet;
+    OUString const  aDBName;
+    bool const      bFilterSet;
 
     void            DoChange( bool bUndo );
 
@@ -299,16 +299,16 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    SCTAB           nTab;
-    ScImportParam   aImportParam;
-    SCCOL           nEndCol;
-    SCROW           nEndRow;
-    ScDocumentUniquePtr xUndoDoc;
-    ScDocumentUniquePtr xRedoDoc;
+    SCTAB const           nTab;
+    ScImportParam const   aImportParam;
+    SCCOL const           nEndCol;
+    SCROW const           nEndRow;
+    ScDocumentUniquePtr   xUndoDoc;
+    ScDocumentUniquePtr   xRedoDoc;
     std::unique_ptr<ScDBData> xUndoDBData;
     std::unique_ptr<ScDBData> xRedoDBData;
-    SCCOL           nFormulaCols;
-    bool            bRedoFilled;
+    SCCOL const           nFormulaCols;
+    bool                  bRedoFilled;
 };
 
 class ScUndoRepeatDB: public ScSimpleUndo
@@ -329,17 +329,17 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScAddress       aBlockStart;
-    ScAddress       aBlockEnd;
-    SCROW           nNewEndRow;
-    ScAddress       aCursorPos;
-    ScDocumentUniquePtr xUndoDoc;
+    ScAddress const       aBlockStart;
+    ScAddress const       aBlockEnd;
+    SCROW const           nNewEndRow;
+    ScAddress const       aCursorPos;
+    ScDocumentUniquePtr   xUndoDoc;
     std::unique_ptr<ScOutlineTable> xUndoTable;
     std::unique_ptr<ScRangeName> xUndoRange;
     std::unique_ptr<ScDBCollection> xUndoDB;
-    ScRange         aOldQuery;
-    ScRange         aNewQuery;
-    bool            bQuerySize;
+    ScRange               aOldQuery;
+    ScRange               aNewQuery;
+    bool                  bQuerySize;
 };
 
 class ScUndoDataPilot: public ScSimpleUndo
@@ -362,7 +362,7 @@ private:
     ScDocumentUniquePtr xNewUndoDoc;
     std::unique_ptr<ScDPObject> xOldDPObject;
     std::unique_ptr<ScDPObject> xNewDPObject;
-    bool            bAllowMove;
+    bool const            bAllowMove;
 };
 
 class ScUndoConsolidate: public ScSimpleUndo
@@ -382,11 +382,11 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScArea              aDestArea;
-    ScDocumentUniquePtr xUndoDoc;
-    ScConsolidateParam  aParam;
-    bool                bInsRef;
-    SCSIZE              nInsertCount;
+    ScArea const              aDestArea;
+    ScDocumentUniquePtr       xUndoDoc;
+    ScConsolidateParam const  aParam;
+    bool const                bInsRef;
+    SCSIZE const              nInsertCount;
     std::unique_ptr<ScOutlineTable> xUndoTab;
     std::unique_ptr<ScDBData> xUndoData;
 };
@@ -410,15 +410,15 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    OUString            aChartName;
+    OUString const      aChartName;
     ScRangeListRef      aOldRangeListRef;
     bool                bOldColHeaders;
     bool                bOldRowHeaders;
 //  ScRange             aNewRange;
     ScRangeListRef      aNewRangeListRef;
-    bool                bNewColHeaders;
-    bool                bNewRowHeaders;
-    bool                bAddRange;
+    bool const          bNewColHeaders;
+    bool const          bNewRowHeaders;
+    bool const          bAddRange;
 
     void                Init();
 };
@@ -441,7 +441,7 @@ public:
 
 private:
     std::unique_ptr<ScMarkData> mxMarkData;
-    ScDocumentUniquePtr xUndoDoc;
+    ScDocumentUniquePtr const xUndoDoc;
     ScDocumentUniquePtr xRedoDoc;
     std::unique_ptr<ScRefUndoData> xRefUndoData;
     std::unique_ptr<ScRefUndoData> xRefRedoData;

@@ -32,9 +32,9 @@ class ScXMLTableRowCellContext;
 
 struct ScXMLAnnotationStyleEntry
 {
-    sal_uInt16          mnFamily;
-    OUString       maName;
-    ESelection          maSelection;
+    sal_uInt16 const          mnFamily;
+    OUString const       maName;
+    ESelection const          maSelection;
 
     ScXMLAnnotationStyleEntry( sal_uInt16 nFam, const OUString& rNam, const ESelection& rSel ) :
         mnFamily( nFam ),

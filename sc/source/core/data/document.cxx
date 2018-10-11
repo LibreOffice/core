@@ -1241,8 +1241,8 @@ struct BroadcastRecalcOnRefMoveHandler
     }
 
 private:
-    sc::AutoCalcSwitch aSwitch; // first for ctor/dtor order, destroy second
-    ScBulkBroadcast aBulk;      // second for ctor/dtor order, destroy first
+    sc::AutoCalcSwitch const aSwitch; // first for ctor/dtor order, destroy second
+    ScBulkBroadcast const aBulk;      // second for ctor/dtor order, destroy first
 };
 
 }

@@ -354,12 +354,12 @@ enum ScXMLConditionTokenType
 
 struct ScXMLConditionInfo
 {
-    ScXMLConditionToken meToken;
-    ScXMLConditionTokenType meType;
-    sheet::ValidationType meValidation;
-    sheet::ConditionOperator meOperator;
+    ScXMLConditionToken const meToken;
+    ScXMLConditionTokenType const meType;
+    sheet::ValidationType const meValidation;
+    sheet::ConditionOperator const meOperator;
     const sal_Char*     mpcIdentifier;
-    sal_Int32           mnIdentLength;
+    sal_Int32 const           mnIdentLength;
 };
 
 static const ScXMLConditionInfo spConditionInfos[] =

@@ -472,8 +472,8 @@ void Test::testSortInFormulaGroup()
     SortRefUpdateSetter aUpdateSet;
 
     static struct {
-        SCCOL nCol;
-        SCROW nRow;
+        SCCOL const nCol;
+        SCROW const nRow;
         const char *pData;
     } aEntries[] = {
         { 0, 0, "3" },   { 1, 0, "=A1" },
@@ -506,9 +506,9 @@ void Test::testSortInFormulaGroup()
     m_pDoc->Sort(0, aSortData, false, true, nullptr, nullptr);
 
     static struct {
-        SCCOL nCol;
-        SCROW nRow;
-        double fValue;
+        SCCOL const nCol;
+        SCROW const nRow;
+        double const fValue;
     } aResults[] = {
         { 0, 0, 1.0 },   { 1, 0, 1.0 },
         { 0, 1, 2.0 },   { 1, 1, 3.0 },

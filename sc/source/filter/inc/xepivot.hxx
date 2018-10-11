@@ -215,7 +215,7 @@ private:
     ScRange             maOrigSrcRange;     /// The original sheet source range.
     ScRange             maExpSrcRange;      /// The exported sheet source range.
     ScRange             maDocSrcRange;      /// The range used to build the cache fields and items.
-    sal_uInt16          mnListIdx;          /// List index in pivot cache buffer.
+    sal_uInt16 const    mnListIdx;          /// List index in pivot cache buffer.
     bool                mbValid;            /// true = The cache is valid for export.
 };
 

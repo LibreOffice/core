@@ -112,20 +112,20 @@ namespace {
 class ScDPOutputImpl
 {
     ScDocument*         mpDoc;
-    sal_uInt16          mnTab;
+    sal_uInt16 const          mnTab;
     ::std::vector< bool > mbNeedLineCols;
     ::std::vector< SCCOL > mnCols;
 
     ::std::vector< bool > mbNeedLineRows;
     ::std::vector< SCROW > mnRows;
 
-    SCCOL   mnTabStartCol;
-    SCROW   mnTabStartRow;
+    SCCOL const   mnTabStartCol;
+    SCROW const   mnTabStartRow;
 
     SCCOL   mnDataStartCol;
     SCROW   mnDataStartRow;
-    SCCOL   mnTabEndCol;
-    SCROW   mnTabEndRow;
+    SCCOL const   mnTabEndCol;
+    SCROW const   mnTabEndRow;
 
 public:
     ScDPOutputImpl( ScDocument* pDoc, sal_uInt16 nTab,

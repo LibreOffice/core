@@ -72,11 +72,11 @@ struct ScHTMLStyle
 
 struct ScHTMLGraphEntry
 {
-    ScRange             aRange;         // mapped range
-    Size                aSize;          // size in pixels
-    Size                aSpace;         // spacing in pixels
-    SdrObject*          pObject;
-    bool                bInCell;        // if output is in cell
+    ScRange const       aRange;         // mapped range
+    Size const          aSize;          // size in pixels
+    Size const          aSpace;         // spacing in pixels
+    SdrObject* const    pObject;
+    bool const          bInCell;        // if output is in cell
     bool                bWritten;
 
     ScHTMLGraphEntry( SdrObject* pObj, const ScRange& rRange,
@@ -109,7 +109,7 @@ class ScHTMLExport : public ScExportBase
     GraphEntryList   aGraphList;
     ScHTMLStyle      aHTMLStyle;
     OUString         aBaseURL;
-    OUString         aStreamPath;
+    OUString const   aStreamPath;
     VclPtr<OutputDevice> pAppWin;        // for Pixel-work
     FileNameMapPtr   pFileNameMap;        // for CopyLocalFileToINet
     OUString         aNonConvertibleChars;   // collect nonconvertible characters
@@ -117,10 +117,10 @@ class ScHTMLExport : public ScExportBase
     SCTAB            nUsedTables;
     short            nIndent;
     sal_Char         sIndent[nIndentMax+1];
-    bool             bAll;           // whole document
+    bool const       bAll;           // whole document
     bool             bTabHasGraphics;
     bool             bTabAlignedLeft;
-    bool             bCalcAsShown;
+    bool const       bCalcAsShown;
     bool             bCopyLocalFileToINet;
     bool             bTableDataHeight;
     bool             mbSkipImages;

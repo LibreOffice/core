@@ -44,10 +44,10 @@ struct ScQueryParam;
 
 class ScInputStatusItem : public SfxPoolItem
 {
-    ScAddress           aCursorPos;
-    ScAddress           aStartPos;
-    ScAddress           aEndPos;
-    OUString            aString;
+    ScAddress const           aCursorPos;
+    ScAddress const           aStartPos;
+    ScAddress const           aEndPos;
+    OUString const            aString;
     std::unique_ptr<EditTextObject>             pEditData;
     const std::vector<editeng::MisspellRanges>* mpMisspellRanges;
 
@@ -84,9 +84,9 @@ public:
 
 class ScTablesHint : public SfxHint
 {
-    sal_uInt16 nId;
-    SCTAB nTab1;
-    SCTAB nTab2;
+    sal_uInt16 const nId;
+    SCTAB const nTab1;
+    SCTAB const nTab2;
 
 public:
                     ScTablesHint(sal_uInt16 nNewId, SCTAB nTable1, SCTAB nTable2=0);
@@ -99,8 +99,8 @@ public:
 
 class ScEditViewHint : public SfxHint
 {
-    ScEditEngineDefaulter*  pEditEngine;
-    ScAddress                   aCursorPos;
+    ScEditEngineDefaulter* const  pEditEngine;
+    ScAddress const                   aCursorPos;
 
 public:
                     ScEditViewHint() = delete;
@@ -115,7 +115,7 @@ public:
 
 class ScIndexHint : public SfxHint
 {
-    sal_uInt16 nIndex;
+    sal_uInt16 const nIndex;
 
 public:
                     ScIndexHint(SfxHintId nNewId, sal_uInt16 nIdx);
@@ -143,7 +143,7 @@ public:
     const ScSortParam&  GetSortData () const { return theSortData; }
 
 private:
-    ScViewData*     pViewData;
+    ScViewData* const     pViewData;
     ScSortParam     theSortData;
 };
 
@@ -169,7 +169,7 @@ public:
 
 private:
     std::unique_ptr<ScQueryParam> mpQueryData;
-    ScViewData*     pViewData;
+    ScViewData* const     pViewData;
     ScRange         aAdvSource;
     bool            bIsAdvanced;
 };
@@ -191,7 +191,7 @@ public:
     const ScSubTotalParam&  GetSubTotalData() const { return theSubTotalData; }
 
 private:
-    ScViewData*     pViewData;
+    ScViewData* const     pViewData;
     ScSubTotalParam theSubTotalData;
 };
 

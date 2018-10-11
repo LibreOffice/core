@@ -37,8 +37,8 @@ class TablePivotChart : public cppu::BaseMutex,
 {
 private:
     ScDocShell* m_pDocShell;
-    SCTAB m_nTab; // Charts are per sheet
-    OUString m_aChartName;
+    SCTAB const m_nTab; // Charts are per sheet
+    OUString const m_aChartName;
 
 public:
     TablePivotChart(ScDocShell* pDocShell, SCTAB nTab, OUString const & rName);

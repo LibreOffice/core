@@ -50,9 +50,9 @@ public:
     private:
         std::unique_ptr<EditTextObject> mpOldData;
         std::unique_ptr<EditTextObject> mpNewData;
-        SCTAB mnTab;
-        SCCOL mnCol;
-        SCROW mnRow;
+        SCTAB const mnTab;
+        SCCOL const mnCol;
+        SCROW const mnRow;
 
     };
 

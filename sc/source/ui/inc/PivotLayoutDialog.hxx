@@ -27,7 +27,7 @@
 class ScItemValue final
 {
 public:
-    OUString maName;
+    OUString const maName;
     ScPivotFuncData maFunctionData;
     ScItemValue* mpOriginalItemValue;
 
@@ -46,9 +46,9 @@ public:
 
 private:
     ScViewData* mpViewData;
-    ScDocument* mpDocument;
+    ScDocument* const mpDocument;
 
-    bool mbNewPivotTable;
+    bool const mbNewPivotTable;
 
     VclPtr<ScPivotLayoutTreeListLabel> mpListBoxField;
     VclPtr<ScPivotLayoutTreeList>      mpListBoxPage;
@@ -82,7 +82,7 @@ private:
     VclPtr<CancelButton>     mpBtnCancel;
 
     VclPtr<formula::RefEdit>   mpActiveEdit;
-    ScAddress::Details  maAddressDetails;
+    ScAddress::Details const  maAddressDetails;
     bool                mbDialogLostFocus;
 
     DECL_LINK(CancelClicked,       Button*, void);

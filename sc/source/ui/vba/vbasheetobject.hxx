@@ -71,7 +71,7 @@ private:
     void setFullString( const OUString& rString );
 
 private:
-    ScVbaPalette maPalette;
+    ScVbaPalette const maPalette;
     css::uno::Reference< css::beans::XPropertySet > mxPropSet;
     sal_Int32 mnStart;
     sal_Int32 mnLength;
@@ -122,7 +122,7 @@ protected:
     virtual void implSetDefaultProperties();
 
 protected:
-    ScVbaPalette maPalette;
+    ScVbaPalette const maPalette;
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::drawing::XShape > mxShape;
     css::uno::Reference< css::beans::XPropertySet > mxShapeProps;

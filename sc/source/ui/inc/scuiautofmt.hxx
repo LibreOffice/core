@@ -47,11 +47,11 @@ private:
     VclPtr<CheckBox>       m_pBtnPattern;
     VclPtr<CheckBox>       m_pBtnAlignment;
     VclPtr<CheckBox>       m_pBtnAdjust;
-    OUString        aStrTitle;
-    OUString        aStrLabel;
-    OUString        aStrClose;
-    OUString        aStrDelMsg;
-    OUString        aStrRename;
+    OUString const        aStrTitle;
+    OUString const        aStrLabel;
+    OUString const        aStrClose;
+    OUString const        aStrDelMsg;
+    OUString const        aStrRename;
 
     ScAutoFormat*           pFormat;
     const ScAutoFormatData* pSelFmtData;

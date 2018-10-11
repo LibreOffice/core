@@ -70,7 +70,7 @@ public:
     ScConditionalFormatList* getCoreObject();
 
 private:
-    SCTAB mnTab;
+    SCTAB const mnTab;
     ScDocShell* mpDocShell;
 };
 
@@ -120,8 +120,8 @@ public:
 private:
     rtl::Reference<ScCondFormatsObj> mxCondFormatList;
     ScDocShell* mpDocShell;
-    SfxItemPropertySet maPropSet;
-    sal_Int32 mnKey;
+    SfxItemPropertySet const maPropSet;
+    sal_Int32 const mnKey;
 };
 
 class ScConditionEntryObj : public cppu::WeakImplHelper<css::beans::XPropertySet,
@@ -157,7 +157,7 @@ public:
 private:
     ScDocShell* mpDocShell;
     rtl::Reference<ScCondFormatObj> mxParent;
-    SfxItemPropertySet maPropSet;
+    SfxItemPropertySet const maPropSet;
     const ScCondFormatEntry* mpFormat;
 };
 
@@ -193,7 +193,7 @@ public:
 
 private:
     rtl::Reference<ScCondFormatObj> mxParent;
-    SfxItemPropertySet maPropSet;
+    SfxItemPropertySet const maPropSet;
     const ScColorScaleFormat* mpFormat;
 };
 
@@ -220,7 +220,7 @@ private:
     ScColorScaleEntry* getCoreObject();
 
     rtl::Reference<ScColorScaleFormatObj> mxParent;
-    size_t mnPos;
+    size_t const mnPos;
 };
 
 class ScDataBarFormatObj : public cppu::WeakImplHelper<css::beans::XPropertySet,
@@ -254,7 +254,7 @@ public:
 
 private:
     rtl::Reference<ScCondFormatObj> mxParent;
-    SfxItemPropertySet maPropSet;
+    SfxItemPropertySet const maPropSet;
     const ScDataBarFormat* mpFormat;
 };
 
@@ -277,7 +277,7 @@ private:
     ScColorScaleEntry* getCoreObject();
 
     rtl::Reference<ScDataBarFormatObj> mxParent;
-    size_t mnPos;
+    size_t const mnPos;
 };
 
 class ScIconSetFormatObj : public cppu::WeakImplHelper<css::beans::XPropertySet,
@@ -311,7 +311,7 @@ public:
 
 private:
     rtl::Reference<ScCondFormatObj> mxParent;
-    SfxItemPropertySet maPropSet;
+    SfxItemPropertySet const maPropSet;
     const ScIconSetFormat* mpFormat;
 };
 
@@ -334,7 +334,7 @@ private:
     ScColorScaleEntry* getCoreObject();
 
     rtl::Reference<ScIconSetFormatObj> mxParent;
-    size_t mnPos;
+    size_t const mnPos;
 };
 
 class ScCondDateFormatObj : public cppu::WeakImplHelper<css::beans::XPropertySet,
@@ -369,7 +369,7 @@ public:
 
 private:
     rtl::Reference<ScCondFormatObj> mxParent;
-    SfxItemPropertySet maPropSet;
+    SfxItemPropertySet const maPropSet;
     const ScCondDateFormatEntry* mpFormat;
 };
 

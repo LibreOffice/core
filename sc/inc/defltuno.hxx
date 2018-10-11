@@ -37,7 +37,7 @@ class ScDocDefaultsObj : public ::cppu::WeakImplHelper<
 {
 private:
     ScDocShell*             pDocShell;
-    SfxItemPropertyMap      aPropertyMap;
+    SfxItemPropertyMap const aPropertyMap;
 
     void                    ItemsChanged();
 

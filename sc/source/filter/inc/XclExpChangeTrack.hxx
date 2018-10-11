@@ -44,7 +44,7 @@ public:
 class XclExpUserBView : public ExcRecord
 {
 private:
-    XclExpString                sUsername;
+    XclExpString const          sUsername;
     sal_uInt8                   aGUID[ 16 ];
 
     virtual void                SaveCont( XclExpStream& rStrm ) override;
@@ -159,7 +159,7 @@ public:
 class XclExpChTrEmpty : public ExcRecord
 {
 private:
-    sal_uInt16                      nRecNum;
+    sal_uInt16 const             nRecNum;
 
 public:
     XclExpChTrEmpty( sal_uInt16 nNum ) : nRecNum( nNum ) {}
@@ -188,8 +188,8 @@ public:
 class XclExpChTr0x0194 : public ExcRecord
 {
 private:
-    XclExpString                sUsername;
-    DateTime                    aDateTime;
+    XclExpString const          sUsername;
+    DateTime const              aDateTime;
 
     virtual void                SaveCont( XclExpStream& rStrm ) override;
 
@@ -244,10 +244,10 @@ class XclExpChTrAction;
 
 class XclExpXmlChTrHeader : public ExcXmlRecord
 {
-    OUString maUserName;
-    DateTime maDateTime;
+    OUString const maUserName;
+    DateTime const maDateTime;
     sal_uInt8 maGUID[16];
-    sal_Int32 mnLogNumber;
+    sal_Int32 const mnLogNumber;
     sal_uInt32 mnMinAction;
     sal_uInt32 mnMaxAction;
 
@@ -269,8 +269,8 @@ public:
 class XclExpChTrInfo : public ExcRecord
 {
 private:
-    XclExpString                sUsername;
-    DateTime                    aDateTime;
+    XclExpString const          sUsername;
+    DateTime const              aDateTime;
     sal_uInt8                   aGUID[ 16 ];
 
     virtual void                SaveCont( XclExpStream& rStrm ) override;
@@ -293,7 +293,7 @@ private:
     std::unique_ptr<sal_uInt16[]>
                                 pBuffer;
     sal_uInt16*                 pLast;
-    sal_uInt16                  nBufSize;
+    sal_uInt16 const            nBufSize;
     sal_uInt16                  nLastId;
 
 public:
@@ -341,12 +341,12 @@ public:
 class XclExpChTrAction : public ExcRecord
 {
 private:
-    OUString                    sUsername;
+    OUString const              sUsername;
     DateTime                    aDateTime;
     sal_uInt32                  nIndex;         // action number
     std::unique_ptr<XclExpChTrAction>
                                 pAddAction;     // additional record for this action
-    bool                        bAccepted;
+    bool const                  bAccepted;
 
 protected:
     const XclExpTabInfo&        rTabInfo;       // for table num export (sc num -> xcl num)
@@ -465,7 +465,7 @@ class XclExpChTrCellContent final : public XclExpChTrAction, protected XclExpRoo
     std::unique_ptr<XclExpChTrData> pOldData;
     std::unique_ptr<XclExpChTrData> pNewData;
     sal_uInt16                  nOldLength;     // this is not the record size
-    ScAddress                   aPosition;
+    ScAddress const             aPosition;
 
     static void                 MakeEmptyChTrData( std::unique_ptr<XclExpChTrData>& rpData );
 
@@ -522,7 +522,7 @@ public:
 class XclExpChTrInsertTab : public XclExpChTrAction, protected XclExpRoot
 {
 private:
-    SCTAB                   nTab;
+    SCTAB const                   nTab;
 
 protected:
     virtual void                SaveActionData( XclExpStream& rStrm ) const override;
@@ -545,7 +545,7 @@ public:
 class XclExpChTrMoveRange final : public XclExpChTrAction
 {
     ScRange                     aSourceRange;
-    ScRange                     aDestRange;
+    ScRange const               aDestRange;
 
     virtual void                SaveActionData( XclExpStream& rStrm ) const override;
     virtual void                PrepareSaveAction( XclExpStream& rStrm ) const override;
