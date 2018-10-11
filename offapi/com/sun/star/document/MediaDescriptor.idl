@@ -324,7 +324,7 @@ service MediaDescriptor
      */
     [optional,property] boolean Overwrite;
 
-    /** password for loading storing documents
+    /** password for loading or storing documents
 
         <p>
         It contains a password for loading or storing a component (if necessary).
@@ -479,7 +479,7 @@ service MediaDescriptor
     /** URL of the document
 
         <p>
-        The location of the component in URL syntax. It must be the full qualified URL and
+        The location of the component in URL syntax. It must be a fully qualified URL.
         </p>
      */
     [optional,property] string URL;
