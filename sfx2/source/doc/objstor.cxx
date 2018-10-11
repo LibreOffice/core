@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -1743,6 +1743,19 @@ bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& r
     uno::Reference< embed::XStorage > xStorage = rSrcMedium.GetStorage();
 
     bool bResult = false;
+#ifdef IOS
+    // On iOS, we typically can't create a backup file in the same folder as where the document is
+    // because that is outside the sandbox, like "/private/var/mobile/Library/Mobile
+    // Documents/com~apple~CloudDocs" for documents opened from the iCloud Drive. So bypass this
+    // whole backup dance for now.
+
+    // FIXME: Also, should investigate whether iOS has some native high-level API that can be used
+    // for automatic keeping of some suitable number of backup copies from various pooints in time,
+    // or something. Although, even if it has, marrying that to the horrible mess here in sfx2, and
+    // in ucb, sal, etc won't be fun.
+    (void) rTargetMedium;
+    bResult = true;
+#else
     if ( xStorage == pImpl->m_xDocStorage )
     {
         try
@@ -1781,7 +1794,7 @@ bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& r
         catch ( uno::Exception& )
         {}
     }
-
+#endif // !IOS
     return bResult;
 }
 
