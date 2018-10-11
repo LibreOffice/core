@@ -40,7 +40,7 @@ namespace sdr
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrCircObj::createViewIndependentPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrCircObj::createViewIndependentPrimitive2DSequence(bool adaptToScreenView) const
         {
             const SfxItemSet& rItemSet = GetCircObj().GetMergedItemSet();
             const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
@@ -51,10 +51,12 @@ namespace sdr
 
             // take unrotated snap rect (direct model data) for position and size
             tools::Rectangle aRectangle = GetCircObj().GetGeoRect();
-            // Hack for calc, transform position of object according
-            // to current zoom so as objects relative position to grid
-            // appears stable
-            aRectangle += GetRectObj().GetGridOffset();
+            if (adaptToScreenView) {
+                // Hack for calc, transform position of object according
+                // to current zoom so as objects relative position to grid
+                // appears stable
+                aRectangle += GetRectObj().GetGridOffset();
+            }
             const basegfx::B2DRange aObjectRange(
                 aRectangle.Left(), aRectangle.Top(),
                 aRectangle.Right(), aRectangle.Bottom() );

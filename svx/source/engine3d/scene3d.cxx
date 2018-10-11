@@ -238,7 +238,7 @@ basegfx::B2DPolyPolygon E3dScene::TakeXorPoly() const
 
     basegfx::B2DPolyPolygon aRetval(basegfx::utils::createB2DPolyPolygonFromB3DPolyPolygon(aCubePolyPolygon,
         aViewInfo3D.getObjectToView()));
-    aRetval.transform(rVCScene.getObjectTransformation());
+    aRetval.transform(rVCScene.getObjectTransformation(true/*TODO*/));
 
     return aRetval;
 }

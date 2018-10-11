@@ -173,6 +173,7 @@ namespace sdr
                     aViewRange,
                     maViewInformation2D.getVisualizedPage(),
                     maViewInformation2D.getViewTime(),
+                    maViewInformation2D.getAdaptToScreenView(),
                     maViewInformation2D.getExtendedInformationSequence());
                 pThis->mfDiscreteOne = 0.0;
             }

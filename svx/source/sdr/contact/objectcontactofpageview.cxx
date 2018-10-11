@@ -229,6 +229,7 @@ namespace sdr
                 aViewRange,
                 GetXDrawPageForSdrPage(GetSdrPage()),
                 fCurrentTime,
+                rTargetOutDev.isScreenComp(),
                 uno::Sequence<beans::PropertyValue>());
             updateViewInformation2D(aNewViewInformation2D);
 

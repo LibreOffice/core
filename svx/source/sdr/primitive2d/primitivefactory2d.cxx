@@ -23,6 +23,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <o3tl/any.hxx>
 #include <rtl/ref.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
@@ -33,6 +34,17 @@
 using namespace com::sun::star;
 
 namespace {
+
+bool extractAdaptToScreenView(css::uno::Sequence<css::beans::PropertyValue> const & parameters) {
+    for (auto const & i: parameters) {
+        if (i.Name == "AdaptToScreenView") {
+            if (auto const b = o3tl::tryAccess<bool>(i.Value)) {
+                return *b;
+            }
+        }
+    }
+    return true;
+}
 
 typedef cppu::WeakComponentImplHelper< css::graphic::XPrimitiveFactory2D, css::lang::XServiceInfo > PrimitiveFactory2DImplBase;
 
@@ -63,7 +75,7 @@ public:
 
 css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL PrimitiveFactory2D::createPrimitivesFromXShape(
     const uno::Reference< drawing::XShape >& xShape,
-    const uno::Sequence< beans::PropertyValue >& /*aParms*/ )
+    const uno::Sequence< beans::PropertyValue >& aParms )
 {
     css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > aRetval;
 
@@ -74,7 +86,7 @@ css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL
         if(pSource)
         {
             const sdr::contact::ViewContact& rSource(pSource->GetViewContact());
-            aRetval = comphelper::containerToSequence(rSource.getViewIndependentPrimitive2DContainer());
+            aRetval = comphelper::containerToSequence(rSource.getViewIndependentPrimitive2DContainer(extractAdaptToScreenView(aParms)));
         }
     }
 
@@ -83,7 +95,7 @@ css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL
 
 css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL PrimitiveFactory2D::createPrimitivesFromXDrawPage(
     const uno::Reference< drawing::XDrawPage >& xDrawPage,
-    const uno::Sequence< beans::PropertyValue >& /*aParms*/ )
+    const uno::Sequence< beans::PropertyValue >& aParms )
 {
     css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > aRetval;
 
@@ -95,7 +107,7 @@ css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL
         {
             const sdr::contact::ViewContact& rSource(pSource->GetViewContact());
 
-            aRetval = comphelper::containerToSequence(rSource.getViewIndependentPrimitive2DContainer());
+            aRetval = comphelper::containerToSequence(rSource.getViewIndependentPrimitive2DContainer(extractAdaptToScreenView(aParms)));
         }
     }
 

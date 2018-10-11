@@ -1753,6 +1753,7 @@ bool DrawFillAttributes(
                     aPaintRange,
                     nullptr,
                     0.0,
+                    rOut.isScreenComp(),
                     uno::Sequence< beans::PropertyValue >());
                 std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
                     rOut,
@@ -4957,6 +4958,7 @@ std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> SwFrame::CreateProce
             aViewRange,
             GetXDrawPageForSdrPage( pDrawPage ),
             0.0,
+            getRootFrame()->GetCurrShell()->GetOut()->isScreenComp(),
             uno::Sequence< beans::PropertyValue >() );
 
     return  drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(

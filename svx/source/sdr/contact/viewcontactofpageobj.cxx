@@ -64,7 +64,7 @@ void ViewContactOfPageObj::ActionChanged()
     }
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageObj::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageObj::createViewIndependentPrimitive2DSequence(bool) const
 {
     // create graphical visualisation data. Since this is the view-independent version which should not be used,
     // create a replacement graphic visualisation here. Use GetLastBoundRect to access the model data directly

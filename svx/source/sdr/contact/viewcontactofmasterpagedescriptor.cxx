@@ -46,7 +46,7 @@ namespace sdr
             return *(new ViewObjectContactOfMasterPageDescriptor(rObjectContact, *this));
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfMasterPageDescriptor::createViewIndependentPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfMasterPageDescriptor::createViewIndependentPrimitive2DSequence(bool) const
         {
             drawinglayer::primitive2d::Primitive2DContainer xRetval;
             drawinglayer::attribute::SdrFillAttribute aFill;

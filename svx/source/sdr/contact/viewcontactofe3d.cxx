@@ -68,7 +68,8 @@ const sdr::contact::ViewContactOfE3dScene* tryToFindVCOfE3DScene(
 namespace sdr { namespace contact {
 
 drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3d::impCreateWithGivenPrimitive3DContainer(
-    const drawinglayer::primitive3d::Primitive3DContainer& rxContent3D) const
+    const drawinglayer::primitive3d::Primitive3DContainer& rxContent3D, bool adaptToScreenView)
+    const
 {
     drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
@@ -113,7 +114,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3d::impCreateWithG
             const drawinglayer::primitive2d::Primitive2DReference xReference(
                 new drawinglayer::primitive2d::Embedded3DPrimitive2D(
                     rxContent3D,
-                    pVCOfE3DScene->getObjectTransformation(),
+                    pVCOfE3DScene->getObjectTransformation(adaptToScreenView),
                     aViewInformation3D,
                     aLightNormal,
                     fShadowSlant,
@@ -175,12 +176,13 @@ drawinglayer::primitive3d::Primitive3DContainer ViewContactOfE3d::getViewIndepen
     return xRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3d::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3d::createViewIndependentPrimitive2DSequence(bool adaptToScreenView) const
 {
     // also need to create a 2D embedding when the view-independent part is requested,
     // see view-dependent part in ViewObjectContactOfE3d::createPrimitive2DSequence
     // get 3d primitive vector, isPrimitiveVisible() is done in 3d creator
-    return impCreateWithGivenPrimitive3DContainer(getViewIndependentPrimitive3DContainer());
+    return impCreateWithGivenPrimitive3DContainer(
+        getViewIndependentPrimitive3DContainer(), adaptToScreenView);
 }
 
 ViewObjectContact& ViewContactOfE3d::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)

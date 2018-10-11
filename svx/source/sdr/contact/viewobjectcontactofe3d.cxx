@@ -18,6 +18,7 @@
  */
 
 #include <sdr/contact/viewobjectcontactofe3d.hxx>
+#include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewcontactofe3d.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/primitive3d/modifiedcolorprimitive3d.hxx>
@@ -68,7 +69,7 @@ namespace sdr
             const ViewContactOfE3d& rViewContact = static_cast< const ViewContactOfE3d& >(GetViewContact());
 
             // get 3d primitive vector, isPrimitiveVisible() is done in 3d creator
-            return rViewContact.impCreateWithGivenPrimitive3DContainer(getPrimitive3DContainer(rDisplayInfo));
+            return rViewContact.impCreateWithGivenPrimitive3DContainer(getPrimitive3DContainer(rDisplayInfo), rDisplayInfo.GetAdaptToScreenView());
         }
 
         drawinglayer::primitive3d::Primitive3DContainer const & ViewObjectContactOfE3d::getPrimitive3DContainer(const DisplayInfo& rDisplayInfo) const

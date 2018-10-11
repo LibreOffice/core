@@ -494,7 +494,7 @@ BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked) const
                     }
 
                     xPrimitives[a] = new drawinglayer::primitive2d::GroupPrimitive2D(
-                        pCandidate->GetViewContact().getViewIndependentPrimitive2DContainer());
+                        pCandidate->GetViewContact().getViewIndependentPrimitive2DContainer(true/*TODO*/));
                 }
 
                 // get logic range

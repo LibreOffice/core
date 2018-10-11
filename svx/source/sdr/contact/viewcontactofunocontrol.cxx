@@ -89,17 +89,19 @@ namespace sdr { namespace contact {
     }
 
 
-    drawinglayer::primitive2d::Primitive2DContainer ViewContactOfUnoControl::createViewIndependentPrimitive2DSequence() const
+    drawinglayer::primitive2d::Primitive2DContainer ViewContactOfUnoControl::createViewIndependentPrimitive2DSequence(bool adaptToScreenView) const
     {
         // create range. Use model data directly, not getBoundRect()/getSnapRect; these will use
         // the primitive data themselves in the long run. Use SdrUnoObj's (which is a SdrRectObj)
         // call to GetGeoRect() to access SdrTextObj::aRect directly and without executing anything
         tools::Rectangle aRectangle(GetSdrUnoObj().GetGeoRect());
-        // Hack for calc, transform position of object according
-        // to current zoom so as objects relative position to grid
-        // appears stable
-        Point aGridOffset = GetSdrUnoObj().GetGridOffset();
-        aRectangle += aGridOffset;
+        if (adaptToScreenView) {
+            // Hack for calc, transform position of object according
+            // to current zoom so as objects relative position to grid
+            // appears stable
+            Point aGridOffset = GetSdrUnoObj().GetGridOffset();
+            aRectangle += aGridOffset;
+        }
         const basegfx::B2DRange aRange(
             aRectangle.Left(), aRectangle.Top(),
             aRectangle.Right(), aRectangle.Bottom());

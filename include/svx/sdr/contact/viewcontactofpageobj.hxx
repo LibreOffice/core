@@ -36,7 +36,7 @@ protected:
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
 
     // create graphical visualisation data
-    virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
+    virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence(bool) const override;
 public:
     // basic constructor, used from SdrObject.
     explicit ViewContactOfPageObj(SdrPageObj& rPageObj);

@@ -241,14 +241,16 @@ void ViewContactOfE3dScene::createViewInformation3D(const basegfx::B3DRange& rCo
         aDeviceToView, 0.0, aEmptyProperties);
 }
 
-void ViewContactOfE3dScene::createObjectTransformation()
+void ViewContactOfE3dScene::createObjectTransformation(bool adaptToScreenView)
 {
     // create 2d Object Transformation from relative point in 2d scene to world
     tools::Rectangle aRectangle = GetE3dScene().GetSnapRect();
-    // Hack for calc, transform position of object according
-    // to current zoom so as objects relative position to grid
-    // appears stable
-    aRectangle += GetE3dScene().GetGridOffset();
+    if (adaptToScreenView) {
+        // Hack for calc, transform position of object according
+        // to current zoom so as objects relative position to grid
+        // appears stable
+        aRectangle += GetE3dScene().GetGridOffset();
+    }
     maObjectTransformation.set(0, 0, aRectangle.getWidth());
     maObjectTransformation.set(1, 1, aRectangle.getHeight());
     maObjectTransformation.set(0, 2, aRectangle.Left());
@@ -268,7 +270,7 @@ void ViewContactOfE3dScene::createSdrLightingAttribute()
 }
 
 drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3dScene::createScenePrimitive2DSequence(
-    const SdrLayerIDSet* pLayerVisibility) const
+    const SdrLayerIDSet* pLayerVisibility, bool adaptToScreenView) const
 {
     drawinglayer::primitive2d::Primitive2DContainer xRetval;
     const sal_uInt32 nChildrenCount(GetObjectCount());
@@ -316,7 +318,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3dScene::createSce
                     bTestVisibility ? aVisibleSequence : aAllSequence,
                     getSdrSceneAttribute(),
                     getSdrLightingAttribute(),
-                    getObjectTransformation(),
+                    getObjectTransformation(adaptToScreenView),
                     getViewInformation3D(aContentRange)));
 
             xRetval = drawinglayer::primitive2d::Primitive2DContainer{ xReference };
@@ -326,19 +328,19 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3dScene::createSce
     // always append an invisible outline for the cases where no visible content exists
     xRetval.push_back(
         drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
-            getObjectTransformation()));
+            getObjectTransformation(adaptToScreenView)));
 
     return xRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3dScene::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3dScene::createViewIndependentPrimitive2DSequence(bool adaptToScreenView) const
 {
     drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
     if(GetObjectCount())
     {
         // create a default ScenePrimitive2D (without visibility test of members)
-        xRetval = createScenePrimitive2DSequence(nullptr);
+        xRetval = createScenePrimitive2DSequence(nullptr, adaptToScreenView);
     }
 
     return xRetval;
@@ -390,11 +392,12 @@ const drawinglayer::geometry::ViewInformation3D& ViewContactOfE3dScene::getViewI
     return maViewInformation3D;
 }
 
-const basegfx::B2DHomMatrix& ViewContactOfE3dScene::getObjectTransformation() const
+const basegfx::B2DHomMatrix& ViewContactOfE3dScene::getObjectTransformation(bool adaptToScreenView)
+    const
 {
     if(maObjectTransformation.isIdentity())
     {
-        const_cast < ViewContactOfE3dScene* >(this)->createObjectTransformation();
+        const_cast < ViewContactOfE3dScene* >(this)->createObjectTransformation(adaptToScreenView);
     }
 
     return maObjectTransformation;

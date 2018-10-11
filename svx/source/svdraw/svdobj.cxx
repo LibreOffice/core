@@ -891,7 +891,7 @@ void SdrObject::RecalcBoundRect()
     // central new method which will calculate the BoundRect using primitive geometry
     if(aOutRect.IsEmpty())
     {
-        const drawinglayer::primitive2d::Primitive2DContainer xPrimitives(GetViewContact().getViewIndependentPrimitive2DContainer());
+        const drawinglayer::primitive2d::Primitive2DContainer xPrimitives(GetViewContact().getViewIndependentPrimitive2DContainer(true/*TODO*/));
 
         if(!xPrimitives.empty())
         {
@@ -1140,7 +1140,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
 
         // get sequence from clone
         const sdr::contact::ViewContact& rVC(pClone->GetViewContact());
-        const drawinglayer::primitive2d::Primitive2DContainer xSequence(rVC.getViewIndependentPrimitive2DContainer());
+        const drawinglayer::primitive2d::Primitive2DContainer xSequence(rVC.getViewIndependentPrimitive2DContainer(true/*TODO*/));
 
         if(!xSequence.empty())
         {
@@ -2319,7 +2319,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(bool bForceLineDash)
     {
         basegfx::B2DPolyPolygon aMergedLineFillPolyPolygon;
         basegfx::B2DPolyPolygon aMergedHairlinePolyPolygon;
-        const drawinglayer::primitive2d::Primitive2DContainer xSequence(GetViewContact().getViewIndependentPrimitive2DContainer());
+        const drawinglayer::primitive2d::Primitive2DContainer xSequence(GetViewContact().getViewIndependentPrimitive2DContainer(true/*TODO*/));
 
         if(!xSequence.empty())
         {

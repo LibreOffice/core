@@ -51,7 +51,7 @@ namespace sdr
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrCaptionObj::createViewIndependentPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrCaptionObj::createViewIndependentPrimitive2DSequence(bool adaptToScreenView) const
         {
             drawinglayer::primitive2d::Primitive2DContainer xRetval;
             const SdrCaptionObj& rCaptionObj(static_cast<const SdrCaptionObj&>(GetSdrObject()));
@@ -64,11 +64,13 @@ namespace sdr
 
             // take unrotated snap rect (direct model data) for position and size
             tools::Rectangle rRectangle = rCaptionObj.GetGeoRect();
-            // Hack for calc, transform position of object according
-            // to current zoom so as objects relative position to grid
-            // appears stable
             Point aGridOff = rCaptionObj.GetGridOffset();
-            rRectangle += aGridOff;
+            if (adaptToScreenView) {
+                // Hack for calc, transform position of object according
+                // to current zoom so as objects relative position to grid
+                // appears stable
+                rRectangle += aGridOff;
+            }
 
             const ::basegfx::B2DRange aObjectRange(
                 rRectangle.Left(), rRectangle.Top(),
@@ -88,10 +90,12 @@ namespace sdr
             drawinglayer::primitive2d::calculateRelativeCornerRadius(
                 rCaptionObj.GetEckenradius(), aObjectRange, fCornerRadiusX, fCornerRadiusY);
             ::basegfx::B2DPolygon aTail = rCaptionObj.getTailPolygon();
-            // Hack for calc, transform position of tail according
-            // to current zoom so as objects relative position to grid
-            // appears stable
-            aTail.transform( basegfx::utils::createTranslateB2DHomMatrix( aGridOff.X(), aGridOff.Y() ) );
+            if (adaptToScreenView) {
+                // Hack for calc, transform position of tail according
+                // to current zoom so as objects relative position to grid
+                // appears stable
+                aTail.transform( basegfx::utils::createTranslateB2DHomMatrix( aGridOff.X(), aGridOff.Y() ) );
+            }
             // create primitive. Always create one (even if invisible) to let the decomposition
             // of SdrCaptionPrimitive2D create needed invisible elements for HitTest and BoundRect
             const drawinglayer::primitive2d::Primitive2DReference xReference(

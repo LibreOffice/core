@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <config_global.h>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -66,6 +69,10 @@ namespace drawinglayer
             // the point in time
             double                                      mfViewTime;
 
+            // If true, potentially adapt objects' geometries to fit a specific on-screen view (see
+            // documentation of AdaptToScreenView in offapi/com/sun/star/graphic/XPrimitive2D.idl):
+            bool mAdaptToScreenView;
+
             bool                                        mbReducedDisplayQuality : 1;
 
             // the complete PropertyValue representation (if already created)
@@ -95,6 +102,8 @@ namespace drawinglayer
             {
                 return OUString("Time");
             }
+
+            static constexpr OUStringLiteral NamePropertyAdaptToScreenView = "AdaptToScreenView";
 
             static OUString getNamePropertyVisualizedPage()
             {
@@ -152,6 +161,10 @@ namespace drawinglayer
                         {
                             rProp.Value >>= mfViewTime;
                         }
+                        else if (rProp.Name == NamePropertyAdaptToScreenView)
+                        {
+                            rProp.Value >>= mAdaptToScreenView;
+                        }
                         else if(rProp.Name == getNamePropertyVisualizedPage())
                         {
                             rProp.Value >>= mxVisualizedPage;
@@ -174,6 +187,7 @@ namespace drawinglayer
                 const bool bViewTransformationUsed(!maViewTransformation.isIdentity());
                 const bool bViewportUsed(!maViewport.isEmpty());
                 const bool bTimeUsed(0.0 < mfViewTime);
+                const bool bAdaptToScreenViewUsed(!mAdaptToScreenView);
                 const bool bVisualizedPageUsed(mxVisualizedPage.is());
                 const bool bReducedDisplayQualityUsed(mbReducedDisplayQuality);
                 const bool bExtraInformation(mxExtendedInformation.hasElements());
@@ -183,6 +197,7 @@ namespace drawinglayer
                     (bViewTransformationUsed ? 1 : 0) +
                     (bViewportUsed ? 1 : 0) +
                     (bTimeUsed ? 1 : 0) +
+                    (bAdaptToScreenViewUsed ? 1 : 0) +
                     (bVisualizedPageUsed ? 1 : 0) +
                     (bReducedDisplayQualityUsed ? 1 : 0) +
                     (bExtraInformation ? mxExtendedInformation.getLength() : 0));
@@ -222,6 +237,13 @@ namespace drawinglayer
                     nIndex++;
                 }
 
+                if(bAdaptToScreenViewUsed)
+                {
+                    mxViewInformation[nIndex].Name = NamePropertyAdaptToScreenView;
+                    mxViewInformation[nIndex].Value <<= mAdaptToScreenView;
+                    nIndex++;
+                }
+
                 if(bVisualizedPageUsed)
                 {
                     mxViewInformation[nIndex].Name = getNamePropertyVisualizedPage();
@@ -247,6 +269,7 @@ namespace drawinglayer
                 const basegfx::B2DRange& rViewport,
                 const uno::Reference< drawing::XDrawPage >& rxDrawPage,
                 double fViewTime,
+                bool adaptToScreenView,
                 const uno::Sequence< beans::PropertyValue >& rExtendedParameters)
             :   maObjectTransformation(rObjectTransformation),
                 maViewTransformation(rViewTransformation),
@@ -256,6 +279,7 @@ namespace drawinglayer
                 maDiscreteViewport(),
                 mxVisualizedPage(rxDrawPage),
                 mfViewTime(fViewTime),
+                mAdaptToScreenView(adaptToScreenView),
                 mbReducedDisplayQuality(false),
                 mxViewInformation(),
                 mxExtendedInformation()
@@ -272,6 +296,7 @@ namespace drawinglayer
                 maDiscreteViewport(),
                 mxVisualizedPage(),
                 mfViewTime(),
+                mAdaptToScreenView(true),
                 mbReducedDisplayQuality(false),
                 mxViewInformation(rViewParameters),
                 mxExtendedInformation()
@@ -288,6 +313,7 @@ namespace drawinglayer
                 maDiscreteViewport(),
                 mxVisualizedPage(),
                 mfViewTime(),
+                mAdaptToScreenView(true),
                 mbReducedDisplayQuality(false),
                 mxViewInformation(),
                 mxExtendedInformation()
@@ -351,6 +377,11 @@ namespace drawinglayer
                 return mfViewTime;
             }
 
+            bool getAdaptToScreenView() const
+            {
+                return mAdaptToScreenView;
+            }
+
             const uno::Reference< drawing::XDrawPage >& getVisualizedPage() const
             {
                 return mxVisualizedPage;
@@ -383,9 +414,14 @@ namespace drawinglayer
                     && maViewport == rCandidate.maViewport
                     && mxVisualizedPage == rCandidate.mxVisualizedPage
                     && mfViewTime == rCandidate.mfViewTime
+                    && mAdaptToScreenView == rCandidate.mAdaptToScreenView
                     && mxExtendedInformation == rCandidate.mxExtendedInformation);
             }
         };
+
+#if !HAVE_CPP_INLINE_VARIABLES
+        constexpr OUStringLiteral ImpViewInformation2D::NamePropertyAdaptToScreenView;
+#endif
     } // end of anonymous namespace
 } // end of namespace drawinglayer
 
@@ -406,6 +442,7 @@ namespace drawinglayer
             const basegfx::B2DRange& rViewport,
             const uno::Reference< drawing::XDrawPage >& rxDrawPage,
             double fViewTime,
+            bool adaptToScreenView,
             const uno::Sequence< beans::PropertyValue >& rExtendedParameters)
         :   mpViewInformation2D(ImpViewInformation2D(
                 rObjectTransformation,
@@ -413,6 +450,7 @@ namespace drawinglayer
                 rViewport,
                 rxDrawPage,
                 fViewTime,
+                adaptToScreenView,
                 rExtendedParameters))
         {
         }
@@ -460,6 +498,11 @@ namespace drawinglayer
         double ViewInformation2D::getViewTime() const
         {
             return mpViewInformation2D->getViewTime();
+        }
+
+        bool ViewInformation2D::getAdaptToScreenView() const
+        {
+            return mpViewInformation2D->getAdaptToScreenView();
         }
 
         const uno::Reference< drawing::XDrawPage >& ViewInformation2D::getVisualizedPage() const

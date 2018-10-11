@@ -43,11 +43,11 @@ namespace sdr
             }
 
             // #i101684# internal tooling
-            basegfx::B2DRange getCorrectedTextBoundRect() const;
+            basegfx::B2DRange getCorrectedTextBoundRect(bool adaptToScreenView) const;
 
             // This method is responsible for creating the graphical visualisation data
             // ONLY based on model data
-            virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const override;
+            virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence(bool adaptToScreenView) const override;
         };
     } // end of namespace contact
 } // end of namespace sdr

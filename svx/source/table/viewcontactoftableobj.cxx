@@ -198,7 +198,7 @@ namespace sdr
             return svx::frame::Style();
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfTableObj::createViewIndependentPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfTableObj::createViewIndependentPrimitive2DSequence(bool) const
         {
             const sdr::table::SdrTableObj& rTableObj = static_cast<const sdr::table::SdrTableObj&>(GetSdrObject());
             const uno::Reference< css::table::XTable > xTable = rTableObj.getTable();

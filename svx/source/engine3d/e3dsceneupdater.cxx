@@ -90,8 +90,8 @@ E3DModifySceneSnapRectUpdater::~E3DModifySceneSnapRectUpdater()
                 aAllContentRange.getMinX(), aAllContentRange.getMinY(),
                 aAllContentRange.getMaxX(), aAllContentRange.getMaxY());
 
-            // transform to 2D world coordinates using scene's 2D transformation
-            aSnapRange.transform(rVCScene.getObjectTransformation());
+            // transform to 2D world coordinates using scene's 2D otransformation
+            aSnapRange.transform(rVCScene.getObjectTransformation(true/*TODO*/));
 
             // snap to (old) integer
             const tools::Rectangle aNewSnapRect(

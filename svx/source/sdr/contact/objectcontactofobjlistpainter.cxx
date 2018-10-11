@@ -99,6 +99,7 @@ void ObjectContactOfObjListPainter::ProcessDisplay(DisplayInfo& rDisplayInfo)
                 aViewRange,
                 GetXDrawPageForSdrPage(const_cast< SdrPage* >(mpProcessedPage)),
                 0.0,
+                pTargetDevice->isScreenComp(),
                 css::uno::Sequence<css::beans::PropertyValue>());
             updateViewInformation2D(aNewViewInformation2D);
 

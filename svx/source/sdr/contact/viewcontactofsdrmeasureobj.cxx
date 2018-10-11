@@ -43,7 +43,7 @@ namespace sdr
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrMeasureObj::createViewIndependentPrimitive2DSequence() const
+        drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrMeasureObj::createViewIndependentPrimitive2DSequence(bool) const
         {
             const SfxItemSet& rItemSet = GetMeasureObj().GetMergedItemSet();
             const drawinglayer::attribute::SdrLineShadowTextAttribute aAttribute(

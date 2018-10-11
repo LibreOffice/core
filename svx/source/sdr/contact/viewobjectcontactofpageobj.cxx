@@ -137,6 +137,7 @@ drawinglayer::primitive2d::Primitive2DContainer PagePrimitiveExtractor::createPr
 
             GetXDrawPageForSdrPage(pStartPage),
             0.0, // no time; page previews are not animated
+            rOriginalViewInformation.getAdaptToScreenView(),
             rOriginalViewInformation.getExtendedInformationSequence());
         updateViewInformation2D(aNewViewInformation2D);
 

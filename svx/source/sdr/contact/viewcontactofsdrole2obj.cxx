@@ -22,6 +22,7 @@
 #include <sdr/contact/viewobjectcontactofsdrole2obj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <sdr/primitive2d/sdrole2primitive2d.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
@@ -57,14 +58,16 @@ ViewContactOfSdrOle2Obj::~ViewContactOfSdrOle2Obj()
 {
 }
 
-basegfx::B2DHomMatrix ViewContactOfSdrOle2Obj::createObjectTransform() const
+basegfx::B2DHomMatrix ViewContactOfSdrOle2Obj::createObjectTransform(bool adaptToScreenView) const
 {
     // take unrotated snap rect (direct model data) for position and size
     tools::Rectangle rRectangle = GetOle2Obj().GetGeoRect();
-    // Hack for calc, transform position of object according
-    // to current zoom so as objects relative position to grid
-    // appears stable
-    rRectangle += GetOle2Obj().GetGridOffset();
+    if (adaptToScreenView) {
+        // Hack for calc, transform position of object according
+        // to current zoom so as objects relative position to grid
+        // appears stable
+        rRectangle += GetOle2Obj().GetGridOffset();
+    }
     const basegfx::B2DRange aObjectRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
 
     // create object matrix
@@ -79,10 +82,10 @@ basegfx::B2DHomMatrix ViewContactOfSdrOle2Obj::createObjectTransform() const
         aObjectRange.getMinX(), aObjectRange.getMinY());
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithParameters() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithParameters(bool adaptToScreenView) const
 {
     // get object transformation
-    const basegfx::B2DHomMatrix aObjectMatrix(createObjectTransform());
+    const basegfx::B2DHomMatrix aObjectMatrix(createObjectTransform(adaptToScreenView));
 
     // Prepare attribute settings, will be used soon anyways
     const SfxItemSet& rItemSet = GetOle2Obj().GetMergedItemSet();
@@ -180,7 +183,7 @@ basegfx::B2DRange ViewContactOfSdrOle2Obj::getRange( const drawinglayer::geometr
             GetOle2Obj().getText(0),
             true);
 
-    basegfx::B2DHomMatrix aObjectMatrix = createObjectTransform();
+    basegfx::B2DHomMatrix aObjectMatrix = createObjectTransform(rViewInfo2D.getAdaptToScreenView());
 
     drawinglayer::primitive2d::Primitive2DReference xContent =
         new drawinglayer::primitive2d::SdrOleContentPrimitive2D(
@@ -209,9 +212,9 @@ void ViewContactOfSdrOle2Obj::ActionChanged()
     }
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrOle2Obj::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrOle2Obj::createViewIndependentPrimitive2DSequence(bool adaptToScreenView) const
 {
-    return createPrimitive2DSequenceWithParameters();
+    return createPrimitive2DSequenceWithParameters(adaptToScreenView);
 }
 
 }}

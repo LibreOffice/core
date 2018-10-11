@@ -58,6 +58,12 @@ interface XPrimitive2D : ::com::sun::star::uno::XInterface
         lead to varied results for animated objects. This value is defined in the
         range [0.0 .. n[, negative values are not allowed. If not given, a value of
         0.0 is implied.
+
+        boolean AdaptToScreenView
+
+        If true (the default), potentially adapt objects' geometries to fit a specific on-screen
+        view.  (This is used by Calc, see ViewContact::createViewIndependentPrimitive2DSequence in
+        include/svx/sdr/contact/viewcontact.hxx.)
      */
     sequence< XPrimitive2D > getDecomposition( [in] sequence< ::com::sun::star::beans::PropertyValue > aViewParameters );
 

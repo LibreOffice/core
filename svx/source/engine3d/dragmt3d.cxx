@@ -239,7 +239,7 @@ void E3dDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
                     basegfx::B2DPolyPolygon aPolyPolygon(basegfx::utils::createB2DPolyPolygonFromB3DPolyPolygon(aCandidate, aTransform));
 
                     // transform to 2D view coordinates
-                    aPolyPolygon.transform(rVCScene.getObjectTransformation());
+                    aPolyPolygon.transform(rVCScene.getObjectTransformation(true/*TODO*/));
 
                     aResult.append(aPolyPolygon);
                 }
@@ -295,7 +295,7 @@ E3dDragRotate::E3dDragRotate(SdrDragView &_rView,
             basegfx::B2DPoint aRotCenter2D(Ref1().X(), Ref1().Y());
 
             // from world to relative scene using inverse getObjectTransformation()
-            basegfx::B2DHomMatrix aInverseObjectTransform(rVCScene.getObjectTransformation());
+            basegfx::B2DHomMatrix aInverseObjectTransform(rVCScene.getObjectTransformation(true/*TODO*/));
             aInverseObjectTransform.invert();
             aRotCenter2D = aInverseObjectTransform * aRotCenter2D;
 
@@ -526,7 +526,7 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
                     // move coor from 2d world to 3d Eye
                     basegfx::B2DPoint aGlobalMoveHead2D(static_cast<double>(rPnt.X() - maLastPos.X()), static_cast<double>(rPnt.Y() - maLastPos.Y()));
                     basegfx::B2DPoint aGlobalMoveTail2D(0.0, 0.0);
-                    basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation());
+                    basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation(true/*TODO*/));
 
                     aInverseSceneTransform.invert();
                     aGlobalMoveHead2D = aInverseSceneTransform * aGlobalMoveHead2D;
@@ -604,7 +604,7 @@ void E3dDragMove::MoveSdrDrag(const Point& rPnt)
                     basegfx::B2DPoint aGlobalScaleStart2D(static_cast<double>(aStartPos.X()), static_cast<double>(aStartPos.Y()));
                     basegfx::B2DPoint aGlobalScaleNext2D(static_cast<double>(rPnt.X()), static_cast<double>(rPnt.Y()));
                     basegfx::B2DPoint aGlobalScaleFixPos2D(static_cast<double>(maScaleFixPos.X()), static_cast<double>(maScaleFixPos.Y()));
-                    basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation());
+                    basegfx::B2DHomMatrix aInverseSceneTransform(rVCScene.getObjectTransformation(true/*TODO*/));
 
                     aInverseSceneTransform.invert();
                     aGlobalScaleStart2D = aInverseSceneTransform * aGlobalScaleStart2D;

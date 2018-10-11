@@ -77,7 +77,12 @@ protected:
     // visualisation method and will also be used for BoundRect computations in the long run.
     // This means it's always an error when the default implementation is called and thus gets
     // asserted there
-    virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence() const;
+    //
+    // @param adaptToScreenView  if true, potentially adapt objects' geometries to fit a specific
+    // on-screen view (as used by Calc, see the hack in e.g.
+    // ViewContactOfGraphic::createViewIndependentPrimitive2DSequence in
+    // svx/source/sdr/contact/viewcontactofgraphic.cxx)
+    virtual drawinglayer::primitive2d::Primitive2DContainer createViewIndependentPrimitive2DSequence(bool adaptToScreenView) const;
 
     // basic constructor. Since this is a base class only, it shall
     // never be called directly
@@ -119,7 +124,10 @@ public:
 
     // access to the local primitive. This will ensure that the primitive is
     // current in comparing the local one with a fresh created incarnation
-    drawinglayer::primitive2d::Primitive2DContainer const & getViewIndependentPrimitive2DContainer() const;
+    //
+    // @param adaptToScreenView  if true, potentially adapt objects' geometries to fit a specific
+    // on-screen view (as used by Calc, see createViewIndependentPrimitive2DSequence)
+    drawinglayer::primitive2d::Primitive2DContainer const & getViewIndependentPrimitive2DContainer(bool adaptToScreenView) const;
 
     // add Gluepoints (if available)
     virtual drawinglayer::primitive2d::Primitive2DContainer createGluePointPrimitive2DSequence() const;

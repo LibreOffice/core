@@ -69,7 +69,7 @@ ViewObjectContact& ViewContactOfPageBackground::CreateObjectSpecificViewObjectCo
     return *pRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageBackground::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageBackground::createViewIndependentPrimitive2DSequence(bool) const
 {
     // We have only the page information, not the view information. Use the
     // svtools::DOCCOLOR color for initialisation
@@ -99,7 +99,7 @@ ViewObjectContact& ViewContactOfPageShadow::CreateObjectSpecificViewObjectContac
     return *pRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageShadow::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageShadow::createViewIndependentPrimitive2DSequence(bool) const
 {
     static bool bUseOldPageShadow(false);
     const SdrPage& rPage = getPage();
@@ -170,7 +170,7 @@ ViewObjectContact& ViewContactOfMasterPage::CreateObjectSpecificViewObjectContac
     return *pRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfMasterPage::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfMasterPage::createViewIndependentPrimitive2DSequence(bool) const
 {
     drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
@@ -241,7 +241,7 @@ ViewObjectContact& ViewContactOfPageFill::CreateObjectSpecificViewObjectContact(
     return *pRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageFill::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageFill::createViewIndependentPrimitive2DSequence(bool) const
 {
     const SdrPage& rPage = getPage();
     const basegfx::B2DRange aPageFillRange(0.0, 0.0, static_cast<double>(rPage.GetWidth()), static_cast<double>(rPage.GetHeight()));
@@ -276,7 +276,7 @@ ViewObjectContact& ViewContactOfOuterPageBorder::CreateObjectSpecificViewObjectC
     return *pRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfOuterPageBorder::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfOuterPageBorder::createViewIndependentPrimitive2DSequence(bool) const
 {
     drawinglayer::primitive2d::Primitive2DContainer xRetval;
     const SdrPage& rPage = getPage();
@@ -337,7 +337,7 @@ ViewObjectContact& ViewContactOfInnerPageBorder::CreateObjectSpecificViewObjectC
     return *pRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfInnerPageBorder::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfInnerPageBorder::createViewIndependentPrimitive2DSequence(bool) const
 {
     const SdrPage& rPage = getPage();
     const basegfx::B2DRange aPageBorderRange(
@@ -385,7 +385,7 @@ ViewObjectContact& ViewContactOfPageHierarchy::CreateObjectSpecificViewObjectCon
     return *pRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageHierarchy::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageHierarchy::createViewIndependentPrimitive2DSequence(bool adaptToScreenView) const
 {
     // collect sub-hierarchy
     drawinglayer::primitive2d::Primitive2DContainer xRetval;
@@ -395,7 +395,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfPageHierarchy::crea
     for(sal_uInt32 a(0); a < nObjectCount; a++)
     {
         const ViewContact& rCandidate(GetViewContact(a));
-        const drawinglayer::primitive2d::Primitive2DContainer aCandSeq(rCandidate.getViewIndependentPrimitive2DContainer());
+        const drawinglayer::primitive2d::Primitive2DContainer aCandSeq(rCandidate.getViewIndependentPrimitive2DContainer(adaptToScreenView));
 
         xRetval.insert(xRetval.end(), aCandSeq.begin(), aCandSeq.end());
     }
@@ -432,7 +432,7 @@ ViewObjectContact& ViewContactOfGrid::CreateObjectSpecificViewObjectContact(Obje
     return *pRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfGrid::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfGrid::createViewIndependentPrimitive2DSequence(bool) const
 {
     // We have only the page information, not the view information and thus no grid settings. Create empty
     // default. For the view-dependent implementation, see ViewObjectContactOfPageGrid::createPrimitive2DSequence
@@ -457,7 +457,7 @@ ViewObjectContact& ViewContactOfHelplines::CreateObjectSpecificViewObjectContact
     return *pRetval;
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfHelplines::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfHelplines::createViewIndependentPrimitive2DSequence(bool) const
 {
     // We have only the page information, not the view information and thus no helplines. Create empty
     // default. For the view-dependent implementation, see ViewObjectContactOfPageHelplines::createPrimitive2DSequence
@@ -578,31 +578,31 @@ void ViewContactOfSdrPage::ActionChanged()
     maViewContactOfHelplinesFront.ActionChanged();
 }
 
-drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrPage::createViewIndependentPrimitive2DSequence() const
+drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrPage::createViewIndependentPrimitive2DSequence(bool adaptToScreenView) const
 {
     drawinglayer::primitive2d::Primitive2DContainer xRetval;
 
     // collect all sub-sequences including sub hierarchy.
-    xRetval.append(maViewContactOfPageBackground.getViewIndependentPrimitive2DContainer());
-    xRetval.append(maViewContactOfPageShadow.getViewIndependentPrimitive2DContainer());
-    xRetval.append(maViewContactOfPageFill.getViewIndependentPrimitive2DContainer());
+    xRetval.append(maViewContactOfPageBackground.getViewIndependentPrimitive2DContainer(adaptToScreenView));
+    xRetval.append(maViewContactOfPageShadow.getViewIndependentPrimitive2DContainer(adaptToScreenView));
+    xRetval.append(maViewContactOfPageFill.getViewIndependentPrimitive2DContainer(adaptToScreenView));
 
     const SdrPage& rPage = GetSdrPage();
 
     if(rPage.TRG_HasMasterPage())
     {
         xRetval.append(
-            rPage.TRG_GetMasterPageDescriptorViewContact().getViewIndependentPrimitive2DContainer());
+            rPage.TRG_GetMasterPageDescriptorViewContact().getViewIndependentPrimitive2DContainer(adaptToScreenView));
     }
     else if(rPage.IsMasterPage())
     {
         xRetval.append(
-            maViewContactOfMasterPage.getViewIndependentPrimitive2DContainer());
+            maViewContactOfMasterPage.getViewIndependentPrimitive2DContainer(adaptToScreenView));
     }
 
-    xRetval.append(maViewContactOfOuterPageBorder.getViewIndependentPrimitive2DContainer());
-    xRetval.append(maViewContactOfInnerPageBorder.getViewIndependentPrimitive2DContainer());
-    xRetval.append(maViewContactOfPageHierarchy.getViewIndependentPrimitive2DContainer());
+    xRetval.append(maViewContactOfOuterPageBorder.getViewIndependentPrimitive2DContainer(adaptToScreenView));
+    xRetval.append(maViewContactOfInnerPageBorder.getViewIndependentPrimitive2DContainer(adaptToScreenView));
+    xRetval.append(maViewContactOfPageHierarchy.getViewIndependentPrimitive2DContainer(adaptToScreenView));
 
     // Only add front versions of grid and helplines since no visibility test is done,
     // so adding the back incarnations is not necessary. This makes the Front

@@ -184,6 +184,7 @@ namespace drawinglayer
                         getViewInformation2D().getViewport(),
                         getViewInformation2D().getVisualizedPage(),
                         getViewInformation2D().getViewTime(),
+                        getViewInformation2D().getAdaptToScreenView(),
                         getViewInformation2D().getExtendedInformationSequence());
                     updateViewInformation(aViewInformation2D);
 
