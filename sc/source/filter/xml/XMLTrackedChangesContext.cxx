@@ -108,7 +108,7 @@ public:
 
 class ScXMLDependingsContext : public ScXMLImportContext
 {
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
+    ScXMLChangeTrackingImportHelper* const    pChangeTrackingImportHelper;
 
 public:
     ScXMLDependingsContext( ScXMLImport& rImport,
@@ -129,7 +129,7 @@ public:
 
 class ScXMLDeletionsContext : public ScXMLImportContext
 {
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
+    ScXMLChangeTrackingImportHelper* const    pChangeTrackingImportHelper;
 
 public:
     ScXMLDeletionsContext( ScXMLImport& rImport,
@@ -144,12 +144,12 @@ class ScXMLChangeCellContext;
 class ScXMLChangeTextPContext : public ScXMLImportContext
 {
     css::uno::Reference< css::xml::sax::XAttributeList> xAttrList;
-    OUString                    sLName;
+    OUString const              sLName;
     OUStringBuffer              sText;
     ScXMLChangeCellContext*     pChangeCellContext;
     rtl::Reference<SvXMLImportContext>
                                 pTextPContext;
-    sal_uInt16                  nPrefix;
+    sal_uInt16 const            nPrefix;
 
 public:
 
@@ -287,7 +287,7 @@ public:
 
 class ScXMLCutOffsContext : public ScXMLImportContext
 {
-    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
+    ScXMLChangeTrackingImportHelper* const    pChangeTrackingImportHelper;
 
 public:
     ScXMLCutOffsContext( ScXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,

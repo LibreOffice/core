@@ -53,7 +53,7 @@ private:
     VclPtr<FixedText> maFtCondNr;
     VclPtr<FixedText> maFtCondition;
 
-    OUString maStrCondition;
+    OUString const maStrCondition;
 protected:
     VclPtr<ListBox> maLbType;
 

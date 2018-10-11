@@ -36,7 +36,7 @@ class ScSheetEventsObj : public cppu::WeakImplHelper<
 {
 private:
     ScDocShell*             mpDocShell;
-    SCTAB                   mnTab;
+    SCTAB const             mnTab;
 
 public:
                             ScSheetEventsObj(ScDocShell* pDocSh, SCTAB nT);

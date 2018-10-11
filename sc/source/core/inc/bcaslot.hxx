@@ -93,7 +93,7 @@ inline bool ScBroadcastArea::operator==( const ScBroadcastArea & rArea ) const
 
 struct ScBroadcastAreaEntry
 {
-    ScBroadcastArea* mpArea;
+    ScBroadcastArea* const mpArea;
     mutable bool     mbErasure;     ///< TRUE if marked for erasure in this set
 
     ScBroadcastAreaEntry( ScBroadcastArea* p ) : mpArea( p), mbErasure( false) {}
@@ -350,7 +350,7 @@ public:
 class ScBulkBroadcast
 {
     ScBroadcastAreaSlotMachine* pBASM;
-    SfxHintId                  mnHintId;
+    SfxHintId const             mnHintId;
 public:
     explicit ScBulkBroadcast( ScBroadcastAreaSlotMachine* p, SfxHintId nHintId ) :
         pBASM(p),

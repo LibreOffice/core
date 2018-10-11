@@ -107,7 +107,7 @@ class ScStyleFamilyObj : public ::cppu::WeakImplHelper<
 {
 private:
     ScDocShell*             pDocShell;
-    SfxStyleFamily          eFamily;        // Family
+    SfxStyleFamily const    eFamily;        // Family
 
     ScStyleObj*             GetObjectByIndex_Impl(sal_uInt32 nIndex);
     ScStyleObj*             GetObjectByName_Impl(const OUString& Name);
@@ -168,7 +168,7 @@ class ScStyleObj : public ::cppu::WeakImplHelper<
 private:
     const SfxItemPropertySet* pPropSet;
     ScDocShell*             pDocShell;
-    SfxStyleFamily          eFamily;        // Family
+    SfxStyleFamily const    eFamily;        // Family
     OUString                aStyleName;
     SfxStyleSheetBase*      pStyle_cached;
 

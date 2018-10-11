@@ -76,7 +76,7 @@ private:
     std::unique_ptr<ScQueryItem> pOutItem;
     ScViewData*         pViewData;
     ScDocument*         pDoc;
-    SCTAB               nSrcTab;
+    SCTAB const         nSrcTab;
 
     VclPtr<ComboBox>           aValueEdArr[3];
     VclPtr<ListBox>            aFieldLbArr[3];

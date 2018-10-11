@@ -72,7 +72,7 @@ public:
 
 private:
     static  sal_Int32   mnDrawingMLCount, mnVmlCount;
-    SCTAB               mnScTab;
+    SCTAB const         mnScTab;
 
     XclEscherEx&        mrEscherEx;
     std::unique_ptr<XclExpMsoDrawing> pMsodrawingPerSheet;
@@ -94,9 +94,9 @@ protected:
         sal_uInt16          nObjId;
         sal_uInt16          nGrbit;
         SCTAB               mnScTab;
-        bool                bFirstOnSheet;
+        bool const          bFirstOnSheet;
 
-        bool                    mbOwnEscher;    /// true = Escher part created on the fly.
+        bool const          mbOwnEscher;    /// true = Escher part created on the fly.
 
     /** @param bOwnEscher  If set to true, this object will create its escher data.
         See SetOwnEscher() for details. */
@@ -153,14 +153,14 @@ public:
 
 class XclObjComment : public XclObj
 {
-    ScAddress                   maScPos;
+    ScAddress const                   maScPos;
 
     // no need to use std::unique_ptr< SdrCaptionObj, SdrObjectFreeOp >
-    SdrCaptionObj*              mpCaption;
+    SdrCaptionObj* const              mpCaption;
 
-    bool                        mbVisible;
-    tools::Rectangle            maFrom;
-    tools::Rectangle            maTo;
+    bool const                        mbVisible;
+    tools::Rectangle const            maFrom;
+    tools::Rectangle const            maTo;
 
 public:
                                 XclObjComment( XclExpObjectManager& rObjMgr,
@@ -181,7 +181,7 @@ public:
 class XclObjDropDown : public XclObj
 {
 private:
-    bool                        bIsFiltered;
+    bool const                  bIsFiltered;
 
     virtual void                WriteSubRecs( XclExpStream& rStrm ) override;
 
@@ -300,7 +300,7 @@ public:
 class ExcBundlesheet8 : public ExcBundlesheetBase
 {
 private:
-    OUString                    sUnicodeName;
+    OUString const              sUnicodeName;
     XclExpString                GetName() const { return XclExpString( sUnicodeName, XclStrFlags::EightBitLength );}
 
     virtual void                SaveCont( XclExpStream& rStrm ) override;
@@ -328,7 +328,7 @@ public:
 class XclCodename : public ExcRecord
 {
 private:
-    XclExpString                aName;
+    XclExpString const                aName;
     virtual void                SaveCont( XclExpStream& rStrm ) override;
 public:
                                 XclCodename( const OUString& );
@@ -345,9 +345,9 @@ public:
 class ExcEScenarioCell
 {
 private:
-    sal_uInt16                      nCol;
-    sal_uInt16                      nRow;
-    XclExpString                sText;
+    sal_uInt16 const            nCol;
+    sal_uInt16                  nRow;
+    XclExpString const          sText;
 
 protected:
 public:

@@ -32,7 +32,7 @@ class TablePivotCharts : public TablePivotCharts_Base, public SfxListener
 {
 private:
     ScDocShell* m_pDocShell;
-    SCTAB m_nTab;
+    SCTAB const m_nTab;
 
 public:
     TablePivotCharts(ScDocShell* pDocShell, SCTAB nTab);

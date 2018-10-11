@@ -97,7 +97,7 @@ public:
 
 private:
     ScPreviewShell*         mpViewShell;
-    ScAccessibleDocumentPagePreview* mpAccDoc;
+    ScAccessibleDocumentPagePreview* const mpAccDoc;
     typedef std::vector<ScAccNote> ScAccNotes;
     mutable ScAccNotes      maNotes;
     mutable ScAccNotes      maMarks;
@@ -258,7 +258,7 @@ uno::Reference<XAccessible> ScNotesChildren::GetChild(sal_Int32 nIndex) const
 
 struct ScPointFound
 {
-    tools::Rectangle maPoint;
+    tools::Rectangle const maPoint;
     sal_Int32 mnParagraphs;
     explicit ScPointFound(const Point& rPoint) : maPoint(rPoint, Size(0, 0)), mnParagraphs(0) {}
     bool operator() (const ScAccNote& rNote)
@@ -416,7 +416,7 @@ sal_Int32 ScNotesChildren::CheckChanges(const ScPreviewLocationData& rData,
 
 struct ScChildGone
 {
-    ScAccessibleDocumentPagePreview* mpAccDoc;
+    ScAccessibleDocumentPagePreview* const mpAccDoc;
     explicit ScChildGone(ScAccessibleDocumentPagePreview* pAccDoc) : mpAccDoc(pAccDoc) {}
     void operator() (const uno::Reference<XAccessible>& xAccessible) const
     {
@@ -434,7 +434,7 @@ struct ScChildGone
 
 struct ScChildNew
 {
-    ScAccessibleDocumentPagePreview* mpAccDoc;
+    ScAccessibleDocumentPagePreview* const mpAccDoc;
     explicit ScChildNew(ScAccessibleDocumentPagePreview* pAccDoc) : mpAccDoc(pAccDoc) {}
     void operator() (const uno::Reference<XAccessible>& xAccessible) const
     {
@@ -635,7 +635,7 @@ public:
 
     void SetDrawBroadcaster();
 private:
-    ScAccessibleDocumentPagePreview* mpAccDoc;
+    ScAccessibleDocumentPagePreview* const mpAccDoc;
     ScPreviewShell* mpViewShell;
     ScShapeRangeVec maShapeRanges;
 
@@ -927,7 +927,7 @@ uno::Reference<XAccessible> ScShapeChildren::GetControl(sal_Int32 nIndex) const
 
 struct ScShapePointFound
 {
-    Point maPoint;
+    Point const maPoint;
     explicit ScShapePointFound(const awt::Point& rPoint) : maPoint(VCLPoint(rPoint)) {}
     bool operator() (const ScShapeChild& rShape)
     {

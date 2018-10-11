@@ -27,7 +27,7 @@ class ScTabViewShell;
 class ScTabViewTarget : public SfxRepeatTarget
 {
 private:
-    ScTabViewShell* pViewShell;
+    ScTabViewShell* const pViewShell;
 
 public:
 

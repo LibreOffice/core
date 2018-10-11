@@ -26,8 +26,8 @@
 
 struct ScUnoRefEntry
 {
-    sal_Int64   nObjectId;
-    ScRangeList aRanges;
+    sal_Int64 const   nObjectId;
+    ScRangeList const aRanges;
 
     ScUnoRefEntry( sal_Int64 nId, const ScRangeList& rOldRanges ) :
         nObjectId( nId ),
@@ -59,7 +59,7 @@ public:
 
 class ScUnoRefUndoHint : public SfxHint
 {
-    ScUnoRefEntry   aEntry;
+    ScUnoRefEntry const   aEntry;
 
 public:
                 ScUnoRefUndoHint( const ScUnoRefEntry& rRefEntry );

@@ -76,8 +76,8 @@ const SfxItemPropertyMapEntry* getConditionEntryrPropSet()
 
 struct ConditionEntryApiMap
 {
-    ScConditionMode eMode;
-    sal_Int32 nApiMode;
+    ScConditionMode const eMode;
+    sal_Int32 const nApiMode;
 };
 
 ConditionEntryApiMap aConditionEntryMap[] =
@@ -127,8 +127,8 @@ const SfxItemPropertyMapEntry* getColorScalePropSet()
 
 struct ColorScaleEntryTypeApiMap
 {
-    ScColorScaleEntryType eType;
-    sal_Int32 nApiType;
+    ScColorScaleEntryType const eType;
+    sal_Int32 const nApiType;
 };
 
 ColorScaleEntryTypeApiMap aColorScaleEntryTypeMap[] =
@@ -176,8 +176,8 @@ const SfxItemPropertyMapEntry* getDataBarPropSet()
 
 struct DataBarAxisApiMap
 {
-    databar::ScAxisPosition ePos;
-    sal_Int32 nApiPos;
+    databar::ScAxisPosition const ePos;
+    sal_Int32 const nApiPos;
 };
 
 DataBarAxisApiMap aDataBarAxisMap[] =
@@ -189,8 +189,8 @@ DataBarAxisApiMap aDataBarAxisMap[] =
 
 struct DataBarEntryTypeApiMap
 {
-    ScColorScaleEntryType eType;
-    sal_Int32 nApiType;
+    ScColorScaleEntryType const eType;
+    sal_Int32 const nApiType;
 };
 
 DataBarEntryTypeApiMap aDataBarEntryTypeMap[] =
@@ -227,8 +227,8 @@ const SfxItemPropertyMapEntry* getIconSetPropSet()
 
 struct IconSetTypeApiMap
 {
-    ScIconSetType eType;
-    sal_Int32 nApiType;
+    ScIconSetType const eType;
+    sal_Int32 const nApiType;
 };
 
 const IconSetTypeApiMap aIconSetApiMap[] =
@@ -256,8 +256,8 @@ const IconSetTypeApiMap aIconSetApiMap[] =
 
 struct IconSetEntryTypeApiMap
 {
-    ScColorScaleEntryType eType;
-    sal_Int32 nApiType;
+    ScColorScaleEntryType const eType;
+    sal_Int32 const nApiType;
 };
 
 IconSetEntryTypeApiMap aIconSetEntryTypeMap[] =
@@ -288,8 +288,8 @@ const SfxItemPropertyMapEntry* getCondDatePropSet()
 
 struct DateTypeApiMap
 {
-    condformat::ScCondFormatDateType eType;
-    sal_Int32 nApiType;
+    condformat::ScCondFormatDateType const eType;
+    sal_Int32 const nApiType;
 };
 
 DateTypeApiMap aDateTypeApiMap[] =

@@ -30,8 +30,8 @@ class FormulaGroupAreaListener : public SvtListener
     const ScColumn* mpColumn;
     SCROW mnTopCellRow;
     SCROW mnGroupLen;
-    bool mbStartFixed;
-    bool mbEndFixed;
+    bool const mbStartFixed;
+    bool const mbEndFixed;
 
 public:
 

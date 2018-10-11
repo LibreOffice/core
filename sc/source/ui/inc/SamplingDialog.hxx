@@ -54,14 +54,14 @@ private:
     VclPtr<formula::RefEdit>   mpActiveEdit;
 
     // Data
-    ScViewData*         mViewData;
-    ScDocument*         mDocument;
+    ScViewData* const         mViewData;
+    ScDocument* const         mDocument;
 
-    ScRange             mInputRange;
-    ScAddress::Details  mAddressDetails;
-    ScAddress           mOutputAddress;
+    ScRange                   mInputRange;
+    ScAddress::Details const  mAddressDetails;
+    ScAddress                 mOutputAddress;
 
-    ScAddress           mCurrentAddress;
+    ScAddress const           mCurrentAddress;
 
     bool                mDialogLostFocus;
 

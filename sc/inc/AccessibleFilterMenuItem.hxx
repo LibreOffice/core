@@ -89,7 +89,7 @@ private:
     css::uno::Reference< css::accessibility::XAccessibleStateSet > mxStateSet;
 
     VclPtr<ScMenuFloatingWindow> mpWindow;
-    size_t mnMenuPos;
+    size_t const mnMenuPos;
 };
 
 #endif

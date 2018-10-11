@@ -35,7 +35,7 @@ public:
 
     std::string mMessage;
     std::string mFile;
-    int mLineNumber;
+    int const mLineNumber;
 };
 
 /// Failed in marshaling
@@ -47,7 +47,7 @@ public:
     std::string mFunction;
     cl_int mError;
     std::string mFile;
-    int mLineNumber;
+    int const mLineNumber;
 };
 
 /// Inconsistent state
@@ -57,7 +57,7 @@ public:
     Unhandled( const std::string& fn, int ln );
 
     std::string mFile;
-    int mLineNumber;
+    int const mLineNumber;
 };
 
 typedef std::shared_ptr<FormulaTreeNode> FormulaTreeNodeRef;
@@ -76,7 +76,7 @@ public:
     }
 
 private:
-    formula::FormulaConstTokenRef mpCurrentFormula;
+    formula::FormulaConstTokenRef const mpCurrentFormula;
 };
 
 /// (Partially) abstract base class for an operand
@@ -125,7 +125,7 @@ public:
 protected:
     const ScCalcConfig& mCalcConfig;
     std::string mSymName;
-    FormulaTreeNodeRef mFormulaTree;
+    FormulaTreeNodeRef const mFormulaTree;
 };
 
 typedef std::shared_ptr<DynamicKernelArgument> DynamicKernelArgumentRef;

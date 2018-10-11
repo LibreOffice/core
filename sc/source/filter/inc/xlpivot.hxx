@@ -515,7 +515,7 @@ public:
 protected:
     XclPCFieldInfo      maFieldInfo;        /// Pivot cache field info (SXFIELD record).
     XclPCFieldType      meFieldType;        /// Type of this pivot cache field.
-    sal_uInt16          mnFieldIdx;         /// Own field index in pivot cache.
+    sal_uInt16 const    mnFieldIdx;         /// Own field index in pivot cache.
     ScfUInt16Vec        maGroupOrder;       /// Order of items in a grouping field (SXGROUPINFO record).
     XclPCNumGroupInfo   maNumGroupInfo;     /// Info for numeric grouping (SXNUMGROUP record).
 };

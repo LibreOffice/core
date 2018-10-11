@@ -40,7 +40,7 @@ class ScSortKeyWindow
 public:
     ScSortKeyItems m_aSortKeyItems;
 private:
-    weld::Container* m_pBox;
+    weld::Container* const m_pBox;
 
 public:
     ScSortKeyWindow(weld::Container* pBox);

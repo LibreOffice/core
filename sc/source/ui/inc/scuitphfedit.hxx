@@ -84,7 +84,7 @@ private:
 
     ScEditWindow * m_pEditFocus; ///one of m_pWndLeft, m_pWndCenter, m_pWndRight
 
-    sal_uInt16       nWhich;
+    sal_uInt16 const       nWhich;
 
     DECL_LINK( ObjectSelectHdl, ScEditWindow&, void );
 

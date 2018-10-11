@@ -82,13 +82,12 @@ class ScImportAsciiDlg : public ModalDialog
 
     VclPtr<ScCsvTableBox>              mpTableBox;
 
-    OUString                    aTextSepList;
     OUString                    maFieldSeparators;  // selected field separators
     sal_Unicode                 mcTextSep;
 
     rtl_TextEncoding            meCharSet;          /// Selected char set.
     bool                        mbCharSetSystem;    /// Is System char set selected?
-    ScImportAsciiCall           meCall;             /// How the dialog is called (see asciiopt.hxx)
+    ScImportAsciiCall const     meCall;             /// How the dialog is called (see asciiopt.hxx)
     bool                        mbDetectSpaceSep;   /// Whether to detect a possible space separator.
 
 public:
