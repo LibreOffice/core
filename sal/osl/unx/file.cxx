@@ -1061,15 +1061,19 @@ oslFileError SAL_CALL osl_syncFile(oslFileHandle Handle)
 
     FileHandle_Impl::Guard lock(&(pImpl->m_mutex));
 
-    SAL_INFO("sal.file", "osl_syncFile(" << pImpl->m_fd << ")");
-
     oslFileError result = pImpl->syncFile();
 
     if (result != osl_File_E_None)
         return result;
 
     if (fsync(pImpl->m_fd) == -1)
+    {
+        int e = errno;
+        SAL_INFO("sal.file", "fsync(" << pImpl->m_fd << "): errno " << e << ": " << strerror(e));
         return oslTranslateFileError(errno);
+    }
+    else
+        SAL_INFO("sal.file", "fsync(" << pImpl->m_fd << "): OK");
 
     return osl_File_E_None;
 }
