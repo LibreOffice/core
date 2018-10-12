@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_c3f4435e",
+        "filename": "formula/source/core/api/token.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-10-12T14:47:37Z",
+      "side": 1,
+      "message": "\"overallocate\" exists too, see https://en.wiktionary.org/wiki/overallocate",
+      "range": {
+        "startLine": 586,
+        "startChar": 17,
+        "endLine": 586,
+        "endChar": 31
+      },
+      "revId": "48b86b25fd33e922045133873ff7cd3c18e14b67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
