@@ -119,8 +119,8 @@ bool FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
             pObj->SetMergedItemSet(aAttr);
         }
 
-        if ( bReturn )
-            pView->GetCreateObj()->SetGridOffset( aGridOff );
+//Z        if ( bReturn )
+//Z            pView->GetCreateObj()->SetGridOffset( aGridOff );
     }
     return bReturn;
 }

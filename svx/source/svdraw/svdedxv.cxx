@@ -263,11 +263,11 @@ void SdrObjEditView::ModelHasChanged()
                 pTextObj->TakeTextEditArea(&aPaperMin1,&aPaperMax1,&aEditArea1,&aMinArea1);
 
                 Point aPvOfs(pTextObj->GetTextEditOffset());
-                // Hack for calc, transform position of edit object according
+                //Z Hack for calc, transform position of edit object according
                 // to current zoom so as objects relative position to grid
                 // appears stable
-                aEditArea1 += pTextObj->GetGridOffset();
-                aMinArea1 += pTextObj->GetGridOffset();
+                aEditArea1 += pTextObj->getGridOffsetForObject();
+                aMinArea1 += pTextObj->getGridOffsetForObject();
                 aEditArea1.Move(aPvOfs.X(),aPvOfs.Y());
                 aMinArea1.Move(aPvOfs.X(),aPvOfs.Y());
                 tools::Rectangle aNewArea(aMinArea1);
@@ -494,7 +494,7 @@ namespace
             if (!maRange.equal(maLastRange) || maLastTextPrimitives != maTextPrimitives)
             {
                 // conditions of last local decomposition have changed, delete to force new evaluation
-                const_cast<TextEditOverlayObject*>(this)->setPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DContainer());
+                const_cast<TextEditOverlayObject*>(this)->resetPrimitive2DSequence();
             }
         }
 
@@ -1148,14 +1148,14 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
             aTextEditArea = aTextRect;
 
-            // Hack for calc, transform position of edit object according
+            //Z Hack for calc, transform position of edit object according
             // to current zoom so as objects relative position to grid
             // appears stable
 
             Point aPvOfs(pTextObj->GetTextEditOffset());
-            aTextEditArea += pTextObj->GetGridOffset();
+            aTextEditArea += pTextObj->getGridOffsetForObject();
             aTextEditArea.Move(aPvOfs.X(),aPvOfs.Y());
-            aMinTextEditArea += pTextObj->GetGridOffset();
+            aMinTextEditArea += pTextObj->getGridOffsetForObject();
             aMinTextEditArea.Move(aPvOfs.X(),aPvOfs.Y());
             pTextEditCursorBuffer=pWin->GetCursor();
 
