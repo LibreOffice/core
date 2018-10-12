@@ -43,7 +43,7 @@ namespace oox { namespace ppt {
 
     struct ImplAttributeNameConversion
     {
-        AnimationAttributeEnum meAttribute;
+        AnimationAttributeEnum const meAttribute;
         const char* mpMSName;
         const char* mpAPIName;
     };
@@ -53,9 +53,9 @@ namespace oox { namespace ppt {
     struct OOX_DLLPUBLIC transition
     {
         const sal_Char* mpName;
-        sal_Int16 mnType;
-        sal_Int16 mnSubType;
-        bool mbDirection; // true: default geometric direction
+        sal_Int16 const mnType;
+        sal_Int16 const mnSubType;
+        bool const mbDirection; // true: default geometric direction
 
         static const transition* getList();
         static const transition* find( const OUString& rName );
@@ -63,7 +63,7 @@ namespace oox { namespace ppt {
 
     struct OOX_DLLPUBLIC convert_subtype
     {
-        sal_Int32 mnID;
+        sal_Int32 const mnID;
         const sal_Char* mpStrSubType;
 
         static const convert_subtype* getList();

@@ -36,8 +36,8 @@ namespace oox { namespace ppt {
 
 class PPTShapeGroupContext : public ::oox::drawingml::ShapeGroupContext
 {
-    SlidePersistPtr     mpSlidePersistPtr;
-    ShapeLocation       meShapeLocation;
+    SlidePersistPtr const mpSlidePersistPtr;
+    ShapeLocation const meShapeLocation;
     oox::drawingml::ShapePtr    pGraphicShape;
 
     void                applyFontRefColor(const oox::drawingml::ShapePtr& pShape, const oox::drawingml::Color& rFontRefColor);
