@@ -66,13 +66,28 @@ extern "C"
             "vcl.gtk",
             "create vcl plugin instance with gtk version " << gtk_major_version
                 << " " << gtk_minor_version << " " << gtk_micro_version);
+
+#if !GTK_CHECK_VERSION(3,0,0)
         if( gtk_major_version < 2 || // very unlikely sanity check
             ( gtk_major_version == 2 && gtk_minor_version < 4 ) )
         {
             g_warning("require a newer gtk than %d.%d for gdk_threads_set_lock_functions", static_cast<int>(gtk_major_version), gtk_minor_version);
             return nullptr;
         }
+#else
+        if (gtk_major_version == 3 && gtk_minor_version < 18)
+        {
+            g_warning("require gtk >= 3.18 for theme expectations");
+            return nullptr;
+        }
+#endif
 
+        // for gtk2 it is always built with X support, so this is always called
+        // for gtk3 it is normally built with X and Wayland support, if
+        // X is supported GDK_WINDOWING_X11 is defined and this is always
+        // called, regardless of if we're running under X or Wayland.
+        // We can't use (GDK_IS_X11_DISPLAY(pDisplay)) to only do it under
+        // X, because we need to do it earlier than we have a display
 #if !GTK_CHECK_VERSION(3,0,0) || defined(GDK_WINDOWING_X11)
         /* #i92121# workaround deadlocks in the X11 implementation
         */
@@ -83,14 +98,6 @@ extern "C"
         */
         if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
             XInitThreads();
-#endif
-
-#if GTK_CHECK_VERSION(3,0,0)
-        if (gtk_minor_version < 18)
-        {
-            g_warning("require a newer gtk than 3.%d for theme expectations", gtk_minor_version);
-            return nullptr;
-        }
 #endif
 
         // init gdk thread protection
