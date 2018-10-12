@@ -36,6 +36,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/unolingu.hxx>
+#include <editeng/memberids.h>
 #include <hints.hxx>
 #include <cmdid.h>
 #include <swtypes.hxx>
@@ -885,6 +886,11 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
         throw beans::UnknownPropertyException(
             "Unknown property: " + rPropertyName,
             static_cast< cppu::OWeakObject * >(this));
+    }
+    // TODO: is this the best approach to tell API clients about the change?
+    if (pEntry->nWID == RES_BACKGROUND && pEntry->nMemberId == MID_GRAPHIC_URL)
+    {
+        throw uno::RuntimeException("Getting GraphicURL property is not supported");
     }
 
     SwSectionFormat *const pSectionFormat( m_pImpl->GetSectionFormat() );
