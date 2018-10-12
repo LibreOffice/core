@@ -302,8 +302,8 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     Point aGridOff = CurrentGridSyncOffsetAndPos( aMDPos );
 
                     bool bRet = pView->BegCreateObj(aMDPos);
-                    if ( bRet )
-                    pView->GetCreateObj()->SetGridOffset( aGridOff );
+//Z                    if ( bRet )
+//Z                    pView->GetCreateObj()->SetGridOffset( aGridOff );
                 }
                 else if (SdrObject* pObj = pView->PickObj(aMDPos, pView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::BEFOREMARK))
                 {
@@ -358,8 +358,8 @@ bool FuText::MouseMove(const MouseEvent& rMEvt)
     // if object is being created then more than likely the mouse
     // position has been 'adjusted' for the current zoom, need to
     // restore the mouse position here to ensure resize works as expected
-    if ( pView->GetCreateObj() )
-        aPnt -= pView->GetCreateObj()->GetGridOffset();
+//Z    if ( pView->GetCreateObj() )
+//Z        aPnt -= pView->GetCreateObj()->GetGridOffset();
 
     if ( pView->MouseMove(rMEvt, pWindow) )
         return true; // event handled from SdrView

@@ -53,7 +53,7 @@ bool FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
         Point aGridOff = CurrentGridSyncOffsetAndPos( aPnt );
         pWindow->CaptureMouse();
         pView->BegCreateObj( aPnt );
-        pView->GetCreateObj()->SetGridOffset( aGridOff );
+//Z        pView->GetCreateObj()->SetGridOffset( aGridOff );
         bReturn = true;
     }
     return bReturn;
