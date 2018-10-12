@@ -114,22 +114,16 @@ Impl3DMirrorConstructOverlay::Impl3DMirrorConstructOverlay(const E3dView& rView)
 
             if(pPV && pPV->PageWindowCount())
             {
-                sdr::contact::ObjectContact& rOC = pPV->GetPageWindow(0)->GetObjectContact();
-                sdr::contact::DisplayInfo aDisplayInfo;
-
-                // Do not use the last ViewPort set at the OC at the last ProcessDisplay()
-                rOC.resetViewPort();
-
                 for(size_t a = 0; a < mnCount; ++a)
                 {
                     SdrObject* pObject = mrView.GetMarkedObjectByIndex(a);
 
                     if(pObject)
                     {
-                        sdr::contact::ViewContact& rVC = pObject->GetViewContact();
-                        sdr::contact::ViewObjectContact& rVOC = rVC.GetViewObjectContact(rOC);
-
-                        const drawinglayer::primitive2d::Primitive2DContainer aNewSequence(rVOC.getPrimitive2DSequenceHierarchy(aDisplayInfo));
+                        // use the view-independent primitive representation (without
+                        // evtl. GridOffset, that may be applied to the DragEntry individually)
+                        const drawinglayer::primitive2d::Primitive2DContainer aNewSequence(
+                            pObject->GetViewContact().getViewIndependentPrimitive2DContainer());
                         maFullOverlay.append(aNewSequence);
                     }
                 }

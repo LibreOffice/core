@@ -49,7 +49,6 @@ private:
     bool const        m_bByKeyboard;
 
     tools::Rectangle       m_aRect;
-    ScDrawView*     m_pDrawView;
     std::unique_ptr<SdrModel>           m_pModel;
     std::shared_ptr< SdrCaptionObj >    m_xObject;
     bool            m_bVisible;
@@ -58,7 +57,7 @@ private:
 public:
                 ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window* pBottom, vcl::Window* pDiagonal,
                                 ScDocument* pD, const ScAddress& aPos, const OUString& rUser,
-                                const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard, ScDrawView * pDrawView);
+                                const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard);
                 ~ScNoteMarker();
 
     void        Draw();

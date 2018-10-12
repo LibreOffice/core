@@ -50,11 +50,7 @@ namespace sdr
                     false));
 
             // take unrotated snap rect (direct model data) for position and size
-            tools::Rectangle aRectangle = GetCircObj().GetGeoRect();
-            // Hack for calc, transform position of object according
-            // to current zoom so as objects relative position to grid
-            // appears stable
-            aRectangle += GetRectObj().GetGridOffset();
+            const tools::Rectangle aRectangle(GetCircObj().GetGeoRect());
             const basegfx::B2DRange aObjectRange(
                 aRectangle.Left(), aRectangle.Top(),
                 aRectangle.Right(), aRectangle.Bottom() );

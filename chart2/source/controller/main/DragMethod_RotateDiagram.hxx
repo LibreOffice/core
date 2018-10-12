@@ -53,7 +53,9 @@ public:
     virtual void MoveSdrDrag(const Point& rPnt) override;
     virtual bool EndSdrDrag(bool bCopy) override;
 
-    virtual void CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager) override;
+    virtual void CreateOverlayGeometry(
+        sdr::overlay::OverlayManager& rOverlayManager,
+        const sdr::contact::ObjectContact& rObjectContact) override;
 
 private:
     E3dScene*   m_pScene;

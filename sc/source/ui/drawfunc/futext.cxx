@@ -295,15 +295,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 if (bStraightEnter)//Hack for that silly idea that creating text fields is inside the text routine
                 {
                     // create object
-                    // Hack to align object to nearest grid position where object
-                    // would be anchored ( if it were cell anchored )
-                    // Get grid offset for current position ( note: aPnt is
-                    // also adjusted )
-                    Point aGridOff = CurrentGridSyncOffsetAndPos( aMDPos );
-
-                    bool bRet = pView->BegCreateObj(aMDPos);
-                    if ( bRet )
-                    pView->GetCreateObj()->SetGridOffset( aGridOff );
+                    pView->BegCreateObj(aMDPos);
                 }
                 else if (SdrObject* pObj = pView->PickObj(aMDPos, pView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::BEFOREMARK))
                 {
@@ -355,11 +347,6 @@ bool FuText::MouseMove(const MouseEvent& rMEvt)
 
     Point aPix(rMEvt.GetPosPixel());
     Point aPnt(pWindow->PixelToLogic(aPix));
-    // if object is being created then more than likely the mouse
-    // position has been 'adjusted' for the current zoom, need to
-    // restore the mouse position here to ensure resize works as expected
-    if ( pView->GetCreateObj() )
-        aPnt -= pView->GetCreateObj()->GetGridOffset();
 
     if ( pView->MouseMove(rMEvt, pWindow) )
         return true; // event handled from SdrView

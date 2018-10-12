@@ -41,6 +41,10 @@ class SdrObject;
 class SdrPageView;
 class MouseEvent;
 
+namespace sdr { namespace contact {
+    class ObjectContact;
+}}
+
 // Every object must be able to create its handles. They will be fetched on
 // selection, registered at the View and made visible.
 // When a handle is touched by the mouse (IsHit()), from the view the matching mouse pointer
@@ -170,6 +174,18 @@ protected:
         BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker,
         Point aMoveOutsideOffset = Point());
     static BitmapMarkerKind GetNextBigger(BitmapMarkerKind eKnd);
+
+    // Helper to support inserting a new OverlayObject. It will do all
+    // necessary stuff involved with that:
+    // - add GridOffset for non-linear ViewToDevice transformation (calc)
+    // - add to OverlayManager
+    // - add to local OverlayObjectList - ownership change (!)
+    // It is centralized here (and protected) to avoid that new usages/
+    // implementations forget one of these needed steps.
+    void insertNewlyCreatedOverlayObjectForSdrHdl(
+        std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject,
+        const sdr::contact::ObjectContact& rObjectContact,
+        sdr::overlay::OverlayManager& rOverlayManager);
 
 public:
     SdrHdl();
