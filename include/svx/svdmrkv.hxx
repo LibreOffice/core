@@ -109,7 +109,7 @@ protected:
     sdr::ViewSelection          maSdrViewSelection;
 
     tools::Rectangle            maMarkedObjRect;
-    tools::Rectangle            maMarkedObjRectNoOffset;
+//Z    tools::Rectangle            maMarkedObjRectNoOffset;
     tools::Rectangle            maMarkedPointsRect;
     tools::Rectangle            maMarkedGluePointsRect;
 
@@ -402,7 +402,9 @@ public:
     const tools::Rectangle& GetMarkedGluePointsRect() const; // Enclosing rectangle of all marked glue points
     const tools::Rectangle& GetAllMarkedRect() const { return GetMarkedObjRect(); }
     tools::Rectangle GetAllMarkedBoundRect() const { return GetMarkedObjBoundRect(); }
-    Point GetGridOffset() const;
+
+//Z    Point GetGridOffset() const;
+    const Point& GetGridOffsetForView() const;
 
     // Will be always called, if the list of marked objects might be changed.
     // If you override this method, be sure that you call the
