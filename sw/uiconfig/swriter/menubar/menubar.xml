@@ -336,6 +336,7 @@
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertPageHeader"/>
           <menu:menuitem menu:id=".uno:InsertPageFooter"/>
+          <menu:menuitem menu:id=".uno:UseHeaderFooterMenu"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>
