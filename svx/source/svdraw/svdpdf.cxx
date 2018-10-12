@@ -125,7 +125,6 @@ ImpSdrPdfImport::ImpSdrPdfImport(SdrModel& rModel, SdrLayerID nLay, const tools:
     , mnLayer(nLay)
     , maOldLineColor()
     , mnLineWidth(0)
-    , maLineCap(css::drawing::LineCap_BUTT)
     , maDash(css::drawing::DashStyle_RECT, 0, 0, 0, 0, 0)
     , mbMov(false)
     , mbSize(false)
@@ -386,7 +385,7 @@ void ImpSdrPdfImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr)
         mpLineAttr->Put(XLineJointItem(css::drawing::LineJoint_NONE));
 
         // Add LineCap support
-        mpLineAttr->Put(XLineCapItem(maLineCap));
+        mpLineAttr->Put(XLineCapItem(gaLineCap));
 
         if (((maDash.GetDots() && maDash.GetDotLen())
              || (maDash.GetDashes() && maDash.GetDashLen()))

@@ -196,15 +196,13 @@ class VCL_DLLPUBLIC PDFNameElement : public PDFElement
     OString m_aValue;
     /// Offset after the '/' token.
     sal_uInt64 m_nLocation = 0;
-    /// Length till the next token start.
-    sal_uInt64 const m_nLength = 0;
 
 public:
     PDFNameElement();
     bool Read(SvStream& rStream) override;
     const OString& GetValue() const;
     sal_uInt64 GetLocation() const;
-    sal_uInt64 GetLength() const;
+    static sal_uInt64 GetLength() { return 0; }
 };
 
 /// Dictionary object: a set key-value pairs.

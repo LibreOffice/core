@@ -605,7 +605,7 @@ private:
 
     sal_Int32           nDepthChangedHdlPrevDepth;
     sal_Int16           nMaxDepth;
-    const sal_Int16     nMinDepth;
+    static constexpr sal_Int16 gnMinDepth = -1;
 
     OutlinerMode        nOutlinerMode;
 
