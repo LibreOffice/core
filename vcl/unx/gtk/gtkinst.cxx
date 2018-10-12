@@ -73,6 +73,7 @@ extern "C"
             return nullptr;
         }
 
+#if !GTK_CHECK_VERSION(3,0,0) || defined(GDK_WINDOWING_X11)
         /* #i92121# workaround deadlocks in the X11 implementation
         */
         static const char* pNoXInitThreads = getenv( "SAL_NO_XINITTHREADS" );
@@ -82,6 +83,7 @@ extern "C"
         */
         if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
             XInitThreads();
+#endif
 
 #if GTK_CHECK_VERSION(3,0,0)
         if (gtk_minor_version < 18)
