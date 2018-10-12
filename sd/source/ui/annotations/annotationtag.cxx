@@ -225,6 +225,8 @@ void AnnotationHdl::CreateB2dIAObject()
                                 pOverlayObject.reset(new sdr::overlay::OverlayBitmapEx( aPosition, aBitmapEx, 0, 0 ));
                             }
 
+                            // OVERLAYMANAGER
+                            rPageWindow.GetObjectContact().addPossibleGridOffset(pOverlayObject.get(), GetObj());
                             xManager->add(*pOverlayObject);
                             maOverlayGroup.append(std::move(pOverlayObject));
                         }

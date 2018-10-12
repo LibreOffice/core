@@ -612,9 +612,11 @@ void SdrHdl::CreateB2dIAObject()
                                                     aPosition, eColIndex, eKindOfMarker,
                                                     aMoveOutsideOffset);
                         }
-                        // OVERLAYMANAGER
+
                         if (pNewOverlayObject)
                         {
+                            // OVERLAYMANAGER
+                            rPageWindow.GetObjectContact().addPossibleGridOffset(pNewOverlayObject.get(), GetObj());
                             xManager->add(*pNewOverlayObject);
                             maOverlayGroup.append(std::move(pNewOverlayObject));
                         }
@@ -1121,6 +1123,7 @@ void SdrHdlColor::CreateB2dIAObject()
                                 ));
 
                             // OVERLAYMANAGER
+                            rPageWindow.GetObjectContact().addPossibleGridOffset(pNewOverlayObject.get(), GetObj());
                             xManager->add(*pNewOverlayObject);
                             maOverlayGroup.append(std::move(pNewOverlayObject));
                         }
@@ -1280,6 +1283,9 @@ void SdrHdlGradient::CreateB2dIAObject()
                                 ));
 
                             pNewOverlayObject->setBaseColor(IsGradient() ? COL_BLACK : COL_BLUE);
+
+                            // OVERLAYMANAGER
+                            rPageWindow.GetObjectContact().addPossibleGridOffset(pNewOverlayObject.get(), GetObj());
                             xManager->add(*pNewOverlayObject);
                             maOverlayGroup.append(std::move(pNewOverlayObject));
 
@@ -1301,6 +1307,8 @@ void SdrHdlGradient::CreateB2dIAObject()
                                     IsGradient() ? COL_BLACK : COL_BLUE
                                 ));
 
+                            // OVERLAYMANAGER
+                            rPageWindow.GetObjectContact().addPossibleGridOffset(pNewOverlayObject.get(), GetObj());
                             xManager->add(*pNewOverlayObject);
                             maOverlayGroup.append(std::move(pNewOverlayObject));
                         }
@@ -1425,10 +1433,11 @@ void SdrHdlLine::CreateB2dIAObject()
                                     aPosition2
                                 ));
 
-                            // OVERLAYMANAGER
                             // color(?)
                             pNewOverlayObject->setBaseColor(COL_LIGHTRED);
 
+                            // OVERLAYMANAGER
+                            rPageWindow.GetObjectContact().addPossibleGridOffset(pNewOverlayObject.get(), GetObj());
                             xManager->add(*pNewOverlayObject);
                             maOverlayGroup.append(std::move(pNewOverlayObject));
                         }
@@ -1482,13 +1491,15 @@ void SdrHdlBezWgt::CreateB2dIAObject()
                                         aPosition1,
                                         aPosition2
                                     ));
-                                // OVERLAYMANAGER
+
                                 // line part is not hittable
                                 pNewOverlayObject->setHittable(false);
 
                                 // color(?)
                                 pNewOverlayObject->setBaseColor(COL_LIGHTBLUE);
 
+                                // OVERLAYMANAGER
+                                rPageWindow.GetObjectContact().addPossibleGridOffset(pNewOverlayObject.get(), GetObj());
                                 xManager->add(*pNewOverlayObject);
                                 maOverlayGroup.append(std::move(pNewOverlayObject));
                             }
@@ -1532,9 +1543,10 @@ void E3dVolumeMarker::CreateB2dIAObject()
                                 sdr::overlay::OverlayPolyPolygonStripedAndFilled(
                                     aWireframePoly));
 
-                            // OVERLAYMANAGER
                             pNewOverlayObject->setBaseColor(COL_BLACK);
 
+                            // OVERLAYMANAGER
+                            rPageWindow.GetObjectContact().addPossibleGridOffset(pNewOverlayObject.get(), GetObj());
                             xManager->add(*pNewOverlayObject);
                             maOverlayGroup.append(std::move(pNewOverlayObject));
                         }
@@ -1596,9 +1608,10 @@ void ImpEdgeHdl::CreateB2dIAObject()
                                     eColIndex,
                                     eKindOfMarker));
 
-                                // OVERLAYMANAGER
                                 if (pNewOverlayObject)
                                 {
+                                    // OVERLAYMANAGER
+                                    rPageWindow.GetObjectContact().addPossibleGridOffset(pNewOverlayObject.get(), GetObj());
                                     xManager->add(*pNewOverlayObject);
                                     maOverlayGroup.append(std::move(pNewOverlayObject));
                                 }
@@ -1712,9 +1725,10 @@ void ImpMeasureHdl::CreateB2dIAObject()
                                 eColIndex,
                                 eKindOfMarker));
 
-                            // OVERLAYMANAGER
                             if (pNewOverlayObject)
                             {
+                                // OVERLAYMANAGER
+                                rPageWindow.GetObjectContact().addPossibleGridOffset(pNewOverlayObject.get(), GetObj());
                                 xManager->add(*pNewOverlayObject);
                                 maOverlayGroup.append(std::move(pNewOverlayObject));
                             }
@@ -1784,8 +1798,10 @@ void ImpTextframeHdl::CreateB2dIAObject()
                                 nRotationAngle * -F_PI18000,
                                 true)); // allow animation; the Handle is not shown at text edit time
 
-                            // OVERLAYMANAGER
                             pNewOverlayObject->setHittable(false);
+
+                            // OVERLAYMANAGER
+                            rPageWindow.GetObjectContact().addPossibleGridOffset(pNewOverlayObject.get(), GetObj());
                             xManager->add(*pNewOverlayObject);
                             maOverlayGroup.append(std::move(pNewOverlayObject));
                         }
@@ -2399,6 +2415,7 @@ void SdrCropHdl::CreateB2dIAObject()
                     }
 
                     // OVERLAYMANAGER
+                    rPageWindow.GetObjectContact().addPossibleGridOffset(pOverlayObject.get(), GetObj());
                     xManager->add(*pOverlayObject);
                     maOverlayGroup.append(std::move(pOverlayObject));
                 }
@@ -2612,6 +2629,8 @@ void SdrCropViewHdl::CreateB2dIAObject()
                 // only informative object, no hit
                 pNew->setHittable(false);
 
+                // OVERLAYMANAGER
+                rPageWindow.GetObjectContact().addPossibleGridOffset(pNew.get(), GetObj());
                 xManager->add(*pNew);
                 maOverlayGroup.append(std::move(pNew));
             }
