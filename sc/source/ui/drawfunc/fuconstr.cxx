@@ -46,47 +46,6 @@ FuConstruct::~FuConstruct()
 {
 }
 
-// Calculate and return offset at current zoom. rInOutPos is adjusted by
-// the calculated offset. rInOutPos now points to the position than when
-// scaled to 100% actually would be at the position you see at the current zoom
-// ( relative to the grid ) note: units are expected to be in 100th mm
-Point FuConstruct::CurrentGridSyncOffsetAndPos( Point& rInOutPos )
-{
-    Point aRetGridOff;
-    ScViewData& rViewData = rViewShell.GetViewData();
-    ScDocument* pDoc = rViewData.GetDocument();
-    if ( pDoc )
-    {
-        // rInOutPos might not be where you think it is if there is zoom
-        // involved. Lets calculate where aPos would be at 100% zoom
-        // that's the actual correct position for the object (when you
-        // restore the zoom.
-        bool bNegative = pDoc->IsNegativePage(pView->GetTab());
-        tools::Rectangle aObjRect( rInOutPos, rInOutPos );
-        ScRange aRange = pDoc->GetRange( pView->GetTab(), aObjRect );
-        ScAddress aOldStt = aRange.aStart;
-        Point aOldPos( pDoc->GetColOffset( aOldStt.Col(), aOldStt.Tab()  ), pDoc->GetRowOffset( aOldStt.Row(), aOldStt.Tab() ) );
-        aOldPos.setX( sc::TwipsToHMM( aOldPos.X() ) );
-        aOldPos.setY( sc::TwipsToHMM( aOldPos.Y() ) );
-        ScSplitPos eWhich = rViewData.GetActivePart();
-        ScGridWindow* pGridWin = rViewData.GetActiveWin();
-        // and equiv screen pos
-        Point aScreenPos =  rViewShell.GetViewData().GetScrPos( aOldStt.Col(), aOldStt.Row(), eWhich, true );
-        MapMode aDrawMode = pGridWin->GetDrawMapMode();
-        Point aCurPosHmm = pGridWin->PixelToLogic(aScreenPos, aDrawMode );
-        Point aOff = ( rInOutPos - aCurPosHmm );
-        rInOutPos = aOldPos + aOff;
-        aRetGridOff = aCurPosHmm - aOldPos;
-        // fdo#64011 fix the X position when the sheet are RTL
-        if ( bNegative )
-        {
-            aRetGridOff.setX( aCurPosHmm.getX() + aOldPos.getX() );
-            rInOutPos.setX( aOff.getX() - aOldPos.getX() );
-        }
-    }
-    return aRetGridOff;
-}
-
 bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // remember button state for creation of own MouseEvents
@@ -143,12 +102,6 @@ bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
 
     Point aPix(rMEvt.GetPosPixel());
     Point aPnt( pWindow->PixelToLogic(aPix) );
-
-    // if object is being created then more than likely the mouse
-    // position has been 'adjusted' for the current zoom, need to
-    // restore the mouse position here to ensure resize works as expected
-    if ( pView->GetCreateObj() )
-        aPnt -= pView->GetCreateObj()->GetGridOffset();
 
     if ( pView->IsAction() )
     {

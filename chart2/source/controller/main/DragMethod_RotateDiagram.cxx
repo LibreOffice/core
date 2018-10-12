@@ -172,7 +172,9 @@ bool DragMethod_RotateDiagram::EndSdrDrag(bool /*bCopy*/)
 
     return true;
 }
-void DragMethod_RotateDiagram::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager)
+void DragMethod_RotateDiagram::CreateOverlayGeometry(
+    sdr::overlay::OverlayManager& rOverlayManager,
+    const sdr::contact::ObjectContact& rObjectContact)
 {
     ::basegfx::B3DHomMatrix aCurrentTransform;
     aCurrentTransform.translate( -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0,
@@ -212,10 +214,14 @@ void DragMethod_RotateDiagram::CreateOverlayGeometry(sdr::overlay::OverlayManage
         // transform to 2D view coordinates
         aPolyPolygon.transform(rVCScene.getObjectTransformation());
 
-        std::unique_ptr<sdr::overlay::OverlayPolyPolygonStripedAndFilled> pNew(new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
-            aPolyPolygon));
-        rOverlayManager.add(*pNew);
-        addToOverlayObjectList(std::move(pNew));
+        std::unique_ptr<sdr::overlay::OverlayPolyPolygonStripedAndFilled> pNew(
+            new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
+                aPolyPolygon));
+
+        insertNewlyCreatedOverlayObjectForSdrDragMethod(
+            std::move(pNew),
+            rObjectContact,
+            rOverlayManager);
     }
 }
 } //namespace chart

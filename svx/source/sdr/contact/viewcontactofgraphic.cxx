@@ -310,14 +310,10 @@ namespace sdr
 
             // take unrotated snap rect for position and size. Directly use model data, not getBoundRect() or getSnapRect()
             // which will use the primitive data we just create in the near future
-            tools::Rectangle rRectangle = GetGrafObject().GetGeoRect();
-            // Hack for calc, transform position of object according
-            // to current zoom so as objects relative position to grid
-            // appears stable
-            rRectangle += GetGrafObject().GetGridOffset();
+            const tools::Rectangle aRectangle(GetGrafObject().GetGeoRect());
             const ::basegfx::B2DRange aObjectRange(
-                rRectangle.Left(), rRectangle.Top(),
-                rRectangle.Right(), rRectangle.Bottom());
+                aRectangle.Left(), aRectangle.Top(),
+                aRectangle.Right(), aRectangle.Bottom());
 
             // look for mirroring
             const GeoStat& rGeoStat(GetGrafObject().GetGeoStat());

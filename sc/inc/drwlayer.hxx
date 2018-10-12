@@ -176,8 +176,15 @@ public:
     static void             SetPageAnchored( SdrObject& );
     static void             SetCellAnchored( SdrObject&, const ScDrawObjData &rAnchor );
     static void             SetVisualCellAnchored( SdrObject&, const ScDrawObjData &rAnchor );
+
     // Updates rAnchor based on position of rObj
-    static void             GetCellAnchorFromPosition( const SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect = true, bool bHiddenAsZero = true );
+    static void GetCellAnchorFromPosition(
+        const tools::Rectangle &rRectangle,
+        ScDrawObjData &rAnchor,
+        const ScDocument &rDoc,
+        SCTAB nTab,
+        bool bHiddenAsZero = true);
+
     static void             SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument &rDoc, SCTAB nTab, bool bResizeWithCell );
     static void             UpdateCellAnchorFromPositionEnd( const SdrObject &rObj, ScDrawObjData &rAnchor, const ScDocument &rDoc, SCTAB nTab, bool bUseLogicRect = true );
     static ScAnchorType     GetAnchorType( const SdrObject& );

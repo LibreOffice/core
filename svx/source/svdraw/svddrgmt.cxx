@@ -135,11 +135,12 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPolyPolygon::createP
 }
 
 
-SdrDragEntrySdrObject::SdrDragEntrySdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify)
+SdrDragEntrySdrObject::SdrDragEntrySdrObject(
+    const SdrObject& rOriginal,
+    bool bModify)
 :   SdrDragEntry(),
     maOriginal(rOriginal),
     mpClone(nullptr),
-    mrObjectContact(rObjectContact),
     mbModify(bModify)
 {
     // add SdrObject parts to transparent overlay stuff
@@ -185,16 +186,9 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntrySdrObject::createPri
         pSource = mpClone;
     }
 
-    // get VOC and Primitive2DContainer
-    sdr::contact::ViewContact& rVC = pSource->GetViewContact();
-    sdr::contact::ViewObjectContact& rVOC = rVC.GetViewObjectContact(mrObjectContact);
-    sdr::contact::DisplayInfo aDisplayInfo;
-
-    // Do not use the last ViewPort set at the OC from the last ProcessDisplay(),
-    // here we want the complete primitive sequence without visibility clippings
-    mrObjectContact.resetViewPort();
-
-    return rVOC.getPrimitive2DSequenceHierarchy(aDisplayInfo);
+    // use the view-independent primitive representation (without
+    // evtl. GridOffset, that may be applied to the DragEntry individually)
+    return pSource->GetViewContact().getViewIndependentPrimitive2DContainer();
 }
 
 
@@ -338,11 +332,46 @@ void SdrDragMethod::createSdrDragEntries()
     }
 }
 
-void SdrDragMethod::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact)
+void SdrDragMethod::createSdrDragEntryForSdrObject(const SdrObject& rOriginal)
 {
     // add full object drag; Clone() at the object has to work
     // for this
-    addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntrySdrObject(rOriginal, rObjectContact, true/*bModify*/)));
+    addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntrySdrObject(rOriginal, true/*bModify*/)));
+}
+
+void SdrDragMethod::insertNewlyCreatedOverlayObjectForSdrDragMethod(
+    std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject,
+    const sdr::contact::ObjectContact& rObjectContact,
+    sdr::overlay::OverlayManager& rOverlayManager)
+{
+    // check if we have an OverlayObject
+    if(!pOverlayObject)
+    {
+        return;
+    }
+
+    // add to OverlayManager
+    rOverlayManager.add(*pOverlayObject);
+
+    // Add GridOffset for non-linear ViewToDevice transformation (calc)
+    if(rObjectContact.supportsGridOffsets())
+    {
+        const basegfx::B2DRange& rNewRange(pOverlayObject->getBaseRange());
+
+        if(!rNewRange.isEmpty())
+        {
+            basegfx::B2DVector aOffset(0.0, 0.0);
+            rObjectContact.calculateGridOffsetForB2DRange(aOffset, rNewRange);
+
+            if(!aOffset.equalZero())
+            {
+                pOverlayObject->setOffset(aOffset);
+            }
+        }
+    }
+
+    // add to local OverlayObjectList - ownership change (!)
+    maOverlayObjectList.append(std::move(pOverlayObject));
 }
 
 void SdrDragMethod::createSdrDragEntries_SolidDrag()
@@ -364,7 +393,6 @@ void SdrDragMethod::createSdrDragEntries_SolidDrag()
                 {
                     if(pPV->PageWindowCount())
                     {
-                        sdr::contact::ObjectContact& rOC = pPV->GetPageWindow(0)->GetObjectContact();
                         SdrObjListIter aIter(*pObject);
 
                         while(aIter.IsMore())
@@ -386,7 +414,7 @@ void SdrDragMethod::createSdrDragEntries_SolidDrag()
                                 {
                                     // add full object drag; Clone() at the object has to work
                                     // for this
-                                    createSdrDragEntryForSdrObject(*pCandidate, rOC);
+                                    createSdrDragEntryForSdrObject(*pCandidate);
                                 }
 
                                 if(bAddWireframe)
@@ -654,7 +682,9 @@ void SdrDragMethod::CancelSdrDrag()
 
 typedef std::map< const SdrObject*, SdrObject* > SdrObjectAndCloneMap;
 
-void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager)
+void SdrDragMethod::CreateOverlayGeometry(
+    sdr::overlay::OverlayManager& rOverlayManager,
+    const sdr::contact::ObjectContact& rObjectContact)
 {
     // create SdrDragEntries on demand
     if(maSdrDragEntries.empty())
@@ -764,9 +794,14 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
 
         if(!aResult.empty())
         {
-            std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(new sdr::overlay::OverlayPrimitive2DSequenceObject(aResult));
-            rOverlayManager.add(*pNewOverlayObject);
-            addToOverlayObjectList(std::move(pNewOverlayObject));
+            std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(
+                new sdr::overlay::OverlayPrimitive2DSequenceObject(
+                    aResult));
+
+            insertNewlyCreatedOverlayObjectForSdrDragMethod(
+                std::move(pNewOverlayObject),
+                rObjectContact,
+                rOverlayManager);
         }
 
         if(!aResultTransparent.empty())
@@ -774,9 +809,14 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
             drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparencePrimitive2D(new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(aResultTransparent, 0.5));
             aResultTransparent = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparencePrimitive2D };
 
-            std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(new sdr::overlay::OverlayPrimitive2DSequenceObject(aResultTransparent));
-            rOverlayManager.add(*pNewOverlayObject);
-            addToOverlayObjectList(std::move(pNewOverlayObject));
+            std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(
+                new sdr::overlay::OverlayPrimitive2DSequenceObject(
+                    aResultTransparent));
+
+            insertNewlyCreatedOverlayObjectForSdrDragMethod(
+                std::move(pNewOverlayObject),
+                rObjectContact,
+                rOverlayManager);
         }
     }
 
@@ -788,11 +828,17 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
 
         const basegfx::B2DPoint aTopLeft(aActionRectangle.Left(), aActionRectangle.Top());
         const basegfx::B2DPoint aBottomRight(aActionRectangle.Right(), aActionRectangle.Bottom());
-        std::unique_ptr<sdr::overlay::OverlayRollingRectangleStriped> pNew(new sdr::overlay::OverlayRollingRectangleStriped(
-            aTopLeft, aBottomRight, true, false));
+        std::unique_ptr<sdr::overlay::OverlayRollingRectangleStriped> pNew(
+            new sdr::overlay::OverlayRollingRectangleStriped(
+                aTopLeft,
+                aBottomRight,
+                true,
+                false));
 
-        rOverlayManager.add(*pNew);
-        addToOverlayObjectList(std::move(pNew));
+        insertNewlyCreatedOverlayObjectForSdrDragMethod(
+            std::move(pNew),
+            rObjectContact,
+            rOverlayManager);
     }
 }
 
@@ -1159,8 +1205,7 @@ void SdrDragObjOwn::createSdrDragEntries()
 
             if(pPV && pPV->PageWindowCount())
             {
-                sdr::contact::ObjectContact& rOC = pPV->GetPageWindow(0)->GetObjectContact();
-                addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntrySdrObject(*mpClone, rOC, false)));
+                addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntrySdrObject(*mpClone, false)));
 
                 // potentially no wireframe needed, full drag works
                 bAddWireframe = false;
@@ -1417,19 +1462,15 @@ Pointer SdrDragObjOwn::GetSdrDragPointer() const
 }
 
 
-void SdrDragMove::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact)
+void SdrDragMove::createSdrDragEntryForSdrObject(const SdrObject& rOriginal)
 {
-    // for SdrDragMove, use current Primitive2DContainer of SdrObject visualization
-    // in given ObjectContact directly
-    sdr::contact::ViewContact& rVC = rOriginal.GetViewContact();
-    sdr::contact::ViewObjectContact& rVOC = rVC.GetViewObjectContact(rObjectContact);
-    sdr::contact::DisplayInfo aDisplayInfo;
+    // use the view-independent primitive representation (without
+    // evtl. GridOffset, that may be applied to the DragEntry individually)
+    addSdrDragEntry(
+        std::unique_ptr<SdrDragEntry>(
+            new SdrDragEntryPrimitive2DSequence(
+                rOriginal.GetViewContact().getViewIndependentPrimitive2DContainer())));
 
-    // Do not use the last ViewPort set at the OC from the last ProcessDisplay(),
-    // here we want the complete primitive sequence without visible clippings
-    rObjectContact.resetViewPort();
-
-    addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntryPrimitive2DSequence(rVOC.getPrimitive2DSequenceHierarchy(aDisplayInfo))));
 }
 
 void SdrDragMove::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
@@ -1766,8 +1807,7 @@ bool SdrDragResize::BeginSdrDrag()
 
     if (pRefHdl!=nullptr && !getSdrDragView().IsResizeAtCenter())
     {
-        // Calc hack to adjust for calc grid
-        DragStat().SetRef1(pRefHdl->GetPos() - getSdrDragView().GetGridOffset());
+        DragStat().SetRef1(pRefHdl->GetPos());
     }
     else
     {
