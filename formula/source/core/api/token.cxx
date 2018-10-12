@@ -583,7 +583,7 @@ void FormulaTokenArray::Finalize()
 {
     if( nLen && !mbFinalized )
     {
-        // Add() overallocates, so reallocate to the minimum needed size.
+        // Add() over-allocates, so reallocate to the minimum needed size.
         std::unique_ptr<FormulaToken*[]> newCode(new FormulaToken*[ nLen ]);
         std::copy(&pCode[0], &pCode[nLen], newCode.get());
         pCode = std::move( newCode );
