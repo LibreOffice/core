@@ -284,12 +284,12 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
         NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
         SvNumberFormatter* pNumberFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
 
-        ScopedVclPtrInstance< DataLabelsDialog > aDlg( GetChartWindow(), aItemSet, pNumberFormatter);
+        DataLabelsDialog aDlg(GetChartFrame(), aItemSet, pNumberFormatter);
 
-        if( aDlg->Execute() == RET_OK )
+        if (aDlg.run() == RET_OK)
         {
             SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
-            aDlg->FillItemSet( aOutItemSet );
+            aDlg.FillItemSet(aOutItemSet);
             // lock controllers till end of block
             ControllerLockGuardUNO aCLGuard( getModel() );
             bool bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now

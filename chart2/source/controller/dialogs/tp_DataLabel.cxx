@@ -24,18 +24,15 @@
 namespace chart
 {
 
-DataLabelsTabPage::DataLabelsTabPage(vcl::Window* pWindow, const SfxItemSet& rInAttrs)
-        : SfxTabPage(pWindow
-        , "tp_DataLabel"
-        , "modules/schart/ui/tp_DataLabel.ui"
-        , &rInAttrs)
-        , m_aDataLabelResources(this, GetFrameWeld(), rInAttrs)
+DataLabelsTabPage::DataLabelsTabPage(TabPageParent pWindow, const SfxItemSet& rInAttrs)
+        : SfxTabPage(pWindow , "modules/schart/ui/tp_DataLabel.ui", "tp_DataLabel", &rInAttrs)
+        , m_aDataLabelResources(m_xBuilder.get(), pWindow.GetFrameWeld(), rInAttrs)
 {
 }
 
-VclPtr<SfxTabPage> DataLabelsTabPage::Create(TabPageParent pWindow, const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> DataLabelsTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
 {
-    return VclPtr<DataLabelsTabPage>::Create(pWindow.pParent, *rOutAttrs);
+    return VclPtr<DataLabelsTabPage>::Create(pParent, *rOutAttrs);
 }
 
 bool DataLabelsTabPage::FillItemSet(SfxItemSet* rOutAttrs)

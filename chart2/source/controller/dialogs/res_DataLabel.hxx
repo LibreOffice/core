@@ -34,7 +34,7 @@ namespace chart
 class DataLabelResources final
 {
 public:
-    DataLabelResources( VclBuilderContainer* pWindow, weld::Window* pParent, const SfxItemSet& rInAttrs );
+    DataLabelResources(weld::Builder* pBuilder, weld::Window* pParent, const SfxItemSet& rInAttrs);
     ~DataLabelResources();
 
     void FillItemSet(SfxItemSet* rOutAttrs) const;
@@ -43,29 +43,6 @@ public:
     void SetNumberFormatter( SvNumberFormatter* pFormatter );
 
 private:
-    VclPtr<CheckBox>            m_pCBNumber;
-    VclPtr<PushButton>          m_pPB_NumberFormatForValue;
-    VclPtr<CheckBox>            m_pCBPercent;
-    VclPtr<PushButton>          m_pPB_NumberFormatForPercent;
-    VclPtr<FixedText>           m_pFT_NumberFormatForPercent;
-    VclPtr<CheckBox>            m_pCBCategory;
-    VclPtr<CheckBox>            m_pCBSymbol;
-    VclPtr<CheckBox>            m_pCBWrapText;
-
-    VclPtr<VclHBox>             m_pSeparatorResources;
-    VclPtr<ListBox>             m_pLB_Separator;
-
-    VclPtr<VclHBox>             m_pBxLabelPlacement;
-    VclPtr<ListBox>             m_pLB_LabelPlacement;
-
-    VclPtr<VclHBox>             m_pBxOrientation;
-    VclPtr<svx::DialControl>    m_pDC_Dial;
-    VclPtr<FixedText>           m_pFT_Dial;
-    VclPtr<NumericField>        m_pNF_Degrees;
-
-    VclPtr<VclHBox>             m_pBxTextDirection;
-    VclPtr<TextDirectionListBox>    m_pLB_TextDirection;
-
     std::map< sal_Int32, sal_uInt16 > m_aPlacementToListBoxMap;
     std::map< sal_uInt16, sal_Int32 > m_aListBoxToPlacementMap;
 
@@ -83,8 +60,34 @@ private:
     weld::Window*       m_pWindow;
     SfxItemPool*        m_pPool;
 
-    DECL_LINK(NumberFormatDialogHdl, Button *, void );
-    DECL_LINK(CheckHdl, Button*, void );
+    svx::SvxDialControl m_aDC_Dial;
+
+    std::unique_ptr<weld::CheckButton> m_xCBNumber;
+    std::unique_ptr<weld::Button> m_xPB_NumberFormatForValue;
+    std::unique_ptr<weld::CheckButton> m_xCBPercent;
+    std::unique_ptr<weld::Button> m_xPB_NumberFormatForPercent;
+    std::unique_ptr<weld::Label> m_xFT_NumberFormatForPercent;
+    std::unique_ptr<weld::CheckButton> m_xCBCategory;
+    std::unique_ptr<weld::CheckButton> m_xCBSymbol;
+    std::unique_ptr<weld::CheckButton> m_xCBWrapText;
+
+    std::unique_ptr<weld::Widget> m_xSeparatorResources;
+    std::unique_ptr<weld::ComboBox> m_xLB_Separator;
+
+    std::unique_ptr<weld::Widget> m_xBxLabelPlacement;
+    std::unique_ptr<weld::ComboBox> m_xLB_LabelPlacement;
+
+    std::unique_ptr<weld::Widget> m_xBxOrientation;
+    std::unique_ptr<weld::Label> m_xFT_Dial;
+    std::unique_ptr<weld::SpinButton> m_xNF_Degrees;
+
+    std::unique_ptr<weld::Widget> m_xBxTextDirection;
+
+    std::unique_ptr<SchTextDirectionListBox> m_xLB_TextDirection;
+    std::unique_ptr<weld::CustomWeld> m_xDC_Dial;
+
+    DECL_LINK(NumberFormatDialogHdl, weld::Button&, void );
+    DECL_LINK(CheckHdl, weld::ToggleButton&, void );
     void EnableControls();
 };
 

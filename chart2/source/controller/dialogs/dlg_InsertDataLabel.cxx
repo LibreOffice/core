@@ -23,11 +23,9 @@
 namespace chart
 {
 
-DataLabelsDialog::DataLabelsDialog(vcl::Window* pWindow, const SfxItemSet& rInAttrs, SvNumberFormatter* pFormatter) :
-    ModalDialog(pWindow
-                ,"dlg_DataLabels"
-                ,"modules/schart/ui/dlg_DataLabel.ui"),
-    m_apDataLabelResources( new DataLabelResources(this, GetFrameWeld(), rInAttrs) )
+DataLabelsDialog::DataLabelsDialog(weld::Window* pWindow, const SfxItemSet& rInAttrs, SvNumberFormatter* pFormatter)
+    : GenericDialogController(pWindow, "modules/schart/ui/dlg_DataLabel.ui", "dlg_DataLabels")
+    , m_apDataLabelResources(new DataLabelResources(m_xBuilder.get(), pWindow, rInAttrs))
 {
     m_apDataLabelResources->SetNumberFormatter( pFormatter );
     m_apDataLabelResources->Reset(rInAttrs);
