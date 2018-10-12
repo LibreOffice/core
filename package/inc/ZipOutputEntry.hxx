@@ -53,7 +53,7 @@ class ZipOutputEntry
     ZipEntry            *m_pCurrentEntry;
     sal_Int16           m_nDigested;
     ZipPackageStream*   m_pCurrentStream;
-    bool                m_bEncryptCurrentEntry;
+    bool const          m_bEncryptCurrentEntry;
     std::atomic<bool>   m_bFinished;
 
 public:

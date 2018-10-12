@@ -164,8 +164,8 @@ void Test::test() {
             serviceName(theServiceName),
             defaultConstructor(theDefaultConstructor)
         {}
-        OUString serviceName;
-        bool defaultConstructor;
+        OUString const serviceName;
+        bool const defaultConstructor;
     };
     struct Implementation {
         Implementation(

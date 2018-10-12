@@ -104,7 +104,7 @@ struct OWriteStream_Impl
 
     bool m_bHasInsertedStreamOptimization;
 
-    sal_Int32 m_nStorageType;
+    sal_Int32 const m_nStorageType;
 
     // Relations info related data, stored in *.rels file in OFOPXML format
     css::uno::Reference< css::io::XInputStream > m_xOrigRelInfoStream;
@@ -248,7 +248,7 @@ protected:
     bool m_bInitOnDemand;
     sal_Int64 m_nInitPosition;
 
-    bool m_bTransacted;
+    bool const m_bTransacted;
 
     OWriteStream( OWriteStream_Impl* pImpl, bool bTransacted );
     OWriteStream( OWriteStream_Impl* pImpl, css::uno::Reference< css::io::XStream > const & xStream, bool bTransacted );
