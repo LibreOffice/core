@@ -3125,12 +3125,14 @@ void ScModelObj::HandleCalculateEvents()
 
 sal_Bool ScModelObj::isOpenCLEnabled()
 {
-    return officecfg::Office::Common::Misc::UseOpenCL::get();
+    return ScCalcConfig::isOpenCLEnabled();
 }
 
 void ScModelObj::enableOpenCL(sal_Bool bEnable)
 {
     if (ScCalcConfig::isOpenCLEnabled() == static_cast<bool>(bEnable))
+        return;
+    if (ScCalcConfig::getForceCalculationType() != ForceCalculationNone)
         return;
 
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());

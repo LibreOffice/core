@@ -1483,11 +1483,42 @@ public:
         }
     }
 };
-}
+
+// Forced calculation: OpenCL and threads require formula groups, so force even single cells to be a "group".
+// Remove the group again at the end, since there are some places throughout the code
+// that do not handle well groups with just 1 cell. Remove the groups only when the recursion level
+// reaches 0 again (groups contain some info such as disabling threading because of cycles, so removing
+// a group immediately would remove the info), for this reason affected cells are stored in the recursion
+// helper.
+struct TemporaryCellGroupMaker
+{
+    TemporaryCellGroupMaker( ScFormulaCell* cell, bool enable )
+        : mCell( cell )
+        , mEnabled( enable )
+    {
+        if( mEnabled && mCell->GetCellGroup() == nullptr )
+        {
+            mCell->CreateCellGroup( 1, false );
+            mCell->GetDocument()->GetRecursionHelper().AddTemporaryGroupCell( mCell );
+        }
+    }
+    ~TemporaryCellGroupMaker()
+    {
+        if( mEnabled )
+            mCell->GetDocument()->GetRecursionHelper().CleanTemporaryGroupCells();
+    }
+    ScFormulaCell* mCell;
+    const bool mEnabled;
+};
+
+} // namespace
 
 void ScFormulaCell::Interpret()
 {
     ScRecursionHelper& rRecursionHelper = pDocument->GetRecursionHelper();
+
+    static ForceCalculationType forceType = ScCalcConfig::getForceCalculationType();
+    TemporaryCellGroupMaker cellGroupMaker( this, forceType != ForceCalculationNone && forceType != ForceCalculationCore );
 
     ScFormulaCell* pTopCell = mxGroup ? mxGroup->mpTopCell : this;
 
@@ -4473,9 +4504,12 @@ bool ScFormulaCell::InterpretFormulaGroup()
         return false;
     }
 
-    // To temporarily use threading for sc unit tests regardless of the size of the formula group,
-    // add the condition !std::getenv("LO_TESTNAME") below (with &&)
-    if (GetWeight() < ScInterpreter::GetGlobalConfig().mnOpenCLMinimumFormulaGroupSize)
+    // Use SC_TEST_CALCULATION=opencl/threads to force calculation e.g. for unittests
+    static ForceCalculationType forceType = ScCalcConfig::getForceCalculationType();
+    if (forceType == ForceCalculationCore
+        || ( GetWeight() < ScInterpreter::GetGlobalConfig().mnOpenCLMinimumFormulaGroupSize
+            && forceType != ForceCalculationOpenCL
+            && forceType != ForceCalculationThreads))
     {
         mxGroup->meCalcState = sc::GroupCalcDisabled;
         aScope.addGroupSizeThresholdMessage(*this);
@@ -4802,7 +4836,8 @@ bool ScFormulaCell::InterpretFormulaGroupOpenCL(sc::FormulaLogger::GroupScope& a
         if (pInterpreter == nullptr ||
             !pInterpreter->interpret(*pDocument, xGroup->mpTopCell->aPos, xGroup, aCode))
         {
-            SAL_INFO("sc.opencl", "interpreting group " << mxGroup << " (state " << static_cast<int>(mxGroup->meCalcState) << ") failed, disabling");
+            SAL_INFO("sc.opencl", "interpreting group " << mxGroup->mpTopCell->aPos
+                << " (state " << static_cast<int>(mxGroup->meCalcState) << ") failed, disabling");
             mxGroup->meCalcState = sc::GroupCalcDisabled;
 
             // Undo the hack above

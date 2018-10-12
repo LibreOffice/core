@@ -59,6 +59,7 @@ class ScRecursionHelper
     bool                                bDoingRecursion;
     bool                                bInIterationReturn;
     bool                                bConverging;
+    std::vector< ScFormulaCell* >       aTemporaryGroupCells;
 
     void Init();
     void ResetIteration();
@@ -107,6 +108,9 @@ public:
     bool PushFormulaGroup(ScFormulaCell* pCell);
     void PopFormulaGroup();
     bool AnyParentFGInCycle();
+
+    void AddTemporaryGroupCell(ScFormulaCell* cell);
+    void CleanTemporaryGroupCells();
 };
 
 /** A class to wrap ScRecursionHelper::PushFormulaGroup(),

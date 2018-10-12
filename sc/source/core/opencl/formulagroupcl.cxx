@@ -3843,6 +3843,9 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
 
     genRPNTokens(rDoc, rTopPos, rCode);
 
+    if( rCode.GetCodeLen() == 0 )
+        return false;
+
     CLInterpreterContext aCxt = createCLInterpreterContext(maCalcConfig, xGroup, rCode);
     if (!aCxt.isValid())
         return false;

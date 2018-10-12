@@ -157,6 +157,21 @@ bool ScRecursionHelper::AnyParentFGInCycle()
     return false;
 }
 
+void ScRecursionHelper::AddTemporaryGroupCell(ScFormulaCell* cell)
+{
+    aTemporaryGroupCells.push_back( cell );
+}
+
+void ScRecursionHelper::CleanTemporaryGroupCells()
+{
+    if( GetRecursionCount() == 0 )
+    {
+        for( ScFormulaCell* cell : aTemporaryGroupCells )
+            cell->SetCellGroup( nullptr );
+        aTemporaryGroupCells.clear();
+    }
+}
+
 ScFormulaGroupCycleCheckGuard::ScFormulaGroupCycleCheckGuard(ScRecursionHelper& rRecursionHelper, ScFormulaCell* pCell) :
     mrRecHelper(rRecursionHelper)
 {

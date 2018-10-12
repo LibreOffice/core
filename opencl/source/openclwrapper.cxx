@@ -761,6 +761,11 @@ void findDeviceInfoFromDeviceId(cl_device_id aDeviceId, size_t& rDeviceId, size_
 
 bool canUseOpenCL()
 {
+    if( const char* env = getenv( "SC_FORCE_CALCULATION" ))
+    {
+        if( strcmp( env, "opencl" ) == 0 )
+            return true;
+    }
     return !getenv("SAL_DISABLE_OPENCL") && officecfg::Office::Common::Misc::UseOpenCL::get();
 }
 

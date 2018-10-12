@@ -27,6 +27,16 @@ enum ScRecalcOptions
     RECALC_ASK,
 };
 
+// Env.var. SC_FORCE_CALCULATION can be used to force all calculation
+// to be done using OpenCL or group threading (even for single cells).
+enum ForceCalculationType
+{
+    ForceCalculationNone, // do not force anything
+    ForceCalculationCore, // "core", use only non-threaded normal code
+    ForceCalculationOpenCL, // "opencl", force OpenCL
+    ForceCalculationThreads // "threads", force threaded code
+};
+
 /**
  * Configuration options for formula interpreter.
  */
@@ -47,6 +57,7 @@ struct SC_DLLPUBLIC ScCalcConfig
 
     static bool isOpenCLEnabled();
     static bool isThreadingEnabled();
+    static ForceCalculationType getForceCalculationType();
 
     bool mbOpenCLSubsetOnly:1;
     bool mbOpenCLAutoSelect:1;

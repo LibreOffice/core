@@ -43,10 +43,44 @@ static rtl::Reference<ConfigurationListener> const & getFormulaCalculationListen
     return xListener;
 }
 
+static ForceCalculationType forceCalculationTypeInit()
+{
+    const char* env = getenv( "SC_FORCE_CALCULATION" );
+    if( env != nullptr )
+    {
+        if( strcmp( env, "opencl" ) == 0 )
+        {
+            SAL_INFO("sc.core.formulagroup", "Forcing calculations to use OpenCL");
+            return ForceCalculationOpenCL;
+        }
+        if( strcmp( env, "threads" ) == 0 )
+        {
+            SAL_INFO("sc.core.formulagroup", "Forcing calculations to use threads");
+            return ForceCalculationThreads;
+        }
+        if( strcmp( env, "core" ) == 0 )
+        {
+            SAL_INFO("sc.core.formulagroup", "Forcing calculations to use core");
+            return ForceCalculationCore;
+        }
+        SAL_WARN("sc.core.formulagroup", "Unrecognized value of SC_TEST_CALCULATION");
+    }
+    return ForceCalculationNone;
+}
+
+ForceCalculationType ScCalcConfig::getForceCalculationType()
+{
+    static const ForceCalculationType type = forceCalculationTypeInit();
+    return type;
+}
+
 bool ScCalcConfig::isOpenCLEnabled()
 {
     if (utl::ConfigManager::IsFuzzing())
         return false;
+    static ForceCalculationType force = getForceCalculationType();
+    if( force != ForceCalculationNone )
+        return force == ForceCalculationOpenCL;
     static comphelper::ConfigurationListenerProperty<bool> gOpenCLEnabled(getMiscListener(), "UseOpenCL");
     return gOpenCLEnabled.get();
 }
@@ -55,6 +89,9 @@ bool ScCalcConfig::isThreadingEnabled()
 {
     if (utl::ConfigManager::IsFuzzing())
         return false;
+    static ForceCalculationType force = getForceCalculationType();
+    if( force != ForceCalculationNone )
+        return force == ForceCalculationThreads;
     static comphelper::ConfigurationListenerProperty<bool> gThreadingEnabled(getFormulaCalculationListener(), "UseThreadedCalculationForFormulaGroups");
     return gThreadingEnabled.get();
 }
