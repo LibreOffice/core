@@ -27,7 +27,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 UserInformation::UserInformation():
-    m_aUserLocale( LanguageTag( ConfigManager::getLocale()).getLocale())
+    m_aUserLocale( LanguageTag( ConfigManager::getWorkLocale()).getLocale())
 {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

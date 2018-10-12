@@ -655,7 +655,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables()
 
     // Detect the language type of the current office
     m_aPreDefVars.m_eLanguageType = LANGUAGE_ENGLISH_US;
-    OUString aLocaleStr( utl::ConfigManager::getLocale() );
+    OUString aLocaleStr( utl::ConfigManager::getUILocale() );
     m_aPreDefVars.m_eLanguageType = LanguageTag::convertToLanguageTypeWithFallback( aLocaleStr );
     // We used to have an else branch here with a SAL_WARN, but that
     // always fired in some unit tests when this code was built with

@@ -108,10 +108,16 @@ OUString utl::ConfigManager::getDefaultCurrency() {
         "L10N/ooSetupCurrency");
 }
 
-OUString utl::ConfigManager::getLocale() {
+OUString utl::ConfigManager::getUILocale() {
     return getConfigurationString(
         "/org.openoffice.Setup",
         "L10N/ooLocale");
+}
+
+OUString utl::ConfigManager::getWorkLocale() {
+    return getConfigurationString(
+        "/org.openoffice.Setup",
+        "L10N/ooSetupSystemLocale");
 }
 
 OUString utl::ConfigManager::getProductExtension() {

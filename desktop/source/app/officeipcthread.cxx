@@ -1086,7 +1086,7 @@ bool IpcThread::process(OString const & arguments, bool * waitProcessed) {
             }
             if (bShowHelp) {
                 aHelpURLBuffer.append("?Language=");
-                aHelpURLBuffer.append(utl::ConfigManager::getLocale());
+                aHelpURLBuffer.append(utl::ConfigManager::getUILocale());
 #if defined UNX
                 aHelpURLBuffer.append("&System=UNX");
 #elif defined WNT

@@ -118,7 +118,7 @@ SafeModeDialog::SafeModeDialog(vcl::Window* pParent)
 
     // Set URL for help button (module=safemode)
     OUString sURL("http://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
-        "&LOlocale=" + utl::ConfigManager::getLocale() + "&LOmodule=safemode");
+        "&LOlocale=" + utl::ConfigManager::getUILocale() + "&LOmodule=safemode");
     mpBugLink->SetURL(sURL);
 
     mpUserProfileLink->SetURL(comphelper::BackupFileHelper::getUserProfileURL());

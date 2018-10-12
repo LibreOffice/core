@@ -43,7 +43,9 @@ public:
 
     static OUString getDefaultCurrency();
 
-    static OUString getLocale();
+    static OUString getUILocale();
+
+    static OUString getWorkLocale();
 
     static OUString getProductExtension();
 
