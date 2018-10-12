@@ -79,7 +79,7 @@ bool FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
                 bForceNoFillStyle = true;
             if ( bForceNoFillStyle )
                 pObj->SetMergedItem( XFillStyleItem( drawing::FillStyle_NONE ) );
-            pObj->SetGridOffset( aGridOff );
+//Z            pObj->SetGridOffset( aGridOff );
         }
 
         bReturn = true;

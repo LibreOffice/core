@@ -30,7 +30,7 @@ namespace sdr
 {
     namespace contact
     {
-        class ObjectContactOfPageView final : public ObjectContact, public Idle
+        class SVX_DLLPUBLIC ObjectContactOfPageView : public ObjectContact, public Idle
         {
             // the owner of this ObjectContactOfPageView. Set from constructor and not
             // to be changed in any way.

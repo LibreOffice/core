@@ -40,7 +40,8 @@ public:
 
     // Returns grid sync offset for rInOutPos, additionally adjusts rInOutPos
     // by the offset
-    Point CurrentGridSyncOffsetAndPos( Point& rInOutPos);
+//Z    Point CurrentGridSyncOffsetAndPos( Point& rInOutPos);
+    const Point& CurrentGridSyncOffsetAndPos(Point& rInOutPos);
 };
 
 #endif      // _SD_FUCONSTR_HXX

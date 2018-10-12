@@ -678,7 +678,7 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
     // apply calc offset to marked object rect
     // ( necessary for handles to be displayed in
     // correct position )
-    Point aGridOff = GetGridOffset();
+    Point aGridOff = GetGridOffsetForView();
 
     // There can be multiple mark views, but we're only interested in the one that has a window associated.
     const bool bTiledRendering = comphelper::LibreOfficeKit::isActive() && GetFirstOutputDevice() && GetFirstOutputDevice()->GetOutDevType() == OUTDEV_WINDOW;
@@ -1706,7 +1706,7 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
     SdrObject* pRet=nullptr;
     tools::Rectangle aRect(pObj->GetCurrentBoundRect());
     // hack for calc grid sync
-    aRect += pObj->GetGridOffset();
+    aRect += pObj->getGridOffsetForObject();
     sal_uInt16 nTol2(nTol);
 
     // double tolerance for OLE, text frames and objects in
@@ -2049,23 +2049,29 @@ tools::Rectangle SdrMarkView::GetMarkedObjBoundRect() const
         tools::Rectangle aR1(pO->GetCurrentBoundRect());
         // Ensure marked area includes the calc offset
         // ( if applicable ) to sync to grid
-        aR1 += pO->GetGridOffset();
+        aR1 += pO->getGridOffsetForObject();
         if (aRect.IsEmpty()) aRect=aR1;
         else aRect.Union(aR1);
     }
     return aRect;
 }
 
-Point SdrMarkView::GetGridOffset() const
+//Z
+const Point& SdrMarkView::GetGridOffsetForView() const
 {
-    Point aOffset;
-    // calculate the area occupied by the union of each marked object
-    // ( synced to grid ) and compare to the same unsynced area to calculate
-    // the offset. Hopefully that's the sensible thing to do
-    const tools::Rectangle& aGroupSyncedRect = GetMarkedObjRect();
-    aOffset =   aGroupSyncedRect.TopLeft() - maMarkedObjRectNoOffset.TopLeft();
-    return aOffset;
+    static Point aNoOffset;
+    return aNoOffset;
 }
+//ZPoint SdrMarkView::GetGridOffset() const
+//{
+//    Point aOffset;
+//    // calculate the area occupied by the union of each marked object
+//    // ( synced to grid ) and compare to the same unsynced area to calculate
+//    // the offset. Hopefully that's the sensible thing to do
+//    const tools::Rectangle& aGroupSyncedRect = GetMarkedObjRect();
+//    aOffset =   aGroupSyncedRect.TopLeft() - maMarkedObjRectNoOffset.TopLeft();
+//    return aOffset;
+//}
 
 const tools::Rectangle& SdrMarkView::GetMarkedObjRect() const
 {
@@ -2084,7 +2090,7 @@ const tools::Rectangle& SdrMarkView::GetMarkedObjRect() const
             // correct position )
             if (aRect2.IsEmpty()) aRect2=aR1;
             else aRect2.Union( aR1 );
-            aR1 += pO->GetGridOffset();
+            aR1 += pO->getGridOffsetForObject();
             if (aRect.IsEmpty()) aRect=aR1;
             else aRect.Union(aR1);
         }

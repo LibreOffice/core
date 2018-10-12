@@ -803,7 +803,7 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
             else
             {
                 ::basegfx::B2DPolyPolygon aPoly = pCurrentCreate->TakeCreatePoly(maDragStat);
-                Point aGridOff = pCurrentCreate->GetGridOffset();
+                Point aGridOff = pCurrentCreate->getGridOffsetForObject();
                 // Hack for calc, transform position of create placeholder
                 // object according to current zoom so as objects relative
                 // position to grid appears stable

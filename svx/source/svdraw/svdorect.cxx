@@ -326,7 +326,7 @@ void SdrRectObj::AddToHdlList(SdrHdlList& rHdlList) const
                 OSL_ENSURE(!IsTextEditActive(), "Do not use a ImpTextframeHdl for highlighting text in active text edit, this will collide with EditEngine paints (!)");
                 // hack for calc grid sync to ensure the hatched area
                 // for a textbox is displayed at correct position
-                pH.reset(new ImpTextframeHdl(maRect + GetGridOffset() ));
+                pH.reset(new ImpTextframeHdl(maRect + getGridOffsetForObject() ));
                 pH->SetObj(const_cast<SdrRectObj*>(this));
                 pH->SetRotationAngle(aGeo.nRotationAngle);
                 break;

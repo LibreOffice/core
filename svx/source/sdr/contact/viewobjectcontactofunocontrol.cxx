@@ -22,7 +22,7 @@
 #include <sdr/contact/viewcontactofunocontrol.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/properties/properties.hxx>
-#include <sdr/contact/objectcontactofpageview.hxx>
+#include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpagv.hxx>
@@ -918,12 +918,7 @@ namespace sdr { namespace contact {
             SdrUnoObj* pUnoObject( nullptr );
             if ( getUnoObject( pUnoObject ) )
             {
-                Point aGridOffset = pUnoObject->GetGridOffset();
-                tools::Rectangle aRect( pUnoObject->GetLogicRect() );
-                // Hack for calc, transform position of object according
-                // to current zoom so as objects relative position to grid
-                // appears stable
-                aRect += aGridOffset;
+                const tools::Rectangle aRect( pUnoObject->GetLogicRect() );
                 UnoControlContactHelper::adjustControlGeometry_throw( m_aControl, aRect, _rViewTransformation, m_aZoomLevelNormalization );
             }
             else
@@ -1086,12 +1081,7 @@ namespace sdr { namespace contact {
 
             // knit the model and the control
             _out_rControl.setModel( xControlModel );
-            Point aGridOffset =  _rUnoObject.GetGridOffset();
-            tools::Rectangle aRect( _rUnoObject.GetLogicRect() );
-            // Hack for calc, transform position of object according
-            // to current zoom so as objects relative position to grid
-            // appears stable
-            aRect += aGridOffset;
+            const tools::Rectangle aRect( _rUnoObject.GetLogicRect() );
 
             // proper geometry
             UnoControlContactHelper::adjustControlGeometry_throw(
@@ -1488,12 +1478,7 @@ namespace sdr { namespace contact {
         // Do use model data directly to create the correct geometry. Do NOT
         // use getBoundRect()/getSnapRect() here; these will use the sequence of
         // primitives themselves in the long run.
-        tools::Rectangle aSdrGeoData( _rVOC.GetSdrUnoObj().GetGeoRect() );
-        Point aGridOffset = _rVOC.GetSdrUnoObj().GetGridOffset();
-        // Hack for calc, transform position of object according
-        // to current zoom so as objects relative position to grid
-        // appears stable
-        aSdrGeoData += aGridOffset;
+        const tools::Rectangle aSdrGeoData( _rVOC.GetSdrUnoObj().GetGeoRect() );
         const basegfx::B2DRange aRange(
             aSdrGeoData.Left(),
             aSdrGeoData.Top(),

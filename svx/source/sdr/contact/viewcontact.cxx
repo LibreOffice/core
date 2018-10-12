@@ -25,7 +25,7 @@
 #include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <sdr/contact/objectcontactofpageview.hxx>
+#include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <tools/debug.hxx>
 
 namespace sdr { namespace contact {

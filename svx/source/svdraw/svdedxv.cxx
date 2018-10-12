@@ -266,8 +266,8 @@ void SdrObjEditView::ModelHasChanged()
                 // Hack for calc, transform position of edit object according
                 // to current zoom so as objects relative position to grid
                 // appears stable
-                aEditArea1 += pTextObj->GetGridOffset();
-                aMinArea1 += pTextObj->GetGridOffset();
+                aEditArea1 += pTextObj->getGridOffsetForObject();
+                aMinArea1 += pTextObj->getGridOffsetForObject();
                 aEditArea1.Move(aPvOfs.X(),aPvOfs.Y());
                 aMinArea1.Move(aPvOfs.X(),aPvOfs.Y());
                 tools::Rectangle aNewArea(aMinArea1);
@@ -1153,9 +1153,9 @@ bool SdrObjEditView::SdrBeginTextEdit(
             // appears stable
 
             Point aPvOfs(pTextObj->GetTextEditOffset());
-            aTextEditArea += pTextObj->GetGridOffset();
+            aTextEditArea += pTextObj->getGridOffsetForObject();
             aTextEditArea.Move(aPvOfs.X(),aPvOfs.Y());
-            aMinTextEditArea += pTextObj->GetGridOffset();
+            aMinTextEditArea += pTextObj->getGridOffsetForObject();
             aMinTextEditArea.Move(aPvOfs.X(),aPvOfs.Y());
             pTextEditCursorMerker=pWin->GetCursor();
 

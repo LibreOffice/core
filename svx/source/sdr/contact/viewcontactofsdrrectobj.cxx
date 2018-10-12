@@ -47,14 +47,10 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrRectObj::createV
             false));
 
     // take unrotated snap rect (direct model data) for position and size
-    tools::Rectangle rRectangle = GetRectObj().GetGeoRect();
-    // Hack for calc, transform position of object according
-    // to current zoom so as objects relative position to grid
-    // appears stable
-    rRectangle += GetRectObj().GetGridOffset();
+    const tools::Rectangle aRectangle(GetRectObj().GetGeoRect());
     const ::basegfx::B2DRange aObjectRange(
-        rRectangle.Left(), rRectangle.Top(),
-        rRectangle.Right(), rRectangle.Bottom() );
+        aRectangle.Left(), aRectangle.Top(),
+        aRectangle.Right(), aRectangle.Bottom() );
 
     const GeoStat& rGeoStat(GetRectObj().GetGeoStat());
 
