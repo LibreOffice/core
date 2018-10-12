@@ -35,6 +35,7 @@
 #include <tabvwsh.hxx>
 #include <appoptio.hxx>
 #include <compiler.hxx>
+#include <funcdesc.hxx>
 
 #include <dwfunctr.hxx>
 

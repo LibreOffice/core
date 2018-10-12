@@ -8,10 +8,12 @@
  */
 
 #include <condformatmgr.hxx>
+#include <condformathelper.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <condformatdlg.hxx>
 #include <document.hxx>
+#include <conditio.hxx>
 
 ScCondFormatManagerWindow::ScCondFormatManagerWindow(SvSimpleTableContainer& rParent,
     ScDocument* pDoc, ScConditionalFormatList* pFormatList)

@@ -22,14 +22,10 @@
 
 #include <sfx2/shell.hxx>
 #include <shellids.hxx>
-#include <sfx2/module.hxx>
-#include <svx/svdmark.hxx>
 #include <unotools/caserotate.hxx>
 #include <tools/link.hxx>
 #include <memory>
 #include "formatsh.hxx"
-#include <address.hxx>
-#include <vcl/window.hxx>
 #include <rtl/ref.hxx>
 #include <sot/formats.hxx>
 

@@ -24,7 +24,6 @@
 
 class ScTabViewShell;
 class SdrOle2Obj;
-class SdrGrafObj;
 class SdrModel;
 
 class ScClient : public SfxInPlaceClient

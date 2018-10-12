@@ -13,10 +13,8 @@
 #include <vcl/popupmenuwindow.hxx>
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
-#include <vcl/scrbar.hxx>
 #include <vcl/timer.hxx>
 #include <svtools/svlbitm.hxx>
-#include <svx/checklbx.hxx>
 
 #include <memory>
 #include <unordered_set>

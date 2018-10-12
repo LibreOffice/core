@@ -8,8 +8,11 @@
  */
 
 #include "htmldataprovider.hxx"
+#include <datamapper.hxx>
 #include <datatransformation.hxx>
 #include <salhelper/thread.hxx>
+#include <vcl/svapp.hxx>
+#include <tools/stream.hxx>
 
 #include <libxml/HTMLparser.h>
 #include <libxml/HTMLtree.h>

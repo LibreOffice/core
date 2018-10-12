@@ -12,6 +12,7 @@
 #include "helper/qahelper.hxx"
 #include <document.hxx>
 #include <docsh.hxx>
+#include <scdll.hxx>
 
 #include <rangelst.hxx>
 

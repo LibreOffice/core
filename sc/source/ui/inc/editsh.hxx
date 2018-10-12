@@ -21,12 +21,12 @@
 #define INCLUDED_SC_SOURCE_UI_INC_EDITSH_HXX
 
 #include <sfx2/shell.hxx>
-#include <sfx2/module.hxx>
 #include <tools/link.hxx>
+#include <rtl/ref.hxx>
 
 #include <shellids.hxx>
-#include <editeng/editview.hxx>
 
+class SfxModule;
 class EditView;
 class ScViewData;
 class ScInputHandler;

@@ -27,6 +27,9 @@
 #include <comphelper/string.hxx>
 #include <miscuno.hxx>
 #include <dbdocutl.hxx>
+#include <datamapper.hxx>
+#include <vcl/svapp.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace css;
 using namespace ::com::sun::star::beans;

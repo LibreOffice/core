@@ -31,11 +31,13 @@
 #include <patattr.hxx>
 #include <docpool.hxx>
 #include <docoptio.hxx>
+#include <formulaopt.hxx>
 
 #include <formula/vectortoken.hxx>
 #include <o3tl/make_unique.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svl/broadcast.hxx>
+#include <svl/intitem.hxx>
 
 #include <memory>
 #include <functional>

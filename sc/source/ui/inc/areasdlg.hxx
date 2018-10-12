@@ -21,13 +21,12 @@
 
 #include <address.hxx>
 
-#include <svl/stritem.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/fixed.hxx>
 #include "anyrefdg.hxx"
 
 class ScDocument;
 class ScViewData;
+class SfxStringItem;
 
 class ScPrintAreasDlg : public ScAnyRefDlg
 {

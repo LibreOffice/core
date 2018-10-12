@@ -64,6 +64,7 @@
 #include <scresid.hxx>
 #include <markdata.hxx>
 #include <memory>
+#include <formulaopt.hxx>
 
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

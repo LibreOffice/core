@@ -20,13 +20,12 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_DPGROUPDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_DPGROUPDLG_HXX
 
-#include <vcl/fixed.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <svx/checklbx.hxx>
 #include "editfield.hxx"
-#include <dpgroup.hxx>
+#include <dpnumgroupinfo.hxx>
 
 class ScDPGroupEditHelper
 {

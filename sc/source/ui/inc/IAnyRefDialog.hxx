@@ -23,7 +23,6 @@
 
 class ScRange;
 class ScDocument;
-class ScTabViewShell;
 class SfxObjectShell;
 namespace formula
 {

@@ -89,6 +89,7 @@
 #include <svl/sharedstringpool.hxx>
 
 #include <sfx2/docfile.hxx>
+#include <sfx2/sfxsids.hrc>
 
 #include <iostream>
 #include <memory>

@@ -10,20 +10,15 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CONDFORMATMGR_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CONDFORMATMGR_HXX
 
-#include <scres.hrc>
-
 #include <vcl/dialog.hxx>
-#include <vcl/layout.hxx>
-#include <svtools/svtabbx.hxx>
 #include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 #include <svtools/simptabl.hxx>
-
-#include <conditio.hxx>
 
 #include <map>
 
 class ScDocument;
+class ScConditionalFormat;
+class ScConditionalFormatList;
 
 class ScCondFormatManagerWindow : public SvSimpleTable
 {
