@@ -83,8 +83,6 @@ friend class SvxColorChildWindow;
 private:
     XColorListRef       pColorList;
     VclPtr<SvxColorValueSet_docking> aColorSet;
-    sal_uInt16 const    nLeftSlot;
-    sal_uInt16 const    nRightSlot;
     sal_uInt16          nCols;
     sal_uInt16          nLines;
     long                nCount;

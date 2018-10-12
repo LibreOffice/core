@@ -147,7 +147,7 @@ public:
 // 'pWhichIds'. It has the length 'nWhichIds'.
 // The WhichMap is not deleted.
 SVT_DLLPUBLIC void BuildWhichTable( std::vector<sal_uInt16> &rWhichMap,
-                               sal_uInt16 *pWhichIds,
+                               sal_uInt16 const *pWhichIds,
                                sal_uInt16 nWhichIds );
 
 /*========================================================================

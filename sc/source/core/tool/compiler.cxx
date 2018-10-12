@@ -4766,7 +4766,7 @@ bool ScCompiler::HandleRange()
                     AdjustSheetLocalNameRelReferences( nSheetTab - aPos.Tab());
 
                 SetRelNameReference();
-                MoveRelWrap(pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
+                MoveRelWrap(MAXCOL, MAXROW);
             }
             maArrIterator.Reset();
             if ( bAddPair )
