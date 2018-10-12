@@ -198,7 +198,6 @@ public:
 
     sal_Int32 nContrast;
     sal_Int32 nBrightness;
-    double const    fGamma;
 
     static constexpr sal_Int32 nFillColor = 0xffffffff;
 
@@ -259,7 +258,6 @@ public:
         ,nShadowTransparence(0)
         ,nContrast(0)
         ,nBrightness(0)
-        ,fGamma( -1.0 )
         ,eColorMode( drawing::ColorMode_STANDARD )
         ,nCurrentBorderLine(BORDER_TOP)
         ,bIsGraphic(false)
@@ -1274,9 +1272,6 @@ uno::Reference<text::XTextContent> GraphicImport::createGraphicObject(uno::Refer
                 xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_GRAPHIC_COLOR_MODE ),
                     uno::makeAny(m_pImpl->eColorMode));
             }
-            if(m_pImpl->fGamma > 0. )
-                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_GAMMA ),
-                    uno::makeAny(m_pImpl->fGamma ));
 
             xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_BACK_COLOR ),
                 uno::makeAny( GraphicImport_Impl::nFillColor ));

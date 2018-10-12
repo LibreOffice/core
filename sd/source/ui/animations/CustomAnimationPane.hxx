@@ -163,7 +163,7 @@ private:
     OUString    maStrProperty;
 
     sal_Int32   mnPropertyType;
-    sal_Int32 const mnMotionPathPos;
+    static sal_Int32 const gnMotionPathPos = 3;
     sal_Int32   mnCurvePathPos;
     sal_Int32   mnPolygonPathPos;
     sal_Int32   mnFreeformPathPos;

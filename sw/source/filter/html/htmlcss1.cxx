@@ -72,19 +72,12 @@ using namespace ::com::sun::star;
 static void lcl_swcss1_setEncoding( SwFormat& rFormat, rtl_TextEncoding eEnc );
 
 // Implementation of SwCSS1Parsers (actually swcss1.cxx)
-static struct SwCSS1ItemIds
+static const sal_uInt16 aItemIds[] =
 {
-    sal_uInt16 const nFormatBreak;
-    sal_uInt16 const nFormatPageDesc;
-    sal_uInt16 const nFormatKeep;
-
-    SwCSS1ItemIds() :
-        nFormatBreak( RES_BREAK ),
-        nFormatPageDesc( RES_PAGEDESC ),
-        nFormatKeep( RES_KEEP )
-    {}
-
-} aItemIds;
+    RES_BREAK,
+    RES_PAGEDESC,
+    RES_KEEP,
+};
 
 void SwCSS1Parser::ChgPageDesc( const SwPageDesc *pPageDesc,
                                 const SwPageDesc& rNewPageDesc )
@@ -98,7 +91,7 @@ void SwCSS1Parser::ChgPageDesc( const SwPageDesc *pPageDesc,
 
 SwCSS1Parser::SwCSS1Parser( SwDoc *pD, const sal_uInt32 aFHeights[7], const OUString& rBaseURL, bool bNewDoc ) :
     SvxCSS1Parser( pD->GetAttrPool(), rBaseURL,
-                   reinterpret_cast<sal_uInt16*>(&aItemIds), sizeof(aItemIds) / sizeof(sal_uInt16) ),
+                   aItemIds, SAL_N_ELEMENTS(aItemIds)),
     m_pDoc( pD ),
     m_nDropCapCnt( 0 ),
     m_bIsNewDoc( bNewDoc ),

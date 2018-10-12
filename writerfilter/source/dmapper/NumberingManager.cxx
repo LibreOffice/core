@@ -229,13 +229,6 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetCharStyleProperties( )
 
 uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults)
 {
-    const sal_Int16 aWWToUnoAdjust[] =
-    {
-        text::HoriOrientation::LEFT,
-        text::HoriOrientation::CENTER,
-        text::HoriOrientation::RIGHT,
-    };
-
     std::vector<beans::PropertyValue> aNumberingProperties;
 
     if( m_nIStartAt >= 0)
@@ -253,8 +246,6 @@ uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults
         aNumberingProperties.push_back(lcl_makePropVal(PROP_NUMBERING_TYPE, nNumberFormat));
     }
 
-    if( m_nJC >= 0 && m_nJC <= sal::static_int_cast<sal_Int32>(SAL_N_ELEMENTS(aWWToUnoAdjust)) )
-        aNumberingProperties.push_back(lcl_makePropVal(PROP_ADJUST, aWWToUnoAdjust[m_nJC]));
 
     if( !isOutlineNumbering())
     {
