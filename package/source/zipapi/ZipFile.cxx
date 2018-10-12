@@ -824,7 +824,7 @@ sal_Int32 ZipFile::findEND()
     try
     {
         nLength = static_cast <sal_Int32 > (aGrabber.getLength());
-        if (nLength == 0 || nLength < ENDHDR)
+        if (nLength < ENDHDR)
             return -1;
         nPos = nLength - ENDHDR - ZIP_MAXNAMELEN;
         nEnd = nPos >= 0 ? nPos : 0 ;
@@ -989,7 +989,7 @@ void ZipFile::recover()
     try
     {
         nLength = aGrabber.getLength();
-        if (nLength == 0 || nLength < ENDHDR)
+        if (nLength < ENDHDR)
             return;
 
         aGrabber.seek( 0 );

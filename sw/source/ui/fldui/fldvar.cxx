@@ -797,7 +797,7 @@ void SwFieldVarPage::FillFormatLB(sal_uInt16 nTypeId)
     {
         if (!nOldNumFormat && (nNumFormatSel = m_pNumFormatLB->GetEntryPos(sOldNumSel)) != LISTBOX_ENTRY_NOTFOUND)
             m_pNumFormatLB->SelectEntryPos(nNumFormatSel);
-        else if (nOldNumFormat && nOldNumFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
+        else if (nOldNumFormat == NUMBERFORMAT_ENTRY_NOT_FOUND)
             m_pNumFormatLB->SelectEntry(sOldSel);
     }
 

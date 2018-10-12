@@ -1616,7 +1616,7 @@ void SvxCharEffectsPage::SelectHdl_Impl(weld::ComboBox* pBox)
     if (m_xEmphasisLB.get() == pBox)
     {
         auto nEPos = m_xEmphasisLB->get_active();
-        bool bEnable = nEPos > 0 && nEPos != -1;
+        bool bEnable = nEPos > 0;
         m_xPositionFT->set_sensitive( bEnable );
         m_xPositionLB->set_sensitive( bEnable );
     }

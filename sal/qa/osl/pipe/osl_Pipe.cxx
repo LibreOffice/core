@@ -441,7 +441,7 @@ namespace osl_Pipe
             {
                 ::osl::Pipe aPipe;
                 aPipe.create( test::uniquePipeName(aTestPipeName), osl_Pipe_CREATE );
-                bRes  = aPipe == aPipe;
+                bRes  = aPipe == aPipe; // NOLINT(misc-redundant-expression)
                 aPipe.close( );
 
                 CPPUNIT_ASSERT_MESSAGE( "#test comment#: test isEqual(), compare itself.",

@@ -178,7 +178,7 @@ bool IsItalic( const vcl::Font &rFont )
 bool IsBold( const vcl::Font &rFont )
 {
     FontWeight eWeight = rFont.GetWeight();
-    return eWeight != WEIGHT_DONTKNOW && eWeight > WEIGHT_NORMAL;
+    return eWeight > WEIGHT_NORMAL;
 }
 
 

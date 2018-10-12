@@ -491,7 +491,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         if (*p == '\'')
         {
             p = parseQuotedName(p, rExternDocName);
-            if (!*p || *p != ']' || rExternDocName.isEmpty())
+            if (*p != ']' || rExternDocName.isEmpty())
             {
                 rExternDocName.clear();
                 return start;
@@ -523,7 +523,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         // But, more sickness comes with MOOXML as there may be
         // '[1]Sheet 4'!$A$1  where [1] is the external doc's index.
         p = parseQuotedName(p, rExternDocName);
-        if (!*p || *p != '!')
+        if (*p != '!')
         {
             rExternDocName.clear();
             return start;

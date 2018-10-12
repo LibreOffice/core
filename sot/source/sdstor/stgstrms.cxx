@@ -1327,7 +1327,7 @@ sal_uInt64 StgTmpStrm::SeekPos(sal_uInt64 n)
     assert(n != SAL_MAX_UINT32);
     if( n == STREAM_SEEK_TO_END )
         n = GetSize();
-    if( n && n > THRESHOLD && !m_pStrm )
+    if( n > THRESHOLD && !m_pStrm )
     {
         SetSize( n );
         if( GetError() != ERRCODE_NONE )
