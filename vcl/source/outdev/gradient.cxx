@@ -537,7 +537,7 @@ void OutputDevice::DrawComplexGradient( const tools::Rectangle& rRect,
         ImplDrawPolygon( aPoly = aExtRect, pClixPolyPoly );
     }
 
-    // loop to output Polygone/PolyPolygone sequentially
+    // loop to output Polygon/PolyPolygon sequentially
     for( long i = 1; i < nSteps; i++ )
     {
         // calculate new Polygon
@@ -866,7 +866,7 @@ void OutputDevice::DrawComplexGradientToMetafile( const tools::Rectangle& rRect,
     xPolyPoly->Insert( aPoly = rRect );
     xPolyPoly->Insert( aPoly );
 
-    // loop to output Polygone/PolyPolygone sequentially
+    // loop to output Polygon/PolyPolygon sequentially
     for( long i = 1; i < nSteps; i++ )
     {
         // calculate new Polygon
