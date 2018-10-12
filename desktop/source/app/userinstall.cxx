@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -27,6 +27,7 @@
 #include <officecfg/Setup.hxx>
 #include <osl/file.h>
 #include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <unotools/bootstrap.hxx>
@@ -128,6 +129,12 @@ Status create(OUString const & uri) {
     default:
         return ERROR_OTHER;
     }
+#else
+    // On (Android and) iOS, just create the user directory. Later code fails mysteriously if it
+    // doesn't exist.
+    OUString userDir("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/user");
+    rtl::Bootstrap::expandMacros(userDir);
+    osl::Directory::createPath(userDir);
 #endif
     std::shared_ptr<comphelper::ConfigurationChanges> batch(
         comphelper::ConfigurationChanges::create());
