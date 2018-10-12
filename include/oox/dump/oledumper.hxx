@@ -174,11 +174,11 @@ private:
     bool                dumpComCtlComplex();
 
 protected:
-    sal_uInt32          mnDataId5;
-    sal_uInt32          mnDataId6;
-    sal_uInt16          mnVersion;
-    bool                mbCommonPart;
-    bool                mbComplexPart;
+    sal_uInt32 const    mnDataId5;
+    sal_uInt32 const    mnDataId6;
+    sal_uInt16 const    mnVersion;
+    bool const          mbCommonPart;
+    bool const          mbComplexPart;
 };
 
 
@@ -350,9 +350,9 @@ private:
     {
         enum LargePropertyType { PROPTYPE_POS, PROPTYPE_SIZE, PROPTYPE_GUID, PROPTYPE_STRING, PROPTYPE_STRINGARRAY };
 
-        LargePropertyType   mePropType;
-        OUString     maItemName;
-        sal_uInt32          mnDataSize;
+        LargePropertyType const mePropType;
+        OUString const maItemName;
+        sal_uInt32 const    mnDataSize;
         OUString*    mpItemValue;
         explicit     LargeProperty( LargePropertyType ePropType, const String& rItemName, sal_uInt32 nDataSize, OUString* pItemValue = nullptr ) :
                                 mePropType( ePropType ), maItemName( rItemName ), mnDataSize( nDataSize ), mpItemValue( pItemValue ) {}
@@ -361,8 +361,8 @@ private:
 
     struct StreamProperty
     {
-        OUString     maItemName;
-        sal_uInt16          mnData;
+        OUString const maItemName;
+        sal_uInt16 const    mnData;
         explicit     StreamProperty( const String& rItemName, sal_uInt16 nData ) :
                                 maItemName( rItemName ), mnData( nData ) {}
     };
@@ -761,7 +761,7 @@ protected:
 
 private:
     VbaSharedData&      mrVbaData;
-    sal_Int32           mnStrmOffset;
+    sal_Int32 const     mnStrmOffset;
 };
 
 

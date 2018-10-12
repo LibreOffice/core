@@ -48,7 +48,7 @@ public:
 
 protected:
     SlidePersistPtr     mpSlidePersistPtr;
-    ShapeLocation       meShapeLocation;
+    ShapeLocation const meShapeLocation;
 
 private:
     OUString     maSlideName;

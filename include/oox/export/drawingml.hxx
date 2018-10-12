@@ -126,7 +126,7 @@ private:
     static std::map<OUString, OUString> maWdpCache;
 
     /// To specify where write eg. the images to (like 'ppt', or 'word' - according to the OPC).
-    DocumentType meDocumentType;
+    DocumentType const meDocumentType;
     /// Parent exporter, used for text callback.
     DMLTextExport* mpTextExport;
 

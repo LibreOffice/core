@@ -93,6 +93,8 @@ bool StaticConstField::TraverseConstructorInitializer(CXXCtorInitializer* init)
     // unusual case where a user constructor sets a field to one value, and a copy constructor sets it to a different value
     if (fn == SRCDIR "/sw/source/core/attr/hints.cxx")
         return true;
+    if (fn == SRCDIR "/oox/source/core/contexthandler2.cxx")
+        return true;
 
     report(DiagnosticsEngine::Warning, "field can be static const", init->getSourceLocation())
         << init->getSourceRange();
