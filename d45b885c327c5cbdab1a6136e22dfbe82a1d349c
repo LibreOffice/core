@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_03e11b9b",
+        "filename": "connectivity/source/drivers/firebird/PreparedStatement.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 321,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2018-10-12T14:47:01Z",
+      "side": 1,
+      "message": "SQL_DOUBLE is probably a double length floating number -\u003e needs _with_ fractional part",
+      "range": {
+        "startLine": 321,
+        "startChar": 9,
+        "endLine": 321,
+        "endChar": 19
+      },
+      "revId": "d45b885c327c5cbdab1a6136e22dfbe82a1d349c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
