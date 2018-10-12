@@ -3997,7 +3997,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         g_object_get( pSettings, "gtk-cursor-blink-time", &blink_time, nullptr );
         // set the blink_time if there is a setting and it is reasonable
         // else leave the default value
-        if( blink_time > 100 && blink_time != gint(STYLE_CURSOR_NOBLINKTIME) )
+        if( blink_time > 100 )
             aStyleSet.SetCursorBlinkTime( blink_time/2 );
     }
     else

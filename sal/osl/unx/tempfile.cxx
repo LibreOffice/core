@@ -248,7 +248,7 @@ static oslFileError osl_create_temp_file_impl_(
 
         /* in case of error osl_File_E_EXIST we simply try again else we give up */
 
-        if ((osl_error == osl_File_E_None) || (osl_error != osl_File_E_EXIST))
+        if (osl_error != osl_File_E_EXIST)
         {
             rtl_uString_release(rand_name);
 

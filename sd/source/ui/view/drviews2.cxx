@@ -2214,7 +2214,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     sal_uInt16 nDepth = pOL->GetDepth(aSel.nEndPara);
                     //there exists a previous numbering level
-                    if (nDepth != sal_uInt16(-1) && nDepth < 8)
+                    if (nDepth < 8)
                     {
                         sal_uInt16 nNewDepth = nDepth+1;
                         pOL->Insert(SdResId(STR_PRESOBJ_MPOUTLINE_ARY[nNewDepth]), EE_PARA_APPEND, nNewDepth);

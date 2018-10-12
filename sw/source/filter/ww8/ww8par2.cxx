@@ -753,7 +753,7 @@ void SwWW8ImplReader::Read_ANLevelNo( sal_uInt16, const sal_uInt8* pData, short 
         {
             // Range WW:1..9 -> SW:0..8 no bullets / numbering
 
-            if (*pData <= MAXLEVEL && *pData <= 9)
+            if (*pData <= 9)
             {
                 m_nSwNumLevel = *pData - 1;
                 if (!m_bNoAttrImport)

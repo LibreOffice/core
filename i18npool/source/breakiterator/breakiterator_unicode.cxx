@@ -394,7 +394,7 @@ Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_
 
     Boundary rv;
     rv.startPos = icuBI->mpValue->mpBreakIterator->preceding(nStartPos);
-    if( rv.startPos < 0 || rv.startPos == icu::BreakIterator::DONE)
+    if( rv.startPos < 0)
         rv.endPos = rv.startPos;
     else {
         if ( (rWordType == WordType::ANYWORD_IGNOREWHITESPACES ||
