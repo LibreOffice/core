@@ -105,6 +105,9 @@ void Qt5Widget::handleMouseButtonEvent(QMouseEvent* pEvent, bool bReleased)
             return;
     }
 
+    if (!bReleased)
+        m_dragStartPosition = pEvent->pos();
+
     aEvent.mnTime = pEvent->timestamp();
     aEvent.mnX = static_cast<long>(pEvent->pos().x());
     aEvent.mnY = static_cast<long>(pEvent->pos().y());
@@ -124,15 +127,29 @@ void Qt5Widget::mouseReleaseEvent(QMouseEvent* pEvent) { handleMouseButtonEvent(
 
 void Qt5Widget::mouseMoveEvent(QMouseEvent* pEvent)
 {
+    QPoint point = pEvent->pos();
+
     SalMouseEvent aEvent;
     aEvent.mnTime = pEvent->timestamp();
-    aEvent.mnX = pEvent->pos().x();
-    aEvent.mnY = pEvent->pos().y();
+    aEvent.mnX = point.x();
+    aEvent.mnY = point.y();
     aEvent.mnCode = GetKeyModCode(pEvent->modifiers()) | GetMouseModCode(pEvent->buttons());
     aEvent.mnButton = 0;
 
     m_pFrame->CallCallback(SalEvent::MouseMove, &aEvent);
     pEvent->accept();
+
+    if ((pEvent->buttons() & Qt::LeftButton)
+        && (pEvent->pos() - m_dragStartPosition).manhattanLength()
+               < QApplication::startDragDistance())
+    {
+        QMimeData* mimeData = new QMimeData;
+        mimeData->setData("application/x-dnditemdata", nullptr);
+
+        QDrag* drag = new QDrag(this);
+        drag->setMimeData(mimeData);
+        drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::MoveAction);
+    }
 }
 
 void Qt5Widget::wheelEvent(QWheelEvent* pEvent)
@@ -161,6 +178,25 @@ void Qt5Widget::wheelEvent(QWheelEvent* pEvent)
 
     m_pFrame->CallCallback(SalEvent::WheelMouse, &aEvent);
     pEvent->accept();
+}
+
+void Qt5Widget::dragEnterEvent(QDragEnterEvent* event)
+{
+    SAL_WARN("vcl.qt5", "dragenterevent");
+    if (event->source() == this)
+        event->accept();
+}
+
+void Qt5Widget::dragMoveEvent(QDragMoveEvent* event)
+{
+    SAL_WARN("vcl.qt5", "dragmoveevent");
+    QWidget::dragMoveEvent(event);
+}
+
+void Qt5Widget::dropEvent(QDropEvent* event)
+{
+    SAL_WARN("vcl.qt5", "dropevent");
+    QWidget::dropEvent(event);
 }
 
 void Qt5Widget::moveEvent(QMoveEvent*) { m_pFrame->CallCallback(SalEvent::Move, nullptr); }
@@ -359,6 +395,7 @@ Qt5Widget::Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
 {
     create();
     setMouseTracking(true);
+    setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
 }
 

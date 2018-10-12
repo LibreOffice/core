@@ -36,6 +36,8 @@ class Qt5Widget : public QWidget
 {
     Q_OBJECT
 
+    QPoint m_dragStartPosition;
+
     bool handleKeyEvent(QKeyEvent*, bool);
     void handleMouseButtonEvent(QMouseEvent*, bool);
 
@@ -46,6 +48,9 @@ class Qt5Widget : public QWidget
     virtual void mouseMoveEvent(QMouseEvent*) override;
     virtual void mousePressEvent(QMouseEvent*) override;
     virtual void mouseReleaseEvent(QMouseEvent*) override;
+    virtual void dragEnterEvent(QDragEnterEvent*) override;
+    virtual void dragMoveEvent(QDragMoveEvent*) override;
+    virtual void dropEvent(QDropEvent*) override;
     virtual void moveEvent(QMoveEvent*) override;
     virtual void paintEvent(QPaintEvent*) override;
     virtual void resizeEvent(QResizeEvent*) override;
