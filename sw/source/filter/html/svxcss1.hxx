@@ -199,7 +199,7 @@ class SvxCSS1Parser : public CSS1Parser
     std::unique_ptr<SvxCSS1PropertyInfo> pSheetPropInfo;
     SvxCSS1PropertyInfo *pPropInfo;
 
-    sal_uInt16 const nMinFixLineSpace;    // minimum spacing for fixed line spacing
+    static constexpr sal_uInt16 gnMinFixLineSpace = MM50/2;    // minimum spacing for fixed line spacing
 
     rtl_TextEncoding    eDfltEnc;
 
@@ -241,7 +241,7 @@ public:
 
     SvxCSS1Parser( SfxItemPool& rPool,
                     const OUString& rBaseURL,
-                   sal_uInt16 *pWhichIds, sal_uInt16 nWhichIds );
+                   sal_uInt16 const *pWhichIds, sal_uInt16 nWhichIds );
     virtual ~SvxCSS1Parser() override;
 
     bool IsIgnoreFontFamily() const { return bIgnoreFontFamily; }
@@ -298,7 +298,7 @@ public:
                       SvxCSS1PropertyInfo& rTargetInfo,
                       bool bSmart );
 
-    sal_uInt16 GetMinFixLineSpace() const { return nMinFixLineSpace; }
+    static sal_uInt16 GetMinFixLineSpace() { return gnMinFixLineSpace; }
 
     virtual void SetDfltEncoding( rtl_TextEncoding eEnc );
     rtl_TextEncoding GetDfltEncoding() const { return eDfltEnc; }

@@ -45,9 +45,7 @@
 
 SwPagePreviewLayout::SwPagePreviewLayout( SwViewShell& _rParentViewShell,
                                           const SwRootFrame& _rLayoutRootFrame )
-    : mnXFree ( 4*142 ),
-      mnYFree ( 4*142 ),
-      mrParentViewShell( _rParentViewShell ),
+    : mrParentViewShell( _rParentViewShell ),
       mrLayoutRootFrame ( _rLayoutRootFrame )
 {
     Clear_();
@@ -137,12 +135,12 @@ void SwPagePreviewLayout::CalcPreviewLayoutSizes()
         pPage = static_cast<const SwPageFrame*>(pPage->GetNext());
     }
     // calculate and set column width and row height
-    mnColWidth = maMaxPageSize.Width() + mnXFree;
-    mnRowHeight = maMaxPageSize.Height() + mnYFree;
+    mnColWidth = maMaxPageSize.Width() + gnXFree;
+    mnRowHeight = maMaxPageSize.Height() + gnYFree;
 
     // calculate and set preview layout width and height
-    mnPreviewLayoutWidth = mnCols * mnColWidth + mnXFree;
-    mnPreviewLayoutHeight = mnRows * mnRowHeight + mnYFree;
+    mnPreviewLayoutWidth = mnCols * mnColWidth + gnXFree;
+    mnPreviewLayoutHeight = mnRows * mnRowHeight + gnYFree;
 
     // calculate document rectangle in preview layout
     {
@@ -155,7 +153,7 @@ void SwPagePreviewLayout::CalcPreviewLayoutSizes()
         // use method <GetRowOfPage(..)>.
         const sal_uInt16 nDocRows = GetRowOfPage( mnPages );
         aDocSize.setHeight( nDocRows * maMaxPageSize.Height() +
-                            (nDocRows+1) * mnYFree );
+                            (nDocRows+1) * gnYFree );
         maPreviewDocRect.SetPos( Point( 0, 0 ) );
         maPreviewDocRect.SetSize( aDocSize );
     }
@@ -396,9 +394,9 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
         mnPaintStartRow = nRowOfProposed;
         // page offset
         maPaintStartPageOffset.setX(
-                (rProposedStartPos.X() % mnColWidth) - mnXFree );
+                (rProposedStartPos.X() % mnColWidth) - gnXFree );
         maPaintStartPageOffset.setY(
-                (rProposedStartPos.Y() % mnRowHeight) - mnYFree );
+                (rProposedStartPos.Y() % mnRowHeight) - gnYFree );
         // virtual preview document offset.
         maPaintPreviewDocOffset = rProposedStartPos;
     }
@@ -543,13 +541,13 @@ void SwPagePreviewLayout::CalcPreviewPages()
         if ( maPaintStartPageOffset != Point( -1, -1 ) )
             aInitialPaintOffset = Point(0,0) - maPaintStartPageOffset;
         else
-            aInitialPaintOffset = Point( mnXFree, mnYFree );
+            aInitialPaintOffset = Point( gnXFree, gnYFree );
     }
     else {
         if ( maPaintStartPageOffset != Point( -1, -1 ) )
             aInitialPaintOffset = Point(0 + ((SwPagePreviewLayout::mnCols-1)*mnColWidth),0) - maPaintStartPageOffset;
         else
-            aInitialPaintOffset = Point( mnXFree + ((SwPagePreviewLayout::mnCols-1)*mnColWidth), mnYFree );
+            aInitialPaintOffset = Point( gnXFree + ((SwPagePreviewLayout::mnCols-1)*mnColWidth), gnYFree );
     }
     aInitialPaintOffset += maAdditionalPaintOffset;
 
@@ -927,7 +925,7 @@ SwTwips SwPagePreviewLayout::GetWinPagesScrollAmount(
     SwTwips nScrollAmount;
     if ( mbDoesLayoutRowsFitIntoWindow )
     {
-        nScrollAmount = (mnPreviewLayoutHeight - mnYFree) * _nWinPagesToScroll;
+        nScrollAmount = (mnPreviewLayoutHeight - gnYFree) * _nWinPagesToScroll;
     }
     else
         nScrollAmount = _nWinPagesToScroll * maPaintedPreviewDocRect.GetHeight();
@@ -948,7 +946,7 @@ SwTwips SwPagePreviewLayout::GetWinPagesScrollAmount(
         }
         else
         {
-            while ( (maPaintedPreviewDocRect.Top() + nScrollAmount + mnYFree) >= maPreviewDocRect.GetHeight() )
+            while ( (maPaintedPreviewDocRect.Top() + nScrollAmount + gnYFree) >= maPreviewDocRect.GetHeight() )
             {
                 nScrollAmount -= mnRowHeight;
             }

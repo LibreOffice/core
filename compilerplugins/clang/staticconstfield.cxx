@@ -11,6 +11,9 @@
 #include "check.hxx"
 #include "compat.hxx"
 #include <iostream>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
 namespace
 {
@@ -22,10 +25,54 @@ public:
     {
     }
 
-    void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
+    void run() override;
 
     bool TraverseConstructorInitializer(CXXCtorInitializer* init);
+    bool TraverseCXXConstructorDecl(CXXConstructorDecl* decl);
+
+private:
+    struct Data
+    {
+        std::vector<CXXCtorInitializer const*> inits;
+        std::string value;
+    };
+    std::unordered_map<FieldDecl const*, Data> m_potentials;
+    std::unordered_set<FieldDecl const*> m_excluded;
+    CXXConstructorDecl* m_currentConstructor = nullptr;
 };
+
+void StaticConstField::run()
+{
+    std::string fn = handler.getMainFileName();
+    loplugin::normalizeDotDotInFilePath(fn);
+
+    // unusual case where a user constructor sets a field to one value, and a copy constructor sets it to a different value
+    if (fn == SRCDIR "/sw/source/core/attr/hints.cxx")
+        return;
+    if (fn == SRCDIR "/oox/source/core/contexthandler2.cxx")
+        return;
+
+    TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+
+    for (auto const& pair : m_potentials)
+    {
+        report(DiagnosticsEngine::Error, "field can be static const", pair.first->getLocation())
+            << pair.first->getSourceRange();
+        for (CXXCtorInitializer const* init : pair.second.inits)
+            if (pair.first->getLocation() != init->getSourceLocation())
+                report(DiagnosticsEngine::Note, "init here", init->getSourceLocation())
+                    << init->getSourceRange();
+    }
+}
+
+bool StaticConstField::TraverseCXXConstructorDecl(CXXConstructorDecl* decl)
+{
+    auto prev = m_currentConstructor;
+    m_currentConstructor = decl;
+    bool ret = FilteringPlugin::TraverseCXXConstructorDecl(decl);
+    m_currentConstructor = prev;
+    return ret;
+}
 
 bool StaticConstField::TraverseConstructorInitializer(CXXCtorInitializer* init)
 {
@@ -33,11 +80,21 @@ bool StaticConstField::TraverseConstructorInitializer(CXXCtorInitializer* init)
         return true;
     if (!init->getMember())
         return true;
+    if (!init->getInit())
+        return true;
+    if (!m_currentConstructor || m_currentConstructor->isCopyOrMoveConstructor())
+        return true;
+    if (!m_currentConstructor->getParent()->isCompleteDefinition())
+        return true;
+    if (m_excluded.find(init->getMember()) != m_excluded.end())
+        return true;
     auto type = init->getMember()->getType();
     auto tc = loplugin::TypeCheck(type);
-    bool found = false;
     if (!tc.Const())
         return true;
+
+    bool found = false;
+    std::string value;
     if (tc.Const().Class("OUString").Namespace("rtl").GlobalNamespace()
         || tc.Const().Class("OString").Namespace("rtl").GlobalNamespace())
     {
@@ -45,61 +102,66 @@ bool StaticConstField::TraverseConstructorInitializer(CXXCtorInitializer* init)
         {
             if (constructExpr->getNumArgs() >= 1
                 && isa<clang::StringLiteral>(constructExpr->getArg(0)))
+            {
+                value = dyn_cast<clang::StringLiteral>(constructExpr->getArg(0))->getString();
                 found = true;
+            }
         }
     }
-    else if (type->isIntegerType())
-    {
-        if (isa<IntegerLiteral>(init->getInit()->IgnoreParenImpCasts()))
-            found = true;
-        // isIntegerType includes bool
-        else if (isa<CXXBoolLiteralExpr>(init->getInit()->IgnoreParenImpCasts()))
-            found = true;
-    }
+#if CLANG_VERSION >= 50000
     else if (type->isFloatingType())
     {
-        if (isa<FloatingLiteral>(init->getInit()->IgnoreParenImpCasts()))
+        APFloat x1(0.0f);
+        if (init->getInit()->EvaluateAsFloat(x1, compiler.getASTContext()))
+        {
+            std::string s;
+            llvm::raw_string_ostream os(s);
+            x1.print(os);
+            value = os.str();
             found = true;
-    }
-    else if (type->isEnumeralType())
-    {
-        if (auto declRefExpr = dyn_cast<DeclRefExpr>(init->getInit()->IgnoreParenImpCasts()))
-        {
-            if (isa<EnumConstantDecl>(declRefExpr->getDecl()))
-                found = true;
         }
     }
-
-    // If we find more than one non-copy-move constructor, we can't say for sure if a member can be static
-    // because it could be initialised differently in each constructor.
-    if (auto cxxRecordDecl = dyn_cast<CXXRecordDecl>(init->getMember()->getParent()))
+#endif
+    // ignore this, it seems to trigger an infinite recursion
+    else if (isa<UnaryExprOrTypeTraitExpr>(init->getInit()))
+        ;
+    // ignore this, calling EvaluateAsInt on it will crash clang
+    else if (init->getInit()->isValueDependent())
+        ;
+    else
     {
-        int cnt = 0;
-        for (auto it = cxxRecordDecl->ctor_begin(); it != cxxRecordDecl->ctor_end(); ++it)
+        APSInt x1;
+        if (init->getInit()->EvaluateAsInt(x1, compiler.getASTContext()))
         {
-            if (!it->isCopyOrMoveConstructor())
-                cnt++;
+            value = x1.toString(10);
+            found = true;
         }
-        if (cnt > 1)
-            return true;
     }
 
     if (!found)
+    {
+        m_potentials.erase(init->getMember());
+        m_excluded.insert(init->getMember());
         return true;
+    }
 
-    std::string fn = handler.getMainFileName();
-    loplugin::normalizeDotDotInFilePath(fn);
-
-    // unusual case where a user constructor sets a field to one value, and a copy constructor sets it to a different value
-    if (fn == SRCDIR "/sw/source/core/attr/hints.cxx")
-        return true;
-    if (fn == SRCDIR "/oox/source/core/contexthandler2.cxx")
-        return true;
-
-    report(DiagnosticsEngine::Warning, "field can be static const", init->getSourceLocation())
-        << init->getSourceRange();
-    report(DiagnosticsEngine::Note, "field here", init->getMember()->getLocation())
-        << init->getMember()->getSourceRange();
+    auto findIt = m_potentials.find(init->getMember());
+    if (findIt != m_potentials.end())
+    {
+        if (findIt->second.value != value)
+        {
+            m_potentials.erase(findIt);
+            m_excluded.insert(init->getMember());
+        }
+        else
+            findIt->second.inits.push_back(init);
+    }
+    else
+    {
+        Data& data = m_potentials[init->getMember()];
+        data.inits.push_back(init);
+        data.value = value;
+    }
 
     return true;
 }
