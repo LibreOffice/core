@@ -42,6 +42,19 @@ TextDirectionListBox::TextDirectionListBox( vcl::Window* pParent ) :
 
 VCL_BUILDER_FACTORY(TextDirectionListBox)
 
+SchTextDirectionListBox::SchTextDirectionListBox(std::unique_ptr<weld::ComboBox> pControl)
+    : svx::SvxFrameDirectionListBox(std::move(pControl))
+{
+    append(SvxFrameDirection::Horizontal_LR_TB, SchResId(STR_TEXT_DIRECTION_LTR));
+    append(SvxFrameDirection::Horizontal_RL_TB, SchResId(STR_TEXT_DIRECTION_RTL));
+    append(SvxFrameDirection::Environment, SchResId(STR_TEXT_DIRECTION_SUPER));
+
+    if (!SvtLanguageOptions().IsCTLFontEnabled())
+    {
+        hide();
+    }
+}
+
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,6 +33,13 @@ public:
     explicit            TextDirectionListBox( vcl::Window* pParent );
 };
 
+class SchTextDirectionListBox : public svx::SvxFrameDirectionListBox
+{
+public:
+    explicit SchTextDirectionListBox(std::unique_ptr<weld::ComboBox> pControl);
+};
+
+
 } //namespace chart
 
 #endif
