@@ -68,7 +68,7 @@ private:
                         mxModelFactory;         ///< Factory to create the container.
     mutable css::uno::Reference< css::container::XNameContainer >
                         mxContainer;            ///< Container for the objects.
-    OUString            maServiceName;          ///< Service name to create the container.
+    OUString const      maServiceName;          ///< Service name to create the container.
     sal_Int32           mnIndex;                ///< Index to create unique identifiers.
 };
 

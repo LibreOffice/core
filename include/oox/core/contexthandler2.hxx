@@ -217,7 +217,7 @@ private:
     typedef std::shared_ptr< ContextStack > ContextStackRef;
 
     ContextStackRef     mxContextStack;     ///< Stack of all processed elements.
-    size_t              mnRootStackSize;    ///< Stack size on construction time.
+    size_t const        mnRootStackSize;    ///< Stack size on construction time.
 
 protected:
     bool                mbEnableTrimSpace;  ///< True = trim whitespace in characters().

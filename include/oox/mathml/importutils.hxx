@@ -136,7 +136,7 @@ public:
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& attributes = css::uno::Reference< css::xml::sax::XFastAttributeList >());
         Tag( int token,
             const AttributeList& attribs);
-        int token; ///< tag type, or XML_TOKEN_INVALID
+        int const token; ///< tag type, or XML_TOKEN_INVALID
         AttributeList attributes;
         OUString text;
         /**
