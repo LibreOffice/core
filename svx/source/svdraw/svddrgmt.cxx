@@ -1770,7 +1770,7 @@ bool SdrDragResize::BeginSdrDrag()
     if (pRefHdl!=nullptr && !getSdrDragView().IsResizeAtCenter())
     {
         // Calc hack to adjust for calc grid
-        DragStat().SetRef1(pRefHdl->GetPos() - getSdrDragView().GetGridOffset());
+        DragStat().SetRef1(pRefHdl->GetPos() - getSdrDragView().GetGridOffsetForView());
     }
     else
     {
