@@ -207,7 +207,7 @@ void ScCopyPasteTest::testTdf84411()
     CPPUNIT_ASSERT(pModel != nullptr);
     bool bOpenCLState = ScCalcConfig::isOpenCLEnabled();
     pModel->enableOpenCL(false);
-    CPPUNIT_ASSERT(!ScCalcConfig::isOpenCLEnabled());
+    CPPUNIT_ASSERT(!ScCalcConfig::isOpenCLEnabled() || ScCalcConfig::getForceCalculationType() == ForceCalculationOpenCL);
     pModel->enableAutomaticCalculation(true);
 
 
