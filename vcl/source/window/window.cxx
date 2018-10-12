@@ -571,8 +571,6 @@ void Window::dispose()
 
 Window::~Window()
 {
-    // FIXME: we should kill all LazyDeletor usage.
-    vcl::LazyDeletor::Undelete( this );
     disposeOnce();
 }
 
@@ -1758,16 +1756,10 @@ void Window::ImplNewInputContext()
     pFocusWin->ImplGetFrame()->SetInputContext( &aNewContext );
 }
 
-void Window::doLazyDelete()
+void Window::SetParentToDefaultWindow()
 {
-    SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(this);
-    DockingWindow* pDockWin = dynamic_cast<DockingWindow*>(this);
-    if( pSysWin || ( pDockWin && pDockWin->IsFloatingMode() ) )
-    {
-        Show( false );
-        SetParent( ImplGetDefaultWindow() );
-    }
-    vcl::LazyDeletor::Delete( this );
+    Show(false);
+    SetParent(ImplGetDefaultWindow());
 }
 
 KeyIndicatorState Window::GetIndicatorState() const

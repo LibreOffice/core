@@ -25,41 +25,6 @@
 
 namespace vcl {
 
-LazyDeletorBase::LazyDeletorBase()
-{
-}
-
-LazyDeletorBase::~LazyDeletorBase()
-{
-}
-
-// instantiate instance pointer for LazyDeletor<Window>
-LazyDeletor* LazyDeletor::s_pOneInstance = nullptr;
-
-// a list for all LazyeDeletor<T> singletons
-static std::vector< LazyDeletorBase* > lcl_aDeletors;
-
-void LazyDelete::addDeletor( LazyDeletorBase* i_pDel )
-{
-    lcl_aDeletors.push_back( i_pDel );
-}
-
-void LazyDelete::flush()
-{
-    DBG_TESTSOLARMUTEX(); // must be locked
-
-    unsigned int nCount = lcl_aDeletors.size();
-    for( unsigned int i = 0; i < nCount; i++ )
-        delete lcl_aDeletors[i];
-    lcl_aDeletors.clear();
-}
-
-// specialized is_less function for Window
-bool LazyDeletor::is_less( vcl::Window const * left, vcl::Window const * right )
-{
-    return left != right && right->IsChild( left, true );
-}
-
 DeleteOnDeinitBase::~DeleteOnDeinitBase()
 {
     ImplSVData* pSVData = ImplGetSVData();

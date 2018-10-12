@@ -2952,8 +2952,9 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
         {
             pWin->StopExecute();
             pWin->doShutdown();
-            pWindow->doLazyDelete();
-            pWindow = nullptr;
+            pWindow->Show(false
+            pWindow->SetParentToDefaultWindow();
+            pWindow.disposeAndClear();
             ImplClosePopupToolBox(pW);
             ImplFlushPendingSelect();
             return nSelectedId;
@@ -3013,8 +3014,8 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const tools::R
             }
         }
         pWin->doShutdown();
-        pWindow->doLazyDelete();
-        pWindow = nullptr;
+        pWindow->SetParentToDefaultWindow();
+        pWindow.disposeAndClear();
         ImplClosePopupToolBox(pW);
         ImplFlushPendingSelect();
     }
