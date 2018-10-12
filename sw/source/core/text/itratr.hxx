@@ -63,7 +63,7 @@ private:
     const SwTextNode* m_pTextNode;
     sw::MergedPara const* m_pMergedPara;
 
-    void SeekFwd( const sal_Int32 nPos );
+    void SeekFwd(sal_Int32 nOldPos, sal_Int32 nNewPos);
     void SetFnt( SwFont* pNew ) { m_pFont = pNew; }
     void InitFontAndAttrHandler(SwTextNode const& rTextNode,
         OUString const& rText, bool const* pbVertLayout);
