@@ -75,7 +75,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
     }
 
     Type aExpectedArgType = ::cppu::UnoType<css::lang::Locale>::get();
-    LanguageType eNewFormatterLanguage = LANGUAGE_ENGLISH_US;
+    LanguageType eNewFormatterLanguage = LANGUAGE_SYSTEM;
         // the default
 
     const Any* pArgs = _rArguments.getConstArray();
