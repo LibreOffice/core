@@ -1081,7 +1081,7 @@ static OUString lcl_CreateOutlineString( size_t nIndex,
             sEntry.append(".");
         }
     sEntry.append( rOutlineNodes[ nIndex ]->
-                    GetTextNode()->GetExpandText() );
+                    GetTextNode()->GetExpandText(nullptr) );
     return sEntry.makeStringAndClear();
 }
 

@@ -291,7 +291,7 @@ SwGetExpField::SwGetExpField(SwGetExpFieldType* pTyp, const OUString& rFormel,
     SetFormula( rFormel );
 }
 
-OUString SwGetExpField::Expand() const
+OUString SwGetExpField::ExpandImpl(SwRootFrame const*const) const
 {
     if(m_nSubType & nsSwExtendedSubType::SUB_CMD)
         return GetFormula();
@@ -490,7 +490,6 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const OUString& rName, sal_uInt16 nTyp )
     : SwValueFieldType( pDc, SwFieldIds::SetExp ),
     m_sName( rName ),
-    m_pOutlChgNd( nullptr ),
     m_sDelim( "." ),
     m_nType(nTyp), m_nLevel( UCHAR_MAX ),
     m_bDeleted( false )
@@ -583,7 +582,8 @@ void SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rField )
     rField.SetSeqNumber( n );
 }
 
-size_t SwSetExpFieldType::GetSeqFieldList( SwSeqFieldList& rList )
+size_t SwSetExpFieldType::GetSeqFieldList(SwSeqFieldList& rList,
+        SwRootFrame const*const pLayout)
 {
     rList.Clear();
 
@@ -596,7 +596,7 @@ size_t SwSetExpFieldType::GetSeqFieldList( SwSeqFieldList& rList )
             pNd->GetNodes().IsDocNodes() )
         {
             SeqFieldLstElem aNew(
-                    pNd->GetExpandText(),
+                    pNd->GetExpandText(pLayout),
                     static_cast<SwSetExpField*>(pF->GetField())->GetSeqNumber() );
             rList.InsertSort( aNew );
         }
@@ -796,7 +796,7 @@ void SwSetExpField::SetFormatField(SwFormatField & rFormatField)
     mpFormatField = &rFormatField;
 }
 
-OUString SwSetExpField::Expand() const
+OUString SwSetExpField::ExpandImpl(SwRootFrame const*const) const
 {
     if (mnSubType & nsSwExtendedSubType::SUB_CMD)
     {   // we need the CommandString
@@ -1210,7 +1210,7 @@ std::unique_ptr<SwField> SwInputField::Copy() const
     return std::unique_ptr<SwField>(pField.release());
 }
 
-OUString SwInputField::Expand() const
+OUString SwInputField::ExpandImpl(SwRootFrame const*const) const
 {
     if((mnSubType & 0x00ff) == INP_TXT)
     {

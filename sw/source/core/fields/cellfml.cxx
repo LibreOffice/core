@@ -193,7 +193,7 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
                 break;
 
             default:
-                nRet = rCalcPara.m_rCalc.Calculate( pField->ExpandField(true) ).GetDouble();
+                nRet = rCalcPara.m_rCalc.Calculate( pField->ExpandField(true, nullptr) ).GetDouble();
             }
         }
         else if ( nSttPos < sText.getLength()

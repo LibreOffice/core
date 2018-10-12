@@ -80,7 +80,8 @@ struct containsPos
     }
 };
 
-ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode, ExpandMode eMode)
+ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
+        SwRootFrame const*const pLayout, ExpandMode eMode)
 {
     const OUString& rNodeText = rNode.GetText();
     m_aRetText = rNodeText;
@@ -151,7 +152,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode, ExpandMode eMode)
                                 aFieldResult.m_sExpand = ((eMode & ExpandMode::ReplaceMode)
                                     ? OUString(CHAR_ZWSP) : OUString("")) +
                                       static_txtattr_cast<SwTextField const*>(pAttr)->
-                                      GetFormatField().GetField()->ExpandField(true);
+                                      GetFormatField().GetField()->ExpandField(true, pLayout);
                                 aFieldResult.m_eType = FieldResult::FIELD;
                             }
                             break;
@@ -162,7 +163,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode, ExpandMode eMode)
                                 const SwDoc *pDoc = rNode.GetDoc();
                                 aFieldResult.m_sExpand = (eMode & ExpandMode::ReplaceMode)
                                     ? OUString(CHAR_ZWSP)
-                                    : rFootnote.GetViewNumStr(*pDoc);
+                                    : rFootnote.GetViewNumStr(*pDoc, pLayout);
                                 aFieldResult.m_eType = FieldResult::FOOTNOTE;
                             }
                             break;

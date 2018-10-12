@@ -226,7 +226,7 @@ void* lcl_GetKeyFromFrame( const SwFrame& rFrame )
     return pKey;
 }
 
-bool lcl_HasPreviousParaSameNumRule( const SwTextNode& rNode )
+bool lcl_HasPreviousParaSameNumRule(SwTextFrame const& rTextFrame, const SwTextNode& rNode)
 {
     bool bRet = false;
     SwNodeIndex aIdx( rNode );
@@ -237,11 +237,12 @@ bool lcl_HasPreviousParaSameNumRule( const SwTextNode& rNode )
 
     while (pNode != rNodes.DocumentSectionStartNode(const_cast<SwNode*>(static_cast<SwNode const *>(&rNode))) )
     {
-        --aIdx;
+        sw::GotoPrevLayoutTextFrame(aIdx, rTextFrame.getRootFrame());
 
         if (aIdx.GetNode().IsTextNode())
         {
-            const SwTextNode* pPrevTextNd = aIdx.GetNode().GetTextNode();
+            const SwTextNode *const pPrevTextNd = sw::GetParaPropsNode(
+                    *rTextFrame.getRootFrame(), *aIdx.GetNode().GetTextNode());
             const SwNumRule * pPrevNumRule = pPrevTextNd->GetNumRule();
 
             // We find the previous text node. Now check, if the previous text node
@@ -418,7 +419,7 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
     {
         const SwTextFrame& rTextFrame = static_cast<const SwTextFrame&>(mpNumInfo->mrFrame);
         SwTextNode const*const pTextNd = rTextFrame.GetTextNodeForParaProps();
-        const SwNodeNum* pNodeNum = pTextNd->GetNum();
+        const SwNodeNum* pNodeNum = pTextNd->GetNum(rTextFrame.getRootFrame());
 
         if ( vcl::PDFWriter::List == eType )
         {
@@ -833,7 +834,7 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
 
     const SwTextNode *const pTextNd = rTextFrame.GetTextNodeForParaProps();
     const SwNumRule* pNumRule = pTextNd->GetNumRule();
-    const SwNodeNum* pNodeNum = pTextNd->GetNum();
+    const SwNodeNum* pNodeNum = pTextNd->GetNum(rTextFrame.getRootFrame());
 
     const bool bNumbered = !pTextNd->IsOutline() && pNodeNum && pNodeNum->GetParent() && pNumRule;
 
@@ -844,7 +845,7 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
         return;
 
     const SwNumberTreeNode* pParent = pNodeNum->GetParent();
-    const bool bSameNumbering = lcl_HasPreviousParaSameNumRule(*pTextNd);
+    const bool bSameNumbering = lcl_HasPreviousParaSameNumRule(rTextFrame, *pTextNd);
 
     // Second condition: current numbering is not 'interrupted'
     if ( bSameNumbering )
@@ -1102,7 +1103,8 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
                 // Heading: H1 - H6
 
-                if ( pTextNd->IsOutline() )
+                if (pTextNd->IsOutline()
+                    && sw::IsParaPropsNode(*pFrame->getRootFrame(), *pTextNd))
                 {
                     int nRealLevel = pTextNd->GetAttrOutlineLevel()-1;
                     nRealLevel = std::min(nRealLevel, 5);
@@ -2023,6 +2025,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 OSL_ENSURE( nullptr != pTNd, "Enhanced pdf export - text node is missing" );
 
                 if ( pTNd->IsHidden() ||
+                     !sw::IsParaPropsNode(*mrSh.GetLayout(), *pTNd) ||
                      // #i40292# Skip empty outlines:
                      pTNd->GetText().isEmpty())
                     continue;
@@ -2056,7 +2059,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         pPDFExtOutDevData->CreateDest(aRect, nDestPageNum);
 
                     // Outline entry text
-                    const OUString& rEntry = mrSh.getIDocumentOutlineNodesAccess()->getOutlineText( i, true, false, false );
+                    const OUString& rEntry = mrSh.getIDocumentOutlineNodesAccess()->getOutlineText(
+                        i, mrSh.GetLayout(), true, false, false );
 
                     // Create a new outline item:
                     const sal_Int32 nOutlineId =

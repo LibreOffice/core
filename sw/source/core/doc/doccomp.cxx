@@ -1068,7 +1068,7 @@ namespace
                 {
                     sRet.append( '\n' );
                 }
-                sRet.append( aIdx.GetNode().GetTextNode()->GetExpandText() );
+                sRet.append( aIdx.GetNode().GetTextNode()->GetExpandText(nullptr) );
             }
             ++aIdx;
         }
@@ -1177,7 +1177,7 @@ OUString SwCompareLine::GetText() const
     switch( rNode.GetNodeType() )
     {
     case SwNodeType::Text:
-        sRet = rNode.GetTextNode()->GetExpandText();
+        sRet = rNode.GetTextNode()->GetExpandText(nullptr);
         break;
 
     case SwNodeType::Table:
@@ -1231,7 +1231,7 @@ OUString SwCompareLine::GetText() const
 
 sal_uLong SwCompareLine::GetTextNodeHashValue( const SwTextNode& rNd, sal_uLong nVal )
 {
-    OUString sStr( rNd.GetExpandText() );
+    OUString sStr( rNd.GetExpandText(nullptr) );
     for( sal_Int32 n = 0; n < sStr.getLength(); ++n )
         ( nVal <<= 1 ) += sStr[ n ];
     return nVal;

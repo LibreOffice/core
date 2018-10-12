@@ -29,6 +29,7 @@
 class SfxPoolItem;
 class SwTextNode;
 class SwFrame;
+class SwRootFrame;
 struct SwPosition;
 class SwTextField;
 class SwDoc;
@@ -85,7 +86,7 @@ class SW_DLLPUBLIC SwGetExpField : public SwFormulaField
 
     bool            m_bLateInitialization; // #i82544#
 
-    virtual OUString            Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
@@ -139,7 +140,6 @@ class SwSetExpField;
 class SW_DLLPUBLIC SwSetExpFieldType : public SwValueFieldType
 {
     OUString const m_sName;
-    const SwNode* m_pOutlChgNd;
     OUString      m_sDelim;
     sal_uInt16      m_nType;
     sal_uInt8       m_nLevel;
@@ -168,7 +168,7 @@ public:
 
     void   SetSeqRefNo( SwSetExpField& rField );
 
-    size_t GetSeqFieldList( SwSeqFieldList& rList );
+    size_t GetSeqFieldList(SwSeqFieldList& rList, SwRootFrame const* pLayout);
 
     /// Number sequence fields chapterwise if required.
     const OUString& GetDelimiter() const      { return m_sDelim; }
@@ -176,11 +176,6 @@ public:
     sal_uInt8 GetOutlineLvl() const             { return m_nLevel; }
     void SetOutlineLvl( sal_uInt8 n )           { m_nLevel = n; }
     void SetChapter( SwSetExpField& rField, const SwNode& rNd );
-
-    /** Member only for SwDoc::UpdateExpField.
-     It is needed only at runtime of sequence field types! */
-    const SwNode* GetOutlineChgNd() const   { return m_pOutlChgNd; }
-    void SetOutlineChgNd( const SwNode* p ) { m_pOutlChgNd = p; }
 
     virtual void        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual void        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
@@ -207,7 +202,7 @@ class SW_DLLPUBLIC SwSetExpField : public SwFormulaField
     sal_uInt16          mnSubType;
     SwFormatField * mpFormatField; /// pool item to which the SwSetExpField belongs
 
-    virtual OUString            Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
@@ -292,7 +287,7 @@ class SW_DLLPUBLIC SwInputField : public SwField
 
     SwFormatField* mpFormatField; // attribute to which the <SwInputField> belongs to
 
-    virtual OUString        Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 
     // Accessing Input Field's content
@@ -378,7 +373,7 @@ class SwTableField : public SwValueField, public SwTableFormula
     OUString      sExpand;
     sal_uInt16      nSubType;
 
-    virtual OUString    Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 
     /// Search TextNode containing the field.

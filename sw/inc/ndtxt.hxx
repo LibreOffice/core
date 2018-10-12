@@ -92,6 +92,7 @@ class SW_DLLPUBLIC SwTextNode
     std::unique_ptr<SwpHints> m_pSwpHints;
 
     mutable SwNodeNum* mpNodeNum;  ///< Numbering for this paragraph.
+    mutable SwNodeNum* mpNodeNumRLHidden; ///< Numbering for this paragraph (hidden redlines)
 
     OUString m_Text;
 
@@ -155,8 +156,6 @@ class SW_DLLPUBLIC SwTextNode
 
     SAL_DLLPRIVATE void CalcHiddenCharFlags() const;
 
-    SAL_DLLPRIVATE SwNumRule * GetNumRule_(bool bInParent) const;
-
     SAL_DLLPRIVATE void SetLanguageAndFont( const SwPaM &rPaM,
             LanguageType nLang, sal_uInt16 nLangWhichId,
             const vcl::Font *pFont,  sal_uInt16 nFontWhichId );
@@ -164,12 +163,6 @@ class SW_DLLPUBLIC SwTextNode
     /// Start: Data collected during idle time
 
     SAL_DLLPRIVATE void InitSwParaStatistics( bool bNew );
-
-    /** create number for this text node, if not already existing
-
-        @return number of this node
-    */
-    SwNodeNum* CreateNum() const;
 
     inline void TryDeleteSwpHints();
 
@@ -428,12 +421,10 @@ public:
      */
     SwNumRule *GetNumRule(bool bInParent = true) const;
 
-    const SwNodeNum* GetNum() const
-    {
-        return mpNodeNum;
-    }
+    const SwNodeNum* GetNum(SwRootFrame const* pLayout = nullptr) const;
+    void DoNum(std::function<void (SwNodeNum &)> const&);
 
-    SwNumberTree::tNumberVector GetNumberVector() const;
+    SwNumberTree::tNumberVector GetNumberVector(SwRootFrame const* pLayout = nullptr) const;
 
     /**
        Returns if this text node is an outline.
@@ -467,7 +458,8 @@ public:
         MAXLEVEL
     */
     OUString GetNumString( const bool _bInclPrefixAndSuffixStrings = true,
-            const unsigned int _nRestrictToThisLevel = MAXLEVEL ) const;
+            const unsigned int _nRestrictToThisLevel = MAXLEVEL,
+            SwRootFrame const* pLayout = nullptr) const;
 
     /**
        Returns the additional indents of this text node and its numbering.
@@ -534,7 +526,7 @@ public:
         @retval true      This node is numbered.
         @retval false     else
      */
-    bool IsNumbered() const;
+    bool IsNumbered(SwRootFrame const* pLayout = nullptr) const;
 
     /** Returns if this text node has a marked label.
 
@@ -681,14 +673,16 @@ public:
        add 5th optional parameter <bWithSpacesForLevel> indicating, if additional
        spaces are inserted in front of the expanded text string depending on
        the list level. */
-    OUString GetExpandText(  const sal_Int32 nIdx = 0,
+    OUString GetExpandText( SwRootFrame const* pLayout,
+                            const sal_Int32 nIdx = 0,
                             const sal_Int32 nLen = -1,
                             const bool bWithNum = false,
                             const bool bAddSpaceAfterListLabelStr = false,
                             const bool bWithSpacesForLevel = false,
                             const ExpandMode eAdditionalMode = ExpandMode(0)) const;
-    bool GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
+    bool CopyExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
                            sal_Int32 nIdx, sal_Int32 nLen,
+                           SwRootFrame const* pLayout,
                            bool bWithNum = false, bool bWithFootnote = true,
                            bool bReplaceTabsWithSpaces = false ) const;
 
@@ -773,10 +767,12 @@ public:
     bool IsCountedInList() const;
 
     void AddToList();
+    void AddToListRLHidden();
     void RemoveFromList();
+    void RemoveFromListRLHidden();
     bool IsInList() const;
 
-    bool IsFirstOfNumRule() const;
+    bool IsFirstOfNumRule(SwRootFrame const& rLayout) const;
 
     sal_uInt16 GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd ) const;
 

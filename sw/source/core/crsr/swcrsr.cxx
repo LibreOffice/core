@@ -2032,12 +2032,12 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
     return bRet;
 }
 
-bool SwCursor::LeftRightMargin( bool bLeft, bool bAPI )
+bool SwCursor::LeftRightMargin(SwRootFrame const& rLayout, bool bLeft, bool bAPI)
 {
     Point aPt;
     std::pair<Point, bool> const tmp(aPt, true);
-    SwContentFrame *const pFrame = GetContentNode()->getLayoutFrame(
-        GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), GetPoint(), &tmp);
+    SwContentFrame const*const pFrame = GetContentNode()->getLayoutFrame(
+        &rLayout, GetPoint(), &tmp);
 
     // calculate cursor bidi level
     if ( pFrame )
@@ -2049,13 +2049,13 @@ bool SwCursor::LeftRightMargin( bool bLeft, bool bAPI )
            && !IsSelOvr( SwCursorSelOverFlags::Toggle | SwCursorSelOverFlags::ChangePos );
 }
 
-bool SwCursor::IsAtLeftRightMargin( bool bLeft, bool bAPI ) const
+bool SwCursor::IsAtLeftRightMargin(SwRootFrame const& rLayout, bool bLeft, bool bAPI) const
 {
     bool bRet = false;
     Point aPt;
     std::pair<Point, bool> const tmp(aPt, true);
-    SwContentFrame *const pFrame = GetContentNode()->getLayoutFrame(
-        GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), GetPoint(), &tmp);
+    SwContentFrame const*const pFrame = GetContentNode()->getLayoutFrame(
+        &rLayout, GetPoint(), &tmp);
     if( pFrame )
     {
         SwPaM aPam( *GetPoint() );
@@ -2063,7 +2063,9 @@ bool SwCursor::IsAtLeftRightMargin( bool bLeft, bool bAPI ) const
             --aPam.GetPoint()->nContent;
         bRet = (bLeft ? pFrame->LeftMargin( &aPam )
                       : pFrame->RightMargin( &aPam, bAPI ))
-                && *aPam.GetPoint() == *GetPoint();
+                && (!pFrame->IsTextFrame()
+                    || static_cast<SwTextFrame const*>(pFrame)->MapModelToViewPos(*aPam.GetPoint())
+                        == static_cast<SwTextFrame const*>(pFrame)->MapModelToViewPos(*GetPoint()));
     }
     return bRet;
 }

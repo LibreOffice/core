@@ -1305,7 +1305,7 @@ OUString SAL_CALL SwXTextField::getPresentation(sal_Bool bShowCommand)
     {
         throw uno::RuntimeException();
     }
-    return bShowCommand ? pField->GetFieldName() : pField->ExpandField(true);
+    return bShowCommand ? pField->GetFieldName() : pField->ExpandField(true, nullptr);
 }
 
 void SAL_CALL SwXTextField::attach(

@@ -104,8 +104,12 @@ namespace sw {
                 {
                     while (m_CurrentHint < pHints->Count())
                     {
-                        SwTextAttr const*const pHint(pHints->Get(m_CurrentHint));
-                        if (rExtent.nEnd < pHint->GetStart())
+                        SwTextAttr *const pHint(pHints->Get(m_CurrentHint));
+                        if (rExtent.nEnd < pHint->GetStart()
+                                // <= if it has no end or isn't empty
+                            || (rExtent.nEnd == pHint->GetStart()
+                                && (!pHint->GetEnd()
+                                    || *pHint->GetEnd() != pHint->GetStart())))
                         {
                             break;
                         }
@@ -149,44 +153,24 @@ namespace sw {
         }
     }
 
-    SwTextAttr const* MergedAttrIterByEnd::NextAttr(SwTextNode const** ppNode)
+    MergedAttrIterByEnd::MergedAttrIterByEnd(SwTextFrame const& rFrame)
+        : m_pNode(rFrame.GetMergedPara() ? nullptr : rFrame.GetTextNodeFirst())
+        , m_CurrentHint(0)
     {
-        if (m_pMerged)
+        if (!m_pNode)
         {
-            while (m_CurrentExtent < m_pMerged->extents.size())
+            MergedAttrIterReverse iter(rFrame);
+            SwTextNode const* pNode(nullptr);
+            while (SwTextAttr const* pHint = iter.PrevAttr(&pNode))
             {
-                sw::Extent const& rExtent(m_pMerged->extents[m_CurrentExtent]);
-                if (SwpHints const*const pHints = rExtent.pNode->GetpSwpHints())
-                {
-                    while (m_CurrentHint < pHints->Count())
-                    {
-                        SwTextAttr const*const pHint(
-                                pHints->GetSortedByEnd(m_CurrentHint));
-                        if (rExtent.nEnd <= *pHint->GetAnyEnd())
-                        {
-                            break;
-                        }
-                        ++m_CurrentHint;
-                        if (rExtent.nStart < *pHint->GetAnyEnd())
-                        {
-                            if (ppNode)
-                            {
-                                *ppNode = rExtent.pNode;
-                            }
-                            return pHint;
-                        }
-                    }
-                }
-                ++m_CurrentExtent;
-                if (m_CurrentExtent < m_pMerged->extents.size() &&
-                    rExtent.pNode != m_pMerged->extents[m_CurrentExtent].pNode)
-                {
-                    m_CurrentHint = 0; // reset
-                }
+                m_Hints.emplace_back(pNode, pHint);
             }
-            return nullptr;
         }
-        else
+    }
+
+    SwTextAttr const* MergedAttrIterByEnd::NextAttr(SwTextNode const*& rpNode)
+    {
+        if (m_pNode)
         {
             SwpHints const*const pHints(m_pNode->GetpSwpHints());
             if (pHints)
@@ -196,15 +180,29 @@ namespace sw {
                     SwTextAttr const*const pHint(
                             pHints->GetSortedByEnd(m_CurrentHint));
                     ++m_CurrentHint;
-                    if (ppNode)
-                    {
-                        *ppNode = m_pNode;
-                    }
+                    rpNode = m_pNode;
                     return pHint;
                 }
             }
             return nullptr;
         }
+        else
+        {
+            if (m_CurrentHint < m_Hints.size())
+            {
+                auto const ret = m_Hints[m_Hints.size() - m_CurrentHint - 1];
+                ++m_CurrentHint;
+                rpNode = ret.first;
+                return ret.second;
+            }
+            return nullptr;
+        }
+    }
+
+    void MergedAttrIterByEnd::PrevAttr()
+    {
+        assert(0 < m_CurrentHint); // should only rewind as far as 0
+        --m_CurrentHint;
     }
 
     MergedAttrIterReverse::MergedAttrIterReverse(SwTextFrame const& rFrame)
@@ -238,13 +236,18 @@ namespace sw {
                 {
                     while (0 < m_CurrentHint)
                     {
-                        SwTextAttr const*const pHint(pHints->Get(m_CurrentHint - 1));
-                        if (pHint->GetStart() < rExtent.nStart)
+                        SwTextAttr *const pHint(
+                                pHints->GetSortedByEnd(m_CurrentHint - 1));
+                        if (*pHint->GetAnyEnd() < rExtent.nStart
+                                // <= if it has end and isn't empty
+                            || (pHint->GetEnd()
+                                && *pHint->GetEnd() != pHint->GetStart()
+                                && *pHint->GetEnd() == rExtent.nStart))
                         {
                             break;
                         }
                         --m_CurrentHint;
-                        if (pHint->GetStart() <= rExtent.nEnd)
+                        if (*pHint->GetAnyEnd() <= rExtent.nEnd)
                         {
                             if (ppNode)
                             {
@@ -258,7 +261,8 @@ namespace sw {
                 if (0 < m_CurrentExtent &&
                     rExtent.pNode != m_pMerged->extents[m_CurrentExtent-1].pNode)
                 {
-                    SwpHints const*const pHints(rExtent.pNode->GetpSwpHints());
+                    SwpHints const*const pHints(
+                        m_pMerged->extents[m_CurrentExtent-1].pNode->GetpSwpHints());
                     m_CurrentHint = pHints ? pHints->Count() : 0; // reset
                 }
             }
@@ -269,7 +273,7 @@ namespace sw {
             SwpHints const*const pHints(m_pNode->GetpSwpHints());
             if (pHints && 0 < m_CurrentHint)
             {
-                SwTextAttr const*const pHint(pHints->Get(m_CurrentHint - 1));
+                SwTextAttr const*const pHint(pHints->GetSortedByEnd(m_CurrentHint - 1));
                 --m_CurrentHint;
                 if (ppNode)
                 {
@@ -302,6 +306,66 @@ namespace sw {
             assert(rFrame.IsNoTextFrame());
             return static_cast<SwNoTextFrame const&>(rFrame).GetNode()->GetIndex() == nNodeIndex;
         }
+    }
+
+    bool IsParaPropsNode(SwRootFrame const& rLayout, SwTextNode const& rNode)
+    {
+        if (rLayout.IsHideRedlines())
+        {
+            if (SwTextFrame const*const pFrame = static_cast<SwTextFrame*>(rNode.getLayoutFrame(&rLayout)))
+            {
+                sw::MergedPara const*const pMerged(pFrame->GetMergedPara());
+                if (pMerged && pMerged->pParaPropsNode != &rNode)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    SwTextNode *
+    GetParaPropsNode(SwRootFrame const& rLayout, SwNodeIndex const& rPos)
+    {
+        SwTextNode *const pTextNode(rPos.GetNode().GetTextNode());
+        if (pTextNode && !sw::IsParaPropsNode(rLayout, *pTextNode))
+        {
+            return static_cast<SwTextFrame*>(pTextNode->getLayoutFrame(&rLayout))->GetMergedPara()->pParaPropsNode;
+        }
+        else
+        {
+            return pTextNode;
+        }
+    }
+
+    SwPosition
+    GetParaPropsPos(SwRootFrame const& rLayout, SwPosition const& rPos)
+    {
+        SwPosition pos(rPos);
+        SwTextNode const*const pNode(pos.nNode.GetNode().GetTextNode());
+        if (pNode)
+        {
+            pos.nNode = *sw::GetParaPropsNode(rLayout, *pNode);
+            pos.nContent.Assign(pos.nNode.GetNode().GetContentNode(), 0);
+        }
+        return pos;
+    }
+
+    std::pair<SwTextNode *, SwTextNode *>
+    GetFirstAndLastNode(SwRootFrame const& rLayout, SwNodeIndex const& rPos)
+    {
+        SwTextNode *const pTextNode(rPos.GetNode().GetTextNode());
+        if (pTextNode && rLayout.IsHideRedlines())
+        {
+            if (SwTextFrame const*const pFrame = static_cast<SwTextFrame*>(pTextNode->getLayoutFrame(&rLayout)))
+            {
+                if (sw::MergedPara const*const pMerged = pFrame->GetMergedPara())
+                {
+                    return std::make_pair(pMerged->pFirstNode, const_cast<SwTextNode*>(pMerged->pLastNode));
+                }
+            }
+        }
+        return std::make_pair(pTextNode, pTextNode);
     }
 
 } // namespace sw
@@ -602,8 +666,6 @@ SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib )
     , mnFootnoteLine( 0 )
     , mnHeightOfLastLine( 0 )
     , mnAdditionalFirstLineOffset( 0 )
-    // note: this may change this->pRegisteredIn to m_pMergedPara->listeners
-    , m_pMergedPara(CheckParaRedlineMerge(*this, *pNode, sw::FrameMode::New)) // ensure it is inited
     , mnOffset( 0 )
     , mnCacheIndex( USHRT_MAX )
     , mbLocked( false )
@@ -620,6 +682,9 @@ SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib )
     , mbFollowFormatAllowed( true )
 {
     mnFrameType = SwFrameType::Txt;
+    // note: this may call SwClientNotify if it's in a list so do it last
+    // note: this may change this->pRegisteredIn to m_pMergedPara->listeners
+    m_pMergedPara = CheckParaRedlineMerge(*this, *pNode, sw::FrameMode::New);
 }
 
 namespace sw {
@@ -822,7 +887,9 @@ static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
         nInserted = nLen;
         if (rNode.GetIndex() < rMerged.pParaPropsNode->GetIndex())
         {   // text inserted before current para-props node
-            rMerged.pParaPropsNode = &rNode;
+            rMerged.pParaPropsNode->RemoveFromListRLHidden();
+            rMerged.pParaPropsNode = &const_cast<SwTextNode&>(rNode);
+            rMerged.pParaPropsNode->AddToListRLHidden();
         }
     }
     rMerged.mergedText = text.makeStringAndClear();
@@ -948,9 +1015,11 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
     {   // all visible text from node was erased
         if (rMerged.pParaPropsNode == &rNode)
         {
+            rMerged.pParaPropsNode->RemoveFromListRLHidden();
             rMerged.pParaPropsNode = rMerged.extents.empty()
                 ? rMerged.pFirstNode
                 : rMerged.extents.front().pNode;
+            rMerged.pParaPropsNode->AddToListRLHidden();
         }
 // NOPE must listen on all non-hidden nodes; particularly on pLastNode        rMerged.listener.EndListening(&const_cast<SwTextNode&>(rNode));
     }
@@ -1719,7 +1788,7 @@ void UpdateMergedParaForMove(sw::MergedPara & rMerged,
             if(nDeleted)
             {
                 // InvalidateRange/lcl_SetScriptInval was called sufficiently for SwInsText
-                lcl_SetWrong(rTextFrame, rDestNode, nStart, -nDeleted, false);
+                lcl_SetWrong(rTextFrame, rDestNode, nStart, it.first - it.second, false);
                 if (rTextFrame.HasFollow())
                 {
                     TextFrameIndex const nIndex(sw::MapModelToView(rMerged, &rDestNode, nStart));
@@ -1822,6 +1891,8 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             return; // ignore it
         }
     }
+
+    Broadcast(SfxHint()); // notify SwAccessibleParagraph
 
     // while locked ignore all modifications
     if( IsLocked() )
@@ -3234,8 +3305,10 @@ void SwTextFrame::CalcAdditionalFirstLineOffset()
     mnAdditionalFirstLineOffset = 0;
 
     const SwTextNode* pTextNode( GetTextNodeForParaProps() );
-    if ( pTextNode && pTextNode->IsNumbered() && pTextNode->IsCountedInList() &&
-         pTextNode->GetNumRule() )
+    // sw_redlinehide: check that pParaPropsNode is the correct one
+    assert(pTextNode->IsNumbered(getRootFrame()) == pTextNode->IsNumbered(nullptr));
+    if (pTextNode && pTextNode->IsNumbered(getRootFrame()) &&
+        pTextNode->IsCountedInList() && pTextNode->GetNumRule())
     {
         int nListLevel = pTextNode->GetActualListLevel();
 

@@ -266,7 +266,7 @@ SwXFootnote::setLabel(const OUString& aLabel)
         SwTextNode& rTextNode = const_cast<SwTextNode&>(pTextFootnote->GetTextNode());
 
         SwPaM aPam(rTextNode, pTextFootnote->GetStart());
-        GetDoc()->SetCurFootnote(aPam, newLabel, pFormat->GetNumber(), pFormat->IsEndNote());
+        GetDoc()->SetCurFootnote(aPam, newLabel, pFormat->IsEndNote());
     }
     else if (m_pImpl->m_bIsDescriptor)
     {

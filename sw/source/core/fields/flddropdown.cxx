@@ -62,7 +62,7 @@ SwDropDownField::~SwDropDownField()
 {
 }
 
-OUString SwDropDownField::Expand() const
+OUString SwDropDownField::ExpandImpl(SwRootFrame const*const) const
 {
     OUString sSelect = GetSelectedItem();
     if (sSelect.isEmpty())

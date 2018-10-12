@@ -47,7 +47,7 @@ SwMacroField::SwMacroField(SwMacroFieldType* pInitType,
     m_bIsScriptURL = isScriptURL(m_aMacro);
 }
 
-OUString SwMacroField::Expand() const
+OUString SwMacroField::ExpandImpl(SwRootFrame const*const) const
 {
     return m_aText ;
 }

@@ -49,7 +49,7 @@ class SwOutlineContent : public SwContent
             SwContent(pCnt, rName, nYPos),
             nOutlinePos(nArrPos), nOutlineLevel(nLevel), bIsMoveable(bMove) {}
 
-    sal_uInt16  GetPos() const {return nOutlinePos;}
+    SwOutlineNodes::size_type GetOutlinePos() const {return nOutlinePos;}
     sal_uInt8   GetOutlineLevel() const {return nOutlineLevel;}
     bool        IsMoveable() const {return bIsMoveable;};
 };

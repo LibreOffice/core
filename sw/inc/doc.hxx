@@ -622,9 +622,9 @@ public:
     void SetEndNoteInfo(const SwEndNoteInfo& rInfo);
           SwFootnoteIdxs& GetFootnoteIdxs()       { return *mpFootnoteIdxs; }
     const SwFootnoteIdxs& GetFootnoteIdxs() const { return *mpFootnoteIdxs; }
-    // change footnotes in area
+    /// change footnotes in range
     bool SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
-                    sal_uInt16 nNumber, bool bIsEndNote );
+                    bool bIsEndNote );
 
     /** Operations on the content of the document e.g.
         spell-checking/hyphenating/word-counting
@@ -632,6 +632,7 @@ public:
     css::uno::Any
             Spell( SwPaM&, css::uno::Reference< css::linguistic2::XSpellChecker1 > const &,
                    sal_uInt16* pPageCnt, sal_uInt16* pPageSt, bool bGrammarCheck,
+                   SwRootFrame const* pLayout, // for grammar-check
                    SwConversionArgs *pConvArgs = nullptr ) const;
 
     css::uno::Reference< css::linguistic2::XHyphenatedWord >
@@ -1002,12 +1003,12 @@ public:
     void PropagateOutlineRule();
 
     // Outline - promote / demote.
-    bool OutlineUpDown( const SwPaM& rPam, short nOffset );
+    bool OutlineUpDown(const SwPaM& rPam, short nOffset, SwRootFrame const* pLayout = nullptr);
 
     /// Outline - move up / move down.
     bool MoveOutlinePara( const SwPaM& rPam, SwOutlineNodes::difference_type nOffset);
 
-    bool GotoOutline( SwPosition& rPos, const OUString& rName ) const;
+    bool GotoOutline(SwPosition& rPos, const OUString& rName, SwRootFrame const* = nullptr) const;
 
     /** Accept changes of outline styles for OutlineRule.
      @param bResetIndentAttrs Optional parameter - default value false:
@@ -1022,6 +1023,7 @@ public:
     OUString SetNumRule( const SwPaM&,
                      const SwNumRule&,
                      bool bCreateNewList,
+                     SwRootFrame const* pLayout = nullptr,
                      const OUString& sContinuedListId = OUString(),
                      bool bSetItem = true,
                      const bool bResetIndentAttrs = false );
@@ -1032,7 +1034,8 @@ public:
     void SetNumRuleStart( const SwPosition& rPos, bool bFlag = true );
     void SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt );
 
-    static SwNumRule* GetNumRuleAtPos( const SwPosition& rPos );
+    // sw_redlinehide: may set rPos to different node (the one with the NumRule)
+    static SwNumRule* GetNumRuleAtPos(SwPosition& rPos, SwRootFrame const* pLayout = nullptr);
 
     const SwNumRuleTable& GetNumRuleTable() const { return *mpNumRuleTable; }
 
@@ -1064,9 +1067,11 @@ public:
                         const OUString& rNewRule );
 
     // Goto next/previous on same level.
-    static bool GotoNextNum( SwPosition&, bool bOverUpper = true,
+    static bool GotoNextNum( SwPosition&, SwRootFrame const* pLayout,
+                        bool bOverUpper = true,
                         sal_uInt8* pUpper = nullptr, sal_uInt8* pLower = nullptr );
-    static bool GotoPrevNum( SwPosition&, bool bOverUpper = true );
+    static bool GotoPrevNum( SwPosition&, SwRootFrame const* pLayout,
+                        bool bOverUpper = true );
 
     /** Searches for a text node with a numbering rule.
 
@@ -1097,22 +1102,24 @@ public:
                                     const bool bOutline,
                                     int nNonEmptyAllowed,
                                     OUString& sListId,
+                                    SwRootFrame const* pLayout,
                                     const bool bInvestigateStartNode = false );
 
     // Paragraphs without numbering but with indents.
     bool NoNum( const SwPaM& );
 
     // Delete, splitting of numbering list.
-    void DelNumRules( const SwPaM& );
+    void DelNumRules(const SwPaM&, SwRootFrame const* pLayout = nullptr);
 
     // Invalidates all numrules
     void InvalidateNumRules();
 
-    bool NumUpDown( const SwPaM&, bool bDown );
+    bool NumUpDown(const SwPaM&, bool bDown, SwRootFrame const* pLayout = nullptr);
 
     /** Move selected paragraphes (not only numberings)
      according to offsets. (if negative: go to doc start). */
-    bool MoveParagraph( const SwPaM&, long nOffset, bool bIsOutlMv = false );
+    bool MoveParagraph(SwPaM&, long nOffset, bool bIsOutlMv = false);
+    bool MoveParagraphImpl(SwPaM&, long nOffset, bool bIsOutlMv, SwRootFrame const*);
 
     bool NumOrNoNum( const SwNodeIndex& rIdx, bool bDel = false);
 
@@ -1380,7 +1387,7 @@ public:
     // restore the invisible content if it's available on the undo stack
     bool RestoreInvisibleContent();
 
-    bool ConvertFieldsToText();
+    bool ConvertFieldsToText(SwRootFrame const& rLayout);
 
     // Create sub-documents according to given collection.
     // If no collection is given, use chapter styles for 1st level.
@@ -1546,7 +1553,7 @@ public:
      */
     static OUString GetPaMDescr(const SwPaM & rPaM);
 
-    static bool IsFirstOfNumRuleAtPos( const SwPosition & rPos );
+    static bool IsFirstOfNumRuleAtPos(const SwPosition & rPos, SwRootFrame const& rLayout);
 
     // access methods for XForms model(s)
 
