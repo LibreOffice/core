@@ -135,7 +135,7 @@ class WaitWindow_Impl : public WorkWindow
 {
     tools::Rectangle     maRect;
     OUString      maText;
-    const DrawTextFlags mnTextStyle = DrawTextFlags::Center | DrawTextFlags::VCenter | DrawTextFlags::WordBreak | DrawTextFlags::MultiLine;
+    static constexpr DrawTextFlags gnTextStyle = DrawTextFlags::Center | DrawTextFlags::VCenter | DrawTextFlags::WordBreak | DrawTextFlags::MultiLine;
 
 public:
     WaitWindow_Impl();
@@ -2283,7 +2283,7 @@ WaitWindow_Impl::WaitWindow_Impl() : WorkWindow(nullptr, WB_BORDER | WB_3DLOOK)
 {
     tools::Rectangle aRect = tools::Rectangle(0, 0, 300, 30000);
     maText = SfxResId(RID_CNT_STR_WAITING);
-    maRect = GetTextRect(aRect, maText, mnTextStyle);
+    maRect = GetTextRect(aRect, maText, gnTextStyle);
     aRect = maRect;
     aRect.AdjustRight(2 * X_OFFSET );
     aRect.AdjustBottom(2 * Y_OFFSET );
@@ -2310,7 +2310,7 @@ void  WaitWindow_Impl::dispose()
 
 void WaitWindow_Impl::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)
 {
-    rRenderContext.DrawText(maRect, maText, mnTextStyle);
+    rRenderContext.DrawText(maRect, maText, gnTextStyle);
 }
 
 void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,

@@ -42,8 +42,8 @@ private:
     friend class SwViewShell;
 
     /// number of horizontal and vertical twips for spacing between the pages.
-    const SwTwips mnXFree;
-    const SwTwips mnYFree;
+    static constexpr SwTwips gnXFree = 4 * 142;
+    static constexpr SwTwips gnYFree = 4 * 142;
 
     /// view shell the print preview is generated for.
     SwViewShell& mrParentViewShell;

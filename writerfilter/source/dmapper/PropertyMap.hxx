@@ -228,8 +228,6 @@ private:
     // Page number type is a value from css::style::NumberingType.
     sal_Int16                                       m_nPageNumberType;
     sal_Int32                                       m_nBreakType;
-    sal_Int32 const                                 m_nPaperBin;
-    sal_Int32 const                                 m_nFirstPaperBin;
 
     sal_Int32                                       m_nLeftMargin;
     sal_Int32                                       m_nRightMargin;
