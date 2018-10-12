@@ -6356,6 +6356,11 @@
           <value xml:lang="en-US">Sen~d</value>
         </prop>
       </node>
+      <node oor:name=".uno:TableMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">T~able</value>
+        </prop>
+      </node>
       <node oor:name=".uno:SignaturesMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Digital Signatures</value>
