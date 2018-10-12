@@ -349,8 +349,7 @@ void Window::EndAutoScroll()
         pSVData->maWinData.mpAutoScrollWin = nullptr;
         pSVData->maWinData.mnAutoScrollFlags = StartAutoScrollFlags::NONE;
         pSVData->maAppData.mpWheelWindow->ImplStop();
-        pSVData->maAppData.mpWheelWindow->doLazyDelete();
-        pSVData->maAppData.mpWheelWindow = nullptr;
+        pSVData->maAppData.mpWheelWindow.disposeAndClear();
     }
 }
 

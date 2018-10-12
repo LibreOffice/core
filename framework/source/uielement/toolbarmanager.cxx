@@ -232,13 +232,8 @@ void ToolBarManager::Destroy()
             delete static_cast< AddonsParams* >( m_pToolBar->GetItemData( nItemId ));
     }
 
-    // Hide toolbar as lazy delete can destroy the toolbar much later.
+    // note #i93173# and tdf#119390, we can still be in one of m_pToolBar's handlers
     m_pToolBar->Hide();
-    // #i93173# delete toolbar lazily as we can still be in one of its handlers
-    // tdf#119390 this will reparent the toolbar, so focus is restored from a
-    // floating toolbar to the last focused control of the application window.
-    m_pToolBar->doLazyDelete();
-
     m_pToolBar->SetSelectHdl( Link<ToolBox *, void>() );
     m_pToolBar->SetActivateHdl( Link<ToolBox *, void>() );
     m_pToolBar->SetDeactivateHdl( Link<ToolBox *, void>() );
@@ -248,7 +243,7 @@ void ToolBarManager::Destroy()
     m_pToolBar->SetStateChangedHdl( Link<StateChangedType const *, void>() );
     m_pToolBar->SetDataChangedHdl( Link<DataChangedEvent const *, void>() );
 
-    m_pToolBar.clear();
+    m_pToolBar.disposeAndClear();
 
     SvtMiscOptions().RemoveListenerLink( LINK( this, ToolBarManager, MiscOptionsChanged ) );
 }

@@ -189,7 +189,7 @@ ways and often both.
 
 ---------- What remains to be done ? ----------
 
-	* Cleanup DogTags and LazyDelete.
+	* Cleanup DogTags
 
 	* Expand the VclPtr pattern to many other less
 	  than safe VCL types.

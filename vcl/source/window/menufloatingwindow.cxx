@@ -473,8 +473,9 @@ void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
         {
             pPopup->ImplGetFloatingWindow()->StopExecute();
             pPopup->ImplGetFloatingWindow()->doShutdown();
-            pPopup->pWindow->doLazyDelete();
-            pPopup->pWindow = nullptr;
+            pPopup->pWindow->Show(false);
+            pPopup->pWindow->SetParent(ImplGetDefaultWindow());
+            pPopup->pWindow.disposeAndClear();
 
             Update();
         }
