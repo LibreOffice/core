@@ -210,10 +210,10 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         InitFillColor();
 
         // draw using a loop; else the topology will paint a PolyPolygon
-        for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
+        for(auto const& rPolygon : aAreaPolyPolygon)
         {
             ImplDrawPolyPolygonWithB2DPolyPolygon(
-                basegfx::B2DPolyPolygon(aAreaPolyPolygon.getB2DPolygon(a)));
+                basegfx::B2DPolyPolygon(rPolygon));
         }
 
         SetLineColor(aOldLineColor);
@@ -228,11 +228,11 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
 
         // when AA it is necessary to also paint the filled polygon's outline
         // to avoid optical gaps
-        for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
+        for(auto const& rPolygon : aAreaPolyPolygon)
         {
             (void)DrawPolyLineDirect(
                 basegfx::B2DHomMatrix(),
-                aAreaPolyPolygon.getB2DPolygon(a),
+                rPolygon,
                 0.0,
                 0.0,
                 basegfx::B2DLineJoin::NONE,

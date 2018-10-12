@@ -587,9 +587,7 @@ bool X11SalGraphics::drawPolyPolygon(
         return true;
     }
 
-    const sal_uInt32 nPolyCount(rPolyPolygon.count());
-
-    if(nPolyCount <= 0)
+    if(rPolyPolygon.count() == 0)
     {
         return true;
     }
@@ -620,14 +618,13 @@ bool X11SalGraphics::drawPolyPolygon(
         cairo_t* cr = getCairoContext();
         clipRegion(cr);
 
-        for(sal_uInt32 a(0); a < nPolyCount; ++a)
+        for(auto const& rPolygon : aPolyPolygon)
         {
-            const basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(a));
-            const sal_uInt32 nPointCount(aPolygon.count());
+            const sal_uInt32 nPointCount(rPolygon.count());
 
             if(nPointCount)
             {
-                const sal_uInt32 nEdgeCount(aPolygon.isClosed() ? nPointCount : nPointCount - 1);
+                const sal_uInt32 nEdgeCount(rPolygon.isClosed() ? nPointCount : nPointCount - 1);
 
                 if(nEdgeCount)
                 {
@@ -635,7 +632,7 @@ bool X11SalGraphics::drawPolyPolygon(
 
                     for(sal_uInt32 b = 0; b < nEdgeCount; ++b)
                     {
-                        aPolygon.getBezierSegment(b, aEdge);
+                        rPolygon.getBezierSegment(b, aEdge);
 
                         if(!b)
                         {

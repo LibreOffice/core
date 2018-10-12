@@ -1539,9 +1539,8 @@ void PDFWriterImpl::PDFPage::appendPolyPolygon( const tools::PolyPolygon& rPolyP
 
 void PDFWriterImpl::PDFPage::appendPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly, OStringBuffer& rBuffer ) const
 {
-    sal_uInt32 nPolygons = rPolyPoly.count();
-    for( sal_uInt32 n = 0; n < nPolygons; n++ )
-        appendPolygon( rPolyPoly.getB2DPolygon( n ), rBuffer );
+    for(auto const& rPolygon : rPolyPoly)
+        appendPolygon( rPolygon, rBuffer );
 }
 
 void PDFWriterImpl::PDFPage::appendMappedLength( sal_Int32 nLength, OStringBuffer& rBuffer, bool bVertical, sal_Int32* pOutLength ) const

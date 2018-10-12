@@ -135,14 +135,12 @@ static void AddPolyPolygonToPath( CGMutablePathRef xPath,
                                   bool bPixelSnap, bool bLineDraw )
 {
     // short circuit if there is nothing to do
-    const int nPolyCount = rPolyPoly.count();
-    if( nPolyCount <= 0 )
+    if( rPolyPoly.count() == 0 )
     {
         return;
     }
-    for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
+    for(auto const& rPolygon : rPolyPoly)
     {
-        const basegfx::B2DPolygon rPolygon = rPolyPoly.getB2DPolygon( nPolyIdx );
         AddPolygonToPath( xPath, rPolygon, true, bPixelSnap, bLineDraw );
     }
 }
@@ -969,8 +967,7 @@ bool AquaSalGraphics::drawPolyPolygon(
     double fTransparency)
 {
     // short circuit if there is nothing to do
-    const int nPolyCount = rPolyPolygon.count();
-    if( nPolyCount <= 0 )
+    if( rPolyPolygon.count() == 0 )
         return true;
 
     // ignore invisible polygons
@@ -984,9 +981,8 @@ bool AquaSalGraphics::drawPolyPolygon(
     // setup poly-polygon path
     CGMutablePathRef xPath = CGPathCreateMutable();
     SAL_INFO( "vcl.cg", "CGPathCreateMutable() = " << xPath );
-    for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
+    for(auto const& rPolygon : rPolyPolygon)
     {
-        const basegfx::B2DPolygon rPolygon = rPolyPolygon.getB2DPolygon( nPolyIdx );
         AddPolygonToPath( xPath, rPolygon, true, !getAntiAliasB2DDraw(), IsPenVisible() );
     }
 
