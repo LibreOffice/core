@@ -7316,6 +7316,7 @@ include/svx/sdr/attribute/sdrtextattribute.hxx
 include/svx/sdr/contact/displayinfo.hxx
 include/svx/sdr/contact/objectcontact.hxx
 include/svx/sdr/contact/objectcontactofobjlistpainter.hxx
+include/svx/sdr/contact/objectcontactofpageview.hxx
 include/svx/sdr/contact/viewcontact.hxx
 include/svx/sdr/contact/viewcontactofe3d.hxx
 include/svx/sdr/contact/viewcontactofe3dscene.hxx
@@ -14028,7 +14029,6 @@ svx/inc/pch/precompiled_svxcore.cxx
 svx/inc/pch/precompiled_svxcore.hxx
 svx/inc/sdr/attribute/sdrfilltextattribute.hxx
 svx/inc/sdr/attribute/sdrformtextoutlineattribute.hxx
-svx/inc/sdr/contact/objectcontactofpageview.hxx
 svx/inc/sdr/contact/viewcontactofe3dcube.hxx
 svx/inc/sdr/contact/viewcontactofe3dextrude.hxx
 svx/inc/sdr/contact/viewcontactofe3dlathe.hxx
