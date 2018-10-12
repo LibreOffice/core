@@ -38,6 +38,10 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <svx/sdr/contact/objectcontactofpageview.hxx>
+#include <svx/sdr/contact/viewobjectcontact.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/sdrpagewindow.hxx>
 
 #include <drawview.hxx>
 #include <global.hxx>
@@ -322,8 +326,13 @@ void ScDrawView::RecalcScale()
     if (nEndRow<20)
         nEndRow = 20;
 
-    ScDrawUtil::CalcScale( pDoc, nTab, 0,0, nEndCol,nEndRow, pDev,aZoomX,aZoomY,nPPTX,nPPTY,
-                            aScaleX,aScaleY );
+    ScDrawUtil::CalcScale(
+        pDoc, nTab, 0, 0, nEndCol, nEndRow, pDev, aZoomX, aZoomY, nPPTX, nPPTY,
+        aScaleX, aScaleY);
+
+    // clear all evtl existing GridOffset vectors
+    resetGridOffsetsForAllSdrPageViews();
+
     SdrPageView* pPV = GetSdrPageView();
     if ( pViewData && pPV )
     {
@@ -939,7 +948,12 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
             // synthesise an anchor ( but don't attach it to
             // the object as we want to maintain page anchoring )
             ScDrawObjData aAnchor;
-            ScDrawLayer::GetCellAnchorFromPosition( *pObj, aAnchor, *pDoc, GetTab() );
+            const tools::Rectangle aObjRect(pObj->GetLogicRect());
+            ScDrawLayer::GetCellAnchorFromPosition(
+                aObjRect,
+                aAnchor,
+                *pDoc,
+                GetTab());
             aOldStt = aAnchor.maStart;
         }
         MapMode aDrawMode = pGridWin->GetDrawMapMode();
@@ -954,8 +968,136 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
         // fdo#63878 Fix the X position for RTL Sheet
         if( pDoc->IsNegativePage( GetTab() ) )
             aGridOff.setX( aCurPosHmm.getX() + aOldPos.getX() );
-        pObj->SetGridOffset( aGridOff );
     }
+}
+
+void ScDrawView::resetGridOffsetsForAllSdrPageViews()
+{
+    SdrPageView* pPageView(GetSdrPageView());
+
+    if(nullptr != pPageView)
+    {
+        for(sal_uInt32 a(0); a < pPageView->PageWindowCount(); a++)
+        {
+            SdrPageWindow* pPageWindow(pPageView->GetPageWindow(a));
+            assert(pPageWindow && "SdrView::SetMasterPagePaintCaching: Corrupt SdrPageWindow list (!)");
+
+            if(nullptr != pPageWindow)
+            {
+                sdr::contact::ObjectContact& rObjectContact(pPageWindow->GetObjectContact());
+
+                if(rObjectContact.supportsGridOffsets())
+                {
+                    rObjectContact.resetAllGridOffsets();
+                }
+            }
+        }
+    }
+}
+
+bool ScDrawView::calculateGridOffsetForSdrObject(
+    SdrObject& rSdrObject,
+    basegfx::B2DVector& rTarget) const
+{
+    ScGridWindow* pGridWin(pViewData->GetActiveWin());
+
+    if(nullptr == pGridWin)
+    {
+        return false;
+    }
+
+    ScDrawObjData* pData(ScDrawLayer::GetObjData(&rSdrObject));
+    ScAddress aOldStt;
+
+    if(nullptr != pData && pData->maStart.IsValid())
+    {
+        aOldStt = pData->maStart;
+    }
+    else
+    {
+        // Page anchored object so...
+        // synthesise an anchor ( but don't attach it to
+        // the object as we want to maintain page anchoring )
+        ScDrawObjData aAnchor;
+        const tools::Rectangle aObjRect(rSdrObject.GetLogicRect());
+        ScDrawLayer::GetCellAnchorFromPosition(
+            aObjRect,
+            aAnchor,
+            *pDoc,
+            GetTab());
+        aOldStt = aAnchor.maStart;
+    }
+
+    MapMode aDrawMode = pGridWin->GetDrawMapMode();
+
+    // find pos anchor position
+    Point aOldPos(pDoc->GetColOffset(aOldStt.Col(), aOldStt.Tab()), pDoc->GetRowOffset(aOldStt.Row(), aOldStt.Tab()));
+    aOldPos.setX(sc::TwipsToHMM(aOldPos.X()));
+    aOldPos.setY(sc::TwipsToHMM(aOldPos.Y()));
+
+    // find position of same point on the screen ( e.g. grid )
+    ScSplitPos eWhich(pViewData->GetActivePart());
+    Point aCurPos(pViewData->GetScrPos(aOldStt.Col(), aOldStt.Row(), eWhich, true));
+    Point aCurPosHmm(pGridWin->PixelToLogic(aCurPos, aDrawMode));
+    Point aGridOff(aCurPosHmm - aOldPos);
+
+    // fdo#63878 Fix the X position for RTL Sheet
+    if(pDoc->IsNegativePage(GetTab()))
+    {
+        aGridOff.setX(aCurPosHmm.getX() + aOldPos.getX());
+    }
+
+    rTarget.setX(aGridOff.X());
+    rTarget.setY(aGridOff.Y());
+    return true;
+}
+
+bool ScDrawView::calculateGridOffsetForB2DRange(
+    const basegfx::B2DRange& rB2DRange,
+    basegfx::B2DVector& rTarget) const
+{
+    ScGridWindow* pGridWin(pViewData->GetActiveWin());
+
+    if(nullptr == pGridWin || rB2DRange.isEmpty())
+    {
+        return false;
+    }
+
+    // No SdrObject, so synthesise an anchor ( but don't attach it to
+    // the object as we want to maintain page anchoring )
+    ScDrawObjData aAnchor;
+    const tools::Rectangle aRectangle(
+        basegfx::fround(rB2DRange.getMinX()), basegfx::fround(rB2DRange.getMinY()),
+        basegfx::fround(rB2DRange.getMaxX()), basegfx::fround(rB2DRange.getMaxY()));
+    ScDrawLayer::GetCellAnchorFromPosition(
+        aRectangle,
+        aAnchor,
+        *pDoc,
+        GetTab());
+    ScAddress aOldStt(aAnchor.maStart);
+
+    MapMode aDrawMode = pGridWin->GetDrawMapMode();
+
+    // find pos anchor position
+    Point aOldPos(pDoc->GetColOffset(aOldStt.Col(), aOldStt.Tab()), pDoc->GetRowOffset(aOldStt.Row(), aOldStt.Tab()));
+    aOldPos.setX(sc::TwipsToHMM(aOldPos.X()));
+    aOldPos.setY(sc::TwipsToHMM(aOldPos.Y()));
+
+    // find position of same point on the screen ( e.g. grid )
+    ScSplitPos eWhich(pViewData->GetActivePart());
+    Point aCurPos(pViewData->GetScrPos(aOldStt.Col(), aOldStt.Row(), eWhich, true));
+    Point aCurPosHmm(pGridWin->PixelToLogic(aCurPos, aDrawMode));
+    Point aGridOff(aCurPosHmm - aOldPos);
+
+    // fdo#63878 Fix the X position for RTL Sheet
+    if(pDoc->IsNegativePage(GetTab()))
+    {
+        aGridOff.setX(aCurPosHmm.getX() + aOldPos.getX());
+    }
+
+    rTarget.setX(aGridOff.X());
+    rTarget.setY(aGridOff.Y());
+    return true;
 }
 
 // support enhanced text edit for draw objects
@@ -999,6 +1141,89 @@ SdrObject* ScDrawView::ApplyGraphicToObject(
     }
 
     return nullptr;
+}
+
+// Own derivation of ObjectContact to allow on-demand calculation of
+// GridOffset for non-linear ViewToDevice transformation (calc)
+namespace sdr
+{
+    namespace contact
+    {
+        class ObjectContactOfScDrawView final : public ObjectContactOfPageView
+        {
+        private:
+            // The ScDrawView to work on
+            const ScDrawView&       mrScDrawView;
+
+        public:
+            explicit ObjectContactOfScDrawView(
+                const ScDrawView& rScDrawView,
+                SdrPageWindow& rPageWindow,
+                const sal_Char* pDebugName);
+
+            virtual bool supportsGridOffsets() const override;
+            virtual void calculateGridOffsetForViewOjectContact(
+                basegfx::B2DVector& rTarget,
+                const ViewObjectContact& rClient) const override;
+            virtual void calculateGridOffsetForB2DRange(
+                basegfx::B2DVector& rTarget,
+                const basegfx::B2DRange& rB2DRange) const override;
+        };
+
+        ObjectContactOfScDrawView::ObjectContactOfScDrawView(
+            const ScDrawView& rScDrawView,
+            SdrPageWindow& rPageWindow,
+            const sal_Char* pDebugName)
+        :   ObjectContactOfPageView(rPageWindow, pDebugName),
+            mrScDrawView(rScDrawView)
+        {
+        }
+
+        bool ObjectContactOfScDrawView::supportsGridOffsets() const
+        {
+            // yes - we support it
+            return true;
+        }
+
+        void ObjectContactOfScDrawView::calculateGridOffsetForViewOjectContact(
+            basegfx::B2DVector& rTarget,
+            const ViewObjectContact& rClient) const
+        {
+            // Here the on-demand calculation happens. Try to access the SdrObject involved
+            SdrObject* pTargetSdrObject(rClient.GetViewContact().TryToGetSdrObject());
+
+            if(nullptr != pTargetSdrObject)
+            {
+                mrScDrawView.calculateGridOffsetForSdrObject(
+                    *pTargetSdrObject,
+                    rTarget);
+            }
+        }
+
+        void ObjectContactOfScDrawView::calculateGridOffsetForB2DRange(
+            basegfx::B2DVector& rTarget,
+            const basegfx::B2DRange& rB2DRange) const
+        {
+            // Here the on-demand calculation happens. Try to access the SdrObject involved
+            if(!rB2DRange.isEmpty())
+            {
+                mrScDrawView.calculateGridOffsetForB2DRange(
+                    rB2DRange,
+                    rTarget);
+            }
+        }
+    }
+}
+
+// Create own derivation of ObjectContact for calc
+sdr::contact::ObjectContact* ScDrawView::createViewSpecificObjectContact(
+    SdrPageWindow& rPageWindow,
+    const sal_Char* pDebugName) const
+{
+    return new sdr::contact::ObjectContactOfScDrawView(
+        *this,
+        rPageWindow,
+        pDebugName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

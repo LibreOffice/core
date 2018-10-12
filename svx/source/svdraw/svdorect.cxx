@@ -316,9 +316,7 @@ void SdrRectObj::AddToHdlList(SdrHdlList& rHdlList) const
     if(IsTextFrame())
     {
         OSL_ENSURE(!IsTextEditActive(), "Do not use a ImpTextframeHdl for highlighting text in active text edit, this will collide with EditEngine paints (!)");
-        // hack for calc grid sync to ensure the hatched area
-        // for a textbox is displayed at correct position
-        std::unique_ptr<SdrHdl> pH(new ImpTextframeHdl(maRect + GetGridOffset()));
+        std::unique_ptr<SdrHdl> pH(new ImpTextframeHdl(maRect));
         pH->SetObj(const_cast<SdrRectObj*>(this));
         pH->SetRotationAngle(aGeo.nRotationAngle);
         rHdlList.AddHdl(std::move(pH));

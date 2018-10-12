@@ -261,13 +261,20 @@ void SdrObjEditView::ModelHasChanged()
                 tools::Rectangle aEditArea1;
                 tools::Rectangle aMinArea1;
                 pTextObj->TakeTextEditArea(&aPaperMin1,&aPaperMax1,&aEditArea1,&aMinArea1);
-
                 Point aPvOfs(pTextObj->GetTextEditOffset());
-                // Hack for calc, transform position of edit object according
-                // to current zoom so as objects relative position to grid
-                // appears stable
-                aEditArea1 += pTextObj->GetGridOffset();
-                aMinArea1 += pTextObj->GetGridOffset();
+
+                // add possible GridOffset to up-to-now view-independent EditAreas
+                basegfx::B2DVector aGridOffset(0.0, 0.0);
+                if(getPossibleGridOffsetForSdrObject(aGridOffset, pTextObj, GetSdrPageView()))
+                {
+                    const Point aOffset(
+                        basegfx::fround(aGridOffset.getX()),
+                        basegfx::fround(aGridOffset.getY()));
+
+                    aEditArea1 += aOffset;
+                    aMinArea1 += aOffset;
+                }
+
                 aEditArea1.Move(aPvOfs.X(),aPvOfs.Y());
                 aMinArea1.Move(aPvOfs.X(),aPvOfs.Y());
                 tools::Rectangle aNewArea(aMinArea1);
@@ -494,7 +501,7 @@ namespace
             if (!maRange.equal(maLastRange) || maLastTextPrimitives != maTextPrimitives)
             {
                 // conditions of last local decomposition have changed, delete to force new evaluation
-                const_cast<TextEditOverlayObject*>(this)->setPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DContainer());
+                const_cast<TextEditOverlayObject*>(this)->resetPrimitive2DSequence();
             }
         }
 
@@ -1148,14 +1155,20 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
             aTextEditArea = aTextRect;
 
-            // Hack for calc, transform position of edit object according
-            // to current zoom so as objects relative position to grid
-            // appears stable
+            // add possible GridOffset to up-to-now view-independent EditAreas
+            basegfx::B2DVector aGridOffset(0.0, 0.0);
+            if(getPossibleGridOffsetForSdrObject(aGridOffset, pTextObj, pPV))
+            {
+                const Point aOffset(
+                    basegfx::fround(aGridOffset.getX()),
+                    basegfx::fround(aGridOffset.getY()));
+
+                aTextEditArea += aOffset;
+                aMinTextEditArea += aOffset;
+            }
 
             Point aPvOfs(pTextObj->GetTextEditOffset());
-            aTextEditArea += pTextObj->GetGridOffset();
             aTextEditArea.Move(aPvOfs.X(),aPvOfs.Y());
-            aMinTextEditArea += pTextObj->GetGridOffset();
             aMinTextEditArea.Move(aPvOfs.X(),aPvOfs.Y());
             pTextEditCursorBuffer=pWin->GetCursor();
 

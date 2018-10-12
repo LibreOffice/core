@@ -34,6 +34,7 @@
 #include <svx/sdr/overlay/overlayanimatedbitmapex.hxx>
 #include <svx/sdr/overlay/overlaybitmapex.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
+#include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/svxids.hrc>
 
 #include <view/viewoverlaymanager.hxx>
@@ -248,8 +249,12 @@ void ImageButtonHdl::CreateB2dIAObject()
                     {
                         std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject(
                             new sdr::overlay::OverlayBitmapEx( aPosition, aBitmapEx, 0, 0 ));
-                        xManager->add(*pOverlayObject);
-                        maOverlayGroup.append(std::move(pOverlayObject));
+
+                        // OVERLAYMANAGER
+                        insertNewlyCreatedOverlayObjectForSdrHdl(
+                            std::move(pOverlayObject),
+                            rPageWindow.GetObjectContact(),
+                            *xManager.get());
                     }
                 }
             }

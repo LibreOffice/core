@@ -155,10 +155,25 @@ public:
         const OUString& rFilter);
 
     static void CheckOle( const SdrMarkList& rMarkList, bool& rAnyOle, bool& rOneOle );
+
     void SyncForGrid( SdrObject* pObj );
+
+    bool calculateGridOffsetForSdrObject(
+        SdrObject& rSdrObject,
+        basegfx::B2DVector& rTarget) const;
+    bool calculateGridOffsetForB2DRange(
+        const basegfx::B2DRange& rB2DRange,
+        basegfx::B2DVector& rTarget) const;
+    void resetGridOffsetsForAllSdrPageViews();
 
     /// See SdrMarkView::GetSfxViewShell().
     SfxViewShell* GetSfxViewShell() const override;
+
+    // Do not create ObjectContact locally, but offer a call to allow override
+    // and to create own derivations of ObjectContact
+    virtual sdr::contact::ObjectContact* createViewSpecificObjectContact(
+        SdrPageWindow& rPageWindow,
+        const sal_Char* pDebugName) const override;
 };
 
 extern Point aDragStartDiff;
