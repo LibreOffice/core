@@ -23,8 +23,8 @@
 #include "AccessibleContextBase.hxx"
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <global.hxx>
-#include <vcl/window.hxx>
+#include <address.hxx>
+#include <vcl/vclptr.hxx>
 
 #include <memory>
 

@@ -21,8 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_DBDOCFUN_HXX
 
 #include <address.hxx>
-#include <tools/solar.h>
-#include <com/sun/star/uno/Sequence.hxx>
+#include <vector>
 
 struct ScImportParam;
 struct ScQueryParam;
@@ -32,10 +31,10 @@ struct ScSubTotalParam;
 class SfxViewFrame;
 class ScDBData;
 class ScDocShell;
-class ScAddress;
-class ScRange;
 class ScDPObject;
 class ScDBCollection;
+
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Sequence; } } } }
 
 namespace com { namespace sun { namespace star {
     namespace beans {

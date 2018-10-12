@@ -21,13 +21,10 @@
 #define INCLUDED_SC_SOURCE_UI_INC_DRWTRANS_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <svtools/transfer.hxx>
 
 #include <sfx2/objsh.hxx>
-#include <global.hxx>
 #include <charthelper.hxx>
-#include <rangelst.hxx>
 
 class SdrModel;
 class ScDocShell;

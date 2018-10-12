@@ -30,7 +30,6 @@ namespace com { namespace sun { namespace star { namespace sheet {
 struct ScSortParam;
 struct ScQueryParam;
 class ScDBData;
-class ScDBCollection;
 class ScDPObject;
 class ScDPSaveData;
 struct ScDPNumGroupInfo;

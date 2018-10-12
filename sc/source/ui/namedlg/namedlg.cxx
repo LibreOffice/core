@@ -20,6 +20,7 @@
 #include <memory>
 #include <global.hxx>
 #include <reffact.hxx>
+#include <compiler.hxx>
 #include <document.hxx>
 #include <docfunc.hxx>
 #include <globstr.hrc>

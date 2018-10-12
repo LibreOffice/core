@@ -14,11 +14,6 @@
 #include <address.hxx>
 #include <rangelst.hxx>
 
-#include "docsh.hxx"
-#include <document.hxx>
-#include "docfunc.hxx"
-#include <formulacell.hxx>
-
 #include <vector>
 
 class FormulaTemplate

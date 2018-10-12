@@ -125,6 +125,8 @@
 #include <transobj.hxx>
 #include <chgtrack.hxx>
 #include <table.hxx>
+#include <appoptio.hxx>
+#include <formulaopt.hxx>
 
 #include <strings.hrc>
 

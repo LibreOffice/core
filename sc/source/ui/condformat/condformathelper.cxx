@@ -11,6 +11,7 @@
 #include <condformathelper.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
+#include <conditio.hxx>
 
 namespace {
 

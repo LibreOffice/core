@@ -10,16 +10,21 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CONDFORMATDLGENTRY_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CONDFORMATDLGENTRY_HXX
 
-#include <memory>
-#include <colorscale.hxx>
 #include <conditio.hxx>
 #include <formula/funcutl.hxx>
-
+#include <vcl/vclptr.hxx>
+#include <vcl/builder.hxx>
+#include <vcl/layout.hxx>
 #include <svl/lstner.hxx>
+#include <svx/fntctrl.hxx>
 
 class ScIconSetFrmtDataEntry;
 class ScCondFormatDlg;
 class SvxColorListBox;
+class ScColorScaleFormat;
+class ScDataBarFormat;
+class ScIconSetFormat;
+struct ScDataBarFormatData;
 
 namespace condformat {
 

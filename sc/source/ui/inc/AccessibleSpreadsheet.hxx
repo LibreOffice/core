@@ -50,7 +50,6 @@ public:
 class ScTabViewShell;
 class ScAccessibleDocument;
 class ScAccessibleCell;
-class ScRangeList;
 
 /** @descr
         This base class provides an implementation of the

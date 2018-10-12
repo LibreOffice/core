@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_UI_INC_CONTENT_HXX
 
 #include <svtools/treelistbox.hxx>
-#include <global.hxx>
 #include <address.hxx>
 #include <tools/solar.h>
 #include <o3tl/enumarray.hxx>
@@ -30,7 +29,6 @@ class ScNavigatorDlg;
 class ScDocument;
 class ScDocShell;
 class ScAreaLink;
-class SdrPage;
 
 enum class ScContentId {
     ROOT, TABLE, RANGENAME, DBAREA,

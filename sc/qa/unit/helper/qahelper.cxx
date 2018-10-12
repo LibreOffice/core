@@ -23,6 +23,7 @@
 #include <cppunit/Asserter.h>
 #include <cppunit/AdditionalMessage.h>
 #include <sal/log.hxx>
+#include <sfx2/sfxsids.hrc>
 
 #include <orcus/csv_parser.hpp>
 

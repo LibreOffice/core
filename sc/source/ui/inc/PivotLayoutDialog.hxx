@@ -11,13 +11,9 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTDIALOG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_PIVOTLAYOUTDIALOG_HXX
 
-#include <svx/checklbx.hxx>
 #include <vcl/lstbox.hxx>
 #include "anyrefdg.hxx"
 #include <dpobject.hxx>
-#include <dpsave.hxx>
-#include <dpshttab.hxx>
-#include <document.hxx>
 #include "viewdata.hxx"
 
 #include "PivotLayoutTreeList.hxx"
