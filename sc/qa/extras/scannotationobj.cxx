@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/container/xchild.hxx>
+#include <test/container/xenumerationaccess.hxx>
 #include <test/sheet/xsheetannotation.hxx>
 #include <test/sheet/xsheetannotationshapesupplier.hxx>
 
@@ -27,9 +28,10 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-class ScAnnontationObj : public CalcUnoApiTest, public apitest::XSheetAnnotation,
-                                                public apitest::XSheetAnnotationShapeSupplier,
-                                                public apitest::XChild
+class ScAnnontationObj : public CalcUnoApiTest, public apitest::XChild,
+                                                public apitest::XEnumerationAccess,
+                                                public apitest::XSheetAnnotation,
+                                                public apitest::XSheetAnnotationShapeSupplier
 {
 public:
     ScAnnontationObj();
@@ -44,6 +46,9 @@ public:
 
     // XChild
     CPPUNIT_TEST(testGetSetParent);
+
+    // XEnumerationAccess
+    CPPUNIT_TEST(testCreateEnumeration);
 
     // XSheetAnnotation
     CPPUNIT_TEST(testGetPosition);

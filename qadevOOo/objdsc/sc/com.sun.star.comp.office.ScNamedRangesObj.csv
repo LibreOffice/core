@@ -1,8 +1,0 @@
-"ScNamedRangesObj";"com::sun::star::container::XNameAccess";"getByName()"
-"ScNamedRangesObj";"com::sun::star::container::XNameAccess";"getElementNames()"
-"ScNamedRangesObj";"com::sun::star::container::XNameAccess";"hasByName()"
-"ScNamedRangesObj";"com::sun::star::container::XIndexAccess";"getCount()"
-"ScNamedRangesObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
-"ScNamedRangesObj";"com::sun::star::container::XElementAccess";"getElementType()"
-"ScNamedRangesObj";"com::sun::star::container::XElementAccess";"hasElements()"
-"ScNamedRangesObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"
