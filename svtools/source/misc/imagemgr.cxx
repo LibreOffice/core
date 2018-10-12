@@ -39,7 +39,6 @@
 #include <unotools/configmgr.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
-#include <vcl/lazydelete.hxx>
 #include <bitmaps.hlst>
 #include <strings.hxx>
 

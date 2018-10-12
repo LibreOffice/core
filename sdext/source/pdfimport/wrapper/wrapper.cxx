@@ -62,7 +62,6 @@
 #include <vcl/metric.hxx>
 #include <vcl/font.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/lazydelete.hxx>
 
 #include <memory>
 #include <unordered_map>
