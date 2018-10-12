@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_635fb741",
+        "filename": "svl/source/numbers/zforlist.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1493,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2018-10-12T15:54:35Z",
+      "side": 1,
+      "message": "Given the above changes, I wonder if this check for special standard format still makes sense here.\n \nIn this particular case: default \u003d\u003d {everything except DATE, TIME, DATETIME and NUMBER }, while IsSpecialStandardFormat tests for time formats only. So presumably it ain\u0027t going to happen that the condition here would evaluate to true",
+      "range": {
+        "startLine": 1493,
+        "startChar": 13,
+        "endLine": 1493,
+        "endChar": 36
+      },
+      "revId": "c10083bf5f0f5f08c78d009e83168028590ff1a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
