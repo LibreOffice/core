@@ -94,7 +94,7 @@ SvxBrushItem*   ScGlobal::pEmbeddedBrushItem = nullptr;
 ScFunctionList* ScGlobal::pStarCalcFunctionList = nullptr;
 ScFunctionMgr*  ScGlobal::pStarCalcFunctionMgr  = nullptr;
 
-ScUnitConverter* ScGlobal::pUnitConverter = nullptr;
+std::atomic<ScUnitConverter*> ScGlobal::pUnitConverter(nullptr);
 SvNumberFormatter* ScGlobal::pEnglishFormatter = nullptr;
 ScFieldEditEngine* ScGlobal::pFieldEditEngine = nullptr;
 
@@ -655,11 +655,8 @@ void ScGlobal::ResetFunctionList()
 
 ScUnitConverter* ScGlobal::GetUnitConverter()
 {
-    assert(!bThreadedGroupCalcInProgress);
-    if ( !pUnitConverter )
-        pUnitConverter = new ScUnitConverter;
-
-    return pUnitConverter;
+    return comphelper::doubleCheckedInit( pUnitConverter,
+        []() { return new ScUnitConverter; });
 }
 
 const sal_Unicode* ScGlobal::UnicodeStrChr( const sal_Unicode* pStr,
