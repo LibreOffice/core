@@ -43,6 +43,7 @@
 #include <svx/svdovirt.hxx>
 #include <sdr/overlay/overlayrollingrectangle.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrhittesthelper.hxx>
@@ -675,11 +676,6 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
         }
     }
 
-    // apply calc offset to marked object rect
-    // ( necessary for handles to be displayed in
-    // correct position )
-    Point aGridOff = GetGridOffset();
-
     // There can be multiple mark views, but we're only interested in the one that has a window associated.
     const bool bTiledRendering = comphelper::LibreOfficeKit::isActive() && GetFirstOutputDevice() && GetFirstOutputDevice()->GetOutDevType() == OUTDEV_WINDOW;
 
@@ -804,20 +800,13 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
     if (bFrmHdl)
     {
         if(!aRect.IsEmpty())
-        { // otherwise nothing is found
+        {
+            // otherwise nothing is found
+            const size_t nSiz0(maHdlList.GetHdlCount());
+
             if( bSingleTextObjMark )
             {
-                const size_t nSiz0=maHdlList.GetHdlCount();
                 mpMarkedObj->AddToHdlList(maHdlList);
-                const size_t nSiz1=maHdlList.GetHdlCount();
-                for (size_t i=nSiz0; i<nSiz1; ++i)
-                {
-                    SdrHdl* pHdl=maHdlList.GetHdl(i);
-                    pHdl->SetObj(mpMarkedObj);
-                    pHdl->SetPos( pHdl->GetPos() + aGridOff );
-                    pHdl->SetPageView(mpMarkedPV);
-                    pHdl->SetObjHdlNum(sal_uInt16(i-nSiz0));
-                }
             }
             else
             {
@@ -876,6 +865,20 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                     }
                 }
             }
+
+            const size_t nSiz1(maHdlList.GetHdlCount());
+
+            // moved setting the missing parameters at SdrHdl here from the
+            // single loop above (bSingleTextObjMark), this was missing all
+            // the time. Setting SdrObject is now required to correctly get
+            // the View-Dependent evtl. GridOffset adapted
+            for (size_t i=nSiz0; i<nSiz1; ++i)
+            {
+                SdrHdl* pHdl=maHdlList.GetHdl(i);
+                pHdl->SetObj(mpMarkedObj);
+                pHdl->SetPageView(mpMarkedPV);
+                pHdl->SetObjHdlNum(sal_uInt16(i-nSiz0));
+            }
         }
     }
     else
@@ -907,7 +910,6 @@ void SdrMarkView::SetMarkHandles(SfxViewShell* pOtherShell)
                 for (size_t i=nSiz0; i<nSiz1; ++i)
                 {
                     SdrHdl* pHdl=maHdlList.GetHdl(i);
-                    pHdl->SetPos( pHdl->GetPos() + aGridOff );
                     pHdl->SetObj(pObj);
                     pHdl->SetPageView(pPV);
                     pHdl->SetObjHdlNum(sal_uInt16(i-nSiz0));
@@ -1692,6 +1694,46 @@ void SdrMarkView::SetMarkHdlSizePixel(sal_uInt16 nSiz)
     }
 }
 
+bool SdrMarkView::getPossibleGridOffsetForSdrObject(
+    basegfx::B2DVector& rOffset,
+    const SdrObject* pObj,
+    const SdrPageView* pPV) const
+{
+    if(nullptr == pObj || nullptr == pPV)
+    {
+        return false;
+    }
+
+    const OutputDevice* pOutputDevice(GetFirstOutputDevice());
+
+    if(nullptr == pOutputDevice)
+    {
+        return false;
+    }
+
+    const SdrPageWindow* pSdrPageWindow(pPV->FindPageWindow(*pOutputDevice));
+
+    if(nullptr == pSdrPageWindow)
+    {
+        return false;
+    }
+
+    const sdr::contact::ObjectContact& rObjectContact(pSdrPageWindow->GetObjectContact());
+
+    if(!rObjectContact.supportsGridOffsets())
+    {
+        return false;
+    }
+
+    basegfx::B2DVector aOffset(0.0, 0.0);
+    const sdr::contact::ViewObjectContact& rVOC(pObj->GetViewContact().GetViewObjectContact(
+        const_cast<sdr::contact::ObjectContact&>(rObjectContact)));
+
+    rObjectContact.calculateGridOffsetForViewOjectContact(rOffset, rVOC);
+
+    return !rOffset.equalZero();
+}
+
 SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, SdrSearchOptions nOptions, const SdrLayerIDSet* pMVisLay) const
 {
     if(((nOptions & SdrSearchOptions::IMPISMASTER) && pObj->IsNotVisibleAsMaster()) || (!pObj->IsVisible()))
@@ -1705,8 +1747,16 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
     const bool bTXT(dynamic_cast<const SdrTextObj*>( pObj) != nullptr && static_cast<SdrTextObj*>(pObj)->IsTextFrame());
     SdrObject* pRet=nullptr;
     tools::Rectangle aRect(pObj->GetCurrentBoundRect());
-    // hack for calc grid sync
-    aRect += pObj->GetGridOffset();
+
+    // add possible GridOffset to up-to-now view-independent BountRect data
+    basegfx::B2DVector aGridOffset(0.0, 0.0);
+    if(getPossibleGridOffsetForSdrObject(aGridOffset, pObj, pPV))
+    {
+        aRect += Point(
+            basegfx::fround(aGridOffset.getX()),
+            basegfx::fround(aGridOffset.getY()));
+    }
+
     sal_uInt16 nTol2(nTol);
 
     // double tolerance for OLE, text frames and objects in
@@ -2040,6 +2090,7 @@ void SdrMarkView::AdjustMarkHdl(SfxViewShell* pOtherShell)
     SetMarkHandles(pOtherShell);
 }
 
+// BoundRect in model coordinates, no GridOffset added
 tools::Rectangle SdrMarkView::GetMarkedObjBoundRect() const
 {
     tools::Rectangle aRect;
@@ -2047,49 +2098,32 @@ tools::Rectangle SdrMarkView::GetMarkedObjBoundRect() const
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pO=pM->GetMarkedSdrObj();
         tools::Rectangle aR1(pO->GetCurrentBoundRect());
-        // Ensure marked area includes the calc offset
-        // ( if applicable ) to sync to grid
-        aR1 += pO->GetGridOffset();
+        //Z Ensure marked area includes the calc offset
+        //Z No - keep in ModelData coordinates
         if (aRect.IsEmpty()) aRect=aR1;
         else aRect.Union(aR1);
     }
     return aRect;
 }
 
-Point SdrMarkView::GetGridOffset() const
-{
-    Point aOffset;
-    // calculate the area occupied by the union of each marked object
-    // ( synced to grid ) and compare to the same unsynced area to calculate
-    // the offset. Hopefully that's the sensible thing to do
-    const tools::Rectangle& aGroupSyncedRect = GetMarkedObjRect();
-    aOffset =   aGroupSyncedRect.TopLeft() - maMarkedObjRectNoOffset.TopLeft();
-    return aOffset;
-}
-
+// ObjRect in model coordinates, no GridOffset added
 const tools::Rectangle& SdrMarkView::GetMarkedObjRect() const
 {
     if (mbMarkedObjRectDirty) {
         const_cast<SdrMarkView*>(this)->mbMarkedObjRectDirty=false;
         tools::Rectangle aRect;
-        tools::Rectangle aRect2;
         for (size_t nm=0; nm<GetMarkedObjectCount(); ++nm) {
             SdrMark* pM=GetSdrMarkByIndex(nm);
             SdrObject* pO = pM->GetMarkedSdrObj();
             if (!pO)
                 continue;
             tools::Rectangle aR1(pO->GetSnapRect());
-            // apply calc offset to marked object rect
-            // ( necessary for handles to be displayed in
-            // correct position )
-            if (aRect2.IsEmpty()) aRect2=aR1;
-            else aRect2.Union( aR1 );
-            aR1 += pO->GetGridOffset();
+            //Z apply calc offset to marked object rect
+            //Z No - keep in ModelData coordinates
             if (aRect.IsEmpty()) aRect=aR1;
             else aRect.Union(aR1);
         }
         const_cast<SdrMarkView*>(this)->maMarkedObjRect=aRect;
-        const_cast<SdrMarkView*>(this)->maMarkedObjRectNoOffset=aRect2;
     }
     return maMarkedObjRect;
 }
