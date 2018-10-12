@@ -1353,6 +1353,30 @@ static const ScIconSetBitmapMap aBitmapMap[] = {
 
 }
 
+const char* ScIconSetFormat::getIconSetName( ScIconSetType eType )
+{
+    const ScIconSetMap* pMap = ScIconSetFormat::g_IconSetMap;
+    for(; pMap->pName; ++pMap)
+    {
+        if(pMap->eType == eType)
+            return pMap->pName;
+    }
+
+    return "";
+}
+
+sal_Int32 ScIconSetFormat::getIconSetElements( ScIconSetType eType )
+{
+    const ScIconSetMap* pMap = ScIconSetFormat::g_IconSetMap;
+    for(; pMap->pName; ++pMap)
+    {
+        if(pMap->eType == eType)
+            return pMap->nElements;
+    }
+
+    return 0;
+}
+
 BitmapEx& ScIconSetFormat::getBitmap(sc::IconSetBitmapMap & rIconSetBitmapMap,
         ScIconSetType const eType, sal_Int32 const nIndex)
 {
