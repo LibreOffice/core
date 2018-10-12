@@ -36,7 +36,7 @@
 
 ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window* pBottom, vcl::Window* pDiagonal,
                             ScDocument* pD, const ScAddress& aPos, const OUString& rUser,
-                            const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard, ScDrawView *pDrawViewP) :
+                            const MapMode& rMap, bool bLeftEdge, bool bForce, bool bKeyboard) :
     m_pWindow( pWin ),
     m_pRightWin( pRight ),
     m_pBottomWin( pBottom ),
@@ -47,7 +47,6 @@ ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window*
     m_aMapMode( rMap ),
     m_bLeft( bLeftEdge ),
     m_bByKeyboard( bKeyboard ),
-    m_pDrawView ( pDrawViewP ),
     m_bVisible( false )
 {
     Size aSizePixel = m_pWindow->GetOutputSizePixel();
@@ -98,15 +97,14 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl, Timer *, void)
             m_xObject = ScNoteUtil::CreateTempCaption( *m_pDoc, m_aDocPos, *pPage, m_aUserText, m_aVisRect, m_bLeft );
             if( m_xObject )
             {
-                if (m_pDrawView)
-                    m_pDrawView->SyncForGrid(m_xObject.get());
+                // Here, SyncForGrid and GetGridOffset was used with the comment:
+                // // Need to include grid offset: GetCurrentBoundRect is removing it
+                // // but we need to know actual rect position
+                // This is no longer true - SdrObject::RecalcBoundRect() uses the
+                // GetViewContact().getViewIndependentPrimitive2DContainer()) call
+                // that now by default adds the eventually needed GridOffset. Thus
+                // I have removed that adaption stuff.
                 m_aRect = m_xObject->GetCurrentBoundRect();
-
-                // Need to include grid offset: GetCurrentBoundRect is removing it
-                // but we need to know actual rect position
-                m_aRect += m_xObject->GetGridOffset();
-
-                assert(m_pDrawView && "this ended up with a wrong rectangle");
             }
 
             // Insert page so that the model recognise it and also deleted

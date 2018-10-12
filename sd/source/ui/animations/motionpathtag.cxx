@@ -290,8 +290,11 @@ void SdPathHdl::CreateB2dIAObject()
                             const drawinglayer::primitive2d::Primitive2DContainer& aSequence = rVC.getViewIndependentPrimitive2DContainer();
                             std::unique_ptr<sdr::overlay::OverlayObject> pNew(new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence));
 
-                            xManager->add(*pNew);
-                            maOverlayGroup.append(std::move(pNew));
+                            // OVERLAYMANAGER
+                            insertNewlyCreatedOverlayObjectForSdrHdl(
+                                std::move(pNew),
+                                rPageWindow.GetObjectContact(),
+                                *xManager.get());
                         }
                     }
                 }

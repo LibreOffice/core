@@ -196,7 +196,7 @@ namespace sdr
                     || nNewTransparence != mnLastTransparence)
                 {
                     // conditions of last local decomposition have changed, delete
-                    const_cast< OverlaySelection* >(this)->setPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DContainer());
+                    const_cast< OverlaySelection* >(this)->resetPrimitive2DSequence();
                 }
             }
 

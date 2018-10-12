@@ -36,8 +36,8 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <svx/svdoole2.hxx>
-
 #include <sdr/contact/viewcontactofsdrole2obj.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
 using namespace com::sun::star;
 
@@ -159,6 +159,7 @@ ViewObjectContact::ViewObjectContact(ObjectContact& rObjectContact, ViewContact&
     mrViewContact(rViewContact),
     maObjectRange(),
     mxPrimitive2DSequence(),
+    maGridOffset(0.0, 0.0),
     mbLazyInvalidate(false)
 {
     // make the ViewContact remember me
@@ -363,8 +364,36 @@ drawinglayer::primitive2d::Primitive2DContainer const & ViewObjectContact::getPr
 
         // always update object range when PrimitiveSequence changes
         const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-        const_cast< ViewObjectContact* >(this)->maObjectRange =
-            mxPrimitive2DSequence.getB2DRange(rViewInformation2D);
+        const_cast< ViewObjectContact* >(this)->maObjectRange = mxPrimitive2DSequence.getB2DRange(rViewInformation2D);
+
+        // check and eventually embed to GridOffset transform primitive
+        if(GetObjectContact().supportsGridOffsets())
+        {
+            const basegfx::B2DVector& rGridOffset(getGridOffset());
+
+            if(0.0 != rGridOffset.getX() || 0.0 != rGridOffset.getY())
+            {
+                const basegfx::B2DHomMatrix aTranslateGridOffset(
+                    basegfx::utils::createTranslateB2DHomMatrix(
+                        rGridOffset));
+                const drawinglayer::primitive2d::Primitive2DReference aEmbed(
+                    new drawinglayer::primitive2d::TransformPrimitive2D(
+                        aTranslateGridOffset,
+                        mxPrimitive2DSequence));
+
+                // Set values at local data. So for now, the mechanism is to reset some of the
+                // defining things (mxPrimitive2DSequence, maGridOffset) and re-create the
+                // buffered data (including maObjectRange). It *could* be changed to keep
+                // the unmodified PrimitiveSequence and only update the GridOffset, but this
+                // would require a 2nd instance of maObjectRange and mxPrimitive2DSequence. I
+                // started doing so, but it just makes the code more complicated. For now,
+                // just allow re-creation of the PrimitiveSequence (and removing buffered
+                // decomposed content of it). May be optimized, though. OTOH it only happens
+                // in calc which traditionally does not have a huge amout of DrawObjects anyways.
+                const_cast< ViewObjectContact* >(this)->mxPrimitive2DSequence = drawinglayer::primitive2d::Primitive2DContainer { aEmbed };
+                const_cast< ViewObjectContact* >(this)->maObjectRange.transform(aTranslateGridOffset);
+            }
+        }
     }
 
     // return current Primitive2DContainer
@@ -425,6 +454,30 @@ drawinglayer::primitive2d::Primitive2DContainer ViewObjectContact::getPrimitive2
     }
 
     return xSeqRetval;
+}
+
+// Support getting a GridOffset per object and view for non-linear ViewToDevice
+// transformation (calc). On-demand created by delegating to the ObjectContact
+// (->View) that has then all needed information
+const basegfx::B2DVector& ViewObjectContact::getGridOffset() const
+{
+    if(0.0 == maGridOffset.getX() && 0.0 == maGridOffset.getY() && GetObjectContact().supportsGridOffsets())
+    {
+        // create on-demand
+        GetObjectContact().calculateGridOffsetForViewOjectContact(const_cast<ViewObjectContact*>(this)->maGridOffset, *this);
+    }
+
+    return maGridOffset;
+}
+
+void ViewObjectContact::resetGridOffset()
+{
+    // reset buffered GridOffset itself
+    maGridOffset.setX(0.0);
+    maGridOffset.setY(0.0);
+
+    // also reset sequence to get a re-calculation when GridOffset changes
+    mxPrimitive2DSequence.clear();
 }
 
 }}

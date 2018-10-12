@@ -105,7 +105,6 @@ protected:
     sdr::ViewSelection          maSdrViewSelection;
 
     tools::Rectangle            maMarkedObjRect;
-    tools::Rectangle            maMarkedObjRectNoOffset;
     tools::Rectangle            maMarkedPointsRect;
     tools::Rectangle            maMarkedGluePointsRect;
 
@@ -125,6 +124,18 @@ protected:
 
     // flag to completely disable handles at the view
     bool                        mbMarkHandlesHidden : 1;
+
+    // Helper to get a possible GridOffset from SdrObject
+    bool getPossibleGridOffsetForSdrObject(
+        basegfx::B2DVector& rOffset,
+        const SdrObject* pObj,
+        const SdrPageView* pPV) const;
+
+    // Helper to get a possible GridOffset from Position
+    bool getPossibleGridOffsetForPosition(
+        basegfx::B2DVector& rOffset,
+        const basegfx::B2DPoint& rPoint,
+        const SdrPageView* pPV) const;
 
 private:
     SVX_DLLPRIVATE void ImpClearVars();
@@ -398,7 +409,6 @@ public:
     const tools::Rectangle& GetMarkedGluePointsRect() const; // Enclosing rectangle of all marked glue points
     const tools::Rectangle& GetAllMarkedRect() const { return GetMarkedObjRect(); }
     tools::Rectangle GetAllMarkedBoundRect() const { return GetMarkedObjBoundRect(); }
-    Point GetGridOffset() const;
 
     // Will be always called, if the list of marked objects might be changed.
     // If you override this method, be sure that you call the

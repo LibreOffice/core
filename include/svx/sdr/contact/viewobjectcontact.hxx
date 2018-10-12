@@ -58,6 +58,9 @@ private:
     // the PrimitiveAnimation if Primitive2DContainer contains animations
     std::unique_ptr<sdr::animation::PrimitiveAnimation> mpPrimitiveAnimation;
 
+    // possible on-demand calculated GridOffset for non-linear ViewToDevice transformation (calc)
+    basegfx::B2DVector                              maGridOffset;
+
     // This bool gets set when the object gets invalidated by ActionChanged() and
     // can be used from the OC to late-invalidates
     bool                                            mbLazyInvalidate : 1;
@@ -124,6 +127,10 @@ public:
 
     // just process the sub-hierarchy, used as tooling from getPrimitive2DSequenceHierarchy
     drawinglayer::primitive2d::Primitive2DContainer getPrimitive2DSequenceSubHierarchy(DisplayInfo& rDisplayInfo) const;
+
+    // interface to support GridOffset for non-linear ViewToDevice transformation (calc)
+    const basegfx::B2DVector& getGridOffset() const;
+    void resetGridOffset();
 };
 
 }}

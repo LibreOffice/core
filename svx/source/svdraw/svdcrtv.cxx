@@ -641,6 +641,31 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 
                 if(!bSceneIntoScene)
                 {
+                    // Here an interactively created SdrObject gets added, so
+                    // take into account that interaction created an object in
+                    // model coordinates. If we have e.g. a GirdOffset, this is a
+                    // little bit tricky - we have an object in model coordinates,
+                    // so the fetched offset is at the wrong point in principle
+                    // since we need to 'substract' the offset here to get to
+                    // 'real' model coordinates. But we have nothing better here,
+                    // so go for it.
+                    // The 2nd a little tricky thing is that this will early-create
+                    // a ViewObjectContact for the new SdrObject, but these VOCs
+                    // are anyways layouted for being create-on-demand. This will
+                    // be adapted/replaced corretly later on.
+                    // This *should* be the right place for getting all interactively
+                    // created objects, see InsertObjectAtView below that calls
+                    // CreateUndoNewObject.
+                    basegfx::B2DVector aGridOffset(0.0, 0.0);
+                    if(getPossibleGridOffsetForSdrObject(aGridOffset, pObj, pCreatePV))
+                    {
+                        const Size aOffset(
+                            basegfx::fround(-aGridOffset.getX()),
+                            basegfx::fround(-aGridOffset.getY()));
+
+                        pObj->NbcMove(aOffset);
+                    }
+
                     // do the same as before
                     InsertObjectAtView(pObj, *pCreatePV);
                 }
@@ -802,12 +827,8 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
             }
             else
             {
-                ::basegfx::B2DPolyPolygon aPoly = pCurrentCreate->TakeCreatePoly(maDragStat);
-                Point aGridOff = pCurrentCreate->GetGridOffset();
-                // Hack for calc, transform position of create placeholder
-                // object according to current zoom so as objects relative
-                // position to grid appears stable
-                aPoly.transform( basegfx::utils::createTranslateB2DHomMatrix( aGridOff.X(), aGridOff.Y() ) );
+                const ::basegfx::B2DPolyPolygon aPoly(pCurrentCreate->TakeCreatePoly(maDragStat));
+
                 mpCreateViewExtraData->CreateAndShowOverlay(*this, nullptr, aPoly);
             }
 
