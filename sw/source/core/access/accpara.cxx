@@ -1415,7 +1415,7 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
 
     const OUString& rText = GetString();
 
-    if( ! IsValidChar( nIndex, rText.getLength()+1 ) )
+    if (!IsValidPosition(nIndex, rText.getLength()))
         throw lang::IndexOutOfBoundsException();
 
     bool bSupplementalMode = false;
@@ -1844,7 +1844,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getRunAttributes(
 
     {
         const OUString& rText = GetString();
-        if ( !IsValidChar( nIndex, rText.getLength() ) )
+        if (!IsValidPosition(nIndex, rText.getLength()))
         {
             throw lang::IndexOutOfBoundsException();
         }
