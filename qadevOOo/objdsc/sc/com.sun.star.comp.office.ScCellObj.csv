@@ -192,7 +192,6 @@
 "ScCellObj";"com::sun::star::beans::XPropertySet";"removePropertyChangeListener()"
 "ScCellObj";"com::sun::star::beans::XPropertySet";"addVetoableChangeListener()"
 "ScCellObj";"com::sun::star::beans::XPropertySet";"removeVetoableChangeListener()"
-"ScCellObj";"com::sun::star::container::XEnumerationAccess#optional";"createEnumeration()"
 "ScCellObj";"com::sun::star::text::XText";"insertTextContent()"
 "ScCellObj";"com::sun::star::text::XText";"removeTextContent()"
 "ScCellObj";"com::sun::star::util::XModifyBroadcaster#optional";"addModifyListener()"

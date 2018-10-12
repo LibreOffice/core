@@ -5,4 +5,3 @@
 "ScDataPilotTablesObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
 "ScDataPilotTablesObj";"com::sun::star::container::XElementAccess";"getElementType()"
 "ScDataPilotTablesObj";"com::sun::star::container::XElementAccess";"hasElements()"
-"ScDataPilotTablesObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"

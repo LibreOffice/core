@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xenumerationaccess.hxx>
 #include <test/sheet/tableautoformat.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -25,7 +26,10 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScAutoFormatObj : public CalcUnoApiTest, public apitest::TableAutoFormat
+class ScAutoFormatObj : public CalcUnoApiTest,
+                        public apitest::XEnumerationAccess,
+                        public apitest::TableAutoFormat
+
 {
 public:
     ScAutoFormatObj();
@@ -35,6 +39,9 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScAutoFormatObj);
+
+    // XEnumerationAccess
+    CPPUNIT_TEST(testCreateEnumeration);
 
     // TableAutoFormat
     CPPUNIT_TEST(testTableAutoFormatProperties);
