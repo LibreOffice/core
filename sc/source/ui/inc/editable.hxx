@@ -25,7 +25,6 @@
 class ScDocument;
 class ScViewFunc;
 class ScMarkData;
-class ScRange;
 
 namespace sc {
 

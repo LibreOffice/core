@@ -20,23 +20,16 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_ACREDLIN_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_ACREDLIN_HXX
 
-#include <vcl/morebtn.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/group.hxx>
-#include <svtools/headbar.hxx>
-#include <svtools/simptabl.hxx>
-#include <svtools/svtabbx.hxx>
-#include <rangenam.hxx>
-#include "anyrefdg.hxx"
-#include <vcl/lstbox.hxx>
 #include <svx/ctredlin.hxx>
 #include <chgtrack.hxx>
 #include <chgviset.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 
 class ScViewData;
 class ScDocument;
+class SvSimpleTable;
+
+struct SfxChildWinInfo;
 
 class ScRedlinData : public RedlinData
 {

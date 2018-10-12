@@ -13,8 +13,6 @@
 
 #include <svtools/treelistbox.hxx>
 
-#include <vcl/builder.hxx>
-
 #include <pivot.hxx>
 
 class ScPivotLayoutDialog;

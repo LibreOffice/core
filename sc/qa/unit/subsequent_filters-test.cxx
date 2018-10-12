@@ -44,6 +44,7 @@
 #include <dbdata.hxx>
 #include <validat.hxx>
 #include <formulacell.hxx>
+#include <formulaopt.hxx>
 #include <userdat.hxx>
 #include <stlsheet.hxx>
 #include <docfunc.hxx>

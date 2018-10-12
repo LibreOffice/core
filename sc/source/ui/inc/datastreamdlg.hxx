@@ -12,17 +12,15 @@
 
 #include <sal/config.h>
 
-#include <rtl/ref.hxx>
 #include <vcl/weld.hxx>
-
-#include "datastream.hxx"
 
 class ScDocShell;
 class URLBox;
 class ScRange;
-class ComboBox;
 
 namespace sc {
+
+class DataStream;
 
 class DataStreamDlg : public weld::GenericDialogController
 {

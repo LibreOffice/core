@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_UI_INC_ACCESSIBILITYHINTS_HXX
 
 #include "viewdata.hxx"
-#include <com/sun/star/uno/XInterface.hpp>
 #include <svl/hint.hxx>
 
 class ScAccWinFocusLostHint : public SfxHint

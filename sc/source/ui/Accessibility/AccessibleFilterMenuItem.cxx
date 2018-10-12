@@ -28,6 +28,7 @@
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

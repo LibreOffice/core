@@ -14,6 +14,7 @@
 #include <document.hxx>
 #include <docsh.hxx>
 #include <global.hxx>
+#include <scdll.hxx>
 
 #include <address.hxx>
 #include <rangeutl.hxx>

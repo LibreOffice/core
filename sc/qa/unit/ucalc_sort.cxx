@@ -23,6 +23,7 @@
 #include <editutil.hxx>
 #include <table.hxx>
 #include <drwlayer.hxx>
+#include <formulaopt.hxx>
 
 #include <sal/config.h>
 #include <editeng/wghtitem.hxx>
