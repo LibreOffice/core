@@ -196,6 +196,8 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
 
             if( pdir )
             {
+                SAL_INFO("sal.file", "opendir(" << path << ") => " << pdir);
+
                 /* create and initialize impl structure */
                 oslDirectoryImpl* pDirImpl = static_cast<oslDirectoryImpl*>(malloc( sizeof(oslDirectoryImpl) ));
 
@@ -214,9 +216,8 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
             }
             else
             {
-#ifdef DEBUG_OSL_FILE
-                perror ("osl_openDirectory"); fprintf (stderr, path);
-#endif
+                int e = errno;
+                SAL_INFO("sal.file", "opendir(" << path << "): errno " << e << ": " << strerror(e));
             }
         }
     }
@@ -244,8 +245,14 @@ oslFileError SAL_CALL osl_closeDirectory(oslDirectory pDirectory)
     else
 #endif
     {
-        if (closedir( pDirImpl->pDirStruct))
+        if (closedir( pDirImpl->pDirStruct) != 0)
+        {
+            int e = errno;
+            SAL_INFO("sal.file", "closedir(" << pDirImpl->pDirStruct << "): errno " << e << ": " << strerror(e));
             err = oslTranslateFileError(errno);
+        }
+        else
+            SAL_INFO("sal.file", "closedir(" << pDirImpl->pDirStruct << "): OK");
     }
 
     /* cleanup members */
@@ -461,8 +468,11 @@ oslFileError osl_psz_createDirectory(char const * pszPath, sal_uInt32 flags)
     if ( nRet < 0 )
     {
         nRet=errno;
+        SAL_INFO("sal.file", "mkdir(" << pszPath << ",0" << std::oct << mode << std::dec << "): errno " << nRet << ": " << strerror(nRet));
         return oslTranslateFileError(nRet);
     }
+    else
+        SAL_INFO("sal.file", "mkdir(" << pszPath << ",0" << std::oct << mode << std::dec << "): OK");
 
     return osl_File_E_None;
 }
@@ -476,8 +486,11 @@ static oslFileError osl_psz_removeDirectory( const sal_Char* pszPath )
     if ( nRet < 0 )
     {
         nRet=errno;
+        SAL_INFO("sal.file", "rmdir(" << pszPath << "): errno " << nRet << ": " << strerror(nRet));
         return oslTranslateFileError(nRet);
     }
+    else
+        SAL_INFO("sal.file", "rmdir(" << pszPath << "): OK");
 
     return osl_File_E_None;
 }

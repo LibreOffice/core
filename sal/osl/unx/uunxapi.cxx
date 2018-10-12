@@ -181,8 +181,15 @@ int access_u(const rtl_uString* pustrPath, int mode)
     accessFilePathState *state = prepare_to_access_file_path(fn.getStr());
 
     int result = access(fn.getStr(), mode);
+    int saved_errno = errno;
+    if (result == -1)
+        SAL_INFO("sal.file", "access(" << fn.getStr() << ",0" << std::oct << mode << std::dec << "): errno " << saved_errno << ": " << strerror(saved_errno));
+    else
+        SAL_INFO("sal.file", "access(" << fn.getStr() << ",0" << std::oct << mode << std::dec << "): OK");
 
     done_accessing_file_path(fn.getStr(), state);
+
+    errno = saved_errno;
 
     return result;
 }
@@ -211,6 +218,11 @@ bool realpath_u(const rtl_uString* pustrFileName, rtl_uString** ppustrResolvedNa
 
     char  rp[PATH_MAX];
     bool  bRet = realpath(fn.getStr(), rp);
+    int   saved_errno = errno;
+    if (!bRet)
+        SAL_INFO("sal.file", "realpath(" << fn.getStr() << "): errno " << saved_errno << ": " << strerror(saved_errno));
+    else
+        SAL_INFO("sal.file", "realpath(" << fn.getStr() << "): OK");
 
     done_accessing_file_path(fn.getStr(), state);
 
@@ -221,6 +233,9 @@ bool realpath_u(const rtl_uString* pustrFileName, rtl_uString** ppustrResolvedNa
 
         rtl_uString_assign(ppustrResolvedName, resolved.pData);
     }
+
+    errno = saved_errno;
+
     return bRet;
 }
 
@@ -236,8 +251,15 @@ int stat_c(const char* cpPath, struct stat* buf)
     accessFilePathState *state = prepare_to_access_file_path(cpPath);
 
     int result = stat(cpPath, buf);
+    int saved_errno = errno;
+    if (result == -1)
+        SAL_INFO("sal.file", "stat(" << cpPath << "): errno " << saved_errno << ": " << strerror(saved_errno));
+    else
+        SAL_INFO("sal.file", "stat(" << cpPath << "): OK");
 
     done_accessing_file_path(cpPath, state);
+
+    errno = saved_errno;
 
     return result;
 }
@@ -254,8 +276,15 @@ int lstat_c(const char* cpPath, struct stat* buf)
     accessFilePathState *state = prepare_to_access_file_path(cpPath);
 
     int result = lstat(cpPath, buf);
+    int saved_errno = errno;
+    if (result == -1)
+        SAL_INFO("sal.file", "lstat(" << cpPath << "): errno " << saved_errno << ": " << strerror(saved_errno));
+    else
+        SAL_INFO("sal.file", "lstat(" << cpPath << "): OK");
 
     done_accessing_file_path(cpPath, state);
+
+    errno = saved_errno;
 
     return result;
 }
@@ -278,8 +307,15 @@ int mkdir_u(const rtl_uString* path, mode_t mode)
     accessFilePathState *state = prepare_to_access_file_path(fn.getStr());
 
     int result = mkdir(OUStringToOString(path).getStr(), mode);
+    int saved_errno = errno;
+    if (result == -1)
+        SAL_INFO("sal.file", "mkdir(" << OUStringToOString(path).getStr() << ",0" << std::oct << mode << std::dec << "): errno " << saved_errno << ": " << strerror(saved_errno));
+    else
+        SAL_INFO("sal.file", "mkdir(" << OUStringToOString(path).getStr() << ",0" << std::oct << mode << std::dec << "): OK");
 
     done_accessing_file_path(fn.getStr(), state);
+
+    errno = saved_errno;
 
     return result;
 }
@@ -291,9 +327,7 @@ int open_c(const char *cpPath, int oflag, int mode)
     int result = open(cpPath, oflag, mode);
     int saved_errno = errno;
     if (result == -1)
-    {
         SAL_INFO("sal.file", "open(" << cpPath << ",0" << std::oct << oflag << ",0" << mode << std::dec << "): errno " << saved_errno << ": " << strerror(saved_errno));
-    }
     else
         SAL_INFO("sal.file", "open(" << cpPath << ",0" << std::oct << oflag << ",0" << mode << std::dec << ") => " << result);
 
@@ -362,16 +396,15 @@ int ftruncate_with_name(int fd, sal_uInt64 uSize, rtl_String* path)
     accessFilePathState *state = prepare_to_access_file_path(fn.getStr());
 
     int result = ftruncate(fd, uSize);
-
+    int saved_errno = errno;
     if (result < 0)
-    {
-        int e = errno;
-        SAL_INFO("sal.file", "ftruncate(" << fd << "," << uSize << "): errno " << e << ": " << strerror(e));
-    }
+        SAL_INFO("sal.file", "ftruncate(" << fd << "," << uSize << "): errno " << saved_errno << ": " << strerror(saved_errno));
     else
         SAL_INFO("sal.file", "ftruncate(" << fd << "," << uSize << "): OK");
 
     done_accessing_file_path(fn.getStr(), state);
+
+    errno = saved_errno;
 
     return result;
 }
