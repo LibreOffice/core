@@ -138,7 +138,7 @@ class OOX_DLLPUBLIC OleFormCtrlExportHelper final
 {
     std::unique_ptr<::oox::ole::EmbeddedControl> mpControl;
     ::oox::ole::ControlModelBase* mpModel;
-    ::oox::GraphicHelper maGrfHelper;
+    ::oox::GraphicHelper const maGrfHelper;
     css::uno::Reference< css::frame::XModel > mxDocModel;
     css::uno::Reference< css::awt::XControlModel > mxControlModel;
 
@@ -175,7 +175,7 @@ class OOX_DLLPUBLIC MSConvertOCXControls : public SvxMSConvertOCXControls
 {
 protected:
     css::uno::Reference< css::uno::XComponentContext > mxCtx;
-    ::oox::GraphicHelper maGrfHelper;
+    ::oox::GraphicHelper const maGrfHelper;
 
     bool importControlFromStream( ::oox::BinaryInputStream& rInStrm,
                                   css::uno::Reference< css::form::XFormComponent > & rxFormComp,

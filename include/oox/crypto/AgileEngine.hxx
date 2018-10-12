@@ -57,15 +57,15 @@ struct OOX_DLLPUBLIC AgileEncryptionInfo
 
 struct OOX_DLLPUBLIC AgileEncryptionParameters
 {
-    sal_Int32 spinCount;
-    sal_Int32 saltSize;
-    sal_Int32 keyBits;
-    sal_Int32 hashSize;
-    sal_Int32 blockSize;
+    sal_Int32 const spinCount;
+    sal_Int32 const saltSize;
+    sal_Int32 const keyBits;
+    sal_Int32 const hashSize;
+    sal_Int32 const blockSize;
 
-    OUString cipherAlgorithm;
-    OUString cipherChaining;
-    OUString hashAlgorithm;
+    OUString const cipherAlgorithm;
+    OUString const cipherChaining;
+    OUString const hashAlgorithm;
 };
 
 enum class AgileEncryptionPreset

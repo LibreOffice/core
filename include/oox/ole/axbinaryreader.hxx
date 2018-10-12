@@ -85,7 +85,7 @@ public:
 private:
     BinaryInputStream*  mpInStrm;           ///< The wrapped input stream.
     sal_Int64           mnStrmPos;          ///< Tracks relative position in the stream.
-    sal_Int64           mnStrmSize;         ///< Size of the wrapped stream data.
+    sal_Int64 const     mnStrmSize;         ///< Size of the wrapped stream data.
 };
 
 
@@ -182,7 +182,7 @@ private:
     struct StringProperty : public ComplexProperty
     {
         OUString&    mrValue;
-        sal_uInt32          mnSize;
+        sal_uInt32 const    mnSize;
 
         explicit            StringProperty( OUString& rValue, sal_uInt32 nSize ) :
                                 mrValue( rValue ), mnSize( nSize ) {}
@@ -193,7 +193,7 @@ private:
     struct ArrayStringProperty : public ComplexProperty
     {
         AxArrayString&      mrArray;
-        sal_uInt32          mnSize;
+        sal_uInt32 const    mnSize;
         explicit            ArrayStringProperty( AxArrayString& rArray, sal_uInt32 nSize ) :
                                 mrArray( rArray ), mnSize( nSize ) {}
         virtual bool        readProperty( AxAlignedInputStream& rInStrm ) override;

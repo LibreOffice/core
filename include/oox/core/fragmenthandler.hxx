@@ -59,7 +59,7 @@ struct FragmentBaseData
     const OUString      maFragmentPath;
     css::uno::Reference< css::xml::sax::XLocator >
                         mxLocator;
-    RelationsRef        mxRelations;
+    RelationsRef const  mxRelations;
 
     explicit            FragmentBaseData(
                             XmlFilterBase& rFilter,

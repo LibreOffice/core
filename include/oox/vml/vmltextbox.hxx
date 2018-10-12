@@ -67,9 +67,9 @@ struct OOX_DLLPUBLIC TextFontModel
 /** A text portion in a textbox with the same formatting for all characters. */
 struct TextPortionModel
 {
-    TextParagraphModel  maParagraph;
+    TextParagraphModel const maParagraph;
     TextFontModel       maFont;
-    OUString     maText;
+    OUString const maText;
 
     explicit            TextPortionModel( const TextParagraphModel& rParagraph, const TextFontModel& rFont, const OUString& rText );
 };

@@ -83,10 +83,10 @@ typedef o3tl::enumarray<ShapeProperty, sal_Int32> ShapePropertyIds;
 struct OOX_DLLPUBLIC ShapePropertyInfo
 {
     const ShapePropertyIds& mrPropertyIds;
-    bool mbNamedLineMarker;      /// True = use named line marker instead of explicit line marker.
-    bool mbNamedLineDash;        /// True = use named line dash instead of explicit line dash.
-    bool mbNamedFillGradient;    /// True = use named fill gradient instead of explicit fill gradient.
-    bool mbNamedFillBitmap;      /// True = use named fill bitmap instead of explicit fill bitmap.
+    bool const mbNamedLineMarker;      /// True = use named line marker instead of explicit line marker.
+    bool const mbNamedLineDash;        /// True = use named line dash instead of explicit line dash.
+    bool const mbNamedFillGradient;    /// True = use named fill gradient instead of explicit fill gradient.
+    bool const mbNamedFillBitmap;      /// True = use named fill bitmap instead of explicit fill bitmap.
 
     static ShapePropertyInfo DEFAULT;           /// Default property info (used as default parameter of other methods).
 
@@ -154,7 +154,7 @@ private:
 
 private:
     ModelObjectHelper&  mrModelObjHelper;
-    ShapePropertyInfo   maShapePropInfo;
+    ShapePropertyInfo const maShapePropInfo;
 };
 
 

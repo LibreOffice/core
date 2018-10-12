@@ -184,7 +184,7 @@ private:
     const dgm::Point* getPresNode() const;
     sal_Int32 getNodeCount() const;
 
-    bool          mIsElse;
+    bool const    mIsElse;
     IteratorAttr  maIter;
     ConditionAttr maCond;
 };
@@ -260,7 +260,7 @@ public:
         { return mpShapeTemplate; }
 
 private:
-    ShapePtr mpShapeTemplate;
+    ShapePtr const mpShapeTemplate;
 };
 
 typedef std::shared_ptr< ShapeAtom > ShapeAtomPtr;
