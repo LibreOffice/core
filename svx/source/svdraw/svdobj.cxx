@@ -454,6 +454,13 @@ void SdrObject::Free( SdrObject*& _rpObject )
     delete pObject;
 }
 
+//Z
+const Point& SdrObject::getGridOffsetForObject() const
+{
+    static Point aNullPoint;
+    return aNullPoint;
+}
+
 void SdrObject::SetRectsDirty(bool bNotMyself, bool bRecursive)
 {
     if (!bNotMyself)
@@ -891,6 +898,11 @@ void SdrObject::RecalcBoundRect()
     // central new method which will calculate the BoundRect using primitive geometry
     if(aOutRect.IsEmpty())
     {
+        // Comment for GridOffset stuff: Due to using
+        // GetViewContact().getViewIndependentPrimitive2DContainer
+        // here, that offset should *not* be included -> view-independent.
+        // Thus needs no longer be substracted (what was done before).
+        //Z Maybe need to check that.
         const drawinglayer::primitive2d::Primitive2DContainer xPrimitives(GetViewContact().getViewIndependentPrimitive2DContainer());
 
         if(!xPrimitives.empty())
@@ -906,7 +918,6 @@ void SdrObject::RecalcBoundRect()
                     static_cast<long>(floor(aRange.getMinY())),
                     static_cast<long>(ceil(aRange.getMaxX())),
                     static_cast<long>(ceil(aRange.getMaxY())));
-                aOutRect -= GetGridOffset(); // don't include grid offset
                 return;
             }
         }
@@ -1024,7 +1035,7 @@ SdrObject& SdrObject::operator=(const SdrObject& rObj)
     if (rObj.pGrabBagItem!=nullptr)
         pGrabBagItem.reset(static_cast< SfxGrabBagItem* >( rObj.pGrabBagItem->Clone() ));
 
-    aGridOffset = rObj.aGridOffset;
+//Z    aGridOffset = rObj.aGridOffset;
     return *this;
 }
 
@@ -1707,7 +1718,7 @@ bool SdrObject::HasTextEdit() const
 bool SdrObject::Equals(const SdrObject& rOtherObj) const
 {
     return (aAnchor.X() == rOtherObj.aAnchor.X() && aAnchor.Y() == rOtherObj.aAnchor.Y() &&
-            aGridOffset.X() == rOtherObj.aGridOffset.X() && aGridOffset.Y() == rOtherObj.aGridOffset.Y() &&
+//Z            aGridOffset.X() == rOtherObj.aGridOffset.X() && aGridOffset.Y() == rOtherObj.aGridOffset.Y() &&
             nOrdNum == rOtherObj.nOrdNum && mnNavigationPosition == rOtherObj.mnNavigationPosition &&
             mbSupportTextIndentingOnLineWidthChange == rOtherObj.mbSupportTextIndentingOnLineWidthChange &&
             mbLineIsOutsideGeometry == rOtherObj.mbLineIsOutsideGeometry && bMarkProt == rOtherObj.bMarkProt &&
