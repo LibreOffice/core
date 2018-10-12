@@ -94,7 +94,11 @@ short AbstractSdStartPresDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(AbstractSdPresLayoutDlg_Impl);
+short AbstractSdPresLayoutDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 IMPL_ABSTDLG_BASE(SdAbstractSfxDialog_Impl);
 
 short AbstractSdVectorizeDlg_Impl::Execute()
@@ -344,12 +348,12 @@ bool AbstractMorphDlg_Impl::IsOrientationFade() const
 
 void AbstractSdStartPresDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
 {
-    m_xDlg->GetAttr( rOutAttrs );
+    m_xDlg->GetAttr(rOutAttrs);
 }
 
 void AbstractSdPresLayoutDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
 {
-    pDlg->GetAttr( rOutAttrs );
+    m_xDlg->GetAttr(rOutAttrs);
 }
 
 const SfxItemSet* SdAbstractSfxDialog_Impl::GetOutputItemSet() const
@@ -457,9 +461,9 @@ VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdPresLayoutTe
     return VclPtr<SdPresLayoutTemplateDlg_Impl>::Create( VclPtr<SdPresLayoutTemplateDlg>::Create( pDocSh, pParent, bBackgroundDlg, rStyleBase, ePO, pSSPool ) );
 }
 
-VclPtr<AbstractSdPresLayoutDlg>  SdAbstractDialogFactory_Impl::CreateSdPresLayoutDlg(  ::sd::DrawDocShell* pDocShell, const SfxItemSet& rInAttrs)
+VclPtr<AbstractSdPresLayoutDlg> SdAbstractDialogFactory_Impl::CreateSdPresLayoutDlg(weld::Window* pParent, ::sd::DrawDocShell* pDocShell, const SfxItemSet& rInAttrs)
 {
-    return VclPtr<AbstractSdPresLayoutDlg_Impl>::Create( VclPtr<SdPresLayoutDlg>::Create( pDocShell, nullptr, rInAttrs ) );
+    return VclPtr<AbstractSdPresLayoutDlg_Impl>::Create(o3tl::make_unique<SdPresLayoutDlg>(pDocShell, pParent, rInAttrs));
 }
 
 VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdTabTemplateDlg(vcl::Window* pParent, const SfxObjectShell* pDocShell, SfxStyleSheetBase& rStyleBase, SdrModel* pModel, SdrView* pView )
