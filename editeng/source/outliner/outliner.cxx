@@ -66,8 +66,8 @@ using std::advance;
 
 void Outliner::ImplCheckDepth( sal_Int16& rnDepth ) const
 {
-    if( rnDepth < nMinDepth )
-        rnDepth = nMinDepth;
+    if( rnDepth < gnMinDepth )
+        rnDepth = gnMinDepth;
     else if( rnDepth > nMaxDepth )
         rnDepth = nMaxDepth;
 }
@@ -713,7 +713,7 @@ void Outliner::ImplSetLevelDependentStyleSheet( sal_Int32 nPara )
 void Outliner::ImplInitDepth( sal_Int32 nPara, sal_Int16 nDepth, bool bCreateUndo )
 {
 
-    DBG_ASSERT( ( nDepth >= nMinDepth ) && ( nDepth <= nMaxDepth ), "ImplInitDepth - Depth is invalid!" );
+    DBG_ASSERT( ( nDepth >= gnMinDepth ) && ( nDepth <= nMaxDepth ), "ImplInitDepth - Depth is invalid!" );
 
     Paragraph* pPara = pParaList->GetParagraph( nPara );
         if (!pPara)
@@ -1249,7 +1249,6 @@ Outliner::Outliner(SfxItemPool* pPool, OutlinerMode nMode)
     : mnFirstSelPage(0)
     , nDepthChangedHdlPrevDepth(0)
     , nMaxDepth(9)
-    , nMinDepth(-1)
     , bFirstParaIsEmpty(true)
     , nBlockInsCallback(0)
     , bStrippingPortions(false)
@@ -1885,7 +1884,7 @@ void Outliner::Clear()
         ImplBlockInsertionCallbacks( true );
         pEditEngine->Clear();
         pParaList->Clear();
-        pParaList->Append( std::unique_ptr<Paragraph>(new Paragraph( nMinDepth )));
+        pParaList->Append( std::unique_ptr<Paragraph>(new Paragraph( gnMinDepth )));
         bFirstParaIsEmpty = true;
         ImplBlockInsertionCallbacks( false );
     }
@@ -1893,7 +1892,7 @@ void Outliner::Clear()
     {
             Paragraph* pPara = pParaList->GetParagraph( 0 );
             if(pPara)
-                pPara->SetDepth( nMinDepth );
+                pPara->SetDepth( gnMinDepth );
     }
 }
 

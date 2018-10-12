@@ -278,8 +278,8 @@ private:
                     mpTable;    // LZW compression data
     LZWCTreeNode*   mpPrefix;   // the compression is as same as the TIFF compression
     static constexpr sal_uInt16 gnDataSize = 8;
-    sal_uInt16 const mnClearCode;
-    sal_uInt16 const mnEOICode;
+    static constexpr sal_uInt16 gnClearCode = 1 << gnDataSize;
+    static constexpr sal_uInt16 gnEOICode = gnClearCode + 1;
     sal_uInt16      mnTableSize;
     sal_uInt16      mnCodeSize;
     sal_uInt32      mnOffset;
@@ -298,9 +298,7 @@ public:
 LZWEncoder::LZWEncoder(osl::File* pOutputFile) :
         Ascii85Encoder (pOutputFile),
         mpPrefix(nullptr),
-        mnClearCode(1 << gnDataSize),
-        mnEOICode(mnClearCode + 1),
-        mnTableSize(mnEOICode + 1),
+        mnTableSize(gnEOICode + 1),
         mnCodeSize(gnDataSize + 1),
         mnOffset(32),       // free bits in dwShift
         mdwShift(0)
@@ -313,7 +311,7 @@ LZWEncoder::LZWEncoder(osl::File* pOutputFile) :
         mpTable[i].mnValue      = static_cast<sal_uInt8>(mpTable[i].mnCode);
     }
 
-    WriteBits( mnClearCode, mnCodeSize );
+    WriteBits( gnClearCode, mnCodeSize );
 }
 
 LZWEncoder::~LZWEncoder()
@@ -321,7 +319,7 @@ LZWEncoder::~LZWEncoder()
     if (mpPrefix)
         WriteBits (mpPrefix->mnCode, mnCodeSize);
 
-    WriteBits (mnEOICode, mnCodeSize);
+    WriteBits (gnEOICode, mnCodeSize);
 }
 
 void
@@ -369,13 +367,13 @@ LZWEncoder::EncodeByte (sal_uInt8 nByte )
 
             if (mnTableSize == 409)
             {
-                WriteBits (mnClearCode, mnCodeSize);
+                WriteBits (gnClearCode, mnCodeSize);
 
-                for (i = 0; i < mnClearCode; i++)
+                for (i = 0; i < gnClearCode; i++)
                     mpTable[i].mpFirstChild = nullptr;
 
                 mnCodeSize = gnDataSize + 1;
-                mnTableSize = mnEOICode + 1;
+                mnTableSize = gnEOICode + 1;
             }
             else
             {

@@ -57,9 +57,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 pDoc        ( pDok ),
                 eTempGrammar( eGrammar ),
                 nIndex      ( 0 ),
-                bModified   ( false ),
-                mnMaxRow    (-1),
-                mnMaxCol    (-1)
+                bModified   ( false )
 {
     if (!rSymbol.isEmpty())
     {
@@ -94,9 +92,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 pDoc        ( pDok ),
                 eTempGrammar( FormulaGrammar::GRAM_UNSPECIFIED ),
                 nIndex      ( 0 ),
-                bModified   ( false ),
-                mnMaxRow    (-1),
-                mnMaxCol    (-1)
+                bModified   ( false )
 {
     pCode->SetFromRangeName(true);
     InitCode();
@@ -113,9 +109,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 pDoc        ( pDok ),
                 eTempGrammar( FormulaGrammar::GRAM_UNSPECIFIED ),
                 nIndex      ( 0 ),
-                bModified   ( false ),
-                mnMaxRow    (-1),
-                mnMaxCol    (-1)
+                bModified   ( false )
 {
     ScSingleRefData aRefData;
     aRefData.InitAddress( rTarget );
@@ -137,9 +131,7 @@ ScRangeData::ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument,
     pDoc        (pDocument ? pDocument : rScRangeData.pDoc),
     eTempGrammar(rScRangeData.eTempGrammar),
     nIndex      (rScRangeData.nIndex),
-    bModified   (rScRangeData.bModified),
-    mnMaxRow    (rScRangeData.mnMaxRow),
-    mnMaxCol    (rScRangeData.mnMaxCol)
+    bModified   (rScRangeData.bModified)
 {
     pCode->SetFromRangeName(true);
 }
@@ -270,7 +262,7 @@ void ScRangeData::UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress& rPos )
 {
     std::unique_ptr<ScTokenArray> pTemp( pCode->Clone() );
     ScCompiler aComp( pDoc, rPos, *pTemp.get(), formula::FormulaGrammar::GRAM_DEFAULT);
-    aComp.MoveRelWrap(GetMaxCol(), GetMaxRow());
+    aComp.MoveRelWrap(MAXCOL, MAXROW);
     aComp.CreateStringFromTokenArray( rBuffer );
 }
 
@@ -503,16 +495,6 @@ ScRangeData::IsNameValidType ScRangeData::IsNameValid( const OUString& rName, co
         }
     }
     return NAME_VALID;
-}
-
-SCROW ScRangeData::GetMaxRow() const
-{
-    return mnMaxRow >= 0 ? mnMaxRow : MAXROW;
-}
-
-SCCOL ScRangeData::GetMaxCol() const
-{
-    return mnMaxCol >= 0 ? mnMaxCol : MAXCOL;
 }
 
 FormulaError ScRangeData::GetErrCode() const

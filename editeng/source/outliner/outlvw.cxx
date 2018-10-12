@@ -491,8 +491,8 @@ void OutlinerView::Indent( short nDiff )
         if( nOldDepth == -1 )
             continue;
 
-        if ( nNewDepth < pOwner->nMinDepth )
-            nNewDepth = pOwner->nMinDepth;
+        if ( nNewDepth < Outliner::gnMinDepth )
+            nNewDepth = Outliner::gnMinDepth;
         if ( nNewDepth > pOwner->nMaxDepth )
             nNewDepth = pOwner->nMaxDepth;
 

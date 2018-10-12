@@ -27,8 +27,7 @@ static const int gnBorderHeight(3);
 
 PreviewValueSet::PreviewValueSet (vcl::Window* pParent)
     : ValueSet (pParent, WB_TABSTOP),
-      maPreviewSize(10,10),
-      mnMaxColumnCount(-1)
+      maPreviewSize(10,10)
 {
     SetStyle (
         GetStyle()
@@ -92,8 +91,6 @@ sal_uInt16 PreviewValueSet::CalculateColumnCount (int nWidth) const
         nColumnCount = nWidth / (maPreviewSize.Width() + 2*gnBorderWidth);
         if (nColumnCount < 1)
             nColumnCount = 1;
-        else if (mnMaxColumnCount>0 && nColumnCount>mnMaxColumnCount)
-            nColumnCount = mnMaxColumnCount;
     }
     return static_cast<sal_uInt16>(nColumnCount);
 }
