@@ -1571,13 +1571,15 @@ public:
     // a helper method for a Control's Draw method
     void PaintToDevice( ::OutputDevice* pDevice, const Point& rPos, const Size& rSize );
 
-    /* mark Window for deletion in top of event queue
+    /* tdf#119390 set parent to default window. Typically for use in advance of destroying
+     * a floating windows which has the current focus so focus will revert to the main
+     * document window and not the first widget in the current parent of the floating
+     * window.
     */
-    void doLazyDelete();
+    void SetParentToDefaultWindow();
 
 
     //  Keyboard access functions
-
 
     /** Query the states of keyboard indicators - Caps Lock, Num Lock and
         Scroll Lock.  Use the following mask to retrieve the state of each

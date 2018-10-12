@@ -377,8 +377,8 @@ void MenuBarWindow::KillActivePopup()
             }
             pActivePopup->ImplGetFloatingWindow()->StopExecute();
             pActivePopup->ImplGetFloatingWindow()->doShutdown();
-            pActivePopup->pWindow->doLazyDelete();
-            pActivePopup->pWindow = nullptr;
+            pActivePopup->pWindow->SetParentToDefaultWindow();
+            pActivePopup->pWindow.disposeAndClear();
         }
         pActivePopup = nullptr;
     }
