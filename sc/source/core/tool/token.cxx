@@ -1299,6 +1299,7 @@ void ScTokenArray::CheckForThreading( const FormulaToken& r )
         ocDBVar,
         ocDBVarP,
         ocText,
+        ocSheet,
         ocExternal,
         ocDde,
         ocWebservice,
