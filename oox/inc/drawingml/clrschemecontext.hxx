@@ -42,7 +42,7 @@ public:
 
 private:
     ClrScheme&      mrClrScheme;
-    sal_Int32       mnColorToken;
+    sal_Int32 const mnColorToken;
 };
 
 class clrSchemeContext : public oox::core::ContextHandler2

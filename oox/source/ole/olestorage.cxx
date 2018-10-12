@@ -80,7 +80,7 @@ private:
     Reference< XStream > mxTempFile;
     Reference< XOutputStream > mxOutStrm;
     Reference< XSeekable > mxSeekable;
-    OUString            maElementName;
+    OUString const      maElementName;
 };
 
 OleOutputStream::OleOutputStream( const Reference< XComponentContext >& rxContext,

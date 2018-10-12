@@ -136,8 +136,8 @@ public:
             const css::uno::Reference< css::xml::sax::XFastAttributeList >& attributes = css::uno::Reference< css::xml::sax::XFastAttributeList >());
         Tag( int token,
             const AttributeList& attribs);
-        int token; ///< tag type, or XML_TOKEN_INVALID
-        AttributeList attributes;
+        int const token; ///< tag type, or XML_TOKEN_INVALID
+        AttributeList const attributes;
         OUString text;
         /**
          This function returns value of the given attribute, or the passed default value if not found.
