@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xenumerationaccess.hxx>
 #include <test/sheet/spreadsheetviewsettings.hxx>
 #include <test/sheet/xactivationbroadcaster.hxx>
 #include <test/sheet/xcellrangereferrer.hxx>
@@ -33,6 +34,7 @@ class ScTabViewObj : public CalcUnoApiTest,
                      public apitest::SpreadsheetViewSettings,
                      public apitest::XActivationBroadcaster,
                      public apitest::XCellRangeReferrer,
+                     public apitest::XEnumerationAccess,
                      public apitest::XSpreadsheetView,
                      public apitest::XViewFreezable,
                      public apitest::XViewSplitable
@@ -57,6 +59,9 @@ public:
     // XCellRangeReferrer
     //Disabled till it's clear why it fails on some machines.
     //CPPUNIT_TEST(testGetReferredCells);
+
+    // XEnumerationAccess
+    CPPUNIT_TEST(testCreateEnumeration);
 
     // XSpreadsheetView
     CPPUNIT_TEST(testGetSetActiveSheet);

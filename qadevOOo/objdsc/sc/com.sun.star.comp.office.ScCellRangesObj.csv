@@ -186,4 +186,3 @@
 "ScCellRangesObj";"com::sun::star::chart::XChartDataArray";"setRowDescriptions()"
 "ScCellRangesObj";"com::sun::star::chart::XChartDataArray";"getColumnDescriptions()"
 "ScCellRangesObj";"com::sun::star::chart::XChartDataArray";"setColumnDescriptions()"
-"ScCellRangesObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"

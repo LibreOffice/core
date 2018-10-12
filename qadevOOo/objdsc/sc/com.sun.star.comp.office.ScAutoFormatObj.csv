@@ -11,4 +11,3 @@
 "ScAutoFormatObj";"com::sun::star::beans::XPropertySet";"removePropertyChangeListener()"
 "ScAutoFormatObj";"com::sun::star::beans::XPropertySet";"addVetoableChangeListener()"
 "ScAutoFormatObj";"com::sun::star::beans::XPropertySet";"removeVetoableChangeListener()"
-"ScAutoFormatObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"

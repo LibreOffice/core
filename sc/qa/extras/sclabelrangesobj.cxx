@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xenumerationaccess.hxx>
 #include <test/sheet/xlabelranges.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -25,7 +26,9 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScLabelRangesObj : public CalcUnoApiTest, public apitest::XLabelRanges
+class ScLabelRangesObj : public CalcUnoApiTest,
+                         public apitest::XEnumerationAccess,
+                         public apitest::XLabelRanges
 {
 public:
     ScLabelRangesObj();
@@ -35,6 +38,9 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScLabelRangesObj);
+
+    // XEnumerationAccess
+    CPPUNIT_TEST(testCreateEnumeration);
 
     // XLabelRanges
     CPPUNIT_TEST(testAddNew);

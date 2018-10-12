@@ -37,7 +37,6 @@
 "ScTabViewObj";"com::sun::star::view::XFormLayerAccess#optional";"getFromController()"
 "ScTabViewObj";"com::sun::star::view::XFormLayerAccess#optional";"isFormDesignMode()"
 "ScTabViewObj";"com::sun::star::view::XFormLayerAccess#optional";"setFormDesignMode()"
-"ScTabViewObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"
 "ScTabViewObj";"com::sun::star::frame::XController";"attachFrame()"
 "ScTabViewObj";"com::sun::star::frame::XController";"attachModel()"
 "ScTabViewObj";"com::sun::star::frame::XController";"suspend()"
@@ -49,4 +48,3 @@
 "ScTabViewObj";"com::sun::star::awt::XUserInputInterception#optional";"removeKeyHandler()"
 "ScTabViewObj";"com::sun::star::awt::XUserInputInterception#optional";"addMouseClickHandler()"
 "ScTabViewObj";"com::sun::star::awt::XUserInputInterception#optional";"removeMouseClickHandler()"
-

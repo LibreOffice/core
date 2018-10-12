@@ -8,4 +8,3 @@
 "ScTableSheetsObj";"com::sun::star::container::XIndexAccess";"getByIndex()"
 "ScTableSheetsObj";"com::sun::star::container::XElementAccess";"getElementType()"
 "ScTableSheetsObj";"com::sun::star::container::XElementAccess";"hasElements()"
-"ScTableSheetsObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"

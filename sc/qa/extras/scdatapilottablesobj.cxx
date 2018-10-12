@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xenumerationaccess.hxx>
 #include <test/sheet/xdatapilottables.hxx>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -30,7 +31,9 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScDataPilotTablesObj : public CalcUnoApiTest, public apitest::XDataPilotTables
+class ScDataPilotTablesObj : public CalcUnoApiTest,
+                             public apitest::XDataPilotTables,
+                             public apitest::XEnumerationAccess
 {
 public:
     ScDataPilotTablesObj();
@@ -44,6 +47,9 @@ public:
 
     // XDataPilotTables
     CPPUNIT_TEST(testXDataPilotTables);
+
+    // XEnumerationAccess
+    CPPUNIT_TEST(testCreateEnumeration);
 
     CPPUNIT_TEST_SUITE_END();
 

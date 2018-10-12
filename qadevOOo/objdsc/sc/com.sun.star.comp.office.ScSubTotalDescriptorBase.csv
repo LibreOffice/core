@@ -9,4 +9,3 @@
 "ScSubTotalDescriptorBase";"com::sun::star::beans::XPropertySet";"removePropertyChangeListener()"
 "ScSubTotalDescriptorBase";"com::sun::star::beans::XPropertySet";"addVetoableChangeListener()"
 "ScSubTotalDescriptorBase";"com::sun::star::beans::XPropertySet";"removeVetoableChangeListener()"
-"ScSubTotalDescriptorBase";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"
