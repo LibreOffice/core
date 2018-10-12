@@ -9,8 +9,11 @@
 
 #include <dataprovider.hxx>
 #include <datatransformation.hxx>
+#include <datamapper.hxx>
 #include <stringutil.hxx>
 
+#include <vcl/svapp.hxx>
+#include <docsh.hxx>
 #include <orcus/csv_parser.hpp>
 #include <utility>
 

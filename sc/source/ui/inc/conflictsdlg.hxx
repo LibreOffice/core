@@ -22,15 +22,14 @@
 
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/idle.hxx>
 #include <svx/ctredlin.hxx>
 
-#include <chgtrack.hxx>
 #include "docsh.hxx"
 
 class ScViewData;
+class ScChangeTrack;
+class ScChangeAction;
 
 enum ScConflictAction
 {

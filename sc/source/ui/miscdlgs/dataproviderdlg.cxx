@@ -12,6 +12,9 @@
 #include <document.hxx>
 #include <dataprovider.hxx>
 #include <datatransformation.hxx>
+#include <datamapper.hxx>
+#include <dbdata.hxx>
+#include <docsh.hxx>
 
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>

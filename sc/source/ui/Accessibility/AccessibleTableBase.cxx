@@ -28,6 +28,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 

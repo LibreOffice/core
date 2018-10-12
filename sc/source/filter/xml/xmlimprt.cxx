@@ -78,6 +78,7 @@
 #include <unonames.hxx>
 #include <numformat.hxx>
 #include <sizedev.hxx>
+#include <scdll.hxx>
 
 #include <comphelper/base64.hxx>
 #include <comphelper/extract.hxx>

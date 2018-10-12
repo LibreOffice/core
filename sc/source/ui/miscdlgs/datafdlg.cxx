@@ -14,6 +14,7 @@
 #include <docsh.hxx>
 #include <refundo.hxx>
 #include <undodat.hxx>
+#include <tabvwsh.hxx>
 
 #include <rtl/ustrbuf.hxx>
 

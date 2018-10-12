@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CLIPUTIL_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CLIPUTIL_HXX
 
-#include <address.hxx>
+#include <types.hxx>
 
 class ScViewData;
 class ScTabViewShell;

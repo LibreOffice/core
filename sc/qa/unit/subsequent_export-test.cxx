@@ -18,6 +18,7 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/stritem.hxx>
+#include <sfx2/sfxsids.hrc>
 
 #include "helper/qahelper.hxx"
 #include "helper/xpath.hxx"

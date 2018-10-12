@@ -29,6 +29,7 @@
 #include <docsh.hxx>
 #include <miscuno.hxx>
 #include <forbiuno.hxx>
+#include <appoptio.hxx>
 #include <viewopti.hxx>
 #include <docpool.hxx>
 #include <sc.hrc>

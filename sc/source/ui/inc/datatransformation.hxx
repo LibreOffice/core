@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_DATAPROVIDER_DATATRANSFORMATION_HXX
 #define INCLUDED_SC_SOURCE_UI_DATAPROVIDER_DATATRANSFORMATION_HXX
 
-#include <address.hxx>
+#include <types.hxx>
 #include <scdllapi.h>
 
 #include <sortparam.hxx>

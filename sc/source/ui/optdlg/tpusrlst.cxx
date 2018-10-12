@@ -34,6 +34,7 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <tpusrlst.hxx>
+#include <scui_def.hxx>
 
 #define CR  u'\x000D'
 #define LF  u'\x000A'

@@ -14,6 +14,7 @@
 
 #include <global.hxx>
 #include <document.hxx>
+#include <scdll.hxx>
 
 #include <tools/stream.hxx>
 

@@ -12,14 +12,13 @@
 
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <svtools/ctrlbox.hxx>
-#include <svl/zforlist.hxx>
-#include "anyrefdg.hxx"
+#include <address.hxx>
 
 struct ScDataBarFormatData;
 class ScDocument;
 class SvxColorListBox;
+class SvNumberFormatter;
+class Edit;
 
 class ScDataBarSettingsDlg : public ModalDialog
 {

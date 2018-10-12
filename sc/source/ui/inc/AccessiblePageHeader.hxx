@@ -27,7 +27,6 @@
 class ScPreviewShell;
 class EditTextObject;
 class ScAccessiblePageHeaderArea;
-class ScPreviewShell;
 
 class ScAccessiblePageHeader : public ScAccessibleContextBase
 {

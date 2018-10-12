@@ -12,12 +12,9 @@
 
 #include <sal/config.h>
 
-#include <rtl/ref.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/listctrl.hxx>
-#include <vcl/button.hxx>
 
 #include "datatableview.hxx"
 
