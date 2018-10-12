@@ -12,7 +12,6 @@
 
 #include <memory>
 
-class ScDocument;
 class ScMarkData;
 class ScRange;
 enum class InsertDeleteFlags : sal_uInt16;

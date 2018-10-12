@@ -18,6 +18,7 @@
 #include <svx/drawitem.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
+#include <vcl/lstbox.hxx>
 #include <libxml/tree.h>
 
 #include <anyrefdg.hxx>

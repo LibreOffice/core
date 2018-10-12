@@ -22,6 +22,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <sot/storage.hxx>
 #include <sot/exchange.hxx>
 #include <filter/msfilter/classids.hxx>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_EDITFIELD_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_EDITFIELD_HXX
 
-#include <vcl/field.hxx>
+#include <vcl/edit.hxx>
 
 /** An edit control that contains a double precision floating-point value. */
 class ScDoubleField : public Edit

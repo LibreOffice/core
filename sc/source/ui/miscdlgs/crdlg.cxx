@@ -20,6 +20,7 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <crdlg.hxx>
+#include <scui_def.hxx>
 
 ScColOrRowDlg::ScColOrRowDlg(weld::Window* pParent, const OUString& rStrTitle, const OUString& rStrLabel)
     : GenericDialogController(pParent, "modules/scalc/ui/colorrowdialog.ui", "ColOrRowDialog")

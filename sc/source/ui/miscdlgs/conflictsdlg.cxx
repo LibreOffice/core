@@ -24,6 +24,7 @@
 #include <scresid.hxx>
 #include <viewdata.hxx>
 #include <dbfunc.hxx>
+#include <chgtrack.hxx>
 
 // struct ScConflictsListEntry
 

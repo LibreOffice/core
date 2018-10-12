@@ -20,22 +20,15 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_AUTOFMT_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_AUTOFMT_HXX
 
-#include <vcl/virdev.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
-#include <vcl/morebtn.hxx>
-#include <svtools/scriptedtext.hxx>
 #include <svx/framelinkarray.hxx>
 #include <scdllapi.h>
-#include "viewdata.hxx"
 
 class ScAutoFormatData;
 class SvxBoxItem;
 class SvxLineItem;
-class ScAutoFmtPreview; // s.u.
 class SvNumberFormatter;
-class ScDocument;
+class VirtualDevice;
+class ScViewData;
 
 enum AutoFmtLine { TOP_LINE, BOTTOM_LINE, LEFT_LINE, RIGHT_LINE };
 

@@ -20,12 +20,12 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CSVRULER_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CSVRULER_HXX
 
-#include <vcl/virdev.hxx>
 #include "csvcontrol.hxx"
 #include "csvsplits.hxx"
 #include <scdllapi.h>
 
 class ScAccessibleCsvControl;
+class VirtualDevice;
 
 /** A ruler control for the CSV import dialog. Supports setting and moving
     splits (which divide lines of data into several columns). */

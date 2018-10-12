@@ -13,12 +13,11 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
+#include <types.hxx>
 
-#include <global.hxx>
-
-#include "tabvwsh.hxx"
-#include <sfx2/bindings.hxx>
-#include <sfx2/dispatch.hxx>
+class ScTabViewShell;
+class ScDocument;
 
 #define MAX_DATAFORM_COLS   256
 #define MAX_DATAFORM_ROWS   32000

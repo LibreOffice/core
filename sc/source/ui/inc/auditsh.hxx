@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_UI_INC_AUDITSH_HXX
 
 #include <sfx2/shell.hxx>
-#include <sfx2/module.hxx>
 
 #include <shellids.hxx>
 
