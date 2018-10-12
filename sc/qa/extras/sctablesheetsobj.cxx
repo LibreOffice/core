@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xenumerationaccess.hxx>
 #include <test/container/xnamecontainer.hxx>
 #include <test/sheet/xspreadsheets.hxx>
 #include <test/sheet/xspreadsheets2.hxx>
@@ -20,7 +21,10 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-class ScTableSheetsObj : public CalcUnoApiTest, public ::apitest::XSpreadsheets, public ::apitest::XSpreadsheets2, public apitest::XNameContainer
+class ScTableSheetsObj : public CalcUnoApiTest, public apitest::XEnumerationAccess,
+                                                public ::apitest::XSpreadsheets,
+                                                public ::apitest::XSpreadsheets2,
+                                                public apitest::XNameContainer
 {
 public:
     ScTableSheetsObj();
@@ -29,6 +33,9 @@ public:
     virtual void tearDown() override;
 
     CPPUNIT_TEST_SUITE(ScTableSheetsObj);
+
+    // XEnumerationAccess
+    CPPUNIT_TEST(testCreateEnumeration);
 
     // XSpreadsheets
     CPPUNIT_TEST(testInsertNewByName);
