@@ -271,6 +271,13 @@ published service ViewSettings
         @since LibreOffice 6.1
     */
     [optional, property] boolean ShowInlineTooltips;
+
+    /** If this property is `TRUE`, the advanced menu for header/footer is shown
+
+        @since LibreOffice 6.2
+    */
+    [optional, property] boolean UseHeaderFooterMenu;
+
 };
 
 }; }; }; };

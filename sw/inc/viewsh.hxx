@@ -559,7 +559,7 @@ public:
     /// Acts both for headers / footers, depending on the bShow(Header|Footer)Separator flags
     bool IsHeaderFooterEdit() const { return mbHeaderFooterEdit; }
     bool IsShowHeaderFooterSeparator( FrameControlType eControl ) { return (eControl == Header)? mbShowHeaderSeparator: mbShowFooterSeparator; }
-    virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow ) { if ( eControl == Header ) mbShowHeaderSeparator = bShow; else mbShowFooterSeparator = bShow; }
+    virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow );
     bool IsSelectAll() { return mbSelectAll; }
 
     void setOutputToWindow(bool bOutputToWindow);

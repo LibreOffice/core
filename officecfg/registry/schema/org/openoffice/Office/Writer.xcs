@@ -1063,6 +1063,14 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="UseHeaderFooterMenu" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options - Text document - Contents - [Section] Display -->
+          <info>
+            <desc>Enables the writer to use the advanced menu on headers/footers.</desc>
+            <label>Use advanced header/footer menu</label>
+          </info>
+          <value>true</value>
+        </prop>
       </group>
       <group oor:name="NonprintingCharacter">
         <info>
