@@ -45,6 +45,30 @@
       "revId": "b0ce6cc77ad385d38d53bd400d29ae2a56c823c0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_a3dcaf46",
+        "filename": "xmlscript/source/xmldlg_imexp/xmldlg_expmodels.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2018-10-12T10:08:52Z",
+      "side": 1,
+      "message": "Thanks.\n\nAlso asked to Codespell guys to remove it from typo list.",
+      "parentUuid": "ff0f0b1f_efbdf068",
+      "range": {
+        "startLine": 1035,
+        "startChar": 53,
+        "endLine": 1035,
+        "endChar": 62
+      },
+      "revId": "b0ce6cc77ad385d38d53bd400d29ae2a56c823c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
