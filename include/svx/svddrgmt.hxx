@@ -129,8 +129,17 @@ protected:
     virtual void createSdrDragEntries();
     virtual void createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact);
 
-    // access for derivated classes to maOverlayObjectList (passes ownership)
-    void addToOverlayObjectList(std::unique_ptr<sdr::overlay::OverlayObject> pNew) { maOverlayObjectList.append(std::move(pNew)); }
+    // Helper to support inserting a new OverlayObject. It will do all
+    // necessary stuff involved with that:
+    // - add GridOffset for non-linear ViewToDevice transformation (calc)
+    // - add to OverlayManager
+    // - add to local OverlayObjectList - ownersdhip change (!)
+    // It is centralized here (and protected) to avoid that new usages/
+    // implementations forget one of these needed steps.
+    void insertNewlyCreatedOverlayObjectForSdrDragMethod(
+        std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject,
+        const sdr::contact::ObjectContact& rObjectContact,
+        sdr::overlay::OverlayManager& rOverlayManager);
 
     // access for derivated classes to mrSdrDragView
     SdrDragView& getSdrDragView() { return mrSdrDragView; }
@@ -192,7 +201,9 @@ public:
     virtual void CancelSdrDrag();
     virtual Pointer GetSdrDragPointer() const=0;
 
-    virtual void CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager);
+    virtual void CreateOverlayGeometry(
+        sdr::overlay::OverlayManager& rOverlayManager,
+        const sdr::contact::ObjectContact& rObjectContact);
     void destroyOverlayGeometry();
 
     virtual basegfx::B2DHomMatrix getCurrentTransformation();

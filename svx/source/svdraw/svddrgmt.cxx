@@ -345,6 +345,27 @@ void SdrDragMethod::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, s
     addSdrDragEntry(std::unique_ptr<SdrDragEntry>(new SdrDragEntrySdrObject(rOriginal, rObjectContact, true/*bModify*/)));
 }
 
+void SdrDragMethod::insertNewlyCreatedOverlayObjectForSdrDragMethod(
+    std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject,
+    const sdr::contact::ObjectContact& rObjectContact,
+    sdr::overlay::OverlayManager& rOverlayManager)
+{
+    // check if we have an OverlayObject
+    if(!pOverlayObject)
+    {
+        return;
+    }
+
+    // Add GridOffset for non-linear ViewToDevice transformation (calc)
+    //Z TODO...will use rObjectContact
+
+    // add to OverlayManager
+    rOverlayManager.add(*pOverlayObject);
+
+    // add to local OverlayObjectList - ownersdhip change (!)
+    maOverlayObjectList.append(std::move(pOverlayObject));
+}
+
 void SdrDragMethod::createSdrDragEntries_SolidDrag()
 {
     const size_t nMarkCount(getSdrDragView().GetMarkedObjectCount());
@@ -654,7 +675,9 @@ void SdrDragMethod::CancelSdrDrag()
 
 typedef std::map< const SdrObject*, SdrObject* > SdrObjectAndCloneMap;
 
-void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager)
+void SdrDragMethod::CreateOverlayGeometry(
+    sdr::overlay::OverlayManager& rOverlayManager,
+    const sdr::contact::ObjectContact& rObjectContact)
 {
     // create SdrDragEntries on demand
     if(maSdrDragEntries.empty())
@@ -764,9 +787,14 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
 
         if(!aResult.empty())
         {
-            std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(new sdr::overlay::OverlayPrimitive2DSequenceObject(aResult));
-            rOverlayManager.add(*pNewOverlayObject);
-            addToOverlayObjectList(std::move(pNewOverlayObject));
+            std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(
+                new sdr::overlay::OverlayPrimitive2DSequenceObject(
+                    aResult));
+
+            insertNewlyCreatedOverlayObjectForSdrDragMethod(
+                std::move(pNewOverlayObject),
+                rObjectContact,
+                rOverlayManager);
         }
 
         if(!aResultTransparent.empty())
@@ -774,9 +802,14 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
             drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparencePrimitive2D(new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(aResultTransparent, 0.5));
             aResultTransparent = drawinglayer::primitive2d::Primitive2DContainer { aUnifiedTransparencePrimitive2D };
 
-            std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(new sdr::overlay::OverlayPrimitive2DSequenceObject(aResultTransparent));
-            rOverlayManager.add(*pNewOverlayObject);
-            addToOverlayObjectList(std::move(pNewOverlayObject));
+            std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(
+                new sdr::overlay::OverlayPrimitive2DSequenceObject(
+                    aResultTransparent));
+
+            insertNewlyCreatedOverlayObjectForSdrDragMethod(
+                std::move(pNewOverlayObject),
+                rObjectContact,
+                rOverlayManager);
         }
     }
 
@@ -788,11 +821,17 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
 
         const basegfx::B2DPoint aTopLeft(aActionRectangle.Left(), aActionRectangle.Top());
         const basegfx::B2DPoint aBottomRight(aActionRectangle.Right(), aActionRectangle.Bottom());
-        std::unique_ptr<sdr::overlay::OverlayRollingRectangleStriped> pNew(new sdr::overlay::OverlayRollingRectangleStriped(
-            aTopLeft, aBottomRight, true, false));
+        std::unique_ptr<sdr::overlay::OverlayRollingRectangleStriped> pNew(
+            new sdr::overlay::OverlayRollingRectangleStriped(
+                aTopLeft,
+                aBottomRight,
+                true,
+                false));
 
-        rOverlayManager.add(*pNew);
-        addToOverlayObjectList(std::move(pNew));
+        insertNewlyCreatedOverlayObjectForSdrDragMethod(
+            std::move(pNew),
+            rObjectContact,
+            rOverlayManager);
     }
 }
 
@@ -1766,8 +1805,9 @@ bool SdrDragResize::BeginSdrDrag()
 
     if (pRefHdl!=nullptr && !getSdrDragView().IsResizeAtCenter())
     {
-        // Calc hack to adjust for calc grid
-        DragStat().SetRef1(pRefHdl->GetPos() - getSdrDragView().GetGridOffset());
+        //Z Calc hack to adjust for calc grid
+        //Z DragStat().SetRef1(pRefHdl->GetPos() - getSdrDragView().GetGridOffsetForView());
+        DragStat().SetRef1(pRefHdl->GetPos());
     }
     else
     {
