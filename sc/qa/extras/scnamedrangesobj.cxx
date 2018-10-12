@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xenumerationaccess.hxx>
 #include <test/sheet/xnamedranges.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -19,7 +20,8 @@ using namespace css::uno;
 
 namespace sc_apitest {
 
-class ScNamedRangesObj : public CalcUnoApiTest, public apitest::XNamedRanges
+class ScNamedRangesObj : public CalcUnoApiTest, public apitest::XEnumerationAccess,
+                                                public apitest::XNamedRanges
 {
 public:
     ScNamedRangesObj();
@@ -31,9 +33,13 @@ public:
 
     CPPUNIT_TEST_SUITE(ScNamedRangesObj);
 
+    // XEnumerationAccess
+    CPPUNIT_TEST(testCreateEnumeration);
+
     // XNamedRanges
     CPPUNIT_TEST(testAddNewByName);
     CPPUNIT_TEST(testAddNewFromTitles);
+
     //CPPUNIT_TEST_EXCEPTION(testRemoveByName, uno::RuntimeException);
     CPPUNIT_TEST(testOutputList);
 
