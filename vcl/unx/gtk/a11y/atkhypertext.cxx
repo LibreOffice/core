@@ -66,17 +66,10 @@ hyper_link_get_uri( AtkHyperlink *pLink,
 }
 
 static AtkObject *
-hyper_link_get_object( AtkHyperlink *pLink,
-                       gint          i)
+hyper_link_get_object( AtkHyperlink *,
+                       gint          )
 {
-    try {
-        uno::Any aAny = getHyperlink( pLink )->getAccessibleActionObject( i );
-        uno::Reference< accessibility::XAccessible > xObj( aAny, uno::UNO_QUERY_THROW );
-        return atk_object_wrapper_ref( xObj );
-    }
-    catch(const uno::Exception&) {
-        g_warning( "Exception in hyper_link_get_object" );
-    }
+    g_warning( "FIXME: hyper_link_get_object unimplemented" );
     return nullptr;
 }
 static gint
