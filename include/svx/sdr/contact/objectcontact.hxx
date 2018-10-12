@@ -163,6 +163,13 @@ public:
     // wanted (like in such cases) this method is used. It will reuse the current
     // ViewInformation2D, but clear the ViewPort (no ViewPort means all is visible)
     void resetViewPort();
+
+    // interface to support GridOffset for non-linear ViewToDevice transformation (calc)
+    virtual bool supportsGridOffsets() const;
+    virtual void calculateGridOffsetForViewOjectContact(
+        basegfx::B2DVector& rTarget,
+        const ViewObjectContact& rClient) const;
+    void resetAllGridOffsets();
 };
 
 }}

@@ -71,11 +71,7 @@ namespace sdr
             else
             {
                 // append an invisible outline for the cases where no visible content exists
-                tools::Rectangle aCurrentBoundRect(GetSdrObjGroup().GetLastBoundRect());
-                // Hack for calc, transform position of object according
-                // to current zoom so as objects relative position to grid
-                // appears stable
-                aCurrentBoundRect += GetSdrObjGroup().GetGridOffset();
+                const tools::Rectangle aCurrentBoundRect(GetSdrObjGroup().GetLastBoundRect());
                 const basegfx::B2DRange aCurrentRange(
                     aCurrentBoundRect.Left(), aCurrentBoundRect.Top(),
                     aCurrentBoundRect.Right(), aCurrentBoundRect.Bottom());
