@@ -382,9 +382,6 @@ public:
     sal_Int16 GetRelativeWidthRelation() const;
     const double* GetRelativeHeight() const;
     sal_Int16 GetRelativeHeightRelation() const;
-    // evil calc grid/shape drawlayer syncing
-    const Point& GetGridOffset() const { return aGridOffset; }
-    void SetGridOffset( const Point& rGridOffset ){ aGridOffset = rGridOffset; }
 
     /// @param bNotMyself = true: set only ObjList to dirty, don't mark this object as dirty.
     ///
@@ -998,7 +995,6 @@ protected:
 private:
     struct Impl;
     std::unique_ptr<Impl>             mpImpl;
-    Point                             aGridOffset;  // hack (Calc)
     SdrObjList*                       mpParentOfSdrObject;     // list that includes this object
     sal_uInt32                        nOrdNum;      // order number of the object in the list
     std::unique_ptr<SfxGrabBagItem>   pGrabBagItem; // holds the GrabBagItem property
