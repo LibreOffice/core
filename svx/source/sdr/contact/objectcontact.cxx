@@ -31,6 +31,19 @@ using namespace com::sun::star;
 
 namespace sdr { namespace contact {
 
+bool ObjectContact::supportsGridOffsets() const
+{
+    // default does not support GridOffset
+    return false;
+}
+
+void ObjectContact::calculateGridOffsetForViewOjectContact(
+    basegfx::B2DVector& /*rTarget*/,
+    const ViewObjectContact& /*rClient*/) const
+{
+    // default does not on-demand calculate GridOffset
+}
+
 ObjectContact::ObjectContact()
 :   maViewObjectContactVector(),
     maPrimitiveAnimator(),
@@ -206,6 +219,18 @@ void ObjectContact::resetViewPort()
             rCurrentVI2D.getExtendedInformationSequence());
 
         updateViewInformation2D(aNewVI2D);
+    }
+}
+
+void ObjectContact::resetAllGridOffsets()
+{
+    const sal_uInt32 nVOCCount(getViewObjectContactCount());
+
+    for(sal_uInt32 a(0); a < nVOCCount; a++)
+    {
+        ViewObjectContact* pVOC(getViewObjectContact(a));
+        assert(pVOC && "ObjectContact: ViewObjectContact list Corrupt (!)");
+        pVOC->resetGridOffset();
     }
 }
 
