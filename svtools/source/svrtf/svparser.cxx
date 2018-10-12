@@ -598,7 +598,7 @@ void SvParser<T>::Continue( T )
 }
 
 void BuildWhichTable( std::vector<sal_uInt16> &rWhichMap,
-                      sal_uInt16 *pWhichIds,
+                      sal_uInt16 const *pWhichIds,
                       sal_uInt16 nWhichIds )
 {
     sal_uInt16 aNewRange[2];

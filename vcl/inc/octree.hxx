@@ -95,7 +95,7 @@ private:
 
     std::unique_ptr<sal_uInt8[]> pBuffer;
     std::unique_ptr<sal_uInt8[]> pMap;
-    const sal_uLong             nBits;
+    static constexpr sal_uLong gnBits = 8 -OCTREE_BITS;
 
     SAL_DLLPRIVATE void ImplCreateBuffers( const sal_uLong nMax );
 
@@ -109,9 +109,9 @@ public:
 
 inline sal_uInt16 InverseColorMap::GetBestPaletteIndex( const BitmapColor& rColor )
 {
-    return pMap[ ( ( static_cast<sal_uLong>(rColor.GetRed()) >> nBits ) << OCTREE_BITS_1 ) |
-                 ( ( static_cast<sal_uLong>(rColor.GetGreen()) >> nBits ) << OCTREE_BITS ) |
-                 ( static_cast<sal_uLong>(rColor.GetBlue()) >> nBits ) ];
+    return pMap[ ( ( static_cast<sal_uLong>(rColor.GetRed()) >> gnBits ) << OCTREE_BITS_1 ) |
+                 ( ( static_cast<sal_uLong>(rColor.GetGreen()) >> gnBits ) << OCTREE_BITS ) |
+                 ( static_cast<sal_uLong>(rColor.GetBlue()) >> gnBits ) ];
 }
 
 #endif // INCLUDED_VCL_INC_OCTREE_HXX

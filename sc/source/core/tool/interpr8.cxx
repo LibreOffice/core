@@ -96,7 +96,7 @@ private:
     bool bEDS;                          // true: EDS, false: ETS
 
     // constants used in determining best fit for alpha, beta, gamma
-    const double cfMinABCResolution = 0.001;  // minimum change of alpha, beta, gamma
+    static constexpr double cfMinABCResolution = 0.001;  // minimum change of alpha, beta, gamma
     static const SCSIZE cnScenarios = 1000;   // No. of scenarios to calculate for PI calculations
 
     bool initData();
