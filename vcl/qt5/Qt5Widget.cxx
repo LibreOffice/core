@@ -105,6 +105,17 @@ void Qt5Widget::handleMouseButtonEvent(QMouseEvent* pEvent, bool bReleased)
             return;
     }
 
+    if (!bReleased)
+    {
+        QMimeData* mimeData = new QMimeData;
+        mimeData->setData("application/x-dnditemdata", nullptr);
+
+        QDrag* drag = new QDrag(this);
+        drag->setMimeData(mimeData);
+
+        drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction);
+    }
+
     aEvent.mnTime = pEvent->timestamp();
     aEvent.mnX = static_cast<long>(pEvent->pos().x());
     aEvent.mnY = static_cast<long>(pEvent->pos().y());
@@ -161,6 +172,25 @@ void Qt5Widget::wheelEvent(QWheelEvent* pEvent)
 
     m_pFrame->CallCallback(SalEvent::WheelMouse, &aEvent);
     pEvent->accept();
+}
+
+void Qt5Widget::dragEnterEvent(QDragEnterEvent* event)
+{
+    SAL_WARN("vcl.qt5", "dragenterevent");
+    if (event->source() == this)
+        event->accept();
+}
+
+void Qt5Widget::dragMoveEvent(QDragMoveEvent* event)
+{
+    SAL_WARN("vcl.qt5", "dragmoveevent");
+    QWidget::dragMoveEvent(event);
+}
+
+void Qt5Widget::dropEvent(QDropEvent* event)
+{
+    SAL_WARN("vcl.qt5", "dropevent");
+    QWidget::dropEvent(event);
 }
 
 void Qt5Widget::moveEvent(QMoveEvent*) { m_pFrame->CallCallback(SalEvent::Move, nullptr); }
@@ -359,6 +389,7 @@ Qt5Widget::Qt5Widget(Qt5Frame& rFrame, Qt::WindowFlags f)
 {
     create();
     setMouseTracking(true);
+    setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
 }
 
