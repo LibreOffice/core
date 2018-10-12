@@ -4259,6 +4259,8 @@ struct ScDependantsCalculator
             case svSingleRef:
                 {
                     ScSingleRefData aRef = *p->GetSingleRef(); // =Sheet1!A1
+                    if( aRef.IsDeleted())
+                        return false;
                     ScAddress aRefPos = aRef.toAbs(mrPos);
 
                     if (!mrDoc.TableExists(aRefPos.Tab()))
@@ -4297,6 +4299,8 @@ struct ScDependantsCalculator
             case svDoubleRef:
                 {
                     ScComplexRefData aRef = *p->GetDoubleRef();
+                    if( aRef.IsDeleted())
+                        return false;
                     ScRange aAbs = aRef.toAbs(mrPos);
 
                     // Multiple sheet
