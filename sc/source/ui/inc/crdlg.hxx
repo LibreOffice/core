@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_UI_INC_CRDLG_HXX
 
 #include <vcl/weld.hxx>
-#include "scui_def.hxx"
 
 class ScColOrRowDlg : public weld::GenericDialogController
 {

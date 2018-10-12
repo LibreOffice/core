@@ -14,6 +14,7 @@
 #include <vcl/layout.hxx>
 #include <address.hxx>
 #include <docsh.hxx>
+#include <datastream.hxx>
 
 namespace sc {
 

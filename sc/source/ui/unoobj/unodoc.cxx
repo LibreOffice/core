@@ -24,6 +24,7 @@
 
 #include <appluno.hxx>
 #include <scmod.hxx>
+#include <scdll.hxx>
 #include <vcl/svapp.hxx>
 
 #include <docsh.hxx>

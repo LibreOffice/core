@@ -23,7 +23,6 @@
 #include <sfx2/tabdlg.hxx>
 
 namespace weld { class Window; }
-class SfxViewFrame;
 class SfxItemSet;
 
 class ScAttrDlg : public SfxTabDialogController

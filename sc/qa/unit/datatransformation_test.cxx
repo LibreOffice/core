@@ -15,6 +15,7 @@
 #include <address.hxx>
 #include <dataprovider.hxx>
 #include <datatransformation.hxx>
+#include <scdll.hxx>
 #include <vcl/scheduler.hxx>
 #include <tools/datetime.hxx>
 #include <tools/time.hxx>

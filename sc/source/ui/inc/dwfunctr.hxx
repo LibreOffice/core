@@ -19,17 +19,12 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_DWFUNCTR_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_DWFUNCTR_HXX
 
-#include <sfx2/childwin.hxx>
-#include <sfx2/dockwin.hxx>
-#include <svl/lstner.hxx>
-
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
-#include <vcl/combobox.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
-#include "anyrefdg.hxx"
-#include <global.hxx>
-#include <funcdesc.hxx>
+
+class ScFuncDesc;
+namespace formula { class IFunctionDescription; }
 
 class ScFunctionWin : public PanelLayout
 {

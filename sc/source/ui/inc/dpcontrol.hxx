@@ -26,8 +26,6 @@
 #include <vcl/vclptr.hxx>
 
 class OutputDevice;
-class Point;
-class Size;
 class StyleSettings;
 class ScDocument;
 

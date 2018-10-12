@@ -14,8 +14,6 @@
 
 #include <set>
 
-class ScRange;
-
 struct ScCellMergeOption
 {
     ::std::set<SCTAB> maTabs;

@@ -22,13 +22,10 @@
 #include <documentstreamaccess.hxx>
 
 class ScDocShell;
-class ScDocument;
-namespace vcl { class Window; }
 
 namespace sc {
 
 namespace datastreams {
-    class CallerThread;
     class ReaderThread;
 }
 

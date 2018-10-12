@@ -31,6 +31,7 @@
 #include <editeng/wghtitem.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
+#include <svtools/scriptedtext.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -48,6 +49,7 @@
 #include <document.hxx>
 #include <docsh.hxx>
 #include <tabvwsh.hxx>
+#include <viewdata.hxx>
 
 #define FRAME_OFFSET 4
 
