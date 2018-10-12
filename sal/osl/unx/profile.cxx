@@ -949,6 +949,15 @@ static osl_TFile* openFileImpl(const sal_Char* pszFilename, oslProfileOption Pro
     if (! bWriteable)
     {
         pFile->m_Handle = open(pszFilename, O_RDONLY);
+
+        if (pFile->m_Handle == -1)
+        {
+            int e = errno;
+            SAL_INFO("sal.file", "open(" << pszFilename << ",O_RDONLY): errno " << e << ": " << strerror(e));
+        }
+        else
+            SAL_INFO("sal.file", "open(" << pszFilename << ",O_RDONLY) => " << pFile->m_Handle);
+
         /* mfe: argghh!!! do not check if the file could be opened */
         /*      default mode expects it that way!!!                 */
     }
@@ -957,9 +966,13 @@ static osl_TFile* openFileImpl(const sal_Char* pszFilename, oslProfileOption Pro
         if (((pFile->m_Handle = open(pszFilename, O_RDWR | O_CREAT | O_EXCL, DEFAULT_PMODE)) < 0) &&
             ((pFile->m_Handle = open(pszFilename, O_RDWR)) < 0))
         {
+            int e = errno;
+            SAL_INFO("sal.file", "open(" << pszFilename << ",...): errno " << e << ": " << strerror(e));
             free(pFile);
             return nullptr;
         }
+        else
+            SAL_INFO("sal.file", "open(" << pszFilename << ",...) => " << pFile->m_Handle);
     }
 
     /* set close-on-exec flag */
@@ -1003,6 +1016,7 @@ static osl_TStamp closeFileImpl(osl_TFile* pFile, oslProfileOption Flags)
         }
 
         close(pFile->m_Handle);
+        SAL_INFO("sal.file", "close(" << pFile->m_Handle << ")");
         pFile->m_Handle = -1;
     }
 
@@ -1710,8 +1724,27 @@ static bool osl_ProfileSwapProfileNames(osl_TProfileImpl* pProfile)
     unlink( pszBakFile );
 
     // Rename ini -> bak, then tmp -> ini:
-    return rename( pProfile->m_FileName, pszBakFile ) == 0
-        && rename( pszTmpFile, pProfile->m_FileName ) == 0;
+    bool result = rename( pProfile->m_FileName, pszBakFile ) == 0;
+    if (!result)
+    {
+        int e = errno;
+        SAL_INFO("sal.file", "rename(" << pProfile->m_FileName << "," << pszBakFile << "): errno " << e << ": " << strerror(e));
+    }
+    else
+    {
+        SAL_INFO("sal.file", "rename(" << pProfile->m_FileName << "," << pszBakFile << "): OK");
+        result = rename( pszTmpFile, pProfile->m_FileName ) == 0;
+        if (!result)
+        {
+            int e = errno;
+            SAL_INFO("sal.file", "rename(" << pszTmpFile << "," << pProfile->m_FileName << "): errno " << e << ": " << strerror(e));
+        }
+        else
+        {
+            SAL_INFO("sal.file", "rename(" << pszTmpFile << "," << pProfile->m_FileName << "): OK");
+        }
+    }
+    return result;
 }
 
 static void osl_ProfileGenerateExtension(const sal_Char* pszFileName, const sal_Char* pszExtension, sal_Char* pszTmpName, int BufferMaxLen)
