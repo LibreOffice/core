@@ -41,6 +41,10 @@ class SdrObject;
 class SdrPageView;
 class MouseEvent;
 
+namespace sdr { namespace contact {
+    class ObjectContact;
+}}
+
 // Every object must be able to create its handles. They will be fetched on
 // selection, registered at the View and made visible.
 // When a handle is touched by the mouse (IsHit()), from the view the matching mouse pointer
@@ -170,6 +174,12 @@ protected:
         BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker,
         Point aMoveOutsideOffset = Point());
     static BitmapMarkerKind GetNextBigger(BitmapMarkerKind eKnd);
+
+    // Helper to support adding GridOffset for non-linear ViewToDevice transformation (calc)
+    // The helper just does things in one place that all creators of SdrHdl need to do
+    void addPossibleGridOffsetAtOverlayObject(
+        sdr::overlay::OverlayObject* pOverlayObject,
+        const sdr::contact::ObjectContact& rObjectContact);
 
 public:
     SdrHdl();
