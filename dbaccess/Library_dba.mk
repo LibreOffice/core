@@ -121,7 +121,6 @@ $(eval $(call gb_Library_add_exception_objects,dba,\
     dbaccess/source/core/misc/PropertyForward \
     dbaccess/source/core/misc/sdbcoretools \
     dbaccess/source/core/misc/services \
-    dbaccess/source/core/misc/userinformation \
     dbaccess/source/core/misc/veto \
     dbaccess/source/core/recovery/dbdocrecovery \
     dbaccess/source/core/recovery/settingsimport \

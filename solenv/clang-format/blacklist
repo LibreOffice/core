@@ -3138,7 +3138,6 @@ dbaccess/source/core/inc/sdbcoretools.hxx
 dbaccess/source/core/inc/statement.hxx
 dbaccess/source/core/inc/table.hxx
 dbaccess/source/core/inc/tablecontainer.hxx
-dbaccess/source/core/inc/userinformation.hxx
 dbaccess/source/core/inc/veto.hxx
 dbaccess/source/core/inc/viewcontainer.hxx
 dbaccess/source/core/misc/ContainerMediator.cxx
@@ -3149,7 +3148,6 @@ dbaccess/source/core/misc/dsntypes.cxx
 dbaccess/source/core/misc/objectnameapproval.cxx
 dbaccess/source/core/misc/sdbcoretools.cxx
 dbaccess/source/core/misc/services.cxx
-dbaccess/source/core/misc/userinformation.cxx
 dbaccess/source/core/misc/veto.cxx
 dbaccess/source/core/recovery/dbdocrecovery.cxx
 dbaccess/source/core/recovery/settingsimport.cxx
