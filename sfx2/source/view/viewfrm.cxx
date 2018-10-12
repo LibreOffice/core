@@ -1372,7 +1372,7 @@ IMPL_LINK_NOARG(SfxViewFrame, GetInvolvedHandler, Button*, void)
 {
     try
     {
-        OUString sURL("https://hub.libreoffice.org/joinus/?LOlocale=" + utl::ConfigManager::getLocale());
+        OUString sURL("https://hub.libreoffice.org/joinus/?LOlocale=" + utl::ConfigManager::getUILocale());
         sfx2::openUriExternally(sURL, false);
     }
     catch (const Exception&)

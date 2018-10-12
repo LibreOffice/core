@@ -155,7 +155,7 @@ void CommandEnvironmentImpl::printLicense(
     Reference< css::i18n::XCollator > xCollator =
         css::i18n::Collator::create( m_xComponentContext );
     xCollator->loadDefaultCollator(
-        LanguageTag(utl::ConfigManager::getLocale()).getLocale(),
+        LanguageTag(utl::ConfigManager::getUILocale()).getLocale(),
         css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE);
 
     do

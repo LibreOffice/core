@@ -477,7 +477,7 @@ void SfxDocTplService_Impl::getDefaultLocale()
         ::osl::MutexGuard aGuard( maMutex );
         if ( !mbLocaleSet )
         {
-            maLocale = LanguageTag::convertToLocale( utl::ConfigManager::getLocale(), false);
+            maLocale = LanguageTag::convertToLocale( utl::ConfigManager::getUILocale(), false);
             mbLocaleSet = true;
         }
     }

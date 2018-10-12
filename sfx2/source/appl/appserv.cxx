@@ -528,7 +528,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         {
             OUString module = SfxHelp::GetCurrentModuleIdentifier();
             OUString sURL("https://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
-                "&LOlocale=" + utl::ConfigManager::getLocale() + "&LOmodule=" + module.copy(module.lastIndexOf('.') + 1 )  );
+                "&LOlocale=" + utl::ConfigManager::getUILocale() + "&LOmodule=" + module.copy(module.lastIndexOf('.') + 1 )  );
             sfx2::openUriExternally(sURL, false);
             break;
         }
@@ -538,29 +538,29 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             // Askbot has URL's normalized to languages, not locales
             // Get language from locale: ll or lll or ll-CC or lll-CC
 
-            OUString sURL("https://hub.libreoffice.org/forum/?LOlocale=" + utl::ConfigManager::getLocale());
+            OUString sURL("https://hub.libreoffice.org/forum/?LOlocale=" + utl::ConfigManager::getUILocale());
             sfx2::openUriExternally(sURL, false);
             break;
         }
         case SID_DOCUMENTATION:
         {
             // Open documentation page based on locales
-            OUString sURL("https://hub.libreoffice.org/documentation/?LOlocale=" + utl::ConfigManager::getLocale());
+            OUString sURL("https://hub.libreoffice.org/documentation/?LOlocale=" + utl::ConfigManager::getUILocale());
             sfx2::openUriExternally(sURL, false);
             break;
         }
         case SID_GETINVOLVED:
         {
             // Open get involved/join us page based on locales
-            OUString sURL("https://hub.libreoffice.org/joinus/?LOlocale=" + utl::ConfigManager::getLocale());
+            OUString sURL("https://hub.libreoffice.org/joinus/?LOlocale=" + utl::ConfigManager::getUILocale());
             sfx2::openUriExternally(sURL, false);
             break;
         }
         case SID_DONATION:
         {
             // Open donation page based on language + script (BCP47) with language as fall back.
-            OUString aLang = LanguageTag(utl::ConfigManager::getLocale()).getLanguage();
-            OUString aBcp47 = LanguageTag(utl::ConfigManager::getLocale()).getBcp47();
+            OUString aLang = LanguageTag(utl::ConfigManager::getUILocale()).getLanguage();
+            OUString aBcp47 = LanguageTag(utl::ConfigManager::getUILocale()).getBcp47();
             OUString sURL("https://hub.libreoffice.org/donation/?BCP47=" + aBcp47 + "&LOlang=" + aLang );
             sfx2::openUriExternally(sURL, false);
             break;

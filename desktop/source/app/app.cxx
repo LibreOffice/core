@@ -1998,7 +1998,7 @@ void Desktop::OpenClients()
             OUString aHelpURL = "vnd.sun.star.help://"
                               + aHelpModule
                               + "/start?Language="
-                              + utl::ConfigManager::getLocale();
+                              + utl::ConfigManager::getUILocale();
 #if defined UNX
             aHelpURL += "&System=UNX";
 #elif defined WNT
