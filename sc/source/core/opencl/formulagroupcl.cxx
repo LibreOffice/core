@@ -3600,6 +3600,8 @@ DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, const ScToken
             sal_uInt8 nParamCount =  pCur->GetParamCount();
             for (sal_uInt8 i = 0; i < nParamCount; i++)
             {
+                if( aTokenVector.empty())
+                    return nullptr;
                 FormulaToken* pTempFormula = aTokenVector.back();
                 aTokenVector.pop_back();
                 if (pTempFormula->GetOpCode() != ocPush)
