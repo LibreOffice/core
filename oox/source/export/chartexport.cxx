@@ -154,7 +154,7 @@ public:
     }
 
 private:
-    OUString m_aRole;
+    OUString const m_aRole;
 };
 
 static Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Reference< chart2::XDiagram > & xDiagram )

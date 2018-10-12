@@ -82,7 +82,7 @@ struct AxisModel
     sal_Int32           mnTickLabelPos;     /// Position of tick mark labels relative to the axis.
     sal_Int32           mnTickLabelSkip;    /// Number of tick mark labels to skip.
     sal_Int32           mnTickMarkSkip;     /// Number of tick marks to skip.
-    sal_Int32           mnTypeId;           /// Type identifier of this axis.
+    sal_Int32 const     mnTypeId;           /// Type identifier of this axis.
     bool                mbAuto;             /// True = automatic selection of text/date axis type.
     bool                mbDeleted;          /// True = axis has been deleted manually.
     bool                mbNoMultiLevel;     /// True = no multi-level categories supported.

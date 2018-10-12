@@ -63,7 +63,7 @@ enum FormularCommand
 struct FormularCommandNameTable
 {
     const char*     pS;
-    FormularCommand pE;
+    FormularCommand const pE;
 };
 static const FormularCommandNameTable pFormularCommandNameTable[] =
 {

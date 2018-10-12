@@ -679,7 +679,7 @@ protected:
 private:
     struct ExtItemFormatKey
     {
-        sal_Int64           mnKey;
+        sal_Int64 const     mnKey;
         ::std::pair< sal_Int64, sal_Int64 >  maFilter;
         explicit            ExtItemFormatKey( sal_Int64 nKey ) : mnKey( nKey ), maFilter( 0, 0 ) {}
         bool                operator<( const ExtItemFormatKey& rRight ) const;
@@ -800,8 +800,8 @@ private:
     typedef ::std::map< OUString, NameListRef >      NameListMap;
 
     css::uno::Reference< css::uno::XComponentContext > mxContext;
-    StorageRef          mxRootStrg;
-    OUString            maSysFileName;
+    StorageRef const    mxRootStrg;
+    OUString const      maSysFileName;
     ConfigFileSet       maConfigFiles;
     ConfigDataMap       maConfigData;
     NameListMap         maNameLists;
@@ -1184,8 +1184,8 @@ private:
 private:
     struct PreferredItem
     {
-        OUString     maName;
-        bool                mbStorage;
+        OUString const maName;
+        bool const          mbStorage;
 
         explicit     PreferredItem( const OUString& rName, bool bStorage ) :
                                 maName( rName ), mbStorage( bStorage ) {}

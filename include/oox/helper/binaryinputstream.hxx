@@ -372,7 +372,7 @@ private:
 
 private:
     BinaryInputStream*  mpInStrm;
-    sal_Int64           mnStartPos;
+    sal_Int64 const     mnStartPos;
     sal_Int64           mnRelPos;
     sal_Int64           mnSize;
 };

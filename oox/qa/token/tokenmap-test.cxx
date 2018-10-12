@@ -31,7 +31,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    TokenMap tokenMap;
+    TokenMap const tokenMap;
 };
 
 void TokenmapTest::test_roundTrip()

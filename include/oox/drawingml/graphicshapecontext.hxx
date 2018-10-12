@@ -51,8 +51,8 @@ public:
     virtual void onEndElement() override;
 
 private:
-    bool                mbEmbedShapesInChart;
-    ::oox::core::ContextHandler2Helper* mpParent;
+    bool const          mbEmbedShapesInChart;
+    ::oox::core::ContextHandler2Helper* const mpParent;
 };
 
 
