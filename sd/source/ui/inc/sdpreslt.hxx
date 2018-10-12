@@ -22,8 +22,8 @@
 
 #include <vector>
 
-#include <vcl/dialog.hxx>
-#include <vcl/button.hxx>
+#include <vcl/customweld.hxx>
+#include <vcl/weld.hxx>
 #include <svtools/valueset.hxx>
 
 class SfxItemSet;
@@ -33,27 +33,22 @@ class DrawDocShell;
 }
 
 class SdPresLayoutDlg
-    : public ModalDialog
+    : public weld::GenericDialogController
 {
 public:
     SdPresLayoutDlg(
         ::sd::DrawDocShell* pDocShell,
-        vcl::Window* pWindow,
+        weld::Window* pWindow,
         const SfxItemSet& rInAttrs);
     virtual ~SdPresLayoutDlg() override;
-    virtual void dispose() override;
 
     void                GetAttr(SfxItemSet& rOutAttrs);
 
-    DECL_LINK(ClickLayoutHdl, ValueSet*, void);
-    DECL_LINK(ClickLoadHdl, Button*, void);
+    DECL_LINK(ClickLayoutHdl, SvtValueSet*, void);
+    DECL_LINK(ClickLoadHdl, weld::Button&, void);
 
 private:
     ::sd::DrawDocShell* mpDocSh;
-    VclPtr<ValueSet>           m_pVS;
-    VclPtr<CheckBox>           m_pCbxMasterPage;
-    VclPtr<CheckBox>           m_pCbxCheckMasters;
-    VclPtr<PushButton>         m_pBtnLoad;
 
     const SfxItemSet&   mrOutAttrs;
 
@@ -62,6 +57,12 @@ private:
     OUString            maName;          ///< layout name or file name
     long                mnLayoutCount;   ///< number of master pages in the document
     const OUString      maStrNone;
+
+    std::unique_ptr<weld::CheckButton> m_xCbxMasterPage;
+    std::unique_ptr<weld::CheckButton> m_xCbxCheckMasters;
+    std::unique_ptr<weld::Button> m_xBtnLoad;
+    std::unique_ptr<SvtValueSet> m_xVS;
+    std::unique_ptr<weld::CustomWeld> m_xVSWin;
 
     void                FillValueSet();
     void                Reset();

@@ -170,7 +170,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     else
     {
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSdPresLayoutDlg> pDlg( pFact->CreateSdPresLayoutDlg(mpDocSh, aSet ) );
+        ScopedVclPtr<AbstractSdPresLayoutDlg> pDlg(pFact->CreateSdPresLayoutDlg(rReq.GetFrameWeld(), mpDocSh, aSet));
 
         sal_uInt16 nResult = pDlg->Execute();
 
