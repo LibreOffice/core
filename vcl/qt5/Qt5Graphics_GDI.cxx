@@ -105,9 +105,8 @@ static bool AddPolyPolygonToPath(QPainterPath& rPath, const basegfx::B2DPolyPoly
     const int nPolyCount = rPolyPoly.count();
     if (nPolyCount <= 0)
         return false;
-    for (int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx)
+    for (auto const& rPolygon : rPolyPoly)
     {
-        const basegfx::B2DPolygon rPolygon = rPolyPoly.getB2DPolygon(nPolyIdx);
         AddPolygonToPath(rPath, rPolygon, true, bPixelSnap, bLineDraw);
     }
     return true;

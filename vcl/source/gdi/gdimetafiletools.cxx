@@ -58,11 +58,11 @@ namespace
                     // add clipped geometry
                     if(bStroke)
                     {
-                        for(sal_uInt32 a(0); a < aResult.count(); a++)
+                        for(auto const& rB2DPolygon : aResult)
                         {
                             rTarget.AddAction(
                                 new MetaPolyLineAction(
-                                        tools::Polygon(aResult.getB2DPolygon(a))));
+                                        tools::Polygon(rB2DPolygon)));
                         }
                     }
                     else
@@ -937,9 +937,9 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                                 if(aResult.count() > 1 || aResult.getB2DPolygon(0) != aSource)
                                 {
                                     // add clipped geometry
-                                    for(sal_uInt32 a(0); a < aResult.count(); a++)
+                                    for(auto const& rB2DPolygon : aResult)
                                     {
-                                        aStroke.setPath(tools::Polygon(aResult.getB2DPolygon(a)));
+                                        aStroke.setPath(tools::Polygon(rB2DPolygon));
                                         addSvtGraphicStroke(aStroke, aTarget);
                                     }
 

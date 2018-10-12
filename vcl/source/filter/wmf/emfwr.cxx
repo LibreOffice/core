@@ -917,10 +917,9 @@ void EMFWriter::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const bas
 
         if(aLinePolyPolygon.count())
         {
-            for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
+            for(auto const& rB2DPolygon : aLinePolyPolygon)
             {
-                const basegfx::B2DPolygon aCandidate(aLinePolyPolygon.getB2DPolygon(a));
-                ImplWritePolygonRecord( tools::Polygon(aCandidate), false );
+                ImplWritePolygonRecord( tools::Polygon(rB2DPolygon), false );
             }
         }
 
@@ -932,10 +931,9 @@ void EMFWriter::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const bas
             maVDev->SetLineColor();
             maVDev->SetFillColor(aOldLineColor);
 
-            for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
+            for(auto const& rB2DPolygon : aFillPolyPolygon)
             {
-                const tools::Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
-                ImplWritePolyPolygonRecord(tools::PolyPolygon( tools::Polygon(aPolygon) ));
+                ImplWritePolyPolygonRecord(tools::PolyPolygon( tools::Polygon(rB2DPolygon) ));
             }
 
             maVDev->SetLineColor(aOldLineColor);

@@ -69,8 +69,8 @@ namespace
     tools::PolyPolygon toPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPoly )
     {
         tools::PolyPolygon aTarget;
-        for (sal_uInt32 i = 0; i < rPolyPoly.count(); ++i)
-            aTarget.Insert(toPolygon(rPolyPoly.getB2DPolygon(i)));
+        for (auto const& rB2DPolygon : rPolyPoly)
+            aTarget.Insert(toPolygon(rB2DPolygon));
 
         return aTarget;
     }
@@ -269,16 +269,13 @@ void OutputDevice::DrawTransparent(
         if( bDrawnOk && IsLineColor() )
         {
             const basegfx::B2DVector aHairlineWidth(1,1);
-            const sal_uInt32 nPolyCount(aB2DPolyPolygon.count());
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
-            for( sal_uInt32 nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
+            for(auto const& rPolygon : aB2DPolyPolygon)
             {
-                const basegfx::B2DPolygon aOnePoly(aB2DPolyPolygon.getB2DPolygon(nPolyIdx));
-
                 mpGraphics->DrawPolyLine(
                     aFullTransform,
-                    aOnePoly,
+                    rPolygon,
                     fTransparency,
                     aHairlineWidth,
                     basegfx::B2DLineJoin::NONE,
@@ -394,16 +391,13 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
 
             // draw the border line
             const basegfx::B2DVector aLineWidths( 1, 1 );
-            const sal_uInt32 nPolyCount(aB2DPolyPolygon.count());
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
-            for( sal_uInt32 nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
+            for(auto const& rPolygon : aB2DPolyPolygon)
             {
-                const basegfx::B2DPolygon aPolygon(aB2DPolyPolygon.getB2DPolygon(nPolyIdx));
-
                 bDrawn = mpGraphics->DrawPolyLine(
                     aTransform,
-                    aPolygon,
+                    rPolygon,
                     fTransparency,
                     aLineWidths,
                     basegfx::B2DLineJoin::NONE,
