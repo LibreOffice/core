@@ -1571,13 +1571,8 @@ public:
     // a helper method for a Control's Draw method
     void PaintToDevice( ::OutputDevice* pDevice, const Point& rPos, const Size& rSize );
 
-    /* mark Window for deletion in top of event queue
-    */
-    void doLazyDelete();
-
 
     //  Keyboard access functions
-
 
     /** Query the states of keyboard indicators - Caps Lock, Num Lock and
         Scroll Lock.  Use the following mask to retrieve the state of each
