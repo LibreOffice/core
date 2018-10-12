@@ -5,4 +5,3 @@
 "ScTableConditionalFormat";"com::sun::star::container::XIndexAccess";"getByIndex()"
 "ScTableConditionalFormat";"com::sun::star::container::XElementAccess";"getElementType()"
 "ScTableConditionalFormat";"com::sun::star::container::XElementAccess";"hasElements()"
-"ScTableConditionalFormat";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"

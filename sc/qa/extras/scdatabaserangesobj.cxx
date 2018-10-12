@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xenumerationaccess.hxx>
 #include <test/sheet/xdatabaseranges.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -25,7 +26,9 @@ using namespace com::sun::star;
 
 namespace sc_apitest
 {
-class ScDatabaseRangesObj : public CalcUnoApiTest, public apitest::XDatabaseRanges
+class ScDatabaseRangesObj : public CalcUnoApiTest,
+                            public apitest::XDatabaseRanges,
+                            public apitest::XEnumerationAccess
 {
 public:
     ScDatabaseRangesObj();
@@ -38,6 +41,9 @@ public:
 
     // XDatabaseRanges
     CPPUNIT_TEST(testAddRemoveDbRanges);
+
+    // XEnumerationAccess
+    CPPUNIT_TEST(testCreateEnumeration);
 
     CPPUNIT_TEST_SUITE_END();
 
