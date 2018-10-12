@@ -2533,8 +2533,8 @@ bool OutputDevice::GetTextOutline( tools::PolyPolygon& rPolyPoly, const OUString
 
     // convert and merge into a tool polypolygon
     for (auto const& elem : aB2DPolyPolyVector)
-        for( unsigned int i = 0; i < elem.count(); ++i )
-            rPolyPoly.Insert(tools::Polygon(elem.getB2DPolygon( i ))); // #i76339#
+        for(auto const& rB2DPolygon : elem)
+            rPolyPoly.Insert(tools::Polygon(rB2DPolygon)); // #i76339#
 
     return true;
 }

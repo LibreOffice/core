@@ -2477,18 +2477,16 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
                     // In worst case a very expensive RegionHandle representation gets created.
                     // In this case it's cheaper to use the PolyPolygon
                     const basegfx::B2DPolyPolygon aPolyPolygon(rRegion.GetAsB2DPolyPolygon());
-                    const sal_uInt32 nPolyCount(aPolyPolygon.count());
                     SVBT64 aSVBT64;
 
-                    for(sal_uInt32 a(0); a < nPolyCount; a++)
+                    for(auto const& rPolygon : aPolyPolygon)
                     {
-                        const basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(a));
-                        const sal_uInt32 nPointCount(aPolygon.count());
-                        const bool bControl(aPolygon.areControlPointsUsed());
+                        const sal_uInt32 nPointCount(rPolygon.count());
+                        const bool bControl(rPolygon.areControlPointsUsed());
 
                         for(sal_uInt32 b(0); b < nPointCount; b++)
                         {
-                            const basegfx::B2DPoint aPoint(aPolygon.getB2DPoint(b));
+                            const basegfx::B2DPoint aPoint(rPolygon.getB2DPoint(b));
 
                             DoubleToSVBT64(aPoint.getX(), aSVBT64);
                             nCrc = vcl_get_checksum(nCrc, aSVBT64, 8);
@@ -2497,9 +2495,9 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
 
                             if(bControl)
                             {
-                                if(aPolygon.isPrevControlPointUsed(b))
+                                if(rPolygon.isPrevControlPointUsed(b))
                                 {
-                                    const basegfx::B2DPoint aCtrl(aPolygon.getPrevControlPoint(b));
+                                    const basegfx::B2DPoint aCtrl(rPolygon.getPrevControlPoint(b));
 
                                     DoubleToSVBT64(aCtrl.getX(), aSVBT64);
                                     nCrc = vcl_get_checksum(nCrc, aSVBT64, 8);
@@ -2507,9 +2505,9 @@ BitmapChecksum GDIMetaFile::GetChecksum() const
                                     nCrc = vcl_get_checksum(nCrc, aSVBT64, 8);
                                 }
 
-                                if(aPolygon.isNextControlPointUsed(b))
+                                if(rPolygon.isNextControlPointUsed(b))
                                 {
-                                    const basegfx::B2DPoint aCtrl(aPolygon.getNextControlPoint(b));
+                                    const basegfx::B2DPoint aCtrl(rPolygon.getNextControlPoint(b));
 
                                     DoubleToSVBT64(aCtrl.getX(), aSVBT64);
                                     nCrc = vcl_get_checksum(nCrc, aSVBT64, 8);

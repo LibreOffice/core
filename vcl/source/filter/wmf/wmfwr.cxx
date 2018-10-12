@@ -984,10 +984,9 @@ void WMFWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx:
             aSrcLineInfo = rInfo;
             SetLineAndFillAttr();
 
-            for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
+            for(auto const& rB2DPolygon : aLinePolyPolygon)
             {
-                const basegfx::B2DPolygon aCandidate(aLinePolyPolygon.getB2DPolygon(a));
-                WMFRecord_PolyLine( tools::Polygon(aCandidate) );
+                WMFRecord_PolyLine( tools::Polygon(rB2DPolygon) );
             }
         }
 
@@ -1000,10 +999,9 @@ void WMFWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx:
             aSrcFillColor = aOldLineColor;
             SetLineAndFillAttr();
 
-            for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
+            for(auto const& rB2DPolygon : aFillPolyPolygon)
             {
-                const tools::Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
-                WMFRecord_Polygon( aPolygon );
+                WMFRecord_Polygon( tools::Polygon(rB2DPolygon) );
             }
 
             aSrcLineColor = aOldLineColor;
