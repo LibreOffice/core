@@ -27,6 +27,8 @@
 #include <vcl/toolbox.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
+#include <sfx2/app.hxx>
+
 namespace sfx2 { namespace sidebar {
 
 FocusManager::FocusLocation::FocusLocation (const PanelComponent eComponent, const sal_Int32 nIndex)
@@ -379,6 +381,26 @@ void FocusManager::HandleKeyEvent (
 
     switch (rKeyCode.GetCode())
     {
+        case KEY_ESCAPE:
+            switch (aLocation.meComponent)
+            {
+                case PC_TabBar:
+                case PC_DeckTitle:
+                case PC_DeckToolBox:
+                case PC_PanelTitle:
+                case PC_PanelToolBox:
+                {
+                    vcl::Window* pFocusWin = Application::GetFocusWindow();
+                    if (pFocusWin)
+                        pFocusWin->GrabFocusToDocument();
+                    break;
+                }
+
+                default:
+                    break;
+            }
+            return;
+
         case KEY_SPACE:
             switch (aLocation.meComponent)
             {
