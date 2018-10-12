@@ -3311,7 +3311,8 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 
         case MID_GRAPHIC_URL:
         {
-            throw uno::RuntimeException("Getting from this property is not supported");
+            SAL_INFO("editeng.items", "Getting GraphicURL property is not supported");
+            return false;
         }
         break;
         case MID_GRAPHIC:
