@@ -20,22 +20,6 @@
 
 using namespace ::oox;
 
-namespace {
-
-const char* getIconSetName( ScIconSetType eType )
-{
-    const ScIconSetMap* pMap = ScIconSetFormat::g_IconSetMap;
-    for(; pMap->pName; ++pMap)
-    {
-        if(pMap->eType == eType)
-            return pMap->pName;
-    }
-
-    return "";
-}
-
-}
-
 XclExpExt::XclExpExt( const XclExpRoot& rRoot ):
     XclExpRoot(rRoot)
 {
@@ -74,7 +58,7 @@ XclExpExtIcon::XclExpExtIcon(const XclExpRoot& rRoot, const std::pair<ScIconSetT
     XclExpRoot(rRoot),
     nIndex(rCustomEntry.second)
 {
-    pIconSetName = getIconSetName(rCustomEntry.first);
+    pIconSetName = ScIconSetFormat::getIconSetName(rCustomEntry.first);
 }
 
 void XclExpExtIcon::SaveXml(XclExpXmlStream& rStrm)
@@ -226,7 +210,7 @@ XclExpExtIconSet::XclExpExtIconSet(const XclExpRoot& rRoot, const ScIconSetForma
     mbCustom = rData.mbCustom;
     mbReverse = rData.mbReverse;
     mbShowValue = rData.mbShowValue;
-    mpIconSetName = getIconSetName(rData.eIconSetType);
+    mpIconSetName = ScIconSetFormat::getIconSetName(rData.eIconSetType);
 
     if (mbCustom)
     {
