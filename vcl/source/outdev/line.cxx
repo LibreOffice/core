@@ -193,11 +193,11 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
         {
             basegfx::B2DPolyPolygon aResult;
 
-            for(sal_uInt32 c(0); c < aLinePolyPolygon.count(); c++)
+            for(auto const& rPolygon : aLinePolyPolygon)
             {
                 basegfx::B2DPolyPolygon aLineTarget;
                 basegfx::utils::applyLineDashing(
-                    aLinePolyPolygon.getB2DPolygon(c),
+                    rPolygon,
                     fDotDashArray,
                     &aLineTarget);
                 aResult.append(aLineTarget);
@@ -221,10 +221,10 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
             aLinePolyPolygon = basegfx::utils::adaptiveSubdivideByDistance(aLinePolyPolygon, 1.0);
         }
 
-        for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
+        for(auto const& rPolygon : aLinePolyPolygon)
         {
             aFillPolyPolygon.append(basegfx::utils::createAreaGeometry(
-                aLinePolyPolygon.getB2DPolygon(a),
+                rPolygon,
                 fHalfLineWidth,
                 rInfo.GetLineJoin(),
                 rInfo.GetLineCap()));
@@ -238,9 +238,8 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
 
     if(aLinePolyPolygon.count())
     {
-        for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
+        for(auto const& rB2DPolygon : aLinePolyPolygon)
         {
-            const basegfx::B2DPolygon aCandidate(aLinePolyPolygon.getB2DPolygon(a));
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
             bool bDone(false);
 
@@ -248,7 +247,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
             {
                 bDone = mpGraphics->DrawPolyLine(
                     basegfx::B2DHomMatrix(),
-                    aCandidate,
+                    rB2DPolygon,
                     0.0,
                     basegfx::B2DVector(1.0,1.0),
                     basegfx::B2DLineJoin::NONE,
@@ -260,7 +259,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
 
             if(!bDone)
             {
-                tools::Polygon aPolygon(aCandidate);
+                tools::Polygon aPolygon(rB2DPolygon);
                 mpGraphics->DrawPolyLine(
                     aPolygon.GetSize(),
                     reinterpret_cast<SalPoint*>(aPolygon.GetPointAry()),
@@ -292,9 +291,9 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
 
         if(!bDone)
         {
-            for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
+            for(auto const& rB2DPolygon : aFillPolyPolygon)
             {
-                tools::Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
+                tools::Polygon aPolygon(rB2DPolygon);
 
                 // need to subdivide, mpGraphics->DrawPolygon ignores curves
                 aPolygon.AdaptiveSubdivide(aPolygon);

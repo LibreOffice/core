@@ -1085,9 +1085,9 @@ static bool containsOnlyHorizontalAndVerticalEdges(const basegfx::B2DPolyPolygon
         return false;
     }
 
-    for(sal_uInt32 a(0); a < rCandidate.count(); a++)
+    for(auto const& rPolygon : rCandidate)
     {
-        if(!containsOnlyHorizontalAndVerticalEdges(rCandidate.getB2DPolygon(a)))
+        if(!containsOnlyHorizontalAndVerticalEdges(rPolygon))
         {
             return false;
         }
@@ -1157,11 +1157,11 @@ bool WinSalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
                 aExpand = basegfx::B2DHomMatrix(basegfx::utils::createSourceRangeTargetRangeTransform(aRangeS, aRangeT));
             }
 
-            for(sal_uInt32 a(0); a < nCount; a++)
+            for(auto const& rPolygon : aPolyPolygon)
             {
                 const basegfx::B2DPolygon aPoly(
                     basegfx::utils::adaptiveSubdivideByDistance(
-                        aPolyPolygon.getB2DPolygon(a),
+                        rPolygon,
                         1));
                 const sal_uInt32 nPoints(aPoly.count());
 
