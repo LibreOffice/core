@@ -69,6 +69,7 @@ public:
     void set_active_id(SvxFrameDirection eDir) { m_xControl->set_active_id(OUString::number(static_cast<sal_uInt32>(eDir))); }
     void remove_id(SvxFrameDirection eDir) { m_xControl->remove_id(OUString::number(static_cast<sal_uInt32>(eDir))); }
     void set_active(int pos) { m_xControl->set_active(pos); }
+    int get_active() const { return m_xControl->get_active(); }
     void set_sensitive(bool bSensitive) { m_xControl->set_sensitive(bSensitive); }
     void hide() { m_xControl->hide(); }
     void show(bool bShow = true) { m_xControl->show(bShow); }

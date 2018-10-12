@@ -69,65 +69,54 @@ bool lcl_ReadNumberFormatFromItemSet( const SfxItemSet& rSet, sal_uInt16 nValueW
     return bSet;
 }
 
-void lcl_setBoolItemToCheckBox( const SfxItemSet& rInAttrs, sal_uInt16 nWhichId, CheckBox& rCheckbox )
+void lcl_setBoolItemToCheckBox(const SfxItemSet& rInAttrs, sal_uInt16 nWhichId, weld::CheckButton& rCheckbox)
 {
-    rCheckbox.EnableTriState( false );
-
     const SfxPoolItem *pPoolItem = nullptr;
     if( rInAttrs.GetItemState(nWhichId, true, &pPoolItem) == SfxItemState::SET )
-        rCheckbox.Check( static_cast<const SfxBoolItem*>(pPoolItem)->GetValue() );
+        rCheckbox.set_active(static_cast<const SfxBoolItem*>(pPoolItem)->GetValue());
     else
-    {
-        rCheckbox.EnableTriState();
-        rCheckbox.SetState( TRISTATE_INDET );
-    }
+        rCheckbox.set_state(TRISTATE_INDET);
 }
 
 }//end anonymous namespace
 
-DataLabelResources::DataLabelResources(VclBuilderContainer* pWindow, weld::Window* pParent, const SfxItemSet& rInAttrs )
-    :
-    m_pNumberFormatter(nullptr),
-    m_bNumberFormatMixedState(true),
-    m_bPercentFormatMixedState(true),
-    m_nNumberFormatForValue(0),
-    m_nNumberFormatForPercent(11),
-    m_bSourceFormatMixedState(true),
-    m_bPercentSourceMixedState(true),
-    m_bSourceFormatForValue(true),
-    m_bSourceFormatForPercent(true),
-    m_pWindow(pParent),
-    m_pPool(rInAttrs.GetPool())
+DataLabelResources::DataLabelResources(weld::Builder* pBuilder, weld::Window* pParent, const SfxItemSet& rInAttrs)
+    : m_pNumberFormatter(nullptr)
+    , m_bNumberFormatMixedState(true)
+    , m_bPercentFormatMixedState(true)
+    , m_nNumberFormatForValue(0)
+    , m_nNumberFormatForPercent(11)
+    , m_bSourceFormatMixedState(true)
+    , m_bPercentSourceMixedState(true)
+    , m_bSourceFormatForValue(true)
+    , m_bSourceFormatForPercent(true)
+    , m_pWindow(pParent)
+    , m_pPool(rInAttrs.GetPool())
+    , m_xCBNumber(pBuilder->weld_check_button("CB_VALUE_AS_NUMBER"))
+    , m_xPB_NumberFormatForValue(pBuilder->weld_button("PB_NUMBERFORMAT"))
+    , m_xCBPercent(pBuilder->weld_check_button("CB_VALUE_AS_PERCENTAGE"))
+    , m_xPB_NumberFormatForPercent(pBuilder->weld_button("PB_PERCENT_NUMBERFORMAT"))
+    , m_xFT_NumberFormatForPercent(pBuilder->weld_label("STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE"))
+    , m_xCBCategory(pBuilder->weld_check_button("CB_CATEGORY"))
+    , m_xCBSymbol(pBuilder->weld_check_button("CB_SYMBOL"))
+    , m_xCBWrapText(pBuilder->weld_check_button("CB_WRAP_TEXT"))
+    , m_xSeparatorResources(pBuilder->weld_widget("boxSEPARATOR"))
+    , m_xLB_Separator(pBuilder->weld_combo_box("LB_TEXT_SEPARATOR"))
+    , m_xBxLabelPlacement(pBuilder->weld_widget("boxPLACEMENT"))
+    , m_xLB_LabelPlacement(pBuilder->weld_combo_box("LB_LABEL_PLACEMENT"))
+    , m_xBxOrientation(pBuilder->weld_widget("boxORIENTATION"))
+    , m_xFT_Dial(pBuilder->weld_label("CT_LABEL_DIAL"))
+    , m_xNF_Degrees(pBuilder->weld_spin_button("NF_LABEL_DEGREES"))
+    , m_xBxTextDirection(pBuilder->weld_widget("boxTXT_DIRECTION"))
+    , m_xLB_TextDirection(new SchTextDirectionListBox(pBuilder->weld_combo_box("LB_LABEL_TEXTDIR")))
+    , m_xDC_Dial(new weld::CustomWeld(*pBuilder, "CT_DIAL", m_aDC_Dial))
 {
-    pWindow->get(m_pCBNumber, "CB_VALUE_AS_NUMBER");
-    pWindow->get(m_pPB_NumberFormatForValue, "PB_NUMBERFORMAT");
-    pWindow->get(m_pCBPercent, "CB_VALUE_AS_PERCENTAGE");
-    pWindow->get(m_pPB_NumberFormatForPercent, "PB_PERCENT_NUMBERFORMAT");
-    pWindow->get(m_pFT_NumberFormatForPercent,"STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE");
-    pWindow->get(m_pCBCategory, "CB_CATEGORY");
-    pWindow->get(m_pCBSymbol, "CB_SYMBOL");
-    pWindow->get(m_pCBWrapText, "CB_WRAP_TEXT");
-
-    pWindow->get(m_pBxLabelPlacement, "boxPLACEMENT");
-    pWindow->get(m_pLB_LabelPlacement, "LB_LABEL_PLACEMENT");
-
-    pWindow->get(m_pDC_Dial, "CT_DIAL");
-    pWindow->get(m_pFT_Dial, "CT_LABEL_DIAL");
-
-    m_pDC_Dial->SetText(m_pFT_Dial->GetText());
-
-    pWindow->get(m_pNF_Degrees, "NF_LABEL_DEGREES");
-    pWindow->get(m_pLB_TextDirection, "LB_LABEL_TEXTDIR");
-    pWindow->get(m_pBxTextDirection, "boxTXT_DIRECTION");
-    pWindow->get(m_pBxOrientation, "boxORIENTATION");
-
-    pWindow->get(m_pSeparatorResources, "boxSEPARATOR");
-    pWindow->get(m_pLB_Separator, "LB_TEXT_SEPARATOR");
+    m_aDC_Dial.SetText(m_xFT_Dial->get_label());
 
     //fill label placement list
     std::map< sal_Int32, OUString > aPlacementToStringMap;
-    for( sal_Int32 nEnum=0; nEnum<m_pLB_LabelPlacement->GetEntryCount(); ++nEnum )
-        aPlacementToStringMap[nEnum] = m_pLB_LabelPlacement->GetEntry(static_cast<sal_uInt16>(nEnum));
+    for( sal_Int32 nEnum=0; nEnum<m_xLB_LabelPlacement->get_count(); ++nEnum )
+        aPlacementToStringMap[nEnum] = m_xLB_LabelPlacement->get_text(static_cast<sal_uInt16>(nEnum));
 
 
     std::vector< sal_Int32 > aAvailablePlacementList;
@@ -135,25 +124,24 @@ DataLabelResources::DataLabelResources(VclBuilderContainer* pWindow, weld::Windo
     if( rInAttrs.GetItemState(SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS, true, &pPoolItem) == SfxItemState::SET )
         aAvailablePlacementList = static_cast<const SfxIntegerListItem*>(pPoolItem)->GetList();
 
-    m_pLB_LabelPlacement->Clear();
+    m_xLB_LabelPlacement->clear();
     for( size_t nN=0; nN<aAvailablePlacementList.size(); ++nN )
     {
         sal_uInt16 nListBoxPos = static_cast<sal_uInt16>( nN );
         sal_Int32 nPlacement = aAvailablePlacementList[nN];
         m_aPlacementToListBoxMap[nPlacement]=nListBoxPos;
         m_aListBoxToPlacementMap[nListBoxPos]=nPlacement;
-        m_pLB_LabelPlacement->InsertEntry( aPlacementToStringMap[nPlacement] );
+        m_xLB_LabelPlacement->append_text( aPlacementToStringMap[nPlacement] );
     }
-    m_pLB_LabelPlacement->SetDropDownLineCount(m_pLB_LabelPlacement->GetEntryCount());
 
     //some click handler
-    m_pPB_NumberFormatForValue->SetClickHdl( LINK( this, DataLabelResources, NumberFormatDialogHdl ) );
-    m_pPB_NumberFormatForPercent->SetClickHdl( LINK( this, DataLabelResources, NumberFormatDialogHdl ) );
-    m_pCBNumber->SetClickHdl( LINK( this, DataLabelResources, CheckHdl ));
-    m_pCBPercent->SetClickHdl( LINK( this, DataLabelResources, CheckHdl ));
-    m_pCBCategory->SetClickHdl(  LINK( this, DataLabelResources, CheckHdl ));
-    m_pCBSymbol->SetClickHdl(  LINK( this, DataLabelResources, CheckHdl ));
-    m_pCBWrapText->SetClickHdl(  LINK( this, DataLabelResources, CheckHdl ));
+    m_xPB_NumberFormatForValue->connect_clicked( LINK( this, DataLabelResources, NumberFormatDialogHdl ) );
+    m_xPB_NumberFormatForPercent->connect_clicked( LINK( this, DataLabelResources, NumberFormatDialogHdl ) );
+    m_xCBNumber->connect_toggled( LINK( this, DataLabelResources, CheckHdl ));
+    m_xCBPercent->connect_toggled( LINK( this, DataLabelResources, CheckHdl ));
+    m_xCBCategory->connect_toggled(  LINK( this, DataLabelResources, CheckHdl ));
+    m_xCBSymbol->connect_toggled(  LINK( this, DataLabelResources, CheckHdl ));
+    m_xCBWrapText->connect_toggled(  LINK( this, DataLabelResources, CheckHdl ));
 
     m_bNumberFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_SOURCE, m_nNumberFormatForValue, m_bSourceFormatForValue, m_bSourceFormatMixedState );
     m_bPercentFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_nNumberFormatForPercent, m_bSourceFormatForPercent , m_bPercentSourceMixedState);
@@ -162,10 +150,10 @@ DataLabelResources::DataLabelResources(VclBuilderContainer* pWindow, weld::Windo
     {
         bool bForbidPercentValue = rInAttrs.Get( SCHATTR_DATADESCR_NO_PERCENTVALUE ).GetValue();
         if( bForbidPercentValue )
-            m_pCBPercent->Enable(false);
+            m_xCBPercent->set_sensitive(false);
     }
 
-    m_pDC_Dial->SetLinkedField( m_pNF_Degrees );
+    m_aDC_Dial.SetLinkedField(m_xNF_Degrees.get());
 }
 
 DataLabelResources::~DataLabelResources()
@@ -177,7 +165,7 @@ void DataLabelResources::SetNumberFormatter( SvNumberFormatter* pFormatter )
     m_pNumberFormatter = pFormatter;
 }
 
-IMPL_LINK( DataLabelResources, NumberFormatDialogHdl, Button *, pButton, void )
+IMPL_LINK(DataLabelResources, NumberFormatDialogHdl, weld::Button&, rButton, void)
 {
     if( !m_pPool || !m_pNumberFormatter )
     {
@@ -185,15 +173,15 @@ IMPL_LINK( DataLabelResources, NumberFormatDialogHdl, Button *, pButton, void )
         return;
     }
 
-    if( pButton == m_pPB_NumberFormatForValue && !m_pCBNumber->IsChecked())
-        m_pCBNumber->Check();
-    else if( pButton == m_pPB_NumberFormatForPercent && !m_pCBPercent->IsChecked())
-        m_pCBPercent->Check();
+    if (&rButton == m_xPB_NumberFormatForValue.get() && !m_xCBNumber->get_active())
+        m_xCBNumber->set_active(true);
+    else if (&rButton == m_xPB_NumberFormatForPercent.get() && !m_xCBPercent->get_active())
+        m_xCBPercent->set_active(true);
 
     SfxItemSet aNumberSet = NumberFormatDialog::CreateEmptyItemSetForNumberFormatDialog( *m_pPool );
     aNumberSet.Put (SvxNumberInfoItem( m_pNumberFormatter, static_cast<sal_uInt16>(SID_ATTR_NUMBERFORMAT_INFO)));
 
-    bool bPercent = ( pButton == m_pPB_NumberFormatForPercent );
+    bool bPercent = (&rButton == m_xPB_NumberFormatForPercent.get());
 
     sal_uLong& rnFormatKey = bPercent ? m_nNumberFormatForPercent : m_nNumberFormatForValue;
     bool& rUseSourceFormat = bPercent ? m_bSourceFormatForPercent : m_bSourceFormatForValue;
@@ -206,7 +194,7 @@ IMPL_LINK( DataLabelResources, NumberFormatDialogHdl, Button *, pButton, void )
 
     NumberFormatDialog aDlg(m_pWindow, aNumberSet);
     if( bPercent )
-        aDlg.set_title(m_pFT_NumberFormatForPercent->GetText());
+        aDlg.set_title(m_xFT_NumberFormatForPercent->get_label());
     if (aDlg.run() == RET_OK)
     {
         const SfxItemSet* pResult = aDlg.GetOutputItemSet();
@@ -225,57 +213,55 @@ IMPL_LINK( DataLabelResources, NumberFormatDialogHdl, Button *, pButton, void )
     }
 }
 
-IMPL_LINK( DataLabelResources, CheckHdl, Button*, pBox, void )
+IMPL_LINK_NOARG(DataLabelResources, CheckHdl, weld::ToggleButton&, void)
 {
-    if( pBox )
-        static_cast<CheckBox*>(pBox)->EnableTriState( false );
     EnableControls();
 }
 
 void DataLabelResources::EnableControls()
 {
-    m_pCBSymbol->Enable( m_pCBNumber->IsChecked() || (m_pCBPercent->IsChecked() && m_pCBPercent->IsEnabled())
-    || m_pCBCategory->IsChecked() );
+    m_xCBSymbol->set_sensitive( m_xCBNumber->get_active() || (m_xCBPercent->get_active() && m_xCBPercent->get_sensitive())
+    || m_xCBCategory->get_active() );
 
-    m_pCBWrapText->Enable( m_pCBNumber->IsChecked() || (m_pCBPercent->IsChecked() && m_pCBPercent->IsEnabled())
-    || m_pCBCategory->IsChecked() );
+    m_xCBWrapText->set_sensitive( m_xCBNumber->get_active() || (m_xCBPercent->get_active() && m_xCBPercent->get_sensitive())
+    || m_xCBCategory->get_active() );
 
     // Enable or disable separator, placement and direction based on the check
     // box states. Note that the check boxes are tri-state.
     {
         long nNumberOfCheckedLabelParts = 0;
-        if (m_pCBNumber->GetState() != TRISTATE_FALSE)
+        if (m_xCBNumber->get_state() != TRISTATE_FALSE)
             ++nNumberOfCheckedLabelParts;
-        if (m_pCBPercent->GetState() != TRISTATE_FALSE && m_pCBPercent->IsEnabled())
+        if (m_xCBPercent->get_state() != TRISTATE_FALSE && m_xCBPercent->get_sensitive())
             ++nNumberOfCheckedLabelParts;
-        if (m_pCBCategory->GetState() != TRISTATE_FALSE)
+        if (m_xCBCategory->get_state() != TRISTATE_FALSE)
             ++nNumberOfCheckedLabelParts;
 
-        m_pSeparatorResources->Enable( nNumberOfCheckedLabelParts > 1 );
+        m_xSeparatorResources->set_sensitive( nNumberOfCheckedLabelParts > 1 );
 
         bool bEnableTextDir = nNumberOfCheckedLabelParts > 0;
-        m_pBxTextDirection->Enable( bEnableTextDir );
-        bool bEnablePlacement = nNumberOfCheckedLabelParts > 0 && m_pLB_LabelPlacement->GetEntryCount()>1;
-        m_pBxLabelPlacement->Enable( bEnablePlacement );
+        m_xBxTextDirection->set_sensitive( bEnableTextDir );
+        bool bEnablePlacement = nNumberOfCheckedLabelParts > 0 && m_xLB_LabelPlacement->get_count()>1;
+        m_xBxLabelPlacement->set_sensitive( bEnablePlacement );
     }
 
-    m_pPB_NumberFormatForValue->Enable( m_pNumberFormatter && m_pCBNumber->IsChecked() );
-    m_pPB_NumberFormatForPercent->Enable( m_pNumberFormatter && m_pCBPercent->IsChecked() && m_pCBPercent->IsEnabled() );
+    m_xPB_NumberFormatForValue->set_sensitive( m_pNumberFormatter && m_xCBNumber->get_active() );
+    m_xPB_NumberFormatForPercent->set_sensitive( m_pNumberFormatter && m_xCBPercent->get_active() && m_xCBPercent->get_sensitive() );
 
-    bool bEnableRotation = ( m_pCBNumber->IsChecked() || m_pCBPercent->IsChecked() || m_pCBCategory->IsChecked() );
-    m_pBxOrientation->Enable( bEnableRotation );
+    bool bEnableRotation = ( m_xCBNumber->get_active() || m_xCBPercent->get_active() || m_xCBCategory->get_active() );
+    m_xBxOrientation->set_sensitive( bEnableRotation );
 }
 
 void DataLabelResources::FillItemSet( SfxItemSet* rOutAttrs ) const
 {
-    if( m_pCBNumber->IsChecked() )
+    if( m_xCBNumber->get_active() )
     {
         if( !m_bNumberFormatMixedState )
             rOutAttrs->Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE, m_nNumberFormatForValue ));
         if( !m_bSourceFormatMixedState )
             rOutAttrs->Put( SfxBoolItem( SID_ATTR_NUMBERFORMAT_SOURCE, m_bSourceFormatForValue ));
     }
-    if( m_pCBPercent->IsChecked() )
+    if( m_xCBPercent->get_active() )
     {
         if( !m_bPercentFormatMixedState )
             rOutAttrs->Put( SfxUInt32Item( SCHATTR_PERCENT_NUMBERFORMAT_VALUE, m_nNumberFormatForPercent ));
@@ -283,33 +269,33 @@ void DataLabelResources::FillItemSet( SfxItemSet* rOutAttrs ) const
             rOutAttrs->Put( SfxBoolItem( SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_bSourceFormatForPercent ));
     }
 
-    if( m_pCBNumber->GetState()!= TRISTATE_INDET )
-        rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_NUMBER, m_pCBNumber->IsChecked() ) );
-    if( m_pCBPercent->GetState()!= TRISTATE_INDET )
-        rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_PERCENTAGE, m_pCBPercent->IsChecked() ) );
-    if( m_pCBCategory->GetState()!= TRISTATE_INDET )
-        rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_CATEGORY, m_pCBCategory->IsChecked() ) );
-    if( m_pCBSymbol->GetState()!= TRISTATE_INDET )
-        rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYMBOL, m_pCBSymbol->IsChecked()) );
-    if( m_pCBWrapText->GetState()!= TRISTATE_INDET )
-        rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_WRAP_TEXT, m_pCBWrapText->IsChecked()) );
+    if( m_xCBNumber->get_state()!= TRISTATE_INDET )
+        rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_NUMBER, m_xCBNumber->get_active() ) );
+    if( m_xCBPercent->get_state()!= TRISTATE_INDET )
+        rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_PERCENTAGE, m_xCBPercent->get_active() ) );
+    if( m_xCBCategory->get_state()!= TRISTATE_INDET )
+        rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_CATEGORY, m_xCBCategory->get_active() ) );
+    if( m_xCBSymbol->get_state()!= TRISTATE_INDET )
+        rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYMBOL, m_xCBSymbol->get_active()) );
+    if( m_xCBWrapText->get_state()!= TRISTATE_INDET )
+        rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_WRAP_TEXT, m_xCBWrapText->get_active()) );
 
-    OUString aSep = our_aLBEntryMap[m_pLB_Separator->GetSelectedEntryPos()];
+    OUString aSep = our_aLBEntryMap[m_xLB_Separator->get_active()];
     rOutAttrs->Put( SfxStringItem( SCHATTR_DATADESCR_SEPARATOR, aSep) );
 
-    std::map< sal_uInt16, sal_Int32 >::const_iterator aIt( m_aListBoxToPlacementMap.find(m_pLB_LabelPlacement->GetSelectedEntryPos()) );
+    std::map< sal_uInt16, sal_Int32 >::const_iterator aIt( m_aListBoxToPlacementMap.find(m_xLB_LabelPlacement->get_active()) );
     if(aIt!=m_aListBoxToPlacementMap.end())
     {
         sal_Int32 nValue = aIt->second;
         rOutAttrs->Put( SfxInt32Item( SCHATTR_DATADESCR_PLACEMENT, nValue ) );
     }
 
-    if( m_pLB_TextDirection->GetSelectedEntryCount() > 0 )
-        rOutAttrs->Put( SvxFrameDirectionItem( m_pLB_TextDirection->GetSelectEntryValue(), EE_PARA_WRITINGDIR ) );
+    if (m_xLB_TextDirection->get_active() != -1)
+        rOutAttrs->Put( SvxFrameDirectionItem( m_xLB_TextDirection->get_active_id(), EE_PARA_WRITINGDIR ) );
 
-    if( m_pDC_Dial->IsVisible() )
+    if( m_aDC_Dial.IsVisible() )
     {
-        sal_Int32 nDegrees = m_pDC_Dial->GetRotation();
+        sal_Int32 nDegrees = m_aDC_Dial.GetRotation();
         rOutAttrs->Put(SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
     }
 }
@@ -317,13 +303,13 @@ void DataLabelResources::FillItemSet( SfxItemSet* rOutAttrs ) const
 void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
 {
     // default state
-    m_pCBSymbol->Enable( false );
+    m_xCBSymbol->set_sensitive( false );
 
-    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_NUMBER, *m_pCBNumber );
-    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_PERCENTAGE, *m_pCBPercent );
-    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_CATEGORY, *m_pCBCategory );
-    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_SYMBOL, *m_pCBSymbol );
-    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_WRAP_TEXT, *m_pCBWrapText );
+    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_NUMBER, *m_xCBNumber );
+    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_PERCENTAGE, *m_xCBPercent );
+    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_CATEGORY, *m_xCBCategory );
+    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_SYMBOL, *m_xCBSymbol );
+    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_WRAP_TEXT, *m_xCBWrapText );
 
     m_bNumberFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_SOURCE, m_nNumberFormatForValue, m_bSourceFormatForValue, m_bSourceFormatMixedState );
     m_bPercentFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_nNumberFormatForPercent, m_bSourceFormatForPercent ,  m_bPercentSourceMixedState);
@@ -333,10 +319,10 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
        for(sal_uInt32 i=0; i < SAL_N_ELEMENTS(our_aLBEntryMap); ++i )
        {
           if( our_aLBEntryMap[i] == static_cast<const SfxStringItem*>(pPoolItem)->GetValue())
-              m_pLB_Separator->SelectEntryPos( i );
+              m_xLB_Separator->set_active( i );
        }
     else
-        m_pLB_Separator->SelectEntryPos( 0 );
+        m_xLB_Separator->set_active( 0 );
 
     if( rInAttrs.GetItemState(SCHATTR_DATADESCR_PLACEMENT, true, &pPoolItem) == SfxItemState::SET )
     {
@@ -345,24 +331,24 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
         if(aIt!=m_aPlacementToListBoxMap.end())
         {
             sal_uInt16 nPos = aIt->second;
-            m_pLB_LabelPlacement->SelectEntryPos( nPos );
+            m_xLB_LabelPlacement->set_active( nPos );
         }
         else
-            m_pLB_LabelPlacement->SetNoSelection();
+            m_xLB_LabelPlacement->set_active(-1);
     }
     else
-        m_pLB_LabelPlacement->SetNoSelection();
+        m_xLB_LabelPlacement->set_active(-1);
 
     if( rInAttrs.GetItemState(EE_PARA_WRITINGDIR, true, &pPoolItem ) == SfxItemState::SET )
-        m_pLB_TextDirection->SelectEntryValue( static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue() );
+        m_xLB_TextDirection->set_active_id( static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue() );
 
     if( rInAttrs.GetItemState( SCHATTR_TEXT_DEGREES, true, &pPoolItem ) == SfxItemState::SET )
     {
         sal_Int32 nDegrees = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
-        m_pDC_Dial->SetRotation( nDegrees );
+        m_aDC_Dial.SetRotation( nDegrees );
     }
     else
-        m_pDC_Dial->SetRotation( 0 );
+        m_aDC_Dial.SetRotation( 0 );
 
     EnableControls();
 }
