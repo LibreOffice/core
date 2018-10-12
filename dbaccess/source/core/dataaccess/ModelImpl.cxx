@@ -55,6 +55,7 @@
 #include <vcl/errcode.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/sharedunocomponent.hxx>
+#include <unotools/configmgr.hxx>
 
 #include <algorithm>
 
@@ -690,9 +691,8 @@ const Reference< XNumberFormatsSupplier > & ODatabaseModelImpl::getNumberFormats
 {
     if (!m_xNumberFormatsSupplier.is())
     {
-        // the arguments : the locale of the current user
-        UserInformation aUserInfo;
-        Locale aLocale = aUserInfo.getUserLanguage();
+        // the arguments : the work locale of the current user
+        Locale aLocale( LanguageTag::convertToLocale( utl::ConfigManager::getWorkLocale(), false));
 
         m_xNumberFormatsSupplier.set( NumberFormatsSupplier::createWithLocale( m_aContext, aLocale ) );
     }
