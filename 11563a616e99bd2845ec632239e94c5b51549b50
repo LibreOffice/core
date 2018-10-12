@@ -16,6 +16,70 @@
       "revId": "11563a616e99bd2845ec632239e94c5b51549b50",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_c3cb231c",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/DrawImpressCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 1959,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-10-12T15:08:06Z",
+      "side": 1,
+      "message": "I wondered about that. I think that this was probably just copy/pasted from Writer - I don\u0027t think that ContextLabel was used anywhere inside of Draw/Impress, but I\u0027m not sure how to verify that conclusively.",
+      "parentUuid": "ff0f0b1f_633e972a",
+      "revId": "11563a616e99bd2845ec632239e94c5b51549b50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_43003335",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-10-12T15:08:06Z",
+      "side": 1,
+      "message": "This existing label fit the purpose I wanted, but I don\u0027t know if Table Design has a more limited meaning.  At this point I just hijacked it for convenience, and at least in English it seems to fit well.  The real use seems to be more limited to applying table styles though?\n\nI was also wondering whether it would be good or bad to disable the submenu if there was no table selected. Doing so would involve creating a SID_ for it I think. But likely disabling a submenu is not really a good idea...",
+      "range": {
+        "startLine": 346,
+        "startChar": 27,
+        "endLine": 346,
+        "endChar": 42
+      },
+      "revId": "11563a616e99bd2845ec632239e94c5b51549b50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_03fa3b41",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-10-12T15:08:06Z",
+      "side": 1,
+      "message": "I debated whether to put all the row actions together or whether to break it up more into functionality (grouping select/min/opt/dist rows and columns together, followed by a grouping of insert/delete rows/columns).\n\nPutting ALL of the row items together makes the section feel really big, but it probably is the most logical.\n\nPerhaps I should move these four up behind \"select\" since that entry fits best will these others AND it puts the delete option next to a spacer and not next to a useful feature (to prevent accidental delete clicks). Yes - let me do that.",
+      "range": {
+        "startLine": 355,
+        "startChar": 10,
+        "endLine": 357,
+        "endChar": 56
+      },
+      "revId": "11563a616e99bd2845ec632239e94c5b51549b50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

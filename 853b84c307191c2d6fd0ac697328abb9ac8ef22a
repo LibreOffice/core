@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_63da17ea",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/DrawImpressCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 2009,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-10-12T15:08:06Z",
+      "side": 0,
+      "message": "I changed this one in all places because it was inconsistent with the other uses, which were always in the singular. Hope that is OK.",
+      "range": {
+        "startLine": 2009,
+        "startChar": 34,
+        "endLine": 2009,
+        "endChar": 45
+      },
+      "revId": "853b84c307191c2d6fd0ac697328abb9ac8ef22a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
