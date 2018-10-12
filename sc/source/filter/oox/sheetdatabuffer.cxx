@@ -105,7 +105,10 @@ void CellBlockBuffer::setColSpans( sal_Int32 nRow, const ValueRangeSet& rColSpan
     OSL_ENSURE( maColSpans.count( nRow ) == 0, "CellBlockBuffer::setColSpans - multiple column spans for the same row" );
     OSL_ENSURE( (mnCurrRow < nRow) && (maColSpans.empty() || (maColSpans.rbegin()->first < nRow)), "CellBlockBuffer::setColSpans - rows are unsorted" );
     if( (mnCurrRow < nRow) && (maColSpans.count( nRow ) == 0) )
+    {
         maColSpans[ nRow ] = rColSpans.getRanges();
+        mnCurrRow = nRow;
+    }
 }
 
 SheetDataBuffer::SheetDataBuffer( const WorksheetHelper& rHelper ) :

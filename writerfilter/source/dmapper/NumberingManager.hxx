@@ -44,7 +44,6 @@ class ListLevel : public PropertyMap
 {
     sal_Int32                                     m_nIStartAt;       //LN_CT_Lvl_start
     sal_Int32                                     m_nNFC;            //LN_CT_Lvl_numFmt
-    sal_Int32 const                               m_nJC;             //LN_JC
     sal_Int16                                     m_nXChFollow;      //LN_IXCHFOLLOW
     OUString                               m_sBulletChar;
     css::awt::Size                         m_aGraphicSize;
@@ -61,7 +60,6 @@ public:
     ListLevel() :
         m_nIStartAt(-1)
         ,m_nNFC(-1)
-        ,m_nJC(-1)
         ,m_nXChFollow(SvxNumberFormat::LISTTAB)
         ,m_nTabstop( 0 )
         ,m_outline(false)

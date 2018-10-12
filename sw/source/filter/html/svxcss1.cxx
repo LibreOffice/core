@@ -705,12 +705,11 @@ bool SvxCSS1Parser::DeclarationParsed( const OUString& rProperty,
 }
 
 SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
-                              sal_uInt16 *pWhichIds, sal_uInt16 nWhichIds ) :
+                              sal_uInt16 const *pWhichIds, sal_uInt16 nWhichIds ) :
     CSS1Parser(),
     sBaseURL( rBaseURL ),
     pItemSet(nullptr),
     pPropInfo( nullptr ),
-    nMinFixLineSpace(  MM50/2 ),
     eDfltEnc( RTL_TEXTENCODING_DONTKNOW ),
     bIgnoreFontFamily( false )
 {
@@ -1595,7 +1594,7 @@ static void ParseCSS1_background_color( const CSS1Expression *pExpr,
 static void ParseCSS1_line_height( const CSS1Expression *pExpr,
                                    SfxItemSet &rItemSet,
                                    SvxCSS1PropertyInfo& /*rPropInfo*/,
-                                   const SvxCSS1Parser& rParser )
+                                   const SvxCSS1Parser& )
 {
     OSL_ENSURE( pExpr, "no expression" );
 
@@ -1635,8 +1634,8 @@ static void ParseCSS1_line_height( const CSS1Expression *pExpr,
 
     if( nHeight )
     {
-        if( nHeight < rParser.GetMinFixLineSpace() )
-            nHeight = rParser.GetMinFixLineSpace();
+        if( nHeight < SvxCSS1Parser::GetMinFixLineSpace() )
+            nHeight = SvxCSS1Parser::GetMinFixLineSpace();
         SvxLineSpacingItem aLSItem( nHeight, aItemIds.nLineSpacing );
         aLSItem.SetLineHeight( nHeight );
         // interpret <line-height> attribute as minimum line height

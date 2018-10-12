@@ -51,7 +51,6 @@ protected:
 private:
     Link<const MouseEvent&,void> maRightMouseClickHandler;
     Size maPreviewSize;
-    const int mnMaxColumnCount;
 
     sal_uInt16 CalculateColumnCount (int nWidth) const;
     sal_uInt16 CalculateRowCount (sal_uInt16 nColumnCount) const;
