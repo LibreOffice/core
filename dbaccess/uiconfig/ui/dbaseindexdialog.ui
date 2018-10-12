@@ -1,32 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="dba">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">dbaccess/res/one_left.png</property>
+    <property name="icon_name">dbaccess/res/one_left.png</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">dbaccess/res/all_left.png</property>
+    <property name="icon_name">dbaccess/res/one_left.png</property>
   </object>
   <object class="GtkImage" id="image3">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">dbaccess/res/one_right.png</property>
+    <property name="icon_name">dbaccess/res/one_right.png</property>
   </object>
   <object class="GtkImage" id="image4">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">dbaccess/res/all_right.png</property>
+    <property name="icon_name">dbaccess/res/all_right.png</property>
+  </object>
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore2">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
   </object>
   <object class="GtkDialog" id="DBaseIndexDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes" context="dbaseindexdialog|DBaseIndexDialog">Indexes</property>
+    <property name="modal">True</property>
+    <property name="default_width">0</property>
+    <property name="default_height">0</property>
     <property name="type_hint">dialog</property>
+    <child>
+      <placeholder/>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
@@ -103,10 +125,10 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes" context="dbaseindexdialog|label1">_Table:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">table</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -121,7 +143,8 @@
                     <property name="has_entry">True</property>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="comboboxtext-entry">
-                        <property name="can_focus">False</property>
+                        <property name="can_focus">True</property>
+                        <property name="activates_default">True</property>
                       </object>
                     </child>
                   </object>
@@ -158,10 +181,10 @@
                           <object class="GtkLabel" id="label3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="dbaseindexdialog|label3">T_able indexes</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">tableindex:border</property>
+                            <property name="mnemonic_widget">tableindex</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -172,10 +195,10 @@
                           <object class="GtkLabel" id="label4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes" context="dbaseindexdialog|label4">_Free indexes</property>
                             <property name="use_underline">True</property>
-                            <property name="mnemonic_widget">freeindex:border</property>
+                            <property name="mnemonic_widget">freeindex</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -183,13 +206,37 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkTreeView" id="tableindex:border">
+                          <object class="GtkScrolledWindow" id="tableindexwin">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="treeview-selection1"/>
+                            <property name="shadow_type">in</property>
+                            <child>
+                              <object class="GtkTreeView" id="tableindex">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
+                                <property name="model">liststore1</property>
+                                <property name="headers_visible">False</property>
+                                <property name="headers_clickable">False</property>
+                                <property name="search_column">0</property>
+                                <property name="show_expanders">False</property>
+                                <child internal-child="selection">
+                                  <object class="GtkTreeSelection" id="treeview-selection1"/>
+                                </child>
+                                <child>
+                                  <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
                             </child>
                           </object>
                           <packing>
@@ -198,13 +245,37 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkTreeView" id="freeindex:border">
+                          <object class="GtkScrolledWindow" id="freeindexwin">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
+                            <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="treeview-selection3"/>
+                            <property name="shadow_type">in</property>
+                            <child>
+                              <object class="GtkTreeView" id="freeindex">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="vexpand">True</property>
+                                <property name="model">liststore2</property>
+                                <property name="headers_visible">False</property>
+                                <property name="headers_clickable">False</property>
+                                <property name="search_column">0</property>
+                                <property name="show_expanders">False</property>
+                                <child internal-child="selection">
+                                  <object class="GtkTreeSelection" id="treeview-selection2"/>
+                                </child>
+                                <child>
+                                  <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
                             </child>
                           </object>
                           <packing>
@@ -266,7 +337,6 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="image">image4</property>
-                                <property name="yalign">0.49000000953674316</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>

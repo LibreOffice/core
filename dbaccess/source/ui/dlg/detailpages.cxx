@@ -250,8 +250,8 @@ namespace dbaui
     {
         if (m_pIndexes == pButton)
         {
-            ScopedVclPtrInstance< ODbaseIndexDialog > aIndexDialog(this, m_sDsn);
-            aIndexDialog->Execute();
+            ODbaseIndexDialog aIndexDialog(GetDialogFrameWeld(), m_sDsn);
+            aIndexDialog.run();
         }
         else
         {
