@@ -139,14 +139,14 @@ private:
 
     oox::ppt::HeaderFooter                                                  maHeaderFooter;
     sal_Int32                                                               mnLayoutValueToken;
-    bool                                                                    mbMaster;
-    bool                                                                    mbNotes;
+    bool const                                                              mbMaster;
+    bool const                                                              mbNotes;
 
-    oox::drawingml::TextListStylePtr                                        maDefaultTextStylePtr;
-    oox::drawingml::TextListStylePtr                                        maTitleTextStylePtr;
-    oox::drawingml::TextListStylePtr                                        maBodyTextStylePtr;
-    oox::drawingml::TextListStylePtr                                        maNotesTextStylePtr;
-    oox::drawingml::TextListStylePtr                                        maOtherTextStylePtr;
+    oox::drawingml::TextListStylePtr const                                  maDefaultTextStylePtr;
+    oox::drawingml::TextListStylePtr const                                  maTitleTextStylePtr;
+    oox::drawingml::TextListStylePtr const                                  maBodyTextStylePtr;
+    oox::drawingml::TextListStylePtr const                                  maNotesTextStylePtr;
+    oox::drawingml::TextListStylePtr const                                  maOtherTextStylePtr;
 
     std::map< OUString, css::uno::Reference< css::animations::XAnimationNode > > maAnimNodesMap;
     std::map< OUString, ::oox::drawingml::ShapePtr >                        maShapeMap;

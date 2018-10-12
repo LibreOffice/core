@@ -38,7 +38,7 @@ namespace oox { namespace ppt {
         virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
     private:
-        ::sal_Int32                 mnElement;
+        ::sal_Int32 const           mnElement;
         css::uno::Any&              maValue;
         ::oox::drawingml::Color     maColor;
     };

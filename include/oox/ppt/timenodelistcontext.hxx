@@ -45,7 +45,7 @@ namespace oox { namespace ppt {
     protected:
         TimeNodeContext( ::oox::core::FragmentHandler2 const & rParent, sal_Int32  aElement, const TimeNodePtr & pNode ) throw();
 
-        sal_Int32 mnElement;
+        sal_Int32 const mnElement;
         TimeNodePtr mpNode;
     };
 

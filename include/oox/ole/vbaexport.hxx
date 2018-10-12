@@ -63,7 +63,7 @@ private:
     sal_uInt8* mpCompressedChunkStream;
 
     // same as DecompressedChunkEnd in the spec
-    std::size_t mnChunkSize;
+    std::size_t const mnChunkSize;
 
     // CompressedCurrent according to the spec
     sal_uInt64 mnCompressedCurrent;
@@ -133,7 +133,7 @@ private:
     sal_uInt8 mnUnencryptedByte1; // the last unencrypted byte read or written
     sal_uInt8 mnEncryptedByte1; // the last encrypted byte read or written
     sal_uInt8 mnEncryptedByte2; // the next-to-last encrypted byte read or written
-    sal_Unicode mnProjKey; // a project-specific encryption key
+    sal_Unicode const mnProjKey; // a project-specific encryption key
     sal_uInt8 mnIgnoredLength; // the length in bytes of IgnoredEnc
 
     sal_uInt8 mnSeed; // the seed value

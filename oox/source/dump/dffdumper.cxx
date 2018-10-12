@@ -158,10 +158,10 @@ enum PropType { PROPTYPE_BINARY, PROPTYPE_STRING, PROPTYPE_BLIP, PROPTYPE_COLORA
 
 struct PropInfo
 {
-    OUString            maName;
-    PropType            meType;
-    sal_uInt16          mnId;
-    sal_uInt32          mnSize;
+    OUString const      maName;
+    PropType const      meType;
+    sal_uInt16 const    mnId;
+    sal_uInt32 const    mnSize;
     explicit     PropInfo( const OUString& rName, PropType eType, sal_uInt16 nId, sal_uInt32 nSize ) :
                             maName( rName ), meType( eType ), mnId( nId ), mnSize( nSize ) {}
 };

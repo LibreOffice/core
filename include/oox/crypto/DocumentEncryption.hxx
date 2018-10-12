@@ -32,7 +32,7 @@ class OOX_DLLPUBLIC DocumentEncryption
 private:
     css::uno::Reference< css::io::XStream > mxDocumentStream;
     oox::ole::OleStorage& mrOleStorage;
-    OUString maPassword;
+    OUString const maPassword;
 
     Standard2007Engine mEngine;
 

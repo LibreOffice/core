@@ -37,7 +37,7 @@ public:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs ) override;
 
 private:
-    SlidePersistPtr     mpSlidePersistPtr;
+    SlidePersistPtr const mpSlidePersistPtr;
 };
 
 } }

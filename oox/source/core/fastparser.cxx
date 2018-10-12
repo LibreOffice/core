@@ -47,7 +47,7 @@ public:
                         ~InputStreamCloseGuard();
 private:
     Reference< XInputStream > mxInStream;
-    bool                mbCloseStream;
+    bool const          mbCloseStream;
 };
 
 InputStreamCloseGuard::InputStreamCloseGuard( const Reference< XInputStream >& rxInStream, bool bCloseStream ) :
