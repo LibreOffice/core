@@ -32,7 +32,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/sdrpaintwindow.hxx>
-#include <sdr/contact/objectcontactofpageview.hxx>
+#include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/fmview.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 struct SdrPageWindow::Impl
 {
     // #110094# ObjectContact section
-    mutable sdr::contact::ObjectContactOfPageView* mpObjectContact;
+    mutable sdr::contact::ObjectContact* mpObjectContact;
 
     // the SdrPageView this window belongs to
     SdrPageView& mrPageView;
@@ -456,8 +456,11 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
 const sdr::contact::ObjectContact& SdrPageWindow::GetObjectContact() const
 {
     if (!mpImpl->mpObjectContact)
-        mpImpl->mpObjectContact = new sdr::contact::ObjectContactOfPageView(
-            const_cast<SdrPageWindow&>(*this), "svx::svdraw::SdrPageWindow mpObjectContact" );
+    {
+        mpImpl->mpObjectContact = GetPageView().GetView().createViewSpecificObjectContact(
+            const_cast<SdrPageWindow&>(*this),
+            "svx::svdraw::SdrPageWindow mpObjectContact");
+    }
 
     return *mpImpl->mpObjectContact;
 }
@@ -465,8 +468,11 @@ const sdr::contact::ObjectContact& SdrPageWindow::GetObjectContact() const
 sdr::contact::ObjectContact& SdrPageWindow::GetObjectContact()
 {
     if (!mpImpl->mpObjectContact)
-        mpImpl->mpObjectContact = new sdr::contact::ObjectContactOfPageView(
-             *this, "svx::svdraw::SdrPageWindow mpObjectContact" );
+    {
+        mpImpl->mpObjectContact = GetPageView().GetView().createViewSpecificObjectContact(
+             *this,
+             "svx::svdraw::SdrPageWindow mpObjectContact" );
+    }
 
     return *mpImpl->mpObjectContact;
 }

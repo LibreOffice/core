@@ -60,12 +60,10 @@ ViewContactOfSdrOle2Obj::~ViewContactOfSdrOle2Obj()
 basegfx::B2DHomMatrix ViewContactOfSdrOle2Obj::createObjectTransform() const
 {
     // take unrotated snap rect (direct model data) for position and size
-    tools::Rectangle rRectangle = GetOle2Obj().GetGeoRect();
-    // Hack for calc, transform position of object according
-    // to current zoom so as objects relative position to grid
-    // appears stable
-    rRectangle += GetOle2Obj().GetGridOffset();
-    const basegfx::B2DRange aObjectRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
+    const tools::Rectangle aRectangle(GetOle2Obj().GetGeoRect());
+    const basegfx::B2DRange aObjectRange(
+        aRectangle.Left(), aRectangle.Top(),
+        aRectangle.Right(), aRectangle.Bottom());
 
     // create object matrix
     const GeoStat& rGeoStat(GetOle2Obj().GetGeoStat());
@@ -100,17 +98,12 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfSdrOle2Obj::createP
         // #i123539# allow buffering and reuse of local chart data to not need to rebuild it
         // on every ViewObjectContact::getPrimitive2DSequence call. TTTT: Not needed for
         // aw080, there this mechanism already works differently
-        if(mxChartContent.is()
-                // check if we need to update the transformation primitive wrapping the chart
-                && maGridOffset == GetOle2Obj().GetGridOffset())
+        if(mxChartContent.is())
         {
             xContent = mxChartContent;
         }
         else
         {
-            // update grid offset
-            const_cast< ViewContactOfSdrOle2Obj* >(this)->maGridOffset = GetOle2Obj().GetGridOffset();
-
             // try to get chart primitives and chart range directly from xChartModel
             basegfx::B2DRange aChartContentRange;
             const drawinglayer::primitive2d::Primitive2DContainer aChartSequence(

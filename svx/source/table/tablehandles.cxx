@@ -172,6 +172,9 @@ void TableEdgeHdl::CreateB2dIAObject()
                             {
                                 // create overlay object for visible parts
                                 std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject(new OverlayTableEdge(aVisible, true));
+
+                                // OVERLAYMANAGER
+                                addPossibleGridOffsetAtOverlayObject(pOverlayObject.get(), rPageWindow.GetObjectContact());
                                 xManager->add(*pOverlayObject);
                                 maOverlayGroup.append(std::move(pOverlayObject));
                             }
@@ -182,6 +185,9 @@ void TableEdgeHdl::CreateB2dIAObject()
                                 // a standard HitTest using the primitives from that overlay object
                                 // (see OverlayTableEdge implementation)
                                 std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject(new OverlayTableEdge(aInvisible, false));
+
+                                // OVERLAYMANAGER
+                                addPossibleGridOffsetAtOverlayObject(pOverlayObject.get(), rPageWindow.GetObjectContact());
                                 xManager->add(*pOverlayObject);
                                 maOverlayGroup.append(std::move(pOverlayObject));
                             }
@@ -289,6 +295,9 @@ void TableBorderHdl::CreateB2dIAObject()
                         new sdr::overlay::OverlayRectangle(aRange.getMinimum(), aRange.getMaximum(),
                                                            aHilightColor, fTransparence,
                                                            fWidth, 0.0, 0.0, bAnimate));
+
+                    // OVERLAYMANAGER
+                    addPossibleGridOffsetAtOverlayObject(pOverlayObject.get(), rPageWindow.GetObjectContact());
                     xManager->add(*pOverlayObject);
                     maOverlayGroup.append(std::move(pOverlayObject));
                 }
