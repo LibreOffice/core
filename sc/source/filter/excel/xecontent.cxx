@@ -1450,22 +1450,6 @@ XclExpIconSet::XclExpIconSet( const XclExpRoot& rRoot, const ScIconSetFormat& rF
     }
 }
 
-namespace {
-
-const char* getIconSetName( ScIconSetType eType )
-{
-    const ScIconSetMap* pMap = ScIconSetFormat::g_IconSetMap;
-    for(; pMap->pName; ++pMap)
-    {
-        if(pMap->eType == eType)
-            return pMap->pName;
-    }
-
-    return "";
-}
-
-}
-
 void XclExpIconSet::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
@@ -1475,7 +1459,7 @@ void XclExpIconSet::SaveXml( XclExpXmlStream& rStrm )
             XML_priority, OString::number( mnPriority + 1 ).getStr(),
             FSEND );
 
-    const char* pIconSetName = getIconSetName(mrFormat.GetIconSetData()->eIconSetType);
+    const char* pIconSetName = ScIconSetFormat::getIconSetName(mrFormat.GetIconSetData()->eIconSetType);
     rWorksheet->startElement( XML_iconSet,
             XML_iconSet, pIconSetName,
             XML_showValue, mrFormat.GetIconSetData()->mbShowValue ? nullptr : "0",

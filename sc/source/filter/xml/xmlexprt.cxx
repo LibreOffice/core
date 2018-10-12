@@ -4203,22 +4203,6 @@ OUString getCondFormatEntryType(const ScColorScaleEntry& rEntry, bool bFirst = t
     return OUString();
 }
 
-OUString getIconSetName(ScIconSetType eType)
-{
-    const char* pName = nullptr;
-    const ScIconSetMap* pMap = ScIconSetFormat::g_IconSetMap;
-    for(;pMap->pName;++pMap)
-    {
-        if(pMap->eType == eType)
-        {
-            pName = pMap->pName;
-            break;
-        }
-    }
-    assert(pName);
-    return OUString::createFromAscii(pName);
-}
-
 OUString getDateStringForType(condformat::ScCondFormatDateType eType)
 {
     switch(eType)
@@ -4508,7 +4492,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                     else if(pFormatEntry->GetType() == ScFormatEntry::Type::Iconset)
                     {
                         const ScIconSetFormat& rIconSet = static_cast<const ScIconSetFormat&>(*pFormatEntry);
-                        OUString aIconSetName = getIconSetName(rIconSet.GetIconSetData()->eIconSetType);
+                        OUString aIconSetName = OUString::createFromAscii(ScIconSetFormat::getIconSetName(rIconSet.GetIconSetData()->eIconSetType));
                         AddAttribute( XML_NAMESPACE_CALC_EXT, XML_ICON_SET_TYPE, aIconSetName );
                         if (rIconSet.GetIconSetData()->mbCustom)
                             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CUSTOM, OUString::boolean(true));
@@ -4521,7 +4505,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                                     it = rIconSet.GetIconSetData()->maCustomVector.begin();
                                     it != rIconSet.GetIconSetData()->maCustomVector.end(); ++it)
                             {
-                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CUSTOM_ICONSET_NAME, getIconSetName(it->first));
+                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CUSTOM_ICONSET_NAME, OUString::createFromAscii(ScIconSetFormat::getIconSetName(it->first)));
                                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CUSTOM_ICONSET_INDEX, OUString::number(it->second));
                                 SvXMLElementExport aCustomIcon(*this, XML_NAMESPACE_CALC_EXT, XML_CUSTOM_ICONSET, true, true);
                             }
