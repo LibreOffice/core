@@ -58,7 +58,7 @@ bool FuConstUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 
         pWindow->CaptureMouse();
         pView->BegCreateObj(aPnt);
-        pView->GetCreateObj()->SetGridOffset( aGridOff );
+//Z        pView->GetCreateObj()->SetGridOffset( aGridOff );
         bReturn = true;
     }
     return bReturn;

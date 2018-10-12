@@ -65,14 +65,25 @@ namespace sdr
             OverlayManager*                                 mpOverlayManager;
 
             // Primitive2DContainer of the OverlayObject
-            drawinglayer::primitive2d::Primitive2DContainer  maPrimitive2DSequence;
+            drawinglayer::primitive2d::Primitive2DContainer maPrimitive2DSequence;
+
+            // Possible Offset added to the geometry (automatically in
+            // createOverlayObjectPrimitive2DSequence()). Usually zero, may
+            // be used e.g. from calc when GridOffset is needed
+            basegfx::B2DVector                              maOffset;
 
         protected:
             // access methods to maPrimitive2DSequence. The usage of this methods may allow
             // later thread-safe stuff to be added if needed. Only to be used by getPrimitive2DSequence()
             // implementations for buffering the last decomposition.
+            // Resetting is allowed e.g. in ::getOverlayObjectPrimitive2DSequence() implementations
+            // if the conditions have changed to force a re-creation in calling the base implementation.
+            // The only allowed setter of maPrimitive2DSequence is
+            // OverlayObject::getOverlayObjectPrimitive2DSequence() which should be called by calling
+            // the base implementation in derived functions. That one will use the result of
+            // createOverlayObjectPrimitive2DSequence() to provide the geometry.
             const drawinglayer::primitive2d::Primitive2DContainer& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
-            void setPrimitive2DSequence(const drawinglayer::primitive2d::Primitive2DContainer& rNew) { maPrimitive2DSequence = rNew; }
+            void resetPrimitive2DSequence() { maPrimitive2DSequence.clear(); }
 
             // the creation method for Primitive2DContainer. Called when getPrimitive2DSequence()
             // sees that maPrimitive2DSequence is empty. Needs to be supported by all
@@ -145,6 +156,10 @@ namespace sdr
             // access to baseColor
             const Color& getBaseColor() const { return maBaseColor; }
             void setBaseColor(Color aNew);
+
+            // access to Offset
+            const basegfx::B2DVector& getOffset() const { return maOffset; }
+            void setOffset(const basegfx::B2DVector& rOffset);
 
             // execute event from base class sdr::animation::Event. Default
             // implementation does nothing and does not create a new event.
