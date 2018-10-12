@@ -1994,11 +1994,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     pFormat->SetRange(aRangeList);
 
                     ScIconSetType eIconSetType = limit_cast<ScIconSetType>(pParam->GetValue(), IconSet_3Arrows, IconSet_5Boxes);
-                    int nSteps = 3;
-                    if (eIconSetType >= IconSet_4Arrows && eIconSetType < IconSet_5Arrows)
-                        nSteps = 4;
-                    else if (eIconSetType >= IconSet_5Arrows)
-                        nSteps = 5;
+                    const int nSteps = ScIconSetFormat::getIconSetElements(eIconSetType);
 
                     ScIconSetFormat* pEntry = new ScIconSetFormat(pDoc);
                     ScIconSetFormatData* pIconSetFormatData = new ScIconSetFormatData(eIconSetType);
