@@ -277,7 +277,14 @@ public:
 class SdPresLayoutDlg;
 class AbstractSdPresLayoutDlg_Impl : public AbstractSdPresLayoutDlg
 {
-    DECL_ABSTDLG_BASE(AbstractSdPresLayoutDlg_Impl,SdPresLayoutDlg)
+private:
+    std::unique_ptr<SdPresLayoutDlg> m_xDlg;
+public:
+    AbstractSdPresLayoutDlg_Impl(std::unique_ptr<SdPresLayoutDlg> pDlg)
+        : m_xDlg(std::move(pDlg))
+    {
+    }
+    virtual short   Execute() override;
     virtual void    GetAttr(SfxItemSet& rOutAttrs) override;
 };
 
@@ -337,7 +344,7 @@ public:
                                                                      const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList ) override;
     virtual VclPtr<VclAbstractDialog>          CreateRemoteDialog( vcl::Window* pWindow ) override; // ad for RemoteDialog
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdPresLayoutTemplateDlg( SfxObjectShell* pDocSh, vcl::Window* pParent, bool bBackgroundDlg, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool ) override;
-    virtual VclPtr<AbstractSdPresLayoutDlg>    CreateSdPresLayoutDlg( ::sd::DrawDocShell* pDocShell, const SfxItemSet& rInAttrs) override;
+    virtual VclPtr<AbstractSdPresLayoutDlg>    CreateSdPresLayoutDlg(weld::Window* pParent, ::sd::DrawDocShell* pDocShell, const SfxItemSet& rInAttrs) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdTabTemplateDlg(vcl::Window* pParent, const SfxObjectShell* pDocShell, SfxStyleSheetBase& rStyleBase, SdrModel* pModel, SdrView* pView ) override;
     virtual VclPtr<SfxAbstractDialog>          CreatSdActionDialog(vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView) override;
     virtual VclPtr<AbstractSdVectorizeDlg>     CreateSdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell) override;
