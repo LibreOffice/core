@@ -44,6 +44,7 @@ struct SwCursorMoveState;
 struct SwFillData;
 class SwPortionHandler;
 class SwScriptInfo;
+enum class ExpandMode;
 
 #define NON_PRINTING_CHARACTER_COLOR Color(0x26, 0x8b, 0xd2)
 
@@ -100,6 +101,14 @@ enum class FrameMode { New, Existing };
 std::unique_ptr<sw::MergedPara> CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode, FrameMode eMode);
 
 bool FrameContainsNode(SwContentFrame const& rFrame, sal_uLong nNodeIndex);
+bool IsParaPropsNode(SwRootFrame const& rLayout, SwTextNode const& rNode);
+SwTextNode * GetParaPropsNode(SwRootFrame const& rLayout, SwNodeIndex const& rNode);
+SwPosition GetParaPropsPos(SwRootFrame const& rLayout, SwPosition const& rPos);
+std::pair<SwTextNode *, SwTextNode *>
+GetFirstAndLastNode(SwRootFrame const& rLayout, SwNodeIndex const& rPos);
+
+void GotoPrevLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const* pLayout);
+void GotoNextLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const* pLayout);
 
 TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
         bool isRealDelete,
@@ -112,12 +121,16 @@ void MoveDeletedPrevFrames(SwTextNode & rDeletedPrev, SwTextNode & rNode);
 enum class Recreate { No, ThisNode, Predecessor };
 void CheckResetRedlineMergeFlag(SwTextNode & rNode, Recreate eRecreateMerged);
 
-void UpdateFramesForAddDeleteRedline(SwPaM const& rPam);
+void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam);
 void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam);
 
 void AddRemoveFlysAnchoredToFrameStartingAtNode(
         SwTextFrame & rFrame, SwTextNode & rTextNode,
         std::set<sal_uLong> *pSkipped);
+
+OUString GetExpandTextMerged(SwRootFrame const* pLayout,
+        SwTextNode const& rNode, bool bWithNumber,
+        bool bWithSpacesForLevel, ExpandMode i_mode);
 
 } // namespace sw
 
@@ -417,11 +430,6 @@ public:
 
     /// Returns the text portion we want to edit (for inline see underneath)
     const OUString& GetText() const;
-    // TODO: remove GetTextNode
-    SwTextNode *GetTextNode()
-        { return static_cast<SwTextNode*>(SwFrame::GetDep()); }
-    const SwTextNode *GetTextNode() const
-        { return static_cast<const SwTextNode*>(SwFrame::GetDep()); }
     SwTextNode const* GetTextNodeForParaProps() const;
     SwTextNode      * GetTextNodeFirst()
         { return const_cast<SwTextNode*>(const_cast<SwTextFrame const*>(this)->GetTextNodeFirst()); };
@@ -939,14 +947,14 @@ struct MergedPara
     /// const_casts it and modifies it (also, Update will modify it)
     OUString mergedText;
     /// most paragraph properties are taken from the first non-empty node
-    SwTextNode const* pParaPropsNode;
+    SwTextNode * pParaPropsNode;
     /// except break attributes, those are taken from the first node
     SwTextNode *const pFirstNode;
     /// mainly for sanity checks
     SwTextNode const* pLastNode;
     MergedPara(SwTextFrame & rFrame, std::vector<Extent>&& rExtents,
             OUString const& rText,
-            SwTextNode const*const pProps, SwTextNode *const pFirst,
+            SwTextNode *const pProps, SwTextNode *const pFirst,
             SwTextNode const*const pLast)
         : listener(rFrame), extents(std::move(rExtents)), mergedText(rText)
         , pParaPropsNode(pProps), pFirstNode(pFirst), pLastNode(pLast)
@@ -977,11 +985,15 @@ public:
 };
 
 class MergedAttrIterByEnd
-    : public MergedAttrIterBase
 {
+private:
+    std::vector<std::pair<SwTextNode const*, SwTextAttr const*>> m_Hints;
+    SwTextNode const*const m_pNode;
+    size_t m_CurrentHint;
 public:
-    MergedAttrIterByEnd(SwTextFrame const& rFrame) : MergedAttrIterBase(rFrame) {}
-    SwTextAttr const* NextAttr(SwTextNode const** ppNode = nullptr);
+    MergedAttrIterByEnd(SwTextFrame const& rFrame);
+    SwTextAttr const* NextAttr(SwTextNode const*& rpNode);
+    void PrevAttr();
 };
 
 class MergedAttrIterReverse

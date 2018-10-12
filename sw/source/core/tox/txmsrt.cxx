@@ -373,6 +373,7 @@ void SwTOXIndex::FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16 )
             !(GetOptions() & SwTOIOptions::KeyAsEntry))
     {
         aRet.sText = static_cast<const SwTextNode*>(aTOXSources[0].pNd)->GetExpandText(
+                            nullptr,
                             pTextMark->GetStart(),
                             *pEnd - pTextMark->GetStart());
         if(SwTOIOptions::InitialCaps & nOpt && pTOXIntl && !aRet.sText.isEmpty())
@@ -452,6 +453,7 @@ TextAndReading SwTOXContent::GetText_Impl() const
     {
         return TextAndReading(
             static_cast<const SwTextNode*>(aTOXSources[0].pNd)->GetExpandText(
+                                     nullptr,
                                      pTextMark->GetStart(),
                                      *pEnd - pTextMark->GetStart() ),
             pTextMark->GetTOXMark().GetTextReading());
@@ -464,9 +466,9 @@ void SwTOXContent::FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16
 {
     const sal_Int32* pEnd = pTextMark->End();
     if( pEnd && !pTextMark->GetTOXMark().IsAlternativeText() )
-        static_cast<const SwTextNode*>(aTOXSources[0].pNd)->GetExpandText( rNd, &rInsPos,
-                                    pTextMark->GetStart(),
-                                    *pEnd - pTextMark->GetStart() );
+        static_cast<const SwTextNode*>(aTOXSources[0].pNd)->CopyExpandText(
+                rNd, &rInsPos, pTextMark->GetStart(),
+                *pEnd - pTextMark->GetStart(), nullptr );
     else
     {
         rNd.InsertText( GetText().sText, rInsPos );
@@ -503,6 +505,7 @@ TextAndReading SwTOXPara::GetText_Impl() const
     case SwTOXElement::OutlineLevel:
         {
             return TextAndReading(static_cast<const SwTextNode*>(pNd)->GetExpandText(
+                    nullptr,
                     nStartIndex,
                     nEndIndex == -1 ? -1 : nEndIndex - nStartIndex,
                     false, false, false),
@@ -538,9 +541,9 @@ void SwTOXPara::FillText( SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) 
     if( SwTOXElement::Template == eType || SwTOXElement::Sequence == eType  || SwTOXElement::OutlineLevel == eType)
     {
         const SwTextNode* pSrc = static_cast<const SwTextNode*>(aTOXSources[0].pNd);
-        pSrc->GetExpandText( rNd, &rInsPos, nStartIndex,
+        pSrc->CopyExpandText( rNd, &rInsPos, nStartIndex,
                 nEndIndex == -1 ? -1 : nEndIndex - nStartIndex,
-                false, false, true );
+                nullptr, false, false, true );
     }
     else
     {
@@ -687,7 +690,7 @@ sal_uInt16 SwTOXAuthority::GetLevel() const
 
 static OUString lcl_GetText(SwFormatField const& rField)
 {
-    return rField.GetField()->ExpandField(true);
+    return rField.GetField()->ExpandField(true, nullptr);
 }
 
 TextAndReading SwTOXAuthority::GetText_Impl() const

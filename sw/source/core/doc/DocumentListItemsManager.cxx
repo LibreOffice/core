@@ -18,7 +18,9 @@
  */
 
 #include <DocumentListItemsManager.hxx>
+
 #include <SwNodeNum.hxx>
+#include <txtfrm.hxx>
 #include <ndtxt.hxx>
 #include <osl/diagnose.h>
 
@@ -66,12 +68,19 @@ void DocumentListItemsManager::removeListItem( const SwNodeNum& rNodeNum )
     }
 }
 
-OUString DocumentListItemsManager::getListItemText( const SwNodeNum& rNodeNum ) const
+OUString DocumentListItemsManager::getListItemText(const SwNodeNum& rNodeNum,
+        SwRootFrame const& rLayout) const
 {
-    return rNodeNum.GetTextNode()
-           ? rNodeNum.GetTextNode()->GetExpandText( 0, -1, true/*bWithNumber*/,
-                                                    true/*bWithNumber*/, true/*bWithSpacesForLevel*/ )
-           : OUString();
+    SwTextNode const*const pNode(rNodeNum.GetTextNode());
+    assert(pNode);
+    return sw::GetExpandTextMerged(&rLayout, *pNode, true, true, ExpandMode(0));
+}
+
+bool DocumentListItemsManager::isNumberedInLayout(
+        SwNodeNum const& rNodeNum, // note: this is the non-hidden Num ...
+        SwRootFrame const& rLayout) const
+{
+    return sw::IsParaPropsNode(rLayout, *rNodeNum.GetTextNode());
 }
 
 void DocumentListItemsManager::getNumItems( tSortedNodeNumList& orNodeNumList ) const

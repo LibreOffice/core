@@ -24,6 +24,7 @@
 class SwFrame;
 class SwContentNode;
 class SwTextNode;
+class SwRootFrame;
 
 enum SwChapterFormat
 {
@@ -48,37 +49,40 @@ class SW_DLLPUBLIC SwChapterField : public SwField
 {
     friend class SwChapterFieldType;
     friend class ToxTextGeneratorTest; // the unittest needs to mock the chapter fields.
-    sal_uInt8 nLevel;
-    OUString sTitle;
-    OUString sNumber;
-    OUString sPre;
-    OUString sPost;
 
-    virtual OUString Expand() const override;
+    struct State
+    {
+        sal_uInt8 nLevel;
+        OUString sTitle;
+        OUString sNumber;
+        OUString sPre;
+        OUString sPost;
+        State() : nLevel(0) {}
+    };
+    State m_State;
+    State m_StateRLHidden;
+
+    virtual OUString ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
     SwChapterField(SwChapterFieldType*, sal_uInt32 nFormat = 0);
 
     // #i53420#
-    void ChangeExpansion( const SwFrame*,
+    void ChangeExpansion( const SwFrame&,
                           const SwContentNode*,
         bool bSrchNum = false);
-    void ChangeExpansion(const SwTextNode &rNd, bool bSrchNum);
+    void ChangeExpansion(const SwTextNode &rNd, bool bSrchNum, SwRootFrame const* pLayout = nullptr);
 
-    inline sal_uInt8 GetLevel() const;
-    inline void SetLevel(sal_uInt8);
+    sal_uInt8 GetLevel(SwRootFrame const* pLayout = nullptr) const;
+    void SetLevel(sal_uInt8);
 
-    inline const OUString& GetNumber() const;
-    inline const OUString& GetTitle() const;
+    const OUString& GetNumber(SwRootFrame const* pLayout = nullptr) const;
+    const OUString& GetTitle(SwRootFrame const* pLayout = nullptr) const;
+
     virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
-
-inline sal_uInt8 SwChapterField::GetLevel() const   { return nLevel; }
-inline void SwChapterField::SetLevel(sal_uInt8 nLev) { nLevel = nLev; }
-inline const OUString& SwChapterField::GetNumber() const { return sNumber; }
-inline const OUString& SwChapterField::GetTitle() const { return sTitle; }
 
 #endif // INCLUDED_SW_INC_CHPFLD_HXX
 

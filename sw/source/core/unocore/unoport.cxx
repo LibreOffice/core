@@ -173,7 +173,7 @@ OUString SwXTextPortion::getString()
     if ( pTextNd )
     {
         const sal_Int32 nStt = rUnoCursor.Start()->nContent.GetIndex();
-        aText = pTextNd->GetExpandText( nStt,
+        aText = pTextNd->GetExpandText(nullptr, nStt,
                 rUnoCursor.End()->nContent.GetIndex() - nStt );
     }
     return aText;

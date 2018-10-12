@@ -1143,7 +1143,7 @@ void SwXTextViewCursor::gotoStart(sal_Bool bExpand)
     if (!IsTextSelection())
         throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
 
-    m_pView->GetWrtShell().SttDoc( bExpand );
+    m_pView->GetWrtShell().StartOfSection( bExpand );
 
 }
 
@@ -1157,7 +1157,7 @@ void SwXTextViewCursor::gotoEnd(sal_Bool bExpand)
     if (!IsTextSelection())
         throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
 
-    m_pView->GetWrtShell().EndDoc( bExpand );
+    m_pView->GetWrtShell().EndOfSection( bExpand );
 
 }
 
@@ -1381,7 +1381,8 @@ OUString SwXTextViewCursor::getString()
             {
                 SwWrtShell& rSh = m_pView->GetWrtShell();
                 SwPaM* pShellCursor = rSh.GetCursor();
-                SwUnoCursorHelper::GetTextFromPam(*pShellCursor, uRet);
+                SwUnoCursorHelper::GetTextFromPam(*pShellCursor, uRet,
+                        rSh.GetLayout());
                 break;
             }
             default:;//prevent warning

@@ -22,6 +22,7 @@
 #include <svl/poolitem.hxx>
 #include "swdllapi.h"
 #include <memory>
+#include "calbck.hxx"
 
 class SvxMacro;
 class SvxMacroTableDtor;
@@ -31,7 +32,9 @@ enum class SvMacroItemId : sal_uInt16;
 
 // ATT_INETFMT
 
-class SW_DLLPUBLIC SwFormatINetFormat: public SfxPoolItem
+class SW_DLLPUBLIC SwFormatINetFormat
+    : public SfxPoolItem
+    , public sw::BroadcasterMixin
 {
     friend class SwTextINetFormat;
 

@@ -56,8 +56,8 @@ public:
     virtual bool SetFieldsDirty(bool b, const SwNode* pChk, sal_uLong nLen) override;
     virtual void SetFixFields(const DateTime* pNewDateTime) override;
     virtual void FieldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt) override;
-    virtual void FieldsToCalc(SwCalc& rCalc, const SetGetExpField& rToThisField) override;
-    virtual void FieldsToExpand(SwHashTable<HashStr>& rTable, const SetGetExpField& rToThisField) override;
+    virtual void FieldsToCalc(SwCalc& rCalc, const SetGetExpField& rToThisField, SwRootFrame const* pLayout) override;
+    virtual void FieldsToExpand(SwHashTable<HashStr>& rTable, const SetGetExpField& rToThisField, SwRootFrame const& rLayout) override;
     virtual bool IsNewFieldLst() const override;
     virtual void SetNewFieldLst( bool bFlag) override;
     virtual void InsDelFieldInFieldLst(bool bIns, const SwTextField& rField) override;
@@ -94,6 +94,8 @@ private:
 
     DocumentFieldsManager(DocumentFieldsManager const&) = delete;
     DocumentFieldsManager& operator=(DocumentFieldsManager const&) = delete;
+
+    void UpdateExpFieldsImpl(SwTextField* pField, SwRootFrame const* pLayout);
 
     SwDoc& m_rDoc;
 

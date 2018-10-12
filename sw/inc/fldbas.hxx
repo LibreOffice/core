@@ -28,6 +28,7 @@
 #include <climits>
 
 class SwDoc;
+class SwRootFrame;
 class SvNumberFormatter;
 namespace com { namespace sun { namespace star { namespace beans { class XPropertySet; } } } }
 namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
@@ -130,7 +131,7 @@ enum SwFieldTypesEnum {
     TYP_PARAGRAPHSIGFLD,
     TYP_END
 };
-enum SwAttrFieldTYpe {
+enum SwAttrFieldType {
     ATTR_NONE,
     ATTR_DATEFLD,
     ATTR_TIMEFLD,
@@ -191,7 +192,6 @@ namespace nsSwGetSetExpType
 {
 const SwGetSetExpType GSE_STRING  = 0x0001; ///< String
 const SwGetSetExpType GSE_EXPR    = 0x0002; ///< Expression
-const SwGetSetExpType GSE_INP     = 0x0004; ///< InputField
 const SwGetSetExpType GSE_SEQ     = 0x0008; ///< Sequence
 const SwGetSetExpType GSE_FORMULA = 0x0010; ///< Formula
 }
@@ -273,7 +273,7 @@ inline void SwFieldType::UpdateFields() const
 
 /** Base class of all fields.
  Type of field is queried via Which.
- Expanded content of field is queried via Expand(). */
+ Expanded content of field is queried via ExpandField(). */
 class SW_DLLPUBLIC SwField
 {
 private:
@@ -284,7 +284,7 @@ private:
     sal_uInt32          m_nFormat;              /// this can be either SvxNumType or SwChapterFormat depending on the subtype
     SwFieldType*        m_pType;
 
-    virtual OUString    Expand() const = 0;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const = 0;
     virtual std::unique_ptr<SwField> Copy() const = 0;
 
 protected:
@@ -316,9 +316,11 @@ public:
                     this is because various fields need special handing
                     (ChangeExpansion()) to return correct values, and only
                     SwTextFormatter::NewFieldPortion() sets things up properly.
+        @param  pLayout     the layout to use for expansion; there are a few
+                            fields that expand differently via layout mode.
         @return     the generated text (suitable for display)
       */
-    OUString            ExpandField(bool const bCached) const;
+    OUString            ExpandField(bool bCached, SwRootFrame const* pLayout) const;
 
     /// @return name or content.
     virtual OUString    GetFieldName() const;

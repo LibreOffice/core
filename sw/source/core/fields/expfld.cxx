@@ -283,7 +283,9 @@ void SwGetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* pNew )
 
 SwGetExpField::SwGetExpField(SwGetExpFieldType* pTyp, const OUString& rFormel,
                             sal_uInt16 nSub, sal_uLong nFormat)
-    : SwFormulaField( pTyp, nFormat, 0.0 ),
+    : SwFormulaField( pTyp, nFormat, 0.0 )
+    , m_fValueRLHidden(0.0)
+    ,
     m_bIsInBodyText( true ),
     m_nSubType(nSub),
     m_bLateInitialization( false )
@@ -291,12 +293,24 @@ SwGetExpField::SwGetExpField(SwGetExpFieldType* pTyp, const OUString& rFormel,
     SetFormula( rFormel );
 }
 
-OUString SwGetExpField::Expand() const
+void SwGetExpField::ChgExpStr(const OUString& rExpand, SwRootFrame const*const pLayout)
+{
+    if (!pLayout || pLayout->IsHideRedlines())
+    {
+        m_sExpandRLHidden = rExpand;
+    }
+    if (!pLayout || !pLayout->IsHideRedlines())
+    {
+        m_sExpand = rExpand;
+    }
+}
+
+OUString SwGetExpField::ExpandImpl(SwRootFrame const*const pLayout) const
 {
     if(m_nSubType & nsSwExtendedSubType::SUB_CMD)
         return GetFormula();
 
-    return m_sExpand;
+    return (pLayout && pLayout->IsHideRedlines()) ? m_sExpandRLHidden : m_sExpand;
 }
 
 OUString SwGetExpField::GetFieldName() const
@@ -314,6 +328,7 @@ std::unique_ptr<SwField> SwGetExpField::Copy() const
     std::unique_ptr<SwGetExpField> pTmp(new SwGetExpField(static_cast<SwGetExpFieldType*>(GetTyp()),
                                             GetFormula(), m_nSubType, GetFormat()));
     pTmp->SetLanguage(GetLanguage());
+    pTmp->m_fValueRLHidden = m_fValueRLHidden;
     pTmp->SwValueField::SetValue(GetValue());
     pTmp->m_sExpand       = m_sExpand;
     pTmp->m_bIsInBodyText  = m_bIsInBodyText;
@@ -356,25 +371,27 @@ void SwGetExpField::ChangeExpansion( const SwFrame& rFrame, const SwTextField& r
         }
     }
 
+    SwRootFrame const& rLayout(*rFrame.getRootFrame());
+    OUString & rExpand(rLayout.IsHideRedlines() ? m_sExpandRLHidden : m_sExpand);
     SetGetExpField aEndField( aPos.nNode, &rField, &aPos.nContent );
     if(GetSubType() & nsSwGetSetExpType::GSE_STRING)
     {
         SwHashTable<HashStr> aHashTable(0);
-        rDoc.getIDocumentFieldsAccess().FieldsToExpand( aHashTable, aEndField );
-        m_sExpand = LookString( aHashTable, GetFormula() );
+        rDoc.getIDocumentFieldsAccess().FieldsToExpand(aHashTable, aEndField, rLayout);
+        rExpand = LookString( aHashTable, GetFormula() );
     }
     else
     {
         // fill calculator with values
         SwCalc aCalc( rDoc );
-        rDoc.getIDocumentFieldsAccess().FieldsToCalc(aCalc, aEndField);
+        rDoc.getIDocumentFieldsAccess().FieldsToCalc(aCalc, aEndField, &rLayout);
 
         // calculate value
-        SetValue(aCalc.Calculate(GetFormula()).GetDouble());
+        SetValue(aCalc.Calculate(GetFormula()).GetDouble(), &rLayout);
 
         // analyse based on format
-        m_sExpand = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(
-                                GetValue(), GetFormat(), GetLanguage());
+        rExpand = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(
+                                GetValue(&rLayout), GetFormat(), GetLanguage());
     }
 }
 
@@ -447,6 +464,7 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     {
     case FIELD_PROP_DOUBLE:
         SwValueField::SetValue(*o3tl::doAccess<double>(rAny));
+        m_fValueRLHidden = *o3tl::doAccess<double>(rAny);
         break;
     case FIELD_PROP_FORMAT:
         rAny >>= nTmp;
@@ -478,7 +496,7 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     {
         OUString sTmp;
         rAny >>= sTmp;
-        ChgExpStr(sTmp);
+        ChgExpStr(sTmp, nullptr);
         break;
     }
     default:
@@ -490,7 +508,6 @@ bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const OUString& rName, sal_uInt16 nTyp )
     : SwValueFieldType( pDc, SwFieldIds::SetExp ),
     m_sName( rName ),
-    m_pOutlChgNd( nullptr ),
     m_sDelim( "." ),
     m_nType(nTyp), m_nLevel( UCHAR_MAX ),
     m_bDeleted( false )
@@ -512,6 +529,23 @@ SwFieldType* SwSetExpFieldType::Copy() const
 OUString SwSetExpFieldType::GetName() const
 {
     return m_sName;
+}
+
+const OUString& SwSetExpField::GetExpStr(SwRootFrame const*const pLayout) const
+{
+    return (pLayout && pLayout->IsHideRedlines()) ? msExpandRLHidden : msExpand;
+}
+
+void SwSetExpField::ChgExpStr(const OUString& rExpand, SwRootFrame const*const pLayout)
+{
+    if (!pLayout || pLayout->IsHideRedlines())
+    {
+        msExpandRLHidden = rExpand;
+    }
+    if (!pLayout || !pLayout->IsHideRedlines())
+    {
+        msExpand = rExpand;
+    }
 }
 
 void SwSetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* )
@@ -583,9 +617,12 @@ void SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rField )
     rField.SetSeqNumber( n );
 }
 
-size_t SwSetExpFieldType::GetSeqFieldList( SwSeqFieldList& rList )
+size_t SwSetExpFieldType::GetSeqFieldList(SwSeqFieldList& rList,
+        SwRootFrame const*const pLayout)
 {
     rList.Clear();
+
+    IDocumentRedlineAccess const& rIDRA(GetDoc()->getIDocumentRedlineAccess());
 
     SwIterator<SwFormatField,SwFieldType> aIter( *this );
     for( SwFormatField* pF = aIter.First(); pF; pF = aIter.Next() )
@@ -593,10 +630,12 @@ size_t SwSetExpFieldType::GetSeqFieldList( SwSeqFieldList& rList )
         const SwTextNode* pNd;
         if( pF->GetTextField() &&
             nullptr != ( pNd = pF->GetTextField()->GetpTextNode() ) &&
-            pNd->GetNodes().IsDocNodes() )
+            pNd->GetNodes().IsDocNodes()
+            && (!pLayout || !pLayout->IsHideRedlines()
+                || !sw::IsFieldDeletedInModel(rIDRA, *pF->GetTextField())))
         {
             SeqFieldLstElem aNew(
-                    pNd->GetExpandText(),
+                    pNd->GetExpandText(pLayout),
                     static_cast<SwSetExpField*>(pF->GetField())->GetSeqNumber() );
             rList.InsertSort( aNew );
         }
@@ -605,9 +644,10 @@ size_t SwSetExpFieldType::GetSeqFieldList( SwSeqFieldList& rList )
     return rList.Count();
 }
 
-void SwSetExpFieldType::SetChapter( SwSetExpField& rField, const SwNode& rNd )
+void SwSetExpFieldType::SetChapter(SwSetExpField& rField, const SwNode& rNd,
+        SwRootFrame const*const pLayout)
 {
-    const SwTextNode* pTextNd = rNd.FindOutlineNodeOfLevel( m_nLevel );
+    const SwTextNode* pTextNd = rNd.FindOutlineNodeOfLevel(m_nLevel, pLayout);
     if( pTextNd )
     {
         SwNumRule * pRule = pTextNd->GetNumRule();
@@ -615,19 +655,17 @@ void SwSetExpFieldType::SetChapter( SwSetExpField& rField, const SwNode& rNd )
         if (pRule)
         {
             // --> OD 2005-11-02 #i51089 - TUNING#
-            if ( pTextNd->GetNum() )
+            if (SwNodeNum const*const pNum = pTextNd->GetNum(pLayout))
             {
-                const SwNodeNum & aNum = *(pTextNd->GetNum());
-
                 // only get the number, without pre-/post-fixstrings
-                OUString sNumber( pRule->MakeNumString(aNum, false ));
+                OUString const sNumber(pRule->MakeNumString(*pNum, false));
 
                 if( !sNumber.isEmpty() )
-                    rField.ChgExpStr( sNumber + m_sDelim + rField.GetExpStr() );
+                    rField.ChgExpStr(sNumber + m_sDelim + rField.GetExpStr(pLayout), pLayout);
             }
             else
             {
-                OSL_FAIL( "<SwSetExpFieldType::SetChapter(..)> - text node with numbering rule, but without number. This is a serious defect" );
+                OSL_ENSURE(pTextNd->GetNum(nullptr), "<SwSetExpFieldType::SetChapter(..)> - text node with numbering rule, but without number. This is a serious defect");
             }
         }
     }
@@ -774,8 +812,10 @@ bool SwSeqFieldList::SeekEntry( const SeqFieldLstElem& rNew, size_t* pP ) const
 
 SwSetExpField::SwSetExpField(SwSetExpFieldType* pTyp, const OUString& rFormel,
                                         sal_uLong nFormat)
-    : SwFormulaField( pTyp, nFormat, 0.0 ), mnSeqNo( USHRT_MAX ),
-    mnSubType(0)
+    : SwFormulaField( pTyp, nFormat, 0.0 )
+    , m_fValueRLHidden(0.0)
+    , mnSeqNo( USHRT_MAX )
+    , mnSubType(0)
     , mpFormatField(nullptr)
 {
     SetFormula(rFormel);
@@ -784,6 +824,7 @@ SwSetExpField::SwSetExpField(SwSetExpFieldType* pTyp, const OUString& rFormel,
     if( IsSequenceField() )
     {
         SwValueField::SetValue(1.0);
+        m_fValueRLHidden = 1.0;
         if( rFormel.isEmpty() )
         {
             SetFormula(pTyp->GetName() + "+1");
@@ -796,7 +837,7 @@ void SwSetExpField::SetFormatField(SwFormatField & rFormatField)
     mpFormatField = &rFormatField;
 }
 
-OUString SwSetExpField::Expand() const
+OUString SwSetExpField::ExpandImpl(SwRootFrame const*const pLayout) const
 {
     if (mnSubType & nsSwExtendedSubType::SUB_CMD)
     {   // we need the CommandString
@@ -804,7 +845,7 @@ OUString SwSetExpField::Expand() const
     }
     if(!(mnSubType & nsSwExtendedSubType::SUB_INVISIBLE))
     {   // value is visible
-        return msExpand;
+        return (pLayout && pLayout->IsHideRedlines()) ? msExpandRLHidden : msExpand;
     }
     return OUString();
 }
@@ -836,7 +877,9 @@ std::unique_ptr<SwField> SwSetExpField::Copy() const
     std::unique_ptr<SwSetExpField> pTmp(new SwSetExpField(static_cast<SwSetExpFieldType*>(GetTyp()),
                                             GetFormula(), GetFormat()));
     pTmp->SwValueField::SetValue(GetValue());
+    pTmp->m_fValueRLHidden = m_fValueRLHidden;
     pTmp->msExpand       = msExpand;
+    pTmp->msExpandRLHidden = msExpandRLHidden;
     pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
     pTmp->SetLanguage(GetLanguage());
     pTmp->maPText        = maPText;
@@ -871,11 +914,56 @@ void SwSetExpField::SetValue( const double& rAny )
                                                 GetFormat(), GetLanguage());
 }
 
+void SwSetExpField::SetValue(const double& rValue, SwRootFrame const*const pLayout)
+{
+    if (!pLayout || !pLayout->IsHideRedlines())
+    {
+        SetValue(rValue);
+    }
+    if (!pLayout || pLayout->IsHideRedlines())
+    {
+        m_fValueRLHidden = rValue;
+        if (IsSequenceField())
+        {
+            msExpandRLHidden = FormatNumber(rValue, static_cast<SvxNumType>(GetFormat()), GetLanguage());
+        }
+        else
+        {
+            msExpandRLHidden = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(
+                    rValue, GetFormat(), GetLanguage());
+        }
+    }
+}
+
+double SwSetExpField::GetValue(SwRootFrame const* pLayout) const
+{
+    return (pLayout && pLayout->IsHideRedlines()) ? m_fValueRLHidden : GetValue();
+}
+
 void SwGetExpField::SetValue( const double& rAny )
 {
     SwValueField::SetValue(rAny);
     m_sExpand = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue( rAny, GetFormat(),
                                                             GetLanguage());
+}
+
+void SwGetExpField::SetValue(const double& rValue, SwRootFrame const*const pLayout)
+{
+    if (!pLayout || !pLayout->IsHideRedlines())
+    {
+        SetValue(rValue);
+    }
+    if (!pLayout || pLayout->IsHideRedlines())
+    {
+        m_fValueRLHidden = rValue;
+        m_sExpandRLHidden = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(
+                rValue, GetFormat(), GetLanguage());
+    }
+}
+
+double SwGetExpField::GetValue(SwRootFrame const* pLayout) const
+{
+    return (pLayout && pLayout->IsHideRedlines()) ? m_fValueRLHidden : GetValue();
 }
 
 /** Find the index of the reference text following the current field
@@ -1021,6 +1109,7 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             double fVal = 0.0;
             rAny >>= fVal;
             SetValue(fVal);
+            m_fValueRLHidden = fVal;
         }
         break;
     case FIELD_PROP_SUBTYPE:
@@ -1044,7 +1133,7 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         {
             OUString sTmp;
             rAny >>= sTmp;
-            ChgExpStr( sTmp );
+            ChgExpStr(sTmp, nullptr);
         }
         break;
     default:
@@ -1101,7 +1190,7 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= GetInputFlag();
         break;
     case FIELD_PROP_PAR4:
-        rAny <<= GetExpStr();
+        rAny <<= GetExpStr(nullptr);
         break;
     default:
         return SwField::QueryValue(rAny, nWhichId);
@@ -1210,7 +1299,7 @@ std::unique_ptr<SwField> SwInputField::Copy() const
     return std::unique_ptr<SwField>(pField.release());
 }
 
-OUString SwInputField::Expand() const
+OUString SwInputField::ExpandImpl(SwRootFrame const*const) const
 {
     if((mnSubType & 0x00ff) == INP_TXT)
     {

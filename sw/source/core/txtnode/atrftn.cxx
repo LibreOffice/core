@@ -23,6 +23,7 @@
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <cntfrm.hxx>
+#include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <txtftn.hxx>
 #include <ftnidx.hxx>
@@ -122,6 +123,7 @@ SwFormatFootnote::SwFormatFootnote( bool bEndNote )
     , SwModify(nullptr)
     , m_pTextAttr(nullptr)
     , m_nNumber(0)
+    , m_nNumberRLHidden(0)
     , m_bEndNote(bEndNote)
 {
 }
@@ -130,6 +132,7 @@ bool SwFormatFootnote::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
     return m_nNumber  == static_cast<const SwFormatFootnote&>(rAttr).m_nNumber &&
+        //FIXME?
            m_aNumber  == static_cast<const SwFormatFootnote&>(rAttr).m_aNumber &&
            m_bEndNote == static_cast<const SwFormatFootnote&>(rAttr).m_bEndNote;
 }
@@ -139,6 +142,7 @@ SfxPoolItem* SwFormatFootnote::Clone( SfxItemPool* ) const
     SwFormatFootnote* pNew  = new SwFormatFootnote;
     pNew->m_aNumber = m_aNumber;
     pNew->m_nNumber = m_nNumber;
+    pNew->m_nNumberRLHidden = m_nNumberRLHidden;
     pNew->m_bEndNote = m_bEndNote;
     return pNew;
 }
@@ -175,8 +179,9 @@ SwFormatFootnote::~SwFormatFootnote()
 {
 }
 
-void SwFormatFootnote::GetFootnoteText( OUString& rStr ) const
+OUString SwFormatFootnote::GetFootnoteText(SwRootFrame const& rLayout) const
 {
+    OUStringBuffer buf;
     if( m_pTextAttr->GetStartNode() )
     {
         SwNodeIndex aIdx( *m_pTextAttr->GetStartNode(), 1 );
@@ -185,20 +190,25 @@ void SwFormatFootnote::GetFootnoteText( OUString& rStr ) const
             pCNd = aIdx.GetNodes().GoNext( &aIdx );
 
         if( pCNd->IsTextNode() ) {
-            rStr = static_cast<SwTextNode*>(pCNd)->GetExpandText();
+            buf.append(static_cast<SwTextNode*>(pCNd)->GetExpandText(&rLayout));
 
             ++aIdx;
             while ( !aIdx.GetNode().IsEndNode() ) {
                 if ( aIdx.GetNode().IsTextNode() )
-                    rStr += "  " + aIdx.GetNode().GetTextNode()->GetExpandText();
+                {
+                    buf.append("  ");
+                    buf.append(aIdx.GetNode().GetTextNode()->GetExpandText(&rLayout));
+                }
                 ++aIdx;
             }
         }
     }
+    return buf.makeStringAndClear();
 }
 
 /// return the view string of the foot/endnote
-OUString SwFormatFootnote::GetViewNumStr( const SwDoc& rDoc, bool bInclStrings ) const
+OUString SwFormatFootnote::GetViewNumStr(const SwDoc& rDoc,
+        SwRootFrame const*const pLayout, bool bInclStrings) const
 {
     OUString sRet( GetNumStr() );
     if( sRet.isEmpty() )
@@ -208,6 +218,9 @@ OUString SwFormatFootnote::GetViewNumStr( const SwDoc& rDoc, bool bInclStrings )
         const SwSectionNode* pSectNd = m_pTextAttr
                     ? SwUpdFootnoteEndNtAtEnd::FindSectNdWithEndAttr( *m_pTextAttr )
                     : nullptr;
+        sal_uInt16 const nNumber(pLayout && pLayout->IsHideRedlines()
+                ? GetNumberRLHidden()
+                : GetNumber());
 
         if( pSectNd )
         {
@@ -220,7 +233,7 @@ OUString SwFormatFootnote::GetViewNumStr( const SwDoc& rDoc, bool bInclStrings )
             if( FTNEND_ATTXTEND_OWNNUMANDFMT == rFootnoteEnd.GetValue() )
             {
                 bMakeNum = false;
-                sRet = rFootnoteEnd.GetSwNumType().GetNumStr( GetNumber() );
+                sRet = rFootnoteEnd.GetSwNumType().GetNumStr( nNumber );
                 if( bInclStrings )
                 {
                     sRet = rFootnoteEnd.GetPrefix() + sRet + rFootnoteEnd.GetSuffix();
@@ -235,7 +248,7 @@ OUString SwFormatFootnote::GetViewNumStr( const SwDoc& rDoc, bool bInclStrings )
                 pInfo = &rDoc.GetEndNoteInfo();
             else
                 pInfo = &rDoc.GetFootnoteInfo();
-            sRet = pInfo->aFormat.GetNumStr( GetNumber() );
+            sRet = pInfo->aFormat.GetNumStr( nNumber );
             if( bInclStrings )
             {
                 sRet = pInfo->GetPrefix() + sRet + pInfo->GetSuffix();
@@ -325,7 +338,8 @@ void SwTextFootnote::SetStartNode( const SwNodeIndex *pNewNode, bool bDelNode )
     }
 }
 
-void SwTextFootnote::SetNumber( const sal_uInt16 nNewNum, const OUString &sNumStr )
+void SwTextFootnote::SetNumber(const sal_uInt16 nNewNum,
+        sal_uInt16 const nNumberRLHidden, const OUString &sNumStr)
 {
     SwFormatFootnote& rFootnote = const_cast<SwFormatFootnote&>(GetFootnote());
 
@@ -333,9 +347,15 @@ void SwTextFootnote::SetNumber( const sal_uInt16 nNewNum, const OUString &sNumSt
     if ( sNumStr.isEmpty() )
     {
         rFootnote.m_nNumber = nNewNum;
+        rFootnote.m_nNumberRLHidden = nNumberRLHidden;
     }
+    InvalidateNumberInLayout();
+}
 
-    OSL_ENSURE( m_pTextNode, "SwTextFootnote: where is my TextNode?" );
+void SwTextFootnote::InvalidateNumberInLayout()
+{
+    assert(m_pTextNode);
+    SwFormatFootnote const& rFootnote(GetFootnote());
     SwNodes &rNodes = m_pTextNode->GetDoc()->GetNodes();
     m_pTextNode->ModifyNotification( nullptr, &rFootnote );
     if ( m_pStartNode )

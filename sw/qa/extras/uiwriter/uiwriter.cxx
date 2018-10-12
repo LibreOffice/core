@@ -753,7 +753,7 @@ void SwUiWriterTest::testTdf67238()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getColumns()->getCount());
     //selecting the table
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     pWrtShell->SelTable();
     //making the table protected
     pWrtShell->ProtectCells();
@@ -792,7 +792,7 @@ void SwUiWriterTest::testTdf67238()
     CPPUNIT_ASSERT(((rTable.GetTableBox("C2"))->GetFrameFormat()->GetProtect()).IsContentProtected());
     CPPUNIT_ASSERT(((rTable.GetTableBox("C3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
     //moving the cursor to the starting of the document
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     //making the table [un]protected
     pWrtShell->SelTable();
     pWrtShell->UnProtectCells();
@@ -2409,7 +2409,7 @@ void SwUiWriterTest::testTdf72788()
     //Make selection to remove formatting in first paragraph
     //[this is text
     //]more text
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     //Start selection
     pCursor->SetMark();
     for (int i = 0; i < 13; i++) {
@@ -2576,20 +2576,20 @@ void SwUiWriterTest::testTdf77342()
     SwFieldType* pField = pWrtShell->GetFieldType(0, SwFieldIds::GetRef);
     SwGetRefFieldType* pRefType = static_cast<SwGetRefFieldType*>(pField);
     //moving cursor to the starting of document
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     //inserting reference field 1
     SwGetRefField aField1(pRefType, "", "", REF_FOOTNOTE, sal_uInt16(0), REF_CONTENT);
     pWrtShell->Insert(aField1);
     //inserting second footnote
     pWrtShell->InsertFootnote("");
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     pCursor->Move(fnMoveForward);
     //inserting reference field 2
     SwGetRefField aField2(pRefType, "", "", REF_FOOTNOTE, sal_uInt16(1), REF_CONTENT);
     pWrtShell->Insert(aField2);
     //inserting third footnote
     pWrtShell->InsertFootnote("");
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     pCursor->Move(fnMoveForward);
     pCursor->Move(fnMoveForward);
     //inserting reference field 3
@@ -2619,7 +2619,7 @@ void SwUiWriterTest::testTdf77342()
     uno::Any aAny;
     sal_uInt16 aFormat;
     //reference field 1
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     SwField* pRef1 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pRef1->GetFormat();
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
@@ -2640,11 +2640,11 @@ void SwUiWriterTest::testTdf77342()
     pRef3->QueryValue(aAny, sal_uInt16(FIELD_PROP_SHORT1));
     CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_uInt16(2)), aAny);
     //moving cursor to the end of the document
-    pWrtShell->EndDoc();
+    pWrtShell->EndOfSection();
     //pasting the copied selection at current cursor position
     pWrtShell->Paste(xClpDoc.get());
     //checking the fields, both new and old, for proper values
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     //old reference field 1
     SwField* pOldRef11 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pOldRef11->GetFormat();
@@ -2712,11 +2712,11 @@ void SwUiWriterTest::testTdf77342()
     SwTextFootnote* pTFNote4 = static_cast<SwTextFootnote*> (pFootnote4);
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pTFNote4->GetSeqRefNo());
     //moving the cursor to the starting of document
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     //pasting the selection again at current cursor position
     pWrtShell->Paste(xClpDoc.get());
     //checking the fields, both new and old, for proper values
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     //new reference field 1
     SwField* pNewRef21 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pNewRef21->GetFormat();
@@ -2818,7 +2818,7 @@ void SwUiWriterTest::testTdf63553()
     pWrtShell->Insert(aSetField1);
     SwGetRefFieldType* pRefType = static_cast<SwGetRefFieldType*>(pWrtShell->GetFieldType(0, SwFieldIds::GetRef));
     //moving cursor to the starting of document
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     //inserting reference field 1
     SwGetRefField aGetField1(pRefType, "Illustration", "", REF_SEQUENCEFLD, sal_uInt16(0), REF_CONTENT);
     pWrtShell->Insert(aGetField1);
@@ -2829,7 +2829,7 @@ void SwUiWriterTest::testTdf63553()
     SwSetExpField aSetField2(pSeqType, "", SVX_NUM_ARABIC);
     pWrtShell->Insert(aSetField2);
     //moving the cursor
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     pCursor->Move(fnMoveForward);
     //inserting reference field 2
     SwGetRefField aGetField2(pRefType, "Illustration", "", REF_SEQUENCEFLD, sal_uInt16(1), REF_CONTENT);
@@ -2841,7 +2841,7 @@ void SwUiWriterTest::testTdf63553()
     //inserting sequence field 3
     SwSetExpField aSetField3(pSeqType, "", SVX_NUM_ARABIC);
     pWrtShell->Insert(aSetField3);
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     pCursor->Move(fnMoveForward);
     pCursor->Move(fnMoveForward);
     //inserting reference field 3
@@ -2858,7 +2858,7 @@ void SwUiWriterTest::testTdf63553()
     //selecting reference field 2 and 3 and sequence field 1 and 2
     //selection is such that more than one and not all sequence fields and reference fields are selected
     //ref1-[ref2-ref3-seq1-seq2]-seq3
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     pCursor->Move(fnMoveForward);
     //start marking
     pCursor->SetMark();
@@ -2874,7 +2874,7 @@ void SwUiWriterTest::testTdf63553()
     uno::Any aAny;
     sal_uInt16 aFormat;
     //reference field 1
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     SwField* pRef1 = SwCursorShell::GetFieldAtCursor(pCursor, true);
     aFormat = pRef1->GetFormat();
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(REF_CONTENT), aFormat);
@@ -2910,11 +2910,11 @@ void SwUiWriterTest::testTdf63553()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pSeqF3->GetSeqNumber());
     CPPUNIT_ASSERT_EQUAL(OUString("Number range Illustration"), pSeqF3->GetFieldName());
     //moving cursor to the end of the document
-    pWrtShell->EndDoc();
+    pWrtShell->EndOfSection();
     //pasting the copied selection at current cursor position
     pWrtShell->Paste(xClpDoc.get());
     //checking the fields, both new and old, for proper values
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     //now we have ref1-ref2-ref3-seq1-seq2-seq3-nref1-nref2-nseq1-nseq2
     //old reference field 1
     SwField* pOldRef11 = SwCursorShell::GetFieldAtCursor(pCursor, true);
@@ -2976,11 +2976,11 @@ void SwUiWriterTest::testTdf63553()
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pNewSeq2->GetSeqNumber());
     CPPUNIT_ASSERT_EQUAL(OUString("Number range Illustration"), pNewSeq2->GetFieldName());
     //moving the cursor to the starting of document
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     //pasting the selection again at current cursor position
     pWrtShell->Paste(xClpDoc.get());
     //checking the fields, both new and old, for proper values
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     //now we have [nnref1-nnref2-nnseq1-nnseq2]-ref1-[ref2-ref3-seq1-seq2]-seq3-[nref1-nref2-nseq1-nseq2]
     //new reference field 1
     SwField* pNewRef21 = SwCursorShell::GetFieldAtCursor(pCursor, true);
@@ -3115,7 +3115,7 @@ void SwUiWriterTest::testTdf80663()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getColumns()->getCount());
     //Deleting the first row
-    pWrtShell->SttDoc(); //moves the cursor to the start of Doc
+    pWrtShell->StartOfSection(); //moves the cursor to the start of Doc
     pWrtShell->SelTableRow(); //selects the first row
     pWrtShell->DeleteRow();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
@@ -3151,7 +3151,7 @@ void SwUiWriterTest::testTdf80663()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getColumns()->getCount());
     //Deleting the first column
-    pWrtShell->SttDoc(); //moves the cursor to the start of Doc
+    pWrtShell->StartOfSection(); //moves the cursor to the start of Doc
     pWrtShell->SelTableCol(); //selects first column
     pWrtShell->DeleteCol();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
@@ -3169,7 +3169,7 @@ void SwUiWriterTest::testTdf80663()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getColumns()->getCount());
     //Deleting the second column
-    pWrtShell->SttDoc(); //moves the cursor to the start of Doc
+    pWrtShell->StartOfSection(); //moves the cursor to the start of Doc
     pWrtShell->GoNextCell(); //moves the cursor to next cell
     pWrtShell->SelTableCol(); //selects second column
     pWrtShell->DeleteCol();
@@ -3202,7 +3202,7 @@ void SwUiWriterTest::testTdf57197()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getColumns()->getCount());
     //Inserting one row before the existing row
-    pWrtShell->SttDoc(); //moves the cursor to the start of Doc
+    pWrtShell->StartOfSection(); //moves the cursor to the start of Doc
     pWrtShell->InsertRow(1, false);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getColumns()->getCount());
@@ -3219,7 +3219,7 @@ void SwUiWriterTest::testTdf57197()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getColumns()->getCount());
     //Inserting one row after the existing row
-    pWrtShell->SttDoc(); //moves the cursor to the start of Doc
+    pWrtShell->StartOfSection(); //moves the cursor to the start of Doc
     pWrtShell->InsertRow(1, true);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getColumns()->getCount());
@@ -3236,7 +3236,7 @@ void SwUiWriterTest::testTdf57197()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getColumns()->getCount());
     //Inserting one column before the existing column
-    pWrtShell->SttDoc(); //moves the cursor to the start of Doc
+    pWrtShell->StartOfSection(); //moves the cursor to the start of Doc
     pWrtShell->InsertCol(1, false);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getColumns()->getCount());
@@ -3253,7 +3253,7 @@ void SwUiWriterTest::testTdf57197()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getColumns()->getCount());
     //Inserting one column after the existing column
-    pWrtShell->SttDoc(); //moves the cursor to the start of Doc
+    pWrtShell->StartOfSection(); //moves the cursor to the start of Doc
     pWrtShell->InsertCol(1, true);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getColumns()->getCount());
@@ -3557,7 +3557,7 @@ void SwUiWriterTest::testTableBackgroundColor()
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getColumns()->getCount());
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     pWrtShell->SelTableRow(); //Selecting First Row
     pWrtShell->ClearMark();
     //Modifying the color of Table Box
@@ -4903,16 +4903,16 @@ void SwUiWriterTest::testRedlineParam()
     // Turn on track changes, and add changes to the start and end of the document.
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
     xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     pWrtShell->Insert("aaa");
-    pWrtShell->EndDoc();
+    pWrtShell->EndOfSection();
     pWrtShell->Insert("zzz");
 
     const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), rTable.size());
 
     // Select the first redline.
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
         {"NextTrackedChange", uno::makeAny(static_cast<sal_uInt16>(rTable[0]->GetId()))}
@@ -4925,7 +4925,7 @@ void SwUiWriterTest::testRedlineParam()
     CPPUNIT_ASSERT_EQUAL(OUString("aaa"), pShellCursor->GetText());
 
     // Select the second redline.
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     aPropertyValues = comphelper::InitPropertySequence(
     {
         {"NextTrackedChange", uno::makeAny(static_cast<sal_uInt16>(rTable[1]->GetId()))}
@@ -4936,7 +4936,7 @@ void SwUiWriterTest::testRedlineParam()
     CPPUNIT_ASSERT_EQUAL(OUString("zzz"), pShellCursor->GetText());
 
     // Move the cursor to the start again, and reject the second change.
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     aPropertyValues = comphelper::InitPropertySequence(
     {
         {"RejectTrackedChange", uno::makeAny(static_cast<sal_uInt16>(rTable[1]->GetId()))}
@@ -4967,7 +4967,7 @@ void SwUiWriterTest::testRedlineViewAuthor()
     // Turn on track changes, and add changes to the start of the document.
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
     xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     pWrtShell->Insert("aaa");
 
     // Now assert that SwView::SetRedlineAuthor() had an effect.
@@ -5027,15 +5027,15 @@ void SwUiWriterTest::testRedlineTimestamp()
     // the document.
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
     xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     pWrtShell->Insert("aaa");
     osl::Thread::wait(std::chrono::seconds(1));
-    pWrtShell->EndDoc();
+    pWrtShell->EndOfSection();
     pWrtShell->Insert("zzz");
 
     // Inserting additional characters at the start changed the table size to
     // 3, i.e. the first and the second "aaa" wasn't combined.
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     pWrtShell->Insert("aaa");
 
     // Now assert that at least one of the seconds are not 0.
@@ -5117,10 +5117,10 @@ void SwUiWriterTest::testTdf104032()
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     SwDoc aClipboard;
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     pWrtShell->Copy(&aClipboard);
-    pWrtShell->EndDoc();
+    pWrtShell->EndOfSection();
     pWrtShell->Paste(&aClipboard);
     rUndoManager.Undo();
 }
@@ -5776,7 +5776,7 @@ void SwUiWriterTest::testTdf113445()
 
     // Insert a new paragraph at the start of the document.
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     pWrtShell->SplitNode();
     discardDumpedLayout();
     pXmlDoc = parseLayoutDump();
@@ -6146,14 +6146,14 @@ void SwUiWriterTest::testTdf115132()
 
     // Create an empty paragraph that will separate first table from the rest
     pWrtShell->SplitNode();
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     // Create a table at the start of document body
     SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
     const SwTable* pTable = &pWrtShell->InsertTable(TableOpt, 2, 3);
     const SwTableFormat* pFormat = pTable->GetFrameFormat();
     CPPUNIT_ASSERT(pFormat);
     vTestTableNames.push_back(pFormat->GetName());
-    pWrtShell->EndDoc();
+    pWrtShell->EndOfSection();
     // Create a table after a paragraph
     pTable = &pWrtShell->InsertTable(TableOpt, 2, 3);
     pFormat = pTable->GetFrameFormat();

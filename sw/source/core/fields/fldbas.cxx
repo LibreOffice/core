@@ -408,7 +408,8 @@ bool SwField::IsFixed() const
     return bRet;
 }
 
-OUString SwField::ExpandField(bool const bCached) const
+OUString
+SwField::ExpandField(bool const bCached, SwRootFrame const*const pLayout) const
 {
     if ( m_bUseFieldValueCache )
     {
@@ -417,15 +418,15 @@ OUString SwField::ExpandField(bool const bCached) const
             if (GetTypeId() == TYP_AUTHORITY)
             {
                 const SwAuthorityField* pAuthorityField = static_cast<const SwAuthorityField*>(this);
-                m_Cache = pAuthorityField->ConditionalExpandAuthIdentifier();
+                m_Cache = pAuthorityField->ConditionalExpandAuthIdentifier(pLayout);
             }
             else
-                m_Cache = Expand();
+                m_Cache = ExpandImpl(pLayout);
         }
         return m_Cache;
     }
 
-    return Expand();
+    return ExpandImpl(pLayout);
 }
 
 std::unique_ptr<SwField> SwField::CopyField() const

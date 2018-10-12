@@ -35,6 +35,7 @@
 #include <fesh.hxx>
 #include <docsh.hxx>
 #include <ftninfo.hxx>
+#include <ftnidx.hxx>
 #include <fmtclbl.hxx>
 #include <fmtfsize.hxx>
 #include <fmtpdsc.hxx>
@@ -4340,6 +4341,12 @@ static void UnHideRedlines(SwRootFrame & rLayout,
                         pFrame->SetMergedPara(nullptr);
                     }
                 }
+                pFrame->Broadcast(SfxHint()); // notify SwAccessibleParagraph
+            }
+            // all nodes, not just merged ones! it may be in the same list as
+            if (rTextNode.IsNumbered(nullptr)) // a preceding merged one...
+            {   // notify frames so they reformat numbering portions
+                rTextNode.NumRuleChgd();
             }
         }
         if (!rNode.IsCreateFrameWhenHidingRedlines())
@@ -4430,7 +4437,8 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
     }
     mbHideRedlines = bHideRedlines;
     SwDoc & rDoc(*GetFormat()->GetDoc());
-    if (rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
+    if (!bHideRedlines // Show->Hide must init hidden number trees
+        && rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())
     {
         return;
     }
@@ -4479,6 +4487,36 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
             pRedline->InvalidateRange(SwRangeRedline::Invalidation::Add);
         }
     }
+
+    SwFootnoteIdxs & rFootnotes(rDoc.GetFootnoteIdxs());
+    if (rDoc.GetFootnoteInfo().eNum == FTNNUM_CHAPTER)
+    {
+        // sadly determining which node is outline node requires hidden layout
+        rFootnotes.UpdateAllFootnote();
+    }
+    // invalidate all footnotes to reformat their numbers
+    for (SwTextFootnote *const pFootnote : rFootnotes)
+    {
+        SwFormatFootnote const& rFootnote(pFootnote->GetFootnote());
+        if (rFootnote.GetNumber() != rFootnote.GetNumberRLHidden()
+            && rFootnote.GetNumStr().isEmpty())
+        {
+            pFootnote->InvalidateNumberInLayout();
+        }
+    }
+    // update various fields to re-expand them with the new layout
+    IDocumentFieldsAccess & rIDFA(rDoc.getIDocumentFieldsAccess());
+    auto const pAuthType(rIDFA.GetFieldType(
+        SwFieldIds::TableOfAuthorities, OUString(), false));
+    if (pAuthType) // created on demand...
+    {   // calling DelSequenceArray() should be unnecessary here since the
+        // sequence doesn't depend on frames
+        pAuthType->UpdateFields();
+    }
+    rIDFA.GetFieldType(SwFieldIds::RefPageGet, OUString(), false)->UpdateFields();
+    rIDFA.GetSysFieldType(SwFieldIds::Chapter)->UpdateFields();
+    rIDFA.UpdateExpFields(nullptr, false);
+    rIDFA.UpdateRefFields();
 
 //    InvalidateAllContent(SwInvalidateFlags::Size); // ??? TODO what to invalidate?  this is the big hammer
 }

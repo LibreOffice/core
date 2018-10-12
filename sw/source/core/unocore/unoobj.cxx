@@ -160,7 +160,8 @@ void SwUnoCursorHelper::SelectPam(SwPaM & rPam, const bool bExpand)
     }
 }
 
-void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
+void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer,
+        SwRootFrame const*const pLayout)
 {
     if (!rPam.HasMark())
     {
@@ -188,6 +189,7 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
     // #i68522#
     const bool bOldShowProgress = xWrt->m_bShowProgress;
     xWrt->m_bShowProgress = false;
+    xWrt->m_bHideDeleteRedlines = pLayout && pLayout->IsHideRedlines();
 
     if( ! aWriter.Write( xWrt ).IsError() )
     {

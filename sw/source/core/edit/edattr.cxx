@@ -79,7 +79,8 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
         // the attributes to get are those from the numbering format.
         if (rCurrentPaM.IsInFrontOfLabel())
         {
-            SwTextNode * pTextNd = rCurrentPaM.GetPoint()->nNode.GetNode().GetTextNode();
+            SwTextNode const*const pTextNd = sw::GetParaPropsNode(*GetLayout(),
+                    rCurrentPaM.GetPoint()->nNode);
 
             if (pTextNd)
             {
@@ -268,8 +269,9 @@ SwTextFormatColl* SwEditShell::GetPaMTextFormatColl( SwPaM* pPaM ) const
 
             if( pNd->IsTextNode() )
             {
+                SwTextNode *const pTextNode(sw::GetParaPropsNode(*GetLayout(), SwNodeIndex(*pNd)));
                 // if it's a text node get its named paragraph format
-                SwTextFormatColl* pFormat = pNd->GetTextNode()->GetTextColl();
+                SwTextFormatColl *const pFormat = pTextNode->GetTextColl();
 
                 // if the paragraph format exist stop here and return it
                 if( pFormat != nullptr )
@@ -419,7 +421,7 @@ bool SwEditShell::SetCurFootnote( const SwFormatFootnote& rFillFootnote )
     for(SwPaM& rCursor : GetCursor()->GetRingContainer())
     {
         bChgd |=
-            mxDoc->SetCurFootnote( rCursor, rFillFootnote.GetNumStr(), rFillFootnote.GetNumber(), rFillFootnote.IsEndNote() );
+            mxDoc->SetCurFootnote(rCursor, rFillFootnote.GetNumStr(), rFillFootnote.IsEndNote());
 
     }
 
@@ -444,6 +446,8 @@ size_t SwEditShell::GetSeqFootnoteList( SwSeqFieldList& rList, bool bEndNotes )
 {
     rList.Clear();
 
+    IDocumentRedlineAccess & rIDRA(mxDoc->getIDocumentRedlineAccess());
+
     const size_t nFootnoteCnt = mxDoc->GetFootnoteIdxs().size();
     SwTextFootnote* pTextFootnote;
     for( size_t n = 0; n < nFootnoteCnt; ++n )
@@ -463,10 +467,16 @@ size_t SwEditShell::GetSeqFootnoteList( SwSeqFieldList& rList, bool bEndNotes )
 
             if( pTextNd )
             {
-                OUString sText( rFootnote.GetViewNumStr( *mxDoc ));
+                if (GetLayout()->IsHideRedlines()
+                    && sw::IsFootnoteDeleted(rIDRA, *pTextFootnote))
+                {
+                    continue;
+                }
+
+                OUString sText(rFootnote.GetViewNumStr(*mxDoc, GetLayout()));
                 if( !sText.isEmpty() )
                     sText += " ";
-                sText += pTextNd->GetExpandText();
+                sText += pTextNd->GetExpandText(GetLayout());
 
                 SeqFieldLstElem aNew( sText, pTextFootnote->GetSeqRefNo() );
                 while( rList.InsertSort( aNew ) )
@@ -563,7 +573,8 @@ static SvtScriptType lcl_SetScriptFlags( sal_uInt16 nType )
     }
 }
 
-static bool lcl_IsNoEndTextAttrAtPos( const SwTextNode& rTNd, sal_Int32 nPos,
+static bool lcl_IsNoEndTextAttrAtPos(SwRootFrame const& rLayout,
+        const SwTextNode& rTNd, sal_Int32 const nPos,
                             SvtScriptType &rScrpt, bool bInSelection, bool bNum )
 {
     bool bRet = false;
@@ -574,7 +585,7 @@ static bool lcl_IsNoEndTextAttrAtPos( const SwTextNode& rTNd, sal_Int32 nPos,
     {
         bRet = false;
 
-        if ( rTNd.IsInList() )
+        if (sw::IsParaPropsNode(rLayout, rTNd) && rTNd.IsInList())
         {
             OSL_ENSURE( rTNd.GetNumRule(),
                     "<lcl_IsNoEndTextAttrAtPos(..)> - no list style found at text node. Serious defect." );
@@ -614,7 +625,7 @@ static bool lcl_IsNoEndTextAttrAtPos( const SwTextNode& rTNd, sal_Int32 nPos,
                 const SwField* const pField = pAttr->GetFormatField().GetField();
                 if (pField)
                 {
-                    sExp += pField->ExpandField(true);
+                    sExp += pField->ExpandField(true, &rLayout);
                 }
             }
         }
@@ -684,7 +695,7 @@ SvtScriptType SwEditShell::GetScriptType() const
                     else
                         nScript = SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() );
 
-                    if( !lcl_IsNoEndTextAttrAtPos( *pTNd, nPos, nRet, false, false ))
+                    if (!lcl_IsNoEndTextAttrAtPos(*GetLayout(), *pTNd, nPos, nRet, false, false))
                         nRet |= lcl_SetScriptFlags( nScript );
                 }
             }
@@ -726,7 +737,7 @@ SvtScriptType SwEditShell::GetScriptType() const
                                       g_pBreakIt->GetBreakIter()->getScriptType(
                                                                 rText, nChg );
 
-                            if( !lcl_IsNoEndTextAttrAtPos( *pTNd, nChg, nRet, true,
+                            if (!lcl_IsNoEndTextAttrAtPos(*GetLayout(), *pTNd, nChg, nRet, true,
                                       0 == nChg && rText.getLength() == nEndPos))
                                 nRet |= lcl_SetScriptFlags( nScript );
 

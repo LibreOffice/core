@@ -112,14 +112,14 @@ void SwCursorShell::MoveCursorToNum()
 /// go to next/previous point on the same level
 void SwCursorShell::GotoNextNum()
 {
-    if (!SwDoc::GotoNextNum( *m_pCurrentCursor->GetPoint() ))
+    if (!SwDoc::GotoNextNum(*m_pCurrentCursor->GetPoint(), GetLayout()))
         return;
     MoveCursorToNum();
 }
 
 void SwCursorShell::GotoPrevNum()
 {
-    if (!SwDoc::GotoPrevNum( *m_pCurrentCursor->GetPoint() ))
+    if (!SwDoc::GotoPrevNum(*m_pCurrentCursor->GetPoint(), GetLayout()))
         return;
     MoveCursorToNum();
 }
@@ -1001,7 +1001,8 @@ bool SwCursorShell::GotoOutline( const OUString& rName )
     SwCursorSaveState aSaveState( *pCursor );
 
     bool bRet = false;
-    if( mxDoc->GotoOutline( *pCursor->GetPoint(), rName ) && !pCursor->IsSelOvr() )
+    if (mxDoc->GotoOutline(*pCursor->GetPoint(), rName, GetLayout())
+        && !pCursor->IsSelOvr())
     {
         UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
         bRet = true;
@@ -1023,18 +1024,45 @@ bool SwCursorShell::GotoNextOutline()
     SwCursor* pCursor = getShellCursor( true );
     SwNode* pNd = &(pCursor->GetNode());
     SwOutlineNodes::size_type nPos;
-    if( rNds.GetOutLineNds().Seek_Entry( pNd, &nPos ))
-        ++nPos;
+    bool bUseFirst = !rNds.GetOutLineNds().Seek_Entry( pNd, &nPos );
+    SwOutlineNodes::size_type const nStartPos(nPos);
 
-    if( nPos == rNds.GetOutLineNds().size() )
+    do
     {
-        nPos = 0;
+        if (nPos == rNds.GetOutLineNds().size())
+        {
+            nPos = 0;
+        }
+        else if (!bUseFirst)
+        {
+            ++nPos;
+        }
+
+        if (bUseFirst)
+        {
+            bUseFirst = false;
+        }
+        else
+        {
+            if (nPos == nStartPos)
+            {
+                SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
+                return false;
+            }
+        }
+
+        pNd = rNds.GetOutLineNds()[ nPos ];
+    }
+    while (!sw::IsParaPropsNode(*GetLayout(), *pNd->GetTextNode()));
+
+    if (nPos < nStartPos)
+    {
         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::EndWrapped );
     }
     else
+    {
         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
-
-    pNd = rNds.GetOutLineNds()[ nPos ];
+    }
 
     SET_CURR_SHELL( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves
@@ -1064,20 +1092,38 @@ bool SwCursorShell::GotoPrevOutline()
     SwOutlineNodes::size_type nPos;
     bool bRet = false;
     (void)rNds.GetOutLineNds().Seek_Entry(pNd, &nPos);
-    if ( nPos == 0 )
-    {
-        nPos = rNds.GetOutLineNds().size();
-        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::StartWrapped );
-    }
-    else
-        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+    SwOutlineNodes::size_type const nStartPos(nPos);
 
-    if (nPos)
+    do
     {
-        --nPos; // before
+        if (nPos == 0)
+        {
+            nPos = rNds.GetOutLineNds().size() - 1;
+        }
+        else
+        {
+            --nPos; // before
+        }
+        if (nPos == nStartPos)
+        {
+            pNd = nullptr;
+            break;
+        }
 
         pNd = rNds.GetOutLineNds()[ nPos ];
+    }
+    while (!sw::IsParaPropsNode(*GetLayout(), *pNd->GetTextNode()));
 
+    if (pNd)
+    {
+        if (nStartPos < nPos)
+        {
+            SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::StartWrapped );
+        }
+        else
+        {
+            SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
+        }
         SET_CURR_SHELL( this );
         SwCallLink aLk( *this ); // watch Cursor-Moves
         SwCursorSaveState aSaveState( *pCursor );
@@ -1087,6 +1133,10 @@ bool SwCursorShell::GotoPrevOutline()
         bRet = !pCursor->IsSelOvr();
         if( bRet )
             UpdateCursor(SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE|SwCursorShell::READONLY);
+    }
+    else
+    {
+        SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
     }
     return bRet;
 }
@@ -1106,9 +1156,11 @@ SwOutlineNodes::size_type SwCursorShell::GetOutlinePos( sal_uInt8 nLevel )
     {
         pNd = rNds.GetOutLineNds()[ nPos ];
 
-        if( pNd->GetTextNode()->GetAttrOutlineLevel()-1 <= nLevel )
+        if (sw::IsParaPropsNode(*GetLayout(), *pNd->GetTextNode())
+            && pNd->GetTextNode()->GetAttrOutlineLevel()-1 <= nLevel)
+        {
             return nPos;
-
+        }
     }
     return SwOutlineNodes::npos; // no more left
 }
@@ -1235,11 +1287,11 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
             && IsAttrAtPos::Outline & rContentAtPos.eContentAtPos
             && !rNds.GetOutLineNds().empty() )
         {
-            const SwTextNode* pONd = pTextNd->FindOutlineNodeOfLevel( MAXLEVEL-1);
+            const SwTextNode* pONd = pTextNd->FindOutlineNodeOfLevel(MAXLEVEL-1, GetLayout());
             if( pONd )
             {
                 rContentAtPos.eContentAtPos = IsAttrAtPos::Outline;
-                rContentAtPos.sStr = pONd->GetExpandText( 0, -1, true, true );
+                rContentAtPos.sStr = sw::GetExpandTextMerged(GetLayout(), *pONd, true, false, ExpandMode(0));
                 bRet = true;
             }
         }
@@ -1252,7 +1304,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                  && IsAttrAtPos::NumLabel & rContentAtPos.eContentAtPos)
         {
             bRet = aTmpState.m_bInNumPortion;
-            rContentAtPos.aFnd.pNode = pTextNd;
+            rContentAtPos.aFnd.pNode = sw::GetParaPropsNode(*GetLayout(), aPos.nNode);
 
             Size aSizeLogic(aTmpState.m_nInNumPortionOffset, 0);
             Size aSizePixel = GetWin()->LogicToPixel(aSizeLogic);
@@ -1484,7 +1536,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             const sal_Int32* pEnd = pTextAttr->GetEnd();
                             if( pEnd )
                                 rContentAtPos.sStr =
-                                    pTextNd->GetExpandText( pTextAttr->GetStart(), *pEnd - pTextAttr->GetStart() );
+                                    pTextNd->GetExpandText(GetLayout(), pTextAttr->GetStart(), *pEnd - pTextAttr->GetStart());
                             else if( RES_TXTATR_TOXMARK == pTextAttr->Which())
                                 rContentAtPos.sStr =
                                     pTextAttr->GetTOXMark().GetAlternativeText();
@@ -1530,7 +1582,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             const sal_Int32 nSt = pTextAttr->GetStart();
                             const sal_Int32 nEnd = *pTextAttr->End();
 
-                            rContentAtPos.sStr = pTextNd->GetExpandText(nSt, nEnd-nSt);
+                            rContentAtPos.sStr = pTextNd->GetExpandText(GetLayout(), nSt, nEnd-nSt);
 
                             rContentAtPos.aFnd.pAttr = &pTextAttr->GetAttr();
                             rContentAtPos.eContentAtPos = IsAttrAtPos::InetAttr;
@@ -2386,7 +2438,8 @@ bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
                         ? ( aPos < aCmpPos && aCurPos < aPos )
                         : ( aCmpPos < aPos && aPos < aCurPos ))
                     {
-                        OUString sText( pTextNd->GetExpandText( rAttr.GetStart(),
+                        OUString sText(pTextNd->GetExpandText(GetLayout(),
+                                        rAttr.GetStart(),
                                         *rAttr.GetEnd() - rAttr.GetStart() ) );
 
                         sText = sText.replaceAll(OUStringLiteral1(0x0a), "");

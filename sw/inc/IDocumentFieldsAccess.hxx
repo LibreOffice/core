@@ -38,6 +38,8 @@ class SwNode;
 enum class SwFieldIds : sal_uInt16;
 template <class T> class SwHashTable;
 struct HashStr;
+class SwRootFrame;
+class IDocumentRedlineAccess;
 
 namespace rtl { class OUString; }
 using rtl::OUString;
@@ -122,9 +124,9 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
     // (if the address != 0 and the pointer == 0 a new list will be returned).
     virtual void FieldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt) = 0;
 
-    virtual void FieldsToCalc(SwCalc& rCalc, const SetGetExpField& rToThisField) = 0;
+    virtual void FieldsToCalc(SwCalc& rCalc, const SetGetExpField& rToThisField, SwRootFrame const* pLayout) = 0;
 
-    virtual void FieldsToExpand(SwHashTable<HashStr> & rTable, const SetGetExpField& rToThisField) = 0;
+    virtual void FieldsToExpand(SwHashTable<HashStr> & rTable, const SetGetExpField& rToThisField, SwRootFrame const& rLayout) = 0;
 
     virtual bool IsNewFieldLst() const = 0;
 
@@ -137,6 +139,11 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
 protected:
     virtual ~IDocumentFieldsAccess() {};
  };
+
+namespace sw {
+bool IsFieldDeletedInModel(IDocumentRedlineAccess const& rIDRA,
+        SwTextField const& rTextField);
+}
 
 #endif // INCLUDED_SW_INC_IDOCUMENTFIELDSACCESS_HXX
 

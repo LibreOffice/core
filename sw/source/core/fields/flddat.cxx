@@ -61,7 +61,7 @@ SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, sal_uInt16 nSub
     }
 }
 
-OUString SwDateTimeField::Expand() const
+OUString SwDateTimeField::ExpandImpl(SwRootFrame const*const) const
 {
     double fVal;
 

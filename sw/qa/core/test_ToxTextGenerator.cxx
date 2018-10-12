@@ -141,10 +141,10 @@ ToxTextGeneratorTest::ChapterNumberWithoutTextIsGeneratedForNoprepstTitle()
     SwForm form;
     ToxTextGeneratorWithMockedChapterField ttg(form);
     // set all values to make sure they are not used
-    ttg.GetChapterField().sNumber = "1";
-    ttg.GetChapterField().sPre = "PRE";
-    ttg.GetChapterField().sPost = "POST";
-    ttg.GetChapterField().sTitle = "TITLE";
+    ttg.GetChapterField().m_State.sNumber = "1";
+    ttg.GetChapterField().m_State.sPre = "PRE";
+    ttg.GetChapterField().m_State.sPost = "POST";
+    ttg.GetChapterField().m_State.sTitle = "TITLE";
 
     SwFormToken token(TOKEN_CHAPTER_INFO);
     token.nChapterFormat = CF_NUM_NOPREPST_TITLE;
@@ -167,10 +167,10 @@ ToxTextGeneratorTest::ChapterNumberWithTitleIsGeneratedForNumberNoPrepst()
     SwForm form;
     ToxTextGeneratorWithMockedChapterField ttg(form);
     // set all values to make sure they are not used
-    ttg.GetChapterField().sNumber = "5";
-    ttg.GetChapterField().sPre = "PRE";
-    ttg.GetChapterField().sPost = "POST";
-    ttg.GetChapterField().sTitle = "myTitle";
+    ttg.GetChapterField().m_State.sNumber = "5";
+    ttg.GetChapterField().m_State.sPre = "PRE";
+    ttg.GetChapterField().m_State.sPost = "POST";
+    ttg.GetChapterField().m_State.sTitle = "myTitle";
 
     SwFormToken token(TOKEN_CHAPTER_INFO);
     token.nChapterFormat = CF_NUMBER_NOPREPST;

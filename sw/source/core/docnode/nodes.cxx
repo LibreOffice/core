@@ -358,15 +358,6 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, sal_uLong nSz,
         SwNode* pFrameNd = rNds.FindPrvNxtFrameNode( aFrameNdIdx,
                                         rNds[ rInsPos.GetIndex() - 1 ] );
 
-        if( !pFrameNd && aFrameNdIdx > rNds.GetEndOfExtras().GetIndex() )
-        {
-            OSL_ENSURE( false, "here, something wrong happened" );
-            aFrameNdIdx = rNds.GetEndOfContent();
-            pFrameNd = SwNodes::GoPrevSection( &aFrameNdIdx, true, false );
-            if( pFrameNd && !static_cast<SwContentNode*>(pFrameNd)->HasWriterListeners() )
-                pFrameNd = nullptr;
-            OSL_ENSURE( pFrameNd, "ChgNode() - no FrameNode found" );
-        }
         if( pFrameNd )
             while( aIdx != rInsPos )
             {

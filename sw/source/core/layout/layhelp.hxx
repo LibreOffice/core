@@ -53,6 +53,7 @@ typedef std::vector<SwFlyCache> SwPageFlyCache;
 class SwLayCacheImpl
 {
     std::vector<sal_uLong> mIndices;
+    /// either a textframe character offset, or a row index inside a table
     std::deque<sal_Int32> aOffset;
     std::vector<sal_uInt16> aType;
     SwPageFlyCache m_FlyCache;

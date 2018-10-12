@@ -1940,11 +1940,11 @@ void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos
         if(rInfos.eType == ww::eCITATION)
         {
             sExpand = static_cast<SwAuthorityField const*>(rInfos.pField.get())
-                        ->ExpandCitation(AUTH_FIELD_TITLE);
+                        ->ExpandCitation(AUTH_FIELD_TITLE, nullptr);
         }
         else
         {
-            sExpand = rInfos.pField->ExpandField( true );
+            sExpand = rInfos.pField->ExpandField(true, nullptr);
         }
         // newlines embedded in fields are 0x0B in MSO and 0x0A for us
         RunText(sExpand.replace(0x0A, 0x0B));

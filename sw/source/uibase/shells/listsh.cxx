@@ -80,8 +80,11 @@ static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bU
             {
                 // Move down with subpoints:
                 while ( nActEndPos < pIDoc->getOutlineNodesCount() &&
-                        pIDoc->getOutlineLevel( nActEndPos ) > nActLevel )
+                       (!pIDoc->isOutlineInLayout(nActEndPos, *rSh.GetLayout())
+                        || nActLevel < pIDoc->getOutlineLevel(nActEndPos)))
+                {
                     ++nActEndPos;
+                }
 
                 if ( nActEndPos < pIDoc->getOutlineNodesCount() )
                 {
@@ -90,8 +93,11 @@ static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bU
                     --nActEndPos;
                     SwOutlineNodes::size_type nDest = nActEndPos + 2;
                     while ( nDest < pIDoc->getOutlineNodesCount() &&
-                            pIDoc->getOutlineLevel( nDest ) > nActLevel )
+                           (!pIDoc->isOutlineInLayout(nDest, *rSh.GetLayout())
+                            || nActLevel < pIDoc->getOutlineLevel(nDest)))
+                    {
                         ++nDest;
+                    }
 
                     nDir = nDest - 1 - nActEndPos;
                 }
@@ -101,10 +107,14 @@ static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bU
                 // Move up with subpoints:
                 if ( nActPos > 0 )
                 {
-                    --nActEndPos;
+                    nActEndPos = nActPos;
                     SwOutlineNodes::size_type nDest = nActPos - 1;
-                    while ( nDest > 0 && pIDoc->getOutlineLevel( nDest ) > nActLevel )
+                    while (nDest > 0 &&
+                           (!pIDoc->isOutlineInLayout(nDest, *rSh.GetLayout())
+                            || nActLevel < pIDoc->getOutlineLevel(nDest)))
+                    {
                         --nDest;
+                    }
 
                     nDir = nDest - nActPos;
                 }

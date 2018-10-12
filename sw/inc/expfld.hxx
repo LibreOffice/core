@@ -29,6 +29,7 @@
 class SfxPoolItem;
 class SwTextNode;
 class SwFrame;
+class SwRootFrame;
 struct SwPosition;
 class SwTextField;
 class SwDoc;
@@ -79,23 +80,29 @@ protected:
 
 class SW_DLLPUBLIC SwGetExpField : public SwFormulaField
 {
+    double          m_fValueRLHidden; ///< SwValueField; hidden redlines
     OUString        m_sExpand;
+    OUString        m_sExpandRLHidden; ///< hidden redlines
     bool            m_bIsInBodyText;
     sal_uInt16          m_nSubType;
 
     bool            m_bLateInitialization; // #i82544#
 
-    virtual OUString            Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
+    using SwFormulaField::GetValue; // hide it, don't use
+    virtual void        SetValue(const double& rVal) override; // hide it
 
 public:
     SwGetExpField( SwGetExpFieldType*, const OUString& rFormel,
                    sal_uInt16 nSubType, sal_uLong nFormat);
 
-    virtual void                SetValue( const double& rVal ) override;
+    double      GetValue(SwRootFrame const* pLayout) const;
+    void        SetValue(const double& rVal, SwRootFrame const* pLayout);
+
     virtual void                SetLanguage(LanguageType nLng) override;
 
-    inline void                 ChgExpStr(const OUString& rExpand);
+    void                 ChgExpStr(const OUString& rExpand, SwRootFrame const* pLayout);
 
     /// Called by formatting.
     inline bool                 IsInBodyText() const;
@@ -123,9 +130,6 @@ public:
     void                SetLateInitialization() { m_bLateInitialization = true;}
 };
 
-inline void SwGetExpField::ChgExpStr(const OUString& rExpand)
-    { m_sExpand = rExpand;}
-
  /// Called by formatting.
 inline bool SwGetExpField::IsInBodyText() const
     { return m_bIsInBodyText; }
@@ -139,7 +143,6 @@ class SwSetExpField;
 class SW_DLLPUBLIC SwSetExpFieldType : public SwValueFieldType
 {
     OUString const m_sName;
-    const SwNode* m_pOutlChgNd;
     OUString      m_sDelim;
     sal_uInt16      m_nType;
     sal_uInt8       m_nLevel;
@@ -168,19 +171,14 @@ public:
 
     void   SetSeqRefNo( SwSetExpField& rField );
 
-    size_t GetSeqFieldList( SwSeqFieldList& rList );
+    size_t GetSeqFieldList(SwSeqFieldList& rList, SwRootFrame const* pLayout);
 
     /// Number sequence fields chapterwise if required.
     const OUString& GetDelimiter() const      { return m_sDelim; }
     void SetDelimiter( const OUString& s )    { m_sDelim = s; }
     sal_uInt8 GetOutlineLvl() const             { return m_nLevel; }
     void SetOutlineLvl( sal_uInt8 n )           { m_nLevel = n; }
-    void SetChapter( SwSetExpField& rField, const SwNode& rNd );
-
-    /** Member only for SwDoc::UpdateExpField.
-     It is needed only at runtime of sequence field types! */
-    const SwNode* GetOutlineChgNd() const   { return m_pOutlChgNd; }
-    void SetOutlineChgNd( const SwNode* p ) { m_pOutlChgNd = p; }
+    void SetChapter(SwSetExpField& rField, const SwNode& rNd, SwRootFrame const* pLayout);
 
     virtual void        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual void        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
@@ -200,15 +198,19 @@ inline const OUString& SwSetExpFieldType::GetSetRefName() const
 
 class SW_DLLPUBLIC SwSetExpField : public SwFormulaField
 {
+    double          m_fValueRLHidden; ///< SwValueField; hidden redlines
     OUString        msExpand;
+    OUString        msExpandRLHidden; ///< hidden redlines
     OUString        maPText;
     bool            mbInput;
     sal_uInt16          mnSeqNo;
     sal_uInt16          mnSubType;
     SwFormatField * mpFormatField; /// pool item to which the SwSetExpField belongs
 
-    virtual OUString            Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
+    using SwFormulaField::GetValue; // hide it, don't use
+    virtual void        SetValue(const double& rVal) override; // hide it
 
 public:
     SwSetExpField(SwSetExpFieldType*, const OUString& rFormel, sal_uLong nFormat = 0);
@@ -216,11 +218,12 @@ public:
     void SetFormatField(SwFormatField & rFormatField);
     SwFormatField* GetFormatField() { return mpFormatField;}
 
-    virtual void                SetValue( const double& rVal ) override;
+    double      GetValue(SwRootFrame const* pLayout) const;
+    void        SetValue(const double& rVal, SwRootFrame const* pLayout);
 
-    inline const OUString&      GetExpStr() const;
+    const OUString&      GetExpStr(SwRootFrame const* pLayout) const;
 
-    inline void                 ChgExpStr( const OUString& rExpand );
+    void                 ChgExpStr(const OUString& rExpand, SwRootFrame const* pLayout);
 
     inline void                 SetPromptText(const OUString& rStr);
     inline const OUString&      GetPromptText() const;
@@ -248,12 +251,6 @@ public:
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const override;
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich ) override;
 };
-
-inline const OUString& SwSetExpField::GetExpStr() const
-    { return msExpand;       }
-
-inline void SwSetExpField::ChgExpStr( const OUString& rExpand )
-    { msExpand = rExpand;    }
 
 inline void  SwSetExpField::SetPromptText(const OUString& rStr)
     { maPText = rStr;        }
@@ -292,7 +289,7 @@ class SW_DLLPUBLIC SwInputField : public SwField
 
     SwFormatField* mpFormatField; // attribute to which the <SwInputField> belongs to
 
-    virtual OUString        Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 
     // Accessing Input Field's content
@@ -378,7 +375,7 @@ class SwTableField : public SwValueField, public SwTableFormula
     OUString      sExpand;
     sal_uInt16      nSubType;
 
-    virtual OUString    Expand() const override;
+    virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 
     /// Search TextNode containing the field.
