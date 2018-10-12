@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_633e972a",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/DrawImpressCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 1959,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-10-12T13:03:55Z",
+      "side": 1,
+      "message": "Given that all labels are now the same, please remove ContextLabel and PopupLabel, and just leave Label. (Same applies also to other cases in this file.)",
+      "revId": "11563a616e99bd2845ec632239e94c5b51549b50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
