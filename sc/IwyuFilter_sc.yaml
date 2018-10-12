@@ -397,3 +397,89 @@ blacklist:
     sc/source/filter/inc/xlstring.hxx:
     # Needed for template
     - o3tl/typed_flags_set.hxx
+    sc/source/ui/inc/AccessibleContextBase.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleComponent.hpp
+    - com/sun/star/accessibility/XAccessibleContext.hpp
+    - com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp
+    - com/sun/star/accessibility/XAccessible.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    sc/source/ui/inc/AccessibleCellBase.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleValue.hpp
+    sc/source/ui/inc/AccessibleCell.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp
+    sc/source/ui/inc/AccessibleCsvControl.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleSelection.hpp
+    - com/sun/star/accessibility/XAccessibleTable.hpp
+    - com/sun/star/accessibility/XAccessibleText.hpp
+    sc/source/ui/inc/AccessibleDocument.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleSelection.hpp
+    - com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp
+    - com/sun/star/view/XSelectionChangeListener.hpp
+    sc/source/ui/inc/AccessiblePreviewTable.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleTable.hpp
+    sc/source/ui/inc/AccessiblePreviewHeaderCell.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleValue.hpp
+    sc/source/ui/inc/AccessibleTableBase.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleSelection.hpp
+    - com/sun/star/accessibility/XAccessibleTable.hpp
+    - com/sun/star/accessibility/XAccessibleTableSelection.hpp
+    sc/source/ui/inc/ChartRangeSelectionListener.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/view/XSelectionChangeListener.hpp
+    sc/source/ui/inc/AnalysisOfVarianceDialog.hxx:
+    # base class has to be a complete type
+    - viewdata.hxx
+    sc/source/ui/inc/anyrefdg.hxx:
+    # base struct has to be a complete type
+    - sfx2/basedlgs.hxx
+    sc/source/ui/inc/anyrefdg.hxx:
+    # base struct has to be a complete type
+    - sfx2/basedlgs.hxx
+    sc/source/ui/inc/condformatuno.hxx:
+    # base struct has to be a complete type
+    - com/sun/star/beans/XPropertySet.hpp
+    - com/sun/star/sheet/XColorScaleEntry.hpp
+    - com/sun/star/sheet/XConditionalFormat.hpp
+    - com/sun/star/sheet/XConditionalFormats.hpp
+    - com/sun/star/sheet/XConditionEntry.hpp
+    - com/sun/star/sheet/XDataBarEntry.hpp
+    - com/sun/star/sheet/XIconSetEntry.hpp
+    sc/source/ui/inc/dataprovider.hxx:
+    # Don't replace with an implementation detail
+    - orcus/csv_parser.hpp
+    sc/source/ui/inc/DrawModelBroadcaster.hxx:
+    # base class has to be a complete type
+    - com/sun/star/document/XEventBroadcaster.hpp
+    sc/source/ui/inc/ExponentialSmoothingDialog.hxx:
+    # base class has to be a complete type
+    - viewdata.hxx
+    sc/source/ui/inc/MatrixComparisonGenerator.hxx:
+    # base class has to be a complete type
+    - viewdata.hxx
+    sc/source/ui/inc/MovingAverageDialog.hxx:
+    # base class has to be a complete type
+    - viewdata.hxx
+    sc/source/ui/inc/PivotLayoutDialog.hxx:
+    # base class has to be a complete type
+    - viewdata.hxx
+    sc/source/ui/inc/RandomNumberGeneratorDialog.hxx:
+    # base class has to be a complete type
+    - viewdata.hxx
+    sc/source/ui/inc/StatisticsInputOutputDialog.hxx:
+    # base class has to be a complete type
+    - viewdata.hxx
+    sc/source/ui/inc/SamplingDialog.hxx:
+    # base class has to be a complete type
+    - viewdata.hxx
+    sc/source/ui/inc/StatisticsTwoVariableDialog.hxx:
+    # base class has to be a complete type
+    - viewdata.hxx

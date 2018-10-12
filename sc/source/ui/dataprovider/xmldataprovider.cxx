@@ -13,6 +13,8 @@
 #include <comphelper/string.hxx>
 #include <filter.hxx>
 #include <document.hxx>
+#include <datamapper.hxx>
+#include <vcl/svapp.hxx>
 #include <orcusfilters.hxx>
 #include <utility>
 

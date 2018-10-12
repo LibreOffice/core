@@ -12,37 +12,25 @@
 
 #include <memory>
 #include <salhelper/thread.hxx>
-#include <tools/stream.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
-#include <address.hxx>
 #include <osl/mutex.hxx>
-#include <osl/conditn.hxx>
-#include <dbdata.hxx>
 #include <document.hxx>
-#include <vcl/idle.hxx>
 
-#include "docsh.hxx"
-#include <scdllapi.h>
-#include <datamapper.hxx>
 #include <rtl/strbuf.hxx>
 
-#include <queue>
 #include <vector>
 #include <map>
-
-#include <officecfg/Office/Calc.hxx>
 
 #include <orcus/csv_parser.hpp>
 
 class SvStream;
+class ScDBData;
 
 namespace sc {
 
-class DataProvider;
-class CSVDataProvider;
-class ScDBDataManager;
 class DataTransformation;
+class ExternalDataSource;
 
 class CSVFetchThread : public salhelper::Thread
 {

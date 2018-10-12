@@ -20,12 +20,10 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_DOCFUNC_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_DOCFUNC_HXX
 
-#include <tools/link.hxx>
+#include <tools/solar.h>
 #include <global.hxx>
 #include <formula/grammar.hxx>
 #include <tabbgcolor.hxx>
-#include <token.hxx>
-#include <rangenam.hxx>
 
 #include <memory>
 #include <vector>
@@ -47,6 +45,8 @@ struct ScCellMergeOption;
 class ScConditionalFormat;
 class ScConditionalFormatList;
 class ScUndoRemoveMerge;
+class ScRangeName;
+
 enum class TransliterationFlags;
 enum class CreateNameFlags;
 namespace sc {

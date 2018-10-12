@@ -72,6 +72,7 @@
 #include <com/sun/star/frame/XStorable2.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
+#include <ooo/vba/excel/XWorkbook.hpp>
 
 #include <config_folders.h>
 
@@ -103,6 +104,8 @@
 #include <pntlock.hxx>
 #include <docuno.hxx>
 #include <appoptio.hxx>
+#include <formulaopt.hxx>
+#include <scdll.hxx>
 #include <detdata.hxx>
 #include <printfun.hxx>
 #include <dociter.hxx>

@@ -17,6 +17,9 @@
 #include <editutil.hxx>
 
 #include <TableFillingAndNavigationTools.hxx>
+#include <formulacell.hxx>
+#include <docfunc.hxx>
+#include <docsh.hxx>
 
 FormulaTemplate::FormulaTemplate(ScDocument* pDoc)
     : mpDoc(pDoc)

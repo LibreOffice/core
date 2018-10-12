@@ -11,17 +11,10 @@
 #define INCLUDED_SC_SOURCE_UI_INC_CONDFORMATDLG_HXX
 
 #include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
-#include <svx/fntctrl.hxx>
-#include <svtools/ctrlbox.hxx>
 
 #include <rangelst.hxx>
-#include "condformathelper.hxx"
-#include "viewdata.hxx"
 #include "condformatdlgitem.hxx"
 
 #include "anyrefdg.hxx"
@@ -33,10 +26,8 @@
 
 class ScDocument;
 class ScConditionalFormat;
-class ScFormatEntry;
-class ScConditionalFormat;
-struct ScDataBarFormatData;
 class ScCondFrmtEntry;
+class ScViewData;
 
 class ScCondFormatDlg;
 

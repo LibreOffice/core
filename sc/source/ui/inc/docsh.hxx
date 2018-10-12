@@ -20,19 +20,13 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_DOCSH_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_DOCSH_HXX
 
-#include <ooo/vba/excel/XWorkbook.hpp>
-#include <o3tl/deleter.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <sfx2/viewsh.hxx>
-#include <com/sun/star/datatransfer/XTransferable2.hpp>
 
 #include <scdllapi.h>
-#include <scdll.hxx>
 #include <document.hxx>
-#include <appoptio.hxx>
-#include <formulaopt.hxx>
 #include <shellids.hxx>
 #include <optutil.hxx>
 #include <docuno.hxx>
@@ -51,25 +45,26 @@ class ScViewData;
 class ScDocFunc;
 class ScDrawLayer;
 class ScTabViewShell;
-class ScSbxDocHelper;
 class ScAutoStyleList;
-class ScRange;
 class ScMarkData;
 class ScPaintLockData;
 class ScChangeAction;
-class VirtualDevice;
 class ScImportOptions;
 class ScDocShellModificator;
 class ScOptSolverSave;
-class ScRefreshTimer;
 class ScSheetSaveData;
 class ScFlatBoolRowSegments;
-class HelperModelObj;
 struct ScColWidthParam;
+class ScFormulaOptions;
 
 namespace com { namespace sun { namespace star { namespace script { namespace vba {
     class XVBAScriptListener;
 } } } } }
+
+namespace ooo { namespace vba { namespace excel { class XWorkbook; } } }
+
+namespace o3tl { template <typename T> struct default_delete; }
+namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable2; } } } }
 
 namespace sfx2 { class FileDialogHelper; }
 struct DocShell_Impl;
@@ -438,7 +433,6 @@ public:
 
 void UpdateAcceptChangesDialog();
 
-class ScDocShell;
 typedef tools::SvRef<ScDocShell> ScDocShellRef;
 
 /** Create before modifications of the document and destroy thereafter.

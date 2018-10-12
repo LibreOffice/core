@@ -19,6 +19,8 @@
 #include <uiitems.hxx>
 #include <dputil.hxx>
 #include <dbdocfun.hxx>
+#include <dpsave.hxx>
+#include <dpshttab.hxx>
 
 #include <memory>
 #include <vector>

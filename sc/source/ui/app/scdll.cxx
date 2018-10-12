@@ -62,6 +62,7 @@
 #include <graphsh.hxx>
 #include <mediash.hxx>
 #include <pgbrksh.hxx>
+#include <scdll.hxx>
 
 #include <docpool.hxx>
 #include <appoptio.hxx>

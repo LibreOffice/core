@@ -19,6 +19,9 @@
 #include "xmldataprovider.hxx"
 #include "sqldataprovider.hxx"
 #include <datatransformation.hxx>
+#include <datamapper.hxx>
+#include <dbdata.hxx>
+#include <docsh.hxx>
 
 using namespace com::sun::star;
 

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CSVTABLEBOX_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CSVTABLEBOX_HXX
 
-#include <vcl/ctrl.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/vclptr.hxx>
 #include <scdllapi.h>

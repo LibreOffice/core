@@ -11,6 +11,9 @@
 #include <condformatdlg.hxx>
 #include <condformatdlgentry.hxx>
 #include <conditio.hxx>
+#include <compiler.hxx>
+#include <colorscale.hxx>
+#include <condformathelper.hxx>
 
 #include <document.hxx>
 

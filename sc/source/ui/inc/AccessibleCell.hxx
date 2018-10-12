@@ -22,14 +22,14 @@
 
 #include <memory>
 #include "AccessibleCellBase.hxx"
-#include <global.hxx>
 #include "viewdata.hxx"
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
-#include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <rtl/ref.hxx>
-#include <unotools/accessiblerelationsethelper.hxx>
 #include <editeng/AccessibleStaticTextBase.hxx>
 #include <comphelper/uno3.hxx>
+
+namespace com { namespace sun { namespace star { namespace accessibility { class XAccessibleRelationSet; } } } }
+namespace utl { class AccessibleRelationSetHelper; }
 
 class ScTabViewShell;
 class ScAccessibleDocument;

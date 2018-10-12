@@ -37,6 +37,7 @@
 #include <compiler.hxx>
 #include <interpre.hxx>
 #include <calcconfig.hxx>
+#include <formulaopt.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
