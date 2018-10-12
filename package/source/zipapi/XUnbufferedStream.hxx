@@ -59,7 +59,7 @@ class XUnbufferedStream final : public cppu::WeakImplHelper
     sal_Int16 mnHeaderToRead;
     sal_Int64 mnZipCurrent, mnZipEnd, mnZipSize, mnMyCurrent;
     CRC32 maCRC;
-    bool mbCheckCRC;
+    bool const mbCheckCRC;
 
 public:
     XUnbufferedStream(

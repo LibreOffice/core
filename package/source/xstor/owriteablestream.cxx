@@ -66,7 +66,7 @@ struct WSInternalData_Impl
     rtl::Reference<comphelper::RefCountedMutex> m_xSharedMutex;
     ::std::unique_ptr< ::cppu::OTypeCollection> m_pTypeCollection;
     ::cppu::OMultiTypeInterfaceContainerHelper m_aListenersContainer; // list of listeners
-    sal_Int32 m_nStorageType;
+    sal_Int32 const m_nStorageType;
 
     // the mutex reference MUST NOT be empty
     WSInternalData_Impl( const rtl::Reference<comphelper::RefCountedMutex>& rMutexRef, sal_Int32 nStorageType )

@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 
 struct SPStreamData_Impl
 {
-    bool m_bInStreamBased;
+    bool const m_bInStreamBased;
 
     // the streams below are not visible from outside so there is no need to remember position
 

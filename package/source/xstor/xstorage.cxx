@@ -77,9 +77,9 @@ struct StorInternalData_Impl
     rtl::Reference<comphelper::RefCountedMutex> m_xSharedMutex;
     ::cppu::OMultiTypeInterfaceContainerHelper m_aListenersContainer; // list of listeners
     ::std::unique_ptr< ::cppu::OTypeCollection> m_pTypeCollection;
-    bool m_bIsRoot;
-    sal_Int32 m_nStorageType; // the mode in which the storage is used
-    bool m_bReadOnlyWrap;
+    bool const m_bIsRoot;
+    sal_Int32 const m_nStorageType; // the mode in which the storage is used
+    bool const m_bReadOnlyWrap;
 
     ::rtl::Reference<OChildDispListener_Impl> m_pSubElDispListener;
 
