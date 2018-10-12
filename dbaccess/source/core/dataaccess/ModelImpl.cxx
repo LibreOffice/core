@@ -24,7 +24,6 @@
 #include "datasource.hxx"
 #include <stringconstants.hxx>
 #include <ModelImpl.hxx>
-#include <userinformation.hxx>
 #include <sdbcoretools.hxx>
 
 #include <com/sun/star/beans/PropertyBag.hpp>

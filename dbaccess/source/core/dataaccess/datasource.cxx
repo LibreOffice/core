@@ -18,7 +18,6 @@
  */
 
 #include "datasource.hxx"
-#include <userinformation.hxx>
 #include "commandcontainer.hxx"
 #include <stringconstants.hxx>
 #include <core_resource.hxx>
