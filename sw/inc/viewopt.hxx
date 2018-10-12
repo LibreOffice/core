@@ -268,7 +268,7 @@ public:
     void SetShowInlineTooltips( bool b )
         { b ? (m_nCoreOptions |= ViewOptFlags1::ShowInlineTooltips ) : ( m_nCoreOptions &= ~ViewOptFlags1::ShowInlineTooltips); }
 
-    //show/hide interactive header/footer on top/bootom of pages
+    //show/hide interactive header/footer on top/bottom of pages
     bool IsUseHeaderFooterMenu() const
         { return bool(m_nCoreOptions & ViewOptFlags1::UseHeaderFooterMenu ); }
     void SetUseHeaderFooterMenu( bool b )
