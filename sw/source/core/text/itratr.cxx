@@ -231,7 +231,7 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
 }
 
 // AMA: New AttrIter Nov 94
-void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
+void SwAttrIter::SeekFwd(const sal_Int32 nOldPos, const sal_Int32 nNewPos)
 {
     SwpHints const*const pHints(m_pTextNode->GetpSwpHints());
     SwTextAttr *pTextAttr;
@@ -247,7 +247,7 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
         {
             // Close the TextAttributes, whose StartPos were before or at
             // the old nPos and are currently open
-            if (pTextAttr->GetStart() <= m_nPosition)  Rst( pTextAttr );
+            if (pTextAttr->GetStart() <= nOldPos)  Rst( pTextAttr );
             m_nEndIndex++;
         }
     }
@@ -291,14 +291,15 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
             sal_Int32 nPos(m_nPosition);
             do
             {
+                sal_Int32 const nOldPos(nPos);
                 nPos = GetNextAttrImpl(m_pTextNode, m_nStartIndex, m_nEndIndex, nPos);
                 if (nPos <= m_pTextNode->Len())
                 {
-                    SeekFwd(nPos);
+                    SeekFwd(nOldPos, nPos);
                 }
                 else
                 {
-                    SeekFwd(m_pTextNode->Len());
+                    SeekFwd(nOldPos, m_pTextNode->Len());
                 }
             }
             while (nPos < m_pTextNode->Len());
@@ -370,21 +371,22 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
             sal_Int32 nPos(m_nPosition);
             do
             {
+                sal_Int32 const nOldPos(nPos);
                 nPos = GetNextAttrImpl(m_pTextNode, m_nStartIndex, m_nEndIndex, nPos);
                 if (nPos <= newPos.second)
                 {
-                    SeekFwd(nPos);
+                    SeekFwd(nOldPos, nPos);
                 }
                 else
                 {
-                    SeekFwd(newPos.second);
+                    SeekFwd(nOldPos, newPos.second);
                 }
             }
             while (nPos < newPos.second);
         }
         else
         {
-            SeekFwd(newPos.second);
+            SeekFwd(m_nPosition, newPos.second);
         }
     }
 
