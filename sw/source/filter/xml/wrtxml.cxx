@@ -187,7 +187,8 @@ ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xS
     bool isShowChanges;
     if (officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
     {   // TODO: ideally this would be stored per-view...
-        isShowChanges = !m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout()->IsHideRedlines();
+        SwRootFrame const*const pLayout(m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
+        isShowChanges = pLayout == nullptr || !pLayout->IsHideRedlines();
     }
     else
     {
