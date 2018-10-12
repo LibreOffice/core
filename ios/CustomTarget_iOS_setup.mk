@@ -92,7 +92,7 @@ $(IOSGEN)/native-code.h: $(BUILDDIR)/config_host.mk \
 	(echo '[Bootstrap]' \
 	&& echo 'InstallMode=<installmode>' \
 	&& echo "ProductKey=LibreOffice $(PRODUCTVERSION)" \
-	&& echo 'UserInstallation=$$SYSUSERHOME/userinstallation' \
+	&& echo 'UserInstallation=$$SYSUSERHOME' \
 	    ) > $(IOSRES)/program/bootstraprc
 
 	(echo '[Version]' \
