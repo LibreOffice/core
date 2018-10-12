@@ -37,10 +37,6 @@ public:
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
             bool SimpleMouseButtonUp(const MouseEvent& rMEvt);
-
-    // Returns grid sync offset for rInOutPos, additionally adjusts rInOutPos
-    // by the offset
-    Point CurrentGridSyncOffsetAndPos( Point& rInOutPos);
 };
 
 #endif      // _SD_FUCONSTR_HXX
