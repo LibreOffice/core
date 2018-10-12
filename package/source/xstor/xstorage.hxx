@@ -84,7 +84,7 @@ struct SotElement_Impl
     OUString             m_aOriginalName;
     bool                    m_bIsRemoved;
     bool                    m_bIsInserted;
-    bool                    m_bIsStorage;
+    bool const              m_bIsStorage;
 
     std::unique_ptr<OStorage_Impl> m_xStorage;
     std::unique_ptr<OWriteStream_Impl, o3tl::default_delete<OWriteStream_Impl>> m_xStream;
@@ -129,7 +129,7 @@ struct OStorage_Impl
 
     bool                        m_bCommited;    // sending the streams is coordinated by the root storage of the package
 
-    bool                        m_bIsRoot;      // marks this storage as root storages that manages all commits and reverts
+    bool const                  m_bIsRoot;      // marks this storage as root storages that manages all commits and reverts
     bool                        m_bListCreated;
 
     /// Count of registered modification listeners
@@ -166,7 +166,7 @@ struct OStorage_Impl
 
     SwitchablePersistenceStream* m_pSwitchStream;
 
-    sal_Int32 m_nStorageType; // the mode in which the storage is used
+    sal_Int32 const m_nStorageType; // the mode in which the storage is used
 
     // the _rels substorage that is handled in a special way in embed::StorageFormats::OFOPXML
     SotElement_Impl* m_pRelStorElement;

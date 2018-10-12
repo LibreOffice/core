@@ -31,7 +31,7 @@ namespace tools
 {
 class Options
 {
-    std::string m_program;
+    std::string const m_program;
 
     Options (Options const &) = delete;
     Options & operator= (Options const &) = delete;

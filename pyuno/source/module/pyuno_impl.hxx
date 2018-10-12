@@ -336,8 +336,8 @@ class Adapter : public cppu::WeakImplHelper<
     css::script::XInvocation, css::lang::XUnoTunnel >
 {
     PyRef mWrappedObject;
-    PyInterpreterState *mInterpreter;  // interpreters don't seem to be refcounted !
-    css::uno::Sequence< css::uno::Type > mTypes;
+    PyInterpreterState * const mInterpreter;  // interpreters don't seem to be refcounted !
+    css::uno::Sequence< css::uno::Type > const mTypes;
     MethodOutIndexMap m_methodOutIndexMap;
 
 private:
