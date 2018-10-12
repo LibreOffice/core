@@ -519,7 +519,7 @@ class ScGlobal
     static ScFunctionList*  pStarCalcFunctionList;
     static ScFunctionMgr*   pStarCalcFunctionMgr;
 
-    static ScUnitConverter* pUnitConverter;
+    static std::atomic<ScUnitConverter*> pUnitConverter;
 
     static  SvNumberFormatter*  pEnglishFormatter;          // for UNO / XML export
 

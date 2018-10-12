@@ -109,7 +109,7 @@ SvxBrushItem*   ScGlobal::pEmbeddedBrushItem = nullptr;
 ScFunctionList* ScGlobal::pStarCalcFunctionList = nullptr;
 ScFunctionMgr*  ScGlobal::pStarCalcFunctionMgr  = nullptr;
 
-ScUnitConverter* ScGlobal::pUnitConverter = nullptr;
+std::atomic<ScUnitConverter*> ScGlobal::pUnitConverter(nullptr);
 SvNumberFormatter* ScGlobal::pEnglishFormatter = nullptr;
 ScFieldEditEngine* ScGlobal::pFieldEditEngine = nullptr;
 
@@ -586,7 +586,7 @@ void ScGlobal::Clear()
     delete pLocale.load(); pLocale = nullptr;
     DELETEZ(pStrClipDocName);
 
-    DELETEZ(pUnitConverter);
+    delete pUnitConverter.load(); pUnitConverter = nullptr;
     DELETEZ(pFieldEditEngine);
 
     DELETEZ(pEmptyOUString);
@@ -676,11 +676,8 @@ void ScGlobal::ResetFunctionList()
 
 ScUnitConverter* ScGlobal::GetUnitConverter()
 {
-    assert(!bThreadedGroupCalcInProgress);
-    if ( !pUnitConverter )
-        pUnitConverter = new ScUnitConverter;
-
-    return pUnitConverter;
+    return comphelper::doubleCheckedInit( pUnitConverter,
+        []() { return new ScUnitConverter; });
 }
 
 const sal_Unicode* ScGlobal::UnicodeStrChr( const sal_Unicode* pStr,
