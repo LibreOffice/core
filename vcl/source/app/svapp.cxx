@@ -458,10 +458,9 @@ static bool ImplYield(bool i_bWait, bool i_bAllEvents)
     SAL_INFO("vcl.schedule", "Enter ImplYield: " << (i_bWait ? "wait" : "no wait") <<
              ": " << (i_bAllEvents ? "all events" : "one event"));
 
-    // TODO: there's a data race here on WNT only because ImplYield may be
-    // called without SolarMutex; if we can get rid of LazyDelete (with VclPtr)
-    // then the only remaining use of mnDispatchLevel is in OSX specific code
-    // so that would effectively eliminate the race on WNT
+    // there's a data race here on WNT only because ImplYield may be
+    // called without SolarMutex; but the only remaining use of mnDispatchLevel
+    // is in OSX specific code
     pSVData->maAppData.mnDispatchLevel++;
 
     // do not wait for events if application was already quit; in that
@@ -472,10 +471,6 @@ static bool ImplYield(bool i_bWait, bool i_bAllEvents)
     pSVData->maAppData.mnDispatchLevel--;
 
     DBG_TESTSOLARMUTEX(); // must be locked on return from Yield
-
-    // flush lazy deleted objects
-    if( pSVData->maAppData.mnDispatchLevel == 0 )
-        vcl::LazyDelete::flush();
 
     SAL_INFO("vcl.schedule", "Leave ImplYield with return " << bProcessedEvent );
     return bProcessedEvent;
