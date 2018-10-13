@@ -21,7 +21,6 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/dialcontrol.hxx>
-#include <svx/orienthelper.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
 #include <TextDirectionListBox.hxx>

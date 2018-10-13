@@ -36,7 +36,6 @@
 #define ALIGNDLG_VERALIGN_DISTRIBUTED 5
 
 
-#include <svx/orienthelper.hxx>
 #include <vcl/field.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>

@@ -139,7 +139,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/linkwarn \
     svx/source/dialog/measctrl \
     svx/source/dialog/optgrid \
-    svx/source/dialog/orienthelper \
     svx/source/dialog/pagectrl \
     svx/source/dialog/paraprev \
     svx/source/dialog/passwd \
