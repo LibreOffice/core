@@ -84,12 +84,25 @@
               </packing>
             </child>
             <child>
-              <object class="svxlo-DialControl" id="dialCtrl">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
-                <property name="active">True</property>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkViewport">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkDrawingArea" id="dialCtrl">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -157,7 +170,7 @@
               </packing>
             </child>
             <child>
-              <object class="chartcontrollerlo-TextDirectionListBox" id="textdirLB">
+              <object class="GtkComboBoxText" id="textdirLB">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>

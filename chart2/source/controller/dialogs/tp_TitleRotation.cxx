@@ -29,28 +29,40 @@
 namespace chart
 {
 
-SchAlignmentTabPage::SchAlignmentTabPage(vcl::Window* pWindow,
-                                         const SfxItemSet& rInAttrs, bool bWithRotation) :
-    SfxTabPage(pWindow, "TitleRotationTabPage","modules/schart/ui/titlerotationtabpage.ui", &rInAttrs)
+SchAlignmentTabPage::SchAlignmentTabPage(TabPageParent pParent,
+                                         const SfxItemSet& rInAttrs, bool bWithRotation)
+    : SfxTabPage(pParent, "modules/schart/ui/titlerotationtabpage.ui", "TitleRotationTabPage", &rInAttrs)
+    , m_xFtRotate(m_xBuilder->weld_label("degreeL"))
+    , m_xNfRotate(m_xBuilder->weld_spin_button("OrientDegree"))
+    , m_xCbStacked(m_xBuilder->weld_check_button("stackedCB"))
+    , m_xFtTextDirection(m_xBuilder->weld_label("textdirL"))
+    , m_xFtABCD(m_xBuilder->weld_label("labelABCD"))
+    , m_xLbTextDirection(new SchTextDirectionListBox(m_xBuilder->weld_combo_box("textdirLB")))
+    , m_xCtrlDial(new weld::CustomWeld(*m_xBuilder, "dialCtrl", m_aCtrlDial))
 {
-    get(m_pCtrlDial,"dialCtrl");
-    get(m_pFtRotate,"degreeL");
-    get(m_pNfRotate,"OrientDegree");
-    get(m_pCbStacked,"stackedCB");
-    get(m_pFtTextDirection,"textdirL");
-    get(m_pLbTextDirection,"textdirLB");
-    get(m_pFtABCD,"labelABCD");
-    m_pCtrlDial->SetText(m_pFtABCD->GetText());
-    m_pOrientHlp.reset( new svx::OrientationHelper(*m_pCtrlDial, *m_pNfRotate, *m_pCbStacked) );
+    m_aCtrlDial.SetText(m_xFtABCD->get_label());
+    m_xCbStacked->connect_toggled(LINK(this, SchAlignmentTabPage, StackedToggleHdl));
 
-    m_pCbStacked->EnableTriState( false );
-    m_pOrientHlp->Enable();
-    m_pOrientHlp->AddDependentWindow( *m_pFtRotate, TRISTATE_TRUE );
+    m_xCtrlDial->set_sensitive(true);
+    m_xNfRotate->set_sensitive(true);
+    m_xCbStacked->set_sensitive(true);
+    m_xFtRotate->set_sensitive(true);
 
     if( !bWithRotation )
     {
-        m_pOrientHlp->Hide();
+        m_xCtrlDial->hide();
+        m_xNfRotate->hide();
+        m_xCbStacked->hide();
+        m_xFtRotate->hide();
     }
+}
+
+IMPL_LINK_NOARG(SchAlignmentTabPage, StackedToggleHdl, weld::ToggleButton&, void)
+{
+    bool bActive = m_xCbStacked->get_active();
+    m_xNfRotate->set_sensitive(bActive);
+    m_xCtrlDial->set_sensitive(bActive);
+    m_xFtRotate->set_sensitive(bActive);
 }
 
 SchAlignmentTabPage::~SchAlignmentTabPage()
@@ -60,39 +72,33 @@ SchAlignmentTabPage::~SchAlignmentTabPage()
 
 void SchAlignmentTabPage::dispose()
 {
-    m_pOrientHlp.reset();
-    m_pCtrlDial.clear();
-    m_pFtRotate.clear();
-    m_pNfRotate.clear();
-    m_pCbStacked.clear();
-    m_pFtTextDirection.clear();
-    m_pLbTextDirection.clear();
-    m_pFtABCD.clear();
+    m_xCtrlDial.reset();
+    m_xLbTextDirection.reset();
     SfxTabPage::dispose();
 }
 
 VclPtr<SfxTabPage> SchAlignmentTabPage::Create(TabPageParent pParent,
                                                const SfxItemSet* rInAttrs)
 {
-    return VclPtr<SchAlignmentTabPage>::Create(pParent.pParent, *rInAttrs);
+    return VclPtr<SchAlignmentTabPage>::Create(pParent, *rInAttrs);
 }
 
 VclPtr<SfxTabPage> SchAlignmentTabPage::CreateWithoutRotation(TabPageParent pParent,
                                                               const SfxItemSet* rInAttrs)
 {
-    return VclPtr<SchAlignmentTabPage>::Create(pParent.pParent, *rInAttrs, false);
+    return VclPtr<SchAlignmentTabPage>::Create(pParent, *rInAttrs, false);
 }
 
 bool SchAlignmentTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 {
     //Since 04/1998 text can be rotated by an arbitrary angle: SCHATTR_TEXT_DEGREES
-    bool bStacked = m_pOrientHlp->GetStackedState() == TRISTATE_TRUE;
+    bool bStacked = m_xCbStacked->get_active();
     rOutAttrs->Put( SfxBoolItem( SCHATTR_TEXT_STACKED, bStacked ) );
 
-    sal_Int32 nDegrees = bStacked ? 0 : m_pCtrlDial->GetRotation();
+    sal_Int32 nDegrees = bStacked ? 0 : m_aCtrlDial.GetRotation();
     rOutAttrs->Put( SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
 
-    SvxFrameDirection aDirection( m_pLbTextDirection->GetSelectEntryValue() );
+    SvxFrameDirection aDirection( m_xLbTextDirection->get_active_id() );
     rOutAttrs->Put( SvxFrameDirectionItem( aDirection, EE_PARA_WRITINGDIR ) );
 
     return true;
@@ -103,14 +109,15 @@ void SchAlignmentTabPage::Reset(const SfxItemSet* rInAttrs)
     const SfxPoolItem* pItem = GetItem( *rInAttrs, SCHATTR_TEXT_DEGREES );
 
     sal_Int32 nDegrees = pItem ? static_cast<const SfxInt32Item*>(pItem)->GetValue() : 0;
-    m_pCtrlDial->SetRotation( nDegrees );
+    m_aCtrlDial.SetRotation( nDegrees );
 
     pItem = GetItem( *rInAttrs, SCHATTR_TEXT_STACKED );
     bool bStacked = pItem && static_cast<const SfxBoolItem*>(pItem)->GetValue();
-    m_pOrientHlp->SetStackedState( bStacked ? TRISTATE_TRUE : TRISTATE_FALSE );
+    m_xCbStacked->set_active(bStacked);
+    StackedToggleHdl(*m_xCbStacked);
 
     if( rInAttrs->GetItemState(EE_PARA_WRITINGDIR, true, &pItem) == SfxItemState::SET)
-        m_pLbTextDirection->SelectEntryValue( static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue() );
+        m_xLbTextDirection->set_active_id(static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue());
 }
 
 } //namespace chart
