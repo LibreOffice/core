@@ -14210,7 +14210,6 @@ svx/source/dialog/fontlb.cxx
 svx/source/dialog/fontwork.cxx
 svx/source/dialog/framelink.cxx
 svx/source/dialog/framelinkarray.cxx
-svx/source/dialog/frmdirlbox.cxx
 svx/source/dialog/frmsel.cxx
 svx/source/dialog/graphctl.cxx
 svx/source/dialog/grfflt.cxx

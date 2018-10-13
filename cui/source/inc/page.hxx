@@ -106,7 +106,7 @@ private:
     std::unique_ptr<weld::RadioButton> m_xPortraitBtn;
     std::unique_ptr<weld::RadioButton> m_xLandscapeBtn;
     std::unique_ptr<weld::Label> m_xTextFlowLbl;
-    std::unique_ptr<svx::SvxFrameDirectionListBox>  m_xTextFlowBox;
+    std::unique_ptr<svx::FrameDirectionListBox>  m_xTextFlowBox;
     std::unique_ptr<weld::ComboBox> m_xPaperTrayBox;
     // Margins
     std::unique_ptr<weld::Label> m_xLeftMarginLbl;
