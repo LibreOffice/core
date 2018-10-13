@@ -179,6 +179,8 @@ public:
     sal_Int32           GetRotation() const;
     /** Sets the rotation to the passed value (in 1/100 degrees). */
     void                SetRotation( sal_Int32 nAngle );
+    /** Returns true, if the control is not in "don't care" state. */
+    bool                HasRotation() const;
     /** Sets the control to "don't care" state. */
     void                SetNoRotation();
 

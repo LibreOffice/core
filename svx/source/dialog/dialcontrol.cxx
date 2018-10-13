@@ -621,6 +621,11 @@ void SvxDialControl::LoseFocus()
     HandleEscapeEvent();
 }
 
+bool SvxDialControl::HasRotation() const
+{
+    return !mpImpl->mbNoRot;
+}
+
 void SvxDialControl::SetNoRotation()
 {
     if( !mpImpl->mbNoRot )

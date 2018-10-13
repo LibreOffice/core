@@ -30,43 +30,41 @@
 namespace chart
 {
 
-SchAxisLabelTabPage::SchAxisLabelTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs ) :
-        SfxTabPage( pParent, "AxisLabelTabPage","modules/schart/ui/tp_axisLabel.ui", &rInAttrs ),
-
-        m_bShowStaggeringControls( true ),
-
-        m_nInitialDegrees( 0 ),
-        m_bHasInitialDegrees( true ),
-        m_bInitialStacking( false ),
-        m_bHasInitialStacking( true ),
-        m_bComplexCategories( false )
+SchAxisLabelTabPage::SchAxisLabelTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pParent, "modules/schart/ui/tp_axisLabel.ui", "AxisLabelTabPage", &rInAttrs)
+    , m_bShowStaggeringControls( true )
+    , m_nInitialDegrees( 0 )
+    , m_bHasInitialDegrees( true )
+    , m_bInitialStacking( false )
+    , m_bHasInitialStacking( true )
+    , m_bComplexCategories( false )
+    , m_xCbShowDescription(m_xBuilder->weld_check_button("showlabelsCB"))
+    , m_xFlOrder(m_xBuilder->weld_label("orderL"))
+    , m_xRbSideBySide(m_xBuilder->weld_radio_button("tile"))
+    , m_xRbUpDown(m_xBuilder->weld_radio_button("odd"))
+    , m_xRbDownUp(m_xBuilder->weld_radio_button("even"))
+    , m_xRbAuto(m_xBuilder->weld_radio_button("auto"))
+    , m_xFlTextFlow(m_xBuilder->weld_label("textflowL"))
+    , m_xCbTextOverlap(m_xBuilder->weld_check_button("overlapCB"))
+    , m_xCbTextBreak(m_xBuilder->weld_check_button("breakCB"))
+    , m_xFtABCD(m_xBuilder->weld_label("labelABCD"))
+    , m_xFlOrient(m_xBuilder->weld_label("labelTextOrient"))
+    , m_xFtRotate(m_xBuilder->weld_label("degreeL"))
+    , m_xNfRotate(m_xBuilder->weld_spin_button("OrientDegree"))
+    , m_xCbStacked(m_xBuilder->weld_check_button("stackedCB"))
+    , m_xFtTextDirection(m_xBuilder->weld_label("textdirL"))
+    , m_xLbTextDirection(new SchTextDirectionListBox(m_xBuilder->weld_combo_box("textdirLB")))
+    , m_xCtrlDial(new weld::CustomWeld(*m_xBuilder, "dialCtrl", m_aCtrlDial))
 {
-    get(m_pCbShowDescription, "showlabelsCB");
-    get(m_pFlOrder, "orderL");
-    get(m_pRbSideBySide, "tile");
-    get(m_pRbUpDown, "odd");
-    get(m_pRbDownUp, "even");
-    get(m_pRbAuto, "auto");
-    get(m_pFlTextFlow, "textflowL");
-    get(m_pCbTextOverlap, "overlapCB");
-    get(m_pCbTextBreak, "breakCB");
-    get(m_pFlOrient, "labelTextOrient");
-    get(m_pCtrlDial,"dialCtrl");
-    get(m_pFtRotate,"degreeL");
-    get(m_pNfRotate,"OrientDegree");
-    get(m_pCbStacked,"stackedCB");
-    get(m_pFtTextDirection,"textdirL");
-    get(m_pLbTextDirection,"textdirLB");
-    get(m_pFtABCD,"labelABCD");
-    m_pCtrlDial->SetText(m_pFtABCD->GetText());
-    m_pOrientHlp.reset(new svx::OrientationHelper(*m_pCtrlDial, *m_pNfRotate, *m_pCbStacked));
-    m_pOrientHlp->Enable();
+    m_aCtrlDial.SetText(m_xFtABCD->get_label());
+    m_aCtrlDial.SetLinkedField(m_xNfRotate.get());
+    m_xCtrlDial->set_sensitive(true);
+    m_xNfRotate->set_sensitive(true);
+    m_xCbStacked->set_sensitive(true);
+    m_xFtRotate->set_sensitive(true);
 
-    m_pCbStacked->EnableTriState( false );
-    m_pOrientHlp->AddDependentWindow( *m_pFlOrient );
-    m_pOrientHlp->AddDependentWindow( *m_pFtRotate, TRISTATE_TRUE );
-
-    m_pCbShowDescription->SetClickHdl( LINK( this, SchAxisLabelTabPage, ToggleShowLabel ) );
+    m_xCbStacked->connect_toggled(LINK(this, SchAxisLabelTabPage, StackedToggleHdl));
+    m_xCbShowDescription->connect_toggled(LINK(this, SchAxisLabelTabPage, ToggleShowLabel));
 }
 
 SchAxisLabelTabPage::~SchAxisLabelTabPage()
@@ -76,45 +74,29 @@ SchAxisLabelTabPage::~SchAxisLabelTabPage()
 
 void SchAxisLabelTabPage::dispose()
 {
-    m_pOrientHlp.reset();
-    m_pCbShowDescription.clear();
-    m_pFlOrder.clear();
-    m_pRbSideBySide.clear();
-    m_pRbUpDown.clear();
-    m_pRbDownUp.clear();
-    m_pRbAuto.clear();
-    m_pFlTextFlow.clear();
-    m_pCbTextOverlap.clear();
-    m_pCbTextBreak.clear();
-    m_pFtABCD.clear();
-    m_pFlOrient.clear();
-    m_pCtrlDial.clear();
-    m_pFtRotate.clear();
-    m_pNfRotate.clear();
-    m_pCbStacked.clear();
-    m_pFtTextDirection.clear();
-    m_pLbTextDirection.clear();
+    m_xCtrlDial.reset();
+    m_xLbTextDirection.reset();
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> SchAxisLabelTabPage::Create( TabPageParent pParent, const SfxItemSet* rAttrs )
+VclPtr<SfxTabPage> SchAxisLabelTabPage::Create(TabPageParent pParent, const SfxItemSet* rAttrs)
 {
-    return VclPtr<SchAxisLabelTabPage>::Create( pParent.pParent, *rAttrs );
+    return VclPtr<SchAxisLabelTabPage>::Create(pParent, *rAttrs);
 }
 
 bool SchAxisLabelTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 {
     bool bStacked = false;
-    if( m_pOrientHlp->GetStackedState() != TRISTATE_INDET )
+    if (m_xCbStacked->get_state() != TRISTATE_INDET )
     {
-        bStacked = m_pOrientHlp->GetStackedState() == TRISTATE_TRUE;
+        bStacked = m_xCbStacked->get_state() == TRISTATE_TRUE;
         if( !m_bHasInitialStacking || (bStacked != m_bInitialStacking) )
             rOutAttrs->Put( SfxBoolItem( SCHATTR_TEXT_STACKED, bStacked ) );
     }
 
-    if( m_pCtrlDial->HasRotation() )
+    if( m_aCtrlDial.HasRotation() )
     {
-        sal_Int32 nDegrees = bStacked ? 0 : m_pCtrlDial->GetRotation();
+        sal_Int32 nDegrees = bStacked ? 0 : m_aCtrlDial.GetRotation();
         if( !m_bHasInitialDegrees || (nDegrees != m_nInitialDegrees) )
             rOutAttrs->Put( SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
     }
@@ -124,13 +106,13 @@ bool SchAxisLabelTabPage::FillItemSet( SfxItemSet* rOutAttrs )
         SvxChartTextOrder eOrder = SvxChartTextOrder::SideBySide;
         bool bRadioButtonChecked = true;
 
-        if( m_pRbUpDown->IsChecked())
+        if( m_xRbUpDown->get_active())
             eOrder = SvxChartTextOrder::UpDown;
-        else if( m_pRbDownUp->IsChecked())
+        else if( m_xRbDownUp->get_active())
             eOrder = SvxChartTextOrder::DownUp;
-        else if( m_pRbAuto->IsChecked())
+        else if( m_xRbAuto->get_active())
             eOrder = SvxChartTextOrder::Auto;
-        else if( m_pRbSideBySide->IsChecked())
+        else if( m_xRbSideBySide->get_active())
             eOrder = SvxChartTextOrder::SideBySide;
         else
             bRadioButtonChecked = false;
@@ -139,15 +121,15 @@ bool SchAxisLabelTabPage::FillItemSet( SfxItemSet* rOutAttrs )
             rOutAttrs->Put( SvxChartTextOrderItem( eOrder, SCHATTR_AXIS_LABEL_ORDER ));
     }
 
-    if( m_pCbTextOverlap->GetState() != TRISTATE_INDET )
-        rOutAttrs->Put( SfxBoolItem( SCHATTR_AXIS_LABEL_OVERLAP, m_pCbTextOverlap->IsChecked() ) );
-    if( m_pCbTextBreak->GetState() != TRISTATE_INDET )
-        rOutAttrs->Put( SfxBoolItem( SCHATTR_AXIS_LABEL_BREAK, m_pCbTextBreak->IsChecked() ) );
-    if( m_pCbShowDescription->GetState() != TRISTATE_INDET )
-        rOutAttrs->Put( SfxBoolItem( SCHATTR_AXIS_SHOWDESCR, m_pCbShowDescription->IsChecked() ) );
+    if( m_xCbTextOverlap->get_state() != TRISTATE_INDET )
+        rOutAttrs->Put( SfxBoolItem( SCHATTR_AXIS_LABEL_OVERLAP, m_xCbTextOverlap->get_active() ) );
+    if( m_xCbTextBreak->get_state() != TRISTATE_INDET )
+        rOutAttrs->Put( SfxBoolItem( SCHATTR_AXIS_LABEL_BREAK, m_xCbTextBreak->get_active() ) );
+    if( m_xCbShowDescription->get_state() != TRISTATE_INDET )
+        rOutAttrs->Put( SfxBoolItem( SCHATTR_AXIS_SHOWDESCR, m_xCbShowDescription->get_active() ) );
 
-    if( m_pLbTextDirection->GetSelectedEntryCount() > 0 )
-        rOutAttrs->Put( SvxFrameDirectionItem( m_pLbTextDirection->GetSelectEntryValue(), EE_PARA_WRITINGDIR ) );
+    if (m_xLbTextDirection->get_active() != -1)
+        rOutAttrs->Put( SvxFrameDirectionItem( m_xLbTextDirection->get_active_id(), EE_PARA_WRITINGDIR ) );
 
     return true;
 }
@@ -160,19 +142,17 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
     SfxItemState aState = rInAttrs->GetItemState( SCHATTR_AXIS_SHOWDESCR, false, &pPoolItem );
     if( aState == SfxItemState::DONTCARE )
     {
-        m_pCbShowDescription->EnableTriState();
-        m_pCbShowDescription->SetState( TRISTATE_INDET );
+        m_xCbShowDescription->set_state( TRISTATE_INDET );
     }
     else
     {
-        m_pCbShowDescription->EnableTriState( false );
         bool bCheck = false;
         if( aState == SfxItemState::SET )
             bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
-        m_pCbShowDescription->Check( bCheck );
+        m_xCbShowDescription->set_active( bCheck );
 
         if( aState != SfxItemState::DEFAULT && aState != SfxItemState::SET )
-            m_pCbShowDescription->Hide();
+            m_xCbShowDescription->hide();
     }
 
     // Rotation as orient item or in degrees ----------
@@ -185,9 +165,9 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
 
     m_bHasInitialDegrees = aState != SfxItemState::DONTCARE;
     if( m_bHasInitialDegrees )
-        m_pCtrlDial->SetRotation( m_nInitialDegrees );
+        m_aCtrlDial.SetRotation( m_nInitialDegrees );
     else
-        m_pCtrlDial->SetNoRotation();
+        m_aCtrlDial.SetNoRotation();
 
     // check stacked item
     m_bInitialStacking = false;
@@ -197,52 +177,49 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
 
     m_bHasInitialStacking = aState != SfxItemState::DONTCARE;
     if( m_bHasInitialDegrees )
-        m_pOrientHlp->SetStackedState( m_bInitialStacking ? TRISTATE_TRUE : TRISTATE_FALSE );
+        m_xCbStacked->set_state(m_bInitialStacking ? TRISTATE_TRUE : TRISTATE_FALSE);
     else
-        m_pOrientHlp->SetStackedState( TRISTATE_INDET );
+        m_xCbStacked->set_state(TRISTATE_INDET);
+    StackedToggleHdl(*m_xCbStacked);
 
     if( rInAttrs->GetItemState( EE_PARA_WRITINGDIR, true, &pPoolItem ) == SfxItemState::SET )
-        m_pLbTextDirection->SelectEntryValue( static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue() );
+        m_xLbTextDirection->set_active_id( static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue() );
 
     // Text overlap ----------
     aState = rInAttrs->GetItemState( SCHATTR_AXIS_LABEL_OVERLAP, false, &pPoolItem );
     if( aState == SfxItemState::DONTCARE )
     {
-        m_pCbTextOverlap->EnableTriState();
-        m_pCbTextOverlap->SetState( TRISTATE_INDET );
+        m_xCbTextOverlap->set_state( TRISTATE_INDET );
     }
     else
     {
-        m_pCbTextOverlap->EnableTriState( false );
         bool bCheck = false;
         if( aState == SfxItemState::SET )
             bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
-        m_pCbTextOverlap->Check( bCheck );
+        m_xCbTextOverlap->set_active( bCheck );
 
         if( aState != SfxItemState::DEFAULT && aState != SfxItemState::SET )
-            m_pCbTextOverlap->Hide();
+            m_xCbTextOverlap->hide();
     }
 
     // text break ----------
     aState = rInAttrs->GetItemState( SCHATTR_AXIS_LABEL_BREAK, false, &pPoolItem );
     if( aState == SfxItemState::DONTCARE )
     {
-        m_pCbTextBreak->EnableTriState();
-        m_pCbTextBreak->SetState( TRISTATE_INDET );
+        m_xCbTextBreak->set_state( TRISTATE_INDET );
     }
     else
     {
-        m_pCbTextBreak->EnableTriState( false );
         bool bCheck = false;
         if( aState == SfxItemState::SET )
             bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
-        m_pCbTextBreak->Check( bCheck );
+        m_xCbTextBreak->set_active( bCheck );
 
         if( aState != SfxItemState::DEFAULT && aState != SfxItemState::SET )
         {
-            m_pCbTextBreak->Hide();
-            if( ! m_pCbTextOverlap->IsVisible() )
-                m_pFlTextFlow->Hide();
+            m_xCbTextBreak->hide();
+            if( ! m_xCbTextOverlap->get_visible() )
+                m_xFlTextFlow->hide();
         }
     }
 
@@ -257,22 +234,22 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
             switch( eOrder )
             {
                 case SvxChartTextOrder::SideBySide:
-                    m_pRbSideBySide->Check();
+                    m_xRbSideBySide->set_active(true);
                     break;
                 case SvxChartTextOrder::UpDown:
-                    m_pRbUpDown->Check();
+                    m_xRbUpDown->set_active(true);
                     break;
                 case SvxChartTextOrder::DownUp:
-                    m_pRbDownUp->Check();
+                    m_xRbDownUp->set_active(true);
                     break;
                 case SvxChartTextOrder::Auto:
-                    m_pRbAuto->Check();
+                    m_xRbAuto->set_active(true);
                     break;
             }
         }
     }
 
-    ToggleShowLabel( nullptr );
+    ToggleShowLabel(*m_xCbShowDescription);
 }
 
 void SchAxisLabelTabPage::ShowStaggeringControls( bool bShowStaggeringControls )
@@ -281,11 +258,11 @@ void SchAxisLabelTabPage::ShowStaggeringControls( bool bShowStaggeringControls )
 
     if( !m_bShowStaggeringControls )
     {
-        m_pRbSideBySide->Hide();
-        m_pRbUpDown->Hide();
-        m_pRbDownUp->Hide();
-        m_pRbAuto->Hide();
-        m_pFlOrder->Hide();
+        m_xRbSideBySide->hide();
+        m_xRbUpDown->hide();
+        m_xRbDownUp->hide();
+        m_xRbAuto->hide();
+        m_xFlOrder->hide();
     }
 }
 
@@ -296,23 +273,34 @@ void SchAxisLabelTabPage::SetComplexCategories( bool bComplexCategories )
 
 // event handling routines
 
-IMPL_LINK_NOARG(SchAxisLabelTabPage, ToggleShowLabel, Button*, void)
+IMPL_LINK_NOARG(SchAxisLabelTabPage, StackedToggleHdl, weld::ToggleButton&, void)
 {
-    bool bEnable = ( m_pCbShowDescription->GetState() != TRISTATE_FALSE );
+    bool bActive = m_xCbStacked->get_active() && m_xCbStacked->get_sensitive();
+    m_xNfRotate->set_sensitive(bActive);
+    m_xCtrlDial->set_sensitive(bActive);
+    m_aCtrlDial.StyleUpdated();
+    m_xFtRotate->set_sensitive(bActive);
+}
 
-    m_pOrientHlp->Enable( bEnable );
-    m_pFlOrder->Enable( bEnable );
-    m_pRbSideBySide->Enable( bEnable );
-    m_pRbUpDown->Enable( bEnable );
-    m_pRbDownUp->Enable( bEnable );
-    m_pRbAuto->Enable( bEnable );
+IMPL_LINK_NOARG(SchAxisLabelTabPage, ToggleShowLabel, weld::ToggleButton&, void)
+{
+    bool bEnable = ( m_xCbShowDescription->get_state() != TRISTATE_FALSE );
 
-    m_pFlTextFlow->Enable( bEnable );
-    m_pCbTextOverlap->Enable( bEnable && !m_bComplexCategories );
-    m_pCbTextBreak->Enable( bEnable );
+    m_xCbStacked->set_sensitive(bEnable);
+    StackedToggleHdl(*m_xCbStacked);
 
-    m_pFtTextDirection->Enable( bEnable );
-    m_pLbTextDirection->Enable( bEnable );
+    m_xFlOrder->set_sensitive( bEnable );
+    m_xRbSideBySide->set_sensitive( bEnable );
+    m_xRbUpDown->set_sensitive( bEnable );
+    m_xRbDownUp->set_sensitive( bEnable );
+    m_xRbAuto->set_sensitive( bEnable );
+
+    m_xFlTextFlow->set_sensitive( bEnable );
+    m_xCbTextOverlap->set_sensitive( bEnable && !m_bComplexCategories );
+    m_xCbTextBreak->set_sensitive( bEnable );
+
+    m_xFtTextDirection->set_sensitive( bEnable );
+    m_xLbTextDirection->set_sensitive( bEnable );
 }
 } //namespace chart
 
