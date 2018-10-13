@@ -27,10 +27,10 @@ namespace vcl { class Window; }
 namespace chart
 {
 
-class SchTextDirectionListBox : public svx::SvxFrameDirectionListBox
+class TextDirectionListBox : public svx::SvxFrameDirectionListBox
 {
 public:
-    explicit SchTextDirectionListBox(std::unique_ptr<weld::ComboBox> pControl);
+    explicit TextDirectionListBox(std::unique_ptr<weld::ComboBox> pControl);
 };
 
 

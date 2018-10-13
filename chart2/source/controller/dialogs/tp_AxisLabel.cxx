@@ -53,7 +53,7 @@ SchAxisLabelTabPage::SchAxisLabelTabPage(TabPageParent pParent, const SfxItemSet
     , m_xNfRotate(m_xBuilder->weld_spin_button("OrientDegree"))
     , m_xCbStacked(m_xBuilder->weld_check_button("stackedCB"))
     , m_xFtTextDirection(m_xBuilder->weld_label("textdirL"))
-    , m_xLbTextDirection(new SchTextDirectionListBox(m_xBuilder->weld_combo_box("textdirLB")))
+    , m_xLbTextDirection(new TextDirectionListBox(m_xBuilder->weld_combo_box("textdirLB")))
     , m_xCtrlDial(new weld::CustomWeld(*m_xBuilder, "dialCtrl", m_aCtrlDial))
 {
     m_aCtrlDial.SetText(m_xFtABCD->get_label());

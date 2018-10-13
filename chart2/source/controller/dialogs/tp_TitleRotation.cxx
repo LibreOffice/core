@@ -37,7 +37,7 @@ SchAlignmentTabPage::SchAlignmentTabPage(TabPageParent pParent,
     , m_xCbStacked(m_xBuilder->weld_check_button("stackedCB"))
     , m_xFtTextDirection(m_xBuilder->weld_label("textdirL"))
     , m_xFtABCD(m_xBuilder->weld_label("labelABCD"))
-    , m_xLbTextDirection(new SchTextDirectionListBox(m_xBuilder->weld_combo_box("textdirLB")))
+    , m_xLbTextDirection(new TextDirectionListBox(m_xBuilder->weld_combo_box("textdirLB")))
     , m_xCtrlDial(new weld::CustomWeld(*m_xBuilder, "dialCtrl", m_aCtrlDial))
 {
     m_aCtrlDial.SetLinkedField(m_xNfRotate.get());
