@@ -1006,7 +1006,7 @@ SvxParaAlignTabPage::SvxParaAlignTabPage(TabPageParent pParent, const SfxItemSet
     , m_xVertAlignFL(m_xBuilder->weld_widget("frameFL_VERTALIGN"))
     , m_xVertAlignLB(m_xBuilder->weld_combo_box("comboLB_VERTALIGN"))
     , m_xPropertiesFL(m_xBuilder->weld_widget("framePROPERTIES"))
-    , m_xTextDirectionLB(new svx::SvxFrameDirectionListBox(m_xBuilder->weld_combo_box("comboLB_TEXTDIRECTION")))
+    , m_xTextDirectionLB(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box("comboLB_TEXTDIRECTION")))
 {
     SetExchangeSupport();
 

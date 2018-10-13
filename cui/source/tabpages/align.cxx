@@ -123,7 +123,7 @@ AlignmentTabPage::AlignmentTabPage(TabPageParent pParent, const SfxItemSet& rCor
     , m_xBtnWrap(m_xBuilder->weld_check_button("checkWrapTextAuto"))
     , m_xBtnHyphen(m_xBuilder->weld_check_button("checkHyphActive"))
     , m_xBtnShrink(m_xBuilder->weld_check_button("checkShrinkFitCellSize"))
-    , m_xLbFrameDir(new SvxFrameDirectionListBox(m_xBuilder->weld_combo_box("comboTextDirBox")))
+    , m_xLbFrameDir(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box("comboTextDirBox")))
     //ValueSet hover strings
     , m_xFtBotLock(m_xBuilder->weld_label("labelSTR_BOTTOMLOCK"))
     , m_xFtTopLock(m_xBuilder->weld_label("labelSTR_TOPLOCK"))

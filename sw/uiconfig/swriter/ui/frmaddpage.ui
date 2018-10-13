@@ -1,29 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
-  <object class="GtkListStore" id="liststore">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name gint1 -->
-      <column type="gint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="frmaddpage|liststore">Top</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="frmaddpage|liststore">Centered</col>
-        <col id="1">1</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="frmaddpage|liststore">Bottom</col>
-        <col id="1">2</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkTextBuffer" id="textbuffer1">
     <property name="text">
 
@@ -64,6 +42,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
+                    <property name="activates_default">True</property>
                     <property name="width_chars">50</property>
                   </object>
                   <packing>
@@ -76,6 +55,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
+                    <property name="activates_default">True</property>
                     <property name="width_chars">50</property>
                   </object>
                   <packing>
@@ -173,7 +153,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="frmaddpage|description_label">_Description:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">description:border</property>
+                    <property name="mnemonic_widget">description</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -187,7 +167,7 @@
                     <property name="can_focus">True</property>
                     <property name="shadow_type">in</property>
                     <child>
-                      <object class="GtkTextView" id="description:border">
+                      <object class="GtkTextView" id="description">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="wrap_mode">word</property>
@@ -256,10 +236,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="vertalign">
+                      <object class="GtkComboBoxText" id="vertalign">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="model">liststore</property>
+                        <items>
+                          <item id="0" translatable="yes" context="frmaddpage|liststore">Top</item>
+                          <item id="1" translatable="yes" context="frmaddpage|liststore">Centered</item>
+                          <item id="2" translatable="yes" context="frmaddpage|liststore">Bottom</item>
+                        </items>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -457,9 +441,9 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-FrameDirectionListBox" id="textflow">
-                        <property name="can_focus">False</property>
+                      <object class="GtkComboBoxText" id="textflow">
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>

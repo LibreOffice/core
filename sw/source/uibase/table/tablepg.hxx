@@ -66,7 +66,7 @@ class SwFormatTablePage : public SfxTabPage
     std::unique_ptr<weld::Label> m_xBottomFT;
     std::unique_ptr<weld::MetricSpinButton> m_xBottomMF;
 
-    std::unique_ptr<svx::SvxFrameDirectionListBox> m_xTextDirectionLB;
+    std::unique_ptr<svx::FrameDirectionListBox> m_xTextDirectionLB;
     std::unique_ptr<weld::Widget> m_xProperties;
 
     void        Init();
