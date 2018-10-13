@@ -22,6 +22,7 @@
 
 #include <cmdid.h>
 #include <hintids.hxx>
+#include <bitmaps.hlst>
 #include <vcl/mnemonic.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/stritem.hxx>
@@ -2384,7 +2385,7 @@ SwGrfExtPage::SwGrfExtPage(vcl::Window *pParent, const SfxItemSet &rSet)
     get(m_pConnectED, "entry");
     get(m_pBrowseBT, "browse");
     get(m_pBmpWin, "preview");
-    m_pBmpWin->SetBitmapEx(get<FixedImage>("fallback")->GetImage().GetBitmapEx());
+    m_pBmpWin->SetBitmapEx(BitmapEx(RID_BMP_PREVIEW_FALLBACK));
 
     // RotGrfFlyFrame: Need Angle and RotateControls now
     get(m_pFlAngle, "FL_ANGLE");
