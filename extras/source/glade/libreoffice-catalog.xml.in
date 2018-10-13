@@ -274,9 +274,6 @@
     <glade-widget-class title="Frame Direction ListBox" name="svxlo-FrameDirectionListBox"
                         generic-name="FrameDirectionListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
-    <glade-widget-class title="Text Direction ListBox" name="chartcontrollerlo-TextDirectionListBox"
-                        generic-name="TextDirectionListBox" parent="svxlo-FrameDirectionListBox"
-                        icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Chart Light Button" name="chartcontrollerlo-LightButton"
                         generic-name="ChartLightButton" parent="GtkButton"
                         icon-name="widget-gtk-button"/>
