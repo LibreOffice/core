@@ -260,8 +260,10 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
         {
             if ( rCurrentDesktopStr.equalsIgnoreAsciiCase( "unity" ) )
                 return DESKTOP_UNITY;
-            else if ( rCurrentDesktopStr.equalsIgnoreAsciiCase( "gnome") )
+            else if ( rCurrentDesktopStr.equalsIgnoreAsciiCase( "gnome" ) )
                 return DESKTOP_GNOME;
+            else if ( rCurrentDesktopStr.equalsIgnoreAsciiCase( "lxqt" ) )
+                return DESKTOP_LXQT;
         }
     }
 
