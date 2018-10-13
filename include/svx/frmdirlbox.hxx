@@ -29,35 +29,17 @@ class SvxFrameDirectionItem;
 
 namespace svx {
 
-
 /** This listbox contains entries to select horizontal text direction.
 
     The control works on the SvxFrameDirection enumeration (i.e. left-to-right,
     right-to-left), used i.e. in conjunction with the SvxFrameDirectionItem.
  */
-class SAL_WARN_UNUSED SVX_DLLPUBLIC FrameDirectionListBox : public ListBox
-{
-public:
-    explicit            FrameDirectionListBox( vcl::Window* pParent, WinBits nBits );
-
-    /** Inserts a string with corresponding direction enum into the listbox. */
-    void                InsertEntryValue(
-                            const OUString& rString,
-                            SvxFrameDirection eDirection );
-
-    /** Selects the specified frame direction. */
-    void                SelectEntryValue( SvxFrameDirection eDirection );
-    /** Returns the currently selected frame direction. */
-    SvxFrameDirection   GetSelectEntryValue() const;
-};
-
-
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFrameDirectionListBox
+class SAL_WARN_UNUSED SVX_DLLPUBLIC FrameDirectionListBox
 {
 private:
     std::unique_ptr<weld::ComboBox> m_xControl;
 public:
-    explicit SvxFrameDirectionListBox(std::unique_ptr<weld::ComboBox> pControl)
+    explicit FrameDirectionListBox(std::unique_ptr<weld::ComboBox> pControl)
         : m_xControl(std::move(pControl))
     {
     }

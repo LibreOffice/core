@@ -88,7 +88,7 @@ SwFormatTablePage::SwFormatTablePage(TabPageParent pParent, const SfxItemSet& rS
     , m_xTopMF(m_xBuilder->weld_metric_spin_button("abovemf", FUNIT_CM))
     , m_xBottomFT(m_xBuilder->weld_label("belowft"))
     , m_xBottomMF(m_xBuilder->weld_metric_spin_button("belowmf", FUNIT_CM))
-    , m_xTextDirectionLB(new svx::SvxFrameDirectionListBox(m_xBuilder->weld_combo_box("textdirection")))
+    , m_xTextDirectionLB(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box("textdirection")))
     , m_xProperties(m_xBuilder->weld_widget("properties"))
 {
     //lock these to initial sizes so they don't change on percent to non percent change

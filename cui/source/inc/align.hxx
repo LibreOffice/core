@@ -98,7 +98,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xBtnWrap;
     std::unique_ptr<weld::CheckButton> m_xBtnHyphen;
     std::unique_ptr<weld::CheckButton> m_xBtnShrink;
-    std::unique_ptr<SvxFrameDirectionListBox> m_xLbFrameDir;
+    std::unique_ptr<svx::FrameDirectionListBox> m_xLbFrameDir;
 
     // hidden labels/string
     std::unique_ptr<weld::Label> m_xFtBotLock;

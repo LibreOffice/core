@@ -2877,13 +2877,12 @@ IMPL_LINK_NOARG(SwFrameURLPage, InsertFileHdl, Button*, void)
     }
 }
 
-SwFrameAddPage::SwFrameAddPage(vcl::Window *pParent, const SfxItemSet &rSet)
-    : SfxTabPage(pParent, "FrameAddPage" , "modules/swriter/ui/frmaddpage.ui", &rSet)
+SwFrameAddPage::SwFrameAddPage(TabPageParent pParent, const SfxItemSet &rSet)
+    : SfxTabPage(pParent, "modules/swriter/ui/frmaddpage.ui", "FrameAddPage", &rSet)
     , m_pWrtSh(nullptr)
     , m_bHtmlMode(false)
     , m_bFormat(false)
     , m_bNew(false)
-{
     get(m_pNameFrame, "nameframe");
     get(m_pNameFT,"name_label");
     get(m_pNameED,"name");
@@ -2895,28 +2894,24 @@ SwFrameAddPage::SwFrameAddPage(vcl::Window *pParent, const SfxItemSet &rSet)
     get(m_pNextLB,"next");
     get(m_pDescriptionFT, "description_label");
     get(m_pDescriptionED, "description");
-
     get(m_pProtectFrame,"protect");
     get(m_pProtectContentCB,"protectcontent");
     get(m_pProtectFrameCB,"protectframe");
     get(m_pProtectSizeCB,"protectsize");
-
     get(m_pContentAlignFrame, "contentalign");
     get(m_pVertAlignLB,"vertalign");
-
     get(m_pPropertiesFrame,"properties");
     get(m_pEditInReadonlyCB,"editinreadonly");
     get(m_pPrintFrameCB,"printframe");
     get(m_pTextFlowFT,"textflow_label");
     get(m_pTextFlowLB,"textflow");
-
-    m_pTextFlowLB->InsertEntryValue( SvxResId( RID_SVXSTR_FRAMEDIR_LTR ), SvxFrameDirection::Horizontal_LR_TB );
-    m_pTextFlowLB->InsertEntryValue( SvxResId( RID_SVXSTR_FRAMEDIR_RTL ), SvxFrameDirection::Horizontal_RL_TB );
-    m_pTextFlowLB->InsertEntryValue( SvxResId( RID_SVXSTR_PAGEDIR_RTL_VERT ), SvxFrameDirection::Vertical_RL_TB );
-    m_pTextFlowLB->InsertEntryValue( SvxResId( RID_SVXSTR_PAGEDIR_LTR_VERT ), SvxFrameDirection::Vertical_LR_TB );
-    m_pTextFlowLB->InsertEntryValue( SvxResId( RID_SVXSTR_FRAMEDIR_SUPER ), SvxFrameDirection::Environment );
-
-    m_pDescriptionED->set_height_request(m_pDescriptionED->get_preferred_size().Height());
+{
+    m_xTextFlowLB->append(SvxFrameDirection::Horizontal_LR_TB, SvxResId(RID_SVXSTR_FRAMEDIR_LTR));
+    m_xTextFlowLB->append(SvxFrameDirection::Horizontal_RL_TB, SvxResId(RID_SVXSTR_FRAMEDIR_RTL));
+    m_xTextFlowLB->append(SvxFrameDirection::Vertical_RL_TB, SvxResId(RID_SVXSTR_PAGEDIR_RTL_VERT));
+    m_xTextFlowLB->append(SvxFrameDirection::Vertical_LR_TB, SvxResId(RID_SVXSTR_PAGEDIR_LTR_VERT));
+    m_xTextFlowLB->append(SvxFrameDirection::Environment, SvxResId(RID_SVXSTR_FRAMEDIR_SUPER));
+    m_xDescriptionED->set_size_request(-1, m_xDescriptionED->get_preferred_size().Height());
 }
 
 SwFrameAddPage::~SwFrameAddPage()
@@ -2926,35 +2921,13 @@ SwFrameAddPage::~SwFrameAddPage()
 
 void SwFrameAddPage::dispose()
 {
-    m_pNameFrame.clear();
-    m_pNameFT.clear();
-    m_pNameED.clear();
-    m_pAltNameFT.clear();
-    m_pAltNameED.clear();
-    m_pPrevFT.clear();
-    m_pPrevLB.clear();
-    m_pNextFT.clear();
-    m_pNextLB.clear();
-    m_pProtectFrame.clear();
-    m_pProtectContentCB.clear();
-    m_pProtectFrameCB.clear();
-    m_pProtectSizeCB.clear();
-    m_pContentAlignFrame.clear();
-    m_pVertAlignLB.clear();
-    m_pPropertiesFrame.clear();
-    m_pEditInReadonlyCB.clear();
-    m_pPrintFrameCB.clear();
-    m_pTextFlowFT.clear();
-    m_pTextFlowLB.clear();
-    m_pDescriptionFT.clear();
-    m_pDescriptionED.clear();
+    m_xTextFlowLB.reset();
     SfxTabPage::dispose();
 }
 
-
 VclPtr<SfxTabPage> SwFrameAddPage::Create(TabPageParent pParent, const SfxItemSet *rSet)
 {
-    return VclPtr<SwFrameAddPage>::Create(pParent.pParent, *rSet);
+    return VclPtr<SwFrameAddPage>::Create(pParent, *rSet);
 }
 
 void SwFrameAddPage::Reset(const SfxItemSet *rSet )

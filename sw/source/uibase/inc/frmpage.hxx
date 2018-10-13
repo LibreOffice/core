@@ -320,7 +320,7 @@ class SwFrameAddPage : public SfxTabPage
     static const sal_uInt16 aAddPgRg[];
 
 public:
-    SwFrameAddPage(vcl::Window *pParent, const SfxItemSet &rSet);
+    SwFrameAddPage(TabPageParent pParent, const SfxItemSet &rSet);
     virtual ~SwFrameAddPage() override;
     virtual void dispose() override;
 

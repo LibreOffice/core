@@ -157,7 +157,7 @@ class SvxParaAlignTabPage : public SfxTabPage
     std::unique_ptr<weld::ComboBox> m_xVertAlignLB;
 
     std::unique_ptr<weld::Widget> m_xPropertiesFL;
-    std::unique_ptr<svx::SvxFrameDirectionListBox>  m_xTextDirectionLB;
+    std::unique_ptr<svx::FrameDirectionListBox>  m_xTextDirectionLB;
 
     DECL_LINK(AlignHdl_Impl, weld::ToggleButton&, void);
     DECL_LINK(LastLineHdl_Impl, weld::ComboBox&, void);
