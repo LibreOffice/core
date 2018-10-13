@@ -37,7 +37,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbStacked;
     std::unique_ptr<weld::Label> m_xFtTextDirection;
     std::unique_ptr<weld::Label> m_xFtABCD;
-    std::unique_ptr<SchTextDirectionListBox> m_xLbTextDirection;
+    std::unique_ptr<TextDirectionListBox> m_xLbTextDirection;
     std::unique_ptr<weld::CustomWeld> m_xCtrlDial;
 
     DECL_LINK(StackedToggleHdl, weld::ToggleButton&, void);

@@ -108,7 +108,7 @@ DataLabelResources::DataLabelResources(weld::Builder* pBuilder, weld::Window* pP
     , m_xFT_Dial(pBuilder->weld_label("CT_LABEL_DIAL"))
     , m_xNF_Degrees(pBuilder->weld_spin_button("NF_LABEL_DEGREES"))
     , m_xBxTextDirection(pBuilder->weld_widget("boxTXT_DIRECTION"))
-    , m_xLB_TextDirection(new SchTextDirectionListBox(pBuilder->weld_combo_box("LB_LABEL_TEXTDIR")))
+    , m_xLB_TextDirection(new TextDirectionListBox(pBuilder->weld_combo_box("LB_LABEL_TEXTDIR")))
     , m_xDC_Dial(new weld::CustomWeld(*pBuilder, "CT_DIAL", m_aDC_Dial))
 {
     m_aDC_Dial.SetText(m_xFT_Dial->get_label());

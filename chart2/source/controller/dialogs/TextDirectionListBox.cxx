@@ -27,7 +27,7 @@
 namespace chart
 {
 
-SchTextDirectionListBox::SchTextDirectionListBox(std::unique_ptr<weld::ComboBox> pControl)
+TextDirectionListBox::TextDirectionListBox(std::unique_ptr<weld::ComboBox> pControl)
     : svx::SvxFrameDirectionListBox(std::move(pControl))
 {
     append(SvxFrameDirection::Horizontal_LR_TB, SchResId(STR_TEXT_DIRECTION_LTR));

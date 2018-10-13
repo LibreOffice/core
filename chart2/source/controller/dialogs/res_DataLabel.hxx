@@ -83,7 +83,7 @@ private:
 
     std::unique_ptr<weld::Widget> m_xBxTextDirection;
 
-    std::unique_ptr<SchTextDirectionListBox> m_xLB_TextDirection;
+    std::unique_ptr<TextDirectionListBox> m_xLB_TextDirection;
     std::unique_ptr<weld::CustomWeld> m_xDC_Dial;
 
     DECL_LINK(NumberFormatDialogHdl, weld::Button&, void );
