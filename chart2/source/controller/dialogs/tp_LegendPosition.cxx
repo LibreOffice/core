@@ -28,16 +28,11 @@
 namespace chart
 {
 
-SchLegendPosTabPage::SchLegendPosTabPage(vcl::Window* pWindow, const SfxItemSet& rInAttrs)
-    : SfxTabPage( pWindow
-                 ,"tp_LegendPosition"
-                 ,"modules/schart/ui/tp_LegendPosition.ui"
-                 , &rInAttrs )
-    , m_aLegendPositionResources(*this)
+SchLegendPosTabPage::SchLegendPosTabPage(TabPageParent pWindow, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pWindow, "modules/schart/ui/tp_LegendPosition.ui", "tp_LegendPosition", &rInAttrs)
+    , m_aLegendPositionResources(*m_xBuilder)
+    , m_xLbTextDirection(new SchTextDirectionListBox(m_xBuilder->weld_combo_box("LB_LEGEND_TEXTDIR")))
 {
-    get(m_pLbTextDirection,"LB_LEGEND_TEXTDIR");
-
-    m_pLbTextDirection->SetDropDownLineCount(3);
 }
 
 SchLegendPosTabPage::~SchLegendPosTabPage()
@@ -47,22 +42,22 @@ SchLegendPosTabPage::~SchLegendPosTabPage()
 
 void SchLegendPosTabPage::dispose()
 {
-    m_pLbTextDirection.clear();
+    m_xLbTextDirection.reset();
     SfxTabPage::dispose();
 }
 
 
-VclPtr<SfxTabPage> SchLegendPosTabPage::Create(TabPageParent pWindow, const SfxItemSet* rOutAttrs)
+VclPtr<SfxTabPage> SchLegendPosTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
 {
-    return VclPtr<SchLegendPosTabPage>::Create(pWindow.pParent, *rOutAttrs);
+    return VclPtr<SchLegendPosTabPage>::Create(pParent, *rOutAttrs);
 }
 
 bool SchLegendPosTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 {
     m_aLegendPositionResources.writeToItemSet(*rOutAttrs);
 
-    if( m_pLbTextDirection->GetSelectedEntryCount() > 0 )
-        rOutAttrs->Put( SvxFrameDirectionItem( m_pLbTextDirection->GetSelectEntryValue(), EE_PARA_WRITINGDIR ) );
+    if (m_xLbTextDirection->get_active() != -1)
+        rOutAttrs->Put(SvxFrameDirectionItem(m_xLbTextDirection->get_active_id(), EE_PARA_WRITINGDIR));
 
     return true;
 }
@@ -73,7 +68,7 @@ void SchLegendPosTabPage::Reset(const SfxItemSet* rInAttrs)
 
     const SfxPoolItem* pPoolItem = nullptr;
     if( rInAttrs->GetItemState( EE_PARA_WRITINGDIR, true, &pPoolItem ) == SfxItemState::SET )
-        m_pLbTextDirection->SelectEntryValue( static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue() );
+        m_xLbTextDirection->set_active_id( static_cast<const SvxFrameDirectionItem*>(pPoolItem)->GetValue() );
 }
 
 } //namespace chart

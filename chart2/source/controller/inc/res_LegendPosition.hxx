@@ -74,6 +74,8 @@ class SchLegendPositionResources final
 {
 
 public:
+    //constructor without Display checkbox
+    SchLegendPositionResources(weld::Builder& rBuilder);
     //constructor inclusive Display checkbox
     SchLegendPositionResources(weld::Builder& rBuilder, const css::uno::Reference<
                        css::uno::XComponentContext>& xCC );
@@ -81,6 +83,11 @@ public:
 
     void writeToResources( const css::uno::Reference< css::frame::XModel >& xChartModel );
     void writeToModel( const css::uno::Reference< css::frame::XModel >& xChartModel ) const;
+
+    void initFromItemSet( const SfxItemSet& rInAttrs );
+    void writeToItemSet( SfxItemSet& rOutAttrs ) const;
+
+    void SetChangeHdl( const Link<LinkParamNone*,void>& rLink );
 
     DECL_LINK(PositionEnableHdl, weld::ToggleButton&, void);
     DECL_LINK(PositionChangeHdl, weld::ToggleButton&, void);
