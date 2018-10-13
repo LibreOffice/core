@@ -3228,8 +3228,6 @@ void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawP
     if( nullptr == mpModel || mpModel->mpDoc == nullptr )
         throw lang::DisposedException();
 
-    SdDrawDocument& rDoc = *mpModel->mpDoc;
-
     SdMasterPage* pSdPage = SdMasterPage::getImplementation( xPage );
     if(pSdPage == nullptr)
         return;
@@ -3245,6 +3243,8 @@ void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawP
     if( pPage->GetPageKind() == PageKind::Standard )
     {
         sal_uInt16 nPage = pPage->GetPageNum();
+
+        SdDrawDocument& rDoc = *mpModel->mpDoc;
 
         SdPage* pNotesPage = static_cast< SdPage* >( rDoc.GetMasterPage( nPage+1 ) );
 
