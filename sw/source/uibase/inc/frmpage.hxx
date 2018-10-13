@@ -200,35 +200,39 @@ public:
     void            EnableVerticalPositioning( bool bEnable );
 };
 
-class SwGrfExtPage: public SfxTabPage
+class SwGrfExtPage : public SfxTabPage
 {
-    // mirror
-    VclPtr<VclContainer>   m_pMirror;
-    VclPtr<CheckBox>       m_pMirrorVertBox;
-    VclPtr<CheckBox>       m_pMirrorHorzBox;
-    VclPtr<RadioButton>    m_pAllPagesRB;
-    VclPtr<RadioButton>    m_pLeftPagesRB;
-    VclPtr<RadioButton>    m_pRightPagesRB;
-    VclPtr<BmpWindow>      m_pBmpWin;
-
-    VclPtr<Edit>           m_pConnectED;
-    VclPtr<PushButton>     m_pBrowseBT;
-
-    // RotGrfFlyFrame: Need Angle and RotateControls now
-    VclPtr<VclFrame>            m_pFlAngle;
-    VclPtr<NumericField>        m_pNfAngle;
-    VclPtr<svx::DialControl>    m_pCtlAngle;
-
     OUString        aFilterName;
     OUString        aGrfName, aNewGrfName;
 
-    std::unique_ptr<::sfx2::FileDialogHelper> pGrfDlg;
+    std::unique_ptr<::sfx2::FileDialogHelper> m_xGrfDlg;
 
-    bool            bHtmlMode;
+    bool            m_bHtmlMode;
+
+    // mirror
+    BmpWindow m_aBmpWin;
+    svx::SvxDialControl m_aCtlAngle;
+    std::unique_ptr<weld::Widget> m_xMirror;
+    std::unique_ptr<weld::CheckButton> m_xMirrorVertBox;
+    std::unique_ptr<weld::CheckButton> m_xMirrorHorzBox;
+    std::unique_ptr<weld::RadioButton> m_xAllPagesRB;
+    std::unique_ptr<weld::RadioButton> m_xLeftPagesRB;
+    std::unique_ptr<weld::RadioButton> m_xRightPagesRB;
+
+    std::unique_ptr<weld::Entry> m_xConnectED;
+    std::unique_ptr<weld::Button> m_xBrowseBT;
+    std::unique_ptr<weld::Frame> m_xLinkFrame;
+
+    // RotGrfFlyFrame: Need Angle and RotateControls now
+    std::unique_ptr<weld::Frame> m_xFlAngle;
+    std::unique_ptr<weld::SpinButton> m_xNfAngle;
+    std::unique_ptr<weld::CustomWeld> m_xCtlAngle;
+    std::unique_ptr<weld::CustomWeld> m_xBmpWin;
+
 
     // handler for mirroring
-    DECL_LINK(MirrorHdl, Button*, void);
-    DECL_LINK(BrowseHdl, Button*, void);
+    DECL_LINK(MirrorHdl, weld::ToggleButton&, void);
+    DECL_LINK(BrowseHdl, weld::Button&, void);
 
     virtual void    ActivatePage(const SfxItemSet& rSet) override;
     virtual ~SwGrfExtPage() override;
@@ -238,7 +242,7 @@ class SwGrfExtPage: public SfxTabPage
     using SfxTabPage::DeactivatePage;
 
 public:
-    SwGrfExtPage(vcl::Window *pParent, const SfxItemSet &rSet);
+    SwGrfExtPage(TabPageParent pParent, const SfxItemSet &rSet);
 
     static VclPtr<SfxTabPage> Create(TabPageParent pParent, const SfxItemSet *rSet);
 
