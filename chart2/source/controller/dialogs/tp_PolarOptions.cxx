@@ -29,20 +29,16 @@
 namespace chart
 {
 
-PolarOptionsTabPage::PolarOptionsTabPage( vcl::Window* pWindow,const SfxItemSet& rInAttrs ) :
-    SfxTabPage( pWindow
-    ,"tp_PolarOptions"
-    ,"modules/schart/ui/tp_PolarOptions.ui"
-    ,&rInAttrs)
+PolarOptionsTabPage::PolarOptionsTabPage(TabPageParent pWindow, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pWindow, "modules/schart/ui/tp_PolarOptions.ui", "tp_PolarOptions", &rInAttrs)
+    , m_xCB_Clockwise(m_xBuilder->weld_check_button("CB_CLOCKWISE"))
+    , m_xFL_StartingAngle(m_xBuilder->weld_frame("frameANGLE"))
+    , m_xNF_StartingAngle(m_xBuilder->weld_spin_button("NF_STARTING_ANGLE"))
+    , m_xFL_PlotOptions(m_xBuilder->weld_frame("framePLOT_OPTIONS"))
+    , m_xCB_IncludeHiddenCells(m_xBuilder->weld_check_button("CB_INCLUDE_HIDDEN_CELLS_POLAR"))
+    , m_xAngleDial(new weld::CustomWeld(*m_xBuilder, "CT_ANGLE_DIAL", m_aAngleDial))
 {
-    get(m_pCB_Clockwise, "CB_CLOCKWISE");
-    get(m_pFL_StartingAngle, "frameANGLE");
-    get(m_pAngleDial, "CT_ANGLE_DIAL");
-    get(m_pNF_StartingAngle, "NF_STARTING_ANGLE");
-    get(m_pFL_PlotOptions, "framePLOT_OPTIONS");
-    get(m_pCB_IncludeHiddenCells, "CB_INCLUDE_HIDDEN_CELLS_POLAR");
-
-    m_pAngleDial->SetLinkedField( m_pNF_StartingAngle );
+    m_aAngleDial.SetLinkedField(m_xNF_StartingAngle.get());
 }
 
 PolarOptionsTabPage::~PolarOptionsTabPage()
@@ -52,33 +48,28 @@ PolarOptionsTabPage::~PolarOptionsTabPage()
 
 void PolarOptionsTabPage::dispose()
 {
-    m_pCB_Clockwise.clear();
-    m_pFL_StartingAngle.clear();
-    m_pAngleDial.clear();
-    m_pNF_StartingAngle.clear();
-    m_pFL_PlotOptions.clear();
-    m_pCB_IncludeHiddenCells.clear();
+    m_xAngleDial.reset();
     SfxTabPage::dispose();
 }
 
-VclPtr<SfxTabPage> PolarOptionsTabPage::Create( TabPageParent pWindow,const SfxItemSet* rOutAttrs )
+VclPtr<SfxTabPage> PolarOptionsTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
 {
-    return VclPtr<PolarOptionsTabPage>::Create( pWindow.pParent, *rOutAttrs );
+    return VclPtr<PolarOptionsTabPage>::Create(pParent, *rOutAttrs);
 }
 
 bool PolarOptionsTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 {
-    if( m_pAngleDial->IsVisible() )
+    if (m_xAngleDial->get_visible())
     {
         rOutAttrs->Put(SfxInt32Item(SCHATTR_STARTING_ANGLE,
-            static_cast< sal_Int32 >(m_pAngleDial->GetRotation()/100)));
+            static_cast< sal_Int32 >(m_aAngleDial.GetRotation()/100)));
     }
 
-    if( m_pCB_Clockwise->IsVisible() )
-        rOutAttrs->Put(SfxBoolItem(SCHATTR_CLOCKWISE,m_pCB_Clockwise->IsChecked()));
+    if( m_xCB_Clockwise->get_visible() )
+        rOutAttrs->Put(SfxBoolItem(SCHATTR_CLOCKWISE,m_xCB_Clockwise->get_active()));
 
-    if (m_pCB_IncludeHiddenCells->IsVisible())
-        rOutAttrs->Put(SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, m_pCB_IncludeHiddenCells->IsChecked()));
+    if (m_xCB_IncludeHiddenCells->get_visible())
+        rOutAttrs->Put(SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, m_xCB_IncludeHiddenCells->get_active()));
 
     return true;
 }
@@ -90,29 +81,29 @@ void PolarOptionsTabPage::Reset(const SfxItemSet* rInAttrs)
     if (rInAttrs->GetItemState(SCHATTR_STARTING_ANGLE, true, &pPoolItem) == SfxItemState::SET)
     {
         long nTmp = static_cast<long>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
-        m_pAngleDial->SetRotation( nTmp*100 );
+        m_aAngleDial.SetRotation( nTmp*100 );
     }
     else
     {
-        m_pFL_StartingAngle->Show(false);
+        m_xFL_StartingAngle->show(false);
     }
     if (rInAttrs->GetItemState(SCHATTR_CLOCKWISE, true, &pPoolItem) == SfxItemState::SET)
     {
         bool bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
-        m_pCB_Clockwise->Check(bCheck);
+        m_xCB_Clockwise->set_active(bCheck);
     }
     else
     {
-        m_pCB_Clockwise->Show(false);
+        m_xCB_Clockwise->show(false);
     }
     if (rInAttrs->GetItemState(SCHATTR_INCLUDE_HIDDEN_CELLS, true, &pPoolItem) == SfxItemState::SET)
     {
         bool bVal = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
-        m_pCB_IncludeHiddenCells->Check(bVal);
+        m_xCB_IncludeHiddenCells->set_active(bVal);
     }
     else
     {
-        m_pFL_PlotOptions->Show(false);
+        m_xFL_PlotOptions->show(false);
     }
 }
 
