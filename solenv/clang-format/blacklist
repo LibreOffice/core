@@ -7287,7 +7287,6 @@ include/svx/objfac3d.hxx
 include/svx/ofaitem.hxx
 include/svx/optgenrl.hxx
 include/svx/optgrid.hxx
-include/svx/orienthelper.hxx
 include/svx/pagectrl.hxx
 include/svx/pageitem.hxx
 include/svx/pagenumberlistbox.hxx
@@ -14226,7 +14225,6 @@ svx/source/dialog/langbox.cxx
 svx/source/dialog/linkwarn.cxx
 svx/source/dialog/measctrl.cxx
 svx/source/dialog/optgrid.cxx
-svx/source/dialog/orienthelper.cxx
 svx/source/dialog/pagectrl.cxx
 svx/source/dialog/pagenumberlistbox.cxx
 svx/source/dialog/papersizelistbox.cxx
