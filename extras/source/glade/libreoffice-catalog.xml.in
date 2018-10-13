@@ -366,9 +366,6 @@
     <glade-widget-class title="Pivot Table Data List" name="sclo-ScPivotLayoutTreeListData"
                         generic-name="Pivot Table Data List" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
-    <glade-widget-class title="Dial Control" name="svxlo-DialControl"
-                        generic-name="Dial Control" parent="GtkSpinner"
-                        icon-name="widget-gtk-spinner"/>
     <glade-widget-class title="Sidebar Dial Control" name="svxlo-SidebarDialControl"
                         generic-name="Sidebar Dial Control" parent="GtkSpinner"
                         icon-name="widget-gtk-spinner"/>
