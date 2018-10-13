@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_FRMDIRLBOX_HXX
 #define INCLUDED_SVX_FRMDIRLBOX_HXX
 
-#include <vcl/lstbox.hxx>
 #include <vcl/weld.hxx>
 #include <editeng/frmdir.hxx>
 #include <svx/svxdllapi.h>
@@ -29,39 +28,18 @@ class SvxFrameDirectionItem;
 
 namespace svx {
 
-
 /** This listbox contains entries to select horizontal text direction.
 
     The control works on the SvxFrameDirection enumeration (i.e. left-to-right,
     right-to-left), used i.e. in conjunction with the SvxFrameDirectionItem.
  */
-class SAL_WARN_UNUSED SVX_DLLPUBLIC FrameDirectionListBox : public ListBox
-{
-public:
-    explicit            FrameDirectionListBox( vcl::Window* pParent, WinBits nBits );
-
-    /** Inserts a string with corresponding direction enum into the listbox. */
-    void                InsertEntryValue(
-                            const OUString& rString,
-                            SvxFrameDirection eDirection );
-
-    /** Selects the specified frame direction. */
-    void                SelectEntryValue( SvxFrameDirection eDirection );
-    /** Returns the currently selected frame direction. */
-    SvxFrameDirection   GetSelectEntryValue() const;
-};
-
-
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFrameDirectionListBox
+class SAL_WARN_UNUSED SVX_DLLPUBLIC FrameDirectionListBox
 {
 private:
     std::unique_ptr<weld::ComboBox> m_xControl;
 public:
-    explicit SvxFrameDirectionListBox(std::unique_ptr<weld::ComboBox> pControl)
-        : m_xControl(std::move(pControl))
-    {
-    }
-
+    explicit FrameDirectionListBox(std::unique_ptr<weld::ComboBox> pControl);
+    virtual ~FrameDirectionListBox();
     bool get_visible() const { return m_xControl->get_visible(); }
     void save_value() { m_xControl->save_value(); }
     bool get_value_changed_from_saved() const { return m_xControl->get_value_changed_from_saved(); }

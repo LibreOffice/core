@@ -18,59 +18,15 @@
  */
 
 #include <svx/frmdirlbox.hxx>
-#include <vcl/builderfactory.hxx>
 
-namespace svx {
-
-namespace {
-
-void* lclEnumToVoid( SvxFrameDirection eDirection )
+namespace svx
 {
-    return reinterpret_cast< void* >( static_cast< sal_uInt32 >( eDirection ) );
-}
-
-SvxFrameDirection lclVoidToEnum( void* pDirection )
-{
-    return static_cast< SvxFrameDirection >( reinterpret_cast< sal_IntPtr >( pDirection ) );
-}
-
-} // namespace
-
-FrameDirectionListBox::FrameDirectionListBox( vcl::Window* pParent, WinBits nBits )
-    : ListBox(pParent, nBits)
+FrameDirectionListBox::FrameDirectionListBox(std::unique_ptr<weld::ComboBox> pControl)
+    : m_xControl(std::move(pControl))
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void makeFrameDirectionListBox(VclPtr<vcl::Window> & rRet, VclPtr<vcl::Window> & pParent, VclBuilder::stringmap &)
-{
-    VclPtrInstance<FrameDirectionListBox> pListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK|WB_TABSTOP);
-    pListBox->EnableAutoSize(true);
-    rRet = pListBox;
-}
-
-void FrameDirectionListBox::InsertEntryValue( const OUString& rString, SvxFrameDirection eDirection )
-{
-    sal_Int32 nRealPos = InsertEntry( rString );
-    SetEntryData( nRealPos, lclEnumToVoid( eDirection ) );
-}
-
-void FrameDirectionListBox::SelectEntryValue( SvxFrameDirection eDirection )
-{
-    sal_Int32 nPos = GetEntryPos( lclEnumToVoid( eDirection ) );
-    if( nPos == LISTBOX_ENTRY_NOTFOUND )
-        SetNoSelection();
-    else
-        SelectEntryPos( nPos );
-}
-
-SvxFrameDirection FrameDirectionListBox::GetSelectEntryValue() const
-{
-    sal_Int32 nPos = GetSelectedEntryPos();
-    if( nPos == LISTBOX_ENTRY_NOTFOUND )
-        return static_cast< SvxFrameDirection >( 0xFFFF );
-    return lclVoidToEnum( GetEntryData( nPos ) );
-}
-
+FrameDirectionListBox::~FrameDirectionListBox() {}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

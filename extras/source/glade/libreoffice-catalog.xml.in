@@ -271,9 +271,6 @@
     <glade-widget-class title="Assign Fields Control" name="swuilo-SwAssignFieldsControl"
                         generic-name="Assign Fields Control" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Frame Direction ListBox" name="svxlo-FrameDirectionListBox"
-                        generic-name="FrameDirectionListBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Chart Light Button" name="chartcontrollerlo-LightButton"
                         generic-name="ChartLightButton" parent="GtkButton"
                         icon-name="widget-gtk-button"/>

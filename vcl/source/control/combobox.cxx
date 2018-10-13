@@ -1294,6 +1294,11 @@ void ComboBox::SetSeparatorPos( sal_Int32 n )
     m_pImpl->m_pImplLB->SetSeparatorPos( n );
 }
 
+void ComboBox::AddSeparator( sal_Int32 n )
+{
+    m_pImpl->m_pImplLB->AddSeparator( n );
+}
+
 void ComboBox::SetMRUEntries( const OUString& rEntries )
 {
     m_pImpl->m_pImplLB->SetMRUEntries( rEntries, ';' );
