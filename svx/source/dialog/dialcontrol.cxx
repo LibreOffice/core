@@ -262,8 +262,6 @@ DialControl::DialControl( vcl::Window* pParent, WinBits nBits ) :
     Init( GetOutputSizePixel() );
 }
 
-VCL_BUILDER_FACTORY_ARGS(DialControl, WB_TABSTOP)
-
 void DialControl::Resize()
 {
     mpImpl->SetSize(GetOutputSizePixel());
