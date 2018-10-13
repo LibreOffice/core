@@ -20,10 +20,9 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_TP_AXISLABEL_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
 #include <svx/dialcontrol.hxx>
-#include <svx/orienthelper.hxx>
+#include <vcl/customweld.hxx>
+#include <vcl/weld.hxx>
 #include <TextDirectionListBox.hxx>
 
 namespace chart
@@ -32,28 +31,6 @@ namespace chart
 class SchAxisLabelTabPage : public SfxTabPage
 {
 private:
-    VclPtr<CheckBox>            m_pCbShowDescription;
-
-    VclPtr<FixedText>           m_pFlOrder;
-    VclPtr<RadioButton>         m_pRbSideBySide;
-    VclPtr<RadioButton>         m_pRbUpDown;
-    VclPtr<RadioButton>         m_pRbDownUp;
-    VclPtr<RadioButton>         m_pRbAuto;
-
-    VclPtr<FixedText>           m_pFlTextFlow;
-    VclPtr<CheckBox>            m_pCbTextOverlap;
-    VclPtr<CheckBox>            m_pCbTextBreak;
-    VclPtr<FixedText>           m_pFtABCD;
-    VclPtr<FixedText>           m_pFlOrient;
-    VclPtr<svx::DialControl>    m_pCtrlDial;
-    VclPtr<FixedText>           m_pFtRotate;
-    VclPtr<NumericField>        m_pNfRotate;
-    VclPtr<TriStateBox>         m_pCbStacked;
-    std::unique_ptr<svx::OrientationHelper> m_pOrientHlp;
-
-    VclPtr<FixedText>               m_pFtTextDirection;
-    VclPtr<TextDirectionListBox>    m_pLbTextDirection;
-
     bool                m_bShowStaggeringControls;
 
     sal_Int32           m_nInitialDegrees;
@@ -62,10 +39,30 @@ private:
     bool                m_bHasInitialStacking;      /// false = checkbox in tristate
     bool                m_bComplexCategories;
 
-    DECL_LINK ( ToggleShowLabel, Button*, void );
+    svx::SvxDialControl m_aCtrlDial;
+    std::unique_ptr<weld::CheckButton> m_xCbShowDescription;
+    std::unique_ptr<weld::Label> m_xFlOrder;
+    std::unique_ptr<weld::RadioButton> m_xRbSideBySide;
+    std::unique_ptr<weld::RadioButton> m_xRbUpDown;
+    std::unique_ptr<weld::RadioButton> m_xRbDownUp;
+    std::unique_ptr<weld::RadioButton> m_xRbAuto;
+    std::unique_ptr<weld::Label> m_xFlTextFlow;
+    std::unique_ptr<weld::CheckButton> m_xCbTextOverlap;
+    std::unique_ptr<weld::CheckButton> m_xCbTextBreak;
+    std::unique_ptr<weld::Label> m_xFtABCD;
+    std::unique_ptr<weld::Label> m_xFlOrient;
+    std::unique_ptr<weld::Label> m_xFtRotate;
+    std::unique_ptr<weld::SpinButton> m_xNfRotate;
+    std::unique_ptr<weld::CheckButton> m_xCbStacked;
+    std::unique_ptr<weld::Label> m_xFtTextDirection;
+    std::unique_ptr<SchTextDirectionListBox> m_xLbTextDirection;
+    std::unique_ptr<weld::CustomWeld> m_xCtrlDial;
+
+    DECL_LINK(StackedToggleHdl, weld::ToggleButton&, void);
+    DECL_LINK(ToggleShowLabel, weld::ToggleButton&, void);
 
 public:
-    SchAxisLabelTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
+    SchAxisLabelTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SchAxisLabelTabPage() override;
     virtual void dispose() override;
 
