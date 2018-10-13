@@ -240,6 +240,17 @@ void LegendPositionResources::SetChangeHdl( const Link<LinkParamNone*,void>& rLi
     m_aChangeLink = rLink;
 }
 
+SchLegendPositionResources::SchLegendPositionResources(weld::Builder& rBuilder)
+    : m_xCC() // unused in this scenario
+    , m_xCbxShow() // unused in this scenario, assumed to be visible
+    , m_xRbtLeft(rBuilder.weld_radio_button("left"))
+    , m_xRbtRight(rBuilder.weld_radio_button("right"))
+    , m_xRbtTop(rBuilder.weld_radio_button("top"))
+    , m_xRbtBottom(rBuilder.weld_radio_button("bottom"))
+{
+    impl_setRadioButtonToggleHdl();
+}
+
 SchLegendPositionResources::SchLegendPositionResources(weld::Builder& rBuilder,
     const uno::Reference< uno::XComponentContext >& xCC)
     : m_xCC(xCC)
@@ -367,6 +378,54 @@ IMPL_LINK_NOARG(SchLegendPositionResources, PositionEnableHdl, weld::ToggleButto
     m_aChangeLink.Call(nullptr);
 }
 
+void SchLegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )
+{
+    const SfxPoolItem* pPoolItem = nullptr;
+    if( rInAttrs.GetItemState( SCHATTR_LEGEND_POS, true, &pPoolItem ) == SfxItemState::SET )
+    {
+        chart2::LegendPosition nLegendPosition = static_cast<chart2::LegendPosition>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
+        switch( nLegendPosition )
+        {
+            case chart2::LegendPosition_LINE_START:
+                m_xRbtLeft->set_active(true);
+                break;
+            case chart2::LegendPosition_PAGE_START:
+                m_xRbtTop->set_active(true);
+                break;
+            case chart2::LegendPosition_LINE_END:
+                m_xRbtRight->set_active(true);
+                break;
+            case chart2::LegendPosition_PAGE_END:
+                m_xRbtBottom->set_active(true);
+                break;
+            default:
+                break;
+        }
+    }
+
+    if (m_xCbxShow && rInAttrs.GetItemState( SCHATTR_LEGEND_SHOW, true, &pPoolItem ) == SfxItemState::SET)
+    {
+        bool bShow = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
+        m_xCbxShow->set_active(bShow);
+    }
+}
+
+void SchLegendPositionResources::writeToItemSet( SfxItemSet& rOutAttrs ) const
+{
+    chart2::LegendPosition nLegendPosition = chart2::LegendPosition_CUSTOM;
+    if( m_xRbtLeft->get_active() )
+        nLegendPosition = chart2::LegendPosition_LINE_START;
+    else if( m_xRbtTop->get_active() )
+        nLegendPosition = chart2::LegendPosition_PAGE_START;
+    else if( m_xRbtRight->get_active() )
+        nLegendPosition = chart2::LegendPosition_LINE_END;
+    else if( m_xRbtBottom->get_active() )
+        nLegendPosition = chart2::LegendPosition_PAGE_END;
+    rOutAttrs.Put( SfxInt32Item(SCHATTR_LEGEND_POS, static_cast<sal_Int32>(nLegendPosition) ) );
+
+    rOutAttrs.Put( SfxBoolItem(SCHATTR_LEGEND_SHOW, !m_xCbxShow || m_xCbxShow->get_active()) );
+}
+
 IMPL_LINK(SchLegendPositionResources, PositionChangeHdl, weld::ToggleButton&, rRadio, void )
 {
     //for each radio click there are coming two change events
@@ -374,6 +433,11 @@ IMPL_LINK(SchLegendPositionResources, PositionChangeHdl, weld::ToggleButton&, rR
     //the second call gives the check of the new button
     if (rRadio.get_active())
         m_aChangeLink.Call(nullptr);
+}
+
+void SchLegendPositionResources::SetChangeHdl( const Link<LinkParamNone*,void>& rLink )
+{
+    m_aChangeLink = rLink;
 }
 
 } //namespace chart
