@@ -661,6 +661,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
             if (GetProperty(rXPropSet, "LineDash"))
             {
                 aLineDash = mAny.get<drawing::LineDash>();
+                //this query is good for shapes, but in the case of charts it returns 0 values
                 if (aLineDash.Dots == 0 && aLineDash.DotLen == 0 && aLineDash.Dashes == 0 && aLineDash.DashLen == 0 && aLineDash.Distance == 0) {
                     OUString aLineDashName;
                     GET(aLineDashName, LineDashName);
@@ -734,31 +735,12 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         int relDotLen = nLineWidth ? aLineDash.DotLen / nLineWidth : 0;
         int relDashLen = nLineWidth ? aLineDash.DashLen / nLineWidth : 0;
         int relDistance = nLineWidth ? aLineDash.Distance / nLineWidth : 0;
-        // fixing relative values in the case of mso preset linewidths
-        //todo: fix relDotLen, relDashLen and relDistance in every case of 0-1 linewidth
-        switch (nLineWidth)
+        // fixing relative values in the case of linewidths smaller than 1 pt
+        if (0 < nLineWidth && nLineWidth < 35) //35 HMM == 1 pt
         {
-        case 9: // 1/4 pt
-            {
-            relDotLen = relDotLen ? (relDotLen + 1) / 4 : 0;
-            relDashLen = relDashLen ? (relDashLen + 1) / 4 : 0;
-            relDistance = relDistance ? (relDistance + 1) / 4 : 0;
-            break;
-            }
-        case 18: // 1/2 pt
-            {
-            relDotLen = relDotLen ? (relDotLen + 1) / 2 : 0;
-            relDashLen = relDashLen ? (relDashLen + 1) / 2 : 0;
-            relDistance = relDistance ? (relDistance + 1) / 2 : 0;
-            break;
-            }
-        case 26: // 3/4 pt
-            {
-            relDotLen = relDotLen ? (relDotLen + 1) * 3 / 4 : 0;
-            relDashLen = relDashLen ? (relDashLen + 1) * 3 / 4 : 0;
-            relDistance = relDistance ? (relDistance + 1) *3 / 4 : 0;
-            break;
-            }
+            relDotLen = relDotLen ? (relDotLen + 1) * (nLineWidth * 360.0 / 12700) : 0;
+            relDashLen = relDashLen ? (relDashLen + 1) * (nLineWidth * 360.0 / 12700) : 0;
+            relDistance = relDistance ? (relDistance + 1) * (nLineWidth * 360.0 / 12700) : 0;
         }
         // keep default mso preset linestyles (instead of custdash)
         if (aLineDash.Dots == 1 && relDotLen == 1 && aLineDash.Dashes == 0 && relDashLen == 0 && relDistance == 3)
