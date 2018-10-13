@@ -111,6 +111,11 @@ public:
 
     void            SetSeparatorPos( sal_Int32  n );
 
+    /**
+     * Adds a new separator at the given position n.
+     */
+    void            AddSeparator( sal_Int32 n );
+
     void            EnableAutocomplete( bool bEnable, bool bMatchCase = false );
     bool            IsAutocompleteEnabled() const;
 

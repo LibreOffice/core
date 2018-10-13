@@ -281,32 +281,6 @@ public:
 
 class SwFrameAddPage : public SfxTabPage
 {
-    VclPtr<VclContainer> m_pNameFrame;
-    VclPtr<FixedText>    m_pNameFT;
-    VclPtr<Edit>         m_pNameED;
-    VclPtr<FixedText>    m_pAltNameFT;
-    VclPtr<Edit>         m_pAltNameED;
-    VclPtr<FixedText>    m_pDescriptionFT;
-    VclPtr<Edit>         m_pDescriptionED;
-    VclPtr<FixedText>    m_pPrevFT;
-    VclPtr<ListBox>      m_pPrevLB;
-    VclPtr<FixedText>    m_pNextFT;
-    VclPtr<ListBox>      m_pNextLB;
-
-    VclPtr<VclContainer> m_pProtectFrame;
-    VclPtr<CheckBox>     m_pProtectContentCB;
-    VclPtr<CheckBox>     m_pProtectFrameCB;
-    VclPtr<CheckBox>     m_pProtectSizeCB;
-
-    VclPtr<VclContainer> m_pContentAlignFrame;
-    VclPtr<ListBox>      m_pVertAlignLB;
-
-    VclPtr<VclContainer> m_pPropertiesFrame;
-    VclPtr<CheckBox>     m_pEditInReadonlyCB;
-    VclPtr<CheckBox>     m_pPrintFrameCB;
-    VclPtr<FixedText>    m_pTextFlowFT;
-    VclPtr<svx::FrameDirectionListBox>      m_pTextFlowLB;
-
     SwWrtShell*   m_pWrtSh;
 
     OUString      m_sDlgType;
@@ -314,13 +288,39 @@ class SwFrameAddPage : public SfxTabPage
     bool      m_bFormat;
     bool      m_bNew;
 
-    DECL_LINK(EditModifyHdl, Edit&, void);
-    DECL_LINK(ChainModifyHdl, ListBox&, void);
+    std::unique_ptr<weld::Widget> m_xNameFrame;
+    std::unique_ptr<weld::Label> m_xNameFT;
+    std::unique_ptr<weld::Entry> m_xNameED;
+    std::unique_ptr<weld::Label> m_xAltNameFT;
+    std::unique_ptr<weld::Entry> m_xAltNameED;
+    std::unique_ptr<weld::Label> m_xDescriptionFT;
+    std::unique_ptr<weld::Entry> m_xDescriptionED;
+    std::unique_ptr<weld::Label> m_xPrevFT;
+    std::unique_ptr<weld::ComboBox> m_xPrevLB;
+    std::unique_ptr<weld::Label> m_xNextFT;
+    std::unique_ptr<weld::ComboBox> m_xNextLB;
+
+    std::unique_ptr<weld::Widget> m_xProtectFrame;
+    std::unique_ptr<weld::CheckButton> m_xProtectContentCB;
+    std::unique_ptr<weld::CheckButton> m_xProtectFrameCB;
+    std::unique_ptr<weld::CheckButton> m_xProtectSizeCB;
+
+    std::unique_ptr<weld::Widget> m_xContentAlignFrame;
+    std::unique_ptr<weld::ComboBox> m_xVertAlignLB;
+
+    std::unique_ptr<weld::Widget> m_xPropertiesFrame;
+    std::unique_ptr<weld::CheckButton> m_xEditInReadonlyCB;
+    std::unique_ptr<weld::CheckButton> m_xPrintFrameCB;
+    std::unique_ptr<weld::Label> m_xTextFlowFT;
+    std::unique_ptr<svx::FrameDirectionListBox> m_xTextFlowLB;
+
+    DECL_LINK(EditModifyHdl, weld::Entry&, void);
+    DECL_LINK(ChainModifyHdl, weld::ComboBox&, void);
 
     static const sal_uInt16 aAddPgRg[];
 
 public:
-    SwFrameAddPage(vcl::Window *pParent, const SfxItemSet &rSet);
+    SwFrameAddPage(TabPageParent pParent, const SfxItemSet &rSet);
     virtual ~SwFrameAddPage() override;
     virtual void dispose() override;
 

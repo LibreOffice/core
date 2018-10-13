@@ -2399,6 +2399,12 @@ public:
             m_xComboBox->SetEntryData(nInsertedAt, new OUString(*pId));
     }
 
+    virtual void insert_separator(int pos) override
+    {
+        auto nInsertPos = pos == -1 ? m_xComboBox->GetEntryCount() : pos;
+        m_xComboBox->AddSeparator(nInsertPos);
+    }
+
     virtual bool has_entry() const override
     {
         return false;
@@ -2496,6 +2502,12 @@ public:
             m_xComboBox->SetEntryData(nInsertedAt, new OUString(*pId));
     }
 
+    virtual void insert_separator(int pos) override
+    {
+        auto nInsertPos = pos == -1 ? m_xComboBox->GetEntryCount() : pos;
+        m_xComboBox->AddSeparator(nInsertPos);
+    }
+
     virtual void set_entry_text(const OUString& rText) override
     {
         m_xComboBox->SetText(rText);
@@ -2560,6 +2572,11 @@ public:
         Edit& rEntry = m_pEntry->getEntry();
         rEntry.SetAutocompleteHdl(LINK(this, SalInstanceEntryTreeView, AutocompleteHdl));
         rEntry.AddEventListener(LINK(this, SalInstanceEntryTreeView, KeyPressListener));
+    }
+
+    virtual void insert_separator(int /*pos*/) override
+    {
+        assert(false);
     }
 
     virtual void make_sorted() override
