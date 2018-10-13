@@ -20,12 +20,12 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_BMPWIN_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_BMPWIN_HXX
 
-#include <vcl/graph.hxx>
+#include <vcl/customweld.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/window.hxx>
+#include <vcl/graph.hxx>
 
 // extended page for graphics
-class BmpWindow : public vcl::Window
+class BmpWindow : public weld::CustomWidgetController
 {
 private:
     Graphic     aGraphic;
@@ -37,10 +37,10 @@ private:
 
     virtual void Paint(vcl::RenderContext& /*rRenderContext*/, const tools::Rectangle& rRect) override;
 
-    virtual Size GetOptimalSize() const override;
+    virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
 
 public:
-    BmpWindow(vcl::Window* pPar, WinBits nStyle);
+    BmpWindow();
     virtual ~BmpWindow() override;
     void MirrorVert(bool bMirror) { bVert = bMirror; Invalidate(); }
     void MirrorHorz(bool bMirror) { bHorz = bMirror; Invalidate(); }

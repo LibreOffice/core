@@ -44,6 +44,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
+                    <property name="activates_default">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -147,7 +148,6 @@
                     <property name="xalign">0</property>
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">leftpages</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -164,7 +164,7 @@
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
-                    <property name="group">rightpages</property>
+                    <property name="group">allpages</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -193,7 +193,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="swuilo-BmpWindow" id="preview">
+                      <object class="GtkDrawingArea" id="preview">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                       </object>
@@ -311,11 +311,25 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-DialControl" id="CTL_ANGLE">
+                      <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="tooltip_text" translatable="yes" context="picturepage|CTL_ANGLE|tooltip_text">Rotation Angle</property>
+                        <property name="can_focus">True</property>
                         <property name="halign">center</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkViewport">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkDrawingArea" id="CTL_ANGLE">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
+                                <property name="tooltip_text" translatable="yes" context="picturepage|CTL_ANGLE|tooltip_text">Rotation Angle</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
