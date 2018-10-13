@@ -69,6 +69,17 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules):
     if include == "boost/intrusive_ptr.hpp" and "boost/smart_ptr/intrusive_ptr.hpp" in toAdd:
         return True
 
+    # Avoid .hxx to .h proposals in basic css/uno/* API
+    unoapi = {
+        "com/sun/star/uno/Any.hxx": "com/sun/star/uno/Any.h",
+        "com/sun/star/uno/Reference.hxx": "com/sun/star/uno/Reference.h",
+        "com/sun/star/uno/Sequence.hxx": "com/sun/star/uno/Sequence.h",
+        "com/sun/star/uno/Type.hxx": "com/sun/star/uno/Type.h"
+    }
+    for k, v in unoapi.items():
+        if include == k and v in toAdd:
+            return True
+
     # 3rd-party, non-self-contained headers.
     if include == "libepubgen/libepubgen.h" and "libepubgen/libepubgen-decls.h" in toAdd:
         return True
