@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_5ee6cc18",
+        "filename": "vcl/qt5/Qt5Graphics_GDI.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-10-13T06:50:54Z",
+      "side": 1,
+      "message": "Could be removed since it\u0027s used once",
+      "range": {
+        "startLine": 105,
+        "startChar": 14,
+        "endLine": 105,
+        "endChar": 24
+      },
+      "revId": "07e87ded178e1d426183cfa1a21109e186c068f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_debbfce2",
+        "filename": "vcl/source/outdev/polygon.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-10-13T06:50:54Z",
+      "side": 1,
+      "message": "bSuccess shouldn\u0027t be tested inside the loop?",
+      "range": {
+        "startLine": 97,
+        "startChar": 16,
+        "endLine": 97,
+        "endChar": 54
+      },
+      "revId": "07e87ded178e1d426183cfa1a21109e186c068f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
