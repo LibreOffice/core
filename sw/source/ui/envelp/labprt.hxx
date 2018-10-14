@@ -21,7 +21,6 @@
 
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
-#include <vcl/group.hxx>
 #include <vcl/layout.hxx>
 #include <sfx2/tabdlg.hxx>
 

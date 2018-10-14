@@ -16,7 +16,6 @@
 #include "anyrefdg.hxx"
 
 #include <vcl/fixed.hxx>
-#include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
 
 #include <boost/optional.hpp>

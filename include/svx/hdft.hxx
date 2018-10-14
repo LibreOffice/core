@@ -24,7 +24,6 @@
 #include <vcl/customweld.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-#include <vcl/group.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 

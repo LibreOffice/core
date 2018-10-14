@@ -22,7 +22,6 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/pageitem.hxx>
-#include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/timer.hxx>

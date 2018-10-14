@@ -23,7 +23,6 @@
 #include <svtools/svmedit.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/group.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/scrbar.hxx>

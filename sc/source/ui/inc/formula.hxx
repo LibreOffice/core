@@ -24,7 +24,6 @@
 #include "anyrefdg.hxx"
 #include <global.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/group.hxx>
 #include <svtools/svmedit.hxx>
 #include <vcl/tabpage.hxx>
 

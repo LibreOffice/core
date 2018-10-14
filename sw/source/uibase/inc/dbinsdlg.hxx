@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DBINSDLG_HXX
 
 #include <vcl/button.hxx>
-#include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/layout.hxx>

@@ -25,7 +25,6 @@
 #include "anyrefdg.hxx"
 
 #include <vcl/fixed.hxx>
-#include <vcl/group.hxx>
 
 enum ScSolverErr
     {

@@ -24,7 +24,6 @@
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
-#include <vcl/group.hxx>
 #include <svtools/treelistbox.hxx>
 
 #include <numfmtlb.hxx>

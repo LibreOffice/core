@@ -22,7 +22,6 @@
 #include <memory>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/field.hxx>
-#include <vcl/group.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <svtools/svtabbx.hxx>

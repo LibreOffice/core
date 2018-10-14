@@ -21,7 +21,6 @@
 
 #include <sfx2/tabdlg.hxx>
 
-#include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>

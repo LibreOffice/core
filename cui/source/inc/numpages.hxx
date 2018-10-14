@@ -24,7 +24,6 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <svx/Palette.hxx>
-#include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/lstbox.hxx>

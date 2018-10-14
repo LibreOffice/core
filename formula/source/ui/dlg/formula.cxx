@@ -26,7 +26,6 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/group.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/idle.hxx>

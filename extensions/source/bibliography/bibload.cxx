@@ -49,7 +49,6 @@
 #include <vcl/window.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/group.hxx>
 #include <svtools/svmedit.hxx>
 
 #include "bibresid.hxx"

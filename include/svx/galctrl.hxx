@@ -22,7 +22,6 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/group.hxx>
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menu.hxx>

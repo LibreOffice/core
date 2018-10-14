@@ -16,7 +16,6 @@
 #include "anyrefdg.hxx"
 
 #include <vcl/fixed.hxx>
-#include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
 
 class ScStatisticsInputOutputDialog : public ScAnyRefDlg

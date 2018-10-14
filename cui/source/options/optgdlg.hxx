@@ -20,7 +20,6 @@
 #define INCLUDED_CUI_SOURCE_OPTIONS_OPTGDLG_HXX
 #include <memory>
 #include <vcl/lstbox.hxx>
-#include <vcl/group.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <sfx2/tabdlg.hxx>

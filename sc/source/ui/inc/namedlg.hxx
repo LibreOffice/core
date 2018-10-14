@@ -22,7 +22,6 @@
 
 #include <vcl/morebtn.hxx>
 #include <vcl/combobox.hxx>
-#include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
