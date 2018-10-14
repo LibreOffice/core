@@ -85,13 +85,7 @@ OpenJDK at least, but probably not true for Lemotes JDK */
 class MalformedVersionException : public std::exception
 {
 public:
-    MalformedVersionException();
-
-    MalformedVersionException(const MalformedVersionException &);
-
     virtual ~MalformedVersionException() override;
-
-    MalformedVersionException & operator =(const MalformedVersionException &);
 };
 
 class VendorBase: public salhelper::SimpleReferenceObject

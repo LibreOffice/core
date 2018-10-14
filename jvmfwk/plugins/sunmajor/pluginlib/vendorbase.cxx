@@ -31,23 +31,7 @@ using namespace osl;
 namespace jfw_plugin
 {
 
-MalformedVersionException::MalformedVersionException()
-{}
-
-MalformedVersionException::MalformedVersionException(
-    const MalformedVersionException & )
-{}
-
-MalformedVersionException::~MalformedVersionException()
-{}
-
-MalformedVersionException &
-MalformedVersionException::operator =(
-    const MalformedVersionException &)
-{
-    return *this;
-}
-
+MalformedVersionException::~MalformedVersionException() = default;
 
 VendorBase::VendorBase(): m_bAccessibility(false)
 {
