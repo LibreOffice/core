@@ -117,11 +117,6 @@ SdrUndoGroup::~SdrUndoGroup()
 {
 }
 
-void SdrUndoGroup::Clear()
-{
-    maActions.clear();
-}
-
 void SdrUndoGroup::AddAction(std::unique_ptr<SdrUndoAction> pAct)
 {
     maActions.push_back(std::move(pAct));

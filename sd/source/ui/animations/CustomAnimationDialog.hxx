@@ -143,8 +143,6 @@ public:
                                 const OUString& rPresetId,
                                 const Link<LinkParamNone*,void>& rModifyHdl );
 
-    sal_Int32 getControlType() const { return mnType; }
-
 protected:
     std::unique_ptr<weld::Builder> mxBuilder;
     std::unique_ptr<weld::Container> mxContainer;

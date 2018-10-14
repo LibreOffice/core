@@ -103,7 +103,6 @@ public:
 
     void executeAction(Action& ac) const;
     void executeColumnAction(ScDocument& rDoc, ColumnAction& ac) const;
-    void executeColumnAction(ScDocument& rDoc, ColumnAction& ac, double& fMem) const;
 };
 
 /**
@@ -162,7 +161,6 @@ class RangeColumnSpanSet
 public:
     RangeColumnSpanSet( const ScRange& spanRange )
          : range( spanRange ) {}
-    void executeAction(ScDocument& rDoc, sc::ColumnSpanSet::Action& ac) const;
     void executeColumnAction(ScDocument& rDoc, sc::ColumnSpanSet::ColumnAction& ac) const;
     void executeColumnAction(ScDocument& rDoc, sc::ColumnSpanSet::ColumnAction& ac, double& fMem) const;
 private:
