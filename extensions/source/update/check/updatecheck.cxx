@@ -84,7 +84,7 @@ OUString getReleaseNote(const UpdateInfo& rInfo, sal_uInt8 pos, bool autoDownloa
 namespace
 {
 
-inline OUString getBuildId()
+OUString getBuildId()
 {
     OUString aPathVal("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version") ":buildid}");
     rtl::Bootstrap::expandMacros(aPathVal);
@@ -93,7 +93,7 @@ inline OUString getBuildId()
 
 
 #if (defined LINUX || defined __sun)
-inline OUString getBaseInstallation()
+OUString getBaseInstallation()
 {
     OUString aPathVal("$BRAND_BASE_DIR");
     rtl::Bootstrap::expandMacros(aPathVal);
@@ -102,7 +102,7 @@ inline OUString getBaseInstallation()
 #endif
 
 
-inline bool isObsoleteUpdateInfo(const OUString& rBuildId)
+bool isObsoleteUpdateInfo(const OUString& rBuildId)
 {
     return rBuildId != getBuildId() && !rBuildId.isEmpty();
 }

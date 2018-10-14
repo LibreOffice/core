@@ -91,7 +91,7 @@ static void openFile( OutData& out )
 }
 
 
-static inline OString
+static OString
 getStringValue(const uno::Reference< container::XNameAccess >& xNameAccess, const OUString& aName)
 {
     OSL_ASSERT(xNameAccess->hasByName(aName));
@@ -101,7 +101,7 @@ getStringValue(const uno::Reference< container::XNameAccess >& xNameAccess, cons
 }
 
 
-static inline sal_Int32
+static sal_Int32
 getInt32Value(const uno::Reference< container::XNameAccess >& xNameAccess,
                     const OUString& aName)
 {
