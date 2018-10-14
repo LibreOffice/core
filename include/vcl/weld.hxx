@@ -309,6 +309,8 @@ public:
     {
         insert(-1, rStr, &rId, nullptr, &rImage);
     }
+    virtual void insert_separator(int pos) = 0;
+    void append_separator() { insert_separator(-1); }
 
     virtual int get_count() const = 0;
     virtual void make_sorted() = 0;

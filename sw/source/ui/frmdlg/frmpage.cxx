@@ -437,30 +437,29 @@ static size_t lcl_GetFrameMapCount( const FrameMap* pMap)
     return 0;
 }
 
-static void lcl_InsertVectors(ListBox& rBox,
+static void lcl_InsertVectors(weld::ComboBox& rBox,
     const std::vector< OUString >& rPrev, const std::vector< OUString >& rThis,
     const std::vector< OUString >& rNext, const std::vector< OUString >& rRemain)
 {
     std::vector< OUString >::const_iterator aIt;
-    sal_Int32 nEntry = 0;
     for(aIt = rPrev.begin(); aIt != rPrev.end(); ++aIt)
-        nEntry = rBox.InsertEntry(*aIt);
+        rBox.append_text(*aIt);
     for(aIt = rThis.begin(); aIt != rThis.end(); ++aIt)
-        nEntry = rBox.InsertEntry(*aIt);
+        rBox.append_text(*aIt);
     for(aIt = rNext.begin(); aIt != rNext.end(); ++aIt)
-        nEntry = rBox.InsertEntry(*aIt);
-    rBox.SetSeparatorPos(nEntry);
+        rBox.append_text(*aIt);
+    rBox.append_separator();
     //now insert all strings sorted
-    const sal_Int32 nStartPos = rBox.GetEntryCount();
+    const auto nStartPos = rBox.get_count();
 
     for(aIt = rPrev.begin(); aIt != rPrev.end(); ++aIt)
-        ::InsertStringSorted(*aIt, rBox, nStartPos );
+        ::InsertStringSorted("", *aIt, rBox, nStartPos );
     for(aIt = rThis.begin(); aIt != rThis.end(); ++aIt)
-        ::InsertStringSorted(*aIt, rBox, nStartPos );
+        ::InsertStringSorted("", *aIt, rBox, nStartPos );
     for(aIt = rNext.begin(); aIt != rNext.end(); ++aIt)
-        ::InsertStringSorted(*aIt, rBox, nStartPos );
+        ::InsertStringSorted("", *aIt, rBox, nStartPos );
     for(aIt = rRemain.begin(); aIt != rRemain.end(); ++aIt)
-        ::InsertStringSorted(*aIt, rBox, nStartPos );
+        ::InsertStringSorted("", *aIt, rBox, nStartPos );
 }
 
 // --> OD 2009-08-31 #mongolianlayout#
@@ -2883,28 +2882,28 @@ SwFrameAddPage::SwFrameAddPage(TabPageParent pParent, const SfxItemSet &rSet)
     , m_bHtmlMode(false)
     , m_bFormat(false)
     , m_bNew(false)
-    get(m_pNameFrame, "nameframe");
-    get(m_pNameFT,"name_label");
-    get(m_pNameED,"name");
-    get(m_pAltNameFT,"altname_label");
-    get(m_pAltNameED,"altname");
-    get(m_pPrevFT,"prev_label");
-    get(m_pPrevLB,"prev");
-    get(m_pNextFT,"next_label");
-    get(m_pNextLB,"next");
-    get(m_pDescriptionFT, "description_label");
-    get(m_pDescriptionED, "description");
-    get(m_pProtectFrame,"protect");
-    get(m_pProtectContentCB,"protectcontent");
-    get(m_pProtectFrameCB,"protectframe");
-    get(m_pProtectSizeCB,"protectsize");
-    get(m_pContentAlignFrame, "contentalign");
-    get(m_pVertAlignLB,"vertalign");
-    get(m_pPropertiesFrame,"properties");
-    get(m_pEditInReadonlyCB,"editinreadonly");
-    get(m_pPrintFrameCB,"printframe");
-    get(m_pTextFlowFT,"textflow_label");
-    get(m_pTextFlowLB,"textflow");
+    , m_xNameFrame(m_xBuilder->weld_widget("nameframe"))
+    , m_xNameFT(m_xBuilder->weld_label("name_label"))
+    , m_xNameED(m_xBuilder->weld_entry("name"))
+    , m_xAltNameFT(m_xBuilder->weld_label("altname_label"))
+    , m_xAltNameED(m_xBuilder->weld_entry("altname"))
+    , m_xDescriptionFT(m_xBuilder->weld_label("description_label"))
+    , m_xDescriptionED(m_xBuilder->weld_entry("description"))
+    , m_xPrevFT(m_xBuilder->weld_label("prev_label"))
+    , m_xPrevLB(m_xBuilder->weld_combo_box("prev"))
+    , m_xNextFT(m_xBuilder->weld_label("next_label"))
+    , m_xNextLB(m_xBuilder->weld_combo_box("next"))
+    , m_xProtectFrame(m_xBuilder->weld_widget("protect"))
+    , m_xProtectContentCB(m_xBuilder->weld_check_button("protectcontent"))
+    , m_xProtectFrameCB(m_xBuilder->weld_check_button("protectframe"))
+    , m_xProtectSizeCB(m_xBuilder->weld_check_button("protectsize"))
+    , m_xContentAlignFrame(m_xBuilder->weld_widget("contentalign"))
+    , m_xVertAlignLB(m_xBuilder->weld_combo_box("vertalign"))
+    , m_xPropertiesFrame(m_xBuilder->weld_widget("properties"))
+    , m_xEditInReadonlyCB(m_xBuilder->weld_check_button("editinreadonly"))
+    , m_xPrintFrameCB(m_xBuilder->weld_check_button("printframe"))
+    , m_xTextFlowFT(m_xBuilder->weld_label("textflow_label"))
+    , m_xTextFlowLB(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box("textflow")))
 {
     m_xTextFlowLB->append(SvxFrameDirection::Horizontal_LR_TB, SvxResId(RID_SVXSTR_FRAMEDIR_LTR));
     m_xTextFlowLB->append(SvxFrameDirection::Horizontal_RL_TB, SvxResId(RID_SVXSTR_FRAMEDIR_RTL));
@@ -2937,30 +2936,30 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
     m_bHtmlMode = (nHtmlMode & HTMLMODE_ON) != 0;
     if (m_bHtmlMode)
     {
-        m_pProtectFrame->Hide();
-        m_pEditInReadonlyCB->Hide();
-        m_pPrintFrameCB->Hide();
+        m_xProtectFrame->hide();
+        m_xEditInReadonlyCB->hide();
+        m_xPrintFrameCB->hide();
     }
     if (m_sDlgType == "PictureDialog" || m_sDlgType == "ObjectDialog")
     {
-        m_pEditInReadonlyCB->Hide();
+        m_xEditInReadonlyCB->hide();
         if (m_bHtmlMode)
         {
-            m_pPropertiesFrame->Hide();
+            m_xPropertiesFrame->hide();
         }
-        m_pContentAlignFrame->Hide();
+        m_xContentAlignFrame->hide();
     }
 
     if(SfxItemState::SET == rSet->GetItemState(FN_SET_FRM_ALT_NAME, false, &pItem))
     {
-        m_pAltNameED->SetText(static_cast<const SfxStringItem*>(pItem)->GetValue());
-        m_pAltNameED->SaveValue();
+        m_xAltNameED->set_text(static_cast<const SfxStringItem*>(pItem)->GetValue());
+        m_xAltNameED->save_value();
     }
 
     if(SfxItemState::SET == rSet->GetItemState(FN_UNO_DESCRIPTION, false, &pItem))
     {
-        m_pDescriptionED->SetText(static_cast<const SfxStringItem*>(pItem)->GetValue());
-        m_pDescriptionED->SaveValue();
+        m_xDescriptionED->set_text(static_cast<const SfxStringItem*>(pItem)->GetValue());
+        m_xDescriptionED->save_value();
     }
 
     if(!m_bFormat)
@@ -2986,24 +2985,24 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
             m_pWrtSh->SetFlyName(aTmpName1);
         }
 
-        m_pNameED->SetText( aTmpName1 );
-        m_pNameED->SaveValue();
+        m_xNameED->set_text( aTmpName1 );
+        m_xNameED->save_value();
     }
     else
     {
-        m_pNameED->Enable( false );
-        m_pAltNameED->Enable(false);
-        m_pNameFT->Enable( false );
-        m_pAltNameFT->Enable(false);
+        m_xNameED->set_sensitive( false );
+        m_xAltNameED->set_sensitive(false);
+        m_xNameFT->set_sensitive( false );
+        m_xAltNameFT->set_sensitive(false);
     }
-    if (m_sDlgType == "FrameDialog" && m_pAltNameFT->IsVisible())
+    if (m_sDlgType == "FrameDialog" && m_xAltNameFT->get_visible())
     {
-        m_pAltNameFT->Hide();
-        m_pAltNameED->Hide();
+        m_xAltNameFT->hide();
+        m_xAltNameED->hide();
     }
     else
     {
-        m_pNameED->SetModifyHdl(LINK(this, SwFrameAddPage, EditModifyHdl));
+        m_xNameED->connect_changed(LINK(this, SwFrameAddPage, EditModifyHdl));
     }
 
     if (!m_bNew)
@@ -3031,15 +3030,17 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
             std::vector< OUString > aRemainFrames;
             m_pWrtSh->GetConnectableFrameFormats(*pFormat, sNextChain, false,
                             aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
-            lcl_InsertVectors(*m_pPrevLB, aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
+            for (sal_Int32 nEntry = m_xPrevLB->get_count(); nEntry > 1; nEntry--)
+                m_xPrevLB->remove(nEntry - 1);
+            lcl_InsertVectors(*m_xPrevLB, aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
             if(!sPrevChain.isEmpty())
             {
-                if(LISTBOX_ENTRY_NOTFOUND == m_pPrevLB->GetEntryPos(sPrevChain))
-                    m_pPrevLB->InsertEntry(sPrevChain, 1);
-                m_pPrevLB->SelectEntry(sPrevChain);
+                if (m_xPrevLB->find_text(sPrevChain) == -1)
+                    m_xPrevLB->insert_text(1, sPrevChain);
+                m_xPrevLB->set_active_text(sPrevChain);
             }
             else
-                m_pPrevLB->SelectEntryPos(0);
+                m_xPrevLB->set_active(0);
             aPrevPageFrames.erase(aPrevPageFrames.begin(), aPrevPageFrames.end());
             aNextPageFrames.erase(aNextPageFrames.begin(), aNextPageFrames.end());
             aThisPageFrames.erase(aThisPageFrames.begin(), aThisPageFrames.end());
@@ -3047,58 +3048,58 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
 
             m_pWrtSh->GetConnectableFrameFormats(*pFormat, sPrevChain, true,
                             aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames );
-            lcl_InsertVectors(*m_pNextLB, aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
+            for (sal_Int32 nEntry = m_xNextLB->get_count(); nEntry > 1; nEntry--)
+                m_xNextLB->remove(nEntry - 1);
+            lcl_InsertVectors(*m_xNextLB, aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
             if(!sNextChain.isEmpty())
             {
-                if(LISTBOX_ENTRY_NOTFOUND == m_pNextLB->GetEntryPos(sNextChain))
-                    m_pNextLB->InsertEntry(sNextChain, 1);
-                m_pNextLB->SelectEntry(sNextChain);
+                if (m_xNextLB->find_text(sNextChain) == -1)
+                    m_xNextLB->insert_text(1, sNextChain);
+                m_xNextLB->set_active_text(sNextChain);
             }
             else
-                m_pNextLB->SelectEntryPos(0);
-            Link<ListBox&,void> aLink(LINK(this, SwFrameAddPage, ChainModifyHdl));
-            m_pPrevLB->SetSelectHdl(aLink);
-            m_pNextLB->SetSelectHdl(aLink);
+                m_xNextLB->set_active(0);
+            Link<weld::ComboBox&,void> aLink(LINK(this, SwFrameAddPage, ChainModifyHdl));
+            m_xPrevLB->connect_changed(aLink);
+            m_xNextLB->connect_changed(aLink);
         }
     }
     // Pos Protected
     const SvxProtectItem& rProt = rSet->Get(RES_PROTECT);
-    m_pProtectFrameCB->Check(rProt.IsPosProtected());
-    m_pProtectContentCB->Check(rProt.IsContentProtected());
-    m_pProtectSizeCB->Check(rProt.IsSizeProtected());
+    m_xProtectFrameCB->set_active(rProt.IsPosProtected());
+    m_xProtectContentCB->set_active(rProt.IsContentProtected());
+    m_xProtectSizeCB->set_active(rProt.IsSizeProtected());
 
     const SwFormatEditInReadonly& rEdit = rSet->Get(RES_EDIT_IN_READONLY);
-    m_pEditInReadonlyCB->Check(rEdit.GetValue());          m_pEditInReadonlyCB->SaveValue();
+    m_xEditInReadonlyCB->set_active(rEdit.GetValue());
+    m_xEditInReadonlyCB->save_state();
 
     // print
     const SvxPrintItem& rPrt = rSet->Get(RES_PRINT);
-    m_pPrintFrameCB->Check(rPrt.GetValue());               m_pPrintFrameCB->SaveValue();
+    m_xPrintFrameCB->set_active(rPrt.GetValue());
+    m_xPrintFrameCB->save_state();
 
     // textflow
     if( (!m_bHtmlMode || (0 != (nHtmlMode&HTMLMODE_SOME_STYLES)))
         && m_sDlgType != "PictureDialog" && m_sDlgType != "ObjectDialog"
         && SfxItemState::UNKNOWN != rSet->GetItemState( RES_FRAMEDIR ) )
     {
-        m_pTextFlowFT->Show();
-        m_pTextFlowLB->Show();
+        m_xTextFlowFT->show();
+        m_xTextFlowLB->show();
 
         //vertical text flow is not possible in HTML
         if(m_bHtmlMode)
         {
-            m_pTextFlowLB->RemoveEntry(m_pTextFlowLB->GetEntryPos(reinterpret_cast<void*>(SvxFrameDirection::Vertical_RL_TB)));
+            m_xTextFlowLB->remove_id(SvxFrameDirection::Vertical_RL_TB);
         }
         SvxFrameDirection nVal = rSet->Get(RES_FRAMEDIR).GetValue();
-        sal_Int32 nPos;
-        for( nPos = m_pTextFlowLB->GetEntryCount(); nPos; )
-            if( static_cast<SvxFrameDirection>(reinterpret_cast<sal_IntPtr>(m_pTextFlowLB->GetEntryData( --nPos ))) == nVal )
-                break;
-        m_pTextFlowLB->SelectEntryPos( nPos );
-        m_pTextFlowLB->SaveValue();
+        m_xTextFlowLB->set_active_id(nVal);
+        m_xTextFlowLB->save_value();
     }
     else
     {
-        m_pTextFlowFT->Hide();
-        m_pTextFlowLB->Hide();
+        m_xTextFlowFT->hide();
+        m_xTextFlowLB->hide();
     }
 
     // Content alignment
@@ -3113,46 +3114,41 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
             case SDRTEXTVERTADJUST_BLOCK:    nPos = 1;   break;
             case SDRTEXTVERTADJUST_BOTTOM:   nPos = 2;   break;
         }
-        m_pVertAlignLB->SelectEntryPos(nPos);
+        m_xVertAlignLB->set_active(nPos);
     }
-    m_pVertAlignLB->SaveValue();
+    m_xVertAlignLB->save_value();
 }
 
 bool SwFrameAddPage::FillItemSet(SfxItemSet *rSet)
 {
     bool bRet = false;
-    if (m_pNameED->IsValueChangedFromSaved())
-        bRet |= nullptr != rSet->Put(SfxStringItem(FN_SET_FRM_NAME, m_pNameED->GetText()));
-    if (m_pAltNameED->IsValueChangedFromSaved())
-        bRet |= nullptr != rSet->Put(SfxStringItem(FN_SET_FRM_ALT_NAME, m_pAltNameED->GetText()));
-    if (m_pDescriptionED->IsValueChangedFromSaved())
-        bRet |= nullptr != rSet->Put(SfxStringItem(FN_UNO_DESCRIPTION, m_pDescriptionED->GetText()));
+    if (m_xNameED->get_value_changed_from_saved())
+        bRet |= nullptr != rSet->Put(SfxStringItem(FN_SET_FRM_NAME, m_xNameED->get_text()));
+    if (m_xAltNameED->get_value_changed_from_saved())
+        bRet |= nullptr != rSet->Put(SfxStringItem(FN_SET_FRM_ALT_NAME, m_xAltNameED->get_text()));
+    if (m_xDescriptionED->get_value_changed_from_saved())
+        bRet |= nullptr != rSet->Put(SfxStringItem(FN_UNO_DESCRIPTION, m_xDescriptionED->get_text()));
 
     const SfxPoolItem* pOldItem;
     SvxProtectItem aProt ( GetItemSet().Get(RES_PROTECT) );
-    aProt.SetContentProtect( m_pProtectContentCB->IsChecked() );
-    aProt.SetSizeProtect ( m_pProtectSizeCB->IsChecked() );
-    aProt.SetPosProtect  ( m_pProtectFrameCB->IsChecked() );
+    aProt.SetContentProtect( m_xProtectContentCB->get_active() );
+    aProt.SetSizeProtect ( m_xProtectSizeCB->get_active() );
+    aProt.SetPosProtect  ( m_xProtectFrameCB->get_active() );
     if ( nullptr == (pOldItem = GetOldItem(*rSet, FN_SET_PROTECT)) ||
                 aProt != *pOldItem )
         bRet |= nullptr != rSet->Put( aProt);
 
-    if ( m_pEditInReadonlyCB->IsValueChangedFromSaved() )
-        bRet |= nullptr != rSet->Put( SwFormatEditInReadonly( RES_EDIT_IN_READONLY, m_pEditInReadonlyCB->IsChecked()));
+    if ( m_xEditInReadonlyCB->get_state_changed_from_saved() )
+        bRet |= nullptr != rSet->Put( SwFormatEditInReadonly( RES_EDIT_IN_READONLY, m_xEditInReadonlyCB->get_active()));
 
-    if ( m_pPrintFrameCB->IsValueChangedFromSaved() )
-        bRet |= nullptr != rSet->Put( SvxPrintItem( RES_PRINT, m_pPrintFrameCB->IsChecked()));
+    if ( m_xPrintFrameCB->get_state_changed_from_saved() )
+        bRet |= nullptr != rSet->Put( SvxPrintItem( RES_PRINT, m_xPrintFrameCB->get_active()));
 
     // textflow
-    if( m_pTextFlowLB->IsVisible() )
+    if (m_xTextFlowLB->get_visible() && m_xTextFlowLB->get_value_changed_from_saved())
     {
-        sal_Int32 nPos = m_pTextFlowLB->GetSelectedEntryPos();
-        if( m_pTextFlowLB->IsValueChangedFromSaved() )
-        {
-            SvxFrameDirection eDirection = static_cast<SvxFrameDirection>(
-                        reinterpret_cast<sal_IntPtr>(m_pTextFlowLB->GetEntryData( nPos )));
-            bRet |= nullptr != rSet->Put( SvxFrameDirectionItem(eDirection, RES_FRAMEDIR ));
-        }
+        SvxFrameDirection eDirection = m_xTextFlowLB->get_active_id();
+        bRet |= nullptr != rSet->Put( SvxFrameDirectionItem(eDirection, RES_FRAMEDIR ));
     }
     if(m_pWrtSh)
     {
@@ -3160,10 +3156,10 @@ bool SwFrameAddPage::FillItemSet(SfxItemSet *rSet)
         if (pFormat)
         {
             OUString sCurrentPrevChain, sCurrentNextChain;
-            if(m_pPrevLB->GetSelectedEntryPos())
-                sCurrentPrevChain = m_pPrevLB->GetSelectedEntry();
-            if(m_pNextLB->GetSelectedEntryPos())
-                sCurrentNextChain = m_pNextLB->GetSelectedEntry();
+            if (m_xPrevLB->get_active())
+                sCurrentPrevChain = m_xPrevLB->get_active_text();
+            if (m_xNextLB->get_active())
+                sCurrentNextChain = m_xNextLB->get_active_text();
             const SwFormatChain &rChain = pFormat->GetChain();
             const SwFlyFrameFormat* pFlyFormat;
             OUString sNextChain, sPrevChain;
@@ -3179,10 +3175,10 @@ bool SwFrameAddPage::FillItemSet(SfxItemSet *rSet)
         }
     }
 
-    if(m_pVertAlignLB->IsValueChangedFromSaved())
+    if (m_xVertAlignLB->get_value_changed_from_saved())
     {
         SdrTextVertAdjust nAdjust;
-        switch(m_pVertAlignLB->GetSelectedEntryPos())
+        switch (m_xVertAlignLB->get_active())
         {
             default:
             case 0 : nAdjust = SDRTEXTVERTADJUST_TOP; break;
@@ -3195,11 +3191,11 @@ bool SwFrameAddPage::FillItemSet(SfxItemSet *rSet)
     return bRet;
 }
 
-IMPL_LINK_NOARG(SwFrameAddPage, EditModifyHdl, Edit&, void)
+IMPL_LINK_NOARG(SwFrameAddPage, EditModifyHdl, weld::Entry&, void)
 {
-    bool bEnable = !m_pNameED->GetText().isEmpty();
-    m_pAltNameED->Enable(bEnable);
-    m_pAltNameFT->Enable(bEnable);
+    bool bEnable = !m_xNameED->get_text().isEmpty();
+    m_xAltNameED->set_sensitive(bEnable);
+    m_xAltNameFT->set_sensitive(bEnable);
 }
 
 void SwFrameAddPage::SetFormatUsed(bool bFormatUsed)
@@ -3207,25 +3203,25 @@ void SwFrameAddPage::SetFormatUsed(bool bFormatUsed)
     m_bFormat = bFormatUsed;
     if (m_bFormat)
     {
-        m_pNameFrame->Hide();
+        m_xNameFrame->hide();
     }
 }
 
-IMPL_LINK(SwFrameAddPage, ChainModifyHdl, ListBox&, rBox, void)
+IMPL_LINK(SwFrameAddPage, ChainModifyHdl, weld::ComboBox&, rBox, void)
 {
     OUString sCurrentPrevChain, sCurrentNextChain;
-    if(m_pPrevLB->GetSelectedEntryPos())
-        sCurrentPrevChain = m_pPrevLB->GetSelectedEntry();
-    if(m_pNextLB->GetSelectedEntryPos())
-        sCurrentNextChain = m_pNextLB->GetSelectedEntry();
+    if (m_xPrevLB->get_active())
+        sCurrentPrevChain = m_xPrevLB->get_active_text();
+    if (m_xNextLB->get_active())
+        sCurrentNextChain = m_xNextLB->get_active_text();
     SwFrameFormat* pFormat = m_pWrtSh->GetFlyFrameFormat();
     if (!pFormat)
         return;
 
-    bool bNextBox = m_pNextLB == &rBox;
-    ListBox& rChangeLB = bNextBox ? *m_pPrevLB : *m_pNextLB;
-    for(sal_Int32 nEntry = rChangeLB.GetEntryCount(); nEntry > 1; nEntry--)
-        rChangeLB.RemoveEntry(nEntry - 1);
+    bool bNextBox = m_xNextLB.get() == &rBox;
+    weld::ComboBox& rChangeLB = bNextBox ? *m_xPrevLB : *m_xNextLB;
+    for (sal_Int32 nEntry = rChangeLB.get_count(); nEntry > 1; nEntry--)
+        rChangeLB.remove(nEntry - 1);
     //determine chainable frames
     std::vector< OUString > aPrevPageFrames;
     std::vector< OUString > aThisPageFrames;
@@ -3236,10 +3232,10 @@ IMPL_LINK(SwFrameAddPage, ChainModifyHdl, ListBox&, rBox, void)
     lcl_InsertVectors(rChangeLB,
             aPrevPageFrames, aThisPageFrames, aNextPageFrames, aRemainFrames);
     const OUString sToSelect = bNextBox ? sCurrentPrevChain : sCurrentNextChain;
-    if(rChangeLB.GetEntryPos(sToSelect) != LISTBOX_ENTRY_NOTFOUND)
-        rChangeLB.SelectEntry(sToSelect);
+    if (rChangeLB.find_text(sToSelect) != -1)
+        rChangeLB.set_active_text(sToSelect);
     else
-        rChangeLB.SelectEntryPos(0);
+        rChangeLB.set_active(0);
 
 }
 
