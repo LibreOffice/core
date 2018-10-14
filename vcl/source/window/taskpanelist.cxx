@@ -167,48 +167,45 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
         bool bSplitterOnly = aKeyCode.IsMod1() && aKeyCode.IsShift();
 
         // is the focus in the list ?
-        auto p = mTaskPanes.begin();
-        while( p != mTaskPanes.end() )
+        auto p = std::find_if(mTaskPanes.begin(), mTaskPanes.end(),
+            [](const VclPtr<vcl::Window>& rWinPtr) { return rWinPtr->HasChildPathFocus( true ); });
+        if( p != mTaskPanes.end() )
         {
             vcl::Window *pWin = p->get();
-            if( pWin->HasChildPathFocus( true ) )
+
+            // Ctrl-F6 goes directly to the document
+            if( !pWin->IsDialog() && aKeyCode.IsMod1() && !aKeyCode.IsShift() )
             {
-                // Ctrl-F6 goes directly to the document
-                if( !pWin->IsDialog() && aKeyCode.IsMod1() && !aKeyCode.IsShift() )
-                {
-                    pWin->ImplGrabFocusToDocument( GetFocusFlags::F6 );
-                    return true;
-                }
-
-                // activate next task pane
-                vcl::Window *pNextWin = nullptr;
-
-                if( bSplitterOnly )
-                    pNextWin = FindNextSplitter( *p );
-                else
-                    pNextWin = FindNextFloat( *p, bForward );
-
-                if( pNextWin != pWin )
-                {
-                    ImplGetSVData()->maWinData.mbNoSaveFocus = true;
-                    ImplTaskPaneListGrabFocus( pNextWin, bForward );
-                    ImplGetSVData()->maWinData.mbNoSaveFocus = false;
-                }
-                else
-                {
-                    // forward key if no splitter found
-                    if( bSplitterOnly )
-                        return false;
-
-                    // we did not find another taskpane, so
-                    // put focus back into document
-                    pWin->ImplGrabFocusToDocument( GetFocusFlags::F6 | (bForward ? GetFocusFlags::Forward : GetFocusFlags::Backward));
-                }
-
+                pWin->ImplGrabFocusToDocument( GetFocusFlags::F6 );
                 return true;
             }
+
+            // activate next task pane
+            vcl::Window *pNextWin = nullptr;
+
+            if( bSplitterOnly )
+                pNextWin = FindNextSplitter( *p );
             else
-                ++p;
+                pNextWin = FindNextFloat( *p, bForward );
+
+            if( pNextWin != pWin )
+            {
+                ImplGetSVData()->maWinData.mbNoSaveFocus = true;
+                ImplTaskPaneListGrabFocus( pNextWin, bForward );
+                ImplGetSVData()->maWinData.mbNoSaveFocus = false;
+            }
+            else
+            {
+                // forward key if no splitter found
+                if( bSplitterOnly )
+                    return false;
+
+                // we did not find another taskpane, so
+                // put focus back into document
+                pWin->ImplGrabFocusToDocument( GetFocusFlags::F6 | (bForward ? GetFocusFlags::Forward : GetFocusFlags::Backward));
+            }
+
+            return true;
         }
 
         // the focus is not in the list: activate first float if F6 was pressed
@@ -233,29 +230,26 @@ vcl::Window* TaskPaneList::FindNextSplitter( vcl::Window *pWindow )
     ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSort() );
 
     auto p = mTaskPanes.begin();
-    while( p != mTaskPanes.end() )
+    if( pWindow )
+        p = std::find(mTaskPanes.begin(), mTaskPanes.end(), pWindow);
+
+    if( p != mTaskPanes.end() )
     {
-        if( !pWindow || *p == pWindow )
+        unsigned n = mTaskPanes.size();
+        while( --n )
         {
-            unsigned n = mTaskPanes.size();
-            while( --n )
+            if( pWindow )   // increment before test
+                ++p;
+            if( p == mTaskPanes.end() )
+                p = mTaskPanes.begin();
+            if( (*p)->ImplIsSplitter() && (*p)->IsReallyVisible() && !(*p)->IsDialog() && (*p)->GetParent()->HasChildPathFocus() )
             {
-                if( pWindow )   // increment before test
-                    ++p;
-                if( p == mTaskPanes.end() )
-                    p = mTaskPanes.begin();
-                if( (*p)->ImplIsSplitter() && (*p)->IsReallyVisible() && !(*p)->IsDialog() && (*p)->GetParent()->HasChildPathFocus() )
-                {
-                    pWindow = (*p).get();
-                    break;
-                }
-                if( !pWindow )  // increment after test, otherwise first element is skipped
-                    ++p;
+                pWindow = (*p).get();
+                break;
             }
-            break;
+            if( !pWindow )  // increment after test, otherwise first element is skipped
+                ++p;
         }
-        else
-            ++p;
     }
 
     return pWindow;
@@ -270,30 +264,24 @@ vcl::Window* TaskPaneList::FindNextFloat( vcl::Window *pWindow, bool bForward )
         ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSortBackward() );
 
     auto p = mTaskPanes.begin();
+    if( pWindow )
+        p = std::find(mTaskPanes.begin(), mTaskPanes.end(), pWindow);
+
     while( p != mTaskPanes.end() )
     {
-        if( !pWindow || *p == pWindow )
+        if( pWindow )   // increment before test
+            ++p;
+        if( p == mTaskPanes.end() )
+            break; // do not wrap, send focus back to document at end of list
+        /* #i83908# do not use the menubar if it is native and invisible
+        */
+        if( (*p)->IsReallyVisible() && !(*p)->ImplIsSplitter() &&
+            ( (*p)->GetType() != WindowType::MENUBARWINDOW || static_cast<MenuBarWindow*>(p->get())->CanGetFocus() ) )
         {
-            while( p != mTaskPanes.end() )
-            {
-                if( pWindow )   // increment before test
-                    ++p;
-                if( p == mTaskPanes.end() )
-                    break; // do not wrap, send focus back to document at end of list
-                /* #i83908# do not use the menubar if it is native and invisible
-                */
-                if( (*p)->IsReallyVisible() && !(*p)->ImplIsSplitter() &&
-                    ( (*p)->GetType() != WindowType::MENUBARWINDOW || static_cast<MenuBarWindow*>(p->get())->CanGetFocus() ) )
-                {
-                    pWindow = (*p).get();
-                    break;
-                }
-                if( !pWindow )  // increment after test, otherwise first element is skipped
-                    ++p;
-            }
+            pWindow = (*p).get();
             break;
         }
-        else
+        if( !pWindow )  // increment after test, otherwise first element is skipped
             ++p;
     }
 

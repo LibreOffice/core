@@ -537,29 +537,18 @@ namespace
         if (aStart != rGroup.end())
             ++aI;
 
-        for (; aI != rGroup.end(); ++aI)
+        aI = std::find_if(aI, rGroup.end(), isSuitableDestination);
+        if (aI == rGroup.end())
         {
-            vcl::Window *pWindow = *aI;
-
-            if (isSuitableDestination(pWindow))
-            {
-                pWindow->ImplControlFocus( GetFocusFlags::CURSOR | GetFocusFlags::Forward );
-                return true;
-            }
+            aI = std::find_if(rGroup.begin(), aStart, isSuitableDestination);
+            if (aI == aStart)
+                return false;
         }
 
-        for (aI = rGroup.begin(); aI != aStart; ++aI)
-        {
-            vcl::Window *pWindow = *aI;
+        vcl::Window *pWindow = *aI;
 
-            if (isSuitableDestination(pWindow))
-            {
-                pWindow->ImplControlFocus( GetFocusFlags::CURSOR | GetFocusFlags::Forward );
-                return true;
-            }
-        }
-
-        return false;
+        pWindow->ImplControlFocus( GetFocusFlags::CURSOR | GetFocusFlags::Forward );
+        return true;
     }
 
     bool nextInGroup(RadioButton *pSourceWindow, bool bBackward)

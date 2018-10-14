@@ -528,10 +528,9 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
             fprintf(stderr, "Endless loop found in a compound glyph.\n");
             fprintf(stderr, "%d -> ", index);
             fprintf(stderr," [");
-            for( std::vector< sal_uInt32 >::const_iterator it = glyphlist.begin();
-                 it != glyphlist.end(); ++it )
+            for( const auto& rGlyph : glyphlist )
             {
-                fprintf( stderr,"%d ", (int) *it );
+                fprintf( stderr,"%d ", (int) rGlyph );
             }
             fprintf(stderr,"]\n");
         /**/

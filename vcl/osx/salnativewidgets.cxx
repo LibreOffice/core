@@ -74,12 +74,10 @@ public:
 void AquaBlinker::Blink( AquaSalFrame* pFrame, const tools::Rectangle& rRect, int nTimeout )
 {
     // prevent repeated paints from triggering themselves all the time
-    for( std::list< AquaBlinker* >::const_iterator it = pFrame->maBlinkers.begin();
-         it != pFrame->maBlinkers.end(); ++it )
-    {
-        if( (*it)->maInvalidateRect == rRect )
-            return;
-    }
+    auto isRepeated = std::any_of(pFrame->maBlinkers.begin(), pFrame->maBlinkers.end(),
+        [&rRect](AquaBlinker* pBlinker) { return pBlinker->maInvalidateRect == rRect; });
+    if( isRepeated )
+        return;
     AquaBlinker* pNew = new AquaBlinker( pFrame, rRect );
     pNew->SetTimeout( nTimeout );
     pNew->Start();

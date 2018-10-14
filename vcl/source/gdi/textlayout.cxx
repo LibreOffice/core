@@ -290,12 +290,9 @@ namespace vcl
         // convert the metric vector
         if ( _pVector )
         {
-            for (   MetricVector::iterator charRect = _pVector->begin();
-                    charRect != _pVector->end();
-                    ++charRect
-                )
+            for ( auto& rCharRect : *_pVector )
             {
-                *charRect = m_rTargetDevice.LogicToPixel( *charRect );
+                rCharRect = m_rTargetDevice.LogicToPixel( rCharRect );
             }
         }
 

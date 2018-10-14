@@ -129,10 +129,10 @@ void CairoFontsCache::CacheFont(void *pFont, const CairoFontsCache::CacheId &rId
 
 void* CairoFontsCache::FindCachedFont(const CairoFontsCache::CacheId &rId)
 {
-    LRUFonts::iterator aEnd = maLRUFonts.end();
-    for (LRUFonts::iterator aI = maLRUFonts.begin(); aI != aEnd; ++aI)
-        if (aI->second == rId)
-            return aI->first;
+    auto aI = std::find_if(maLRUFonts.begin(), maLRUFonts.end(),
+        [&rId](const LRUFonts::value_type& rFont) { return rFont.second == rId; });
+    if (aI != maLRUFonts.end())
+        return aI->first;
     return nullptr;
 }
 

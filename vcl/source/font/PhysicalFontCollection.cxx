@@ -907,9 +907,8 @@ std::unique_ptr<ImplDeviceFontSizeList> PhysicalFontCollection::GetDeviceFontSiz
         std::set<int> rHeights;
         pFontFamily->GetFontHeights( rHeights );
 
-        std::set<int>::const_iterator it = rHeights.begin();
-        for(; it != rHeights.begin(); ++it )
-            pDeviceFontSizeList->Add( *it );
+        for( const auto& rHeight : rHeights )
+            pDeviceFontSizeList->Add( rHeight );
     }
 
     return pDeviceFontSizeList;

@@ -756,10 +756,9 @@ GtkPrintDialog::impl_initPrintContent(uno::Sequence<sal_Bool> const& i_rDisabled
 void
 GtkPrintDialog::impl_checkOptionalControlDependencies()
 {
-    for (std::map<GtkWidget*, OUString>::iterator it = m_aControlToPropertyMap.begin();
-         it != m_aControlToPropertyMap.end(); ++it)
+    for (auto& rEntry : m_aControlToPropertyMap)
     {
-        gtk_widget_set_sensitive(it->first, m_rController.isUIOptionEnabled(it->second));
+        gtk_widget_set_sensitive(rEntry.first, m_rController.isUIOptionEnabled(rEntry.second));
     }
 }
 

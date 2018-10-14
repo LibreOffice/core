@@ -530,10 +530,9 @@ bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const OUString& r
                     aMemoryStream.WriteUInt32( nSkipActions );
                     WMFRecord_Escape( PRIVATE_ESCAPE_UNICODE, nStrmLen, static_cast<const sal_Int8*>(aMemoryStream.GetData()) );
 
-                    std::vector<tools::PolyPolygon>::iterator aIter( aPolyPolyVec.begin() );
-                    while ( aIter != aPolyPolyVec.end() )
+                    for ( const auto& rPolyPoly : aPolyPolyVec )
                     {
-                        tools::PolyPolygon aPolyPoly( *aIter++ );
+                        tools::PolyPolygon aPolyPoly( rPolyPoly );
                         aPolyPoly.Move( rPoint.X(), rPoint.Y() );
                         WMFRecord_PolyPolygon( aPolyPoly );
                     }

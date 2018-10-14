@@ -10807,18 +10807,12 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, 
         // silently insert structure into document again if one properly exists
         if( ! m_aStructure[ 0 ].m_aChildren.empty() )
         {
-            PDFWriter::StructElement childType = PDFWriter::NonStructElement;
-            sal_Int32 nNewCurElement = 0;
             const std::list< sal_Int32 >& rRootChildren = m_aStructure[0].m_aChildren;
-            for( std::list< sal_Int32 >::const_iterator it = rRootChildren.begin();
-                 childType != PDFWriter::Document && it != rRootChildren.end(); ++it )
+            auto it = std::find_if(rRootChildren.begin(), rRootChildren.end(),
+                [&](sal_Int32 nElement) { return m_aStructure[ nElement ].m_eType == PDFWriter::Document; });
+            if( it != rRootChildren.end() )
             {
-                nNewCurElement = *it;
-                childType = m_aStructure[ nNewCurElement ].m_eType;
-            }
-            if( childType == PDFWriter::Document )
-            {
-                m_nCurrentStructElement = nNewCurElement;
+                m_nCurrentStructElement = *it;
                 SAL_WARN( "vcl.pdfwriter", "Structure element inserted to StructTreeRoot that is not a document" );
             }
             else {

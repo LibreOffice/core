@@ -400,14 +400,10 @@ void Menu::ImplCallEventListeners( VclEventId nEvent, sal_uInt16 nPos )
     {
         // Copy the list, because this can be destroyed when calling a Link...
         std::list<Link<VclMenuEvent&,void>> aCopy( maEventListeners );
-        std::list<Link<VclMenuEvent&,void>>::iterator aIter( aCopy.begin() );
-        std::list<Link<VclMenuEvent&,void>>::const_iterator aEnd( aCopy.end() );
-        while ( aIter != aEnd )
+        for ( const auto& rLink : aCopy )
         {
-            Link<VclMenuEvent&,void> &rLink = *aIter;
             if( std::find(maEventListeners.begin(), maEventListeners.end(), rLink) != maEventListeners.end() )
                 rLink.Call( aEvent );
-            ++aIter;
         }
     }
 }

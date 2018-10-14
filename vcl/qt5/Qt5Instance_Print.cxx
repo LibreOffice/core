@@ -89,12 +89,12 @@ void Qt5Instance::GetPrinterQueueInfo(ImplPrnQueueList* pList)
     ::std::vector<OUString> aPrinters;
     rManager.listPrinters(aPrinters);
 
-    for (::std::vector<OUString>::iterator it = aPrinters.begin(); it != aPrinters.end(); ++it)
+    for (const auto& rPrinter : aPrinters)
     {
-        const PrinterInfo& rInfo(rManager.getPrinterInfo(*it));
+        const PrinterInfo& rInfo(rManager.getPrinterInfo(rPrinter));
         // create new entry
         SalPrinterQueueInfo* pInfo = new SalPrinterQueueInfo;
-        pInfo->maPrinterName = *it;
+        pInfo->maPrinterName = rPrinter;
         pInfo->maDriver = rInfo.m_aDriverName;
         pInfo->maLocation = rInfo.m_aLocation;
         pInfo->maComment = rInfo.m_aComment;

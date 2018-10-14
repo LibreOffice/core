@@ -719,23 +719,13 @@ ToolBox::ImplToolItems::size_type ToolBox::GetItemPos( sal_uInt16 nItemId ) cons
 ToolBox::ImplToolItems::size_type ToolBox::GetItemPos( const Point& rPos ) const
 {
     // search the item position on the given point
-    ImplToolItems::size_type nRet = ITEM_NOTFOUND;
-    ImplToolItems::size_type nPos = 0;
-    ImplToolItems::const_iterator it = mpData->m_aItems.begin();
-    while( it != mpData->m_aItems.end() )
-    {
-        if ( it->maRect.IsInside( rPos ) )
-        {
-            // item found -> save position and break
-            nRet = nPos;
-            break;
-        }
+    auto it = std::find_if(mpData->m_aItems.begin(), mpData->m_aItems.end(),
+        [&rPos](const ImplToolItem& rItem) { return rItem.maRect.IsInside( rPos ); });
 
-        ++it;
-        ++nPos;
-    }
+    if( it != mpData->m_aItems.end() )
+        return std::distance(mpData->m_aItems.begin(), it);
 
-    return nRet;
+    return ITEM_NOTFOUND;
 }
 
 sal_uInt16 ToolBox::GetItemId( ImplToolItems::size_type nPos ) const
@@ -746,20 +736,11 @@ sal_uInt16 ToolBox::GetItemId( ImplToolItems::size_type nPos ) const
 sal_uInt16 ToolBox::GetItemId( const Point& rPos ) const
 {
     // find item that was clicked
-    ImplToolItems::const_iterator it = mpData->m_aItems.begin();
-    while( it != mpData->m_aItems.end() )
-    {
-        // is it this item?
-        if ( it->maRect.IsInside( rPos ) )
-        {
-            if ( it->meType == ToolBoxItemType::BUTTON )
-                return it->mnId;
-            else
-                return 0;
-        }
+    auto it = std::find_if(mpData->m_aItems.begin(), mpData->m_aItems.end(),
+        [&rPos](const ImplToolItem& rItem) { return rItem.maRect.IsInside( rPos ); });
 
-        ++it;
-    }
+    if( (it != mpData->m_aItems.end()) && (it->meType == ToolBoxItemType::BUTTON) )
+        return it->mnId;
 
     return 0;
 }
@@ -781,11 +762,10 @@ sal_uInt16 ToolBox::GetItemId(const OUString &rCommand) const
     if (!mpData)
         return 0;
 
-    for (ImplToolItems::const_iterator it = mpData->m_aItems.begin(); it != mpData->m_aItems.end(); ++it)
-    {
-        if (it->maCommandStr == rCommand)
-            return it->mnId;
-    }
+    auto it = std::find_if(mpData->m_aItems.begin(), mpData->m_aItems.end(),
+        [&rCommand](const ImplToolItem& rItem) { return rItem.maCommandStr == rCommand; });
+    if (it != mpData->m_aItems.end())
+        return it->mnId;
 
     return 0;
 }
@@ -1461,17 +1441,11 @@ void ToolBox::SetOutStyle( sal_uInt16 nNewStyle )
 // disable key input if all items are disabled
 void ToolBox::ImplUpdateInputEnable()
 {
-    for( ImplToolItems::const_iterator it = mpData->m_aItems.begin();
-         it != mpData->m_aItems.end(); ++it )
-    {
-        if( it->mbEnabled )
-        {
+    mpData->mbKeyInputDisabled = std::none_of(mpData->m_aItems.begin(), mpData->m_aItems.end(),
+        [](const ImplToolItem& rItem) {
             // at least one useful entry
-            mpData->mbKeyInputDisabled = false;
-            return;
-        }
-    }
-    mpData->mbKeyInputDisabled = true;
+            return rItem.mbEnabled;
+        });
 }
 
 void ToolBox::ImplFillLayoutData()
@@ -1593,14 +1567,8 @@ bool ToolBox::ImplHasClippedItems()
 {
     // are any items currently clipped ?
     ImplFormat();
-    ImplToolItems::const_iterator it = mpData->m_aItems.begin();
-    while ( it != mpData->m_aItems.end() )
-    {
-        if( it->IsClipped() )
-            return true;
-        ++it;
-    }
-    return false;
+    return std::any_of(mpData->m_aItems.begin(), mpData->m_aItems.end(),
+        [](const ImplToolItem& rItem) { return rItem.IsClipped(); });
 }
 
 namespace
@@ -1631,17 +1599,16 @@ void ToolBox::UpdateCustomMenu()
     if ( !mpData->m_aItems.empty() )
     {
         // nStartPos will hold the number of clipped items appended from first loop
-        for ( ImplToolItems::iterator it(mpData->m_aItems.begin());
-                it != mpData->m_aItems.end(); ++it)
+        for ( const auto& rItem : mpData->m_aItems )
         {
-            if( it->IsClipped() )
+            if( rItem.IsClipped() )
             {
-                sal_uInt16 id = it->mnId + TOOLBOX_MENUITEM_START;
-                MenuItemBits nMenuItemBits = ConvertBitsFromToolBoxToMenu(it->mnBits);
-                pMenu->InsertItem( id, it->maText, it->maImage, nMenuItemBits);
-                pMenu->SetItemCommand( id, it->maCommandStr );
-                pMenu->EnableItem( id, it->mbEnabled );
-                pMenu->CheckItem ( id, it->meState == TRISTATE_TRUE );
+                sal_uInt16 id = rItem.mnId + TOOLBOX_MENUITEM_START;
+                MenuItemBits nMenuItemBits = ConvertBitsFromToolBoxToMenu(rItem.mnBits);
+                pMenu->InsertItem( id, rItem.maText, rItem.maImage, nMenuItemBits);
+                pMenu->SetItemCommand( id, rItem.maCommandStr );
+                pMenu->EnableItem( id, rItem.mbEnabled );
+                pMenu->CheckItem ( id, rItem.meState == TRISTATE_TRUE );
             }
         }
 
@@ -1649,17 +1616,16 @@ void ToolBox::UpdateCustomMenu()
         pMenu->InsertSeparator();
 
         // now append the items that are explicitly disabled
-        for ( ImplToolItems::iterator it(mpData->m_aItems.begin());
-                it != mpData->m_aItems.end(); ++it)
+        for ( const auto& rItem : mpData->m_aItems )
         {
-            if( it->IsItemHidden() )
+            if( rItem.IsItemHidden() )
             {
-                sal_uInt16 id = it->mnId + TOOLBOX_MENUITEM_START;
-                MenuItemBits nMenuItemBits = ConvertBitsFromToolBoxToMenu(it->mnBits);
-                pMenu->InsertItem( id, it->maText, it->maImage, nMenuItemBits );
-                pMenu->SetItemCommand( id, it->maCommandStr );
-                pMenu->EnableItem( id, it->mbEnabled );
-                pMenu->CheckItem( id, it->meState == TRISTATE_TRUE );
+                sal_uInt16 id = rItem.mnId + TOOLBOX_MENUITEM_START;
+                MenuItemBits nMenuItemBits = ConvertBitsFromToolBoxToMenu(rItem.mnBits);
+                pMenu->InsertItem( id, rItem.maText, rItem.maImage, nMenuItemBits );
+                pMenu->SetItemCommand( id, rItem.maCommandStr );
+                pMenu->EnableItem( id, rItem.mbEnabled );
+                pMenu->CheckItem( id, rItem.meState == TRISTATE_TRUE );
             }
         }
 

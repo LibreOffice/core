@@ -1080,17 +1080,10 @@ GraphicFilter::~GraphicFilter()
 {
     {
         ::osl::MutexGuard aGuard( getListMutex() );
-        for(
-            FilterList_impl::iterator it = pFilterHdlList->begin();
-            it != pFilterHdlList->end();
-            ++it
-        ) {
-            if( *it == this )
-            {
-                pFilterHdlList->erase( it );
-                break;
-            }
-        }
+        auto it = std::find(pFilterHdlList->begin(), pFilterHdlList->end(), this);
+        if( it != pFilterHdlList->end() )
+            pFilterHdlList->erase( it );
+
         if( pFilterHdlList->empty() )
         {
             delete pFilterHdlList;

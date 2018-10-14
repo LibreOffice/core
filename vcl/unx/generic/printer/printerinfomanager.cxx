@@ -712,30 +712,25 @@ static void lpgetSysQueueTokenHandler(
     // find _all: line
     OString aAllLine( "_all:" );
     OString aAllAttr( "all=" );
-    for( std::vector< OString >::const_iterator it = i_rLines.begin();
-         it != i_rLines.end(); ++it )
+    auto it = std::find_if(i_rLines.begin(), i_rLines.end(),
+        [&aAllLine](const OString& rLine) { return rLine.indexOf( aAllLine, 0 ) == 0; });
+    if( it != i_rLines.end() )
     {
-        if( it->indexOf( aAllLine, 0 ) == 0 )
+        // now find the "all" attribute
+        ++it;
+        it = std::find_if(it, i_rLines.end(),
+            [&aAllAttr](const OString& rLine) { return WhitespaceToSpace( rLine ).startsWith( aAllAttr ); });
+        if( it != i_rLines.end() )
         {
-            // now find the "all" attribute
-            ++it;
-            while( it != i_rLines.end() )
+            // insert the comma separated entries into the set of printers to use
+            OString aClean( WhitespaceToSpace( *it ) );
+            sal_Int32 nPos = aAllAttr.getLength();
+            while( nPos != -1 )
             {
-                OString aClean( WhitespaceToSpace( *it ) );
-                if( aClean.startsWith( aAllAttr ) )
-                {
-                    // insert the comma separated entries into the set of printers to use
-                    sal_Int32 nPos = aAllAttr.getLength();
-                    while( nPos != -1 )
-                    {
-                        OString aTok( aClean.getToken( 0, ',', nPos ) );
-                        if( !aTok.isEmpty() )
-                            aOnlySet.insert( OStringToOUString( aTok, aEncoding ) );
-                    }
-                    break;
-                }
+                OString aTok( aClean.getToken( 0, ',', nPos ) );
+                if( !aTok.isEmpty() )
+                    aOnlySet.insert( OStringToOUString( aTok, aEncoding ) );
             }
-            break;
         }
     }
 

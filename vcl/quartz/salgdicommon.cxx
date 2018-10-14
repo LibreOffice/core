@@ -1769,18 +1769,17 @@ bool AquaSalGraphics::setClipRegion( const vcl::Region& i_rClip )
         RectangleVector aRectangles;
         i_rClip.GetRegionRectangles(aRectangles);
 
-        for(RectangleVector::const_iterator aRectIter(aRectangles.begin());
-            aRectIter != aRectangles.end(); ++aRectIter)
+        for(const auto& rRect : aRectangles)
         {
-            const long nW(aRectIter->Right() - aRectIter->Left() + 1); // uses +1 logic in original
+            const long nW(rRect.Right() - rRect.Left() + 1); // uses +1 logic in original
 
             if(nW)
             {
-                const long nH(aRectIter->Bottom() - aRectIter->Top() + 1); // uses +1 logic in original
+                const long nH(rRect.Bottom() - rRect.Top() + 1); // uses +1 logic in original
 
                 if(nH)
                 {
-                    const CGRect aRect = CGRectMake( aRectIter->Left(), aRectIter->Top(), nW, nH);
+                    const CGRect aRect = CGRectMake( rRect.Left(), rRect.Top(), nW, nH);
                     SAL_INFO( "vcl.cg", "CGPathAddRect(" << mxClipPath << ",NULL," << aRect << ")" );
                     CGPathAddRect( mxClipPath, nullptr, aRect );
                 }

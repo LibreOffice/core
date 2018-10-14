@@ -560,9 +560,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int>& o
 
             std::unique_ptr<PrintFont> xUpdate;
 
-            auto second_font = aFonts.begin();
-            ++second_font;
-            if (second_font == aFonts.end()) // one font
+            if (aFonts.size() == 1) // one font
                 xUpdate = std::move(aFonts.front());
             else // more than one font
             {

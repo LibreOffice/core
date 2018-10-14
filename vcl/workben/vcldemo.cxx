@@ -1504,14 +1504,9 @@ public:
     void addInvalidate(vcl::Window *pWindow) { maInvalidates.emplace_back(pWindow); };
     void removeInvalidate(vcl::Window *pWindow)
     {
-        for (auto aIt = maInvalidates.begin(); aIt != maInvalidates.end(); ++aIt)
-        {
-            if (*aIt == pWindow)
-            {
-                maInvalidates.erase(aIt);
-                return;
-            }
-        }
+        auto aIt = std::find(maInvalidates.begin(), maInvalidates.end(), pWindow);
+        if (aIt != maInvalidates.end())
+            maInvalidates.erase(aIt);
     }
     void Invalidate()
     {

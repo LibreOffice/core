@@ -457,13 +457,10 @@ SelectionManager::~SelectionManager()
     {
         osl::MutexGuard aGuard( *osl::Mutex::getGlobalMutex() );
 
-        std::unordered_map< OUString, SelectionManager* >::iterator it;
-        for( it = getInstances().begin(); it != getInstances().end(); ++it )
-            if( it->second == this )
-            {
-                getInstances().erase( it );
-                break;
-            }
+        auto it = std::find_if(getInstances().begin(), getInstances().end(),
+            [&](const std::pair< OUString, SelectionManager* >& rInstance) { return rInstance.second == this; });
+        if( it != getInstances().end() )
+            getInstances().erase( it );
     }
 
     if( m_aThread )

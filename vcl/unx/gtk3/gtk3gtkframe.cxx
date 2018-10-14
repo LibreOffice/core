@@ -3937,19 +3937,14 @@ bool GtkSalFrame::IMHandler::handleKeyEvent( GdkEventKey* pEvent )
 
         m_bPreeditJustChanged = false;
 
-        std::list<PreviousKeyPress>::iterator    iter     = m_aPrevKeyPresses.begin();
-        std::list<PreviousKeyPress>::iterator    iter_end = m_aPrevKeyPresses.end();
-        while (iter != iter_end)
+        auto iter = std::find(m_aPrevKeyPresses.begin(), m_aPrevKeyPresses.end(), pEvent);
+        // If we found a corresponding previous key press event, swallow the release
+        // and remove the earlier key press from our list
+        if (iter != m_aPrevKeyPresses.end())
         {
-            // If we found a corresponding previous key press event, swallow the release
-            // and remove the earlier key press from our list
-            if (*iter == pEvent)
-            {
-                m_aPrevKeyPresses.erase(iter);
-                m_nPrevKeyPresses--;
-                return true;
-            }
-            ++iter;
+            m_aPrevKeyPresses.erase(iter);
+            m_nPrevKeyPresses--;
+            return true;
         }
 
         if( bResult )
