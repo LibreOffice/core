@@ -300,7 +300,7 @@ sc/inc/compiler.hxx:257
     ScCompiler::AddInMap pEnglish const char *
 sc/inc/compiler.hxx:259
     ScCompiler::AddInMap pUpper const char *
-sc/inc/document.hxx:2523
+sc/inc/document.hxx:2528
     ScMutationDisable mpDocument class ScDocument *
 sc/inc/pivot.hxx:75
     ScDPLabelData mnFlags sal_Int32
@@ -379,7 +379,7 @@ sd/source/filter/ppt/ppt97animations.hxx:51
 sd/source/ui/remotecontrol/Receiver.hxx:36
     sd::Receiver pTransmitter class sd::Transmitter *
 sd/source/ui/sidebar/MasterPageContainerProviders.hxx:136
-    sd::sidebar::TemplatePreviewProvider msURL class rtl::OUString
+    sd::sidebar::TemplatePreviewProvider msURL const class rtl::OUString
 sd/source/ui/sidebar/SlideBackground.hxx:100
     sd::sidebar::SlideBackground m_pContainer VclPtr<class VclVBox>
 sfx2/source/view/classificationcontroller.cxx:59
@@ -465,7 +465,7 @@ sw/source/filter/inc/rtf.hxx:29
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk sal_uInt8
 sw/source/filter/inc/rtf.hxx:31
-    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/noel/disk2/libo5/sw/source/filter/inc/rtf.hxx:27:9)
+    RTFSurround::(anonymous) Flags struct (anonymous struct at /media/noel/disk2/libo6/sw/source/filter/inc/rtf.hxx:27:9)
 ucb/source/ucp/gio/gio_mount.hxx:46
     OOoMountOperationClass parent_class GMountOperationClass
 ucb/source/ucp/gio/gio_mount.hxx:49

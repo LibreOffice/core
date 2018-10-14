@@ -90,14 +90,9 @@ public:
     void SetChangeHdl( const Link<LinkParamNone*,void>& rLink );
 
     DECL_LINK(PositionEnableHdl, weld::ToggleButton&, void);
-    DECL_LINK(PositionChangeHdl, weld::ToggleButton&, void);
-
-private:
-    void impl_setRadioButtonToggleHdl();
 
 private:
     css::uno::Reference< css::uno::XComponentContext>    m_xCC;
-    Link<LinkParamNone*,void> m_aChangeLink;
 
     std::unique_ptr<weld::CheckButton> m_xCbxShow;
     std::unique_ptr<weld::RadioButton> m_xRbtLeft;
