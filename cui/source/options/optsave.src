@@ -224,16 +224,16 @@ TabPage RID_SFXPAGE_SAVE
     };
     FixedImage FI_ODF_WARNING
     {
-        Pos = MAP_APPFONT ( 12, 180 ) ;
+        Pos = MAP_APPFONT ( 12, 174 ) ;
         Size = MAP_APPFONT ( 8, 8 ) ;
         Hide = TRUE ;
     };
     FixedText FT_WARN
     {
-        Pos = MAP_APPFONT ( 23, 180 ) ;
+        Pos = MAP_APPFONT ( 23, 174 ) ;
         Size = MAP_APPFONT ( 239, 8 ) ;
         Hide = TRUE ;
-        Text [ en-US ] = "Not using ODF 1.2 Extended may cause information to be lost!" ;
+        Text [ en-US ] = "Not using ODF 1.2 Extended may cause information to be lost." ;
     };
     Image IMG_ODF_WARNING
     {
