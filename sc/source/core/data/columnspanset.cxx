@@ -217,49 +217,6 @@ void ColumnSpanSet::executeColumnAction(ScDocument& rDoc, ColumnAction& ac) cons
     }
 }
 
-void ColumnSpanSet::executeColumnAction(ScDocument& rDoc, ColumnAction& ac, double& fMem) const
-{
-    for (size_t nTab = 0; nTab < maTables.size(); ++nTab)
-    {
-        if (!maTables[nTab])
-            continue;
-
-        const TableType& rTab = *maTables[nTab];
-        for (size_t nCol = 0; nCol < rTab.size(); ++nCol)
-        {
-            if (!rTab[nCol])
-                continue;
-
-            ScTable* pTab = rDoc.FetchTable(nTab);
-            if (!pTab)
-                continue;
-
-            if (!ValidCol(nCol))
-            {
-                // End the loop.
-                nCol = rTab.size();
-                continue;
-            }
-
-            ScColumn& rColumn = pTab->aCol[nCol];
-            ac.startColumn(&rColumn);
-            ColumnType& rCol = *rTab[nCol];
-            ColumnSpansType::const_iterator it = rCol.maSpans.begin(), itEnd = rCol.maSpans.end();
-            SCROW nRow1, nRow2;
-            nRow1 = it->first;
-            bool bVal = it->second;
-            for (++it; it != itEnd; ++it)
-            {
-                nRow2 = it->first-1;
-                ac.executeSum( nRow1, nRow2, bVal, fMem );
-
-                nRow1 = nRow2+1; // for the next iteration.
-                bVal = it->second;
-            }
-        }
-    }
-}
-
 namespace {
 
 class Scanner
@@ -378,25 +335,6 @@ bool SingleColumnSpanSet::empty() const
     return (it->first == 0) && !(it->second) && (++it != maSpans.end()) && (it->first == MAXROWCOUNT);
 }
 
-
-void RangeColumnSpanSet::executeAction(ScDocument& rDoc, sc::ColumnSpanSet::Action& ac) const
-{
-    for (SCTAB nTab = range.aStart.Tab(); nTab <= range.aEnd.Tab(); ++nTab)
-    {
-        for (SCCOL nCol = range.aStart.Col(); nCol <= range.aEnd.Col(); ++nCol)
-        {
-            ScTable* pTab = rDoc.FetchTable(nTab);
-            if (!pTab)
-                continue;
-
-            if (!ValidCol(nCol))
-                break;
-
-            ac.startColumn(nTab, nCol);
-            ac.execute(ScAddress(nCol, range.aStart.Row(), nTab), range.aEnd.Row() - range.aStart.Row() + 1, true);
-        }
-    }
-}
 
 void RangeColumnSpanSet::executeColumnAction(ScDocument& rDoc, sc::ColumnSpanSet::ColumnAction& ac) const
 {

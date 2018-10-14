@@ -162,7 +162,6 @@ public:
     void            SetLanguageList( SvxLanguageListFlags nLangList,
                             bool bHasLangNone, bool bLangNoneIsLangAll = false,
                             bool bCheckSpellAvail = false );
-    void            AddLanguages( const std::vector< LanguageType >& rLanguageTypes, SvxLanguageListFlags nLangList );
     void            InsertLanguage(const LanguageType nLangType);
 
     EditedAndValid      GetEditedAndValid() const { return m_eEditedAndValid;}

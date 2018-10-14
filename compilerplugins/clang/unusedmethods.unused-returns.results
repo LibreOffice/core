@@ -56,11 +56,11 @@ include/LibreOfficeKit/LibreOfficeKit.hxx:484
     unsigned char * lok::Document::renderFont(const char *,const char *,int *,int *)
 include/LibreOfficeKit/LibreOfficeKit.hxx:523
     _Bool lok::Document::getViewIds(int *,unsigned long)
-include/LibreOfficeKit/LibreOfficeKit.hxx:643
+include/LibreOfficeKit/LibreOfficeKit.hxx:671
     char * lok::Office::getFilterTypes()
-include/LibreOfficeKit/LibreOfficeKit.hxx:697
+include/LibreOfficeKit/LibreOfficeKit.hxx:725
     char * lok::Office::getVersionInfo()
-include/LibreOfficeKit/LibreOfficeKit.hxx:711
+include/LibreOfficeKit/LibreOfficeKit.hxx:739
     _Bool lok::Office::runMacro(const char *)
 include/oox/crypto/AgileEngine.hxx:121
     _Bool oox::core::AgileEngine::decryptHmacKey()
@@ -196,9 +196,9 @@ include/vcl/texteng.hxx:279
     _Bool TextEngine::Read(class SvStream &,const class TextSelection *)
 include/vcl/toolbox.hxx:514
     _Bool ToolBox::ChangeHighlightUpDn(_Bool)
-include/vcl/weld.hxx:316
+include/vcl/weld.hxx:344
     _Bool weld::ComboBox::get_entry_selection_bounds(int &,int &)
-include/vcl/weld.hxx:956
+include/vcl/weld.hxx:1017
     _Bool weld::TextView::get_selection_bounds(int &,int &)
 lotuswordpro/inc/lwpsvstream.hxx:76
     class LwpSvStream & LwpSvStream::ReadUInt8(unsigned char &)

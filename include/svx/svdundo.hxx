@@ -97,7 +97,6 @@ public:
     SdrUndoGroup(SdrModel& rNewMod);
     virtual ~SdrUndoGroup() override;
 
-    void Clear();
     sal_Int32 GetActionCount() const { return maActions.size(); }
     SdrUndoAction* GetAction(sal_Int32 nNum) const { return maActions[nNum].get(); }
     void AddAction(std::unique_ptr<SdrUndoAction> pAct);
