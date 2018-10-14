@@ -899,7 +899,7 @@ static void ToolkitWorkerFunction( void* pArgs )
     if( bInitedByVCLToolkit )
     {
         UnoWrapper* pUnoWrapper = new UnoWrapper( pTk );
-        Application::SetUnoWrapper( pUnoWrapper );
+        UnoWrapperBase::SetUnoWrapper( pUnoWrapper );
     }
     getInitCondition().set();
     if( bInitedByVCLToolkit )

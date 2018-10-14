@@ -2906,7 +2906,7 @@ weld::MessageDialog* SalInstance::CreateMessageDialog(weld::Widget* pParent, Vcl
 
 weld::Window* SalInstance::GetFrameWeld(const css::uno::Reference<css::awt::XWindow>& rWindow)
 {
-    UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
+    UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper();
     if (!pWrapper)
         return nullptr;
     VclPtr<vcl::Window> xWindow = pWrapper->GetWindow(rWindow);
