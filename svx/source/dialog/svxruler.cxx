@@ -2200,7 +2200,15 @@ void SvxRuler::ApplyTabs()
         if( mxRulerImpl->lMaxRightLogic != -1 &&
             mpTabs[nCoreIdx + TAB_GAP].nPos + Ruler::GetNullOffset() == nMaxRight )
         {
-            aTabStop.GetTabPos() = mxRulerImpl->lMaxRightLogic - lLogicNullOffset;
+            // Set tab pos exactly at the right indent
+            long nTmpLeftIndentLogic
+                = lAppNullOffset + bRTL ? GetRightFrameMargin() : GetLeftFrameMargin();
+            if (mxRulerImpl->bIsTabsRelativeToIndent && mxParaItem)
+            {
+                nTmpLeftIndentLogic += bRTL ? mxParaItem->GetRight() : mxParaItem->GetLeft();
+            }
+            aTabStop.GetTabPos()
+                = mxRulerImpl->lMaxRightLogic - lLogicNullOffset - nTmpLeftIndentLogic;
         }
         else
         {
