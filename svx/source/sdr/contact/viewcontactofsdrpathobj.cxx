@@ -46,9 +46,9 @@ namespace sdr
             sal_uInt32 nPolyCount(rUnitPolyPolygon.count());
             sal_uInt32 nPointCount(0);
 
-            for(sal_uInt32 a(0); a < nPolyCount; a++)
+            for(auto const& rPolygon : rUnitPolyPolygon)
             {
-                nPointCount += rUnitPolyPolygon.getB2DPolygon(a).count();
+                nPointCount += rPolygon.count();
             }
 
             if(!nPointCount)

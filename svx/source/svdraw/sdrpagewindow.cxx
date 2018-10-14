@@ -280,13 +280,13 @@ namespace
                     // poly b being closed.
                     basegfx::B2DPolyPolygon aResult(basegfx::utils::clipPolyPolygonOnPolyPolygon(aPolyB, aPolyA));
 
-                    for(sal_uInt32 a(0); a < aResult.count(); a++)
+                    for(auto const& rPolygon : aResult)
                     {
                         int nR = comphelper::rng::uniform_int_distribution(0, 254);
                         int nG = comphelper::rng::uniform_int_distribution(0, 254);
                         int nB = comphelper::rng::uniform_int_distribution(0, 254);
                         Color aColor(nR, nG, nB);
-                        impPaintStrokePolygon(aResult.getB2DPolygon(a), rOutDev, aColor);
+                        impPaintStrokePolygon(rPolygon, rOutDev, aColor);
                     }
                 }
             }

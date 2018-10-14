@@ -56,13 +56,11 @@ namespace sdr
             // calculate texture size. Use the polygon length of the longest polygon for
             // height and the rotated radius for width (using polygon center) to get a good
             // texture mapping
-            const sal_uInt32 nPolygonCount(aPolyPolygon.count());
             double fPolygonMaxLength(0.0);
 
-            for(sal_uInt32 a(0); a < nPolygonCount; a++)
+            for(auto const& rCandidate : aPolyPolygon)
             {
-                const basegfx::B2DPolygon aCandidate(aPolyPolygon.getB2DPolygon(a));
-                const double fPolygonLength(basegfx::utils::getLength(aCandidate));
+                const double fPolygonLength(basegfx::utils::getLength(rCandidate));
                 fPolygonMaxLength = std::max(fPolygonMaxLength, fPolygonLength);
             }
 

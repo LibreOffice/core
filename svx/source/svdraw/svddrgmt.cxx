@@ -423,9 +423,9 @@ void SdrDragMethod::createSdrDragEntries_PolygonDrag()
         {
             const basegfx::B2DPolyPolygon aNewPolyPolygon(pM->GetMarkedSdrObj()->TakeXorPoly());
 
-            for(sal_uInt32 b(0); b < aNewPolyPolygon.count(); b++)
+            for(auto const& rPolygon : aNewPolyPolygon)
             {
-                nPointCount += aNewPolyPolygon.getB2DPolygon(b).count();
+                nPointCount += rPolygon.count();
             }
 
             if(nPointCount > SdrDragView::GetDragXorPointLimit())
