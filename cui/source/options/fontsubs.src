@@ -82,13 +82,14 @@ TabPage RID_SVX_FONT_SUBSTITUTION
     };
     ImageList IL_ICON
     {
-        Prefix = "nu" ;
+        Prefix = "nu";
+        MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
         IdList =
         {
             BT_SUBSTAPPLY ;
             BT_SUBSTDELETE ;
         };
-        IdCount = { 2 ; } ;
+        IdCount = { 2 ; };
     };
     ToolBox TBX_SUBSTNEWDEL
     {
