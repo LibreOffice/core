@@ -20,11 +20,8 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_RES_ERRORBAR_HXX
 
 #include <memory>
-#include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/weld.hxx>
+#include <sfx2/tabdlg.hxx>
 #include <svl/itemset.hxx>
 #include <svx/chrtitem.hxx>
 #include "RangeSelectionListener.hxx"
@@ -46,7 +43,7 @@ public:
     };
 
     ErrorBarResources(
-        VclBuilderContainer* pParent, Dialog* pParentDialog, const SfxItemSet& rInAttrs, bool bNoneAvailable, chart::ErrorBarResources::tErrorBarType eType = ERROR_BAR_Y );
+        weld::Builder* pParent, TabPageParent pParentDialog, const SfxItemSet& rInAttrs, bool bNoneAvailable, chart::ErrorBarResources::tErrorBarType eType = ERROR_BAR_Y );
     virtual ~ErrorBarResources();
 
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
@@ -63,38 +60,6 @@ public:
     virtual void disposingRangeSelection() override;
 
 private:
-    // category
-    VclPtr<RadioButton>          m_pRbNone;
-    VclPtr<RadioButton>          m_pRbConst;
-    VclPtr<RadioButton>          m_pRbPercent;
-    VclPtr<RadioButton>          m_pRbFunction;
-    VclPtr<RadioButton>          m_pRbRange;
-    VclPtr<ListBox>              m_pLbFunction;
-
-    // parameters
-    VclPtr<VclFrame>             m_pFlParameters;
-    VclPtr<VclBox>               m_pBxPositive;
-    VclPtr<MetricField>          m_pMfPositive;
-    VclPtr<Edit>                 m_pEdRangePositive;
-    VclPtr<PushButton>           m_pIbRangePositive;
-    VclPtr<VclBox>               m_pBxNegative;
-    VclPtr<MetricField>          m_pMfNegative;
-    VclPtr<Edit>                 m_pEdRangeNegative;
-    VclPtr<PushButton>           m_pIbRangeNegative;
-    VclPtr<CheckBox>             m_pCbSyncPosNeg;
-
-    // indicator
-    VclPtr<RadioButton>          m_pRbBoth;
-    VclPtr<RadioButton>          m_pRbPositive;
-    VclPtr<RadioButton>          m_pRbNegative;
-    VclPtr<FixedImage>           m_pFiBoth;
-    VclPtr<FixedImage>           m_pFiPositive;
-    VclPtr<FixedImage>           m_pFiNegative;
-
-    VclPtr<FixedText>           m_pUIStringPos;
-    VclPtr<FixedText>           m_pUIStringNeg;
-    VclPtr<FixedText>           m_pUIStringRbRange;
-
     SvxChartKindError    m_eErrorKind;
     SvxChartIndicate     m_eIndicate;
 
@@ -109,22 +74,55 @@ private:
     double               m_fPlusValue;
     double               m_fMinusValue;
 
-    VclPtr<Dialog>       m_pParentDialog;
+    TabPageParent        m_pParentDialog;
     std::unique_ptr< RangeSelectionHelper >  m_apRangeSelectionHelper;
-    VclPtr<Edit>         m_pCurrentRangeChoosingField;
+    weld::Entry*         m_pCurrentRangeChoosingField;
     bool                 m_bHasInternalDataProvider;
     bool                 m_bEnableDataTableDialog;
 
-    DECL_LINK( CategoryChosen, Button*, void );
-    DECL_LINK( CategoryChosen2, ListBox&, void );
-    DECL_LINK( SynchronizePosAndNeg, CheckBox&, void );
-    DECL_LINK( PosValueChanged, Edit&, void );
-    DECL_LINK( IndicatorChanged, Button *, void );
-    DECL_LINK( ChooseRange, Button *, void );
-    DECL_LINK( RangeChanged, Edit&, void );
+
+    // category
+    std::unique_ptr<weld::RadioButton> m_xRbNone;
+    std::unique_ptr<weld::RadioButton> m_xRbConst;
+    std::unique_ptr<weld::RadioButton> m_xRbPercent;
+    std::unique_ptr<weld::RadioButton> m_xRbFunction;
+    std::unique_ptr<weld::RadioButton> m_xRbRange;
+    std::unique_ptr<weld::ComboBox> m_xLbFunction;
+
+    // parameters
+    std::unique_ptr<weld::Frame> m_xFlParameters;
+    std::unique_ptr<weld::Widget> m_xBxPositive;
+    std::unique_ptr<weld::MetricSpinButton> m_xMfPositive;
+    std::unique_ptr<weld::Entry> m_xEdRangePositive;
+    std::unique_ptr<weld::Button> m_xIbRangePositive;
+    std::unique_ptr<weld::Widget> m_xBxNegative;
+    std::unique_ptr<weld::MetricSpinButton> m_xMfNegative;
+    std::unique_ptr<weld::Entry> m_xEdRangeNegative;
+    std::unique_ptr<weld::Button> m_xIbRangeNegative;
+    std::unique_ptr<weld::CheckButton> m_xCbSyncPosNeg;
+
+    // indicator
+    std::unique_ptr<weld::RadioButton> m_xRbBoth;
+    std::unique_ptr<weld::RadioButton> m_xRbPositive;
+    std::unique_ptr<weld::RadioButton> m_xRbNegative;
+    std::unique_ptr<weld::Image> m_xFiBoth;
+    std::unique_ptr<weld::Image> m_xFiPositive;
+    std::unique_ptr<weld::Image> m_xFiNegative;
+
+    std::unique_ptr<weld::Label> m_xUIStringPos;
+    std::unique_ptr<weld::Label> m_xUIStringNeg;
+    std::unique_ptr<weld::Label> m_xUIStringRbRange;
+
+    DECL_LINK( CategoryChosen, weld::ToggleButton&, void );
+    DECL_LINK( CategoryChosen2, weld::ComboBox&, void );
+    DECL_LINK( SynchronizePosAndNeg, weld::ToggleButton&, void );
+    DECL_LINK( PosValueChanged, weld::MetricSpinButton&, void );
+    DECL_LINK( IndicatorChanged, weld::ToggleButton&, void );
+    DECL_LINK( ChooseRange, weld::Button&, void );
+    DECL_LINK( RangeChanged, weld::Entry&, void );
 
     void UpdateControlStates();
-    void isRangeFieldContentValid( Edit & rEdit );
+    void isRangeFieldContentValid(weld::Entry& rEdit);
 };
 
 } //namespace chart

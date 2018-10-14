@@ -29,7 +29,7 @@ namespace chart
 class ErrorBarsTabPage : public SfxTabPage
 {
 public:
-    ErrorBarsTabPage ( vcl::Window* pParent, const SfxItemSet& rInAttrs );
+    ErrorBarsTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
 
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
     void SetErrorBarType( ErrorBarResources::tErrorBarType eNewType );
