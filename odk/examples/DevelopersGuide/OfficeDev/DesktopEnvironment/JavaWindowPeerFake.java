@@ -24,7 +24,7 @@
 import java.awt.*;
 
 
-/** <p>Class to pass the system window handle to the OpenOffice.org toolkit.</p>
+/** <p>Class to pass the system window handle to the OpenOffice toolkit.</p>
  */
 class JavaWindowPeerFake implements com.sun.star.awt.XSystemDependentWindowPeer,
                                     com.sun.star.awt.XWindowPeer
@@ -39,7 +39,7 @@ class JavaWindowPeerFake implements com.sun.star.awt.XSystemDependentWindowPeer,
     // ____________________
     /**
      * Implementation of XSystemDependentWindowPeer (that's all we really need).
-     * This method is called back from the Office toolkit to retrieve the system data.
+     * This method is called back from the OpenOffice toolkit to retrieve the system data.
      */
     public java.lang.Object getWindowHandle(byte[] aProcessId, short aSystem)
         throws com.sun.star.uno.RuntimeException
@@ -50,7 +50,7 @@ class JavaWindowPeerFake implements com.sun.star.awt.XSystemDependentWindowPeer,
         return aReturn;
     }
 
-    /** not really neaded.
+    /** not really needed.
      */
     public com.sun.star.awt.XToolkit getToolkit()
         throws com.sun.star.uno.RuntimeException
