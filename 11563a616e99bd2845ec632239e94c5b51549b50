@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "ff0f0b1f_99b11ee5",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/DrawImpressCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 1959,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-10-14T22:50:15Z",
+      "side": 1,
+      "message": "Well, it isn\u0027t present in the menubar, and searching it returns no results from cxx files (meaning there is no code that tries to get its label specifically). So it\u0027s certainly not used. And given that the old label also doesn\u0027t fit the proposed use-case, there should be no doubt in changing it.",
+      "parentUuid": "ff0f0b1f_c3cb231c",
+      "revId": "11563a616e99bd2845ec632239e94c5b51549b50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff0f0b1f_43003335",
         "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
         "patchSetId": 1
@@ -48,6 +66,30 @@
       "writtenOn": "2018-10-12T15:08:06Z",
       "side": 1,
       "message": "This existing label fit the purpose I wanted, but I don\u0027t know if Table Design has a more limited meaning.  At this point I just hijacked it for convenience, and at least in English it seems to fit well.  The real use seems to be more limited to applying table styles though?\n\nI was also wondering whether it would be good or bad to disable the submenu if there was no table selected. Doing so would involve creating a SID_ for it I think. But likely disabling a submenu is not really a good idea...",
+      "range": {
+        "startLine": 346,
+        "startChar": 27,
+        "endLine": 346,
+        "endChar": 42
+      },
+      "revId": "11563a616e99bd2845ec632239e94c5b51549b50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_79b64adc",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-10-14T22:50:15Z",
+      "side": 1,
+      "message": "Regarding the label: I don\u0027t think that \"Design\" fits here. Also note that .uno:TableDesign actually has an ellipsis at its end, which certainly isn\u0027t good as a title for a submenu. Ideally we need a simple \"Table\" label here. (It\u0027s also odd that we misuse .uno:TableDesign as a label for a submenu, when actually it maps to a real command (SID_TABLEDESIGN)).\n\nRegarding disabling the submenu: I\u0027m not sure it\u0027s a bad idea (and IIRC we have a bug report about it in bugzilla). But this isn\u0027t easily possible with the current menu implementation. Creating new SIDs won\u0027t help you, unfortunately...",
+      "parentUuid": "ff0f0b1f_43003335",
       "range": {
         "startLine": 346,
         "startChar": 27,
