@@ -573,12 +573,12 @@ namespace
             basegfx::B2DPolyPolygon aB2DPolyPolygon = *aPolygon;
             aB2DPolyPolygon.transform(rTransform);
 
-            for(sal_uInt32 a(0); a < aB2DPolyPolygon.count(); a++)
+            for(auto const& rPolygon : aB2DPolyPolygon)
             {
                 // create one primitive per polygon
                 drawinglayer::primitive2d::PolygonStrokePrimitive2D* pNew =
                     new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
-                        aB2DPolyPolygon.getB2DPolygon(a), rLineAttribute, rStrokeAttribute);
+                        rPolygon, rLineAttribute, rStrokeAttribute);
                 rTarget.push_back(pNew);
             }
         }

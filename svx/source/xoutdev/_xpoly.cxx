@@ -855,10 +855,9 @@ XPolyPolygon::XPolyPolygon( XPolyPolygon&& ) = default;
 XPolyPolygon::XPolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
     : pImpXPolyPolygon()
 {
-    for(sal_uInt32 a(0); a < rPolyPolygon.count(); a++)
+    for(auto const& rCandidate : rPolyPolygon)
     {
-        const basegfx::B2DPolygon aCandidate = rPolyPolygon.getB2DPolygon(a);
-        Insert(XPolygon(aCandidate));
+        Insert(XPolygon(rCandidate));
     }
 }
 

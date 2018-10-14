@@ -1751,25 +1751,21 @@ void SdrPathObj::ImpForceKind()
 
     // #i75974# adapt polygon state to object type. This may include a reinterpretation
     // of a closed geometry as open one, but with identical first and last point
-    for(sal_uInt32 a(0); a < maPathPolygon.count(); a++)
+    for(auto& rPolygon : maPathPolygon)
     {
-        basegfx::B2DPolygon aCandidate(maPathPolygon.getB2DPolygon(a));
-
-        if(IsClosed() != aCandidate.isClosed())
+        if(IsClosed() != rPolygon.isClosed())
         {
             // #i80213# really change polygon geometry; else e.g. the last point which
             // needs to be identical with the first one will be missing when opening
             // due to OBJ_PATH type
-            if(aCandidate.isClosed())
+            if(rPolygon.isClosed())
             {
-                basegfx::utils::openWithGeometryChange(aCandidate);
+                basegfx::utils::openWithGeometryChange(rPolygon);
             }
             else
             {
-                basegfx::utils::closeWithGeometryChange(aCandidate);
+                basegfx::utils::closeWithGeometryChange(rPolygon);
             }
-
-            maPathPolygon.setB2DPolygon(a, aCandidate);
         }
     }
 }
@@ -1900,11 +1896,10 @@ OUString SdrPathObj::TakeObjNameSingul() const
         {
             // get point count
             sal_uInt32 nPointCount(0);
-            const sal_uInt32 nPolyCount(GetPathPoly().count());
 
-            for(sal_uInt32 a(0); a < nPolyCount; a++)
+            for(auto const& rPolygon : GetPathPoly())
             {
-                nPointCount += GetPathPoly().getB2DPolygon(a).count();
+                nPointCount += rPolygon.count();
             }
 
             if(bClosed)
@@ -1974,11 +1969,10 @@ basegfx::B2DPolyPolygon SdrPathObj::TakeXorPoly() const
 sal_uInt32 SdrPathObj::GetHdlCount() const
 {
     sal_uInt32 nRetval(0);
-    const sal_uInt32 nPolyCount(GetPathPoly().count());
 
-    for(sal_uInt32 a(0); a < nPolyCount; a++)
+    for(auto const& rPolygon : GetPathPoly())
     {
-        nRetval += GetPathPoly().getB2DPolygon(a).count();
+        nRetval += rPolygon.count();
     }
 
     return nRetval;
@@ -2408,12 +2402,11 @@ bool SdrPathObj::IsPolyObj() const
 
 sal_uInt32 SdrPathObj::GetPointCount() const
 {
-    const sal_uInt32 nPolyCount(GetPathPoly().count());
     sal_uInt32 nRetval(0);
 
-    for(sal_uInt32 a(0); a < nPolyCount; a++)
+    for(auto const& rPolygon : GetPathPoly())
     {
-        nRetval += GetPathPoly().getB2DPolygon(a).count();
+        nRetval += rPolygon.count();
     }
 
     return nRetval;

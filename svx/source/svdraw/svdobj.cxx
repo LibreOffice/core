@@ -1788,15 +1788,14 @@ void SdrObject::PaintMacro(OutputDevice& rOut, const tools::Rectangle& , const S
 {
     const RasterOp eRop(rOut.GetRasterOp());
     const basegfx::B2DPolyPolygon aPolyPolygon(TakeXorPoly());
-    const sal_uInt32 nCount(aPolyPolygon.count());
 
     rOut.SetLineColor(COL_BLACK);
     rOut.SetFillColor();
     rOut.SetRasterOp(RasterOp::Invert);
 
-    for(sal_uInt32 a(0); a < nCount; a++)
+    for(auto const& rPolygon : aPolyPolygon)
     {
-        rOut.DrawPolyLine(aPolyPolygon.getB2DPolygon(a));
+        rOut.DrawPolyLine(rPolygon);
     }
 
     rOut.SetRasterOp(eRop);
