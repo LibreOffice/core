@@ -2312,6 +2312,11 @@ public:
         return new GtkInstanceContainer(GTK_CONTAINER(gtk_dialog_get_content_area(m_pDialog)), false);
     }
 
+    virtual void set_modal(bool bModal) override
+    {
+        gtk_window_set_modal(GTK_WINDOW(m_pDialog), bModal);
+    }
+
     virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>&) override
     {
         //not implemented for the gtk variant

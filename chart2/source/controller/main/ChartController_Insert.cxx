@@ -488,18 +488,18 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
 
             //prepare and open dialog
             SolarMutexGuard aGuard;
-            ScopedVclPtrInstance<InsertErrorBarsDialog> aDlg(
-                GetChartWindow(), aItemSet,
+            InsertErrorBarsDialog aDlg(
+                GetChartFrame(), aItemSet,
                 uno::Reference< chart2::XChartDocument >( getModel(), uno::UNO_QUERY ),
                 bYError ? ErrorBarResources::ERROR_BAR_Y : ErrorBarResources::ERROR_BAR_X);
 
-            aDlg->SetAxisMinorStepWidthForErrorBarDecimals(
+            aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
                 InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getModel(), m_xChartView, OUString() ) );
 
-            if( aDlg->Execute() == RET_OK )
+            if (aDlg.run() == RET_OK)
             {
                 SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
-                aDlg->FillItemSet( aOutItemSet );
+                aDlg.FillItemSet( aOutItemSet );
 
                 // lock controllers till end of block
                 ControllerLockGuardUNO aCLGuard( getModel() );

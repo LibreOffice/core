@@ -238,6 +238,7 @@ public:
     virtual void set_default_response(int response) = 0;
     virtual Button* get_widget_for_response(int response) = 0;
     virtual Container* weld_content_area() = 0;
+    virtual void set_modal(bool bModal) = 0;
 
     virtual void SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>& rLink)
         = 0;
