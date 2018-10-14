@@ -29,7 +29,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-#include <vcl/morebtn.hxx>
 #include <vcl/field.hxx>
 #include <vcl/weld.hxx>
 #include <svx/checklbx.hxx>
