@@ -1491,13 +1491,11 @@ void SAL_CALL librdf_Repository::setStatementRDFa(
     }
     try
     {
-        for (::std::vector< std::shared_ptr<librdf_TypeConverter::Resource> >
-                ::iterator iter = predicates.begin(); iter != predicates.end();
-             ++iter)
+        for (const auto& rPredicatePtr : predicates)
         {
             addStatementGraph_Lock(
                 librdf_TypeConverter::Statement(pSubject,
-                    std::dynamic_pointer_cast<librdf_TypeConverter::URI>(*iter),
+                    std::dynamic_pointer_cast<librdf_TypeConverter::URI>(rPredicatePtr),
                     pContent),
                 sContext, true);
         }

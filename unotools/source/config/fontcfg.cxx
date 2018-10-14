@@ -216,10 +216,11 @@ OUString DefaultFontConfiguration::getDefaultFont( const LanguageTag& rLanguageT
         else
         {
             ::std::vector< OUString > aFallbacks( rLanguageTag.getFallbackStrings( false));
-            for (::std::vector< OUString >::const_iterator it( aFallbacks.begin());
-                    it != aFallbacks.end() && aRet.isEmpty(); ++it)
+            for (const auto& rFallback : aFallbacks)
             {
-                aRet = tryLocale( *it, aType );
+                aRet = tryLocale( rFallback, aType );
+                if (!aRet.isEmpty())
+                    break;
             }
         }
     }
@@ -1064,13 +1065,13 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontN
     if (aLanguageTag.getLanguage() != "en")
         aFallbacks.emplace_back("en");
 
-    for (::std::vector< OUString >::const_iterator fb( aFallbacks.begin()); fb != aFallbacks.end(); ++fb)
+    for (const auto& rFallback : aFallbacks)
     {
-        std::unordered_map< OUString, LocaleSubst >::const_iterator lang = m_aSubst.find( *fb );
+        std::unordered_map< OUString, LocaleSubst >::const_iterator lang = m_aSubst.find( rFallback );
         if( lang != m_aSubst.end() )
         {
             if( ! lang->second.bConfigRead )
-                readLocaleSubst( *fb );
+                readLocaleSubst( rFallback );
             // try to find an exact match
             // because the list is sorted this will also find fontnames of the form searchfontname*
             std::vector< FontNameAttr >::const_iterator it = ::std::lower_bound( lang->second.aSubstAttributes.begin(), lang->second.aSubstAttributes.end(), aSearchAttr, StrictStringSort() );

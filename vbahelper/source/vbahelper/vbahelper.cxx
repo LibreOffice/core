@@ -724,12 +724,9 @@ void setCursorHelper( const uno::Reference< frame::XModel >& xModel, const Point
         }
     }
 
-    for (   ::std::vector< uno::Reference< frame::XController > >::const_iterator controller = aControllers.begin();
-            controller != aControllers.end();
-            ++controller
-        )
+    for ( const auto& rController : aControllers )
     {
-        const uno::Reference< frame::XFrame >      xFrame     ( (*controller)->getFrame(),       uno::UNO_SET_THROW   );
+        const uno::Reference< frame::XFrame >      xFrame     ( rController->getFrame(),         uno::UNO_SET_THROW   );
         const uno::Reference< awt::XWindow >       xWindow    ( xFrame->getContainerWindow(),    uno::UNO_SET_THROW   );
 
         VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );

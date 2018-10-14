@@ -361,18 +361,11 @@ bool utl::UCBContentHelper::Exists(OUString const & url) {
         o.removeFinalSlash();
         std::vector<OUString> cs(
             getContents(o.GetMainURL(INetURLObject::DecodeMechanism::NONE)));
-        for (std::vector<OUString>::iterator i(cs.begin()); i != cs.end();
-             ++i)
-        {
-            if (INetURLObject(*i).getName(
-                    INetURLObject::LAST_SEGMENT, true,
-                    INetURLObject::DecodeMechanism::WithCharset).
-                equalsIgnoreAsciiCase(name))
-            {
-                return true;
-            }
-        }
-        return false;
+        return std::any_of(cs.begin(), cs.end(),
+            [&name](const OUString& rItem) {
+                return INetURLObject(rItem).
+                    getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset).
+                        equalsIgnoreAsciiCase(name); });
     }
 }
 

@@ -244,10 +244,10 @@ Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions_Impl::GetList() co
         lProperties[i].Name = SvtCompatibilityEntry::getName( SvtCompatibilityEntry::Index(i) );
 
     sal_Int32 j = 0;
-    for ( std::vector< SvtCompatibilityEntry >::const_iterator pItem = m_aOptions.begin(); pItem != m_aOptions.end(); ++pItem )
+    for ( const auto& rItem : m_aOptions )
     {
         for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Name); i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
-            lProperties[i].Value = pItem->getValue( SvtCompatibilityEntry::Index(i) );
+            lProperties[i].Value = rItem.getValue( SvtCompatibilityEntry::Index(i) );
         lResult[ j++ ] = lProperties;
     }
 
