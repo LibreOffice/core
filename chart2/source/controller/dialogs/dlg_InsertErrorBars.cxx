@@ -39,19 +39,17 @@ namespace chart
 {
 
 InsertErrorBarsDialog::InsertErrorBarsDialog(
-    vcl::Window* pParent, const SfxItemSet& rMyAttrs,
+    weld::Window* pParent, const SfxItemSet& rMyAttrs,
     const uno::Reference< chart2::XChartDocument > & xChartDocument,
-    ErrorBarResources::tErrorBarType eType /* = ErrorBarResources::ERROR_BAR_Y */ ) :
-        ModalDialog( pParent
-        ,"dlg_InsertErrorBars"
-        ,"modules/schart/ui/dlg_InsertErrorBars.ui"),
-        m_apErrorBarResources( new ErrorBarResources(
-                                   this, this, rMyAttrs,
+    ErrorBarResources::tErrorBarType eType /* = ErrorBarResources::ERROR_BAR_Y */ )
+        : GenericDialogController(pParent, "modules/schart/ui/dlg_InsertErrorBars.ui", "dlg_InsertErrorBars")
+        , m_apErrorBarResources( new ErrorBarResources(
+                                   m_xBuilder.get(), TabPageParent(m_xDialog.get(), nullptr), rMyAttrs,
                                    /* bNoneAvailable = */ true, eType ))
 {
     ObjectType objType = eType == ErrorBarResources::ERROR_BAR_Y ? OBJECTTYPE_DATA_ERRORS_Y : OBJECTTYPE_DATA_ERRORS_X;
 
-    SetText( ObjectNameProvider::getName_ObjectForAllSeries(objType) );
+    m_xDialog->set_title(ObjectNameProvider::getName_ObjectForAllSeries(objType));
 
     m_apErrorBarResources->SetChartDocumentForRangeChoosing( xChartDocument );
 }
@@ -59,14 +57,6 @@ InsertErrorBarsDialog::InsertErrorBarsDialog(
 void InsertErrorBarsDialog::FillItemSet(SfxItemSet& rOutAttrs)
 {
     m_apErrorBarResources->FillItemSet(rOutAttrs);
-}
-
-void InsertErrorBarsDialog::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    ModalDialog::DataChanged( rDCEvt );
-
-    if ( (rDCEvt.GetType() == DataChangedEventType::SETTINGS) && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
-        m_apErrorBarResources->FillValueSets();
 }
 
 void InsertErrorBarsDialog::SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth )

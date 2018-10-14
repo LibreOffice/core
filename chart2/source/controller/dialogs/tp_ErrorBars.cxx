@@ -27,23 +27,15 @@ using namespace ::com::sun::star;
 namespace chart
 {
 
-ErrorBarsTabPage::ErrorBarsTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs ) :
-        SfxTabPage( pParent
-        ,"tp_ErrorBars"
-        ,"modules/schart/ui/tp_ErrorBars.ui"
-        , &rInAttrs ),
-        m_aErrorBarResources(
-            this,
-            // the parent is the tab control, of which the parent is the dialog
-            pParent->GetParentDialog(),
-            rInAttrs, /* bNoneAvailable = */ false )
+ErrorBarsTabPage::ErrorBarsTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs)
+    : SfxTabPage(pParent, "modules/schart/ui/tp_ErrorBars.ui", "tp_ErrorBars", &rInAttrs)
+    , m_aErrorBarResources(m_xBuilder.get(), pParent, rInAttrs, /* bNoneAvailable = */ false)
 {
 }
 
-VclPtr<SfxTabPage> ErrorBarsTabPage::Create(
-    TabPageParent pParent, const SfxItemSet* rOutAttrs )
+VclPtr<SfxTabPage> ErrorBarsTabPage::Create(TabPageParent pParent, const SfxItemSet* rOutAttrs)
 {
-    return VclPtr<ErrorBarsTabPage>::Create( pParent.pParent, *rOutAttrs );
+    return VclPtr<ErrorBarsTabPage>::Create(pParent, *rOutAttrs);
 }
 
 bool ErrorBarsTabPage::FillItemSet( SfxItemSet* rOutAttrs )
