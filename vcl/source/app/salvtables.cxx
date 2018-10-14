@@ -727,6 +727,16 @@ public:
         assert(false && "must be system or docking window");
     }
 
+    virtual void set_modal(bool bModal) override
+    {
+        if (::Dialog* pDialog = dynamic_cast<::Dialog*>(m_xWindow.get()))
+        {
+            pDialog->SetModalInputMode(bModal);
+            return;
+        }
+        m_xWindow->ImplGetFrame()->SetModal(bModal);
+    }
+
     virtual void window_move(int x, int y) override
     {
         m_xWindow->SetPosPixel(Point(x, y));

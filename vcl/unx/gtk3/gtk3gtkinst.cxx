@@ -2052,6 +2052,11 @@ public:
             g_object_unref(pCursor);
     }
 
+    virtual void set_modal(bool bModal) override
+    {
+        gtk_window_set_modal(m_pWindow, bModal);
+    }
+
     virtual void resize_to_request() override
     {
         gtk_window_resize(m_pWindow, 1, 1);
