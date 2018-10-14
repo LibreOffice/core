@@ -59,7 +59,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <vcl/unowrap.hxx>
+#include <vcl/toolkit/unowrap.hxx>
 
 #include <vcl/unohelp.hxx>
 #include <vcl/configsettings.hxx>

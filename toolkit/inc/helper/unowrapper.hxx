@@ -25,7 +25,7 @@
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
-#include <vcl/unowrap.hxx>
+#include <vcl/toolkit/unowrap.hxx>
 #include <vcl/window.hxx>
 
 #include <helper/accessibilityclient.hxx>

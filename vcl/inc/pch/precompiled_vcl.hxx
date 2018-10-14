@@ -179,9 +179,9 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/toolkit/unowrap.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/unohelp.hxx>
-#include <vcl/unowrap.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/vclreferencebase.hxx>

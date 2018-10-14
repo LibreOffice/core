@@ -45,7 +45,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <vcl/unowrap.hxx>
+#include <vcl/toolkit/unowrap.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/unohelp.hxx>

@@ -38,7 +38,7 @@
 #include <vcl/button.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/unowrap.hxx>
+#include <vcl/toolkit/unowrap.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/virdev.hxx>

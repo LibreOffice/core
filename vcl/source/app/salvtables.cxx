@@ -45,7 +45,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
-#include <vcl/unowrap.hxx>
+#include <vcl/toolkit/unowrap.hxx>
 #include <vcl/weld.hxx>
 #include <bitmaps.hlst>
 
