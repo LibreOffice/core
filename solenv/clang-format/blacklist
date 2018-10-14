@@ -7963,7 +7963,6 @@ include/vcl/gradient.hxx
 include/vcl/graph.hxx
 include/vcl/graphicfilter.hxx
 include/vcl/graphictools.hxx
-include/vcl/group.hxx
 include/vcl/hatch.hxx
 include/vcl/help.hxx
 include/vcl/i18nhelp.hxx
@@ -8052,6 +8051,7 @@ include/vcl/threadex.hxx
 include/vcl/throbber.hxx
 include/vcl/timer.hxx
 include/vcl/toolbox.hxx
+include/vcl/toolkit/group.hxx
 include/vcl/txtattr.hxx
 include/vcl/uitest/factory.hxx
 include/vcl/uitest/logger.hxx
@@ -17987,7 +17987,6 @@ vcl/source/control/field.cxx
 vcl/source/control/field2.cxx
 vcl/source/control/fixed.cxx
 vcl/source/control/fixedhyper.cxx
-vcl/source/control/group.cxx
 vcl/source/control/imgctrl.cxx
 vcl/source/control/imp_listbox.cxx
 vcl/source/control/listbox.cxx
@@ -18181,6 +18180,7 @@ vcl/source/outdev/transparent.cxx
 vcl/source/outdev/vclreferencebase.cxx
 vcl/source/outdev/wallpaper.cxx
 vcl/source/salmain/salmain.cxx
+vcl/source/toolkit/group.cxx
 vcl/source/uipreviewer/previewer.cxx
 vcl/source/uitest/logger.cxx
 vcl/source/uitest/uiobject.cxx

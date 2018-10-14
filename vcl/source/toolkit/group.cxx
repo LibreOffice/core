@@ -18,7 +18,7 @@
  */
 
 #include <vcl/event.hxx>
-#include <vcl/group.hxx>
+#include <vcl/toolkit/group.hxx>
 #include <vcl/settings.hxx>
 
 #include <controldata.hxx>
