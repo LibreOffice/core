@@ -1184,7 +1184,9 @@ SwFormatColl *SwContentNode::ChgFormatColl( SwFormatColl *pNewColl )
 
         if( !IsModifyLocked() )
         {
-            ChkCondColl();
+            SwFormatChg aTmp1( pOldColl );
+            SwFormatChg aTmp2( pNewColl );
+            SwClientNotify( *this, sw::LegacyModifyHint(&aTmp1, &aTmp2) );
         }
     }
     if ( IsInCache() )
