@@ -52,6 +52,8 @@ bridges/source/jni_uno/jni_java2uno.cxx:151
     jni_uno::largest p void *
 bridges/source/jni_uno/jni_java2uno.cxx:152
     jni_uno::largest a uno_Any
+chart2/source/controller/inc/res_LegendPosition.hxx:93
+    chart::SchLegendPositionResources m_aChangeLink Link<class LinkParamNone *, void>
 chart2/source/model/main/DataPoint.hxx:108
     chart::DataPoint m_bNoParentPropAllowed _Bool
 connectivity/source/drivers/evoab2/EApi.h:125
@@ -158,11 +160,11 @@ cui/source/options/optcolor.cxx:255
     ColorConfigWindow_Impl aModuleOptions class SvtModuleOptions
 cui/source/options/optpath.cxx:79
     OptPath_Impl m_aDefOpt class SvtDefaultOptions
-cui/source/options/personalization.hxx:39
+cui/source/options/personalization.hxx:45
     SvxPersonalizationTabPage m_vDefaultPersonaImages VclPtr<class PushButton> [3]
-cui/source/options/personalization.hxx:103
+cui/source/options/personalization.hxx:109
     SelectPersonaDialog m_vResultList VclPtr<class PushButton> [9]
-cui/source/options/personalization.hxx:104
+cui/source/options/personalization.hxx:110
     SelectPersonaDialog m_vSearchSuggestions VclPtr<class PushButton> [6]
 cui/source/options/treeopt.cxx:469
     OptionsGroupInfo m_bLoadError _Bool
@@ -303,17 +305,17 @@ include/sfx2/msg.hxx:95
 include/sfx2/msg.hxx:96
     SfxTypeAttrib pName const char *
 include/sfx2/msg.hxx:105
-    SfxType createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+    SfxType createSfxPoolItemFunc const std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:106
     SfxType pType const std::type_info *
 include/sfx2/msg.hxx:107
-    SfxType nAttribs sal_uInt16
+    SfxType nAttribs const sal_uInt16
 include/sfx2/msg.hxx:108
     SfxType aAttrib struct SfxTypeAttrib [1]
 include/sfx2/msg.hxx:118
     SfxType0 pType const std::type_info *
 include/sfx2/sidebar/ResourceManager.hxx:108
-    sfx2::sidebar::ResourceManager maMiscOptions class SvtMiscOptions
+    sfx2::sidebar::ResourceManager maMiscOptions const class SvtMiscOptions
 include/svl/adrparse.hxx:52
     SvAddressParser m_bHasFirst _Bool
 include/svl/ondemand.hxx:58
@@ -353,7 +355,7 @@ include/test/sheet/xnamedranges.hxx:38
 include/test/sheet/xspreadsheets2.hxx:46
     apitest::XSpreadsheets2 xDocument css::uno::Reference<css::sheet::XSpreadsheetDocument>
 include/unoidl/unoidl.hxx:444
-    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/noel/disk2/libo5/include/unoidl/unoidl.hxx:444:5)
+    unoidl::ConstantValue  union unoidl::ConstantValue::(anonymous at /media/noel/disk2/libo6/include/unoidl/unoidl.hxx:444:5)
 include/unoidl/unoidl.hxx:445
     unoidl::ConstantValue::(anonymous) booleanValue _Bool
 include/unoidl/unoidl.hxx:446
@@ -415,7 +417,7 @@ registry/source/reflwrit.cxx:142
 registry/source/reflwrit.cxx:182
     CPInfo::(anonymous) aUik struct RTUik *
 reportdesign/source/ui/inc/ColorListener.hxx:35
-    rptui::OColorListener m_aColorConfig svtools::ColorConfig
+    rptui::OColorListener m_aColorConfig const svtools::ColorConfig
 sal/osl/unx/process.cxx:825
     osl_procStat signal char [24]
 sal/osl/unx/process.cxx:826
@@ -437,7 +439,7 @@ sal/rtl/uuid.cxx:65
 sc/inc/compiler.hxx:127
     ScRawToken::(anonymous union)::(anonymous) eItem class ScTableRefToken::Item
 sc/inc/compiler.hxx:128
-    ScRawToken::(anonymous) table struct (anonymous struct at /media/noel/disk2/libo5/sc/inc/compiler.hxx:125:9)
+    ScRawToken::(anonymous) table struct (anonymous struct at /media/noel/disk2/libo6/sc/inc/compiler.hxx:125:9)
 sc/inc/compiler.hxx:133
     ScRawToken::(anonymous) pMat class ScMatrix *
 sc/inc/formulagroup.hxx:39
@@ -519,19 +521,19 @@ sd/source/ui/slideshow/showwindow.hxx:103
 sd/source/ui/slidesorter/cache/SlsPageCacheManager.cxx:143
     sd::slidesorter::cache::PageCacheManager::RecentlyUsedPageCaches maMap std::map<key_type, mapped_type>
 sd/source/ui/slidesorter/inc/controller/SlsAnimator.hxx:97
-    sd::slidesorter::controller::Animator maElapsedTime ::canvas::tools::ElapsedTime
+    sd::slidesorter::controller::Animator maElapsedTime const ::canvas::tools::ElapsedTime
 sd/source/ui/table/TableDesignPane.hxx:94
     sd::TableDesignWidget m_aCheckBoxes VclPtr<class CheckBox> [6]
 sdext/source/pdfimport/inc/pdfihelper.hxx:101
     pdfi::GraphicsContext BlendMode sal_Int8
 sdext/source/pdfimport/tree/style.hxx:42
-    pdfi::StyleContainer::Style Contents class rtl::OUString
+    pdfi::StyleContainer::Style Contents const class rtl::OUString
 sfx2/source/appl/lnkbase2.cxx:95
     sfx2::ImplDdeItem pLink class sfx2::SvBaseLink *
 slideshow/source/engine/slideshowimpl.cxx:153
-    (anonymous namespace)::FrameSynchronization maTimer canvas::tools::ElapsedTime
+    (anonymous namespace)::FrameSynchronization maTimer const canvas::tools::ElapsedTime
 sot/source/sdstor/ucbstorage.cxx:408
-    UCBStorageStream_Impl m_aKey class rtl::OString
+    UCBStorageStream_Impl m_aKey const class rtl::OString
 starmath/source/view.cxx:856
     SmViewShell_Impl aOpts const class SvtMiscOptions
 store/source/storbios.cxx:59

@@ -9,9 +9,9 @@ avmedia/source/vlc/wrapper/Types.hxx:44
 avmedia/source/vlc/wrapper/Types.hxx:45
     libvlc_event_t::(anonymous union)::(anonymous) dummy2 const char *
 avmedia/source/vlc/wrapper/Types.hxx:46
-    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo5/avmedia/source/vlc/wrapper/Types.hxx:43:7)
+    libvlc_event_t::(anonymous) padding struct (anonymous struct at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:43:7)
 avmedia/source/vlc/wrapper/Types.hxx:47
-    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo5/avmedia/source/vlc/wrapper/Types.hxx:41:5)
+    libvlc_event_t u union (anonymous union at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:41:5)
 avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t psz_name char *
 basegfx/source/polygon/b2dtrapezoid.cxx:201
@@ -120,7 +120,7 @@ cppu/source/uno/check.cxx:138
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
 cui/source/dialogs/colorpicker.cxx:712
     cui::ColorPickerDialog m_aColorPrevious class cui::ColorPreviewControl
-cui/source/factory/dlgfact.cxx:1418
+cui/source/factory/dlgfact.cxx:1421
     SvxMacroAssignDialog m_aItems class SfxItemSet
 cui/source/inc/cfgutil.hxx:190
     SvxScriptSelectorDialog m_aStylesInfo struct SfxStylesInfo_Impl
@@ -136,8 +136,6 @@ cui/source/inc/tabstpge.hxx:95
     SvxTabulatorTabPage m_aCenterWin class TabWin_Impl
 cui/source/inc/tabstpge.hxx:96
     SvxTabulatorTabPage m_aDezWin class TabWin_Impl
-cui/source/tabpages/backgrnd.cxx:73
-    SvxBackgroundPage_Impl bIsImportDlgInExecute _Bool
 dbaccess/source/core/api/RowSet.hxx:111
     dbaccess::ORowSet m_aURL class rtl::OUString
 dbaccess/source/core/api/RowSet.hxx:125
@@ -203,9 +201,9 @@ include/registry/registry.hxx:35
 include/sfx2/classificationhelper.hxx:127
     sfx::ClassificationKeyCreator m_ePolicyType const enum SfxClassificationPolicyType
 include/sfx2/msg.hxx:117
-    SfxType0 createSfxPoolItemFunc std::function<SfxPoolItem *(void)>
+    SfxType0 createSfxPoolItemFunc const std::function<SfxPoolItem *(void)>
 include/sfx2/msg.hxx:119
-    SfxType0 nAttribs sal_uInt16
+    SfxType0 nAttribs const sal_uInt16
 include/svl/ondemand.hxx:58
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
 include/svx/ClassificationDialog.hxx:59
@@ -289,17 +287,17 @@ pyuno/source/module/pyuno_impl.hxx:324
 reportdesign/source/core/api/ReportDefinition.cxx:241
     reportdesign::OStyle m_aSize awt::Size
 sal/osl/unx/thread.cxx:90
-    osl_thread_priority_st m_Highest int
+    osl_thread_priority_st m_Highest const int
 sal/osl/unx/thread.cxx:91
-    osl_thread_priority_st m_Above_Normal int
+    osl_thread_priority_st m_Above_Normal const int
 sal/osl/unx/thread.cxx:92
-    osl_thread_priority_st m_Normal int
+    osl_thread_priority_st m_Normal const int
 sal/osl/unx/thread.cxx:93
-    osl_thread_priority_st m_Below_Normal int
+    osl_thread_priority_st m_Below_Normal const int
 sal/osl/unx/thread.cxx:94
-    osl_thread_priority_st m_Lowest int
+    osl_thread_priority_st m_Lowest const int
 sal/osl/unx/thread.cxx:112
-    osl_thread_global_st m_priority struct osl_thread_priority_st
+    osl_thread_global_st m_priority const struct osl_thread_priority_st
 sal/qa/osl/process/osl_process.cxx:157
     Test_osl_executeProcess env_param_ const class rtl::OUString
 sal/textenc/textenc.cxx:406
@@ -314,7 +312,7 @@ sc/inc/compiler.hxx:259
     ScCompiler::AddInMap pUpper const char *
 sc/inc/formulalogger.hxx:42
     sc::FormulaLogger maMessages std::vector<OUString>
-sc/inc/interpretercontext.hxx:31
+sc/inc/interpretercontext.hxx:32
     ScInterpreterContext mrDoc const class ScDocument &
 sc/inc/token.hxx:406
     SingleDoubleRefModifier aDub struct ScComplexRefData
@@ -385,11 +383,11 @@ sccomp/source/solver/DifferentialEvolution.hxx:35
 sccomp/source/solver/ParticelSwarmOptimization.hxx:56
     ParticleSwarmOptimizationAlgorithm maRandomDevice std::random_device
 scripting/source/stringresource/stringresource.cxx:1310
-    stringresource::BinaryInput m_aData Sequence<sal_Int8>
+    stringresource::BinaryInput m_aData const Sequence<sal_Int8>
 sd/inc/anminfo.hxx:52
-    SdAnimationInfo maSecondSoundFile class rtl::OUString
+    SdAnimationInfo maSecondSoundFile const class rtl::OUString
 sd/source/filter/eppt/epptbase.hxx:347
-    PPTWriterBase maFraction class Fraction
+    PPTWriterBase maFraction const class Fraction
 sd/source/filter/ppt/pptin.hxx:82
     SdPPTImport maParam struct PowerPointImportParam
 sd/source/ui/inc/AccessibleDocumentViewBase.hxx:262
@@ -397,23 +395,23 @@ sd/source/ui/inc/AccessibleDocumentViewBase.hxx:262
 sd/source/ui/remotecontrol/Receiver.hxx:36
     sd::Receiver pTransmitter class sd::Transmitter *
 sd/source/ui/remotecontrol/ZeroconfService.hxx:36
-    sd::ZeroconfService port uint
+    sd::ZeroconfService port const uint
 sd/source/ui/table/TableDesignPane.hxx:104
-    sd::TableDesignPane aImpl class sd::TableDesignWidget
+    sd::TableDesignPane aImpl const class sd::TableDesignWidget
 sd/source/ui/view/DocumentRenderer.cxx:1319
-    sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
+    sd::DocumentRenderer::Implementation mxObjectShell const SfxObjectShellRef
 sd/source/ui/view/viewshel.cxx:1211
-    sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
+    sd::KeepSlideSorterInSyncWithPageChanges m_aDrawLock const sd::slidesorter::view::class SlideSorterView::DrawLock
 sd/source/ui/view/viewshel.cxx:1212
-    sd::KeepSlideSorterInSyncWithPageChanges m_aModelLock sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
+    sd::KeepSlideSorterInSyncWithPageChanges m_aModelLock const sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
 sd/source/ui/view/viewshel.cxx:1213
-    sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::class PageSelector::UpdateLock
+    sd::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock const sd::slidesorter::controller::class PageSelector::UpdateLock
 sd/source/ui/view/viewshel.cxx:1214
-    sd::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
+    sd::KeepSlideSorterInSyncWithPageChanges m_aContext const sd::slidesorter::controller::class SelectionObserver::Context
 sfx2/source/doc/doctempl.cxx:116
-    DocTempl::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
+    DocTempl::DocTempl_EntryData_Impl mxObjShell const class SfxObjectShellLock
 slideshow/source/engine/animationnodes/animationbasenode.hxx:89
-    slideshow::internal::AnimationBaseNode mpSubsetManager slideshow::internal::SubsettableShapeManagerSharedPtr
+    slideshow::internal::AnimationBaseNode mpSubsetManager const slideshow::internal::SubsettableShapeManagerSharedPtr
 slideshow/source/engine/opengl/TransitionImpl.hxx:296
     Vertex normal glm::vec3
 slideshow/source/engine/opengl/TransitionImpl.hxx:297
@@ -449,7 +447,7 @@ svl/source/crypto/cryptosign.cxx:282
 svtools/source/inc/svimpbox.hxx:125
     SvImpLBox aFctSet class ImpLBSelEng
 svtools/source/svhtml/htmlkywd.cxx:558
-    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /media/noel/disk2/libo5/svtools/source/svhtml/htmlkywd.cxx:558:5)
+    HTML_OptionEntry  union HTML_OptionEntry::(anonymous at /media/noel/disk2/libo6/svtools/source/svhtml/htmlkywd.cxx:558:5)
 svtools/source/svhtml/htmlkywd.cxx:560
     HTML_OptionEntry::(anonymous) sToken const sal_Char *
 svtools/source/svhtml/htmlkywd.cxx:561
@@ -584,13 +582,13 @@ vcl/inc/unx/i18n_ic.hxx:46
     SalI18N_InputContext maSwitchIMCallback XIMCallback
 vcl/inc/unx/i18n_ic.hxx:47
     SalI18N_InputContext maDestroyCallback XIMCallback
-vcl/source/app/salvtables.cxx:1525
+vcl/source/app/salvtables.cxx:1542
     SalInstanceEntry m_aTextFilter class SalInstanceEntry::WeldTextFilter
 vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:36
     ImplOldJobSetupData cPortName char [32]
-vcl/unx/gtk3/gtk3gtkinst.cxx:2346
+vcl/unx/gtk3/gtk3gtkinst.cxx:2398
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link const AtkHyperlink

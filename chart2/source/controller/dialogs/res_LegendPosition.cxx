@@ -248,7 +248,6 @@ SchLegendPositionResources::SchLegendPositionResources(weld::Builder& rBuilder)
     , m_xRbtTop(rBuilder.weld_radio_button("top"))
     , m_xRbtBottom(rBuilder.weld_radio_button("bottom"))
 {
-    impl_setRadioButtonToggleHdl();
 }
 
 SchLegendPositionResources::SchLegendPositionResources(weld::Builder& rBuilder,
@@ -261,15 +260,6 @@ SchLegendPositionResources::SchLegendPositionResources(weld::Builder& rBuilder,
     , m_xRbtBottom(rBuilder.weld_radio_button("bottom"))
 {
     m_xCbxShow->connect_toggled(LINK(this, SchLegendPositionResources, PositionEnableHdl));
-    impl_setRadioButtonToggleHdl();
-}
-
-void SchLegendPositionResources::impl_setRadioButtonToggleHdl()
-{
-    m_xRbtLeft->connect_toggled(LINK(this, SchLegendPositionResources, PositionChangeHdl));
-    m_xRbtTop->connect_toggled(LINK(this, SchLegendPositionResources, PositionChangeHdl));
-    m_xRbtRight->connect_toggled(LINK(this, SchLegendPositionResources, PositionChangeHdl));
-    m_xRbtBottom->connect_toggled(LINK(this, SchLegendPositionResources, PositionChangeHdl));
 }
 
 SchLegendPositionResources::~SchLegendPositionResources()
@@ -374,8 +364,6 @@ IMPL_LINK_NOARG(SchLegendPositionResources, PositionEnableHdl, weld::ToggleButto
     m_xRbtTop->set_sensitive( bEnable );
     m_xRbtRight->set_sensitive( bEnable );
     m_xRbtBottom->set_sensitive( bEnable );
-
-    m_aChangeLink.Call(nullptr);
 }
 
 void SchLegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )
@@ -424,20 +412,6 @@ void SchLegendPositionResources::writeToItemSet( SfxItemSet& rOutAttrs ) const
     rOutAttrs.Put( SfxInt32Item(SCHATTR_LEGEND_POS, static_cast<sal_Int32>(nLegendPosition) ) );
 
     rOutAttrs.Put( SfxBoolItem(SCHATTR_LEGEND_SHOW, !m_xCbxShow || m_xCbxShow->get_active()) );
-}
-
-IMPL_LINK(SchLegendPositionResources, PositionChangeHdl, weld::ToggleButton&, rRadio, void )
-{
-    //for each radio click there are coming two change events
-    //first uncheck of previous button -> ignore that call
-    //the second call gives the check of the new button
-    if (rRadio.get_active())
-        m_aChangeLink.Call(nullptr);
-}
-
-void SchLegendPositionResources::SetChangeHdl( const Link<LinkParamNone*,void>& rLink )
-{
-    m_aChangeLink = rLink;
 }
 
 } //namespace chart
