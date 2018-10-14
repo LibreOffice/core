@@ -133,6 +133,7 @@ namespace accessibility
     sal_Int32 SAL_CALL AccessibleCheckBoxCell::getAccessibleIndexInParent()
     {
         ::osl::MutexGuard aGuard( getMutex() );
+        ensureIsAlive();
 
         return ( getRowPos() * mpBrowseBox->GetColumnCount() ) + getColumnPos();
     }
