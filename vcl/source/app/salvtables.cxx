@@ -819,6 +819,11 @@ public:
         m_xDialog->set_default_response(nResponse);
     }
 
+    virtual void set_modal(bool bModal) override
+    {
+        m_xDialog->SetModalInputMode(bModal);
+    }
+
     virtual Container* weld_content_area() override
     {
         return new SalInstanceContainer(m_xDialog->get_content_area(), false);

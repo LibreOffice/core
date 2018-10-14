@@ -20,7 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_INSERTERRORBARS_HXX
 
 #include <memory>
-#include <vcl/dialog.hxx>
+#include <vcl/weld.hxx>
 #include <svl/itemset.hxx>
 
 #include "res_ErrorBar.hxx"
@@ -30,12 +30,12 @@ namespace com { namespace sun { namespace star { namespace frame { class XModel;
 namespace chart
 {
 
-class InsertErrorBarsDialog : public ModalDialog
+class InsertErrorBarsDialog : public weld::GenericDialogController
 {
 public:
-    InsertErrorBarsDialog( vcl::Window* pParent, const SfxItemSet& rMyAttrs,
-                           const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument,
-                           ErrorBarResources::tErrorBarType eType );
+    InsertErrorBarsDialog(weld::Window* pParent, const SfxItemSet& rMyAttrs,
+                          const css::uno::Reference< css::chart2::XChartDocument > & xChartDocument,
+                          ErrorBarResources::tErrorBarType eType);
 
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
 
@@ -45,7 +45,6 @@ public:
         const OUString& rSelectedObjectCID );
 
     void FillItemSet( SfxItemSet& rOutAttrs );
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) override;
 
 private:
     std::unique_ptr< ErrorBarResources >    m_apErrorBarResources;
