@@ -33,7 +33,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/unowrap.hxx>
+#include <vcl/toolkit/unowrap.hxx>
 #include <vcl/settings.hxx>
 
 #define DOCKWIN_FLOATSTYLES         (WB_SIZEABLE | WB_MOVEABLE | WB_CLOSEABLE | WB_STANDALONE | WB_ROLLABLE )

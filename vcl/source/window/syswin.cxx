@@ -31,7 +31,7 @@
 #include <vcl/event.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>
-#include <vcl/unowrap.hxx>
+#include <vcl/toolkit/unowrap.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/mnemonic.hxx>

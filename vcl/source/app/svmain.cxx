@@ -42,7 +42,7 @@
 #include <vcl/image.hxx>
 #include <vcl/ImageTree.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/unowrap.hxx>
+#include <vcl/toolkit/unowrap.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/configsettings.hxx>
 #include <vcl/lazydelete.hxx>
