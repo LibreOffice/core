@@ -161,24 +161,22 @@ void GlobalEventConfig_Impl::ImplCommit()
 {
     //DF need to check it this is correct??
     SAL_INFO("unotools", "In GlobalEventConfig_Impl::ImplCommit");
-    EventBindingHash::const_iterator it = m_eventBindingHash.begin();
-    EventBindingHash::const_iterator it_end = m_eventBindingHash.end();
     // clear the existing nodes
     ClearNodeSet( SETNODE_BINDINGS );
     Sequence< beans::PropertyValue > seqValues( 1 );
     OUString sNode;
     //step through the list of events
-    for(int i=0;it!=it_end;++it,++i)
+    for(const auto& rEntry : m_eventBindingHash)
     {
         //no point in writing out empty bindings!
-        if(it->second.isEmpty() )
+        if(rEntry.second.isEmpty() )
             continue;
         sNode = SETNODE_BINDINGS PATHDELIMITER "BindingType['" +
-                it->first +
+                rEntry.first +
                 "']" PATHDELIMITER PROPERTYNAME_BINDINGURL;
         SAL_INFO("unotools", "writing binding for: " << sNode);
         seqValues[ 0 ].Name = sNode;
-        seqValues[ 0 ].Value <<= it->second;
+        seqValues[ 0 ].Value <<= rEntry.second;
         //write the data to the registry
         SetSetProperties(SETNODE_BINDINGS,seqValues);
     }

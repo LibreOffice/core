@@ -94,8 +94,6 @@ class SvtDynMenu
         // convert internal list to external format
         // for using it on right menus really
         // Notice:   We build a property list with 4 entries and set it on result list then.
-        //           The while-loop starts with pointer on internal member list lSetupEntries, change to
-        //           lUserEntries then and stop after that with NULL!
         //           Separator entries will be packed in another way then normal entries! We define
         //           special string "sSeparator" to perform too ...
         Sequence< Sequence< PropertyValue > > GetList() const
@@ -106,20 +104,17 @@ class SvtDynMenu
             Sequence< PropertyValue >             lProperties ( PROPERTYCOUNT );
             Sequence< Sequence< PropertyValue > > lResult     ( nSetupCount+nUserCount );
             OUString                              sSeparator  ( "private:separator" );
-            const vector< SvtDynMenuEntry >*            pList       = &lSetupEntries;
 
             lProperties[OFFSET_URL            ].Name = PROPERTYNAME_URL;
             lProperties[OFFSET_TITLE          ].Name = PROPERTYNAME_TITLE;
             lProperties[OFFSET_IMAGEIDENTIFIER].Name = PROPERTYNAME_IMAGEIDENTIFIER;
             lProperties[OFFSET_TARGETNAME     ].Name = PROPERTYNAME_TARGETNAME;
 
-            while( pList != nullptr )
+            for( const auto& pList : {&lSetupEntries, &lUserEntries} )
             {
-                for( vector< SvtDynMenuEntry >::const_iterator pItem =pList->begin();
-                                                         pItem!=pList->end();
-                                                         ++pItem              )
+                for( const auto& rItem : *pList )
                 {
-                    if( pItem->sURL == sSeparator )
+                    if( rItem.sURL == sSeparator )
                     {
                         lProperties[OFFSET_URL              ].Value <<= sSeparator;
                         lProperties[OFFSET_TITLE            ].Value <<= OUString();
@@ -128,18 +123,14 @@ class SvtDynMenu
                     }
                     else
                     {
-                        lProperties[OFFSET_URL              ].Value <<= pItem->sURL;
-                        lProperties[OFFSET_TITLE            ].Value <<= pItem->sTitle;
-                        lProperties[OFFSET_IMAGEIDENTIFIER  ].Value <<= pItem->sImageIdentifier;
-                        lProperties[OFFSET_TARGETNAME       ].Value <<= pItem->sTargetName;
+                        lProperties[OFFSET_URL              ].Value <<= rItem.sURL;
+                        lProperties[OFFSET_TITLE            ].Value <<= rItem.sTitle;
+                        lProperties[OFFSET_IMAGEIDENTIFIER  ].Value <<= rItem.sImageIdentifier;
+                        lProperties[OFFSET_TARGETNAME       ].Value <<= rItem.sTargetName;
                     }
                     lResult[nStep] = lProperties;
                     ++nStep;
                 }
-                if( pList == &lSetupEntries )
-                    pList = &lUserEntries;
-                else
-                    pList = nullptr;
             }
             return lResult;
         }
@@ -501,15 +492,12 @@ void SvtDynamicMenuOptions_Impl::impl_SortAndExpandPropertyNames( const Sequence
 
     // Copy sorted entries to destination and expand every item with
     // 4 supported sub properties.
-    for( vector< OUString >::const_iterator pItem =lTemp.begin();
-                                            pItem!=lTemp.end();
-                                            ++pItem              )
+    for( const auto& rItem : lTemp )
     {
-        OUString sFixPath(sSetNode + PATHDELIMITER + *pItem + PATHDELIMITER);
+        OUString sFixPath(sSetNode + PATHDELIMITER + rItem + PATHDELIMITER);
         lDestination[nDestinationStep++] = sFixPath + PROPERTYNAME_URL;
         lDestination[nDestinationStep++] = sFixPath + PROPERTYNAME_TITLE;
-        lDestination[nDestinationStep++] = sFixPath
-            + PROPERTYNAME_IMAGEIDENTIFIER;
+        lDestination[nDestinationStep++] = sFixPath + PROPERTYNAME_IMAGEIDENTIFIER;
         lDestination[nDestinationStep++] = sFixPath + PROPERTYNAME_TARGETNAME;
     }
 }

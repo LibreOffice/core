@@ -93,11 +93,9 @@ void FilterDialog::ChangeFilters( const FilterNameList* pFilterNames )
     m_xLbFilters->clear();
     if( m_pFilterNames != nullptr )
     {
-        for( FilterNameListPtr pItem  = m_pFilterNames->begin();
-                               pItem != m_pFilterNames->end()  ;
-                               ++pItem                         )
+        for( const auto& rItem : *m_pFilterNames )
         {
-            m_xLbFilters->append_text(pItem->sUI);
+            m_xLbFilters->append_text(rItem.sUI);
         }
     }
 }

@@ -344,9 +344,9 @@ VbaEventsHelperBase::ModulePathMap& VbaEventsHelperBase::updateModulePathMap( co
     sal_Int32 nModuleType = getModuleType( rModuleName );
     // search for all event handlers
     ModulePathMap& rPathMap = maEventPaths[ rModuleName ];
-    for( EventHandlerInfoMap::iterator aIt = maEventInfos.begin(), aEnd = maEventInfos.end(); aIt != aEnd; ++aIt )
+    for( const auto& rEventInfo : maEventInfos )
     {
-        const EventHandlerInfo& rInfo = aIt->second;
+        const EventHandlerInfo& rInfo = rEventInfo.second;
         if( rInfo.mnModuleType == nModuleType )
             rPathMap[ rInfo.mnEventId ] = resolveVBAMacro( mpShell, maLibraryName, rModuleName, rInfo.maMacroName );
     }

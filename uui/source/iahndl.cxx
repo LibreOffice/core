@@ -284,15 +284,8 @@ UUIInteractionHelper::tryOtherInteractionHandler(
     InteractionHandlerDataList dataList;
     getInteractionHandlerList(dataList);
 
-    InteractionHandlerDataList::const_iterator aEnd(dataList.end());
-    for (InteractionHandlerDataList::const_iterator aIt(dataList.begin());
-         aIt != aEnd;
-         ++aIt)
-    {
-        if ( handleCustomRequest( rRequest, aIt->ServiceName ) )
-            return true;
-    }
-    return false;
+    return std::any_of(dataList.cbegin(), dataList.cend(),
+        [&](const InteractionHandlerData& rData) { return handleCustomRequest( rRequest, rData.ServiceName ); });
 }
 
 namespace

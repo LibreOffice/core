@@ -20,6 +20,8 @@
 #include <sal/config.h>
 #include <unotools/options.hxx>
 
+#include <algorithm>
+
 using utl::detail::Options;
 using utl::ConfigurationBroadcaster;
 
@@ -64,15 +66,9 @@ void ConfigurationBroadcaster::AddListener( utl::ConfigurationListener* pListene
 void ConfigurationBroadcaster::RemoveListener( utl::ConfigurationListener const * pListener )
 {
     if ( mpList ) {
-        for ( IMPL_ConfigurationListenerList::iterator it = mpList->begin();
-              it != mpList->end();
-              ++it
-        ) {
-            if ( *it == pListener ) {
-                mpList->erase( it );
-                break;
-            }
-        }
+        auto it = std::find(mpList->begin(), mpList->end(), pListener);
+        if ( it != mpList->end() )
+            mpList->erase( it );
     }
 }
 

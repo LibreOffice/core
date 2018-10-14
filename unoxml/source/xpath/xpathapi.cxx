@@ -120,16 +120,14 @@ namespace XPath
             xmlXPathContextPtr ctx,
             const nsmap_t& nsmap)
     {
-        nsmap_t::const_iterator i = nsmap.begin();
         OString oprefix, ouri;
-        while (i != nsmap.end())
+        for (const auto& rEntry : nsmap)
         {
-            oprefix = OUStringToOString(i->first,  RTL_TEXTENCODING_UTF8);
-            ouri    = OUStringToOString(i->second, RTL_TEXTENCODING_UTF8);
+            oprefix = OUStringToOString(rEntry.first,  RTL_TEXTENCODING_UTF8);
+            ouri    = OUStringToOString(rEntry.second, RTL_TEXTENCODING_UTF8);
             xmlChar const *p = reinterpret_cast<xmlChar const *>(oprefix.getStr());
             xmlChar const *u = reinterpret_cast<xmlChar const *>(ouri.getStr());
             (void)xmlXPathRegisterNs(ctx, p, u);
-            ++i;
         }
     }
 
@@ -166,10 +164,9 @@ namespace XPath
     {
         nsmap_t namespaces;
         lcl_collectNamespaces(namespaces, xNamespaceNode);
-        for (nsmap_t::const_iterator iter = namespaces.begin();
-                iter != namespaces.end(); ++iter)
+        for (const auto& rEntry : namespaces)
         {
-            rAPI.registerNS(iter->first, iter->second);
+            rAPI.registerNS(rEntry.first, rEntry.second);
         }
     }
 
@@ -179,10 +176,9 @@ namespace XPath
             xmlXPathContextPtr ctx,
             const extensions_t& extensions)
     {
-        extensions_t::const_iterator i = extensions.begin();
-        while (i != extensions.end())
+        for (const auto& rExtensionRef : extensions)
         {
-            Libxml2ExtensionHandle aHandle = (*i)->getLibxml2ExtensionHandle();
+            Libxml2ExtensionHandle aHandle = rExtensionRef->getLibxml2ExtensionHandle();
             if ( aHandle.functionLookupFunction != 0 )
             {
                 xmlXPathRegisterFuncLookup(ctx,
@@ -199,7 +195,6 @@ namespace XPath
                     reinterpret_cast<void*>(
                         sal::static_int_cast<sal_IntPtr>(aHandle.variableData)));
             }
-            ++i;
         }
     }
 

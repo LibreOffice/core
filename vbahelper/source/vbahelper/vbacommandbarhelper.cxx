@@ -73,13 +73,10 @@ public:
 
     OUString findBuildinToolbar( const OUString& sToolbarName )
     {
-        MSO2OOCommandbarMap::iterator it = maBuildinToolbarMap.begin();
-        for(; it != maBuildinToolbarMap.end(); ++it )
-        {
-            OUString sName = it->first;
-            if( sName.equalsIgnoreAsciiCase( sToolbarName ) )
-                return it->second;
-        }
+        auto it = std::find_if(maBuildinToolbarMap.begin(), maBuildinToolbarMap.end(),
+            [&sToolbarName](const MSO2OOCommandbarMap::value_type& rItem) { return rItem.first.equalsIgnoreAsciiCase( sToolbarName ); });
+        if( it != maBuildinToolbarMap.end() )
+            return it->second;
         return OUString();
     }
 };

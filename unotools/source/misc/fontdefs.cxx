@@ -549,10 +549,10 @@ OUString GetSubsFontName( const OUString& rName, SubsFontFlags nFlags )
             }
             if( ! pVector )
                 continue;
-            for( ::std::vector< OUString >::const_iterator it = pVector->begin(); it != pVector->end(); ++it )
-                if( ! ImplIsFontToken( rName, *it ) )
+            for( const auto& rSubstitution : *pVector )
+                if( ! ImplIsFontToken( rName, rSubstitution ) )
                 {
-                    ImplAppendFontToken( aName, *it );
+                    ImplAppendFontToken( aName, rSubstitution );
                     if( nFlags & SubsFontFlags::ONLYONE )
                     {
                         i = 4;
