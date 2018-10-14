@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/morebtn.hxx>
+#include <vcl/toolkit/morebtn.hxx>
 
 #include <vector>
 

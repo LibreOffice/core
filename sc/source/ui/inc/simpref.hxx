@@ -22,7 +22,6 @@
 
 #include <vcl/combobox.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/morebtn.hxx>
 #include "anyrefdg.hxx"
 #include <dbdata.hxx>
 

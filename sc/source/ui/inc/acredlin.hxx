@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_ACREDLIN_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_ACREDLIN_HXX
 
-#include <vcl/morebtn.hxx>
 #include <vcl/combobox.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/simptabl.hxx>

@@ -100,7 +100,7 @@
 #include <vcl/longcurr.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
-#include <vcl/morebtn.hxx>
+#include <vcl/toolkit/morebtn.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/spin.hxx>

@@ -7991,7 +7991,6 @@ include/vcl/metaactiontypes.hxx
 include/vcl/metric.hxx
 include/vcl/mnemonic.hxx
 include/vcl/mnemonicengine.hxx
-include/vcl/morebtn.hxx
 include/vcl/msgbox.hxx
 include/vcl/notebookbar.hxx
 include/vcl/oldprintadaptor.hxx
@@ -8052,6 +8051,7 @@ include/vcl/throbber.hxx
 include/vcl/timer.hxx
 include/vcl/toolbox.hxx
 include/vcl/toolkit/group.hxx
+include/vcl/toolkit/morebtn.hxx
 include/vcl/toolkit/unowrap.hxx
 include/vcl/txtattr.hxx
 include/vcl/uitest/factory.hxx
@@ -17993,7 +17993,6 @@ vcl/source/control/listbox.cxx
 vcl/source/control/listctrl.cxx
 vcl/source/control/longcurr.cxx
 vcl/source/control/menubtn.cxx
-vcl/source/control/morebtn.cxx
 vcl/source/control/notebookbar.cxx
 vcl/source/control/prgsbar.cxx
 vcl/source/control/quickselectionengine.cxx
@@ -18181,6 +18180,7 @@ vcl/source/outdev/vclreferencebase.cxx
 vcl/source/outdev/wallpaper.cxx
 vcl/source/salmain/salmain.cxx
 vcl/source/toolkit/group.cxx
+vcl/source/toolkit/morebtn.cxx
 vcl/source/uipreviewer/previewer.cxx
 vcl/source/uitest/logger.cxx
 vcl/source/uitest/uiobject.cxx
