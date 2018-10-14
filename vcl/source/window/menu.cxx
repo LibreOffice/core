@@ -1310,7 +1310,7 @@ css::uno::Reference<css::accessibility::XAccessible> Menu::GetAccessible()
     }
     else if ( !mxAccessible.is() )
     {
-        UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
+        UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper();
         if ( pWrapper )
             mxAccessible = pWrapper->CreateAccessible(this, IsMenuBar());
     }

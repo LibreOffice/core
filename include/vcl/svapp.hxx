@@ -1183,23 +1183,6 @@ public:
     */
     static css::uno::Reference< css::awt::XToolkit > GetVCLToolkit();
 
-    /** Get the application's UNO wrapper object.
-
-     Note that this static function will only ever try to create UNO wrapper object once, and
-     if it fails then it will not ever try again, even if the function is called multiple times.
-
-     @param     bCreateIfNotExists  Create the UNO wrapper object if it doesn't exist when true.
-
-     @return UNO wrapper object.
-    */
-    static UnoWrapperBase*      GetUnoWrapper( bool bCreateIfNotExists = true );
-
-    /** Sets the application's UNO Wrapper object.
-
-     @param     pWrapper        Pointer to UNO wrapper object.
-    */
-    static void                 SetUnoWrapper( UnoWrapperBase* pWrapper );
-
     ///@}
 
 

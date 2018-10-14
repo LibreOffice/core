@@ -1394,7 +1394,7 @@ SystemWindowFlags Application::GetSystemWindowMode()
 css::uno::Reference< css::awt::XToolkit > Application::GetVCLToolkit()
 {
     css::uno::Reference< css::awt::XToolkit > xT;
-    UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
+    UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper();
     if ( pWrapper )
         xT = pWrapper->GetVCLToolkit();
     return xT;
@@ -1410,7 +1410,7 @@ extern "C" { static void thisModule() {} }
 
 #endif
 
-UnoWrapperBase* Application::GetUnoWrapper( bool bCreateIfNotExist )
+UnoWrapperBase* UnoWrapperBase::GetUnoWrapper( bool bCreateIfNotExist )
 {
     ImplSVData* pSVData = ImplGetSVData();
     static bool bAlreadyTriedToCreate = false;
@@ -1437,7 +1437,7 @@ UnoWrapperBase* Application::GetUnoWrapper( bool bCreateIfNotExist )
     return pSVData->mpUnoWrapper;
 }
 
-void Application::SetUnoWrapper( UnoWrapperBase* pWrapper )
+void UnoWrapperBase::SetUnoWrapper( UnoWrapperBase* pWrapper )
 {
     ImplSVData* pSVData = ImplGetSVData();
     SAL_WARN_IF( pSVData->mpUnoWrapper, "vcl", "SetUnoWrapper: Wrapper already exists" );

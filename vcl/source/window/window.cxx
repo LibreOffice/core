@@ -225,7 +225,7 @@ void Window::dispose()
         }
     }
 
-    UnoWrapperBase* pWrapper = Application::GetUnoWrapper( false );
+    UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper( false );
     if ( pWrapper )
         pWrapper->WindowDestroyed( this );
 
@@ -3159,7 +3159,7 @@ Reference< css::awt::XWindowPeer > Window::GetComponentInterface( bool bCreate )
 {
     if ( !mpWindowImpl->mxWindowPeer.is() && bCreate )
     {
-        UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
+        UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper();
         if ( pWrapper )
             mpWindowImpl->mxWindowPeer = pWrapper->GetWindowInterface( this );
     }
@@ -3168,7 +3168,7 @@ Reference< css::awt::XWindowPeer > Window::GetComponentInterface( bool bCreate )
 
 void Window::SetComponentInterface( Reference< css::awt::XWindowPeer > const & xIFace )
 {
-    UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
+    UnoWrapperBase* pWrapper = UnoWrapperBase::GetUnoWrapper();
     SAL_WARN_IF( !pWrapper, "vcl.window", "SetComponentInterface: No Wrapper!" );
     if ( pWrapper )
         pWrapper->SetWindowInterface( this, xIFace );
