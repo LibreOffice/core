@@ -20,7 +20,6 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_OPTPAGE_HXX
 #include <sfx2/tabdlg.hxx>
 
-#include <vcl/group.hxx>
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>

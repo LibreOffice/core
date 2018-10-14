@@ -24,7 +24,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/group.hxx>
 #include <TableGrantCtrl.hxx>
 #include "adminpages.hxx"
 

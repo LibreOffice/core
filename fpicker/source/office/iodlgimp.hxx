@@ -25,7 +25,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/group.hxx>
 
 #include <deque>
 #include <memory>

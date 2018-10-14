@@ -22,7 +22,6 @@
 
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/group.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/morebtn.hxx>
 #include <global.hxx>

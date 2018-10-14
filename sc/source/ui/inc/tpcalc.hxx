@@ -23,7 +23,6 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-#include <vcl/group.hxx>
 #include "editfield.hxx"
 
 class ScDocOptions;

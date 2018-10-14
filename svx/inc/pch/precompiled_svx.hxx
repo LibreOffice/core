@@ -113,7 +113,6 @@
 #include <vcl/font.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/group.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/keycod.hxx>

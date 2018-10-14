@@ -23,7 +23,6 @@
 #include <svx/svdpagv.hxx>
 #include <editeng/colritem.hxx>
 #include <svx/svdundo.hxx>
-#include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>

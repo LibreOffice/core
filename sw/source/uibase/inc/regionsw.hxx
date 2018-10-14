@@ -26,7 +26,6 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/combobox.hxx>
-#include <vcl/group.hxx>
 #include <vcl/layout.hxx>
 #include <svtools/treelistbox.hxx>
 #include <sfx2/basedlgs.hxx>

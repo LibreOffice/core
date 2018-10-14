@@ -23,7 +23,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/image.hxx>
-#include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/timer.hxx>

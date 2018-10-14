@@ -25,7 +25,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/menubtn.hxx>
-#include <vcl/group.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/image.hxx>
 #include <vcl/toolbox.hxx>

@@ -24,7 +24,6 @@
 #include <vcl/button.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/dialog.hxx>
 #include <sfx2/childwin.hxx>

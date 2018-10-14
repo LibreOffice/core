@@ -25,7 +25,6 @@
 
 #include <vcl/fixed.hxx>
 
-#include <vcl/group.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svx/colorbox.hxx>
 

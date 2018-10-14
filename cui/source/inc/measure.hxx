@@ -20,7 +20,6 @@
 #define INCLUDED_CUI_SOURCE_INC_MEASURE_HXX
 
 #include <vcl/fixed.hxx>
-#include <vcl/group.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svx/dlgctrl.hxx>
 #include <svx/measctrl.hxx>

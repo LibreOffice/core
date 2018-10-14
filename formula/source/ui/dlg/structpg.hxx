@@ -21,7 +21,6 @@
 #define INCLUDED_FORMULA_SOURCE_UI_DLG_STRUCTPG_HXX
 
 #include <vcl/lstbox.hxx>
-#include <vcl/group.hxx>
 #include <svtools/svmedit.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>

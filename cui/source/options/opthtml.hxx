@@ -22,7 +22,6 @@
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/group.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svx/txencbox.hxx>
 

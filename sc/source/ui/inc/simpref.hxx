@@ -20,12 +20,8 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_SIMPREF_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_SIMPREF_HXX
 
-#include <vcl/group.hxx>
-
 #include <vcl/combobox.hxx>
-
 #include <vcl/fixed.hxx>
-
 #include <vcl/morebtn.hxx>
 #include "anyrefdg.hxx"
 #include <dbdata.hxx>

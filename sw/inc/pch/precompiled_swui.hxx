@@ -150,7 +150,6 @@
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/GraphicObject.hxx>
-#include <vcl/group.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/help.hxx>
 #include <vcl/idle.hxx>

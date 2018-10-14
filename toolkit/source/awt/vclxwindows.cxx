@@ -57,8 +57,6 @@
 #include <vcl/settings.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <vcl/group.hxx>
-
 #include <helper/accessibilityclient.hxx>
 #include <helper/imagealign.hxx>
 #include <helper/msgbox.hxx>

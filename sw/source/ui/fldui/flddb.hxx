@@ -22,7 +22,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
-#include <vcl/group.hxx>
 
 #include <condedit.hxx>
 #include <dbtree.hxx>

@@ -24,7 +24,6 @@
 #include <svx/svdattr.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/group.hxx>
 
 class SdrView;
 

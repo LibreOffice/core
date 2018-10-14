@@ -21,9 +21,6 @@
 
 #include <svx/dlgctrl.hxx>
 #include <svx/svdobj.hxx>
-
-#include <vcl/group.hxx>
-
 #include <vcl/fixed.hxx>
 #include <sfx2/basedlgs.hxx>
 

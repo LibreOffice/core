@@ -54,7 +54,6 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>
 #include <tools/debug.hxx>
