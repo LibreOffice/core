@@ -94,7 +94,7 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
-#include <vcl/group.hxx>
+#include <vcl/toolkit/group.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/imgctrl.hxx>
 #include <vcl/longcurr.hxx>

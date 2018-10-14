@@ -182,7 +182,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/field \
     vcl/source/control/fixed \
     vcl/source/control/fixedhyper \
-    vcl/source/control/group \
     vcl/source/control/imgctrl \
     vcl/source/control/listctrl \
     vcl/source/control/longcurr \
@@ -207,6 +206,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/edit/textview \
     vcl/source/edit/txtattr \
     vcl/source/edit/xtextedt \
+    vcl/source/toolkit/group \
     vcl/source/outdev/outdev \
     vcl/source/outdev/outdevstate \
     vcl/source/outdev/outdevstatestack \
