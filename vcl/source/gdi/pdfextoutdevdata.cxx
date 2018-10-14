@@ -394,31 +394,26 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                 /* first determining if this BeginGroup is starting a GfxLink,
                    by searching for a EndGroup or a EndGroupGfxLink */
                 mbGroupIgnoreGDIMtfActions = false;
-                std::deque< PDFExtOutDevDataSync >::iterator aBeg = mActions.begin();
-                std::deque< PDFExtOutDevDataSync >::iterator aEnd = mActions.end();
-                while ( aBeg != aEnd )
+                auto isStartingGfxLink = std::any_of(mActions.begin(), mActions.end(),
+                    [](const PDFExtOutDevDataSync& rAction) { return rAction.eAct == PDFExtOutDevDataSync::EndGroupGfxLink; });
+                if ( isStartingGfxLink )
                 {
-                    if ( aBeg->eAct == PDFExtOutDevDataSync::EndGroupGfxLink )
+                    Graphic& rGraphic = mGraphics.front();
+                    if ( rGraphic.IsGfxLink() && mParaRects.size() >= 2 )
                     {
-                        Graphic& rGraphic = mGraphics.front();
-                        if ( rGraphic.IsGfxLink() && mParaRects.size() >= 2 )
+                        GfxLinkType eType = rGraphic.GetGfxLink().GetType();
+                        if ( eType == GfxLinkType::NativeJpg )
                         {
-                            GfxLinkType eType = rGraphic.GetGfxLink().GetType();
-                            if ( eType == GfxLinkType::NativeJpg )
-                            {
-                                mbGroupIgnoreGDIMtfActions = rOutDevData.HasAdequateCompression(rGraphic, mParaRects[0], mParaRects[1]);
-                                if ( !mbGroupIgnoreGDIMtfActions )
-                                    mCurrentGraphic = rGraphic;
-                            }
-                            else if ( eType == GfxLinkType::NativePng || eType == GfxLinkType::NativePdf )
-                            {
-                                if ( eType == GfxLinkType::NativePdf || rOutDevData.HasAdequateCompression(rGraphic, mParaRects[0], mParaRects[1]) )
-                                    mCurrentGraphic = rGraphic;
-                            }
+                            mbGroupIgnoreGDIMtfActions = rOutDevData.HasAdequateCompression(rGraphic, mParaRects[0], mParaRects[1]);
+                            if ( !mbGroupIgnoreGDIMtfActions )
+                                mCurrentGraphic = rGraphic;
                         }
-                        break;
+                        else if ( eType == GfxLinkType::NativePng || eType == GfxLinkType::NativePdf )
+                        {
+                            if ( eType == GfxLinkType::NativePdf || rOutDevData.HasAdequateCompression(rGraphic, mParaRects[0], mParaRects[1]) )
+                                mCurrentGraphic = rGraphic;
+                        }
                     }
-                    ++aBeg;
                 }
             }
             break;

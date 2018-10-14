@@ -81,9 +81,8 @@ SvpSalFrame::~SvpSalFrame()
         m_pInstance->deregisterFrame( this );
 
     std::list<SvpSalFrame*> Children = m_aChildren;
-    for( std::list<SvpSalFrame*>::iterator it = Children.begin();
-         it != Children.end(); ++it )
-         (*it)->SetParent( m_pParent );
+    for( auto& rChild : Children )
+        rChild->SetParent( m_pParent );
     if( m_pParent )
         m_pParent->m_aChildren.remove( this );
 

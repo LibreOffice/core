@@ -400,17 +400,13 @@ vcl::Window* Dialog::GetDefaultParent(WinBits nStyle)
     {
         ImplSVData* pSVData = ImplGetSVData();
         auto& rExecuteDialogs = pSVData->maWinData.mpExecuteDialogs;
-        for (auto it = rExecuteDialogs.rbegin(); it != rExecuteDialogs.rend(); ++it)
-        {
-            // only if visible and enabled
-            if (pParent->ImplGetFirstOverlapWindow()->IsWindowOrChild(*it, true) &&
-                (*it)->IsReallyVisible() &&
-                (*it)->IsEnabled() && (*it)->IsInputEnabled() && !(*it)->IsInModalMode())
-            {
-                pParent = it->get();
-                break;
-            }
-        }
+        auto it = std::find_if(rExecuteDialogs.rbegin(), rExecuteDialogs.rend(),
+            [&pParent](VclPtr<Dialog>& rDialogPtr) {
+                return pParent->ImplGetFirstOverlapWindow()->IsWindowOrChild(rDialogPtr, true) &&
+                    rDialogPtr->IsReallyVisible() && rDialogPtr->IsEnabled() &&
+                    rDialogPtr->IsInputEnabled() && !rDialogPtr->IsInModalMode(); });
+        if (it != rExecuteDialogs.rend())
+            pParent = it->get();
     }
 
     return pParent;

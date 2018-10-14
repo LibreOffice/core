@@ -199,12 +199,8 @@ void SalData::initNWF()
 // ********************************************************
 void SalData::deInitNWF()
 {
-    ThemeMap::iterator iter = aThemeMap.begin();
-    while( iter != aThemeMap.end() )
-    {
-        vsAPI.CloseThemeData(iter->second);
-        ++iter;
-    }
+    for( auto& rEntry : aThemeMap )
+        vsAPI.CloseThemeData(rEntry.second);
     aThemeMap.clear();
 }
 

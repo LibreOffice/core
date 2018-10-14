@@ -549,9 +549,8 @@ Size VclButtonBox::addReqGroups(const VclButtonBox::Requisition &rReq) const
 static long getMaxNonOutlier(const std::vector<long> &rG, long nAvgDimension)
 {
     long nMaxDimensionNonOutlier = 0;
-    for (auto const& elem : rG)
+    for (auto const& nPrimaryChildDimension : rG)
     {
-        long nPrimaryChildDimension = elem;
         if (nPrimaryChildDimension < nAvgDimension * 1.5)
         {
             nMaxDimensionNonOutlier = std::max(nPrimaryChildDimension,
@@ -569,13 +568,13 @@ static std::vector<long> setButtonSizes(const std::vector<long> &rG,
     //set everything < 1.5 times the average to the same width, leave the
     //outliers un-touched
     std::vector<bool>::const_iterator aJ = rNonHomogeneous.begin();
-    for (auto const& elem : rG)
+    auto nNonOutlierWidth = std::max(nMaxNonOutlier, nMinWidth);
+    for (auto const& nPrimaryChildDimension : rG)
     {
-        long nPrimaryChildDimension = elem;
         bool bNonHomogeneous = *aJ;
         if (!bNonHomogeneous && nPrimaryChildDimension < nAvgDimension * 1.5)
         {
-            aVec.push_back(std::max(nMaxNonOutlier, nMinWidth));
+            aVec.push_back(nNonOutlierWidth);
         }
         else
         {

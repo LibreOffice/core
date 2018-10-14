@@ -1077,14 +1077,11 @@ void ImplSalBitmapCache::ImplAdd( X11SalBitmap* pBmp )
 
 void ImplSalBitmapCache::ImplRemove( X11SalBitmap const * pBmp )
 {
-    for( auto it = maBmpList.begin(); it != maBmpList.end(); ++it)
+    auto it = std::find(maBmpList.begin(), maBmpList.end(), pBmp);
+    if( it != maBmpList.end() )
     {
-        if( *it == pBmp )
-        {
-            (*it)->ImplRemovedFromCache();
-            maBmpList.erase( it );
-            break;
-        }
+        (*it)->ImplRemovedFromCache();
+        maBmpList.erase( it );
     }
 }
 

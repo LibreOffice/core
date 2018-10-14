@@ -78,13 +78,10 @@ namespace
         aImages.reserve( aImageURLs.size() );
 
         ::comphelper::NamedValueCollection aMediaProperties;
-        for (   ::std::vector< OUString >::const_iterator imageURL = aImageURLs.begin();
-                imageURL != aImageURLs.end();
-                ++imageURL
-            )
+        for ( const auto& rImageURL : aImageURLs )
         {
             Reference< XGraphic > xGraphic;
-            aMediaProperties.put( "URL", *imageURL );
+            aMediaProperties.put( "URL", rImageURL );
             xGraphic.set( xGraphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_QUERY );
             aImages.emplace_back( xGraphic );
         }

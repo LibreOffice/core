@@ -1215,9 +1215,8 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
     }
 
     // second pass: fill in defaults
-    for( line = rLines.begin(); line != rLines.end(); ++line )
+    for( const auto& aLine : rLines )
     {
-        OString aLine(*line);
         if (aLine.startsWith("*Default"))
         {
             SAL_INFO("vcl.unx.print", "Found a default: '" << aLine << "'");
@@ -1598,14 +1597,10 @@ void PPDKey::eraseValue( const OUString& rOption )
     if( it == m_aValues.end() )
         return;
 
-    for( PPDKey::value_type::iterator vit = m_aOrderedValues.begin(); vit != m_aOrderedValues.end(); ++vit )
-    {
-        if( *vit == &(it->second ) )
-        {
-            m_aOrderedValues.erase( vit );
-            break;
-        }
-    }
+    auto vit = std::find(m_aOrderedValues.begin(), m_aOrderedValues.end(), &(it->second ));
+    if( vit != m_aOrderedValues.end() )
+        m_aOrderedValues.erase( vit );
+
     m_aValues.erase( it );
 }
 
@@ -1649,10 +1644,12 @@ PPDContext& PPDContext::operator=( PPDContext&& rCopy )
 
 const PPDKey* PPDContext::getModifiedKey( int n ) const
 {
-    hash_type::const_iterator it;
-    for( it = m_aCurrentValues.begin(); it != m_aCurrentValues.end() && n--; ++it )
-        ;
-    return it != m_aCurrentValues.end() ? it->first : nullptr;
+    if( m_aCurrentValues.size() < static_cast<hash_type::size_type>(n) )
+        return nullptr;
+
+    hash_type::const_iterator it = m_aCurrentValues.begin();
+    std::advance(it, n);
+    return it->first;
 }
 
 void PPDContext::setParser( const PPDParser* pParser )

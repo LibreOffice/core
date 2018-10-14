@@ -1916,16 +1916,9 @@ void lcl_hideDoubleSeparators( ToolBox::ImplToolItems& rItems )
             if ( !bLastSep )
             {
                 // check if any visible items have to appear behind it
-                ToolBox::ImplToolItems::iterator temp_it;
-                for ( temp_it = it+1; temp_it != rItems.end(); ++temp_it )
-                {
-                    if ( (temp_it->meType == ToolBoxItemType::BUTTON) &&
-                         temp_it->mbVisible )
-                    {
-                        it->mbVisible = true;
-                        break;
-                    }
-                }
+                if (std::any_of(it + 1, rItems.end(), [](const ImplToolItem& rItem) {
+                        return (rItem.meType == ToolBoxItemType::BUTTON) && rItem.mbVisible; }))
+                    it->mbVisible = true;
             }
             bLastSep = true;
         }
@@ -4889,30 +4882,20 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
             if( bUp )
             {
                 // select last valid non-clipped item
-                ImplToolItems::iterator it = mpData->m_aItems.end();
                 ImplToolItem* pItem = nullptr;
-                while( it != mpData->m_aItems.begin() )
-                {
-                    --it;
-                    if ( ImplIsValidItem( &(*it), true ) )
-                    {
-                        pItem = &(*it);
-                        break;
-                    }
-                }
+                auto it = std::find_if(mpData->m_aItems.rbegin(), mpData->m_aItems.rend(),
+                    [](const ImplToolItem& rItem) { return ImplIsValidItem( &rItem, true ); });
+                if( it != mpData->m_aItems.rend() )
+                    pItem = &(*it);
+
                 InvalidateMenuButton();
                 ImplChangeHighlight( pItem );
             }
             else
             {
                 // select first valid non-clipped item
-                ImplToolItems::iterator it = mpData->m_aItems.begin();
-                while( it != mpData->m_aItems.end() )
-                {
-                    if ( ImplIsValidItem( &(*it), true ) )
-                        break;
-                    ++it;
-                }
+                ImplToolItems::iterator it = std::find_if(mpData->m_aItems.begin(), mpData->m_aItems.end(),
+                    [](const ImplToolItem& rItem) { return ImplIsValidItem( &rItem, true ); });
                 if( it != mpData->m_aItems.end() )
                 {
                     InvalidateMenuButton();
@@ -4925,13 +4908,8 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
         if( bUp )
         {
             // Select first valid item
-            ImplToolItems::iterator it = mpData->m_aItems.begin();
-            while( it != mpData->m_aItems.end() )
-            {
-                if ( ImplIsValidItem( &(*it), false ) )
-                    break;
-                ++it;
-            }
+            ImplToolItems::iterator it = std::find_if(mpData->m_aItems.begin(), mpData->m_aItems.end(),
+                [](const ImplToolItem& rItem) { return ImplIsValidItem( &rItem, false ); });
 
             // select the menu button if a clipped item would be selected
             if( (it != mpData->m_aItems.end() && &(*it) == ImplGetFirstClippedItem()) && IsMenuEnabled() )
@@ -4955,17 +4933,12 @@ bool ToolBox::ImplChangeHighlightUpDn( bool bUp, bool bNoCycle )
             }
             else
             {
-                ImplToolItems::iterator it = mpData->m_aItems.end();
                 ImplToolItem* pItem = nullptr;
-                while( it != mpData->m_aItems.begin() )
-                {
-                    --it;
-                    if ( ImplIsValidItem( &(*it), false ) )
-                    {
-                        pItem = &(*it);
-                        break;
-                    }
-                }
+                auto it = std::find_if(mpData->m_aItems.rbegin(), mpData->m_aItems.rend(),
+                    [](const ImplToolItem& rItem) { return ImplIsValidItem( &rItem, false ); });
+                if( it != mpData->m_aItems.rend() )
+                    pItem = &(*it);
+
                 ImplChangeHighlight( pItem );
             }
             return true;

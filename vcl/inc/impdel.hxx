@@ -67,9 +67,8 @@ class DeletionListener
 
 inline void DeletionNotifier::notifyDelete()
 {
-    for( std::list< DeletionListener* >::const_iterator it =
-            m_aListeners.begin(); it != m_aListeners.end(); ++it )
-       (*it)->deleted();
+    for( auto& rListener : m_aListeners )
+       rListener->deleted();
 
     m_aListeners.clear();
 }

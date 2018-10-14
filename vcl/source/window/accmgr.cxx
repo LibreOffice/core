@@ -22,6 +22,8 @@
 #include <vcl/accel.hxx>
 #include <accmgr.hxx>
 
+#include <algorithm>
+
 ImplAccelManager::~ImplAccelManager()
 {
 }
@@ -66,15 +68,9 @@ void ImplAccelManager::RemoveAccel( Accelerator const * pAccel )
     }
 
     // throw it away
-    for ( auto it = mpAccelList->begin();
-          it != mpAccelList->end();
-          ++it
-    ) {
-        if ( *it == pAccel ) {
-            mpAccelList->erase( it );
-            break;
-        }
-    }
+    auto it = std::find(mpAccelList->begin(), mpAccelList->end(), pAccel);
+    if (it != mpAccelList->end())
+        mpAccelList->erase( it );
 }
 
 void ImplAccelManager::EndSequence()
