@@ -552,6 +552,12 @@
 #define RID_SVXSTR_GRAFMODE_GREYS                           NC_("RID_SVXSTR_GRAFMODE_GREYS", "Grayscale")
 #define RID_SVXSTR_GRAFMODE_MONO                            NC_("RID_SVXSTR_GRAFMODE_MONO", "Black/White")
 #define RID_SVXSTR_GRAFMODE_WATERMARK                       NC_("RID_SVXSTR_GRAFMODE_WATERMARK", "Watermark")
+// Default colors
+#define RID_SVXSTR_COLOR_DEFAULT_FONT                       NC_("RID_SVXSTR_COLOR_DEFAULT_FONTCOLOR", "Dark Red 2")
+#define RID_SVXSTR_COLOR_DEFAULT_FRAMELINE                  NC_("RID_SVXSTR_COLOR_DEFAULT_FRAMELINE", "Blue")
+#define RID_SVXSTR_COLOR_DEFAULT_HIGHLIGHT                  NC_("RID_SVXSTR_COLOR_DEFAULT_HIGHLIGHT", "Yellow")
+#define RID_SVXSTR_COLOR_DEFAULT_SHAPE_STROKE               NC_("RID_SVXSTR_COLOR_DEFAULT_SHAPE_STROKE", "Dark Blue 1")
+#define RID_SVXSTR_COLOR_DEFAULT_SHAPE_FILLING              NC_("RID_SVXSTR_COLOR_DEFAULT_SHAPE_FILLING", "Light Blue 2")
 // Elements of the standard color palette
 #define RID_SVXSTR_COLOR_BLACK                              NC_("RID_SVXSTR_COLOR_BLACK", "Black")
 #define RID_SVXSTR_COLOR_GREY                               NC_("RID_SVXSTR_COLOR_GREY", "Gray")

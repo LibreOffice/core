@@ -78,8 +78,11 @@ class XLineTransparenceItem;
 class XLineWidthItem;
 class XSecondaryFillColorItem;
 
-#define COL_DEFAULT_SHAPE_FILLING ::Color(0x729fcf)
-#define COL_DEFAULT_SHAPE_STROKE  ::Color(0x3465a4)
+#define COL_DEFAULT_FONT          ::Color(0xC9211E)         // dark red 2
+#define COL_DEFAULT_FRAMELINE     ::Color(0x2A6099)         // blue
+#define COL_DEFAULT_HIGHLIGHT     ::Color(0xFFFF00)         // yellow
+#define COL_DEFAULT_SHAPE_FILLING ::Color(0x729fcf)         // light blue 2
+#define COL_DEFAULT_SHAPE_STROKE  ::Color(0x3465a4)         // dark blue 1
 
 #define XATTR_START             1000
 

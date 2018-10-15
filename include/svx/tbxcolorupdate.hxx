@@ -26,6 +26,8 @@
 #include <tools/color.hxx>
 #include <vcl/vclptr.hxx>
 
+#include <svx/Palette.hxx>
+
 class ToolBox;
 class VirtualDevice;
 
@@ -43,9 +45,11 @@ namespace svx
     class SVX_DLLPUBLIC ToolboxButtonColorUpdater
     {
     public:
-                    ToolboxButtonColorUpdater( sal_uInt16 nSlotId, sal_uInt16 nTbxBtnId, ToolBox* ptrTbx, bool bWideButton = false);
+                    ToolboxButtonColorUpdater( sal_uInt16 nSlotId, sal_uInt16 nTbxBtnId, ToolBox* ptrTbx, bool bWideButton,
+                                              const OUString& rCommandLabel );
                     ~ToolboxButtonColorUpdater();
 
+        void        Update( const NamedColor& rNamedColor );
         void        Update( const Color& rColor, bool bForceUpdate = false );
         Color const & GetCurrentColor() const { return maCurColor; }
 
@@ -60,6 +64,7 @@ namespace svx
         tools::Rectangle   maUpdRect;
         Size        maBmpSize;
         bool        mbWasHiContrastMode;
+        OUString    maCommandLabel;
     };
 
 
