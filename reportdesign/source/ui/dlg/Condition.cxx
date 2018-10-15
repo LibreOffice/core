@@ -48,6 +48,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <svtools/valueset.hxx>
 
+#include <vcl/commandinfoprovider.hxx>
+
 namespace rptui
 {
 using namespace ::com::sun::star;
@@ -96,7 +98,7 @@ void ConditionColorWrapper::dispose()
 
 void ConditionColorWrapper::operator()(const OUString& /*rCommand*/, const NamedColor& rNamedColor)
 {
-    mxControl->ApplyCommand(mnSlotId, rNamedColor.first);
+    mxControl->ApplyCommand(mnSlotId, rNamedColor);
 }
 
 // = Condition
@@ -161,9 +163,13 @@ Condition::Condition( vcl::Window* _pParent, IConditionalFormatAction& _rAction,
     m_nFontDialogId = m_pActions->GetItemId(".uno:FontDialog");
 
     m_pBtnUpdaterBackgroundColor.reset( new svx::ToolboxButtonColorUpdater(
-                                            SID_BACKGROUND_COLOR, m_nBackgroundColorId, m_pActions ) );
+                                            SID_BACKGROUND_COLOR, m_nBackgroundColorId, m_pActions, false,
+                                            vcl::CommandInfoProvider::GetLabelForCommand( ".uno:BackgroundColor",
+                                                                                          "com.sun.star.report.ReportDefinition" ) ) );
     m_pBtnUpdaterFontColor.reset( new svx::ToolboxButtonColorUpdater(
-                                            SID_ATTR_CHAR_COLOR2, m_nFontColorId, m_pActions ) );
+                                      SID_ATTR_CHAR_COLOR2, m_nFontColorId, m_pActions, false,
+                                      vcl::CommandInfoProvider::GetLabelForCommand( ".uno:FontColor",
+                                                                                    "com.sun.star.report.ReportDefinition" ) ) );
 
     Show();
 
@@ -238,7 +244,8 @@ IMPL_LINK(Condition, DropdownClick, ToolBox*, pToolBox, void)
 
 IMPL_LINK_NOARG( Condition, OnFormatAction, ToolBox*, void )
 {
-    ApplyCommand(mapToolbarItemToSlotId(m_pActions->GetCurItemId()),COL_AUTO);
+    ApplyCommand(mapToolbarItemToSlotId(m_pActions->GetCurItemId()),
+                 std::pair<Color, rtl::OUString>(COL_AUTO, "#" + COL_AUTO.AsRGBHexString()));
 }
 
 IMPL_LINK( Condition, OnConditionAction, Button*, _pClickedButton, void )
@@ -253,14 +260,14 @@ IMPL_LINK( Condition, OnConditionAction, Button*, _pClickedButton, void )
         m_rAction.deleteCondition( getConditionIndex() );
 }
 
-void Condition::ApplyCommand( sal_uInt16 _nCommandId, const ::Color& _rColor)
+void Condition::ApplyCommand( sal_uInt16 _nCommandId, const NamedColor& rNamedColor )
 {
     if ( _nCommandId == SID_ATTR_CHAR_COLOR2 )
-        m_pBtnUpdaterFontColor->Update( _rColor );
+        m_pBtnUpdaterFontColor->Update( rNamedColor );
     else if ( _nCommandId == SID_BACKGROUND_COLOR )
-        m_pBtnUpdaterBackgroundColor->Update( _rColor );
+        m_pBtnUpdaterBackgroundColor->Update( rNamedColor );
 
-    m_rAction.applyCommand( m_nCondIndex, _nCommandId, _rColor );
+    m_rAction.applyCommand( m_nCondIndex, _nCommandId, rNamedColor.first );
 }
 
 void Condition::setImageList(sal_Int16 /*_eBitmapSet*/)
