@@ -225,4 +225,6 @@
     <string name="pref_sort_title">File Order</string>
     <string name="pref_filter_title">Default File Filter</string>
     <string name="pref_filter_summary">Set which file filter should be used by default.</string>
+    <string name="display_language">Display Language</string>
+    <string name="display_language_summary">Set the default display language</string>
 </resources>
