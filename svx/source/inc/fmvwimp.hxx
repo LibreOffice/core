@@ -247,8 +247,8 @@ private:
     void Activate(bool bSync = false);
     void Deactivate(bool bDeactivateController = true);
 
-    SdrObject*  implCreateFieldControl( const svx::ODataAccessDescriptor& _rColumnDescriptor );
-    SdrObject*  implCreateXFormsControl( const svx::OXFormsDescriptor &_rDesc );
+    SdrObjectUniquePtr implCreateFieldControl( const svx::ODataAccessDescriptor& _rColumnDescriptor );
+    SdrObjectUniquePtr implCreateXFormsControl( const svx::OXFormsDescriptor &_rDesc );
 
     static bool createControlLabelPair(
         OutputDevice const & _rOutDev,

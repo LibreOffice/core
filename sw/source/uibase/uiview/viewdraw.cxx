@@ -115,7 +115,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
             if( pDescriptorItem )
             {
                 svx::ODataAccessDescriptor aDescriptor( pDescriptorItem->GetValue() );
-                SdrObject* pObj = pFormView->CreateFieldControl( aDescriptor );
+                SdrObjectUniquePtr pObj = pFormView->CreateFieldControl( aDescriptor );
 
                 if ( pObj )
                 {
@@ -130,14 +130,14 @@ void SwView::ExecDraw(SfxRequest& rReq)
                     //determine the size of the object
                     if(pObj->IsGroupObject())
                     {
-                        const tools::Rectangle& rBoundRect = static_cast<SdrObjGroup*>(pObj)->GetCurrentBoundRect();
+                        const tools::Rectangle& rBoundRect = static_cast<SdrObjGroup*>(pObj.get())->GetCurrentBoundRect();
                         aStartPos.AdjustX( -(rBoundRect.GetWidth()/2) );
                         aStartPos.AdjustY( -(rBoundRect.GetHeight()/2) );
                     }
 
                     // TODO: unmark all other
                     m_pWrtShell->EnterStdMode();
-                    m_pWrtShell->SwFEShell::InsertDrawObj( *pObj, aStartPos );
+                    m_pWrtShell->SwFEShell::InsertDrawObj( *(pObj.release()), aStartPos );
                 }
             }
         }

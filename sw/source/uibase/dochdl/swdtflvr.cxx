@@ -2688,10 +2688,10 @@ bool SwTransferable::PasteDBData( TransferableDataHelper& rData,
             if (pFmView && pDragPt)
             {
                 const OXFormsDescriptor &rDesc = OXFormsTransferable::extractDescriptor(rData);
-                SdrObject* pObj = pFmView->CreateXFormsControl(rDesc);
-                if(nullptr != pObj)
+                SdrObjectUniquePtr pObj = pFmView->CreateXFormsControl(rDesc);
+                if(pObj)
                 {
-                    rSh.SwFEShell::InsertDrawObj( *pObj, *pDragPt );
+                    rSh.SwFEShell::InsertDrawObj( *(pObj.release()), *pDragPt );
                 }
             }
         }
@@ -2745,9 +2745,9 @@ bool SwTransferable::PasteDBData( TransferableDataHelper& rData,
             FmFormView* pFmView = dynamic_cast<FmFormView*>( rSh.GetDrawView()  );
             if (pFmView && bHaveColumnDescriptor && pDragPt)
             {
-                SdrObject* pObj = pFmView->CreateFieldControl( OColumnTransferable::extractColumnDescriptor(rData) );
-                if ( nullptr != pObj)
-                    rSh.SwFEShell::InsertDrawObj( *pObj, *pDragPt );
+                SdrObjectUniquePtr pObj = pFmView->CreateFieldControl( OColumnTransferable::extractColumnDescriptor(rData) );
+                if (pObj)
+                    rSh.SwFEShell::InsertDrawObj( *(pObj.release()), *pDragPt );
             }
         }
         bRet = true;
