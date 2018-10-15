@@ -29,6 +29,7 @@
 #include <tools/color.hxx>
 #include <tools/datetime.hxx>
 #include <tools/link.hxx>
+#include <tools/solar.h>
 #include <unotools/options.hxx>
 #include "global.hxx"
 #include "bigrange.hxx"

@@ -19,8 +19,6 @@
 #ifndef INCLUDED_TOOLS_GLOBNAME_HXX
 #define INCLUDED_TOOLS_GLOBNAME_HXX
 
-#include <vector>
-
 #include <tools/toolsdllapi.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <o3tl/cow_wrapper.hxx>

@@ -19,8 +19,6 @@
 #ifndef INCLUDED_TOOLS_CONTNR_HXX
 #define INCLUDED_TOOLS_CONTNR_HXX
 
-#include <tools/toolsdllapi.h>
-
 #include <limits.h>
 
 #define TREELIST_APPEND             (ULONG_MAX)

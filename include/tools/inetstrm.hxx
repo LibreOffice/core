@@ -26,7 +26,6 @@
 #include <memory>
 
 class INetMIMEMessage;
-class SvStream;
 
 class TOOLS_DLLPUBLIC INetMIMEMessageStream
 {

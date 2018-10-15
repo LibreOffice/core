@@ -18,6 +18,7 @@
  */
 #include <tools/date.hxx>
 #include <sal/log.hxx>
+#include <com/sun/star/util/DateTime.hpp>
 
 #include <systemdatetime.hxx>
 

@@ -20,9 +20,9 @@
 #define INCLUDED_TOOLS_TIME_HXX
 
 #include <tools/toolsdllapi.h>
-#include <tools/solar.h>
 #include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/util/DateTime.hpp>
+
+namespace com { namespace sun { namespace star { namespace util { struct DateTime; } } } }
 
 /**
  @WARNING: This class can serve both as wall clock time and time duration, and

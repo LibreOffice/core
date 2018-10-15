@@ -23,6 +23,7 @@
 #include <comphelper/sequence.hxx>
 
 #include <filter/msfilter/mscodec.hxx>
+#include <tools/stream.hxx>
 #include <tools/XmlWriter.hxx>
 
 #include <com/sun/star/io/XSeekable.hpp>

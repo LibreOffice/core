@@ -21,7 +21,6 @@
 
 #include <tools/toolsdllapi.h>
 #include <tools/gen.hxx>
-#include <tools/debug.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/cow_wrapper.hxx>
 
@@ -61,7 +60,6 @@ enum class PolyFlags : sal_uInt8
 class SvStream;
 class ImplPolygon;
 struct ImplPolyPolygon;
-namespace tools { class PolyPolygon; }
 
 namespace basegfx
 {

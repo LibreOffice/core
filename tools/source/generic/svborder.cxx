@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <tools/svborder.hxx>
+#include <tools/gen.hxx>
 
 tools::Rectangle & operator += ( tools::Rectangle & rRect, const SvBorder & rBorder )
 {

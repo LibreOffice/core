@@ -11,9 +11,11 @@
 #define INCLUDED_TOOLS_XMLWRITER_HXX
 
 #include <tools/toolsdllapi.h>
-#include <tools/stream.hxx>
+#include <rtl/ustring.hxx>
 #include <memory>
 #include <vector>
+
+class SvStream;
 
 namespace tools
 {

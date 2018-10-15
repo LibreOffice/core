@@ -22,7 +22,6 @@
 #include <tools/toolsdllapi.h>
 #include <rtl/character.hxx>
 #include <rtl/string.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
 
