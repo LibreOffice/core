@@ -1696,9 +1696,18 @@ public:
     virtual void set_error(bool bError) override
     {
         if (bError)
-            m_xEntry->SetControlForeground(Color(0xf0, 0, 0));
+        {
+            // #i75179# enable setting the background to a different color
+            m_xEntry->SetForceControlBackground(true);
+            m_xEntry->SetControlForeground(COL_WHITE);
+            m_xEntry->SetControlBackground(0xff6563);
+        }
         else
+        {
+            m_xEntry->SetForceControlBackground(false);
             m_xEntry->SetControlForeground();
+            m_xEntry->SetControlBackground();
+        }
     }
 
     virtual vcl::Font get_font() override
