@@ -140,8 +140,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
                 rSprm.getId() == NS_ooxml::LN_CT_TcPrBase;
             if (bGrabBag)
             {
-                aSavedGrabBag = m_aInteropGrabBag;
-                m_aInteropGrabBag.clear();
+                std::swap(aSavedGrabBag, m_aInteropGrabBag);
             }
             resolveSprmProps( rSprm );
             if (bGrabBag)
@@ -154,7 +153,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
                     aSavedGrabBag.push_back(getInteropGrabBag("tblPr"));
                 else if (rSprm.getId() == NS_ooxml::LN_CT_TcPrBase)
                     aSavedGrabBag.push_back(getInteropGrabBag("tcPr"));
-                m_aInteropGrabBag = aSavedGrabBag;
+                std::swap(m_aInteropGrabBag, aSavedGrabBag);
             }
         }
             break;
