@@ -361,6 +361,9 @@ public:
     bool HasValidSignatures();
     SignatureState              GetDocumentSignatureState();
     void                        SignDocumentContent(weld::Window* pDialogParent);
+
+    bool SignDocumentContentUsingCertificate(const css::uno::Reference<css::security::XCertificate>& xCertificate);
+
     void SignSignatureLine(weld::Window* pDialogParent, const OUString& aSignatureLineId,
                            const css::uno::Reference<css::security::XCertificate>& xCert,
                            const css::uno::Reference<css::graphic::XGraphic>& xValidGraphic,

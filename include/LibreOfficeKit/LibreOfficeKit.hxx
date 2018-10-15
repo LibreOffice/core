@@ -550,6 +550,20 @@ public:
         mpDoc->pClass->postWindowExtTextInputEvent(mpDoc, nWindowId, nType, pText);
     }
 
+    /**
+     *  Insert certificate (in binary form) to the certificate store.
+     *
+     */
+    bool (*insertCertificate) (LibreOfficeKitDocument* pThis,
+                                const unsigned char* pCertificateBinary,
+                                const int pCertificateBinarySize);
+    /**
+     *  Verify signature of the document.
+     *
+     *  Check possible values in include/sfx2/signaturestate.hxx
+     */
+    int (*getSignatureState) (LibreOfficeKitDocument* pThis);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

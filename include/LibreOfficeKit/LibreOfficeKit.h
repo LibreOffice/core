@@ -309,6 +309,16 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::getPartInfo().
     char* (*getPartInfo) (LibreOfficeKitDocument* pThis, int nPart);
 
+// CERTIFICATE AND SIGNING
+
+    /// @see lok::Document::insertCertificate().
+    bool (*insertCertificate) (LibreOfficeKitDocument* pThis,
+                                const unsigned char* pCertificateBinary,
+                                const int pCertificateBinarySize);
+
+    /// @see lok::Document::getSignatureState().
+    int (*getSignatureState) (LibreOfficeKitDocument* pThis);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

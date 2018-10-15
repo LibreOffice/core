@@ -273,6 +273,10 @@ public:
                       = css::uno::Reference<css::graphic::XGraphic>(),
                       const OUString& aComment = OUString());
 
+    SAL_DLLPRIVATE bool
+    SignDocumentContentUsingCertificate(bool bHasValidDocumentSignature,
+                 const css::uno::Reference<css::security::XCertificate>& xCertificate);
+
     // the following two methods must be used and make sense only during saving currently
     // TODO/LATER: in future the signature state should be controlled by the medium not by the document
     //             in this case the methods will be used generally, and might need to be renamed
