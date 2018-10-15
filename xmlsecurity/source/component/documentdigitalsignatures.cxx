@@ -168,6 +168,11 @@ public:
         SAL_CALL chooseEncryptionCertificate() override;
     css::uno::Reference<css::security::XCertificate> SAL_CALL chooseCertificateWithProps(
         css::uno::Sequence<::com::sun::star::beans::PropertyValue>& Properties) override;
+
+    sal_Bool SAL_CALL signDocumentWithCertificate(
+                            css::uno::Reference<css::security::XCertificate> const & xCertificate,
+                            css::uno::Reference<css::embed::XStorage> const & xStoragexStorage,
+                            css::uno::Reference<css::io::XStream> const & xStream) override;
 };
 
 DocumentDigitalSignatures::DocumentDigitalSignatures( const Reference< XComponentContext >& rxCtx ):
@@ -746,6 +751,42 @@ void DocumentDigitalSignatures::addLocationToTrustedSources( const OUString& Loc
     aSecURLs[ nCnt ] = Location;
 
     aSecOpt.SetSecureURLs( aSecURLs );
+}
+
+sal_Bool DocumentDigitalSignatures::signDocumentWithCertificate(
+            css::uno::Reference<css::security::XCertificate> const & xCertificate,
+            css::uno::Reference<css::embed::XStorage> const & xStorage,
+            css::uno::Reference<css::io::XStream> const & xStream)
+{
+    DocumentSignatureManager aSignatureManager(mxCtx, DocumentSignatureMode::Content);
+
+    if (!aSignatureManager.init())
+        return false;
+
+    aSignatureManager.mxStore = xStorage;
+    aSignatureManager.maSignatureHelper.SetStorage(xStorage, m_sODFVersion);
+    aSignatureManager.mxSignatureStream = xStream;
+
+    Reference<XXMLSecurityContext> xSecurityContext;
+    Reference<XServiceInfo> xServiceInfo(xCertificate, UNO_QUERY);
+    xSecurityContext = aSignatureManager.getSecurityContext();
+
+    sal_Int32 nSecurityId;
+
+    bool bSuccess = aSignatureManager.add(xCertificate, xSecurityContext, "", nSecurityId, true);
+    if (!bSuccess)
+        return false;
+
+    aSignatureManager.read(/*bUseTempStream=*/true, /*bCacheLastSignature=*/false);
+    aSignatureManager.write(true);
+
+    if (xStorage.is() && !xStream.is())
+    {
+        uno::Reference<embed::XTransactedObject> xTransaction(xStorage, uno::UNO_QUERY);
+        xTransaction->commit();
+    }
+
+    return true;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
