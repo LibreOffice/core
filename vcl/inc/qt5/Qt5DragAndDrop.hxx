@@ -57,6 +57,10 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     void dragFailed();
+    css::uno::Reference<css::datatransfer::XTransferable> const& GetTransferable() const
+    {
+        return m_xTrans;
+    }
 };
 
 class Qt5DropTarget
@@ -102,6 +106,8 @@ public:
     OUString SAL_CALL getImplementationName() override;
     sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override;
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+    void fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

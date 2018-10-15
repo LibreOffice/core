@@ -185,7 +185,10 @@ void Qt5Widget::dragEnterEvent(QDragEnterEvent* event)
 
 void Qt5Widget::dragMoveEvent(QDragMoveEvent* event)
 {
+    QPoint point = event->pos();
     SAL_WARN("vcl.qt5", "dragmoveevent");
+
+    m_pFrame->draggingStarted(point.x(), point.y());
     QWidget::dragMoveEvent(event);
 }
 
