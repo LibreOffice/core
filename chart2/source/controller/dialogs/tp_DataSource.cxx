@@ -105,7 +105,7 @@ OUString lcl_GetSelectedRole( const SvTabListBox & rRoleListBox, bool bUITransla
     return aResult;
 }
 
-OUString lcl_GetSelectedRolesRange( const SvTabListBox & rRoleListBox )
+OUString lcl_GetSelectedRolesRange( const weld::TreeView& rRoleListBox )
 {
     OUString aResult;
     SvTreeListEntry * pEntry = rRoleListBox.FirstSelected();
@@ -178,46 +178,37 @@ Reference< chart2::data::XLabeledDataSequence > lcl_findLSequenceWithOnlyLabel(
 namespace chart
 {
 
-DataSourceTabPage::DataSourceTabPage(
-    vcl::Window * pParent,
-    DialogModel & rDialogModel,
-    ChartTypeTemplateProvider* pTemplateProvider,
-    Dialog * pParentDialog,
-    bool bHideDescription /* = false */ ) :
-        ::svt::OWizardPage( pParent
-                           ,"tp_DataSource"
-                           ,"modules/schart/ui/tp_DataSource.ui"),
-    m_pTemplateProvider( pTemplateProvider ),
-    m_rDialogModel( rDialogModel ),
-
-    m_pCurrentRangeChoosingField( nullptr ),
-    m_bIsDirty( false ),
-    m_pParentDialog( pParentDialog ),
-    m_pTabPageNotifiable( dynamic_cast< TabPageNotifiable * >( pParentDialog ))
+DataSourceTabPage::DataSourceTabPage(TabPageParent pParent, DialogModel & rDialogModel,
+                                     ChartTypeTemplateProvider* pTemplateProvider,
+                                     Dialog * pParentDialog,
+                                     bool bHideDescription /* = false */)
+    : ::svt::OWizardPage(pParent, "modules/schart/ui/tp_DataSource.ui", "tp_DataSource")
+    , m_pTemplateProvider(pTemplateProvider)
+    , m_rDialogModel(rDialogModel)
+    , m_pCurrentRangeChoosingField( nullptr )
+    , m_bIsDirty( false )
+    , m_pParentDialog( pParentDialog )
+    , m_pTabPageNotifiable( dynamic_cast< TabPageNotifiable * >( pParentDialog ))
+    , m_xFT_CAPTION(m_xBuilder->weld_label("FT_CAPTION_FOR_WIZARD"))
+    , m_xFT_SERIES(m_xBuilder->weld_label("FT_SERIES"))
+    , m_xLB_SERIES(m_xBuilder->weld_tree_view("LB_SERIES"))
+    , m_xBTN_ADD(m_xBuilder->weld_button("BTN_ADD"))
+    , m_xBTN_REMOVE(m_xBuilder->weld_button("BTN_REMOVE"))
+    , m_xBTN_UP(m_xBuilder->weld_button("BTN_UP"))
+    , m_xBTN_DOWN(m_xBuilder->weld_button("BTN_DOWN"))
+    , m_xFT_ROLE(m_xBuilder->weld_label("FT_ROLE"))
+    , m_xLB_ROLE(m_xBuilder->weld_tree_view("LB_ROLE"))
+    , m_xFT_RANGE(m_xBuilder->weld_label("FT_RANGE"))
+    , m_xEDT_RANGE(m_xBuilder->weld_entry("EDT_RANGE"))
+    , m_xIMB_RANGE_MAIN(m_xBuilder->weld_button("IMB_RANGE_MAIN"))
+    , m_xFT_CATEGORIES(m_xBuilder->weld_label("FT_CATEGORIES"))
+    , m_xFT_DATALABELS(m_xBuilder->weld_label("FT_DATALABELS"))
+    , m_xEDT_CATEGORIES(m_xBuilder->weld_entry("EDT_CATEGORIES"))
+    , m_xIMB_RANGE_CAT(m_xBuilder->weld_button("IMB_RANGE_CAT"))
 {
+    m_xFT_CAPTION->show(!bHideDescription);
 
-    get(m_pFT_CAPTION     ,"FT_CAPTION_FOR_WIZARD");
-    get(m_pFT_SERIES      ,"FT_SERIES");
-
-    get(m_pLB_SERIES     ,"LB_SERIES");
-
-    get(m_pBTN_ADD        ,"BTN_ADD");
-    get(m_pBTN_REMOVE     ,"BTN_REMOVE");
-    get(m_pBTN_UP         ,"BTN_UP");
-    get(m_pBTN_DOWN       ,"BTN_DOWN");
-    get(m_pFT_ROLE        ,"FT_ROLE");
-    get(m_pLB_ROLE        ,"LB_ROLE");
-    get(m_pFT_RANGE       ,"FT_RANGE");
-    get(m_pEDT_RANGE      ,"EDT_RANGE");
-    get(m_pIMB_RANGE_MAIN ,"IMB_RANGE_MAIN");
-    get(m_pFT_CATEGORIES  ,"FT_CATEGORIES");
-    get(m_pFT_DATALABELS  ,"FT_DATALABELS");
-    get(m_pEDT_CATEGORIES ,"EDT_CATEGORIES");
-    get(m_pIMB_RANGE_CAT  ,"IMB_RANGE_CAT");
-
-    m_pFT_CAPTION->Show(!bHideDescription);
-
-    m_aFixedTextRange = m_pFT_RANGE->GetText();
+    m_aFixedTextRange = m_xFT_RANGE->get_label();
     SetText( SchResId( STR_OBJECT_DATASERIES_PLURAL ) );
 
     // set handlers
@@ -275,23 +266,6 @@ DataSourceTabPage::~DataSourceTabPage()
 
 void DataSourceTabPage::dispose()
 {
-    m_pFT_CAPTION.clear();
-    m_pFT_SERIES.clear();
-    m_pLB_SERIES.clear();
-    m_pBTN_ADD.clear();
-    m_pBTN_REMOVE.clear();
-    m_pBTN_UP.clear();
-    m_pBTN_DOWN.clear();
-    m_pFT_ROLE.clear();
-    m_pLB_ROLE.clear();
-    m_pFT_RANGE.clear();
-    m_pEDT_RANGE.clear();
-    m_pIMB_RANGE_MAIN.clear();
-    m_pFT_CATEGORIES.clear();
-    m_pFT_DATALABELS.clear();
-    m_pEDT_CATEGORIES.clear();
-    m_pIMB_RANGE_CAT.clear();
-    m_pCurrentRangeChoosingField.clear();
     m_pParentDialog.clear();
     ::svt::OWizardPage::dispose();
 }
