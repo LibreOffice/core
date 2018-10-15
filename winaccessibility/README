@@ -45,8 +45,8 @@ not by actual end users.
 
 Debugging / playing with winaccessibility
 
-You need to enable 'experimental mode' in Tools->Options. After
-that NVDA should work as expected. In order to use 'accprobe' to debug
+If NVDA is running when soffice starts, IA2 should be automatically enabled
+and work as expected. In order to use 'accprobe' to debug
 it is necessary to override the check for whether an AT (like NVDA) is
 running; to do that use:
 
@@ -56,3 +56,6 @@ Then you can use accprobe to introspect the accessibility hierarchy
 remotely, checkout:
 
 http://accessibility.linuxfoundation.org/a11yweb/util/accprobe/
+
+But often it's more useful to look at NVDA's text output window...
+
