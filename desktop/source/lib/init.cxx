@@ -72,6 +72,13 @@
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
 
+#include <com/sun/star/xml/crypto/SEInitializer.hpp>
+#include <com/sun/star/xml/crypto/XSEInitializer.hpp>
+#include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
+#include <com/sun/star/security/DocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
+#include <com/sun/star/security/XCertificate.hpp>
+
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -687,6 +694,12 @@ static void doc_postWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId,
 
 static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart);
 
+static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
+                                  const unsigned char* pCertificateBinary,
+                                  const int pCertificateBinarySize);
+
+static int doc_getSignatureState(LibreOfficeKitDocument* pThis);
+
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
     : mxComponent(xComponent)
 {
@@ -744,6 +757,9 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->setViewLanguage = doc_setViewLanguage;
 
         m_pDocumentClass->getPartInfo = doc_getPartInfo;
+
+        m_pDocumentClass->insertCertificate = doc_insertCertificate;
+        m_pDocumentClass->getSignatureState = doc_getSignatureState;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -3665,6 +3681,59 @@ static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindo
         else if (FloatingWindow* pFloatWin = dynamic_cast<FloatingWindow*>(pWindow.get()))
             pFloatWin->EndPopupMode(FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll);
     }
+}
+
+// CERTIFICATE AND DOCUMENT SIGNING
+static bool doc_insertCertificate(LibreOfficeKitDocument* /*pThis*/, const unsigned char* pCertificateBinary, const int nCertificateBinarySize)
+{
+    if (!xContext.is())
+        return false;
+
+    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext;
+    xSecurityContext = xSEInitializer->createSecurityContext(OUString());
+    if (!xSecurityContext.is())
+        return false;
+
+    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment;
+    xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
+
+    uno::Sequence<sal_Int8> aCertificateSequence(nCertificateBinarySize);
+    std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.begin());
+
+    uno::Reference<security::XCertificate> xCertificate = xSecurityEnvironment->createCertificateFromRaw(aCertificateSequence);
+
+    if (!xCertificate.is())
+        return false;
+
+    printf("CERTIFICATE\n\tIssuerName: %s \n\tSubjectName: %s\n\tPK %s\n\n",
+            xCertificate->getIssuerName().toUtf8().getStr(),
+            xCertificate->getSubjectName().toUtf8().getStr(),
+            xCertificate->getSubjectPublicKeyAlgorithm().toUtf8().getStr());
+
+    SfxObjectShell* pDoc = SfxObjectShell::Current();
+    if (!pDoc)
+        return false;
+
+    return pDoc->SignDocumentContentUsingCertificate(xCertificate);
+}
+
+static int doc_getSignatureState(LibreOfficeKitDocument* pThis)
+{
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    if (!pDocument->mxComponent.is())
+        return int(SignatureState::UNKNOWN);
+
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(pDocument->mxComponent.get());
+    if (!pBaseModel)
+        return int(SignatureState::UNKNOWN);
+
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    if (!pObjectShell)
+        return int(SignatureState::UNKNOWN);
+
+    return int(pObjectShell->GetDocumentSignatureState());
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)

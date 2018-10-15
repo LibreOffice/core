@@ -557,6 +557,25 @@ public:
         mpDoc->pClass->postWindowExtTextInputEvent(mpDoc, nWindowId, nType, pText);
     }
 
+    /**
+     *  Insert certificate (in binary form) to the certificate store.
+     */
+    bool insertCertificate(const unsigned char* pCertificateBinary,
+                           const int pCertificateBinarySize)
+    {
+        return mpDoc->pClass->insertCertificate(mpDoc, pCertificateBinary, pCertificateBinarySize);
+    }
+
+    /**
+     *  Verify signature of the document.
+     *
+     *  Check possible values in include/sfx2/signaturestate.hxx
+     */
+    int getSignatureState()
+    {
+        return mpDoc->pClass->getSignatureState(mpDoc);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

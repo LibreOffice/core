@@ -363,6 +363,9 @@ public:
     bool HasValidSignatures();
     SignatureState              GetDocumentSignatureState();
     void                        SignDocumentContent();
+
+    bool SignDocumentContentUsingCertificate(const css::uno::Reference<css::security::XCertificate>& xCertificate);
+
     void SignSignatureLine(const OUString& aSignatureLineId,
                            const css::uno::Reference<css::security::XCertificate> xCert);
     SignatureState              GetScriptingSignatureState();
