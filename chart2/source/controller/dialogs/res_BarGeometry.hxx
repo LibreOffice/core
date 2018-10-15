@@ -19,9 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_BARGEOMETRY_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_DIALOGS_RES_BARGEOMETRY_HXX
 
-#include <vcl/builder.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
+#include <vcl/weld.hxx>
 
 namespace chart
 {
@@ -29,20 +27,19 @@ namespace chart
 class BarGeometryResources
 {
 public:
-    explicit BarGeometryResources(VclBuilderContainer* pParent);
+    explicit BarGeometryResources(weld::Builder* pParent);
 
-    void Show( bool bShow );
-    void Enable( bool bEnable );
+    void show( bool bShow );
+    void set_sensitive( bool bEnable );
 
-    sal_Int32 GetSelectedEntryCount() const;
-    sal_Int32 GetSelectedEntryPos() const;
-    void SelectEntryPos(sal_Int32 nPos);
+    sal_Int32 get_selected_index() const;
+    void select(sal_Int32 nPos);
 
-    void SetSelectHdl( const Link<ListBox&,void>& rLink );
+    void connect_changed(const Link<weld::TreeView&,void>& rLink);
 
 private:
-    VclPtr<FixedText> m_pFT_Geometry;
-    VclPtr<ListBox>   m_pLB_Geometry;
+    std::unique_ptr<weld::Label> m_xFT_Geometry;
+    std::unique_ptr<weld::TreeView> m_xLB_Geometry;
 };
 
 } //namespace chart

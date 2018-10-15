@@ -3711,6 +3711,15 @@ Size SvtValueSet::CalcWindowSizePixel( const Size& rItemSize, sal_uInt16 nDesire
     return aSize;
 }
 
+void SvtValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage )
+{
+    std::unique_ptr<SvtValueSetItem> pItem(new SvtValueSetItem( *this ));
+    pItem->mnId     = nItemId;
+    pItem->meType   = VALUESETITEM_IMAGE;
+    pItem->maImage  = rImage;
+    ImplInsertItem( std::move(pItem), VALUESET_APPEND );
+}
+
 void SvtValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
                            const OUString& rText, size_t nPos )
 {
