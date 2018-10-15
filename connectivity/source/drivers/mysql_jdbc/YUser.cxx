@@ -26,6 +26,7 @@
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
 #include <TConnection.hxx>
 #include <strings.hrc>
+#include <comphelper/types.hxx>
 
 using namespace connectivity;
 using namespace connectivity::mysql;
