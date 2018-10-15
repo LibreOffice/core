@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_19218efc",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 6359,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-10-15T06:28:54Z",
+      "side": 1,
+      "message": "I put this in GenericCommands because it seems like if this one is used more often, then it ought to be as consistent as possible (specifically the accelerator key). Correct decision?\n\nInterestingly, this is only used in SW, and then as a main menu. The writerCommands also defines the label identically - perhaps it could/should be deleted from that one if defined here?",
+      "range": {
+        "startLine": 6359,
+        "startChar": 22,
+        "endLine": 6359,
+        "endChar": 36
+      },
+      "revId": "c3ea3dea24f10e7f75c5f9ee4192a4daf6cf990c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_990d9e92",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-10-15T06:28:54Z",
+      "side": 1,
+      "message": "Regular Table menu instead of TableDesign. I had to define the wording since it just showed up blank (which is why I chose TableDesign earlier). It still doesn\u0027t have an icon attached - I have no idea how to do that (but when they create the icons for SetMinimalXXX I should be able to figure that out).",
+      "range": {
+        "startLine": 346,
+        "startChar": 26,
+        "endLine": 346,
+        "endChar": 40
+      },
+      "revId": "c3ea3dea24f10e7f75c5f9ee4192a4daf6cf990c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_b91862d3",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-10-15T06:28:54Z",
+      "side": 1,
+      "message": "Added missing useful selectTable. This could also be good for my auto-size in case row/column wasn\u0027t selected - and handles both options at once. Also nice that this fits in a prominent position (since selecting needs to be done first).",
+      "range": {
+        "startLine": 349,
+        "startChar": 34,
+        "endLine": 349,
+        "endChar": 50
+      },
+      "revId": "c3ea3dea24f10e7f75c5f9ee4192a4daf6cf990c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_7912cab3",
+        "filename": "sd/uiconfig/sdraw/menubar/menubar.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 355,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2018-10-15T06:28:54Z",
+      "side": 1,
+      "message": "Using the flexible insert dialog instead of separate before/after menu entries helps to reduce the \"heaviness\" that I complained about earlier.\n\nAlso the dialog for RowHeight was removed since it was just a blank entry, so obviously not used in Draw - I must have copied that from Writer.",
+      "range": {
+        "startLine": 355,
+        "startChar": 34,
+        "endLine": 355,
+        "endChar": 55
+      },
+      "revId": "c3ea3dea24f10e7f75c5f9ee4192a4daf6cf990c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
