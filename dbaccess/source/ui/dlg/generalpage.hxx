@@ -87,7 +87,7 @@ namespace dbaui
         void onTypeSelected(const OUString& _sURLPrefix);
 
         /**
-         * Initializes the listbox, which contains entires each representing a
+         * Initializes the listbox, which contains entries each representing a
          * connection to an existing database.
          */
         void initializeTypeList();
