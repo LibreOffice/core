@@ -45,6 +45,54 @@
       "revId": "ef3ffc3a59945e34bac9d058aee78af6aea91781",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_9440c309",
+        "filename": "sc/source/ui/condformat/condformatmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1001839
+      },
+      "writtenOn": "2018-10-15T12:29:09Z",
+      "side": 1,
+      "message": "GCC doesn\u0027t compile with that syntax:\n/home/abhyudaya/lo/sc/source/ui/condformat/condformatmgr.cxx:149:59: error: conversion from ‘const char*’ to non-scalar type ‘rtl::OUString’ requested\n     OUString aNewSensitivity \u003d this-\u003empFormatList-\u003esize() ? \"true\" : \"false\";",
+      "parentUuid": "ff0f0b1f_b47aa785",
+      "range": {
+        "startLine": 149,
+        "startChar": 60,
+        "endLine": 149,
+        "endChar": 96
+      },
+      "revId": "ef3ffc3a59945e34bac9d058aee78af6aea91781",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_74452f17",
+        "filename": "sc/source/ui/condformat/condformatmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1001839
+      },
+      "writtenOn": "2018-10-15T12:29:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff0f0b1f_d4751b9a",
+      "range": {
+        "startLine": 149,
+        "startChar": 31,
+        "endLine": 149,
+        "endChar": 37
+      },
+      "revId": "ef3ffc3a59945e34bac9d058aee78af6aea91781",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
