@@ -527,7 +527,6 @@ Size const & PrintDialog::getJobPageSize()
 
 PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterController>& i_rController)
 : ModalDialog(i_pWindow, "PrintDialog", "vcl/ui/printdialog.ui")
-, mpCustomOptionsUIBuilder(nullptr)
 , maPController( i_rController )
 , maPrintToFileText( VclResId( SV_PRINT_TOFILE_TXT ) )
 , maDefPrtText( VclResId( SV_PRINT_DEFPRT_TXT ) )
@@ -599,7 +598,7 @@ PrintDialog::PrintDialog(vcl::Window* i_pWindow, const std::shared_ptr<PrinterCo
     std::sort( rQueues.begin(), rQueues.end(), lcl_ListBoxCompare );
     for( const auto& rQueue : rQueues )
     {
-        mpPrinters->InsertEntry( *it );
+        mpPrinters->InsertEntry( rQueue );
     }
     // select current printer
     if( mpPrinters->GetEntryPos( maPController->getPrinter()->GetName() ) != LISTBOX_ENTRY_NOTFOUND )
@@ -1094,41 +1093,23 @@ void PrintDialog::checkControlDependencies()
 
 void PrintDialog::checkOptionalControlDependencies()
 {
-    for( auto it = maControlToPropertyMap.begin();
-         it != maControlToPropertyMap.end(); ++it )
+    for( const auto& rEntry : maControlToPropertyMap )
     {
-        bool bShouldbeEnabled = maPController->isUIOptionEnabled( it->second );
-        if( ! bShouldbeEnabled )
-        {
-            // enable controls that are directly attached to a dependency anyway
-            // if the normally disabled controls get modified, change the dependency
-            // so the control would be enabled
-            // example: in print range "Print All" is selected, "Page Range" is then of course
-            // not selected and the Edit for the Page Range would be disabled
-            // as a convenience we should enable the Edit anyway and automatically select
-            // "Page Range" instead of "Print All" if the Edit gets modified
-            if( maReverseDependencySet.find( it->second ) != maReverseDependencySet.end() )
-            {
-                OUString aDep( maPController->getDependency( it->second ) );
-                // if the dependency is at least enabled, then enable this control anyway
-                if( !aDep.isEmpty() && maPController->isUIOptionEnabled( aDep ) )
-                    bShouldbeEnabled = true;
-            }
-        }
+        bool bShouldbeEnabled = maPController->isUIOptionEnabled( rEntry.second );
 
-        if( bShouldbeEnabled && dynamic_cast<RadioButton*>(it->first.get()) )
+        if( bShouldbeEnabled && dynamic_cast<RadioButton*>(rEntry.first.get()) )
         {
-            auto r_it = maControlToNumValMap.find( it->first );
+            auto r_it = maControlToNumValMap.find( rEntry.first );
             if( r_it != maControlToNumValMap.end() )
             {
-                bShouldbeEnabled = maPController->isUIChoiceEnabled( it->second, r_it->second );
+                bShouldbeEnabled = maPController->isUIChoiceEnabled( rEntry.second, r_it->second );
             }
         }
 
-        bool bIsEnabled = it->first->IsEnabled();
+        bool bIsEnabled = rEntry.first->IsEnabled();
         // Enable does not do a change check first, so can be less cheap than expected
         if( bShouldbeEnabled != bIsEnabled )
-            it->first->Enable( bShouldbeEnabled );
+            rEntry.first->Enable( bShouldbeEnabled );
     }
 }
 

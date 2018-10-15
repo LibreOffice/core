@@ -255,6 +255,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="image">image2</property>
+                                <property name="tooltip_text" translatable="yes" context="printdialog|forward">Next page</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -294,6 +295,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="image">image1</property>
+                                <property name="tooltip_text" translatable="yes" context="printdialog|backward">Previous page</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -372,6 +374,9 @@
                   <object class="GtkNotebook" id="tabcontrol">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="scrollable">True</property>
+                    <property name="enable_popup">True</property>
                     <child>
                       <object class="GtkBox" id="box11">
                         <property name="visible">True</property>
