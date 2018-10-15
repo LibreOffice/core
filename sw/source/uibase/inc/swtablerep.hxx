@@ -28,19 +28,19 @@ class SwTabCols;
 struct TColumn;
 class SW_DLLPUBLIC SwTableRep
 {
-    std::unique_ptr<TColumn[]> pTColumns;
+    std::unique_ptr<TColumn[]> m_pTColumns;
 
-    SwTwips     nTableWidth;
-    SwTwips     nSpace;
-    SwTwips     nLeftSpace;
-    SwTwips     nRightSpace;
-    sal_uInt16      nAlign;
-    sal_uInt16      nColCount;
-    sal_uInt16      nAllCols;
-    sal_uInt16      nWidthPercent;
-    bool        bLineSelected : 1;
-    bool        bWidthChanged : 1;
-    bool        bColsChanged : 1;
+    SwTwips     m_nTableWidth;
+    SwTwips     m_nSpace;
+    SwTwips     m_nLeftSpace;
+    SwTwips     m_nRightSpace;
+    sal_uInt16      m_nAlign;
+    sal_uInt16      m_nColCount;
+    sal_uInt16      m_nAllCols;
+    sal_uInt16      m_nWidthPercent;
+    bool        m_bLineSelected : 1;
+    bool        m_bWidthChanged : 1;
+    bool        m_bColsChanged : 1;
 
 public:
     SwTableRep( const SwTabCols& rTabCol );
@@ -48,37 +48,37 @@ public:
 
     bool        FillTabCols( SwTabCols& rTabCol ) const;
 
-    SwTwips     GetLeftSpace() const            {return nLeftSpace;}
-    void        SetLeftSpace(SwTwips nSet)      {nLeftSpace = nSet;}
+    SwTwips     GetLeftSpace() const            {return m_nLeftSpace;}
+    void        SetLeftSpace(SwTwips nSet)      {m_nLeftSpace = nSet;}
 
-    SwTwips     GetRightSpace() const           {return nRightSpace;}
-    void        SetRightSpace(SwTwips nSet)     {nRightSpace = nSet;}
+    SwTwips     GetRightSpace() const           {return m_nRightSpace;}
+    void        SetRightSpace(SwTwips nSet)     {m_nRightSpace = nSet;}
 
-    SwTwips     GetWidth() const                {return nTableWidth;}
-    void        SetWidth(SwTwips nSet)          {nTableWidth = nSet;}
+    SwTwips     GetWidth() const                {return m_nTableWidth;}
+    void        SetWidth(SwTwips nSet)          {m_nTableWidth = nSet;}
 
-    sal_uInt16      GetWidthPercent() const         {return nWidthPercent;}
-    void        SetWidthPercent(sal_uInt16 nSet)    {nWidthPercent = nSet;}
+    sal_uInt16      GetWidthPercent() const         {return m_nWidthPercent;}
+    void        SetWidthPercent(sal_uInt16 nSet)    {m_nWidthPercent = nSet;}
 
-    sal_uInt16      GetAlign() const                {return nAlign;}
-    void        SetAlign(sal_uInt16 nSet)           {nAlign = nSet;}
+    sal_uInt16      GetAlign() const                {return m_nAlign;}
+    void        SetAlign(sal_uInt16 nSet)           {m_nAlign = nSet;}
 
-    sal_uInt16      GetColCount() const             {return nColCount;}
-    sal_uInt16      GetAllColCount() const          {return nAllCols;}
+    sal_uInt16      GetColCount() const             {return m_nColCount;}
+    sal_uInt16      GetAllColCount() const          {return m_nAllCols;}
 
-    bool        HasColsChanged() const          {return bColsChanged;}
-    void        SetColsChanged()                {bColsChanged = true;}
+    bool        HasColsChanged() const          {return m_bColsChanged;}
+    void        SetColsChanged()                {m_bColsChanged = true;}
 
-    bool        HasWidthChanged() const         {return bWidthChanged;}
-    void        SetWidthChanged()               {bWidthChanged  = true;}
+    bool        HasWidthChanged() const         {return m_bWidthChanged;}
+    void        SetWidthChanged()               {m_bWidthChanged  = true;}
 
-    bool        IsLineSelected() const          {return bLineSelected;}
-    void        SetLineSelected(bool bSet)      {bLineSelected = bSet;}
+    bool        IsLineSelected() const          {return m_bLineSelected;}
+    void        SetLineSelected(bool bSet)      {m_bLineSelected = bSet;}
 
-    SwTwips     GetSpace() const                { return nSpace;}
-    void        SetSpace(SwTwips nSet)          {nSpace = nSet;}
+    SwTwips     GetSpace() const                { return m_nSpace;}
+    void        SetSpace(SwTwips nSet)          {m_nSpace = nSet;}
 
-    TColumn*    GetColumns() const              {return pTColumns.get();}
+    TColumn*    GetColumns() const              {return m_pTColumns.get();}
 };
 #endif
 
