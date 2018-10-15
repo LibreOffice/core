@@ -1146,7 +1146,7 @@ namespace
 }
 
 
-SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor& _rColumnDescriptor )
+SdrObjectUniquePtr FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor& _rColumnDescriptor )
 {
     // not if we're in design mode
     if ( !m_pView->IsDesignMode() )
@@ -1347,7 +1347,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
         bool bCheckbox = ( OBJ_FM_CHECKBOX == nOBJID );
         OSL_ENSURE( !bCheckbox || !pLabel, "FmXFormView::implCreateFieldControl: why was there a label created for a check box?" );
         if ( bCheckbox )
-            return pControl.release();
+            return SdrObjectUniquePtr(pControl.release());
 
         SdrObjGroup* pGroup  = new SdrObjGroup(getView()->getSdrModelFromSdrView());
         SdrObjList* pObjList = pGroup->GetSubList();
@@ -1366,7 +1366,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
             }
         }
 
-        return pGroup; // and done
+        return SdrObjectUniquePtr(pGroup); // and done
     }
     catch (const Exception&)
     {
@@ -1378,7 +1378,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const svx::ODataAccessDescriptor
 }
 
 
-SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_rDesc )
+SdrObjectUniquePtr FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_rDesc )
 {
     // not if we're in design mode
     if ( !m_pView->IsDesignMode() )
@@ -1456,7 +1456,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
             bool bCheckbox = ( OBJ_FM_CHECKBOX == nOBJID );
             OSL_ENSURE( !bCheckbox || !pLabel, "FmXFormView::implCreateXFormsControl: why was there a label created for a check box?" );
             if ( bCheckbox )
-                return pControl.release();
+                return pControl;
 
 
             // group objects
@@ -1465,7 +1465,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
             pObjList->InsertObject(pLabel.release());
             pObjList->InsertObject(pControl.release());
 
-            return pGroup;
+            return SdrObjectUniquePtr(pGroup);
         }
         else {
 
@@ -1495,7 +1495,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const svx::OXFormsDescriptor &_
             Reference< css::form::submission::XSubmissionSupplier > xSubmissionSupplier(pControl->GetUnoControlModel(), UNO_QUERY);
             xSubmissionSupplier->setSubmission(xSubmission);
 
-            return pControl;
+            return SdrObjectUniquePtr(pControl);
         }
     }
     catch (const Exception&)

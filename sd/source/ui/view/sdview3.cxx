@@ -842,7 +842,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
         if( aDataHelper.GetString( SotClipboardFormatId::SBA_FIELDDATAEXCHANGE, aOUString ) )
         {
-            SdrObject* pObj = CreateFieldControl( aOUString );
+            SdrObjectUniquePtr pObj = CreateFieldControl( aOUString );
 
             if( pObj )
             {
@@ -854,7 +854,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                 aRect.SetPos( maDropPos );
                 pObj->SetLogicRect( aRect );
-                InsertObjectAtView( pObj, *GetSdrPageView(), SdrInsertFlags::SETDEFLAYER );
+                InsertObjectAtView( pObj.release(), *GetSdrPageView(), SdrInsertFlags::SETDEFLAYER );
                 bReturn = true;
             }
         }

@@ -272,7 +272,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
                 if(pPageView)
                 {
                     svx::ODataAccessDescriptor aDescriptor(pDescriptorItem->GetValue());
-                    SdrObject* pNewDBField = pFormView->CreateFieldControl(aDescriptor);
+                    SdrObjectUniquePtr pNewDBField = pFormView->CreateFieldControl(aDescriptor);
 
                     if(pNewDBField)
                     {
@@ -285,7 +285,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
                         pNewDBField->SetLogicRect(aNewObjectRectangle);
 
-                        GetView()->InsertObjectAtView(pNewDBField, *pPageView);
+                        GetView()->InsertObjectAtView(pNewDBField.release(), *pPageView);
                     }
                 }
             }
