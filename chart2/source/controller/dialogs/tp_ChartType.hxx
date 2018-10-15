@@ -47,7 +47,7 @@ class SortByXValuesResourceGroup;
 class ChartTypeTabPage final : public ResourceChangeListener, public svt::OWizardPage, public ChartTypeTemplateProvider
 {
 public:
-    ChartTypeTabPage( vcl::Window* pParent
+    ChartTypeTabPage( TabPageParent pParent
                 , const css::uno::Reference< css::chart2::XChartDocument >& xChartModel
                 , bool bShowDescription = true );
     virtual ~ChartTypeTabPage() override;
@@ -69,12 +69,8 @@ private:
     void commitToModel( const ChartTypeParameter& rParameter );
     void selectMainType();
 
-    DECL_LINK( SelectMainTypeHdl, ListBox&, void );
-    DECL_LINK( SelectSubTypeHdl, ValueSet*, void );
-
-    VclPtr<FixedText>  m_pFT_ChooseType;
-    VclPtr<ListBox>    m_pMainTypeList;
-    VclPtr<ValueSet>   m_pSubTypeList;
+    DECL_LINK(SelectMainTypeHdl, weld::TreeView&, void);
+    DECL_LINK(SelectSubTypeHdl, SvtValueSet*, void );
 
     std::unique_ptr<Dim3DLookResourceGroup>     m_pDim3DLookResourceGroup;
     std::unique_ptr<StackingResourceGroup>      m_pStackingResourceGroup;
@@ -90,6 +86,11 @@ private:
     sal_Int32 m_nChangingCalls;
 
     TimerTriggeredControllerLock   m_aTimerTriggeredControllerLock;
+
+    std::unique_ptr<weld::Label>  m_xFT_ChooseType;
+    std::unique_ptr<weld::TreeView> m_xMainTypeList;
+    std::unique_ptr<SvtValueSet> m_xSubTypeList;
+    std::unique_ptr<weld::CustomWeld> m_xSubTypeListWin;
 };
 
 } //namespace chart

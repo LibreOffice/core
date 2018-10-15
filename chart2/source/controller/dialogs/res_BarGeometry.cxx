@@ -22,42 +22,39 @@
 namespace chart
 {
 
-BarGeometryResources::BarGeometryResources(VclBuilderContainer* pWindow)
+BarGeometryResources::BarGeometryResources(weld::Builder* pBuilder)
+    : m_xFT_Geometry(pBuilder->weld_label("shapeft"))
+    , m_xLB_Geometry(pBuilder->weld_tree_view("shape"))
 {
-    pWindow->get(m_pFT_Geometry, "shapeft");
-    pWindow->get(m_pLB_Geometry, "shape");
+    m_xLB_Geometry->set_size_request(-1, m_xLB_Geometry->get_height_rows(4));
 }
 
-void BarGeometryResources::SetSelectHdl( const Link<ListBox&,void>& rLink )
+void BarGeometryResources::connect_changed(const Link<weld::TreeView&,void>& rLink)
 {
-    m_pLB_Geometry->SetSelectHdl( rLink );
+    m_xLB_Geometry->connect_changed(rLink);
 }
 
-void BarGeometryResources::Show( bool bShow )
+void BarGeometryResources::show( bool bShow )
 {
-    m_pFT_Geometry->Show( bShow );
-    m_pLB_Geometry->Show( bShow );
-}
-void BarGeometryResources::Enable( bool bEnable )
-{
-    m_pFT_Geometry->Enable( bEnable );
-    m_pLB_Geometry->Enable( bEnable );
+    m_xFT_Geometry->show( bShow );
+    m_xLB_Geometry->show( bShow );
 }
 
-sal_Int32 BarGeometryResources::GetSelectedEntryCount() const
+void BarGeometryResources::set_sensitive( bool bEnable )
 {
-    return m_pLB_Geometry->GetSelectedEntryCount();
+    m_xFT_Geometry->set_sensitive( bEnable );
+    m_xLB_Geometry->set_sensitive( bEnable );
 }
 
-sal_Int32 BarGeometryResources::GetSelectedEntryPos() const
+sal_Int32 BarGeometryResources::get_selected_index() const
 {
-    return m_pLB_Geometry->GetSelectedEntryPos();
+    return m_xLB_Geometry->get_selected_index();
 }
 
-void BarGeometryResources::SelectEntryPos(sal_Int32 nPos)
+void BarGeometryResources::select(sal_Int32 nPos)
 {
-    if( nPos < m_pLB_Geometry->GetEntryCount() )
-        m_pLB_Geometry->SelectEntryPos( nPos );
+    if (nPos < m_xLB_Geometry->n_children())
+        m_xLB_Geometry->select(nPos);
 }
 
 } //namespace chart

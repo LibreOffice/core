@@ -502,6 +502,8 @@ public:
 
     void SetOptimalSize();
 
+    /// Insert @rImage item.
+    void            InsertItem(sal_uInt16 nItemId, const Image& rImage);
     /// Insert @rImage item with @rStr as a tooltip
     void            InsertItem(sal_uInt16 nItemId, const Image& rImage,
                                const OUString& rStr, size_t nPos = VALUESET_APPEND);

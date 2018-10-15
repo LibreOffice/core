@@ -24,6 +24,7 @@
 #include <svtools/wizdlg.hxx>
 #include <vcl/button.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/weld.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 class Bitmap;
@@ -104,6 +105,8 @@ namespace svt
                 must be the OWizardMachine (which is derived from Window)
          */
         OWizardPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
+        OWizardPage(TabPageParent pParent, const OUString& rUIXMLDescription, const OString& rID);
+        virtual void dispose() override;
         virtual ~OWizardPage() override;
 
         // IWizardPageController overridables
@@ -112,6 +115,9 @@ namespace svt
         virtual bool        canAdvance() const override;
 
     protected:
+        std::unique_ptr<weld::Builder> m_xBuilder;
+        std::unique_ptr<weld::Container> m_xContainer;
+
         // TabPage overridables
         virtual void        ActivatePage() override;
 

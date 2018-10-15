@@ -23,9 +23,34 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/builder.hxx>
+#include <vcl/weld.hxx>
 #include <vcl/window.hxx>
 #include <vcl/IContext.hxx>
 
+struct TabPageParent
+{
+    TabPageParent(vcl::Window* _pParent)
+        : pParent(_pParent)
+        , pPage(nullptr)
+        , pController(nullptr)
+    {
+    }
+    TabPageParent(weld::Container* _pPage, weld::DialogController* _pController)
+        : pParent(nullptr)
+        , pPage(_pPage)
+        , pController(_pController)
+    {
+    }
+    weld::Window* GetFrameWeld() const
+    {
+        if (pController)
+            return pController->getDialog();
+        return pParent->GetFrameWeld();
+    }
+    VclPtr<vcl::Window> pParent;
+    weld::Container* const pPage;
+    weld::DialogController* pController;
+};
 
 class VCL_DLLPUBLIC TabPage
     : public vcl::Window
