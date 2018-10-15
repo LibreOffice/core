@@ -150,7 +150,7 @@ void Qt5DropTarget::initialize(const Sequence<Any>& rArguments)
     }
 
     m_pFrame = reinterpret_cast<Qt5Frame*>(nFrame);
-    //m_pFrame->registerDropTarget(this);
+    m_pFrame->registerDropTarget(this);
     m_bActive = true;
 }
 
@@ -181,6 +181,8 @@ void Qt5DropTarget::setDefaultActions(sal_Int8 nDefaultActions)
 {
     m_nDefaultActions = nDefaultActions;
 }
+
+void Qt5DropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde) {}
 
 void Qt5DropTarget::acceptDrag(sal_Int8 /*dragOperation*/) { return; }
 void Qt5DropTarget::rejectDrag() { return; }

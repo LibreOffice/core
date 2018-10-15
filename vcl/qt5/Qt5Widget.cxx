@@ -107,13 +107,15 @@ void Qt5Widget::handleMouseButtonEvent(QMouseEvent* pEvent, bool bReleased)
 
     if (!bReleased)
     {
+        QPoint point = pEvent->pos();
         QMimeData* mimeData = new QMimeData;
         mimeData->setData("application/x-dnditemdata", nullptr);
 
         QDrag* drag = new QDrag(this);
         drag->setMimeData(mimeData);
+        drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::MoveAction);
 
-        drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::CopyAction);
+        m_pFrame->draggingStarted(point.x(), point.y());
     }
 
     aEvent.mnTime = pEvent->timestamp();
