@@ -966,7 +966,10 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
             int e = errno;
             SAL_INFO("sal.file", "flock(" << fd << ",LOCK_EX|LOCK_NB): errno " << e << ": " << strerror(e));
             /* Mac OSX returns ENOTSUP for webdav drives. We should try read lock */
-            if ((e != ENOTSUP) || ((flock(fd, LOCK_SH | LOCK_NB) == 1) && (errno != ENOTSUP)))
+
+            // Restore errno after possibly having been overwritten by the SAL_INFO above...
+            errno = e;
+            if ((errno != ENOTSUP) || ((flock(fd, LOCK_SH | LOCK_NB) == 1) && (errno != ENOTSUP)))
             {
                 eRet = oslTranslateFileError(errno);
                 (void) close(fd);
@@ -1100,7 +1103,7 @@ oslFileError SAL_CALL osl_syncFile(oslFileHandle Handle)
     {
         int e = errno;
         SAL_INFO("sal.file", "fsync(" << pImpl->m_fd << "): errno " << e << ": " << strerror(e));
-        return oslTranslateFileError(errno);
+        return oslTranslateFileError(e);
     }
     else
         SAL_INFO("sal.file", "fsync(" << pImpl->m_fd << "): OK");

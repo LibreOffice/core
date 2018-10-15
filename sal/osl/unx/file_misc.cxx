@@ -218,6 +218,8 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString* ustrDirectoryURL, oslDirect
             {
                 int e = errno;
                 SAL_INFO("sal.file", "opendir(" << path << "): errno " << e << ": " << strerror(e));
+                // Restore errno after possible modification by SAL_INFO above
+                errno = e;
             }
         }
     }
@@ -249,7 +251,7 @@ oslFileError SAL_CALL osl_closeDirectory(oslDirectory pDirectory)
         {
             int e = errno;
             SAL_INFO("sal.file", "closedir(" << pDirImpl->pDirStruct << "): errno " << e << ": " << strerror(e));
-            err = oslTranslateFileError(errno);
+            err = oslTranslateFileError(e);
         }
         else
             SAL_INFO("sal.file", "closedir(" << pDirImpl->pDirStruct << "): OK");
@@ -819,7 +821,7 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
             int e = errno;
             SAL_INFO("sal.file", "rename(" << pszDestFileName << ", " << tmpDestFile
                      << "): errno " << e << ": " << strerror(e));
-            if (errno == ENOENT)
+            if (e == ENOENT)
             {
                 DestFileExists = 0;
             }
