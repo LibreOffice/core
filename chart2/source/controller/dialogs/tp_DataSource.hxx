@@ -27,6 +27,9 @@
 
 #include <RangeSelectionListener.hxx>
 
+namespace com { namespace sun { namespace star { namespace chart2 { class XChartType; } } } }
+namespace com { namespace sun { namespace star { namespace chart2 { class XDataSeries; } } } }
+
 namespace chart { class TabPageNotifiable; }
 
 namespace chart
@@ -35,25 +38,36 @@ namespace chart
 class ChartTypeTemplateProvider;
 class DialogModel;
 
+class SeriesEntry
+{
+public:
+    OUString m_sRole;
+
+    /// the corresponding data series
+    css::uno::Reference< css::chart2::XDataSeries > m_xDataSeries;
+
+    /// the chart type that contains the series (via XDataSeriesContainer)
+    css::uno::Reference< css::chart2::XChartType > m_xChartType;
+};
+
 class DataSourceTabPage final :
         public ::svt::OWizardPage,
         public RangeSelectionListenerParent
 {
 public:
-    explicit DataSourceTabPage(
-        vcl::Window * pParent,
-        DialogModel & rDialogModel,
-        ChartTypeTemplateProvider* pTemplateProvider,
-        Dialog * pParentDialog,
-        bool bHideDescription = false );
+    explicit DataSourceTabPage(TabPageParent pParent,
+                               DialogModel & rDialogModel,
+                               ChartTypeTemplateProvider* pTemplateProvider,
+                               Dialog * pParentDialog,
+                               bool bHideDescription = false);
     virtual ~DataSourceTabPage() override;
-    virtual void dispose() override;
 
     void commitPage();
 
 private:
     // OWizardPage
     virtual void ActivatePage() override;
+    virtual void dispose() override;
     virtual bool commitPage( ::svt::WizardTypes::CommitPageReason eReason ) override;
 
     //TabPage
@@ -61,20 +75,21 @@ private:
 
     virtual void        initializePage() override;
 
-    DECL_LINK( SeriesSelectionChangedHdl, SvTreeListBox*, void );
-    DECL_LINK( RoleSelectionChangedHdl, SvTreeListBox*, void );
-    DECL_LINK( MainRangeButtonClickedHdl, Button*, void );
-    DECL_LINK( CategoriesRangeButtonClickedHdl, Button*, void );
-    DECL_LINK( AddButtonClickedHdl, Button*, void );
-    DECL_LINK( RemoveButtonClickedHdl, Button*, void );
-    DECL_LINK( RangeModifiedHdl, Edit&, void );
-    DECL_LINK( RangeUpdateDataHdl, Edit&, void );
-    DECL_LINK( UpButtonClickedHdl, Button*, void );
-    DECL_LINK( DownButtonClickedHdl, Button*, void );
+    DECL_LINK( SeriesSelectionChangedHdl, weld::TreeView&, void );
+    DECL_LINK( RoleSelectionChangedHdl, weld::TreeView&, void );
+    DECL_LINK( MainRangeButtonClickedHdl, weld::Button&, void );
+    DECL_LINK( CategoriesRangeButtonClickedHdl, weld::Button&, void );
+    DECL_LINK( AddButtonClickedHdl, weld::Button&, void );
+    DECL_LINK( RemoveButtonClickedHdl, weld::Button&, void );
+    DECL_LINK( RangeModifiedHdl, weld::Entry&, void );
+    DECL_LINK( UpButtonClickedHdl, weld::Button&, void );
+    DECL_LINK( DownButtonClickedHdl, weld::Button&, void );
 
     // ____ RangeSelectionListenerParent ____
     virtual void listeningFinished( const OUString & rNewRange ) override;
     virtual void disposingRangeSelection() override;
+
+    void InsertRoleLBEntry(const OUString& rRole, const OUString& rRange);
 
     void updateControlState();
 
@@ -85,12 +100,12 @@ private:
             <TRUE/> if the text from the field is a valid format to the internal
             data was valid
      */
-    bool updateModelFromControl( Edit * pField = nullptr );
+    bool updateModelFromControl(weld::Entry* pField = nullptr);
 
     /** @return </sal_True>, if the edit field contains a valid range entry. If no
         XCellRangesAccess can be obtained, </sal_False> is returned.
      */
-    bool isRangeFieldContentValid( Edit & rEdit );
+    bool isRangeFieldContentValid(weld::Entry& rEdit);
 
     /** @return </sal_True>, if the tab-page is in a consistent (commitable) state
      */
@@ -102,34 +117,34 @@ private:
     void fillSeriesListBox();
     void fillRoleListBox();
 
-    VclPtr<FixedText>     m_pFT_CAPTION;
-    VclPtr<FixedText>     m_pFT_SERIES;
-    VclPtr<SvTreeListBox> m_pLB_SERIES;
-    VclPtr<PushButton>    m_pBTN_ADD;
-    VclPtr<PushButton>    m_pBTN_REMOVE;
-    VclPtr<PushButton>    m_pBTN_UP;
-    VclPtr<PushButton>    m_pBTN_DOWN;
-
-    VclPtr<FixedText>     m_pFT_ROLE;
-    VclPtr<SvTabListBox>  m_pLB_ROLE;
-    VclPtr<FixedText>     m_pFT_RANGE;
-    VclPtr<Edit>          m_pEDT_RANGE;
-    VclPtr<PushButton>    m_pIMB_RANGE_MAIN;
-
-    VclPtr<FixedText>     m_pFT_CATEGORIES;
-    VclPtr<FixedText>     m_pFT_DATALABELS;//used for xy charts
-    VclPtr<Edit>          m_pEDT_CATEGORIES;
-    VclPtr<PushButton>    m_pIMB_RANGE_CAT;
+    std::vector<std::unique_ptr<SeriesEntry>> m_aEntries;
 
     OUString       m_aFixedTextRange;
 
     ChartTypeTemplateProvider * m_pTemplateProvider;
     DialogModel &               m_rDialogModel;
-    VclPtr<Edit>                m_pCurrentRangeChoosingField;
+    weld::Entry*                m_pCurrentRangeChoosingField;
     bool                        m_bIsDirty;
 
     VclPtr<Dialog>              m_pParentDialog;
     TabPageNotifiable *         m_pTabPageNotifiable;
+
+    std::unique_ptr<weld::Label> m_xFT_CAPTION;
+    std::unique_ptr<weld::Label> m_xFT_SERIES;
+    std::unique_ptr<weld::TreeView> m_xLB_SERIES;
+    std::unique_ptr<weld::Button> m_xBTN_ADD;
+    std::unique_ptr<weld::Button> m_xBTN_REMOVE;
+    std::unique_ptr<weld::Button> m_xBTN_UP;
+    std::unique_ptr<weld::Button> m_xBTN_DOWN;
+    std::unique_ptr<weld::Label> m_xFT_ROLE;
+    std::unique_ptr<weld::TreeView> m_xLB_ROLE;
+    std::unique_ptr<weld::Label> m_xFT_RANGE;
+    std::unique_ptr<weld::Entry> m_xEDT_RANGE;
+    std::unique_ptr<weld::Button> m_xIMB_RANGE_MAIN;
+    std::unique_ptr<weld::Label> m_xFT_CATEGORIES;
+    std::unique_ptr<weld::Label> m_xFT_DATALABELS;//used for xy charts
+    std::unique_ptr<weld::Entry> m_xEDT_CATEGORIES;
+    std::unique_ptr<weld::Button> m_xIMB_RANGE_CAT;
 };
 
 } //  namespace chart

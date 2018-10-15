@@ -472,7 +472,6 @@ custom_widgets = [
     'SearchResultsBox',
     'SelectionListBox',
     'SentenceEditWindow',
-    'SeriesListBox',
     'SfxAccCfgTabListBox',
     'SfxConfigFunctionListBox',
     'SfxConfigGroupListBox',
