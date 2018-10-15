@@ -41,11 +41,9 @@ class RangeChooserTabPage final : public svt::OWizardPage, public RangeSelection
 {
 public:
 
-    RangeChooserTabPage( vcl::Window* pParent
-                , DialogModel & rDialogModel
-                , ChartTypeTemplateProvider* pTemplateProvider
-                , Dialog * pParentDialog
-                , bool bHideDescription = false );
+    RangeChooserTabPage(TabPageParent pParent, DialogModel & rDialogModel,
+                        ChartTypeTemplateProvider* pTemplateProvider,
+                        Dialog * pParentDialog, bool bHideDescription = false);
     virtual ~RangeChooserTabPage() override;
     virtual void dispose() override;
 
@@ -69,30 +67,11 @@ private:
     bool isValid();
     void setDirty();
 
-    DECL_LINK( ChooseRangeHdl, Button*, void );
-    DECL_LINK( ControlChangedHdl, Edit&, void );
-    DECL_LINK( ControlChangedCheckBoxHdl, CheckBox&, void );
-    DECL_LINK( ControlChangedRadioHdl, RadioButton&, void );
-    DECL_LINK( ControlEditedHdl, Edit&, void );
-
-    VclPtr<FixedText>       m_pFT_Caption;
-    VclPtr<FixedText>       m_pFT_Range;
-    VclPtr<Edit>            m_pED_Range;
-    VclPtr<PushButton>      m_pIB_Range;
-
-    VclPtr<RadioButton>     m_pRB_Rows;
-    VclPtr<RadioButton>     m_pRB_Columns;
-
-    VclPtr<CheckBox>        m_pCB_FirstRowAsLabel;
-    VclPtr<CheckBox>        m_pCB_FirstColumnAsLabel;
-    VclPtr<FixedText>       m_pFTTitle;
-
-    VclPtr<FixedLine>       m_pFL_TimeBased;
-    VclPtr<CheckBox>        m_pCB_TimeBased;
-    VclPtr<FixedText>       m_pFT_TimeStart;
-    VclPtr<Edit>            m_pEd_TimeStart;
-    VclPtr<FixedText>       m_pFT_TimeEnd;
-    VclPtr<Edit>            m_pEd_TimeEnd;
+    DECL_LINK( ChooseRangeHdl, weld::Button&, void );
+    DECL_LINK( ControlChangedHdl, weld::Entry&, void );
+    DECL_LINK( ControlChangedCheckBoxHdl, weld::ToggleButton&, void );
+    DECL_LINK( ControlChangedRadioHdl, weld::ToggleButton&, void );
+    DECL_LINK( ControlEditedHdl, weld::Entry&, void );
 
     sal_Int32       m_nChangingControlCalls;
     bool            m_bIsDirty;
@@ -105,6 +84,21 @@ private:
     VclPtr<Dialog>                                          m_pParentDialog;
     TabPageNotifiable *                                     m_pTabPageNotifiable;
 
+    std::unique_ptr<weld::Label> m_xFT_Caption;
+    std::unique_ptr<weld::Label> m_xFT_Range;
+    std::unique_ptr<weld::Entry> m_xED_Range;
+    std::unique_ptr<weld::Button> m_xIB_Range;
+    std::unique_ptr<weld::RadioButton> m_xRB_Rows;
+    std::unique_ptr<weld::RadioButton> m_xRB_Columns;
+    std::unique_ptr<weld::CheckButton> m_xCB_FirstRowAsLabel;
+    std::unique_ptr<weld::CheckButton> m_xCB_FirstColumnAsLabel;
+    std::unique_ptr<weld::Label> m_xFTTitle;
+    std::unique_ptr<weld::Widget> m_xFL_TimeBased;
+    std::unique_ptr<weld::CheckButton> m_xCB_TimeBased;
+    std::unique_ptr<weld::Label> m_xFT_TimeStart;
+    std::unique_ptr<weld::Entry> m_xEd_TimeStart;
+    std::unique_ptr<weld::Label> m_xFT_TimeEnd;
+    std::unique_ptr<weld::Entry> m_xEd_TimeEnd;
 };
 
 } //namespace chart

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
   <object class="GtkImage" id="imageIB_RANGE">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="tooltip_text" translatable="yes" context="tp_RangeChooser|imageIB_RANGE|tooltip_text">Select data range</property>
-    <property name="pixbuf">chart2/res/selectrange.png</property>
+    <property name="icon_name">chart2/res/selectrange.png</property>
   </object>
   <object class="GtkBox" id="tp_RangeChooser">
     <property name="visible">True</property>
@@ -24,8 +24,8 @@
           <object class="GtkLabel" id="FT_CAPTION_FOR_WIZARD">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
             <property name="label" translatable="yes" context="tp_RangeChooser|FT_CAPTION_FOR_WIZARD">Choose a Data Range</property>
+            <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -46,10 +46,10 @@
               <object class="GtkLabel" id="FT_RANGE">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
                 <property name="label" translatable="yes" context="tp_RangeChooser|FT_RANGE">_Data range:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">ED_RANGE</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -60,8 +60,9 @@
             <child>
               <object class="GtkEntry" id="ED_RANGE">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
+                <property name="activates_default">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -71,9 +72,8 @@
             </child>
             <child>
               <object class="GtkButton" id="IB_RANGE">
-                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes" context="tp_RangeChooser|IB_RANGE|tooltip_text">Select data range</property>
                 <property name="image">imageIB_RANGE</property>
@@ -94,15 +94,13 @@
         <child>
           <object class="GtkRadioButton" id="RB_DATAROWS">
             <property name="label" translatable="yes" context="tp_RangeChooser|RB_DATAROWS">Data series in _rows</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="active">True</property>
             <property name="draw_indicator">True</property>
-            <property name="group">RB_DATACOLS</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -113,13 +111,11 @@
         <child>
           <object class="GtkRadioButton" id="RB_DATACOLS">
             <property name="label" translatable="yes" context="tp_RangeChooser|RB_DATACOLS">Data series in _columns</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
-            <property name="active">True</property>
             <property name="draw_indicator">True</property>
             <property name="group">RB_DATAROWS</property>
           </object>
@@ -132,9 +128,8 @@
         <child>
           <object class="GtkCheckButton" id="CB_FIRST_ROW_ASLABELS">
             <property name="label" translatable="yes" context="tp_RangeChooser|CB_FIRST_ROW_ASLABELS">_First row as label</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
@@ -149,9 +144,8 @@
         <child>
           <object class="GtkCheckButton" id="CB_FIRST_COLUMN_ASLABELS">
             <property name="label" translatable="yes" context="tp_RangeChooser|CB_FIRST_COLUMN_ASLABELS">F_irst column as label</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
@@ -177,7 +171,6 @@
         <child>
           <object class="GtkCheckButton" id="CB_TIME_BASED">
             <property name="label" translatable="yes" context="tp_RangeChooser|CB_TIME_BASED">Time based charting</property>
-            <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -200,29 +193,27 @@
               <object class="GtkEntry" id="ED_TIME_BASED_START">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="activates_default">True</property>
                 <property name="width_chars">5</property>
-                <property name="text" translatable="no">0</property>
+                <property name="text">0</property>
                 <property name="input_purpose">number</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkEntry" id="ED_TIME_BASED_END">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="activates_default">True</property>
                 <property name="width_chars">5</property>
-                <property name="text" translatable="no">0</property>
+                <property name="text">0</property>
               </object>
               <packing>
                 <property name="left_attach">3</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -237,8 +228,6 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -253,8 +242,6 @@
               <packing>
                 <property name="left_attach">2</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
           </object>
