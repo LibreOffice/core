@@ -325,8 +325,10 @@ void SwFrame::DestroyImpl()
 
     // accessible objects for fly and cell frames have been already disposed
     // by the destructors of the derived classes.
-    if( IsAccessibleFrame() && !(IsFlyFrame() || IsCellFrame()) && GetDep() )
+    if (IsAccessibleFrame() && !(IsFlyFrame() || IsCellFrame())
+        && (GetDep() || IsTextFrame())) // sw_redlinehide: text frame may not have Dep!
     {
+        assert(!IsTextFrame() || GetDep() || static_cast<SwTextFrame*>(this)->GetMergedPara());
         SwRootFrame *pRootFrame = getRootFrame();
         if( pRootFrame && pRootFrame->IsAnyShellAccessible() )
         {
