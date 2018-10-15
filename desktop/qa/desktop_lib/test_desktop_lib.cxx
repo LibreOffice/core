@@ -19,6 +19,8 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
+#include <com/sun/star/frame/XStorable.hpp>
+
 #include <vcl/scheduler.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/uri.hxx>
@@ -116,6 +118,8 @@ public:
     void testCommentsCallbacksWriter();
     void testRunMacro();
     void testExtractParameter();
+    void testGetSignatureState();
+    void testInsertCertificate();
     void testABI();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
@@ -159,6 +163,8 @@ public:
     CPPUNIT_TEST(testCommentsCallbacksWriter);
     CPPUNIT_TEST(testRunMacro);
     CPPUNIT_TEST(testExtractParameter);
+    CPPUNIT_TEST(testGetSignatureState);
+    CPPUNIT_TEST(testInsertCertificate);
     CPPUNIT_TEST(testABI);
     CPPUNIT_TEST_SUITE_END();
 
@@ -2236,6 +2242,43 @@ void DesktopLOKTest::testExtractParameter()
     aValue = extractParameter(aOptions, "Language");
     CPPUNIT_ASSERT_EQUAL(OUString(), aValue);
     CPPUNIT_ASSERT_EQUAL(OUString("Something1,Something2=blah,Something3"), aOptions);
+
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void DesktopLOKTest::testGetSignatureState()
+{
+    comphelper::LibreOfficeKit::setActive();
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    Scheduler::ProcessEventsToIdle();
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    int nState = pDocument->m_pDocumentClass->getSignatureState(pDocument);
+    CPPUNIT_ASSERT_EQUAL(int(0), nState);
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void DesktopLOKTest::testInsertCertificate()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(mxComponent.is());
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+
+    OUString aFileURL;
+    createFileURL("certificate.der", aFileURL);
+
+    SvFileStream aStream(aFileURL, StreamMode::READ);
+    sal_uInt64 nSize = aStream.remainingSize();
+
+    std::vector<unsigned char> aCertificate;
+    aCertificate.resize(nSize);
+    aStream.ReadBytes(aCertificate.data(), nSize);
+
+    bool bResult = pDocument->m_pDocumentClass->insertCertificate(pDocument, aCertificate.data(), int(aCertificate.size()));
+    CPPUNIT_ASSERT(bResult);
 
     comphelper::LibreOfficeKit::setActive(false);
 }
