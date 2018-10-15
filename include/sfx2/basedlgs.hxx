@@ -40,7 +40,6 @@ class OKButton;
 class CancelButton;
 class HelpButton;
 class Button;
-class FixedLine;
 
 // class SfxModalDialog --------------------------------------------------
 
@@ -153,7 +152,6 @@ public:
 struct SingleTabDlgImpl
 {
     VclPtr<SfxTabPage>          m_pSfxPage;
-    VclPtr<FixedLine>           m_pLine;
 
     SingleTabDlgImpl();
 };
