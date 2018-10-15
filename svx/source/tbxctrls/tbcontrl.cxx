@@ -3110,7 +3110,9 @@ void SvxColorToolBoxControl::initialize( const css::uno::Sequence<css::uno::Any>
         // Sidebar uses wide buttons for those.
         m_bSplitButton = typeid( *pToolBox ) != typeid( sfx2::sidebar::SidebarToolBox );
 
-    m_xBtnUpdater.reset( new svx::ToolboxButtonColorUpdater( m_nSlotId, nId, pToolBox, !m_bSplitButton ) );
+    OUString aCommandLabel = vcl::CommandInfoProvider::GetLabelForCommand( getCommandURL(), getModuleName() );
+
+    m_xBtnUpdater.reset( new svx::ToolboxButtonColorUpdater( m_nSlotId, nId, pToolBox, !m_bSplitButton,  aCommandLabel ) );
     pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ( m_bSplitButton ? ToolBoxItemBits::DROPDOWN : ToolBoxItemBits::DROPDOWNONLY ) );
 }
 
@@ -3181,7 +3183,7 @@ VclPtr<vcl::Window> SvxColorToolBoxControl::createPopupWindow( vcl::Window* pPar
 
 IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, const NamedColor&, rColor, void)
 {
-    m_xBtnUpdater->Update(rColor.first);
+    m_xBtnUpdater->Update(rColor);
 }
 
 void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
