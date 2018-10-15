@@ -108,30 +108,22 @@ OUString lcl_GetSelectedRole( const SvTabListBox & rRoleListBox, bool bUITransla
     return aResult;
 }
 
-OUString lcl_GetSelectedRolesRange( const SvTabListBox & rRoleListBox )
+OUString lcl_GetSelectedRolesRange( const weld::TreeView& rRoleListBox )
 {
     OUString aResult;
-    SvTreeListEntry * pEntry = rRoleListBox.FirstSelected();
-    if( pEntry )
-        aResult = SvTabListBox::GetEntryText( pEntry, 2 );
+    int nEntry = rRoleListBox.get_selected_index();
+    if (nEntry != -1)
+        aResult = rRoleListBox.get_text(nEntry, 1);
     return aResult;
 }
 
 OUString lcl_GetSequenceNameForLabel( ::chart::SeriesEntry const * pEntry )
 {
-    OUString aResult( "values-y" );
-    if( pEntry &&
-        pEntry->m_xChartType.is())
-    {
+    OUString aResult("values-y");
+    if (pEntry && pEntry->m_xChartType.is())
         aResult = pEntry->m_xChartType->getRoleOfSequenceForSeriesLabel();
-    }
     return aResult;
 }
-
-static long lcl_pRoleListBoxTabs[] =
-    {
-        0, 0, 75
-    };
 
 void lcl_enableRangeChoosing( bool bEnable, Dialog * pDialog )
 {
@@ -181,94 +173,76 @@ Reference< chart2::data::XLabeledDataSequence > lcl_findLSequenceWithOnlyLabel(
 namespace chart
 {
 
-DataSourceTabPage::DataSourceTabPage(
-    vcl::Window * pParent,
-    DialogModel & rDialogModel,
-    ChartTypeTemplateProvider* pTemplateProvider,
-    Dialog * pParentDialog,
-    bool bHideDescription /* = false */ ) :
-        ::svt::OWizardPage( pParent
-                           ,"tp_DataSource"
-                           ,"modules/schart/ui/tp_DataSource.ui"),
-    m_pTemplateProvider( pTemplateProvider ),
-    m_rDialogModel( rDialogModel ),
-
-    m_pCurrentRangeChoosingField( nullptr ),
-    m_bIsDirty( false ),
-    m_pParentDialog( pParentDialog ),
-    m_pTabPageNotifiable( dynamic_cast< TabPageNotifiable * >( pParentDialog ))
+DataSourceTabPage::DataSourceTabPage(TabPageParent pParent, DialogModel & rDialogModel,
+                                     ChartTypeTemplateProvider* pTemplateProvider,
+                                     Dialog * pParentDialog,
+                                     bool bHideDescription /* = false */)
+    : ::svt::OWizardPage(pParent, "modules/schart/ui/tp_DataSource.ui", "tp_DataSource")
+    , m_pTemplateProvider(pTemplateProvider)
+    , m_rDialogModel(rDialogModel)
+    , m_pCurrentRangeChoosingField( nullptr )
+    , m_bIsDirty( false )
+    , m_pParentDialog( pParentDialog )
+    , m_pTabPageNotifiable( dynamic_cast< TabPageNotifiable * >( pParentDialog ))
+    , m_xFT_CAPTION(m_xBuilder->weld_label("FT_CAPTION_FOR_WIZARD"))
+    , m_xFT_SERIES(m_xBuilder->weld_label("FT_SERIES"))
+    , m_xLB_SERIES(m_xBuilder->weld_tree_view("LB_SERIES"))
+    , m_xBTN_ADD(m_xBuilder->weld_button("BTN_ADD"))
+    , m_xBTN_REMOVE(m_xBuilder->weld_button("BTN_REMOVE"))
+    , m_xBTN_UP(m_xBuilder->weld_button("BTN_UP"))
+    , m_xBTN_DOWN(m_xBuilder->weld_button("BTN_DOWN"))
+    , m_xFT_ROLE(m_xBuilder->weld_label("FT_ROLE"))
+    , m_xLB_ROLE(m_xBuilder->weld_tree_view("LB_ROLE"))
+    , m_xFT_RANGE(m_xBuilder->weld_label("FT_RANGE"))
+    , m_xEDT_RANGE(m_xBuilder->weld_entry("EDT_RANGE"))
+    , m_xIMB_RANGE_MAIN(m_xBuilder->weld_button("IMB_RANGE_MAIN"))
+    , m_xFT_CATEGORIES(m_xBuilder->weld_label("FT_CATEGORIES"))
+    , m_xFT_DATALABELS(m_xBuilder->weld_label("FT_DATALABELS"))
+    , m_xEDT_CATEGORIES(m_xBuilder->weld_entry("EDT_CATEGORIES"))
+    , m_xIMB_RANGE_CAT(m_xBuilder->weld_button("IMB_RANGE_CAT"))
 {
+    m_xFT_CAPTION->show(!bHideDescription);
 
-    get(m_pFT_CAPTION     ,"FT_CAPTION_FOR_WIZARD");
-    get(m_pFT_SERIES      ,"FT_SERIES");
-
-    get(m_pLB_SERIES     ,"LB_SERIES");
-
-    get(m_pBTN_ADD        ,"BTN_ADD");
-    get(m_pBTN_REMOVE     ,"BTN_REMOVE");
-    get(m_pBTN_UP         ,"BTN_UP");
-    get(m_pBTN_DOWN       ,"BTN_DOWN");
-    get(m_pFT_ROLE        ,"FT_ROLE");
-    get(m_pLB_ROLE        ,"LB_ROLE");
-    get(m_pFT_RANGE       ,"FT_RANGE");
-    get(m_pEDT_RANGE      ,"EDT_RANGE");
-    get(m_pIMB_RANGE_MAIN ,"IMB_RANGE_MAIN");
-    get(m_pFT_CATEGORIES  ,"FT_CATEGORIES");
-    get(m_pFT_DATALABELS  ,"FT_DATALABELS");
-    get(m_pEDT_CATEGORIES ,"EDT_CATEGORIES");
-    get(m_pIMB_RANGE_CAT  ,"IMB_RANGE_CAT");
-
-    m_pFT_CAPTION->Show(!bHideDescription);
-
-    m_aFixedTextRange = m_pFT_RANGE->GetText();
+    m_aFixedTextRange = m_xFT_RANGE->get_label();
     SetText( SchResId( STR_OBJECT_DATASERIES_PLURAL ) );
 
     // set handlers
-    m_pLB_SERIES->SetSelectHdl( LINK( this, DataSourceTabPage, SeriesSelectionChangedHdl ));
+    m_xLB_SERIES->connect_changed(LINK(this, DataSourceTabPage, SeriesSelectionChangedHdl));
+    m_xLB_ROLE->connect_changed(LINK(this, DataSourceTabPage, RoleSelectionChangedHdl));
 
-    m_pLB_ROLE->SetSelectHdl( LINK( this, DataSourceTabPage, RoleSelectionChangedHdl ));
+    m_xIMB_RANGE_MAIN->connect_clicked(LINK(this, DataSourceTabPage, MainRangeButtonClickedHdl));
+    m_xIMB_RANGE_CAT->connect_clicked(LINK(this, DataSourceTabPage, CategoriesRangeButtonClickedHdl));
 
-    m_pIMB_RANGE_MAIN->SetClickHdl( LINK( this, DataSourceTabPage, MainRangeButtonClickedHdl ));
-    m_pIMB_RANGE_CAT->SetClickHdl( LINK( this, DataSourceTabPage, CategoriesRangeButtonClickedHdl ));
+    m_xBTN_ADD->connect_clicked(LINK(this, DataSourceTabPage, AddButtonClickedHdl));
+    m_xBTN_REMOVE->connect_clicked(LINK(this, DataSourceTabPage, RemoveButtonClickedHdl));
 
-    m_pBTN_ADD->SetClickHdl( LINK( this, DataSourceTabPage, AddButtonClickedHdl ));
-    m_pBTN_REMOVE->SetClickHdl( LINK( this, DataSourceTabPage, RemoveButtonClickedHdl ));
+    m_xBTN_UP->connect_clicked(LINK(this, DataSourceTabPage, UpButtonClickedHdl));
+    m_xBTN_DOWN->connect_clicked(LINK(this, DataSourceTabPage, DownButtonClickedHdl));
 
-    m_pBTN_UP->SetClickHdl( LINK( this, DataSourceTabPage, UpButtonClickedHdl ));
-    m_pBTN_DOWN->SetClickHdl( LINK( this, DataSourceTabPage, DownButtonClickedHdl ));
-
-    m_pEDT_RANGE->SetModifyHdl( LINK( this, DataSourceTabPage, RangeModifiedHdl ));
-    m_pEDT_CATEGORIES->SetModifyHdl( LINK( this, DataSourceTabPage, RangeModifiedHdl ));
-    m_pEDT_RANGE->SetUpdateDataHdl( LINK( this, DataSourceTabPage, RangeUpdateDataHdl ));
-    m_pEDT_CATEGORIES->SetUpdateDataHdl( LINK( this, DataSourceTabPage, RangeUpdateDataHdl ));
+    m_xEDT_RANGE->connect_changed(LINK(this, DataSourceTabPage, RangeModifiedHdl));
+    m_xEDT_CATEGORIES->connect_changed(LINK( this, DataSourceTabPage, RangeModifiedHdl));
+#if 0
+    //TODO
+    m_xEDT_RANGE->SetUpdateDataHdl( LINK( this, DataSourceTabPage, RangeUpdateDataHdl ));
+    m_xEDT_CATEGORIES->SetUpdateDataHdl( LINK( this, DataSourceTabPage, RangeUpdateDataHdl ));
 
     // #i75179# enable setting the background to a different color
-    m_pEDT_RANGE->SetForceControlBackground(true);
-    m_pEDT_CATEGORIES->SetForceControlBackground(true);
-
-    // set symbol font for arrows
-    // note: StarSymbol is substituted to OpenSymbol for OOo
-    vcl::Font aSymbolFont( m_pBTN_UP->GetFont());
-    aSymbolFont.SetFamilyName( "StarSymbol" );
-    m_pBTN_UP->SetControlFont( aSymbolFont );
-    m_pBTN_DOWN->SetControlFont( aSymbolFont );
-
-    // set button text
-    sal_Unicode const cBlackUpPointingTriangle( 0x25b2 );
-    sal_Unicode const cBlackDownPointingTriangle( 0x25bc );
-    m_pBTN_UP->SetText( OUString( cBlackUpPointingTriangle ));
-    m_pBTN_DOWN->SetText( OUString( cBlackDownPointingTriangle ));
+    m_xEDT_RANGE->SetForceControlBackground(true);
+    m_xEDT_CATEGORIES->SetForceControlBackground(true);
+#endif
 
     // init controls
-    m_pLB_ROLE->SetTabs( SAL_N_ELEMENTS(lcl_pRoleListBoxTabs), lcl_pRoleListBoxTabs );
-    m_pLB_ROLE->Show();
+    std::vector<int> aWidths;
+    aWidths.push_back(m_xLB_ROLE->get_approximate_digit_width() * 20);
+    m_xLB_ROLE->set_column_fixed_widths(aWidths);
+    m_xLB_ROLE->show();
 
     updateControlsFromDialogModel();
 
     // select first series
-    if( m_pLB_SERIES->First())
-        m_pLB_SERIES->Select( m_pLB_SERIES->First());
-    m_pLB_SERIES->GrabFocus();
+    if (m_xLB_SERIES->n_children())
+        m_xLB_SERIES->select(0);
+    m_xLB_SERIES->grab_focus();
 }
 
 DataSourceTabPage::~DataSourceTabPage()
@@ -278,23 +252,6 @@ DataSourceTabPage::~DataSourceTabPage()
 
 void DataSourceTabPage::dispose()
 {
-    m_pFT_CAPTION.clear();
-    m_pFT_SERIES.clear();
-    m_pLB_SERIES.clear();
-    m_pBTN_ADD.clear();
-    m_pBTN_REMOVE.clear();
-    m_pBTN_UP.clear();
-    m_pBTN_DOWN.clear();
-    m_pFT_ROLE.clear();
-    m_pLB_ROLE.clear();
-    m_pFT_RANGE.clear();
-    m_pEDT_RANGE.clear();
-    m_pIMB_RANGE_MAIN.clear();
-    m_pFT_CATEGORIES.clear();
-    m_pFT_DATALABELS.clear();
-    m_pEDT_CATEGORIES.clear();
-    m_pIMB_RANGE_CAT.clear();
-    m_pCurrentRangeChoosingField.clear();
     m_pParentDialog.clear();
     ::svt::OWizardPage::dispose();
 }
@@ -332,23 +289,12 @@ bool DataSourceTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReas
         return false;
 }
 
-bool DataSourceTabPage::isRangeFieldContentValid( Edit & rEdit )
+bool DataSourceTabPage::isRangeFieldContentValid(weld::Entry& rEdit )
 {
-    OUString aRange( rEdit.GetText());
-    bool bIsValid = ( aRange.isEmpty() ) ||
-        m_rDialogModel.getRangeSelectionHelper()->verifyCellRange( aRange );
-
-    if( bIsValid )
-    {
-        rEdit.SetControlForeground();
-        rEdit.SetControlBackground();
-    }
-    else
-    {
-        rEdit.SetControlBackground( RANGE_SELECTION_INVALID_RANGE_BACKGROUND_COLOR );
-        rEdit.SetControlForeground( RANGE_SELECTION_INVALID_RANGE_FOREGROUND_COLOR );
-    }
-
+    OUString aRange(rEdit.get_text());
+    bool bIsValid = aRange.isEmpty() ||
+        m_rDialogModel.getRangeSelectionHelper()->verifyCellRange(aRange);
+    rEdit.set_error(!bIsValid);
     return bIsValid;
 }
 
@@ -356,11 +302,11 @@ bool DataSourceTabPage::isValid()
 {
     bool bRoleRangeValid = true;
     bool bCategoriesRangeValid = true;
-    bool bHasSelectedEntry = (m_pLB_SERIES->FirstSelected() != nullptr);
+    bool bHasSelectedEntry = (m_xLB_SERIES->get_selected_index() != -1);
 
-    if( bHasSelectedEntry )
-        bRoleRangeValid = isRangeFieldContentValid( *m_pEDT_RANGE );
-    if( m_pEDT_CATEGORIES->IsEnabled() )
+    if (bHasSelectedEntry)
+        bRoleRangeValid = isRangeFieldContentValid(*m_xEDT_RANGE);
+    if (m_xEDT_CATEGORIES->get_sensitive())
         bCategoriesRangeValid = isRangeFieldContentValid( *m_pEDT_CATEGORIES );
     bool bValid = ( bRoleRangeValid && bCategoriesRangeValid );
 
@@ -387,23 +333,23 @@ void DataSourceTabPage::updateControlsFromDialogModel()
     SeriesSelectionChangedHdl( nullptr );
 
     // categories
-    m_pEDT_CATEGORIES->SetText( m_rDialogModel.getCategoriesRange() );
+    m_xEDT_CATEGORIES->set_text(m_rDialogModel.getCategoriesRange());
 
     updateControlState();
 }
 
 void DataSourceTabPage::fillSeriesListBox()
 {
-    m_pLB_SERIES->SetUpdateMode( false );
+    m_xLB_SERIES->freeze();
 
     Reference< XDataSeries > xSelected;
-    SeriesEntry * pEntry = dynamic_cast< SeriesEntry * >( m_pLB_SERIES->FirstSelected());
+    SeriesEntry * pEntry = dynamic_cast< SeriesEntry * >( m_xLB_SERIES->FirstSelected());
     if( pEntry )
         xSelected.set( pEntry->m_xDataSeries );
 
     bool bHasSelectedEntry = (pEntry != nullptr);
     SvTreeListEntry * pSelectedEntry = nullptr;
-    m_pLB_SERIES->Clear();
+    m_xLB_SERIES->clear();
 
     std::vector< DialogModel::tSeriesWithChartTypeByName > aSeries(
         m_rDialogModel.getAllDataSeriesWithLabel() );
@@ -445,7 +391,7 @@ void DataSourceTabPage::fillSeriesListBox()
     if( bHasSelectedEntry && pSelectedEntry )
         m_pLB_SERIES->Select( pSelectedEntry );
 
-    m_pLB_SERIES->SetUpdateMode( true );
+    m_xLB_SERIES->thaw();
 }
 
 void DataSourceTabPage::fillRoleListBox()
@@ -501,30 +447,30 @@ void DataSourceTabPage::updateControlState()
         bHasValidRole = (pRoleEntry != nullptr);
     }
 
-    m_pBTN_ADD->Enable();
-    m_pBTN_REMOVE->Enable( bHasSelectedSeries );
+    m_xBTN_ADD->set_sensitive(true);
+    m_xBTN_REMOVE->set_sensitive(bHasSelectedSeries);
 
-    m_pBTN_UP->Enable( bHasSelectedSeries && (pSeriesEntry != m_pLB_SERIES->First()));
-    m_pBTN_DOWN->Enable( bHasSelectedSeries && (pSeriesEntry != m_pLB_SERIES->Last()));
+    m_xBTN_UP->set_sensitive(bHasSelectedSeries && (pSeriesEntry != m_pLB_SERIES->First()));
+    m_xBTN_DOWN->set_sensitive(bHasSelectedSeries && (pSeriesEntry != m_pLB_SERIES->Last()));
 
     bool bHasCategories = m_rDialogModel.isCategoryDiagram();
 
-    m_pFT_DATALABELS->Show(!bHasCategories);
-    m_pFT_CATEGORIES->Show( bHasCategories);
+    m_xFT_DATALABELS->show(!bHasCategories);
+    m_xFT_CATEGORIES->show( bHasCategories);
     bool bShowIB = bHasRangeChooser;
 
-    m_pIMB_RANGE_CAT->Show(bShowIB);
+    m_xIMB_RANGE_CAT->show(bShowIB);
 
-    m_pFT_SERIES->Enable();
-    m_pLB_SERIES->Enable();
+    m_xFT_SERIES->set_sensitive(true);
+    m_xLB_SERIES->set_sensitive(true);
 
-    m_pFT_ROLE->Enable( bHasSelectedSeries );
-    m_pLB_ROLE->Enable( bHasSelectedSeries );
+    m_xFT_ROLE->set_sensitive(bHasSelectedSeries);
+    m_xLB_ROLE->set_sensitive(bHasSelectedSeries);
 
-    m_pFT_RANGE->Enable( bHasValidRole );
-    m_pEDT_RANGE->Enable( bHasValidRole );
+    m_xFT_RANGE->set_sensitive(bHasValidRole);
+    m_xEDT_RANGE->set_sensitive(bHasValidRole);
 
-    m_pIMB_RANGE_MAIN->Show(bShowIB);
+    m_xIMB_RANGE_MAIN->show(bShowIB);
 
     isValid();
 }
@@ -729,14 +675,14 @@ IMPL_LINK_NOARG(DataSourceTabPage, DownButtonClickedHdl, Button*, void)
     }
 }
 
-IMPL_LINK( DataSourceTabPage, RangeModifiedHdl, Edit&, rEdit, void )
+IMPL_LINK(DataSourceTabPage, RangeModifiedHdl, weld::Entry&, rEdit, void)
 {
     // note: isValid sets the color of the edit field
     if( isRangeFieldContentValid( rEdit ))
     {
         setDirty();
         updateModelFromControl( &rEdit );
-        if( &rEdit == m_pEDT_RANGE )
+        if (&rEdit == m_xEDT_RANGE.get())
         {
             if( ! lcl_UpdateCurrentSeriesName( *m_pLB_SERIES ))
                 fillSeriesListBox();
@@ -747,7 +693,7 @@ IMPL_LINK( DataSourceTabPage, RangeModifiedHdl, Edit&, rEdit, void )
     isValid();
 }
 
-IMPL_LINK( DataSourceTabPage, RangeUpdateDataHdl, Edit&, rEdit, void )
+IMPL_LINK(DataSourceTabPage, RangeUpdateDataHdl, weld::Entry&, rEdit, void)
 {
     // note: isValid sets the color of the edit field
     if( isRangeFieldContentValid( rEdit ))
@@ -780,18 +726,18 @@ void DataSourceTabPage::listeningFinished(
     GrabFocus();
     if( m_pCurrentRangeChoosingField )
     {
-        m_pCurrentRangeChoosingField->SetText( aRange );
-        m_pCurrentRangeChoosingField->GrabFocus();
+        m_pCurrentRangeChoosingField->set_text(aRange);
+        m_pCurrentRangeChoosingField->grab_focus();
     }
 
     if( m_pCurrentRangeChoosingField == m_pEDT_RANGE )
     {
-        m_pEDT_RANGE->SetText( aRange );
+        m_pEDT_RANGE->set_text(aRange);
         setDirty();
     }
     else if( m_pCurrentRangeChoosingField == m_pEDT_CATEGORIES )
     {
-        m_pEDT_CATEGORIES->SetText( aRange );
+        m_pEDT_CATEGORIES->set_text(aRange);
         setDirty();
     }
 
