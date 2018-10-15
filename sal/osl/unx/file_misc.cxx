@@ -819,7 +819,7 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
             int e = errno;
             SAL_INFO("sal.file", "rename(" << pszDestFileName << ", " << tmpDestFile
                      << "): errno " << e << ": " << strerror(e));
-            if (errno == ENOENT)
+            if (e == ENOENT)
             {
                 DestFileExists = 0;
             }
