@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_d978b6f9",
+        "filename": "include/tools/stream.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-15T06:24:52Z",
+      "side": 1,
+      "message": "So, TellEnd is more like totalSize() (a kind of complement to remainingSize())?\n\nIts implementation does not consider the case that is taken into account in SvStream::remainingSize(), where Tell() \u003e Seek(STREAM_SEEK_TO_END).",
+      "range": {
+        "startLine": 276,
+        "startChar": 4,
+        "endLine": 276,
+        "endChar": 67
+      },
+      "revId": "9ec8bf8f22fe74884185492ef2576ce79b41e4f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
