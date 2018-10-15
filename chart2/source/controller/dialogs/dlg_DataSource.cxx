@@ -138,7 +138,7 @@ DataSourceDialog::DataSourceDialog(vcl::Window * pParent,
 
     m_pRangeChooserTabPage = VclPtr<RangeChooserTabPage>::Create(TabPageParent(m_pTabControl), *(m_apDialogModel.get()),
                                      m_apDocTemplateProvider.get(), this, true /* bHideDescription */ );
-    m_pDataSourceTabPage = VclPtr<DataSourceTabPage>::Create(m_pTabControl, *(m_apDialogModel.get()),
+    m_pDataSourceTabPage = VclPtr<DataSourceTabPage>::Create(TabPageParent(m_pTabControl), *(m_apDialogModel.get()),
                                     m_apDocTemplateProvider.get(), this, true /* bHideDescription */ );
 
     m_pTabControl->InsertPage( TP_RANGECHOOSER, SchResId(STR_PAGE_DATA_RANGE) );
