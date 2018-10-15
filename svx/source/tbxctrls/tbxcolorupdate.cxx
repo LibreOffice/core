@@ -28,14 +28,18 @@
 #include <vcl/settings.hxx>
 #include <tools/debug.hxx>
 
+#include <svx/strings.hrc>
+#include <svx/dialmgr.hxx>
+
 namespace svx
 {
     ToolboxButtonColorUpdater::ToolboxButtonColorUpdater(
-        sal_uInt16 nSlotId, sal_uInt16 nTbxBtnId, ToolBox* pToolBox, bool bWideButton)
+        sal_uInt16 nSlotId, sal_uInt16 nTbxBtnId, ToolBox* pToolBox, bool bWideButton, OUString aCommandLabel)
         : mbWideButton(bWideButton)
         , mnBtnId(nTbxBtnId)
         , mpTbx(pToolBox)
         , maCurColor(COL_TRANSPARENT)
+        , maCommandLabel(aCommandLabel)
     {
         DBG_ASSERT(pToolBox, "ToolBox not found :-(");
         mbWasHiContrastMode = pToolBox && pToolBox->GetSettings().GetStyleSettings().GetHighContrastMode();
@@ -43,21 +47,21 @@ namespace svx
         {
             case SID_ATTR_CHAR_COLOR:
             case SID_ATTR_CHAR_COLOR2:
-                Update(COL_RED_FONTCOLOR);
+                Update(std::pair<Color, OUString>(COL_RED_FONTCOLOR, SvxResId(RID_SVXSTR_COLOR_RED)));
                 break;
             case SID_FRAME_LINECOLOR:
-                Update(COL_BLUE);
+                Update(std::pair<Color, OUString>(COL_BLUE, SvxResId(RID_SVXSTR_COLOR_BLUE)));
                 break;
             case SID_ATTR_CHAR_COLOR_BACKGROUND:
             case SID_ATTR_CHAR_BACK_COLOR:
             case SID_BACKGROUND_COLOR:
-                Update(COL_YELLOW_HIGHLIGHT);
+                Update(std::pair<Color, OUString>(COL_YELLOW_HIGHLIGHT, SvxResId(RID_SVXSTR_COLOR_YELLOW)));
                 break;
             case SID_ATTR_LINE_COLOR:
-                Update(COL_DEFAULT_SHAPE_STROKE);
+                Update(std::pair<Color, OUString>(COL_DEFAULT_SHAPE_STROKE, "#" + COL_DEFAULT_SHAPE_STROKE.AsRGBHexString()));
                 break;
             case SID_ATTR_FILL_COLOR:
-                Update(COL_DEFAULT_SHAPE_FILLING);
+                Update(std::pair<Color, OUString>(COL_DEFAULT_SHAPE_FILLING, "#" + COL_DEFAULT_SHAPE_FILLING.AsRGBHexString()));
                 break;
             default:
                 Update(COL_TRANSPARENT);
@@ -66,6 +70,20 @@ namespace svx
 
     ToolboxButtonColorUpdater::~ToolboxButtonColorUpdater()
     {}
+
+    void ToolboxButtonColorUpdater::Update(const std::pair<Color, OUString>& rColor)
+    {
+        Update(rColor.first);
+        if (!mbWideButton && !rColor.second.isEmpty())
+        {
+            // Also show the current color as QuickHelpText
+            OUString colorSuffix = " (%1)";
+            colorSuffix = colorSuffix.replaceFirst("%1", rColor.second);
+            OUString colorHelpText = maCommandLabel + colorSuffix;
+
+            mpTbx->SetQuickHelpText(mnBtnId, colorHelpText);
+        }
+    }
 
     void ToolboxButtonColorUpdater::Update(const Color& rColor, bool bForceUpdate)
     {

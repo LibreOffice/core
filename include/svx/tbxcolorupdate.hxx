@@ -43,9 +43,11 @@ namespace svx
     class SVX_DLLPUBLIC ToolboxButtonColorUpdater
     {
     public:
-                    ToolboxButtonColorUpdater( sal_uInt16 nSlotId, sal_uInt16 nTbxBtnId, ToolBox* ptrTbx, bool bWideButton = false);
+                    ToolboxButtonColorUpdater( sal_uInt16 nSlotId, sal_uInt16 nTbxBtnId, ToolBox* ptrTbx, bool bWideButton = false,
+                                              rtl::OUString aCommandLabel = OUString() );
                     ~ToolboxButtonColorUpdater();
 
+        void        Update( const std::pair<Color, OUString>& rColor );
         void        Update( const Color& rColor, bool bForceUpdate = false );
         Color const & GetCurrentColor() const { return maCurColor; }
 
@@ -60,6 +62,7 @@ namespace svx
         tools::Rectangle   maUpdRect;
         Size        maBmpSize;
         bool        mbWasHiContrastMode;
+        OUString    maCommandLabel;
     };
 
 
