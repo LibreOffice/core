@@ -164,7 +164,14 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
         if (ScCalcConfig::isOpenCLEnabled())
         {
             const ScCalcConfig& rConfig = ScInterpreter::GetGlobalConfig();
-            switchOpenCLDevice(rConfig.maOpenCLDevice, rConfig.mbOpenCLAutoSelect);
+            if( !switchOpenCLDevice(rConfig.maOpenCLDevice, rConfig.mbOpenCLAutoSelect))
+            {
+                if( ScCalcConfig::getForceCalculationType() == ForceCalculationOpenCL )
+                {
+                    SAL_WARN( "opencl", "OpenCL forced but failed to initialize" );
+                    abort();
+                }
+            }
         }
 #endif
     }
