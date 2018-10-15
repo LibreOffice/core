@@ -122,7 +122,7 @@ protected:
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_ARRAY,1);
     SbxArray( SbxDataType=SbxVARIANT );
-    SbxArray( const SbxArray& );
+    SbxArray( const SbxArray& ) = delete;
     SbxArray& operator=( const SbxArray& );
     virtual void Clear() override;
     sal_uInt16           Count() const;
@@ -167,7 +167,7 @@ protected:
 public:
     SBX_DECL_PERSIST_NODATA(SBXID_DIMARRAY,1);
     SbxDimArray( SbxDataType=SbxVARIANT );
-    SbxDimArray( const SbxDimArray& );
+    SbxDimArray( const SbxDimArray& ) = delete;
     SbxDimArray& operator=( const SbxDimArray& );
     virtual void Clear() override;
     using SbxArray::GetRef;

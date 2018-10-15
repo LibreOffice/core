@@ -2791,44 +2791,6 @@ ScDocument* ScDocShell::GetClipDoc()
     return nullptr;
 }
 
-ScDocShell::ScDocShell( const ScDocShell& rShell ) :
-    SvRefBase(rShell),
-    SotObject(),
-    SfxObjectShell( rShell.GetCreateMode() ),
-    SfxListener(),
-    m_aDocument       ( SCDOCMODE_DOCUMENT, this ),
-    m_aDdeTextFmt(OUString("TEXT")),
-    m_nPrtToScreenFactor( 1.0 ),
-    m_pImpl           ( new DocShell_Impl ),
-    m_bHeaderOn       ( true ),
-    m_bFooterOn       ( true ),
-    m_bIsEmpty        ( true ),
-    m_bIsInUndo       ( false ),
-    m_bDocumentModifiedPending( false ),
-    m_bUpdateEnabled  ( true ),
-    m_bUcalcTest(rShell.m_bUcalcTest),
-    m_nDocumentLock   ( 0 ),
-    m_nCanUpdate (css::document::UpdateDocMode::ACCORDING_TO_CONFIG)
-{
-    SetPool( &SC_MOD()->GetPool() );
-
-    m_bIsInplace = rShell.m_bIsInplace;
-
-    m_pDocFunc = CreateDocFunc();
-
-    //  SetBaseModel needs exception handling
-    ScModelObj::CreateAndSet( this );
-
-    StartListening(*this);
-    SfxStyleSheetPool* pStlPool = m_aDocument.GetStyleSheetPool();
-    if (pStlPool)
-        StartListening(*pStlPool);
-
-    GetPageOnFromPageStyleSet( nullptr, 0, m_bHeaderOn, m_bFooterOn );
-
-    // InitItems and CalcOutputFactor are called now in Load/ConvertFrom/InitNew
-}
-
 ScDocShell::ScDocShell( const SfxModelFlags i_nSfxCreationFlags ) :
     SfxObjectShell( i_nSfxCreationFlags ),
     m_aDocument       ( SCDOCMODE_DOCUMENT, this ),

@@ -44,14 +44,6 @@ SbxArray::SbxArray( SbxDataType t ) : SbxBase()
         SetFlag( SbxFlagBits::Fixed );
 }
 
-SbxArray::SbxArray( const SbxArray& rArray ) :
-    SvRefBase( rArray ), SbxBase()
-{
-    if( rArray.eType != SbxVARIANT )
-        SetFlag( SbxFlagBits::Fixed );
-    *this = rArray;
-}
-
 SbxArray& SbxArray::operator=( const SbxArray& rArray )
 {
     if( &rArray != this )
@@ -463,12 +455,6 @@ void SbxArray::PutDirect( SbxVariable* pVar, sal_uInt32 nIdx )
 
 SbxDimArray::SbxDimArray( SbxDataType t ) : SbxArray( t ), mbHasFixedSize( false )
 {
-}
-
-SbxDimArray::SbxDimArray( const SbxDimArray& rArray )
-    : SvRefBase( rArray ), SbxArray( rArray.eType )
-{
-    *this = rArray;
 }
 
 SbxDimArray& SbxDimArray::operator=( const SbxDimArray& rArray )

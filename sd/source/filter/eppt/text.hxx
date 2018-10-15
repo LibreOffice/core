@@ -214,7 +214,7 @@ class ParagraphObj : public PropStateValue, public SOParagraph
                         ParagraphObj( css::uno::Reference< css::text::XTextContent > const & rXTextContentRef,
                             ParaFlags, FontCollection& rFontCollection,
                                 PPTExBulletProvider& rBuProv );
-                        ParagraphObj( const ParagraphObj& rParargraphObj );
+                        ParagraphObj( const ParagraphObj& rParargraphObj ) = delete;
                         ParagraphObj( const css::uno::Reference< css::beans::XPropertySet > & rXPropSetRef,
                                       PPTExBulletProvider* pBuProv );
 

@@ -77,7 +77,7 @@ public:
                      const ScRangeListRef& rRangeListRef );
     ScChartListener( const OUString& rName, ScDocument* pDoc,
                      std::unique_ptr<::std::vector<ScTokenRef>> pTokens );
-    ScChartListener( const ScChartListener& );
+    ScChartListener( const ScChartListener& ) = delete;
     virtual ~ScChartListener() override;
 
     const OUString& GetName() const { return maName;}
