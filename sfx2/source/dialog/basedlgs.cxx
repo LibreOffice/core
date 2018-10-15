@@ -46,8 +46,7 @@ using namespace ::com::sun::star::uno;
 #define USERITEM_NAME "UserItem"
 
 SingleTabDlgImpl::SingleTabDlgImpl()
-        : m_pSfxPage(nullptr)
-        , m_pLine(nullptr)
+    : m_pSfxPage(nullptr)
 {
 }
 
@@ -664,7 +663,6 @@ SfxSingleTabDialog::~SfxSingleTabDialog()
 void SfxSingleTabDialog::dispose()
 {
     pImpl->m_pSfxPage.disposeAndClear();
-    pImpl->m_pLine.disposeAndClear();
     pImpl.reset();
     pOKBtn.clear();
     pCancelBtn.clear();
