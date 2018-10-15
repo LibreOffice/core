@@ -56,6 +56,8 @@ class RtfSdrExport final : public EscherEx
     /// Remember which shape types we had already written.
     std::unique_ptr<bool[]> m_pShapeTypeWritten;
 
+    bool m_bInGroup = false;
+
 public:
     explicit RtfSdrExport(RtfExport& rExport);
     ~RtfSdrExport() override;

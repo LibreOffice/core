@@ -89,10 +89,11 @@ void RtfSdrExport::CloseContainer()
 sal_uInt32 RtfSdrExport::EnterGroup(const OUString& /*rShapeName*/,
                                     const tools::Rectangle* /*pRect*/)
 {
+    m_bInGroup = true;
     return GenerateShapeId();
 }
 
-void RtfSdrExport::LeaveGroup() { /* noop */}
+void RtfSdrExport::LeaveGroup() { m_bInGroup = false; }
 
 void RtfSdrExport::AddShape(sal_uInt32 nShapeType, ShapeFlag nShapeFlags, sal_uInt32 /*nShapeId*/)
 {
@@ -562,8 +563,13 @@ sal_Int32 RtfSdrExport::StartShape()
     m_rAttrOutput.RunText().append(OOO_STRING_SVTOOLS_RTF_SHPBYIGNORE);
 
     // Write ZOrder.
-    m_rAttrOutput.RunText().append(OOO_STRING_SVTOOLS_RTF_SHPZ);
-    m_rAttrOutput.RunText().append(OString::number(m_pSdrObject->GetOrdNum()));
+    if (!m_bInGroup)
+    {
+        // Order inside the group shape is not relevant for the flat shape list
+        // we write.
+        m_rAttrOutput.RunText().append(OOO_STRING_SVTOOLS_RTF_SHPZ);
+        m_rAttrOutput.RunText().append(OString::number(m_pSdrObject->GetOrdNum()));
+    }
 
     for (auto it = m_aShapeProps.rbegin(); it != m_aShapeProps.rend(); ++it)
         lcl_AppendSP(m_rAttrOutput.RunText(), (*it).first.getStr(), (*it).second);
