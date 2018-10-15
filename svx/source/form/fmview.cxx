@@ -387,19 +387,19 @@ void FmFormView::DeactivateControls(SdrPageView const * pPageView)
 }
 
 
-SdrObject* FmFormView::CreateFieldControl( const ODataAccessDescriptor& _rColumnDescriptor )
+SdrObjectUniquePtr FmFormView::CreateFieldControl( const ODataAccessDescriptor& _rColumnDescriptor )
 {
     return pImpl->implCreateFieldControl( _rColumnDescriptor );
 }
 
 
-SdrObject* FmFormView::CreateXFormsControl( const OXFormsDescriptor &_rDesc )
+SdrObjectUniquePtr FmFormView::CreateXFormsControl( const OXFormsDescriptor &_rDesc )
 {
     return pImpl->implCreateXFormsControl(_rDesc);
 }
 
 
-SdrObject* FmFormView::CreateFieldControl(const OUString& rFieldDesc) const
+SdrObjectUniquePtr FmFormView::CreateFieldControl(const OUString& rFieldDesc) const
 {
     OUString sDataSource     = rFieldDesc.getToken(0,u'\x000B');
     OUString sObjectName     = rFieldDesc.getToken(1,u'\x000B');
