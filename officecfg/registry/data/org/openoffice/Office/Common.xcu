@@ -207,18 +207,7 @@
           <value>_default</value>
         </prop>
       </node>
-      <node oor:name="m9" oor:op="replace" install:module="writer">
-        <prop oor:name="URL" oor:type="xs:string">
-          <value>private:factory/swriter/GlobalDocument</value>
-        </prop>
-        <prop oor:name="Title">
-          <value xml:lang="en-US">M~aster Document</value>
-        </prop>
-        <prop oor:name="TargetName" oor:type="xs:string">
-          <value>_default</value>
-        </prop>
-      </node>
-      <node oor:name="m10" oor:op="replace">
+      <node oor:name="m9" oor:op="replace">
         <prop oor:name="URL" oor:type="xs:string">
           <value>private:separator</value>
         </prop>
@@ -226,7 +215,7 @@
           <value>_default</value>
         </prop>
       </node>
-      <node oor:name="m11" oor:op="replace" install:module="writer">
+      <node oor:name="m10" oor:op="replace" install:module="writer">
         <prop oor:name="URL" oor:type="xs:string">
           <value>private:factory/swriter?slot=21051</value>
         </prop>
@@ -240,7 +229,7 @@
           <value>private:image/3255</value>
         </prop>
       </node>
-      <node oor:name="m12" oor:op="replace" install:module="writer">
+      <node oor:name="m11" oor:op="replace" install:module="writer">
         <prop oor:name="URL" oor:type="xs:string">
           <value>private:factory/swriter?slot=21052</value>
         </prop>
@@ -254,9 +243,20 @@
           <value>private:image/3255</value>
         </prop>
       </node>
-      <node oor:name="m13" oor:op="replace">
+      <node oor:name="m12" oor:op="replace">
         <prop oor:name="URL" oor:type="xs:string">
           <value>private:separator</value>
+        </prop>
+        <prop oor:name="TargetName" oor:type="xs:string">
+          <value>_default</value>
+        </prop>
+      </node>
+      <node oor:name="m13" oor:op="replace" install:module="writer">
+        <prop oor:name="URL" oor:type="xs:string">
+          <value>private:factory/swriter/GlobalDocument</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="en-US">M~aster Document</value>
         </prop>
         <prop oor:name="TargetName" oor:type="xs:string">
           <value>_default</value>
