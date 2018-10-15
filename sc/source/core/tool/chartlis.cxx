@@ -113,34 +113,6 @@ ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP, std:
 {
 }
 
-ScChartListener::ScChartListener( const ScChartListener& r ) :
-    SvtListener(),
-    mpTokens(new vector<ScTokenRef>(*r.mpTokens)),
-    maName(r.maName),
-    mpDoc( r.mpDoc ),
-    bUsed( false ),
-    bDirty( r.bDirty )
-{
-    if ( r.pUnoData )
-        pUnoData.reset( new ScChartUnoData( *r.pUnoData ) );
-
-    if (r.mpExtRefListener.get())
-    {
-        // Re-register this new listener for the files that the old listener
-        // was listening to.
-
-        ScExternalRefManager* pRefMgr = mpDoc->GetExternalRefManager();
-        const std::unordered_set<sal_uInt16>& rFileIds = r.mpExtRefListener->getAllFileIds();
-        mpExtRefListener.reset(new ExternalRefListener(*this, mpDoc));
-        std::unordered_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
-        for (; itr != itrEnd; ++itr)
-        {
-            pRefMgr->addLinkListener(*itr, mpExtRefListener.get());
-            mpExtRefListener->addFileId(*itr);
-        }
-    }
-}
-
 ScChartListener::~ScChartListener()
 {
     if ( HasBroadcaster() )

@@ -737,14 +737,6 @@ ParagraphObj::ParagraphObj(css::uno::Reference< css::text::XTextContent > const 
     }
 }
 
-ParagraphObj::ParagraphObj( const ParagraphObj& rObj )
-: PropStateValue()
-, SOParagraph()
-, mvPortions()
-{
-    ImplConstruct( rObj );
-}
-
 ParagraphObj::~ParagraphObj()
 {
     ImplClear();

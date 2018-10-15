@@ -64,7 +64,7 @@ private:
 
 public:
     OOXMLProperty(Id id, const OOXMLValue::Pointer_t& pValue, Type_t eType);
-    OOXMLProperty(const OOXMLProperty & rSprm);
+    OOXMLProperty(const OOXMLProperty & rSprm) = delete;
     virtual ~OOXMLProperty() override;
 
     sal_uInt32 getId() const override;

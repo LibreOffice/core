@@ -176,7 +176,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    explicit        ScDocShell( const ScDocShell& rDocShell );
+    explicit        ScDocShell( const ScDocShell& rDocShell ) = delete;
     explicit        ScDocShell( const SfxModelFlags i_nSfxCreationFlags = SfxModelFlags::EMBEDDED_OBJECT );
                     virtual ~ScDocShell() override;
 
