@@ -191,7 +191,15 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
      */
     com::sun::star::security::XCertificate chooseCertificateWithProps( [out] sequence<::com::sun::star::beans::PropertyValue> Properties);
 
-} ;
+    /** Signs the content of the document with the provided certificate.
+
+        @since LibreOffice 6.2
+     */
+    boolean signDocumentWithCertificate([in] ::com::sun::star::security::XCertificate xCertificate,
+                                        [in] ::com::sun::star::embed::XStorage xStorage,
+                                        [in] ::com::sun::star::io::XStream xStream);
+
+};
 
 } ; } ; } ; } ;
 
