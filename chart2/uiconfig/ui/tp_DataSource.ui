@@ -1,19 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="chart">
   <requires lib="gtk+" version="3.18"/>
-  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkImage" id="imageIMB_RANGE_CAT">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="tooltip_text" translatable="yes" context="tp_DataSource|imageIMB_RANGE_CAT|tooltip_text">Select data range</property>
-    <property name="pixbuf">chart2/res/selectrange.png</property>
+    <property name="icon_name">chart2/res/selectrange.png</property>
   </object>
   <object class="GtkImage" id="imageIMB_RANGE_MAIN">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="tooltip_text" translatable="yes" context="tp_DataSource|imageIMB_RANGE_MAIN|tooltip_text">Select data range</property>
-    <property name="pixbuf">chart2/res/selectrange.png</property>
+    <property name="icon_name">chart2/res/selectrange.png</property>
+  </object>
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore2">
+    <columns>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
   </object>
   <object class="GtkBox" id="tp_DataSource">
     <property name="visible">True</property>
@@ -57,7 +72,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="tp_DataSource|FT_SERIES">Data _series:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">LB_SERIES:border</property>
+                <property name="mnemonic_widget">LB_SERIES</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -67,14 +82,39 @@
               </packing>
             </child>
             <child>
-              <object class="chartcontrollerlo-SeriesListBox" id="LB_SERIES:border">
-                <property name="width_request">200</property>
-                <property name="height_request">200</property>
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="Chart Series ListBox-selection1"/>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="LB_SERIES">
+                    <property name="width_request">200</property>
+                    <property name="height_request">200</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore1</property>
+                    <property name="headers_visible">False</property>
+                    <property name="headers_clickable">False</property>
+                    <property name="search_column">0</property>
+                    <property name="show_expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="treeview-selection1"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
                 </child>
               </object>
               <packing>
@@ -93,7 +133,6 @@
                 <child>
                   <object class="GtkButton" id="BTN_ADD">
                     <property name="label" translatable="yes" context="tp_DataSource|BTN_ADD">_Add</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
@@ -106,7 +145,6 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="BTN_UP">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
@@ -125,7 +163,6 @@
                 <child>
                   <object class="GtkButton" id="BTN_REMOVE">
                     <property name="label" translatable="yes" context="tp_DataSource|BTN_REMOVE">_Remove</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
@@ -139,7 +176,6 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="BTN_DOWN">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="receives_default">True</property>
@@ -182,7 +218,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="tp_DataSource|FT_ROLE">_Data ranges:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">LB_ROLE:border</property>
+                <property name="mnemonic_widget">LB_ROLE</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
@@ -191,15 +227,39 @@
               </packing>
             </child>
             <child>
-              <object class="svtlo-SvTabListBox" id="LB_ROLE:border">
-                <property name="width_request">440</property>
-                <property name="height_request">100</property>
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection" id="Tab List-selection"/>
+                <property name="shadow_type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="LB_ROLE">
+                    <property name="width_request">440</property>
+                    <property name="height_request">100</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="model">liststore2</property>
+                    <property name="headers_visible">False</property>
+                    <property name="headers_clickable">False</property>
+                    <property name="search_column">0</property>
+                    <property name="show_expanders">False</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="treeview-selection2"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
                 </child>
               </object>
               <packing>
@@ -241,7 +301,6 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="IMB_RANGE_MAIN">
-                    <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
