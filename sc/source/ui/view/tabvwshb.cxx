@@ -448,7 +448,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                     if(pPageView)
                     {
                         svx::ODataAccessDescriptor aDescriptor(pDescriptorItem->GetValue());
-                        SdrObject* pNewDBField = pDrView->CreateFieldControl(aDescriptor);
+                        SdrObjectUniquePtr pNewDBField = pDrView->CreateFieldControl(aDescriptor);
 
                         if(pNewDBField)
                         {
@@ -462,11 +462,11 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                             pNewDBField->SetLogicRect(aNewObjectRectangle);
 
                             // controls must be on control layer, groups on front layer
-                            if ( dynamic_cast<const SdrUnoObj*>( pNewDBField) !=  nullptr )
+                            if ( dynamic_cast<const SdrUnoObj*>( pNewDBField.get() ) !=  nullptr )
                                 pNewDBField->NbcSetLayer(SC_LAYER_CONTROLS);
                             else
                                 pNewDBField->NbcSetLayer(SC_LAYER_FRONT);
-                            if (dynamic_cast<const SdrObjGroup*>( pNewDBField) !=  nullptr)
+                            if (dynamic_cast<const SdrObjGroup*>( pNewDBField.get() ) !=  nullptr)
                             {
                                 SdrObjListIter aIter( *pNewDBField, SdrIterMode::DeepWithGroups );
                                 SdrObject* pSubObj = aIter.Next();
@@ -480,7 +480,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                                 }
                             }
 
-                            pView->InsertObjectAtView(pNewDBField, *pPageView);
+                            pView->InsertObjectAtView(pNewDBField.release(), *pPageView);
                         }
                     }
                 }
