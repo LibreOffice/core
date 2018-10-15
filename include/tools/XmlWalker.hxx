@@ -11,8 +11,10 @@
 #define INCLUDED_TOOLS_XMLWALKER_HXX
 
 #include <tools/toolsdllapi.h>
-#include <tools/stream.hxx>
+#include <rtl/string.hxx>
 #include <memory>
+
+class SvStream;
 
 namespace tools
 {

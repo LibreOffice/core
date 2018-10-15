@@ -24,6 +24,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
+#include <sstream>
 
 namespace
 {

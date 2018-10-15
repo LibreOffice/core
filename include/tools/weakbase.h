@@ -20,7 +20,6 @@
 #define INCLUDED_TOOLS_WEAKBASE_H
 
 #include <sal/types.h>
-#include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <tools/toolsdllapi.h>
 

@@ -23,10 +23,10 @@
 #define ZBUFFER_DEPTH_RANGE         (double(256L * 256L * 256L))
 
 #include <basegfx/matrix/b3dhommatrix.hxx>
-#include <basegfx/range/b3drange.hxx>
 #include <tools/gen.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/point/b3dpoint.hxx>
+#include <basegfx/vector/b3dvector.hxx>
 #include <tools/toolsdllapi.h>
 
 /// Transformation sets for 3D output

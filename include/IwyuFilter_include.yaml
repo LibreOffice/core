@@ -209,3 +209,26 @@ blacklist:
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/rendering/XBezierPolyPolygon2D.hpp
     - com/sun/star/rendering/XLinePolyPolygon2D.hpp
+    include/tools/debug.hxx:
+    # Used behind #ifndef
+    - tools/toolsdllapi.h
+    include/tools/diagnose_ex.h:
+    # Needed for macros
+    - com/sun/star/lang/IllegalArgumentException.hpp
+    - com/sun/star/uno/RuntimeException.hpp
+    - rtl/ustring.hxx
+    include/tools/fontenum.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx
+    include/tools/svlibrary.h:
+    # Used behind #ifndef
+    - osl/module.h
+    include/tools/poly.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx
+    include/tools/stream.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx
+    include/tools/urlobj.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx

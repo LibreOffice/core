@@ -19,14 +19,13 @@
 #ifndef INCLUDED_TOOLS_DATE_HXX
 #define INCLUDED_TOOLS_DATE_HXX
 
-#include <sal/log.hxx>
-
 #include <tools/toolsdllapi.h>
 
 #include <ostream>
 
 #include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/DateTime.hpp>
+
+namespace com { namespace sun { namespace star { namespace util { struct DateTime; } } } }
 
 enum DayOfWeek { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY,
                  SATURDAY, SUNDAY };

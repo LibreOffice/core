@@ -21,7 +21,8 @@
 #define INCLUDED_TOOLS_SVBORDER_HXX
 
 #include <tools/toolsdllapi.h>
-#include <tools/gen.hxx>
+
+namespace tools { class Rectangle; }
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC SvBorder
 {

@@ -20,8 +20,6 @@
 #define INCLUDED_TOOLS_URLOBJ_HXX
 
 #include <tools/toolsdllapi.h>
-#include <com/sun/star/uno/Reference.hxx>
-#include <rtl/string.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/textenc.h>
 #include <sal/types.h>
@@ -35,6 +33,8 @@ class SvMemoryStream;
 namespace com { namespace sun { namespace star { namespace util {
     class XStringWidth;
 } } } }
+
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
 
 // Common URL prefixes for various schemes:
 #define INET_FTP_SCHEME "ftp://"

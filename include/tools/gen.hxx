@@ -24,7 +24,6 @@
 #include <limits.h>
 #include <algorithm>
 #include <ostream>
-#include <cstdlib>
 
 class SvStream;
 namespace rtl

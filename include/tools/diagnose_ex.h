@@ -27,7 +27,6 @@
 
 #include <tools/toolsdllapi.h>
 #include <cppuhelper/exc_hlp.hxx>
-#include <osl/thread.h>
 
 TOOLS_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtException,
         const char* currentFunction, const char* fileAndLineNo,

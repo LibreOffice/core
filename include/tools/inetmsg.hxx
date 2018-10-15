@@ -21,7 +21,6 @@
 
 #include <tools/toolsdllapi.h>
 #include <rtl/string.hxx>
-#include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
 #include <tools/inetmime.hxx>
 #include <tools/stream.hxx>

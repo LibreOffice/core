@@ -36,6 +36,7 @@
 #include <tools/weakbase.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/gen.hxx>
+#include <osl/diagnose.h>
 #include <typeinfo>
 #include <functional>
 

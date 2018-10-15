@@ -19,16 +19,10 @@
 #ifndef INCLUDED_TOOLS_BIGINT_HXX
 #define INCLUDED_TOOLS_BIGINT_HXX
 
-#include <climits>
 #include <rtl/ustring.hxx>
 #include <tools/toolsdllapi.h>
-#include <tools/solar.h>
-
-class SvStream;
 
 #define MAX_DIGITS 8
-
-class Fraction;
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC BigInt
 {
