@@ -53,9 +53,8 @@ CustomWidgetDraw::~CustomWidgetDraw() {}
 
 bool CustomWidgetDraw::isNativeControlSupported(ControlType eType, ControlPart ePart)
 {
-    if (!s_pWidgetImplementation)
-        return false;
-    return s_pWidgetImplementation->isNativeControlSupported(eType, ePart);
+    return s_pWidgetImplementation
+           && s_pWidgetImplementation->isNativeControlSupported(eType, ePart);
 }
 
 bool CustomWidgetDraw::hitTestNativeControl(ControlType /*eType*/, ControlPart /*ePart*/,
@@ -302,11 +301,9 @@ bool CustomWidgetDraw::getNativeControlRegion(
     ControlState eState, const ImplControlValue& /*aValue*/, const OUString& /*aCaption*/,
     tools::Rectangle& rNativeBoundingRegion, tools::Rectangle& rNativeContentRegion)
 {
-    if (!s_pWidgetImplementation)
-        return false;
-
-    return s_pWidgetImplementation->getRegion(eType, ePart, eState, rBoundingControlRegion,
-                                              rNativeBoundingRegion, rNativeContentRegion);
+    return s_pWidgetImplementation
+           && s_pWidgetImplementation->getRegion(eType, ePart, eState, rBoundingControlRegion,
+                                                 rNativeBoundingRegion, rNativeContentRegion);
 }
 
 bool CustomWidgetDraw::updateSettings(AllSettings& rSettings)
