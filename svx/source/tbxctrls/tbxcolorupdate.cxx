@@ -28,6 +28,9 @@
 #include <vcl/settings.hxx>
 #include <tools/debug.hxx>
 
+#include <svx/strings.hrc>
+#include <svx/dialmgr.hxx>
+
 namespace svx
 {
     ToolboxButtonColorUpdater::ToolboxButtonColorUpdater(
@@ -36,6 +39,7 @@ namespace svx
         , mnBtnId(nTbxBtnId)
         , mpTbx(pToolBox)
         , maCurColor(COL_TRANSPARENT)
+        , maCurColorName(OUString())
     {
         DBG_ASSERT(pToolBox, "ToolBox not found :-(");
         mbWasHiContrastMode = pToolBox && pToolBox->GetSettings().GetStyleSettings().GetHighContrastMode();
@@ -43,15 +47,15 @@ namespace svx
         {
             case SID_ATTR_CHAR_COLOR:
             case SID_ATTR_CHAR_COLOR2:
-                Update(COL_RED_FONTCOLOR);
+                Update(std::pair<Color, OUString>(COL_RED_FONTCOLOR, SvxResId(RID_SVXSTR_COLOR_RED)));
                 break;
             case SID_FRAME_LINECOLOR:
-                Update(COL_BLUE);
+                Update(std::pair<Color, OUString>(COL_BLUE, SvxResId(RID_SVXSTR_COLOR_BLUE)));
                 break;
             case SID_ATTR_CHAR_COLOR_BACKGROUND:
             case SID_ATTR_CHAR_BACK_COLOR:
             case SID_BACKGROUND_COLOR:
-                Update(COL_YELLOW_HIGHLIGHT);
+                Update(std::pair<Color, OUString>(COL_YELLOW_HIGHLIGHT, SvxResId(RID_SVXSTR_COLOR_YELLOW)));
                 break;
             case SID_ATTR_LINE_COLOR:
                 Update(COL_DEFAULT_SHAPE_STROKE);
@@ -66,6 +70,12 @@ namespace svx
 
     ToolboxButtonColorUpdater::~ToolboxButtonColorUpdater()
     {}
+
+    void ToolboxButtonColorUpdater::Update(const std::pair<Color, OUString>& rColor)
+    {
+        maCurColorName = rColor.second;
+        Update(rColor.first);
+    }
 
     void ToolboxButtonColorUpdater::Update(const Color& rColor, bool bForceUpdate)
     {

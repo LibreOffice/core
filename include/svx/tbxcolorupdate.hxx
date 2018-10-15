@@ -46,8 +46,10 @@ namespace svx
                     ToolboxButtonColorUpdater( sal_uInt16 nSlotId, sal_uInt16 nTbxBtnId, ToolBox* ptrTbx, bool bWideButton = false);
                     ~ToolboxButtonColorUpdater();
 
+        void        Update( const std::pair<Color, OUString>& rColor );
         void        Update( const Color& rColor, bool bForceUpdate = false );
         Color const & GetCurrentColor() const { return maCurColor; }
+        OUString const & GetCurrentColorName() const { return maCurColorName; }
 
     private:
         ToolboxButtonColorUpdater(ToolboxButtonColorUpdater &) = delete;
@@ -57,6 +59,7 @@ namespace svx
         sal_uInt16 const      mnBtnId;
         VclPtr<ToolBox> mpTbx;
         Color       maCurColor;
+        OUString    maCurColorName;
         tools::Rectangle   maUpdRect;
         Size        maBmpSize;
         bool        mbWasHiContrastMode;

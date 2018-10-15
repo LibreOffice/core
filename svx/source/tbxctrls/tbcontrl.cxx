@@ -3181,7 +3181,7 @@ VclPtr<vcl::Window> SvxColorToolBoxControl::createPopupWindow( vcl::Window* pPar
 
 IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, const NamedColor&, rColor, void)
 {
-    m_xBtnUpdater->Update(rColor.first);
+    m_xBtnUpdater->Update(rColor);
 }
 
 void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
@@ -3211,6 +3211,16 @@ void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent&
     }
     else if ( rEvent.State >>= bValue )
         pToolBox->CheckItem( nId, bValue );
+
+    if ( m_bSplitButton )
+    {
+        // Also show the current color as QuickHelpText
+        OUString colorSuffix = " (%1)";
+        colorSuffix = colorSuffix.replaceFirst( "%1", m_xBtnUpdater->GetCurrentColorName() );
+        OUString colorHelpText = vcl::CommandInfoProvider::GetLabelForCommand( getCommandURL(), getModuleName() ) + colorSuffix;
+
+        pToolBox->SetQuickHelpText( nId, colorHelpText );
+    }
 }
 
 void SvxColorToolBoxControl::execute(sal_Int16 /*nSelectModifier*/)
