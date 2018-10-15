@@ -53,8 +53,6 @@ private: //methods
 
 private: //member
 
-    double m_fBubbleSizeScaling;//input parameter
-
     double m_fMaxLogicBubbleSize;//calculated values
     double m_fBubbleSizeFactorToScreen;//calculated values
 };

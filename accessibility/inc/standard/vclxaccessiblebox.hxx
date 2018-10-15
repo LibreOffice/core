@@ -81,8 +81,6 @@ public:
     */
     sal_Int16 SAL_CALL getAccessibleRole() override;
 
-    sal_Int32 SAL_CALL getAccessibleIndexInParent() override;
-
     // XAccessibleAction
 
     /** There is one action for drop down boxes and none for others.
@@ -154,10 +152,6 @@ protected:
     virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
 
     sal_Int32 implGetAccessibleChildCount();
-
-private:
-    /// Index in parent.  This is settable from the outside.
-    sal_Int32 m_nIndexInParent;
 };
 
 #endif

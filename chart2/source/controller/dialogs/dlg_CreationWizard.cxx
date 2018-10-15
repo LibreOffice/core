@@ -50,7 +50,6 @@ CreationWizard::CreationWizard(vcl::Window* pParent, const uno::Reference<frame:
                 , m_xChartModel(xChartModel,uno::UNO_QUERY)
                 , m_xComponentContext(xContext)
                 , m_pTemplateProvider(nullptr)
-                , m_nLastState(STATE_LAST)
                 , m_aTimerTriggeredControllerLock(xChartModel)
                 , m_bCanTravel(true)
 {
@@ -140,18 +139,18 @@ svt::WizardTypes::WizardState CreationWizard::determineNextState( WizardState nC
 {
     if( !m_bCanTravel )
         return WZS_INVALID_STATE;
-    if( nCurrentState == m_nLastState )
+    if( nCurrentState == STATE_LAST )
         return WZS_INVALID_STATE;
     svt::WizardTypes::WizardState nNextState = nCurrentState + 1;
-    while( !isStateEnabled( nNextState ) && nNextState <= m_nLastState )
+    while( !isStateEnabled( nNextState ) && nNextState <= STATE_LAST )
         ++nNextState;
-    return (nNextState==m_nLastState+1) ? WZS_INVALID_STATE : nNextState;
+    return (nNextState==STATE_LAST+1) ? WZS_INVALID_STATE : nNextState;
 }
 void CreationWizard::enterState(WizardState nState)
 {
     m_aTimerTriggeredControllerLock.startTimer();
     enableButtons( WizardButtonFlags::PREVIOUS, nState > STATE_FIRST );
-    enableButtons( WizardButtonFlags::NEXT, nState < m_nLastState );
+    enableButtons( WizardButtonFlags::NEXT, nState < STATE_LAST );
     if( isStateEnabled( nState ))
         svt::RoadmapWizard::enterState(nState);
 }

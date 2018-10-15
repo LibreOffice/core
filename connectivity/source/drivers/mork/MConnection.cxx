@@ -359,18 +359,8 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
 {
     if (_rError.getResId() != nullptr)
     {
-        OSL_ENSURE( ( _rError.getErrorCondition() == 0 ),
-            "OConnection::throwSQLException: unsupported error code combination!" );
-
         throwGenericSQLException( _rError.getResId(), _rxContext );
         OSL_FAIL( "OConnection::throwSQLException: unreachable (2)!" );
-    }
-
-    if ( _rError.getErrorCondition() != 0 )
-    {
-        SQLError aErrorHelper;
-        aErrorHelper.raiseException( _rError.getErrorCondition(), _rxContext);
-        OSL_FAIL( "OConnection::throwSQLException: unreachable (3)!" );
     }
 
     throwGenericSQLException( STR_UNSPECIFIED_ERROR, _rxContext );

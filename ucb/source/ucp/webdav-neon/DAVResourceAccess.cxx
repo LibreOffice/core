@@ -44,6 +44,7 @@ using namespace com::sun::star;
 
 // DAVAuthListener_Impl Implementation.
 
+static constexpr sal_uInt32 g_nRedirectLimit = 5;
 
 // virtual
 int DAVAuthListener_Impl::authenticate(
@@ -131,8 +132,7 @@ DAVResourceAccess::DAVResourceAccess(
     const OUString & rURL )
 : m_aURL( rURL ),
   m_xSessionFactory( rSessionFactory ),
-  m_xContext( rxContext ),
-  m_nRedirectLimit( 5 )
+  m_xContext( rxContext )
 {
 }
 
@@ -144,8 +144,7 @@ DAVResourceAccess::DAVResourceAccess( const DAVResourceAccess & rOther )
   m_xSession( rOther.m_xSession ),
   m_xSessionFactory( rOther.m_xSessionFactory ),
   m_xContext( rOther.m_xContext ),
-  m_aRedirectURIs( rOther.m_aRedirectURIs ),
-  m_nRedirectLimit( rOther.m_nRedirectLimit )
+  m_aRedirectURIs( rOther.m_aRedirectURIs )
 {
 }
 
@@ -160,7 +159,6 @@ DAVResourceAccess & DAVResourceAccess::operator=(
     m_xSessionFactory = rOther.m_xSessionFactory;
     m_xContext        = rOther.m_xContext;
     m_aRedirectURIs   = rOther.m_aRedirectURIs;
-    m_nRedirectLimit = rOther.m_nRedirectLimit;
 
     return *this;
 }
@@ -1126,7 +1124,7 @@ bool DAVResourceAccess::detectRedirectCycle(
     // A pratical limit may be 5, due to earlier specifications:
     // <https://tools.ietf.org/html/rfc2068#section-10.3>
     // it can be raised keeping in mind the added net activity.
-    if( static_cast< size_t >( m_nRedirectLimit ) <= m_aRedirectURIs.size() )
+    if( static_cast< size_t >( g_nRedirectLimit ) <= m_aRedirectURIs.size() )
         return true;
 
     // try to detect a cyclical redirection

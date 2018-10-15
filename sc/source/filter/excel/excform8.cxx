@@ -150,12 +150,6 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
     ScComplexRefData        aCRD;
     ExtensionTypeVec        aExtensions;
 
-    if( eStatus != ConvErr::OK )
-    {
-        aIn.Ignore( nFormulaLen );
-        return eStatus;
-    }
-
     if( nFormulaLen == 0 )
     {
         aPool.Store( OUString( "-/-" ) );
@@ -967,12 +961,6 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std
     ScSingleRefData         aSRD;
     ScComplexRefData            aCRD;
 
-    if( eStatus != ConvErr::OK )
-    {
-        aIn.Ignore( nFormulaLen );
-        return eStatus;
-    }
-
     if( nFormulaLen == 0 )
         return ConvErr::OK;
 
@@ -1310,12 +1298,6 @@ void ExcelToSc8::ConvertExternName( std::unique_ptr<ScTokenArray>& rpArray, XclI
 
     ScSingleRefData           aSRD;
     ScComplexRefData            aCRD;
-
-    if (eStatus != ConvErr::OK)
-    {
-        rStrm.Ignore(nFormulaLen);
-        return;
-    }
 
     if (nFormulaLen == 0)
     {

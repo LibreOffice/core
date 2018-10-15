@@ -243,8 +243,7 @@ class EDITENG_DLLPUBLIC SvxAutoCorrect
     LanguageType eCharClassLang;
 
     ACFlags nFlags;
-    sal_Unicode cStartDQuote, cEndDQuote, cStartSQuote, cEndSQuote,
-                cEmDash, cEnDash;
+    sal_Unicode cStartDQuote, cEndDQuote, cStartSQuote, cEndSQuote;
 
 
     // private methods

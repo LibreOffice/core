@@ -205,7 +205,7 @@ LineInfo DXFTransform::Transform(const DXFLineInfo& aDXFLineInfo) const
     LineInfo aLineInfo;
 
     aLineInfo.SetStyle( aDXFLineInfo.eStyle );
-    aLineInfo.SetWidth( static_cast<sal_Int32>(aDXFLineInfo.fWidth * scale + 0.5) );
+    aLineInfo.SetWidth( 0 );
     aLineInfo.SetDashCount( static_cast< sal_uInt16 >( aDXFLineInfo.nDashCount ) );
     aLineInfo.SetDashLen( static_cast<sal_Int32>(aDXFLineInfo.fDashLen * scale + 0.5) );
     aLineInfo.SetDotCount( static_cast< sal_uInt16 >( aDXFLineInfo.nDotCount ) );

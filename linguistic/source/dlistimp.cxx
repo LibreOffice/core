@@ -74,8 +74,7 @@ class DicEvtListenerHelper :
     uno::Reference< XDictionaryList >       xMyDicList;
 
     sal_Int16                               nCondensedEvt;
-    sal_Int16                               nNumCollectEvtListeners,
-                                         nNumVerboseListeners;
+    sal_Int16                               nNumCollectEvtListeners;
 
 public:
     explicit DicEvtListenerHelper( const uno::Reference< XDictionaryList > &rxDicList );
@@ -109,7 +108,7 @@ DicEvtListenerHelper::DicEvtListenerHelper(
     xMyDicList              ( rxDicList )
 {
     nCondensedEvt   = 0;
-    nNumCollectEvtListeners = nNumVerboseListeners  = 0;
+    nNumCollectEvtListeners = 0;
 }
 
 
@@ -194,12 +193,6 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
             DictionaryListEventFlags::DEACTIVATE_NEG_DIC :
             DictionaryListEventFlags::DEACTIVATE_POS_DIC;
 
-    // update list of collected events if needs to be
-    if (nNumVerboseListeners > 0)
-    {
-        aCollectDicEvt.push_back(rDicEvent);
-    }
-
     if (nNumCollectEvtListeners == 0 && nCondensedEvt != 0)
         FlushEvents();
 }
@@ -242,8 +235,6 @@ sal_Int16 DicEvtListenerHelper::FlushEvents()
     {
         // build DictionaryListEvent to pass on to listeners
         uno::Sequence< DictionaryEvent > aDicEvents;
-        if (nNumVerboseListeners > 0)
-            aDicEvents = comphelper::containerToSequence(aCollectDicEvt);
         DictionaryListEvent aEvent( xMyDicList, nCondensedEvt, aDicEvents );
 
         // pass on event

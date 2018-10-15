@@ -2184,7 +2184,10 @@ namespace emfio
                 mbClipNeedsUpdate = true;
             }
             if ( meLatestRasterOp != meRasterOp )
+            {
                 mpGDIMetaFile->AddAction( new MetaRasterOpAction( meRasterOp ) );
+                meLatestRasterOp = meRasterOp;
+            }
             mvSaveStack.pop_back();
         }
     }

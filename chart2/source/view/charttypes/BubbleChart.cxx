@@ -49,7 +49,6 @@ using namespace ::com::sun::star::chart2;
 BubbleChart::BubbleChart( const uno::Reference<XChartType>& xChartTypeModel
                      , sal_Int32 nDimensionCount )
         : VSeriesPlotter( xChartTypeModel, nDimensionCount, false )
-        , m_fBubbleSizeScaling(1.0)
         , m_fMaxLogicBubbleSize( 0.0 )
         , m_fBubbleSizeFactorToScreen( 1.0 )
 {
@@ -121,7 +120,7 @@ drawing::Direction3D BubbleChart::transformToScreenBubbleSize( double fLogicSize
     double fMaxRadius = sqrt( fMaxSize / F_PI );
     double fRaduis = sqrt( fLogicSize / F_PI );
 
-    aRet.DirectionX = m_fBubbleSizeScaling * m_fBubbleSizeFactorToScreen * fRaduis / fMaxRadius;
+    aRet.DirectionX = m_fBubbleSizeFactorToScreen * fRaduis / fMaxRadius;
     aRet.DirectionY = aRet.DirectionX;
 
     return aRet;

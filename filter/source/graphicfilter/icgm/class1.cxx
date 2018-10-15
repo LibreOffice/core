@@ -146,17 +146,7 @@ void CGM::ImplDoClass1()
         break;
         case 0x0a : /*Color Value Extent*/
         {
-            if ( pElement->eColorModel == CM_RGB )
-                nI1 = 6;
-            else
-            {
-                nI1 = 8;
-                mbStatus = false;                               // CMYK is not supported
-            }
-            for ( nI0 = 0; nI0 < nI1; nI0++ )
-            {
-                pElement->nColorValueExtent[ nI0 ] = static_cast<sal_uInt8>(ImplGetUI( pElement->nColorPrecision ));
-            }
+            nI1 = 6;
         }
         break;
         case 0x0b : /*MetaFile Element List */break;

@@ -67,7 +67,6 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         , m_bConnectBars(false)
         , m_bSupportingAxisSideBySide(false)
         , m_bGroupBarsPerAxis(true)
-        , m_nAllSeriesAxisIndex(-1)
         , m_bSupportingStartingAngle(false)
         , m_nStartingAngle(90)
         , m_bClockwise(false)
@@ -393,8 +392,6 @@ void SeriesOptionsItemConverter::FillSpecialItem(
         }
         case SCHATTR_AXIS_FOR_ALL_SERIES:
         {
-            if( m_nAllSeriesAxisIndex != - 1)
-                rOutItemSet.Put( SfxInt32Item(nWhichId, m_nAllSeriesAxisIndex));
             break;
         }
         case SCHATTR_STARTING_ANGLE:

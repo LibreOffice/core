@@ -1750,7 +1750,6 @@ ParagraphProperties::ParagraphProperties()
     , m_hRule( -1 )
     , m_xAlign( -1 )
     , m_yAlign( -1 )
-    , m_bAnchorLock( false )
     , m_nDropCapLength( 0 )
 {
 }
@@ -1773,8 +1772,7 @@ bool ParagraphProperties::operator==( const ParagraphProperties& rCompare )
              m_vSpace      == rCompare.m_vSpace &&
              m_hRule       == rCompare.m_hRule &&
              m_xAlign      == rCompare.m_xAlign &&
-             m_yAlign      == rCompare.m_yAlign &&
-             m_bAnchorLock == rCompare.m_bAnchorLock );
+             m_yAlign      == rCompare.m_yAlign );
 }
 
 void ParagraphProperties::ResetFrameProperties()
@@ -1796,7 +1794,6 @@ void ParagraphProperties::ResetFrameProperties()
     m_hRule          = -1;
     m_xAlign         = -1;
     m_yAlign         = -1;
-    m_bAnchorLock    = false;
     m_nDropCapLength = 0;
 }
 

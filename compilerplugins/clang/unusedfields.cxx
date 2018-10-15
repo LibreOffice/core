@@ -391,7 +391,7 @@ bool UnusedFields::TraverseCXXMethodDecl(CXXMethodDecl* cxxMethodDecl)
     {
         if (cxxMethodDecl->isCopyAssignmentOperator()
             || cxxMethodDecl->isMoveAssignmentOperator()
-            || (cxxMethodDecl->getIdentifier() && cxxMethodDecl->getName() == "Clone"))
+            || (cxxMethodDecl->getIdentifier() && (cxxMethodDecl->getName().startswith("Clone") || cxxMethodDecl->getName().startswith("clone"))))
             insideMoveOrCopyOrCloneDeclParent = cxxMethodDecl->getParent();
     }
     insideFunctionDecl = cxxMethodDecl;

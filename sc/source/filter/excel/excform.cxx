@@ -222,12 +222,6 @@ ConvErr ExcelToSc::Convert( std::unique_ptr<ScTokenArray>& pResult, XclImpStream
     ScComplexRefData        aCRD;
     ExtensionTypeVec    aExtensions;
 
-    if( eStatus != ConvErr::OK )
-    {
-        aIn.Ignore( nFormulaLen );
-        return eStatus;
-    }
-
     if( nFormulaLen == 0 )
     {
         aPool.Store( OUString("-/-") );
@@ -914,12 +908,6 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
     ScComplexRefData    aCRD;
     aCRD.Ref1.SetAbsTab(aEingPos.Tab());
     aCRD.Ref2.SetAbsTab(aEingPos.Tab());
-
-    if( eStatus != ConvErr::OK )
-    {
-        aIn.Ignore( nFormulaLen );
-        return eStatus;
-    }
 
     if( nFormulaLen == 0 )
         return ConvErr::OK;

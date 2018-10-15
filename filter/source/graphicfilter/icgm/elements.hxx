@@ -64,7 +64,6 @@ class CGMElements
         FloatRect           aClipRect;
 
         ColorSelectionMode  eColorSelectionMode;
-        ColorModel          eColorModel;
         sal_uInt32          nColorMaximumIndex;             // default 63
         sal_uInt32          nLatestColorMaximumIndex;       // default 63
         sal_Int8            aColorTableEntryIs[ 256 ];

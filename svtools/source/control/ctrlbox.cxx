@@ -1261,7 +1261,6 @@ void FontSizeBox::ImplInit()
 {
     EnableAutocomplete( false );
 
-    bRelativeMode   = false;
     bPtRelative     = false;
     bRelative       = false;
     bStdSize        = false;
@@ -1277,69 +1276,14 @@ void FontSizeBox::ImplInit()
 void FontSizeBox::Reformat()
 {
     FontSizeNames aFontSizeNames( GetSettings().GetUILanguageTag().getLanguageType() );
-    if ( !bRelativeMode || !aFontSizeNames.IsEmpty() )
+    long nNewValue = aFontSizeNames.Name2Size( GetText() );
+    if ( nNewValue)
     {
-        long nNewValue = aFontSizeNames.Name2Size( GetText() );
-        if ( nNewValue)
-        {
-            mnLastValue = nNewValue;
-            return;
-        }
+        mnLastValue = nNewValue;
+        return;
     }
 
     MetricBox::Reformat();
-}
-
-void FontSizeBox::Modify()
-{
-    MetricBox::Modify();
-
-    if ( !bRelativeMode )
-        return;
-
-    OUString aStr = comphelper::string::stripStart(GetText(), ' ');
-
-    bool bNewMode = bRelative;
-    bool bOldPtRelMode = bPtRelative;
-
-    if ( bRelative )
-    {
-        bPtRelative = false;
-        const sal_Unicode* pStr = aStr.getStr();
-        while ( *pStr )
-        {
-            if ( ((*pStr < '0') || (*pStr > '9')) && (*pStr != '%') && !unicode::isSpace(*pStr) )
-            {
-                if ( ('-' == *pStr || '+' == *pStr) && !bPtRelative )
-                    bPtRelative = true;
-                else if ( bPtRelative && 'p' == *pStr && 't' == *++pStr )
-                    ;
-                else
-                {
-                    bNewMode = false;
-                    break;
-                }
-            }
-            pStr++;
-        }
-    }
-    else if (!aStr.isEmpty())
-    {
-        if ( -1 != aStr.indexOf('%') )
-        {
-            bNewMode = true;
-            bPtRelative = false;
-        }
-
-        if ( '-' == aStr[0] || '+' == aStr[0] )
-        {
-            bNewMode = true;
-            bPtRelative = true;
-        }
-    }
-
-    if ( bNewMode != bRelative || bPtRelative != bOldPtRelMode )
-        SetRelative( bNewMode );
 }
 
 void FontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList )
@@ -1428,78 +1372,6 @@ void FontSizeBox::Fill( const FontMetric* pFontMetric, const FontList* pList )
 
     SetText( aStr );
     SetSelection( aSelection );
-}
-
-void FontSizeBox::SetRelative( bool bNewRelative )
-{
-    if ( !bRelativeMode )
-        return;
-
-    Selection aSelection = GetSelection();
-    OUString aStr = comphelper::string::stripStart(GetText(), ' ');
-
-    if ( bNewRelative )
-    {
-        bRelative = true;
-        bStdSize = false;
-
-        if ( bPtRelative )
-        {
-            Clear(); //clear early because SetDecimalDigits is a slow recalc
-
-            SetDecimalDigits( 1 );
-            SetMin( nPtRelMin );
-            SetMax( nPtRelMax );
-            SetUnit( FUNIT_POINT );
-
-            short i = nPtRelMin, n = 0;
-            // JP 30.06.98: more than 100 values are not useful
-            while ( i <= nPtRelMax && n++ < 100 )
-            {
-                InsertValue( i );
-                i = i + nPtRelStep;
-            }
-        }
-        else
-        {
-            Clear(); //clear early because SetDecimalDigits is a slow recalc
-
-            SetDecimalDigits( 0 );
-            SetMin( nRelMin );
-            SetMax( nRelMax );
-            SetUnit( FUNIT_PERCENT );
-
-            sal_uInt16 i = nRelMin;
-            while ( i <= nRelMax )
-            {
-                InsertValue( i );
-                i = i + nRelStep;
-            }
-        }
-    }
-    else
-    {
-        if (pFontList)
-            Clear(); //clear early because SetDecimalDigits is a slow recalc
-        bRelative = bPtRelative = false;
-        SetDecimalDigits( 1 );
-        SetMin( 20 );
-        SetMax( 9999 );
-        SetUnit( FUNIT_POINT );
-        if ( pFontList )
-            Fill( &aFontMetric, pFontList );
-    }
-
-    SetText( aStr );
-    SetSelection( aSelection );
-}
-
-OUString FontSizeBox::CreateFieldText( sal_Int64 nValue ) const
-{
-    OUString sRet( MetricBox::CreateFieldText( nValue ) );
-    if ( bRelativeMode && bPtRelative && (0 <= nValue) && !sRet.isEmpty() )
-        sRet = "+" + sRet;
-    return sRet;
 }
 
 void FontSizeBox::SetValue( sal_Int64 nNewValue, FieldUnit eInUnit )
