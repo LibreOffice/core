@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_146393de",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2610,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-10-15T11:33:40Z",
+      "side": 1,
+      "message": "Why does this use collator compareString() if it only tests for equality?",
+      "revId": "79d7416fe5776ea5c7280e9da2864135ab5021ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
