@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "ff0f0b1f_d44cfb77",
+        "filename": "sc/source/ui/docshell/impex.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1208,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-10-15T11:08:42Z",
+      "side": 1,
+      "message": "I have doubts about this change. The edit format of a type is not necessarily the same as the standard default display format of the same type.",
+      "revId": "c10083bf5f0f5f08c78d009e83168028590ff1a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_94568306",
+        "filename": "sc/source/ui/formdlg/formula.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 347,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-10-15T11:08:42Z",
+      "side": 1,
+      "message": "Same here, the edit format not necessarily equals the standard default format of a type.",
+      "revId": "c10083bf5f0f5f08c78d009e83168028590ff1a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff0f0b1f_635fb741",
         "filename": "svl/source/numbers/zforlist.cxx",
         "patchSetId": 4
