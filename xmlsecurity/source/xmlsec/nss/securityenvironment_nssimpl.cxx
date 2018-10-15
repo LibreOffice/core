@@ -945,11 +945,18 @@ xmlSecKeysMngrPtr SecurityEnvironment_NssImpl::createKeysManager() {
     {
         if (auto pCERTCertificate = const_cast<CERTCertificate*>(pCertificate->getNssCert()))
         {
-            SECKEYPrivateKey* pPrivateKey = PK11_FindPrivateKeyFromCert(pCERTCertificate->slot, pCERTCertificate, nullptr);
-            xmlSecKeyDataPtr pKeyData = xmlSecNssPKIAdoptKey(pPrivateKey, nullptr);
-            xmlSecKeyPtr pKey = xmlSecKeyCreate();
-            xmlSecKeySetValue(pKey, pKeyData);
-            xmlSecNssAppDefaultKeysMngrAdoptKey(pKeysMngr, pKey);
+            if (pCERTCertificate && pCERTCertificate->slot)
+            {
+                SECKEYPrivateKey* pPrivateKey = PK11_FindPrivateKeyFromCert(pCERTCertificate->slot, pCERTCertificate, nullptr);
+                xmlSecKeyDataPtr pKeyData = xmlSecNssPKIAdoptKey(pPrivateKey, nullptr);
+                xmlSecKeyPtr pKey = xmlSecKeyCreate();
+                xmlSecKeySetValue(pKey, pKeyData);
+                xmlSecNssAppDefaultKeysMngrAdoptKey(pKeysMngr, pKey);
+            }
+            else
+            {
+                SAL_WARN("xmlsecurity.xmlsec", "Can't get the private key from the certificate.");
+            }
         }
     }
 
