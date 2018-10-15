@@ -46,6 +46,8 @@
 #include <vcl/layout.hxx>
 #include <vcl/syswin.hxx>
 
+#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
+
 #include <cairo.h>
 #include <headless/svpgdi.hxx>
 
@@ -868,6 +870,31 @@ void Qt5Frame::deregisterDropTarget(Qt5DropTarget const* pDropTarget)
     assert(m_pDropTarget == pDropTarget);
     (void)pDropTarget;
     m_pDropTarget = nullptr;
+}
+
+void Qt5Frame::draggingStarted(const int x, const int y)
+{
+    assert(m_pDropTarget);
+
+    css::datatransfer::dnd::DropTargetDragEnterEvent aEvent;
+    aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
+    aEvent.Context = static_cast<css::datatransfer::dnd::XDropTargetDragContext*>(m_pDropTarget);
+    aEvent.LocationX = x;
+    aEvent.LocationY = y;
+    aEvent.DropAction = css::datatransfer::dnd::DNDConstants::ACTION_MOVE; //FIXME
+    aEvent.SourceActions = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
+
+    css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
+    xTransferable = m_pDragSource->GetTransferable();
+
+    if (xTransferable.is())
+    {
+        css::uno::Sequence<css::datatransfer::DataFlavor> aFormats
+            = xTransferable->getTransferDataFlavors();
+        aEvent.SupportedDataFlavors = aFormats;
+
+        m_pDropTarget->fire_dragEnter(aEvent);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
