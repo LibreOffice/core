@@ -97,8 +97,7 @@ private:
     bool drawFilledTriangles(
         const basegfx::B2DHomMatrix& rObjectToDevice,
         const basegfx::triangulator::B2DTriangleVector& rTriangles,
-        double fTransparency,
-        bool bPixelOffset);
+        double fTransparency);
 
     long GetGraphicsHeight() const;
 

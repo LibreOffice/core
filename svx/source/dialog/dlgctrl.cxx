@@ -922,8 +922,8 @@ void FillTypeLB::Fill()
     SetUpdateMode( true );
 }
 
-LineLB::LineLB(vcl::Window* pParent, WinBits aWB)
-:   ListBox(pParent, aWB),
+LineLB::LineLB(vcl::Window* pParent)
+:   ListBox(pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL),
     mbAddStandardFields(true)
 {
     // No EdgeBlending for LineStyle/Dash SetEdgeBlending(true);

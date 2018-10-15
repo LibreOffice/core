@@ -51,7 +51,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
 SvxLineBox::SvxLineBox( vcl::Window* pParent, const Reference< XFrame >& rFrame ) :
-    LineLB( pParent, WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL ),
+    LineLB( pParent ),
     nCurPos     ( 0 ),
     aLogicalSize(40,140),
     bRelease    ( true ),
