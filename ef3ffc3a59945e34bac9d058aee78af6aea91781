@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ff0f0b1f_b47aa785",
+        "filename": "sc/source/ui/condformat/condformatmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-10-15T11:18:52Z",
+      "side": 1,
+      "message": "Conversion from ASCII literal string to OUString usually doesn\u0027t have to be explicitly stated, this simplifies:\n\n  OUString aNewSensitivity \u003d mpFormatList-\u003esize() ? \"true\" : \"false\";\n\nIf some compiler complains about that within a ternary operator then please excuse me ;-)",
+      "range": {
+        "startLine": 149,
+        "startChar": 60,
+        "endLine": 149,
+        "endChar": 96
+      },
+      "revId": "ef3ffc3a59945e34bac9d058aee78af6aea91781",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff0f0b1f_d4751b9a",
+        "filename": "sc/source/ui/condformat/condformatmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-10-15T11:18:52Z",
+      "side": 1,
+      "message": "Don\u0027t explicitly state this-\u003e as it is implicit in C++",
+      "range": {
+        "startLine": 149,
+        "startChar": 31,
+        "endLine": 149,
+        "endChar": 37
+      },
+      "revId": "ef3ffc3a59945e34bac9d058aee78af6aea91781",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
