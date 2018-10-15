@@ -93,6 +93,30 @@
       "revId": "ef3ffc3a59945e34bac9d058aee78af6aea91781",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df140735_f93a77cb",
+        "filename": "sc/source/ui/condformat/condformatmgr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-10-15T18:19:54Z",
+      "side": 1,
+      "message": "\u003e GCC doesn\u0027t compile with that syntax:\n\nAh ok. Sorry.",
+      "parentUuid": "ff0f0b1f_9440c309",
+      "range": {
+        "startLine": 149,
+        "startChar": 60,
+        "endLine": 149,
+        "endChar": 96
+      },
+      "revId": "ef3ffc3a59945e34bac9d058aee78af6aea91781",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
