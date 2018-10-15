@@ -20,11 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_RES_TITLES_HXX
 
 #include "TitleDialogData.hxx"
-#include <vcl/fixed.hxx>
 #include <vcl/weld.hxx>
-
-class VclBuilderContainer;
-class Edit;
 
 namespace chart
 {
@@ -32,33 +28,33 @@ namespace chart
 class TitleResources final
 {
 public:
-    TitleResources(VclBuilderContainer& rParent, bool bShowSecondaryAxesTitle);
+    TitleResources(weld::Builder& rParent, bool bShowSecondaryAxesTitle);
     ~TitleResources();
 
     void writeToResources( const TitleDialogData& rInput );
     void readFromResources( TitleDialogData& rOutput );
 
-    void SetUpdateDataHdl( const Link<Edit&,void>& rLink );
-    bool IsModified();
-    void ClearModifyFlag();
+    void connect_changed( const Link<weld::Entry&,void>& rLink );
+    bool get_value_changed_from_saved();
+    void save_value();
 
 private:
-    VclPtr<FixedText> m_pFT_Main;
-    VclPtr<FixedText> m_pFT_Sub;
-    VclPtr<Edit> m_pEd_Main;
-    VclPtr<Edit> m_pEd_Sub;
+    std::unique_ptr<weld::Label> m_xFT_Main;
+    std::unique_ptr<weld::Label> m_xFT_Sub;
+    std::unique_ptr<weld::Entry> m_xEd_Main;
+    std::unique_ptr<weld::Entry> m_xEd_Sub;
 
-    VclPtr<FixedText> m_pFT_XAxis;
-    VclPtr<FixedText> m_pFT_YAxis;
-    VclPtr<FixedText> m_pFT_ZAxis;
-    VclPtr<Edit> m_pEd_XAxis;
-    VclPtr<Edit> m_pEd_YAxis;
-    VclPtr<Edit> m_pEd_ZAxis;
+    std::unique_ptr<weld::Label> m_xFT_XAxis;
+    std::unique_ptr<weld::Label> m_xFT_YAxis;
+    std::unique_ptr<weld::Label> m_xFT_ZAxis;
+    std::unique_ptr<weld::Entry> m_xEd_XAxis;
+    std::unique_ptr<weld::Entry> m_xEd_YAxis;
+    std::unique_ptr<weld::Entry> m_xEd_ZAxis;
 
-    VclPtr<FixedText> m_pFT_SecondaryXAxis;
-    VclPtr<FixedText> m_pFT_SecondaryYAxis;
-    VclPtr<Edit> m_pEd_SecondaryXAxis;
-    VclPtr<Edit> m_pEd_SecondaryYAxis;
+    std::unique_ptr<weld::Label> m_xFT_SecondaryXAxis;
+    std::unique_ptr<weld::Label> m_xFT_SecondaryYAxis;
+    std::unique_ptr<weld::Entry> m_xEd_SecondaryXAxis;
+    std::unique_ptr<weld::Entry> m_xEd_SecondaryYAxis;
 };
 
 class SchTitleResources final

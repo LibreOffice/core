@@ -30,40 +30,31 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-TitlesAndObjectsTabPage::TitlesAndObjectsTabPage( svt::OWizardMachine* pParent
-        , const uno::Reference< XChartDocument >& xChartModel
-        , const uno::Reference< uno::XComponentContext >& xContext )
-        : OWizardPage(pParent, "WizElementsPage", "modules/schart/ui/wizelementspage.ui")
-        , m_xTitleResources(new TitleResources(*this, false))
-        , m_xLegendPositionResources(new LegendPositionResources(*this, xContext))
-        , m_xChartModel(xChartModel)
-        , m_xCC(xContext)
-        , m_bCommitToModel(true)
-        , m_aTimerTriggeredControllerLock( uno::Reference< frame::XModel >( m_xChartModel, uno::UNO_QUERY ) )
+TitlesAndObjectsTabPage::TitlesAndObjectsTabPage(TabPageParent pParent,
+                                                 const uno::Reference< XChartDocument >& xChartModel,
+                                                 const uno::Reference< uno::XComponentContext >& xContext )
+    : OWizardPage(pParent, "modules/schart/ui/wizelementspage.ui", "WizElementsPage")
+    , m_xTitleResources(new TitleResources(*m_xBuilder, false))
+    , m_xLegendPositionResources(new LegendPositionResources(*m_xBuilder, xContext))
+    , m_xChartModel(xChartModel)
+    , m_xCC(xContext)
+    , m_bCommitToModel(true)
+    , m_aTimerTriggeredControllerLock( uno::Reference< frame::XModel >( m_xChartModel, uno::UNO_QUERY ) )
+    , m_xCB_Grid_X(m_xBuilder->weld_check_button("x"))
+    , m_xCB_Grid_Y(m_xBuilder->weld_check_button("y"))
+    , m_xCB_Grid_Z(m_xBuilder->weld_check_button("z"))
 {
-    get(m_pCB_Grid_X, "x");
-    get(m_pCB_Grid_Y, "y");
-    get(m_pCB_Grid_Z, "z");
-
-    m_xTitleResources->SetUpdateDataHdl( LINK( this, TitlesAndObjectsTabPage, ChangeEditHdl ));
+    m_xTitleResources->connect_changed( LINK( this, TitlesAndObjectsTabPage, ChangeEditHdl ));
     m_xLegendPositionResources->SetChangeHdl( LINK( this, TitlesAndObjectsTabPage, ChangeHdl ));
 
-    m_pCB_Grid_X->SetToggleHdl( LINK( this, TitlesAndObjectsTabPage, ChangeCheckBoxHdl ));
-    m_pCB_Grid_Y->SetToggleHdl( LINK( this, TitlesAndObjectsTabPage, ChangeCheckBoxHdl ));
-    m_pCB_Grid_Z->SetToggleHdl( LINK( this, TitlesAndObjectsTabPage, ChangeCheckBoxHdl ));
+    m_xCB_Grid_X->connect_toggled( LINK( this, TitlesAndObjectsTabPage, ChangeCheckBoxHdl ));
+    m_xCB_Grid_Y->connect_toggled( LINK( this, TitlesAndObjectsTabPage, ChangeCheckBoxHdl ));
+    m_xCB_Grid_Z->connect_toggled( LINK( this, TitlesAndObjectsTabPage, ChangeCheckBoxHdl ));
 }
 
 TitlesAndObjectsTabPage::~TitlesAndObjectsTabPage()
 {
     disposeOnce();
-}
-
-void TitlesAndObjectsTabPage::dispose()
-{
-    m_pCB_Grid_X.clear();
-    m_pCB_Grid_Y.clear();
-    m_pCB_Grid_Z.clear();
-    OWizardPage::dispose();
 }
 
 void TitlesAndObjectsTabPage::initializePage()
@@ -89,12 +80,12 @@ void TitlesAndObjectsTabPage::initializePage()
         uno::Sequence< sal_Bool > aExistenceList;
         AxisHelper::getAxisOrGridPossibilities( aPossibilityList, xDiagram, false );
         AxisHelper::getAxisOrGridExcistence( aExistenceList, xDiagram, false );
-        m_pCB_Grid_X->Enable( aPossibilityList[0] );
-        m_pCB_Grid_Y->Enable( aPossibilityList[1] );
-        m_pCB_Grid_Z->Enable( aPossibilityList[2] );
-        m_pCB_Grid_X->Check( aExistenceList[0] );
-        m_pCB_Grid_Y->Check( aExistenceList[1] );
-        m_pCB_Grid_Z->Check( aExistenceList[2] );
+        m_xCB_Grid_X->set_sensitive( aPossibilityList[0] );
+        m_xCB_Grid_Y->set_sensitive( aPossibilityList[1] );
+        m_xCB_Grid_Z->set_sensitive( aPossibilityList[2] );
+        m_xCB_Grid_X->set_active( aExistenceList[0] );
+        m_xCB_Grid_Y->set_active( aExistenceList[1] );
+        m_xCB_Grid_Z->set_active( aExistenceList[2] );
     }
 
     m_bCommitToModel = true;
@@ -102,7 +93,7 @@ void TitlesAndObjectsTabPage::initializePage()
 
 bool TitlesAndObjectsTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
 {
-    if( m_xTitleResources->IsModified() ) //titles may have changed in the meanwhile
+    if( m_xTitleResources->get_value_changed_from_saved() ) //titles may have changed in the meanwhile
         commitToModel();
     return true;//return false if this page should not be left
 }
@@ -119,7 +110,7 @@ void TitlesAndObjectsTabPage::commitToModel()
         TitleDialogData aTitleOutput;
         m_xTitleResources->readFromResources( aTitleOutput );
         aTitleOutput.writeDifferenceToModel( xModel, m_xCC );
-        m_xTitleResources->ClearModifyFlag();
+        m_xTitleResources->save_value();
     }
 
     //commit legend changes to model
@@ -133,23 +124,24 @@ void TitlesAndObjectsTabPage::commitToModel()
         uno::Sequence< sal_Bool > aOldExistenceList;
         AxisHelper::getAxisOrGridExcistence( aOldExistenceList, xDiagram, false );
         uno::Sequence< sal_Bool > aNewExistenceList(aOldExistenceList);
-        aNewExistenceList[0] = m_pCB_Grid_X->IsChecked();
-        aNewExistenceList[1] = m_pCB_Grid_Y->IsChecked();
-        aNewExistenceList[2] = m_pCB_Grid_Z->IsChecked();
+        aNewExistenceList[0] = m_xCB_Grid_X->get_active();
+        aNewExistenceList[1] = m_xCB_Grid_Y->get_active();
+        aNewExistenceList[2] = m_xCB_Grid_Z->get_active();
         AxisHelper::changeVisibilityOfGrids( xDiagram
                 , aOldExistenceList, aNewExistenceList );
     }
 }
 
+IMPL_LINK_NOARG(TitlesAndObjectsTabPage, ChangeCheckBoxHdl, weld::ToggleButton&, void)
+{
+    ChangeHdl(nullptr);
+}
 
-IMPL_LINK_NOARG(TitlesAndObjectsTabPage, ChangeCheckBoxHdl, CheckBox&, void)
+IMPL_LINK_NOARG(TitlesAndObjectsTabPage, ChangeEditHdl, weld::Entry&, void)
 {
     ChangeHdl(nullptr);
 }
-IMPL_LINK_NOARG(TitlesAndObjectsTabPage, ChangeEditHdl, Edit&, void)
-{
-    ChangeHdl(nullptr);
-}
+
 IMPL_LINK_NOARG(TitlesAndObjectsTabPage, ChangeHdl, LinkParamNone*, void)
 {
     if( m_bCommitToModel )

@@ -25,127 +25,109 @@
 namespace chart
 {
 
-TitleResources::TitleResources( VclBuilderContainer& rBuilder, bool bShowSecondaryAxesTitle )
+TitleResources::TitleResources(weld::Builder& rBuilder, bool bShowSecondaryAxesTitle)
+    : m_xFT_Main(rBuilder.weld_label("labelMainTitle"))
+    , m_xFT_Sub(rBuilder.weld_label("labelSubTitle"))
+    , m_xEd_Main(rBuilder.weld_entry("maintitle"))
+    , m_xEd_Sub(rBuilder.weld_entry("subtitle"))
+    , m_xFT_XAxis(rBuilder.weld_label("labelPrimaryXaxis"))
+    , m_xFT_YAxis(rBuilder.weld_label("labelPrimaryYaxis"))
+    , m_xFT_ZAxis(rBuilder.weld_label("labelPrimaryZaxis"))
+    , m_xEd_XAxis(rBuilder.weld_entry("primaryXaxis"))
+    , m_xEd_YAxis(rBuilder.weld_entry("primaryYaxis"))
+    , m_xEd_ZAxis(rBuilder.weld_entry("primaryZaxis"))
+    , m_xFT_SecondaryXAxis(rBuilder.weld_label("labelSecondaryXAxis"))
+    , m_xFT_SecondaryYAxis(rBuilder.weld_label("labelSecondaryYAxis"))
+    , m_xEd_SecondaryXAxis(rBuilder.weld_entry("secondaryXaxis"))
+    , m_xEd_SecondaryYAxis(rBuilder.weld_entry("secondaryYaxis"))
 {
-    rBuilder.get( m_pFT_Main, "labelMainTitle" );
-    rBuilder.get( m_pFT_Sub, "labelSubTitle" );
-    rBuilder.get( m_pEd_Main, "maintitle" );
-    rBuilder.get( m_pEd_Sub, "subtitle" );
-
-    rBuilder.get( m_pFT_XAxis, "labelPrimaryXaxis" );
-    rBuilder.get( m_pFT_YAxis, "labelPrimaryYaxis" );
-    rBuilder.get( m_pFT_ZAxis, "labelPrimaryZaxis" );
-    rBuilder.get( m_pEd_XAxis, "primaryXaxis" );
-    rBuilder.get( m_pEd_YAxis, "primaryYaxis" );
-    rBuilder.get( m_pEd_ZAxis, "primaryZaxis" );
-
-    rBuilder.get( m_pFT_SecondaryXAxis, "labelSecondaryXAxis" );
-    rBuilder.get( m_pFT_SecondaryYAxis, "labelSecondaryYAxis" );
-    rBuilder.get( m_pEd_SecondaryXAxis, "secondaryXaxis" );
-    rBuilder.get( m_pEd_SecondaryYAxis, "secondaryYaxis" );
-
-    m_pFT_SecondaryXAxis->Show( bShowSecondaryAxesTitle );
-    m_pFT_SecondaryYAxis->Show( bShowSecondaryAxesTitle );
-    m_pEd_SecondaryXAxis->Show( bShowSecondaryAxesTitle );
-    m_pEd_SecondaryYAxis->Show( bShowSecondaryAxesTitle );
+    m_xFT_SecondaryXAxis->show( bShowSecondaryAxesTitle );
+    m_xFT_SecondaryYAxis->show( bShowSecondaryAxesTitle );
+    m_xEd_SecondaryXAxis->show( bShowSecondaryAxesTitle );
+    m_xEd_SecondaryYAxis->show( bShowSecondaryAxesTitle );
 }
 
 TitleResources::~TitleResources()
 {
 }
 
-void TitleResources::SetUpdateDataHdl( const Link<Edit&,void>& rLink )
+void TitleResources::connect_changed( const Link<weld::Entry&,void>& rLink )
 {
-    sal_uLong nTimeout = 4*EDIT_UPDATEDATA_TIMEOUT;
-
-    m_pEd_Main->EnableUpdateData( nTimeout );
-    m_pEd_Main->SetUpdateDataHdl( rLink );
-
-    m_pEd_Sub->EnableUpdateData( nTimeout );
-    m_pEd_Sub->SetUpdateDataHdl( rLink );
-
-    m_pEd_XAxis->EnableUpdateData( nTimeout );
-    m_pEd_XAxis->SetUpdateDataHdl( rLink );
-
-    m_pEd_YAxis->EnableUpdateData( nTimeout );
-    m_pEd_YAxis->SetUpdateDataHdl( rLink );
-
-    m_pEd_ZAxis->EnableUpdateData( nTimeout );
-    m_pEd_ZAxis->SetUpdateDataHdl( rLink );
-
-    m_pEd_SecondaryXAxis->EnableUpdateData( nTimeout );
-    m_pEd_SecondaryXAxis->SetUpdateDataHdl( rLink );
-
-    m_pEd_SecondaryYAxis->EnableUpdateData( nTimeout );
-    m_pEd_SecondaryYAxis->SetUpdateDataHdl( rLink );
+    m_xEd_Main->connect_changed( rLink );
+    m_xEd_Sub->connect_changed( rLink );
+    m_xEd_XAxis->connect_changed( rLink );
+    m_xEd_YAxis->connect_changed( rLink );
+    m_xEd_ZAxis->connect_changed( rLink );
+    m_xEd_SecondaryXAxis->connect_changed( rLink );
+    m_xEd_SecondaryYAxis->connect_changed( rLink );
 }
 
-bool TitleResources::IsModified()
+bool TitleResources::get_value_changed_from_saved()
 {
-    return m_pEd_Main->IsModified()
-        || m_pEd_Sub->IsModified()
-        || m_pEd_XAxis->IsModified()
-        || m_pEd_YAxis->IsModified()
-        || m_pEd_ZAxis->IsModified()
-        || m_pEd_SecondaryXAxis->IsModified()
-        || m_pEd_SecondaryYAxis->IsModified();
+    return m_xEd_Main->get_value_changed_from_saved()
+        || m_xEd_Sub->get_value_changed_from_saved()
+        || m_xEd_XAxis->get_value_changed_from_saved()
+        || m_xEd_YAxis->get_value_changed_from_saved()
+        || m_xEd_ZAxis->get_value_changed_from_saved()
+        || m_xEd_SecondaryXAxis->get_value_changed_from_saved()
+        || m_xEd_SecondaryYAxis->get_value_changed_from_saved();
 }
 
-void TitleResources::ClearModifyFlag()
+void TitleResources::save_value()
 {
-    m_pEd_Main->ClearModifyFlag();
-    m_pEd_Sub->ClearModifyFlag();
-    m_pEd_XAxis->ClearModifyFlag();
-    m_pEd_YAxis->ClearModifyFlag();
-    m_pEd_ZAxis->ClearModifyFlag();
-    m_pEd_SecondaryXAxis->ClearModifyFlag();
-    m_pEd_SecondaryYAxis->ClearModifyFlag();
+    m_xEd_Main->save_value();
+    m_xEd_Sub->save_value();
+    m_xEd_XAxis->save_value();
+    m_xEd_YAxis->save_value();
+    m_xEd_ZAxis->save_value();
+    m_xEd_SecondaryXAxis->save_value();
+    m_xEd_SecondaryYAxis->save_value();
 }
 
 void TitleResources::writeToResources( const TitleDialogData& rInput )
 {
-    m_pFT_Main->Enable( rInput.aPossibilityList[0] );
-    m_pFT_Sub->Enable( rInput.aPossibilityList[1] );
-    m_pFT_XAxis->Enable( rInput.aPossibilityList[2] );
-    m_pFT_YAxis->Enable( rInput.aPossibilityList[3] );
-    m_pFT_ZAxis->Enable( rInput.aPossibilityList[4] );
-    m_pFT_SecondaryXAxis->Enable( rInput.aPossibilityList[5] );
-    m_pFT_SecondaryYAxis->Enable( rInput.aPossibilityList[6] );
+    m_xFT_Main->set_sensitive( rInput.aPossibilityList[0] );
+    m_xFT_Sub->set_sensitive( rInput.aPossibilityList[1] );
+    m_xFT_XAxis->set_sensitive( rInput.aPossibilityList[2] );
+    m_xFT_YAxis->set_sensitive( rInput.aPossibilityList[3] );
+    m_xFT_ZAxis->set_sensitive( rInput.aPossibilityList[4] );
+    m_xFT_SecondaryXAxis->set_sensitive( rInput.aPossibilityList[5] );
+    m_xFT_SecondaryYAxis->set_sensitive( rInput.aPossibilityList[6] );
 
-    m_pEd_Main->Enable( rInput.aPossibilityList[0] );
-    m_pEd_Sub->Enable( rInput.aPossibilityList[1] );
-    m_pEd_XAxis->Enable( rInput.aPossibilityList[2] );
-    m_pEd_YAxis->Enable( rInput.aPossibilityList[3] );
-    m_pEd_ZAxis->Enable( rInput.aPossibilityList[4] );
-    m_pEd_SecondaryXAxis->Enable( rInput.aPossibilityList[5] );
-    m_pEd_SecondaryYAxis->Enable( rInput.aPossibilityList[6] );
+    m_xEd_Main->set_sensitive( rInput.aPossibilityList[0] );
+    m_xEd_Sub->set_sensitive( rInput.aPossibilityList[1] );
+    m_xEd_XAxis->set_sensitive( rInput.aPossibilityList[2] );
+    m_xEd_YAxis->set_sensitive( rInput.aPossibilityList[3] );
+    m_xEd_ZAxis->set_sensitive( rInput.aPossibilityList[4] );
+    m_xEd_SecondaryXAxis->set_sensitive( rInput.aPossibilityList[5] );
+    m_xEd_SecondaryYAxis->set_sensitive( rInput.aPossibilityList[6] );
 
-    m_pEd_Main->SetText(rInput.aTextList[0]);
-    m_pEd_Sub->SetText(rInput.aTextList[1]);
-    m_pEd_XAxis->SetText(rInput.aTextList[2]);
-    m_pEd_YAxis->SetText(rInput.aTextList[3]);
-    m_pEd_ZAxis->SetText(rInput.aTextList[4]);
-    m_pEd_SecondaryXAxis->SetText(rInput.aTextList[5]);
-    m_pEd_SecondaryYAxis->SetText(rInput.aTextList[6]);
+    m_xEd_Main->set_text(rInput.aTextList[0]);
+    m_xEd_Sub->set_text(rInput.aTextList[1]);
+    m_xEd_XAxis->set_text(rInput.aTextList[2]);
+    m_xEd_YAxis->set_text(rInput.aTextList[3]);
+    m_xEd_ZAxis->set_text(rInput.aTextList[4]);
+    m_xEd_SecondaryXAxis->set_text(rInput.aTextList[5]);
+    m_xEd_SecondaryYAxis->set_text(rInput.aTextList[6]);
 }
 
 void TitleResources::readFromResources( TitleDialogData& rOutput )
 {
-    rOutput.aExistenceList[0] = !m_pEd_Main->GetText().isEmpty();
-    rOutput.aExistenceList[1] = !m_pEd_Sub->GetText().isEmpty();
-    rOutput.aExistenceList[2] = !m_pEd_XAxis->GetText().isEmpty();
-    rOutput.aExistenceList[3] = !m_pEd_YAxis->GetText().isEmpty();
-    rOutput.aExistenceList[4] = !m_pEd_ZAxis->GetText().isEmpty();
-    rOutput.aExistenceList[5] = !m_pEd_SecondaryXAxis->GetText().isEmpty();
-    rOutput.aExistenceList[6] = !m_pEd_SecondaryYAxis->GetText().isEmpty();
+    rOutput.aExistenceList[0] = !m_xEd_Main->get_text().isEmpty();
+    rOutput.aExistenceList[1] = !m_xEd_Sub->get_text().isEmpty();
+    rOutput.aExistenceList[2] = !m_xEd_XAxis->get_text().isEmpty();
+    rOutput.aExistenceList[3] = !m_xEd_YAxis->get_text().isEmpty();
+    rOutput.aExistenceList[4] = !m_xEd_ZAxis->get_text().isEmpty();
+    rOutput.aExistenceList[5] = !m_xEd_SecondaryXAxis->get_text().isEmpty();
+    rOutput.aExistenceList[6] = !m_xEd_SecondaryYAxis->get_text().isEmpty();
 
-    rOutput.aTextList[0] = m_pEd_Main->GetText();
-    rOutput.aTextList[1] = m_pEd_Sub->GetText();
-    rOutput.aTextList[2] = m_pEd_XAxis->GetText();
-    rOutput.aTextList[3] = m_pEd_YAxis->GetText();
-    rOutput.aTextList[4] = m_pEd_ZAxis->GetText();
-    rOutput.aTextList[5] = m_pEd_SecondaryXAxis->GetText();
-    rOutput.aTextList[6] = m_pEd_SecondaryYAxis->GetText();
+    rOutput.aTextList[0] = m_xEd_Main->get_text();
+    rOutput.aTextList[1] = m_xEd_Sub->get_text();
+    rOutput.aTextList[2] = m_xEd_XAxis->get_text();
+    rOutput.aTextList[3] = m_xEd_YAxis->get_text();
+    rOutput.aTextList[4] = m_xEd_ZAxis->get_text();
+    rOutput.aTextList[5] = m_xEd_SecondaryXAxis->get_text();
+    rOutput.aTextList[6] = m_xEd_SecondaryYAxis->get_text();
 }
 
 SchTitleResources::SchTitleResources(weld::Builder& rBuilder, bool bShowSecondaryAxesTitle)
