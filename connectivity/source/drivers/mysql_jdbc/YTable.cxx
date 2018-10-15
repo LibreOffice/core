@@ -195,7 +195,7 @@ void SAL_CALL OMySQLTable::alterColumnByName(const OUString& colName,
             || sOldDesc != sNewDesc)
         {
             // special handling because they changed the type names to distinguish
-            // if a column should be an auto_incmrement one
+            // if a column should be an auto_increment one
             if (bOldAutoIncrement != bAutoIncrement)
             {
                 OUString sTypeName;
