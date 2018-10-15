@@ -363,14 +363,13 @@ bool DocumentSignatureManager::add(
 
     uno::Sequence<uno::Reference<security::XCertificate>> aCertPath
         = xSecurityContext->getSecurityEnvironment()->buildCertificatePath(xCert);
-    const uno::Reference<security::XCertificate>* pCertPath = aCertPath.getConstArray();
-    sal_Int32 nCnt = aCertPath.getLength();
 
     OUStringBuffer aStrBuffer;
-    for (int i = 0; i < nCnt; i++)
+    for (uno::Reference<security::XCertificate> const& rxCertificate : aCertPath)
     {
-        comphelper::Base64::encode(aStrBuffer, pCertPath[i]->getEncoded());
-        maSignatureHelper.AddEncapsulatedX509Certificate(aStrBuffer.makeStringAndClear());
+        comphelper::Base64::encode(aStrBuffer, rxCertificate->getEncoded());
+        OUString aString = aStrBuffer.makeStringAndClear();
+        maSignatureHelper.AddEncapsulatedX509Certificate(aString);
     }
 
     std::vector<OUString> aElements = DocumentSignatureHelper::CreateElementList(
