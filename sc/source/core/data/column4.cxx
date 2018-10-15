@@ -1522,10 +1522,12 @@ void ScColumn::EndListeningIntersectedGroups(
     {
         ScFormulaCell* pFC = sc::formula_block::at(*it->data, aPos.second);
         ScFormulaCellGroupRef xGroup = pFC->GetCellGroup();
-        if (xGroup && !pFC->IsSharedTop())
+        if (xGroup)
         {
-            // End listening.
-            pFC->EndListeningTo(rCxt);
+            if (!pFC->IsSharedTop())
+                // End listening.
+                pFC->EndListeningTo(rCxt);
+
             if (pGroupPos)
                 // Record the position of the top cell of the group.
                 pGroupPos->push_back(xGroup->mpTopCell->aPos);
@@ -1538,10 +1540,12 @@ void ScColumn::EndListeningIntersectedGroups(
     {
         ScFormulaCell* pFC = sc::formula_block::at(*it->data, aPos.second);
         ScFormulaCellGroupRef xGroup = pFC->GetCellGroup();
-        if (xGroup && !pFC->IsSharedTop())
+        if (xGroup)
         {
-            // End listening.
-            pFC->EndListeningTo(rCxt);
+            if (!pFC->IsSharedTop())
+                // End listening.
+                pFC->EndListeningTo(rCxt);
+
             if (pGroupPos)
             {
                 // Record the position of the bottom cell of the group.
