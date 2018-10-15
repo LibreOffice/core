@@ -2706,9 +2706,10 @@ void SvtValueSet::RemoveItem( sal_uInt16 nItemId )
     }
 
     // reset variables
-    if (mnSelItemId == nItemId)
+    if (mnHighItemId == nItemId || mnSelItemId == nItemId)
     {
         mnCurCol        = 0;
+        mnHighItemId    = 0;
         mnSelItemId     = 0;
         mbNoSelection   = true;
     }
@@ -2727,11 +2728,12 @@ void SvtValueSet::Clear()
     // reset variables
     mnFirstLine     = 0;
     mnCurCol        = 0;
+    mnHighItemId    = 0;
     mnSelItemId     = 0;
     mbNoSelection   = true;
 
     mbFormat = true;
-    if (IsReallyVisible() && IsUpdateMode())
+    if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 }
 
@@ -3603,7 +3605,7 @@ void SvtValueSet::SetColCount( sal_uInt16 nNewCols )
         mnUserCols = nNewCols;
         mbFormat = true;
         queue_resize();
-        if ( IsReallyVisible() && IsUpdateMode() )
+        if (IsReallyVisible() && IsUpdateMode())
             Invalidate();
     }
 }
