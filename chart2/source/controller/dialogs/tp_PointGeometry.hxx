@@ -28,7 +28,7 @@ class BarGeometryResources;
 class SchLayoutTabPage : public SfxTabPage
 {
 public:
-    SchLayoutTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs);
+    SchLayoutTabPage(TabPageParent pParent, const SfxItemSet& rInAttrs);
     virtual ~SchLayoutTabPage() override;
     virtual void dispose() override;
 

@@ -22,6 +22,7 @@
 #include <servicenames.hxx>
 #include <osl/mutex.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/svapp.hxx>
 
 namespace chart
 {
@@ -70,7 +71,7 @@ void ChartTypeUnoDlg::implInitialize(const uno::Any& _rValue)
 }
 svt::OGenericUnoDialog::Dialog ChartTypeUnoDlg::createDialog(const css::uno::Reference<css::awt::XWindow>& rParent)
 {
-    return svt::OGenericUnoDialog::Dialog(VclPtr<ChartTypeDialog>::Create(VCLUnoHelper::GetWindow(rParent), m_xChartModel));
+    return svt::OGenericUnoDialog::Dialog(o3tl::make_unique<ChartTypeDialog>(Application::GetFrameWeld(rParent), m_xChartModel));
 }
 uno::Reference<beans::XPropertySetInfo>  SAL_CALL ChartTypeUnoDlg::getPropertySetInfo()
 {

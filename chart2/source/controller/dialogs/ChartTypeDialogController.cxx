@@ -117,10 +117,7 @@ ChartTypeDialogController::ChartTypeDialogController()
 ChartTypeDialogController::~ChartTypeDialogController()
 {
 }
-Image ChartTypeDialogController::getImage()
-{
-    return Image();
-}
+
 bool ChartTypeDialogController::isSubType( const OUString& rServiceName )
 {
     const tTemplateServiceChartTypeParameterMap& rTemplateMap = getTemplateMap();
@@ -337,7 +334,7 @@ void ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
         }
     }
 }
-void ChartTypeDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
+void ChartTypeDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
 }
@@ -366,7 +363,7 @@ bool ChartTypeDialogController::shouldShow_SortByXValuesResourceGroup() const
     return false;
 }
 
-void ChartTypeDialogController::showExtraControls( VclBuilderContainer* /*pParent*/ )
+void ChartTypeDialogController::showExtraControls(weld::Builder* /*pBuilder*/)
 {
 }
 void ChartTypeDialogController::hideExtraControls() const
@@ -414,9 +411,9 @@ OUString ColumnChartDialogController::getName()
     return SchResId( STR_TYPE_COLUMN );
 }
 
-Image ColumnChartDialogController::getImage()
+OUString ColumnChartDialogController::getImage()
 {
-    return Image(BitmapEx(BMP_TYPE_COLUMN));
+    return BMP_TYPE_COLUMN;
 }
 
 const tTemplateServiceChartTypeParameterMap& ColumnChartDialogController::getTemplateMap() const
@@ -431,7 +428,7 @@ const tTemplateServiceChartTypeParameterMap& ColumnChartDialogController::getTem
         {"com.sun.star.chart2.template.ThreeDColumnDeep" ,               ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z)}};
     return s_aTemplateMap;
 }
-void ColumnChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+void ColumnChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -491,9 +488,9 @@ OUString BarChartDialogController::getName()
     return SchResId( STR_TYPE_BAR );
 }
 
-Image BarChartDialogController::getImage()
+OUString BarChartDialogController::getImage()
 {
-    return Image(BitmapEx(BMP_TYPE_BAR));
+    return BMP_TYPE_BAR;
 }
 
 const tTemplateServiceChartTypeParameterMap& BarChartDialogController::getTemplateMap() const
@@ -508,7 +505,7 @@ const tTemplateServiceChartTypeParameterMap& BarChartDialogController::getTempla
         {"com.sun.star.chart2.template.ThreeDBarDeep" ,               ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z)}};
     return s_aTemplateMap;
 }
-void BarChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+void BarChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -564,9 +561,9 @@ OUString PieChartDialogController::getName()
 {
     return SchResId( STR_TYPE_PIE );
 }
-Image PieChartDialogController::getImage()
+OUString PieChartDialogController::getImage()
 {
-    return Image(BitmapEx(BMP_TYPE_PIE));
+    return BMP_TYPE_PIE;
 }
 const tTemplateServiceChartTypeParameterMap& PieChartDialogController::getTemplateMap() const
 {
@@ -581,7 +578,7 @@ const tTemplateServiceChartTypeParameterMap& PieChartDialogController::getTempla
     {"com.sun.star.chart2.template.ThreeDDonutAllExploded" , ChartTypeParameter(4,false,true)}};
     return s_aTemplateMap;
 }
-void PieChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+void PieChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -625,9 +622,9 @@ OUString LineChartDialogController::getName()
     return SchResId( STR_TYPE_LINE );
 }
 
-Image LineChartDialogController::getImage()
+OUString LineChartDialogController::getImage()
 {
-    return Image(BitmapEx(BMP_TYPE_LINE));
+    return BMP_TYPE_LINE;
 }
 
 const tTemplateServiceChartTypeParameterMap& LineChartDialogController::getTemplateMap() const
@@ -647,7 +644,7 @@ const tTemplateServiceChartTypeParameterMap& LineChartDialogController::getTempl
     {"com.sun.star.chart2.template.ThreeDLineDeep" ,             ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z,false,true)}};
     return s_aTemplateMap;
 }
-void LineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+void LineChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -776,9 +773,9 @@ OUString XYChartDialogController::getName()
     return SchResId( STR_TYPE_XY );
 }
 
-Image XYChartDialogController::getImage()
+OUString XYChartDialogController::getImage()
 {
-    return Image(BitmapEx(BMP_TYPE_XY));
+    return BMP_TYPE_XY;
 }
 
 const tTemplateServiceChartTypeParameterMap& XYChartDialogController::getTemplateMap() const
@@ -791,7 +788,7 @@ const tTemplateServiceChartTypeParameterMap& XYChartDialogController::getTemplat
     return s_aTemplateMap;
 }
 
-void XYChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+void XYChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -879,9 +876,9 @@ OUString AreaChartDialogController::getName()
     return SchResId(STR_TYPE_AREA);
 }
 
-Image AreaChartDialogController::getImage()
+OUString AreaChartDialogController::getImage()
 {
-    return Image(BitmapEx(BMP_TYPE_AREA));
+    return BMP_TYPE_AREA;
 }
 
 bool AreaChartDialogController::shouldShow_3DLookControl() const
@@ -901,7 +898,7 @@ const tTemplateServiceChartTypeParameterMap& AreaChartDialogController::getTempl
     return s_aTemplateMap;
 }
 
-void AreaChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+void AreaChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -966,9 +963,9 @@ OUString NetChartDialogController::getName()
     return SchResId(STR_TYPE_NET);
 }
 
-Image NetChartDialogController::getImage()
+OUString NetChartDialogController::getImage()
 {
-    return Image(BitmapEx(BMP_TYPE_NET));
+    return BMP_TYPE_NET;
 }
 
 bool NetChartDialogController::shouldShow_StackingControl() const
@@ -997,7 +994,7 @@ const tTemplateServiceChartTypeParameterMap& NetChartDialogController::getTempla
     {"com.sun.star.chart2.template.PercentStackedFilledNet" ,ChartTypeParameter(4,false,false,GlobalStackMode_STACK_Y_PERCENT,false,false)}};
     return s_aTemplateMap;
 }
-void NetChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
+void NetChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
 
@@ -1061,9 +1058,9 @@ OUString StockChartDialogController::getName()
     return SchResId(STR_TYPE_STOCK);
 }
 
-Image StockChartDialogController::getImage()
+OUString StockChartDialogController::getImage()
 {
-    return Image(BitmapEx(BMP_TYPE_STOCK));
+    return BMP_TYPE_STOCK;
 }
 
 const tTemplateServiceChartTypeParameterMap& StockChartDialogController::getTemplateMap() const
@@ -1076,7 +1073,7 @@ const tTemplateServiceChartTypeParameterMap& StockChartDialogController::getTemp
     return s_aTemplateMap;
 }
 
-void StockChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
+void StockChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
     rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_STOCK_1)));
@@ -1097,8 +1094,6 @@ void StockChartDialogController::adjustParameterToSubType( ChartTypeParameter& r
 }
 
 CombiColumnLineChartDialogController::CombiColumnLineChartDialogController()
-    : m_pFT_NumberOfLines(nullptr)
-    , m_pMF_NumberOfLines(nullptr)
 {
     bSupports3D = false;
 }
@@ -1108,9 +1103,9 @@ OUString CombiColumnLineChartDialogController::getName()
     return SchResId(STR_TYPE_COMBI_COLUMN_LINE);
 }
 
-Image CombiColumnLineChartDialogController::getImage( )
+OUString CombiColumnLineChartDialogController::getImage( )
 {
-    return Image(BitmapEx(BMP_TYPE_COLUMN_LINE));
+    return BMP_TYPE_COLUMN_LINE;
 }
 
 const tTemplateServiceChartTypeParameterMap& CombiColumnLineChartDialogController::getTemplateMap() const
@@ -1121,7 +1116,7 @@ const tTemplateServiceChartTypeParameterMap& CombiColumnLineChartDialogControlle
     return s_aTemplateMap;
 }
 
-void CombiColumnLineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
+void CombiColumnLineChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
     rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_COLUMN_LINE)));
@@ -1131,42 +1126,39 @@ void CombiColumnLineChartDialogController::fillSubTypeList( ValueSet& rSubTypeLi
     rSubTypeList.SetItemText(2, SchResId(STR_LINE_STACKEDCOLUMN));
 }
 
-void CombiColumnLineChartDialogController::showExtraControls( VclBuilderContainer* pParent )
+void CombiColumnLineChartDialogController::showExtraControls(weld::Builder* pBuilder)
 {
-    if (!m_pFT_NumberOfLines)
+    if (!m_xFT_NumberOfLines)
     {
-        pParent->get(m_pFT_NumberOfLines, "nolinesft");
+        m_xFT_NumberOfLines = pBuilder->weld_label("nolinesft");
     }
-    if (!m_pMF_NumberOfLines)
+    if (!m_xMF_NumberOfLines)
     {
-        pParent->get(m_pMF_NumberOfLines, "nolines");
+        m_xMF_NumberOfLines = pBuilder->weld_spin_button("nolines");
 
-        m_pMF_NumberOfLines->SetSpinSize(1);
-        m_pMF_NumberOfLines->SetFirst( 1 );
-        m_pMF_NumberOfLines->SetLast( 100 );
-        m_pMF_NumberOfLines->SetMin( 1 );
-        m_pMF_NumberOfLines->SetMax( 100 );
+        m_xMF_NumberOfLines->set_increments(1, 10);
+        m_xMF_NumberOfLines->set_range(1, 100);
 
-        m_pMF_NumberOfLines->SetModifyHdl( LINK( this, CombiColumnLineChartDialogController, ChangeLineCountHdl ) );
+        m_xMF_NumberOfLines->connect_value_changed( LINK( this, CombiColumnLineChartDialogController, ChangeLineCountHdl ) );
     }
 
-    m_pFT_NumberOfLines->Show();
-    m_pMF_NumberOfLines->Show();
+    m_xFT_NumberOfLines->show();
+    m_xMF_NumberOfLines->show();
 }
 
 void CombiColumnLineChartDialogController::hideExtraControls() const
 {
-    if(m_pFT_NumberOfLines)
-        m_pFT_NumberOfLines->Hide();
-    if(m_pMF_NumberOfLines)
-        m_pMF_NumberOfLines->Hide();
+    if (m_xFT_NumberOfLines)
+        m_xFT_NumberOfLines->hide();
+    if (m_xMF_NumberOfLines)
+        m_xMF_NumberOfLines->hide();
 }
 
 void CombiColumnLineChartDialogController::fillExtraControls( const ChartTypeParameter& /*rParameter*/
                 , const uno::Reference< XChartDocument >& xChartModel
                 , const uno::Reference< beans::XPropertySet >& xTemplateProps ) const
 {
-    if(!m_pMF_NumberOfLines)
+    if (!m_xMF_NumberOfLines)
         return;
 
     uno::Reference< frame::XModel > xModel( xChartModel, uno::UNO_QUERY );
@@ -1190,24 +1182,23 @@ void CombiColumnLineChartDialogController::fillExtraControls( const ChartTypePar
     }
     if( nNumLines < 0 )
         nNumLines = 0;
-    m_pMF_NumberOfLines->SetValue( nNumLines );
+    m_xMF_NumberOfLines->set_value(nNumLines);
 
     sal_Int32 nMaxLines = ChartModelHelper::getDataSeries( xModel ).size() - 1;
     if( nMaxLines < 0 )
         nMaxLines = 0;
-    m_pMF_NumberOfLines->SetLast( nMaxLines );
-    m_pMF_NumberOfLines->SetMax( nMaxLines );
+    m_xMF_NumberOfLines->set_max(nMaxLines);
 }
 void CombiColumnLineChartDialogController::setTemplateProperties( const uno::Reference< beans::XPropertySet >& xTemplateProps ) const
 {
     if( xTemplateProps.is() )
     {
-        sal_Int32 nNumLines = static_cast< sal_Int32 >( m_pMF_NumberOfLines->GetValue());
+        sal_Int32 nNumLines = m_xMF_NumberOfLines->get_value();
         xTemplateProps->setPropertyValue( "NumberOfLines" , uno::Any(nNumLines) );
     }
 }
 
-IMPL_LINK_NOARG(CombiColumnLineChartDialogController, ChangeLineCountHdl, Edit&, void)
+IMPL_LINK_NOARG(CombiColumnLineChartDialogController, ChangeLineCountHdl, weld::SpinButton&, void)
 {
     if( m_pChangeListener )
         m_pChangeListener->stateChanged(this);
@@ -1242,9 +1233,9 @@ OUString BubbleChartDialogController::getName()
     return SchResId(STR_TYPE_BUBBLE);
 }
 
-Image BubbleChartDialogController::getImage()
+OUString BubbleChartDialogController::getImage()
 {
-    return Image(BitmapEx(BMP_TYPE_BUBBLE));
+    return BMP_TYPE_BUBBLE;
 }
 
 const tTemplateServiceChartTypeParameterMap& BubbleChartDialogController::getTemplateMap() const
@@ -1253,7 +1244,7 @@ const tTemplateServiceChartTypeParameterMap& BubbleChartDialogController::getTem
         {"com.sun.star.chart2.template.Bubble" ,          ChartTypeParameter(1,true)}};
     return s_aTemplateMap;
 }
-void BubbleChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
+void BubbleChartDialogController::fillSubTypeList( SvtValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
     rSubTypeList.InsertItem(1, Image(BitmapEx(BMP_BUBBLE_1)));

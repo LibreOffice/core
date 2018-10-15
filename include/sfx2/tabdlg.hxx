@@ -41,31 +41,6 @@ class SfxViewFrame;
 class SfxTabPage;
 class SfxBindings;
 
-struct TabPageParent
-{
-    TabPageParent(vcl::Window* _pParent)
-        : pParent(_pParent)
-        , pPage(nullptr)
-        , pController(nullptr)
-    {
-    }
-    TabPageParent(weld::Container* _pPage, weld::DialogController* _pController)
-        : pParent(nullptr)
-        , pPage(_pPage)
-        , pController(_pController)
-    {
-    }
-    weld::Window* GetFrameWeld() const
-    {
-        if (pController)
-            return pController->getDialog();
-        return pParent->GetFrameWeld();
-    }
-    VclPtr<vcl::Window> pParent;
-    weld::Container* const pPage;
-    weld::DialogController* pController;
-};
-
 typedef VclPtr<SfxTabPage> (*CreateTabPage)(TabPageParent pParent, const SfxItemSet *rAttrSet);
 typedef const sal_uInt16*     (*GetTabPageRanges)(); // provides international Which-value
 struct TabPageImpl;

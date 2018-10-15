@@ -4152,6 +4152,30 @@ public:
         gtk_widget_set_size_request(m_pWidget, nWidth, nHeight);
     }
 
+    virtual void set_visible(bool visible) override
+    {
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+        if (GTK_IS_SCROLLED_WINDOW(pParent))
+            gtk_widget_set_visible(pParent, visible);
+        gtk_widget_set_visible(m_pWidget, visible);
+    }
+
+    virtual void show() override
+    {
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+        if (GTK_IS_SCROLLED_WINDOW(pParent))
+            gtk_widget_show(pParent);
+        gtk_widget_show(m_pWidget);
+    }
+
+    virtual void hide() override
+    {
+        GtkWidget* pParent = gtk_widget_get_parent(m_pWidget);
+        if (GTK_IS_SCROLLED_WINDOW(pParent))
+            gtk_widget_hide(pParent);
+        gtk_widget_hide(m_pWidget);
+    }
+
     virtual void set_selection_mode(bool bMultiple) override
     {
         disable_notify_events();
