@@ -47,9 +47,11 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 
 using namespace css;
 using namespace css::uno;
+using namespace css::xml::crypto;
 
 DocumentDigitalSignatures::DocumentDigitalSignatures( const Reference< XComponentContext >& rxCtx ):
     mxCtx(rxCtx),
@@ -576,6 +578,42 @@ Reference< XInterface > DocumentDigitalSignatures_CreateInstance(
     const Reference< XComponentContext >& rCtx)
 {
     return static_cast<cppu::OWeakObject*>(new DocumentDigitalSignatures( rCtx ));
+}
+
+sal_Bool DocumentDigitalSignatures::signDocumentWithCertificate(
+            css::uno::Reference<css::security::XCertificate> const & xCertificate,
+            css::uno::Reference<css::embed::XStorage> const & xStorage,
+            css::uno::Reference<css::io::XStream> const & xStream)
+{
+    DocumentSignatureManager aSignatureManager(mxCtx, DocumentSignatureMode::Content);
+
+    if (!aSignatureManager.init())
+        return false;
+
+    aSignatureManager.mxStore = xStorage;
+    aSignatureManager.maSignatureHelper.SetStorage(xStorage, m_sODFVersion);
+    aSignatureManager.mxSignatureStream = xStream;
+
+    Reference<XXMLSecurityContext> xSecurityContext;
+    Reference<XServiceInfo> xServiceInfo(xCertificate, UNO_QUERY);
+    xSecurityContext = aSignatureManager.getSecurityContext();
+
+    sal_Int32 nSecurityId;
+
+    bool bSuccess = aSignatureManager.add(xCertificate, xSecurityContext, "", nSecurityId, true);
+    if (!bSuccess)
+        return false;
+
+    aSignatureManager.read(/*bUseTempStream=*/true, /*bCacheLastSignature=*/false);
+    aSignatureManager.write(true);
+
+    if (xStorage.is() && !xStream.is())
+    {
+        uno::Reference<embed::XTransactedObject> xTransaction(xStorage, uno::UNO_QUERY);
+        xTransaction->commit();
+    }
+
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

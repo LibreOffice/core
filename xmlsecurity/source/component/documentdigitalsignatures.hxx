@@ -108,6 +108,11 @@ public:
     css::uno::Reference< css::security::XCertificate > SAL_CALL chooseSigningCertificate(OUString& rDescription) override;
     css::uno::Sequence<css::uno::Reference< css::security::XCertificate > > SAL_CALL chooseEncryptionCertificate() override;
     css::uno::Reference< css::security::XCertificate > SAL_CALL chooseCertificateWithProps(css::uno::Sequence<::com::sun::star::beans::PropertyValue>& Properties) override;
+
+    sal_Bool SAL_CALL signDocumentWithCertificate(
+                            css::uno::Reference<css::security::XCertificate> const & xCertificate,
+                            css::uno::Reference<css::embed::XStorage> const & xStoragexStorage,
+                            css::uno::Reference<css::io::XStream> const & xStream) override;
 };
 
 /// @throws css::uno::Exception
