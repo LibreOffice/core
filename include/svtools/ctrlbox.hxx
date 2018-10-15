@@ -446,14 +446,7 @@ class SVT_DLLPUBLIC FontSizeBox : public MetricBox
 {
     FontMetric       aFontMetric;
     const FontList* pFontList;
-    sal_uInt16          nRelMin;
-    sal_uInt16          nRelMax;
-    sal_uInt16          nRelStep;
-    short           nPtRelMin;
-    short           nPtRelMax;
-    short           nPtRelStep;
-    bool            bRelativeMode:1,
-                    bRelative:1,
+    bool            bRelative:1,
                     bPtRelative:1,
                     bStdSize:1;
 
@@ -461,18 +454,14 @@ class SVT_DLLPUBLIC FontSizeBox : public MetricBox
     SVT_DLLPRIVATE void         ImplInit();
 
 protected:
-    virtual OUString CreateFieldText( sal_Int64 nValue ) const override;
     virtual sal_Int64 GetValueFromStringUnit(const OUString& rStr, FieldUnit eOutUnit) const override;
 
 public:
                     FontSizeBox( vcl::Window* pParent, WinBits nWinStyle );
 
     void            Reformat() override;
-    void            Modify() override;
 
     void            Fill( const FontMetric* pFontMetric, const FontList* pList );
-
-    void            SetRelative( bool bRelative );
 
     virtual void    SetValue( sal_Int64 nNewValue, FieldUnit eInUnit ) override;
     virtual void    SetValue( sal_Int64 nNewValue  ) override;

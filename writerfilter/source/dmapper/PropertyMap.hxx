@@ -399,7 +399,6 @@ private:
     sal_Int32                                    m_hRule;          // from ST_HeightRule exact, atLeast, auto
     sal_Int32                                    m_xAlign;         // from ST_XAlign center, inside, left, outside, right
     sal_Int32                                    m_yAlign;         // from ST_YAlign bottom, center, inline, inside, outside, top
-    bool                                         m_bAnchorLock;
     sal_Int8                                     m_nDropCapLength; // number of characters
     OUString                                     m_sParaStyleName;
 

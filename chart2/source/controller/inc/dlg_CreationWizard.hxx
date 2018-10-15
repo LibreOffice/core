@@ -65,8 +65,6 @@ private:
     ChartTypeTemplateProvider* m_pTemplateProvider;
     std::unique_ptr<DialogModel> m_pDialogModel;
 
-    WizardState m_nLastState;
-
     TimerTriggeredControllerLock m_aTimerTriggeredControllerLock;
 
     bool m_bCanTravel;

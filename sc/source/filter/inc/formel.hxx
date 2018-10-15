@@ -79,7 +79,6 @@ protected:
     TokenPool           aPool;          // user token + predefined token
     TokenStack          aStack;
     ScAddress           aEingPos;
-    ConvErr             eStatus;
     std::unique_ptr<sal_Char[]>
                         pBuffer;        // universal buffer
 

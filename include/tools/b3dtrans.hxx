@@ -58,10 +58,6 @@ private:
     double                mfBottomBound;
     double                mfTopBound;
 
-    // Near and far clipping planes
-    double                mfNearBound;
-    double                mfFarBound;
-
     // Aspect ratio of 3D transformation (Y / X)
     // default: 1:1 -> 1.0
     // Disable with value 0.0

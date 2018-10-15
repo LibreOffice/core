@@ -62,7 +62,6 @@ CGMElements& CGMElements::operator=( const CGMElements& rSource )
     eClipIndicator = rSource.eClipIndicator;
     aClipRect = rSource.aClipRect;
     eColorSelectionMode = rSource.eColorSelectionMode;
-    eColorModel = rSource.eColorModel;
     nColorMaximumIndex = rSource.nColorMaximumIndex;
     nLatestColorMaximumIndex = rSource.nLatestColorMaximumIndex;
 
@@ -165,7 +164,6 @@ void CGMElements::Init()
     aClipRect = aVDCExtent;
 
     eColorSelectionMode = CSM_INDEXED;
-    eColorModel = CM_RGB;
     nColorMaximumIndex = 63;
     int i;
     for ( i = 0; i < 256; aColorTableEntryIs[ i++ ] = 0 ) ;

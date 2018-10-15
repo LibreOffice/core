@@ -78,7 +78,6 @@ private:
     */
     Animator::AnimationId mnScrollAnimationId;
     Point maRequestedVisibleTopLeft;
-    Animator::AnimationMode meRequestedAnimationMode;
     bool mbIsCurrentSlideTrackingActive;
     int  mnDisableCount;
 

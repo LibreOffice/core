@@ -54,7 +54,6 @@ VisibleAreaManager::VisibleAreaManager (SlideSorter& rSlideSorter)
       maVisibleRequests(),
       mnScrollAnimationId(Animator::NotAnAnimationId),
       maRequestedVisibleTopLeft(),
-      meRequestedAnimationMode(Animator::AM_Immediate),
       mbIsCurrentSlideTrackingActive(true),
       mnDisableCount(0)
 {
@@ -131,19 +130,8 @@ void VisibleAreaManager::MakeVisible()
         mrSlideSorter,
         aCurrentTopLeft,
         maRequestedVisibleTopLeft);
-    if (meRequestedAnimationMode==Animator::AM_Animated
-        && mrSlideSorter.GetProperties()->IsSmoothSelectionScrolling())
-    {
-        mnScrollAnimationId = mrSlideSorter.GetController().GetAnimator()->AddAnimation(
-            aAnimation,
-            Animator::FinishFunctor());
-    }
-    else
-    {
-        // Execute the animation at its final value.
-        aAnimation(1.0);
-    }
-    meRequestedAnimationMode = Animator::AM_Immediate;
+    // Execute the animation at its final value.
+    aAnimation(1.0);
 }
 
 ::boost::optional<Point> VisibleAreaManager::GetRequestedTopLeft() const

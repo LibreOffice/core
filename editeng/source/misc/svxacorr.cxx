@@ -302,6 +302,8 @@ ACFlags SvxAutoCorrect::GetDefaultFlags()
     return nRet;
 }
 
+static constexpr sal_Unicode cEmDash = 0x2014;
+static constexpr sal_Unicode cEnDash = 0x2013;
 
 SvxAutoCorrect::SvxAutoCorrect( const OUString& rShareAutocorrFile,
                                 const OUString& rUserAutocorrFile )
@@ -313,8 +315,6 @@ SvxAutoCorrect::SvxAutoCorrect( const OUString& rShareAutocorrFile,
     , cEndDQuote( 0 )
     , cStartSQuote( 0 )
     , cEndSQuote( 0 )
-    , cEmDash( 0x2014 )
-    , cEnDash( 0x2013)
 {
 }
 
@@ -328,8 +328,6 @@ SvxAutoCorrect::SvxAutoCorrect( const SvxAutoCorrect& rCpy )
     , cEndDQuote( rCpy.cEndDQuote )
     , cStartSQuote( rCpy.cStartSQuote )
     , cEndSQuote( rCpy.cEndSQuote )
-    , cEmDash( rCpy.cEmDash )
-    , cEnDash( rCpy.cEnDash )
 {
 }
 
@@ -536,10 +534,10 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
     CharClass& rCC = GetCharClass( eLang );
     if (eLang == LANGUAGE_SYSTEM)
         eLang = GetAppLang().getLanguageType();
-    bool bAlwaysUseEmDash = (cEmDash && (eLang == LANGUAGE_RUSSIAN || eLang == LANGUAGE_UKRAINIAN));
+    bool bAlwaysUseEmDash = (eLang == LANGUAGE_RUSSIAN || eLang == LANGUAGE_UKRAINIAN);
 
     // replace " - " or " --" with "enDash"
-    if( cEnDash && 1 < nSttPos && 1 <= nEndPos - nSttPos )
+    if( 1 < nSttPos && 1 <= nEndPos - nSttPos )
     {
         sal_Unicode cCh = rTxt[ nSttPos ];
         if( '-' == cCh )
@@ -611,7 +609,7 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
     // [0-9]--[0-9] double dash always replaced with "enDash"
     // Finnish and Hungarian use enDash instead of emDash.
     bool bEnDash = (eLang == LANGUAGE_HUNGARIAN || eLang == LANGUAGE_FINNISH);
-    if( ((cEmDash && !bEnDash) || (cEnDash && bEnDash)) && 4 <= nEndPos - nSttPos )
+    if( 4 <= nEndPos - nSttPos )
     {
         OUString sTmp( rTxt.copy( nSttPos, nEndPos - nSttPos ) );
         sal_Int32 nFndPos = sTmp.indexOf("--");
@@ -1259,8 +1257,8 @@ void SvxAutoCorrect::DoAutoCorrect( SvxAutoCorrDoc& rDoc, const OUString& rTxt,
                 bool bSttQuote = !nInsPos ||
                         NonFieldWordDelim( ( cPrev = rTxt[ nInsPos-1 ])) ||
                         lcl_IsInAsciiArr( "([{", cPrev ) ||
-                        ( cEmDash && cEmDash == cPrev ) ||
-                        ( cEnDash && cEnDash == cPrev );
+                        ( cEmDash == cPrev ) ||
+                        ( cEnDash == cPrev );
 
                 InsertQuote( rDoc, nInsPos, cChar, bSttQuote, bInsert );
                 break;

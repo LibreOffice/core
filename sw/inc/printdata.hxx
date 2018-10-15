@@ -63,10 +63,7 @@ public:
              m_bPrintProspectRTL,
              m_bPrintSingleJobs, m_bPaperFromSetup,
              /// Print empty pages
-             m_bPrintEmptyPages,
-
-             /// #i56195# no field update while printing mail merge documents
-             m_bUpdateFieldsInPrinting;
+             m_bPrintEmptyPages;
 
     SwPostItMode    m_nPrintPostIts;
     OUString       m_sFaxName;
@@ -82,8 +79,7 @@ public:
         m_bPrintLeftPages         =
         m_bPrintRightPages        =
         m_bPrintPageBackground    =
-        m_bPrintEmptyPages        =
-        m_bUpdateFieldsInPrinting = true;
+        m_bPrintEmptyPages        = true;
 
         m_bPaperFromSetup         =
         m_bPrintReverse           =
@@ -121,7 +117,6 @@ public:
         m_bPrintSingleJobs    ==   rData.m_bPrintSingleJobs     &&
         m_bPaperFromSetup     ==   rData.m_bPaperFromSetup      &&
         m_bPrintEmptyPages    ==   rData.m_bPrintEmptyPages     &&
-        m_bUpdateFieldsInPrinting == rData.m_bUpdateFieldsInPrinting &&
         m_nPrintPostIts       ==   rData.m_nPrintPostIts        &&
         m_sFaxName            ==   rData.m_sFaxName             &&
         m_bPrintHiddenText    ==   rData.m_bPrintHiddenText     &&

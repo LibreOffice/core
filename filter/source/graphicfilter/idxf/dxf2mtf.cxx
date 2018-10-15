@@ -117,7 +117,6 @@ DXFLineInfo DXF2GDIMetaFile::GetEntityDXFLineInfo(const DXFBasicEntity & rE)
     DXFLineInfo aDXFLineInfo;
 
     aDXFLineInfo.eStyle = LineStyle::Solid;
-    aDXFLineInfo.fWidth = 0;
     aDXFLineInfo.nDashCount = 0;
     aDXFLineInfo.fDashLen = 0;
     aDXFLineInfo.nDotCount = 0;
@@ -789,7 +788,6 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
 
     nBlockColor=7;
     aBlockDXFLineInfo.eStyle = LineStyle::Solid;
-    aBlockDXFLineInfo.fWidth = 0;
     aBlockDXFLineInfo.nDashCount = 0;
     aBlockDXFLineInfo.fDashLen = 0;
     aBlockDXFLineInfo.nDotCount = 0;
@@ -804,7 +802,6 @@ bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & rMTF
     else {
         nParentLayerColor=7;
         aParentLayerDXFLineInfo.eStyle = LineStyle::Solid;
-        aParentLayerDXFLineInfo.fWidth = 0;
         aParentLayerDXFLineInfo.nDashCount = 0;
         aParentLayerDXFLineInfo.fDashLen = 0;
         aParentLayerDXFLineInfo.nDotCount = 0;

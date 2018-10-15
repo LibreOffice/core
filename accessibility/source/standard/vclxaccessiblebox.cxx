@@ -42,8 +42,7 @@ using namespace ::com::sun::star::accessibility;
 VCLXAccessibleBox::VCLXAccessibleBox (VCLXWindow* pVCLWindow, BoxType aType, bool bIsDropDownBox)
     : VCLXAccessibleComponent (pVCLWindow),
       m_aBoxType (aType),
-      m_bIsDropDownBox (bIsDropDownBox),
-      m_nIndexInParent (DEFAULT_INDEX_IN_PARENT)
+      m_bIsDropDownBox (bIsDropDownBox)
 {
     // Set up the flags that indicate which children this object has.
     m_bHasListChild = true;
@@ -352,14 +351,6 @@ sal_Int16 SAL_CALL VCLXAccessibleBox::getAccessibleRole()
         return AccessibleRole::COMBO_BOX;
     else
         return AccessibleRole::PANEL;
-}
-
-sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleIndexInParent()
-{
-    if (m_nIndexInParent != DEFAULT_INDEX_IN_PARENT)
-        return m_nIndexInParent;
-    else
-        return VCLXAccessibleComponent::getAccessibleIndexInParent();
 }
 
 //=====  XAccessibleAction  ===================================================

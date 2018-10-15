@@ -49,10 +49,6 @@ namespace cppcanvas
         EMFPRegion::EMFPRegion()
             : parts(0)
             , initialState(0)
-            , ix(0.0)
-            , iy(0.0)
-            , iw(0.0)
-            , ih(0.0)
         {
         }
 

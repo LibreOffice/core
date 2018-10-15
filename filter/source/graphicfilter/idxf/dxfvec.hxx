@@ -28,7 +28,6 @@ class Point;
 class DXFLineInfo {
 public:
     LineStyle       eStyle;
-    double          fWidth;
     sal_Int32       nDashCount;
     double          fDashLen;
     sal_Int32       nDotCount;
@@ -37,7 +36,6 @@ public:
 
     DXFLineInfo() :
         eStyle(LineStyle::Solid),
-        fWidth(0),
         nDashCount(0),
         fDashLen(0),
         nDotCount(0),

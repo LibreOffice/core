@@ -1,56 +1,209 @@
+accessibility/inc/standard/vclxaccessiblebox.hxx:160
+    VCLXAccessibleBox m_nIndexInParent
+    -1
+chart2/source/controller/inc/dlg_CreationWizard.hxx:68
+    chart::CreationWizard m_nLastState
+    3
+chart2/source/controller/inc/SeriesOptionsItemConverter.hxx:65
+    chart::wrapper::SeriesOptionsItemConverter m_nAllSeriesAxisIndex
+    -1
 chart2/source/model/main/DataPoint.hxx:108
     chart::DataPoint m_bNoParentPropAllowed
+    0
+chart2/source/view/charttypes/BubbleChart.hxx:56
+    chart::BubbleChart m_fBubbleSizeScaling
+    1
+connectivity/source/drivers/mork/MErrorResource.hxx:31
+    connectivity::mork::ErrorDescriptor m_nErrorCondition
+    0
+connectivity/source/inc/dbase/DIndexIter.hxx:36
+    connectivity::dbase::OIndexIterator m_pOperator
     0
 connectivity/source/inc/dbase/DIndexIter.hxx:37
     connectivity::dbase::OIndexIterator m_pOperand
     0
+connectivity/source/inc/writer/WTable.hxx:69
+    connectivity::writer::OWriterTable m_nStartCol
+    0
+cppcanvas/source/mtfrenderer/emfpregion.hxx:32
+    cppcanvas::internal::EMFPRegion iw
+    0
+cppcanvas/source/mtfrenderer/emfpregion.hxx:32
+    cppcanvas::internal::EMFPRegion ih
+    0
+cppcanvas/source/mtfrenderer/emfpregion.hxx:32
+    cppcanvas::internal::EMFPRegion ix
+    0
+cppcanvas/source/mtfrenderer/emfpregion.hxx:32
+    cppcanvas::internal::EMFPRegion iy
+    0
 desktop/source/app/cmdlineargs.hxx:137
     desktop::CommandLineArgs m_quickstart
+    0
+emfio/inc/mtftools.hxx:487
+    emfio::MtfTools meLatestRasterOp
+    4
+filter/source/graphicfilter/icgm/cgm.hxx:47
+    CGM mnOutdx
+    28000
+filter/source/graphicfilter/icgm/cgm.hxx:48
+    CGM mnOutdy
+    21000
+filter/source/graphicfilter/icgm/elements.hxx:67
+    CGMElements eColorModel
+    0
+filter/source/graphicfilter/idxf/dxfvec.hxx:31
+    DXFLineInfo fWidth
+    0
+filter/source/msfilter/viscache.hxx:31
+    Impl_OlePres nFormat
+    3
+include/basegfx/pixel/bpixel.hxx:43
+    basegfx::BPixel::(anonymous union)::(anonymous) mnValue
+    0
+include/basegfx/pixel/bpixel.hxx:44
+    basegfx::BPixel::(anonymous) maCombinedRGBO
     0
 include/basic/sbxvar.hxx:70
     SbxValues::(anonymous) pData
     0
-include/editeng/charsetcoloritem.hxx:35
-    SvxCharSetColorItem eFrom
+include/canvas/rendering/irendermodule.hxx:40
+    canvas::Vertex g
+    1
+include/canvas/rendering/irendermodule.hxx:40
+    canvas::Vertex b
+    1
+include/canvas/rendering/irendermodule.hxx:40
+    canvas::Vertex r
+    1
+include/canvas/rendering/irendermodule.hxx:42
+    canvas::Vertex z
     0
+include/editeng/svxacorr.hxx:247
+    SvxAutoCorrect cEnDash
+    8211
+include/editeng/svxacorr.hxx:247
+    SvxAutoCorrect cEmDash
+    8212
 include/editeng/swafopt.hxx:58
     editeng::SortedAutoCompleteStrings owning_
     1
 include/filter/msfilter/dffpropset.hxx:33
     DffPropFlags bSet
     0
+include/filter/msfilter/dffpropset.hxx:34
+    DffPropFlags bComplex
+    1
 include/filter/msfilter/dffpropset.hxx:35
     DffPropFlags bBlip
     1
+include/i18nutil/casefolding.hxx:57
+    i18nutil::Mapping nmap
+    0
 include/o3tl/vector_pool.hxx:93
     o3tl::detail::struct_from_value::type nextFree
     -1
+include/oox/core/contexthandler2.hxx:220
+    oox::core::ContextHandler2Helper mnRootStackSize
+    0
 include/oox/dump/dumperbase.hxx:1683
     oox::dump::RecordObjectBase mbBinaryOnly
     0
-include/oox/ole/axcontrol.hxx:427
-    oox::ole::ComCtlModelBase mbCommonPart
-    1
-include/oox/ole/axcontrol.hxx:428
-    oox::ole::ComCtlModelBase mbComplexPart
-    1
+include/svtools/ctrlbox.hxx:455
+    FontSizeBox bRelativeMode
+    0
 include/svtools/svparser.hxx:74
     SvParser::TokenStackType nTokenValue
     0
 include/svtools/svparser.hxx:75
     SvParser::TokenStackType bTokenHasValue
     0
-include/svx/dialcontrol.hxx:212
-    svx::SvxDialControl::DialControl_Impl mbNoRot
-    0
-include/svx/svdograf.hxx:106
-    SdrGrafObj mbInsidePaint
-    0
+include/tools/b3dtrans.hxx:62
+    B3dTransformationSet mfNearBound
+    0.001
+include/tools/b3dtrans.hxx:63
+    B3dTransformationSet mfFarBound
+    1.0009999999999999
 include/vcl/filter/pdfdocument.hxx:200
     vcl::filter::PDFNameElement m_nLength
     0
+include/vcl/slider.hxx:39
+    Slider mnChannelPixOffset
+    0
+include/vcl/slider.hxx:51
+    Slider mbFullDrag
+    1
+include/vcl/status.hxx:78
+    StatusBar mbVisibleItems
+    1
 libreofficekit/source/gtk/lokdocview.cxx:84
     LOKDocViewPrivateImpl m_bIsLoading
+    0
+linguistic/source/dlistimp.cxx:78
+    DicEvtListenerHelper nNumVerboseListeners
+    0
+lotuswordpro/inc/xfilter/xfborders.hxx:119
+    XFBorder m_fOffset
+    0
+lotuswordpro/inc/xfilter/xfcellstyle.hxx:140
+    XFCellStyle m_fTextIndent
+    0
+lotuswordpro/inc/xfilter/xfcellstyle.hxx:148
+    XFCellStyle m_bWrapText
+    0
+lotuswordpro/inc/xfilter/xfdrawstyle.hxx:125
+    XFDrawStyle m_eWrap
+    0
+lotuswordpro/inc/xfilter/xffont.hxx:245
+    XFFont m_eRelief
+    0
+lotuswordpro/inc/xfilter/xffont.hxx:247
+    XFFont m_eEmphasize
+    0
+lotuswordpro/inc/xfilter/xffont.hxx:249
+    XFFont m_bEmphasizeTop
+    1
+lotuswordpro/inc/xfilter/xffont.hxx:250
+    XFFont m_bOutline
+    0
+lotuswordpro/inc/xfilter/xffont.hxx:251
+    XFFont m_bShadow
+    0
+lotuswordpro/inc/xfilter/xffont.hxx:252
+    XFFont m_bBlink
+    0
+lotuswordpro/inc/xfilter/xffont.hxx:255
+    XFFont m_fCharSpace
+    0
+lotuswordpro/inc/xfilter/xffont.hxx:256
+    XFFont m_nWidthScale
+    100
+lotuswordpro/inc/xfilter/xfnumberstyle.hxx:103
+    XFNumberStyle m_nMinInteger
+    1
+lotuswordpro/inc/xfilter/xfnumberstyle.hxx:104
+    XFNumberStyle m_nMinExponent
+    2
+lotuswordpro/inc/xfilter/xfnumberstyle.hxx:107
+    XFNumberStyle m_bCurrencySymbolPost
+    0
+lotuswordpro/inc/xfilter/xfparastyle.hxx:224
+    XFParaStyle m_eLastLineAlign
+    0
+lotuswordpro/inc/xfilter/xfparastyle.hxx:225
+    XFParaStyle m_bJustSingleWord
+    0
+lotuswordpro/inc/xfilter/xfparastyle.hxx:226
+    XFParaStyle m_bKeepWithNext
+    0
+lotuswordpro/inc/xfilter/xfparastyle.hxx:240
+    XFParaStyle m_nPageNumber
+    0
+lotuswordpro/inc/xfilter/xfparastyle.hxx:241
+    XFParaStyle m_bNumberLines
+    1
+lotuswordpro/inc/xfilter/xfparastyle.hxx:242
+    XFParaStyle m_nLineNumberRestart
     0
 opencl/source/opencl_device.cxx:54
     (anonymous namespace)::LibreOfficeDeviceEvaluationIO inputSize
@@ -61,32 +214,83 @@ opencl/source/opencl_device.cxx:55
 pyuno/source/module/pyuno_impl.hxx:312
     pyuno::RuntimeCargo valid
     1
-sax/source/tools/fastserializer.hxx:231
-    sax_fastparser::FastSaxSerializer mbXescape
+sal/osl/unx/signal.cxx:82
+    (anonymous namespace)::SignalAction Action
     1
-sc/inc/compiler.hxx:112
+sc/inc/compiler.hxx:111
     ScRawToken::(anonymous union)::(anonymous) eInForceArray
+    0
+sc/inc/rangenam.hxx:84
+    ScRangeData mnMaxRow
+    -1
+sc/inc/rangenam.hxx:85
+    ScRangeData mnMaxCol
+    -1
+sc/inc/refdata.hxx:37
+    ScSingleRefData::(anonymous) mnFlagValue
     0
 sc/qa/unit/ucalc.hxx:41
     Test::RangeNameDef mnIndex
     1
+sc/source/core/tool/interpr8.cxx:99
+    ScETSForecastCalculation cfMinABCResolution
+    0.001
+sc/source/filter/inc/formel.hxx:82
+    ConverterBase eStatus
+    0
+sc/source/filter/inc/orcusinterface.hxx:179
+    ScOrcusConditionalFormat meEntryType
+    0
+sc/source/filter/inc/xltracer.hxx:82
+    XclTracer mbEnabled
+    0
 sd/inc/sdpptwrp.hxx:42
     SdPPTFilter pBas
     0
 sd/source/filter/html/htmlex.hxx:113
     HtmlExport mbAutoSlide
     1
-sfx2/source/appl/lnkbase2.cxx:77
+sd/source/ui/slidesorter/inc/controller/SlsVisibleAreaManager.hxx:81
+    sd::slidesorter::controller::VisibleAreaManager meRequestedAnimationMode
+    1
+sd/source/ui/slidesorter/view/SlsLayouter.cxx:41
+    sd::slidesorter::view::Layouter::Implementation mnVerticalGap
+    4
+sd/source/ui/slidesorter/view/SlsLayouter.cxx:42
+    sd::slidesorter::view::Layouter::Implementation mnHorizontalGap
+    4
+sfx2/source/appl/lnkbase2.cxx:76
     sfx2::ImplBaseLinkData::tDDEType pItem
     0
-sfx2/source/appl/lnkbase2.cxx:82
+sfx2/source/appl/lnkbase2.cxx:81
     sfx2::ImplBaseLinkData::(anonymous) DDEType
     0
-sfx2/source/doc/doctemplates.cxx:137
+sfx2/source/bastyp/progress.cxx:56
+    SfxProgress_Impl bLocked
+    0
+sfx2/source/control/dispatch.cxx:118
+    SfxDispatcher_Impl pParent
+    0
+sfx2/source/control/dispatch.cxx:133
+    SfxDispatcher_Impl bModal
+    0
+sfx2/source/doc/doctemplates.cxx:138
     (anonymous namespace)::WaitWindow_Impl mnTextStyle
     12576
-sfx2/source/view/ipclient.cxx:82
-    SfxBooleanFlagGuard m_bLifeValue
+sfx2/source/inc/workwin.hxx:188
+    SfxWorkWindow pParent
+    0
+sfx2/source/view/printer.cxx:39
+    SfxPrinter_Impl mbAll
+    1
+sfx2/source/view/printer.cxx:40
+    SfxPrinter_Impl mbSelection
+    1
+sfx2/source/view/printer.cxx:41
+    SfxPrinter_Impl mbFromTo
+    1
+sfx2/source/view/printer.cxx:42
+    SfxPrinter_Impl mbRange
     1
 soltools/cpp/cpp.h:120
     includelist deleted
@@ -101,20 +305,23 @@ stoc/source/inspect/introspection.cxx:1530
     (anonymous namespace)::Cache::Data hits
     1
 svx/source/svdraw/svdpdf.hxx:173
-    ImpSdrPdfImport maLineJoin
-    0
-svx/source/svdraw/svdpdf.hxx:174
     ImpSdrPdfImport maLineCap
     0
-sw/inc/hints.hxx:199
+sw/inc/hints.hxx:223
     SwAttrSetChg m_bDelSet
     0
+sw/inc/pagepreviewlayout.hxx:45
+    SwPagePreviewLayout mnXFree
+    568
 sw/inc/pagepreviewlayout.hxx:46
     SwPagePreviewLayout mnYFree
     568
-sw/source/core/inc/frmtool.hxx:260
-    SwBorderAttrs m_bBorderDist
+sw/inc/printdata.hxx:69
+    SwPrintData m_bUpdateFieldsInPrinting
     1
+sw/inc/viewopt.hxx:189
+    SwViewOption m_bTest10
+    0
 sw/source/core/inc/UndoSort.hxx:38
     SwSortUndoElement::(anonymous union)::(anonymous) nID
     4294967295
@@ -133,32 +340,50 @@ sw/source/filter/html/svxcss1.hxx:202
 sw/source/filter/inc/rtf.hxx:30
     RTFSurround::(anonymous union)::(anonymous) nJunk
     0
-sw/source/filter/ww8/ww8par.hxx:660
+sw/source/filter/ww8/ww8par.hxx:659
     WW8FormulaControl mfUnknown
     0
-sw/source/filter/ww8/ww8par.hxx:669
+sw/source/filter/ww8/ww8par.hxx:668
     WW8FormulaControl mhpsCheckBox
     20
+tools/source/generic/config.cxx:59
+    ImplConfigData meLineEnd
+    2
+ucb/source/ucp/webdav-neon/DAVResourceAccess.hxx:65
+    webdav_ucp::DAVResourceAccess m_nRedirectLimit
+    5
 unotools/source/config/saveopt.cxx:77
     SvtSaveOptions_Impl bROUserAutoSave
     0
+vcl/inc/listbox.hxx:201
+    ImplListBoxWindow mnBorder
+    1
+vcl/inc/octree.hxx:98
+    InverseColorMap nBits
+    3
 vcl/inc/salprn.hxx:42
     SalPrinterQueueInfo mnStatus
     0
 vcl/inc/salprn.hxx:43
     SalPrinterQueueInfo mnJobs
     4294967295
-vcl/inc/svdata.hxx:267
+vcl/inc/svdata.hxx:273
     ImplSVNWFData mnStatusBarLowerRightOffset
     0
-vcl/inc/svdata.hxx:283
+vcl/inc/svdata.hxx:279
+    ImplSVNWFData mbMenuBarDockingAreaCommonBG
+    0
+vcl/inc/svdata.hxx:289
     ImplSVNWFData mbCenteredTabs
     0
-vcl/inc/svdata.hxx:284
+vcl/inc/svdata.hxx:290
     ImplSVNWFData mbNoActiveTabTextRaise
     0
-vcl/inc/svdata.hxx:286
+vcl/inc/svdata.hxx:292
     ImplSVNWFData mbProgressNeedsErase
+    0
+vcl/inc/svdata.hxx:301
+    ImplSVNWFData mbRolloverMenubar
     0
 vcl/source/filter/jpeg/transupp.h:128
     (anonymous) perfect
@@ -166,8 +391,20 @@ vcl/source/filter/jpeg/transupp.h:128
 vcl/source/filter/jpeg/transupp.h:129
     (anonymous) trim
     0
+vcl/source/filter/jpeg/transupp.h:130
+    (anonymous) force_grayscale
+    0
 vcl/source/filter/jpeg/transupp.h:131
     (anonymous) crop
+    0
+vcl/source/filter/jpeg/transupp.h:147
+    (anonymous) crop_xoffset
+    0
+vcl/source/filter/jpeg/transupp.h:149
+    (anonymous) crop_yoffset
+    0
+vcl/source/filter/wmf/wmfwr.hxx:78
+    WMFWriter bSrcIsClipping
     0
 vcl/source/font/font.cxx:539
     (anonymous namespace)::WeightSearchEntry weight
@@ -211,18 +448,30 @@ vcl/source/gdi/dibtools.cxx:117
 vcl/source/gdi/dibtools.cxx:118
     (anonymous namespace)::DIBV5Header nV5Reserved
     0
-vcl/source/gdi/pdfwriter_impl.hxx:698
-    vcl::PDFWriterImpl m_nInheritedPageWidth
-    595
-vcl/source/gdi/pdfwriter_impl.hxx:699
-    vcl::PDFWriterImpl m_nInheritedPageHeight
-    842
-writerfilter/source/dmapper/GraphicImport.cxx:208
+vcl/source/window/status.cxx:53
+    StatusBar::ImplData mbDrawItemFrames
+    0
+vcl/unx/generic/print/bitmap_gfx.cxx:281
+    psp::LZWEncoder mnClearCode
+    256
+writerfilter/source/dmapper/GraphicImport.cxx:207
     writerfilter::dmapper::GraphicImport_Impl nCurrentBorderLine
     2
+writerfilter/source/dmapper/NumberingManager.hxx:47
+    writerfilter::dmapper::ListLevel m_nJC
+    -1
+writerfilter/source/dmapper/PropertyMap.hxx:232
+    writerfilter::dmapper::SectionPropertyMap m_nFirstPaperBin
+    -1
+writerfilter/source/dmapper/PropertyMap.hxx:402
+    writerfilter::dmapper::ParagraphProperties m_bAnchorLock
+    0
 writerfilter/source/rtftok/rtfdocumentimpl.hxx:620
     writerfilter::rtftok::RTFDocumentImpl m_nNestedTRLeft
     0
 writerfilter/source/rtftok/rtfdocumentimpl.hxx:621
     writerfilter::rtftok::RTFDocumentImpl m_nTopLevelTRLeft
+    0
+writerfilter/source/rtftok/rtfdocumentimpl.hxx:624
+    writerfilter::rtftok::RTFDocumentImpl m_nNestedCurrentCellX
     0
