@@ -16,6 +16,7 @@
 
 #include <Qt5DragAndDrop.hxx>
 #include <Qt5Frame.hxx>
+#include <Qt5Widget.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -63,7 +64,12 @@ void Qt5DragSource::startDrag(
     m_xListener = rListener;
     m_xTrans = rTrans;
 
-    if (!m_pFrame)
+    if (m_pFrame)
+    {
+        Qt5Widget* qw = static_cast<Qt5Widget*>(m_pFrame->GetQWidget());
+        qw->startDrag();
+    }
+    else
         dragFailed();
 }
 
@@ -150,7 +156,7 @@ void Qt5DropTarget::initialize(const Sequence<Any>& rArguments)
     }
 
     m_pFrame = reinterpret_cast<Qt5Frame*>(nFrame);
-    //m_pFrame->registerDropTarget(this);
+    m_pFrame->registerDropTarget(this);
     m_bActive = true;
 }
 
@@ -180,6 +186,19 @@ sal_Int8 Qt5DropTarget::getDefaultActions() { return m_nDefaultActions; }
 void Qt5DropTarget::setDefaultActions(sal_Int8 nDefaultActions)
 {
     m_nDefaultActions = nDefaultActions;
+}
+
+void Qt5DropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde)
+{
+    osl::ClearableGuard<::osl::Mutex> aGuard(m_aMutex);
+    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
+        m_aListeners);
+    aGuard.clear();
+
+    for (auto const& listener : aListeners)
+    {
+        listener->dragEnter(dtde);
+    }
 }
 
 void Qt5DropTarget::acceptDrag(sal_Int8 /*dragOperation*/) { return; }
