@@ -2246,6 +2246,11 @@ size_t ScConditionalFormatList::size() const
     return m_ConditionalFormats.size();
 }
 
+bool ScConditionalFormatList::empty() const
+{
+    return m_ConditionalFormats.empty();
+}
+
 void ScConditionalFormatList::erase( sal_uLong nIndex )
 {
     for( iterator itr = begin(); itr != end(); ++itr )

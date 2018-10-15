@@ -650,6 +650,7 @@ public:
     const_iterator end() const;
 
     size_t size() const;
+    bool empty() const;
 
     void erase(sal_uLong nIndex);
     void clear();

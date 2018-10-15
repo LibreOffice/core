@@ -57,7 +57,7 @@ void ScCondFormatManagerWindow::Init()
 
     SetUpdateMode(true);
 
-    if (mpFormatList && mpFormatList->size())
+    if (mpFormatList && !mpFormatList->empty())
         SelectRow(0);
 }
 
@@ -146,7 +146,7 @@ std::unique_ptr<ScConditionalFormatList> ScCondFormatManagerDlg::GetConditionalF
 
 void ScCondFormatManagerDlg::UpdateButtonSensitivity()
 {
-    OUString aNewSensitivity = mpFormatList->size() ? OUString("true") : OUString("false");
+    OUString aNewSensitivity = mpFormatList->empty() ? OUString("false") : OUString("true");
     m_pBtnRemove->set_property("sensitive", aNewSensitivity);
     m_pBtnEdit->set_property("sensitive", aNewSensitivity);
 }
