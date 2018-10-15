@@ -117,7 +117,7 @@ namespace
         return 0;
     }
 
-    GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC, bool bUseDoubleBufferedRendering)
+    GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC)
     {
         OpenGLZone aZone;
 
@@ -149,9 +149,6 @@ namespace
             GLX_X_VISUAL_TYPE,      GLX_TRUE_COLOR,
             None
         };
-
-        if (!bUseDoubleBufferedRendering)
-            visual_attribs[1] = False;
 
         int fbCount = 0;
         GLXFBConfig* pFBC = glXChooseFBConfig( dpy,
@@ -260,7 +257,7 @@ SystemWindowData X11OpenGLContext::generateWinData(vcl::Window* pParent, bool /*
         return aWinData;
 
     int best_fbc = -1;
-    GLXFBConfig* pFBC = getFBConfig(dpy, win, best_fbc, true);
+    GLXFBConfig* pFBC = getFBConfig(dpy, win, best_fbc);
 
     if (!pFBC)
         return aWinData;
@@ -302,7 +299,7 @@ bool X11OpenGLContext::ImplInit()
     if (hasCreateContextAttribsARB && !mbRequestLegacyContext)
     {
         int best_fbc = -1;
-        GLXFBConfig* pFBC = getFBConfig(m_aGLWin.dpy, m_aGLWin.win, best_fbc, /*bUseDoubleBufferedRendering*/true);
+        GLXFBConfig* pFBC = getFBConfig(m_aGLWin.dpy, m_aGLWin.win, best_fbc);
 
         if (pFBC && best_fbc != -1)
         {

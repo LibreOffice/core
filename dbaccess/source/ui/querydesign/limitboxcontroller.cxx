@@ -40,7 +40,7 @@ class LimitBoxImpl: public LimitBox
 };
 
 LimitBoxImpl::LimitBoxImpl( vcl::Window* pParent, LimitBoxController* pCtrl )
-    : LimitBox( pParent, WinBits( WB_DROPDOWN | WB_VSCROLL) )
+    : LimitBox( pParent )
     , m_pControl( pCtrl )
 {
 }

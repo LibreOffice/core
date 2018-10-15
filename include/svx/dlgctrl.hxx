@@ -234,7 +234,7 @@ private:
     bool        mbAddStandardFields : 1;
 
 public:
-    LineLB(vcl::Window* pParent, WinBits aWB);
+    LineLB(vcl::Window* pParent);
 
     void Fill(const XDashListRef &pList);
     bool getAddStandardFields() const { return mbAddStandardFields; }

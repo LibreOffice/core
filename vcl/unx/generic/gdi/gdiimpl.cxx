@@ -1573,8 +1573,7 @@ bool X11SalGraphicsImpl::drawFilledTrapezoids( const basegfx::B2DTrapezoid* pB2D
 bool X11SalGraphicsImpl::drawFilledTriangles(
     const basegfx::B2DHomMatrix& rObjectToDevice,
      const basegfx::triangulator::B2DTriangleVector& rTriangles,
-     double fTransparency,
-     bool bPixelOffset)
+     double fTransparency)
 {
     if(rTriangles.empty())
         return true;
@@ -1589,10 +1588,7 @@ bool X11SalGraphicsImpl::drawFilledTriangles(
     // prepare transformation for ObjectToDevice coordinate system
     basegfx::B2DHomMatrix aObjectToDevice(rObjectToDevice);
 
-    if(bPixelOffset)
-    {
-        aObjectToDevice = basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5) * aObjectToDevice;
-    }
+    aObjectToDevice = basegfx::utils::createTranslateB2DHomMatrix(0.5, 0.5) * aObjectToDevice;
 
      // convert the Triangles into XRender-Triangles
     std::vector<XTriangle> aTriVector(rTriangles.size());
@@ -1847,8 +1843,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
         drawFilledTriangles(
             rObjectToDevice,
             pSystemDependentData_Triangulation->getTriangles(),
-            fTransparency,
-            true));
+            fTransparency));
 
     // restore the original brush GC
     mnBrushColor = aKeepBrushColor;
