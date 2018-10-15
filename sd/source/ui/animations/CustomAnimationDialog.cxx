@@ -188,7 +188,7 @@ public:
     virtual void setValue( const Any& rValue, const OUString& rPresetId ) override;
 
 private:
-    std::map< sal_uInt16, OUString > maPropertyValues;
+    std::vector<OUString> maPropertyValues;
     Link<LinkParamNone*,void> maModifyLink;
     std::unique_ptr<weld::ComboBox> mxControl;
 
@@ -235,9 +235,9 @@ void SdPresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId
             for( auto& aSubType : aSubTypes )
             {
                 mxControl->append_text(rPresets.getUINameForProperty(aSubType));
-                if(aSubType == aPropertyValue)
-                    nPos = mxControl->get_count() - 1;
-                maPropertyValues[nPos] = aSubType;
+                maPropertyValues.push_back(aSubType);
+                if (aSubType == aPropertyValue)
+                    nPos = maPropertyValues.size() - 1;
             }
         }
         else
@@ -252,7 +252,10 @@ void SdPresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId
 
 Any SdPresetPropertyBox::getValue()
 {
-    return makeAny(maPropertyValues[mxControl->get_active()]);
+    const int nIndex = mxControl->get_active();
+    if (nIndex == -1)
+        return Any();
+    return makeAny(maPropertyValues[nIndex]);
 }
 
 class ColorPropertyBox  : public PropertySubControl
