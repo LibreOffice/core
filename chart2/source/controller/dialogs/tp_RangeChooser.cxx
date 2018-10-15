@@ -31,12 +31,12 @@
 namespace
 {
     void lcl_ShowChooserButton(
-        PushButton& rChooserButton,
+        weld::Button& rChooserButton,
         bool bShow)
     {
-        if( rChooserButton.IsVisible() != bShow )
+        if( rChooserButton.get_visible() != bShow )
         {
-            rChooserButton.Show( bShow );
+            rChooserButton.show( bShow );
         }
     }
 
@@ -58,46 +58,41 @@ using namespace ::com::sun::star::chart2;
 
 using ::com::sun::star::uno::Sequence;
 
-RangeChooserTabPage::RangeChooserTabPage( vcl::Window* pParent
-        , DialogModel & rDialogModel
-        , ChartTypeTemplateProvider* pTemplateProvider
-        , Dialog * pParentDialog
-        , bool bHideDescription /* = false */ )
-        : OWizardPage( pParent
-        ,"tp_RangeChooser"
-        ,"modules/schart/ui/tp_RangeChooser.ui")
-        , m_nChangingControlCalls(0)
-        , m_bIsDirty(false)
-        , m_aLastValidRangeString()
-        , m_pTemplateProvider(pTemplateProvider)
-        , m_rDialogModel( rDialogModel )
-        , m_pParentDialog( pParentDialog )
-        , m_pTabPageNotifiable( dynamic_cast< TabPageNotifiable * >( pParentDialog ))
+RangeChooserTabPage::RangeChooserTabPage(TabPageParent pParent, DialogModel & rDialogModel,
+                                         ChartTypeTemplateProvider* pTemplateProvider,
+                                         Dialog * pParentDialog, bool bHideDescription /* = false */)
+    : OWizardPage(pParent, "modules/schart/ui/tp_RangeChooser.ui", "tp_RangeChooser")
+    , m_nChangingControlCalls(0)
+    , m_bIsDirty(false)
+    , m_aLastValidRangeString()
+    , m_pTemplateProvider(pTemplateProvider)
+    , m_rDialogModel( rDialogModel )
+    , m_pParentDialog( pParentDialog )
+    , m_pTabPageNotifiable( dynamic_cast< TabPageNotifiable * >( pParentDialog ))
+    , m_xFT_Caption(m_xBuilder->weld_label("FT_CAPTION_FOR_WIZARD"))
+    , m_xFT_Range(m_xBuilder->weld_label("FT_RANGE"))
+    , m_xED_Range(m_xBuilder->weld_entry("ED_RANGE"))
+    , m_xIB_Range(m_xBuilder->weld_button("IB_RANGE"))
+    , m_xRB_Rows(m_xBuilder->weld_radio_button("RB_DATAROWS"))
+    , m_xRB_Columns(m_xBuilder->weld_radio_button("RB_DATACOLS"))
+    , m_xCB_FirstRowAsLabel(m_xBuilder->weld_check_button("CB_FIRST_ROW_ASLABELS"))
+    , m_xCB_FirstColumnAsLabel(m_xBuilder->weld_check_button("CB_FIRST_COLUMN_ASLABELS"))
+    , m_xFTTitle(m_xBuilder->weld_label("STR_PAGE_DATA_RANGE"))
+    , m_xFL_TimeBased(m_xBuilder->weld_widget("separator1"))
+    , m_xCB_TimeBased(m_xBuilder->weld_check_button("CB_TIME_BASED"))
+    , m_xFT_TimeStart(m_xBuilder->weld_label("label1"))
+    , m_xEd_TimeStart(m_xBuilder->weld_entry("ED_TIME_BASED_START"))
+    , m_xFT_TimeEnd(m_xBuilder->weld_label("label2"))
+    , m_xEd_TimeEnd(m_xBuilder->weld_entry("ED_TIME_BASED_END"))
 {
-    get(m_pFT_Caption, "FT_CAPTION_FOR_WIZARD");
-    get(m_pFT_Range, "FT_RANGE");
-    get(m_pED_Range, "ED_RANGE");
-    get(m_pIB_Range, "IB_RANGE");
-    get(m_pRB_Rows, "RB_DATAROWS");
-    get(m_pRB_Columns, "RB_DATACOLS");
-    get(m_pCB_FirstRowAsLabel, "CB_FIRST_ROW_ASLABELS");
-    get(m_pCB_FirstColumnAsLabel, "CB_FIRST_COLUMN_ASLABELS");
-    get(m_pFTTitle, "STR_PAGE_DATA_RANGE");// OH:remove later with dialog title
-    get(m_pFL_TimeBased, "separator1");
-    get(m_pCB_TimeBased, "CB_TIME_BASED");
-    get(m_pFT_TimeStart, "label1");
-    get(m_pEd_TimeStart, "ED_TIME_BASED_START");
-    get(m_pFT_TimeEnd, "label2");
-    get(m_pEd_TimeEnd, "ED_TIME_BASED_END");
+    m_xFT_Caption->show(!bHideDescription);
 
-    m_pFT_Caption->Show(!bHideDescription);
-
-    SetText( m_pFTTitle->GetText());// OH:remove later with dialog
+    SetText(m_xFTTitle->get_label());// OH:remove later with dialog
 
     // set defaults as long as DetectArguments does not work
-    m_pRB_Columns->Check();
-    m_pCB_FirstColumnAsLabel->Check();
-    m_pCB_FirstRowAsLabel->Check();
+    m_xRB_Columns->set_active(true);
+    m_xCB_FirstColumnAsLabel->set_active(true);
+    m_xCB_FirstRowAsLabel->set_active(true);
 
     // BM: Note, that the range selection is not available, if there is no view.
     // This happens for charts having their own embedded spreadsheet.  If you
@@ -105,29 +100,25 @@ RangeChooserTabPage::RangeChooserTabPage( vcl::Window* pParent
     // page the calc view would be created in this case.  So, I enable the
     // button here, and in the worst case nothing happens when it is pressed.
     // Not nice, but I see no better solution for the moment.
-    m_pIB_Range->SetClickHdl( LINK( this, RangeChooserTabPage, ChooseRangeHdl ));
+    m_xIB_Range->connect_clicked( LINK( this, RangeChooserTabPage, ChooseRangeHdl ));
 
-    // #i75179# enable setting the background to a different color
-    m_pED_Range->SetForceControlBackground(true);
-
-    m_pED_Range->SetUpdateDataHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ));
-    m_pED_Range->SetModifyHdl( LINK( this, RangeChooserTabPage, ControlEditedHdl ));
-    m_pRB_Rows->SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedRadioHdl ) );
-    m_pCB_FirstRowAsLabel->SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedCheckBoxHdl ) );
-    m_pCB_FirstColumnAsLabel->SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedCheckBoxHdl ) );
-    m_pCB_TimeBased->SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedCheckBoxHdl ) );
-    m_pEd_TimeStart->SetModifyHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
-    m_pEd_TimeEnd->SetModifyHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
+    m_xED_Range->connect_changed( LINK( this, RangeChooserTabPage, ControlEditedHdl ));
+    m_xRB_Rows->connect_toggled( LINK( this, RangeChooserTabPage, ControlChangedRadioHdl ) );
+    m_xCB_FirstRowAsLabel->connect_toggled( LINK( this, RangeChooserTabPage, ControlChangedCheckBoxHdl ) );
+    m_xCB_FirstColumnAsLabel->connect_toggled( LINK( this, RangeChooserTabPage, ControlChangedCheckBoxHdl ) );
+    m_xCB_TimeBased->connect_toggled( LINK( this, RangeChooserTabPage, ControlChangedCheckBoxHdl ) );
+    m_xEd_TimeStart->connect_changed( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
+    m_xEd_TimeEnd->connect_changed( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
 
     SvtMiscOptions aOpts;
     if ( !aOpts.IsExperimentalMode() )
     {
-        m_pFL_TimeBased->Hide();
-        m_pCB_TimeBased->Hide();
-        m_pFT_TimeStart->Hide();
-        m_pEd_TimeStart->Hide();
-        m_pFT_TimeEnd->Hide();
-        m_pEd_TimeEnd->Hide();
+        m_xFL_TimeBased->hide();
+        m_xCB_TimeBased->hide();
+        m_xFT_TimeStart->hide();
+        m_xEd_TimeStart->hide();
+        m_xFT_TimeEnd->hide();
+        m_xEd_TimeEnd->hide();
     }
 }
 
@@ -138,25 +129,9 @@ RangeChooserTabPage::~RangeChooserTabPage()
 
 void RangeChooserTabPage::dispose()
 {
-    m_pFT_Caption.clear();
-    m_pFT_Range.clear();
-    m_pED_Range.clear();
-    m_pIB_Range.clear();
-    m_pRB_Rows.clear();
-    m_pRB_Columns.clear();
-    m_pCB_FirstRowAsLabel.clear();
-    m_pCB_FirstColumnAsLabel.clear();
-    m_pFTTitle.clear();
-    m_pFL_TimeBased.clear();
-    m_pCB_TimeBased.clear();
-    m_pFT_TimeStart.clear();
-    m_pEd_TimeStart.clear();
-    m_pFT_TimeEnd.clear();
-    m_pEd_TimeEnd.clear();
     m_pParentDialog.clear();
     OWizardPage::dispose();
 }
-
 
 void RangeChooserTabPage::ActivatePage()
 {
@@ -171,9 +146,9 @@ void RangeChooserTabPage::initControlsFromModel()
     if(m_pTemplateProvider)
         m_xCurrentChartTypeTemplate = m_pTemplateProvider->getCurrentTemplate();
 
-    bool bUseColumns = ! m_pRB_Rows->IsChecked();
-    bool bFirstCellAsLabel = bUseColumns ? m_pCB_FirstRowAsLabel->IsChecked() : m_pCB_FirstColumnAsLabel->IsChecked();
-    bool bHasCategories = bUseColumns ? m_pCB_FirstColumnAsLabel->IsChecked() : m_pCB_FirstRowAsLabel->IsChecked();
+    bool bUseColumns = !m_xRB_Rows->get_active();
+    bool bFirstCellAsLabel = bUseColumns ? m_xCB_FirstRowAsLabel->get_active() : m_xCB_FirstColumnAsLabel->get_active();
+    bool bHasCategories = bUseColumns ? m_xCB_FirstColumnAsLabel->get_active() : m_xCB_FirstRowAsLabel->get_active();
 
     bool bIsValid = m_rDialogModel.allArgumentsForRectRangeDetected();
     if( bIsValid )
@@ -181,13 +156,13 @@ void RangeChooserTabPage::initControlsFromModel()
     else
         m_aLastValidRangeString.clear();
 
-    m_pED_Range->SetText( m_aLastValidRangeString );
+    m_xED_Range->set_text( m_aLastValidRangeString );
 
-    m_pRB_Rows->Check( !bUseColumns );
-    m_pRB_Columns->Check(  bUseColumns );
+    m_xRB_Rows->set_active( !bUseColumns );
+    m_xRB_Columns->set_active(  bUseColumns );
 
-    m_pCB_FirstRowAsLabel->Check( m_pRB_Rows->IsChecked()?bHasCategories:bFirstCellAsLabel  );
-    m_pCB_FirstColumnAsLabel->Check( m_pRB_Columns->IsChecked()?bHasCategories:bFirstCellAsLabel  );
+    m_xCB_FirstRowAsLabel->set_active( m_xRB_Rows->get_active()?bHasCategories:bFirstCellAsLabel  );
+    m_xCB_FirstColumnAsLabel->set_active( m_xRB_Columns->get_active()?bHasCategories:bFirstCellAsLabel  );
 
     isValid();
 
@@ -235,15 +210,15 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
 
     if( m_bIsDirty )
     {
-        bool bFirstCellAsLabel = ( m_pCB_FirstColumnAsLabel->IsChecked() && !m_pRB_Columns->IsChecked() )
-            || ( m_pCB_FirstRowAsLabel->IsChecked()    && !m_pRB_Rows->IsChecked() );
-        bool bHasCategories = ( m_pCB_FirstColumnAsLabel->IsChecked() && m_pRB_Columns->IsChecked() )
-            || ( m_pCB_FirstRowAsLabel->IsChecked()    && m_pRB_Rows->IsChecked() );
-        bool bTimeBased = m_pCB_TimeBased->IsChecked();
+        bool bFirstCellAsLabel = ( m_xCB_FirstColumnAsLabel->get_active() && !m_xRB_Columns->get_active() )
+            || ( m_xCB_FirstRowAsLabel->get_active()    && !m_xRB_Rows->get_active() );
+        bool bHasCategories = ( m_xCB_FirstColumnAsLabel->get_active() && m_xRB_Columns->get_active() )
+            || ( m_xCB_FirstRowAsLabel->get_active()    && m_xRB_Rows->get_active() );
+        bool bTimeBased = m_xCB_TimeBased->get_active();
 
         Sequence< beans::PropertyValue > aArguments(
             DataSourceHelper::createArguments(
-                m_pRB_Columns->IsChecked(), bFirstCellAsLabel, bHasCategories ) );
+                m_xRB_Columns->get_active(), bFirstCellAsLabel, bHasCategories ) );
 
         if(bTimeBased)
         {
@@ -254,7 +229,7 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
         }
 
         // only if range is valid
-        if( m_aLastValidRangeString == m_pED_Range->GetText())
+        if( m_aLastValidRangeString == m_xED_Range->get_text())
         {
             m_rDialogModel.setTemplate( m_xCurrentChartTypeTemplate );
             aArguments.realloc( aArguments.getLength() + 1 );
@@ -267,8 +242,8 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
 
             if(bTimeBased)
             {
-                sal_Int32 nStart = m_pEd_TimeStart->GetText().toInt32();
-                sal_Int32 nEnd = m_pEd_TimeEnd->GetText().toInt32();
+                sal_Int32 nStart = m_xEd_TimeStart->get_text().toInt32();
+                sal_Int32 nEnd = m_xEd_TimeEnd->get_text().toInt32();
                 m_rDialogModel.setTimeBasedRange(true, nStart, nEnd);
             }
         }
@@ -280,28 +255,28 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
 
 bool RangeChooserTabPage::isValid()
 {
-    OUString aRange( m_pED_Range->GetText());
-    bool bFirstCellAsLabel = ( m_pCB_FirstColumnAsLabel->IsChecked() && !m_pRB_Columns->IsChecked() )
-        || ( m_pCB_FirstRowAsLabel->IsChecked()    && !m_pRB_Rows->IsChecked() );
-    bool bHasCategories = ( m_pCB_FirstColumnAsLabel->IsChecked() && m_pRB_Columns->IsChecked() )
-        || ( m_pCB_FirstRowAsLabel->IsChecked()    && m_pRB_Rows->IsChecked() );
+    OUString aRange( m_xED_Range->get_text());
+    bool bFirstCellAsLabel = ( m_xCB_FirstColumnAsLabel->get_active() && !m_xRB_Columns->get_active() )
+        || ( m_xCB_FirstRowAsLabel->get_active()    && !m_xRB_Rows->get_active() );
+    bool bHasCategories = ( m_xCB_FirstColumnAsLabel->get_active() && m_xRB_Columns->get_active() )
+        || ( m_xCB_FirstRowAsLabel->get_active()    && m_xRB_Rows->get_active() );
     bool bIsValid = ( aRange.isEmpty() ) ||
         m_rDialogModel.getRangeSelectionHelper()->verifyArguments(
             DataSourceHelper::createArguments(
-                aRange, Sequence< sal_Int32 >(), m_pRB_Columns->IsChecked(), bFirstCellAsLabel, bHasCategories ));
+                aRange, Sequence< sal_Int32 >(), m_xRB_Columns->get_active(), bFirstCellAsLabel, bHasCategories ));
 
     if( bIsValid )
     {
-        m_pED_Range->SetControlForeground();
-        m_pED_Range->SetControlBackground();
+        m_xED_Range->set_error(false);
+        m_xED_Range->set_error(false);
         if( m_pTabPageNotifiable )
             m_pTabPageNotifiable->setValidPage( this );
         m_aLastValidRangeString = aRange;
     }
     else
     {
-        m_pED_Range->SetControlBackground( RANGE_SELECTION_INVALID_RANGE_BACKGROUND_COLOR );
-        m_pED_Range->SetControlForeground( RANGE_SELECTION_INVALID_RANGE_FOREGROUND_COLOR );
+        m_xED_Range->set_error(true);
+        m_xED_Range->set_error(true);
         if( m_pTabPageNotifiable )
             m_pTabPageNotifiable->setInvalidPage( this );
     }
@@ -311,67 +286,67 @@ bool RangeChooserTabPage::isValid()
     // would render it invalid, the button should be disabled
     if( bIsValid )
     {
-        bool bDataInColumns = m_pRB_Columns->IsChecked();
+        bool bDataInColumns = m_xRB_Columns->get_active();
         bool bIsSwappedRangeValid = m_rDialogModel.getRangeSelectionHelper()->verifyArguments(
             DataSourceHelper::createArguments(
                 aRange, Sequence< sal_Int32 >(), ! bDataInColumns, bHasCategories, bFirstCellAsLabel ));
-        m_pRB_Rows->Enable( bIsSwappedRangeValid );
-        m_pRB_Columns->Enable( bIsSwappedRangeValid );
+        m_xRB_Rows->set_sensitive( bIsSwappedRangeValid );
+        m_xRB_Columns->set_sensitive( bIsSwappedRangeValid );
 
-        m_pCB_FirstRowAsLabel->Enable(
+        m_xCB_FirstRowAsLabel->set_sensitive(
             m_rDialogModel.getRangeSelectionHelper()->verifyArguments(
                 DataSourceHelper::createArguments(
-                    aRange, Sequence< sal_Int32 >(), m_pRB_Columns->IsChecked(),
+                    aRange, Sequence< sal_Int32 >(), m_xRB_Columns->get_active(),
                     bDataInColumns ? ! bFirstCellAsLabel : bFirstCellAsLabel,
                     bDataInColumns ? bHasCategories : ! bHasCategories )));
-        m_pCB_FirstColumnAsLabel->Enable(
+        m_xCB_FirstColumnAsLabel->set_sensitive(
             m_rDialogModel.getRangeSelectionHelper()->verifyArguments(
                 DataSourceHelper::createArguments(
-                    aRange, Sequence< sal_Int32 >(), m_pRB_Columns->IsChecked(),
+                    aRange, Sequence< sal_Int32 >(), m_xRB_Columns->get_active(),
                     bDataInColumns ? bFirstCellAsLabel : ! bFirstCellAsLabel,
                     bDataInColumns ? ! bHasCategories : bHasCategories )));
     }
     else
     {
-        m_pRB_Rows->Enable( bIsValid );
-        m_pRB_Columns->Enable( bIsValid );
-        m_pCB_FirstRowAsLabel->Enable( bIsValid );
-        m_pCB_FirstColumnAsLabel->Enable( bIsValid );
+        m_xRB_Rows->set_sensitive( bIsValid );
+        m_xRB_Columns->set_sensitive( bIsValid );
+        m_xCB_FirstRowAsLabel->set_sensitive( bIsValid );
+        m_xCB_FirstColumnAsLabel->set_sensitive( bIsValid );
     }
 
     bool bShowIB = m_rDialogModel.getRangeSelectionHelper()->hasRangeSelection();
-    lcl_ShowChooserButton( *m_pIB_Range, bShowIB );
+    lcl_ShowChooserButton( *m_xIB_Range, bShowIB );
 
     return bIsValid;
 }
 
-IMPL_LINK_NOARG(RangeChooserTabPage, ControlEditedHdl, Edit&, void)
+IMPL_LINK_NOARG(RangeChooserTabPage, ControlEditedHdl, weld::Entry&, void)
 {
     setDirty();
     isValid();
 }
 
-IMPL_LINK_NOARG(RangeChooserTabPage, ControlChangedRadioHdl, RadioButton&, void)
+IMPL_LINK_NOARG(RangeChooserTabPage, ControlChangedRadioHdl, weld::ToggleButton&, void)
 {
-    ControlChangedHdl(*m_pED_Range);
+    ControlChangedHdl(*m_xED_Range);
 }
 
-IMPL_LINK_NOARG(RangeChooserTabPage, ControlChangedCheckBoxHdl, CheckBox&, void)
+IMPL_LINK_NOARG(RangeChooserTabPage, ControlChangedCheckBoxHdl, weld::ToggleButton&, void)
 {
-    ControlChangedHdl(*m_pED_Range);
+    ControlChangedHdl(*m_xED_Range);
 }
 
-IMPL_LINK_NOARG(RangeChooserTabPage, ControlChangedHdl, Edit&, void)
+IMPL_LINK_NOARG(RangeChooserTabPage, ControlChangedHdl, weld::Entry&, void)
 {
     setDirty();
     if( isValid())
         changeDialogModelAccordingToControls();
 }
 
-IMPL_LINK_NOARG(RangeChooserTabPage, ChooseRangeHdl, Button*, void)
+IMPL_LINK_NOARG(RangeChooserTabPage, ChooseRangeHdl, weld::Button&, void)
 {
-    OUString aRange = m_pED_Range->GetText();
-    OUString aTitle = m_pFTTitle->GetText();
+    OUString aRange = m_xED_Range->get_text();
+    OUString aTitle = m_xFTTitle->get_label();
 
     lcl_enableRangeChoosing( true, m_pParentDialog );
     m_rDialogModel.getRangeSelectionHelper()->chooseRange( aRange, aTitle, *this );
@@ -392,8 +367,8 @@ void RangeChooserTabPage::listeningFinished( const OUString & rNewRange )
     //update dialog state
     ToTop();
     GrabFocus();
-    m_pED_Range->SetText( aRange );
-    m_pED_Range->GrabFocus();
+    m_xED_Range->set_text(aRange);
+    m_xED_Range->grab_focus();
 
     setDirty();
     if( isValid())
