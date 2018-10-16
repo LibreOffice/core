@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df140735_1cd07950",
+        "filename": "svx/source/tbxctrls/tbcontrl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3215,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-10-16T15:38:26Z",
+      "side": 1,
+      "message": "Note that the statusChanged method is called each time the selection changes to a text with a different color. Do we really want to update the tooltip so often? Wouldn\u0027t it be cleaner to just do this once inside ToolboxButtonColorUpdater::Update?",
+      "revId": "6093197d0a0f2f3782444eb5f54b5f5772185906",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df140735_fcc4a594",
+        "filename": "svx/source/tbxctrls/tbxcolorupdate.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-10-16T15:38:26Z",
+      "side": 1,
+      "message": "OUString doesn\u0027t need an explicit init.",
+      "revId": "6093197d0a0f2f3782444eb5f54b5f5772185906",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df140735_bcbe2dfd",
+        "filename": "svx/source/tbxctrls/tbxcolorupdate.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-10-16T15:38:26Z",
+      "side": 1,
+      "message": "Line and fill color need to be handled too, as otherwise their initial tooltip will look like \"Line Color ()\".",
+      "revId": "6093197d0a0f2f3782444eb5f54b5f5772185906",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
