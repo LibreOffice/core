@@ -97,9 +97,8 @@ struct SfxObjectBars_Impl
     ToolbarId          eId;      // ConfigId of the Toolbox
     sal_uInt16         nPos;
     SfxVisibilityFlags nFlags;   // special visibility flags
-    SfxInterface*      pIFace;
 
-    SfxObjectBars_Impl() : eId(ToolbarId::None), nPos(0), nFlags(SfxVisibilityFlags::Invisible), pIFace(nullptr) {}
+    SfxObjectBars_Impl() : eId(ToolbarId::None), nPos(0), nFlags(SfxVisibilityFlags::Invisible) {}
 };
 
 struct SfxDispatcher_Impl
@@ -1294,7 +1293,6 @@ void SfxDispatcher::Update_Impl_( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
             rBar.nPos = nPos;
             rBar.nFlags = nFlags;
             rBar.eId = pIFace->GetObjectBarId(nNo);
-            rBar.pIFace = pIFace;
 
             if ( bUIActive || bIsActive )
             {

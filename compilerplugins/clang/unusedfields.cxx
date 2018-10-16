@@ -393,6 +393,11 @@ bool UnusedFields::TraverseCXXMethodDecl(CXXMethodDecl* cxxMethodDecl)
             || cxxMethodDecl->isMoveAssignmentOperator()
             || (cxxMethodDecl->getIdentifier() && (cxxMethodDecl->getName().startswith("Clone") || cxxMethodDecl->getName().startswith("clone"))))
             insideMoveOrCopyOrCloneDeclParent = cxxMethodDecl->getParent();
+        // these are similar in that they tend to simply enumerate all the fields of an object without putting
+        // them to some useful purpose
+        auto op = cxxMethodDecl->getOverloadedOperator();
+        if (op == OO_EqualEqual || op == OO_ExclaimEqual)
+            insideMoveOrCopyOrCloneDeclParent = cxxMethodDecl->getParent();
     }
     insideFunctionDecl = cxxMethodDecl;
     bool ret = RecursiveASTVisitor::TraverseCXXMethodDecl(cxxMethodDecl);
@@ -405,19 +410,29 @@ bool UnusedFields::TraverseFunctionDecl(FunctionDecl* functionDecl)
 {
     auto copy1 = insideStreamOutputOperator;
     auto copy2 = insideFunctionDecl;
+    auto copy3 = insideMoveOrCopyOrCloneDeclParent;
     if (functionDecl->getLocation().isValid() && !ignoreLocation(functionDecl) && functionDecl->isThisDeclarationADefinition())
     {
-        if (functionDecl->getOverloadedOperator() == OO_LessLess
+        auto op = functionDecl->getOverloadedOperator();
+        if (op == OO_LessLess
             && functionDecl->getNumParams() == 2)
         {
             QualType qt = functionDecl->getParamDecl(1)->getType();
             insideStreamOutputOperator = qt.getNonReferenceType().getUnqualifiedType()->getAsCXXRecordDecl();
+        }
+        // these are similar in that they tend to simply enumerate all the fields of an object without putting
+        // them to some useful purpose
+        if (op == OO_EqualEqual || op == OO_ExclaimEqual)
+        {
+            QualType qt = functionDecl->getParamDecl(1)->getType();
+            insideMoveOrCopyOrCloneDeclParent = qt.getNonReferenceType().getUnqualifiedType()->getAsCXXRecordDecl();
         }
     }
     insideFunctionDecl = functionDecl;
     bool ret = RecursiveASTVisitor::TraverseFunctionDecl(functionDecl);
     insideStreamOutputOperator = copy1;
     insideFunctionDecl = copy2;
+    insideMoveOrCopyOrCloneDeclParent = copy3;
     return ret;
 }
 
