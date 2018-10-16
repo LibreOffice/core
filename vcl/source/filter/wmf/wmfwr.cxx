@@ -144,7 +144,6 @@ WMFWriter::WMFWriter()
     , nActRecordPos(0)
     , eSrcRasterOp(RasterOp::OverPaint)
     , eSrcTextAlign(ALIGN_BASELINE)
-    , bSrcIsClipping(false)
     , pAttrStack(nullptr)
     , eSrcHorTextAlign(W_TA_LEFT)
     , eDstROP2(RasterOp::OverPaint)
@@ -928,9 +927,8 @@ void WMFWriter::SetLineAndFillAttr()
         aDstFillColor = aSrcFillColor;
         CreateSelectDeleteBrush( aDstFillColor );
     }
-    if ( bDstIsClipping != bSrcIsClipping ||
-        (bSrcIsClipping && aDstClipRegion!=aSrcClipRegion)) {
-        bDstIsClipping=bSrcIsClipping;
+    if ( bDstIsClipping ) {
+        bDstIsClipping=false;
         aDstClipRegion=aSrcClipRegion;
     }
 }
@@ -1765,7 +1763,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     CreateSelectDeleteBrush( aDstFillColor );
 
     aDstClipRegion = aSrcClipRegion = vcl::Region();
-    bDstIsClipping = bSrcIsClipping = false;
+    bDstIsClipping = false;
 
     vcl::Font aFont;
     aFont.SetCharSet( GetExtendedTextEncoding( RTL_TEXTENCODING_MS_1252 ) );

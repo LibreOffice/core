@@ -75,7 +75,6 @@ private:
     FontAlign eSrcTextAlign;
     vcl::Font aSrcFont;
     MapMode   aSrcMapMode;
-    bool      bSrcIsClipping;
     vcl::Region    aSrcClipRegion;
     WMFWriterAttrStackMember * pAttrStack;
 

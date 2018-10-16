@@ -75,7 +75,6 @@ private:
     sal_uInt16          mnCurItemId;
     sal_uInt16          mnPercent;
     sal_uInt16          mnPercentCount;
-    bool                mbVisibleItems;
     bool                mbFormat;
     bool                mbProgressMode;
     bool                mbInUserDraw;
@@ -128,8 +127,6 @@ public:
     void                ShowItem( sal_uInt16 nItemId );
     void                HideItem( sal_uInt16 nItemId );
     bool                IsItemVisible( sal_uInt16 nItemId ) const;
-
-    bool                AreItemsVisible() const { return mbVisibleItems; }
 
     void                RedrawItem( sal_uInt16 nItemId );
 

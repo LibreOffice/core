@@ -48,6 +48,8 @@
 
 using namespace ::com::sun::star;
 
+static constexpr long gnBorder = 1;
+
 void ImplInitDropDownButton( PushButton* pButton )
 {
     pButton->SetSymbol( SymbolType::SPIN_DOWN );
@@ -479,7 +481,6 @@ ImplListBoxWindow::ImplListBoxWindow( vcl::Window* pParent, WinBits nWinStyle ) 
 
     mnTop               = 0;
     mnLeft              = 0;
-    mnBorder            = 1;
     mnSelectModifier    = 0;
     mnUserDrawEntry     = LISTBOX_ENTRY_NOTFOUND;
     mbTrack             = false;
@@ -555,7 +556,7 @@ void ImplListBoxWindow::ImplCalcMetrics()
     mnMaxImgHeight  = 0;
 
     mnTextHeight = static_cast<sal_uInt16>(GetTextHeight());
-    mnMaxTxtHeight = mnTextHeight + mnBorder;
+    mnMaxTxtHeight = mnTextHeight + gnBorder;
     mnMaxHeight = mnMaxTxtHeight;
 
     if ( maUserItemSize.Height() > mnMaxHeight )
@@ -666,7 +667,7 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
             if( aMetrics.nTextWidth > mnMaxTxtWidth )
                 mnMaxTxtWidth = aMetrics.nTextWidth;
             aMetrics.nEntryWidth = mnMaxTxtWidth;
-            aMetrics.nEntryHeight = aTextRect.GetHeight() + mnBorder;
+            aMetrics.nEntryHeight = aTextRect.GetHeight() + gnBorder;
         }
         else
         {
@@ -677,7 +678,7 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
             if( aMetrics.nTextWidth > mnMaxTxtWidth )
                 mnMaxTxtWidth = aMetrics.nTextWidth;
             aMetrics.nEntryWidth = mnMaxTxtWidth;
-            aMetrics.nEntryHeight = mnTextHeight + mnBorder;
+            aMetrics.nEntryHeight = mnTextHeight + gnBorder;
         }
     }
     if ( aMetrics.bImage )
@@ -708,7 +709,7 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
     {
         // entries which have no (aka an empty) text, and no image,
         // and are not user-drawn, should be shown nonetheless
-        aMetrics.nEntryHeight = mnTextHeight + mnBorder;
+        aMetrics.nEntryHeight = mnTextHeight + gnBorder;
     }
 
     if ( aMetrics.nEntryWidth > mnMaxWidth )
@@ -811,7 +812,7 @@ void ImplListBoxWindow::ImplHideFocusRect()
 
 sal_Int32 ImplListBoxWindow::GetEntryPosForPoint( const Point& rPoint ) const
 {
-    long nY = mnBorder;
+    long nY = gnBorder;
 
     sal_Int32 nSelect = mnTop;
     const ImplEntryType* pEntry = mpEntryList->GetEntryPtr( nSelect );
@@ -1271,7 +1272,7 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
             }
             else
             {
-                nSelect = static_cast<sal_Int32>( ( aPt.Y() + mnBorder ) / mnMaxHeight ) + mnTop;
+                nSelect = static_cast<sal_Int32>( ( aPt.Y() + gnBorder ) / mnMaxHeight ) + mnTop;
                 nSelect = std::min( nSelect, GetLastVisibleEntry() );
                 nSelect = std::min( nSelect, static_cast<sal_Int32>( mpEntryList->GetEntryCount() - 1 ) );
             }
@@ -1789,12 +1790,12 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         if (!!aImage)
         {
             aImgSz = aImage.GetSizePixel();
-            Point aPtImg(mnBorder - mnLeft, nY + ((pEntry->mnHeight - aImgSz.Height()) / 2));
+            Point aPtImg(gnBorder - mnLeft, nY + ((pEntry->mnHeight - aImgSz.Height()) / 2));
 
             // pb: #106948# explicit mirroring for calc
             if (mbMirroring)
                 // right aligned
-                aPtImg.setX( mnMaxWidth + mnBorder - aImgSz.Width() - mnLeft );
+                aPtImg.setX( mnMaxWidth + gnBorder - aImgSz.Width() - mnLeft );
 
             if (!IsZoom())
             {
@@ -1830,12 +1831,12 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         OUString aStr(mpEntryList->GetEntryText(nPos));
         if (!aStr.isEmpty())
         {
-            long nMaxWidth = std::max(mnMaxWidth, GetOutputSizePixel().Width() - 2 * mnBorder);
+            long nMaxWidth = std::max(mnMaxWidth, GetOutputSizePixel().Width() - 2 * gnBorder);
             // a multiline entry should only be as wide a the window
             if (pEntry->mnFlags & ListBoxEntryFlags::MultiLine)
-                nMaxWidth = GetOutputSizePixel().Width() - 2 * mnBorder;
+                nMaxWidth = GetOutputSizePixel().Width() - 2 * gnBorder;
 
-            tools::Rectangle aTextRect(Point(mnBorder - mnLeft, nY),
+            tools::Rectangle aTextRect(Point(gnBorder - mnLeft, nY),
                                 Size(nMaxWidth, pEntry->mnHeight));
 
             if (!bDrawTextAtImagePos && (mpEntryList->HasEntryImage(nPos) || IsUserDrawEnabled()))
@@ -1848,7 +1849,7 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
             if (mbMirroring)
             {
                 // right aligned
-                aTextRect.SetLeft( nMaxWidth + mnBorder - rRenderContext.GetTextWidth(aStr) - mnLeft );
+                aTextRect.SetLeft( nMaxWidth + gnBorder - rRenderContext.GetTextWidth(aStr) - mnLeft );
                 if (aImgSz.Width() > 0)
                     aTextRect.AdjustLeft( -(aImgSz.Width() + IMG_TXT_DISTANCE) );
             }
@@ -1891,8 +1892,8 @@ void ImplListBoxWindow::ImplDoPaint(vcl::RenderContext& rRenderContext, const to
     if (mbHasFocusRect)
         ImplHideFocusRect();
 
-    long nY = 0; // + mnBorder;
-    long nHeight = GetOutputSizePixel().Height();// - mnMaxHeight + mnBorder;
+    long nY = 0; // + gnBorder;
+    long nHeight = GetOutputSizePixel().Height();// - mnMaxHeight + gnBorder;
 
     for (sal_Int32 i = mnTop; i < nCount && nY < nHeight + mnMaxHeight; i++)
     {
@@ -1923,7 +1924,7 @@ sal_uInt16 ImplListBoxWindow::GetDisplayLineCount() const
     // FIXME: ListBoxEntryFlags::MultiLine
 
     const sal_Int32 nCount = mpEntryList->GetEntryCount()-mnTop;
-    long nHeight = GetOutputSizePixel().Height();// - mnMaxHeight + mnBorder;
+    long nHeight = GetOutputSizePixel().Height();// - mnMaxHeight + gnBorder;
     sal_uInt16 nEntries = static_cast< sal_uInt16 >( ( nHeight + mnMaxHeight - 1 ) / mnMaxHeight );
     if( nEntries > nCount )
         nEntries = static_cast<sal_uInt16>(nCount);
@@ -2077,7 +2078,7 @@ Size ImplListBoxWindow::CalcSize(sal_Int32 nMaxLines) const
 
     Size aSz;
     aSz.setHeight(  nMaxLines * mnMaxHeight );
-    aSz.setWidth( mnMaxWidth + 2*mnBorder );
+    aSz.setWidth( mnMaxWidth + 2*gnBorder );
     return aSz;
 }
 
