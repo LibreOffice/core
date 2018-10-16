@@ -133,7 +133,7 @@ namespace basctl
             const sal_Char* pEventName;
             void (DocumentEventListener::*listenerMethod)( const ScriptDocument& _rDocument );
         };
-        EventEntry const aEvents[] = {
+        static EventEntry const aEvents[] = {
             { "OnNew",          &DocumentEventListener::onDocumentCreated },
             { "OnLoad",         &DocumentEventListener::onDocumentOpened },
             { "OnSave",         &DocumentEventListener::onDocumentSave },

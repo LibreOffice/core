@@ -77,7 +77,7 @@ struct AxisLabelPosMap
     css::chart::ChartAxisLabelPosition ePos;
 };
 
-AxisLabelPosMap aLabelPosMap[] = {
+static AxisLabelPosMap const aLabelPosMap[] = {
     { 0, css::chart::ChartAxisLabelPosition_NEAR_AXIS },
     { 1, css::chart::ChartAxisLabelPosition_NEAR_AXIS_OTHER_SIDE },
     { 2, css::chart::ChartAxisLabelPosition_OUTSIDE_START },
@@ -99,7 +99,7 @@ sal_Int32 getLabelPosition(const css::uno::Reference<css::frame::XModel>& xModel
 
     css::chart::ChartAxisLabelPosition ePos;
     aAny >>= ePos;
-    for (AxisLabelPosMap & i : aLabelPosMap)
+    for (AxisLabelPosMap const & i : aLabelPosMap)
     {
         if (i.ePos == ePos)
             return i.nPos;
@@ -118,7 +118,7 @@ void setLabelPosition(const css::uno::Reference<css::frame::XModel>& xModel,
         return;
 
     css::chart::ChartAxisLabelPosition ePos;
-    for (AxisLabelPosMap & i : aLabelPosMap)
+    for (AxisLabelPosMap const & i : aLabelPosMap)
     {
         if (i.nPos == nPos)
             ePos = i.ePos;

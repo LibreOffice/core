@@ -46,7 +46,7 @@ namespace
 
 bool Media::LoadSymbols()
 {
-    ApiMap const VLC_MEDIA_API[] =
+    static ApiMap const VLC_MEDIA_API[] =
     {
         SYM_MAP( libvlc_media_new_path ),
         SYM_MAP( libvlc_media_release ),
