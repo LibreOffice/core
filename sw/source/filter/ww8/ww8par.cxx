@@ -5300,6 +5300,9 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     // stacks etc. are destroyed, and before fields
     // are updated
     m_aExtraneousParas.delete_all_from_doc();
+    // ofz#10994 remove any trailing fly paras before processing redlines
+    m_xWFlyPara.reset();
+    m_xSFlyPara.reset();
     m_xRedlineStack->closeall(*m_pPaM->GetPoint());
     while (!m_aFrameRedlines.empty())
         m_aFrameRedlines.pop();
@@ -5392,9 +5395,6 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
     m_pPaM = nullptr;
 
     UpdateFields();
-
-    m_xWFlyPara.reset();
-    m_xSFlyPara.reset();
 
     // delete the pam before the call for hide all redlines (Bug 73683)
     if (m_bNewDoc)
