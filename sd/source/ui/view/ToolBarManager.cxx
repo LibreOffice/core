@@ -59,12 +59,10 @@ class ToolBarRules;
 
 /** Lock of the frame::XLayoutManager.
 */
-class LayouterLock
+struct LayouterLock
 {
-public:
     explicit LayouterLock (const Reference<frame::XLayoutManager>& rxLayouter);
     ~LayouterLock();
-private:
     Reference<frame::XLayoutManager> mxLayouter;
 };
 
@@ -579,6 +577,10 @@ void ToolBarManager::Implementation::SetValid (bool bValid)
                 Reference<beans::XPropertySet> xFrameProperties (xFrame, UNO_QUERY_THROW);
                 Any aValue (xFrameProperties->getPropertyValue("LayoutManager"));
                 aValue >>= mxLayouter;
+                // tdf#119997 if mpSynchronousLayouterLock was created before mxLayouter was
+                // set then update it now that its available
+                if (mpSynchronousLayouterLock && !mpSynchronousLayouterLock->mxLayouter)
+                    mpSynchronousLayouterLock->mxLayouter = mxLayouter;
             }
             catch (const RuntimeException&)
             {
@@ -821,11 +823,14 @@ void ToolBarManager::Implementation::Update (
             // Note that the lock count may have been increased since
             // entering this method.  In that case one of the next
             // UnlockUpdate() calls will post the UpdateCallback.
-            if (mnPendingUpdateCall==nullptr && mnLockCount==0)
+            if (mnLockCount==0)
             {
                 mpAsynchronousLayouterLock = std::move(pLocalLayouterLock);
-                mnPendingUpdateCall = Application::PostUserEvent(
-                    LINK(this,ToolBarManager::Implementation,UpdateCallback));
+                if (mnPendingUpdateCall==nullptr)
+                {
+                    mnPendingUpdateCall = Application::PostUserEvent(
+                        LINK(this,ToolBarManager::Implementation,UpdateCallback));
+                }
             }
         }
         else
