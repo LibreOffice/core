@@ -380,8 +380,7 @@ std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet
     {
         if( !rSet.GetPool()->IsItemPoolable(pItem->Which() ) )
             bNonPoolable = true;
-        if ( !xFoundIgnorableItems.get() ||
-             (xFoundIgnorableItems->Put( *pItem ) == nullptr ) )
+        if (!xFoundIgnorableItems || (xFoundIgnorableItems->Put(*pItem) == nullptr))
         {
             pCurNode = pCurNode->findChildNode( *pItem, false );
         }

@@ -807,7 +807,7 @@ void SwGrfNode::TriggerAsyncRetrieveInputStream()
         return;
     }
 
-    if ( mpThreadConsumer.get() == nullptr )
+    if (mpThreadConsumer == nullptr)
     {
         mpThreadConsumer.reset(new SwAsyncRetrieveInputStreamThreadConsumer(*this), o3tl::default_delete<SwAsyncRetrieveInputStreamThreadConsumer>());
 

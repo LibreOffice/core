@@ -226,7 +226,7 @@ namespace dlgprov
 
     Reference< XControlModel > DialogProviderImpl::createDialogModelForBasic()
     {
-        if ( !m_BasicInfo.get() )
+        if (!m_BasicInfo)
             // shouldn't get here
             throw RuntimeException("No information to create dialog" );
         Reference< resource::XStringResourceManager > xStringResourceManager = getStringResourceFromDialogLibrary( m_BasicInfo->mxDlgLib );
@@ -493,9 +493,11 @@ namespace dlgprov
                 // also add the dialog control itself to the sequence
                 pObjects[nControlCount].set( rxControl, UNO_QUERY );
 
-                Reference< XScriptEventsAttacher > xScriptEventsAttacher = new DialogEventsAttacherImpl
-                    ( m_xContext, m_xModel, rxControl, rxHandler, rxIntrospectionAccess,
-                      bDialogProviderMode, ( m_BasicInfo.get() ? m_BasicInfo->mxBasicRTLListener : nullptr ), msDialogLibName );
+                Reference<XScriptEventsAttacher> xScriptEventsAttacher
+                    = new DialogEventsAttacherImpl(
+                        m_xContext, m_xModel, rxControl, rxHandler, rxIntrospectionAccess,
+                        bDialogProviderMode,
+                        (m_BasicInfo ? m_BasicInfo->mxBasicRTLListener : nullptr), msDialogLibName);
 
                 Any aHelper;
                 xScriptEventsAttacher->attachEvents( aObjects, Reference< XScriptListener >(), aHelper );
@@ -611,7 +613,7 @@ namespace dlgprov
         try
         {
             // add support for basic RTL_FUNCTION
-            if ( m_BasicInfo.get() )
+            if (m_BasicInfo)
                 xCtrlMod = createDialogModelForBasic();
             else
             {

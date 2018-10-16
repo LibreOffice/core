@@ -47,7 +47,7 @@ namespace {
 static std::shared_ptr<FactoryMap> spFactoryMap;
 std::shared_ptr<FactoryMap> const & GetFactoryMap()
 {
-    if (spFactoryMap.get() == nullptr)
+    if (spFactoryMap == nullptr)
     {
         spFactoryMap.reset(new FactoryMap);
         (*spFactoryMap)[SdDrawingDocument_getImplementationName()] = SdDrawingDocumentFactoryId;

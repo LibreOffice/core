@@ -4117,7 +4117,7 @@ void MSWordExportBase::OutputEndNode( const SwEndNode &rNode )
 
 const NfKeywordTable & MSWordExportBase::GetNfKeywordTable()
 {
-    if (m_pKeyMap.get() == nullptr)
+    if (m_pKeyMap == nullptr)
     {
         m_pKeyMap.reset(new NfKeywordTable);
         NfKeywordTable & rKeywordTable = *m_pKeyMap;

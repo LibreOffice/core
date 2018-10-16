@@ -714,7 +714,7 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
     uno::Reference<rdf::XMetadatable> xMeta(rMeta.GetXMeta());
     if (xMeta.is())
     {
-        if (pPortions.get()) // set cache in the XMeta to the given portions
+        if (pPortions) // set cache in the XMeta to the given portions
         {
             const uno::Reference<lang::XUnoTunnel> xUT(xMeta, uno::UNO_QUERY);
             SwXMeta *const pXMeta(
@@ -1218,7 +1218,7 @@ SwXMeta::createEnumeration()
 
     SwPaM aPam(*pTextNode, nMetaStart);
 
-    if (!m_pImpl->m_pTextPortions.get())
+    if (!m_pImpl->m_pTextPortions)
     {
         return new SwXTextPortionEnumeration(
                     aPam, GetParentText(), nMetaStart, nMetaEnd);

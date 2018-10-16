@@ -46,11 +46,7 @@ Node::Node(tools::Rectangle const & aRectangle)
     , mOccupied(false)
 {}
 
-bool Node::isLeaf()
-{
-    return mLeftNode.get()  == nullptr &&
-           mRightNode.get() == nullptr;
-}
+bool Node::isLeaf() { return mLeftNode == nullptr && mRightNode == nullptr; }
 
 Node* Node::insert(int nWidth, int nHeight, int nPadding)
 {

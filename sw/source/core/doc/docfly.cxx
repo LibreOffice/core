@@ -561,7 +561,7 @@ bool SwDoc::SetFlyFrameAttr( SwFrameFormat& rFlyFormat, SfxItemSet& rSet )
 
     bool const bRet = lcl_SetFlyFrameAttr(*this, &SwDoc::SetFlyFrameAnchor, rFlyFormat, rSet);
 
-    if ( pSaveUndo.get() )
+    if (pSaveUndo)
     {
         if ( pSaveUndo->GetUndo() )
         {

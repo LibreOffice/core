@@ -202,7 +202,8 @@ void SwDocShell::ToggleLayoutMode(SwView* pView)
 // update text fields on document properties changes
 void SwDocShell::DoFlushDocInfo()
 {
-    if (!m_xDoc.get()) return;
+    if (!m_xDoc)
+        return;
 
     bool bUnlockView(true);
     if (m_pWrtShell)
@@ -246,7 +247,7 @@ static void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVB
 // Notification on DocInfo changes
 void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if (!m_xDoc.get())
+    if (!m_xDoc)
     {
         return ;
     }

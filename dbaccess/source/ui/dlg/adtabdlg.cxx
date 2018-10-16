@@ -401,7 +401,7 @@ void OAddTableDlg::impl_switchTo( ObjectList _eList )
 
 void OAddTableDlg::Update()
 {
-    if ( !m_xCurrentList.get() )
+    if (!m_xCurrentList)
         impl_switchTo( Tables );
     else
         m_xCurrentList->updateTableObjectList( m_rContext.allowViews() );

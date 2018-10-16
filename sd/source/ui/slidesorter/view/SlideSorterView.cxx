@@ -220,10 +220,7 @@ sal_Int32 SlideSorterView::GetPageIndexAtPoint (const Point& rWindowPosition) co
     return nIndex;
 }
 
-Layouter& SlideSorterView::GetLayouter()
-{
-    return *mpLayouter.get();
-}
+Layouter& SlideSorterView::GetLayouter() { return *mpLayouter; }
 
 void SlideSorterView::ModelHasChanged()
 {
@@ -688,7 +685,7 @@ void SlideSorterView::ConfigurationChanged (
 std::shared_ptr<cache::PageCache> const & SlideSorterView::GetPreviewCache()
 {
     sd::Window *pWindow (mrSlideSorter.GetContentWindow().get());
-    if (pWindow && mpPreviewCache.get() == nullptr)
+    if (pWindow && mpPreviewCache == nullptr)
     {
         mpPreviewCache.reset(
             new cache::PageCache(

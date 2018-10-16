@@ -611,7 +611,7 @@ void AreaPropertyPanelBase::ImpUpdateTransparencies()
     {
         bool bZeroValue(false);
 
-        if(mpTransparanceItem.get())
+        if (mpTransparanceItem)
         {
             const sal_uInt16 nValue(mpTransparanceItem->GetValue());
 
@@ -1258,7 +1258,7 @@ IMPL_LINK( AreaPropertyPanelBase, ClickTrGrHdl_Impl, ToolBox*, pToolBox, void )
 {
     if (!mxTrGrPopup)
         mxTrGrPopup = VclPtr<AreaTransparencyGradientPopup>::Create(*this);
-    if (mpFloatTransparenceItem.get())
+    if (mpFloatTransparenceItem)
         mxTrGrPopup->Rearrange(mpFloatTransparenceItem.get());
     OSL_ASSERT( pToolBox->GetItemCommand(pToolBox->GetCurItemId()) == UNO_SIDEBARGRADIENT);
     mxTrGrPopup->StartPopupMode(pToolBox, FloatWinPopupFlags::GrabFocus);

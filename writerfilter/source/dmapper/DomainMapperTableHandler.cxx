@@ -915,7 +915,7 @@ css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTabl
 #ifdef DEBUG_WRITERFILTER
         TagLogger::getInstance().startElement("rowProps.row");
 #endif
-        if( rRow.get() )
+        if (rRow)
         {
             //set default to 'break across pages"
             rRow->Insert( PROP_IS_SPLIT_ALLOWED, uno::makeAny(true ), false );

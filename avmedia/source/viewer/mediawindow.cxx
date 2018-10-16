@@ -397,13 +397,13 @@ uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL
         }
     }
 
-    if( !xRet.is() && !xGraphic.get() )
+    if (!xRet.is() && !xGraphic)
     {
         const BitmapEx aBmpEx(AVMEDIA_BMP_EMPTYLOGO);
         xGraphic.reset( new Graphic( aBmpEx ) );
     }
 
-    if( xGraphic.get() )
+    if (xGraphic)
         xRet = xGraphic->GetXGraphic();
 
     return xRet;

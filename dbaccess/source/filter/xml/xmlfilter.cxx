@@ -629,7 +629,7 @@ void ODBFilter::fillPropertyMap(const Any& _rValue,TPropertyNameMap& _rMap)
 
 const SvXMLTokenMap& ODBFilter::GetDocElemTokenMap() const
 {
-    if ( !m_pDocElemTokenMap.get() )
+    if (!m_pDocElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -648,7 +648,7 @@ const SvXMLTokenMap& ODBFilter::GetDocElemTokenMap() const
 
 const SvXMLTokenMap& ODBFilter::GetDocContentElemTokenMap() const
 {
-    if (!m_pDocContentElemTokenMap.get())
+    if (!m_pDocContentElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -669,7 +669,7 @@ const SvXMLTokenMap& ODBFilter::GetDocContentElemTokenMap() const
 
 const SvXMLTokenMap& ODBFilter::GetDatabaseElemTokenMap() const
 {
-    if ( !m_pDatabaseElemTokenMap.get() )
+    if (!m_pDatabaseElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -690,7 +690,7 @@ const SvXMLTokenMap& ODBFilter::GetDatabaseElemTokenMap() const
 
 const SvXMLTokenMap& ODBFilter::GetDataSourceElemTokenMap() const
 {
-    if ( !m_pDataSourceElemTokenMap.get() )
+    if (!m_pDataSourceElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -742,7 +742,7 @@ const SvXMLTokenMap& ODBFilter::GetDataSourceElemTokenMap() const
 
 const SvXMLTokenMap& ODBFilter::GetLoginElemTokenMap() const
 {
-    if ( !m_pLoginElemTokenMap.get() )
+    if (!m_pLoginElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -760,7 +760,7 @@ const SvXMLTokenMap& ODBFilter::GetLoginElemTokenMap() const
 
 const SvXMLTokenMap& ODBFilter::GetDatabaseDescriptionElemTokenMap() const
 {
-    if ( !m_pDatabaseDescriptionElemTokenMap.get() )
+    if (!m_pDatabaseDescriptionElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -776,7 +776,7 @@ const SvXMLTokenMap& ODBFilter::GetDatabaseDescriptionElemTokenMap() const
 
 const SvXMLTokenMap& ODBFilter::GetDataSourceInfoElemTokenMap() const
 {
-    if ( !m_pDataSourceInfoElemTokenMap.get() )
+    if (!m_pDataSourceInfoElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -803,7 +803,7 @@ const SvXMLTokenMap& ODBFilter::GetDataSourceInfoElemTokenMap() const
 
 const SvXMLTokenMap& ODBFilter::GetDocumentsElemTokenMap() const
 {
-    if ( !m_pDocumentsElemTokenMap.get() )
+    if (!m_pDocumentsElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -824,7 +824,7 @@ const SvXMLTokenMap& ODBFilter::GetDocumentsElemTokenMap() const
 
 const SvXMLTokenMap& ODBFilter::GetComponentElemTokenMap() const
 {
-    if ( !m_pComponentElemTokenMap.get() )
+    if (!m_pComponentElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -844,7 +844,7 @@ const SvXMLTokenMap& ODBFilter::GetComponentElemTokenMap() const
 
 const SvXMLTokenMap& ODBFilter::GetQueryElemTokenMap() const
 {
-    if ( !m_pQueryElemTokenMap.get() )
+    if (!m_pQueryElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -869,7 +869,7 @@ const SvXMLTokenMap& ODBFilter::GetQueryElemTokenMap() const
 
 const SvXMLTokenMap& ODBFilter::GetColumnElemTokenMap() const
 {
-    if ( !m_pColumnElemTokenMap.get() )
+    if (!m_pColumnElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {

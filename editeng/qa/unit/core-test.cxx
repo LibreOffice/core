@@ -1629,7 +1629,7 @@ void Test::testSectionAttributes()
 
         aEngine.QuickSetAttribs(*pSet, ESelection(0,3,0,9)); // 'bbbccc'
         std::unique_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
-        CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText.get());
+        CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText);
         std::vector<editeng::Section> aAttrs;
         pEditText->GetAllSections(aAttrs);
 
@@ -1678,7 +1678,7 @@ void Test::testSectionAttributes()
         aEngine.QuickSetAttribs(*pSet, ESelection(4,0,4,5));
 
         std::unique_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
-        CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText.get());
+        CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText);
         std::vector<editeng::Section> aAttrs;
         pEditText->GetAllSections(aAttrs);
         CPPUNIT_ASSERT_EQUAL(size_t(5), aAttrs.size());
@@ -1739,7 +1739,7 @@ void Test::testSectionAttributes()
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aEngine.GetParagraphCount());
 
         std::unique_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
-        CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText.get());
+        CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText);
         std::vector<editeng::Section> aAttrs;
         pEditText->GetAllSections(aAttrs);
 

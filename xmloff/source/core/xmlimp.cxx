@@ -304,7 +304,7 @@ public:
 
     sal_uInt16 getGeneratorVersion( const SvXMLImport& rImport )
     {
-        if ( !mpDocumentInfo.get() )
+        if (!mpDocumentInfo)
         {
             mpDocumentInfo.reset( new DocumentInfo( rImport ) );
         }
@@ -568,7 +568,7 @@ void SAL_CALL SvXMLImport::endDocument()
 
     GetTextImport()->MapCrossRefHeadingFieldsHorribly();
 
-    if (mpImpl->mpRDFaHelper.get())
+    if (mpImpl->mpRDFaHelper)
     {
         const uno::Reference<rdf::XRepositorySupplier> xRS(mxModel,
             uno::UNO_QUERY);
@@ -2005,7 +2005,7 @@ void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
 ::xmloff::RDFaImportHelper &
 SvXMLImport::GetRDFaImportHelper()
 {
-    if (!mpImpl->mpRDFaHelper.get())
+    if (!mpImpl->mpRDFaHelper)
     {
         mpImpl->mpRDFaHelper.reset( new ::xmloff::RDFaImportHelper(*this) );
     }
@@ -2184,8 +2184,8 @@ void SvXMLImportFastNamespaceHandler::addNSDeclAttributes( rtl::Reference < comp
 {
     for(const auto& aNamespaceDefine : m_aNamespaceDefines)
     {
-        OUString& rPrefix = aNamespaceDefine.get()->m_aPrefix;
-        OUString& rNamespaceURI = aNamespaceDefine.get()->m_aNamespaceURI;
+        OUString& rPrefix = aNamespaceDefine->m_aPrefix;
+        OUString& rNamespaceURI = aNamespaceDefine->m_aNamespaceURI;
         OUString sDecl;
         if ( rPrefix.isEmpty() )
             sDecl = "xmlns";

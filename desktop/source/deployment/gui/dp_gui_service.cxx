@@ -270,7 +270,8 @@ void ServiceImpl::startExecuteModal(
         }
     }
 
-    if (app.get() != nullptr) {
+    if (app != nullptr)
+    {
         Application::Execute();
         DeInitVCL();
     }

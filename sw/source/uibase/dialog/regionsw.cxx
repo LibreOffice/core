@@ -173,7 +173,7 @@ IMPL_LINK( SwWrtShell, InsertRegionDialog, void*, p, void )
 {
     SwSectionData* pSect = static_cast<SwSectionData*>(p);
     std::unique_ptr<SwSectionData> xSectionData(pSect);
-    if (!xSectionData.get())
+    if (!xSectionData)
         return;
 
     SfxItemSet aSet(

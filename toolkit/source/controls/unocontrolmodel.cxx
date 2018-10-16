@@ -1312,7 +1312,7 @@ void UnoControlModel::setPropertyValues( const css::uno::Sequence< OUString >& r
         {
             if ( ( pHandles[n] >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( pHandles[n] <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
             {
-                if ( !pFD.get() )
+                if (!pFD)
                 {
                     css::uno::Any* pProp = &maData[ BASEPROPERTY_FONTDESCRIPTOR ];
                     pFD.reset( new awt::FontDescriptor );
@@ -1339,7 +1339,7 @@ void UnoControlModel::setPropertyValues( const css::uno::Sequence< OUString >& r
             // same as a few lines above
 
         // Don't merge FD property into array, as it is sorted
-        if ( pFD.get() )
+        if (pFD)
         {
             css::uno::Any aValue;
             aValue <<= *pFD;

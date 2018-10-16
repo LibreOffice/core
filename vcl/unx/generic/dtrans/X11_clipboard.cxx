@@ -65,12 +65,12 @@ X11Clipboard::create( SelectionManager& rManager, Atom aSelection )
     rtl::Reference<X11Clipboard> cb(new X11Clipboard(rManager, aSelection));
     if( aSelection != None )
     {
-        rManager.registerHandler( aSelection, *cb.get() );
+        rManager.registerHandler(aSelection, *cb);
     }
     else
     {
-        rManager.registerHandler( XA_PRIMARY, *cb.get() );
-        rManager.registerHandler( rManager.getAtom( "CLIPBOARD" ), *cb.get() );
+        rManager.registerHandler(XA_PRIMARY, *cb);
+        rManager.registerHandler(rManager.getAtom("CLIPBOARD"), *cb);
     }
     return cb.get();
 }

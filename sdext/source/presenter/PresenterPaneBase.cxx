@@ -108,7 +108,7 @@ void PresenterPaneBase::SetTitle (const OUString& rsTitle)
     msTitle = rsTitle;
 
     OSL_ASSERT(mpPresenterController.get()!=nullptr);
-    OSL_ASSERT(mpPresenterController->GetPaintManager().get()!=nullptr);
+    OSL_ASSERT(mpPresenterController->GetPaintManager() != nullptr);
 
     mpPresenterController->GetPaintManager()->Invalidate(mxBorderWindow);
 }

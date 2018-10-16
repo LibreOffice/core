@@ -178,7 +178,7 @@ void SAL_CALL PresenterViewFactory::disposing()
         mxConfigurationController->removeResourceFactoryForReference(this);
     mxConfigurationController = nullptr;
 
-    if (mpResourceCache.get() != nullptr)
+    if (mpResourceCache != nullptr)
     {
         // Dispose all views in the cache.
         ResourceContainer::const_iterator iView (mpResourceCache->begin());
@@ -243,7 +243,7 @@ void SAL_CALL PresenterViewFactory::releaseResource (const Reference<XResource>&
 
     // Dispose only views that we can not put into the cache.
     CachablePresenterView* pView = dynamic_cast<CachablePresenterView*>(rxView.get());
-    if (pView == nullptr || mpResourceCache.get()==nullptr)
+    if (pView == nullptr || mpResourceCache == nullptr)
     {
         try
         {
@@ -281,7 +281,7 @@ Reference<XResource> PresenterViewFactory::GetViewFromCache(
     const Reference<XResourceId>& rxViewId,
     const Reference<XPane>& rxAnchorPane) const
 {
-    if (mpResourceCache.get() == nullptr)
+    if (mpResourceCache == nullptr)
         return nullptr;
 
     try

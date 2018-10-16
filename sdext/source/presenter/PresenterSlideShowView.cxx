@@ -734,7 +734,7 @@ void PresenterSlideShowView::PaintEndSlide (const awt::Rectangle& rRepaintBox)
         if (mpPresenterController.get() == nullptr)
             break;
         std::shared_ptr<PresenterTheme> pTheme (mpPresenterController->GetTheme());
-        if (pTheme.get() == nullptr)
+        if (pTheme == nullptr)
             break;
 
         const OUString sViewStyle (pTheme->GetStyleName(mxViewId->getResourceURL()));

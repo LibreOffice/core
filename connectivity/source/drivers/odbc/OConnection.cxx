@@ -78,7 +78,7 @@ OConnection::~OConnection()
 
 oslGenericFunction OConnection::getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const
 {
-    OSL_ENSURE(m_xDriver.get(),"OConnection::getOdbcFunction: m_xDriver is null!");
+    OSL_ENSURE(m_xDriver, "OConnection::getOdbcFunction: m_xDriver is null!");
     return m_xDriver->getOdbcFunction(_nIndex);
 }
 

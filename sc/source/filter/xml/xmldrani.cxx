@@ -409,7 +409,7 @@ void SAL_CALL ScXMLDatabaseRangeContext::endFastElement( sal_Int32 /*nElement*/ 
     {
         ::std::unique_ptr<ScDBData> pData(ConvertToDBData(STR_DB_LOCAL_NONAME));
 
-        if (pData.get())
+        if (pData)
         {
             ScRange aRange;
             pData->GetArea(aRange);
@@ -423,7 +423,7 @@ void SAL_CALL ScXMLDatabaseRangeContext::endFastElement( sal_Int32 /*nElement*/ 
     {
         ::std::unique_ptr<ScDBData> pData(ConvertToDBData(STR_DB_GLOBAL_NONAME));
 
-        if (pData.get())
+        if (pData)
         {
             ScRange aRange;
             pData->GetArea(aRange);
@@ -439,7 +439,7 @@ void SAL_CALL ScXMLDatabaseRangeContext::endFastElement( sal_Int32 /*nElement*/ 
     {
         ::std::unique_ptr<ScDBData> pData(ConvertToDBData(sDatabaseRangeName));
 
-        if (pData.get())
+        if (pData)
         {
             setAutoFilterFlags(*pDoc, *pData);
             (void)pDoc->GetDBCollection()->getNamedDBs().insert(std::move(pData));

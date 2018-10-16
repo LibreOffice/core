@@ -815,7 +815,7 @@ void SAL_CALL FrameworkHelper::DisposeListener::disposing()
 
 void SAL_CALL FrameworkHelper::DisposeListener::disposing (const lang::EventObject& rEventObject)
 {
-    if (mpHelper.get() != nullptr)
+    if (mpHelper != nullptr)
         mpHelper->disposing(rEventObject);
 }
 

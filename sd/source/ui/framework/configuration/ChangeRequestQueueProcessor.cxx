@@ -152,7 +152,7 @@ void ChangeRequestQueueProcessor::ProcessOneEvent()
             SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": All requests are processed");
             // The queue is empty so tell the ConfigurationManager to update
             // its state.
-            if (mpConfigurationUpdater.get() != nullptr)
+            if (mpConfigurationUpdater != nullptr)
             {
 #if DEBUG_SD_CONFIGURATION_TRACE
                 ConfigurationTracer::TraceConfiguration (

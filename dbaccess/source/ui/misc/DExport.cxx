@@ -674,7 +674,7 @@ bool ODatabaseExport::createRowSet()
 {
     m_pUpdateHelper.reset(new OParameterUpdateHelper(createPreparedStatment(m_xConnection->getMetaData(),m_xTable,m_vColumnPositions)));
 
-    return m_pUpdateHelper.get() != nullptr;
+    return m_pUpdateHelper != nullptr;
 }
 
 bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTextColor, const FontDescriptor& _rFont)

@@ -713,7 +713,7 @@ void Chart2Positioner::createPositionMap()
     if (meGlue == GLUETYPE_NA && mpPositionMap.get())
         mpPositionMap.reset();
 
-    if (mpPositionMap.get())
+    if (mpPositionMap)
         return;
 
     glueState();
@@ -2411,7 +2411,7 @@ ScChart2DataSequence::~ScChart2DataSequence()
     if ( m_pDocument )
     {
         m_pDocument->RemoveUnoObject( *this);
-        if (m_pHiddenListener.get())
+        if (m_pHiddenListener)
         {
             ScChartListenerCollection* pCLC = m_pDocument->GetChartListenerCollection();
             if (pCLC)
@@ -2432,7 +2432,7 @@ void ScChart2DataSequence::RefChanged()
         if( m_pDocument )
         {
             ScChartListenerCollection* pCLC = nullptr;
-            if (m_pHiddenListener.get())
+            if (m_pHiddenListener)
             {
                 pCLC = m_pDocument->GetChartListenerCollection();
                 if (pCLC)
@@ -2765,7 +2765,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             // Bring the change back from the range list to the token list.
             UpdateTokensFromRanges(aRanges);
 
-            if (pUndoRanges.get())
+            if (pUndoRanges)
                 m_pDocument->AddUnoRefChange(m_nObjectId, *pUndoRanges);
         }
     }
@@ -3205,7 +3205,7 @@ void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< uti
         if (!m_pValueListener)
             m_pValueListener.reset(new ScLinkListener( LINK( this, ScChart2DataSequence, ValueListenerHdl ) ));
 
-        if (!m_pHiddenListener.get())
+        if (!m_pHiddenListener)
             m_pHiddenListener.reset(new HiddenRangeListener(*this));
 
         if( m_pDocument )

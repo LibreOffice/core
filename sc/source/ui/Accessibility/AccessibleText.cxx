@@ -632,8 +632,8 @@ IMPL_LINK(ScAccessibleTextData, NotifyHdl, EENotify&, aNotify, void)
 {
     ::std::unique_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( &aNotify );
 
-    if( aHint.get() )
-        GetBroadcaster().Broadcast( *aHint.get() );
+    if (aHint)
+        GetBroadcaster().Broadcast(*aHint);
 }
 
 ScDocShell* ScAccessibleCellTextData::GetDocShell(ScTabViewShell* pViewShell)
@@ -731,8 +731,8 @@ IMPL_LINK(ScAccessibleEditObjectTextData, NotifyHdl, EENotify&, rNotify, void)
 {
     ::std::unique_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( &rNotify );
 
-    if( aHint.get() )
-        GetBroadcaster().Broadcast( *aHint.get() );
+    if (aHint)
+        GetBroadcaster().Broadcast(*aHint);
 }
 
 ScAccessibleEditLineTextData::ScAccessibleEditLineTextData(EditView* pEditView, vcl::Window* pWin)

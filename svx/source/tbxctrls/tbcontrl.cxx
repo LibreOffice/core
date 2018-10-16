@@ -1227,7 +1227,7 @@ void SvxFontNameBox_Impl::Select()
         //  while in Dispatch()), accessing members will crash in this case.
         ReleaseFocus_Impl();
         EndPreview();
-        if ( pFontItem.get() )
+        if (pFontItem)
         {
             aArgs[0].Name   = "CharFontName";
             SfxToolBoxControl::Dispatch( m_xDispatchProvider,
@@ -1242,7 +1242,7 @@ void SvxFontNameBox_Impl::Select()
             EndPreview();
             return;
         }
-        if ( pFontItem.get() )
+        if (pFontItem)
         {
             aArgs[0].Name   = "CharPreviewFontName";
             SfxToolBoxControl::Dispatch( m_xDispatchProvider,

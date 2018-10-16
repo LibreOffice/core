@@ -232,7 +232,7 @@ SpellDialog::~SpellDialog()
 
 void SpellDialog::dispose()
 {
-    if (pImpl.get())
+    if (pImpl)
     {
         // save possibly modified user-dictionaries
         Reference< XSearchableDictionaryList >  xDicList( LinguMgr::GetDictionaryList() );

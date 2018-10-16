@@ -410,7 +410,7 @@ sal_Bool SAL_CALL PresenterCanvas::updateScreen (sal_Bool bUpdateAll)
     ThrowIfDisposed();
 
     mbOffsetUpdatePending = true;
-    if (m_pUpdateRequester.get() != nullptr)
+    if (m_pUpdateRequester != nullptr)
     {
         m_pUpdateRequester->RequestUpdate(bUpdateAll);
         return true;

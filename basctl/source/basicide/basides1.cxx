@@ -631,14 +631,14 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             }
 
             const SfxUnoAnyItem* pDocModelItem = rReq.GetArg<SfxUnoAnyItem>(SID_BASICIDE_ARG_DOCUMENT_MODEL);
-            if ( !pDocument.get() && pDocModelItem )
+            if (!pDocument && pDocModelItem)
             {
                 uno::Reference< frame::XModel > xModel( pDocModelItem->GetValue(), UNO_QUERY );
                 if ( xModel.is() )
                     pDocument.reset( new ScriptDocument( xModel ) );
             }
 
-            if ( !pDocument.get() )
+            if (!pDocument)
                 break;
 
             const SfxStringItem* pLibNameItem = rReq.GetArg<SfxStringItem>(SID_BASICIDE_ARG_LIBNAME);

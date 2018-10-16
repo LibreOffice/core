@@ -107,7 +107,7 @@ CustomToolBarImportHelper::createCommandFromMacro( const OUString& sCmd )
 OUString CustomToolBarImportHelper::MSOCommandToOOCommand( sal_Int16 msoCmd )
 {
     OUString result;
-    if ( pMSOCmdConvertor.get() )
+    if (pMSOCmdConvertor)
         result = pMSOCmdConvertor->MSOCommandToOOCommand( msoCmd );
     return result;
 }
@@ -115,7 +115,7 @@ OUString CustomToolBarImportHelper::MSOCommandToOOCommand( sal_Int16 msoCmd )
 OUString CustomToolBarImportHelper::MSOTCIDToOOCommand( sal_Int16 msoTCID )
 {
     OUString result;
-    if ( pMSOCmdConvertor.get() )
+    if (pMSOCmdConvertor)
         result = pMSOCmdConvertor->MSOTCIDToOOCommand( msoTCID );
     return result;
 }

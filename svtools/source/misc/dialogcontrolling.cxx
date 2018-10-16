@@ -159,7 +159,8 @@ namespace svt
 
     void ControlDependencyManager::addController( const std::shared_ptr<DialogController>& _pController )
     {
-        OSL_ENSURE( _pController.get() != nullptr, "ControlDependencyManager::addController: invalid controller, this will crash, sooner or later!" );
+        OSL_ENSURE(_pController != nullptr, "ControlDependencyManager::addController: invalid "
+                                            "controller, this will crash, sooner or later!");
         m_pImpl->aControllers.push_back( _pController );
     }
 

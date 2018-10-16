@@ -1650,7 +1650,7 @@ bool LngSvcMgr::SaveCfgSvcs( const OUString &rServiceName )
 
     if (rServiceName == SN_SPELLCHECKER)
     {
-        if (!mxSpellDsp.get())
+        if (!mxSpellDsp)
             GetSpellCheckerDsp_Impl();
         pDsp = mxSpellDsp.get();
         aLocales = getAvailableLocales( SN_SPELLCHECKER );

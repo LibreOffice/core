@@ -1042,7 +1042,7 @@ namespace drawinglayer
                     std::unique_ptr< vcl::PDFWriter::AnyWidget > pPDFControl(
                         ::toolkitform::describePDFControl( rXControl, *mpPDFExtOutDevData ) );
 
-                    if(pPDFControl.get())
+                    if (pPDFControl)
                     {
                         // still need to fill in the location (is a class Rectangle)
                         const basegfx::B2DRange aRangeLogic(rControlPrimitive.getB2DRange(getViewInformation2D()));
@@ -1056,7 +1056,7 @@ namespace drawinglayer
                         pPDFControl->TextFont.SetFontSize(aFontSize);
 
                         mpPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::Form);
-                        mpPDFExtOutDevData->CreateControl(*pPDFControl.get());
+                        mpPDFExtOutDevData->CreateControl(*pPDFControl);
                         mpPDFExtOutDevData->EndStructureElement();
 
                         // no normal paint needed (see original UnoControlPDFExportContact::do_PaintObject);
@@ -1295,8 +1295,8 @@ namespace drawinglayer
                 rtl::Reference< primitive2d::PolygonHairlinePrimitive2D > xPLeft(new primitive2d::PolygonHairlinePrimitive2D(aLeft, rHairlinePrimitive.getBColor()));
                 rtl::Reference< primitive2d::PolygonHairlinePrimitive2D > xPRight(new primitive2d::PolygonHairlinePrimitive2D(aRight, rHairlinePrimitive.getBColor()));
 
-                processBasePrimitive2D(*xPLeft.get());
-                processBasePrimitive2D(*xPRight.get());
+                processBasePrimitive2D(*xPLeft);
+                processBasePrimitive2D(*xPRight);
             }
             else
             {
@@ -1344,8 +1344,8 @@ namespace drawinglayer
                 rtl::Reference< primitive2d::PolygonStrokePrimitive2D > xPRight(new primitive2d::PolygonStrokePrimitive2D(
                     aRight, rStrokePrimitive.getLineAttribute(), rStrokePrimitive.getStrokeAttribute()));
 
-                processBasePrimitive2D(*xPLeft.get());
-                processBasePrimitive2D(*xPRight.get());
+                processBasePrimitive2D(*xPLeft);
+                processBasePrimitive2D(*xPRight);
             }
             else
             {
@@ -1435,8 +1435,8 @@ namespace drawinglayer
                     aEmpty,
                     rStrokeArrowPrimitive.getEnd()));
 
-                processBasePrimitive2D(*xPLeft.get());
-                processBasePrimitive2D(*xPRight.get());
+                processBasePrimitive2D(*xPLeft);
+                processBasePrimitive2D(*xPRight);
             }
             else
             {

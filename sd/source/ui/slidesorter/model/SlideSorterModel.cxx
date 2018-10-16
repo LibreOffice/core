@@ -322,7 +322,7 @@ void SlideSorterModel::ClearDescriptorList()
          iDescriptor!=iEnd;
          ++iDescriptor)
     {
-        if (iDescriptor->get() != nullptr)
+        if (*iDescriptor != nullptr)
         {
             if (iDescriptor->use_count() > 1)
             {

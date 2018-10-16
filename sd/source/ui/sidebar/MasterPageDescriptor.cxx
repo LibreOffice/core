@@ -102,16 +102,16 @@ const Image& MasterPageDescriptor::GetPreview (MasterPageContainer::PreviewSize 
         bDataChanged = true;
     }
 
-    if (mpPageObjectProvider.get()==nullptr && rDescriptor.mpPageObjectProvider.get()!=nullptr)
+    if (mpPageObjectProvider == nullptr && rDescriptor.mpPageObjectProvider != nullptr)
     {
         mpPageObjectProvider = rDescriptor.mpPageObjectProvider;
         bDataChanged = true;
     }
 
-     if (mpPreviewProvider.get()==nullptr && rDescriptor.mpPreviewProvider.get()!=nullptr)
-     {
-         mpPreviewProvider = rDescriptor.mpPreviewProvider;
-         bPreviewChanged = true;
+    if (mpPreviewProvider == nullptr && rDescriptor.mpPreviewProvider != nullptr)
+    {
+        mpPreviewProvider = rDescriptor.mpPreviewProvider;
+        bPreviewChanged = true;
      }
 
      if (mnTemplateIndex<0 && rDescriptor.mnTemplateIndex>=0)
@@ -143,9 +143,8 @@ int MasterPageDescriptor::UpdatePageObject (
     int nModified = 0;
 
     // Update the page object when that is not yet known.
-    if (mpMasterPage == nullptr
-        && mpPageObjectProvider.get()!=nullptr
-        && (nCostThreshold<0 || mpPageObjectProvider->GetCostIndex()<=nCostThreshold))
+    if (mpMasterPage == nullptr && mpPageObjectProvider != nullptr
+        && (nCostThreshold < 0 || mpPageObjectProvider->GetCostIndex() <= nCostThreshold))
     {
         // Note that pDocument may be NULL.
 
@@ -198,9 +197,8 @@ bool MasterPageDescriptor::UpdatePreview (
     bool bModified (false);
 
     // Update the preview when that is not yet known.
-    if (maLargePreview.GetSizePixel().Width()==0
-        && mpPreviewProvider.get()!=nullptr
-        && (nCostThreshold<0 || mpPreviewProvider->GetCostIndex()<=nCostThreshold))
+    if (maLargePreview.GetSizePixel().Width() == 0 && mpPreviewProvider != nullptr
+        && (nCostThreshold < 0 || mpPreviewProvider->GetCostIndex() <= nCostThreshold))
     {
         SdPage* pPage = mpSlide;
         if (pPage == nullptr)
@@ -323,20 +321,17 @@ bool MasterPageDescriptor::AllComparator::operator() (const SharedMasterPageDesc
         // identical in any of these values then there are thought of as
         // equivalent.  Only the Origin has to be the same in both
         // descriptors.
-        return
-            mpDescriptor->meOrigin == rDescriptor->meOrigin
-            && (
-                (!mpDescriptor->msURL.isEmpty()
-                    && mpDescriptor->msURL == rDescriptor->msURL)
-                || (!mpDescriptor->msPageName.isEmpty()
-                    && mpDescriptor->msPageName == rDescriptor->msPageName)
-                || (!mpDescriptor->msStyleName.isEmpty()
-                    && mpDescriptor->msStyleName == rDescriptor->msStyleName)
-                || (mpDescriptor->mpMasterPage!=nullptr
-                    && mpDescriptor->mpMasterPage==rDescriptor->mpMasterPage)
-                || (mpDescriptor->mpPageObjectProvider.get()!=nullptr
-                    && rDescriptor->mpPageObjectProvider.get()!=nullptr
-                    && mpDescriptor->mpPageObjectProvider==rDescriptor->mpPageObjectProvider));
+        return mpDescriptor->meOrigin == rDescriptor->meOrigin
+               && ((!mpDescriptor->msURL.isEmpty() && mpDescriptor->msURL == rDescriptor->msURL)
+                   || (!mpDescriptor->msPageName.isEmpty()
+                       && mpDescriptor->msPageName == rDescriptor->msPageName)
+                   || (!mpDescriptor->msStyleName.isEmpty()
+                       && mpDescriptor->msStyleName == rDescriptor->msStyleName)
+                   || (mpDescriptor->mpMasterPage != nullptr
+                       && mpDescriptor->mpMasterPage == rDescriptor->mpMasterPage)
+                   || (mpDescriptor->mpPageObjectProvider != nullptr
+                       && rDescriptor->mpPageObjectProvider != nullptr
+                       && mpDescriptor->mpPageObjectProvider == rDescriptor->mpPageObjectProvider));
     }
 }
 

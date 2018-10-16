@@ -148,7 +148,7 @@ void SAL_CALL SlideSorterService::disposing (const lang::EventObject& rEvent)
 void SAL_CALL SlideSorterService::setCurrentPage(const Reference<drawing::XDrawPage>& rxSlide)
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() != nullptr)
+    if (mpSlideSorter != nullptr)
         mpSlideSorter->GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
             mpSlideSorter->GetModel().GetIndex(rxSlide));
 }
@@ -156,7 +156,7 @@ void SAL_CALL SlideSorterService::setCurrentPage(const Reference<drawing::XDrawP
 Reference<drawing::XDrawPage> SAL_CALL SlideSorterService::getCurrentPage()
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() != nullptr)
+    if (mpSlideSorter != nullptr)
         return mpSlideSorter->GetController().GetCurrentSlideManager()->GetCurrentSlide()->GetXDrawPage();
     else
         return nullptr;
@@ -173,14 +173,14 @@ void SAL_CALL SlideSorterService::setDocumentSlides (
     const Reference<container::XIndexAccess >& rxSlides)
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() != nullptr && mpSlideSorter->IsValid())
+    if (mpSlideSorter != nullptr && mpSlideSorter->IsValid())
         mpSlideSorter->GetController().SetDocumentSlides(rxSlides);
 }
 
 sal_Bool SAL_CALL SlideSorterService::getIsHighlightCurrentSlide()
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() == nullptr || ! mpSlideSorter->IsValid())
+    if (mpSlideSorter == nullptr || !mpSlideSorter->IsValid())
         return false;
     else
         return mpSlideSorter->GetProperties()->IsHighlightCurrentSlide();
@@ -189,7 +189,7 @@ sal_Bool SAL_CALL SlideSorterService::getIsHighlightCurrentSlide()
 void SAL_CALL SlideSorterService::setIsHighlightCurrentSlide (sal_Bool bValue)
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() != nullptr && mpSlideSorter->IsValid())
+    if (mpSlideSorter != nullptr && mpSlideSorter->IsValid())
     {
         mpSlideSorter->GetProperties()->SetHighlightCurrentSlide(bValue);
         controller::SlideSorterController::ModelChangeLock aLock (mpSlideSorter->GetController());
@@ -200,7 +200,7 @@ void SAL_CALL SlideSorterService::setIsHighlightCurrentSlide (sal_Bool bValue)
 sal_Bool SAL_CALL SlideSorterService::getIsShowSelection()
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() == nullptr || ! mpSlideSorter->IsValid())
+    if (mpSlideSorter == nullptr || !mpSlideSorter->IsValid())
         return false;
     else
         return mpSlideSorter->GetProperties()->IsShowSelection();
@@ -209,14 +209,14 @@ sal_Bool SAL_CALL SlideSorterService::getIsShowSelection()
 void SAL_CALL SlideSorterService::setIsShowSelection (sal_Bool bValue)
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() != nullptr && mpSlideSorter->IsValid())
+    if (mpSlideSorter != nullptr && mpSlideSorter->IsValid())
         mpSlideSorter->GetProperties()->SetShowSelection(bValue);
 }
 
 sal_Bool SAL_CALL SlideSorterService::getIsShowFocus()
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() == nullptr || ! mpSlideSorter->IsValid())
+    if (mpSlideSorter == nullptr || !mpSlideSorter->IsValid())
         return false;
     else
         return mpSlideSorter->GetProperties()->IsShowFocus();
@@ -225,14 +225,14 @@ sal_Bool SAL_CALL SlideSorterService::getIsShowFocus()
 void SAL_CALL SlideSorterService::setIsShowFocus (sal_Bool bValue)
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() != nullptr && mpSlideSorter->IsValid())
+    if (mpSlideSorter != nullptr && mpSlideSorter->IsValid())
         mpSlideSorter->GetProperties()->SetShowFocus(bValue);
 }
 
 sal_Bool SAL_CALL SlideSorterService::getIsCenterSelection()
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() == nullptr || ! mpSlideSorter->IsValid())
+    if (mpSlideSorter == nullptr || !mpSlideSorter->IsValid())
         return false;
     else
         return mpSlideSorter->GetProperties()->IsCenterSelection();
@@ -241,14 +241,14 @@ sal_Bool SAL_CALL SlideSorterService::getIsCenterSelection()
 void SAL_CALL SlideSorterService::setIsCenterSelection (sal_Bool bValue)
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() != nullptr && mpSlideSorter->IsValid())
+    if (mpSlideSorter != nullptr && mpSlideSorter->IsValid())
         mpSlideSorter->GetProperties()->SetCenterSelection(bValue);
 }
 
 sal_Bool SAL_CALL SlideSorterService::getIsSuspendPreviewUpdatesDuringFullScreenPresentation()
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() == nullptr || ! mpSlideSorter->IsValid())
+    if (mpSlideSorter == nullptr || !mpSlideSorter->IsValid())
         return true;
     else
         return mpSlideSorter->GetProperties()
@@ -259,7 +259,7 @@ void SAL_CALL SlideSorterService::setIsSuspendPreviewUpdatesDuringFullScreenPres
     sal_Bool bValue)
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() != nullptr && mpSlideSorter->IsValid())
+    if (mpSlideSorter != nullptr && mpSlideSorter->IsValid())
         mpSlideSorter->GetProperties()
             ->SetSuspendPreviewUpdatesDuringFullScreenPresentation(bValue);
 }
@@ -267,7 +267,7 @@ void SAL_CALL SlideSorterService::setIsSuspendPreviewUpdatesDuringFullScreenPres
 sal_Bool SAL_CALL SlideSorterService::getIsOrientationVertical()
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() == nullptr || ! mpSlideSorter->IsValid())
+    if (mpSlideSorter == nullptr || !mpSlideSorter->IsValid())
         return true;
     else
         return mpSlideSorter->GetView().GetOrientation() != Layouter::HORIZONTAL;
@@ -276,7 +276,7 @@ sal_Bool SAL_CALL SlideSorterService::getIsOrientationVertical()
 void SAL_CALL SlideSorterService::setIsOrientationVertical (sal_Bool bValue)
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() != nullptr && mpSlideSorter->IsValid())
+    if (mpSlideSorter != nullptr && mpSlideSorter->IsValid())
         mpSlideSorter->GetView().SetOrientation(bValue
             ? Layouter::GRID
             : Layouter::HORIZONTAL);
@@ -285,7 +285,7 @@ void SAL_CALL SlideSorterService::setIsOrientationVertical (sal_Bool bValue)
 sal_Bool SAL_CALL SlideSorterService::getIsSmoothScrolling()
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() == nullptr || ! mpSlideSorter->IsValid())
+    if (mpSlideSorter == nullptr || !mpSlideSorter->IsValid())
         return false;
     else
         return mpSlideSorter->GetProperties()->IsSmoothSelectionScrolling();
@@ -294,14 +294,14 @@ sal_Bool SAL_CALL SlideSorterService::getIsSmoothScrolling()
 void SAL_CALL SlideSorterService::setIsSmoothScrolling (sal_Bool bValue)
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() != nullptr && mpSlideSorter->IsValid())
+    if (mpSlideSorter != nullptr && mpSlideSorter->IsValid())
         mpSlideSorter->GetProperties()->SetSmoothSelectionScrolling(bValue);
 }
 
 util::Color SAL_CALL SlideSorterService::getBackgroundColor()
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() == nullptr || ! mpSlideSorter->IsValid())
+    if (mpSlideSorter == nullptr || !mpSlideSorter->IsValid())
         return util::Color();
     else
         return util::Color(
@@ -311,14 +311,14 @@ util::Color SAL_CALL SlideSorterService::getBackgroundColor()
 void SAL_CALL SlideSorterService::setBackgroundColor (util::Color aBackgroundColor)
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() != nullptr && mpSlideSorter->IsValid())
+    if (mpSlideSorter != nullptr && mpSlideSorter->IsValid())
         mpSlideSorter->GetProperties()->SetBackgroundColor(Color(aBackgroundColor));
 }
 
 util::Color SAL_CALL SlideSorterService::getTextColor()
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() == nullptr || ! mpSlideSorter->IsValid())
+    if (mpSlideSorter == nullptr || !mpSlideSorter->IsValid())
         return util::Color();
     else
         return util::Color(
@@ -328,14 +328,14 @@ util::Color SAL_CALL SlideSorterService::getTextColor()
 void SAL_CALL SlideSorterService::setTextColor (util::Color aTextColor)
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() != nullptr && mpSlideSorter->IsValid())
+    if (mpSlideSorter != nullptr && mpSlideSorter->IsValid())
         mpSlideSorter->GetProperties()->SetTextColor(Color(aTextColor));
 }
 
 util::Color SAL_CALL SlideSorterService::getSelectionColor()
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() == nullptr || ! mpSlideSorter->IsValid())
+    if (mpSlideSorter == nullptr || !mpSlideSorter->IsValid())
         return util::Color();
     else
         return util::Color(
@@ -345,14 +345,14 @@ util::Color SAL_CALL SlideSorterService::getSelectionColor()
 void SAL_CALL SlideSorterService::setSelectionColor (util::Color aSelectionColor)
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() != nullptr && mpSlideSorter->IsValid())
+    if (mpSlideSorter != nullptr && mpSlideSorter->IsValid())
         mpSlideSorter->GetProperties()->SetSelectionColor(Color(aSelectionColor));
 }
 
 util::Color SAL_CALL SlideSorterService::getHighlightColor()
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() == nullptr || ! mpSlideSorter->IsValid())
+    if (mpSlideSorter == nullptr || !mpSlideSorter->IsValid())
         return util::Color();
     else
         return util::Color(
@@ -362,14 +362,14 @@ util::Color SAL_CALL SlideSorterService::getHighlightColor()
 void SAL_CALL SlideSorterService::setHighlightColor (util::Color aHighlightColor)
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() != nullptr && mpSlideSorter->IsValid())
+    if (mpSlideSorter != nullptr && mpSlideSorter->IsValid())
         mpSlideSorter->GetProperties()->SetHighlightColor(Color(aHighlightColor));
 }
 
 sal_Bool SAL_CALL SlideSorterService::getIsUIReadOnly()
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() == nullptr || ! mpSlideSorter->IsValid())
+    if (mpSlideSorter == nullptr || !mpSlideSorter->IsValid())
         return true;
     else
         return mpSlideSorter->GetProperties()->IsUIReadOnly();
@@ -378,7 +378,7 @@ sal_Bool SAL_CALL SlideSorterService::getIsUIReadOnly()
 void SAL_CALL SlideSorterService::setIsUIReadOnly (sal_Bool bIsUIReadOnly)
 {
     ThrowIfDisposed();
-    if (mpSlideSorter.get() != nullptr && mpSlideSorter->IsValid())
+    if (mpSlideSorter != nullptr && mpSlideSorter->IsValid())
         mpSlideSorter->GetProperties()->SetUIReadOnly(bIsUIReadOnly);
 }
 

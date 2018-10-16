@@ -225,7 +225,7 @@ namespace accessibility
         if( !mbEditSourceEmpty )
         {
             // deregister as listener
-            if( mpEditSource.get() )
+            if (mpEditSource)
                 EndListening( mpEditSource->GetBroadcaster() );
         }
         else
@@ -236,7 +236,7 @@ namespace accessibility
 
     SvxTextForwarder* AccessibleEmptyEditSource::GetTextForwarder()
     {
-        if( !mpEditSource.get() )
+        if (!mpEditSource)
             return nullptr;
 
         return mpEditSource->GetTextForwarder();
@@ -244,7 +244,7 @@ namespace accessibility
 
     SvxViewForwarder* AccessibleEmptyEditSource::GetViewForwarder()
     {
-        if( !mpEditSource.get() )
+        if (!mpEditSource)
             return nullptr;
 
         return mpEditSource->GetViewForwarder();
@@ -267,7 +267,7 @@ namespace accessibility
 
     SvxEditViewForwarder* AccessibleEmptyEditSource::GetEditViewForwarder( bool bCreate )
     {
-        if( !mpEditSource.get() )
+        if (!mpEditSource)
             return nullptr;
 
         // switch edit source, if not yet done
@@ -279,7 +279,7 @@ namespace accessibility
 
     std::unique_ptr<SvxEditSource> AccessibleEmptyEditSource::Clone() const
     {
-        if( !mpEditSource.get() )
+        if (!mpEditSource)
             return nullptr;
 
         return mpEditSource->Clone();
@@ -287,7 +287,7 @@ namespace accessibility
 
     void AccessibleEmptyEditSource::UpdateData()
     {
-        if( mpEditSource.get() )
+        if (mpEditSource)
             mpEditSource->UpdateData();
     }
 

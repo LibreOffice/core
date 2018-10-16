@@ -642,14 +642,14 @@ IPropertyArrayHelper & DrawController::getInfoHelper()
 {
     SolarMutexGuard aGuard;
 
-    if (mpPropertyArrayHelper.get() == nullptr)
+    if (mpPropertyArrayHelper == nullptr)
     {
         ::std::vector<beans::Property> aProperties;
         FillPropertyTable(aProperties);
         mpPropertyArrayHelper.reset(new OPropertyArrayHelper(comphelper::containerToSequence(aProperties), false));
     }
 
-    return *mpPropertyArrayHelper.get();
+    return *mpPropertyArrayHelper;
 }
 
 Reference < beans::XPropertySetInfo >  DrawController::getPropertySetInfo()

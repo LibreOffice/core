@@ -93,7 +93,7 @@ void SAL_CALL ShellStackGuard::notifyConfigurationChange (
 {
     if (rEvent.Type == FrameworkHelper::msConfigurationUpdateStartEvent)
     {
-        if (mpUpdateLock.get() == nullptr && IsPrinting())
+        if (mpUpdateLock == nullptr && IsPrinting())
         {
             // Prevent configuration updates while the printer is printing.
             mpUpdateLock.reset(new ConfigurationController::Lock(mxConfigurationController));
@@ -122,7 +122,7 @@ IMPL_LINK(ShellStackGuard, TimeoutHandler, Timer*, pIdle, void)
 #else
     (void)pIdle;
 #endif
-    if (mpUpdateLock.get() != nullptr)
+    if (mpUpdateLock != nullptr)
     {
         if ( ! IsPrinting())
         {

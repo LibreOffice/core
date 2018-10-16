@@ -2548,7 +2548,7 @@ void ScDocument::MergeNumberFormatter(const ScDocument* pSrcDoc)
 
 ScClipParam& ScDocument::GetClipParam()
 {
-    if (!mpClipParam.get())
+    if (!mpClipParam)
         mpClipParam.reset(new ScClipParam);
 
     return *mpClipParam;

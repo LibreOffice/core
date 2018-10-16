@@ -203,8 +203,8 @@ std::shared_ptr<MasterPageContainer::Implementation>
             Implementation::mpInstance);
     }
 
-    DBG_ASSERT (pInstance.get()!=nullptr,
-        "MasterPageContainer::Implementation::Instance(): instance is nullptr");
+    DBG_ASSERT(pInstance != nullptr,
+               "MasterPageContainer::Implementation::Instance(): instance is nullptr");
     return pInstance;
 }
 
@@ -625,8 +625,8 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
     if (aEntry == maContainer.end())
     {
         // Insert a new MasterPageDescriptor.
-        bool bIgnore (rpDescriptor->mpPageObjectProvider.get()==nullptr
-            && rpDescriptor->msURL.isEmpty());
+        bool bIgnore(rpDescriptor->mpPageObjectProvider == nullptr
+                     && rpDescriptor->msURL.isEmpty());
 
         if ( ! bIgnore)
         {
@@ -661,7 +661,7 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
         aResult = (*aEntry)->maToken;
         std::unique_ptr<std::vector<MasterPageContainerChangeEvent::EventType> > pEventTypes(
             (*aEntry)->Update(*rpDescriptor));
-        if (pEventTypes.get()!=nullptr && pEventTypes->size()>0)
+        if (pEventTypes != nullptr && pEventTypes->size() > 0)
         {
             // One or more aspects of the descriptor have changed.  Send
             // appropriate events to the listeners.
@@ -780,7 +780,7 @@ MasterPageContainer::PreviewState MasterPageContainer::Implementation::GetPrevie
     {
         if (pDescriptor->maLargePreview.GetSizePixel().Width() != 0)
             eState = PS_AVAILABLE;
-        else if (pDescriptor->mpPreviewProvider.get() != nullptr)
+        else if (pDescriptor->mpPreviewProvider != nullptr)
         {
             // The preview does not exist but can be created.  When that is
             // not expensive then do it at once.

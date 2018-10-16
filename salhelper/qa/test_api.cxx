@@ -109,7 +109,7 @@ public:
 void Test::testCondition() {
     osl::Mutex mutex;
     std::unique_ptr< salhelper::Condition > p(new DerivedCondition(mutex));
-    CPPUNIT_ASSERT(typeid (*p.get()) != typeid (salhelper::Condition));
+    CPPUNIT_ASSERT(typeid(*p) != typeid(salhelper::Condition));
     CPPUNIT_ASSERT(bool(typeid (p.get()) == typeid (salhelper::Condition *)));
     CPPUNIT_ASSERT(bool(
         typeid (const_cast< salhelper::Condition const * >(p.get()))

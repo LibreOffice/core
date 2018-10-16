@@ -3496,13 +3496,12 @@ void SchXMLExportHelper_Impl::exportText( const OUString& rText )
 
 // class SchXMLExport
 
-SchXMLExport::SchXMLExport(
-    const Reference< uno::XComponentContext >& xContext,
-    OUString const & implementationName, SvXMLExportFlags nExportFlags )
-:   SvXMLExport( util::MeasureUnit::CM, xContext, implementationName,
-        ::xmloff::token::XML_CHART, nExportFlags ),
-    maAutoStylePool( new SchXMLAutoStylePoolP(*this) ),
-    maExportHelper( new SchXMLExportHelper(*this, *maAutoStylePool.get()) )
+SchXMLExport::SchXMLExport(const Reference<uno::XComponentContext>& xContext,
+                           OUString const& implementationName, SvXMLExportFlags nExportFlags)
+    : SvXMLExport(util::MeasureUnit::CM, xContext, implementationName, ::xmloff::token::XML_CHART,
+                  nExportFlags)
+    , maAutoStylePool(new SchXMLAutoStylePoolP(*this))
+    , maExportHelper(new SchXMLExportHelper(*this, *maAutoStylePool))
 {
     if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
         GetNamespaceMap_().Add( GetXMLToken(XML_NP_CHART_EXT), GetXMLToken(XML_N_CHART_EXT), XML_NAMESPACE_CHART_EXT);

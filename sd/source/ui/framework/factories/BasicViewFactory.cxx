@@ -162,12 +162,12 @@ Reference<XResource> SAL_CALL BasicViewFactory::createResource (
         std::shared_ptr<ViewDescriptor> pDescriptor (GetViewFromCache(rxViewId, xPane));
 
         // When the requested view is not in the cache then create a new view.
-        if (pDescriptor.get() == nullptr)
+        if (pDescriptor == nullptr)
         {
             pDescriptor = CreateView(rxViewId, *pFrame, *pWindow, xPane, pFrameView, bIsCenterPane);
         }
 
-        if (pDescriptor.get() != nullptr)
+        if (pDescriptor != nullptr)
             xView = pDescriptor->mxView;
 
         mpViewShellContainer->push_back(pDescriptor);
@@ -287,7 +287,7 @@ std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::CreateView (
         pFrameView);
     pDescriptor->mxViewId = rxViewId;
 
-    if (pDescriptor->mpViewShell.get() != nullptr)
+    if (pDescriptor->mpViewShell != nullptr)
     {
         pDescriptor->mpViewShell->Init(bIsCenterPane);
         mpBase->GetViewShellManager()->ActivateViewShell(pDescriptor->mpViewShell.get());
@@ -485,7 +485,7 @@ std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::GetViewFromC
 
     // When the view has been found then relocate it to the given pane and
     // remove it from the cache.
-    if (pDescriptor.get() != nullptr)
+    if (pDescriptor != nullptr)
     {
         bool bRelocationSuccessfull (false);
         Reference<XRelocatableResource> xResource (pDescriptor->mxView, UNO_QUERY);

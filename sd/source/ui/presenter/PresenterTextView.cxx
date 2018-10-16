@@ -204,8 +204,7 @@ Any PresenterTextView::SetPropertyValue (
 void PresenterTextView::ThrowIfDisposed()
 {
     if (PresenterTextViewInterfaceBase::rBHelper.bDisposed
-        || PresenterTextViewInterfaceBase::rBHelper.bInDispose
-        || mpImplementation.get()==nullptr)
+        || PresenterTextViewInterfaceBase::rBHelper.bInDispose || mpImplementation == nullptr)
     {
         throw lang::DisposedException ("PresenterTextView object has already been disposed",
             static_cast<uno::XWeak*>(this));

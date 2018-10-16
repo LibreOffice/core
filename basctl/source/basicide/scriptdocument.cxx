@@ -302,7 +302,7 @@ namespace basctl
         m_xDocModify.clear();
         m_xScriptAccess.clear();
 
-        if ( m_pDocListener.get() )
+        if (m_pDocListener)
             m_pDocListener->dispose();
     }
 

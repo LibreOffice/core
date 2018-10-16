@@ -655,7 +655,9 @@ SvXMLImportContextRef ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 n
         case XML_TOK_TABLE_ROW_CELL_ANNOTATION:
         {
             bIsEmpty = false;
-            OSL_ENSURE( !mxAnnotationData.get(), "ScXMLTableRowCellContext::CreateChildContext - multiple annotations in one cell" );
+            OSL_ENSURE(
+                !mxAnnotationData,
+                "ScXMLTableRowCellContext::CreateChildContext - multiple annotations in one cell");
             mxAnnotationData.reset( new ScXMLAnnotationData );
             pContext = new ScXMLAnnotationContext( rXMLImport, nPrefix, rLName,
                                                     xAttrList, *mxAnnotationData);
@@ -854,7 +856,7 @@ void ScXMLTableRowCellContext::SetContentValidation( const ScAddress& rCellPos )
 void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
 {
     ScDocument* pDoc = rXMLImport.GetDocument();
-    if( !pDoc || !mxAnnotationData.get() )
+    if (!pDoc || !mxAnnotationData)
         return;
 
     LockSolarMutex();
@@ -906,7 +908,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
                 nOldShapeCount = xShapesIA->getCount();
 
             // an outliner object is required (empty note captions not allowed)
-            if( xOutlinerObj.get() )
+            if (xOutlinerObj)
             {
                 // create cell note with all data from drawing object
                 pNote = ScNoteUtil::CreateNoteFromObjectData( *pDoc, rPos,

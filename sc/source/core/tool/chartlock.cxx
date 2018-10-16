@@ -157,7 +157,7 @@ ScTemporaryChartLock::~ScTemporaryChartLock()
 
 void ScTemporaryChartLock::StartOrContinueLocking()
 {
-    if(!mapScChartLockGuard.get())
+    if (!mapScChartLockGuard)
         mapScChartLockGuard.reset( new ScChartLockGuard(mpDoc) );
     maTimer.Start();
 }
@@ -170,7 +170,7 @@ void ScTemporaryChartLock::StopLocking()
 
 void ScTemporaryChartLock::AlsoLockThisChart( const Reference< frame::XModel >& xModel )
 {
-    if(mapScChartLockGuard.get())
+    if (mapScChartLockGuard)
         mapScChartLockGuard->AlsoLockThisChart( xModel );
 }
 

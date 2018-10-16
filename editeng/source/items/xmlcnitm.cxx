@@ -53,7 +53,7 @@ bool SvXMLAttrContainerItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( dynamic_cast< const SvXMLAttrContainerItem* >(&rItem) !=  nullptr,
                "SvXMLAttrContainerItem::operator ==(): Bad type");
-    return *pImpl.get() == *static_cast<const SvXMLAttrContainerItem&>(rItem).pImpl.get();
+    return *pImpl == *static_cast<const SvXMLAttrContainerItem&>(rItem).pImpl;
 }
 
 bool SvXMLAttrContainerItem::GetPresentation(
@@ -74,8 +74,8 @@ sal_uInt16 SvXMLAttrContainerItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/
 
 bool SvXMLAttrContainerItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
-    Reference<XNameContainer> xContainer =
-        new SvUnoAttributeContainer( o3tl::make_unique<SvXMLAttrContainerData>( *pImpl.get() ) );
+    Reference<XNameContainer> xContainer
+        = new SvUnoAttributeContainer(o3tl::make_unique<SvXMLAttrContainerData>(*pImpl));
 
     rVal <<= xContainer;
     return true;

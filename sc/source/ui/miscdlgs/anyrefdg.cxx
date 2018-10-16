@@ -569,7 +569,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
         if( m_pRefBtn )
             m_pRefBtn->SetEndImage();
 
-        if (!m_pAccel.get())
+        if (!m_pAccel)
         {
             m_pAccel.reset( new Accelerator );
             m_pAccel->InsertItem( 1, vcl::KeyCode( KEY_RETURN ) );

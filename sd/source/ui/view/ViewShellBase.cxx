@@ -382,7 +382,7 @@ std::shared_ptr<ViewShell> ViewShellBase::GetMainViewShell() const
     std::shared_ptr<ViewShell> pMainViewShell (
         framework::FrameworkHelper::Instance(*const_cast<ViewShellBase*>(this))
             ->GetViewShell(framework::FrameworkHelper::msCenterPaneURL));
-    if (pMainViewShell.get() == nullptr)
+    if (pMainViewShell == nullptr)
         pMainViewShell = framework::FrameworkHelper::Instance(*const_cast<ViewShellBase*>(this))
             ->GetViewShell(framework::FrameworkHelper::msFullScreenPaneURL);
     return pMainViewShell;
@@ -532,7 +532,7 @@ Reference<view::XRenderable> ViewShellBase::GetRenderable()
 
 SfxPrinter* ViewShellBase::GetPrinter (bool bCreate)
 {
-    OSL_ASSERT(mpImpl.get()!=nullptr);
+    OSL_ASSERT(mpImpl != nullptr);
 
     return GetDocShell()->GetPrinter (bCreate);
 }
@@ -541,7 +541,7 @@ sal_uInt16 ViewShellBase::SetPrinter (
     SfxPrinter* pNewPrinter,
     SfxPrinterChangeFlags nDiffFlags)
 {
-    OSL_ASSERT(mpImpl.get()!=nullptr);
+    OSL_ASSERT(mpImpl != nullptr);
 
     GetDocShell()->SetPrinter(pNewPrinter);
 
@@ -920,8 +920,8 @@ OUString ViewShellBase::GetInitialViewShellType()
 
 std::shared_ptr<tools::EventMultiplexer> const & ViewShellBase::GetEventMultiplexer()
 {
-    OSL_ASSERT(mpImpl.get()!=nullptr);
-    OSL_ASSERT(mpImpl->mpEventMultiplexer.get()!=nullptr);
+    OSL_ASSERT(mpImpl != nullptr);
+    OSL_ASSERT(mpImpl->mpEventMultiplexer != nullptr);
 
     return mpImpl->mpEventMultiplexer;
 }
@@ -933,37 +933,37 @@ const ::tools::Rectangle& ViewShellBase::getClientRectangle() const
 
 std::shared_ptr<ToolBarManager> const & ViewShellBase::GetToolBarManager() const
 {
-    OSL_ASSERT(mpImpl.get()!=nullptr);
-    OSL_ASSERT(mpImpl->mpToolBarManager.get()!=nullptr);
+    OSL_ASSERT(mpImpl != nullptr);
+    OSL_ASSERT(mpImpl->mpToolBarManager != nullptr);
 
     return mpImpl->mpToolBarManager;
 }
 
 std::shared_ptr<FormShellManager> const & ViewShellBase::GetFormShellManager() const
 {
-    OSL_ASSERT(mpImpl.get()!=nullptr);
-    OSL_ASSERT(mpImpl->mpFormShellManager.get()!=nullptr);
+    OSL_ASSERT(mpImpl != nullptr);
+    OSL_ASSERT(mpImpl->mpFormShellManager != nullptr);
 
     return mpImpl->mpFormShellManager;
 }
 
 DrawController& ViewShellBase::GetDrawController() const
 {
-    OSL_ASSERT(mpImpl.get()!=nullptr);
+    OSL_ASSERT(mpImpl != nullptr);
 
     return *mpImpl->mpController;
 }
 
 void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabBar)
 {
-    OSL_ASSERT(mpImpl.get()!=nullptr);
+    OSL_ASSERT(mpImpl != nullptr);
 
     mpImpl->mpViewTabBar = rViewTabBar;
 }
 
 vcl::Window* ViewShellBase::GetViewWindow()
 {
-    OSL_ASSERT(mpImpl.get()!=nullptr);
+    OSL_ASSERT(mpImpl != nullptr);
 
     return mpImpl->mpViewWindow.get();
 }
@@ -1438,7 +1438,7 @@ void FocusForwardingWindow::dispose()
 void FocusForwardingWindow::KeyInput (const KeyEvent& rKEvt)
 {
     std::shared_ptr<ViewShell> pViewShell = mrBase.GetMainViewShell();
-    if (pViewShell.get() != nullptr)
+    if (pViewShell != nullptr)
     {
         vcl::Window* pWindow = pViewShell->GetActiveWindow();
         if (pWindow != nullptr)
@@ -1455,7 +1455,7 @@ void FocusForwardingWindow::KeyInput (const KeyEvent& rKEvt)
 void FocusForwardingWindow::Command (const CommandEvent& rEvent)
 {
     std::shared_ptr<ViewShell> pViewShell = mrBase.GetMainViewShell();
-    if (pViewShell.get() != nullptr)
+    if (pViewShell != nullptr)
     {
         vcl::Window* pWindow = pViewShell->GetActiveWindow();
         if (pWindow != nullptr)

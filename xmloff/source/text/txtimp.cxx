@@ -752,7 +752,7 @@ XMLTextListsHelper & XMLTextImportHelper::GetTextListHelper()
 
 const SvXMLTokenMap& XMLTextImportHelper::GetTextElemTokenMap()
 {
-    if (!m_xImpl->m_xTextElemTokenMap.get())
+    if (!m_xImpl->m_xTextElemTokenMap)
     {
         m_xImpl->m_xTextElemTokenMap.reset(
             new SvXMLTokenMap( aTextElemTokenMap ));
@@ -762,7 +762,7 @@ const SvXMLTokenMap& XMLTextImportHelper::GetTextElemTokenMap()
 
 const SvXMLTokenMap& XMLTextImportHelper::GetTextPElemTokenMap()
 {
-    if (!m_xImpl->m_xTextPElemTokenMap.get())
+    if (!m_xImpl->m_xTextPElemTokenMap)
     {
         m_xImpl->m_xTextPElemTokenMap.reset(
             new SvXMLTokenMap( aTextPElemTokenMap ));
@@ -772,7 +772,7 @@ const SvXMLTokenMap& XMLTextImportHelper::GetTextPElemTokenMap()
 
 const SvXMLTokenMap& XMLTextImportHelper::GetTextPAttrTokenMap()
 {
-    if (!m_xImpl->m_xTextPAttrTokenMap.get())
+    if (!m_xImpl->m_xTextPAttrTokenMap)
     {
         m_xImpl->m_xTextPAttrTokenMap.reset(
             new SvXMLTokenMap( aTextPAttrTokenMap ));
@@ -782,7 +782,7 @@ const SvXMLTokenMap& XMLTextImportHelper::GetTextPAttrTokenMap()
 
 const SvXMLTokenMap& XMLTextImportHelper::GetTextFrameAttrTokenMap()
 {
-    if (!m_xImpl->m_xTextFrameAttrTokenMap.get())
+    if (!m_xImpl->m_xTextFrameAttrTokenMap)
     {
         m_xImpl->m_xTextFrameAttrTokenMap.reset(
             new SvXMLTokenMap( aTextFrameAttrTokenMap ));
@@ -792,7 +792,7 @@ const SvXMLTokenMap& XMLTextImportHelper::GetTextFrameAttrTokenMap()
 
 const SvXMLTokenMap& XMLTextImportHelper::GetTextContourAttrTokenMap()
 {
-    if (!m_xImpl->m_xTextContourAttrTokenMap.get())
+    if (!m_xImpl->m_xTextContourAttrTokenMap)
     {
         m_xImpl->m_xTextContourAttrTokenMap.reset(
             new SvXMLTokenMap( aTextContourAttrTokenMap ));
@@ -802,7 +802,7 @@ const SvXMLTokenMap& XMLTextImportHelper::GetTextContourAttrTokenMap()
 
 const SvXMLTokenMap& XMLTextImportHelper::GetTextHyperlinkAttrTokenMap()
 {
-    if (!m_xImpl->m_xTextHyperlinkAttrTokenMap.get())
+    if (!m_xImpl->m_xTextHyperlinkAttrTokenMap)
     {
         m_xImpl->m_xTextHyperlinkAttrTokenMap.reset(
             new SvXMLTokenMap( aTextHyperlinkAttrTokenMap ));
@@ -812,7 +812,7 @@ const SvXMLTokenMap& XMLTextImportHelper::GetTextHyperlinkAttrTokenMap()
 
 const SvXMLTokenMap& XMLTextImportHelper::GetTextMasterPageElemTokenMap()
 {
-    if (!m_xImpl->m_xTextMasterPageElemTokenMap.get())
+    if (!m_xImpl->m_xTextMasterPageElemTokenMap)
     {
         m_xImpl->m_xTextMasterPageElemTokenMap.reset(
             new SvXMLTokenMap( aTextMasterPageElemTokenMap ));
@@ -822,7 +822,7 @@ const SvXMLTokenMap& XMLTextImportHelper::GetTextMasterPageElemTokenMap()
 
 const SvXMLTokenMap& XMLTextImportHelper::GetTextFieldAttrTokenMap()
 {
-    if (!m_xImpl->m_xTextFieldAttrTokenMap.get())
+    if (!m_xImpl->m_xTextFieldAttrTokenMap)
     {
         m_xImpl->m_xTextFieldAttrTokenMap.reset(
             new SvXMLTokenMap( aTextFieldAttrTokenMap ));
@@ -2545,7 +2545,7 @@ void XMLTextImportHelper::PopListContext()
 
 const SvXMLTokenMap& XMLTextImportHelper::GetTextNumberedParagraphAttrTokenMap()
 {
-    if (!m_xImpl->m_xTextNumberedParagraphAttrTokenMap.get())
+    if (!m_xImpl->m_xTextNumberedParagraphAttrTokenMap)
     {
         m_xImpl->m_xTextNumberedParagraphAttrTokenMap.reset(
             new SvXMLTokenMap( aTextNumberedParagraphAttrTokenMap ) );
@@ -2555,7 +2555,7 @@ const SvXMLTokenMap& XMLTextImportHelper::GetTextNumberedParagraphAttrTokenMap()
 
 const SvXMLTokenMap& XMLTextImportHelper::GetTextListBlockAttrTokenMap()
 {
-    if (!m_xImpl->m_xTextListBlockAttrTokenMap.get())
+    if (!m_xImpl->m_xTextListBlockAttrTokenMap)
     {
         m_xImpl->m_xTextListBlockAttrTokenMap.reset(
             new SvXMLTokenMap( aTextListBlockAttrTokenMap ) );
@@ -2565,7 +2565,7 @@ const SvXMLTokenMap& XMLTextImportHelper::GetTextListBlockAttrTokenMap()
 
 const SvXMLTokenMap& XMLTextImportHelper::GetTextListBlockElemTokenMap()
 {
-    if (!m_xImpl->m_xTextListBlockElemTokenMap.get())
+    if (!m_xImpl->m_xTextListBlockElemTokenMap)
     {
         m_xImpl->m_xTextListBlockElemTokenMap.reset(
             new SvXMLTokenMap( aTextListBlockElemTokenMap ) );
@@ -2575,7 +2575,7 @@ const SvXMLTokenMap& XMLTextImportHelper::GetTextListBlockElemTokenMap()
 
 SvI18NMap& XMLTextImportHelper::GetRenameMap()
 {
-    if (!m_xImpl->m_xRenameMap.get())
+    if (!m_xImpl->m_xRenameMap)
     {
         m_xImpl->m_xRenameMap.reset( new SvI18NMap );
     }
@@ -2702,7 +2702,7 @@ void XMLTextImportHelper::ConnectFrameChains(
         }
         else
         {
-            if (!m_xImpl->m_xPrevFrmNames.get())
+            if (!m_xImpl->m_xPrevFrmNames)
             {
                 m_xImpl->m_xPrevFrmNames.reset( new std::vector<OUString> );
                 m_xImpl->m_xNextFrmNames.reset( new std::vector<OUString> );

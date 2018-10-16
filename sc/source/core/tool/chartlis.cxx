@@ -119,7 +119,7 @@ ScChartListener::~ScChartListener()
         EndListeningTo();
     pUnoData.reset();
 
-    if (mpExtRefListener.get())
+    if (mpExtRefListener)
     {
         // Stop listening to all external files.
         ScExternalRefManager* pRefMgr = mpDoc->GetExternalRefManager();
@@ -263,7 +263,7 @@ private:
 
 void ScChartListener::StartListeningTo()
 {
-    if (!mpTokens.get() || mpTokens->empty())
+    if (!mpTokens || mpTokens->empty())
         // no references to listen to.
         return;
 
@@ -272,7 +272,7 @@ void ScChartListener::StartListeningTo()
 
 void ScChartListener::EndListeningTo()
 {
-    if (!mpTokens.get() || mpTokens->empty())
+    if (!mpTokens || mpTokens->empty())
         // no references to listen to.
         return;
 
@@ -303,7 +303,7 @@ void ScChartListener::UpdateChartIntersecting( const ScRange& rRange )
 
 ScChartListener::ExternalRefListener* ScChartListener::GetExtRefListener()
 {
-    if (!mpExtRefListener.get())
+    if (!mpExtRefListener)
         mpExtRefListener.reset(new ExternalRefListener(*this, mpDoc));
 
     return mpExtRefListener.get();

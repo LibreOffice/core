@@ -59,7 +59,7 @@ public:
     const BitmapEx& GetMarkedPreview() const { return maMarkedPreview; }
     inline void SetMarkedPreview (const BitmapEx& rMarkePreview);
 
-    bool HasReplacement() const { return (mpReplacement.get() != nullptr); }
+    bool HasReplacement() const { return (mpReplacement != nullptr); }
     inline bool HasLosslessReplacement() const;
     void Invalidate() { mpReplacement.reset(); mpCompressor.reset(); mbIsUpToDate = false; }
     bool IsPrecious() const { return mbIsPrecious; }
@@ -490,7 +490,7 @@ inline sal_Int32 BitmapCache::CacheEntry::GetMemorySize() const
     sal_Int32 nSize (0);
     nSize += maPreview.GetSizeBytes();
     nSize += maMarkedPreview.GetSizeBytes();
-    if (mpReplacement.get() != nullptr)
+    if (mpReplacement != nullptr)
         nSize += mpReplacement->GetMemorySize();
     return nSize;
 }
@@ -499,7 +499,7 @@ void BitmapCache::CacheEntry::Compress (const std::shared_ptr<BitmapCompressor>&
 {
     if ( ! maPreview.IsEmpty())
     {
-        if (mpReplacement.get() == nullptr)
+        if (mpReplacement == nullptr)
         {
             mpReplacement = rpCompressor->Compress(maPreview);
 
@@ -522,7 +522,7 @@ void BitmapCache::CacheEntry::Compress (const std::shared_ptr<BitmapCompressor>&
 
 inline void BitmapCache::CacheEntry::Decompress()
 {
-    if (mpReplacement.get()!=nullptr && mpCompressor.get()!=nullptr && maPreview.IsEmpty())
+    if (mpReplacement != nullptr && mpCompressor != nullptr && maPreview.IsEmpty())
     {
         maPreview = mpCompressor->Decompress(*mpReplacement);
         maMarkedPreview.SetEmpty();
@@ -551,9 +551,7 @@ inline void BitmapCache::CacheEntry::SetMarkedPreview (const BitmapEx& rMarkedPr
 
 inline bool BitmapCache::CacheEntry::HasLosslessReplacement() const
 {
-    return mpReplacement.get()!=nullptr
-        && mpCompressor.get()!=nullptr
-        && mpCompressor->IsLossless();
+    return mpReplacement != nullptr && mpCompressor != nullptr && mpCompressor->IsLossless();
 }
 
 } } } // end of namespace ::sd::slidesorter::cache

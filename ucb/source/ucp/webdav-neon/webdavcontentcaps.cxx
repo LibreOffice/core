@@ -304,10 +304,9 @@ uno::Sequence< beans::Property > Content::getProperties(
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
         bTransient = m_bTransient;
-        xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
-        if ( m_xCachedProps.get() )
-            xCachedProps.reset(
-                new ContentProperties( *m_xCachedProps.get() ) );
+        xResAccess.reset(new DAVResourceAccess(*m_xResAccess));
+        if (m_xCachedProps)
+            xCachedProps.reset(new ContentProperties(*m_xCachedProps));
         xProvider.set( m_pProvider );
     }
 
@@ -494,7 +493,7 @@ uno::Sequence< beans::Property > Content::getProperties(
                 "CreatableContentsInfo" ) );
 
     // Add cached properties, if present and still missing.
-    if ( xCachedProps.get() )
+    if (xCachedProps)
     {
         const std::set< OUString >::const_iterator set_end
             = aPropSet.end();

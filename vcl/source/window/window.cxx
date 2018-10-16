@@ -3181,7 +3181,7 @@ LOKWindowsMap& GetLOKWindowsMap()
     if (!s_pLOKWindowsMap)
         s_pLOKWindowsMap.reset(new LOKWindowsMap);
 
-    return *s_pLOKWindowsMap.get();
+    return *s_pLOKWindowsMap;
 }
 
 }

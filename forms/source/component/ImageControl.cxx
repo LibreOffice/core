@@ -402,7 +402,7 @@ bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL, Val
     else
     {
         pImageStream = ::utl::UcbStreamHelper::CreateStream( _rURL, StreamMode::READ );
-        bool bSetNull = ( pImageStream.get() == nullptr ) || ( ERRCODE_NONE != pImageStream->GetErrorCode() );
+        bool bSetNull = (pImageStream == nullptr) || (ERRCODE_NONE != pImageStream->GetErrorCode());
 
         if ( !bSetNull )
         {

@@ -2040,7 +2040,7 @@ SwXTextField::getAnchor()
 
     std::shared_ptr< SwPaM > pPamForTextField;
     SwTextField::GetPamForTextField(*pTextField, pPamForTextField);
-    if (pPamForTextField.get() == nullptr)
+    if (pPamForTextField == nullptr)
         return nullptr;
 
     // If this is a postit field, then return the range of its annotation mark if it has one.

@@ -117,9 +117,9 @@ IMPL_LINK(SidebarTextEditSource, NotifyHdl, EENotify&, rNotify, void)
 {
     std::unique_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( &rNotify ) );
 
-    if( aHint.get() )
+    if (aHint)
     {
-        Broadcast( *aHint.get() );
+        Broadcast(*aHint);
     }
 }
 

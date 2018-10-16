@@ -840,10 +840,7 @@ void ScTabView::TestHintWindow()
     }
 }
 
-bool ScTabView::HasHintWindow() const
-{
-    return mxInputHintOO.get() != nullptr;
-}
+bool ScTabView::HasHintWindow() const { return mxInputHintOO != nullptr; }
 
 void ScTabView::RemoveHintWindow()
 {

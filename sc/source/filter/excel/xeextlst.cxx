@@ -149,10 +149,10 @@ XclExpExtDataBar::XclExpExtDataBar( const XclExpRoot& rRoot, const ScDataBarForm
     XclExpRoot(rRoot)
 {
     const ScDataBarFormatData& rFormatData = *rFormat.GetDataBarData();
-    mpLowerLimit.reset( new XclExpExtCfvo( *this, *rFormatData.mpLowerLimit.get(), rPos, true ) );
-    mpUpperLimit.reset( new XclExpExtCfvo( *this, *rFormatData.mpUpperLimit.get(), rPos, false ) );
-    if(rFormatData.mpNegativeColor.get())
-        mpNegativeColor.reset( new XclExpExtNegativeColor( *rFormatData.mpNegativeColor.get() ) );
+    mpLowerLimit.reset(new XclExpExtCfvo(*this, *rFormatData.mpLowerLimit, rPos, true));
+    mpUpperLimit.reset(new XclExpExtCfvo(*this, *rFormatData.mpUpperLimit, rPos, false));
+    if (rFormatData.mpNegativeColor)
+        mpNegativeColor.reset(new XclExpExtNegativeColor(*rFormatData.mpNegativeColor));
     else
         mpNegativeColor.reset( new XclExpExtNegativeColor( rFormatData.maPositiveColor ) );
     mpAxisColor.reset( new XclExpExtAxisColor( rFormatData.maAxisColor ) );

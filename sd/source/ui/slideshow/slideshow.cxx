@@ -948,7 +948,7 @@ void SlideShow::activate( ViewShellBase& rBase )
     if( (mpFullScreenViewShellBase == &rBase) && !mxController.is() )
     {
         ::std::shared_ptr<PresentationViewShell> pShell = std::dynamic_pointer_cast<PresentationViewShell>(rBase.GetMainViewShell());
-        if(pShell.get() != nullptr)
+        if (pShell != nullptr)
         {
             pShell->FinishInitialization( mpFullScreenFrameView );
             mpFullScreenFrameView = nullptr;

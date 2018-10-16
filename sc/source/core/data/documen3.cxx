@@ -400,7 +400,7 @@ ScDPObject* ScDocument::GetDPAtBlock( const ScRange & rBlock ) const
 
 void ScDocument::StopTemporaryChartLock()
 {
-    if( apTemporaryChartLock.get() )
+    if (apTemporaryChartLock)
         apTemporaryChartLock->StopLocking();
 }
 
@@ -615,7 +615,7 @@ bool ScDocument::LinkExternalTab( SCTAB& rTab, const OUString& aDocTab,
 ScExternalRefManager* ScDocument::GetExternalRefManager() const
 {
     ScDocument* pThis = const_cast<ScDocument*>(this);
-    if (!pExternalRefMgr.get())
+    if (!pExternalRefMgr)
         pThis->pExternalRefMgr.reset( new ScExternalRefManager( pThis));
 
     return pExternalRefMgr.get();
@@ -628,7 +628,7 @@ bool ScDocument::IsInExternalReferenceMarking() const
 
 void ScDocument::MarkUsedExternalReferences()
 {
-    if (!pExternalRefMgr.get())
+    if (!pExternalRefMgr)
         return;
     if (!pExternalRefMgr->hasExternalData())
         return;
@@ -643,7 +643,7 @@ void ScDocument::MarkUsedExternalReferences()
 
 ScFormulaParserPool& ScDocument::GetFormulaParserPool() const
 {
-    if( !mxFormulaParserPool.get() )
+    if (!mxFormulaParserPool)
         mxFormulaParserPool.reset( new ScFormulaParserPool( *this ) );
     return *mxFormulaParserPool;
 }

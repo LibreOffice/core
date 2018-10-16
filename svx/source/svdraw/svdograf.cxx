@@ -278,7 +278,7 @@ const GraphicObject& SdrGrafObj::GetGraphicObject(bool bForceSwapIn) const
 {
     if (bForceSwapIn)
         ForceSwapIn();
-    return *mpGraphicObject.get();
+    return *mpGraphicObject;
 }
 
 const GraphicObject* SdrGrafObj::GetReplacementGraphicObject() const

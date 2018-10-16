@@ -232,7 +232,7 @@ void XclImpStringHelper::SetToDocument(
 
     ::std::unique_ptr< EditTextObject > pTextObj( lclCreateTextObject( rRoot, rString, XclFontItemType::Editeng, nXFIndex ) );
 
-    if (pTextObj.get())
+    if (pTextObj)
     {
         rDoc.setEditCell(rPos, std::move(pTextObj));
     }

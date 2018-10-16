@@ -566,7 +566,7 @@ void FormulaDlg_Impl::UpdateValues( bool bForceRecalcStruct )
     // is supported, i.e. the button is visible.
     if (m_pBtnMatrix->IsVisible() && !m_pBtnMatrix->IsChecked())
     {
-        std::unique_ptr<FormulaCompiler> pCompiler( m_pHelper->createCompiler( *m_pTokenArray.get()));
+        std::unique_ptr<FormulaCompiler> pCompiler(m_pHelper->createCompiler(*m_pTokenArray));
         // In the case of the reportdesign dialog there is no currently active
         // OpCode symbol mapping that could be used to create strings from
         // tokens, it's all dreaded API mapping. However, in that case there's
@@ -825,7 +825,7 @@ void FormulaDlg_Impl::UpdateTokenArray( const OUString& rStrExp)
         }
     } // if ( pTokens && nLen == m_aTokenList.getLength() )
 
-    std::unique_ptr<FormulaCompiler> pCompiler( m_pHelper->createCompiler(*m_pTokenArray.get()));
+    std::unique_ptr<FormulaCompiler> pCompiler(m_pHelper->createCompiler(*m_pTokenArray));
     // #i101512# Disable special handling of jump commands.
     pCompiler->EnableJumpCommandReorder(false);
     pCompiler->EnableStopOnError(false);

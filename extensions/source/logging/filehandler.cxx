@@ -206,7 +206,7 @@ namespace logging
 
     void FileHandler::impl_writeString_nothrow( const OString& _rEntry )
     {
-        OSL_PRECOND( m_pFile.get(), "FileHandler::impl_writeString_nothrow: no file!" );
+        OSL_PRECOND(m_pFile, "FileHandler::impl_writeString_nothrow: no file!");
 
         sal_uInt64 nBytesToWrite( _rEntry.getLength() );
         sal_uInt64 nBytesWritten( 0 );
@@ -304,7 +304,7 @@ namespace logging
     void SAL_CALL FileHandler::flush(  )
     {
         MethodGuard aGuard( *this );
-        if(!m_pFile.get())
+        if (!m_pFile)
         {
             OSL_PRECOND(false, "FileHandler::flush: no file!");
             return;

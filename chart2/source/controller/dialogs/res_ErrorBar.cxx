@@ -192,7 +192,7 @@ void ErrorBarResources::SetChartDocumentForRangeChoosing(
     m_apRangeSelectionHelper.reset( new RangeSelectionHelper( xChartDocument ));
 
     // has internal data provider => rename "cell range" to "from data"
-    OSL_ASSERT( m_apRangeSelectionHelper.get());
+    OSL_ASSERT(m_apRangeSelectionHelper);
     if( m_bHasInternalDataProvider )
     {
         m_xRbRange->set_label(m_xUIStringRbRange->get_label());
@@ -435,8 +435,8 @@ IMPL_LINK_NOARG(ErrorBarResources, IndicatorChanged, weld::ToggleButton&, void)
 
 IMPL_LINK(ErrorBarResources, ChooseRange, weld::Button&, rButton, void)
 {
-    OSL_ASSERT( m_apRangeSelectionHelper.get());
-    if( ! m_apRangeSelectionHelper.get())
+    OSL_ASSERT(m_apRangeSelectionHelper);
+    if (!m_apRangeSelectionHelper)
         return;
     OSL_ASSERT( m_pCurrentRangeChoosingField == nullptr );
 
@@ -665,8 +665,8 @@ void ErrorBarResources::FillValueSets()
 void ErrorBarResources::listeningFinished(
     const OUString & rNewRange )
 {
-    OSL_ASSERT( m_apRangeSelectionHelper.get());
-    if( ! m_apRangeSelectionHelper.get())
+    OSL_ASSERT(m_apRangeSelectionHelper);
+    if (!m_apRangeSelectionHelper)
         return;
 
     // rNewRange becomes invalid after removing the listener
@@ -697,8 +697,8 @@ void ErrorBarResources::listeningFinished(
 
 void ErrorBarResources::disposingRangeSelection()
 {
-    OSL_ASSERT( m_apRangeSelectionHelper.get());
-    if( m_apRangeSelectionHelper.get())
+    OSL_ASSERT(m_apRangeSelectionHelper);
+    if (m_apRangeSelectionHelper)
         m_apRangeSelectionHelper->stopRangeListening( false );
 }
 

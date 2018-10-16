@@ -2335,8 +2335,8 @@ FileDialogHelper::FileDialogHelper(
 
     aWildcard += aExtName;
 
-    OUString const aUIString = ::sfx2::addExtension( aFilterUIName,
-            aWildcard, (OPEN == lcl_OpenOrSave(mpImpl->m_nDialogType)), *mpImpl.get());
+    OUString const aUIString = ::sfx2::addExtension(
+        aFilterUIName, aWildcard, (OPEN == lcl_OpenOrSave(mpImpl->m_nDialogType)), *mpImpl);
     AddFilter( aUIString, aWildcard );
 }
 
@@ -2401,11 +2401,7 @@ void FileDialogHelper::StartExecuteModal( const Link<FileDialogHelper*,void>& rE
         mpImpl->implStartExecute();
 }
 
-
-short FileDialogHelper::GetDialogType() const
-{
-    return mpImpl.get() ? mpImpl->m_nDialogType : 0;
-}
+short FileDialogHelper::GetDialogType() const { return mpImpl ? mpImpl->m_nDialogType : 0; }
 
 bool FileDialogHelper::IsPasswordEnabled() const
 {
@@ -2415,7 +2411,7 @@ bool FileDialogHelper::IsPasswordEnabled() const
 OUString FileDialogHelper::GetRealFilter() const
 {
     OUString sFilter;
-    if ( mpImpl.get() )
+    if (mpImpl)
         mpImpl->getRealFilter( sFilter );
     return sFilter;
 }

@@ -57,11 +57,11 @@ const static double gnVerticalBorder (5);
         PresenterConfigurationAccess::GetProperty(xProperties, "Action") >>= sAction;
 
         PresenterTheme::SharedFontDescriptor pFont;
-        if (rpTheme.get() != nullptr)
+        if (rpTheme != nullptr)
             pFont = rpTheme->GetFont("ButtonFont");
 
         PresenterTheme::SharedFontDescriptor pMouseOverFont;
-        if (rpTheme.get() != nullptr)
+        if (rpTheme != nullptr)
             pMouseOverFont = rpTheme->GetFont("ButtonMouseOverFont");
 
         rtl::Reference<PresenterButton> pButton (

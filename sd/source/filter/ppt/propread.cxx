@@ -206,7 +206,7 @@ Section::Section( const Section& rSection )
     for ( int i = 0; i < 16; i++ )
         aFMTID[ i ] = rSection.aFMTID[ i ];
     for(const std::unique_ptr<PropEntry>& rEntry : rSection.maEntries)
-        maEntries.push_back(o3tl::make_unique<PropEntry>(*rEntry.get()));
+        maEntries.push_back(o3tl::make_unique<PropEntry>(*rEntry));
 }
 
 Section::Section( const sal_uInt8* pFMTID )
@@ -528,7 +528,7 @@ Section& Section::operator=( const Section& rSection )
         memcpy( static_cast<void*>(aFMTID), static_cast<void const *>(rSection.aFMTID), 16 );
 
         for(const std::unique_ptr<PropEntry>& rEntry : rSection.maEntries)
-            maEntries.push_back(o3tl::make_unique<PropEntry>(*rEntry.get()));
+            maEntries.push_back(o3tl::make_unique<PropEntry>(*rEntry));
     }
     return *this;
 }
@@ -609,7 +609,7 @@ PropRead& PropRead::operator=( const PropRead& rPropRead )
         memcpy( mApplicationCLSID, rPropRead.mApplicationCLSID, 16 );
 
         for(const std::unique_ptr<Section>& rSection : rPropRead.maSections)
-            maSections.push_back(o3tl::make_unique<Section>(*rSection.get()));
+            maSections.push_back(o3tl::make_unique<Section>(*rSection));
     }
     return *this;
 }

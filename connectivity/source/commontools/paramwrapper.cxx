@@ -150,7 +150,7 @@ namespace param
 
     ::cppu::IPropertyArrayHelper& ParameterWrapper::getInfoHelper()
     {
-        if ( !m_pInfoHelper.get() )
+        if (!m_pInfoHelper)
         {
             Sequence< Property > aProperties;
             try

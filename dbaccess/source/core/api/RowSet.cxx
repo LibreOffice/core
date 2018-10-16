@@ -1704,7 +1704,9 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
     {
         DELETEZ(m_pCache);
     }
-    m_pCache = new ORowSetCache( xResultSet, m_xComposer.get(), m_aContext, aComposedUpdateTableName, m_bModified, m_bNew, *m_aParameterValueForCache.get(),m_aFilter,m_nMaxRows );
+    m_pCache
+        = new ORowSetCache(xResultSet, m_xComposer.get(), m_aContext, aComposedUpdateTableName,
+                           m_bModified, m_bNew, *m_aParameterValueForCache, m_aFilter, m_nMaxRows);
     if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
     {
         m_nPrivileges = Privilege::SELECT;

@@ -139,7 +139,7 @@ void CenterViewFocusModule::HandleNewView (
             if (pViewShellWrapper != nullptr)
             {
                 std::shared_ptr<ViewShell> pViewShell = pViewShellWrapper->GetViewShell();
-                if (pViewShell.get() != nullptr)
+                if (pViewShell != nullptr)
                     mpBase->GetViewShellManager()->MoveToTop(*pViewShell);
             }
         }

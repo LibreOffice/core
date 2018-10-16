@@ -229,7 +229,7 @@ SvxUnoText& ScAnnotationObj::GetUnoText()
         pUnoText = new SvxUnoText( &aEditSource, lcl_GetAnnotationPropertySet(),
                                     uno::Reference<text::XText>() );
     }
-    return *pUnoText.get();
+    return *pUnoText;
 }
 
 const ScPostIt* ScAnnotationObj::ImplGetNote() const

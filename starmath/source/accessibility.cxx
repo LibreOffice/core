@@ -862,8 +862,8 @@ SmTextForwarder::~SmTextForwarder()
 IMPL_LINK(SmTextForwarder, NotifyHdl, EENotify&, rNotify, void)
 {
     ::std::unique_ptr< SfxHint > aHint = SvxEditSourceHelper::EENotification2Hint( &rNotify );
-    if (aHint.get())
-        rEditSource.GetBroadcaster().Broadcast( *aHint.get() );
+    if (aHint)
+        rEditSource.GetBroadcaster().Broadcast(*aHint);
 }
 
 sal_Int32 SmTextForwarder::GetParagraphCount() const

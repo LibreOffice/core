@@ -309,7 +309,7 @@ PresenterSlideSorter::PresenterSlideSorter (
             mxCanvas,
             "SlideSorterCloser");
 
-        if (mpPresenterController->GetTheme().get() != nullptr)
+        if (mpPresenterController->GetTheme() != nullptr)
         {
             PresenterTheme::SharedFontDescriptor pFont (
                 mpPresenterController->GetTheme()->GetFont("ButtonFont"));
@@ -530,7 +530,7 @@ void SAL_CALL PresenterSlideSorter::mouseEntered (const css::awt::MouseEvent&) {
 void SAL_CALL PresenterSlideSorter::mouseExited (const css::awt::MouseEvent&)
 {
     mnSlideIndexMousePressed = -1;
-    if (mpMouseOverManager.get() != nullptr)
+    if (mpMouseOverManager != nullptr)
         mpMouseOverManager->SetSlide(mnSlideIndexMousePressed, awt::Rectangle(0,0,0,0));
 }
 
@@ -538,7 +538,7 @@ void SAL_CALL PresenterSlideSorter::mouseExited (const css::awt::MouseEvent&)
 
 void SAL_CALL PresenterSlideSorter::mouseMoved (const css::awt::MouseEvent& rEvent)
 {
-    if (mpMouseOverManager.get() != nullptr)
+    if (mpMouseOverManager != nullptr)
     {
         css::awt::MouseEvent rTemp =rEvent;
         /// check whether RTL interface or not
@@ -591,7 +591,7 @@ void SAL_CALL PresenterSlideSorter::propertyChange (
 void SAL_CALL PresenterSlideSorter::notifyPreviewCreation (
     sal_Int32 nSlideIndex)
 {
-    OSL_ASSERT(mpLayout.get()!=nullptr);
+    OSL_ASSERT(mpLayout != nullptr);
 
     awt::Rectangle aBBox (mpLayout->GetBoundingBox(nSlideIndex));
     mpPresenterController->GetPaintManager()->Invalidate(mxWindow, aBBox, true);
@@ -886,7 +886,7 @@ void PresenterSlideSorter::PaintPreview (
     // Emphasize the current slide.
     if (nSlideIndex == mnCurrentSlideIndex)
     {
-        if (mpCurrentSlideFrameRenderer.get() != nullptr)
+        if (mpCurrentSlideFrameRenderer != nullptr)
         {
             const awt::Rectangle aSlideBoundingBox(
                 sal::static_int_cast<sal_Int32>(0.5 + aTopLeft.X),
@@ -1443,10 +1443,10 @@ PresenterSlideSorter::MouseOverManager::MouseOverManager (
       mxInvalidateTarget(rxInvalidateTarget),
       mpPaintManager(rpPaintManager)
 {
-    if (rpTheme.get()!=nullptr)
+    if (rpTheme != nullptr)
     {
         std::shared_ptr<PresenterBitmapContainer> pBitmaps (rpTheme->GetBitmapContainer());
-        if (pBitmaps.get() != nullptr)
+        if (pBitmaps != nullptr)
         {
             mpLeftLabelBitmap = pBitmaps->GetBitmap("LabelLeft");
             mpCenterLabelBitmap = pBitmaps->GetBitmap("LabelCenter");
@@ -1709,7 +1709,7 @@ void PresenterSlideSorter::MouseOverManager::PaintButtonBackground (
 
 void PresenterSlideSorter::MouseOverManager::Invalidate()
 {
-    if (mpPaintManager.get() != nullptr)
+    if (mpPaintManager != nullptr)
         mpPaintManager->Invalidate(mxInvalidateTarget, maSlideBoundingBox, true);
 }
 

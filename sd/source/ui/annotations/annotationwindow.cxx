@@ -518,7 +518,7 @@ void AnnotationWindow::setAnnotation( const Reference< XAnnotation >& xAnnotatio
         if( pTextApi )
         {
             std::unique_ptr< OutlinerParaObject > pOPO( pTextApi->CreateText() );
-            Engine()->SetText( *pOPO.get() );
+            Engine()->SetText(*pOPO);
         }
 
         Engine()->ClearModifyFlag();
