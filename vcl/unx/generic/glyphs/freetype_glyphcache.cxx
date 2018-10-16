@@ -278,7 +278,7 @@ void GlyphCache::InitFreetype()
     if( pEnv )
         nDefaultPrioAutoHint  = pEnv[0] - '0';
 
-    vclFontFileList::get();
+    (void)vclFontFileList::get();
 }
 
 FT_Face FreetypeFont::GetFtFace() const
