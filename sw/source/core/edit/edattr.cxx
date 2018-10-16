@@ -463,7 +463,7 @@ size_t SwEditShell::GetSeqFootnoteList( SwSeqFieldList& rList, bool bEndNotes )
 
             if( pTextNd )
             {
-                OUString sText( rFootnote.GetViewNumStr( *mxDoc ));
+                OUString sText(rFootnote.GetViewNumStr(*mxDoc, GetLayout()));
                 if( !sText.isEmpty() )
                     sText += " ";
                 sText += pTextNd->GetExpandText();
