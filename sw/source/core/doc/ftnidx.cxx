@@ -22,12 +22,26 @@
 #include <ftninfo.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
+#include <redline.hxx>
 #include <ftnidx.hxx>
 #include <ndtxt.hxx>
 #include <ndindex.hxx>
 #include <section.hxx>
 #include <fmtftntx.hxx>
 #include <rootfrm.hxx>
+
+static bool IsFootnoteDeleted(IDocumentRedlineAccess const& rIDRA,
+        SwTextFootnote const& rTextFootnote)
+{
+    SwRedlineTable::size_type tmp;
+    SwPosition const pos(const_cast<SwTextNode&>(rTextFootnote.GetTextNode()),
+            rTextFootnote.GetStart());
+    SwRangeRedline const*const pRedline(rIDRA.GetRedline(pos, &tmp));
+    return (pRedline
+        && pRedline->GetType() == nsRedlineType_t::REDLINE_DELETE
+        && *pRedline->GetPoint() != *pRedline->GetMark());
+}
 
 bool CompareSwFootnoteIdxs::operator()(SwTextFootnote* const& lhs, SwTextFootnote* const& rhs) const
 {
@@ -49,6 +63,7 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
 
     const SwEndNoteInfo& rEndInfo = pDoc->GetEndNoteInfo();
     const SwFootnoteInfo& rFootnoteInfo = pDoc->GetFootnoteInfo();
+    IDocumentRedlineAccess const& rIDRA(pDoc->getIDocumentRedlineAccess());
 
     // For normal foot notes we treat per-chapter and per-document numbering
     // separately. For Endnotes we only have per-document numbering.
@@ -78,6 +93,7 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
 
         size_t nPos = 0;
         size_t nFootnoteNo = 1;
+        size_t nFootnoteNoHidden = 1;
         if( SeekEntry( *pCapStt, &nPos ) && nPos )
         {
             // Step forward until the Index is not the same anymore
@@ -91,7 +107,13 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
             return;
 
         if( rOutlNds.empty() )
+        {
             nFootnoteNo = nPos+1;
+            if (nPos)
+            {
+                nFootnoteNoHidden = (*this)[nPos - 1]->GetFootnote().GetNumberRLHidden() + 1;
+            }
+        }
 
         for( ; nPos < size(); ++nPos )
         {
@@ -103,7 +125,15 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
             if( rFootnote.GetNumStr().isEmpty() && !rFootnote.IsEndNote() &&
                 !SwUpdFootnoteEndNtAtEnd::FindSectNdWithEndAttr( *pTextFootnote ))
             {
-                pTextFootnote->SetNumber( rFootnoteInfo.nFootnoteOffset + nFootnoteNo++, rFootnote.GetNumStr() );
+                pTextFootnote->SetNumber(
+                    rFootnoteInfo.nFootnoteOffset + nFootnoteNo,
+                    rFootnoteInfo.nFootnoteOffset + nFootnoteNoHidden,
+                    rFootnote.GetNumStr() );
+                ++nFootnoteNo;
+                if (!IsFootnoteDeleted(rIDRA, *pTextFootnote))
+                {
+                    ++nFootnoteNoHidden;
+                }
             }
         }
     }
@@ -116,6 +146,8 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
     size_t nPos;
     size_t nFootnoteNo = 1;
     size_t nEndNo = 1;
+    size_t nFootnoteNoHidden = 1;
+    size_t nEndNoHidden = 1;
     sal_uLong nUpdNdIdx = rStt.GetIndex();
     for( nPos = 0; nPos < size(); ++nPos )
     {
@@ -126,12 +158,24 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
         const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
         if( rFootnote.GetNumStr().isEmpty() )
         {
-            if( !aNumArr.ChkNumber( *pTextFootnote ) )
+            if (!aNumArr.ChkNumber(rIDRA, *pTextFootnote).first)
             {
                 if( pTextFootnote->GetFootnote().IsEndNote() )
+                {
                     nEndNo++;
+                    if (!IsFootnoteDeleted(rIDRA, *pTextFootnote))
+                    {
+                        ++nEndNoHidden;
+                    }
+                }
                 else
+                {
                     nFootnoteNo++;
+                    if (!IsFootnoteDeleted(rIDRA, *pTextFootnote))
+                    {
+                        ++nFootnoteNoHidden;
+                    }
+                }
             }
         }
     }
@@ -143,15 +187,34 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNodeIndex& rStt )
         const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
         if( rFootnote.GetNumStr().isEmpty() )
         {
-            sal_uInt16 nSectNo = aNumArr.ChkNumber( *pTextFootnote );
-            if( !nSectNo && ( rFootnote.IsEndNote() || !bEndNoteOnly ))
-                nSectNo = rFootnote.IsEndNote()
-                            ? rEndInfo.nFootnoteOffset + nEndNo++
-                            : rFootnoteInfo.nFootnoteOffset + nFootnoteNo++;
-
-            if( nSectNo )
+            std::pair<sal_uInt16, sal_uInt16> nSectNo = aNumArr.ChkNumber(rIDRA, *pTextFootnote);
+            if (!nSectNo.first && (rFootnote.IsEndNote() || !bEndNoteOnly))
             {
-                pTextFootnote->SetNumber( nSectNo, rFootnote.GetNumStr() );
+                if (rFootnote.IsEndNote())
+                {
+                    nSectNo.first = rEndInfo.nFootnoteOffset + nEndNo;
+                    ++nEndNo;
+                    nSectNo.second = rEndInfo.nFootnoteOffset + nEndNoHidden;
+                    if (!IsFootnoteDeleted(rIDRA, *pTextFootnote))
+                    {
+                        ++nEndNoHidden;
+                    }
+                }
+                else
+                {
+                    nSectNo.first = rFootnoteInfo.nFootnoteOffset + nFootnoteNo;
+                    ++nFootnoteNo;
+                    nSectNo.second = rFootnoteInfo.nFootnoteOffset + nFootnoteNoHidden;
+                    if (!IsFootnoteDeleted(rIDRA, *pTextFootnote))
+                    {
+                        ++nFootnoteNoHidden;
+                    }
+                }
+            }
+
+            if (nSectNo.first)
+            {
+                pTextFootnote->SetNumber(nSectNo.first, nSectNo.second, rFootnote.GetNumStr());
             }
         }
     }
@@ -167,6 +230,7 @@ void SwFootnoteIdxs::UpdateAllFootnote()
     SwTextFootnote* pTextFootnote;
     const SwEndNoteInfo& rEndInfo = pDoc->GetEndNoteInfo();
     const SwFootnoteInfo& rFootnoteInfo = pDoc->GetFootnoteInfo();
+    IDocumentRedlineAccess const& rIDRA(pDoc->getIDocumentRedlineAccess());
 
     SwUpdFootnoteEndNtAtEnd aNumArr;
 
@@ -178,6 +242,7 @@ void SwFootnoteIdxs::UpdateAllFootnote()
     {
         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
         sal_uInt16 nNo = 1;     // Number for the Footnotes
+        sal_uInt16 nNoNo = 1;
         size_t nFootnoteIdx = 0;     // Index into theFootnoteIdx array
         for( size_t n = 0; n < rOutlNds.size(); ++n )
         {
@@ -195,16 +260,25 @@ void SwFootnoteIdxs::UpdateAllFootnote()
                     if( !rFootnote.IsEndNote() && rFootnote.GetNumStr().isEmpty() &&
                         !SwUpdFootnoteEndNtAtEnd::FindSectNdWithEndAttr( *pTextFootnote ))
                     {
-                        pTextFootnote->SetNumber( rFootnoteInfo.nFootnoteOffset + nNo++, rFootnote.GetNumStr() );
+                        pTextFootnote->SetNumber(
+                            rFootnoteInfo.nFootnoteOffset + nNo,
+                            rFootnoteInfo.nFootnoteOffset + nNoNo,
+                            rFootnote.GetNumStr() );
+                        ++nNo;
+                        if (!IsFootnoteDeleted(rIDRA, *pTextFootnote))
+                        {
+                            ++nNoNo;
+                        }
                     }
                 }
                 if( nFootnoteIdx >= size() )
                     break;          // ok, everything is updated
                 nNo = 1;
+                nNoNo = 1;
             }
         }
 
-        for( nNo = 1; nFootnoteIdx < size(); ++nFootnoteIdx )
+        for (nNo = 1, nNoNo = 1; nFootnoteIdx < size(); ++nFootnoteIdx)
         {
             // Endnotes are per-document
             pTextFootnote = (*this)[ nFootnoteIdx ];
@@ -212,29 +286,59 @@ void SwFootnoteIdxs::UpdateAllFootnote()
             if( !rFootnote.IsEndNote() && rFootnote.GetNumStr().isEmpty() &&
                 !SwUpdFootnoteEndNtAtEnd::FindSectNdWithEndAttr( *pTextFootnote ))
             {
-                pTextFootnote->SetNumber( rFootnoteInfo.nFootnoteOffset + nNo++, rFootnote.GetNumStr() );
+                pTextFootnote->SetNumber(
+                        rFootnoteInfo.nFootnoteOffset + nNo,
+                        rFootnoteInfo.nFootnoteOffset + nNoNo,
+                        rFootnote.GetNumStr() );
+                ++nNo;
+                if (!IsFootnoteDeleted(rIDRA, *pTextFootnote))
+                {
+                    ++nNoNo;
+                }
             }
         }
     }
 
     // We use bool here, so that we also iterate through the Endnotes with a chapter setting.
     const bool bEndNoteOnly = FTNNUM_DOC != rFootnoteInfo.eNum;
-    sal_uInt16 nFootnoteNo = 0, nEndNo = 0;
+    sal_uInt16 nFootnoteNo = 1;
+    sal_uInt16 nEndnoteNo = 1;
+    sal_uInt16 nFootnoteNoHidden = 1;
+    sal_uInt16 nEndnoteNoHidden = 1;
     for( size_t nPos = 0; nPos < size(); ++nPos )
     {
         pTextFootnote = (*this)[ nPos ];
         const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
         if( rFootnote.GetNumStr().isEmpty() )
         {
-            sal_uInt16 nSectNo = aNumArr.ChkNumber( *pTextFootnote );
-            if( !nSectNo && ( rFootnote.IsEndNote() || !bEndNoteOnly ))
-                nSectNo = rFootnote.IsEndNote()
-                                ? rEndInfo.nFootnoteOffset + (++nEndNo)
-                                : rFootnoteInfo.nFootnoteOffset + (++nFootnoteNo);
-
-            if( nSectNo )
+            std::pair<sal_uInt16, sal_uInt16> nSectNo = aNumArr.ChkNumber(rIDRA, *pTextFootnote);
+            if (!nSectNo.first && (rFootnote.IsEndNote() || !bEndNoteOnly))
             {
-                pTextFootnote->SetNumber( nSectNo, rFootnote.GetNumStr() );
+                if (rFootnote.IsEndNote())
+                {
+                    nSectNo.first = rEndInfo.nFootnoteOffset + nEndnoteNo;
+                    ++nEndnoteNo;
+                    nSectNo.second = rEndInfo.nFootnoteOffset + nEndnoteNoHidden;
+                    if (!IsFootnoteDeleted(rIDRA, *pTextFootnote))
+                    {
+                        ++nEndnoteNoHidden;
+                    }
+                }
+                else
+                {
+                    nSectNo.first = rFootnoteInfo.nFootnoteOffset + nFootnoteNo;
+                    ++nFootnoteNo;
+                    nSectNo.second = rFootnoteInfo.nFootnoteOffset + nFootnoteNoHidden;
+                    if (!IsFootnoteDeleted(rIDRA, *pTextFootnote))
+                    {
+                        ++nFootnoteNoHidden;
+                    }
+                }
+            }
+
+            if (nSectNo.first)
+            {
+                pTextFootnote->SetNumber(nSectNo.first, nSectNo.second, rFootnote.GetNumStr());
             }
         }
     }
@@ -296,12 +400,15 @@ const SwSectionNode* SwUpdFootnoteEndNtAtEnd::FindSectNdWithEndAttr(
     return pNd;
 }
 
-sal_uInt16 SwUpdFootnoteEndNtAtEnd::GetNumber( const SwTextFootnote& rTextFootnote,
+std::pair<sal_uInt16, sal_uInt16> SwUpdFootnoteEndNtAtEnd::GetNumber(
+        IDocumentRedlineAccess const& rIDRA,
+        const SwTextFootnote& rTextFootnote,
                                     const SwSectionNode& rNd )
 {
-    sal_uInt16 nRet = 0, nWh;
+    std::pair<sal_uInt16, sal_uInt16> nRet(0, 0);
+    sal_uInt16 nWh;
     std::vector<const SwSectionNode*>* pArr;
-    std::vector<sal_uInt16> *pNum;
+    std::vector<std::pair<sal_uInt16, sal_uInt16>> *pNum;
     if( rTextFootnote.GetFootnote().IsEndNote() )
     {
         pArr = &aEndSects;
@@ -318,25 +425,36 @@ sal_uInt16 SwUpdFootnoteEndNtAtEnd::GetNumber( const SwTextFootnote& rTextFootno
     for( size_t n = pArr->size(); n; )
         if( (*pArr)[ --n ] == &rNd )
         {
-            nRet = ++((*pNum)[ n ]);
+            nRet.first = ++((*pNum)[ n ].first);
+            nRet.second = ((*pNum)[ n ].second);
+            if (!IsFootnoteDeleted(rIDRA, rTextFootnote))
+            {
+                ++((*pNum)[ n ].second);
+            }
             break;
         }
 
-    if( !nRet )
+    if (!nRet.first)
     {
         pArr->push_back( &rNd );
-        nRet = static_cast<const SwFormatFootnoteEndAtTextEnd&>(rNd.GetSection().GetFormat()->
+        sal_uInt16 const tmp = static_cast<const SwFormatFootnoteEndAtTextEnd&>(
+                rNd.GetSection().GetFormat()->
                                 GetFormatAttr( nWh )).GetOffset();
-        ++nRet;
+        nRet.first = tmp + 1;
+        nRet.second = tmp + 1;
         pNum->push_back( nRet );
     }
     return nRet;
 }
 
-sal_uInt16 SwUpdFootnoteEndNtAtEnd::ChkNumber( const SwTextFootnote& rTextFootnote )
+std::pair<sal_uInt16, sal_uInt16> SwUpdFootnoteEndNtAtEnd::ChkNumber(
+        IDocumentRedlineAccess const& rIDRA,
+        const SwTextFootnote& rTextFootnote)
 {
     const SwSectionNode* pSectNd = FindSectNdWithEndAttr( rTextFootnote );
-    return pSectNd ? GetNumber( rTextFootnote, *pSectNd ) : 0;
+    return pSectNd
+            ? GetNumber(rIDRA, rTextFootnote, *pSectNd)
+            : std::pair<sal_uInt16, sal_uInt16>(0, 0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
