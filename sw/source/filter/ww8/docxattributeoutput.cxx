@@ -3205,15 +3205,6 @@ static void impl_cellMargins( FSHelperPtr const & pSerializer, const SvxBoxItem&
                 continue;
         }
 
-        if ( aBorders[i] == SvxBoxItemLine::LEFT ) {
-            // Office's cell margin is measured from the right of the border.
-            // While LO's cell spacing is measured from the center of the border.
-            // So we add half left-border width to tblIndent value
-            const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
-            if (pLn)
-                nDist -= pLn->GetWidth() * 0.5;
-        }
-
         if (!tagWritten) {
             pSerializer->startElementNS( XML_w, tag, FSEND );
             tagWritten = true;
