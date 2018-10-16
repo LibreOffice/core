@@ -759,8 +759,8 @@ namespace
                     xmlFreeDoc(m_rEntity.mpParser->myDoc);
                 xmlFreeParserCtxt(m_rEntity.mpParser);
             }
-            m_rParser.popEntity();
             joinThread();
+            m_rParser.popEntity();
         }
         void setThread(const rtl::Reference<ParserThread> &xParser)
         {
