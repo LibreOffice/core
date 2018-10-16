@@ -1898,5 +1898,47 @@ void Test::testSharedFormulaUpdateOnReplacement()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSharedFormulaDeleteTopCell()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    const char* pData[][2] = {
+        { "=SUM(B$1:B$2)", "1" },
+        { "=SUM(B$1:B$2)", "2" }
+    };
+
+    insertRangeData( m_pDoc, ScAddress(0,0,0), pData, SAL_N_ELEMENTS(pData));
+
+    // Check that A1:A2 is a formula group.
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell( ScAddress(0,0,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pFC->GetSharedTopRow());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(2), pFC->GetSharedLength());
+
+    // Check results A1:A2.
+    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue( ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue( ScAddress(0,1,0)));
+
+    // Delete cell A1.
+    ScMarkData aMark;
+    aMark.SelectOneTable(0);
+    getDocShell().GetDocFunc().DeleteCell( ScAddress(0,0,0), aMark, InsertDeleteFlags::CONTENTS, false);
+    // Check it's gone.
+    CPPUNIT_ASSERT(!m_pDoc->GetFormulaCell( ScAddress(0,0,0)));
+
+    // Check result A2.
+    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue( ScAddress(0,1,0)));
+
+    // Replace B1 with 4.
+    m_pDoc->SetString( ScAddress(1,0,0), "4");
+
+    // Check result A2.
+    CPPUNIT_ASSERT_EQUAL( 6.0, m_pDoc->GetValue( ScAddress(0,1,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
