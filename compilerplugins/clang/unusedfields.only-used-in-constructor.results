@@ -14,7 +14,7 @@ avmedia/source/vlc/wrapper/Types.hxx:47
     libvlc_event_t u union (anonymous union at /media/noel/disk2/libo6/avmedia/source/vlc/wrapper/Types.hxx:41:5)
 avmedia/source/vlc/wrapper/Types.hxx:53
     libvlc_track_description_t psz_name char *
-basegfx/source/polygon/b2dtrapezoid.cxx:201
+basegfx/source/polygon/b2dtrapezoid.cxx:202
     basegfx::trapezoidhelper::PointBlockAllocator maFirstStackBlock class basegfx::B2DPoint [32]
 basic/qa/cppunit/basictest.hxx:27
     MacroSnippet maDll class BasicDLL
@@ -208,8 +208,6 @@ include/svl/ondemand.hxx:58
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
 include/svx/ClassificationDialog.hxx:59
     svx::ClassificationDialog m_bPerParagraph const _Bool
-include/svx/ClassificationDialog.hxx:63
-    svx::ClassificationDialog m_nInsertMarkings const sal_Int16
 include/svx/itemwin.hxx:34
     SvxLineBox aDelayTimer class Timer
 include/vcl/font/Feature.hxx:102
@@ -303,7 +301,7 @@ sal/qa/osl/process/osl_process.cxx:157
 sal/textenc/textenc.cxx:406
     (anonymous namespace)::FullTextEncodingData module_ osl::Module
 sc/inc/column.hxx:128
-    ScColumn maCellsEvent sc::CellStoreEvent
+    ScColumn maCellsEvent const sc::CellStoreEvent
 sc/inc/compiler.hxx:256
     ScCompiler::AddInMap pODFF const char *
 sc/inc/compiler.hxx:257
@@ -311,7 +309,7 @@ sc/inc/compiler.hxx:257
 sc/inc/compiler.hxx:259
     ScCompiler::AddInMap pUpper const char *
 sc/inc/formulalogger.hxx:42
-    sc::FormulaLogger maMessages std::vector<OUString>
+    sc::FormulaLogger maMessages const std::vector<OUString>
 sc/inc/interpretercontext.hxx:32
     ScInterpreterContext mrDoc const class ScDocument &
 sc/inc/token.hxx:406
@@ -319,9 +317,9 @@ sc/inc/token.hxx:406
 sc/qa/unit/ucalc_column.cxx:104
     aInputs aName const char *
 sc/source/core/data/document.cxx:1244
-    (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch sc::AutoCalcSwitch
+    (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aSwitch const sc::AutoCalcSwitch
 sc/source/core/data/document.cxx:1245
-    (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aBulk class ScBulkBroadcast
+    (anonymous namespace)::BroadcastRecalcOnRefMoveHandler aBulk const class ScBulkBroadcast
 sc/source/filter/html/htmlpars.cxx:3029
     (anonymous namespace)::CSSHandler::MemStr mp const char *
 sc/source/filter/html/htmlpars.cxx:3030
@@ -329,7 +327,7 @@ sc/source/filter/html/htmlpars.cxx:3030
 sc/source/filter/inc/htmlpars.hxx:614
     ScHTMLQueryParser mnUnusedId ScHTMLTableId
 sc/source/filter/inc/sheetdatacontext.hxx:62
-    oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
+    oox::xls::SheetDataContext aReleaser const class SolarMutexReleaser
 sc/source/filter/inc/xetable.hxx:1002
     XclExpCellTable maArrayBfr class XclExpArrayBuffer
 sc/source/filter/inc/xetable.hxx:1003
@@ -352,9 +350,9 @@ sc/source/filter/xml/xmltransformationi.hxx:121
     ScXMLColumnNumberContext aType class rtl::OUString
 sc/source/filter/xml/xmltransformationi.hxx:155
     ScXMLDateTimeContext aType class rtl::OUString
-sc/source/ui/inc/acredlin.hxx:58
+sc/source/ui/inc/acredlin.hxx:51
     ScAcceptChgDlg aReOpenIdle class Idle
-sc/source/ui/inc/anyrefdg.hxx:119
+sc/source/ui/inc/anyrefdg.hxx:112
     ScRefHandler m_aIdle class Idle
 sc/source/ui/inc/msgpool.hxx:37
     ScMessagePool aGlobalStringItem class SfxStringItem
@@ -390,6 +388,8 @@ sd/source/filter/eppt/epptbase.hxx:347
     PPTWriterBase maFraction const class Fraction
 sd/source/filter/ppt/pptin.hxx:82
     SdPPTImport maParam struct PowerPointImportParam
+sd/source/ui/animations/CustomAnimationDialog.hxx:149
+    sd::SdPropertySubControl mnType sal_Int32
 sd/source/ui/inc/AccessibleDocumentViewBase.hxx:262
     accessibility::AccessibleDocumentViewBase maViewForwarder class accessibility::AccessibleViewForwarder
 sd/source/ui/remotecontrol/Receiver.hxx:36
@@ -508,17 +508,11 @@ sw/source/core/text/inftxt.hxx:686
     SwTextSlot aText class rtl::OUString
 sw/source/core/text/porfld.cxx:141
     SwFieldSlot aText class rtl::OUString
-sw/source/filter/html/htmlcss1.cxx:77
-    SwCSS1ItemIds nFormatBreak const sal_uInt16
-sw/source/filter/html/htmlcss1.cxx:78
-    SwCSS1ItemIds nFormatPageDesc const sal_uInt16
-sw/source/filter/html/htmlcss1.cxx:79
-    SwCSS1ItemIds nFormatKeep const sal_uInt16
 sw/source/ui/dbui/mmaddressblockpage.hxx:212
     SwCustomizeAddressBlockDialog m_aTextFilter class TextFilter
 sw/source/uibase/docvw/romenu.hxx:35
     SwReadOnlyPopup m_aBuilder class VclBuilder
-sw/source/uibase/inc/cption.hxx:44
+sw/source/uibase/inc/cption.hxx:43
     SwCaptionDialog m_aTextFilter class TextFilterAutoConvert
 sw/source/uibase/inc/glossary.hxx:95
     SwGlossaryDlg m_aNoSpaceFilter class TextFilter
@@ -526,11 +520,11 @@ sw/source/uibase/inc/olmenu.hxx:77
     SwSpellPopup m_aBuilder class VclBuilder
 sw/source/uibase/inc/olmenu.hxx:86
     SwSpellPopup m_nLangParaMenuId const sal_uInt16
-sw/source/uibase/inc/optload.hxx:186
+sw/source/uibase/inc/optload.hxx:185
     SwCaptionOptPage m_aTextFilter class TextFilterAutoConvert
-sw/source/uibase/inc/regionsw.hxx:256
+sw/source/uibase/inc/regionsw.hxx:255
     SwInsertSectionTabDialog m_nNotePageId sal_uInt16
-sw/source/uibase/inc/regionsw.hxx:276
+sw/source/uibase/inc/regionsw.hxx:275
     SwSectionPropertyTabDialog m_nNotePageId sal_uInt16
 sw/source/uibase/inc/uivwimp.hxx:95
     SwView_Impl xTmpSelDocSh const class SfxObjectShellLock
@@ -582,13 +576,13 @@ vcl/inc/unx/i18n_ic.hxx:46
     SalI18N_InputContext maSwitchIMCallback XIMCallback
 vcl/inc/unx/i18n_ic.hxx:47
     SalI18N_InputContext maDestroyCallback XIMCallback
-vcl/source/app/salvtables.cxx:1542
+vcl/source/app/salvtables.cxx:1552
     SalInstanceEntry m_aTextFilter class SalInstanceEntry::WeldTextFilter
 vcl/source/gdi/jobset.cxx:35
     ImplOldJobSetupData cDeviceName char [32]
 vcl/source/gdi/jobset.cxx:36
     ImplOldJobSetupData cPortName char [32]
-vcl/unx/gtk3/gtk3gtkinst.cxx:2398
+vcl/unx/gtk3/gtk3gtkinst.cxx:2403
     CrippledViewport viewport GtkViewport
 vcl/unx/gtk/a11y/atkhypertext.cxx:29
     (anonymous) atk_hyper_link const AtkHyperlink

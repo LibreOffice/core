@@ -4,7 +4,7 @@ avmedia/source/vlc/wrapper/Types.hxx:52
     libvlc_track_description_t i_id int
 avmedia/source/vlc/wrapper/Types.hxx:54
     libvlc_track_description_t p_next struct libvlc_track_description_t *
-basegfx/source/polygon/b2dtrapezoid.cxx:201
+basegfx/source/polygon/b2dtrapezoid.cxx:202
     basegfx::trapezoidhelper::PointBlockAllocator maFirstStackBlock class basegfx::B2DPoint [32]
 basic/source/inc/expr.hxx:93
     SbiExprNode::(anonymous) nTypeStrId sal_uInt16
@@ -52,8 +52,6 @@ bridges/source/jni_uno/jni_java2uno.cxx:151
     jni_uno::largest p void *
 bridges/source/jni_uno/jni_java2uno.cxx:152
     jni_uno::largest a uno_Any
-chart2/source/controller/inc/res_LegendPosition.hxx:93
-    chart::SchLegendPositionResources m_aChangeLink Link<class LinkParamNone *, void>
 chart2/source/model/main/DataPoint.hxx:108
     chart::DataPoint m_bNoParentPropAllowed _Bool
 connectivity/source/drivers/evoab2/EApi.h:125
@@ -218,7 +216,7 @@ extensions/source/update/check/updatehdl.hxx:85
     UpdateHandler mbStringsLoaded _Bool
 filter/source/graphicfilter/eps/eps.cxx:113
     PSWriter pVDev ScopedVclPtrInstance<class VirtualDevice>
-filter/source/graphicfilter/icgm/cgm.hxx:62
+filter/source/graphicfilter/icgm/cgm.hxx:60
     CGM mbPicture _Bool
 filter/source/graphicfilter/icgm/chart.hxx:44
     DataNode nBoxX1 sal_Int16
@@ -285,19 +283,19 @@ include/filter/msfilter/svdfppt.hxx:882
 include/filter/msfilter/svdfppt.hxx:883
     ImplPPTParaPropSet nDontKnow2bit06 sal_uInt16
 include/oox/core/contexthandler2.hxx:220
-    oox::core::ContextHandler2Helper mnRootStackSize size_t
+    oox::core::ContextHandler2Helper mnRootStackSize const size_t
 include/oox/ole/axbinarywriter.hxx:151
     oox::ole::AxBinaryPropertyWriter maStreamProps oox::ole::AxBinaryPropertyWriter::ComplexPropVector
 include/registry/refltype.hxx:65
-    RTUik m_Data1 sal_uInt32
+    RTUik m_Data1 const sal_uInt32
 include/registry/refltype.hxx:66
-    RTUik m_Data2 sal_uInt16
+    RTUik m_Data2 const sal_uInt16
 include/registry/refltype.hxx:67
-    RTUik m_Data3 sal_uInt16
+    RTUik m_Data3 const sal_uInt16
 include/registry/refltype.hxx:68
-    RTUik m_Data4 sal_uInt32
+    RTUik m_Data4 const sal_uInt32
 include/registry/refltype.hxx:69
-    RTUik m_Data5 sal_uInt32
+    RTUik m_Data5 const sal_uInt32
 include/sfx2/charmapcontrol.hxx:44
     SfxCharmapCtrl m_pFavCharView VclPtr<class SvxCharViewControl> [16]
 include/sfx2/msg.hxx:95
@@ -320,18 +318,6 @@ include/svl/adrparse.hxx:52
     SvAddressParser m_bHasFirst _Bool
 include/svl/ondemand.hxx:58
     OnDemandLocaleDataWrapper aSysLocale class SvtSysLocale
-include/svtools/ctrlbox.hxx:449
-    FontSizeBox nRelMin sal_uInt16
-include/svtools/ctrlbox.hxx:450
-    FontSizeBox nRelMax sal_uInt16
-include/svtools/ctrlbox.hxx:451
-    FontSizeBox nRelStep sal_uInt16
-include/svtools/ctrlbox.hxx:452
-    FontSizeBox nPtRelMin short
-include/svtools/ctrlbox.hxx:453
-    FontSizeBox nPtRelMax short
-include/svtools/ctrlbox.hxx:454
-    FontSizeBox nPtRelStep short
 include/svtools/editsyntaxhighlighter.hxx:32
     MultiLineEditSyntaxHighlight m_aColorConfig const svtools::ColorConfig
 include/svx/sdr/overlay/overlayanimatedbitmapex.hxx:51
@@ -378,8 +364,6 @@ include/unoidl/unoidl.hxx:454
     unoidl::ConstantValue::(anonymous) doubleValue double
 include/unotest/bootstrapfixturebase.hxx:37
     test::BootstrapFixtureBase m_directories class test::Directories
-include/vcl/filter/pdfdocument.hxx:200
-    vcl::filter::PDFNameElement m_nLength const sal_uInt64
 include/vcl/opengl/OpenGLContext.hxx:57
     OpenGLCapabilitySwitch mbLimitedShaderRegisters _Bool
 include/vcl/opengl/OpenGLContext.hxx:176
@@ -400,14 +384,16 @@ lingucomponent/source/languageguessing/simpleguesser.cxx:79
     textcat_t maxsize uint4
 lingucomponent/source/languageguessing/simpleguesser.cxx:81
     textcat_t output char [1024]
+linguistic/source/dlistimp.cxx:73
+    DicEvtListenerHelper aCollectDicEvt std::vector<DictionaryEvent>
 linguistic/source/dlistimp.hxx:56
     DicList aOpt class LinguOptions
 oox/qa/token/tokenmap-test.cxx:34
-    oox::TokenmapTest tokenMap class oox::TokenMap
+    oox::TokenmapTest tokenMap const class oox::TokenMap
 oox/qa/unit/vba_compression.cxx:71
-    TestVbaCompression m_directories test::Directories
+    TestVbaCompression m_directories const test::Directories
 oox/source/drawingml/chart/objectformatter.cxx:708
-    oox::drawingml::chart::ObjectFormatterData maFromLocale struct com::sun::star::lang::Locale
+    oox::drawingml::chart::ObjectFormatterData maFromLocale const struct com::sun::star::lang::Locale
 oox/source/drawingml/diagram/diagramlayoutatoms.hxx:208
     oox::drawingml::ChooseAtom maEmptyChildren const std::vector<LayoutAtomPtr>
 registry/source/reflwrit.cxx:141
@@ -437,13 +423,13 @@ sal/rtl/uuid.cxx:64
 sal/rtl/uuid.cxx:65
     UUID node sal_uInt8 [6]
 sc/inc/compiler.hxx:127
-    ScRawToken::(anonymous union)::(anonymous) eItem class ScTableRefToken::Item
+    ScRawToken::(anonymous union)::(anonymous) eItem const class ScTableRefToken::Item
 sc/inc/compiler.hxx:128
-    ScRawToken::(anonymous) table struct (anonymous struct at /media/noel/disk2/libo6/sc/inc/compiler.hxx:125:9)
+    ScRawToken::(anonymous) table const struct (anonymous struct at /media/noel/disk2/libo6/sc/inc/compiler.hxx:125:9)
 sc/inc/compiler.hxx:133
-    ScRawToken::(anonymous) pMat class ScMatrix *
+    ScRawToken::(anonymous) pMat class ScMatrix *const
 sc/inc/formulagroup.hxx:39
-    sc::FormulaGroupEntry::(anonymous) mpCells class ScFormulaCell **
+    sc::FormulaGroupEntry::(anonymous) mpCells class ScFormulaCell **const
 sc/inc/reordermap.hxx:21
     sc::ColRowReorderMapType maData sc::ColRowReorderMapType::DataType
 sc/source/core/inc/adiasync.hxx:42
@@ -457,13 +443,13 @@ sc/source/filter/excel/xltoolbar.cxx:35
 sc/source/filter/inc/autofilterbuffer.hxx:181
     oox::xls::FilterColumn mxSettings std::shared_ptr<FilterSettingsBase>
 sc/source/filter/inc/commentsbuffer.hxx:42
-    oox::xls::CommentModel maAnchor css::awt::Rectangle
+    oox::xls::CommentModel maAnchor const css::awt::Rectangle
 sc/source/filter/inc/htmlpars.hxx:56
     ScHTMLStyles maEmpty const class rtl::OUString
 sc/source/filter/inc/namebuff.hxx:80
     RangeNameBufferWK3::Entry nAbsInd sal_uInt16
 sc/source/filter/inc/qproform.hxx:55
-    QProToSc mnAddToken struct TokenId
+    QProToSc mnAddToken const struct TokenId
 sc/source/filter/inc/stylesbuffer.hxx:676
     oox::xls::Dxf mxAlignment std::shared_ptr<Alignment>
 sc/source/filter/inc/stylesbuffer.hxx:678
@@ -530,11 +516,13 @@ sdext/source/pdfimport/tree/style.hxx:42
     pdfi::StyleContainer::Style Contents const class rtl::OUString
 sfx2/source/appl/lnkbase2.cxx:95
     sfx2::ImplDdeItem pLink class sfx2::SvBaseLink *
+sfx2/source/inc/appdata.hxx:103
+    SfxAppData_Impl nInReschedule sal_uInt16
 slideshow/source/engine/slideshowimpl.cxx:153
     (anonymous namespace)::FrameSynchronization maTimer const canvas::tools::ElapsedTime
-sot/source/sdstor/ucbstorage.cxx:408
+sot/source/sdstor/ucbstorage.cxx:403
     UCBStorageStream_Impl m_aKey const class rtl::OString
-starmath/source/view.cxx:856
+starmath/source/view.cxx:861
     SmViewShell_Impl aOpts const class SvtMiscOptions
 store/source/storbios.cxx:59
     OStoreSuperBlock m_aMarked OStoreSuperBlock::L
@@ -586,8 +574,6 @@ svx/source/inc/gridcell.hxx:526
     DbPatternField m_pValueFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
 svx/source/inc/gridcell.hxx:527
     DbPatternField m_pPaintFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
-svx/source/svdraw/svdpdf.hxx:173
-    ImpSdrPdfImport maLineCap const css::drawing::LineCap
 svx/source/svdraw/svdpdf.hxx:174
     ImpSdrPdfImport maDash const class XDash
 sw/inc/acmplwrd.hxx:42
@@ -638,7 +624,7 @@ sw/source/uibase/inc/fldmgr.hxx:78
     SwInsertField_Data m_aDBDataSource const css::uno::Any
 sw/source/uibase/inc/labimg.hxx:50
     SwLabItem m_aBin class rtl::OUString
-sw/source/uibase/inc/optload.hxx:107
+sw/source/uibase/inc/optload.hxx:106
     CaptionComboBox aDefault const class rtl::OUString
 toolkit/source/awt/vclxtoolkit.cxx:434
     (anonymous namespace)::VCLXToolkit mxSelection css::uno::Reference<css::datatransfer::clipboard::XClipboard>
@@ -730,11 +716,11 @@ vcl/source/filter/jpeg/transupp.h:148
     (anonymous) crop_xoffset_set JCROP_CODE
 vcl/source/filter/jpeg/transupp.h:150
     (anonymous) crop_yoffset_set JCROP_CODE
-vcl/source/fontsubset/sft.cxx:1049
+vcl/source/fontsubset/sft.cxx:1048
     vcl::_subHeader2 firstCode const sal_uInt16
-vcl/source/fontsubset/sft.cxx:1050
+vcl/source/fontsubset/sft.cxx:1049
     vcl::_subHeader2 entryCount const sal_uInt16
-vcl/source/fontsubset/sft.cxx:1051
+vcl/source/fontsubset/sft.cxx:1050
     vcl::_subHeader2 idDelta const sal_uInt16
 vcl/source/gdi/dibtools.cxx:51
     (anonymous namespace)::CIEXYZ aXyzX FXPT2DOT30

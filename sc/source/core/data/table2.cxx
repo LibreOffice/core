@@ -1125,7 +1125,7 @@ void ScTable::StartListeningFormulaCells(
 void ScTable::CopyToTable(
     sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     InsertDeleteFlags nFlags, bool bMarked, ScTable* pDestTab, const ScMarkData* pMarkData,
-    bool bAsLink, bool bColRowFlags, bool bGlobalNamesToLocal, bool bCopyCaptions )
+    bool bAsLink, bool bColRowFlags, bool bCopyCaptions )
 {
     if (!ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2))
         return;
@@ -1137,7 +1137,7 @@ void ScTable::CopyToTable(
                 ~InsertDeleteFlags( InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES));
         for (SCCOL i = nCol1; i <= nCol2; i++)
             aCol[i].CopyToColumn(rCxt, nRow1, nRow2, bIsUndoDoc ? nFlags : nTempFlags, bMarked,
-                                pDestTab->aCol[i], pMarkData, bAsLink, bGlobalNamesToLocal);
+                                pDestTab->aCol[i], pMarkData, bAsLink);
     }
 
     if (!bColRowFlags)      // Column widths/Row heights/Flags

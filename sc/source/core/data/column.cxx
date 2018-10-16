@@ -1387,7 +1387,6 @@ class CopyByCloneHandler
     InsertDeleteFlags const mnCopyFlags;
 
     sc::StartListeningType meListenType;
-    ScCloneFlags const mnFormulaCellCloneFlags;
 
     void setDefaultAttrToDest(size_t nRow)
     {
@@ -1430,7 +1429,7 @@ class CopyByCloneHandler
         if (bForceFormula || bCloneFormula)
         {
             // Clone as formula cell.
-            ScFormulaCell* pCell = new ScFormulaCell(rSrcCell, *mrDestCol.GetDoc(), aDestPos, mnFormulaCellCloneFlags);
+            ScFormulaCell* pCell = new ScFormulaCell(rSrcCell, *mrDestCol.GetDoc(), aDestPos);
             pCell->SetDirtyVar();
             mrDestCol.SetFormulaCell(maDestPos, nRow, pCell, meListenType, rSrcCell.NeedsNumberFormat());
             setDefaultAttrToDest(nRow);
@@ -1496,14 +1495,13 @@ class CopyByCloneHandler
 
 public:
     CopyByCloneHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos,
-            InsertDeleteFlags nCopyFlags, svl::SharedStringPool* pSharedStringPool, bool bGlobalNamesToLocal) :
+            InsertDeleteFlags nCopyFlags, svl::SharedStringPool* pSharedStringPool) :
         mrSrcCol(rSrcCol),
         mrDestCol(rDestCol),
         mpDestPos(pDestPos),
         mpSharedStringPool(pSharedStringPool),
         mnCopyFlags(nCopyFlags),
-        meListenType(sc::SingleCellListening),
-        mnFormulaCellCloneFlags(bGlobalNamesToLocal ? ScCloneFlags::NamesToLocal : ScCloneFlags::Default)
+        meListenType(sc::SingleCellListening)
     {
         if (mpDestPos)
             maDestPos = *mpDestPos;
@@ -1656,7 +1654,7 @@ public:
 void ScColumn::CopyToColumn(
     sc::CopyToDocContext& rCxt,
     SCROW nRow1, SCROW nRow2, InsertDeleteFlags nFlags, bool bMarked, ScColumn& rColumn,
-    const ScMarkData* pMarkData, bool bAsLink, bool bGlobalNamesToLocal) const
+    const ScMarkData* pMarkData, bool bAsLink) const
 {
     if (bMarked)
     {
@@ -1714,7 +1712,7 @@ void ScColumn::CopyToColumn(
                 (GetDoc()->GetPool() != rColumn.GetDoc()->GetPool()) ?
                 &rColumn.GetDoc()->GetSharedStringPool() : nullptr;
             CopyByCloneHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol), nFlags,
-                    pSharedStringPool, bGlobalNamesToLocal);
+                    pSharedStringPool);
             aFunc.setStartListening(rCxt.isStartListening());
             sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
         }
