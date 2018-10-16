@@ -420,7 +420,7 @@ void SAL_CALL PresenterToolBar::disposing()
     ElementContainer::const_iterator iEnd (maElementContainer.end());
     for ( ; iPart!=iEnd; ++iPart)
     {
-        OSL_ASSERT(iPart->get()!=nullptr);
+        OSL_ASSERT(*iPart != nullptr);
         ElementContainerPart::iterator iElement ((*iPart)->begin());
         ElementContainerPart::const_iterator iPartEnd ((*iPart)->end());
         for ( ; iElement!=iPartEnd; ++iElement)
@@ -1369,7 +1369,7 @@ void ElementMode::ReadElementMode (
         UNO_QUERY);
     Reference<beans::XPropertySet> xProperties (
         PresenterConfigurationAccess::GetNodeProperties(xNode, OUString()));
-    if ( ! xProperties.is() && rpDefaultMode.get()!=nullptr)
+    if (!xProperties.is() && rpDefaultMode != nullptr)
     {
         // The mode is not specified.  Use the given, possibly empty,
         // default mode instead.
@@ -1380,30 +1380,25 @@ void ElementMode::ReadElementMode (
 
     // Read action.
     if ( ! (PresenterConfigurationAccess::GetProperty(xProperties, "Action") >>= msAction))
-        if (rpDefaultMode.get()!=nullptr)
+        if (rpDefaultMode != nullptr)
             msAction = rpDefaultMode->msAction;
 
     // Read text and font
-    OUString sText (rpDefaultMode.get()!=nullptr ? rpDefaultMode->maText.GetText() : OUString());
+    OUString sText(rpDefaultMode != nullptr ? rpDefaultMode->maText.GetText() : OUString());
     PresenterConfigurationAccess::GetProperty(xProperties, "Text") >>= sText;
     Reference<container::XHierarchicalNameAccess> xFontNode (
         PresenterConfigurationAccess::GetProperty(xProperties, "Font"), UNO_QUERY);
-    PresenterTheme::SharedFontDescriptor pFont (PresenterTheme::ReadFont(
-        xFontNode,
-        rpDefaultMode.get()!=nullptr
-            ? rpDefaultMode->maText.GetFont()
-            : PresenterTheme::SharedFontDescriptor()));
+    PresenterTheme::SharedFontDescriptor pFont(PresenterTheme::ReadFont(
+        xFontNode, rpDefaultMode != nullptr ? rpDefaultMode->maText.GetFont()
+                                            : PresenterTheme::SharedFontDescriptor()));
     maText = Text(sText,pFont);
 
     // Read bitmaps to display as icons.
     Reference<container::XHierarchicalNameAccess> xIconNode (
         PresenterConfigurationAccess::GetProperty(xProperties, "Icon"), UNO_QUERY);
     mpIcon = PresenterBitmapContainer::LoadBitmap(
-        xIconNode,
-        "",
-        rContext.mxPresenterHelper,
-        rContext.mxCanvas,
-        rpDefaultMode.get()!=nullptr ? rpDefaultMode->mpIcon : SharedBitmapDescriptor());
+        xIconNode, "", rContext.mxPresenterHelper, rContext.mxCanvas,
+        rpDefaultMode != nullptr ? rpDefaultMode->mpIcon : SharedBitmapDescriptor());
     }
     catch(Exception&)
     {

@@ -1318,7 +1318,7 @@ void SdPublishingDlg::UpdatePage()
  */
 void SdPublishingDlg::LoadPreviewButtons()
 {
-    if( mpButtonSet.get() )
+    if (mpButtonSet)
     {
         const int nButtonCount = 8;
         static const char *pButtonNames[nButtonCount] =

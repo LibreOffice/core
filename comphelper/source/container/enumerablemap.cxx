@@ -349,7 +349,7 @@ namespace comphelper
 
         // create the comparator for the KeyType, and throw if the type is not supported
         std::unique_ptr< IKeyPredicateLess > pComparator( getStandardLessPredicate( aKeyType, nullptr ) );
-        if ( !pComparator.get() )
+        if (!pComparator)
             throw IllegalTypeException("Unsupported key type.", *this );
 
         // init members
@@ -369,7 +369,7 @@ namespace comphelper
     void EnumerableMap::impl_initValues_throw( const Sequence< Pair< Any, Any > >& _initialValues )
     {
         OSL_PRECOND( m_aData.m_pValues.get() && m_aData.m_pValues->empty(), "EnumerableMap::impl_initValues_throw: illegal call!" );
-        if ( !m_aData.m_pValues.get() || !m_aData.m_pValues->empty() )
+        if (!m_aData.m_pValues || !m_aData.m_pValues->empty())
             throw RuntimeException();
 
         const Pair< Any, Any >* mapping = _initialValues.getConstArray();

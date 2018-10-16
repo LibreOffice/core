@@ -209,7 +209,7 @@ void SAL_CALL PresenterPaneBorderPainter::paintBorder (
     }
     ProvideTheme(rxCanvas);
 
-    if (mpRenderer.get() != nullptr)
+    if (mpRenderer != nullptr)
     {
         mpRenderer->SetCanvas(rxCanvas);
         mpRenderer->SetupClipping(
@@ -244,7 +244,7 @@ void SAL_CALL PresenterPaneBorderPainter::paintBorderWithCallout (
     }
     ProvideTheme(rxCanvas);
 
-    if (mpRenderer.get() != nullptr)
+    if (mpRenderer != nullptr)
     {
         mpRenderer->SetCanvas(rxCanvas);
         mpRenderer->SetupClipping(
@@ -265,12 +265,11 @@ awt::Point SAL_CALL PresenterPaneBorderPainter::getCalloutOffset (
 {
     ThrowIfDisposed();
     ProvideTheme();
-    if (mpRenderer.get() != nullptr)
+    if (mpRenderer != nullptr)
     {
         const std::shared_ptr<RendererPaneStyle> pRendererPaneStyle(
             mpRenderer->GetRendererPaneStyle(rsPaneBorderStyleName));
-        if (pRendererPaneStyle.get() != nullptr
-            && pRendererPaneStyle->mpBottomCallout.get() != nullptr)
+        if (pRendererPaneStyle != nullptr && pRendererPaneStyle->mpBottomCallout.get() != nullptr)
         {
             return awt::Point (
                 0,
@@ -290,7 +289,7 @@ bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanva
     if ( ! mxContext.is())
         return false;
 
-    if (mpTheme.get() != nullptr)
+    if (mpTheme != nullptr)
     {
         // Check if the theme already has a canvas.
         if ( ! mpTheme->HasCanvas())
@@ -305,9 +304,9 @@ bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanva
         bModified = true;
     }
 
-    if (mpTheme.get() != nullptr && bModified)
+    if (mpTheme != nullptr && bModified)
     {
-        if (mpRenderer.get() == nullptr)
+        if (mpRenderer == nullptr)
             mpRenderer.reset(new Renderer(mxContext, mpTheme));
         else
             mpRenderer->SetCanvas(rxCanvas);
@@ -318,7 +317,7 @@ bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanva
 
 void PresenterPaneBorderPainter::ProvideTheme()
 {
-    if (mpTheme.get() == nullptr)
+    if (mpTheme == nullptr)
     {
         // Create a theme without bitmaps (no canvas => no bitmaps).
         ProvideTheme(nullptr);
@@ -330,7 +329,7 @@ void PresenterPaneBorderPainter::ProvideTheme()
 void PresenterPaneBorderPainter::SetTheme (const std::shared_ptr<PresenterTheme>& rpTheme)
 {
     mpTheme = rpTheme;
-    if (mpRenderer.get() == nullptr)
+    if (mpRenderer == nullptr)
         mpRenderer.reset(new Renderer(mxContext, mpTheme));
 }
 
@@ -339,10 +338,10 @@ awt::Rectangle PresenterPaneBorderPainter::AddBorder (
     const awt::Rectangle& rInnerBox,
     const css::drawing::framework::BorderType eBorderType) const
 {
-    if (mpRenderer.get() != nullptr)
+    if (mpRenderer != nullptr)
     {
         const std::shared_ptr<RendererPaneStyle> pRendererPaneStyle(mpRenderer->GetRendererPaneStyle(rsPaneURL));
-        if (pRendererPaneStyle.get() != nullptr)
+        if (pRendererPaneStyle != nullptr)
             return pRendererPaneStyle->AddBorder(rInnerBox, eBorderType);
     }
     return rInnerBox;
@@ -353,10 +352,10 @@ awt::Rectangle PresenterPaneBorderPainter::RemoveBorder (
     const css::awt::Rectangle& rOuterBox,
     const css::drawing::framework::BorderType eBorderType) const
 {
-    if (mpRenderer.get() != nullptr)
+    if (mpRenderer != nullptr)
     {
         const std::shared_ptr<RendererPaneStyle> pRendererPaneStyle(mpRenderer->GetRendererPaneStyle(rsPaneURL));
-        if (pRendererPaneStyle.get() != nullptr)
+        if (pRendererPaneStyle != nullptr)
             return pRendererPaneStyle->RemoveBorder(rOuterBox, eBorderType);
     }
     return rOuterBox;
@@ -416,7 +415,7 @@ void PresenterPaneBorderPainter::Renderer::PaintBorder (
 
     // Create the outer and inner border of the, ahm, border.
     std::shared_ptr<RendererPaneStyle> pStyle (GetRendererPaneStyle(rsPaneURL));
-    if (pStyle.get() == nullptr)
+    if (pStyle == nullptr)
         return;
 
     awt::Rectangle aOuterBox (rBBox);
@@ -560,7 +559,7 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
 std::shared_ptr<RendererPaneStyle>
     PresenterPaneBorderPainter::Renderer::GetRendererPaneStyle (const OUString& rsResourceURL)
 {
-    OSL_ASSERT(mpTheme.get()!=nullptr);
+    OSL_ASSERT(mpTheme != nullptr);
 
     RendererPaneStyleContainer::const_iterator iStyle (maRendererPaneStyles.find(rsResourceURL));
     if (iStyle == maRendererPaneStyles.end())
@@ -708,7 +707,7 @@ void PresenterPaneBorderPainter::Renderer::SetupClipping (
         return;
 
     std::shared_ptr<RendererPaneStyle> pStyle (GetRendererPaneStyle(rsPaneStyleName));
-    if (pStyle.get() == nullptr)
+    if (pStyle == nullptr)
     {
         mxViewStateClip = PresenterGeometryHelper::CreatePolygon(
             rUpdateBox,
@@ -765,7 +764,7 @@ RendererPaneStyle::RendererPaneStyle (
       maOuterBorderSize(),
       maTotalBorderSize()
 {
-    if (rpTheme.get() != nullptr)
+    if (rpTheme != nullptr)
     {
         mpTopLeft = GetBitmap(rpTheme, rsStyleName, "TopLeft");
         mpTop = GetBitmap(rpTheme, rsStyleName, "Top");

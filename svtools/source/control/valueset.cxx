@@ -400,7 +400,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
         nNoneHeight = 0;
         nNoneSpace = 0;
 
-        if (mpNoneItem.get())
+        if (mpNoneItem)
             mpNoneItem.reset(nullptr);
     }
 
@@ -502,7 +502,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
 
         if (nStyle & WB_NONEFIELD)
         {
-            if (mpNoneItem.get())
+            if (mpNoneItem)
             {
                 mpNoneItem->mbVisible = false;
                 mpNoneItem->maText = GetText();
@@ -578,7 +578,7 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
         // create NoSelection field and show it
         if (nStyle & WB_NONEFIELD)
         {
-            if (mpNoneItem.get() == nullptr)
+            if (mpNoneItem == nullptr)
                 mpNoneItem.reset(new ValueSetItem(*this));
 
             mpNoneItem->mnId = 0;
@@ -739,7 +739,7 @@ void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 nIt
         pItem = mItemList[ nPos ].get();
         aRect = ImplGetItemRect( nPos );
     }
-    else if (mpNoneItem.get())
+    else if (mpNoneItem)
     {
         pItem = mpNoneItem.get();
         aRect = maNoneItemRect;
@@ -866,7 +866,7 @@ void ValueSet::ImplHideSelect( sal_uInt16 nItemId )
     }
     else
     {
-        if (mpNoneItem.get() == nullptr)
+        if (mpNoneItem == nullptr)
         {
             return;
         }
@@ -1219,15 +1219,15 @@ void ValueSet::KeyInput( const KeyEvent& rKeyEvent )
 
     --nLastItem;
 
-    const size_t nCurPos = mnSelItemId ? GetItemPos(mnSelItemId)
-                                       : (mpNoneItem.get() ? VALUESET_ITEM_NONEITEM : 0);
+    const size_t nCurPos
+        = mnSelItemId ? GetItemPos(mnSelItemId) : (mpNoneItem ? VALUESET_ITEM_NONEITEM : 0);
     size_t nItemPos = VALUESET_ITEM_NOTFOUND;
     size_t nVStep = mnCols;
 
     switch (rKeyEvent.GetKeyCode().GetCode())
     {
         case KEY_HOME:
-            nItemPos = mpNoneItem.get() ? VALUESET_ITEM_NONEITEM : 0;
+            nItemPos = mpNoneItem ? VALUESET_ITEM_NONEITEM : 0;
             break;
 
         case KEY_END:
@@ -1241,7 +1241,7 @@ void ValueSet::KeyInput( const KeyEvent& rKeyEvent )
                 {
                     nItemPos = nCurPos-1;
                 }
-                else if (mpNoneItem.get())
+                else if (mpNoneItem)
                 {
                     nItemPos = VALUESET_ITEM_NONEITEM;
                 }
@@ -1287,7 +1287,7 @@ void ValueSet::KeyInput( const KeyEvent& rKeyEvent )
                     // Go up of a whole page
                     nItemPos = nCurPos-nVStep;
                 }
-                else if (mpNoneItem.get())
+                else if (mpNoneItem)
                 {
                     nItemPos = VALUESET_ITEM_NONEITEM;
                 }
@@ -2505,15 +2505,15 @@ bool SvtValueSet::KeyInput( const KeyEvent& rKeyEvent )
 
     --nLastItem;
 
-    const size_t nCurPos = mnSelItemId ? GetItemPos(mnSelItemId)
-                                       : (mpNoneItem.get() ? VALUESET_ITEM_NONEITEM : 0);
+    const size_t nCurPos
+        = mnSelItemId ? GetItemPos(mnSelItemId) : (mpNoneItem ? VALUESET_ITEM_NONEITEM : 0);
     size_t nItemPos = VALUESET_ITEM_NOTFOUND;
     size_t nVStep = mnCols;
 
     switch (rKeyEvent.GetKeyCode().GetCode())
     {
         case KEY_HOME:
-            nItemPos = mpNoneItem.get() ? VALUESET_ITEM_NONEITEM : 0;
+            nItemPos = mpNoneItem ? VALUESET_ITEM_NONEITEM : 0;
             break;
 
         case KEY_END:
@@ -2527,7 +2527,7 @@ bool SvtValueSet::KeyInput( const KeyEvent& rKeyEvent )
                 {
                     nItemPos = nCurPos-1;
                 }
-                else if (mpNoneItem.get())
+                else if (mpNoneItem)
                 {
                     nItemPos = VALUESET_ITEM_NONEITEM;
                 }
@@ -2572,7 +2572,7 @@ bool SvtValueSet::KeyInput( const KeyEvent& rKeyEvent )
                     // Go up of a whole page
                     nItemPos = nCurPos-nVStep;
                 }
-                else if (mpNoneItem.get())
+                else if (mpNoneItem)
                 {
                     nItemPos = VALUESET_ITEM_NONEITEM;
                 }
@@ -3019,7 +3019,7 @@ void SvtValueSet::Format(vcl::RenderContext const & rRenderContext)
         nNoneHeight = 0;
         nNoneSpace = 0;
 
-        if (mpNoneItem.get())
+        if (mpNoneItem)
             mpNoneItem.reset(nullptr);
     }
 
@@ -3115,7 +3115,7 @@ void SvtValueSet::Format(vcl::RenderContext const & rRenderContext)
 
         if (nStyle & WB_NONEFIELD)
         {
-            if (mpNoneItem.get())
+            if (mpNoneItem)
             {
                 mpNoneItem->mbVisible = false;
                 mpNoneItem->maText = GetText();
@@ -3319,7 +3319,7 @@ void SvtValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext, sal_uInt16 
         pItem = mItemList[ nPos ].get();
         aRect = ImplGetItemRect( nPos );
     }
-    else if (mpNoneItem.get())
+    else if (mpNoneItem)
     {
         pItem = mpNoneItem.get();
         aRect = maNoneItemRect;

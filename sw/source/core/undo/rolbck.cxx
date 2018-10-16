@@ -220,7 +220,7 @@ SwHistorySetText::~SwHistorySetText()
 
 void SwHistorySetText::SetInDoc( SwDoc* pDoc, bool )
 {
-    if ( !m_pAttr.get() )
+    if (!m_pAttr)
         return;
 
     if ( RES_TXTATR_CHARFMT == m_pAttr->Which() )
@@ -283,7 +283,7 @@ SwHistorySetTextField::~SwHistorySetTextField()
 
 void SwHistorySetTextField::SetInDoc( SwDoc* pDoc, bool )
 {
-    if ( !m_pField.get() )
+    if (!m_pField)
         return;
 
     SwFieldType* pNewFieldType = m_pFieldType.get();
@@ -461,7 +461,7 @@ void SwHistorySetFootnote::SetInDoc( SwDoc* pDoc, bool )
     if ( !pTextNd )
         return;
 
-    if ( m_pUndo.get() )
+    if (m_pUndo)
     {
         // set the footnote in the TextNode
         SwFormatFootnote aTemp( m_bEndNote );
@@ -622,7 +622,7 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
             "<SwHistoryBookmark::SetInDoc(..)>"
             " - wrong node for a mark");
 
-        if(pPam.get() != nullptr && pContentNd)
+        if (pPam != nullptr && pContentNd)
         {
             pPam->SetMark();
             pPam->GetMark()->nNode = m_nOtherNode;
@@ -640,7 +640,7 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
         *pPam->GetMark() = pMark->GetOtherMarkPos();
     }
 
-    if(pPam.get())
+    if (pPam)
     {
         if ( pMark != nullptr )
         {

@@ -1315,11 +1315,11 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         return bReturn;
 
     // handle accelerators
-    if( ! m_apAccelExecute.get() && m_xFrame.is() && m_xCC.is() )
+    if (!m_apAccelExecute && m_xFrame.is() && m_xCC.is())
     {
         m_apAccelExecute = ::svt::AcceleratorExecute::createAcceleratorHelper();
-        OSL_ASSERT( m_apAccelExecute.get());
-        if( m_apAccelExecute.get() )
+        OSL_ASSERT(m_apAccelExecute);
+        if (m_apAccelExecute)
             m_apAccelExecute->init( m_xCC, m_xFrame );
     }
 
@@ -1328,7 +1328,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
     bool bAlternate = aKeyCode.IsMod2();
     bool bCtrl = aKeyCode.IsMod1();
 
-    if( m_apAccelExecute.get() )
+    if (m_apAccelExecute)
         bReturn = m_apAccelExecute->execute( aKeyCode );
     if( bReturn )
         return bReturn;

@@ -187,7 +187,7 @@ std::shared_ptr<TimerScheduler> TimerScheduler::Instance(
     uno::Reference<uno::XComponentContext> const& xContext)
 {
     ::osl::MutexGuard aGuard (maInstanceMutex);
-    if (mpInstance.get() == nullptr)
+    if (mpInstance == nullptr)
     {
         if (!xContext.is())
             return nullptr;

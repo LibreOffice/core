@@ -2173,7 +2173,7 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                         OSL_ENSURE(!isUNKNOWNATR(nHintWhich),
                                 "SwTextNode::GetAttr(): unknown attribute?");
 
-                        if ( !pAttrArr.get() )
+                        if (!pAttrArr)
                         {
                             pAttrArr.reset(
                                 new std::vector< SwPoolItemEndPair >(coArrSz));
@@ -2230,7 +2230,7 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                 }
             }
 
-            if ( pAttrArr.get() )
+            if (pAttrArr)
             {
                 for (size_t n = 0; n < coArrSz; ++n)
                 {

@@ -130,8 +130,9 @@ bool OPatternModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
         }
         else
         {
-            OSL_ENSURE( m_pFormattedValue.get(), "OPatternModel::commitControlValueToDbColumn: no value helper!" );
-            if ( !m_pFormattedValue.get() )
+            OSL_ENSURE(m_pFormattedValue,
+                       "OPatternModel::commitControlValueToDbColumn: no value helper!");
+            if (!m_pFormattedValue)
                 return false;
 
             if ( !m_pFormattedValue->setFormattedValue( sNewValue ) )
@@ -167,9 +168,10 @@ void OPatternModel::onDisconnectedDbColumn()
 
 Any OPatternModel::translateDbColumnToControlValue()
 {
-    OSL_PRECOND( m_pFormattedValue.get(), "OPatternModel::translateDbColumnToControlValue: no value helper!" );
+    OSL_PRECOND(m_pFormattedValue,
+                "OPatternModel::translateDbColumnToControlValue: no value helper!");
 
-    if ( m_pFormattedValue.get() )
+    if (m_pFormattedValue)
     {
         OUString sValue( m_pFormattedValue->getFormattedValue() );
         if  (   sValue.isEmpty()

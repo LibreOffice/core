@@ -1017,10 +1017,7 @@ EditView* ScTextWnd::GetEditView()
     return mpEditView.get();
 }
 
-bool ScTextWnd::HasEditView() const
-{
-    return mpEditView.get() != nullptr;
-}
+bool ScTextWnd::HasEditView() const { return mpEditView != nullptr; }
 
 long ScTextWnd::GetPixelHeightForLines(long nLines)
 {

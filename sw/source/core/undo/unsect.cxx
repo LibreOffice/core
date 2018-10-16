@@ -148,7 +148,7 @@ void SwUndoInsSection::UndoImpl(::sw::UndoRedoContext & rContext)
         Join( rDoc, nEndNode );
     }
 
-    if (m_pHistory.get())
+    if (m_pHistory)
     {
         m_pHistory->TmpRollback( &rDoc, 0, false );
     }
@@ -160,7 +160,7 @@ void SwUndoInsSection::UndoImpl(::sw::UndoRedoContext & rContext)
 
     AddUndoRedoPaM(rContext);
 
-    if( m_pRedlineSaveData.get())
+    if (m_pRedlineSaveData)
         SetSaveData( rDoc, *m_pRedlineSaveData );
 }
 
@@ -170,7 +170,7 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
     SwPaM & rPam( AddUndoRedoPaM(rContext) );
 
     const SwTOXBaseSection* pUpdateTOX = nullptr;
-    if (m_pTOXBase.get())
+    if (m_pTOXBase)
     {
         pUpdateTOX = rDoc.InsertTableOf( *rPam.GetPoint(),
                                         *m_pTOXBase, m_pAttrSet.get(), true);
@@ -180,7 +180,7 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
         rDoc.InsertSwSection(rPam, *m_pSectionData, nullptr, m_pAttrSet.get());
     }
 
-    if (m_pHistory.get())
+    if (m_pHistory)
     {
         m_pHistory->SetTmpEnd( m_pHistory->Count() );
     }
@@ -219,7 +219,7 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoInsSection::RepeatImpl(::sw::RepeatContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
-    if (m_pTOXBase.get())
+    if (m_pTOXBase)
     {
         rDoc.InsertTableOf(*rContext.GetRepeatPaM().GetPoint(),
                                         *m_pTOXBase, m_pAttrSet.get(), true);
@@ -244,7 +244,7 @@ void SwUndoInsSection::Join( SwDoc& rDoc, sal_uLong nNode )
     }
     pTextNd->JoinNext();
 
-    if (m_pHistory.get())
+    if (m_pHistory)
     {
         SwIndex aCntIdx( pTextNd, 0 );
         pTextNd->RstTextAttr( aCntIdx, pTextNd->Len(), 0, nullptr, true );
@@ -256,7 +256,7 @@ SwUndoInsSection::SaveSplitNode(SwTextNode *const pTextNd, bool const bAtStart)
 {
     if( pTextNd->GetpSwpHints() )
     {
-        if (!m_pHistory.get())
+        if (!m_pHistory)
         {
             m_pHistory.reset( new SwHistory );
         }
@@ -318,7 +318,7 @@ void SwUndoDelSection::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
-    if (m_pTOXBase.get())
+    if (m_pTOXBase)
     {
         rDoc.InsertTableOf(m_nStartNode, m_nEndNode-2, *m_pTOXBase,
                 m_pAttrSet.get());
@@ -328,7 +328,7 @@ void SwUndoDelSection::UndoImpl(::sw::UndoRedoContext & rContext)
         SwNodeIndex aStt( rDoc.GetNodes(), m_nStartNode );
         SwNodeIndex aEnd( rDoc.GetNodes(), m_nEndNode-2 );
         SwSectionFormat* pFormat = rDoc.MakeSectionFormat();
-        if (m_pAttrSet.get())
+        if (m_pAttrSet)
         {
             pFormat->SetFormatAttr( *m_pAttrSet );
         }
@@ -424,7 +424,7 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
     SwFormat* pFormat = rNdSect.GetFormat();
 
     SfxItemSet* pCur = ::lcl_GetAttrSet( rNdSect );
-    if (m_pAttrSet.get())
+    if (m_pAttrSet)
     {
         // The Content and Protect items must persist
         const SfxPoolItem* pItem;

@@ -119,7 +119,7 @@ void SAL_CALL PresenterPaneFactory::disposing()
     mxConfigurationControllerWeak = WeakReference<XConfigurationController>();
 
     // Dispose the panes in the cache.
-    if (mpResourceCache.get() != nullptr)
+    if (mpResourceCache != nullptr)
     {
         ResourceContainer::const_iterator iPane (mpResourceCache->begin());
         ResourceContainer::const_iterator iEnd (mpResourceCache->end());
@@ -147,7 +147,7 @@ Reference<XResource> SAL_CALL PresenterPaneFactory::createResource (
     if (sPaneURL.isEmpty())
         return nullptr;
 
-    if (mpResourceCache.get() != nullptr)
+    if (mpResourceCache != nullptr)
     {
         // Has the requested resource already been created?
         ResourceContainer::const_iterator iResource (mpResourceCache->find(sPaneURL));
@@ -194,7 +194,7 @@ void SAL_CALL PresenterPaneFactory::releaseResource (const Reference<XResource>&
         if (pDescriptor->mxBorderWindow.is())
             pDescriptor->mxBorderWindow->setVisible(false);
 
-        if (mpResourceCache.get() != nullptr)
+        if (mpResourceCache != nullptr)
         {
             // Store the pane in the cache.
             (*mpResourceCache)[sPaneURL] = rxResource;

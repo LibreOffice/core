@@ -219,7 +219,7 @@ namespace svt
 
 #if HAVE_FEATURE_DESKTOP
         // load the library implementing the factory
-        if ( !s_pFactory.get() )
+        if (!s_pFactory)
         {
 #ifndef DISABLE_DYNLOADING
             const OUString sModuleName( SVLIBRARY( "acc" ));
@@ -249,7 +249,7 @@ namespace svt
         }
 #endif // HAVE_FEATURE_DESKTOP
 
-        if ( !s_pFactory.get() )
+        if (!s_pFactory)
             // the attempt to load the lib, or to create the factory, failed
             // -> fall back to a dummy factory
             s_pFactory = new AccessibleDummyFactory;

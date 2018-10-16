@@ -614,13 +614,11 @@ void ChartModel::impl_loadGraphics(
                             ::utl::UcbStreamHelper::CreateStream(
                                 xElementStream, true ) );
 
-                        if( apIStm.get() )
+                        if (apIStm)
                         {
                             Graphic aGraphic;
 
-                            if( !GraphicConverter::Import(
-                                    *apIStm.get(),
-                                    aGraphic ) )
+                            if (!GraphicConverter::Import(*apIStm, aGraphic))
                             {
                                 m_aGraphicObjectVector.emplace_back(aGraphic );
                             }

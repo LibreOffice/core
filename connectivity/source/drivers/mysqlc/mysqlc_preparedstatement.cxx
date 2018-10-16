@@ -108,7 +108,7 @@ Reference<XResultSetMetaData> SAL_CALL OPreparedStatement::getMetaData()
     {
         MYSQL_RES* pRes = mysql_stmt_result_metadata(m_pStmt);
         // TODO warning or error if no meta data.
-        m_xMetaData = new OResultSetMetaData(*m_xConnection.get(), pRes);
+        m_xMetaData = new OResultSetMetaData(*m_xConnection, pRes);
     }
     return m_xMetaData;
 }
@@ -135,19 +135,17 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
 
     if (!m_binds.empty() && mysql_stmt_bind_param(m_pStmt, m_binds.data()))
     {
-        MYSQL* pMysql = m_xConnection.get()->getMysqlConnection();
+        MYSQL* pMysql = m_xConnection->getMysqlConnection();
         mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_stmt_error(m_pStmt), mysql_errno(pMysql),
-                                                     *this,
-                                                     m_xConnection.get()->getConnectionEncoding());
+                                                     *this, m_xConnection->getConnectionEncoding());
     }
 
     int nFail = mysql_stmt_execute(m_pStmt);
     if (nFail != 0)
     {
-        MYSQL* pMysql = m_xConnection.get()->getMysqlConnection();
+        MYSQL* pMysql = m_xConnection->getMysqlConnection();
         mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_stmt_error(m_pStmt), mysql_errno(pMysql),
-                                                     *this,
-                                                     m_xConnection.get()->getConnectionEncoding());
+                                                     *this, m_xConnection->getConnectionEncoding());
     }
 
     return !nFail;
@@ -160,20 +158,18 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate()
 
     if (!m_binds.empty() && mysql_stmt_bind_param(m_pStmt, m_binds.data()))
     {
-        MYSQL* pMysql = m_xConnection.get()->getMysqlConnection();
+        MYSQL* pMysql = m_xConnection->getMysqlConnection();
         mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_stmt_error(m_pStmt), mysql_errno(pMysql),
-                                                     *this,
-                                                     m_xConnection.get()->getConnectionEncoding());
+                                                     *this, m_xConnection->getConnectionEncoding());
     }
 
     int nFail = mysql_stmt_execute(m_pStmt);
 
     if (nFail != 0)
     {
-        MYSQL* pMysql = m_xConnection.get()->getMysqlConnection();
+        MYSQL* pMysql = m_xConnection->getMysqlConnection();
         mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_stmt_error(m_pStmt), mysql_errno(pMysql),
-                                                     *this,
-                                                     m_xConnection.get()->getConnectionEncoding());
+                                                     *this, m_xConnection->getConnectionEncoding());
     }
 
     sal_Int32 affectedRows = mysql_stmt_affected_rows(m_pStmt);
@@ -210,24 +206,22 @@ Reference<XResultSet> SAL_CALL OPreparedStatement::executeQuery()
 
     if (!m_binds.empty() && mysql_stmt_bind_param(m_pStmt, m_binds.data()))
     {
-        MYSQL* pMysql = m_xConnection.get()->getMysqlConnection();
+        MYSQL* pMysql = m_xConnection->getMysqlConnection();
         mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_stmt_error(m_pStmt), mysql_errno(pMysql),
-                                                     *this,
-                                                     m_xConnection.get()->getConnectionEncoding());
+                                                     *this, m_xConnection->getConnectionEncoding());
     }
 
     int nFail = mysql_stmt_execute(m_pStmt);
 
     if (nFail != 0)
     {
-        MYSQL* pMysql = m_xConnection.get()->getMysqlConnection();
+        MYSQL* pMysql = m_xConnection->getMysqlConnection();
         mysqlc_sdbc_driver::throwSQLExceptionWithMsg(mysql_stmt_error(m_pStmt), mysql_errno(pMysql),
-                                                     *this,
-                                                     m_xConnection.get()->getConnectionEncoding());
+                                                     *this, m_xConnection->getConnectionEncoding());
     }
 
     Reference<XResultSet> xResultSet;
-    xResultSet = new OPreparedResultSet(*m_xConnection.get(), this, m_pStmt);
+    xResultSet = new OPreparedResultSet(*m_xConnection, this, m_pStmt);
     return xResultSet;
 }
 

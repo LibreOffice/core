@@ -42,7 +42,7 @@ TimerTriggeredControllerLock::~TimerTriggeredControllerLock()
 
 void TimerTriggeredControllerLock::startTimer()
 {
-    if(!m_apControllerLockGuard.get())
+    if (!m_apControllerLockGuard)
         m_apControllerLockGuard.reset( new  ControllerLockGuardUNO(m_xModel) );
     m_aTimer.Start();
 }

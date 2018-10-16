@@ -243,7 +243,7 @@ void SwParagraphNumTabPage::Reset(const SfxItemSet* rSet)
     NewStartHdl_Impl(*m_xNewStartCB);
     m_xNewStartNF->save_value();
     m_xNewStartNumberCB->save_state();
-    StyleHdl_Impl(*m_xNumberStyleLB.get());
+    StyleHdl_Impl(*m_xNumberStyleLB);
     if( SfxItemState::DEFAULT <= rSet->GetItemState(RES_LINENUMBER))
     {
         const SwFormatLineNumber& rNum = rSet->Get(RES_LINENUMBER);

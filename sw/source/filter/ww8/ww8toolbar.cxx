@@ -643,7 +643,7 @@ bool Tcg::Read(SvStream &rS)
 
 bool Tcg::ImportCustomToolBar( SfxObjectShell& rDocSh )
 {
-    if ( tcg.get() )
+    if (tcg)
         return tcg->ImportCustomToolBar( rDocSh );
     return false;
 }

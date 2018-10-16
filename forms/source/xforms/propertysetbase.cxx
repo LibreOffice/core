@@ -69,7 +69,8 @@ Reference< XPropertySetInfo > SAL_CALL PropertySetBase::getPropertySetInfo(  )
 void PropertySetBase::registerProperty( const Property& rProperty,
     const ::rtl::Reference< PropertyAccessorBase >& rAccessor )
 {
-    OSL_ENSURE( rAccessor.get(), "PropertySetBase::registerProperty: invalid property accessor, this will crash!" );
+    OSL_ENSURE(rAccessor,
+               "PropertySetBase::registerProperty: invalid property accessor, this will crash!");
     m_aAccessors.emplace( rProperty.Handle, rAccessor );
 
     OSL_ENSURE( rAccessor->isWriteable()

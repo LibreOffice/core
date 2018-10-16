@@ -197,7 +197,7 @@ sal_Int16 ListLevel::GetParentNumbering( const OUString& sText, sal_Int16 nLevel
 uno::Sequence<beans::PropertyValue> ListLevel::GetProperties(bool bDefaults)
 {
     uno::Sequence<beans::PropertyValue> aLevelProps = GetLevelProperties(bDefaults);
-    if ( m_pParaStyle.get( ) )
+    if (m_pParaStyle)
         AddParaProperties( &aLevelProps );
     return aLevelProps;
 }

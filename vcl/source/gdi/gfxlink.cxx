@@ -46,7 +46,8 @@ GfxLink::GfxLink(std::unique_ptr<sal_uInt8[]> pBuf, sal_uInt32 nSize, GfxLinkTyp
     , mbPrefMapModeValid(false)
     , mbPrefSizeValid(false)
 {
-    SAL_WARN_IF(mpSwapInData.get() == nullptr || mnSwapInDataSize <= 0, "vcl", "GfxLink::GfxLink(): empty/NULL buffer given");
+    SAL_WARN_IF(mpSwapInData == nullptr || mnSwapInDataSize <= 0, "vcl",
+                "GfxLink::GfxLink(): empty/NULL buffer given");
 }
 
 bool GfxLink::operator==( const GfxLink& rGfxLink ) const

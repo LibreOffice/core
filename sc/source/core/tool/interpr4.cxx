@@ -2472,7 +2472,7 @@ void ScInterpreter::ScDBGet()
 {
     bool bMissingField = false;
     unique_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
-    if (!pQueryParam.get())
+    if (!pQueryParam)
     {
         // Failed to create query param.
         PushIllegalParameter();

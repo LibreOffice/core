@@ -3871,7 +3871,7 @@ SwTableAutoFormatTable& SwDoc::GetTableStyles()
         m_pTableStyles.reset(new SwTableAutoFormatTable);
         m_pTableStyles->Load();
     }
-    return *m_pTableStyles.get();
+    return *m_pTableStyles;
 }
 
 OUString SwDoc::GetUniqueTableName() const
@@ -4602,7 +4602,7 @@ std::unique_ptr<SwTableAutoFormat> SwDoc::DelTableStyle(const OUString& rName, b
     std::unique_ptr<SwTableAutoFormat> pReleasedFormat = GetTableStyles().ReleaseAutoFormat(rName);
 
     std::vector<SwTable*> vAffectedTables;
-    if (pReleasedFormat.get())
+    if (pReleasedFormat)
     {
         size_t nTableCount = GetTableFrameFormatCount(true);
         for (size_t i=0; i < nTableCount; ++i)

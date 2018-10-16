@@ -212,7 +212,7 @@ void VCartesianGrid::createShapes()
 
     //create all scaled tickmark values
     std::unique_ptr< TickFactory > apTickFactory( createTickFactory() );
-    TickFactory& aTickFactory = *apTickFactory.get();
+    TickFactory& aTickFactory = *apTickFactory;
     TickInfoArraysType aAllTickInfos;
     aTickFactory.getAllTicks( aAllTickInfos );
 

@@ -1476,7 +1476,7 @@ oslGenericFunction LocaleDataImpl::getFunctionSymbol( const Locale& rLocale, con
 
     if (pCachedItem)
         cachedItem = std::move(pCachedItem);
-    if (cachedItem.get())
+    if (cachedItem)
         cachedItem->aLocale = rLocale;
 
     return pSymbol;

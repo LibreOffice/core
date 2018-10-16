@@ -241,9 +241,9 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         if ( InteractionInfo* pInteraction = mpHostAppData ? mpHostAppData->GetInteractionInfo():nullptr )
         {
             const std::unique_ptr< SvMemoryStream >& pMemStrm = pInteraction->getHyperlinkRecord();
-            if ( pMemStrm.get() )
+            if (pMemStrm)
             {
-                aPropOpt.AddOpt(ESCHER_Prop_pihlShape, false, 0, *pMemStrm.get());
+                aPropOpt.AddOpt(ESCHER_Prop_pihlShape, false, 0, *pMemStrm);
             }
             aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x00080008 );
         }

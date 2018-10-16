@@ -168,7 +168,7 @@ SwDLL::~SwDLL() COVERITY_NOEXCEPT_FALSE
 sw::Filters & SwDLL::getFilters()
 {
     assert(filters_);
-    return *filters_.get();
+    return *filters_;
 }
 
 #ifndef DISABLE_DYNLOADING

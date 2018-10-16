@@ -387,8 +387,8 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent)
 
             if( mbMasterPage )
             {
-                mpDocSh->GetUndoManager()->AddUndoAction(
-                    o3tl::make_unique<StyleSheetUndoAction>(mpDoc, static_cast<SfxStyleSheet*>(pStyleSheet), &(*pTempSet.get())));
+                mpDocSh->GetUndoManager()->AddUndoAction(o3tl::make_unique<StyleSheetUndoAction>(
+                    mpDoc, static_cast<SfxStyleSheet*>(pStyleSheet), &(*pTempSet)));
                 pStyleSheet->GetItemSet().Put( *(pTempSet.get()) );
                 sdr::properties::CleanupFillProperties( pStyleSheet->GetItemSet() );
                 pStyleSheet->Broadcast(SfxHint(SfxHintId::DataChanged));

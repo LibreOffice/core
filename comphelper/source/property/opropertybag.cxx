@@ -277,7 +277,7 @@ namespace comphelper
 
     ::cppu::IPropertyArrayHelper& SAL_CALL OPropertyBag::getInfoHelper()
     {
-        if ( !m_pArrayHelper.get() )
+        if (!m_pArrayHelper)
         {
             Sequence< Property > aProperties;
             m_aDynamicProperties.describeProperties( aProperties );

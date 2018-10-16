@@ -1557,12 +1557,12 @@ void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabel
                 double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
                 if( nTextLevel>0 )
                 {
-                    lcl_shiftLabels( *apTickIter.get(), aCummulatedLabelsDistance );
+                    lcl_shiftLabels(*apTickIter, aCummulatedLabelsDistance);
                     fRotationAngleDegree = 0.0;
                 }
-                aCummulatedLabelsDistance += lcl_getLabelsDistance( *apTickIter.get()
-                    , pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties )
-                    , fRotationAngleDegree );
+                aCummulatedLabelsDistance += lcl_getLabelsDistance(
+                    *apTickIter, pTickFactory2D->getDistanceAxisTickToText(m_aAxisProperties),
+                    fRotationAngleDegree);
             }
         }
     }
@@ -1611,7 +1611,7 @@ void VCartesianAxis::createLabels()
         {
             if(nTextLevel==0)
             {
-                nScreenDistanceBetweenTicks = TickFactory2D::getTickScreenDistance( *apTickIter.get() );
+                nScreenDistanceBetweenTicks = TickFactory2D::getTickScreenDistance(*apTickIter);
                 if( nTextLevelCount>1 )
                     nScreenDistanceBetweenTicks*=2; //the above used tick iter does contain also the sub ticks -> thus the given distance is only the half
             }
@@ -1624,7 +1624,8 @@ void VCartesianAxis::createLabels()
 
             }
             AxisLabelProperties& rAxisLabelProperties =  m_aAxisProperties.m_bComplexCategories ? aComplexProps : m_aAxisLabelProperties;
-            while( !createTextShapes( m_xTextTarget, *apTickIter.get(), rAxisLabelProperties, pTickFactory2D, nScreenDistanceBetweenTicks ) )
+            while (!createTextShapes(m_xTextTarget, *apTickIter, rAxisLabelProperties,
+                                     pTickFactory2D, nScreenDistanceBetweenTicks))
             {
             };
         }
@@ -1666,7 +1667,8 @@ void VCartesianAxis::createMaximumLabels()
         std::unique_ptr< TickIter > apTickIter(createMaximumLabelTickIterator( nTextLevel ));
         if(apTickIter)
         {
-            while( !createTextShapes( m_xTextTarget, *apTickIter.get(), aAxisLabelProperties, pTickFactory2D, -1 ) )
+            while (!createTextShapes(m_xTextTarget, *apTickIter, aAxisLabelProperties,
+                                     pTickFactory2D, -1))
             {
             };
         }
@@ -1802,7 +1804,9 @@ void VCartesianAxis::createShapes()
                 if( apTickIter )
                 {
                     double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
-                    B2DVector aLabelsDistance( lcl_getLabelsDistance( *apTickIter.get(), pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties ), fRotationAngleDegree ) );
+                    B2DVector aLabelsDistance(lcl_getLabelsDistance(
+                        *apTickIter, pTickFactory2D->getDistanceAxisTickToText(m_aAxisProperties),
+                        fRotationAngleDegree));
                     sal_Int32 nCurrentLength = static_cast<sal_Int32>(aLabelsDistance.getLength());
                     aTickmarkPropertiesList.push_back( m_aAxisProperties.makeTickmarkPropertiesForComplexCategories( nOffset + nCurrentLength, 0 ) );
                     nOffset += nCurrentLength;

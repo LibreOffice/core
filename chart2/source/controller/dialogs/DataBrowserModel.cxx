@@ -279,7 +279,7 @@ private:
 
 void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
 {
-    OSL_ASSERT( m_apDialogModel.get());
+    OSL_ASSERT(m_apDialogModel);
     Reference< chart2::XInternalDataProvider > xDataProvider(
         m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
 
@@ -400,7 +400,7 @@ void DataBrowserModel::insertComplexCategoryLevel( sal_Int32 nAfterColumnIndex )
 {
     //create a new text column for complex categories
 
-    OSL_ASSERT( m_apDialogModel.get());
+    OSL_ASSERT(m_apDialogModel);
     Reference< chart2::XInternalDataProvider > xDataProvider( m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
     if (!xDataProvider.is())
         return;
@@ -438,7 +438,7 @@ void DataBrowserModel::removeComplexCategoryLevel( sal_Int32 nAtColumnIndex )
 
 void DataBrowserModel::removeDataSeriesOrComplexCategoryLevel( sal_Int32 nAtColumnIndex )
 {
-    OSL_ASSERT( m_apDialogModel.get());
+    OSL_ASSERT(m_apDialogModel);
     if (nAtColumnIndex < 0 || static_cast<size_t>(nAtColumnIndex) >= m_aColumns.size())
         // Out of bound.
         return;
@@ -507,7 +507,7 @@ void DataBrowserModel::removeDataSeriesOrComplexCategoryLevel( sal_Int32 nAtColu
 
 void DataBrowserModel::swapDataSeries( sal_Int32 nFirstColumnIndex )
 {
-    OSL_ASSERT( m_apDialogModel.get());
+    OSL_ASSERT(m_apDialogModel);
     if( static_cast< tDataColumnVector::size_type >( nFirstColumnIndex ) < m_aColumns.size() - 1 )
     {
         Reference< chart2::XDataSeries > xSeries( m_aColumns[nFirstColumnIndex].m_xDataSeries );
@@ -521,7 +521,7 @@ void DataBrowserModel::swapDataSeries( sal_Int32 nFirstColumnIndex )
 
 void DataBrowserModel::swapDataPointForAllSeries( sal_Int32 nFirstIndex )
 {
-    OSL_ASSERT( m_apDialogModel.get());
+    OSL_ASSERT(m_apDialogModel);
     Reference< chart2::XInternalDataProvider > xDataProvider(
         m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
     // lockControllers

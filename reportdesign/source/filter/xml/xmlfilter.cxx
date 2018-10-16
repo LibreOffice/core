@@ -773,7 +773,7 @@ SvXMLImportContext *ORptFilter::CreateFastContext( sal_Int32 nElement,
 
 const SvXMLTokenMap& ORptFilter::GetDocElemTokenMap() const
 {
-    if ( !m_pDocElemTokenMap.get() )
+    if (!m_pDocElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -790,7 +790,7 @@ const SvXMLTokenMap& ORptFilter::GetDocElemTokenMap() const
 
 const SvXMLTokenMap& ORptFilter::GetDocContentElemTokenMap() const
 {
-    if (!m_pDocContentElemTokenMap.get())
+    if (!m_pDocContentElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -808,21 +808,21 @@ const SvXMLTokenMap& ORptFilter::GetDocContentElemTokenMap() const
 
 const SvXMLTokenMap& ORptFilter::GetReportElemTokenMap() const
 {
-    if ( !m_pReportElemTokenMap.get() )
+    if (!m_pReportElemTokenMap)
         m_pReportElemTokenMap.reset(OXMLHelper::GetReportElemTokenMap());
     return *m_pReportElemTokenMap;
 }
 
 const SvXMLTokenMap& ORptFilter::GetSubDocumentElemTokenMap() const
 {
-    if ( !m_pSubDocumentElemTokenMap.get() )
+    if (!m_pSubDocumentElemTokenMap)
         m_pSubDocumentElemTokenMap.reset(OXMLHelper::GetSubDocumentElemTokenMap());
     return *m_pSubDocumentElemTokenMap;
 }
 
 const SvXMLTokenMap& ORptFilter::GetFunctionElemTokenMap() const
 {
-    if ( !m_pFunctionElemTokenMap.get() )
+    if (!m_pFunctionElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -840,7 +840,7 @@ const SvXMLTokenMap& ORptFilter::GetFunctionElemTokenMap() const
 
 const SvXMLTokenMap& ORptFilter::GetFormatElemTokenMap() const
 {
-    if ( !m_pFormatElemTokenMap.get() )
+    if (!m_pFormatElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -856,7 +856,7 @@ const SvXMLTokenMap& ORptFilter::GetFormatElemTokenMap() const
 
 const SvXMLTokenMap& ORptFilter::GetGroupElemTokenMap() const
 {
-    if ( !m_pGroupElemTokenMap.get() )
+    if (!m_pGroupElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -882,7 +882,7 @@ const SvXMLTokenMap& ORptFilter::GetGroupElemTokenMap() const
 
 const SvXMLTokenMap& ORptFilter::GetReportElementElemTokenMap() const
 {
-    if ( !m_pElemTokenMap.get() )
+    if (!m_pElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -900,7 +900,7 @@ const SvXMLTokenMap& ORptFilter::GetReportElementElemTokenMap() const
 
 const SvXMLTokenMap& ORptFilter::GetControlElemTokenMap() const
 {
-    if ( !m_pControlElemTokenMap.get() )
+    if (!m_pControlElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -922,7 +922,7 @@ const SvXMLTokenMap& ORptFilter::GetControlElemTokenMap() const
 
 const SvXMLTokenMap& ORptFilter::GetControlPropertyElemTokenMap() const
 {
-    if ( !m_pControlElemTokenMap.get() )
+    if (!m_pControlElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -944,7 +944,7 @@ const SvXMLTokenMap& ORptFilter::GetControlPropertyElemTokenMap() const
 
 const SvXMLTokenMap& ORptFilter::GetComponentElemTokenMap() const
 {
-    if ( !m_pComponentElemTokenMap.get() )
+    if (!m_pComponentElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -960,7 +960,7 @@ const SvXMLTokenMap& ORptFilter::GetComponentElemTokenMap() const
 
 const SvXMLTokenMap& ORptFilter::GetColumnTokenMap() const
 {
-    if ( !m_pColumnTokenMap.get() )
+    if (!m_pColumnTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -984,7 +984,7 @@ const SvXMLTokenMap& ORptFilter::GetColumnTokenMap() const
 
 const SvXMLTokenMap& ORptFilter::GetSectionElemTokenMap() const
 {
-    if ( !m_pSectionElemTokenMap.get() )
+    if (!m_pSectionElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
@@ -1007,7 +1007,7 @@ const SvXMLTokenMap& ORptFilter::GetSectionElemTokenMap() const
 
 const SvXMLTokenMap& ORptFilter::GetCellElemTokenMap() const
 {
-    if ( !m_pCellElemTokenMap.get() )
+    if (!m_pCellElemTokenMap)
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {

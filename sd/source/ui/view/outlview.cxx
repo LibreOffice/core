@@ -136,7 +136,8 @@ OutlineView::OutlineView( DrawDocShell& rDocSh, vcl::Window* pWindow, OutlineVie
  */
 OutlineView::~OutlineView()
 {
-    DBG_ASSERT(maDragAndDropModelGuard.get() == nullptr, "sd::OutlineView::~OutlineView(), prior drag operation not finished correctly!" );
+    DBG_ASSERT(maDragAndDropModelGuard == nullptr,
+               "sd::OutlineView::~OutlineView(), prior drag operation not finished correctly!");
 
     Link<tools::EventMultiplexerEvent&,void> aLink( LINK(this,OutlineView,EventMultiplexerListener) );
     mrOutlineViewShell.GetViewShellBase().GetEventMultiplexer()->RemoveEventListener( aLink );
@@ -332,7 +333,7 @@ IMPL_LINK( OutlineView, ParagraphInsertedHdl, Outliner::ParagraphHdlParam, aPara
 {
     // we get calls to this handler during binary insert of drag and drop contents but
     // we ignore it here and handle it later in OnEndPasteOrDrop()
-    if( maDragAndDropModelGuard.get() == nullptr )
+    if (maDragAndDropModelGuard == nullptr)
     {
         OutlineViewPageChangesGuard aGuard(this);
 
@@ -751,7 +752,8 @@ IMPL_LINK_NOARG(OutlineView, StatusEventHdl, EditStatus&, void)
 
 IMPL_LINK_NOARG(OutlineView, BeginDropHdl, EditView*, void)
 {
-    DBG_ASSERT(maDragAndDropModelGuard.get() == nullptr, "sd::OutlineView::BeginDropHdl(), prior drag operation not finished correctly!" );
+    DBG_ASSERT(maDragAndDropModelGuard == nullptr,
+               "sd::OutlineView::BeginDropHdl(), prior drag operation not finished correctly!");
 
     maDragAndDropModelGuard.reset( new OutlineViewModelChangeGuard( *this ) );
 }

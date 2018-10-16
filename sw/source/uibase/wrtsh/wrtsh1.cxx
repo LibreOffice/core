@@ -1729,7 +1729,7 @@ OUString SwWrtShell::GetSelDescr() const
         }
         break;
     default:
-        if (mxDoc.get())
+        if (mxDoc)
             aResult = GetCursorDescr();
     }
 

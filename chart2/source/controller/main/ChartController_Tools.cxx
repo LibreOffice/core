@@ -246,7 +246,7 @@ void ChartController::executeDispatch_ScaleText()
     ControllerLockGuardUNO aCtlLockGuard( getModel() );
 
     std::unique_ptr<ReferenceSizeProvider> pRefSizeProv(impl_createReferenceSizeProvider());
-    OSL_ASSERT( pRefSizeProv.get());
+    OSL_ASSERT(pRefSizeProv);
     if (pRefSizeProv)
         pRefSizeProv->toggleAutoResizeState();
 

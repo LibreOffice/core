@@ -178,7 +178,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
             // get the SvStream to work with
             std::unique_ptr< SvStream > aStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
 
-            if(!aStream.get())
+            if (!aStream)
             {
                 // we need the SvStream
                 break;
@@ -189,7 +189,8 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
             // As a bonus, zipped data is already detected and handled there
             GraphicFilter aGraphicFilter;
             Graphic aGraphic;
-            const ErrCode nGraphicFilterErrorCode(aGraphicFilter.ImportGraphic(aGraphic, OUString(), *aStream.get()));
+            const ErrCode nGraphicFilterErrorCode(
+                aGraphicFilter.ImportGraphic(aGraphic, OUString(), *aStream));
 
             if(ERRCODE_NONE != nGraphicFilterErrorCode)
             {
@@ -260,7 +261,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
                         pTargetSdrPage->getSdrModelFromSdrPage(),
                         aGraphic));
 
-                if(!aNewSdrGrafObj.get())
+                if (!aNewSdrGrafObj)
                 {
                     // could not create GraphicObject
                     break;
@@ -577,7 +578,7 @@ private:
 
         std::unique_ptr< SvStream > aStream(utl::UcbStreamHelper::CreateStream(mxInput, true));
 
-        if(!aStream.get())
+        if (!aStream)
         {
             return;
         }

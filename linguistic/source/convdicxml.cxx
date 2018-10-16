@@ -333,7 +333,7 @@ void ConvDicXMLExport::ExportContent_()
     {
         OUString aLeftText(elem);
         AddAttribute( XML_NAMESPACE_TCD, "left-text", aLeftText );
-        if (rDic.pConvPropType.get())   // property-type list available?
+        if (rDic.pConvPropType) // property-type list available?
         {
             sal_Int16 nPropertyType = -1;
             PropTypeMap::iterator aIt2 = rDic.pConvPropType->find( aLeftText );

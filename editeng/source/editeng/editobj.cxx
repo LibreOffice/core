@@ -128,7 +128,7 @@ ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse 
 
     for (const auto & aAttrib : rCopyFrom.maCharAttribs)
     {
-        const XEditAttribute& rAttr = *aAttrib.get();
+        const XEditAttribute& rAttr = *aAttrib;
         std::unique_ptr<XEditAttribute> pMyAttr = MakeXEditAttribute(
             rPoolToUse, *rAttr.GetItem(), rAttr.GetStart(), rAttr.GetEnd());
         maCharAttribs.push_back(std::move(pMyAttr));
@@ -463,7 +463,7 @@ void EditTextObjectImpl::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
         ContentInfosType aReplaced;
         aReplaced.reserve(aContents.size());
         for (auto const& content : aContents)
-            aReplaced.push_back(std::unique_ptr<ContentInfo>(new ContentInfo(*content.get(), *pNewPool)));
+            aReplaced.push_back(std::unique_ptr<ContentInfo>(new ContentInfo(*content, *pNewPool)));
         aReplaced.swap(aContents);
 
         // set local variables
@@ -566,7 +566,7 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, const EditTextOb
 
     aContents.reserve(r.aContents.size());
     for (auto const& content : r.aContents)
-        aContents.push_back(std::unique_ptr<ContentInfo>(new ContentInfo(*content.get(), *pPool)));
+        aContents.push_back(std::unique_ptr<ContentInfo>(new ContentInfo(*content, *pPool)));
 }
 
 EditTextObjectImpl::~EditTextObjectImpl()
@@ -597,7 +597,7 @@ void EditTextObjectImpl::NormalizeString( svl::SharedStringPool& rPool )
 {
     for (auto const& content : aContents)
     {
-        ContentInfo& rInfo = *content.get();
+        ContentInfo& rInfo = *content;
         rInfo.NormalizeString(rPool);
     }
 }
@@ -608,7 +608,7 @@ std::vector<svl::SharedString> EditTextObjectImpl::GetSharedStrings() const
     aSSs.reserve(aContents.size());
     for (auto const& content : aContents)
     {
-        const ContentInfo& rInfo = *content.get();
+        const ContentInfo& rInfo = *content;
         aSSs.push_back(rInfo.GetSharedString());
     }
     return aSSs;
@@ -700,7 +700,7 @@ void EditTextObjectImpl::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttr
     const ContentInfo& rC = *aContents[nPara].get();
     for (const auto & aAttrib : rC.maCharAttribs)
     {
-        const XEditAttribute& rAttr = *aAttrib.get();
+        const XEditAttribute& rAttr = *aAttrib;
         EECharAttrib aEEAttr;
         aEEAttr.pAttr = rAttr.GetItem();
         aEEAttr.nStart = rAttr.GetStart();
@@ -746,7 +746,7 @@ const SvxFieldData* EditTextObjectImpl::GetFieldData(sal_Int32 nPara, size_t nPo
     size_t nCurPos = 0;
     for (auto const& charAttrib : rC.maCharAttribs)
     {
-        const XEditAttribute& rAttr = *charAttrib.get();
+        const XEditAttribute& rAttr = *charAttrib;
         if (rAttr.GetItem()->Which() != EE_FEATURE_FIELD)
             // Skip attributes that are not fields.
             continue;
@@ -864,7 +864,7 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
         rBorders.push_back(rC.GetText().getLength());
         for (const auto & aAttrib : rC.maCharAttribs)
         {
-            const XEditAttribute& rAttr = *aAttrib.get();
+            const XEditAttribute& rAttr = *aAttrib;
             const SfxPoolItem* pItem = rAttr.GetItem();
             if (!pItem)
                 continue;
@@ -928,7 +928,7 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
 
         for (const auto & aAttrib : rC.maCharAttribs)
         {
-            const XEditAttribute& rXAttr = *aAttrib.get();
+            const XEditAttribute& rXAttr = *aAttrib;
             const SfxPoolItem* pItem = rXAttr.GetItem();
             if (!pItem)
                 continue;

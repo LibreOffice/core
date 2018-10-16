@@ -666,7 +666,7 @@ void java_sql_Connection::loadDriverFromProperties( const OUString& _sDriverClas
 
                     ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
                 }
-                if ( pDrvClass.get() )
+                if (pDrvClass)
                 {
                     LocalRef< jobject > driverObject( t.env() );
                     driverObject.set( pDrvClass->newInstanceObject() );

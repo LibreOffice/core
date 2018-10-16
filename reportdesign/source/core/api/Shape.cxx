@@ -193,7 +193,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OShape::getPropertySetInfo(  
 
 cppu::IPropertyArrayHelper& OShape::getInfoHelper()
 {
-    if ( !m_pAggHelper.get() )
+    if (!m_pAggHelper)
     {
         uno::Sequence<beans::Property> aAggSeq;
         if ( m_aProps.aComponent.m_xProperty.is() )

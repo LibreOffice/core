@@ -3163,7 +3163,7 @@ void ScDPCollection::NameCaches::updateCache(
         return;
     }
 
-    ScDPCache& rCache = *itr->second.get();
+    ScDPCache& rCache = *itr->second;
     // Update the cache with new cell values. This will clear all group dimension info.
     rCache.InitFromDoc(mpDoc, rRange);
 
@@ -3556,7 +3556,7 @@ bool ScDPCollection::GetReferenceGroups(const ScDPObject& rDPObj, const ScDPDime
 {
     for (const std::unique_ptr<ScDPObject>& aTable : maTables)
     {
-        const ScDPObject& rRefObj = *aTable.get();
+        const ScDPObject& rRefObj = *aTable;
 
         if (&rRefObj == &rDPObj)
             continue;
@@ -3639,7 +3639,7 @@ void ScDPCollection::CopyToTab( SCTAB nOld, SCTAB nNew )
     TablesType::const_iterator it = maTables.begin(), itEnd = maTables.end();
     for (; it != itEnd; ++it)
     {
-        const ScDPObject& rObj = *it->get();
+        const ScDPObject& rObj = **it;
         ScRange aOutRange = rObj.GetOutRange();
         if (aOutRange.aStart.Tab() != nOld)
             continue;
@@ -3664,7 +3664,7 @@ bool ScDPCollection::RefsEqual( const ScDPCollection& r ) const
 
     TablesType::const_iterator itr = maTables.begin(), itr2 = r.maTables.begin(), itrEnd = maTables.end();
     for (; itr != itrEnd; ++itr, ++itr2)
-        if (!(*itr)->RefsEqual(*itr2->get()))
+        if (!(*itr)->RefsEqual(**itr2))
             return false;
 
     return true;
@@ -3678,7 +3678,7 @@ void ScDPCollection::WriteRefsTo( ScDPCollection& r ) const
         TablesType::const_iterator itr = maTables.begin(), itrEnd = maTables.end();
         TablesType::iterator itr2 = r.maTables.begin();
         for (; itr != itrEnd; ++itr, ++itr2)
-            (*itr)->WriteRefsTo(*itr2->get());
+            (*itr)->WriteRefsTo(**itr2);
     }
     else
     {
@@ -3897,7 +3897,7 @@ void ScDPCollection::GetAllTables(const ScRange& rSrcRange, std::set<ScDPObject*
     TablesType::const_iterator it = maTables.begin(), itEnd = maTables.end();
     for (; it != itEnd; ++it)
     {
-        const ScDPObject& rObj = *it->get();
+        const ScDPObject& rObj = **it;
         if (!rObj.IsSheetData())
             // Source is not a sheet range.
             continue;
@@ -3926,7 +3926,7 @@ void ScDPCollection::GetAllTables(const OUString& rSrcName, std::set<ScDPObject*
     TablesType::const_iterator it = maTables.begin(), itEnd = maTables.end();
     for (; it != itEnd; ++it)
     {
-        const ScDPObject& rObj = *it->get();
+        const ScDPObject& rObj = **it;
         if (!rObj.IsSheetData())
             // Source is not a sheet range.
             continue;
@@ -3957,7 +3957,7 @@ void ScDPCollection::GetAllTables(
     TablesType::const_iterator it = maTables.begin(), itEnd = maTables.end();
     for (; it != itEnd; ++it)
     {
-        const ScDPObject& rObj = *it->get();
+        const ScDPObject& rObj = **it;
         if (!rObj.IsImportData())
             // Source data is not a database.
             continue;

@@ -674,7 +674,7 @@ NumberAnimationSharedPtr createPushWipeTransition(
     const SoundPlayerSharedPtr&                     pSoundPlayer )
 {
     boost::optional<SlideSharedPtr> leavingSlide; // no bitmap
-    if (leavingSlide_ && (*leavingSlide_).get() != nullptr)
+    if (leavingSlide_ && *leavingSlide_ != nullptr)
     {
         // opt: only page, if we've an
         // actual slide to move out here. We

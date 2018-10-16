@@ -377,7 +377,7 @@ SwDocShell::SwDocShell( SwDoc *const pD, SfxObjectCreateMode const eMode )
 SwDocShell::~SwDocShell()
 {
     // disable chart related objects now because in ~SwDoc it may be to late for this
-    if (m_xDoc.get())
+    if (m_xDoc)
     {
         m_xDoc->getIDocumentChartDataProviderAccess().GetChartControllerHelper().Disconnect();
         SwChartDataProvider *pPCD = m_xDoc->getIDocumentChartDataProviderAccess().GetChartDataProvider();
@@ -411,7 +411,7 @@ void  SwDocShell::Init_Impl()
 
 void SwDocShell::AddLink()
 {
-    if (!m_xDoc.get())
+    if (!m_xDoc)
     {
         SwDocFac aFactory;
         m_xDoc = aFactory.GetDoc();
@@ -433,8 +433,8 @@ void SwDocShell::UpdateFontList()
     if (!m_IsInUpdateFontList)
     {
         m_IsInUpdateFontList = true;
-        OSL_ENSURE(m_xDoc.get(), "No Doc no FontList");
-        if (m_xDoc.get())
+        OSL_ENSURE(m_xDoc, "No Doc no FontList");
+        if (m_xDoc)
         {
             m_pFontList.reset( new FontList( m_xDoc->getIDocumentDeviceAccess().getReferenceDevice(true) ) );
             PutItem( SvxFontListItem( m_pFontList.get(), SID_ATTR_CHAR_FONTLIST ) );
@@ -448,7 +448,7 @@ void SwDocShell::RemoveLink()
     // disconnect Uno-Object
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
     static_cast<SwXTextDocument*>(xDoc.get())->Invalidate();
-    if (m_xDoc.get())
+    if (m_xDoc)
     {
         if (m_xBasePool.is())
         {
@@ -484,7 +484,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
         rEmbeddedObjectContainer.setUserAllowsLinkUpdate(false);
 
         SAL_INFO( "sw.ui", "after SfxInPlaceObject::Load" );
-        if (m_xDoc.get())       // for last version!!
+        if (m_xDoc) // for last version!!
             RemoveLink();       // release the existing
 
         AddLink();      // set Link and update Data!!
@@ -570,7 +570,8 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
         }
 
         UpdateFontList();
-        InitDrawModelAndDocShell(this, m_xDoc.get() ? m_xDoc->getIDocumentDrawModelAccess().GetDrawModel() : nullptr);
+        InitDrawModelAndDocShell(this, m_xDoc ? m_xDoc->getIDocumentDrawModelAccess().GetDrawModel()
+                                              : nullptr);
 
         SetError(nErr);
         bRet = !nErr.IsError();
@@ -591,7 +592,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
 bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
 {
     bool bRet = false;
-    if (m_xDoc.get())
+    if (m_xDoc)
         RemoveLink();
 
     AddLink();      // set Link and update Data!!

@@ -268,7 +268,7 @@ namespace toolkitform
             Reference< XPropertySet > xModelProps( _rxControl->getModel(), UNO_QUERY );
             sal_Int16 nControlType = classifyFormControl( xModelProps );
             Descriptor.reset( createDefaultWidget( nControlType ) );
-            if ( !Descriptor.get() )
+            if (!Descriptor)
                 // no PDF widget available for this
                 return Descriptor;
 

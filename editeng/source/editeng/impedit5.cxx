@@ -435,7 +435,7 @@ SfxItemSet ImpEditEngine::GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int
             const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
             for (const auto & nAttr : rAttrs)
             {
-                const EditCharAttrib& rAttr = *nAttr.get();
+                const EditCharAttrib& rAttr = *nAttr;
 
                 if ( nStart == nEnd )
                 {
@@ -549,7 +549,7 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, SetA
                         CharAttribList::AttribsType& rAttribs = pNode->GetCharAttribs().GetAttribs();
                         for (std::unique_ptr<EditCharAttrib> & rAttrib : rAttribs)
                         {
-                            EditCharAttrib& rAttr = *rAttrib.get();
+                            EditCharAttrib& rAttr = *rAttrib;
                             if (rAttr.GetStart() > nEndPos)
                                 break;
 
@@ -746,7 +746,7 @@ void ImpEditEngine::GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& 
         const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
         for (const auto & i : rAttrs)
         {
-            const EditCharAttrib& rAttr = *i.get();
+            const EditCharAttrib& rAttr = *i;
             EECharAttrib aEEAttr;
             aEEAttr.pAttr = rAttr.GetItem();
             aEEAttr.nStart = rAttr.GetStart();

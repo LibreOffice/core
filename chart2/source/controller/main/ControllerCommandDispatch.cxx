@@ -522,8 +522,8 @@ void ControllerCommandDispatch::fireStatusEventForURLImpl(
 
 void ControllerCommandDispatch::updateCommandAvailability()
 {
-    bool bModelStateIsValid = ( m_apModelState.get() != nullptr );
-    bool bControllerStateIsValid = ( m_apControllerState.get() != nullptr );
+    bool bModelStateIsValid = (m_apModelState != nullptr);
+    bool bControllerStateIsValid = (m_apControllerState != nullptr);
     // Model and controller states exist.
     OSL_ASSERT( bModelStateIsValid );
     OSL_ASSERT( bControllerStateIsValid );

@@ -892,7 +892,7 @@ void SaneDlg::AcquirePreview()
         mrSane.SetOptionValue( nOption, true );
 
     rtl::Reference<BitmapTransporter> xTransporter(new BitmapTransporter);
-    if( ! mrSane.Start( *xTransporter.get() ) )
+    if (!mrSane.Start(*xTransporter))
     {
         std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                        VclMessageType::Warning, VclButtonsType::Ok,

@@ -178,8 +178,7 @@ void checkMap(
                  ->createCursor()),
                 ignoreUnpublished);
         } else {
-            bool pubA = dynamic_cast<unoidl::PublishableEntity &>(*entA.get())
-                .isPublished();
+            bool pubA = dynamic_cast<unoidl::PublishableEntity&>(*entA).isPublished();
             if (!pubA && ignoreUnpublished) {
                 continue;
             }
@@ -196,9 +195,7 @@ void checkMap(
                     << std::endl;
                 std::exit(EXIT_FAILURE);
             }
-            if (pubA
-                && (!dynamic_cast<unoidl::PublishableEntity &>(*entB.get())
-                    .isPublished()))
+            if (pubA && (!dynamic_cast<unoidl::PublishableEntity&>(*entB).isPublished()))
             {
                 std::cerr
                     << "A published entity " << name << " is not published in B"

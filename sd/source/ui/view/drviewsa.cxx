@@ -747,13 +747,13 @@ void DrawViewShell::Notify (SfxBroadcaster&, const SfxHint& rHint)
 
 void DrawViewShell::ExecuteAnnotation (SfxRequest const & rRequest)
 {
-    if( mpAnnotationManager.get() )
+    if (mpAnnotationManager)
         mpAnnotationManager->ExecuteAnnotation( rRequest );
 }
 
 void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
 {
-    if( mpAnnotationManager.get() )
+    if (mpAnnotationManager)
         mpAnnotationManager->GetAnnotationState( rItemSet );
 }
 

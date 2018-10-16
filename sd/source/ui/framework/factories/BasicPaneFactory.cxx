@@ -406,7 +406,7 @@ Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
 
         // With shell and child window id create the ChildWindowPane
         // wrapper.
-        if (pShell.get() != nullptr)
+        if (pShell != nullptr)
         {
             xPane = new ChildWindowPane(
                 rxPaneId,

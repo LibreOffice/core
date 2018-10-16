@@ -814,7 +814,7 @@ void handleEnumType(
         static_cast< ClassFile::AccessFlags >(
             ClassFile::ACC_PRIVATE | ClassFile::ACC_STATIC),
         "<clinit>", "()V", code.get(), std::vector< OString >(), "");
-    writeClassFile(options, className, *cf.get());
+    writeClassFile(options, className, *cf);
 }
 
 void addField(
@@ -1349,8 +1349,7 @@ void addPlainStructBaseArguments(
             "unexpected entity \"" + base
             + "\" in call to addPlainStructBaseArguments");
     }
-    unoidl::PlainStructTypeEntity& ent2(
-        dynamic_cast<unoidl::PlainStructTypeEntity&>(*ent.get()));
+    unoidl::PlainStructTypeEntity& ent2(dynamic_cast<unoidl::PlainStructTypeEntity&>(*ent));
     if (!ent2.getDirectBase().isEmpty()) {
         addPlainStructBaseArguments(
             manager, dependencies, methodDescriptor, code,
@@ -1435,7 +1434,7 @@ void handlePlainStructType(
         ClassFile::ACC_PUBLIC, "<init>", desc.getDescriptor(), code.get(),
         std::vector< OString >(), desc.getSignature());
     addTypeInfo(className, typeInfo, dependencies, cf.get());
-    writeClassFile(options, className, *cf.get());
+    writeClassFile(options, className, *cf);
 }
 
 void handlePolyStructType(
@@ -1521,7 +1520,7 @@ void handlePolyStructType(
         ClassFile::ACC_PUBLIC, "<init>", desc.getDescriptor(), code.get(),
         std::vector< OString >(), desc.getSignature());
     addTypeInfo(className, typeInfo, dependencies, cf.get());
-    writeClassFile(options, className, *cf.get());
+    writeClassFile(options, className, *cf);
 }
 
 void addExceptionBaseArguments(
@@ -1538,8 +1537,7 @@ void addExceptionBaseArguments(
             "unexpected entity \"" + base
             + "\" in call to addExceptionBaseArguments");
     }
-    unoidl::ExceptionTypeEntity& ent2(
-        dynamic_cast<unoidl::ExceptionTypeEntity&>(*ent.get()));
+    unoidl::ExceptionTypeEntity& ent2(dynamic_cast<unoidl::ExceptionTypeEntity&>(*ent));
     bool baseException = base == "com.sun.star.uno.Exception";
     if (!baseException) {
         addExceptionBaseArguments(
@@ -1827,7 +1825,7 @@ void handleExceptionType(
         std::vector< OString >(), desc2.getSignature());
 
     addTypeInfo(className, typeInfo, dependencies, cf.get());
-    writeClassFile(options, className, *cf.get());
+    writeClassFile(options, className, *cf);
 }
 
 void createExceptionsAttribute(
@@ -1954,7 +1952,7 @@ void handleInterfaceType(
         }
     }
     addTypeInfo(className, typeInfo, dependencies, cf.get());
-    writeClassFile(options, className, *cf.get());
+    writeClassFile(options, className, *cf);
 }
 
 void handleTypedef(
@@ -2063,7 +2061,7 @@ void handleConstantGroup(
                 | ClassFile::ACC_FINAL),
             codemaker::convertString(member.name), desc, valueIndex, sig);
     }
-    writeClassFile(options, className, *cf.get());
+    writeClassFile(options, className, *cf);
 }
 
 void addExceptionHandlers(
@@ -2324,7 +2322,7 @@ void handleService(
                 code.get(), std::vector< OString >(), "");
         }
     }
-    writeClassFile(options, className, *cf.get());
+    writeClassFile(options, className, *cf);
 }
 
 void handleSingleton(
@@ -2440,7 +2438,7 @@ void handleSingleton(
             ClassFile::ACC_PUBLIC | ClassFile::ACC_STATIC),
         "get", desc.getDescriptor(), code.get(), std::vector< OString >(),
         desc.getSignature());
-    writeClassFile(options, className, *cf.get());
+    writeClassFile(options, className, *cf);
 }
 
 }

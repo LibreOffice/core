@@ -2415,7 +2415,7 @@ SfxStyleSheetBase&   SwDocStyleSheetPool::Make( const OUString&   rName,
     mxStyleSheet->SetPhysical(true);
     mxStyleSheet->Create();
 
-    return *mxStyleSheet.get();
+    return *mxStyleSheet;
 }
 
 SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const SfxStyleSheetBase& /*rOrg*/)

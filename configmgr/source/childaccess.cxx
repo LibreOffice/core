@@ -252,7 +252,8 @@ void ChildAccess::setProperty(
 
 css::uno::Any ChildAccess::asValue()
 {
-    if (changedValue_.get() != nullptr) {
+    if (changedValue_ != nullptr)
+    {
         return *changedValue_;
     }
     css::uno::Any value;
@@ -295,7 +296,8 @@ void ChildAccess::commitChanges(bool valid, Modifications * globalModifications)
 {
     assert(globalModifications != nullptr);
     commitChildChanges(valid, globalModifications);
-    if (valid && changedValue_.get() != nullptr) {
+    if (valid && changedValue_ != nullptr)
+    {
         std::vector<OUString> path(getAbsolutePath());
         getComponents().addModification(path);
         globalModifications->add(path);

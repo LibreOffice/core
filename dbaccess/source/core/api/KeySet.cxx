@@ -809,7 +809,8 @@ void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow, ORowSetRow const & _rK
         aValue.setSigned(m_aSignedFlags[parameterName.second.nPosition-1]);
         if ( (_rInsertRow->get())[parameterName.second.nPosition] != aValue )
         {
-            rtl::Reference<ORowSetValueVector> aCopy(new ORowSetValueVector(*m_aParameterValueForCache.get()));
+            rtl::Reference<ORowSetValueVector> aCopy(
+                new ORowSetValueVector(*m_aParameterValueForCache));
             (aCopy->get())[i] = (_rInsertRow->get())[parameterName.second.nPosition];
             m_aUpdatedParameter[i_nBookmark] = aCopy;
             bChanged = true;

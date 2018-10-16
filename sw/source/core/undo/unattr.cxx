@@ -161,7 +161,7 @@ void SwUndoFormatAttr::UndoImpl(::sw::UndoRedoContext & rContext)
     // OD 2004-10-26 #i35443#
     // Important note: <Undo(..)> also called by <ReDo(..)>
 
-    if ( !m_pOldSet.get() || !m_pFormat || !IsFormatInDoc( &rContext.GetDoc() ))
+    if (!m_pOldSet || !m_pFormat || !IsFormatInDoc(&rContext.GetDoc()))
         return;
 
     // #i35443# - If anchor attribute has been successful
@@ -290,7 +290,7 @@ void SwUndoFormatAttr::RedoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoFormatAttr::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    if ( !m_pOldSet.get() )
+    if (!m_pOldSet)
         return;
 
     SwDoc & rDoc(rContext.GetDoc());
@@ -535,14 +535,16 @@ SwUndoFormatResetAttr::~SwUndoFormatResetAttr()
 
 void SwUndoFormatResetAttr::UndoImpl(::sw::UndoRedoContext &)
 {
-    if ( m_pOldItem.get() ) {
+    if (m_pOldItem)
+    {
         m_pChangedFormat->SetFormatAttr( *m_pOldItem );
     }
 }
 
 void SwUndoFormatResetAttr::RedoImpl(::sw::UndoRedoContext &)
 {
-    if ( m_pOldItem.get() ) {
+    if (m_pOldItem)
+    {
         m_pChangedFormat->ResetFormatAttr( m_nWhichId );
     }
 }
@@ -726,7 +728,8 @@ void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
             // remove all format redlines, will be recreated if needed
             SetPaM(aPam);
             pDoc->getIDocumentRedlineAccess().DeleteRedline(aPam, false, nsRedlineType_t::REDLINE_FORMAT);
-            if ( m_pRedlineSaveData.get() ) {
+            if (m_pRedlineSaveData)
+            {
                 SetSaveData( *pDoc, *m_pRedlineSaveData );
             }
         }
@@ -849,7 +852,8 @@ SwUndoDefaultAttr::~SwUndoDefaultAttr()
 void SwUndoDefaultAttr::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
-    if ( m_pOldSet.get() ) {
+    if (m_pOldSet)
+    {
         SwUndoFormatAttrHelper aTmp(
             *rDoc.GetDfltTextFormatColl() );
         rDoc.SetDefault( *m_pOldSet );
@@ -859,7 +863,8 @@ void SwUndoDefaultAttr::UndoImpl(::sw::UndoRedoContext & rContext)
             m_pOldSet = std::move(aTmp.GetUndo()->m_pOldSet);
         }
     }
-    if ( m_pTabStop.get() ) {
+    if (m_pTabStop)
+    {
         SvxTabStopItem* pOld = static_cast<SvxTabStopItem*>(
                                    rDoc.GetDefault( RES_PARATR_TABSTOP ).Clone() );
         rDoc.SetDefault( *m_pTabStop );

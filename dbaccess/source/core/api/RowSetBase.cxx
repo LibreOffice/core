@@ -1412,14 +1412,14 @@ void ORowSetNotifier::fire()
 
 std::vector<sal_Int32>& ORowSetNotifier::getChangedColumns() const
 {
-    OSL_ENSURE(m_pImpl.get(),"Illegal CTor call, use the other one!");
+    OSL_ENSURE(m_pImpl, "Illegal CTor call, use the other one!");
     return m_pImpl->aChangedColumns;
 }
 
 void ORowSetNotifier::firePropertyChange()
 {
-    OSL_ENSURE(m_pImpl.get(),"Illegal CTor call, use the other one!");
-    if( m_pImpl.get() )
+    OSL_ENSURE(m_pImpl, "Illegal CTor call, use the other one!");
+    if (m_pImpl)
     {
         for (auto const& changedColumn : m_pImpl->aChangedColumns)
         {

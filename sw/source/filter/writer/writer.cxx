@@ -317,7 +317,7 @@ bool Writer::CopyLocalFileToINet( OUString& rFileNm )
             INetProtocol::VndSunStarWebdav >= aTargetUrl.GetProtocol() ) )
         return bRet;
 
-    if (m_pImpl->pFileNameMap.get())
+    if (m_pImpl->pFileNameMap)
     {
         // has the file been moved?
         std::map<OUString, OUString>::iterator it = m_pImpl->pFileNameMap->find( rFileNm );

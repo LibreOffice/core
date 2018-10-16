@@ -1751,7 +1751,7 @@ XMLPageExport* SvXMLExport::CreatePageExport()
 
 SchXMLExportHelper* SvXMLExport::CreateChartExport()
 {
-    return new SchXMLExportHelper(*this,*GetAutoStylePool().get());
+    return new SchXMLExportHelper(*this, *GetAutoStylePool());
 }
 
 XMLFontAutoStylePool* SvXMLExport::CreateFontAutoStylePool()
@@ -2428,7 +2428,7 @@ SvXMLExport::AddAttributesRDFa(
         return; // no xml:id => no RDFa
     }
 
-    if (!mpImpl->mpRDFaHelper.get())
+    if (!mpImpl->mpRDFaHelper)
     {
         mpImpl->mpRDFaHelper.reset( new ::xmloff::RDFaExportHelper(*this) );
     }

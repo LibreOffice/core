@@ -803,7 +803,7 @@ void Ruler::ImplDrawIndents(vcl::RenderContext& rRenderContext, long nMin, long 
                 }
             }
             bool bIsHit = false;
-            if(mxCurrentHitTest.get() != nullptr && mxCurrentHitTest->eType == RulerType::Indent)
+            if (mxCurrentHitTest != nullptr && mxCurrentHitTest->eType == RulerType::Indent)
             {
                 bIsHit = mxCurrentHitTest->nAryPos == j;
             }
@@ -1996,7 +1996,7 @@ void Ruler::MouseMove( const MouseEvent& rMEvt )
 
     if (ImplHitTest( rMEvt.GetPosPixel(), mxCurrentHitTest.get() ))
     {
-        maHoverSelection = *mxCurrentHitTest.get();
+        maHoverSelection = *mxCurrentHitTest;
 
         if (mxCurrentHitTest->bSize)
         {
@@ -2028,7 +2028,7 @@ void Ruler::MouseMove( const MouseEvent& rMEvt )
         }
     }
 
-    if (mxPreviousHitTest.get() != nullptr && mxPreviousHitTest->eType != mxCurrentHitTest->eType)
+    if (mxPreviousHitTest != nullptr && mxPreviousHitTest->eType != mxCurrentHitTest->eType)
     {
         mbFormat = true;
     }

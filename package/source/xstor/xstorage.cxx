@@ -1845,7 +1845,7 @@ void OStorage::InternalDispose( bool bNotifyImpl )
         OSL_ENSURE( !m_pData->m_aOpenSubComponentsVector.size() || m_pData->m_pSubElDispListener.get(),
                     "If any subelements are open the listener must exist!" );
 
-        if (m_pData->m_pSubElDispListener.get())
+        if (m_pData->m_pSubElDispListener)
         {
             m_pData->m_pSubElDispListener->OwnerIsDisposed();
 
@@ -2042,7 +2042,7 @@ void OStorage::MakeLinkToSubComponent_Impl( const uno::Reference< lang::XCompone
     if ( !xComponent.is() )
         throw uno::RuntimeException( THROW_WHERE );
 
-    if (!m_pData->m_pSubElDispListener.get())
+    if (!m_pData->m_pSubElDispListener)
     {
         m_pData->m_pSubElDispListener = new OChildDispListener_Impl( *this );
     }

@@ -116,7 +116,7 @@ ConfigurationController::~ConfigurationController() throw()
 
 void SAL_CALL ConfigurationController::disposing()
 {
-    if (mpImplementation.get() == nullptr)
+    if (mpImplementation == nullptr)
         return;
 
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::disposing");
@@ -148,9 +148,9 @@ void SAL_CALL ConfigurationController::disposing()
 
 void ConfigurationController::ProcessEvent()
 {
-    if (mpImplementation.get() != nullptr)
+    if (mpImplementation != nullptr)
     {
-        OSL_ASSERT(mpImplementation->mpQueueProcessor.get()!=nullptr);
+        OSL_ASSERT(mpImplementation->mpQueueProcessor != nullptr);
 
         mpImplementation->mpQueueProcessor->ProcessOneEvent();
     }
@@ -158,9 +158,9 @@ void ConfigurationController::ProcessEvent()
 
 void ConfigurationController::RequestSynchronousUpdate()
 {
-    if (mpImplementation.get() == nullptr)
+    if (mpImplementation == nullptr)
         return;
-    if (mpImplementation->mpQueueProcessor.get() == nullptr)
+    if (mpImplementation->mpQueueProcessor == nullptr)
         return;
     mpImplementation->mpQueueProcessor->ProcessUntilEmpty();
 }
@@ -175,7 +175,7 @@ void SAL_CALL ConfigurationController::addConfigurationChangeListener (
     ::osl::MutexGuard aGuard (maMutex);
 
     ThrowIfDisposed();
-    OSL_ASSERT(mpImplementation.get()!=nullptr);
+    OSL_ASSERT(mpImplementation != nullptr);
     mpImplementation->mpBroadcaster->AddListener(rxListener, rsEventType, rUserData);
 }
 
@@ -199,14 +199,14 @@ void SAL_CALL ConfigurationController::notifyEvent (
 
 void SAL_CALL ConfigurationController::lock()
 {
-    OSL_ASSERT(mpImplementation.get()!=nullptr);
-    OSL_ASSERT(mpImplementation->mpConfigurationUpdater.get()!=nullptr);
+    OSL_ASSERT(mpImplementation != nullptr);
+    OSL_ASSERT(mpImplementation->mpConfigurationUpdater != nullptr);
 
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
 
     ++mpImplementation->mnLockCount;
-    if (mpImplementation->mpConfigurationUpdaterLock.get()==nullptr)
+    if (mpImplementation->mpConfigurationUpdaterLock == nullptr)
         mpImplementation->mpConfigurationUpdaterLock
             = mpImplementation->mpConfigurationUpdater->GetLock();
 }
@@ -509,9 +509,9 @@ void ConfigurationController::ThrowIfDisposed () const
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 
-    if (mpImplementation.get() == nullptr)
+    if (mpImplementation == nullptr)
     {
-        OSL_ASSERT(mpImplementation.get() != nullptr);
+        OSL_ASSERT(mpImplementation != nullptr);
         throw RuntimeException("ConfigurationController not initialized",
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }

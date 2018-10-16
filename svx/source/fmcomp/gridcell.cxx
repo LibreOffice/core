@@ -1784,18 +1784,18 @@ OUString DbPatternField::GetFormatText(const Reference< css::sdb::XColumn >& _rx
     bool bIsForPaint = _rxField != m_rColumn.GetField();
     ::std::unique_ptr< FormattedColumnValue >& rpFormatter = bIsForPaint ? m_pPaintFormatter : m_pValueFormatter;
 
-    if ( !rpFormatter.get() )
+    if (!rpFormatter)
     {
         rpFormatter = o3tl::make_unique< FormattedColumnValue> (
             m_xContext, getCursor(), Reference< XPropertySet >( _rxField, UNO_QUERY ) );
-        OSL_ENSURE( rpFormatter.get(), "DbPatternField::Init: no value formatter!" );
+        OSL_ENSURE(rpFormatter, "DbPatternField::Init: no value formatter!");
     }
     else
         OSL_ENSURE( rpFormatter->getColumn() == _rxField, "DbPatternField::GetFormatText: my value formatter is working for another field ...!" );
         // re-creating the value formatter here every time would be quite expensive ...
 
     OUString sText;
-    if ( rpFormatter.get() )
+    if (rpFormatter)
         sText = rpFormatter->getFormattedValue();
 
     return impl_formatText( sText );

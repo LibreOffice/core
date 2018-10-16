@@ -512,7 +512,7 @@ void SwTextField::DeleteTextField( const SwTextField& rTextField )
     {
         std::shared_ptr< SwPaM > pPamForTextField;
         GetPamForTextField(rTextField, pPamForTextField);
-        if (pPamForTextField.get() != nullptr)
+        if (pPamForTextField != nullptr)
         {
             rTextField.GetTextNode().GetDoc()->getIDocumentContentOperations().DeleteAndJoin(*pPamForTextField);
         }

@@ -26,7 +26,7 @@ namespace cmis
 
     StdOutputStream::~StdOutputStream()
     {
-        if ( m_pStream.get( ) )
+        if (m_pStream)
             m_pStream->setstate( ios::eofbit );
     }
 
@@ -51,7 +51,7 @@ namespace cmis
     {
         osl::MutexGuard aGuard( m_aMutex );
 
-        if ( !m_pStream.get() )
+        if (!m_pStream)
             throw io::IOException( );
 
         try
@@ -69,7 +69,7 @@ namespace cmis
     {
         osl::MutexGuard aGuard( m_aMutex );
 
-        if ( !m_pStream.get() )
+        if (!m_pStream)
             throw io::IOException( );
 
         try
@@ -87,7 +87,7 @@ namespace cmis
     {
         osl::MutexGuard aGuard( m_aMutex );
 
-        if ( !m_pStream.get() )
+        if (!m_pStream)
             throw io::IOException( );
 
         m_pStream->setstate( ios_base::eofbit );

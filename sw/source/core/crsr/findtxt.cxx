@@ -679,11 +679,8 @@ int SwFindParaText::Find( SwPaM* pCursor, SwMoveFnCollection const & fnMove,
 
         std::unique_ptr<OUString> pRepl( bRegExp
                 ? ReplaceBackReferences( m_rSearchOpt, pCursor ) : nullptr );
-        bool const bReplaced =
-            m_rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange(
-                *pCursor,
-                (pRepl.get()) ? *pRepl : m_rSearchOpt.replaceString,
-                bRegExp );
+        bool const bReplaced = m_rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange(
+            *pCursor, pRepl ? *pRepl : m_rSearchOpt.replaceString, bRegExp);
         m_rCursor.SaveTableBoxContent( pCursor->GetPoint() );
 
         if( bRegExp )

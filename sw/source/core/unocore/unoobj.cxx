@@ -306,7 +306,7 @@ SwUnoCursorHelper::SetPageDesc(
         pNewDesc.reset(new SwFormatPageDesc(
                     *static_cast<const SwFormatPageDesc*>(pItem)));
     }
-    if (!pNewDesc.get())
+    if (!pNewDesc)
     {
         pNewDesc.reset(new SwFormatPageDesc());
     }
@@ -324,7 +324,7 @@ SwUnoCursorHelper::SetPageDesc(
             {
                 throw lang::IllegalArgumentException();
             }
-            pNewDesc.get()->RegisterToPageDesc( *pPageDesc );
+            pNewDesc->RegisterToPageDesc(*pPageDesc);
             bPut = true;
         }
         if(!bPut)
@@ -425,7 +425,7 @@ lcl_setDropcapCharStyle(SwPaM const & rPam, SfxItemSet & rItemSet,
     {
         pDrop.reset(new SwFormatDrop(*static_cast<const SwFormatDrop*>(pItem)));
     }
-    if (!pDrop.get())
+    if (!pDrop)
     {
         pDrop.reset(new SwFormatDrop);
     }
@@ -450,7 +450,7 @@ lcl_setRubyCharstyle(SfxItemSet & rItemSet, uno::Any const& rValue)
     {
         pRuby.reset(new SwFormatRuby(*static_cast<const SwFormatRuby*>(pItem)));
     }
-    if (!pRuby.get())
+    if (!pRuby)
     {
         pRuby.reset(new SwFormatRuby(OUString()));
     }
@@ -1906,7 +1906,7 @@ SwUnoCursorHelper::GetPropertyStates(
             }
             else
             {
-                if (!pSet.get())
+                if (!pSet)
                 {
                     switch ( eCaller )
                     {

@@ -78,7 +78,7 @@ const sal_uInt16 BIFF12_OLEOBJECT_AUTOLOAD  = 0x0002;
 
 void DataValidationsContextBase::SetValidation( WorksheetHelper& rTarget )
 {
-    if (!mxValModel.get())
+    if (!mxValModel)
         return;
 
     rTarget.getAddressConverter().convertToCellRangeList(mxValModel->maRanges, maSqref, rTarget.getSheetIndex(), true);

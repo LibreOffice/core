@@ -1464,8 +1464,10 @@ XclExpDataBar::XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rF
     const ScRange & rRange = rFormat.GetRange().front();
     ScAddress aAddr = rRange.aStart;
     // exact position is not important, we allow only absolute refs
-    mpCfvoLowerLimit.reset( new XclExpCfvo( GetRoot(), *mrFormat.GetDataBarData()->mpLowerLimit.get(), aAddr, true ) );
-    mpCfvoUpperLimit.reset( new XclExpCfvo( GetRoot(), *mrFormat.GetDataBarData()->mpUpperLimit.get(), aAddr, false ) );
+    mpCfvoLowerLimit.reset(
+        new XclExpCfvo(GetRoot(), *mrFormat.GetDataBarData()->mpLowerLimit, aAddr, true));
+    mpCfvoUpperLimit.reset(
+        new XclExpCfvo(GetRoot(), *mrFormat.GetDataBarData()->mpUpperLimit, aAddr, false));
 
     mpCol.reset( new XclExpColScaleCol( GetRoot(), mrFormat.GetDataBarData()->maPositiveColor ) );
 }
@@ -1712,7 +1714,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
 
         // first formula
         xScTokArr.reset( pValData->CreateFlatCopiedTokenArray( 0 ) );
-        if( xScTokArr.get() )
+        if (xScTokArr)
         {
             if( pValData->GetDataMode() == SC_VALID_LIST )
             {
@@ -1785,7 +1787,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
 
         // second formula
         xScTokArr.reset( pValData->CreateFlatCopiedTokenArray( 1 ) );
-        if( xScTokArr.get() )
+        if (xScTokArr)
         {
             if(GetOutput() == EXC_OUTPUT_BINARY)
                 mxTokArr2 = rFmlaComp.CreateFormula( EXC_FMLATYPE_DATAVAL, *xScTokArr );

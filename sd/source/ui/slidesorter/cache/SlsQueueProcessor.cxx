@@ -146,8 +146,7 @@ void QueueProcessor::ProcessOneRequest (
         ::osl::MutexGuard aGuard (maMutex);
 
         // Create a new preview bitmap and store it in the cache.
-        if (mpCache.get() != nullptr
-            && mpCacheContext.get() != nullptr)
+        if (mpCache != nullptr && mpCacheContext.get() != nullptr)
         {
             const SdPage* pSdPage = dynamic_cast<const SdPage*>(mpCacheContext->GetPage(aKey));
             if (pSdPage != nullptr)

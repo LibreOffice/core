@@ -1608,9 +1608,9 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
                 _nLabelObjectID)));
         _pLabelPage->NbcInsertObject(pLabel.get());
 
-        OSL_ENSURE( pLabel.get(), "FmXFormView::createControlLabelPair: could not create the label!" );
+        OSL_ENSURE(pLabel, "FmXFormView::createControlLabelPair: could not create the label!");
 
-        if ( !pLabel.get() )
+        if (!pLabel)
             return false;
 
         xLabelModel.set( pLabel->GetUnoControlModel(), UNO_QUERY );
@@ -1641,9 +1641,9 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
              _nControlObjectID)));
     _pControlPage->NbcInsertObject(pControl.get());
 
-    OSL_ENSURE( pControl.get(), "FmXFormView::createControlLabelPair: could not create the control!" );
+    OSL_ENSURE(pControl, "FmXFormView::createControlLabelPair: could not create the control!");
 
-    if ( !pControl.get() )
+    if (!pControl)
         return false;
 
     Reference< XPropertySet > xControlSet( pControl->GetUnoControlModel(), UNO_QUERY );

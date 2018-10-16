@@ -80,21 +80,21 @@ void X11SalGraphics::CopyScreenArea( Display* pDisplay,
 
 void X11SalGraphics::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY )
 {
-    X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mxImpl.get());
+    X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mxImpl);
     rImpl.FillPixmapFromScreen( pPixmap, nX, nY );
 }
 
 bool X11SalGraphics::RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY )
 {
     SAL_INFO( "vcl", "RenderPixmapToScreen" );
-    X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mxImpl.get());
+    X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mxImpl);
     return rImpl.RenderPixmapToScreen( pPixmap, pMask, nX, nY );
 }
 
 bool X11SalGraphics::TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey, int nX, int nY)
 {
     SAL_INFO( "vcl", "TryRenderCachedNativeControl" );
-    X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mxImpl.get());
+    X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mxImpl);
     return rImpl.TryRenderCachedNativeControl(rControlCacheKey, nX, nY);
 }
 
@@ -102,7 +102,7 @@ bool X11SalGraphics::RenderAndCacheNativeControl(X11Pixmap* pPixmap, X11Pixmap* 
                                                  ControlCacheKey& rControlCacheKey)
 {
     SAL_INFO( "vcl", "RenderAndCachePixmap" );
-    X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mxImpl.get());
+    X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mxImpl);
     return rImpl.RenderAndCacheNativeControl(pPixmap, pMask, nX, nY, rControlCacheKey);
 }
 

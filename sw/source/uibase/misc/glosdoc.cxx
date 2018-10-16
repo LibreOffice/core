@@ -611,7 +611,7 @@ Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry(
     bool bCreate = ( rCompleteGroupName == GetDefName() );
     std::unique_ptr< SwTextBlocks > pGlosGroup( GetGroupDoc( rCompleteGroupName, bCreate ) );
 
-    if ( !pGlosGroup.get() || pGlosGroup->GetError() )
+    if (!pGlosGroup || pGlosGroup->GetError())
         throw lang::WrappedTargetException();
 
     sal_uInt16 nIdx = pGlosGroup->GetIndex( rEntryName );

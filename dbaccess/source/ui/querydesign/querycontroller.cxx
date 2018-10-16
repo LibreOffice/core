@@ -1711,7 +1711,7 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
                 std::unique_ptr< ::connectivity::OSQLParseNode > pNode(
                     m_aSqlParser.parseTree( aErrorMsg, m_sStatement, m_bGraphicalDesign ) );
 
-                if ( pNode.get() )
+                if (pNode)
                 {
                     delete m_pSqlIterator->getParseTree();
                     m_pSqlIterator->setParseTree( pNode.release() );

@@ -31,11 +31,11 @@ public:
         EditTextObjectImpl::ContentInfosType& rContents = mrObj.GetContents();
         for (std::unique_ptr<ContentInfo> & i : rContents)
         {
-            ContentInfo& rContent = *i.get();
+            ContentInfo& rContent = *i;
             ContentInfo::XEditAttributesType& rAttribs = rContent.GetCharAttribs();
             for (std::unique_ptr<XEditAttribute> & rAttrib : rAttribs)
             {
-                XEditAttribute& rAttr = *rAttrib.get();
+                XEditAttribute& rAttr = *rAttrib;
                 const SfxPoolItem* pItem = rAttr.GetItem();
                 if (pItem->Which() != EE_FEATURE_FIELD)
                     // This is not a field item.

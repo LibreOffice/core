@@ -707,14 +707,14 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
                 // transfer ownership of outliner object to caption, or set simple text
                 OSL_ENSURE( rInitData.mxOutlinerObj.get() || !rInitData.maSimpleText.isEmpty(),
                     "ScPostIt::CreateCaptionFromInitData - need either outliner para object or simple text" );
-                if( rInitData.mxOutlinerObj.get() )
+                if (rInitData.mxOutlinerObj)
                     maNoteData.m_pCaption->SetOutlinerParaObject( std::move(rInitData.mxOutlinerObj) );
                 else
                     maNoteData.m_pCaption->SetText( rInitData.maSimpleText );
 
                 // copy all items or set default items; reset shadow items
                 ScCaptionUtil::SetDefaultItems( *maNoteData.m_pCaption, mrDoc );
-                if( rInitData.mxItemSet.get() )
+                if (rInitData.mxItemSet)
                     ScCaptionUtil::SetCaptionItems( *maNoteData.m_pCaption, *rInitData.mxItemSet );
 
                 // set position and size of the caption object

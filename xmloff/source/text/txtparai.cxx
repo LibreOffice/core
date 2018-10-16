@@ -1560,7 +1560,8 @@ SvXMLImportContextRef XMLImpSpanContext_Impl::CreateChildContext(
         }
         else
         {
-            pContext = new XMLUrlFieldImportContext( rImport, *rImport.GetTextImport().get(), nPrefix, rLocalName );
+            pContext = new XMLUrlFieldImportContext(rImport, *rImport.GetTextImport(), nPrefix,
+                                                    rLocalName);
             //whitespace handling like other fields
             rIgnoreLeadingSpace = false;
 
@@ -1584,9 +1585,8 @@ SvXMLImportContextRef XMLImpSpanContext_Impl::CreateChildContext(
         }
         else
         {
-            pContext = new XMLFootnoteImportContext( rImport,
-                                                     *rImport.GetTextImport().get(),
-                                                     nPrefix, rLocalName );
+            pContext = new XMLFootnoteImportContext(rImport, *rImport.GetTextImport(), nPrefix,
+                                                    rLocalName);
         }
         rIgnoreLeadingSpace = false;
         break;
@@ -1595,19 +1595,17 @@ SvXMLImportContextRef XMLImpSpanContext_Impl::CreateChildContext(
     case XML_TOK_TEXT_BOOKMARK:
     case XML_TOK_TEXT_BOOKMARK_START:
     case XML_TOK_TEXT_BOOKMARK_END:
-        pContext = new XMLTextMarkImportContext( rImport,
-                                                 *rImport.GetTextImport().get(),
-                                                 rHints.GetCrossRefHeadingBookmark(),
-                                                 nPrefix, rLocalName );
+        pContext = new XMLTextMarkImportContext(rImport, *rImport.GetTextImport(),
+                                                rHints.GetCrossRefHeadingBookmark(), nPrefix,
+                                                rLocalName);
         break;
 
     case XML_TOK_TEXT_FIELDMARK:
     case XML_TOK_TEXT_FIELDMARK_START:
     case XML_TOK_TEXT_FIELDMARK_END:
-        pContext = new XMLTextMarkImportContext( rImport,
-                                                 *rImport.GetTextImport().get(),
-                                                 rHints.GetCrossRefHeadingBookmark(),
-                                                 nPrefix, rLocalName );
+        pContext = new XMLTextMarkImportContext(rImport, *rImport.GetTextImport(),
+                                                rHints.GetCrossRefHeadingBookmark(), nPrefix,
+                                                rLocalName);
         break;
 
     case XML_TOK_TEXT_REFERENCE_START:
@@ -1708,10 +1706,8 @@ SvXMLImportContextRef XMLImpSpanContext_Impl::CreateChildContext(
 
     default:
         // none of the above? then it's probably  a text field!
-        pContext =
-            XMLTextFieldImportContext::CreateTextFieldImportContext(
-                rImport, *rImport.GetTextImport().get(), nPrefix, rLocalName,
-                nToken);
+        pContext = XMLTextFieldImportContext::CreateTextFieldImportContext(
+            rImport, *rImport.GetTextImport(), nPrefix, rLocalName, nToken);
         // #108784# import draw elements (except control shapes in headers)
         if( pContext == nullptr &&
             !( rImport.GetTextImport()->IsInHeaderFooter() &&

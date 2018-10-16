@@ -552,7 +552,8 @@ void lcl_clear( STLCONTAINER& i_container )
 
             // get predicate object
             ::std::unique_ptr< ::comphelper::IKeyPredicateLess > const pPredicate( ::comphelper::getStandardLessPredicate( dataType, m_collator ) );
-            ENSURE_OR_RETURN_FALSE( pPredicate.get(), "SortableGridDataModel::impl_reIndex_nothrow: no sortable data found!" );
+            ENSURE_OR_RETURN_FALSE(
+                pPredicate, "SortableGridDataModel::impl_reIndex_nothrow: no sortable data found!");
 
             // then sort
             CellDataLessComparison const aComparator( aColumnData, *pPredicate, i_sortAscending );

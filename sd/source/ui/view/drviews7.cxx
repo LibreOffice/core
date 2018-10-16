@@ -682,7 +682,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
         else if( SfxItemState::DEFAULT == rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) )
         {
-            if (mpCurrentClipboardFormats.get() != nullptr)
+            if (mpCurrentClipboardFormats != nullptr)
                 rSet.Put(*mpCurrentClipboardFormats);
         }
     }

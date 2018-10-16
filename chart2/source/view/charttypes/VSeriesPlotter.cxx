@@ -364,7 +364,7 @@ OUString VSeriesPlotter::getLabelTextForValue( VDataSeries const & rDataSeries
 {
     OUString aNumber;
 
-    if( m_apNumberFormatterWrapper.get())
+    if (m_apNumberFormatterWrapper)
     {
         sal_Int32 nNumberFormatKey = 0;
         if( rDataSeries.hasExplicitNumberFormat(nPointIndex,bAsPercentage) )
@@ -1334,7 +1334,7 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
             bResizeEquation = false;
             if( bShowEquation )
             {
-                if( m_apNumberFormatterWrapper.get())
+                if (m_apNumberFormatterWrapper)
                 {   // iteration 0: default representation (no wrap)
                     // iteration 1: expected width (nFormulaWidth) is calculated
                     aFormula = xRegressionCurveCalculator->getFormattedRepresentation(
@@ -1356,7 +1356,7 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
             {
                 aFormula.append( "R" ).append( OUStringLiteral1( aSuperscriptFigures[2] ) ).append( " = " );
                 double fR( xRegressionCurveCalculator->getCorrelationCoefficient());
-                if( m_apNumberFormatterWrapper.get())
+                if (m_apNumberFormatterWrapper)
                 {
                     Color nLabelCol;
                     bool bColChanged;
@@ -1459,7 +1459,7 @@ long VSeriesPlotter::calculateTimeResolutionOnXAxis()
     {
         const std::vector< double >&  rDateCategories = m_pExplicitCategoriesProvider->getDateCategories();
         Date aNullDate(30,12,1899);
-        if( m_apNumberFormatterWrapper.get() )
+        if (m_apNumberFormatterWrapper)
             aNullDate = m_apNumberFormatterWrapper->getNullDate();
         if( !rDateCategories.empty() )
         {

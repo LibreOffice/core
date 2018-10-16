@@ -3699,14 +3699,14 @@ StyleSheetTablePtr const & DomainMapper::GetStyleSheetTable( )
 
 GraphicZOrderHelper* DomainMapper::graphicZOrderHelper()
 {
-    if( zOrderHelper.get() == nullptr )
+    if (zOrderHelper == nullptr)
         zOrderHelper.reset( new GraphicZOrderHelper );
     return zOrderHelper.get();
 }
 
 GraphicNamingHelper& DomainMapper::GetGraphicNamingHelper()
 {
-    if (m_pGraphicNamingHelper.get() == nullptr)
+    if (m_pGraphicNamingHelper == nullptr)
         m_pGraphicNamingHelper.reset(new GraphicNamingHelper());
     return *m_pGraphicNamingHelper;
 }

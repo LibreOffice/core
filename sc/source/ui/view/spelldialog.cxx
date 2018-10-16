@@ -258,7 +258,8 @@ void ScSpellDialogChildWindow::Init()
 
 bool ScSpellDialogChildWindow::IsSelectionChanged()
 {
-    if( !mxOldRangeList.get() || !mpViewShell || (mpViewShell != dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() ))  )
+    if (!mxOldRangeList || !mpViewShell
+        || (mpViewShell != dynamic_cast<ScTabViewShell*>(SfxViewShell::Current())))
         return true;
 
     if( EditView* pEditView = mpViewData->GetSpellingView() )

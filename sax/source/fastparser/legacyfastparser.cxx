@@ -71,8 +71,8 @@ void NamespaceHandler::addNSDeclAttributes( rtl::Reference < comphelper::Attribu
 {
     for(const auto& aNamespaceDefine : m_aNamespaceDefines)
     {
-        OUString& rPrefix = aNamespaceDefine.get()->m_aPrefix;
-        OUString& rNamespaceURI = aNamespaceDefine.get()->m_aNamespaceURI;
+        OUString& rPrefix = aNamespaceDefine->m_aPrefix;
+        OUString& rNamespaceURI = aNamespaceDefine->m_aNamespaceURI;
         OUString sDecl;
         if ( rPrefix.isEmpty() )
             sDecl = "xmlns";

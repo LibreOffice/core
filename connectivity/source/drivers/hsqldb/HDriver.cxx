@@ -259,7 +259,7 @@ namespace connectivity
                         if ( xStream.is() )
                         {
                             std::unique_ptr<SvStream> pStream( ::utl::UcbStreamHelper::CreateStream(xStream) );
-                            if ( pStream.get() )
+                            if (pStream)
                             {
                                 OString sLine;
                                 OString sVersionString;

@@ -159,7 +159,7 @@ sal_uInt16 PPTExBulletProvider::GetId(Graphic const & rGraphic, Size& rGraphicSi
                 }
             }
         }
-        sal_uInt32 nId = pGraphicProv->GetBlibID(aBuExPictureStream, *xGraphicObject.get());
+        sal_uInt32 nId = pGraphicProv->GetBlibID(aBuExPictureStream, *xGraphicObject);
 
         if ( nId && ( nId < 0x10000 ) )
             nRetValue = static_cast<sal_uInt16>(nId) - 1;
@@ -813,7 +813,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
         ParagraphObj* pPara = rTextObj.GetParagraph(i);
         for ( std::vector<std::unique_ptr<PortionObj> >::const_iterator it = pPara->begin(); it != pPara->end(); ++it )
         {
-            const PortionObj& rPortion = *(*it).get();
+            const PortionObj& rPortion = **it;
             nPropertyFlags = 0;
             sal_uInt32 nCharAttr = rPortion.mnCharAttr;
             sal_uInt32 nCharColor = rPortion.mnCharColor;
@@ -1104,7 +1104,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
             pPara = aTextObj.GetParagraph(i);
             for ( std::vector<std::unique_ptr<PortionObj> >::const_iterator it = pPara->begin(); it != pPara->end(); ++it )
             {
-                const PortionObj& rPortion = *(*it).get();
+                const PortionObj& rPortion = **it;
                 if ( rPortion.mpFieldEntry )
                 {
                     const FieldEntry* pFieldEntry = rPortion.mpFieldEntry.get();
@@ -3352,7 +3352,7 @@ void TextObjBinary::WriteTextSpecInfo( SvStream* pStrm )
             ParagraphObj* pPtr = GetParagraph(i);
             for ( std::vector<std::unique_ptr<PortionObj> >::const_iterator it = pPtr->begin(); nCharactersLeft && it != pPtr->end(); ++it )
             {
-                const PortionObj& rPortion = *(*it).get();
+                const PortionObj& rPortion = **it;
                 sal_Int32 nPortionSize = rPortion.mnTextSize >= nCharactersLeft ? nCharactersLeft : rPortion.mnTextSize;
                 sal_Int32 const nFlags = 7;
                 nCharactersLeft -= nPortionSize;

@@ -734,14 +734,10 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
             else
                 sName = rFamily.maStrFamilyName;
 
-            pAntiImpl->exportStyleAttributes(
-                GetExport().GetAttrList(),
-                nFamily,
-                aExpStyles[i].mpProperties->GetProperties(),
-                *rFamily.mxMapper.get()
-                    , GetExport().GetMM100UnitConverter(),
-                    GetExport().GetNamespaceMap()
-                );
+            pAntiImpl->exportStyleAttributes(GetExport().GetAttrList(), nFamily,
+                                             aExpStyles[i].mpProperties->GetProperties(),
+                                             *rFamily.mxMapper, GetExport().GetMM100UnitConverter(),
+                                             GetExport().GetNamespaceMap());
 
             SvXMLElementExport aElem( GetExport(),
                                       XML_NAMESPACE_STYLE, sName,
@@ -772,14 +768,10 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
                 aExpStyles[i].mpProperties->GetProperties(),
                 nStart, nEnd, SvXmlExportFlags::IGN_WS, bExtensionNamespace );
 
-            pAntiImpl->exportStyleContent(
-                GetExport().GetDocHandler(),
-                nFamily,
-                aExpStyles[i].mpProperties->GetProperties(),
-                *rFamily.mxMapper.get(),
-                GetExport().GetMM100UnitConverter(),
-                GetExport().GetNamespaceMap()
-                );
+            pAntiImpl->exportStyleContent(GetExport().GetDocHandler(), nFamily,
+                                          aExpStyles[i].mpProperties->GetProperties(),
+                                          *rFamily.mxMapper, GetExport().GetMM100UnitConverter(),
+                                          GetExport().GetNamespaceMap());
         }
     }
 }

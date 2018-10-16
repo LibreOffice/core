@@ -106,7 +106,7 @@ Drawing::~Drawing()
 
 ::oox::ole::EmbeddedForm& Drawing::getControlForm() const
 {
-    if( !mxCtrlForm.get() )
+    if (!mxCtrlForm)
         mxCtrlForm.reset( new ::oox::ole::EmbeddedForm(
             mrFilter.getModel(), mxDrawPage, mrFilter.getGraphicHelper() ) );
     return *mxCtrlForm;

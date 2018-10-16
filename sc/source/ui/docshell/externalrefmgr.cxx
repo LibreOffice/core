@@ -1589,7 +1589,7 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
             // no data within specified range.
             continue;
 
-        if (pUsedRange.get())
+        if (pUsedRange)
             // Make sure the used area only grows, not shrinks.
             pUsedRange->ExtendTo(ScRange(nDataCol1, nDataRow1, 0, nDataCol2, nDataRow2, 0));
         else
@@ -1638,7 +1638,7 @@ static std::unique_ptr<ScTokenArray> convertToTokenArray(
         bFirstTab = false;
     }
 
-    if (!pUsedRange.get())
+    if (!pUsedRange)
         return nullptr;
 
     s.SetCol(pUsedRange->aStart.Col());
