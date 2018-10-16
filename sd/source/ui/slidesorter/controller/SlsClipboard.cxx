@@ -892,7 +892,7 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
     if (mrSlideSorter.GetViewShell() != nullptr)
         pDrawViewShell = std::dynamic_pointer_cast<DrawViewShell>(
             mrSlideSorter.GetViewShell()->GetViewShellBase().GetMainViewShell());
-    if (pDrawViewShell.get() != nullptr
+    if (pDrawViewShell != nullptr
         && (pDrawViewShell->GetShellType() == ViewShell::ST_IMPRESS
             || pDrawViewShell->GetShellType() == ViewShell::ST_DRAW))
     {

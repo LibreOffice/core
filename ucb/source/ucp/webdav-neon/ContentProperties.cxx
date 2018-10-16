@@ -157,13 +157,10 @@ ContentProperties::ContentProperties()
 {
 }
 
-
-ContentProperties::ContentProperties( const ContentProperties & rOther )
-: m_aEscapedTitle( rOther.m_aEscapedTitle ),
-  m_xProps( rOther.m_xProps.get()
-            ? new PropertyValueMap( *rOther.m_xProps )
-            : new PropertyValueMap ),
-  m_bTrailingSlash( rOther.m_bTrailingSlash )
+ContentProperties::ContentProperties(const ContentProperties& rOther)
+    : m_aEscapedTitle(rOther.m_aEscapedTitle)
+    , m_xProps(rOther.m_xProps ? new PropertyValueMap(*rOther.m_xProps) : new PropertyValueMap)
+    , m_bTrailingSlash(rOther.m_bTrailingSlash)
 {
 }
 

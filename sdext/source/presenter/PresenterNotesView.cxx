@@ -630,7 +630,7 @@ void PresenterNotesView::ChangeFontSize (const sal_Int32 nSizeChange)
             std::shared_ptr<PresenterConfigurationAccess> pConfiguration (
                 mpPresenterController->GetTheme()->GetNodeForViewStyle(
                     sStyleName));
-            if (pConfiguration.get()==nullptr || ! pConfiguration->IsValid())
+            if (pConfiguration == nullptr || !pConfiguration->IsValid())
                 return;
 
             pConfiguration->GoToChild(OUString("Font"));

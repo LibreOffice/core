@@ -2490,7 +2490,7 @@ void FormController::insertControl(const Reference< XControl > & xControl)
     m_aControls.realloc(m_aControls.getLength() + 1);
     m_aControls.getArray()[m_aControls.getLength() - 1] = xControl;
 
-    if ( m_pColumnInfoCache.get() )
+    if (m_pColumnInfoCache)
         m_pColumnInfoCache->deinitializeControls();
 
     implControlInserted( xControl, m_bAttachEvents );
@@ -3711,8 +3711,8 @@ sal_Bool SAL_CALL FormController::approveRowChange(const RowChangeEvent& _rEvent
     if ( !lcl_shouldValidateRequiredFields_nothrow( _rEvent.Source ) )
         return true;
 
-    OSL_ENSURE( m_pColumnInfoCache.get(), "FormController::approveRowChange: no column infos!" );
-    if ( !m_pColumnInfoCache.get() )
+    OSL_ENSURE(m_pColumnInfoCache, "FormController::approveRowChange: no column infos!");
+    if (!m_pColumnInfoCache)
         return true;
 
     try

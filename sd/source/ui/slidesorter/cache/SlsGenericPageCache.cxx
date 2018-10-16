@@ -49,24 +49,24 @@ GenericPageCache::GenericPageCache (
 
 GenericPageCache::~GenericPageCache()
 {
-    if (mpQueueProcessor.get() != nullptr)
+    if (mpQueueProcessor != nullptr)
         mpQueueProcessor->Stop();
     maRequestQueue.Clear();
     mpQueueProcessor.reset();
 
-    if (mpBitmapCache.get() != nullptr)
+    if (mpBitmapCache != nullptr)
         PageCacheManager::Instance()->ReleaseCache(mpBitmapCache);
     mpBitmapCache.reset();
 }
 
 void GenericPageCache::ProvideCacheAndProcessor()
 {
-    if (mpBitmapCache.get() == nullptr)
+    if (mpBitmapCache == nullptr)
         mpBitmapCache = PageCacheManager::Instance()->GetCache(
             mpCacheContext->GetModel(),
             maPreviewSize);
 
-    if (mpQueueProcessor.get() == nullptr)
+    if (mpQueueProcessor == nullptr)
         mpQueueProcessor.reset(new QueueProcessor(
             maRequestQueue,
             mpBitmapCache,
@@ -87,11 +87,11 @@ void GenericPageCache::ChangePreviewSize (
             "GenericPageCache<>::GetPreviewBitmap(): bitmap requested with large width. "
             "This may indicate an error.");
 
-        if (mpBitmapCache.get() != nullptr)
+        if (mpBitmapCache != nullptr)
         {
             mpBitmapCache = PageCacheManager::Instance()->ChangeSize(
                 mpBitmapCache, maPreviewSize, rPreviewSize);
-            if (mpQueueProcessor.get() != nullptr)
+            if (mpQueueProcessor != nullptr)
             {
                 mpQueueProcessor->SetPreviewSize(rPreviewSize, bDoSuperSampling);
                 mpQueueProcessor->SetBitmapCache(mpBitmapCache);
@@ -209,7 +209,7 @@ bool GenericPageCache::InvalidatePreviewBitmap (const CacheKey aKey)
         return pCacheManager->InvalidatePreviewBitmap(
             mpCacheContext->GetModel(),
             aKey);
-    else if (mpBitmapCache.get() != nullptr)
+    else if (mpBitmapCache != nullptr)
         return mpBitmapCache->InvalidateBitmap(mpCacheContext->GetPage(aKey));
     else
         return false;
@@ -265,14 +265,14 @@ void GenericPageCache::SetPreciousFlag (
 void GenericPageCache::Pause()
 {
     ProvideCacheAndProcessor();
-    if (mpQueueProcessor.get() != nullptr)
+    if (mpQueueProcessor != nullptr)
         mpQueueProcessor->Pause();
 }
 
 void GenericPageCache::Resume()
 {
     ProvideCacheAndProcessor();
-    if (mpQueueProcessor.get() != nullptr)
+    if (mpQueueProcessor != nullptr)
         mpQueueProcessor->Resume();
 }
 

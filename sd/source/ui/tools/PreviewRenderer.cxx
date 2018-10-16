@@ -208,7 +208,7 @@ bool PreviewRenderer::Initialize (
 
     // Create view
     ProvideView (pDocShell);
-    if (mpView.get() == nullptr)
+    if (mpView == nullptr)
         return false;
 
     // Adjust contrast mode.
@@ -390,7 +390,7 @@ void PreviewRenderer::ProvideView (DrawDocShell* pDocShell)
         if (mpDocShellOfView != nullptr)
             StartListening (*mpDocShellOfView);
     }
-    if (mpView.get() == nullptr)
+    if (mpView == nullptr)
     {
         mpView.reset (new DrawView (pDocShell, mpPreviewDevice.get(), nullptr));
     }

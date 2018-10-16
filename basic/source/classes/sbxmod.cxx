@@ -2546,7 +2546,7 @@ void SbUserFormModule::Unload()
         m_xDialog.clear(); //release ref to the uno object
         SbxValues aVals;
         bool bWaitForDispose = true; // assume dialog is showing
-        if ( m_DialogListener.get() )
+        if (m_DialogListener)
         {
             bWaitForDispose = m_DialogListener->isShowing();
             SAL_INFO("basic", "Showing " << bWaitForDispose );

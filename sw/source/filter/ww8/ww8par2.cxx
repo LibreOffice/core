@@ -480,7 +480,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
             {
                 if (!m_xTableDesc)
                 {
-                    OSL_ENSURE(m_xTableDesc.get(), "What!");
+                    OSL_ENSURE(m_xTableDesc, "What!");
                     bTestAllowed = false;
                 }
                 else
@@ -3481,7 +3481,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
     delete pTableWFlyPara;
     delete pTableSFlyPara;
 
-    return m_xTableDesc.get() != nullptr;
+    return m_xTableDesc != nullptr;
 }
 
 void SwWW8ImplReader::TabCellEnd()
@@ -3522,7 +3522,7 @@ void SwWW8ImplReader::PopTableDesc()
 
 void SwWW8ImplReader::StopTable()
 {
-    OSL_ENSURE(m_xTableDesc.get(), "Panic, stop table with no table!");
+    OSL_ENSURE(m_xTableDesc, "Panic, stop table with no table!");
     if (!m_xTableDesc)
         return;
 
@@ -3997,7 +3997,7 @@ void WW8RStyle::ScanStyles()        // investigate style dependencies
         rSI.m_nFilePos = mpStStrm->Tell();        // remember FilePos
         sal_uInt16 nSkip;
         std::unique_ptr<WW8_STD> xStd(Read1Style(nSkip, nullptr));  // read STD
-        rSI.m_bValid = xStd.get() != nullptr;
+        rSI.m_bValid = xStd != nullptr;
         if (rSI.m_bValid)
         {
             rSI.m_nBase = xStd->istdBase; // remember Basis

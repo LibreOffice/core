@@ -330,7 +330,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
 
                 std::unique_ptr< svx::ISdrObjectFilter > pFilter( FmFormShell::CreateFocusableControlFilter(
                     *pDrawView, *pWindow ) );
-                if ( !pFilter.get() )
+                if (!pFilter)
                     break;
 
                 const SdrObject* pNearestControl = rSh.GetBestObject( true, GotoObjFlags::DrawControl, false, pFilter.get() );

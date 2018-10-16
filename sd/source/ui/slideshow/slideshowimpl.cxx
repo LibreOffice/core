@@ -1923,7 +1923,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
 {
     mnContextMenuEvent = nullptr;
 
-    if( mpSlideController.get() == nullptr )
+    if (mpSlideController == nullptr)
         return;
 
     mbWasPaused = mbIsPaused;
@@ -2568,7 +2568,8 @@ sal_Int32 SAL_CALL SlideshowImpl::getCurrentSlideIndex()
 
 Reference< XDrawPage > SAL_CALL SlideshowImpl::getSlideByIndex(::sal_Int32 Index)
 {
-    if( (mpSlideController.get() == nullptr ) || (Index < 0) || (Index >= mpSlideController->getSlideIndexCount() ) )
+    if ((mpSlideController == nullptr) || (Index < 0)
+        || (Index >= mpSlideController->getSlideIndexCount()))
         throw IndexOutOfBoundsException();
 
     return mpSlideController->getSlideByNumber( mpSlideController->getSlideNumber( Index ) );

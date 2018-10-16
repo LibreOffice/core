@@ -51,7 +51,7 @@ SwNavigationMgr::~SwNavigationMgr()
     SolarMutexGuard g;
     for (auto & it : m_entries)
     {
-        EndListening(it.get()->m_aNotifier);
+        EndListening(it->m_aNotifier);
     }
     m_entries.clear();
 }
@@ -64,7 +64,7 @@ void SwNavigationMgr::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     {
         for (auto it = m_entries.begin(); it != m_entries.end(); ++it)
         {
-            if (!it->get() || & rBC == & it->get()->m_aNotifier)
+            if (!*it || &rBC == &it->get()->m_aNotifier)
             {
                 EndListening(rBC);
                 m_entries.erase(it);

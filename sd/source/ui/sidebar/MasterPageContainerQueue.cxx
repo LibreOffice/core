@@ -153,11 +153,11 @@ sal_Int32 MasterPageContainerQueue::CalculatePriority (
 
     // The cost is used as a starting value.
     int nCost (0);
-    if (rpDescriptor->mpPreviewProvider.get() != nullptr)
+    if (rpDescriptor->mpPreviewProvider != nullptr)
     {
         nCost = rpDescriptor->mpPreviewProvider->GetCostIndex();
         if (rpDescriptor->mpPreviewProvider->NeedsPageObject())
-            if (rpDescriptor->mpPageObjectProvider.get() != nullptr)
+            if (rpDescriptor->mpPageObjectProvider != nullptr)
                 nCost += rpDescriptor->mpPageObjectProvider->GetCostIndex();
     }
 
@@ -220,7 +220,7 @@ IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer, void
             if ( ! mpWeakContainer.expired())
             {
                 std::shared_ptr<ContainerAdapter> pContainer (mpWeakContainer);
-                if (pContainer.get() != nullptr)
+                if (pContainer != nullptr)
                     pContainer->UpdateDescriptor(aRequest.mpDescriptor,false,true,true);
             }
         }

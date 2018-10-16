@@ -1301,7 +1301,7 @@ void SwTextNode::Update(
                         }
                         else if( bNoExp )
                         {
-                            if ( !pCollector.get() )
+                            if (!pCollector)
                             {
                                pCollector.reset( new SwpHts );
                             }
@@ -1515,7 +1515,7 @@ void SwTextNode::Update(
     // base class
     SwIndexReg::Update( rPos, nChangeLen, bNegative, bDelete );
 
-    if ( pCollector.get() )
+    if (pCollector)
     {
         const size_t nCount = pCollector->size();
         for ( size_t i = 0; i < nCount; ++i )

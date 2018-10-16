@@ -804,7 +804,7 @@ IGrammarContact* getGrammarContact( const SwTextNode& rTextNode )
 SwDoc::GetXmlIdRegistry()
 {
     // UGLY: this relies on SetClipBoard being called before GetXmlIdRegistry!
-    if (!m_pXmlIdRegistry.get())
+    if (!m_pXmlIdRegistry)
     {
         m_pXmlIdRegistry.reset( ::sfx2::createXmlIdRegistry( IsClipBoard() ) );
     }

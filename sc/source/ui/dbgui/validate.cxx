@@ -804,7 +804,7 @@ void ScTPValidationError::Reset( const SfxItemSet* rArgSet )
     else
         m_xEdError->set_text( EMPTY_OUSTRING );
 
-    SelectActionHdl( *m_xLbAction.get() );
+    SelectActionHdl(*m_xLbAction);
 }
 
 bool ScTPValidationError::FillItemSet( SfxItemSet* rArgSet )

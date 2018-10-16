@@ -450,7 +450,7 @@ bool SdOutliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
     {
         std::shared_ptr<sd::ViewShell> pShell (pBase->GetMainViewShell());
         SetViewShell(pShell);
-        if (pShell.get() == nullptr)
+        if (pShell == nullptr)
             bAbort = true;
         else
             switch (pShell->GetShellType())
@@ -859,7 +859,7 @@ void SdOutliner::DetectChange()
         std::dynamic_pointer_cast<sd::DrawViewShell>(pViewShell));
 
     // Detect whether the view has been switched from the outside.
-    if (pDrawViewShell.get() != nullptr
+    if (pDrawViewShell != nullptr
         && (aPosition.meEditMode != pDrawViewShell->GetEditMode()
             || aPosition.mePageKind != pDrawViewShell->GetPageKind()))
     {
@@ -962,7 +962,7 @@ void SdOutliner::RememberStartPosition()
     {
         std::shared_ptr<sd::DrawViewShell> pDrawViewShell (
             std::dynamic_pointer_cast<sd::DrawViewShell>(pViewShell));
-        if (pDrawViewShell.get() != nullptr)
+        if (pDrawViewShell != nullptr)
         {
             meStartViewMode = pDrawViewShell->GetPageKind();
             meStartEditMode = pDrawViewShell->GetEditMode();
@@ -1018,7 +1018,7 @@ void SdOutliner::RestoreStartPosition()
             std::shared_ptr<sd::DrawViewShell> pDrawViewShell (
                 std::dynamic_pointer_cast<sd::DrawViewShell>(pViewShell));
             SetViewMode (meStartViewMode);
-            if (pDrawViewShell.get() != nullptr)
+            if (pDrawViewShell != nullptr)
             {
                 SetPage (meStartEditMode, mnStartPageIndex);
                 mpObj = mpStartEditedObject;
@@ -1332,7 +1332,7 @@ void SdOutliner::SetViewMode (PageKind ePageKind)
     std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
     std::shared_ptr<sd::DrawViewShell> pDrawViewShell(
         std::dynamic_pointer_cast<sd::DrawViewShell>(pViewShell));
-    if (pDrawViewShell.get()!=nullptr && ePageKind != pDrawViewShell->GetPageKind())
+    if (pDrawViewShell != nullptr && ePageKind != pDrawViewShell->GetPageKind())
     {
         // Restore old edit mode.
         pDrawViewShell->ChangeEditMode(mpImpl->meOriginalEditMode, false);
@@ -1385,8 +1385,8 @@ void SdOutliner::SetViewMode (PageKind ePageKind)
         // Save edit mode so that it can be restored when switching the view
         // shell again.
         pDrawViewShell = std::dynamic_pointer_cast<sd::DrawViewShell>(pViewShell);
-        OSL_ASSERT(pDrawViewShell.get()!=nullptr);
-        if (pDrawViewShell.get() != nullptr)
+        OSL_ASSERT(pDrawViewShell != nullptr);
+        if (pDrawViewShell != nullptr)
             mpImpl->meOriginalEditMode = pDrawViewShell->GetEditMode();
     }
 }
@@ -1398,8 +1398,8 @@ void SdOutliner::SetPage (EditMode eEditMode, sal_uInt16 nPageIndex)
         std::shared_ptr<sd::ViewShell> pViewShell (mpWeakViewShell.lock());
         std::shared_ptr<sd::DrawViewShell> pDrawViewShell(
             std::dynamic_pointer_cast<sd::DrawViewShell>(pViewShell));
-        OSL_ASSERT(pDrawViewShell.get()!=nullptr);
-        if (pDrawViewShell.get() != nullptr)
+        OSL_ASSERT(pDrawViewShell != nullptr);
+        if (pDrawViewShell != nullptr)
         {
             pDrawViewShell->ChangeEditMode(eEditMode, false);
             pDrawViewShell->SwitchPage(nPageIndex);
@@ -1752,7 +1752,7 @@ void SdOutliner::Implementation::ProvideOutlinerView (
     const std::shared_ptr<sd::ViewShell>& rpViewShell,
     vcl::Window* pWindow)
 {
-    if (rpViewShell.get() != nullptr)
+    if (rpViewShell != nullptr)
     {
         switch (rpViewShell->GetShellType())
         {

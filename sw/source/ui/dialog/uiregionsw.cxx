@@ -1469,8 +1469,7 @@ void SwInsertSectionTabDialog::SetSectionData(SwSectionData const& rSect)
 short   SwInsertSectionTabDialog::Ok()
 {
     short nRet = SfxTabDialog::Ok();
-    OSL_ENSURE(m_pSectionData.get(),
-            "SwInsertSectionTabDialog: no SectionData?");
+    OSL_ENSURE(m_pSectionData, "SwInsertSectionTabDialog: no SectionData?");
     const SfxItemSet* pOutputItemSet = GetOutputItemSet();
     rWrtSh.InsertSection(*m_pSectionData, pOutputItemSet);
     SfxViewFrame* pViewFrame = rWrtSh.GetView().GetViewFrame();

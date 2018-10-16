@@ -601,7 +601,7 @@ void OutlineToImpressFinalizer::operator() (bool)
     ::sd::OutlineViewShell* pOutlineShell
         = dynamic_cast<sd::OutlineViewShell*>(FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
 
-    if (pOutlineShell != nullptr && mpStream.get() != nullptr)
+    if (pOutlineShell != nullptr && mpStream != nullptr)
     {
         sd::OutlineView* pView = static_cast<sd::OutlineView*>(pOutlineShell->GetView());
         // mba: the stream can't contain any relative URLs, because we don't

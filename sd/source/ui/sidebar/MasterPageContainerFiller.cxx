@@ -85,7 +85,7 @@ void MasterPageContainerFiller::RunNextStep()
     {
         case DONE:
         case ERROR:
-            if (mpScannerTask.get() != nullptr)
+            if (mpScannerTask != nullptr)
             {
                 mrContainerAdapter.FillingDone();
                 mpScannerTask.reset();
@@ -113,7 +113,7 @@ MasterPageContainerFiller::State MasterPageContainerFiller::ScanTemplate()
 {
     State eState (ERROR);
 
-    if (mpScannerTask.get() != nullptr)
+    if (mpScannerTask != nullptr)
     {
         if (mpScannerTask->HasNextStep())
         {

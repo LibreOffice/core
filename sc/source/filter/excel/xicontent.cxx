@@ -331,14 +331,14 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
 
     OSL_ENSURE( rStrm.GetRecLeft() == 0, "XclImpHyperlink::ReadEmbeddedData - record size mismatch" );
 
-    if( !xLongName.get() && xShortName.get() )
+    if (!xLongName && xShortName.get())
         xLongName = std::move(xShortName);
-    else if( !xLongName.get() && xTextMark.get() )
+    else if (!xLongName && xTextMark.get())
         xLongName.reset( new OUString );
 
-    if( xLongName.get() )
+    if (xLongName)
     {
-        if( xTextMark.get() )
+        if (xTextMark)
         {
             if( xLongName->isEmpty() )
             {
@@ -939,7 +939,7 @@ void XclImpValidationManager::Apply()
     DVItemList::iterator itr = maDVItems.begin(), itrEnd = maDVItems.end();
     for (; itr != itrEnd; ++itr)
     {
-        DVItem& rItem = *itr->get();
+        DVItem& rItem = **itr;
         // set the handle ID
         sal_uLong nHandle = rDoc.AddValidationEntry( rItem.maValidData );
         ScPatternAttr aPattern( rDoc.GetPool() );

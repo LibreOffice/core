@@ -1562,7 +1562,8 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     if ( ::osl::Condition::result_timeout == eResult )
     {
         // maximum time to wait
-        OSL_ENSURE( !m_xCancelAsyncTimer.get(), "SvtFileView_Impl::GetFolderContent_Impl: there's still a previous timer!" );
+        OSL_ENSURE(!m_xCancelAsyncTimer,
+                   "SvtFileView_Impl::GetFolderContent_Impl: there's still a previous timer!");
         m_xCancelAsyncTimer.set(new CallbackTimer(this));
         sal_Int32 nMaxTimeout = pAsyncDescriptor->nMaxTimeout;
         OSL_ENSURE( nMaxTimeout > nMinTimeout,

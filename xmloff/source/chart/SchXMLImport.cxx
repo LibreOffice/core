@@ -521,7 +521,7 @@ SvXMLImportContext *SchXMLImport::CreateDocumentContext(sal_uInt16 const nPrefix
         ( IsXMLToken( rLocalName, XML_DOCUMENT_STYLES) ||
           IsXMLToken( rLocalName, XML_DOCUMENT_CONTENT) ))
     {
-        pContext = new SchXMLDocContext( *maImportHelper.get(), *this, nPrefix, rLocalName );
+        pContext = new SchXMLDocContext(*maImportHelper, *this, nPrefix, rLocalName);
     } else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
                 ( IsXMLToken(rLocalName, XML_DOCUMENT) ||
                   (IsXMLToken(rLocalName, XML_DOCUMENT_META)
@@ -532,9 +532,8 @@ SvXMLImportContext *SchXMLImport::CreateDocumentContext(sal_uInt16 const nPrefix
         // mst@: right now, this seems to be not supported, so it is untested
         if (!xDPS.is()) {
             pContext = (IsXMLToken(rLocalName, XML_DOCUMENT_META))
-                ? SvXMLImport::CreateDocumentContext(nPrefix, rLocalName, xAttrList)
-                : new SchXMLDocContext( *maImportHelper.get(), *this,
-                                        nPrefix, rLocalName );
+                           ? SvXMLImport::CreateDocumentContext(nPrefix, rLocalName, xAttrList)
+                           : new SchXMLDocContext(*maImportHelper, *this, nPrefix, rLocalName);
         }
     } else {
         pContext = SvXMLImport::CreateDocumentContext(nPrefix, rLocalName, xAttrList);
@@ -557,13 +556,11 @@ SvXMLImportContext *SchXMLImport::CreateFastContext( sal_Int32 nElement,
                 GetModel(), uno::UNO_QUERY);
             // mst@: right now, this seems to be not supported, so it is untested
             if (xDPS.is()) {
-                pContext = (nElement == XML_ELEMENT( OFFICE, XML_DOCUMENT_META ))
-                    ? new SvXMLMetaDocumentContext(*this,
-                                xDPS->getDocumentProperties())
-                    // flat OpenDocument file format
-                    : new SchXMLFlatDocContext_Impl(
-                                *maImportHelper.get(), *this, nElement,
-                                xDPS->getDocumentProperties());
+                pContext = (nElement == XML_ELEMENT(OFFICE, XML_DOCUMENT_META))
+                               ? new SvXMLMetaDocumentContext(*this, xDPS->getDocumentProperties())
+                               // flat OpenDocument file format
+                               : new SchXMLFlatDocContext_Impl(*maImportHelper, *this, nElement,
+                                                               xDPS->getDocumentProperties());
             }
         }
         break;

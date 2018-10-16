@@ -119,7 +119,7 @@ OUString SAL_CALL
 util::URL SAL_CALL
     ResourceId::getFullResourceURL()
 {
-    if (mpURL.get() != nullptr)
+    if (mpURL != nullptr)
         return *mpURL;
 
     Reference<util::XURLTransformer> xURLTransformer (mxURLTransformerWeak);

@@ -220,7 +220,7 @@ FeatureState OJoinController::GetState(sal_uInt16 _nId) const
 
 AddTableDialogContext& OJoinController::impl_getDialogContext() const
 {
-    if ( !m_pDialogContext.get() )
+    if (!m_pDialogContext)
     {
         OJoinController* pNonConstThis = const_cast< OJoinController* >( this );
         pNonConstThis->m_pDialogContext.reset( new AddTableDialogContext( *pNonConstThis ) );

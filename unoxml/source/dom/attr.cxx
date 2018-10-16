@@ -47,7 +47,8 @@ namespace DOM
 
     xmlNsPtr CAttr::GetNamespace(xmlNodePtr const pNode)
     {
-        if (!m_pNamespace.get()) {
+        if (!m_pNamespace)
+        {
             return nullptr;
         }
         xmlChar const*const pUri(reinterpret_cast<xmlChar const*>(
@@ -217,11 +218,14 @@ namespace DOM
 
         if (!m_aNodePtr) { return; }
 
-        if (m_pNamespace.get()) {
+        if (m_pNamespace)
+        {
             OSL_ASSERT(!m_aNodePtr->parent);
             m_pNamespace->second =
                 OUStringToOString(prefix, RTL_TEXTENCODING_UTF8);
-        } else {
+        }
+        else
+        {
             CNode::setPrefix(prefix);
         }
     }
@@ -232,12 +236,15 @@ namespace DOM
 
         if (!m_aNodePtr) { return OUString(); }
 
-        if (m_pNamespace.get()) {
+        if (m_pNamespace)
+        {
             OSL_ASSERT(!m_aNodePtr->parent);
             OUString const ret(OStringToOUString(
                         m_pNamespace->second, RTL_TEXTENCODING_UTF8));
             return ret;
-        } else {
+        }
+        else
+        {
             return CNode::getPrefix();
         }
     }
@@ -248,12 +255,15 @@ namespace DOM
 
         if (!m_aNodePtr) { return OUString(); }
 
-        if (m_pNamespace.get()) {
+        if (m_pNamespace)
+        {
             OSL_ASSERT(!m_aNodePtr->parent);
             OUString const ret(OStringToOUString(
                         m_pNamespace->first, RTL_TEXTENCODING_UTF8));
             return ret;
-        } else {
+        }
+        else
+        {
             return CNode::getNamespaceURI();
         }
     }

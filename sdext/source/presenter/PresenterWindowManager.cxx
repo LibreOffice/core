@@ -156,7 +156,7 @@ void PresenterWindowManager::SetTheme (const std::shared_ptr<PresenterTheme>& rp
 
     // Get background bitmap or background color from the theme.
 
-    if (mpTheme.get() != nullptr)
+    if (mpTheme != nullptr)
     {
         mpBackgroundBitmap = mpTheme->GetBitmap(OUString(), "Background");
     }
@@ -255,7 +255,7 @@ void SAL_CALL PresenterWindowManager::windowPaint (const awt::PaintEvent& rEvent
     if ( ! mxParentCanvas.is())
         return;
 
-    if (mpTheme.get()!=nullptr)
+    if (mpTheme != nullptr)
     {
         try
         {

@@ -361,7 +361,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
             {
                 std::shared_ptr<DrawViewShell> pDrawViewShell (
                     std::dynamic_pointer_cast<DrawViewShell>(pBase->GetMainViewShell()));
-                if (pDrawViewShell.get() != nullptr)
+                if (pDrawViewShell != nullptr)
                     pDrawViewShell->FuSupport(rRequest);
             }
         }
@@ -706,7 +706,7 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
                 {
                     std::shared_ptr<DrawViewShell> pDrawViewShell (
                         std::dynamic_pointer_cast<DrawViewShell>(pBase->GetMainViewShell()));
-                    if (pDrawViewShell.get() != nullptr)
+                    if (pDrawViewShell != nullptr)
                     {
                         TransferableDataHelper aDataHelper (
                             TransferableDataHelper::CreateFromSystemClipboard(

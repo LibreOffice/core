@@ -773,8 +773,9 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
         // normalize the statement so that it doesn't contain any application-level features anymore
         OUString sError;
         const std::unique_ptr< OSQLParseNode > pStatementTree( m_aSqlParser.parseTree( sError, sSQL ) );
-        OSL_ENSURE( pStatementTree.get(), "OSingleSelectQueryComposer::getColumns: could not parse the column retrieval statement!" );
-        if ( pStatementTree.get() )
+        OSL_ENSURE(pStatementTree, "OSingleSelectQueryComposer::getColumns: could not parse the "
+                                   "column retrieval statement!");
+        if (pStatementTree)
             if ( !pStatementTree->parseNodeToExecutableStatement( sSQL, m_xConnection, m_aSqlParser, nullptr ) )
                 break;
 
@@ -1768,7 +1769,7 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
 
         OUString aErrorMsg;
         std::unique_ptr<OSQLParseNode> pSqlParseNode( m_aSqlParser.parseTree(aErrorMsg,aSql));
-        if ( pSqlParseNode.get() )
+        if (pSqlParseNode)
         {
             m_aAdditiveIterator.setParseTree(pSqlParseNode.get());
             // normalize the filter

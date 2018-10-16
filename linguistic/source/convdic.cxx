@@ -296,7 +296,7 @@ void ConvDic::AddEntry( const OUString &rLeftText, const OUString &rRightText )
 
     DBG_ASSERT(!HasEntry( rLeftText, rRightText), "entry already exists" );
     aFromLeft .emplace( rLeftText, rRightText );
-    if (pFromRight.get())
+    if (pFromRight)
         pFromRight->emplace( rRightText, rLeftText );
 
     if (bMaxCharCountIsValid)
@@ -320,7 +320,7 @@ void ConvDic::RemoveEntry( const OUString &rLeftText, const OUString &rRightText
     DBG_ASSERT( aLeftIt  != aFromLeft.end(),  "left map entry missing" );
     aFromLeft .erase( aLeftIt );
 
-    if (pFromRight.get())
+    if (pFromRight)
     {
         ConvMap::iterator aRightIt = GetEntry( *pFromRight, rRightText, rLeftText );
         DBG_ASSERT( aRightIt != pFromRight->end(), "right map entry missing" );
@@ -371,7 +371,7 @@ void SAL_CALL ConvDic::clear(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     aFromLeft .clear();
-    if (pFromRight.get())
+    if (pFromRight)
         pFromRight->clear();
     bNeedEntries    = false;
     bIsModified     = true;
@@ -390,7 +390,7 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getConversions(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if (!pFromRight.get() && eDirection == ConversionDirection_FROM_RIGHT)
+    if (!pFromRight && eDirection == ConversionDirection_FROM_RIGHT)
         return uno::Sequence< OUString >();
 
     if (bNeedEntries)
@@ -440,7 +440,7 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getConversionEntries(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if (!pFromRight.get() && eDirection == ConversionDirection_FROM_RIGHT)
+    if (!pFromRight && eDirection == ConversionDirection_FROM_RIGHT)
         return uno::Sequence< OUString >();
 
     if (bNeedEntries)
@@ -497,7 +497,7 @@ sal_Int16 SAL_CALL ConvDic::getMaxCharCount( ConversionDirection eDirection )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if (!pFromRight.get() && eDirection == ConversionDirection_FROM_RIGHT)
+    if (!pFromRight && eDirection == ConversionDirection_FROM_RIGHT)
     {
         DBG_ASSERT( nMaxRightCharCount == 0, "max right char count should be 0" );
         return 0;
@@ -517,7 +517,7 @@ sal_Int16 SAL_CALL ConvDic::getMaxCharCount( ConversionDirection eDirection )
         }
 
         nMaxRightCharCount  = 0;
-        if (pFromRight.get())
+        if (pFromRight)
         {
             for (auto const& elem : *pFromRight)
             {
@@ -547,7 +547,7 @@ void SAL_CALL ConvDic::setPropertyType(
 
     // currently we assume that entries with the same left text have the
     // same PropertyType even if the right text is different...
-    if (pConvPropType.get())
+    if (pConvPropType)
         pConvPropType->emplace( rLeftText, nPropertyType );
     bIsModified = true;
 }
@@ -562,7 +562,7 @@ sal_Int16 SAL_CALL ConvDic::getPropertyType(
         throw container::NoSuchElementException();
 
     sal_Int16 nRes = ConversionPropertyType::NOT_DEFINED;
-    if (pConvPropType.get())
+    if (pConvPropType)
     {
         // still assuming that entries with same left text have same PropertyType
         // even if they have different right text...

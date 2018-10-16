@@ -890,8 +890,8 @@ IMPL_LINK(SvxTextEditSourceImpl, NotifyHdl, EENotify&, rNotify, void)
     {
         std::unique_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( &rNotify) );
 
-        if( aHint.get() )
-            Broadcast( *aHint.get() );
+        if (aHint)
+            Broadcast(*aHint);
     }
 }
 

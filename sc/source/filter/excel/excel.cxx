@@ -142,7 +142,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument*
             default:    DBG_ERROR_BIFF();
         }
 
-        eRet = xFilter.get() ? xFilter->Read() : SCERR_IMPORT_INTERNAL;
+        eRet = xFilter ? xFilter->Read() : SCERR_IMPORT_INTERNAL;
     }
 
     return eRet;

@@ -192,7 +192,7 @@ bool TokenPool::GetElement( const sal_uInt16 nId, ScTokenArray* pScToken )
                     sal_uInt16 n = pElement[ nId ];
                     auto* p = ppP_Str.getIfInRange( n );
                     if (p)
-                        pScToken->AddString(mrStringPool.intern(*p->get()));
+                        pScToken->AddString(mrStringPool.intern(**p));
                     else
                         bRet = false;
                 }

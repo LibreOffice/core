@@ -74,7 +74,7 @@ ViewShell::Implementation::~Implementation() COVERITY_NOEXCEPT_FALSE
     if ( ! mpUpdateLockForMouse.expired())
     {
         std::shared_ptr<ToolBarManagerLock> pLock(mpUpdateLockForMouse);
-        if (pLock.get() != nullptr)
+        if (pLock != nullptr)
         {
             // Force the ToolBarManagerLock to be released even when the
             // IsUICaptured() returns <TRUE/>.

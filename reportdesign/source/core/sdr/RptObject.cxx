@@ -812,7 +812,7 @@ void OUnoObject::_propertyChange( const  beans::PropertyChangeEvent& evt )
                     // set old name property
                     OObjectBase::EndListening();
                     if ( m_xMediator.is() )
-                        m_xMediator.get()->stopListening();
+                        m_xMediator->stopListening();
                     try
                     {
                         xControlModel->setPropertyValue( PROPERTY_NAME, evt.NewValue );
@@ -821,7 +821,7 @@ void OUnoObject::_propertyChange( const  beans::PropertyChangeEvent& evt )
                     {
                     }
                     if ( m_xMediator.is() )
-                        m_xMediator.get()->startListening();
+                        m_xMediator->startListening();
                     OObjectBase::StartListening();
                 }
             }

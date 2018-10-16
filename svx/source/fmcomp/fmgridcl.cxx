@@ -770,7 +770,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
             std::unique_ptr<SfxPoolItem> pItem;
             eState = pCurrentFrame->GetBindings().QueryState(SID_FM_CTL_PROPERTIES, pItem);
 
-            if (eState >= SfxItemState::DEFAULT && pItem.get() != nullptr )
+            if (eState >= SfxItemState::DEFAULT && pItem != nullptr)
             {
                 bool bChecked = dynamic_cast<const SfxBoolItem*>( pItem.get()) != nullptr && static_cast<SfxBoolItem*>(pItem.get())->GetValue();
                 rMenu.CheckItem("column", bChecked);

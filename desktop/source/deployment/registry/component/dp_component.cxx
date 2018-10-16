@@ -554,21 +554,21 @@ BackendImpl::BackendImpl(
 void BackendImpl::addDataToDb(
     OUString const & url, ComponentBackendDb::Data const & data)
 {
-    if (m_backendDb.get())
+    if (m_backendDb)
         m_backendDb->addEntry(url, data);
 }
 
 ComponentBackendDb::Data BackendImpl::readDataFromDb(OUString const & url)
 {
     ComponentBackendDb::Data data;
-    if (m_backendDb.get())
+    if (m_backendDb)
         data = m_backendDb->getEntry(url);
     return data;
 }
 
 void BackendImpl::revokeEntryFromDb(OUString const & url)
 {
-    if (m_backendDb.get())
+    if (m_backendDb)
         m_backendDb->revokeEntry(url);
 }
 
@@ -582,7 +582,7 @@ BackendImpl::getSupportedPackageTypes()
 
 void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaType*/)
 {
-    if (m_backendDb.get())
+    if (m_backendDb)
         m_backendDb->removeEntry(url);
 }
 

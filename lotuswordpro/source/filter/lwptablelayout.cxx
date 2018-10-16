@@ -773,7 +773,7 @@ void LwpTableLayout::ParseTable()
         throw std::runtime_error("missing super table");
     }
 
-    if (m_pXFTable.get())
+    if (m_pXFTable)
     {
         throw std::runtime_error("this table is already parsed");
     }

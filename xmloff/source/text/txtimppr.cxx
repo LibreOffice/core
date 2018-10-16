@@ -756,11 +756,11 @@ void XMLTextImportPropertyMapper::finished(
 
     for (sal_uInt16 i=0; i<4; i++)
     {
-        if (pNewParaMargins[i].get())
+        if (pNewParaMargins[i])
         {
             rProperties.push_back(*pNewParaMargins[i]);
         }
-        if (pNewMargins[i].get())
+        if (pNewMargins[i])
         {
             rProperties.push_back(*pNewMargins[i]);
         }

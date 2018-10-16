@@ -78,8 +78,7 @@ void ElapsedTime::adjustTimer( double fOffset )
 
 double ElapsedTime::getCurrentTime() const
 {
-    return m_pTimeBase.get() == nullptr
-        ? getSystemTime() : m_pTimeBase->getElapsedTimeImpl();
+    return m_pTimeBase == nullptr ? getSystemTime() : m_pTimeBase->getElapsedTimeImpl();
 }
 
 double ElapsedTime::getElapsedTime() const

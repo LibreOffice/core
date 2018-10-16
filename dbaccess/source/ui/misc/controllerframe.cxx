@@ -119,7 +119,7 @@ namespace dbaui
     static void lcl_setFrame_nothrow( ControllerFrame_Data& _rData, const Reference< XFrame >& _rxFrame )
     {
         // release old listener
-        if ( _rData.m_pListener.get() )
+        if (_rData.m_pListener)
         {
             _rData.m_pListener->dispose();
             _rData.m_pListener = nullptr;

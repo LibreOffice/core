@@ -302,7 +302,7 @@ bool OpenGLSalBitmap::AllocateUserData()
     }
 #endif
 
-    return mpUserBuffer.get() != nullptr;
+    return mpUserBuffer != nullptr;
 }
 
 namespace {
@@ -486,7 +486,7 @@ GLuint OpenGLSalBitmap::CreateTexture()
     sal_uInt8* pData( nullptr );
     bool bAllocated( false );
 
-    if (mpUserBuffer.get() != nullptr)
+    if (mpUserBuffer != nullptr)
     {
         if( mnBits == 16 || mnBits == 24 || mnBits == 32 )
         {

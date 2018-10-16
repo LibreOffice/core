@@ -356,10 +356,12 @@ namespace pcr
 
     void PropertyComposer::impl_ensureUIRequestComposer( const Reference< XObjectInspectorUI >& _rxInspectorUI )
     {
-        OSL_ENSURE( !m_pUIRequestComposer.get() || m_pUIRequestComposer->getDelegatorUI().get() == _rxInspectorUI.get(),
-            "PropertyComposer::impl_ensureUIRequestComposer: somebody's changing the horse in the mid of the race!" );
+        OSL_ENSURE(!m_pUIRequestComposer
+                       || m_pUIRequestComposer->getDelegatorUI().get() == _rxInspectorUI.get(),
+                   "PropertyComposer::impl_ensureUIRequestComposer: somebody's changing the horse "
+                   "in the mid of the race!");
 
-        if ( !m_pUIRequestComposer.get() )
+        if (!m_pUIRequestComposer)
             m_pUIRequestComposer.reset( new ComposedPropertyUIUpdate( _rxInspectorUI, this ) );
     }
 
@@ -410,7 +412,7 @@ namespace pcr
 
         clearContainer( m_aSlaveHandlers );
 
-        if ( m_pUIRequestComposer.get() )
+        if (m_pUIRequestComposer)
             m_pUIRequestComposer->dispose();
         m_pUIRequestComposer.reset();
     }

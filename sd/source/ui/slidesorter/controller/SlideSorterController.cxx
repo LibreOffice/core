@@ -213,50 +213,50 @@ model::SharedPageDescriptor SlideSorterController::GetPageAt (
 
 PageSelector& SlideSorterController::GetPageSelector()
 {
-    OSL_ASSERT(mpPageSelector.get()!=nullptr);
-    return *mpPageSelector.get();
+    OSL_ASSERT(mpPageSelector != nullptr);
+    return *mpPageSelector;
 }
 
 FocusManager& SlideSorterController::GetFocusManager()
 {
-    OSL_ASSERT(mpFocusManager.get()!=nullptr);
-    return *mpFocusManager.get();
+    OSL_ASSERT(mpFocusManager != nullptr);
+    return *mpFocusManager;
 }
 
 Clipboard& SlideSorterController::GetClipboard()
 {
-    OSL_ASSERT(mpClipboard.get()!=nullptr);
-    return *mpClipboard.get();
+    OSL_ASSERT(mpClipboard != nullptr);
+    return *mpClipboard;
 }
 
 ScrollBarManager& SlideSorterController::GetScrollBarManager()
 {
-    OSL_ASSERT(mpScrollBarManager.get()!=nullptr);
-    return *mpScrollBarManager.get();
+    OSL_ASSERT(mpScrollBarManager != nullptr);
+    return *mpScrollBarManager;
 }
 
 std::shared_ptr<CurrentSlideManager> const & SlideSorterController::GetCurrentSlideManager() const
 {
-    OSL_ASSERT(mpCurrentSlideManager.get()!=nullptr);
+    OSL_ASSERT(mpCurrentSlideManager != nullptr);
     return mpCurrentSlideManager;
 }
 
 std::shared_ptr<SlotManager> const & SlideSorterController::GetSlotManager() const
 {
-    OSL_ASSERT(mpSlotManager.get()!=nullptr);
+    OSL_ASSERT(mpSlotManager != nullptr);
     return mpSlotManager;
 }
 
 std::shared_ptr<SelectionManager> const & SlideSorterController::GetSelectionManager() const
 {
-    OSL_ASSERT(mpSelectionManager.get()!=nullptr);
+    OSL_ASSERT(mpSelectionManager != nullptr);
     return mpSelectionManager;
 }
 
 std::shared_ptr<InsertionIndicatorHandler> const &
     SlideSorterController::GetInsertionIndicatorHandler() const
 {
-    OSL_ASSERT(mpInsertionIndicatorHandler.get()!=nullptr);
+    OSL_ASSERT(mpInsertionIndicatorHandler != nullptr);
     return mpInsertionIndicatorHandler;
 }
 

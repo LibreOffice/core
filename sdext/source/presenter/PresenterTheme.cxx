@@ -290,7 +290,7 @@ OUString PresenterTheme::GetStyleName (const OUString& rsResourceURL) const
 {
     OUString sStyleName;
     std::shared_ptr<Theme> pTheme (mpTheme);
-    while (sStyleName.isEmpty() && pTheme.get()!=nullptr)
+    while (sStyleName.isEmpty() && pTheme != nullptr)
     {
         sStyleName = pTheme->maStyleAssociations.GetStyleName(rsResourceURL);
         pTheme = pTheme->mpParentTheme;
@@ -302,7 +302,7 @@ OUString PresenterTheme::GetStyleName (const OUString& rsResourceURL) const
     const OUString& rsStyleName,
     const bool bOuter) const
 {
-    OSL_ASSERT(mpTheme.get() != nullptr);
+    OSL_ASSERT(mpTheme != nullptr);
 
     SharedPaneStyle pPaneStyle (mpTheme->GetPaneStyle(rsStyleName));
     if (pPaneStyle.get() != nullptr)
@@ -346,7 +346,7 @@ bool PresenterTheme::ConvertToColor (
 std::shared_ptr<PresenterConfigurationAccess> PresenterTheme::GetNodeForViewStyle (
     const OUString& rsStyleName) const
 {
-    if (mpTheme.get() == nullptr)
+    if (mpTheme == nullptr)
         return std::shared_ptr<PresenterConfigurationAccess>();
 
     // Open configuration for writing.
@@ -375,16 +375,16 @@ SharedBitmapDescriptor PresenterTheme::GetBitmap (
     const OUString& rsStyleName,
     const OUString& rsBitmapName) const
 {
-    if (mpTheme.get() != nullptr)
+    if (mpTheme != nullptr)
     {
         if (rsStyleName.isEmpty())
         {
             if (rsBitmapName == "Background")
             {
                 std::shared_ptr<Theme> pTheme (mpTheme);
-                while (pTheme.get()!=nullptr && pTheme->mpBackground.get()==nullptr)
+                while (pTheme != nullptr && pTheme->mpBackground.get() == nullptr)
                     pTheme = pTheme->mpParentTheme;
-                if (pTheme.get() != nullptr)
+                if (pTheme != nullptr)
                     return pTheme->mpBackground;
                 else
                     return SharedBitmapDescriptor();
@@ -416,21 +416,21 @@ SharedBitmapDescriptor PresenterTheme::GetBitmap (
 SharedBitmapDescriptor PresenterTheme::GetBitmap (
     const OUString& rsBitmapName) const
 {
-    if (mpTheme.get() != nullptr)
+    if (mpTheme != nullptr)
     {
         if (rsBitmapName == "Background")
         {
             std::shared_ptr<Theme> pTheme (mpTheme);
-            while (pTheme.get()!=nullptr && pTheme->mpBackground.get()==nullptr)
+            while (pTheme != nullptr && pTheme->mpBackground.get() == nullptr)
                 pTheme = pTheme->mpParentTheme;
-            if (pTheme.get() != nullptr)
+            if (pTheme != nullptr)
                 return pTheme->mpBackground;
             else
                 return SharedBitmapDescriptor();
         }
         else
         {
-            if (mpTheme->mpIconContainer.get() != nullptr)
+            if (mpTheme->mpIconContainer != nullptr)
                 return mpTheme->mpIconContainer->GetBitmap(rsBitmapName);
         }
     }
@@ -440,7 +440,7 @@ SharedBitmapDescriptor PresenterTheme::GetBitmap (
 
 std::shared_ptr<PresenterBitmapContainer> PresenterTheme::GetBitmapContainer() const
 {
-    if (mpTheme.get() != nullptr)
+    if (mpTheme != nullptr)
         return mpTheme->mpIconContainer;
     else
         return std::shared_ptr<PresenterBitmapContainer>();
@@ -449,7 +449,7 @@ std::shared_ptr<PresenterBitmapContainer> PresenterTheme::GetBitmapContainer() c
 PresenterTheme::SharedFontDescriptor PresenterTheme::GetFont (
     const OUString& rsStyleName) const
 {
-    if (mpTheme.get() != nullptr)
+    if (mpTheme != nullptr)
     {
         SharedPaneStyle pPaneStyle (mpTheme->GetPaneStyle(rsStyleName));
         if (pPaneStyle.get() != nullptr)
@@ -460,7 +460,7 @@ PresenterTheme::SharedFontDescriptor PresenterTheme::GetFont (
             return pViewStyle->GetFont();
 
         std::shared_ptr<Theme> pTheme (mpTheme);
-        while (pTheme.get() != nullptr)
+        while (pTheme != nullptr)
         {
             Theme::FontContainer::const_iterator iFont (pTheme->maFontContainer.find(rsStyleName));
             if (iFont != pTheme->maFontContainer.end())
@@ -485,7 +485,7 @@ PresenterTheme::FontDescriptor::FontDescriptor (
       mnXOffset(0),
       mnYOffset(0)
 {
-    if (rpDescriptor.get() != nullptr)
+    if (rpDescriptor != nullptr)
     {
         msFamilyName = rpDescriptor->msFamilyName;
         msStyleName = rpDescriptor->msStyleName;
@@ -610,16 +610,12 @@ void PresenterTheme::Theme::Read (
     maViewStyles.Read(rReadContext, mxThemeRoot);
 
     // Read bitmaps.
-    mpIconContainer.reset(
-        new PresenterBitmapContainer(
-            Reference<container::XNameAccess>(
-                PresenterConfigurationAccess::GetConfigurationNode(mxThemeRoot, "Bitmaps"),
-                UNO_QUERY),
-            mpParentTheme.get()!=nullptr
-                ? mpParentTheme->mpIconContainer
-                : std::shared_ptr<PresenterBitmapContainer>(),
-            rReadContext.mxComponentContext,
-            rReadContext.mxCanvas));
+    mpIconContainer.reset(new PresenterBitmapContainer(
+        Reference<container::XNameAccess>(
+            PresenterConfigurationAccess::GetConfigurationNode(mxThemeRoot, "Bitmaps"), UNO_QUERY),
+        mpParentTheme != nullptr ? mpParentTheme->mpIconContainer
+                                 : std::shared_ptr<PresenterBitmapContainer>(),
+        rReadContext.mxComponentContext, rReadContext.mxCanvas));
 
     // Read fonts.
     Reference<container::XNameAccess> xFontNode(
@@ -638,7 +634,7 @@ SharedPaneStyle PresenterTheme::Theme::GetPaneStyle (const OUString& rsStyleName
     SharedPaneStyle pPaneStyle (maPaneStyles.GetPaneStyle(rsStyleName));
     if (pPaneStyle.get() != nullptr)
         return pPaneStyle;
-    else if (mpParentTheme.get() != nullptr)
+    else if (mpParentTheme != nullptr)
         return mpParentTheme->GetPaneStyle(rsStyleName);
     else
         return SharedPaneStyle();
@@ -649,7 +645,7 @@ SharedViewStyle PresenterTheme::Theme::GetViewStyle (const OUString& rsStyleName
     SharedViewStyle pViewStyle (maViewStyles.GetViewStyle(rsStyleName));
     if (pViewStyle.get() != nullptr)
         return pViewStyle;
-    else if (mpParentTheme.get() != nullptr)
+    else if (mpParentTheme != nullptr)
         return mpParentTheme->GetViewStyle(rsStyleName);
     else
         return SharedViewStyle();
@@ -786,7 +782,7 @@ std::shared_ptr<PresenterTheme::Theme> ReadContext::ReadTheme (
         }
     }
 
-    if (pTheme.get() != nullptr)
+    if (pTheme != nullptr)
     {
         pTheme->Read(rConfiguration, *this);
     }
@@ -873,7 +869,7 @@ void PaneStyleContainer::ProcessPaneStyle(
     Reference<container::XNameAccess> xOuterBorderSizeNode (rValues[4], UNO_QUERY);
     pStyle->maOuterBorderSize = ReadContext::ReadBorderSize(xOuterBorderSizeNode);
 
-    if (pStyle->mpParentStyle.get() != nullptr)
+    if (pStyle->mpParentStyle != nullptr)
     {
         pStyle->maInnerBorderSize.Merge(pStyle->mpParentStyle->maInnerBorderSize);
         pStyle->maOuterBorderSize.Merge(pStyle->mpParentStyle->maOuterBorderSize);
@@ -884,11 +880,9 @@ void PaneStyleContainer::ProcessPaneStyle(
         Reference<container::XNameAccess> xBitmapsNode (rValues[5], UNO_QUERY);
         pStyle->mpBitmaps.reset(new PresenterBitmapContainer(
             xBitmapsNode,
-            pStyle->mpParentStyle.get()!=nullptr
-                ? pStyle->mpParentStyle->mpBitmaps
-                : std::shared_ptr<PresenterBitmapContainer>(),
-            rReadContext.mxComponentContext,
-            rReadContext.mxCanvas,
+            pStyle->mpParentStyle != nullptr ? pStyle->mpParentStyle->mpBitmaps
+                                             : std::shared_ptr<PresenterBitmapContainer>(),
+            rReadContext.mxComponentContext, rReadContext.mxCanvas,
             rReadContext.mxPresenterHelper));
     }
 
@@ -918,14 +912,14 @@ PaneStyle::PaneStyle()
 
 const SharedBitmapDescriptor PaneStyle::GetBitmap (const OUString& rsBitmapName) const
 {
-    if (mpBitmaps.get() != nullptr)
+    if (mpBitmaps != nullptr)
     {
         const SharedBitmapDescriptor pBitmap = mpBitmaps->GetBitmap(rsBitmapName);
         if (pBitmap.get() != nullptr)
             return pBitmap;
     }
 
-    if (mpParentStyle.get() != nullptr)
+    if (mpParentStyle != nullptr)
         return mpParentStyle->GetBitmap(rsBitmapName);
     else
         return SharedBitmapDescriptor();
@@ -935,7 +929,7 @@ PresenterTheme::SharedFontDescriptor PaneStyle::GetFont() const
 {
     if (mpFont.get() != nullptr)
         return mpFont;
-    else if (mpParentStyle.get() != nullptr)
+    else if (mpParentStyle != nullptr)
         return mpParentStyle->GetFont();
     else
         return PresenterTheme::SharedFontDescriptor();
@@ -1042,7 +1036,7 @@ PresenterTheme::SharedFontDescriptor ViewStyle::GetFont() const
 {
     if (mpFont.get() != nullptr)
         return mpFont;
-    else if (mpParentStyle.get() != nullptr)
+    else if (mpParentStyle != nullptr)
         return mpParentStyle->GetFont();
     else
         return PresenterTheme::SharedFontDescriptor();

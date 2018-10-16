@@ -432,7 +432,7 @@ SplineResourceGroup::SplineResourceGroup(weld::Builder* pBuilder, TabPageParent 
 
 SplinePropertiesDialog& SplineResourceGroup::getSplinePropertiesDialog()
 {
-    if( !m_xSplinePropertiesDialog.get() )
+    if (!m_xSplinePropertiesDialog)
     {
         m_xSplinePropertiesDialog.reset(new SplinePropertiesDialog(m_pParent.GetFrameWeld()));
     }

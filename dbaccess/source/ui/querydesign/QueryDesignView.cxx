@@ -768,7 +768,7 @@ namespace
                             OUString aErrorMsg;
                             Reference<XPropertySet> xColumn;
                             std::unique_ptr< ::connectivity::OSQLParseNode> pParseNode(_pView->getPredicateTreeFromEntry(field,aCriteria,aErrorMsg,xColumn));
-                            if (pParseNode.get())
+                            if (pParseNode)
                             {
                                 if (bMulti && !(field->isOtherFunction() || (aFieldName.toChar() == '*')))
                                     pParseNode->replaceNodeValue(field->GetAlias(),aFieldName);
@@ -798,7 +798,7 @@ namespace
                             OUString aErrorMsg;
                             Reference<XPropertySet> xColumn;
                             std::unique_ptr< ::connectivity::OSQLParseNode> pParseNode( _pView->getPredicateTreeFromEntry(field,aCriteria,aErrorMsg,xColumn));
-                            if (pParseNode.get())
+                            if (pParseNode)
                             {
                                 if (bMulti && !(field->isOtherFunction() || (aFieldName.toChar() == '*')))
                                     pParseNode->replaceNodeValue(field->GetAlias(),aFieldName);
@@ -1125,7 +1125,7 @@ namespace
                         OUString aErrorMsg;
                         Reference<XPropertySet> xColumn;
                         std::unique_ptr< ::connectivity::OSQLParseNode> pParseNode(_pView->getPredicateTreeFromEntry(field,aTmp,aErrorMsg,xColumn));
-                        if (pParseNode.get())
+                        if (pParseNode)
                         {
                             OUString sGroupBy;
                             pParseNode->getChild(0)->parseNodeToStr(    sGroupBy,
@@ -2824,7 +2824,7 @@ OUString OQueryDesignView::getStatement()
         ::connectivity::OSQLParser& rParser( rController.getParser() );
         OUString sErrorMessage;
         std::unique_ptr<OSQLParseNode> pParseNode( rParser.parseTree( sErrorMessage, sSQL, true ) );
-        if ( pParseNode.get() )
+        if (pParseNode)
         {
             OSQLParseNode* pNode = pParseNode->getChild(3)->getChild(1);
             if ( pNode->count() > 1 )
@@ -2934,7 +2934,7 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(const OTableFieldDesc
             sSql += "SELECT * FROM x WHERE " + pEntry->GetField() + _sCriteria;
             std::unique_ptr<OSQLParseNode> pParseNode( rParser.parseTree( _rsErrorMessage, sSql, true ) );
             nType = DataType::DOUBLE;
-            if ( pParseNode.get() )
+            if (pParseNode)
             {
                 OSQLParseNode* pColumnRef = pParseNode->getByRule(OSQLParseNode::column_ref);
                 if ( pColumnRef )

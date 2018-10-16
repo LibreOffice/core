@@ -99,7 +99,7 @@ std::shared_ptr<SlideSorterViewShell> SlideSorterViewShell::Create (
         pViewShell.reset(
             new SlideSorterViewShell(pFrame,rViewShellBase,pParentWindow,pFrameViewArgument));
         pViewShell->Initialize();
-        if (pViewShell->mpSlideSorter.get() == nullptr)
+        if (pViewShell->mpSlideSorter == nullptr)
             pViewShell.reset();
     }
     catch(Exception&)
@@ -247,7 +247,7 @@ css::uno::Reference<css::accessibility::XAccessible>
 {
     // When the view is not set then the initialization is not yet complete
     // and we can not yet provide an accessibility object.
-    if (mpView == nullptr || mpSlideSorter.get() == nullptr)
+    if (mpView == nullptr || mpSlideSorter == nullptr)
         return nullptr;
 
     assert(mpSlideSorter.get()!=nullptr);
@@ -329,7 +329,7 @@ SdPage* SlideSorterViewShell::GetActualPage()
     if ( ! IsMainViewShell())
     {
         std::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
-        if (pMainViewShell.get() != nullptr)
+        if (pMainViewShell != nullptr)
             pCurrentPage = pMainViewShell->GetActualPage();
     }
 
@@ -528,7 +528,7 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
     if ( ! IsMainViewShell())
     {
         std::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
-        if (pMainViewShell.get() != nullptr)
+        if (pMainViewShell != nullptr)
             mpSlideSorter->GetController().GetCurrentSlideManager()->NotifyCurrentSlideChange(
                 pMainViewShell->getCurrentPage());
     }

@@ -41,7 +41,7 @@ ignoreKana::transliterateRange( const OUString& str1, const OUString& str2 )
     rtl::Reference< hiraganaToKatakana > t1(new hiraganaToKatakana);
     rtl::Reference< katakanaToHiragana > t2(new katakanaToHiragana);
 
-    return transliteration_Ignore::transliterateRange(str1, str2, *t1.get(), *t2.get());
+    return transliteration_Ignore::transliterateRange(str1, str2, *t1, *t2);
 }
 
 sal_Unicode SAL_CALL

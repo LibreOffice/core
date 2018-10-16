@@ -386,7 +386,7 @@ EEHorizontalTextDirection ScDocument::GetEditTextDirection(SCTAB nTab) const
 
 ScMacroManager* ScDocument::GetMacroManager()
 {
-    if (!mpMacroMgr.get())
+    if (!mpMacroMgr)
         mpMacroMgr.reset(new ScMacroManager(this));
     return mpMacroMgr.get();
 }
@@ -811,7 +811,7 @@ bool ScDocument::IsInLinkUpdate() const
 
 void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
 {
-    if (!pExternalRefMgr.get())
+    if (!pExternalRefMgr)
         return;
 
     sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(bAutoCalc);
@@ -1205,7 +1205,7 @@ void ScDocument::KeyInput()
 {
     if ( pChartListenerCollection->hasListeners() )
         pChartListenerCollection->StartTimer();
-    if( apTemporaryChartLock.get() )
+    if (apTemporaryChartLock)
         apTemporaryChartLock->StartOrContinueLocking();
 }
 

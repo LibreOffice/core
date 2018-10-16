@@ -178,8 +178,7 @@ codemaker::UnoType::Sort TypeManager::decompose(
         switch (s) {
         case codemaker::UnoType::Sort::Typedef:
             if (resolveTypedefs) {
-                n = dynamic_cast<unoidl::TypedefEntity&>(*ent.get()).
-                    getType();
+                n = dynamic_cast<unoidl::TypedefEntity&>(*ent).getType();
                 while (n.startsWith("[]")) {
                     ++k; //TODO: overflow
                     n = n.copy(std::strlen("[]"));

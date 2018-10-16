@@ -945,7 +945,7 @@ DataPointLabel* VDataSeries::getDataPointLabel( sal_Int32 index ) const
     if( isAttributedDataPoint( index ) )
     {
         adaptPointCache( index );
-        if( !m_apLabel_AttributedPoint.get() )
+        if (!m_apLabel_AttributedPoint)
             m_apLabel_AttributedPoint
                 = getDataPointLabelFromPropertySet(getPropertiesOfPoint(index));
         pRet = m_apLabel_AttributedPoint.get();

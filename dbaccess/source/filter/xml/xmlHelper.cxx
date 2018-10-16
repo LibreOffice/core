@@ -52,7 +52,7 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
     switch (_nType)
     {
         case XML_DB_TYPE_EQUAL:
-            if ( !m_pDisplayHandler.get() )
+            if (!m_pDisplayHandler)
             {
                 static const SvXMLEnumMapEntry<bool> aDisplayMap[] =
                 {

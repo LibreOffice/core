@@ -5241,7 +5241,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
         else
             pTextObj = ScEditUtil::CreateURLObjectFromURL(rDoc, sURL, sURL);
 
-        if (pTextObj.get())
+        if (pTextObj)
             pEngine->SetText(*pTextObj);
     }
 
@@ -5662,7 +5662,7 @@ OString ScGridWindow::getCellCursor(const Fraction& rZoomX, const Fraction& rZoo
     // GridWindow stores a shown cell cursor in mpOOCursors, hence
     // we can use that to determine whether we would want to be showing
     // one (client-side) for tiled rendering too.
-    if (!mpOOCursors.get())
+    if (!mpOOCursors)
     {
         return OString("EMPTY");
     }

@@ -567,7 +567,7 @@ bool OReportSection::handleKeyEvent(const KeyEvent& _rEvent)
 
 void OReportSection::deactivateOle()
 {
-    if ( m_pFunc.get() )
+    if (m_pFunc)
         m_pFunc->deactivateOle(true);
 }
 

@@ -1127,7 +1127,7 @@ namespace accessibility
         while( !maEventQueue.IsEmpty() )
         {
             ::std::unique_ptr< SfxHint > pHint( maEventQueue.PopFront() );
-            if( pHint.get() )
+            if (pHint)
             {
                 const SfxHint& rHint = *(pHint.get());
 

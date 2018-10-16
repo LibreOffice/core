@@ -380,15 +380,15 @@ void PageMasterImportPropertyMapper::finished(std::vector< XMLPropertyState >& r
 
     for (sal_uInt16 i = 0; i < 4; i++)
     {
-        if (pNewMargins[i].get())
+        if (pNewMargins[i])
         {
             rProperties.push_back(*pNewMargins[i]);
         }
-        if (pNewHeaderMargins[i].get())
+        if (pNewHeaderMargins[i])
         {
             rProperties.push_back(*pNewHeaderMargins[i]);
         }
-        if (pNewFooterMargins[i].get())
+        if (pNewFooterMargins[i])
         {
             rProperties.push_back(*pNewFooterMargins[i]);
         }

@@ -157,7 +157,7 @@ static void lclMatchKeyword(OUString& rName, const ScCellKeywordHashMap& aMap,
 
 void ScCellKeywordTranslator::transKeyword(OUString& rName, const lang::Locale* pLocale, OpCode eOpCode)
 {
-    if ( !spInstance.get() )
+    if (!spInstance)
         spInstance.reset( new ScCellKeywordTranslator );
 
     LanguageType nLang = pLocale ?

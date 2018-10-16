@@ -87,7 +87,7 @@ bool HelpParser::CreatePO(
 
     std::unique_ptr <XMLFile> file ( aParser.Execute( sHelpFile, pXmlFile ) );
 
-    if(file.get() == nullptr)
+    if (file == nullptr)
     {
         printf(
             "%s: %s\n",

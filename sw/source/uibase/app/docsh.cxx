@@ -1353,7 +1353,7 @@ OUString SwDocShell::GetEventName( sal_Int32 nIndex )
 
 const ::sfx2::IXmlIdRegistry* SwDocShell::GetXmlIdRegistry() const
 {
-    return m_xDoc.get() ? &m_xDoc->GetXmlIdRegistry() : nullptr;
+    return m_xDoc ? &m_xDoc->GetXmlIdRegistry() : nullptr;
 }
 
 bool SwDocShell::IsChangeRecording() const

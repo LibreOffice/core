@@ -86,7 +86,7 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
 {
     if (mpCurrentRule)
     {
-        ScFormatEntry& rFormat = *maEntries.rbegin()->get();
+        ScFormatEntry& rFormat = **maEntries.rbegin();
         assert(rFormat.GetType() == ScFormatEntry::Type::Iconset);
         ScIconSetFormat& rIconSet = static_cast<ScIconSetFormat&>(rFormat);
         ScDocument* pDoc = &getScDocument();

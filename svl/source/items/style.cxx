@@ -650,9 +650,9 @@ SfxStyleSheetBase& SfxStyleSheetBasePool::Make( const OUString& rName, SfxStyleF
     {
         xStyle = Create( rName, eFam, mask );
         StoreStyleSheet(xStyle);
-        Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetCreated, *xStyle.get() ) );
+        Broadcast(SfxStyleSheetHint(SfxHintId::StyleSheetCreated, *xStyle));
     }
-    return *xStyle.get();
+    return *xStyle;
 }
 
 /**
@@ -668,7 +668,7 @@ void SfxStyleSheetBasePool::Add( const SfxStyleSheetBase& rSheet )
     }
     rtl::Reference< SfxStyleSheetBase > xNew( Create( rSheet ) );
     pImpl->mxIndexedStyleSheets->AddStyleSheet(xNew);
-    Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetChanged, *xNew.get() ) );
+    Broadcast(SfxStyleSheetHint(SfxHintId::StyleSheetChanged, *xNew));
 }
 
 SfxStyleSheetBasePool& SfxStyleSheetBasePool::operator=( const SfxStyleSheetBasePool& r )
@@ -802,7 +802,7 @@ struct StyleSheetDisposerFunctor final : public svl::StyleSheetDisposer
         catch( css::uno::Exception& )
         {
         }
-        mPool->Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetErased, *styleSheet.get() ) );
+        mPool->Broadcast(SfxStyleSheetHint(SfxHintId::StyleSheetErased, *styleSheet));
     }
 
     SfxStyleSheetBasePool* mPool;

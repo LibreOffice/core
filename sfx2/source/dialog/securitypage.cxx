@@ -418,16 +418,16 @@ SfxSecurityPage::SfxSecurityPage(TabPageParent pParent, const SfxItemSet& rItemS
 bool SfxSecurityPage::FillItemSet( SfxItemSet * /*rItemSet*/ )
 {
     bool bModified = false;
-    DBG_ASSERT( m_pImpl.get(), "implementation pointer is 0. Still in c-tor?" );
-    if (m_pImpl.get() != nullptr)
+    DBG_ASSERT(m_pImpl, "implementation pointer is 0. Still in c-tor?");
+    if (m_pImpl != nullptr)
         bModified = m_pImpl->FillItemSet_Impl();
     return bModified;
 }
 
 void SfxSecurityPage::Reset( const SfxItemSet * /*rItemSet*/ )
 {
-    DBG_ASSERT( m_pImpl.get(), "implementation pointer is 0. Still in c-tor?" );
-    if (m_pImpl.get() != nullptr)
+    DBG_ASSERT(m_pImpl, "implementation pointer is 0. Still in c-tor?");
+    if (m_pImpl != nullptr)
         m_pImpl->Reset_Impl();
 }
 

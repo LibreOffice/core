@@ -575,7 +575,7 @@ bool SfxObjectShell::PrepareClose
         // Ask if to save
         short nRet = RET_YES;
         {
-            const Reference< XTitle > xTitle( *pImpl->pBaseModel.get(), UNO_QUERY_THROW );
+            const Reference<XTitle> xTitle(*pImpl->pBaseModel, UNO_QUERY_THROW);
             const OUString     sTitle = xTitle->getTitle ();
             nRet = ExecuteQuerySaveDocument(pFrame->GetWindow().GetFrameWeld(), sTitle);
         }

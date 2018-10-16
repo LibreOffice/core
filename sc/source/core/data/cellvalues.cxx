@@ -270,7 +270,7 @@ struct TableValues::Impl
             m_Tables.push_back(o3tl::make_unique<TableType>());
             std::unique_ptr<TableType>& rTab2 = m_Tables.back();
             for (size_t nCol = 0; nCol < nCols; ++nCol)
-                rTab2.get()->push_back(o3tl::make_unique<CellValues>());
+                rTab2->push_back(o3tl::make_unique<CellValues>());
         }
     }
 
@@ -287,7 +287,7 @@ struct TableValues::Impl
             return nullptr;
         std::unique_ptr<TableType>& rTab2 = m_Tables[nTab-maRange.aStart.Tab()];
         size_t nColOffset = nCol - maRange.aStart.Col();
-        if(nColOffset >= rTab2.get()->size())
+        if (nColOffset >= rTab2->size())
             return nullptr;
         return &rTab2.get()[0][nColOffset].get()[0];
     }

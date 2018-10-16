@@ -607,7 +607,8 @@ bool Bridge::makeCall(
         decrementActiveCalls();
         decrementCalls();
     }
-    if (resp.get() == nullptr) {
+    if (resp == nullptr)
+    {
         throw css::lang::DisposedException(
             "Binary URP bridge disposed during call",
             static_cast< cppu::OWeakObject * >(this));

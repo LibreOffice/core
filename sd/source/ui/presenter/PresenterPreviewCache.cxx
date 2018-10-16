@@ -97,7 +97,7 @@ void SAL_CALL PresenterPreviewCache::setDocumentSlides (
     const Reference<XInterface>& rxDocument)
 {
     ThrowIfDisposed();
-    OSL_ASSERT(mpCacheContext.get()!=nullptr);
+    OSL_ASSERT(mpCacheContext != nullptr);
 
     mpCacheContext->SetDocumentSlides(rxSlides, rxDocument);
 }
@@ -107,7 +107,7 @@ void SAL_CALL PresenterPreviewCache::setVisibleRange (
     sal_Int32 nLastVisibleSlideIndex)
 {
     ThrowIfDisposed();
-    OSL_ASSERT(mpCacheContext.get()!=nullptr);
+    OSL_ASSERT(mpCacheContext != nullptr);
 
     mpCacheContext->SetVisibleSlideRange (nFirstVisibleSlideIndex, nLastVisibleSlideIndex);
 }
@@ -116,7 +116,7 @@ void SAL_CALL PresenterPreviewCache::setPreviewSize (
     const css::geometry::IntegerSize2D& rSize)
 {
     ThrowIfDisposed();
-    OSL_ASSERT(mpCache.get()!=nullptr);
+    OSL_ASSERT(mpCache != nullptr);
 
     maPreviewSize = Size(rSize.Width, rSize.Height);
     mpCache->ChangeSize(maPreviewSize, Bitmap::HasFastScale());
@@ -127,7 +127,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterPreviewCache::getSlidePreview (
     const Reference<rendering::XCanvas>& rxCanvas)
 {
     ThrowIfDisposed();
-    OSL_ASSERT(mpCacheContext.get()!=nullptr);
+    OSL_ASSERT(mpCacheContext != nullptr);
 
     cppcanvas::CanvasSharedPtr pCanvas (
         cppcanvas::VCLFactory::createCanvas(rxCanvas));
@@ -164,14 +164,14 @@ void SAL_CALL PresenterPreviewCache::removePreviewCreationNotifyListener (
 void SAL_CALL PresenterPreviewCache::pause()
 {
     ThrowIfDisposed();
-    OSL_ASSERT(mpCache.get()!=nullptr);
+    OSL_ASSERT(mpCache != nullptr);
     mpCache->Pause();
 }
 
 void SAL_CALL PresenterPreviewCache::resume()
 {
     ThrowIfDisposed();
-    OSL_ASSERT(mpCache.get()!=nullptr);
+    OSL_ASSERT(mpCache != nullptr);
     mpCache->Resume();
 }
 

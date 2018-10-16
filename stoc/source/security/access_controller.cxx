@@ -494,10 +494,10 @@ void AccessController::checkAndClearPostPoned()
     // check postponed permissions
     std::unique_ptr< t_rec_vec > rec( static_cast< t_rec_vec * >( m_rec.getData() ) );
     m_rec.setData( nullptr ); // takeover ownership
-    OSL_ASSERT( rec.get() );
-    if (rec.get())
+    OSL_ASSERT(rec);
+    if (rec)
     {
-        t_rec_vec const & vec = *rec.get();
+        t_rec_vec const& vec = *rec;
         switch (m_mode)
         {
         case SINGLE_USER:

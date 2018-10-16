@@ -402,7 +402,7 @@ namespace dbaui
                 OConnectionLineDataVec& rLines = m_pConnData->GetConnLineDataList();
                 for( const auto& rLine : rLines )
                 {
-                    rLine.get()->Reset();
+                    rLine->Reset();
                 }
 
                 m_pConnData->setReferencingTable(_pSource->GetData());

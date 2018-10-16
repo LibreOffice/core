@@ -1334,8 +1334,8 @@ bool SwCalc::Str2Double( const OUString& rCommand, sal_Int32& rCommandPos,
         }
     }
 
-    bool const bRet = lcl_Str2Double( rCommand, rCommandPos, rVal,
-            (pLclD.get()) ? pLclD.get() : aSysLocale.GetLocaleDataPtr() );
+    bool const bRet = lcl_Str2Double(rCommand, rCommandPos, rVal,
+                                     (pLclD) ? pLclD.get() : aSysLocale.GetLocaleDataPtr());
 
     return bRet;
 }

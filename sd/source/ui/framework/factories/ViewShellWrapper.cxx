@@ -196,7 +196,7 @@ sal_Bool SAL_CALL ViewShellWrapper::relocateToAnchor (
             xWindow->removeWindowListener(this);
         mxWindow = nullptr;
 
-        if (mpViewShell.get() != nullptr)
+        if (mpViewShell != nullptr)
         {
             VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xPane->getWindow());
             if (pWindow && mpViewShell->RelocateToParentWindow(pWindow))

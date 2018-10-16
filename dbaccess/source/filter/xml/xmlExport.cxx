@@ -749,7 +749,7 @@ void ODBExport::exportDelimiter()
 
 void ODBExport::exportAutoIncrement()
 {
-    if ( m_aAutoIncrement.get() )
+    if (m_aAutoIncrement)
     {
         AddAttribute(XML_NAMESPACE_DB, XML_ADDITIONAL_COLUMN_STATEMENT,m_aAutoIncrement->second);
         AddAttribute(XML_NAMESPACE_DB, XML_ROW_RETRIEVING_STATEMENT,m_aAutoIncrement->first);

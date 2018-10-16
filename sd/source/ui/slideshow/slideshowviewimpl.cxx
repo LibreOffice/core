@@ -237,19 +237,23 @@ void SAL_CALL SlideShowView::disposing( const lang::EventObject& )
     // notify all listeners that _we_ are going down (send a disposing()),
     // then delete listener containers:
     lang::EventObject const evt( static_cast<OWeakObject *>(this) );
-    if (mpViewListeners.get() != nullptr) {
+    if (mpViewListeners != nullptr)
+    {
         mpViewListeners->disposing( evt );
         mpViewListeners.reset();
     }
-    if (mpPaintListeners.get() != nullptr) {
+    if (mpPaintListeners != nullptr)
+    {
         mpPaintListeners->disposing( evt );
         mpPaintListeners.reset();
     }
-    if (mpMouseListeners.get() != nullptr) {
+    if (mpMouseListeners != nullptr)
+    {
         mpMouseListeners->disposing( evt );
         mpMouseListeners.reset();
     }
-    if (mpMouseMotionListeners.get() != nullptr) {
+    if (mpMouseMotionListeners != nullptr)
+    {
         mpMouseMotionListeners->disposing( evt );
         mpMouseMotionListeners.reset();
     }
@@ -380,7 +384,7 @@ void SAL_CALL SlideShowView::addTransformationChangedListener( const Reference< 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if( mpViewListeners.get() )
+    if (mpViewListeners)
         mpViewListeners->addListener( xListener );
 }
 
@@ -388,7 +392,7 @@ void SAL_CALL SlideShowView::removeTransformationChangedListener( const Referenc
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if( mpViewListeners.get() )
+    if (mpViewListeners)
         mpViewListeners->removeListener( xListener );
 }
 
@@ -396,7 +400,7 @@ void SAL_CALL SlideShowView::addPaintListener( const Reference< awt::XPaintListe
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if( mpPaintListeners.get() )
+    if (mpPaintListeners)
         mpPaintListeners->addTypedListener( xListener );
 }
 
@@ -404,7 +408,7 @@ void SAL_CALL SlideShowView::removePaintListener( const Reference< awt::XPaintLi
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if( mpPaintListeners.get() )
+    if (mpPaintListeners)
         mpPaintListeners->removeTypedListener( xListener );
 }
 
@@ -412,7 +416,7 @@ void SAL_CALL SlideShowView::addMouseListener( const Reference< awt::XMouseListe
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if( mpMouseListeners.get() )
+    if (mpMouseListeners)
         mpMouseListeners->addTypedListener( xListener );
 }
 
@@ -420,7 +424,7 @@ void SAL_CALL SlideShowView::removeMouseListener( const Reference< awt::XMouseLi
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if( mpMouseListeners.get() )
+    if (mpMouseListeners)
         mpMouseListeners->removeTypedListener( xListener );
 }
 
@@ -436,7 +440,7 @@ void SAL_CALL SlideShowView::addMouseMotionListener( const Reference< awt::XMous
         mxWindow->addMouseMotionListener( this );
     }
 
-    if( mpMouseMotionListeners.get() )
+    if (mpMouseMotionListeners)
         mpMouseMotionListeners->addTypedListener( xListener );
 }
 
@@ -444,7 +448,7 @@ void SAL_CALL SlideShowView::removeMouseMotionListener( const Reference< awt::XM
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if( mpMouseMotionListeners.get() )
+    if (mpMouseMotionListeners)
         mpMouseMotionListeners->removeTypedListener( xListener );
 
     // TODO(P1): Might be nice to deregister for mouse motion
@@ -500,7 +504,7 @@ void SAL_CALL SlideShowView::windowResized( const awt::WindowEvent& e )
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-    if( mpViewListeners.get() )
+    if (mpViewListeners)
     {
         // Change event source, to enable listeners to match event
         // with view
@@ -546,7 +550,7 @@ void SAL_CALL SlideShowView::mousePressed( const awt::MouseEvent& e )
         aEvent.maEvent = e;
         aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
-        if( mpMouseListeners.get() )
+        if (mpMouseListeners)
             mpMouseListeners->notify( aEvent );
         updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
     }
@@ -569,7 +573,7 @@ void SAL_CALL SlideShowView::mouseReleased( const awt::MouseEvent& e )
         aEvent.maEvent = e;
         aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
-        if( mpMouseListeners.get() )
+        if (mpMouseListeners)
             mpMouseListeners->notify( aEvent );
         updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
     }
@@ -586,7 +590,7 @@ void SAL_CALL SlideShowView::mouseEntered( const awt::MouseEvent& e )
     aEvent.maEvent = e;
     aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
-    if( mpMouseListeners.get() )
+    if (mpMouseListeners)
         mpMouseListeners->notify( aEvent );
     updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
 }
@@ -602,7 +606,7 @@ void SAL_CALL SlideShowView::mouseExited( const awt::MouseEvent& e )
     aEvent.maEvent = e;
     aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
-    if( mpMouseListeners.get() )
+    if (mpMouseListeners)
         mpMouseListeners->notify( aEvent );
     updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
 }
@@ -619,7 +623,7 @@ void SAL_CALL SlideShowView::mouseDragged( const awt::MouseEvent& e )
     aEvent.maEvent = e;
     aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
-    if( mpMouseMotionListeners.get() )
+    if (mpMouseMotionListeners)
         mpMouseMotionListeners->notify( aEvent );
     updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
 }
@@ -635,7 +639,7 @@ void SAL_CALL SlideShowView::mouseMoved( const awt::MouseEvent& e )
     aEvent.maEvent = e;
     aEvent.maEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
-    if( mpMouseMotionListeners.get() )
+    if (mpMouseMotionListeners)
         mpMouseMotionListeners->notify( aEvent );
     updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
 }

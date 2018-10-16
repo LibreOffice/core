@@ -589,7 +589,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
             pOutliner->Insert(sReplyText);
 
         std::unique_ptr< OutlinerParaObject > pOPO( pOutliner->CreateParaObject() );
-        pTextApi->SetText( *pOPO.get() );
+        pTextApi->SetText(*pOPO);
 
         OUString sReplyAuthor;
         if (comphelper::LibreOfficeKit::isActive())
@@ -811,7 +811,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
             {
                 // switch to next/previous slide with annotations
                 std::shared_ptr<DrawViewShell> pDrawViewShell(std::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
-                if (pDrawViewShell.get() != nullptr)
+                if (pDrawViewShell != nullptr)
                 {
                     pDrawViewShell->ChangeEditMode(pPage->IsMasterPage() ? EditMode::MasterPage : EditMode::Page, false);
                     pDrawViewShell->SwitchPage((pPage->GetPageNum() - 1) >> 1);

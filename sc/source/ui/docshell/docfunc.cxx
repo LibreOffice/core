@@ -1101,7 +1101,7 @@ void ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
             ScMyRememberItemVector::iterator aItr = aRememberItems.begin();
             while (aItr != aRememberItems.end())
             {
-                rEngine.SetParaAttribs((*aItr).get()->nIndex, (*aItr).get()->aItemSet);
+                rEngine.SetParaAttribs((*aItr)->nIndex, (*aItr)->aItemSet);
                 ++aItr;
             }
         }

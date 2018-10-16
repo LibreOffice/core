@@ -1990,7 +1990,8 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape )
 
     ImplMap( rShape.maShapePolyPoly, aPolyPoly );
 
-    const bool  bLineOnly = ( rShape.maShapeFillColor == COL_TRANSPARENT ) && ( !rShape.mapShapeGradient.get() );
+    const bool bLineOnly
+        = (rShape.maShapeFillColor == COL_TRANSPARENT) && (!rShape.mapShapeGradient);
     tools::Rectangle   aBoundRect( aPolyPoly.GetBoundRect() );
 
     maAttributeWriter.AddPaintAttr( rShape.maShapeLineColor, rShape.maShapeFillColor, &aBoundRect, rShape.mapShapeGradient.get() );
@@ -3076,7 +3077,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                          pA->GetDataSize() )
                 {
                     // write open shape in every case
-                    if( mapCurShape.get() )
+                    if (mapCurShape)
                     {
                         ImplWriteShape( *mapCurShape );
                         mapCurShape.reset();
@@ -3114,7 +3115,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                             if( bGradient )
                             {
                                 // step through following actions until the first Gradient/GradientEx action is found
-                                while( !mapCurShape->mapShapeGradient.get() && bSkip && ( ++nCurAction < nCount ) )
+                                while (!mapCurShape->mapShapeGradient && bSkip
+                                       && (++nCurAction < nCount))
                                 {
                                     pAction = rMtf.GetAction( nCurAction );
 
@@ -3172,7 +3174,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     aStroke.getPath(aPoly);
 
-                    if(mapCurShape.get())
+                    if (mapCurShape)
                     {
                         if(1 != mapCurShape->maShapePolyPoly.Count()
                             || !mapCurShape->maShapePolyPoly[0].IsEqual(aPoly))
@@ -3184,7 +3186,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                         }
                     }
 
-                    if( !mapCurShape.get() )
+                    if (!mapCurShape)
                     {
 
                         mapCurShape.reset( new SVGShapeDescriptor );
@@ -3281,7 +3283,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     }
 
                     // write open shape in every case
-                    if( mapCurShape.get() )
+                    if (mapCurShape)
                     {
                         ImplWriteShape( *mapCurShape );
                         mapCurShape.reset();
@@ -3718,7 +3720,7 @@ void SVGActionWriter::WriteMetaFile( const Point& rPos100thmm,
     ImplEndClipRegion();
 
     // draw open shape that doesn't have a border
-    if( mapCurShape.get() )
+    if (mapCurShape)
     {
         ImplWriteShape( *mapCurShape );
         mapCurShape.reset();

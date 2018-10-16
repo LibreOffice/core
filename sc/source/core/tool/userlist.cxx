@@ -272,7 +272,7 @@ ScUserList::ScUserList()
 ScUserList::ScUserList(const ScUserList& rOther)
 {
     for (const std::unique_ptr<ScUserListData>& rData : rOther.maData)
-        maData.push_back( o3tl::make_unique<ScUserListData>(*rData.get()) );
+        maData.push_back(o3tl::make_unique<ScUserListData>(*rData));
 }
 
 const ScUserListData* ScUserList::GetData(const OUString& rSubStr) const
@@ -310,7 +310,7 @@ ScUserList& ScUserList::operator=( const ScUserList& rOther )
 {
     maData.clear();
     for (const std::unique_ptr<ScUserListData>& rData : rOther.maData)
-        maData.push_back( o3tl::make_unique<ScUserListData>(*rData.get()) );
+        maData.push_back(o3tl::make_unique<ScUserListData>(*rData));
     return *this;
 }
 
@@ -322,8 +322,8 @@ bool ScUserList::operator==( const ScUserList& r ) const
     DataType::const_iterator itr1 = maData.begin(), itr2 = r.maData.begin(), itrEnd = maData.end();
     for (; itr1 != itrEnd; ++itr1, ++itr2)
     {
-        const ScUserListData& v1 = *itr1->get();
-        const ScUserListData& v2 = *itr2->get();
+        const ScUserListData& v1 = **itr1;
+        const ScUserListData& v2 = **itr2;
         if (v1.GetString() != v2.GetString() || v1.GetSubCount() != v2.GetSubCount())
             return false;
     }

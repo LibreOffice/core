@@ -2301,7 +2301,7 @@ EFieldInfo EditEngine::GetFieldInfo( sal_Int32 nPara, sal_uInt16 nField ) const
         sal_uInt16 nCurrentField = 0;
         for (auto const& attrib : pNode->GetCharAttribs().GetAttribs())
         {
-            const EditCharAttrib& rAttr = *attrib.get();
+            const EditCharAttrib& rAttr = *attrib;
             if (rAttr.Which() == EE_FEATURE_FIELD)
             {
                 if ( nCurrentField == nField )

@@ -951,7 +951,7 @@ sal_uInt16 LwpMiddleLayout::GetScaleMode()
         return GetLayoutScale()->GetScaleMode();
     rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
     if (xBase.is())
-        return dynamic_cast<LwpMiddleLayout&>(*xBase.get()).GetScaleMode();
+        return dynamic_cast<LwpMiddleLayout&>(*xBase).GetScaleMode();
     else
         return (LwpLayoutScale::FIT_IN_FRAME | LwpLayoutScale::MAINTAIN_ASPECT_RATIO);
 }
@@ -963,7 +963,7 @@ sal_uInt16 LwpMiddleLayout::GetScaleTile()
             ? 1 : 0;
     rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
     if (xBase.is())
-        return dynamic_cast<LwpMiddleLayout&>(*xBase.get()).GetScaleTile();
+        return dynamic_cast<LwpMiddleLayout&>(*xBase).GetScaleTile();
     else
         return 0;
 }
@@ -985,7 +985,7 @@ sal_uInt16 LwpMiddleLayout::GetScaleCenter()
     {
         rtl::Reference<LwpObject> xBase(GetBasedOnStyle());
         if (xBase.is())
-            nRet = dynamic_cast<LwpMiddleLayout&>(*xBase.get()).GetScaleCenter();
+            nRet = dynamic_cast<LwpMiddleLayout&>(*xBase).GetScaleCenter();
     }
 
     m_bGettingScaleCenter = false;

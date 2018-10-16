@@ -785,7 +785,7 @@ void  LinePropertyPanelBase::FillLineStyleList()
 
 void LinePropertyPanelBase::SelectLineStyle()
 {
-    if( !mpStyleItem.get() || !mpDashItem.get() )
+    if (!mpStyleItem || !mpDashItem)
     {
         mpLBStyle->SetNoSelection();
         mpLBStyle->Disable();
@@ -833,7 +833,7 @@ void LinePropertyPanelBase::SelectEndStyle(bool bStart)
 
     if(bStart)
     {
-        if( !mpStartItem.get() )
+        if (!mpStartItem)
         {
             mpLBStart->SetNoSelection();
             mpLBStart->Disable();
@@ -862,7 +862,7 @@ void LinePropertyPanelBase::SelectEndStyle(bool bStart)
     }
     else
     {
-        if( !mpEndItem.get() )
+        if (!mpEndItem)
         {
             mpLBEnd->SetNoSelection();
             mpLBEnd->Disable();

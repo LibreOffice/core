@@ -240,7 +240,7 @@ void PresenterScrollBar::SetCanvas (const Reference<css::rendering::XCanvas>& rx
         mxCanvas = rxCanvas;
         if (mxCanvas.is())
         {
-            if (mpBitmaps.get()==nullptr)
+            if (mpBitmaps == nullptr)
             {
                 if (mpSharedBitmaps.expired())
                 {
@@ -434,7 +434,7 @@ void PresenterScrollBar::Repaint (
     const geometry::RealRectangle2D& rBox,
     const bool bAsynchronousUpdate)
 {
-    if (mpPaintManager.get() != nullptr)
+    if (mpPaintManager != nullptr)
         mpPaintManager->Invalidate(
             mxWindow,
             PresenterGeometryHelper::ConvertRectangle(rBox),
@@ -687,7 +687,7 @@ void PresenterVerticalScrollBar::UpdateBorders()
 
 void PresenterVerticalScrollBar::UpdateBitmaps()
 {
-    if (mpBitmaps.get() != nullptr)
+    if (mpBitmaps != nullptr)
     {
         mpPrevButtonDescriptor = mpBitmaps->GetBitmap("Up");
         mpNextButtonDescriptor = mpBitmaps->GetBitmap("Down");

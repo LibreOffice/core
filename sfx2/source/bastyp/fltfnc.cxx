@@ -269,7 +269,7 @@ namespace
         // previously
         for (std::unique_ptr<SfxFilterMatcher_Impl>& aImpl : aImplArr)
             if (aImpl->aName == aName)
-                return *aImpl.get();
+                return *aImpl;
 
         // first Matcher created for this factory
         aImplArr.push_back(o3tl::make_unique<SfxFilterMatcher_Impl>(aName));

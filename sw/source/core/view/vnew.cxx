@@ -281,7 +281,8 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
 
 SwViewShell::~SwViewShell()
 {
-    IDocumentLayoutAccess * const pLayoutAccess = mxDoc.get() ? &mxDoc->getIDocumentLayoutAccess() : nullptr;
+    IDocumentLayoutAccess* const pLayoutAccess
+        = mxDoc ? &mxDoc->getIDocumentLayoutAccess() : nullptr;
 
     {
         SET_CURR_SHELL( this );
@@ -320,7 +321,7 @@ SwViewShell::~SwViewShell()
 
         mpImp.reset();
 
-        if ( mxDoc.get() )
+        if (mxDoc)
         {
             if( mxDoc->getReferenceCount() > 1 )
                 GetLayout()->ResetNewLayout();

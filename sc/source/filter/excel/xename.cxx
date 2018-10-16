@@ -609,12 +609,13 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
         {
             // Don't modify the actual document; use a temporary copy to create the export formulas.
             std::unique_ptr<ScTokenArray> pTokenCopy( pScTokArr->Clone() );
-            lcl_EnsureAbs3DToken( nTab, pTokenCopy.get()->FirstToken() );
+            lcl_EnsureAbs3DToken(nTab, pTokenCopy->FirstToken());
 
-            xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, *pTokenCopy.get() );
+            xTokArr = GetFormulaCompiler().CreateFormula(EXC_FMLATYPE_NAME, *pTokenCopy);
             if ( GetOutput() != EXC_OUTPUT_BINARY )
             {
-                ScCompiler aComp( &GetDocRef(), rRangeData.GetPos(), *pTokenCopy.get(), formula::FormulaGrammar::GRAM_OOXML );
+                ScCompiler aComp(&GetDocRef(), rRangeData.GetPos(), *pTokenCopy,
+                                 formula::FormulaGrammar::GRAM_OOXML);
                 aComp.CreateStringFromTokenArray( sSymbol );
             }
         }

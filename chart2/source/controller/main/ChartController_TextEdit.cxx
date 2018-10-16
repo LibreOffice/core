@@ -59,7 +59,8 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
     if(!pTextObj)
         return;
 
-    OSL_PRECOND( !m_pTextActionUndoGuard.get(), "ChartController::StartTextEdit: already have a TextUndoGuard!?" );
+    OSL_PRECOND(!m_pTextActionUndoGuard,
+                "ChartController::StartTextEdit: already have a TextUndoGuard!?");
     m_pTextActionUndoGuard.reset( new UndoGuard(
         SchResId( STR_ACTION_EDIT_TEXT ), m_xUndoManager ) );
     SdrOutliner* pOutliner = m_pDrawViewWrapper->getOutliner();
@@ -135,8 +136,8 @@ bool ChartController::EndTextEdit()
             TitleHelper::setCompleteString( aString, uno::Reference<
                 css::chart2::XTitle >::query( xPropSet ), m_xCC );
 
-            OSL_ENSURE( m_pTextActionUndoGuard.get(), "ChartController::EndTextEdit: no TextUndoGuard!" );
-            if ( m_pTextActionUndoGuard.get() )
+            OSL_ENSURE(m_pTextActionUndoGuard, "ChartController::EndTextEdit: no TextUndoGuard!");
+            if (m_pTextActionUndoGuard)
                 m_pTextActionUndoGuard->commit();
         }
         m_pTextActionUndoGuard.reset();

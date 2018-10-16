@@ -1651,7 +1651,7 @@ void SwUndoTableNdsChg::SaveNewBoxes( const SwTableNode& rTableNd,
 void SwUndoTableNdsChg::SaveSection( SwStartNode* pSttNd )
 {
     OSL_ENSURE( IsDelBox(), "wrong Action" );
-    if (m_pDelSects.get() == nullptr)
+    if (m_pDelSects == nullptr)
         m_pDelSects.reset(new SwUndoSaveSections);
 
     SwTableNode* pTableNd = pSttNd->FindTableNode();
@@ -3161,7 +3161,7 @@ void SwUndoTableStyleMake::UndoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoTableStyleMake::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    if (m_pAutoFormat.get())
+    if (m_pAutoFormat)
     {
         SwTableAutoFormat* pFormat = rContext.GetDoc().MakeTableStyle(m_sName, true);
         if (pFormat)

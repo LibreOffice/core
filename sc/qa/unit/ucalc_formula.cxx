@@ -1005,7 +1005,7 @@ void Test::testFormulaCompiler()
         std::unique_ptr<ScTokenArray> pArray;
         {
             pArray.reset(compileFormula(m_pDoc, OUString::createFromAscii(aTests[i].pInput), aTests[i].eInputGram));
-            CPPUNIT_ASSERT_MESSAGE("Token array shouldn't be NULL!", pArray.get());
+            CPPUNIT_ASSERT_MESSAGE("Token array shouldn't be NULL!", pArray);
         }
 
         OUString aFormula = toString(*m_pDoc, ScAddress(), *pArray, aTests[i].eOutputGram);
@@ -1033,7 +1033,7 @@ void Test::testFormulaCompilerJumpReordering()
 
         // Compile formula string first.
         std::unique_ptr<ScTokenArray> pCode(compileFormula(m_pDoc, aInput));
-        CPPUNIT_ASSERT(pCode.get());
+        CPPUNIT_ASSERT(pCode);
 
         // Then generate RPN tokens.
         ScCompiler aCompRPN(m_pDoc, ScAddress(), *pCode, FormulaGrammar::GRAM_NATIVE);

@@ -94,7 +94,7 @@ SourceFileProvider::SourceFileProvider(
                 if (k == map->end()) {
                     k = map->insert(std::make_pair(id, new Module)).first;
                 }
-                Module& mod = dynamic_cast<Module&>(*k->second.get());
+                Module& mod = dynamic_cast<Module&>(*k->second);
                 map = &mod.map;
             }
         }

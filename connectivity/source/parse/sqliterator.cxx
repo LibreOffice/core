@@ -330,7 +330,7 @@ void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQu
 
     OUString sError;
     std::unique_ptr< OSQLParseNode > pSubQueryNode( const_cast< OSQLParser& >( m_rParser ).parseTree( sError, sSubQueryCommand ) );
-    if ( !pSubQueryNode.get() )
+    if (!pSubQueryNode)
         break;
 
     OSQLParseTreeIterator aSubQueryIterator( *this, m_rParser, pSubQueryNode.get() );

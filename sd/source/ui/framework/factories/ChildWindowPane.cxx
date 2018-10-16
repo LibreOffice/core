@@ -134,7 +134,7 @@ vcl::Window* ChildWindowPane::GetWindow()
         // visible to early then some layouting seems to be made twice or at
         // an inconvenient time and the overall process of initializing the
         // Impress takes longer.
-        if ( ! mbHasBeenActivated && mpShell.get()!=nullptr && ! mpShell->IsActive())
+        if (!mbHasBeenActivated && mpShell != nullptr && !mpShell->IsActive())
             break;
 
         mbHasBeenActivated = true;

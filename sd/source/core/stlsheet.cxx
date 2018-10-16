@@ -802,7 +802,7 @@ void SAL_CALL SdStyleSheet::addModifyListener( const Reference< XModifyListener 
     }
     else
     {
-        if( !mpModifyListenerForewarder.get() )
+        if (!mpModifyListenerForewarder)
             mpModifyListenerForewarder.reset( new ModifyListenerForewarder( this ) );
         mrBHelper.addListener( cppu::UnoType<XModifyListener>::get(), xListener );
     }

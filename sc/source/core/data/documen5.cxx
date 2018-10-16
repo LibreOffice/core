@@ -348,7 +348,7 @@ void ScDocument::UpdateChart( const OUString& rChartName )
         try
         {
             uno::Reference< util::XModifiable > xModif( xChartDoc, uno::UNO_QUERY_THROW );
-            if( apTemporaryChartLock.get() )
+            if (apTemporaryChartLock)
                 apTemporaryChartLock->AlsoLockThisChart( uno::Reference< frame::XModel >( xModif, uno::UNO_QUERY ) );
             xModif->setModified( true );
         }

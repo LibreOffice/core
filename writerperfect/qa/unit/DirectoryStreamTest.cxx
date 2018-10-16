@@ -141,7 +141,7 @@ void DirectoryStreamTest::testStructuredOperations()
 
     unique_ptr<DirectoryStream> pDir(DirectoryStream::createForParent(m_xFile));
     CPPUNIT_ASSERT(bool(pDir));
-    lcl_testStructuredOperations(*pDir.get());
+    lcl_testStructuredOperations(*pDir);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DirectoryStreamTest);

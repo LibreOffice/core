@@ -312,7 +312,7 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
 XMLTextParagraphExport* SwXMLExport::CreateTextParagraphExport()
 {
-    return new SwXMLTextParagraphExport( *this, *GetAutoStylePool().get() );
+    return new SwXMLTextParagraphExport(*this, *GetAutoStylePool());
 }
 
 XMLShapeExport* SwXMLExport::CreateShapeExport()

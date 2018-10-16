@@ -159,7 +159,7 @@ BackendImpl::getSupportedPackageTypes()
 
 void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaType*/)
 {
-    if (m_backendDb.get())
+    if (m_backendDb)
         m_backendDb->removeEntry(url);
 }
 
@@ -208,21 +208,21 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url)
 {
     ::boost::optional<HelpBackendDb::Data> data;
-    if (m_backendDb.get())
+    if (m_backendDb)
         data = m_backendDb->getEntry(url);
     return data;
 }
 
 bool BackendImpl::hasActiveEntry(OUString const & url)
 {
-    if (m_backendDb.get())
+    if (m_backendDb)
         return m_backendDb->hasActiveEntry(url);
     return false;
 }
 
 bool BackendImpl::activateEntry(OUString const & url)
 {
-    if (m_backendDb.get())
+    if (m_backendDb)
         return m_backendDb->activateEntry(url);
     return false;
 }
@@ -533,13 +533,13 @@ void BackendImpl::implProcessHelp(
             }
             // Writing the data entry replaces writing the flag file. If we got to this
             // point the registration was successful.
-            if (m_backendDb.get())
+            if (m_backendDb)
                 m_backendDb->addEntry(xPackage->getURL(), data);
         }
     } //if (doRegisterPackage)
     else
     {
-        if (m_backendDb.get())
+        if (m_backendDb)
             m_backendDb->revokeEntry(xPackage->getURL());
     }
 }

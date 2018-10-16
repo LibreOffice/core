@@ -4230,7 +4230,7 @@ void OReportController::openZoomDialog()
         aZoomItem.SetValueSet(SvxZoomEnableFlags::N100|SvxZoomEnableFlags::WHOLEPAGE|SvxZoomEnableFlags::PAGEWIDTH);
         pDescriptor->Put(aZoomItem);
 
-        ScopedVclPtr<AbstractSvxZoomDialog> pDlg( pFact->CreateSvxZoomDialog(nullptr, *pDescriptor.get()) );
+        ScopedVclPtr<AbstractSvxZoomDialog> pDlg(pFact->CreateSvxZoomDialog(nullptr, *pDescriptor));
         pDlg->SetLimits( 20, 400 );
         bool bCancel = ( RET_CANCEL == pDlg->Execute() );
 

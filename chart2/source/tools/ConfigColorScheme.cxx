@@ -118,14 +118,14 @@ void ConfigColorScheme::retrieveConfigColors()
         return;
 
     // create config item if necessary
-    if( ! m_apChartConfigItem.get())
+    if (!m_apChartConfigItem)
     {
         m_apChartConfigItem.reset(
             new impl::ChartConfigItem( *this ));
         m_apChartConfigItem->addPropertyNotification( aSeriesPropName );
     }
-    OSL_ASSERT( m_apChartConfigItem.get());
-    if( ! m_apChartConfigItem.get())
+    OSL_ASSERT(m_apChartConfigItem);
+    if (!m_apChartConfigItem)
         return;
 
     // retrieve colors

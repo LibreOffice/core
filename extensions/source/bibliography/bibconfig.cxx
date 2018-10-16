@@ -270,7 +270,7 @@ const Mapping*  BibConfig::GetMapping(const BibDBDescriptor& rDesc) const
 {
     for(std::unique_ptr<Mapping> const & i : mvMappings)
     {
-        Mapping& rMapping = *i.get();
+        Mapping& rMapping = *i;
         bool bURLEqual = rDesc.sDataSource == rMapping.sURL;
         if(rDesc.sTableOrQuery == rMapping.sTableName && bURLEqual)
             return &rMapping;

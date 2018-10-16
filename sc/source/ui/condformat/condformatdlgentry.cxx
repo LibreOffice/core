@@ -1156,7 +1156,7 @@ ScFormatEntry* ScDataBarFrmtEntry::createDatabarEntry() const
     SetColorScaleEntry(mpDataBarData->mpLowerLimit.get(), *maLbDataBarMinType.get(), *maEdDataBarMin.get(), mpDoc, maPos, true);
     SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), *maLbDataBarMaxType.get(), *maEdDataBarMax.get(), mpDoc, maPos, true);
     ScDataBarFormat* pDataBar = new ScDataBarFormat(mpDoc);
-    pDataBar->SetDataBarData(new ScDataBarFormatData(*mpDataBarData.get()));
+    pDataBar->SetDataBarData(new ScDataBarFormatData(*mpDataBarData));
     return pDataBar;
 }
 

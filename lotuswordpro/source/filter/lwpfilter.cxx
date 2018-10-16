@@ -118,7 +118,7 @@ static bool Decompress(SvStream *pCompressed, SvStream * & pOutDecompressed)
 
     std::unique_ptr<LtcUtBenValueStream> aWordProData(pBentoContainer->FindValueStreamWithPropertyName("WordProData"));
 
-    if (!aWordProData.get())
+    if (!aWordProData)
         return false;
 
     // decompressing

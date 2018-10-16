@@ -40,7 +40,7 @@ ignoreSize_ja_JP::transliterateRange( const OUString& str1, const OUString& str2
     rtl::Reference< smallToLarge_ja_JP > t1(new smallToLarge_ja_JP);
     rtl::Reference< largeToSmall_ja_JP > t2(new largeToSmall_ja_JP);
 
-    return transliteration_Ignore::transliterateRange(str1, str2, *t1.get(), *t2.get());
+    return transliteration_Ignore::transliterateRange(str1, str2, *t1, *t2);
 }
 
 sal_Unicode SAL_CALL

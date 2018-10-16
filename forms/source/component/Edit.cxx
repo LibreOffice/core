@@ -634,10 +634,11 @@ bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     }
     else
     {
-        OSL_PRECOND( m_pValueFormatter.get(), "OEditModel::commitControlValueToDbColumn: no value formatter!" );
+        OSL_PRECOND(m_pValueFormatter,
+                    "OEditModel::commitControlValueToDbColumn: no value formatter!");
         try
         {
-            if ( m_pValueFormatter.get() )
+            if (m_pValueFormatter)
             {
                 if ( !m_pValueFormatter->setFormattedValue( sNewValue ) )
                     return false;
@@ -657,9 +658,10 @@ bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 
 Any OEditModel::translateDbColumnToControlValue()
 {
-    OSL_PRECOND( m_pValueFormatter.get(), "OEditModel::translateDbColumnToControlValue: no value formatter!" );
+    OSL_PRECOND(m_pValueFormatter,
+                "OEditModel::translateDbColumnToControlValue: no value formatter!");
     Any aRet;
-    if ( m_pValueFormatter.get() )
+    if (m_pValueFormatter)
     {
         OUString sValue( m_pValueFormatter->getFormattedValue() );
         if  (   sValue.isEmpty()

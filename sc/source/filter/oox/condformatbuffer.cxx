@@ -306,8 +306,8 @@ void DataBarRule::importAttribs( const AttributeList& rAttribs )
 
 void DataBarRule::SetData( ScDataBarFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr )
 {
-    ScColorScaleEntry* pUpperEntry = ConvertToModel( *mpUpperLimit.get(), pDoc, rAddr);
-    ScColorScaleEntry* pLowerEntry = ConvertToModel( *mpLowerLimit.get(), pDoc, rAddr);
+    ScColorScaleEntry* pUpperEntry = ConvertToModel(*mpUpperLimit, pDoc, rAddr);
+    ScColorScaleEntry* pLowerEntry = ConvertToModel(*mpLowerLimit, pDoc, rAddr);
 
     mxFormat->mpUpperLimit.reset( pUpperEntry );
     mxFormat->mpLowerLimit.reset( pLowerEntry );
@@ -860,8 +860,8 @@ void CondFormatRule::finalizeImport()
         if( maModel.maFormulas.size() >= 2)
         {
             pTokenArray2.reset(new ScTokenArray());
-            ScTokenConversion::ConvertToTokenArray( rDoc, *pTokenArray2.get(), maModel.maFormulas[ 1 ] );
-            rDoc.CheckLinkFormulaNeedingCheck( *pTokenArray2.get());
+            ScTokenConversion::ConvertToTokenArray(rDoc, *pTokenArray2, maModel.maFormulas[1]);
+            rDoc.CheckLinkFormulaNeedingCheck(*pTokenArray2);
         }
 
         ScTokenArray aTokenArray;

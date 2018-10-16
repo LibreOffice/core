@@ -2083,7 +2083,7 @@ void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, sal_Int32 nChars )
         const CharAttribList::AttribsType& rAttribs = rPaM.GetNode()->GetCharAttribs().GetAttribs();
         for (const auto & rAttrib : rAttribs)
         {
-            const EditCharAttrib& rAttr = *rAttrib.get();
+            const EditCharAttrib& rAttr = *rAttrib;
             if (rAttr.GetEnd() >= nStart && rAttr.GetStart() < nEnd)
             {
                 EditSelection aSel( rPaM );
@@ -2961,7 +2961,7 @@ bool ImpEditEngine::UpdateFields()
         CharAttribList::AttribsType& rAttribs = pNode->GetCharAttribs().GetAttribs();
         for (std::unique_ptr<EditCharAttrib> & rAttrib : rAttribs)
         {
-            EditCharAttrib& rAttr = *rAttrib.get();
+            EditCharAttrib& rAttr = *rAttrib;
             if (rAttr.Which() == EE_FEATURE_FIELD)
             {
                 EditCharAttribField& rField = static_cast<EditCharAttribField&>(rAttr);
@@ -3356,7 +3356,7 @@ void ImpEditEngine::UpdateSelections()
         bool bChanged = false;
         for (std::unique_ptr<DeletedNodeInfo> & aDeletedNode : aDeletedNodes)
         {
-            const DeletedNodeInfo& rInf = *aDeletedNode.get();
+            const DeletedNodeInfo& rInf = *aDeletedNode;
             if ( ( aCurSel.Min().GetNode() == rInf.GetNode() ) ||
                  ( aCurSel.Max().GetNode() == rInf.GetNode() ) )
             {

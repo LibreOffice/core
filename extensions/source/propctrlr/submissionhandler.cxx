@@ -122,8 +122,8 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
-        OSL_ENSURE( m_pHelper.get(), "SubmissionPropertyHandler::getPropertyValue: inconsistency!" );
-            // if we survived impl_getPropertyId_throwUnknownProperty, we should have a helper, since no helper implies no properties
+        OSL_ENSURE(m_pHelper, "SubmissionPropertyHandler::getPropertyValue: inconsistency!");
+        // if we survived impl_getPropertyId_throwUnknownProperty, we should have a helper, since no helper implies no properties
 
         Any aReturn;
         try
@@ -171,8 +171,8 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
-        OSL_ENSURE( m_pHelper.get(), "SubmissionPropertyHandler::setPropertyValue: inconsistency!" );
-            // if we survived impl_getPropertyId_throwUnknownProperty, we should have a helper, since no helper implies no properties
+        OSL_ENSURE(m_pHelper, "SubmissionPropertyHandler::setPropertyValue: inconsistency!");
+        // if we survived impl_getPropertyId_throwUnknownProperty, we should have a helper, since no helper implies no properties
 
         try
         {
@@ -212,7 +212,7 @@ namespace pcr
     Sequence< OUString > SAL_CALL SubmissionPropertyHandler::getActuatingProperties( )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        if ( !m_pHelper.get() )
+        if (!m_pHelper)
             return Sequence< OUString >();
 
         Sequence<OUString> aReturn { PROPERTY_XFORMS_BUTTONTYPE };
@@ -223,7 +223,7 @@ namespace pcr
     Sequence< OUString > SAL_CALL SubmissionPropertyHandler::getSupersededProperties( )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        if ( !m_pHelper.get() )
+        if (!m_pHelper)
             return Sequence< OUString >();
 
         Sequence< OUString > aReturn( 3 );
@@ -262,7 +262,7 @@ namespace pcr
     Sequence< Property > SubmissionPropertyHandler::doDescribeSupportedProperties() const
     {
         std::vector< Property > aProperties;
-        if ( m_pHelper.get() )
+        if (m_pHelper)
         {
             implAddPropertyDescription( aProperties, PROPERTY_SUBMISSION_ID, cppu::UnoType<submission::XSubmission>::get() );
             implAddPropertyDescription( aProperties, PROPERTY_XFORMS_BUTTONTYPE, ::cppu::UnoType<FormButtonType>::get() );
@@ -279,7 +279,7 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !_rxControlFactory.is() )
             throw NullPointerException();
-        if ( !m_pHelper.get() )
+        if (!m_pHelper)
             throw RuntimeException();
 
         std::vector< OUString > aListEntries;
@@ -287,7 +287,7 @@ namespace pcr
         switch ( nPropId )
         {
         case PROPERTY_ID_SUBMISSION_ID:
-            m_pHelper.get()->getAllElementUINames( EFormsHelper::Submission, aListEntries, false );
+            m_pHelper->getAllElementUINames(EFormsHelper::Submission, aListEntries, false);
             break;
 
         case PROPERTY_ID_XFORMS_BUTTONTYPE:
@@ -320,8 +320,9 @@ namespace pcr
 
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nActuatingPropId( impl_getPropertyId_throwRuntime( _rActuatingPropertyName ) );
-        OSL_PRECOND( m_pHelper.get(), "SubmissionPropertyHandler::actuatingPropertyChanged: inconsistentcy!" );
-            // if we survived impl_getPropertyId_throwRuntime, we should have a helper, since no helper implies no properties
+        OSL_PRECOND(m_pHelper,
+                    "SubmissionPropertyHandler::actuatingPropertyChanged: inconsistentcy!");
+        // if we survived impl_getPropertyId_throwRuntime, we should have a helper, since no helper implies no properties
 
         switch ( nActuatingPropId )
         {
@@ -344,8 +345,10 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         Any aPropertyValue;
 
-        OSL_ENSURE( m_pHelper.get(), "SubmissionPropertyHandler::convertToPropertyValue: we have no SupportedProperties!" );
-        if ( !m_pHelper.get() )
+        OSL_ENSURE(
+            m_pHelper,
+            "SubmissionPropertyHandler::convertToPropertyValue: we have no SupportedProperties!");
+        if (!m_pHelper)
             return aPropertyValue;
 
         OUString sControlValue;
@@ -383,8 +386,10 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         Any aControlValue;
 
-        OSL_ENSURE( m_pHelper.get(), "SubmissionPropertyHandler::convertToControlValue: we have no SupportedProperties!" );
-        if ( !m_pHelper.get() )
+        OSL_ENSURE(
+            m_pHelper,
+            "SubmissionPropertyHandler::convertToControlValue: we have no SupportedProperties!");
+        if (!m_pHelper)
             return aControlValue;
 
         OSL_ENSURE( _rControlValueType.getTypeClass() == TypeClass_STRING,

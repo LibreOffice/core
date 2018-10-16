@@ -502,7 +502,7 @@ void SvxRuler::UpdateFrame()
     {
         // if no initialization by default app behavior
         const long nOld = lLogicNullOffset;
-        lLogicNullOffset = mxColumnItem.get() ? mxColumnItem->GetLeft(): mxLRSpaceItem->GetLeft();
+        lLogicNullOffset = mxColumnItem ? mxColumnItem->GetLeft() : mxLRSpaceItem->GetLeft();
 
         if(bAppSetNullOffset)
         {
@@ -537,7 +537,7 @@ void SvxRuler::UpdateFrame()
     {
         // relative the upper edge of the surrounding frame
         const long nOld = lLogicNullOffset;
-        lLogicNullOffset = mxColumnItem.get() ? mxColumnItem->GetLeft() : mxULSpaceItem->GetUpper();
+        lLogicNullOffset = mxColumnItem ? mxColumnItem->GetLeft() : mxULSpaceItem->GetUpper();
 
         if(bAppSetNullOffset)
         {
@@ -555,7 +555,7 @@ void SvxRuler::UpdateFrame()
             SetMargin1(ConvertVPosPixel(lAppNullOffset), nMarginStyle);
         }
 
-        long lLower = mxColumnItem.get() ? mxColumnItem->GetRight() : mxULSpaceItem->GetLower();
+        long lLower = mxColumnItem ? mxColumnItem->GetRight() : mxULSpaceItem->GetLower();
         long nMargin2 = mxPagePosItem->GetHeight() - lLower - lLogicNullOffset + lAppNullOffset;
         long nMargin2Pixel = ConvertVPosPixel(nMargin2);
 
@@ -568,7 +568,7 @@ void SvxRuler::UpdateFrame()
         SetMargin2();
     }
 
-    if(mxColumnItem.get())
+    if (mxColumnItem)
     {
         mxRulerImpl->nColLeftPix = static_cast<sal_uInt16>(ConvertSizePixel(mxColumnItem->GetLeft()));
         mxRulerImpl->nColRightPix = static_cast<sal_uInt16>(ConvertSizePixel(mxColumnItem->GetRight()));
@@ -610,7 +610,7 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
     {
         case RulerType::Indent:
         {
-            if (!mxParaItem.get())
+            if (!mxParaItem)
                 break;
 
             long nIndex = aSelection.nAryPos + INDENT_GAP;
@@ -631,10 +631,10 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
         }
         case RulerType::Border:
         {
-            if (mxColumnItem.get() == nullptr)
+            if (mxColumnItem == nullptr)
                 break;
 
-            SvxColumnItem& aColumnItem = *mxColumnItem.get();
+            SvxColumnItem& aColumnItem = *mxColumnItem;
 
             if (aSelection.nAryPos + 1 >= aColumnItem.Count())
                 break;
@@ -652,9 +652,9 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
         case RulerType::Margin1:
         {
             long nLeft = 0.0;
-            if (mxLRSpaceItem.get())
+            if (mxLRSpaceItem)
                 nLeft = mxLRSpaceItem->GetLeft();
-            else if (mxULSpaceItem.get())
+            else if (mxULSpaceItem)
                 nLeft = mxULSpaceItem->GetUpper();
             else
                 break;
@@ -668,9 +668,9 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
         case RulerType::Margin2:
         {
             long nRight = 0.0;
-            if (mxLRSpaceItem.get())
+            if (mxLRSpaceItem)
                 nRight = mxLRSpaceItem->GetRight();
-            else if (mxULSpaceItem.get())
+            else if (mxULSpaceItem)
                 nRight = mxULSpaceItem->GetLower();
             else
                 break;
@@ -844,17 +844,17 @@ void SvxRuler::UpdateColumns()
 void SvxRuler::UpdateObject()
 {
     /* Update view of object representation */
-    if(mxObjectItem.get())
+    if (mxObjectItem)
     {
         DBG_ASSERT(!mpObjectBorders.empty(), "no Buffer");
         // !! to the page margin
-        long nMargin = mxLRSpaceItem.get() ? mxLRSpaceItem->GetLeft() : 0;
+        long nMargin = mxLRSpaceItem ? mxLRSpaceItem->GetLeft() : 0;
         mpObjectBorders[0].nPos =
             ConvertPosPixel(mxObjectItem->GetStartX() -
                             nMargin + lAppNullOffset);
         mpObjectBorders[1].nPos =
             ConvertPosPixel(mxObjectItem->GetEndX() - nMargin + lAppNullOffset);
-        nMargin = mxULSpaceItem.get() ? mxULSpaceItem->GetUpper() : 0;
+        nMargin = mxULSpaceItem ? mxULSpaceItem->GetUpper() : 0;
         mpObjectBorders[2].nPos =
             ConvertPosPixel(mxObjectItem->GetStartY() -
                             nMargin + lAppNullOffset);
@@ -883,7 +883,7 @@ void SvxRuler::UpdatePara()
     */
 
     // Dependence on PagePosItem
-    if(mxParaItem.get() && mxPagePosItem.get() && !mxObjectItem.get())
+    if (mxParaItem.get() && mxPagePosItem.get() && !mxObjectItem)
     {
         bool bRTLText = mxRulerImpl->pTextRTLItem && mxRulerImpl->pTextRTLItem->GetValue();
         // First-line indent is negative to the left paragraph margin
@@ -958,7 +958,7 @@ void SvxRuler::UpdateParaBorder(const SvxLRSpaceItem * pItem )
 void SvxRuler::UpdatePage()
 {
     /* Update view of position and width of page */
-    if(mxPagePosItem.get())
+    if (mxPagePosItem)
     {
         // all objects are automatically adjusted
         if(bHorz)
@@ -1063,10 +1063,7 @@ void SvxRuler::UpdateTabs()
     if(IsDrag())
         return;
 
-    if( mxPagePosItem.get() &&
-        mxParaItem.get()    &&
-        mxTabStopItem.get() &&
-        !mxObjectItem.get() )
+    if (mxPagePosItem.get() && mxParaItem.get() && mxTabStopItem.get() && !mxObjectItem)
     {
         // buffer for DefaultTabStop
         // Distance last Tab <-> Right paragraph margin / DefaultTabDist
@@ -1222,7 +1219,7 @@ void SvxRuler::Update()
 
 long SvxRuler::GetPageWidth() const
 {
-    if (!mxPagePosItem.get())
+    if (!mxPagePosItem)
         return 0;
     return bHorz ? mxPagePosItem->GetWidth() : mxPagePosItem->GetHeight();
 }
@@ -1238,25 +1235,25 @@ inline long SvxRuler::GetFrameLeft() const
 long SvxRuler::GetFirstLineIndent() const
 {
     /* Get First-line indent in pixels */
-    return mxParaItem.get() ? mpIndents[INDENT_FIRST_LINE].nPos : GetMargin1();
+    return mxParaItem ? mpIndents[INDENT_FIRST_LINE].nPos : GetMargin1();
 }
 
 long SvxRuler::GetLeftIndent() const
 {
     /* Get Left paragraph margin in Pixels */
-    return mxParaItem.get() ? mpIndents[INDENT_LEFT_MARGIN].nPos : GetMargin1();
+    return mxParaItem ? mpIndents[INDENT_LEFT_MARGIN].nPos : GetMargin1();
 }
 
 long SvxRuler::GetRightIndent() const
 {
     /* Get Right paragraph margin in Pixels */
-    return mxParaItem.get() ? mpIndents[INDENT_RIGHT_MARGIN].nPos : GetMargin2();
+    return mxParaItem ? mpIndents[INDENT_RIGHT_MARGIN].nPos : GetMargin2();
 }
 
 long SvxRuler::GetLogicRightIndent() const
 {
     /* Get Right paragraph margin in Logic */
-    return mxParaItem.get() ? GetRightFrameMargin() - mxParaItem->GetRight() : GetRightFrameMargin();
+    return mxParaItem ? GetRightFrameMargin() - mxParaItem->GetRight() : GetRightFrameMargin();
 }
 
 // Left margin in App values, is either the margin (= 0)  or the left edge of
@@ -1264,8 +1261,8 @@ long SvxRuler::GetLogicRightIndent() const
 long SvxRuler::GetLeftFrameMargin() const
 {
     // #126721# for some unknown reason the current column is set to 0xffff
-    DBG_ASSERT(!mxColumnItem.get() || mxColumnItem->GetActColumn() < mxColumnItem->Count(),
-                    "issue #126721# - invalid current column!");
+    DBG_ASSERT(!mxColumnItem || mxColumnItem->GetActColumn() < mxColumnItem->Count(),
+               "issue #126721# - invalid current column!");
     long nLeft = 0;
     if (mxColumnItem.get() &&
         mxColumnItem->Count() &&
@@ -1279,8 +1276,8 @@ long SvxRuler::GetLeftFrameMargin() const
 
 inline long SvxRuler::GetLeftMin() const
 {
-    DBG_ASSERT(mxMinMaxItem.get(), "no MinMax value set");
-    if (mxMinMaxItem.get())
+    DBG_ASSERT(mxMinMaxItem, "no MinMax value set");
+    if (mxMinMaxItem)
     {
         if (bHorz)
             return mxMinMaxItem->GetValue().Left();
@@ -1292,8 +1289,8 @@ inline long SvxRuler::GetLeftMin() const
 
 inline long SvxRuler::GetRightMax() const
 {
-    DBG_ASSERT(mxMinMaxItem.get(), "no MinMax value set");
-    if (mxMinMaxItem.get())
+    DBG_ASSERT(mxMinMaxItem, "no MinMax value set");
+    if (mxMinMaxItem)
     {
         if (bHorz)
             return mxMinMaxItem->GetValue().Right();
@@ -1307,7 +1304,7 @@ inline long SvxRuler::GetRightMax() const
 long SvxRuler::GetRightFrameMargin() const
 {
     /* Get right frame margin (in logical units) */
-    if (mxColumnItem.get())
+    if (mxColumnItem)
     {
         if (!IsActLastColumn(true))
         {
@@ -1402,23 +1399,23 @@ void SvxRuler::AdjustMargin1(long lInputDiff)
     {
         long lDiff = lDragPos;
         SetNullOffset(nOld + lDiff);
-        if (!mxColumnItem.get() || !(nDragType & SvxRulerDragFlags::OBJECT_SIZE_LINEAR))
+        if (!mxColumnItem || !(nDragType & SvxRulerDragFlags::OBJECT_SIZE_LINEAR))
         {
             SetMargin2( GetMargin2() - lDiff, nMarginStyle );
 
-            if (!mxColumnItem.get() && !mxObjectItem.get() && mxParaItem.get())
+            if (!mxColumnItem && !mxObjectItem && mxParaItem.get())
             {
                 // Right indent of the old position
                 mpIndents[INDENT_RIGHT_MARGIN].nPos -= lDiff;
                 SetIndents(INDENT_COUNT, &mpIndents[0] + INDENT_GAP);
             }
-            if(mxObjectItem.get())
+            if (mxObjectItem)
             {
                 mpObjectBorders[GetObjectBordersOff(0)].nPos -= lDiff;
                 mpObjectBorders[GetObjectBordersOff(1)].nPos -= lDiff;
                 SetBorders(2, &mpObjectBorders[0] + GetObjectBordersOff(0));
             }
-            if(mxColumnItem.get())
+            if (mxColumnItem)
             {
                 for(sal_uInt16 i = 0; i < mxColumnItem->Count()-1; ++i)
                     mpBorders[i].nPos -= lDiff;
@@ -1426,7 +1423,7 @@ void SvxRuler::AdjustMargin1(long lInputDiff)
                 if(mxColumnItem->IsFirstAct())
                 {
                     // Right indent of the old position
-                    if(mxParaItem.get())
+                    if (mxParaItem)
                     {
                         mpIndents[INDENT_RIGHT_MARGIN].nPos -= lDiff;
                         SetIndents(INDENT_COUNT, &mpIndents[0] + INDENT_GAP);
@@ -1434,7 +1431,7 @@ void SvxRuler::AdjustMargin1(long lInputDiff)
                 }
                 else
                 {
-                    if(mxParaItem.get())
+                    if (mxParaItem)
                     {
                         mpIndents[INDENT_FIRST_LINE].nPos -= lDiff;
                         mpIndents[INDENT_LEFT_MARGIN].nPos -= lDiff;
@@ -1456,9 +1453,12 @@ void SvxRuler::AdjustMargin1(long lInputDiff)
         long lDiff = lDragPos - nOld;
         SetMargin1(nOld + lDiff, nMarginStyle);
 
-        if (!mxColumnItem.get() || !(nDragType & (SvxRulerDragFlags::OBJECT_SIZE_LINEAR | SvxRulerDragFlags::OBJECT_SIZE_PROPORTIONAL)))
+        if (!mxColumnItem
+            || !(nDragType
+                 & (SvxRulerDragFlags::OBJECT_SIZE_LINEAR
+                    | SvxRulerDragFlags::OBJECT_SIZE_PROPORTIONAL)))
         {
-            if (!mxColumnItem.get() && !mxObjectItem.get() && mxParaItem.get())
+            if (!mxColumnItem && !mxObjectItem && mxParaItem.get())
             {
                 // Left indent of the old position
                 mpIndents[INDENT_FIRST_LINE].nPos += lDiff;
@@ -1466,7 +1466,7 @@ void SvxRuler::AdjustMargin1(long lInputDiff)
                 SetIndents(INDENT_COUNT, &mpIndents[0] + INDENT_GAP);
             }
 
-            if (mxColumnItem.get())
+            if (mxColumnItem)
             {
                 for(sal_uInt16 i = 0; i < mxColumnItem->Count() - 1; ++i)
                     mpBorders[i].nPos += lDiff;
@@ -1474,7 +1474,7 @@ void SvxRuler::AdjustMargin1(long lInputDiff)
                 if (mxColumnItem->IsFirstAct())
                 {
                     // Left indent of the old position
-                    if(mxParaItem.get())
+                    if (mxParaItem)
                     {
                         mpIndents[INDENT_FIRST_LINE].nPos += lDiff;
                         mpIndents[INDENT_LEFT_MARGIN].nPos += lDiff;
@@ -1483,7 +1483,7 @@ void SvxRuler::AdjustMargin1(long lInputDiff)
                 }
                 else
                 {
-                    if(mxParaItem.get())
+                    if (mxParaItem)
                     {
                         mpIndents[INDENT_FIRST_LINE].nPos += lDiff;
                         mpIndents[INDENT_LEFT_MARGIN].nPos += lDiff;
@@ -1492,7 +1492,7 @@ void SvxRuler::AdjustMargin1(long lInputDiff)
                     }
                 }
             }
-            if(mxTabStopItem.get())
+            if (mxTabStopItem)
             {
                 ModifyTabs_Impl(nTabCount + TAB_GAP, &mpTabs[0], lDiff);
                 SetTabs(nTabCount, &mpTabs[0] + TAB_GAP);
@@ -1529,7 +1529,7 @@ void SvxRuler::DragMargin2()
     SetMargin2( aDragPosition, nMarginStyle );
 
     // Right indent of the old position
-    if((!mxColumnItem.get() || IsActLastColumn()) && mxParaItem.get())
+    if ((!mxColumnItem || IsActLastColumn()) && mxParaItem.get())
     {
         mpIndents[INDENT_FIRST_LINE].nPos += lDiff;
         SetIndents(INDENT_COUNT, &mpIndents[0] + INDENT_GAP);
@@ -1591,7 +1591,7 @@ void SvxRuler::DrawLine_Impl(long& lTabPosition, int nNew, bool bHorizontal)
             long nDrapPosition = GetCorrectedDragPos( ( nNew & 4 ) != 0, ( nNew & 2 ) != 0 );
             nDrapPosition = MakePositionSticky(nDrapPosition, GetLeftFrameMargin());
             lTabPosition = ConvertHSizeLogic( nDrapPosition + GetNullOffset() );
-            if(mxPagePosItem.get())
+            if (mxPagePosItem)
                 lTabPosition += mxPagePosItem->GetPos().X();
             pEditWin->InvertTracking(
                 tools::Rectangle( Point(lTabPosition, -aZero.Y()),
@@ -1616,7 +1616,7 @@ void SvxRuler::DrawLine_Impl(long& lTabPosition, int nNew, bool bHorizontal)
             long nDrapPosition = GetCorrectedDragPos();
             nDrapPosition = MakePositionSticky(nDrapPosition, GetLeftFrameMargin());
             lTabPosition = ConvertVSizeLogic(nDrapPosition + GetNullOffset());
-            if(mxPagePosItem.get())
+            if (mxPagePosItem)
                 lTabPosition += mxPagePosItem->GetPos().Y();
             pEditWin->InvertTracking(
                 tools::Rectangle( Point(-aZero.X(),        lTabPosition),
@@ -2042,7 +2042,7 @@ void SvxRuler::ApplyMargins()
 
     }
     pBindings->GetDispatcher()->ExecuteList(nId, SfxCallMode::RECORD, { pItem });
-    if(mxTabStopItem.get())
+    if (mxTabStopItem)
         UpdateTabs();
 }
 
@@ -2309,7 +2309,7 @@ void SvxRuler::ApplyObject()
     /* Applying object settings, changed by dragging. */
 
     // to the page margin
-    long nMargin = mxLRSpaceItem.get() ? mxLRSpaceItem->GetLeft() : 0;
+    long nMargin = mxLRSpaceItem ? mxLRSpaceItem->GetLeft() : 0;
     long nStartX = PixelAdjust(
                     ConvertPosLogic(mpObjectBorders[0].nPos) +
                         nMargin -
@@ -2324,7 +2324,7 @@ void SvxRuler::ApplyObject()
                     mxObjectItem->GetEndX());
     mxObjectItem->SetEndX(nEndX);
 
-    nMargin = mxULSpaceItem.get() ? mxULSpaceItem->GetUpper() : 0;
+    nMargin = mxULSpaceItem ? mxULSpaceItem->GetUpper() : 0;
     long nStartY = PixelAdjust(
                     ConvertPosLogic(mpObjectBorders[2].nPos) +
                         nMargin -
@@ -2356,7 +2356,7 @@ void SvxRuler::PrepareProportional_Impl(RulerType eType)
       case RulerType::Margin1:
       case RulerType::Border:
         {
-            DBG_ASSERT(mxColumnItem.get(), "no ColumnItem");
+            DBG_ASSERT(mxColumnItem, "no ColumnItem");
 
             mxRulerImpl->SetPercSize(mxColumnItem->Count());
 
@@ -2591,7 +2591,7 @@ void SvxRuler::CalcMinMax()
             mxRulerImpl->lMaxLeftLogic = GetLeftMin();
             nMaxLeft=ConvertSizePixel(mxRulerImpl->lMaxLeftLogic);
 
-            if (!mxColumnItem.get() || mxColumnItem->Count() == 1 )
+            if (!mxColumnItem || mxColumnItem->Count() == 1)
             {
                 if(bRTL)
                 {
@@ -2675,14 +2675,11 @@ void SvxRuler::CalcMinMax()
         }
         case RulerType::Margin2:
         {        // right edge of the surrounding Frame
-            mxRulerImpl->lMaxRightLogic =
-                mxMinMaxItem.get() ?
-                    GetPageWidth() - GetRightMax() :
-                    GetPageWidth();
+            mxRulerImpl->lMaxRightLogic
+                = mxMinMaxItem ? GetPageWidth() - GetRightMax() : GetPageWidth();
             nMaxRight = ConvertSizePixel(mxRulerImpl->lMaxRightLogic);
 
-
-            if(!mxColumnItem.get())
+            if (!mxColumnItem)
             {
                 if(bRTL)
                 {
@@ -2792,7 +2789,7 @@ void SvxRuler::CalcMinMax()
             }
           case RulerDragSize::Move:
             {
-                if(mxColumnItem.get())
+                if (mxColumnItem)
                 {
                     //nIdx contains the position of the currently moved item
                     //next visible separator on the left
@@ -3045,7 +3042,7 @@ void SvxRuler::CalcMinMax()
                 {
                     nMaxLeft = lNullPix;
                     nMaxRight = lNullPix + std::min(GetFirstLineIndent(), GetLeftIndent()) - glMinFrame;
-                    if(mxColumnItem.get())
+                    if (mxColumnItem)
                     {
                         sal_uInt16 nRightCol=GetActRightColumn( true );
                         if(!IsActLastColumn( true ))
@@ -3064,7 +3061,7 @@ void SvxRuler::CalcMinMax()
                     nMaxLeft = lNullPix +
                         std::max(GetFirstLineIndent(), GetLeftIndent());
                     nMaxRight = lNullPix;
-                    if(mxColumnItem.get())
+                    if (mxColumnItem)
                     {
                         sal_uInt16 nRightCol=GetActRightColumn( true );
                         if(!IsActLastColumn( true ))
@@ -3126,7 +3123,7 @@ bool SvxRuler::StartDrag()
         case RulerType::Margin2:        // right edge of the surrounding Frame
             if((bHorz && mxLRSpaceItem.get()) || (!bHorz && mxULSpaceItem.get()))
             {
-                if(!mxColumnItem.get())
+                if (!mxColumnItem)
                     EvalModifier();
                 else
                     nDragType = SvxRulerDragFlags::OBJECT;
@@ -3137,7 +3134,7 @@ bool SvxRuler::StartDrag()
             }
             break;
         case RulerType::Border: // Table, column (Modifier)
-            if(mxColumnItem.get())
+            if (mxColumnItem)
             {
                 nDragOffset = 0;
                 if (!mxColumnItem->IsTable())
@@ -3200,9 +3197,9 @@ void  SvxRuler::Drag()
             DragIndents();
             break;
         case RulerType::Border: // Table, columns
-            if(mxColumnItem.get())
+            if (mxColumnItem)
                 DragBorders();
-            else if(mxObjectItem.get())
+            else if (mxObjectItem)
                 DragObjectBorder();
             break;
         case RulerType::Tab: // Tabs
@@ -3233,7 +3230,7 @@ void SvxRuler::EndDrag()
             case RulerType::Margin1: // upper left edge of the surrounding Frame
             case RulerType::Margin2: // lower right edge of the surrounding Frame
                 {
-                    if(!mxColumnItem.get() || !mxColumnItem->IsTable())
+                    if (!mxColumnItem || !mxColumnItem->IsTable())
                         ApplyMargins();
 
                     if(mxColumnItem.get() &&
@@ -3247,13 +3244,13 @@ void SvxRuler::EndDrag()
                 if(lInitialDragPos != lPos ||
                     (mxRulerImpl->bIsTableRows && bHorz)) //special case - the null offset is changed here
                 {
-                    if(mxColumnItem.get())
+                    if (mxColumnItem)
                     {
                         ApplyBorders();
                         if(bHorz)
                             UpdateTabs();
                     }
-                    else if(mxObjectItem.get())
+                    else if (mxObjectItem)
                         ApplyObject();
                 }
                 break;
@@ -3555,7 +3552,7 @@ long SvxRuler::CalcPropMaxRight(sal_uInt16 nCol) const
                 if(nActCol == USHRT_MAX)
                 {
                     nRight = 0;
-                    while(!(*mxColumnItem.get())[nRight].bVisible)
+                    while (!(*mxColumnItem)[nRight].bVisible)
                     {
                         nRight++;
                     }
@@ -3593,7 +3590,7 @@ long SvxRuler::CalcPropMaxRight(sal_uInt16 nCol) const
             sal_uInt16 nVisCols = 0;
             for(size_t i = GetActRightColumn(false, nCol); i < mpBorders.size();)
             {
-                if((*mxColumnItem.get())[i].bVisible)
+                if ((*mxColumnItem)[i].bVisible)
                     nVisCols++;
                 i = GetActRightColumn(false, i);
             }
