@@ -82,8 +82,7 @@ void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, cons
         mpImpl->mnState = SignatureState::UNKNOWN;
     }
 
-    if( GetStatusBar().AreItemsVisible() )              // necessary ?
-        GetStatusBar().SetItemData( GetId(), nullptr );
+    GetStatusBar().SetItemData( GetId(), nullptr ); // necessary ?
 
     GetStatusBar().SetItemText( GetId(), "" );    // necessary ?
 

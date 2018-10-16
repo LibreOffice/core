@@ -111,8 +111,7 @@ IMPL_LINK( SvxModifyControl, OnTimer, Timer *, pTimer, void )
 
 void SvxModifyControl::_repaint()
 {
-    if ( GetStatusBar().AreItemsVisible() )
-        GetStatusBar().SetItemData( GetId(), nullptr );    // force repaint
+    GetStatusBar().SetItemData( GetId(), nullptr );    // force repaint
 }
 
 /**

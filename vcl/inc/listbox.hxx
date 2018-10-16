@@ -198,7 +198,6 @@ private:
 
     sal_Int32       mnTop;           ///< output from line on
     long            mnLeft;          ///< output from column on
-    long            mnBorder;        ///< distance border - text
     long            mnTextHeight;    ///< text height
     ProminentEntry  meProminentType; ///< where is the "prominent" entry
 

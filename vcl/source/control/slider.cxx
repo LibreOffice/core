@@ -56,7 +56,6 @@ void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnStateFlags        = 0;
     meScrollType        = ScrollType::DontKnow;
     mbCalcSize          = true;
-    mbFullDrag          = true;
     mbScrollTypeSet     = false;
 
     mpLinkedField       = nullptr;
@@ -704,11 +703,6 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
             // after dragging, recalculate to a rounded Thumb position
             ImplCalc();
             Update();
-
-            if ( !mbFullDrag && (mnStartPos != mnThumbPos) )
-            {
-                Slide();
-            }
         }
 
         EndSlide();
@@ -742,7 +736,7 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
                     ImplUpdateRects();
                     Update();
                     ImplUpdateLinkedField();
-                    if ( mbFullDrag && (nOldPos != mnThumbPos) )
+                    if ( nOldPos != mnThumbPos )
                     {
                         Slide();
                     }
