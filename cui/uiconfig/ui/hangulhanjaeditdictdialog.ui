@@ -347,5 +347,8 @@
         </child>
       </object>
     </child>
+    <action-widgets>
+      <action-widget response="-11">help</action-widget>
+    </action-widgets>
   </object>
 </interface>
