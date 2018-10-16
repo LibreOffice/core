@@ -162,7 +162,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode, ExpandMode eMode)
                                 const SwDoc *pDoc = rNode.GetDoc();
                                 aFieldResult.m_sExpand = (eMode & ExpandMode::ReplaceMode)
                                     ? OUString(CHAR_ZWSP)
-                                    : rFootnote.GetViewNumStr(*pDoc);
+                                    : rFootnote.GetViewNumStr(*pDoc, nullptr/*TODO?*/);
                                 aFieldResult.m_eType = FieldResult::FOOTNOTE;
                             }
                             break;

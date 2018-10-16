@@ -23,6 +23,7 @@
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <cntfrm.hxx>
+#include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <txtftn.hxx>
 #include <ftnidx.hxx>
@@ -201,7 +202,8 @@ void SwFormatFootnote::GetFootnoteText( OUString& rStr ) const
 }
 
 /// return the view string of the foot/endnote
-OUString SwFormatFootnote::GetViewNumStr( const SwDoc& rDoc, bool bInclStrings ) const
+OUString SwFormatFootnote::GetViewNumStr(const SwDoc& rDoc,
+        SwRootFrame const*const pLayout, bool bInclStrings) const
 {
     OUString sRet( GetNumStr() );
     if( sRet.isEmpty() )
@@ -211,6 +213,9 @@ OUString SwFormatFootnote::GetViewNumStr( const SwDoc& rDoc, bool bInclStrings )
         const SwSectionNode* pSectNd = m_pTextAttr
                     ? SwUpdFootnoteEndNtAtEnd::FindSectNdWithEndAttr( *m_pTextAttr )
                     : nullptr;
+        sal_uInt16 const nNumber(pLayout && pLayout->IsHideRedlines()
+                ? GetNumberRLHidden()
+                : GetNumber());
 
         if( pSectNd )
         {
@@ -223,7 +228,7 @@ OUString SwFormatFootnote::GetViewNumStr( const SwDoc& rDoc, bool bInclStrings )
             if( FTNEND_ATTXTEND_OWNNUMANDFMT == rFootnoteEnd.GetValue() )
             {
                 bMakeNum = false;
-                sRet = rFootnoteEnd.GetSwNumType().GetNumStr( GetNumber() );
+                sRet = rFootnoteEnd.GetSwNumType().GetNumStr( nNumber );
                 if( bInclStrings )
                 {
                     sRet = rFootnoteEnd.GetPrefix() + sRet + rFootnoteEnd.GetSuffix();
@@ -238,7 +243,7 @@ OUString SwFormatFootnote::GetViewNumStr( const SwDoc& rDoc, bool bInclStrings )
                 pInfo = &rDoc.GetEndNoteInfo();
             else
                 pInfo = &rDoc.GetFootnoteInfo();
-            sRet = pInfo->aFormat.GetNumStr( GetNumber() );
+            sRet = pInfo->aFormat.GetNumStr( nNumber );
             if( bInclStrings )
             {
                 sRet = pInfo->GetPrefix() + sRet + pInfo->GetSuffix();
