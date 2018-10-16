@@ -914,11 +914,10 @@ void SwUndoMoveLeftMargin::RepeatImpl(::sw::RepeatContext & rContext)
 
 SwUndoChangeFootNote::SwUndoChangeFootNote(
     const SwPaM& rRange, const OUString& rText,
-    sal_uInt16 nNum, bool bIsEndNote )
+        bool const bIsEndNote)
     : SwUndo( SwUndoId::CHGFTN, rRange.GetDoc() ), SwUndRng( rRange )
     , m_pHistory( new SwHistory() )
     , m_Text( rText )
-    , m_nNumber( nNum )
     , m_bEndNote( bIsEndNote )
 {
 }
@@ -943,14 +942,14 @@ void SwUndoChangeFootNote::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc( rContext.GetDoc() );
     SwPaM & rPaM = AddUndoRedoPaM(rContext);
-    rDoc.SetCurFootnote(rPaM, m_Text, m_nNumber, m_bEndNote);
+    rDoc.SetCurFootnote(rPaM, m_Text, m_bEndNote);
     SetPaM(rPaM);
 }
 
 void SwUndoChangeFootNote::RepeatImpl(::sw::RepeatContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
-    rDoc.SetCurFootnote( rContext.GetRepeatPaM(), m_Text, m_nNumber, m_bEndNote );
+    rDoc.SetCurFootnote(rContext.GetRepeatPaM(), m_Text, m_bEndNote);
 }
 
 SwUndoFootNoteInfo::SwUndoFootNoteInfo( const SwFootnoteInfo &rInfo, const SwDoc* pDoc )

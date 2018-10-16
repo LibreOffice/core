@@ -622,9 +622,9 @@ public:
     void SetEndNoteInfo(const SwEndNoteInfo& rInfo);
           SwFootnoteIdxs& GetFootnoteIdxs()       { return *mpFootnoteIdxs; }
     const SwFootnoteIdxs& GetFootnoteIdxs() const { return *mpFootnoteIdxs; }
-    // change footnotes in area
+    /// change footnotes in range
     bool SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
-                    sal_uInt16 nNumber, bool bIsEndNote );
+                    bool bIsEndNote );
 
     /** Operations on the content of the document e.g.
         spell-checking/hyphenating/word-counting
