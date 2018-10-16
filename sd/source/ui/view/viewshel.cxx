@@ -1213,6 +1213,9 @@ class KeepSlideSorterInSyncWithPageChanges
     sd::slidesorter::controller::PageSelector::UpdateLock const m_aUpdateLock;
     sd::slidesorter::controller::SelectionObserver::Context const m_aContext;
 
+    KeepSlideSorterInSyncWithPageChanges& operator=(const KeepSlideSorterInSyncWithPageChanges&) = delete;
+    KeepSlideSorterInSyncWithPageChanges(const KeepSlideSorterInSyncWithPageChanges&) = delete;
+
 public:
     explicit KeepSlideSorterInSyncWithPageChanges(sd::slidesorter::SlideSorter const & rSlideSorter)
         : m_aDrawLock(rSlideSorter)
