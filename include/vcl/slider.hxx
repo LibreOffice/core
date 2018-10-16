@@ -48,7 +48,6 @@ private:
     sal_uInt16      mnStateFlags;
     ScrollType      meScrollType;
     bool            mbCalcSize;
-    bool            mbFullDrag;
     bool            mbScrollTypeSet;
 
     VclPtr<NumericField> mpLinkedField;
