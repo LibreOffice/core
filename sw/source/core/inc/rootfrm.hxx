@@ -340,8 +340,8 @@ public:
     void ResetTurbo() { mpTurbo = nullptr; }
     const SwContentFrame *GetTurbo() { return mpTurbo; }
 
-    /// Update the footernumbers of all Pages
-    void UpdateFootnoteNums(); // Only for page by page numnbering!
+    /// Update the footnote numbers of all Pages
+    void UpdateFootnoteNums(); // Only for page by page numbering!
 
     /// Remove all footnotes (but no references)
     void RemoveFootnotes( SwPageFrame *pPage = nullptr, bool bPageOnly = false,
