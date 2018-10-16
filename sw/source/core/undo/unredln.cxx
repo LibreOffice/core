@@ -117,7 +117,7 @@ void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
     else if (dynamic_cast<SwUndoAcceptRedline*>(this)
           || dynamic_cast<SwUndoRejectRedline*>(this))
     {   // (can't check here if there's a delete redline being accepted)
-        sw::UpdateFramesForAddDeleteRedline(rPam);
+        sw::UpdateFramesForAddDeleteRedline(rDoc, rPam);
     }
 }
 
@@ -204,7 +204,7 @@ void SwUndoRedlineDelete::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
     {
         rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline(*mpRedlData, rPam), false );
     }
-    sw::UpdateFramesForAddDeleteRedline(rPam);
+    sw::UpdateFramesForAddDeleteRedline(rDoc, rPam);
 }
 
 bool SwUndoRedlineDelete::CanGrouping( const SwUndoRedlineDelete& rNext )

@@ -113,7 +113,7 @@ void MoveDeletedPrevFrames(SwTextNode & rDeletedPrev, SwTextNode & rNode);
 enum class Recreate { No, ThisNode, Predecessor };
 void CheckResetRedlineMergeFlag(SwTextNode & rNode, Recreate eRecreateMerged);
 
-void UpdateFramesForAddDeleteRedline(SwPaM const& rPam);
+void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam);
 void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam);
 
 void AddRemoveFlysAnchoredToFrameStartingAtNode(
