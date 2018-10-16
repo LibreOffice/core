@@ -55,7 +55,8 @@ public:
 
     RTFValue::Pointer_t find(Id nKeyword, bool bFirst = true, bool bForWrite = false);
     /// Does the same as ->push_back(), except that it can overwrite or ignore existing entries.
-    void set(Id nKeyword, RTFValue::Pointer_t pValue, RTFOverwrite eOverwrite = RTFOverwrite::YES);
+    void set(Id nKeyword, const RTFValue::Pointer_t& pValue,
+             RTFOverwrite eOverwrite = RTFOverwrite::YES);
     bool erase(Id nKeyword);
     void eraseLast(Id nKeyword);
     /// Removes elements which are already in the reference set.

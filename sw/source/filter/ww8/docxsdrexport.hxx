@@ -55,7 +55,7 @@ class DocxSdrExport
     struct Impl;
     std::unique_ptr<Impl> m_pImpl;
 public:
-    DocxSdrExport(DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML);
+    DocxSdrExport(DocxExport& rExport, const sax_fastparser::FSHelperPtr& pSerializer, oox::drawingml::DrawingML* pDrawingML);
     ~DocxSdrExport();
 
     void setSerializer(const sax_fastparser::FSHelperPtr& pSerializer);
