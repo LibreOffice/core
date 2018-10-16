@@ -1049,10 +1049,10 @@ void GetPersonaThread::execute()
         osl::Directory::createPath( gallery );
 
         if ( !xFileAccess->exists(gallery + aHeaderFile) )
-            xFileAccess->copy( aHeaderURL, gallery + aHeaderFile );
+            curlDownload( OUStringToOString(aHeaderURL, RTL_TEXTENCODING_UTF8), gallery + aHeaderFile );
 
         if ( !xFileAccess->exists(gallery + aFooterFile) )
-            xFileAccess->copy( aFooterURL, gallery + aFooterFile );
+            curlDownload( OUStringToOString(aFooterURL, RTL_TEXTENCODING_UTF8), gallery + aFooterFile );
     }
     catch ( const uno::Exception & )
     {
