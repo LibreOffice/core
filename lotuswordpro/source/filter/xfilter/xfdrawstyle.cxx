@@ -64,8 +64,7 @@
 #include "xffontworkstyle.hxx"
 #include <lwpglobalmgr.hxx>
 XFDrawStyle::XFDrawStyle()
-    : m_eWrap(enumXFWrapNone)
-    , m_pLineStyle(nullptr)
+    : m_pLineStyle(nullptr)
     , m_pAreaStyle(nullptr)
     , m_fArrowStartSize(0.3)
     , m_fArrowEndSize(0.3)
@@ -165,27 +164,8 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
 
     pAttrList->Clear();
 
-    if( m_eWrap == enumXFWrapBackground )
-    {
-        pAttrList->AddAttribute( "style:run-through", "background" );
-    }
-    else
-    {
-        pAttrList->AddAttribute( "style:run-through", "foreground" );
-
-        if( m_eWrap == enumXFWrapNone )
-            pAttrList->AddAttribute( "style:wrap", "none" );
-        else if( m_eWrap == enumXFWrapLeft )
-            pAttrList->AddAttribute( "style:wrap", "left" );
-        else if( m_eWrap == enumXFWrapRight )
-            pAttrList->AddAttribute( "style:wrap", "right" );
-        else if( m_eWrap == enumXFWrapParallel )
-            pAttrList->AddAttribute( "style:wrap", "parallel" );
-        else if( m_eWrap == enumXFWrapRunThrough )
-            pAttrList->AddAttribute( "style:wrap", "run-through" );
-        else if( m_eWrap == enumXFWrapBest )
-            pAttrList->AddAttribute( "style:wrap", "dynamic" );
-    }
+    pAttrList->AddAttribute( "style:run-through", "foreground" );
+    pAttrList->AddAttribute( "style:wrap", "none" );
 
     //line style:
     if( m_pLineStyle )

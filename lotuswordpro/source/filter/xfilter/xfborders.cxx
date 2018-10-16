@@ -61,7 +61,6 @@
 
 XFBorder::XFBorder()
 {
-    m_fOffset = 0;
     m_bDouble = false;
     m_bSameWidth = false;
     m_fWidthInner = 0;
@@ -154,8 +153,6 @@ OUString   XFBorder::ToString()
 
 bool operator==(XFBorder const & b1, XFBorder const & b2)
 {
-    if( b1.m_fOffset != b2.m_fOffset )
-        return false;
     if( b1.m_bDouble != b2.m_bDouble )
         return false;
     if( !b1.m_bDouble )

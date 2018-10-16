@@ -67,13 +67,7 @@
 
 XFParaStyle::XFParaStyle()
     : m_eAlignType(enumXFAlignNone)
-    , m_eLastLineAlign(enumXFAlignNone)
-    , m_bJustSingleWord(false)
-    , m_bKeepWithNext(false)
     , m_fTextIndent(0)
-    , m_nPageNumber(0)
-    , m_bNumberLines(true)
-    , m_nLineNumberRestart(0)
     , m_nFlag(0)
     , m_bNumberRight(false)
 {
@@ -83,9 +77,6 @@ XFParaStyle::XFParaStyle()
 XFParaStyle::XFParaStyle(const XFParaStyle& other)
     : XFStyle(other)
     , m_eAlignType(other.m_eAlignType)
-    , m_eLastLineAlign(other.m_eLastLineAlign)
-    , m_bJustSingleWord(other.m_bJustSingleWord)
-    , m_bKeepWithNext(other.m_bKeepWithNext)
     , m_fTextIndent(other.m_fTextIndent)
     , m_aBackColor(other.m_aBackColor)
     , m_aMargin(other.m_aMargin)
@@ -95,9 +86,6 @@ XFParaStyle::XFParaStyle(const XFParaStyle& other)
     , m_aDropcap(other.m_aDropcap)
     , m_aLineHeight(other.m_aLineHeight)
     , m_aBreaks(other.m_aBreaks)
-    , m_nPageNumber(other.m_nPageNumber)
-    , m_bNumberLines(other.m_bNumberLines)
-    , m_nLineNumberRestart(other.m_nLineNumberRestart)
     , m_nFlag(other.m_nFlag)
     , m_bNumberRight(other.m_bNumberRight)
 {
@@ -134,12 +122,7 @@ XFParaStyle& XFParaStyle::operator=(const XFParaStyle& other)
         m_strParentStyleName = other.m_strParentStyleName;
         m_nFlag = other.m_nFlag;
         m_eAlignType = other.m_eAlignType;
-        m_eLastLineAlign = other.m_eLastLineAlign;
-        m_bJustSingleWord = other.m_bJustSingleWord;
-        m_bKeepWithNext = other.m_bKeepWithNext;
         m_fTextIndent = other.m_fTextIndent;
-        m_bNumberLines = other.m_bNumberLines;
-        m_nLineNumberRestart = other.m_nLineNumberRestart;
         m_bNumberRight = other.m_bNumberRight;
 
         m_pFont = other.m_pFont;
@@ -301,20 +284,8 @@ bool    XFParaStyle::Equal(IXFStyle *pStyle)
         return false;
     if( m_fTextIndent != pOther->m_fTextIndent )
         return false;
-    if( m_bJustSingleWord != pOther->m_bJustSingleWord )
-        return false;
-    if( m_bKeepWithNext != pOther->m_bKeepWithNext )
-        return false;
-    //line number:
-    if( m_bNumberLines != pOther->m_bNumberLines )
-        return false;
-    if( m_nLineNumberRestart != pOther->m_nLineNumberRestart )
-        return false;
     //align:
     if( m_eAlignType != pOther->m_eAlignType )
-        return false;
-    //last line align:
-    if( m_eLastLineAlign != pOther->m_eLastLineAlign )
         return false;
 
     //shadow:
@@ -335,8 +306,6 @@ bool    XFParaStyle::Equal(IXFStyle *pStyle)
         return false;
     //breaks:
     if( m_aBreaks != pOther->m_aBreaks )
-        return false;
-    if( m_nPageNumber != pOther->m_nPageNumber )
         return false;
     if( m_aTabs != pOther->m_aTabs )
         return false;
@@ -414,25 +383,9 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
     {
         pAttrList->AddAttribute("fo:text-align", GetAlignName(m_eAlignType) );
     }
-    //last line align:
-    if( m_eLastLineAlign != enumXFAlignNone )
-    {
-        pAttrList->AddAttribute("fo:fo:text-align-last", GetAlignName(m_eLastLineAlign) );
-        if( m_bJustSingleWord )
-            pAttrList->AddAttribute("style:justify-single-word", "true" );
-    }
     //line number:
-    if( m_bNumberLines )
-    {
-        pAttrList->AddAttribute( "text:number-lines", "true" );
-        pAttrList->AddAttribute( "text:line-number", OUString::number(m_nLineNumberRestart) );
-    }
-    else
-    {
-        pAttrList->AddAttribute( "text:number-lines", "false" );
-        assert(m_nLineNumberRestart>0);
-        pAttrList->AddAttribute( "text:line-number", "0" );
-    }
+    pAttrList->AddAttribute( "text:number-lines", "true" );
+    pAttrList->AddAttribute( "text:line-number", OUString::number(0) );
 
     //shadow:
     m_aShadow.ToXml(pStrm);
@@ -451,14 +404,8 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
     if( m_pFont.is() )
         m_pFont->ToXml(pStrm);
 
-    //page number:
-    if( m_nPageNumber )
-        pAttrList->AddAttribute("fo:page-number", OUString::number(m_nPageNumber) );
     //page breaks:
     m_aBreaks.ToXml(pStrm);
-
-    if( m_bKeepWithNext )
-        pAttrList->AddAttribute("fo:fo:keep-with-next", "true" );
 
     pStrm->StartElement("style:properties");
 

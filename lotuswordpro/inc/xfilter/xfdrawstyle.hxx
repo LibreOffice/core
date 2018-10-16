@@ -122,7 +122,6 @@ public:
 
 private:
     std::unique_ptr<XFFontWorkStyle> m_pFontWorkStyle;
-    enumXFWrap  m_eWrap;
     XFDrawLineStyle *m_pLineStyle;
     XFDrawAreaStyle *m_pAreaStyle;
     OUString   m_strArrowStart;

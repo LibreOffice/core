@@ -221,9 +221,6 @@ public:
 protected:
     OUString   m_strMasterPage;
     enumXFAlignType m_eAlignType;
-    enumXFAlignType m_eLastLineAlign;
-    bool        m_bJustSingleWord;
-    bool        m_bKeepWithNext;
 
     double      m_fTextIndent;
     XFColor     m_aBackColor;
@@ -237,9 +234,6 @@ protected:
     XFDropcap   m_aDropcap;
     XFLineHeight m_aLineHeight;
     XFBreaks    m_aBreaks;
-    sal_Int32   m_nPageNumber;
-    bool    m_bNumberLines;
-    sal_Int32   m_nLineNumberRestart;
 
     sal_uInt32  m_nFlag;
     bool m_bNumberRight;
