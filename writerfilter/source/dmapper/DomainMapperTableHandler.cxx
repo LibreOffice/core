@@ -266,9 +266,7 @@ void lcl_extractHoriOrient(std::vector<beans::PropertyValue>& rFrameProperties, 
     }
 }
 
-}
-
-static void lcl_DecrementHoriOrientPosition(std::vector<beans::PropertyValue>& rFrameProperties, sal_Int32 nAmount)
+void lcl_DecrementHoriOrientPosition(std::vector<beans::PropertyValue>& rFrameProperties, sal_Int32 nAmount)
 {
     // Shifts the frame left by the given value.
     for (beans::PropertyValue & rPropertyValue : rFrameProperties)
@@ -281,6 +279,42 @@ static void lcl_DecrementHoriOrientPosition(std::vector<beans::PropertyValue>& r
             return;
         }
     }
+}
+
+void lcl_adjustBorderDistance(TableInfo& rInfo, const table::BorderLine2& rLeftBorder,
+                              const table::BorderLine2& rRightBorder)
+{
+    // MS Word appears to do these things to adjust the cell horizontal area:
+    //
+    // bll = left borderline width
+    // blr = right borderline width
+    // cea = cell's edit area rectangle
+    // cea_w = cea width
+    // cml = cell's left margin (padding) defined in cell settings
+    // cmr = cell's right margin (padding) defined in cell settings
+    // cw  = cell width (distance between middles of left borderline and right borderline)
+    // pad_l = actual cea left padding = (its left pos relative to middle of bll)
+    // pad_r = actual cea right padding = abs (its right pos relative to middle of blr)
+    //
+    // pad_l = max(bll/2, cml) -> cea does not overlap left borderline
+    // cea_w = cw-max(pad_l+blr/2, cml+cmr) -> cea does not overlap right borderline
+    // pad_r = max(pad_l+blr/2, cml+cmr) - pad_l
+    //
+    // It means that e.g. for border widths of 6 pt (~2.12 mm), left margin 0 mm, and right margin
+    // 2 mm, actual left and right margins will (unexpectedly) coincide with inner edges of cell's
+    // borderlines - the right margin won't create spacing between right of edit rectangle and the
+    // inner edge of right borderline.
+
+    const sal_Int32 nActualL
+        = std::max<sal_Int32>(rLeftBorder.LineWidth / 2, rInfo.nLeftBorderDistance);
+    const sal_Int32 nActualR
+        = std::max<sal_Int32>(nActualL + rRightBorder.LineWidth / 2,
+                              rInfo.nLeftBorderDistance + rInfo.nRightBorderDistance)
+          - nActualL;
+    rInfo.nLeftBorderDistance = nActualL;
+    rInfo.nRightBorderDistance = nActualR;
+}
+
 }
 
 TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo & rInfo, std::vector<beans::PropertyValue>& rFrameProperties)
@@ -460,7 +494,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         //table border settings
         table::TableBorder aTableBorder;
-        table::BorderLine2 aBorderLine, aLeftBorder;
+        table::BorderLine2 aBorderLine, aLeftBorder, aRightBorder;
 
         if (lcl_extractTableBorderProperty(m_aTableProperties.get(), PROP_TOP_BORDER, rInfo, aBorderLine))
         {
@@ -477,9 +511,10 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             aTableBorder.LeftLine = aLeftBorder;
             aTableBorder.IsLeftLineValid = true;
         }
-        if (lcl_extractTableBorderProperty(m_aTableProperties.get(), PROP_RIGHT_BORDER, rInfo, aBorderLine))
+        if (lcl_extractTableBorderProperty(m_aTableProperties.get(), PROP_RIGHT_BORDER, rInfo,
+                                           aRightBorder))
         {
-            aTableBorder.RightLine = aBorderLine;
+            aTableBorder.RightLine = aRightBorder;
             aTableBorder.IsRightLineValid = true;
         }
         if (lcl_extractTableBorderProperty(m_aTableProperties.get(), META_PROP_HORIZONTAL_BORDER, rInfo, aBorderLine))
@@ -510,21 +545,22 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         // Only top level table position depends on border width of Column A.
         // TODO: Position based on last row (at least in MSOffice 2016), but first row in Office 2003.
         //       Export code is also based on first cell, so using first row here...
-        if ( rInfo.nNestLevel == 1 && !m_aCellProperties.empty() && !m_aCellProperties[0].empty() )
+        if ( !m_aCellProperties.empty() && !m_aCellProperties[0].empty() )
         {
             // aLeftBorder already contains tblBorder; overwrite if cell is different.
-            const boost::optional<PropertyMap::Property> aCellBorder
+            boost::optional<PropertyMap::Property> aCellBorder
                 = m_aCellProperties[0][0]->getProperty(PROP_LEFT_BORDER);
             if ( aCellBorder )
                 aCellBorder->second >>= aLeftBorder;
+            aCellBorder = m_aCellProperties[0][0]->getProperty(PROP_RIGHT_BORDER);
+            if (aCellBorder)
+                aCellBorder->second >>= aLeftBorder;
         }
-        if ( rInfo.nNestLevel == 1 && aLeftBorder.LineWidth )
+        if (rInfo.nNestLevel == 1 && aLeftBorder.LineWidth && !rFrameProperties.empty())
         {
-            if (rFrameProperties.empty())
-                rInfo.nLeftBorderDistance += aLeftBorder.LineWidth * 0.5;
-            else
-                lcl_DecrementHoriOrientPosition(rFrameProperties, aLeftBorder.LineWidth * 0.5);
+            lcl_DecrementHoriOrientPosition(rFrameProperties, aLeftBorder.LineWidth * 0.5);
         }
+        lcl_adjustBorderDistance(rInfo, aLeftBorder, aRightBorder);
 
         // tdf#106742: since MS Word 2013 (compatibilityMode >= 15), top-level tables are handled the same as nested tables;
         // this is also the default behavior in LO when DOCX doesn't define "compatibilityMode" option
