@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df140735_396c6f07",
+        "filename": "extras/Persona_white.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1001264
+      },
+      "writtenOn": "2018-10-16T12:40:14Z",
+      "side": 1,
+      "message": "Unnecessary whitespace? (Also in other mk files)",
+      "range": {
+        "startLine": 16,
+        "startChar": 2,
+        "endLine": 16,
+        "endChar": 3
+      },
+      "revId": "dcfacce3ada7444d33bcf654493daf59e0a88f84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
