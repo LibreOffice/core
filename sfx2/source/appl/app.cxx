@@ -353,7 +353,6 @@ void SfxApplication::SetProgress_Impl
     if ( pImpl->pProgress && pProgress )
     {
         pImpl->pProgress->Suspend();
-        pImpl->pProgress->UnLock();
         delete pImpl->pProgress;
     }
 

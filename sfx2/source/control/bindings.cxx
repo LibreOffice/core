@@ -242,7 +242,7 @@ void SfxBindings::HidePopups( bool bHide )
     // Hide SfxChildWindows
     DBG_ASSERT( pDispatcher, "HidePopups not allowed without dispatcher" );
     if ( pImpl->pWorkWin )
-        pImpl->pWorkWin->HidePopups_Impl( bHide, true );
+        pImpl->pWorkWin->HidePopups_Impl( bHide );
 }
 
 void SfxBindings::Update_Impl(SfxStateCache& rCache /*The up to date SfxStatusCache*/)

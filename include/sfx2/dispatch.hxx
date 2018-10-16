@@ -101,7 +101,7 @@ friend class SfxHelp;
     SAL_DLLPRIVATE void Update_Impl_( bool,bool,bool,SfxWorkWindow*);
 
 
-    bool                FindServer_( sal_uInt16 nId, SfxSlotServer &rServer, bool bModal );
+    bool                FindServer_( sal_uInt16 nId, SfxSlotServer &rServer );
     bool                FillState_( const SfxSlotServer &rServer,
                                     SfxItemSet &rState, const SfxSlot *pRealSlot );
     void                Execute_( SfxShell &rShell, const SfxSlot &rSlot,
@@ -176,7 +176,7 @@ public:
     SAL_DLLPRIVATE void Update_Impl( bool bForce = false ); // ObjectBars etc.
     SAL_DLLPRIVATE bool IsUpdated_Impl() const;
     SAL_DLLPRIVATE bool GetShellAndSlot_Impl( sal_uInt16 nSlot, SfxShell **ppShell, const SfxSlot **ppSlot,
-                                              bool bOwnShellsOnly, bool bModal, bool bRealSlot=true );
+                                              bool bOwnShellsOnly, bool bRealSlot );
     SAL_DLLPRIVATE void SetReadOnly_Impl( bool  bOn );
     SAL_DLLPRIVATE bool GetReadOnly_Impl() const;
     SAL_DLLPRIVATE SfxSlotFilterState IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) const;

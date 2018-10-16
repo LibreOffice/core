@@ -282,8 +282,7 @@ SfxSplitWindow::~SfxSplitWindow()
 
 void SfxSplitWindow::dispose()
 {
-    if ( !pWorkWin->GetParent_Impl() )
-        SaveConfig_Impl();
+    SaveConfig_Impl();
 
     if ( pEmptyWin )
     {
