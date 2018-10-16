@@ -1145,7 +1145,7 @@ void SfxDispatcher::Update_Impl( bool bForce )
     {
         SfxWorkWindow *pWork = xImp->pFrame->GetFrame().GetWorkWindow_Impl();
         SfxDispatcher *pAct = pWork->GetBindings().GetDispatcher_Impl();
-        if ( pAct == this || pAct == this )
+        if (pAct == this)
         {
             if ( !bUpdate )
                 bUpdate = !xImp->bUpdated;
@@ -1198,7 +1198,7 @@ void SfxDispatcher::Update_Impl( bool bForce )
     {
         SfxWorkWindow *pWork = xImp->pFrame->GetFrame().GetWorkWindow_Impl();
         SfxDispatcher *pAct = pWork->GetBindings().GetDispatcher_Impl();
-        if ( pAct == this || pAct == this )
+        if (pAct == this)
         {
             pWork->ResetObjectBars_Impl();
             pWork->ResetChildWindows_Impl();
