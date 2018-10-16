@@ -228,7 +228,7 @@ void SwEndNoteInfo::SwClientNotify( const SwModify& rModify, const SfxHint& rHin
                 const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
                 if ( rFootnote.IsEndNote() == m_bEndNote )
                 {
-                    pTextFootnote->SetNumber(rFootnote.GetNumber(), rFootnote.GetNumStr());
+                    pTextFootnote->SetNumber(rFootnote.GetNumber(), rFootnote.GetNumberRLHidden(), rFootnote.GetNumStr());
                 }
             }
         }
@@ -337,7 +337,7 @@ void SwDoc::SetFootnoteInfo(const SwFootnoteInfo& rInfo)
                     SwTextFootnote *pTextFootnote = rFootnoteIdxs[ nPos ];
                     const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
                     if ( !rFootnote.IsEndNote() )
-                        pTextFootnote->SetNumber(rFootnote.GetNumber(), rFootnote.GetNumStr());
+                        pTextFootnote->SetNumber(rFootnote.GetNumber(), rFootnote.GetNumberRLHidden(), rFootnote.GetNumStr());
                 }
             }
         }
@@ -407,7 +407,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
                 SwTextFootnote *pTextFootnote = rFootnoteIdxs[ nPos ];
                 const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
                 if ( rFootnote.IsEndNote() )
-                    pTextFootnote->SetNumber(rFootnote.GetNumber(), rFootnote.GetNumStr());
+                    pTextFootnote->SetNumber(rFootnote.GetNumber(), rFootnote.GetNumberRLHidden(), rFootnote.GetNumStr());
             }
         }
     }
@@ -473,7 +473,7 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
                     pUndo->GetHistory().Add( *pTextFootnote );
                 }
 
-                pTextFootnote->SetNumber(rFootnote.GetNumber(), rNumStr);
+                pTextFootnote->SetNumber(rFootnote.GetNumber(), rFootnote.GetNumberRLHidden(), rNumStr);
                 if( rFootnote.IsEndNote() != bIsEndNote )
                 {
                     const_cast<SwFormatFootnote&>(rFootnote).SetEndNote( bIsEndNote );
@@ -503,7 +503,7 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
                     pUndo->GetHistory().Add( *pTextFootnote );
                 }
 
-                pTextFootnote->SetNumber(rFootnote.GetNumber(), rNumStr);
+                pTextFootnote->SetNumber(rFootnote.GetNumber(), rFootnote.GetNumberRLHidden(), rNumStr);
                 if( rFootnote.IsEndNote() != bIsEndNote )
                 {
                     const_cast<SwFormatFootnote&>(rFootnote).SetEndNote( bIsEndNote );

@@ -122,6 +122,7 @@ SwFormatFootnote::SwFormatFootnote( bool bEndNote )
     , SwModify(nullptr)
     , m_pTextAttr(nullptr)
     , m_nNumber(0)
+    , m_nNumberRLHidden(0)
     , m_bEndNote(bEndNote)
 {
 }
@@ -130,6 +131,7 @@ bool SwFormatFootnote::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
     return m_nNumber  == static_cast<const SwFormatFootnote&>(rAttr).m_nNumber &&
+        //FIXME?
            m_aNumber  == static_cast<const SwFormatFootnote&>(rAttr).m_aNumber &&
            m_bEndNote == static_cast<const SwFormatFootnote&>(rAttr).m_bEndNote;
 }
@@ -139,6 +141,7 @@ SfxPoolItem* SwFormatFootnote::Clone( SfxItemPool* ) const
     SwFormatFootnote* pNew  = new SwFormatFootnote;
     pNew->m_aNumber = m_aNumber;
     pNew->m_nNumber = m_nNumber;
+    pNew->m_nNumberRLHidden = m_nNumberRLHidden;
     pNew->m_bEndNote = m_bEndNote;
     return pNew;
 }
@@ -325,7 +328,8 @@ void SwTextFootnote::SetStartNode( const SwNodeIndex *pNewNode, bool bDelNode )
     }
 }
 
-void SwTextFootnote::SetNumber( const sal_uInt16 nNewNum, const OUString &sNumStr )
+void SwTextFootnote::SetNumber(const sal_uInt16 nNewNum,
+        sal_uInt16 const nNumberRLHidden, const OUString &sNumStr)
 {
     SwFormatFootnote& rFootnote = const_cast<SwFormatFootnote&>(GetFootnote());
 
@@ -333,6 +337,7 @@ void SwTextFootnote::SetNumber( const sal_uInt16 nNewNum, const OUString &sNumSt
     if ( sNumStr.isEmpty() )
     {
         rFootnote.m_nNumber = nNewNum;
+        rFootnote.m_nNumberRLHidden = nNumberRLHidden;
     }
 
     OSL_ENSURE( m_pTextNode, "SwTextFootnote: where is my TextNode?" );

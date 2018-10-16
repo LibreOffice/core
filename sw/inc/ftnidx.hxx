@@ -23,6 +23,7 @@
 #include <sal/types.h>
 #include <o3tl/sorted_vector.hxx>
 
+class IDocumentRedlineAccess;
 class SwTextFootnote;
 class SwNodeIndex;
 class SwSectionNode;
@@ -51,7 +52,7 @@ public:
 class SwUpdFootnoteEndNtAtEnd
 {
     std::vector<const SwSectionNode*> aFootnoteSects, aEndSects;
-    std::vector<sal_uInt16> aFootnoteNums, aEndNums;
+    std::vector<std::pair<sal_uInt16, sal_uInt16>> aFootnoteNums, aEndNums;
 
 public:
     SwUpdFootnoteEndNtAtEnd() : aFootnoteSects(), aEndSects() {}
@@ -59,8 +60,11 @@ public:
     static const SwSectionNode* FindSectNdWithEndAttr(
                                             const SwTextFootnote& rTextFootnote );
 
-    sal_uInt16 GetNumber( const SwTextFootnote& rTextFootnote, const SwSectionNode& rNd );
-    sal_uInt16 ChkNumber( const SwTextFootnote& rTextFootnote );
+    std::pair<sal_uInt16, sal_uInt16> GetNumber(
+            IDocumentRedlineAccess const&, const SwTextFootnote& rTextFootnote,
+            const SwSectionNode& rNd);
+    std::pair<sal_uInt16, sal_uInt16> ChkNumber(
+            IDocumentRedlineAccess const&, const SwTextFootnote& rTextFootnote);
 };
 
 #endif // INCLUDED_SW_INC_FTNIDX_HXX
