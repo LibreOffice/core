@@ -554,7 +554,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                 aCellBorder->second >>= aLeftBorder;
             aCellBorder = m_aCellProperties[0][0]->getProperty(PROP_RIGHT_BORDER);
             if (aCellBorder)
-                aCellBorder->second >>= aLeftBorder;
+                aCellBorder->second >>= aRightBorder;
         }
         if (rInfo.nNestLevel == 1 && aLeftBorder.LineWidth && !rFrameProperties.empty())
         {
