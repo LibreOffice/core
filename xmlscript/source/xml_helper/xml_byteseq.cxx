@@ -63,7 +63,7 @@ sal_Int32 BSeqInputStream::readBytes(
     if (rData.getLength() != nBytesToRead)
         rData.realloc( nBytesToRead );
     if (nBytesToRead != 0) {
-        memcpy(rData.getArray(), &_seq.data()[_nPos], nBytesToRead);
+        memcpy(rData.getArray(), &_seq[_nPos], nBytesToRead);
     }
     _nPos += nBytesToRead;
     return nBytesToRead;

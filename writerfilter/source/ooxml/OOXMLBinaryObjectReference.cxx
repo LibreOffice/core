@@ -52,7 +52,7 @@ void OOXMLBinaryObjectReference::read()
         nSize += nBytesRead;
         mSequence.resize(nSize);
 
-        memcpy(&mSequence.data()[nOldSize], aSeq.getArray(), nBytesRead);
+        memcpy(&mSequence[nOldSize], aSeq.getArray(), nBytesRead);
     }
 
     mbRead = true;
