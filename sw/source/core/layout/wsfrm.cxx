@@ -35,6 +35,7 @@
 #include <fesh.hxx>
 #include <docsh.hxx>
 #include <ftninfo.hxx>
+#include <ftnidx.hxx>
 #include <fmtclbl.hxx>
 #include <fmtfsize.hxx>
 #include <fmtpdsc.hxx>
@@ -4489,6 +4490,18 @@ void SwRootFrame::SetHideRedlines(bool const bHideRedlines)
         if (pRedline->GetType() != nsRedlineType_t::REDLINE_DELETE)
         {
             pRedline->InvalidateRange(SwRangeRedline::Invalidation::Add);
+        }
+    }
+
+    // invalidate all footnotes to reformat their numbers
+    SwFootnoteIdxs const& rFootnotes(rDoc.GetFootnoteIdxs());
+    for (SwTextFootnote *const pFootnote : rFootnotes)
+    {
+        SwFormatFootnote const& rFootnote(pFootnote->GetFootnote());
+        if (rFootnote.GetNumber() != rFootnote.GetNumberRLHidden()
+            && rFootnote.GetNumStr().isEmpty())
+        {
+            pFootnote->InvalidateNumberInLayout();
         }
     }
 

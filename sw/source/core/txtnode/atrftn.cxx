@@ -345,8 +345,13 @@ void SwTextFootnote::SetNumber(const sal_uInt16 nNewNum,
         rFootnote.m_nNumber = nNewNum;
         rFootnote.m_nNumberRLHidden = nNumberRLHidden;
     }
+    InvalidateNumberInLayout();
+}
 
-    OSL_ENSURE( m_pTextNode, "SwTextFootnote: where is my TextNode?" );
+void SwTextFootnote::InvalidateNumberInLayout()
+{
+    assert(m_pTextNode);
+    SwFormatFootnote const& rFootnote(GetFootnote());
     SwNodes &rNodes = m_pTextNode->GetDoc()->GetNodes();
     m_pTextNode->ModifyNotification( nullptr, &rFootnote );
     if ( m_pStartNode )

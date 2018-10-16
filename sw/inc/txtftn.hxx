@@ -57,6 +57,8 @@ public:
     // Check conditional paragraph styles.
     void CheckCondColl();
 
+    void InvalidateNumberInLayout();
+
     // For references to footnotes.
     void SetSeqRefNo();
     void SetSeqNo( sal_uInt16 n )       { m_nSeqNo = n; }   // For Readers.
