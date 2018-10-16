@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "df140735_1c82b950",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2018-10-16T15:05:09Z",
+      "side": 1,
+      "message": "Any reason this should not be static anymore?",
+      "revId": "c954ff43841e6bcfab06be74e528da93996d761d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
