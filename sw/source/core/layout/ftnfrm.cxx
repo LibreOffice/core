@@ -2371,10 +2371,30 @@ void SwPageFrame::UpdateFootnoteNum()
                     SwTextFootnote* pTextFootnote = pFootnote->GetAttr();
                     if( !pTextFootnote->GetFootnote().IsEndNote() &&
                          pTextFootnote->GetFootnote().GetNumStr().isEmpty() &&
-                         !pFootnote->GetMaster() &&
-                         (pTextFootnote->GetFootnote().GetNumber() != ++nNum) )
+                         !pFootnote->GetMaster())
                     {
-                        pTextFootnote->SetNumber( nNum, OUString() );
+                        // sw_redlinehide: the layout can only keep one number
+                        // up to date; depending on its setting, this is either
+                        // the non-hidden or the hidden number; the other
+                        // number will simply be preserved as-is (so in case
+                        // there are 2 layouts, maybe both can be updated...)
+                        ++nNum;
+                        sal_uInt16 const nOldNum(pTextFootnote->GetFootnote().GetNumber());
+                        sal_uInt16 const nOldNumRLHidden(pTextFootnote->GetFootnote().GetNumberRLHidden());
+                        if (getRootFrame()->IsHideRedlines())
+                        {
+                            if (nNum != nOldNumRLHidden)
+                            {
+                                pTextFootnote->SetNumber(nOldNum, nNum, OUString());
+                            }
+                        }
+                        else
+                        {
+                            if (nNum != nOldNum)
+                            {
+                                pTextFootnote->SetNumber(nNum, nOldNumRLHidden, OUString());
+                            }
+                        }
                     }
                     if ( pFootnote->GetNext() )
                         pFootnote = static_cast<SwFootnoteFrame*>(pFootnote->GetNext());

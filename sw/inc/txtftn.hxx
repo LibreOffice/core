@@ -41,7 +41,7 @@ public:
 
     SwNodeIndex *GetStartNode() const { return m_pStartNode.get(); }
     void SetStartNode( const SwNodeIndex *pNode, bool bDelNodes = true );
-    void SetNumber( const sal_uInt16 nNumber, const OUString &sNumStr );
+    void SetNumber(sal_uInt16 nNumber, sal_uInt16 nNumberRLHidden, const OUString &sNumStr);
     void CopyFootnote(SwTextFootnote & rDest, SwTextNode & rDestNode) const;
 
     // Get and set TextNode pointer.

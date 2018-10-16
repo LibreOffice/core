@@ -230,7 +230,7 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
         // If no automatic numbering use the following char from the main text
         // as the footnote number
         if (!rDesc.mbAutoNum)
-            static_cast<SwTextFootnote*>(pFN)->SetNumber(0, sChar);
+            static_cast<SwTextFootnote*>(pFN)->SetNumber(0, 0, sChar);
 
         /*
             Delete the footnote char from the footnote if its at the beginning

@@ -422,7 +422,7 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
         {
             SwTextFootnote *pTextFootnote = rFootnoteIdxs[ nPos ];
             const SwFormatFootnote &rFootnote = pTextFootnote->GetFootnote();
-            pTextFootnote->SetNumber(rFootnote.GetNumber(), rFootnote.GetNumStr());
+            pTextFootnote->SetNumber(rFootnote.GetNumber(), rFootnote.GetNumberRLHidden(), rFootnote.GetNumStr());
         }
     }
 
