@@ -47,7 +47,7 @@ void EventManager::Handler( const libvlc_event_t *event, void *pData )
 
 bool EventManager::LoadSymbols()
 {
-    ApiMap const VLC_EVENT_MANAGER_API[] =
+    static ApiMap const VLC_EVENT_MANAGER_API[] =
     {
         SYM_MAP( libvlc_media_player_event_manager ),
         SYM_MAP( libvlc_event_attach ),

@@ -121,7 +121,7 @@ struct ErrorBarTypeMap
     sal_Int32 nApi;
 };
 
-ErrorBarTypeMap aErrorBarType[] = {
+static ErrorBarTypeMap const aErrorBarType[] = {
     { 0, css::chart::ErrorBarStyle::ABSOLUTE },
     { 1, css::chart::ErrorBarStyle::RELATIVE },
     { 2, css::chart::ErrorBarStyle::FROM_DATA },
@@ -148,7 +148,7 @@ sal_Int32 getTypePos(const css::uno::Reference<css::frame::XModel>& xModel,
     sal_Int32 nApi = 0;
     aAny >>= nApi;
 
-    for (ErrorBarTypeMap & i : aErrorBarType)
+    for (ErrorBarTypeMap const & i : aErrorBarType)
     {
         if (i.nApi == nApi)
             return i.nPos;
@@ -167,7 +167,7 @@ void setTypePos(const css::uno::Reference<css::frame::XModel>& xModel,
         return;
 
     sal_Int32 nApi = 0;
-    for (ErrorBarTypeMap & i : aErrorBarType)
+    for (ErrorBarTypeMap const & i : aErrorBarType)
     {
         if (i.nPos == nPos)
             nApi = i.nApi;
