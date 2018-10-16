@@ -82,6 +82,12 @@ namespace
     {
         basegfx::B2DRange aDamageRect(getFillDamage(cr));
         aDamageRect.intersect(getClipBox(cr));
+        // see tdf#106577 under wayland, some pixel droppings seen, maybe we're
+        // out by one somewhere, or cairo_stroke_extents is confused by
+        // dashes/line width
+        // see also tdf#106577
+        if (!aDamageRect.isEmpty())
+            aDamageRect.grow(1);
         return aDamageRect;
     }
 
@@ -104,6 +110,12 @@ namespace
     {
         basegfx::B2DRange aDamageRect(getStrokeDamage(cr));
         aDamageRect.intersect(getClipBox(cr));
+        // see tdf#106577 under wayland, some pixel droppings seen, maybe we're
+        // out by one somewhere, or cairo_stroke_extents is confused by
+        // dashes/line width
+        // see also tdf#106577
+        if (!aDamageRect.isEmpty())
+            aDamageRect.grow(1);
         return aDamageRect;
     }
 }
@@ -1824,13 +1836,6 @@ void SvpSalGraphics::invert(const basegfx::B2DPolygon &rPoly, SalInvert nFlags)
         cairo_set_dash(cr, dashLengths, 2, 0);
 
         extents = getClippedStrokeDamage(cr);
-        //see tdf#106577 under wayland, some pixel droppings seen, maybe we're
-        //out by one somewhere, or cairo_stroke_extents is confused by
-        //dashes/line width
-        if(!extents.isEmpty())
-        {
-            extents.grow(1);
-        }
 
         cairo_stroke(cr);
     }
