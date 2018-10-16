@@ -193,7 +193,7 @@ struct DocxSdrExport::Impl
     bool checkFrameBtlr(SwNode* pStartNode, bool bDML);
 };
 
-DocxSdrExport::DocxSdrExport(DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer,
+DocxSdrExport::DocxSdrExport(DocxExport& rExport, const sax_fastparser::FSHelperPtr& pSerializer,
                              oox::drawingml::DrawingML* pDrawingML)
     : m_pImpl(o3tl::make_unique<Impl>(*this, rExport, pSerializer, pDrawingML))
 {

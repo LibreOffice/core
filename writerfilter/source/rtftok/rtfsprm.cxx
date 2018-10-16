@@ -76,7 +76,7 @@ RTFValue::Pointer_t RTFSprms::find(Id nKeyword, bool bFirst, bool bForWrite)
     return pValue;
 }
 
-void RTFSprms::set(Id nKeyword, RTFValue::Pointer_t pValue, RTFOverwrite eOverwrite)
+void RTFSprms::set(Id nKeyword, const RTFValue::Pointer_t& pValue, RTFOverwrite eOverwrite)
 {
     ensureCopyBeforeWrite();
 
