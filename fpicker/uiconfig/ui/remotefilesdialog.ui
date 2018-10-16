@@ -307,6 +307,9 @@
         </child>
       </object>
     </child>
+    <action-widgets>
+      <action-widget response="-11">help</action-widget>
+    </action-widgets>
   </object>
   <object class="GtkMenu" id="service_edit_menu">
     <property name="visible">True</property>

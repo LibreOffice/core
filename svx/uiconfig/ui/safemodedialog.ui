@@ -480,6 +480,9 @@ The proposed changes get more radical from top down so it is recommended to try 
         </child>
       </object>
     </child>
+    <action-widgets>
+      <action-widget response="-11">help</action-widget>
+    </action-widgets>
   </object>
   <object class="GtkActionGroup" id="actiongroup1"/>
 </interface>
