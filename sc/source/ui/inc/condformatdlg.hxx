@@ -67,6 +67,7 @@ public:
     void Freeze() { mbFrozen = true; }
     void Thaw() { mbFrozen = false; }
     void RecalcAll();
+    void UpdateFormulaBasedRules( const OUString& rOldRange, const OUString& rNewRange );
 
     DECL_LINK( AddBtnHdl, Button*, void );
     DECL_LINK( RemoveBtnHdl, Button*, void );
@@ -100,6 +101,8 @@ private:
     ScViewData* mpViewData;
 
     VclPtr<formula::RefEdit> mpLastEdit;
+    OUString maLastRangeStr;
+    bool mbRangeValid;
 
     std::shared_ptr<ScCondFormatDlgItem> mpDlgItem;
 
@@ -132,6 +135,7 @@ public:
 
     DECL_LINK( BtnPressedHdl, Button*, void );
     DECL_LINK( RangeGetFocusHdl, Control&, void );
+    DECL_LINK( RangeLoseFocusHdl, Control&, void );
 };
 
 #endif

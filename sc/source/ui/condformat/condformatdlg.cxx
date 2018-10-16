@@ -9,6 +9,7 @@
 
 #include <condformatdlg.hxx>
 
+#include <refupdatecontext.hxx>
 #include <vcl/vclevent.hxx>
 #include <svl/style.hxx>
 #include <sfx2/dispatch.hxx>
@@ -252,6 +253,46 @@ void ScCondFormatList::DoScroll(long nDelta)
     aRect.AdjustRight( -(mpScrollBar->GetSizePixel().Width()) );
     Scroll( 0, -nDelta, aRect );
     mpScrollBar->SetPosPixel(aNewPoint);
+}
+
+void ScCondFormatList::UpdateFormulaBasedRules(const OUString &rOldRangeStr, const OUString &rNewRangeStr)
+{
+    ScRangeList aOldRange, aNewRange;
+    aOldRange.Parse(rOldRangeStr, mpDoc, mpDoc->GetAddressConvention());
+    aNewRange.Parse(rNewRangeStr, mpDoc, mpDoc->GetAddressConvention());
+
+    //FIXME: invalid ranges? (shouldn't happen, but ...)
+    ScAddress aAdr1 = aOldRange.GetTopLeftCorner();
+    ScAddress aAdr2 = aNewRange.GetTopLeftCorner();
+    sc::RefUpdateContext aRefCxt(*mpDoc);
+
+    aRefCxt.meMode = URM_MOVE;
+    aRefCxt.maRange = ScRange(aAdr2); //FIXME: is this correct?
+    aRefCxt.mnColDelta = aAdr2.Col() - aAdr1.Col();
+    aRefCxt.mnRowDelta = aAdr2.Row() - aAdr1.Row();
+    aRefCxt.mnTabDelta = aAdr2.Tab() - aAdr1.Tab();
+
+    Freeze();
+    for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+    {
+       if ((*itr)->GetType() == condformat::entry::FORMULA)
+       {
+           ScFormatEntry* pEntry = (*itr)->GetEntry();
+           ScCondFormatEntry* pCEntry = static_cast<ScCondFormatEntry*>( pEntry);
+           if (pCEntry)
+           {
+               pCEntry->UpdateReference(aRefCxt);
+
+               // oh geez, why can't I simply edit the entry?
+               itr->disposeAndClear();
+               *itr = VclPtr<ScFormulaFrmtEntry>::Create(this, mpDoc, mpDialogParent, maPos, pCEntry);
+               mpDialogParent->InvalidateRefData();
+               (*itr)->SetActive();
+           }
+       }
+    }
+    Thaw();
+    RecalcAll();
 }
 
 IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox&, rBox, void)
@@ -506,6 +547,8 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
                         "modules/scalc/ui/conditionalformatdialog.ui")
     , mpViewData(pViewData)
     , mpLastEdit(nullptr)
+    , maLastRangeStr(OUString())
+    , mbRangeValid(false)
     , mpDlgItem(static_cast<ScCondFormatDlgItem*>(pItem->Clone()))
 {
     get(mpBtnOk, "ok");
@@ -567,11 +610,14 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
     mpBtnCancel->SetClickHdl( LINK(this, ScCondFormatDlg, BtnPressedHdl ) );
     mpEdRange->SetModifyHdl( LINK( this, ScCondFormatDlg, EdRangeModifyHdl ) );
     mpEdRange->SetGetFocusHdl( LINK( this, ScCondFormatDlg, RangeGetFocusHdl ) );
+    mpEdRange->SetLoseFocusHdl( LINK( this, ScCondFormatDlg, RangeLoseFocusHdl ) );
 
     OUString aRangeString;
     aRange.Format(aRangeString, ScRefFlags::VALID, pViewData->GetDocument(),
                     pViewData->GetDocument()->GetAddressConvention());
     mpEdRange->SetText(aRangeString);
+    maLastRangeStr = aRangeString;
+    mbRangeValid = !aRangeString.isEmpty();
 
     msBaseTitle = GetText();
     updateTitle();
@@ -783,6 +829,7 @@ IMPL_LINK( ScCondFormatDlg, EdRangeModifyHdl, Edit&, rEdit, void )
     {
         rEdit.SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
         mpBtnOk->Enable(true);
+        mbRangeValid = true;
     }
     else
     {
@@ -796,6 +843,19 @@ IMPL_LINK( ScCondFormatDlg, EdRangeModifyHdl, Edit&, rEdit, void )
 IMPL_LINK( ScCondFormatDlg, RangeGetFocusHdl, Control&, rControl, void )
 {
     mpLastEdit = static_cast<formula::RefEdit*>(&rControl);
+    maLastRangeStr = mpLastEdit->GetText();
+}
+
+IMPL_LINK( ScCondFormatDlg, RangeLoseFocusHdl, Control&, rControl, void )
+{
+    // we are editing a range (maLastRangeStr is empty if new range)
+    // the new range must be valid
+    if (!maLastRangeStr.isEmpty() && mbRangeValid)
+    {
+        OUString aNewRangeStr = static_cast<formula::RefEdit*>(&rControl)->GetText();
+        if (aNewRangeStr != maLastRangeStr)
+            mpCondFormList->UpdateFormulaBasedRules( maLastRangeStr, aNewRangeStr );
+    }
 }
 
 IMPL_LINK( ScCondFormatDlg, BtnPressedHdl, Button*, pBtn, void)
