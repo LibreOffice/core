@@ -116,7 +116,6 @@ private:
     friend class XFBorders;
 
 private:
-    double      m_fOffset;
     XFColor     m_aColor;
     bool    m_bDouble;
     bool    m_bSameWidth;

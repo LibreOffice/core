@@ -137,7 +137,6 @@ private:
     enumXFAlignType m_eHoriAlign;
     enumXFAlignType m_eVertAlign;
 
-    double      m_fTextIndent;
     XFColor     m_aBackColor;
     std::unique_ptr<XFBGImage> m_xBackImage;
     XFMargins   m_aMargin;
@@ -145,7 +144,6 @@ private:
     rtl::Reference<XFFont> m_pFont;
     XFShadow    m_aShadow;
     std::unique_ptr<XFBorders>  m_pBorders;
-    bool    m_bWrapText;
 };
 
 inline void XFCellStyle::SetAlignType(enumXFAlignType hori, enumXFAlignType vert)

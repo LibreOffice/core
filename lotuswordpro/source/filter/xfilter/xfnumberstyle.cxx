@@ -62,11 +62,8 @@
 XFNumberStyle::XFNumberStyle()
     : m_eType(enumXFNumberNumber)
     , m_nDecimalDigits(0)
-    , m_nMinInteger(1)
-    , m_nMinExponent(2)
     , m_bGroup(false)
     , m_aColor(0,0,0)
-    , m_bCurrencySymbolPost(false)
     , m_bRedIfNegative(false)
     , m_aNegativeColor(255,0,0)
 {}
@@ -88,8 +85,6 @@ bool XFNumberStyle::Equal(IXFStyle *pStyle)
         return false;
     if( m_nDecimalDigits != pOther->m_nDecimalDigits )
         return false;
-    if( m_nMinInteger != pOther->m_nMinInteger )
-        return false;
     if( m_bRedIfNegative != pOther->m_bRedIfNegative )
         return false;
     if( m_bGroup != pOther->m_bGroup )
@@ -99,10 +94,6 @@ bool XFNumberStyle::Equal(IXFStyle *pStyle)
     if( m_strPrefix != pOther->m_strPrefix )
         return false;
     if( m_strSuffix != pOther->m_strSuffix )
-        return false;
-
-    //When category of number format is scientific, the number can not be displayed normally in table.
-    if ( m_nMinExponent != pOther->m_nMinExponent )
         return false;
 
     if( m_bRedIfNegative )
@@ -117,8 +108,6 @@ bool XFNumberStyle::Equal(IXFStyle *pStyle)
 
     if( m_eType == enuMXFNumberCurrency )
     {
-        if( m_bCurrencySymbolPost != pOther->m_bCurrencySymbolPost )
-            return false;
         if( m_strCurrencySymbol != pOther->m_strCurrencySymbol )
             return false;
     }
@@ -288,7 +277,7 @@ void XFNumberStyle::ToXml_Content(IXFStream *pStrm, bool nagetive)
         }
     }
 
-    if( m_eType == enuMXFNumberCurrency && !m_bCurrencySymbolPost )
+    if( m_eType == enuMXFNumberCurrency )
     {
         if( !m_strCurrencySymbol.isEmpty() )
         {
@@ -303,8 +292,8 @@ void XFNumberStyle::ToXml_Content(IXFStream *pStrm, bool nagetive)
     {
         pAttrList->Clear();
         pAttrList->AddAttribute("number:decimal-places", OUString::number(m_nDecimalDigits));
-        pAttrList->AddAttribute("number:min-integer-digits", OUString::number(m_nMinInteger));
-        pAttrList->AddAttribute("number:min-exponent-digits", OUString::number(m_nMinExponent));
+        pAttrList->AddAttribute("number:min-integer-digits", OUString::number(1));
+        pAttrList->AddAttribute("number:min-exponent-digits", OUString::number(2));
         pStrm->StartElement( "number:scientific-number" );
         pStrm->EndElement( "number:scientific-number" );
     }
@@ -312,7 +301,7 @@ void XFNumberStyle::ToXml_Content(IXFStream *pStrm, bool nagetive)
     {
         pAttrList->Clear();
         pAttrList->AddAttribute("number:decimal-places", OUString::number(m_nDecimalDigits));
-        pAttrList->AddAttribute("number:min-integer-digits", OUString::number(m_nMinInteger));
+        pAttrList->AddAttribute("number:min-integer-digits", OUString::number(1));
 
         if( m_bGroup )
             pAttrList->AddAttribute("number:grouping","true");
@@ -321,16 +310,6 @@ void XFNumberStyle::ToXml_Content(IXFStream *pStrm, bool nagetive)
 
         pStrm->StartElement( "number:number" );
         pStrm->EndElement( "number:number" );
-    }
-
-    if( m_eType == enuMXFNumberCurrency && m_bCurrencySymbolPost )
-    {
-        if( !m_strCurrencySymbol.isEmpty() )
-        {
-            pStrm->StartElement( "number:currency-symbol" );
-            pStrm->Characters(m_strCurrencySymbol);
-            pStrm->EndElement( "number:currency-symbol" );
-        }
     }
 
     if( !nagetive )

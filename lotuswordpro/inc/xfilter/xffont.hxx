@@ -242,18 +242,10 @@ private:
 
     enumXFUnderline m_eUnderline;
     enumXFCrossout  m_eCrossout;
-    enumXFRelief    m_eRelief;
     enumXFTransform m_eTransform;
-    enumXFEmphasize m_eEmphasize;
     bool    m_bWordByWord;
-    bool    m_bEmphasizeTop;
-    bool    m_bOutline;
-    bool    m_bShadow;
-    bool    m_bBlink;
     sal_Int16   m_nPosition;
     sal_Int16   m_nScale;
-    double      m_fCharSpace;
-    sal_Int16   m_nWidthScale;
     XFColor     m_aColor;
     XFColor     m_aBackColor;
     //The flag defines which variable will be functional

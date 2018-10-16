@@ -100,11 +100,8 @@ private:
 
     enumXFNumberType    m_eType;
     sal_Int32  m_nDecimalDigits;
-    sal_Int32  m_nMinInteger;
-    sal_Int32  m_nMinExponent;
     bool       m_bGroup;
     XFColor    m_aColor;
-    bool       m_bCurrencySymbolPost;
     OUString   m_strCurrencySymbol;
     OUString   m_strPrefix;
     OUString   m_strSuffix;
