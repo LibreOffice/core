@@ -399,7 +399,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
 }
 
 bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
-                       sal_uInt16 nNumber, bool bIsEndNote )
+                       bool bIsEndNote)
 {
     SwFootnoteIdxs& rFootnoteArr = GetFootnoteIdxs();
     SwRootFrame* pTmpRoot = getIDocumentLayoutAccess().GetCurrentLayout();
@@ -417,7 +417,7 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().ClearRedo(); // AppendUndo far below, so leave it
-        pUndo.reset(new SwUndoChangeFootNote( rPam, rNumStr, nNumber, bIsEndNote ));
+        pUndo.reset(new SwUndoChangeFootNote( rPam, rNumStr, bIsEndNote ));
     }
 
     SwTextFootnote* pTextFootnote;
@@ -442,7 +442,7 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
                     pUndo->GetHistory().Add( *pTextFootnote );
                 }
 
-                pTextFootnote->SetNumber( nNumber, rNumStr );
+                pTextFootnote->SetNumber(rFootnote.GetNumber(), rNumStr);
                 if( rFootnote.IsEndNote() != bIsEndNote )
                 {
                     const_cast<SwFormatFootnote&>(rFootnote).SetEndNote( bIsEndNote );
@@ -472,7 +472,7 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
                     pUndo->GetHistory().Add( *pTextFootnote );
                 }
 
-                pTextFootnote->SetNumber( nNumber, rNumStr );
+                pTextFootnote->SetNumber(rFootnote.GetNumber(), rNumStr);
                 if( rFootnote.IsEndNote() != bIsEndNote )
                 {
                     const_cast<SwFormatFootnote&>(rFootnote).SetEndNote( bIsEndNote );
