@@ -713,8 +713,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                 if ( !pDispatcher->IsLocked() )
                 {
                     const SfxSlot *pSlot = nullptr;
-                    if ( pDispatcher->GetShellAndSlot_Impl( GetId(), &pShell, &pSlot, false,
-                                                            SfxCallMode::MODAL==(nCall&SfxCallMode::MODAL), false ) )
+                    if ( pDispatcher->GetShellAndSlot_Impl( GetId(), &pShell, &pSlot, false, false ) )
                     {
                         if ( bMasterSlave )
                         {

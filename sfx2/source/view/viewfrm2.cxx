@@ -172,7 +172,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
             }
             else
             {
-                pWorkWin->HidePopups_Impl( !bShow, true );
+                pWorkWin->HidePopups_Impl( !bShow );
                 pWorkWin->MakeChildrenVisible_Impl( bShow );
             }
 

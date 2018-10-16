@@ -185,7 +185,6 @@ class SfxWorkWindow final
     std::vector< SfxObjectBar_Impl > aObjBarList;
     tools::Rectangle               aClientArea;
     tools::Rectangle               aUpperClientArea;
-    SfxWorkWindow*          pParent;
     VclPtr<SfxSplitWindow>  pSplit[SFX_SPLITWINDOWS_MAX];
     std::vector<SfxChild_Impl*>
                             aChildren;
@@ -236,8 +235,6 @@ public:
                             { return bDockingAllowed; }
     bool                    IsInternalDockingAllowed() const
                             { return bInternalDockingAllowed; }
-    SfxWorkWindow*          GetParent_Impl() const
-                            { return pParent; }
 
     // Methods for all Child windows
     void                    DataChanged_Impl();
@@ -248,7 +245,7 @@ public:
     bool                    PrepareClose_Impl();
     void                    ArrangeChildren_Impl( bool bForce = true );
     void                    DeleteControllers_Impl();
-    void                    HidePopups_Impl(bool bHide, bool bParent, sal_uInt16 nId=0);
+    void                    HidePopups_Impl(bool bHide, sal_uInt16 nId=0);
     void                    ConfigChild_Impl(SfxChildIdentifier,
                                              SfxDockingConfig, sal_uInt16);
     void                    MakeChildrenVisible_Impl( bool bVis );
@@ -261,8 +258,7 @@ public:
     void                    UpdateObjectBars_Impl();
     void                    UpdateObjectBars_Impl2();
     void                    ResetObjectBars_Impl();
-    void                    SetObjectBar_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags, ToolbarId eId,
-                                    SfxInterface *pIFace);
+    void                    SetObjectBar_Impl(sal_uInt16 nPos, SfxVisibilityFlags nFlags, ToolbarId eId);
     bool                    IsVisible_Impl();
     void                    MakeVisible_Impl( bool );
     void                    Lock_Impl( bool );

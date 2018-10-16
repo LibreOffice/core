@@ -223,7 +223,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
     if ( bSlotDirty )
     {
         // get the SlotServer; we need it for internal controllers anyway, but also in most cases
-        rDispat.FindServer_( nId, aSlotServ, false );
+        rDispat.FindServer_( nId, aSlotServ );
 
         DBG_ASSERT( !mxDispatch.is(), "Old Dispatch not removed!" );
 

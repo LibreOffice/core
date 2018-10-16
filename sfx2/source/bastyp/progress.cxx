@@ -53,7 +53,6 @@ struct SfxProgress_Impl
     OUString                aText, aStateText;
     sal_uIntPtr             nMax;
     clock_t                 nCreate;
-    bool                    bLocked;
     bool                    bWaitMode;
     bool                    bRunning;
 
@@ -63,37 +62,11 @@ struct SfxProgress_Impl
     SfxViewFrame*           pView;
 
     explicit                SfxProgress_Impl();
-    void                    Enable_Impl();
-
 };
-
-
-void SfxProgress_Impl::Enable_Impl()
-{
-    SfxObjectShell* pDoc = xObjSh.get();
-    SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pDoc);
-    while ( pFrame )
-    {
-        pFrame->Enable(true/*bEnable*/);
-        pFrame->GetDispatcher()->Lock( false );
-        pFrame = SfxViewFrame::GetNext(*pFrame, pDoc);
-    }
-
-    if ( pView )
-    {
-        pView->Enable( true/*bEnable*/ );
-        pView->GetDispatcher()->Lock( false );
-    }
-
-    if ( !pDoc )
-        SfxGetpApp()->GetAppDispatcher_Impl()->Lock( false );
-}
-
 
 SfxProgress_Impl::SfxProgress_Impl()
     : nMax(0)
     , nCreate(0)
-    , bLocked(false)
     , bWaitMode(false)
     , bRunning(false)
     , pActiveProgress(nullptr)
@@ -136,7 +109,6 @@ SfxProgress::SfxProgress
     pImpl->xObjSh = pObjSh;
     pImpl->aText = rText;
     pImpl->nMax = nRange;
-    pImpl->bLocked = false;
     pImpl->bWaitMode = bWait;
     pImpl->nCreate = Get10ThSec();
     SAL_INFO(
@@ -196,8 +168,6 @@ void SfxProgress::Stop()
         pImpl->xObjSh->SetProgress_Impl(nullptr);
     else
         SfxGetpApp()->SetProgress_Impl(nullptr);
-    if ( pImpl->bLocked )
-        pImpl->Enable_Impl();
 }
 
 void SfxProgress::SetStateText
@@ -371,18 +341,6 @@ void SfxProgress::Suspend()
 }
 
 
-void SfxProgress::UnLock()
-{
-    if( pImpl->pActiveProgress ) return;
-    if ( !pImpl->bLocked )
-        return;
-
-    SAL_INFO("sfx.bastyp", "SfxProgress: unlocked");
-    pImpl->bLocked = false;
-    pImpl->Enable_Impl();
-}
-
-
 void SfxProgress::Reschedule()
 
 /*  [Description]
@@ -392,16 +350,6 @@ void SfxProgress::Reschedule()
 
 {
     SFX_STACK(SfxProgress::Reschedule);
-
-    if( pImpl->pActiveProgress ) return;
-    SfxApplication* pApp = SfxGetpApp();
-    if ( pImpl->bLocked && 0 == pApp->Get_Impl()->nRescheduleLocks )
-    {
-        SfxAppData_Impl *pAppData = pApp->Get_Impl();
-        ++pAppData->nInReschedule;
-        Application::Reschedule();
-        --pAppData->nInReschedule;
-    }
 }
 
 
