@@ -666,9 +666,8 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
                     GET(aLineDashName, LineDashName);
                     if (!aLineDashName.isEmpty()) {
                         if (xModel) {
-                            css::uno::Any aAny;
-                            aAny = getLineDash(xModel, aLineDashName);
-                            aLineDash = aAny.get<drawing::LineDash>();
+                            css::uno::Any aAny = getLineDash(xModel, aLineDashName);
+                            aAny >>= aLineDash;
                         }
                     }
                 }
