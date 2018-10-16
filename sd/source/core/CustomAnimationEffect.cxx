@@ -129,6 +129,7 @@ private:
 CustomAnimationEffect::CustomAnimationEffect( const css::uno::Reference< css::animations::XAnimationNode >& xNode )
 :   mnNodeType(-1),
     mnPresetClass(-1),
+    mnFill(AnimationFill::HOLD),
     mfBegin(-1.0),
     mfDuration(-1.0),
     mfAbsoluteDuration(-1.0),
@@ -194,6 +195,8 @@ void CustomAnimationEffect::setNode( const css::uno::Reference< css::animations:
     mfAcceleration = mxNode->getAcceleration();
     mfDecelerate = mxNode->getDecelerate();
     mbAutoReverse = mxNode->getAutoReverse();
+
+    mnFill = mxNode->getFill();
 
     // get iteration data
     Reference< XIterateContainer > xIter( mxNode, UNO_QUERY );
@@ -819,6 +822,7 @@ void CustomAnimationEffect::replaceNode( const css::uno::Reference< css::animati
     sal_Int16 nNodeType = mnNodeType;
     Any aTarget = maTarget;
 
+    sal_Int16 nFill = mnFill;
     double fBegin = mfBegin;
     double fDuration = mfDuration;
     double fAcceleration = mfAcceleration;
@@ -837,6 +841,7 @@ void CustomAnimationEffect::replaceNode( const css::uno::Reference< css::animati
     setTargetSubItem( nSubItem );
     setDuration( fDuration );
     setBegin( fBegin );
+    setFill( nFill );
 
     setAcceleration( fAcceleration );
     setDecelerate( fDecelerate );
@@ -889,14 +894,6 @@ Any CustomAnimationEffect::getEnd() const
     }
 }
 
-sal_Int16 CustomAnimationEffect::getFill() const
-{
-    if( mxNode.is() )
-        return mxNode->getFill();
-    else
-        return 0;
-}
-
 void CustomAnimationEffect::setRepeatCount( const Any& rRepeatCount )
 {
     if( mxNode.is() )
@@ -916,8 +913,11 @@ void CustomAnimationEffect::setEnd( const Any& rEnd )
 
 void CustomAnimationEffect::setFill( sal_Int16 nFill )
 {
-    if( mxNode.is() )
+    if (mxNode.is())
+    {
+        mnFill = nFill;
         mxNode->setFill( nFill );
+    }
 }
 
 Reference< XAnimationNode > CustomAnimationEffect::createAfterEffectNode() const

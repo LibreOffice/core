@@ -81,7 +81,7 @@ public:
     SAL_DLLPRIVATE css::uno::Any   getEnd() const;
     SAL_DLLPRIVATE void            setEnd( const css::uno::Any& rEnd );
 
-    SAL_DLLPRIVATE sal_Int16       getFill() const;
+    SAL_DLLPRIVATE sal_Int16       getFill() const { return mnFill; }
     SAL_DLLPRIVATE void            setFill( sal_Int16 nFill );
 
     SAL_DLLPRIVATE double          getBegin() const { return mfBegin; }
@@ -176,6 +176,7 @@ private:
     OUString        maPresetSubType;
     OUString        maProperty;
     sal_Int16       mnPresetClass;
+    sal_Int16       mnFill;
     double          mfBegin;
     double          mfDuration;                 // this is the maximum duration of the subeffects
     double          mfAbsoluteDuration;         // this is the maximum duration of the subeffects including possible iterations
