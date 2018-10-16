@@ -67,7 +67,7 @@ namespace wrapper
 {
     bool Player::LoadSymbols()
     {
-        ApiMap const VLC_PLAYER_API[] =
+        static ApiMap const VLC_PLAYER_API[] =
         {
             SYM_MAP( libvlc_media_player_new_from_media ),
             SYM_MAP( libvlc_media_player_release ),

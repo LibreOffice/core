@@ -39,7 +39,7 @@ struct TypeInfoDef
     sal_Int32 maxScale;
 };
 
-extern TypeInfoDef mysqlc_types[];
+extern TypeInfoDef const mysqlc_types[];
 
 #endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_TYPES_HXX
 

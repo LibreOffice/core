@@ -268,7 +268,7 @@ xmlDocPtr Chart2ExportTest::parseExport(const OUString& rDir, const OUString& rF
 
 void Chart2ExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
 {
-    struct { char const * pPrefix; char const * pURI; } aNamespaces[] =
+    static struct { char const * pPrefix; char const * pURI; } const aNamespaces[] =
     {
         { "w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main" },
         { "v", "urn:schemas-microsoft-com:vml" },
@@ -895,7 +895,7 @@ void Chart2ExportTest::testDataLabelBordersDOCX()
             CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aIndices[1]);
             */
 
-            const Check aDataPoints[] =
+            static const Check aDataPoints[] =
             {
                 { 0, css::drawing::LineStyle_SOLID, 0x00FFFF00 }, // solid yellow
                 { 2, css::drawing::LineStyle_SOLID, 0x00FF0000 }  // solid red
