@@ -57,13 +57,11 @@ static void generateIncludes(std::ostream & o,
             o << "#include \"cppuhelper/propertysetmixin.hxx\"\n";
     }
 
-    std::set< OUString >::const_iterator iter = interfaces.begin();
-    while (iter != interfaces.end())
+    for (const auto& rIface : interfaces)
     {
         o << "#include \""
-          << (*iter).replace('.', '/')
+          << rIface.replace('.', '/')
           << ".hpp\"\n";
-        ++iter;
     }
 }
 
@@ -153,13 +151,11 @@ static void generateCompHelperDefinition(std::ostream & o,
         "_getSupportedServiceNames()\n{\n    css::uno::Sequence< "
         "::rtl::OUString > s(" << services.size() << ");\n";
 
-    std::set< OUString >::const_iterator iter = services.begin();
     short i=0;
-    while (iter != services.end())
+    for (const auto& rService : services)
     {
         o << "    s[" << i++ << "] = ::rtl::OUString(\""
-          << *iter << "\");\n";
-        ++iter;
+          << rService << "\");\n";
     }
     o << "    return s;\n}\n\n";
 
@@ -424,20 +420,17 @@ void generateXDispatch(std::ostream& o,
         "css::uno::Sequence< css::beans::PropertyValue >& aArguments ) throw"
         "(css::uno::RuntimeException)\n{\n";
 
-    ProtocolCmdMap::const_iterator iter = protocolCmdMap.begin();
-    while (iter != protocolCmdMap.end()) {
-        o << "    if ( aURL.Protocol.equalsAscii(\"" << (*iter).first
+    for (const auto& rEntry : protocolCmdMap) {
+        o << "    if ( aURL.Protocol.equalsAscii(\"" << rEntry.first
           << "\") == 0 )\n    {\n";
 
-        for (std::vector< OString >::const_iterator i = (*iter).second.begin();
-             i != (*iter).second.end(); ++i) {
-            o << "        if ( aURL.Path.equalsAscii(\"" << (*i) << "\") )\n"
+        for (const auto& rCmd : rEntry.second) {
+            o << "        if ( aURL.Path.equalsAscii(\"" << rCmd << "\") )\n"
                 "        {\n                // add your own code here\n"
                 "                return;\n        }\n";
         }
 
         o << "    }\n";
-        ++iter;
     }
     o << "}\n\n";
 
@@ -469,19 +462,16 @@ void generateXDispatchProvider(std::ostream& o,
         "css::frame::XDispatch > xRet;\n"
         "    if ( !m_xFrame.is() )\n        return 0;\n\n";
 
-    ProtocolCmdMap::const_iterator iter = protocolCmdMap.begin();
-    while (iter != protocolCmdMap.end()) {
-        o << "    if ( aURL.Protocol.equalsAscii(\"" << (*iter).first
+    for (const auto& rEntry : protocolCmdMap) {
+        o << "    if ( aURL.Protocol.equalsAscii(\"" << rEntry.first
           << "\") == 0 )\n    {\n";
 
-        for (std::vector< OString >::const_iterator i = (*iter).second.begin();
-             i != (*iter).second.end(); ++i) {
-            o << "        if ( aURL.Path.equalsAscii(\"" << (*i) << "\") == 0 )\n"
+        for (const auto& rCmd : rEntry.second) {
+            o << "        if ( aURL.Path.equalsAscii(\"" << rCmd << "\") == 0 )\n"
                 "            xRet = this;\n";
         }
 
         o << "    }\n";
-        ++iter;
     }
     o << "    return xRet;\n}\n\n";
 
@@ -580,16 +570,15 @@ static void generateMemberInitialization(std::ostream& o,
                                   AttributeInfo const & members)
 {
     if (!members.empty()) {
-        for (AttributeInfo::const_iterator i(members.begin());
-             i != members.end(); ++i)
+        for (const auto& rMember : members)
         {
             sal_Int32 rank;
-            if ((manager->decompose(i->type, true, nullptr, &rank, nullptr, nullptr)
+            if ((manager->decompose(rMember.type, true, nullptr, &rank, nullptr, nullptr)
                  <= codemaker::UnoType::Sort::Char)
                 && rank == 0)
             {
-                o << ",\n    m_" << i->name << "(";
-                printType(o, options, manager, i->type, 16, true);
+                o << ",\n    m_" << rMember.name << "(";
+                printType(o, options, manager, rMember.type, 16, true);
                 o << ")";
             }
         }
@@ -601,12 +590,11 @@ static void generateMemberDeclaration(std::ostream& o,
                                rtl::Reference< TypeManager > const & manager,
                                AttributeInfo const & members)
 {
-    for (AttributeInfo::const_iterator i(members.begin());
-         i != members.end(); ++i)
+    for (const auto& rMember : members)
     {
         o << "    ";
-        printType(o, options, manager, i->type, 1);
-        o << " m_" << i->name << ";\n";
+        printType(o, options, manager, rMember.type, 1);
+        o << " m_" << rMember.name << ";\n";
     }
 }
 
@@ -693,13 +681,11 @@ static OString generateClassDefinition(std::ostream& o,
           << parent << "::release(); }\n\n";
     }
 
-    std::set< OUString >::const_iterator it = interfaces.begin();
     codemaker::GeneratedTypeSet generated;
-    while (it != interfaces.end())
+    for (const auto& rIface : interfaces)
     {
-        printMethods(o, options, manager, *it, generated, "", "", "    ",
+        printMethods(o, options, manager, rIface, generated, "", "", "    ",
                      true, propertyhelper);
-        ++it;
     }
 
     o << "private:\n    " << classname << "(const " << classname << " &); // not defined\n"
@@ -877,17 +863,15 @@ static void generateMethodBodies(std::ostream& o,
         OUString const & propertyhelper)
 {
     OString name(classname.concat("::"));
-    std::set< OUString >::const_iterator iter = interfaces.begin();
     codemaker::GeneratedTypeSet generated;
-    while (iter != interfaces.end()) {
-        if ( *iter == "com.sun.star.lang.XServiceInfo" ) {
+    for (const auto& rIface : interfaces) {
+        if ( rIface == "com.sun.star.lang.XServiceInfo" ) {
             generateXServiceInfoBodies(o, name, comphelpernamespace);
-            generated.add(u2b(*iter));
+            generated.add(u2b(rIface));
         } else {
-            printMethods(o, options, manager, *iter, generated, "_",
+            printMethods(o, options, manager, rIface, generated, "_",
                          name, "", true, propertyhelper);
         }
-        ++iter;
     }
 }
 
@@ -957,10 +941,8 @@ void generateSkeleton(ProgramOptions const & options,
     bool serviceobject = false;
     bool supportxcomponent = false;
 
-    std::vector< OString >::const_iterator iter = types.begin();
-    while (iter != types.end()) {
-        checkType(manager, b2u(*iter), interfaces, services, properties);
-        ++iter;
+    for (const auto& rType : types) {
+        checkType(manager, b2u(rType), interfaces, services, properties);
     }
 
     if (options.componenttype == 3) {
@@ -1090,10 +1072,8 @@ void generateCalcAddin(ProgramOptions const & options,
     bool supportxcomponent = false;
 
 
-    std::vector< OString >::const_iterator iter = types.begin();
-    while (iter != types.end()) {
-        checkType(manager, b2u(*iter), interfaces, services, properties);
-        ++iter;
+    for (const auto& rType : types) {
+        checkType(manager, b2u(rType), interfaces, services, properties);
     }
 
     OUString sAddinService;

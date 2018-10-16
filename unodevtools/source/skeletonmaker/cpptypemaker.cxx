@@ -26,6 +26,8 @@
 #include "skeletoncommon.hxx"
 #include "skeletoncpp.hxx"
 
+#include <algorithm>
+
 using namespace ::codemaker::cpp;
 
 namespace skeletonmaker { namespace cpp {
@@ -156,18 +158,16 @@ static bool printConstructorParameters(
                     o, options, manager, baseSort, baseEnt,
                     ent2->getDirectBase(), std::vector< OUString >());
             }
-            for (std::vector< unoidl::PlainStructTypeEntity::Member >::
-                     const_iterator i(ent2->getDirectMembers().begin());
-                 i != ent2->getDirectMembers().end(); ++i)
+            for (const auto& rMember : ent2->getDirectMembers())
             {
                 if (previous) {
                     o << ", ";
                 }
                 previous = true;
-                printType(o, options, manager, i->type, 4);
+                printType(o, options, manager, rMember.type, 4);
                 o << ' '
                   << codemaker::cpp::translateUnoToCppIdentifier(
-                      u2b(i->name), "param");
+                      u2b(rMember.name), "param");
             }
             break;
         }
@@ -177,23 +177,20 @@ static bool printConstructorParameters(
                 dynamic_cast< unoidl::PolymorphicStructTypeTemplateEntity * >(
                     entity.get()));
             assert(ent2.is());
-            for (std::vector<
-                     unoidl::PolymorphicStructTypeTemplateEntity::Member >::
-                     const_iterator i(ent2->getMembers().begin());
-                 i != ent2->getMembers().end(); ++i)
+            for (const auto& rMember : ent2->getMembers())
             {
                 if (previous) {
                     o << ", ";
                 }
                 previous = true;
-                if (i->parameterized) {
-                    o << i->type;
+                if (rMember.parameterized) {
+                    o << rMember.type;
                 } else {
-                    printType(o, options, manager, i->type, 4);
+                    printType(o, options, manager, rMember.type, 4);
                 }
                 o << ' '
                   << codemaker::cpp::translateUnoToCppIdentifier(
-                      u2b(i->name), "param");
+                      u2b(rMember.name), "param");
             }
             break;
         }
@@ -203,32 +200,24 @@ static bool printConstructorParameters(
                 dynamic_cast< unoidl::PolymorphicStructTypeTemplateEntity * >(
                     entity.get()));
             assert(ent2.is());
-            for (std::vector<
-                     unoidl::PolymorphicStructTypeTemplateEntity::Member >::
-                     const_iterator i(ent2->getMembers().begin());
-                 i != ent2->getMembers().end(); ++i)
+            for (const auto& rMember : ent2->getMembers())
             {
                 if (previous) {
                     o << ", ";
                 }
                 previous = true;
-                if (i->parameterized) {
-                    for (std::vector< OUString >::const_iterator j(
-                             ent2->getTypeParameters().begin());
-                         j != ent2->getTypeParameters().end(); ++j)
-                    {
-                        if (i->type == *j) {
-                            o << arguments[
-                                j - ent2->getTypeParameters().begin()];
-                            break;
-                        }
+                if (rMember.parameterized) {
+                    auto j = std::find(ent2->getTypeParameters().begin(),
+                        ent2->getTypeParameters().end(), rMember.type);
+                    if (j != ent2->getTypeParameters().end()) {
+                        o << arguments[j - ent2->getTypeParameters().begin()];
                     }
                 } else {
-                    printType(o, options, manager, i->type, 4);
+                    printType(o, options, manager, rMember.type, 4);
                 }
                 o << ' '
                   << codemaker::cpp::translateUnoToCppIdentifier(
-                      u2b(i->name), "param");
+                      u2b(rMember.name), "param");
             }
             break;
         }
@@ -245,18 +234,16 @@ static bool printConstructorParameters(
                     o, options, manager, baseSort, baseEnt,
                     ent2->getDirectBase(), std::vector< OUString >());
             }
-            for (std::vector< unoidl::ExceptionTypeEntity::Member >::
-                     const_iterator i(ent2->getDirectMembers().begin());
-                 i != ent2->getDirectMembers().end(); ++i)
+            for (const auto& rMember : ent2->getDirectMembers())
             {
                 if (previous) {
                     o << ", ";
                 }
                 previous = true;
-                printType(o, options, manager, i->type, 4);
+                printType(o, options, manager, rMember.type, 4);
                 o << ' '
                   << codemaker::cpp::translateUnoToCppIdentifier(
-                      u2b(i->name), "param");
+                      u2b(rMember.name), "param");
             }
             break;
         }
@@ -319,11 +306,10 @@ static void printExceptionSpecification(
 {
     o << ((options.shortnames) ? " throw (css::uno::RuntimeException" :
           " throw (::com::sun::star::uno::RuntimeException");
-    for (std::vector< OUString >::const_iterator i(exceptions.begin());
-         i != exceptions.end(); ++i)
+    for (const auto& rException : exceptions)
     {
         o << ", ";
-        printType(o, options, manager, *i, 1);
+        printType(o, options, manager, rException, 1);
     }
     o << ")";
 }
@@ -508,12 +494,10 @@ void printMethods(std::ostream & o,
         dynamic_cast< unoidl::InterfaceTypeEntity * >(ent.get()));
     assert(ent2.is());
     if (options.all || defaultvalue) {
-        for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
-                 ent2->getDirectMandatoryBases().begin());
-             i != ent2->getDirectMandatoryBases().end(); ++i)
+        for (const auto& rBase : ent2->getDirectMandatoryBases())
         {
             printMethods(
-                o, options, manager, i->name, generated, delegate, classname,
+                o, options, manager, rBase.name, generated, delegate, classname,
                 indentation, defaultvalue, propertyhelper);
         }
         if (!(ent2->getDirectAttributes().empty()
@@ -524,45 +508,43 @@ void printMethods(std::ostream & o,
             o << ":\n";
         }
     }
-    for (std::vector< unoidl::InterfaceTypeEntity::Attribute >::const_iterator
-             i(ent2->getDirectAttributes().begin());
-         i != ent2->getDirectAttributes().end(); ++i)
+    for (const auto& rAttr : ent2->getDirectAttributes())
     {
         o << indentation;
         if (!body)
             o << "virtual ";
 
-        printType(o, options, manager, i->type, 1);
+        printType(o, options, manager, rAttr.type, 1);
         o << " SAL_CALL ";
         if (!classname.isEmpty())
             o << classname;
 
-        o << "get" << i->name << "()";
-        printExceptionSpecification(o, options, manager, i->getExceptions);
+        o << "get" << rAttr.name << "()";
+        printExceptionSpecification(o, options, manager, rAttr.getExceptions);
         if (body) {
             if (defaultbody) {
                 if (!propertyhelper.isEmpty()) {
                     o << "\n{\n    osl::MutexGuard g(m_aMutex);\n    return m_"
-                      << i->name << ";\n}\n\n";
+                      << rAttr.name << ";\n}\n\n";
                 } else {
                     o << "\n{\n    return ";
                     if (options.componenttype == 1) {
-                        o << "m_" << i->name;
+                        o << "m_" << rAttr.name;
                     } else {
-                        printType(o, options, manager, i->type, 8, true);
+                        printType(o, options, manager, rAttr.type, 8, true);
                     }
                     o << ";\n}\n\n";
                 }
             } else {
                 o << "\n" << indentation << "{\n" << indentation << "    return "
-                  << delegate << "get" << i->name << "();\n"
+                  << delegate << "get" << rAttr.name << "();\n"
                   << indentation << "}\n\n";
             }
         } else {
             o << ";\n";
         }
 
-        if (!i->readOnly) {
+        if (!rAttr.readOnly) {
             o << indentation;
             if (!body)
                 o << "virtual ";
@@ -571,17 +553,17 @@ void printMethods(std::ostream & o,
             if (!classname.isEmpty())
                 o << classname;
 
-            o << "set" << i->name << '(';
-            printType(o, options, manager, i->type, 4);
+            o << "set" << rAttr.name << '(';
+            printType(o, options, manager, rAttr.type, 4);
             o << " the_value)";
-            printExceptionSpecification(o, options, manager, i->setExceptions);
+            printExceptionSpecification(o, options, manager, rAttr.setExceptions);
             if (body) {
                 if (defaultbody) {
                     if (!propertyhelper.isEmpty()) {
-                        printSetPropertyMixinBody(o, *i);
+                        printSetPropertyMixinBody(o, rAttr);
                     } else {
                         if (options.componenttype == 1) {
-                            o << "\n{\n    m_" << i->name
+                            o << "\n{\n    m_" << rAttr.name
                               << " = the_value;\n}\n\n";
                         } else {
                             o << "\n{\n\n}\n\n";
@@ -589,7 +571,7 @@ void printMethods(std::ostream & o,
                     }
                 } else {
                     o << "\n" << indentation << "{\n" << indentation << "    "
-                      << delegate << "set" << i->name
+                      << delegate << "set" << rAttr.name
                       << "(the_value);\n" << indentation << "}\n\n";
                 }
             } else {
@@ -597,50 +579,48 @@ void printMethods(std::ostream & o,
             }
         }
     }
-    for (std::vector< unoidl::InterfaceTypeEntity::Method >::const_iterator i(
-             ent2->getDirectMethods().begin());
-         i != ent2->getDirectMethods().end(); ++i)
+    for (const auto& rMethod : ent2->getDirectMethods())
     {
         o << indentation;
         if (!body)
             o << "virtual ";
 
-        printType(o, options, manager, i->returnType, 1);
+        printType(o, options, manager, rMethod.returnType, 1);
         o << " SAL_CALL ";
         if (!classname.isEmpty())
             o << classname;
 
-        o << i->name << '(';
-        printMethodParameters(o, options, manager, i->parameters, true);
+        o << rMethod.name << '(';
+        printMethodParameters(o, options, manager, rMethod.parameters, true);
         o << ')';
-        printExceptionSpecification(o, options, manager, i->exceptions);
+        printExceptionSpecification(o, options, manager, rMethod.exceptions);
         if (body) {
             if (defaultbody) {
                 o << "\n{\n";
-                if (i->returnType != "void") {
+                if (rMethod.returnType != "void") {
                     o << "    // TODO: Exchange the default return implementation for \""
-                      << i->name << "\" !!!\n";
+                      << rMethod.name << "\" !!!\n";
                     o << "    // Exchange the default return implementation.\n"
                         "    // NOTE: Default initialized polymorphic structs "
                         "can cause problems because of\n    // missing default "
                         "initialization of primitive types of some C++ compilers or"
                         "\n    // different Any initialization in Java and C++ "
                         "polymorphic structs.\n    return ";
-                    printType(o, options, manager, i->returnType, 8, true);
+                    printType(o, options, manager, rMethod.returnType, 8, true);
                     o << ";";
                 } else {
                     o << "    // TODO: Insert your implementation for \""
-                      << i->name << "\" here.";
+                      << rMethod.name << "\" here.";
                 }
                 o << "\n}\n\n";
             } else {
                 o << "\n" << indentation << "{\n" << indentation << "    ";
-                if (i->returnType != "void")
+                if (rMethod.returnType != "void")
                     o << "return ";
 
-                o << delegate << i->name << '(';
+                o << delegate << rMethod.name << '(';
                 printMethodParameters(
-                    o, options, manager, i->parameters, false);
+                    o, options, manager, rMethod.parameters, false);
                 o << ");\n" << indentation << "}\n\n";
             }
         } else {
@@ -667,35 +647,30 @@ static void printConstructors(
     rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity > ent2(
         dynamic_cast< unoidl::SingleInterfaceBasedServiceEntity * >(ent.get()));
     assert(ent2.is());
-    for (std::vector< unoidl::SingleInterfaceBasedServiceEntity::Constructor >::
-             const_iterator i(ent2->getConstructors().begin());
-         i != ent2->getConstructors().end(); ++i)
+    for (const auto& rConstructor : ent2->getConstructors())
     {
         o << "static ";
         printType(o, options, manager, ent2->getBase(), 1);
         o << ' ';
-        if (i->defaultConstructor) {
+        if (rConstructor.defaultConstructor) {
             o << "create";
         } else {
             o << codemaker::cpp::translateUnoToCppIdentifier(
-                u2b(i->name), "method");
+                u2b(rConstructor.name), "method");
         }
         o << ((options.shortnames) ? "(css::uno::Reference< css" :
               "(::com::sun::star::uno::Reference< ::com::sun::star")
           << "::uno::XComponentContext > const & the_context";
-        for (std::vector<
-                 unoidl::SingleInterfaceBasedServiceEntity::Constructor::
-                 Parameter >::const_iterator j(i->parameters.begin());
-             j != i->parameters.end(); ++j)
+        for (const auto& rParam : rConstructor.parameters)
         {
             o << ", ";
-            printType(o, options, manager, j->type, 4);
+            printType(o, options, manager, rParam.type, 4);
             o << ' '
               << codemaker::cpp::translateUnoToCppIdentifier(
-                  u2b(j->name), "param");
+                  u2b(rParam.name), "param");
         }
         o << ')';
-        printExceptionSpecification(o, options, manager, i->exceptions);
+        printExceptionSpecification(o, options, manager, rConstructor.exceptions);
         o << ";\n";
     }
 }
@@ -708,32 +683,26 @@ static void printServiceMembers(
     OString const & delegate)
 {
     assert(entity.is());
-    for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
-             entity->getDirectMandatoryBaseServices().begin());
-         i != entity->getDirectMandatoryBaseServices().end(); ++i)
+    for (const auto& rService : entity->getDirectMandatoryBaseServices())
     {
-        o << "\n// exported service " << i->name << "\n";
-        generateDocumentation(o, options, manager, u2b(i->name), delegate);
-        o << "\n// end of exported service " << i->name << "\n";
+        o << "\n// exported service " << rService.name << "\n";
+        generateDocumentation(o, options, manager, u2b(rService.name), delegate);
+        o << "\n// end of exported service " << rService.name << "\n";
     }
-    for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
-             entity->getDirectMandatoryBaseInterfaces().begin());
-         i != entity->getDirectMandatoryBaseInterfaces().end(); ++i)
+    for (const auto& rIface : entity->getDirectMandatoryBaseInterfaces())
     {
-        o << "\n// supported interface " << i->name << "\n";
-        generateDocumentation(o, options, manager, u2b(i->name), delegate);
+        o << "\n// supported interface " << rIface.name << "\n";
+        generateDocumentation(o, options, manager, u2b(rIface.name), delegate);
     }
     if (delegate.isEmpty()) {
         o << "\n// properties of service \""<< name << "\"\n";
-        for (std::vector< unoidl::AccumulationBasedServiceEntity::Property >::
-                 const_iterator i(entity->getDirectProperties().begin());
-             i != entity->getDirectProperties().end(); ++i)
+        for (const auto& rProp : entity->getDirectProperties())
         {
             o << "// private ";
-            printType(o, options, manager, i->type, 1);
+            printType(o, options, manager, rProp.type, 1);
             o << " "
               << codemaker::cpp::translateUnoToCppIdentifier(
-                  u2b(i->name), "property")
+                  u2b(rProp.name), "property")
               << ";\n";
         }
     }
