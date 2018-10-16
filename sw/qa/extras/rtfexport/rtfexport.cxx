@@ -754,7 +754,7 @@ DECLARE_RTFEXPORT_TEST(testTdf84832, "tdf84832.docx")
 {
     uno::Reference<table::XCell> xCell = getCell(getParagraphOrTable(2), "A1");
     // This was 0, as left padding wasn't exported.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(113)),
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(108)),
                          getProperty<sal_Int32>(xCell, "LeftBorderDistance"));
 }
 

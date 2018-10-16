@@ -1160,7 +1160,18 @@ DECLARE_OOXMLEXPORT_TEST( testTableCellMargin, "table-cell-margin.docx" )
             cellLeftMarginFromOffice[i], aLeftMargin - 0.5 * aLeftBorderLine.LineWidth, 1 );
         // The 'a' in the fourth table should not be partly hidden by the border
         if ( i == 3 )
-            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE( "Incorrect cell padding", 0.5 * aLeftBorderLine.LineWidth, aLeftMargin, 1 );
+        {
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect cell left padding",
+                                                 0.5 * aLeftBorderLine.LineWidth, aLeftMargin, 1);
+            // tdf#119885: cell's edit area must touch right border
+            sal_Int32 aRightMargin = -1;
+            xPropSet->getPropertyValue("RightBorderDistance") >>= aRightMargin;
+            uno::Any aRightBorder = xPropSet->getPropertyValue("RightBorder");
+            table::BorderLine2 aRightBorderLine;
+            aRightBorder >>= aRightBorderLine;
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect cell right padding",
+                                                 0.5 * aRightBorderLine.LineWidth, aRightMargin, 1);
+        }
     }
 }
 
