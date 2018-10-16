@@ -16,6 +16,24 @@
       "revId": "c954ff43841e6bcfab06be74e528da93996d761d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "df140735_1c451918",
+        "filename": "writerfilter/source/dmapper/DomainMapperTableHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-16T15:58:32Z",
+      "side": 1,
+      "message": "Just because I moved the \"}\" closing \"namespace {\" below it and my new function ;-)",
+      "parentUuid": "df140735_1c82b950",
+      "revId": "c954ff43841e6bcfab06be74e528da93996d761d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
