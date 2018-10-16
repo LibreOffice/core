@@ -2409,9 +2409,9 @@ public:
     {
         ScFormulaCell* p2 = const_cast<ScFormulaCell*>(p);
         if (p2->IsValue())
-            maEntries.push_back(Entry(nRow, p2->GetValue()));
+            maEntries.emplace_back(nRow, p2->GetValue());
         else
-            maEntries.push_back(Entry(nRow, p2->GetString()));
+            maEntries.emplace_back(nRow, p2->GetString());
     }
 
     void commitCells(ScColumn& rColumn)
