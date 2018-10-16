@@ -28,6 +28,7 @@
 #include <docary.hxx>
 #include <ndtxt.hxx>
 #include <unocrsr.hxx>
+#include <ftnidx.hxx>
 #include <strings.hrc>
 #include <swmodule.hxx>
 #include <editsh.hxx>
@@ -118,8 +119,11 @@ using namespace com::sun::star;
 
 namespace sw {
 
-void UpdateFramesForAddDeleteRedline(SwPaM const& rPam)
+void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
 {
+    // no need to call UpdateFootnoteNums for FTNNUM_PAGE:
+    // the AppendFootnote/RemoveFootnote will do it by itself!
+    rDoc.GetFootnoteIdxs().UpdateFootnote(rPam.Start()->nNode);
     SwTextNode *const pStartNode(rPam.Start()->nNode.GetNode().GetTextNode());
     std::vector<SwTextFrame*> frames;
     SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pStartNode);
@@ -148,6 +152,7 @@ void UpdateFramesForAddDeleteRedline(SwPaM const& rPam)
 
 void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
 {
+    rDoc.GetFootnoteIdxs().UpdateFootnote(rPam.Start()->nNode);
     SwTextNode *const pStartNode(rPam.Start()->nNode.GetNode().GetTextNode());
     std::vector<SwTextFrame*> frames;
     std::set<SwRootFrame*> layouts;

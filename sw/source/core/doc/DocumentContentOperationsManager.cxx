@@ -3679,7 +3679,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
         // sw_redlinehide: 2 reasons why this is needed:
         // 1. it's the first redline in node => RedlineDelText was sent but ignored
         // 2. redline spans multiple nodes => must merge text frames
-        sw::UpdateFramesForAddDeleteRedline(*pCursor);
+        sw::UpdateFramesForAddDeleteRedline(m_rDoc, *pCursor);
     }
     m_rDoc.getIDocumentState().SetModified();
 
