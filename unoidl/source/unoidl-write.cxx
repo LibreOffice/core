@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <cstdlib>
@@ -445,6 +446,12 @@ void mapCursor(
     }
 }
 
+template<typename T>
+bool hasNotEmptyAnnotations(const std::vector<T>& v)
+{
+    return std::any_of(v.begin(), v.end(), [](const T& rItem) { return !rItem.annotations.empty(); });
+}
+
 sal_uInt64 writeMap(
     osl::File & file, std::map< OUString, Item > & map, std::size_t * rootSize)
 {
@@ -458,12 +465,8 @@ sal_uInt64 writeMap(
                 rtl::Reference< unoidl::EnumTypeEntity > ent2(
                     static_cast< unoidl::EnumTypeEntity * >(
                         i.second.entity.get()));
-                bool ann = !ent2->getAnnotations().empty();
-                for (auto j(ent2->getMembers().begin());
-                     !ann && j != ent2->getMembers().end(); ++j)
-                {
-                    ann = !j->annotations.empty();
-                }
+                bool ann = !ent2->getAnnotations().empty() ||
+                    hasNotEmptyAnnotations(ent2->getMembers());
                 i.second.dataOffset = getOffset(file);
                 writeKind(file, ent2.get(), ann);
                 write32(file, ent2->getMembers().size());
@@ -480,12 +483,8 @@ sal_uInt64 writeMap(
                 rtl::Reference< unoidl::PlainStructTypeEntity > ent2(
                     static_cast< unoidl::PlainStructTypeEntity * >(
                         i.second.entity.get()));
-                bool ann = !ent2->getAnnotations().empty();
-                for (auto j(ent2->getDirectMembers().begin());
-                     !ann && j != ent2->getDirectMembers().end(); ++j)
-                {
-                    ann = !j->annotations.empty();
-                }
+                bool ann = !ent2->getAnnotations().empty() ||
+                    hasNotEmptyAnnotations(ent2->getDirectMembers());
                 i.second.dataOffset = getOffset(file);
                 writeKind(
                     file, ent2.get(), ann, !ent2->getDirectBase().isEmpty());
@@ -508,12 +507,8 @@ sal_uInt64 writeMap(
                         static_cast<
                         unoidl::PolymorphicStructTypeTemplateEntity * >(
                             i.second.entity.get()));
-                bool ann = !ent2->getAnnotations().empty();
-                for (auto j(ent2->getMembers().begin());
-                     !ann && j != ent2->getMembers().end(); ++j)
-                {
-                    ann = !j->annotations.empty();
-                }
+                bool ann = !ent2->getAnnotations().empty() ||
+                    hasNotEmptyAnnotations(ent2->getMembers());
                 i.second.dataOffset = getOffset(file);
                 writeKind(file, ent2.get(), ann);
                 write32(file, ent2->getTypeParameters().size());
@@ -539,12 +534,8 @@ sal_uInt64 writeMap(
                 rtl::Reference< unoidl::ExceptionTypeEntity > ent2(
                     static_cast< unoidl::ExceptionTypeEntity * >(
                         i.second.entity.get()));
-                bool ann = !ent2->getAnnotations().empty();
-                for (auto j(ent2->getDirectMembers().begin());
-                     !ann && j != ent2->getDirectMembers().end(); ++j)
-                {
-                    ann = !j->annotations.empty();
-                }
+                bool ann = !ent2->getAnnotations().empty() ||
+                    hasNotEmptyAnnotations(ent2->getDirectMembers());
                 i.second.dataOffset = getOffset(file);
                 writeKind(
                     file, ent2.get(), ann, !ent2->getDirectBase().isEmpty());
@@ -565,27 +556,11 @@ sal_uInt64 writeMap(
                 rtl::Reference< unoidl::InterfaceTypeEntity > ent2(
                     static_cast< unoidl::InterfaceTypeEntity * >(
                         i.second.entity.get()));
-                bool ann = !ent2->getAnnotations().empty();
-                for (auto j(ent2->getDirectMandatoryBases().begin());
-                     !ann && j != ent2->getDirectMandatoryBases().end(); ++j)
-                {
-                    ann = !j->annotations.empty();
-                }
-                for (auto j(ent2->getDirectOptionalBases().begin());
-                     !ann && j != ent2->getDirectOptionalBases().end(); ++j)
-                {
-                    ann = !j->annotations.empty();
-                }
-                for (auto j(ent2->getDirectAttributes().begin());
-                     !ann && j != ent2->getDirectAttributes().end(); ++j)
-                {
-                    ann = !j->annotations.empty();
-                }
-                for (auto j(ent2->getDirectMethods().begin());
-                     !ann && j != ent2->getDirectMethods().end(); ++j)
-                {
-                    ann = !j->annotations.empty();
-                }
+                bool ann = !ent2->getAnnotations().empty() ||
+                    hasNotEmptyAnnotations(ent2->getDirectMandatoryBases()) ||
+                    hasNotEmptyAnnotations(ent2->getDirectOptionalBases()) ||
+                    hasNotEmptyAnnotations(ent2->getDirectAttributes()) ||
+                    hasNotEmptyAnnotations(ent2->getDirectMethods());
                 i.second.dataOffset = getOffset(file);
                 writeKind(file, ent2.get(), ann);
                 write32(file, ent2->getDirectMandatoryBases().size());
@@ -757,11 +732,8 @@ sal_uInt64 writeMap(
                     && ent2->getConstructors()[0].defaultConstructor;
                 bool ann = !ent2->getAnnotations().empty();
                 if (!dfltCtor) {
-                    for (auto j(ent2->getConstructors().begin());
-                         !ann && j != ent2->getConstructors().end(); ++j)
-                    {
-                        ann = !j->annotations.empty();
-                    }
+                    if (!ann)
+                        ann = hasNotEmptyAnnotations(ent2->getConstructors());
                 }
                 i.second.dataOffset = getOffset(file);
                 writeKind(file, ent2.get(), ann, dfltCtor);
@@ -801,37 +773,12 @@ sal_uInt64 writeMap(
                 rtl::Reference< unoidl::AccumulationBasedServiceEntity > ent2(
                     static_cast< unoidl::AccumulationBasedServiceEntity * >(
                         i.second.entity.get()));
-                bool ann = !ent2->getAnnotations().empty();
-                for (auto j(ent2->getDirectMandatoryBaseServices().begin());
-                     !ann && j != ent2->getDirectMandatoryBaseServices().end();
-                     ++j)
-                {
-                    ann = !j->annotations.empty();
-                }
-                for (auto j(ent2->getDirectOptionalBaseServices().begin());
-                     !ann && j != ent2->getDirectOptionalBaseServices().end();
-                     ++j)
-                {
-                    ann = !j->annotations.empty();
-                }
-                for (auto j(ent2->getDirectMandatoryBaseInterfaces().begin());
-                     (!ann
-                      && j != ent2->getDirectMandatoryBaseInterfaces().end());
-                     ++j)
-                {
-                    ann = !j->annotations.empty();
-                }
-                for (auto j(ent2->getDirectOptionalBaseInterfaces().begin());
-                     !ann && j != ent2->getDirectOptionalBaseInterfaces().end();
-                     ++j)
-                {
-                    ann = !j->annotations.empty();
-                }
-                for (auto j(ent2->getDirectProperties().begin());
-                     !ann && j != ent2->getDirectProperties().end(); ++j)
-                {
-                    ann = !j->annotations.empty();
-                }
+                bool ann = !ent2->getAnnotations().empty() ||
+                    hasNotEmptyAnnotations(ent2->getDirectMandatoryBaseServices()) ||
+                    hasNotEmptyAnnotations(ent2->getDirectOptionalBaseServices()) ||
+                    hasNotEmptyAnnotations(ent2->getDirectMandatoryBaseInterfaces()) ||
+                    hasNotEmptyAnnotations(ent2->getDirectOptionalBaseInterfaces()) ||
+                    hasNotEmptyAnnotations(ent2->getDirectProperties());
                 i.second.dataOffset = getOffset(file);
                 writeKind(file, ent2.get(), ann);
                 write32(file, ent2->getDirectMandatoryBaseServices().size());

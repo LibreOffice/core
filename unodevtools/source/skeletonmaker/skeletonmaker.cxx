@@ -260,32 +260,29 @@ SAL_IMPLEMENT_MAIN()
     }
 
     rtl::Reference< TypeManager > manager(new TypeManager);
-    for (std::vector< OString >::const_iterator i(registries.begin());
-         i != registries.end(); ++i)
+    for (const auto& rRegistry : registries)
     {
-        manager->loadProvider(convertToFileUrl(*i), true);
+        manager->loadProvider(convertToFileUrl(rRegistry), true);
     }
 
     if ( options.dump ) {
-        std::vector< OString >::const_iterator iter = types.begin();
-        while (iter != types.end()) {
+        for (const auto& rType : types) {
             std::cout << "\n/***************************************************"
                 "*****************************/\n";
             switch (options.language )
             {
             case 1: //Java
                 java::generateDocumentation(std::cout, options, manager,
-                                            *iter, delegate);
+                                            rType, delegate);
                 break;
             case 2: //C++
                 cpp::generateDocumentation(std::cout, options, manager,
-                                           *iter, delegate);
+                                           rType, delegate);
                 break;
             default:
                 OSL_ASSERT(false);
                 break;
             }
-            ++iter;
         }
     } else {
         switch ( options.language )

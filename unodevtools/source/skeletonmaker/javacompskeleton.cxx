@@ -256,18 +256,17 @@ static void registerProperties(std::ostream& o,
     if (!properties.empty()) {
         bool cast = false;
         OStringBuffer attributeValue;
-        for (AttributeInfo::const_iterator i(properties.begin());
-             i != properties.end(); ++i)
+        for (const auto& rProp : properties)
         {
-            if (i->attributes != 0) {
-                cast = checkAttribute(attributeValue, i->attributes);
+            if (rProp.attributes != 0) {
+                cast = checkAttribute(attributeValue, rProp.attributes);
             } else {
                 cast = true;
                 attributeValue.append('0');
             }
 
-            o << indentation << "registerProperty(\"" << i->name
-              << "\", \"m_" << i->name << "\",\n"
+            o << indentation << "registerProperty(\"" << rProp.name
+              << "\", \"m_" << rProp.name << "\",\n"
               << indentation << "      ";
             if (cast)
                 o << "(short)";
@@ -425,20 +424,17 @@ static void generateXDispatchBodies(std::ostream& o, ProgramOptions const & opti
         "     public void dispatch( com.sun.star.util.URL aURL,\n"
         "                           com.sun.star.beans.PropertyValue[] aArguments )\n    {\n";
 
-    ProtocolCmdMap::const_iterator iter = options.protocolCmdMap.begin();
-    while (iter != options.protocolCmdMap.end()) {
-        o << "         if ( aURL.Protocol.equals(\"" << (*iter).first
+    for (const auto& rEntry : options.protocolCmdMap) {
+        o << "         if ( aURL.Protocol.equals(\"" << rEntry.first
           << "\") )\n        {\n";
 
-        for (std::vector< OString >::const_iterator i = (*iter).second.begin();
-             i != (*iter).second.end(); ++i) {
-            o << "            if ( aURL.Path.equals(\"" << (*i) << "\") )\n"
+        for (const auto& rCmd : rEntry.second) {
+            o << "            if ( aURL.Path.equals(\"" << rCmd << "\") )\n"
                 "            {\n                // add your own code here\n"
                 "                return;\n            }\n";
         }
 
         o << "        }\n";
-        ++iter;
     }
     o << "    }\n\n";
 
@@ -462,19 +458,16 @@ static void generateXDispatchProviderBodies(std::ostream& o, ProgramOptions cons
         "                                                       String sTargetFrameName,\n"
         "                                                       int iSearchFlags )\n    {\n";
 
-    ProtocolCmdMap::const_iterator iter = options.protocolCmdMap.begin();
-    while (iter != options.protocolCmdMap.end()) {
-        o << "        if ( aURL.Protocol.equals(\"" << (*iter).first
+    for (const auto& rEntry : options.protocolCmdMap) {
+        o << "        if ( aURL.Protocol.equals(\"" << rEntry.first
           << "\") )\n        {\n";
 
-        for (std::vector< OString >::const_iterator i = (*iter).second.begin();
-             i != (*iter).second.end(); ++i) {
-            o << "            if ( aURL.Path.equals(\"" << (*i) << "\") )\n"
+        for (const auto& rCmd : rEntry.second) {
+            o << "            if ( aURL.Path.equals(\"" << rCmd << "\") )\n"
                 "                return this;\n";
         }
 
         o << "        }\n";
-        ++iter;
     }
     o << "        return null;\n    }\n\n";
 
@@ -498,11 +491,9 @@ static void generateMethodBodies(std::ostream& o,
          const std::set< OUString >& interfaces,
          const OString& indentation, bool usepropertymixin)
 {
-    std::set< OUString >::const_iterator iter = interfaces.begin();
     codemaker::GeneratedTypeSet generated;
-    while (iter != interfaces.end()) {
-        OUString type(*iter);
-        ++iter;
+    for (const auto& rIface : interfaces) {
+        OUString type(rIface);
         if (type == "com.sun.star.lang.XServiceInfo") {
             generateXServiceInfoBodies(o);
             generated.add(u2b(type));
@@ -760,26 +751,20 @@ static void generateClassDefinition(std::ostream& o,
 
     // attribute/property members
     if (!properties.empty()) {
-        AttributeInfo::const_iterator iter =
-            properties.begin();
         o << "    // properties\n";
-        while (iter != properties.end()) {
+        for (const auto& rProp : properties) {
             o << "    protected ";
-            printType(o, options, manager, iter->type, false);
-            o << " m_" << iter->name << ";\n";
-            ++iter;
+            printType(o, options, manager, rProp.type, false);
+            o << " m_" << rProp.name << ";\n";
         }
     } else if (!attributes.empty()) {
-        AttributeInfo::const_iterator iter =
-            attributes.begin();
         o << "    // attributes\n";
-        while (iter != attributes.end()) {
+        for (const auto& rAttr : attributes) {
             o << "    private ";
-            printType(o, options, manager, iter->type, false);
-            o << " m_" << iter->name << " = ";
-            printType(o, options, manager, iter->type, false, true);
+            printType(o, options, manager, rAttr.type, false);
+            o << " m_" << rAttr.name << " = ";
+            printType(o, options, manager, rAttr.type, false, true);
             o <<";\n";
-            ++iter;
         }
     }
 
@@ -827,10 +812,8 @@ void generateSkeleton(ProgramOptions const & options,
     bool serviceobject = false;
     bool supportxcomponent = false;
 
-    std::vector< OString >::const_iterator iter = types.begin();
-    while (iter != types.end()) {
-        checkType(manager, b2u(*iter), interfaces, services, properties);
-        ++iter;
+    for (const auto& rType : types) {
+        checkType(manager, b2u(rType), interfaces, services, properties);
     }
 
     if (options.componenttype == 3) {
