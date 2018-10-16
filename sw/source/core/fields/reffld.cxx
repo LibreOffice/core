@@ -525,7 +525,7 @@ void SwGetRefField::UpdateField( const SwTextField* pFieldTextAttr )
                     SwTextFootnote* const pFootnoteIdx = pDoc->GetFootnoteIdxs()[i];
                     if( m_nSeqNo == pFootnoteIdx->GetSeqRefNo() )
                     {
-                        m_sText = pFootnoteIdx->GetFootnote().GetViewNumStr( *pDoc );
+                        m_sText = pFootnoteIdx->GetFootnote().GetViewNumStr(*pDoc, nullptr/*TODO?*/);
                         if (!m_sSetReferenceLanguage.isEmpty())
                             lcl_formatReferenceLanguage(m_sText, false, GetLanguage(), m_sSetReferenceLanguage);
                         break;

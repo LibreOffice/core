@@ -118,7 +118,7 @@ void SwLayoutWriter::CheckRedlineFootnotesHidden()
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nType", "POR_TXT");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "foaz");
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Special[2]", "nType", "POR_FTN");
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Special[2]", "rText", "5"); // TODO 2
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Special[2]", "rText", "2");
     assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[1]/txt[1]/merged", "paraPropsNodeIndex", "13");
     assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[1]/txt[1]/Special[1]", "nType", "POR_FTNNUM");
     assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[1]/txt[1]/Special[1]", "rText", "1");
@@ -126,7 +126,7 @@ void SwLayoutWriter::CheckRedlineFootnotesHidden()
     assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[1]/txt[1]/Text[1]", "Portion", "ac");
     assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[2]/txt[1]/merged", "paraPropsNodeIndex", "16");
     assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[2]/txt[1]/Special[1]", "nType", "POR_FTNNUM");
-    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[2]/txt[1]/Special[1]", "rText", "5"); // TODO 2
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[2]/txt[1]/Special[1]", "rText", "2");
     assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[2]/txt[1]/Text[1]", "nType", "POR_TXT");
     assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn[2]/txt[1]/Text[1]", "Portion", "mo");
 }

@@ -32,6 +32,7 @@ namespace com { namespace sun { namespace star {
 
 class SwDoc;
 class SwTextFootnote;
+class SwRootFrame;
 
 // ATT_FTN
 
@@ -87,7 +88,8 @@ public:
     void GetFootnoteText( OUString& rStr ) const;
 
     /// Returns string to be displayed of footnote / endnote.
-    OUString GetViewNumStr( const SwDoc& rDoc, bool bInclStrs = false ) const;
+    OUString GetViewNumStr(const SwDoc& rDoc, SwRootFrame const* pLayout,
+            bool bInclStrings = false) const;
 
     css::uno::WeakReference<css::text::XFootnote> const& GetXFootnote() const
         { return m_wXFootnote; }

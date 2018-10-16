@@ -778,7 +778,7 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
     SwDoc *const pDoc = &m_pFrame->GetDoc();
 
     if( rInf.IsTest() )
-        return new SwFootnotePortion( rFootnote.GetViewNumStr( *pDoc ), pFootnote );
+        return new SwFootnotePortion(rFootnote.GetViewNumStr(*pDoc, m_pFrame->getRootFrame()), pFootnote);
 
     SwSwapIfSwapped swap(m_pFrame);
 
@@ -892,7 +892,8 @@ SwFootnotePortion *SwTextFormatter::NewFootnotePortion( SwTextFormatInfo &rInf,
         }
     }
     // Finally: Create FootnotePortion and exit ...
-    SwFootnotePortion *pRet = new SwFootnotePortion( rFootnote.GetViewNumStr( *pDoc ),
+    SwFootnotePortion *pRet = new SwFootnotePortion(
+            rFootnote.GetViewNumStr(*pDoc, m_pFrame->getRootFrame()),
                                            pFootnote, nReal );
     rInf.SetFootnoteInside( true );
 
@@ -917,7 +918,7 @@ SwNumberPortion *SwTextFormatter::NewFootnoteNumPortion( SwTextFormatInfo const 
     SwFormatFootnote& rFootnote = const_cast<SwFormatFootnote&>(pFootnote->GetFootnote());
 
     SwDoc *const pDoc = &m_pFrame->GetDoc();
-    OUString aFootnoteText( rFootnote.GetViewNumStr( *pDoc, true ));
+    OUString aFootnoteText(rFootnote.GetViewNumStr(*pDoc, m_pFrame->getRootFrame(), true));
 
     const SwEndNoteInfo* pInfo;
     if( rFootnote.IsEndNote() )
@@ -1249,7 +1250,7 @@ SwFootnoteSave::SwFootnoteSave( const SwTextSizeInfo &rInf,
         else
         {
             // examine text and set script
-            OUString aTmpStr( rFootnote.GetViewNumStr( *pDoc ) );
+            OUString aTmpStr(rFootnote.GetViewNumStr(*pDoc, rInf.GetTextFrame()->getRootFrame()));
             pFnt->SetActual( SwScriptInfo::WhichFont(0, aTmpStr) );
         }
 
