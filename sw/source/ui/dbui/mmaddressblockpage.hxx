@@ -85,38 +85,35 @@ public:
     SwMailMergeWizard* GetWizard() { return m_pWizard; }
 };
 
-class SwSelectAddressBlockDialog : public SfxModalDialog
+class SwSelectAddressBlockDialog : public SfxDialogController
 {
-    VclPtr<SwAddressPreview>   m_pPreview;
-    VclPtr<PushButton>         m_pNewPB;
-    VclPtr<PushButton>         m_pCustomizePB;
-    VclPtr<PushButton>         m_pDeletePB;
-
-    VclPtr<RadioButton>        m_pNeverRB;
-    VclPtr<RadioButton>        m_pAlwaysRB;
-    VclPtr<RadioButton>        m_pDependentRB;
-    VclPtr<Edit>               m_pCountryED;
-
     css::uno::Sequence< OUString>    m_aAddressBlocks;
     SwMailMergeConfigItem& m_rConfig;
 
-    DECL_LINK(NewCustomizeHdl_Impl, Button*, void);
-    DECL_LINK(DeleteHdl_Impl, Button*, void);
-    DECL_LINK(IncludeHdl_Impl, Button*, void);
+    std::unique_ptr<AddressPreview> m_xPreview;
+    std::unique_ptr<weld::Button> m_xNewPB;
+    std::unique_ptr<weld::Button> m_xCustomizePB;
+    std::unique_ptr<weld::Button> m_xDeletePB;
+    std::unique_ptr<weld::RadioButton> m_xNeverRB;
+    std::unique_ptr<weld::RadioButton> m_xAlwaysRB;
+    std::unique_ptr<weld::RadioButton> m_xDependentRB;
+    std::unique_ptr<weld::Entry> m_xCountryED;
+    std::unique_ptr<weld::CustomWeld> m_xPreviewWin;
 
-    using Window::SetSettings;
+    DECL_LINK(NewCustomizeHdl_Impl, weld::Button&, void);
+    DECL_LINK(DeleteHdl_Impl, weld::Button&, void);
+    DECL_LINK(IncludeHdl_Impl, weld::ToggleButton&, void);
 
 public:
-    SwSelectAddressBlockDialog(vcl::Window* pParent, SwMailMergeConfigItem& rConfig);
+    SwSelectAddressBlockDialog(weld::Window* pParent, SwMailMergeConfigItem& rConfig);
     virtual ~SwSelectAddressBlockDialog() override;
-    virtual void dispose() override;
 
     void         SetAddressBlocks(const css::uno::Sequence< OUString>& rBlocks,
                                 sal_uInt16 nSelected);
     const css::uno::Sequence< OUString>&    GetAddressBlocks();
 
     void         SetSettings(bool bIsCountry, const OUString& sCountry);
-    bool         IsIncludeCountry() const {return !m_pNeverRB->IsChecked();}
+    bool         IsIncludeCountry() const {return !m_xNeverRB->get_active();}
     OUString     GetCountry() const;
 };
 
