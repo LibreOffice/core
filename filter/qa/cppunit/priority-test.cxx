@@ -50,7 +50,7 @@ void PriorityFilterTest::testPriority()
     static struct {
         const char *pURL;
         const char *pFormat;
-    } aToCheck[] = {
+    } const aToCheck[] = {
         { "file:///tmp/foo.xls", "calc_MS_Excel_97" }
         // TODO: expand this to check more of these priorities
     };

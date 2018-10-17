@@ -7018,7 +7018,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
             sal_uInt32 n1;
             sal_uInt16 n2, n3;
             sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
-        } aArr[] = {
+        } const aArr[] = {
             { OLE_MATHTYPE_2_STARMATH, "smath", MSO_EQUATION3_CLASSID },
             { OLE_MATHTYPE_2_STARMATH, "smath", MSO_EQUATION2_CLASSID },
             { OLE_WINWORD_2_STARWRITER, "swriter", MSO_WW8_CLASSID },

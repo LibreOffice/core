@@ -2970,7 +2970,7 @@ void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFontItem& rCo
         DefaultFontType nFontType;
         LanguageType    nLanguage;
     }
-    aOutTypeArr[ nItemCnt ] =
+    const aOutTypeArr[ nItemCnt ] =
     {
         {  DefaultFontType::LATIN_TEXT, LANGUAGE_ENGLISH_US },
         {  DefaultFontType::CJK_TEXT, LANGUAGE_ENGLISH_US },
