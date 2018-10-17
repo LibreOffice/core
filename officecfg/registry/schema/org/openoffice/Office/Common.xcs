@@ -2049,6 +2049,31 @@
           <desc>Contains all help bookmarks.</desc>
         </info>
       </set>
+      <prop oor:name="SendFeedbackURL" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the URL used with the UNO command SendFeedback (SID_SEND_FEEDBACK).</desc>
+        </info>
+      </prop>
+      <prop oor:name="QA_URL" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the URL used with the UNO command QuestionAnswers (SID_Q_AND_A).</desc>
+        </info>
+      </prop>
+      <prop oor:name="DocumentationURL" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the URL used with the UNO command Documentation (SID_DOCUMENTATION).</desc>
+        </info>
+      </prop>
+      <prop oor:name="GetInvolvedURL" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the URL used with the UNO command GetInvolved (SID_GETINVOLVED).</desc>
+        </info>
+      </prop>
+      <prop oor:name="DonationURL" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the URL used with the UNO command Donation (SID_DONATION).</desc>
+        </info>
+      </prop>
     </group>
     <group oor:name="History">
       <!-- OldLocation: soffice.ini -->
