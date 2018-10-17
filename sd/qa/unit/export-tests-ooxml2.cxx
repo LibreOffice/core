@@ -192,6 +192,7 @@ public:
     void testTdf118768();
     void testTdf118836();
     void testTdf116350TextEffects();
+    void testTdf120573();
     void testTdf118825();
     void testTdf119118();
     void testTdf99213();
@@ -270,6 +271,7 @@ public:
     CPPUNIT_TEST(testTdf118768);
     CPPUNIT_TEST(testTdf118836);
     CPPUNIT_TEST(testTdf116350TextEffects);
+    CPPUNIT_TEST(testTdf120573);
     CPPUNIT_TEST(testTdf118825);
     CPPUNIT_TEST(testTdf119118);
     CPPUNIT_TEST(testTdf99213);
@@ -1969,6 +1971,29 @@ void SdOOXMLExportTest2::testTdf116350TextEffects()
     assertXPath(pXmlDocContent, "//p:sp[14]/p:spPr/a:solidFill/a:srgbClr", 0);
 
     xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf120573()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( m_directories.getURLFromSrc( "sd/qa/unit/data/pptx/tdf120573.pptx" ), PPTX );
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload( xDocShRef.get(), PPTX, &tempFile );
+
+    xmlDocPtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
+    assertXPath(pXmlDoc, "//p:sld/p:cSld/p:spTree/p:pic/p:nvPicPr/p:nvPr/a:audioFile", 1);
+    assertXPath(pXmlDoc, "//p:sld/p:cSld/p:spTree/p:pic/p:nvPicPr/p:nvPr/a:videoFile", 0);
+
+    xmlDocPtr pXmlDocRels = parseExport(tempFile, "ppt/slides/_rels/slide1.xml.rels");
+    assertXPath(pXmlDocRels,
+        "(/rels:Relationships/rels:Relationship[@Target='../media/media1.wav'])[1]",
+        "Type",
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/audio");
+
+    xmlDocPtr pXmlContentType = parseExport(tempFile, "[Content_Types].xml");
+    assertXPath(pXmlContentType,
+                "/ContentType:Types/ContentType:Override[@PartName='/ppt/media/media1.wav']",
+                "ContentType",
+                "audio/x-wav");
 }
 
 void SdOOXMLExportTest2::testTdf118825()

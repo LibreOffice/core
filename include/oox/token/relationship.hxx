@@ -58,6 +58,7 @@ enum class Relationship
     THEME,
     VBAPROJECT,
     VIDEO,
+    AUDIO,
     VMLDRAWING,
     WORDVBADATA,
     WORKSHEET
