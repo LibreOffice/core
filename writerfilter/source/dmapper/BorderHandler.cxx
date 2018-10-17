@@ -21,6 +21,8 @@
 #include "PropertyMap.hxx"
 #include "ConversionHelper.hxx"
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <o3tl/enumarray.hxx>
+#include <o3tl/enumrange.hxx>
 #include <ooxml/resourceids.hxx>
 #include <filter/msfilter/util.hxx>
 #include <comphelper/sequence.hxx>
@@ -42,9 +44,8 @@ m_nLineDistance(0),
 m_bShadow(false),
 m_bOOXML( bOOXML )
 {
-    const int nBorderCount(BORDER_COUNT);
-    std::fill_n(m_aFilledLines, nBorderCount, false);
-    std::fill_n(m_aBorderLines, nBorderCount, table::BorderLine2());
+    m_aFilledLines.fill(false);
+    m_aBorderLines.fill(table::BorderLine2());
 }
 
 BorderHandler::~BorderHandler()
@@ -90,73 +91,70 @@ void BorderHandler::lcl_attribute(Id rName, Value & rVal)
 
 void BorderHandler::lcl_sprm(Sprm & rSprm)
 {
-    BorderPosition pos = BORDER_COUNT; // invalid pos
+    BorderPosition pos;
     const bool rtl = false; // TODO detect
     OUString aBorderPos;
     switch( rSprm.getId())
     {
         case NS_ooxml::LN_CT_TblBorders_top:
-            pos = BORDER_TOP;
+            pos = BorderPosition::Top;
             aBorderPos = "top";
             break;
         case NS_ooxml::LN_CT_TblBorders_start:
-            pos = rtl ? BORDER_RIGHT : BORDER_LEFT;
+            pos = rtl ? BorderPosition::Right : BorderPosition::Left;
             aBorderPos = "start";
             break;
         case NS_ooxml::LN_CT_TblBorders_left:
-            pos = BORDER_LEFT;
+            pos = BorderPosition::Left;
             aBorderPos = "left";
             break;
         case NS_ooxml::LN_CT_TblBorders_bottom:
-            pos = BORDER_BOTTOM;
+            pos = BorderPosition::Bottom;
             aBorderPos = "bottom";
             break;
         case NS_ooxml::LN_CT_TblBorders_end:
-            pos = rtl ? BORDER_LEFT : BORDER_RIGHT;
+            pos = rtl ? BorderPosition::Left : BorderPosition::Right;
             aBorderPos = "end";
             break;
         case NS_ooxml::LN_CT_TblBorders_right:
-            pos = BORDER_RIGHT;
+            pos = BorderPosition::Right;
             aBorderPos = "right";
             break;
         case NS_ooxml::LN_CT_TblBorders_insideH:
-            pos = BORDER_HORIZONTAL;
+            pos = BorderPosition::Horizontal;
             aBorderPos = "insideH";
             break;
         case NS_ooxml::LN_CT_TblBorders_insideV:
-            pos = BORDER_VERTICAL;
+            pos = BorderPosition::Vertical;
             aBorderPos = "insideV";
             break;
         default:
-            break;
+            return;
     }
-    if( pos != BORDER_COUNT )
+    writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+    if( pProperties.get())
     {
-        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if( pProperties.get())
+        std::vector<beans::PropertyValue> aSavedGrabBag;
+        if (!m_aInteropGrabBagName.isEmpty())
         {
-            std::vector<beans::PropertyValue> aSavedGrabBag;
-            if (!m_aInteropGrabBagName.isEmpty())
-            {
-                aSavedGrabBag = m_aInteropGrabBag;
-                m_aInteropGrabBag.clear();
-            }
-            pProperties->resolve(*this);
-            if (!m_aInteropGrabBagName.isEmpty())
-            {
-                aSavedGrabBag.push_back(getInteropGrabBag(aBorderPos));
-                m_aInteropGrabBag = aSavedGrabBag;
-            }
+            aSavedGrabBag = m_aInteropGrabBag;
+            m_aInteropGrabBag.clear();
         }
-        ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
-                               m_aBorderLines[ pos ], m_bOOXML );
-        m_aFilledLines[ pos ] = true;
+        pProperties->resolve(*this);
+        if (!m_aInteropGrabBagName.isEmpty())
+        {
+            aSavedGrabBag.push_back(getInteropGrabBag(aBorderPos));
+            m_aInteropGrabBag = aSavedGrabBag;
+        }
     }
+    ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
+                           m_aBorderLines[ pos ], m_bOOXML );
+    m_aFilledLines[ pos ] = true;
 }
 
 PropertyMapPtr  BorderHandler::getProperties()
 {
-    static const PropertyIds aPropNames[BORDER_COUNT] =
+    static const o3tl::enumarray<BorderPosition, PropertyIds> aPropNames =
     {
         PROP_TOP_BORDER,
         PROP_LEFT_BORDER,
@@ -169,7 +167,7 @@ PropertyMapPtr  BorderHandler::getProperties()
     // don't fill in default properties
     if( m_bOOXML )
     {
-        for( sal_Int32 nProp = 0; nProp < BORDER_COUNT; ++nProp)
+        for( auto nProp: o3tl::enumrange<BorderPosition>())
         {
             if ( m_aFilledLines[nProp] ) {
                 pPropertyMap->Insert( aPropNames[nProp], uno::makeAny( m_aBorderLines[nProp] ) );
