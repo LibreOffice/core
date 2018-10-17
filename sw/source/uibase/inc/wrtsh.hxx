@@ -206,8 +206,8 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     bool LeftMargin ( bool bSelect, bool bBasicCall );
     bool RightMargin( bool bSelect, bool bBasicCall );
 
-    bool SttDoc     ( bool bSelect = false );
-    bool EndDoc     ( bool bSelect = false );
+    bool StartOfSection( bool bSelect = false );
+    bool EndOfSection  ( bool bSelect = false );
 
     bool SttNxtPg   ( bool bSelect = false );
     void SttPrvPg   ( bool bSelect = false );

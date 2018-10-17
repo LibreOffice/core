@@ -273,7 +273,7 @@ void SwLayoutWriter::testRedlineFlysInBody()
     SfxItemSet flySet(pDoc->GetAttrPool(),
                       svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
     SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
-    pWrtShell->SttDoc(false);
+    pWrtShell->StartOfSection(false);
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
     flySet.Put(anchor);
@@ -370,7 +370,7 @@ void SwLayoutWriter::testRedlineFlysInBody()
     }
 
     // anchor to 2nd (deleted) paragraph
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     pWrtShell->Down(false, 1);
     anchor.SetType(RndStdIds::FLY_AT_CHAR);
     anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
@@ -447,7 +447,7 @@ void SwLayoutWriter::testRedlineFlysInBody()
     }
 
     // anchor to 3rd paragraph
-    pWrtShell->EndDoc();
+    pWrtShell->EndOfSection();
     anchor.SetType(RndStdIds::FLY_AT_CHAR);
     anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
     pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
@@ -555,7 +555,7 @@ void SwLayoutWriter::testRedlineFlysInHeader()
     SfxItemSet flySet(pDoc->GetAttrPool(),
                       svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
     SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
-    pWrtShell->SttDoc(false);
+    pWrtShell->StartOfSection(false);
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
     flySet.Put(anchor);
@@ -656,7 +656,7 @@ void SwLayoutWriter::testRedlineFlysInHeader()
     }
 
     // anchor to 2nd (deleted) paragraph
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     pWrtShell->Down(false, 1);
     anchor.SetType(RndStdIds::FLY_AT_CHAR);
     anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
@@ -738,7 +738,7 @@ void SwLayoutWriter::testRedlineFlysInHeader()
     }
 
     // anchor to 3rd paragraph
-    pWrtShell->EndDoc();
+    pWrtShell->EndOfSection();
     anchor.SetType(RndStdIds::FLY_AT_CHAR);
     anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
     pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
@@ -862,7 +862,7 @@ void SwLayoutWriter::testRedlineFlysInFootnote()
     pWrtShell->SplitNode(false);
     pWrtShell->Insert("baz");
 
-    pWrtShell->SttDoc(false);
+    pWrtShell->StartOfSection(false);
     CPPUNIT_ASSERT(pWrtShell->IsCursorInFootnote());
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
@@ -1085,11 +1085,11 @@ void SwLayoutWriter::testRedlineFlysInFootnote()
     }
 
     // anchor to 3rd paragraph
-    pWrtShell->EndDoc();
+    pWrtShell->EndOfSection();
     pWrtShell->SttEndDoc(false);
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->GotoFootnoteText();
-    pWrtShell->EndDoc();
+    pWrtShell->EndOfSection();
     anchor.SetType(RndStdIds::FLY_AT_CHAR);
     anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
     pDoc->SetAttr(anchor, *const_cast<SwFrameFormat*>(pFly));
@@ -1213,7 +1213,7 @@ void SwLayoutWriter::testRedlineFlysInFlys()
                       svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
     SwFormatFrameSize size(ATT_MIN_SIZE, 1000, 1000);
     flySet.Put(size); // set a size, else we get 1 char per line...
-    pWrtShell->SttDoc(false);
+    pWrtShell->StartOfSection(false);
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     SwFormatAnchor anchor1(RndStdIds::FLY_AT_CHAR);
     anchor1.SetAnchor(pWrtShell->GetCursor()->GetPoint());
@@ -1229,7 +1229,7 @@ void SwLayoutWriter::testRedlineFlysInFlys()
     pWrtShell->Insert("ghi");
 
     SwFormatAnchor anchor2(RndStdIds::FLY_AT_CHAR);
-    pWrtShell->SttDoc(false); // start of fly...
+    pWrtShell->StartOfSection(false); // start of fly...
     anchor2.SetAnchor(pWrtShell->GetCursor()->GetPoint());
     flySet.Put(anchor2);
     SwFrameFormat const* pFly2 = pWrtShell->NewFlyFrame(flySet, /*bAnchValid=*/true);
@@ -1391,7 +1391,7 @@ void SwLayoutWriter::testRedlineFlysInFlys()
 
     // anchor to 2nd (deleted) paragraph
     // also, switch the in-fly anchoring to the other fly, for additional fun!
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     pWrtShell->Down(false, 1);
     anchor2.SetType(RndStdIds::FLY_AT_CHAR);
     anchor2.SetAnchor(pWrtShell->GetCursor()->GetPoint());
@@ -1524,7 +1524,7 @@ void SwLayoutWriter::testRedlineFlysInFlys()
     anchor1.SetAnchor(pWrtShell->GetCursor()->GetPoint());
     pDoc->SetAttr(anchor1, *const_cast<SwFrameFormat*>(pFly1));
     pWrtShell->GotoFly(pFly1->GetName(), FLYCNTTYPE_FRM, /*bSelFrame=*/false);
-    pWrtShell->EndDoc();
+    pWrtShell->EndOfSection();
     anchor2.SetType(RndStdIds::FLY_AT_CHAR);
     anchor2.SetAnchor(pWrtShell->GetCursor()->GetPoint());
     pDoc->SetAttr(anchor2, *const_cast<SwFrameFormat*>(pFly2));
@@ -1689,7 +1689,7 @@ void SwLayoutWriter::testRedlineFlysAtFlys()
                       svl::Items<RES_FRM_SIZE, RES_FRM_SIZE, RES_ANCHOR, RES_ANCHOR>{});
     SwFormatFrameSize size(ATT_MIN_SIZE, 1000, 1000);
     flySet.Put(size); // set a size, else we get 1 char per line...
-    pWrtShell->SttDoc(false);
+    pWrtShell->StartOfSection(false);
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     SwFormatAnchor anchor1(RndStdIds::FLY_AT_CHAR);
     anchor1.SetAnchor(pWrtShell->GetCursor()->GetPoint());
@@ -1837,7 +1837,7 @@ void SwLayoutWriter::testRedlineFlysAtFlys()
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text[2]", "Portion", "az");
 
     // anchor to 2nd (deleted) paragraph
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
     pWrtShell->Down(false, 1);
     anchor1.SetType(RndStdIds::FLY_AT_CHAR);
     anchor1.SetAnchor(pWrtShell->GetCursor()->GetPoint());
