@@ -92,32 +92,13 @@ public:
     virtual Size        GetOptimalSize() const override;
     virtual void        Resize() override;
 
-    /** Returns true, if the control is not in "don't care" state. */
-    bool                HasRotation() const;
-    /** Sets the control to "don't care" state. */
-    void                SetNoRotation();
-
     /** Returns the current rotation angle in 1/100 degrees. */
     sal_Int32           GetRotation() const;
     /** Sets the rotation to the passed value (in 1/100 degrees). */
     void                SetRotation( sal_Int32 nAngle );
 
-    /** Links the passed numeric edit field to the control (bi-directional).
-     *  nDecimalPlaces:
-     *     field value is unsign given decimal places
-     *     default is 0 which means field values are in degrees,
-     *     2 means 100th of degree
-     */
-    void                SetLinkedField( NumericField* pField, sal_Int32 nDecimalPlaces = 0);
-
     /** The passed handler is called whenever the rotation value changes. */
     void                SetModifyHdl( const Link<DialControl*,void>& rLink );
-
-    /** Save value for later comparison */
-    void                SaveValue();
-
-    /** Compare value with the saved value */
-    bool                IsValueModified();
 
 protected:
     struct DialControl_Impl

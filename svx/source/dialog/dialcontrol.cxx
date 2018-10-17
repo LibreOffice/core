@@ -350,22 +350,6 @@ void DialControl::LoseFocus()
     Control::LoseFocus();
 }
 
-bool DialControl::HasRotation() const
-{
-    return !mpImpl->mbNoRot;
-}
-
-void DialControl::SetNoRotation()
-{
-    if( !mpImpl->mbNoRot )
-    {
-        mpImpl->mbNoRot = true;
-        InvalidateControl();
-        if( mpImpl->mpLinkField )
-            mpImpl->mpLinkField->SetText( "" );
-    }
-}
-
 sal_Int32 DialControl::GetRotation() const
 {
     return mpImpl->mnAngle;
@@ -381,26 +365,6 @@ void DialControl::SetRotation( sal_Int32 nAngle )
     SetRotation( nAngle, false );
 }
 
-void DialControl::SetLinkedField( NumericField* pField, sal_Int32 nDecimalPlaces )
-{
-    mpImpl->mnLinkedFieldValueMultiplyer = 100 / std::pow(10.0, double(nDecimalPlaces));
-
-    // remove modify handler from old linked field
-    if( mpImpl->mpLinkField )
-    {
-        NumericField& rField = *mpImpl->mpLinkField;
-        rField.SetModifyHdl( Link<Edit&,void>() );
-    }
-    // remember the new linked field
-    mpImpl->mpLinkField = pField;
-    // set modify handler at new linked field
-    if( mpImpl->mpLinkField )
-    {
-        NumericField& rField = *mpImpl->mpLinkField;
-        rField.SetModifyHdl( LINK( this, DialControl, LinkedFieldModifyHdl ) );
-    }
-}
-
 IMPL_LINK_NOARG( DialControl, LinkedFieldModifyHdl, Edit&, void )
 {
     LinkedFieldModifyHdl();
@@ -412,16 +376,6 @@ void DialControl::LinkedFieldModifyHdl()
         SetRotation( static_cast< sal_Int32 >( mpImpl->mpLinkField->GetValue() * mpImpl->mnLinkedFieldValueMultiplyer ), false );
 }
 
-
-void DialControl::SaveValue()
-{
-    mpImpl->mnInitialAngle = mpImpl->mnAngle;
-}
-
-bool DialControl::IsValueModified()
-{
-    return mpImpl->mnInitialAngle != mpImpl->mnAngle;
-}
 
 void DialControl::SetModifyHdl( const Link<DialControl*,void>& rLink )
 {
