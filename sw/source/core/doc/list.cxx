@@ -57,7 +57,7 @@ class SwListImpl
         OUString msDefaultListStyleName;
 
         // list trees for certain document ranges
-        typedef std::pair<SwNodeNum*, SwPaM*> tListTreeForRange;
+        typedef std::pair<std::unique_ptr<SwNodeNum>, std::unique_ptr<SwPaM>> tListTreeForRange;
         typedef std::vector<tListTreeForRange> tListTrees;
         tListTrees maListTrees;
 
@@ -82,8 +82,7 @@ SwListImpl::SwListImpl( const OUString& sListId,
 
         SwNodeNum* pNumberTreeRootNode = new SwNodeNum( &rDefaultListStyle );
         SwPaM* pPam = new SwPaM( *(aPam.Start()), *(aPam.End()) );
-        tListTreeForRange aListTreeForRange( pNumberTreeRootNode, pPam );
-        maListTrees.push_back( aListTreeForRange );
+        maListTrees.emplace_back(pNumberTreeRootNode, pPam);
 
         pNode = pNode->EndOfSectionNode();
         if (pNode != &rNodes.GetEndOfContent())
@@ -104,8 +103,6 @@ SwListImpl::~SwListImpl() COVERITY_NOEXCEPT_FALSE
           ++aNumberTreeIter )
     {
         SwNodeNum::HandleNumberTreeRootNodeDelete( *((*aNumberTreeIter).first) );
-        delete (*aNumberTreeIter).first;
-        delete (*aNumberTreeIter).second;
     }
 }
 
