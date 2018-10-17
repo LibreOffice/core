@@ -109,6 +109,7 @@ void Qt5AccessibleEventListener::notifyEvent(
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::TableRowHeaderChanged));
             return;
         case AccessibleEventId::TABLE_SUMMARY_CHANGED:
+        case AccessibleEventId::CARET_CHANGED:
             QAccessible::updateAccessibility(
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::TableSummaryChanged));
             return;
@@ -132,6 +133,7 @@ void Qt5AccessibleEventListener::notifyEvent(
             QAccessible::updateAccessibility(
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::SectionChanged));
             return;
+        case AccessibleEventId::TEXT_CHANGED:
         case AccessibleEventId::COLUMN_CHANGED:
             QAccessible::updateAccessibility(
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::TextColumnChanged));
@@ -155,8 +157,6 @@ void Qt5AccessibleEventListener::notifyEvent(
         case AccessibleEventId::LABELED_BY_RELATION_CHANGED:
         case AccessibleEventId::MEMBER_OF_RELATION_CHANGED:
         case AccessibleEventId::SUB_WINDOW_OF_RELATION_CHANGED:
-        case AccessibleEventId::CARET_CHANGED:
-        case AccessibleEventId::TEXT_CHANGED:
         case AccessibleEventId::HYPERTEXT_CHANGED:
         case AccessibleEventId::TABLE_MODEL_CHANGED:
         case AccessibleEventId::LISTBOX_ENTRY_EXPANDED:
