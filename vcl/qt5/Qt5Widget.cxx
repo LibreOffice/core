@@ -194,7 +194,10 @@ void Qt5Widget::dragMoveEvent(QDragMoveEvent* event)
 
 void Qt5Widget::dropEvent(QDropEvent* event)
 {
+    QPoint point = event->pos();
     SAL_WARN("vcl.qt5", "dropevent");
+
+    m_pFrame->dropping(point.x(), point.y());
     QWidget::dropEvent(event);
 }
 
