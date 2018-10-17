@@ -24,6 +24,7 @@
 #include <memory>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <o3tl/enumarray.hxx>
 
 namespace writerfilter {
 namespace dmapper
@@ -31,20 +32,19 @@ namespace dmapper
 class PropertyMap;
 class BorderHandler : public LoggedProperties
 {
-public:
+private:
     //todo: order is a guess
-    enum BorderPosition
+    enum class BorderPosition
     {
-        BORDER_TOP,
-        BORDER_LEFT,
-        BORDER_BOTTOM,
-        BORDER_RIGHT,
-        BORDER_HORIZONTAL,
-        BORDER_VERTICAL,
-        BORDER_COUNT
+        Top,
+        Left,
+        Bottom,
+        Right,
+        Horizontal,
+        Vertical,
+        LAST = Vertical
     };
 
-private:
     //values of the current border
     sal_Int32       m_nLineWidth;
     sal_Int32       m_nLineType;
@@ -53,8 +53,8 @@ private:
     bool            m_bShadow;
     bool const      m_bOOXML;
 
-    bool                                        m_aFilledLines[BORDER_COUNT];
-    css::table::BorderLine2 m_aBorderLines[BORDER_COUNT];
+    o3tl::enumarray<BorderPosition, bool> m_aFilledLines;
+    o3tl::enumarray<BorderPosition, css::table::BorderLine2> m_aBorderLines;
     OUString m_aInteropGrabBagName;
     std::vector<css::beans::PropertyValue> m_aInteropGrabBag;
     void appendGrabBag(const OUString& aKey, const OUString& aValue);
