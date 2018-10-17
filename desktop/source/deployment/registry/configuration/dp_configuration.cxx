@@ -29,6 +29,7 @@
 #include <dp_services.hxx>
 #include <dp_ucb.h>
 #include <rtl/string.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
 #include <osl/file.hxx>
