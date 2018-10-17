@@ -152,17 +152,16 @@ public:
     }
 };
 
-class SwMailMergeFieldConnectionsDlg : public ModalDialog
+class SwMailMergeFieldConnectionsDlg : public weld::GenericDialogController
 {
-    VclPtr<RadioButton> m_pUseExistingRB;
+    std::unique_ptr<weld::RadioButton> m_xUseExistingRB;
 public:
-    SwMailMergeFieldConnectionsDlg(vcl::Window* pParent);
+    SwMailMergeFieldConnectionsDlg(weld::Window* pParent);
     virtual ~SwMailMergeFieldConnectionsDlg() override;
-    virtual void dispose() override;
 
     bool IsUseExistingConnections() const
     {
-        return m_pUseExistingRB->IsChecked();
+        return m_xUseExistingRB->get_active();
     }
 };
 

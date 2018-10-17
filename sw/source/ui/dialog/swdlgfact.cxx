@@ -1040,10 +1040,9 @@ VclPtr<AbstractMailMergeCreateFromDlg> SwAbstractDialogFactory_Impl::CreateMailM
     return VclPtr<AbstractMailMergeCreateFromDlg_Impl>::Create(pDlg);
 }
 
-VclPtr<AbstractMailMergeFieldConnectionsDlg> SwAbstractDialogFactory_Impl::CreateMailMergeFieldConnectionsDlg(vcl::Window* pParent)
+VclPtr<AbstractMailMergeFieldConnectionsDlg> SwAbstractDialogFactory_Impl::CreateMailMergeFieldConnectionsDlg(weld::Window* pParent)
 {
-    VclPtr<SwMailMergeFieldConnectionsDlg> pDlg = VclPtr<SwMailMergeFieldConnectionsDlg>::Create( pParent );
-    return VclPtr<AbstractMailMergeFieldConnectionsDlg_Impl>::Create( pDlg );
+    return VclPtr<AbstractMailMergeFieldConnectionsDlg_Impl>::Create(o3tl::make_unique<SwMailMergeFieldConnectionsDlg>(pParent));
 }
 
 VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr &rTOXMgr)

@@ -634,22 +634,14 @@ void SwMailMergeCreateFromDlg::dispose()
     ModalDialog::dispose();
 }
 
-SwMailMergeFieldConnectionsDlg::SwMailMergeFieldConnectionsDlg(vcl::Window* pParent)
-    : ModalDialog(pParent, "MergeConnectDialog",
-                  "modules/swriter/ui/mergeconnectdialog.ui")
+SwMailMergeFieldConnectionsDlg::SwMailMergeFieldConnectionsDlg(weld::Window* pParent)
+    : GenericDialogController(pParent, "modules/swriter/ui/mergeconnectdialog.ui", "MergeConnectDialog")
+    , m_xUseExistingRB(m_xBuilder->weld_radio_button("existing"))
 {
-    get(m_pUseExistingRB, "existing");
 }
 
 SwMailMergeFieldConnectionsDlg::~SwMailMergeFieldConnectionsDlg()
 {
-    disposeOnce();
-}
-
-void SwMailMergeFieldConnectionsDlg::dispose()
-{
-    m_pUseExistingRB.clear();
-    ModalDialog::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
