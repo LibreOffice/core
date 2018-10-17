@@ -22,6 +22,30 @@
       "revId": "e30f6a8c6b053e7a7b9c54fb3fdaed4e73bb5389",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f231b9d_d6230405",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-10-17T14:06:12Z",
+      "side": 1,
+      "message": "\"The\" locale you work in, not the UI locale. To distinguish from UI locale. ie. what is available under Tools -\u003e Options -\u003e Language Settings -\u003e Languages, Language Of, Locale setting.\n\nNow that I inspected all places where getLocale() was used and found only one where getWorkLocale() should be used instead of getUILocale() we can as well rename getWorkLocale() to getLocale() again if it\u0027s too confusing.. ;-)",
+      "parentUuid": "df140735_59c04351",
+      "range": {
+        "startLine": 13,
+        "startChar": 54,
+        "endLine": 13,
+        "endChar": 65
+      },
+      "revId": "e30f6a8c6b053e7a7b9c54fb3fdaed4e73bb5389",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
