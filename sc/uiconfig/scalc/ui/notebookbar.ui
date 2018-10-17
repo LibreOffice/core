@@ -12841,6 +12841,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="CalcNotebookbar|PrintLabel">Print</property>
+                <style>
+                  <class name="context-Printpreview"/>
+                </style>
               </object>
               <packing>
                 <property name="position">12</property>
