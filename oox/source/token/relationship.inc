@@ -38,6 +38,7 @@
 {Relationship::THEME, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme"},
 {Relationship::VBAPROJECT, "http://schemas.microsoft.com/office/2006/relationships/vbaProject"},
 {Relationship::VIDEO, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/video"},
+{Relationship::AUDIO, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/audio"},
 {Relationship::VMLDRAWING, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing"},
 {Relationship::WORDVBADATA, "http://schemas.microsoft.com/office/2006/relationships/wordVbaData"},
 {Relationship::WORKSHEET, "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet"}

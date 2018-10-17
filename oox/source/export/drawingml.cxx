@@ -1073,6 +1073,7 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
         aExtension = rURL.copy(nLastDot);
 
     bool bEmbed = rURL.startsWith("vnd.sun.star.Package:");
+    Relationship eMediaType = Relationship::VIDEO;
 
     // mime type
 #if HAVE_FEATURE_AVMEDIA
@@ -1096,6 +1097,11 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
             aMimeType = "video/ogg";
         else if (aExtension.equalsIgnoreAsciiCase(".wmv"))
             aMimeType = "video/x-ms-wmv";
+        else if (aExtension.equalsIgnoreAsciiCase(".wav"))
+        {
+            aMimeType = "audio/x-wav";
+            eMediaType = Relationship::AUDIO;
+        }
     }
 
     OUString aVideoFileRelId;
@@ -1123,18 +1129,18 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
                                          .append(static_cast<sal_Int32>(mnImageCounter++))
                                          .append(aExtension)
                                          .makeStringAndClear();
-        aVideoFileRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::VIDEO), aPath);
+        aVideoFileRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(eMediaType), aPath);
         aMediaRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::MEDIA), aPath);
     }
     else
     {
-        aVideoFileRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::VIDEO), rURL);
+        aVideoFileRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(eMediaType), rURL);
         aMediaRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::MEDIA), rURL);
     }
 
     GetFS()->startElementNS(XML_p, XML_nvPr, FSEND);
 
-    GetFS()->singleElementNS(XML_a, XML_videoFile,
+    GetFS()->singleElementNS(XML_a, eMediaType == Relationship::VIDEO ? XML_videoFile : XML_audioFile,
                     FSNS(XML_r, XML_link), USS(aVideoFileRelId),
                     FSEND);
 
