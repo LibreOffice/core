@@ -71,6 +71,11 @@ LibreOffice
             STARTCENTER_INFO_URL https://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
             DICT_REPO_URL https://extensions.libreoffice.org/dictionaries/
+            SEND_FEEDBACK_URL https://hub.libreoffice.org/send-feedback/
+            Q_AND_A_URL https://hub.libreoffice.org/forum/
+            DOCUMENTATION_URL https://hub.libreoffice.org/documentation/
+            GETINVOVLED_URL https://hub.libreoffice.org/joinus/
+            DONATION_URL https://hub.libreoffice.org/donation/
         }
         active          1
         compression     5
@@ -123,6 +128,11 @@ LibreOfficeDev
             STARTCENTER_INFO_URL https://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
             DICT_REPO_URL https://extensions.libreoffice.org/dictionaries/
+            SEND_FEEDBACK_URL https://hub.libreoffice.org/send-feedback/
+            Q_AND_A_URL https://hub.libreoffice.org/forum/
+            DOCUMENTATION_URL https://hub.libreoffice.org/documentation/
+            GETINVOVLED_URL https://hub.libreoffice.org/joinus/
+            DONATION_URL https://hub.libreoffice.org/donation/
         }
         active          1
         compression     5
@@ -164,6 +174,11 @@ LibreOffice_SDK
             STARTCENTER_INFO_URL https://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
             DICT_REPO_URL https://extensions.libreoffice.org/dictionaries/
+            SEND_FEEDBACK_URL https://hub.libreoffice.org/send-feedback/
+            Q_AND_A_URL https://hub.libreoffice.org/forum/
+            DOCUMENTATION_URL https://hub.libreoffice.org/documentation/
+            GETINVOVLED_URL https://hub.libreoffice.org/joinus/
+            DONATION_URL https://hub.libreoffice.org/donation/
         }
         active 1
         compression 5
@@ -209,6 +224,11 @@ LibreOfficeDev_SDK
             STARTCENTER_INFO_URL https://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL https://templates.libreoffice.org/
             DICT_REPO_URL https://extensions.libreoffice.org/dictionaries/
+            SEND_FEEDBACK_URL https://hub.libreoffice.org/send-feedback/
+            Q_AND_A_URL https://hub.libreoffice.org/forum/
+            DOCUMENTATION_URL https://hub.libreoffice.org/documentation/
+            GETINVOVLED_URL https://hub.libreoffice.org/joinus/
+            DONATION_URL https://hub.libreoffice.org/donation/
         }
         active 1
         compression 5

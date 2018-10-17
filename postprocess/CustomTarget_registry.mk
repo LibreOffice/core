@@ -554,6 +554,11 @@ postprocess_main_SED := \
 	-e 's,$${ABOUTBOXPRODUCTVERSION},$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX),g' \
 	-e 's,$${ABOUTBOXPRODUCTVERSIONSUFFIX},$(LIBO_VERSION_SUFFIX_SUFFIX),g' \
 	-e 's,$${DICT_REPO_URL},http://extensions.libreoffice.org/dictionaries/,g' \
+	-e 's,$${SEND_FEEDBACK_URL},http://hub.libreoffice.org/send-feedback/,g' \
+	-e 's,$${Q_AND_A_URL},http://hub.libreoffice.org/forum/,g' \
+	-e 's,$${DOCUMENTATION_URL},http://hub.libreoffice.org/documentation/,g' \
+	-e 's,$${GETINVOVLED_URL},http://hub.libreoffice.org/joinus/,g' \
+	-e 's,$${DONATION_URL},http://hub.libreoffice.org/donation/,g' \
 	-e 's,$${OOOVENDOR},$(if $(OOO_VENDOR),$(subst $(COMMA),\x2c,$(OOO_VENDOR)),The Document Foundation),g' \
 	-e 's,$${PRODUCTNAME},$(PRODUCTNAME),g' \
 	-e 's,$${PRODUCTVERSION},$(PRODUCTVERSION),g' \
