@@ -1416,9 +1416,9 @@ SwTwips SwFlowFrame::CalcUpperSpace( const SwBorderAttrs *pAttrs,
     // OD 06.01.2004 #i11859#
     {
         const IDocumentSettingAccess& rIDSA = m_rThis.GetUpper()->GetFormat()->getIDocumentSettingAccess();
-        const bool bUseFormerLineSpacing = rIDSA.get(DocumentSettingId::OLD_LINE_SPACING);
         if( pPrevFrame )
         {
+            const bool bUseFormerLineSpacing = rIDSA.get(DocumentSettingId::OLD_LINE_SPACING);
             const bool bContextualSpacing = pAttrs->GetULSpace().GetContext()
                                          && lcl_getContextualSpacing(pPrevFrame)
                                          && lcl_IdenticalStyles(pPrevFrame, &m_rThis);
