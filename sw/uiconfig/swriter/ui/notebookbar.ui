@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
   <requires lib="LibreOffice" version="1.0"/>
@@ -2001,13 +2001,13 @@
                             <property name="label" translatable="yes" context="WriterNotebookbar|FileMenuButton">_File</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
                             <property name="resize_mode">immediate</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
-                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -2020,13 +2020,13 @@
                             <property name="label" translatable="yes" context="WriterNotebookbar|HelpMenuButton">_Help</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
                             <property name="resize_mode">immediate</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
-                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -2235,11 +2235,11 @@
                               <object class="svtlo-ManagedMenuButton" id="File-RecentFileList">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="focus_on_click">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="action_name">.uno:RecentFileList</property>
                                 <property name="image">RecentFilesImg</property>
                                 <property name="use_underline">True</property>
-                                <property name="focus_on_click">False</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -2949,12 +2949,12 @@
                             <property name="label" translatable="yes" context="WriterNotebookbar|HomeMenuButton">_Home</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
-                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -5363,12 +5363,12 @@
                             <property name="label" translatable="yes" context="WriterNotebookbar|InsertMenuButton">_Insert</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
-                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -5478,12 +5478,12 @@
                             <property name="label" translatable="yes" context="WriterNotebookbar|LayoutMenuButton">Layout</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
-                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -6424,11 +6424,11 @@
                             <property name="label" translatable="yes" context="WriterNotebookbar|ReferencesMenuButton">Reference_s</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
-                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -7639,12 +7639,12 @@
                             <property name="label" translatable="yes" context="WriterNotebookbar|ReviewMenuButton">_Review</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
-                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -8320,12 +8320,12 @@
                             <property name="label" translatable="yes" context="WriterNotebookbar|ViewMenuButton">_View</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
-                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -9468,11 +9468,11 @@
                             <property name="label" translatable="yes" context="WriterNotebookbar|TableMenuButton">T_able</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
-                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -10678,11 +10678,11 @@
                             <property name="label" translatable="yes" context="WriterNotebookbar|ImageMenuButton">Image</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
-                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -11887,12 +11887,12 @@
                             <property name="label" translatable="yes" context="WriterNotebookbar|DrawMenuButton">D_raw</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
-                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -11984,21 +11984,20 @@
                     <property name="position">3</property>
                   </packing>
                 </child>
-                <style>
-                  <class name="Context-Draw"/>
-                </style>
               </object>
               <packing>
                 <property name="position">9</property>
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="ShapeLabel">
+              <object class="GtkLabel" id="DrawLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="WriterNotebookbar|DrawLabel">Draw</property>
                 <style>
                   <class name="context-Draw"/>
+                  <class name="context-DrawLine"/>
+                  <class name="context-ThreeDObject"/>
                 </style>
               </object>
               <packing>
@@ -12424,12 +12423,12 @@
                             <property name="label" translatable="yes" context="WriterNotebookbar|PrintMenuButton">_Print</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="halign">end</property>
                             <property name="hexpand">True</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
-                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -12496,9 +12495,6 @@
                     <property name="position">3</property>
                   </packing>
                 </child>
-                <style>
-                  <class name="context-Printpreview"/>
-                </style>
               </object>
               <packing>
                 <property name="position">10</property>
@@ -13245,11 +13241,11 @@
                             <property name="label" translatable="yes" context="WriterNotebookbar|MediaMenuButton">_Media</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="halign">start</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
-                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -13316,9 +13312,6 @@
                     <property name="position">3</property>
                   </packing>
                 </child>
-                <style>
-                  <class name="context-Media"/>
-                </style>
               </object>
               <packing>
                 <property name="position">10</property>
@@ -14168,12 +14161,12 @@
                             <property name="label" translatable="yes" context="WriterNotebookbar|ObjectMenuButton">Object</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
-                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -14241,10 +14234,6 @@
                     <property name="position">3</property>
                   </packing>
                 </child>
-                <style>
-                  <class name="Context-Frame"/>
-                  <class name="Context-OLE"/>
-                </style>
               </object>
               <packing>
                 <property name="position">10</property>
@@ -14288,12 +14277,12 @@
                             <property name="label" translatable="yes" context="WriterNotebookbar|ToolsMenuButton">_Tools</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="focus_on_click">False</property>
                             <property name="receives_default">False</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
                             <property name="relief">none</property>
                             <property name="use_underline">True</property>
-                            <property name="focus_on_click">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
