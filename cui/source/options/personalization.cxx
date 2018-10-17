@@ -439,14 +439,12 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( vcl::Window *pParent, cons
     get( m_pSelectPersona, "select_persona" );
     m_pSelectPersona->SetClickHdl( LINK( this, SvxPersonalizationTabPage, SelectPersona ) );
 
-    get( m_vDefaultPersonaImages[0], "default1" );
-    m_vDefaultPersonaImages[0]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
-
-    get( m_vDefaultPersonaImages[1], "default2" );
-    m_vDefaultPersonaImages[1]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
-
-    get( m_vDefaultPersonaImages[2], "default3" );
-    m_vDefaultPersonaImages[2]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
+    for (sal_uInt32 i = 0; i < MAX_DEFAULT_PERSONAS; ++i)
+    {
+        OUString sDefaultId("default" + OUString::number(i));
+        get( m_vDefaultPersonaImages[i], OUStringToOString(sDefaultId, RTL_TEXTENCODING_UTF8) );
+        m_vDefaultPersonaImages[i]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
+    }
 
     get( m_pPersonaList, "installed_personas" );
     m_pPersonaList->SetSelectHdl( LINK( this, SvxPersonalizationTabPage, SelectInstalledPersona ) );
@@ -601,12 +599,13 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
     while( aStream.IsOpen() && !aStream.eof() && nIndex < MAX_DEFAULT_PERSONAS )
     {
         OString aLine;
-        OUString aPersonaSetting, aPreviewFile;
-        sal_Int32 nPreviewIndex = 0;
+        OUString aPersonaSetting, aPreviewFile, aName;
+        sal_Int32 nParseIndex = 0;
 
         aStream.ReadLine( aLine );
         aPersonaSetting = OStringToOUString( aLine, RTL_TEXTENCODING_UTF8 );
-        aPreviewFile = aPersonaSetting.getToken( 2, ';', nPreviewIndex );
+        aName = aPersonaSetting.getToken( 1, ';', nParseIndex );
+        aPreviewFile = aPersonaSetting.getToken( 0, ';', nParseIndex );
 
         if (aPreviewFile.isEmpty())
             break;
@@ -619,6 +618,7 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
         aFilter.ImportGraphic( aGraphic, aURLObj );
         BitmapEx aBmp = aGraphic.GetBitmapEx();
         m_vDefaultPersonaImages[nIndex]->SetModeImage( Image( aBmp ) );
+        m_vDefaultPersonaImages[nIndex]->SetQuickHelpText(aName);
         m_vDefaultPersonaImages[nIndex++]->Show();
         foundOne = true;
     }
@@ -694,7 +694,7 @@ IMPL_LINK( SvxPersonalizationTabPage, ForceSelect, Button*, pButton, void )
 IMPL_LINK( SvxPersonalizationTabPage, DefaultPersona, Button*, pButton, void )
 {
     m_pDefaultPersona->Check();
-    for( sal_Int32 nIndex = 0; nIndex < MAX_DEFAULT_PERSONAS; nIndex++ )
+    for( sal_Int32 nIndex = 0; nIndex < MAX_DEFAULT_PERSONAS; ++nIndex )
     {
         if( pButton == m_vDefaultPersonaImages[nIndex] )
             m_aPersonaSettings = m_vDefaultPersonaSettings[nIndex];
