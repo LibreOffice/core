@@ -1911,6 +1911,11 @@ void SvMemoryStream::SetSize(sal_uInt64 const nNewSize)
     ReAllocateMemory( nDiff );
 }
 
+sal_uInt64 SvStream::TellEnd()
+{
+    return Tell() + remainingSize();
+}
+
 //Create a OString of nLen bytes from rStream
 OString read_uInt8s_ToOString(SvStream& rStrm, std::size_t nLen)
 {
