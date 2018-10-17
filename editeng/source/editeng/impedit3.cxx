@@ -1445,10 +1445,10 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     sal_uInt16 nNewAscent = pLine->GetTxtHeight() * nPropLineSpace / 100 * 4 / 5; // 80%
                     if ( !nAscent || nAscent > nNewAscent )
                     {
-                        sal_uInt16 nHeight = pLine->GetHeight() * nPropLineSpace / 100;
-                        pLine->SetHeight( nHeight, pLine->GetTxtHeight() );
                         pLine->SetMaxAscent( nNewAscent );
                     }
+                    sal_uInt16 nHeight = pLine->GetHeight() * nPropLineSpace / 100;
+                    pLine->SetHeight( nHeight, pLine->GetTxtHeight() );
                 }
                 else if ( rLSItem.GetPropLineSpace() && ( rLSItem.GetPropLineSpace() != 100 ) )
                 {
