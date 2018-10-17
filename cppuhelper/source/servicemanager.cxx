@@ -1993,7 +1993,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
     std::cerr << std::endl;
 
     // Various rather important uno mappings.
-    struct {
+    static struct {
         const char *mpFrom;
         const char *mpTo;
         const char *mpPurpose;

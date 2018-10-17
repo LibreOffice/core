@@ -19,7 +19,7 @@ is_env_arg (rtl_uString const *str)
     return !rtl_ustr_ascii_compare_WithLength (str->buffer, 5, "-env:");
 }
 
-static struct {
+static const struct {
     const char   *name;
     unsigned int  bInhibitSplash : 1;
     unsigned int  bInhibitPagein : 1;
