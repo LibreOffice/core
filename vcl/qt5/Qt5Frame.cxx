@@ -901,4 +901,23 @@ void Qt5Frame::draggingStarted(const int x, const int y)
     }
 }
 
+void Qt5Frame::dropping(const int x, const int y)
+{
+    assert(m_pDropTarget);
+
+    css::datatransfer::dnd::DropTargetDropEvent aEvent;
+    aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
+    aEvent.Context = static_cast<css::datatransfer::dnd::XDropTargetDropContext*>(m_pDropTarget);
+    aEvent.LocationX = x;
+    aEvent.LocationY = y;
+    aEvent.DropAction = css::datatransfer::dnd::DNDConstants::ACTION_MOVE; //FIXME
+    aEvent.SourceActions = css::datatransfer::dnd::DNDConstants::ACTION_MOVE;
+
+    css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
+    xTransferable = m_pDragSource->GetTransferable();
+    aEvent.Transferable = xTransferable;
+
+    m_pDropTarget->fire_drop(aEvent);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

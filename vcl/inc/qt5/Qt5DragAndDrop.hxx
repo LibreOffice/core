@@ -108,6 +108,7 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     void fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde);
+    void fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
