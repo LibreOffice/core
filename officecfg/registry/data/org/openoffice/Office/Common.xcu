@@ -379,6 +379,21 @@
         </prop>
       </node>
     </node>
+    <prop oor:name="SendFeedbackURL" oor:type="xs:string">
+      <value>https://hub.libreoffice.org/send-feedback/</value>
+    </prop>
+    <prop oor:name="QA_URL" oor:type="xs:string">
+      <value>https://hub.libreoffice.org/forum/</value>
+    </prop>
+    <prop oor:name="DocumentationURL" oor:type="xs:string">
+      <value>https://hub.libreoffice.org/documentation/</value>
+    </prop>
+    <prop oor:name="GetInvolvedURL" oor:type="xs:string">
+      <value>https://hub.libreoffice.org/joinus/</value>
+    </prop>
+    <prop oor:name="DonationURL" oor:type="xs:string">
+      <value>https://hub.libreoffice.org/donation/</value>
+    </prop>
   </node>
   <node oor:name="Forms">
     <node oor:name="ControlLayout">
