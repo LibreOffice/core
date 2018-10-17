@@ -540,8 +540,8 @@ public:
 
     FunctionProvider(FunctionProvider const &) = default;
     FunctionProvider(FunctionProvider &&) = default;
-    FunctionProvider & operator =(FunctionProvider const &) = default;
-    FunctionProvider & operator =(FunctionProvider &&) = default;
+    FunctionProvider & operator =(FunctionProvider const &) = delete;
+    FunctionProvider & operator =(FunctionProvider &&) = delete;
 
     /** Returns the function info for an OOXML function name, or 0 on error. */
     const FunctionInfo* getFuncInfoFromOoxFuncName( const OUString& rFuncName ) const;
@@ -582,8 +582,8 @@ public:
 
     OpCodeProvider(OpCodeProvider const &) = default;
     OpCodeProvider(OpCodeProvider &&) = default;
-    OpCodeProvider & operator =(OpCodeProvider const &) = default;
-    OpCodeProvider & operator =(OpCodeProvider &&) = default;
+    OpCodeProvider & operator =(OpCodeProvider const &) = delete;
+    OpCodeProvider & operator =(OpCodeProvider &&) = delete;
 
     /** Returns the structure containing all token op-codes for operators and
         special tokens used by the Calc document and its formula parser. */
