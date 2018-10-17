@@ -69,13 +69,9 @@ OUString   GetTableColName(sal_Int32 col);
 
 OUString   GetUnderlineName(enumXFUnderline type);
 
-OUString   GetReliefName(enumXFRelief type);
-
 OUString   GetCrossoutName(enumXFCrossout type);
 
 OUString   GetTransformName(enumXFTransform type);
-
-OUString   GetEmphasizeName(enumXFEmphasize type);
 
 OUString   GetTextDirName(enumXFTextDir dir);
 

@@ -152,22 +152,6 @@ OUString   GetUnderlineName(enumXFUnderline type)
     return OUString();
 }
 
-OUString   GetReliefName(enumXFRelief type)
-{
-    switch(type)
-    {
-        case enumXFReliefEngraved:
-            return OUString("engraved");
-            break;
-        case enumXFReliefEmbossed:
-            return OUString("embossed");
-            break;
-        default:
-            break;
-    }
-    return OUString();
-}
-
 OUString   GetCrossoutName(enumXFCrossout type)
 {
     switch(type)
@@ -207,27 +191,6 @@ OUString   GetTransformName(enumXFTransform type)
         break;
     case enumXFTransformSmallCaps:
         return OUString("small-caps");
-        break;
-    default:
-        break;
-    }
-    return OUString();
-}
-
-OUString   GetEmphasizeName(enumXFEmphasize type)
-{
-    switch(type) {
-    case enumXFEmphasizeDot:
-        return OUString("dot");
-        break;
-    case enumXFEmphasizeCircle:
-        return OUString("circle");
-        break;
-    case enumXFEmphasizeDisc:
-        return OUString("disc");
-        break;
-    case enumXFEmphasizeAccent:
-        return OUString("accent");
         break;
     default:
         break;
