@@ -98,7 +98,7 @@ namespace rptui
 
 
         // service names for all our handlers
-        const struct
+        static const struct
         {
             const sal_Char* serviceName;
         } aFactories[] = {
