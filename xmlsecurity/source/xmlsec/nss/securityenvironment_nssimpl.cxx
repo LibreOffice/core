@@ -57,6 +57,14 @@ using ::com::sun::star::lang::XSingleServiceFactory ;
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::security::XCertificate ;
 
+namespace std
+{
+template <> struct default_delete<PRArenaPool>
+{
+    void operator()(PRArenaPool* ptr) { PORT_FreeArena(ptr, PR_FALSE); }
+};
+}
+
 static X509Certificate_NssImpl* NssCertToXCert( CERTCertificate* cert ) ;
 static X509Certificate_NssImpl* NssPrivKeyToXCert( SECKEYPrivateKey* ) ;
 
@@ -329,9 +337,7 @@ Reference< XCertificate > SecurityEnvironment_NssImpl::getCertificate( const OUS
         CERTName* nmIssuer ;
         char* chIssuer ;
         SECItem* derIssuer ;
-        PRArenaPool* arena ;
-
-        arena = PORT_NewArena( DER_DEFAULT_CHUNKSIZE ) ;
+        std::unique_ptr<PRArenaPool> arena(PORT_NewArena(DER_DEFAULT_CHUNKSIZE));
         if( arena == nullptr )
             throw RuntimeException() ;
 
@@ -341,15 +347,13 @@ Reference< XCertificate > SecurityEnvironment_NssImpl::getCertificate( const OUS
         nmIssuer = CERT_AsciiToName( chIssuer ) ;
         if( nmIssuer == nullptr ) {
             PL_strfree( chIssuer ) ;
-            PORT_FreeArena( arena, PR_FALSE ) ;
             return nullptr; // no need for exception cf. i40394
         }
 
-        derIssuer = SEC_ASN1EncodeItem( arena, nullptr, static_cast<void*>(nmIssuer), SEC_ASN1_GET( CERT_NameTemplate ) ) ;
+        derIssuer = SEC_ASN1EncodeItem( arena.get(), nullptr, static_cast<void*>(nmIssuer), SEC_ASN1_GET( CERT_NameTemplate ) ) ;
         if( derIssuer == nullptr ) {
             PL_strfree( chIssuer ) ;
             CERT_DestroyName( nmIssuer ) ;
-            PORT_FreeArena( arena, PR_FALSE ) ;
             throw RuntimeException() ;
         }
 
@@ -372,7 +376,6 @@ Reference< XCertificate > SecurityEnvironment_NssImpl::getCertificate( const OUS
         CERT_DestroyName( nmIssuer ) ;
         //SECITEM_FreeItem( derIssuer, PR_FALSE ) ;
         CERT_DestroyCertificate( cert ) ;
-        PORT_FreeArena( arena, PR_FALSE ) ;
     } else {
         xcert = nullptr ;
     }
