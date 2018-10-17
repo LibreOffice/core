@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.22.1 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.18"/>
-  <!-- interface-requires LibreOffice 1.0 -->
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-media-previous</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-media-next</property>
+    <property name="icon_size">1</property>
+  </object>
   <object class="GtkBox" id="MMSalutationPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -45,16 +56,14 @@
                       <object class="GtkLabel" id="previewft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes" context="mmsalutationpage|previewft">Preview</property>
                         <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">preview:border</property>
+                        <property name="mnemonic_widget">preview</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -77,22 +86,35 @@
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">0</property>
-                            <property name="width">1</property>
                             <property name="height">2</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="swlo-SwAddressPreview" id="preview:border">
+                          <object class="GtkScrolledWindow" id="previewwin">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
+                            <property name="hscrollbar_policy">never</property>
+                            <property name="shadow_type">in</property>
+                            <child>
+                              <object class="GtkViewport">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <child>
+                                  <object class="GtkDrawingArea" id="preview">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="hexpand">True</property>
+                                    <property name="vexpand">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
@@ -111,8 +133,6 @@
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -126,8 +146,6 @@
                               <packing>
                                 <property name="left_attach">2</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -135,38 +153,30 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="hexpand">True</property>
-                                <property name="xalign">1</property>
                                 <property name="label" translatable="yes" context="mmsalutationpage|documentindex">Document: %1</property>
+                                <property name="xalign">1</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
                             <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -188,8 +198,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -208,16 +216,14 @@
                               <object class="GtkLabel" id="generalft">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes" context="mmsalutationpage|generalft">General salutation</property>
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">general</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">1</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -235,8 +241,6 @@
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">2</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -263,78 +267,69 @@
                                           <object class="GtkLabel" id="femalefi">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes" context="mmsalutationpage|femalefi">Address list field indicating a female recipient</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
                                             <property name="top_attach">2</property>
                                             <property name="width">3</property>
-                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
                                           <object class="GtkLabel" id="femaleft">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes" context="mmsalutationpage|femaleft">_Female</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">female</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
                                             <property name="top_attach">0</property>
-                                            <property name="width">1</property>
-                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
                                           <object class="GtkLabel" id="maleft">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes" context="mmsalutationpage|maleft">_Male</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">male</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
                                             <property name="top_attach">1</property>
-                                            <property name="width">1</property>
-                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
                                           <object class="GtkLabel" id="femalecolft">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes" context="mmsalutationpage|femalecolft">Field name</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">femalecol</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
                                             <property name="top_attach">3</property>
-                                            <property name="width">1</property>
-                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
                                           <object class="GtkLabel" id="femalefieldft">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes" context="mmsalutationpage|femalefieldft">Field value</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">femalefield</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">0</property>
                                             <property name="top_attach">4</property>
-                                            <property name="width">1</property>
-                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -349,8 +344,6 @@
                                           <packing>
                                             <property name="left_attach">2</property>
                                             <property name="top_attach">0</property>
-                                            <property name="width">1</property>
-                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -365,8 +358,6 @@
                                           <packing>
                                             <property name="left_attach">2</property>
                                             <property name="top_attach">1</property>
-                                            <property name="width">1</property>
-                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -379,8 +370,6 @@
                                           <packing>
                                             <property name="left_attach">1</property>
                                             <property name="top_attach">0</property>
-                                            <property name="width">1</property>
-                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -393,8 +382,6 @@
                                           <packing>
                                             <property name="left_attach">1</property>
                                             <property name="top_attach">1</property>
-                                            <property name="width">1</property>
-                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -407,8 +394,6 @@
                                           <packing>
                                             <property name="left_attach">1</property>
                                             <property name="top_attach">3</property>
-                                            <property name="width">1</property>
-                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -427,8 +412,6 @@
                                           <packing>
                                             <property name="left_attach">1</property>
                                             <property name="top_attach">4</property>
-                                            <property name="width">1</property>
-                                            <property name="height">1</property>
                                           </packing>
                                         </child>
                                         <child>
@@ -443,8 +426,6 @@
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">1</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -460,16 +441,12 @@
                                   <packing>
                                     <property name="left_attach">0</property>
                                     <property name="top_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
                                   </packing>
                                 </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                           </object>
@@ -478,16 +455,12 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -518,17 +491,5 @@
       <widget name="newfemale"/>
       <widget name="newmale"/>
     </widgets>
-  </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-media-previous</property>
-    <property name="icon_size">1</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-media-next</property>
-    <property name="icon_size">1</property>
   </object>
 </interface>
