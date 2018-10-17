@@ -268,6 +268,8 @@ public:
 class VCL_DLLPUBLIC RadioButton : public Button
 {
 private:
+    friend class VclBuilder;
+
     std::shared_ptr< std::vector< VclPtr< RadioButton > > > m_xGroup;
     tools::Rectangle       maStateRect;
     tools::Rectangle       maMouseRect;

@@ -418,7 +418,10 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
             if (m_bLegacy)
                 pOne->group(*pOther);
             else
+            {
                 pOther->group(*pOne);
+                std::stable_sort(pOther->m_xGroup->begin(), pOther->m_xGroup->end(), sortIntoBestTabTraversalOrder(this));
+            }
         }
     }
 
