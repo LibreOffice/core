@@ -69,6 +69,9 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include <scabstdlg.hxx>
+#include <vcl/EnumContext.hxx>
+#include <vcl/notebookbar.hxx>
+
 //  for mouse wheel
 #define MINZOOM_SLIDER 10
 #define MAXZOOM_SLIDER 400
@@ -155,6 +158,15 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
 {
     Construct( &pViewFrame->GetWindow() );
 
+    SfxShell::SetContextBroadcasterEnabled(true);
+    SfxShell::SetContextName(vcl::EnumContext::GetContextName(vcl::EnumContext::Context::Printpreview));
+    SfxShell::BroadcastContextForActivation(true);
+
+
+    auto& pNotebookBar = pViewFrame->GetWindow().GetSystemWindow()->GetNotebookBar();
+    if (pNotebookBar)
+        pNotebookBar->ControlListener(true);
+
     if ( auto pTabViewShell = dynamic_cast<ScTabViewShell*>( pOldSh) )
     {
         //  store view settings, show table from TabView
@@ -180,6 +192,9 @@ ScPreviewShell::~ScPreviewShell()
 {
     if (mpFrameWindow)
         mpFrameWindow->SetCloseHdl(Link<SystemWindow&,void>()); // Remove close handler.
+
+    if (auto& pBar = GetViewFrame()->GetWindow().GetSystemWindow()->GetNotebookBar())
+        pBar->ControlListener(false);
 
     // #108333#; notify Accessibility that Shell is dying and before destroy all
     BroadcastAccessibility( SfxHint( SfxHintId::Dying ) );
