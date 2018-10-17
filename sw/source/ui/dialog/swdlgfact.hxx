@@ -508,8 +508,15 @@ class AbstractMailMergeCreateFromDlg_Impl : public AbstractMailMergeCreateFromDl
 class SwMailMergeFieldConnectionsDlg;
 class AbstractMailMergeFieldConnectionsDlg_Impl : public AbstractMailMergeFieldConnectionsDlg
 {
-    DECL_ABSTDLG_BASE(AbstractMailMergeFieldConnectionsDlg_Impl,SwMailMergeFieldConnectionsDlg)
-    virtual bool    IsUseExistingConnections() const override ;
+protected:
+    std::unique_ptr<SwMailMergeFieldConnectionsDlg> m_xDlg;
+public:
+    explicit AbstractMailMergeFieldConnectionsDlg_Impl(std::unique_ptr<SwMailMergeFieldConnectionsDlg> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual bool IsUseExistingConnections() const override ;
 };
 
 class SwMultiTOXTabDialog;
@@ -670,7 +677,7 @@ public:
                                                 sal_Int32 nCommandType,
                                                 const css::uno::Reference< css::sdbc::XConnection>& xConnection ) override;
     virtual VclPtr<AbstractMailMergeCreateFromDlg>     CreateMailMergeCreateFromDlg(vcl::Window* pParent) override;
-    virtual VclPtr<AbstractMailMergeFieldConnectionsDlg> CreateMailMergeFieldConnectionsDlg(vcl::Window* pParent) override;
+    virtual VclPtr<AbstractMailMergeFieldConnectionsDlg> CreateMailMergeFieldConnectionsDlg(weld::Window* pParent) override;
     virtual VclPtr<VclAbstractDialog>          CreateMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr &rTOXMgr) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateOutlineTabDialog(weld::Window* pParent, const SfxItemSet* pSwItemSet,
                                                 SwWrtShell &) override;
