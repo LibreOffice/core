@@ -703,7 +703,7 @@ namespace
 
         //various stream names that can contain the real document contents for
         //this object in a straightforward direct way
-        const OUStringLiteral aStreamNames[] =
+        static const OUStringLiteral aStreamNames[] =
         {
             "CONTENTS",
             "Package",

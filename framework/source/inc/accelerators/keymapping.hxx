@@ -61,7 +61,7 @@ class KeyMapping
 
     private:
 
-        static KeyIdentifierInfo KeyIdentifierMap[];
+        static KeyIdentifierInfo const KeyIdentifierMap[];
 
         /** @short  hash to map identifier to key codes. */
         Identifier2CodeHash m_lIdentifierHash;
