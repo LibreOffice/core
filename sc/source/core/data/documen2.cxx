@@ -962,7 +962,8 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                 }
                 pSrcDoc->maTabs[nSrcPos]->CopyToTable(aCxt, 0, 0, MAXCOL, MAXROW,
                         ( bResultsOnly ? InsertDeleteFlags::ALL & ~InsertDeleteFlags::FORMULA : InsertDeleteFlags::ALL),
-                        false, maTabs[nDestPos].get() );
+                        false, maTabs[nDestPos].get(), /*pMarkData*/nullptr, /*bAsLink*/false, /*bColRowFlags*/true,
+                        /*bGlobalNamesToLocal*/false, /*bCopyCaptions*/true );
             }
         }
         maTabs[nDestPos]->SetTabNo(nDestPos);

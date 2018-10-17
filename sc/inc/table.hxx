@@ -520,8 +520,8 @@ public:
     void CopyToTable(
         sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         InsertDeleteFlags nFlags, bool bMarked, ScTable* pDestTab,
-        const ScMarkData* pMarkData = nullptr, bool bAsLink = false, bool bColRowFlags = true,
-        bool bGlobalNamesToLocal = false, bool bCopyCaptions = true );
+        const ScMarkData* pMarkData, bool bAsLink, bool bColRowFlags,
+        bool bGlobalNamesToLocal, bool bCopyCaptions );
 
     void CopyCaptionsToTable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pDestTab, bool bCloneCaption );
 
