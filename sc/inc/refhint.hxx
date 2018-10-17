@@ -41,8 +41,8 @@ public:
 
     RefHint(RefHint const &) = default;
     RefHint(RefHint &&) = default;
-    RefHint & operator =(RefHint const &) = default;
-    RefHint & operator =(RefHint &&) = default;
+    RefHint & operator =(RefHint const &) = delete;
+    RefHint & operator =(RefHint &&) = delete;
 
     Type getType() const;
 };
