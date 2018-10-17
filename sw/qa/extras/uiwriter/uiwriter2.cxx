@@ -11,6 +11,8 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <swdtflvr.hxx>
 #include <wrtsh.hxx>
+#include <redline.hxx>
+#include <ndtxt.hxx>
 
 namespace
 {
@@ -21,9 +23,11 @@ char const DATA_DIRECTORY[] = "/sw/qa/extras/uiwriter/data2/";
 class SwUiWriterTest2 : public SwModelTestBase
 {
 public:
+    void testRedlineMoveInsertInDelete();
     void testTdf101534();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
+    CPPUNIT_TEST(testRedlineMoveInsertInDelete);
     CPPUNIT_TEST(testTdf101534);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -53,6 +57,42 @@ void SwUiWriterTest2::testTdf101534()
     pWrtShell->GetCurAttr(aSet);
     // This failed, direct formatting was lost.
     CPPUNIT_ASSERT(aSet.HasItem(RES_LR_SPACE));
+}
+
+void SwUiWriterTest2::testRedlineMoveInsertInDelete()
+{
+    loadURL("private:factory/swriter", nullptr);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwWrtShell* const pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->Insert(" foo");
+    pWrtShell->SttEndDoc(true);
+    pWrtShell->InsertFootnote("");
+    CPPUNIT_ASSERT(pWrtShell->IsCursorInFootnote());
+    RedlineFlags const mode(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
+    CPPUNIT_ASSERT(mode & (RedlineFlags::ShowDelete | RedlineFlags::ShowInsert));
+    pWrtShell->SetRedlineFlags(mode);
+    // insert redline
+    pWrtShell->Insert("bar");
+    // first delete redline, logically containing the insert redline
+    // (note: Word apparently allows similar things...)
+    pWrtShell->SttEndDoc(true);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    pWrtShell->Delete(); // the footnote
+    // second delete redline, following the first one
+    pWrtShell->EndDoc(false);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 3, /*bBasicCall=*/false);
+    pWrtShell->Delete(); // "foo"
+
+    // hiding used to copy the 2nd delete redline "foo", but not delete it
+    pWrtShell->SetRedlineFlags(mode & ~RedlineFlags::ShowDelete); // hide
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(" "),
+        pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    pWrtShell->SetRedlineFlags(mode); // show again
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(u"\u0001 foo"),
+        pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest2);

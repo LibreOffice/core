@@ -757,7 +757,15 @@ void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
             {
                 for (sal_uInt16 nLoop = 1; nLoop <= 2; ++nLoop)
                     for (size_t i = 0; i < mpRedlineTable->size(); ++i)
-                        ((*mpRedlineTable)[i]->*pFnc)(nLoop, i);
+                    {
+                        SwRangeRedline *const pRedline((*mpRedlineTable)[i]);
+                        (pRedline->*pFnc)(nLoop, i);
+                        while (mpRedlineTable->size() <= i
+                            || (*mpRedlineTable)[i] != pRedline)
+                        {        // ensure current position
+                            --i; // a previous redline may have been deleted
+                        }
+                    }
 
                 //SwRangeRedline::MoveFromSection routinely changes
                 //the keys that mpRedlineTable is sorted by
