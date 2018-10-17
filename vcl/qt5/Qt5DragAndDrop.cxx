@@ -201,6 +201,19 @@ void Qt5DropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragE
     }
 }
 
+void Qt5DropTarget::fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde)
+{
+    osl::ClearableGuard<osl::Mutex> aGuard(m_aMutex);
+    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
+        m_aListeners);
+    aGuard.clear();
+
+    for (auto const& listener : aListeners)
+    {
+        listener->drop(dtde);
+    }
+}
+
 void Qt5DropTarget::acceptDrag(sal_Int8 /*dragOperation*/) { return; }
 void Qt5DropTarget::rejectDrag() { return; }
 
