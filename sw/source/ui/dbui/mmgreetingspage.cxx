@@ -34,64 +34,42 @@ using namespace svt;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-static void lcl_FillGreetingsBox(ListBox& rBox,
+static void lcl_FillGreetingsBox(weld::ComboBox& rBox,
                         SwMailMergeConfigItem const & rConfig,
                         SwMailMergeConfigItem::Gender eType)
 {
     const Sequence< OUString> rEntries = rConfig.GetGreetings(eType);
     for(sal_Int32 nEntry = 0; nEntry < rEntries.getLength(); ++nEntry)
-        rBox.InsertEntry(rEntries[nEntry]);
-    rBox.SelectEntryPos(rConfig.GetCurrentGreeting(eType));
+        rBox.append_text(rEntries[nEntry]);
+    rBox.set_active(rConfig.GetCurrentGreeting(eType));
 }
 
-static void lcl_FillGreetingsBox(ComboBox& rBox,
-                        SwMailMergeConfigItem const & rConfig,
-                        SwMailMergeConfigItem::Gender eType)
-{
-    const Sequence< OUString> rEntries = rConfig.GetGreetings(eType);
-    for(sal_Int32 nEntry = 0; nEntry < rEntries.getLength(); ++nEntry)
-        rBox.InsertEntry(rEntries[nEntry]);
-    rBox.SelectEntryPos(rConfig.GetCurrentGreeting(eType));
-}
-
-static void lcl_StoreGreetingsBox(ListBox const & rBox,
+static void lcl_StoreGreetingsBox(const weld::ComboBox& rBox,
                         SwMailMergeConfigItem& rConfig,
                         SwMailMergeConfigItem::Gender eType)
 {
-    Sequence< OUString> aEntries(rBox.GetEntryCount());
+    Sequence< OUString> aEntries(rBox.get_count());
     OUString* pEntries = aEntries.getArray();
-    for(sal_Int32 nEntry = 0; nEntry < rBox.GetEntryCount(); ++nEntry)
-        pEntries[nEntry] = rBox.GetEntry(nEntry);
+    for(sal_Int32 nEntry = 0; nEntry < rBox.get_count(); ++nEntry)
+        pEntries[nEntry] = rBox.get_text(nEntry);
     rConfig.SetGreetings(eType, aEntries);
-    rConfig.SetCurrentGreeting(eType, rBox.GetSelectedEntryPos());
+    rConfig.SetCurrentGreeting(eType, rBox.get_active());
 }
 
-static void lcl_StoreGreetingsBox(ComboBox const & rBox,
-                        SwMailMergeConfigItem& rConfig,
-                        SwMailMergeConfigItem::Gender eType)
+IMPL_LINK_NOARG(SwGreetingsHandler, IndividualHdl_Impl, weld::ToggleButton&, void)
 {
-    Sequence< OUString> aEntries(rBox.GetEntryCount());
-    OUString* pEntries = aEntries.getArray();
-    for(sal_Int32 nEntry = 0; nEntry < rBox.GetEntryCount(); ++nEntry)
-        pEntries[nEntry] = rBox.GetEntry(nEntry);
-    rConfig.SetGreetings(eType, aEntries);
-    rConfig.SetCurrentGreeting(eType, rBox.GetSelectedEntryPos());
-}
-
-IMPL_LINK_NOARG(SwGreetingsHandler, IndividualHdl_Impl, Button*, void)
-{
-    bool bIndividual = m_pPersonalizedCB->IsEnabled() && m_pPersonalizedCB->IsChecked();
-    m_pFemaleFT->Enable(bIndividual);
-    m_pFemaleLB->Enable(bIndividual);
-    m_pFemalePB->Enable(bIndividual);
-    m_pMaleFT->Enable(bIndividual);
-    m_pMaleLB->Enable(bIndividual);
-    m_pMalePB->Enable(bIndividual);
-    m_pFemaleFI->Enable(bIndividual);
-    m_pFemaleColumnFT->Enable(bIndividual);
-    m_pFemaleColumnLB->Enable(bIndividual);
-    m_pFemaleFieldFT->Enable(bIndividual);
-    m_pFemaleFieldCB->Enable(bIndividual);
+    bool bIndividual = m_xPersonalizedCB->get_sensitive() && m_xPersonalizedCB->get_active();
+    m_xFemaleFT->set_sensitive(bIndividual);
+    m_xFemaleLB->set_sensitive(bIndividual);
+    m_xFemalePB->set_sensitive(bIndividual);
+    m_xMaleFT->set_sensitive(bIndividual);
+    m_xMaleLB->set_sensitive(bIndividual);
+    m_xMalePB->set_sensitive(bIndividual);
+    m_xFemaleFI->set_sensitive(bIndividual);
+    m_xFemaleColumnFT->set_sensitive(bIndividual);
+    m_xFemaleColumnLB->set_sensitive(bIndividual);
+    m_xFemaleFieldFT->set_sensitive(bIndividual);
+    m_xFemaleFieldCB->set_sensitive(bIndividual);
 
     if( m_bIsTabPage )
     {
@@ -102,17 +80,18 @@ IMPL_LINK_NOARG(SwGreetingsHandler, IndividualHdl_Impl, Button*, void)
     UpdatePreview();
 }
 
-IMPL_LINK(SwGreetingsHandler, GreetingHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwGreetingsHandler, GreetingHdl_Impl, weld::Button&, rButton, void)
 {
     ScopedVclPtr<SwCustomizeAddressBlockDialog> pDlg(
-            VclPtr<SwCustomizeAddressBlockDialog>::Create(pButton, m_rConfigItem,
-                        pButton == m_pMalePB ?
+            VclPtr<SwCustomizeAddressBlockDialog>::Create(nullptr /*TODO*/, m_rConfigItem,
+                        &rButton == m_xMalePB.get() ?
                         SwCustomizeAddressBlockDialog::GREETING_MALE :
                         SwCustomizeAddressBlockDialog::GREETING_FEMALE ));
-    if(RET_OK == pDlg->Execute())
+    if (RET_OK == pDlg->Execute())
     {
-        ListBox* pToInsert = pButton == m_pMalePB ? m_pMaleLB.get() : m_pFemaleLB.get();
-        pToInsert->SelectEntryPos(pToInsert->InsertEntry(pDlg->GetAddress()));
+        weld::ComboBox* pToInsert = &rButton == m_xMalePB.get() ? m_xMaleLB.get() : m_xFemaleLB.get();
+        pToInsert->append_text(pDlg->GetAddress());
+        pToInsert->set_active(pToInsert->get_count() - 1);
         if(m_bIsTabPage)
         {
             m_pWizard->UpdateRoadmap();
@@ -122,16 +101,16 @@ IMPL_LINK(SwGreetingsHandler, GreetingHdl_Impl, Button*, pButton, void)
     }
 }
 
-void    SwGreetingsHandler::UpdatePreview()
+void SwGreetingsHandler::UpdatePreview()
 {
     //the base class does nothing
 }
 
-IMPL_LINK(SwMailMergeGreetingsPage, AssignHdl_Impl, Button*, pButton, void)
+IMPL_LINK_NOARG(SwMailMergeGreetingsPage, AssignHdl_Impl, weld::Button&, void)
 {
-    const OUString sPreview(m_pFemaleLB->GetSelectedEntry() + "\n" + m_pMaleLB->GetSelectedEntry());
+    const OUString sPreview(m_xFemaleLB->get_active_text() + "\n" + m_xMaleLB->get_active_text());
     ScopedVclPtr<SwAssignFieldsDialog> pDlg(
-            VclPtr<SwAssignFieldsDialog>::Create(pButton, m_rConfigItem, sPreview, false));
+            VclPtr<SwAssignFieldsDialog>::Create(nullptr /*TODO*/, m_rConfigItem, sPreview, false));
     if(RET_OK == pDlg->Execute())
     {
         UpdatePreview();
@@ -140,15 +119,12 @@ IMPL_LINK(SwMailMergeGreetingsPage, AssignHdl_Impl, Button*, pButton, void)
     }
 }
 
-IMPL_LINK_NOARG(SwMailMergeGreetingsPage, GreetingSelectHdl_Impl, Edit&, void)
+IMPL_LINK_NOARG(SwMailMergeGreetingsPage, GreetingSelectListBoxHdl_Impl, weld::ComboBox&, void)
 {
     UpdatePreview();
 }
-IMPL_LINK_NOARG(SwMailMergeGreetingsPage, GreetingSelectListBoxHdl_Impl, ListBox&, void)
-{
-    UpdatePreview();
-}
-IMPL_LINK_NOARG(SwMailMergeGreetingsPage, GreetingSelectComboBoxHdl_Impl, ComboBox&, void)
+
+IMPL_LINK_NOARG(SwMailMergeGreetingsPage, GreetingSelectComboBoxHdl_Impl, weld::ComboBox&, void)
 {
     UpdatePreview();
 }
@@ -157,11 +133,11 @@ void SwMailMergeGreetingsPage::UpdatePreview()
 {
     //find out which type of greeting should be selected:
     bool bFemale = false;
-    bool bNoValue = !m_pFemaleColumnLB->IsEnabled();
+    bool bNoValue = !m_xFemaleColumnLB->get_sensitive();
     if( !bNoValue )
     {
-        const OUString sFemaleValue = m_pFemaleFieldCB->GetText();
-        const OUString sFemaleColumn = m_pFemaleColumnLB->GetSelectedEntry();
+        const OUString sFemaleValue = m_xFemaleFieldCB->get_active_text();
+        const OUString sFemaleColumn = m_xFemaleColumnLB->get_active_text();
         Reference< sdbcx::XColumnsSupplier > xColsSupp( m_rConfigItem.GetResultSet(), UNO_QUERY);
         Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;
         if(!sFemaleValue.isEmpty() && !sFemaleColumn.isEmpty() &&
@@ -196,99 +172,79 @@ void SwMailMergeGreetingsPage::UpdatePreview()
         }
     }
 
-    OUString sPreview = bFemale ? m_pFemaleLB->GetSelectedEntry() :
-        bNoValue ? m_pNeutralCB->GetText() : m_pMaleLB->GetSelectedEntry();
+    OUString sPreview = bFemale ? m_xFemaleLB->get_active_text() :
+        bNoValue ? m_xNeutralCB->get_active_text() : m_xMaleLB->get_active_text();
 
     sPreview = SwAddressPreview::FillData(sPreview, m_rConfigItem);
-    m_pPreviewWIN->SetAddress(sPreview);
+    m_xPreview->SetAddress(sPreview);
 }
 
-void    SwGreetingsHandler::Contains(bool bContainsGreeting)
+void SwGreetingsHandler::Contains(bool bContainsGreeting)
 {
-    m_pPersonalizedCB->Enable(bContainsGreeting);
-    bool bEnablePersonal = bContainsGreeting && m_pPersonalizedCB->IsChecked();
-    m_pFemaleFT->Enable(bEnablePersonal);
-    m_pFemaleLB->Enable(bEnablePersonal);
-    m_pFemalePB->Enable(bEnablePersonal);
-    m_pMaleFT->Enable(bEnablePersonal);
-    m_pMaleLB->Enable(bEnablePersonal);
-    m_pMalePB->Enable(bEnablePersonal);
-    m_pFemaleFI->Enable(bEnablePersonal);
-    m_pFemaleColumnFT->Enable(bEnablePersonal);
-    m_pFemaleColumnLB->Enable(bEnablePersonal);
-    m_pFemaleFieldFT->Enable(bEnablePersonal);
-    m_pFemaleFieldCB->Enable(bEnablePersonal);
-
-    m_pNeutralFT->Enable(bContainsGreeting);
-    m_pNeutralCB->Enable(bContainsGreeting);
+    m_xPersonalizedCB->set_sensitive(bContainsGreeting);
+    bool bEnablePersonal = bContainsGreeting && m_xPersonalizedCB->get_active();
+    m_xFemaleFT->set_sensitive(bEnablePersonal);
+    m_xFemaleLB->set_sensitive(bEnablePersonal);
+    m_xFemalePB->set_sensitive(bEnablePersonal);
+    m_xMaleFT->set_sensitive(bEnablePersonal);
+    m_xMaleLB->set_sensitive(bEnablePersonal);
+    m_xMalePB->set_sensitive(bEnablePersonal);
+    m_xFemaleFI->set_sensitive(bEnablePersonal);
+    m_xFemaleColumnFT->set_sensitive(bEnablePersonal);
+    m_xFemaleColumnLB->set_sensitive(bEnablePersonal);
+    m_xFemaleFieldFT->set_sensitive(bEnablePersonal);
+    m_xFemaleFieldCB->set_sensitive(bEnablePersonal);
+    m_xNeutralFT->set_sensitive(bContainsGreeting);
+    m_xNeutralCB->set_sensitive(bContainsGreeting);
 }
 
-SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* _pParent)
-    : svt::OWizardPage(_pParent, "MMSalutationPage",
-        "modules/swriter/ui/mmsalutationpage.ui"),
-    SwGreetingsHandler(_pParent->GetConfigItem())
+SwMailMergeGreetingsPage::SwMailMergeGreetingsPage(SwMailMergeWizard* pWizard, TabPageParent pParent)
+    : svt::OWizardPage(pParent, "modules/swriter/ui/mmsalutationpage.ui", "MMSalutationPage")
+    , SwGreetingsHandler(pWizard->GetConfigItem(), *m_xBuilder)
+    , m_xPreview(new AddressPreview(m_xBuilder->weld_scrolled_window("previewwin")))
+    , m_xPreviewFI(m_xBuilder->weld_label("previewft"))
+    , m_xAssignPB(m_xBuilder->weld_button("assign"))
+    , m_xDocumentIndexFI(m_xBuilder->weld_label("documentindex"))
+    , m_xPrevSetIB(m_xBuilder->weld_button("prev"))
+    , m_xNextSetIB(m_xBuilder->weld_button("next"))
+    , m_xPreviewWIN(new weld::CustomWeld(*m_xBuilder, "preview", *m_xPreview))
 {
-    m_pWizard = _pParent;
+    m_pWizard = pWizard;
 
-    get(m_pGreetingLineCB, "greeting");
-    get(m_pPersonalizedCB, "personalized");
-    get(m_pFemaleFT, "femaleft");
-    get(m_pFemaleLB, "female");
-    get(m_pFemalePB, "newfemale");
-    get(m_pMaleFT, "maleft");
-    get(m_pMaleLB, "male");
-    get(m_pMalePB, "newmale");
-    get(m_pFemaleFI, "femalefi");
-    get(m_pFemaleColumnFT, "femalecolft");
-    get(m_pFemaleColumnLB, "femalecol");
-    get(m_pFemaleFieldFT, "femalefieldft");
-    get(m_pFemaleFieldCB, "femalefield");
-    get(m_pNeutralFT, "generalft");
-    get(m_pNeutralCB, "general");
-    get(m_pPreviewFI, "previewft");
-    get(m_pPreviewWIN, "preview");
-    Size aSize(LogicToPixel(Size(186, 21), MapMode(MapUnit::MapAppFont)));
-    m_pPreviewWIN->set_width_request(aSize.Width());
-    m_pPreviewWIN->set_height_request(aSize.Height());
-    get(m_pAssignPB, "assign");
-    get(m_pDocumentIndexFI, "documentindex");
-    m_sDocument = m_pDocumentIndexFI->GetText();
-    get(m_pPrevSetIB, "prev");
-    get(m_pNextSetIB, "next");
+    Size aSize(m_xPreview->GetDrawingArea()->get_ref_device().LogicToPixel(Size(186, 21), MapMode(MapUnit::MapAppFont)));
+    m_xPreviewWIN->set_size_request(aSize.Width(), aSize.Height());
+    m_sDocument = m_xDocumentIndexFI->get_label();
 
     m_bIsTabPage = true;
 
-    m_pGreetingLineCB->SetClickHdl(LINK(this, SwMailMergeGreetingsPage, ContainsHdl_Impl));
-    Link<Button*,void> aIndividualLink = LINK(this, SwGreetingsHandler, IndividualHdl_Impl);
-    m_pPersonalizedCB->SetClickHdl(aIndividualLink);
-    Link<Button*,void> aGreetingLink = LINK(this, SwGreetingsHandler, GreetingHdl_Impl);
-    m_pFemalePB->SetClickHdl(aGreetingLink);
-    m_pMalePB->SetClickHdl(aGreetingLink);
-    m_pAssignPB->SetClickHdl(LINK(this, SwMailMergeGreetingsPage, AssignHdl_Impl));
-    Link<Edit&,void> aLBoxLink = LINK(this, SwMailMergeGreetingsPage, GreetingSelectHdl_Impl);
-    Link<ListBox&,void> aLBoxLink2 = LINK(this, SwMailMergeGreetingsPage, GreetingSelectListBoxHdl_Impl);
-    m_pFemaleLB->SetSelectHdl(aLBoxLink2);
-    m_pMaleLB->SetSelectHdl(aLBoxLink2);
-    m_pFemaleColumnLB->SetSelectHdl(aLBoxLink2);
-    m_pFemaleFieldCB->SetSelectHdl(LINK(this, SwMailMergeGreetingsPage, GreetingSelectComboBoxHdl_Impl));
-    m_pFemaleFieldCB->SetModifyHdl(aLBoxLink);
-    m_pNeutralCB->SetSelectHdl(LINK(this, SwMailMergeGreetingsPage, GreetingSelectComboBoxHdl_Impl));
-    m_pNeutralCB->SetModifyHdl(aLBoxLink);
+    m_xGreetingLineCB->connect_toggled(LINK(this, SwMailMergeGreetingsPage, ContainsHdl_Impl));
+    Link<weld::ToggleButton&,void> aIndividualLink = LINK(this, SwGreetingsHandler, IndividualHdl_Impl);
+    m_xPersonalizedCB->connect_toggled(aIndividualLink);
+    Link<weld::Button&,void> aGreetingLink = LINK(this, SwGreetingsHandler, GreetingHdl_Impl);
+    m_xFemalePB->connect_clicked(aGreetingLink);
+    m_xMalePB->connect_clicked(aGreetingLink);
+    m_xAssignPB->connect_clicked(LINK(this, SwMailMergeGreetingsPage, AssignHdl_Impl));
+    Link<weld::ComboBox&,void> aLBoxLink2 = LINK(this, SwMailMergeGreetingsPage, GreetingSelectListBoxHdl_Impl);
+    m_xFemaleLB->connect_changed(aLBoxLink2);
+    m_xMaleLB->connect_changed(aLBoxLink2);
+    m_xFemaleColumnLB->connect_changed(aLBoxLink2);
+    m_xFemaleFieldCB->connect_changed(LINK(this, SwMailMergeGreetingsPage, GreetingSelectComboBoxHdl_Impl));
+    m_xNeutralCB->connect_changed(LINK(this, SwMailMergeGreetingsPage, GreetingSelectComboBoxHdl_Impl));
 
-    Link<Button*,void> aDataLink = LINK(this, SwMailMergeGreetingsPage, InsertDataHdl_Impl);
-    m_pPrevSetIB->SetClickHdl(aDataLink);
-    m_pNextSetIB->SetClickHdl(aDataLink);
+    Link<weld::Button&,void> aDataLink = LINK(this, SwMailMergeGreetingsPage, InsertDataHdl_Impl);
+    m_xPrevSetIB->connect_clicked(aDataLink);
+    m_xNextSetIB->connect_clicked(aDataLink);
 
-    m_pGreetingLineCB->Check(m_rConfigItem.IsGreetingLine(false));
-    m_pPersonalizedCB->Check(m_rConfigItem.IsIndividualGreeting(false));
-    ContainsHdl_Impl(m_pGreetingLineCB);
-    aIndividualLink.Call(nullptr);
+    m_xGreetingLineCB->set_active(m_rConfigItem.IsGreetingLine(false));
+    m_xPersonalizedCB->set_active(m_rConfigItem.IsIndividualGreeting(false));
+    ContainsHdl_Impl(*m_xGreetingLineCB);
+    aIndividualLink.Call(*m_xPersonalizedCB);
 
-    lcl_FillGreetingsBox(*m_pFemaleLB, m_rConfigItem, SwMailMergeConfigItem::FEMALE);
-    lcl_FillGreetingsBox(*m_pMaleLB, m_rConfigItem, SwMailMergeConfigItem::MALE);
-    lcl_FillGreetingsBox(*m_pNeutralCB, m_rConfigItem, SwMailMergeConfigItem::NEUTRAL);
+    lcl_FillGreetingsBox(*m_xFemaleLB, m_rConfigItem, SwMailMergeConfigItem::FEMALE);
+    lcl_FillGreetingsBox(*m_xMaleLB, m_rConfigItem, SwMailMergeConfigItem::MALE);
+    lcl_FillGreetingsBox(*m_xNeutralCB, m_rConfigItem, SwMailMergeConfigItem::NEUTRAL);
 
-    m_pDocumentIndexFI->SetText(m_sDocument.replaceFirst("%1", "1"));
+    m_xDocumentIndexFI->set_label(m_sDocument.replaceFirst("%1", "1"));
 }
 
 SwMailMergeGreetingsPage::~SwMailMergeGreetingsPage()
@@ -298,33 +254,29 @@ SwMailMergeGreetingsPage::~SwMailMergeGreetingsPage()
 
 void SwMailMergeGreetingsPage::dispose()
 {
-    m_pPreviewFI.clear();
-    m_pPreviewWIN.clear();
-    m_pAssignPB.clear();
-    m_pDocumentIndexFI.clear();
-    m_pPrevSetIB.clear();
-    m_pNextSetIB.clear();
+    m_xPreviewWIN.reset();
+    m_xPreview.reset();
     svt::OWizardPage::dispose();
 }
 
 void SwMailMergeGreetingsPage::ActivatePage()
 {
     //try to find the gender setting
-    m_pFemaleColumnLB->Clear();
+    m_xFemaleColumnLB->clear();
     Reference< sdbcx::XColumnsSupplier > xColsSupp = m_rConfigItem.GetColumnsSupplier();
     if(xColsSupp.is())
     {
         Reference < container::XNameAccess> xColAccess = xColsSupp->getColumns();
         Sequence< OUString > aColumns = xColAccess->getElementNames();
         for(sal_Int32 nName = 0; nName < aColumns.getLength(); ++nName)
-            m_pFemaleColumnLB->InsertEntry(aColumns[nName]);
+            m_xFemaleColumnLB->append_text(aColumns[nName]);
     }
 
-    m_pFemaleColumnLB->SelectEntry(m_rConfigItem.GetAssignedColumn(MM_PART_GENDER));
-    m_pFemaleColumnLB->SaveValue();
+    m_xFemaleColumnLB->set_active_text(m_rConfigItem.GetAssignedColumn(MM_PART_GENDER));
+    m_xFemaleColumnLB->save_value();
 
-    m_pFemaleFieldCB->SetText(m_rConfigItem.GetFemaleGenderValue());
-    m_pFemaleFieldCB->SaveValue();
+    m_xFemaleFieldCB->set_entry_text(m_rConfigItem.GetFemaleGenderValue());
+    m_xFemaleFieldCB->save_value();
 
     UpdatePreview();
     m_pWizard->enableButtons(WizardButtonFlags::NEXT, m_pWizard->isStateEnabled(MM_LAYOUTPAGE));
@@ -332,63 +284,54 @@ void SwMailMergeGreetingsPage::ActivatePage()
 
 bool SwMailMergeGreetingsPage::commitPage( ::svt::WizardTypes::CommitPageReason )
 {
-    if (m_pFemaleColumnLB->IsValueChangedFromSaved())
+    if (m_xFemaleColumnLB->get_value_changed_from_saved())
     {
         const SwDBData& rDBData = m_rConfigItem.GetCurrentDBData();
         Sequence< OUString> aAssignment = m_rConfigItem.GetColumnAssignment( rDBData );
         if(aAssignment.getLength() <= MM_PART_GENDER)
             aAssignment.realloc(MM_PART_GENDER + 1);
-        aAssignment[MM_PART_GENDER] = m_pFemaleColumnLB->GetSelectedEntry();
+        aAssignment[MM_PART_GENDER] = m_xFemaleColumnLB->get_active_text();
         m_rConfigItem.SetColumnAssignment( rDBData, aAssignment );
     }
-    if (m_pFemaleFieldCB->IsValueChangedFromSaved())
-        m_rConfigItem.SetFemaleGenderValue(m_pFemaleFieldCB->GetText());
+    if (m_xFemaleFieldCB->get_value_changed_from_saved())
+        m_rConfigItem.SetFemaleGenderValue(m_xFemaleFieldCB->get_active_text());
 
-    lcl_StoreGreetingsBox(*m_pFemaleLB, m_rConfigItem, SwMailMergeConfigItem::FEMALE);
-    lcl_StoreGreetingsBox(*m_pMaleLB, m_rConfigItem, SwMailMergeConfigItem::MALE);
+    lcl_StoreGreetingsBox(*m_xFemaleLB, m_rConfigItem, SwMailMergeConfigItem::FEMALE);
+    lcl_StoreGreetingsBox(*m_xMaleLB, m_rConfigItem, SwMailMergeConfigItem::MALE);
 
-    sal_Int32 nCurrentTextPos = m_pNeutralCB->GetEntryPos(m_pNeutralCB->GetText());
-    if(COMBOBOX_ENTRY_NOTFOUND == nCurrentTextPos)
+    sal_Int32 nCurrentTextPos = m_xNeutralCB->find_text(m_xNeutralCB->get_active_text());
+    if (nCurrentTextPos == -1)
     {
-        sal_Int32 nCount = m_pNeutralCB->GetEntryCount();
-        m_pNeutralCB->InsertEntry(m_pNeutralCB->GetText(), nCount);
-        m_pNeutralCB->SelectEntryPos(nCount);
+        m_xNeutralCB->append_text(m_xNeutralCB->get_active_text());
+        m_xNeutralCB->set_active(m_xNeutralCB->get_count() - 1);
     }
-    lcl_StoreGreetingsBox(*m_pNeutralCB, m_rConfigItem, SwMailMergeConfigItem::NEUTRAL);
-    m_rConfigItem.SetGreetingLine(m_pGreetingLineCB->IsChecked(), false);
-    m_rConfigItem.SetIndividualGreeting(m_pPersonalizedCB->IsChecked(), false);
+    lcl_StoreGreetingsBox(*m_xNeutralCB, m_rConfigItem, SwMailMergeConfigItem::NEUTRAL);
+    m_rConfigItem.SetGreetingLine(m_xGreetingLineCB->get_active(), false);
+    m_rConfigItem.SetIndividualGreeting(m_xPersonalizedCB->get_active(), false);
     return true;
 }
 
-IMPL_LINK(SwMailMergeGreetingsPage, ContainsHdl_Impl, Button*, pBox, void)
+IMPL_LINK(SwMailMergeGreetingsPage, ContainsHdl_Impl, weld::ToggleButton&, rBox, void)
 {
-    bool bContainsGreeting = static_cast<CheckBox*>(pBox)->IsChecked();
+    bool bContainsGreeting = rBox.get_active();
     SwGreetingsHandler::Contains(bContainsGreeting);
-    m_pPreviewFI-> Enable(bContainsGreeting);
-    m_pPreviewWIN->Enable(bContainsGreeting);
-    m_pAssignPB->  Enable(bContainsGreeting);
-    m_pDocumentIndexFI->  Enable(bContainsGreeting);
-    m_pPrevSetIB->Enable(bContainsGreeting);
-    m_pNextSetIB->Enable(bContainsGreeting);
-    m_rConfigItem.SetGreetingLine(m_pGreetingLineCB->IsChecked(), false);
+    m_xPreviewFI->set_sensitive(bContainsGreeting);
+    m_xPreviewWIN->set_sensitive(bContainsGreeting);
+    m_xAssignPB->set_sensitive(bContainsGreeting);
+    m_xDocumentIndexFI->set_sensitive(bContainsGreeting);
+    m_xPrevSetIB->set_sensitive(bContainsGreeting);
+    m_xNextSetIB->set_sensitive(bContainsGreeting);
+    m_rConfigItem.SetGreetingLine(m_xGreetingLineCB->get_active(), false);
     m_pWizard->UpdateRoadmap();
     m_pWizard->enableButtons(WizardButtonFlags::NEXT, m_pWizard->isStateEnabled(MM_LAYOUTPAGE));
 }
 
-IMPL_LINK(SwMailMergeGreetingsPage, InsertDataHdl_Impl, Button*, pButton, void)
+IMPL_LINK(SwMailMergeGreetingsPage, InsertDataHdl_Impl, weld::Button&, rButton, void)
 {
-    //if no pButton is given, the first set has to be pre-set
-    if(!pButton)
-    {
-        m_rConfigItem.GetResultSet();
-    }
-    else
-    {
-        bool bNext = pButton == m_pNextSetIB;
-        sal_Int32 nPos = m_rConfigItem.GetResultSetPosition();
-        m_rConfigItem.MoveResultSet( bNext ? ++nPos : --nPos);
-    }
+    bool bNext = &rButton == m_xNextSetIB.get();
     sal_Int32 nPos = m_rConfigItem.GetResultSetPosition();
+    m_rConfigItem.MoveResultSet( bNext ? ++nPos : --nPos);
+    nPos = m_rConfigItem.GetResultSetPosition();
     bool bEnable = true;
     if(nPos < 1)
     {
@@ -397,119 +340,91 @@ IMPL_LINK(SwMailMergeGreetingsPage, InsertDataHdl_Impl, Button*, pButton, void)
     }
     else
         UpdatePreview();
-    m_pPrevSetIB->Enable(bEnable);
-    m_pNextSetIB->Enable(bEnable);
-    m_pDocumentIndexFI->Enable(bEnable);
-    m_pDocumentIndexFI->SetText(m_sDocument.replaceFirst("%1", OUString::number(nPos)));
+    m_xPrevSetIB->set_sensitive(bEnable);
+    m_xNextSetIB->set_sensitive(bEnable);
+    m_xDocumentIndexFI->set_sensitive(bEnable);
+    m_xDocumentIndexFI->set_label(m_sDocument.replaceFirst("%1", OUString::number(nPos)));
 }
 
-SwMailBodyDialog::SwMailBodyDialog(vcl::Window* pParent) :
-    SfxModalDialog(pParent, "MailBodyDialog", "modules/swriter/ui/mmmailbody.ui"),
-    SwGreetingsHandler(*GetActiveView()->GetMailMergeConfigItem())
+SwMailBodyDialog::SwMailBodyDialog(weld::Window* pParent)
+    : SfxDialogController(pParent, "modules/swriter/ui/mmmailbody.ui", "MailBodyDialog")
+    , SwGreetingsHandler(*GetActiveView()->GetMailMergeConfigItem(), *m_xBuilder)
+    , m_xBodyFT(m_xBuilder->weld_label("bodyft"))
+    , m_xBodyMLE(m_xBuilder->weld_text_view("bodymle"))
+    , m_xOK(m_xBuilder->weld_button("ok"))
 {
-    get(m_pGreetingLineCB, "greeting");
-    get(m_pPersonalizedCB, "personalized");
-    get(m_pFemaleFT, "femaleft");
-    get(m_pFemaleLB, "female");
-    get(m_pFemalePB, "newfemale");
-    get(m_pMaleFT, "maleft");
-    get(m_pMaleLB, "male");
-    get(m_pMalePB, "newmale");
-    get(m_pFemaleFI, "femalefi");
-    get(m_pFemaleColumnFT, "femalecolft");
-    get(m_pFemaleColumnLB, "femalecol");
-    get(m_pFemaleFieldFT, "femalefieldft");
-    get(m_pFemaleFieldCB, "femalefield");
-    get(m_pNeutralFT, "generalft");
-    get(m_pNeutralCB, "general");
-    get(m_pBodyFT, "bodyft");
-    get(m_pBodyMLE, "bodymle");
-    m_pBodyMLE->SetStyle(m_pBodyMLE->GetStyle() | WB_HSCROLL | WB_VSCROLL | WB_IGNORETAB);
-    Size aSize(LogicToPixel(Size(180, 50), MapMode(MapUnit::MapAppFont)));
-    m_pBodyMLE->set_width_request(aSize.Width());
-    m_pBodyMLE->set_height_request(aSize.Height());
-    get(m_pOK, "ok");
     m_bIsTabPage = false;
+    m_xBodyMLE->set_size_request(m_xBodyMLE->get_approximate_digit_width() * 45,
+                                 m_xBodyMLE->get_height_rows(6));
+    m_xGreetingLineCB->connect_toggled(LINK(this, SwMailBodyDialog, ContainsHdl_Impl));
+    Link<weld::ToggleButton&,void> aIndividualLink = LINK(this, SwGreetingsHandler, IndividualHdl_Impl);
+    m_xPersonalizedCB->connect_toggled(aIndividualLink);
+    Link<weld::Button&,void> aGreetingLink = LINK(this, SwGreetingsHandler, GreetingHdl_Impl);
+    m_xFemalePB->connect_clicked(aGreetingLink);
+    m_xMalePB->connect_clicked(aGreetingLink);
+    m_xOK->connect_clicked(LINK(this, SwMailBodyDialog, OKHdl));
 
-    m_pGreetingLineCB->SetClickHdl(LINK(this, SwMailBodyDialog, ContainsHdl_Impl));
-    Link<Button*,void> aIndividualLink = LINK(this, SwGreetingsHandler, IndividualHdl_Impl);
-    m_pPersonalizedCB->SetClickHdl(aIndividualLink);
-    Link<Button*,void> aGreetingLink = LINK(this, SwGreetingsHandler, GreetingHdl_Impl);
-    m_pFemalePB->SetClickHdl(aGreetingLink);
-    m_pMalePB->SetClickHdl(aGreetingLink);
-    m_pOK->SetClickHdl(LINK(this, SwMailBodyDialog, OKHdl));
+    m_xGreetingLineCB->set_active(m_rConfigItem.IsGreetingLine(true));
+    m_xPersonalizedCB->set_active(m_rConfigItem.IsIndividualGreeting(true));
+    ContainsHdl_Impl(*m_xGreetingLineCB);
+    aIndividualLink.Call(*m_xPersonalizedCB);
 
-    m_pGreetingLineCB->Check(m_rConfigItem.IsGreetingLine(true));
-    m_pPersonalizedCB->Check(m_rConfigItem.IsIndividualGreeting(true));
-    ContainsHdl_Impl(m_pGreetingLineCB);
-    aIndividualLink.Call(nullptr);
-
-    lcl_FillGreetingsBox(*m_pFemaleLB, m_rConfigItem, SwMailMergeConfigItem::FEMALE);
-    lcl_FillGreetingsBox(*m_pMaleLB, m_rConfigItem, SwMailMergeConfigItem::MALE);
-    lcl_FillGreetingsBox(*m_pNeutralCB, m_rConfigItem, SwMailMergeConfigItem::NEUTRAL);
+    lcl_FillGreetingsBox(*m_xFemaleLB, m_rConfigItem, SwMailMergeConfigItem::FEMALE);
+    lcl_FillGreetingsBox(*m_xMaleLB, m_rConfigItem, SwMailMergeConfigItem::MALE);
+    lcl_FillGreetingsBox(*m_xNeutralCB, m_rConfigItem, SwMailMergeConfigItem::NEUTRAL);
 
     //try to find the gender setting
-    m_pFemaleColumnLB->Clear();
+    m_xFemaleColumnLB->clear();
     Reference< sdbcx::XColumnsSupplier > xColsSupp = m_rConfigItem.GetColumnsSupplier();
     if(xColsSupp.is())
     {
         Reference < container::XNameAccess> xColAccess = xColsSupp->getColumns();
         Sequence< OUString > aColumns = xColAccess->getElementNames();
         for(sal_Int32 nName = 0; nName < aColumns.getLength(); ++nName)
-            m_pFemaleColumnLB->InsertEntry(aColumns[nName]);
+            m_xFemaleColumnLB->append_text(aColumns[nName]);
     }
 
-    m_pFemaleColumnLB->SelectEntry(m_rConfigItem.GetAssignedColumn(MM_PART_GENDER));
-    m_pFemaleColumnLB->SaveValue();
+    m_xFemaleColumnLB->set_active_text(m_rConfigItem.GetAssignedColumn(MM_PART_GENDER));
+    m_xFemaleColumnLB->save_value();
 
-    m_pFemaleFieldCB->SetText(m_rConfigItem.GetFemaleGenderValue());
-    m_pFemaleFieldCB->SaveValue();
+    m_xFemaleFieldCB->set_entry_text(m_rConfigItem.GetFemaleGenderValue());
+    m_xFemaleFieldCB->save_value();
 }
 
 SwMailBodyDialog::~SwMailBodyDialog()
 {
-    disposeOnce();
 }
 
-void SwMailBodyDialog::dispose()
+IMPL_LINK(SwMailBodyDialog, ContainsHdl_Impl, weld::ToggleButton&, rBox, void)
 {
-    m_pBodyFT.clear();
-    m_pBodyMLE.clear();
-    m_pOK.clear();
-    SfxModalDialog::dispose();
+    SwGreetingsHandler::Contains(rBox.get_active());
+    m_rConfigItem.SetGreetingLine(rBox.get_active(), true);
 }
 
-IMPL_LINK(SwMailBodyDialog, ContainsHdl_Impl, Button*, pButton, void)
-{
-    CheckBox* pBox = static_cast<CheckBox*>(pButton);
-    SwGreetingsHandler::Contains(pBox->IsChecked());
-    m_rConfigItem.SetGreetingLine(pBox->IsChecked(), true);
-}
-
-IMPL_LINK_NOARG(SwMailBodyDialog, OKHdl, Button*, void)
+IMPL_LINK_NOARG(SwMailBodyDialog, OKHdl, weld::Button&, void)
 {
     m_rConfigItem.SetGreetingLine(
-                m_pGreetingLineCB->IsChecked(), false);
+                m_xGreetingLineCB->get_active(), false);
     m_rConfigItem.SetIndividualGreeting(
-                m_pPersonalizedCB->IsChecked(), false);
+                m_xPersonalizedCB->get_active(), false);
 
-    if(m_pFemaleColumnLB->IsValueChangedFromSaved())
+    if (m_xFemaleColumnLB->get_value_changed_from_saved())
     {
         const SwDBData& rDBData = m_rConfigItem.GetCurrentDBData();
         Sequence< OUString> aAssignment = m_rConfigItem.GetColumnAssignment( rDBData );
-        sal_Int32 nPos = m_pFemaleColumnLB->GetSelectedEntryPos();
+        sal_Int32 nPos = m_xFemaleColumnLB->get_active();
         if(aAssignment.getLength() < MM_PART_GENDER)
             aAssignment.realloc(MM_PART_GENDER);
         if( nPos > 0 )
-            aAssignment[MM_PART_GENDER] = m_pFemaleColumnLB->GetSelectedEntry();
+            aAssignment[MM_PART_GENDER] = m_xFemaleColumnLB->get_active_text();
         else
             aAssignment[MM_PART_GENDER].clear();
         m_rConfigItem.SetColumnAssignment( rDBData, aAssignment );
     }
-    if(m_pFemaleFieldCB->IsValueChangedFromSaved())
-        m_rConfigItem.SetFemaleGenderValue(m_pFemaleFieldCB->GetText());
+    if (m_xFemaleFieldCB->get_value_changed_from_saved())
+        m_rConfigItem.SetFemaleGenderValue(m_xFemaleFieldCB->get_active_text());
 
-    EndDialog(RET_OK);
+    m_xDialog->response(RET_OK);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

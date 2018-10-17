@@ -544,6 +544,337 @@ OUString SwAddressPreview::FillData(
     return sAddress.makeStringAndClear();
 }
 
+AddressPreview::AddressPreview(std::unique_ptr<weld::ScrolledWindow> xWindow)
+    : m_xVScrollBar(std::move(xWindow))
+    , pImpl(new SwAddressPreview_Impl())
+{
+    m_xVScrollBar->set_user_managed_scrolling();
+    m_xVScrollBar->connect_vadjustment_changed(LINK(this, AddressPreview, ScrollHdl));
+}
+
+AddressPreview::~AddressPreview()
+{
+}
+
+IMPL_LINK_NOARG(AddressPreview, ScrollHdl, weld::ScrolledWindow&, void)
+{
+    Invalidate();
+}
+
+void AddressPreview::AddAddress(const OUString& rAddress)
+{
+    pImpl->aAddresses.push_back(rAddress);
+    UpdateScrollBar();
+}
+
+void AddressPreview::SetAddress(const OUString& rAddress)
+{
+    pImpl->aAddresses.clear();
+    pImpl->aAddresses.push_back(rAddress);
+    m_xVScrollBar->set_vpolicy(VclPolicyType::NEVER);
+    Invalidate();
+}
+
+sal_uInt16 AddressPreview::GetSelectedAddress()const
+{
+    OSL_ENSURE(pImpl->nSelectedAddress < pImpl->aAddresses.size(), "selection invalid");
+    return pImpl->nSelectedAddress;
+}
+
+void AddressPreview::SelectAddress(sal_uInt16 nSelect)
+{
+    OSL_ENSURE(pImpl->nSelectedAddress < pImpl->aAddresses.size(), "selection invalid");
+    pImpl->nSelectedAddress = nSelect;
+    // now make it visible..
+    sal_uInt16 nSelectRow = nSelect / pImpl->nColumns;
+    sal_uInt16 nStartRow = m_xVScrollBar->vadjustment_get_value();
+    if( (nSelectRow < nStartRow) || (nSelectRow >= (nStartRow + pImpl->nRows) ))
+        m_xVScrollBar->vadjustment_set_value(nSelectRow);
+}
+
+void AddressPreview::Clear()
+{
+    pImpl->aAddresses.clear();
+    pImpl->nSelectedAddress = 0;
+    UpdateScrollBar();
+}
+
+void AddressPreview::ReplaceSelectedAddress(const OUString& rNew)
+{
+    pImpl->aAddresses[pImpl->nSelectedAddress] = rNew;
+    Invalidate();
+}
+
+void AddressPreview::RemoveSelectedAddress()
+{
+    pImpl->aAddresses.erase(pImpl->aAddresses.begin() + pImpl->nSelectedAddress);
+    if(pImpl->nSelectedAddress)
+        --pImpl->nSelectedAddress;
+    UpdateScrollBar();
+    Invalidate();
+}
+
+void AddressPreview::SetLayout(sal_uInt16 nRows, sal_uInt16 nColumns)
+{
+    pImpl->nRows = nRows;
+    pImpl->nColumns = nColumns;
+    UpdateScrollBar();
+}
+
+void AddressPreview::EnableScrollBar()
+{
+    pImpl->bEnableScrollBar = true;
+}
+
+void AddressPreview::UpdateScrollBar()
+{
+    if (pImpl->nColumns)
+    {
+        sal_uInt16 nResultingRows = static_cast<sal_uInt16>(pImpl->aAddresses.size() + pImpl->nColumns - 1) / pImpl->nColumns;
+        ++nResultingRows;
+        auto nValue = m_xVScrollBar->vadjustment_get_value();
+        if (nValue > nResultingRows)
+            nValue = nResultingRows;
+        m_xVScrollBar->set_vpolicy(pImpl->bEnableScrollBar && nResultingRows > pImpl->nRows ? VclPolicyType::ALWAYS : VclPolicyType::NEVER);
+        m_xVScrollBar->vadjustment_configure(nValue, 0, nResultingRows, 1, 10, pImpl->nRows);
+    }
+}
+
+void AddressPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
+{
+    const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
+    rRenderContext.SetFillColor(rSettings.GetWindowColor());
+    rRenderContext.SetLineColor(COL_TRANSPARENT);
+    rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), GetOutputSizePixel()));
+    Color aPaintColor(IsEnabled() ? rSettings.GetWindowTextColor() : rSettings.GetDisableColor());
+    rRenderContext.SetLineColor(aPaintColor);
+    vcl::Font aFont(rRenderContext.GetFont());
+    aFont.SetColor(aPaintColor);
+    rRenderContext.SetFont(aFont);
+
+    Size aSize(GetOutputSizePixel());
+    sal_uInt16 nStartRow = 0;
+    if (m_xVScrollBar->get_vpolicy() != VclPolicyType::NEVER)
+    {
+        aSize.AdjustWidth(-m_xVScrollBar->get_vscroll_width());
+        nStartRow = m_xVScrollBar->vadjustment_get_value();
+    }
+    Size aPartSize(aSize.Width() / pImpl->nColumns,
+                   aSize.Height() / pImpl->nRows);
+    aPartSize.AdjustWidth( -2 );
+    aPartSize.AdjustHeight( -2 );
+
+    sal_uInt16 nAddress = nStartRow * pImpl->nColumns;
+    const sal_uInt16 nNumAddresses = static_cast<sal_uInt16>(pImpl->aAddresses.size());
+    for (sal_uInt16 nRow = 0; nRow < pImpl->nRows ; ++nRow)
+    {
+        for (sal_uInt16 nCol = 0; nCol < pImpl->nColumns; ++nCol)
+        {
+            if (nAddress >= nNumAddresses)
+                break;
+            Point aPos(nCol * aPartSize.Width(),
+                       nRow * aPartSize.Height());
+            aPos.Move(1, 1);
+            bool bIsSelected = nAddress == pImpl->nSelectedAddress;
+            if ((pImpl->nColumns * pImpl->nRows) == 1)
+                bIsSelected = false;
+            OUString adr(pImpl->aAddresses[nAddress]);
+            DrawText_Impl(rRenderContext, adr, aPos, aPartSize, bIsSelected);
+            ++nAddress;
+        }
+    }
+    rRenderContext.SetClipRegion();
+}
+
+void AddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    if (rMEvt.IsLeft() && pImpl->nRows && pImpl->nColumns)
+    {
+        //determine the selected address
+        const Point& rMousePos = rMEvt.GetPosPixel();
+        Size aSize(GetOutputSizePixel());
+        Size aPartSize( aSize.Width()/pImpl->nColumns, aSize.Height()/pImpl->nRows );
+        sal_uInt32 nRow = rMousePos.Y() / aPartSize.Height() ;
+        if (m_xVScrollBar->get_vpolicy() != VclPolicyType::NEVER)
+        {
+            nRow += m_xVScrollBar->vadjustment_get_value();
+        }
+        sal_uInt32 nCol = rMousePos.X() / aPartSize.Width();
+        sal_uInt32 nSelect = nRow * pImpl->nColumns + nCol;
+
+        if( nSelect < pImpl->aAddresses.size() &&
+                pImpl->nSelectedAddress != static_cast<sal_uInt16>(nSelect))
+        {
+            pImpl->nSelectedAddress = static_cast<sal_uInt16>(nSelect);
+            m_aSelectHdl.Call(nullptr);
+        }
+        Invalidate();
+    }
+}
+
+bool AddressPreview::KeyInput( const KeyEvent& rKEvt )
+{
+    sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
+    bool bHandled = false;
+    if (pImpl->nRows && pImpl->nColumns)
+    {
+        sal_uInt32 nSelectedRow = pImpl->nSelectedAddress / pImpl->nColumns;
+        sal_uInt32 nSelectedColumn = pImpl->nSelectedAddress - (nSelectedRow * pImpl->nColumns);
+        switch(nKey)
+        {
+            case KEY_UP:
+                if(nSelectedRow)
+                    --nSelectedRow;
+                bHandled = true;
+            break;
+            case KEY_DOWN:
+                if(pImpl->aAddresses.size() > sal_uInt32(pImpl->nSelectedAddress + pImpl->nColumns))
+                    ++nSelectedRow;
+                bHandled = true;
+            break;
+            case KEY_LEFT:
+                if(nSelectedColumn)
+                    --nSelectedColumn;
+                bHandled = true;
+            break;
+            case KEY_RIGHT:
+                if(nSelectedColumn < sal_uInt32(pImpl->nColumns - 1) &&
+                       pImpl->aAddresses.size() - 1 > pImpl->nSelectedAddress )
+                    ++nSelectedColumn;
+                bHandled = true;
+            break;
+        }
+        sal_uInt32 nSelect = nSelectedRow * pImpl->nColumns + nSelectedColumn;
+        if( nSelect < pImpl->aAddresses.size() &&
+                pImpl->nSelectedAddress != static_cast<sal_uInt16>(nSelect))
+        {
+            pImpl->nSelectedAddress = static_cast<sal_uInt16>(nSelect);
+            m_aSelectHdl.Call(nullptr);
+            Invalidate();
+        }
+    }
+    return bHandled;
+}
+
+void AddressPreview::DrawText_Impl(vcl::RenderContext& rRenderContext, const OUString& rAddress,
+                                     const Point& rTopLeft, const Size& rSize, bool bIsSelected)
+{
+    rRenderContext.SetClipRegion(vcl::Region(tools::Rectangle(rTopLeft, rSize)));
+    if (bIsSelected)
+    {
+        //selection rectangle
+        rRenderContext.SetFillColor(COL_TRANSPARENT);
+        rRenderContext.DrawRect(tools::Rectangle(rTopLeft, rSize));
+    }
+    sal_Int32 nHeight = GetTextHeight();
+    Point aStart = rTopLeft;
+    //put it away from the border
+    aStart.Move(2, 2);
+    sal_Int32 nPos = 0;
+    do
+    {
+        rRenderContext.DrawText(aStart, rAddress.getToken(0, '\n', nPos));
+        aStart.AdjustY(nHeight );
+    }
+    while (nPos >= 0);
+}
+
+OUString AddressPreview::FillData(
+        const OUString& rAddress,
+        SwMailMergeConfigItem const & rConfigItem,
+        const Sequence< OUString>* pAssignments)
+{
+    //find the column names in the address string (with name assignment!) and
+    //exchange the placeholder (like <Firstname>) with the database content
+    //unassigned columns are expanded to <not assigned>
+    Reference< XColumnsSupplier > xColsSupp( rConfigItem.GetResultSet(), UNO_QUERY);
+    Reference <XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : nullptr;
+    Sequence< OUString> aAssignment = pAssignments ?
+                    *pAssignments :
+                    rConfigItem.GetColumnAssignment(
+                                                rConfigItem.GetCurrentDBData() );
+    const OUString* pAssignment = aAssignment.getConstArray();
+    const std::vector<std::pair<OUString, int>>& rDefHeaders = rConfigItem.GetDefaultAddressHeaders();
+    OUString sNotAssigned = "<" + SwResId(STR_NOTASSIGNED) + ">";
+
+    bool bIncludeCountry = rConfigItem.IsIncludeCountry();
+    const OUString rExcludeCountry = rConfigItem.GetExcludeCountry();
+    bool bSpecialReplacementForCountry = (!bIncludeCountry || !rExcludeCountry.isEmpty());
+    OUString sCountryColumn;
+    if( bSpecialReplacementForCountry )
+    {
+        sCountryColumn = rDefHeaders[MM_PART_COUNTRY].first;
+        Sequence< OUString> aSpecialAssignment =
+                        rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
+        if(aSpecialAssignment.getLength() > MM_PART_COUNTRY && aSpecialAssignment[MM_PART_COUNTRY].getLength())
+            sCountryColumn = aSpecialAssignment[MM_PART_COUNTRY];
+    }
+
+    SwAddressIterator aIter(rAddress);
+    OUStringBuffer sAddress;
+    while(aIter.HasMore())
+    {
+        SwMergeAddressItem aItem = aIter.Next();
+        if(aItem.bIsColumn)
+        {
+            //get the default column name
+
+            //find the appropriate assignment
+            OUString sConvertedColumn = aItem.sText;
+            for(sal_uInt32 nColumn = 0;
+                    nColumn < rDefHeaders.size() && nColumn < sal_uInt32(aAssignment.getLength());
+                                                                                ++nColumn)
+            {
+                if (rDefHeaders[nColumn].first == aItem.sText &&
+                    !pAssignment[nColumn].isEmpty())
+                {
+                    sConvertedColumn = pAssignment[nColumn];
+                    break;
+                }
+            }
+            if(!sConvertedColumn.isEmpty() &&
+                    xColAccess.is() &&
+                    xColAccess->hasByName(sConvertedColumn))
+            {
+                //get the content and exchange it in the address string
+                Any aCol = xColAccess->getByName(sConvertedColumn);
+                Reference< XColumn > xColumn;
+                aCol >>= xColumn;
+                if(xColumn.is())
+                {
+                    try
+                    {
+                        OUString sReplace = xColumn->getString();
+
+                        if( bSpecialReplacementForCountry && sCountryColumn == sConvertedColumn )
+                        {
+                            if( !rExcludeCountry.isEmpty() && sReplace != rExcludeCountry )
+                                aItem.sText = sReplace;
+                            else
+                                aItem.sText.clear();
+                        }
+                        else
+                        {
+                            aItem.sText = sReplace;
+                        }
+                    }
+                    catch (const sdbc::SQLException&)
+                    {
+                        OSL_FAIL("SQLException caught");
+                    }
+                }
+            }
+            else
+            {
+                aItem.sText = sNotAssigned;
+            }
+
+        }
+        sAddress.append(aItem.sText);
+    }
+    return sAddress.makeStringAndClear();
+}
+
 SwMergeAddressItem   SwAddressIterator::Next()
 {
     //currently the string may either start with a '<' then it's a column
