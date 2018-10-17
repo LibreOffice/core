@@ -449,6 +449,7 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
     if (sURL.isEmpty())
         sURL = aNew.TemplateURL;
     INetURLObject aURL(sURL);
+    aNew.StandardImageId = SvFileInformationManager::GetFileImageId(aURL);
     aNew.StandardImage = SvFileInformationManager::GetFileImage(aURL);
 
     /* set the right UI state for this item to NOT_RECOVERED_YET... because nDocState shows the state of
@@ -959,14 +960,13 @@ short RecoveryDialog::Execute()
                  // failed recovery documents. They must be saved to
                  // a user selected directory.
                  short                 nRet                  = DLG_RET_UNKNOWN;
-                 ScopedVclPtrInstance< BrokenRecoveryDialog > pBrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted);
-                 OUString              sSaveDir              = pBrokenRecoveryDialog->getSaveDirURL(); // get the default dir
-                 if (pBrokenRecoveryDialog->isExecutionNeeded())
+                 BrokenRecoveryDialog aBrokenRecoveryDialog(GetFrameWeld(), m_pCore, !m_bWasRecoveryStarted);
+                 OUString sSaveDir = aBrokenRecoveryDialog.getSaveDirURL(); // get the default dir
+                 if (aBrokenRecoveryDialog.isExecutionNeeded())
                  {
-                     nRet = pBrokenRecoveryDialog->Execute();
-                     sSaveDir = pBrokenRecoveryDialog->getSaveDirURL();
+                     nRet = aBrokenRecoveryDialog.run();
+                     sSaveDir = aBrokenRecoveryDialog.getSaveDirURL();
                  }
-                 pBrokenRecoveryDialog.disposeAndClear();
 
                  switch(nRet)
                  {
@@ -1027,18 +1027,17 @@ short RecoveryDialog::Execute()
                  // They should be saved to a user defined location.
                  // If no temp files exists or user decided to ignore it ...
                  // we have to remove all recovery/session data anyway!
-                 short                 nRet                  = DLG_RET_UNKNOWN;
-                 ScopedVclPtrInstance< BrokenRecoveryDialog > pBrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted);
-                 OUString              sSaveDir              = pBrokenRecoveryDialog->getSaveDirURL(); // get the default save location
+                 short nRet = DLG_RET_UNKNOWN;
+                 BrokenRecoveryDialog aBrokenRecoveryDialog(GetFrameWeld(), m_pCore, !m_bWasRecoveryStarted);
+                 OUString sSaveDir = aBrokenRecoveryDialog.getSaveDirURL(); // get the default save location
 
                  // dialog itself checks if there is a need to copy files for this mode.
                  // It uses the information m_bWasRecoveryStarted doing so.
-                 if (pBrokenRecoveryDialog->isExecutionNeeded())
+                 if (aBrokenRecoveryDialog.isExecutionNeeded())
                  {
-                     nRet     = pBrokenRecoveryDialog->Execute();
-                     sSaveDir = pBrokenRecoveryDialog->getSaveDirURL();
+                     nRet     = aBrokenRecoveryDialog.run();
+                     sSaveDir = aBrokenRecoveryDialog.getSaveDirURL();
                  }
-                 pBrokenRecoveryDialog.disposeAndClear();
 
                  // Possible states:
                  // a) nRet == DLG_RET_UNKNOWN
@@ -1108,7 +1107,6 @@ void RecoveryDialog::updateItems()
     m_pFileListLB->Invalidate();
     m_pFileListLB->Update();
 }
-
 
 void RecoveryDialog::stepNext(TURLInfo* pItem)
 {
@@ -1206,48 +1204,35 @@ OUString RecoveryDialog::impl_getStatusString( const TURLInfo& rInfo ) const
     return sStatus;
 }
 
-BrokenRecoveryDialog::BrokenRecoveryDialog(vcl::Window*       pParent        ,
-                                           RecoveryCore* pCore          ,
-                                           bool      bBeforeRecovery)
-    : ModalDialog   ( pParent, "DocRecoveryBrokenDialog", "svx/ui/docrecoverybrokendialog.ui" )
-    , m_pCore       ( pCore                                               )
-    , m_bBeforeRecovery (bBeforeRecovery)
+BrokenRecoveryDialog::BrokenRecoveryDialog(weld::Window* pParent,
+                                           RecoveryCore* pCore,
+                                           bool bBeforeRecovery)
+    : GenericDialogController(pParent, "svx/ui/docrecoverybrokendialog.ui", "DocRecoveryBrokenDialog")
+    , m_pCore(pCore)
+    , m_bBeforeRecovery(bBeforeRecovery)
     , m_bExecutionNeeded(false)
+    , m_xFileListLB(m_xBuilder->weld_tree_view("filelist"))
+    , m_xSaveDirED(m_xBuilder->weld_entry("savedir"))
+    , m_xSaveDirBtn(m_xBuilder->weld_button("change"))
+    , m_xOkBtn(m_xBuilder->weld_button("ok"))
+    , m_xCancelBtn(m_xBuilder->weld_button("cancel"))
 {
-    get(m_pFileListLB, "filelist");
-    get(m_pSaveDirED, "savedir");
-    get(m_pSaveDirBtn, "change");
-    get(m_pOkBtn, "save");
-    get(m_pCancelBtn, "cancel");
-
-    m_pSaveDirBtn->SetClickHdl( LINK( this, BrokenRecoveryDialog, SaveButtonHdl ) );
-    m_pOkBtn->SetClickHdl( LINK( this, BrokenRecoveryDialog, OkButtonHdl ) );
-    m_pCancelBtn->SetClickHdl( LINK( this, BrokenRecoveryDialog, CancelButtonHdl ) );
+    m_xSaveDirBtn->connect_clicked( LINK( this, BrokenRecoveryDialog, SaveButtonHdl ) );
+    m_xOkBtn->connect_clicked( LINK( this, BrokenRecoveryDialog, OkButtonHdl ) );
+    m_xCancelBtn->connect_clicked( LINK( this, BrokenRecoveryDialog, CancelButtonHdl ) );
 
     m_sSavePath = SvtPathOptions().GetWorkPath();
     INetURLObject aObj( m_sSavePath );
     OUString sPath;
     osl::FileBase::getSystemPathFromFileURL(aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), sPath);
-    m_pSaveDirED->SetText( sPath );
+    m_xSaveDirED->set_text(sPath);
 
     impl_refresh();
 }
 
 BrokenRecoveryDialog::~BrokenRecoveryDialog()
 {
-    disposeOnce();
 }
-
-void BrokenRecoveryDialog::dispose()
-{
-    m_pFileListLB.clear();
-    m_pSaveDirED.clear();
-    m_pSaveDirBtn.clear();
-    m_pOkBtn.clear();
-    m_pCancelBtn.clear();
-    ModalDialog::dispose();
-}
-
 
 void BrokenRecoveryDialog::impl_refresh()
 {
@@ -1277,50 +1262,43 @@ void BrokenRecoveryDialog::impl_refresh()
 
         m_bExecutionNeeded = true;
 
-        const sal_Int32 nPos = m_pFileListLB->InsertEntry(rInfo.DisplayName, rInfo.StandardImage );
-        m_pFileListLB->SetEntryData( nPos, const_cast<TURLInfo *>(&rInfo) );
+        m_xFileListLB->append(OUString::number(reinterpret_cast<sal_IntPtr>(&rInfo)), rInfo.DisplayName, rInfo.StandardImageId);
     }
     m_sSavePath.clear();
-    m_pOkBtn->GrabFocus();
+    m_xOkBtn->grab_focus();
 }
-
 
 bool BrokenRecoveryDialog::isExecutionNeeded()
 {
     return m_bExecutionNeeded;
 }
 
-
 const OUString& BrokenRecoveryDialog::getSaveDirURL()
 {
     return m_sSavePath;
 }
 
-
-IMPL_LINK_NOARG(BrokenRecoveryDialog, OkButtonHdl, Button*, void)
+IMPL_LINK_NOARG(BrokenRecoveryDialog, OkButtonHdl, weld::Button&, void)
 {
-    OUString sPhysicalPath = comphelper::string::strip(m_pSaveDirED->GetText(), ' ');
+    OUString sPhysicalPath = comphelper::string::strip(m_xSaveDirED->get_text(), ' ');
     OUString sURL;
     osl::FileBase::getFileURLFromSystemPath( sPhysicalPath, sURL );
     m_sSavePath = sURL;
     while (m_sSavePath.isEmpty())
         impl_askForSavePath();
 
-    EndDialog(DLG_RET_OK);
+    m_xDialog->response(DLG_RET_OK);
 }
 
-
-IMPL_LINK_NOARG(BrokenRecoveryDialog, CancelButtonHdl, Button*, void)
+IMPL_LINK_NOARG(BrokenRecoveryDialog, CancelButtonHdl, weld::Button&, void)
 {
-    EndDialog();
+    m_xDialog->response(RET_CANCEL);
 }
 
-
-IMPL_LINK_NOARG(BrokenRecoveryDialog, SaveButtonHdl, Button*, void)
+IMPL_LINK_NOARG(BrokenRecoveryDialog, SaveButtonHdl, weld::Button&, void)
 {
     impl_askForSavePath();
 }
-
 
 void BrokenRecoveryDialog::impl_askForSavePath()
 {
@@ -1335,7 +1313,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
         m_sSavePath = xFolderPicker->getDirectory();
         OUString sPath;
         osl::FileBase::getSystemPathFromFileURL(m_sSavePath, sPath);
-        m_pSaveDirED->SetText( sPath );
+        m_xSaveDirED->set_text(sPath);
     }
 }
 
