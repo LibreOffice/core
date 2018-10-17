@@ -1136,7 +1136,7 @@ void SwTiledRenderingTest::testUndoInvalidations()
 
     // Insert a character the end of the document.
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->EndDoc();
+    pWrtShell->EndOfSection();
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
     Scheduler::ProcessEventsToIdle();
@@ -1170,7 +1170,7 @@ void SwTiledRenderingTest::testUndoLimiting()
 
     // Insert a character the end of the document in the second view.
     SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell2->EndDoc();
+    pWrtShell2->EndOfSection();
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'c', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'c', 0);
     Scheduler::ProcessEventsToIdle();
@@ -1396,9 +1396,9 @@ void SwTiledRenderingTest::testTrackChanges()
     ViewCallback aView;
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->GetSfxViewShell()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView);
-    pWrtShell->EndDoc();
+    pWrtShell->EndOfSection();
     pWrtShell->Insert("zzz");
-    pWrtShell->SttDoc();
+    pWrtShell->StartOfSection();
 
     // Get the redline just created
     const SwRedlineTable& rTable = pWrtShell->GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
@@ -1608,7 +1608,7 @@ void SwTiledRenderingTest::testRedlineColors()
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
     xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
-    pWrtShell->EndDoc();
+    pWrtShell->EndOfSection();
     pWrtShell->Insert("zzz");
 
     // Assert that info about exactly one author is returned.
@@ -1897,10 +1897,10 @@ void SwTiledRenderingTest::testAllTrackedChanges()
     SwWrtShell* pWrtShell2 = pView2->GetWrtShellPtr();
     // Insert text and reject all
     {
-        pWrtShell1->SttDoc();
+        pWrtShell1->StartOfSection();
         pWrtShell1->Insert("hxx");
 
-        pWrtShell2->EndDoc();
+        pWrtShell2->EndOfSection();
         pWrtShell2->Insert("cxx");
     }
 
@@ -1922,10 +1922,10 @@ void SwTiledRenderingTest::testAllTrackedChanges()
 
     // Insert text and accept all
     {
-        pWrtShell1->SttDoc();
+        pWrtShell1->StartOfSection();
         pWrtShell1->Insert("hyy");
 
-        pWrtShell2->EndDoc();
+        pWrtShell2->EndOfSection();
         pWrtShell2->Insert("cyy");
     }
 

@@ -366,11 +366,11 @@ void SwView::ExecSearch(SfxRequest& rReq)
                             m_pWrtShell->Push();
                             if (SwDocPositions::Start == aOpts.eEnd)
                             {
-                                m_pWrtShell->EndDoc();
+                                m_pWrtShell->EndOfSection();
                             }
                             else
                             {
-                                m_pWrtShell->SttDoc();
+                                m_pWrtShell->StartOfSection();
                             }
                         }
                         nFound = FUNC_Search( aOpts );
@@ -518,9 +518,9 @@ bool SwView::SearchAndWrap(bool bApi)
     if( m_eLastSearchCommand == SvxSearchCmd::FIND_ALL )
     {
         if( SwDocPositions::Start == aOpts.eEnd )
-            m_pWrtShell->EndDoc();
+            m_pWrtShell->EndOfSection();
         else
-            m_pWrtShell->SttDoc();
+            m_pWrtShell->StartOfSection();
     }
 
     // fdo#65014 : Ensure that the point of the cursor is at the extremity of the
@@ -656,9 +656,9 @@ bool SwView::SearchAll()
         m_pWrtShell->KillSelection(nullptr, false);
 
         if( SwDocPositions::Start == aOpts.eEnd )
-            m_pWrtShell->EndDoc();
+            m_pWrtShell->EndOfSection();
         else
-            m_pWrtShell->SttDoc();
+            m_pWrtShell->StartOfSection();
     }
     m_bExtra = false;
     sal_uInt16 nFound = static_cast<sal_uInt16>(FUNC_Search( aOpts ));

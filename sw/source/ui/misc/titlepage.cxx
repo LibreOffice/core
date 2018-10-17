@@ -184,7 +184,7 @@ SwTitlePageDlg::SwTitlePageDlg(weld::Window *pParent)
     mpIndexDesc = mpSh->GetPageDescFromPool(RES_POOLPAGE_REGISTER);
     mpNormalDesc = mpSh->GetPageDescFromPool(RES_POOLPAGE_STANDARD);
 
-    mpSh->SttDoc();
+    mpSh->StartOfSection();
     if (lcl_GetPageDesc( mpSh, nSetPage, &mpPageFormatDesc ))
     {
         if (mpPageFormatDesc->GetPageDesc() == mpTitleDesc)

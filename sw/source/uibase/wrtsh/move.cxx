@@ -294,13 +294,13 @@ bool SwWrtShell::GoEnd(bool bKeepArea, const bool *pMoveTable)
            SwCursorShell::SttEndDoc(false);
 }
 
-bool SwWrtShell::SttDoc( bool bSelect )
+bool SwWrtShell::StartOfSection(bool const bSelect)
 {
     ShellMoveCursor aTmp( this, bSelect );
     return GoStart(false, nullptr, bSelect );
 }
 
-bool SwWrtShell::EndDoc( bool bSelect)
+bool SwWrtShell::EndOfSection(bool const bSelect)
 {
     ShellMoveCursor aTmp( this, bSelect );
     return GoEnd();

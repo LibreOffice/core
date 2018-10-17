@@ -80,7 +80,7 @@ void SwUiWriterTest2::testRedlineMoveInsertInDelete()
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     pWrtShell->Delete(); // the footnote
     // second delete redline, following the first one
-    pWrtShell->EndDoc(false);
+    pWrtShell->EndOfSection(false);
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 3, /*bBasicCall=*/false);
     pWrtShell->Delete(); // "foo"
 

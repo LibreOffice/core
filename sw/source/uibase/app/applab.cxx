@@ -324,12 +324,12 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
                             // if there is no content in the fly then
                             // don't leave the fly!!!
                             pSh->Push();
-                            pSh->SttDoc();
+                            pSh->StartOfSection();
                             bool bInFly = nullptr != pSh->WizardGetFly();
                             pSh->Pop(bInFly ? SwCursorShell::PopMode::DeleteStack : SwCursorShell::PopMode::DeleteCurrent);
 
                             if( bInFly )
-                                pSh->EndDoc(true);  // select all content
+                                pSh->EndOfSection(true); // select all content
                                                     // in the fly
                             else
                                 pSh->SetMark();     // set only the mark
@@ -349,8 +349,8 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
                         aSect.SetLinkFileName(sLinkName.makeStringAndClear());
                         aSect.SetProtectFlag(true);
                         pSh->Insert(".");   // Dummytext to allocate the Section
-                        pSh->SttDoc();
-                        pSh->EndDoc(true);  // Select everything in the frame
+                        pSh->StartOfSection();
+                        pSh->EndOfSection(true); // Select everything in the frame
                         pSh->InsertSection(aSect);
                     }
                     pSh->Pop(SwCursorShell::PopMode::DeleteCurrent);
