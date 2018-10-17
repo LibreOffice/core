@@ -275,7 +275,7 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocS
                 rStrm.ReadUInt32( nStrLen );
                 nStrLen /= 2;
                 rStrm.SeekRel( 2 );
-                xLongName.reset(new OUString(read_uInt32_lenPrefixed_uInt16s_ToOUString(rStrm)));
+                xLongName.reset(new OUString(read_uInt16s_ToOUString(rStrm, nStrLen)));
                 lclGetAbsPath( *xLongName, nLevel, pDocShell);
             }
             else
@@ -286,7 +286,7 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocS
             sal_uInt32 nStrLen(0);
             rStrm.ReadUInt32( nStrLen );
             nStrLen /= 2;
-            xLongName.reset(new OUString(read_uInt32_lenPrefixed_uInt16s_ToOUString(rStrm)));
+            xLongName.reset(new OUString(read_uInt16s_ToOUString(rStrm, nStrLen)));
             if( !::get_flag( nFlags, WW8_HLINK_ABS ) )
                 lclGetAbsPath( *xLongName, 0 ,pDocShell);
         }
