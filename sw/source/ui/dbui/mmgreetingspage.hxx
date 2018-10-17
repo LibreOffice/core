@@ -32,93 +32,99 @@ class SwMailMergeWizard;
 class SwGreetingsHandler
 {
 protected:
-    VclPtr<CheckBox>           m_pGreetingLineCB;
-
-    VclPtr<CheckBox>           m_pPersonalizedCB;
-
-    VclPtr<FixedText>          m_pFemaleFT;
-    VclPtr<ListBox>            m_pFemaleLB;
-    VclPtr<PushButton>         m_pFemalePB;
-
-    VclPtr<FixedText>          m_pMaleFT;
-    VclPtr<ListBox>            m_pMaleLB;
-    VclPtr<PushButton>         m_pMalePB;
-
-    VclPtr<FixedText>          m_pFemaleFI;
-    VclPtr<FixedText>          m_pFemaleColumnFT;
-    VclPtr<ListBox>            m_pFemaleColumnLB;
-    VclPtr<FixedText>          m_pFemaleFieldFT;
-    VclPtr<ComboBox>           m_pFemaleFieldCB;
-
-    VclPtr<FixedText>          m_pNeutralFT;
-    VclPtr<ComboBox>           m_pNeutralCB;
-
-    bool                m_bIsTabPage;
-
     VclPtr<SwMailMergeWizard>  m_pWizard;
     /// The mail merge state, available even when m_pWizard is nullptr.
     SwMailMergeConfigItem& m_rConfigItem;
+    bool m_bIsTabPage;
 
-    SwGreetingsHandler(SwMailMergeConfigItem& rConfigItem)
-        : m_bIsTabPage(false),
-        m_rConfigItem(rConfigItem)
+    std::unique_ptr<weld::CheckButton> m_xGreetingLineCB;
+    std::unique_ptr<weld::CheckButton> m_xPersonalizedCB;
+    std::unique_ptr<weld::Label> m_xFemaleFT;
+    std::unique_ptr<weld::ComboBox> m_xFemaleLB;
+    std::unique_ptr<weld::Button> m_xFemalePB;
+    std::unique_ptr<weld::Label> m_xMaleFT;
+    std::unique_ptr<weld::ComboBox> m_xMaleLB;
+    std::unique_ptr<weld::Button> m_xMalePB;
+    std::unique_ptr<weld::Label> m_xFemaleFI;
+    std::unique_ptr<weld::Label> m_xFemaleColumnFT;
+    std::unique_ptr<weld::ComboBox> m_xFemaleColumnLB;
+    std::unique_ptr<weld::Label> m_xFemaleFieldFT;
+    std::unique_ptr<weld::ComboBox> m_xFemaleFieldCB;
+    std::unique_ptr<weld::Label> m_xNeutralFT;
+    std::unique_ptr<weld::ComboBox> m_xNeutralCB;
+
+    SwGreetingsHandler(SwMailMergeConfigItem& rConfigItem, weld::Builder& rBuilder)
+        : m_rConfigItem(rConfigItem)
+        , m_bIsTabPage(false)
+        , m_xGreetingLineCB(rBuilder.weld_check_button("greeting"))
+        , m_xPersonalizedCB(rBuilder.weld_check_button("personalized"))
+        , m_xFemaleFT(rBuilder.weld_label("femaleft"))
+        , m_xFemaleLB(rBuilder.weld_combo_box("female"))
+        , m_xFemalePB(rBuilder.weld_button("newfemale"))
+        , m_xMaleFT(rBuilder.weld_label("maleft"))
+        , m_xMaleLB(rBuilder.weld_combo_box("male"))
+        , m_xMalePB(rBuilder.weld_button("newmale"))
+        , m_xFemaleFI(rBuilder.weld_label("femalefi"))
+        , m_xFemaleColumnFT(rBuilder.weld_label("femalecolft"))
+        , m_xFemaleColumnLB(rBuilder.weld_combo_box("femalecol"))
+        , m_xFemaleFieldFT(rBuilder.weld_label("femalefieldft"))
+        , m_xFemaleFieldCB(rBuilder.weld_combo_box("femalefield"))
+        , m_xNeutralFT(rBuilder.weld_label("generalft"))
+        , m_xNeutralCB(rBuilder.weld_combo_box("general"))
     {
     }
 
     ~SwGreetingsHandler() {}
 
-    DECL_LINK(IndividualHdl_Impl, Button*, void);
-    DECL_LINK(GreetingHdl_Impl, Button*, void);
+    DECL_LINK(IndividualHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(GreetingHdl_Impl, weld::Button&, void);
 
     void    Contains(bool bContainsGreeting);
     virtual void    UpdatePreview();
 };
 
-class SwMailMergeGreetingsPage : public svt::OWizardPage,
-                                    public SwGreetingsHandler
+class SwMailMergeGreetingsPage : public svt::OWizardPage
+                               , public SwGreetingsHandler
 {
-    VclPtr<FixedText>          m_pPreviewFI;
-    VclPtr<SwAddressPreview>   m_pPreviewWIN;
-    VclPtr<PushButton>         m_pAssignPB;
-    VclPtr<FixedText>          m_pDocumentIndexFI;
-    VclPtr<PushButton>         m_pPrevSetIB;
-    VclPtr<PushButton>         m_pNextSetIB;
+    std::unique_ptr<AddressPreview> m_xPreview;
+    std::unique_ptr<weld::Label> m_xPreviewFI;
+    std::unique_ptr<weld::Button> m_xAssignPB;
+    std::unique_ptr<weld::Label> m_xDocumentIndexFI;
+    std::unique_ptr<weld::Button> m_xPrevSetIB;
+    std::unique_ptr<weld::Button> m_xNextSetIB;
+    std::unique_ptr<weld::CustomWeld> m_xPreviewWIN;
 
     OUString            m_sDocument;
 
-    DECL_LINK(ContainsHdl_Impl, Button*, void);
-    DECL_LINK(InsertDataHdl_Impl, Button*, void);
-    DECL_LINK(GreetingSelectHdl_Impl, Edit&, void);
-    DECL_LINK(GreetingSelectComboBoxHdl_Impl, ComboBox&, void);
-    DECL_LINK(GreetingSelectListBoxHdl_Impl, ListBox&, void);
-    DECL_LINK(AssignHdl_Impl, Button*, void);
+    DECL_LINK(ContainsHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(InsertDataHdl_Impl, weld::Button&, void);
+    DECL_LINK(GreetingSelectComboBoxHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(GreetingSelectListBoxHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(AssignHdl_Impl, weld::Button&, void);
 
     virtual void        UpdatePreview() override;
     virtual void        ActivatePage() override;
     virtual bool        commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
 public:
-        SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent);
-        virtual ~SwMailMergeGreetingsPage() override;
+    SwMailMergeGreetingsPage(SwMailMergeWizard* pWizard, TabPageParent pParent);
+    virtual ~SwMailMergeGreetingsPage() override;
     virtual void dispose() override;
-
 };
 
-class SwMailBodyDialog : public SfxModalDialog, public SwGreetingsHandler
+class SwMailBodyDialog : public SfxDialogController, public SwGreetingsHandler
 {
-    VclPtr<FixedText>           m_pBodyFT;
-    VclPtr<VclMultiLineEdit>    m_pBodyMLE;
+    std::unique_ptr<weld::Label> m_xBodyFT;
+    std::unique_ptr<weld::TextView> m_xBodyMLE;
+    std::unique_ptr<weld::Button> m_xOK;
 
-    VclPtr<OKButton>            m_pOK;
-
-    DECL_LINK(ContainsHdl_Impl, Button*, void);
-    DECL_LINK(OKHdl, Button*, void);
+    DECL_LINK(ContainsHdl_Impl, weld::ToggleButton&, void);
+    DECL_LINK(OKHdl, weld::Button&, void);
 public:
-    SwMailBodyDialog(vcl::Window* pParent);
+    SwMailBodyDialog(weld::Window* pParent);
     virtual ~SwMailBodyDialog() override;
-    virtual void dispose() override;
 
-    void            SetBody(const OUString& rBody ) {m_pBodyMLE->SetText(rBody);}
-    OUString        GetBody() const {return m_pBodyMLE->GetText();}
+    void SetBody(const OUString& rBody ) { m_xBodyMLE->set_text(rBody); }
+    OUString GetBody() const { return m_xBodyMLE->get_text(); }
 };
 #endif
 

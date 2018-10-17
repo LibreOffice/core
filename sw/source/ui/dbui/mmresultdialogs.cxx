@@ -849,13 +849,13 @@ IMPL_LINK(SwMMResultEmailDialog, SendTypeHdl_Impl, ListBox&, rBox, void)
     }
 }
 
-IMPL_LINK(SwMMResultEmailDialog, SendAsHdl_Impl, Button*, pButton, void)
+IMPL_LINK_NOARG(SwMMResultEmailDialog, SendAsHdl_Impl, Button*, void)
 {
-    VclPtr<SwMailBodyDialog> pDlg = VclPtr<SwMailBodyDialog>::Create(pButton);
-    pDlg->SetBody(m_sBody);
-    if(RET_OK == pDlg->Execute())
+    SwMailBodyDialog aDlg(GetFrameWeld());
+    aDlg.SetBody(m_sBody);
+    if (RET_OK == aDlg.run())
     {
-        m_sBody = pDlg->GetBody();
+        m_sBody = aDlg.GetBody();
     }
 }
 
