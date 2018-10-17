@@ -84,6 +84,7 @@ cmd/32/insertpushbutton.svg cmd/32/pushbutton.svg
 cmd/32/insertrowbreak.svg cmd/32/insertpagebreak.svg
 cmd/32/insertrowsbefore.svg cmd/32/insertrows.svg
 cmd/32/insertslidefield.svg cmd/32/insertslidenumber.svg
+cmd/32/insertslidetitlefield.svg cmd/32/inserttitlefield.svg
 cmd/32/insertspreadsheet.svg cmd/32/togglesheetgrid.svg
 cmd/32/inserttextframe.svg cmd/32/insertframe.svg
 cmd/32/inserttimefield.svg cmd/32/timefield.svg
@@ -94,6 +95,7 @@ cmd/32/insobjctrl.svg cmd/32/newdoc.svg
 cmd/32/numberformatmenu.svg cmd/32/numberformatstandard.svg
 cmd/32/numericfield.svg cmd/32/numberformatstandard.svg
 cmd/32/repaginate.svg cmd/32/insertpagenumberfield.svg
+cmd/32/showchanges.svg cmd/32/addwatch.svg
 cmd/32/showtrackedchanges.svg cmd/32/addwatch.svg
 cmd/32/tracechangemode.svg cmd/32/trackchanges.svg
 
@@ -140,6 +142,7 @@ cmd/lc_insertrowbreak.svg cmd/lc_insertpagebreak.svg
 cmd/lc_insertrowsbefore.svg cmd/lc_insertrows.svg
 cmd/lc_insertsignatureline.svg cmd/lc_signaturelinedialog.svg
 cmd/lc_insertslidefield.svg cmd/lc_insertslidenumber.svg
+cmd/lc_insertslidetitlefield.svg cmd/lc_inserttitlefield.svg
 cmd/lc_insertspreadsheet.svg cmd/lc_togglesheetgrid.svg
 cmd/lc_inserttextframe.svg cmd/lc_insertframe.svg
 cmd/lc_inserttimefield.svg cmd/lc_timefield.svg
@@ -150,6 +153,7 @@ cmd/lc_insobjctrl.svg cmd/lc_newdoc.svg
 cmd/lc_numberformatmenu.svg cmd/lc_numberformatstandard.svg
 cmd/lc_numericfield.svg cmd/lc_numberformatstandard.svg
 cmd/lc_repaginate.svg cmd/lc_insertpagenumberfield.svg
+cmd/lc_showchanges.svg cmd/lc_addwatch.svg
 cmd/lc_showtrackedchanges.svg cmd/lc_addwatch.svg
 cmd/lc_tracechangemode.svg cmd/lc_trackchanges.svg
 
@@ -196,6 +200,7 @@ cmd/sc_insertrowbreak.svg cmd/sc_insertpagebreak.svg
 cmd/sc_insertrowsbefore.svg cmd/sc_insertrows.svg
 cmd/sc_insertsignatureline.svg cmd/sc_signaturelinedialog.svg
 cmd/sc_insertslidefield.svg cmd/sc_insertslidenumber.svg
+cmd/sc_insertslidetitlefield.svg cmd/sc_inserttitlefield.svg
 cmd/sc_insertspreadsheet.svg cmd/sc_togglesheetgrid.svg
 cmd/sc_inserttextframe.svg cmd/sc_insertframe.svg
 cmd/sc_inserttimefield.svg cmd/sc_timefield.svg
@@ -206,6 +211,7 @@ cmd/sc_insobjctrl.svg cmd/sc_newdoc.svg
 cmd/sc_numberformatmenu.svg cmd/sc_numberformatstandard.svg
 cmd/sc_numericfield.svg cmd/sc_numberformatstandard.svg
 cmd/sc_repaginate.svg cmd/sc_insertpagenumberfield.svg
+cmd/sc_showchanges.svg cmd/sc_addwatch.svg
 cmd/sc_showtrackedchanges.svg cmd/sc_addwatch.svg
 cmd/sc_tracechangemode.svg cmd/sc_trackchanges.svg
 
@@ -747,16 +753,13 @@ cmd/sc_closewin.svg cmd/sc_quit.svg
 
 # Close
 cmd/32/closedocs.svg cmd/32/closedoc.svg
-cmd/32/closepreview.svg cmd/32/closedoc.svg
-cmd/32/exitsearch.svg cmd/32/closedoc.svg
+cmd/32/exitsearch.svg cmd/32/closepreview.svg
 
 cmd/lc_closedocs.svg cmd/lc_closedoc.svg
-cmd/lc_closepreview.svg cmd/lc_closedoc.svg
-cmd/lc_exitsearch.svg cmd/lc_closedoc.svg
+cmd/lc_exitsearch.svg cmd/lc_closepreview.svg
 
 cmd/sc_closedocs.svg cmd/sc_closedoc.svg
-cmd/sc_closepreview.svg cmd/sc_closedoc.svg
-cmd/sc_exitsearch.svg cmd/sc_closedoc.svg
+cmd/sc_exitsearch.svg cmd/sc_closepreview.svg
 
 # Cancel
 cmd/32/no.svg cmd/32/cancel.svg
@@ -1318,13 +1321,10 @@ cmd/sc_selectmode.svg cmd/sc_selectobject.svg
 
 # Navigator
 cmd/32/navigationbar.svg cmd/32/navigator.svg
-cmd/32/reportnavigator.svg cmd/32/navigator.svg
 
 cmd/lc_navigationbar.svg cmd/lc_navigator.svg
-cmd/lc_reportnavigator.svg cmd/lc_navigator.svg
 
 cmd/sc_navigationbar.svg cmd/sc_navigator.svg
-cmd/sc_reportnavigator.svg cmd/sc_navigator.svg
 
 # Database
 cmd/32/dbdtableedit.svg cmd/32/dbtableedit.svg
@@ -1367,7 +1367,7 @@ cmd/32/dbnewtable.svg cmd/32/inserttable.svg
 cmd/32/inscellsctrl.svg cmd/32/inserttable.svg
 cmd/32/rowoperations.svg cmd/32/entirerow.svg
 cmd/32/setoptimalcolumnwidthdirect.svg cmd/32/setoptimalcolumnwidth.svg
-cmd/32/starchartdialog.svg cmd/32/insertobjectdialog.svg
+cmd/32/starchartdialog.svg cmd/32/drawchart.svg
 
 cmd/lc_cellprotection.svg cmd/lc_protect.svg
 cmd/lc_columnoperations.svg cmd/lc_entirecolumn.svg
@@ -1375,7 +1375,7 @@ cmd/lc_dbnewtable.svg cmd/lc_inserttable.svg
 cmd/lc_inscellsctrl.svg cmd/lc_inserttable.svg
 cmd/lc_rowoperations.svg cmd/lc_entirerow.svg
 cmd/lc_setoptimalcolumnwidthdirect.svg cmd/lc_setoptimalcolumnwidth.svg
-cmd/lc_starchartdialog.svg cmd/lc_insertobjectdialog.svg
+cmd/lc_starchartdialog.svg cmd/lc_drawchart.svg
 
 cmd/sc_cellprotection.svg cmd/sc_protect.svg
 cmd/sc_columnoperations.svg cmd/sc_entirecolumn.svg
@@ -1383,7 +1383,7 @@ cmd/sc_dbnewtable.svg cmd/sc_inserttable.svg
 cmd/sc_inscellsctrl.svg cmd/sc_inserttable.svg
 cmd/sc_rowoperations.svg cmd/sc_entirerow.svg
 cmd/sc_setoptimalcolumnwidthdirect.svg cmd/sc_setoptimalcolumnwidth.svg
-cmd/sc_starchartdialog.svg cmd/sc_insertobjectdialog.svg
+cmd/sc_starchartdialog.svg cmd/sc_drawchart.svg
 
 # Help
 cmd/32/absoluterecord.svg cmd/32/helpindex.svg
@@ -1574,9 +1574,26 @@ res/lc10715.svg cmd/lc_datafilterstandardfilter.svg
 res/lc10716.svg cmd/lc_datafilterautofilter.svg
 res/lc10853.svg cmd/lc_recsearch.svg
 
+res/lx03123.svg res/odp_32_8.svg
+res/lx03127.svg res/ods_32_8.svg
+res/lx03129.svg res/odb_32_8.svg
+res/lx03130.svg res/odp_32_8.svg
+res/lx03144.svg res/odf_32_8.svg
 res/lx03145.svg res/odf_32_8.svg
+res/lx03145.svg res/odf_32_8.svg
+res/lx03162.svg res/odt_32_8.svg
+res/lx03160.svg res/odg_32_8.svg
 res/lx03165.svg cmd/lc_save.svg
 res/lx03189.svg cmd/lc_open.svg
+res/lx03227.svg res/odg_32_8.svg
+res/lx03228.svg res/odg_32_8.svg
+res/lx03245.svg res/odb_32_8.svg
+res/lx03246.svg res/odg_32_8.svg
+res/lx03247.svg res/odf_32_8.svg
+res/lx03249.svg res/odp_32_8.svg
+res/lx03250.svg res/ods_32_8.svg
+res/lx03251.svg res/odt_32_8.svg
+res/lx03253.svg res/odp_32_8.svg
 res/sc05501.svg cmd/sc_open.svg
 res/lx03256.svg cmd/lc_insertplugin.svg
 
@@ -1715,7 +1732,7 @@ sfx2/res/actiontemplates016.svg cmd/lc_configuredialog.svg
 sfx2/res/actiontemplates018.svg cmd/lc_delete.svg
 sfx2/res/actiontemplates019.svg cmd/lc_editdoc.svg
 sfx2/res/actiontemplates020.svg cmd/lc_exportto.svg
-sfx2/res/actionview010.svg cmd/lc_importfromfile.svg
+sfx2/res/actionview010.svg cmd/lc_dataimport.svg
 sfx2/res/actionview025.svg cmd/lc_delete.svg
 sfx2/res/actionview028.svg cmd/lc_save.svg
 sfx2/res/actionview030.svg cmd/lc_open.svg
@@ -1837,8 +1854,6 @@ svx/res/nu03.svg cmd/sc_addwatch.svg
 
 svx/res/ole.svg sc/res/nc05.svg
 svx/res/persp3d.svg cmd/lc_extrusiondirectionfloater.svg
-svx/res/parallel_16.svg cmd/sc_extrusiondepthfloater.svg
-svx/res/perspective_16.svg cmd/lc_extrusiondirectionfloater.svg
 svx/res/reloads.svg cmd/sc_reload.svg
 svx/res/rotate3d.svg cmd/sc_convertinto3dlathe.svg
 svx/res/signet_11x16.svg xmlsecurity/res/certificate_16.svg
