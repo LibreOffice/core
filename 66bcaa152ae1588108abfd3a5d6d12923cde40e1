@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7f231b9d_7630b008",
+        "filename": "sc/source/ui/condformat/condformatdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-10-17T19:44:02Z",
+      "side": 1,
+      "message": "In URM_MOVE context aRefCxt.maRange is the new target range after the move. But using URM_MOVE and thus ScTokenArray::AdjustReferenceOnMove() is wrong here. That is for moving cells and adjusting references that point into the moved range to move along.",
+      "revId": "66bcaa152ae1588108abfd3a5d6d12923cde40e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f231b9d_164a9c7f",
+        "filename": "sc/source/ui/condformat/condformatdlg.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2018-10-17T19:44:02Z",
+      "side": 1,
+      "message": "This is only called when the Range edit field loses focus, i.e. when travelling to another dialog element, but not if one just hits Enter after editing the range string.",
+      "revId": "66bcaa152ae1588108abfd3a5d6d12923cde40e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
