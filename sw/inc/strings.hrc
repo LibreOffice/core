@@ -835,7 +835,7 @@
 #define STR_FILENAMEFLD                         NC_("STR_FILENAMEFLD", "File name")
 #define STR_DBNAMEFLD                           NC_("STR_DBNAMEFLD", "Database Name")
 #define STR_CHAPTERFLD                          NC_("STR_CHAPTERFLD", "Chapter")
-#define STR_PAGENUMBERFLD                       NC_("STR_PAGENUMBERFLD", "Page numbers")
+#define STR_PAGENUMBERFLD                       NC_("STR_PAGENUMBERFLD", "Page number")
 #define STR_DOCSTATFLD                          NC_("STR_DOCSTATFLD", "Statistics")
 #define STR_AUTHORFLD                           NC_("STR_AUTHORFLD", "Author")
 #define STR_TEMPLNAMEFLD                        NC_("STR_TEMPLNAMEFLD", "Templates")
