@@ -83,7 +83,7 @@ bool passesPositiveList(const OUString& rUrl) {
 
 void handleCommand(
     const OString& rInPath, const OString& rOutPath,
-    const OString& rExecutable)
+    const std::string& rExecutable)
 {
     OStringBuffer buf;
     if (rExecutable == "uiex" || rExecutable == "hrcex")
@@ -96,7 +96,7 @@ void handleCommand(
         buf.append(OString(getenv("WORKDIR_FOR_BUILD")));
         buf.append("/LinkTarget/Executable/");
     }
-    buf.append(rExecutable);
+    buf.append(rExecutable.data());
     buf.append(" -i ");
     buf.append(rInPath);
     buf.append(" -o ");
@@ -173,7 +173,7 @@ bool handleFile(const OString& rProject, const OUString& rUrl, const OString& rP
 {
     struct Command {
         OUStringLiteral extension;
-        OString executable;
+        std::string executable;
         bool positive;
     };
     static Command const commands[] = {

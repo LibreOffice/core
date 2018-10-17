@@ -45,7 +45,7 @@ static struct
 {
     int const      errcode;
     oslPipeError   error;
-} PipeError[]= {
+} const PipeError[]= {
     { 0,               osl_Pipe_E_None              },  /* no error */
     { EPROTOTYPE,      osl_Pipe_E_NoProtocol        },  /* Protocol wrong type for socket */
     { ENOPROTOOPT,     osl_Pipe_E_NoProtocol        },  /* Protocol not available */
