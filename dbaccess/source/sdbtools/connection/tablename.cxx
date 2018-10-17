@@ -177,7 +177,7 @@ namespace sdbtools
         */
         EComposeRule lcl_translateCompositionType_throw( sal_Int32 _nType )
         {
-            const struct
+            static const struct
             {
                 sal_Int32       nCompositionType;
                 EComposeRule    eComposeRule;

@@ -88,7 +88,7 @@ void SvxChartColorTable::replace( size_t _nIndex, const XColorEntry & _rEntry )
 
 void SvxChartColorTable::useDefault()
 {
-    Color aColors[] = {
+    static const Color aColors[] = {
         Color( 0x00, 0x45, 0x86 ),
         Color( 0xff, 0x42, 0x0e ),
         Color( 0xff, 0xd3, 0x20 ),

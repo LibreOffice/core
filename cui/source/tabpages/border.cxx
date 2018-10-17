@@ -1265,13 +1265,13 @@ void SvxBorderTabPage::FillLineListBox_Impl()
 {
     using namespace ::com::sun::star::table::BorderLineStyle;
 
-    struct {
+    static struct {
         SvxBorderLineStyle mnStyle;
         long mnMinWidth;
         LineListBox::ColorFunc mpColor1Fn;
         LineListBox::ColorFunc mpColor2Fn;
         LineListBox::ColorDistFunc mpColorDistFn;
-    } aLines[] = {
+    } const aLines[] = {
         // Simple lines
         { SvxBorderLineStyle::SOLID,        0, &sameColor, &sameColor, &sameDistColor },
         { SvxBorderLineStyle::DOTTED,       0, &sameColor, &sameColor, &sameDistColor },
