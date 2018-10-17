@@ -138,7 +138,8 @@ bool PowerPointImport::importDocument()
 
     bool bRet = importFragment(xPresentationFragmentHandler);
 
-    if (mbMissingExtDrawing)
+    static bool bNoSmartartWarning = getenv("OOX_NO_SMARTART_WARNING");
+    if (!bNoSmartartWarning && mbMissingExtDrawing)
     {
         // Construct a warning message.
         INetURLObject aURL(getFileUrl());
