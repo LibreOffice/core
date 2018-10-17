@@ -252,7 +252,15 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocS
         // UNC path
     if( ::get_flag( nFlags, WW8_HLINK_UNC ) )
     {
-        xLongName.reset(new OUString(read_uInt32_lenPrefixed_uInt16s_ToOUString(rStrm)));
+        // MS-OSHARED: An unsigned integer that specifies the number of Unicode characters in the
+        // string field, including the null-terminating character.
+        sal_uInt32 nStrLen(0);
+        rStrm.ReadUInt32(nStrLen);
+        if (nStrLen)
+        {
+            xLongName.reset(new OUString(read_uInt16s_ToOUString(rStrm, nStrLen - 1)));
+            rStrm.SeekRel(sizeof(sal_Unicode)); // skip null-byte at end
+        }
         lclGetAbsPath( *xLongName, 0 , pDocShell);
     }
     // file link or URL
@@ -263,7 +271,16 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocS
         if( memcmp(aGuid, aGuidFileMoniker, 16) == 0 )
         {
             rStrm.ReadUInt16( nLevel );
-            xShortName.reset(new OUString(read_uInt32_lenPrefixed_uInt8s_ToOUString(rStrm, GetCharSetFromLanguage())));
+            // MS-OSHARED: An unsigned integer that specifies the number of
+            // ANSI characters in ansiPath, including the terminating NULL character
+            sal_uInt32 nUnits = 0;
+            rStrm.ReadUInt32(nUnits);
+            if (nUnits)
+            {
+                OString sStr(read_uInt8s_ToOString(rStrm, nUnits - 1));
+                rStrm.SeekRel(sizeof(sal_uInt8)); // skip null-byte at end
+                xShortName.reset(new OUString(sStr.getStr(), sStr.getLength(), GetCharSetFromLanguage()));
+            }
             rStrm.SeekRel( 24 );
 
             sal_uInt32 nStrLen(0);
@@ -274,7 +291,8 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocS
                 rStrm.ReadUInt32( nStrLen );
                 nStrLen /= 2;
                 rStrm.SeekRel( 2 );
-                xLongName.reset(new OUString(read_uInt32_lenPrefixed_uInt16s_ToOUString(rStrm)));
+                // MS-OSHARED: This array MUST not include a terminating NULL character.
+                xLongName.reset(new OUString(read_uInt16s_ToOUString(rStrm, nStrLen)));
                 lclGetAbsPath( *xLongName, nLevel, pDocShell);
             }
             else
@@ -282,10 +300,18 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocS
         }
         else if( memcmp(aGuid, aGuidUrlMoniker, 16) == 0 )
         {
+            // MS-OSHARED: An unsigned integer that specifies the size of this
+            // structure in bytes, excluding the size of the length field. The
+            // value of this field MUST be ... the byte size of the url
+            // field (including the terminating NULL character)
             sal_uInt32 nStrLen(0);
             rStrm.ReadUInt32( nStrLen );
             nStrLen /= 2;
-            xLongName.reset(new OUString(read_uInt32_lenPrefixed_uInt16s_ToOUString(rStrm)));
+            if (nStrLen)
+            {
+                xLongName.reset(new OUString(read_uInt16s_ToOUString(rStrm, nStrLen - 1)));
+                rStrm.SeekRel(sizeof(sal_Unicode)); // skip null-byte at end
+            }
             if( !::get_flag( nFlags, WW8_HLINK_ABS ) )
                 lclGetAbsPath( *xLongName, 0 ,pDocShell);
         }

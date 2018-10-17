@@ -528,14 +528,6 @@ inline OString read_uInt8_lenPrefixed_uInt8s_ToOString(SvStream& rStrm)
     return read_uInt8s_ToOString(rStrm, nUnits);
 }
 
-/// Attempt to read a pascal-style length (of type prefix) prefixed sequence of
-/// 8bit units to an OUString
-inline OUString read_uInt32_lenPrefixed_uInt8s_ToOUString(SvStream& rStrm,
-                                                          rtl_TextEncoding eEnc)
-{
-    return OStringToOUString(read_uInt32_lenPrefixed_uInt8s_ToOString(rStrm), eEnc);
-}
-
 inline OUString read_uInt16_lenPrefixed_uInt8s_ToOUString(SvStream& rStrm,
                                                           rtl_TextEncoding eEnc)
 {
