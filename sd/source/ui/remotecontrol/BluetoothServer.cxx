@@ -90,14 +90,14 @@ struct sd::BluetoothServer::Impl {
     GMainContext *mpContext;
     DBusConnection *mpConnection;
     DBusObject *mpService;
-    enum BluezVersion { BLUEZ4, BLUEZ5, UNKNOWN };
+    enum class BluezVersion { BLUEZ4, BLUEZ5, UNKNOWN };
     BluezVersion maBluezVersion;
 
     Impl()
         : mpContext( g_main_context_new() )
         , mpConnection( nullptr )
         , mpService( nullptr )
-        , maBluezVersion( UNKNOWN )
+        , maBluezVersion( BluezVersion::UNKNOWN )
     { }
 
     std::unique_ptr<DBusObject> getAdapter()
@@ -106,7 +106,7 @@ struct sd::BluetoothServer::Impl {
         {
             return mpService->cloneForInterface( "org.bluez.Adapter" );
         }
-        else if (spServer->mpImpl->maBluezVersion == BLUEZ5)
+        else if (spServer->mpImpl->maBluezVersion == BluezVersion::BLUEZ5)
         {
             return getBluez5Adapter(mpConnection);
         }
@@ -1181,7 +1181,7 @@ void SAL_CALL BluetoothServer::run()
         SAL_INFO("sdremote.bluetooth", "Using Bluez 5");
         registerBluez5Profile(pConnection, mpCommunicators);
         mpImpl->mpConnection = pConnection;
-        mpImpl->maBluezVersion = Impl::BLUEZ5;
+        mpImpl->maBluezVersion = Impl::BluezVersion::BLUEZ5;
 
         // We don't need to listen to adapter changes anymore -- profile
         // registration is done globally for the entirety of bluez, so we only
@@ -1212,7 +1212,7 @@ void SAL_CALL BluetoothServer::run()
     }
 
     // Otherwise we could be on Bluez 4 and continue as usual.
-    mpImpl->maBluezVersion = Impl::BLUEZ4;
+    mpImpl->maBluezVersion = Impl::BluezVersion::BLUEZ4;
 
     // Try to setup the default adapter, otherwise wait for add/remove signal
     mpImpl->mpService = registerWithDefaultAdapter( pConnection );
