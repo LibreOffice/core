@@ -332,7 +332,7 @@ SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(weld::Window* pParent, Sw
     , m_xPreviewWin(new weld::CustomWeld(*m_xBuilder, "preview", *m_xPreview))
 {
     m_xPreviewWin->set_size_request(m_xCountryED->get_approximate_digit_width() * 45,
-                                    m_xCountryED->get_text_height(12));
+                                    m_xCountryED->get_text_height() * 12);
 
     Link<weld::Button&,void> aCustomizeHdl = LINK(this, SwSelectAddressBlockDialog, NewCustomizeHdl_Impl);
     m_xNewPB->connect_clicked(aCustomizeHdl);
