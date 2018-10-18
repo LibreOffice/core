@@ -59,10 +59,11 @@
   <menu:menuitem menu:id=".uno:EnterGroup"/>
   <menu:menuitem menu:id=".uno:LeaveGroup"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:RenameObject"/>
   <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
-  <menu:menuitem menu:id=".uno:NameGroup"/>
-  <menu:menuitem menu:id=".uno:AssignMacro"/>
+  <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:EditShapeHyperlink"/>
   <menu:menuitem menu:id=".uno:DeleteShapeHyperlink"/>
   <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
+  <menu:menuitem menu:id=".uno:AssignMacro"/>
 </menu:menupopup>
