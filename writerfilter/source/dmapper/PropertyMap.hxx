@@ -262,6 +262,7 @@ private:
 
     void DontBalanceTextColumns();
 
+    void ApplyProtectionProperties( css::uno::Reference< css::beans::XPropertySet >& xSection, DomainMapper_Impl& rDM_Impl );
     css::uno::Reference< css::text::XTextColumns > ApplyColumnProperties( const css::uno::Reference< css::beans::XPropertySet >& xFollowPageStyle,
                                                                           DomainMapper_Impl& rDM_Impl);
 
