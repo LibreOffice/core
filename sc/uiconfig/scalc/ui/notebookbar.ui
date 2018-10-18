@@ -7,238 +7,238 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="DataSortD">
+      <object class="GtkMenuItem" id="MenuData-DataSort">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DataSort</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SortAscendingD">
+      <object class="GtkMenuItem" id="MenuData-SortAscending">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SortAscending</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SortDescendingD">
+      <object class="GtkMenuItem" id="MenuData-SortDescending">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SortDescending</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator164">
+      <object class="GtkSeparatorMenuItem" id="MenuData-separator1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DataFilterAutoFilterD">
+      <object class="GtkMenuItem" id="MenuData-DataFilterAutoFilter">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DataFilterAutoFilter</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DataFilterStandardFilterD">
+      <object class="GtkMenuItem" id="MenuData-DataFilterStandardFilter">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DataFilterStandardFilter</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DataFilterSpecialFilterD">
+      <object class="GtkMenuItem" id="MenuData-DataFilterSpecialFilter">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DataFilterSpecialFilter</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DataFilterRemoveFilterD">
+      <object class="GtkMenuItem" id="MenuData-DataFilterRemoveFilter">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DataFilterRemoveFilter</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DataFilterHideAutoFilterD">
+      <object class="GtkMenuItem" id="MenuData-DataFilterHideAutoFilter">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DataFilterHideAutoFilter</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator165">
+      <object class="GtkSeparatorMenuItem" id="MenuData-separator2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DefineDBNameD">
+      <object class="GtkMenuItem" id="MenuData-DefineDBName">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DefineDBName</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SelectDBD">
+      <object class="GtkMenuItem" id="MenuData-Select">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SelectDB</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DataAreaRefreshD">
+      <object class="GtkMenuItem" id="MenuData-DataAreaRefresh">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DataAreaRefresh</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator166">
+      <object class="GtkSeparatorMenuItem" id="MenuData-separator3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertPivotTableD">
+      <object class="GtkMenuItem" id="MenuData-InsertPivotTable">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertPivotTable</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="RecalcPivotTableD">
+      <object class="GtkMenuItem" id="MenuData-RecalcPivotTable">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:RecalcPivotTable</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DeletePivotTableD">
+      <object class="GtkMenuItem" id="MenuData-DeletePivotTable">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DeletePivotTable</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator167">
+      <object class="GtkSeparatorMenuItem" id="MenuData-separator4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="CalculateD">
+      <object class="GtkMenuItem" id="MenuData-Calculate">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Calculate</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator168">
+      <object class="GtkSeparatorMenuItem" id="MenuData-separator5">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ValidationD">
+      <object class="GtkMenuItem" id="MenuData-Validation">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Validation</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DataSubTotalsD">
+      <object class="GtkMenuItem" id="MenuData-DataSubTotals">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DataSubTotals</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DataFormD">
+      <object class="GtkMenuItem" id="MenuData-DataForm">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DataForm</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DataStreamsD">
+      <object class="GtkMenuItem" id="MenuData-DataStreams">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DataStreams</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator170">
+      <object class="GtkSeparatorMenuItem" id="MenuData-separator6">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="TableOperationDialogD">
+      <object class="GtkMenuItem" id="MenuData-TableOperationDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:TableOperationDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="TextToColumnsD">
+      <object class="GtkMenuItem" id="MenuData-TextToColumns">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:TextToColumns</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DataConsolidateD">
+      <object class="GtkMenuItem" id="MenuData-DataConsolidate">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DataConsolidate</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator171">
+      <object class="GtkSeparatorMenuItem" id="MenuData-separator7">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="GroupD">
+      <object class="GtkMenuItem" id="MenuData-Group">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Group</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="UngroupD">
+      <object class="GtkMenuItem" id="MenuData-Ungroup">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Ungroup</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="AutoOutlineD">
+      <object class="GtkMenuItem" id="MenuData-AutoOutline">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:AutoOutline</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ClearOutlineD">
+      <object class="GtkMenuItem" id="MenuData-ClearOutline">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ClearOutline</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="HideDetailD">
+      <object class="GtkMenuItem" id="MenuData-HideDetail">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:HideDetail</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ShowDetailD">
+      <object class="GtkMenuItem" id="MenuData-ShowDetail">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ShowDetail</property>
@@ -438,41 +438,41 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="InsertCurrentDateD">
+      <object class="GtkMenuItem" id="MenuField-InsertCurrentDate">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertCurrentDate</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertCurrentTimeD">
+      <object class="GtkMenuItem" id="MenuField-InsertCurrentTime">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertCurrentTime</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator60">
+      <object class="GtkSeparatorMenuItem" id="MenuField-separator1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertFieldDateVariableD">
+      <object class="GtkMenuItem" id="MenuField-InsertFieldDateVariable">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertFieldDateVariable</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertFieldSheetD">
+      <object class="GtkMenuItem" id="MenuField-InsertFieldSheet">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertFieldSheet</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertFieldDocTitleD">
+      <object class="GtkMenuItem" id="MenuField-InsertFieldDocTitle">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertFieldDocTitle</property>
@@ -774,184 +774,184 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="ShadowedD">
+      <object class="GtkMenuItem" id="MenuHome-Shadowed">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Shadowed</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="OutlineFontD">
+      <object class="GtkMenuItem" id="MenuHome-OutlineFont">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:OutlineFont</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="OverlineD">
+      <object class="GtkMenuItem" id="MenuHome-Overline">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Overline</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator52">
+      <object class="GtkSeparatorMenuItem" id="MenuHome-separator1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ChangeCaseToUpperD">
+      <object class="GtkMenuItem" id="MenuHome-ChangeCaseToUpper">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ChangeCaseToUpper</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ChangeCaseToLowerD">
+      <object class="GtkMenuItem" id="MenuHome-ChangeCaseToLower">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ChangeCaseToLower</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ChangeCaseRotateCaseD">
+      <object class="GtkMenuItem" id="MenuHome-ChangeCaseRotateCase">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ChangeCaseRotateCase</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator47">
+      <object class="GtkSeparatorMenuItem" id="MenuHome-separator2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ChangeCaseToSentenceCaseD">
+      <object class="GtkMenuItem" id="MenuHome-ChangeCaseToSentenceCase3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ChangeCaseToSentenceCase</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ChangeCaseToTitleCaseD">
+      <object class="GtkMenuItem" id="MenuHome-ChangeCaseToTitleCase">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ChangeCaseToTitleCase</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ChangeCaseToToggleCaseD">
+      <object class="GtkMenuItem" id="MenuHome-ChangeCaseToToggleCase">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ChangeCaseToToggleCase</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator55">
+      <object class="GtkSeparatorMenuItem" id="MenuHome-separator3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertNonBreakingSpaceD">
+      <object class="GtkMenuItem" id="MenuHome-InsertNonBreakingSpace">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertNonBreakingSpace</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertHardHyphenD">
+      <object class="GtkMenuItem" id="MenuHome-InsertHardHyphen">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertHardHyphen</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertSoftHyphenD">
+      <object class="GtkMenuItem" id="MenuHome-InsertSoftHyphen">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertSoftHyphen</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertZWSPD">
+      <object class="GtkMenuItem" id="MenuHome-InsertZWSP">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertZWSP</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertZWNBSPD">
+      <object class="GtkMenuItem" id="MenuHome-InsertZWNBSP">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertZWNBSP</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertLRMD">
+      <object class="GtkMenuItem" id="MenuHome-InsertLRM">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertLRM</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertRLMD">
+      <object class="GtkMenuItem" id="MenuHome-InsertRLM">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertRLM</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator8">
+      <object class="GtkSeparatorMenuItem" id="MenuHome-separator4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SelectAlld2">
+      <object class="GtkMenuItem" id="MenuHome-SelectAlld">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SelectAll</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SelectRowD">
+      <object class="GtkMenuItem" id="MenuHome-SelectRow">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SelectRow</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SelectColumnD">
+      <object class="GtkMenuItem" id="MenuHome-SelectColumn">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SelectColumn</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SelectDataD">
+      <object class="GtkMenuItem" id="MenuHome-SelectData">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SelectData</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator83">
+      <object class="GtkSeparatorMenuItem" id="MenuHome-separator5">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="FocusToFindbarD2">
+      <object class="GtkMenuItem" id="MenuHome-FocusToFindbar">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">vnd.sun.star.findbar:FocusToFindbar</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SearchDialogD2">
+      <object class="GtkMenuItem" id="MenuHome-SearchDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SearchDialog</property>
@@ -1068,149 +1068,149 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="FunctionDialogD">
+      <object class="GtkMenuItem" id="MenuInsert-FunctionDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:FunctionDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertNameD">
+      <object class="GtkMenuItem" id="MenuInsert-InsertName">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertName</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator80">
+      <object class="GtkSeparatorMenuItem" id="MenuInsert-separator1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="GalleryD">
+      <object class="GtkMenuItem" id="MenuInsert-Gallery">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Gallery</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="TwainSelectD">
+      <object class="GtkMenuItem" id="MenuInsert-TwainSelect">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:TwainSelect</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertAVMediaD">
+      <object class="GtkMenuItem" id="MenuInsert-InsertAVMedia">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertAVMedia</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator79">
+      <object class="GtkSeparatorMenuItem" id="MenuInsert-separator2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertObjectD">
+      <object class="GtkMenuItem" id="MenuInsert-InsertObject">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertObject</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertSheetFromFileD">
+      <object class="GtkMenuItem" id="MenuInsert-InsertSheetFromFile">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertSheetFromFile</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertObjectChartFromFileD">
+      <object class="GtkMenuItem" id="MenuInsert-InsertObjectChartFromFile">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertObjectChartFromFile</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator85">
+      <object class="GtkSeparatorMenuItem" id="MenuInsert-separator3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DrawTextD">
+      <object class="GtkMenuItem" id="MenuInsert-DrawText">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DrawText</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="FontworkGalleryFloaterD">
+      <object class="GtkMenuItem" id="MenuInsert-FontworkGalleryFloater">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:FontworkGalleryFloater</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertObjectFloatingFrame">
+      <object class="GtkMenuItem" id="MenuInsert-InsertObjectFloatingFrame">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertObjectFloatingFrame</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator87">
+      <object class="GtkSeparatorMenuItem" id="MenuInsert-separator4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="HyperlinkDialogD">
+      <object class="GtkMenuItem" id="MenuInsert-HyperlinkDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:HyperlinkDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="AddNameD">
+      <object class="GtkMenuItem" id="MenuInsert-AddName">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:AddName</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DefineNameD">
+      <object class="GtkMenuItem" id="MenuInsert-DefineName">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DefineName</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator91">
+      <object class="GtkSeparatorMenuItem" id="MenuInsert-separator5">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertCurrentDate">
+      <object class="GtkMenuItem" id="MenuInsert-InsertCurrentDate">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertCurrentDate</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertCurrentTime">
+      <object class="GtkMenuItem" id="MenuInsert-InsertCurrentTime">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertCurrentTime</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="EditHeaderAndFooterD">
+      <object class="GtkMenuItem" id="MenuInsert-EditHeaderAndFooter">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:EditHeaderAndFooter</property>
@@ -1252,104 +1252,98 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="InsertCellD">
+      <object class="GtkMenuItem" id="MenuPage-InsertCell">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertCell</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DeleteCellD">
+      <object class="GtkMenuItem" id="MenuPage-DeleteCell">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DeleteCell</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator121">
+      <object class="GtkSeparatorMenuItem" id="MenuPage-separator1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DefinePrintAreaD">
+      <object class="GtkMenuItem" id="MenuPage-DefinePrintArea">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DefinePrintArea</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="AddPrintAreaD">
+      <object class="GtkMenuItem" id="MenuPage-AddPrintArea">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:AddPrintArea</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="EditPrintAreaD">
+      <object class="GtkMenuItem" id="MenuPage-EditPrintArea">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:EditPrintArea</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DeletePrintAreaD">
+      <object class="GtkMenuItem" id="MenuPage-DeletePrintArea">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DeletePrintArea</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator192">
+      <object class="GtkSeparatorMenuItem" id="MenuPage-separator2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertRowBreakD">
+      <object class="GtkMenuItem" id="MenuPage-InsertRowBreak">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertRowBreak</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DeleteRowbreakD">
+      <object class="GtkMenuItem" id="MenuPage-DeleteRowbreak">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DeleteRowbreak</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertColumnBreakD">
+      <object class="GtkMenuItem" id="MenuPage-InsertColumnBreak">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertColumnBreak</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DeleteColumnbreakD">
+      <object class="GtkMenuItem" id="MenuPage-DeleteColumnbreak">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DeleteColumnbreak</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator119">
+      <object class="GtkSeparatorMenuItem" id="MenuPage-separator3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="PageFormatDialogD">
+      <object class="GtkMenuItem" id="MenuPage-PageFormatDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:PageFormatDialog</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separator105">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
       </object>
     </child>
   </object>
@@ -1408,135 +1402,135 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="SpellDialogD">
+      <object class="GtkMenuItem" id="MenuReview-SpellDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SpellDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SpellOnlineD">
+      <object class="GtkMenuItem" id="MenuReview-SpellOnline">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SpellOnline</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ThesaurusDialogD">
+      <object class="GtkMenuItem" id="MenuReview-ThesaurusDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ThesaurusDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator58">
+      <object class="GtkSeparatorMenuItem" id="MenuReview-separator1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SetLanguageAllTextMenuD">
+      <object class="GtkMenuItem" id="MenuReview-SetLanguageAllTextMenu">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SetLanguageAllTextMenu</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator90">
+      <object class="GtkSeparatorMenuItem" id="MenuReview-separator2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="HyphenateD">
+      <object class="GtkMenuItem" id="MenuReview-Hyphenate">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Hyphenate</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ChineseConversionD">
+      <object class="GtkMenuItem" id="MenuReview-ChineseConversion">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ChineseConversion</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="HangulHanjaConversionD">
+      <object class="GtkMenuItem" id="MenuReview-HangulHanjaConversion">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:HangulHanjaConversion</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MoreDictionariesD">
+      <object class="GtkMenuItem" id="MenuReview-MoreDictionaries">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:MoreDictionaries</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator64">
+      <object class="GtkSeparatorMenuItem" id="MenuReview-separator3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="TraceChangeModeD">
+      <object class="GtkMenuItem" id="MenuReview-TraceChangeMode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:TraceChangeMode</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="AcceptChangesD">
+      <object class="GtkMenuItem" id="MenuReview-AcceptChanges">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:AcceptChanges</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator73">
+      <object class="GtkSeparatorMenuItem" id="MenuReview-separator4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InsertAnnotationD">
+      <object class="GtkMenuItem" id="MenuReview-InsertAnnotation">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertAnnotation</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ShowAllNotesD">
+      <object class="GtkMenuItem" id="MenuReview-ShowAllNotes">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ShowAllNotes</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator77">
+      <object class="GtkSeparatorMenuItem" id="MenuReview-separator5">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ProtectD">
+      <object class="GtkMenuItem" id="MenuReview-Protect">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Protect</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="CompareDocuments">
+      <object class="GtkMenuItem" id="MenuReview-CompareDocuments">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:CompareDocuments</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MergeDocumentsD">
+      <object class="GtkMenuItem" id="MenuReview-MergeDocuments">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:MergeDocuments</property>
@@ -1547,84 +1541,84 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="SamplingDialogD1">
+      <object class="GtkMenuItem" id="MenuStatistic-SamplingDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SamplingDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DescriptiveStatisticsDialog1">
+      <object class="GtkMenuItem" id="MenuStatistic-DescriptiveStatisticsDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:DescriptiveStatisticsDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="AnalysisOfVarianceDialogD1">
+      <object class="GtkMenuItem" id="MenuStatistic-AnalysisOfVarianceDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:AnalysisOfVarianceDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="CorrelationDialogD1">
+      <object class="GtkMenuItem" id="MenuStatistic-CorrelationDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:CorrelationDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="CovarianceDialogD1">
+      <object class="GtkMenuItem" id="MenuStatistic-CovarianceDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:CovarianceDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ExponentialSmoothingDialogD1">
+      <object class="GtkMenuItem" id="MenuStatistic-ExponentialSmoothingDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ExponentialSmoothingDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MovingAverageDialogD1">
+      <object class="GtkMenuItem" id="MenuStatistic-MovingAverageDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:MovingAverageDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="RegressionDialogD1">
+      <object class="GtkMenuItem" id="MenuStatistic-RegressionDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:RegressionDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="TTestDialogD1">
+      <object class="GtkMenuItem" id="MenuStatistic-TTestDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:TTestDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="FTestDialogD1">
+      <object class="GtkMenuItem" id="MenuStatistic-FTestDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:CovarianceDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ZTestDialogD1">
+      <object class="GtkMenuItem" id="MenuStatistic-ZTestDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ZTestDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ChiSquareTestDialogD1">
+      <object class="GtkMenuItem" id="MenuStatistic-ChiSquareTestDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ChiSquareTestDialog</property>
@@ -1635,123 +1629,123 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="MacroOrganizerD">
+      <object class="GtkMenuItem" id="MenuTools-MacroOrganizer">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:MacroOrganizer?TabId:short=1</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MacroSignatureD">
+      <object class="GtkMenuItem" id="MenuTools-MacroSignature">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:MacroSignature</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ScriptOrganizerD">
+      <object class="GtkMenuItem" id="MenuTools-ScriptOrganizer">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ScriptOrganizer</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ViewDataSourceBrowserD">
+      <object class="GtkMenuItem" id="MenuTools-ViewDataSourceBrowser">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ViewDataSourceBrowser</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="BasicIDEAppearD">
+      <object class="GtkMenuItem" id="MenuTools-BasicIDEAppear">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:BasicIDEAppear</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="RunMacroD">
+      <object class="GtkMenuItem" id="MenuTools-RunMacro">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:RunMacro</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MacroRecorderD">
+      <object class="GtkMenuItem" id="MenuTools-MacroRecorder">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:MacroRecorder</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator49">
+      <object class="GtkSeparatorMenuItem" id="MenuTools-separator1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ShowPrecedentsD">
+      <object class="GtkMenuItem" id="MenuTools-ShowPrecedents">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ShowPrecedents</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ShowDependentsD">
+      <object class="GtkMenuItem" id="MenuTools-ShowDependents">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ShowDependents</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ClearArrowsD">
+      <object class="GtkMenuItem" id="MenuTools-ClearArrows">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ClearArrows</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator51">
+      <object class="GtkSeparatorMenuItem" id="MenuTools-separator2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="GoalSeekDialogD">
+      <object class="GtkMenuItem" id="MenuTools-GoalSeekDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:GoalSeekDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SolverDialogD">
+      <object class="GtkMenuItem" id="MenuTools-SolverDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SolverDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator54">
+      <object class="GtkSeparatorMenuItem" id="MenuTools-separator3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="OpenXMLFilterSettingsD">
+      <object class="GtkMenuItem" id="MenuTools-OpenXMLFilterSettings">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:OpenXMLFilterSettings</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="PackageManagerDialogD">
+      <object class="GtkMenuItem" id="MenuTools-PackageManagerDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">service:com.sun.star.deployment.ui.PackageManagerDialog</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="UpdateMenuD2">
+      <object class="GtkMenuItem" id="MenuTools-UpdateMenu">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
@@ -1759,7 +1753,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="OptionsTreeDialogD">
+      <object class="GtkMenuItem" id="MenuTools-OptionsTreeDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:OptionsTreeDialog</property>
@@ -1770,142 +1764,142 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="PagebreakModeD">
+      <object class="GtkMenuItem" id="MenuView-PagebreakMode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:PagebreakMode</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="NormalViewModeD">
+      <object class="GtkMenuItem" id="MenuView-NormalViewMode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:NormalViewMode</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator101">
+      <object class="GtkSeparatorMenuItem" id="MenuView-separator1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="FreezePanesD">
+      <object class="GtkMenuItem" id="MenuView-FreezePanes">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:FreezePanes</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SplitWindowD">
+      <object class="GtkMenuItem" id="MenuView-SplitWindow">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SplitWindow</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator194">
+      <object class="GtkSeparatorMenuItem" id="MenuView-separator2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenubarD">
+      <object class="GtkMenuItem" id="MenuView-Menubar">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Menubar</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SidebarD1">
+      <object class="GtkMenuItem" id="MenuView-Sidebar">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Sidebar</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="StatusBarVisibleD">
+      <object class="GtkMenuItem" id="MenuView-StatusBarVisible">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:StatusBarVisible</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator33">
+      <object class="GtkSeparatorMenuItem" id="MenuView-separator3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="InputLineVisibleD">
+      <object class="GtkMenuItem" id="MenuView-InputLineVisible">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InputLineVisible</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ViewRowColumnHeadersD">
+      <object class="GtkMenuItem" id="MenuView-ViewRowColumnHeaders">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ViewRowColumnHeaders</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ToggleSheetGridD">
+      <object class="GtkMenuItem" id="MenuView-ToggleSheetGrid">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ToggleSheetGrid</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator103">
+      <object class="GtkSeparatorMenuItem" id="MenuView-separator4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ViewValueHighlightingD">
+      <object class="GtkMenuItem" id="MenuView-ViewValueHighlighting">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ViewValueHighlighting</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ToggleFormulaD">
+      <object class="GtkMenuItem" id="MenuView-ToggleFormula">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ToggleFormula</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ShowGraphicsD">
+      <object class="GtkMenuItem" id="MenuView-ShowGraphics">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ShowGraphics</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator127">
+      <object class="GtkSeparatorMenuItem" id="MenuView-separator5">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ZoomPageD">
+      <object class="GtkMenuItem" id="MenuView-ZoomPage">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ZoomPage</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ZoomPageWidthD">
+      <object class="GtkMenuItem" id="MenuView-ZoomPageWidth">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ZoomPageWidth</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="FullScreenD">
+      <object class="GtkMenuItem" id="MenuView-FullScreen">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:FullScreen</property>
