@@ -693,7 +693,7 @@ isOfType( uno::XInterface *pInterface, const uno::Type & rType )
 }
 
 extern "C" {
-typedef  GType (* GetGIfaceType ) (void);
+typedef  GType (* GetGIfaceType ) ();
 }
 const struct {
         const char          *name;

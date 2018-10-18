@@ -318,7 +318,7 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-SfxItemSet* SwColumnDlg::EvalCurrentSelection(void)
+SfxItemSet* SwColumnDlg::EvalCurrentSelection()
 {
     SfxItemSet* pSet = nullptr;
 

@@ -176,7 +176,7 @@ class PresenterProtocolHandler::Dispatch
       public PresenterDispatchInterfaceBase
 {
 public:
-    typedef void (PresenterProtocolHandler::Dispatch::* Action)(void);
+    typedef void (PresenterProtocolHandler::Dispatch::* Action)();
 
     /** Create a new Dispatch object.  When the given command name
         (rsURLPath) is not known then an empty reference is returned.

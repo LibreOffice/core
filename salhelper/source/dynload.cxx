@@ -23,7 +23,7 @@
 namespace salhelper
 {
 
-typedef void* (*ApiInitFunction) (void);
+typedef void* (*ApiInitFunction) ();
 
 ORealDynamicLoader::ORealDynamicLoader(ORealDynamicLoader ** ppSetToZeroInDestructor_,
                        const rtl::OUString& moduleName,
