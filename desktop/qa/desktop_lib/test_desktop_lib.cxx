@@ -2261,24 +2261,37 @@ void DesktopLOKTest::testInsertCertificate()
 {
     comphelper::LibreOfficeKit::setActive();
 
+    // Load the document, save it into a temp file and load that file again
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    CPPUNIT_ASSERT(pDocument->pClass->saveAs(pDocument, aTempFile.GetURL().toUtf8().getStr(), "odt", nullptr));
+    closeDoc();
+
+    mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+    pDocument = new LibLODocument_Impl(mxComponent);
 
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(mxComponent.is());
     pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
 
-    OUString aFileURL;
-    createFileURL("certificate.der", aFileURL);
-
-    SvFileStream aStream(aFileURL, StreamMode::READ);
-    sal_uInt64 nSize = aStream.remainingSize();
-
+    OUString aCertificateURL;
+    createFileURL("certificate.der", aCertificateURL);
+    SvFileStream aCertificateStream(aCertificateURL, StreamMode::READ);
     std::vector<unsigned char> aCertificate;
-    aCertificate.resize(nSize);
-    aStream.ReadBytes(aCertificate.data(), nSize);
+    aCertificate.resize(aCertificateStream.remainingSize());
+    aCertificateStream.ReadBytes(aCertificate.data(), aCertificateStream.remainingSize());
 
-    bool bResult = pDocument->m_pDocumentClass->insertCertificate(pDocument, aCertificate.data(), int(aCertificate.size()));
-    CPPUNIT_ASSERT(bResult);
+    OUString aPrivateKeyURL;
+    createFileURL("pkey.der", aPrivateKeyURL);
+    SvFileStream aPrivateKeyStream(aPrivateKeyURL, StreamMode::READ);
+    std::vector<unsigned char> aPrivateKey;
+    aPrivateKey.resize(aPrivateKeyStream.remainingSize());
+    aPrivateKeyStream.ReadBytes(aPrivateKey.data(), aPrivateKeyStream.remainingSize());
+
+    pDocument->m_pDocumentClass->insertCertificate(pDocument,
+                        aCertificate.data(), int(aCertificate.size()),
+                        aPrivateKey.data(), int(aPrivateKey.size()));
 
     comphelper::LibreOfficeKit::setActive(false);
 }
