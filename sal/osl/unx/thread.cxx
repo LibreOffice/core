@@ -24,6 +24,7 @@
 #include <functional>
 
 #include "system.hxx"
+#include "unixerrnostring.hxx"
 #include <string.h>
 #if defined(OPENBSD)
 #include <sched.h>
@@ -292,8 +293,7 @@ static oslThread osl_thread_create_Impl (
     {
         SAL_WARN(
             "sal.osl",
-            "pthread_create failed with " << nRet << " \"" << strerror(nRet)
-                << "\"");
+            "pthread_create failed: " << UnixErrnoString(nRet));
 
         pthread_mutex_unlock (&(pImpl->m_Lock));
         osl_thread_destruct_Impl (&pImpl);
@@ -732,8 +732,7 @@ static void osl_thread_priority_init_Impl()
     {
         SAL_WARN(
             "sal.osl",
-            "pthread_getschedparam failed with " << nRet << " \""
-                << strerror(nRet) << "\"");
+            "pthread_getschedparam failed: " << UnixErrnoString(nRet));
         return;
     }
 
@@ -758,8 +757,7 @@ static void osl_thread_priority_init_Impl()
         int e = errno;
         SAL_WARN(
             "sal.osl",
-            "sched_get_priority_min failed with " << e << " \"" << strerror(e)
-                << "\"");
+            "sched_get_priority_min failed: " << UnixErrnoString(e));
     }
 
     if ((nRet = sched_get_priority_max(policy) ) != -1)
@@ -773,8 +771,7 @@ static void osl_thread_priority_init_Impl()
         int e = errno;
         SAL_WARN(
             "sal.osl",
-            "sched_get_priority_max failed with " << e << " \"" << strerror(e)
-                << "\"");
+            "sched_get_priority_max failed: " << UnixErrnoString(e));
     }
 
     g_thread.m_priority.m_Normal =
@@ -792,8 +789,7 @@ static void osl_thread_priority_init_Impl()
     {
         SAL_WARN(
             "sal.osl",
-            "pthread_setschedparam failed with " << nRet << " \""
-                << strerror(nRet) << "\"");
+            "pthread_setschedparam failed: " << UnixErrnoString(nRet));
         SAL_INFO(
             "sal.osl",
             "Thread ID " << pthread_self() << ", Policy " << policy
@@ -887,8 +883,7 @@ void SAL_CALL osl_setThreadPriority (
     {
         SAL_WARN(
             "sal.osl",
-            "pthread_setschedparam failed with " << nRet << " \""
-                << strerror(nRet) << "\"");
+            "pthread_setschedparam failed: " << UnixErrnoString(nRet));
     }
 
 #endif /* NO_PTHREAD_PRIORITY */
