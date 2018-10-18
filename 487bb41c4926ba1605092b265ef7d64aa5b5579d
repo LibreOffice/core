@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f201791_38cb45a6",
+        "filename": "officecfg/registry/data/org/openoffice/Office/Common.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-18T14:34:26Z",
+      "side": 1,
+      "message": "you can put these directly as default values into the .xcs",
+      "revId": "487bb41c4926ba1605092b265ef7d64aa5b5579d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
