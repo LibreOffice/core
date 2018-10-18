@@ -32,6 +32,18 @@ public:
     }
 };
 
+DECLARE_WW8EXPORT_TEST(testTdf37778_readonlySection, "tdf37778_readonlySection.doc")
+{
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT( xStorable->isReadonly() );
+
+    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+    // The problem was that section protection was being enabled in addition to being read-only.
+    // This created an explicit section with protection. There should be just the default, non-explicit section.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of Sections", sal_Int32(0), xSections->getCount());
+    }
+
 DECLARE_WW8EXPORT_TEST(testTdf120225_textControlCrossRef, "tdf120225_textControlCrossRef.doc")
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
