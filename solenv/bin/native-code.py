@@ -283,6 +283,7 @@ edit_constructor_list = [
     "com_sun_star_comp_Writer_XMLOasisMetaExporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisSettingsExporter_get_implementation",
     "com_sun_star_comp_Writer_XMLOasisStylesExporter_get_implementation",
+    "com_sun_star_comp_Writer_WriterModule_get_implementation",
     ]
 
 # math

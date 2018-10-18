@@ -32,22 +32,12 @@
 
 using namespace css;
 
-OUString SwUnoModule_getImplementationName() throw()
-{
-    return OUString( "com.sun.star.comp.Writer.WriterModule" );
-}
-
-uno::Sequence< OUString > SwUnoModule_getSupportedServiceNames() throw()
-{
-    uno::Sequence<OUString> aSeq { "com.sun.star.text.ModuleDispatcher" };
-    return aSeq;
-}
-
-uno::Reference< uno::XInterface > SwUnoModule_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > &  )
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface*
+com_sun_star_comp_Writer_WriterModule_get_implementation(uno::XComponentContext* /*pCtx*/,
+                                                         uno::Sequence<uno::Any> const& /*rSeq*/)
 {
     SolarMutexGuard aGuard;
-    return uno::Reference< uno::XInterface >( dynamic_cast< frame::XDispatch * >(new SwUnoModule), uno::UNO_QUERY );
+    return cppu::acquire(new SwUnoModule);
 }
 
     // XNotifyingDispatch
@@ -144,7 +134,7 @@ uno::Reference< frame::XDispatch > SAL_CALL SwUnoModule::queryDispatch(
 // XServiceInfo
 OUString SAL_CALL SwUnoModule::getImplementationName(  )
 {
-    return SwUnoModule_getImplementationName();
+    return OUString( "com.sun.star.comp.Writer.WriterModule" );
 }
 
 sal_Bool SAL_CALL SwUnoModule::supportsService( const OUString& sServiceName )
@@ -154,7 +144,8 @@ sal_Bool SAL_CALL SwUnoModule::supportsService( const OUString& sServiceName )
 
 uno::Sequence< OUString > SAL_CALL SwUnoModule::getSupportedServiceNames(  )
 {
-    return SwUnoModule_getSupportedServiceNames();
+    uno::Sequence<OUString> aSeq { "com.sun.star.text.ModuleDispatcher" };
+    return aSeq;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

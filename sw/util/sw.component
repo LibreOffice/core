@@ -47,7 +47,8 @@
       constructor="lo_writer_MMExcludeEntryController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="SwXModule" constructor="SwXModule_get_implementation">
+  <implementation name="SwXModule"
+      constructor="SwXModule_get_implementation">
     <service name="com.sun.star.text.GlobalSettings"/>
   </implementation>
   <implementation name="com.sun.star.comp.Writer.FilterOptionsDialog"
@@ -65,7 +66,8 @@
       constructor="com_sun_star_comp_Writer_WebDocument_get_implementation">
     <service name="com.sun.star.text.WebDocument"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.WriterModule">
+  <implementation name="com.sun.star.comp.Writer.WriterModule"
+      constructor="com_sun_star_comp_Writer_WriterModule_get_implementation">
     <service name="com.sun.star.text.ModuleDispatcher"/>
   </implementation>
   <implementation name="com.sun.star.comp.Writer.XMLContentExporter"
