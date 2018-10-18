@@ -12,13 +12,10 @@
   <menu:menuitem menu:id=".uno:Copy"/>
   <menu:menuitem menu:id=".uno:Paste"/>
   <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:TransformDialog"/>
   <menu:menuitem menu:id=".uno:FormatLine"/>
   <menu:menuitem menu:id=".uno:FormatArea"/>
   <menu:menuitem menu:id=".uno:TextAttributes"/>
-  <menu:menuitem menu:id=".uno:TransformDialog"/>
-  <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
-  <menu:menuitem menu:id=".uno:RenameObject"/>
   <menu:menuseparator/>
   <menu:menu menu:id=".uno:ArrangeRow">
     <menu:menupopup>
@@ -28,4 +25,7 @@
       <menu:menuitem menu:id=".uno:SendToBack"/>
     </menu:menupopup>
   </menu:menu>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:RenameObject"/>
+  <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
 </menu:menupopup>
