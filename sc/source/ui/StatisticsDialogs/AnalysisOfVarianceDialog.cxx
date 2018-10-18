@@ -35,7 +35,7 @@ struct StatisticCalculation {
     const char* aResultRangeName;
 };
 
-static StatisticCalculation lclBasicStatistics[] =
+static StatisticCalculation const lclBasicStatistics[] =
 {
     { STR_ANOVA_LABEL_GROUPS, nullptr,             nullptr       },
     { STRID_CALC_COUNT,       "=COUNT(%RANGE%)",   "COUNT_RANGE" },

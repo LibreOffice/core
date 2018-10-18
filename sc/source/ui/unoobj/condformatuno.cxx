@@ -80,7 +80,7 @@ struct ConditionEntryApiMap
     sal_Int32 const nApiMode;
 };
 
-ConditionEntryApiMap aConditionEntryMap[] =
+static ConditionEntryApiMap const aConditionEntryMap[] =
 {
     {ScConditionMode::Equal, sheet::ConditionFormatOperator::EQUAL},
     {ScConditionMode::Less, sheet::ConditionFormatOperator::LESS},
@@ -131,7 +131,7 @@ struct ColorScaleEntryTypeApiMap
     sal_Int32 const nApiType;
 };
 
-ColorScaleEntryTypeApiMap aColorScaleEntryTypeMap[] =
+static ColorScaleEntryTypeApiMap const aColorScaleEntryTypeMap[] =
 {
     { COLORSCALE_MIN, sheet::ColorScaleEntryType::COLORSCALE_MIN },
     { COLORSCALE_MAX, sheet::ColorScaleEntryType::COLORSCALE_MAX },
@@ -180,7 +180,7 @@ struct DataBarAxisApiMap
     sal_Int32 const nApiPos;
 };
 
-DataBarAxisApiMap aDataBarAxisMap[] =
+static DataBarAxisApiMap const aDataBarAxisMap[] =
 {
     { databar::NONE, sheet::DataBarAxis::AXIS_NONE },
     { databar::AUTOMATIC, sheet::DataBarAxis::AXIS_AUTOMATIC },
@@ -193,7 +193,7 @@ struct DataBarEntryTypeApiMap
     sal_Int32 const nApiType;
 };
 
-DataBarEntryTypeApiMap aDataBarEntryTypeMap[] =
+static DataBarEntryTypeApiMap const aDataBarEntryTypeMap[] =
 {
     { COLORSCALE_AUTO, sheet::DataBarEntryType::DATABAR_AUTO },
     { COLORSCALE_MIN, sheet::DataBarEntryType::DATABAR_MIN },
@@ -260,7 +260,7 @@ struct IconSetEntryTypeApiMap
     sal_Int32 const nApiType;
 };
 
-IconSetEntryTypeApiMap aIconSetEntryTypeMap[] =
+static IconSetEntryTypeApiMap const aIconSetEntryTypeMap[] =
 {
     { COLORSCALE_MIN, sheet::IconSetFormatEntry::ICONSET_MIN },
     { COLORSCALE_VALUE, sheet::IconSetFormatEntry::ICONSET_VALUE },
@@ -292,7 +292,7 @@ struct DateTypeApiMap
     sal_Int32 const nApiType;
 };
 
-DateTypeApiMap aDateTypeApiMap[] =
+static DateTypeApiMap const aDateTypeApiMap[] =
 {
     { condformat::TODAY, sheet::DateType::TODAY },
     { condformat::YESTERDAY, sheet::DateType::YESTERDAY },
@@ -741,7 +741,7 @@ void SAL_CALL ScConditionEntryObj::setPropertyValue(
             sal_Int32 nVal;
             if (aValue >>= nVal)
             {
-                for (ConditionEntryApiMap & rEntry : aConditionEntryMap)
+                for (ConditionEntryApiMap const & rEntry : aConditionEntryMap)
                 {
                     if (rEntry.nApiMode == nVal)
                     {
@@ -789,7 +789,7 @@ uno::Any SAL_CALL ScConditionEntryObj::getPropertyValue( const OUString& aProper
         case Operator:
         {
             ScConditionMode eMode = getCoreObject()->GetOperation();
-            for (ConditionEntryApiMap & rEntry : aConditionEntryMap)
+            for (ConditionEntryApiMap const & rEntry : aConditionEntryMap)
             {
                 if (rEntry.eMode == eMode)
                 {
@@ -869,7 +869,7 @@ void setColorScaleEntry(ScColorScaleEntry* pEntry, uno::Reference<sheet::XColorS
     ScColorScaleEntryType eType = ScColorScaleEntryType();
     sal_Int32 nApiType = xEntry->getType();
     bool bFound = false;
-    for (ColorScaleEntryTypeApiMap & rEntry : aColorScaleEntryTypeMap)
+    for (ColorScaleEntryTypeApiMap const & rEntry : aColorScaleEntryTypeMap)
     {
         if (rEntry.nApiType == nApiType)
         {
@@ -1023,7 +1023,7 @@ void ScColorScaleEntryObj::setColor(util::Color aColor)
 sal_Int32 ScColorScaleEntryObj::getType()
 {
     ScColorScaleEntry* pEntry = getCoreObject();
-    for (ColorScaleEntryTypeApiMap & rEntry : aColorScaleEntryTypeMap)
+    for (ColorScaleEntryTypeApiMap const & rEntry : aColorScaleEntryTypeMap)
     {
         if (rEntry.eType == pEntry->GetType())
         {
@@ -1037,7 +1037,7 @@ sal_Int32 ScColorScaleEntryObj::getType()
 void ScColorScaleEntryObj::setType(sal_Int32 nType)
 {
     ScColorScaleEntry* pEntry = getCoreObject();
-    for (ColorScaleEntryTypeApiMap & rEntry : aColorScaleEntryTypeMap)
+    for (ColorScaleEntryTypeApiMap const & rEntry : aColorScaleEntryTypeMap)
     {
         if (rEntry.nApiType == nType)
         {
@@ -1120,7 +1120,7 @@ void setDataBarEntry(ScColorScaleEntry* pEntry, uno::Reference<sheet::XDataBarEn
     ScColorScaleEntryType eType = ScColorScaleEntryType();
     sal_Int32 nApiType = xEntry->getType();
     bool bFound = false;
-    for (DataBarEntryTypeApiMap & rEntry : aDataBarEntryTypeMap)
+    for (DataBarEntryTypeApiMap const & rEntry : aDataBarEntryTypeMap)
     {
         if (rEntry.nApiType == nApiType)
         {
@@ -1167,7 +1167,7 @@ void SAL_CALL ScDataBarFormatObj::setPropertyValue(
             sal_Int32 nVal;
             if (aValue >>= nVal)
             {
-                for (DataBarAxisApiMap & rEntry : aDataBarAxisMap)
+                for (DataBarAxisApiMap const & rEntry : aDataBarAxisMap)
                 {
                     if (rEntry.nApiPos == nVal)
                     {
@@ -1291,7 +1291,7 @@ uno::Any SAL_CALL ScDataBarFormatObj::getPropertyValue( const OUString& aPropert
         {
             databar::ScAxisPosition ePos = getCoreObject()->GetDataBarData()->meAxisPosition;
             sal_Int32 nApiPos = sheet::DataBarAxis::AXIS_NONE;
-            for (DataBarAxisApiMap & rEntry : aDataBarAxisMap)
+            for (DataBarAxisApiMap const & rEntry : aDataBarAxisMap)
             {
                 if (rEntry.ePos == ePos)
                 {
@@ -1397,7 +1397,7 @@ ScColorScaleEntry* ScDataBarEntryObj::getCoreObject()
 sal_Int32 ScDataBarEntryObj::getType()
 {
     ScColorScaleEntry* pEntry = getCoreObject();
-    for (DataBarEntryTypeApiMap & rEntry : aDataBarEntryTypeMap)
+    for (DataBarEntryTypeApiMap const & rEntry : aDataBarEntryTypeMap)
     {
         if (rEntry.eType == pEntry->GetType())
         {
@@ -1411,7 +1411,7 @@ sal_Int32 ScDataBarEntryObj::getType()
 void ScDataBarEntryObj::setType(sal_Int32 nType)
 {
     ScColorScaleEntry* pEntry = getCoreObject();
-    for (DataBarEntryTypeApiMap & rEntry : aDataBarEntryTypeMap)
+    for (DataBarEntryTypeApiMap const & rEntry : aDataBarEntryTypeMap)
     {
         if (rEntry.nApiType == nType)
         {
@@ -1495,7 +1495,7 @@ void setIconSetEntry(ScIconSetFormat* pFormat, uno::Reference<sheet::XIconSetEnt
     ScColorScaleEntryType eType = ScColorScaleEntryType();
     sal_Int32 nApiType = xEntry->getType();
     bool bFound = false;
-    for (IconSetEntryTypeApiMap & rEntry : aIconSetEntryTypeMap)
+    for (IconSetEntryTypeApiMap const & rEntry : aIconSetEntryTypeMap)
     {
         if (rEntry.nApiType == nApiType)
         {
@@ -1697,7 +1697,7 @@ sal_Int32 ScIconSetEntryObj::getType()
     if (mnPos == 0)
         return sheet::IconSetFormatEntry::ICONSET_MIN;
 
-    for (IconSetEntryTypeApiMap & rEntry : aIconSetEntryTypeMap)
+    for (IconSetEntryTypeApiMap const & rEntry : aIconSetEntryTypeMap)
     {
         if (rEntry.eType == pEntry->GetType())
         {
@@ -1715,7 +1715,7 @@ void ScIconSetEntryObj::setType(sal_Int32 nType)
         return;
 
     ScColorScaleEntry* pEntry = getCoreObject();
-    for (IconSetEntryTypeApiMap & rEntry : aIconSetEntryTypeMap)
+    for (IconSetEntryTypeApiMap const & rEntry : aIconSetEntryTypeMap)
     {
         if (rEntry.nApiType == nType)
         {
@@ -1818,7 +1818,7 @@ void SAL_CALL ScCondDateFormatObj::setPropertyValue(
             if (!(aValue >>= nApiType))
                 throw lang::IllegalArgumentException();
 
-            for (DateTypeApiMap & rEntry : aDateTypeApiMap)
+            for (DateTypeApiMap const & rEntry : aDateTypeApiMap)
             {
                 if (rEntry.nApiType == nApiType)
                 {
@@ -1855,7 +1855,7 @@ uno::Any SAL_CALL ScCondDateFormatObj::getPropertyValue( const OUString& aProper
         case DateType:
         {
             condformat::ScCondFormatDateType eType = getCoreObject()->GetDateType();
-            for (DateTypeApiMap & rEntry : aDateTypeApiMap)
+            for (DateTypeApiMap const & rEntry : aDateTypeApiMap)
             {
                 if (rEntry.eType == eType)
                 {

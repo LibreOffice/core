@@ -103,8 +103,8 @@ void Test::testFormulaCreateStringFromTokens()
     m_pDoc->InsertTab(3, aTabName4);
 
     // Insert named ranges.
-    struct {
-        bool const bGlobal;
+    static const struct {
+        bool bGlobal;
         const char* pName;
         const char* pExpr;
     } aNames[] = {
@@ -139,7 +139,7 @@ void Test::testFormulaCreateStringFromTokens()
     }
 
     // Insert DB ranges.
-    struct {
+    static const struct {
         const char* pName;
         SCTAB const nTab;
         SCCOL const nCol1;
@@ -809,7 +809,7 @@ void Test::testFormulaHashAndTag()
 
     // Test formula hashing.
 
-    struct {
+    static const struct {
         const char* pFormula1; const char* pFormula2; bool bEqual;
     } aHashTests[] = {
         { "=1", "=2", false }, // different constants
@@ -864,7 +864,7 @@ void Test::testFormulaHashAndTag()
 
     // Test formula vectorization state.
 
-    struct {
+    static const struct {
         const char* pFormula;
         ScFormulaVectorState const eState;
     } aVectorTests[] = {
@@ -903,7 +903,7 @@ void Test::testFormulaTokenEquality()
         bool const mbEqual;
     };
 
-    FormulaTokenEqualityTest aTests[] = {
+    static const FormulaTokenEqualityTest aTests[] = {
         { "R1C2", "R1C2", true },
         { "R1C2", "R1C3", false },
         { "R1C2", "R2C2", false },
@@ -990,7 +990,7 @@ void Test::testFormulaRefData()
 
 void Test::testFormulaCompiler()
 {
-    struct {
+    static const struct {
         const char* pInput; FormulaGrammar::Grammar eInputGram;
         const char* pOutput; FormulaGrammar::Grammar eOutputGram;
     } aTests[] = {
@@ -1040,7 +1040,7 @@ void Test::testFormulaCompilerJumpReordering()
         aCompRPN.CompileTokenArray();
 
         // RPN tokens should be ordered: B1, ocIf, C1, ocSep, D1, ocClose.
-        TokenCheck aCheckRPN[] =
+        static const TokenCheck aCheckRPN[] =
         {
             { ocPush,  svSingleRef },
             { ocIf,    svUnknown   }, // type is context dependent, don't test it
@@ -1068,7 +1068,7 @@ void Test::testFormulaCompilerJumpReordering()
         aCompRPN2.EnableJumpCommandReorder(false);
         aCompRPN2.CompileTokenArray();
 
-        TokenCheck aCheckRPN2[] =
+        static const TokenCheck aCheckRPN2[] =
         {
             { ocPush,  svSingleRef },
             { ocPush,  svDouble    },
@@ -4646,7 +4646,7 @@ void Test::testFuncCOUNTIF()
     printRange(m_pDoc, ScRange(0, 0, 0, 0, 8, 0), "data range for COUNTIF");
 
     // formulas and results
-    struct {
+    static const struct {
         const char* pFormula; double fResult;
     } aChecks[] = {
         { "=COUNTIF(A1:A12;1999)",       1 },
@@ -4838,7 +4838,7 @@ void Test::testFuncIFERROR()
     printRange(m_pDoc, ScRange(0, 0, 0, 0, nRows-1, 0), "data range for IFERROR/IFNA");
 
     // formulas and results
-    struct {
+    static const struct {
         const char* pFormula; const char* pResult;
     } aChecks[] = {
         { "=IFERROR(A1;9)",                         "1" },
@@ -5007,7 +5007,7 @@ void Test::testFuncNUMBERVALUE()
     printRange(m_pDoc, ScRange(0, 0, 0, 0, nRows - 1, 0), "data range for NUMBERVALUE");
 
     // formulas and results
-    struct {
+    static const struct {
         const char* pFormula; const char* pResult;
     } aChecks[] = {
         { "=NUMBERVALUE(A1;\"b\";\"ag\")",  "199.9" },
@@ -5189,7 +5189,7 @@ void Test::testFuncVLOOKUP()
     printRange(m_pDoc, ScRange(0, 0, 0, 1, 13, 0), "raw data for VLOOKUP");
 
     // Formula data
-    struct {
+    static const struct {
         const char* pLookup; const char* pFormula; const char* pRes;
     } aChecks[] = {
         { "Lookup",  "Formula", nullptr },
@@ -5321,7 +5321,7 @@ struct StrStrCheck {
 };
 
 template<size_t DataSize, size_t FormulaSize, int Type>
-static void runTestMATCH(ScDocument* pDoc, const char* aData[DataSize], StrStrCheck aChecks[FormulaSize])
+static void runTestMATCH(ScDocument* pDoc, const char* aData[DataSize], const StrStrCheck aChecks[FormulaSize])
 {
     size_t nDataSize = DataSize;
     for (size_t i = 0; i < nDataSize; ++i)
@@ -5360,7 +5360,7 @@ static void runTestMATCH(ScDocument* pDoc, const char* aData[DataSize], StrStrCh
 }
 
 template<size_t DataSize, size_t FormulaSize, int Type>
-static void runTestHorizontalMATCH(ScDocument* pDoc, const char* aData[DataSize], StrStrCheck aChecks[FormulaSize])
+static void runTestHorizontalMATCH(ScDocument* pDoc, const char* aData[DataSize], const StrStrCheck aChecks[FormulaSize])
 {
     size_t nDataSize = DataSize;
     for (size_t i = 0; i < nDataSize; ++i)
@@ -5425,7 +5425,7 @@ void Test::testFuncMATCH()
         };
 
         // formula (B1:C12)
-        StrStrCheck aChecks[] = {
+        static const StrStrCheck aChecks[] = {
             { "0.8",   "#N/A" },
             { "1.2",      "1" },
             { "2.3",      "2" },
@@ -5469,7 +5469,7 @@ void Test::testFuncMATCH()
         };
 
         // formula (B1:C12)
-        StrStrCheck aChecks[] = {
+        static const StrStrCheck aChecks[] = {
             { "10",      "#N/A" },
             { "8.9",     "4" },
             { "7.8",     "5" },
@@ -6481,7 +6481,7 @@ void Test::testExternalRefFunctions()
 
     m_pDoc->InsertTab(0, "Test");
 
-    struct {
+    static const struct {
         const char* pFormula; double fResult;
     } aChecks[] = {
         { "=SUM('file:///extdata.fake'#Data.A1:A4)",     10 },
@@ -6816,7 +6816,7 @@ void Test::testFuncTableRef()
     /* TODO: should the item/header separator really be equal to the parameter
      * separator, thus be locale dependent and ';' semicolon here, or should it
      * be a fixed ',' comma instead? */
-    struct {
+    static const struct {
         const char* pName;
         const char* pExpr;
         const char* pCounta; // expected result when used in row 2 (first data row) as argument to COUNTA()
@@ -6990,7 +6990,7 @@ void Test::testFuncTableRef()
     }
 
     // Named expressions that use header-less Table structured references.
-    struct {
+    static const struct {
         const char* pName;
         const char* pExpr;
         const char* pCounta; // expected result when used in row 10 (first data row) as argument to COUNTA()
