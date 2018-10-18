@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_9318fc75",
+        "filename": "include/svx/tbxcolorupdate.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-10-18T23:29:49Z",
+      "side": 1,
+      "message": "const reference",
+      "revId": "30694bd194df5d18180d65bc64dc1478eda2d13b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_532ca498",
+        "filename": "sfx2/source/sidebar/ControllerFactory.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-10-18T23:29:49Z",
+      "side": 1,
+      "message": "Good catch. But actually the whole thing seems redundant, as the tooltip is usually already set inside ToolBox::InsertItem (the one that\u0027s called from SidebarToolBox::InsertItem), or in PanelTitleBar::SetMoreOptionsCommand. With a quick search I couldn\u0027t find by now any other SidebarToolBox usage that doesn\u0027t set the tooltip by itself.\n\n(As a side note, the EnableItem call here seems wrong too, as ideally we should just let the button\u0027s controller decide whether to enable the button, and not override it.)",
+      "revId": "30694bd194df5d18180d65bc64dc1478eda2d13b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
