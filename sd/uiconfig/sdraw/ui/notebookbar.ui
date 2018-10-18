@@ -61,107 +61,107 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-Line">
+      <object class="GtkMenuItem" id="MenuDraw-ToggleObjectBezierMode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:Line</property>
+        <property name="action_name">.uno:ToggleObjectBezierMode</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-Freeline_Unfilled">
+      <object class="GtkMenuItem" id="MenuDraw-ToggleObjectRotateMode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:Freeline_Unfilled</property>
+        <property name="action_name">.uno:ToggleObjectRotateMode</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-Freeline">
+      <object class="GtkMenuItem" id="MenuDraw-MirrorVert">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:Freeline</property>
+        <property name="action_name">.uno:MirrorVert</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-Bezier_Unfilled">
+      <object class="GtkMenuItem" id="MenuDraw-MirrorHorz">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:Bezier_Unfilled</property>
+        <property name="action_name">.uno:MirrorHorz</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-BezierFill">
+      <object class="GtkMenuItem" id="MenuDraw-AdvancedMode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:BezierFill</property>
+        <property name="action_name">.uno:AdvancedMode</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-Polygon_Unfilled">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:Polygon_Unfilled</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuDraw-Polygon_Diagonal_Unfilled">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:Polygon_Diagonal_Unfilled</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="MenuDraw-Polygon_Diagonal">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:Polygon_Diagonal</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="MenuDraw-separator">
+      <object class="GtkSeparatorMenuItem" id="MenuDraw-separator1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-BasicShapes">
+      <object class="GtkMenuItem" id="MenuDraw-Combine">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:BasicShapes</property>
+        <property name="action_name">.uno:Combine</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-SymbolShapes">
+      <object class="GtkMenuItem" id="MenuDraw-Dismantle">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:SymbolShapes</property>
+        <property name="action_name">.uno:Dismantle</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-ArrowShapes">
+      <object class="GtkMenuItem" id="MenuDraw-Merge">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:ArrowShapes</property>
+        <property name="action_name">.uno:Merge</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-StarShapes">
+      <object class="GtkMenuItem" id="MenuDraw-Substract">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:StarShapes</property>
+        <property name="action_name">.uno:Substract</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-CalloutShapes">
+      <object class="GtkMenuItem" id="MenuDraw-Intersect">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:CalloutShapes</property>
+        <property name="action_name">.uno:Intersect</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-FlowChartShapes">
+      <object class="GtkMenuItem" id="MenuDraw-EqualizeWidth">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:FlowChartShapes</property>
+        <property name="action_name">.uno:EqualizeWidth</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuDraw-EqualizeHeight">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:EqualizeHeight</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuDraw-Connect">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:Connect</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuDraw-Break">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:Break</property>
       </object>
     </child>
     <child>
@@ -171,17 +171,17 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-DrawCaption">
+      <object class="GtkMenuItem" id="MenuDraw-CopyObjects">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:DrawCaption</property>
+        <property name="action_name">.uno:CopyObjects</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-VerticalCaption">
+      <object class="GtkMenuItem" id="MenuDraw-Morphing">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:VerticalCaption</property>
+        <property name="action_name">.uno:Morphing</property>
       </object>
     </child>
     <child>
@@ -191,31 +191,52 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-DrawText">
+      <object class="GtkMenuItem" id="MenuDraw-ChangeBezier">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:DrawText</property>
+        <property name="action_name">.uno:ChangeBezier</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-VerticalText">
+      <object class="GtkMenuItem" id="MenuDraw-ChangePolygon">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:VerticalText</property>
+        <property name="action_name">.uno:ChangePolygon</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-FontWork">
+      <object class="GtkMenuItem" id="MenuDraw-convert_to_contour">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:FontWork</property>
+        <property name="action_name">.uno:convert_to_contour</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuDraw-Text_Marquee">
+      <object class="GtkMenuItem" id="MenuDraw-ConvertInto3D">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:Text_Marquee</property>
+        <property name="action_name">.uno:ConvertInto3D</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuDraw-ConvertInto3DLatheFast">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ConvertInto3DLatheFast</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuDraw-ConvertIntoBitmap">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ConvertIntoBitmap</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuDraw-ConvertIntoMetaFile">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ConvertIntoMetaFile</property>
       </object>
     </child>
     <child>
