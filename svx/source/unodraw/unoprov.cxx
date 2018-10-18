@@ -773,70 +773,58 @@ static comphelper::PropertyMapEntry const * ImplGetAdditionalWriterDrawingDefaul
     return aSvxAdditionalDefaultsPropertyMap_Impl;
 }
 
-typedef std::unordered_map< OUString, sal_uInt32 > UHashMapImpl;
+struct HashMapEntry { OUStringLiteral name; sal_uInt32 id; };
+static const HashMapEntry aHashMapImpl[] = {
+            { OUStringLiteral("com.sun.star.drawing.AppletShape"),          OBJ_OLE2_APPLET },
+            { OUStringLiteral("com.sun.star.drawing.CaptionShape"),         OBJ_CAPTION },
+            { OUStringLiteral("com.sun.star.drawing.ClosedBezierShape"),    OBJ_PATHFILL },
+            { OUStringLiteral("com.sun.star.drawing.ClosedFreeHandShape"),  OBJ_FREEFILL },
+            { OUStringLiteral("com.sun.star.drawing.ConnectorShape"),       OBJ_EDGE },
+            { OUStringLiteral("com.sun.star.drawing.ControlShape"),         OBJ_UNO  },
+            { OUStringLiteral("com.sun.star.drawing.CustomShape"),          OBJ_CUSTOMSHAPE },
+            { OUStringLiteral("com.sun.star.drawing.EllipseShape"),         OBJ_CIRC },
+            { OUStringLiteral("com.sun.star.drawing.FrameShape"),           OBJ_FRAME },
+            { OUStringLiteral("com.sun.star.drawing.GraphicObjectShape"),   OBJ_GRAF },
+            { OUStringLiteral("com.sun.star.drawing.GroupShape"),           OBJ_GRUP },
+            { OUStringLiteral("com.sun.star.drawing.LineShape"),            OBJ_LINE },
+            { OUStringLiteral("com.sun.star.drawing.MeasureShape"),         OBJ_MEASURE },
+            { OUStringLiteral("com.sun.star.drawing.MediaShape"),           OBJ_MEDIA },
+            { OUStringLiteral("com.sun.star.drawing.OLE2Shape"),            OBJ_OLE2 },
+            { OUStringLiteral("com.sun.star.drawing.OpenBezierShape"),      OBJ_PATHLINE },
+            { OUStringLiteral("com.sun.star.drawing.OpenFreeHandShape"),    OBJ_FREELINE },
+            { OUStringLiteral("com.sun.star.drawing.PageShape"),            OBJ_PAGE },
+            { OUStringLiteral("com.sun.star.drawing.PluginShape"),          OBJ_OLE2_PLUGIN },
+            { OUStringLiteral("com.sun.star.drawing.PolyLinePathShape"),    OBJ_PATHPLIN },
+            { OUStringLiteral("com.sun.star.drawing.PolyLineShape"),        OBJ_PLIN },
+            { OUStringLiteral("com.sun.star.drawing.PolyPolygonPathShape"), OBJ_PATHPOLY },
+            { OUStringLiteral("com.sun.star.drawing.PolyPolygonShape"),     OBJ_POLY },
+            { OUStringLiteral("com.sun.star.drawing.RectangleShape"),       OBJ_RECT },
+            { OUStringLiteral("com.sun.star.drawing.Shape3DCubeObject"),    E3D_CUBEOBJ_ID    | E3D_INVENTOR_FLAG },
+            { OUStringLiteral("com.sun.star.drawing.Shape3DExtrudeObject"), E3D_EXTRUDEOBJ_ID | E3D_INVENTOR_FLAG },
+            { OUStringLiteral("com.sun.star.drawing.Shape3DLatheObject"),   E3D_LATHEOBJ_ID   | E3D_INVENTOR_FLAG },
+            { OUStringLiteral("com.sun.star.drawing.Shape3DPolygonObject"), E3D_POLYGONOBJ_ID | E3D_INVENTOR_FLAG },
+            { OUStringLiteral("com.sun.star.drawing.Shape3DSceneObject"),   E3D_SCENE_ID  | E3D_INVENTOR_FLAG },
+            { OUStringLiteral("com.sun.star.drawing.Shape3DSphereObject"),  E3D_SPHEREOBJ_ID  | E3D_INVENTOR_FLAG },
+            { OUStringLiteral("com.sun.star.drawing.TextShape"),            OBJ_TEXT },
+};
 
-namespace {
-
-const UHashMapImpl& GetUHashImpl()
+#ifdef DBG_UTIL
+static bool HashMapComparator(HashMapEntry const & lhs, HashMapEntry const & rhs)
 {
-    static UHashMapImpl aImpl(63);
-    static bool bInited = false;
-    if (!bInited)
-    {
-        const struct { const char *name; sal_Int32 length; sal_uInt32 id; } aInit[] = {
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.RectangleShape"),       OBJ_RECT },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.EllipseShape"),         OBJ_CIRC },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ControlShape"),         OBJ_UNO  },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ConnectorShape"),       OBJ_EDGE },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MeasureShape"),         OBJ_MEASURE },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.LineShape"),            OBJ_LINE },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyPolygonShape"),     OBJ_POLY },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyLineShape"),        OBJ_PLIN },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OpenBezierShape"),      OBJ_PATHLINE },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ClosedBezierShape"),    OBJ_PATHFILL },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OpenFreeHandShape"),    OBJ_FREELINE },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ClosedFreeHandShape"),  OBJ_FREEFILL },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyPolygonPathShape"), OBJ_PATHPOLY },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PolyLinePathShape"),    OBJ_PATHPLIN },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GraphicObjectShape"),   OBJ_GRAF },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GroupShape"),           OBJ_GRUP },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TextShape"),            OBJ_TEXT },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OLE2Shape"),            OBJ_OLE2 },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PageShape"),            OBJ_PAGE },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.CaptionShape"),         OBJ_CAPTION },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.FrameShape"),           OBJ_FRAME },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PluginShape"),          OBJ_OLE2_PLUGIN },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.AppletShape"),          OBJ_OLE2_APPLET },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.CustomShape"),          OBJ_CUSTOMSHAPE },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MediaShape"),           OBJ_MEDIA },
-
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DSceneObject"),   E3D_SCENE_ID  | E3D_INVENTOR_FLAG },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DCubeObject"),    E3D_CUBEOBJ_ID    | E3D_INVENTOR_FLAG },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DSphereObject"),  E3D_SPHEREOBJ_ID  | E3D_INVENTOR_FLAG },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DLatheObject"),   E3D_LATHEOBJ_ID   | E3D_INVENTOR_FLAG },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DExtrudeObject"), E3D_EXTRUDEOBJ_ID | E3D_INVENTOR_FLAG },
-            { RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DPolygonObject"), E3D_POLYGONOBJ_ID | E3D_INVENTOR_FLAG },
-        };
-
-        for (const auto& i : aInit)
-            aImpl[OUString( i.name, i.length, RTL_TEXTENCODING_ASCII_US ) ] = i.id;
-        bInited = true;
-    }
-
-    return aImpl;
+    return rtl_str_compare_WithLength(lhs.name.data, lhs.name.size, rhs.name.data, rhs.name.size) < 0;
 }
-
-}
-
+#endif
 
 OUString UHashMap::getNameFromId(sal_uInt32 nId)
 {
-    const UHashMapImpl &rMap = GetUHashImpl();
+#ifdef DBG_UTIL
+    assert( std::is_sorted(std::begin(aHashMapImpl), std::end(aHashMapImpl), HashMapComparator) );
+#endif
 
-    for (UHashMapImpl::const_iterator it = rMap.begin(); it != rMap.end(); ++it)
+    for (auto const & i : aHashMapImpl)
     {
-        if (it->second == nId)
-            return it->first;
+        if (i.id == nId)
+            return i.name;
     }
     OSL_FAIL("[CL] unknown SdrObject identifier");
     return OUString();
@@ -844,17 +832,26 @@ OUString UHashMap::getNameFromId(sal_uInt32 nId)
 
 uno::Sequence< OUString > UHashMap::getServiceNames()
 {
-    return comphelper::mapKeysToSequence( GetUHashImpl() );
+    uno::Sequence<OUString> aSeq(SAL_N_ELEMENTS(aHashMapImpl));
+    int i = 0;
+    for (auto const & entry : aHashMapImpl)
+        aSeq[i++] = entry.name;
+    return aSeq;
 }
 
 sal_uInt32 UHashMap::getId( const OUString& rCompareString )
 {
-    const UHashMapImpl &rMap = GetUHashImpl();
-    UHashMapImpl::const_iterator it = rMap.find( rCompareString );
-    if( it == rMap.end() )
+#ifdef DBG_UTIL
+    assert( std::is_sorted(std::begin(aHashMapImpl), std::end(aHashMapImpl), HashMapComparator) );
+#endif
+
+    auto it = std::lower_bound(std::begin(aHashMapImpl), std::end(aHashMapImpl), rCompareString,
+                [&](HashMapEntry const & entry, OUString const & s)
+                { return rtl_ustr_ascii_compare(s.pData->buffer, entry.name.data) > 0; });
+    if( it == std::end(aHashMapImpl) )
         return UHASHMAP_NOTFOUND;
     else
-        return it->second;
+        return it->id;
 }
 
 struct theSvxMapProvider :
