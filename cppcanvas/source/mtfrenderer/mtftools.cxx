@@ -257,6 +257,24 @@ namespace cppcanvas
 
         namespace
         {
+            void appendWaveline( ::basegfx::B2DPolyPolygon& o_rPoly,
+                             const ::basegfx::B2DPoint& rStartPos,
+                             const double               nX1,
+                             const double               nY1,
+                             const double               nX2,
+                             const double               nY2,
+                             const double               nWaveWidth,
+                             const double               nWaveHeight)
+            {
+                const double x(rStartPos.getX());
+                const double y(rStartPos.getY());
+
+                o_rPoly.append(::basegfx::utils::createWaveline(
+                            ::basegfx::utils::createPolygonFromRect(::basegfx::B2DRectangle(x + nX1, y + nY1, x + nX2, y + nY2)),
+                            nWaveWidth,
+                            nWaveHeight));
+            }
+
             void appendRect( ::basegfx::B2DPolyPolygon& o_rPoly,
                              const ::basegfx::B2DPoint& rStartPos,
                              const double               nX1,
@@ -324,10 +342,51 @@ namespace cppcanvas
                 case LINESTYLE_DONTKNOW:
                     break;
 
-                case LINESTYLE_SMALLWAVE:     // TODO(F3): NYI
+                case LINESTYLE_DOUBLEWAVE:
                     // FALLTHROUGH intended
-                case LINESTYLE_WAVE:          // TODO(F3): NYI
+                case LINESTYLE_SMALLWAVE:
                     // FALLTHROUGH intended
+                case LINESTYLE_BOLDWAVE:
+                    // FALLTHROUGH intended
+                case LINESTYLE_WAVE:
+                {
+                    double nWaveWidth = rTextLineInfo.mnOverlineHeight * 10.6 * 0.25;
+                    double nOffset = 0.0;
+
+                    if (rTextLineInfo.mnOverlineStyle == LINESTYLE_DOUBLEWAVE)
+                    {
+                        nOffset = -rTextLineInfo.mnOverlineHeight * 0.5;
+                    }
+                    else
+                    {
+                        nWaveWidth *= 2.0;
+                    }
+
+                    appendWaveline(
+                        aTextLinesPolyPoly,
+                        rStartPos,
+                        0,
+                        rTextLineInfo.mnOverlineOffset + nOffset,
+                        rLineWidth,
+                        rTextLineInfo.mnOverlineOffset + rTextLineInfo.mnOverlineHeight + nOffset,
+                        nWaveWidth,
+                        nWaveWidth * 0.5);
+
+                    if (rTextLineInfo.mnOverlineStyle == LINESTYLE_DOUBLEWAVE)
+                    {
+                        nOffset = rTextLineInfo.mnOverlineHeight * 1.2;
+                        appendWaveline(
+                            aTextLinesPolyPoly,
+                            rStartPos,
+                            0,
+                            rTextLineInfo.mnOverlineOffset + nOffset,
+                            rLineWidth,
+                            rTextLineInfo.mnOverlineOffset + rTextLineInfo.mnOverlineHeight + nOffset,
+                            nWaveWidth,
+                            nWaveWidth * 0.5);
+                    }
+                    break;
+                }
                 case LINESTYLE_SINGLE:
                     appendRect(
                         aTextLinesPolyPoly,
@@ -348,8 +407,6 @@ namespace cppcanvas
                     // FALLTHROUGH intended
                 case LINESTYLE_BOLDDASHDOTDOT:// TODO(F3): NYI
                     // FALLTHROUGH intended
-                case LINESTYLE_BOLDWAVE:      // TODO(F3): NYI
-                    // FALLTHROUGH intended
                 case LINESTYLE_BOLD:
                     appendRect(
                         aTextLinesPolyPoly,
@@ -360,8 +417,6 @@ namespace cppcanvas
                         rTextLineInfo.mnOverlineOffset + rTextLineInfo.mnOverlineHeight );
                     break;
 
-                case LINESTYLE_DOUBLEWAVE:    // TODO(F3): NYI
-                    // FALLTHROUGH intended
                 case LINESTYLE_DOUBLE:
                     appendRect(
                         aTextLinesPolyPoly,
