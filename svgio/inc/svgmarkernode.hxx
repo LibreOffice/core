@@ -31,7 +31,7 @@ namespace svgio
         class SvgMarkerNode : public SvgNode
         {
         public:
-            enum MarkerUnits
+            enum class MarkerUnits
             {
                 strokeWidth,
                 userSpaceOnUse
