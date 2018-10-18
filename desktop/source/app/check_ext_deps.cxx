@@ -422,9 +422,12 @@ void Desktop::SynchronizeExtensionRepositories()
                 silent->getInteractionHandler());
 #endif
     } else {
-        // reinstallDeployedExtensions above already calls syncRepositories
-        // internally:
-        dp_misc::syncRepositories(false, silent);
+        // reinstallDeployedExtensions above already calls syncRepositories internally
+
+        // Force syncing repositories on startup. There are cases where the extension
+        // registration becomes invalid which leads to extensions not starting up, although
+        // installed and active. Syncing extension repos on startup fixes that.
+        dp_misc::syncRepositories(/*force=*/true, silent);
     }
 }
 
