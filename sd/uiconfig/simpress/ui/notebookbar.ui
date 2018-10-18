@@ -496,89 +496,107 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <child>
-      <object class="GtkMenuItem" id="HelpIndexD">
+      <object class="GtkMenuItem" id="MenuHelp-HelpIndex">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:HelpIndex</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ExtendedHelpD">
+      <object class="GtkMenuItem" id="MenuHelp-ExtendedHelp">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ExtendedHelp</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DocumentationD">
+      <object class="GtkMenuItem" id="MenuHelp-Documentation">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:Documentation</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator94">
+      <object class="GtkSeparatorMenuItem" id="MenuHelp-separator">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="QuestionAnswersD1">
+      <object class="GtkMenuItem" id="MenuHelp-QuestionAnswers">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:QuestionAnswers</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SendFeedbackD1">
+      <object class="GtkMenuItem" id="MenuHelp-SendFeedback">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SendFeedback</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="DonationD1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:Donation</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separator100">
+      <object class="GtkSeparatorMenuItem" id="MenuHelp-separator1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="SafeModeD1">
+      <object class="GtkMenuItem" id="MenuHelp-SafeMode">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:SafeMode</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="UpdateMenuD">
+      <object class="GtkMenuItem" id="MenuHelp-GetInvolved">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
-        <property name="label" translatable="yes" context="impressnotebookbar|Help">_Check for Updates...</property>
+        <property name="action_name">.uno:GetInvolved</property>
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="separator113">
+      <object class="GtkSeparatorMenuItem" id="MenuHelp-separator2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="ShowLicenseD1">
+      <object class="GtkMenuItem" id="MenuHelp-Donation">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:Donation</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuHelp-separator3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuHelp-ShowLicense">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:ShowLicense</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="AboutD">
+      <object class="GtkMenuItem" id="MenuHelp-UpdateMenu">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">vnd.sun.star.job:alias=UpdateCheck</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuHelp-separator4">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuHelp-About">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:About</property>
@@ -844,6 +862,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="MenuImage-OriginalSize">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:OriginalSize</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="MenuImage-ImageMapDialog">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -871,10 +896,16 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuImage-GraphicDialog">
+      <object class="GtkSeparatorMenuItem" id="separator10">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:GraphicDialog</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuImage-AnimationEffects">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:AnimationEffects</property>
       </object>
     </child>
   </object>
