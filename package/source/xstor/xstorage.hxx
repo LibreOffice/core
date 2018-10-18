@@ -68,7 +68,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 #define RELINFO_CHANGED_BROKEN      7
 
 #define STOR_MESS_PRECOMMIT 1
-#define STOR_MESS_COMMITED  2
+#define STOR_MESS_COMMITTED  2
 #define STOR_MESS_PREREVERT 3
 #define STOR_MESS_REVERTED  4
 
