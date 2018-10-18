@@ -2328,7 +2328,7 @@ ScFormatFilterPlugin* ScFilterCreate();
 
 #endif
 
-typedef ScFormatFilterPlugin * (*FilterFn)(void);
+typedef ScFormatFilterPlugin * (*FilterFn)();
 ScFormatFilterPlugin &ScFormatFilter::Get()
 {
     static ScFormatFilterPlugin *plugin;

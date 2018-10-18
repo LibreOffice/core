@@ -342,10 +342,7 @@ public:
         const Reference< XStream >& aStream
     ) override;
 
-    virtual Reference<XStream> SAL_CALL
-    getStream (
-        void
-    ) override
+    virtual Reference<XStream> SAL_CALL getStream () override
     {
         osl::MutexGuard aGuard(m_aMutex);
         return m_xStream;
@@ -371,10 +368,7 @@ public:
         const Reference<XInputStream> &rxInputStream
     ) override;
 
-    virtual Reference<XInputStream> SAL_CALL
-    getInputStream (
-        void
-    ) override
+    virtual Reference<XInputStream> SAL_CALL getInputStream() override
     {
         osl::MutexGuard aGuard(m_aMutex);
         return m_xStream;

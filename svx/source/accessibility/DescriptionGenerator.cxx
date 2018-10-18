@@ -114,7 +114,7 @@ void DescriptionGenerator::Initialize (const OUString& sPrefix)
 }
 
 
-OUString DescriptionGenerator::operator() (void)
+OUString DescriptionGenerator::operator() ()
 {
     msDescription.append('.');
     return msDescription.makeStringAndClear();

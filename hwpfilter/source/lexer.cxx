@@ -191,7 +191,7 @@ static int yy_did_buffer_switch_on_eof;
 static void yyrestart YY_PROTO(( FILE *input_file ));
 
 static void yy_switch_to_buffer YY_PROTO(( YY_BUFFER_STATE new_buffer ));
-static void yy_load_buffer_state YY_PROTO(( void ));
+static void yy_load_buffer_state YY_PROTO(( ));
 static YY_BUFFER_STATE yy_create_buffer YY_PROTO(( FILE *file, int size ));
 static void yy_delete_buffer YY_PROTO(( YY_BUFFER_STATE b ));
 static void yy_init_buffer YY_PROTO(( YY_BUFFER_STATE b, FILE *file ));
@@ -210,9 +210,9 @@ static FILE *yyin = nullptr, *yyout = nullptr;
 typedef int yy_state_type;
 #define yytext_ptr yytext
 
-static yy_state_type yy_get_previous_state YY_PROTO(( void ));
+static yy_state_type yy_get_previous_state YY_PROTO(( ));
 static yy_state_type yy_try_NUL_trans YY_PROTO(( yy_state_type current_state ));
-static int yy_get_next_buffer YY_PROTO(( void ));
+static int yy_get_next_buffer YY_PROTO(( ));
 static void yy_fatal_error YY_PROTO(( yyconst char msg[] ));
 
 /* Done after the current pattern has been matched and before the

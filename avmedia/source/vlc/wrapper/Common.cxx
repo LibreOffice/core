@@ -13,8 +13,8 @@ namespace
 {
     const char AVMEDIA_NO_ERROR[] = "No error";
 
-    const char* ( *libvlc_get_version ) (void);
-    char *  ( * libvlc_errmsg ) (void);
+    const char* ( *libvlc_get_version ) ();
+    char *  ( * libvlc_errmsg ) ();
 }
 
 namespace avmedia

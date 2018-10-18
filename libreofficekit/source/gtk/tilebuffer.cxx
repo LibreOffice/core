@@ -116,7 +116,7 @@ void LOEvent::destroy(void* pMemory)
 }
 
 GQuark
-LOKTileBufferErrorQuark(void)
+LOKTileBufferErrorQuark()
 {
     return g_quark_from_static_string("lok-tilebuffer-error");
 }

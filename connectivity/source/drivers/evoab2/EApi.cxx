@@ -34,7 +34,7 @@ static const char *eBookLibNames[] = {
     "libebook.so.8"       // evolution-2.0
 };
 
-typedef void (*SymbolFunc) (void);
+typedef void (*SymbolFunc) ();
 
 #define SYM_MAP(a) { #a, reinterpret_cast<SymbolFunc *>(&a) }
 struct ApiMap

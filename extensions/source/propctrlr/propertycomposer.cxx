@@ -250,7 +250,7 @@ namespace pcr
     }
 
 
-    static void uniteStringArrays( const PropertyComposer::HandlerArray& _rHandlers, Sequence< OUString > (SAL_CALL XPropertyHandler::*pGetter)( void ),
+    static void uniteStringArrays( const PropertyComposer::HandlerArray& _rHandlers, Sequence< OUString > (SAL_CALL XPropertyHandler::*pGetter)( ),
         Sequence< OUString >& /* [out] */ _rUnion )
     {
         std::set< OUString > aUnitedBag;
