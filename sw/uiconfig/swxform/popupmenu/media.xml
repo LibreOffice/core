@@ -14,14 +14,23 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:TransformDialog"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
-  <menu:menuitem menu:id=".uno:NameGroup"/>
-  <menu:menuseparator/>
-  <menu:menu menu:id=".uno:ArrangeMenu">
+  <menu:menuitem menu:id=".uno:AnchorMenu"/>
+  <menu:menu menu:id=".uno:WrapMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:BringToFront"/>
-      <menu:menuitem menu:id=".uno:ObjectForwardOne"/>
-      <menu:menuitem menu:id=".uno:SendToBack"/>
+      <menu:menuitem menu:id=".uno:WrapOff"/>
+      <menu:menuitem menu:id=".uno:WrapOn"/>
+      <menu:menuitem menu:id=".uno:WrapIdeal"/>
+      <menu:menuitem menu:id=".uno:WrapLeft"/>
+      <menu:menuitem menu:id=".uno:WrapRight"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:WrapThrough"/>
+      <menu:menuitem menu:id=".uno:WrapThroughTransparencyToggle"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:WrapContour"/>
+      <menu:menuitem menu:id=".uno:ContourDialog"/>
+      <menu:menuitem menu:id=".uno:WrapAnchorOnly"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:TextWrap"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:ObjectAlign">
@@ -35,28 +44,17 @@
       <menu:menuitem menu:id=".uno:AlignDown"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menu menu:id=".uno:WrapMenu">
+  <menu:menu menu:id=".uno:ArrangeFrameMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:WrapOff"/>
-      <menu:menuitem menu:id=".uno:WrapOn"/>
-      <menu:menuitem menu:id=".uno:WrapIdeal"/>
-      <menu:menuitem menu:id=".uno:WrapThrough"/>
-      <menu:menuitem menu:id=".uno:WrapThroughTransparencyToggle"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:WrapContour"/>
-      <menu:menuitem menu:id=".uno:WrapAnchorOnly"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:TextWrap"/>
+      <menu:menuitem menu:id=".uno:BringToFront"/>
+      <menu:menuitem menu:id=".uno:ObjectForwardOne"/>
+      <menu:menuitem menu:id=".uno:ObjectBackOne"/>
+      <menu:menuitem menu:id=".uno:SendToBack"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menuitem menu:id=".uno:AnchorMenu"/>
   <menu:menuseparator/>
-  <menu:menu menu:id=".uno:GroupMenu">
-    <menu:menupopup>
-      <menu:menuitem menu:id=".uno:FormatGroup"/>
-      <menu:menuitem menu:id=".uno:FormatUngroup"/>
-      <menu:menuitem menu:id=".uno:EnterGroup"/>
-      <menu:menuitem menu:id=".uno:LeaveGroup"/>
-    </menu:menupopup>
-  </menu:menu>
+  <menu:menuitem menu:id=".uno:NameGroup"/>
+  <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:InsertCaptionDialog"/>
 </menu:menupopup>
