@@ -679,6 +679,31 @@ void SectionPropertyMap::DontBalanceTextColumns()
     }
 }
 
+void SectionPropertyMap::ApplyProtectionProperties( uno::Reference< beans::XPropertySet >& xSection, DomainMapper_Impl& rDM_Impl )
+{
+    try
+    {
+        // Word implements section protection differently than LO.
+        // PROP_IS_PROTECTED only applies if global setting GetProtectForm is enabled.
+        bool bIsProtected = rDM_Impl.GetSettingsTable()->GetProtectForm();
+        if ( bIsProtected )
+        {
+            // If form protection is enabled then section protection is enabled, unless explicitly disabled
+            if ( isSet(PROP_IS_PROTECTED) )
+                getProperty(PROP_IS_PROTECTED)->second >>= bIsProtected;
+            if ( !xSection.is() )
+                xSection = rDM_Impl.appendTextSectionAfter( m_xStartingRange );
+            if ( xSection.is() )
+                xSection->setPropertyValue( getPropertyName(PROP_IS_PROTECTED), uno::makeAny(bIsProtected) );
+        }
+        Erase(PROP_IS_PROTECTED);
+    }
+    catch ( uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION("writerfilter", "ApplyProtectionProperties failed setting PROP_IS_PROTECTED");
+    }
+}
+
 uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties( const uno::Reference< beans::XPropertySet >& xColumnContainer,
                                                                                 DomainMapper_Impl& rDM_Impl )
 {
@@ -1326,8 +1351,13 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         //todo: insert a section or access the already inserted section
         uno::Reference< beans::XPropertySet > xSection =
             rDM_Impl.appendTextSectionAfter( m_xStartingRange );
-        if ( m_nColumnCount > 0 && xSection.is() )
-            ApplyColumnProperties( xSection, rDM_Impl );
+        if ( xSection.is() )
+        {
+            if ( m_nColumnCount > 0 )
+                ApplyColumnProperties( xSection, rDM_Impl );
+
+            ApplyProtectionProperties( xSection, rDM_Impl );
+        }
 
         try
         {
@@ -1366,6 +1396,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     }
     else
     {
+        uno::Reference< beans::XPropertySet > xSection;
+        ApplyProtectionProperties( xSection, rDM_Impl );
+
         //get the properties and create appropriate page styles
         uno::Reference< beans::XPropertySet > xFollowPageStyle = GetPageStyle( rDM_Impl.GetPageStyles(), rDM_Impl.GetTextFactory(), false );
 
