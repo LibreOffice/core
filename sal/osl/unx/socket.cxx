@@ -30,6 +30,7 @@
 #include <sal/log.hxx>
 
 #include "sockimpl.hxx"
+#include "unixerrnostring.hxx"
 
 /* defines for poll */
 #ifdef HAVE_POLL_H
@@ -1179,7 +1180,7 @@ oslSocket SAL_CALL osl_createSocket(
     if(pSocket->m_Socket == OSL_INVALID_SOCKET)
     {
         int nErrno = errno;
-        SAL_WARN( "sal.osl", "socket creation failed: (" << nErrno << ") " << strerror(nErrno) );
+        SAL_WARN( "sal.osl", "socket creation failed: " << UnixErrnoString(nErrno) );
 
         destroySocketImpl(pSocket);
         pSocket= nullptr;
@@ -1195,7 +1196,7 @@ oslSocket SAL_CALL osl_createSocket(
             {
                 pSocket->m_nLastError=errno;
                 int nErrno = errno;
-                SAL_WARN( "sal.osl", "failed changing socket flags: (" << nErrno << ") " << strerror(nErrno) );
+                SAL_WARN( "sal.osl", "failed changing socket flags: " << UnixErrnoString(nErrno) );
             }
         }
         else
@@ -1258,7 +1259,7 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
         if (nRet < 0)
         {
             int nErrno = errno;
-            SAL_WARN( "sal.osl", "getsockname call failed with error: (" << nErrno << ") " << strerror(nErrno) );
+            SAL_WARN( "sal.osl", "getsockname call failed: " << UnixErrnoString(nErrno) );
         }
 
         if (s.aSockAddr.sa_family == AF_INET)
@@ -1272,7 +1273,7 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
             if (nConnFD < 0)
             {
                 int nErrno = errno;
-                SAL_WARN( "sal.osl", "socket call failed with error: (" << nErrno << ") " << strerror(nErrno) );
+                SAL_WARN( "sal.osl", "socket call failed: " << UnixErrnoString(nErrno) );
             }
             else
             {
@@ -1280,7 +1281,7 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
                 if (nRet < 0)
                 {
                     int nErrno = errno;
-                    SAL_WARN( "sal.osl", "connect call failed with error: (" << nErrno << ") " << strerror(nErrno) );
+                    SAL_WARN( "sal.osl", "connect call failed: " << UnixErrnoString(nErrno) );
                 }
                 close(nConnFD);
             }
@@ -1294,7 +1295,7 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
     {
         pSocket->m_nLastError=errno;
         int nErrno = errno;
-        SAL_WARN( "sal.osl", "closeSocket close error: (" << nErrno << ") " << strerror(nErrno) );
+        SAL_WARN( "sal.osl", "closeSocket close failed: " << UnixErrnoString(nErrno) );
     }
 
     pSocket->m_Socket = OSL_INVALID_SOCKET;
@@ -1427,7 +1428,7 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
 
         pSocket->m_nLastError=errno;
         int nErrno = errno;
-        SAL_WARN( "sal.osl", "connection failed: (" << nErrno << ") " << strerror(nErrno) );
+        SAL_WARN( "sal.osl", "connection failed: " << UnixErrnoString(nErrno) );
         return osl_Socket_Error;
     }
 
@@ -1451,7 +1452,7 @@ oslSocketResult SAL_CALL osl_connectSocketTo(oslSocket pSocket,
     {
         pSocket->m_nLastError=errno;
         int nErrno = errno;
-        SAL_WARN( "sal.osl", "connection failed: (" << nErrno << ") " << strerror(nErrno) );
+        SAL_WARN( "sal.osl", "connection failed: " << UnixErrnoString(nErrno) );
 
         osl_enableNonBlockingMode(pSocket, false);
         return osl_Socket_Error;
@@ -1559,7 +1560,7 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
     {
         pSocket->m_nLastError=errno;
         int nErrno = errno;
-        SAL_WARN( "sal.osl", "accept connection failed: (" << nErrno << ") " << strerror(nErrno) );
+        SAL_WARN( "sal.osl", "accept connection failed: " << UnixErrnoString(nErrno) );
 
 #if defined(CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT)
         pSocket->m_bIsAccepting = false;
@@ -1594,7 +1595,7 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
         {
             pSocket->m_nLastError=errno;
             int nErrno = errno;
-            SAL_WARN( "sal.osl", "failed changing socket flags: (" << nErrno << ") " << strerror(nErrno) );
+            SAL_WARN( "sal.osl", "fcntl failed: " << UnixErrnoString(nErrno) );
         }
 
     }
@@ -1636,7 +1637,7 @@ sal_Int32 SAL_CALL osl_receiveSocket(oslSocket pSocket,
     {
         pSocket->m_nLastError=errno;
         int nErrno = errno;
-        SAL_WARN( "sal.osl", "receive socket [" << nRead << "] failed: (" << nErrno << ") " << strerror(nErrno) );
+        SAL_WARN( "sal.osl", "receive socket [" << nRead << "] failed: " << UnixErrnoString(nErrno) );
     }
     else if ( nRead == 0 )
     {
@@ -1680,7 +1681,7 @@ sal_Int32 SAL_CALL osl_receiveFromSocket(oslSocket pSocket,
     {
         pSocket->m_nLastError=errno;
         int nErrno = errno;
-        SAL_WARN( "sal.osl", "receive socket [" << nRead << "] failed: (" << nErrno << ") " << strerror(nErrno) );
+        SAL_WARN( "sal.osl", "receive socket [" << nRead << "] failed: " << UnixErrnoString(nErrno) );
     }
     else if ( nRead == 0 )
     {
@@ -1717,7 +1718,7 @@ sal_Int32 SAL_CALL osl_sendSocket(oslSocket pSocket,
     {
         pSocket->m_nLastError=errno;
         int nErrno = errno;
-        SAL_WARN( "sal.osl", "send socket [" << nWritten << "] failed: (" << nErrno << ") " << strerror(nErrno) );
+        SAL_WARN( "sal.osl", "send socket [" << nWritten << "] failed: " << UnixErrnoString(nErrno) );
     }
     else if ( nWritten == 0 )
     {
@@ -1765,7 +1766,7 @@ sal_Int32 SAL_CALL osl_sendToSocket(oslSocket pSocket,
     {
         pSocket->m_nLastError=errno;
         int nErrno = errno;
-        SAL_WARN( "sal.osl", "send socket [" << nWritten << "] failed: (" << nErrno << ") " << strerror(nErrno) );
+        SAL_WARN( "sal.osl", "send socket [" << nWritten << "] failed: " << UnixErrnoString(nErrno) );
     }
     else if ( nWritten == 0 )
     {
@@ -1871,7 +1872,7 @@ static bool socket_poll (
     {
         pSocket->m_nLastError = errno;
         int nErrno = errno;
-        SAL_WARN( "sal.osl", "poll error: (" << nErrno << ") " << strerror(nErrno) );
+        SAL_WARN( "sal.osl", "poll failed: " << UnixErrnoString(nErrno) );
         return false;
     }
     if (result == 0)
@@ -1921,7 +1922,7 @@ static sal_Bool socket_poll (
     {
         pSocket->m_nLastError = errno;
         int nErrno = errno;
-        SAL_WARN( "sal.osl", "select error: (" << nErrno << ") " << strerror(nErrno) );
+        SAL_WARN( "sal.osl", "select failed: " << UnixErrnoString(nErrno) );
         return sal_False;
     }
     if (result == 0)
@@ -1992,7 +1993,7 @@ sal_Bool SAL_CALL osl_shutdownSocket(oslSocket pSocket,
     {
         pSocket->m_nLastError=errno;
         int nErrno = errno;
-        SAL_WARN( "sal.osl", "socket shutdown error: (" << nErrno << ") " << strerror(nErrno) );
+        SAL_WARN( "sal.osl", "shutdown failed: " << UnixErrnoString(nErrno) );
     }
     return (nRet==0);
 }
