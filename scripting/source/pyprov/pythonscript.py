@@ -24,6 +24,7 @@ import imp
 import time
 import ast
 import platform
+from com.sun.star.uri.RelativeUriExcessParentSegments import RETAIN
 
 try:
     unicode
@@ -211,8 +212,33 @@ class MyUriHelper:
 
     def scriptURI2StorageUri( self, scriptURI ):
         try:
-            myUri = self.m_uriRefFac.parse(scriptURI)
-            ret = self.m_baseUri + "/" + myUri.getName().replace( "|", "/" )
+            # base path to the python script location
+            sBaseUri = self.m_baseUri + "/"
+            xBaseUri = self.m_uriRefFac.parse(sBaseUri)
+
+            # path to the .py file + "$functionname, arguments, etc
+            xStorageUri = self.m_uriRefFac.parse(scriptURI)
+            sStorageUri = xStorageUri.getName().replace( "|", "/" );
+
+            # path to the .py file, relative to the base
+            sFileUri = sStorageUri[0:sStorageUri.find("$")]
+            xFileUri = self.m_uriRefFac.parse(sFileUri)
+            if not xFileUri:
+                message = "pythonscript: invalid relative uri '" + sFileUri+ "'"
+                log.debug( message )
+                raise RuntimeException( message )
+
+            # absolute path to the .py file
+            xAbsScriptUri = self.m_uriRefFac.makeAbsolute(xBaseUri, xFileUri, True, RETAIN)
+            sAbsScriptUri = xAbsScriptUri.getUriReference()
+
+            # ensure py file is under the base path
+            if not sAbsScriptUri.startswith(sBaseUri):
+                message = "pythonscript: storage uri '" + sAbsScriptUri + "' not in base uri '" + self.m_baseUri + "'"
+                log.debug( message )
+                raise RuntimeException( message )
+
+            ret = sBaseUri + sStorageUri
             log.debug( "converting scriptURI="+scriptURI + " to storageURI=" + ret )
             return ret
         except UnoException as e:
