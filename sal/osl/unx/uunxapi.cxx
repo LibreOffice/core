@@ -25,6 +25,7 @@
 #include <rtl/ustring.hxx>
 #include <osl/thread.h>
 #include <sal/log.hxx>
+#include <comphelper/unixerrorstring.hxx>
 
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>
@@ -183,7 +184,7 @@ int access_u(const rtl_uString* pustrPath, int mode)
     int result = access(fn.getStr(), mode);
     int saved_errno = errno;
     if (result == -1)
-        SAL_INFO("sal.file", "access(" << fn.getStr() << ",0" << std::oct << mode << std::dec << "): errno " << saved_errno << ": " << strerror(saved_errno));
+        SAL_INFO("sal.file", "access(" << fn.getStr() << ",0" << std::oct << mode << std::dec << "): " << UnixErrnoString(saved_errno));
     else
         SAL_INFO("sal.file", "access(" << fn.getStr() << ",0" << std::oct << mode << std::dec << "): OK");
 
@@ -220,7 +221,7 @@ bool realpath_u(const rtl_uString* pustrFileName, rtl_uString** ppustrResolvedNa
     bool  bRet = realpath(fn.getStr(), rp);
     int   saved_errno = errno;
     if (!bRet)
-        SAL_INFO("sal.file", "realpath(" << fn.getStr() << "): errno " << saved_errno << ": " << strerror(saved_errno));
+        SAL_INFO("sal.file", "realpath(" << fn.getStr() << "): " << UnixErrnoString(saved_errno));
     else
         SAL_INFO("sal.file", "realpath(" << fn.getStr() << "): OK");
 
@@ -253,7 +254,7 @@ int stat_c(const char* cpPath, struct stat* buf)
     int result = stat(cpPath, buf);
     int saved_errno = errno;
     if (result == -1)
-        SAL_INFO("sal.file", "stat(" << cpPath << "): errno " << saved_errno << ": " << strerror(saved_errno));
+        SAL_INFO("sal.file", "stat(" << cpPath << "): " << UnixErrnoString(saved_errno));
     else
         SAL_INFO("sal.file", "stat(" << cpPath << "): OK");
 
@@ -278,7 +279,7 @@ int lstat_c(const char* cpPath, struct stat* buf)
     int result = lstat(cpPath, buf);
     int saved_errno = errno;
     if (result == -1)
-        SAL_INFO("sal.file", "lstat(" << cpPath << "): errno " << saved_errno << ": " << strerror(saved_errno));
+        SAL_INFO("sal.file", "lstat(" << cpPath << "): " << UnixErrnoString(saved_errno));
     else
         SAL_INFO("sal.file", "lstat(" << cpPath << "): OK");
 
@@ -309,7 +310,7 @@ int mkdir_u(const rtl_uString* path, mode_t mode)
     int result = mkdir(OUStringToOString(path).getStr(), mode);
     int saved_errno = errno;
     if (result == -1)
-        SAL_INFO("sal.file", "mkdir(" << OUStringToOString(path).getStr() << ",0" << std::oct << mode << std::dec << "): errno " << saved_errno << ": " << strerror(saved_errno));
+        SAL_INFO("sal.file", "mkdir(" << OUStringToOString(path).getStr() << ",0" << std::oct << mode << std::dec << "): " << UnixErrnoString(saved_errno));
     else
         SAL_INFO("sal.file", "mkdir(" << OUStringToOString(path).getStr() << ",0" << std::oct << mode << std::dec << "): OK");
 
@@ -327,7 +328,7 @@ int open_c(const char *cpPath, int oflag, int mode)
     int result = open(cpPath, oflag, mode);
     int saved_errno = errno;
     if (result == -1)
-        SAL_INFO("sal.file", "open(" << cpPath << ",0" << std::oct << oflag << ",0" << mode << std::dec << "): errno " << saved_errno << ": " << strerror(saved_errno));
+        SAL_INFO("sal.file", "open(" << cpPath << ",0" << std::oct << oflag << ",0" << mode << std::dec << "): " << UnixErrnoString(saved_errno));
     else
         SAL_INFO("sal.file", "open(" << cpPath << ",0" << std::oct << oflag << ",0" << mode << std::dec << ") => " << result);
 
@@ -398,7 +399,7 @@ int ftruncate_with_name(int fd, sal_uInt64 uSize, rtl_String* path)
     int result = ftruncate(fd, uSize);
     int saved_errno = errno;
     if (result < 0)
-        SAL_INFO("sal.file", "ftruncate(" << fd << "," << uSize << "): errno " << saved_errno << ": " << strerror(saved_errno));
+        SAL_INFO("sal.file", "ftruncate(" << fd << "," << uSize << "): " << UnixErrnoString(saved_errno));
     else
         SAL_INFO("sal.file", "ftruncate(" << fd << "," << uSize << "): OK");
 
