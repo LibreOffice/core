@@ -832,7 +832,7 @@ namespace svgio
                 {
                     double fTargetWidth(rMarker.getMarkerWidth().isSet() ? rMarker.getMarkerWidth().solve(mrOwner, xcoordinate) : 3.0);
                     double fTargetHeight(rMarker.getMarkerHeight().isSet() ? rMarker.getMarkerHeight().solve(mrOwner, xcoordinate) : 3.0);
-                    const bool bStrokeWidth(SvgMarkerNode::strokeWidth == rMarker.getMarkerUnits());
+                    const bool bStrokeWidth(SvgMarkerNode::MarkerUnits::strokeWidth == rMarker.getMarkerUnits());
                     const double fStrokeWidth(getStrokeWidth().isSet() ? getStrokeWidth().solve(mrOwner) : 1.0);
 
                     if(bStrokeWidth)
