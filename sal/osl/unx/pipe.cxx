@@ -30,6 +30,7 @@
 
 #include "sockimpl.hxx"
 #include "secimpl.hxx"
+#include "unixerrnostring.hxx"
 
 #include <cassert>
 
@@ -222,7 +223,7 @@ static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Op
     pPipe->m_Socket = socket(AF_UNIX, SOCK_STREAM, 0);
     if (pPipe->m_Socket < 0)
     {
-        SAL_WARN("sal.osl.pipe", "socket() failed: " << strerror(errno));
+        SAL_WARN("sal.osl.pipe", "socket() failed: " << UnixErrnoString(errno));
         destroyPipeImpl(pPipe);
         return nullptr;
     }
@@ -233,7 +234,7 @@ static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Op
         Flags |= FD_CLOEXEC;
         if (fcntl(pPipe->m_Socket, F_SETFD, Flags) == -1)
         {
-            SAL_WARN("sal.osl.pipe", "fcntl() failed: " << strerror(errno));
+            SAL_WARN("sal.osl.pipe", "fcntl() failed: " << UnixErrnoString(errno));
         }
     }
 
@@ -270,7 +271,7 @@ static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Op
         /* ok, fs clean */
         if (bind(pPipe->m_Socket, reinterpret_cast< sockaddr* >(&addr), len) < 0)
         {
-            SAL_WARN("sal.osl.pipe", "bind() failed: " << strerror(errno));
+            SAL_WARN("sal.osl.pipe", "bind() failed: " << UnixErrnoString(errno));
             close(pPipe->m_Socket);
             destroyPipeImpl(pPipe);
             return nullptr;
@@ -286,7 +287,7 @@ static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Op
 
         if (listen(pPipe->m_Socket, 5) < 0)
         {
-            SAL_WARN("sal.osl.pipe", "listen() failed: " << strerror(errno));
+            SAL_WARN("sal.osl.pipe", "listen() failed: " << UnixErrnoString(errno));
             // cid#1255391 warns about unlink(name) after stat(name, &status)
             // above, but the intervening call to bind makes those two clearly
             // unrelated, as it would fail if name existed at that point in
@@ -307,7 +308,7 @@ static oslPipe osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions Op
         if (connect(pPipe->m_Socket, reinterpret_cast< sockaddr* >(&addr), len) >= 0)
             return pPipe;
 
-        SAL_WARN("sal.osl.pipe", "connect() failed: " << strerror(errno));
+        SAL_WARN("sal.osl.pipe", "connect() failed: " << UnixErrnoString(errno));
     }
 
     close (pPipe->m_Socket);
@@ -361,7 +362,7 @@ void SAL_CALL osl_closePipe(oslPipe pPipe)
         int fd = socket(AF_UNIX, SOCK_STREAM, 0);
         if (fd < 0)
         {
-            SAL_WARN("sal.osl.pipe", "socket() failed: " << strerror(errno));
+            SAL_WARN("sal.osl.pipe", "socket() failed: " << UnixErrnoString(errno));
             return;
         }
 
@@ -374,7 +375,7 @@ void SAL_CALL osl_closePipe(oslPipe pPipe)
 
         nRet = connect(fd, reinterpret_cast< sockaddr* >(&addr), sizeof(addr));
         if (nRet < 0)
-            SAL_WARN("sal.osl.pipe", "connect() failed: " << strerror(errno));
+            SAL_WARN("sal.osl.pipe", "connect() failed: " << UnixErrnoString(errno));
 
         close(fd);
     }
@@ -382,11 +383,11 @@ void SAL_CALL osl_closePipe(oslPipe pPipe)
 
     nRet = shutdown(ConnFD, 2);
     if (nRet < 0)
-        SAL_WARN("sal.osl.pipe", "shutdown() failed: " << strerror(errno));
+        SAL_WARN("sal.osl.pipe", "shutdown() failed: " << UnixErrnoString(errno));
 
     nRet = close(ConnFD);
     if (nRet < 0)
-        SAL_WARN("sal.osl.pipe", "close() failed: " << strerror(errno));
+        SAL_WARN("sal.osl.pipe", "close() failed: " << UnixErrnoString(errno));
 
     /* remove filesystem entry */
     if (strlen(pPipe->m_Name) > 0)
@@ -418,7 +419,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
 
     if (s < 0)
     {
-        SAL_WARN("sal.osl.pipe", "accept() failed: " << strerror(errno));
+        SAL_WARN("sal.osl.pipe", "accept() failed: " << UnixErrnoString(errno));
         return nullptr;
     }
 
@@ -446,7 +447,7 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     {
         flags |= FD_CLOEXEC;
         if (fcntl(s, F_SETFD, flags) < 0)
-            SAL_WARN("sal.osl.pipe", "fcntl() failed: " <<  strerror(errno));
+            SAL_WARN("sal.osl.pipe", "fcntl() failed: " <<  UnixErrnoString(errno));
     }
 
     pAcceptedPipe->m_Socket = s;
@@ -471,7 +472,7 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
     nRet = recv(pPipe->m_Socket, pBuffer, BytesToRead, 0);
 
     if (nRet < 0)
-        SAL_WARN("sal.osl.pipe", "recv() failed: " << strerror(errno));
+        SAL_WARN("sal.osl.pipe", "recv() failed: " << UnixErrnoString(errno));
 
     return nRet;
 }
@@ -493,7 +494,7 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
     nRet = send(pPipe->m_Socket, pBuffer, BytesToSend, 0);
 
     if (nRet <= 0)
-        SAL_WARN("sal.osl.pipe", "send() failed: " << strerror(errno));
+        SAL_WARN("sal.osl.pipe", "send() failed: " << UnixErrnoString(errno));
 
      return nRet;
 }
