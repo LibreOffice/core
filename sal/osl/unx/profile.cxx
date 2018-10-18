@@ -20,6 +20,7 @@
 #include "system.hxx"
 #include "readwrite_helper.hxx"
 #include "file_url.hxx"
+#include "unixerrnostring.hxx"
 
 #include <osl/diagnose.h>
 #include <osl/profile.h>
@@ -334,7 +335,7 @@ static bool writeProfileImpl(osl_TFile* pFile)
 
     if ( !safeWrite(pFile->m_Handle, pFile->m_pWriteBuf, pFile->m_nWriteBufLen - pFile->m_nWriteBufFree) )
     {
-        SAL_INFO("sal.osl", "write failed " << strerror(errno));
+        SAL_INFO("sal.osl", "write failed: " << UnixErrnoString(errno));
         return false;
     }
 
@@ -928,7 +929,7 @@ static bool OslProfile_lockFile(const osl_TFile* pFile, osl_TLockMode eMode)
     if ( fcntl(pFile->m_Handle, F_SETLKW, &lock) == -1 && errno != ENOTSUP )
 #endif
     {
-        SAL_INFO("sal.osl", "fcntl returned -1 (" << strerror(errno) << ")");
+        SAL_INFO("sal.osl", "fcntl failed: " << UnixErrnoString(errno));
         return false;
     }
 
@@ -953,7 +954,7 @@ static osl_TFile* openFileImpl(const sal_Char* pszFilename, oslProfileOption Pro
         if (pFile->m_Handle == -1)
         {
             int e = errno;
-            SAL_INFO("sal.file", "open(" << pszFilename << ",O_RDONLY): errno " << e << ": " << strerror(e));
+            SAL_INFO("sal.file", "open(" << pszFilename << ",O_RDONLY): " << UnixErrnoString(e));
         }
         else
             SAL_INFO("sal.file", "open(" << pszFilename << ",O_RDONLY) => " << pFile->m_Handle);
@@ -967,7 +968,7 @@ static osl_TFile* openFileImpl(const sal_Char* pszFilename, oslProfileOption Pro
             ((pFile->m_Handle = open(pszFilename, O_RDWR)) < 0))
         {
             int e = errno;
-            SAL_INFO("sal.file", "open(" << pszFilename << ",...): errno " << e << ": " << strerror(e));
+            SAL_INFO("sal.file", "open(" << pszFilename << ",...): " << UnixErrnoString(e));
             free(pFile);
             return nullptr;
         }
@@ -1079,7 +1080,7 @@ static sal_Char* OslProfile_getLine(osl_TFile* pFile)
 
             if ((Max = read(pFile->m_Handle, &pFile->m_ReadBuf[Bytes], Free)) < 0)
             {
-                SAL_INFO("sal.osl", "read failed " << strerror(errno));
+                SAL_INFO("sal.osl", "read failed: " << UnixErrnoString(errno));
 
                 if( pLine )
                     free( pLine );
@@ -1728,7 +1729,7 @@ static bool osl_ProfileSwapProfileNames(osl_TProfileImpl* pProfile)
     if (!result)
     {
         int e = errno;
-        SAL_INFO("sal.file", "rename(" << pProfile->m_FileName << "," << pszBakFile << "): errno " << e << ": " << strerror(e));
+        SAL_INFO("sal.file", "rename(" << pProfile->m_FileName << "," << pszBakFile << "): " << UnixErrnoString(e));
     }
     else
     {
@@ -1737,7 +1738,7 @@ static bool osl_ProfileSwapProfileNames(osl_TProfileImpl* pProfile)
         if (!result)
         {
             int e = errno;
-            SAL_INFO("sal.file", "rename(" << pszTmpFile << "," << pProfile->m_FileName << "): errno " << e << ": " << strerror(e));
+            SAL_INFO("sal.file", "rename(" << pszTmpFile << "," << pProfile->m_FileName << "): " << UnixErrnoString(e));
         }
         else
         {
