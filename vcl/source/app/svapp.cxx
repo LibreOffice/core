@@ -89,65 +89,35 @@ void InitSettings(ImplSVData* pSVData);
 }
 
 // keycodes handled internally by VCL
-class ImplReservedKey
+static vcl::KeyCode const ReservedKeys[]
 {
-public:
-    explicit ImplReservedKey( vcl::KeyCode aKeyCode )
-        : mKeyCode(aKeyCode)
-    {
-    }
-
-    vcl::KeyCode mKeyCode;
-};
-
-typedef std::pair<ImplReservedKey*, size_t> ReservedKeys;
-namespace
-{
-    struct ImplReservedKeysImpl
-    {
-        ReservedKeys* operator()()
-        {
-            static ImplReservedKey ImplReservedKeys[] =
-            {
-                ImplReservedKey(vcl::KeyCode(KEY_F1,0)                  ),
-                ImplReservedKey(vcl::KeyCode(KEY_F1,KEY_SHIFT)          ),
-                ImplReservedKey(vcl::KeyCode(KEY_F1,KEY_MOD1)           ),
-                ImplReservedKey(vcl::KeyCode(KEY_F2,KEY_SHIFT)          ),
-                ImplReservedKey(vcl::KeyCode(KEY_F4,KEY_MOD1)           ),
-                ImplReservedKey(vcl::KeyCode(KEY_F4,KEY_MOD2)           ),
-                ImplReservedKey(vcl::KeyCode(KEY_F4,KEY_MOD1|KEY_MOD2)  ),
-                ImplReservedKey(vcl::KeyCode(KEY_F6,0)                  ),
-                ImplReservedKey(vcl::KeyCode(KEY_F6,KEY_MOD1)           ),
-                ImplReservedKey(vcl::KeyCode(KEY_F6,KEY_SHIFT)          ),
-                ImplReservedKey(vcl::KeyCode(KEY_F6,KEY_MOD1|KEY_SHIFT) ),
-                ImplReservedKey(vcl::KeyCode(KEY_F10,0)                 )
+                vcl::KeyCode(KEY_F1,0)                  ,
+                vcl::KeyCode(KEY_F1,KEY_SHIFT)          ,
+                vcl::KeyCode(KEY_F1,KEY_MOD1)           ,
+                vcl::KeyCode(KEY_F2,KEY_SHIFT)          ,
+                vcl::KeyCode(KEY_F4,KEY_MOD1)           ,
+                vcl::KeyCode(KEY_F4,KEY_MOD2)           ,
+                vcl::KeyCode(KEY_F4,KEY_MOD1|KEY_MOD2)  ,
+                vcl::KeyCode(KEY_F6,0)                  ,
+                vcl::KeyCode(KEY_F6,KEY_MOD1)           ,
+                vcl::KeyCode(KEY_F6,KEY_SHIFT)          ,
+                vcl::KeyCode(KEY_F6,KEY_MOD1|KEY_SHIFT) ,
+                vcl::KeyCode(KEY_F10,0)
 #ifdef UNX
                 ,
-                ImplReservedKey(vcl::KeyCode(KEY_1,KEY_SHIFT|KEY_MOD1)),
-                ImplReservedKey(vcl::KeyCode(KEY_2,KEY_SHIFT|KEY_MOD1)),
-                ImplReservedKey(vcl::KeyCode(KEY_3,KEY_SHIFT|KEY_MOD1)),
-                ImplReservedKey(vcl::KeyCode(KEY_4,KEY_SHIFT|KEY_MOD1)),
-                ImplReservedKey(vcl::KeyCode(KEY_5,KEY_SHIFT|KEY_MOD1)),
-                ImplReservedKey(vcl::KeyCode(KEY_6,KEY_SHIFT|KEY_MOD1)),
-                ImplReservedKey(vcl::KeyCode(KEY_7,KEY_SHIFT|KEY_MOD1)),
-                ImplReservedKey(vcl::KeyCode(KEY_8,KEY_SHIFT|KEY_MOD1)),
-                ImplReservedKey(vcl::KeyCode(KEY_9,KEY_SHIFT|KEY_MOD1)),
-                ImplReservedKey(vcl::KeyCode(KEY_0,KEY_SHIFT|KEY_MOD1)),
-                ImplReservedKey(vcl::KeyCode(KEY_ADD,KEY_SHIFT|KEY_MOD1))
+                vcl::KeyCode(KEY_1,KEY_SHIFT|KEY_MOD1),
+                vcl::KeyCode(KEY_2,KEY_SHIFT|KEY_MOD1),
+                vcl::KeyCode(KEY_3,KEY_SHIFT|KEY_MOD1),
+                vcl::KeyCode(KEY_4,KEY_SHIFT|KEY_MOD1),
+                vcl::KeyCode(KEY_5,KEY_SHIFT|KEY_MOD1),
+                vcl::KeyCode(KEY_6,KEY_SHIFT|KEY_MOD1),
+                vcl::KeyCode(KEY_7,KEY_SHIFT|KEY_MOD1),
+                vcl::KeyCode(KEY_8,KEY_SHIFT|KEY_MOD1),
+                vcl::KeyCode(KEY_9,KEY_SHIFT|KEY_MOD1),
+                vcl::KeyCode(KEY_0,KEY_SHIFT|KEY_MOD1),
+                vcl::KeyCode(KEY_ADD,KEY_SHIFT|KEY_MOD1)
 #endif
-            };
-            static ReservedKeys aKeys
-            (
-                &ImplReservedKeys[0],
-                SAL_N_ELEMENTS(ImplReservedKeys)
-            );
-            return &aKeys;
-        }
-    };
-
-    struct ImplReservedKeys
-        : public rtl::StaticAggregate<ReservedKeys, ImplReservedKeysImpl> {};
-}
+};
 
 extern "C" {
     typedef UnoWrapperBase* (*FN_TkCreateUnoWrapper)();
@@ -298,7 +268,7 @@ void Application::Abort( const OUString& rErrorText )
 
 sal_uLong Application::GetReservedKeyCodeCount()
 {
-    return ImplReservedKeys::get()->second;
+    return SAL_N_ELEMENTS(ReservedKeys);
 }
 
 const vcl::KeyCode* Application::GetReservedKeyCode( sal_uLong i )
@@ -306,7 +276,7 @@ const vcl::KeyCode* Application::GetReservedKeyCode( sal_uLong i )
     if( i >= GetReservedKeyCodeCount() )
         return nullptr;
     else
-        return &ImplReservedKeys::get()->first[i].mKeyCode;
+        return &ReservedKeys[i];
 }
 
 IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplEndAllPopupsMsg, void*, void )
