@@ -213,7 +213,11 @@ short AbstractJavaEditDialog_Impl::Execute()
 }
 
 IMPL_ABSTDLG_BASE(AbstractMailMergeDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractMailMergeCreateFromDlg_Impl);
+
+short AbstractMailMergeCreateFromDlg_Impl::Execute()
+{
+    return m_xDlg->run();
+}
 
 short AbstractMailMergeFieldConnectionsDlg_Impl::Execute()
 {
@@ -637,7 +641,7 @@ OUString AbstractMailMergeDlg_Impl::GetTargetURL() const
 
 bool AbstractMailMergeCreateFromDlg_Impl::IsThisDocument() const
 {
-    return pDlg->IsThisDocument();
+    return m_xDlg->IsThisDocument();
 }
 
 bool AbstractMailMergeFieldConnectionsDlg_Impl::IsUseExistingConnections() const
@@ -1039,10 +1043,9 @@ VclPtr<AbstractMailMergeDlg> SwAbstractDialogFactory_Impl::CreateMailMergeDlg(
     return VclPtr<AbstractMailMergeDlg_Impl>::Create( pDlg );
 }
 
-VclPtr<AbstractMailMergeCreateFromDlg> SwAbstractDialogFactory_Impl::CreateMailMergeCreateFromDlg(vcl::Window* pParent)
+VclPtr<AbstractMailMergeCreateFromDlg> SwAbstractDialogFactory_Impl::CreateMailMergeCreateFromDlg(weld::Window* pParent)
 {
-    VclPtr<SwMailMergeCreateFromDlg> pDlg = VclPtr<SwMailMergeCreateFromDlg>::Create(pParent);
-    return VclPtr<AbstractMailMergeCreateFromDlg_Impl>::Create(pDlg);
+    return VclPtr<AbstractMailMergeCreateFromDlg_Impl>::Create(o3tl::make_unique<SwMailMergeCreateFromDlg>(pParent));
 }
 
 VclPtr<AbstractMailMergeFieldConnectionsDlg> SwAbstractDialogFactory_Impl::CreateMailMergeFieldConnectionsDlg(weld::Window* pParent)
