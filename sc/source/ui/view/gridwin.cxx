@@ -645,7 +645,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, pDoc));
     if (comphelper::LibreOfficeKit::isActive())
         mpAutoFilterPopup->SetLOKNotifier(SfxViewShell::Current());
-    mpAutoFilterPopup->setOKAction(new AutoFilterAction(this, Normal));
+    mpAutoFilterPopup->setOKAction(new AutoFilterAction(this, AutoFilterMode::Normal));
     mpAutoFilterPopup->setPopupEndAction(
         new AutoFilterPopupEndAction(this, ScAddress(nCol, nRow, nTab)));
     std::unique_ptr<AutoFilterData> pData(new AutoFilterData);
@@ -700,20 +700,20 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     // Populate the menu.
     mpAutoFilterPopup->addMenuItem(
         ScResId(STR_MENU_SORT_ASC),
-        new AutoFilterAction(this, SortAscending));
+        new AutoFilterAction(this, AutoFilterMode::SortAscending));
     mpAutoFilterPopup->addMenuItem(
         ScResId(STR_MENU_SORT_DESC),
-        new AutoFilterAction(this, SortDescending));
+        new AutoFilterAction(this, AutoFilterMode::SortDescending));
     mpAutoFilterPopup->addSeparator();
     mpAutoFilterPopup->addMenuItem(
-        ScResId(SCSTR_TOP10FILTER), new AutoFilterAction(this, Top10));
+        ScResId(SCSTR_TOP10FILTER), new AutoFilterAction(this, AutoFilterMode::Top10));
     mpAutoFilterPopup->addMenuItem(
-        ScResId(SCSTR_FILTER_EMPTY), new AutoFilterAction(this, Empty));
+        ScResId(SCSTR_FILTER_EMPTY), new AutoFilterAction(this, AutoFilterMode::Empty));
     mpAutoFilterPopup->addMenuItem(
-        ScResId(SCSTR_FILTER_NOTEMPTY), new AutoFilterAction(this, NonEmpty));
+        ScResId(SCSTR_FILTER_NOTEMPTY), new AutoFilterAction(this, AutoFilterMode::NonEmpty));
     mpAutoFilterPopup->addSeparator();
     mpAutoFilterPopup->addMenuItem(
-        ScResId(SCSTR_STDFILTER), new AutoFilterAction(this, Custom));
+        ScResId(SCSTR_STDFILTER), new AutoFilterAction(this, AutoFilterMode::Custom));
 
     ScCheckListMenuWindow::Config aConfig;
     aConfig.mbAllowEmptySet = false;
@@ -752,8 +752,8 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
     svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();
     switch (eMode)
     {
-        case SortAscending:
-        case SortDescending:
+        case AutoFilterMode::SortAscending:
+        case AutoFilterMode::SortDescending:
         {
             SCCOL nCol = rPos.Col();
             ScSortParam aSortParam;
@@ -774,7 +774,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
             aSortParam.bInplace = true;
             aSortParam.maKeyState[0].bDoSort = true;
             aSortParam.maKeyState[0].nField = nCol;
-            aSortParam.maKeyState[0].bAscending = (eMode == SortAscending);
+            aSortParam.maKeyState[0].bAscending = (eMode == AutoFilterMode::SortAscending);
 
             for (size_t i = 1; i < aSortParam.GetSortKeyCount(); ++i)
                 aSortParam.maKeyState[i].bDoSort = false;
@@ -786,7 +786,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
             ;
     }
 
-    if (eMode == Custom)
+    if (eMode == AutoFilterMode::Custom)
     {
         ScRange aRange;
         pDBData->GetArea(aRange);
@@ -819,7 +819,7 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
 
         switch (eMode)
         {
-            case Normal:
+            case AutoFilterMode::Normal:
             {
                 pEntry->eOp = SC_EQUAL;
 
@@ -844,15 +844,15 @@ void ScGridWindow::UpdateAutoFilterFromMenu(AutoFilterMode eMode)
                 }
             }
             break;
-            case Top10:
+            case AutoFilterMode::Top10:
                 pEntry->eOp = SC_TOPVAL;
                 pEntry->GetQueryItem().meType = ScQueryEntry::ByString;
                 pEntry->GetQueryItem().maString = rPool.intern("10");
             break;
-            case Empty:
+            case AutoFilterMode::Empty:
                 pEntry->SetQueryByEmpty();
             break;
-            case NonEmpty:
+            case AutoFilterMode::NonEmpty:
                 pEntry->SetQueryByNonEmpty();
             break;
             default:
