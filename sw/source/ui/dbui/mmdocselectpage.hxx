@@ -27,32 +27,29 @@ class SwMailMergeWizard;
 
 class SwMailMergeDocSelectPage : public svt::OWizardPage
 {
-    VclPtr<RadioButton>        m_pCurrentDocRB;
-    VclPtr<RadioButton>        m_pNewDocRB;
-    VclPtr<RadioButton>        m_pLoadDocRB;
-    VclPtr<RadioButton>        m_pLoadTemplateRB;
-    VclPtr<RadioButton>        m_pRecentDocRB;
-
-    VclPtr<PushButton>         m_pBrowseDocPB;
-    VclPtr<PushButton>         m_pBrowseTemplatePB;
-
-    VclPtr<ListBox>            m_pRecentDocLB;
-
     OUString            m_sLoadFileName;
     OUString            m_sLoadTemplateName;
 
     VclPtr<SwMailMergeWizard>  m_pWizard;
 
-    DECL_LINK(DocSelectHdl, Button*, void);
-    DECL_LINK(FileSelectHdl, Button*, void);
+    std::unique_ptr<weld::RadioButton> m_xCurrentDocRB;
+    std::unique_ptr<weld::RadioButton> m_xNewDocRB;
+    std::unique_ptr<weld::RadioButton> m_xLoadDocRB;
+    std::unique_ptr<weld::RadioButton> m_xLoadTemplateRB;
+    std::unique_ptr<weld::RadioButton> m_xRecentDocRB;
+    std::unique_ptr<weld::Button> m_xBrowseDocPB;
+    std::unique_ptr<weld::Button> m_xBrowseTemplatePB;
+    std::unique_ptr<weld::ComboBox> m_xRecentDocLB;
+
+    DECL_LINK(DocSelectHdl, weld::ToggleButton&, void);
+    DECL_LINK(FileSelectHdl, weld::Button&, void);
 
     virtual bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason ) override;
 
 public:
-        SwMailMergeDocSelectPage( SwMailMergeWizard* _pParent);
-        virtual ~SwMailMergeDocSelectPage() override;
+    SwMailMergeDocSelectPage(SwMailMergeWizard* pWizard, TabPageParent pParent);
+    virtual ~SwMailMergeDocSelectPage() override;
     virtual void dispose() override;
-
 };
 
 #endif
