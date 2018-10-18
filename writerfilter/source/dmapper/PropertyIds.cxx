@@ -234,6 +234,7 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_REDLINE_DATE_TIME     :    sName = "RedlineDateTime"; break;
         case PROP_REDLINE_TYPE          :    sName = "RedlineType"; break;
         case PROP_REDLINE_REVERT_PROPERTIES: sName = "RedlineRevertProperties"; break;
+        case PROP_IS_PROTECTED          :    sName = "IsProtected"; break;
         case PROP_SIZE_PROTECTED        :    sName = "SizeProtected"; break;
         case PROP_POSITION_PROTECTED    :    sName = "PositionProtected"; break;
         case PROP_OPAQUE                :    sName = "Opaque"; break;
