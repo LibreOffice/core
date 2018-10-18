@@ -104,7 +104,7 @@ private:
 
 class ViewElementListProvider;
 
-class SchAttribTabDlg : public SfxTabDialog
+class SchAttribTabDlg : public SfxTabDialogController
 {
 private:
     sal_uInt16                   nDlgType;
@@ -119,18 +119,16 @@ private:
     double          m_fAxisMinorStepWidthForErrorBarDecimals;
     bool            m_bOKPressed;
 
-    virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage) override;
+    DECL_LINK(OKPressed, weld::Button&, void);
 
-    Link<Button*,void> m_aOriginalOKClickHdl;
-    DECL_LINK( OKPressed, Button*, void );
+    virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
 
 public:
-    SchAttribTabDlg(vcl::Window* pParent, const SfxItemSet* pAttr,
+    SchAttribTabDlg(weld::Window* pParent, const SfxItemSet* pAttr,
                     const ObjectPropertiesDialogParameter* pDialogParameter,
                     const ViewElementListProvider* pViewElementListProvider,
                     const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
     virtual ~SchAttribTabDlg() override;
-    virtual void dispose() override;
 
     //pSymbolShapeProperties: Properties to be set on the symbollist shapes
     //pAutoSymbolGraphic: Graphic to be shown if AutoSymbol gets selected
