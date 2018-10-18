@@ -139,16 +139,15 @@ public:
 
 };
 
-class SwMailMergeCreateFromDlg : public ModalDialog
+class SwMailMergeCreateFromDlg : public weld::GenericDialogController
 {
-    VclPtr<RadioButton> m_pThisDocRB;
+    std::unique_ptr<weld::RadioButton> m_xThisDocRB;
 public:
-    SwMailMergeCreateFromDlg(vcl::Window* pParent);
+    SwMailMergeCreateFromDlg(weld::Window* pParent);
     virtual ~SwMailMergeCreateFromDlg() override;
-    virtual void dispose() override;
     bool IsThisDocument() const
     {
-        return m_pThisDocRB->IsChecked();
+        return m_xThisDocRB->get_active();
     }
 };
 

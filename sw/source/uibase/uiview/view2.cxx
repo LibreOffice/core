@@ -1116,8 +1116,8 @@ void SwView::Execute(SfxRequest &rReq)
             {
                 SfxViewFrame* pTmpFrame = GetViewFrame();
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractMailMergeCreateFromDlg> pDlg( pFact->CreateMailMergeCreateFromDlg(&pTmpFrame->GetWindow()) );
-                if(RET_OK == pDlg->Execute())
+                ScopedVclPtr<AbstractMailMergeCreateFromDlg> pDlg(pFact->CreateMailMergeCreateFromDlg(pTmpFrame->GetWindow().GetFrameWeld()));
+                if (RET_OK == pDlg->Execute())
                     bUseCurrentDocument = pDlg->IsThisDocument();
                 else
                     break;
