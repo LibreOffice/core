@@ -52,6 +52,24 @@
       "revId": "487bb41c4926ba1605092b265ef7d64aa5b5579d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f1d235d_b43400e0",
+        "filename": "officecfg/registry/data/org/openoffice/Office/Common.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-18T18:17:12Z",
+      "side": 1,
+      "message": "Thank you!",
+      "parentUuid": "5f201791_18452918",
+      "revId": "487bb41c4926ba1605092b265ef7d64aa5b5579d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
