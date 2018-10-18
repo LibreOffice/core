@@ -419,10 +419,7 @@ bool isValidTarget(const Any& rTarget)
 
     ParagraphTarget aParagraphTarget;
 
-    if ((rTarget >>= aParagraphTarget) && aParagraphTarget.Shape.is())
-        return true;
-
-    return false;
+    return (rTarget >>= aParagraphTarget) && aParagraphTarget.Shape.is();
 }
 
 /// extract ooxml node type from a XAnimationNode.

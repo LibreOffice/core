@@ -72,11 +72,7 @@ bool IncludesCollection::exists(string filePath) {
     }
     DirContent dirContent = (*mapIter).second;
     DirContent::iterator dirIter = dirContent.find(fileName);
-    if (dirIter == dirContent.end()) {
-        return false;
-    } else {
-        return true;
-    };
+    return dirIter != dirContent.end();
 }
 
 extern "C" {

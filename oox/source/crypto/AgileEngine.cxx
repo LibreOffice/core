@@ -665,9 +665,7 @@ bool AgileEngine::setupEncryption(OUString const & rPassword)
     else
         setupEncryptionParameters({ 100000, 16, 256, 64, 16, OUString("AES"), OUString("ChainingModeCBC"), OUString("SHA512") });
 
-    if (!setupEncryptionKey(rPassword))
-        return false;
-    return true;
+    return setupEncryptionKey(rPassword);
 }
 
 void AgileEngine::setupEncryptionParameters(AgileEncryptionParameters const & rAgileEncryptionParameters)

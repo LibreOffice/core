@@ -127,23 +127,9 @@ OUString lcl_getDefaultValue(const OUString& sColumnDef)
     return OUString{};
 }
 
-bool lcl_isNullable(const OUString& sColumnDef)
-{
-    if (sColumnDef.indexOf("NOT NULL") >= 0)
-    {
-        return false;
-    }
-    return true;
-}
+bool lcl_isNullable(const OUString& sColumnDef) { return sColumnDef.indexOf("NOT NULL") < 0; }
 
-bool lcl_isPrimaryKey(const OUString& sColumnDef)
-{
-    if (sColumnDef.indexOf("PRIMARY KEY") >= 0)
-    {
-        return true;
-    }
-    return false;
-}
+bool lcl_isPrimaryKey(const OUString& sColumnDef) { return sColumnDef.indexOf("PRIMARY KEY") >= 0; }
 
 sal_Int32 lcl_getDataTypeFromHsql(const OUString& sTypeName)
 {

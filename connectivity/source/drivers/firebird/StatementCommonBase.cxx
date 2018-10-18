@@ -386,10 +386,7 @@ short OStatementCommonBase::getSqlInfoItem(char aInfoItem)
 
 bool OStatementCommonBase::isDDLStatement()
 {
-    if (getSqlInfoItem(isc_info_sql_stmt_type) == isc_info_sql_stmt_ddl)
-        return true;
-    else
-        return false;
+    return getSqlInfoItem(isc_info_sql_stmt_type) == isc_info_sql_stmt_ddl;
 }
 
 sal_Int32 OStatementCommonBase::getStatementChangeCount()

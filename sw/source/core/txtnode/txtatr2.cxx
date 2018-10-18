@@ -71,13 +71,8 @@ void SwTextCharFormat::ModifyNotification( const SfxPoolItem* pOld, const SfxPoo
 
 bool SwTextCharFormat::GetInfo( SfxPoolItem const & rInfo ) const
 {
-    if ( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTextNode ||
-        &m_pTextNode->GetNodes() != static_cast<SwAutoFormatGetDocNode const &>(rInfo).pNodes )
-    {
-        return true;
-    }
-
-    return false;
+    return RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTextNode ||
+        &m_pTextNode->GetNodes() != static_cast<SwAutoFormatGetDocNode const &>(rInfo).pNodes;
 }
 
 SwTextAttrNesting::SwTextAttrNesting( SfxPoolItem & i_rAttr,
@@ -184,13 +179,8 @@ void SwTextINetFormat::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew 
 
 bool SwTextINetFormat::GetInfo( SfxPoolItem& rInfo ) const
 {
-    if ( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTextNode ||
-        &m_pTextNode->GetNodes() != static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes )
-    {
-        return true;
-    }
-
-    return false;
+    return RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTextNode ||
+        &m_pTextNode->GetNodes() != static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes;
 }
 
 bool SwTextINetFormat::IsProtect( ) const
@@ -232,13 +222,8 @@ void SwTextRuby::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
 bool SwTextRuby::GetInfo( SfxPoolItem& rInfo ) const
 {
-    if( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTextNode ||
-        &m_pTextNode->GetNodes() != static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes )
-    {
-        return true;
-    }
-
-    return false;
+    return RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTextNode ||
+        &m_pTextNode->GetNodes() != static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes;
 }
 
 SwCharFormat* SwTextRuby::GetCharFormat()

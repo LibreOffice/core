@@ -53,9 +53,7 @@ static sal_Char tmpFilePattern[512];
 
 bool isFileUrl(const OString& fileName)
 {
-    if (fileName.startsWith("file://") )
-        return true;
-    return false;
+    return fileName.startsWith("file://");
 }
 
 OString convertToAbsoluteSystemPath(const OString& fileName)

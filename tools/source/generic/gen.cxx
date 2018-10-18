@@ -192,10 +192,7 @@ bool tools::Rectangle::IsInside( const Point& rPoint ) const
 
 bool tools::Rectangle::IsInside( const tools::Rectangle& rRect ) const
 {
-    if ( IsInside( rRect.TopLeft() ) && IsInside( rRect.BottomRight() ) )
-        return true;
-    else
-        return false;
+    return IsInside( rRect.TopLeft() ) && IsInside( rRect.BottomRight() );
 }
 
 bool tools::Rectangle::IsOver( const tools::Rectangle& rRect ) const

@@ -535,10 +535,7 @@ namespace pcr
         std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr, // TODO/eForms: proper parent
                                                        VclMessageType::Question, VclButtonsType::YesNo,
                                                        sConfirmation));
-        if (xQueryBox->run() != RET_YES)
-            return false;
-
-        return true;
+        return xQueryBox->run() == RET_YES;
     }
 
     bool XSDValidationPropertyHandler::implDoRemoveCurrentDataType()

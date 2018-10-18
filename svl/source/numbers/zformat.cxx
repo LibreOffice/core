@@ -4212,14 +4212,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
     bool bSign;
     if (fNumber < 0.0)
     {
-        if (nIx == 0) // Not in the ones at the back
-        {
-            bSign = true; // Formats
-        }
-        else
-        {
-            bSign = false;
-        }
+        bSign = (nIx == 0); // Not in the ones at the back;
         fNumber = -fNumber;
     }
     else

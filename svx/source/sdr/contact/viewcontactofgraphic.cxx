@@ -411,10 +411,7 @@ namespace sdr
             const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject();
 
             // draft when no graphic
-            if(GraphicType::NONE == rGraphicObject.GetType() || GraphicType::Default == rGraphicObject.GetType())
-               return true;
-
-            return false;
+            return GraphicType::NONE == rGraphicObject.GetType() || GraphicType::Default == rGraphicObject.GetType();
         }
 
     } // end of namespace contact

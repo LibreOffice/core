@@ -2846,20 +2846,14 @@ const FontModel& StylesBuffer::getDefaultFontModel() const
 
 bool StylesBuffer::equalBorders( sal_Int32 nBorderId1, sal_Int32 nBorderId2 )
 {
-    if( nBorderId1 == nBorderId2 )
-        return true;
-
     // in OOXML, borders are assumed to be unique
-    return false;
+    return nBorderId1 == nBorderId2;
 }
 
 bool StylesBuffer::equalFills( sal_Int32 nFillId1, sal_Int32 nFillId2 )
 {
-    if( nFillId1 == nFillId2 )
-        return true;
-
     // in OOXML, fills are assumed to be unique
-    return false;
+    return nFillId1 == nFillId2;
 }
 
 OUString StylesBuffer::getDefaultStyleName() const

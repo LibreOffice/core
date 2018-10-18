@@ -990,7 +990,7 @@ namespace
 
 bool lcl_isFormatObjectCommand( const OUString& aCommand )
 {
-    if(    aCommand == "MainTitle"
+    return aCommand == "MainTitle"
         || aCommand == "SubTitle"
         || aCommand == "XTitle"
         || aCommand == "YTitle"
@@ -1036,12 +1036,7 @@ bool lcl_isFormatObjectCommand( const OUString& aCommand )
         || aCommand == "FormatStockLoss"
         || aCommand == "FormatStockGain"
         || aCommand == "FormatMajorGrid"
-        || aCommand == "FormatMinorGrid"
-        )
-        return true;
-
-    // else
-    return false;
+        || aCommand == "FormatMinorGrid";
 }
 
 } // anonymous namespace

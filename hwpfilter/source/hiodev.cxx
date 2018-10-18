@@ -270,10 +270,7 @@ void HMemIODev::flush()
 
 bool HMemIODev::state() const
 {
-    if (pos <= length)
-        return false;
-    else
-        return true;
+    return pos > length;
 }
 
 bool HMemIODev::setCompressed(bool )

@@ -306,12 +306,9 @@ void SwFormatField::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 bool SwFormatField::GetInfo( SfxPoolItem& rInfo ) const
 {
     const SwTextNode* pTextNd;
-    if( RES_AUTOFMT_DOCNODE != rInfo.Which() ||
+    return RES_AUTOFMT_DOCNODE != rInfo.Which() ||
         !mpTextField || nullptr == ( pTextNd = mpTextField->GetpTextNode() ) ||
-        &pTextNd->GetNodes() != static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes )
-        return true;
-
-    return false;
+        &pTextNd->GetNodes() != static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes;
 }
 
 bool SwFormatField::IsFieldInDoc() const

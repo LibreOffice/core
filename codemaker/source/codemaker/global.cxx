@@ -214,10 +214,7 @@ bool makeValidTypeFile(const OString& targetFileName, const OString& tmpFileName
 
 bool removeTypeFile(const OString& fileName)
 {
-    if ( !unlink(fileName.getStr()) )
-        return true;
-
-    return false;
+    return unlink(fileName.getStr()) == 0;
 }
 
 OUString convertToFileUrl(const OString& fileName)
@@ -269,10 +266,7 @@ FileStream::~FileStream()
 
 bool FileStream::isValid() const
 {
-    if ( m_file )
-        return true;
-
-    return false;
+    return m_file != nullptr;
 }
 
 void FileStream::createTempFile(const OString& sPath)

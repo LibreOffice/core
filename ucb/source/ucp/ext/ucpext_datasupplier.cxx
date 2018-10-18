@@ -253,11 +253,8 @@ namespace ucb { namespace ucp { namespace ext
     {
         ::osl::ClearableGuard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-        if ( m_pImpl->m_aResults.size() > i_nIndex )
-            // result already present.
-            return true;
-
-        return false;
+        // true if result already present.
+        return m_pImpl->m_aResults.size() > i_nIndex;
     }
 
 

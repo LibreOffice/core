@@ -119,9 +119,7 @@ int HWPFile::SetState(int errcode)
 
 bool HWPFile::Read1b(unsigned char &out)
 {
-    if (!hiodev || !hiodev->read1b(out))
-        return false;
-    return true;
+    return hiodev && hiodev->read1b(out);
 }
 
 bool HWPFile::Read1b(char &out)

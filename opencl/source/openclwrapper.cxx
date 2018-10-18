@@ -760,10 +760,7 @@ void findDeviceInfoFromDeviceId(cl_device_id aDeviceId, size_t& rDeviceId, size_
 
 bool canUseOpenCL()
 {
-    if (getenv("SAL_DISABLE_OPENCL") || !officecfg::Office::Common::Misc::UseOpenCL::get())
-        return false;
-
-    return true;
+    return !getenv("SAL_DISABLE_OPENCL") && officecfg::Office::Common::Misc::UseOpenCL::get();
 }
 
 bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEvaluation, OUString& rOutSelectedDeviceVersionIDString)

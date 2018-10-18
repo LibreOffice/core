@@ -977,9 +977,7 @@ OUString Sane::GetOptionUnitName( int n )
 bool Sane::ActivateButtonOption( int n )
 {
     SANE_Status nStatus = ControlOption( n, SANE_ACTION_SET_VALUE, nullptr );
-    if( nStatus != SANE_STATUS_GOOD )
-        return false;
-    return true;
+    return nStatus == SANE_STATUS_GOOD;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

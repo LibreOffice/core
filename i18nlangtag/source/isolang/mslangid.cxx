@@ -475,14 +475,12 @@ bool MsLangId::isNonLatinWestern( LanguageType nLang )
 // static
 bool MsLangId::isLegacy( LanguageType nLang )
 {
-    if (nLang.anyOf(
+    return nLang.anyOf(
          LANGUAGE_SERBIAN_CYRILLIC_SAM,
-         LANGUAGE_SERBIAN_LATIN_SAM))
+         LANGUAGE_SERBIAN_LATIN_SAM);
             /* TODO: activate once dictionary was renamed from pap-AN to
              * pap-CW, or the pap-CW one supports also pap-AN, see fdo#44112 */
         //case LANGUAGE_PAPIAMENTU:
-            return true;
-    return false;
 }
 
 

@@ -52,46 +52,31 @@ DateTime& DateTime::operator =( const css::util::DateTime& rUDateTime )
 
 bool DateTime::IsBetween( const DateTime& rFrom, const DateTime& rTo ) const
 {
-    if ( (*this >= rFrom) && (*this <= rTo) )
-        return true;
-    else
-        return false;
+    return (*this >= rFrom) && (*this <= rTo);
 }
 
 bool DateTime::operator >( const DateTime& rDateTime ) const
 {
-    if ( (Date::operator>( rDateTime )) ||
-         (Date::operator==( rDateTime ) && tools::Time::operator>( rDateTime )) )
-        return true;
-    else
-        return false;
+    return (Date::operator>( rDateTime )) ||
+         (Date::operator==( rDateTime ) && tools::Time::operator>( rDateTime ));
 }
 
 bool DateTime::operator <( const DateTime& rDateTime ) const
 {
-    if ( (Date::operator<( rDateTime )) ||
-         (Date::operator==( rDateTime ) && tools::Time::operator<( rDateTime )) )
-        return true;
-    else
-        return false;
+    return (Date::operator<( rDateTime )) ||
+         (Date::operator==( rDateTime ) && tools::Time::operator<( rDateTime ));
 }
 
 bool DateTime::operator >=( const DateTime& rDateTime ) const
 {
-    if ( (Date::operator>( rDateTime )) ||
-         (Date::operator==( rDateTime ) && tools::Time::operator>=( rDateTime )) )
-        return true;
-    else
-        return false;
+    return (Date::operator>( rDateTime )) ||
+         (Date::operator==( rDateTime ) && tools::Time::operator>=( rDateTime ));
 }
 
 bool DateTime::operator <=( const DateTime& rDateTime ) const
 {
-    if ( (Date::operator<( rDateTime )) ||
-         (Date::operator==( rDateTime ) && tools::Time::operator<=( rDateTime )) )
-        return true;
-    else
-        return false;
+    return (Date::operator<( rDateTime )) ||
+         (Date::operator==( rDateTime ) && tools::Time::operator<=( rDateTime ));
 }
 
 sal_Int64 DateTime::GetSecFromDateTime( const Date& rDate ) const

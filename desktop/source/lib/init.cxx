@@ -1136,13 +1136,9 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                                                            std::stringstream aOldStream(elem.second);
                                                            boost::property_tree::read_json(aOldStream, aOldTree);
                                                            const unsigned nOldDialogId = aOldTree.get<unsigned>("id", 0);
-                                                           if (aOldTree.get<std::string>("action", "") == "invalidate" &&
+                                                           return aOldTree.get<std::string>("action", "") == "invalidate" &&
                                                                nLOKWindowId == nOldDialogId &&
-                                                               aOldTree.get<std::string>("rectangle", "").empty())
-                                                           {
-                                                               return true;
-                                                           }
-                                                           return false;
+                                                               aOldTree.get<std::string>("rectangle", "").empty();
                                                        });
 
                         // we found a invalidate-all window callback

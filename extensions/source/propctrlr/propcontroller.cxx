@@ -401,10 +401,7 @@ namespace pcr
         m_bSuspendingPropertyHandlers = true;
         bool bHandlerVeto = !suspendPropertyHandlers_nothrow( true );
         m_bSuspendingPropertyHandlers = false;
-        if ( bHandlerVeto )
-            return false;
-
-        return true;
+        return !bHandlerVeto;
     }
 
 

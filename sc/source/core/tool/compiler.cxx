@@ -5811,9 +5811,7 @@ bool ScCompiler::SkipImplicitIntersectionOptimization(const FormulaToken* token)
         return true;
     }
     formula::ParamClass returnType = ScParameterClassification::GetParameterType( token, SAL_MAX_UINT16 );
-    if( returnType == formula::Reference )
-        return true;
-    return false;
+    return returnType == formula::Reference;
 }
 
 void ScCompiler::HandleIIOpCode(FormulaToken* token, FormulaToken*** pppToken, sal_uInt8 nNumParams)
