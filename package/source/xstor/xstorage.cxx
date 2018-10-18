@@ -1985,7 +1985,7 @@ void OStorage::BroadcastTransaction( sal_Int8 nMessage )
                 case STOR_MESS_PRECOMMIT:
                        static_cast<embed::XTransactionListener*>( pIterator.next( ) )->preCommit( aSource );
                     break;
-                case STOR_MESS_COMMITED:
+                case STOR_MESS_COMMITTED:
                        static_cast<embed::XTransactionListener*>( pIterator.next( ) )->commited( aSource );
                     break;
                 case STOR_MESS_PREREVERT:
@@ -3608,7 +3608,7 @@ void SAL_CALL OStorage::commit()
     if ( xParentModif.is() )
         xParentModif->setModified( true );
 
-    BroadcastTransaction( STOR_MESS_COMMITED );
+    BroadcastTransaction( STOR_MESS_COMMITTED );
 }
 
 void SAL_CALL OStorage::revert()
