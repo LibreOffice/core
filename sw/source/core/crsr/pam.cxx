@@ -611,6 +611,16 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
         {
             bRet = true;
         }
+        else
+        {
+            const SwSectionNode* pParentSectionNd = pNd->FindSectionNode();
+            if ( pParentSectionNd != nullptr
+                 && ( pParentSectionNd->GetSection().IsProtectFlag()
+                      || ( bFormView && !pParentSectionNd->GetSection().IsEditInReadonlyFlag()) ) )
+            {
+                bRet = true;
+            }
+        }
     }
 
     if ( !bRet
@@ -710,13 +720,22 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
             bRet = true;
         else
         {
-            // Form protection case
-            bool bAtStartA = pA != nullptr && pA->GetMarkStart() == *GetPoint();
-            bool bAtStartB = pB != nullptr && pB->GetMarkStart() == *GetMark();
-            bRet = ( pA != pB ) || bAtStartA || bAtStartB;
-            bool bProtectForm = pDoc->GetDocumentSettingManager().get( DocumentSettingId::PROTECT_FORM );
-            if ( bProtectForm )
-                bRet |= ( pA == nullptr || pB == nullptr );
+            bool bAtStartA = (pA != nullptr) && (pA->GetMarkStart() == *GetPoint());
+            bool bAtStartB = (pB != nullptr) && (pB->GetMarkStart() == *GetMark());
+
+            if ((pA == pB) && (bAtStartA != bAtStartB))
+                bRet = true;
+            else if (pA != pB)
+            {
+                // If both points are either outside or at marks edges (i.e. selection either
+                // touches fields, or fully encloses it), then don't disable editing
+                bRet = !( ( !pA || bAtStartA ) && ( !pB || bAtStartB ) );
+            }
+            if( !bRet && pDoc->GetDocumentSettingManager().get( DocumentSettingId::PROTECT_FORM ) && (pA || pB) )
+            {
+                // Form protection case
+                bRet = ( pA == nullptr ) || ( pB == nullptr ) || bAtStartA || bAtStartB;
+            }
         }
     }
     else

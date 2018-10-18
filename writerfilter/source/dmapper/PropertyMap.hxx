@@ -246,6 +246,9 @@ class SectionPropertyMap : public PropertyMap
     bool                                    m_bFirstPageFooterLinkToPrevious;
 
     void ApplyProperties_(css::uno::Reference<css::beans::XPropertySet> const& xStyle);
+    /// Check if document is protected. If so, ensure a section exists, and apply its protected value.
+    void ApplyProtectionProperties( css::uno::Reference< css::beans::XPropertySet >& xSection, DomainMapper_Impl& rDM_Impl );
+
     css::uno::Reference<css::text::XTextColumns> ApplyColumnProperties(css::uno::Reference<css::beans::XPropertySet> const& xFollowPageStyle,
                                                                        DomainMapper_Impl& rDM_Impl);
     void CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl );

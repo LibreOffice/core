@@ -1533,9 +1533,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
     AttrOutput().SectFootnoteEndnotePr();
 
     // forms
-    bool formProtection = m_pDoc->getIDocumentSettingAccess().get( DocumentSettingId::PROTECT_FORM );
-    formProtection |= rSepInfo.IsProtected();
-    AttrOutput().SectionFormProtection( formProtection );
+    AttrOutput().SectionFormProtection( rSepInfo.IsProtected() );
 
     // line numbers
     const SwLineNumberInfo& rLnNumInfo = m_pDoc->GetLineNumberInfo();
