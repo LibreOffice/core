@@ -92,51 +92,41 @@ public:
 };
 
 /// Dialog implementing the sending as email of the result document.
-class SwMMResultEmailDialog : public SfxModalDialog
+class SwMMResultEmailDialog : public SfxDialogController
 {
-    VclPtr<FixedText>      m_pMailToFT;
-    VclPtr<ListBox>        m_pMailToLB;
-    VclPtr<PushButton>     m_pCopyToPB;
-
-    VclPtr<FixedText>      m_pSubjectFT;
-    VclPtr<Edit>           m_pSubjectED;
-
-    VclPtr<FixedText>      m_pSendAsFT;
-    VclPtr<ListBox>        m_pSendAsLB;
-    VclPtr<PushButton>     m_pSendAsPB;
-
-    VclPtr<VclContainer>   m_pAttachmentGroup;
-    VclPtr<Edit>           m_pAttachmentED;
-
-    VclPtr<RadioButton>    m_pSendAllRB;
-
-    VclPtr<RadioButton>    m_pFromRB;
-    VclPtr<NumericField>   m_pFromNF;
-    VclPtr<FixedText>      m_pToFT;
-    VclPtr<NumericField>   m_pToNF;
-
-    VclPtr<Button>         m_pOKButton;
-
     OUString const  m_sConfigureMail;
-
     OUString        m_sCC;
     OUString        m_sBCC;
-
     OUString        m_sBody;
 
-    DECL_LINK(CopyToHdl_Impl, Button*, void);
-    DECL_LINK(SendTypeHdl_Impl, ListBox&, void);
-    DECL_LINK(SendAsHdl_Impl, Button*, void);
-    DECL_LINK(SendDocumentsHdl_Impl, Button*, void);
-    DECL_LINK(DocumentSelectionHdl_Impl, Button*, void);
+    std::unique_ptr<weld::Label> m_xMailToFT;
+    std::unique_ptr<weld::ComboBox> m_xMailToLB;
+    std::unique_ptr<weld::Button> m_xCopyToPB;
+    std::unique_ptr<weld::Label> m_xSubjectFT;
+    std::unique_ptr<weld::Entry> m_xSubjectED;
+    std::unique_ptr<weld::Label> m_xSendAsFT;
+    std::unique_ptr<weld::ComboBox> m_xSendAsLB;
+    std::unique_ptr<weld::Button> m_xSendAsPB;
+    std::unique_ptr<weld::Widget> m_xAttachmentGroup;
+    std::unique_ptr<weld::Entry> m_xAttachmentED;
+    std::unique_ptr<weld::RadioButton> m_xSendAllRB;
+    std::unique_ptr<weld::RadioButton> m_xFromRB;
+    std::unique_ptr<weld::SpinButton> m_xFromNF;
+    std::unique_ptr<weld::Label> m_xToFT;
+    std::unique_ptr<weld::SpinButton> m_xToNF;
+    std::unique_ptr<weld::Button> m_xOKButton;
+
+    DECL_LINK(CopyToHdl_Impl, weld::Button&, void);
+    DECL_LINK(SendTypeHdl_Impl, weld::ComboBox&, void);
+    DECL_LINK(SendAsHdl_Impl, weld::Button&, void);
+    DECL_LINK(SendDocumentsHdl_Impl, weld::Button&, void);
+    DECL_LINK(DocumentSelectionHdl_Impl, weld::ToggleButton&, void);
 
     void FillInEmailSettings();
 
 public:
-    SwMMResultEmailDialog();
+    SwMMResultEmailDialog(weld::Window *pParent);
     virtual ~SwMMResultEmailDialog() override;
-
-    virtual void dispose() override;
 };
 
 struct SwMailDescriptor

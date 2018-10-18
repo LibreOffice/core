@@ -1218,10 +1218,10 @@ void SwAbstractDialogFactory_Impl::ExecuteMMResultPrintDialog(weld::Window* pPar
     aDialog.run();
 }
 
-void SwAbstractDialogFactory_Impl::ExecuteMMResultEmailDialog()
+void SwAbstractDialogFactory_Impl::ExecuteMMResultEmailDialog(weld::Window* pParent)
 {
-    ScopedVclPtrInstance<SwMMResultEmailDialog> pDialog;
-    pDialog->Execute();
+    SwMMResultEmailDialog aDialog(pParent);
+    aDialog.run();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
