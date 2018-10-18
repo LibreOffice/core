@@ -49,7 +49,7 @@ public:
 
     virtual void SetForwardKey(bool bEnable) override;
 
-    virtual const SystemEnvData* GetSystemData() const override;
+    virtual const SystemEnvData* GetSystemData() const override { return &m_aSystemData; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
