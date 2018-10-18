@@ -64,8 +64,6 @@ short AbstractSdCustomShowDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
-IMPL_ABSTDLG_BASE(SdAbstractTabDialog_Impl);
-
 short SdPresLayoutTemplateDlg_Impl::Execute()
 {
     return m_xDlg->execute();
@@ -161,32 +159,6 @@ bool AbstractSdCustomShowDlg_Impl::IsModified() const
 bool AbstractSdCustomShowDlg_Impl::IsCustomShow() const
 {
     return m_xDlg->IsCustomShow();
-}
-
-void SdAbstractTabDialog_Impl::SetCurPageId( const OString& rName )
-{
-    pDlg->SetCurPageId( rName );
-}
-
-const SfxItemSet* SdAbstractTabDialog_Impl::GetOutputItemSet() const
-{
-    return pDlg->GetOutputItemSet();
-}
-
-const sal_uInt16* SdAbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
-{
-    return pDlg->GetInputRanges( pItem );
-}
-
-void SdAbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
-{
-     pDlg->SetInputSet( pInSet );
-}
-
-//From class Window.
-void SdAbstractTabDialog_Impl::SetText( const OUString& rStr )
-{
-    pDlg->SetText( rStr );
 }
 
 short SdAbstractTabController_Impl::Execute()
