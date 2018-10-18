@@ -355,7 +355,7 @@ std::vector<sal_uInt8> LwpGraphicObject::GetRawGrafData()
  * @param   pGrafData   the array to store the image data. the pointer need to be deleted outside.
  * @return  the length of the image data.
  */
-sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
+sal_uInt32 LwpGraphicObject::GetGrafData(std::unique_ptr<sal_uInt8[]>& pGrafData)
 {
     // create graphic object
     // if small file, use the compressed stream for BENTO
@@ -386,8 +386,8 @@ sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
         // read image data
         sal_uInt32 nDataLen = pGrafStream->TellEnd();
 
-        pGrafData = new sal_uInt8 [nDataLen];
-        pMemGrafStream->ReadBytes(pGrafData, nDataLen);
+        pGrafData.reset(new sal_uInt8 [nDataLen]);
+        pMemGrafStream->ReadBytes(pGrafData.get(), nDataLen);
 
         delete pMemGrafStream;
         pMemGrafStream = nullptr;
@@ -643,7 +643,7 @@ void LwpGraphicObject::CreateGrafObject()
  */
 void LwpGraphicObject::XFConvertEquation(XFContentContainer * pCont)
 {
-    sal_uInt8* pGrafData = nullptr;
+    std::unique_ptr<sal_uInt8[]> pGrafData;
     sal_uInt32 nDataLen = GetGrafData(pGrafData);
     if(pGrafData)
     {
@@ -687,11 +687,7 @@ void LwpGraphicObject::XFConvertEquation(XFContentContainer * pCont)
 
         pXFPara->Add(pXFNote);
         pCont->Add(pXFPara);
-
-        delete [] pGrafData;
-        pGrafData = nullptr;
     }
-
 }
 
 void LwpGraphicObject::GetGrafOrgSize(double & rWidth, double & rHeight)
