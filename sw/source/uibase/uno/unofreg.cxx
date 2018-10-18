@@ -62,14 +62,6 @@ SAL_DLLPUBLIC_EXPORT void * sw_component_getFactory(
                 SwTextDocument_createInstance,
                 SwTextDocument_getSupportedServiceNames() );
         }
-        else if( SwUnoModule_getImplementationName().equalsAsciiL(
-                                                    pImplName, nImplNameLen ) )
-        {
-            xFactory = ::cppu::createSingleFactory( xMSF,
-                SwUnoModule_getImplementationName(),
-                SwUnoModule_createInstance,
-                SwUnoModule_getSupportedServiceNames() );
-        }
 
         if( xFactory.is())
         {
