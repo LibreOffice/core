@@ -60,7 +60,7 @@ OUString lclConvertToCanonicalName(const OUString& rFileName)
     return aBuffer.makeStringAndClear();
 }
 
-} // end anonymouse namespace
+} // end anonymous namespace
 
 CommandImageResolver::CommandImageResolver()
 {

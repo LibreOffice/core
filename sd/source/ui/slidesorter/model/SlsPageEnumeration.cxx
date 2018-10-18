@@ -67,7 +67,7 @@ private:
     void AdvanceToNextValidElement();
 };
 
-} // end of anonymouse namespace
+} // end of anonymous namespace
 
 namespace sd { namespace slidesorter { namespace model {
 
