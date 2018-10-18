@@ -1078,6 +1078,17 @@ public:
         m_xNotebook->RemovePage(m_xNotebook->GetPageId(rIdent));
     }
 
+    virtual void append_page(const OString& rIdent, const OUString& rLabel) override
+    {
+        sal_uInt16 nNewPageCount = m_xNotebook->GetPageCount() + 1;
+        sal_uInt16 nNewPageId = nNewPageCount;
+        m_xNotebook->InsertPage(nNewPageId, rLabel, TAB_APPEND);
+        VclPtrInstance<TabPage> xPage(m_xNotebook);
+        xPage->Show();
+        m_xNotebook->SetTabPage(nNewPageId, xPage);
+        m_xNotebook->SetPageName(nNewPageId, rIdent);
+    }
+
     virtual int get_n_pages() const override
     {
         return m_xNotebook->GetPageCount();
