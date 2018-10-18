@@ -556,7 +556,9 @@ public:
      */
     bool (*insertCertificate) (LibreOfficeKitDocument* pThis,
                                 const unsigned char* pCertificateBinary,
-                                const int pCertificateBinarySize);
+                                const int pCertificateBinarySize,
+                                const unsigned char* pPrivateKeyBinary,
+                                const int nPrivateKeyBinarySize);
     /**
      *  Verify signature of the document.
      *
