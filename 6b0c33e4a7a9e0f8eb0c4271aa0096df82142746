@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f201791_759428e9",
+        "filename": "svx/source/svdraw/svdlayer.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-10-18T11:47:42Z",
+      "side": 1,
+      "message": "Regina, look at the old version of the code here, sorry I meant SetStandardLayer()",
+      "revId": "6b0c33e4a7a9e0f8eb0c4271aa0096df82142746",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
