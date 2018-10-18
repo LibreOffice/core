@@ -105,7 +105,7 @@ void Test::testMetaGenerator()
         comphelper::GenericPropertySet_CreateInstance(
             new comphelper::PropertySetInfo(aInfoMap)));
 
-    struct {
+    static struct {
         char const*const generator;
         char const*const buildId;
         sal_uInt16 const result;

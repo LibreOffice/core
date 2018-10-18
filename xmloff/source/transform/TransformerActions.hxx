@@ -120,10 +120,10 @@ class XMLTransformerActions :
                             NameHash_Impl, NameHash_Impl >
 {
 public:
-    explicit XMLTransformerActions( XMLTransformerActionInit *pInit );
+    explicit XMLTransformerActions( XMLTransformerActionInit const *pInit );
     ~XMLTransformerActions();
 
-    void Add( XMLTransformerActionInit *pInit );
+    void Add( XMLTransformerActionInit const *pInit );
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERACTIONS_HXX

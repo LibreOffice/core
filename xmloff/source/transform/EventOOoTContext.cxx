@@ -39,13 +39,13 @@ class XMLTransformerOOoEventMap_Impl:
 {
 public:
 
-    void AddMap( XMLTransformerEventMapEntry *pInit );
+    void AddMap( XMLTransformerEventMapEntry const *pInit );
 
-    XMLTransformerOOoEventMap_Impl( XMLTransformerEventMapEntry *pInit,
-                                       XMLTransformerEventMapEntry *pInit2  );
+    XMLTransformerOOoEventMap_Impl( XMLTransformerEventMapEntry const *pInit,
+                                       XMLTransformerEventMapEntry const *pInit2  );
 };
 
-void XMLTransformerOOoEventMap_Impl::AddMap( XMLTransformerEventMapEntry *pInit )
+void XMLTransformerOOoEventMap_Impl::AddMap( XMLTransformerEventMapEntry const *pInit )
 {
     XMLTransformerOOoEventMap_Impl::key_type aKey;
     XMLTransformerOOoEventMap_Impl::mapped_type aData;
@@ -70,8 +70,8 @@ void XMLTransformerOOoEventMap_Impl::AddMap( XMLTransformerEventMapEntry *pInit 
 }
 
 XMLTransformerOOoEventMap_Impl::XMLTransformerOOoEventMap_Impl(
-        XMLTransformerEventMapEntry *pInit,
-        XMLTransformerEventMapEntry *pInit2 )
+        XMLTransformerEventMapEntry const *pInit,
+        XMLTransformerEventMapEntry const *pInit2 )
 {
     if( pInit )
         AddMap( pInit );

@@ -47,24 +47,24 @@ enum XMLPropOOOTransformerAction
     XML_ATACTION_WRITER_BACK_GRAPHIC_TRANSPARENCY
 };
 
-extern XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[];
-extern XMLTransformerActionInit aGraphicPropertyOOoElemActionTable[];
-extern XMLTransformerActionInit aDrawingPagePropertyOOoAttrActionTable[];
-extern XMLTransformerActionInit aPageLayoutPropertyOOoAttrActionTable[];
-extern XMLTransformerActionInit aHeaderFooterPropertyOOoAttrActionTable[];
-extern XMLTransformerActionInit aTextPropertyOOoAttrActionTable[];
-extern XMLTransformerActionInit aTextPropertyOOoElemActionTable[];
-extern XMLTransformerActionInit aParagraphPropertyOOoAttrActionTable[];
-extern XMLTransformerActionInit aParagraphPropertyOOoElemActionTable[];
-extern XMLTransformerActionInit aSectionPropertyOOoAttrActionTable[];
-extern XMLTransformerActionInit aTablePropertyOOoAttrActionTable[];
-extern XMLTransformerActionInit aTableColumnPropertyOOoAttrActionTable[];
-extern XMLTransformerActionInit aTableRowPropertyOOoAttrActionTable[];
-extern XMLTransformerActionInit aTableCellPropertyOOoAttrActionTable[];
-extern XMLTransformerActionInit aTableCellPropertyOOoElemActionTable[];
-extern XMLTransformerActionInit aListLevelPropertyOOoAttrActionTable[];
-extern XMLTransformerActionInit aChartPropertyOOoAttrActionTable[];
-extern XMLTransformerActionInit aChartPropertyOOoElemActionTable[];
+extern XMLTransformerActionInit const aGraphicPropertyOOoAttrActionTable[];
+extern XMLTransformerActionInit const aGraphicPropertyOOoElemActionTable[];
+extern XMLTransformerActionInit const aDrawingPagePropertyOOoAttrActionTable[];
+extern XMLTransformerActionInit const aPageLayoutPropertyOOoAttrActionTable[];
+extern XMLTransformerActionInit const aHeaderFooterPropertyOOoAttrActionTable[];
+extern XMLTransformerActionInit const aTextPropertyOOoAttrActionTable[];
+extern XMLTransformerActionInit const aTextPropertyOOoElemActionTable[];
+extern XMLTransformerActionInit const aParagraphPropertyOOoAttrActionTable[];
+extern XMLTransformerActionInit const aParagraphPropertyOOoElemActionTable[];
+extern XMLTransformerActionInit const aSectionPropertyOOoAttrActionTable[];
+extern XMLTransformerActionInit const aTablePropertyOOoAttrActionTable[];
+extern XMLTransformerActionInit const aTableColumnPropertyOOoAttrActionTable[];
+extern XMLTransformerActionInit const aTableRowPropertyOOoAttrActionTable[];
+extern XMLTransformerActionInit const aTableCellPropertyOOoAttrActionTable[];
+extern XMLTransformerActionInit const aTableCellPropertyOOoElemActionTable[];
+extern XMLTransformerActionInit const aListLevelPropertyOOoAttrActionTable[];
+extern XMLTransformerActionInit const aChartPropertyOOoAttrActionTable[];
+extern XMLTransformerActionInit const aChartPropertyOOoElemActionTable[];
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_PROPERTYACTIONSOOO_HXX
 

@@ -21,7 +21,7 @@
 #include <xmloff/xmlnmspe.hxx>
 
 
-XMLTransformerEventMapEntry aTransformerEventMap[] =
+XMLTransformerEventMapEntry const aTransformerEventMap[] =
 {
     { XML_NAMESPACE_DOM,    "select",   "on-select" },
     { XML_NAMESPACE_OFFICE, "insert-start", "on-insert-start" },
@@ -92,7 +92,7 @@ XMLTransformerEventMapEntry aTransformerEventMap[] =
     { 0, nullptr, nullptr }
 };
 
-XMLTransformerEventMapEntry aFormTransformerEventMap[] =
+XMLTransformerEventMapEntry const aFormTransformerEventMap[] =
 {
     { XML_NAMESPACE_DOM,    "mouseover",    "on-mouseover" },
     { XML_NAMESPACE_DOM,    "mouseout", "on-mouseout" },

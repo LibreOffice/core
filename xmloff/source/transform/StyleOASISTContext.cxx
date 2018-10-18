@@ -920,7 +920,7 @@ bool XMLStyleOASISTContext::IsPersistent() const
 XMLTransformerActions *XMLStyleOASISTContext::CreateTransformerActions(
         sal_uInt16 nType )
 {
-    XMLTransformerActionInit *pInit = nullptr;
+    XMLTransformerActionInit const *pInit = nullptr;
 
     switch( nType )
     {

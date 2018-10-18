@@ -44,10 +44,10 @@ class XMLTransformerOASISEventMap_Impl:
                             NameHash_Impl, NameHash_Impl >
 {
 public:
-    explicit XMLTransformerOASISEventMap_Impl( XMLTransformerEventMapEntry *pInit );
+    explicit XMLTransformerOASISEventMap_Impl( XMLTransformerEventMapEntry const *pInit );
 };
 
-XMLTransformerOASISEventMap_Impl::XMLTransformerOASISEventMap_Impl( XMLTransformerEventMapEntry *pInit )
+XMLTransformerOASISEventMap_Impl::XMLTransformerOASISEventMap_Impl( XMLTransformerEventMapEntry const *pInit )
 {
     if( pInit )
     {

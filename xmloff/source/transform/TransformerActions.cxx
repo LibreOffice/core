@@ -26,7 +26,7 @@ using namespace ::osl;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
 
-XMLTransformerActions::XMLTransformerActions( XMLTransformerActionInit *pInit )
+XMLTransformerActions::XMLTransformerActions( XMLTransformerActionInit const *pInit )
 {
     if( pInit )
     {
@@ -55,7 +55,7 @@ XMLTransformerActions::~XMLTransformerActions()
 {
 }
 
-void XMLTransformerActions::Add( XMLTransformerActionInit *pInit )
+void XMLTransformerActions::Add( XMLTransformerActionInit const *pInit )
 {
     if( pInit )
     {

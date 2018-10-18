@@ -57,12 +57,12 @@ namespace xmloff
             return -1;
         }
 
-        struct AlignmentTranslationEntry
+        static struct AlignmentTranslationEntry
         {
             ParagraphAdjust const nParagraphValue;
             sal_Int16 const       nControlValue;
         }
-        AlignmentTranslations[] =
+        const AlignmentTranslations[] =
         {
             // note that order matters:
             // valueAlignToParaAdjust and valueParaAdjustToAlign search this map from the _beginning_

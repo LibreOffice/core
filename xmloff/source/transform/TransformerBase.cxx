@@ -171,8 +171,8 @@ XMLTransformerActions *XMLTransformerBase::GetUserDefinedActions( sal_uInt16 )
     return nullptr;
 }
 
-XMLTransformerBase::XMLTransformerBase( XMLTransformerActionInit *pInit,
-                                    ::xmloff::token::XMLTokenEnum *pTKMapInit )
+XMLTransformerBase::XMLTransformerBase( XMLTransformerActionInit const *pInit,
+                                    ::xmloff::token::XMLTokenEnum const *pTKMapInit )
     throw () :
     m_pNamespaceMap( new SvXMLNamespaceMap ),
     m_ElemActions( pInit ),

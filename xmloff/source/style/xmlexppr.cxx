@@ -62,7 +62,7 @@ const sal_uInt16 MAX_PROP_TYPES =
     (XML_TYPE_PROP_END >> XML_TYPE_PROP_SHIFT) -
     (XML_TYPE_PROP_START >> XML_TYPE_PROP_SHIFT);
 
-XMLPropTokens_Impl aPropTokens[MAX_PROP_TYPES] =
+XMLPropTokens_Impl const aPropTokens[MAX_PROP_TYPES] =
 {
     ENTRY(CHART),
     ENTRY(GRAPHIC),
