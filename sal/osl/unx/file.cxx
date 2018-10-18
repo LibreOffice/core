@@ -26,6 +26,7 @@
 #include <rtl/alloc.h>
 #include <rtl/byteseq.hxx>
 #include <rtl/string.hxx>
+#include <comphelper/unixerrorstring.hxx>
 
 #include "system.hxx"
 #include "createfilehandlefromfd.hxx"
@@ -257,7 +258,7 @@ oslFileError FileHandle_Impl::setSize(sal_uInt64 uSize)
         if (nCurPos == off_t(-1))
         {
             int e = errno;
-            SAL_INFO("sal.file", "lseek(" << m_fd << ",0,SEEK_CUR): errno " << e << ": " << strerror(e));
+            SAL_INFO("sal.file", "lseek(" << m_fd << ",0,SEEK_CUR): " << UnixErrnoString(e));
             return result;
         }
         else
@@ -267,7 +268,7 @@ oslFileError FileHandle_Impl::setSize(sal_uInt64 uSize)
         if (lseek(m_fd, static_cast<off_t>(nSize - 1), SEEK_SET) == -1)
         {
             int e = errno;
-            SAL_INFO("sal.file", "lseek(" << m_fd << "," << nSize - 1 << ",SEEK_SET): errno " << e << ": " << strerror(e));
+            SAL_INFO("sal.file", "lseek(" << m_fd << "," << nSize - 1 << ",SEEK_SET): " << UnixErrnoString(e));
             return result;
         }
         else
@@ -277,7 +278,7 @@ oslFileError FileHandle_Impl::setSize(sal_uInt64 uSize)
         {
             /* Failure. Restore saved position */
             int e = errno;
-            SAL_INFO("sal.file", "write(" << m_fd << ",\"\",1): errno " << e << ": " << strerror(e));
+            SAL_INFO("sal.file", "write(" << m_fd << ",\"\",1): " << UnixErrnoString(e));
             (void) lseek(m_fd, nCurPos, SEEK_SET);
             return result;
         }
@@ -912,7 +913,7 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
         if (f == -1)
         {
             int e = errno;
-            SAL_INFO("sal.file", "fcntl(" << fd << ",F_GETFL,0): errno " << e << ": " << strerror(e));
+            SAL_INFO("sal.file", "fcntl(" << fd << ",F_GETFL,0): " << UnixErrnoString(e));
             eRet = oslTranslateFileError(e);
             (void) close(fd);
             SAL_INFO("sal.file", "close(" << fd << ")");
@@ -924,7 +925,7 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
         if (fcntl(fd, F_SETFL, (f & ~O_NONBLOCK)) == -1)
         {
             int e = errno;
-            SAL_INFO("sal.file", "fcntl(" << fd << ",F_SETFL,(f & ~O_NONBLOCK)): errno " << e << ": " << strerror(e));
+            SAL_INFO("sal.file", "fcntl(" << fd << ",F_SETFL,(f & ~O_NONBLOCK)): " << UnixErrnoString(e));
             eRet = oslTranslateFileError(e);
             (void) close(fd);
             SAL_INFO("sal.file", "close(" << fd << ")");
@@ -940,7 +941,7 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
     if (fstat(fd, &aFileStat) == -1)
     {
         int e = errno;
-        SAL_INFO("sal.file", "fstat(" << fd << "): errno " << e << ": " << strerror(e));
+        SAL_INFO("sal.file", "fstat(" << fd << "): " << UnixErrnoString(e));
         eRet = oslTranslateFileError(e);
         (void) close(fd);
         SAL_INFO("sal.file", "close(" << fd << ")");
@@ -964,7 +965,7 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
         if (flock(fd, LOCK_EX | LOCK_NB) == -1)
         {
             int e = errno;
-            SAL_INFO("sal.file", "flock(" << fd << ",LOCK_EX|LOCK_NB): errno " << e << ": " << strerror(e));
+            SAL_INFO("sal.file", "flock(" << fd << ",LOCK_EX|LOCK_NB): " << UnixErrnoString(e));
             /* Mac OSX returns ENOTSUP for webdav drives. We should try read lock */
 
             // Restore errno after possibly having been overwritten by the SAL_INFO above...
@@ -990,7 +991,7 @@ oslFileError openFilePath(const char *cpFilePath, oslFileHandle* pHandle, sal_uI
         if (fcntl(fd, F_SETLK, &aflock) == -1)
         {
             int e = errno;
-            SAL_INFO("sal.file", "fcntl(" << fd << ",F_SETLK): errno " << e << ": " << strerror(e));
+            SAL_INFO("sal.file", "fcntl(" << fd << ",F_SETLK): " << UnixErrnoString(e));
             eRet = oslTranslateFileError(e);
             (void) close(fd);
             SAL_INFO("sal.file", "close(" << fd << ")");
@@ -1070,7 +1071,7 @@ oslFileError SAL_CALL osl_closeFile(oslFileHandle Handle)
     else if (close(pImpl->m_fd) == -1)
     {
         int e = errno;
-        SAL_INFO("sal.file", "close(" << pImpl->m_fd << "): errno " << e << ": " << strerror(e));
+        SAL_INFO("sal.file", "close(" << pImpl->m_fd << "): " << UnixErrnoString(e));
         /* translate error code */
         result = oslTranslateFileError(e);
     }
@@ -1102,7 +1103,7 @@ oslFileError SAL_CALL osl_syncFile(oslFileHandle Handle)
     if (fsync(pImpl->m_fd) == -1)
     {
         int e = errno;
-        SAL_INFO("sal.file", "fsync(" << pImpl->m_fd << "): errno " << e << ": " << strerror(e));
+        SAL_INFO("sal.file", "fsync(" << pImpl->m_fd << "): " << UnixErrnoString(e));
         return oslTranslateFileError(e);
     }
     else
@@ -1204,7 +1205,7 @@ oslFileError SAL_CALL osl_mapFile(
 
 #elif defined __sun
         if (madvise(static_cast< caddr_t >(p), nLength, MADV_WILLNEED) != 0)
-            SAL_INFO("sal.file", "madvise(..., MADV_WILLNEED) failed with " << strerror(errno));
+            SAL_INFO("sal.file", "madvise(..., MADV_WILLNEED) failed with " << UnixErrnoString(errno));
 #endif
     }
 
