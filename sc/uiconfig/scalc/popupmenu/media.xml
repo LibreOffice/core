@@ -15,13 +15,16 @@
   <menu:menuitem menu:id=".uno:TransformDialog"/>
   <menu:menuitem menu:id=".uno:FitCellSize"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
-  <menu:menuitem menu:id=".uno:RenameObject"/>
-  <menu:menuseparator/>
-  <menu:menu menu:id=".uno:FlipMenu">
+  <menu:menuitem menu:id=".uno:AnchorMenu"/>
+  <menu:menu menu:id=".uno:ObjectAlign">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:ObjectMirrorVertical"/>
-      <menu:menuitem menu:id=".uno:ObjectMirrorHorizontal"/>
+      <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
+      <menu:menuitem menu:id=".uno:AlignCenter"/>
+      <menu:menuitem menu:id=".uno:ObjectAlignRight"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:AlignUp"/>
+      <menu:menuitem menu:id=".uno:AlignMiddle"/>
+      <menu:menuitem menu:id=".uno:AlignDown"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:ArrangeMenu">
@@ -35,25 +38,10 @@
       <menu:menuitem menu:id=".uno:SetObjectToBackground"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menu menu:id=".uno:ObjectAlign">
-    <menu:menupopup>
-      <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
-      <menu:menuitem menu:id=".uno:AlignCenter"/>
-      <menu:menuitem menu:id=".uno:ObjectAlignRight"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:AlignUp"/>
-      <menu:menuitem menu:id=".uno:AlignMiddle"/>
-      <menu:menuitem menu:id=".uno:AlignDown"/>
-    </menu:menupopup>
-  </menu:menu>
-  <menu:menuitem menu:id=".uno:AnchorMenu"/>
   <menu:menuseparator/>
-  <menu:menu menu:id=".uno:GroupMenu">
-    <menu:menupopup>
-      <menu:menuitem menu:id=".uno:FormatGroup"/>
-      <menu:menuitem menu:id=".uno:FormatUngroup"/>
-      <menu:menuitem menu:id=".uno:EnterGroup"/>
-      <menu:menuitem menu:id=".uno:LeaveGroup"/>
-    </menu:menupopup>
-  </menu:menu>
+  <menu:menuitem menu:id=".uno:RenameObject"/>
+  <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:InsertCaptionDialog"/>
 </menu:menupopup>
+
