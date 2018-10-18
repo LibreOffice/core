@@ -1996,27 +1996,44 @@ void SfxTabDialogController::SavePosAndId()
     Adds a page to the dialog. The Name must correspond to a entry in the
     TabControl in the dialog .ui
 */
-void SfxTabDialogController::AddTabPage
-(
-    const OString &rName,          // Page ID
-    CreateTabPage pCreateFunc,     // Pointer to the Factory Method
-    GetTabPageRanges pRangesFunc   // Pointer to the Method for querying
-                                   // Ranges onDemand
-)
+void SfxTabDialogController::AddTabPage(const OString &rName /* Page ID */,
+                                        CreateTabPage pCreateFunc  /* Pointer to the Factory Method */,
+                                        GetTabPageRanges pRangesFunc /* Pointer to the Method for querying Ranges onDemand */)
 {
     m_pImpl->aData.push_back(new Data_Impl(m_pImpl->aData.size(), rName, pCreateFunc, pRangesFunc));
 }
 
-void SfxTabDialogController::AddTabPage
-(
-    const OString &rName,          // Page ID
-    sal_uInt16 nPageCreateId       // Identifier of the Factory Method to create the page
-)
+void SfxTabDialogController::AddTabPage(const OString &rName /* Page ID */,
+                                        sal_uInt16 nPageCreateId /* Identifier of the Factory Method to create the page */)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     CreateTabPage pCreateFunc = pFact->GetTabPageCreatorFunc(nPageCreateId);
     GetTabPageRanges pRangesFunc = pFact->GetTabPageRangesFunc(nPageCreateId);
     AddTabPage(rName, pCreateFunc, pRangesFunc);
+}
+
+/*  [Description]
+
+    Add a page to the dialog. The Rider text is passed on, the page has no
+    counterpart in the TabControl in the resource of the dialogue.
+*/
+
+void SfxTabDialogController::AddTabPage(const OString &rName, /* Page ID */
+                                        const OUString& rRiderText,
+                                        CreateTabPage pCreateFunc  /* Pointer to the Factory Method */,
+                                        GetTabPageRanges pRangesFunc /* Pointer to the Method for querying Ranges onDemand */)
+{
+    assert(!m_xTabCtrl->get_page(rName) && "Double Page-Ids in the Tabpage");
+    m_xTabCtrl->append_page(rName, rRiderText);
+    AddTabPage(rName, pCreateFunc, pRangesFunc);
+}
+
+void SfxTabDialogController::AddTabPage(const OString &rName, const OUString& rRiderText,
+                                        sal_uInt16 nPageCreateId /* Identifier of the Factory Method to create the page */)
+{
+    assert(!m_xTabCtrl->get_page(rName) && "Double Page-Ids in the Tabpage");
+    m_xTabCtrl->append_page(rName, rRiderText);
+    AddTabPage(rName, nPageCreateId);
 }
 
 void SfxTabDialogController::CreatePages()

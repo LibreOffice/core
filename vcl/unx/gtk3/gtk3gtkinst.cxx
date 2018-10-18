@@ -2937,6 +2937,22 @@ public:
         enable_notify_events();
     }
 
+    virtual void append_page(const OString& rIdent, const OUString& rLabel) override
+    {
+        disable_notify_events();
+
+        GtkWidget *pTabWidget = gtk_label_new(MapToGtkAccelerator(rLabel).getStr());
+        gtk_buildable_set_name(GTK_BUILDABLE(pTabWidget), rIdent.getStr());
+
+        GtkWidget *pChild = gtk_grid_new();
+        gtk_notebook_append_page(m_pNotebook, pChild, pTabWidget);
+        gtk_widget_show_all(pChild);
+        gtk_widget_show_all(pTabWidget);
+
+        update_tab_pos();
+        enable_notify_events();
+    }
+
     virtual ~GtkInstanceNotebook() override
     {
         g_signal_handler_disconnect(m_pNotebook, m_nSwitchPageSignalId);

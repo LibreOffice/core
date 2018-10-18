@@ -1025,6 +1025,8 @@ class SalInstanceNotebook : public SalInstanceContainer, public virtual weld::No
 private:
     VclPtr<TabControl> m_xNotebook;
     mutable std::vector<std::unique_ptr<SalInstanceContainer>> m_aPages;
+    std::vector<VclPtr<TabPage>> m_aAddedPages;
+    std::vector<VclPtr<VclGrid>> m_aAddedGrids;
 
     DECL_LINK(DeactivatePageHdl, TabControl*, bool);
     DECL_LINK(ActivatePageHdl, TabControl*, void);
@@ -1078,6 +1080,23 @@ public:
         m_xNotebook->RemovePage(m_xNotebook->GetPageId(rIdent));
     }
 
+    virtual void append_page(const OString& rIdent, const OUString& rLabel) override
+    {
+        sal_uInt16 nNewPageCount = m_xNotebook->GetPageCount() + 1;
+        sal_uInt16 nNewPageId = nNewPageCount;
+        m_xNotebook->InsertPage(nNewPageId, rLabel);
+        VclPtrInstance<TabPage> xPage(m_xNotebook);
+        VclPtrInstance<VclGrid> xGrid(xPage);
+        xPage->Show();
+        xGrid->set_hexpand(true);
+        xGrid->set_vexpand(true);
+        xGrid->Show();
+        m_xNotebook->SetTabPage(nNewPageId, xPage);
+        m_xNotebook->SetPageName(nNewPageId, rIdent);
+        m_aAddedPages.push_back(xPage);
+        m_aAddedGrids.push_back(xGrid);
+    }
+
     virtual int get_n_pages() const override
     {
         return m_xNotebook->GetPageCount();
@@ -1090,6 +1109,10 @@ public:
 
     virtual ~SalInstanceNotebook() override
     {
+        for (auto &rGrid : m_aAddedGrids)
+            rGrid.disposeAndClear();
+        for (auto &rPage : m_aAddedPages)
+            rPage.disposeAndClear();
         m_xNotebook->SetActivatePageHdl(Link<TabControl*,void>());
         m_xNotebook->SetDeactivatePageHdl(Link<TabControl*,bool>());
     }
