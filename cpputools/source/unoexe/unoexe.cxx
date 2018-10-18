@@ -112,7 +112,7 @@ static bool readOption( OUString * pValue, const sal_Char * pOpt,
         ++(*pnIndex);
         return true;
     }
-      else if (aArg.indexOf(aOpt) == 1)
+    else if (aArg.indexOf(aOpt) == 1)
     {
         *pValue = aArg.copy(1 + aOpt.getLength());
         SAL_INFO("cpputools.unoexe", "> identified option -" << pOpt << " = " << aArg);

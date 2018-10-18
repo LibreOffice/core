@@ -264,11 +264,11 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
 
 void SAL_CALL SessionListener::statusChanged(const frame::FeatureStateEvent& event)
 {
-   SAL_INFO("fwk.session", "SessionListener::statusChanged");
+    SAL_INFO("fwk.session", "SessionListener::statusChanged");
 
-   SAL_INFO("fwk.session.debug", "  ev.Feature = " << event.FeatureURL.Complete <<
-                                 ", ev.Descript = " << event.FeatureDescriptor);
-   if ( event.FeatureURL.Complete == "vnd.sun.star.autorecovery:/doSessionRestore" )
+    SAL_INFO("fwk.session.debug", "  ev.Feature = " << event.FeatureURL.Complete <<
+                                  ", ev.Descript = " << event.FeatureDescriptor);
+    if ( event.FeatureURL.Complete == "vnd.sun.star.autorecovery:/doSessionRestore" )
     {
         if (event.FeatureDescriptor == "update")
             m_bRestored = true; // a document was restored

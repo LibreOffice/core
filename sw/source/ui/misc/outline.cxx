@@ -319,7 +319,7 @@ short SwOutlineTabDialog::Ok()
             const SfxPoolItem & rItem =
                 rTextColl.GetFormatAttr(RES_PARATR_NUMRULE, false);
 
-           if (static_cast<sal_uInt8>(GetLevel(rTextColl.GetName())) == MAXLEVEL)
+            if (static_cast<sal_uInt8>(GetLevel(rTextColl.GetName())) == MAXLEVEL)
             {
                 if(rTextColl.IsAssignedToListLevelOfOutlineStyle())
                 {

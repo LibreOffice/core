@@ -632,8 +632,8 @@ void SwTextAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
                          if( !pPos->IsMarginPortion() )
                               static_cast<SwGluePortion*>(pPos)->MoveHalfGlue( pGlue );
                          }
-                     }
-                     else
+                    }
+                    else
                         static_cast<SwGluePortion*>(pPos)->MoveHalfGlue( pGlue );
                 }
             }

@@ -1595,7 +1595,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
                 xPropSet->setPropertyValue("MediaType",
                     uno::makeAny( OUString("application/vnd.openxmlformats-package.relationships+xml" ) ) );
 
-                  if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
+                if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
                     m_nRelInfoStatus = RELINFO_NO_INIT;
                 else
                 {

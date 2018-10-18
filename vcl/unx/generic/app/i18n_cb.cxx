@@ -83,13 +83,12 @@ Preedit_DeleteText(preedit_text_t *ptext, int from, int howmuch)
 
     int to = from + howmuch;
 
-      if (to == static_cast<int>(ptext->nLength))
+    if (to == static_cast<int>(ptext->nLength))
     {
         // delete from the end of the text
         ptext->nLength = from;
-      }
-    else
-        if (to < static_cast<int>(ptext->nLength))
+    }
+    else if (to < static_cast<int>(ptext->nLength))
     {
         // cut out of the middle of the text
         memmove( static_cast<void*>(ptext->pUnicodeBuffer + from),
@@ -99,7 +98,7 @@ Preedit_DeleteText(preedit_text_t *ptext, int from, int howmuch)
                 static_cast<void*>(ptext->pCharStyle + to),
                 (ptext->nLength - to) * sizeof(XIMFeedback));
         ptext->nLength -= howmuch;
-      }
+    }
     else
     {
           // XXX this indicates an error, are we out of sync ?

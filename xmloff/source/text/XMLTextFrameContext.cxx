@@ -175,7 +175,7 @@ XMLTextFrameParam_Impl::XMLTextFrameParam_Impl(
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
         if ( XML_NAMESPACE_DRAW == nPrefix )
         {
-               if( IsXMLToken(aLocalName, XML_VALUE) )
+            if( IsXMLToken(aLocalName, XML_VALUE) )
             {
                 sValue = rValue;
                 bFoundValue=true;

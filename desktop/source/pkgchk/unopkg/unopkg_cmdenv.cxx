@@ -251,7 +251,7 @@ void CommandEnvironmentImpl::handle(
             abort = false;
         }
     }
-       else if (request >>= instExc)
+    else if (request >>= instExc)
     {
         //Only if the unopgk was started with gui + extension then we user is asked.
         //In console mode there is no asking.

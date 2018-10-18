@@ -527,11 +527,11 @@ namespace svgio
                                 rTarget.append(aNewTarget);
                             }
                         }
-                     }
-                     else if(!pCandidate)
-                     {
+                    }
+                    else if(!pCandidate)
+                    {
                         OSL_ENSURE(false, "Null-Pointer in child node list (!)");
-                     }
+                    }
                 }
 
                 if(!rTarget.empty())

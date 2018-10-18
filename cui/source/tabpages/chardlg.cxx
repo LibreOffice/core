@@ -2115,7 +2115,7 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
         rSet->Put( aNewItem );
         bModified = true;
     }
-     else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
+    else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
         rSet->InvalidateItem(nWhich);
 
     bChanged = true;

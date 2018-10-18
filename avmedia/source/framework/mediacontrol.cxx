@@ -296,10 +296,9 @@ IMPL_LINK( MediaControl, implSelectHdl, ToolBox*, p, void )
         if( p->GetCurItemId() == AVMEDIA_TOOLBOXITEM_OPEN )
         {
             OUString aURL;
-
-             if (MediaWindow::executeMediaURLDialog(GetFrameWeld(), aURL, nullptr))
-             {
-                 if( !MediaWindow::isMediaURL( aURL, ""/*TODO?*/, true ) )
+            if (MediaWindow::executeMediaURLDialog(GetFrameWeld(), aURL, nullptr))
+            {
+                if( !MediaWindow::isMediaURL( aURL, ""/*TODO?*/, true ) )
                     MediaWindow::executeFormatErrorBox(GetFrameWeld());
                 else
                 {

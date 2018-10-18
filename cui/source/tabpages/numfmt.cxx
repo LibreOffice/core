@@ -1402,9 +1402,9 @@ bool SvxNumberFormatTabPage::Click_Impl(weld::Button& rIB)
         if ( nFmtLbSelPos != SELPOS_NONE )
         {
             if(bOneAreaFlag)                  //@@ ???
-                    SetCategory(0);
-                else
-                    SetCategory(nCatLbSelPos );
+                SetCategory(0);
+            else
+                SetCategory(nCatLbSelPos );
 
             m_xLbFormat->select(static_cast<sal_uInt16>(nFmtLbSelPos));
             m_xEdFormat->set_text( aFormat );

@@ -1729,7 +1729,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
                     uno::makeAny( OUString( "application/vnd.openxmlformats-package.relationships+xml" ) ) );
 
                 m_xNewRelInfoStream.clear();
-                  if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
+                if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
                 {
                     m_aRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
                     m_nRelInfoStatus = RELINFO_NO_INIT;

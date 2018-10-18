@@ -793,8 +793,8 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
         {
             // TODO: this doesn't belong here. It belongs into the TableControl/_Impl, so A11Y also
             // works when the control is used outside the UNO context
-             if ( pTable->GetRowCount()>0 )
-             {
+            if ( pTable->GetRowCount()>0 )
+            {
                 pTable->commitCellEventIfAccessibleAlive(
                     AccessibleEventId::STATE_CHANGED,
                     makeAny( AccessibleStateType::FOCUSED ),
@@ -813,7 +813,7 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
                     makeAny( AccessibleStateType::FOCUSED ),
                     Any()
                 );
-             }
+            }
         }
         break;
 

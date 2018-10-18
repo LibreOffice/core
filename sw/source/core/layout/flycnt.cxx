@@ -675,13 +675,13 @@ static const SwFrame * lcl_CalcDownDist( SwDistance &rRet,
                             nPrtHeight = pLay->getFrameArea().Left() + pLay->getFramePrintArea().Left()
                                          + pLay->getFramePrintArea().Width() - pSect->getFrameArea().Left()
                                          - pSect->getFrameArea().Width();
-                         }
-                         else
-                         {
-                             nFrameTop = pSect->getFrameArea().Left();
-                             nPrtHeight = pSect->getFrameArea().Left() - pLay->getFrameArea().Left()
+                        }
+                        else
+                        {
+                            nFrameTop = pSect->getFrameArea().Left();
+                            nPrtHeight = pSect->getFrameArea().Left() - pLay->getFrameArea().Left()
                                      - pLay->getFramePrintArea().Left();
-                          }
+                        }
                     }
                     else
                     {

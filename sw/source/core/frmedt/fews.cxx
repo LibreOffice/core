@@ -242,7 +242,8 @@ FrameTypeFlags SwFEShell::GetFrameType( const Point *pPt, bool bStopAtFly ) cons
     {
         switch ( pFrame->GetType() )
         {
-            case SwFrameType::Column:    if( pFrame->GetUpper()->IsSctFrame() )
+            case SwFrameType::Column:
+                                if( pFrame->GetUpper()->IsSctFrame() )
                                 {
                                     // Check, if isn't not only a single column
                                     // from a section with footnotes at the end.
@@ -254,17 +255,20 @@ FrameTypeFlags SwFEShell::GetFrameType( const Point *pPt, bool bStopAtFly ) cons
                                 else // only pages and frame columns
                                     nReturn |= FrameTypeFlags::COLUMN;
                                 break;
-            case SwFrameType::Page:      nReturn |= FrameTypeFlags::PAGE;
+            case SwFrameType::Page:
+                                nReturn |= FrameTypeFlags::PAGE;
                                 if( static_cast<const SwPageFrame*>(pFrame)->IsFootnotePage() )
                                     nReturn |= FrameTypeFlags::FTNPAGE;
                                 break;
             case SwFrameType::Header:    nReturn |= FrameTypeFlags::HEADER;      break;
             case SwFrameType::Footer:    nReturn |= FrameTypeFlags::FOOTER;      break;
-            case SwFrameType::Body:      if( pFrame->GetUpper()->IsPageFrame() ) // not for ColumnFrames
+            case SwFrameType::Body:
+                                if( pFrame->GetUpper()->IsPageFrame() ) // not for ColumnFrames
                                     nReturn |= FrameTypeFlags::BODY;
                                 break;
             case SwFrameType::Ftn:       nReturn |= FrameTypeFlags::FOOTNOTE;    break;
-            case SwFrameType::Fly:       if( static_cast<const SwFlyFrame*>(pFrame)->IsFlyLayFrame() )
+            case SwFrameType::Fly:
+                                if( static_cast<const SwFlyFrame*>(pFrame)->IsFlyLayFrame() )
                                     nReturn |= FrameTypeFlags::FLY_FREE;
                                 else if ( static_cast<const SwFlyFrame*>(pFrame)->IsFlyAtContentFrame() )
                                     nReturn |= FrameTypeFlags::FLY_ATCNT;

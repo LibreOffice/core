@@ -1906,14 +1906,14 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                 pImpl->m_eError = ERRCODE_IO_GENERAL;
             }
 
-               if ( bResult )
-               {
+            if ( bResult )
+            {
                 if ( pImpl->pTempFile )
                 {
                     pImpl->pTempFile->EnableKillingFile();
                     pImpl->pTempFile.reset();
                 }
-               }
+            }
             else if ( bTransactStarted )
             {
                 UseBackupToRestore_Impl( aOriginalContent, xDummyEnv );

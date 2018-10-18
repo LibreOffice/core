@@ -1023,7 +1023,7 @@ sal_Bool SAL_CALL OEvoabResultSet::previous(  )
         m_nIndex--;
         return true;
     }
-        else
+    else
         return false;
 }
 

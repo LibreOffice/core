@@ -1258,8 +1258,8 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const OUString& sPrimarySe
             aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD1;
         else if ( sToken[i] == "MOD2" )
             aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD2;
-                else if ( sToken[i] == "MOD3" )
-                        aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD3;
+        else if ( sToken[i] == "MOD3" )
+             aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD3;
     }
 
     css::uno::Reference< css::container::XNameAccess > xKey;

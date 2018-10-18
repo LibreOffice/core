@@ -876,8 +876,8 @@ OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType, OSQLParseNode* pLiteral)
                 case DataType::DATE:
                 case DataType::TIME:
                 case DataType::TIMESTAMP:
-                if ( m_xFormatter.is() )
-                    pReturn = buildDate( nType, pReturn);
+                    if ( m_xFormatter.is() )
+                        pReturn = buildDate( nType, pReturn);
                     else
                         m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ErrorCode::InvalidDateCompare);
                     break;

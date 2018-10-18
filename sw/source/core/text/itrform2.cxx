@@ -1332,43 +1332,43 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                 SAL_FALLTHROUGH;
             default        :
                 {
-                SwTabPortion* pLastTabPortion = rInf.GetLastTab();
-                if ( pLastTabPortion && cChar == rInf.GetTabDecimal() )
-                {
-                    // Abandon dec. tab position if line is full
-                    // We have a decimal tab portion in the line and the next character has to be
-                    // aligned at the tab stop position. We store the width from the beginning of
-                    // the tab stop portion up to the portion containing the decimal separator:
-                  if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_COMPAT) /*rInf.GetVsh()->IsTabCompat();*/ &&
-                         POR_TABDECIMAL == pLastTabPortion->GetWhichPor() )
+                    SwTabPortion* pLastTabPortion = rInf.GetLastTab();
+                    if ( pLastTabPortion && cChar == rInf.GetTabDecimal() )
                     {
-                        OSL_ENSURE( rInf.X() >= pLastTabPortion->GetFix(), "Decimal tab stop position cannot be calculated" );
-                        const sal_uInt16 nWidthOfPortionsUpToDecimalPosition = static_cast<sal_uInt16>(rInf.X() - pLastTabPortion->GetFix() );
-                        static_cast<SwTabDecimalPortion*>(pLastTabPortion)->SetWidthOfPortionsUpToDecimalPosition( nWidthOfPortionsUpToDecimalPosition );
-                        rInf.SetTabDecimal( 0 );
+                        // Abandon dec. tab position if line is full
+                        // We have a decimal tab portion in the line and the next character has to be
+                        // aligned at the tab stop position. We store the width from the beginning of
+                        // the tab stop portion up to the portion containing the decimal separator:
+                        if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::TAB_COMPAT) /*rInf.GetVsh()->IsTabCompat();*/ &&
+                             POR_TABDECIMAL == pLastTabPortion->GetWhichPor() )
+                        {
+                            OSL_ENSURE( rInf.X() >= pLastTabPortion->GetFix(), "Decimal tab stop position cannot be calculated" );
+                            const sal_uInt16 nWidthOfPortionsUpToDecimalPosition = static_cast<sal_uInt16>(rInf.X() - pLastTabPortion->GetFix() );
+                            static_cast<SwTabDecimalPortion*>(pLastTabPortion)->SetWidthOfPortionsUpToDecimalPosition( nWidthOfPortionsUpToDecimalPosition );
+                            rInf.SetTabDecimal( 0 );
+                        }
+                        else
+                            rInf.SetFull( rInf.GetLastTab()->Format( rInf ) );
+                    }
+
+                    if( rInf.GetRest() )
+                    {
+                        if( rInf.IsFull() )
+                        {
+                            rInf.SetNewLine(true);
+                            return nullptr;
+                        }
+                        pPor = rInf.GetRest();
+                        rInf.SetRest(nullptr);
                     }
                     else
-                        rInf.SetFull( rInf.GetLastTab()->Format( rInf ) );
-                }
-
-                if( rInf.GetRest() )
-                {
-                    if( rInf.IsFull() )
                     {
-                        rInf.SetNewLine(true);
-                        return nullptr;
+                        if( rInf.IsFull() )
+                            return nullptr;
+                        pPor = NewTextPortion( rInf );
                     }
-                    pPor = rInf.GetRest();
-                    rInf.SetRest(nullptr);
+                    break;
                 }
-                else
-                {
-                    if( rInf.IsFull() )
-                        return nullptr;
-                    pPor = NewTextPortion( rInf );
-                }
-                break;
-            }
         }
 
         // if a portion is created despite there being a pending RestPortion,

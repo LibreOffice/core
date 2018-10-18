@@ -441,8 +441,8 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
                 {
                     nTabSize = pTabControl->GetSizePixel().Width();
 
-                     if ( aViewData.GetHSplitMode() != SC_SPLIT_FIX ) // left Scrollbar
-                     {
+                    if ( aViewData.GetHSplitMode() != SC_SPLIT_FIX ) // left Scrollbar
+                    {
                         if (nTabSize > nSizeLt-SC_SCROLLBAR_MIN)
                             nTabSize = nSizeLt-SC_SCROLLBAR_MIN;
                         if (nTabSize < SC_TABBAR_MIN)

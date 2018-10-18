@@ -1954,8 +1954,8 @@ bool TransferableDataHelper::GetFileList( FileList& rFileList )
                             rFileList.AppendFile( OStringToOUString(aDiskString, RTL_TEXTENCODING_UTF8) );
 
                     bRet = true;
-                 }
-                 else
+                }
+                else
                     bRet = ( ReadFileList( *xStm, rFileList ).GetError() == ERRCODE_NONE );
             }
         }

@@ -530,7 +530,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     rFilterData[ nData ].Value >>= mnDefaultLinkAction;
                 else if ( rFilterData[ nData ].Name == "ConvertOOoTargetToPDFTarget" )
                     rFilterData[ nData ].Value >>= mbConvertOOoTargetToPDFTarget;
-                 else if ( rFilterData[ nData ].Name == "ExportBookmarksToPDFDestination" )
+                else if ( rFilterData[ nData ].Name == "ExportBookmarksToPDFDestination" )
                     rFilterData[ nData ].Value >>= mbExportBmkToDest;
                 else if ( rFilterData[ nData ].Name == "ExportBookmarks" )
                     rFilterData[ nData ].Value >>= mbExportBookmarks;

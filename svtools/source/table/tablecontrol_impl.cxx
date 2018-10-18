@@ -1446,24 +1446,24 @@ namespace svt { namespace table
                         int prevRow = getRowSelectedNumber(m_aSelectedRows, m_nCurRow);
                         int nextRow = getRowSelectedNumber(m_aSelectedRows, m_nCurRow-1);
                         if(prevRow>-1)
-                         {
+                        {
                              //if m_nCurRow isn't the upper one, can move up, otherwise not
                             if(m_nCurRow>0)
                                  m_nCurRow--;
-                             else
+                            else
                                  return bSuccess = true;
                              //if nextRow already selected, deselect it, otherwise select it
-                             if(nextRow>-1 && m_aSelectedRows[nextRow] == m_nCurRow)
-                             {
+                            if(nextRow>-1 && m_aSelectedRows[nextRow] == m_nCurRow)
+                            {
                                  m_aSelectedRows.erase(m_aSelectedRows.begin()+prevRow);
                                  invalidateRow( m_nCurRow + 1 );
-                             }
-                             else
+                            }
+                            else
                             {
                                  m_aSelectedRows.push_back(m_nCurRow);
                                  invalidateRow( m_nCurRow );
-                             }
-                         }
+                            }
+                        }
                         else
                         {
                             if(m_nCurRow>0)

@@ -346,8 +346,8 @@ void SwPageFrame::CheckDirection( bool bVert )
 
                 if(SvxFrameDirection::Vertical_RL_TB == nDir)
                     mbVertLR = false;
-                    else if(SvxFrameDirection::Vertical_LR_TB==nDir)
-                       mbVertLR = true;
+                else if(SvxFrameDirection::Vertical_LR_TB==nDir)
+                    mbVertLR = true;
             }
         }
 

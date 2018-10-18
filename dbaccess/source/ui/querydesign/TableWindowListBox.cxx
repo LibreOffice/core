@@ -245,9 +245,8 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
                     ScrollUpHdl( nullptr );
                 }
             }
-
-           // scroll down if the pointer is on the lower scroll area
-           else if( aTopScrollArea.IsInside(m_aMousePos) )
+            // scroll down if the pointer is on the lower scroll area
+            else if( aTopScrollArea.IsInside(m_aMousePos) )
             {
                 if( !m_aScrollTimer.IsActive() )
                 {

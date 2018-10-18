@@ -256,7 +256,7 @@ void ScDPOutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL 
     else
         aBox.SetLine(&aLine,  SvxBoxItemLine::RIGHT);
 
-     if ( nEndRow == mnTabEndRow ) //bottom
+    if ( nEndRow == mnTabEndRow ) //bottom
         aBox.SetLine(&aOutLine,  SvxBoxItemLine::BOTTOM);
     else
         aBox.SetLine(&aLine,  SvxBoxItemLine::BOTTOM);

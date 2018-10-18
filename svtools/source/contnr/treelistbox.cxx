@@ -1498,7 +1498,7 @@ void SvTreeListBox::SetTabs()
     {
         if( bHasButtons )
             nCase = NODE_AND_CHECK_BUTTONS;
-         else
+        else
             nCase = CHECK_BUTTONS;
     }
 

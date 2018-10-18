@@ -827,7 +827,7 @@ void OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
                 cChar = pLevelSettings->sBulletChar[0];
             if( AllSettings::GetLayoutRTL() )
             {
-                            if( 0 == i && cChar == BulletsTypeMgr::aDynamicBulletTypes[5] )
+                if( 0 == i && cChar == BulletsTypeMgr::aDynamicBulletTypes[5] )
                     cChar = BulletsTypeMgr::aDynamicRTLBulletTypes[5];
                 else if( 1 == i )
                 {

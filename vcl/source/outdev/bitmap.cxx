@@ -456,8 +456,8 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
                         }
 
                         aBmp = aVDev->GetBitmap( Point(), aVDev->GetOutputSizePixel() );
-                     }
-                     else
+                    }
+                    else
                         bClipped = false;
                 }
                 else
