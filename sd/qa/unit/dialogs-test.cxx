@@ -502,7 +502,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
             SdDrawDocument* pDrawDoc = getSdXImpressDocument()->GetDoc();
             CPPUNIT_ASSERT(pDrawDoc);
             pRetval = getSdAbstractDialogFactory()->CreateSdTabTemplateDlg(
-                getViewShell()->GetActiveWindow(),
+                getViewShell()->GetFrameWeld(),
                 getDocShell(),
                 *pStyleSheet,
                 pDrawDoc,

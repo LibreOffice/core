@@ -46,14 +46,13 @@
 /**
  * Constructor of the Tab dialog: appends pages to the dialog
  */
-SdTabTemplateDlg::SdTabTemplateDlg( vcl::Window* pParent,
-                                const SfxObjectShell* pDocShell,
-                                SfxStyleSheetBase& rStyleBase,
-                                SdrModel const * pModel,
-                                SdrView* pView )
-    : SfxStyleDialog(pParent, "TemplateDialog",
-        "modules/simpress/ui/templatedialog.ui",
-        rStyleBase)
+SdTabTemplateDlg::SdTabTemplateDlg(weld::Window* pParent,
+                                   const SfxObjectShell* pDocShell,
+                                   SfxStyleSheetBase& rStyleBase,
+                                   SdrModel const * pModel,
+                                   SdrView* pView)
+    : SfxStyleDialogController(pParent, "modules/simpress/ui/templatedialog.ui",
+                               "TemplateDialog", rStyleBase)
     , rDocShell(*pDocShell)
     , pSdrView(pView)
     , pColorList(pModel->GetColorList())
@@ -63,31 +62,21 @@ SdTabTemplateDlg::SdTabTemplateDlg( vcl::Window* pParent,
     , pPatternList(pModel->GetPatternList())
     , pDashList(pModel->GetDashList())
     , pLineEndList(pModel->GetLineEndList())
-    , m_nLineId(0)
-    , m_nAreaId(0)
-    , m_nShadowId(0)
-    , m_nTransparencyId(0)
-    , m_nFontId(0)
-    , m_nFontEffectId(0)
-    , m_nBackgroundId(0)
-    , m_nTextId(0)
-    , m_nDimensionId(0)
-    , m_nConnectorId(0)
 {
     // fill Listbox and set Select-Handler
 
-    m_nLineId = AddTabPage("line", RID_SVXPAGE_LINE);
-    m_nAreaId = AddTabPage("area", RID_SVXPAGE_AREA);
-    m_nShadowId = AddTabPage("shadowing", RID_SVXPAGE_SHADOW);
-    m_nTransparencyId = AddTabPage("transparency", RID_SVXPAGE_TRANSPARENCE);
-    m_nFontId = AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
-    m_nFontEffectId = AddTabPage("fonteffect", RID_SVXPAGE_CHAR_EFFECTS);
-    m_nBackgroundId = AddTabPage("background", RID_SVXPAGE_BACKGROUND);
+    AddTabPage("line", RID_SVXPAGE_LINE);
+    AddTabPage("area", RID_SVXPAGE_AREA);
+    AddTabPage("shadowing", RID_SVXPAGE_SHADOW);
+    AddTabPage("transparency", RID_SVXPAGE_TRANSPARENCE);
+    AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
+    AddTabPage("fonteffect", RID_SVXPAGE_CHAR_EFFECTS);
+    AddTabPage("background", RID_SVXPAGE_BACKGROUND);
     AddTabPage("indents", RID_SVXPAGE_STD_PARAGRAPH);
-    m_nTextId = AddTabPage("text", RID_SVXPAGE_TEXTATTR);
+    AddTabPage("text", RID_SVXPAGE_TEXTATTR);
     AddTabPage("animation", RID_SVXPAGE_TEXTANIMATION);
-    m_nDimensionId = AddTabPage("dimensioning", RID_SVXPAGE_MEASURE);
-    m_nConnectorId = AddTabPage("connector", RID_SVXPAGE_CONNECTION);
+    AddTabPage("dimensioning", RID_SVXPAGE_MEASURE);
+    AddTabPage("connector", RID_SVXPAGE_CONNECTION);
     AddTabPage("alignment", RID_SVXPAGE_ALIGN_PARAGRAPH);
     AddTabPage("tabs", RID_SVXPAGE_TABULATOR);
     SvtCJKOptions aCJKOptions;
@@ -97,10 +86,10 @@ SdTabTemplateDlg::SdTabTemplateDlg( vcl::Window* pParent,
         RemoveTabPage("asiantypo");
 }
 
-void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SdTabTemplateDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-    if (nId == m_nLineId)
+    if (rId == "line")
     {
         aSet.Put (SvxColorListItem(pColorList,SID_COLOR_TABLE));
         aSet.Put (SvxDashListItem(pDashList,SID_DASH_LIST));
@@ -108,7 +97,7 @@ void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         aSet.Put (SfxUInt16Item(SID_DLG_TYPE,1));
         rPage.PageCreated(aSet);
     }
-    else if (nId == m_nAreaId)
+    else if (rId == "area")
     {
         aSet.Put (SvxColorListItem(pColorList,SID_COLOR_TABLE));
         aSet.Put (SvxGradientListItem(pGradientList,SID_GRADIENT_LIST));
@@ -120,20 +109,20 @@ void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         aSet.Put (SvxPatternListItem(pPatternList,SID_PATTERN_LIST));
         rPage.PageCreated(aSet);
     }
-    else if (nId == m_nShadowId)
+    else if (rId == "shadowing")
     {
         aSet.Put (SvxColorListItem(pColorList,SID_COLOR_TABLE));
         aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,0));
         aSet.Put (SfxUInt16Item(SID_DLG_TYPE,1));
         rPage.PageCreated(aSet);
     }
-    else if (nId == m_nTransparencyId)
+    else if (rId == "transparency")
     {
         aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,0));
         aSet.Put (SfxUInt16Item(SID_DLG_TYPE,1));
         rPage.PageCreated(aSet);
     }
-    else if (nId == m_nFontId)
+    else if (rId == "font")
     {
         SvxFontListItem aItem(*static_cast<const SvxFontListItem*>(
             rDocShell.GetItem( SID_ATTR_CHAR_FONTLIST) ) );
@@ -141,25 +130,25 @@ void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         aSet.Put (SvxFontListItem( aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
         rPage.PageCreated(aSet);
     }
-    else if (nId == m_nFontEffectId)
+    else if (rId == "fonteffect")
     {
         rPage.PageCreated(aSet);
     }
-    else if (nId == m_nBackgroundId)
+    else if (rId == "background")
     {
         aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR)));
         rPage.PageCreated(aSet);
     }
-    else if (nId == m_nTextId)
+    else if (rId == "text")
     {
         rPage.PageCreated(aSet);
     }
-    else if (nId == m_nDimensionId)
+    else if (rId == "dimensioning")
     {
         aSet.Put (OfaPtrItem(SID_OBJECT_LIST,pSdrView));
         rPage.PageCreated(aSet);
     }
-    else if (nId == m_nConnectorId)
+    else if (rId == "connector")
     {
         aSet.Put (OfaPtrItem(SID_OBJECT_LIST,pSdrView));
         rPage.PageCreated(aSet);
