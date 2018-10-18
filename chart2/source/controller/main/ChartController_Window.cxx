@@ -899,6 +899,10 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
             else
                 m_aSelection.resetPossibleSelectionAfterSingleClickWasEnsured();
         }
+
+        //@todo ForcePointer(&rMEvt);
+        pChartWindow->ReleaseMouse();
+
         // In tiled rendering drag mode could be not yet over on the call
         // that should handle the double-click, so better to perform this check
         // always.
@@ -907,9 +911,6 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
             Point aMousePixel = rMEvt.GetPosPixel();
             execute_DoubleClick( &aMousePixel );
         }
-
-        //@todo ForcePointer(&rMEvt);
-        pChartWindow->ReleaseMouse();
 
         if( m_aSelection.isSelectionDifferentFromBeforeMouseDown() )
             bNotifySelectionChange = true;
