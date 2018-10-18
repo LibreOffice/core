@@ -899,6 +899,8 @@ void Qt5Frame::draggingStarted(const int x, const int y)
         m_pDropTarget->fire_dragEnter(aEvent);
         m_bInDrag = true;
     }
+    else
+        m_pDropTarget->fire_dragOver(aEvent);
 }
 
 void Qt5Frame::dropping(const int x, const int y)
@@ -918,6 +920,12 @@ void Qt5Frame::dropping(const int x, const int y)
     aEvent.Transferable = xTransferable;
 
     m_pDropTarget->fire_drop(aEvent);
+    m_bInDrag = false;
+
+    if (m_pDragSource)
+    {
+        m_pDragSource->fire_dragEnd();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

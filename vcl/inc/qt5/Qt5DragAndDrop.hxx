@@ -57,6 +57,7 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     void dragFailed();
+    void fire_dragEnd();
     css::uno::Reference<css::datatransfer::XTransferable> const& GetTransferable() const
     {
         return m_xTrans;
@@ -108,6 +109,7 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     void fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde);
+    void fire_dragOver(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde);
     void fire_drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde);
 };
 

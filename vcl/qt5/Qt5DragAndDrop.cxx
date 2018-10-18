@@ -63,6 +63,7 @@ void Qt5DragSource::startDrag(
 {
     m_xListener = rListener;
     m_xTrans = rTrans;
+    SAL_WARN("vcl.qt5", "startDrag");
 
     if (m_pFrame)
     {
@@ -80,6 +81,19 @@ void Qt5DragSource::dragFailed()
         datatransfer::dnd::DragSourceDropEvent aEv;
         aEv.DropAction = datatransfer::dnd::DNDConstants::ACTION_NONE;
         aEv.DropSuccess = false;
+        auto xListener = m_xListener;
+        m_xListener.clear();
+        xListener->dragDropEnd(aEv);
+    }
+}
+
+void Qt5DragSource::fire_dragEnd()
+{
+    if (m_xListener.is())
+    {
+        datatransfer::dnd::DragSourceDropEvent aEv;
+        aEv.DropAction = datatransfer::dnd::DNDConstants::ACTION_MOVE;
+        aEv.DropSuccess = true; // FIXME: what if drop didn't work out?
         auto xListener = m_xListener;
         m_xListener.clear();
         xListener->dragDropEnd(aEv);
@@ -198,6 +212,19 @@ void Qt5DropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragE
     for (auto const& listener : aListeners)
     {
         listener->dragEnter(dtde);
+    }
+}
+
+void Qt5DropTarget::fire_dragOver(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtde)
+{
+    osl::ClearableGuard<::osl::Mutex> aGuard(m_aMutex);
+    std::vector<css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>> aListeners(
+        m_aListeners);
+    aGuard.clear();
+
+    for (auto const& listener : aListeners)
+    {
+        listener->dragOver(dtde);
     }
 }
 
