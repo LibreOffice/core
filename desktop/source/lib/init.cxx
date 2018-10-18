@@ -75,6 +75,7 @@
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
+#include <com/sun/star/xml/crypto/XCertificateCreator.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
@@ -696,7 +697,9 @@ static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart);
 
 static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
                                   const unsigned char* pCertificateBinary,
-                                  const int pCertificateBinarySize);
+                                  const int nCertificateBinarySize,
+                                  const unsigned char* pPrivateKeyBinary,
+                                  const int nPrivateKeyBinarySize);
 
 static int doc_getSignatureState(LibreOfficeKitDocument* pThis);
 
@@ -3684,7 +3687,9 @@ static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindo
 }
 
 // CERTIFICATE AND DOCUMENT SIGNING
-static bool doc_insertCertificate(LibreOfficeKitDocument* /*pThis*/, const unsigned char* pCertificateBinary, const int nCertificateBinarySize)
+static bool doc_insertCertificate(LibreOfficeKitDocument* /*pThis*/,
+                                  const unsigned char* pCertificateBinary, const int nCertificateBinarySize,
+                                  const unsigned char* pPrivateKeyBinary, const int nPrivateKeySize)
 {
     if (!xContext.is())
         return false;
@@ -3697,11 +3702,19 @@ static bool doc_insertCertificate(LibreOfficeKitDocument* /*pThis*/, const unsig
 
     uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment;
     xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
+    uno::Reference<xml::crypto::XCertificateCreator> xCertificateCreator(xSecurityEnvironment, uno::UNO_QUERY);
+
+    if (!xCertificateCreator.is())
+        return false;
 
     uno::Sequence<sal_Int8> aCertificateSequence(nCertificateBinarySize);
     std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.begin());
 
-    uno::Reference<security::XCertificate> xCertificate = xSecurityEnvironment->createCertificateFromRaw(aCertificateSequence);
+    uno::Sequence<sal_Int8> aPrivateKeySequence(nPrivateKeySize);
+    std::copy(pPrivateKeyBinary, pPrivateKeyBinary + nPrivateKeySize, aPrivateKeySequence.begin());
+
+    uno::Reference<security::XCertificate> xCertificate;
+    xCertificate = xCertificateCreator->createDERCertificateWithPrivateKey(aCertificateSequence, aPrivateKeySequence);
 
     if (!xCertificate.is())
         return false;
