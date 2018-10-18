@@ -4433,8 +4433,6 @@ SwFormatPageDesc wwSectionManager::SetSwFormatPageDesc(mySegIter const &rIter,
 
 void wwSectionManager::InsertSegments()
 {
-    const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
-    bool bUseEnhFields = rOpt.IsUseEnhancedFields();
     mySegIter aEnd = maSegments.end();
     mySegIter aStart = maSegments.begin();
     for (mySegIter aIter = aStart; aIter != aEnd; ++aIter)
@@ -4464,12 +4462,6 @@ void wwSectionManager::InsertSegments()
             || aIter->maSep.dxaLeft != aPrev->maSep.dxaLeft || aIter->maSep.dxaRight != aPrev->maSep.dxaRight )
             bInsertPageDesc = true;
         bool bProtected = SectionIsProtected(*aIter); // do we really  need this ?? I guess I have a different logic in editshell which disables this...
-        if (bUseEnhFields && mrReader.m_xWDop->fProtEnabled && aIter->IsNotProtected())
-        {
-            // here we have the special case that the whole document is protected, with the exception of this section.
-            // I want to address this when I do the section rework, so for the moment we disable the overall protection then...
-            mrReader.m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::PROTECT_FORM, false );
-        }
 
         if (bInsertPageDesc)
         {
