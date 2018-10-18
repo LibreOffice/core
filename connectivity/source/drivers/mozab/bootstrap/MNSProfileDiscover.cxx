@@ -199,12 +199,7 @@ namespace connectivity
         {
             sal_Int32 index=static_cast<sal_Int32>(product);
             ProductStruct &rProduct = m_ProductProfileList[index];
-            if (rProduct.mProfileList.empty() || rProduct.mProfileList.find(profileName) == rProduct.mProfileList.end())
-            {
-                return false;
-            }
-            else
-                return true;
+            return rProduct.mProfileList.find(profileName) != rProduct.mProfileList.end();
         }
     }
 }

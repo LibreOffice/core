@@ -1823,27 +1823,13 @@ bool SvtFileDialog::PrepareExecute()
 
             Reference< XResultSet > xResultSet
                 = aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_FOLDERS_ONLY );
-            if ( xResultSet.is() )
+            if ( xResultSet.is() && !xResultSet->next() )
             {
-                bool bEmpty = true;
-                if ( !xResultSet->next() )
-                {
-                    // folder is empty
-                    bEmpty = true;
-                }
-                else
-                {
-                                bEmpty = false;
-                }
-
-                if ( bEmpty )
-                {
-                    std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
-                                                              VclMessageType::Warning, VclButtonsType::Ok,
-                                                              FpsResId(STR_SVT_NOREMOVABLEDEVICE)));
-                    xBox->run();
-                    return false;
-                }
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(GetFrameWeld(),
+                                                          VclMessageType::Warning, VclButtonsType::Ok,
+                                                          FpsResId(STR_SVT_NOREMOVABLEDEVICE)));
+                xBox->run();
+                return false;
             }
         }
         catch ( ContentCreationException const & )

@@ -37,10 +37,7 @@ bool FeDeclarator::checkType(AstDeclaration const * type) const
     if( count != -1 )
         tmp = m_name.copy( count+1 );
 
-    if (tmp == type->getLocalName())
-        return false;
-    else
-        return true;
+    return tmp != type->getLocalName();
 }
 
 AstType const * FeDeclarator::compose(AstDeclaration const * pDecl)

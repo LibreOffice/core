@@ -1228,10 +1228,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
                     const jchar* jcharName= pJNIEnv->GetStringChars( jsClass, nullptr);
                     OUString sName(reinterpret_cast<sal_Unicode const *>(jcharName));
                     bool bIsSandbox;
-                    if ( sName == "com.sun.star.lib.sandbox.SandboxSecurity" )
-                        bIsSandbox= true;
-                    else
-                        bIsSandbox= false;
+                    bIsSandbox = sName == "com.sun.star.lib.sandbox.SandboxSecurity";
                     pJNIEnv->ReleaseStringChars( jsClass, jcharName);
 
                     if (bIsSandbox)

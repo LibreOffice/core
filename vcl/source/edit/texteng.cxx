@@ -357,13 +357,9 @@ bool TextEngine::DoesKeyChangeText( const KeyEvent& rKeyEvent )
 
 bool TextEngine::IsSimpleCharInput( const KeyEvent& rKeyEvent )
 {
-    if( rKeyEvent.GetCharCode() >= 32 && rKeyEvent.GetCharCode() != 127 &&
+    return rKeyEvent.GetCharCode() >= 32 && rKeyEvent.GetCharCode() != 127 &&
         KEY_MOD1 != (rKeyEvent.GetKeyCode().GetModifier() & ~KEY_SHIFT) && // (ssa) #i45714#:
-        KEY_MOD2 != (rKeyEvent.GetKeyCode().GetModifier() & ~KEY_SHIFT) )  // check for Ctrl and Alt separately
-    {
-        return true;
-    }
-    return false;
+        KEY_MOD2 != (rKeyEvent.GetKeyCode().GetModifier() & ~KEY_SHIFT);  // check for Ctrl and Alt separately
 }
 
 void TextEngine::ImpInitDoc()

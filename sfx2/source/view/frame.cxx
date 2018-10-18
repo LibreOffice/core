@@ -163,10 +163,8 @@ void SfxFrame::DoClose_Impl()
 
 bool SfxFrame::DocIsModified_Impl()
 {
-    if ( pImpl->pCurrentViewFrame && pImpl->pCurrentViewFrame->GetObjectShell() &&
-            pImpl->pCurrentViewFrame->GetObjectShell()->IsModified() )
-        return true;
-    return false;
+    return pImpl->pCurrentViewFrame && pImpl->pCurrentViewFrame->GetObjectShell() &&
+            pImpl->pCurrentViewFrame->GetObjectShell()->IsModified();
 }
 
 bool SfxFrame::PrepareClose_Impl( bool bUI )

@@ -361,10 +361,7 @@ namespace slideshow
                            const ::basegfx::B2DVector&  /*rSlideBounds*/ )
         {
             // try to extract string
-            if( !(rSourceAny >>= o_rValue) )
-                return false; // nothing left to try
-
-            return true;
+            return rSourceAny >>= o_rValue;
         }
 
         /// extract bool value from Any

@@ -159,13 +159,8 @@ namespace
             return false;
         }
 
-        if((LANGUAGE_JAPANESE == rFont.GetLanguage()) || (LANGUAGE_JAPANESE == rFont.GetCJKContextLanguage()))
-        {
-            // the underline is right for Japanese only
-            return true;
-        }
-
-        return false;
+        // the underline is right for Japanese only
+        return (LANGUAGE_JAPANESE == rFont.GetLanguage()) || (LANGUAGE_JAPANESE == rFont.GetCJKContextLanguage());
     }
 
     void impTextBreakupHandler::impCreateTextPortionPrimitive(const DrawPortionInfo& rInfo)

@@ -5243,9 +5243,7 @@ bool PDFWriterImpl::emitCatalog()
 
     aLine.append( ">>\n"
                   "endobj\n\n" );
-    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
-
-    return true;
+    return writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
 #if HAVE_FEATURE_NSS
@@ -5317,10 +5315,7 @@ bool PDFWriterImpl::emitSignature()
 
     aLine.append(" >>\nendobj\n\n" );
 
-    if (!writeBuffer( aLine.getStr(), aLine.getLength() ))
-        return false;
-
-    return true;
+    return writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
 bool PDFWriterImpl::finalizeSignature()
@@ -5393,8 +5388,7 @@ bool PDFWriterImpl::finalizeSignature()
     CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, m_nSignatureContentOffset)) );
     m_aFile.write(aCMSHexBuffer.getStr(), aCMSHexBuffer.getLength(), nWritten);
 
-    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, nOffset)) );
-    return true;
+    return osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, nOffset);
 }
 
 #endif //HAVE_FEATURE_NSS
@@ -5923,9 +5917,7 @@ bool PDFWriterImpl::emitTrailer()
     aLine.append( static_cast<sal_Int64>(nXRefOffset) );
     aLine.append( "\n"
                   "%%EOF\n" );
-    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
-
-    return true;
+    return writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
 struct AnnotationSortEntry
@@ -8861,9 +8853,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit const & rObject )
     aLine.append( " 0 R\n"
                   ">>\n"
                   "endobj\n\n" );
-    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
-
-    return true;
+    return writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
 void PDFWriterImpl::writeJPG( JPGEmit& rObject )

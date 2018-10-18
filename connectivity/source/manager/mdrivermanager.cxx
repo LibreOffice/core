@@ -169,11 +169,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
         bool operator()( const Reference<XDriver>& _rDriver ) const
         {
             // ask the driver
-            if ( _rDriver.is() && _rDriver->acceptsURL( m_rURL ) )
-                return true;
-
-            // does not accept ...
-            return false;
+            return _rDriver.is() && _rDriver->acceptsURL( m_rURL );
         }
     };
 

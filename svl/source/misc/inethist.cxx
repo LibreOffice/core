@@ -276,16 +276,8 @@ bool INetURLHistory_Impl::queryUrl (const OUString &rUrl) const
 {
     sal_uInt32 h = crc32 (rUrl);
     sal_uInt16 k = find (h);
-    if ((k < capacity()) && (m_pHash[k] == h))
-    {
-        // Cache hit.
-        return true;
-    }
-    else
-    {
-        // Cache miss.
-        return false;
-    }
+    // true if cache hit
+    return (k < capacity()) && (m_pHash[k] == h);
 }
 
 /*

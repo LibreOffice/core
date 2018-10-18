@@ -725,10 +725,7 @@ bool SvxNumberFormatShell::IsEssentialFormat_Impl(SvNumFormatType eType, sal_uIn
         break;
     }
 
-    if (nKey == pFormatter->GetStandardFormat(eType, eCurLanguage))
-        return true;
-
-    return false;
+    return nKey == pFormatter->GetStandardFormat(eType, eCurLanguage);
 }
 
 short SvxNumberFormatShell::FillEListWithCurrency_Impl(std::vector<OUString>& rList, short nSelPos)

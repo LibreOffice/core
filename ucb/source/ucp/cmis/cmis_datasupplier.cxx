@@ -83,10 +83,7 @@ namespace cmis
             return true;
 
         getData();
-        if ( maResults.size() > nIndex )
-            return true;
-
-        return false;
+        return maResults.size() > nIndex;
     }
 
     sal_uInt32 DataSupplier::totalCount()

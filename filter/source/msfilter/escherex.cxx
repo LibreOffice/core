@@ -2479,19 +2479,14 @@ bool EscherPropertyContainer::IsDefaultObject(
             break;
     }
 
-    if(rSdrObjCustomShape.IsDefaultGeometry( SdrObjCustomShape::DefaultType::Equations )
+    return rSdrObjCustomShape.IsDefaultGeometry( SdrObjCustomShape::DefaultType::Equations )
         && rSdrObjCustomShape.IsDefaultGeometry( SdrObjCustomShape::DefaultType::Viewbox )
         && rSdrObjCustomShape.IsDefaultGeometry( SdrObjCustomShape::DefaultType::Path )
         && rSdrObjCustomShape.IsDefaultGeometry( SdrObjCustomShape::DefaultType::Gluepoints )
         && rSdrObjCustomShape.IsDefaultGeometry( SdrObjCustomShape::DefaultType::Segments )
         && rSdrObjCustomShape.IsDefaultGeometry( SdrObjCustomShape::DefaultType::StretchX )
         && rSdrObjCustomShape.IsDefaultGeometry( SdrObjCustomShape::DefaultType::StretchY )
-        && rSdrObjCustomShape.IsDefaultGeometry( SdrObjCustomShape::DefaultType::TextFrames ) )
-    {
-        return true;
-    }
-
-    return false;
+        && rSdrObjCustomShape.IsDefaultGeometry( SdrObjCustomShape::DefaultType::TextFrames );
 }
 
 void EscherPropertyContainer::LookForPolarHandles( const MSO_SPT eShapeType, sal_Int32& nAdjustmentsWhichNeedsToBeConverted )

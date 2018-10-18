@@ -77,10 +77,7 @@ namespace dbp
             return false;
 
         Reference< XGridColumnFactory > xColumnFactory(getContext().xObjectModel, UNO_QUERY);
-        if (!xColumnFactory.is())
-            return false;
-
-        return true;
+        return xColumnFactory.is();
     }
 
 

@@ -1164,12 +1164,7 @@ bool XMLTextImportHelper::IsDuplicateFrame(const OUString& sName, sal_Int32 nX, 
         }
 
         // In some case, position is not defined for frames, so check whether the two frames follow each other (are anchored to the same position)
-        if (m_xImpl->msLastImportedFrameName != sName)
-        {
-            return false;
-        }
-
-        return true;
+        return m_xImpl->msLastImportedFrameName == sName;
     }
     return false;
 }

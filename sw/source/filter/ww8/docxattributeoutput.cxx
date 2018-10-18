@@ -5149,10 +5149,7 @@ bool DocxAttributeOutput::ExportAsActiveXControl(const SdrObject* pObject) const
         return false;
 
     oox::ole::OleFormCtrlExportHelper exportHelper(comphelper::getProcessComponentContext(), xModel, xControlModel);
-    if(!exportHelper.isValid())
-        return false;
-
-    return true;
+    return exportHelper.isValid();
 }
 
 void DocxAttributeOutput::PostponeOLE( SwOLENode& rNode, const Size& rSize, const SwFlyFrameFormat* pFlyFrameFormat )
