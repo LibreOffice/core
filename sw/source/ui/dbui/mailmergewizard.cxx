@@ -93,7 +93,7 @@ VclPtr<TabPage> SwMailMergeWizard::createPage(WizardState _nState)
     switch(_nState)
     {
         case MM_DOCUMENTSELECTPAGE :
-            pRet = VclPtr<SwMailMergeDocSelectPage>::Create(this);
+            pRet = VclPtr<SwMailMergeDocSelectPage>::Create(this, TabPageParent(this));
 
             /* tdf#52986 Set help ID using SetRoadmapHelpId for all pages
             so that when by default the focus is on the left side pane of
