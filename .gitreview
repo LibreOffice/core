@@ -3,5 +3,4 @@ host=logerrit
 port=29418
 project=core
 defaultremote=logerrit
-defaultbranch=libreoffice-5-2-7
-
+defaultbranch=feature/cib_contract136
