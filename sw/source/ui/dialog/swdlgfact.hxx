@@ -722,7 +722,7 @@ public:
 
     virtual void ExecuteMMResultSaveDialog(weld::Window* pParent) override;
     virtual void ExecuteMMResultPrintDialog(weld::Window* pParent) override;
-    virtual void ExecuteMMResultEmailDialog() override;
+    virtual void ExecuteMMResultEmailDialog(weld::Window* pParent) override;
 };
 
 #endif
