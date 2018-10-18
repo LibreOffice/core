@@ -41,6 +41,7 @@
 #endif
 
 #include "system.hxx"
+#include "unixerrnostring.hxx"
 #if defined(__sun)
 # include <sys/procfs.h>
 #endif
@@ -174,7 +175,7 @@ static void ChildStatusProc(void *pData)
             OSL_ASSERT(geteuid() == 0);     /* must be root */
 
             if (! INIT_GROUPS(data.m_name, data.m_gid) || (setuid(data.m_uid) != 0))
-                SAL_WARN("sal.osl", "Failed to change uid and guid, errno=" << errno << " (" << strerror(errno) << ")" );
+                SAL_WARN("sal.osl", "Failed to change uid and guid: " << UnixErrnoString(errno));
 
             const rtl::OUString envVar("HOME");
             osl_clearEnvironment(envVar.pData);
@@ -234,14 +235,14 @@ static void ChildStatusProc(void *pData)
             execv(data.m_pszArgs[0], const_cast<char **>(data.m_pszArgs));
         }
 
-        SAL_WARN("sal.osl", "Failed to exec, errno=" << errno << " (" << strerror(errno) << ")");
+        SAL_WARN("sal.osl", "Failed to exec: " << UnixErrnoString(errno));
 
         SAL_WARN("sal.osl", "ChildStatusProc : starting '" << data.m_pszArgs[0] << "' failed");
 
         /* if we reach here, something went wrong */
         errno_copy = errno;
         if ( !safeWrite(channel[1], &errno_copy, sizeof(errno_copy)) )
-            SAL_WARN("sal.osl", "sendFdPipe : sending failed (" << strerror(errno) << ")");
+            SAL_WARN("sal.osl", "sendFdPipe : sending failed:  " << UnixErrnoString(errno));
 
         if ( channel[1] != -1 )
             close(channel[1]);
@@ -300,7 +301,7 @@ static void ChildStatusProc(void *pData)
 
             if ( child_pid < 0)
             {
-                SAL_WARN("sal.osl", "Failed to wait for child process, errno=" << errno << " (" << strerror(errno) << ")");
+                SAL_WARN("sal.osl", "Failed to wait for child process: " << UnixErrnoString(errno));
 
                 /*
                 We got another error than EINTR. Anyway we have to wake up the
@@ -341,7 +342,7 @@ static void ChildStatusProc(void *pData)
         else
         {
             SAL_WARN("sal.osl", "ChildStatusProc : starting '" << data.m_pszArgs[0] << "' failed");
-            SAL_WARN("sal.osl", "Failed to launch child process, child reports errno=" << status << " (" << strerror(status) << ")");
+            SAL_WARN("sal.osl", "Failed to launch child process, child reports " << UnixErrnoString(status));
 
             /* Close pipe ends */
             if ( pdata->m_pInputWrite )
