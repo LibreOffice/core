@@ -364,6 +364,15 @@ DECLARE_WW8EXPORT_TEST(testCp1000044, "cp1000044.doc")
     CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     CPPUNIT_ASSERT_EQUAL( true, pDoc->getIDocumentSettingAccess().get( DocumentSettingId::PROTECT_FORM ) );
+
+    uno::Sequence<beans::PropertyValue> aGrabBag = getProperty< uno::Sequence<beans::PropertyValue> >(mxComponent, "InteropGrabBag");
+    sal_Int32 nPasswordHash = 0;
+    for ( sal_Int32 i = 0; i < aGrabBag.getLength(); ++i )
+    {
+        if ( aGrabBag[i].Name == "FormPasswordHash" )
+            aGrabBag[i].Value >>= nPasswordHash;
+    }
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Password Hash", sal_Int32(609995782), nPasswordHash);
 }
 
 DECLARE_WW8EXPORT_TEST(testBorderColours, "bordercolours.doc")
