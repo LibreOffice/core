@@ -878,7 +878,9 @@
       <object class="GtkAlignment" id="alignment6">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="top_padding">6</property>
         <property name="left_padding">12</property>
+        <property name="right_padding">12</property>
         <child>
           <object class="GtkScrolledWindow">
             <property name="visible">True</property>
