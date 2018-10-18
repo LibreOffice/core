@@ -95,7 +95,7 @@ using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 
-static PHLayout pPHLayout[] =
+static PHLayout const pPHLayout[] =
 {
     { EppLayout::TITLESLIDE,            { 0x0d, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x10, true, true, false },
     { EppLayout::TITLEANDBODYSLIDE,     { 0x0d, 0x0e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 0x00, 0x0d, 0x0e, true, true, false },
@@ -452,12 +452,12 @@ sal_Int32 PPTWriterBase::GetLayoutOffsetFixed( const css::uno::Reference< css::b
     return nLayout;
 }
 
-PHLayout& PPTWriterBase::GetLayout(  const css::uno::Reference< css::beans::XPropertySet >& rXPropSet )
+PHLayout const & PPTWriterBase::GetLayout(  const css::uno::Reference< css::beans::XPropertySet >& rXPropSet )
 {
     return pPHLayout[ GetLayoutOffsetFixed( rXPropSet ) ];
 }
 
-PHLayout& PPTWriterBase::GetLayout( sal_Int32 nOffset )
+PHLayout const & PPTWriterBase::GetLayout( sal_Int32 nOffset )
 {
     if( nOffset >= 0 && nOffset < EPP_LAYOUT_SIZE )
         return pPHLayout[ nOffset ];
