@@ -49,19 +49,17 @@
 /**
  * Constructor of Tab dialog: appends pages to the dialog
  */
-SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell const * pDocSh,
-                                vcl::Window* pParent,
+SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg(SfxObjectShell const * pDocSh,
+                                weld::Window* pParent,
                                 bool bBackground,
                                 SfxStyleSheetBase& rStyleBase,
                                 PresentationObjects _ePO,
-                                SfxStyleSheetBasePool* pSSPool ) :
-        SfxTabDialog        ( pParent
-                            , "DrawPRTLDialog"
-                            , "modules/sdraw/ui/drawprtldialog.ui"),
-        mpDocShell          ( pDocSh ),
-        ePO                 ( _ePO ),
-        aInputSet           ( *rStyleBase.GetItemSet().GetPool(), svl::Items<SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL>{} ),
-        pOrgSet             ( &rStyleBase.GetItemSet() )
+                                SfxStyleSheetBasePool* pSSPool)
+    : SfxTabDialogController(pParent, "modules/sdraw/ui/drawprtldialog.ui", "DrawPRTLDialog")
+    , mpDocShell(pDocSh)
+    , ePO(_ePO)
+    , aInputSet(*rStyleBase.GetItemSet().GetPool(), svl::Items<SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL>{})
+    , pOrgSet(&rStyleBase.GetItemSet())
 {
     if( IS_OUTLINE(ePO))
     {
@@ -133,14 +131,14 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell const * pDocSh,
 
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
 
-    mnLine = AddTabPage( "RID_SVXPAGE_LINE", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_LINE ), nullptr );
-    mnArea = AddTabPage( "RID_SVXPAGE_AREA", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), nullptr );
-    mnShadow = AddTabPage( "RID_SVXPAGE_SHADOW", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_SHADOW ), nullptr );
-    mnTransparency = AddTabPage( "RID_SVXPAGE_TRANSPARENCE", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), nullptr );
-    mnFont = AddTabPage( "RID_SVXPAGE_CHAR_NAME", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), nullptr );
-    mnEffects = AddTabPage( "RID_SVXPAGE_CHAR_EFFECTS", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), nullptr );
+    AddTabPage( "RID_SVXPAGE_LINE", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_LINE ), nullptr );
+    AddTabPage( "RID_SVXPAGE_AREA", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), nullptr );
+    AddTabPage( "RID_SVXPAGE_SHADOW", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_SHADOW ), nullptr );
+    AddTabPage( "RID_SVXPAGE_TRANSPARENCE", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), nullptr );
+    AddTabPage( "RID_SVXPAGE_CHAR_NAME", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), nullptr );
+    AddTabPage( "RID_SVXPAGE_CHAR_EFFECTS", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), nullptr );
     AddTabPage( "RID_SVXPAGE_STD_PARAGRAPH", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_STD_PARAGRAPH ), nullptr );
-    mnTextAtt = AddTabPage( "RID_SVXPAGE_TEXTATTR", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TEXTATTR ), nullptr );
+    AddTabPage( "RID_SVXPAGE_TEXTATTR", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TEXTATTR ), nullptr );
     AddTabPage( "RID_SVXPAGE_PICK_BULLET", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PICK_BULLET ), nullptr );
     AddTabPage( "RID_SVXPAGE_PICK_SINGLE_NUM", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PICK_SINGLE_NUM ), nullptr );
     AddTabPage( "RID_SVXPAGE_PICK_BMP", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PICK_BMP ), nullptr );
@@ -148,7 +146,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell const * pDocSh,
     AddTabPage( "RID_SVXPAGE_TABULATOR", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TABULATOR ), nullptr );
     AddTabPage( "RID_SVXPAGE_PARA_ASIAN", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PARA_ASIAN ), nullptr );
     AddTabPage( "RID_SVXPAGE_ALIGN_PARAGRAPH", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGN_PARAGRAPH ), nullptr );
-    mnBackground = AddTabPage( "RID_SVXPAGE_BACKGROUND", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr);
+    AddTabPage( "RID_SVXPAGE_BACKGROUND", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), nullptr);
 
     SvtCJKOptions aCJKOptions;
     if( !aCJKOptions.IsAsianTypographyEnabled() )
@@ -212,25 +210,18 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell const * pDocSh,
             aTitle = SdResId(STR_PSEUDOSHEET_NOTES);
         break;
     }
-    SetText( aTitle );
+    m_xDialog->set_title(aTitle);
 }
 
 SdPresLayoutTemplateDlg::~SdPresLayoutTemplateDlg()
 {
-    disposeOnce();
 }
 
-void SdPresLayoutTemplateDlg::dispose()
-{
-    pOutSet.reset();
-    SfxTabDialog::dispose();
-}
-
-void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
+void SdPresLayoutTemplateDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
 {
     SfxAllItemSet aSet(*(aInputSet.GetPool()));
 
-    if (nId == mnLine)
+    if (rId == "RID_SVXPAGE_LINE")
     {
         aSet.Put (SvxColorListItem(pColorTab,SID_COLOR_TABLE));
         aSet.Put (SvxDashListItem(pDashList,SID_DASH_LIST));
@@ -238,7 +229,7 @@ void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         aSet.Put (SfxUInt16Item(SID_DLG_TYPE,1));
         rPage.PageCreated(aSet);
     }
-    else if (nId == mnArea)
+    else if (rId == "RID_SVXPAGE_AREA")
     {
         aSet.Put (SvxColorListItem(pColorTab,SID_COLOR_TABLE));
         aSet.Put (SvxGradientListItem(pGradientList,SID_GRADIENT_LIST));
@@ -250,35 +241,35 @@ void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         aSet.Put (SfxUInt16Item(SID_TABPAGE_POS,0));
         rPage.PageCreated(aSet);
     }
-    else if (nId == mnShadow)
+    else if (rId == "RID_SVXPAGE_SHADOW")
     {
         aSet.Put (SvxColorListItem(pColorTab,SID_COLOR_TABLE));
         aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,0));
         aSet.Put (SfxUInt16Item(SID_DLG_TYPE,1));
         rPage.PageCreated(aSet);
     }
-    else if (nId == mnTransparency)
+    else if (rId == "RID_SVXPAGE_TRANSPARENCE")
     {
         aSet.Put (SfxUInt16Item(SID_PAGE_TYPE,0));
         aSet.Put (SfxUInt16Item(SID_DLG_TYPE,1));
         rPage.PageCreated(aSet);
     }
-    else if (nId == mnFont)
+    else if (rId == "RID_SVXPAGE_CHAR_NAME")
     {
         SvxFontListItem aItem(*static_cast<const SvxFontListItem*>(mpDocShell->GetItem( SID_ATTR_CHAR_FONTLIST) ) );
         aSet.Put (SvxFontListItem( aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
         rPage.PageCreated(aSet);
     }
-    else if (nId == mnEffects)
+    else if (rId == "RID_SVXPAGE_CHAR_EFFECTS")
     {
         rPage.PageCreated(aSet);
     }
-    else if (nId == mnTextAtt)
+    else if (rId == "RID_SVXPAGE_TEXTATTR")
     {
         aSet.Put(CntUInt16Item(SID_SVXTEXTATTRPAGE_OBJKIND, OBJ_TEXT));
         rPage.PageCreated(aSet);
     }
-    else if (nId == mnBackground)
+    else if (rId == "RID_SVXPAGE_BACKGROUND")
     {
         aSet.Put(SfxUInt32Item(SID_FLAG_TYPE,static_cast<sal_uInt32>(SvxBackgroundTabFlags::SHOW_CHAR_BKGCOLOR)));
         rPage.PageCreated(aSet);
@@ -287,17 +278,17 @@ void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 
 const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet() const
 {
-    if( pOutSet )
+    if (pOutSet)
     {
-        pOutSet->Put( *SfxTabDialog::GetOutputItemSet() );
+        pOutSet->Put(*SfxTabDialogController::GetOutputItemSet());
 
         const SvxNumBulletItem *pSvxNumBulletItem = nullptr;
-        if( SfxItemState::SET == pOutSet->GetItemState(EE_PARA_NUMBULLET, false, reinterpret_cast<const SfxPoolItem**>(&pSvxNumBulletItem) ))
+        if (SfxItemState::SET == pOutSet->GetItemState(EE_PARA_NUMBULLET, false, reinterpret_cast<const SfxPoolItem**>(&pSvxNumBulletItem)))
             SdBulletMapper::MapFontsInNumRule( *pSvxNumBulletItem->GetNumRule(), *pOutSet );
         return pOutSet.get();
     }
     else
-        return SfxTabDialog::GetOutputItemSet();
+        return SfxTabDialogController::GetOutputItemSet();
 }
 
 sal_uInt16 SdPresLayoutTemplateDlg::GetOutlineLevel() const

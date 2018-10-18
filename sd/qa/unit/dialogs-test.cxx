@@ -463,16 +463,17 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
         }
         case 15:
         {
-            // CreateSdPresLayoutTemplateDlg(SfxObjectShell* pDocSh, vcl::Window* pParent, const SdResId& DlgId, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool) override;
+            // CreateSdPresLayoutTemplateDlg(SfxObjectShell* pDocSh, weld::Window* pParent, const SdResId& DlgId, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool) override;
             // use STR_PSEUDOSHEET_TITLE configuration, see futempl.cxx for more possible configurations
             // may be nicer on the long run to take a configuration which represents a selected SdrObject
             SfxStyleSheetBasePool* pStyleSheetPool = getDocShell()->GetStyleSheetPool();
             CPPUNIT_ASSERT(pStyleSheetPool);
             SfxStyleSheetBase* pStyleSheet = pStyleSheetPool->First();
             CPPUNIT_ASSERT(pStyleSheet);
+            vcl::Window* pWin = Application::GetDefDialogParent();
             pRetval = getSdAbstractDialogFactory()->CreateSdPresLayoutTemplateDlg(
                 getDocShell(),
-                Application::GetDefDialogParent(),
+                pWin ? pWin->GetFrameWeld() : nullptr,
                 false,
                 *pStyleSheet,
                 PO_TITLE,
