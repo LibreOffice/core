@@ -499,7 +499,7 @@ public:
 
     virtual void ExecuteMMResultSaveDialog(weld::Window* pParent) = 0;
     virtual void ExecuteMMResultPrintDialog(weld::Window* pParent) = 0;
-    virtual void ExecuteMMResultEmailDialog() = 0;
+    virtual void ExecuteMMResultEmailDialog(weld::Window* pParent) = 0;
 
 protected:
     ~SwAbstractDialogFactory() {}
