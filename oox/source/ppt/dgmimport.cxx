@@ -68,6 +68,7 @@ bool QuickDiagrammingImport::importDocument()
 
     Reference<drawing::XShapes> xParentShape(getParentShape(),
                                              UNO_QUERY_THROW);
+    oox::core::Relations aRelations("");
     oox::drawingml::ShapePtr pShape(
         new oox::drawingml::Shape( "com.sun.star.drawing.DiagramShape" ) );
     drawingml::loadDiagram(pShape,
@@ -75,7 +76,8 @@ bool QuickDiagrammingImport::importDocument()
                            "",
                            aFragmentPath,
                            "",
-                           "");
+                           "",
+                           aRelations);
     oox::drawingml::ThemePtr pTheme(
         new oox::drawingml::Theme());
     basegfx::B2DHomMatrix aMatrix;

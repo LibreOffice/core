@@ -105,14 +105,14 @@ public:
             {
                 // CT_When
                 ConditionAtomPtr pNode( new ConditionAtom(mpNode->getLayoutNode(), false, rAttribs.getFastAttributeList()) );
-                mpNode->addChild( pNode );
+                LayoutAtom::connect(mpNode, pNode);
                 return new IfContext( *this, rAttribs, pNode );
             }
             case DGM_TOKEN( else ):
             {
                 // CT_Otherwise
                 ConditionAtomPtr pNode( new ConditionAtom(mpNode->getLayoutNode(), true, rAttribs.getFastAttributeList()) );
-                mpNode->addChild( pNode );
+                LayoutAtom::connect(mpNode, pNode);
                 return new IfContext( *this, rAttribs, pNode );
             }
             default:
@@ -182,7 +182,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
     case DGM_TOKEN( layoutNode ):
     {
         LayoutNodePtr pNode( new LayoutNode(mpNode->getLayoutNode().getDiagram()) );
-        mpNode->addChild( pNode );
+        LayoutAtom::connect(mpNode, pNode);
         pNode->setChildOrder( rAttribs.getToken( XML_chOrder, XML_b ) );
         pNode->setMoveWith( rAttribs.getString( XML_moveWith ).get() );
         pNode->setStyleLabel( rAttribs.getString( XML_styleLbl ).get() );
@@ -210,7 +210,7 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
         pShape->setDiagramRotation(rAttribs.getInteger(XML_rot, 0) * PER_DEGREE);
 
         ShapeAtomPtr pAtom( new ShapeAtom(mpNode->getLayoutNode(), pShape) );
-        mpNode->addChild( pAtom );
+        LayoutAtom::connect(mpNode, pAtom);
         return new ShapeContext( *this, ShapePtr(), pShape );
     }
     case DGM_TOKEN( extLst ):
@@ -219,21 +219,21 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
     {
         // CT_Algorithm
         AlgAtomPtr pAtom( new AlgAtom(mpNode->getLayoutNode()) );
-        mpNode->addChild( pAtom );
+        LayoutAtom::connect(mpNode, pAtom);
         return new AlgorithmContext( *this, rAttribs, pAtom );
     }
     case DGM_TOKEN( choose ):
     {
         // CT_Choose
         LayoutAtomPtr pAtom( new ChooseAtom(mpNode->getLayoutNode()) );
-        mpNode->addChild( pAtom );
+        LayoutAtom::connect(mpNode, pAtom);
         return new ChooseContext( *this, rAttribs, pAtom );
     }
     case DGM_TOKEN( forEach ):
     {
         // CT_ForEach
         ForEachAtomPtr pAtom( new ForEachAtom(mpNode->getLayoutNode(), rAttribs.getFastAttributeList()) );
-        mpNode->addChild( pAtom );
+        LayoutAtom::connect(mpNode, pAtom);
         return new ForEachContext( *this, rAttribs, pAtom );
     }
     case DGM_TOKEN( constrLst ):
