@@ -510,6 +510,21 @@ static void WriteDop( WW8Export& rWrt )
         rDop.lKeyProtDoc != 0)
     {
         rDop.fProtEnabled =  true;
+        // The password was ignored at import if forms protection was enabled,
+        // so round-trip it since protection is still enabled.
+        if ( rDop.lKeyProtDoc == 0 && xProps.is() )
+        {
+            uno::Sequence< beans::PropertyValue > aGrabBag;
+            xProps->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+            for ( sal_Int32 i = 0; i < aGrabBag.getLength(); ++i )
+            {
+                if ( aGrabBag[i].Name == "FormPasswordHash" )
+                {
+                    aGrabBag[i].Value >>= rDop.lKeyProtDoc;
+                    break;
+                }
+            }
+        }
     }
     else
     {

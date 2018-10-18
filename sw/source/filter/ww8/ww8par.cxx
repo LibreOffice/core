@@ -1919,6 +1919,12 @@ void SwWW8ImplReader::ImportDop()
     // Still allow editing of form fields.
     if (!m_xWDop->fProtEnabled)
         m_pDocShell->SetModifyPasswordHash(m_xWDop->lKeyProtDoc);
+    else if ( xDocProps.is() )
+    {
+        comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue("InteropGrabBag"));
+        aGrabBag["FormPasswordHash"] <<= m_xWDop->lKeyProtDoc;
+        xDocProps->setPropertyValue("InteropGrabBag", uno::Any(aGrabBag.getAsConstPropertyValueList()));
+    }
 
     const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
     if (rOpt.IsUseEnhancedFields())
