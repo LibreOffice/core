@@ -390,17 +390,17 @@ void ChartController::executeDispatch_InsertTrendline()
     aDialogParameter.init( getModel() );
     ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
     SolarMutexGuard aGuard;
-    ScopedVclPtrInstance<SchAttribTabDlg> aDialog(
-        GetChartWindow(), &aItemSet, &aDialogParameter,
+    SchAttribTabDlg aDialog(
+        GetChartFrame(), &aItemSet, &aDialogParameter,
         &aViewElementListProvider,
         uno::Reference< util::XNumberFormatsSupplier >(
                 getModel(), uno::UNO_QUERY ) );
 
     // note: when a user pressed "OK" but didn't change any settings in the
     // dialog, the SfxTabDialog returns "Cancel"
-    if( aDialog->Execute() == RET_OK || aDialog->DialogWasClosedWithOK())
+    if( aDialog.execute() == RET_OK || aDialog.DialogWasClosedWithOK())
     {
-        const SfxItemSet* pOutItemSet = aDialog->GetOutputItemSet();
+        const SfxItemSet* pOutItemSet = aDialog.GetOutputItemSet();
         if( pOutItemSet )
         {
             ControllerLockGuardUNO aCLGuard( getModel() );
@@ -448,20 +448,20 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
         aDialogParameter.init( getModel() );
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
         SolarMutexGuard aGuard;
-        ScopedVclPtrInstance<SchAttribTabDlg> aDlg(
-                GetChartWindow(), &aItemSet, &aDialogParameter,
+        SchAttribTabDlg aDlg(
+                GetChartFrame(), &aItemSet, &aDialogParameter,
                 &aViewElementListProvider,
                 uno::Reference< util::XNumberFormatsSupplier >(
                         getModel(), uno::UNO_QUERY ) );
-        aDlg->SetAxisMinorStepWidthForErrorBarDecimals(
+        aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
             InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getModel(),
                                                                              m_xChartView, m_aSelection.getSelectedCID()));
 
         // note: when a user pressed "OK" but didn't change any settings in the
         // dialog, the SfxTabDialog returns "Cancel"
-        if( aDlg->Execute() == RET_OK || aDlg->DialogWasClosedWithOK())
+        if (aDlg.execute() == RET_OK || aDlg.DialogWasClosedWithOK())
         {
-            const SfxItemSet* pOutItemSet = aDlg->GetOutputItemSet();
+            const SfxItemSet* pOutItemSet = aDlg.GetOutputItemSet();
             if( pOutItemSet )
             {
                 ControllerLockGuardUNO aCLGuard( getModel() );
