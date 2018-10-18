@@ -896,6 +896,12 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                 break;
 
+            case SID_INSERT_CURRENT_DATE:
+            case SID_INSERT_CURRENT_TIME:
+                if ( pDoc->IsTabProtected(nTab) )
+                    rSet.DisableItem( nWhich );
+                break;
+
             case SID_SELECT_SCENARIO:
                 {
                     std::vector<OUString> aList;
