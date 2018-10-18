@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f201791_557dace5",
+        "filename": "external/gpgmepp/ExternalPackage_gpgmepp.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-18T10:36:52Z",
+      "side": 1,
+      "message": "does this need explicit removal in the ExternalPackage_gpgme.clean target?",
+      "revId": "ff4248bae6be86a2c8e80a2e09b6d8e029844ef3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
