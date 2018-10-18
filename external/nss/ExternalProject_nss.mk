@@ -23,7 +23,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 		$(if $(filter X86_64,$(CPUNAME)),USE_64=1) \
 		LIB="$(ILIB)" \
 		XCFLAGS="-arch:SSE $(SOLARINC)" \
-		$(MAKE) -j1 nss_build_all RC="rc.exe $(SOLARINC)" \
+		$(MAKE) nss_build_all RC="rc.exe $(SOLARINC)" \
 			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \
 	,nss)
 
@@ -45,7 +45,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalExecuta
 			$(if $(filter iOS-ARM,$(OS)-$(CPUNAME)),CPU_ARCH=arm) \
 			NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)") \
 		NSDISTMODE=copy \
-		$(MAKE) -j1 AR="$(AR)" \
+		$(MAKE) AR="$(AR)" \
 			RANLIB="$(RANLIB)" \
 			NMEDIT="$(NM)edit" \
 			COMMA=$(COMMA) \
