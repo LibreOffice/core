@@ -2137,7 +2137,7 @@ AC_ARG_WITH(branding,
                           bar from left,top. Comma separated decimal values.
                           PROGRESSFRAMECOLOR="20,136,3" Set color of progress
                           bar frame. Comma separated RGB decimal values.
-                          PROGRESSTEXTCOLOR="255,255,255" Set color of progress
+                          PROGRESSTEXTCOLOR="0,0,0" Set color of progress
                           bar text. Comma separated RGB decimal values.
                           PROGRESSTEXTBASELINE="287" Set vertical position of
                           progress bar text from top. Decimal value.
