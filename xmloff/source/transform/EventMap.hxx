@@ -29,8 +29,8 @@ struct XMLTransformerEventMapEntry
     const sal_Char *m_pOOoName;
 };
 
-extern XMLTransformerEventMapEntry aTransformerEventMap[];
-extern XMLTransformerEventMapEntry aFormTransformerEventMap[];
+extern XMLTransformerEventMapEntry const aTransformerEventMap[];
+extern XMLTransformerEventMapEntry const aFormTransformerEventMap[];
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_EVENTMAP_HXX
 
