@@ -90,10 +90,10 @@ struct TestParam
         bool const bOptimal;
     };
     const char* sTestDoc;
-    int const nImportType;
-    int const nExportType; // -1 for import test, otherwise this is an export test
-    int const nRowData;
-    RowData* const pData;
+    int nImportType;
+    int nExportType; // -1 for import test, otherwise this is an export test
+    int nRowData;
+    RowData const * pData;
 };
 
 struct FileFormat {
