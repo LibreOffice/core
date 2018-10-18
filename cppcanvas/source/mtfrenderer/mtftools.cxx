@@ -257,6 +257,42 @@ namespace cppcanvas
 
         namespace
         {
+            void appendWaveline( ::basegfx::B2DPolyPolygon& o_rPoly,
+                             const ::basegfx::B2DPoint& rStartPos,
+                             const double               nStartOffset,
+                             const double               nWidth,
+                             const double               nHeight,
+                             sal_Int8                   nLineStyle)
+            {
+                const double x(rStartPos.getX());
+                const double y(rStartPos.getY());
+                const double nY1 = y + nStartOffset;
+                const double nX2 = x + nWidth;
+                const double nY2 = nY1 + nHeight;
+                double nWaveWidth = nHeight * 10.6 * 0.25;
+                // Offset for the double line.
+                double nOffset = 0.0;
+
+                if (nLineStyle == LINESTYLE_DOUBLEWAVE)
+                    nOffset = -nHeight * 0.5;
+                else
+                    nWaveWidth *= 2.0;
+
+                o_rPoly.append(::basegfx::utils::createWaveline(
+                            ::basegfx::utils::createPolygonFromRect(::basegfx::B2DRectangle(x, nY1 + nOffset, nX2, nY2 + nOffset)),
+                            nWaveWidth,
+                            nWaveWidth * 0.5));
+
+                if (nLineStyle == LINESTYLE_DOUBLEWAVE)
+                {
+                    nOffset = nHeight * 1.2;
+                    o_rPoly.append(::basegfx::utils::createWaveline(
+                                ::basegfx::utils::createPolygonFromRect(::basegfx::B2DRectangle(x, nY1 + nOffset, nX2, nY2 + nOffset)),
+                                nWaveWidth,
+                                nWaveWidth * 0.5));
+                }
+            }
+
             void appendRect( ::basegfx::B2DPolyPolygon& o_rPoly,
                              const ::basegfx::B2DPoint& rStartPos,
                              const double               nX1,
@@ -324,10 +360,22 @@ namespace cppcanvas
                 case LINESTYLE_DONTKNOW:
                     break;
 
-                case LINESTYLE_SMALLWAVE:     // TODO(F3): NYI
+                case LINESTYLE_DOUBLEWAVE:
                     // FALLTHROUGH intended
-                case LINESTYLE_WAVE:          // TODO(F3): NYI
+                case LINESTYLE_SMALLWAVE:
                     // FALLTHROUGH intended
+                case LINESTYLE_BOLDWAVE:
+                    // FALLTHROUGH intended
+                case LINESTYLE_WAVE:
+                    appendWaveline(
+                        aTextLinesPolyPoly,
+                        rStartPos,
+                        rTextLineInfo.mnOverlineOffset,
+                        rLineWidth,
+                        rTextLineInfo.mnOverlineHeight,
+                        rTextLineInfo.mnOverlineStyle);
+
+                    break;
                 case LINESTYLE_SINGLE:
                     appendRect(
                         aTextLinesPolyPoly,
@@ -348,8 +396,6 @@ namespace cppcanvas
                     // FALLTHROUGH intended
                 case LINESTYLE_BOLDDASHDOTDOT:// TODO(F3): NYI
                     // FALLTHROUGH intended
-                case LINESTYLE_BOLDWAVE:      // TODO(F3): NYI
-                    // FALLTHROUGH intended
                 case LINESTYLE_BOLD:
                     appendRect(
                         aTextLinesPolyPoly,
@@ -360,8 +406,6 @@ namespace cppcanvas
                         rTextLineInfo.mnOverlineOffset + rTextLineInfo.mnOverlineHeight );
                     break;
 
-                case LINESTYLE_DOUBLEWAVE:    // TODO(F3): NYI
-                    // FALLTHROUGH intended
                 case LINESTYLE_DOUBLE:
                     appendRect(
                         aTextLinesPolyPoly,
