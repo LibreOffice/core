@@ -158,24 +158,21 @@ extern "C" srv_vendor_t
 sal_GetServerVendor( Display *p_display )
 {
     typedef struct {
-        srv_vendor_t const    e_vendor;   // vendor as enum
-        const char      *p_name;    // vendor name as returned by VendorString()
-        unsigned int const    n_len;  // number of chars to compare
+        srv_vendor_t  e_vendor; // vendor as enum
+        const char*   p_name;   // vendor name as returned by VendorString()
+        unsigned int  n_len;    // number of chars to compare
     } vendor_t;
 
-    const vendor_t p_vendorlist[] = {
+    static const vendor_t vendorlist[] = {
         { vendor_sun,         "Sun Microsystems, Inc.",          10 },
-        // always the last entry: vendor_none to indicate eol
-        { vendor_none,        nullptr,                               0 },
     };
 
     // handle regular server vendors
     char     *p_name   = ServerVendor( p_display );
-    vendor_t *p_vendor;
-    for (p_vendor = const_cast<vendor_t*>(p_vendorlist); p_vendor->e_vendor != vendor_none; p_vendor++)
+    for (auto const & vendor : vendorlist)
     {
-        if ( strncmp (p_name, p_vendor->p_name, p_vendor->n_len) == 0 )
-            return p_vendor->e_vendor;
+        if ( strncmp (p_name, vendor.p_name, vendor.n_len) == 0 )
+            return vendor.e_vendor;
     }
 
     // vendor not found in list
