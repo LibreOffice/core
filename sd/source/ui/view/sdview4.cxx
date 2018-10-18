@@ -492,7 +492,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
             }
             else
 #endif
-                if( mnAction & DND_ACTION_LINK )
+            if( mnAction & DND_ACTION_LINK )
                 static_cast< DrawViewShell* >( mpViewSh )->InsertURLButton( aCurrentDropFile, aCurrentDropFile, OUString(), &maDropPos );
             else
             {

@@ -379,25 +379,25 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
                     aErrorMessage += "Required attribute statusbar:url must have a value!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
-                        else
-                        {
-                            Sequence< PropertyValue > aStatusbarItemProp( 6 );
-                            aStatusbarItemProp[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
-                            aStatusbarItemProp[1].Name = ITEM_DESCRIPTOR_HELPURL;
-                            aStatusbarItemProp[2].Name = ITEM_DESCRIPTOR_OFFSET;
-                            aStatusbarItemProp[3].Name = ITEM_DESCRIPTOR_STYLE;
-                            aStatusbarItemProp[4].Name = ITEM_DESCRIPTOR_WIDTH;
-                            aStatusbarItemProp[5].Name = ITEM_DESCRIPTOR_TYPE;
+                else
+                {
+                    Sequence< PropertyValue > aStatusbarItemProp( 6 );
+                    aStatusbarItemProp[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
+                    aStatusbarItemProp[1].Name = ITEM_DESCRIPTOR_HELPURL;
+                    aStatusbarItemProp[2].Name = ITEM_DESCRIPTOR_OFFSET;
+                    aStatusbarItemProp[3].Name = ITEM_DESCRIPTOR_STYLE;
+                    aStatusbarItemProp[4].Name = ITEM_DESCRIPTOR_WIDTH;
+                    aStatusbarItemProp[5].Name = ITEM_DESCRIPTOR_TYPE;
 
-                            aStatusbarItemProp[0].Value <<= aCommandURL;
-                            aStatusbarItemProp[1].Value <<= aHelpURL;
-                            aStatusbarItemProp[2].Value <<= nOffset;
-                            aStatusbarItemProp[3].Value <<= nItemBits;
-                            aStatusbarItemProp[4].Value <<= nWidth;
-                            aStatusbarItemProp[5].Value <<= css::ui::ItemType::DEFAULT;
+                    aStatusbarItemProp[0].Value <<= aCommandURL;
+                    aStatusbarItemProp[1].Value <<= aHelpURL;
+                    aStatusbarItemProp[2].Value <<= nOffset;
+                    aStatusbarItemProp[3].Value <<= nItemBits;
+                    aStatusbarItemProp[4].Value <<= nWidth;
+                    aStatusbarItemProp[5].Value <<= css::ui::ItemType::DEFAULT;
 
-                            m_aStatusBarItems->insertByIndex( m_aStatusBarItems->getCount(), makeAny( aStatusbarItemProp ) );
-                       }
+                    m_aStatusBarItems->insertByIndex( m_aStatusBarItems->getCount(), makeAny( aStatusbarItemProp ) );
+               }
             }
             break;
 

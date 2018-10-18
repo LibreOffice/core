@@ -230,7 +230,7 @@ ScVbaWorksheets::Add( const uno::Any& Before, const uno::Any& After,
 
     if ( Before.hasValue() )
     {
-            if ( Before >>= xBeforeAfterSheet )
+        if ( Before >>= xBeforeAfterSheet )
             aStringSheet = xBeforeAfterSheet->getName();
         else
             Before >>= aStringSheet;
@@ -238,7 +238,7 @@ ScVbaWorksheets::Add( const uno::Any& Before, const uno::Any& After,
 
     if (aStringSheet.isEmpty() && After.hasValue() )
     {
-            if ( After >>= xBeforeAfterSheet )
+        if ( After >>= xBeforeAfterSheet )
             aStringSheet = xBeforeAfterSheet->getName();
         else
             After >>= aStringSheet;

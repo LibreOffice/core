@@ -217,20 +217,20 @@ void HWPFile::ReadParaList(std::vector < HWPPara* > &aplist)
     unsigned char prev_etcflag = 0;
     while (spNode->Read(*this, 0))
     {
-         if( !(spNode->etcflag & 0x04) ){
-          tmp_etcflag = spNode->etcflag;
-          spNode->etcflag = prev_etcflag;
-          prev_etcflag = tmp_etcflag;
-         }
+        if( !(spNode->etcflag & 0x04) ){
+            tmp_etcflag = spNode->etcflag;
+            spNode->etcflag = prev_etcflag;
+            prev_etcflag = tmp_etcflag;
+        }
         if (spNode->nch && spNode->reuse_shape)
         {
             if (!aplist.empty()){
-                     spNode->pshape = aplist.back()->pshape;
-                }
-                else{
-                     spNode->nch = 0;
-                     spNode->reuse_shape = 0;
-                }
+                 spNode->pshape = aplist.back()->pshape;
+            }
+            else{
+                 spNode->nch = 0;
+                 spNode->reuse_shape = 0;
+            }
         }
         spNode->pshape->pagebreak = spNode->etcflag;
         if (spNode->nch)
@@ -258,12 +258,12 @@ void HWPFile::ReadParaList(std::vector< std::unique_ptr<HWPPara> > &aplist, unsi
         if (spNode->nch && spNode->reuse_shape)
         {
             if (!aplist.empty()){
-                     spNode->pshape = aplist.back()->pshape;
-                }
-                else{
-                     spNode->nch = 0;
-                     spNode->reuse_shape = 0;
-                }
+                spNode->pshape = aplist.back()->pshape;
+            }
+            else{
+                spNode->nch = 0;
+                spNode->reuse_shape = 0;
+            }
         }
         spNode->pshape->pagebreak = spNode->etcflag;
         if (spNode->nch)

@@ -40,10 +40,10 @@ class AnimatorAccess
 public:
     virtual void AddRun (const std::shared_ptr<PageObjectRun>& rRun) = 0;
     virtual void RemoveRun (const std::shared_ptr<PageObjectRun>& rRun) = 0;
-    virtual model::SlideSorterModel& GetModel (void) const = 0;
-    virtual view::SlideSorterView& GetView (void) const = 0;
-    virtual std::shared_ptr<controller::Animator> GetAnimator (void) = 0;
-    virtual VclPtr<sd::Window> GetContentWindow (void) = 0;
+    virtual model::SlideSorterModel& GetModel () const = 0;
+    virtual view::SlideSorterView& GetView () const = 0;
+    virtual std::shared_ptr<controller::Animator> GetAnimator () = 0;
+    virtual VclPtr<sd::Window> GetContentWindow () = 0;
 
 protected:
     ~AnimatorAccess() COVERITY_NOEXCEPT_FALSE {}

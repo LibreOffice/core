@@ -3372,7 +3372,7 @@ void OQueryDesignView::fillFunctionInfo(  const ::connectivity::OSQLParseNode* p
                 nDataType = DataType::FLOAT;
             else if ( SQL_ISTOKEN(pCastTarget, REAL) )
                 nDataType = DataType::REAL;
-           else if ( SQL_ISTOKEN(pCastTarget, DOUBLE) )
+            else if ( SQL_ISTOKEN(pCastTarget, DOUBLE) )
                 nDataType = DataType::DOUBLE;
             else if ( SQL_ISTOKEN(pCastTarget, BOOLEAN) )
                 nDataType = DataType::BOOLEAN;

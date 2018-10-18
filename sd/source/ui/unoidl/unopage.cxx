@@ -2523,7 +2523,7 @@ void SdDrawPage::getBackground(Any& rValue)
 {
     const SfxItemSet& rFillAttributes = GetPage()->getSdrPageProperties().GetItemSet();
 
-       if(drawing::FillStyle_NONE == rFillAttributes.Get(XATTR_FILLSTYLE).GetValue())
+    if(drawing::FillStyle_NONE == rFillAttributes.Get(XATTR_FILLSTYLE).GetValue())
     {
         // no fill set (switched off by drawing::FillStyle_NONE), clear rValue to represent this
         rValue.clear();

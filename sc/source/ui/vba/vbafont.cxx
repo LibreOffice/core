@@ -79,12 +79,12 @@ ScVbaFont::setColorIndex( const uno::Any& _colorindex )
     // handled properly here
 
     if ( !nIndex || ( nIndex == excel::XlColorIndex::xlColorIndexAutomatic ) )
-        {
+    {
         nIndex = 1;  // check default ( assume black )
-                ScVbaFont_BASE::setColorIndex( uno::makeAny( nIndex ) );
-        }
-        else
-            ScVbaFont_BASE::setColorIndex( _colorindex );
+        ScVbaFont_BASE::setColorIndex( uno::makeAny( nIndex ) );
+    }
+    else
+        ScVbaFont_BASE::setColorIndex( _colorindex );
 }
 
 uno::Any SAL_CALL

@@ -795,38 +795,39 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             {
                                 ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
                                 for (; itr != itrEnd; ++itr)
+                                {
+                                    if ( !pDoc->IsTabProtected(*itr) )
                                     {
-                                        if ( !pDoc->IsTabProtected(*itr) )
-                                        {
-                                            ScUndoTabColorInfo aTabColorInfo(*itr);
-                                            aTabColorInfo.maNewTabBgColor = aSelectedColor;
-                                            pTabColorList->push_back(aTabColorInfo);
-                                        }
+                                        ScUndoTabColorInfo aTabColorInfo(*itr);
+                                        aTabColorInfo.maNewTabBgColor = aSelectedColor;
+                                        pTabColorList->push_back(aTabColorInfo);
                                     }
-                                    bDone = SetTabBgColor( *pTabColorList );
                                 }
-                                else
+                                bDone = SetTabBgColor( *pTabColorList );
+                            }
+                            else
+                            {
+                                bDone = SetTabBgColor( aSelectedColor, nCurrentTab ); //ScViewFunc.SetTabBgColor
+                            }
+
+                            if ( bDone )
+                            {
+                                rReq.AppendItem( SvxColorItem( aTabBgColor, nSlot ) );
+                                rReq.Done();
+                            }
+                            else
+                            {
+                                if( rReq.IsAPI() )
                                 {
-                                    bDone = SetTabBgColor( aSelectedColor, nCurrentTab ); //ScViewFunc.SetTabBgColor
-                                }
-                                if ( bDone )
-                                {
-                                    rReq.AppendItem( SvxColorItem( aTabBgColor, nSlot ) );
-                                    rReq.Done();
-                                }
-                                else
-                                {
-                                    if( rReq.IsAPI() )
-                                    {
 #if HAVE_FEATURE_SCRIPTING
-                                        StarBASIC::Error( ERRCODE_BASIC_SETPROP_FAILED );
+                                    StarBASIC::Error( ERRCODE_BASIC_SETPROP_FAILED );
 #endif
-                                    }
                                 }
                             }
                         }
                     }
                 }
+            }
                 break;
 
         case FID_TAB_EVENTS:

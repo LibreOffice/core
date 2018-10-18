@@ -2002,7 +2002,7 @@ void CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         "0000000000000000000000000000000000000000000000000000000000000000\n"
         "cleartomark\n"
         "\x80\x03";
-     if( rEmitter.mbPfbSubset)
+    if( rEmitter.mbPfbSubset)
         rEmitter.emitRawData( aPfxFooter, sizeof(aPfxFooter)-1);
     else
         rEmitter.emitRawData( aPfxFooter+6, sizeof(aPfxFooter)-9);

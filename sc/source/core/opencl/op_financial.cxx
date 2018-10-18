@@ -2374,10 +2374,10 @@ void OpNPV::GenSlidingWindowFunction(std::stringstream &ss,
     //while (i-- > 1)
     for (size_t i = 1; i < vSubArguments.size(); i++)
     {
-      FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
-      assert(pCur);
-      if (pCur->GetType() == formula::svDoubleVectorRef)
-      {
+        FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
+        assert(pCur);
+        if (pCur->GetType() == formula::svDoubleVectorRef)
+        {
             const formula::DoubleVectorRefToken* pDVR =
             static_cast<const formula::DoubleVectorRefToken *>(pCur);
             size_t nCurWindowSize = pDVR->GetRefRowSize();

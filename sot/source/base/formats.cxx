@@ -1550,8 +1550,8 @@ sal_uInt8 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavorE
             }
             rDefaultAction = nUserAction;
     }
-      else
-            rDefaultAction = nUserAction;
+    else
+        rDefaultAction = nUserAction;
 
     switch( nUserAction )
     {

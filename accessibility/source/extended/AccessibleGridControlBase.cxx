@@ -398,15 +398,15 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  )
     {
         if ( pInst->IsControlForeground() )
             nColor = pInst->GetControlForeground();
-    else
-    {
-        vcl::Font aFont;
-        if ( pInst->IsControlFont() )
-            aFont = pInst->GetControlFont();
         else
-            aFont = pInst->GetFont();
-        nColor = aFont.GetColor();
-    }
+        {
+            vcl::Font aFont;
+            if ( pInst->IsControlFont() )
+                aFont = pInst->GetControlFont();
+            else
+                aFont = pInst->GetFont();
+            nColor = aFont.GetColor();
+        }
     }
     return sal_Int32(nColor);
 }
@@ -422,7 +422,7 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  )
     {
         if ( pInst->IsControlBackground() )
             nColor = pInst->GetControlBackground();
-    else
+        else
             nColor = pInst->GetBackground().GetColor();
     }
     return sal_Int32(nColor);

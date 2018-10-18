@@ -385,7 +385,7 @@ namespace accessibility
         {
             if( bHasButtons )
                 nCase = 2;
-             else
+            else
                 nCase = 3;
         }
         return nCase;

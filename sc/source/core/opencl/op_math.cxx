@@ -2700,7 +2700,7 @@ void OpConvert::GenSlidingWindowFunction(
 void OpProduct::GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-       ss << "\ndouble " << sSymName;
+    ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"( ";
     for (size_t i = 0; i < vSubArguments.size(); i++)
     {
@@ -2722,52 +2722,52 @@ void OpProduct::GenSlidingWindowFunction(std::stringstream &ss,
             static_cast<const formula::DoubleVectorRefToken *>(pCur);
             size_t nCurWindowSize = pDVR->GetRefRowSize();
 
-             ss << "    for (int i = ";
-             if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
-             {
+            ss << "    for (int i = ";
+            if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
+            {
                  ss << "gid0; i < " << pDVR->GetArrayLength();
                  ss << " && i < " << nCurWindowSize  << "; i++)\n";
                  ss << "    {\n";
-             }
-             else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-             {
+            }
+            else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
+            {
                  ss << "0; i < " << pDVR->GetArrayLength();
                  ss << " && i < gid0+" << nCurWindowSize << "; i++)\n";
                  ss << "    {\n";
-             }
-             else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
-             {
+            }
+            else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
+            {
                  ss << "0; i + gid0 < " <<  pDVR->GetArrayLength();
                  ss << " &&  i < " << nCurWindowSize << "; i++)\n";
                  ss << "    {\n";
-              }
-              else if (pDVR->IsStartFixed() && pDVR->IsEndFixed())
-              {
+            }
+            else if (pDVR->IsStartFixed() && pDVR->IsEndFixed())
+            {
 
                  ss << "0; i < " << pDVR->GetArrayLength() << "; i++)\n";
                  ss << "    {\n";
-              }
-              ss << "if(!isnan("<<rArg->GenSlidingWindowDeclRef()<<"))\n";
-              ss << "product = product*";
-              ss << rArg->GenSlidingWindowDeclRef()<<";\n";
-              ss << "    }\n";
             }
-            else if (pCur->GetType() == formula::svSingleVectorRef)
-            {
-                ss << "if(!isnan("<<rArg->GenSlidingWindowDeclRef()<<"))\n";
-                ss << "product = product*";
-                ss << rArg->GenSlidingWindowDeclRef()<<";\n";
-
-            }
-            else
-            {
-                ss << "if(!isnan("<<rArg->GenSlidingWindowDeclRef()<<"))\n";
-                ss << "product = product*";
-                ss << rArg->GenSlidingWindowDeclRef()<<";\n";
-            }
+            ss << "if(!isnan("<<rArg->GenSlidingWindowDeclRef()<<"))\n";
+            ss << "product = product*";
+            ss << rArg->GenSlidingWindowDeclRef()<<";\n";
+            ss << "    }\n";
         }
-        ss << "    return product;\n";
-        ss << "}";
+        else if (pCur->GetType() == formula::svSingleVectorRef)
+        {
+            ss << "if(!isnan("<<rArg->GenSlidingWindowDeclRef()<<"))\n";
+            ss << "product = product*";
+            ss << rArg->GenSlidingWindowDeclRef()<<";\n";
+
+        }
+        else
+        {
+            ss << "if(!isnan("<<rArg->GenSlidingWindowDeclRef()<<"))\n";
+            ss << "product = product*";
+            ss << rArg->GenSlidingWindowDeclRef()<<";\n";
+        }
+    }
+    ss << "    return product;\n";
+    ss << "}";
 }
 void OpAverageIf::GenSlidingWindowFunction(std::stringstream &ss,
     const std::string &sSymName, SubArguments &vSubArguments)
@@ -2904,7 +2904,7 @@ void OpAverageIf::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    }\n";
         }
     }
-      else
+    else
     {
         CheckSubArgumentIsNan(ss,vSubArguments, 0);
         ss << "        if ( isequal( tmp0 , tmp1 ) ) \n";

@@ -1415,97 +1415,97 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             OUString aVal = read_uInt16_lenPrefixed_uInt8s_ToOUString(r,
                 RTL_TEXTENCODING_ASCII_US);
             if( !aVal.isEmpty() )
-                    aData.pOUString = new OUString( aVal );
-                else
-                    aData.pOUString = nullptr; // JSM 1995-09-22
-                break;
-            }
-            case SbxERROR:
-            case SbxUSHORT:
-                r.ReadUInt16( aData.nUShort ); break;
-            case SbxOBJECT:
-            {
-                sal_uInt8 nMode;
-                r.ReadUChar( nMode );
-                switch( nMode )
-                {
-                    case 0:
-                        aData.pObj = nullptr;
-                        break;
-                    case 1:
-                        aData.pObj = SbxBase::Load( r );
-                        return ( aData.pObj != nullptr );
-                    case 2:
-                        aData.pObj = this;
-                        break;
-                }
-                break;
-            }
-            case SbxCHAR:
-            {
-                char c;
-                r.ReadChar( c );
-                aData.nChar = c;
-                break;
-            }
-            case SbxBYTE:
-                r.ReadUChar( aData.nByte ); break;
-            case SbxULONG:
-                r.ReadUInt32( aData.nULong ); break;
-            case SbxINT:
-            {
-                sal_uInt8 n;
-                r.ReadUChar( n );
-                // Match the Int on this system?
-                if( n > SAL_TYPES_SIZEOFINT )
-                {
-                    r.ReadInt32( aData.nLong );
-                    aData.eType = SbxLONG;
-                }
-                else {
-                    sal_Int32 nInt;
-                    r.ReadInt32( nInt );
-                    aData.nInt = nInt;
-                }
-                break;
-            }
-            case SbxUINT:
-            {
-                sal_uInt8 n;
-                r.ReadUChar( n );
-                // Match the UInt on this system?
-                if( n > SAL_TYPES_SIZEOFINT )
-                {
-                    r.ReadUInt32( aData.nULong );
-                    aData.eType = SbxULONG;
-                }
-                else {
-                    sal_uInt32 nUInt;
-                    r.ReadUInt32( nUInt );
-                    aData.nUInt = nUInt;
-                }
-                break;
-            }
-            case SbxEMPTY:
-            case SbxNULL:
-            case SbxVOID:
-                break;
-            case SbxDATAOBJECT:
-                r.ReadInt32( aData.nLong );
-                break;
-            // #78919 For backwards compatibility
-            case SbxWSTRING:
-            case SbxWCHAR:
-                break;
-            default:
-                aData.clear(SbxNULL);
-                ResetFlag(SbxFlagBits::Fixed);
-                SAL_WARN( "basic.sbx", "Loaded a non-supported data type" );
-
-                return false;
+                aData.pOUString = new OUString( aVal );
+            else
+                aData.pOUString = nullptr; // JSM 1995-09-22
+            break;
         }
-        return true;
+        case SbxERROR:
+        case SbxUSHORT:
+            r.ReadUInt16( aData.nUShort ); break;
+        case SbxOBJECT:
+        {
+            sal_uInt8 nMode;
+            r.ReadUChar( nMode );
+            switch( nMode )
+            {
+                case 0:
+                    aData.pObj = nullptr;
+                    break;
+                case 1:
+                    aData.pObj = SbxBase::Load( r );
+                    return ( aData.pObj != nullptr );
+                case 2:
+                    aData.pObj = this;
+                    break;
+            }
+            break;
+        }
+        case SbxCHAR:
+        {
+            char c;
+            r.ReadChar( c );
+            aData.nChar = c;
+            break;
+        }
+        case SbxBYTE:
+            r.ReadUChar( aData.nByte ); break;
+        case SbxULONG:
+            r.ReadUInt32( aData.nULong ); break;
+        case SbxINT:
+        {
+            sal_uInt8 n;
+            r.ReadUChar( n );
+            // Match the Int on this system?
+            if( n > SAL_TYPES_SIZEOFINT )
+            {
+                r.ReadInt32( aData.nLong );
+                aData.eType = SbxLONG;
+            }
+            else {
+                sal_Int32 nInt;
+                r.ReadInt32( nInt );
+                aData.nInt = nInt;
+            }
+            break;
+        }
+        case SbxUINT:
+        {
+            sal_uInt8 n;
+            r.ReadUChar( n );
+            // Match the UInt on this system?
+            if( n > SAL_TYPES_SIZEOFINT )
+            {
+                r.ReadUInt32( aData.nULong );
+                aData.eType = SbxULONG;
+            }
+            else {
+                sal_uInt32 nUInt;
+                r.ReadUInt32( nUInt );
+                aData.nUInt = nUInt;
+            }
+            break;
+        }
+        case SbxEMPTY:
+        case SbxNULL:
+        case SbxVOID:
+            break;
+        case SbxDATAOBJECT:
+            r.ReadInt32( aData.nLong );
+            break;
+        // #78919 For backwards compatibility
+        case SbxWSTRING:
+        case SbxWCHAR:
+            break;
+        default:
+            aData.clear(SbxNULL);
+            ResetFlag(SbxFlagBits::Fixed);
+            SAL_WARN( "basic.sbx", "Loaded a non-supported data type" );
+
+            return false;
     }
+    return true;
+}
 
     bool SbxValue::StoreData( SvStream& r ) const
     {

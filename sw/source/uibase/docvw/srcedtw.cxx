@@ -443,9 +443,9 @@ void  TextViewOutWin::Command( const CommandEvent& rCEvt )
 
         default:
             if ( pTextView )
-            pTextView->Command( rCEvt );
-        else
-            Window::Command(rCEvt);
+                pTextView->Command( rCEvt );
+            else
+                Window::Command(rCEvt);
     }
 }
 

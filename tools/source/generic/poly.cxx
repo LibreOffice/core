@@ -110,8 +110,8 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rRect )
          mxPointAry[2] = rRect.BottomRight();
          mxPointAry[3] = rRect.BottomLeft();
          mxPointAry[4] = rRect.TopLeft();
-     }
-     else
+    }
+    else
         mnPoints = 0;
 }
 

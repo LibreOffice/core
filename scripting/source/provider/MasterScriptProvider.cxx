@@ -559,9 +559,9 @@ MasterScriptProvider::removeByName( const OUString& Name )
 
         Reference< container::XNameContainer > xCont( m_xMSPPkg, UNO_QUERY_THROW );
         xCont->removeByName( Name );
-   }
-   else
-   {
+    }
+    else
+    {
         if ( Name.isEmpty() )
         {
             throw lang::IllegalArgumentException( "Name not set!!",
@@ -625,9 +625,9 @@ MasterScriptProvider::hasByName( const OUString& aName )
             throw RuntimeException( "PackageMasterScriptProvider is unitialised" );
         }
 
-   }
-   else
-   {
+    }
+    else
+    {
         if ( aName.isEmpty() )
         {
             throw lang::IllegalArgumentException( "Name not set!!",

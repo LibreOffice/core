@@ -51,24 +51,24 @@ IconThemeSelector::IconThemeSelector()
 /*static*/ OUString
 IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvironment)
 {
-    OUString r;
 #ifdef _WIN32
-    r = "colibre";
     (void)desktopEnvironment;
+    return OUString("colibre");
 #else
+    OUString r;
     if ( desktopEnvironment.equalsIgnoreAsciiCase("kde4") ||
          desktopEnvironment.equalsIgnoreAsciiCase("kde5") ||
          desktopEnvironment.equalsIgnoreAsciiCase("lxqt") ) {
         r = "breeze";
-    } else
-    if ( desktopEnvironment.equalsIgnoreAsciiCase("macosx") ) {
+    }
+    else if ( desktopEnvironment.equalsIgnoreAsciiCase("macosx") ) {
 #if MPL_HAVE_SUBSET
         r = "tango";
 #else
         r = "breeze";
 #endif
-    } else
-    if ( desktopEnvironment.equalsIgnoreAsciiCase("gnome") ||
+    }
+    else if ( desktopEnvironment.equalsIgnoreAsciiCase("gnome") ||
          desktopEnvironment.equalsIgnoreAsciiCase("mate") ||
          desktopEnvironment.equalsIgnoreAsciiCase("unity") ) {
         r = "elementary";
@@ -76,9 +76,8 @@ IconThemeSelector::GetIconThemeForDesktopEnvironment(const OUString& desktopEnvi
     {
         r = FALLBACK_ICON_THEME_ID;
     }
-#endif
-
     return r;
+#endif // _WIN32
 }
 
 OUString

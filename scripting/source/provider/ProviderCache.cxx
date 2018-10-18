@@ -71,11 +71,11 @@ ProviderCache::getProvider( const OUString& providerName )
         {
             provider = h_it->second.provider;
         }
-    else
-    {
-        // need to create provider and insert into hash
+        else
+        {
+            // need to create provider and insert into hash
             provider = createProvider( h_it->second );
-    }
+        }
     }
     return provider;
 }

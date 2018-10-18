@@ -1840,26 +1840,26 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 }
             }
             else if (pArgs->Count () != 4)
-                 {
+            {
 #if HAVE_FEATURE_SCRIPTING
-                     StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
+                 StarBASIC::FatalError (ERRCODE_BASIC_WRONG_ARGS);
 #endif
-                     Cancel();
-                     rReq.Ignore ();
-                     break;
-                 }
-                 else
-                 {
-                     const SfxStringItem* pLayerName = rReq.GetArg<SfxStringItem>(ID_VAL_LAYERNAME);
-                     const SfxBoolItem* pIsVisible = rReq.GetArg<SfxBoolItem>(ID_VAL_ISVISIBLE);
-                     const SfxBoolItem* pIsLocked = rReq.GetArg<SfxBoolItem>(ID_VAL_ISLOCKED);
-                     const SfxBoolItem* pIsPrintable = rReq.GetArg<SfxBoolItem>(ID_VAL_ISPRINTABLE);
+                 Cancel();
+                 rReq.Ignore ();
+                 break;
+            }
+            else
+            {
+                 const SfxStringItem* pLayerName = rReq.GetArg<SfxStringItem>(ID_VAL_LAYERNAME);
+                 const SfxBoolItem* pIsVisible = rReq.GetArg<SfxBoolItem>(ID_VAL_ISVISIBLE);
+                 const SfxBoolItem* pIsLocked = rReq.GetArg<SfxBoolItem>(ID_VAL_ISLOCKED);
+                 const SfxBoolItem* pIsPrintable = rReq.GetArg<SfxBoolItem>(ID_VAL_ISPRINTABLE);
 
-                     aLayerName   = pLayerName->GetValue ();
-                     bIsVisible   = pIsVisible->GetValue ();
-                     bIsLocked    = pIsLocked->GetValue ();
-                     bIsPrintable = pIsPrintable->GetValue ();
-                 }
+                 aLayerName   = pLayerName->GetValue ();
+                 bIsVisible   = pIsVisible->GetValue ();
+                 bIsLocked    = pIsLocked->GetValue ();
+                 bIsPrintable = pIsPrintable->GetValue ();
+            }
 
             OUString aPrevLayer = mpDrawView->GetActiveLayer();
             SdrLayer* pLayer;

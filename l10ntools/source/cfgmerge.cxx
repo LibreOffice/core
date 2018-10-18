@@ -187,7 +187,7 @@ void CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
             sTokenName = sToken.getToken(1, '<').getToken(0, '>').
                 getToken(0, ' ');
 
-              if ( !IsTokenClosed( sToken )) {
+            if ( !IsTokenClosed( sToken )) {
                 OString sSearch;
                 switch ( nToken ) {
                     case CFG_TOKEN_PACKAGE:

@@ -1370,19 +1370,19 @@ void HwpReader::parseCharShape(CharShape const * cshape)
         padd("fo:font-style", sXML_CDATA, "italic");
         padd("style:font-style-asian", sXML_CDATA, "italic");
     }
-     else{
+    else{
         padd("fo:font-style", sXML_CDATA, "normal");
         padd("style:font-style-asian", sXML_CDATA, "normal");
-     }
+    }
     if (cshape->attr >> 1 & 0x01)
     {
         padd("fo:font-weight", sXML_CDATA, "bold");
         padd("style:font-weight-asian", sXML_CDATA, "bold");
     }
-     else{
+    else{
         padd("fo:font-weight", sXML_CDATA, "normal");
         padd("style:font-weight-asian", sXML_CDATA, "normal");
-     }
+    }
     if (cshape->attr >> 2 & 0x01)
         padd("style:text-underline", sXML_CDATA, "single");
     if (cshape->attr >> 3 & 0x01)
@@ -1463,7 +1463,7 @@ void HwpReader::parseParaShape(ParaShape const * pshape)
 
     if( pshape->pagebreak & 0x02 || pshape->pagebreak & 0x04)
         padd("fo:break-before", sXML_CDATA, "page");
-     else if( pshape->pagebreak & 0x01 )
+    else if( pshape->pagebreak & 0x01 )
         padd("fo:break-before", sXML_CDATA, "column");
 
 }
@@ -3565,10 +3565,10 @@ void HwpReader::makeTextBox(TxtBox * hbox)
         rstartEl("text:p", mxList.get());
         mxList->clear();
     }
-     else{
+    else{
          padd("draw:z-index", sXML_CDATA,
               ascii(Int2Str(hbox->zorder, "%d", buf)));
-     }
+    }
 
     padd("draw:style-name", sXML_CDATA,
         ascii(Int2Str(hbox->style.boxnum, "Txtbox%d", buf)));

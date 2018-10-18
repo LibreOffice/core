@@ -105,7 +105,6 @@ void StopWatch::stop()
 // pre: Timer should be started
 // post: Timer will stopped
 
-    // gettimeofday(&t2, 0);                         // Ask timer
     osl_getSystemTime( &t2 );
     t_print("# %u %u nsecs\n", static_cast<unsigned>(t2.Seconds), static_cast<unsigned>(t2.Nanosec));
 
@@ -113,18 +112,13 @@ void StopWatch::stop()
     {                                // check if started.
         m_nSeconds = static_cast<sal_Int32>(t2.Seconds) - static_cast<sal_Int32>(t1.Seconds);
         if ( t2.Nanosec > t1.Nanosec )
-               m_nNanoSec = static_cast<sal_Int32>(t2.Nanosec) - static_cast<sal_Int32>(t1.Nanosec);
-           else
-           {
-        m_nNanoSec = 1000000000 + static_cast<sal_Int32>(t2.Nanosec) - static_cast<sal_Int32>(t1.Nanosec);
-                m_nSeconds -= 1;
-    }
-    t_print("# %u %u nsecs\n", static_cast<unsigned>(m_nSeconds), static_cast<unsigned>(m_nNanoSec) );
-        //if (m_nNanoSec < 0)
-        //{
-            //m_nNanoSec += 1000000000;
-            //m_nSeconds -= 1;
-        //}
+            m_nNanoSec = static_cast<sal_Int32>(t2.Nanosec) - static_cast<sal_Int32>(t1.Nanosec);
+        else
+        {
+            m_nNanoSec = 1000000000 + static_cast<sal_Int32>(t2.Nanosec) - static_cast<sal_Int32>(t1.Nanosec);
+            m_nSeconds -= 1;
+        }
+        t_print("# %u %u nsecs\n", static_cast<unsigned>(m_nSeconds), static_cast<unsigned>(m_nNanoSec) );
         m_bIsValid = true;
         m_bIsRunning = false;
     }

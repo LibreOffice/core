@@ -2438,8 +2438,7 @@ OUString SwCursorShell::GetSelText() const
             aText = buf.makeStringAndClear();
         }
     }
-    else
-    if( m_pCurrentCursor->GetPoint()->nNode.GetIndex() ==
+    else if( m_pCurrentCursor->GetPoint()->nNode.GetIndex() ==
         m_pCurrentCursor->GetMark()->nNode.GetIndex() )
     {
         SwTextNode* pTextNd = m_pCurrentCursor->GetNode().GetTextNode();

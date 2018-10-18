@@ -4238,7 +4238,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, GraphicObjec
                 rPicOutStrm.WriteUInt32( 0x7f90000 | static_cast<sal_uInt16>( mvBlibEntrys.size() << 4 ) )
                            .WriteUInt32( 0 );
                 nAtomSize = rPicOutStrm.Tell();
-                 if ( eBlibType == PNG )
+                if ( eBlibType == PNG )
                     rPicOutStrm.WriteUInt16( 0x0606 );
                 else if ( eBlibType == WMF )
                     rPicOutStrm.WriteUInt16( 0x0403 );

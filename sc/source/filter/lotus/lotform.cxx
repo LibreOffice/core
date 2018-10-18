@@ -639,7 +639,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
                     else aStack << aPool.Store( ScfTools::ReadLongDouble( aIn ) );
                     break;
             case FT_Snum:
-                    if ( bWK123 )
+                if ( bWK123 )
                 {
                          sal_uInt32   nValue;
 
@@ -654,7 +654,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
                         aStack << aPool.Store( SnumToDouble( nVal ) );
                 }
                 break;
-                default:
+            default:
                     SAL_WARN( "sc.filter", "*LotusToSc::Convert(): unknown enum!" );
         }
     }

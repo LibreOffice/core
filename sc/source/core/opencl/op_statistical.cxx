@@ -3959,30 +3959,29 @@ void OpChiInv::GenSlidingWindowFunction(
             if (!pDVR->IsStartFixed() && pDVR->IsEndFixed()) {
                 ss << "gid0; i < " << pDVR->GetArrayLength();
                 ss << " && i < " << nCurWindowSize  << "; i++){\n";
-                } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
+            } else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed()) {
                 ss << "0; i < " << pDVR->GetArrayLength();
                 ss << " && i < gid0+"<< nCurWindowSize << "; i++){\n";
-                } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
+            } else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()){
                 ss << "0; i + gid0 < " << pDVR->GetArrayLength();
                 ss << " &&  i < "<< nCurWindowSize << "; i++){\n";
-                }
-                else {
+            } else {
                 ss << "0; i < "<< nCurWindowSize << "; i++){\n";
-                }
             }
-            else if (pCur->GetType() == formula::svSingleVectorRef)
-            {
+        }
+        else if (pCur->GetType() == formula::svSingleVectorRef)
+        {
                 const formula::SingleVectorRefToken* pSVR =
                     static_cast< const formula::SingleVectorRefToken* >(pCur);
                 ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n";
-            }
-            else if (pCur->GetType() == formula::svDouble)
-            {
-                ss << "{\n";
-            }
+        }
+        else if (pCur->GetType() == formula::svDouble)
+        {
+            ss << "{\n";
+        }
 
-            if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
-            {
+        if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
+        {
                 ss << "if (isnan(";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef();
                 ss << "))\n";
@@ -3990,13 +3989,13 @@ void OpChiInv::GenSlidingWindowFunction(
                 ss << "else\n";
                 ss <<"tmp"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
                 ss << ";\n}\n";
-            }
-            else
-            {
+        }
+        else
+        {
                ss << "tmp"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
                ss << ";\n";
-            }
-            }
+        }
+    }
     ss << "    tmp1 = floor(tmp1);";
     ss << "    if (tmp1 < 1.0 || tmp0 <= 0.0 || tmp0 > 1.0 )\n";
     ss << "    {\n";

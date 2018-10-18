@@ -84,9 +84,8 @@ int InitXrmExport( const char* pFilename)
 
     if ( bMergeMode )
         pParser = new XRMResMerge( sMergeSrc, sOutputFile, sFilename );
-      else if (!sOutputFile.isEmpty()) {
+    else if (!sOutputFile.isEmpty())
         pParser = new XRMResExport( sOutputFile, sInputFileName );
-    }
 
     return 1;
 }
