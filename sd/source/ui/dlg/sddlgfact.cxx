@@ -475,9 +475,9 @@ VclPtr<AbstractSdPresLayoutDlg> SdAbstractDialogFactory_Impl::CreateSdPresLayout
     return VclPtr<AbstractSdPresLayoutDlg_Impl>::Create(o3tl::make_unique<SdPresLayoutDlg>(pDocShell, pParent, rInAttrs));
 }
 
-VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdTabTemplateDlg(vcl::Window* pParent, const SfxObjectShell* pDocShell, SfxStyleSheetBase& rStyleBase, SdrModel* pModel, SdrView* pView )
+VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdTabTemplateDlg(weld::Window* pParent, const SfxObjectShell* pDocShell, SfxStyleSheetBase& rStyleBase, SdrModel* pModel, SdrView* pView)
 {
-    return VclPtr<SdAbstractTabDialog_Impl>::Create( VclPtr<SdTabTemplateDlg>::Create( pParent, pDocShell, rStyleBase, pModel, pView ) );
+    return VclPtr<SdAbstractTabController_Impl>::Create(o3tl::make_unique<SdTabTemplateDlg>(pParent, pDocShell, rStyleBase, pModel, pView));
 }
 
 VclPtr<SfxAbstractDialog> SdAbstractDialogFactory_Impl::CreatSdActionDialog(vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView )
