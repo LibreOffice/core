@@ -26,7 +26,6 @@
 #include <sal/macros.h>
 #include <osl/diagnose.h>
 #include "securityenvironment_nssimpl.hxx"
-#include "x509certificate_nssimpl.hxx"
 #include <comphelper/servicehelper.hxx>
 
 #include <xmlsec-wrapper.h>
@@ -528,20 +527,23 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl::buildCertifi
     return Sequence< Reference < XCertificate > >();
 }
 
-Reference< XCertificate > SecurityEnvironment_NssImpl::createCertificateFromRaw( const Sequence< sal_Int8 >& rawCertificate ) {
-    X509Certificate_NssImpl* xcert ;
+X509Certificate_NssImpl* SecurityEnvironment_NssImpl::createX509CertificateFromDER(const css::uno::Sequence<sal_Int8>& aDerCertificate)
+{
+    X509Certificate_NssImpl* pX509Certificate = nullptr;
 
-    if( rawCertificate.getLength() > 0 ) {
-        xcert = new X509Certificate_NssImpl() ;
-        if( xcert == nullptr )
-            throw RuntimeException() ;
-
-        xcert->setRawCert( rawCertificate ) ;
-    } else {
-        xcert = nullptr ;
+    if (aDerCertificate.getLength() > 0)
+    {
+        pX509Certificate = new X509Certificate_NssImpl();
+        if (pX509Certificate == nullptr)
+            throw RuntimeException();
+        pX509Certificate->setRawCert(aDerCertificate);
     }
+    return pX509Certificate;
+}
 
-    return xcert ;
+Reference<XCertificate> SecurityEnvironment_NssImpl::createCertificateFromRaw(const Sequence< sal_Int8 >& rawCertificate)
+{
+    return createX509CertificateFromDER(rawCertificate);
 }
 
 Reference< XCertificate > SecurityEnvironment_NssImpl::createCertificateFromAscii( const OUString& asciiCertificate )
@@ -966,6 +968,47 @@ void SecurityEnvironment_NssImpl::destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr
     if( pKeysMngr != nullptr ) {
         xmlSecKeysMngrDestroy( pKeysMngr ) ;
     }
+}
+
+uno::Reference<security::XCertificate> SecurityEnvironment_NssImpl::createDERCertificateWithPrivateKey(
+        Sequence<sal_Int8> const & raDERCertificate, Sequence<sal_Int8> const & raPrivateKey)
+{
+    SECStatus nStatus = SECSuccess;
+
+    PK11SlotInfo* pSlot = PK11_GetInternalKeySlot();
+    if (!pSlot)
+        return uno::Reference<security::XCertificate>();
+
+    SECItem pDerPrivateKeyInfo;
+    pDerPrivateKeyInfo.data = reinterpret_cast<unsigned char *>(const_cast<sal_Int8 *>(raPrivateKey.getConstArray()));
+    pDerPrivateKeyInfo.len = raPrivateKey.getLength();
+
+    const unsigned int keyUsage = KU_KEY_ENCIPHERMENT | KU_DATA_ENCIPHERMENT | KU_DIGITAL_SIGNATURE;
+    SECKEYPrivateKey* pPrivateKey = nullptr;
+
+    bool bPermanent = false;
+    bool bSensitive = false;
+
+    nStatus = PK11_ImportDERPrivateKeyInfoAndReturnKey(
+          pSlot, &pDerPrivateKeyInfo, nullptr, nullptr, bPermanent, bSensitive,
+          keyUsage, &pPrivateKey, nullptr);
+
+    if (nStatus != SECSuccess)
+        return uno::Reference<security::XCertificate>();
+
+    if (!pPrivateKey)
+        return uno::Reference<security::XCertificate>();
+
+    X509Certificate_NssImpl* pX509Certificate = createX509CertificateFromDER(raDERCertificate);
+    if (!pX509Certificate)
+        return uno::Reference<security::XCertificate>();
+
+    addCryptoSlot(pSlot);
+
+    CERTCertificate* pCERTCertificate = const_cast<CERTCertificate*>(pX509Certificate->getNssCert());
+    pCERTCertificate->slot = pSlot;
+
+    return pX509Certificate;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

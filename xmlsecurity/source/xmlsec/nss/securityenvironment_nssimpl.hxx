@@ -31,10 +31,13 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
+#include <com/sun/star/xml/crypto/XCertificateCreator.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/security/CertificateCharacters.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+
+#include "x509certificate_nssimpl.hxx"
 
 #include <osl/mutex.hxx>
 
@@ -46,7 +49,8 @@
 #include <xmlsec-wrapper.h>
 
 class SecurityEnvironment_NssImpl : public ::cppu::WeakImplHelper<
-    css::xml::crypto::XSecurityEnvironment ,
+    css::xml::crypto::XSecurityEnvironment,
+    css::xml::crypto::XCertificateCreator,
     css::lang::XServiceInfo,
     css::lang::XUnoTunnel >
 {
@@ -137,6 +141,10 @@ private:
         virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromRaw( const css::uno::Sequence< sal_Int8 >& rawCertificate ) override ;
         virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromAscii( const OUString& asciiCertificate ) override ;
 
+        // Methods of XCertificateCreator
+        css::uno::Reference<css::security::XCertificate> SAL_CALL createDERCertificateWithPrivateKey(
+                css::uno::Sequence<sal_Int8> const & raDERCertificate,
+                css::uno::Sequence<sal_Int8> const & raPrivateKey) override;
 
         //Native methods
         /// @throws css::uno::RuntimeException
@@ -147,6 +155,8 @@ private:
 
 private:
         void updateSlots();
+
+        X509Certificate_NssImpl* createX509CertificateFromDER(const css::uno::Sequence<sal_Int8>& aDerCertificate);
 
           /// @throws css::uno::Exception
           /// @throws css::uno::RuntimeException
