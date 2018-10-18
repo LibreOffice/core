@@ -47,7 +47,7 @@ void TabPage::ImplInit( vcl::Window* pParent, WinBits nStyle )
 void TabPage::ImplInitSettings()
 {
     vcl::Window* pParent = GetParent();
-    if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
+    if (pParent && pParent->IsChildTransparentModeEnabled() && !IsControlBackground())
     {
         EnableChildTransparentMode();
         SetParentClipMode( ParentClipMode::NoClip );

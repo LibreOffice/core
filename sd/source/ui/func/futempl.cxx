@@ -363,7 +363,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                     if( !bOldDocInOtherLanguage )
                     {
-                        pPresDlg.disposeAndReset(pFact ? pFact->CreateSdPresLayoutTemplateDlg( mpDocSh,  mpViewShell->GetActiveWindow(), bBackground, *pStyleSheet, ePO, pSSPool ) : nullptr);
+                        pPresDlg.disposeAndReset(pFact ? pFact->CreateSdPresLayoutTemplateDlg(mpDocSh,  mpViewShell->GetFrameWeld(), bBackground, *pStyleSheet, ePO, pSSPool ) : nullptr);
                     }
                 }
 
