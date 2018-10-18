@@ -20,24 +20,23 @@
 #define INCLUDED_SW_SOURCE_UI_DBUI_MMOUTPUTTYPEPAGE_HXX
 
 #include <svtools/wizardmachine.hxx>
-#include <vcl/button.hxx>
+#include <vcl/weld.hxx>
 #include <mailmergehelper.hxx>
 class SwMailMergeWizard;
 
 class SwMailMergeOutputTypePage : public svt::OWizardPage
 {
-    VclPtr<RadioButton>    m_pLetterRB;
-    VclPtr<RadioButton>    m_pMailRB;
-
-    VclPtr<FixedText>      m_pLetterHint;
-    VclPtr<FixedText>      m_pMailHint;
-
     VclPtr<SwMailMergeWizard>  m_pWizard;
 
-    DECL_LINK(TypeHdl_Impl, Button*, void);
+    std::unique_ptr<weld::RadioButton> m_xLetterRB;
+    std::unique_ptr<weld::RadioButton> m_xMailRB;
+    std::unique_ptr<weld::Label> m_xLetterHint;
+    std::unique_ptr<weld::Label> m_xMailHint;
+
+    DECL_LINK(TypeHdl_Impl, weld::ToggleButton&, void);
 
 public:
-    SwMailMergeOutputTypePage( SwMailMergeWizard* _pParent);
+    SwMailMergeOutputTypePage(SwMailMergeWizard* pWizard, TabPageParent pParent);
     virtual ~SwMailMergeOutputTypePage() override;
     virtual void dispose() override;
 };

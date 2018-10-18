@@ -102,7 +102,7 @@ VclPtr<TabPage> SwMailMergeWizard::createPage(WizardState _nState)
             SetRoadmapHelpId("modules/swriter/ui/mmselectpage/MMSelectPage");
         break;
         case MM_OUTPUTTYPETPAGE    :
-            pRet = VclPtr<SwMailMergeOutputTypePage>::Create(this);
+            pRet = VclPtr<SwMailMergeOutputTypePage>::Create(this, TabPageParent(this));
             SetRoadmapHelpId("modules/swriter/ui/mmoutputtypepage/MMOutputTypePage");
         break;
         case MM_ADDRESSBLOCKPAGE   :
