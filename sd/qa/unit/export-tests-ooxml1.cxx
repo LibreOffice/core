@@ -136,7 +136,7 @@ public:
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
     {
-        struct { char const * pPrefix; char const * pURI; } namespaces[] =
+        static const struct { char const * pPrefix; char const * pURI; } namespaces[] =
         {
             // OOXML
             { "ContentType", "http://schemas.openxmlformats.org/package/2006/content-types" },

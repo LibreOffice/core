@@ -317,7 +317,7 @@ the test, and re-running; it should break.
 */
 void SdImportTest::testDocumentLayout()
 {
-    struct { const char *pInput, *pDump; sal_Int32 nFormat; sal_Int32 nExportType; } aFilesToCompare[] =
+    static const struct { const char *pInput, *pDump; sal_Int32 nFormat; sal_Int32 nExportType; } aFilesToCompare[] =
     {
         { "odp/shapes-test.odp", "xml/shapes-test_page", ODP, -1 },
         { "fdo47434.pptx", "xml/fdo47434_", PPTX, -1 },
