@@ -1096,19 +1096,16 @@ cmd/sc_basicshapes.frame.svg cmd/sc_rect_unfilled.svg
 
 # Sort
 cmd/32/ordercrit.svg cmd/32/sortascending.svg
-cmd/32/reverseorder.svg cmd/32/tabdialog.svg
 cmd/32/sortdown.svg cmd/32/sortdescending.svg
 cmd/32/sortup.svg cmd/32/sortascending.svg
 cmd/32/tablesort.svg cmd/32/sortascending.svg
 
 cmd/lc_ordercrit.svg cmd/lc_sortascending.svg
-cmd/lc_reverseorder.svg cmd/lc_tabdialog.svg
 cmd/lc_sortdown.svg cmd/lc_sortdescending.svg
 cmd/lc_sortup.svg cmd/lc_sortascending.svg
 cmd/lc_tablesort.svg cmd/lc_sortascending.svg
 
 cmd/sc_ordercrit.svg cmd/sc_sortascending.svg
-cmd/sc_reverseorder.svg cmd/sc_tabdialog.svg
 cmd/sc_sortdown.svg cmd/sc_sortdescending.svg
 cmd/sc_sortup.svg cmd/sc_sortascending.svg
 cmd/sc_tablesort.svg cmd/sc_sortascending.svg
