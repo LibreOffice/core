@@ -1880,22 +1880,14 @@ void SwWW8ImplReader::ImportDop()
 
     // disable form design mode to be able to use imported controls directly
     // #i31239# always disable form design mode, not only in protected docs
+    uno::Reference<beans::XPropertySet> xDocProps(m_pDocShell->GetModel(), uno::UNO_QUERY);
+    if (xDocProps.is())
     {
-        uno::Reference<lang::XComponent> xModelComp(m_pDocShell->GetModel(),
-           uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xDocProps(xModelComp,
-           uno::UNO_QUERY);
-        if (xDocProps.is())
+        uno::Reference<beans::XPropertySetInfo> xInfo = xDocProps->getPropertySetInfo();
+        if (xInfo.is())
         {
-            uno::Reference<beans::XPropertySetInfo> xInfo =
-                xDocProps->getPropertySetInfo();
-            if (xInfo.is())
-            {
-                if (xInfo->hasPropertyByName("ApplyFormDesignMode"))
-                {
-                    xDocProps->setPropertyValue("ApplyFormDesignMode", css::uno::makeAny(false));
-                }
-            }
+            if (xInfo->hasPropertyByName("ApplyFormDesignMode"))
+                xDocProps->setPropertyValue("ApplyFormDesignMode", css::uno::makeAny(false));
         }
     }
 
