@@ -257,32 +257,22 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const css::uno::Reference< css:
 
     SAL_WARN_IF(!xInputStream.is(), "xmlsecurity.helper", "input stream missing");
 
-    /*
-     * prepare ParserInputSrouce
-     */
+    // prepare ParserInputSrouce
     xml::sax::InputSource aParserInput;
     aParserInput.aInputStream = xInputStream;
 
-    /*
-     * get SAX parser component
-     */
+    // get SAX parser component
     uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(mxCtx);
 
-    /*
-     * create a signature reader
-     */
+    // create a signature reader
     uno::Reference< xml::sax::XDocumentHandler > xHandler
         = mpXSecController->createSignatureReader(*this);
 
-    /*
-     * setup the connection:
-     * Parser -> SignatureReader
-     */
+    // setup the connection:
+    // Parser -> SignatureReader
     xParser->setDocumentHandler( xHandler );
 
-    /*
-     * parser the stream
-     */
+    // parser the stream
     try
     {
         xParser->parseStream( aParserInput );
@@ -292,9 +282,7 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const css::uno::Reference< css:
         mbError = true;
     }
 
-    /*
-     * release the signature reader
-     */
+    // release the signature reader
     mpXSecController->releaseSignatureReader( );
 
     return !mbError;
