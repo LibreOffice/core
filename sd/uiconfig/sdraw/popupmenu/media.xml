@@ -38,6 +38,7 @@
       <menu:menuitem menu:id=".uno:ReverseOrder"/>
     </menu:menupopup>
   </menu:menu>
-  <menu:menuitem menu:id=".uno:DistributeSelection"/>
-  <menu:menuitem menu:id=".uno:Break"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:NameGroup"/>
+  <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
 </menu:menupopup>
