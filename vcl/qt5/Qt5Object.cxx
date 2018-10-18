@@ -31,6 +31,14 @@ Qt5Object::Qt5Object(Qt5Frame* pParent, bool bShow)
     m_pQWidget.reset(new QWidget(pParent->GetQWidget()));
     if (bShow)
         m_pQWidget->show();
+
+    m_aSystemData.nSize = sizeof(SystemEnvData);
+    m_aSystemData.aWindow = pParent->GetQWidget()->winId();
+    m_aSystemData.aShellWindow = reinterpret_cast<sal_IntPtr>(this);
+    //m_aSystemData.pSalFrame = this;
+    //m_aSystemData.pWidget = m_pQWidget;
+    //m_aSystemData.nScreen = m_nXScreen.getXScreen();
+    m_aSystemData.pToolkit = "qt5";
 }
 
 void Qt5Object::ResetClipRegion()
@@ -63,7 +71,5 @@ void Qt5Object::Show(bool bVisible)
 }
 
 void Qt5Object::SetForwardKey(bool /*bEnable*/) {}
-
-const SystemEnvData* Qt5Object::GetSystemData() const { return nullptr; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
