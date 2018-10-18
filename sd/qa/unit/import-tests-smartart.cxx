@@ -40,6 +40,7 @@ public:
     void testEquation();
     void testSegmentedCycle();
     void testBaseRtoL();
+    void testVertialBoxList();
 
     CPPUNIT_TEST_SUITE(SdImportTestSmartArt);
 
@@ -64,6 +65,7 @@ public:
     CPPUNIT_TEST(testEquation);
     CPPUNIT_TEST(testSegmentedCycle);
     CPPUNIT_TEST(testBaseRtoL);
+    CPPUNIT_TEST(testVertialBoxList);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -355,6 +357,19 @@ void SdImportTestSmartArt::testBaseRtoL()
     CPPUNIT_ASSERT(xShape0->getPosition().X > xShape1->getPosition().X);
     CPPUNIT_ASSERT(xShape2->getPosition().X > xShape3->getPosition().X);
     CPPUNIT_ASSERT((xShape2->getPosition().X >  xShape4->getPosition().X) && (xShape3->getPosition().X < xShape4->getPosition().X));
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testVertialBoxList()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/smartart-vertial-box-list.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef),
+                                                 uno::UNO_QUERY_THROW);
+    // Without the accompanying fix in place, this test would have failed with
+    // 'actual: 0'.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xShapeGroup->getCount());
 
     xDocShRef->DoClose();
 }

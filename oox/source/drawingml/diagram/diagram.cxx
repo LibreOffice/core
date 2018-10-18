@@ -31,6 +31,7 @@
 #include <drawingml/fillproperties.hxx>
 #include <oox/ppt/pptshapegroupcontext.hxx>
 #include <oox/ppt/pptshape.hxx>
+#include <oox/token/namespaces.hxx>
 
 #include "diagramlayoutatoms.hxx"
 #include "layoutatomvisitors.hxx"
@@ -376,12 +377,57 @@ static void importFragment( core::XmlFilterBase& rFilter,
     rFilter.importFragment( rxHandler, xSerializer );
 }
 
+namespace
+{
+/**
+ * A fragment handler that just counts the number of <dsp:sp> elements in a
+ * fragment.
+ */
+class DiagramShapeCounter : public oox::core::FragmentHandler2
+{
+public:
+    DiagramShapeCounter(oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath,
+                        sal_Int32& nCounter);
+    oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElement,
+                                                 const AttributeList& rAttribs) override;
+
+private:
+    sal_Int32& m_nCounter;
+};
+
+DiagramShapeCounter::DiagramShapeCounter(oox::core::XmlFilterBase& rFilter,
+                                         const OUString& rFragmentPath, sal_Int32& nCounter)
+    : FragmentHandler2(rFilter, rFragmentPath)
+    , m_nCounter(nCounter)
+{
+}
+
+oox::core::ContextHandlerRef DiagramShapeCounter::onCreateContext(sal_Int32 nElement,
+                                                                  const AttributeList& /*rAttribs*/)
+{
+    switch (nElement)
+    {
+        case DSP_TOKEN(drawing):
+        case DSP_TOKEN(spTree):
+            return this;
+        case DSP_TOKEN(sp):
+            ++m_nCounter;
+            break;
+        default:
+            break;
+    }
+
+    return nullptr;
+}
+}
+
 void loadDiagram( ShapePtr const & pShape,
                   core::XmlFilterBase& rFilter,
                   const OUString& rDataModelPath,
                   const OUString& rLayoutPath,
                   const OUString& rQStylePath,
-                  const OUString& rColorStylePath )
+                  const OUString& rColorStylePath,
+                  const oox::core::Relations& rRelations )
 {
     DiagramPtr pDiagram( new Diagram );
 
@@ -408,11 +454,26 @@ void loadDiagram( ShapePtr const & pShape,
 
         // Pass the info to pShape
         for (auto const& extDrawing : pData->getExtDrawings())
-                pShape->addExtDrawingRelId(extDrawing);
+        {
+            OUString aFragmentPath = rRelations.getFragmentPathFromRelId(extDrawing);
+            // Ignore RelIds which don't resolve to a fragment path.
+            if (aFragmentPath.isEmpty())
+                continue;
+
+            sal_Int32 nCounter = 0;
+            rtl::Reference<core::FragmentHandler> xCounter(
+                new DiagramShapeCounter(rFilter, aFragmentPath, nCounter));
+            rFilter.importFragment(xCounter);
+            // Ignore ext drawings which don't actually have any shapes.
+            if (nCounter == 0)
+                continue;
+
+            pShape->addExtDrawingRelId(extDrawing);
+        }
     }
 
     // extLst is present, lets bet on that and ignore the rest of the data from here
-    if( pData->getExtDrawings().empty() )
+    if( pShape->getExtDrawings().empty() )
     {
         // layout
         if( !rLayoutPath.isEmpty() )

@@ -39,7 +39,8 @@ void loadDiagram( ShapePtr const & pShape,
                   const OUString& rDataModelPath,
                   const OUString& rLayoutPath,
                   const OUString& rQStylePath,
-                  const OUString& rColorStylePath );
+                  const OUString& rColorStylePath,
+                  const oox::core::Relations& rRelations );
 
 void loadDiagram( const ShapePtr& pShape,
                   core::XmlFilterBase& rFilter,
