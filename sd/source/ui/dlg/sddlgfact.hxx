@@ -123,18 +123,6 @@ public:
     virtual bool        IsCustomShow() const override ;
 };
 
-class SfxTabDialog;
-class SdAbstractTabDialog_Impl : public SfxAbstractTabDialog
-{
-    DECL_ABSTDLG_BASE( SdAbstractTabDialog_Impl,SfxTabDialog )
-    virtual void                SetCurPageId( const OString& rName ) override;
-    virtual const SfxItemSet*   GetOutputItemSet() const override;
-    virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem ) override;
-    virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
-        //From class Window.
-    virtual void        SetText( const OUString& rStr ) override;
-};
-
 class SdAbstractTabController_Impl : public SfxAbstractTabDialog
 {
 protected:
