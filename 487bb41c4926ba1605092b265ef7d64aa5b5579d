@@ -16,6 +16,24 @@
       "revId": "487bb41c4926ba1605092b265ef7d64aa5b5579d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f201791_583ba19b",
+        "filename": "officecfg/registry/data/org/openoffice/Office/Common.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-18T14:35:57Z",
+      "side": 1,
+      "message": "\u003e you can put these directly as default values into the .xcs\n\nTried this but didn\u0027t work.",
+      "parentUuid": "5f201791_38cb45a6",
+      "revId": "487bb41c4926ba1605092b265ef7d64aa5b5579d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
