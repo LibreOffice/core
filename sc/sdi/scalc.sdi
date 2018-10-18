@@ -3073,7 +3073,7 @@ SfxVoidItem InsertObjectStarMath SID_INSERT_SMATH
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -6181,7 +6181,7 @@ SfxVoidItem InsertCurrentDate SID_INSERT_CURRENT_DATE
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -6199,7 +6199,7 @@ SfxVoidItem InsertCurrentTime SID_INSERT_CURRENT_TIME
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
