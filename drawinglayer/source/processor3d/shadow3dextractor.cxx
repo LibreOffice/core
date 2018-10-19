@@ -248,7 +248,7 @@ namespace drawinglayer
 
         Shadow3DExtractingProcessor::~Shadow3DExtractingProcessor()
         {
-            OSL_ENSURE(0 == maPrimitive2DSequence.size(),
+            OSL_ENSURE(maPrimitive2DSequence.empty(),
                 "OOps, someone used Shadow3DExtractingProcessor, but did not fetch the results (!)");
         }
 

@@ -373,7 +373,7 @@ void SwGlossaries::UpdateGlosPath(bool bFull)
                     INetURLObject(),
                     m_aPath.getToken(0, SVT_SEARCHPATH_DELIMITER, nIndex),
                     URIHelper::GetMaybeFileHdl());
-                if (aDirArr.size() &&
+                if (!aDirArr.empty() &&
                     std::find(aDirArr.begin(), aDirArr.end(), sPth) != aDirArr.end())
                 {
                     continue;

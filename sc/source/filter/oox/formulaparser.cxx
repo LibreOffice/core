@@ -696,7 +696,7 @@ size_t FormulaParserImpl::insertWhiteSpaceTokens( const WhiteSpaceVec* pSpaces, 
 
 size_t FormulaParserImpl::getOperandSize( size_t nOpIndex ) const
 {
-    OSL_ENSURE( (nOpIndex < 1) && (1 <= maOperandSizeStack.size()),
+    OSL_ENSURE( (nOpIndex < 1) && (!maOperandSizeStack.empty()),
         "FormulaParserImpl::getOperandSize - invalid parameters" );
     return maOperandSizeStack[ maOperandSizeStack.size() - 1 + nOpIndex ];
 }
@@ -753,7 +753,7 @@ bool FormulaParserImpl::pushParenthesesOperandToken( const WhiteSpaceVec* pClosi
 
 bool FormulaParserImpl::pushUnaryPreOperatorToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces )
 {
-    bool bOk = maOperandSizeStack.size() >= 1;
+    bool bOk = !maOperandSizeStack.empty();
     if( bOk )
     {
         size_t nOpSize = popOperandSize();
@@ -766,7 +766,7 @@ bool FormulaParserImpl::pushUnaryPreOperatorToken( sal_Int32 nOpCode, const Whit
 
 bool FormulaParserImpl::pushUnaryPostOperatorToken( sal_Int32 nOpCode, const WhiteSpaceVec* pSpaces )
 {
-    bool bOk = maOperandSizeStack.size() >= 1;
+    bool bOk = !maOperandSizeStack.empty();
     if( bOk )
     {
         size_t nOpSize = popOperandSize();
@@ -793,7 +793,7 @@ bool FormulaParserImpl::pushBinaryOperatorToken( sal_Int32 nOpCode, const WhiteS
 
 bool FormulaParserImpl::pushParenthesesOperatorToken( const WhiteSpaceVec* pOpeningSpaces, const WhiteSpaceVec* pClosingSpaces )
 {
-    bool bOk = maOperandSizeStack.size() >= 1;
+    bool bOk = !maOperandSizeStack.empty();
     if( bOk )
     {
         size_t nOpSize = popOperandSize();

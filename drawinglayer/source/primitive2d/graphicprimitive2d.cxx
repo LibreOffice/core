@@ -110,7 +110,7 @@ namespace drawinglayer
                 aTransformedGraphic,
                 aTransform);
 
-            if(!aRetval.size())
+            if(aRetval.empty())
             {
                 // content is invisible, done
                 return;
@@ -131,7 +131,7 @@ namespace drawinglayer
                     o3tl::clamp(aSuppressGraphicAttr.GetGamma(), 0.0, 10.0),
                     aSuppressGraphicAttr.IsInvert());
 
-                if(!aRetval.size())
+                if(aRetval.empty())
                 {
                     // content is invisible, done
                     return;

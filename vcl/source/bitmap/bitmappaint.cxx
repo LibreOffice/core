@@ -681,7 +681,7 @@ vcl::Region Bitmap::CreateRegion(const Color& rColor, const tools::Rectangle& rR
             if (aNewLine != aLine)
             {
                 // need to write aLine, it's different from the next line
-                if (aLine.size())
+                if (!aLine.empty())
                 {
                     tools::Rectangle aSubRect;
 
@@ -704,7 +704,7 @@ vcl::Region Bitmap::CreateRegion(const Color& rColor, const tools::Rectangle& rR
         }
 
         // write last line if used
-        if (aLine.size())
+        if (!aLine.empty())
         {
             tools::Rectangle aSubRect;
 

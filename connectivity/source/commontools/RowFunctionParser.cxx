@@ -253,7 +253,7 @@ public:
 
         ParserContext::OperandStack& rNodeStack( mpContext->maOperandStack );
 
-        if( rNodeStack.size() < 1 )
+        if( rNodeStack.empty() )
             throw ParseError( "Not enough arguments for unary operator" );
 
         // retrieve arguments

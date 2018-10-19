@@ -1731,7 +1731,7 @@ bool DrawFillAttributes(
                 aPaintRange,
                 aDefineRange);
 
-            if(rSequence.size())
+            if(!rSequence.empty())
             {
                 drawinglayer::primitive2d::Primitive2DContainer const*
                     pPrimitives(&rSequence);

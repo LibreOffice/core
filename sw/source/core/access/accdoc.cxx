@@ -858,7 +858,7 @@ css::uno::Sequence< css::uno::Any >
 
             while( _pStartCursor && ( (_pStartCursor = _pStartCursor->GetNext()) != _pStartCursor2) );
 
-            if ( vFrameList.size() )
+            if ( !vFrameList.empty() )
             {
                 uno::Sequence< uno::Any > aRet(vFrameList.size());
                 std::vector<SwFrame*>::iterator aIter = vFrameList.begin();

@@ -579,7 +579,7 @@ void DomainMapperTableManager::endOfRowAction()
 
     IntVectorPtr pTableGrid = getCurrentGrid( );
     IntVectorPtr pCellWidths = getCurrentCellWidths( );
-    if(!m_nTableWidth && pTableGrid->size())
+    if(!m_nTableWidth && !pTableGrid->empty())
     {
 #ifdef DEBUG_WRITERFILTER
         TagLogger::getInstance().startElement("tableWidth");
@@ -697,7 +697,7 @@ void DomainMapperTableManager::endOfRowAction()
 #endif
         insertRowProps(pPropMap);
     }
-    else if ( pCellWidths->size() > 0 &&
+    else if ( !pCellWidths->empty() &&
                ( m_nLayoutType == NS_ooxml::LN_Value_doc_ST_TblLayout_fixed
                  || pCellWidths->size() == ( m_nGridBefore + nGrids + m_nGridAfter ) )
              )

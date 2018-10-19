@@ -219,7 +219,7 @@ namespace basegfx
 
         void applyLineDashing(const B2DPolyPolygon& rCandidate, const std::vector<double>& rDotDashArray, B2DPolyPolygon* pLineTarget, double fFullDashDotLen)
         {
-            if(fFullDashDotLen == 0.0 && rDotDashArray.size())
+            if(fFullDashDotLen == 0.0 && !rDotDashArray.empty())
             {
                 // calculate fFullDashDotLen from rDotDashArray
                 fFullDashDotLen = std::accumulate(rDotDashArray.begin(), rDotDashArray.end(), 0.0);

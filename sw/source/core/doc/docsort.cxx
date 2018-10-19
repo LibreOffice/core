@@ -849,7 +849,7 @@ sal_uInt16 FlatFndBox::GetRowCount(const FndBox_& rBox)
         sal_uInt16 nLn = 1;
         for (const auto &rpB : rBoxes)
         {
-            if (rpB->GetLines().size())
+            if (!rpB->GetLines().empty())
             {   // Iterate recursively over the Lines
                 nLn = std::max(GetRowCount(*rpB), nLn);
             }

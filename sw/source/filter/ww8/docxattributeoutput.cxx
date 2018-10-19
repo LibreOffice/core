@@ -3321,7 +3321,7 @@ void DocxAttributeOutput::EndTable()
     // We closed the table; if it is a nested table, the cell that contains it
     // still continues
     // set to true only if we were in a nested table, not otherwise.
-    if( 0 != tableFirstCells.size() )
+    if( !tableFirstCells.empty() )
         m_tableReference->m_bTableCellOpen = true;
 
     // Cleans the table helper

@@ -700,7 +700,7 @@ public:
         B2DTrapezoidVector aVector;
         basegfx::utils::trapezoidSubdivide(aVector, aPolyPolygon);
         CPPUNIT_ASSERT_MESSAGE("more than zero sub-divided trapezoids",
-                               aVector.size() > 0);
+                               !aVector.empty());
     }
 
     // Change the following lines only, if you add, remove or rename

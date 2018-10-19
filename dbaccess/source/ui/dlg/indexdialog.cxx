@@ -677,7 +677,7 @@ namespace dbaui
     bool DbaIndexDialog::implCheckPlausibility(const Indexes::const_iterator& _rPos)
     {
         // need at least one field
-        if (0 == _rPos->aFields.size())
+        if (_rPos->aFields.empty())
         {
             std::unique_ptr<weld::MessageDialog> xError(Application::CreateMessageDialog(GetFrameWeld(),
                                                         VclMessageType::Warning, VclButtonsType::Ok,

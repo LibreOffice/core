@@ -436,7 +436,7 @@ void OPreparedStatement::describeParameter()
     {
         m_xParamColumns = new OSQLColumns();
         const OSQLTables& rTabs = m_pSQLIterator->getTables();
-        if(rTabs.size())
+        if(!rTabs.empty())
         {
             OSQLTable xTable = rTabs.begin()->second;
             for (auto const& parseNode : aParseNodes)

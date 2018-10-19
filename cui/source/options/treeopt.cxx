@@ -1946,11 +1946,11 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
                             if ( !sLeafGrpId.isEmpty() )
                             {
                                 bool bAlreadyOpened = false;
-                                if ( pNode->m_aGroupedLeaves.size() > 0 )
+                                if ( !pNode->m_aGroupedLeaves.empty() )
                                 {
                                     for (auto & rGroup : pNode->m_aGroupedLeaves)
                                     {
-                                        if ( rGroup.size() > 0 &&
+                                        if ( !rGroup.empty() &&
                                              rGroup[0]->m_sGroupId == sLeafGrpId )
                                         {
                                             std::vector<std::unique_ptr<OptionsLeaf>>::size_type l = 0;
@@ -1980,14 +1980,14 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
             }
 
             // do not insert nodes without leaves
-            if ( pNode->m_aLeaves.size() > 0 || pNode->m_aGroupedLeaves.size() > 0 )
+            if ( !pNode->m_aLeaves.empty() || !pNode->m_aGroupedLeaves.empty() )
             {
                 pModule ? aNodeList.push_back( std::move(pNode) ) : aOutNodeList.push_back( std::move(pNode) );
             }
         }
     }
 
-    if ( pModule && aNodeList.size() > 0 )
+    if ( pModule && !aNodeList.empty() )
     {
         for ( auto const & i: pModule->m_aNodeList )
         {
@@ -2057,7 +2057,7 @@ void  OfaTreeOptionsDialog::InsertNodes( const VectorOfNodes& rNodeList )
 {
     for (auto const& node : rNodeList)
     {
-        if ( node->m_aLeaves.size() > 0 || node->m_aGroupedLeaves.size() > 0 )
+        if ( !node->m_aLeaves.empty() || !node->m_aGroupedLeaves.empty() )
         {
             for ( auto const & j: node->m_aGroupedLeaves )
             {

@@ -2353,7 +2353,7 @@ bool TextEngine::CreateLines( sal_uInt32 nPara )
                                           pTEParaPortion->GetLines().end() );
     }
 
-    SAL_WARN_IF( !pTEParaPortion->GetLines().size(), "vcl", "CreateLines: No Line!" );
+    SAL_WARN_IF( pTEParaPortion->GetLines().empty(), "vcl", "CreateLines: No Line!" );
 
     pTEParaPortion->SetValid();
 

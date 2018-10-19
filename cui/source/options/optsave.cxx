@@ -565,7 +565,7 @@ IMPL_LINK( SvxSaveTabPage, FilterHdl_Impl, ListBox&, rBox, void )
         {
             aSaveAsLB->Clear();
             auto & rFilters = pImpl->aFilterArr[nData];
-            if(!pImpl->aUIFilterArr[nData].size())
+            if(pImpl->aUIFilterArr[nData].empty())
             {
                 pImpl->aUIFilterArr[nData].resize(pImpl->aFilterArr[nData].size());
                 auto & rUIFilters = pImpl->aUIFilterArr[nData];

@@ -184,7 +184,7 @@ bool OWizColumnSelect::LeavePage()
     if  (   m_pParent->GetPressedButton() == OCopyTableWizard::WIZARD_NEXT
         ||  m_pParent->GetPressedButton() == OCopyTableWizard::WIZARD_FINISH
         )
-        return m_pParent->getDestColumns().size() != 0;
+        return !m_pParent->getDestColumns().empty();
     else
         return true;
 }

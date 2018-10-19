@@ -1877,7 +1877,7 @@ void SwFEShell::GetConnectableFrameFormats(SwFrameFormat & rFormat,
 
     }
 
-    if  (aTmpSpzArray.size() > 0)
+    if  (!aTmpSpzArray.empty())
     {
         aPrevPageVec.clear();
         aThisPageVec.clear();

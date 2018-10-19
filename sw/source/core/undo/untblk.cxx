@@ -223,7 +223,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
         }
     }
 
-    if (m_FlyUndos.size())
+    if (!m_FlyUndos.empty())
     {
         sal_uLong nTmp = rPam.GetPoint()->nNode.GetIndex();
         for (size_t n = m_FlyUndos.size(); 0 < n; --n)

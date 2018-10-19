@@ -258,7 +258,7 @@ void BrowseBox::ToggleSelection()
         tools::Rectangle aAddRect(
             Point( nOfsX, (nRow-nTopRow)*GetDataRowHeight() ),
             Size( pDataWin->GetSizePixel().Width(), GetDataRowHeight() ) );
-        if ( aHighlightList.size() && nLastRowInRect == ( nRow - 1 ) )
+        if ( !aHighlightList.empty() && nLastRowInRect == ( nRow - 1 ) )
             aHighlightList[ 0 ].Union( aAddRect );
         else
             aHighlightList.emplace( aHighlightList.begin(), aAddRect );

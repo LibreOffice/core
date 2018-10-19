@@ -1573,7 +1573,7 @@ double VSeriesPlotter::getMinimumZ()
 }
 double VSeriesPlotter::getMaximumZ()
 {
-    if( m_nDimension!=3 || !m_aZSlots.size() )
+    if( m_nDimension!=3 || m_aZSlots.empty() )
         return getMinimumZ()+1;
     return m_aZSlots.size();
 }

@@ -1703,7 +1703,7 @@ bool SwContentNode::GetAttr( SfxItemSet& rSet ) const
 sal_uInt16 SwContentNode::ClearItemsFromAttrSet( const std::vector<sal_uInt16>& rWhichIds )
 {
     sal_uInt16 nRet = 0;
-    if ( 0 == rWhichIds.size() )
+    if ( rWhichIds.empty() )
         return nRet;
 
     OSL_ENSURE( GetpSwAttrSet(), "no item set" );

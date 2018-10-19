@@ -392,9 +392,9 @@ const SwStartNode *SwHTMLTableLayout::GetAnyBoxStartNode() const
     const SwTableBox* pBox = m_pSwTable->GetTabLines()[0]->GetTabBoxes()[0];
     while( nullptr == (pBoxSttNd = pBox->GetSttNd()) )
     {
-        OSL_ENSURE( pBox->GetTabLines().size() > 0,
+        OSL_ENSURE( !pBox->GetTabLines().empty(),
                 "Box without start node and lines" );
-        OSL_ENSURE( pBox->GetTabLines().front()->GetTabBoxes().size() > 0,
+        OSL_ENSURE( !pBox->GetTabLines().front()->GetTabBoxes().empty(),
                 "Line without boxes" );
         pBox = pBox->GetTabLines().front()->GetTabBoxes().front();
     }

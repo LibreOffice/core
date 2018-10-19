@@ -3917,7 +3917,7 @@ uno::Sequence< uno::Reference< ui::XUIElement > > ToolbarLayoutManager::getToolb
     uno::Sequence< uno::Reference< ui::XUIElement > > aSeq;
 
     SolarMutexGuard g;
-    if ( m_aUIElements.size() > 0 )
+    if ( !m_aUIElements.empty() )
     {
         sal_uInt32 nCount(0);
         for (auto const& elem : m_aUIElements)

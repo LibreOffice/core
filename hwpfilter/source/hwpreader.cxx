@@ -2908,7 +2908,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
     {
         if( para->hhstr[n]->hh == CH_END_PARA )
         {
-            if (str.size() > 0)
+            if (!str.empty())
             {
                 if( !pstart ){ STARTP;}
                 if( !tstart ){ STARTT;}
@@ -2998,7 +2998,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     break;
                 case CH_TAB:                      // 9
                     if( !pstart ) {STARTP;}
-                    if (str.size() > 0)
+                    if (!str.empty())
                     {
                         if( !tstart ) {STARTT;}
                         makeChars(str);
@@ -3019,7 +3019,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     else
                     {
                         if( !pstart ) {STARTP;}
-                        if (str.size() > 0)
+                        if (!str.empty())
                         {
                             if( !tstart ) {STARTT;}
                             makeChars(str);
@@ -3052,7 +3052,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     else
                     {
                         if( !pstart ) {STARTP;}
-                        if (str.size() > 0)
+                        if (!str.empty())
                         {
                             if( !tstart ) {STARTT;}
                             makeChars(str);
@@ -3064,7 +3064,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                 }
                 case CH_LINE:                     // 14
                 {
-                    if (str.size() > 0)
+                    if (!str.empty())
                     {
                         if( !pstart ) {STARTP;}
                         if( !tstart ) {STARTT;}
@@ -3731,7 +3731,7 @@ void HwpReader::makeHyperText(TxtBox * hbox)
               reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hypert->filename)).c_str())).c_str());
 #endif
           padd("xlink:type", sXML_CDATA, "simple");
-          if (tmp.size() > 0 && strcmp(tmp.c_str(), "[HTML]")) {
+          if (!tmp.empty() && strcmp(tmp.c_str(), "[HTML]")) {
               ::std::string tmp3(tmp2);
               tmp3.push_back('#');
               tmp3.append(tmp);

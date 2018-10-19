@@ -3501,7 +3501,7 @@ ScDPResultMember* ScDPResultDimension::GetMember(long n)
 
 ScDPResultDimension* ScDPResultDimension::GetFirstChildDimension() const
 {
-    if ( maMemberArray.size() > 0 )
+    if ( !maMemberArray.empty() )
         return maMemberArray[0]->GetChildDimension();
     else
         return nullptr;

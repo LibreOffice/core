@@ -239,7 +239,7 @@ namespace sdr
 
         void OverlayManager::completeRedraw(const vcl::Region& rRegion, OutputDevice* pPreRenderDevice) const
         {
-            if(!rRegion.IsEmpty() && maOverlayObjects.size())
+            if(!rRegion.IsEmpty() && !maOverlayObjects.empty())
             {
                 // check for changed MapModes. That may influence the
                 // logical size of pixel based OverlayObjects (like BitmapHandles)

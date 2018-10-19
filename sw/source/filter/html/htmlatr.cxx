@@ -3049,7 +3049,7 @@ static Writer& OutHTML_SwFormatINetFormat( Writer& rWrt, const SfxPoolItem& rHt 
     if( rHTMLWrt.m_bTagOn )
     {
         // if necessary, temporarily close an attribute that is still open
-        if( rHTMLWrt.m_aINetFormats.size() )
+        if( !rHTMLWrt.m_aINetFormats.empty() )
         {
             SwFormatINetFormat *pINetFormat =
                 rHTMLWrt.m_aINetFormats.back();
@@ -3068,7 +3068,7 @@ static Writer& OutHTML_SwFormatINetFormat( Writer& rWrt, const SfxPoolItem& rHt 
         OutHTML_INetFormat( rWrt, rINetFormat, false );
 
         OSL_ENSURE( rHTMLWrt.m_aINetFormats.size(), "there must be a URL attribute missing" );
-        if( rHTMLWrt.m_aINetFormats.size() )
+        if( !rHTMLWrt.m_aINetFormats.empty() )
         {
             // get its own attribute from the stack
             SwFormatINetFormat *pINetFormat = rHTMLWrt.m_aINetFormats.back();

@@ -161,7 +161,7 @@ void PageStyleContext::FillPropertySet(const uno::Reference<beans::XPropertySet 
 {
     // need to filter out old fill definitions when the new ones are used. The new
     // ones are used when a FillStyle is defined
-    if(!m_bIsFillStyleAlreadyConverted && GetProperties().size())
+    if(!m_bIsFillStyleAlreadyConverted && !GetProperties().empty())
     {
         static ::rtl::OUString s_FillStyle("FillStyle");
         static ::rtl::OUString s_HeaderFillStyle("HeaderFillStyle");

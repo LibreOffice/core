@@ -209,7 +209,7 @@ sal_Int32 OQueryTableView::CountTableAlias(const OUString& rName, sal_Int32& rMa
 void OQueryTableView::ReSync()
 {
     TTableWindowData& rTabWinDataList = m_pView->getController().getTableWindowData();
-    OSL_ENSURE((getTableConnections().size()==0) && (GetTabWinMap().size()==0),
+    OSL_ENSURE((getTableConnections().empty()) && (GetTabWinMap().empty()),
         "before calling OQueryTableView::ReSync() please call ClearAll !");
 
     // I need a collection of all window names that cannot be created so that I do not initialize connections for them.

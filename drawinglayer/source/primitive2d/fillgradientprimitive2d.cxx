@@ -187,7 +187,7 @@ namespace drawinglayer
             basegfx::B2DRange aOutmostRange(getOutputRange());
             basegfx::B2DPolyPolygon aCombinedPolyPoly;
 
-            if(rEntries.size())
+            if(!rEntries.empty())
             {
                 // extend aOutmostRange with first polygon
                 basegfx::B2DPolygon aFirstPoly(rUnitPolygon);
@@ -204,7 +204,7 @@ namespace drawinglayer
                     aCombinedPolyPoly,
                     rOuterColor));
 
-            if(rEntries.size())
+            if(!rEntries.empty())
             {
                 // reuse first polygon, it's the second one
                 aCombinedPolyPoly.remove(0);

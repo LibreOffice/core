@@ -569,7 +569,7 @@ void FilterCache::flush()
     // renew all dependencies and optimizations
     impl_validateAndOptimize();
 
-    if (m_lChangedTypes.size() > 0)
+    if (!m_lChangedTypes.empty())
     {
         css::uno::Reference< css::container::XNameAccess > xConfig(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::container::XNameAccess > xSet   ;
@@ -581,7 +581,7 @@ void FilterCache::flush()
         xFlush->commitChanges();
     }
 
-    if (m_lChangedFilters.size() > 0)
+    if (!m_lChangedFilters.empty())
     {
         css::uno::Reference< css::container::XNameAccess > xConfig(impl_openConfig(E_PROVIDER_FILTERS), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::container::XNameAccess > xSet   ;
@@ -2122,7 +2122,7 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
     lData = impl_tokenizeString(sData, ',');
     if (
         (sData.isEmpty()) ||
-        (lData.size()<1    )
+        (lData.empty()    )
        )
     {
         throw css::uno::Exception( "Can not read old item property DATA.", css::uno::Reference< css::uno::XInterface >());

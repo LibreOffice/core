@@ -1234,7 +1234,7 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
         }
         aLine.append( "]\n" );
     }
-    if( m_aMCIDParents.size() > 0 )
+    if( !m_aMCIDParents.empty() )
     {
         OStringBuffer aStructParents( 1024 );
         aStructParents.append( "[ " );
@@ -4672,7 +4672,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                         }
                         aValue.append( "]" );
                     }
-                    else if( rWidget.m_aSelectedEntries.size() > 0 &&
+                    else if( !rWidget.m_aSelectedEntries.empty() &&
                              rWidget.m_aSelectedEntries[0] >= 0 &&
                              rWidget.m_aSelectedEntries[0] < sal_Int32(rWidget.m_aListEntries.size()) )
                     {
@@ -4708,7 +4708,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             aLine.append( rWidget.m_nParent );
             aLine.append( " 0 R\n" );
         }
-        if( rWidget.m_aKids.size() )
+        if( !rWidget.m_aKids.empty() )
         {
             aLine.append( "/Kids[" );
             for( size_t i = 0; i < rWidget.m_aKids.size(); i++ )
@@ -4886,7 +4886,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
 
 bool PDFWriterImpl::emitAnnotations()
 {
-    if( m_aPages.size() < 1 )
+    if( m_aPages.empty() )
         return false;
 
     CHECK_RETURN( emitLinkAnnotations() );
@@ -5191,7 +5191,7 @@ bool PDFWriterImpl::emitCatalog()
     {
         aLine.append( "/MarkInfo<</Marked true>>\n" );
     }
-    if( m_aWidgets.size() > 0 )
+    if( !m_aWidgets.empty() )
     {
         aLine.append( "/AcroForm<</Fields[\n" );
         int nWidgets = m_aWidgets.size();
@@ -5899,7 +5899,7 @@ bool PDFWriterImpl::emitTrailer()
         aLine.append( aDocChecksum.makeStringAndClear() );
         aLine.append( "\n" );
     }
-    if( m_aAdditionalStreams.size() > 0 )
+    if( !m_aAdditionalStreams.empty() )
     {
         aLine.append( "/AdditionalStreams [" );
         for(const PDFAddStream & rAdditionalStream : m_aAdditionalStreams)
@@ -8398,7 +8398,7 @@ void PDFWriterImpl::drawPolyLine( const tools::Polygon& rPoly, const PDFWriter::
             case PDFWriter::joinRound:  aLine.append( " 1 j" );break;
             case PDFWriter::joinBevel:  aLine.append( " 2 j" );break;
         }
-        if( rInfo.m_aDashArray.size() > 0 )
+        if( !rInfo.m_aDashArray.empty() )
         {
             aLine.append( " [ " );
             for (auto const& dash : rInfo.m_aDashArray)

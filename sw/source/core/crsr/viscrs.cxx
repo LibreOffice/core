@@ -444,7 +444,7 @@ void SwSelPaintRects::HighlightInputField()
         }
     }
 
-    if ( aInputFieldRanges.size() > 0 )
+    if ( !aInputFieldRanges.empty() )
     {
         if (m_pTextInputFieldOverlay != nullptr)
         {

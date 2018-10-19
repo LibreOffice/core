@@ -672,7 +672,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     else
     {
         // Unconditionally insert; check for a recently freed place
-        if (pItemArr->maFree.size() > 0)
+        if (!pItemArr->maFree.empty())
         {
             auto itr = pItemArr->begin();
             sal_uInt32 nIdx = pItemArr->maFree.back();

@@ -297,7 +297,7 @@ static void lcl_CopyCol( FndBox_ & rFndBox, CpyPara *const pCpyPara)
             SwFormatFrameSize aFrameSz( pNewFormat->GetFrameSize() );
 
             bool bDiffCount = false;
-            if( pBox->GetTabLines().size() )
+            if( !pBox->GetTabLines().empty() )
             {
                 pCmpLine = rFndBox.GetLines().front().get();
                 if ( pCmpLine->GetBoxes().size() != pCmpLine->GetLine()->GetTabBoxes().size() )
@@ -1411,7 +1411,7 @@ static void lcl_Merge_MoveBox(FndBox_ & rFndBox, InsULPara *const pULPara)
     pBoxes = &pULPara->pInsLine->GetTabBoxes();
 
     // Is there still a level to step down to?
-    if (rFndBox.GetBox()->GetTabLines().size())
+    if (!rFndBox.GetBox()->GetTabLines().empty())
     {
         SwTableBox* pBox = new SwTableBox(
                 static_cast<SwTableBoxFormat*>(rFndBox.GetBox()->GetFrameFormat()),
@@ -1423,7 +1423,7 @@ static void lcl_Merge_MoveBox(FndBox_ & rFndBox, InsULPara *const pULPara)
         {
             lcl_Merge_MoveLine(**it, &aPara);
         }
-        if( pBox->GetTabLines().size() )
+        if( !pBox->GetTabLines().empty() )
         {
             if( USHRT_MAX == nInsPos )
                 nInsPos = pBoxes->size();
@@ -1730,7 +1730,7 @@ static void lcl_CalcNewWidths(const FndLines_t& rFndLines, CpyPara& rPara)
         {
             std::vector< sal_uLong > &rWidth = (*rPara.pWidths.get())[ nLine ];
             const FndLine_ *pFndLine = rFndLines[ nLine ].get();
-            if( pFndLine && pFndLine->GetBoxes().size() )
+            if( pFndLine && !pFndLine->GetBoxes().empty() )
             {
                 const SwTableLine *pLine = pFndLine->GetLine();
                 if( pLine && !pLine->GetTabBoxes().empty() )

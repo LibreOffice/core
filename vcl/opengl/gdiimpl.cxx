@@ -899,7 +899,7 @@ void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPol
     basegfx::B2DTrapezoidVector aB2DTrapVector;
     basegfx::utils::trapezoidSubdivide( aB2DTrapVector, aSimplePolyPolygon );
     // draw tessellation result
-    if( aB2DTrapVector.size())
+    if( !aB2DTrapVector.empty())
     {
         for(basegfx::B2DTrapezoid & i : aB2DTrapVector)
             DrawTrapezoid( i, blockAA );

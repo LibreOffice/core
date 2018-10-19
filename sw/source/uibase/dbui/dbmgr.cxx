@@ -3315,7 +3315,7 @@ std::shared_ptr<SwMailMergeConfigItem> SwDBManager::PerformMailMerge(SwView cons
 
 void SwDBManager::RevokeLastRegistrations()
 {
-    if (m_aUncommitedRegistrations.size())
+    if (!m_aUncommitedRegistrations.empty())
     {
         SwView* pView = ( m_pDoc && m_pDoc->GetDocShell() ) ? m_pDoc->GetDocShell()->GetView() : nullptr;
         if (pView)

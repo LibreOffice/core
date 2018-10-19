@@ -51,7 +51,7 @@ namespace drawinglayer
             const std::vector< double >& getDotDashArray() const { return maDotDashArray; }
             double getFullDotDashLen() const
             {
-                if(0.0 == mfFullDotDashLen && maDotDashArray.size())
+                if(0.0 == mfFullDotDashLen && !maDotDashArray.empty())
                 {
                     // calculate length on demand
                     const double fAccumulated(std::accumulate(maDotDashArray.begin(), maDotDashArray.end(), 0.0));

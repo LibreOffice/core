@@ -202,7 +202,7 @@ void SvImpLBox::UpdateContextBmpWidthVectorFromMovedEntry( SvTreeListEntry* pEnt
 void SvImpLBox::UpdateContextBmpWidthMax( SvTreeListEntry const * pEntry )
 {
     sal_uInt16 nDepth = pView->pModel->GetDepth( pEntry );
-    if( aContextBmpWidthVector.size() < 1 )
+    if( aContextBmpWidthVector.empty() )
         return;
     short nWidth = aContextBmpWidthVector[ nDepth ];
     if( nWidth != pView->nContextBmpWidthMax ) {

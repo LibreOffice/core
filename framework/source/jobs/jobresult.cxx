@@ -117,7 +117,7 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
         css::uno::Sequence<css::beans::NamedValue> aTmp;
         pIt->second >>= aTmp;
         comphelper::sequenceToContainer(m_lArguments, aTmp);
-        if (!m_lArguments.size())
+        if (m_lArguments.empty())
             m_eParts |= E_ARGUMENTS;
     }
 

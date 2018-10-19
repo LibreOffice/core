@@ -230,7 +230,7 @@ namespace drawinglayer
                     // create transformed integer DXArray in view coordinate system
                     std::vector< long > aTransformedDXArray;
 
-                    if(rTextCandidate.getDXArray().size())
+                    if(!rTextCandidate.getDXArray().empty())
                     {
                         aTransformedDXArray.reserve(rTextCandidate.getDXArray().size());
                         const basegfx::B2DVector aPixelVector(maCurrentTransformation * basegfx::B2DVector(1.0, 0.0));
@@ -262,7 +262,7 @@ namespace drawinglayer
                     sal_Int32 nPos = rTextCandidate.getTextPosition();
                     sal_Int32 nLen = rTextCandidate.getTextLength();
 
-                    long* pDXArray = aTransformedDXArray.size() ? &(aTransformedDXArray[0]) : nullptr ;
+                    long* pDXArray = !aTransformedDXArray.empty() ? &(aTransformedDXArray[0]) : nullptr ;
 
                     if ( rTextCandidate.isFilled() )
                     {

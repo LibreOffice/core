@@ -1453,7 +1453,7 @@ bool WrappedNumberOfLinesProperty::detectInnerValue( uno::Any& rInnerValue ) con
     {
         std::vector< uno::Reference< chart2::XDataSeries > > aSeriesVector(
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
-        if( aSeriesVector.size() > 0 )
+        if( !aSeriesVector.empty() )
         {
             Reference< lang::XMultiServiceFactory > xFact( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
             DiagramHelper::tTemplateWithServiceName aTemplateAndService =

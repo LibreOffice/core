@@ -342,7 +342,7 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
                 {
                 case MOVE_REL:
                     aCoordList.resize(2, 0); // 2* params -> param count reset
-                    if ( rPointLists.size() > 0 && rPointLists.back().size() > 0 )
+                    if ( !rPointLists.empty() && !rPointLists.back().empty() )
                     {
                         rPointLists.emplace_back( );
                         rFlagLists.emplace_back( );
@@ -355,7 +355,7 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
 
                 case MOVE_ABS:
                     aCoordList.resize(2, 0); // 2 params -> no param count reset
-                    if ( rPointLists.size() > 0 && rPointLists.back().size() > 0 )
+                    if ( !rPointLists.empty() && !rPointLists.back().empty() )
                     {
                         rPointLists.emplace_back( );
                         rFlagLists.emplace_back( );

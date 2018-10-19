@@ -112,7 +112,7 @@ namespace svgio
                     }
                 }
 
-                if(aSelectorParts.size())
+                if(!aSelectorParts.empty())
                 {
                     OUStringBuffer aConcatenatedSelector;
 

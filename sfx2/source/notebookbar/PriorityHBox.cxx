@@ -200,7 +200,7 @@ void PriorityHBox::GetChildrenWithPriorities()
             m_aSortedChildren.push_back(pPrioritable);
     }
 
-    if (!m_aSortedChildren.size())
+    if (m_aSortedChildren.empty())
         m_bInitialized = false;
 
     std::sort(m_aSortedChildren.begin(), m_aSortedChildren.end(), lcl_comparePriority);

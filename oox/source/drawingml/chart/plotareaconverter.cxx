@@ -369,7 +369,7 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
                 pAxesSet = &aAxesSets.create();
                 // find axis models used by the type group
                 const std::vector<sal_Int32>& rAxisIds = typeGroup->maAxisIds;
-                if( rAxisIds.size() >= 1 )
+                if( !rAxisIds.empty() )
                     pAxesSet->maAxes[ API_X_AXIS ] = aAxisMap.get( rAxisIds[ 0 ] );
                 if( rAxisIds.size() >= 2 )
                     pAxesSet->maAxes[ API_Y_AXIS ] = aAxisMap.get( rAxisIds[ 1 ] );

@@ -52,7 +52,7 @@ void Receiver::pushCommand( const std::vector<OString> &rCommand )
 
 void Receiver::Invoke()
 {
-    if( maExecQueue.size() )
+    if( !maExecQueue.empty() )
     {
         std::vector< OString > aCommands( maExecQueue.front() );
         maExecQueue.pop_front();

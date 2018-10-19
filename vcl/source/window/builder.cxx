@@ -2464,7 +2464,7 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
         sal_uInt16 nPageId = pTabControl->GetCurPageId();
         pTabControl->SetPageText(nPageId, aFind->second);
         pTabControl->SetPageName(nPageId, sID);
-        if (context.size() != 0)
+        if (!context.empty())
         {
             TabPage* pPage = pTabControl->GetTabPage(nPageId);
             pPage->SetContext(context);
@@ -3406,7 +3406,7 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, xmlreader::Xm
                     if (pPrioritable)
                         pPrioritable->SetPriority(nPriority);
                 }
-                if (aContext.size() != 0)
+                if (!aContext.empty())
                 {
                     vcl::IContext* pContextControl = dynamic_cast<vcl::IContext*>(pCurrentChild.get());
                     SAL_WARN_IF(!pContextControl, "vcl", "context set for not supported item");

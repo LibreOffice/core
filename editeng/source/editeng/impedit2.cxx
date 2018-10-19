@@ -4017,9 +4017,9 @@ long ImpEditEngine::GetXPos(
         else if ( rPortion.GetKind() == PortionKind::TEXT )
         {
             OSL_ENSURE( nIndex != pLine->GetStart(), "Strange behavior in new GetXPos()" );
-            OSL_ENSURE( pLine && pLine->GetCharPosArray().size(), "svx::ImpEditEngine::GetXPos(), portion in an empty line?" );
+            OSL_ENSURE( pLine && !pLine->GetCharPosArray().empty(), "svx::ImpEditEngine::GetXPos(), portion in an empty line?" );
 
-            if( pLine->GetCharPosArray().size() )
+            if( !pLine->GetCharPosArray().empty() )
             {
                 sal_Int32 nPos = nIndex - 1 - pLine->GetStart();
                 if (nPos < 0 || nPos >= static_cast<sal_Int32>(pLine->GetCharPosArray().size()))

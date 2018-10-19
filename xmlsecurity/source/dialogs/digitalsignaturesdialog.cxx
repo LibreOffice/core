@@ -364,7 +364,7 @@ short DigitalSignaturesDialog::Execute()
     // consequences, as I noticed when I tried to use DocumentSignatureManager::IsXAdESRelevant()
     // (which now is in #if 0).
 
-    if (maSignatureManager.maCurrentSignatureInformations.size() > 0)
+    if (!maSignatureManager.maCurrentSignatureInformations.empty())
     {
         // If the document has only SHA-1 signatures we probably want it to stay that way?
     }

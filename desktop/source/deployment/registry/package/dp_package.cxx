@@ -1470,7 +1470,7 @@ void BackendImpl::PackageImpl::scanBundle(
             // patch description:
             std::vector<sal_Int8> bytes( readFile( descrFileContent ) );
             OUStringBuffer buf;
-            if ( bytes.size() )
+            if ( !bytes.empty() )
             {
                 buf.append( OUString( reinterpret_cast<sal_Char const *>(
                                           bytes.data() ),

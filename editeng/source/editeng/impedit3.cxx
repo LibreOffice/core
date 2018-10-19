@@ -3311,7 +3311,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                     // longer done in Overlay mode and allows to *read* the URL).
                                     // It would be difficult to change this due to needed adaptions in
                                     // EditEngine (look for lineBreaksList creation)
-                                    if( nullptr == pActiveView && bStripOnly && !bParsingFields && pExtraInfo && pExtraInfo->lineBreaksList.size() )
+                                    if( nullptr == pActiveView && bStripOnly && !bParsingFields && pExtraInfo && !pExtraInfo->lineBreaksList.empty() )
                                     {
                                         bParsingFields = true;
                                         itSubLines = pExtraInfo->lineBreaksList.begin();
@@ -3494,7 +3494,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, tools::Rectangle aClipRect, Po
                                     // StripPortions() data callback
                                     GetEditEnginePtr()->DrawingText( aOutPos, aText, nTextStart, nTextLen, pDXArray,
                                         aTmpFont, n, rTextPortion.GetRightToLeftLevel(),
-                                        aWrongSpellVector.size() ? &aWrongSpellVector : nullptr,
+                                        !aWrongSpellVector.empty() ? &aWrongSpellVector : nullptr,
                                         pFieldData,
                                         bEndOfLine, bEndOfParagraph, // support for EOL/EOP TEXT comments
                                         &aLocale,

@@ -164,7 +164,7 @@ css::uno::Sequence< sal_Int8> UpdateableResultSet::getImplementationId()
 OUString UpdateableResultSet::buildWhereClause()
 {
     OUString ret;
-    if( m_primaryKey.size() )
+    if( !m_primaryKey.empty() )
     {
         OUStringBuffer buf( 128 );
         buf.append( " WHERE " );

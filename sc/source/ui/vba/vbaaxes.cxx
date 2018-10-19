@@ -141,7 +141,7 @@ public:
     }
     virtual sal_Bool SAL_CALL hasElements( ) override
     {
-        return ( mCoordinates.size() > 0 );
+        return ( !mCoordinates.empty() );
     }
 };
 

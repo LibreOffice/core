@@ -1256,7 +1256,7 @@ void NodeContext::initValid(bool bHasValidChild, bool bIsIterateChild)
     {
         Reference<XIterateContainer> xIterate(mxNode, UNO_QUERY);
         mbValid = xIterate.is() && (bIsIterateChild || isValidTarget(xIterate->getTarget()))
-                  && maChildNodes.size();
+                  && !maChildNodes.empty();
     }
     else if (nType == AnimationNodeType::COMMAND)
     {

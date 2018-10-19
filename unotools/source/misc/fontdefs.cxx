@@ -535,15 +535,15 @@ OUString GetSubsFontName( const OUString& rName, SubsFontFlags nFlags )
             switch( i )
             {
                 case 0:
-                    if( nFlags & SubsFontFlags::MS  &&  pAttr->MSSubstitutions.size() )
+                    if( nFlags & SubsFontFlags::MS  &&  !pAttr->MSSubstitutions.empty() )
                         pVector = &pAttr->MSSubstitutions;
                     break;
                 case 1:
-                    if( nFlags & SubsFontFlags::PS  &&  pAttr->PSSubstitutions.size() )
+                    if( nFlags & SubsFontFlags::PS  &&  !pAttr->PSSubstitutions.empty() )
                         pVector = &pAttr->PSSubstitutions;
                     break;
                 case 2:
-                    if( nFlags & SubsFontFlags::HTML  &&  pAttr->HTMLSubstitutions.size() )
+                    if( nFlags & SubsFontFlags::HTML  &&  !pAttr->HTMLSubstitutions.empty() )
                         pVector = &pAttr->HTMLSubstitutions;
                     break;
             }

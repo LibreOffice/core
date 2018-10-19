@@ -340,7 +340,7 @@ std::vector<beans::PropertyValue> desktop::jsonToPropertyValuesVector(const char
             else if (rType == "[]any")
             {
                 aNodeValue = rPair.second.get_child("value", aNodeNull);
-                if (aNodeValue != aNodeNull && aNodeValue.size() > 0)
+                if (aNodeValue != aNodeNull && !aNodeValue.empty())
                 {
                     sal_Int32 itSeq = 0;
                     uno::Sequence< uno::Any > aSeq(aNodeValue.size());

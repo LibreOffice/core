@@ -172,7 +172,7 @@ namespace drawinglayer
         {
             Primitive3DContainer aRetval;
 
-            if(r3DPolyPolygonVector.size())
+            if(!r3DPolyPolygonVector.empty())
             {
                 // create list of simple fill primitives
                 aRetval.resize(r3DPolyPolygonVector.size());

@@ -89,7 +89,7 @@ OUString SAL_CALL TypeDetection::queryTypeByURL(const OUString& sURL)
     cache.detectFlatForURL(aURL, lFlatTypes);
 
     if (
-        (lFlatTypes.size() < 1                                ) &&
+        (lFlatTypes.empty()                                ) &&
         (!cache.isFillState(FilterCache::E_CONTAINS_TYPES))
        )
     {
@@ -98,7 +98,7 @@ OUString SAL_CALL TypeDetection::queryTypeByURL(const OUString& sURL)
     }
 
     // first item is guaranteed as "preferred" one!
-    if (lFlatTypes.size() > 0)
+    if (!lFlatTypes.empty())
     {
         const FlatDetectionInfo& aMatch = *(lFlatTypes.begin());
         sType = aMatch.sType;
@@ -426,7 +426,7 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
         // throwing an exception if creation of the might needed input
         // stream failed by e.g. an IO exception ...
         std::vector<OUString> lUsedDetectors;
-        if (lFlatTypes.size()>0)
+        if (!lFlatTypes.empty())
             sType = impl_detectTypeFlatAndDeep(stlDescriptor, lFlatTypes, bAllowDeep, lUsedDetectors, sLastChance);
 
         // flat detection failed

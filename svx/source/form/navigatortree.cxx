@@ -348,7 +348,7 @@ namespace svxform
                 bool bSingleSelection = (m_arrCurrentSelection.size() == 1);
 
 
-                DBG_ASSERT( (m_arrCurrentSelection.size() > 0) || m_bRootSelected, "no entries selected" );
+                DBG_ASSERT( (!m_arrCurrentSelection.empty()) || m_bRootSelected, "no entries selected" );
                     // shouldn't happen, because I would have selected one during call to IsSelected,
                     // if there was none before
 
@@ -774,7 +774,7 @@ namespace svxform
 
         // List of dropped entries from DragServer
         const ListBoxEntrySet& aDropped = m_aControlExchange->selected();
-        DBG_ASSERT(aDropped.size() >= 1, "NavigatorTree::implAcceptDataTransfer: no entries !");
+        DBG_ASSERT(!aDropped.empty(), "NavigatorTree::implAcceptDataTransfer: no entries !");
 
         bool bDropTargetIsComponent = IsFormComponentEntry( _pTargetEntry );
         //SvTreeListEntry* pDropTargetParent = GetParent( _pTargetEntry );
@@ -1012,7 +1012,7 @@ namespace svxform
 
         // list of dragged entries
         ListBoxEntrySet aDropped = _rData.selected();
-        DBG_ASSERT(aDropped.size() >= 1, "NavigatorTree::implExecuteDataTransfer: no entries!");
+        DBG_ASSERT(!aDropped.empty(), "NavigatorTree::implExecuteDataTransfer: no entries!");
 
         // shell and model
         FmFormShell* pFormShell = GetNavModel()->GetFormShell();

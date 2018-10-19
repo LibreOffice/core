@@ -140,7 +140,7 @@ namespace drawinglayer
                 const double fShadowSlant(getSdrSceneAttribute().getShadowSlant());
                 const basegfx::B3DRange aScene3DRange(getChildren3D().getB3DRange(getViewInformation3D()));
 
-                if(maSdrLightingAttribute.getLightVector().size())
+                if(!maSdrLightingAttribute.getLightVector().empty())
                 {
                     // get light normal from first light and normalize
                     aLightNormal = maSdrLightingAttribute.getLightVector()[0].getDirection();

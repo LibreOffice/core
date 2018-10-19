@@ -450,7 +450,7 @@ static void lcl_createPresetShape(uno::Reference<drawing::XShape>& xShape,
 
     auto aGdList = pCustomShapePropertiesPtr->getAdjustmentGuideList();
     Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustment(
-        aGdList.size() ? aGdList.size() : 1 );
+        !aGdList.empty() ? aGdList.size() : 1 );
 
     int nIndex = 0;
     for (auto& aEntry : aGdList)
@@ -462,7 +462,7 @@ static void lcl_createPresetShape(uno::Reference<drawing::XShape>& xShape,
         aAdjustment[nIndex++].State = css::beans::PropertyState_DIRECT_VALUE;
     }
 
-    if (!aGdList.size())
+    if (aGdList.empty())
     {
         // Default angle
         double fAngle = 0;
@@ -479,7 +479,7 @@ static void lcl_createPresetShape(uno::Reference<drawing::XShape>& xShape,
     xSet->setPropertyValue( UNO_NAME_FILLSTYLE, uno::makeAny( drawing::FillStyle_SOLID ) );
 
     const TextParagraphVector& rParagraphs = pTextBody->getParagraphs();
-    if (rParagraphs.size() && rParagraphs[0]->getRuns().size())
+    if (!rParagraphs.empty() && !rParagraphs[0]->getRuns().empty())
     {
         std::shared_ptr<TextParagraph> pParagraph = rParagraphs[0];
         std::shared_ptr<TextRun> pRun = pParagraph->getRuns()[0];

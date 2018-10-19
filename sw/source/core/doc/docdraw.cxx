@@ -366,7 +366,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
             GetIDocumentUndoRedo().AppendUndo(std::unique_ptr<SwUndo>(pUndo));
         }
 
-        while ( pFormatsAndObjs[i].size() > 0 )
+        while ( !pFormatsAndObjs[i].empty() )
         {
             SwDrawFrameFormat* pFormat( pFormatsAndObjs[i].back().first );
             SdrObject* pObj( pFormatsAndObjs[i].back().second );

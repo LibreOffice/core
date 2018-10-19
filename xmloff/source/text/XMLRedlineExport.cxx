@@ -126,7 +126,7 @@ void XMLRedlineExport::ExportChangesList(
         ChangesVectorType* pChangesList = aFind->second.get();
 
         // export only if changes are found
-        if (pChangesList->size() > 0)
+        if (!pChangesList->empty())
         {
             // changes container element
             SvXMLElementExport aChanges(rExport, XML_NAMESPACE_TEXT,

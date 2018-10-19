@@ -69,7 +69,7 @@ void SvxChartColorTable::append( const XColorEntry & _rEntry )
 
 void SvxChartColorTable::remove( size_t _nIndex )
 {
-    if (m_aColorEntries.size() > 0)
+    if (!m_aColorEntries.empty())
         m_aColorEntries.erase( m_aColorEntries.begin() + _nIndex);
 
     for (size_t i=0 ; i<m_aColorEntries.size(); i++)

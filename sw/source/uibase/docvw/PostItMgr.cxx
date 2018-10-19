@@ -690,7 +690,7 @@ void SwPostItMgr::LayoutPostIts()
         for (std::unique_ptr<SwPostItPageItem>& pPage : mPages)
         {
             // only layout if there are notes on this page
-            if (pPage->mvSidebarItems.size()>0)
+            if (!pPage->mvSidebarItems.empty())
             {
                 std::vector<SwAnnotationWin*> aVisiblePostItList;
                 unsigned long           lNeededHeight = 0;

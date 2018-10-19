@@ -315,7 +315,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 const MetaISectRectClipRegionAction* pA = static_cast< const MetaISectRectClipRegionAction* >(pAction);
                 const tools::Rectangle& rRect = pA->GetRect();
 
-                if(!rRect.IsEmpty() && aClips.size() && aClips.back().count())
+                if(!rRect.IsEmpty() && !aClips.empty() && aClips.back().count())
                 {
                     const basegfx::B2DRange aClipRange(
                         rRect.Left(), rRect.Top(),
@@ -335,7 +335,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 const MetaISectRegionClipRegionAction* pA = static_cast< const MetaISectRegionClipRegionAction* >(pAction);
                 const vcl::Region& rRegion = pA->GetRegion();
 
-                if(!rRegion.IsEmpty() && aClips.size() && aClips.back().count())
+                if(!rRegion.IsEmpty() && !aClips.empty() && aClips.back().count())
                 {
                     const basegfx::B2DPolyPolygon aNewClip(rRegion.GetAsB2DPolyPolygon());
 
@@ -354,7 +354,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
                 const long aHorMove(pA->GetHorzMove());
                 const long aVerMove(pA->GetVertMove());
 
-                if((aHorMove || aVerMove) && aClips.size() && aClips.back().count())
+                if((aHorMove || aVerMove) && !aClips.empty() && aClips.back().count())
                 {
                     aClips.back().transform(
                         basegfx::utils::createTranslateB2DHomMatrix(
@@ -386,7 +386,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
             case MetaActionType::POP :
             {
 
-                if(aPushFlags.size())
+                if(!aPushFlags.empty())
                 {
                     const PushFlags nFlags(aPushFlags.back());
                     aPushFlags.pop_back();
@@ -441,7 +441,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
         // this tooling is only a fallback (see comments in header), only the needed
         // actions will be implemented. Extend using the pattern for the already
         // implemented actions.
-        if(aClips.size() && aClips.back().count())
+        if(!aClips.empty() && aClips.back().count())
         {
             switch(nType)
             {

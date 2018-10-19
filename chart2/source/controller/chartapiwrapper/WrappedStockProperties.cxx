@@ -131,7 +131,7 @@ css::uno::Any WrappedVolumeProperty::getPropertyValue( const css::uno::Reference
     {
         std::vector< uno::Reference< chart2::XDataSeries > > aSeriesVector(
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
-        if( aSeriesVector.size() > 0 )
+        if( !aSeriesVector.empty() )
         {
             Reference< lang::XMultiServiceFactory > xFact( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
             DiagramHelper::tTemplateWithServiceName aTemplateAndService =
@@ -196,7 +196,7 @@ css::uno::Any WrappedUpDownProperty::getPropertyValue( const css::uno::Reference
     {
         std::vector< uno::Reference< chart2::XDataSeries > > aSeriesVector(
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
-        if( aSeriesVector.size() > 0 )
+        if( !aSeriesVector.empty() )
         {
             Reference< lang::XMultiServiceFactory > xFact( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
             DiagramHelper::tTemplateWithServiceName aTemplateAndService =

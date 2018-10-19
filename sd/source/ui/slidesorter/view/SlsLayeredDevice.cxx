@@ -78,7 +78,7 @@ void ForAllRectangles (const vcl::Region& rRegion, const std::function<void (con
     RectangleVector aRectangles;
     rRegion.GetRegionRectangles(aRectangles);
 
-    if(0 == aRectangles.size())
+    if(aRectangles.empty())
     {
         aFunction(::tools::Rectangle());
     }

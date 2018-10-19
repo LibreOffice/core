@@ -86,7 +86,7 @@ sal_Bool SwXRedlines::hasElements(  )
     if(!IsValid())
         throw uno::RuntimeException();
     const SwRedlineTable& rRedTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
-    return rRedTable.size() > 0;
+    return !rRedTable.empty();
 }
 
 OUString SwXRedlines::getImplementationName()

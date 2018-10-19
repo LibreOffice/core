@@ -78,7 +78,7 @@ namespace abp
         // invoke the dialog doing the mapping
         if ( fieldmapping::invokeDialog( getORB(), this, getDialog()->getDataSource().getDataSource(), rSettings ) )
         {
-            if ( rSettings.aFieldMapping.size() )
+            if ( !rSettings.aFieldMapping.empty() )
                 getDialog()->travelNext();
             else
                 implUpdateHint();

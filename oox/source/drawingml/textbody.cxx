@@ -88,7 +88,7 @@ bool TextBody::isEmpty() const
         return false;
 
     const TextRunVector aRuns = maParagraphs[0]->getRuns();
-    if ( aRuns.size() <= 0 )
+    if ( aRuns.empty() )
         return true;
     if ( aRuns.size() > 1 )
         return false;

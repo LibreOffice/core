@@ -2246,7 +2246,7 @@ public:
                 xWidgets = VclPtr< DemoWidgets >::Create ();
             else if (bPopup)
                 xPopup = VclPtrInstance< DemoPopup> ();
-            else if (aFontNames.size() > 0)
+            else if (!aFontNames.empty())
                 renderFonts(aFontNames);
             else
                 aMainWin->Show();

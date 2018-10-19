@@ -499,7 +499,7 @@ void SfxDispatcher::Pop(SfxShell& rShell, SfxDispatcherPopFlags nMode)
             << (bUntil ? " (up to)" : ""));
 
     // same shell as on top of the to-do stack?
-    if(xImp->aToDoStack.size() && xImp->aToDoStack.front().pCluster == &rShell)
+    if(!xImp->aToDoStack.empty() && xImp->aToDoStack.front().pCluster == &rShell)
     {
         // cancel inverse actions
         if ( xImp->aToDoStack.front().bPush != bPush )

@@ -533,7 +533,7 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
 bool XMLPropStyleContext::doNewDrawingLayerFillStyleDefinitionsExist(
     const OUString& rFillStyleTag) const
 {
-    if(maProperties.size() && rFillStyleTag.getLength())
+    if(!maProperties.empty() && rFillStyleTag.getLength())
     {
         const rtl::Reference< XMLPropertySetMapper >& rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();
 
@@ -578,7 +578,7 @@ bool XMLPropStyleContext::doNewDrawingLayerFillStyleDefinitionsExist(
 void XMLPropStyleContext::deactivateOldFillStyleDefinitions(
     const OldFillStyleDefinitionSet& rHashSetOfTags)
 {
-    if(!rHashSetOfTags.empty() && maProperties.size())
+    if(!rHashSetOfTags.empty() && !maProperties.empty())
     {
         const rtl::Reference< XMLPropertySetMapper >& rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();
 
@@ -603,7 +603,7 @@ void XMLPropStyleContext::deactivateOldFillStyleDefinitions(
 
 void XMLPropStyleContext::translateNameBasedDrawingLayerFillStyleDefinitionsToStyleDisplayNames()
 {
-    if(maProperties.size())
+    if(!maProperties.empty())
     {
         const rtl::Reference< XMLPropertySetMapper >& rMapper = GetStyles()->GetImportPropertyMapper(GetFamily())->getPropertySetMapper();
 

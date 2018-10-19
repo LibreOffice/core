@@ -3928,7 +3928,7 @@ bool SwWW8ImplReader::IsParaEndInCPs(sal_Int32 nStart, sal_Int32 nEnd,bool bSdOD
 //Clear the para end position recorded in reader intermittently for the least impact on loading performance
 void SwWW8ImplReader::ClearParaEndPosition()
 {
-    if ( m_aEndParaPos.size() > 0 )
+    if ( !m_aEndParaPos.empty() )
         m_aEndParaPos.clear();
 }
 

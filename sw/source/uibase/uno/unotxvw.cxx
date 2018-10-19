@@ -294,7 +294,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface)
         // sdrObjects handled below
     }
     bool bRet(false);
-    if (sdrObjects.size())
+    if (!sdrObjects.empty())
     {
 
         SdrView *const pDrawView = rSh.GetDrawView();

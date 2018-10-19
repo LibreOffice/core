@@ -1842,7 +1842,7 @@ void OStorage::InternalDispose( bool bNotifyImpl )
 
     if ( m_pData->m_bReadOnlyWrap )
     {
-        OSL_ENSURE( !m_pData->m_aOpenSubComponentsVector.size() || m_pData->m_pSubElDispListener.get(),
+        OSL_ENSURE( m_pData->m_aOpenSubComponentsVector.empty() || m_pData->m_pSubElDispListener.get(),
                     "If any subelements are open the listener must exist!" );
 
         if (m_pData->m_pSubElDispListener)
@@ -3930,7 +3930,7 @@ sal_Bool SAL_CALL OStorage::hasElements()
 
     try
     {
-        return ( m_pImpl->GetChildrenVector().size() != 0 );
+        return ( !m_pImpl->GetChildrenVector().empty() );
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {

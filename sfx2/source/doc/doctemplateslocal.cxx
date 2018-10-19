@@ -145,7 +145,7 @@ void SAL_CALL DocTemplLocaleHelper::startElement( const OUString& aName, const u
 {
     if ( aName == g_sGroupListElement )
     {
-        if ( m_aElementsSeq.size() != 0 )
+        if ( !m_aElementsSeq.empty() )
             throw xml::sax::SAXException(); // TODO: this element must be the first level element
 
         m_aElementsSeq.push_back( aName );

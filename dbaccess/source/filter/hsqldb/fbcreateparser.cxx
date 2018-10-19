@@ -138,7 +138,7 @@ OUString FbCreateStmtParser::compose() const
         }
 
         // Firebird SQL dialect does not like parameters for TIMESTAMP
-        if (params.size() > 0 && columnIter->getDataType() != DataType::TIMESTAMP)
+        if (!params.empty() && columnIter->getDataType() != DataType::TIMESTAMP)
         {
             sSql.append("(");
             auto it = params.cbegin();

@@ -2419,7 +2419,7 @@ void DomainMapper_Impl::PopShapeContext()
         getTableManager().endLevel();
         popTableManager();
     }
-    if ( m_aAnchoredStack.size() > 0 )
+    if ( !m_aAnchoredStack.empty() )
     {
         // For OLE object replacement shape, the text append context was already removed
         // or the OLE object couldn't be inserted.
@@ -4922,7 +4922,7 @@ void DomainMapper_Impl::SetFieldFFData(const FFDataHandler::Pointer_t& pFFDataHa
     TagLogger::getInstance().startElement("setFieldFFData");
 #endif
 
-    if (m_aFieldStack.size())
+    if (!m_aFieldStack.empty())
     {
         FieldContextPtr pContext = m_aFieldStack.top();
         if (pContext.get())

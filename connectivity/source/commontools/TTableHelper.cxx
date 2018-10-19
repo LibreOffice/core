@@ -348,7 +348,7 @@ void OTableHelper::refreshPrimaryKeys(::std::vector< OUString>& _rNames)
         if(bAlreadyFetched)
         {
             SAL_WARN_IF(aPkName.isEmpty(),"connectivity.commontools", "empty Primary Key name");
-            SAL_WARN_IF(pKeyProps->m_aKeyColumnNames.size() == 0,"connectivity.commontools", "Primary Key has no columns");
+            SAL_WARN_IF(pKeyProps->m_aKeyColumnNames.empty(),"connectivity.commontools", "Primary Key has no columns");
             m_pImpl->m_aKeys.emplace(aPkName,pKeyProps);
             _rNames.push_back(aPkName);
         }

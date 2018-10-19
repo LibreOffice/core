@@ -259,7 +259,7 @@ void TreeParser::Merge(
         pMergeDataFile.reset(new MergeDataFile(
             rMergeSrc, static_cast<OString>( m_pSource->name ), false, false ));
         const std::vector<OString> vLanguages = pMergeDataFile->GetLanguages();
-        if( vLanguages.size()>=1 && vLanguages[0] != m_sLang )
+        if( !vLanguages.empty() && vLanguages[0] != m_sLang )
         {
             std::cerr
                 << ("Treex error: given language conflicts with language of"

@@ -126,7 +126,7 @@ ErrCode SwASCWriter::WriteStream()
                 if( bTstFly && m_bWriteAll &&
                     pNd->GetText().isEmpty() &&
                     // Frame exists
-                    m_pDoc->GetSpzFrameFormats()->size() &&
+                    !m_pDoc->GetSpzFrameFormats()->empty() &&
                     // Only one node in the array
                     m_pDoc->GetNodes().GetEndOfExtras().GetIndex() + 3 ==
                     m_pDoc->GetNodes().GetEndOfContent().GetIndex() &&

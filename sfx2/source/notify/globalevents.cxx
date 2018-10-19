@@ -339,7 +339,7 @@ sal_Bool SAL_CALL SfxGlobalEvents_Impl::hasElements()
 {
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
-    return (m_lModels.size()>0);
+    return (!m_lModels.empty());
     // <- SAFE
 }
 

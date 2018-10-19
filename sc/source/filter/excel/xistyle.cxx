@@ -106,7 +106,7 @@ public:
     }
     virtual sal_Bool SAL_CALL hasElements() override
     {
-        return (maColor.size() > 0);
+        return (!maColor.empty());
     }
 
 private:

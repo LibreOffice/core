@@ -821,7 +821,7 @@ void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatu
     if (impl_checkDisposed_Lock())
         return;
 
-    OSL_ENSURE( _rFeatures.size() > 0, "FmXFormShell::invalidateFeatures: invalid arguments!" );
+    OSL_ENSURE( !_rFeatures.empty(), "FmXFormShell::invalidateFeatures: invalid arguments!" );
 
     if ( m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame() )
     {
@@ -889,7 +889,7 @@ void FmXFormShell::disposing()
 
     CloseExternalFormViewer_Lock();
 
-    while ( m_aLoadingPages.size() )
+    while ( !m_aLoadingPages.empty() )
     {
         Application::RemoveUserEvent( m_aLoadingPages.front().nEventId );
         m_aLoadingPages.pop();

@@ -1355,7 +1355,7 @@ void ScHTMLLayoutParser::Image( HtmlImportInfo* pInfo )
         pImage->aSize = pDefaultDev->LogicToPixel( pGraphic->GetPrefSize(),
             pGraphic->GetPrefMapMode() );
     }
-    if (mxActEntry->maImageList.size() > 0)
+    if (!mxActEntry->maImageList.empty())
     {
         long nWidth = 0;
         for (std::unique_ptr<ScHTMLImage> & pI : mxActEntry->maImageList)
@@ -1564,7 +1564,7 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
         break;
         case HtmlTokenId::PARABREAK_OFF:
         {   // We continue vertically after an image
-            if (mxActEntry->maImageList.size() > 0)
+            if (!mxActEntry->maImageList.empty())
                 mxActEntry->maImageList.back()->nDir = nVertical;
         }
         break;

@@ -70,7 +70,7 @@ TextParagraphPropertiesPtr TextParagraph::getParagraphStyle(
     if (nLevel >= static_cast< sal_Int16 >(rListStyle.size()))
         nLevel = 0;
     TextParagraphPropertiesPtr pTextParagraphStyle;
-    if (rListStyle.size())
+    if (!rListStyle.empty())
         pTextParagraphStyle = rListStyle[nLevel];
 
     return pTextParagraphStyle;
@@ -134,12 +134,12 @@ void TextParagraph::insertAt(
             aParaProp.apply( maProperties );
 
             // bullets have same color as following texts by default
-            if( !aioBulletList.hasProperty( PROP_BulletColor ) && maRuns.size() > 0
+            if( !aioBulletList.hasProperty( PROP_BulletColor ) && !maRuns.empty()
                 && (*maRuns.begin())->getTextCharacterProperties().maFillProperties.moFillType.has() )
                 aioBulletList.setProperty( PROP_BulletColor, (*maRuns.begin())->getTextCharacterProperties().maFillProperties.getBestSolidColor().getColor( rFilterBase.getGraphicHelper() ));
             if( !aioBulletList.hasProperty( PROP_BulletColor ) && aTextCharacterStyle.maFillProperties.moFillType.has() )
                 aioBulletList.setProperty( PROP_BulletColor, aTextCharacterStyle.maFillProperties.getBestSolidColor().getColor( rFilterBase.getGraphicHelper() ));
-            if( !aioBulletList.hasProperty( PROP_GraphicSize ) && maRuns.size() > 0
+            if( !aioBulletList.hasProperty( PROP_GraphicSize ) && !maRuns.empty()
                 && aParaProp.getBulletList().maGraphic.hasValue())
             {
                 long nFirstCharHeightMm = TransformMetric(nCharHeightFirst > 0 ? nCharHeightFirst : 1200, FUNIT_POINT, FUNIT_MM);

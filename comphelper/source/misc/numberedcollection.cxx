@@ -221,7 +221,7 @@ OUString SAL_CALL NumberedCollection::getUntitledPrefix()
         impl_cleanUpDeadItems(m_lComponents, lDeadItems);
 
         // a) non free numbers ... return INVALID_NUMBER
-        if (lPossibleNumbers.size () < 1)
+        if (lPossibleNumbers.empty())
             return css::frame::UntitledNumbersConst::INVALID_NUMBER;
 
         // b) return first free number

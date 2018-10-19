@@ -324,7 +324,7 @@ bool MorkParser::parseCell()
     if ( NP::Rows != nowParsing_ )
     {
         // Dicts
-        if ( "" != Text )
+        if ( !Text.empty() )
         {
             if ( nowParsing_ == NP::Columns )
             {
@@ -338,7 +338,7 @@ bool MorkParser::parseCell()
     }
     else
     {
-        if ( "" != Text )
+        if ( !Text.empty() )
         {
             // Rows
             //int ValueId = string( Text.c_str() ).toInt( 0, 16 );

@@ -1141,7 +1141,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         case FN_REDLINE_ACCEPT_ALL:
         case FN_REDLINE_REJECT_ALL:
         {
-            if (GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().size() == 0)
+            if (GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().empty())
                 rSet.DisableItem(nWhich);
         }
         break;

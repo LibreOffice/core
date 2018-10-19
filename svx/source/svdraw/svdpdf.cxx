@@ -691,7 +691,7 @@ bool ImpSdrPdfImport::CheckLastPolyLineAndFillMerge(const basegfx::B2DPolyPolygo
     // #i73407# reformulation to use new B2DPolygon classes
     if (mbLastObjWasPolyWithoutLine)
     {
-        SdrObject* pTmpObj = maTmpList.size() ? maTmpList[maTmpList.size() - 1] : nullptr;
+        SdrObject* pTmpObj = !maTmpList.empty() ? maTmpList[maTmpList.size() - 1] : nullptr;
         SdrPathObj* pLastPoly = dynamic_cast<SdrPathObj*>(pTmpObj);
 
         if (pLastPoly)

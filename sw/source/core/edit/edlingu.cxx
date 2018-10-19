@@ -1074,12 +1074,12 @@ void SwEditShell::ApplyChangedSentence(const svx::SpellPortions& rNewPortions, b
 
     OSL_ENSURE(  g_pSpellIter, "SpellIter missing" );
     if (!g_pSpellIter ||
-        g_pSpellIter->GetLastPortions().size() <= 0) // no portions -> no text to be changed
+        g_pSpellIter->GetLastPortions().empty()) // no portions -> no text to be changed
         return;
 
     const SpellPortions& rLastPortions = g_pSpellIter->GetLastPortions();
     const SpellContentPositions  rLastPositions = g_pSpellIter->GetLastPositions();
-    OSL_ENSURE(rLastPortions.size() > 0 &&
+    OSL_ENSURE(!rLastPortions.empty() &&
             rLastPortions.size() == rLastPositions.size(),
             "last vectors of spelling results are not set or not equal");
 

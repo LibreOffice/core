@@ -71,7 +71,7 @@ Any SAL_CALL OComponentEventThread::queryInterface(const Type& _rType)
 
 void OComponentEventThread::impl_clearEventQueue()
 {
-    while ( m_aEvents.size() )
+    while ( !m_aEvents.empty() )
     {
         delete *m_aEvents.begin();
         m_aEvents.erase( m_aEvents.begin() );
@@ -148,7 +148,7 @@ void OComponentEventThread::run()
     {
         ::osl::MutexGuard aGuard(m_aMutex);
 
-        while( m_aEvents.size() > 0 )
+        while( !m_aEvents.empty() )
         {
             // Get the Control and hold on to it so that it cannot be deleted during actionPerformed
             rtl::Reference<::cppu::OComponentHelper> xComp = m_xComp;

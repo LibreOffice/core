@@ -591,7 +591,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 bSkipSequence = true;
                                 if ( aStartArrow.Count() || aEndArrow.Count() )
                                     bSkipSequence = false;
-                                if ( aDashArray.size() && ( fStrokeWidth != 0.0 ) && ( fTransparency == 0.0 ) )
+                                if ( !aDashArray.empty() && ( fStrokeWidth != 0.0 ) && ( fTransparency == 0.0 ) )
                                     bSkipSequence = false;
                                 if ( bSkipSequence )
                                 {

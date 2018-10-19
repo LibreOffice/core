@@ -735,7 +735,7 @@ namespace dbtools
 
         // fill the parameters from the master-detail relationship
         Reference< XNameAccess > xParentColumns;
-        if ( getParentColumns( xParentColumns, false ) && xParentColumns->hasElements() && m_aMasterFields.size() )
+        if ( getParentColumns( xParentColumns, false ) && xParentColumns->hasElements() && !m_aMasterFields.empty() )
             fillLinkedParameters( xParentColumns );
 
         // let the user (via the interaction handler) fill all remaining parameters

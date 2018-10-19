@@ -303,7 +303,7 @@ void XclExpXmlPivotCaches::SavePivotCacheXml( XclExpXmlStream& rStrm, const Entr
         // 1 - (Default) at least one text value, or can also contain a mix of other data types and blank values,
         //     or blank values only
         // 0 - the field does not have a mix of text and other values
-        if (!(isContainsString || (aDPTypes.size() > 1) || (isContainsBlank && aDPTypesWithoutBlank.size() == 0)))
+        if (!(isContainsString || (aDPTypes.size() > 1) || (isContainsBlank && aDPTypesWithoutBlank.empty())))
             pAttList->add(XML_containsSemiMixedTypes, ToPsz10(false));
 
         if (!isContainsNonDate)

@@ -389,7 +389,7 @@ static std::vector< OUString > lookupKeys(
 //                 printf( "\n" );
             }
         }
-        if( ! ret.size() )
+        if( ret.empty() )
         {
             if (isLog(pSettings, LogLevel::Info))
             {
@@ -498,7 +498,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                     }
                 }
 
-                if( sourceTableKeys.size() && i == static_cast<int>(sourceTableKeys.size()) )
+                if( !sourceTableKeys.empty() && i == static_cast<int>(sourceTableKeys.size()) )
                 {
                     *(data->pLastResultset) =
                         UpdateableResultSet::createFromPGResultSet(
@@ -514,7 +514,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
                     buf.append( "." );
                     aReason = buf.makeStringAndClear();
                 }
-                else if( sourceTableKeys.size() )
+                else if( !sourceTableKeys.empty() )
                 {
                     OStringBuffer buf( 128 );
                     buf.append( "can't support updateable resultset for table " );

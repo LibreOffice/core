@@ -574,7 +574,7 @@ void CustomAnimationPane::updateControls()
             Any aValue;
 
             std::vector<OUString> aProperties( pDescriptor->getProperties() );
-            if( aProperties.size() >= 1 )
+            if( !aProperties.empty() )
             {
                 mnPropertyType = getPropertyType( aProperties.front() );
 
@@ -1209,7 +1209,7 @@ std::unique_ptr<STLPropertySet> CustomAnimationPane::createSelectionSet()
             sal_Int32 nType = nPropertyTypeNone;
 
             std::vector<OUString> aProperties( pDescriptor->getProperties() );
-            if( aProperties.size() >= 1 )
+            if( !aProperties.empty() )
                 nType = getPropertyType( aProperties.front() );
 
             if( nType != nPropertyTypeNone )
@@ -1614,7 +1614,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet const * pResultSet, ST
                     // All the effects of the outline object is removed so we need to
                     // put it back. OTOH, the shape object that still has effects
                     // in the text group is fine.
-                    if (nTextGrouping == -1 && pTextGroup->getEffects().size() == 0)
+                    if (nTextGrouping == -1 && pTextGroup->getEffects().empty())
                     {
                         pEffect->setTarget(makeAny(pEffect->getTargetShape()));
                         pEffect->setGroupId(-1);

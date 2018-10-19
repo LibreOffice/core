@@ -661,7 +661,7 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
         aResult = (*aEntry)->maToken;
         std::unique_ptr<std::vector<MasterPageContainerChangeEvent::EventType> > pEventTypes(
             (*aEntry)->Update(*rpDescriptor));
-        if (pEventTypes != nullptr && pEventTypes->size() > 0)
+        if (pEventTypes != nullptr && !pEventTypes->empty())
         {
             // One or more aspects of the descriptor have changed.  Send
             // appropriate events to the listeners.

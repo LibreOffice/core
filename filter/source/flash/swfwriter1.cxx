@@ -1099,7 +1099,7 @@ bool Writer::Impl_writeStroke( SvtGraphicStroke const & rStroke )
 
     SvtGraphicStroke::DashArray aDashArray;
     rStroke.getDashArray( aDashArray );
-    if( 0 != aDashArray.size() )
+    if( !aDashArray.empty() )
         return false;       // todo: implement dashes
 
     Color aColor( mpVDev->GetLineColor() );

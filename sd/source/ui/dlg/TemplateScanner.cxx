@@ -275,7 +275,7 @@ TemplateScanner::State TemplateScanner::ScanFolder()
 {
     State eNextState (ERROR);
 
-    if (mpFolderDescriptors->size() > 0)
+    if (!mpFolderDescriptors->empty())
     {
         FolderDescriptor aDescriptor (*mpFolderDescriptors->begin());
         mpFolderDescriptors->erase(mpFolderDescriptors->begin());

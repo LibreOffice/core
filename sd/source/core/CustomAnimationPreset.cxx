@@ -563,7 +563,7 @@ Reference< XAnimationNode > CustomAnimationPresets::getRandomPreset( sal_Int16 n
         pCategoryList = nullptr;
     }
 
-    if( pCategoryList && pCategoryList->size() )
+    if( pCategoryList && !pCategoryList->empty() )
     {
         sal_Int32 nCategory = comphelper::rng::uniform_size_distribution(0, pCategoryList->size()-1);
 

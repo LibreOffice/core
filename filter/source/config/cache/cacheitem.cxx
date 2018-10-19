@@ -73,7 +73,7 @@ void CacheItem::validateUINames(const OUString& sActLocale)
         // 1a) set UIName inside list of UINames for current locale
         lUINames[sActLocale] <<= sUIName;
     }
-    else if (lUINames.size()>0)
+    else if (!lUINames.empty())
     {
         // 1b) or get it from this list, if it not exist!
         lUINames[sActLocale] >>= sUIName;

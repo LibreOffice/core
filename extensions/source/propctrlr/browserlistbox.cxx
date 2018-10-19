@@ -977,7 +977,7 @@ namespace pcr
         }
 
         // wrap around?
-        if ( ( static_cast< size_t >( nLine ) >= m_aLines.size() ) && ( m_aLines.size() > 0 ) )
+        if ( ( static_cast< size_t >( nLine ) >= m_aLines.size() ) && ( !m_aLines.empty() ) )
             m_aLines[0].pLine->GrabFocus();
     }
 

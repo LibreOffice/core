@@ -74,7 +74,7 @@ namespace basegfx
             // get scanlines first LineNumber as start
             sal_Int32 nLineNumber(std::max(aCurrentEntry->getY(), nStartLine));
 
-            while((aCurrentLine.size() || aCurrentEntry != maLineEntries.end()) && (nLineNumber < nStopLine))
+            while((!aCurrentLine.empty() || aCurrentEntry != maLineEntries.end()) && (nLineNumber < nStopLine))
             {
                 // add all entries which start at current line to current scanline
                 while(aCurrentEntry != maLineEntries.end())

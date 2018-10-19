@@ -2138,7 +2138,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
         }
     }
 
-    if (aRowVector.size() > 0)
+    if (!aRowVector.empty())
     {
         // generate global total
         SCROW nGlobalStartRow = aRowVector[0].nSubStartRow;
