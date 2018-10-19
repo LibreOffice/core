@@ -872,43 +872,40 @@ void AccObject::UpdateState()
 
     short Role = m_accRole;
 
-    if( m_pIMAcc )
+    switch(m_accRole)
     {
-        switch(m_accRole)
-        {
-        case LABEL:
-        case STATIC:
-            m_pIMAcc->IncreaseState( STATE_SYSTEM_READONLY );
-            break;
-        case TEXT:
-            // 2. editable combobox -> readonly ------ bridge
-        case EMBEDDED_OBJECT:
-        case END_NOTE:
-        case FOOTER:
-        case FOOTNOTE:
-        case GRAPHIC:
-        case HEADER:
-        case HEADING:
+    case LABEL:
+    case STATIC:
+        m_pIMAcc->IncreaseState( STATE_SYSTEM_READONLY );
+        break;
+    case TEXT:
+        // 2. editable combobox -> readonly ------ bridge
+    case EMBEDDED_OBJECT:
+    case END_NOTE:
+    case FOOTER:
+    case FOOTNOTE:
+    case GRAPHIC:
+    case HEADER:
+    case HEADING:
 
-            //Image Map
-        case PARAGRAPH:
-        case PASSWORD_TEXT:
-        case SHAPE:
-        case SPIN_BOX:
-        case TABLE:
-        case TABLE_CELL:
-        case TEXT_FRAME:
-        case DATE_EDITOR:
-        case DOCUMENT:
-        case COLUMN_HEADER:
-            {
-                if(!isEditable)
-                    m_pIMAcc->IncreaseState( STATE_SYSTEM_READONLY );
-            }
-            break;
-        default:
-            break;
+        //Image Map
+    case PARAGRAPH:
+    case PASSWORD_TEXT:
+    case SHAPE:
+    case SPIN_BOX:
+    case TABLE:
+    case TABLE_CELL:
+    case TEXT_FRAME:
+    case DATE_EDITOR:
+    case DOCUMENT:
+    case COLUMN_HEADER:
+        {
+            if(!isEditable)
+                m_pIMAcc->IncreaseState( STATE_SYSTEM_READONLY );
         }
+        break;
+    default:
+        break;
     }
 
     if( isEnable )
@@ -970,24 +967,21 @@ void AccObject::UpdateState()
         }
     }
 
-    if( m_pIMAcc )
+    switch(m_accRole)
     {
-        switch(m_accRole)
-        {
-        case POPUP_MENU:
-        case MENU:
-            if( pContext->getAccessibleChildCount() > 0 )
-                m_pIMAcc->IncreaseState( STATE_SYSTEM_HASPOPUP );
-            break;
-        case PASSWORD_TEXT:
-            m_pIMAcc->IncreaseState( STATE_SYSTEM_PROTECTED );
-            break;
-        default:
-            break;
-        }
+    case POPUP_MENU:
+    case MENU:
+        if( pContext->getAccessibleChildCount() > 0 )
+            m_pIMAcc->IncreaseState( STATE_SYSTEM_HASPOPUP );
+        break;
+    case PASSWORD_TEXT:
+        m_pIMAcc->IncreaseState( STATE_SYSTEM_PROTECTED );
+        break;
+    default:
+        break;
     }
-
 }
+
 /**
    * update location information from uno to com
    * @param
