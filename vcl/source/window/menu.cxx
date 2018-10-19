@@ -2700,7 +2700,7 @@ void PopupMenu::ClosePopup(Menu* pMenu)
 {
     MenuFloatingWindow* p = dynamic_cast<MenuFloatingWindow*>(ImplGetWindow());
     PopupMenu *pPopup = dynamic_cast<PopupMenu*>(pMenu);
-    if (p && pMenu)
+    if (p && pPopup)
         p->KillActivePopup(pPopup);
 }
 
