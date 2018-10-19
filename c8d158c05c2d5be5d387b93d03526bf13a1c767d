@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "1f1a1f67_3627d667",
+        "filename": "sc/uiconfig/scalc/popupmenu/draw.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-10-19T12:37:13Z",
+      "side": 0,
+      "message": "Please see discussion in tdf#94448 and tdf#107635. IIRC the conclusion back then was that the text command should be in the context menu when selecting a textbox, and also when in text editing mode (for both textbox and a shape), but not when selecting a shape. Alternative solution would be to implement tdf#107753, so the text command won\u0027t be visible when right clicking on a shape that doesn\u0027t have text.",
+      "parentUuid": "1f1a1f67_b37f78aa",
+      "range": {
+        "startLine": 17,
+        "startChar": 2,
+        "endLine": 17,
+        "endChar": 48
+      },
+      "revId": "c8d158c05c2d5be5d387b93d03526bf13a1c767d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f1a1f67_f375f0cd",
         "filename": "sc/uiconfig/scalc/popupmenu/draw.xml",
         "patchSetId": 2
@@ -84,6 +108,30 @@
       "side": 0,
       "message": "good point, but it didn\u0027t work.",
       "parentUuid": "1f1a1f67_f375f0cd",
+      "range": {
+        "startLine": 19,
+        "startChar": 1,
+        "endLine": 19,
+        "endChar": 45
+      },
+      "revId": "c8d158c05c2d5be5d387b93d03526bf13a1c767d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_f6203e4c",
+        "filename": "sc/uiconfig/scalc/popupmenu/draw.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-10-19T12:37:13Z",
+      "side": 0,
+      "message": "It works if you set anchor type to cell.",
+      "parentUuid": "1f1a1f67_3640f607",
       "range": {
         "startLine": 19,
         "startChar": 1,
