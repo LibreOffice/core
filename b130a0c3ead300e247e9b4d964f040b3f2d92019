@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1f1a1f67_76366eb7",
+        "filename": "sc/uiconfig/scalc/popupmenu/draw.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2018-10-19T12:06:01Z",
+      "side": 1,
+      "message": "was shown ONLY when you have selected more than one shape and than it show only the possible one so FormatGroup and if it\u0027s a group it show Ungroup, and Enter.",
+      "parentUuid": "1f1a1f67_937c7cb6",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 44
+      },
+      "revId": "b130a0c3ead300e247e9b4d964f040b3f2d92019",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f1a1f67_336c8807",
         "filename": "sc/uiconfig/scalc/popupmenu/draw.xml",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2018-10-19T10:34:16Z",
       "side": 1,
       "message": "Macro along with links? Sure it\u0027s not better suited above with Rename and Title? (Both work for me but it should be consistent.)",
+      "range": {
+        "startLine": 58,
+        "startChar": 2,
+        "endLine": 58,
+        "endChar": 45
+      },
+      "revId": "b130a0c3ead300e247e9b4d964f040b3f2d92019",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_563b729b",
+        "filename": "sc/uiconfig/scalc/popupmenu/draw.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2018-10-19T12:06:01Z",
+      "side": 1,
+      "message": "Macro is the last element in all calc context menus like AnimationEffects in impress.",
+      "parentUuid": "1f1a1f67_336c8807",
       "range": {
         "startLine": 58,
         "startChar": 2,
@@ -65,6 +113,24 @@
     },
     {
       "key": {
+        "uuid": "1f1a1f67_765f8ee5",
+        "filename": "sd/uiconfig/sdraw/popupmenu/draw.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2018-10-19T12:06:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f1a1f67_f35e1044",
+      "revId": "b130a0c3ead300e247e9b4d964f040b3f2d92019",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f1a1f67_53502433",
         "filename": "sd/uiconfig/sdraw/popupmenu/draw.xml",
         "patchSetId": 2
@@ -76,6 +142,30 @@
       "writtenOn": "2018-10-19T10:43:15Z",
       "side": 1,
       "message": "Note that the labels are missing the verb. This will be a problem until we move them out of .uno:MirrorMenu in other context menus too.",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 44
+      },
+      "revId": "b130a0c3ead300e247e9b4d964f040b3f2d92019",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_9650ead6",
+        "filename": "sd/uiconfig/sdraw/popupmenu/draw.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2018-10-19T12:06:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f1a1f67_53502433",
       "range": {
         "startLine": 17,
         "startChar": 0,
@@ -105,6 +195,24 @@
     },
     {
       "key": {
+        "uuid": "1f1a1f67_165e1ae6",
+        "filename": "sd/uiconfig/sdraw/popupmenu/draw.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2018-10-19T12:06:01Z",
+      "side": 1,
+      "message": "I would prefer to have multiselect.xml in ALL modules would be reduce complexity.",
+      "parentUuid": "1f1a1f67_d35b1452",
+      "revId": "b130a0c3ead300e247e9b4d964f040b3f2d92019",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f1a1f67_b3589856",
         "filename": "sw/uiconfig/sglobal/popupmenu/draw.xml",
         "patchSetId": 2
@@ -116,6 +224,24 @@
       "writtenOn": "2018-10-19T10:43:15Z",
       "side": 1,
       "message": "Why change to .uno:ArrangeFrameMenu and remove .uno:SetObjectToForeground and .uno:SetObjectToBackground (unlike Calc)?",
+      "revId": "b130a0c3ead300e247e9b4d964f040b3f2d92019",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_f6f71ed4",
+        "filename": "sw/uiconfig/sglobal/popupmenu/draw.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2018-10-19T12:06:01Z",
+      "side": 1,
+      "message": "good point, thanks",
+      "parentUuid": "1f1a1f67_b3589856",
       "revId": "b130a0c3ead300e247e9b4d964f040b3f2d92019",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false

@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1f1a1f67_d6c1c282",
+        "filename": "sc/uiconfig/scalc/popupmenu/draw.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2018-10-19T12:06:01Z",
+      "side": 0,
+      "message": "you can change the text layout when you have an text in the shape. I would recommend this action to have it in drawtext.xml so it will be shown when you\u0027d like to edit the text. \n\nReason is that not all shapes can have text in addition you change the text style and not the shape style.",
+      "parentUuid": "1f1a1f67_b37f78aa",
+      "range": {
+        "startLine": 17,
+        "startChar": 2,
+        "endLine": 17,
+        "endChar": 48
+      },
+      "revId": "c8d158c05c2d5be5d387b93d03526bf13a1c767d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f1a1f67_f375f0cd",
         "filename": "sc/uiconfig/scalc/popupmenu/draw.xml",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2018-10-19T10:34:16Z",
       "side": 0,
       "message": "Missing this command, which is important for Calc.",
+      "range": {
+        "startLine": 19,
+        "startChar": 1,
+        "endLine": 19,
+        "endChar": 45
+      },
+      "revId": "c8d158c05c2d5be5d387b93d03526bf13a1c767d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_3640f607",
+        "filename": "sc/uiconfig/scalc/popupmenu/draw.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000996
+      },
+      "writtenOn": "2018-10-19T12:06:01Z",
+      "side": 0,
+      "message": "good point, but it didn\u0027t work.",
+      "parentUuid": "1f1a1f67_f375f0cd",
       "range": {
         "startLine": 19,
         "startChar": 1,
