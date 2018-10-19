@@ -52,7 +52,7 @@ OUString convertToFileUrl(char const * filename, sal_Int32 length)
     OUString uFileUrl;
     if (length > 0)
     {
-        if ((filename[0] == '.') || (filename[0] != SEPARATOR))
+        if (filename[0] != SEPARATOR)
         {
             // relative path name.
             OUString uWorkingDir;
