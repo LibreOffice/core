@@ -211,8 +211,9 @@ FatError EasyFat::Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect )
 {
     if( nCount > 0 )
     {
-        --nCount /= GetPageSize();
-        nCount++;
+        --nCount;
+        nCount /= GetPageSize();
+        ++nCount;
     }
 
     sal_Int32 nCurPage = nPage;
