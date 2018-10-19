@@ -671,12 +671,15 @@ STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKe
                             VARIANT varParentRole;
                             VariantInit( &varParentRole );
 
-                            m_pIParent->get_accRole(varChild, &varParentRole);
-
-                            if( m_pIParent && varParentRole.lVal == ROLE_SYSTEM_COMBOBOX ) // edit in comboBox
+                            if (m_pIParent)
                             {
-                                m_pIParent->get_accKeyboardShortcut(varChild, pszKeyboardShortcut);
-                                return S_OK;
+                                m_pIParent->get_accRole(varChild, &varParentRole);
+
+                                if (varParentRole.lVal == ROLE_SYSTEM_COMBOBOX) // edit in comboBox
+                                {
+                                    m_pIParent->get_accKeyboardShortcut(varChild, pszKeyboardShortcut);
+                                    return S_OK;
+                                }
                             }
                         }
 
