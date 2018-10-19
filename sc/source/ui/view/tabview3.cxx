@@ -1918,7 +1918,6 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
         else
         {
             // hide / show inplace client
-
             ScClient* pClient = static_cast<ScClient*>(aViewData.GetViewShell()->GetIPClient());
             if ( pClient && pClient->IsObjectInPlaceActive() )
             {
@@ -2131,9 +2130,14 @@ void ScTabView::UpdateEditView()
         if (aViewData.HasEditView(eCurrent))
         {
             EditView* pEditView = aViewData.GetEditView(eCurrent);
+
+            long nRefTabNo = GetViewData().GetRefTabNo();
+            long nX = GetViewData().GetCurXForTab(nRefTabNo);
+            long nY = GetViewData().GetCurYForTab(nRefTabNo);
+
             aViewData.SetEditEngine(eCurrent,
                 static_cast<ScEditEngineDefaulter*>(pEditView->GetEditEngine()),
-                pGridWin[i], GetViewData().GetCurX(), GetViewData().GetCurY() );
+                pGridWin[i], nX, nY );
             if (eCurrent == eActive)
                 pEditView->ShowCursor( false );
         }

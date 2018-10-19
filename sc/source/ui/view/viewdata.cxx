@@ -1442,7 +1442,6 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
     // add windows from other views
     if (!bWasThere && comphelper::LibreOfficeKit::isActive())
-    //if (comphelper::LibreOfficeKit::isActive())
     {
         ScTabViewShell* pThisViewShell = GetViewShell();
         SCTAB nThisTabNo = GetTabNo();
