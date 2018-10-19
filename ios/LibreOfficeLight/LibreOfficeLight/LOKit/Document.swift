@@ -539,7 +539,9 @@ open class Document
     
     public func invokeHandlers()
     {
-        temporaryHackToInvokeCallbackHandlers(pDoc)
+        // The app seems to work even without this? Or maybe I
+        // just didn't test hard enough?
+        // temporaryHackToInvokeCallbackHandlers(pDoc)
         
     }
 
