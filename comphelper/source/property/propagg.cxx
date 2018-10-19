@@ -239,7 +239,7 @@ sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
     {
         aNameProp.Name = pReqProps[i];
         auto findIter = std::lower_bound(m_aProperties.begin(), m_aProperties.end(), aNameProp, PropertyCompareByName());
-        if ( findIter != m_aProperties.end() )
+        if ( findIter != m_aProperties.end() && !PropertyCompareByName()(*findIter, aNameProp))
         {
             _pHandles[i] = findIter->Handle;
             nHitCount++;
