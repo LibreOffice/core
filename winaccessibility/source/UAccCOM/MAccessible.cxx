@@ -2898,10 +2898,13 @@ void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pv
             break;
 
         case TypeClass_BOOLEAN:
+        {
+            bool bBoolean(false);
+            rAnyVal >>= bBoolean;
             pvData->vt = VT_BOOL;
-            memcpy(&pvData->boolVal, rAnyVal.getValue(), sizeof(sal_Bool));
+            pvData->boolVal = bBoolean; // boolVal is a VARIANT_BOOL, a 16bit field
             break;
-
+        }
         case TypeClass_BYTE:
             pvData->vt = VT_UI1;
             memcpy(&pvData->bVal, rAnyVal.getValue(), sizeof(sal_Int8));
