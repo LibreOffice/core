@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_9317dcee",
+        "filename": "sal/osl/unx/unixerrnostring.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-19T07:26:13Z",
+      "side": 1,
+      "message": "no need for inline in unnamed namespace (apart from silencing -Wunused?); why not just put the defn in a .cxx (in relevant #ifdef if need be?)",
+      "revId": "7932dcc35a19f412cca8e9b40069507583303b22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
