@@ -105,11 +105,8 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExp
     case util::NumberFormat::SCIENTIFIC:
     case util::NumberFormat::FRACTION:
         {
-            if (!bWasSetTypeAttribute)
-            {
-                rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT);
-                bWasSetTypeAttribute = true;
-            }
+            rXMLExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT);
+            bWasSetTypeAttribute = true;
             SAL_FALLTHROUGH;
         }
     case util::NumberFormat::PERCENT:
@@ -374,11 +371,8 @@ void XMLNumberFormatAttributesExportHelper::WriteAttributes(
     case util::NumberFormat::SCIENTIFIC:
     case util::NumberFormat::FRACTION:
         {
-            if (!bWasSetTypeAttribute)
-            {
-                pExport->AddAttribute(sAttrValType, XML_FLOAT);
-                bWasSetTypeAttribute = true;
-            }
+            pExport->AddAttribute(sAttrValType, XML_FLOAT);
+            bWasSetTypeAttribute = true;
             SAL_FALLTHROUGH;
         }
     case util::NumberFormat::PERCENT:
