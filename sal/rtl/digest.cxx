@@ -283,7 +283,7 @@ static void updateMD2(DigestContextMD2 *ctx)
     }
 
     memcpy(sp1, state, 16 * sizeof(sal_uInt32));
-    memset(state, 0, 48 * sizeof(sal_uInt32));
+    rtl_secureZeroMemory(state, 48 * sizeof(sal_uInt32));
 }
 
 static void endMD2(DigestContextMD2 *ctx)
@@ -320,7 +320,7 @@ rtlDigestError SAL_CALL rtl_digest_MD2(
     if (result == rtl_Digest_E_None)
         result = rtl_digest_getMD2(&digest, pBuffer, nBufLen);
 
-    memset(&digest, 0, sizeof(digest));
+    rtl_secureZeroMemory(&digest, sizeof(digest));
     return result;
 }
 
@@ -658,7 +658,7 @@ rtlDigestError SAL_CALL rtl_digest_MD5(
     if (result == rtl_Digest_E_None)
         result = rtl_digest_getMD5(&digest, pBuffer, nBufLen);
 
-    memset(&digest, 0, sizeof(digest));
+    rtl_secureZeroMemory(&digest, sizeof(digest));
     return result;
 }
 
@@ -1101,7 +1101,7 @@ rtlDigestError SAL_CALL rtl_digest_SHA(
     if (result == rtl_Digest_E_None)
         result = rtl_digest_getSHA(&digest, pBuffer, nBufLen);
 
-    memset(&digest, 0, sizeof(digest));
+    rtl_secureZeroMemory(&digest, sizeof(digest));
     return result;
 }
 
@@ -1261,7 +1261,7 @@ rtlDigestError SAL_CALL rtl_digest_SHA1(
     if (result == rtl_Digest_E_None)
         result = rtl_digest_getSHA1(&digest, pBuffer, nBufLen);
 
-    memset(&digest, 0, sizeof(digest));
+    rtl_secureZeroMemory(&digest, sizeof(digest));
     return result;
 }
 
@@ -1476,7 +1476,7 @@ rtlDigestError SAL_CALL rtl_digest_HMAC_MD5(
             result = rtl_digest_getHMAC_MD5(&digest, pBuffer, nBufLen);
     }
 
-    memset(&digest, 0, sizeof(digest));
+    rtl_secureZeroMemory(&digest, sizeof(digest));
     return result;
 }
 
@@ -1672,7 +1672,7 @@ rtlDigestError SAL_CALL rtl_digest_HMAC_SHA1(
             result = rtl_digest_getHMAC_SHA1(&digest, pBuffer, nBufLen);
     }
 
-    memset(&digest, 0, sizeof(digest));
+    rtl_secureZeroMemory(&digest, sizeof(digest));
     return result;
 }
 
@@ -1872,7 +1872,7 @@ rtlDigestError SAL_CALL rtl_digest_PBKDF2(
         rtl_secureZeroMemory(T, DIGEST_CBLOCK_PBKDF2);
     }
 
-    memset(&digest, 0, sizeof(digest));
+    rtl_secureZeroMemory(&digest, sizeof(digest));
     return rtl_Digest_E_None;
 }
 
