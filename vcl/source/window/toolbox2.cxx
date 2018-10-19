@@ -1019,8 +1019,7 @@ void ToolBox::SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror )
     {
         ImplToolItem* pItem = &mpData->m_aItems[nPos];
 
-        if ((pItem->mbMirrorMode && !bMirror) ||
-            (!pItem->mbMirrorMode && bMirror))
+        if (pItem->mbMirrorMode != bMirror)
         {
             pItem->mbMirrorMode = bMirror;
             if (!!pItem->maImage)
