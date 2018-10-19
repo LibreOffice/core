@@ -164,8 +164,7 @@ void SbxValue::Clear()
             }
             break;
         case SbxDECIMAL:
-            if( aData.eType == SbxDECIMAL )
-                releaseDecimalPtr( aData.pDecimal );
+            releaseDecimalPtr( aData.pDecimal );
             break;
         case SbxDATAOBJECT:
             aData.pData = nullptr; break;
