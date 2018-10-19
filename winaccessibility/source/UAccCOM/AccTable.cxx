@@ -132,9 +132,9 @@ STDMETHODIMP CAccTable::get_columnDescription(long column, BSTR * description)
     const ::rtl::OUString& ouStr = GetXInterface()->getAccessibleColumnDescription(column);
     // #CHECK#
 
-    SAFE_SYSFREESTRING(*description);//??
+    SAFE_SYSFREESTRING(*description);
     *description = SysAllocString(o3tl::toW(ouStr.getStr()));
-    if(description==nullptr)
+    if (*description==nullptr)
         return E_FAIL;
     return S_OK;
 
@@ -353,9 +353,8 @@ STDMETHODIMP CAccTable::get_rowDescription(long row, BSTR * description)
 
     SAFE_SYSFREESTRING(*description);
     *description = SysAllocString(o3tl::toW(ouStr.getStr()));
-    if(description==nullptr)
+    if (*description==nullptr)
         return E_FAIL;
-
     return S_OK;
 
     LEAVE_PROTECTED_BLOCK
