@@ -62,7 +62,7 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
     std::vector<SwSectionNode *> sections;
     std::vector<sw::Extent> extents;
     OUStringBuffer mergedText;
-    SwTextNode const* pParaPropsNode(nullptr);
+    SwTextNode * pParaPropsNode(nullptr);
     SwTextNode * pNode(&rTextNode);
     sal_Int32 nLastEnd(0);
     for (auto i = rIDRA.GetRedlinePos(rTextNode, USHRT_MAX);
@@ -180,6 +180,10 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
     }
     if (!bHaveRedlines)
     {
+        if (rTextNode.IsInList() && !rTextNode.GetNum(rFrame.getRootFrame()))
+        {
+            rTextNode.AddToListRLHidden(); // try to add it...
+        }
         return nullptr;
     }
     if (nLastEnd != pNode->Len())
@@ -196,6 +200,18 @@ CheckParaRedlineMerge(SwTextFrame & rFrame, SwTextNode & rTextNode,
     {
         assert(!mergedText.isEmpty());
         pParaPropsNode = extents.begin()->pNode; // para props from first node that isn't empty
+    }
+    // keep lists up to date with visible nodes
+    if (pParaPropsNode->IsInList() && !pParaPropsNode->GetNum(rFrame.getRootFrame()))
+    {
+        pParaPropsNode->AddToListRLHidden(); // try to add it...
+    }
+    for (auto const pTextNode : nodes)
+    {
+        if (pTextNode != pParaPropsNode)
+        {
+            pTextNode->RemoveFromListRLHidden();
+        }
     }
     if (eMode == FrameMode::Existing)
     {
