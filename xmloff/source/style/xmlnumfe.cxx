@@ -601,8 +601,8 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
 
     //  number:embedded-text as child elements
 
-    sal_uInt16 nEntryCount = rEmbeddedEntries.size();
-    for (sal_uInt16 nEntry=0; nEntry<nEntryCount; nEntry++)
+    auto nEntryCount = rEmbeddedEntries.size();
+    for (decltype(nEntryCount) nEntry=0; nEntry < nEntryCount; ++nEntry)
     {
         const SvXMLEmbeddedTextEntry *const pObj = &rEmbeddedEntries[nEntry];
 
@@ -953,8 +953,8 @@ static OUString lcl_GetDefaultCalendar( SvNumberFormatter const * pFormatter, La
 
 static bool lcl_IsInEmbedded( const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries, sal_uInt16 nPos )
 {
-    sal_uInt16 nCount = rEmbeddedEntries.size();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    auto nCount = rEmbeddedEntries.size();
+    for (decltype(nCount) i=0; i<nCount; i++)
         if ( rEmbeddedEntries[i].nSourcePos == nPos )
             return true;
 
