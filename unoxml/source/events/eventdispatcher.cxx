@@ -92,9 +92,8 @@ namespace DOM { namespace events {
         TypeListenerMap::const_iterator tIter = rTMap.find(aType);
         if (tIter != rTMap.end()) {
             ListenerMap const& rMap = tIter->second;
-            auto iter = rMap.lower_bound(pNode);
-            auto const ibound = rMap.upper_bound(pNode);
-            for( ; iter != ibound; ++iter )
+            auto iterRange = rMap.equal_range(pNode);
+            for( auto iter = iterRange.first; iter != iterRange.second; ++iter )
             {
                 if(iter->second.is())
                     (iter->second)->handleEvent(xEvent);
