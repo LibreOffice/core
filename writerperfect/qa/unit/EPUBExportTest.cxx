@@ -284,7 +284,7 @@ void EPUBExportTest::testMimetype()
     SvMemoryStream aMemoryStream;
     aMemoryStream.WriteStream(aFileStream);
     OString aExpected("application/epub+zip");
-    CPPUNIT_ASSERT(aMemoryStream.GetSize() > static_cast<sal_uInt64>(38 + aExpected.getLength()));
+    CPPUNIT_ASSERT(aMemoryStream.GetSize() > static_cast<sal_uInt64>(aExpected.getLength()) + 38);
 
     OString aActual(static_cast<const char*>(aMemoryStream.GetData()) + 38, aExpected.getLength());
     // This failed: actual data was some garbage, not the uncompressed mime type.
