@@ -589,8 +589,8 @@ uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( 
     if( certInfo.Issuer.pbData ) free( certInfo.Issuer.pbData ) ;
 
     if( pCertContext != nullptr ) {
-        xcert = MswcryCertContextToXCert( pCertContext ) ;
-        if( pCertContext ) CertFreeCertificateContext( pCertContext ) ;
+        xcert = MswcryCertContextToXCert(pCertContext);
+        CertFreeCertificateContext(pCertContext);
     } else {
         xcert = nullptr ;
     }
