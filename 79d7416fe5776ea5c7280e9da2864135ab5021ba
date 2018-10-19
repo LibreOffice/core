@@ -16,6 +16,24 @@
       "revId": "79d7416fe5776ea5c7280e9da2864135ab5021ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_f6939e5b",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2610,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2018-10-19T12:50:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff0f0b1f_146393de",
+      "revId": "79d7416fe5776ea5c7280e9da2864135ab5021ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
