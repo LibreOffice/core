@@ -504,7 +504,7 @@ namespace dxcanvas
             aBmpData.Height      = rRawRGBAData.mnHeight;
             aBmpData.Stride      = 4*aBmpData.Width; // bottom-up format
             aBmpData.PixelFormat = PixelFormat32bppARGB;
-            aBmpData.Scan0       = rRawRGBAData.mpBitmapData.get();
+            aBmpData.Scan0       = const_cast<sal_uInt8*>(rRawRGBAData.maBitmapData.data());
 
             const Gdiplus::Rect aRect( 0,0,aBmpData.Width,aBmpData.Height );
             if( Gdiplus::Ok != pBitmap->LockBits( &aRect,
