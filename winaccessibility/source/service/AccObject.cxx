@@ -380,9 +380,6 @@ void AccObject::UpdateDefaultAction( )
    */
 void  AccObject::SetValue( Any pAny )
 {
-    unsigned short pUNumberString[100];
-    memset( pUNumberString, 0 , sizeof( pUNumberString) );
-
     if( nullptr == m_pIMAcc || !m_xAccContextRef.is() )
     {
         assert(false);
@@ -423,9 +420,8 @@ void  AccObject::SetValue( Any pAny )
     }
 
     return;
-
-
 }
+
 ::rtl::OUString AccObject::GetMAccessibleValueFromAny(Any pAny)
 {
     ::rtl::OUString strValue;
