@@ -155,7 +155,7 @@ namespace dxcanvas
                 RawRGBABitmap aBmpData;
                 aBmpData.mnWidth     = aBmpSize.Width();
                 aBmpData.mnHeight    = aBmpSize.Height();
-                aBmpData.mpBitmapData.reset( new sal_uInt8[ 4*aBmpData.mnWidth*aBmpData.mnHeight ] );
+                aBmpData.maBitmapData.resize(4*aBmpData.mnWidth*aBmpData.mnHeight);
 
                 Bitmap aBitmap( rBmpEx.GetBitmap() );
 
@@ -200,7 +200,7 @@ namespace dxcanvas
                                       "Unsupported alpha scanline format" );
 
                     BitmapColor     aCol;
-                    sal_uInt8*      pCurrOutput( aBmpData.mpBitmapData.get() );
+                    sal_uInt8*      pCurrOutput(aBmpData.maBitmapData.data());
                     int             x, y;
 
                     for( y=0; y<nHeight; ++y )
@@ -340,7 +340,7 @@ namespace dxcanvas
                     int             nCurrBit;
                     const int       nMask( 1 );
                     const int       nInitialBit(7);
-                    sal_uInt8*      pCurrOutput( aBmpData.mpBitmapData.get() );
+                    sal_uInt8*      pCurrOutput(aBmpData.maBitmapData.data());
                     int             x, y;
 
                     // mapping table, to get from mask index color to

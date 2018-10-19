@@ -37,7 +37,7 @@ namespace dxcanvas
         {
             sal_Int32                           mnWidth;
             sal_Int32                           mnHeight;
-            std::shared_ptr< sal_uInt8 >    mpBitmapData;
+            std::vector<sal_uInt8>              maBitmapData;
         };
 
         bool drawVCLBitmapFromXBitmap( const std::shared_ptr< Gdiplus::Graphics >& rGraphics,
