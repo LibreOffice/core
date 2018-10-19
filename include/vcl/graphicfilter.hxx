@@ -152,7 +152,7 @@ class VCL_DLLPUBLIC GraphicDescriptor final
     bool            ImpDetectGIF( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectJPG( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectPCD( SvStream& rStm, bool bExtendedInfo );
-    bool            ImpDetectPCX( SvStream& rStm, bool bExtendedInfo );
+    bool            ImpDetectPCX( SvStream& rStm );
     bool            ImpDetectPNG( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectTIF( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectXBM( SvStream& rStm, bool bExtendedInfo );
