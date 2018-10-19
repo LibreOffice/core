@@ -300,19 +300,16 @@ cmd/lc_optionstreedialog.svg cmd/lc_controlproperties.svg
 cmd/sc_optionstreedialog.svg cmd/sc_controlproperties.svg
 
 # Track Change
-cmd/32/acceptchanges.svg cmd/32/accepttrackedchanges.svg
-cmd/32/accepttracedchange.svg cmd/32/accepttrackedchanges.svg 
-cmd/32/accepttrackedchange.svg cmd/32/accepttrackedchanges.svg
+cmd/32/acceptchanges.svg cmd/32/accepttrackedchange.svg
+cmd/32/accepttracedchange.svg cmd/32/accepttrackedchange.svg 
 cmd/32/commentchange.svg cmd/32/commentchangetracking.svg
 
-cmd/lc_acceptchanges.svg cmd/lc_accepttrackedchanges.svg
-cmd/lc_accepttracedchange.svg cmd/lc_accepttrackedchanges.svg 
-cmd/lc_accepttrackedchange.svg cmd/lc_accepttrackedchanges.svg
+cmd/lc_acceptchanges.svg cmd/lc_accepttrackedchange.svg
+cmd/lc_accepttracedchange.svg cmd/lc_accepttrackedchange.svg 
 cmd/lc_commentchange.svg cmd/lc_commentchangetracking.svg
 
-cmd/sc_acceptchanges.svg cmd/sc_accepttrackedchanges.svg
-cmd/sc_accepttracedchange.svg cmd/sc_accepttrackedchanges.svg 
-cmd/sc_accepttrackedchange.svg cmd/sc_accepttrackedchanges.svg
+cmd/sc_acceptchanges.svg cmd/sc_accepttrackedchange.svg
+cmd/sc_accepttracedchange.svg cmd/sc_accepttrackedchange.svg 
 cmd/sc_commentchange.svg cmd/sc_commentchangetracking.svg
 
 # Formatmenu
@@ -1139,8 +1136,11 @@ cmd/lc_fontworkshapetype.svg cmd/lc_fontwork.svg
 cmd/sc_fontworkshapetype.svg cmd/sc_fontwork.svg
 
 # Axis
+cmd/32/diagramaxisall.svg cmd/32/diagramaxisxyz.svg
 cmd/32/toggleaxisdescr.svg cmd/32/helplinesvisible.svg
+cmd/lc_diagramaxisall.svg cmd/lc_diagramaxisxyz.svg
 cmd/lc_toggleaxisdescr.svg cmd/lc_helplinesvisible.svg
+cmd/sc_diagramaxisall.svg cmd/sc_diagramaxisxyz.svg
 cmd/sc_toggleaxisdescr.svg cmd/sc_helplinesvisible.svg
 
 # Grid
