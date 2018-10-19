@@ -281,9 +281,9 @@ void Calendar_jewish::mapToGregorian()
 
 // Methods in XExtendedCalendar
 OUString SAL_CALL
-Calendar_jewish::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
+Calendar_jewish::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 /*nNativeNumberMode*/ )
 {
-    nNativeNumberMode = NativeNumberMode::NATNUM2;  // make Hebrew number for Jewish calendar
+    const sal_Int16 nNativeNumberMode = NativeNumberMode::NATNUM2;  // make Hebrew number for Jewish calendar
 
     if (nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR) {
         sal_Int32 value = getValue(CalendarFieldIndex::YEAR) % 1000; // take last 3 digits
