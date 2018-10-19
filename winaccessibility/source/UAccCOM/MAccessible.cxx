@@ -1074,7 +1074,7 @@ STDMETHODIMP CMAccessible::put_accValue(VARIANT varChild, BSTR szValue)
         {
             if(varChild.lVal==CHILDID_SELF)
             {
-                SysAllocString(m_pszValue);
+                SAFE_SYSFREESTRING(m_pszValue);
                 m_pszValue=SysAllocString(szValue);
                 return S_OK;
             }
@@ -1108,7 +1108,7 @@ STDMETHODIMP CMAccessible::Put_XAccName(const OLECHAR __RPC_FAR *pszName)
             return E_INVALIDARG;
         }
 
-        SAFE_SYSFREESTRING(m_pszName);//??
+        SAFE_SYSFREESTRING(m_pszName);
         m_pszName = SysAllocString(pszName);
         if(m_pszName==nullptr)
             return E_FAIL;
