@@ -2101,7 +2101,7 @@ Sequence< datatransfer::DataFlavor > SAL_CALL SfxBaseModel::getTransferDataFlavo
 {
     SfxModelGuard aGuard( *this );
 
-    sal_Int32 nSuppFlavors = GraphicHelper::supportsMetaFileHandle_Impl() ? 10 : 8;
+    const sal_Int32 nSuppFlavors = GraphicHelper::supportsMetaFileHandle_Impl() ? 10 : 8;
     Sequence< datatransfer::DataFlavor > aFlavorSeq( nSuppFlavors );
 
     aFlavorSeq[0].MimeType =
