@@ -1558,17 +1558,8 @@ void DocxAttributeOutput::DoWritePermissionTagEnd(const OUString & permission)
 {
     OUString permissionIdAndName;
 
-    if (permission.startsWith("permission-for-group:", &permissionIdAndName))
-    {
-        const sal_Int32 sparatorIndex = permissionIdAndName.indexOf(':');
-        const OUString permissionId   = permissionIdAndName.copy(0, sparatorIndex);
-        const OString rId             = OUStringToOString(BookmarkToWord(permissionId), RTL_TEXTENCODING_UTF8).getStr();
-
-        m_pSerializer->singleElementNS(XML_w, XML_permEnd,
-            FSNS(XML_w, XML_id), rId.getStr(),
-            FSEND);
-    }
-    else // if (permission.startsWith("permission-for-user:", &permissionIdAndName))
+    if (permission.startsWith("permission-for-group:", &permissionIdAndName) ||
+       (permission.startsWith("permission-for-user:", &permissionIdAndName))
     {
         const sal_Int32 sparatorIndex = permissionIdAndName.indexOf(':');
         const OUString permissionId   = permissionIdAndName.copy(0, sparatorIndex);
