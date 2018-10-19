@@ -1139,8 +1139,11 @@ cmd/lc_fontworkshapetype.png cmd/lc_fontwork.png
 cmd/sc_fontworkshapetype.png cmd/sc_fontwork.png
 
 # Axis
+cmd/32/diagramaxisall.png cmd/32/diagramaxisxyz.png
 cmd/32/toggleaxisdescr.png cmd/32/helplinesvisible.png
+cmd/lc_diagramaxisall.png cmd/lc_diagramaxisxyz.png
 cmd/lc_toggleaxisdescr.png cmd/lc_helplinesvisible.png
+cmd/sc_diagramaxisall.png cmd/sc_diagramaxisxyz.png
 cmd/sc_toggleaxisdescr.png cmd/sc_helplinesvisible.png
 
 # Grid
