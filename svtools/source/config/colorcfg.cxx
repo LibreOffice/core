@@ -104,12 +104,10 @@ namespace {
 
 uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme)
 {
-    uno::Sequence<OUString> aNames(2 * ColorConfigEntryCount);
-    OUString* pNames = aNames.getArray();
     struct ColorConfigEntryData_Impl
     {
-        OUStringLiteral const cName;
-        bool const            bCanBeVisible;
+        OUStringLiteral cName;
+        bool            bCanBeVisible;
     };
     static const ColorConfigEntryData_Impl cNames[] =
     {
@@ -164,19 +162,19 @@ uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme)
         { OUStringLiteral("/SQLParameter"),  false },
         { OUStringLiteral("/SQLComment"),  false }
     };
+
+    uno::Sequence<OUString> aNames(2 * ColorConfigEntryCount);
+    OUString* pNames = aNames.getArray();
     int nIndex = 0;
     OUString sBase = "ColorSchemes/"
                    + utl::wrapConfigurationElementName(rScheme);
-    const int nCount = ColorConfigEntryCount;
-    for(sal_Int32 i = 0; i < nCount; ++i)
+    for(sal_Int32 i = 0; i < ColorConfigEntryCount; ++i)
     {
         OUString sBaseName = sBase + cNames[i].cName;
-        pNames[nIndex] += sBaseName;
-        pNames[nIndex++] += "/Color";
+        pNames[nIndex++] = sBaseName + "/Color";
         if(cNames[i].bCanBeVisible)
         {
-            pNames[nIndex] += sBaseName;
-            pNames[nIndex++] += g_sIsVisible;
+            pNames[nIndex++] = sBaseName + g_sIsVisible;
         }
     }
     aNames.realloc(nIndex);
