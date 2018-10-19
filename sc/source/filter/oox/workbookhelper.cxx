@@ -548,7 +548,7 @@ void WorkbookGlobals::initialize()
         aCalcConfig.SetStringRefSyntax( formula::FormulaGrammar::CONV_XL_A1 ) ;
         mpDoc->SetCalcConfig(aCalcConfig);
     }
-    else if (aGenerator.startsWithIgnoreAsciiCase("LibreOffice"))
+    else if (aGenerator.startsWithIgnoreAsciiCase("LibreOffice") || aGenerator.startsWithIgnoreAsciiCase("Collabora") || aGenerator.startsWithIgnoreAsciiCase("CIB"))
     {
         mbGeneratorKnownGood = true;
     }
