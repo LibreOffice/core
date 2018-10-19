@@ -4328,6 +4328,8 @@ void SwTextNode::RemoveFromListRLHidden()
 
 bool SwTextNode::IsInList() const
 {
+    // it looks like an unconnected Num can't happen, except in the undo-array
+    assert(!GetNum() || GetNum()->GetParent() || !GetNodes().IsDocNodes());
     return GetNum() != nullptr && GetNum()->GetParent() != nullptr;
 }
 
