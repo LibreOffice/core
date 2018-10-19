@@ -2082,7 +2082,7 @@ void PowerPointExport::ImplWriteNotes(sal_uInt32 nPageNum)
                 .makeStringAndClear());
 
     // add slide implicit relation to notes
-    if (mpSlidesFSArray.size() >= nPageNum)
+    if (nPageNum < mpSlidesFSArray.size())
         addRelation(mpSlidesFSArray[ nPageNum ]->getOutputStream(),
                     oox::getRelationship(Relationship::NOTESSLIDE),
                     OUStringBuffer()
