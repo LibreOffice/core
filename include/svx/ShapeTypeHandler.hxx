@@ -133,7 +133,7 @@ public:
              Array of new shape type descriptors.
      */
     void AddShapeTypeList (int nDescriptorCount,
-        ShapeTypeDescriptor aDescriptorList[]);
+        ShapeTypeDescriptor const aDescriptorList[]);
 
     /// get the accessible base name for an object
     ///

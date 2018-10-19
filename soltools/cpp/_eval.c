@@ -48,7 +48,7 @@ struct pri
     char const ctype;
 };
 
-static struct pri priority[] =
+static const struct pri priority[] =
 {
     {
         0, 0, 0
