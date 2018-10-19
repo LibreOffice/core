@@ -186,7 +186,7 @@ SvtLanguageTableImpl::SvtLanguageTableImpl()
         {
             LanguageTag aLang(rBcp47);
             LanguageType nLangType = aLang.getLanguageType();
-            if (nType <= LanguageTag::ScriptType::RTL && nType > LanguageTag::ScriptType::UNKNOWN)
+            if (nType <= sal_Int32(LanguageTag::ScriptType::RTL) && nType > sal_Int32(LanguageTag::ScriptType::UNKNOWN))
                 aLang.setScriptType(LanguageTag::ScriptType(nType));
             sal_uInt32 nPos = FindIndex(nLangType);
             if (nPos == RESARRAY_INDEX_NOTFOUND)
