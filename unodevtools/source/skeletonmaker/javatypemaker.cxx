@@ -602,7 +602,7 @@ void printConstructors(
         for (std::vector<
                  unoidl::SingleInterfaceBasedServiceEntity::Constructor::
                  Parameter >::const_iterator j(i->parameters.begin());
-             j != i->parameters.end(); ++i)
+             j != i->parameters.end(); ++j)
         {
             o << ", ";
             printType(o, options, manager, j->type, false);
