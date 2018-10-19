@@ -892,7 +892,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc )
                 break;      // exit the "while-loop"
             }
             else if( *aCpyPam.GetPoint() == *aCpyPam.GetMark() &&
-                 pClpDoc->GetSpzFrameFormats()->size() )
+                 !pClpDoc->GetSpzFrameFormats()->empty() )
             {
                 // we need a DrawView
                 if( !Imp()->GetDrawView() )
@@ -1154,7 +1154,7 @@ void SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
     }
     // now the page bound objects
     // additionally copy page bound frames
-    if( GetDoc()->GetSpzFrameFormats()->size() )
+    if( !GetDoc()->GetSpzFrameFormats()->empty() )
     {
         // create a draw view if necessary
         if( !rToFill.Imp()->GetDrawView() )

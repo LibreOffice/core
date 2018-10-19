@@ -2540,7 +2540,7 @@ void DocumentRedlineManager::AcceptAllRedline(bool bAccept)
         rUndoMgr.StartUndo(bAccept ? SwUndoId::ACCEPT_REDLINE : SwUndoId::REJECT_REDLINE, &aRewriter);
     }
 
-    while (mpRedlineTable->size() > 0)
+    while (!mpRedlineTable->empty())
     {
         if (bAccept)
             AcceptRedline(mpRedlineTable->size() - 1, true);

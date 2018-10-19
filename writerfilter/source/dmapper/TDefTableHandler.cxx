@@ -415,17 +415,17 @@ void TDefTableHandler::lcl_sprm(Sprm & rSprm)
 
 void TDefTableHandler::fillCellProperties( const ::tools::SvRef< TablePropertyMap >& pCellProperties ) const
 {
-    if( m_aTopBorderLines.size() )
+    if( !m_aTopBorderLines.empty() )
         pCellProperties->Insert( PROP_TOP_BORDER, uno::makeAny( m_aTopBorderLines[0] ) );
-    if( m_aLeftBorderLines.size() )
+    if( !m_aLeftBorderLines.empty() )
         pCellProperties->Insert( PROP_LEFT_BORDER, uno::makeAny( m_aLeftBorderLines[0] ) );
-    if( m_aBottomBorderLines.size() )
+    if( !m_aBottomBorderLines.empty() )
         pCellProperties->Insert( PROP_BOTTOM_BORDER, uno::makeAny( m_aBottomBorderLines[0] ) );
-    if( m_aRightBorderLines.size() )
+    if( !m_aRightBorderLines.empty() )
         pCellProperties->Insert( PROP_RIGHT_BORDER, uno::makeAny( m_aRightBorderLines[0] ) );
-    if( m_aInsideHBorderLines.size() )
+    if( !m_aInsideHBorderLines.empty() )
         pCellProperties->Insert( META_PROP_HORIZONTAL_BORDER, uno::makeAny( m_aInsideHBorderLines[0] ) );
-    if( m_aInsideVBorderLines.size() )
+    if( !m_aInsideVBorderLines.empty() )
         pCellProperties->Insert( META_PROP_VERTICAL_BORDER, uno::makeAny( m_aInsideVBorderLines[0] ) );
 }
 

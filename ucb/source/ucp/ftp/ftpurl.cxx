@@ -226,7 +226,7 @@ void FTPURL::parse(const OUString& url)
                         ""/*aAccount*/);
 
     // now check for something like ";type=i" at end of url
-    if(m_aPathSegmentVec.size() &&
+    if(!m_aPathSegmentVec.empty() &&
        (l = m_aPathSegmentVec.back().indexOf(';')) != -1) {
         m_aType = m_aPathSegmentVec.back().copy(l);
         m_aPathSegmentVec.back() = m_aPathSegmentVec.back().copy(0,l);
@@ -344,7 +344,7 @@ void FTPURL::child(const OUString& title)
 OUString FTPURL::child() const
 {
     return
-        m_aPathSegmentVec.size() ?
+        !m_aPathSegmentVec.empty() ?
         decodePathSegment(m_aPathSegmentVec.back()) : OUString();
 }
 
@@ -742,7 +742,7 @@ OUString FTPURL::ren(const OUString& NewTitle)
     curl_slist_free_all(slist);
     if(err != CURLE_OK)
         throw curl_exception(err);
-    else if( m_aPathSegmentVec.size() && m_aPathSegmentVec.back() != ".." )
+    else if( !m_aPathSegmentVec.empty() && m_aPathSegmentVec.back() != ".." )
         m_aPathSegmentVec.back() = encodePathSegment(NewTitle);
     return OldTitle;
 }

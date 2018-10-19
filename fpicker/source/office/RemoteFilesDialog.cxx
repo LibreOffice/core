@@ -1417,7 +1417,7 @@ std::vector<OUString> RemoteFilesDialog::GetPathList() const
         pEntry = m_pFileView->NextSelected( pEntry );
     }
 
-    if( aList.size() == 0 && !m_sPath.isEmpty() )
+    if( aList.empty() && !m_sPath.isEmpty() )
         aList.push_back( m_sPath );
 
     return aList;

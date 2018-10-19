@@ -725,7 +725,7 @@ void PresenterTextParagraph::AddLine (
     Line aLine (rCurrentLine.startPos, rCurrentLine.endPos);
 
     // Find the start and end of the line with respect to cells.
-    if (maLines.size() > 0)
+    if (!maLines.empty())
     {
         aLine.mnLineStartCellIndex = maLines.back().mnLineEndCellIndex;
         aLine.mnBaseLine = maLines.back().mnBaseLine + mnLineHeight;

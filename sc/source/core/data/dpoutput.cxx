@@ -858,7 +858,7 @@ void ScDPOutput::CalcSizes()
         //  calculate output positions and sizes
 
         long nPageSize = 0;     // use page fields!
-        if ( bDoFilter || pPageFields.size() )
+        if ( bDoFilter || !pPageFields.empty() )
         {
             nPageSize += pPageFields.size() + 1;   // plus one empty row
             if ( bDoFilter )

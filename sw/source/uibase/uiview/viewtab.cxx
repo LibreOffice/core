@@ -71,7 +71,7 @@ static void lcl_FillSvxColumn(const SwFormatCol& rCol,
 {
     const SwColumns& rCols = rCol.GetColumns();
 
-    bool bOrtho = rCol.IsOrtho() && rCols.size();
+    bool bOrtho = rCol.IsOrtho() && !rCols.empty();
     long nInnerWidth = 0;
     if( bOrtho )
     {

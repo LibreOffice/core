@@ -2018,7 +2018,7 @@ tools::Rectangle TabControl::GetCharacterBounds( sal_uInt16 nPageId, long nIndex
 {
     tools::Rectangle aRet;
 
-    if( !HasLayoutData() || ! mpTabCtrlData->maLayoutPageIdToLine.size() )
+    if( !HasLayoutData() || mpTabCtrlData->maLayoutPageIdToLine.empty() )
         FillLayoutData();
 
     if( HasLayoutData() )
@@ -2039,7 +2039,7 @@ long TabControl::GetIndexForPoint( const Point& rPoint, sal_uInt16& rPageId ) co
 {
     long nRet = -1;
 
-    if( !HasLayoutData() || ! mpTabCtrlData->maLayoutPageIdToLine.size() )
+    if( !HasLayoutData() || mpTabCtrlData->maLayoutPageIdToLine.empty() )
         FillLayoutData();
 
     if( HasLayoutData() )

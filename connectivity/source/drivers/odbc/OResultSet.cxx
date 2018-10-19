@@ -190,7 +190,7 @@ SQLRETURN OResultSet::unbind(bool _bUnbindHandle)
     if ( _bUnbindHandle )
         nRet = N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND);
 
-    if ( m_aBindVector.size() > 0 )
+    if ( !m_aBindVector.empty() )
     {
         TVoidVector::iterator pValue = m_aBindVector.begin();
         TVoidVector::const_iterator pEnd = m_aBindVector.end();

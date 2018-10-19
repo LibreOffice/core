@@ -252,7 +252,7 @@ void MailDispatcher::run()
 
         ::osl::ClearableMutexGuard message_container_guard( m_aMessageContainerMutex );
 
-        if ( m_aXMessageList.size() )
+        if ( !m_aXMessageList.empty() )
         {
             thread_status_guard.clear();
             uno::Reference<mail::XMailMessage> message = m_aXMessageList.front();

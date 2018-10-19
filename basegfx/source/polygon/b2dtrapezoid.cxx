@@ -210,7 +210,7 @@ namespace basegfx
 
             ~PointBlockAllocator()
             {
-                while(maBlocks.size() > 0)
+                while(!maBlocks.empty())
                 {
                     delete [] maBlocks.back();
                     maBlocks.pop_back();

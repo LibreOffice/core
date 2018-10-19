@@ -139,12 +139,12 @@ namespace drawinglayer
             const basegfx::B2DRange& rPaintRange,
             const basegfx::B2DRange& rDefineRange) const
         {
-            if(maPrimitives.size() && (maLastPaintRange != rPaintRange || maLastDefineRange != rDefineRange))
+            if(!maPrimitives.empty() && (maLastPaintRange != rPaintRange || maLastDefineRange != rDefineRange))
             {
                 const_cast< SdrAllFillAttributesHelper* >(this)->maPrimitives.clear();
             }
 
-            if(!maPrimitives.size())
+            if(maPrimitives.empty())
             {
                 const_cast< SdrAllFillAttributesHelper* >(this)->createPrimitive2DSequence(rPaintRange, rDefineRange);
             }

@@ -2229,7 +2229,7 @@ void SlideshowImpl::createSlideList( bool bAll, const OUString& rPresSlide )
 
         // create animation slide controller
         AnimationSlideController::Mode eMode =
-            ( pCustomShow && pCustomShow->PagesVector().size() ) ? AnimationSlideController::CUSTOM :
+            ( pCustomShow && !pCustomShow->PagesVector().empty() ) ? AnimationSlideController::CUSTOM :
                 (bAll ? AnimationSlideController::ALL : AnimationSlideController::FROM);
 
         Reference< XDrawPagesSupplier > xDrawPages( mpDoc->getUnoModel(), UNO_QUERY_THROW );

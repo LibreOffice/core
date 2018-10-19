@@ -3896,7 +3896,7 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
         case AUTORECOVERY_PROPHANDLE_EXISTS_RECOVERYDATA :
                 {
                     bool bSessionData = officecfg::Office::Recovery::RecoveryInfo::SessionData::get(m_xContext);
-                    bool bRecoveryData = m_lDocCache.size() > 0;
+                    bool bRecoveryData = !m_lDocCache.empty();
 
                     // exists session data ... => then we can't say, that these
                     // data are valid for recovery. So we have to return sal_False then!

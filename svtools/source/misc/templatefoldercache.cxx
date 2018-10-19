@@ -218,7 +218,7 @@ namespace svt
             if ( _rLHS->getSubContents().size() != _rRHS->getSubContents().size() )
                 return false;
 
-            if ( _rLHS->getSubContents().size() )
+            if ( !_rLHS->getSubContents().empty() )
             {   // there are children
                 // -> compare them
                 ::std::pair< FolderIterator, FolderIterator > aFirstDifferent = ::std::mismatch(

@@ -350,7 +350,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     }
 
     bool bUpdateFootnote = false;
-    if( GetFootnoteIdxs().size() && pAttr )
+    if( !GetFootnoteIdxs().empty() && pAttr )
     {
         sal_uInt16 nVal = pAttr->Get( RES_FTN_AT_TXTEND ).GetValue();
            if( ( FTNEND_ATTXTEND_OWNNUMSEQ == nVal ||
@@ -748,7 +748,7 @@ void SwDoc::UpdateSection( size_t const nPos, SwSectionData & rNewData,
 void sw_DeleteFootnote( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd )
 {
     SwFootnoteIdxs& rFootnoteArr = pNd->GetDoc()->GetFootnoteIdxs();
-    if( rFootnoteArr.size() )
+    if( !rFootnoteArr.empty() )
     {
         size_t nPos = 0;
         rFootnoteArr.SeekEntry( SwNodeIndex( *pNd ), &nPos );

@@ -839,7 +839,7 @@ namespace sw {
         {
             m_First = false;
             rpNode = m_pMerged
-                ? m_pMerged->extents.size()
+                ? !m_pMerged->extents.empty()
                     ? m_pMerged->extents[0].pNode
                     : m_pMerged->pFirstNode
                 : m_pNode;

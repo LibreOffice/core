@@ -864,7 +864,7 @@ bool ContextMenuSaveInData::HasURL( const OUString& rURL )
 
 bool ContextMenuSaveInData::HasSettings()
 {
-    return m_pRootEntry && m_pRootEntry->GetEntries()->size();
+    return m_pRootEntry && !m_pRootEntry->GetEntries()->empty();
 }
 
 bool ContextMenuSaveInData::Apply()
@@ -2473,7 +2473,7 @@ ToolbarSaveInData::HasURL( const OUString& rURL )
 bool ToolbarSaveInData::HasSettings()
 {
     // return true if there is at least one toolbar entry
-    return GetEntries()->size() > 0;
+    return !GetEntries()->empty();
 }
 
 void ToolbarSaveInData::Reset()

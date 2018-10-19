@@ -1576,7 +1576,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     if ( m_nColumnCount > 0 )
     {
         // skip custom-width columns since we don't know what column the shape is in.
-        if ( m_aColWidth.size() )
+        if ( !m_aColWidth.empty() )
             nParagraphWidth = 0;
         else
             nParagraphWidth = (nParagraphWidth - (m_nColumnDistance * m_nColumnCount)) / (m_nColumnCount + 1);

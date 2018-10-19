@@ -203,7 +203,7 @@ void SwFEShell::InsertRow( sal_uInt16 nCnt, bool bBehind )
 
     TableWait aWait( nCnt, pFrame, *GetDoc()->GetDocShell(), aBoxes.size() );
 
-    if ( aBoxes.size() )
+    if ( !aBoxes.empty() )
         GetDoc()->InsertRow( aBoxes, nCnt, bBehind );
 
     EndAllActionAndCall();

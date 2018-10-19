@@ -137,7 +137,7 @@ OUString GetDictionaryWriteablePath()
     std::vector< OUString > aPaths( GetMultiPaths_Impl( "Dictionary", DictionaryPathFlags::NONE ) );
     DBG_ASSERT( aPaths.size() == 1, "Dictionary_writable path corrupted?" );
     OUString aRes;
-    if (aPaths.size() > 0)
+    if (!aPaths.empty())
         aRes = aPaths[0];
     return aRes;
 }

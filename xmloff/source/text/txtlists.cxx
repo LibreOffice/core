@@ -292,7 +292,7 @@ void XMLTextListsHelper::PushListOnStack( const OUString& sListId,
 void XMLTextListsHelper::PopListFromStack()
 {
     if ( mpListStack &&
-         mpListStack->size() > 0 )
+         !mpListStack->empty() )
     {
         mpListStack->pop_back();
     }

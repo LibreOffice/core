@@ -368,7 +368,7 @@ sal_Bool SAL_CALL OZipFileAccess::hasElements()
     if ( !m_pZipFile )
         throw uno::RuntimeException(THROW_WHERE);
 
-    return ( m_pZipFile->GetEntryHash().size() != 0 );
+    return ( !m_pZipFile->GetEntryHash().empty() );
 }
 
 // XZipFileAccess

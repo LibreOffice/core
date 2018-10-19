@@ -1285,7 +1285,7 @@ PDFFileImplData* PDFFile::impl_getData() const
             if( doc_id != pTrailer->m_pDict->m_aMap.end() )
             {
                 PDFArray* pArr = dynamic_cast<PDFArray*>(doc_id->second);
-                if( pArr && pArr->m_aSubElements.size() > 0 )
+                if( pArr && !pArr->m_aSubElements.empty() )
                 {
                     PDFString* pStr = dynamic_cast<PDFString*>(pArr->m_aSubElements[0].get());
                     if( pStr )

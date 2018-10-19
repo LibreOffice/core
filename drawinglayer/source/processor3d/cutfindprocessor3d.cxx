@@ -47,7 +47,7 @@ namespace drawinglayer
 
         void CutFindProcessor::processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate)
         {
-            if(mbAnyHit && maResult.size())
+            if(mbAnyHit && !maResult.empty())
             {
                 // stop processing as soon as a hit was recognized
                 return;
@@ -132,7 +132,7 @@ namespace drawinglayer
                     const primitive3d::UnifiedTransparenceTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::UnifiedTransparenceTexturePrimitive3D& >(rCandidate);
                     const primitive3d::Primitive3DContainer& rChildren = rPrimitive.getChildren();
 
-                    if(rChildren.size())
+                    if(!rChildren.empty())
                     {
                         process(rChildren);
                     }

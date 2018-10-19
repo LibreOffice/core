@@ -850,7 +850,7 @@ void SdrEditView::DeleteMarkedObj()
         GetMarkedObjectListWriteAccess().Clear();
         maHdlList.Clear();
 
-        while(aParents.size() && !GetMarkedObjectCount())
+        while(!aParents.empty() && !GetMarkedObjectCount())
         {
             // iterate over remembered parents
             SdrObject* pParent = aParents.back();

@@ -2067,7 +2067,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
 
     DBG_ASSERT(pSpellInfo, "pSpellInfo not initialized");
     if (pSpellInfo &&
-        pSpellInfo->aLastSpellPortions.size() > 0)  // no portions -> no text to be changed
+        !pSpellInfo->aLastSpellPortions.empty())  // no portions -> no text to be changed
     {
         // get current paragraph length to calculate later on how the sentence length changed,
         // in order to place the cursor at the end of the sentence again
@@ -2077,7 +2077,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
         UndoActionStart( EDITUNDO_INSERT );
         if(pSpellInfo->aLastSpellPortions.size() == rNewPortions.size())
         {
-            DBG_ASSERT( rNewPortions.size() > 0, "rNewPortions should not be empty here" );
+            DBG_ASSERT( !rNewPortions.empty(), "rNewPortions should not be empty here" );
             DBG_ASSERT( pSpellInfo->aLastSpellPortions.size() == pSpellInfo->aLastSpellContentSelections.size(),
                     "aLastSpellPortions and aLastSpellContentSelections size mismatch" );
 

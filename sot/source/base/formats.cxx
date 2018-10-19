@@ -1405,7 +1405,7 @@ static sal_uInt16 GetTransferableAction_Impl(
 {
     try
     {
-        if( rDataFlavorExVector.size() )
+        if( !rDataFlavorExVector.empty() )
         {
             const SotAction_Impl*   pArrayStart = pArray;
             SotClipboardFormatId    nId = pArray->nFormatId;

@@ -1033,7 +1033,7 @@ ValueSetItem* ValueSet::ImplGetItem( size_t nPos )
 
 ValueSetItem* ValueSet::ImplGetFirstItem()
 {
-    return mItemList.size() ? mItemList[0].get() : nullptr;
+    return !mItemList.empty() ? mItemList[0].get() : nullptr;
 }
 
 sal_uInt16 ValueSet::ImplGetVisibleItemCount() const
@@ -2404,7 +2404,7 @@ SvtValueSetItem* SvtValueSet::ImplGetItem( size_t nPos )
 
 SvtValueSetItem* SvtValueSet::ImplGetFirstItem()
 {
-    return mItemList.size() ? mItemList[0].get() : nullptr;
+    return !mItemList.empty() ? mItemList[0].get() : nullptr;
 }
 
 sal_uInt16 SvtValueSet::ImplGetVisibleItemCount() const

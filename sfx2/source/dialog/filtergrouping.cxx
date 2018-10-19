@@ -805,7 +805,7 @@ namespace sfx2
                 if ( m_xFilterGroupManager.is() )
                 {   // the file dialog implementation supports visual grouping of filters
                     // create a representation of the group which is understandable by the XFilterGroupManager
-                    if ( _rGroup.size() )
+                    if ( !_rGroup.empty() )
                     {
                         Sequence< StringPair > aFilters( comphelper::containerToSequence(_rGroup) );
                         if ( _bAddExtension )

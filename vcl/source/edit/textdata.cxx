@@ -117,7 +117,7 @@ void TETextPortionList::Reset()
 
 void TETextPortionList::DeleteFromPortion( std::size_t nDelFrom )
 {
-    SAL_WARN_IF( ( nDelFrom >= maPortions.size() ) && ( (nDelFrom != 0) || (maPortions.size() != 0) ), "vcl", "DeleteFromPortion: Out of range" );
+    SAL_WARN_IF( ( nDelFrom >= maPortions.size() ) && ( (nDelFrom != 0) || (!maPortions.empty()) ), "vcl", "DeleteFromPortion: Out of range" );
     maPortions.erase( maPortions.begin() + nDelFrom, maPortions.end() );
 }
 

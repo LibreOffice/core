@@ -87,7 +87,7 @@ void XMLEventImportHelper::PushTranslationTable()
 
 void XMLEventImportHelper::PopTranslationTable()
 {
-    DBG_ASSERT(aEventNameMapVector.size() > 0,
+    DBG_ASSERT(!aEventNameMapVector.empty(),
                "no translation tables left to pop");
     if ( !aEventNameMapVector.empty() )
     {

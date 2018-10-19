@@ -44,7 +44,7 @@ IMPL_LINK_NOARG(AutocompleteEdit, AutoCompleteHdl_Impl, Edit&, void)
     if( aCurText.isEmpty() )
         return;
 
-    if( m_aEntries.size() )
+    if( !m_aEntries.empty() )
     {
         if( Match( aCurText ) )
         {
@@ -89,7 +89,7 @@ bool AutocompleteEdit::PreNotify( NotifyEvent& rNEvt )
             Selection aSelection( GetSelection() );
             sal_uInt16 nLen = static_cast<sal_uInt16>(aSelection.Min());
 
-            if( m_aMatching.size() &&
+            if( !m_aMatching.empty() &&
                 ( ( aCode == KEY_DOWN && m_nCurrent + 1 < m_aMatching.size() )
                 || ( aCode == KEY_UP && m_nCurrent > 0 ) ) )
             {

@@ -484,7 +484,7 @@ void NodeJava::write() const
             xmlFreeNode(lastNode);
         }
         //add a new line after <vmParameters>
-        if (m_vmParameters->size() > 0)
+        if (!m_vmParameters->empty())
         {
             xmlNode * nodeCrLf = xmlNewText(reinterpret_cast<xmlChar const *>("\n"));
             xmlAddChild(vmParameters, nodeCrLf);
@@ -524,7 +524,7 @@ void NodeJava::write() const
             xmlFreeNode(lastNode);
         }
         //add a new line after <vmParameters>
-        if (m_JRELocations->size() > 0)
+        if (!m_JRELocations->empty())
         {
             xmlNode * nodeCrLf = xmlNewText(reinterpret_cast<xmlChar const *>("\n"));
             xmlAddChild(jreLocationsNode, nodeCrLf);

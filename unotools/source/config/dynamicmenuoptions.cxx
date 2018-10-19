@@ -83,7 +83,7 @@ class SvtDynMenu
         void AppendSetupEntry( const SvtDynMenuEntry& rEntry )
         {
             if(
-                ( lSetupEntries.size()         <  1           )  ||
+                ( lSetupEntries.empty()           )  ||
                 ( lSetupEntries.rbegin()->sURL != rEntry.sURL )
               )
             {

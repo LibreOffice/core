@@ -477,7 +477,7 @@ namespace
                             const sal_Int32 nPortionIndex(pCandidate->getPortionIndex(nUsedTextLength, nNextGlyphLen));
                             ::std::vector< double > aNewDXArray;
 
-                            if(nNextGlyphLen > 1 && pCandidate->getDoubleDXArray().size())
+                            if(nNextGlyphLen > 1 && !pCandidate->getDoubleDXArray().empty())
                             {
                                 // copy DXArray for portion
                                 aNewDXArray.insert(

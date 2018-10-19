@@ -1016,7 +1016,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const tools:
     OutputDevice* pOutputDev = &rRenderContext;
 
     // prepare paint
-    if ( maPreviewPages.size() > 0 )
+    if ( !maPreviewPages.empty() )
     {
         mrParentViewShell.Imp()->m_bFirstPageInvalid = false;
         mrParentViewShell.Imp()->m_pFirstVisiblePage =
@@ -1166,7 +1166,7 @@ void SwPagePreviewLayout::Repaint( const tools::Rectangle& rInvalidCoreRect ) co
     // environment and parameter ok
 
     // prepare paint
-    if ( maPreviewPages.size() > 0 )
+    if ( !maPreviewPages.empty() )
     {
         mrParentViewShell.Imp()->m_bFirstPageInvalid = false;
         mrParentViewShell.Imp()->m_pFirstVisiblePage =

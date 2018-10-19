@@ -88,7 +88,7 @@ drawinglayer::primitive2d::Primitive2DContainer ViewContactOfE3d::impCreateWithG
             const basegfx::B3DRange& rAllContentRange = pVCOfE3DScene->getAllContentRange3D();
             drawinglayer::geometry::ViewInformation3D aViewInformation3D(pVCOfE3DScene->getViewInformation3D());
 
-            if(pVCOfE3DScene->getSdrLightingAttribute().getLightVector().size())
+            if(!pVCOfE3DScene->getSdrLightingAttribute().getLightVector().empty())
             {
                 // get light normal from first light and normalize
                 aLightNormal = pVCOfE3DScene->getSdrLightingAttribute().getLightVector()[0].getDirection();

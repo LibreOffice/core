@@ -482,7 +482,7 @@ void SAL_CALL Diagram::addCoordinateSystem(
             != m_aCoordSystems.end())
             throw lang::IllegalArgumentException();
 
-        if( m_aCoordSystems.size()>=1 )
+        if( !m_aCoordSystems.empty() )
         {
             OSL_FAIL( "more than one coordinatesystem is not supported yet by the fileformat" );
             return;

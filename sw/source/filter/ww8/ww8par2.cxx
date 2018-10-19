@@ -4445,7 +4445,7 @@ void WW8RStyle::ImportOldFormatStyles()
         ImportSprms(aPAPXOffsets[stcp].mnOffset, aPAPXOffsets[stcp].mnSize,
             true);
 
-        if (aConvertedChpx[stcp].size() > 0)
+        if (!aConvertedChpx[stcp].empty())
             ImportSprms(&(aConvertedChpx[stcp][0]),
                         static_cast< short >(aConvertedChpx[stcp].size()),
                         false);

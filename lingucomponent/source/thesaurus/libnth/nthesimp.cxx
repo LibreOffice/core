@@ -102,7 +102,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
 
     // this routine should return the locales supported by the installed
     // dictionaries.
-    if (!mvThesInfo.size())
+    if (mvThesInfo.empty())
     {
         SvtLinguConfig aLinguCfg;
 

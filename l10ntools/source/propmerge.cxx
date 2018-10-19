@@ -173,7 +173,7 @@ void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFil
         pMergeDataFile.reset( new MergeDataFile( rMergeSrc, m_sSource, false, false ) );
 
         const std::vector<OString> vLanguages = pMergeDataFile->GetLanguages();
-        if( vLanguages.size()>=1 && vLanguages[0] != m_sLang )
+        if( !vLanguages.empty() && vLanguages[0] != m_sLang )
         {
             std::cerr
                 << ("Propex error: given language conflicts with language of"

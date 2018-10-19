@@ -2426,7 +2426,7 @@ OUString FileDialogHelper::GetPath() const
 {
     OUString aPath;
 
-    if ( mpImpl->mlLastURLs.size() > 0)
+    if ( !mpImpl->mlLastURLs.empty())
         return mpImpl->mlLastURLs[0];
 
     if ( mpImpl->mxFileDlg.is() )
@@ -2444,7 +2444,7 @@ OUString FileDialogHelper::GetPath() const
 
 Sequence < OUString > FileDialogHelper::GetMPath() const
 {
-    if ( mpImpl->mlLastURLs.size() > 0)
+    if ( !mpImpl->mlLastURLs.empty())
         return comphelper::containerToSequence(mpImpl->mlLastURLs);
 
     if ( mpImpl->mxFileDlg.is() )

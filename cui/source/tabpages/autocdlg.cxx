@@ -2308,7 +2308,7 @@ void OfaAutoCompleteTabPage::Reset( const SfxItemSet*  )
             }
     }
 
-    if (pOpt->m_pAutoCompleteList && pOpt->m_pAutoCompleteList->size())
+    if (pOpt->m_pAutoCompleteList && !pOpt->m_pAutoCompleteList->empty())
     {
         m_pAutoCompleteList = const_cast<editeng::SortedAutoCompleteStrings*>(
                 pOpt->m_pAutoCompleteList);

@@ -2060,7 +2060,7 @@ static void lcl_InsertRow( SwTableLine const &rLine, SwLayoutFrame *pUpper, SwFr
 static void FndBoxCopyCol( SwTableBox* pBox, FndPara* pFndPara )
 {
     std::unique_ptr<FndBox_> pFndBox(new FndBox_( pBox, pFndPara->pFndLine ));
-    if( pBox->GetTabLines().size() )
+    if( !pBox->GetTabLines().empty() )
     {
         FndPara aPara( *pFndPara, pFndBox.get() );
         ForEach_FndLineCopyCol( pFndBox->GetBox()->GetTabLines(), &aPara );
@@ -2086,7 +2086,7 @@ static void FndLineCopyCol( SwTableLine* pLine, FndPara* pFndPara )
     for( SwTableBoxes::iterator it = pFndLine->GetLine()->GetTabBoxes().begin();
              it != pFndLine->GetLine()->GetTabBoxes().end(); ++it)
         FndBoxCopyCol(*it, &aPara );
-    if( pFndLine->GetBoxes().size() )
+    if( !pFndLine->GetBoxes().empty() )
     {
         pFndPara->pFndBox->GetLines().push_back( std::move(pFndLine) );
     }
@@ -2538,7 +2538,7 @@ bool FndBox_::AreLinesToRestore( const SwTable &rTable ) const
 {
     // Should we call MakeFrames here?
 
-    if ( !m_pLineBefore && !m_pLineBehind && rTable.GetTabLines().size() )
+    if ( !m_pLineBefore && !m_pLineBehind && !rTable.GetTabLines().empty() )
         return true;
 
     sal_uInt16 nBfPos;

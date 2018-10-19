@@ -170,7 +170,7 @@ void Throbber::setImageList( ::std::vector< Image > const& i_images )
 
     maImageList = i_images;
 
-    const Image aInitialImage( maImageList.size() ? maImageList[ 0 ] : Image() );
+    const Image aInitialImage( !maImageList.empty() ? maImageList[ 0 ] : Image() );
     SetImage( aInitialImage );
 }
 

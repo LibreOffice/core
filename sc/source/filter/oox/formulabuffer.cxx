@@ -394,15 +394,15 @@ FormulaBuffer::SheetItem FormulaBuffer::getSheetItem( SCTAB nTab )
         return aItem;
     }
 
-    if( maCellFormulas[ nTab ].size() > 0 )
+    if( !maCellFormulas[ nTab ].empty() )
         aItem.mpCellFormulas = &maCellFormulas[ nTab ];
-    if( maCellArrayFormulas[ nTab ].size() > 0 )
+    if( !maCellArrayFormulas[ nTab ].empty() )
         aItem.mpArrayFormulas = &maCellArrayFormulas[ nTab ];
-    if( maCellFormulaValues[ nTab ].size() > 0 )
+    if( !maCellFormulaValues[ nTab ].empty() )
         aItem.mpCellFormulaValues = &maCellFormulaValues[ nTab ];
-    if( maSharedFormulas[ nTab ].size() > 0 )
+    if( !maSharedFormulas[ nTab ].empty() )
         aItem.mpSharedFormulaEntries = &maSharedFormulas[ nTab ];
-    if( maSharedFormulaIds[ nTab ].size() > 0 )
+    if( !maSharedFormulaIds[ nTab ].empty() )
         aItem.mpSharedFormulaIDs = &maSharedFormulaIds[ nTab ];
 
     return aItem;

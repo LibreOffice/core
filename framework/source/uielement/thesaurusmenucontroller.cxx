@@ -77,7 +77,7 @@ void ThesaurusMenuController::fillPopupMenu()
     VCLXMenu* pAwtMenu = VCLXMenu::GetImplementation( m_xPopupMenu );
     Menu* pVCLMenu = pAwtMenu->GetMenu();
     pVCLMenu->SetMenuFlags( MenuFlags::NoAutoMnemonics );
-    if ( aSynonyms.size() > 0 )
+    if ( !aSynonyms.empty() )
     {
         SvtLinguConfig aCfg;
         Image aImage;

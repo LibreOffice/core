@@ -214,7 +214,7 @@ uno::Type SAL_CALL ZipPackageFolder::getElementType(  )
 }
 sal_Bool SAL_CALL ZipPackageFolder::hasElements(  )
 {
-    return maContents.size() > 0;
+    return !maContents.empty();
 }
     // XNameAccess
 ZipContentInfo& ZipPackageFolder::doGetByName( const OUString& aName )

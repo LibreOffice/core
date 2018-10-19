@@ -287,7 +287,7 @@ Reference< XLabeledDataSequence > TypeGroupConverter::createCategorySequence()
         }
     }
     /* n#839727 Create Category Sequence when none are found */
-    if( !xLabeledSeq.is() && mrModel.maSeries.size() > 0 ) {
+    if( !xLabeledSeq.is() && !mrModel.maSeries.empty() ) {
         if( nMaxValues < 0 )
             nMaxValues = 2;
         SeriesModel &aModel = *mrModel.maSeries.get(0);

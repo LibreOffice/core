@@ -386,7 +386,7 @@ static void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XCompon
             rOptimizer.SetStatusValue( TK_Progress, Any( nProgress ) );
             rOptimizer.DispatchStatus();
 
-            if ( aGraphicIter->maUser.size() )
+            if ( !aGraphicIter->maUser.empty() )
             {
                 GraphicSettings aGraphicSettings( rGraphicSettings );
                 aGraphicSettings.mbRemoveCropArea = aGraphicIter->mbRemoveCropArea;

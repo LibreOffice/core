@@ -147,7 +147,7 @@ void NotebookBar::SetSystemWindow(SystemWindow* pSystemWindow)
 
 void SAL_CALL NotebookBarContextChangeEventListener::notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent)
 {
-    if (mpParent && mpParent->m_pContextContainers.size() > 0)
+    if (mpParent && !mpParent->m_pContextContainers.empty())
     {
         for (NotebookbarContextControl* pControl : mpParent->m_pContextContainers)
             pControl->SetContext(vcl::EnumContext::GetContextEnum(rEvent.ContextName));

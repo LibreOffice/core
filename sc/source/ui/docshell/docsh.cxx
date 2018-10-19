@@ -1167,7 +1167,7 @@ static void lcl_parseHtmlFilterOption(const OUString& rOption, LanguageType& rLa
     rLang = LanguageType( 0 );
     rDateConvert = false;
 
-    if (aTokens.size() > 0)
+    if (!aTokens.empty())
         rLang = static_cast<LanguageType>(aTokens[0].toInt32());
     if (aTokens.size() > 1)
         rDateConvert = static_cast<bool>(aTokens[1].toInt32());

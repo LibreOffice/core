@@ -1014,7 +1014,7 @@ bool SwCursorShell::GotoNextOutline()
 {
     const SwNodes& rNds = GetDoc()->GetNodes();
 
-    if ( rNds.GetOutLineNds().size() == 0 )
+    if ( rNds.GetOutLineNds().empty() )
     {
         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
         return false;
@@ -1053,7 +1053,7 @@ bool SwCursorShell::GotoPrevOutline()
 {
     const SwNodes& rNds = GetDoc()->GetNodes();
 
-    if ( rNds.GetOutLineNds().size() == 0 )
+    if ( rNds.GetOutLineNds().empty() )
     {
         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
         return false;
@@ -1446,7 +1446,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                         std::vector<SwTextAttr *> const marks(
                             pTextNd->GetTextAttrsAt(
                                aPos.nContent.GetIndex(), RES_TXTATR_TOXMARK));
-                        if (marks.size())
+                        if (!marks.empty())
                         {   // hmm... can only return 1 here
                             pTextAttr = *marks.begin();
                         }
@@ -1458,7 +1458,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                         std::vector<SwTextAttr *> const marks(
                             pTextNd->GetTextAttrsAt(
                                aPos.nContent.GetIndex(), RES_TXTATR_REFMARK));
-                        if (marks.size())
+                        if (!marks.empty())
                         {   // hmm... can only return 1 here
                             pTextAttr = *marks.begin();
                         }

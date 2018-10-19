@@ -227,7 +227,7 @@ IMPL_LINK(MasterPageContainerQueue, DelayedPreviewCreation, Timer*, pTimer, void
     }
     while (false);
 
-    if (mpRequestQueue->size() > 0 && ! bWaitForMoreRequests)
+    if (!mpRequestQueue->empty() && ! bWaitForMoreRequests)
     {
         int nTimeout (snDelayedCreationTimeout);
         if (bIsShowingFullScreenShow)
@@ -253,7 +253,7 @@ bool MasterPageContainerQueue::IsEmpty() const
 void MasterPageContainerQueue::ProcessAllRequests()
 {
     snWaitForMoreRequestsCount = 0;
-    if (mpRequestQueue->size() > 0)
+    if (!mpRequestQueue->empty())
         maDelayedPreviewCreationTimer.Start();
 }
 

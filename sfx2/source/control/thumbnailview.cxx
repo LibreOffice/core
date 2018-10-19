@@ -870,7 +870,7 @@ void ThumbnailView::GetFocus()
             nSelected = i;
     }
 
-    if (nSelected == -1 && mItemList.size() > 0)
+    if (nSelected == -1 && !mItemList.empty())
     {
         SelectItem(1);
     }

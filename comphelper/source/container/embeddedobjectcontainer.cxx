@@ -234,7 +234,7 @@ uno::Sequence < OUString > EmbeddedObjectContainer::GetObjectNames() const
 
 bool EmbeddedObjectContainer::HasEmbeddedObjects() const
 {
-    return pImpl->maObjectContainer.size() != 0;
+    return !pImpl->maObjectContainer.empty();
 }
 
 bool EmbeddedObjectContainer::HasEmbeddedObject( const OUString& rName )

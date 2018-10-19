@@ -1484,7 +1484,7 @@ Type SAL_CALL SbaXFormAdapter::getElementType()
 
 sal_Bool SAL_CALL SbaXFormAdapter::hasElements()
 {
-    return m_aChildren.size() > 0;
+    return !m_aChildren.empty();
 }
 
 // css::container::XIndexContainer

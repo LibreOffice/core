@@ -191,7 +191,7 @@ bool SwCursor::GotoNextFootnoteAnchor()
     const SwTextFootnote* pTextFootnote = nullptr;
     size_t nPos = 0;
 
-    if( !rFootnoteArr.size() )
+    if( rFootnoteArr.empty() )
     {
         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
         return false;
@@ -264,7 +264,7 @@ bool SwCursor::GotoPrevFootnoteAnchor()
     const SwTextFootnote* pTextFootnote = nullptr;
     size_t nPos = 0;
 
-    if( !rFootnoteArr.size() )
+    if( rFootnoteArr.empty() )
     {
         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
         return false;

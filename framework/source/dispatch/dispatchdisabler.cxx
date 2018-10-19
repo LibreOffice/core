@@ -101,7 +101,7 @@ uno::Type SAL_CALL DispatchDisabler::getElementType()
 
 ::sal_Bool SAL_CALL DispatchDisabler::hasElements()
 {
-    return maDisabledURLs.size() > 0;
+    return !maDisabledURLs.empty();
 }
 
 // XNameAccess

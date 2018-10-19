@@ -396,7 +396,7 @@ void ParaWin::SetArgNameFont(sal_uInt16 no,const vcl::Font& aFont)
 void ParaWin::SetEdFocus()
 {
     UpdateArgDesc(0);
-    if(0<aParaArray.size())
+    if(!aParaArray.empty())
         aArgInput[0].GetArgEdPtr()->GrabFocus();
 }
 

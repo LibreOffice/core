@@ -133,7 +133,7 @@ void ScreenshotTest::dumpDialogToPath(VclAbstractDialog& rDialog)
 {
     const std::vector<OString> aPageDescriptions(rDialog.getAllPageUIXMLDescriptions());
 
-    if (aPageDescriptions.size())
+    if (!aPageDescriptions.empty())
     {
         for (size_t a(0); a < aPageDescriptions.size(); a++)
         {
@@ -157,7 +157,7 @@ void ScreenshotTest::dumpDialogToPath(Dialog& rDialog)
 {
     const std::vector<OString> aPageDescriptions(rDialog.getAllPageUIXMLDescriptions());
 
-    if (aPageDescriptions.size())
+    if (!aPageDescriptions.empty())
     {
         for (size_t a(0); a < aPageDescriptions.size(); a++)
         {

@@ -2050,7 +2050,7 @@ void SVGActionWriter::ImplWriteShape( const SVGShapeDescriptor& rShape )
         }
     }
 
-    if( rShape.maDashArray.size() )
+    if( !rShape.maDashArray.empty() )
     {
         OUStringBuffer   aDashArrayStr;
 

@@ -705,7 +705,7 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
         }
 
         // #i54102# if there are edges, reconnect their ends to the corresponding clones (if found)
-        if(aEdges.size())
+        if(!aEdges.empty())
         {
             for(SdrEdgeObj* pSdrEdgeObj: aEdges)
             {

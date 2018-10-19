@@ -877,7 +877,7 @@ void EditorWindow::HandleCodeCompletion()
                 std::vector< OUString > aMethVect = aTypeCompletor.GetXIdlClassMethods();//methods
                 aEntryVect.insert(aEntryVect.end(), aMethVect.begin(), aMethVect.end() );
             }
-            if( aEntryVect.size() > 0 )
+            if( !aEntryVect.empty() )
                 SetupAndShowCodeCompleteWnd( aEntryVect, aSel );
         }
     }

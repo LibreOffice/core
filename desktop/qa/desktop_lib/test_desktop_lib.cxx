@@ -290,16 +290,16 @@ void DesktopLOKTest::testGetStyles()
     char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:StyleApply");
     std::stringstream aStream(pJSON);
     boost::property_tree::read_json(aStream, aTree);
-    CPPUNIT_ASSERT( aTree.size() > 0 );
+    CPPUNIT_ASSERT( !aTree.empty() );
     CPPUNIT_ASSERT_EQUAL( std::string(".uno:StyleApply"), aTree.get_child("commandName").get_value<std::string>()  );
 
     boost::property_tree::ptree aValues = aTree.get_child("commandValues");
-    CPPUNIT_ASSERT( aValues.size() > 0 );
+    CPPUNIT_ASSERT( !aValues.empty() );
     for (const auto& rPair : aValues)
     {
         if( rPair.first != "ClearStyle")
         {
-            CPPUNIT_ASSERT( rPair.second.size() > 0);
+            CPPUNIT_ASSERT( !rPair.second.empty());
         }
         if (rPair.first != "CharacterStyles" &&
             rPair.first != "ParagraphStyles" &&
@@ -326,15 +326,15 @@ void DesktopLOKTest::testGetFonts()
     char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:CharFontName");
     std::stringstream aStream(pJSON);
     boost::property_tree::read_json(aStream, aTree);
-    CPPUNIT_ASSERT( aTree.size() > 0 );
+    CPPUNIT_ASSERT( !aTree.empty() );
     CPPUNIT_ASSERT_EQUAL( std::string(".uno:CharFontName"), aTree.get_child("commandName").get_value<std::string>() );
 
     boost::property_tree::ptree aValues = aTree.get_child("commandValues");
-    CPPUNIT_ASSERT( aValues.size() > 0 );
+    CPPUNIT_ASSERT( !aValues.empty() );
     for (const auto& rPair : aValues)
     {
         // check that we have font sizes available for each font
-        CPPUNIT_ASSERT( rPair.second.size() > 0);
+        CPPUNIT_ASSERT( !rPair.second.empty());
     }
     free(pJSON);
     comphelper::LibreOfficeKit::setActive(false);
@@ -401,7 +401,7 @@ void DesktopLOKTest::testGetFilterTypes()
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
 
-    CPPUNIT_ASSERT(aTree.size() > 0);
+    CPPUNIT_ASSERT(!aTree.empty());
     CPPUNIT_ASSERT_EQUAL(std::string("application/vnd.oasis.opendocument.text"), aTree.get_child("writer8").get_child("MediaType").get_value<std::string>());
     free(pJSON);
     comphelper::LibreOfficeKit::setActive(false);
@@ -1930,10 +1930,10 @@ void DesktopLOKTest::testGetFontSubset()
     char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, aCommand.getStr());
     std::stringstream aStream(pJSON);
     boost::property_tree::read_json(aStream, aTree);
-    CPPUNIT_ASSERT( aTree.size() > 0 );
+    CPPUNIT_ASSERT( !aTree.empty() );
     CPPUNIT_ASSERT_EQUAL( std::string(".uno:FontSubset"), aTree.get_child("commandName").get_value<std::string>() );
     boost::property_tree::ptree aValues = aTree.get_child("commandValues");
-    CPPUNIT_ASSERT( aValues.size() > 0 );
+    CPPUNIT_ASSERT( !aValues.empty() );
     free(pJSON);
 
     comphelper::LibreOfficeKit::setActive(false);

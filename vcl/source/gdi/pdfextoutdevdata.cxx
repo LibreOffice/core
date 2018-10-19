@@ -322,7 +322,7 @@ void PageSyncData::PushAction( const OutputDevice& rOutDev, const PDFExtOutDevDa
 bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const GDIMetaFile& rMtf, const PDFExtOutDevData& rOutDevData )
 {
     bool bRet = false;
-    if ( mActions.size() && ( mActions.front().nIdx == rCurGDIMtfAction ) )
+    if ( !mActions.empty() && ( mActions.front().nIdx == rCurGDIMtfAction ) )
     {
         bRet = true;
         PDFExtOutDevDataSync aDataSync = mActions.front();

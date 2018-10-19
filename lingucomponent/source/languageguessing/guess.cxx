@@ -97,7 +97,7 @@ Guess::Guess(const char * guess_str)
             current_pointer++;
         }
 
-        if(lang!=""){//if not we use the default value
+        if(!lang.empty()){//if not we use the default value
             language_str=lang;
         }
         country_str=country;

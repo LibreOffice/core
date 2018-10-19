@@ -100,7 +100,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
 
     // this routine should return the locales supported by the installed
     // dictionaries.
-    if (!mvDicts.size())
+    if (mvDicts.empty())
     {
         SvtLinguConfig aLinguCfg;
 

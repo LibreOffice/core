@@ -72,7 +72,7 @@ css::uno::Reference< css::uno::XInterface> const & IndexAccessIterator::Next()
             }
             else
             {   // otherwise, look above and to the right, if possible
-                while (m_arrChildIndizies.size() > 0)
+                while (!m_arrChildIndizies.empty())
                 {   // If the list isn't empty and there's nothing above
                     css::uno::Reference< css::container::XChild> xChild(xSearchLoop, css::uno::UNO_QUERY);
                     OSL_ENSURE(xChild.is(), "IndexAccessIterator::Next : a content has no appropriate interface !");

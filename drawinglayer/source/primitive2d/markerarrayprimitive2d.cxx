@@ -96,7 +96,7 @@ namespace drawinglayer
         {
             basegfx::B2DRange aRetval;
 
-            if(getPositions().size())
+            if(!getPositions().empty())
             {
                 // get the basic range from the position vector
                 for (auto const& pos : getPositions())

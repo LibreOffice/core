@@ -238,7 +238,7 @@ void SdrTableRTFParser::InsertCell( RtfImportInfo const * pInfo )
         RTFColumnVectorPtr xColumn( maRows.back() );
         if ( xCellInfo->mxVMergeCell )
         {
-            if ( xColumn->size()==0 ||
+            if ( xColumn->empty() ||
                     xColumn->back()->mxVMergeCell != xCellInfo->mxVMergeCell )
                 xCellInfo->mxVMergeCell->mnRowSpan++;
         }

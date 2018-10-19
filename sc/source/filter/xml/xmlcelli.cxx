@@ -964,7 +964,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
 // core implementation
 void ScXMLTableRowCellContext::SetDetectiveObj( const ScAddress& rPosition )
 {
-    if( cellExists(rPosition) && pDetectiveObjVec && pDetectiveObjVec->size() )
+    if( cellExists(rPosition) && pDetectiveObjVec && !pDetectiveObjVec->empty() )
     {
         LockSolarMutex();
         ScDetectiveFunc aDetFunc( rXMLImport.GetDocument(), rPosition.Tab() );

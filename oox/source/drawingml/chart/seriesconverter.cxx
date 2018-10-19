@@ -285,7 +285,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         if (mrModel.mxShapeProp)
             importBorderProperties(aPropSet, *mrModel.mxShapeProp, getFilter().getGraphicHelper());
 
-        if( mrModel.mxText && mrModel.mxText->mxTextBody && mrModel.mxText->mxTextBody->getParagraphs().size() )
+        if( mrModel.mxText && mrModel.mxText->mxTextBody && !mrModel.mxText->mxTextBody->getParagraphs().empty() )
         {
             css::uno::Reference< XComponentContext > xContext = getComponentContext();
             uno::Sequence< css::uno::Reference< XDataPointCustomLabelField > > aSequence;

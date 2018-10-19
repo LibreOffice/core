@@ -223,7 +223,7 @@ void OpZTest::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double arg = 0.0;\n";
     ss << "    double sigma = 0.0;\n";
     ss << "    double mu = 0.0;\n";
-    if(vSubArguments.size() == 1 || vSubArguments.size() == 0)
+    if(vSubArguments.size() == 1 || vSubArguments.empty())
     {
         ss << "    return DBL_MAX;\n";
         ss << "}\n";

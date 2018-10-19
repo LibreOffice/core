@@ -314,7 +314,7 @@ void X11SalData::PushXErrorLevel( bool bIgnore )
 
 void X11SalData::PopXErrorLevel()
 {
-    if( m_aXErrorHandlerStack.size() )
+    if( !m_aXErrorHandlerStack.empty() )
     {
         XSetErrorHandler( m_aXErrorHandlerStack.back().m_aHandler );
         m_aXErrorHandlerStack.pop_back();

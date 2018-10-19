@@ -661,7 +661,7 @@ void OCopyTableWizard::construct()
 
     m_pbNext->GrabFocus();
 
-    if (m_vDestColumns.size())
+    if (!m_vDestColumns.empty())
         // source is a html or rtf table
         m_pbNext->SetStyle(m_pbFinish->GetStyle() | WB_DEFBUTTON);
     else

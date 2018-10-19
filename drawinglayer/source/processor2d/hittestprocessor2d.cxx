@@ -199,7 +199,7 @@ namespace drawinglayer
                                         true);
                                     aCutFindProcessor.process(rPrimitives);
 
-                                    mbHit = (0 != aCutFindProcessor.getCutPoints().size());
+                                    mbHit = (!aCutFindProcessor.getCutPoints().empty());
                                 }
                             }
                         }

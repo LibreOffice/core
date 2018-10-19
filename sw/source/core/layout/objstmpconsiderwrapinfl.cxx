@@ -47,7 +47,7 @@ void SwObjsMarkedAsTmpConsiderWrapInfluence::Remove( SwAnchoredObject& _rAnchore
 
 void SwObjsMarkedAsTmpConsiderWrapInfluence::Clear()
 {
-    while ( maObjsTmpConsiderWrapInfl.size() )
+    while ( !maObjsTmpConsiderWrapInfl.empty() )
     {
         SwAnchoredObject* pAnchoredObj = maObjsTmpConsiderWrapInfl.back();
         pAnchoredObj->SetTmpConsiderWrapInfluence( false );

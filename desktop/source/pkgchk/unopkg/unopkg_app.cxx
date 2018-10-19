@@ -530,7 +530,7 @@ extern "C" int unopkg_main()
             Reference<ui::dialogs::XAsynchronousExecutableDialog> xDialog(
                 deployment::ui::PackageManagerDialog::createAndInstall(
                     xComponentContext,
-                    cmdPackages.size() > 0 ? cmdPackages[0] : OUString() ));
+                    !cmdPackages.empty() ? cmdPackages[0] : OUString() ));
 
             osl::Condition dialogEnded;
             dialogEnded.reset();

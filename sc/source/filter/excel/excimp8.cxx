@@ -438,7 +438,7 @@ void ImportExcel8::PostDocLoad()
     ImportExcel::PostDocLoad();
 
     // check scenarios; Attention: This increases the table count of the document!!
-    if( !pD->IsClipboard() && maScenList.aEntries.size() )
+    if( !pD->IsClipboard() && !maScenList.aEntries.empty() )
     {
         pD->UpdateChartListenerCollection();    // references in charts must be updated
 

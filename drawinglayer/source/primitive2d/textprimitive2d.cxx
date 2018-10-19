@@ -122,7 +122,7 @@ namespace drawinglayer
                     // When getting outlines from stretched text (aScale.getX() != 1.0) it
                     // is necessary to inverse-scale the DXArray (if used) to not get the
                     // outlines already aligned to given, but wrong DXArray
-                    if(getDXArray().size() && !basegfx::fTools::equal(aScale.getX(), 1.0))
+                    if(!getDXArray().empty() && !basegfx::fTools::equal(aScale.getX(), 1.0))
                     {
                         std::vector< double > aScaledDXArray = getDXArray();
                         const double fDXArrayScale(1.0 / aScale.getX());

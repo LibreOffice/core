@@ -717,7 +717,7 @@ bool SwAccessiblePortionData::IsValidCorePosition( sal_Int32 nPos ) const
 
 bool SwAccessiblePortionData::IsZeroCorePositionData()
 {
-    if( m_aModelPositions.size() < 1  ) return true;
+    if( m_aModelPositions.empty()  ) return true;
     return m_aModelPositions[0] == 0 &&  m_aModelPositions[m_aModelPositions.size()-1] == 0;
 }
 

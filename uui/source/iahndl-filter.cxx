@@ -151,7 +151,7 @@ handleNoSuchFilterRequest_(
 
     // no list available for showing
     // -> abort operation
-    if (lNames.size()<1)
+    if (lNames.empty())
     {
         xAbort->select();
         return;

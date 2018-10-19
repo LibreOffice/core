@@ -1905,7 +1905,7 @@ bool MSWordExportBase::GetBookmarks( const SwTextNode& rNd, sal_Int32 nStt,
             }
         }
     }
-    return ( rArr.size() > 0 );
+    return ( !rArr.empty() );
 }
 
 bool MSWordExportBase::GetAnnotationMarks( const SwTextNode& rNd, sal_Int32 nStt,
@@ -1941,7 +1941,7 @@ bool MSWordExportBase::GetAnnotationMarks( const SwTextNode& rNd, sal_Int32 nStt
             }
         }
     }
-    return ( rArr.size() > 0 );
+    return ( !rArr.empty() );
 }
 
 class CompareMarksEnd

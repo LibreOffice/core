@@ -198,7 +198,7 @@ SCTAB ScMarkData::GetSelectCount() const
 
 SCTAB ScMarkData::GetFirstSelected() const
 {
-    if (maTabMarked.size() > 0)
+    if (!maTabMarked.empty())
         return (*maTabMarked.begin());
 
     OSL_FAIL("GetFirstSelected: nothing selected");
@@ -207,7 +207,7 @@ SCTAB ScMarkData::GetFirstSelected() const
 
 SCTAB ScMarkData::GetLastSelected() const
 {
-    if (maTabMarked.size() > 0)
+    if (!maTabMarked.empty())
         return (*maTabMarked.rbegin());
 
     OSL_FAIL("GetLastSelected: nothing selected");

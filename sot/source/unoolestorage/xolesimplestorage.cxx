@@ -550,7 +550,7 @@ sal_Bool SAL_CALL OLESimpleStorage::hasElements()
         throw uno::RuntimeException(); // TODO:
     }
 
-    return aList.size() != 0;
+    return !aList.empty();
 }
 
 

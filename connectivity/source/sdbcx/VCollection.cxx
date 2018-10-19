@@ -104,7 +104,7 @@ namespace
 
         virtual void reFill(const ::std::vector< OUString> &_rVector) override
         {
-            OSL_ENSURE(!m_aNameMap.size(),"OCollection::reFill: collection isn't empty");
+            OSL_ENSURE(m_aNameMap.empty(),"OCollection::reFill: collection isn't empty");
             m_aElements.reserve(_rVector.size());
 
             for (auto const& elem : _rVector)

@@ -475,7 +475,7 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 marks = rPam.GetNode().GetTextNode()->GetTextAttrsAt(
                     rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK);
             }
-            if (marks.size())
+            if (!marks.empty())
             {
                 if( pAny )
                 {   // hmm... can only return 1 here
@@ -644,7 +644,7 @@ bool getCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 marks = rPam.GetNode().GetTextNode()->GetTextAttrsAt(
                             rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK);
             }
-            if (marks.size())
+            if (!marks.empty())
             {
                 if( pAny )
                 {   // hmm... can only return 1 here

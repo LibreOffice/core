@@ -577,7 +577,7 @@ void SAL_CALL PresenterClockTimer::notify (const css::uno::Any&)
             ::std::back_inserter(aListenerCopy));
     }
 
-    if (aListenerCopy.size() > 0)
+    if (!aListenerCopy.empty())
     {
         ListenerContainer::const_iterator iListener;
         ListenerContainer::const_iterator iEnd (aListenerCopy.end());

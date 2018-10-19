@@ -177,7 +177,7 @@ namespace drawinglayer
                 if (mbBufferingAllowed)
                 {
                     // all frames buffered
-                    if (mbBufferingAllowed && maBufferedPrimitives.size() && nIndex < maBufferedPrimitives.size())
+                    if (mbBufferingAllowed && !maBufferedPrimitives.empty() && nIndex < maBufferedPrimitives.size())
                     {
                         if (!maBufferedPrimitives[nIndex].is())
                         {
@@ -300,7 +300,7 @@ namespace drawinglayer
                 if (mbBufferingAllowed)
                 {
                     // all frames buffered, check if available
-                    if (maBufferedPrimitives.size() && nIndex < maBufferedPrimitives.size())
+                    if (!maBufferedPrimitives.empty() && nIndex < maBufferedPrimitives.size())
                     {
                         if (maBufferedPrimitives[nIndex].is())
                         {
@@ -574,7 +574,7 @@ namespace drawinglayer
         {
             Primitive2DContainer aRetval;
 
-            if(!rChildren.size())
+            if(rChildren.empty())
             {
                 // no child content, done
                 return aRetval;

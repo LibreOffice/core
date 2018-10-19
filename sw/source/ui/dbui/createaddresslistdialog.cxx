@@ -135,7 +135,7 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
 {
     m_pData = &rDBData;
     //when the address data is updated then remove the controls an build again
-    if(m_aFixedTexts.size())
+    if(!m_aFixedTexts.empty())
     {
         for(auto aTextIter = m_aFixedTexts.begin(); aTextIter != m_aFixedTexts.end(); ++aTextIter)
             aTextIter->disposeAndClear();
@@ -233,7 +233,7 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
     }
     // Even if no items in m_aEdits, the scrollbar will still exist;
     // we might as well disable it.
-    if (m_aEdits.size() < 1) {
+    if (m_aEdits.empty()) {
         m_pScrollBar->DoScroll(0);
         m_pScrollBar->SetThumbPos(0);
         m_pScrollBar->Enable(false);
@@ -377,7 +377,7 @@ void SwAddressControl_Impl::Resize()
     m_pWindow->SetSizePixel(Size(aSize.Width() - nScrollBarWidth, m_pWindow->GetOutputSizePixel().Height()));
     m_pScrollBar->SetPosPixel(Point(aSize.Width() - nScrollBarWidth, 0));
 
-    if(m_aEdits.size())
+    if(!m_aEdits.empty())
     {
         long nNewEditSize = aSize.Width() - (*m_aEdits.begin())->GetPosPixel().X() - nScrollBarWidth - 6;
 

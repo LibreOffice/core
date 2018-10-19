@@ -245,7 +245,7 @@ UUIInteractionHelper::replaceMessageWithArguments(
 {
     OUString aMessage = _aMessage;
 
-    SAL_WARN_IF(rArguments.size() == 0, "uui", "replaceMessageWithArguments: No arguments passed!");
+    SAL_WARN_IF(rArguments.empty(), "uui", "replaceMessageWithArguments: No arguments passed!");
     for (size_t i = 0; i < rArguments.size(); ++i)
     {
         const OUString sReplaceTemplate = "$(ARG" + OUString::number(i+1) + ")";

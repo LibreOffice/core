@@ -476,7 +476,7 @@ void PrinterInfoManager::initialize()
     }
 
     // set default printer
-    if( m_aPrinters.size() )
+    if( !m_aPrinters.empty() )
     {
         if( m_aPrinters.find( aDefaultPrinter ) == m_aPrinters.end() )
             aDefaultPrinter = m_aPrinters.begin()->first;

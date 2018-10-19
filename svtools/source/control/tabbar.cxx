@@ -2531,7 +2531,7 @@ Size TabBar::CalcWindowSizePixel() const
 {
     long nWidth = 0;
 
-    if (mpImpl->mpItemList.size() > 0)
+    if (!mpImpl->mpItemList.empty())
     {
         const_cast<TabBar*>(this)->ImplCalcWidth();
         for (auto& pItem : mpImpl->mpItemList)

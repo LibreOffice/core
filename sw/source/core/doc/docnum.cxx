@@ -1141,7 +1141,7 @@ bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
 
         SwNumRule::tTextNodeList aTextNodeList;
         pOldRule->GetTextNodeList( aTextNodeList );
-        if ( aTextNodeList.size() > 0 )
+        if ( !aTextNodeList.empty() )
         {
             SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : nullptr );
             sal_uInt16 nChgFormatLevel = 0;

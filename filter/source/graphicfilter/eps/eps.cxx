@@ -1260,7 +1260,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                 bSkipSequence = false;
                             if ( static_cast<sal_uInt32>(eJT) > 2 )
                                 bSkipSequence = false;
-                            if ( l_aDashArray.size() && ( fStrokeWidth != 0.0 ) )
+                            if ( !l_aDashArray.empty() && ( fStrokeWidth != 0.0 ) )
                                 bSkipSequence = false;
                             if ( bSkipSequence )
                             {
