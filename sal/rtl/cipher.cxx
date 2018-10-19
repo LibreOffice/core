@@ -659,8 +659,8 @@ static rtlCipherError BF_init(
         key->m_P[i] ^= D;
     }
 
-    DL = 0;
-    DR = 0;
+    rtl_secureZeroMemory(&DL, sizeof(DL));
+    rtl_secureZeroMemory(&DR, sizeof(DR));
 
     for (i = 0; i < CIPHER_ROUNDS_BF + 2; i += 2)
     {
@@ -808,7 +808,8 @@ static void BF_updateECB(
 
         RTL_CIPHER_HTONL64(DL, DR, pBuffer, nLength);
     }
-    DL = DR = 0;
+    rtl_secureZeroMemory(&DL, sizeof(DL));
+    rtl_secureZeroMemory(&DR, sizeof(DR));
 }
 
 static void BF_updateCBC(
@@ -857,7 +858,8 @@ static void BF_updateCBC(
 
         RTL_CIPHER_HTONL64(DL, DR, pBuffer, nLength);
     }
-    DL = DR = 0;
+    rtl_secureZeroMemory(&DL, sizeof(DL));
+    rtl_secureZeroMemory(&DR, sizeof(DR));
 }
 
 static void BF_updateCFB(
@@ -880,7 +882,8 @@ static void BF_updateCFB(
         BF_encode(&(ctx->m_key), &IVL, &IVR);
         RTL_CIPHER_HTONL64(IVL, IVR, iv, 8);
 
-        IVL = IVR = 0;
+        rtl_secureZeroMemory(&IVL, sizeof(IVL));
+        rtl_secureZeroMemory(&IVR, sizeof(IVR));
     }
 
     if (direction == rtl_Cipher_DirectionEncode)
