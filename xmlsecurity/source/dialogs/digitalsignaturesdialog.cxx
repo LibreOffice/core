@@ -571,7 +571,6 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             OUString aDescription;
             OUString aType;
 
-            bool bSigValid = false;
             bool bCertValid = false;
             if( xCert.is() )
             {
@@ -622,7 +621,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                     aType = "PDF";
             }
 
-            bSigValid = ( rInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );
+            bool bSigValid = rInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
 
             if ( bSigValid )
             {
@@ -638,7 +637,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             {
                 aImage = m_pSigsInvalidImg->GetImage();
             }
-            else if (bSigValid && !bCertValid)
+            else if (!bCertValid)
             {
                 aImage = m_pSigsNotvalidatedImg->GetImage();
             }
@@ -647,20 +646,20 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             // If there is no storage, then it's pointless to check storage
             // stream references.
             else if (maSignatureManager.meSignatureMode == DocumentSignatureMode::Content
-                && bSigValid && bCertValid && (maSignatureManager.mxStore.is() && !DocumentSignatureHelper::isOOo3_2_Signature(
+                && bCertValid && (maSignatureManager.mxStore.is() && !DocumentSignatureHelper::isOOo3_2_Signature(
                 maSignatureManager.maCurrentSignatureInformations[n])))
             {
                 aImage = m_pSigsNotvalidatedImg->GetImage();
                 bAllNewSignatures = false;
             }
             else if (maSignatureManager.meSignatureMode == DocumentSignatureMode::Content
-                && bSigValid && bCertValid && DocumentSignatureHelper::isOOo3_2_Signature(
+                && bCertValid && DocumentSignatureHelper::isOOo3_2_Signature(
                 maSignatureManager.maCurrentSignatureInformations[n]))
             {
                 aImage = m_pSigsValidImg->GetImage();
             }
             else if (maSignatureManager.meSignatureMode == DocumentSignatureMode::Macros
-                && bSigValid && bCertValid)
+                && bCertValid)
             {
                 aImage = m_pSigsValidImg->GetImage();
             }
