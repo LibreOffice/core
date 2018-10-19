@@ -45,6 +45,80 @@
       "revId": "b130a0c3ead300e247e9b4d964f040b3f2d92019",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_f35e1044",
+        "filename": "sd/uiconfig/sdraw/popupmenu/draw.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-10-19T10:43:15Z",
+      "side": 1,
+      "message": ".uno:AdvancedMode menu (below) already includes this command.",
+      "revId": "b130a0c3ead300e247e9b4d964f040b3f2d92019",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_53502433",
+        "filename": "sd/uiconfig/sdraw/popupmenu/draw.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-10-19T10:43:15Z",
+      "side": 1,
+      "message": "Note that the labels are missing the verb. This will be a problem until we move them out of .uno:MirrorMenu in other context menus too.",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 44
+      },
+      "revId": "b130a0c3ead300e247e9b4d964f040b3f2d92019",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_d35b1452",
+        "filename": "sd/uiconfig/sdraw/popupmenu/draw.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-10-19T10:43:15Z",
+      "side": 1,
+      "message": "group have different popupmenu (or we want to get rid of it?)",
+      "revId": "b130a0c3ead300e247e9b4d964f040b3f2d92019",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_b3589856",
+        "filename": "sw/uiconfig/sglobal/popupmenu/draw.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-10-19T10:43:15Z",
+      "side": 1,
+      "message": "Why change to .uno:ArrangeFrameMenu and remove .uno:SetObjectToForeground and .uno:SetObjectToBackground (unlike Calc)?",
+      "revId": "b130a0c3ead300e247e9b4d964f040b3f2d92019",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
