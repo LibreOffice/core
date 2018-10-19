@@ -419,7 +419,7 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
     {
         const SwTextFrame& rTextFrame = static_cast<const SwTextFrame&>(mpNumInfo->mrFrame);
         SwTextNode const*const pTextNd = rTextFrame.GetTextNodeForParaProps();
-        const SwNodeNum* pNodeNum = pTextNd->GetNum();
+        const SwNodeNum* pNodeNum = pTextNd->GetNum(rTextFrame.getRootFrame());
 
         if ( vcl::PDFWriter::List == eType )
         {
@@ -838,7 +838,7 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
 
     const SwTextNode *const pTextNd = rTextFrame.GetTextNodeForParaProps();
     const SwNumRule* pNumRule = pTextNd->GetNumRule();
-    const SwNodeNum* pNodeNum = pTextNd->GetNum();
+    const SwNodeNum* pNodeNum = pTextNd->GetNum(rTextFrame.getRootFrame());
 
     const bool bNumbered = !pTextNd->IsOutline() && pNodeNum && pNodeNum->GetParent() && pNumRule;
 

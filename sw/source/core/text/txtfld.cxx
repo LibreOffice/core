@@ -474,6 +474,9 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
         return nullptr;
 
     SwNumberPortion *pRet = nullptr;
+    // sw_redlinehide: at this point it's certain that pTextNd is the node with
+    // the numbering of the frame; only the actual number-vector (GetNumString)
+    // depends on the hide-mode in the layout so other calls don't need to care
     const SwTextNode *const pTextNd = GetTextFrame()->GetTextNodeForParaProps();
     const SwNumRule* pNumRule = pTextNd->GetNumRule();
 
@@ -575,7 +578,7 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
             }
             else
             {
-                OUString aText( pTextNd->GetNumString() );
+                OUString aText( pTextNd->GetNumString(true, MAXLEVEL, m_pFrame->getRootFrame()) );
                 if ( !aText.isEmpty() )
                 {
                     aText += pTextNd->GetLabelFollowedBy();
