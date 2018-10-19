@@ -579,14 +579,14 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
     {
         HGLOBAL     hDrawDIB;
         HBITMAP     hDrawDDB = rSalBitmap.ImplGethDDB();
-        WinSalBitmap*   pTmpSalBmp = nullptr;
+        std::unique_ptr<WinSalBitmap> xTmpSalBmp;
         bool        bPrintDDB = ( bPrinter && hDrawDDB );
 
         if( bPrintDDB )
         {
-            pTmpSalBmp = new WinSalBitmap;
-            pTmpSalBmp->Create( rSalBitmap, rSalBitmap.GetBitCount() );
-            hDrawDIB = pTmpSalBmp->ImplGethDIB();
+            xTmpSalBmp.reset(new WinSalBitmap);
+            xTmpSalBmp->Create( rSalBitmap, rSalBitmap.GetBitCount() );
+            hDrawDIB = xTmpSalBmp->ImplGethDIB();
         }
         else
             hDrawDIB = rSalBitmap.ImplGethDIB();
@@ -670,9 +670,6 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
 
             ImplReleaseCachedDC( CACHED_HDC_DRAW );
         }
-
-        if( bPrintDDB )
-            delete pTmpSalBmp;
     }
 }
 
