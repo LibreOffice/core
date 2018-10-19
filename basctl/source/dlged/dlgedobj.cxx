@@ -948,6 +948,22 @@ bool DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     bool bResult = SdrUnoObj::EndCreate(rStat, eCmd);
 
+    // tdf#120674 after interactive creation, the SdrObject (this) has no SdrPage yet
+    // due to not being inserted. Usually this should be handled in a ::handlePageChange
+    // implementation. For historical reasons, the SdrPage (which is the DlgEdPage) was
+    // already set. For now, get it from the SdrDragStat and use it to access and set
+    // the local pDlgEdForm
+    if(nullptr == pDlgEdForm && nullptr != rStat.GetPageView())
+    {
+        const DlgEdPage* pDlgEdPage(dynamic_cast<const DlgEdPage*>(rStat.GetPageView()->GetPage()));
+
+        if(nullptr != pDlgEdPage)
+        {
+            // set parent form
+            pDlgEdForm = pDlgEdPage->GetDlgEdForm();
+        }
+    }
+
     SetDefaults();
     StartListening();
 
@@ -956,9 +972,6 @@ bool DlgEdObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 
 void DlgEdObj::SetDefaults()
 {
-    // set parent form
-    pDlgEdForm = static_cast<DlgEdPage*>(getSdrPageFromSdrObject())->GetDlgEdForm();
-
     if ( pDlgEdForm )
     {
         // add child to parent form
