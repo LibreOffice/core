@@ -182,7 +182,7 @@ static sal_uInt16 aNavigationInsertIds[ NAVI_ENTRIES ] =
     NID_NEXT
 };
 
-static OUStringLiteral aNavigationImgIds[ NAVI_ENTRIES ] =
+static OUStringLiteral const aNavigationImgIds[ NAVI_ENTRIES ] =
 {
     // -- first line
     RID_BMP_RIBBAR_TBL,
