@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_b37f78aa",
+        "filename": "sc/uiconfig/scalc/popupmenu/draw.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-19T10:34:16Z",
+      "side": 0,
+      "message": "Missing this command, not sure what exactly it does and if it\u0027s needed.",
+      "range": {
+        "startLine": 17,
+        "startChar": 2,
+        "endLine": 17,
+        "endChar": 48
+      },
+      "revId": "c8d158c05c2d5be5d387b93d03526bf13a1c767d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_f375f0cd",
+        "filename": "sc/uiconfig/scalc/popupmenu/draw.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2018-10-19T10:34:16Z",
+      "side": 0,
+      "message": "Missing this command, which is important for Calc.",
+      "range": {
+        "startLine": 19,
+        "startChar": 1,
+        "endLine": 19,
+        "endChar": 45
+      },
+      "revId": "c8d158c05c2d5be5d387b93d03526bf13a1c767d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
