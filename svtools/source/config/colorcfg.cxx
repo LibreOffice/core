@@ -104,79 +104,77 @@ namespace {
 
 uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme)
 {
-    uno::Sequence<OUString> aNames(2 * ColorConfigEntryCount);
-    OUString* pNames = aNames.getArray();
     struct ColorConfigEntryData_Impl
     {
-        OUStringLiteral const cName;
-        bool const            bCanBeVisible;
+        OUStringLiteral cName;
+        bool            bCanBeVisible;
     };
     static const ColorConfigEntryData_Impl cNames[] =
     {
-        { OUStringLiteral("/DocColor")        ,false },
-        { OUStringLiteral("/DocBoundaries")   ,true },
-        { OUStringLiteral("/AppBackground")   ,false },
-        { OUStringLiteral("/ObjectBoundaries"),true },
-        { OUStringLiteral("/TableBoundaries") ,true },
-        { OUStringLiteral("/FontColor")     ,false },
-        { OUStringLiteral("/Links")           ,true },
-        { OUStringLiteral("/LinksVisited")    ,true },
-        { OUStringLiteral("/Spell")     ,false },
-        { OUStringLiteral("/SmartTags")     ,false },
-        { OUStringLiteral("/Shadow")        , true },
-        { OUStringLiteral("/WriterTextGrid")  ,false },
-        { OUStringLiteral("/WriterFieldShadings"),true },
-        { OUStringLiteral("/WriterIdxShadings")     ,true },
-        { OUStringLiteral("/WriterDirectCursor")    ,true },
-        { OUStringLiteral("/WriterScriptIndicator")    ,false },
-        { OUStringLiteral("/WriterSectionBoundaries")    ,true },
-        { OUStringLiteral("/WriterHeaderFooterMark")    ,false },
-        { OUStringLiteral("/WriterPageBreaks")    ,false },
-        { OUStringLiteral("/HTMLSGML")        ,false },
-        { OUStringLiteral("/HTMLComment")     ,false },
-        { OUStringLiteral("/HTMLKeyword")     ,false },
-        { OUStringLiteral("/HTMLUnknown")     ,false },
-        { OUStringLiteral("/CalcGrid")        ,false },
-        { OUStringLiteral("/CalcPageBreak"), false },
-        { OUStringLiteral("/CalcPageBreakManual"), false },
-        { OUStringLiteral("/CalcPageBreakAutomatic"), false },
-        { OUStringLiteral("/CalcDetective")   ,false },
-        { OUStringLiteral("/CalcDetectiveError")   ,false },
-        { OUStringLiteral("/CalcReference")   ,false },
-        { OUStringLiteral("/CalcNotesBackground") ,false },
-        { OUStringLiteral("/CalcValue") ,false },
-        { OUStringLiteral("/CalcFormula") ,false },
-        { OUStringLiteral("/CalcText") ,false },
-        { OUStringLiteral("/CalcProtectedBackground") ,false },
-        { OUStringLiteral("/DrawGrid")        ,true },
-        { OUStringLiteral("/BASICIdentifier"),  false },
-        { OUStringLiteral("/BASICComment")   ,  false },
-        { OUStringLiteral("/BASICNumber")    ,  false },
-        { OUStringLiteral("/BASICString")    ,  false },
-        { OUStringLiteral("/BASICOperator")  ,  false },
-        { OUStringLiteral("/BASICKeyword")   ,  false },
-        { OUStringLiteral("/BASICError"),  false },
-        { OUStringLiteral("/SQLIdentifier"),  false },
-        { OUStringLiteral("/SQLNumber"),  false },
-        { OUStringLiteral("/SQLString"),  false },
-        { OUStringLiteral("/SQLOperator"),  false },
-        { OUStringLiteral("/SQLKeyword"),  false },
-        { OUStringLiteral("/SQLParameter"),  false },
-        { OUStringLiteral("/SQLComment"),  false }
+        { "/DocColor"        ,false },
+        { "/DocBoundaries"   ,true },
+        { "/AppBackground"   ,false },
+        { "/ObjectBoundaries",true },
+        { "/TableBoundaries" ,true },
+        { "/FontColor"     ,false },
+        { "/Links"           ,true },
+        { "/LinksVisited"    ,true },
+        { "/Spell"     ,false },
+        { "/SmartTags"     ,false },
+        { "/Shadow"        , true },
+        { "/WriterTextGrid"  ,false },
+        { "/WriterFieldShadings",true },
+        { "/WriterIdxShadings"     ,true },
+        { "/WriterDirectCursor"    ,true },
+        { "/WriterScriptIndicator"    ,false },
+        { "/WriterSectionBoundaries"    ,true },
+        { "/WriterHeaderFooterMark"    ,false },
+        { "/WriterPageBreaks"    ,false },
+        { "/HTMLSGML"        ,false },
+        { "/HTMLComment"     ,false },
+        { "/HTMLKeyword"     ,false },
+        { "/HTMLUnknown"     ,false },
+        { "/CalcGrid"        ,false },
+        { "/CalcPageBreak", false },
+        { "/CalcPageBreakManual", false },
+        { "/CalcPageBreakAutomatic", false },
+        { "/CalcDetective"   ,false },
+        { "/CalcDetectiveError"   ,false },
+        { "/CalcReference"   ,false },
+        { "/CalcNotesBackground" ,false },
+        { "/CalcValue" ,false },
+        { "/CalcFormula" ,false },
+        { "/CalcText" ,false },
+        { "/CalcProtectedBackground" ,false },
+        { "/DrawGrid"        ,true },
+        { "/BASICIdentifier",  false },
+        { "/BASICComment"   ,  false },
+        { "/BASICNumber"    ,  false },
+        { "/BASICString"    ,  false },
+        { "/BASICOperator"  ,  false },
+        { "/BASICKeyword"   ,  false },
+        { "/BASICError",  false },
+        { "/SQLIdentifier",  false },
+        { "/SQLNumber",  false },
+        { "/SQLString",  false },
+        { "/SQLOperator",  false },
+        { "/SQLKeyword",  false },
+        { "/SQLParameter",  false },
+        { "/SQLComment",  false }
     };
+
+    uno::Sequence<OUString> aNames(2 * ColorConfigEntryCount);
+    OUString* pNames = aNames.getArray();
     int nIndex = 0;
     OUString sBase = "ColorSchemes/"
                    + utl::wrapConfigurationElementName(rScheme);
-    const int nCount = ColorConfigEntryCount;
-    for(sal_Int32 i = 0; i < nCount; ++i)
+    for(sal_Int32 i = 0; i < ColorConfigEntryCount; ++i)
     {
         OUString sBaseName = sBase + cNames[i].cName;
-        pNames[nIndex] += sBaseName;
-        pNames[nIndex++] += "/Color";
+        pNames[nIndex++] = sBaseName + "/Color";
         if(cNames[i].bCanBeVisible)
         {
-            pNames[nIndex] += sBaseName;
-            pNames[nIndex++] += g_sIsVisible;
+            pNames[nIndex++] = sBaseName + g_sIsVisible;
         }
     }
     aNames.realloc(nIndex);

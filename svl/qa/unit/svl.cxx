@@ -1098,11 +1098,11 @@ void Test::testIsNumberFormat()
     LanguageType eLang = LANGUAGE_ENGLISH_US;
     SvNumberFormatter aFormatter(m_xContext, eLang);
 
-    struct NumberFormatData
+    static struct NumberFormatData
     {
         const char* pFormat;
         bool const bIsNumber;
-    } aTests[] = {
+    } const aTests[] = {
         { "20.3", true },
         { "2", true },
         { "test", false },
