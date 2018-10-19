@@ -4289,6 +4289,29 @@ bool SwTextNode::IsCountedInList() const
     return aIsCountedInListItem.GetValue();
 }
 
+static SwList * FindList(SwTextNode *const pNode)
+{
+    const OUString sListId = pNode->GetListId();
+    if (!sListId.isEmpty())
+    {
+        auto & rIDLA(pNode->GetDoc()->getIDocumentListsAccess());
+        SwList* pList = rIDLA.getListByName( sListId );
+        if ( pList == nullptr )
+        {
+            // Create corresponding list.
+            SwNumRule* pNumRule = pNode->GetNumRule();
+            if ( pNumRule )
+            {
+                pList = rIDLA.createList(sListId, pNode->GetNumRule()->GetName());
+            }
+        }
+        OSL_ENSURE( pList != nullptr,
+                "<SwTextNode::AddToList()> - no list for given list id. Serious defect" );
+        return pList;
+    }
+    return nullptr;
+}
+
 void SwTextNode::AddToList()
 {
     if ( IsInList() )
@@ -4297,25 +4320,12 @@ void SwTextNode::AddToList()
         return;
     }
 
-    const OUString sListId = GetListId();
-    if (!sListId.isEmpty())
+    SwList *const pList(FindList(this));
+    if (pList)
     {
-        SwList* pList = GetDoc()->getIDocumentListsAccess().getListByName( sListId );
-        if ( pList == nullptr )
-        {
-            // Create corresponding list.
-            SwNumRule* pNumRule = GetNumRule();
-            if ( pNumRule )
-            {
-                pList = GetDoc()->getIDocumentListsAccess().createList( sListId, GetNumRule()->GetName() );
-            }
-        }
-        OSL_ENSURE( pList != nullptr,
-                "<SwTextNode::AddToList()> - no list for given list id. Serious defect" );
-        if ( pList )
-        {
-            pList->InsertListItem( *CreateNum(), GetAttrListLevel() );
-        }
+        assert(!mpNodeNum);
+        mpNodeNum = new SwNodeNum(this);
+        pList->InsertListItem(*mpNodeNum, false, GetAttrListLevel());
     }
 }
 
