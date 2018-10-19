@@ -134,7 +134,7 @@ namespace sw {
             SwpHints const*const pHints(m_pNode->GetpSwpHints());
             if (pHints)
             {
-                while (m_CurrentHint < pHints->Count())
+                if (m_CurrentHint < pHints->Count())
                 {
                     SwTextAttr const*const pHint(pHints->Get(m_CurrentHint));
                     ++m_CurrentHint;
@@ -191,7 +191,7 @@ namespace sw {
             SwpHints const*const pHints(m_pNode->GetpSwpHints());
             if (pHints)
             {
-                while (m_CurrentHint < pHints->Count())
+                if (m_CurrentHint < pHints->Count())
                 {
                     SwTextAttr const*const pHint(
                             pHints->GetSortedByEnd(m_CurrentHint));
@@ -269,7 +269,7 @@ namespace sw {
             SwpHints const*const pHints(m_pNode->GetpSwpHints());
             if (pHints)
             {
-                while (0 < m_CurrentHint)
+                if (0 < m_CurrentHint)
                 {
                     SwTextAttr const*const pHint(pHints->Get(m_CurrentHint - 1));
                     --m_CurrentHint;

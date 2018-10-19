@@ -886,7 +886,7 @@ namespace sw {
             SwpHints const*const pHints(m_pNode->GetpSwpHints());
             if (pHints)
             {
-                while (m_CurrentHint < pHints->Count())
+                if (m_CurrentHint < pHints->Count())
                 {
                     SwTextAttr const*const pHint(pHints->Get(m_CurrentHint));
                     ++m_CurrentHint;
