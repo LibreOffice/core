@@ -336,6 +336,11 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmXGridPeer:
         css::form::XResetListener,
         css::view::XSelectionSupplier>
 {
+protected:
+    css::uno::Reference< css::uno::XComponentContext >    m_xContext;
+    ::osl::Mutex                                          m_aMutex;
+
+private:
     css::uno::Reference< css::container::XIndexContainer >    m_xColumns;
     css::uno::Reference< css::sdbc::XRowSet >                 m_xCursor;
     ::comphelper::OInterfaceContainerHelper2       m_aModifyListeners,
@@ -361,10 +366,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmXGridPeer:
     class GridListenerDelegator;
     friend class GridListenerDelegator;
     std::unique_ptr<GridListenerDelegator>  m_pGridListener;
-
-protected:
-    css::uno::Reference< css::uno::XComponentContext >    m_xContext;
-    ::osl::Mutex                                              m_aMutex;
 
 public:
     FmXGridPeer(const css::uno::Reference< css::uno::XComponentContext >&);

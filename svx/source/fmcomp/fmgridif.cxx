@@ -1030,7 +1030,8 @@ using namespace fmgridif;
 
 
 FmXGridPeer::FmXGridPeer(const Reference< XComponentContext >& _rxContext)
-            :m_aModifyListeners(m_aMutex)
+            :m_xContext(_rxContext)
+            ,m_aModifyListeners(m_aMutex)
             ,m_aUpdateListeners(m_aMutex)
             ,m_aContainerListeners(m_aMutex)
             ,m_aSelectionListeners(m_aMutex)
@@ -1038,7 +1039,6 @@ FmXGridPeer::FmXGridPeer(const Reference< XComponentContext >& _rxContext)
             ,m_aMode( getDataModeIdentifier() )
             ,m_nCursorListening(0)
             ,m_bInterceptingDispatch(false)
-            ,m_xContext(_rxContext)
 {
     // Create must be called after this constructor
     m_pGridListener.reset( new GridListenerDelegator( this ) );
