@@ -143,7 +143,7 @@ class ImpSdrPdfImport final
             if (top > bottom)
                 bottom = std::max(leftBottomY, rightBottomY);
             else
-                bottom = std::max(leftBottomY, rightBottomY);
+                bottom = std::min(leftBottomY, rightBottomY);
         }
 
         std::string toString() const
