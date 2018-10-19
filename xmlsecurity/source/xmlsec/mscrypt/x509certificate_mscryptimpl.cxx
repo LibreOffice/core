@@ -369,8 +369,6 @@ css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > 
                 xExtn = reinterpret_cast<CertificateExtension_XmlSecImpl*>(new SanExtensionImpl());
             else
                 xExtn = new CertificateExtension_XmlSecImpl;
-            if( xExtn == nullptr )
-                throw RuntimeException() ;
 
             xExtn->setCertExtn( pExtn->Value.pbData, pExtn->Value.cbData, reinterpret_cast<unsigned char*>(pExtn->pszObjId), strlen( pExtn->pszObjId ), pExtn->fCritical ) ;
 
@@ -394,9 +392,6 @@ css::uno::Reference< css::security::XCertificateExtension > SAL_CALL X509Certifi
             //TODO: Compare the oid
             if( false ) {
                 xExtn = new CertificateExtension_XmlSecImpl;
-                if( xExtn == nullptr )
-                    throw RuntimeException() ;
-
                 xExtn->setCertExtn( pExtn->Value.pbData, pExtn->Value.cbData, reinterpret_cast<unsigned char*>(pExtn->pszObjId), strlen( pExtn->pszObjId ), pExtn->fCritical ) ;
             }
         }
