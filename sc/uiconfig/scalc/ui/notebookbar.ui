@@ -5014,10 +5014,10 @@
                             <property name="show_arrow">False</property>
                             <property name="icon_size">3</property>
                             <child>
-                              <object class="GtkToolButton" id="Insert-Text">
+                              <object class="GtkToolButton" id="Insert-DrawText">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="action_name">.uno:Text</property>
+                                <property name="action_name">.uno:DrawText</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
