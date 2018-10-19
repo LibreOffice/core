@@ -116,7 +116,6 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
 
             if (xServiceInfo.is())
             {
-                bool bTextFrame = xServiceInfo->supportsService("com.sun.star.text.TextFrame");
                 // Handle inset attributes for Writer textframes.
                 sal_Int32 aInsets[] = { XML_lIns, XML_tIns, XML_rIns, XML_bIns };
                 boost::optional<sal_Int32> oInsets[4];
@@ -129,11 +128,10 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                         // Defaults from the spec: left/right: 91440 EMU, top/bottom: 45720 EMU
                         oInsets[i] = (aInsets[i] == XML_lIns || aInsets[i] == XML_rIns) ? 254 : 127;
                 }
-                OUString aProps[] = { OUString("LeftBorderDistance"), OUString("TopBorderDistance"), OUString("RightBorderDistance"), OUString("BottomBorderDistance") };
-                OUString aShapeProps[] = { OUString("TextLeftDistance"), OUString("TextUpperDistance"), OUString("TextRightDistance"), OUString("TextLowerDistance") };
-                for (std::size_t i = 0; i < SAL_N_ELEMENTS(bTextFrame ? aProps : aShapeProps); ++i)
+                const OUString aShapeProps[] = { OUString("TextLeftDistance"), OUString("TextUpperDistance"), OUString("TextRightDistance"), OUString("TextLowerDistance") };
+                for (std::size_t i = 0; i < SAL_N_ELEMENTS(aShapeProps); ++i)
                     if (oInsets[i])
-                        xPropertySet->setPropertyValue((bTextFrame ? aProps : aShapeProps)[i], uno::makeAny(*oInsets[i]));
+                        xPropertySet->setPropertyValue(aShapeProps[i], uno::makeAny(*oInsets[i]));
             }
 
             // Handle text vertical adjustment inside a text frame
