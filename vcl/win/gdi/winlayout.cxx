@@ -23,6 +23,7 @@
 #include <sal/log.hxx>
 
 #include <comphelper/windowserrorstring.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <opengl/texture.hxx>
 #include <opengl/win/gdiimpl.hxx>
@@ -48,11 +49,11 @@
 #include <shlwapi.h>
 #include <winver.h>
 
-GlobalOpenGLGlyphCache * GlobalOpenGLGlyphCache::get() {
-    SalData * data = GetSalData();
-    if (!data->m_pGlobalOpenGLGlyphCache) {
+GlobalOpenGLGlyphCache * GlobalOpenGLGlyphCache::get()
+{
+    SalData *data = GetSalData();
+    if (!data->m_pGlobalOpenGLGlyphCache)
         data->m_pGlobalOpenGLGlyphCache.reset(new GlobalOpenGLGlyphCache);
-    }
     return data->m_pGlobalOpenGLGlyphCache.get();
 }
 
@@ -67,12 +68,15 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
         SAL_WARN("vcl.gdi", "CreateCompatibleDC failed: " << WindowsErrorString(GetLastError()));
         return false;
     }
-    HFONT hOrigFont = static_cast<HFONT>(SelectObject(aHDC.get(), hFont));
+
+    const HFONT hOrigFont = static_cast<HFONT>(SelectObject(aHDC.get(), hFont));
     if (hOrigFont == nullptr)
     {
         SAL_WARN("vcl.gdi", "SelectObject failed: " << WindowsErrorString(GetLastError()));
         return false;
     }
+    const ::comphelper::ScopeGuard aHFONTrestoreScopeGuard(
+        [&aHDC,hOrigFont]() { SelectFont(aHDC.get(), hOrigFont); });
 
     // For now we assume DWrite is present and we won't bother with fallback paths.
     D2DWriteTextOutRenderer * pTxt = dynamic_cast<D2DWriteTextOutRenderer *>(&TextOutRenderer::get(true));
@@ -86,6 +90,7 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
         SAL_WARN("vcl.gdi", "Binding of font failed. The font might not be supported by DirectWrite.");
         return false;
     }
+    const ::comphelper::ScopeGuard aFontReleaseScopeGuard([&pTxt]() { pTxt->ReleaseFont(); });
 
     std::vector<WORD> aGlyphIndices(1);
     aGlyphIndices[0] = nGlyphIndex;
@@ -158,10 +163,7 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
 
     ID2D1SolidColorBrush* pBrush = nullptr;
     if (!SUCCEEDED(pRT->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &pBrush)))
-    {
-        pTxt->ReleaseFont();
         return false;
-    }
 
     D2D1_POINT_2F baseline = {
         static_cast<FLOAT>(aElement.getExtraOffset()),
@@ -194,11 +196,8 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
         break;
     default:
         SAL_WARN("vcl.gdi", "DrawGlyphRun-EndDraw failed: " << WindowsErrorString(GetLastError()));
-        SelectFont(aDC.getCompatibleHDC(), hOrigFont);
         return false;
     }
-
-    pTxt->ReleaseFont();
 
     if (!OpenGLGlyphCache::ReserveTextureSpace(aElement, nBitmapWidth, nBitmapHeight))
         return false;
@@ -206,8 +205,6 @@ bool WinFontInstance::CacheGlyphToAtlas(HDC hDC, HFONT hFont, int nGlyphIndex, S
         return false;
 
     maOpenGLGlyphCache.PutDrawElementInCache(aElement, nGlyphIndex);
-
-    SelectFont(aDC.getCompatibleHDC(), hOrigFont);
 
     return true;
 }
