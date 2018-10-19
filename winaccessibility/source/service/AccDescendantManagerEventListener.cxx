@@ -183,7 +183,7 @@ bool AccDescendantManagerEventListener::NotifyChildEvent(short nWinEvent,const A
             XAccessible* pAcc = xChild.get();
             pAgent->NotifyAccEvent(nWinEvent, pAcc);
 
-            if (pAgent && pAgent->IsStateManageDescendant(m_xAccessible.get())
+            if (pAgent->IsStateManageDescendant(m_xAccessible.get())
                     && (nWinEvent == UM_EVENT_SELECTION_CHANGED_REMOVE))
             {
                 pAgent->DeleteAccObj( pAcc );
