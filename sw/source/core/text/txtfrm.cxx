@@ -832,7 +832,9 @@ static TextFrameIndex UpdateMergedParaForInsert(MergedPara & rMerged,
         nInserted = nLen;
         if (rNode.GetIndex() < rMerged.pParaPropsNode->GetIndex())
         {   // text inserted before current para-props node
-            rMerged.pParaPropsNode = &rNode;
+            rMerged.pParaPropsNode->RemoveFromListRLHidden();
+            rMerged.pParaPropsNode = &const_cast<SwTextNode&>(rNode);
+            rMerged.pParaPropsNode->AddToListRLHidden();
         }
     }
     rMerged.mergedText = text.makeStringAndClear();
@@ -958,9 +960,11 @@ TextFrameIndex UpdateMergedParaForDelete(MergedPara & rMerged,
     {   // all visible text from node was erased
         if (rMerged.pParaPropsNode == &rNode)
         {
+            rMerged.pParaPropsNode->RemoveFromListRLHidden();
             rMerged.pParaPropsNode = rMerged.extents.empty()
                 ? rMerged.pFirstNode
                 : rMerged.extents.front().pNode;
+            rMerged.pParaPropsNode->AddToListRLHidden();
         }
 // NOPE must listen on all non-hidden nodes; particularly on pLastNode        rMerged.listener.EndListening(&const_cast<SwTextNode&>(rNode));
     }
