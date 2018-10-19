@@ -67,7 +67,7 @@ bool GraphicDescriptor::Detect( bool bExtendedInfo )
         else if ( ImpDetectBMP( rStm, bExtendedInfo ) ) bRet = true;
         else if ( ImpDetectPNG( rStm, bExtendedInfo ) ) bRet = true;
         else if ( ImpDetectTIF( rStm, bExtendedInfo ) ) bRet = true;
-        else if ( ImpDetectPCX( rStm, bExtendedInfo ) ) bRet = true;
+        else if ( ImpDetectPCX( rStm ) ) bRet = true;
         else if ( ImpDetectDXF( rStm, bExtendedInfo ) ) bRet = true;
         else if ( ImpDetectMET( rStm, bExtendedInfo ) ) bRet = true;
         else if ( ImpDetectSVM( rStm, bExtendedInfo ) ) bRet = true;
@@ -433,13 +433,12 @@ bool GraphicDescriptor::ImpDetectPCD( SvStream& rStm, bool )
     return bRet;
 }
 
-bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm, bool bExtendedInfo )
+bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm )
 {
     // ! Because 0x0a can be interpreted as LF too ...
     // we can't be sure that this special sign represent a PCX file only.
     // Every Ascii file is possible here :-(
     // We must detect the whole header.
-    bExtendedInfo = true;
 
     bool    bRet = false;
     sal_uInt8   cByte = 0;
@@ -453,61 +452,58 @@ bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm, bool bExtendedInfo )
         nFormat = GraphicFileFormat::PCX;
         bRet = true;
 
-        if ( bExtendedInfo )
+        sal_uInt16  nTemp16;
+        sal_uInt16  nXmin;
+        sal_uInt16  nXmax;
+        sal_uInt16  nYmin;
+        sal_uInt16  nYmax;
+        sal_uInt16  nDPIx;
+        sal_uInt16  nDPIy;
+
+        rStm.SeekRel( 1 );
+
+        // compression
+        rStm.ReadUChar( cByte );
+
+        bRet = (cByte==0 || cByte ==1);
+        if (bRet)
         {
-            sal_uInt16  nTemp16;
-            sal_uInt16  nXmin;
-            sal_uInt16  nXmax;
-            sal_uInt16  nYmin;
-            sal_uInt16  nYmax;
-            sal_uInt16  nDPIx;
-            sal_uInt16  nDPIy;
-
-            rStm.SeekRel( 1 );
-
-            // compression
+            // Bits/Pixel
             rStm.ReadUChar( cByte );
+            nBitsPerPixel = cByte;
 
-            bRet = (cByte==0 || cByte ==1);
-            if (bRet)
-            {
-                // Bits/Pixel
-                rStm.ReadUChar( cByte );
-                nBitsPerPixel = cByte;
+            // image dimensions
+            rStm.ReadUInt16( nTemp16 );
+            nXmin = nTemp16;
+            rStm.ReadUInt16( nTemp16 );
+            nYmin = nTemp16;
+            rStm.ReadUInt16( nTemp16 );
+            nXmax = nTemp16;
+            rStm.ReadUInt16( nTemp16 );
+            nYmax = nTemp16;
 
-                // image dimensions
-                rStm.ReadUInt16( nTemp16 );
-                nXmin = nTemp16;
-                rStm.ReadUInt16( nTemp16 );
-                nYmin = nTemp16;
-                rStm.ReadUInt16( nTemp16 );
-                nXmax = nTemp16;
-                rStm.ReadUInt16( nTemp16 );
-                nYmax = nTemp16;
+            aPixSize.setWidth( nXmax - nXmin + 1 );
+            aPixSize.setHeight( nYmax - nYmin + 1 );
 
-                aPixSize.setWidth( nXmax - nXmin + 1 );
-                aPixSize.setHeight( nYmax - nYmin + 1 );
+            // resolution
+            rStm.ReadUInt16( nTemp16 );
+            nDPIx = nTemp16;
+            rStm.ReadUInt16( nTemp16 );
+            nDPIy = nTemp16;
 
-                // resolution
-                rStm.ReadUInt16( nTemp16 );
-                nDPIx = nTemp16;
-                rStm.ReadUInt16( nTemp16 );
-                nDPIy = nTemp16;
+            // set logical size
+            MapMode aMap( MapUnit::MapInch, Point(),
+                          Fraction( 1, nDPIx ), Fraction( 1, nDPIy ) );
+            aLogSize = OutputDevice::LogicToLogic( aPixSize, aMap,
+                                                   MapMode( MapUnit::Map100thMM ) );
 
-                // set logical size
-                MapMode aMap( MapUnit::MapInch, Point(),
-                              Fraction( 1, nDPIx ), Fraction( 1, nDPIy ) );
-                aLogSize = OutputDevice::LogicToLogic( aPixSize, aMap,
-                                                       MapMode( MapUnit::Map100thMM ) );
+            // number of color planes
+            cByte = 5; // Illegal value in case of EOF.
+            rStm.SeekRel( 49 );
+            rStm.ReadUChar( cByte );
+            nPlanes = cByte;
 
-                // number of color planes
-                cByte = 5; // Illegal value in case of EOF.
-                rStm.SeekRel( 49 );
-                rStm.ReadUChar( cByte );
-                nPlanes = cByte;
-
-                bRet = (nPlanes<=4);
-            }
+            bRet = (nPlanes<=4);
         }
     }
 
