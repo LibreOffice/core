@@ -1,9 +1,9 @@
 diff -ur icu.org/source/common/unicode/platform.h icu/source/common/unicode/platform.h
---- icu.org/source/common/unicode/platform.h	2017-03-22 20:06:26.000000000 +0100
-+++ icu/source/common/unicode/platform.h	2017-04-21 22:32:31.656693147 +0200
-@@ -818,7 +818,7 @@
- #elif defined(U_STATIC_IMPLEMENTATION)
- #   define U_EXPORT
+--- icu.org/source/common/unicode/platform.h	2018-10-02 00:39:56.000000000 +0200
++++ icu/source/common/unicode/platform.h	2018-10-20 00:36:24.598886605 +0200
+@@ -789,7 +789,7 @@
+ #elif defined(_MSC_VER) || (__has_declspec_attribute(dllexport) && __has_declspec_attribute(dllimport))
+ #   define U_EXPORT __declspec(dllexport)
  #elif defined(__GNUC__)
 -#   define U_EXPORT __attribute__((visibility("default")))
 +#   define U_EXPORT
@@ -11,8 +11,8 @@ diff -ur icu.org/source/common/unicode/platform.h icu/source/common/unicode/plat
     || (defined(__SUNPRO_C) && __SUNPRO_C >= 0x550) 
  #   define U_EXPORT __global
 diff -ur icu.org/source/config/mh-linux icu/source/config/mh-linux
---- icu.org/source/config/mh-linux	2016-06-15 20:58:17.000000000 +0200
-+++ icu/source/config/mh-linux	2017-04-21 22:32:31.653693154 +0200
+--- icu.org/source/config/mh-linux	2018-09-29 02:34:41.000000000 +0200
++++ icu/source/config/mh-linux	2018-10-20 00:33:36.558130876 +0200
 @@ -27,7 +27,7 @@
  
  ## Compiler switch to embed a library name
@@ -23,9 +23,9 @@ diff -ur icu.org/source/config/mh-linux icu/source/config/mh-linux
  #SH# LD_SONAME=
  
 diff -ur icu.org/source/configure icu/source/configure
---- icu.org/source/configure	2017-04-07 09:40:30.000000000 +0200
-+++ icu/source/configure	2017-04-21 22:32:31.656693147 +0200
-@@ -5134,7 +5134,7 @@
+--- icu.org/source/configure	2018-10-02 00:39:56.000000000 +0200
++++ icu/source/configure	2018-10-20 00:33:36.559130874 +0200
+@@ -5207,7 +5207,7 @@
  	else
  		icu_cv_host_frag=mh-linux-va
  	fi ;;
@@ -34,7 +34,7 @@ diff -ur icu.org/source/configure icu/source/configure
  i[34567]86-*-cygwin)
  	if test "$GCC" = yes; then
  		icu_cv_host_frag=mh-cygwin
-@@ -6358,6 +6358,10 @@
+@@ -6400,6 +6400,10 @@
  # Check to see if genccode can generate simple assembly.
  GENCCODE_ASSEMBLY=
  case "${host}" in
@@ -45,7 +45,7 @@ diff -ur icu.org/source/configure icu/source/configure
  *-linux*|*-kfreebsd*-gnu*|i*86-*-*bsd*|i*86-pc-gnu)
      if test "$GCC" = yes; then
          # We're using gcc, and the simple -a gcc command line works for genccode
-@@ -7445,6 +7449,10 @@
+@@ -7499,6 +7503,10 @@
      # wchar_t can be used
      CHECK_UTF16_STRING_RESULT="available"
      ;;
@@ -56,20 +56,9 @@ diff -ur icu.org/source/configure icu/source/configure
  *)
      ;;
  esac
-diff -ur icu.org/source/i18n/number_decimalquantity.cpp icu/source/i18n/number_decimalquantity.cpp
---- icu.org/source/i18n/number_decimalquantity.cpp	2017-11-21 12:39:25.068592814 +0100
-+++ icu/source/i18n/number_decimalquantity.cpp	2017-11-21 12:39:53.988590886 +0100
-@@ -384,7 +384,7 @@
-         for (; i <= -22; i += 22) n /= 1e22;
-         n /= DOUBLE_MULTIPLIERS[-i];
-     }
--    auto result = static_cast<int64_t>(std::round(n));
-+    auto result = static_cast<int64_t>(round(n));
-     if (result != 0) {
-         _setToLong(result);
-         scale -= fracLength;
---- icu/source/i18n/decimfmt.cpp.orig	2018-08-03 09:26:22.036924562 +0200
-+++ icu/source/i18n/decimfmt.cpp	2018-08-03 09:25:14.169399374 +0200
+diff -ur icu.org/source/i18n/decimfmt.cpp icu/source/i18n/decimfmt.cpp
+--- icu.org/source/i18n/decimfmt.cpp	2018-10-02 00:39:56.000000000 +0200
++++ icu/source/i18n/decimfmt.cpp	2018-10-20 00:33:36.560130873 +0200
 @@ -9,6 +9,13 @@
  // Helpful in toString methods and elsewhere.
  #define UNISTR_FROM_STRING_EXPLICIT
@@ -84,3 +73,15 @@ diff -ur icu.org/source/i18n/number_decimalquantity.cpp icu/source/i18n/number_d
  #include <cmath>
  #include <cstdlib>
  #include <stdlib.h>
+diff -ur icu.org/source/i18n/number_decimalquantity.cpp icu/source/i18n/number_decimalquantity.cpp
+--- icu.org/source/i18n/number_decimalquantity.cpp	2018-10-02 00:39:56.000000000 +0200
++++ icu/source/i18n/number_decimalquantity.cpp	2018-10-20 00:33:36.560130873 +0200
+@@ -432,7 +432,7 @@
+         for (; i <= -22; i += 22) n /= 1e22;
+         n /= DOUBLE_MULTIPLIERS[-i];
+     }
+-    auto result = static_cast<int64_t>(std::round(n));
++    auto result = static_cast<int64_t>(round(n));
+     if (result != 0) {
+         _setToLong(result);
+         scale -= fracLength;

@@ -1,6 +1,6 @@
 diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
---- icu.org/source/common/dictbe.cpp	2018-03-26 15:38:30.000000000 +0200
-+++ icu/source/common/dictbe.cpp	2018-04-17 17:55:38.620944919 +0200
+--- icu.org/source/common/dictbe.cpp	2018-10-02 00:39:56.000000000 +0200
++++ icu/source/common/dictbe.cpp	2018-10-20 00:14:46.462039038 +0200
 @@ -29,7 +29,19 @@
   ******************************************************************
   */
@@ -498,9 +498,9 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 -                    uc = utext_current32(text);
 -                    if (fEndWordSet.contains(pc) && fBeginWordSet.contains(uc)) {
 -                        // Maybe. See if it's in the dictionary.
--                        int32_t candidates = words[(wordsFound + 1) % KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd);
+-                        int32_t num_candidates = words[(wordsFound + 1) % KHMER_LOOKAHEAD].candidates(text, fDictionary, rangeEnd);
 -                        utext_setNativeIndex(text, current+cuWordLength+chars);
--                        if (candidates > 0) {
+-                        if (num_candidates > 0) {
 +                    if (c == 0x17D2) { // Coeng
 +                        utext_next32(text);
 +                        c = utext_current32(text);
@@ -658,8 +658,8 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
  
  #if !UCONFIG_NO_NORMALIZATION
 diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
---- icu.org/source/common/dictbe.h	2018-03-26 15:38:30.000000000 +0200
-+++ icu/source/common/dictbe.h	2018-04-17 14:55:33.307639865 +0200
+--- icu.org/source/common/dictbe.h	2018-09-29 02:34:41.000000000 +0200
++++ icu/source/common/dictbe.h	2018-10-19 14:21:00.339942804 +0200
 @@ -34,7 +34,8 @@
   * threads without synchronization.</p>
   */
@@ -999,8 +999,8 @@ diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
  
  /*******************************************************************
 diff -ur icu.org/source/common/dictionarydata.cpp icu/source/common/dictionarydata.cpp
---- icu.org/source/common/dictionarydata.cpp	2018-03-26 15:38:30.000000000 +0200
-+++ icu/source/common/dictionarydata.cpp	2018-04-17 14:04:50.775567214 +0200
+--- icu.org/source/common/dictionarydata.cpp	2018-09-29 02:34:41.000000000 +0200
++++ icu/source/common/dictionarydata.cpp	2018-10-19 14:21:00.339942804 +0200
 @@ -44,7 +44,7 @@
  
  int32_t UCharsDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t limit,
@@ -1048,8 +1048,8 @@ diff -ur icu.org/source/common/dictionarydata.cpp icu/source/common/dictionaryda
                  if (values != NULL) {
                      values[wordCount] = bt.getValue();
 diff -ur icu.org/source/common/dictionarydata.h icu/source/common/dictionarydata.h
---- icu.org/source/common/dictionarydata.h	2018-03-26 15:38:30.000000000 +0200
-+++ icu/source/common/dictionarydata.h	2018-04-17 14:04:50.775567214 +0200
+--- icu.org/source/common/dictionarydata.h	2018-09-29 02:34:41.000000000 +0200
++++ icu/source/common/dictionarydata.h	2018-10-19 14:21:00.339942804 +0200
 @@ -21,6 +21,7 @@
  #include "unicode/utext.h"
  #include "unicode/udata.h"
@@ -1086,8 +1086,8 @@ diff -ur icu.org/source/common/dictionarydata.h icu/source/common/dictionarydata
  private:
      UChar32 transform(UChar32 c) const;
 diff -ur icu.org/source/data/Makefile.in icu/source/data/Makefile.in
---- icu.org/source/data/Makefile.in	2018-04-17 12:28:37.098707466 +0200
-+++ icu/source/data/Makefile.in	2018-04-17 14:04:50.775567214 +0200
+--- icu.org/source/data/Makefile.in	2018-10-19 14:20:11.031075856 +0200
++++ icu/source/data/Makefile.in	2018-10-19 14:21:00.339942804 +0200
 @@ -183,7 +183,7 @@
  endif
  endif
