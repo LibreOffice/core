@@ -780,7 +780,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
             nColumnSize = sColumnType.copy(6, 1).toInt32(); // 'year(' length is 5
         else if (sDataType.equalsIgnoreAsciiCase("date"))
             nColumnSize = 10;
-        else if (sDataType.equalsIgnoreAsciiCase("date"))
+        else if (sDataType.equalsIgnoreAsciiCase("time"))
             nColumnSize = 8;
         else if (sDataType.equalsIgnoreAsciiCase("datetime")
                  || sDataType.equalsIgnoreAsciiCase("timestamp"))
