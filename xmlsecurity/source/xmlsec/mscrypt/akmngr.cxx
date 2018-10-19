@@ -55,14 +55,6 @@ xmlSecKeysMngrPtr MSCryptoAppliedKeysMngrCreate()
         return nullptr ;
     }
 
-    /*-
-     * At present, MS Crypto engine do not provide a way to setup a key store.
-     */
-    if (keyStore != nullptr)
-    {
-        /*TODO: binding key store.*/
-    }
-
     keyMngr = xmlSecKeysMngrCreate() ;
     if (keyMngr == nullptr)
     {
