@@ -147,7 +147,7 @@ ShapeTypeHandler::~ShapeTypeHandler()
 
 
 void ShapeTypeHandler::AddShapeTypeList (int nDescriptorCount,
-    ShapeTypeDescriptor aDescriptorList[])
+    ShapeTypeDescriptor const aDescriptorList[])
 {
     SolarMutexGuard aGuard;
 
