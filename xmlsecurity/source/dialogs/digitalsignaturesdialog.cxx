@@ -501,41 +501,40 @@ IMPL_STATIC_LINK(DigitalSignaturesDialog, CertMgrButtonHdl, Button*, pButton, vo
 #else
     const OUString aGUIServers[] = { OUString("kleopatra"), OUString("seahorse"),  OUString("gpa"), OUString("kgpg") };
     const char* cPath = getenv("PATH");
+    if (!cPath)
+        return;
 #endif
 
-    if (cPath)
+    OUString aPath(cPath, strlen(cPath), osl_getThreadTextEncoding());
+    OUString sFoundGUIServer, sExecutable;
+
+    for ( auto const &rServer : aGUIServers )
     {
-       OUString aPath(cPath, strlen(cPath), osl_getThreadTextEncoding());
-       OUString sFoundGUIServer, sExecutable;
+        osl::FileBase::RC searchError = osl::File::searchFileURL(rServer, aPath, sFoundGUIServer );
+        if (searchError == osl::FileBase::E_None)
+        {
+            osl::File::getSystemPathFromFileURL( sFoundGUIServer, sExecutable );
+            break;
+        }
 
-       for ( auto const &rServer : aGUIServers )
-       {
-           osl::FileBase::RC searchError = osl::File::searchFileURL(rServer, aPath, sFoundGUIServer );
-           if (searchError == osl::FileBase::E_None)
-           {
-               osl::File::getSystemPathFromFileURL( sFoundGUIServer, sExecutable );
-               break;
-           }
+    }
 
-       }
+    if ( !sExecutable.isEmpty() )
+    {
+        uno::Reference< uno::XComponentContext > xContext =
+            ::comphelper::getProcessComponentContext();
+        uno::Reference< css::system::XSystemShellExecute > xSystemShell(
+                 css::system::SystemShellExecute::create(xContext) );
 
-       if ( !sExecutable.isEmpty() )
-       {
-           uno::Reference< uno::XComponentContext > xContext =
-               ::comphelper::getProcessComponentContext();
-           uno::Reference< css::system::XSystemShellExecute > xSystemShell(
-                    css::system::SystemShellExecute::create(xContext) );
-
-           xSystemShell->execute( sExecutable, OUString(),
-               css::system::SystemShellExecuteFlags::DEFAULTS );
-       }
-       else
-       {
-           std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pButton->GetFrameWeld(),
-                                                         VclMessageType::Info, VclButtonsType::Ok,
-                                                         XsResId(STR_XMLSECDLG_NO_CERT_MANAGER)));
-           xInfoBox->run();
-       }
+        xSystemShell->execute( sExecutable, OUString(),
+            css::system::SystemShellExecuteFlags::DEFAULTS );
+    }
+    else
+    {
+        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pButton->GetFrameWeld(),
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      XsResId(STR_XMLSECDLG_NO_CERT_MANAGER)));
+        xInfoBox->run();
     }
 }
 
