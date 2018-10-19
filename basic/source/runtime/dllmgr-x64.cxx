@@ -476,7 +476,7 @@ ErrCode call(
     OUString const & dll, ProcData const & proc, SbxArray * arguments,
     SbxVariable & result)
 {
-    if (arguments->Count() > 20)
+    if (arguments && arguments->Count() > 20)
         return ERRCODE_BASIC_NOT_IMPLEMENTED;
 
     std::vector< char > stack;
