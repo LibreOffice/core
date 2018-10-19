@@ -631,7 +631,7 @@ void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode 
                     bPutOp = true;
                     bRemoveFromMap = (mpTable[eOp] != ";" &&
                             mpTable[ocArrayColSep] != mpTable[eOp] &&
-                            mpTable[ocArrayColSep] != mpTable[eOp]);
+                            mpTable[ocArrayRowSep] != mpTable[eOp]);
                 break;
                 // These OpCodes are known to be duplicates in the Excel
                 // external API mapping because of different parameter counts
