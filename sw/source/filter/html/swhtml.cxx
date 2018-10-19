@@ -137,7 +137,7 @@ using editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
 // <P ALIGN=xxx>, <Hn ALIGN=xxx>, <TD ALIGN=xxx> etc.
-HTMLOptionEnum<SvxAdjust> aHTMLPAlignTable[] =
+HTMLOptionEnum<SvxAdjust> const aHTMLPAlignTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_AL_left,    SvxAdjust::Left     },
     { OOO_STRING_SVTOOLS_HTML_AL_center,  SvxAdjust::Center   },
@@ -149,7 +149,7 @@ HTMLOptionEnum<SvxAdjust> aHTMLPAlignTable[] =
 };
 
 // <SPACER TYPE=...>
-static HTMLOptionEnum<sal_uInt16> aHTMLSpacerTypeTable[] =
+static HTMLOptionEnum<sal_uInt16> const aHTMLSpacerTypeTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_SPTYPE_block,      HTML_SPTYPE_BLOCK       },
     { OOO_STRING_SVTOOLS_HTML_SPTYPE_horizontal, HTML_SPTYPE_HORI        },

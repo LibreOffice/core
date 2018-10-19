@@ -119,8 +119,8 @@ class SwFramePage: public SfxTabPage
     sal_Int16 m_nOldV;
     sal_Int16 m_nOldVRel;
 
-    FrameMap* m_pVMap;
-    FrameMap* m_pHMap;
+    FrameMap const * m_pVMap;
+    FrameMap const * m_pHMap;
 
     bool    m_bAllowVertPositioning;
     bool    m_bIsMathOLE;

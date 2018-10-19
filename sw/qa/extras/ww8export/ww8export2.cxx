@@ -825,7 +825,7 @@ DECLARE_OOXMLEXPORT_TEST( testObjectCrossReference, "object_cross_reference.odt"
 
 DECLARE_WW8EXPORT_TEST(testTdf112118_DOC, "tdf112118.doc")
 {
-    struct {
+    static const struct {
         const char* styleName;
         struct {
             const char* sideName;
