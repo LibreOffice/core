@@ -439,7 +439,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         COL_GREEN, // CALCFORMULA
         COL_BLACK, // CALCTEXT
         COL_LIGHTGRAY, // CALCPROTECTEDBACKGROUND
-        COL_LIGHTGRAY, // DRAWGRID
+        COL_GRAY7, // DRAWGRID
         COL_GREEN, // BASICIDENTIFIER,
         COL_GRAY, // BASICCOMMENT,
         COL_LIGHTRED, // BASICNUMBER,
