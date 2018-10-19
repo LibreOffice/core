@@ -16,6 +16,24 @@
       "revId": "fe0fd83c24ae69e18ef704421ef813f1ee1473e7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_96034a10",
+        "filename": "vcl/win/gdi/winlayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-10-19T15:13:20Z",
+      "side": 1,
+      "message": "Didn\u0027t know we had that. Definitly better then the goto code. Will convert.",
+      "parentUuid": "1f1a1f67_16717ae1",
+      "revId": "fe0fd83c24ae69e18ef704421ef813f1ee1473e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
