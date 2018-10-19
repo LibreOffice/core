@@ -34,6 +34,24 @@
       "revId": "f209524965641596cea16a0ee7780fffe176235a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_d9ffb332",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-10-19T20:35:54Z",
+      "side": 0,
+      "message": "As I understand the comments pIn-\u003em_Data[nPos].get() \u003d\u003d pOld.get(). m_Data is a std::vector\u003cunique_ptr\u003e, which is holding the data. So that will free pOld on replace and the same does the std::unique_ptr of the function parameter.\n\nI didn\u0027t follow pIn here, as this is supposed to be a shared pool from the name.",
+      "parentUuid": "1f1a1f67_390d8790",
+      "revId": "f209524965641596cea16a0ee7780fffe176235a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
