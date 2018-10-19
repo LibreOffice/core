@@ -4967,7 +4967,7 @@ void ScDocument::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, bool b
 
 bool ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
 {
-    if ( bStyleSheetUsageInvalid || rStyle.GetUsage() == ScStyleSheet::UNKNOWN )
+    if ( bStyleSheetUsageInvalid || rStyle.GetUsage() == ScStyleSheet::Usage::UNKNOWN )
     {
         SfxStyleSheetIterator aIter( mxPoolHelper->GetStylePool(),
                     SfxStyleFamily::Para );
@@ -4977,7 +4977,7 @@ bool ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
             if (pStyle->isScStyleSheet())
             {
                 const ScStyleSheet* pScStyle = static_cast<const ScStyleSheet*>( pStyle  );
-                pScStyle->SetUsage( ScStyleSheet::NOTUSED );
+                pScStyle->SetUsage( ScStyleSheet::Usage::NOTUSED );
             }
         }
 
@@ -4999,7 +4999,7 @@ bool ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
         return bIsUsed;
     }
 
-    return rStyle.GetUsage() == ScStyleSheet::USED;
+    return rStyle.GetUsage() == ScStyleSheet::Usage::USED;
 }
 
 bool ScDocument::ApplyFlagsTab( SCCOL nStartCol, SCROW nStartRow,

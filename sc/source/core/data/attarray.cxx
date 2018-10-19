@@ -1850,7 +1850,7 @@ bool ScAttrArray::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
         const ScStyleSheet* pStyle = pDocument->GetDefPattern()->GetStyleSheet();
         if ( pStyle )
         {
-            pStyle->SetUsage( ScStyleSheet::USED );
+            pStyle->SetUsage( ScStyleSheet::Usage::USED );
             if ( pStyle == &rStyle )
                 return true;
         }
@@ -1865,7 +1865,7 @@ bool ScAttrArray::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
         const ScStyleSheet* pStyle = mvData[nPos].pPattern->GetStyleSheet();
         if ( pStyle )
         {
-            pStyle->SetUsage( ScStyleSheet::USED );
+            pStyle->SetUsage( ScStyleSheet::Usage::USED );
             if ( pStyle == &rStyle )
             {
                 bIsUsed = true;

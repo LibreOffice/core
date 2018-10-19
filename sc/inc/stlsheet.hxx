@@ -32,7 +32,7 @@ friend class ScStyleSheetPool;
 
 public:
 
-    enum    Usage
+    enum class Usage
     {
         UNKNOWN,
         USED,
