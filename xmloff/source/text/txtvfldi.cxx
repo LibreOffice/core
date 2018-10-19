@@ -205,7 +205,7 @@ void XMLVarFieldImportContext::PrepareField(
 
     if (bSetVisible && bDisplayOK)
     {
-        bool bTmp = ! (bDisplayNone && bDisplayOK);
+        bool bTmp = !bDisplayNone;
         xPropertySet->setPropertyValue(sAPI_is_visible, Any(bTmp));
     }
 
