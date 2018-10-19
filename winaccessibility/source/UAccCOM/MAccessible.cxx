@@ -2641,13 +2641,12 @@ HRESULT WINAPI CMAccessible::SmartQI(void* /*pv*/, REFIID iid, void** ppvObject)
 BOOL
 CMAccessible::get_IAccessibleFromXAccessible(XAccessible * pXAcc, IAccessible **ppIA)
 {
-
     ENTER_PROTECTED_BLOCK
 
         // #CHECK#
         if(ppIA == nullptr)
         {
-            return E_INVALIDARG;
+            return FALSE;
         }
         BOOL isGet = FALSE;
         if(g_pAgent)
