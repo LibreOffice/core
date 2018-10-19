@@ -16,6 +16,24 @@
       "revId": "f209524965641596cea16a0ee7780fffe176235a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_390d8790",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-19T19:53:30Z",
+      "side": 0,
+      "message": "Hmm... but SbiSymDef dtor (holding pIn) does not free the pIn afaict",
+      "parentUuid": "1f1a1f67_f9f82f7d",
+      "revId": "f209524965641596cea16a0ee7780fffe176235a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
