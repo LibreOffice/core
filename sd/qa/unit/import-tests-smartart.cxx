@@ -371,6 +371,13 @@ void SdImportTestSmartArt::testVertialBoxList()
     // 'actual: 0'.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xShapeGroup->getCount());
 
+    uno::Reference<drawing::XShape> xSecondChild(xShapeGroup->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xSecondChild.is());
+    // Without the accompanying fix in place, this test would have failed with
+    // 'actual: 7361' (and with the fix: 'actual: 16932', i.e. the width of the
+    // parent).
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(10000), xSecondChild->getSize().Width);
+
     xDocShRef->DoClose();
 }
 
