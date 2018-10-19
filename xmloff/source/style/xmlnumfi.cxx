@@ -356,12 +356,10 @@ SvXMLNumImpData::SvXMLNumImpData(
 
 sal_uInt32 SvXMLNumImpData::GetKeyForName( const OUString& rName )
 {
-    sal_uInt16 nCount = m_NameEntries.size();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    for (const auto& rObj : m_NameEntries)
     {
-        const SvXMLNumFmtEntry *const pObj = &m_NameEntries[i];
-        if ( pObj->aName == rName )
-            return pObj->nKey;              // found
+        if (rObj.aName == rName)
+            return rObj.nKey;              // found
     }
     return NUMBERFORMAT_ENTRY_NOT_FOUND;
 }
@@ -373,11 +371,9 @@ void SvXMLNumImpData::AddKey( sal_uInt32 nKey, const OUString& rName, bool bRemo
         //  if there is already an entry for this key without the bRemoveAfterUse flag,
         //  clear the flag for this entry, too
 
-        sal_uInt16 nCount = m_NameEntries.size();
-        for (sal_uInt16 i=0; i<nCount; i++)
+        for (const auto& rObj : m_NameEntries)
         {
-            SvXMLNumFmtEntry *const pObj = &m_NameEntries[i];
-            if ( pObj->nKey == nKey && !pObj->bRemoveAfterUse )
+            if (rObj.nKey == nKey && !rObj.bRemoveAfterUse)
             {
                 bRemoveAfterUse = false;        // clear flag for new entry
                 break;
@@ -395,13 +391,11 @@ void SvXMLNumImpData::AddKey( sal_uInt32 nKey, const OUString& rName, bool bRemo
 
 void SvXMLNumImpData::SetUsed( sal_uInt32 nKey )
 {
-    sal_uInt16 nCount = m_NameEntries.size();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    for (auto& rObj : m_NameEntries)
     {
-        SvXMLNumFmtEntry *const pObj = &m_NameEntries[i];
-        if ( pObj->nKey == nKey )
+        if (rObj.nKey == nKey)
         {
-            pObj->bRemoveAfterUse = false;      // used -> don't remove
+            rObj.bRemoveAfterUse = false;      // used -> don't remove
 
             //  continue searching - there may be several entries for the same key
             //  (with different names), the format must not be deleted if any one of
@@ -419,15 +413,13 @@ void SvXMLNumImpData::RemoveVolatileFormats()
     if ( !pFormatter )
         return;
 
-    sal_uInt16 nCount = m_NameEntries.size();
-    for (sal_uInt16 i=0; i<nCount; i++)
+    for (const auto& rObj : m_NameEntries)
     {
-        const SvXMLNumFmtEntry *const pObj = &m_NameEntries[i];
-        if ( pObj->bRemoveAfterUse )
+        if (rObj.bRemoveAfterUse )
         {
-            const SvNumberformat* pFormat = pFormatter->GetEntry(pObj->nKey);
+            const SvNumberformat* pFormat = pFormatter->GetEntry(rObj.nKey);
             if (pFormat && (pFormat->GetType() & SvNumFormatType::DEFINED))
-                pFormatter->DeleteEntry( pObj->nKey );
+                pFormatter->DeleteEntry(rObj.nKey);
         }
     }
 }

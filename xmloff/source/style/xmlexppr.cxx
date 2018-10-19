@@ -999,13 +999,9 @@ void SvXMLExportPropertyMapper::exportElementItems(
         SvXmlExportFlags nFlags,
         const std::vector<sal_uInt16>& rIndexArray ) const
 {
-    const sal_uInt16 nCount = rIndexArray.size();
-
     bool bItemsExported = false;
-    for( sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++ )
+    for (const sal_uInt16 nElement : rIndexArray)
     {
-        const sal_uInt16 nElement = rIndexArray[nIndex];
-
         OSL_ENSURE( 0 != (mpImpl->mxPropMapper->GetEntryFlags(
                 rProperties[nElement].mnIndex ) & MID_FLAG_ELEMENT_ITEM_EXPORT),
                 "wrong mid flag!" );

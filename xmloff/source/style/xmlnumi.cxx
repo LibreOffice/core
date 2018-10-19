@@ -1062,12 +1062,9 @@ void SvxXMLListStyleContext::FillUnoNumRule(
     {
         if( pLevelStyles && rNumRule.is() )
         {
-            sal_uInt16 nCount = pLevelStyles->size();
             sal_Int32 l_nLevels = rNumRule->getCount();
-            for( sal_uInt16 i=0; i < nCount; i++ )
+            for (const auto& pLevelStyle : *pLevelStyles)
             {
-                SvxXMLListLevelStyleContext_Impl *pLevelStyle =
-                    (*pLevelStyles)[i].get();
                 sal_Int32 nLevel = pLevelStyle->GetLevel();
                 if( nLevel >= 0 && nLevel < l_nLevels )
                 {

@@ -274,10 +274,9 @@ XMLEndReferenceContext_Impl::XMLEndReferenceContext_Impl(
     if (XMLStartReferenceContext_Impl::FindName(GetImport(), xAttrList, sName))
     {
         // search for reference start
-        sal_uInt16 nCount = rHints.GetHints().size();
-        for(sal_uInt16 nPos = 0; nPos < nCount; nPos++)
+        for (const auto& rHintPtr : rHints.GetHints())
         {
-            XMLHint_Impl *const pHint = rHints.GetHints()[nPos].get();
+            XMLHint_Impl *const pHint = rHintPtr.get();
             if ( pHint->IsReference() &&
                  sName == static_cast<XMLReferenceHint_Impl *>(pHint)->GetRefName() )
             {
@@ -1099,10 +1098,9 @@ void XMLIndexMarkImportContext_Impl::StartElement(
             if (!sID.isEmpty())
             {
                 // if we have an ID, find the hint and set the end position
-                sal_uInt16 nCount = m_rHints.GetHints().size();
-                for(sal_uInt16 nPos = 0; nPos < nCount; nPos++)
+                for (const auto& rHintPtr : m_rHints.GetHints())
                 {
-                    XMLHint_Impl *const pHint = m_rHints.GetHints()[nPos].get();
+                    XMLHint_Impl *const pHint = rHintPtr.get();
                     if ( pHint->IsIndexMark() &&
                          sID == static_cast<XMLIndexMarkHint_Impl *>(pHint)->GetID() )
                     {
