@@ -735,14 +735,12 @@ uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificat
 }
 
 uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificateFromAscii( const OUString& asciiCertificate ) {
-    xmlChar* chCert ;
-    xmlSecSize certSize ;
 
     OString oscert = OUStringToOString( asciiCertificate , RTL_TEXTENCODING_ASCII_US ) ;
 
-    chCert = xmlStrndup( reinterpret_cast<const xmlChar*>(oscert.getStr()), static_cast<int>(oscert.getLength()) ) ;
+    xmlChar* chCert = xmlStrndup( reinterpret_cast<const xmlChar*>(oscert.getStr()), static_cast<int>(oscert.getLength()) ) ;
 
-    certSize = xmlSecBase64Decode( chCert, chCert, xmlStrlen( chCert ) ) ;
+    xmlSecSize certSize = xmlSecBase64Decode( chCert, chCert, xmlStrlen( chCert ) ) ;
 
     uno::Sequence< sal_Int8 > rawCert( certSize ) ;
     for( xmlSecSize i = 0 ; i < certSize ; i ++ )
@@ -757,9 +755,7 @@ uno::Reference< XCertificate > SecurityEnvironment_MSCryptImpl::createCertificat
 static HCERTSTORE getCertStoreForIntermediatCerts(
     const uno::Sequence< uno::Reference< css::security::XCertificate > >& seqCerts)
 {
-    HCERTSTORE store = nullptr;
-    store = CertOpenStore(
-        CERT_STORE_PROV_MEMORY, 0, NULL, 0, nullptr);
+    HCERTSTORE store = CertOpenStore(CERT_STORE_PROV_MEMORY, 0, NULL, 0, nullptr);
     if (store == nullptr)
         return nullptr;
 
