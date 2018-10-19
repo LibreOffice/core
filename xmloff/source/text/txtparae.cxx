@@ -654,7 +654,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
             ; // section styles have no parents
             break;
         }
-        if( (aPropStates.size() - nIgnoreProps) > 0 )
+        if (aPropStates.size() - nIgnoreProps)
         {
             GetAutoStylePool().Add( nFamily, sParent, aPropStates, bDontSeek );
             if( !sCondParent.isEmpty() && sParent != sCondParent )
@@ -848,7 +848,7 @@ OUString XMLTextParagraphExport::FindTextStyleAndHyperlink(
             ppAddStates++;
         }
     }
-    if( (aPropStates.size() - nIgnoreProps) > 0 )
+    if (aPropStates.size() - nIgnoreProps)
     {
         // erase the character style, otherwise the autostyle cannot be found!
         // erase the hyperlink, otherwise the autostyle cannot be found!
