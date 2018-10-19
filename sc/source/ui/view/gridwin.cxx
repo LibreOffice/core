@@ -5645,7 +5645,7 @@ OString ScGridWindow::getCellCursor(const Fraction& rZoomX, const Fraction& rZoo
     SCROW nY = pViewData->GetCurY();
 
     Fraction defaultZoomX = pViewData->GetZoomX();
-    Fraction defaultZoomY = pViewData->GetZoomX();
+    Fraction defaultZoomY = pViewData->GetZoomY();
 
     pViewData->SetZoom(rZoomX, rZoomY, true);
 
