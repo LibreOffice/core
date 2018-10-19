@@ -875,8 +875,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
         p_cancel( maHandle );
         CheckConsistency( "sane_cancel" );
     }
-    if( pBuffer )
-        delete [] pBuffer;
+    delete [] pBuffer;
 
     ReloadOptions();
 
