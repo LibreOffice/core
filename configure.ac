@@ -6936,6 +6936,7 @@ if test "$ENABLE_JAVA" != ""; then
 fi
 
 HAVE_JAVA9=
+HAVE_JAVA11=
 dnl ===================================================================
 dnl Checks for JDK.
 dnl ===================================================================
@@ -6990,6 +6991,9 @@ you must use the "--with-jdk-home" configure option explicitly])
             if test "$_jdk_ver" -ge 10900; then
                 HAVE_JAVA9=TRUE
             fi
+            if test "$_jdk_ver" -ge 110001; then
+                HAVE_JAVA11=TRUE
+            fi
 
             AC_MSG_RESULT([checked (JDK $_jdk)])
             JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*java,,p"`
@@ -7010,6 +7014,7 @@ else
     JAVA_HOME=
     export JAVA_HOME
 fi
+AC_SUBST(HAVE_JAVA11)
 
 dnl ===================================================================
 dnl Set target Java bytecode version

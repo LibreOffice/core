@@ -66,9 +66,11 @@ APP1_JAVAFILES  = \
 APP1_CLASSFILES = $(patsubst %.java,$(OUT_APP_CLASS)/%.class,$(APP1_JAVAFILES))
 APP1_CLASSNAMES = $(patsubst %.java,%.class,$(APP1_JAVAFILES)) \
 		CustomizeView$(QUOTE)$$ClickListener.class \
-		DocumentView$(QUOTE)$$1.class \
 		DocumentView$(QUOTE)$$Reactor.class
 
+ifneq "$(HAVE_JAVA11)" "TRUE"
+APP1_CLASSNAMES += DocumentView$(QUOTE)$$1.class
+endif
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_APP_CLASS))
