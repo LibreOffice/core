@@ -2600,7 +2600,7 @@ sal_uInt16 XclExpXFBuffer::GetXFIndex( sal_uInt32 nXFId ) const
 sal_Int32 XclExpXFBuffer::GetXmlStyleIndex( sal_uInt32 nXFIndex ) const
 {
     OSL_ENSURE( nXFIndex < maStyleIndexes.size(), "XclExpXFBuffer::GetXmlStyleIndex - invalid index!" );
-    if( nXFIndex > maStyleIndexes.size() )
+    if( nXFIndex >= maStyleIndexes.size() )
         return 0;   // should be caught/debugged via above assert; return "valid" index.
     return maStyleIndexes[ nXFIndex ];
 }
@@ -2608,7 +2608,7 @@ sal_Int32 XclExpXFBuffer::GetXmlStyleIndex( sal_uInt32 nXFIndex ) const
 sal_Int32 XclExpXFBuffer::GetXmlCellIndex( sal_uInt32 nXFIndex ) const
 {
     OSL_ENSURE( nXFIndex < maCellIndexes.size(), "XclExpXFBuffer::GetXmlStyleIndex - invalid index!" );
-    if( nXFIndex > maCellIndexes.size() )
+    if( nXFIndex >= maCellIndexes.size() )
         return 0;   // should be caught/debugged via above assert; return "valid" index.
     return maCellIndexes[ nXFIndex ];
 }
