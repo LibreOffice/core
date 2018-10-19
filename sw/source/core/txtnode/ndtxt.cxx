@@ -200,6 +200,7 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
 SwTextNode::SwTextNode( const SwNodeIndex &rWhere, SwTextFormatColl *pTextColl, const SfxItemSet* pAutoAttr )
 :   SwContentNode( rWhere, SwNodeType::Text, pTextColl ),
     mpNodeNum( nullptr ),
+    mpNodeNumRLHidden(nullptr),
     m_Text(),
     m_pParaIdleData_Impl(nullptr),
     m_bContainsHiddenChars(false),
@@ -2870,6 +2871,7 @@ void SwTextNode::NumRuleChgd()
         if ( pNumRule && pNumRule != GetNum()->GetNumRule() )
         {
             mpNodeNum->ChangeNumRule( *pNumRule );
+            mpNodeNumRLHidden->ChangeNumRule( *pNumRule );
         }
     }
 
@@ -3136,14 +3138,15 @@ bool SwTextNode::HasBullet() const
 // #128041# - introduce parameter <_bInclPrefixAndSuffixStrings>
 //i53420 added max outline parameter
 OUString SwTextNode::GetNumString( const bool _bInclPrefixAndSuffixStrings,
-        const unsigned int _nRestrictToThisLevel ) const
+        const unsigned int _nRestrictToThisLevel,
+        SwRootFrame const*const pLayout) const
 {
     if (GetDoc()->IsClipBoard() && m_pNumStringCache.get())
     {
         // #i111677# do not expand number strings in clipboard documents
         return *m_pNumStringCache;
     }
-    const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : nullptr;
+    const SwNumRule* pRule = GetNum(pLayout) ? GetNum(pLayout)->GetNumRule() : nullptr;
     if ( pRule &&
          IsCountedInList() )
     {
@@ -3153,7 +3156,7 @@ OUString SwTextNode::GetNumString( const bool _bInclPrefixAndSuffixStrings,
 
             (style::NumberingType::NUMBER_NONE == rNumberType.GetNumberingType()))
         {
-            return pRule->MakeNumString( GetNum()->GetNumberVector(),
+            return pRule->MakeNumString( GetNum(pLayout)->GetNumberVector(),
                                      _bInclPrefixAndSuffixStrings,
                                      false,
                                      _nRestrictToThisLevel,
@@ -4023,20 +4026,19 @@ SwFormatColl* SwTextNode::ChgFormatColl( SwFormatColl *pNewColl )
     return pOldColl;
 }
 
-SwNodeNum* SwTextNode::CreateNum() const
+const SwNodeNum* SwTextNode::GetNum(SwRootFrame const*const pLayout) const
 {
-    if ( !mpNodeNum )
-    {
-        mpNodeNum = new SwNodeNum( const_cast<SwTextNode*>(this), false );
-    }
-    return mpNodeNum;
+    // invariant: it's only in list in Hide mode if it's in list in normal mode
+    assert(mpNodeNum || !mpNodeNumRLHidden);
+    return pLayout && pLayout->IsHideRedlines() ? mpNodeNumRLHidden : mpNodeNum;
 }
 
-SwNumberTree::tNumberVector SwTextNode::GetNumberVector() const
+SwNumberTree::tNumberVector
+SwTextNode::GetNumberVector(SwRootFrame const*const pLayout) const
 {
-    if ( GetNum() )
+    if (SwNodeNum const*const pNum = GetNum(pLayout))
     {
-        return GetNum()->GetNumberVector();
+        return pNum->GetNumberVector();
     }
     else
     {
@@ -4142,6 +4144,8 @@ int SwTextNode::GetAttrListLevel() const
 
 int SwTextNode::GetActualListLevel() const
 {
+    assert(!GetNum() || !mpNodeNumRLHidden || // must be in sync
+        GetNum()->GetLevelInListTree() == mpNodeNumRLHidden->GetLevelInListTree());
     return GetNum() ? GetNum()->GetLevelInListTree() : -1;
 }
 
@@ -4326,16 +4330,63 @@ void SwTextNode::AddToList()
         assert(!mpNodeNum);
         mpNodeNum = new SwNodeNum(this, false);
         pList->InsertListItem(*mpNodeNum, false, GetAttrListLevel());
+        // iterate all frames & if there's one with hidden layout...
+        SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> iter(*this);
+        for (SwTextFrame* pFrame = iter.First(); pFrame; pFrame = iter.Next())
+        {
+            if (pFrame->getRootFrame()->IsHideRedlines())
+            {
+                sw::MergedPara const*const pMerged = pFrame->GetMergedPara();
+                if (!pMerged || this == pMerged->pParaPropsNode)
+                {
+                    AddToListRLHidden();
+                }
+                break; // assume it's consistent, need to check only once
+            }
+        }
+    }
+}
+
+void SwTextNode::AddToListRLHidden()
+{
+    if (mpNodeNumRLHidden)
+    {
+        assert(false);
+        OSL_FAIL( "<SwTextNode::AddToListRLHidden()> - the text node is already added to a list. Serious defect" );
+        return;
+    }
+
+    SwList *const pList(FindList(this));
+    if (pList)
+    {
+        assert(!mpNodeNumRLHidden);
+        mpNodeNumRLHidden = new SwNodeNum(this, true);
+        pList->InsertListItem(*mpNodeNumRLHidden, true, GetAttrListLevel());
     }
 }
 
 void SwTextNode::RemoveFromList()
 {
+    // sw_redlinehide: ensure it's removed from the other half too!
+    RemoveFromListRLHidden();
     if ( IsInList() )
     {
         SwList::RemoveListItem( *mpNodeNum );
         delete mpNodeNum;
         mpNodeNum = nullptr;
+
+        SetWordCountDirty( true );
+    }
+}
+
+void SwTextNode::RemoveFromListRLHidden()
+{
+    if (mpNodeNumRLHidden) // direct access because RemoveFromList doesn't have layout
+    {
+        assert(mpNodeNumRLHidden->GetParent() || !GetNodes().IsDocNodes());
+        SwList::RemoveListItem(*mpNodeNumRLHidden);
+        delete mpNodeNumRLHidden;
+        mpNodeNumRLHidden = nullptr;
 
         SetWordCountDirty( true );
     }

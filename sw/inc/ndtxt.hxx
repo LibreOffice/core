@@ -92,6 +92,7 @@ class SW_DLLPUBLIC SwTextNode
     std::unique_ptr<SwpHints> m_pSwpHints;
 
     mutable SwNodeNum* mpNodeNum;  ///< Numbering for this paragraph.
+    mutable SwNodeNum* mpNodeNumRLHidden; ///< Numbering for this paragraph (hidden redlines)
 
     OUString m_Text;
 
@@ -164,12 +165,6 @@ class SW_DLLPUBLIC SwTextNode
     /// Start: Data collected during idle time
 
     SAL_DLLPRIVATE void InitSwParaStatistics( bool bNew );
-
-    /** create number for this text node, if not already existing
-
-        @return number of this node
-    */
-    SwNodeNum* CreateNum() const;
 
     inline void TryDeleteSwpHints();
 
@@ -429,12 +424,9 @@ public:
      */
     SwNumRule *GetNumRule(bool bInParent = true) const;
 
-    const SwNodeNum* GetNum() const
-    {
-        return mpNodeNum;
-    }
+    const SwNodeNum* GetNum(SwRootFrame const* pLayout = nullptr) const;
 
-    SwNumberTree::tNumberVector GetNumberVector() const;
+    SwNumberTree::tNumberVector GetNumberVector(SwRootFrame const* pLayout = nullptr) const;
 
     /**
        Returns if this text node is an outline.
@@ -468,7 +460,8 @@ public:
         MAXLEVEL
     */
     OUString GetNumString( const bool _bInclPrefixAndSuffixStrings = true,
-            const unsigned int _nRestrictToThisLevel = MAXLEVEL ) const;
+            const unsigned int _nRestrictToThisLevel = MAXLEVEL,
+            SwRootFrame const* pLayout = nullptr) const;
 
     /**
        Returns the additional indents of this text node and its numbering.
@@ -774,7 +767,9 @@ public:
     bool IsCountedInList() const;
 
     void AddToList();
+    void AddToListRLHidden();
     void RemoveFromList();
+    void RemoveFromListRLHidden();
     bool IsInList() const;
 
     bool IsFirstOfNumRule() const;
