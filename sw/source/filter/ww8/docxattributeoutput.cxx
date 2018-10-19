@@ -1568,7 +1568,7 @@ void DocxAttributeOutput::DoWritePermissionTagEnd(const OUString & permission)
             FSNS(XML_w, XML_id), rId.getStr(),
             FSEND);
     }
-    else // if (permission.startsWith("permission-for-user:", &permissionIdAndName))
+    else if (permission.startsWith("permission-for-user:", &permissionIdAndName))
     {
         const sal_Int32 sparatorIndex = permissionIdAndName.indexOf(':');
         const OUString permissionId   = permissionIdAndName.copy(0, sparatorIndex);
