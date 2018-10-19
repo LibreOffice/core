@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_53d70425",
+        "filename": "cui/uiconfig/ui/aboutdialog.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-10-19T07:19:29Z",
+      "side": 1,
+      "message": "freely",
+      "range": {
+        "startLine": 191,
+        "startChar": 253,
+        "endLine": 191,
+        "endChar": 257
+      },
+      "revId": "682b5e16b51f88637a4b0d7c78914f5dda921bd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_33dc8845",
+        "filename": "cui/uiconfig/ui/aboutdialog.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-10-19T07:19:29Z",
+      "side": 1,
+      "message": "of LibreOffice",
+      "range": {
+        "startLine": 191,
+        "startChar": 287,
+        "endLine": 191,
+        "endChar": 298
+      },
+      "revId": "682b5e16b51f88637a4b0d7c78914f5dda921bd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_73d20037",
+        "filename": "cui/uiconfig/ui/aboutdialog.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2018-10-19T07:19:29Z",
+      "side": 1,
+      "message": "freely",
+      "range": {
+        "startLine": 191,
+        "startChar": 233,
+        "endLine": 191,
+        "endChar": 237
+      },
+      "revId": "682b5e16b51f88637a4b0d7c78914f5dda921bd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
