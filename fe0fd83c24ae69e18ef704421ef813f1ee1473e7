@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_16717ae1",
+        "filename": "vcl/win/gdi/winlayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-10-19T14:31:24Z",
+      "side": 1,
+      "message": "comphelper::ScopeGuard maybe?",
+      "revId": "fe0fd83c24ae69e18ef704421ef813f1ee1473e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
