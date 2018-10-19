@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,extras_personas,$(SRCDIR)/extras/source/gallery/personas/))
+$(eval $(call gb_Package_Package,extras_personas,$(SRCDIR)/extras/source/gallery/personas))
 
-$(eval $(call gb_Package_add_files,extras_personas,$(LIBO_SHARE_FOLDER)/gallery/personas/,\
+$(eval $(call gb_Package_add_files,extras_personas,$(LIBO_SHARE_FOLDER)/gallery/personas,\
 	personas_list.txt \
 ))	
 
