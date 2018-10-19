@@ -822,7 +822,7 @@ void ScMenuFloatingWindow::ensureSubMenuVisible(ScMenuFloatingWindow* pSubMenu)
 
 void ScMenuFloatingWindow::ensureSubMenuNotVisible()
 {
-    if (mnSelectedMenu <= maMenuItems.size() &&
+    if (mnSelectedMenu < maMenuItems.size() &&
         maMenuItems[mnSelectedMenu].mpSubMenuWin &&
         maMenuItems[mnSelectedMenu].mpSubMenuWin->IsVisible())
     {
