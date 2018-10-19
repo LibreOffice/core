@@ -127,8 +127,8 @@ namespace tdoc_ucp {
         css::uno::Reference< css::io::XStream >
         queryStream( const css::uno::Reference<
                         css::embed::XStorage > & xParentStorage,
-                     const OUString & rPassword,
                      const OUString & rUri,
+                     const OUString & rPassword,
                      StorageAccessMode eMode,
                      bool bTruncate /* ignored for read-only streams */ );
 
