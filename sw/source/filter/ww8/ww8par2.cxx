@@ -798,8 +798,8 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
         return;
     }
 
-    if( m_nSwNumLevel <= MAXLEVEL         // Value range mapping WW:1..9 -> SW:0..8
-        && m_nSwNumLevel <= 9 ){          // No Bullets or Numbering
+    if (m_nSwNumLevel <= 9) // Value range mapping WW:1..9 -> SW:0..8
+    {
 
         // If NumRuleItems were set, either directly or through inheritance, disable them now
         m_pCurrentColl->SetFormatAttr( SwNumRuleItem() );
@@ -814,7 +814,8 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
 
         // Missing Levels need not be replenished
         m_rDoc.SetOutlineNumRule( aNR );
-    }else if( m_xStyles->mnWwNumLevel == 10 || m_xStyles->mnWwNumLevel == 11 ){
+    }
+    else if( m_xStyles->mnWwNumLevel == 10 || m_xStyles->mnWwNumLevel == 11 ){
         SwNumRule* pNR = GetStyRule();
         SetAnld(pNR, reinterpret_cast<WW8_ANLD const *>(pData), 0, false);
         m_pCurrentColl->SetFormatAttr( SwNumRuleItem( pNR->GetName() ) );
