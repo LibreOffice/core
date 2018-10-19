@@ -44,6 +44,7 @@ class SwList
         void SetDefaultListStyleName(OUString const&);
 
         void InsertListItem( SwNodeNum& rNodeNum,
+                             bool isHiddenRedlines,
                              const int nLevel );
         static void RemoveListItem( SwNodeNum& rNodeNum );
 
