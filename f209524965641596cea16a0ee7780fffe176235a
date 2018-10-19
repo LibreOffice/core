@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_f9f82f7d",
+        "filename": "basic/source/comp/symtbl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2018-10-19T19:11:04Z",
+      "side": 0,
+      "message": "AFAIK this results in a double free, as we replace pOld with this, so pOld will be released twice by std::unique_ptr here and the function parameter.\n\nIMHO that code should make this more obvious - or I have misunderstood this too.",
+      "revId": "f209524965641596cea16a0ee7780fffe176235a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
