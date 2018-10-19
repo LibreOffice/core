@@ -27,17 +27,17 @@
 #include <IDocumentListItems.hxx>
 #include <doc.hxx>
 
-SwNodeNum::SwNodeNum( SwTextNode* pTextNode )
-    : SwNumberTreeNode(),
-      mpTextNode( pTextNode ),
-      mpNumRule( nullptr )
+SwNodeNum::SwNodeNum(SwTextNode* pTextNode, bool const isHiddenRedlines)
+    : mpTextNode( pTextNode )
+    , mpNumRule( nullptr )
+    , m_isHiddenRedlines(isHiddenRedlines)
 {
 }
 
 SwNodeNum::SwNodeNum( SwNumRule* pNumRule )
-    : SwNumberTreeNode(),
-      mpTextNode( nullptr ),
-      mpNumRule( pNumRule )
+    : mpTextNode( nullptr )
+    , mpNumRule( pNumRule )
+    , m_isHiddenRedlines(false)
 {
 }
 
@@ -87,11 +87,12 @@ void SwNodeNum::PreAdd()
     }
     OSL_ENSURE( GetNumRule(),
             "<SwNodeNum::PreAdd()> - no list style set at <SwNodeNum> instance" );
-    if ( GetNumRule() && GetTextNode() )
+    if (!m_isHiddenRedlines && GetNumRule() && GetTextNode())
     {
         GetNumRule()->AddTextNode( *(GetTextNode()) );
     }
 
+    if (!m_isHiddenRedlines)
     {
         if ( GetTextNode() &&
              GetTextNode()->GetNodes().IsDocNodes() )
@@ -108,14 +109,14 @@ void SwNodeNum::PostRemove()
     OSL_ENSURE( GetNumRule(),
             "<SwNodeNum::PostRemove()> - no list style set at <SwNodeNum> instance" );
 
-    if ( GetTextNode() )
+    if (!m_isHiddenRedlines && GetTextNode())
     {
         GetTextNode()->getIDocumentListItems().removeListItem( *this );
     }
 
     if ( GetNumRule() )
     {
-        if ( GetTextNode() )
+        if (!m_isHiddenRedlines && GetTextNode())
         {
             GetNumRule()->RemoveTextNode( *(GetTextNode()) );
         }
@@ -370,7 +371,7 @@ const SwNodeNum* SwNodeNum::GetPrecedingNodeNumOf( const SwTextNode& rTextNode )
     const SwNodeNum* pPrecedingNodeNum( nullptr );
 
     // #i83479#
-    SwNodeNum aNodeNumForTextNode( const_cast<SwTextNode*>(&rTextNode) );
+    SwNodeNum aNodeNumForTextNode( const_cast<SwTextNode*>(&rTextNode), false/*doesn't matter*/ );
 
     pPrecedingNodeNum = dynamic_cast<const SwNodeNum*>(
                             GetRoot()

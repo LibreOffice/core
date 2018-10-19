@@ -30,7 +30,9 @@ class SW_DLLPUBLIC SwNodeNum : public SwNumberTreeNode
 {
 public:
 
-    explicit SwNodeNum( SwTextNode* pTextNode );
+    explicit SwNodeNum( SwTextNode* pTextNode, bool isHiddenRedlines );
+    // note: this is only for creating phantom nodes and root nodes; these
+    // never have a text node
     explicit SwNodeNum( SwNumRule* pNumRule );
     virtual ~SwNodeNum() override;
 
@@ -81,8 +83,9 @@ protected:
     // method called at a child after this child has been removed from the list tree
     virtual void PostRemove() override;
 private:
-    SwTextNode * mpTextNode;
+    SwTextNode *const mpTextNode;
     SwNumRule * mpNumRule;
+    bool m_isHiddenRedlines;
 
     static void UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum );
 
