@@ -585,7 +585,7 @@ void SvXMLImportPropertyMapper::PrepareForMultiPropertySet_(
         if ( ( 0 == ( nPropFlags & MID_FLAG_NO_PROPERTY ) ) &&
              ( ( 0 != ( nPropFlags & MID_FLAG_MUST_EXIST ) ) ||
                !rPropSetInfo.is() ||
-               (rPropSetInfo.is() && rPropSetInfo->hasPropertyByName( rPropName )) ) )
+               rPropSetInfo->hasPropertyByName(rPropName) ) )
         {
             // save property into property pair structure
             aPropertyPairs.emplace_back( &rPropName, &rProp.maValue );
