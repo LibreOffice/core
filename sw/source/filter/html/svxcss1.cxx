@@ -3078,101 +3078,80 @@ static void ParseCSS1_so_language( const CSS1Expression *pExpr,
 // the assignment of property to parsing function
 struct CSS1PropEntry
 {
-    union
-    {
-        const sal_Char  *sName;
-        OUString          *pName;
-    };
+    const char * pName;
     FnParseCSS1Prop pFunc;
 };
 
 #define CSS1_PROP_ENTRY(p) \
-    {   { sCSS1_P_##p }, ParseCSS1_##p }
+    { sCSS1_P_##p, ParseCSS1_##p }
 
 // the table with assignments
-static CSS1PropEntry aCSS1PropFnTab[] =
+static CSS1PropEntry const aCSS1PropFnTab[] =
 {
     CSS1_PROP_ENTRY(background),
     CSS1_PROP_ENTRY(background_color),
-    CSS1_PROP_ENTRY(border_top_width),
-    CSS1_PROP_ENTRY(border_right_width),
+    CSS1_PROP_ENTRY(border),
+    CSS1_PROP_ENTRY(border_bottom),
     CSS1_PROP_ENTRY(border_bottom_width),
-    CSS1_PROP_ENTRY(border_left_width),
-    CSS1_PROP_ENTRY(border_width),
     CSS1_PROP_ENTRY(border_color),
+    CSS1_PROP_ENTRY(border_left),
+    CSS1_PROP_ENTRY(border_left_width),
+    CSS1_PROP_ENTRY(border_right),
+    CSS1_PROP_ENTRY(border_right_width),
     CSS1_PROP_ENTRY(border_style),
     CSS1_PROP_ENTRY(border_top),
-    CSS1_PROP_ENTRY(border_right),
-    CSS1_PROP_ENTRY(border_bottom),
-    CSS1_PROP_ENTRY(border_left),
-    CSS1_PROP_ENTRY(border),
+    CSS1_PROP_ENTRY(border_top_width),
+    CSS1_PROP_ENTRY(border_width),
     CSS1_PROP_ENTRY(color),
     CSS1_PROP_ENTRY(column_count),
     CSS1_PROP_ENTRY(direction),
     CSS1_PROP_ENTRY(float),
-    CSS1_PROP_ENTRY(font_size),
+    CSS1_PROP_ENTRY(font),
     CSS1_PROP_ENTRY(font_family),
+    CSS1_PROP_ENTRY(font_size),
     CSS1_PROP_ENTRY(font_style),
     CSS1_PROP_ENTRY(font_variant),
     CSS1_PROP_ENTRY(font_weight),
+    CSS1_PROP_ENTRY(height),
+    CSS1_PROP_ENTRY(left),
     CSS1_PROP_ENTRY(letter_spacing),
     CSS1_PROP_ENTRY(line_height),
     CSS1_PROP_ENTRY(list_style_type),
-    CSS1_PROP_ENTRY(font),
+    CSS1_PROP_ENTRY(margin),
+    CSS1_PROP_ENTRY(margin_bottom),
+    CSS1_PROP_ENTRY(margin_left),
+    CSS1_PROP_ENTRY(margin_right),
+    CSS1_PROP_ENTRY(margin_top),
+    CSS1_PROP_ENTRY(orphans),
+    CSS1_PROP_ENTRY(padding),
+    CSS1_PROP_ENTRY(padding_bottom),
+    CSS1_PROP_ENTRY(padding_left),
+    CSS1_PROP_ENTRY(padding_right),
+    CSS1_PROP_ENTRY(padding_top),
+    CSS1_PROP_ENTRY(page_break_after),
+    CSS1_PROP_ENTRY(page_break_before),
+    CSS1_PROP_ENTRY(page_break_inside),
+    CSS1_PROP_ENTRY(position),
+    CSS1_PROP_ENTRY(size),
+    CSS1_PROP_ENTRY(so_language),
     CSS1_PROP_ENTRY(text_align),
     CSS1_PROP_ENTRY(text_decoration),
     CSS1_PROP_ENTRY(text_indent),
     CSS1_PROP_ENTRY(text_transform),
-    CSS1_PROP_ENTRY(margin_left),
-    CSS1_PROP_ENTRY(margin_right),
-    CSS1_PROP_ENTRY(margin_top),
-    CSS1_PROP_ENTRY(margin_bottom),
-    CSS1_PROP_ENTRY(margin),
-    CSS1_PROP_ENTRY(padding_top),
-    CSS1_PROP_ENTRY(padding_bottom),
-    CSS1_PROP_ENTRY(padding_left),
-    CSS1_PROP_ENTRY(padding_right),
-    CSS1_PROP_ENTRY(padding),
-    CSS1_PROP_ENTRY(position),
-    CSS1_PROP_ENTRY(left),
     CSS1_PROP_ENTRY(top),
-    CSS1_PROP_ENTRY(width),
-    CSS1_PROP_ENTRY(height),
-    CSS1_PROP_ENTRY(size),
-    CSS1_PROP_ENTRY(page_break_before),
-    CSS1_PROP_ENTRY(page_break_after),
-    CSS1_PROP_ENTRY(page_break_inside),
     CSS1_PROP_ENTRY(widows),
-    CSS1_PROP_ENTRY(orphans),
-    CSS1_PROP_ENTRY(so_language)
+    CSS1_PROP_ENTRY(width),
 };
 
-extern "C"
+#ifdef DBG_UTIL
+static bool CSS1PropEntryCompare( const CSS1PropEntry &lhs, const CSS1PropEntry &rhs)
 {
-static int CSS1PropEntryCompare( const void *pFirst, const void *pSecond)
-{
-    int nRet;
-    if( static_cast<const CSS1PropEntry*>(pFirst)->pFunc )
-    {
-        if( static_cast<const CSS1PropEntry*>(pSecond)->pFunc )
-            nRet = strcmp( static_cast<const CSS1PropEntry*>(pFirst)->sName ,
-                    static_cast<const CSS1PropEntry*>(pSecond)->sName );
-        else
-            nRet = -1 * static_cast<const CSS1PropEntry*>(pSecond)->pName->compareToAscii(
-                            static_cast<const CSS1PropEntry*>(pFirst)->sName );
-    }
-    else
-    {
-        if( static_cast<const CSS1PropEntry*>(pSecond)->pFunc )
-            nRet = static_cast<const CSS1PropEntry*>(pFirst)->pName->compareToAscii(
-                        static_cast<const CSS1PropEntry*>(pSecond)->sName );
-        else
-            nRet = static_cast<const CSS1PropEntry*>(pFirst)->pName->compareTo(
-                        *static_cast<const CSS1PropEntry*>(pSecond)->pName );
-    }
-
-    return nRet;
+    return strcmp(lhs.pName, rhs.pName) < 0;
 }
+#endif
+static bool CSS1PropEntryFindCompare(CSS1PropEntry const & lhs, OUString const & s)
+{
+    return s.compareToIgnoreAsciiCaseAscii(lhs.pName) > 0;
 }
 
 void SvxCSS1Parser::ParseProperty( const OUString& rProperty,
@@ -3184,27 +3163,16 @@ void SvxCSS1Parser::ParseProperty( const OUString& rProperty,
 
     if( !bSortedPropFns )
     {
-        qsort( static_cast<void*>(aCSS1PropFnTab),
-                sizeof( aCSS1PropFnTab ) / sizeof( CSS1PropEntry ),
-                sizeof( CSS1PropEntry ),
-                CSS1PropEntryCompare );
+        assert( std::is_sorted( std::begin(aCSS1PropFnTab), std::end(aCSS1PropFnTab),
+                                CSS1PropEntryCompare ) );
         bSortedPropFns = true;
     }
 
-    OUString aTmp( rProperty.toAsciiLowerCase() );
-
-    CSS1PropEntry aSrch;
-    aSrch.pName = &aTmp;
-    aSrch.pFunc = nullptr;
-
-    void* pFound;
-    if( nullptr != ( pFound = bsearch( &aSrch,
-                        static_cast<void*>(aCSS1PropFnTab),
-                        sizeof( aCSS1PropFnTab ) / sizeof( CSS1PropEntry ),
-                        sizeof( CSS1PropEntry ),
-                        CSS1PropEntryCompare )))
+    auto it = std::lower_bound( std::begin(aCSS1PropFnTab), std::end(aCSS1PropFnTab), rProperty,
+                                CSS1PropEntryFindCompare );
+    if( it != std::end(aCSS1PropFnTab) && !CSS1PropEntryFindCompare(*it,rProperty)  )
     {
-        (static_cast<CSS1PropEntry*>(pFound)->pFunc)( pExpr, *pItemSet, *pPropInfo, *this );
+        it->pFunc( pExpr, *pItemSet, *pPropInfo, *this );
     }
 }
 
