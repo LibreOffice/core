@@ -247,10 +247,9 @@ bool RTFTokenizer::lookupMathKeyword(RTFMathSymbol& rSymbol)
 {
     auto low
         = std::lower_bound(s_aRTFMathControlWords.begin(), s_aRTFMathControlWords.end(), rSymbol);
-    int i = low - s_aRTFMathControlWords.begin();
     if (low == s_aRTFMathControlWords.end() || rSymbol < *low)
         return false;
-    rSymbol = s_aRTFMathControlWords[i];
+    rSymbol = *low;
     return true;
 }
 

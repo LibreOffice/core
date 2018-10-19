@@ -38,13 +38,10 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace cppu;
 
-struct SbCompare_UString_PropertyValue_Impl
+static bool SbCompare_UString_PropertyValue_Impl(PropertyValue const & lhs, const OUString& rhs)
 {
-   bool operator() (PropertyValue const & lhs, const OUString& rhs)
-   {
-      return lhs.Name.compareTo(rhs) < 0;
-   }
-};
+    return lhs.Name.compareTo(rhs) < 0;
+}
 
 
 SbPropertyValues::SbPropertyValues()
@@ -82,8 +79,8 @@ size_t SbPropertyValues::GetIndex_Impl( const OUString &rPropName ) const
 {
     SbPropertyValueArr_Impl::const_iterator it = std::lower_bound(
           m_aPropVals.begin(), m_aPropVals.end(), rPropName,
-          SbCompare_UString_PropertyValue_Impl() );
-    if (it == m_aPropVals.end())
+          SbCompare_UString_PropertyValue_Impl );
+    if (it == m_aPropVals.end() || !SbCompare_UString_PropertyValue_Impl(*it, rPropName))
     {
         throw beans::UnknownPropertyException(
                 "Property not found: " + rPropName,

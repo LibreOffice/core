@@ -180,7 +180,7 @@ OUString SmartTagMgr::GetSmartTagCaption( const OUString& rSmartTagType, const c
 {
     OUString aRet;
 
-    auto aLower = maSmartTagMap.lower_bound( rSmartTagType );
+    auto aLower = maSmartTagMap.find( rSmartTagType );
 
     if ( aLower != maSmartTagMap.end() )
     {
