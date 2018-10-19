@@ -62,7 +62,7 @@ public:
         These need to correspond to the ExtraLanguages.ScriptType template
         property in officecfg/registry/schema/org/openoffice/VCL.xcs
      */
-    enum ScriptType
+    enum class ScriptType
     {
         UNKNOWN = 0,
         WESTERN = 1,      // Copies css::i18n::ScriptType for strong types

@@ -673,7 +673,7 @@ LanguageTag::ScriptType LanguageTag::getOnTheFlyScriptType( LanguageType nRegist
     if (itID != rMapLangID.end())
         return (*itID).second->getScriptType();
     else
-        return UNKNOWN;
+        return ScriptType::UNKNOWN;
 }
 
 
