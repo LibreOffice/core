@@ -136,6 +136,7 @@ public:
     SAL_DLLPRIVATE const INetURLObject& GetThmURL() const;
     const INetURLObject&        GetSdgURL() const;
     SAL_DLLPRIVATE const INetURLObject& GetSdvURL() const;
+    SAL_DLLPRIVATE const INetURLObject& GetStrURL() const;
 
     sal_uInt32                  GetId() const;
     SAL_DLLPRIVATE void         SetId( sal_uInt32 nNewId, bool bResetThemeName );
