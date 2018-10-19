@@ -54,13 +54,13 @@ ScStyleSheet::ScStyleSheet( const OUString&     rName,
                             SfxStyleSearchBits  nMaskP )
 
     : SfxStyleSheet   ( rName, rPoolP, eFamily, nMaskP )
-    , eUsage( UNKNOWN )
+    , eUsage( Usage::UNKNOWN )
 {
 }
 
 ScStyleSheet::ScStyleSheet( const ScStyleSheet& rStyle )
     : SfxStyleSheet ( rStyle )
-    , eUsage( UNKNOWN )
+    , eUsage( Usage::UNKNOWN )
 {
 }
 
@@ -261,10 +261,10 @@ bool ScStyleSheet::IsUsed() const
         // and store the state.
         ScDocument* pDoc = static_cast<ScStyleSheetPool*>(m_pPool)->GetDocument();
         if ( pDoc && pDoc->IsStyleSheetUsed( *this ) )
-            eUsage = USED;
+            eUsage = Usage::USED;
         else
-            eUsage = NOTUSED;
-        return eUsage == USED;
+            eUsage = Usage::NOTUSED;
+        return eUsage == Usage::USED;
     }
     else
         return true;
