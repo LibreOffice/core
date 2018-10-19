@@ -119,14 +119,17 @@ namespace basegfx
 
             ImplHomMatrixTemplate& operator=(const ImplHomMatrixTemplate& rToBeCopied)
             {
-                // complete initialization using copy
-                for(sal_uInt16 a(0); a < (RowSize - 1); a++)
+                if (this != &rToBeCopied)
                 {
-                    memcpy(&maLine[a], &rToBeCopied.maLine[a], sizeof(ImplMatLine< RowSize >));
-                }
-                if(rToBeCopied.mpLine)
-                {
-                    mpLine.reset( new ImplMatLine< RowSize >((RowSize - 1), rToBeCopied.mpLine.get()) );
+                    // complete initialization using copy
+                    for(sal_uInt16 a(0); a < (RowSize - 1); a++)
+                    {
+                        memcpy(&maLine[a], &rToBeCopied.maLine[a], sizeof(ImplMatLine< RowSize >));
+                    }
+                    if(rToBeCopied.mpLine)
+                    {
+                        mpLine.reset( new ImplMatLine< RowSize >((RowSize - 1), rToBeCopied.mpLine.get()) );
+                    }
                 }
                 return *this;
             }
