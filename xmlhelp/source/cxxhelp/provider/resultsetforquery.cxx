@@ -237,7 +237,6 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
             }
 
             aIndexFolderResultVectorVector.push_back( std::move(aIndexFolderResultVector) );
-            aIndexFolderResultVector.clear();
         }
         catch (const Exception &e)
         {
