@@ -656,7 +656,7 @@ bool Gallery::RemoveTheme( const OUString& rThemeName )
             INetURLObject   aThmURL( pThm->GetThmURL() );
             INetURLObject   aSdgURL( pThm->GetSdgURL() );
             INetURLObject   aSdvURL( pThm->GetSdvURL() );
-            INetURLObject   aStrURL( pThm->GetSdvURL() );
+            INetURLObject   aStrURL( pThm->GetStrURL() );
 
             ReleaseTheme( pThm, aListener );
 
