@@ -822,8 +822,7 @@ void OStatement_Base::setFetchSize(sal_Int32 _par0)
     {
         setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_ROW_ARRAY_SIZE, _par0);
 
-        if (m_pRowStatusArray)
-            delete[] m_pRowStatusArray;
+        delete[] m_pRowStatusArray;
         m_pRowStatusArray = new SQLUSMALLINT[_par0];
         setStmtOption<SQLUSMALLINT*, SQL_IS_POINTER>(SQL_ATTR_ROW_STATUS_PTR, m_pRowStatusArray);
     }
