@@ -116,10 +116,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
     {
         Bitmap aBmp(rBmpEx.GetBitmap());
 
-        mnInterlaced = 0; // ( aBmp.GetSizePixel().Width() > 128 ) || ( aBmp.GetSizePixel().Height() > 128 ) ? 1 : 0; #i67236#
-
-        // #i67234# defaulting max chunk size to 256kb when using interlace mode
-        mnMaxChunkSize = mnInterlaced == 0 ? std::numeric_limits<sal_uInt32>::max() : 0x40000;
+        mnMaxChunkSize = std::numeric_limits<sal_uInt32>::max();
 
         if (pFilterData)
         {
