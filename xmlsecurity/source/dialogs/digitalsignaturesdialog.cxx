@@ -645,20 +645,19 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             // If there is no storage, then it's pointless to check storage
             // stream references.
             else if (maSignatureManager.meSignatureMode == DocumentSignatureMode::Content
-                && bCertValid && (maSignatureManager.mxStore.is() && !DocumentSignatureHelper::isOOo3_2_Signature(
+                && (maSignatureManager.mxStore.is() && !DocumentSignatureHelper::isOOo3_2_Signature(
                 maSignatureManager.maCurrentSignatureInformations[n])))
             {
                 aImage = m_pSigsNotvalidatedImg->GetImage();
                 bAllNewSignatures = false;
             }
             else if (maSignatureManager.meSignatureMode == DocumentSignatureMode::Content
-                && bCertValid && DocumentSignatureHelper::isOOo3_2_Signature(
+                && DocumentSignatureHelper::isOOo3_2_Signature(
                 maSignatureManager.maCurrentSignatureInformations[n]))
             {
                 aImage = m_pSigsValidImg->GetImage();
             }
-            else if (maSignatureManager.meSignatureMode == DocumentSignatureMode::Macros
-                && bCertValid)
+            else if (maSignatureManager.meSignatureMode == DocumentSignatureMode::Macros)
             {
                 aImage = m_pSigsValidImg->GetImage();
             }
