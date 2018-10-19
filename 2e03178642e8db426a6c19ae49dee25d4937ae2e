@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "1f1a1f67_b649a661",
+        "filename": "scripting/source/pyprov/pythonscript.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2018-10-19T11:09:39Z",
+      "side": 1,
+      "message": "its the same logic as used in getScript which consumes the result of this, I\u0027d be concerned to change one without changing the other",
+      "parentUuid": "1f1a1f67_333a48e7",
+      "revId": "2e03178642e8db426a6c19ae49dee25d4937ae2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f1a1f67_93559c20",
         "filename": "scripting/source/pyprov/pythonscript.py",
         "patchSetId": 2
