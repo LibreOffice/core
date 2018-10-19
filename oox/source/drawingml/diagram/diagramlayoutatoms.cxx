@@ -358,7 +358,9 @@ void AlgAtom::layoutShape( const ShapePtr& rShape,
 
             awt::Size aChildSize = rShape->getSize();
 
-            aChildSize.Width /= (nCount + (nCount-1)*fSpace);
+            // Lineral vertically: no adjustment of width.
+            if (nDir != XML_fromT)
+                aChildSize.Width /= (nCount + (nCount-1)*fSpace);
             aChildSize.Height /= (nCount + (nCount-1)*fSpace);
 
             awt::Point aCurrPos(0, 0);
