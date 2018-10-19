@@ -1862,7 +1862,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                 if( pTextNd && pOutlRule && pTextNd->IsNumbered())
                 {
                     SwNumberTree::tNumberVector aNumVector =
-                        pTextNd->GetNumberVector();
+                        pTextNd->GetNumberVector(pWrtShell->GetLayout());
                     for( int nLevel = 0;
                          nLevel <= pTextNd->GetActualListLevel();
                          nLevel++ )
