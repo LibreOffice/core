@@ -405,7 +405,7 @@ ZipFile::ZipFile(const std::wstring &FileName) :
     m_bShouldFree(true)
 {
     m_pStream = new FileStream(FileName.c_str());
-    if (m_pStream && !isZipStream(m_pStream))
+    if (!isZipStream(m_pStream))
     {
         delete m_pStream;
         m_pStream = nullptr;
