@@ -300,19 +300,16 @@ cmd/lc_optionstreedialog.png cmd/lc_controlproperties.png
 cmd/sc_optionstreedialog.png cmd/sc_controlproperties.png
 
 # Track Change
-cmd/32/acceptchanges.png cmd/32/accepttrackedchanges.png
-cmd/32/accepttracedchange.png cmd/32/accepttrackedchanges.png 
-cmd/32/accepttrackedchange.png cmd/32/accepttrackedchanges.png
+cmd/32/acceptchanges.png cmd/32/accepttrackedchange.png
+cmd/32/accepttracedchange.png cmd/32/accepttrackedchange.png 
 cmd/32/commentchange.png cmd/32/commentchangetracking.png
 
-cmd/lc_acceptchanges.png cmd/lc_accepttrackedchanges.png
-cmd/lc_accepttracedchange.png cmd/lc_accepttrackedchanges.png 
-cmd/lc_accepttrackedchange.png cmd/lc_accepttrackedchanges.png
+cmd/lc_acceptchanges.png cmd/lc_accepttrackedchange.png
+cmd/lc_accepttracedchange.png cmd/lc_accepttrackedchange.png 
 cmd/lc_commentchange.png cmd/lc_commentchangetracking.png
 
-cmd/sc_acceptchanges.png cmd/sc_accepttrackedchanges.png
-cmd/sc_accepttracedchange.png cmd/sc_accepttrackedchanges.png 
-cmd/sc_accepttrackedchange.png cmd/sc_accepttrackedchanges.png
+cmd/sc_acceptchanges.png cmd/sc_accepttrackedchange.png
+cmd/sc_accepttracedchange.png cmd/sc_accepttrackedchange.png 
 cmd/sc_commentchange.png cmd/sc_commentchangetracking.png
 
 # Formatmenu
@@ -1139,8 +1136,11 @@ cmd/lc_fontworkshapetype.png cmd/lc_fontwork.png
 cmd/sc_fontworkshapetype.png cmd/sc_fontwork.png
 
 # Axis
+cmd/32/diagramaxisall.png cmd/32/diagramaxisxyz.png
 cmd/32/toggleaxisdescr.png cmd/32/helplinesvisible.png
+cmd/lc_diagramaxisall.png cmd/lc_diagramaxisxyz.png
 cmd/lc_toggleaxisdescr.png cmd/lc_helplinesvisible.png
+cmd/sc_diagramaxisall.png cmd/sc_diagramaxisxyz.png
 cmd/sc_toggleaxisdescr.png cmd/sc_helplinesvisible.png
 
 # Grid
