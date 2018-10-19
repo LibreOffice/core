@@ -1248,7 +1248,7 @@ static bool equalFont( Style const & style1, Style const & style2 )
         f1.StyleName == f2.StyleName &&
         f1.Family == f2.Family &&
         f1.CharSet == f2.CharSet &&
-        f1.Pitch == f2.CharSet &&
+        f1.Pitch == f2.Pitch &&
         f1.CharacterWidth == f2.CharacterWidth &&
         f1.Weight == f2.Weight &&
         f1.Slant == f2.Slant &&
