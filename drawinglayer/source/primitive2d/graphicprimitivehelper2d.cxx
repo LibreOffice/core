@@ -177,7 +177,7 @@ namespace drawinglayer
                 if (mbBufferingAllowed)
                 {
                     // all frames buffered
-                    if (mbBufferingAllowed && maBufferedPrimitives.size() && nIndex < maBufferedPrimitives.size())
+                    if (maBufferedPrimitives.size() && nIndex < maBufferedPrimitives.size())
                     {
                         if (!maBufferedPrimitives[nIndex].is())
                         {
