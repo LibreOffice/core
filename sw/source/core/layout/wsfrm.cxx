@@ -2881,8 +2881,7 @@ SwTwips SwLayoutFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
                 SetRetouche();
             if ( IsTabFrame() )
             {
-                if( IsTabFrame() )
-                    static_cast<SwTabFrame*>(this)->SetComplete();
+                static_cast<SwTabFrame*>(this)->SetComplete();
                 if ( Lower() )  // Can also be in the Join and be empty!
                     InvalidateNextPos();
             }
