@@ -41,6 +41,7 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <o3tl/enumarray.hxx>
 #include <tools/diagnose_ex.h>
 

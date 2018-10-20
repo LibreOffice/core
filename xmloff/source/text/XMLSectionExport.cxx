@@ -21,6 +21,7 @@
 #include <o3tl/any.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 
 #include <vector>
 

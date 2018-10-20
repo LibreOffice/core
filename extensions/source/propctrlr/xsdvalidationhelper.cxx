@@ -28,6 +28,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/xforms/XDataTypeRepository.hpp>
 #include <unotools/syslocale.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <tools/diagnose_ex.h>
 
 

@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <osl/diagnose.h>
+#include <unotools/charclass.hxx>
 #include <rangeutl.hxx>
 #include <document.hxx>
 #include <global.hxx>

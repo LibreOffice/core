@@ -72,6 +72,7 @@
 #include <salhelper/timer.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/builderfactory.hxx>
+#include <unotools/collatorwrapper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>

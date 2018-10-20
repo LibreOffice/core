@@ -21,8 +21,11 @@
 #define INCLUDED_UNOTOOLS_EVENTLISTENERADAPTER_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XComponent; } } } }
 
 namespace utl
 {

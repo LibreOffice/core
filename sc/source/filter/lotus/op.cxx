@@ -18,6 +18,7 @@
  */
 
 #include <rtl/math.hxx>
+#include <rtl/character.hxx>
 
 #include <string.h>
 #include <math.h>

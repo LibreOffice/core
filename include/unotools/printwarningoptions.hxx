@@ -22,10 +22,10 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <sal/types.h>
-#include <osl/mutex.hxx>
-#include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 #include <memory>
+
+namespace osl { class Mutex; }
 
 /*-************************************************************************************************************
     @short          forward declaration to our private date container implementation

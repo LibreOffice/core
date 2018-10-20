@@ -17,6 +17,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <tools/stream.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <utility>
 #include <vcl/weld.hxx>

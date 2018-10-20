@@ -20,6 +20,9 @@
 #include <sal/config.h>
 
 #include <com/sun/star/lang/IllegalAccessException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/container/ElementExistException.hpp>
+#include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/sdb/XDatabaseRegistrations.hpp>
 
 #include <cppuhelper/basemutex.hxx>

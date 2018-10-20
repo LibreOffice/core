@@ -24,6 +24,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
+#include <tools/link.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>

@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <osl/diagnose.h>
 #include <list>
 #include <map>
 

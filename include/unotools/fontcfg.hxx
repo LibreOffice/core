@@ -19,18 +19,20 @@
 #ifndef INCLUDED_UNOTOOLS_FONTCFG_HXX
 #define INCLUDED_UNOTOOLS_FONTCFG_HXX
 
-#include <i18nlangtag/languagetag.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <tools/solar.h>
 #include <tools/fontenum.hxx>
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <o3tl/typed_flags_set.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+
+namespace o3tl { template <typename T> struct typed_flags; }
+namespace com { namespace sun { namespace star { namespace container { class XNameAccess; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
+
+class LanguageTag;
 
 enum class DefaultFontType;
 

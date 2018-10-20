@@ -63,6 +63,7 @@
 
 #include <svtools/sfxecode.hxx>
 #include <unotools/syslocale.hxx>
+#include <unotools/charclass.hxx>
 
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/docfilt.hxx>

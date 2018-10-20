@@ -24,6 +24,7 @@
 #include <sal/log.hxx>
 #include <tools/date.hxx>
 #include <rtl/math.hxx>
+#include <rtl/character.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>

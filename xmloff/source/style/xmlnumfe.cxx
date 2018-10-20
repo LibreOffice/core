@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <tools/color.hxx>
 #include <sax/tools/converter.hxx>
 

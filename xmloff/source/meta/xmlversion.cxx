@@ -21,6 +21,7 @@
 #include <unotools/streamwrap.hxx>
 #include <xmlversion.hxx>
 #include <xmloff/xmlmetae.hxx>
+#include <osl/diagnose.h>
 
 #include <xmloff/xmltoken.hxx>
 #include <comphelper/processfactory.hxx>

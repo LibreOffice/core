@@ -21,15 +21,8 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <sal/types.h>
-#include <tools/solar.h>
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <o3tl/typed_flags_set.hxx>
-
-namespace utl {
-  class FontSubstConfiguration;
-  struct FontNameAttr;
-}
 
 enum class SubsFontFlags
 {

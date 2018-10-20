@@ -33,6 +33,7 @@
 #include <sfx2/printer.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
+#include <rtl/character.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <unicode/uchar.h>

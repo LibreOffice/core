@@ -18,6 +18,7 @@
  */
 
 #include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <o3tl/any.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/fontcfg.hxx>
@@ -27,6 +28,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <unotools/configpaths.hxx>
 #include <unotools/syslocale.hxx>

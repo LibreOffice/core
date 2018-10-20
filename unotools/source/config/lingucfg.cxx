@@ -22,10 +22,12 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
+#include <com/sun/star/util/XChangesBatch.hpp>
 #include <rtl/instance.hxx>
 #include <sal/log.hxx>
 #include <osl/mutex.hxx>
@@ -33,6 +35,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
+#include <unotools/configitem.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 #include <sal/macros.h>

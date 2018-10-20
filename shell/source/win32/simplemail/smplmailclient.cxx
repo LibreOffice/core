@@ -32,6 +32,7 @@
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/syslocale.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

@@ -35,6 +35,7 @@
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/resmgr.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 using namespace ::com::sun::star;
 using namespace sca::pricing;

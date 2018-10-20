@@ -21,7 +21,6 @@
 #define INCLUDED_UNOTOOLS_CONFIGPATHS_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <sal/types.h>
 #include <rtl/ustring.hxx>
 
 namespace utl

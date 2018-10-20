@@ -18,6 +18,7 @@
  */
 #include <svx/sidebar/LineWidthPopup.hxx>
 #include <svx/sidebar/LinePropertyPanelBase.hxx>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <svx/xlnwtit.hxx>

@@ -31,6 +31,7 @@
 #include <svtools/imapcirc.hxx>
 #include <svtools/imappoly.hxx>
 #include <svl/urihelper.hxx>
+#include <rtl/character.hxx>
 
 #include <sstream>
 
