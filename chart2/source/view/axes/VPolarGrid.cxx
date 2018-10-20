@@ -60,8 +60,8 @@ void VPolarGrid::setIncrements( const std::vector< ExplicitIncrementData >& rInc
 
 void VPolarGrid::getAllTickInfos( sal_Int32 nDimensionIndex, TickInfoArraysType& rAllTickInfos ) const
 {
-    TickFactory aTickFactory(
-            m_pPosHelper->getScales()[nDimensionIndex], m_aIncrements[nDimensionIndex] );
+    const std::vector<ExplicitScaleData>& rScales = m_pPosHelper->getScales();
+    TickFactory aTickFactory(rScales[nDimensionIndex], m_aIncrements[nDimensionIndex]);
     aTickFactory.getAllTicks( rAllTickInfos );
 }
 
@@ -111,7 +111,8 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
     Reference< drawing::XShapes > xMainTarget(
         createGroupShape( xLogicTarget, m_aCID ) );
 
-    const ExplicitScaleData&     rAngleScale = m_pPosHelper->getScales()[0];
+    const std::vector<ExplicitScaleData>& rScales = m_pPosHelper->getScales();
+    const ExplicitScaleData& rAngleScale = rScales[0];
     Reference< XScaling > xInverseScaling( NULL );
     if( rAngleScale.Scaling.is() )
         xInverseScaling = rAngleScale.Scaling->getInverseScaling();
@@ -161,8 +162,9 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
     Reference< drawing::XShapes > xMainTarget(
         createGroupShape( xLogicTarget, m_aCID ) );
 
-    const ExplicitScaleData&     rRadiusScale = m_pPosHelper->getScales()[1];
-    const ExplicitScaleData&     rAngleScale = m_pPosHelper->getScales()[0];
+    const std::vector<ExplicitScaleData>& rScales = m_pPosHelper->getScales();
+    const ExplicitScaleData&     rRadiusScale = rScales[1];
+    const ExplicitScaleData&     rAngleScale = rScales[0];
     const ExplicitIncrementData& rAngleIncrement = m_aIncrements[0];
     Reference< XScaling > xInverseRadiusScaling;
     if( rRadiusScale.Scaling.is() )

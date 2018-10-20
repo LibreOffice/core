@@ -121,8 +121,10 @@ namespace drawinglayer
             // take care of global ambient light
             aRetval += mpSdrLightingAttribute->getAmbientLight() * rColor;
 
+            const std::vector<Sdr3DLightAttribute>& rLightVector = mpSdrLightingAttribute->getLightVector();
+
             // prepare light access. Is there a light?
-            const sal_uInt32 nLightCount(mpSdrLightingAttribute->getLightVector().size());
+            const sal_uInt32 nLightCount(rLightVector.size());
 
             if(nLightCount && !rNormalInEyeCoordinates.equalZero())
             {
@@ -132,7 +134,7 @@ namespace drawinglayer
 
                 for(sal_uInt32 a(0); a < nLightCount; a++)
                 {
-                    const Sdr3DLightAttribute& rLight(mpSdrLightingAttribute->getLightVector()[a]);
+                    const Sdr3DLightAttribute& rLight(rLightVector[a]);
                     const double fCosFac(rLight.getDirection().scalar(aEyeNormal));
 
                     if(basegfx::fTools::more(fCosFac, 0.0))
