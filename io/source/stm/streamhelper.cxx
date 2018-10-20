@@ -75,8 +75,10 @@ void MemRingBuffer::resizeBuffer( sal_Int32 nMinSize )
     }
 
     if( nNewLen != m_nBufferLen ) {
-        m_p = static_cast<sal_Int8 *>(std::realloc( m_p , nNewLen ));
-        if( !m_p ) {
+       if (auto p = static_cast<sal_Int8*>(std::realloc(m_p, nNewLen)))
+            m_p = p;
+        else
+        {
             throw css::io::BufferSizeExceededException(
                 "MemRingBuffer::resizeBuffer BufferSizeExceededException");
         }
