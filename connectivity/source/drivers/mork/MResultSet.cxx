@@ -384,8 +384,7 @@ sal_Bool SAL_CALL OResultSet::isAfterLast(  )
     SAL_WARN("connectivity.mork", "OResultSet::isAfterLast() NOT IMPLEMENTED!");
     ResultSetEntryGuard aGuard( *this );
 
-//    return sal_True;
-    return m_nRowPos > currentRowCount() && MQueryHelper::queryComplete();
+    return m_nRowPos > currentRowCount();
 }
 
 sal_Bool SAL_CALL OResultSet::isFirst(  )
@@ -401,7 +400,7 @@ sal_Bool SAL_CALL OResultSet::isLast(  )
     ResultSetEntryGuard aGuard( *this );
 
 //    return sal_True;
-    return m_nRowPos == currentRowCount() && MQueryHelper::queryComplete();
+    return m_nRowPos == currentRowCount();
 }
 
 void SAL_CALL OResultSet::beforeFirst(  )
@@ -1124,8 +1123,6 @@ void OResultSet::executeQuery()
                     // query to the mozilla addressbooks has returned all
                     // values.
 
-                    OSL_ENSURE( MQueryHelper::queryComplete(), "Query not complete!!");
-
                     OSortIndex aSortIndex(eKeyType,m_aOrderbyAscending);
 
 #if OSL_DEBUG_LEVEL > 0
@@ -1305,25 +1302,8 @@ bool OResultSet::validRow( sal_uInt32 nRow)
 {
     sal_Int32  nNumberOfRecords = m_aQueryHelper.getResultCount();
 
-    while ( nRow > static_cast<sal_uInt32>(nNumberOfRecords) && !MQueryHelper::queryComplete() ) {
-            if (!m_aQueryHelper.checkRowAvailable( nRow ))
-            {
-                SAL_INFO(
-                    "connectivity.mork",
-                    "validRow(" << nRow << "): return False");
-                return false;
-            }
-
-            if ( m_aQueryHelper.hadError() )
-            {
-                m_pStatement->getOwnConnection()->throwSQLException( m_aQueryHelper.getError(), *this );
-            }
-
-            nNumberOfRecords = m_aQueryHelper.getResultCount();
-    }
-
     if (( nRow == 0 ) ||
-        ( nRow > static_cast<sal_uInt32>(nNumberOfRecords) && MQueryHelper::queryComplete()) ){
+        ( nRow > static_cast<sal_uInt32>(nNumberOfRecords)) ){
         SAL_INFO("connectivity.mork", "validRow(" << nRow << "): return False");
         return false;
     }
