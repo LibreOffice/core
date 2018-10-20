@@ -108,7 +108,7 @@ ODesignView::ODesignView(   vcl::Window* pParent,
     m_aSplitWin->InsertItem( COLSET_ID,100,SPLITWINDOW_APPEND, 0, SplitWindowItemFlags::PercentSize | SplitWindowItemFlags::ColSet );
     m_aSplitWin->InsertItem( REPORT_ID, m_aScrollWindow.get(), 100, SPLITWINDOW_APPEND, COLSET_ID, SplitWindowItemFlags::PercentSize);
 
-    // Splitter einrichten
+    // set up splitter
     m_aSplitWin->SetSplitHdl(LINK(this, ODesignView,SplitHdl));
     m_aSplitWin->SetAlign(WindowAlign::Left);
     m_aSplitWin->Show();
