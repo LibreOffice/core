@@ -71,7 +71,7 @@ Scanline GIFLZWDecompressor::DecompressBlock( sal_uInt8* pSrc, sal_uInt8 cBufSiz
     nBlockBufPos = 0;
     pBlockBuf = pSrc;
 
-    while( ProcessOneCode() )
+    while (pTarget && ProcessOneCode())
     {
         nCount += nOutBufDataLen;
 
@@ -79,7 +79,14 @@ Scanline GIFLZWDecompressor::DecompressBlock( sal_uInt8* pSrc, sal_uInt8 cBufSiz
         {
             sal_uLong   nNewSize = nTargetSize << 1;
             sal_uLong   nOffset = pTmpTarget - pTarget;
-            pTarget = static_cast<sal_uInt8*>(std::realloc( pTarget, nNewSize ));
+            if (auto p = static_cast<sal_uInt8*>(std::realloc(pTarget, nNewSize)))
+                pTarget = p;
+            else
+            {
+                free(pTarget);
+                pTarget = nullptr;
+                break;
+            }
 
             nTargetSize = nNewSize;
             pTmpTarget = pTarget + nOffset;
