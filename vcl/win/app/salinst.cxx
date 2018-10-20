@@ -388,6 +388,7 @@ VCLPLUG_WIN_PUBLIC SalInstance* create_SalInstance()
 
 WinSalInstance::WinSalInstance()
     : SalInstance(o3tl::make_unique<SalYieldMutex>())
+    , mhInst( nullptr )
     , mhComWnd( nullptr )
     , m_nNoYieldLock( 0 )
 {
