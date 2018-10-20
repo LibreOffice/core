@@ -1150,7 +1150,7 @@ Reference< XPersistObject >  OObjectInputStream::readObject()
             }
         }
         else {
-            if( m_aPersistVector.size() < nId )
+            if (nId >= m_aPersistVector.size())
             {
                 // id unknown, load failure !
                 bLoadSuccessful = false;
