@@ -108,11 +108,11 @@ private:
     int    nDayOfWeek;                          // Temporary (!) day of week (1..7,-1..-7) if date
     sal_uInt16 nTimePos;                        // Index of first time separator (+1)
     short  nDecPos;                             // Index of substring containing "," (+1)
-    short  nNegCheck;                           // '( )' for negative
+    bool   bNegCheck;                           // '( )' for negative
     short  nESign;                              // Sign of exponent
     short  nAmPm;                               // +1 AM, -1 PM, 0 if none
     short  nLogical;                            // -1 => False, 1 => True
-    sal_Int16 mnEra;                            // Era if date, 0 => BCE, 1 => CE (currently only Gregorian)
+    bool   mbEraCE;                            // Era if date, 0 => BCE, 1 => CE (currently only Gregorian)
     sal_uInt16 nThousand;                       // Count of group (AKA thousand) separators
     sal_uInt16 nPosThousandString;              // Position of concatenated 000,000,000 string
     SvNumFormatType eScannedType;               // Scanned type

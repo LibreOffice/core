@@ -133,7 +133,7 @@ Splitter::Splitter( vcl::Window* pParent, WinBits nStyle ) :
     mnStartSplitPos( 0 ),
     mbDragFull( false ),
     mbKbdSplitting( false ),
-    mbInKeyEvent( 0 ),
+    mbInKeyEvent( false ),
     mnKeyboardStepSize( SPLITTER_DEFAULTSTEPSIZE )
 {
     ImplGetWindowImpl()->mbSplitter        = true;
@@ -555,7 +555,7 @@ void Splitter::KeyInput( const KeyEvent& rKEvt )
     if( mbInKeyEvent )
         return;
 
-    mbInKeyEvent = 1;
+    mbInKeyEvent = true;
 
     Splitter *pSibling = ImplFindSibling();
     vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
@@ -644,7 +644,7 @@ void Splitter::KeyInput( const KeyEvent& rKEvt )
             GrabFocusToDocument();
             break;
     }
-    mbInKeyEvent = 0;
+    mbInKeyEvent = false;
 }
 
 void Splitter::DataChanged( const DataChangedEvent& rDCEvt )

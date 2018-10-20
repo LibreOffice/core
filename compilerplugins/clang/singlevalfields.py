@@ -5,6 +5,7 @@ import re
 import io
 
 definitionToSourceLocationMap = dict() # dict of tuple(parentClass, fieldName) to sourceLocation
+definitionToTypeMap = dict() # dict of tuple(parentClass, fieldName) to field type
 fieldAssignDict = dict() # dict of tuple(parentClass, fieldName) to (set of values)
 
 # clang does not always use exactly the same numbers in the type-parameter vars it generates
@@ -20,9 +21,11 @@ with io.open("workdir/loplugin.singlevalfields.log", "rb", buffering=1024*1024) 
         if tokens[0] == "defn:":
             parentClass = normalizeTypeParams(tokens[1])
             fieldName = normalizeTypeParams(tokens[2])
-            sourceLocation = tokens[3]
+            fieldType = normalizeTypeParams(tokens[3])
+            sourceLocation = tokens[4]
             fieldInfo = (parentClass, fieldName)
             definitionToSourceLocationMap[fieldInfo] = sourceLocation
+            definitionToTypeMap[fieldInfo] = fieldType
         elif tokens[0] == "asgn:":
             parentClass = normalizeTypeParams(tokens[1])
             fieldName = normalizeTypeParams(tokens[2])
@@ -37,7 +40,10 @@ with io.open("workdir/loplugin.singlevalfields.log", "rb", buffering=1024*1024) 
         else:
             print( "unknown line: " + line)
 
+# look for stuff also has a single value
 tmp1list = list()
+# look for things which have two values - zero and one
+tmp2list = list()
 for fieldInfo, assignValues in fieldAssignDict.iteritems():
     v0 = fieldInfo[0] + " " + fieldInfo[1]
     v1 = (",".join(assignValues))
@@ -45,7 +51,7 @@ for fieldInfo, assignValues in fieldAssignDict.iteritems():
     if fieldInfo not in definitionToSourceLocationMap:
         continue
     v2 = definitionToSourceLocationMap[fieldInfo]
-    if len(assignValues) != 1:
+    if len(assignValues) > 2:
         continue
     if "?" in assignValues:
         continue
@@ -75,13 +81,20 @@ for fieldInfo, assignValues in fieldAssignDict.iteritems():
     # Some of our supported compilers don't do constexpr, which means o3tl::typed_flags can't be 'static const'
     if containingClass in ["WaitWindow_Impl"]:
         continue
-    tmp1list.append((v0,v1,v2))
+    if len(assignValues) == 2:
+        if "0" in assignValues and "1" in assignValues:
+            fieldType = definitionToTypeMap[fieldInfo]
+            if not "_Bool" in fieldType and not "enum " in fieldType and not "boolean" in fieldType:
+                tmp2list.append((v0,v1,v2,fieldType))
+    else:
+        tmp1list.append((v0,v1,v2))
 
 # sort results by filename:lineno
 def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
     return [int(text) if text.isdigit() else text.lower()
             for text in re.split(_nsre, s)]
 tmp1list.sort(key=lambda v: natural_sort_key(v[2]))
+tmp2list.sort(key=lambda v: natural_sort_key(v[2]))
 
 # print out the results
 with open("compilerplugins/clang/singlevalfields.results", "wt") as f:
@@ -89,5 +102,10 @@ with open("compilerplugins/clang/singlevalfields.results", "wt") as f:
         f.write(v[2] + "\n")
         f.write("    " + v[0] + "\n")
         f.write("    " + v[1] + "\n")
+with open("compilerplugins/clang/singlevalfields.could-be-bool.results", "wt") as f:
+    for v in tmp2list:
+        f.write(v[2] + "\n")
+        f.write("    " + v[0] + "\n")
+        f.write("    " + v[3] + "\n")
 
 

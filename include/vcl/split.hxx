@@ -37,7 +37,7 @@ private:
     bool                mbHorzSplit;
     bool                mbDragFull;
     bool                mbKbdSplitting;
-    long                mbInKeyEvent;
+    bool                mbInKeyEvent;
     long                mnKeyboardStepSize;
     Link<Splitter*,void>   maStartSplitHdl;
     Link<Splitter*,void>   maSplitHdl;
