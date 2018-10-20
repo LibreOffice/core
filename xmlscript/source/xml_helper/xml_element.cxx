@@ -19,6 +19,7 @@
 
 #include <xmlscript/xml_helper.hxx>
 #include <osl/diagnose.h>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

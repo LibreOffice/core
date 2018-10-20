@@ -23,6 +23,7 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XInputStreamProvider.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>

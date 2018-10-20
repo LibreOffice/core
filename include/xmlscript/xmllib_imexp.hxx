@@ -19,13 +19,14 @@
 #ifndef INCLUDED_XMLSCRIPT_XMLLIB_IMEXP_HXX
 #define INCLUDED_XMLSCRIPT_XMLLIB_IMEXP_HXX
 
-#include <com/sun/star/xml/sax/XWriter.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <xmlscript/xmlns.h>
 #include <xmlscript/xmlscriptdllapi.h>
 
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XDocumentHandler; } } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XWriter; } } } } }
 
 namespace xmlscript
 {
