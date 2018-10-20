@@ -317,15 +317,14 @@ std::vector<bool> entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpressi
                     result = result || elem;
                 }
                 resultVector.push_back(result);
-            } else if (condition == MQueryExpression::AND) {
+            } else {
+                assert(condition == MQueryExpression::AND && "only OR or AND should exist");
                 bool result = true;
                 for (auto const& elem : subquery_result)
                 {
                     result = result && elem;
                 }
                 resultVector.push_back(result);
-            } else {
-                OSL_FAIL("Unknown Expression Type");
             }
         }
         else {
