@@ -624,15 +624,15 @@ namespace dxcanvas
 
             // Setup an ImageAttributes with an alpha-modulating
             // color matrix.
-            const rendering::ARGBColor& rARGBColor(
+            rendering::ARGBColor aARGBColor(
                 mpDevice->getDeviceColorSpace()->convertToARGB(renderState.DeviceColor)[0]);
 
             Gdiplus::ImageAttributes aImgAttr;
             tools::setModulateImageAttributes( aImgAttr,
-                                               rARGBColor.Red,
-                                               rARGBColor.Green,
-                                               rARGBColor.Blue,
-                                               rARGBColor.Alpha );
+                                               aARGBColor.Red,
+                                               aARGBColor.Green,
+                                               aARGBColor.Blue,
+                                               aARGBColor.Alpha );
 
             ENSURE_OR_THROW(
                 Gdiplus::Ok == pGraphics->DrawImage( pBitmap.get(),
