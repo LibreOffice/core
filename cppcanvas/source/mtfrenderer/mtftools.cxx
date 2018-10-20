@@ -319,28 +319,87 @@ namespace cppcanvas
                         ::basegfx::B2DRectangle( nX1, nY1, nX2, nY2 ) ) );
             }
 
-            void appendDashes( ::basegfx::B2DPolyPolygon&   o_rPoly,
+            bool appendDashes( ::basegfx::B2DPolyPolygon&   o_rPoly,
                                const double                 nX,
-                               const double                 nY,
+                               double                       nY,
                                const double                 nLineWidth,
-                               const double                 nLineHeight,
-                               const double                 nDashWidth,
-                               const double                 nDashSkip )
+                               double                       nLineHeight,
+                               sal_Int8                     nLineStyle,
+                               bool                         bIsOverline)
             {
-                const sal_Int32 nNumLoops(
-                    static_cast< sal_Int32 >(
-                        std::max( 1.0,
-                                    nLineWidth / nDashSkip ) + .5) );
+                static const int aDottedArray[]     = { 1, 1, 0};               // DOTTED LINE
+                static const int aDotDashArray[]    = { 1, 1, 4, 1, 0};         // DASHDOT
+                static const int aDashDotDotArray[] = { 1, 1, 1, 1, 4, 1, 0};   // DASHDOTDOT
+                static const int aDashedArray[]     = { 5, 2, 0};               // DASHED LINE
+                static const int aLongDashArray[]   = { 7, 2, 0};               // LONGDASH
+                const int *pArray = nullptr;
+                bool bIsBold = false;
 
-                double x = nX;
-                for( sal_Int32 i=0; i<nNumLoops; ++i )
+                switch(nLineStyle)
                 {
-                    appendRect( o_rPoly,
-                                x,              nY,
-                                x + nDashWidth, nY + nLineHeight );
+                    case LINESTYLE_BOLDDOTTED:
+                        bIsBold = true;
+                    case LINESTYLE_DOTTED:
+                        pArray = aDottedArray;
+                    break;
 
-                    x += nDashSkip;
+                    case LINESTYLE_BOLDDASH:
+                        bIsBold = true;
+                    case LINESTYLE_DASH:
+                        pArray = aDashedArray;
+                    break;
+
+                    case LINESTYLE_BOLDLONGDASH:
+                        bIsBold = true;
+                    case LINESTYLE_LONGDASH:
+                        pArray = aLongDashArray;
+                    break;
+
+                    case LINESTYLE_BOLDDASHDOT:
+                        bIsBold = true;
+                    case LINESTYLE_DASHDOT:
+                        pArray = aDotDashArray;
+                    break;
+                    case LINESTYLE_BOLDDASHDOTDOT:
+                        bIsBold = true;
+                    case LINESTYLE_DASHDOTDOT:
+                        pArray = aDashDotDotArray;
+                    break;
                 }
+
+                if (!pArray)
+                    return false;
+
+                if (bIsBold)
+                {
+                    if (bIsOverline)
+                        nY -= nLineHeight;
+
+                    nLineHeight *= 2;
+                }
+
+                const double nEnd = nX + nLineWidth;
+                sal_Int32 nIndex = 0;
+                bool bAppend = true;
+                double nX1 = nX;
+
+                while(nX1 < nEnd)
+                {
+                    if (pArray[nIndex] == 0)
+                        nIndex = 0;
+
+                    const double nX2 = std::min(nEnd, nX1 + pArray[nIndex] * nLineHeight);
+
+                    if (bAppend)
+                        appendRect(o_rPoly, nX1, nY, nX2, nY + nLineHeight);
+
+                    nX1 = nX2;
+
+                    ++nIndex;
+
+                    bAppend = !bAppend;
+                }
+                return true;
             }
         }
 
@@ -385,17 +444,6 @@ namespace cppcanvas
                         rLineWidth,
                         rTextLineInfo.mnOverlineOffset + rTextLineInfo.mnOverlineHeight );
                     break;
-
-                case LINESTYLE_BOLDDOTTED:    // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case LINESTYLE_BOLDDASH:      // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case LINESTYLE_BOLDLONGDASH:  // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case LINESTYLE_BOLDDASHDOT:   // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case LINESTYLE_BOLDDASHDOTDOT:// TODO(F3): NYI
-                    // FALLTHROUGH intended
                 case LINESTYLE_BOLD:
                     appendRect(
                         aTextLinesPolyPoly,
@@ -424,46 +472,19 @@ namespace cppcanvas
                         rTextLineInfo.mnOverlineOffset + rTextLineInfo.mnOverlineHeight * 2.0 );
                     break;
 
-                case LINESTYLE_DASHDOTDOT:    // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case LINESTYLE_DOTTED:
-                    appendDashes(
-                        aTextLinesPolyPoly,
-                        rStartPos.getX(),
-                        rStartPos.getY() + rTextLineInfo.mnOverlineOffset,
-                        rLineWidth,
-                        rTextLineInfo.mnOverlineHeight,
-                        rTextLineInfo.mnOverlineHeight,
-                        2*rTextLineInfo.mnOverlineHeight );
-                    break;
-
-                case LINESTYLE_DASHDOT:       // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case LINESTYLE_DASH:
-                    appendDashes(
-                        aTextLinesPolyPoly,
-                        rStartPos.getX(),
-                        rStartPos.getY() + rTextLineInfo.mnOverlineOffset,
-                        rLineWidth,
-                        rTextLineInfo.mnOverlineHeight,
-                        3*rTextLineInfo.mnOverlineHeight,
-                        6*rTextLineInfo.mnOverlineHeight );
-                    break;
-
-                case LINESTYLE_LONGDASH:
-                    appendDashes(
-                        aTextLinesPolyPoly,
-                        rStartPos.getX(),
-                        rStartPos.getY() + rTextLineInfo.mnOverlineOffset,
-                        rLineWidth,
-                        rTextLineInfo.mnOverlineHeight,
-                        6*rTextLineInfo.mnOverlineHeight,
-                        12*rTextLineInfo.mnOverlineHeight );
-                    break;
-
                 default:
-                    ENSURE_OR_THROW( false,
+                    if (!appendDashes(
+                        aTextLinesPolyPoly,
+                        rStartPos.getX(),
+                        rStartPos.getY() + rTextLineInfo.mnOverlineOffset,
+                        rLineWidth,
+                        rTextLineInfo.mnOverlineHeight,
+                        rTextLineInfo.mnOverlineStyle,
+                        true))
+                    {
+                        ENSURE_OR_THROW( false,
                                       "::cppcanvas::internal::createTextLinesPolyPolygon(): Unexpected overline case" );
+                    }
             }
 
             switch( rTextLineInfo.mnUnderlineStyle )
@@ -498,16 +519,6 @@ namespace cppcanvas
                         rTextLineInfo.mnUnderlineOffset + rTextLineInfo.mnLineHeight );
                     break;
 
-                case LINESTYLE_BOLDDOTTED:    // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case LINESTYLE_BOLDDASH:      // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case LINESTYLE_BOLDLONGDASH:  // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case LINESTYLE_BOLDDASHDOT:   // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case LINESTYLE_BOLDDASHDOTDOT:// TODO(F3): NYI
-                    // FALLTHROUGH intended
                 case LINESTYLE_BOLD:
                     appendRect(
                         aTextLinesPolyPoly,
@@ -536,46 +547,19 @@ namespace cppcanvas
                         rTextLineInfo.mnUnderlineOffset + 3*rTextLineInfo.mnLineHeight );
                     break;
 
-                case LINESTYLE_DASHDOTDOT:    // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case LINESTYLE_DOTTED:
-                    appendDashes(
-                        aTextLinesPolyPoly,
-                        rStartPos.getX(),
-                        rStartPos.getY() + rTextLineInfo.mnUnderlineOffset,
-                        rLineWidth,
-                        rTextLineInfo.mnLineHeight,
-                        rTextLineInfo.mnLineHeight,
-                        2*rTextLineInfo.mnLineHeight );
-                    break;
-
-                case LINESTYLE_DASHDOT:       // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case LINESTYLE_DASH:
-                    appendDashes(
-                        aTextLinesPolyPoly,
-                        rStartPos.getX(),
-                        rStartPos.getY() + rTextLineInfo.mnUnderlineOffset,
-                        rLineWidth,
-                        rTextLineInfo.mnLineHeight,
-                        3*rTextLineInfo.mnLineHeight,
-                        6*rTextLineInfo.mnLineHeight );
-                    break;
-
-                case LINESTYLE_LONGDASH:
-                    appendDashes(
-                        aTextLinesPolyPoly,
-                        rStartPos.getX(),
-                        rStartPos.getY() + rTextLineInfo.mnUnderlineOffset,
-                        rLineWidth,
-                        rTextLineInfo.mnLineHeight,
-                        6*rTextLineInfo.mnLineHeight,
-                        12*rTextLineInfo.mnLineHeight );
-                    break;
-
                 default:
-                    ENSURE_OR_THROW( false,
+                    if (!appendDashes(
+                        aTextLinesPolyPoly,
+                        rStartPos.getX(),
+                        rStartPos.getY() + rTextLineInfo.mnUnderlineOffset,
+                        rLineWidth,
+                        rTextLineInfo.mnLineHeight,
+                        rTextLineInfo.mnUnderlineStyle,
+                        false))
+                    {
+                        ENSURE_OR_THROW( false,
                                       "::cppcanvas::internal::createTextLinesPolyPolygon(): Unexpected underline case" );
+                    }
             }
 
             switch( rTextLineInfo.mnStrikeoutStyle )
