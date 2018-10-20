@@ -19,6 +19,7 @@
 
 #include "imp_share.hxx"
 #include <xml_import.hxx>
+#include <xmlscript/xmlns.h>
 
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/awt/FontFamily.hpp>

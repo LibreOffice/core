@@ -20,13 +20,14 @@
 #define INCLUDED_XMLSCRIPT_XML_HELPER_HXX
 
 #include <vector>
-#include <rtl/byteseq.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 #include <xmlscript/xmlscriptdllapi.h>
+
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XDocumentHandler; } } } } }
+namespace com { namespace sun { namespace star { namespace io { class XInputStream; } } } }
+namespace com { namespace sun { namespace star { namespace io { class XOutputStream; } } } }
 
 namespace xmlscript
 {

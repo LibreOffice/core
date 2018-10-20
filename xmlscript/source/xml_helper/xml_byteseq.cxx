@@ -21,6 +21,9 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <xmlscript/xml_helper.hxx>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
 
 using namespace osl;
 using namespace com::sun::star;

@@ -19,6 +19,8 @@
 
 #include <xmlscript/xmlmod_imexp.hxx>
 #include <xmlscript/xml_helper.hxx>
+#include <xmlscript/xmlns.h>
+#include <com/sun/star/xml/sax/XWriter.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star;

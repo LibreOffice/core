@@ -19,15 +19,17 @@
 #ifndef INCLUDED_XMLSCRIPT_XMLDLG_IMEXP_HXX
 #define INCLUDED_XMLSCRIPT_XMLDLG_IMEXP_HXX
 
-#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/io/XInputStreamProvider.hpp>
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-
-#include <xmlscript/xmlns.h>
 #include <xmlscript/xmlscriptdllapi.h>
+
+namespace com { namespace sun { namespace star { namespace container { class XNameContainer; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace io { class XInputStream; } } } }
+namespace com { namespace sun { namespace star { namespace io { class XInputStreamProvider; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XDocumentHandler; } } } } }
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XExtendedDocumentHandler; } } } } }
 
 namespace xmlscript
 {

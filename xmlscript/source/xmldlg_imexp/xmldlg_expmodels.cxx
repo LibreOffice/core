@@ -18,7 +18,9 @@
  */
 
 #include "exp_share.hxx"
+#include <xmlscript/xmlns.h>
 
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/form/binding/XValueBinding.hpp>

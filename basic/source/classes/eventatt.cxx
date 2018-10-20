@@ -36,6 +36,7 @@
 #include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
+#include <com/sun/star/io/XInputStreamProvider.hpp>
 
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/basmgr.hxx>

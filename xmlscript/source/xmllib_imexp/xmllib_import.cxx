@@ -23,6 +23,7 @@
 
 #include "imp_share.hxx"
 #include <xml_import.hxx>
+#include <xmlscript/xmlns.h>
 
 using namespace css;
 using namespace css::uno;

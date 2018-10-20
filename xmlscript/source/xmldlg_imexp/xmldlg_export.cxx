@@ -18,6 +18,7 @@
  */
 
 #include "exp_share.hxx"
+#include <xmlscript/xmlns.h>
 
 #include <o3tl/any.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -66,6 +67,7 @@
 #include <com/sun/star/document/GraphicStorageHandler.hpp>
 #include <com/sun/star/document/XGraphicStorageHandler.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/languagetag.hxx>
