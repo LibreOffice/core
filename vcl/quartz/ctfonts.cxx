@@ -40,7 +40,7 @@
 #include <sallayout.hxx>
 #include <hb-coretext.h>
 
-static inline double toRadian(int nDegree)
+static double toRadian(int nDegree)
 {
     return nDegree * (M_PI / 1800.0);
 }

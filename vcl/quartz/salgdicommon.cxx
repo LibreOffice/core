@@ -291,7 +291,7 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
     return (nRC == SFErrCodes::Ok);
 }
 
-static inline void alignLinePoint( const SalPoint* i_pIn, float& o_fX, float& o_fY )
+static void alignLinePoint( const SalPoint* i_pIn, float& o_fX, float& o_fY )
 {
     o_fX = static_cast<float>(i_pIn->mnX ) + 0.5;
     o_fY = static_cast<float>(i_pIn->mnY ) + 0.5;
