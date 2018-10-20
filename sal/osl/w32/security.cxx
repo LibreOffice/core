@@ -77,12 +77,13 @@ static bool getUserNameImpl(oslSecurity Security, rtl_uString **strName, bool bI
 oslSecurity SAL_CALL osl_getCurrentSecurity(void)
 {
     oslSecurityImpl* pSecImpl = static_cast<oslSecurityImpl *>(malloc(sizeof(oslSecurityImpl)));
-
-    pSecImpl->m_pNetResource = nullptr;
-    pSecImpl->m_User[0] = '\0';
-    pSecImpl->m_hToken = nullptr;
-    pSecImpl->m_hProfile = nullptr;
-
+    if (pSecImpl)
+    {
+        pSecImpl->m_pNetResource = nullptr;
+        pSecImpl->m_User[0] = '\0';
+        pSecImpl->m_hToken = nullptr;
+        pSecImpl->m_hProfile = nullptr;
+    }
     return pSecImpl;
 }
 
@@ -112,14 +113,15 @@ oslSecurityError SAL_CALL osl_loginUser( rtl_uString *strUserName, rtl_uString *
                    &hUserToken))
     {
         oslSecurityImpl* pSecImpl = static_cast<oslSecurityImpl *>(malloc(sizeof(oslSecurityImpl)));
-
-        pSecImpl->m_pNetResource = nullptr;
-        pSecImpl->m_hToken = hUserToken;
-        pSecImpl->m_hProfile = nullptr;
-        wcscpy(o3tl::toW(pSecImpl->m_User), o3tl::toW(strUser));
-
+        if (pSecImpl)
+        {
+            pSecImpl->m_pNetResource = nullptr;
+            pSecImpl->m_hToken = hUserToken;
+            pSecImpl->m_hProfile = nullptr;
+            wcscpy(o3tl::toW(pSecImpl->m_User), o3tl::toW(strUser));
+        }
         *pSecurity = pSecImpl;
-        ret = osl_Security_E_None;
+        ret = pSecImpl ? osl_Security_E_None : osl_Security_E_Unknown;
     }
     else
     {
@@ -171,17 +173,25 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(rtl_uString *strUserName,
     if ((err == NO_ERROR) || (err == ERROR_ALREADY_ASSIGNED))
     {
         oslSecurityImpl* pSecImpl = static_cast<oslSecurityImpl *>(malloc(sizeof(oslSecurityImpl)));
-
-        pSecImpl->m_pNetResource = static_cast<NETRESOURCEW *>(malloc(sizeof(NETRESOURCE)));
-        *pSecImpl->m_pNetResource = netResource;
-
-        pSecImpl->m_hToken = nullptr;
-        pSecImpl->m_hProfile = nullptr;
-        wcscpy(o3tl::toW(pSecImpl->m_User), o3tl::toW(rtl_uString_getStr(strUserName)));
-
+        if (pSecImpl)
+        {
+            pSecImpl->m_pNetResource = static_cast<NETRESOURCEW *>(malloc(sizeof(NETRESOURCE)));
+            if (pSecImpl->m_pNetResource)
+            {
+                *pSecImpl->m_pNetResource = netResource;
+                pSecImpl->m_hToken = nullptr;
+                pSecImpl->m_hProfile = nullptr;
+                wcscpy(o3tl::toW(pSecImpl->m_User), o3tl::toW(rtl_uString_getStr(strUserName)));
+            }
+            else
+            {
+                free(pSecImpl);
+                pSecImpl = nullptr;
+            }
+        }
         *pSecurity = pSecImpl;
 
-        ret = osl_Security_E_None;
+        ret = pSecImpl ? osl_Security_E_None : osl_Security_E_Unknown;
     }
     else
     {
@@ -291,7 +301,14 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
             {
                 if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
                 {
-                    pInfoBuffer = static_cast<UCHAR *>(realloc(pInfoBuffer, nInfoBuffer));
+                    if (auto p = static_cast<UCHAR *>(realloc(pInfoBuffer, nInfoBuffer)))
+                        pInfoBuffer = p;
+                    else
+                    {
+                        free(pInfoBuffer);
+                        pInfoBuffer = nullptr;
+                        break;
+                    }
                 }
                 else
                 {
@@ -325,31 +342,29 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
 
                 free(pInfoBuffer);
 
-                return bResult;
+                return bResult != FALSE;
             }
         }
         else
         {
             DWORD needed = 0;
-            sal_Unicode *Ident;
 
             WNetGetUserW(nullptr, nullptr, &needed);
             if (needed < 16)
                 needed = 16;
 
-            Ident = static_cast<sal_Unicode *>(malloc(needed*sizeof(sal_Unicode)));
-
-            if (WNetGetUserW(nullptr, o3tl::toW(Ident), &needed) != NO_ERROR)
+            if (auto Ident = static_cast<sal_Unicode *>(malloc(needed*sizeof(sal_Unicode))))
             {
-                wcscpy(o3tl::toW(Ident), L"unknown");
-                Ident[7] = L'\0';
+                if (WNetGetUserW(nullptr, o3tl::toW(Ident), &needed) != NO_ERROR)
+                {
+                    wcscpy(o3tl::toW(Ident), L"unknown");
+                    Ident[7] = L'\0';
+                }
+
+                rtl_uString_newFromStr( strIdent, Ident);
+                free(Ident);
+                return true;
             }
-
-            rtl_uString_newFromStr( strIdent, Ident);
-
-            free(Ident);
-
-            return true;
         }
     }
 
@@ -710,7 +725,14 @@ static bool getUserNameImpl(oslSecurity Security, rtl_uString **strName,  bool b
             {
                 if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
                 {
-                    pInfoBuffer = static_cast<UCHAR *>(realloc(pInfoBuffer, nInfoBuffer));
+                    if (auto p = static_cast<UCHAR *>(realloc(pInfoBuffer, nInfoBuffer)))
+                        pInfoBuffer = p;
+                    else
+                    {
+                        free(pInfoBuffer);
+                        pInfoBuffer = nullptr;
+                        break;
+                    }
                 }
                 else
                 {
@@ -746,13 +768,11 @@ static bool getUserNameImpl(oslSecurity Security, rtl_uString **strName,  bool b
                     {
                         wcscpy(o3tl::toW(Name), o3tl::toW(UserName));
                     }
+
+                    rtl_uString_newFromStr(strName, Name);
+                    free(pInfoBuffer);
+                    return true;
                 }
-
-                rtl_uString_newFromStr( strName, Name);
-
-                free(pInfoBuffer);
-
-                return true;
             }
         }
         else
