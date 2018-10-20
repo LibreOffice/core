@@ -1382,12 +1382,9 @@ void OResultSet::setFetchSize(sal_Int32 _par0)
     {
         throw css::beans::PropertyVetoException("SDBC/ODBC layer not prepared for fetchSize > 1", *this);
     }
-    if ( _par0 > 0 )
-    {
-        setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_ROW_ARRAY_SIZE, _par0);
-        m_pRowStatusArray.reset( new SQLUSMALLINT[_par0] );
-        setStmtOption<SQLUSMALLINT*, SQL_IS_POINTER>(SQL_ATTR_ROW_STATUS_PTR, m_pRowStatusArray.get());
-    }
+    setStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_ROW_ARRAY_SIZE, _par0);
+    m_pRowStatusArray.reset( new SQLUSMALLINT[_par0] );
+    setStmtOption<SQLUSMALLINT*, SQL_IS_POINTER>(SQL_ATTR_ROW_STATUS_PTR, m_pRowStatusArray.get());
 }
 
 IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
