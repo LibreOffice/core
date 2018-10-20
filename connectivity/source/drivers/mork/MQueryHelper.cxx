@@ -127,15 +127,6 @@ sal_Int32 MQueryHelper::getResultCount() const
 
 bool MQueryHelper::checkRowAvailable( sal_Int32 nDBRow )
 {
-/*
-    while (!queryComplete() && getResultCount() <= (sal_uInt32)nDBRow)
-    {
-        if ( !m_aQueryHelper->waitForRow( nDBRow ) ) {
-            m_aError = m_aQueryHelper->getError();
-            return sal_False;
-        }
-    }
-*/
     return getResultCount() > nDBRow;
 }
 
