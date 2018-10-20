@@ -44,6 +44,9 @@ public:
     // member: statusText
     const OUString & getStatusText() const { return m_sStatusText;}
 
+    const OUString & getEntryMacro() const { return m_sEntryMacro;}
+    const OUString & getExitMacro() const { return m_sExitMacro;}
+
     // member: checkboxHeight
     sal_uInt32 getCheckboxHeight() const { return m_nCheckboxHeight;}
 
@@ -62,6 +65,10 @@ public:
     // member: textDefault
     const OUString & getTextDefault() const { return m_sTextDefault;}
 
+    const OUString & getTextType() const { return m_sTextType; }
+    const OUString & getTextFormat() const { return m_sTextFormat; }
+    sal_uInt16 getTextMaxLength() const { return m_nTextMaxLength; }
+
     // sprm
     void resolveSprm(Sprm & r_sprm);
 
@@ -69,6 +76,8 @@ private:
     OUString m_sName;
     OUString m_sHelpText;
     OUString m_sStatusText;
+    OUString m_sEntryMacro;
+    OUString m_sExitMacro;
     sal_uInt32 m_nCheckboxHeight;
     bool m_bCheckboxAutoHeight;
     int m_nCheckboxChecked;
@@ -76,6 +85,9 @@ private:
     OUString m_sDropDownResult;
     DropDownEntries_t m_DropDownEntries;
     OUString m_sTextDefault;
+    OUString m_sTextType;
+    OUString m_sTextFormat;
+    sal_uInt16 m_nTextMaxLength;
 
     // sprm
     void lcl_sprm(Sprm & r_sprm) override;
