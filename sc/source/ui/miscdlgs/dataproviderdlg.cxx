@@ -18,6 +18,7 @@
 
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
+#include <unotools/charclass.hxx>
 
 #include <utility>
 #include <vcl/lstbox.hxx>
@@ -1137,9 +1138,22 @@ void ScDataProviderDlg::dateTimeTransformation()
     mpList->addEntry(pDateTimeTransformationEntry);
 }
 
+namespace {
+
+bool hasDBName(const OUString& rName, ScDBCollection* pDBCollection)
+{
+    if (pDBCollection->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(rName)))
+        return true;
+
+    return false;
+}
+
+}
+
 void ScDataProviderDlg::import(ScDocument* pDoc, bool bInternal)
 {
     sc::ExternalDataSource aSource = mpDataProviderCtrl->getDataSource(pDoc);
+
     std::vector<VclPtr<vcl::Window>> aListEntries = mpList->getEntries();
     for (size_t i = 1; i < aListEntries.size(); ++i)
     {
@@ -1156,6 +1170,8 @@ void ScDataProviderDlg::import(ScDocument* pDoc, bool bInternal)
     else
     {
         aSource.setDBData(mpDBRanges->GetSelectedEntry());
+        if (!hasDBName(aSource.getDBName(), pDoc->GetDBCollection()))
+            return;
         pDoc->GetExternalDataMapper().insertDataSource(aSource);
     }
     aSource.refresh(pDoc, true);
