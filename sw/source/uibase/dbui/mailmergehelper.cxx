@@ -545,8 +545,8 @@ OUString SwAddressPreview::FillData(
 }
 
 AddressPreview::AddressPreview(std::unique_ptr<weld::ScrolledWindow> xWindow)
-    : m_xVScrollBar(std::move(xWindow))
-    , pImpl(new SwAddressPreview_Impl())
+    : pImpl(new SwAddressPreview_Impl())
+    , m_xVScrollBar(std::move(xWindow))
 {
     m_xVScrollBar->set_user_managed_scrolling();
     m_xVScrollBar->connect_vadjustment_changed(LINK(this, AddressPreview, ScrollHdl));
