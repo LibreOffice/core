@@ -159,9 +159,31 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
             m_aFieldStack.back().SetBookmarkName(aBookmarkName);
             m_aFieldStack.back().SetBookmarkType(ODF_FORMTEXT);
             m_aFieldStack.back().getParameters()["Description"] <<= aFormula.msToolTip;
+            if ( aFormula.mbHelp && !aFormula.msHelp.isEmpty() )
+                m_aFieldStack.back().getParameters()["Help"] <<= aFormula.msHelp;
             m_aFieldStack.back().getParameters()["Name"] <<= aFormula.msTitle;
             if (aFormula.mnMaxLen)
-                m_aFieldStack.back().getParameters()["MaxLength"] <<= OUString::number(aFormula.mnMaxLen);
+                m_aFieldStack.back().getParameters()["MaxLength"] <<= aFormula.mnMaxLen;
+
+            if ( aFormula.mfType == 1 )
+                m_aFieldStack.back().getParameters()["Type"] <<= OUString("number");
+            else if ( aFormula.mfType == 2 )
+                m_aFieldStack.back().getParameters()["Type"] <<= OUString("date");
+            else if ( aFormula.mfType == 3 )
+                m_aFieldStack.back().getParameters()["Type"] <<= OUString("currentTime");
+            else if ( aFormula.mfType == 4 )
+                m_aFieldStack.back().getParameters()["Type"] <<= OUString("currentDate");
+            else if ( aFormula.mfType == 5 )
+                m_aFieldStack.back().getParameters()["Type"] <<= OUString("calculated");
+
+            if ( !aFormula.msDefault.isEmpty() )
+                m_aFieldStack.back().getParameters()["Content"] <<= aFormula.msDefault;
+            if ( !aFormula.msFormatting.isEmpty() )
+                m_aFieldStack.back().getParameters()["Format"] <<= aFormula.msFormatting;
+            if ( !aFormula.msEntryMcr.isEmpty() )
+                m_aFieldStack.back().getParameters()["EntryMacro"] <<= aFormula.msEntryMcr;
+            if ( !aFormula.msExitMcr.isEmpty() )
+                m_aFieldStack.back().getParameters()["ExitMacro"] <<= aFormula.msExitMcr;
         }
         return eF_ResT::TEXT;
     }
@@ -2186,8 +2208,10 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
     // xstzStatText
     msToolTip = read_uInt16_BeltAndBracesString(*pDataStream);
 
-    /*String sEntryMacro =*/ read_uInt16_BeltAndBracesString(*pDataStream);
-    /*String sExitMcr =*/ read_uInt16_BeltAndBracesString(*pDataStream);
+    // xstzEntryMcr
+    msEntryMcr = read_uInt16_BeltAndBracesString(*pDataStream);
+    //xstzExitMcr
+    msExitMcr = read_uInt16_BeltAndBracesString(*pDataStream);
 
     if (nWhich == WW8_CT_DROPDOWN)
     {
@@ -2227,12 +2251,12 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
     }
     mfDropdownIndex = iRes;
 
+    mbHelp = bits1 & 0x80;
+
     nField = bits2;
     mfToolTip = nField & 0x01;
     mfNoMark = (nField & 0x02)>>1;
-    mfUseSize = (nField & 0x04)>>2;
-    mfNumbersOnly= (nField & 0x08)>>3;
-    mfDateOnly = (nField & 0x10)>>4;
+    mfType = (nField & 0x38)>>3;
     mfUnused = (nField & 0xE0)>>5;
 }
 

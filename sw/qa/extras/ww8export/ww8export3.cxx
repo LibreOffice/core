@@ -12,6 +12,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
@@ -64,6 +65,58 @@ DECLARE_WW8EXPORT_TEST(testFdo53985, "fdo53985.doc")
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Section1 is protected", true, getProperty<bool>(xSect, "IsProtected"));
     xSect.set(xSections->getByIndex(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Section4 is protected", false, getProperty<bool>(xSect, "IsProtected"));
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf79435_legacyInputFields, "tdf79435_legacyInputFields.docx")
+{
+    //using .docx input file to verify cross-format compatability.
+    uno::Reference<text::XFormField> xFormField;
+    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(5), 3), "Bookmark");
+    uno::Reference<container::XNameContainer> xParameters(xFormField->getParameters());
+
+    OUString sTmp;
+    xParameters->getByName("EntryMacro") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), sTmp);
+    xParameters->getByName("Help") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("F1Help"), sTmp);
+    xParameters->getByName("ExitMacro") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), sTmp);
+    xParameters->getByName("Description") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("StatusHelp"), sTmp);
+    xParameters->getByName("Content") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("Camelcase"), sTmp);
+    xParameters->getByName("Format") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("TITLE CASE"), sTmp);
+
+    sal_uInt16 nMaxLength = 0;
+    xParameters->getByName("MaxLength") >>= nMaxLength;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Max Length", sal_uInt16(10), nMaxLength);
+
+    // too bad this is based on character runs - just found try trial and error.
+    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(6), 2), "Bookmark");
+    xParameters.set(xFormField->getParameters());
+    xParameters->getByName("Type") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("calculated"), sTmp);
+
+    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(7), 2), "Bookmark");
+    xParameters.set(xFormField->getParameters());
+    xParameters->getByName("Type") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("currentDate"), sTmp);
+
+    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(7), 6), "Bookmark");
+    xParameters.set(xFormField->getParameters());
+    xParameters->getByName("Type") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("currentTime"), sTmp);
+
+    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(8), 2), "Bookmark");
+    xParameters.set(xFormField->getParameters());
+    xParameters->getByName("Type") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("number"), sTmp);
+
+    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(8), 6), "Bookmark");
+    xParameters.set(xFormField->getParameters());
+    xParameters->getByName("Type") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("date"), sTmp);
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf120225_textControlCrossRef, "tdf120225_textControlCrossRef.doc")

@@ -178,7 +178,11 @@ static const sal_Int32 Tag_StartSection = 17;
 class FFDataWriterHelper
 {
     ::sax_fastparser::FSHelperPtr m_pSerializer;
-    void writeCommonStart( const OUString& rName )
+    void writeCommonStart( const OUString& rName,
+                           const OUString& rEntryMacro,
+                           const OUString& rExitMacro,
+                           const OUString& rHelp,
+                           const OUString& rHint )
     {
         m_pSerializer->startElementNS( XML_w, XML_ffData, FSEND );
         m_pSerializer->singleElementNS( XML_w, XML_name,
@@ -188,6 +192,33 @@ class FFDataWriterHelper
         m_pSerializer->singleElementNS( XML_w, XML_calcOnExit,
             FSNS( XML_w, XML_val ),
             "0", FSEND );
+
+        if ( !rEntryMacro.isEmpty() )
+            m_pSerializer->singleElementNS( XML_w, XML_entryMacro,
+                FSNS(XML_w, XML_val),
+                OUStringToOString( rEntryMacro, RTL_TEXTENCODING_UTF8 ).getStr(),
+                FSEND );
+
+        if ( !rExitMacro.isEmpty() )
+            m_pSerializer->singleElementNS( XML_w, XML_exitMacro,
+                FSNS(XML_w, XML_val),
+                OUStringToOString( rExitMacro, RTL_TEXTENCODING_UTF8 ).getStr(),
+                FSEND );
+
+        if ( !rHelp.isEmpty() )
+            m_pSerializer->singleElementNS( XML_w, XML_helpText,
+                FSNS(XML_w, XML_type), OString("text"),
+                FSNS(XML_w, XML_val),
+                OUStringToOString( rHelp, RTL_TEXTENCODING_UTF8 ).getStr(),
+                FSEND );
+
+        if ( !rHint.isEmpty() )
+            m_pSerializer->singleElementNS( XML_w, XML_statusText,
+                FSNS(XML_w, XML_type), OString("text"),
+                FSNS(XML_w, XML_val),
+                OUStringToOString( rHint, RTL_TEXTENCODING_UTF8 ).getStr(),
+                FSEND );
+
     }
     void writeFinish()
     {
@@ -195,9 +226,14 @@ class FFDataWriterHelper
     }
 public:
     explicit FFDataWriterHelper( const ::sax_fastparser::FSHelperPtr& rSerializer ) : m_pSerializer( rSerializer ){}
-    void WriteFormCheckbox( const OUString& rName, bool bChecked )
+    void WriteFormCheckbox( const OUString& rName,
+                            const OUString& rEntryMacro,
+                            const OUString& rExitMacro,
+                            const OUString& rHelp,
+                            const OUString& rHint,
+                            bool bChecked )
     {
-       writeCommonStart( rName );
+       writeCommonStart( rName, rEntryMacro, rExitMacro, rHelp, rHint );
        // Checkbox specific bits
        m_pSerializer->startElementNS( XML_w, XML_checkBox, FSEND );
        // currently hardcoding autosize
@@ -209,9 +245,39 @@ public:
         m_pSerializer->endElementNS( XML_w, XML_checkBox );
        writeFinish();
     }
-    void WriteFormText(  const OUString& rName )
+    void WriteFormText(  const OUString& rName,
+                         const OUString& rEntryMacro,
+                         const OUString& rExitMacro,
+                         const OUString& rHelp,
+                         const OUString& rHint,
+                         const OUString& rType,
+                         const OUString& rDefaultText,
+                         sal_uInt16 nMaxLength,
+                         const OUString& rFormat )
     {
-       writeCommonStart( rName );
+        writeCommonStart( rName, rEntryMacro, rExitMacro, rHelp, rHint );
+
+        m_pSerializer->startElementNS( XML_w, XML_textInput, FSEND );
+        if ( !rType.isEmpty() )
+            m_pSerializer->singleElementNS( XML_w, XML_type,
+                FSNS(XML_w, XML_val),
+                OUStringToOString( rType, RTL_TEXTENCODING_UTF8 ).getStr(),
+                FSEND );
+        if ( !rDefaultText.isEmpty() )
+            m_pSerializer->singleElementNS( XML_w, XML_default,
+                FSNS(XML_w, XML_val),
+                OUStringToOString( rDefaultText, RTL_TEXTENCODING_UTF8 ).getStr(),
+                FSEND );
+        if ( nMaxLength )
+            m_pSerializer->singleElementNS( XML_w, XML_maxLength,
+                FSNS(XML_w, XML_val), OString::number(nMaxLength), FSEND );
+        if ( !rFormat.isEmpty() )
+            m_pSerializer->singleElementNS( XML_w, XML_format,
+                FSNS(XML_w, XML_val),
+                OUStringToOString( rFormat, RTL_TEXTENCODING_UTF8 ).getStr(),
+                FSEND );
+        m_pSerializer->endElementNS( XML_w, XML_textInput );
+
        writeFinish();
     }
 };
@@ -1641,12 +1707,24 @@ void DocxAttributeOutput::DoWriteAnnotationMarks()
 void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
 {
     const ::sw::mark::IFieldmark& rFieldmark = *rInfos.pFieldmark;
+    FieldMarkParamsHelper params( rFieldmark );
+
+    OUString sEntryMacro;
+    params.extractParam("EntryMacro", sEntryMacro);
+    OUString sExitMacro;
+    params.extractParam("ExitMacro", sExitMacro);
+    OUString sHelp;
+    params.extractParam("Help", sHelp);
+    OUString sHint;
+    params.extractParam("Hint", sHint); // .docx StatusText
+    if ( sHint.isEmpty() )
+        params.extractParam("Description", sHint); // .doc StatusText
+
     if ( rInfos.eType == ww::eFORMDROPDOWN )
     {
         uno::Sequence< OUString> vListEntries;
         OUString sName, sSelected;
 
-        FieldMarkParamsHelper params( rFieldmark );
         params.extractParam( ODF_FORMDROPDOWN_LISTENTRY, vListEntries );
         sName = params.getName();
         sal_Int32 nSelectedIndex = 0;
@@ -1664,7 +1742,6 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
         OUString sName;
         bool bChecked = false;
 
-        FieldMarkParamsHelper params( rFieldmark );
         params.extractParam( ODF_FORMCHECKBOX_NAME, sName );
 
         const sw::mark::ICheckboxFieldmark* pCheckboxFm = dynamic_cast<const sw::mark::ICheckboxFieldmark*>(&rFieldmark);
@@ -1672,13 +1749,21 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
             bChecked = true;
 
         FFDataWriterHelper ffdataOut( m_pSerializer );
-        ffdataOut.WriteFormCheckbox( sName, bChecked );
+        ffdataOut.WriteFormCheckbox( sName, sEntryMacro, sExitMacro, sHelp, sHint, bChecked );
     }
     else if ( rInfos.eType == ww::eFORMTEXT )
     {
-        FieldMarkParamsHelper params( rFieldmark );
+        OUString sType;
+        params.extractParam("Type", sType);
+        OUString sDefaultText;
+        params.extractParam("Content", sDefaultText);
+        sal_uInt16 nMaxLength = 0;
+        params.extractParam("MaxLength", nMaxLength);
+        OUString sFormat;
+        params.extractParam("Format", sFormat);
         FFDataWriterHelper ffdataOut( m_pSerializer );
-        ffdataOut.WriteFormText( params.getName() );
+        ffdataOut.WriteFormText( params.getName(), sEntryMacro, sExitMacro, sHelp, sHint,
+                                 sType, sDefaultText, nMaxLength, sFormat );
     }
 }
 

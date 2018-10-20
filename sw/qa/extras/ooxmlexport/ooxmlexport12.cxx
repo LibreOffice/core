@@ -30,6 +30,7 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
+#include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
@@ -721,6 +722,64 @@ DECLARE_OOXMLEXPORT_TEST(testObjectCrossReference, "object_cross_reference.odt")
     }
 
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(21), nIndex);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf79435_legacyInputFields, "tdf79435_legacyInputFields.doc")
+{
+    //using .doc input file to verify cross-format compatability.
+    uno::Reference<text::XFormField> xFormField;
+    xFormField
+        = getProperty<uno::Reference<text::XFormField>>(getRun(getParagraph(5), 3), "Bookmark");
+    uno::Reference<container::XNameContainer> xParameters(xFormField->getParameters());
+
+    OUString sTmp;
+    xParameters->getByName("EntryMacro") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), sTmp);
+    xParameters->getByName("Help") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("F1Help"), sTmp);
+    xParameters->getByName("ExitMacro") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), sTmp);
+    xParameters->getByName("Hint") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("StatusHelp"), sTmp);
+    xParameters->getByName("Content") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("Camelcase"), sTmp);
+    xParameters->getByName("Format") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("TITLE CASE"), sTmp);
+
+    sal_uInt16 nMaxLength = 0;
+    xParameters->getByName("MaxLength") >>= nMaxLength;
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Max Length", sal_uInt16(10), nMaxLength);
+
+    // too bad this is based on character runs - just found try trial and error.
+    xFormField
+        = getProperty<uno::Reference<text::XFormField>>(getRun(getParagraph(6), 2), "Bookmark");
+    xParameters.set(xFormField->getParameters());
+    xParameters->getByName("Type") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("calculated"), sTmp);
+
+    xFormField
+        = getProperty<uno::Reference<text::XFormField>>(getRun(getParagraph(7), 2), "Bookmark");
+    xParameters.set(xFormField->getParameters());
+    xParameters->getByName("Type") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("currentDate"), sTmp);
+
+    xFormField
+        = getProperty<uno::Reference<text::XFormField>>(getRun(getParagraph(7), 6), "Bookmark");
+    xParameters.set(xFormField->getParameters());
+    xParameters->getByName("Type") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("currentTime"), sTmp);
+
+    xFormField
+        = getProperty<uno::Reference<text::XFormField>>(getRun(getParagraph(8), 2), "Bookmark");
+    xParameters.set(xFormField->getParameters());
+    xParameters->getByName("Type") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("number"), sTmp);
+
+    xFormField
+        = getProperty<uno::Reference<text::XFormField>>(getRun(getParagraph(8), 6), "Bookmark");
+    xParameters.set(xFormField->getParameters());
+    xParameters->getByName("Type") >>= sTmp;
+    CPPUNIT_ASSERT_EQUAL(OUString("date"), sTmp);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf120224_textControlCrossRef, "tdf120224_textControlCrossRef.docx")

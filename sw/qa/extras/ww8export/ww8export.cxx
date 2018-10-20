@@ -1116,7 +1116,7 @@ DECLARE_WW8EXPORT_TEST(testBnc636128, "bnc636128.doc")
     uno::Reference<text::XFormField> xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(1), 2), "Bookmark");
     uno::Reference<container::XNameContainer> xParameters = xFormField->getParameters();
     // This resulted in a container.NoSuchElementException.
-    CPPUNIT_ASSERT_EQUAL(OUString("5"), xParameters->getByName("MaxLength").get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(5), xParameters->getByName("MaxLength").get<sal_uInt16>());
 }
 
 

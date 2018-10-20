@@ -3831,10 +3831,16 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     if ( rFieldmark.GetFieldname() == ODF_FORMDROPDOWN )
         type=2;
 
-    ::sw::mark::IFieldmark::parameter_map_t::const_iterator pNameParameter = rFieldmark.GetParameters()->find("name");
+    ::sw::mark::IFieldmark::parameter_map_t::const_iterator pParameter = rFieldmark.GetParameters()->find("name");
     OUString ffname;
-    if(pNameParameter != rFieldmark.GetParameters()->end())
-        pNameParameter->second >>= ffname;
+    if ( pParameter != rFieldmark.GetParameters()->end() )
+    {
+        OUString aName;
+        pParameter->second >>= aName;
+        assert( aName.getLength() < 21 && "jluth seeing if following documentation will cause problems." );
+        const sal_Int32 nLen = std::min( sal_Int32(20), aName.getLength() );
+        ffname = aName.copy(0, nLen);
+    }
 
     sal_uLong nDataStt = pDataStrm->Tell();
     m_pChpPlc->AppendFkpEntry(Strm().Tell());
@@ -3877,15 +3883,107 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
             ffres = 0;
     }
     aFieldHeader.bits |= ( (ffres<<2) & 0x7C );
+
+    OUString ffdeftext;
+    OUString ffformat;
+    OUString ffhelptext = rFieldmark.GetFieldHelptext();
+    if ( ffhelptext.getLength() > 255 )
+        ffhelptext = ffhelptext.copy(0, 255);
+    OUString ffstattext;
+    OUString ffentrymcr;
+    OUString ffexitmcr;
     if (type == 0) // iTypeText
     {
-        sw::mark::IFieldmark::parameter_map_t::const_iterator pParameter = rFieldmark.GetParameters()->find("MaxLength");
-        if (pParameter != rFieldmark.GetParameters()->end())
+        sal_uInt16 nType = 0;
+        pParameter = rFieldmark.GetParameters()->find("Type");
+        if ( pParameter != rFieldmark.GetParameters()->end() )
         {
-            OUString aLength;
-            pParameter->second >>= aLength;
-            aFieldHeader.cch = aLength.toUInt32();
+            OUString aType;
+            pParameter->second >>= aType;
+            if ( aType == "number" )            nType = 1;
+            else if ( aType == "date" )         nType = 2;
+            else if ( aType == "currentTime" )  nType = 3;
+            else if ( aType == "currentDate" )  nType = 4;
+            else if ( aType == "calculated" )   nType = 5;
+            aFieldHeader.bits |= nType<<11; // FFDataBits-F  00111000 00000000
         }
+
+        if ( nType < 3 || nType == 5 )  // not currentTime or currentDate
+        {
+            pParameter = rFieldmark.GetParameters()->find("Content");
+            if ( pParameter != rFieldmark.GetParameters()->end() )
+            {
+                OUString aDefaultText;
+                pParameter->second >>= aDefaultText;
+                assert( aDefaultText.getLength() < 256 && "jluth seeing if following documentation will cause problems." );
+                const sal_Int32 nLen = std::min( sal_Int32(255), aDefaultText.getLength() );
+                ffdeftext = aDefaultText.copy (0, nLen);
+            }
+        }
+
+        pParameter = rFieldmark.GetParameters()->find("MaxLength");
+        if ( pParameter != rFieldmark.GetParameters()->end() )
+        {
+            sal_uInt16 nLength = 0;
+            pParameter->second >>= nLength;
+            assert( nLength < 32768 && "jluth seeing if following documentation will cause problems." );
+            nLength = std::min( sal_uInt16(32767), nLength );
+            aFieldHeader.cch = nLength;
+        }
+
+        pParameter = rFieldmark.GetParameters()->find("Format");
+        if ( pParameter != rFieldmark.GetParameters()->end() )
+        {
+            OUString aFormat;
+            pParameter->second >>= aFormat;
+            const sal_Int32 nLen = std::min( sal_Int32(64), aFormat.getLength() );
+            assert( nLen < 65 && "jluth seeing if following documentation will cause problems." );
+            ffformat = aFormat.copy(0, nLen);
+        }
+    }
+
+    pParameter = rFieldmark.GetParameters()->find("Help"); //help
+    if ( ffhelptext.isEmpty() && pParameter != rFieldmark.GetParameters()->end() )
+    {
+        OUString aHelpText;
+        pParameter->second >>= aHelpText;
+        const sal_Int32 nLen = std::min( sal_Int32(255), aHelpText.getLength() );
+        ffhelptext = aHelpText.copy (0, nLen);
+    }
+    if ( !ffhelptext.isEmpty() )
+        aFieldHeader.bits |= 0x1<<7;
+
+    pParameter = rFieldmark.GetParameters()->find("Description"); // doc tooltip
+    if ( pParameter == rFieldmark.GetParameters()->end() )
+        pParameter = rFieldmark.GetParameters()->find("Hint"); //docx tooltip
+    if ( pParameter != rFieldmark.GetParameters()->end() )
+    {
+        OUString aStatusText;
+        pParameter->second >>= aStatusText;
+        const sal_Int32 nLen = std::min( sal_Int32(138), aStatusText.getLength() );
+        ffstattext = aStatusText.copy (0, nLen);
+    }
+    if ( !ffstattext.isEmpty() )
+        aFieldHeader.bits |= 0x1<<8;
+
+    pParameter = rFieldmark.GetParameters()->find("EntryMacro");
+    if ( pParameter != rFieldmark.GetParameters()->end() )
+    {
+        OUString aEntryMacro;
+        pParameter->second >>= aEntryMacro;
+        assert( aEntryMacro.getLength() < 33 && "jluth seeing if following documentation will cause problems." );
+        const sal_Int32 nLen = std::min( sal_Int32(32), aEntryMacro.getLength() );
+        ffentrymcr = aEntryMacro.copy (0, nLen);
+    }
+
+    pParameter = rFieldmark.GetParameters()->find("ExitMacro");
+    if ( pParameter != rFieldmark.GetParameters()->end() )
+    {
+        OUString aExitMacro;
+        pParameter->second >>= aExitMacro;
+        assert( aExitMacro.getLength() < 33 && "jluth seeing if following documentation will cause problems." );
+        const sal_Int32 nLen = std::min( sal_Int32(32), aExitMacro.getLength() );
+        ffexitmcr = aExitMacro.copy (0, nLen);
     }
 
     std::vector< OUString > aListItems;
@@ -3901,13 +3999,6 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
             copy(vListEntries.begin(), vListEntries.end(), back_inserter(aListItems));
         }
     }
-
-    const OUString ffdeftext;
-    const OUString ffformat;
-    const OUString ffhelptext;
-    const OUString ffstattext;
-    const OUString ffentrymcr;
-    const OUString ffexitmcr;
 
     const sal_uInt8 aFieldData[] =
     {
