@@ -1059,18 +1059,8 @@ bool DAVResourceAccess::detectRedirectCycle(
 
     SerfUri aUri( rRedirectURL );
 
-    std::vector< SerfUri >::const_iterator it  = m_aRedirectURIs.begin();
-    std::vector< SerfUri >::const_iterator end = m_aRedirectURIs.end();
-
-    while ( it != end )
-    {
-        if ( aUri == (*it) )
-            return true;
-
-        ++it;
-    }
-
-    return false;
+    return std::any_of(m_aRedirectURIs.begin(), m_aRedirectURIs.end(),
+        [&aUri](const SerfUri& rUri) { return aUri == rUri; });
 }
 
 

@@ -151,22 +151,11 @@ void SerfGetReqProcImpl::processSingleResponseHeader( const char* inHeaderName,
     else
     {
         // store only header fields which are requested
-        std::vector< OUString >::const_iterator it( mpHeaderNames->begin() );
-        const std::vector< OUString >::const_iterator end( mpHeaderNames->end() );
-
-        while ( it != end )
-        {
-            // header names are case insensitive
-            if ( (*it).equalsIgnoreAsciiCase( aHeaderName ) )
-            {
-                bStoreHeaderField = true;
-                break;
-            }
-            else
-            {
-                ++it;
-            }
-        }
+        bStoreHeaderField = std::any_of(mpHeaderNames->begin(), mpHeaderNames->end(),
+            [&aHeaderName](const OUString& rHeaderName) {
+                // header names are case insensitive
+                return rHeaderName.equalsIgnoreAsciiCase( aHeaderName );
+            });
     }
 
     if ( bStoreHeaderField )

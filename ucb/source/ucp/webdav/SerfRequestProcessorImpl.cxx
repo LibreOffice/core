@@ -82,25 +82,19 @@ void SerfRequestProcessorImpl::handleChunkedEncoding (
 void SerfRequestProcessorImpl::setRequestHeaders( serf_bucket_t* inoutSerfHeaderBucket )
 {
     bool bHasUserAgent( false );
-    DAVRequestHeaders::const_iterator aHeaderIter( mrRequestHeaders.begin() );
-    const DAVRequestHeaders::const_iterator aEnd( mrRequestHeaders.end() );
 
-    while ( aHeaderIter != aEnd )
+    for ( const auto& rHeader : mrRequestHeaders )
     {
-        const OString aHeader = OUStringToOString( (*aHeaderIter).first,
-                                                               RTL_TEXTENCODING_UTF8 );
-        const OString aValue = OUStringToOString( (*aHeaderIter).second,
-                                                            RTL_TEXTENCODING_UTF8 );
+        const OString aHeader = OUStringToOString( rHeader.first, RTL_TEXTENCODING_UTF8 );
+        const OString aValue = OUStringToOString( rHeader.second, RTL_TEXTENCODING_UTF8 );
 
         SAL_INFO("ucb.ucp.webdav",  "Request Header - \"" << aHeader << ": " << aValue << "\"");
         if ( !bHasUserAgent )
-            bHasUserAgent = aHeaderIter->first == "User-Agent";
+            bHasUserAgent = rHeader.first == "User-Agent";
 
         serf_bucket_headers_setc( inoutSerfHeaderBucket,
                                   aHeader.getStr(),
                                   aValue.getStr() );
-
-        ++aHeaderIter;
     }
 
     if ( !bHasUserAgent )

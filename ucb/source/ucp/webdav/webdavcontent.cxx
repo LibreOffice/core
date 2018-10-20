@@ -96,7 +96,6 @@ void lcl_sendPartialGETRequest( bool &bError,
                                 std::unique_ptr< ContentProperties > &xProps,
                                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
 {
-    bool bIsRequestSize = false;
     DAVResource aResource;
     DAVRequestHeaders aPartialGet;
     aPartialGet.push_back(
@@ -104,15 +103,8 @@ void lcl_sendPartialGETRequest( bool &bError,
             OUString( "Range" ),
             OUString( "bytes=0-0" )));
 
-    for ( std::vector< rtl::OUString >::const_iterator it = aHeaderNames.begin();
-            it != aHeaderNames.end(); ++it )
-    {
-        if ( *it == "Content-Length" )
-        {
-            bIsRequestSize = true;
-            break;
-        }
-    }
+    bool bIsRequestSize = std::any_of(aHeaderNames.begin(), aHeaderNames.end(),
+        [](const rtl::OUString& rHeaderName) { return rHeaderName == "Content-Length"; });
 
     if ( bIsRequestSize )
     {
@@ -136,15 +128,14 @@ void lcl_sendPartialGETRequest( bool &bError,
             // Solution: if "Content-Range" is present, map it with UCB "Size" property
             rtl::OUString aAcceptRanges, aContentRange, aContentLength;
             std::vector< DAVPropertyValue > &aResponseProps = aResource.properties;
-            for ( std::vector< DAVPropertyValue >::const_iterator it = aResponseProps.begin();
-                    it != aResponseProps.end(); ++it )
+            for ( const auto& rResponseProp : aResponseProps )
             {
-                if ( it->Name == "Accept-Ranges" )
-                    it->Value >>= aAcceptRanges;
-                else if ( it->Name == "Content-Range" )
-                    it->Value >>= aContentRange;
-                else if ( it->Name == "Content-Length" )
-                    it->Value >>= aContentLength;
+                if ( rResponseProp.Name == "Accept-Ranges" )
+                    rResponseProp.Value >>= aAcceptRanges;
+                else if ( rResponseProp.Name == "Content-Range" )
+                    rResponseProp.Value >>= aContentRange;
+                else if ( rResponseProp.Name == "Content-Length" )
+                    rResponseProp.Value >>= aContentLength;
             }
 
             sal_Int64 nSize = 1;
@@ -170,14 +161,11 @@ void lcl_sendPartialGETRequest( bool &bError,
                     // "*" means that the instance-length is unknown at the time when the response was generated
                     if ( aSize != "*" )
                     {
-                        for ( std::vector< DAVPropertyValue >::iterator it = aResponseProps.begin();
-                                it != aResponseProps.end(); ++it )
+                        auto it = std::find_if(aResponseProps.begin(), aResponseProps.end(),
+                            [](const DAVPropertyValue& rProp) { return rProp.Name == "Content-Length"; });
+                        if (it != aResponseProps.end())
                         {
-                            if (it->Name == "Content-Length")
-                            {
-                                it->Value <<= aSize;
-                                break;
-                            }
+                            it->Value <<= aSize;
                         }
                     }
                 }
@@ -1230,19 +1218,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
         const std::unique_ptr< PropertyValueMap > & xProps = rData.getProperties();
 
-        PropertyValueMap::const_iterator it  = xProps->begin();
-        PropertyValueMap::const_iterator end = xProps->end();
-
         ContentProvider * pProvider
             = static_cast< ContentProvider * >( rProvider.get() );
         beans::Property aProp;
 
-        while ( it != end )
+        for ( const auto& rProp : *xProps )
         {
-            if ( pProvider->getProperty( (*it).first, aProp ) )
-                xRow->appendObject( aProp, (*it).second.value() );
-
-            ++it;
+            if ( pProvider->getProperty( rProp.first, aProp ) )
+                xRow->appendObject( aProp, rProp.second.value() );
         }
 
         // Append all local Additional Properties.
@@ -1342,20 +1325,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     {
                         const OUString & rName = rProperties[ n ].Name;
 
-                        std::vector< OUString >::const_iterator it
-                            = m_aFailedPropNames.begin();
-                        std::vector< OUString >::const_iterator end
-                            = m_aFailedPropNames.end();
-
-                        while ( it != end )
-                        {
-                            if ( *it == rName )
-                                break;
-
-                            ++it;
-                        }
-
-                        if ( it == end )
+                        if ( std::none_of(m_aFailedPropNames.begin(), m_aFailedPropNames.end(),
+                                [&rName](const OUString& rPropName) { return rPropName == rName; }) )
                         {
                             aProperties[ nProps ] = rProperties[ n ];
                             nProps++;
@@ -1869,21 +1840,14 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             // Set property values at server.
             xResAccess->PROPPATCH( aProppatchValues, xEnv );
 
-            std::vector< ProppatchValue >::const_iterator it
-                = aProppatchValues.begin();
-            std::vector< ProppatchValue >::const_iterator end
-                = aProppatchValues.end();
-
-            while ( it != end )
+            for ( const auto& rProppatchValue : aProppatchValues )
             {
-                aEvent.PropertyName = (*it).name;
+                aEvent.PropertyName = rProppatchValue.name;
                 aEvent.OldValue     = uno::Any(); // @@@ to expensive to obtain!
-                aEvent.NewValue     = (*it).value;
+                aEvent.NewValue     = rProppatchValue.value;
 
                 aChanges.getArray()[ nChanged ] = aEvent;
                 nChanged++;
-
-                ++it;
             }
         }
         catch ( DAVException const & e )
@@ -2271,12 +2235,9 @@ void Content::queryChildren( ContentRefList& rChildren )
 
     sal_Int32 nLen = aURL.getLength();
 
-    ::ucbhelper::ContentRefList::const_iterator it  = aAllContents.begin();
-    ::ucbhelper::ContentRefList::const_iterator end = aAllContents.end();
-
-    while ( it != end )
+    for ( const auto& rChild : aAllContents )
     {
-        ::ucbhelper::ContentImplHelperRef xChild = (*it);
+        ::ucbhelper::ContentImplHelperRef xChild = rChild;
         OUString aChildURL
             = xChild->getIdentifier()->getContentIdentifier();
 
@@ -2297,7 +2258,6 @@ void Content::queryChildren( ContentRefList& rChildren )
                             xChild.get() ) ) );
             }
         }
-        ++it;
     }
 }
 
@@ -2812,13 +2772,9 @@ void Content::destroy( bool bDeletePhysical )
     ::http_dav_ucp::Content::ContentRefList aChildren;
     queryChildren( aChildren );
 
-    ContentRefList::const_iterator it  = aChildren.begin();
-    ContentRefList::const_iterator end = aChildren.end();
-
-    while ( it != end )
+    for ( auto& rChild : aChildren )
     {
-        (*it)->destroy( bDeletePhysical );
-        ++it;
+        rChild->destroy( bDeletePhysical );
     }
 }
 
@@ -2947,12 +2903,9 @@ bool Content::exchangeIdentity(
             ContentRefList aChildren;
             queryChildren( aChildren );
 
-            ContentRefList::const_iterator it  = aChildren.begin();
-            ContentRefList::const_iterator end = aChildren.end();
-
-            while ( it != end )
+            for ( const auto& rChild : aChildren )
             {
-                ContentRef xChild = (*it);
+                ContentRef xChild = rChild;
 
                 // Create new content identifier for the child...
                 uno::Reference< ucb::XContentIdentifier >
@@ -2969,8 +2922,6 @@ bool Content::exchangeIdentity(
 
                 if ( !xChild->exchangeIdentity( xNewChildId ) )
                     return false;
-
-                ++it;
             }
             return true;
         }

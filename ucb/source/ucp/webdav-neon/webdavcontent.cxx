@@ -110,21 +110,13 @@ namespace
                                            std::unique_ptr< ContentProperties > &xProps,
                                            const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
-        bool bIsRequestSize = false;
         DAVResource aResource;
         DAVRequestHeaders aPartialGet;
         aPartialGet.emplace_back( OUString( "Range" ), // see <https://tools.ietf.org/html/rfc7233#section-3.1>
                                   OUString( "bytes=0-0" ) );
 
-        for ( std::vector< rtl::OUString >::const_iterator it = aHeaderNames.begin();
-              it != aHeaderNames.end(); ++it )
-        {
-            if ( *it == "Content-Length" )
-            {
-                bIsRequestSize = true;
-                break;
-            }
-        }
+        bool bIsRequestSize = std::any_of(aHeaderNames.begin(), aHeaderNames.end(),
+            [](const rtl::OUString& rHeaderName) { return rHeaderName == "Content-Length"; });
 
         if ( bIsRequestSize )
         {
@@ -145,15 +137,14 @@ namespace
                 // Solution: if "Content-Range" is present, map it with UCB "Size" property
                 rtl::OUString aAcceptRanges, aContentRange, aContentLength;
                 std::vector< DAVPropertyValue > &aResponseProps = aResource.properties;
-                for ( std::vector< DAVPropertyValue >::const_iterator it = aResponseProps.begin();
-                      it != aResponseProps.end(); ++it )
+                for ( const auto& rResponseProp : aResponseProps )
                 {
-                    if ( it->Name == "Accept-Ranges" )
-                        it->Value >>= aAcceptRanges;
-                    else if ( it->Name == "Content-Range" )
-                        it->Value >>= aContentRange;
-                    else if ( it->Name == "Content-Length" )
-                        it->Value >>= aContentLength;
+                    if ( rResponseProp.Name == "Accept-Ranges" )
+                        rResponseProp.Value >>= aAcceptRanges;
+                    else if ( rResponseProp.Name == "Content-Range" )
+                        rResponseProp.Value >>= aContentRange;
+                    else if ( rResponseProp.Name == "Content-Length" )
+                        rResponseProp.Value >>= aContentLength;
                 }
 
                 sal_Int64 nSize = 1;
@@ -182,14 +173,11 @@ namespace
                         // "*" means that the instance-length is unknown at the time when the response was generated
                         if ( aSize != "*" )
                         {
-                            for ( std::vector< DAVPropertyValue >::iterator it = aResponseProps.begin();
-                                  it != aResponseProps.end(); ++it )
+                            auto it = std::find_if(aResponseProps.begin(), aResponseProps.end(),
+                                [](const DAVPropertyValue& rProp) { return rProp.Name == "Content-Length"; });
+                            if (it != aResponseProps.end())
                             {
-                                if (it->Name == "Content-Length")
-                                {
-                                    it->Value <<= aSize;
-                                    break;
-                                }
+                                it->Value <<= aSize;
                             }
                         }
                     }
@@ -1251,19 +1239,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         // Append all standard UCB, DAV and HTTP properties.
         const std::unique_ptr< PropertyValueMap > & xProps = rData.getProperties();
 
-        PropertyValueMap::const_iterator it  = xProps->begin();
-        PropertyValueMap::const_iterator end = xProps->end();
-
         ContentProvider * pProvider
             = static_cast< ContentProvider * >( rProvider.get() );
         beans::Property aProp;
 
-        while ( it != end )
+        for ( const auto& rProp : *xProps )
         {
-            pProvider->getProperty( (*it).first, aProp );
-            xRow->appendObject( aProp, (*it).second.value() );
-
-            ++it;
+            pProvider->getProperty( rProp.first, aProp );
+            xRow->appendObject( aProp, rProp.second.value() );
         }
 
         // Append all local Additional Properties.
@@ -1401,25 +1384,19 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     {
                         const OUString & rName = rProperties[ n ].Name;
 
-                        std::vector< OUString >::const_iterator it
-                            = m_aFailedPropNames.begin();
                         std::vector< OUString >::const_iterator end
                             = m_aFailedPropNames.end();
 
-                        while ( it != end )
+                        auto it = std::find(m_aFailedPropNames.cbegin(), end, rName);
+                        if ( it != end )
                         {
-                            if ( *it == rName )
-                            {
-                                // the failed property in cache is the same as the requested one,
-                                // so add it to the requested properties list
-                                aProperties[ nProps ] = rProperties[ n ];
-                                nProps++;
-                                break;
-                            }
-
-                            ++it;
+                            // the failed property in cache is the same as the requested one,
+                            // so add it to the requested properties list
+                            aProperties[ nProps ] = rProperties[ n ];
+                            nProps++;
                         }
 
+                        // XXX something strange happens here: identical code for different conditions
                         if ( it == end )
                         {
                             aProperties[ nProps ] = rProperties[ n ];
@@ -1451,21 +1428,19 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 #if defined SAL_LOG_INFO
                             {//debug
                                 // print received resources
-                                std::vector< DAVPropertyValue >::const_iterator it = resources[0].properties.begin();
-                                std::vector< DAVPropertyValue >::const_iterator end = resources[0].properties.end();
-                                while ( it != end )
+                                for ( const auto& rProp : resources[0].properties )
                                 {
                                     OUString aPropValue;
                                     bool    bValue;
                                     uno::Sequence< ucb::LockEntry > aSupportedLocks;
-                                    if( (*it).Value >>= aPropValue )
-                                        SAL_INFO( "ucb.ucp.webdav", "PROPFIND (getPropertyValues) - returned property: " << (*it).Name << ":" << aPropValue );
-                                    else if( (*it).Value >>= bValue )
-                                        SAL_INFO( "ucb.ucp.webdav", "PROPFIND (getPropertyValues) - returned property: " << (*it).Name << ":" <<
+                                    if( rProp.Value >>= aPropValue )
+                                        SAL_INFO( "ucb.ucp.webdav", "PROPFIND (getPropertyValues) - returned property: " << rProp.Name << ":" << aPropValue );
+                                    else if( rProp.Value >>= bValue )
+                                        SAL_INFO( "ucb.ucp.webdav", "PROPFIND (getPropertyValues) - returned property: " << rProp.Name << ":" <<
                                                   ( bValue ? "true" : "false" ) );
-                                    else if( (*it).Value >>= aSupportedLocks )
+                                    else if( rProp.Value >>= aSupportedLocks )
                                     {
-                                        SAL_INFO( "ucb.ucp.webdav", "PROPFIND (getPropertyValues) - returned property: " << (*it).Name << ":" );
+                                        SAL_INFO( "ucb.ucp.webdav", "PROPFIND (getPropertyValues) - returned property: " << rProp.Name << ":" );
                                         for ( sal_Int32 n = 0; n < aSupportedLocks.getLength(); ++n )
                                         {
                                             SAL_INFO( "ucb.ucp.webdav","      scope: "
@@ -1474,7 +1449,6 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                                                       << ( aSupportedLocks[ n ].Type != css::ucb::LockType_WRITE ? "" : "write" ) );
                                         }
                                     }
-                                    ++it;
                                 }
                             }
 #endif
@@ -1676,31 +1650,30 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 rProperties, aMissingProps ) )
     {
         //
-        for ( std::vector< rtl::OUString >::const_iterator it = aMissingProps.begin();
-              it != aMissingProps.end(); ++it )
+        for ( const auto& rProp : aMissingProps )
         {
             // For the time being only a couple of properties need to be added
-            if ( (*it) == "DateModified"  || (*it) == "DateCreated" )
+            if ( rProp == "DateModified"  || rProp == "DateCreated" )
             {
                 util::DateTime aDate;
                 xProps->addProperty(
-                    (*it),
+                    rProp,
                     uno::makeAny( aDate ),
                     true );
             }
             // If WebDAV didn't return the resource type, assume default
             // This happens e.g. for lists exported by SharePoint
-            else if ( (*it) == "IsFolder" )
+            else if ( rProp == "IsFolder" )
             {
                 xProps->addProperty(
-                    (*it),
+                    rProp,
                     uno::makeAny( false ),
                     true );
             }
-            else if ( (*it) == "IsDocument" )
+            else if ( rProp == "IsDocument" )
             {
                 xProps->addProperty(
-                    (*it),
+                    rProp,
                     uno::makeAny( true ),
                     true );
             }
@@ -2033,21 +2006,14 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             aStaticDAVOptionsCache.removeDAVOptions( xResAccess->getURL() );
             xResAccess->PROPPATCH( aProppatchValues, xEnv );
 
-            std::vector< ProppatchValue >::const_iterator it
-                = aProppatchValues.begin();
-            std::vector< ProppatchValue >::const_iterator end
-                = aProppatchValues.end();
-
-            while ( it != end )
+            for ( const auto& rProppatchValue : aProppatchValues )
             {
-                aEvent.PropertyName = (*it).name;
+                aEvent.PropertyName = rProppatchValue.name;
                 aEvent.OldValue     = uno::Any(); // @@@ to expensive to obtain!
-                aEvent.NewValue     = (*it).value;
+                aEvent.NewValue     = rProppatchValue.value;
 
                 aChanges.getArray()[ nChanged ] = aEvent;
                 nChanged++;
-
-                ++it;
             }
         }
         catch ( DAVException const & e )
@@ -2448,12 +2414,9 @@ void Content::queryChildren( ContentRefList& rChildren )
 
     sal_Int32 nLen = aURL.getLength();
 
-    ::ucbhelper::ContentRefList::const_iterator it  = aAllContents.begin();
-    ::ucbhelper::ContentRefList::const_iterator end = aAllContents.end();
-
-    while ( it != end )
+    for ( const auto& rChild : aAllContents )
     {
-        ::ucbhelper::ContentImplHelperRef xChild = (*it);
+        ::ucbhelper::ContentImplHelperRef xChild = rChild;
         OUString aChildURL
             = xChild->getIdentifier()->getContentIdentifier();
 
@@ -2473,7 +2436,6 @@ void Content::queryChildren( ContentRefList& rChildren )
                             xChild.get() ) );
             }
         }
-        ++it;
     }
 }
 
@@ -3007,13 +2969,9 @@ void Content::destroy( bool bDeletePhysical )
     ::webdav_ucp::Content::ContentRefList aChildren;
     queryChildren( aChildren );
 
-    ContentRefList::const_iterator it  = aChildren.begin();
-    ContentRefList::const_iterator end = aChildren.end();
-
-    while ( it != end )
+    for ( auto& rChild : aChildren )
     {
-        (*it)->destroy( bDeletePhysical );
-        ++it;
+        rChild->destroy( bDeletePhysical );
     }
 }
 
@@ -3096,16 +3054,13 @@ Content::ResourceType Content::resourceTypeForLocks(
                             // all returned properties are in
                             // resources.properties[n].Name/.Value
 
-                            std::vector< DAVPropertyValue >::iterator it;
-
-                            for ( it = resources[0].properties.begin();
-                                  it != resources[0].properties.end(); ++it)
+                            for ( const auto& rProp : resources[0].properties )
                             {
-                                if ( (*it).Name ==  DAVProperties::SUPPORTEDLOCK )
+                                if ( rProp.Name ==  DAVProperties::SUPPORTEDLOCK )
                                 {
                                     wasSupportedlockFound = true;
                                     uno::Sequence< ucb::LockEntry > aSupportedLocks;
-                                    if ( (*it).Value >>= aSupportedLocks )
+                                    if ( rProp.Value >>= aSupportedLocks )
                                     {
                                         for ( sal_Int32 n = 0; n < aSupportedLocks.getLength(); ++n )
                                         {
@@ -3503,12 +3458,9 @@ bool Content::exchangeIdentity(
             ContentRefList aChildren;
             queryChildren( aChildren );
 
-            ContentRefList::const_iterator it  = aChildren.begin();
-            ContentRefList::const_iterator end = aChildren.end();
-
-            while ( it != end )
+            for ( const auto& rChild : aChildren )
             {
-                ContentRef xChild = (*it);
+                ContentRef xChild = rChild;
 
                 // Create new content identifier for the child...
                 uno::Reference< ucb::XContentIdentifier >
@@ -3525,8 +3477,6 @@ bool Content::exchangeIdentity(
 
                 if ( !xChild->exchangeIdentity( xNewChildId ) )
                     return false;
-
-                ++it;
             }
             return true;
         }
@@ -3830,21 +3780,19 @@ Content::ResourceType Content::getResourceType(
 #if defined SAL_LOG_INFO
                     {//debug
                         // print received resources
-                        std::vector< DAVPropertyValue >::const_iterator it = resources[0].properties.begin();
-                        std::vector< DAVPropertyValue >::const_iterator end = resources[0].properties.end();
-                        while ( it != end )
+                        for ( const auto& rProp : resources[0].properties )
                         {
                             OUString aPropValue;
                             bool    bValue;
                             uno::Sequence< ucb::LockEntry > aSupportedLocks;
-                            if((*it).Value >>= aPropValue )
-                                SAL_INFO( "ucb.ucp.webdav", "PROPFIND (getResourceType) - ret'd prop: " << (*it).Name << ":" << aPropValue );
-                            else if( (*it).Value >>= bValue )
-                                SAL_INFO( "ucb.ucp.webdav", "PROPFIND (getResourceType) - ret'd prop: " << (*it).Name << ":" <<
+                            if(rProp.Value >>= aPropValue )
+                                SAL_INFO( "ucb.ucp.webdav", "PROPFIND (getResourceType) - ret'd prop: " << rProp.Name << ":" << aPropValue );
+                            else if( rProp.Value >>= bValue )
+                                SAL_INFO( "ucb.ucp.webdav", "PROPFIND (getResourceType) - ret'd prop: " << rProp.Name << ":" <<
                                           ( bValue ? "true" : "false" ) );
-                            else if( (*it).Value >>= aSupportedLocks )
+                            else if( rProp.Value >>= aSupportedLocks )
                             {
-                                SAL_INFO( "ucb.ucp.webdav", "PROPFIND (getResourceType) - ret'd prop: " << (*it).Name << ":" );
+                                SAL_INFO( "ucb.ucp.webdav", "PROPFIND (getResourceType) - ret'd prop: " << rProp.Name << ":" );
                                 for ( sal_Int32 n = 0; n < aSupportedLocks.getLength(); ++n )
                                 {
                                     SAL_INFO( "ucb.ucp.webdav","PROPFIND (getResourceType) -       supportedlock[" << n <<"]: scope: "
@@ -3853,7 +3801,6 @@ Content::ResourceType Content::getResourceType(
                                               << ( aSupportedLocks[ n ].Type != css::ucb::LockType_WRITE ? "" : "write" ) );
                                 }
                             }
-                            ++it;
                         }
                     }
 #endif
