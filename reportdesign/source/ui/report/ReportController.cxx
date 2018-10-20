@@ -3147,7 +3147,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
             _nObjectId,
             SdrInventor::ReportDesign,
             OBJ_DLG_FIXEDTEXT,
-            nullptr,
+            pSectionWindow->getReportSection().getPage(),
             pSectionWindow->getReportSection().getPage(),
 
             // tdf#118963 Need a SdrModel for SdrObject creation. Dereferencing
