@@ -135,12 +135,12 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
   #define SIZE_FLAVOR_MAP (sizeof(flavorMap)/sizeof(FlavorMap))
 
-  inline bool isByteSequenceType(const Type& theType)
+  bool isByteSequenceType(const Type& theType)
   {
     return (theType == cppu::UnoType<Sequence<sal_Int8>>::get());
   }
 
-  inline bool isOUStringType(const Type& theType)
+  bool isOUStringType(const Type& theType)
   {
     return (theType == cppu::UnoType<OUString>::get() );
   }

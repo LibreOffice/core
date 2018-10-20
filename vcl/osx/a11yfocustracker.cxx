@@ -35,7 +35,7 @@
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 
-static inline vcl::Window *
+static vcl::Window *
 getWindow(const ::VclSimpleEvent *pEvent)
 {
     return static_cast< const ::VclWindowEvent *> (pEvent)->GetWindow();

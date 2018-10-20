@@ -60,7 +60,7 @@ namespace /* private */
     // coordinate system upper-left hence we need to transform
     // coordinates
 
-    inline void CocoaToVCL(NSPoint& rPoint, const NSRect& bounds)
+    void CocoaToVCL(NSPoint& rPoint, const NSRect& bounds)
     {
         rPoint.y = bounds.size.height - rPoint.y;
     }
