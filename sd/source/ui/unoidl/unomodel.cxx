@@ -481,7 +481,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
         // this is only used for clipboard where we only have one page
         pStandardPage = mpDoc->AllocSdPage(false);
 
-        Size aDefSize(21000, 29700);   // A4-Hochformat
+        Size aDefSize(21000, 29700);   // A4 portrait orientation
         pStandardPage->SetSize( aDefSize );
         mpDoc->InsertPage(pStandardPage, 0);
     }
