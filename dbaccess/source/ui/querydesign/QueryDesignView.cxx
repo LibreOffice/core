@@ -735,7 +735,7 @@ namespace
                             // only show the messagebox the first time
                             if (!bCritsOnAsterikWarning)
                             {
-                                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(_pView ? _pView->GetFrameWeld() : nullptr,
+                                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(_pView->GetFrameWeld(),
                                                                           VclMessageType::Warning, VclButtonsType::Ok,
                                                                           DBA_RES(STR_QRY_CRITERIA_ON_ASTERISK)));
                                 xBox->run();
@@ -891,7 +891,7 @@ namespace
                         // only show the  MessageBox the first time
                         if (!bCritsOnAsterikWarning)
                         {
-                            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(_pView ? _pView->GetFrameWeld() : nullptr,
+                            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(_pView->GetFrameWeld(),
                                                                       VclMessageType::Warning, VclButtonsType::Ok,
                                                                       DBA_RES(STR_QRY_ORDERBY_ON_ASTERISK)));
                             xBox->run();
