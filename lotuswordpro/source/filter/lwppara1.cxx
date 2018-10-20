@@ -467,12 +467,8 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
         {
             m_bHasBullet = true;
 
-            const LwpOverride* pBullet= pParaStyle->GetBulletOverride();
-            std::unique_ptr<LwpBulletOverride> xFinalBullet(
-                pBullet
-                    ? polymorphic_downcast<LwpBulletOverride*>(pBullet->clone())
-                    : new LwpBulletOverride)
-                ;
+            const LwpBulletOverride& rBullet= pParaStyle->GetBulletOverride();
+            std::unique_ptr<LwpBulletOverride> xFinalBullet(rBullet.clone());
 
             std::unique_ptr<LwpBulletOverride> const pLocalBullet2(pLocalBullet->clone());
             pLocalBullet2->Override(xFinalBullet.get());
@@ -491,21 +487,18 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
     }
     else
     {
-        const LwpBulletOverride* pBullOver = pParaStyle->GetBulletOverride();
-        if (pBullOver)
+        const LwpBulletOverride& rBullOver = pParaStyle->GetBulletOverride();
+        m_aSilverBulletID = rBullOver.GetSilverBullet();
+        if (!m_aSilverBulletID.IsNull())
         {
-            m_aSilverBulletID = pBullOver->GetSilverBullet();
-            if (!m_aSilverBulletID.IsNull())
-            {
-                m_bHasBullet = true;
+            m_bHasBullet = true;
 
-                m_pSilverBullet = dynamic_cast<LwpSilverBullet*>(m_aSilverBulletID.obj(VO_SILVERBULLET).get());
-                if (m_pSilverBullet)
-                    m_pSilverBullet->SetFoundry(m_pFoundry);
-            }
-
-            m_xBullOver.reset(pBullOver->clone());
+            m_pSilverBullet = dynamic_cast<LwpSilverBullet*>(m_aSilverBulletID.obj(VO_SILVERBULLET).get());
+            if (m_pSilverBullet)
+                m_pSilverBullet->SetFoundry(m_pFoundry);
         }
+
+        m_xBullOver.reset(rBullOver.clone());
     }
 }
 /**

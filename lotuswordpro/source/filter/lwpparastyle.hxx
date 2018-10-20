@@ -97,7 +97,7 @@ public:
     LwpParaBorderOverride* GetParaBorder() const;
     LwpBreaksOverride* GetBreaks() const;
     LwpTabOverride* GetTabOverride() const;
-    const LwpBulletOverride* GetBulletOverride() const { return &m_BulletOverride;}
+    const LwpBulletOverride& GetBulletOverride() const { return m_BulletOverride; }
     LwpNumberingOverride* GetNumberingOverride() const;
 public:
     static void ApplySubBorder(LwpBorderStuff* pBorderStuff, LwpBorderStuff::BorderType eType, XFBorders* pXFBorders);
