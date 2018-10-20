@@ -48,6 +48,7 @@
 #include <sfx2/printer.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/charclass.hxx>
 #include <vcl/help.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/settings.hxx>

@@ -29,6 +29,7 @@
 
 #include <svl/sharedstringpool.hxx>
 #include <osl/diagnose.h>
+#include <unotools/charclass.hxx>
 
 #include <memory>
 #include <utility>

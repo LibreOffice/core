@@ -20,11 +20,13 @@
 #define INCLUDED_UNOTOOLS_CONFIGVALUECONTAINER_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <osl/mutex.hxx>
-#include <o3tl/typed_flags_set.hxx>
+#include <com/sun/star/uno/Type.hxx>
 #include <memory>
 
+
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace osl { class Mutex; }
 
 namespace utl
 {

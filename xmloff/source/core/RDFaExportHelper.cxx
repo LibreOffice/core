@@ -37,6 +37,7 @@
 #include <com/sun/star/rdf/XDocumentRepository.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 
 #include <functional>
 #include <algorithm>

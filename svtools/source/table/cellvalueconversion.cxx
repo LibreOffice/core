@@ -34,6 +34,7 @@
 #include <tools/time.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/syslocale.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <memory>

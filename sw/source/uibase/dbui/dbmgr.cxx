@@ -113,6 +113,7 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <o3tl/make_unique.hxx>
+#include <unotools/charclass.hxx>
 
 #include <unomailmerge.hxx>
 #include <sfx2/event.hxx>

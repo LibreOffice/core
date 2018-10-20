@@ -21,12 +21,11 @@
 
 #include <unotools/unotoolsdllapi.h>
 
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
+
+namespace com { namespace sun { namespace star { namespace container { class XHierarchicalNameAccess; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XSingleServiceFactory; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
 
 namespace utl {
 

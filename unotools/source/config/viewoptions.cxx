@@ -20,6 +20,7 @@
 #include <unotools/viewoptions.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -28,6 +29,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <unotools/configpaths.hxx>
+#include <unotools/configmgr.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/processfactory.hxx>
 

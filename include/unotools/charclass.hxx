@@ -24,19 +24,18 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
-#include <com/sun/star/i18n/KParseTokens.hpp>
-#include <com/sun/star/i18n/KParseType.hpp>
 #include <com/sun/star/i18n/ParseResult.hpp>
-#include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <osl/mutex.hxx>
-#include <rtl/character.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace uno {
         class XComponentContext;
     }
 }}}
+
+namespace com { namespace sun { namespace star { namespace i18n { class XCharacterClassification; } } } }
 
 const sal_Int32 nCharClassAlphaType =
     css::i18n::KCharacterType::UPPER |

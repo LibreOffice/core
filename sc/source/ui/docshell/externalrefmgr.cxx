@@ -52,6 +52,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/charclass.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <vcl/svapp.hxx>

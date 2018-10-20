@@ -25,6 +25,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdoole2.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <unotools/charclass.hxx>
 
 #include <dbdocfun.hxx>
 #include <sc.hrc>

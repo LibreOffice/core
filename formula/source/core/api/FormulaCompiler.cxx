@@ -30,6 +30,7 @@
 
 #include <svl/zforlist.hxx>
 #include <unotools/resmgr.hxx>
+#include <unotools/charclass.hxx>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
 #include <com/sun/star/sheet/FormulaMapGroup.hpp>
 #include <com/sun/star/sheet/FormulaMapGroupSpecialOffset.hpp>

@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>

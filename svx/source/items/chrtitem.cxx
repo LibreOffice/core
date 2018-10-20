@@ -22,6 +22,7 @@
 #include <basic/sbxvar.hxx>
 #include <rtl/math.hxx>
 #include <unotools/intlwrapper.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 
 #include <float.h>

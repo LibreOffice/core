@@ -25,6 +25,9 @@
 #include <sal/log.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <i18nlangtag/languagetag.hxx>
 
 #include "itemholder1.hxx"
 

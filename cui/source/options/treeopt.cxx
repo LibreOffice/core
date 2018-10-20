@@ -95,6 +95,7 @@
 #include <svx/xpool.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/urlobj.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/misccfg.hxx>
 #include <unotools/moduleoptions.hxx>

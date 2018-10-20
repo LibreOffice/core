@@ -26,7 +26,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/options.hxx>
-#include <o3tl/typed_flags_set.hxx>
 
 namespace com{ namespace sun{ namespace star{
     namespace uno{
@@ -50,6 +49,9 @@ enum class ConfigItemMode
     AllLocales         = 0x02,
     ReleaseTree        = 0x04,
 };
+
+namespace o3tl { template <typename T> struct typed_flags; }
+
 namespace o3tl
 {
     template<> struct typed_flags<ConfigItemMode> : is_typed_flags<ConfigItemMode, 0x07> {};
@@ -63,9 +65,6 @@ namespace utl
         LocalNode,     // local node name, for use in XNameAccess etc. ("Item", "Q & A")
         LocalPath,     // one-level relative path, for use when building paths etc.  ("Item", "Typ['Q &amp; A']")
     };
-
-    class ConfigChangeListener_Impl;
-    class ConfigManager;
 
     class UNOTOOLS_DLLPUBLIC ConfigItem : public ConfigurationBroadcaster
     {

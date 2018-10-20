@@ -46,6 +46,7 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/syslocale.hxx>
 #include <unotools/intlwrapper.hxx>
+#include <unotools/collatorwrapper.hxx>
 
 #include <cstring>
 #include <vector>

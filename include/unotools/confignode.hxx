@@ -20,25 +20,19 @@
 #define INCLUDED_UNOTOOLS_CONFIGNODE_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/util/XChangesBatch.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <unotools/eventlisteneradapter.hxx>
 
-namespace comphelper
-{
-    class ComponentContext;
-}
+namespace com { namespace sun { namespace star { namespace container { class XHierarchicalNameAccess; } } } }
+namespace com { namespace sun { namespace star { namespace container { class XNameAccess; } } } }
+namespace com { namespace sun { namespace star { namespace container { class XNameContainer; } } } }
+namespace com { namespace sun { namespace star { namespace container { class XNameReplace; } } } }
+namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
+namespace com { namespace sun { namespace star { namespace uno { class XComponentContext; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XChangesBatch; } } } }
 
 namespace utl
 {
 
-    //= OConfigurationNode
-
-    class OConfigurationTreeRoot;
     /** a small wrapper around a configuration node.<p/>
         Nodes in the terminology used herein are <em>inner</em> nodes of a configuration
         tree, which means <em>no leafs</em>.

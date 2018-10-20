@@ -20,6 +20,7 @@
 #include <globalnames.hxx>
 
 #include <sfx2/app.hxx>
+#include <unotools/charclass.hxx>
 
 #define ITEMID_NAME 1
 #define ITEMID_RANGE 2

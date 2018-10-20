@@ -11,6 +11,7 @@
 #define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EPUBEXPORTDIALOG_HXX
 
 #include <vcl/weld.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace comphelper
 {
