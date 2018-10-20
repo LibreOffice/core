@@ -21,6 +21,7 @@
 #include <sfx2/app.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/sharedstringpool.hxx>
+#include <unotools/charclass.hxx>
 
 #include <scitems.hxx>
 #include <funcuno.hxx>

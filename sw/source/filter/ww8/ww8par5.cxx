@@ -35,6 +35,8 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <rtl/character.hxx>
+#include <unotools/charclass.hxx>
 
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>

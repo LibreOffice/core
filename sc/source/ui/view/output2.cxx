@@ -55,6 +55,7 @@
 #include <vcl/settings.hxx>
 #include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
+#include <unotools/charclass.hxx>
 
 #include <output.hxx>
 #include <document.hxx>

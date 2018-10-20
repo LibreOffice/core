@@ -23,6 +23,7 @@
 #include <view.hxx>
 #include <drawbase.hxx>
 #include <unobaseclass.hxx>
+#include <rtl/character.hxx>
 
 inline void SwWrtShell::OpenMark()
 {

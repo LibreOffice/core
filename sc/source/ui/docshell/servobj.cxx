@@ -26,6 +26,7 @@
 #include <brdcst.hxx>
 #include <rangenam.hxx>
 #include <sc.hrc>
+#include <unotools/charclass.hxx>
 
 using namespace formula;
 

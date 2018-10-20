@@ -20,6 +20,7 @@
 #include <scitems.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/eeitem.hxx>
+#include <unotools/charclass.hxx>
 
 #include <editeng/lrspitem.hxx>
 #include <editeng/paperinf.hxx>

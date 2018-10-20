@@ -21,13 +21,12 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <unotools/configmgr.hxx>
-#include <unotools/configitem.hxx>
 #include <sal/types.h>
-#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
+
+namespace com { namespace sun { namespace star { namespace beans { struct NamedValue; } } } }
+namespace osl { class Mutex; }
 
 class SvtViewOptionsBase_Impl;
 

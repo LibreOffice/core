@@ -18,6 +18,7 @@
  */
 
 #include <svx/hexcolorcontrol.hxx>
+#include <rtl/character.hxx>
 
 namespace weld {
 

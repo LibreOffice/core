@@ -35,6 +35,7 @@
 #include <basic/sbuno.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
+#include <unotools/charclass.hxx>
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>

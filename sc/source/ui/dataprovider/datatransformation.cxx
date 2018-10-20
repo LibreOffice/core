@@ -15,6 +15,7 @@
 #include <tools/datetime.hxx>
 #include <svl/zforlist.hxx>
 #include <globalnames.hxx>
+#include <unotools/charclass.hxx>
 
 namespace {
 

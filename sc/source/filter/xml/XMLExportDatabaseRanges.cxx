@@ -43,6 +43,7 @@
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <comphelper/extract.hxx>
+#include <osl/diagnose.h>
 
 #include <map>
 

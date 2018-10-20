@@ -39,6 +39,7 @@
 #include <fupoor.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <rtl/character.hxx>
 
 namespace sd {
 

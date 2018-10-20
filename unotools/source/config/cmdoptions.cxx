@@ -26,6 +26,7 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>

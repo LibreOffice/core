@@ -24,6 +24,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <sax/tools/converter.hxx>
 #include <rtl/math.hxx>
+#include <osl/diagnose.h>
 #include "xmlexprt.hxx"
 #include "XMLConverter.hxx"
 #include <document.hxx>

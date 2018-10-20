@@ -23,12 +23,13 @@
 
 //= conversions UNO3.TimeClass <-> Tools.TimeClass (Date/Time/DateTime)
 #include <unotools/unotoolsdllapi.h>
-#include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/util/DateTime.hpp>
+#include <rtl/ustring.hxx>
+
+namespace com { namespace sun { namespace star { namespace util { struct Date; } } } }
+namespace com { namespace sun { namespace star { namespace util { struct DateTime; } } } }
+namespace com { namespace sun { namespace star { namespace util { struct Time; } } } }
 
 class Date;
-namespace tools { class Time; }
 class DateTime;
 
 namespace utl

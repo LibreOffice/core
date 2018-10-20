@@ -14,6 +14,7 @@
 #include <officecfg/Office/Calc.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
+#include <unotools/charclass.hxx>
 
 #include "htmldataprovider.hxx"
 #include "xmldataprovider.hxx"

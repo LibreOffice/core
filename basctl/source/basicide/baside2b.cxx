@@ -50,6 +50,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <vector>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
+#include <unotools/charclass.hxx>
 
 namespace basctl
 {

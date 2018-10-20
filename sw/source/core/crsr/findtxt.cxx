@@ -20,6 +20,7 @@
 #include <memory>
 
 #include <com/sun/star/util/SearchFlags.hpp>
+#include <com/sun/star/util/SearchResult.hpp>
 #include <comphelper/lok.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>

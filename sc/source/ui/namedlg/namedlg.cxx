@@ -37,6 +37,7 @@
 #include <vcl/settings.hxx>
 #include <formula/errorcodes.hxx>
 #include <o3tl/make_unique.hxx>
+#include <unotools/charclass.hxx>
 
 #include <map>
 

@@ -21,11 +21,14 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <sal/types.h>
-#include <osl/mutex.hxx>
-#include <com/sun/star/frame/XFrame.hpp>
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
+
+namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
+namespace osl { class Mutex; }
 
 /*-************************************************************************************************************
     @descr          The method GetList() returns a list of property values.

@@ -72,6 +72,7 @@
 #include <formulabuffer.hxx>
 #include <editutil.hxx>
 #include <editeng/editstat.hxx>
+#include <unotools/charclass.hxx>
 
 #include <memory>
 

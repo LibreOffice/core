@@ -23,14 +23,13 @@
 #include <unotools/unotoolsdllapi.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <tools/solar.h>
-#include <tools/link.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/options.hxx>
 
 class SvtSysLocaleOptions_Impl;
-class SvtListener;
+class LinkParamNone;
+template <typename Arg, typename Ret> class Link;
 
 class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSysLocaleOptions : public utl::detail::Options
 {

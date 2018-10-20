@@ -25,6 +25,7 @@
 #include <sfx2/mieclip.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <sal/log.hxx>
+#include <unotools/charclass.hxx>
 
 #include <global.hxx>
 #include <scerrors.hxx>

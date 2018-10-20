@@ -45,6 +45,7 @@
 #include <vcl/settings.hxx>
 #include <svl/stritem.hxx>
 #include <o3tl/make_unique.hxx>
+#include <unotools/charclass.hxx>
 
 #include <inputwin.hxx>
 #include <scmod.hxx>

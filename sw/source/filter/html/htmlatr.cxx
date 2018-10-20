@@ -77,6 +77,7 @@
 #include "htmlfly.hxx"
 #include <numrule.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/character.hxx>
 
 #include <svtools/HtmlWriter.hxx>
 

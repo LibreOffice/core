@@ -45,6 +45,7 @@
 #include <unotools/options.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 
 ItemHolder1::ItemHolder1()
     : ItemHolderMutexBase()

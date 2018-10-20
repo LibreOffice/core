@@ -12,6 +12,7 @@
 #include <memory>
 
 #include <com/sun/star/io/XTruncate.hpp>
+#include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/uno/SecurityException.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>

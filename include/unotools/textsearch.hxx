@@ -24,12 +24,13 @@
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/util/XTextSearch2.hpp>
 
 #include <ostream>
 
 class CharClass;
+
+namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XTextSearch2; } } } }
 
 namespace com {
     namespace sun {

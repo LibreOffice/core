@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <unotools/transliterationwrapper.hxx>
+#include <unotools/charclass.hxx>
 
 #include <dbdata.hxx>
 #include <globalnames.hxx>

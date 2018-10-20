@@ -21,16 +21,15 @@
 #define INCLUDED_UNOTOOLS_LINGUCFG_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.h>
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/util/XChangesBatch.hpp>
 #include <rtl/ustring.hxx>
-#include <unotools/configitem.hxx>
 #include <unotools/options.hxx>
 #include <i18nlangtag/lang.h>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
+namespace com { namespace sun { namespace star { namespace util { class XChangesBatch; } } } }
 
 class SvtLinguConfigItem;
 

@@ -28,6 +28,9 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <unotools/ZipPackageHelper.hxx>
 #include <comphelper/storagehelper.hxx>

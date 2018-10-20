@@ -21,7 +21,9 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <unotools/syslocale.hxx>
-#include <i18nlangtag/languagetag.hxx>
+#include <rtl/ustring.hxx>
+
+class LanguageTag;
 
 typedef OUString (*ResHookProc)(const OUString& rStr);
 

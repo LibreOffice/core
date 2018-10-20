@@ -27,6 +27,7 @@
 #include <xmloff/xmlement.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "layerexp.hxx"
+#include <osl/diagnose.h>
 
 using ::com::sun::star::uno::Reference;
 

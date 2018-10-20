@@ -28,6 +28,8 @@
 #include <unotools/collatorwrapper.hxx>
 #include <stdlib.h>
 #include <unotools/transliterationwrapper.hxx>
+#include <com/sun/star/i18n/KParseTokens.hpp>
+#include <com/sun/star/i18n/KParseType.hpp>
 #include <sal/log.hxx>
 
 #include <table.hxx>

@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <rtl/character.hxx>
 #include <vcl/vclenum.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/colritem.hxx>

@@ -21,6 +21,7 @@
 #define INCLUDED_SVTOOLS_RULER_HXX
 
 #include <memory>
+#include <map>
 #include <svtools/svtdllapi.h>
 #include <rtl/ref.hxx>
 #include <tools/link.hxx>

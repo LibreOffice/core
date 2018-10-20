@@ -43,6 +43,7 @@
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/character.hxx>
 
 #include <svl/zforlist.hxx>
 

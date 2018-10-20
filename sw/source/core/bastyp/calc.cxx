@@ -50,6 +50,8 @@
 #include <unotools/useroptions.hxx>
 #include <usrfld.hxx>
 #include <viewsh.hxx>
+#include <com/sun/star/i18n/KParseTokens.hpp>
+#include <com/sun/star/i18n/KParseType.hpp>
 
 using namespace ::com::sun::star;
 

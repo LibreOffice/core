@@ -31,6 +31,8 @@
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
 #include <sal/log.hxx>
+#include <rtl/character.hxx>
+#include <unotools/charclass.hxx>
 
 using namespace css;
 

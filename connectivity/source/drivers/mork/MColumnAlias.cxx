@@ -20,6 +20,7 @@
 #include "MColumnAlias.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <officecfg/Office/DataAccess.hxx>
 
 #include <tools/diagnose_ex.h>

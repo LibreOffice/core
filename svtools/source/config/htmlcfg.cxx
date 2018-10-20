@@ -30,6 +30,7 @@
 #include <rtl/instance.hxx>
 #include <list>
 #include <o3tl/typed_flags_set.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
 enum class HtmlCfgFlags {
     NONE                  = 0x000,

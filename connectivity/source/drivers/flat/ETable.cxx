@@ -41,6 +41,7 @@
 #include <connectivity/dbconversion.hxx>
 #include <file/quotedstring.hxx>
 #include <unotools/syslocale.hxx>
+#include <unotools/charclass.hxx>
 
 using namespace ::comphelper;
 using namespace connectivity;

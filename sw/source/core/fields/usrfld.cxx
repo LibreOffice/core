@@ -25,6 +25,7 @@
 
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <unotools/charclass.hxx>
 
 #include <svx/svdmodel.hxx>
 

@@ -40,6 +40,7 @@
 #include <vcl/wrkwin.hxx>
 #include <o3tl/make_unique.hxx>
 #include <stdlib.h>
+#include <unotools/charclass.hxx>
 
 #include <viewfunc.hxx>
 #include <tabvwsh.hxx>

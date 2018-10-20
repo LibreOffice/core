@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <osl/diagnose.h>
+#include <rtl/character.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/unoevent.hxx>
 #include <svl/urihelper.hxx>

@@ -33,6 +33,8 @@
 #include <unotools/calendarwrapper.hxx>
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #include <com/sun/star/i18n/KNumberFormatType.hpp>
+#include <com/sun/star/i18n/FormatElement.hpp>
+#include <com/sun/star/i18n/Currency2.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/misccfg.hxx>
 

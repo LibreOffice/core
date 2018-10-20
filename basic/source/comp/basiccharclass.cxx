@@ -20,6 +20,7 @@
 #include <basiccharclass.hxx>
 
 #include <unotools/charclass.hxx>
+#include <rtl/character.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 

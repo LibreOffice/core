@@ -20,8 +20,12 @@
 #ifndef INCLUDED_UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #define INCLUDED_UNOTOOLS_LOCALEDATAWRAPPER_HXX
 
-#include <com/sun/star/i18n/XLocaleData5.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/i18n/LocaleItem.hpp>
+#include <com/sun/star/i18n/LocaleDataItem2.hpp>
+#include <com/sun/star/i18n/LanguageCountryInfo.hpp>
+#include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <rtl/ustring.hxx>
 #include <rtl/math.h>
@@ -36,6 +40,13 @@ namespace com { namespace sun { namespace star {
         class XComponentContext;
     }
 }}}
+
+namespace com { namespace sun { namespace star { namespace i18n { class XLocaleData5; } } } }
+namespace com { namespace sun { namespace star { namespace i18n { struct Calendar2; } } } }
+namespace com { namespace sun { namespace star { namespace i18n { struct Currency2; } } } }
+namespace com { namespace sun { namespace star { namespace i18n { struct FormatElement; } } } }
+namespace com { namespace sun { namespace star { namespace i18n { struct CalendarItem2; } } } }
+
 class Date;
 namespace tools { class Time; }
 class CalendarWrapper;

@@ -29,12 +29,15 @@
 #include <svl/sharedstringpool.hxx>
 #include <sal/macros.h>
 #include <sal/log.hxx>
+#include <rtl/character.hxx>
 #include <tools/solar.h>
 #include <unotools/charclass.hxx>
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
+#include <com/sun/star/i18n/KParseTokens.hpp>
+#include <com/sun/star/i18n/KParseType.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/transliterationwrapper.hxx>

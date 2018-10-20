@@ -23,6 +23,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/weld.hxx>
+#include <unotools/charclass.hxx>
 
 #include <arealink.hxx>
 

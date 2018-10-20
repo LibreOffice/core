@@ -28,6 +28,7 @@
 #include <com/sun/star/i18n/NumberFormatCode.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/i18n/NumberFormatMapper.hpp>
+#include <com/sun/star/i18n/Currency.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <tools/link.hxx>
 #include <svl/ondemand.hxx>

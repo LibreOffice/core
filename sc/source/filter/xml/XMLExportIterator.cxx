@@ -25,6 +25,7 @@
 #include "XMLExportSharedData.hxx"
 #include "XMLStylesExportHelper.hxx"
 #include <document.hxx>
+#include <osl/diagnose.h>
 
 #include <algorithm>
 

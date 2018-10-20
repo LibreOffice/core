@@ -31,6 +31,7 @@
 #include <svtools/svtresid.hxx>
 #include <svtools/langtab.hxx>
 #include <unotools/syslocale.hxx>
+#include <unotools/charclass.hxx>
 #include <tools/resary.hxx>
 #include <officecfg/VCL.hxx>
 #include <langtab.hrc>

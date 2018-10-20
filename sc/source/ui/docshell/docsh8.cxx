@@ -28,6 +28,8 @@
 #include <ucbhelper/content.hxx>
 #include <svx/txenctab.hxx>
 #include <unotools/sharedunocomponent.hxx>
+#include <unotools/charclass.hxx>
+#include <rtl/character.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
 

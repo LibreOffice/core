@@ -27,6 +27,7 @@
 #include <vcl/waitobj.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
+#include <unotools/charclass.hxx>
 
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 

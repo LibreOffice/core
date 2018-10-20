@@ -21,13 +21,16 @@
 #define INCLUDED_UNOTOOLS_NATIVENUMBERWRAPPER_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <com/sun/star/i18n/XNativeNumberSupplier2.hpp>
+#include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace uno {
         class XComponentContext;
     }
 }}}
+
+namespace com { namespace sun { namespace star { namespace i18n { class XNativeNumberSupplier2; } } } }
 
 class UNOTOOLS_DLLPUBLIC NativeNumberWrapper
 {

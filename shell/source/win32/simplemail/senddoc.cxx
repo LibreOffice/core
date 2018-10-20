@@ -24,6 +24,7 @@
 #include <rtl/bootstrap.hxx>
 #include <sfx2/strings.hrc>
 #include <unotools/resmgr.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <wchar.h>
 #define WIN32_LEAN_AND_MEAN

@@ -25,6 +25,7 @@
 
 #include <vcl/errinf.hxx>
 #include <osl/diagnose.h>
+#include <rtl/character.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/fstathelper.hxx>
 #include <unotools/pathoptions.hxx>

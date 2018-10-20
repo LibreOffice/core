@@ -19,14 +19,15 @@
 #ifndef INCLUDED_UNOTOOLS_COMPATIBILITY_HXX
 #define INCLUDED_UNOTOOLS_COMPATIBILITY_HXX
 
-#include <sal/types.h>
-#include <osl/mutex.hxx>
 #include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/Any.hxx>
 #include <unotools/options.hxx>
 #include <unotools/unotoolsdllapi.h>
 #include <rtl/ustring.hxx>
 #include <memory>
+
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
+namespace osl { class Mutex; }
 
 /*-************************************************************************************************************
     @descr  Struct to hold information about one compatibility entry

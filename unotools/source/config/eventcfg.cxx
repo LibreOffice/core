@@ -34,6 +34,7 @@
 #include "itemholder1.hxx"
 
 #include <algorithm>
+#include <unordered_map>
 
 using namespace ::std;
 using namespace ::utl;

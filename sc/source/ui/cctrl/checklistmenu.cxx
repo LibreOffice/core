@@ -26,6 +26,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>
 #include <tools/wintypes.hxx>
+#include <unotools/charclass.hxx>
 
 #include <AccessibleFilterMenu.hxx>
 #include <AccessibleFilterTopWindow.hxx>

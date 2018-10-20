@@ -71,7 +71,6 @@ namespace connectivity
     using namespace css::lang;
     using namespace css::embed;
     using namespace css::io;
-    using namespace css::task;
     using namespace css::util;
     using namespace css::reflection;
 

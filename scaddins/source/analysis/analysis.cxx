@@ -31,6 +31,7 @@
 #include <sal/macros.h>
 #include <string.h>
 #include <unotools/resmgr.hxx>
+#include <unotools/charclass.hxx>
 #include <algorithm>
 #include <cmath>
 #include <float.h>

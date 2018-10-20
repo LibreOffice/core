@@ -19,9 +19,6 @@
 #ifndef INCLUDED_UNOTOOLS_UCBSTREAMHELPER_HXX
 #define INCLUDED_UNOTOOLS_UCBSTREAMHELPER_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XStream.hpp>
 #include <unotools/unotoolsdllapi.h>
 
 #include <tools/stream.hxx>
@@ -33,10 +30,6 @@ namespace com
     {
         namespace star
         {
-            namespace task
-            {
-                class XInteractionHandler;
-            }
             namespace io
             {
                 class XStream;
@@ -45,11 +38,10 @@ namespace com
         }
     }
 }
+namespace com { namespace sun { namespace star { namespace uno { template <typename > class Reference; } } } }
 
 namespace utl
 {
-    class UcbLockBytesHandler;
-
     class UNOTOOLS_DLLPUBLIC UcbStreamHelper
     {
     public:

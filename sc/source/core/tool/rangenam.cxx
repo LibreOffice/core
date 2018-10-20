@@ -21,6 +21,7 @@
 #include <memory>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
+#include <unotools/charclass.hxx>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 #include <osl/diagnose.h>
 #include <o3tl/make_unique.hxx>

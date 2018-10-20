@@ -21,6 +21,7 @@
 
 #include <vector>
 
+#include <com/sun/star/lang/XComponent.hpp>
 #include <unotools/eventlisteneradapter.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/implbase.hxx>

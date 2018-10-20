@@ -21,10 +21,8 @@
 #define INCLUDED_UNOTOOLS_ITEMHOLDERBASE_HXX
 
 #include <memory>
-#include <vector>
 #include <osl/mutex.hxx>
-
-namespace utl { namespace detail { class Options; } }
+#include <unotools/options.hxx>
 
 struct ItemHolderMutexBase
 {

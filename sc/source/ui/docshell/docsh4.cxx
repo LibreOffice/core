@@ -60,6 +60,7 @@ using namespace ::com::sun::star;
 #include <unotools/securityoptions.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sal/log.hxx>
+#include <unotools/charclass.hxx>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>

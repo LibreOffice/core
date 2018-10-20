@@ -21,6 +21,7 @@
 #include <svx/algitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <unotools/textsearch.hxx>
+#include <unotools/charclass.hxx>
 #include <sfx2/objsh.hxx>
 
 #include <attrib.hxx>

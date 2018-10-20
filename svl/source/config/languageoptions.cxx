@@ -27,6 +27,8 @@
 #include <rtl/instance.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <unotools/syslocale.hxx>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
 #ifdef _WIN32
 #if !defined WIN32_LEAN_AND_MEAN

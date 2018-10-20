@@ -22,6 +22,7 @@
 
 #include <basegfx/range/b2drange.hxx>
 #include <tools/date.hxx>
+#include <tools/time.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/window.hxx>
 

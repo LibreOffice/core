@@ -12,6 +12,7 @@
 #include <vcl/settings.hxx>
 #include <formula/errorcodes.hxx>
 #include <sfx2/app.hxx>
+#include <unotools/charclass.hxx>
 
 #include <compiler.hxx>
 #include <document.hxx>

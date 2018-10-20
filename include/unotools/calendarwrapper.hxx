@@ -24,7 +24,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/i18n/Calendar2.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <unotools/unotoolsdllapi.h>
 
 namespace com { namespace sun { namespace star {
@@ -38,6 +37,8 @@ namespace com { namespace sun { namespace star {
         class XCalendar4;
     }
 }}}
+
+namespace com { namespace sun { namespace star { namespace lang { struct Locale; } } } }
 
 class UNOTOOLS_DLLPUBLIC CalendarWrapper
 {

@@ -19,6 +19,8 @@
 
 #include <memory>
 #include <com/sun/star/i18n/UnicodeType.hpp>
+#include <com/sun/star/i18n/KParseTokens.hpp>
+#include <com/sun/star/i18n/KParseType.hpp>
 #include <config_global.h>
 #include <i18nlangtag/lang.h>
 #include <tools/lineend.hxx>
@@ -26,6 +28,7 @@
 #include <unotools/syslocale.hxx>
 #include <o3tl/make_unique.hxx>
 #include <sal/log.hxx>
+#include <rtl/character.hxx>
 #include <parse.hxx>
 #include <strings.hrc>
 #include <smmod.hxx>

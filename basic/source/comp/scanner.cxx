@@ -25,6 +25,7 @@
 #include <i18nlangtag/lang.h>
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
+#include <rtl/character.hxx>
 
 SbiScanner::SbiScanner( const OUString& rBuf, StarBASIC* p ) : aBuf( rBuf )
 {

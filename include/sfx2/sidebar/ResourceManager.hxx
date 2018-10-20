@@ -24,6 +24,7 @@
 #include <sfx2/sidebar/Context.hxx>
 #include <unotools/confignode.hxx>
 #include <com/sun/star/frame/XController.hpp>
+#include <map>
 #include <set>
 #include <svtools/miscopt.hxx>
 

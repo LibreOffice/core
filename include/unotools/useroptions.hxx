@@ -20,10 +20,11 @@
 #define INCLUDED_UNOTOOLS_USEROPTIONS_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <unotools/configitem.hxx>
-#include <osl/mutex.hxx>
+#include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 #include <memory>
+
+namespace osl { class Mutex; }
 
 // define ----------------------------------------------------------------
 enum class UserOptToken

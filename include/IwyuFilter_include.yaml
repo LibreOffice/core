@@ -232,3 +232,33 @@ blacklist:
     include/tools/urlobj.hxx:
     # Needed for template
     - o3tl/typed_flags_set.hxx
+    include/unotools/accessiblestatesethelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleStateSet.hpp
+    include/unotools/accessiblerelationsethelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/accessibility/XAccessibleRelationSet.hpp
+    include/unotools/eventcfg.hxx:
+    # base class has to be a complete type
+    - com/sun/star/container/XNameReplace.hpp
+    - com/sun/star/document/XEventsSupplier.hpp
+    include/unotools/fontcfg.hxx:
+    # Needed for a sal_uLong enum
+    - tools/solar.h
+    include/unotools/fontcvt.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx
+    include/unotools/fontdefs.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx
+    include/unotools/options.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx
+    include/unotools/readwritemutexguard.hxx:
+    # Needed for template
+    - o3tl/typed_flags_set.hxx
+    include/unotools/streamwrap.hxx:
+    # base class has to be a complete type
+    - com/sun/star/io/XOutputStream.hpp
+    - com/sun/star/io/XStream.hpp
+    - com/sun/star/io/XTruncate.hpp
