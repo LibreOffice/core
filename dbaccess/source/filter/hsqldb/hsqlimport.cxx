@@ -305,9 +305,6 @@ void HsqlImporter::importHsqlDatabase()
     }
     catch (SQLException& ex)
     {
-        // chain errors and keep going
-        if (pException)
-            ex.NextException <<= *pException;
         pException.reset(new SQLException{ std::move(ex) });
     }
 
@@ -329,6 +326,7 @@ void HsqlImporter::importHsqlDatabase()
         }
         catch (SQLException& ex)
         {
+            // chain errors and keep going
             if (pException)
                 ex.NextException <<= *pException;
             pException.reset(new SQLException{ std::move(ex) });
@@ -345,6 +343,7 @@ void HsqlImporter::importHsqlDatabase()
         }
         catch (SQLException& ex)
         {
+            // chain errors and keep going
             if (pException)
                 ex.NextException <<= *pException;
             pException.reset(new SQLException{ std::move(ex) });
@@ -361,6 +360,7 @@ void HsqlImporter::importHsqlDatabase()
         }
         catch (SQLException& ex)
         {
+            // chain errors and keep going
             if (pException)
                 ex.NextException <<= *pException;
             pException.reset(new SQLException{ std::move(ex) });
