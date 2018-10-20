@@ -273,7 +273,7 @@ Assembly ^ TypeEmitter::type_resolve(
     ::System::Object ^, ::System::ResolveEventArgs ^ args )
 {
     ::System::String ^ cts_name = args->Name;
-    ::System::Type ^ ret_type;
+    ::System::Type ^ ret_type = nullptr;
 
     iface_entry ^ entry = dynamic_cast< iface_entry ^ >(m_incomplete_ifaces[cts_name] );
     if (nullptr != entry)
