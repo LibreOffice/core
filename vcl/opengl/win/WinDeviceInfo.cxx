@@ -831,12 +831,6 @@ void WinOpenGLDeviceInfo::GetData()
     }
 }
 
-// Macro for assigning a device vendor id to a string.
-#define DECLARE_VENDOR_ID(name, deviceId) \
-    case name: \
-        *mpDeviceVendors[id] = deviceId; \
-break;
-
 OUString WinOpenGLDeviceInfo::GetDeviceVendor(wgl::DeviceVendor id)
 {
     assert(id >= 0 && id < wgl::DeviceVendorMax);
@@ -848,14 +842,26 @@ OUString WinOpenGLDeviceInfo::GetDeviceVendor(wgl::DeviceVendor id)
 
     switch (id)
     {
-        DECLARE_VENDOR_ID(wgl::VendorAll, "");
-        DECLARE_VENDOR_ID(wgl::VendorIntel, "0x8086");
-        DECLARE_VENDOR_ID(wgl::VendorNVIDIA, "0x10de");
-        DECLARE_VENDOR_ID(wgl::VendorAMD, "0x1022");
-        DECLARE_VENDOR_ID(wgl::VendorATI, "0x1002");
-        DECLARE_VENDOR_ID(wgl::VendorMicrosoft, "0x1414");
-        // Suppress a warning.
-        DECLARE_VENDOR_ID(wgl::DeviceVendorMax, "");
+        case wgl::VendorAll:
+            *mpDeviceVendors[id] = "";
+        break;
+        case wgl::VendorIntel:
+            *mpDeviceVendors[id] = "0x8086";
+        break;
+        case wgl::VendorNVIDIA:
+            *mpDeviceVendors[id] = "0x10de";
+        break;
+        case wgl::VendorAMD:
+            *mpDeviceVendors[id] = "0x1022";
+        break;
+        case wgl::VendorATI:
+            *mpDeviceVendors[id] = "0x1002";
+        break;
+        case wgl::VendorMicrosoft:
+            *mpDeviceVendors[id] = "0x1414";
+        break;
+        case wgl::DeviceVendorMax: // Suppress a warning.
+        break;
     }
 
     return *mpDeviceVendors[id];
