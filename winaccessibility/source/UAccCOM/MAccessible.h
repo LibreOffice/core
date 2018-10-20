@@ -165,12 +165,12 @@ public:
     STDMETHOD(SetXAccessible)(hyper) override;
 
 private:
-    OLECHAR* m_pszName;
-    OLECHAR* m_pszValue;
-    OLECHAR* m_pszActionDescription;
+    BSTR m_pszName;
+    BSTR m_pszValue;
+    BSTR m_pszActionDescription;
     unsigned short m_iRole;
     DWORD   m_dState;
-    OLECHAR* m_pszDescription;
+    BSTR m_pszDescription;
     IMAccessible* m_pIParent;
     Location m_sLocation;
 
