@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_c7d90e23",
+        "filename": "sax/source/tools/fastattribs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-20T20:46:11Z",
+      "side": 1,
+      "message": "Stephan: could you please check if it\u0027s OK to throw std exception here, or should I use SAXException, like below?",
+      "range": {
+        "startLine": 95,
+        "startChar": 12,
+        "endLine": 95,
+        "endChar": 35
+      },
+      "revId": "b2ac0313913177be0268e8e596366b0336f78514",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
