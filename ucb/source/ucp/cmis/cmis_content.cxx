@@ -44,6 +44,7 @@
 #endif
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <config_oauth2.h>
 #include <o3tl/runtimetooustring.hxx>
@@ -106,11 +107,9 @@ namespace
                     uno::Sequence< OUString > aStrings( aCmisStrings.size( ) );
                     OUString* aStringsArr = aStrings.getArray( );
                     sal_Int32 i = 0;
-                    for ( vector< string >::iterator it = aCmisStrings.begin( );
-                            it != aCmisStrings.end( ); ++it, ++i )
+                    for ( const auto& rCmisStr : aCmisStrings )
                     {
-                        string str = *it;
-                        aStringsArr[i] = STD_TO_OUSTR( str );
+                        aStringsArr[i++] = STD_TO_OUSTR( rCmisStr );
                     }
                     aValue <<= aStrings;
                 }
@@ -121,10 +120,9 @@ namespace
                     uno::Sequence< sal_Int64 > aLongs( aCmisLongs.size( ) );
                     sal_Int64* aLongsArr = aLongs.getArray( );
                     sal_Int32 i = 0;
-                    for ( vector< long >::iterator it = aCmisLongs.begin( );
-                            it != aCmisLongs.end( ); ++it, ++i )
+                    for ( const auto& rCmisLong : aCmisLongs )
                     {
-                        aLongsArr[i] = *it;
+                        aLongsArr[i++] = rCmisLong;
                     }
                     aValue <<= aLongs;
                 }
@@ -132,14 +130,7 @@ namespace
             case libcmis::PropertyType::Decimal:
                 {
                     vector< double > aCmisDoubles = pProperty->getDoubles( );
-                    uno::Sequence< double > aDoubles( aCmisDoubles.size( ) );
-                    double* aDoublesArr = aDoubles.getArray( );
-                    sal_Int32 i = 0;
-                    for ( vector< double >::iterator it = aCmisDoubles.begin( );
-                            it != aCmisDoubles.end( ); ++it, ++i )
-                    {
-                        aDoublesArr[i] = *it;
-                    }
+                    uno::Sequence< double > aDoubles = comphelper::containerToSequence(aCmisDoubles);
                     aValue <<= aDoubles;
                 }
                 break;
@@ -149,10 +140,9 @@ namespace
                     uno::Sequence< sal_Bool > aBools( aCmisBools.size( ) );
                     sal_Bool* aBoolsArr = aBools.getArray( );
                     sal_Int32 i = 0;
-                    for ( vector< bool >::iterator it = aCmisBools.begin( );
-                            it != aCmisBools.end( ); ++it, ++i )
+                    for ( const auto& rCmisBool : aCmisBools )
                     {
-                        aBoolsArr[i] = *it;
+                        aBoolsArr[i++] = rCmisBool;
                     }
                     aValue <<= aBools;
                 }
@@ -163,10 +153,9 @@ namespace
                     uno::Sequence< util::DateTime > aTimes( aCmisTimes.size( ) );
                     util::DateTime* aTimesArr = aTimes.getArray( );
                     sal_Int32 i = 0;
-                    for ( vector< boost::posix_time::ptime >::iterator it = aCmisTimes.begin( );
-                            it != aCmisTimes.end( ); ++it, ++i )
+                    for ( const auto& rCmisTime : aCmisTimes )
                     {
-                        aTimesArr[i] = lcl_boostToUnoTime( *it );
+                        aTimesArr[i++] = lcl_boostToUnoTime( rCmisTime );
                     }
                     aValue <<= aTimes;
                 }
@@ -479,15 +468,17 @@ namespace cmis
                     if ( pProperty )
                     {
                         vector< string > typesIds = pProperty->getStrings( );
-                        for ( vector< string >::iterator typeIt = typesIds.begin();
-                                typeIt != typesIds.end() && !m_pObjectType; ++typeIt )
+                        for ( const auto& rType : typesIds )
                         {
                             bTypeRestricted = true;
-                            libcmis::ObjectTypePtr type = getSession( xEnv )->getType( *typeIt );
+                            libcmis::ObjectTypePtr type = getSession( xEnv )->getType( rType );
 
                             // FIXME Improve performances by adding getBaseTypeId( ) method to libcmis
                             if ( type->getBaseType( )->getId( ) == typeId )
+                            {
                                 m_pObjectType = type;
+                                break;
+                            }
                         }
                     }
                 }
@@ -550,12 +541,10 @@ namespace cmis
                         if (pParentFolder)
                         {
                             vector< libcmis::ObjectPtr > children = pParentFolder->getChildren();
-                            for (vector< libcmis::ObjectPtr >::iterator it = children.begin();
-                                it != children.end() && !m_pObject; ++it)
-                            {
-                                if ((*it)->getName() == sName)
-                                    m_pObject = *it;
-                            }
+                            auto it = std::find_if(children.begin(), children.end(),
+                                [&sName](const libcmis::ObjectPtr& rChild) { return rChild->getName() == sName; });
+                            if (it != children.end())
+                                m_pObject = *it;
                         }
                     }
 
@@ -851,15 +840,14 @@ namespace cmis
                         uno::Sequence< document::CmisProperty > aCmisProperties( aProperties.size( ) );
                         document::CmisProperty* pCmisProps = aCmisProperties.getArray( );
                         sal_Int32 i = 0;
-                        for ( map< string, libcmis::PropertyPtr >::iterator it = aProperties.begin();
-                                it != aProperties.end( ); ++it, ++i )
+                        for ( const auto& rProperty : aProperties )
                         {
-                            string sId = it->first;
-                            string sDisplayName =  it->second->getPropertyType()->getDisplayName( );
-                            bool bUpdatable = it->second->getPropertyType()->isUpdatable( );
-                            bool bRequired = it->second->getPropertyType()->isRequired( );
-                            bool bMultiValued = it->second->getPropertyType()->isMultiValued();
-                            bool bOpenChoice = it->second->getPropertyType()->isOpenChoice();
+                            string sId = rProperty.first;
+                            string sDisplayName = rProperty.second->getPropertyType()->getDisplayName( );
+                            bool bUpdatable = rProperty.second->getPropertyType()->isUpdatable( );
+                            bool bRequired = rProperty.second->getPropertyType()->isRequired( );
+                            bool bMultiValued = rProperty.second->getPropertyType()->isMultiValued();
+                            bool bOpenChoice = rProperty.second->getPropertyType()->isOpenChoice();
 
                             pCmisProps[i].Id = STD_TO_OUSTR( sId );
                             pCmisProps[i].Name = STD_TO_OUSTR( sDisplayName );
@@ -867,8 +855,8 @@ namespace cmis
                             pCmisProps[i].Required = bRequired;
                             pCmisProps[i].MultiValued = bMultiValued;
                             pCmisProps[i].OpenChoice = bOpenChoice;
-                            pCmisProps[i].Value = lcl_cmisPropertyToUno( it->second );
-                            switch ( it->second->getPropertyType( )->getType( ) )
+                            pCmisProps[i].Value = lcl_cmisPropertyToUno( rProperty.second );
+                            switch ( rProperty.second->getPropertyType( )->getType( ) )
                             {
                                 default:
                                 case libcmis::PropertyType::String:
@@ -887,7 +875,7 @@ namespace cmis
                                     pCmisProps[i].Type = CMIS_TYPE_DATETIME;
                                 break;
                             }
-
+                            ++i;
                         }
                         xRow->appendObject( rProp.Name, uno::makeAny( aCmisProperties ) );
                     }
@@ -1177,11 +1165,9 @@ namespace cmis
 
             // Get the Original document (latest version)
             vector< libcmis::DocumentPtr > aVersions = pPwc->getAllVersions( );
-            bool bFound = false;
-            for ( vector< libcmis::DocumentPtr >::iterator it = aVersions.begin();
-                    it != aVersions.end( ) && !bFound; ++it )
+            for ( const auto& rVersion : aVersions )
             {
-                libcmis::DocumentPtr pVersion = *it;
+                libcmis::DocumentPtr pVersion = rVersion;
                 map< string, libcmis::PropertyPtr > aProps = pVersion->getProperties( );
                 bool bIsLatestVersion = false;
                 map< string, libcmis::PropertyPtr >::iterator propIt = aProps.find( string( "cmis:isLatestVersion" ) );
@@ -1192,7 +1178,6 @@ namespace cmis
 
                 if ( bIsLatestVersion )
                 {
-                    bFound = true;
                     // Compute the URL of the Document
                     URL aCmisUrl( m_sURL );
                     vector< string > aPaths = pVersion->getPaths( );
@@ -1209,6 +1194,7 @@ namespace cmis
                         aCmisUrl.setObjectId( STD_TO_OUSTR( sId ) );
                     }
                     aRet = aCmisUrl.asString( );
+                    break;
                 }
             }
         }
@@ -1241,14 +1227,14 @@ namespace cmis
             vector< libcmis::DocumentPtr > aCmisVersions = pDoc->getAllVersions( );
             uno::Sequence< document::CmisVersion > aVersions( aCmisVersions.size( ) );
             int i = 0;
-            for ( vector< libcmis::DocumentPtr >::iterator it = aCmisVersions.begin();
-                    it != aCmisVersions.end( ); ++it, ++i )
+            for ( const auto& rVersion : aCmisVersions )
             {
-                libcmis::DocumentPtr pVersion = *it;
+                libcmis::DocumentPtr pVersion = rVersion;
                 aVersions[i].Id = STD_TO_OUSTR( pVersion->getId( ) );
                 aVersions[i].Author = STD_TO_OUSTR( pVersion->getCreatedBy( ) );
                 aVersions[i].TimeStamp = lcl_boostToUnoTime( pVersion->getLastModificationDate( ) );
                 aVersions[i].Comment = STD_TO_OUSTR( pVersion->getStringProperty("cmis:checkinComment") );
+                ++i;
             }
             return aVersions;
         }
@@ -2049,8 +2035,7 @@ namespace cmis
                 vector< libcmis::ObjectPtr > children = pFolder->getChildren( );
 
                 // Loop over the results
-                for ( vector< libcmis::ObjectPtr >::iterator it = children.begin();
-                        it != children.end(); ++it )
+                for ( const auto& rChild : children )
                 {
                     // TODO Cache the objects
 
@@ -2061,15 +2046,15 @@ namespace cmis
                     OUString sPath( m_sObjectPath );
                     if ( !sPath.endsWith("/") )
                         sPath += "/";
-                    sPath += STD_TO_OUSTR( ( *it )->getName( ) );
-                    OUString sId = STD_TO_OUSTR( ( *it )->getId( ) );
+                    sPath += STD_TO_OUSTR( rChild->getName( ) );
+                    OUString sId = STD_TO_OUSTR( rChild->getId( ) );
 
                     aUrl.setObjectId( sId );
                     aUrl.setObjectPath( sPath );
                     aUrl.setUsername( sUser );
 
                     uno::Reference< ucb::XContentIdentifier > xId = new ucbhelper::ContentIdentifier( aUrl.asString( ) );
-                    uno::Reference< ucb::XContent > xContent = new Content( m_xContext, m_pProvider, xId, *it );
+                    uno::Reference< ucb::XContent > xContent = new Content( m_xContext, m_pProvider, xId, rChild );
 
                     results.push_back( xContent );
                 }

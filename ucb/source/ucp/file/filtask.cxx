@@ -512,11 +512,10 @@ TaskManager::registerNotifier( const OUString& aUnqPath, Notifier* pNotifier )
 
     std::vector< Notifier* >& nlist = *( it->second.notifier );
 
-    std::vector<Notifier*>::iterator it1 = nlist.begin();
-    while( it1 != nlist.end() )               // Every "Notifier" only once
+    std::vector<Notifier*>::iterator it1 = std::find(nlist.begin(), nlist.end(), pNotifier);
+    if( it1 != nlist.end() )               // Every "Notifier" only once
     {
-        if( *it1 == pNotifier ) return;
-        ++it1;
+        return;
     }
     nlist.push_back( pNotifier );
 }
@@ -2761,11 +2760,9 @@ TaskManager::getContentExchangedEventListeners( const OUString& aOldPrefix,
                 // However, these may be in status BaseContent::Deleted
                 if( copyList != nullptr )
                 {
-                    std::vector< Notifier* >::iterator copyIt = copyList->begin();
-                    while( copyIt != copyList->end() )
+                    for( const auto& rCopyPtr : *copyList )
                     {
-                        itnew->second.notifier->push_back( *copyIt );
-                        ++copyIt;
+                        itnew->second.notifier->push_back( rCopyPtr );
                     }
                 }
             }

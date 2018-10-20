@@ -92,12 +92,9 @@ SerfLockStore::~SerfLockStore()
     SAL_WARN_IF( !m_aLockInfoMap.empty(), "ucb.ucp.webdav",
                 "SerfLockStore::~SerfLockStore - Releasing active locks!" );
 
-    LockInfoMap::const_iterator it( m_aLockInfoMap.begin() );
-    const LockInfoMap::const_iterator end( m_aLockInfoMap.end() );
-    while ( it != end )
+    for ( auto& rLockInfo : m_aLockInfoMap )
     {
-        (*it).second.m_xSession->UNLOCK( (*it).first );
-        ++it;
+        rLockInfo.second.m_xSession->UNLOCK( rLockInfo.first );
     }
 }
 
@@ -189,11 +186,9 @@ void SerfLockStore::refreshLocks()
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    LockInfoMap::iterator it( m_aLockInfoMap.begin() );
-    const LockInfoMap::const_iterator end( m_aLockInfoMap.end() );
-    while ( it != end )
+    for ( auto& rLockInfo : m_aLockInfoMap )
     {
-        LockInfo & rInfo = (*it).second;
+        LockInfo & rInfo = rLockInfo.second;
         if ( rInfo.m_nLastChanceToSendRefreshRequest != -1 )
         {
             // 30 seconds or less remaining until lock expires?
@@ -205,7 +200,7 @@ void SerfLockStore::refreshLocks()
                 // refresh the lock.
                 sal_Int32 nlastChanceToSendRefreshRequest = -1;
                 if ( rInfo.m_xSession->LOCK(
-                         (*it).first, &nlastChanceToSendRefreshRequest ) )
+                         rLockInfo.first, &nlastChanceToSendRefreshRequest ) )
                 {
                     rInfo.m_nLastChanceToSendRefreshRequest
                         = nlastChanceToSendRefreshRequest;
@@ -217,7 +212,6 @@ void SerfLockStore::refreshLocks()
                 }
             }
         }
-        ++it;
     }
 }
 

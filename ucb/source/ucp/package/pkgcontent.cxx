@@ -1677,13 +1677,9 @@ void Content::destroy(
         ContentRefList aChildren;
         queryChildren( aChildren );
 
-        ContentRefList::const_iterator it  = aChildren.begin();
-        ContentRefList::const_iterator end = aChildren.end();
-
-        while ( it != end )
+        for ( auto& rChild : aChildren )
         {
-            (*it)->destroy( bDeletePhysical, xEnv );
-            ++it;
+            rChild->destroy( bDeletePhysical, xEnv );
         }
     }
 }
@@ -2003,12 +1999,9 @@ bool Content::exchangeIdentity(
                 ContentRefList aChildren;
                 queryChildren( aChildren );
 
-                ContentRefList::const_iterator it  = aChildren.begin();
-                ContentRefList::const_iterator end = aChildren.end();
-
-                while ( it != end )
+                for ( const auto& rChild : aChildren )
                 {
-                    ContentRef xChild = (*it);
+                    ContentRef xChild = rChild;
 
                     // Create new content identifier for the child...
                     uno::Reference< ucb::XContentIdentifier > xOldChildId
@@ -2025,8 +2018,6 @@ bool Content::exchangeIdentity(
 
                     if ( !xChild->exchangeIdentity( xNewChildId ) )
                         return false;
-
-                    ++it;
                 }
             }
             return true;
@@ -2056,12 +2047,9 @@ void Content::queryChildren( ContentRefList& rChildren )
 
     sal_Int32 nLen = aURL.getLength();
 
-    ::ucbhelper::ContentRefList::const_iterator it  = aAllContents.begin();
-    ::ucbhelper::ContentRefList::const_iterator end = aAllContents.end();
-
-    while ( it != end )
+    for ( const auto& rContent : aAllContents )
     {
-        ::ucbhelper::ContentImplHelperRef xChild = (*it);
+        ::ucbhelper::ContentImplHelperRef xChild = rContent;
         OUString aChildURL
             = xChild->getIdentifier()->getContentIdentifier();
 
@@ -2076,7 +2064,6 @@ void Content::queryChildren( ContentRefList& rChildren )
                         static_cast< Content * >( xChild.get() ) );
             }
         }
-        ++it;
     }
 }
 

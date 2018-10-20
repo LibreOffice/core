@@ -598,21 +598,16 @@ void NeonSession::PreSendRequest(ne_request* req, ne_buffer* headers)
     const DAVRequestHeaders & rHeaders
         = getRequestEnvironment().m_aRequestHeaders;
 
-    DAVRequestHeaders::const_iterator it1( rHeaders.begin() );
-    const DAVRequestHeaders::const_iterator end1( rHeaders.end() );
-
-    while ( it1 != end1 )
+    for ( const auto& rHeader : rHeaders )
     {
         OString aHeader
-            = OUStringToOString( (*it1).first,
+            = OUStringToOString( rHeader.first,
                                       RTL_TEXTENCODING_UTF8 );
         OString aValue
-            = OUStringToOString( (*it1).second,
+            = OUStringToOString( rHeader.second,
                                       RTL_TEXTENCODING_UTF8 );
         ne_buffer_concat( headers, aHeader.getStr(), ": ",
                           aValue.getStr(), EOL, nullptr );
-
-        ++it1;
     }
 }
 
@@ -1025,10 +1020,9 @@ void NeonSession::PROPFIND( const OUString & inPath,
 #if defined SAL_LOG_INFO
     { //debug
         SAL_INFO( "ucb.ucp.webdav", "PROPFIND - relative URL: <" << inPath << "> Depth: " << inDepth );
-         for(std::vector< OUString >::const_iterator it = inPropNames.begin();
-             it < inPropNames.end(); ++it)
+         for(const auto& rPropName : inPropNames)
          {
-            SAL_INFO( "ucb.ucp.webdav", "PROPFIND - property requested: " << *it );
+            SAL_INFO( "ucb.ucp.webdav", "PROPFIND - property requested: " << rPropName );
          }
     } //debug
 #endif
@@ -1067,13 +1061,11 @@ void NeonSession::PROPFIND( const OUString & inPath,
 
 #if defined SAL_LOG_INFO
     { //debug
-        for ( std::vector< DAVResourceInfo >::const_iterator itres = ioResInfo.begin();
-              itres < ioResInfo.end(); ++itres)
+        for ( const auto& rResInfo : ioResInfo )
         {
-            for ( std::vector< OUString >::const_iterator it = (*itres).properties.begin();
-                  it < (*itres).properties.end(); ++it)
+            for ( const auto& rProp : rResInfo.properties )
             {
-                SAL_INFO( "ucb.ucp.webdav", "PROPFIND - returned property (name only): " << *it );
+                SAL_INFO( "ucb.ucp.webdav", "PROPFIND - returned property (name only): " << rProp );
             }
         }
     } //debug
@@ -1812,17 +1804,12 @@ bool NeonSession::removeExpiredLocktoken( const OUString & inURL,
         if ( aResources.empty() )
             return false;
 
-        std::vector< DAVPropertyValue >::const_iterator it
-            = aResources[ 0 ].properties.begin();
-        std::vector< DAVPropertyValue >::const_iterator end
-            = aResources[ 0 ].properties.end();
-
-        while ( it != end )
+        for ( const auto& rProp : aResources[ 0 ].properties )
         {
-            if ( (*it).Name == DAVProperties::LOCKDISCOVERY )
+            if ( rProp.Name == DAVProperties::LOCKDISCOVERY )
             {
                 uno::Sequence< ucb::Lock > aLocks;
-                if ( !( (*it).Value >>= aLocks ) )
+                if ( !( rProp.Value >>= aLocks ) )
                     return false;
 
                 if ( !containsLocktoken( aLocks, theLock->token ) )
@@ -1834,7 +1821,6 @@ bool NeonSession::removeExpiredLocktoken( const OUString & inURL,
                 // still valid.
                 return false;
             }
-            ++it;
         }
 
         // No lockdiscovery prop in propfind result / locktoken not found
@@ -2051,24 +2037,16 @@ void runResponseHeaderHandler( void * userdata,
         if ( !bIncludeIt )
         {
             // Check whether this header was requested.
-            std::vector< OUString >::const_iterator it(
-                pCtx->pHeaderNames->begin() );
-            const std::vector< OUString >::const_iterator end(
-                pCtx->pHeaderNames->end() );
+            auto it = std::find_if(pCtx->pHeaderNames->cbegin(), pCtx->pHeaderNames->cend(),
+                [&aHeaderName](const OUString& rName) {
+                    // header names are case insensitive
+                    return rName.equalsIgnoreAsciiCase( aHeaderName ); });
 
-            while ( it != end )
+            if ( it != pCtx->pHeaderNames->end() )
             {
-                // header names are case insensitive
-                if ( (*it).equalsIgnoreAsciiCase( aHeaderName ) )
-                {
-                    aHeaderName = (*it);
-                    break;
-                }
-                ++it;
-            }
-
-            if ( it != end )
+                aHeaderName = (*it);
                 bIncludeIt = true;
+            }
         }
 
         if ( bIncludeIt )

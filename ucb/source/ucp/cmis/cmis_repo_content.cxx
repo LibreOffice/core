@@ -243,12 +243,10 @@ namespace cmis
 
         if ( !m_sRepositoryId.isEmpty() )
         {
-            for ( std::vector< libcmis::RepositoryPtr >::iterator it = m_aRepositories.begin( );
-                    it != m_aRepositories.end( ) && nullptr == repo.get( ); ++it )
-            {
-                if ( STD_TO_OUSTR( ( *it )->getId( ) ) == m_sRepositoryId )
-                    repo = *it;
-            }
+            auto it = std::find_if(m_aRepositories.begin(), m_aRepositories.end(),
+                [&](const libcmis::RepositoryPtr& rRepo) { return STD_TO_OUSTR(rRepo->getId()) == m_sRepositoryId; });
+            if (it != m_aRepositories.end())
+                repo = *it;
         }
         else
             repo = m_aRepositories.front( );
@@ -405,11 +403,10 @@ namespace cmis
 
         if ( m_sRepositoryId.isEmpty( ) )
         {
-            for ( std::vector< libcmis::RepositoryPtr >::iterator it = m_aRepositories.begin( );
-                    it != m_aRepositories.end(); ++it )
+            for ( const auto& rRepo : m_aRepositories )
             {
                 URL aUrl( m_aURL );
-                aUrl.setObjectPath( STD_TO_OUSTR( ( *it )->getId( ) ) );
+                aUrl.setObjectPath( STD_TO_OUSTR( rRepo->getId( ) ) );
 
                 uno::Reference< ucb::XContentIdentifier > xId = new ucbhelper::ContentIdentifier( aUrl.asString( ) );
                 uno::Reference< ucb::XContent > xContent = new RepoContent( m_xContext, m_pProvider, xId, m_aRepositories );

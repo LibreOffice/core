@@ -52,18 +52,10 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
     if (!m_xProxyDecider)
         m_xProxyDecider.reset( new ucbhelper::InternetProxyDecider( rxContext ) );
 
-    Map::iterator aIt( m_aMap.begin() );
-    Map::iterator aEnd( m_aMap.end() );
+    Map::iterator aIt = std::find_if(m_aMap.begin(), m_aMap.end(),
+        [&inUri, &rFlags](const Map::value_type& rEntry) { return rEntry.second->CanUse( inUri, rFlags ); });
 
-    while ( aIt != aEnd )
-    {
-        if ( (*aIt).second->CanUse( inUri, rFlags ) )
-            break;
-
-        ++aIt;
-    }
-
-    if ( aIt == aEnd )
+    if ( aIt == m_aMap.end() )
     {
         NeonUri aURI( inUri );
 
