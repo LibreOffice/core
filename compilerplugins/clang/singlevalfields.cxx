@@ -41,6 +41,7 @@ struct MyFieldInfo
 {
     std::string parentClass;
     std::string fieldName;
+    std::string fieldType;
     std::string sourceLocation;
 };
 bool operator < (const MyFieldInfo &lhs, const MyFieldInfo &rhs)
@@ -83,7 +84,7 @@ public:
         for (const MyFieldAssignmentInfo & s : assignedSet)
             output += "asgn:\t" + s.parentClass + "\t" + s.fieldName + "\t" + s.value + "\n";
         for (const MyFieldInfo & s : definitionSet)
-            output += "defn:\t" + s.parentClass + "\t" + s.fieldName + "\t" + s.sourceLocation + "\n";
+            output += "defn:\t" + s.parentClass + "\t" + s.fieldName + "\t" + s.fieldType + "\t" + s.sourceLocation + "\n";
         std::ofstream myfile;
         myfile.open( WORKDIR "/loplugin.singlevalfields.log", std::ios::app | std::ios::out);
         myfile << output;
@@ -112,6 +113,7 @@ void SingleValFields::niceName(const FieldDecl* fieldDecl, MyFieldInfo& aInfo)
 {
     aInfo.parentClass = fieldDecl->getParent()->getQualifiedNameAsString();
     aInfo.fieldName = fieldDecl->getNameAsString();
+    aInfo.fieldType = fieldDecl->getType().getAsString();
 
     SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( fieldDecl->getLocation() );
     StringRef name = compiler.getSourceManager().getFilename(expansionLoc);
