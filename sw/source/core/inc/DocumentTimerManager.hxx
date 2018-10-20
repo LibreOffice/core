@@ -23,6 +23,7 @@
 #include <IDocumentTimerAccess.hxx>
 #include <SwDocIdle.hxx>
 
+#include <vcl/idle.hxx>
 #include <sal/types.h>
 #include <tools/link.hxx>
 
@@ -60,6 +61,10 @@ private:
     DocumentTimerManager(DocumentTimerManager const&) = delete;
     DocumentTimerManager& operator=(DocumentTimerManager const&) = delete;
 
+    /// Delay starting idle jobs to allow for post-load activity.
+    /// Used by LOK only.
+    DECL_LINK( FireIdleJobsTimeout, Timer *, void );
+
     DECL_LINK( DoIdleJobs, Timer *, void );
 
     IdleJob GetNextIdleJob() const;
@@ -69,6 +74,8 @@ private:
     sal_uInt32 m_nIdleBlockCount; ///< Don't run the Idle, if > 0
     bool m_bStartOnUnblock; ///< true, if the last unblock should start the timer
     SwDocIdle m_aDocIdle;
+    Timer m_aFireIdleJobsTimer;
+    bool m_bWaitForLokInit; ///< true if we waited for LOK to initialize already.
 };
 
 inline bool DocumentTimerManager::IsDocIdle() const

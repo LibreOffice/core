@@ -34,22 +34,38 @@
 #include <docfld.hxx>
 #include <fldbas.hxx>
 #include <vcl/scheduler.hxx>
+#include <comphelper/lok.hxx>
 
 namespace sw
 {
-
-DocumentTimerManager::DocumentTimerManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ),
-                                                                m_nIdleBlockCount( 0 ),
-                                                                m_bStartOnUnblock( false ),
-                                                                m_aDocIdle( i_rSwdoc )
+DocumentTimerManager::DocumentTimerManager(SwDoc& i_rSwdoc)
+    : m_rDoc(i_rSwdoc)
+    , m_nIdleBlockCount(0)
+    , m_bStartOnUnblock(false)
+    , m_aDocIdle(i_rSwdoc)
+    , m_aFireIdleJobsTimer("sw::DocumentTimerManager m_aFireIdleJobsTimer")
+    , m_bWaitForLokInit(true)
 {
     m_aDocIdle.SetPriority(TaskPriority::LOWEST);
-    m_aDocIdle.SetInvokeHandler(LINK( this, DocumentTimerManager, DoIdleJobs));
+    m_aDocIdle.SetInvokeHandler(LINK(this, DocumentTimerManager, DoIdleJobs));
     m_aDocIdle.SetDebugName("sw::DocumentTimerManager m_aDocIdle");
+
+    m_aFireIdleJobsTimer.SetInvokeHandler(LINK(this, DocumentTimerManager, FireIdleJobsTimeout));
+    m_aFireIdleJobsTimer.SetTimeout(1000); // Enough time for LOK to render the first tiles.
 }
 
 void DocumentTimerManager::StartIdling()
 {
+    if (m_bWaitForLokInit && comphelper::LibreOfficeKit::isActive())
+    {
+        // Start the idle jobs only after a certain delay.
+        m_bWaitForLokInit = false;
+        StopIdling();
+        m_aFireIdleJobsTimer.Start();
+        return;
+    }
+
+    m_bWaitForLokInit = false;
     m_bStartOnUnblock = true;
     if (0 == m_nIdleBlockCount)
     {
@@ -84,6 +100,12 @@ void DocumentTimerManager::UnblockIdling()
         else
             Scheduler::Wakeup();
     }
+}
+
+IMPL_LINK(DocumentTimerManager, FireIdleJobsTimeout, Timer*, , void)
+{
+    // Now we can run the idle jobs, assuming we finished LOK initialization.
+    StartIdling();
 }
 
 DocumentTimerManager::IdleJob DocumentTimerManager::GetNextIdleJob() const
