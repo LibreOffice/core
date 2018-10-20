@@ -26,6 +26,7 @@
 
 #include <stdio.h>
 #include <sal/macros.h>
+#include <o3tl/make_unique.hxx>
 
 #ifdef UNOPKG
 
@@ -147,70 +148,80 @@ DWORD WINAPI InputThread( LPVOID pParam )
 {
     DWORD   dwRead = 0;
     HANDLE  hWritePipe = static_cast<HANDLE>(pParam);
-
-    //We need to read in the complete input until we encounter a new line before
-    //converting to Unicode. This is necessary because the input string can use
-    //characters of one, two, and more bytes. If the last character is not
-    //complete, then it will not be converted properly.
-
-    //Find out how a new line (0xd 0xa) looks like with the used code page.
-    //Characters may have one or multiple bytes and different byte ordering
-    //can be used (little and big endian);
-    int cNewLine = WideCharToMultiByte(
-        GetConsoleCP(), 0, L"\r\n", 2, nullptr, 0, nullptr, nullptr);
-    char * mbBuff = new char[cNewLine];
-    WideCharToMultiByte(
-        GetConsoleCP(), 0, L"\r\n", 2, mbBuff, cNewLine, nullptr, nullptr);
-
-    const DWORD dwBufferSize = 256;
-    char* readBuf = static_cast<char*>(malloc(dwBufferSize));
-    int readAll = 0;
-    DWORD curBufSize = dwBufferSize;
-
-    while ( ReadFile( GetStdHandle( STD_INPUT_HANDLE ),
-                      readBuf + readAll,
-                      curBufSize - readAll, &dwRead, nullptr ) )
+    char* readBuf = nullptr;
+    try
     {
-        readAll += dwRead;
-        int lastBufSize = curBufSize;
-        //Grow the buffer if necessary
-        if (readAll > curBufSize * 0.7)
+        //We need to read in the complete input until we encounter a new line before
+        //converting to Unicode. This is necessary because the input string can use
+        //characters of one, two, and more bytes. If the last character is not
+        //complete, then it will not be converted properly.
+
+        //Find out how a new line (0xd 0xa) looks like with the used code page.
+        //Characters may have one or multiple bytes and different byte ordering
+        //can be used (little and big endian);
+        int cNewLine = WideCharToMultiByte(
+            GetConsoleCP(), 0, L"\r\n", 2, nullptr, 0, nullptr, nullptr);
+        auto mbBuff = o3tl::make_unique<char[]>(cNewLine);
+        WideCharToMultiByte(
+            GetConsoleCP(), 0, L"\r\n", 2, mbBuff.get(), cNewLine, nullptr, nullptr);
+
+        const DWORD dwBufferSize = 256;
+        readBuf = static_cast<char*>(malloc(dwBufferSize));
+        if (!readBuf)
+            throw std::bad_alloc();
+        int readAll = 0;
+        DWORD curBufSize = dwBufferSize;
+
+        while ( ReadFile( GetStdHandle( STD_INPUT_HANDLE ),
+                          readBuf + readAll,
+                          curBufSize - readAll, &dwRead, nullptr ) )
         {
-            curBufSize *= 2;
-            readBuf = static_cast<char *>(realloc(readBuf, curBufSize));
+            readAll += dwRead;
+            int lastBufSize = curBufSize;
+            //Grow the buffer if necessary
+            if (readAll > curBufSize * 0.7)
+            {
+                curBufSize *= 2;
+                if (auto p = static_cast<char *>(realloc(readBuf, curBufSize)))
+                    readBuf = p;
+                else
+                {
+                    throw std::bad_alloc();
+                }
+            }
+
+            //If the buffer was filled completely then
+            //there could be more input coming. But if we read from the console
+            //and the console input fits exactly in the buffer, then the next
+            //ReadFile would block until the users presses return, etc.
+            //Therefore we check if last character is a new line.
+            //To test this, set dwBufferSize to 4 and enter "no". This should produce
+            //4 bytes with most code pages.
+            if ( readAll == lastBufSize
+                 && memcmp(readBuf + lastBufSize - cNewLine, mbBuff.get(), cNewLine) != 0)
+            {
+                //The buffer was completely filled and the last byte(s) are no
+                //new line, so there is more to come.
+                continue;
+            }
+            //Obtain the size of the buffer for the converted string.
+            int sizeWBuf = MultiByteToWideChar(
+                GetConsoleCP(), MB_PRECOMPOSED, readBuf, readAll, nullptr, 0);
+
+            auto wideBuf = o3tl::make_unique<wchar_t[]>(sizeWBuf);
+
+            //Do the conversion.
+            MultiByteToWideChar(
+                GetConsoleCP(), MB_PRECOMPOSED, readBuf, readAll, wideBuf.get(), sizeWBuf);
+
+            DWORD   dwWritten;
+            (void)WriteFile( hWritePipe, wideBuf.get(), sizeWBuf * 2, &dwWritten, nullptr );
+
+            readAll = 0;
         }
-
-        //If the buffer was filled completely then
-        //there could be more input coming. But if we read from the console
-        //and the console input fits exactly in the buffer, then the next
-        //ReadFile would block until the users presses return, etc.
-        //Therefore we check if last character is a new line.
-        //To test this, set dwBufferSize to 4 and enter "no". This should produce
-        //4 bytes with most code pages.
-        if ( readAll == lastBufSize
-             && memcmp(readBuf + lastBufSize - cNewLine, mbBuff, cNewLine) != 0)
-        {
-            //The buffer was completely filled and the last byte(s) are no
-            //new line, so there is more to come.
-            continue;
-        }
-        //Obtain the size of the buffer for the converted string.
-        int sizeWBuf = MultiByteToWideChar(
-            GetConsoleCP(), MB_PRECOMPOSED, readBuf, readAll, nullptr, 0);
-
-        wchar_t * wideBuf = new wchar_t[sizeWBuf];
-
-        //Do the conversion.
-        MultiByteToWideChar(
-            GetConsoleCP(), MB_PRECOMPOSED, readBuf, readAll, wideBuf, sizeWBuf);
-
-        DWORD   dwWritten;
-        (void)WriteFile( hWritePipe, wideBuf, sizeWBuf * 2, &dwWritten, nullptr );
-
-        delete[] wideBuf;
-        readAll = 0;
     }
-    delete[] mbBuff;
+    catch (...)
+    {}
     free(readBuf);
     return 0;
 }
