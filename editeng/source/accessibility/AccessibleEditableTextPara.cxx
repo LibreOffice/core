@@ -1235,7 +1235,8 @@ namespace accessibility
             bool bIsDirectVal = false;
             for (auto const& rRunAttrib : aRunAttribs)
             {
-                if ((bIsDirectVal = rRes.Name == rRunAttrib.Name))
+                bIsDirectVal = rRes.Name == rRunAttrib.Name;
+                if (bIsDirectVal)
                     break;
             }
             rRes.Handle = -1;
