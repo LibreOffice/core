@@ -135,7 +135,7 @@ OString createFileNameFromType( const OString& destination,
         }
 
         buffer.append(token);
-    } while( nIndex != -1 );
+    } while(true);
 
     OUString uSysFileName;
     OSL_VERIFY( FileBase::getSystemPathFromFileURL(
