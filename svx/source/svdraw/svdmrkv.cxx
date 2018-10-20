@@ -1820,7 +1820,6 @@ SdrObject* SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrPageView*& rpP
     if (pbHitPassDirect!=nullptr) *pbHitPassDirect=true;
     SdrObject* pRet = nullptr;
     rpPV=nullptr;
-    bool bWholePage(nOptions & SdrSearchOptions::WHOLEPAGE);
     bool bMarked(nOptions & SdrSearchOptions::MARKED);
     bool bMasters=!bMarked && bool(nOptions & SdrSearchOptions::ALSOONMASTER);
     bool bBack(nOptions & SdrSearchOptions::BACKWARD);
@@ -1861,7 +1860,7 @@ SdrObject* SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrPageView*& rpP
             {
                 nPgCount++;
             }
-
+            bool bWholePage(nOptions & SdrSearchOptions::WHOLEPAGE);
             bool bExtraPassForWholePage=bWholePage && pPage!=pPV->GetObjList();
             if (bExtraPassForWholePage) nPgCount++; // First search in AktObjList, then on the entire page
             sal_uInt16 nPgNum=bBack ? 0 : nPgCount;
