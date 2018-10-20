@@ -1125,8 +1125,7 @@ void wwSectionManager::CreateSep(const long nTextPos)
         aNewSection.maSep.pgbPageDepth = (pgbProp & 0x0018) >> 3;
         aNewSection.maSep.pgbOffsetFrom = (pgbProp & 0x00E0) >> 5;
 
-        aNewSection.mnBorders =
-            ::lcl_ReadBorders(eVer <= ww::eWW7, aNewSection.brc, nullptr, nullptr, pSep);
+        aNewSection.mnBorders = ::lcl_ReadBorders(false, aNewSection.brc, nullptr, nullptr, pSep);
     }
 
     // check if Line Numbering must be activated or reset
