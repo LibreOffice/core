@@ -10,21 +10,19 @@
 #ifndef INCLUDED_SC_SOURCE_CORE_OPENCL_OPENCLWRAPPER_HXX
 #define INCLUDED_SC_SOURCE_CORE_OPENCL_OPENCLWRAPPER_HXX
 
-#include <cassert>
 #include <vector>
 
 #include <clew/clew.h>
 
-#include <sal/detail/log.h>
 #include <opencl/opencldllapi.h>
-#include <opencl/platforminfo.hxx>
-#include <osl/file.hxx>
-#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 
 #define MAX_CLFILE_NUM 50
 #define OPENCL_CMDQUEUE_SIZE 1 // number of command queues per OpenCL device.
 
 #include <cstdio>
+
+struct OpenCLPlatformInfo;
 
 namespace openclwrapper
 {
