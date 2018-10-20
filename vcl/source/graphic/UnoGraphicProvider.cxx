@@ -297,7 +297,6 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
     OUString                                aPath;
-    std::unique_ptr<SvStream>             pIStm;
 
     uno::Reference< io::XInputStream > xIStm;
     uno::Reference< awt::XBitmap >xBtm;
@@ -307,7 +306,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     bool bLazyRead = false;
     bool bLoadAsLink = false;
 
-    for( sal_Int32 i = 0; ( i < rMediaProperties.getLength() ) && !pIStm && !xRet.is(); ++i )
+    for (sal_Int32 i = 0; ( i < rMediaProperties.getLength() ) && !xRet.is(); ++i)
     {
         const OUString   aName( rMediaProperties[ i ].Name );
         const uno::Any          aValue( rMediaProperties[ i ].Value );
@@ -364,6 +363,8 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     }
 
     SolarMutexGuard g;
+
+    std::unique_ptr<SvStream> pIStm;
 
     if( xIStm.is() )
     {
