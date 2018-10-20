@@ -70,7 +70,7 @@ namespace drawinglayer
                 case TEXT_LINE_BOLDDASH:      return LINESTYLE_BOLDDASH;
                 case TEXT_LINE_BOLDLONGDASH:  return LINESTYLE_LONGDASH;
                 case TEXT_LINE_BOLDDASHDOT:   return LINESTYLE_BOLDDASHDOT;
-                case TEXT_LINE_BOLDDASHDOTDOT:return LINESTYLE_BOLDDASHDOT;
+                case TEXT_LINE_BOLDDASHDOTDOT:return LINESTYLE_BOLDDASHDOTDOT;
                 case TEXT_LINE_BOLDWAVE:      return LINESTYLE_BOLDWAVE;
             }
         }
