@@ -473,10 +473,22 @@ namespace cppcanvas
                 case LINESTYLE_DONTKNOW:
                     break;
 
-                case LINESTYLE_SMALLWAVE:     // TODO(F3): NYI
+                case LINESTYLE_DOUBLEWAVE:
                     // FALLTHROUGH intended
-                case LINESTYLE_WAVE:          // TODO(F3): NYI
+                case LINESTYLE_SMALLWAVE:
                     // FALLTHROUGH intended
+                case LINESTYLE_BOLDWAVE:
+                    // FALLTHROUGH intended
+                case LINESTYLE_WAVE:
+                    appendWaveline(
+                        aTextLinesPolyPoly,
+                        rStartPos,
+                        0,
+                        rTextLineInfo.mnUnderlineOffset,
+                        rLineWidth,
+                        rTextLineInfo.mnUnderlineOffset + rTextLineInfo.mnLineHeight,
+                        rTextLineInfo.mnUnderlineStyle);
+                    break;
                 case LINESTYLE_SINGLE:
                     appendRect(
                         aTextLinesPolyPoly,
@@ -497,8 +509,6 @@ namespace cppcanvas
                     // FALLTHROUGH intended
                 case LINESTYLE_BOLDDASHDOTDOT:// TODO(F3): NYI
                     // FALLTHROUGH intended
-                case LINESTYLE_BOLDWAVE:      // TODO(F3): NYI
-                    // FALLTHROUGH intended
                 case LINESTYLE_BOLD:
                     appendRect(
                         aTextLinesPolyPoly,
@@ -509,8 +519,6 @@ namespace cppcanvas
                         rTextLineInfo.mnUnderlineOffset + 2*rTextLineInfo.mnLineHeight );
                     break;
 
-                case LINESTYLE_DOUBLEWAVE:    // TODO(F3): NYI
-                    // FALLTHROUGH intended
                 case LINESTYLE_DOUBLE:
                     appendRect(
                         aTextLinesPolyPoly,
