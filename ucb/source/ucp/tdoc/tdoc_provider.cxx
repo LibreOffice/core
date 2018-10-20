@@ -231,17 +231,14 @@ void ContentProvider::notifyDocumentClosed( const OUString & rDocId )
     ::ucbhelper::ContentRefList aAllContents;
     queryExistingContents( aAllContents );
 
-    ::ucbhelper::ContentRefList::const_iterator it  = aAllContents.begin();
-    ::ucbhelper::ContentRefList::const_iterator end = aAllContents.end();
-
     // Notify all content objects related to the closed doc.
 
     bool bFoundDocumentContent = false;
     rtl::Reference< Content > xRoot;
 
-    while ( it != end )
+    for ( const auto& rContent : aAllContents )
     {
-        Uri aUri( (*it)->getIdentifier()->getContentIdentifier() );
+        Uri aUri( rContent->getIdentifier()->getContentIdentifier() );
         OSL_ENSURE( aUri.isValid(),
                     "ContentProvider::notifyDocumentClosed - Invalid URI!" );
 
@@ -249,7 +246,7 @@ void ContentProvider::notifyDocumentClosed( const OUString & rDocId )
         {
             if ( aUri.isRoot() )
             {
-                xRoot = static_cast< Content * >( (*it).get() );
+                xRoot = static_cast< Content * >( rContent.get() );
             }
             else if ( aUri.isDocument() )
             {
@@ -268,12 +265,10 @@ void ContentProvider::notifyDocumentClosed( const OUString & rDocId )
         {
             // Inform content.
             rtl::Reference< Content > xContent
-                = static_cast< Content * >( (*it).get() );
+                = static_cast< Content * >( rContent.get() );
 
             xContent->notifyDocumentClosed();
         }
-
-        ++it;
     }
 
     if ( xRoot.is() )
@@ -294,28 +289,23 @@ void ContentProvider::notifyDocumentOpened( const OUString & rDocId )
     ::ucbhelper::ContentRefList aAllContents;
     queryExistingContents( aAllContents );
 
-    ::ucbhelper::ContentRefList::const_iterator it  = aAllContents.begin();
-    ::ucbhelper::ContentRefList::const_iterator end = aAllContents.end();
-
     // Find root content. If instantiated let it propagate document insertion.
 
-    while ( it != end )
+    for ( const auto& rContent : aAllContents )
     {
-        Uri aUri( (*it)->getIdentifier()->getContentIdentifier() );
+        Uri aUri( rContent->getIdentifier()->getContentIdentifier() );
         OSL_ENSURE( aUri.isValid(),
                     "ContentProvider::notifyDocumentOpened - Invalid URI!" );
 
         if ( aUri.isRoot() )
         {
             rtl::Reference< Content > xRoot
-                = static_cast< Content * >( (*it).get() );
+                = static_cast< Content * >( rContent.get() );
             xRoot->notifyChildInserted( rDocId );
 
             // Done.
             break;
         }
-
-        ++it;
     }
 }
 

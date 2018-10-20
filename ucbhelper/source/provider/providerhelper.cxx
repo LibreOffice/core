@@ -196,20 +196,14 @@ void ContentProviderImplHelper::queryExistingContents(
 
     cleanupRegisteredContents();
 
-    ucbhelper_impl::Contents::const_iterator it
-        = m_pImpl->m_aContents.begin();
-    ucbhelper_impl::Contents::const_iterator end
-        = m_pImpl->m_aContents.end();
-
-    while ( it != end )
+    for ( const auto& rContent : m_pImpl->m_aContents )
     {
-        uno::Reference< ucb::XContent > xContent( (*it).second );
+        uno::Reference< ucb::XContent > xContent( rContent.second );
         if ( xContent.is() )
         {
             rContents.emplace_back(
                     static_cast< ContentImplHelper * >( xContent.get() ) );
         }
-        ++it;
     }
 }
 

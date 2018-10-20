@@ -464,16 +464,10 @@ void SAL_CALL UniversalContentBroker::deregisterContentProvider(
     {
         ProviderList_Impl & rList = aMapIt->getValue();
 
-        ProviderList_Impl::iterator aListEnd(rList.end());
-        for (ProviderList_Impl::iterator aListIt(rList.begin());
-             aListIt != aListEnd; ++aListIt)
-        {
-            if ((*aListIt).getProvider() == Provider)
-            {
-                rList.erase(aListIt);
-                break;
-            }
-        }
+        auto aListIt = std::find_if(rList.begin(), rList.end(),
+            [&Provider](const ProviderListEntry_Impl& rEntry) { return rEntry.getProvider() == Provider; });
+        if (aListIt != rList.end())
+            rList.erase(aListIt);
 
         if (rList.empty())
             m_aProviders.erase(aMapIt);
@@ -810,20 +804,18 @@ void UniversalContentBroker::configureUcb()
 void UniversalContentBroker::prepareAndRegister(
     const ContentProviderDataList& rData)
 {
-    ContentProviderDataList::const_iterator aEnd(rData.end());
-    for (ContentProviderDataList::const_iterator aIt(rData.begin());
-         aIt != aEnd; ++aIt)
+    for (const auto& rContentProviderData : rData)
     {
         OUString aProviderArguments;
-        if (fillPlaceholders(aIt->Arguments,
+        if (fillPlaceholders(rContentProviderData.Arguments,
                              m_aArguments,
                              &aProviderArguments))
         {
             registerAtUcb(this,
                           m_xContext,
-                          aIt->ServiceName,
+                          rContentProviderData.ServiceName,
                           aProviderArguments,
-                          aIt->URLTemplate);
+                          rContentProviderData.URLTemplate);
 
         }
         else

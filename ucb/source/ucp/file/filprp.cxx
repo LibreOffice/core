@@ -45,18 +45,16 @@ XPropertySetInfo_impl::XPropertySetInfo_impl( TaskManager* pMyShell,const OUStri
     TaskManager::ContentMap::iterator it = m_pMyShell->m_aContent.find( aUnqPath );
 
     TaskManager::PropertySet& properties = *(it->second.properties);
-    TaskManager::PropertySet::iterator it1 = properties.begin();
 
     m_seq.realloc( properties.size() );
 
     sal_Int32 count = 0;
-    while( it1 != properties.end() )
+    for( const auto& rProp : properties )
     {
-        m_seq[ count++ ] = beans::Property( it1->getPropertyName(),
-                                              it1->getHandle(),
-                                              it1->getType(),
-                                              it1->getAttributes() );
-        ++it1;
+        m_seq[ count++ ] = beans::Property( rProp.getPropertyName(),
+                                            rProp.getHandle(),
+                                            rProp.getType(),
+                                            rProp.getAttributes() );
     }
 }
 

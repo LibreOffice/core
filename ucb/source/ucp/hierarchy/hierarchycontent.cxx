@@ -741,12 +741,9 @@ void HierarchyContent::queryChildren( HierarchyContentRefVector& rChildren )
 
     sal_Int32 nLen = aURL.getLength();
 
-    ::ucbhelper::ContentRefList::const_iterator it  = aAllContents.begin();
-    ::ucbhelper::ContentRefList::const_iterator end = aAllContents.end();
-
-    while ( it != end )
+    for ( const auto& rContent : aAllContents )
     {
-        ::ucbhelper::ContentImplHelperRef xChild = (*it);
+        ::ucbhelper::ContentImplHelperRef xChild = rContent;
         OUString aChildURL
             = xChild->getIdentifier()->getContentIdentifier();
 
@@ -765,7 +762,6 @@ void HierarchyContent::queryChildren( HierarchyContentRefVector& rChildren )
                         static_cast< HierarchyContent * >( xChild.get() ) );
             }
         }
-        ++it;
     }
 }
 
@@ -812,11 +808,9 @@ bool HierarchyContent::exchangeIdentity(
                 HierarchyContentRefVector aChildren;
                 queryChildren( aChildren );
 
-                HierarchyContentRefVector::const_iterator it  = aChildren.begin();
-
-                while ( it != aChildren.end() )
+                for ( const auto& rChild : aChildren )
                 {
-                    HierarchyContentRef xChild = (*it);
+                    HierarchyContentRef xChild = rChild;
 
                     // Create new content identifier for the child...
                     uno::Reference< ucb::XContentIdentifier > xOldChildId
@@ -833,8 +827,6 @@ bool HierarchyContent::exchangeIdentity(
 
                     if ( !xChild->exchangeIdentity( xNewChildId ) )
                         return false;
-
-                    ++it;
                 }
             }
             return true;

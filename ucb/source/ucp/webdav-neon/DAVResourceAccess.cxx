@@ -1097,13 +1097,10 @@ void DAVResourceAccess::getUserRequestHeaders(
     // en.wikipedia.org:80 forces back 403 "Scripts should use an informative
     // User-Agent string with contact information, or they may be IP-blocked
     // without notice" otherwise:
-    for ( DAVRequestHeaders::iterator i(rRequestHeaders.begin());
-          i != rRequestHeaders.end(); ++i )
+    if ( std::any_of(rRequestHeaders.begin(), rRequestHeaders.end(),
+            [](const DAVRequestHeader& rHeader) { return rHeader.first.equalsIgnoreAsciiCase( "User-Agent" ); }) )
     {
-        if ( i->first.equalsIgnoreAsciiCase( "User-Agent" ) )
-        {
-            return;
-        }
+        return;
     }
     rRequestHeaders.emplace_back( "User-Agent", "LibreOffice" );
 }
@@ -1116,9 +1113,6 @@ bool DAVResourceAccess::detectRedirectCycle(
 
     NeonUri aUri( rRedirectURL );
 
-    std::vector< NeonUri >::const_iterator it  = m_aRedirectURIs.begin();
-    std::vector< NeonUri >::const_iterator end = m_aRedirectURIs.end();
-
     // Check for maximum number of redirections
     // according to <https://tools.ietf.org/html/rfc7231#section-6.4>.
     // A pratical limit may be 5, due to earlier specifications:
@@ -1128,16 +1122,10 @@ bool DAVResourceAccess::detectRedirectCycle(
         return true;
 
     // try to detect a cyclical redirection
-    while ( it != end )
-    {
-        // if equal, cyclical redirection detected
-        if ( aUri == (*it) )
-            return true;
-
-        ++it;
-    }
-
-    return false;
+    return std::any_of(m_aRedirectURIs.begin(), m_aRedirectURIs.end(),
+        [&aUri](const NeonUri& rUri) {
+            // if equal, cyclical redirection detected
+            return aUri == rUri; });
 }
 
 

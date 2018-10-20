@@ -38,16 +38,15 @@ namespace cmis
         std::vector< uno::Reference< ucb::XContent > > aChildren = m_pChildrenProvider->getChildren( );
 
         // Loop over the results and filter them
-        for ( std::vector< uno::Reference< ucb::XContent > >::iterator it = aChildren.begin();
-                it != aChildren.end(); ++it )
+        for ( const auto& rChild : aChildren )
         {
-            OUString sContentType = ( *it )->getContentType( );
+            OUString sContentType = rChild->getContentType( );
             bool bIsFolder = sContentType != CMIS_FILE_TYPE;
             if ( ( mnOpenMode == ucb::OpenMode::FOLDERS && bIsFolder ) ||
                  ( mnOpenMode == ucb::OpenMode::DOCUMENTS && !bIsFolder ) ||
                  ( mnOpenMode == ucb::OpenMode::ALL ) )
             {
-                maResults.emplace_back( *it );
+                maResults.emplace_back( rChild );
             }
         }
         mbCountFinal = true;

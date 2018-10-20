@@ -284,7 +284,7 @@ uno::Sequence< beans::Property > Content::getProperties(
     }
 
     typedef std::set< OUString > StringSet;
-    StringSet aPropSet;
+    std::set< OUString > aPropSet;
 
     // No server access for just created (not yet committed) objects.
     // Only a minimal set of properties supported at this stage.
@@ -324,71 +324,68 @@ uno::Sequence< beans::Property > Content::getProperties(
     bool bHasCreatableInfos   = false;
 
     {
-        std::set< OUString >::const_iterator it  = aPropSet.begin();
-        std::set< OUString >::const_iterator end = aPropSet.end();
-        while ( it != end )
+        for ( const auto& rProp : aPropSet )
         {
             if ( !bHasCreationDate &&
-                 ( (*it) == DAVProperties::CREATIONDATE ) )
+                 ( rProp == DAVProperties::CREATIONDATE ) )
             {
                 bHasCreationDate = true;
             }
             else if ( !bHasGetLastModified &&
-                      ( (*it) == DAVProperties::GETLASTMODIFIED ) )
+                      ( rProp == DAVProperties::GETLASTMODIFIED ) )
             {
                 bHasGetLastModified = true;
             }
             else if ( !bHasGetContentType &&
-                      ( (*it) == DAVProperties::GETCONTENTTYPE ) )
+                      ( rProp == DAVProperties::GETCONTENTTYPE ) )
             {
                 bHasGetContentType = true;
             }
             else if ( !bHasGetContentLength &&
-                      ( (*it) == DAVProperties::GETCONTENTLENGTH ) )
+                      ( rProp == DAVProperties::GETCONTENTLENGTH ) )
             {
                 bHasGetContentLength = true;
             }
-            else if ( !bHasContentType && (*it) == "ContentType" )
+            else if ( !bHasContentType && rProp == "ContentType" )
             {
                 bHasContentType = true;
             }
-            else if ( !bHasIsDocument && (*it) == "IsDocument" )
+            else if ( !bHasIsDocument && rProp == "IsDocument" )
             {
                 bHasIsDocument = true;
             }
-            else if ( !bHasIsFolder && (*it) == "IsFolder" )
+            else if ( !bHasIsFolder && rProp == "IsFolder" )
             {
                 bHasIsFolder = true;
             }
-            else if ( !bHasTitle && (*it) == "Title" )
+            else if ( !bHasTitle && rProp == "Title" )
             {
                 bHasTitle = true;
             }
-            else if ( !bHasBaseURI && (*it) == "BaseURI" )
+            else if ( !bHasBaseURI && rProp == "BaseURI" )
             {
                 bHasBaseURI = true;
             }
-            else if ( !bHasDateCreated && (*it) == "DateCreated" )
+            else if ( !bHasDateCreated && rProp == "DateCreated" )
             {
                 bHasDateCreated = true;
             }
-            else if ( !bHasDateModified && (*it) == "DateModified" )
+            else if ( !bHasDateModified && rProp == "DateModified" )
             {
                 bHasDateModified = true;
             }
-            else if ( !bHasMediaType && (*it) == "MediaType" )
+            else if ( !bHasMediaType && rProp == "MediaType" )
             {
                 bHasMediaType = true;
             }
-            else if ( !bHasSize && (*it) == "Size" )
+            else if ( !bHasSize && rProp == "Size" )
             {
                 bHasSize = true;
             }
-            else if ( !bHasCreatableInfos && (*it) == "CreatableContentsInfo" )
+            else if ( !bHasCreatableInfos && rProp == "CreatableContentsInfo" )
             {
                 bHasCreatableInfos = true;
             }
-            ++it;
         }
     }
 
@@ -451,15 +448,10 @@ uno::Sequence< beans::Property > Content::getProperties(
         const std::unique_ptr< PropertyValueMap > & xProps
             = xCachedProps->getProperties();
 
-        PropertyValueMap::const_iterator       map_it  = xProps->begin();
-        const PropertyValueMap::const_iterator map_end = xProps->end();
-
-        while ( map_it != map_end )
+        for ( const auto& rEntry : *xProps )
         {
-            if ( aPropSet.find( (*map_it).first ) == set_end )
-                aPropSet.insert( (*map_it).first );
-
-            ++map_it;
+            if ( aPropSet.find( rEntry.first ) == set_end )
+                aPropSet.insert( rEntry.first );
         }
     }
 
@@ -467,13 +459,13 @@ uno::Sequence< beans::Property > Content::getProperties(
     sal_Int32 nCount = aPropSet.size();
     uno::Sequence< beans::Property > aProperties( nCount );
 
-    std::set< OUString >::const_iterator it = aPropSet.begin();
     beans::Property aProp;
+    sal_Int32 n = 0;
 
-    for ( sal_Int32 n = 0; n < nCount; ++n, ++it )
+    for ( const auto& rProp : aPropSet )
     {
-        xProvider->getProperty( (*it), aProp );
-        aProperties[ n ] = aProp;
+        xProvider->getProperty( rProp, aProp );
+        aProperties[ n++ ] = aProp;
     }
 
     return aProperties;

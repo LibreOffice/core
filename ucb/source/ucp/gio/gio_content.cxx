@@ -571,12 +571,9 @@ void Content::queryChildren( ContentRefList& rChildren )
 
     sal_Int32 nLen = aURL.getLength();
 
-    ucbhelper::ContentRefList::const_iterator it  = aAllContents.begin();
-    ucbhelper::ContentRefList::const_iterator end = aAllContents.end();
-
-    while ( it != end )
+    for ( const auto& rContent : aAllContents )
     {
-        ucbhelper::ContentImplHelperRef xChild = (*it);
+        ucbhelper::ContentImplHelperRef xChild = rContent;
         OUString aChildURL = xChild->getIdentifier()->getContentIdentifier();
 
         // Is aURL a prefix of aChildURL?
@@ -591,7 +588,6 @@ void Content::queryChildren( ContentRefList& rChildren )
                 rChildren.emplace_back(static_cast< ::gio::Content * >(xChild.get() ) );
             }
         }
-        ++it;
     }
 }
 
@@ -617,12 +613,9 @@ bool Content::exchangeIdentity( const uno::Reference< ucb::XContentIdentifier >&
         ContentRefList aChildren;
         queryChildren( aChildren );
 
-        ContentRefList::const_iterator it  = aChildren.begin();
-        ContentRefList::const_iterator end = aChildren.end();
-
-        while ( it != end )
+        for ( const auto& rChild : aChildren )
         {
-            ContentRef xChild = (*it);
+            ContentRef xChild = rChild;
 
             // Create new content identifier for the child...
             uno::Reference< ucb::XContentIdentifier > xOldChildId = xChild->getIdentifier();
@@ -635,10 +628,8 @@ bool Content::exchangeIdentity( const uno::Reference< ucb::XContentIdentifier >&
 
             if ( !xChild->exchangeIdentity( xNewChildId ) )
                 return false;
-
-            ++it;
-         }
-         return true;
+        }
+        return true;
     }
 
     return false;
@@ -1011,13 +1002,9 @@ void Content::destroy( bool bDeletePhysical )
     ::gio::Content::ContentRefList aChildren;
     queryChildren( aChildren );
 
-    ContentRefList::const_iterator it  = aChildren.begin();
-    ContentRefList::const_iterator end = aChildren.end();
-
-    while ( it != end )
+    for ( auto& rChild : aChildren )
     {
-        (*it)->destroy( bDeletePhysical );
-        ++it;
+        rChild->destroy( bDeletePhysical );
     }
 }
 

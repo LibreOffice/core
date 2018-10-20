@@ -113,17 +113,13 @@ NeonLockStore::~NeonLockStore()
     // release active locks, if any.
     SAL_WARN_IF( !m_aLockInfoMap.empty(), "ucb.ucp.webdav", "NeonLockStore::~NeonLockStore - Releasing active locks!" );
 
-    LockInfoMap::const_iterator it( m_aLockInfoMap.begin() );
-    const LockInfoMap::const_iterator end( m_aLockInfoMap.end() );
-    while ( it != end )
+    for ( auto& rLockInfo : m_aLockInfoMap )
     {
-        NeonLock * pLock = (*it).first;
-        (*it).second.xSession->UNLOCK( pLock );
+        NeonLock * pLock = rLockInfo.first;
+        rLockInfo.second.xSession->UNLOCK( pLock );
 
         ne_lockstore_remove( m_pNeonLockStore, pLock );
         ne_lock_destroy( pLock );
-
-        ++it;
     }
 
     ne_lockstore_destroy( m_pNeonLockStore );
@@ -203,11 +199,9 @@ void NeonLockStore::refreshLocks()
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    LockInfoMap::iterator it( m_aLockInfoMap.begin() );
-    const LockInfoMap::const_iterator end( m_aLockInfoMap.end() );
-    while ( it != end )
+    for ( auto& rLockInfo : m_aLockInfoMap )
     {
-        LockInfo & rInfo = (*it).second;
+        LockInfo & rInfo = rLockInfo.second;
         if ( rInfo.nLastChanceToSendRefreshRequest != -1 )
         {
             // 30 seconds or less remaining until lock expires?
@@ -219,7 +213,7 @@ void NeonLockStore::refreshLocks()
                 // refresh the lock.
                 sal_Int32 nlastChanceToSendRefreshRequest = -1;
                 if ( rInfo.xSession->LOCK(
-                         (*it).first,
+                         rLockInfo.first,
                          /* out param */ nlastChanceToSendRefreshRequest ) )
                 {
                     rInfo.nLastChanceToSendRefreshRequest
@@ -232,7 +226,6 @@ void NeonLockStore::refreshLocks()
                 }
             }
         }
-        ++it;
     }
 }
 
