@@ -211,6 +211,8 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flag
     }
 
     pProfile = static_cast<osl_TProfileImpl*>(calloc(1, sizeof(osl_TProfileImpl)));
+    if (!pProfile)
+        return nullptr;
 
     pProfile->m_Flags = Flags & FLG_USER;
     osl_getSystemPathFromFileURL(strProfileName, &pProfile->m_strFileName);
@@ -1066,6 +1068,8 @@ static bool lockFile(const osl_TFile* pFile, osl_TLockMode eMode)
 static osl_TFile* openFileImpl(rtl_uString * strFileName, oslProfileOption ProfileFlags )
 {
     osl_TFile* pFile = static_cast< osl_TFile*>( calloc( 1, sizeof(osl_TFile) ) );
+    if (!pFile)
+        return nullptr;
     bool bWriteable = false;
 
     if ( ProfileFlags & ( osl_Profile_WRITELOCK | osl_Profile_FLUSHWRITE ) )
@@ -1321,11 +1325,19 @@ static const sal_Char* addLine(osl_TProfileImpl* pProfile, const sal_Char* Line)
             unsigned int oldmax=pProfile->m_MaxLines;
 
             pProfile->m_MaxLines += LINES_ADD;
-            pProfile->m_Lines = static_cast<sal_Char **>(realloc(pProfile->m_Lines, pProfile->m_MaxLines * sizeof(sal_Char *)));
-
-            for ( index = oldmax ; index < pProfile->m_MaxLines ; ++index )
+            if (auto p = static_cast<sal_Char **>(realloc(pProfile->m_Lines, pProfile->m_MaxLines * sizeof(sal_Char *))))
             {
-                pProfile->m_Lines[index]=nullptr;
+                pProfile->m_Lines = p;
+
+                for ( index = oldmax ; index < pProfile->m_MaxLines ; ++index )
+                {
+                    pProfile->m_Lines[index]=nullptr;
+                }
+            }
+            else
+            {
+                free(pProfile->m_Lines);
+                pProfile->m_Lines = nullptr;
             }
         }
 
@@ -1359,12 +1371,19 @@ static const sal_Char* insertLine(osl_TProfileImpl* pProfile, const sal_Char* Li
         else
         {
             pProfile->m_MaxLines += LINES_ADD;
-            pProfile->m_Lines = static_cast<sal_Char **>(realloc(pProfile->m_Lines,
-                                                 pProfile->m_MaxLines * sizeof(sal_Char *)));
+            if (auto p = static_cast<sal_Char**>(
+                    realloc(pProfile->m_Lines, pProfile->m_MaxLines * sizeof(sal_Char*))))
+            {
+                pProfile->m_Lines = p;
 
-            memset(&pProfile->m_Lines[pProfile->m_NoLines],
-                0,
-                (pProfile->m_MaxLines - pProfile->m_NoLines - 1) * sizeof(sal_Char*));
+                memset(&pProfile->m_Lines[pProfile->m_NoLines], 0,
+                       (pProfile->m_MaxLines - pProfile->m_NoLines - 1) * sizeof(sal_Char*));
+            }
+            else
+            {
+                free(pProfile->m_Lines);
+                pProfile->m_Lines = nullptr;
+            }
         }
 
         if (pProfile->m_Lines == nullptr)
@@ -1474,8 +1493,14 @@ static bool addEntry(osl_TProfileImpl* pProfile, osl_TProfileSection *pSection,
             else
             {
                 pSection->m_MaxEntries += ENTRIES_ADD;
-                pSection->m_Entries = static_cast<osl_TProfileEntry *>(realloc(pSection->m_Entries,
-                                pSection->m_MaxEntries * sizeof(osl_TProfileEntry)));
+                if (auto p = static_cast<osl_TProfileEntry*>(realloc(
+                        pSection->m_Entries, pSection->m_MaxEntries * sizeof(osl_TProfileEntry))))
+                    pSection->m_Entries = p;
+                else
+                {
+                    free(pSection->m_Entries);
+                    pSection->m_Entries = nullptr;
+                }
             }
 
             if (pSection->m_Entries == nullptr)
@@ -1533,11 +1558,19 @@ static bool addSection(osl_TProfileImpl* pProfile, int Line, const sal_Char* Sec
             unsigned int oldmax=pProfile->m_MaxSections;
 
             pProfile->m_MaxSections += SECTIONS_ADD;
-            pProfile->m_Sections = static_cast<osl_TProfileSection*>(realloc(pProfile->m_Sections,
-                                          pProfile->m_MaxSections * sizeof(osl_TProfileSection)));
-            for ( index = oldmax ; index < pProfile->m_MaxSections ; ++index )
+            if (auto p = static_cast<osl_TProfileSection*>(realloc(
+                    pProfile->m_Sections, pProfile->m_MaxSections * sizeof(osl_TProfileSection))))
             {
-                pProfile->m_Sections[index].m_Entries=nullptr;
+                pProfile->m_Sections = p;
+                for ( index = oldmax ; index < pProfile->m_MaxSections ; ++index )
+                {
+                    pProfile->m_Sections[index].m_Entries=nullptr;
+                }
+            }
+            else
+            {
+                free(pProfile->m_Sections);
+                pProfile->m_Sections = nullptr;
             }
         }
 
