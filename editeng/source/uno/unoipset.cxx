@@ -221,13 +221,10 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
         }
     }
 
-    if( pMap->nMoreFlags & PropertyMoreFlags::METRIC_ITEM )
+    // check for needed metric translation
+    if(pMap->nMoreFlags & PropertyMoreFlags::METRIC_ITEM && eMapUnit != MapUnit::Map100thMM)
     {
-        // check for needed metric translation
-        if(pMap->nMoreFlags & PropertyMoreFlags::METRIC_ITEM && eMapUnit != MapUnit::Map100thMM)
-        {
-            SvxUnoConvertToMM( eMapUnit, aVal );
-        }
+        SvxUnoConvertToMM( eMapUnit, aVal );
     }
 
     if ( pMap->aType.getTypeClass() == uno::TypeClass_ENUM &&
