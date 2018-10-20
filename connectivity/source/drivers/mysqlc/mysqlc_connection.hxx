@@ -65,12 +65,18 @@ typedef css::uno::Reference<css::container::XNameAccess> my_XNameAccessRef;
 typedef ::cppu::WeakComponentImplHelper3<css::sdbc::XConnection, css::sdbc::XWarningsSupplier,
                                          css::lang::XServiceInfo>
     OMetaConnection_BASE;
+
 struct ConnectionSettings
 {
     rtl_TextEncoding encoding;
     rtl::OUString schema;
     rtl::OUString connectionURL;
     bool readOnly;
+    ConnectionSettings()
+        : encoding(RTL_TEXTENCODING_DONTKNOW)
+        , readOnly(false)
+    {
+    }
 };
 
 class MysqlCDriver;
