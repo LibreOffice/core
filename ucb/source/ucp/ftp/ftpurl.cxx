@@ -88,7 +88,10 @@ int MemoryContainer::append(
             m_nLen+=1024;
         } while(m_nLen < tmp);
 
-        m_pBuffer = std::realloc(m_pBuffer,m_nLen);
+        if (auto p = std::realloc(m_pBuffer, m_nLen))
+            m_pBuffer = p;
+        else
+            return 0;
     }
 
     memcpy(static_cast<sal_Int8*>(m_pBuffer)+m_nWritePos,
