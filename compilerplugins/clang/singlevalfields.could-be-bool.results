@@ -1,0 +1,66 @@
+chart2/source/view/inc/PlottingPositionHelper.hxx:206
+    chart::PolarPlottingPositionHelper m_fRadiusOffset
+    double
+connectivity/source/inc/dbase/dindexnode.hxx:125
+    connectivity::dbase::ONDXPage bNoDelete
+    unsigned int
+filter/source/graphicfilter/eps/eps.cxx:139
+    PSWriter nNextChrSetId
+    sal_uInt8
+include/vcl/split.hxx:40
+    Splitter mbInKeyEvent
+    long
+sal/rtl/cipher.cxx:110
+    Cipher_Impl m_algorithm
+    rtlCipherAlgorithm
+sc/source/filter/inc/stylesbuffer.hxx:290
+    oox::xls::ApiAlignmentData mnHorJustifyMethod
+    sal_Int32
+sc/source/filter/inc/stylesbuffer.hxx:292
+    oox::xls::ApiAlignmentData mnVerJustifyMethod
+    sal_Int32
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1099
+    ScPagePreviewCountData nHeaders
+    long
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1100
+    ScPagePreviewCountData nTables
+    long
+sc/source/ui/Accessibility/AccessibleDocumentPagePreview.cxx:1102
+    ScPagePreviewCountData nFooters
+    long
+sc/source/ui/vba/vbahyperlink.hxx:82
+    ScVbaHyperlink mnType
+    long
+soltools/cpp/cpp.h:121
+    includelist always
+    char
+svl/source/numbers/zforfind.hxx:111
+    ImpSvNumberInputScan nNegCheck
+    short
+svl/source/numbers/zforfind.hxx:115
+    ImpSvNumberInputScan mnEra
+    sal_Int16
+svx/source/inc/cell.hxx:205
+    sdr::table::Cell mnCellContentType
+    css::table::CellContentType
+svx/source/table/tablertfimporter.cxx:55
+    sdr::table::RTFCellDefault mnRowSpan
+    sal_Int32
+sw/source/filter/ww8/docxexport.hxx:100
+    DocxExport m_nHeadersFootersInSection
+    sal_Int32
+sw/source/filter/ww8/ww8scan.hxx:65
+    SprmInfo nVari
+    unsigned int
+vcl/inc/canvasbitmap.hxx:57
+    vcl::unotools::VclCanvasBitmap m_nEndianness
+    sal_Int8
+vcl/inc/unx/i18n_ic.hxx:33
+    SalI18N_InputContext mbUseable
+    int
+vcl/workben/icontest.cxx:144
+    IconTestApp nRet
+    int
+writerfilter/source/dmapper/PageBordersHandler.hxx:54
+    writerfilter::dmapper::PageBordersHandler m_eOffsetFrom
+    class SectionPropertyMap::BorderOffsetFrom
