@@ -3388,7 +3388,7 @@ awt::DockingData SAL_CALL ToolbarLayoutManager::docking( const awt::DockingEvent
                                                    aNewDockingRect.getWidth(), aNewDockingRect.getHeight() );
                 aDockingData.TrackingRectangle = aNewTrackingRect;
             }
-            else if ( pToolBox && bDockingInProgress )
+            else if (pToolBox)
             {
                 bool bIsHorizontal = isToolboxHorizontalAligned( pToolBox );
                 awt::Size aFloatSize = aUIDockingElement.m_aFloatingData.m_aSize;
