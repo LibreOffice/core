@@ -16,6 +16,24 @@
       "revId": "2fb8461b9c20e68feb0073e776821614c22c0cc0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_fccedd81",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2018-10-20T10:07:37Z",
+      "side": 1,
+      "message": "It\u0027s tdf#70851. I\u0027ll fix that, thanks.",
+      "parentUuid": "1f1a1f67_1c5e39e6",
+      "revId": "2fb8461b9c20e68feb0073e776821614c22c0cc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
