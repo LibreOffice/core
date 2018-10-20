@@ -29,6 +29,7 @@
 #include <svl/zforlist.hxx>
 #include <formula/errorcodes.hxx>
 #include <sal/log.hxx>
+#include <rtl/character.hxx>
 
 #include <global.hxx>
 #include <rangeutl.hxx>

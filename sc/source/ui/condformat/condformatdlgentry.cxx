@@ -32,6 +32,7 @@
 #include <stlpool.hxx>
 #include <tabvwsh.hxx>
 #include <simpleformulacalc.hxx>
+#include <unotools/charclass.hxx>
 
 #include <colorformat.hxx>
 #include <scresid.hxx>

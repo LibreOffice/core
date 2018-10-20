@@ -54,6 +54,7 @@
 #include <svtools/menuoptions.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <svtools/miscopt.hxx>
+#include <unotools/collatorwrapper.hxx>
 
 //  Defines
 

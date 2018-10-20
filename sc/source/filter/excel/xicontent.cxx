@@ -37,6 +37,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/crossedoutitem.hxx>
+#include <unotools/charclass.hxx>
 #include <stringutil.hxx>
 #include <cellform.hxx>
 #include <cellvalue.hxx>

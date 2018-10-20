@@ -35,7 +35,6 @@ namespace o3tl {
 
 namespace utl {
 
-class ReadWriteGuard;
 class ReadWriteMutex
 {
     friend class ReadWriteGuard;

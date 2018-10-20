@@ -21,6 +21,7 @@
 
 #include <unotools/syslocale.hxx>
 #include <unotools/configitem.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <rtl/instance.hxx>
 
 namespace chart

@@ -28,6 +28,7 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/io/XMarkableStream.hpp>
+#include <com/sun/star/i18n/Currency2.hpp>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/supportsservice.hxx>

@@ -23,6 +23,7 @@
 #include <cassert>
 
 #include <comphelper/string.hxx>
+#include <unotools/charclass.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 

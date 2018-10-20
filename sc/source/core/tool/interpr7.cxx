@@ -12,6 +12,7 @@
 #include <formulacell.hxx>
 #include <scmatrix.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/character.hxx>
 #include <formula/errorcodes.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/linkmgr.hxx>

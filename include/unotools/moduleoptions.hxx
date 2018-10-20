@@ -21,14 +21,15 @@
 #define INCLUDED_UNOTOOLS_MODULEOPTIONS_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <salhelper/singletonref.hxx>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <osl/mutex.hxx>
 #include <unotools/options.hxx>
 #include <memory>
+
+namespace osl { class Mutex; }
+namespace com { namespace sun { namespace star { namespace frame { class XModel; } } } }
+namespace com { namespace sun { namespace star { namespace beans { struct PropertyValue; } } } }
 
 /*-************************************************************************************************************
     @short          forward declaration to our private date container implementation

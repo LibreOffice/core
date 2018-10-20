@@ -18,6 +18,7 @@
  */
 
 #include <svl/zforlist.hxx>
+#include <unotools/charclass.hxx>
 
 #include <dpcache.hxx>
 #include <dpshttab.hxx>

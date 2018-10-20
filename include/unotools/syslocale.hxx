@@ -21,12 +21,13 @@
 #define INCLUDED_UNOTOOLS_SYSLOCALE_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <unotools/localedatawrapper.hxx>
-#include <unotools/charclass.hxx>
-#include <i18nlangtag/languagetag.hxx>
-#include <sal/types.h>
 #include <rtl/textenc.h>
 
+#include <memory>
+
+class CharClass;
+class LanguageTag;
+class LocaleDataWrapper;
 class SvtSysLocale_Impl;
 class SvtSysLocaleOptions;
 

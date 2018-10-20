@@ -48,6 +48,7 @@
 #include <comphelper/extract.hxx>
 
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;

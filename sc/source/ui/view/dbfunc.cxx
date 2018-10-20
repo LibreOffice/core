@@ -21,6 +21,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/weld.hxx>
+#include <unotools/charclass.hxx>
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
 

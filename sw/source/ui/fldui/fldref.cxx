@@ -33,6 +33,7 @@
 #include <ndtxt.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/syslocaleoptions.hxx>
+#include <unotools/charclass.hxx>
 
 #include <comphelper/string.hxx>
 
