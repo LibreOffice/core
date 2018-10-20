@@ -2706,8 +2706,7 @@ void SwTextNode::EraseText(const SwIndex &rIdx, const sal_Int32 nCount,
         {
                     // attribute with neither end nor CH_TXTATR?
             assert(pHt->HasDummyChar());
-            if (isTXTATR(nWhich) &&
-                (nHintStart >= nStartIdx) && (nHintStart < nEndIdx))
+            if (isTXTATR(nWhich) && (nHintStart < nEndIdx))
             {
                 m_pSwpHints->DeleteAtPos(i);
                 DestroyAttr( pHt );
@@ -5082,10 +5081,17 @@ namespace {
             }
             // #i70748#
             // #i105562#
-            else if ( mrTextNode.GetpSwAttrSet() &&
-                      dynamic_cast<const SfxUInt16Item &>(mrTextNode.GetAttr( RES_PARATR_OUTLINELEVEL, false )).GetValue() > 0 )
+            else
             {
-                mrTextNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
+                assert(!mrTextNode.GetpSwAttrSet()
+                       || dynamic_cast<const SfxUInt16Item*>(
+                              &mrTextNode.GetAttr(RES_PARATR_OUTLINELEVEL, false)));
+                if (mrTextNode.GetpSwAttrSet()
+                    && static_cast<const SfxUInt16Item&>(
+                           mrTextNode.GetAttr(RES_PARATR_OUTLINELEVEL, false)).GetValue() > 0)
+                {
+                    mrTextNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
+                }
             }
         }
 
@@ -5319,9 +5325,9 @@ void SwTextNode::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
             SetXParagraph(css::uno::Reference<css::text::XTextContent>(nullptr));
         }
     }
-    else if (auto pHint = dynamic_cast<const SwAttrHint*>(&rHint))
+    else if (dynamic_cast<const SwAttrHint*>(&rHint))
     {
-        if ( pHint && &rModify == GetRegisteredIn() )
+        if (&rModify == GetRegisteredIn())
             ChkCondColl();
     }
 }
