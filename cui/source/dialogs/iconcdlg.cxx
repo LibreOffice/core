@@ -455,7 +455,7 @@ void IconChoiceDialog::ResetPageImpl ()
 |
 \**********************************************************************/
 
-const sal_uInt16* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
+const sal_uInt16* IconChoiceDialog::GetInputRanges( const SfxItemPool& )
 {
     if ( pSet )
     {
@@ -465,25 +465,9 @@ const sal_uInt16* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
 
     if ( pRanges )
         return pRanges.get();
-    std::vector<sal_uInt16> aUS;
 
-    size_t nCount = maPageList.size();
-
-    // remove double Id's
-    {
-        nCount = aUS.size();
-        for ( size_t i = 0; i < nCount; ++i )
-            aUS[i] = rPool.GetWhich( aUS[i] );
-    }
-
-    if ( aUS.size() > 1 )
-    {
-        std::sort( aUS.begin(), aUS.end() );
-    }
-
-    pRanges.reset(new sal_uInt16[aUS.size() + 1]);
-    std::copy( aUS.begin(), aUS.end(), pRanges.get() );
-    pRanges[aUS.size()] = 0;
+    pRanges.reset(new sal_uInt16[1]);
+    pRanges[0] = 0;
 
     return pRanges.get();
 }
