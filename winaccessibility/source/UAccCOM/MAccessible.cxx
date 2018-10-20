@@ -194,23 +194,19 @@ CMAccessible::~CMAccessible()
     if(m_pszName!=nullptr)
     {
         SAFE_SYSFREESTRING(m_pszName);
-        m_pszName=nullptr;
     }
     if(m_pszValue!=nullptr)
     {
         SAFE_SYSFREESTRING(m_pszValue);
-        m_pszValue=nullptr;
     }
     if(m_pszDescription!=nullptr)
     {
         SAFE_SYSFREESTRING(m_pszDescription);
-        m_pszDescription=nullptr;
     }
 
     if(m_pszActionDescription!=nullptr)
     {
         SAFE_SYSFREESTRING(m_pszActionDescription);
-        m_pszActionDescription=nullptr;
     }
 
     if(m_pIParent)
@@ -251,7 +247,7 @@ STDMETHODIMP CMAccessible::get_accParent(IDispatch **ppdispParent)
         else if(m_hwnd)
         {
             HRESULT hr = AccessibleObjectFromWindow(m_hwnd, OBJID_WINDOW, IID_IAccessible, reinterpret_cast<void**>(ppdispParent));
-            if( ! SUCCEEDED( hr ) || ! ppdispParent )
+            if (!SUCCEEDED(hr) || !*ppdispParent)
             {
                 return S_FALSE;
             }
@@ -670,9 +666,9 @@ STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT varChild, BSTR *pszKe
                             VARIANT varParentRole;
                             VariantInit( &varParentRole );
 
-                            m_pIParent->get_accRole(varChild, &varParentRole);
-
-                            if( m_pIParent && varParentRole.lVal == ROLE_SYSTEM_COMBOBOX ) // edit in comboBox
+                            if (m_pIParent
+                                && SUCCEEDED(m_pIParent->get_accRole(varChild, &varParentRole))
+                                && varParentRole.lVal == ROLE_SYSTEM_COMBOBOX) // edit in comboBox
                             {
                                 m_pIParent->get_accKeyboardShortcut(varChild, pszKeyboardShortcut);
                                 return S_OK;
@@ -1435,7 +1431,10 @@ IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, short flags)
     }
 
     IMAccessible* pCurChild = nullptr;
-    XAccessible* pChildXAcc = nullptr;
+    union {
+        XAccessible* pChildXAcc;
+        hyper nHyper = 0;
+    };
     Reference<XAccessible> pRChildXAcc;
     XAccessibleContext* pChildContext = nullptr;
     int index = 0,delta=0;
@@ -1454,7 +1453,7 @@ IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, short flags)
         {
             return nullptr;
         }
-        pCurChild->GetUNOInterface(reinterpret_cast<hyper*>(&pChildXAcc));
+        pCurChild->GetUNOInterface(&nHyper);
         if(pChildXAcc==nullptr)
         {
             return nullptr;
@@ -1906,12 +1905,11 @@ STDMETHODIMP CMAccessible:: get_groupPosition(long __RPC_FAR *groupLevel,long __
             if ( xGroupPosition.is() )
             {
                 Sequence< sal_Int32 > rSeq = xGroupPosition->getGroupPosition( makeAny( pRContext ) );
-                sal_Int32* pSeq = rSeq.getArray();
-                if ( pSeq )
+                if (rSeq.getLength() >= 3)
                 {
-                    *groupLevel = pSeq[0];
-                    *similarItemsInGroup = pSeq[1];
-                    *positionInGroup = pSeq[2];
+                    *groupLevel = rSeq[0];
+                    *similarItemsInGroup = rSeq[1];
+                    *positionInGroup = rSeq[2];
                     return S_OK;
                 }
                 return S_OK;
@@ -2088,13 +2086,11 @@ STDMETHODIMP CMAccessible:: get_windowHandle(HWND __RPC_FAR *windowHandle)
 
         HWND nHwnd = m_hwnd;
         IAccessible* pParent = m_pIParent;
-        CMAccessible* pChild = this;
         while((nHwnd==nullptr) && pParent)
         {
-            pChild = static_cast<CMAccessible*>(pParent);
-            if(pChild)
+            if (CMAccessible* pChild = dynamic_cast<CMAccessible*>(pParent))
             {
-                pParent = static_cast<IAccessible*>(pChild->m_pIParent);
+                pParent = pChild->m_pIParent;
                 nHwnd = pChild->m_hwnd;
             }
             else
@@ -2313,8 +2309,11 @@ STDMETHODIMP CMAccessible::accSelect(long flagsSelect, VARIANT varChild)
 
     if( flagsSelect&SELFLAG_TAKEFOCUS )
     {
-        XAccessible * pTempUNO = nullptr;
-        pSelectAcc->GetUNOInterface(reinterpret_cast<hyper*>(&pTempUNO));
+        union {
+            XAccessible* pTempUNO;
+            hyper nHyper = 0;
+        };
+        pSelectAcc->GetUNOInterface(&nHyper);
 
         if( pTempUNO == nullptr )
             return NULL;
@@ -2641,12 +2640,13 @@ BOOL
 CMAccessible::get_IAccessibleFromXAccessible(XAccessible * pXAcc, IAccessible **ppIA)
 {
 
-    ENTER_PROTECTED_BLOCK
+    try
+    {
 
         // #CHECK#
         if(ppIA == nullptr)
         {
-            return E_INVALIDARG;
+            return FALSE;
         }
         BOOL isGet = FALSE;
         if(g_pAgent)
@@ -2657,7 +2657,11 @@ CMAccessible::get_IAccessibleFromXAccessible(XAccessible * pXAcc, IAccessible **
         else
             return FALSE;
 
-        LEAVE_PROTECTED_BLOCK
+    }
+    catch(...)
+    {
+        return FALSE;
+    }
 }
 
 OUString CMAccessible::get_StringFromAny(Any const & pAny)
