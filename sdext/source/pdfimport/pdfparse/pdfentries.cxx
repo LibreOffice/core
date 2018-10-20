@@ -21,6 +21,7 @@
 #include <pdfparse.hxx>
 
 #include <comphelper/hash.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -531,7 +532,7 @@ void PDFDict::insertValue( const OString& rName, PDFEntry* pValue )
     if( it == m_aMap.end() )
     {
         // new name/value, pair, append it
-        m_aSubElements.emplace_back( new PDFName( rName ) );
+        m_aSubElements.emplace_back(o3tl::make_unique<PDFName>(rName));
         m_aSubElements.emplace_back( pValue );
     }
     else
@@ -628,7 +629,7 @@ unsigned int PDFStream::getDictLength( const PDFContainer* pContainer ) const
         if( pRef )
         {
             int nEle = pContainer->m_aSubElements.size();
-            for( int i = 0; i < nEle && ! pNum; i++ )
+            for (int i = 0; i < nEle; i++)
             {
                 PDFObject* pObj = dynamic_cast<PDFObject*>(pContainer->m_aSubElements[i].get());
                 if( pObj &&
@@ -729,10 +730,15 @@ static void unzipToBuffer( char* pBegin, unsigned int nLen,
 
     const unsigned int buf_increment_size = 16384;
 
-    *pOutBuf = static_cast<sal_uInt8*>(std::realloc( *pOutBuf, buf_increment_size ));
-    aZStr.next_out      = reinterpret_cast<Bytef*>(*pOutBuf);
-    aZStr.avail_out     = buf_increment_size;
-    *pOutLen = buf_increment_size;
+    if (auto p = static_cast<sal_uInt8*>(std::realloc(*pOutBuf, buf_increment_size)))
+    {
+        *pOutBuf = p;
+        aZStr.next_out = reinterpret_cast<Bytef*>(*pOutBuf);
+        aZStr.avail_out = buf_increment_size;
+        *pOutLen = buf_increment_size;
+    }
+    else
+        err = Z_MEM_ERROR;
     while( err != Z_STREAM_END && err >= Z_OK && aZStr.avail_in )
     {
         err = inflate( &aZStr, Z_NO_FLUSH );
@@ -741,10 +747,15 @@ static void unzipToBuffer( char* pBegin, unsigned int nLen,
             if( err != Z_STREAM_END )
             {
                 const int nNewAlloc = *pOutLen + buf_increment_size;
-                *pOutBuf = static_cast<sal_uInt8*>(std::realloc( *pOutBuf, nNewAlloc ));
-                aZStr.next_out = reinterpret_cast<Bytef*>(*pOutBuf + *pOutLen);
-                aZStr.avail_out = buf_increment_size;
-                *pOutLen = nNewAlloc;
+                if (auto p = static_cast<sal_uInt8*>(std::realloc(*pOutBuf, nNewAlloc)))
+                {
+                    *pOutBuf = p;
+                    aZStr.next_out = reinterpret_cast<Bytef*>(*pOutBuf + *pOutLen);
+                    aZStr.avail_out = buf_increment_size;
+                    *pOutLen = nNewAlloc;
+                }
+                else
+                    err = Z_MEM_ERROR;
             }
         }
     }
@@ -845,7 +856,6 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
                                 pFilter = dynamic_cast<PDFName*>(pArray->m_aSubElements.front().get());
                                 if (pFilter && pFilter->m_aName == "FlateDecode")
                                 {
-                                    delete pFilter;
                                     pArray->m_aSubElements.erase( pArray->m_aSubElements.begin() );
                                 }
                             }
@@ -864,11 +874,9 @@ bool PDFObject::emit( EmitContext& rWriteContext ) const
                 delete pClone;
                 // write stream
                 if( bRet )
-                    rWriteContext.write( "stream\n", 7 );
-                if( bRet )
-                    bRet = rWriteContext.write( pOutBytes, nOutBytes );
-                if( bRet )
-                    bRet = rWriteContext.write( "\nendstream\nendobj\n", 18 );
+                    bRet = rWriteContext.write("stream\n", 7)
+                           && rWriteContext.write(pOutBytes, nOutBytes)
+                           && rWriteContext.write("\nendstream\nendobj\n", 18);
                 if( pOutBytes != reinterpret_cast<sal_uInt8*>(pStream.get()) )
                     std::free( pOutBytes );
                 pEData->setDecryptObject( 0, 0 );
