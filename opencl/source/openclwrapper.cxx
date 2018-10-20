@@ -13,6 +13,7 @@
 
 #include <opencl/openclconfig.hxx>
 #include <opencl/openclwrapper.hxx>
+#include <opencl/platforminfo.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/digest.h>

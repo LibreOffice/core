@@ -14,8 +14,10 @@
 #include <set>
 
 #include <opencl/opencldllapi.h>
-#include <opencl/platforminfo.hxx>
 #include <rtl/ustring.hxx>
+
+struct OpenCLDeviceInfo;
+struct OpenCLPlatformInfo;
 
 struct OPENCL_DLLPUBLIC OpenCLConfig
 {
