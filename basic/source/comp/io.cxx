@@ -236,8 +236,6 @@ void SbiParser::Open()
     TestToken( AS );
     // channel number
     std::unique_ptr<SbiExpression> pChan(new SbiExpression( this ));
-    if( !pChan )
-        Error( ERRCODE_BASIC_SYNTAX );
     std::unique_ptr<SbiExpression> pLen;
     if( Peek() == SYMBOL )
     {
@@ -254,8 +252,7 @@ void SbiParser::Open()
     // channel number
     // file name
     pLen->Gen();
-    if( pChan )
-        pChan->Gen();
+    pChan->Gen();
     aFileName.Gen();
     aGen.Gen( SbiOpcode::OPEN_, static_cast<sal_uInt32>(nMode), static_cast<sal_uInt32>(nFlags) );
     bInStatement = false;
