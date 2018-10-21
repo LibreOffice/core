@@ -3983,7 +3983,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
         }
 
         // set the size from BLIP if there is one
-        if ( pRet && bGrfRead && !aVisArea.IsEmpty() )
+        if ( bGrfRead && !aVisArea.IsEmpty() )
             pRet->SetBLIPSizeRectangle( aVisArea );
 
         if (pRet->GetName().isEmpty())                   // SJ 22.02.00 : PPT OLE IMPORT:
@@ -5619,16 +5619,13 @@ void SvxMSDffManager::StoreShapeOrder(sal_uLong         nId,
                                       SdrObject*    pObject,
                                       SwFlyFrameFormat*  pFly) const
 {
-    sal_uInt16 nShpCnt = m_aShapeOrders.size();
-    for (sal_uInt16 nShapeNum=0; nShapeNum < nShpCnt; nShapeNum++)
+    for (const auto& pOrder : m_aShapeOrders)
     {
-        SvxMSDffShapeOrder& rOrder = *m_aShapeOrders[ nShapeNum ];
-
-        if( rOrder.nShapeId == nId )
+        if (pOrder->nShapeId == nId)
         {
-            rOrder.nTxBxComp = nTxBx;
-            rOrder.pObj      = pObject;
-            rOrder.pFly      = pFly;
+            pOrder->nTxBxComp = nTxBx;
+            pOrder->pObj = pObject;
+            pOrder->pFly = pFly;
         }
     }
 }
@@ -5638,16 +5635,13 @@ void SvxMSDffManager::ExchangeInShapeOrder( SdrObject const * pOldObject,
                                             sal_uLong    nTxBx,
                                             SdrObject*   pObject) const
 {
-    sal_uInt16 nShpCnt = m_aShapeOrders.size();
-    for (sal_uInt16 nShapeNum=0; nShapeNum < nShpCnt; nShapeNum++)
+    for (const auto& pOrder : m_aShapeOrders)
     {
-        SvxMSDffShapeOrder& rOrder = *m_aShapeOrders[ nShapeNum ];
-
-        if( rOrder.pObj == pOldObject )
+        if (pOrder->pObj == pOldObject)
         {
-            rOrder.pFly      = nullptr;
-            rOrder.pObj      = pObject;
-            rOrder.nTxBxComp = nTxBx;
+            pOrder->pFly = nullptr;
+            pOrder->pObj = pObject;
+            pOrder->nTxBxComp = nTxBx;
         }
     }
 }
@@ -5655,16 +5649,13 @@ void SvxMSDffManager::ExchangeInShapeOrder( SdrObject const * pOldObject,
 
 void SvxMSDffManager::RemoveFromShapeOrder( SdrObject const * pObject ) const
 {
-    sal_uInt16 nShpCnt = m_aShapeOrders.size();
-    for (sal_uInt16 nShapeNum=0; nShapeNum < nShpCnt; nShapeNum++)
+    for (const auto& pOrder : m_aShapeOrders)
     {
-        SvxMSDffShapeOrder& rOrder = *m_aShapeOrders[ nShapeNum ];
-
-        if( rOrder.pObj == pObject )
+        if (pOrder->pObj == pObject)
         {
-            rOrder.pObj      = nullptr;
-            rOrder.pFly      = nullptr;
-            rOrder.nTxBxComp = 0;
+            pOrder->pObj = nullptr;
+            pOrder->pFly = nullptr;
+            pOrder->nTxBxComp = 0;
         }
     }
 }
@@ -6381,7 +6372,7 @@ bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rGraphic, tools::Rectan
 
         // remember FilePos of the stream(s)
         sal_uLong nOldPosCtrl = rStCtrl.Tell();
-        sal_uLong nOldPosData = pStData ? pStData->Tell() : nOldPosCtrl;
+        sal_uLong nOldPosData = pStData->Tell();
 
         // fetch matching info struct out of the pointer array
         SvxMSDffBLIPInfo& rInfo = (*m_pBLIPInfos)[ nIdx-1 ];
@@ -6866,9 +6857,6 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
             if( xOle10Stm.is() )
             {
                 std::unique_ptr<sal_uInt8[]> pData(new sal_uInt8[ nDataLen ]);
-                if( !pData )
-                    return false;
-
                 rStm.ReadBytes(pData.get(), nDataLen);
 
                 // write to ole10 stream
