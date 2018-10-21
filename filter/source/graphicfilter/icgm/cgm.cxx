@@ -695,7 +695,7 @@ ImportCGM(SvStream& rIn, uno::Reference< frame::XModel > const & rXModel, css::u
         try
         {
             std::unique_ptr<CGM> pCGM(new CGM(rXModel));
-            if (pCGM && pCGM->IsValid())
+            if (pCGM->IsValid())
             {
                 rIn.SetEndian(SvStreamEndian::BIG);
                 sal_uInt64 const nInSize = rIn.remainingSize();
