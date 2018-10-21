@@ -1718,13 +1718,10 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 KEYINPUT_CHECKTABLE:
                     if( rSh.IsTableMode() || !rSh.GetTableFormat() )
                     {
-                        if(SwKeyState::KeyToView != eFlyState)
-                        {
-                            if(!pFlyFormat && SwKeyState::KeyToView != eFlyState &&
-                                (rSh.GetSelectionType() & (SelectionType::DrawObject|SelectionType::DbForm))  &&
-                                    rSh.GetDrawView()->AreObjectsMarked())
-                                eKeyState = SwKeyState::Draw_Change;
-                        }
+                        if(!pFlyFormat && SwKeyState::KeyToView != eFlyState &&
+                            (rSh.GetSelectionType() & (SelectionType::DrawObject|SelectionType::DbForm))  &&
+                                rSh.GetDrawView()->AreObjectsMarked())
+                            eKeyState = SwKeyState::Draw_Change;
 
                         if( pFlyFormat )
                             eKeyState = eFlyState;
