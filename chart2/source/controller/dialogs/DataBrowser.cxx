@@ -819,8 +819,7 @@ void DataBrowser::SetDataFromModel(
         new NumberFormatterWrapper(
             Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY )));
 
-    if( m_spNumberFormatterWrapper.get() )
-        m_aNumberEditField->SetFormatter( m_spNumberFormatterWrapper->getSvNumberFormatter() );
+    m_aNumberEditField->SetFormatter( m_spNumberFormatterWrapper->getSvNumberFormatter() );
 
     RenewTable();
 
