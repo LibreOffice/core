@@ -112,6 +112,12 @@ en-US = "Dutch"
 [STR_DESC_MODULE_LANGPACK_NL]
 en-US = "Installs the Dutch user interface"
 
+[STR_NAME_MODULE_LANGPACK_DSB]
+en-US = "Lower Sorbian"
+
+[STR_DESC_MODULE_LANGPACK_DSB]
+en-US = "Installs the Lower Sorbian user interface"
+
 [STR_NAME_MODULE_LANGPACK_HSB]
 en-US = "Upper Sorbian"
 
