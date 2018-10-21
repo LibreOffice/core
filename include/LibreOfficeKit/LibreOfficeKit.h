@@ -368,6 +368,11 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::moveSelectedParts().
     void (*moveSelectedParts) (LibreOfficeKitDocument* pThis, int nPosition, bool bDuplicate);
 
+    /// Resize window with given id.
+    /// @see lok::Document::resizeWindow().
+    void (*resizeWindow) (LibreOfficeKitDocument* pThis, unsigned nWindowId,
+                          const int width, const int height);
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
