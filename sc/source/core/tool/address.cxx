@@ -961,7 +961,7 @@ static bool isValidSingleton( ScRefFlags nFlags, ScRefFlags nFlags2 )
 {
     bool bCols = (nFlags & ScRefFlags::COL_VALID) && ((nFlags & ScRefFlags::COL2_VALID) || (nFlags2 & ScRefFlags::COL_VALID));
     bool bRows = (nFlags & ScRefFlags::ROW_VALID) && ((nFlags & ScRefFlags::ROW2_VALID) || (nFlags2 & ScRefFlags::ROW_VALID));
-    return (bCols && !bRows) || (!bCols && bRows);
+    return bCols != bRows;
 }
 
 static ScRefFlags lcl_ScRange_Parse_XL_A1( ScRange& r,

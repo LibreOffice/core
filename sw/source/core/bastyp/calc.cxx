@@ -859,7 +859,7 @@ SwSbxValue SwCalc::Term()
                 GetToken();
                 bool bR = Prim().GetBool();
                 bool bL = left.GetBool();
-                left.PutBool( (bL && !bR) || (!bL && bR) );
+                left.PutBool(bL != bR);
             }
             break;
 

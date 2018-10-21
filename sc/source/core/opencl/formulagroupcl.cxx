@@ -1441,10 +1441,7 @@ public:
             {
 
                 pCurDVR = static_cast<const formula::DoubleVectorRefToken*>(tmpCur);
-                if (!
-                    ((!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
-                        || (pCurDVR->IsStartFixed() && pCurDVR->IsEndFixed()))
-                    )
+                if (pCurDVR->IsStartFixed() != pCurDVR->IsEndFixed())
                     throw Unhandled(__FILE__, __LINE__);
             }
         }
@@ -2182,8 +2179,7 @@ static DynamicKernelArgument* VectorRefFactory( const ScCalcConfig& config, cons
     // Window being too small to justify a parallel reduction
     if (pDVR->GetRefRowSize() < REDUCE_THRESHOLD)
         return new DynamicKernelSlidingArgument<Base>(config, s, ft, pCodeGen, index);
-    if ((pDVR->IsStartFixed() && pDVR->IsEndFixed()) ||
-        (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()))
+    if (pDVR->IsStartFixed() == pDVR->IsEndFixed())
         return new ParallelReductionVectorRef<Base>(config, s, ft, pCodeGen, index);
     else // Other cases are not supported as well
         return new DynamicKernelSlidingArgument<Base>(config, s, ft, pCodeGen, index);

@@ -328,7 +328,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
         {
             long nShearAngle = rGeoStat.nShearAngle;
             double nTan = rGeoStat.nTan;
-            if ((bFlipV&&!bFlipH )||(bFlipH&&!bFlipV))
+            if (bFlipV != bFlipH)
             {
                 nShearAngle = -nShearAngle;
                 nTan = -nTan;
@@ -429,7 +429,7 @@ drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEngine::getLineGeom
             {
                 long nShearAngle = rGeoStat.nShearAngle;
                 double nTan = rGeoStat.nTan;
-                if ((bFlipV&&!bFlipH )||(bFlipH&&!bFlipV))
+                if (bFlipV != bFlipH)
                 {
                     nShearAngle = -nShearAngle;
                     nTan = -nTan;

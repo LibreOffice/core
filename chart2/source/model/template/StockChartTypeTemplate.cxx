@@ -438,11 +438,7 @@ sal_Bool SAL_CALL StockChartTypeTemplate::matchesTemplate(
                 break;
         }
 
-        if( xCandleStickChartType.is() &&
-            ( ( bHasVolume &&
-                xVolumeChartType.is() ) ||
-              ( ! bHasVolume &&
-                ! xVolumeChartType.is() )))
+        if (xCandleStickChartType.is() && bHasVolume == xVolumeChartType.is())
         {
             bResult = true;
 

@@ -147,8 +147,7 @@ void SAL_CALL OReadImagesDocumentHandler::endDocument()
 {
     SolarMutexGuard g;
 
-    if (( m_bImageContainerStartFound && !m_bImageContainerEndFound ) ||
-        ( !m_bImageContainerStartFound && m_bImageContainerEndFound )    )
+    if (m_bImageContainerStartFound != m_bImageContainerEndFound)
     {
         OUString aErrorMessage = getErrorLineString();
         aErrorMessage += "No matching start or end element 'image:imagecontainer' found!";
