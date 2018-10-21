@@ -1253,17 +1253,14 @@ sal_Int32 PDFWriterImpl::computeAccessPermissions( const vcl::PDFWriter::PDFEncr
     according to the table 3.15, pdf v 1.4 */
     sal_Int32 nAccessPermissions = 0xfffff0c0;
 
-    /* check permissions for 40 bit security case */
+    o_rKeyLength = SECUR_128BIT_KEY;
+    o_rRC4KeyLength = 16; // for this value see PDF spec v 1.4, algorithm 3.1 step 4, where n is 16,
+                          // thus maximum permitted value is 16
+
     nAccessPermissions |= ( i_rProperties.CanPrintTheDocument ) ?  1 << 2 : 0;
     nAccessPermissions |= ( i_rProperties.CanModifyTheContent ) ? 1 << 3 : 0;
     nAccessPermissions |= ( i_rProperties.CanCopyOrExtract ) ?   1 << 4 : 0;
     nAccessPermissions |= ( i_rProperties.CanAddOrModify ) ? 1 << 5 : 0;
-    o_rKeyLength = SECUR_40BIT_KEY;
-    o_rRC4KeyLength = SECUR_40BIT_KEY+5; // for this value see PDF spec v 1.4, algorithm 3.1 step 4, where n is 5
-
-    o_rKeyLength = SECUR_128BIT_KEY;
-    o_rRC4KeyLength = 16; // for this value see PDF spec v 1.4, algorithm 3.1 step 4, where n is 16, thus maximum
-    // permitted value is 16
     nAccessPermissions |= ( i_rProperties.CanFillInteractive ) ?         1 << 8 : 0;
     nAccessPermissions |= ( i_rProperties.CanExtractForAccessibility ) ? 1 << 9 : 0;
     nAccessPermissions |= ( i_rProperties.CanAssemble ) ?                1 << 10 : 0;
