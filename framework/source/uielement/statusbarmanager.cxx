@@ -370,9 +370,8 @@ void StatusBarManager::CreateControllers()
                 }
             }
 
-            if ( pController )
-                xController.set(static_cast< ::cppu::OWeakObject *>( pController ),
-                                uno::UNO_QUERY );
+            xController.set(static_cast< ::cppu::OWeakObject *>( pController ),
+                            uno::UNO_QUERY );
         }
 
         m_aControllerMap[nId] = xController;

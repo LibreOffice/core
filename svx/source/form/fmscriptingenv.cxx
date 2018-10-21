@@ -1044,10 +1044,7 @@ namespace svxform
             pScript.reset( new NewStyleUNOScript( *xObjectShell, sScriptURI ) );
         }
 
-        OSL_ENSURE( pScript.get(), "FormScriptingEnvironment::doFireScriptEvent: no script to execute!" );
-        if ( !pScript.get() )
-            // this is an internal error in the above code
-            throw RuntimeException();
+        assert(pScript && "FormScriptingEnvironment::doFireScriptEvent: no script to execute!");
 
         aGuard.clear();
         aSolarGuard.clear();
