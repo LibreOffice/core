@@ -215,8 +215,7 @@ std::shared_ptr<BitmapCache> PageCacheManager::GetCache (
     Recycle(pResult, pDocument,rPreviewSize);
 
     // Put the new (or old) cache into the container.
-    if (pResult != nullptr)
-        mpPageCaches->emplace(aKey, pResult);
+    mpPageCaches->emplace(aKey, pResult);
 
     return pResult;
 }
