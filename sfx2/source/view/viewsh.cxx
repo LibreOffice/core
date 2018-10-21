@@ -1474,7 +1474,7 @@ void SfxViewShell::registerLibreOfficeKitViewCallback(LibreOfficeKitCallback pCa
 
 void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) const
 {
-    if (comphelper::LibreOfficeKit::isTiledPainting())
+    if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledPainting())
         return;
 
     if (pImpl->m_bTiledSearching)
@@ -1493,6 +1493,11 @@ void SfxViewShell::libreOfficeKitViewCallback(int nType, const char* pPayload) c
 
     if (pImpl->m_pLibreOfficeKitViewCallback)
         pImpl->m_pLibreOfficeKitViewCallback(nType, pPayload, pImpl->m_pLibreOfficeKitViewData);
+    else
+        SAL_WARN(
+            "sfx.view",
+            "SfxViewShell::libreOfficeKitViewCallback no callback set! Dropped payload of type "
+                << nType << ": [" << pPayload << ']');
 }
 
 void SfxViewShell::afterCallbackRegistered()
