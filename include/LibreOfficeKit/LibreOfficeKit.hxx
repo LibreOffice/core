@@ -664,6 +664,20 @@ public:
         mpDoc->pClass->moveSelectedParts(mpDoc, nPosition, bDuplicate);
     }
 
+    /**
+     * Resize a window (dialog, popup, etc.) with give id.
+     *
+     * @param nWindowId
+     * @param width The width of the window.
+     * @param height The height of the window.
+     */
+    void resizeWindow(unsigned nWindowId,
+                      const int width,
+                      const int height)
+    {
+        return mpDoc->pClass->resizeWindow(mpDoc, nWindowId, width, height);
+    }
+
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
