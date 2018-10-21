@@ -2591,9 +2591,10 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             break;
         }
 
+        assert(xCell && "can only reach here with xCell set");
+
         // insert the cell into the current row
-        if( xCell )
-            maRowBfr.AppendCell( xCell, bIsMergedBase );
+        maRowBfr.AppendCell( xCell, bIsMergedBase );
 
         if ( !aAddNoteText.isEmpty()  )
             mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, nullptr, aAddNoteText ) );
@@ -2610,7 +2611,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                 ScRange aScRange( aScPos );
                 aScRange.aEnd.IncCol( rMergeItem.GetColMerge() - 1 );
                 aScRange.aEnd.IncRow( rMergeItem.GetRowMerge() - 1 );
-                sal_uInt32 nXFId = xCell ? xCell->GetFirstXFId() : EXC_XFID_NOTFOUND;
+                sal_uInt32 nXFId = xCell->GetFirstXFId();
                 // blank cells merged vertically may occur repeatedly
                 OSL_ENSURE( (aScRange.aStart.Col() == aScRange.aEnd.Col()) || (nScCol == nLastScCol),
                     "XclExpCellTable::XclExpCellTable - invalid repeated blank merged cell" );

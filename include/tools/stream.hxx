@@ -637,7 +637,7 @@ protected:
 
     /// AllocateMemory must update pBuf accordingly
     /// - pBuf: Address of new block
-    bool    AllocateMemory( std::size_t nSize );
+    void    AllocateMemory( std::size_t nSize );
 
     /// ReAllocateMemory must update the following variables:
     /// - pBuf: Address of new block
