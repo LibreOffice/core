@@ -477,7 +477,6 @@ bool compiledShaderBinariesWork()
          // vcl
          tryShaders("combinedVertexShader", "combinedFragmentShader") &&
          tryShaders("dumbVertexShader", "invert50FragmentShader") &&
-         tryShaders("combinedTextureVertexShader", "combinedTextureFragmentShader") &&
          tryShaders("textureVertexShader", "areaScaleFragmentShader") &&
          tryShaders("transformedTextureVertexShader", "maskedTextureFragmentShader") &&
          tryShaders("transformedTextureVertexShader", "areaScaleFastFragmentShader") &&
