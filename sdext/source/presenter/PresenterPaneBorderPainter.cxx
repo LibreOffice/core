@@ -69,7 +69,7 @@ namespace {
         awt::Rectangle RemoveBorder (
             const awt::Rectangle& rBox,
             drawing::framework::BorderType eBorderType) const;
-        Reference<rendering::XCanvasFont> const & GetFont (
+        Reference<rendering::XCanvasFont> GetFont (
             const Reference<rendering::XCanvas>& rxCanvas) const;
 
         SharedBitmapDescriptor mpTopLeft;
@@ -304,7 +304,7 @@ bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanva
         bModified = true;
     }
 
-    if (mpTheme != nullptr && bModified)
+    if (bModified)
     {
         if (mpRenderer == nullptr)
             mpRenderer.reset(new Renderer(mxContext, mpTheme));
@@ -872,12 +872,15 @@ awt::Rectangle RendererPaneStyle::RemoveBorder (
         rBox.Height - pBorderSize->mnTop - pBorderSize->mnBottom);
 }
 
-Reference<rendering::XCanvasFont> const & RendererPaneStyle::GetFont (
+Reference<rendering::XCanvasFont> RendererPaneStyle::GetFont (
     const Reference<rendering::XCanvas>& rxCanvas) const
 {
-    if (mpFont.get() != nullptr)
+    if (mpFont)
+    {
         mpFont->PrepareFont(rxCanvas);
-    return mpFont->mxFont;
+        return mpFont->mxFont;
+    }
+    return Reference<rendering::XCanvasFont>();
 }
 
 void RendererPaneStyle::UpdateBorderSizes()
