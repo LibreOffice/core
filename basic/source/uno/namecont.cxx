@@ -3355,15 +3355,12 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextUserScript
             m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
         }
 
-        if( m_pScriptSubPackageIterator != nullptr )
+        xScriptPackage = m_pScriptSubPackageIterator->getNextScriptSubPackage( rbPureDialogLib );
+        if( !xScriptPackage.is() )
         {
-            xScriptPackage = m_pScriptSubPackageIterator->getNextScriptSubPackage( rbPureDialogLib );
-            if( !xScriptPackage.is() )
-            {
-                delete m_pScriptSubPackageIterator;
-                m_pScriptSubPackageIterator = nullptr;
-                m_iUserPackage++;
-            }
+            delete m_pScriptSubPackageIterator;
+            m_pScriptSubPackageIterator = nullptr;
+            m_iUserPackage++;
         }
     }
 
@@ -3409,15 +3406,12 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScri
             m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
         }
 
-        if( m_pScriptSubPackageIterator != nullptr )
+        xScriptPackage = m_pScriptSubPackageIterator->getNextScriptSubPackage( rbPureDialogLib );
+        if( !xScriptPackage.is() )
         {
-            xScriptPackage = m_pScriptSubPackageIterator->getNextScriptSubPackage( rbPureDialogLib );
-            if( !xScriptPackage.is() )
-            {
-                delete m_pScriptSubPackageIterator;
-                m_pScriptSubPackageIterator = nullptr;
-                m_iSharedPackage++;
-            }
+            delete m_pScriptSubPackageIterator;
+            m_pScriptSubPackageIterator = nullptr;
+            m_iSharedPackage++;
         }
     }
 
@@ -3463,15 +3457,12 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextBundledScr
             m_pScriptSubPackageIterator = new ScriptSubPackageIterator( xPackage );
         }
 
-        if( m_pScriptSubPackageIterator != nullptr )
+        xScriptPackage = m_pScriptSubPackageIterator->getNextScriptSubPackage( rbPureDialogLib );
+        if( !xScriptPackage.is() )
         {
-            xScriptPackage = m_pScriptSubPackageIterator->getNextScriptSubPackage( rbPureDialogLib );
-            if( !xScriptPackage.is() )
-            {
-                delete m_pScriptSubPackageIterator;
-                m_pScriptSubPackageIterator = nullptr;
-                m_iBundledPackage++;
-            }
+            delete m_pScriptSubPackageIterator;
+            m_pScriptSubPackageIterator = nullptr;
+            m_iBundledPackage++;
         }
     }
 
