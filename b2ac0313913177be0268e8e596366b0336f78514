@@ -46,6 +46,30 @@
       "revId": "b2ac0313913177be0268e8e596366b0336f78514",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_a2bba00c",
+        "filename": "sax/source/tools/fastattribs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-21T09:30:19Z",
+      "side": 1,
+      "message": "Thanks!\n\nI assume that the object would get destroyed while unwinding stack. So the state is well-defined, in the sense that every resource that requires deallocation is properly pointed.",
+      "parentUuid": "1f1a1f67_02dc9472",
+      "range": {
+        "startLine": 95,
+        "startChar": 12,
+        "endLine": 95,
+        "endChar": 35
+      },
+      "revId": "b2ac0313913177be0268e8e596366b0336f78514",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
