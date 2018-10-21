@@ -577,11 +577,8 @@ DdeItem* DdeTopic::AddItem( const DdeItem& r )
     else
         s = new DdeItem( r );
 
-    if ( s )
-    {
-        aItems.push_back( s );
-        s->pMyTopic = this;
-    }
+    aItems.push_back( s );
+    s->pMyTopic = this;
     return s;
 }
 
@@ -770,9 +767,9 @@ short DdeItem::GetLinks()
     short nCnt = 0;
     if( pImpData )
     {
-        for( sal_uInt16 n = pImpData->size(); n; )
+        for (const auto& rData : *pImpData)
         {
-            nCnt = nCnt + (*pImpData)[ --n ].nCnt;
+            nCnt += rData.nCnt;
         }
     }
     return nCnt;
