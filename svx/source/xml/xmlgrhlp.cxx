@@ -331,7 +331,7 @@ Graphic SvXMLGraphicOutputStream::GetGraphic()
                     mpOStm->Seek( 0 );
                     aZCodec.Decompress( *mpOStm, *pDest );
 
-                    if (aZCodec.EndCompression() && pDest )
+                    if (aZCodec.EndCompression())
                     {
                         sal_uIntPtr nStreamLen_ = pDest->TellEnd();
                         if (nStreamLen_)
