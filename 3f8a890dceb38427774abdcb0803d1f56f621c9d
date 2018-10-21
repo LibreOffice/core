@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1f1a1f67_02737482",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 743,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2018-10-21T09:49:54Z",
+      "side": 1,
+      "message": "Sorry, I don\u0027t get the question. Clearing the sorted_vector stored in the unique_prt has nothing to do with clearing the unique_ptr?",
+      "parentUuid": "1f1a1f67_626468ba",
+      "revId": "3f8a890dceb38427774abdcb0803d1f56f621c9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1f1a1f67_42596cfc",
         "filename": "sw/source/uibase/utlui/content.cxx",
         "patchSetId": 3
