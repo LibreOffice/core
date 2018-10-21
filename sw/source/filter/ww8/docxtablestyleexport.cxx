@@ -14,6 +14,7 @@
 #include <oox/token/tokens.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <o3tl/make_unique.hxx>
+#include <sax/fastattribs.hxx>
 
 #include <boost/optional.hpp>
 

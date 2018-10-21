@@ -22,7 +22,6 @@
 
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 
@@ -31,7 +30,6 @@
 
 namespace com { namespace sun { namespace star { namespace xml { namespace sax {
 
-class XFastContextHandler;
 class XFastDocumentHandler;
 class XFastTokenHandler;
 

@@ -20,6 +20,7 @@
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
 #include <sax/tools/converter.hxx>
+#include <sax/fastattribs.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>

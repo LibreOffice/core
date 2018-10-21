@@ -20,11 +20,15 @@
 #ifndef INCLUDED_SAX_FSHELPER_HXX
 #define INCLUDED_SAX_FSHELPER_HXX
 
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <sax/fastattribs.hxx>
-#include <stdarg.h>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <sax/saxdllapi.h>
 #include <memory>
 #include <utility>
+
+namespace com { namespace sun { namespace star { namespace io { class XOutputStream; } } } }
+namespace sax_fastparser { class FastAttributeList; }
 
 #define FSNS(namespc, element) ((namespc << 16) | element)
 // Backwards compatibility for code that used FSEND to terminate the vararg.

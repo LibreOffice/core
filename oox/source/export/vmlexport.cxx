@@ -22,6 +22,7 @@
 #include <svl/itemset.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/vmlexport.hxx>
+#include <sax/fastattribs.hxx>
 
 #include <oox/token/tokens.hxx>
 

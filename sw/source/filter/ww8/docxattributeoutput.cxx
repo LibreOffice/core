@@ -145,6 +145,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 
 #include <algorithm>
+#include <stdarg.h>
 
 using ::editeng::SvxBorderLine;
 

@@ -29,6 +29,7 @@
 #include <editeng/brushitem.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/token/tokens.hxx>
+#include <sax/fastattribs.hxx>
 #include <document.hxx>
 #include <stlpool.hxx>
 #include <stlsheet.hxx>

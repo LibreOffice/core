@@ -33,6 +33,7 @@
 #include <oox/token/tokens.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <svtools/unitconv.hxx>
+#include <sax/fastattribs.hxx>
 
 #include <cstdio>
 #include <com/sun/star/awt/CharSet.hpp>

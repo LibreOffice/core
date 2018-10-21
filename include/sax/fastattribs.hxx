@@ -21,15 +21,15 @@
 #define INCLUDED_SAX_FASTATTRIBS_HXX
 
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>
-#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
-#include <com/sun/star/xml/Attribute.hpp>
-#include <com/sun/star/xml/FastAttribute.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <sax/saxdllapi.h>
 
-#include <map>
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace xml { namespace sax { class XFastTokenHandler; } } } } }
+namespace com { namespace sun { namespace star { namespace xml { struct Attribute; } } } }
+namespace com { namespace sun { namespace star { namespace xml { struct FastAttribute; } } } }
 
 namespace sax_fastparser
 {
