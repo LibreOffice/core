@@ -22,6 +22,30 @@
       "revId": "b2ac0313913177be0268e8e596366b0336f78514",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_02dc9472",
+        "filename": "sax/source/tools/fastattribs.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2018-10-21T08:54:19Z",
+      "side": 1,
+      "message": "throwing bad_alloc is generally ok\n\n(but does it leave *this in a good state? though the pushing to first maAttributeToken and then maAttributeValues arguably doesnt care about that either, so probably ok to just ignore that question)",
+      "parentUuid": "1f1a1f67_c7d90e23",
+      "range": {
+        "startLine": 95,
+        "startChar": 12,
+        "endLine": 95,
+        "endChar": 35
+      },
+      "revId": "b2ac0313913177be0268e8e596366b0336f78514",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
