@@ -1032,14 +1032,11 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                 SwHTMLTableLayoutColumn *pColumn = GetColumn( i );
                 if (pColumn->IsRelWidthOption() && pColumn->GetWidthOption() && nQuotMax)
                 {
-                    if( pColumn->GetWidthOption() )
-                    {
-                        pColumn->SetMax( pColumn->GetMax() / nQuotMax );
-                        OSL_ENSURE( pColumn->GetMax() >= pColumn->GetMin(),
-                                "Minimum width is one column bigger than maximum" );
-                        if( pColumn->GetMax() < pColumn->GetMin() )
-                            pColumn->SetMax( pColumn->GetMin() );
-                    }
+                    pColumn->SetMax( pColumn->GetMax() / nQuotMax );
+                    OSL_ENSURE( pColumn->GetMax() >= pColumn->GetMin(),
+                            "Minimum width is one column bigger than maximum" );
+                    if( pColumn->GetMax() < pColumn->GetMin() )
+                        pColumn->SetMax( pColumn->GetMin() );
                 }
                 m_nMax += pColumn->GetMax();
             }
