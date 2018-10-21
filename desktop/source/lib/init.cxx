@@ -2755,6 +2755,13 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
     if (SfxViewShell* pViewShell = SfxViewShell::Current())
     {
         pViewShell->registerLibreOfficeKitViewCallback(CallbackFlushHandler::callback, pDocument->mpCallbackFlushHandlers[nView].get());
+
+        // Sidebars start with ModifyPage, but at the time of creation
+        // we don't have LOK initialized yet, so we lose the messages.
+        // Here we are fully initialized and need to switch to
+        // something else and switch back to show the ModifyPage.
+        doc_postUnoCommand(pThis, ".uno:CustomAnimation", nullptr, false);
+        doc_postUnoCommand(pThis, ".uno:ModifyPage", nullptr, false);
     }
 }
 
