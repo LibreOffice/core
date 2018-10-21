@@ -356,19 +356,18 @@ void Menu::Select()
     ImplMenuDelData aDelData( this );
 
     ImplCallEventListeners( VclEventId::MenuSelect, GetItemPos( GetCurItemId() ) );
-    if ( !aDelData.isDeleted() && !aSelectHdl.Call( this ) )
-    {
-        if( !aDelData.isDeleted() )
-        {
-            Menu* pStartMenu = ImplGetStartMenu();
-            if ( pStartMenu && ( pStartMenu != this ) )
-            {
-                pStartMenu->nSelectedId = nSelectedId;
-                pStartMenu->sSelectedIdent = sSelectedIdent;
-                pStartMenu->aSelectHdl.Call( this );
-            }
-        }
-    }
+    if (aDelData.isDeleted())
+        return;
+    if (aSelectHdl.Call(this))
+        return;
+    if (aDelData.isDeleted())
+        return;
+    Menu* pStartMenu = ImplGetStartMenu();
+    if (!pStartMenu || (pStartMenu == this))
+        return;
+    pStartMenu->nSelectedId = nSelectedId;
+    pStartMenu->sSelectedIdent = sSelectedIdent;
+    pStartMenu->aSelectHdl.Call( this );
 }
 
 #if defined(MACOSX)
