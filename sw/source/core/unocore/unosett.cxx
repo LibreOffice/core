@@ -2091,7 +2091,7 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
     SwNumRule* pCreatedRule = nullptr;
     if(!pNumRule)
     {
-        if(!pNumRule && pDocShell)
+        if(pDocShell)
         {
             pDocRule = new SwNumRule(*pDocShell->GetDoc()->GetOutlineNumRule());
         }
