@@ -95,10 +95,6 @@ public:
 
     SdrLayerID    GetID() const                               { return nID; }
     void          SetModel(SdrModel* pNewModel)               { pModel=pNewModel; }
-    // A SdrLayer should be considered the standard Layer. It shall then set the
-    // appropriate country-specific name. SetName() sets the "StandardLayer" flag
-    // and if necessary returns "Userdefined".
-    void          SetStandardLayer();
 };
 
 #define SDRLAYER_MAXCOUNT 255
@@ -138,9 +134,6 @@ public:
 
     // New layer is created and inserted
     SdrLayer*          NewLayer(const OUString& rName, sal_uInt16 nPos=0xFFFF);
-
-    // New layer, name is retrieved from the resource
-    void               NewStandardLayer(sal_uInt16 nPos);
 
     // Iterate over all layers
     sal_uInt16         GetLayerCount() const                                         { return sal_uInt16(maLayers.size()); }
