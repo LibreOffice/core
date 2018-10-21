@@ -581,11 +581,6 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
 
     //1. ------ create an effect from the presets ------
     ::sd::CustomAnimationEffectPtr pEffect( new ::sd::CustomAnimationEffect( pPreset->create( GetPresetSubType() ) ) );
-    if( !pEffect.get() )
-    {
-        DBG_ASSERT(pEffect.get(),"no suitable effect found");
-        return;
-    }
 
     //2. ------ adapt the created effect ------
 

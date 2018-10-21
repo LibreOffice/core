@@ -345,8 +345,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         pContext = new SvXMLImportContext( GetImport() );
     }
 
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
+    assert(pContext);
 
     return pContext;
 }

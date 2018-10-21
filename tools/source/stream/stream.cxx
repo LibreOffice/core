@@ -1632,13 +1632,10 @@ SvMemoryStream::SvMemoryStream( std::size_t nInitSize, std::size_t nResizeOffset
     pBuf        = nullptr;
     if( nResize != 0 && nResize < 16 )
         nResize = 16;
-    if( nInitSize && !AllocateMemory( nInitSize ) )
-    {
-        SetError( SVSTREAM_OUTOFMEMORY );
-        nSize = 0;
-    }
+    if( nInitSize )
+        AllocateMemory( nInitSize );
     else
-        nSize = nInitSize;
+        nSize = 0;
     SetBufferSize( 64 );
 }
 
@@ -1801,10 +1798,9 @@ void SvMemoryStream::ResetError()
     SvStream::ClearError();
 }
 
-bool SvMemoryStream::AllocateMemory( std::size_t nNewSize )
+void SvMemoryStream::AllocateMemory( std::size_t nNewSize )
 {
     pBuf = new sal_uInt8[nNewSize];
-    return( pBuf != nullptr );
 }
 
 // (using Bozo algorithm)
@@ -1887,13 +1883,8 @@ void* SvMemoryStream::SwitchBuffer()
     ResetError();
 
     std::size_t nInitSize = 512;
-    if( !AllocateMemory(nInitSize) )
-    {
-        SetError( SVSTREAM_OUTOFMEMORY );
-        nSize = 0;
-    }
-    else
-        nSize = nInitSize;
+    AllocateMemory(nInitSize);
+    nSize = nInitSize;
 
     SetBufferSize( 64 );
     return pRetVal;
