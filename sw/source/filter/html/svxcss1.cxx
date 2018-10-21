@@ -3143,7 +3143,7 @@ static CSS1PropEntry const aCSS1PropFnTab[] =
     CSS1_PROP_ENTRY(width),
 };
 
-#ifdef DBG_UTIL
+#if !defined NDEBUG
 static bool CSS1PropEntryCompare( const CSS1PropEntry &lhs, const CSS1PropEntry &rhs)
 {
     return strcmp(lhs.pName, rhs.pName) < 0;
