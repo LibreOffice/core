@@ -943,11 +943,8 @@ long TextEngine::ImpGetXPos( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex
                 if ( ( pPortion->GetKind() == PORTIONKIND_TAB ) && ( (nTextPortion+1) < pParaPortion->GetTextPortions().size() ) )
                 {
                     TETextPortion* pNextPortion = pParaPortion->GetTextPortions()[ nTextPortion+1 ];
-                    if ( ( pNextPortion->GetKind() != PORTIONKIND_TAB ) && (
-                              ( !IsRightToLeft() && pNextPortion->IsRightToLeft() ) ||
-                              ( IsRightToLeft() && !pNextPortion->IsRightToLeft() ) ) )
+                    if (pNextPortion->GetKind() != PORTIONKIND_TAB && IsRightToLeft() != pNextPortion->IsRightToLeft())
                     {
-//                        nX += pNextPortion->GetWidth();
                         // End of the tab portion, use start of next for cursor pos
                         SAL_WARN_IF( bPreferPortionStart, "vcl", "ImpGetXPos: How can we get here!" );
                         nX = ImpGetXPos( nPara, pLine, nIndex, true );
@@ -962,8 +959,7 @@ long TextEngine::ImpGetXPos( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex
 
             long nPosInPortion = CalcTextWidth( nPara, nTextPortionStart, nIndex-nTextPortionStart );
 
-            if ( ( !IsRightToLeft() && !pPortion->IsRightToLeft() ) ||
-                 ( IsRightToLeft() && pPortion->IsRightToLeft() ) )
+            if (IsRightToLeft() == pPortion->IsRightToLeft())
             {
                 nX += nPosInPortion;
             }
@@ -975,9 +971,7 @@ long TextEngine::ImpGetXPos( sal_uInt32 nPara, TextLine* pLine, sal_Int32 nIndex
     }
     else // if ( nIndex == pLine->GetStart() )
     {
-        if ( ( pPortion->GetKind() != PORTIONKIND_TAB ) &&
-                ( ( !IsRightToLeft() && pPortion->IsRightToLeft() ) ||
-                ( IsRightToLeft() && !pPortion->IsRightToLeft() ) ) )
+        if (pPortion->GetKind() != PORTIONKIND_TAB && IsRightToLeft() != pPortion->IsRightToLeft())
         {
             nX += nPortionTextWidth;
         }

@@ -1056,7 +1056,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView const * pEditView, const 
 
         if ( !bPortionBoundary || ( nRTLLevel == nRTLLevelNextPortion ) )
         {
-            if ( ( bVisualToLeft && !(nRTLLevel%2) ) || ( !bVisualToLeft && (nRTLLevel%2) ) )
+            if (bVisualToLeft != (nRTLLevel%2))
             {
                 aPaM = CursorLeft( aPaM, nCharacterIteratorMode );
                 pEditView->pImpEditView->SetCursorBidiLevel( 1 );

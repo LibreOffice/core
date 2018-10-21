@@ -2596,11 +2596,8 @@ bool RadioButton::PreNotify( NotifyEvent& rNEvt )
             // trigger redraw if mouse over state has changed
             if( IsNativeControlSupported(ControlType::Radiobutton, ControlPart::Entire) )
             {
-                if( ( maMouseRect.IsInside( GetPointerPosPixel()) &&
-                     !maMouseRect.IsInside( GetLastPointerPosPixel()) ) ||
-                    ( maMouseRect.IsInside( GetLastPointerPosPixel()) &&
-                     !maMouseRect.IsInside( GetPointerPosPixel()) ) ||
-                     pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow() )
+                if (maMouseRect.IsInside(GetPointerPosPixel()) != maMouseRect.IsInside(GetLastPointerPosPixel()) ||
+                    pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow())
                 {
                     Invalidate( maStateRect );
                 }
@@ -3495,11 +3492,8 @@ bool CheckBox::PreNotify( NotifyEvent& rNEvt )
             // trigger redraw if mouse over state has changed
             if( IsNativeControlSupported(ControlType::Checkbox, ControlPart::Entire) )
             {
-                if( ( maMouseRect.IsInside( GetPointerPosPixel()) &&
-                     !maMouseRect.IsInside( GetLastPointerPosPixel()) ) ||
-                    ( maMouseRect.IsInside( GetLastPointerPosPixel()) &&
-                     !maMouseRect.IsInside( GetPointerPosPixel()) ) ||
-                    pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow() )
+                if (maMouseRect.IsInside(GetPointerPosPixel()) != maMouseRect.IsInside(GetLastPointerPosPixel()) ||
+                    pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow())
                 {
                     Invalidate( maStateRect );
                 }

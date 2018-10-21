@@ -86,9 +86,9 @@ std::unique_ptr<SfxItemSet> SwModule::CreateItemSet( sal_uInt16 nId )
             pAppView = nullptr;
         if(pAppView)
         {
-        // if Text then no WebView and vice versa
             bool bWebView = dynamic_cast<SwWebView*>( pAppView ) !=  nullptr;
-            if( (bWebView &&  !bTextDialog) ||(!bWebView &&  bTextDialog))
+            // if Text then no WebView and vice versa
+            if (bWebView != bTextDialog)
             {
                 aViewOpt = *pAppView->GetWrtShell().GetViewOptions();
             }
