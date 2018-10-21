@@ -1074,12 +1074,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     if ( xProv.is() )
                     {
                         URL aURL;
-                        switch(_nId)
-                        {
-                            case SID_OPENDOC:
-                                aURL.Complete = ".uno:Open";
-                                break;
-                        }
+                        aURL.Complete = ".uno:Open";
 
                         if ( m_xUrlTransformer.is() )
                             m_xUrlTransformer->parseStrict( aURL );
