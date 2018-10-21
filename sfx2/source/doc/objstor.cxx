@@ -1554,7 +1554,7 @@ bool SfxObjectShell::SaveTo_Impl
     if ( bOk )
     {
         // if ODF version of oasis format changes on saving the signature should not be preserved
-        if ( bOk && bTryToPreserveScriptSignature && bNoPreserveForOasis )
+        if ( bTryToPreserveScriptSignature && bNoPreserveForOasis )
             bTryToPreserveScriptSignature = ( SotStorage::GetVersion( rMedium.GetStorage() ) == SOFFICE_FILEFORMAT_60 );
 
         uno::Reference< security::XDocumentDigitalSignatures > xDDSigns;
