@@ -109,9 +109,7 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
                     pBackgroundPropertiesPtr->moFillType = XML_solidFill;
                     pBackgroundPropertiesPtr->maFillColor.setSrgbClr(0xFFFFFF);
                 }
-                if ( pBackgroundPropertiesPtr ) {
-                    pShape->getFillProperties().assignUsed( *pBackgroundPropertiesPtr );
-                }
+                pShape->getFillProperties().assignUsed( *pBackgroundPropertiesPtr );
             }
             pShape->setModelId(rAttribs.getString( XML_modelId ).get());
             return new PPTShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr, pShape );

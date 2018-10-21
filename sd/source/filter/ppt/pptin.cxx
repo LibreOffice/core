@@ -1232,54 +1232,52 @@ bool ImplSdPPTImport::Import()
                 pFrameView = new ::sd::FrameView( mpDoc );
                 rViews.push_back( std::unique_ptr<sd::FrameView>(pFrameView) );
             }
-            if ( pFrameView )
-            {
-                sal_uInt16  nSelectedPage = 0;
-                PageKind    ePageKind = PageKind::Standard;
-                EditMode    eEditMode = EditMode::Page;
 
-                switch ( aUserEditAtom.eLastViewType )
+            sal_uInt16  nSelectedPage = 0;
+            PageKind    ePageKind = PageKind::Standard;
+            EditMode    eEditMode = EditMode::Page;
+
+            switch ( aUserEditAtom.eLastViewType )
+            {
+                case PptViewTypeEnum::Outline:
                 {
-                    case PptViewTypeEnum::Outline:
-                    {
-                        SfxItemSet* pSet = mrMed.GetItemSet();
-                        if ( pSet )
-                            pSet->Put( SfxUInt16Item( SID_VIEW_ID, 3 ) );
-                    }
-                    break;
-                    case PptViewTypeEnum::SlideSorter:
-                    {
-                        SfxItemSet* pSet = mrMed.GetItemSet();
-                        if ( pSet )
-                            pSet->Put( SfxUInt16Item( SID_VIEW_ID, 2 ) );
-                    }
-                    break;
-                    case PptViewTypeEnum::TitleMaster:
-                        nSelectedPage = 1;
-                        SAL_FALLTHROUGH;
-                    case PptViewTypeEnum::SlideMaster:
-                    {
-                        ePageKind = PageKind::Standard;
-                        eEditMode = EditMode::MasterPage;
-                    }
-                    break;
-                    case PptViewTypeEnum::NotesMaster:
-                        eEditMode = EditMode::MasterPage;
-                        SAL_FALLTHROUGH;
-                    case PptViewTypeEnum::Notes:
-                        ePageKind = PageKind::Notes;
-                    break;
-                    case PptViewTypeEnum::Handout:
-                        ePageKind = PageKind::Handout;
-                    break;
-                    default :
-                    case PptViewTypeEnum::Slide:
-                    break;
+                    SfxItemSet* pSet = mrMed.GetItemSet();
+                    if ( pSet )
+                        pSet->Put( SfxUInt16Item( SID_VIEW_ID, 3 ) );
                 }
-                pFrameView->SetPageKind( ePageKind );
-                pFrameView->SetSelectedPage( nSelectedPage );
-                pFrameView->SetViewShEditMode( eEditMode );
+                break;
+                case PptViewTypeEnum::SlideSorter:
+                {
+                    SfxItemSet* pSet = mrMed.GetItemSet();
+                    if ( pSet )
+                        pSet->Put( SfxUInt16Item( SID_VIEW_ID, 2 ) );
+                }
+                break;
+                case PptViewTypeEnum::TitleMaster:
+                    nSelectedPage = 1;
+                    SAL_FALLTHROUGH;
+                case PptViewTypeEnum::SlideMaster:
+                {
+                    ePageKind = PageKind::Standard;
+                    eEditMode = EditMode::MasterPage;
+                }
+                break;
+                case PptViewTypeEnum::NotesMaster:
+                    eEditMode = EditMode::MasterPage;
+                    SAL_FALLTHROUGH;
+                case PptViewTypeEnum::Notes:
+                    ePageKind = PageKind::Notes;
+                break;
+                case PptViewTypeEnum::Handout:
+                    ePageKind = PageKind::Handout;
+                break;
+                default :
+                case PptViewTypeEnum::Slide:
+                break;
             }
+            pFrameView->SetPageKind( ePageKind );
+            pFrameView->SetSelectedPage( nSelectedPage );
+            pFrameView->SetViewShEditMode( eEditMode );
         }
         DffRecordHeader aCustomShowHeader;
         // read and set custom show

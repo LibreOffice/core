@@ -80,6 +80,7 @@ void DiscoveryService::setupSockets()
 #ifdef MACOSX
     // Bonjour for OSX
     zService = new OSXNetworkService();
+    zService->setup();
 #endif
 
 #if HAVE_FEATURE_AVAHI
@@ -89,14 +90,13 @@ void DiscoveryService::setupSockets()
     gethostname(hostname, 1023);
 
     zService = new AvahiNetworkService(hostname);
+    zService->setup();
 #endif
 
 #ifdef _WIN32
     zService = new WINNetworkService();
+    zService->setup();
 #endif
-
-    if (zService)
-        zService->setup();
 
     // Old implementation for backward compatibility matter
     mSocket = socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
