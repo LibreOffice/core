@@ -1899,62 +1899,61 @@ void SAL_CALL SwXTextField::attach(
         break;
         default: OSL_FAIL("What kind of type is that?");
     }
+
     if (!xField)
         throw uno::RuntimeException("no SwField created?");
-    if (xField)
+
+    xField->SetAutomaticLanguage(!m_pImpl->m_pProps->bBool4);
+    SwFormatField aFormat(*xField);
+
+    UnoActionContext aCont(pDoc);
+    if (aPam.HasMark() &&
+        m_pImpl->m_nServiceId != SwServiceType::FieldTypeAnnotation)
     {
-        xField->SetAutomaticLanguage(!m_pImpl->m_pProps->bBool4);
-        SwFormatField aFormat(*xField);
-
-        UnoActionContext aCont(pDoc);
-        if (aPam.HasMark() &&
-            m_pImpl->m_nServiceId != SwServiceType::FieldTypeAnnotation)
-        {
-            pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
-        }
-
-        SwXTextCursor const*const pTextCursor(dynamic_cast<SwXTextCursor*>(pCursor));
-        const bool bForceExpandHints(
-            pTextCursor
-            && pTextCursor->IsAtEndOfMeta() );
-        const SetAttrMode nInsertFlags =
-            bForceExpandHints
-            ? SetAttrMode::FORCEHINTEXPAND
-            : SetAttrMode::DEFAULT;
-
-        if (*aPam.GetPoint() != *aPam.GetMark() &&
-            m_pImpl->m_nServiceId == SwServiceType::FieldTypeAnnotation)
-        {
-            // Make sure we always insert the field at the end
-            SwPaM aEnd(*aPam.End(), *aPam.End());
-            pDoc->getIDocumentContentOperations().InsertPoolItem(aEnd, aFormat, nInsertFlags);
-        }
-        else
-            pDoc->getIDocumentContentOperations().InsertPoolItem(aPam, aFormat, nInsertFlags);
-
-        SwTextAttr* pTextAttr = aPam.GetNode().GetTextNode()->GetFieldTextAttrAt( aPam.GetPoint()->nContent.GetIndex()-1, true );
-
-        // What about updating the fields? (see fldmgr.cxx)
-        if (!pTextAttr)
-            throw uno::RuntimeException("no SwTextAttr inserted?");  // could theoretically happen, if paragraph is full
-
-        const SwFormatField& rField = pTextAttr->GetFormatField();
-        m_pImpl->m_pFormatField = &rField;
-
-        if ( pTextAttr->Which() == RES_TXTATR_ANNOTATION
-             && *aPam.GetPoint() != *aPam.GetMark() )
-        {
-            // create annotation mark
-            const SwPostItField* pPostItField = dynamic_cast< const SwPostItField* >(pTextAttr->GetFormatField().GetField());
-            OSL_ENSURE( pPostItField != nullptr, "<SwXTextField::attachToRange(..)> - annotation field missing!" );
-            if ( pPostItField != nullptr )
-            {
-                IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
-                pMarksAccess->makeAnnotationMark( aPam, pPostItField->GetName() );
-            }
-        }
-
+        pDoc->getIDocumentContentOperations().DeleteAndJoin(aPam);
     }
+
+    SwXTextCursor const*const pTextCursor(dynamic_cast<SwXTextCursor*>(pCursor));
+    const bool bForceExpandHints(
+        pTextCursor
+        && pTextCursor->IsAtEndOfMeta() );
+    const SetAttrMode nInsertFlags =
+        bForceExpandHints
+        ? SetAttrMode::FORCEHINTEXPAND
+        : SetAttrMode::DEFAULT;
+
+    if (*aPam.GetPoint() != *aPam.GetMark() &&
+        m_pImpl->m_nServiceId == SwServiceType::FieldTypeAnnotation)
+    {
+        // Make sure we always insert the field at the end
+        SwPaM aEnd(*aPam.End(), *aPam.End());
+        pDoc->getIDocumentContentOperations().InsertPoolItem(aEnd, aFormat, nInsertFlags);
+    }
+    else
+        pDoc->getIDocumentContentOperations().InsertPoolItem(aPam, aFormat, nInsertFlags);
+
+    SwTextAttr* pTextAttr = aPam.GetNode().GetTextNode()->GetFieldTextAttrAt( aPam.GetPoint()->nContent.GetIndex()-1, true );
+
+    // What about updating the fields? (see fldmgr.cxx)
+    if (!pTextAttr)
+        throw uno::RuntimeException("no SwTextAttr inserted?");  // could theoretically happen, if paragraph is full
+
+    const SwFormatField& rField = pTextAttr->GetFormatField();
+    m_pImpl->m_pFormatField = &rField;
+
+    if ( pTextAttr->Which() == RES_TXTATR_ANNOTATION
+         && *aPam.GetPoint() != *aPam.GetMark() )
+    {
+        // create annotation mark
+        const SwPostItField* pPostItField = dynamic_cast< const SwPostItField* >(pTextAttr->GetFormatField().GetField());
+        OSL_ENSURE( pPostItField != nullptr, "<SwXTextField::attachToRange(..)> - annotation field missing!" );
+        if ( pPostItField != nullptr )
+        {
+            IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
+            pMarksAccess->makeAnnotationMark( aPam, pPostItField->GetName() );
+        }
+    }
+
     xField.reset();
 
     assert(m_pImpl->m_pFormatField);

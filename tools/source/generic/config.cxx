@@ -410,21 +410,14 @@ static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uInt32& 
     if ( !nBufLen )
     {
         pWriteBuf = new sal_uInt8[nLineEndLen];
-        if ( pWriteBuf )
-        {
-            pWriteBuf[0] = aLineEndBuf[0];
-            if ( nLineEndLen == 2 )
-                pWriteBuf[1] = aLineEndBuf[1];
-            return pWriteBuf;
-        }
-        else
-            return nullptr;
+        pWriteBuf[0] = aLineEndBuf[0];
+        if ( nLineEndLen == 2 )
+            pWriteBuf[1] = aLineEndBuf[1];
+        return pWriteBuf;
     }
 
     // Allocate new write buffer (caller frees it)
     pWriteBuf = new sal_uInt8[nBufLen];
-    if ( !pWriteBuf )
-        return nullptr;
 
     // fill buffer
     pBuf = pWriteBuf;

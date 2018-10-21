@@ -295,13 +295,10 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     std::unique_ptr<GraphicObject> pGraphicObject;
     pGraphicObject.reset( new GraphicObject(aItem.GetGraphicObject()) );
 
-    if(pGraphicObject)
-    {
-        BitmapEx aBmpEx(pGraphicObject->GetGraphic().GetBitmapEx());
-        Size aTempBitmapSize = aBmpEx.GetSizePixel();
-        rBitmapSize = PixelToLogic( aTempBitmapSize, MapMode(MapUnit::Map100thMM));
-        CalculateBitmapPresetSize();
-    }
+    BitmapEx aBmpEx(pGraphicObject->GetGraphic().GetBitmapEx());
+    Size aTempBitmapSize = aBmpEx.GetSizePixel();
+    rBitmapSize = PixelToLogic( aTempBitmapSize, MapMode(MapUnit::Map100thMM));
+    CalculateBitmapPresetSize();
 
     bool bTiled = false; bool bStretched = false;
     if(rAttrs->GetItemState( XATTR_FILLBMP_TILE ) != SfxItemState::DONTCARE)
