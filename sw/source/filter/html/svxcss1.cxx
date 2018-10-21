@@ -3163,8 +3163,10 @@ void SvxCSS1Parser::ParseProperty( const OUString& rProperty,
 
     if( !bSortedPropFns )
     {
+#ifdef DBG_UTIL
         assert( std::is_sorted( std::begin(aCSS1PropFnTab), std::end(aCSS1PropFnTab),
                                 CSS1PropEntryCompare ) );
+#endif
         bSortedPropFns = true;
     }
 
