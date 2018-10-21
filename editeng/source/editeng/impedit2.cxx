@@ -1056,7 +1056,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView const * pEditView, const 
 
         if ( !bPortionBoundary || ( nRTLLevel == nRTLLevelNextPortion ) )
         {
-            if ( ( bVisualToLeft && !(nRTLLevel%2) ) || ( !bVisualToLeft && (nRTLLevel%2) ) )
+            if (bVisualToLeft != bool(nRTLLevel % 2))
             {
                 aPaM = CursorLeft( aPaM, nCharacterIteratorMode );
                 pEditView->pImpEditView->SetCursorBidiLevel( 1 );
@@ -2601,7 +2601,7 @@ EditPaM ImpEditEngine::InsertTextUserInput( const EditSelection& rCurSel,
             if (!pCTLOptions)
                 pCTLOptions.reset( new SvtCTLOptions );
 
-            if (_xISC.is() || pCTLOptions)
+            if (_xISC)
             {
                 const sal_Int32 nTmpPos = aPaM.GetIndex();
                 sal_Int16 nCheckMode = pCTLOptions->IsCTLSequenceCheckingRestricted() ?
