@@ -834,6 +834,11 @@ void DockingWindow::setPosSizePixel( long nX, long nY,
     {
         if (!mpFloatWin)
             Window::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
+        else
+        {
+            mpFloatWin->SetOutputSizePixel(Size(nWidth, nHeight));
+            mpFloatWin->SetPosPixel(Point(nX, nY));
+        }
     }
 
     if (::isLayoutEnabled(this))
