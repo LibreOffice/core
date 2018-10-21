@@ -2402,11 +2402,8 @@ void SdrCropHdl::CreateB2dIAObject()
                     }
 
                     // OVERLAYMANAGER
-                    if(pOverlayObject)
-                    {
-                        xManager->add(*pOverlayObject);
-                        maOverlayGroup.append(std::move(pOverlayObject));
-                    }
+                    xManager->add(*pOverlayObject);
+                    maOverlayGroup.append(std::move(pOverlayObject));
                 }
             }
         }

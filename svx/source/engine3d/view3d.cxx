@@ -764,17 +764,14 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
         }
 
         // Set attribute
-        if(p3DObj)
-        {
-            p3DObj->NbcSetLayer(pObj->GetLayer());
+        p3DObj->NbcSetLayer(pObj->GetLayer());
 
-            p3DObj->SetMergedItemSet(aSet);
+        p3DObj->SetMergedItemSet(aSet);
 
-            p3DObj->NbcSetStyleSheet(pObj->GetStyleSheet(), true);
+        p3DObj->NbcSetStyleSheet(pObj->GetStyleSheet(), true);
 
-            // Insert a new extrude object
-            pScene->InsertObject(p3DObj);
-        }
+        // Insert a new extrude object
+        pScene->InsertObject(p3DObj);
     }
 }
 
