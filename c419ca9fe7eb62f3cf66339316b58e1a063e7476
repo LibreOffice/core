@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_cd1a4d16",
+        "filename": "reportdesign/source/ui/dlg/Condition.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2018-10-21T19:08:54Z",
+      "side": 1,
+      "message": "Note that this toolbar is created from a .ui file, which also has the labels, so it makes sense to just use them instead (via ToolBox::GetItemText). Otherwise those .ui labels (which also handled by translators) will become unused, and probably should be removed.",
+      "revId": "c419ca9fe7eb62f3cf66339316b58e1a063e7476",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
