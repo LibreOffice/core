@@ -304,7 +304,7 @@ bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanva
         bModified = true;
     }
 
-    if (mpTheme != nullptr && bModified)
+    if (bModified)
     {
         if (mpRenderer == nullptr)
             mpRenderer.reset(new Renderer(mxContext, mpTheme));
@@ -875,9 +875,12 @@ awt::Rectangle RendererPaneStyle::RemoveBorder (
 Reference<rendering::XCanvasFont> const & RendererPaneStyle::GetFont (
     const Reference<rendering::XCanvas>& rxCanvas) const
 {
-    if (mpFont.get() != nullptr)
+    if (mpFont)
+    {
         mpFont->PrepareFont(rxCanvas);
-    return mpFont->mxFont;
+        return mpFont->mxFont;
+    }
+    return Reference<rendering::XCanvasFont>();
 }
 
 void RendererPaneStyle::UpdateBorderSizes()
