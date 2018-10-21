@@ -358,15 +358,12 @@ void Menu::Select()
     ImplCallEventListeners( VclEventId::MenuSelect, GetItemPos( GetCurItemId() ) );
     if ( !aDelData.isDeleted() && !aSelectHdl.Call( this ) )
     {
-        if( !aDelData.isDeleted() )
+        Menu* pStartMenu = ImplGetStartMenu();
+        if ( pStartMenu && ( pStartMenu != this ) )
         {
-            Menu* pStartMenu = ImplGetStartMenu();
-            if ( pStartMenu && ( pStartMenu != this ) )
-            {
-                pStartMenu->nSelectedId = nSelectedId;
-                pStartMenu->sSelectedIdent = sSelectedIdent;
-                pStartMenu->aSelectHdl.Call( this );
-            }
+            pStartMenu->nSelectedId = nSelectedId;
+            pStartMenu->sSelectedIdent = sSelectedIdent;
+            pStartMenu->aSelectHdl.Call( this );
         }
     }
 }
