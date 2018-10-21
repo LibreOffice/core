@@ -2079,15 +2079,12 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                                                 sal_uInt32 nToCopy, nBufSize;
                                                                 nToCopy = pHd->nRecLen;
                                                                 std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ 0x40000 ]); // 256KB Buffer
-                                                                if ( pBuf )
+                                                                while ( nToCopy )
                                                                 {
-                                                                    while ( nToCopy )
-                                                                    {
-                                                                        nBufSize = ( nToCopy >= 0x40000 ) ? 0x40000 : nToCopy;
-                                                                        rStCtrl.ReadBytes(pBuf.get(), nBufSize);
-                                                                        xOriginal->WriteBytes(pBuf.get(), nBufSize);
-                                                                        nToCopy -= nBufSize;
-                                                                    }
+                                                                    nBufSize = ( nToCopy >= 0x40000 ) ? 0x40000 : nToCopy;
+                                                                    rStCtrl.ReadBytes(pBuf.get(), nBufSize);
+                                                                    xOriginal->WriteBytes(pBuf.get(), nBufSize);
+                                                                    nToCopy -= nBufSize;
                                                                 }
                                                             }
                                                         }
@@ -2203,12 +2200,15 @@ bool SdrPowerPointImport::ReadFontCollection()
 
 PptSlidePersistList* SdrPowerPointImport::GetPageList(PptPageKind ePageKind) const
 {
-    if ( ePageKind == PPT_MASTERPAGE )
-        return m_pMasterPages.get();
-    if ( ePageKind == PPT_SLIDEPAGE )
-        return m_pSlidePages.get();
-    if ( ePageKind == PPT_NOTEPAGE )
-        return m_pNotePages.get();
+    switch (ePageKind)
+    {
+        case PPT_MASTERPAGE:
+            return m_pMasterPages.get();
+        case PPT_SLIDEPAGE:
+            return m_pSlidePages.get();
+        case PPT_NOTEPAGE:
+            return m_pNotePages.get();
+    }
     return nullptr;
 }
 
@@ -3723,10 +3723,8 @@ bool PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport const & rManag
     if ( rNumberFormat.GetNumberingType() != SVX_NUM_BITMAP )
         pParaObj->UpdateBulletRelSize( nBulletHeight );
     if ( nHardCount )
-        ImplGetNumberFormat( rManager, rNumberFormat );
-
-    if ( nHardCount )
     {
+        ImplGetNumberFormat( rManager, rNumberFormat );
         switch ( rNumberFormat.GetNumberingType() )
         {
             case SVX_NUM_CHARS_UPPER_LETTER :
@@ -5295,7 +5293,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                            bTextPropAtom, nExtParaPos, aStyleTextProp9, nExtParaFlags,
                            nBuBlip, nHasAnm, nAnmScheme );
 
-            aCharPropList.emplace_back( new PPTCharPropSet( aCharPropSet, 0 ) );
+            aCharPropList.push_back(o3tl::make_unique<PPTCharPropSet>(aCharPropSet, 0));
         }
     }
 
@@ -5356,7 +5354,8 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                         else if ( bEmptyParaPossible )
                             aCharPropSet.maString.clear();
                         if ( nLen || bEmptyParaPossible )
-                            aCharPropList.emplace_back( new PPTCharPropSet( aCharPropSet, nCurrentPara ) );
+                            aCharPropList.push_back(
+                                o3tl::make_unique<PPTCharPropSet>(aCharPropSet, nCurrentPara));
                         nCurrentPara++;
                         nLen++;
                         nCharReadCnt += nLen;
@@ -5369,7 +5368,8 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                         {
                             nLen = ( nCurrentSpecMarker & 0xffff ) - nCharReadCnt;
                             aCharPropSet.maString = aString.copy(nCharReadCnt, nLen);
-                            aCharPropList.emplace_back( new PPTCharPropSet( aCharPropSet, nCurrentPara ) );
+                            aCharPropList.push_back(
+                                o3tl::make_unique<PPTCharPropSet>(aCharPropSet, nCurrentPara));
                             nCharCount -= nLen;
                             nCharReadCnt += nLen;
                         }
@@ -5396,7 +5396,8 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, const DffRecordHeader& rTextHe
                             nStrLen = nMaxStrLen;
                         aCharPropSet.maString = aString.copy(nCharReadCnt, nStrLen);
                     }
-                    aCharPropList.emplace_back( new PPTCharPropSet( aCharPropSet, nCurrentPara ) );
+                    aCharPropList.push_back(
+                        o3tl::make_unique<PPTCharPropSet>(aCharPropSet, nCurrentPara));
                     nCharReadCnt += nCharCount;
                     bEmptyParaPossible = false;
                     break;
