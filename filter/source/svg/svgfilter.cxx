@@ -260,12 +260,6 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
                     new SdrGrafObj(
                         pTargetSdrPage->getSdrModelFromSdrPage(),
                         aGraphic));
-
-                if (!aNewSdrGrafObj)
-                {
-                    // could not create GraphicObject
-                    break;
-                }
             }
 
             // Evtl. adapt the GraphicPrefSize to target-MapMode of target-Model
