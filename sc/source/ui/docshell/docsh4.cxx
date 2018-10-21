@@ -776,84 +776,82 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     return ;
                 }
 
-                if ( pMed )     // now execute in earnest...
+                // now execute in earnest...
+                SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, pMed->GetName() );
+
+                // pOtherDocSh->DoClose() will be called explicitly later, but it is still more safe to use SfxObjectShellLock here
+                ScDocShell* pOtherDocSh = new ScDocShell;
+                SfxObjectShellLock aDocShTablesRef = pOtherDocSh;
+                pOtherDocSh->DoLoad( pMed );
+                ErrCode nErr = pOtherDocSh->GetErrorCode();
+                if (nErr)
+                    ErrorHandler::HandleError( nErr );          // also warnings
+
+                if ( !pOtherDocSh->GetError() )                 // only errors
                 {
-                    SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, pMed->GetName() );
-
-                    // pOtherDocSh->DoClose() will be called explicitly later, but it is still more safe to use SfxObjectShellLock here
-                    ScDocShell* pOtherDocSh = new ScDocShell;
-                    SfxObjectShellLock aDocShTablesRef = pOtherDocSh;
-                    pOtherDocSh->DoLoad( pMed );
-                    ErrCode nErr = pOtherDocSh->GetErrorCode();
-                    if (nErr)
-                        ErrorHandler::HandleError( nErr );          // also warnings
-
-                    if ( !pOtherDocSh->GetError() )                 // only errors
+                    bool bHadTrack = ( m_aDocument.GetChangeTrack() != nullptr );
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
+                    sal_uLong nStart = 0;
+                    if ( nSlot == SID_DOCUMENT_MERGE && pChangeTrack )
                     {
-                        bool bHadTrack = ( m_aDocument.GetChangeTrack() != nullptr );
-#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
-                        sal_uLong nStart = 0;
-                        if ( nSlot == SID_DOCUMENT_MERGE && pChangeTrack )
-                        {
-                            nStart = pChangeTrack->GetActionMax() + 1;
-                        }
-#endif
-                        if ( nSlot == SID_DOCUMENT_COMPARE )
-                            CompareDocument( pOtherDocSh->GetDocument() );
-                        else
-                            MergeDocument( pOtherDocSh->GetDocument() );
-
-                        //  show "accept changes" dialog
-                        //! get view for this document!
-                        if ( !IsDocShared() )
-                        {
-                            SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                            if ( pViewFrm )
-                            {
-                                pViewFrm->ShowChildWindow( ScAcceptChgDlgWrapper::GetChildWindowId() ); //@51669
-                            }
-                            if ( pBindings )
-                            {
-                                pBindings->Invalidate( FID_CHG_ACCEPT );
-                            }
-                        }
-
-                        rReq.SetReturnValue( SfxInt32Item( nSlot, 0 ) );        //! ???????
-                        rReq.Done();
-
-                        if (!bHadTrack)         //  newly turned on -> show as well
-                        {
-                            ScChangeViewSettings* pOldSet = m_aDocument.GetChangeViewSettings();
-                            if ( !pOldSet || !pOldSet->ShowChanges() )
-                            {
-                                ScChangeViewSettings aChangeViewSet;
-                                aChangeViewSet.SetShowChanges(true);
-                                m_aDocument.SetChangeViewSettings(aChangeViewSet);
-                            }
-                        }
-#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
-                        else if ( nSlot == SID_DOCUMENT_MERGE && IsDocShared() && pChangeTrack )
-                        {
-                            sal_uLong nEnd = pChangeTrack->GetActionMax();
-                            if ( nEnd >= nStart )
-                            {
-                                // only show changes from merged document
-                                ScChangeViewSettings aChangeViewSet;
-                                aChangeViewSet.SetShowChanges( true );
-                                aChangeViewSet.SetShowAccepted( true );
-                                aChangeViewSet.SetHasActionRange();
-                                aChangeViewSet.SetTheActionRange( nStart, nEnd );
-                                m_aDocument.SetChangeViewSettings( aChangeViewSet );
-
-                                // update view
-                                PostPaintExtras();
-                                PostPaintGridAll();
-                            }
-                        }
-#endif
+                        nStart = pChangeTrack->GetActionMax() + 1;
                     }
-                    pOtherDocSh->DoClose();     // delete happens with the Ref
+#endif
+                    if ( nSlot == SID_DOCUMENT_COMPARE )
+                        CompareDocument( pOtherDocSh->GetDocument() );
+                    else
+                        MergeDocument( pOtherDocSh->GetDocument() );
+
+                    //  show "accept changes" dialog
+                    //! get view for this document!
+                    if ( !IsDocShared() )
+                    {
+                        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+                        if ( pViewFrm )
+                        {
+                            pViewFrm->ShowChildWindow( ScAcceptChgDlgWrapper::GetChildWindowId() ); //@51669
+                        }
+                        if ( pBindings )
+                        {
+                            pBindings->Invalidate( FID_CHG_ACCEPT );
+                        }
+                    }
+
+                    rReq.SetReturnValue( SfxInt32Item( nSlot, 0 ) );        //! ???????
+                    rReq.Done();
+
+                    if (!bHadTrack)         //  newly turned on -> show as well
+                    {
+                        ScChangeViewSettings* pOldSet = m_aDocument.GetChangeViewSettings();
+                        if ( !pOldSet || !pOldSet->ShowChanges() )
+                        {
+                            ScChangeViewSettings aChangeViewSet;
+                            aChangeViewSet.SetShowChanges(true);
+                            m_aDocument.SetChangeViewSettings(aChangeViewSet);
+                        }
+                    }
+#if HAVE_FEATURE_MULTIUSER_ENVIRONMENT
+                    else if ( nSlot == SID_DOCUMENT_MERGE && IsDocShared() && pChangeTrack )
+                    {
+                        sal_uLong nEnd = pChangeTrack->GetActionMax();
+                        if ( nEnd >= nStart )
+                        {
+                            // only show changes from merged document
+                            ScChangeViewSettings aChangeViewSet;
+                            aChangeViewSet.SetShowChanges( true );
+                            aChangeViewSet.SetShowAccepted( true );
+                            aChangeViewSet.SetHasActionRange();
+                            aChangeViewSet.SetTheActionRange( nStart, nEnd );
+                            m_aDocument.SetChangeViewSettings( aChangeViewSet );
+
+                            // update view
+                            PostPaintExtras();
+                            PostPaintGridAll();
+                        }
+                    }
+#endif
                 }
+                pOtherDocSh->DoClose();     // delete happens with the Ref
             }
             break;
 
