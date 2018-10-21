@@ -740,10 +740,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         case ContentTypeId::POSTIT:
         {
             nMemberCount = 0;
-            if(!pMember)
-                pMember.reset( new SwContentArr );
-            else
-                pMember->clear();
+            pMember->clear();
             SwPostItMgr* aMgr = pWrtShell->GetView().GetPostItMgr();
             if (aMgr)
             {
@@ -772,10 +769,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         case ContentTypeId::DRAWOBJECT:
         {
             nMemberCount = 0;
-            if(!pMember)
-                pMember.reset( new SwContentArr );
-            else
-                pMember->clear();
+            pMember->clear();
 
             IDocumentDrawModelAccess& rIDDMA = pWrtShell->getIDocumentDrawModelAccess();
             SwDrawModel* pModel = rIDDMA.GetDrawModel();
@@ -2865,9 +2859,7 @@ void SwContentTree::KeyInput(const KeyEvent& rEvent)
                         const size_t nCount = pPage->GetObjCount();
                         bool hasObjectMarked = false;
 
-                        SdrObject* pObject = nullptr;
-                        pObject = GetDrawingObjectsByContent( pCnt );
-                        if( pObject )
+                        if (SdrObject* pObject = GetDrawingObjectsByContent(pCnt))
                         {
                             SdrPageView* pPV = pDrawView->GetSdrPageView/*GetPageViewPvNum*/(/*0*/);
                             if( pPV )
