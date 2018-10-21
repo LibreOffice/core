@@ -287,8 +287,7 @@ static uno::Reference<drawing::XShape> lcl_getShape(const uno::Reference<lang::X
         {
             Graphic aGraphic(xGraphic);
 
-            if ((bEmbedded  && aGraphic.getOriginURL().isEmpty()) ||
-                (!bEmbedded && !aGraphic.getOriginURL().isEmpty()))
+            if (bEmbedded == aGraphic.getOriginURL().isEmpty())
             {
                 xShape.set(xShapeProperties, uno::UNO_QUERY);
                 return xShape;

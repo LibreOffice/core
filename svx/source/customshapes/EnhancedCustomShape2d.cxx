@@ -1175,7 +1175,7 @@ bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Point& r
             if ( aGeoStat.nShearAngle )
             {
                 double nTan = aGeoStat.nTan;
-                if ((bFlipV&&!bFlipH )||(bFlipH&&!bFlipV))
+                if (bFlipV != bFlipH)
                     nTan = -nTan;
                 ShearPoint( rReturnPosition, Point( aLogicRect.GetWidth() / 2, aLogicRect.GetHeight() / 2 ), nTan );
             }
@@ -1220,7 +1220,7 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
             if ( aGeoStat.nShearAngle )
             {
                 double nTan = -aGeoStat.nTan;
-                if ((bFlipV&&!bFlipH )||(bFlipH&&!bFlipV))
+                if (bFlipV != bFlipH)
                     nTan = -nTan;
                 ShearPoint( aP, Point( aLogicRect.GetWidth() / 2, aLogicRect.GetHeight() / 2 ), nTan );
             }

@@ -1393,8 +1393,7 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
             {
                 const SwPosition& rPos = pContact->GetContentAnchor();
                 bool bInHdrFtr = GetDoc()->IsInHeaderFooter( rPos.nNode );
-                if ( ( IsHeaderFooterEdit() && !bInHdrFtr ) ||
-                     ( !IsHeaderFooterEdit() && bInHdrFtr ) )
+                if (IsHeaderFooterEdit() != bInHdrFtr)
                 {
                     bRet = false;
                 }

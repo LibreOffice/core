@@ -501,9 +501,7 @@ long SwTextFrame::SwitchVerticalToHorizontal( long nLimit ) const
 SwFrameSwapper::SwFrameSwapper( const SwTextFrame* pTextFrame, bool bSwapIfNotSwapped )
     : pFrame( pTextFrame ), bUndo( false )
 {
-    if ( pFrame->IsVertical() &&
-        ( (   bSwapIfNotSwapped && ! pFrame->IsSwapped() ) ||
-          ( ! bSwapIfNotSwapped && pFrame->IsSwapped() ) ) )
+    if (pFrame->IsVertical() && bSwapIfNotSwapped != pFrame->IsSwapped())
     {
         bUndo = true;
         const_cast<SwTextFrame*>(pFrame)->SwapWidthAndHeight();
