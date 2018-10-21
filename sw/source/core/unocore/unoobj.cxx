@@ -1848,6 +1848,14 @@ void SwUnoCursorHelper::SetPropertyValues(
         throw beans::PropertyVetoException(aPropertyVetoExMsg, static_cast<cppu::OWeakObject *>(nullptr));
 }
 
+namespace
+{
+    bool NotInRange(sal_uInt16 nWID, sal_uInt16 nStart, sal_uInt16 nEnd)
+    {
+        return nWID < nStart || nWID > nEnd;
+    }
+}
+
 uno::Sequence< beans::PropertyState >
 SwUnoCursorHelper::GetPropertyStates(
             SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
@@ -1889,10 +1897,8 @@ SwUnoCursorHelper::GetPropertyStates(
         }
         if (((SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION == eCaller)  ||
              (SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION_TOLERANT == eCaller)) &&
-            pEntry->nWID < FN_UNO_RANGE_BEGIN &&
-            pEntry->nWID > FN_UNO_RANGE_END  &&
-            pEntry->nWID < RES_CHRATR_BEGIN &&
-            pEntry->nWID > RES_TXTATR_END )
+            NotInRange(pEntry->nWID, FN_UNO_RANGE_BEGIN, FN_UNO_RANGE_END) &&
+            NotInRange(pEntry->nWID, RES_CHRATR_BEGIN, RES_TXTATR_END) )
         {
             pStates[i] = beans::PropertyState_DEFAULT_VALUE;
         }
