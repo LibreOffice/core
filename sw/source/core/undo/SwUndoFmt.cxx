@@ -46,7 +46,7 @@ void SwUndoFormatCreate::UndoImpl(::sw::UndoRedoContext &)
 {
     if (pNew)
     {
-        if (sNewName.isEmpty() && pNew)
+        if (sNewName.isEmpty())
             sNewName = pNew->GetName();
 
         if (!sNewName.isEmpty())
