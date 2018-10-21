@@ -626,8 +626,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
         mpDocSh->SetWaitCursor( false );
 
         std::unique_ptr<SfxProgress> pProgress(new SfxProgress( mpDocSh, SdResId(STR_CREATE_PAGES), nNewPages));
-        if( pProgress )
-            pProgress->SetState( 0, 100 );
+        pProgress->SetState( 0, 100 );
 
         nNewPages = 0;
 
@@ -659,8 +658,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
             if( Outliner::HasParaFlag( pSourcePara, ParaFlag::ISPAGE ) )
             {
                 nNewPages++;
-                if( pProgress )
-                    pProgress->SetState( nNewPages );
+                pProgress->SetState( nNewPages );
             }
 
             pSourcePara = pOutliner->GetParagraph( ++nPos );
