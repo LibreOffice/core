@@ -2040,11 +2040,8 @@ void EnhancedCustomShape2d::CreateSubPath(
                 aTempSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
             }
 
-            if(pObj)
-            {
-                pObj->SetMergedItemSet(aTempSet);
-                rObjectList.push_back(std::pair< SdrPathObj*, double >(pObj, dBrightness));
-            }
+            pObj->SetMergedItemSet(aTempSet);
+            rObjectList.push_back(std::pair< SdrPathObj*, double >(pObj, dBrightness));
         }
     }
 }

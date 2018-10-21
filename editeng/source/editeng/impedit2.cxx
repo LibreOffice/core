@@ -2601,7 +2601,7 @@ EditPaM ImpEditEngine::InsertTextUserInput( const EditSelection& rCurSel,
             if (!pCTLOptions)
                 pCTLOptions.reset( new SvtCTLOptions );
 
-            if (_xISC.is() || pCTLOptions)
+            if (_xISC.is())
             {
                 const sal_Int32 nTmpPos = aPaM.GetIndex();
                 sal_Int16 nCheckMode = pCTLOptions->IsCTLSequenceCheckingRestricted() ?

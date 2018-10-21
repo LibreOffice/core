@@ -1384,10 +1384,12 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
         }
     }
 
+    assert(pPor && "can only reach here with pPor existing");
+
     // Special portions containing numbers (footnote anchor, footnote number,
     // numbering) can be contained in a rotated portion, if the user
     // choose a rotated character attribute.
-    if ( pPor && ! pMulti )
+    if (!pMulti)
     {
         if ( pPor->IsFootnotePortion() )
         {
@@ -1458,8 +1460,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
         m_pCurr->SetAscent( pPor->GetAscent() );
     }
 
-    OSL_ENSURE( !pPor || pPor->Height(),
-            "SwTextFormatter::NewPortion: something went wrong");
+    OSL_ENSURE(pPor->Height(), "SwTextFormatter::NewPortion: something went wrong");
     if( pPor->IsPostItsPortion() && rInf.X() >= rInf.Width() && rInf.GetFly() )
     {
         delete pPor;

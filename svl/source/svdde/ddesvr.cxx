@@ -577,11 +577,8 @@ DdeItem* DdeTopic::AddItem( const DdeItem& r )
     else
         s = new DdeItem( r );
 
-    if ( s )
-    {
-        aItems.push_back( s );
-        s->pMyTopic = this;
-    }
+    aItems.push_back( s );
+    s->pMyTopic = this;
     return s;
 }
 

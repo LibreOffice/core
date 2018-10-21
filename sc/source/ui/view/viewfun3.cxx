@@ -245,21 +245,18 @@ bool ScViewFunc::CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList&
     }
 
     pDoc->CopyToClip( aClipParam, pClipDoc, &rMark, false, bIncludeObjects );
-    if ( pDoc && pClipDoc )
+    ScDrawLayer* pDrawLayer = pClipDoc->GetDrawLayer();
+    if ( pDrawLayer )
     {
-        ScDrawLayer* pDrawLayer = pClipDoc->GetDrawLayer();
-        if ( pDrawLayer )
+        ScClipParam& rClipDocClipParam = pClipDoc->GetClipParam();
+        ScRangeListVector& rRangesVector = rClipDocClipParam.maProtectedChartRangesVector;
+        SCTAB nTabCount = pClipDoc->GetTableCount();
+        for ( SCTAB nTab = 0; nTab < nTabCount; ++nTab )
         {
-            ScClipParam& rClipDocClipParam = pClipDoc->GetClipParam();
-            ScRangeListVector& rRangesVector = rClipDocClipParam.maProtectedChartRangesVector;
-            SCTAB nTabCount = pClipDoc->GetTableCount();
-            for ( SCTAB nTab = 0; nTab < nTabCount; ++nTab )
+            SdrPage* pPage = pDrawLayer->GetPage( static_cast< sal_uInt16 >( nTab ) );
+            if ( pPage )
             {
-                SdrPage* pPage = pDrawLayer->GetPage( static_cast< sal_uInt16 >( nTab ) );
-                if ( pPage )
-                {
-                    ScChartHelper::FillProtectedChartRangesVector( rRangesVector, pDoc, pPage );
-                }
+                ScChartHelper::FillProtectedChartRangesVector( rRangesVector, pDoc, pPage );
             }
         }
     }

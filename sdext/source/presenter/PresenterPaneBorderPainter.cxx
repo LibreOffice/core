@@ -304,7 +304,7 @@ bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanva
         bModified = true;
     }
 
-    if (mpTheme != nullptr && bModified)
+    if (bModified)
     {
         if (mpRenderer == nullptr)
             mpRenderer.reset(new Renderer(mxContext, mpTheme));
