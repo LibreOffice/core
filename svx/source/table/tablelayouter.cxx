@@ -735,7 +735,7 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
                 else
                 {
                     bool bCellHasText = xCell->hasText();
-                    if ( (!bRowHasText && !bCellHasText) || ( bRowHasText && bCellHasText ) )
+                    if (bRowHasText == bCellHasText)
                     {
                         nMinHeight = std::max( nMinHeight, xCell->getMinimumHeight() );
                     }

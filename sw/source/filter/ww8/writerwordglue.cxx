@@ -433,8 +433,7 @@ namespace sw
         {
             // Check top only if both object have a header or if
             // both object don't have a header
-            if ( (  HasHeader() &&  rOther.HasHeader() ) ||
-                 ( !HasHeader() && !rOther.HasHeader() ) )
+            if (HasHeader() == rOther.HasHeader())
             {
                 if (dyaTop != rOther.dyaTop)
                     return false;
@@ -442,8 +441,7 @@ namespace sw
 
             // Check bottom only if both object have a footer or if
             // both object don't have a footer
-            if ( (  HasFooter() &&  rOther.HasFooter() ) ||
-                 ( !HasFooter() && !rOther.HasFooter() ) )
+            if (HasFooter() == rOther.HasFooter())
             {
                 if (dyaBottom != rOther.dyaBottom)
                     return false;

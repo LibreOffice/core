@@ -955,8 +955,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     if( eState != SfxItemState::DONTCARE )
     {
         bool bOn = rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_1).GetValue();
-        if( ( bOn && !GetUILightState(*m_pBtnLight1)) ||
-            ( !bOn && GetUILightState(*m_pBtnLight1)) )
+        if (bOn != GetUILightState(*m_pBtnLight1))
         {
             SetUILightState(*m_pBtnLight1, bOn);
             bUpdate = true;
@@ -1004,8 +1003,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     if( eState != SfxItemState::DONTCARE )
     {
         bool bOn = rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_2).GetValue();
-        if( ( bOn && !GetUILightState(*m_pBtnLight2)) ||
-            ( !bOn && GetUILightState(*m_pBtnLight2)) )
+        if (bOn != GetUILightState(*m_pBtnLight2))
         {
             SetUILightState(*m_pBtnLight2, bOn);
             bUpdate = true;
@@ -1053,8 +1051,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     if( eState != SfxItemState::DONTCARE )
     {
         bool bOn = rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_3).GetValue();
-        if( ( bOn && !GetUILightState(*m_pBtnLight3)) ||
-            ( !bOn && GetUILightState(*m_pBtnLight3)) )
+        if (bOn != GetUILightState(*m_pBtnLight3))
         {
             SetUILightState(*m_pBtnLight3, bOn);
             bUpdate = true;
@@ -1102,8 +1099,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     if( eState != SfxItemState::DONTCARE )
     {
         bool bOn = rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_4).GetValue();
-        if( ( bOn && !GetUILightState(*m_pBtnLight4)) ||
-            ( !bOn && GetUILightState(*m_pBtnLight4)) )
+        if (bOn != GetUILightState(*m_pBtnLight4))
         {
             SetUILightState(*m_pBtnLight4, bOn);
             bUpdate = true;
@@ -1151,8 +1147,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     if( eState != SfxItemState::DONTCARE )
     {
         bool bOn = rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_5).GetValue();
-        if( ( bOn && !GetUILightState(*m_pBtnLight5)) ||
-            ( !bOn && GetUILightState(*m_pBtnLight5)) )
+        if (bOn != GetUILightState(*m_pBtnLight5))
         {
             SetUILightState(*m_pBtnLight5, bOn);
             bUpdate = true;
@@ -1200,8 +1195,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     if( eState != SfxItemState::DONTCARE )
     {
         bool bOn = rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_6).GetValue();
-        if( ( bOn && !GetUILightState(*m_pBtnLight6)) ||
-            ( !bOn && GetUILightState(*m_pBtnLight6)) )
+        if (bOn != GetUILightState(*m_pBtnLight6))
         {
             SetUILightState(*m_pBtnLight6, bOn);
             bUpdate = true;
@@ -1249,8 +1243,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     if( eState != SfxItemState::DONTCARE )
     {
         bool bOn = rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_7).GetValue();
-        if( ( bOn && !GetUILightState(*m_pBtnLight7)) ||
-            ( !bOn && GetUILightState(*m_pBtnLight7)) )
+        if (bOn != GetUILightState(*m_pBtnLight7))
         {
             SetUILightState(*m_pBtnLight7 , bOn);
             bUpdate = true;
@@ -1298,8 +1291,7 @@ void Svx3DWin::Update( SfxItemSet const & rAttrs )
     if( eState != SfxItemState::DONTCARE )
     {
         bool bOn = rAttrs.Get(SDRATTR_3DSCENE_LIGHTON_8).GetValue();
-        if( ( bOn && !GetUILightState(*m_pBtnLight8)) ||
-            ( !bOn && GetUILightState(*m_pBtnLight8)) )
+        if (bOn != GetUILightState(*m_pBtnLight8))
         {
             SetUILightState(*m_pBtnLight8, bOn);
             bUpdate = true;
