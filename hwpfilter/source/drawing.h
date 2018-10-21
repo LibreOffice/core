@@ -374,16 +374,13 @@ static HWPDrawingObject *LoadDrawingObject(void)
 // drawing object can be list.
 // hdo = current item, head = list;
 
-    if (hdo != nullptr)
+    if (hdo->type < 0 || hdo->type >= HWPDO_NITEMS)
     {
-        if (hdo->type < 0 || hdo->type >= HWPDO_NITEMS)
-        {
-            hdo->type = HWPDO_RECT;
-        }
-
-        HWPDOFunc(hdo, OBJFUNC_FREE, nullptr, 0);
-        delete hdo;
+        hdo->type = HWPDO_RECT;
     }
+    HWPDOFunc(hdo, OBJFUNC_FREE, nullptr, 0);
+    delete hdo;
+
     if( prev )
     {
         prev->next = nullptr;
