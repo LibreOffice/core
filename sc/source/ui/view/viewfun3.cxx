@@ -245,21 +245,17 @@ bool ScViewFunc::CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList&
     }
 
     pDoc->CopyToClip( aClipParam, pClipDoc, &rMark, false, bIncludeObjects );
-    if ( pDoc && pClipDoc )
+    if (ScDrawLayer* pDrawLayer = pClipDoc->GetDrawLayer())
     {
-        ScDrawLayer* pDrawLayer = pClipDoc->GetDrawLayer();
-        if ( pDrawLayer )
+        ScClipParam& rClipDocClipParam = pClipDoc->GetClipParam();
+        ScRangeListVector& rRangesVector = rClipDocClipParam.maProtectedChartRangesVector;
+        SCTAB nTabCount = pClipDoc->GetTableCount();
+        for ( SCTAB nTab = 0; nTab < nTabCount; ++nTab )
         {
-            ScClipParam& rClipDocClipParam = pClipDoc->GetClipParam();
-            ScRangeListVector& rRangesVector = rClipDocClipParam.maProtectedChartRangesVector;
-            SCTAB nTabCount = pClipDoc->GetTableCount();
-            for ( SCTAB nTab = 0; nTab < nTabCount; ++nTab )
+            SdrPage* pPage = pDrawLayer->GetPage( static_cast< sal_uInt16 >( nTab ) );
+            if ( pPage )
             {
-                SdrPage* pPage = pDrawLayer->GetPage( static_cast< sal_uInt16 >( nTab ) );
-                if ( pPage )
-                {
-                    ScChartHelper::FillProtectedChartRangesVector( rRangesVector, pDoc, pPage );
-                }
+                ScChartHelper::FillProtectedChartRangesVector( rRangesVector, pDoc, pPage );
             }
         }
     }
@@ -1219,9 +1215,9 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
             SCROW nRow2 = -1;
             while ( ( pPattern = aIter.GetNext( nCol, nRow1, nRow2 ) ) != nullptr )
             {
-                const ScMergeAttr* pMergeFlag = &pPattern->GetItem(ATTR_MERGE);
-                const ScMergeFlagAttr* pMergeFlagAttr = &pPattern->GetItem(ATTR_MERGE_FLAG);
-                if( ( pMergeFlag && pMergeFlag->IsMerged() ) || ( pMergeFlagAttr && pMergeFlagAttr->IsOverlapped() ) )
+                const ScMergeAttr& rMergeFlag = pPattern->GetItem(ATTR_MERGE);
+                const ScMergeFlagAttr& rMergeFlagAttr = pPattern->GetItem(ATTR_MERGE_FLAG);
+                if (rMergeFlag.IsMerged() || rMergeFlagAttr.IsOverlapped())
                 {
                     ScRange aRange(nCol, nRow1, nStartTab);
                     pDoc->ExtendOverlapped(aRange);
