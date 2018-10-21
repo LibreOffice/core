@@ -1387,7 +1387,7 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
     // Special portions containing numbers (footnote anchor, footnote number,
     // numbering) can be contained in a rotated portion, if the user
     // choose a rotated character attribute.
-    if ( pPor && ! pMulti )
+    if (!pMulti)
     {
         if ( pPor->IsFootnotePortion() )
         {
