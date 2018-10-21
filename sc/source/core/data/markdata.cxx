@@ -500,7 +500,7 @@ std::vector<sc::ColRowSpan> ScMarkData::GetMarkedColSpans() const
             while(false);
 
             // Merge marked.
-            itPos = aSpans.insert(itPos, aMarkRange.aStart.Col(), aMarkRange.aEnd.Col()+1, true).first;
+            aSpans.insert(itPos, aMarkRange.aStart.Col(), aMarkRange.aEnd.Col()+1, true);
 
             return sc::toSpanArray<SCCOLROW,sc::ColRowSpan>(aSpans);
         }
