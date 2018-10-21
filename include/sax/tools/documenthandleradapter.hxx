@@ -11,7 +11,6 @@
 #ifndef INCLUDED_SAX_TOOLS_DOCUMENTHANDLERADAPTER_HXX
 #define INCLUDED_SAX_TOOLS_DOCUMENTHANDLERADAPTER_HXX
 
-#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 

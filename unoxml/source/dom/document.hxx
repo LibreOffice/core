@@ -22,6 +22,7 @@
 
 #include <set>
 #include <memory>
+#include <map>
 
 #include <libxml/tree.h>
 

@@ -262,3 +262,14 @@ blacklist:
     - com/sun/star/io/XOutputStream.hpp
     - com/sun/star/io/XStream.hpp
     - com/sun/star/io/XTruncate.hpp
+    include/sax/fshelper.hxx:
+    # base class has to be a complete type
+    - com/sun/star/xml/sax/XFastAttributeList.hpp
+    include/sax/fastattribs.hxx:
+    # base class has to be a complete type
+    - com/sun/star/xml/sax/XFastAttributeList.hpp
+    include/sax/fastparser.hxx:
+    # base class has to be a complete type
+    - com/sun/star/lang/XInitialization.hpp
+    - com/sun/star/lang/XServiceInfo.hpp
+    - com/sun/star/xml/sax/XFastParser.hpp

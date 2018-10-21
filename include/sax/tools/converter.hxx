@@ -25,7 +25,6 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <tools/color.hxx>
 
@@ -38,8 +37,6 @@ namespace com { namespace sun { namespace star {
     namespace util {
         struct Date;
         struct DateTime;
-        struct DateWithTimezone;
-        struct DateTimeWithTimezone;
         struct Duration;
     }
 } } }
