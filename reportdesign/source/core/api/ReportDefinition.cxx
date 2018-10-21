@@ -590,7 +590,7 @@ void OReportDefinition::init()
         m_pImpl->m_pReportModel->GetItemPool().FreezeIdRanges();
         m_pImpl->m_pReportModel->SetScaleUnit( MapUnit::Map100thMM );
         SdrLayerAdmin& rAdmin = m_pImpl->m_pReportModel->GetLayerAdmin();
-        rAdmin.NewStandardLayer(sal_uInt8(RPT_LAYER_FRONT));
+        rAdmin.NewLayer("front", sal_uInt8(RPT_LAYER_FRONT));
         rAdmin.NewLayer("back", sal_uInt8(RPT_LAYER_BACK));
         rAdmin.NewLayer("HiddenLayer", sal_uInt8(RPT_LAYER_HIDDEN));
 

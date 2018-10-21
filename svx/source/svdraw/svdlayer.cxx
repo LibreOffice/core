@@ -76,17 +76,6 @@ SdrLayer::SdrLayer(SdrLayerID nNewID, const OUString& rNewName) :
     mbLockedODF = false;
 }
 
-void SdrLayer::SetStandardLayer()
-{
-    mbUserDefinedLayer=false;
-    maName = SvxResId(STR_StandardLayerName);
-    if (pModel!=nullptr) {
-        SdrHint aHint(SdrHintKind::LayerChange);
-        pModel->Broadcast(aHint);
-        pModel->SetChanged();
-    }
-}
-
 void SdrLayer::SetName(const OUString& rNewName)
 {
     if (rNewName == maName)
@@ -199,19 +188,6 @@ SdrLayer* SdrLayerAdmin::NewLayer(const OUString& rName, sal_uInt16 nPos)
         maLayers.insert(maLayers.begin() + nPos, std::unique_ptr<SdrLayer>(pLay));
     Broadcast();
     return pLay;
-}
-
-void SdrLayerAdmin::NewStandardLayer(sal_uInt16 nPos)
-{
-    SdrLayerID nID=GetUniqueLayerID();
-    SdrLayer* pLay=new SdrLayer(nID,OUString());
-    pLay->SetStandardLayer();
-    pLay->SetModel(pModel);
-    if(nPos==0xFFFF)
-        maLayers.push_back(std::unique_ptr<SdrLayer>(pLay));
-    else
-        maLayers.insert(maLayers.begin() + nPos, std::unique_ptr<SdrLayer>(pLay));
-    Broadcast();
 }
 
 sal_uInt16 SdrLayerAdmin::GetLayerPos(SdrLayer* pLayer) const
