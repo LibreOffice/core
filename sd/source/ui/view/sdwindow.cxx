@@ -886,8 +886,7 @@ sal_Int8 Window::AcceptDrop( const AcceptDropEvent& rEvt )
 
     if( mpViewShell && !mpViewShell->GetDocSh()->IsReadOnly() )
     {
-        if( mpViewShell )
-            nRet = mpViewShell->AcceptDrop( rEvt, *this, this, SDRPAGE_NOTFOUND, SDRLAYER_NOTFOUND );
+        nRet = mpViewShell->AcceptDrop( rEvt, *this, this, SDRPAGE_NOTFOUND, SDRLAYER_NOTFOUND );
 
         if (mbUseDropScroll && dynamic_cast< OutlineViewShell *>( mpViewShell ) ==  nullptr)
             DropScroll( rEvt.maPosPixel );
