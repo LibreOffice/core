@@ -841,6 +841,9 @@ static int doc_getSignatureState(LibreOfficeKitDocument* pThis);
 
 static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOutput);
 
+static void doc_resizeWindow(LibreOfficeKitDocument* pThis, unsigned nLOKWindowId,
+                             const int nWidth, const int nHeight);
+
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
     : mxComponent(xComponent)
 {
@@ -899,6 +902,7 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
         m_pDocumentClass->paintWindow = doc_paintWindow;
         m_pDocumentClass->paintWindowDPI = doc_paintWindowDPI;
         m_pDocumentClass->postWindow = doc_postWindow;
+        m_pDocumentClass->resizeWindow = doc_resizeWindow;
 
         m_pDocumentClass->setViewLanguage = doc_setViewLanguage;
 
@@ -4583,6 +4587,23 @@ static int doc_getSignatureState(LibreOfficeKitDocument* pThis)
     pObjectShell->RecheckSignature(false);
 
     return int(pObjectShell->GetDocumentSignatureState());
+}
+
+static void doc_resizeWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindowId,
+                             const int nWidth, const int nHeight)
+{
+    SolarMutexGuard aGuard;
+    if (gImpl)
+        gImpl->maLastExceptionMsg.clear();
+
+    VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
+    if (!pWindow)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support dialog resizing, or window not found.";
+        return;
+    }
+
+    pWindow->SetSizePixel(Size(nWidth, nHeight));
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)
