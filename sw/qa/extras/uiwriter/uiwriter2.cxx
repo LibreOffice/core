@@ -31,6 +31,7 @@ class SwUiWriterTest2 : public SwModelTestBase
 {
 public:
     void testRedlineMoveInsertInDelete();
+    void testRedlineInHiddenSection();
     void testTdf101534();
     void testTdf54819();
     void testTdf108687_tabstop();
@@ -39,6 +40,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest2);
     CPPUNIT_TEST(testRedlineMoveInsertInDelete);
+    CPPUNIT_TEST(testRedlineInHiddenSection);
     CPPUNIT_TEST(testTdf101534);
     CPPUNIT_TEST(testTdf54819);
     CPPUNIT_TEST(testTdf108687_tabstop);
@@ -123,6 +125,64 @@ void SwUiWriterTest2::testRedlineMoveInsertInDelete()
     CPPUNIT_ASSERT_EQUAL(
         OUString(u"\u0001 foo"),
         pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+}
+
+void SwUiWriterTest2::testRedlineInHiddenSection()
+{
+    loadURL("private:factory/swriter", nullptr);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwWrtShell* const pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("foo");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("bar");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("baz");
+
+    RedlineFlags const mode(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
+    CPPUNIT_ASSERT(mode & (RedlineFlags::ShowDelete | RedlineFlags::ShowInsert));
+    pWrtShell->SetRedlineFlags(mode);
+
+    // delete paragraph "bar"
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 8, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    pWrtShell->StartOfSection();
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->EndOfSection(true);
+
+    SwSectionData section(CONTENT_SECTION, pWrtShell->GetUniqueSectionName());
+    section.SetHidden(true);
+    SwSection const* pSection = pWrtShell->InsertSection(section, nullptr);
+
+    SwSectionNode const* pNode = pSection->GetFormat()->GetSectionNode();
+
+    CPPUNIT_ASSERT(
+        !pNode->GetNodes()[pNode->GetIndex() + 1]->GetTextNode()->getLayoutFrame(nullptr));
+    CPPUNIT_ASSERT(
+        !pNode->GetNodes()[pNode->GetIndex() + 2]->GetTextNode()->getLayoutFrame(nullptr));
+    CPPUNIT_ASSERT(
+        !pNode->GetNodes()[pNode->GetIndex() + 3]->GetTextNode()->getLayoutFrame(nullptr));
+    CPPUNIT_ASSERT(pNode->GetNodes()[pNode->GetIndex() + 4]->IsEndNode());
+
+    pWrtShell->SetRedlineFlags(mode & ~RedlineFlags::ShowDelete); // hide
+
+    CPPUNIT_ASSERT(
+        !pNode->GetNodes()[pNode->GetIndex() + 1]->GetTextNode()->getLayoutFrame(nullptr));
+    CPPUNIT_ASSERT(pNode->GetNodes()[pNode->GetIndex() + 2]->IsEndNode());
+
+    pWrtShell->SetRedlineFlags(mode); // show again
+
+    CPPUNIT_ASSERT(
+        !pNode->GetNodes()[pNode->GetIndex() + 1]->GetTextNode()->getLayoutFrame(nullptr));
+    // there was a frame created here
+    CPPUNIT_ASSERT(
+        !pNode->GetNodes()[pNode->GetIndex() + 2]->GetTextNode()->getLayoutFrame(nullptr));
+    CPPUNIT_ASSERT(
+        !pNode->GetNodes()[pNode->GetIndex() + 3]->GetTextNode()->getLayoutFrame(nullptr));
+    CPPUNIT_ASSERT(pNode->GetNodes()[pNode->GetIndex() + 4]->IsEndNode());
 }
 
 void SwUiWriterTest2::testTdf54819()
