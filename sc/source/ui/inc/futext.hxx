@@ -22,8 +22,6 @@
 
 #include "fuconstr.hxx"
 
-class SdrObject;
-class SdrTextObj;
 class SdrOutliner;
 
 /** Base class for Text functions */

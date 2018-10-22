@@ -24,10 +24,7 @@
 #include "viewutil.hxx"
 #include "viewdata.hxx"
 #include "cbutton.hxx"
-#include <o3tl/deleter.hxx>
-#include <svx/sdr/overlay/overlayobject.hxx>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <memory>
 #include <vector>
@@ -39,6 +36,9 @@ namespace editeng {
 namespace sc {
     struct SpellCheckContext;
 }
+
+namespace sdr { namespace overlay { class OverlayManager; } }
+namespace o3tl { template <typename T> struct default_delete; }
 
 class FmFormView;
 struct ScTableInfo;

@@ -29,12 +29,11 @@
 #include <queryparam.hxx>
 #include <array>
 #include <memory>
-#include <vector>
 
 class ScViewData;
 class ScDocument;
 class ScQueryItem;
-class ScTypedStrData;
+class SfxItemSet;
 struct ScFilterEntries;
 
 class ScPivotFilterDlg : public ModalDialog

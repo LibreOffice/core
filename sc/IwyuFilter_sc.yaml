@@ -462,6 +462,9 @@ blacklist:
     sc/source/ui/inc/ExponentialSmoothingDialog.hxx:
     # base class has to be a complete type
     - viewdata.hxx
+    sc/source/ui/inc/impex.hxx:
+    # Needed for template
+    - o3tl/deleter.hxx
     sc/source/ui/inc/MatrixComparisonGenerator.hxx:
     # base class has to be a complete type
     - viewdata.hxx
@@ -483,3 +486,4 @@ blacklist:
     sc/source/ui/inc/StatisticsTwoVariableDialog.hxx:
     # base class has to be a complete type
     - viewdata.hxx
+

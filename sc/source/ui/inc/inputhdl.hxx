@@ -28,7 +28,6 @@
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
-#include <vcl/vclevent.hxx>
 #include <vcl/vclptr.hxx>
 #include <editeng/svxenum.hxx>
 
@@ -48,8 +47,8 @@ class ScRangeFindList;
 class Timer;
 class KeyEvent;
 class CommandEvent;
-
-struct ESelection;
+class VclWindowEvent;
+namespace vcl { class Window; }
 
 //  ScInputHandler
 

@@ -24,10 +24,9 @@
 #include <cellvalue.hxx>
 #include <tools/color.hxx>
 #include <tools/fract.hxx>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <tools/gen.hxx>
 #include <editeng/svxenum.hxx>
-#include <o3tl/deleter.hxx>
+#include <vcl/outdev.hxx>
 
 namespace sc {
     struct SpellCheckContext;
@@ -36,14 +35,13 @@ namespace sc {
 namespace editeng {
     struct MisspellRanges;
 }
+namespace drawinglayer { namespace processor2d { class BaseProcessor2D; } }
+namespace o3tl { template <typename T> struct default_delete; }
 
-namespace tools { class Rectangle; }
 namespace vcl { class Font; }
-class OutputDevice;
 class EditEngine;
 class ScDocument;
 class ScPatternAttr;
-class SdrObject;
 struct RowInfo;
 struct ScTableInfo;
 class ScTabViewShell;
@@ -57,7 +55,6 @@ class SdrPaintWindow;
 
 enum ScOutputType { OUTTYPE_WINDOW, OUTTYPE_PRINTER };
 
-class ScFieldEditEngine;
 class ClearableClipRegion;
 typedef std::unique_ptr<ClearableClipRegion, o3tl::default_delete<ClearableClipRegion>> ClearableClipRegionPtr;
 

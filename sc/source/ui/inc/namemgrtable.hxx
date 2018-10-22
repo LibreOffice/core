@@ -11,7 +11,6 @@
 #define INCLUDED_SC_SOURCE_UI_INC_NAMEMGRTABLE_HXX
 
 #include <svtools/simptabl.hxx>
-#include <vcl/ctrl.hxx>
 
 #include <address.hxx>
 

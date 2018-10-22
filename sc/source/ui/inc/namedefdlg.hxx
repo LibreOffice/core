@@ -13,7 +13,6 @@
 #include "anyrefdg.hxx"
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
 
 #include <map>

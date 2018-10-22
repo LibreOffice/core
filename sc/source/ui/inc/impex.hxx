@@ -21,14 +21,12 @@
 #define INCLUDED_SC_SOURCE_UI_INC_IMPEX_HXX
 
 #include <o3tl/deleter.hxx>
-#include <sot/exchange.hxx>
-#include <global.hxx>
+#include <sot/formats.hxx>
 #include <address.hxx>
 #include <tools/stream.hxx>
 
 class ScDocShell;
 class ScDocument;
-class SvStream;
 class ScAsciiOptions;
 
 /**

@@ -38,9 +38,6 @@
 #define SC_PREVIEW_RANGE_TAB    3
 
 class OutputDevice;
-namespace tools { class Rectangle; }
-class ScAddress;
-class ScRange;
 class ScDocument;
 struct ScPreviewLocationEntry;
 

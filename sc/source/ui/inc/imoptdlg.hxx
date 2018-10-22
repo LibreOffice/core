@@ -20,14 +20,9 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_IMOPTDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_IMOPTDLG_HXX
 
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/combobox.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
-#include <svx/txencbox.hxx>
+#include <rtl/textenc.h>
+#include <rtl/ustring.hxx>
 #include <scdllapi.h>
-#include <global.hxx>
 
 class SC_DLLPUBLIC ScImportOptions
 {

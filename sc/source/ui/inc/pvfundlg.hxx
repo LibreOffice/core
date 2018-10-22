@@ -21,7 +21,6 @@
 #define INCLUDED_SC_SOURCE_UI_INC_PVFUNDLG_HXX
 
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
-#include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
 #include <vcl/fixed.hxx>

@@ -25,22 +25,20 @@
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/idle.hxx>
-#include <svl/poolitem.hxx>
 #include <svl/lstner.hxx>
 #include <sfx2/childwin.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include "content.hxx"
 #include <svtools/svmedit.hxx>
 
+class SfxPoolItem;
 class ScTabViewShell;
 class ScViewData;
 class ScArea;
 class ScScenarioWindow;
 class ScNavigatorControllerItem;
-class ScNavigatorDialogWrapper;
 class ScNavigatorDlg;
 class ScNavigatorSettings;
-class VclContainer;
 
 #define SC_DROPMODE_URL         0
 #define SC_DROPMODE_LINK        1

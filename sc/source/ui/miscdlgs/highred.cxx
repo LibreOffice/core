@@ -21,6 +21,7 @@
 #include <reffact.hxx>
 #include <document.hxx>
 #include <docsh.hxx>
+#include <chgtrack.hxx>
 
 #include <highred.hxx>
 #include <sfx2/app.hxx>

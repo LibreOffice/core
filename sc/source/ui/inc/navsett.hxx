@@ -22,7 +22,6 @@
 
 #include <tools/solar.h>
 
-#include <vector>
 #include <o3tl/enumarray.hxx>
 #include "content.hxx"
 

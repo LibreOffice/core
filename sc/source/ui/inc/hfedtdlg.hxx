@@ -21,9 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_HFEDTDLG_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <svx/pageitem.hxx>
-
-#include <scres.hrc>
+#include <editeng/svxenum.hxx>
 
 class ScHFEditDlg : public SfxTabDialog
 {

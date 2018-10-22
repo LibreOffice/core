@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_OLINEFUN_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_OLINEFUN_HXX
 
-#include <global.hxx>
+#include <types.hxx>
 
 class ScDocShell;
 class ScRange;

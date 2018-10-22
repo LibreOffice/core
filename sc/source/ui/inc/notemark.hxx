@@ -22,12 +22,15 @@
 
 #include <vcl/mapmod.hxx>
 #include <vcl/timer.hxx>
-#include <global.hxx>
+#include <vcl/vclptr.hxx>
+#include <tools/gen.hxx>
 #include <address.hxx>
-#include <postit.hxx>
+
+namespace vcl { class Window; }
 
 class SdrModel;
 class ScDrawView;
+class SdrCaptionObj;
 
 class ScNoteMarker
 {

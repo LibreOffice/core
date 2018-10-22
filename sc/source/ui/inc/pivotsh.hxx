@@ -20,13 +20,13 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_PIVOTSH_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_PIVOTSH_HXX
 
-#include <sfx2/module.hxx>
 #include <sfx2/shell.hxx>
 
 #include <shellids.hxx>
 
 class ScTabViewShell;
 class ScDPObject;
+class SfxModule;
 
 class ScPivotShell : public SfxShell
 {

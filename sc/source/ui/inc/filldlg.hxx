@@ -25,8 +25,6 @@
 
 class ScDocument;
 
-#include "scui_def.hxx"
-
 class ScFillSeriesDlg : public weld::GenericDialogController
 {
 public:

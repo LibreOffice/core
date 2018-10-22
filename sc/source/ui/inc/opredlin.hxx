@@ -20,13 +20,8 @@
 #define INCLUDED_SC_SOURCE_UI_INC_OPREDLIN_HXX
 
 #include <sfx2/tabdlg.hxx>
-#include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
-#include <svtools/ctrlbox.hxx>
-#include <svx/fntctrl.hxx>
-#include <svx/strarray.hxx>
+
+class SvxColorListBox;
 
 class ScRedlineOptionsTabPage : public SfxTabPage
 {

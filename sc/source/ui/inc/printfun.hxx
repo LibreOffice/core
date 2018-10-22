@@ -24,8 +24,6 @@
 #include <pagepar.hxx>
 #include <editutil.hxx>
 
-#include <vcl/print.hxx>
-
 class SfxPrinter;
 class ScDocShell;
 class ScDocument;
@@ -34,7 +32,6 @@ class SfxItemSet;
 class ScPageHFItem;
 class EditTextObject;
 class MultiSelection;
-class ScHeaderEditEngine;
 class ScPageBreakData;
 class ScPreviewLocationData;
 class ScPrintOptions;
