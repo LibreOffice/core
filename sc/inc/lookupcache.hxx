@@ -27,6 +27,7 @@
 #include <unordered_map>
 
 class ScDocument;
+struct ScLookupCacheMap;
 struct ScQueryEntry;
 
 /** Lookup cache for one range used with interpreter functions such as VLOOKUP
@@ -106,7 +107,7 @@ public:
     };
 
     /// MUST be new'd because Notify() deletes.
-                            ScLookupCache( ScDocument * pDoc, const ScRange & rRange );
+                            ScLookupCache( ScDocument * pDoc, const ScRange & rRange, ScLookupCacheMap & cacheMap );
     virtual                 ~ScLookupCache() override;
     /// Remove from document structure and delete (!) cache on modify hint.
     virtual void Notify( const SfxHint& rHint ) override;
@@ -128,6 +129,8 @@ public:
                                     const bool bAvailable );
 
     const ScRange&  getRange() const { return maRange; }
+
+    ScLookupCacheMap & getCacheMap() const { return mCacheMap; }
 
     struct Hash
     {
@@ -184,6 +187,7 @@ private:
     std::unordered_map< QueryKey, QueryCriteriaAndResult, QueryKey::Hash > maQueryMap;
     ScRange const   maRange;
     ScDocument *    mpDoc;
+    ScLookupCacheMap & mCacheMap;
 
     ScLookupCache( const ScLookupCache & ) = delete;
     ScLookupCache & operator=( const ScLookupCache & ) = delete;

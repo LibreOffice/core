@@ -68,9 +68,10 @@ ScLookupCache::QueryCriteria::~QueryCriteria()
     deleteString();
 }
 
-ScLookupCache::ScLookupCache( ScDocument * pDoc, const ScRange & rRange ) :
+ScLookupCache::ScLookupCache( ScDocument * pDoc, const ScRange & rRange, ScLookupCacheMap & cacheMap ) :
     maRange( rRange),
-    mpDoc( pDoc)
+    mpDoc( pDoc),
+    mCacheMap(cacheMap)
 {
 }
 
