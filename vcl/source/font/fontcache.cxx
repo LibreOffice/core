@@ -97,10 +97,10 @@ ImplFontCache::~ImplFontCache()
 }
 
 rtl::Reference<LogicalFontInstance> ImplFontCache::GetFontInstance( PhysicalFontCollection const * pFontList,
-    const vcl::Font& rFont, const Size& rSize, float fExactHeight )
+    const vcl::Font& rFont, const Size& rSize, float fExactHeight, bool bNonAntialias )
 {
     // initialize internal font request object
-    FontSelectPattern aFontSelData(rFont, rFont.GetFamilyName(), rSize, fExactHeight);
+    FontSelectPattern aFontSelData(rFont, rFont.GetFamilyName(), rSize, fExactHeight, bNonAntialias);
     return GetFontInstance( pFontList, aFontSelData );
 }
 
