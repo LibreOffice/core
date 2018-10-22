@@ -16,6 +16,24 @@
       "revId": "93627569a0e6b7fb7084cf5774f665570ef3c1dc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_7c6408ba",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2609,
+      "author": {
+        "id": 1001119
+      },
+      "writtenOn": "2018-10-22T19:15:41Z",
+      "side": 1,
+      "message": "The proposed operator\u003d\u003d uses equals() method from the same class, which finally uses rtl_ustr_reverseCompare_WithLength() method.\n\nIn compareTo() method a rtl_ustr_compare_WithLength() method is used directly.\n\nFrom the description of these two methods I could say they perform the same job but with different order of characters. But I do not think that we are really needed to handle reverse order here.\n\nFrom other side, there are predefined following helpers:\n\n    friend bool     operator \u003d\u003d ( const OUString\u0026 rStr1,    const OUString\u0026 rStr2 )\n                        { return rStr1.equals(rStr2); }\n    friend bool     operator \u003d\u003d ( const OUString\u0026 rStr1,    const sal_Unicode * pStr2 )\n                        { return rStr1.compareTo( pStr2 ) \u003d\u003d 0; }\n    friend bool     operator \u003d\u003d ( const sal_Unicode * pStr1,    const OUString\u0026 rStr2 )\n                        { return OUString( pStr1 ).compareTo( rStr2 ) \u003d\u003d 0; }\n\nSo, in most cases compareTo() is used :)\n\nI\u0027ll prefer your suggestion while it looks to be more compact and clear. The effectiveness of the internal implementation inside this class is still questionable...",
+      "parentUuid": "1f1a1f67_4882abca",
+      "revId": "93627569a0e6b7fb7084cf5774f665570ef3c1dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
