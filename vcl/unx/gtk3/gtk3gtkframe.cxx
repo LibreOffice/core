@@ -3065,6 +3065,14 @@ void GtkSalFrame::signalRealize(GtkWidget*, gpointer frame)
 
         GdkWindow* gdkWindow = widget_get_window(pThis->m_pWindow);
         gdk_window_move_to_rect(gdkWindow, &rect, rect_anchor, menu_anchor, GDK_ANCHOR_FLIP, 0, 0);
+
+        // Wayland doesn't allow having two visible popups that share the same
+        // top level parent. So given that tooltips also implemented as popups
+        // in newer gtk, make sure to hide the tooltip that might be visible at
+        // this stage (e.g. hovering over a toolbar button until the tooltip
+        // timeout is reached).
+        pThis->m_pParent->m_aTooltip.clear();
+        gtk_widget_trigger_tooltip_query(pThis->m_pParent->getMouseEventWidget());
     }
 #endif
 }
