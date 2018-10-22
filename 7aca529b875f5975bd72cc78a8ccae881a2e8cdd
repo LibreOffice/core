@@ -16,6 +16,24 @@
       "revId": "7aca529b875f5975bd72cc78a8ccae881a2e8cdd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f1a1f67_4d3abde7",
+        "filename": "ucb/source/ucp/webdav-neon/webdavcontent.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1399,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2018-10-22T07:24:47Z",
+      "side": 1,
+      "message": "I don\u0027t know what to do with this part. There are two options:\n1) remove both ifs, copy properties unconditionally. This is equal to current code;\n2) remove one of ifs. I don\u0027t know which one. Comment in (it !\u003d end) condition make me think that I have to remove (it \u003d\u003d end).",
+      "parentUuid": "1f1a1f67_6d50d933",
+      "revId": "7aca529b875f5975bd72cc78a8ccae881a2e8cdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
