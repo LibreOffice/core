@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1f1a1f67_08a2739b",
+        "filename": "sw/source/core/undo/unins.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 765,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2018-10-22T10:53:32Z",
+      "side": 1,
+      "message": "what might look a little less weird is something like:\n\n        auto xSave \u003d o3tl::make_unique\u003cSwHistory\u003e();\n        std::swap(pHistory, xSave);\n\n        DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );\n        m_nSetPos \u003d pHistory-\u003eCount();\n\n        std::swap(xSave, pHistory);\n        pHistory-\u003eMove(0, xSave.get());",
+      "revId": "6eea0bef934ae9e946121b5c8ddeaba8f2992ebc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
