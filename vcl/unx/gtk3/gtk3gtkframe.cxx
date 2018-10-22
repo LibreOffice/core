@@ -2619,6 +2619,15 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
     GtkWidget* pEventWidget = pThis->getMouseEventWidget();
     bool bDifferentEventWindow = pEvent->window != widget_get_window(pEventWidget);
 
+    // tdf#120764 It isn't allowed under wayland to have two visible popups that share
+    // the same top level parent. The problem is that since gtk 3.24 tooltips are also
+    // implemented as popups, which means that we cannot show any popup if there is a
+    // visible tooltip. In fact, gtk will hide the tooltip by itself after this handler,
+    // in case of a button press event. But if we intend to show a popup on button press
+    // it will be too late, so just do it here:
+    if (pEvent->type == GDK_BUTTON_PRESS)
+        pThis->ShowTooltip(OUString(), tools::Rectangle());
+
     SalMouseEvent aEvent;
     SalEvent nEventType = SalEvent::NONE;
     switch( pEvent->type )
