@@ -22,6 +22,7 @@ $(eval $(call gb_JunitTest_use_jars,chart2_unoapi,\
     test \
     unoil \
     jurt \
+    juh \
 ))
 
 $(eval $(call gb_JunitTest_add_classes,chart2_unoapi,\

@@ -32,6 +32,7 @@ $(eval $(call gb_JunitTest_use_jars,sfx2_unoapi,\
     test \
     unoil \
     jurt \
+    juh \
 ))
 
 $(eval $(call gb_JunitTest_add_classes,sfx2_unoapi,\

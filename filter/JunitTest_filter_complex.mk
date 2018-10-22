@@ -24,6 +24,7 @@ $(eval $(call gb_JunitTest_use_jars,filter_complex,\
 	test \
 	unoil \
 	jurt \
+	juh \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,filter_complex,\

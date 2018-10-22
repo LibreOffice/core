@@ -20,6 +20,7 @@ $(eval $(call gb_JunitTest_use_jars,connectivity_complex,\
 	ridl \
 	test \
 	unoil \
+	juh \
 ))
 
 $(eval $(call gb_JunitTest_use_externals,connectivity_complex,\

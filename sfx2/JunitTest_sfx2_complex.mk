@@ -31,6 +31,7 @@ $(eval $(call gb_JunitTest_use_jars,sfx2_complex,\
     test-tools \
     unoil \
     jurt \
+    juh \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,sfx2_complex,\

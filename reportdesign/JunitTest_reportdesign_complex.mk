@@ -36,6 +36,7 @@ $(eval $(call gb_JunitTest_use_jars,reportdesign_complex,\
 	test \
 	unoil \
 	jurt \
+	juh \
 ))
 
 $(eval $(call gb_JunitTest_add_classes,reportdesign_complex,\

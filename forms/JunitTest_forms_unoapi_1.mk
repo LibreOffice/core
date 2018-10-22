@@ -22,6 +22,7 @@ $(eval $(call gb_JunitTest_use_jars,forms_unoapi_1,\
     test \
     unoil \
     jurt \
+    juh \
 ))
 
 $(eval $(call gb_JunitTest_add_classes,forms_unoapi_1,\

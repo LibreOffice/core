@@ -16,6 +16,7 @@ $(eval $(call gb_JunitTest_use_jars,unotools_complex,\
     test-tools \
     test \
     unoil \
+    juh \
 ))
 
 $(eval $(call gb_JunitTest_set_defs,unotools_complex,\

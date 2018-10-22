@@ -22,6 +22,7 @@ $(eval $(call gb_JunitTest_use_jars,starmath_unoapi,\
     test \
     unoil \
     jurt \
+    juh \
 ))
 
 $(eval $(call gb_JunitTest_add_classes,starmath_unoapi,\

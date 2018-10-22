@@ -22,6 +22,7 @@ $(eval $(call gb_JunitTest_use_jars,dbaccess_unoapi,\
     ridl \
     test \
     unoil \
+    juh \
 ))
 
 $(eval $(call gb_JunitTest_add_classes,dbaccess_unoapi,\

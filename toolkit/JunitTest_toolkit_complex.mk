@@ -23,6 +23,7 @@ $(eval $(call gb_JunitTest_use_jars,toolkit_complex,\
     ridl \
     test \
     unoil \
+    juh \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,toolkit_complex,\

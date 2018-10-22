@@ -20,6 +20,7 @@ $(eval $(call gb_JunitTest_use_jars,ucb_complex,\
     test \
     unoil \
     jurt \
+    juh \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,ucb_complex,\

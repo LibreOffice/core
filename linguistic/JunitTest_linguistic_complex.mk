@@ -31,6 +31,7 @@ $(eval $(call gb_JunitTest_use_jars,linguistic_complex,\
 	test-tools \
 	unoil \
 	jurt \
+	juh \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,linguistic_complex,\

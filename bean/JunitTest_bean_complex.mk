@@ -16,6 +16,7 @@ $(eval $(call gb_JunitTest_use_jars,bean_complex,\
 	test \
 	unoil \
 	officebean \
+	juh \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,bean_complex,\

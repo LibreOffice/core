@@ -15,6 +15,7 @@ $(eval $(call gb_JunitTest_use_jars,forms_complex,\
     test \
     unoil \
     jurt \
+    juh \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,forms_complex,\

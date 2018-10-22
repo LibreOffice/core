@@ -19,6 +19,7 @@ $(eval $(call gb_JunitTest_use_jars,sc_unoapi_7, \
     ridl \
     test \
     unoil \
+    juh \
 ))
 
 $(eval $(call gb_JunitTest_set_defs,sc_unoapi_7,\

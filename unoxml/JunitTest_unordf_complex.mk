@@ -30,6 +30,7 @@ $(eval $(call gb_JunitTest_use_jars,unordf_complex,\
     test \
     unoil \
     jurt \
+    juh \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,unordf_complex,\

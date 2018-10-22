@@ -30,6 +30,7 @@ $(eval $(call gb_JunitTest_use_jars,framework_complex,\
     test \
     unoil \
     jurt \
+    juh \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,framework_complex,\

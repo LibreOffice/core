@@ -29,6 +29,7 @@ $(eval $(call gb_JunitTest_use_jars,sw_complex,\
     test \
     unoil \
     jurt \
+    juh \
 ))
 
 $(eval $(call gb_JunitTest_add_classes,sw_complex,\
