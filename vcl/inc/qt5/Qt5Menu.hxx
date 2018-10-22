@@ -60,7 +60,7 @@ public:
     Qt5MenuItem* GetItemAtPos(unsigned nPos) { return maItems[nPos]; }
 
 private slots:
-    void DispatchCommand(Qt5MenuItem* pQItem);
+    void slotMenuTriggered(Qt5MenuItem* pQItem);
 };
 
 class Qt5MenuItem : public SalMenuItem
