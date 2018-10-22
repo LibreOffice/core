@@ -261,7 +261,7 @@ protected:
     virtual void                EmulateDrawTransparent( const tools::PolyPolygon& rPolyPoly,
                                     sal_uInt16 nTransparencePercent ) override;
 
-    virtual void                InitFont() const override;
+    virtual bool                InitFont() const override;
     virtual void                SetFontOrientation( LogicalFontInstance* const pFontInstance ) const override;
 
 public:
