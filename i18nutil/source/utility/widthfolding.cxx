@@ -18,6 +18,7 @@
  */
 
 #include <i18nutil/widthfolding.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 #include "widthfolding_data.h"
 
 using namespace com::sun::star::uno;

@@ -19,12 +19,9 @@
 #ifndef INCLUDED_I18NUTIL_ONETOONEMAPPING_HXX
 #define INCLUDED_I18NUTIL_ONETOONEMAPPING_HXX
 
-#include <rtl/ustring.hxx>
 #include <i18nutil/i18nutildllapi.h>
 
 namespace i18nutil {
-
-class widthfolding;
 
 struct OneToOneMappingTable_t
 {

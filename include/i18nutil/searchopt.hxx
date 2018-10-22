@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/SearchAlgorithms.hpp>
 #include <com/sun/star/util/SearchOptions2.hpp>
-#include <i18nutil/i18nutildllapi.h>
 #include <i18nutil/transliteration.hxx>
 
 namespace i18nutil

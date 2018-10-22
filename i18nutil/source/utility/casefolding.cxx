@@ -19,8 +19,11 @@
 
 #include <i18nutil/casefolding.hxx>
 #include "casefolding_data.h"
+#include <i18nutil/oneToOneMapping.hxx>
 #include <i18nutil/widthfolding.hxx>
 #include <i18nutil/transliteration.hxx>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
