@@ -328,7 +328,6 @@ class VCL_DLLPUBLIC OutputDevice : public virtual VclReferenceBase
     friend class VirtualDevice;
     friend class vcl::Window;
     friend class WorkWindow;
-    friend class vcl::PDFWriterImpl;
     friend void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight );
 
 private:
@@ -1181,12 +1180,12 @@ public:
                                               vcl::TextLayoutCache const* = nullptr) const;
     std::shared_ptr<vcl::TextLayoutCache> CreateTextLayoutCache(OUString const&) const;
 
-private:
-    SAL_DLLPRIVATE void         ImplInitTextColor();
-
     SAL_DLLPRIVATE void         ImplInitTextLineSize();
     SAL_DLLPRIVATE void         ImplInitAboveTextLineSize();
-
+    static
+    SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const OUString& rStr, DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout );
+private:
+    SAL_DLLPRIVATE void         ImplInitTextColor();
 
     SAL_DLLPRIVATE void         ImplDrawTextDirect( SalLayout&, bool bTextLines);
     SAL_DLLPRIVATE void         ImplDrawSpecialText( SalLayout& );
@@ -1202,8 +1201,6 @@ private:
     SAL_DLLPRIVATE void         ImplDrawMnemonicLine( long nX, long nY, long nWidth );
 
 
-    static
-    SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const OUString& rStr, DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout );
     ///@}
 
 
@@ -1287,6 +1284,11 @@ public:
     //drop and fetch font data for all outputdevices
     //If bNewFontLists is true then drop and refetch lists of system fonts
     SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
+
+    SAL_DLLPRIVATE const LogicalFontInstance* GetFontInstance() const;
+    SAL_DLLPRIVATE long GetEmphasisAscent() const { return mnEmphasisAscent; }
+    SAL_DLLPRIVATE long GetEmphasisDescent() const { return mnEmphasisDescent; }
+    SAL_DLLPRIVATE void SetPDFWriter(vcl::PDFWriterImpl* pPDFWriter) { mpPDFWriter = pPDFWriter; ImplUpdateFontData(); }
 
 protected:
 
@@ -1808,8 +1810,6 @@ public:
     SAL_DLLPRIVATE long         ImplLogicWidthToDevicePixel( long nWidth ) const;
 
     SAL_DLLPRIVATE DeviceCoordinate LogicWidthToDeviceCoordinate( long nWidth ) const;
-
-private:
 
     /** Convert a logical X coordinate to a device pixel's X coordinate.
 

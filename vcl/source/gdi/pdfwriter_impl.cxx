@@ -2174,8 +2174,7 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
         pVDev->SetOutputSizePixel( Size( 640, 480 ) );
         pVDev->SetMapMode(MapMode(MapUnit::MapMM));
 
-        m_pReferenceDevice->mpPDFWriter = this;
-        m_pReferenceDevice->ImplUpdateFontData();
+        m_pReferenceDevice->SetPDFWriter(this);
     }
     return m_pReferenceDevice;
 }
@@ -6183,11 +6182,12 @@ bool PDFWriterImpl::emit()
 
 sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
 {
-    getReferenceDevice()->Push();
-    getReferenceDevice()->SetFont( i_rFont );
-    getReferenceDevice()->ImplNewFont();
+    OutputDevice *pOutput = getReferenceDevice();
+    pOutput->Push();
 
-    const PhysicalFontFace* pDevFont = m_pReferenceDevice->mpFontInstance->GetFontFace();
+    pOutput->SetFont( i_rFont );
+
+    const PhysicalFontFace* pDevFont = pOutput->GetFontInstance()->GetFontFace();
     sal_Int32 nFontID = 0;
     FontEmbedData::iterator it = m_aSystemFonts.find( pDevFont );
     if( it != m_aSystemFonts.end() )
@@ -6199,9 +6199,7 @@ sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
         m_aSystemFonts[ pDevFont ].m_nNormalFontID = nFontID;
     }
 
-    getReferenceDevice()->Pop();
-    getReferenceDevice()->ImplNewFont();
-
+    pOutput->Pop();
     return nFontID;
 }
 
@@ -6276,7 +6274,7 @@ void PDFWriterImpl::drawRelief( SalLayout& rLayout, const OUString& rText, bool 
     setTextLineColor( aReliefColor );
     setOverlineColor( aReliefColor );
     setFont( aSetFont );
-    long nOff = 1 + getReferenceDevice()->mnDPIX/300;
+    long nOff = 1 + getReferenceDevice()->GetDPIX()/300;
     if( eRelief == FontRelief::Engraved )
         nOff = -nOff;
 
@@ -6314,7 +6312,7 @@ void PDFWriterImpl::drawShadow( SalLayout& rLayout, const OUString& rText, bool 
     setOverlineColor( rFont.GetColor() );
     updateGraphicsState();
 
-    long nOff = 1 + ((m_pReferenceDevice->mpFontInstance->mnLineHeight-24)/24);
+    long nOff = 1 + ((m_pReferenceDevice->GetFontInstance()->mnLineHeight-24)/24);
     if( rFont.IsOutline() )
         nOff++;
     rLayout.DrawBase() += Point( nOff, nOff );
@@ -6522,7 +6520,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     int nIndex = 0;
     double fXScale = 1.0;
     double fSkew = 0.0;
-    sal_Int32 nPixelFontHeight = m_pReferenceDevice->mpFontInstance->GetFontSelectPattern().mnHeight;
+    sal_Int32 nPixelFontHeight = m_pReferenceDevice->GetFontInstance()->GetFontSelectPattern().mnHeight;
     TextAlign eAlign = m_aCurrentPDFState.m_aFont.GetAlignment();
 
     // transform font height back to current units
@@ -6539,15 +6537,13 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                 static_cast<double>(m_aCurrentPDFState.m_aFont.GetAverageFontWidth()) /
                 static_cast<double>(aMetric.GetAverageFontWidth());
         }
-        // force state before GetFontMetric
-        m_pReferenceDevice->ImplNewFont();
     }
 
     // perform artificial italics if necessary
     if( ( m_aCurrentPDFState.m_aFont.GetItalic() == ITALIC_NORMAL ||
           m_aCurrentPDFState.m_aFont.GetItalic() == ITALIC_OBLIQUE ) &&
-        !( m_pReferenceDevice->mpFontInstance->GetFontFace()->GetItalic() == ITALIC_NORMAL ||
-           m_pReferenceDevice->mpFontInstance->GetFontFace()->GetItalic() == ITALIC_OBLIQUE )
+        !( m_pReferenceDevice->GetFontInstance()->GetFontFace()->GetItalic() == ITALIC_NORMAL ||
+           m_pReferenceDevice->GetFontInstance()->GetFontFace()->GetItalic() == ITALIC_OBLIQUE )
         )
     {
         fSkew = M_PI/12.0;
@@ -6574,8 +6570,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     bool bPop = false;
     bool bABold = false;
     // artificial bold necessary ?
-    if( m_pReferenceDevice->mpFontInstance->GetFontFace()->GetWeight() <= WEIGHT_MEDIUM &&
-        m_pReferenceDevice->mpFontInstance->GetFontSelectPattern().GetWeight() > WEIGHT_MEDIUM )
+    if( m_pReferenceDevice->GetFontInstance()->GetFontFace()->GetWeight() <= WEIGHT_MEDIUM &&
+        m_pReferenceDevice->GetFontInstance()->GetFontSelectPattern().GetWeight() > WEIGHT_MEDIUM )
     {
         if( ! bPop )
             aLine.append( "q " );
@@ -6636,7 +6632,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     }
 
     FontMetric aRefDevFontMetric = m_pReferenceDevice->GetFontMetric();
-    const PhysicalFontFace* pDevFont = m_pReferenceDevice->mpFontInstance->GetFontFace();
+    const PhysicalFontFace* pDevFont = m_pReferenceDevice->GetFontInstance()->GetFontFace();
 
     // collect the glyphs into a single array
     std::vector< PDFGlyph > aGlyphs;
@@ -6704,15 +6700,12 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         registerGlyph(pGlyph, pFont, aCodeUnits, nMappedGlyph, nMappedFontObject);
 
         sal_Int32 nGlyphWidth = 0;
-        if (m_pReferenceDevice->AcquireGraphics())
-        {
-            SalGraphics *pGraphics = m_pReferenceDevice->GetGraphics();
-            if (pGraphics)
-                nGlyphWidth = m_aFontCache.getGlyphWidth(pFont,
-                                                         pGlyph->maGlyphId,
-                                                         pGlyph->IsVertical(),
-                                                         pGraphics);
-        }
+        SalGraphics *pGraphics = m_pReferenceDevice->GetGraphics();
+        if (pGraphics)
+            nGlyphWidth = m_aFontCache.getGlyphWidth(pFont,
+                                                     pGlyph->maGlyphId,
+                                                     pGlyph->IsVertical(),
+                                                     pGraphics);
 
         int nCharPos = -1;
         if (bUseActualText || pGlyph->IsInCluster())
@@ -6748,7 +6741,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         // This includes ascent / descent.
         aRectangle.setHeight(aRefDevFontMetric.GetLineHeight());
 
-        LogicalFontInstance* pFontInstance = m_pReferenceDevice->mpFontInstance.get();
+        const LogicalFontInstance* pFontInstance = m_pReferenceDevice->GetFontInstance();
         if (pFontInstance->mnOrientation)
         {
             // Adapt rectangle for rotated text.
@@ -6900,9 +6893,9 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
 
     nEmphMark = OutputDevice::ImplGetEmphasisMarkStyle( m_aCurrentPDFState.m_aFont );
     if ( nEmphMark & FontEmphasisMark::PosBelow )
-        nEmphHeight = m_pReferenceDevice->mnEmphasisDescent;
+        nEmphHeight = m_pReferenceDevice->GetEmphasisDescent();
     else
-        nEmphHeight = m_pReferenceDevice->mnEmphasisAscent;
+        nEmphHeight = m_pReferenceDevice->GetEmphasisAscent();
     m_pReferenceDevice->ImplGetEmphasisMark( aEmphPoly,
                                              bEmphPolyLine,
                                              aEmphRect1,
@@ -6926,18 +6919,18 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     Point aOffset = Point(0,0);
 
     if ( nEmphMark & FontEmphasisMark::PosBelow )
-        aOffset.AdjustY(m_pReferenceDevice->mpFontInstance->mxFontMetric->GetDescent() + nEmphYOff );
+        aOffset.AdjustY(m_pReferenceDevice->GetFontInstance()->mxFontMetric->GetDescent() + nEmphYOff );
     else
-        aOffset.AdjustY( -(m_pReferenceDevice->mpFontInstance->mxFontMetric->GetAscent() + nEmphYOff) );
+        aOffset.AdjustY( -(m_pReferenceDevice->GetFontInstance()->mxFontMetric->GetAscent() + nEmphYOff) );
 
     long nEmphWidth2     = nEmphWidth / 2;
     long nEmphHeight2    = nEmphHeight / 2;
     aOffset += Point( nEmphWidth2, nEmphHeight2 );
 
     if ( eAlign == ALIGN_BOTTOM )
-        aOffset.AdjustY( -(m_pReferenceDevice->mpFontInstance->mxFontMetric->GetDescent()) );
+        aOffset.AdjustY( -(m_pReferenceDevice->GetFontInstance()->mxFontMetric->GetDescent()) );
     else if ( eAlign == ALIGN_TOP )
-        aOffset.AdjustY(m_pReferenceDevice->mpFontInstance->mxFontMetric->GetAscent() );
+        aOffset.AdjustY(m_pReferenceDevice->GetFontInstance()->mxFontMetric->GetAscent() );
 
     nIndex = 0;
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nIndex))
@@ -7238,7 +7231,7 @@ void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop, const Lin
 void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove )
 {
     // note: units in pFontInstance are ref device pixel
-    LogicalFontInstance*  pFontInstance = m_pReferenceDevice->mpFontInstance.get();
+    const LogicalFontInstance*  pFontInstance = m_pReferenceDevice->GetFontInstance();
     long            nLineHeight = 0;
     long            nLinePos = 0;
 
@@ -7262,7 +7255,7 @@ void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontLin
     if ( (eTextLine == LINESTYLE_SMALLWAVE) && (nLineHeight > 3) )
         nLineHeight = 3;
 
-    long nLineWidth = getReferenceDevice()->mnDPIX/450;
+    long nLineWidth = getReferenceDevice()->GetDPIX()/450;
     if ( ! nLineWidth )
         nLineWidth = 1;
 
@@ -7308,7 +7301,7 @@ void PDFWriterImpl::drawWaveTextLine( OStringBuffer& aLine, long nWidth, FontLin
 void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, FontLineStyle eTextLine, Color aColor, bool bIsAbove )
 {
     // note: units in pFontInstance are ref device pixel
-    LogicalFontInstance*  pFontInstance = m_pReferenceDevice->mpFontInstance.get();
+    const LogicalFontInstance*  pFontInstance = m_pReferenceDevice->GetFontInstance();
     long            nLineHeight = 0;
     long            nLinePos  = 0;
     long            nLinePos2 = 0;
@@ -7500,7 +7493,7 @@ void PDFWriterImpl::drawStraightTextLine( OStringBuffer& aLine, long nWidth, Fon
 void PDFWriterImpl::drawStrikeoutLine( OStringBuffer& aLine, long nWidth, FontStrikeout eStrikeout, Color aColor )
 {
     // note: units in pFontInstance are ref device pixel
-    LogicalFontInstance*  pFontInstance = m_pReferenceDevice->mpFontInstance.get();
+    const LogicalFontInstance*  pFontInstance = m_pReferenceDevice->GetFontInstance();
     long            nLineHeight = 0;
     long            nLinePos  = 0;
     long            nLinePos2 = 0;
@@ -7597,7 +7590,7 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     aRect.SetBottom( rPos.Y()+aRefDevFontMetric.GetDescent() );
     aRect.SetTop( rPos.Y()-aRefDevFontMetric.GetAscent() );
 
-    LogicalFontInstance* pFontInstance = m_pReferenceDevice->mpFontInstance.get();
+    const LogicalFontInstance* pFontInstance = m_pReferenceDevice->GetFontInstance();
     if (pFontInstance->mnOrientation)
     {
         tools::Polygon aPoly( aRect );
@@ -7632,7 +7625,7 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
     updateGraphicsState();
 
     // note: units in pFontInstance are ref device pixel
-    LogicalFontInstance* pFontInstance = m_pReferenceDevice->mpFontInstance.get();
+    const LogicalFontInstance* pFontInstance = m_pReferenceDevice->GetFontInstance();
     Color           aUnderlineColor = m_aCurrentPDFState.m_aTextLineColor;
     Color           aOverlineColor  = m_aCurrentPDFState.m_aOverlineColor;
     Color           aStrikeoutColor = m_aCurrentPDFState.m_aFont.GetColor();
@@ -10257,7 +10250,6 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
     {
         rNewState.m_nUpdateFlags &= ~GraphicsStateUpdateFlags::Font;
         getReferenceDevice()->SetFont( rNewState.m_aFont );
-        getReferenceDevice()->ImplNewFont();
     }
 
     if( rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::LayoutMode )
