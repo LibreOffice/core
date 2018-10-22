@@ -22,6 +22,7 @@
 #include <comphelper/string.hxx>
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>
+#include <global.hxx>
 
 static const sal_Char pStrFix[] = "FIX";
 

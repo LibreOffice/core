@@ -20,19 +20,18 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_FUPOOR_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_FUPOOR_HXX
 
-#include <vcl/event.hxx>
 #include <vcl/timer.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svdobj.hxx>
+#include <vcl/window.hxx>
 
 class ScDrawView;
 class ScTabViewShell;
-namespace vcl { class Window; }
 class SdrModel;
 class Dialog;
-
-// Create default drawing objects via keyboard
-class SdrObject;
+class CommandEvent;
+class KeyEvent;
+class MouseEvent;
 
 //  Return values for command
 #define SC_CMD_NONE     0

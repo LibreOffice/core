@@ -22,12 +22,6 @@
 
 #include <memory>
 #include "anyrefdg.hxx"
-#include <global.hxx>
-#include <vcl/lstbox.hxx>
-#include <svtools/svmedit.hxx>
-#include <vcl/tabpage.hxx>
-
-#include <compiler.hxx>
 
 #include <formula/formula.hxx>
 #include "IAnyRefDialog.hxx"
@@ -37,7 +31,6 @@ class ScDocument;
 class ScFuncDesc;
 class ScInputHandler;
 class ScDocShell;
-class ScFormulaCell;
 
 class ScFormulaDlg final : public formula::FormulaDlg,
                      public IAnyRefDialog

@@ -28,6 +28,7 @@
 #include <attrib.hxx>
 #include <tphf.hxx>
 #include <sc.hrc>
+#include <scres.hrc>
 #include <scabstdlg.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>

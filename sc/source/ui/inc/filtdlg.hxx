@@ -23,7 +23,6 @@
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/layout.hxx>
-#include <global.hxx>
 #include <address.hxx>
 #include "anyrefdg.hxx"
 #include <queryparam.hxx>

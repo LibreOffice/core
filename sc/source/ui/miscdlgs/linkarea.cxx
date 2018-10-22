@@ -26,6 +26,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svtools/ehdl.hxx>
+#include <svtools/inettbc.hxx>
 #include <svtools/sfxecode.hxx>
 #include <vcl/waitobj.hxx>
 

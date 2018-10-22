@@ -22,9 +22,8 @@
 
 #include <sfx2/shell.hxx>
 #include <shellids.hxx>
-#include <sfx2/module.hxx>
-#include <svx/svdmark.hxx>
 
+class SfxModule;
 class ScViewData;
 enum class SvNumFormatType : sal_Int16;
 

@@ -23,6 +23,7 @@
 #include <docsh.hxx>
 #include <rangenam.hxx>
 #include <viewdata.hxx>
+#include <scui_def.hxx>
 
 #include <o3tl/make_unique.hxx>
 

@@ -22,12 +22,12 @@
 
 #include <vcl/weld.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/inettbc.hxx>
 
 namespace sfx2 { class DocumentInserter; }
 namespace sfx2 { class FileDialogHelper; }
 
 class ScDocShell;
+class URLBox;
 
 class ScLinkedAreaDlg : public weld::GenericDialogController
 {

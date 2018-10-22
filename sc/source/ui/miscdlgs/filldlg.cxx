@@ -28,6 +28,7 @@
 #include <document.hxx>
 #include <strings.hrc>
 #include <filldlg.hxx>
+#include <scui_def.hxx>
 
 // class ScFillSeriesDlg
 

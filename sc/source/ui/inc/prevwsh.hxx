@@ -20,10 +20,9 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_PREVWSH_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_PREVWSH_HXX
 
-class ScrollBar;
+#include <types.hxx>
+#include <scdllapi.h>
 
-#include <address.hxx>
-#include <sfx2/viewfac.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/zoomitem.hxx>
 
@@ -35,6 +34,7 @@ class ScPreview;
 struct ScHeaderFieldData;
 class ScPreviewLocationData;
 class CommandEvent;
+class SfxViewFactory;
 
 class SC_DLLPUBLIC ScPreviewShell: public SfxViewShell
 {

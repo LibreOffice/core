@@ -20,8 +20,10 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_MVTABDLG_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_MVTABDLG_HXX
 
-#include <address.hxx>
+#include <types.hxx>
 #include <vcl/weld.hxx>
+
+class ScDocument;
 
 class ScMoveTableDlg : public weld::GenericDialogController
 {

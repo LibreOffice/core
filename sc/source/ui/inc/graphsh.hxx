@@ -21,13 +21,13 @@
 #define INCLUDED_SC_SOURCE_UI_INC_GRAPHSH_HXX
 
 #include <memory>
+#include <vector>
 #include <sfx2/shell.hxx>
 #include <shellids.hxx>
-#include <sfx2/module.hxx>
-#include <svx/svdmark.hxx>
 
 class SdrExternalToolEdit;
 class ScViewData;
+class SfxModule;
 
 #include "drawsh.hxx"
 

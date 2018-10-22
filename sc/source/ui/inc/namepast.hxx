@@ -22,15 +22,12 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
 #include "namemgrtable.hxx"
 
 #include <memory>
 #include <vector>
 #include <map>
 
-#include "scui_def.hxx"
 class ScRangeName;
 class ScDocShell;
 

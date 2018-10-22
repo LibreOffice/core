@@ -20,18 +20,9 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_HIGHRED_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_HIGHRED_HXX
 
-#include <vcl/combobox.hxx>
-#include <svtools/headbar.hxx>
-#include <svtools/simptabl.hxx>
-#include <svtools/svtabbx.hxx>
-
-#include <rangenam.hxx>
 #include "anyrefdg.hxx"
 
-#include <vcl/lstbox.hxx>
-
 #include <svx/ctredlin.hxx>
-#include <chgtrack.hxx>
 #include <chgviset.hxx>
 
 class ScViewData;

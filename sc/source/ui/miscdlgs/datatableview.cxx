@@ -27,6 +27,7 @@
 #include <table.hxx>
 
 #include <vcl/builderfactory.hxx>
+#include <vcl/seleng.hxx>
 #include <sal/log.hxx>
 
 constexpr double nPPTX = 0.06666;

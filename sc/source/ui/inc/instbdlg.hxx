@@ -22,7 +22,7 @@
 
 #include <sfx2/objsh.hxx>
 #include <vcl/weld.hxx>
-#include <address.hxx>
+#include <types.hxx>
 
 class ScViewData;
 class ScDocument;

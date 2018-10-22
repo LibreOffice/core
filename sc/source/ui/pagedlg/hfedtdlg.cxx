@@ -27,6 +27,7 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <scuitphfedit.hxx>
+#include <svx/svxids.hrc>
 
 ScHFEditDlg::ScHFEditDlg( vcl::Window*           pParent,
                           const SfxItemSet& rCoreSet,
