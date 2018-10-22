@@ -138,7 +138,7 @@ void Qt5Menu::DoFullMenuUpdate(Menu* pMenuBar, QMenu* pParentMenu)
                     pAction->setVisible(pSalMenuItem->mbVisible);
 
                     connect(pAction, &QAction::triggered, this,
-                            [this, pSalMenuItem] { DispatchCommand(pSalMenuItem); });
+                            [this, pSalMenuItem] { slotMenuTriggered(pSalMenuItem); });
                 }
             }
         }
@@ -234,14 +234,18 @@ const Qt5Frame* Qt5Menu::GetFrame() const
     return pMenu ? pMenu->mpFrame : nullptr;
 }
 
-void Qt5Menu::DispatchCommand(Qt5MenuItem* pQItem)
+void Qt5Menu::slotMenuTriggered(Qt5MenuItem* pQItem)
 {
     if (pQItem)
     {
         Qt5Menu* pSalMenu = pQItem->mpParentMenu;
         Qt5Menu* pTopLevel = pSalMenu->GetTopLevel();
+
+        // it is possible that dispatcher of a menu entry was cleared since
+        // initial activation (happens e.g. when extension comes w/ its own menus
+        // and dispatchers) so re-activate the entry before dispatching the command
+        pTopLevel->GetMenu()->HandleMenuActivateEvent(pSalMenu->GetMenu());
         pTopLevel->GetMenu()->HandleMenuCommandEvent(pSalMenu->GetMenu(), pQItem->mnId);
-        SAL_WARN("vcl.qt5", "menu triggered " << pQItem->mnId);
     }
 }
 
