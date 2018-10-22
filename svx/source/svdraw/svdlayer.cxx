@@ -136,12 +136,15 @@ void SdrLayerAdmin::ClearLayers()
 
 SdrLayerAdmin& SdrLayerAdmin::operator=(const SdrLayerAdmin& rSrcLayerAdmin)
 {
-    maLayers.clear();
-    pParent=rSrcLayerAdmin.pParent;
-    sal_uInt16 i;
-    sal_uInt16 nCount=rSrcLayerAdmin.GetLayerCount();
-    for (i=0; i<nCount; i++) {
-        maLayers.emplace_back(new SdrLayer(*rSrcLayerAdmin.GetLayer(i)));
+    if (this != &rSrcLayerAdmin)
+    {
+        maLayers.clear();
+        pParent=rSrcLayerAdmin.pParent;
+        sal_uInt16 i;
+        sal_uInt16 nCount=rSrcLayerAdmin.GetLayerCount();
+        for (i=0; i<nCount; i++) {
+            maLayers.emplace_back(new SdrLayer(*rSrcLayerAdmin.GetLayer(i)));
+        }
     }
     return *this;
 }

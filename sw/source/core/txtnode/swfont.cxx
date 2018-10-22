@@ -889,34 +889,37 @@ SwFont::~SwFont()
 
 SwFont& SwFont::operator=( const SwFont &rFont )
 {
-    m_aSub[SwFontScript::Latin] = rFont.m_aSub[SwFontScript::Latin];
-    m_aSub[SwFontScript::CJK] = rFont.m_aSub[SwFontScript::CJK];
-    m_aSub[SwFontScript::CTL] = rFont.m_aSub[SwFontScript::CTL];
-    m_nActual = rFont.m_nActual;
-    m_pBackColor.reset( rFont.m_pBackColor ? new Color( *rFont.m_pBackColor ) : nullptr );
-    m_aHighlightColor = rFont.m_aHighlightColor;
-    m_aTopBorder = rFont.m_aTopBorder;
-    m_aBottomBorder = rFont.m_aBottomBorder;
-    m_aRightBorder = rFont.m_aRightBorder;
-    m_aLeftBorder = rFont.m_aLeftBorder;
-    m_nTopBorderDist = rFont.m_nTopBorderDist;
-    m_nBottomBorderDist = rFont.m_nBottomBorderDist;
-    m_nRightBorderDist = rFont.m_nRightBorderDist;
-    m_nLeftBorderDist = rFont.m_nLeftBorderDist;
-    m_aShadowColor = rFont.m_aShadowColor;
-    m_nShadowWidth = rFont.m_nShadowWidth;
-    m_aShadowLocation = rFont.m_aShadowLocation;
-    m_aUnderColor = rFont.GetUnderColor();
-    m_aOverColor  = rFont.GetOverColor();
-    m_nToxCount = 0;
-    m_nRefCount = 0;
-    m_nMetaCount = 0;
-    m_nInputFieldCount = 0;
-    m_bFontChg = rFont.m_bFontChg;
-    m_bOrgChg = rFont.m_bOrgChg;
-    m_bPaintBlank = rFont.m_bPaintBlank;
-    m_bGreyWave = rFont.m_bGreyWave;
-    m_bBlink = rFont.m_bBlink;
+    if (this != &rFont)
+    {
+        m_aSub[SwFontScript::Latin] = rFont.m_aSub[SwFontScript::Latin];
+        m_aSub[SwFontScript::CJK] = rFont.m_aSub[SwFontScript::CJK];
+        m_aSub[SwFontScript::CTL] = rFont.m_aSub[SwFontScript::CTL];
+        m_nActual = rFont.m_nActual;
+        m_pBackColor.reset( rFont.m_pBackColor ? new Color( *rFont.m_pBackColor ) : nullptr );
+        m_aHighlightColor = rFont.m_aHighlightColor;
+        m_aTopBorder = rFont.m_aTopBorder;
+        m_aBottomBorder = rFont.m_aBottomBorder;
+        m_aRightBorder = rFont.m_aRightBorder;
+        m_aLeftBorder = rFont.m_aLeftBorder;
+        m_nTopBorderDist = rFont.m_nTopBorderDist;
+        m_nBottomBorderDist = rFont.m_nBottomBorderDist;
+        m_nRightBorderDist = rFont.m_nRightBorderDist;
+        m_nLeftBorderDist = rFont.m_nLeftBorderDist;
+        m_aShadowColor = rFont.m_aShadowColor;
+        m_nShadowWidth = rFont.m_nShadowWidth;
+        m_aShadowLocation = rFont.m_aShadowLocation;
+        m_aUnderColor = rFont.GetUnderColor();
+        m_aOverColor  = rFont.GetOverColor();
+        m_nToxCount = 0;
+        m_nRefCount = 0;
+        m_nMetaCount = 0;
+        m_nInputFieldCount = 0;
+        m_bFontChg = rFont.m_bFontChg;
+        m_bOrgChg = rFont.m_bOrgChg;
+        m_bPaintBlank = rFont.m_bPaintBlank;
+        m_bGreyWave = rFont.m_bGreyWave;
+        m_bBlink = rFont.m_bBlink;
+    }
     return *this;
 }
 

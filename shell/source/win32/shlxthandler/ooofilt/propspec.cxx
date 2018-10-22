@@ -111,12 +111,16 @@ CFullPropSpec::CFullPropSpec( CFullPropSpec const & src ) :
 
 CFullPropSpec & CFullPropSpec::operator=( CFullPropSpec const & Property )
 {
-    // Clean up.
-    this->CFullPropSpec::~CFullPropSpec();
+    if (this != &Property)
+    {
+        // Clean up.
+        this->CFullPropSpec::~CFullPropSpec();
 
-    ::new (this) CFullPropSpec( Property );
+        ::new (this) CFullPropSpec( Property );
+    }
     return *this;
 }
+
 CFullPropSpec::~CFullPropSpec()
 {
     if ( _psProperty.ulKind == PRSPEC_LPWSTR &&
@@ -125,6 +129,7 @@ CFullPropSpec::~CFullPropSpec()
         CoTaskMemFree( _psProperty.lpwstr );
     }
 }
+
 void CFullPropSpec::SetProperty( PROPID pidProperty )
 {
     if ( _psProperty.ulKind == PRSPEC_LPWSTR &&

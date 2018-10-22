@@ -158,51 +158,53 @@ ScDBData::ScDBData( const OUString& rName, const ScDBData& rData ) :
 
 ScDBData& ScDBData::operator= (const ScDBData& rData)
 {
-    // Don't modify the name.  The name is not mutable as it is used as a key
-    // in the container to keep the db ranges sorted by the name.
-
-    bool bHeaderRangeDiffers = (nTable != rData.nTable || nStartCol != rData.nStartCol ||
-            nEndCol != rData.nEndCol || nStartRow != rData.nStartRow);
-    bool bNeedsListening = ((bHasHeader && bHeaderRangeDiffers) || (!bHasHeader && rData.bHasHeader));
-    if (bHasHeader && (!rData.bHasHeader || bHeaderRangeDiffers))
+    if (this != &rData)
     {
-        EndTableColumnNamesListener();
+        // Don't modify the name.  The name is not mutable as it is used as a key
+        // in the container to keep the db ranges sorted by the name.
+
+        bool bHeaderRangeDiffers = (nTable != rData.nTable || nStartCol != rData.nStartCol ||
+                nEndCol != rData.nEndCol || nStartRow != rData.nStartRow);
+        bool bNeedsListening = ((bHasHeader && bHeaderRangeDiffers) || (!bHasHeader && rData.bHasHeader));
+        if (bHasHeader && (!rData.bHasHeader || bHeaderRangeDiffers))
+        {
+            EndTableColumnNamesListener();
+        }
+        ScRefreshTimer::operator=( rData );
+        mpSortParam.reset(new ScSortParam(*rData.mpSortParam));
+        mpQueryParam.reset(new ScQueryParam(*rData.mpQueryParam));
+        mpSubTotal.reset(new ScSubTotalParam(*rData.mpSubTotal));
+        mpImportParam.reset(new ScImportParam(*rData.mpImportParam));
+        // Keep mpContainer.
+        nTable              = rData.nTable;
+        nStartCol           = rData.nStartCol;
+        nStartRow           = rData.nStartRow;
+        nEndCol             = rData.nEndCol;
+        nEndRow             = rData.nEndRow;
+        bByRow              = rData.bByRow;
+        bHasHeader          = rData.bHasHeader;
+        bHasTotals          = rData.bHasTotals;
+        bDoSize             = rData.bDoSize;
+        bKeepFmt            = rData.bKeepFmt;
+        bStripData          = rData.bStripData;
+        bIsAdvanced         = rData.bIsAdvanced;
+        aAdvSource          = rData.aAdvSource;
+        bDBSelection        = rData.bDBSelection;
+        nIndex              = rData.nIndex;
+        bAutoFilter         = rData.bAutoFilter;
+        nFilteredRowCount   = rData.nFilteredRowCount;
+
+        if (bHeaderRangeDiffers)
+            InvalidateTableColumnNames( true);
+        else
+        {
+            maTableColumnNames  = rData.maTableColumnNames;
+            mbTableColumnNamesDirty = rData.mbTableColumnNamesDirty;
+        }
+
+        if (bNeedsListening)
+            StartTableColumnNamesListener();
     }
-    ScRefreshTimer::operator=( rData );
-    mpSortParam.reset(new ScSortParam(*rData.mpSortParam));
-    mpQueryParam.reset(new ScQueryParam(*rData.mpQueryParam));
-    mpSubTotal.reset(new ScSubTotalParam(*rData.mpSubTotal));
-    mpImportParam.reset(new ScImportParam(*rData.mpImportParam));
-    // Keep mpContainer.
-    nTable              = rData.nTable;
-    nStartCol           = rData.nStartCol;
-    nStartRow           = rData.nStartRow;
-    nEndCol             = rData.nEndCol;
-    nEndRow             = rData.nEndRow;
-    bByRow              = rData.bByRow;
-    bHasHeader          = rData.bHasHeader;
-    bHasTotals          = rData.bHasTotals;
-    bDoSize             = rData.bDoSize;
-    bKeepFmt            = rData.bKeepFmt;
-    bStripData          = rData.bStripData;
-    bIsAdvanced         = rData.bIsAdvanced;
-    aAdvSource          = rData.aAdvSource;
-    bDBSelection        = rData.bDBSelection;
-    nIndex              = rData.nIndex;
-    bAutoFilter         = rData.bAutoFilter;
-    nFilteredRowCount   = rData.nFilteredRowCount;
-
-    if (bHeaderRangeDiffers)
-        InvalidateTableColumnNames( true);
-    else
-    {
-        maTableColumnNames  = rData.maTableColumnNames;
-        mbTableColumnNamesDirty = rData.mbTableColumnNamesDirty;
-    }
-
-    if (bNeedsListening)
-        StartTableColumnNamesListener();
-
     return *this;
 }
 

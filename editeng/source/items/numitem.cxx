@@ -718,17 +718,20 @@ SvxNumRule::~SvxNumRule()
 
 SvxNumRule& SvxNumRule::operator=( const SvxNumRule& rCopy )
 {
-    nLevelCount          = rCopy.nLevelCount;
-    nFeatureFlags        = rCopy.nFeatureFlags;
-    bContinuousNumbering = rCopy.bContinuousNumbering;
-    eNumberingType       = rCopy.eNumberingType;
-    for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
+    if (this != &rCopy)
     {
-        if(rCopy.aFmts[i])
-            aFmts[i].reset( new SvxNumberFormat(*rCopy.aFmts[i]) );
-        else
-            aFmts[i].reset();
-        aFmtsSet[i] = rCopy.aFmtsSet[i];
+        nLevelCount          = rCopy.nLevelCount;
+        nFeatureFlags        = rCopy.nFeatureFlags;
+        bContinuousNumbering = rCopy.bContinuousNumbering;
+        eNumberingType       = rCopy.eNumberingType;
+        for(sal_uInt16 i = 0; i < SVX_MAX_NUM; i++)
+        {
+            if(rCopy.aFmts[i])
+                aFmts[i].reset( new SvxNumberFormat(*rCopy.aFmts[i]) );
+            else
+                aFmts[i].reset();
+            aFmtsSet[i] = rCopy.aFmtsSet[i];
+        }
     }
     return *this;
 }

@@ -95,17 +95,19 @@ namespace canvas
             // assignment to wrappee
             VCLObject& operator=( const VCLObject& rhs )
             {
-                if( mpWrappee )
+                if (this != &rhs)
                 {
-                    if( rhs.mpWrappee )
-                        *mpWrappee = *rhs.mpWrappee;
+                    if( mpWrappee )
+                    {
+                        if( rhs.mpWrappee )
+                            *mpWrappee = *rhs.mpWrappee;
+                    }
+                    else
+                    {
+                        if( rhs.mpWrappee )
+                            mpWrappee = new Wrappee( *rhs.mpWrappee );
+                    }
                 }
-                else
-                {
-                    if( rhs.mpWrappee )
-                        mpWrappee = new Wrappee( *rhs.mpWrappee );
-                }
-
                 return *this;
             }
 

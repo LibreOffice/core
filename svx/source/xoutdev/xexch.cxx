@@ -120,14 +120,16 @@ SvStream& ReadXFillExchangeData( SvStream& rIStm, XFillExchangeData& rData )
 
 XFillExchangeData& XFillExchangeData::operator=( const XFillExchangeData& rData )
 {
-    if( rData.pXFillAttrSetItem )
-        pXFillAttrSetItem.reset( static_cast<XFillAttrSetItem*>( rData.pXFillAttrSetItem->Clone( pPool = rData.pXFillAttrSetItem->GetItemSet().GetPool() ) ) );
-    else
+    if (this != &rData)
     {
-        pPool = nullptr;
-        pXFillAttrSetItem.reset();
+        if( rData.pXFillAttrSetItem )
+            pXFillAttrSetItem.reset( static_cast<XFillAttrSetItem*>( rData.pXFillAttrSetItem->Clone( pPool = rData.pXFillAttrSetItem->GetItemSet().GetPool() ) ) );
+        else
+        {
+            pPool = nullptr;
+            pXFillAttrSetItem.reset();
+        }
     }
-
     return *this;
 }
 

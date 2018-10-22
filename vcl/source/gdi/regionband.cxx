@@ -38,27 +38,29 @@ RegionBand::RegionBand(const RegionBand& rRef)
 
 RegionBand& RegionBand::operator=(const RegionBand& rRef)
 {
-    ImplRegionBand* pPrevBand = nullptr;
-    ImplRegionBand* pBand = rRef.mpFirstBand;
-
-    while(pBand)
+    if (this != &rRef)
     {
-        ImplRegionBand* pNewBand = new ImplRegionBand(*pBand);
+        ImplRegionBand* pPrevBand = nullptr;
+        ImplRegionBand* pBand = rRef.mpFirstBand;
 
-        // first element? -> set as first into the list
-        if(pBand == rRef.mpFirstBand)
+        while(pBand)
         {
-            mpFirstBand = pNewBand;
-        }
-        else
-        {
-            pPrevBand->mpNextBand = pNewBand;
-        }
+            ImplRegionBand* pNewBand = new ImplRegionBand(*pBand);
 
-        pPrevBand = pNewBand;
-        pBand = pBand->mpNextBand;
+            // first element? -> set as first into the list
+            if(pBand == rRef.mpFirstBand)
+            {
+                mpFirstBand = pNewBand;
+            }
+            else
+            {
+                pPrevBand->mpNextBand = pNewBand;
+            }
+
+            pPrevBand = pNewBand;
+            pBand = pBand->mpNextBand;
+        }
     }
-
     return *this;
 }
 
